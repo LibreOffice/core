@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef _MSC_VER
@@ -33,31 +33,31 @@
 
 static const CHAR* g_Extensions[] =
 {
-    ".doc",     // Microsoft Word Text [0]
-    ".dot",     // Microsoft Word Template
-    ".rtf",     // rtf text
-    ".docx",    // Office Word 2007 XML document
-    ".docm",    // Office Word 2007 XML macro-enabled document
-    ".dotx",    // Office Word 2007 XML template
-    ".dotm",    // Office Word 2007 XML macro-enabled template
-    ".xlw",     // Microsoft Excel
-    ".xls",     // Microsoft Excel
-    ".xlt",     // Microsoft Excel Template
-    ".xlsx",    // Office Excel 2007 XML workbook
-    ".xlsm",    // Office Excel 2007 XML macro-enabled workbook
-    ".xltx",    // Office Excel 2007 XML template
-    ".xltm",    // Office Excel 2007 XML macro-enabled template
-    ".xlsb",    // Office Excel 2007 binary workbook (BIFF12)
-    ".ppt",     // Microsoft Powerpoint
-    ".pps",     // Microsoft Powerpoint
-    ".pot",     // Microsoft Powerpoint Template
-    ".pptx",    // Office PowerPoint 2007 XML presentation
-    ".pptm",    // Office PowerPoint 2007 macro-enabled XML presentation
-    ".potx",    // Office PowerPoint 2007 XML template
-    ".potm",    // Office PowerPoint 2007 macro-enabled XML template
-    ".ppsx",    // Office PowerPoint 2007 XML show
-    ".vsd",     // Visio 2000/XP/2003 document
-    ".vst",     // Visio 2000/XP/2003 template
+    ".doc",     
+    ".dot",     
+    ".rtf",     
+    ".docx",    
+    ".docm",    
+    ".dotx",    
+    ".dotm",    
+    ".xlw",     
+    ".xls",     
+    ".xlt",     
+    ".xlsx",    
+    ".xlsm",    
+    ".xltx",    
+    ".xltm",    
+    ".xlsb",    
+    ".ppt",     
+    ".pps",     
+    ".pot",     
+    ".pptx",    
+    ".pptm",    
+    ".potx",    
+    ".potm",    
+    ".ppsx",    
+    ".vsd",     
+    ".vst",     
     0
 };
 
@@ -67,9 +67,9 @@ static const int POWERPOINT_START = 15;
 static const int VISIO_START = 23;
 static const int VISIO_END = 25;
 
-//    ".xlam",    // Office Excel 2007 XML macro-enabled add-in
-//    ".ppam",    // Office PowerPoint 2007 macro-enabled XML add-in
-//    ".ppsm",    // Office PowerPoint 2007 macro-enabled XML show
+
+
+
 
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
@@ -105,26 +105,26 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
             OutputDebugStringFormat( "Found value [%s] for key [%s].\n", szBuffer, lpSubKey );
 
             if ( strncmp( szBuffer, "WordPad.Document.1", 18 ) == 0 )
-            {   // We will replace registration for WordPad (alas, on XP only) FIXME
+            {   
                 bRet = true;
             }
             else if ( strncmp( szBuffer, "LibreOffice.", 12 ) == 0 )
-            {   // We will replace registration for our own types, too
+            {   
                 bRet = true;
             }
             else if ( strncmp( szBuffer, "lostub.", 7 ) == 0 )
-            {   // We will replace registration for lostub, too
+            {   
                 bRet = true;
             }
-            else // we have a default value -> do not register, see fdo#39791
+            else 
                 bRet = false;
         }
-        else    // no default value found -> return TRUE to register for that key
+        else    
             bRet = true;
 
         RegCloseKey( hKey );
     }
-    else // no key found -> return TRUE to register for that key
+    else 
         bRet = true;
 
     return bRet;
@@ -141,13 +141,13 @@ static LONG DeleteSubKeyTree( HKEY RootKey, LPCSTR lpKey )
         DWORD     nMaxSubKeyLen;
 
         rc = RegQueryInfoKeyA( hKey, 0, 0, 0, 0, &nMaxSubKeyLen, 0, 0, 0, 0, 0, 0 );
-        nMaxSubKeyLen++; // space for trailing '\0'
+        nMaxSubKeyLen++; 
         lpSubKey = reinterpret_cast<CHAR*>( _alloca( nMaxSubKeyLen*sizeof(CHAR) ) );
 
         while (ERROR_SUCCESS == rc)
         {
             DWORD nLen = nMaxSubKeyLen;
-            rc = RegEnumKeyExA( hKey, 0, (LPSTR)lpSubKey, &nLen, 0, 0, 0, 0);    // always index zero
+            rc = RegEnumKeyExA( hKey, 0, (LPSTR)lpSubKey, &nLen, 0, 0, 0, 0);    
 
             if ( ERROR_NO_MORE_ITEMS == rc )
             {
@@ -233,14 +233,14 @@ static void saveOldRegistration( LPCSTR lpSubKey )
         {
             szBuffer[nSize] = '\0';
 
-            // No need to save assocations for our own types
+            
             if ( strncmp( szBuffer, "LibreOffice.", 12 ) != 0 )
             {
-                // Save the old association
+                
                 RegSetValueExA( hKey, "LOBackupAssociation", 0,
                                 REG_SZ, (LPBYTE)szBuffer, nSize );
-                // Also save what the old association means, just so we can try to verify
-                // if/when restoring it that the old application still exists
+                
+                
                 HKEY hKey2 = NULL;
                 lResult = RegOpenKeyExA( HKEY_CLASSES_ROOT, szBuffer, 0,
                                          KEY_QUERY_VALUE, &hKey2 );
@@ -262,7 +262,7 @@ static void saveOldRegistration( LPCSTR lpSubKey )
 }
 
 static void registerForExtensions( MSIHANDLE handle, BOOL bRegisterAll )
-{ // Check all file extensions
+{ 
     int nIndex = 0;
     while ( g_Extensions[nIndex] != 0 )
     {
@@ -276,7 +276,7 @@ static void registerForExtensions( MSIHANDLE handle, BOOL bRegisterAll )
 }
 
 static bool checkSomeExtensionInRegistry( const int nStart, const int nEnd )
-{ // Check all file extensions
+{ 
     int nIndex = nStart;
     bool bFound = false;
 
@@ -293,7 +293,7 @@ static bool checkSomeExtensionInRegistry( const int nStart, const int nEnd )
 }
 
 static void registerSomeExtensions( MSIHANDLE handle, const int nStart, const int nEnd, bool bRegister )
-{ // Check all file extensions
+{ 
     int nIndex = nStart;
 
     while ( (nIndex < nEnd) && (g_Extensions[nIndex] != 0) )
@@ -479,8 +479,8 @@ extern "C" UINT __stdcall FindRegisteredExtensions( MSIHANDLE handle )
     else
         OutputDebugStringFormat( "FindRegisteredExtensions: " );
 
-    // setting the msi properties SELECT_* will force registering for all corresponding
-    // file types
+    
+    
     if ( IsSetMsiProp( handle, "SELECT_WORD" ) )
         registerSomeExtensions( handle, WORD_START, EXCEL_START, true );
     if ( IsSetMsiProp( handle, "SELECT_EXCEL" ) )
@@ -525,14 +525,14 @@ static void restoreOldRegistration( LPCSTR lpSubKey )
                     CHAR   szBuffer3[1024];
                     DWORD  nSize3 = sizeof( szBuffer3 );
 
-                    // Try to verify that the old association is OK to restore
+                    
                     lResult = RegQueryValueExA( hKey, "LOBackupAssociationDeref", NULL, NULL,
                                                 (LPBYTE)szBuffer3, &nSize3 );
                     if ( ERROR_SUCCESS == lResult )
                     {
                         if ( nSize2 == nSize3 && strcmp (szBuffer2, szBuffer3) == 0)
                         {
-                            // Yep. So restore it
+                            
                             RegSetValueExA( hKey, "", 0, REG_SZ, (LPBYTE)szBuffer, nSize );
                         }
                     }

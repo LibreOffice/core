@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/Aspects.hpp>
@@ -94,7 +94,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
                                       const DataFlavorExVector* pFormats,
                                       const TransferableObjectDescriptor* )
 {
-    //TODO/LATER: why is the Descriptor never used?!
+    
     TransferableObjectDescriptor aDesc;
     if( rHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) )
         ((TransferableDataHelper&)rHelper).GetTransferableObjectDescriptor(
@@ -102,7 +102,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
     if ( !pFormats )
         pFormats = &rHelper.GetDataFlavorExVector();
 
-    // create and fill dialog box
+    
     OUString aSourceName, aTypeName;
     sal_uLong nSelFormat = 0;
     SvGlobalName aEmptyNm;
@@ -119,10 +119,10 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         ::std::map< SotFormatStringId, OUString >::iterator itName =
             aSupplementMap.find( nFormat );
 
-        // if there is an "Embed Source" or and "Embedded Object" on the
-        // Clipboard we read the Description and the Source of this object
-        // from an accompanied "Object Descriptor" format on the clipboard
-        // Remember: these formats mostly appear together on the clipboard
+        
+        
+        
+        
         OUString aName;
         const OUString* pName = NULL;
         if ( itName == aSupplementMap.end() )
@@ -176,7 +176,7 @@ sal_uLong SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         if( aTypeName.isEmpty() && aSourceName.isEmpty() )
         {
             ResMgr* pMgr = ResMgr::CreateResMgr( "svt", Application::GetSettings().GetUILanguageTag() );
-            // global resource from svtools (former so3 resource)
+            
             if( pMgr )
                 aSourceName = OUString( ResId( STR_UNKNOWN_SOURCE, *pMgr ) );
             delete pMgr;

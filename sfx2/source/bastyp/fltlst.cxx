@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,9 +31,9 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-//*****************************************************************************************************************
-//  namespaces
-//*****************************************************************************************************************
+
+
+
 using namespace ::com::sun::star;
 
 
@@ -52,14 +52,14 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::
         {
         }
 
-        // util.XRefreshListener
+        
         virtual void SAL_CALL refreshed( const ::com::sun::star::lang::EventObject& rEvent )
             throw(com::sun::star::uno::RuntimeException)
         {
             m_pOwner->refreshed(rEvent);
         }
 
-        // lang.XEventListener
+        
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
             throw(com::sun::star::uno::RuntimeException)
         {
@@ -67,7 +67,7 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::
         }
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short          ctor
     @descr          These initialize an instance of a SfxFilterListener class. Created object listen automaticly
                     on right FilterFactory-Service for all changes and synchronize right SfxFilterContainer with
@@ -87,7 +87,7 @@ class SfxRefreshListener : public ::cppu::WeakImplHelper1<com::sun::star::util::
     @onerror        We show some assertions in non product version.
                     Otherwise we do nothing!
     @threadsafe     yes
-*//*-*************************************************************************************************************/
+*
 SfxFilterListener::SfxFilterListener()
 {
     m_xFilterCache = document::FilterConfigRefresh::create( comphelper::getProcessComponentContext() );

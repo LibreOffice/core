@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ using namespace ::unopkg;
 
 namespace {
 
-//==============================================================================
+
 class CommandEnvironmentImpl
     : public ::cppu::WeakImplHelper3< XCommandEnvironment,
                                       task::XInteractionHandler,
@@ -76,25 +76,25 @@ public:
         bool option_verbose,
         bool option_suppress_license);
 
-    // XCommandEnvironment
+    
     virtual Reference< task::XInteractionHandler > SAL_CALL
     getInteractionHandler() throw (RuntimeException);
     virtual Reference< XProgressHandler > SAL_CALL getProgressHandler()
         throw (RuntimeException);
 
-    // XInteractionHandler
+    
     virtual void SAL_CALL handle(
         Reference< task::XInteractionRequest > const & xRequest )
         throw (RuntimeException);
 
-    // XProgressHandler
+    
     virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException);
     virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException);
     virtual void SAL_CALL pop() throw (RuntimeException);
 };
 
 
-//______________________________________________________________________________
+
 CommandEnvironmentImpl::CommandEnvironmentImpl(
     Reference<XComponentContext> const & xComponentContext,
     OUString const & log_file,
@@ -118,7 +118,7 @@ CommandEnvironmentImpl::CommandEnvironmentImpl(
     }
 }
 
-//______________________________________________________________________________
+
 CommandEnvironmentImpl::~CommandEnvironmentImpl()
 {
     try {
@@ -133,7 +133,7 @@ CommandEnvironmentImpl::~CommandEnvironmentImpl()
     }
 }
 
-//May throw exceptions
+
 void CommandEnvironmentImpl::printLicense(
     const OUString & sName, const OUString& sLicense, bool & accept, bool &decline)
 {
@@ -155,7 +155,7 @@ void CommandEnvironmentImpl::printLicense(
     dp_misc::writeConsole(s2 + sNewLine);
     dp_misc::writeConsole(s3);
 
-    //the user may enter "yes" or "no", we compare in a case insensitive way
+    
     Reference< css::i18n::XCollator > xCollator =
         css::i18n::Collator::create( m_xComponentContext );
     xCollator->loadDefaultCollator(
@@ -185,23 +185,23 @@ void CommandEnvironmentImpl::printLicense(
     while(true);
 }
 
-// XCommandEnvironment
-//______________________________________________________________________________
+
+
 Reference< task::XInteractionHandler >
 CommandEnvironmentImpl::getInteractionHandler() throw (RuntimeException)
 {
     return this;
 }
 
-//______________________________________________________________________________
+
 Reference< XProgressHandler > CommandEnvironmentImpl::getProgressHandler()
     throw (RuntimeException)
 {
     return this;
 }
 
-// XInteractionHandler
-//______________________________________________________________________________
+
+
 void CommandEnvironmentImpl::handle(
     Reference<task::XInteractionRequest> const & xRequest )
     throw (RuntimeException)
@@ -211,7 +211,7 @@ void CommandEnvironmentImpl::handle(
     dp_misc::TRACE("[unopkg_cmdenv.cxx] incoming request:\n"
         + ::comphelper::anyToString(request) + "\n\n");
 
-    // selections:
+    
     bool approve = false;
     bool abort = false;
 
@@ -224,8 +224,8 @@ void CommandEnvironmentImpl::handle(
 
     bool bLicenseException = false;
     if (request >>= wtExc) {
-        // ignore intermediate errors of legacy packages, i.e.
-        // former pkgchk behaviour:
+        
+        
         const Reference<deployment::XPackage> xPackage(
             wtExc.Context, UNO_QUERY );
         OSL_ASSERT( xPackage.is() );
@@ -241,12 +241,12 @@ void CommandEnvironmentImpl::handle(
         }
         abort = !approve;
         if (abort) {
-            // notify cause as error:
+            
             request = wtExc.TargetException;
         }
         else {
-            // handable deployment error signalled, e.g.
-            // bundle item registration failed, notify as warning:
+            
+            
             update_( wtExc.TargetException );
         }
     }
@@ -262,8 +262,8 @@ void CommandEnvironmentImpl::handle(
     }
        else if (request >>= instExc)
     {
-        //Only if the unopgk was started with gui + extension then we user is asked.
-        //In console mode there is no asking.
+        
+        
         approve = true;
     }
     else if (request >>= platExc)
@@ -282,18 +282,18 @@ void CommandEnvironmentImpl::handle(
             abort = !approve;
         }
         else
-            return; // unknown request => no selection at all
+            return; 
     }
 
-    //In case of a user declining a license abort is true but this is intended,
-    //therefore no logging
+    
+    
     if (abort && m_option_verbose && !bLicenseException)
     {
         OUString msg = ::comphelper::anyToString(request);
         dp_misc::writeConsoleError(OUString("\nERROR: ") + msg + "\n");
     }
 
-    // select:
+    
     Sequence< Reference<task::XInteractionContinuation> > conts(
         xRequest->getContinuations() );
     Reference<task::XInteractionContinuation> const * pConts =
@@ -320,8 +320,8 @@ void CommandEnvironmentImpl::handle(
     }
 }
 
-// XProgressHandler
-//______________________________________________________________________________
+
+
 void CommandEnvironmentImpl::push( Any const & Status )
     throw (RuntimeException)
 {
@@ -332,7 +332,7 @@ void CommandEnvironmentImpl::push( Any const & Status )
         m_xLogFile->push( Status );
 }
 
-//______________________________________________________________________________
+
 void CommandEnvironmentImpl::update_( Any const & Status )
     throw (RuntimeException)
 {
@@ -374,7 +374,7 @@ void CommandEnvironmentImpl::update_( Any const & Status )
         dp_misc::writeConsole(msg + "\n");
 }
 
-//______________________________________________________________________________
+
 void CommandEnvironmentImpl::update( Any const & Status )
     throw (RuntimeException)
 {
@@ -383,7 +383,7 @@ void CommandEnvironmentImpl::update( Any const & Status )
         m_xLogFile->update( Status );
 }
 
-//______________________________________________________________________________
+
 void CommandEnvironmentImpl::pop() throw (RuntimeException)
 {
     OSL_ASSERT( m_logLevel > 0 );
@@ -393,11 +393,11 @@ void CommandEnvironmentImpl::pop() throw (RuntimeException)
 }
 
 
-} // anon namespace
+} 
 
 namespace unopkg {
 
-//==============================================================================
+
 Reference< XCommandEnvironment > createCmdEnv(
     Reference< XComponentContext > const & xContext,
     OUString const & logFile,
@@ -408,6 +408,6 @@ Reference< XCommandEnvironment > createCmdEnv(
     return new CommandEnvironmentImpl(
         xContext, logFile, option_force_overwrite, option_verbose, option_suppress_license);
 }
-} // unopkg
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

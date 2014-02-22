@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -35,12 +35,12 @@
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 
-// - Namespaces -
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// - GalleryThemeEntry -
+
 
 static bool FileExists( const INetURLObject &rURL, const rtl::OUString &rExt )
 {
@@ -66,7 +66,7 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
         aURL = aBaseNoCase;
         static sal_Int32 nIdx = 0;
         while( FileExists( aURL, "thm" ) )
-        { // create new URLs
+        { 
             nIdx++;
             aURL = aBaseNoCase;
             aURL.setName( aURL.getName() + OUString::number(nIdx));
@@ -89,8 +89,8 @@ GalleryThemeEntry::GalleryThemeEntry( bool bCreateUniqueURL,
 
     aName = ReadStrFromIni( "name" );
 
-    // This is awful - we shouldn't use these resources if we
-    // possibly can avoid them
+    
+    
     if( aName.isEmpty() && nId && bThemeNameFromResource )
         aName = GAL_RESSTR( RID_GALLERYSTR_THEME_START + (sal_uInt16) nId );
 
@@ -102,15 +102,15 @@ INetURLObject GalleryThemeEntry::ImplGetURLIgnoreCase( const INetURLObject& rURL
 {
     INetURLObject   aURL( rURL );
 
-    // check original file name
+    
     if( !FileExists( aURL ) )
     {
-        // check upper case file name
+        
         aURL.setName( aURL.getName().toAsciiUpperCase() );
 
         if(!FileExists( aURL ) )
         {
-            // check lower case file name
+            
             aURL.setName( aURL.getName().toAsciiLowerCase() );
         }
     }
@@ -135,7 +135,7 @@ void GalleryThemeEntry::SetId( sal_uInt32 nNewId, sal_Bool bResetThemeName )
     bThemeNameFromResource = ( nId && bResetThemeName );
 }
 
-// - GalleryThemeCacheEntry -
+
 
 class GalleryThemeCacheEntry
 {
@@ -154,7 +154,7 @@ public:
     GalleryTheme*                           GetTheme() const { return mpTheme; }
 };
 
-// - Gallery -
+
 
 Gallery::Gallery( const OUString& rMultiPath )
 :       nReadTextEncoding   ( osl_getThreadTextEncoding() )
@@ -165,7 +165,7 @@ Gallery::Gallery( const OUString& rMultiPath )
 
 Gallery::~Gallery()
 {
-    // erase theme list
+    
     for ( size_t i = 0, n = aThemeList.size(); i < n; ++i )
         delete aThemeList[ i ];
     aThemeList.clear();
@@ -237,7 +237,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
         try
         {
-            // check readonlyness the very hard way
+            
             INetURLObject   aTestURL( rBaseURL );
             OUString        aTestFile( "cdefghij.klm" );
 
@@ -431,7 +431,7 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
             pFound = pEntry;
     }
 
-    // try fallback, if no entry was found
+    
     if( !pFound )
     {
         OString aFallback;
@@ -448,13 +448,13 @@ OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
                 aFallback = "Homepage";
                 break;
             case( GALLERY_THEME_POWERPOINT ):
-                aFallback = "private://gallery/hidden/imgppt";
+                aFallback = "private:
                 break;
             case( GALLERY_THEME_FONTWORK ):
-                aFallback = "private://gallery/hidden/fontwork";
+                aFallback = "private:
                 break;
             case( GALLERY_THEME_FONTWORK_VERTICAL ):
-                aFallback = "private://gallery/hidden/fontworkvertical";
+                aFallback = "private:
                 break;
             case( GALLERY_THEME_SOUNDS ):
                 aFallback = "Sounds";
@@ -530,7 +530,7 @@ sal_Bool Gallery::RenameTheme( const OUString& rOldName, const OUString& rNewNam
     GalleryThemeEntry*      pThemeEntry = ImplGetThemeEntry( rOldName );
     sal_Bool                            bRet = sal_False;
 
-    // check if the new theme name is already present
+    
     if( pThemeEntry && !HasTheme( rNewName ) && !pThemeEntry->IsReadOnly() )
     {
         SfxListener   aListener;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartTypeHelper.hxx"
@@ -58,9 +58,9 @@ bool ChartTypeHelper::isSupportingAxisSideBySide(
 
 sal_Bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
-    //form tab only for 3D-bar and 3D-column charts.
+    
 
-    //@todo ask charttype itself --> need model change first
+    
     if(xChartType.is())
     {
         if(nDimensionCount==3)
@@ -77,9 +77,9 @@ sal_Bool ChartTypeHelper::isSupportingGeometryProperties( const uno::Reference< 
 
 sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
-    //3D charts, pie, net and stock do not support statistic properties
+    
 
-    //@todo ask charttype itself (and series? --> stock chart?)  --> need model change first
+    
     if(xChartType.is())
     {
         if(nDimensionCount==3)
@@ -94,7 +94,7 @@ sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference<
             return sal_False;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
             return sal_False;
-        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) ) //todo: BubbleChart support error bars and trend lines
+        if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) ) 
             return sal_False;
     }
     return sal_True;
@@ -102,15 +102,15 @@ sal_Bool ChartTypeHelper::isSupportingStatisticProperties( const uno::Reference<
 
 sal_Bool ChartTypeHelper::isSupportingRegressionProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
-    // note: old chart: only scatter chart
+    
     return isSupportingStatisticProperties( xChartType, nDimensionCount );
 }
 
 sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
-    //2D line charts, net and stock do not support area properties
+    
 
-    //@todo ask charttype itself --> need model change first
+    
     if(xChartType.is())
     {
          if(nDimensionCount==2)
@@ -131,9 +131,9 @@ sal_Bool ChartTypeHelper::isSupportingAreaProperties( const uno::Reference< XCha
 
 sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
-    //2D line charts, 2D scatter charts and 2D net charts do support symbols
+    
 
-    //@todo ask charttype itself --> need model change first
+    
     if(xChartType.is())
     {
         if(nDimensionCount==3)
@@ -152,10 +152,10 @@ sal_Bool ChartTypeHelper::isSupportingSymbolProperties( const uno::Reference< XC
 
 sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 nDimensionIndex )
 {
-    //pie charts do not support axis at all
-    //no 3rd axis for 2D charts
+    
+    
 
-    //@todo ask charttype itself --> need model change first
+    
     if(xChartType.is())
     {
         OUString aChartTypeName = xChartType->getChartType();
@@ -170,9 +170,9 @@ sal_Bool ChartTypeHelper::isSupportingMainAxis( const uno::Reference< XChartType
 
 sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Int32 /*nDimensionIndex*/ )
 {
-    //3D, pie and net charts do not support a secondary axis at all
+    
 
-    //@todo ask charttype itself --> need model change first
+    
     if(xChartType.is())
     {
          if(nDimensionCount==3)
@@ -192,9 +192,9 @@ sal_Bool ChartTypeHelper::isSupportingSecondaryAxis( const uno::Reference< XChar
 sal_Bool ChartTypeHelper::isSupportingOverlapAndGapWidthProperties(
         const uno::Reference< XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
-    //2D bar charts do support a this special properties
+    
 
-    //@todo ask charttype itself --> need model change first
+    
     if(xChartType.is())
     {
          if(nDimensionCount==3)
@@ -212,9 +212,9 @@ sal_Bool ChartTypeHelper::isSupportingOverlapAndGapWidthProperties(
 sal_Bool ChartTypeHelper::isSupportingBarConnectors(
     const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount )
 {
-    //2D bar charts with stacked series support this
+    
 
-    //@todo ask charttype itself --> need model change first
+    
     if(xChartType.is())
     {
         if(nDimensionCount==3)
@@ -230,7 +230,7 @@ sal_Bool ChartTypeHelper::isSupportingBarConnectors(
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN) )
             return sal_True;
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
-            return sal_True;  // note: old chart was false here
+            return sal_True;  
     }
     return sal_False;
 }
@@ -448,36 +448,36 @@ bool ChartTypeHelper::noBordersForSimpleScheme( const uno::Reference< chart2::XC
 
 sal_Int32 ChartTypeHelper::getDefaultDirectLightColor( bool bSimple, const uno::Reference< chart2::XChartType >& xChartType )
 {
-    sal_Int32 nRet = static_cast< sal_Int32 >( 0x808080 ); // grey
+    sal_Int32 nRet = static_cast< sal_Int32 >( 0x808080 ); 
     if( xChartType .is() )
     {
         OUString aChartType = xChartType->getChartType();
         if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         {
             if( bSimple )
-                nRet = static_cast< sal_Int32 >( 0x333333 ); // grey80
+                nRet = static_cast< sal_Int32 >( 0x333333 ); 
             else
-                nRet = static_cast< sal_Int32 >( 0xb3b3b3 ); // grey30
+                nRet = static_cast< sal_Int32 >( 0xb3b3b3 ); 
         }
         else if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
             || aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER) )
-            nRet = static_cast< sal_Int32 >( 0x666666 ); // grey60
+            nRet = static_cast< sal_Int32 >( 0x666666 ); 
     }
     return nRet;
 }
 
 sal_Int32 ChartTypeHelper::getDefaultAmbientLightColor( bool bSimple, const uno::Reference< chart2::XChartType >& xChartType )
 {
-    sal_Int32 nRet = static_cast< sal_Int32 >( 0x999999 ); // grey40
+    sal_Int32 nRet = static_cast< sal_Int32 >( 0x999999 ); 
     if( xChartType .is() )
     {
         OUString aChartType = xChartType->getChartType();
         if( aChartType.equals(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
         {
             if( bSimple )
-                nRet = static_cast< sal_Int32 >( 0xcccccc ); // grey20
+                nRet = static_cast< sal_Int32 >( 0xcccccc ); 
             else
-                nRet = static_cast< sal_Int32 >( 0x666666 ); // grey60
+                nRet = static_cast< sal_Int32 >( 0x666666 ); 
         }
     }
     return nRet;
@@ -516,18 +516,18 @@ drawing::Direction3D ChartTypeHelper::getDefaultRealisticLightDirection( const u
 sal_Int32 ChartTypeHelper::getAxisType( const uno::Reference<
             XChartType >& xChartType, sal_Int32 nDimensionIndex )
 {
-    //retruned is a constant from constant group ::com::sun::star::chart2::AxisType
+    
 
-    //@todo ask charttype itself --> need model change first
+    
     if(!xChartType.is())
         return AxisType::CATEGORY;
 
     OUString aChartTypeName = xChartType->getChartType();
-    if(2==nDimensionIndex)//z-axis
+    if(2==nDimensionIndex)
         return AxisType::SERIES;
-    if(1==nDimensionIndex)//y-axis
+    if(1==nDimensionIndex)
         return AxisType::REALNUMBER;
-    if(0==nDimensionIndex)//x-axis
+    if(0==nDimensionIndex)
     {
         if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
          || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE) )
@@ -685,6 +685,6 @@ bool ChartTypeHelper::isSupportingOnlyDeepStackingFor3D( const uno::Reference< X
     return bRet;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

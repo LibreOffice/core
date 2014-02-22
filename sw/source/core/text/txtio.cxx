@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -191,7 +191,7 @@ CONSTCHAR( pPREP_PAGE, "PAGE" );
 
 const char *GetPrepName( const PrepareHint ePrep )
 {
-    // Kurz und schmerzlos:
+    
     const char *ppNameArr[PREP_END] =
     {
         pPREP_CLEAR, pPREP_WIDOWS_ORPHANS, pPREP_FIXSIZE_CHG,
@@ -205,7 +205,7 @@ const char *GetPrepName( const PrepareHint ePrep )
     return( ppNameArr[ePrep] );
 }
 
-SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwLinePortion::operator<<( SvStream &rOs ) const 
 {
     rOs << " {";
     rOs <<  "L:" << nLineLength;
@@ -216,7 +216,7 @@ SvStream &SwLinePortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwTxtPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwTxtPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {TXT:" );
     rOs << pTxt;
@@ -225,7 +225,7 @@ SvStream &SwTxtPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwTmpEndPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwTmpEndPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {END:" );
     rOs << pTxt;
@@ -236,7 +236,7 @@ SvStream &SwTmpEndPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwBreakPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwBreakPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {BREAK:" );
     rOs << pTxt;
@@ -245,7 +245,7 @@ SvStream &SwBreakPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwKernPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwKernPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {KERN:" );
     rOs << pTxt;
@@ -254,7 +254,7 @@ SvStream &SwKernPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwArrowPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwArrowPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {ARROW:" );
     rOs << pTxt;
@@ -263,7 +263,7 @@ SvStream &SwArrowPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwMultiPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwMultiPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {MULTI:" );
     rOs << pTxt;
@@ -272,7 +272,7 @@ SvStream &SwMultiPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwCombinedPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwCombinedPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {COMBINED:" );
     rOs << pTxt;
@@ -281,7 +281,7 @@ SvStream &SwCombinedPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwLineLayout::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwLineLayout::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {LINE:" );
     rOs << pTxt;
@@ -297,7 +297,7 @@ SvStream &SwLineLayout::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwGluePortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwGluePortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {GLUE:" );
     rOs << pTxt;
@@ -308,7 +308,7 @@ SvStream &SwGluePortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwFixPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwFixPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {FIX:" );
     rOs << pTxt;
@@ -318,7 +318,7 @@ SvStream &SwFixPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwFlyPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwFlyPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {FLY:" );
     rOs << pTxt;
@@ -327,7 +327,7 @@ SvStream &SwFlyPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwMarginPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwMarginPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {MAR:" );
     rOs << pTxt;
@@ -336,7 +336,7 @@ SvStream &SwMarginPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwFlyCntPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwFlyCntPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {FLYCNT:" );
     rOs << pTxt;
@@ -359,7 +359,7 @@ SvStream &SwFlyCntPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwExpandPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwExpandPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {EXP:" );
     rOs << pTxt;
@@ -368,7 +368,7 @@ SvStream &SwExpandPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwFtnPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwFtnPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {FTN:" );
     rOs << pTxt;
@@ -377,7 +377,7 @@ SvStream &SwFtnPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwFtnNumPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwFtnNumPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {FTNNUM:" );
     rOs << pTxt;
@@ -386,7 +386,7 @@ SvStream &SwFtnNumPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwNumberPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwNumberPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {NUMBER:" );
     rOs << pTxt;
@@ -396,7 +396,7 @@ SvStream &SwNumberPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwBulletPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwBulletPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {BULLET:" );
     rOs << pTxt;
@@ -405,7 +405,7 @@ SvStream &SwBulletPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwGrfNumPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwGrfNumPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {GRFNUM:" );
     rOs << pTxt;
@@ -414,7 +414,7 @@ SvStream &SwGrfNumPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwHiddenPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwHiddenPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {Hidden:" );
     rOs << pTxt;
@@ -423,7 +423,7 @@ SvStream &SwHiddenPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwToxPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwToxPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {TOX:" );
     rOs << pTxt;
@@ -432,7 +432,7 @@ SvStream &SwToxPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwRefPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwRefPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {Ref:" );
     rOs << pTxt;
@@ -441,7 +441,7 @@ SvStream &SwRefPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwIsoToxPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwIsoToxPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {ISOTOX:" );
     rOs << pTxt;
@@ -450,7 +450,7 @@ SvStream &SwIsoToxPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwIsoRefPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwIsoRefPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {ISOREF:" );
     rOs << pTxt;
@@ -459,7 +459,7 @@ SvStream &SwIsoRefPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwHyphPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {HYPH:" );
     rOs << pTxt;
@@ -468,7 +468,7 @@ SvStream &SwHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwHyphStrPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {HYPHSTR:" );
     rOs << pTxt;
@@ -477,7 +477,7 @@ SvStream &SwHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwSoftHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwSoftHyphPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {SOFTHYPH:" );
     rOs << pTxt;
@@ -487,7 +487,7 @@ SvStream &SwSoftHyphPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwSoftHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwSoftHyphStrPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {SOFTHYPHSTR:" );
     rOs << pTxt;
@@ -496,7 +496,7 @@ SvStream &SwSoftHyphStrPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwBlankPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwBlankPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {BLANK:" );
     rOs << pTxt;
@@ -505,7 +505,7 @@ SvStream &SwBlankPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwFldPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwFldPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {FLD:" );
     rOs << pTxt;
@@ -516,7 +516,7 @@ SvStream &SwFldPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwPostItsPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwPostItsPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {POSTITS" );
     rOs << pTxt;
@@ -525,7 +525,7 @@ SvStream &SwPostItsPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwTabPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwTabPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {TAB" );
     rOs << pTxt;
@@ -537,7 +537,7 @@ SvStream &SwTabPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwTabLeftPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwTabLeftPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {TABLEFT" );
     rOs << pTxt;
@@ -546,7 +546,7 @@ SvStream &SwTabLeftPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwTabRightPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwTabRightPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {TABRIGHT" );
     rOs << pTxt;
@@ -555,7 +555,7 @@ SvStream &SwTabRightPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwTabCenterPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwTabCenterPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {TABCENTER" );
     rOs << pTxt;
@@ -564,7 +564,7 @@ SvStream &SwTabCenterPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwTabDecimalPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwTabDecimalPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {TABDECIMAL" );
     rOs << pTxt;
@@ -573,7 +573,7 @@ SvStream &SwTabDecimalPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwParaPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwParaPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {PAR" );
     rOs << pTxt;
@@ -582,7 +582,7 @@ SvStream &SwParaPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwHolePortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwHolePortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {HOLE" );
     rOs << pTxt;
@@ -591,7 +591,7 @@ SvStream &SwHolePortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwQuoVadisPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwQuoVadisPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {QUOVADIS" );
     rOs << pTxt;
@@ -600,7 +600,7 @@ SvStream &SwQuoVadisPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &SwErgoSumPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwErgoSumPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {ERGOSUM" );
     rOs << pTxt;
@@ -609,7 +609,7 @@ SvStream &SwErgoSumPortion::operator<<( SvStream &rOs ) const //$ ostream
     return rOs;
 }
 
-SvStream &operator<<( SvStream &rOs, const SwTxtSizeInfo &rInf ) //$ ostream
+SvStream &operator<<( SvStream &rOs, const SwTxtSizeInfo &rInf ) 
 {
     CONSTCHAR( pTxt, " {SIZEINFO:" );
     rOs << pTxt;
@@ -620,7 +620,7 @@ SvStream &operator<<( SvStream &rOs, const SwTxtSizeInfo &rInf ) //$ ostream
     return rOs;
 }
 
-SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
+SvStream &SwDropPortion::operator<<( SvStream &rOs ) const 
 {
     CONSTCHAR( pTxt, " {DROP:" );
     rOs << pTxt;

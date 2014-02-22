@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,7 +29,7 @@
 #include "sc.hrc"
 #include "optdlg.hrc"
 
-// -----------------------------------------------------------------------
+
 
 ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
                                     const SfxItemSet& rCoreAttrs )
@@ -60,7 +60,7 @@ int ScTpPrintOptions::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
 {
@@ -71,7 +71,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
         aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
     else
     {
-        // when called from print dialog and no options set, use configuration
+        
         aOptions = SC_MOD()->GetPrintOptions();
     }
 
@@ -92,7 +92,7 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
     m_pForceBreaksCB->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {

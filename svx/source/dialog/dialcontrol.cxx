@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svx/dialcontrol.hxx"
@@ -32,11 +32,11 @@
 
 namespace svx {
 
-// ============================================================================
+
 
 const long DIAL_OUTER_WIDTH = 8;
 
-// ----------------------------------------------------------------------------
+
 
 DialControlBmp::DialControlBmp( Window& rParent ) :
     VirtualDevice( rParent, 0, 0 ),
@@ -81,10 +81,10 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
 
     if ( !rText.isEmpty() )
     {
-        // rotated text
+        
         Font aFont( GetFont() );
         aFont.SetColor( GetTextColor() );
-        aFont.SetOrientation( static_cast< short >( (nAngle + 5) / 10 ) );  // Font uses 1/10 degrees
+        aFont.SetOrientation( static_cast< short >( (nAngle + 5) / 10 ) );  
         aFont.SetWeight( WEIGHT_BOLD );
         SetFont( aFont );
 
@@ -95,7 +95,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
     }
     else
     {
-        // only a line
+        
         const sal_Int32 nDx (fCos * (maRect.GetWidth()-4) / 2);
         const sal_Int32 nDy (-fSin * (maRect.GetHeight()-4) / 2);
         Point pt1( maRect.Center() );
@@ -105,7 +105,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
         DrawLine( pt1, pt2 );
     }
 
-    // *** drag button ***
+    
 
     bool bMain = (nAngle % 4500) != 0;
     SetLineColor( GetButtonLineColor() );
@@ -117,7 +117,7 @@ void DialControlBmp::DrawElements( const OUString& rText, sal_Int32 nAngle )
     DrawEllipse( Rectangle( nX - nSize, nY - nSize, nX + nSize, nY + nSize ) );
 }
 
-// private --------------------------------------------------------------------
+
 
 const Color& DialControlBmp::GetBackgroundColor() const
 {
@@ -164,13 +164,13 @@ void DialControlBmp::SetSize( const Size& rSize )
 
 void DialControlBmp::DrawBackground()
 {
-    // *** background with 3D effect ***
+    
 
     SetLineColor();
     SetFillColor();
     Erase();
 
-    EnableRTL( true ); // draw 3D effect in correct direction
+    EnableRTL( true ); 
 
     sal_uInt8 nDiff = mbEnabled ? 0x18 : 0x10;
     Color aColor;
@@ -199,7 +199,7 @@ void DialControlBmp::DrawBackground()
 
     EnableRTL( false );
 
-    // *** calibration ***
+    
 
     Point aStartPos( mnCenterX, mnCenterY );
     Color aFullColor( GetScaleLineColor() );
@@ -215,7 +215,7 @@ void DialControlBmp::DrawBackground()
         DrawLine( aStartPos, Point( mnCenterX - nX, mnCenterY - nY ) );
     }
 
-    // *** clear inner area ***
+    
 
     SetLineColor();
     SetFillColor( GetBackgroundColor() );
@@ -223,7 +223,7 @@ void DialControlBmp::DrawBackground()
         maRect.Right() - DIAL_OUTER_WIDTH, maRect.Bottom() - DIAL_OUTER_WIDTH ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 DialControl::DialControl_Impl::DialControl_Impl ( Window& rParent ) :
     mpBmpEnabled(new DialControlBmp(rParent)),
@@ -250,8 +250,8 @@ void DialControl::DialControl_Impl::Init( const Size& rWinSize, const Font& rWin
 
 void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
 {
-    // make the control squared, and adjusted so that we have a well-defined
-    // center ["(x - 1) | 1" creates odd value <= x]
+    
+    
     long nMin = (std::min(rWinSize.Width(), rWinSize.Height()) - 1) | 1;
 
     maWinSize = Size( nMin, nMin );
@@ -264,7 +264,7 @@ void DialControl::DialControl_Impl::SetSize( const Size& rWinSize )
     mpBmpBuffered->SetSize( maWinSize );
 }
 
-// ============================================================================
+
 
 DialControl::DialControl( Window* pParent, WinBits nBits ) :
     Control( pParent, nBits ),
@@ -299,7 +299,7 @@ void DialControl::StateChanged( StateChangedType nStateChange )
     if( nStateChange == STATE_CHANGE_ENABLE )
         InvalidateControl();
 
-    // update the linked edit field
+    
     if( mpImpl->mpLinkField )
     {
         NumericField& rField = *mpImpl->mpLinkField;
@@ -364,7 +364,7 @@ void DialControl::KeyInput( const KeyEvent& rKEvt )
 
 void DialControl::LoseFocus()
 {
-    // release captured mouse
+    
     HandleEscapeEvent();
     Control::LoseFocus();
 }
@@ -404,11 +404,11 @@ void DialControl::SetLinkedField( NumericField* pField, sal_Int32 nDecimalPlaces
 {
     mpImpl->mnLinkedFieldValueMultiplyer = 100 / std::pow(10.0, double(nDecimalPlaces));
 
-    // remove modify handler from old linked field
+    
     ImplSetFieldLink( Link() );
-    // remember the new linked field
+    
     mpImpl->mpLinkField = pField;
-    // set modify handler at new linked field
+    
     ImplSetFieldLink( LINK( this, DialControl, LinkedFieldModifyHdl ) );
 }
 
@@ -427,19 +427,19 @@ void DialControl::SetModifyHdl( const Link& rLink )
     mpImpl->maModifyHdl = rLink;
 }
 
-// private --------------------------------------------------------------------
+
 
 void DialControl::Init( const Size& rWinSize, const Font& rWinFont )
 {
     mpImpl->Init( rWinSize, rWinFont );
-    EnableRTL( false ); // don't mirror mouse handling
+    EnableRTL( false ); 
     SetOutputSizePixel( mpImpl->maWinSize );
     SetBackground();
 }
 
 void DialControl::Init( const Size& rWinSize )
 {
-    //hidpi TODO: GetDefaultFont() picks a font size too small, so fix it here.
+    
     Font aDefaultSize = GetFont();
 
     Font aFont( OutputDevice::GetDefaultFont(
@@ -501,9 +501,9 @@ void DialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
         sal_Int32 nAngle = static_cast< sal_Int32 >( fAngle / F_PI180 * 100.0 );
         if( nY < 0 )
             nAngle = 36000 - nAngle;
-        if( bInitial )  // round to entire 15 degrees
+        if( bInitial )  
             nAngle = ((nAngle + 750) / 1500) * 1500;
-        // Round up to 1 degree
+        
         nAngle = (((nAngle + 50) / 100) * 100) % 36000;
         SetRotation( nAngle, true );
     }
@@ -527,7 +527,7 @@ IMPL_LINK( DialControl, LinkedFieldModifyHdl, NumericField*, pField )
     return 0;
 }
 
-// ============================================================================
+
 
 DialControlWrapper::DialControlWrapper( DialControl& rDial ) :
     SingleControlWrapperType( rDial )
@@ -555,8 +555,8 @@ void DialControlWrapper::SetControlValue( sal_Int32 nValue )
     GetControl().SetRotation( nValue );
 }
 
-// ============================================================================
 
-} // namespace svx
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

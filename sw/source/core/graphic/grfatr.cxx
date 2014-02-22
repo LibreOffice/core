@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -43,7 +43,7 @@ using namespace ::com::sun::star;
 TYPEINIT1_AUTOFACTORY(SwCropGrf, SfxPoolItem)
 TYPEINIT1_AUTOFACTORY(SwGammaGrf, SfxPoolItem)
 
-// SwMirrorGrf
+
 
 SfxPoolItem* SwMirrorGrf::Clone( SfxItemPool* ) const
 {
@@ -79,7 +79,7 @@ bool SwMirrorGrf::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     bool bRet = true;
     sal_Bool bVal;
-    // vertical and horizontal were swapped at some point
+    
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -105,7 +105,7 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     bool bRet = true;
     sal_Bool bVal = *(sal_Bool*)rVal.getValue();
-    // vertical and horizontal were swapped at some point
+    
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
@@ -149,7 +149,7 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-// SwCropGrf
+
 
 SwCropGrf::SwCropGrf()
     : SvxGrfCrop( RES_GRFATR_CROPGRF )
@@ -164,7 +164,7 @@ SfxPoolItem* SwCropGrf::Clone( SfxItemPool* ) const
     return new SwCropGrf( *this );
 }
 
-// SwRotationGrf
+
 
 SfxPoolItem* SwRotationGrf::Clone( SfxItemPool * ) const
 {
@@ -179,20 +179,20 @@ bool SwRotationGrf::operator==( const SfxPoolItem& rCmp ) const
 
 bool SwRotationGrf::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 {
-    // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
-    // where we still want this to be a sal_Int16
+    
+    
     rVal <<= (sal_Int16)GetValue();
     return true;
 }
 
 bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
 {
-    // SfxUInt16Item::QueryValue returns sal_Int32 in Any now... (srx642w)
-    // where we still want this to be a sal_Int16
+    
+    
     sal_Int16 nValue = 0;
     if (rVal >>= nValue)
     {
-        // sal_uInt16 argument needed
+        
         SetValue( (sal_uInt16) nValue );
         return true;
     }
@@ -201,7 +201,7 @@ bool SwRotationGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
     return false;
 }
 
-// Sw___Grf::Clone(..)
+
 
 SfxPoolItem* SwLuminanceGrf::Clone( SfxItemPool * ) const
 {
@@ -233,7 +233,7 @@ SfxPoolItem* SwGammaGrf::Clone( SfxItemPool * ) const
     return new SwGammaGrf( *this );
 }
 
-// SwGammaGrf
+
 
 bool SwGammaGrf::operator==( const SfxPoolItem& rCmp ) const
 {
@@ -252,7 +252,7 @@ bool SwGammaGrf::PutValue( const uno::Any& rVal, sal_uInt8 )
     return rVal >>= nValue;
 }
 
-// Sw___Grf::Clone(..) cont'd
+
 
 SfxPoolItem* SwInvertGrf::Clone( SfxItemPool * ) const
 {
@@ -264,7 +264,7 @@ SfxPoolItem* SwTransparencyGrf::Clone( SfxItemPool * ) const
     return new SwTransparencyGrf( *this );
 }
 
-// SwTransparencyGrf
+
 
 bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
                                         sal_uInt8 ) const
@@ -279,15 +279,15 @@ bool SwTransparencyGrf::QueryValue( uno::Any& rVal,
 bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
                                         sal_uInt8 )
 {
-    //temporary conversion until this is a SfxInt16Item!
+    
     OSL_ENSURE(ISA(SfxByteItem),"Put/QueryValue should be removed!");
     sal_Int16 nVal = 0;
     if(!(rVal >>= nVal) || nVal < -100 || nVal > 100)
         return false;
     if(nVal < 0)
     {
-        // for compatibility with old documents
-        // introduce rounding as for SO 6.0 PP2
+        
+        
         nVal = ( ( nVal * 128 ) - (99/2) ) / 100;
         nVal += 128;
     }
@@ -296,14 +296,14 @@ bool SwTransparencyGrf::PutValue( const uno::Any& rVal,
     return true;
 }
 
-// Sw___Grf::Clone(..) cont'd
+
 
 SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
 {
     return new SwDrawModeGrf( *this );
 }
 
-// SwDrawModeGrf
+
 
 sal_uInt16 SwDrawModeGrf::GetValueCount() const
 {

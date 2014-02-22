@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <attr.hxx>
@@ -57,7 +57,7 @@ namespace DOM
             return pNs;
         }
         pNs = xmlSearchNsByHref(pNode->doc, pNode, pUri);
-        // if (!pNs) hmm... now what? throw?
+        
         if (!pNs) { OSL_TRACE("CAtttr: cannot create namespace"); }
         return pNs;
     }
@@ -134,8 +134,8 @@ namespace DOM
     sal_Bool SAL_CALL CAttr::getSpecified()
         throw (RuntimeException)
     {
-        // FIXME if this DOM implemenatation supported DTDs it would need
-        // to check that this attribute is not default or something
+        
+        
         return sal_True;
     }
 
@@ -172,15 +172,15 @@ namespace DOM
             return;
         }
 
-        // remember old value (for mutation event)
+        
         OUString sOldValue = getValue();
 
         OString o1 = OUStringToOString(value, RTL_TEXTENCODING_UTF8);
         xmlChar* xValue = (xmlChar*)o1.getStr();
-        // xmlChar* xName = OUStringToOString(m_aAttrPtr->name, RTL_TEXTENCODING_UTF8).getStr();
-        // this does not work if the attribute was created anew
-        // xmlNodePtr pNode = m_aAttrPtr->parent;
-        // xmlSetProp(pNode, m_aAttrPtr->name, xValue);
+        
+        
+        
+        
         ::boost::shared_ptr<xmlChar const> const buffer(
                 xmlEncodeEntitiesReentrant(m_aAttrPtr->doc, xValue), xmlFree);
         xmlFreeNodeList(m_aAttrPtr->children);
@@ -195,8 +195,8 @@ namespace DOM
             tmp = tmp->next;
         }
 
-        // dispatch DOM events to signal change in attribute value
-        // dispatch DomAttrModified + DOMSubtreeModified
+        
+        
         OUString sEventName( "DOMAttrModified" );
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(sEventName),UNO_QUERY);
@@ -205,7 +205,7 @@ namespace DOM
                 Reference<XNode>( static_cast<XAttr*>( this ) ),
                 sOldValue, value, getName(), AttrChangeType_MODIFICATION );
 
-        guard.clear(); // release mutex before calling event handlers
+        guard.clear(); 
 
         dispatchEvent(event);
         dispatchSubtreeModified();

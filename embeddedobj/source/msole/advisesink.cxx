@@ -69,14 +69,14 @@ STDMETHODIMP_(ULONG) OleWrapperAdviseSink::Release()
 
 void OleWrapperAdviseSink::disconnectOleComponent()
 {
-    // must not be called from the descructor of OleComponent!!!
+    
     osl::MutexGuard aGuard( m_aMutex );
     m_pOleComp = NULL;
 }
 
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnDataChange(LPFORMATETC, LPSTGMEDIUM)
 {
-    // Unused for now ( no registration for IDataObject events )
+    
 }
 
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG)
@@ -95,14 +95,14 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnViewChange(DWORD dwAspect, LONG)
 
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnRename(LPMONIKER)
 {
-    // handled by default inprocess handler
+    
 }
 
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnSave(void)
 {
-    // TODO: ???
-    // The object knows about document saving already since it contolls it as ClienSite
-    // other interested listeners must be registered for the object
+    
+    
+    
 }
 
 STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose(void)
@@ -118,7 +118,7 @@ STDMETHODIMP_(void) OleWrapperAdviseSink::OnClose(void)
     if ( xLockComponent.is() )
         xLockComponent->OnClose_Impl();
 
-    // TODO: sometimes it can be necessary to simulate OnShowWindow( False ) here
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

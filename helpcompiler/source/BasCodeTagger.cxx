@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <BasCodeTagger.hxx>
@@ -24,7 +24,7 @@ LibXmlTreeWalker::LibXmlTreeWalker( xmlDocPtr doc )
 void LibXmlTreeWalker::nextNode()
 {
 
-      //next node
+      
     if ( m_pCurrentNode->next == NULL )
     {
         m_pCurrentNode = m_Queue.front();
@@ -32,7 +32,7 @@ void LibXmlTreeWalker::nextNode()
     }
     else
         m_pCurrentNode = m_pCurrentNode->next;
-    //queue chiledren if they exist
+    
     if ( m_pCurrentNode->xmlChildrenNode != NULL )
         m_Queue.push_back( m_pCurrentNode->xmlChildrenNode );
 }
@@ -53,7 +53,7 @@ xmlNodePtr LibXmlTreeWalker::currentNode()
     return m_pCurrentNode;
 }
 
-//======================================================
+
 
 BasicCodeTagger::BasicCodeTagger( xmlDocPtr rootDoc ):
     m_Highlighter(HIGHLIGHT_BASIC)
@@ -71,7 +71,7 @@ BasicCodeTagger::~BasicCodeTagger()
     if ( m_pXmlTreeWalker != NULL )
       delete m_pXmlTreeWalker;
 }
-//!Gathers all the <bascode> tag nodes from xml tree.
+
 /*!
  *    Assumes m_pDocument is valid. Handles m_pXmlTreeWalker and m_BasicCodeContainerTags members.
  */
@@ -87,54 +87,54 @@ void BasicCodeTagger::getBasicCodeContainerNodes()
 
     currentNode = m_pXmlTreeWalker->currentNode();
     if ( !( xmlStrcmp( currentNode->name, (const xmlChar*) "bascode" ) ) )
-    { //Found <bascode>
-        m_BasicCodeContainerTags.push_back( currentNode ); //it goes to the end of the list
+    { 
+        m_BasicCodeContainerTags.push_back( currentNode ); 
     }
     while ( !m_pXmlTreeWalker->end() )
     {
           m_pXmlTreeWalker->nextNode();
         if ( !( xmlStrcmp( m_pXmlTreeWalker->currentNode()->name, (const xmlChar*) "bascode" ) ) )
-        { //Found <bascode>
-            m_BasicCodeContainerTags.push_back( m_pXmlTreeWalker->currentNode() ); //it goes to the end of the list
+        { 
+            m_BasicCodeContainerTags.push_back( m_pXmlTreeWalker->currentNode() ); 
             m_pXmlTreeWalker->ignoreCurrNodesChildren();
         }
     }
 }
 
-//! Extracts Basic Codes containted in <bascode> tags.
+
 /*!
  *  For each <bascode> this method iterates trough it's <paragraph> tags and "inserts" <item> tags according
  *  to the Basic code syntax found in that paragraph.
  */
 void BasicCodeTagger::tagBasCodeParagraphs()
 {
-    //helper variables
+    
     xmlNodePtr currBascodeNode;
     xmlNodePtr currParagraph;
     while ( !m_BasicCodeContainerTags.empty() )
     {
         currBascodeNode = m_BasicCodeContainerTags.front();
-        currParagraph = currBascodeNode->xmlChildrenNode; //first <paragraph>
+        currParagraph = currBascodeNode->xmlChildrenNode; 
         while ( currParagraph != NULL )
         {
             tagParagraph( currParagraph );
             currParagraph=currParagraph->next;
         }
-        m_BasicCodeContainerTags.pop_front(); //next element
+        m_BasicCodeContainerTags.pop_front(); 
     }
 }
 
-//! Used by tagBasCodeParagraphs(). It does the work on the current paragraph containing Basic code.
+
 void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
 {
-    //1. get paragraph text
+    
     xmlChar* codeSnippet;
     codeSnippet = xmlNodeListGetString( m_pDocument, paragraph->xmlChildrenNode, 1 );
     if ( codeSnippet == NULL )
     {
-        return; //no text, nothing more to do here
+        return; 
     }
-    //2. delete every child from paragraph (except attributes)
+    
     xmlNodePtr curNode = paragraph->xmlChildrenNode;
     xmlNodePtr sibling;
     while ( curNode != NULL )
@@ -145,7 +145,7 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
         curNode = sibling;
     }
 
-    //3. create new paragraph content
+    
     OUString strLine( reinterpret_cast<const sal_Char*>(codeSnippet),
                                 strlen(reinterpret_cast<const char*>(codeSnippet)),
                                 RTL_TEXTENCODING_UTF8 );
@@ -170,7 +170,7 @@ void BasicCodeTagger::tagParagraph( xmlNodePtr paragraph )
     xmlFree( codeSnippet );
 }
 
-//! Manages tagging process.
+
 /*!
  *    This is the "main" function of BasicCodeTagger.
  */
@@ -178,7 +178,7 @@ void BasicCodeTagger::tagBasicCodes()
 {
       if ( m_bTaggingCompleted )
         return;
-    //gather <bascode> nodes
+    
     try
     {
         getBasicCodeContainerNodes();
@@ -188,12 +188,12 @@ void BasicCodeTagger::tagBasicCodes()
           std::cout << "BasCodeTagger error occured. Error code:" << ex << std::endl;
     }
 
-    //tag basic code paragraphs in <bascode> tag
+    
     tagBasCodeParagraphs();
     m_bTaggingCompleted = true;
 }
 
-//! Converts SyntaxHighlighter's TokenTypes enum to a type string for <item type=... >
+
 xmlChar* BasicCodeTagger::getTypeString( TokenTypes tokenType )
 {
     const char* str;

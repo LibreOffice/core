@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -88,7 +88,7 @@ Any OInstanceProvider::queryInterface( const  Type & aType ) throw ( RuntimeExce
         throw(::com::sun::star::container::NoSuchElementException,
               ::com::sun::star::uno::RuntimeException)
 {
-    // Tries to get the PerformanceTestObject
+    
     if( sObjectName == "TestRemoteObject" )
     {
         return m_rSMgr->createInstance(
@@ -117,10 +117,10 @@ public:
         : _nRef( 0 )
         {}
 
-    // XInterface
+    
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException)
     {
-        // execution time remains appr. constant any time
+        
         Any aRet;
         if (aType == ::getCppuType( (const Reference< XInterface > *)0 ))
         {
@@ -144,12 +144,12 @@ public:
     virtual void SAL_CALL release() throw()
         { if (! osl_atomic_decrement( &_nRef )) delete this; }
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 
-    // Attributes
+    
     virtual sal_Int32 SAL_CALL getLong_attr() throw(::com::sun::star::uno::RuntimeException)
         { return 0; }
     virtual void SAL_CALL setLong_attr( sal_Int32 /* _attributelong */) throw(::com::sun::star::uno::RuntimeException)
@@ -187,7 +187,7 @@ public:
     virtual void SAL_CALL setStruct_attr( const ::com::sun::star::test::performance::ComplexTypes& /* _attributestruct */) throw(::com::sun::star::uno::RuntimeException)
         {}
 
-    // Methods
+    
     virtual sal_Int32 SAL_CALL getLong() throw(::com::sun::star::uno::RuntimeException)
         { return 0; }
     virtual void SAL_CALL setLong( sal_Int32 /* _long */) throw(::com::sun::star::uno::RuntimeException)
@@ -246,7 +246,7 @@ public:
 void ServiceImpl::async() throw(::com::sun::star::uno::RuntimeException)
 {}
 
-// XServiceInfo
+
 OUString ServiceImpl::getImplementationName()
     throw (RuntimeException)
 {
@@ -300,7 +300,7 @@ void OCallMe::call( const OUString& s, sal_Int32 nToDo )
 void SAL_CALL OCallMe::drawLine( sal_Int32 /* x1 */, sal_Int32 /* y1 */, sal_Int32 /* x2 */, sal_Int32 /* y2 */)
         throw(::com::sun::star::uno::RuntimeException)
 {
-    // do nothings
+    
 }
 
 void OCallMe::callOneway( const OUString& /* s */, sal_Int32 nToDo )
@@ -429,25 +429,25 @@ Reference< ::test::XInterfaceTest > SAL_CALL OTestFactory::createInterfaceTest( 
     return Reference < XInterfaceTest > ( (XInterfaceTest * ) new OInterfaceTest() );
 }
 
-//  class OInstanceProvider :
-//      public ::cppu::OWeakObject,
-//      public XInstanceProvider
-//  {
-//  public:
-//      OInstanceProvider( ){}
-//      ~OInstanceProvider(){ printf( "instance provider dies\n" );}
-//  public:
-//      // XInterface
-//      Any         SAL_CALL queryInterface( const Type & aType);
-//      void        SAL_CALL acquire()                       { OWeakObject::acquire(); }
-//      void        SAL_CALL release()                       { OWeakObject::release(); }
 
-//  public:
-//      virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-//             getInstance( const OUString& sObjectName )
-//                   throw( ::com::sun::star::container::NoSuchElementException,
-//                          ::com::sun::star::uno::RuntimeException);
-//  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 double getCallsPerSec( const Reference < XCallMe > &rCall , int nLoops, int nToDo )
 {
@@ -474,7 +474,7 @@ double getCallsPerSecOneway( const Reference < XCallMe > &rCall ,
     osl_getSystemTime( &aStartTime );
     for( sal_Int32 i = 0; i < nLoops; i ++ )
     {
-//          rCall->callOneway( OUString("Performance test string" ), 0 );
+
           rCall->drawLine( 0 , 0 , 500 , 123 );
     }
     osl_getSystemTime( &aEndTime );
@@ -550,7 +550,7 @@ void testException( const Reference < XCallMe > &r )
     }
     catch( TestBridgeException  & e )
     {
-        // Exception flew successfully !
+        
     }
     catch( Exception & e )
     {
@@ -636,7 +636,7 @@ void testRemote( const Reference< XInterface > &rRemote )
     printf( "Testing exception remote ...\n" );
     testException( rRCallMe );
 
-      // Test attributes
+      
        OUString ow( "dum didel dum dideldei" );
        rLCallMe->setsAttribute( ow );
        OSL_ASSERT( rLCallMe->getsAttribute() == ow );
@@ -644,16 +644,16 @@ void testRemote( const Reference< XInterface > &rRemote )
          rRCallMe->setsAttribute( ow );
          OSL_ASSERT( rRCallMe->getsAttribute() == ow );
 
-    // Performance test
+    
     testPerformance( rRCallMe , rLCallMe );
      testOnewayPerformanceOnTwoInterfaces( rRFact->createCallMe(), rRCallMe );
 
-     // Test sequence
+     
        testSequenceOfCalls( rRCallMe );
 
 
-     // test triple to check if transporting the same interface multiple
-     // times causes any problems
+     
+     
        Reference< XInterfaceTest > rRTest = rRFact->createInterfaceTest();
        Reference< XInterfaceTest > rRTest2 = rRFact->createInterfaceTest();
        Reference< XInterfaceTest > rRTest3 = rRFact->createInterfaceTest();
@@ -695,10 +695,10 @@ void testRemote( const Reference< XInterface > &rRemote )
      OSL_ASSERT( r == rLCallMe );
      OSL_ASSERT( ! ( r == rRCallMe ) );
 
-     // test empty references
+     
      rRTest->setIn( Reference < XCallMe > () );
 
-       // test thread deadlocking
+       
       rLCallMe->callAgain( rRCallMe, 20 );
 
 }
@@ -712,7 +712,7 @@ Reference <XInterface > createComponent( const OUString &sService ,
 
     if( ! rInterface.is() )
     {
-        // erst registrieren
+        
         Reference < XImplementationRegistration > rReg (
             rSMgr->createInstance(
                 OUString( "com.sun.star.registry.ImplementationRegistration" )),

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,14 +32,14 @@
 #include <impbmp.hxx>
 #include <salgdi.hxx>
 
-// uncomment the following line to have ownerdrawn menus, ie, with bitmaps
-// however, this is incompatible with OLE inplace editing
-// so it is not activated by default
-//#define OWNERDRAW
+
+
+
+
 
 static DWORD myerr=0;
 
-// =======================================================================
+
 
 sal_Bool SalData::IsKnownMenuHandle( HMENU hMenu )
 {
@@ -49,9 +49,9 @@ sal_Bool SalData::IsKnownMenuHandle( HMENU hMenu )
         return TRUE;
 }
 
-// =======================================================================
 
-// WinSalInst factory methods
+
+
 
 SalMenu* WinSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* )
 {
@@ -87,19 +87,19 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
 
     if( pItemData->eType == MENUITEM_SEPARATOR )
     {
-        // separator
+        
         pSalMenuItem->mInfo.fMask = MIIM_TYPE;
         pSalMenuItem->mInfo.fType = MFT_SEPARATOR;
     }
     else
     {
-        // item
+        
         pSalMenuItem->mText   = pItemData->aText;
         pSalMenuItem->mpMenu  = pItemData->pMenu;
         pSalMenuItem->maBitmap= !!pItemData->aImage ? pItemData->aImage.GetBitmapEx().GetBitmap() : Bitmap();
         pSalMenuItem->mnId    = pItemData->nId;
 
-        // 'translate' mnemonics
+        
         pSalMenuItem->mText = pSalMenuItem->mText.replaceAll( "~", "&" );
 
         pSalMenuItem->mInfo.fMask = MIIM_TYPE | MIIM_STATE | MIIM_ID | MIIM_DATA;
@@ -113,7 +113,7 @@ SalMenuItem* WinSalInstance::CreateMenuItem( const SalItemParams* pItemData )
         pSalMenuItem->mInfo.cch = pSalMenuItem->mText.getLength();
 
         pSalMenuItem->mInfo.wID = pItemData->nId;
-        pSalMenuItem->mInfo.dwItemData = (ULONG_PTR) pSalMenuItem; // user data
+        pSalMenuItem->mInfo.dwItemData = (ULONG_PTR) pSalMenuItem; 
     }
 
     return pSalMenuItem;
@@ -125,13 +125,13 @@ void WinSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 }
 
 
-// =======================================================================
+
 
 static void ImplDrawMenuBar( SalMenu *pMenu )
 {
     if( pMenu->VisibleMenuBar() )
     {
-        // redrawing the menubar all the time actually seems to be unnecessary (it just flickers)
+        
         /*
         WinSalMenu *pMenuBar = ImplFindMenuBar( pMenu );
         if( pMenuBar && pMenuBar->mhWnd )
@@ -140,7 +140,7 @@ static void ImplDrawMenuBar( SalMenu *pMenu )
     }
 }
 
-// =======================================================================
+
 
 
 /*
@@ -157,22 +157,22 @@ WinSalMenu::WinSalMenu()
 
 WinSalMenu::~WinSalMenu()
 {
-    // only required if not associated to a window...
+    
     GetSalData()->mhMenuSet.erase( mhMenu );
     ::DestroyMenu( mhMenu );
 }
 
 bool WinSalMenu::VisibleMenuBar()
 {
-    // The Win32 implementation never shows a native
-    // menubar. Thus, native menus are only visible
-    // when the menu is merged with an OLE container.
-    // The reason are missing tooltips, ownerdraw
-    // issues and accessibility which are better supported
-    // by VCL menus.
-    // Nevertheless, the native menus are always created
-    // and the application will properly react to all native
-    // menu messages.
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     return FALSE;
 }
@@ -318,7 +318,7 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
     {
     WinSalMenuItem* pWItem = static_cast<WinSalMenuItem*>(pSalMenuItem);
         pWItem->mText = rText;
-        // 'translate' mnemonics
+        
         pWItem->mText = pWItem->mText.replaceAll( "~", "&" );
         pWItem->mInfo.fMask = MIIM_TYPE | MIIM_DATA;
         pWItem->mInfo.fType = MFT_STRING;
@@ -327,7 +327,7 @@ void WinSalMenu::SetItemText( unsigned nPos, SalMenuItem* pSalMenuItem, const OU
             pWItem->mInfo.fType |= MFT_OWNERDRAW;
 #endif
 
-        // combine text and accelerator text
+        
         OUString aStr( pWItem->mText );
         if( pWItem->mAccelText.getLength() )
         {
@@ -355,7 +355,7 @@ void WinSalMenu::SetAccelerator( unsigned nPos, SalMenuItem* pSalMenuItem, const
         if( pWItem->mpMenu && !((Menu*)pWItem->mpMenu)->IsMenuBar() )
             pWItem->mInfo.fType |= MFT_OWNERDRAW;
 #endif
-        // combine text and accelerator text
+        
         OUString aStr( pWItem->mText );
         if( pWItem->mAccelText.getLength() )
         {
@@ -377,7 +377,7 @@ void WinSalMenu::GetSystemMenuData( SystemMenuData* pData )
         pData->hMenu = mhMenu;
 }
 
-// =======================================================================
+
 
 /*
  * SalMenuItem
@@ -398,6 +398,6 @@ WinSalMenuItem::~WinSalMenuItem()
         ImplRemoveItemById( mpSalMenu, mnId );
 }
 
-// -------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

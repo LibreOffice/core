@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Sequence.h>
@@ -61,7 +61,7 @@
 #include <pam.hxx>
 #include <SwGrammarMarkUp.hxx>
 #include "numrule.hxx"
-// #i12836# enhanced pdf export
+
 #include <EnhancedPDFExportHelper.hxx>
 #include <docufld.hxx>
 
@@ -115,12 +115,12 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
     {
         bListTabStopIncluded = true;
 
-        // insert the list tab stop into SvxTabItem instance <pRuler>
+        
         const SvxTabStop aListTabStop( nListTabStopPosition,
                                        SVX_TAB_ADJUST_LEFT );
         pRuler->Insert( aListTabStop );
 
-        // remove default tab stops, which are before the inserted list tab stop
+        
         for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
         {
             if ( (*pRuler)[i].GetTabPos() < nListTabStopPosition &&
@@ -134,7 +134,7 @@ void SwLineInfo::CtorInitLineInfo( const SwAttrSet& rAttrSet,
 
     if ( !rTxtNode.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) )
     {
-        // remove default tab stop at position 0
+        
         for ( sal_uInt16 i = 0; i < pRuler->Count(); i++ )
         {
             if ( (*pRuler)[i].GetTabPos() == 0 &&
@@ -234,7 +234,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     const SwTxtNode *pNd = m_pFrm->GetTxtNode();
     m_pVsh = m_pFrm->getRootFrm()->GetCurrShell();
 
-    // Get the output and reference device
+    
     if ( m_pVsh )
     {
         m_pOut = m_pVsh->GetOut();
@@ -243,10 +243,10 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     }
     else
     {
-        // Access via StarONE. We do not need a Shell or an active one.
+        
         if ( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
         {
-            // We can only pick the AppWin here? (there's nothing better to pick?)
+            
             m_pOut = GetpApp()->GetDefaultDevice();
         }
         else
@@ -259,7 +259,7 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     ChkOutDev( *this );
 #endif
 
-    // Set default layout mode ( LTR or RTL ).
+    
     if ( m_pFrm->IsRightToLeft() )
     {
         m_pOut->SetLayoutMode( TEXT_LAYOUT_BIDI_STRONG | TEXT_LAYOUT_BIDI_RTL );
@@ -274,14 +274,14 @@ void SwTxtSizeInfo::CtorInitTxtSizeInfo( SwTxtFrm *pFrame, SwFont *pNewFnt,
     }
 
     //
-    // The Options
+    
     //
     m_pOpt = m_pVsh ?
            m_pVsh->GetViewOptions() :
-           SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) ); // Options from Module, due to StarONE
+           SW_MOD()->GetViewOption( pNd->getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) ); 
 
-    // bURLNotify is set if MakeGraphic prepares it
-    // TODO: Unwind
+    
+    
     m_bURLNotify = pNoteURL && !m_bOnWin;
 
     SetSnapToGrid( pNd->GetSwAttrSet().GetParaGrid().GetValue() &&
@@ -339,9 +339,9 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const OUString* pTxt,
 
 void SwTxtSizeInfo::SelectFont()
 {
-     // The path needs to go via ChgPhysFnt or the FontMetricCache gets confused.
-     // In this case pLastMet has it's old value.
-     // Wrong: GetOut()->SetFont( GetFont()->GetFnt() );
+     
+     
+     
     GetFont()->Invalidate();
     GetFont()->ChgPhysFnt( m_pVsh, *GetOut() );
 }
@@ -375,8 +375,8 @@ SwPosSize SwTxtSizeInfo::GetTxtSize() const
     const SwScriptInfo& rSI =
                      ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
 
-    // in some cases, compression is not allowed or suppressed for
-    // performance reasons
+    
+    
     sal_uInt16 nComp =( SW_CJK == GetFont()->GetActual() &&
                     rSI.CountCompChg() &&
                     ! IsMulti() ) ?
@@ -458,7 +458,7 @@ void SwTxtPaintInfo::CtorInitTxtPaintInfo( SwTxtFrm *pFrame, const SwRect &rPain
     pSpaceAdd = NULL;
     pWrongList = NULL;
     pGrammarCheckList = NULL;
-    pSmartTags = NULL;  // SMARTTAGS
+    pSmartTags = NULL;  
 
 #if OSL_DEBUG_LEVEL > 1
     pBrushItem = ((SvxBrushItem*)-1);
@@ -471,7 +471,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf, const OUString* pTxt
     : SwTxtSizeInfo( rInf, pTxt ),
       pWrongList( rInf.GetpWrongList() ),
       pGrammarCheckList( rInf.GetGrammarCheckList() ),
-      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
+      pSmartTags( rInf.GetSmartTags() ),    
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
       aTxtFly( *rInf.GetTxtFly() ),
@@ -484,7 +484,7 @@ SwTxtPaintInfo::SwTxtPaintInfo( const SwTxtPaintInfo &rInf )
     : SwTxtSizeInfo( rInf ),
       pWrongList( rInf.GetpWrongList() ),
       pGrammarCheckList( rInf.GetGrammarCheckList() ),
-      pSmartTags( rInf.GetSmartTags() ),    // SMARTTAGS
+      pSmartTags( rInf.GetSmartTags() ),    
       pSpaceAdd( rInf.GetpSpaceAdd() ),
       pBrushItem( rInf.GetBrushItem() ),
       aTxtFly( *rInf.GetTxtFly() ),
@@ -511,16 +511,16 @@ static bool lcl_IsDarkBackground( const SwTxtPaintInfo& rInf )
         const XFillGradientItem* pFillGradientItem;
         SwRect aOrigBackRect;
 
-        // Consider, that [GetBackgroundBrush(...)] can set <pCol>
-        // See implementation in /core/layout/paintfrm.cxx
-        // There is a background color, if there is a background brush and
-        // its color is *not* "no fill"/"auto fill".
+        
+        
+        
+        
         if( rInf.GetTxtFrm()->GetBackgroundBrush( pItem, pFillStyleItem, pFillGradientItem, pCol, aOrigBackRect, false ) )
         {
             if ( !pCol )
                 pCol = &pItem->GetColor();
 
-            // Determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
+            
             if ( pCol->GetColor() == COL_TRANSPARENT)
                 pCol = NULL;
         }
@@ -543,14 +543,14 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
                                 const sal_Int32 nStart, const sal_Int32 nLength,
                                 const bool bKern, const bool bWrong,
                                 const bool bSmartTag,
-                                const bool bGrammarCheck )  // SMARTTAGS
+                                const bool bGrammarCheck )  
 {
     if( !nLength )
         return;
 
     if( GetFont()->IsBlink() && OnWin() && rPor.Width() )
     {
-        // check if accessibility options allow blinking portions:
+        
         const SwViewShell* pSh = GetTxtFrm()->getRootFrm()->GetCurrShell();
         if ( pSh && ! pSh->GetAccessibilityOptions()->IsStopAnimatedText() &&
              ! pSh->IsPreview() )
@@ -581,13 +581,13 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
         }
     }
 
-    // The SwScriptInfo is useless if we are inside a field portion
+    
     SwScriptInfo* pSI = 0;
     if ( ! rPor.InFldGrp() )
         pSI = &GetParaPortion()->GetScriptInfo();
 
-    // in some cases, kana compression is not allowed or suppressed for
-    // performance reasons
+    
+    
     sal_uInt16 nComp = 0;
     if ( ! IsMulti() )
         nComp = GetKanaComp();
@@ -597,7 +597,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     const bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
     const bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell();
     const bool bTmpGrammarCheck = bGrammarCheck && OnWin() && bCfgIsAutoGrammar && GetOpt().IsOnlineSpell();
-    const bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
+    const bool bTmpSmart = bSmartTag && OnWin() && !GetOpt().IsPagePreview() && SwSmartTagMgr::Get().IsSmartTagsEnabled(); 
 
     OSL_ENSURE( GetParaPortion(), "No paragraph!");
     SwDrawTextInfo aDrawInf( m_pFrm->getRootFrm()->GetCurrShell(), *m_pOut, pSI, rText, nStart, nLength,
@@ -614,8 +614,8 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     if ( nSpaceAdd )
     {
         sal_Int32 nCharCnt = 0;
-        // #i41860# Thai justified alignment needs some
-        // additional information:
+        
+        
         aDrawInf.SetNumberOfBlanks( rPor.InTxtGrp() ?
                                     static_cast<const SwTxtPortion&>(rPor).GetSpaceCnt( *this, nCharCnt ) :
                                     0 );
@@ -624,19 +624,19 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
     aDrawInf.SetSpace( nSpaceAdd );
     aDrawInf.SetKanaComp( nComp );
 
-    // the font is used to identify the current script via nActual
+    
     aDrawInf.SetFont( m_pFnt );
-    // the frame is used to identify the orientation
+    
     aDrawInf.SetFrm( GetTxtFrm() );
-    // we have to know if the paragraph should snap to grid
+    
     aDrawInf.SetSnapToGrid( SnapToGrid() );
-    // for underlining we must know when not to add extra space behind
-    // a character in justified mode
+    
+    
     aDrawInf.SetSpaceStop( ! rPor.GetPortion() ||
                              rPor.GetPortion()->InFixMargGrp() ||
                              rPor.GetPortion()->IsHolePortion() );
 
-    // Draw text next to the left border
+    
     Point aFontPos(aPos);
     if( m_pFnt->GetLeftBorder() && !static_cast<const SwTxtPortion&>(rPor).GetJoinBorderWithPrev() )
     {
@@ -671,8 +671,8 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
 
     if( GetTxtFly()->IsOn() )
     {
-        // aPos needs to be the TopLeft, because we cannot calculate the
-        // ClipRects otherwise
+        
+        
         const Point aPoint( aFontPos.X(), aFontPos.Y() - rPor.GetAscent() );
         const Size aSize( rPor.Width(), rPor.Height() );
         aDrawInf.SetPos( aPoint );
@@ -681,7 +681,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
         aDrawInf.SetKern( bKern ? rPor.Width() : 0 );
         aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
         aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : NULL );
-        aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );     // SMARTTAGS
+        aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );     
         GetTxtFly()->DrawTextOpaque( aDrawInf );
     }
     else
@@ -693,7 +693,7 @@ void SwTxtPaintInfo::_DrawText( const OUString &rText, const SwLinePortion &rPor
         {
             aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
             aDrawInf.SetGrammarCheck( bTmpGrammarCheck ? pGrammarCheckList : NULL );
-            aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );  // SMARTTAGS
+            aDrawInf.SetSmartTags( bTmpSmart ? pSmartTags : NULL );  
             m_pFnt->_DrawText( aDrawInf );
         }
     }
@@ -735,14 +735,14 @@ void SwTxtPaintInfo::CalcRect( const SwLinePortion& rPor,
     else
     {
         aPoint.A() = X();
-        //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        
         if ( GetTxtFrm()->IsVertLR() )
             aPoint.B() = Y() - rPor.Height() + rPor.GetAscent();
         else
             aPoint.B() = Y() - rPor.GetAscent();
     }
 
-    // Adjust x coordinate if we are inside a bidi portion
+    
     const bool bFrmDir = GetTxtFrm()->IsRightToLeft();
     const bool bCounterDir = ( !bFrmDir && DIR_RIGHT2LEFT == GetDirection() ) ||
                              (  bFrmDir && DIR_LEFT2RIGHT == GetDirection() );
@@ -806,7 +806,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
     bool bCenter = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_CENTER );
     bool bRotate = 0 != ( nOptions & DRAW_SPECIAL_OPTIONS_ROTATE );
 
-    // rRect is given in absolute coordinates
+    
     if ( rInf.GetTxtFrm()->IsRightToLeft() )
         rInf.GetTxtFrm()->SwitchRTLtoLTR( rRect );
     if ( rInf.GetTxtFrm()->IsVertical() )
@@ -814,7 +814,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
     const SwFont* pOldFnt = rInf.GetFont();
 
-    // Font is generated only once:
+    
     static SwFont* m_pFnt = 0;
     if ( ! m_pFnt )
     {
@@ -825,7 +825,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
         m_pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, m_pFnt->GetActual() );
     }
 
-    // Some of the current values are set at the font:
+    
     if ( ! bRotate )
         m_pFnt->SetVertical( 0, rInf.GetTxtFrm()->IsVertical() );
     else
@@ -841,7 +841,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
     ((SwTxtPaintInfo&)rInf).SetFont( m_pFnt );
 
-    // The maximum width depends on the current orientation
+    
     const sal_uInt16 nDir = m_pFnt->GetOrientation( rInf.GetTxtFrm()->IsVertical() );
     SwTwips nMaxWidth = 0;
     switch ( nDir )
@@ -858,7 +858,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
         break;
     }
 
-    // check if char fits into rectangle
+    
     const OUString aTmp( cChar );
     aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
     while ( aFontSize.Width() > nMaxWidth )
@@ -866,7 +866,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
         SwTwips nFactor = ( 100 * aFontSize.Width() ) / nMaxWidth;
         const SwTwips nOldWidth = aFontSize.Width();
 
-        // new height for font
+        
         const sal_uInt8 nAct = m_pFnt->GetActual();
         aFontSize.Height() = ( 100 * m_pFnt->GetSize( nAct ).Height() ) / nFactor;
         aFontSize.Width() = ( 100 * m_pFnt->GetSize( nAct).Width() ) / nFactor;
@@ -884,7 +884,7 @@ static void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rP
 
     const Point aOldPos( rInf.GetPos() );
 
-    // adjust values so that tab is vertically and horizontally centered
+    
     SwTwips nX = rRect.Left();
     SwTwips nY = rRect.Top();
     switch ( nDir )
@@ -1120,7 +1120,7 @@ void SwTxtPaintInfo::DrawBackground( const SwLinePortion &rPor ) const
         OutputDevice* pOut = (OutputDevice*)GetOut();
         pOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
-        // For dark background we do not want to have a filled rectangle
+        
         if ( GetVsh() && GetVsh()->GetWin() && lcl_IsDarkBackground( *this ) )
         {
             pOut->SetLineColor( SwViewOption::GetFontColor().GetColor() );
@@ -1185,7 +1185,7 @@ void SwTxtPaintInfo::DrawBackBrush( const SwLinePortion &rPor ) const
     {
         OutputDevice* pTmpOut = (OutputDevice*)GetOut();
 
-        // #i16816# tagged pdf support
+        
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pTmpOut );
 
         Color aFillColor;
@@ -1246,13 +1246,13 @@ void SwTxtPaintInfo::DrawViewOpt( const SwLinePortion &rPor,
                  && !GetOpt().IsReadonly()
                  && SwViewOption::IsFieldShadings()
                  && ( POR_NUMBER != nWhich
-                      || m_pFrm->GetTxtNode()->HasMarkedLabel())) // #i27615#
+                      || m_pFrm->GetTxtNode()->HasMarkedLabel())) 
             {
                 bDraw = true;
             }
             break;
         case POR_INPUTFLD:
-            // input field shading also in read-only mode
+            
             if ( !GetOpt().IsPagePreview()
                  && SwViewOption::IsFieldShadings() )
             {
@@ -1299,7 +1299,7 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
 {
     sal_Int32 nLen = rVals.getLength();
 
-    if (0 == nLen)  // yet to be initialized?
+    if (0 == nLen)  
     {
         rVals.realloc( 2 );
         PropertyValue *pVal = rVals.getArray();
@@ -1312,7 +1312,7 @@ static void lcl_InitHyphValues( PropertyValues &rVals,
         pVal[1].Handle  = UPH_HYPH_MIN_TRAILING;
         pVal[1].Value   <<= nMinTrailing;
     }
-    else if (2 == nLen) // already initialized once?
+    else if (2 == nLen) 
     {
         PropertyValue *pVal = rVals.getArray();
         pVal[0].Value <<= nMinLeading;
@@ -1356,7 +1356,7 @@ void SwTxtFormatInfo::CtorInitTxtFormatInfo( SwTxtFrm *pNewFrm, const bool bNewI
     bQuick = bNewQuick;
     bInterHyph = bNewInterHyph;
 
-    //! needs to be done in this order
+    
     nMinLeading     = 2;
     nMinTrailing    = 2;
     nMinWordLength  = 0;
@@ -1422,20 +1422,20 @@ const SwFmtDrop *SwTxtFormatInfo::GetDropFmt() const
 
 void SwTxtFormatInfo::Init()
 {
-    // Not initialized: pRest, nLeft, nRight, nFirst, nRealWidth
+    
     X(0);
     bArrowDone = bFull = bFtnDone = bErgoDone = bNumDone = bNoEndHyph =
         bNoMidHyph = bStop = bNewLine = bUnderFlow = bTabOverflow = false;
 
-    // generally we do not allow number portions in follows, except...
+    
     if ( GetTxtFrm()->IsFollow() )
     {
         const SwTxtFrm* pMaster = GetTxtFrm()->FindMaster();
         OSL_ENSURE(pMaster, "pTxtFrm without Master");
         const SwLinePortion* pTmpPara = pMaster ? pMaster->GetPara() : NULL;
 
-        // there is a master for this follow and the master does not have
-        // any contents (especially it does not have a number portion)
+        
+        
         bNumDone = ! pTmpPara ||
                    ! ((SwParaPortion*)pTmpPara)->GetFirstPortion()->IsFlyPortion();
     }
@@ -1541,11 +1541,11 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
     sal_Int32 i = nStart;
 
     //
-    // Used for decimal tab handling:
+    
     //
     const sal_Unicode cTabDec = GetLastTab() ? (sal_Unicode)GetTabDecimal() : 0;
     const sal_Unicode cThousandSep  = ',' == cTabDec ? '.' : ',';
-    // #i45951# German (Switzerland) uses ' as thousand separator
+    
     const sal_Unicode cThousandSep2 = ',' == cTabDec ? '.' : '\'';
 
     bool bNumFound = false;
@@ -1560,7 +1560,7 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
         case CH_TXTATR_INWORD:
             if( !HasHint( i ))
                 break;
-            // no break;
+            
 
         case CHAR_SOFTHYPHEN:
         case CHAR_HARDHYPHEN:
@@ -1583,7 +1583,7 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
                 if( cTabDec == cPos )
                 {
                     OSL_ENSURE( cPos, "Unexpected end of string" );
-                    if( cPos ) // robust
+                    if( cPos ) 
                     {
                         cHookChar = cPos;
                         return i;
@@ -1591,8 +1591,8 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
                 }
 
                 //
-                // Compatibility: First non-digit character behind a
-                // a digit character becomes the hook character
+                
+                
                 //
                 if ( bTabCompat )
                 {
@@ -1615,8 +1615,8 @@ sal_Int32 SwTxtFormatInfo::ScanPortionEnd( const sal_Int32 nStart,
         }
     }
 
-    // Check if character *behind* the portion has
-    // to become the hook:
+    
+    
     if ( i == nEnd && i < GetTxt().getLength() && bNumFound )
     {
         const sal_Unicode cPos = GetChar( i );
@@ -1677,7 +1677,7 @@ SwTxtSlot::SwTxtSlot(
     else
         bOn = pPor->GetExpTxt( *pNew, aTxt );
 
-    // The text is replaced ...
+    
     if( bOn )
     {
         pInf = (SwTxtSizeInfo*)pNew;
@@ -1688,7 +1688,7 @@ SwTxtSlot::SwTxtSlot(
         pInf->SetIdx( 0 );
         pInf->SetLen( bTxtLen ? pInf->GetTxt().getLength() : pPor->GetLen() );
 
-        // ST2
+        
         if ( bExgLists )
         {
             pOldSmartTagList = static_cast<SwTxtPaintInfo*>(pInf)->GetSmartTags();
@@ -1735,8 +1735,8 @@ SwTxtSlot::~SwTxtSlot()
         pInf->SetIdx( nIdx );
         pInf->SetLen( nLen );
 
-        // ST2
-        // Restore old smart tag list
+        
+        
         if ( pOldSmartTagList )
             ((SwTxtPaintInfo*)pInf)->SetSmartTags( pOldSmartTagList );
         if ( pOldGrammarCheckList )
@@ -1752,10 +1752,10 @@ SwFontSave::SwFontSave( const SwTxtSizeInfo &rInf, SwFont *pNew,
     if( pFnt )
     {
         pInf = &((SwTxtSizeInfo&)rInf);
-        // In these cases we temporarily switch to the new font:
-        // 1. the fonts have a different magic number
-        // 2. they have different script types
-        // 3. their background colors differ (this is not covered by 1.)
+        
+        
+        
+        
         if( pFnt->DifferentMagic( pNew, pFnt->GetActual() ) ||
             pNew->GetActual() != pFnt->GetActual() ||
             ( ! pNew->GetBackColor() && pFnt->GetBackColor() ) ||
@@ -1785,7 +1785,7 @@ SwFontSave::~SwFontSave()
 {
     if( pFnt )
     {
-        // Reset SwFont
+        
         pFnt->Invalidate();
         pInf->SetFont( pFnt );
         if( pIter )
@@ -1803,7 +1803,7 @@ bool SwTxtFormatInfo::ChgHyph( const bool bNew )
     {
         bAutoHyph = bNew;
         InitHyph( bNew );
-        // Set language in the Hyphenator
+        
         if( m_pFnt )
             m_pFnt->ChgPhysFnt( m_pVsh, *m_pOut );
     }

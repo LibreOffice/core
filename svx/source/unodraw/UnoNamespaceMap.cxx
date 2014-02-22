@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -56,16 +56,16 @@ namespace svx
         NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool );
         virtual ~NamespaceMap();
 
-        // XNameAccess
+        
         virtual Any SAL_CALL getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException);
         virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException);
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (RuntimeException);
 
-        // XElementAccess
+        
         virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
         virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
@@ -115,7 +115,7 @@ namespace svx
 
 using namespace ::svx;
 
-// -------------
+
 
 NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool* pPool )
 {
@@ -131,7 +131,7 @@ NamespaceIteratorImpl::NamespaceIteratorImpl( sal_uInt16* pWhichIds, SfxItemPool
 
 sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
 {
-    // we still need to process the current attribute
+    
     if( mpCurrentAttr && (mnCurrentAttr != USHRT_MAX) )
     {
         rPrefix = mpCurrentAttr->GetPrefix( mnCurrentAttr );
@@ -141,20 +141,20 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
         return sal_True;
     }
 
-    // we need the next namespace item
+    
     mpCurrentAttr = NULL;
 
     const SfxPoolItem* pItem = 0;
-    // look for the next available item in the current pool
+    
     while( (mnItem < mnItemCount) && ( NULL == (pItem = mpPool->GetItem2( *mpWhichId, mnItem ) ) ) )
         mnItem++;
 
-    // are we finished with the current whichid?
+    
     if( mnItem == mnItemCount )
     {
         mpWhichId++;
 
-        // are we finished with the current pool?
+        
         if( 0 != *mpWhichId )
         {
             mnItem = 0;
@@ -169,7 +169,7 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
     {
         mnItem++;
 
-        // get that item and see if there namespaces inside
+        
         const SvXMLAttrContainerItem *pUnknown = (const SvXMLAttrContainerItem *)pItem;
         if( (pUnknown->GetAttrCount() > 0) )
         {
@@ -182,7 +182,7 @@ sal_Bool NamespaceIteratorImpl::next( OUString& rPrefix, OUString& rURL )
     return false;
 }
 
-// -------------
+
 
 NamespaceMap::NamespaceMap( sal_uInt16* pWhichIds, SfxItemPool* pPool )
 : mpWhichIds( pWhichIds ), mpPool( pPool )
@@ -193,7 +193,7 @@ NamespaceMap::~NamespaceMap()
 {
 }
 
-// XNameAccess
+
 Any SAL_CALL NamespaceMap::getByName( const OUString& aName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     NamespaceIteratorImpl aIter( mpWhichIds, mpPool );
@@ -259,7 +259,7 @@ sal_Bool SAL_CALL NamespaceMap::hasByName( const OUString& aName ) throw (Runtim
     return bFound;
 }
 
-// XElementAccess
+
 Type SAL_CALL NamespaceMap::getElementType() throw (RuntimeException)
 {
     return ::getCppuType( (const OUString*) 0 );
@@ -275,7 +275,7 @@ sal_Bool SAL_CALL NamespaceMap::hasElements() throw (RuntimeException)
     return aIter.next( aPrefix, aURL );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL NamespaceMap::getImplementationName(  )
     throw(RuntimeException)
 {

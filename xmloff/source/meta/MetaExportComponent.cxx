@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MetaExportComponent.hxx"
@@ -60,8 +60,8 @@ void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star:
     }
     catch( lang::IllegalArgumentException& )
     {
-        // allow to use document properties service without model access
-        // this is required for document properties exporter
+        
+        
         mxDocProps =
             uno::Reference< document::XDocumentProperties >::query( xDoc );
         if( !mxDocProps.is() )
@@ -105,7 +105,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
             aArgs[1] <<= xPropSet;
             aArgs[2] <<= GetModel();
 
-            // get filter component
+            
             xDocHandler = uno::Reference< xml::sax::XDocumentHandler >(
                 xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                     "com.sun.star.comp.Oasis2OOoTransformer", aArgs, xContext),
@@ -154,7 +154,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
         SvXMLElementExport aDocElem( *this, XML_NAMESPACE_OFFICE, XML_DOCUMENT_META,
                     sal_True, sal_True );
 
-        // NB: office:meta is now written by _ExportMeta
+        
         _ExportMeta();
     }
     xDocHandler->endDocument();
@@ -165,7 +165,7 @@ void XMLMetaExportComponent::_ExportMeta()
 {
     if (mxDocProps.is()) {
         OUString generator( ::utl::DocInfoHelper::GetGeneratorString() );
-        // update generator here
+        
         mxDocProps->setGenerator(generator);
         SvXMLMetaExport * pMeta = new SvXMLMetaExport(*this, mxDocProps);
         uno::Reference<xml::sax::XDocumentHandler> xMeta(pMeta);
@@ -175,7 +175,7 @@ void XMLMetaExportComponent::_ExportMeta()
     }
 }
 
-// methods without content:
+
 void XMLMetaExportComponent::_ExportAutoStyles() {}
 void XMLMetaExportComponent::_ExportMasterStyles() {}
 void XMLMetaExportComponent::_ExportContent() {}

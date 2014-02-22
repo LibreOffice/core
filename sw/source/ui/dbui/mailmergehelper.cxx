@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <swtypes.hxx>
@@ -113,7 +113,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     xMailServiceProvider->create(
                     rConfigItem.IsInServerPOP() ?
                         mail::MailServiceType_POP3 : mail::MailServiceType_IMAP);
-            //authenticate at the POP or IMAP server first
+            
             OUString sPasswd = rConfigItem.GetInServerPassword();
             if(!rInMailServerPassword.isEmpty())
                 sPasswd = rInMailServerPassword;
@@ -124,7 +124,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     pDialogParentWindow);
 
             xInMailService->addConnectionListener(xConnectionListener);
-            //check connection
+            
             uno::Reference< uno::XCurrentContext> xConnectionContext =
                     new SwConnectionContext(
                         rConfigItem.GetInServerName(),
@@ -148,9 +148,9 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
         }
         else
             xAuthenticator =  new SwAuthenticator();
-        //just to check if the server exists
+        
         xSmtpServer->getSupportedConnectionTypes();
-        //check connection
+        
 
         uno::Reference< uno::XCurrentContext> xConnectionContext =
                 new SwConnectionContext(
@@ -168,7 +168,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
 }
 
 
-} //namespace
+} 
 
 SwBoldFixedInfo::SwBoldFixedInfo(Window* pParent, const ResId& rResId) :
     FixedInfo(pParent, rResId)
@@ -273,7 +273,7 @@ void SwAddressPreview::SelectAddress(sal_uInt16 nSelect)
 {
     OSL_ENSURE(pImpl->nSelectedAddress < pImpl->aAddresses.size(), "selection invalid");
     pImpl->nSelectedAddress = nSelect;
-    // now make it visible..
+    
     sal_uInt16 nSelectRow = nSelect / pImpl->nColumns;
     sal_uInt16 nStartRow = (sal_uInt16)aVScrollBar.GetThumbPos();
     if( (nSelectRow < nStartRow) || (nSelectRow >= (nStartRow + pImpl->nRows) ))
@@ -377,7 +377,7 @@ void  SwAddressPreview::MouseButtonDown( const MouseEvent& rMEvt )
     Window::MouseButtonDown(rMEvt);
     if(rMEvt.IsLeft() && ( pImpl->nRows || pImpl->nColumns))
     {
-        //determine the selected address
+        
         const Point& rMousePos = rMEvt.GetPosPixel();
         Size aSize(GetOutputSizePixel());
         Size aPartSize( aSize.Width()/pImpl->nColumns, aSize.Height()/pImpl->nRows );
@@ -452,7 +452,7 @@ void SwAddressPreview::DrawText_Impl(
     SetClipRegion( Region( Rectangle(rTopLeft, rSize)) );
     if(bIsSelected)
     {
-        //selection rectangle
+        
         SetFillColor(Color(COL_TRANSPARENT));
         DrawRect(Rectangle(rTopLeft, rSize));
     }
@@ -460,7 +460,7 @@ void SwAddressPreview::DrawText_Impl(
     OUString sAddress(rAddress);
     sal_uInt16 nTokens = comphelper::string::getTokenCount(sAddress, '\n');
     Point aStart = rTopLeft;
-    //put it away from the border
+    
     aStart.Move( 2, 2);
     for(sal_uInt16 nToken = 0; nToken < nTokens; nToken++)
     {
@@ -474,9 +474,9 @@ OUString SwAddressPreview::FillData(
         SwMailMergeConfigItem& rConfigItem,
         const Sequence< OUString>* pAssignments)
 {
-    //find the column names in the address string (with name assignment!) and
-    //exchange the placeholder (like <Firstname>) with the database content
-    //unassigned columns are expanded to <not assigned>
+    
+    
+    
     Reference< XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), UNO_QUERY);
     Reference <XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
     Sequence< OUString> aAssignment = pAssignments ?
@@ -508,9 +508,9 @@ OUString SwAddressPreview::FillData(
         SwMergeAddressItem aItem = aIter.Next();
         if(aItem.bIsColumn)
         {
-            //get the default column name
+            
 
-            //find the appropriate assignment
+            
             OUString sConvertedColumn = aItem.sText;
             for(sal_uInt16 nColumn = 0;
                     nColumn < rDefHeaders.Count() && nColumn < aAssignment.getLength();
@@ -527,7 +527,7 @@ OUString SwAddressPreview::FillData(
                     xColAccess.is() &&
                     xColAccess->hasByName(sConvertedColumn))
             {
-                //get the content and exchange it in the address string
+                
                 Any aCol = xColAccess->getByName(sConvertedColumn);
                 Reference< XColumn > xColumn;
                 aCol >>= xColumn;
@@ -568,8 +568,8 @@ OUString SwAddressPreview::FillData(
 
 SwMergeAddressItem   SwAddressIterator::Next()
 {
-    //currently the string may either start with a '<' then it's a column
-    //otherwise it's simple text maybe containing a return
+    
+    
     SwMergeAddressItem   aRet;
     if(!sAddress.isEmpty())
     {

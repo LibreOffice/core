@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbacommandbar.hxx"
 #include "vbacommandbarcontrols.hxx"
@@ -36,7 +36,7 @@ ScVbaCommandBar::ScVbaCommandBar( const uno::Reference< ov::XHelperInterface > x
 OUString SAL_CALL
 ScVbaCommandBar::getName() throw ( uno::RuntimeException )
 {
-    // This will get a "NULL length string" when Name is not set.
+    
     uno::Reference< beans::XPropertySet > xPropertySet( m_xBarSettings, uno::UNO_QUERY_THROW );
     uno::Any aName = xPropertySet->getPropertyValue( "UIName" );
     OUString sName;
@@ -54,7 +54,7 @@ ScVbaCommandBar::getName() throw ( uno::RuntimeException )
                 return sName;
             }
         }
-        // Toolbar name
+        
         uno::Reference< container::XNameAccess > xNameAccess = pCBarHelper->getPersistentWindowState();
         if( xNameAccess->hasByName( m_sResourceUrl ) )
         {
@@ -76,7 +76,7 @@ ScVbaCommandBar::setName( const OUString& _name ) throw (uno::RuntimeException)
 ::sal_Bool SAL_CALL
 ScVbaCommandBar::getVisible() throw (uno::RuntimeException)
 {
-    // menu bar is always visible in OOo
+    
     if( m_bIsMenu )
         return sal_True;
 
@@ -122,14 +122,14 @@ ScVbaCommandBar::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
 ::sal_Bool SAL_CALL
 ScVbaCommandBar::getEnabled() throw (uno::RuntimeException)
 {
-    // emulated with Visible
+    
     return getVisible();
 }
 
 void SAL_CALL
 ScVbaCommandBar::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
 {
-    // emulated with Visible
+    
     setVisible( _enabled );
 }
 
@@ -157,7 +157,7 @@ ScVbaCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorExc
 sal_Int32 SAL_CALL
 ScVbaCommandBar::Type() throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // #FIXME support msoBarTypePopup
+    
     sal_Int32 nType = office::MsoBarType::msoBarTypePopup;
     nType = m_bIsMenu? office::MsoBarType::msoBarTypeNormal : office::MsoBarType::msoBarTypeMenuBar;
     return nType;
@@ -166,7 +166,7 @@ ScVbaCommandBar::Type() throw (script::BasicErrorException, uno::RuntimeExceptio
 uno::Any SAL_CALL
 ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/, const uno::Any& /*aTag*/, const uno::Any& /*aVisible*/, const uno::Any& /*aRecursive*/ ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // alwayse fail to find control
+    
     return uno::makeAny( uno::Reference< XCommandBarControl > () );
 }
 
@@ -211,31 +211,31 @@ void SAL_CALL VbaDummyCommandBar::setName( const OUString& _name ) throw (uno::R
 
 ::sal_Bool SAL_CALL VbaDummyCommandBar::getVisible() throw (uno::RuntimeException)
 {
-    // #STUB
+    
     return sal_True;
 }
 
 void SAL_CALL VbaDummyCommandBar::setVisible( ::sal_Bool /*_visible*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 ::sal_Bool SAL_CALL VbaDummyCommandBar::getEnabled() throw (uno::RuntimeException)
 {
-    // emulated with Visible
+    
     return getVisible();
 }
 
 void SAL_CALL VbaDummyCommandBar::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException)
 {
-    // emulated with Visible
+    
     setVisible( _enabled );
 }
 
 void SAL_CALL VbaDummyCommandBar::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // no-op
-    // #STUB
+    
+    
 }
 
 uno::Any SAL_CALL VbaDummyCommandBar::Controls( const uno::Any& aIndex ) throw (script::BasicErrorException, uno::RuntimeException)

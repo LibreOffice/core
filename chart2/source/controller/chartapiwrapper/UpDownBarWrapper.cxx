@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "UpDownBarWrapper.hxx"
@@ -118,7 +118,7 @@ struct StaticUpDownBarWrapperDefaults : public rtl::StaticAggregate< ::chart::tP
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -137,7 +137,7 @@ UpDownBarWrapper::~UpDownBarWrapper()
 {
 }
 
-// ____ XComponent ____
+
 void SAL_CALL UpDownBarWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -164,7 +164,7 @@ void SAL_CALL UpDownBarWrapper::removeEventListener(
     return *StaticUpDownBarWrapperInfoHelper::get();
 }
 
-//XPropertySet
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL UpDownBarWrapper::getPropertySetInfo()
                     throw (uno::RuntimeException)
 {
@@ -239,8 +239,8 @@ void SAL_CALL UpDownBarWrapper::removeVetoableChangeListener( const OUString& /*
     OSL_FAIL("not implemented");
 }
 
-//XMultiPropertySet
-//getPropertySetInfo() already declared in XPropertySet
+
+
 void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
                     throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -257,7 +257,7 @@ void SAL_CALL UpDownBarWrapper::setPropertyValues( const uno::Sequence< OUString
             ASSERT_EXCEPTION( ex );
         }
     }
-    //todo: store unknown properties elsewhere
+    
 }
 uno::Sequence< uno::Any > SAL_CALL UpDownBarWrapper::getPropertyValues( const uno::Sequence< OUString >& rNameSeq )
                     throw (uno::RuntimeException)
@@ -290,7 +290,7 @@ void SAL_CALL UpDownBarWrapper::firePropertiesChangeEvent( const uno::Sequence< 
     OSL_FAIL("not implemented");
 }
 
-//XPropertyState
+
 beans::PropertyState SAL_CALL UpDownBarWrapper::getPropertyState( const OUString& rPropertyName )
                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
@@ -333,8 +333,8 @@ uno::Any SAL_CALL UpDownBarWrapper::getPropertyDefault( const OUString& rPropert
     return (*aFound).second;
 }
 
-//XMultiPropertyStates
-//getPropertyStates() already declared in XPropertyState
+
+
 void SAL_CALL UpDownBarWrapper::setAllPropertiesToDefault(  )
                     throw (uno::RuntimeException)
 {
@@ -381,10 +381,10 @@ Sequence< OUString > UpDownBarWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( UpDownBarWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -47,7 +47,7 @@ CreateElement::CreateElement(ResourceType_t nResource, Id nId)
 {
 }
 
-// class OOXMLFactory_ns
+
 
 OOXMLFactory_ns::~OOXMLFactory_ns()
 {
@@ -90,7 +90,7 @@ string OOXMLFactory_ns::getDefineName(Id /*nId*/) const
     return "";
 }
 
-// class OOXMLFactory
+
 
 typedef rtl::Static< osl::Mutex, OOXMLFactory > OOXMLFactory_Mutex;
 
@@ -98,7 +98,7 @@ OOXMLFactory::Pointer_t OOXMLFactory::m_Instance;
 
 OOXMLFactory::OOXMLFactory()
 {
-    // multi-thread-safe mutex for all platforms
+    
 
     osl::MutexGuard aGuard(OOXMLFactory_Mutex::get());
 }
@@ -264,7 +264,7 @@ OOXMLFactory::createFastChildContext(OOXMLFastContextHandler * pHandler,
 
     uno::Reference< xml::sax::XFastContextHandler> ret;
 
-    //Avoid handling unknown tokens and recursing to death
+    
     if ((Element & 0xffff) < OOXML_FAST_TOKENS_END)
         ret = createFastChildContextFromFactory(pHandler, pFactory, Element);
 

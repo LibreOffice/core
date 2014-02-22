@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef AIX
@@ -33,7 +33,7 @@
 #endif
 #include <tools/postsys.h>
 #else
-// From MinGW
+
 typedef unsigned short WORD;
 #define PRIMARYLANGID(lgid) ((WORD)(lgid) & 0x3ff)
 #define SUBLANGID(lgid) ((WORD)(lgid) >> 10)
@@ -241,8 +241,8 @@ public:
         active_iso_lang_ = iso_lang;
     }
 
-    // If Text is a placeholder substitute it with
-    //its substitute else leave it unchanged
+    
+    
     void substitute(std::string& Text)
     {
         replacement_table_t* prt = get_replacement_table(active_iso_lang_.make_std_string());
@@ -262,8 +262,8 @@ public:
 
 
 private:
-    // Return the replacement table for the iso lang id
-    // create a new one if not already present
+    
+    
     replacement_table_t* get_replacement_table(const std::string& iso_lang)
     {
         iso_lang_replacement_table_t::iterator iter =
@@ -333,11 +333,11 @@ void add_group_entries(
 
 void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
 {
-    // work-around for #i32420#
+    
 
-    // as the Config class is currently not able to deal correctly with
-    // UTF8 files starting with a byte-order-mark we create a copy of the
-    // original file without the byte-order-mark
+    
+    
+    
     OUString tmpfile_url;
     osl_createTempFile(NULL, NULL, &tmpfile_url.pData);
 
@@ -352,7 +352,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
         StreamExceptionsEnabler sexc_out(out);
         StreamExceptionsEnabler sexc_in(in);
 
-        //skip the byte-order-mark 0xEF 0xBB 0xBF, identifying UTF8 files
+        
         unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
         char buff[3];
         in.read(&buff[0], 3);
@@ -371,7 +371,7 @@ void read_ulf_file(const std::string& FileName, Substitutor& Substitutor)
     }
 
 
-    // end work-around for #i32420#
+    
 
     Config config(tmpfile_url.getStr());
     size_t grpcnt = config.GetGroupCount();
@@ -438,11 +438,11 @@ void start_language_section(
     char buff[10];
     int primLangID = PRIMARYLANGID(ltype);
     int subLangID = SUBLANGID(ltype);
-    // Our resources are normaly not sub language dependent.
-    // Esp. for spanish we don't want to distinguish between trad.
-    // and internatinal sorting ( which leads to two different sub languages )
-    // Setting the sub language to neutral allows us to use one
-    // stringlist for all spanish variants
+    
+    
+    
+    
+    
     if ( ( primLangID == LANG_SPANISH ) &&
          ( subLangID == SUBLANG_SPANISH ) )
         subLangID = SUBLANG_NEUTRAL;
@@ -499,11 +499,11 @@ void inflate_rc_template_to_file(
                 iss >> token;
                 substitutor.substitute(token);
 
-                // HACK for partially merged
-                // *.lng files where some strings have
-                // a particular language that others
-                // don't have in order to keep the
-                // build
+                
+                
+                
+                
+                
                 if (is_placeholder(token))
                     token = make_winrc_unicode_string(token);
 
@@ -515,7 +515,7 @@ void inflate_rc_template_to_file(
     }
 }
 
-} // namespace /* private */
+} 
 
 /* MAIN
    The file names provided via command line should be

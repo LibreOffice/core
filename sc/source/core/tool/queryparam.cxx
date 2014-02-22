@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "queryparam.hxx"
@@ -104,15 +104,15 @@ ScQueryEntry& ScQueryParamBase::GetEntry(SCSIZE n)
 
 ScQueryEntry& ScQueryParamBase::AppendEntry()
 {
-    // Find the first unused entry.
+    
     EntriesType::iterator itr = std::find_if(
         maEntries.begin(), maEntries.end(), FindUnused());
 
     if (itr != maEntries.end())
-        // Found!
+        
         return *itr;
 
-    // Add a new entry to the end.
+    
     maEntries.push_back(new ScQueryEntry);
     return maEntries.back();
 }
@@ -124,12 +124,12 @@ ScQueryEntry* ScQueryParamBase::FindEntryByField(SCCOLROW nField, bool bNew)
 
     if (itr != maEntries.end())
     {
-        // existing entry found!
+        
         return &(*itr);
     }
 
     if (!bNew)
-        // no existing entry found, and we are not creating a new one.
+        
         return NULL;
 
     return &AppendEntry();
@@ -144,8 +144,8 @@ void ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
     {
         maEntries.erase(itr);
         if (maEntries.size() < MAXQUERY)
-            // Make sure that we have at least MAXQUERY number of entries at
-            // all times.
+            
+            
             maEntries.push_back(new ScQueryEntry);
     }
 }
@@ -153,7 +153,7 @@ void ScQueryParamBase::RemoveEntryByField(SCCOLROW nField)
 void ScQueryParamBase::Resize(size_t nNew)
 {
     if (nNew < MAXQUERY)
-        nNew = MAXQUERY;                // never less than MAXQUERY
+        nNew = MAXQUERY;                
 
     if (nNew < maEntries.size())
     {
@@ -182,7 +182,7 @@ void ScQueryParamBase::FillInExcelSyntax(
         ScQueryEntry::Item& rItem = rEntry.GetQueryItem();
 
         rEntry.bDoQuery = true;
-        // Operatoren herausfiltern
+        
         if (aCellStr[0] == '<')
         {
             if (aCellStr[1] == '>')
@@ -320,7 +320,7 @@ bool ScQueryParam::operator==( const ScQueryParam& rOther ) const
 {
     bool bEqual = false;
 
-    // Anzahl der Queries gleich?
+    
     SCSIZE nUsed      = 0;
     SCSIZE nOtherUsed = 0;
     SCSIZE nEntryCount = GetEntryCount();

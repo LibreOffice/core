@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "helpers.hxx"
@@ -92,7 +92,7 @@ OUString retrieveToolbarNameFromHelpURL( Window* pWindow )
             aToolbarName = OStringToOUString( pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8 );
             sal_Int32 i = aToolbarName.lastIndexOf( ':' );
             if ( !aToolbarName.isEmpty() && ( i > 0 ) && (( i + 1 ) < aToolbarName.getLength() ))
-                aToolbarName = aToolbarName.copy( i+1 ); // Remove ".HelpId:" protocol from toolbar name
+                aToolbarName = aToolbarName.copy( i+1 ); 
             else
               aToolbarName = OUString();
         }
@@ -137,9 +137,9 @@ void setZeroRectangle( ::Rectangle& rRect )
     rRect.setHeight(0);
 }
 
-// ATTENTION!
-// This value is directly copied from the sfx2 project.
-// You have to change BOTH values, see sfx2/inc/sfx2/sfxsids.hrc (SID_DOCKWIN_START)
+
+
+
 static const sal_Int32 DOCKWIN_ID_BASE = 9800;
 
 bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt::Rectangle& _rPosSize, uno::Reference< awt::XWindow >& _xWindow)
@@ -158,7 +158,7 @@ bool lcl_checkUIElement(const uno::Reference< ui::XUIElement >& xUIElement, awt:
             _rPosSize.Width = aSize.Width();
             _rPosSize.Height = aSize.Height();
         }
-    } // if ( xUIElement.is() )
+    } 
     return bRet;
 }
 
@@ -166,7 +166,7 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< un
 {
     uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create( rxContext );
 
-    // describe window properties.
+    
     css::awt::WindowDescriptor aDescriptor;
     aDescriptor.Type                =   awt::WindowClass_SIMPLE;
     aDescriptor.WindowServiceName   =   OUString::createFromAscii( pService );
@@ -175,13 +175,13 @@ uno::Reference< awt::XWindowPeer > createToolkitWindow( const uno::Reference< un
     aDescriptor.Bounds              =   awt::Rectangle(0,0,0,0);
     aDescriptor.WindowAttributes    =   0;
 
-    // create a awt window
+    
     uno::Reference< awt::XWindowPeer > xPeer = xToolkit->createWindow( aDescriptor );
 
     return xPeer;
 }
 
-// convert alignment constant to vcl's WindowAlign type
+
 WindowAlign ImplConvertAlignment( sal_Int16 aAlignment )
 {
     if ( aAlignment == ui::DockingArea_DOCKINGAREA_LEFT )
@@ -258,7 +258,7 @@ bool equalRectangles( const css::awt::Rectangle& rRect1,
 
 uno::Reference< frame::XModel > impl_getModelFromFrame( const uno::Reference< frame::XFrame >& rFrame )
 {
-    // Query for the model to get check the context information
+    
     uno::Reference< frame::XModel > xModel;
         if ( rFrame.is() )
         {
@@ -286,10 +286,10 @@ sal_Bool implts_isFrameOrWindowTop( const uno::Reference< frame::XFrame >& xFram
     if (xFrame->isTop())
         return sal_True;
 
-    uno::Reference< awt::XTopWindow > xWindowCheck(xFrame->getContainerWindow(), uno::UNO_QUERY); // dont use _THROW here ... it's a check only
+    uno::Reference< awt::XTopWindow > xWindowCheck(xFrame->getContainerWindow(), uno::UNO_QUERY); 
     if (xWindowCheck.is())
     {
-        // #i76867# top and system window is required.
+        
         SolarMutexGuard aGuard;
         uno::Reference< awt::XWindow > xWindow( xWindowCheck, uno::UNO_QUERY );
         Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -354,6 +354,6 @@ void impl_addWindowListeners(
     }
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

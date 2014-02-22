@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -61,16 +61,16 @@
 #include "scmod.hxx"
 #include "fillinfo.hxx"
 
-// STATIC DATA -----------------------------------------------------------
+
 
 ScDocument* ScPatternAttr::pDoc = NULL;
 
-// -----------------------------------------------------------------------
+
 
 using sc::HMMToTwips;
 using sc::TwipsToHMM;
 
-// -----------------------------------------------------------------------
+
 
 ScPatternAttr::ScPatternAttr( SfxItemSet* pItemSet, const OUString& rStyleName )
     :   SfxSetItem  ( ATTR_PATTERN, pItemSet ),
@@ -127,14 +127,14 @@ inline bool StrCmp( const OUString* pStr1, const OUString* pStr2 )
 
 inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
 {
-    // #i62090# The SfxItemSet in the SfxSetItem base class always has the same ranges
-    // (single range from ATTR_PATTERN_START to ATTR_PATTERN_END), and the items are pooled,
-    // so it's enough to compare just the pointers (Count just because it's even faster).
+    
+    
+    
 
     if ( rSet1.Count() != rSet2.Count() )
         return false;
 
-    SfxItemArray pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
+    SfxItemArray pItems1 = rSet1.GetItems_Impl();   
     SfxItemArray pItems2 = rSet2.GetItems_Impl();
 
     return ( 0 == memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) ) );
@@ -142,7 +142,7 @@ inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
 
 bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
-    // #i62090# Use quick comparison between ScPatternAttr's ItemSets
+    
 
     return ( EqualPatternSets( GetItemSet(), static_cast<const ScPatternAttr&>(rCmp).GetItemSet() ) &&
              StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() ) );
@@ -160,7 +160,7 @@ SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, sal_uInt16 /* nVersion */
         short   eFamDummy;
         pStr = new OUString;
         *pStr = rStream.ReadUniOrByteString( rStream.GetStreamCharSet() );
-        rStream.ReadInt16( eFamDummy ); // wg. altem Dateiformat
+        rStream.ReadInt16( eFamDummy ); 
     }
     else
         pStr = new OUString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
@@ -182,13 +182,13 @@ SvStream& ScPatternAttr::Store(SvStream& rStream, sal_uInt16 /* nItemVersion */)
 
     if ( pStyle )
         rStream.WriteUniOrByteString( pStyle->GetName(), rStream.GetStreamCharSet() );
-    else if ( pName )                   // wenn Style geloescht ist/war
+    else if ( pName )                   
         rStream.WriteUniOrByteString( *pName, rStream.GetStreamCharSet() );
     else
         rStream.WriteUniOrByteString( ScGlobal::GetRscString(STR_STYLENAME_STANDARD),
                                     rStream.GetStreamCharSet() );
 
-    rStream.WriteInt16( (short)SFX_STYLE_FAMILY_PARA );  // wg. altem Dateiformat
+    rStream.WriteInt16( (short)SFX_STYLE_FAMILY_PARA );  
 
     GetItemSet().Store( rStream );
 
@@ -226,7 +226,7 @@ void ScPatternAttr::GetFont(
         const SfxItemSet* pCondSet, sal_uInt8 nScript,
         const Color* pBackConfigColor, const Color* pTextConfigColor )
 {
-    //  Items auslesen
+    
 
     const SvxFontItem* pFontAttr;
     sal_uInt32 nFontHeight;
@@ -329,7 +329,7 @@ void ScPatternAttr::GetFont(
             pItem = &rItemSet.Get( nLangId );
         eLang = ((const SvxLanguageItem*)pItem)->GetLanguage();
     }
-    else    // alles aus rItemSet
+    else    
     {
         pFontAttr = &(const SvxFontItem&)rItemSet.Get( nFontId );
         nFontHeight = ((const SvxFontHeightItem&)
@@ -356,15 +356,15 @@ void ScPatternAttr::GetFont(
                         rItemSet.Get( ATTR_FONT_RELIEF )).GetValue();
         aColor = ((const SvxColorItem&)
                         rItemSet.Get( ATTR_FONT_COLOR )).GetValue();
-        // for graphite language features
+        
         eLang =
         ((const SvxLanguageItem&)rItemSet.Get( nLangId )).GetLanguage();
     }
     OSL_ENSURE(pFontAttr,"Oops?");
 
-    //  auswerten
+    
 
-    //  FontItem:
+    
 
     if (rFont.GetName() != pFontAttr->GetFamilyName())
         rFont.SetName( pFontAttr->GetFamilyName() );
@@ -377,7 +377,7 @@ void ScPatternAttr::GetFont(
 
     rFont.SetLanguage(eLang);
 
-    //  Groesse
+    
 
     if ( pOutDev != NULL )
     {
@@ -404,7 +404,7 @@ void ScPatternAttr::GetFont(
         rFont.SetSize( Size( 0, (long) nFontHeight ) );
     }
 
-    //  determine effective font color
+    
 
     if ( ( aColor.GetColor() == COL_AUTO && eAutoMode != SC_AUTOCOL_RAW ) ||
             eAutoMode == SC_AUTOCOL_IGNOREFONT || eAutoMode == SC_AUTOCOL_IGNOREALL )
@@ -413,7 +413,7 @@ void ScPatternAttr::GetFont(
             aColor.SetColor( COL_BLACK );
         else
         {
-            //  get background color from conditional or own set
+            
             Color aBackColor;
             if ( pCondSet )
             {
@@ -425,7 +425,7 @@ void ScPatternAttr::GetFont(
             else
                 aBackColor = ((const SvxBrushItem&)rItemSet.Get( ATTR_BACKGROUND )).GetColor();
 
-            //  if background color attribute is transparent, use window color for brightness comparisons
+            
             if ( aBackColor == COL_TRANSPARENT ||
                     eAutoMode == SC_AUTOCOL_IGNOREBACK || eAutoMode == SC_AUTOCOL_IGNOREALL )
             {
@@ -433,45 +433,45 @@ void ScPatternAttr::GetFont(
                     aBackColor.SetColor( COL_WHITE );
                 else if ( pBackConfigColor )
                 {
-                    // pBackConfigColor can be used to avoid repeated lookup of the configured color
+                    
                     aBackColor = *pBackConfigColor;
                 }
                 else
                     aBackColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );
             }
 
-            //  get system text color for comparison
+            
             Color aSysTextColor;
             if ( eAutoMode == SC_AUTOCOL_PRINT )
                 aSysTextColor.SetColor( COL_BLACK );
             else if ( pTextConfigColor )
             {
-                // pTextConfigColor can be used to avoid repeated lookup of the configured color
+                
                 aSysTextColor = *pTextConfigColor;
             }
             else
                 aSysTextColor.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
 
-            //  select the resulting color
+            
             if ( aBackColor.IsDark() && aSysTextColor.IsDark() )
             {
-                //  use white instead of dark on dark
+                
                 aColor.SetColor( COL_WHITE );
             }
             else if ( aBackColor.IsBright() && aSysTextColor.IsBright() )
             {
-                //  use black instead of bright on bright
+                
                 aColor.SetColor( COL_BLACK );
             }
             else
             {
-                //  use aSysTextColor (black for SC_AUTOCOL_PRINT, from style settings otherwise)
+                
                 aColor = aSysTextColor;
             }
         }
     }
 
-    //  set font effects
+    
     rFont.SetWeight( eWeight );
     rFont.SetItalic( eItalic );
     rFont.SetUnderline( eUnder );
@@ -498,13 +498,13 @@ void ScPatternAttr::GetFont(
 
 void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& rSrcSet, const SfxItemSet* pCondSet )
 {
-    //  Items auslesen
+    
 
-    SvxColorItem    aColorItem(EE_CHAR_COLOR);              // use item as-is
-    SvxFontItem     aFontItem(EE_CHAR_FONTINFO);            // use item as-is
+    SvxColorItem    aColorItem(EE_CHAR_COLOR);              
+    SvxFontItem     aFontItem(EE_CHAR_FONTINFO);            
     SvxFontItem     aCjkFontItem(EE_CHAR_FONTINFO_CJK);
     SvxFontItem     aCtlFontItem(EE_CHAR_FONTINFO_CTL);
-    long            nTHeight, nCjkTHeight, nCtlTHeight;     // Twips
+    long            nTHeight, nCjkTHeight, nCtlTHeight;     
     FontWeight      eWeight, eCjkWeight, eCtlWeight;
     SvxUnderlineItem aUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE);
     SvxOverlineItem aOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE);
@@ -520,7 +520,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     bool            bHyphenate;
     SvxFrameDirection eDirection;
 
-    //! additional parameter to control if language is needed?
+    
 
     if ( pCondSet )
     {
@@ -623,7 +623,7 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
             pItem = &rSrcSet.Get( ATTR_WRITINGDIR );
         eDirection = (SvxFrameDirection)((const SvxFrameDirectionItem*)pItem)->GetValue();
     }
-    else        // alles direkt aus Pattern
+    else        
     {
         aColorItem = (const SvxColorItem&) rSrcSet.Get( ATTR_FONT_COLOR );
         aFontItem = (const SvxFontItem&) rSrcSet.Get( ATTR_FONT );
@@ -675,21 +675,21 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
                         rSrcSet.Get( ATTR_WRITINGDIR )).GetValue();
     }
 
-    // kompatibel zu LogicToLogic rechnen, also 2540/1440 = 127/72, und runden
+    
 
     long nHeight = TwipsToHMM(nTHeight);
     long nCjkHeight = TwipsToHMM(nCjkTHeight);
     long nCtlHeight = TwipsToHMM(nCtlTHeight);
 
-    //  put items into EditEngine ItemSet
+    
 
     if ( aColorItem.GetValue().GetColor() == COL_AUTO )
     {
-        //  When cell attributes are converted to EditEngine paragraph attributes,
-        //  don't create a hard item for automatic color, because that would be converted
-        //  to black when the item's Store method is used in CreateTransferable/WriteBin.
-        //  COL_AUTO is the EditEngine's pool default, so ClearItem will result in automatic
-        //  color, too, without having to store the item.
+        
+        
+        
+        
+        
         rEditSet.ClearItem( EE_CHAR_COLOR );
     }
     else
@@ -721,11 +721,11 @@ void ScPatternAttr::FillToEditItemSet( SfxItemSet& rEditSet, const SfxItemSet& r
     rEditSet.Put( SfxBoolItem       ( EE_PARA_HYPHENATE, bHyphenate ) );
     rEditSet.Put( SvxFrameDirectionItem( eDirection, EE_PARA_WRITINGDIR ) );
 
-    // Script spacing is always off.
-    // The cell attribute isn't used here as long as there is no UI to set it
-    // (don't evaluate attributes that can't be changed).
-    // If a locale-dependent default is needed, it has to go into the cell
-    // style, like the fonts.
+    
+    
+    
+    
+    
     rEditSet.Put( SvxScriptSpaceItem( false, EE_PARA_ASIANCJKSPACING ) );
 }
 
@@ -770,7 +770,7 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         rDestSet.Put( SvxWeightItem( (FontWeight)((const SvxWeightItem*)pItem)->GetValue(),
                         ATTR_CTL_FONT_WEIGHT) );
 
-    // SvxTextLineItem contains enum and color
+    
     if (rEditSet.GetItemState(EE_CHAR_UNDERLINE,true,&pItem) == SFX_ITEM_SET)
         rDestSet.Put( SvxUnderlineItem(UNDERLINE_NONE,ATTR_FONT_UNDERLINE) = *(const SvxUnderlineItem*)pItem );
     if (rEditSet.GetItemState(EE_CHAR_OVERLINE,true,&pItem) == SFX_ITEM_SET)
@@ -819,9 +819,9 @@ void ScPatternAttr::GetFromEditItemSet( SfxItemSet& rDestSet, const SfxItemSet& 
         switch ( ((const SvxAdjustItem*)pItem)->GetAdjust() )
         {
             case SVX_ADJUST_LEFT:
-                // EditEngine Default ist bei dem GetAttribs() ItemSet
-                // immer gesetzt!
-                // ob links oder rechts entscheiden wir selbst bei Text/Zahl
+                
+                
+                
                 eVal = SVX_HOR_JUSTIFY_STANDARD;
                 break;
             case SVX_ADJUST_RIGHT:
@@ -855,8 +855,8 @@ void ScPatternAttr::GetFromEditItemSet( const SfxItemSet* pEditSet )
 
 void ScPatternAttr::FillEditParaItems( SfxItemSet* pEditSet ) const
 {
-    //  in GetFromEditItemSet schon dabei, in FillEditItemSet aber nicht
-    //  Hor. Ausrichtung Standard wird immer als "links" umgesetzt
+    
+    
 
     const SfxItemSet& rMySet = GetItemSet();
 
@@ -884,19 +884,19 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
 
     for ( sal_uInt16 nSubWhich=ATTR_PATTERN_START; nSubWhich<=ATTR_PATTERN_END; nSubWhich++ )
     {
-        //  only items that are set are interesting
+        
         if ( rThisSet.GetItemState( nSubWhich, false, &pThisItem ) == SFX_ITEM_SET )
         {
             SfxItemState eOldState = rOldSet.GetItemState( nSubWhich, true, &pOldItem );
             if ( eOldState == SFX_ITEM_SET )
             {
-                //  item is set in OldAttrs (or its parent) -> compare pointers
+                
                 if ( pThisItem == pOldItem )
                     rThisSet.ClearItem( nSubWhich );
             }
             else if ( eOldState != SFX_ITEM_DONTCARE )
             {
-                //  not set in OldAttrs -> compare item value to default item
+                
                 if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nSubWhich ) )
                     rThisSet.ClearItem( nSubWhich );
             }
@@ -934,7 +934,7 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
         return NULL;
     }
 
-    //--------------------------------------------------------
+    
 
     const OUString       aStrSrcStyle = pSrcStyle->GetName();
     const SfxStyleFamily eFamily      = pSrcStyle->GetFamily();
@@ -949,8 +949,8 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
         SfxItemSet& rDestSet = pDestStyle->GetItemSet();
         rDestSet.Put( rSrcSet );
 
-        // number format exchange list has to be handled here, too
-        // (only called for cell styles)
+        
+        
 
         const SfxPoolItem* pSrcItem;
         if ( pFormatExchangeList &&
@@ -965,7 +965,7 @@ static SfxStyleSheetBase* lcl_CopyStyleToPool
             }
         }
 
-        // ggF. abgeleitete Styles erzeugen, wenn nicht vorhanden:
+        
 
         if ( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) != aStrParent &&
              aStrSrcStyle != aStrParent &&
@@ -988,14 +988,14 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
     ScPatternAttr* pDestPattern = new ScPatternAttr(pDestDoc->GetPool());
     SfxItemSet* pDestSet = &pDestPattern->GetItemSet();
 
-    // Zellformatvorlage in anderes Dokument kopieren:
+    
 
     if ( pDestDoc != pSrcDoc )
     {
         OSL_ENSURE( pStyle, "Missing Pattern-Style! :-/" );
 
-        // wenn Vorlage im DestDoc vorhanden, dieses benutzen, sonst Style
-        // mit Parent-Vorlagen kopieren/ggF. erzeugen und dem DestDoc hinzufuegen
+        
+        
 
         SfxStyleSheetBase* pStyleCpy = lcl_CopyStyleToPool( pStyle,
                                                             pSrcDoc->GetStyleSheetPool(),
@@ -1015,7 +1015,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 
             if ( nAttrId == ATTR_VALIDDATA )
             {
-                //  Gueltigkeit ins neue Dokument kopieren
+                
 
                 sal_uLong nNewIndex = 0;
                 ScValidationDataList* pSrcList = pSrcDoc->GetValidationList();
@@ -1030,7 +1030,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
             }
             else if ( nAttrId == ATTR_VALUE_FORMAT && pDestDoc->GetFormatExchangeList() )
             {
-                //  Zahlformate nach Exchange-Liste
+                
 
                 sal_uLong nOldFormat = ((const SfxUInt32Item*)pSrcItem)->GetValue();
                 SvNumberFormatterIndexTable::const_iterator it = pDestDoc->GetFormatExchangeList()->find(nOldFormat);
@@ -1114,7 +1114,7 @@ bool ScPatternAttr::IsVisibleEqual( const ScPatternAttr& rOther ) const
             OneEqual( rThisSet, rOtherSet, ATTR_BORDER_BLTR ) &&
             OneEqual( rThisSet, rOtherSet, ATTR_SHADOW );
 
-    //!     auch hier nur wirklich sichtbare Werte testen !!!
+    
 }
 
 const OUString* ScPatternAttr::GetStyleName() const
@@ -1156,9 +1156,9 @@ void ScPatternAttr::UpdateStyleSheet()
     {
         pStyle = (ScStyleSheet*)pDoc->GetStyleSheetPool()->Find(*pName, SFX_STYLE_FAMILY_PARA);
 
-        //  wenn Style nicht gefunden, Standard nehmen,
-        //  damit keine leere Anzeige im Toolbox-Controller
-        //! es wird vorausgesetzt, dass "Standard" immer der erste Eintrag ist!
+        
+        
+        
         if (!pStyle)
         {
             SfxStyleSheetIteratorPtr pIter = pDoc->GetStyleSheetPool()->CreateIterator( SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_ALL );
@@ -1177,7 +1177,7 @@ void ScPatternAttr::UpdateStyleSheet()
 
 void ScPatternAttr::StyleToName()
 {
-    // Style wurde geloescht, Namen merken:
+    
 
     if ( pStyle )
     {
@@ -1208,13 +1208,13 @@ sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter ) const
     LanguageType eLang =
         ((SvxLanguageItem*)&GetItemSet().Get( ATTR_LANGUAGE_FORMAT ))->GetLanguage();
     if ( nFormat < SV_COUNTRY_LANGUAGE_OFFSET && eLang == LANGUAGE_SYSTEM )
-        ;       // es bleibt wie es ist
+        ;       
     else if ( pFormatter )
         nFormat = pFormatter->GetFormatForLanguageIfBuiltIn( nFormat, eLang );
     return nFormat;
 }
 
-//  dasselbe, wenn bedingte Formatierung im Spiel ist:
+
 
 sal_uLong ScPatternAttr::GetNumberFormat( SvNumberFormatter* pFormatter,
                                         const SfxItemSet* pCondSet ) const
@@ -1247,7 +1247,7 @@ const SfxPoolItem& ScPatternAttr::GetItem( sal_uInt16 nSubWhich, const SfxItemSe
     return GetItem( nSubWhich, GetItemSet(), pCondSet );
 }
 
-//  GetRotateVal testet vorher ATTR_ORIENTATION
+
 
 long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
 {
@@ -1256,7 +1256,7 @@ long ScPatternAttr::GetRotateVal( const SfxItemSet* pCondSet ) const
     {
         bool bRepeat = ( static_cast<const SvxHorJustifyItem&>(GetItem(ATTR_HOR_JUSTIFY, pCondSet)).
                             GetValue() == SVX_HOR_JUSTIFY_REPEAT );
-        // ignore orientation/rotation if "repeat" is active
+        
         if ( !bRepeat )
             nAttrRotate = ((const SfxInt32Item&)GetItem( ATTR_ROTATE_VALUE, pCondSet )).GetValue();
     }
@@ -1279,7 +1279,7 @@ sal_uInt8 ScPatternAttr::GetRotateDir( const SfxItemSet* pCondSet ) const
             nRet = SC_ROTDIR_CENTER;
         else if ( eRotMode == SVX_ROTATE_MODE_TOP || eRotMode == SVX_ROTATE_MODE_BOTTOM )
         {
-            long nRot180 = nAttrRotate % 18000;     // 1/100 Grad
+            long nRot180 = nAttrRotate % 18000;     
             if ( nRot180 == 9000 )
                 nRet = SC_ROTDIR_CENTER;
             else if ( ( eRotMode == SVX_ROTATE_MODE_TOP && nRot180 < 9000 ) ||

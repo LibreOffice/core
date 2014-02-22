@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -31,8 +31,8 @@ sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
     return
         nEncoding > RTL_TEXTENCODING_DONTKNOW
-        && nEncoding != 9 // RTL_TEXTENCODING_SYSTEM
-        && nEncoding <= RTL_TEXTENCODING_ADOBE_DINGBATS; // always update this!
+        && nEncoding != 9 
+        && nEncoding <= RTL_TEXTENCODING_ADOBE_DINGBATS; 
 }
 
 /* ======================================================================= */
@@ -198,7 +198,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromWindowsCharset( sal_uInt8 nWinC
 
 rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixCharset )
 {
-    /* See <ftp://ftp.x.org/pub/DOCS/registry>, section 14 ("Font Charset
+    /* See <ftp:
      * (Registry and Encoding) Names").
      */
 
@@ -351,7 +351,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromUnixCharset( const char* pUnixC
         { NULL, RTL_TEXTENCODING_SYMBOL }
     };
 
-    /* See <http://cvs.freedesktop.org/xorg/xc/fonts/encodings/iso8859-11.enc?
+    /* See <http:
        rev=1.1.1.1>: */
     static ImplStrCharsetDef const aUnixCharsetTIS620Tab[] =
     {
@@ -824,9 +824,9 @@ const char* SAL_CALL rtl_getBestMimeCharsetFromTextEncoding( rtl_TextEncoding eT
         return 0;
 }
 
-/* The following two functions are based on <http://www.sharmahd.com/tm/
-   codepages.html>, <http://msdn.microsoft.com/workshop/author/dhtml/reference/
-   charsets/charset4.asp>, and <http://www.iana.org/assignments/character-sets>.
+/* The following two functions are based on <http:
+   codepages.html>, <http:
+   charsets/charset4.asp>, and <http:
  */
 
 rtl_TextEncoding SAL_CALL

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,15 +22,15 @@
 #include <svtools/urlcontrol.hxx>
 #include <vcl/layout.hxx>
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-    //=====================================================================
-    //= OFileURLControl
-    //=====================================================================
-    //---------------------------------------------------------------------
+
+    
+    
+    
+    
     OFileURLControl::OFileURLControl(Window* _pParent, const ResId& _rId)
         : SvtURLBox(_pParent, _rId, INET_PROT_FILE)
     {
@@ -52,7 +52,7 @@ namespace svt
         return pListBox;
     }
 
-    //---------------------------------------------------------------------
+    
     bool OFileURLControl::PreNotify( NotifyEvent& _rNEvt )
     {
         if (GetSubEdit() == _rNEvt.GetWindow())
@@ -64,7 +64,7 @@ namespace svt
         return SvtURLBox::PreNotify(_rNEvt);
     }
 
-    //---------------------------------------------------------------------
+    
     bool OFileURLControl::Notify( NotifyEvent& _rNEvt )
     {
         if (GetSubEdit() == _rNEvt.GetWindow())
@@ -74,12 +74,12 @@ namespace svt
                     {
                         bool nReturn = SvtURLBox::Notify(_rNEvt);
 
-                        // build a system dependent (thus more user readable) file name
+                        
                         OFileNotation aTransformer(m_sPreservedText, OFileNotation::N_URL);
                         SetText(aTransformer.get(OFileNotation::N_SYSTEM));
                         Modify();
 
-                        // Update the pick list
+                        
                         UpdatePickList();
 
                         return nReturn;
@@ -88,8 +88,8 @@ namespace svt
         return SvtURLBox::Notify(_rNEvt);
     }
 
-//.........................................................................
-}   // namespace svt
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

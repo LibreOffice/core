@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "passwdomdlg.hrc"
@@ -32,13 +32,13 @@
 #include <vcl/msgbox.hxx>
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 class PasswordReenterEdit_Impl : public Edit
 {
     OUString  m_aDefaultTxt;
 
-    // disallow use of copy c-tor and assignment operator
+    
     PasswordReenterEdit_Impl( const PasswordReenterEdit_Impl & );
     PasswordReenterEdit_Impl & operator = ( const PasswordReenterEdit_Impl & );
 
@@ -46,7 +46,7 @@ public:
     PasswordReenterEdit_Impl( Window * pParent, const ResId &rResId );
     virtual ~PasswordReenterEdit_Impl();
 
-    // Edit
+    
     virtual void        Paint( const Rectangle& rRect );
 };
 
@@ -77,7 +77,7 @@ void PasswordReenterEdit_Impl::Paint( const Rectangle& rRect )
 }
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 struct PasswordToOpenModifyDialog_Impl
 {
@@ -157,7 +157,7 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
         m_aReenterPasswdToModifyED.SetMaxTextLen( nMaxPasswdLen );
     }
 
-    (void) nMinPasswdLen;   // currently not supported
+    (void) nMinPasswdLen;   
 
     m_aPasswdToOpenED.GrabFocus();
 
@@ -182,7 +182,7 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
             m_bIsPasswordToModify? m_aInvalidStateForOkButton : m_aInvalidStateForOkButton_v2 );
         aErrorBox.Execute();
     }
-    else // check for mismatched passwords...
+    else 
     {
         const bool bToOpenMatch     = m_aPasswdToOpenED.GetText()   == m_aReenterPasswdToOpenED.GetText();
         const bool bToModifyMatch   = m_aPasswdToModifyED.GetText() == m_aReenterPasswdToModifyED.GetText();
@@ -218,7 +218,7 @@ IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG 
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 
 PasswordToOpenModifyDialog::PasswordToOpenModifyDialog(
@@ -264,6 +264,6 @@ bool PasswordToOpenModifyDialog::IsRecommendToOpenReadonly() const
 }
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

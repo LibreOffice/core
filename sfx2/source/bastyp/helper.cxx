@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -122,7 +122,7 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
     return aList;
 }
 
-// -----------------------------------------------------------------------
+
 
 std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUString& rURL )
 {
@@ -188,7 +188,7 @@ std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUStrin
     return aProperties;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
 {
@@ -199,9 +199,9 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
         uno::Reference< task::XInteractionHandler > xInteractionHandler(
             task::InteractionHandler::createWithParent(xContext, 0), uno::UNO_QUERY_THROW );
         ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
-        // open the "active help" stream
+        
         uno::Reference< io::XInputStream > xStream = aCnt.openStream();
-        // and convert it to a String
+        
         uno::Sequence< sal_Int8 > lData;
         sal_Int32 nRead = xStream->readBytes( lData, 1024 );
         while ( nRead > 0 )
@@ -220,7 +220,7 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
     return aRet.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
 {
@@ -242,7 +242,7 @@ bool SfxContentHelper::IsHelpErrorDocument( const OUString& rURL )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Int64 SfxContentHelper::GetSize( const OUString& rContent )
 {

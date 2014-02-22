@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/builder.hxx>
@@ -32,7 +32,7 @@
 namespace formula
 {
 
-// class ValWnd
+
 ValWnd::ValWnd( Window* pParent, const ResId& rId ) : Window( pParent, rId )
 {
     Font aFnt( GetFont() );
@@ -73,12 +73,12 @@ void ValWnd::SetValue( const OUString& rStrVal )
     if ( aStrValue != rStrVal )
     {
         aStrValue = rStrVal;
-        DrawRect( aRectOut );   // delete old text
-        Paint( aRectOut );      // repaint
+        DrawRect( aRectOut );   
+        Paint( aRectOut );      
     }
 }
 
-// class ArgEdit
+
 
 ArgEdit::ArgEdit( Window* pParent, const ResId& rResId )
     :   RefEdit( pParent, NULL, NULL, rResId ),
@@ -98,7 +98,7 @@ void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
     nArgs   = nArgCount;
 }
 
-// Cursor control for Edit Fields in Argument Dialog
+
 void ArgEdit::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode     aCode   = rKEvt.GetKeyCode();
@@ -137,7 +137,7 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
                     bChangeFocus = sal_True;
                 }
             }
-            else // if ( bUp )
+            else 
             {
                 if ( nArgs > 4 )
                 {
@@ -174,7 +174,7 @@ void ArgEdit::KeyInput( const KeyEvent& rKEvt )
         RefEdit::KeyInput( rKEvt );
 }
 
-// class ArgInput
+
 ArgInput::ArgInput()
 {
     pFtArg=NULL;
@@ -209,13 +209,13 @@ void ArgInput::InitArgInput( FixedText* pftArg, ImageButton* pbtnFx,
 
 }
 
-// Sets the Name for the Argument
+
 void ArgInput::SetArgName(const OUString &aArg)
 {
     if(pFtArg !=NULL) pFtArg->SetText(aArg );
 }
 
-// Returns the Name for the Argument
+
 OUString ArgInput::GetArgName()
 {
     OUString aPrivArgName;
@@ -225,19 +225,19 @@ OUString ArgInput::GetArgName()
     return aPrivArgName;
 }
 
-//Sets the Name for the Argument
+
 void ArgInput::SetArgNameFont   (const Font &aFont)
 {
     if(pFtArg !=NULL) pFtArg->SetFont(aFont);
 }
 
-//Sets up the Selection for the EditBox.
+
 void ArgInput::SetArgSelection  (const Selection& rSel )
 {
     if(pEdArg !=NULL) pEdArg ->SetSelection(rSel );
 }
 
-//Sets the Value for the Argument
+
 void ArgInput::SetArgVal(const OUString &rVal)
 {
     if(pEdArg !=NULL)
@@ -246,7 +246,7 @@ void ArgInput::SetArgVal(const OUString &rVal)
     }
 }
 
-//Returns the Value for the Argument
+
 OUString ArgInput::GetArgVal()
 {
     OUString aResult;
@@ -257,7 +257,7 @@ OUString ArgInput::GetArgVal()
     return aResult;
 }
 
-//Hides the Controls
+
 void ArgInput::Hide()
 {
     if ( pFtArg && pBtnFx && pEdArg && pRefBtn)
@@ -269,7 +269,7 @@ void ArgInput::Hide()
     }
 }
 
-//Casts the Controls again.
+
 void ArgInput::Show()
 {
     if ( pFtArg && pBtnFx && pEdArg && pRefBtn)
@@ -373,7 +373,7 @@ IMPL_LINK( ArgInput, EdModifyHdl,ArgEdit*, pEd )
     return 0;
 }
 
-// class EditBox
+
 EditBox::EditBox( Window* pParent, const ResId& rResId )
         :Control(pParent,rResId),
         bMouseFlag(sal_False)
@@ -389,8 +389,8 @@ EditBox::EditBox( Window* pParent, const ResId& rResId )
     WinBits nWinStyle=GetStyle() | WB_DIALOGCONTROL;
     SetStyle(nWinStyle);
 
-    //  #105582# the HelpId from the resource must be set for the MultiLineEdit,
-    //  not for the control that contains it.
+    
+    
     pMEdit->SetHelpId( GetHelpId() );
     SetHelpId( "" );
 }
@@ -403,21 +403,21 @@ EditBox::~EditBox()
     delete pTheEdit;
 }
 
-// When the selection is changed this function will be called
+
 void EditBox::SelectionChanged()
 {
     aSelChangedLink.Call(this);
 }
 
-// When the size is changed, MultiLineEdit must be adapted..
+
 void EditBox::Resize()
 {
     Size aSize=GetOutputSizePixel();
     if(pMEdit!=NULL) pMEdit->SetOutputSizePixel(aSize);
 }
 
-// When the Control is activated, the Selection is repealed
-// and the Cursor set at the end.
+
+
 void EditBox::GetFocus()
 {
     if(pMEdit!=NULL)
@@ -426,8 +426,8 @@ void EditBox::GetFocus()
     }
 }
 
-//When an Event is cleared, this Routine is
-//first called and a PostUserEvent is sent.
+
+
 bool EditBox::PreNotify( NotifyEvent& rNEvt )
 {
     bool nResult = true;
@@ -435,7 +435,7 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
     if(pMEdit==NULL) return nResult;
 
     sal_uInt16 nSwitch=rNEvt.GetType();
-    if(nSwitch==EVENT_KEYINPUT)// || nSwitch==EVENT_KEYUP)
+    if(nSwitch==EVENT_KEYINPUT)
     {
         const KeyCode& aKeyCode=rNEvt.GetKeyEvent()->GetKeyCode();
         sal_uInt16 nKey=aKeyCode.GetCode();
@@ -463,8 +463,8 @@ bool EditBox::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-//When an Event cleared wurde, this routine is
-//first called.
+
+
 IMPL_LINK_NOARG(EditBox, ChangedHdl)
 {
     if(pMEdit!=NULL)
@@ -482,14 +482,14 @@ IMPL_LINK_NOARG(EditBox, ChangedHdl)
 
 void EditBox::UpdateOldSel()
 {
-    //  if selection is set for editing a function, store it as aOldSel,
-    //  so SelectionChanged isn't called in the next ChangedHdl call
+    
+    
 
     if (pMEdit)
         aOldSel = pMEdit->GetSelection();
 }
 
-// class RefEdit
+
 
 #define SC_ENABLE_TIME 100
 
@@ -606,7 +606,7 @@ IMPL_LINK_NOARG(RefEdit, UpdateHdl)
     return 0;
 }
 
-//class RefButton
+
 
 RefButton::RefButton( Window* _pParent, const ResId& rResId) :
     ImageButton( _pParent, rResId ),
@@ -696,6 +696,6 @@ void RefButton::LoseFocus()
         pRefEdit->Modify();
 }
 
-} // formula
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

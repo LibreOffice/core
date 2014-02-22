@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbalisthelper.hxx"
 #include <tools/diagnose_ex.h>
@@ -55,7 +55,7 @@ SwVbaListHelper::SwVbaListHelper( const css::uno::Reference< css::text::XTextDoc
 
 void SwVbaListHelper::Init() throw( css::uno::RuntimeException )
 {
-    // set the numbering style name
+    
     switch( mnGalleryType )
     {
         case word::WdListGalleryType::wdBulletGallery:
@@ -80,7 +80,7 @@ void SwVbaListHelper::Init() throw( css::uno::RuntimeException )
     }
     msStyleName += OUString::number( mnTemplateType );
 
-    // get the numbering style
+    
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( mxTextDocument, uno::UNO_QUERY_THROW );
     mxStyleFamily.set( xStyleSupplier->getStyleFamilies()->getByName("NumberingStyles"), uno::UNO_QUERY_THROW );
     OSL_TRACE("SwVbaListHelper::Init: numbering style name: %s", OUStringToOString( msStyleName, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -91,10 +91,10 @@ void SwVbaListHelper::Init() throw( css::uno::RuntimeException )
     }
     else
     {
-        // create new numbering style
+        
         uno::Reference< lang::XMultiServiceFactory > xDocMSF( mxTextDocument, uno::UNO_QUERY_THROW );
         mxStyleProps.set( xDocMSF->createInstance("com.sun.star.style.NumberingStyle"), uno::UNO_QUERY_THROW );
-        // insert this style into style family, or the property NumberingRules doesn't exist.
+        
         mxStyleFamily->insertByName( msStyleName, uno::makeAny( mxStyleProps ) );
         mxStyleProps->getPropertyValue("NumberingRules") >>= mxNumberingRules;
 
@@ -132,7 +132,7 @@ void SwVbaListHelper::CreateListTemplate() throw( css::uno::RuntimeException )
 
 void SwVbaListHelper::CreateBulletListTemplate() throw( css::uno::RuntimeException )
 {
-    // there is only 1 level for each bullet list in MSWord
+    
     sal_Int32 nLevel = 0;
     uno::Sequence< beans::PropertyValue > aPropertyValues;
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
@@ -181,7 +181,7 @@ void SwVbaListHelper::CreateBulletListTemplate() throw( css::uno::RuntimeExcepti
         }
         default:
         {
-            // we only support 7 types template now
+            
             throw css::uno::RuntimeException();
         }
     }
@@ -192,7 +192,7 @@ void SwVbaListHelper::CreateBulletListTemplate() throw( css::uno::RuntimeExcepti
 
 void SwVbaListHelper::CreateNumberListTemplate() throw( css::uno::RuntimeException )
 {
-    // there is only 1 level for each bullet list in MSWord
+    
     sal_Int32 nLevel = 0;
     uno::Sequence< beans::PropertyValue > aPropertyValues;
     mxNumberingRules->getByIndex( nLevel ) >>= aPropertyValues;
@@ -245,7 +245,7 @@ void SwVbaListHelper::CreateNumberListTemplate() throw( css::uno::RuntimeExcepti
         }
         default:
         {
-            // we only support 7 types template now
+            
             throw css::uno::RuntimeException();
         }
     }
@@ -296,7 +296,7 @@ void SwVbaListHelper::CreateOutlineNumberListTemplate() throw( css::uno::Runtime
         }
         default:
         {
-            // we only support 7 types template now
+            
             throw css::uno::RuntimeException();
         }
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -58,7 +58,7 @@ namespace connectivity
         class OMySQLKeysHelper : public OKeysHelper
         {
         protected:
-            // -----------------------------------------------------------------------------
+            
             virtual OUString getDropForeignKey() const
             {
                 return OUString(" DROP FOREIGN KEY ");
@@ -77,7 +77,7 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection)
     :OTableHelper(_pTables,_xConnection,sal_True)
 {
-    // we create a new table here, so we should have all the rights or ;-)
+    
     m_nPrivileges = Privilege::DROP         |
                     Privilege::REFERENCE    |
                     Privilege::ALTER        |
@@ -89,7 +89,7 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                     Privilege::SELECT;
     construct();
 }
-// -------------------------------------------------------------------------
+
 OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
                     const OUString& _Name,
@@ -110,41 +110,41 @@ OMySQLTable::OMySQLTable(   sdbcx::OCollection* _pTables,
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 void OMySQLTable::construct()
 {
     OTableHelper::construct();
     if ( !isNew() )
         registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  ::getCppuType(&m_nPrivileges));
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OMySQLTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OMySQLTable::getInfoHelper()
 {
     return *static_cast<OMySQLTable_PROP*>(const_cast<OMySQLTable*>(this))->getArrayHelper(isNew() ? 1 : 0);
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* OMySQLTable::createColumns(const TStringVector& _rNames)
 {
     OMySQLColumns* pColumns = new OMySQLColumns(*this,sal_True,m_aMutex,_rNames);
     pColumns->setParent(this);
     return pColumns;
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* OMySQLTable::createKeys(const TStringVector& _rNames)
 {
     return new OMySQLKeysHelper(this,m_aMutex,_rNames);
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* OMySQLTable::createIndexes(const TStringVector& _rNames)
 {
     return new OIndexesHelper(this,m_aMutex,_rNames);
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OMySQLTable::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -160,16 +160,16 @@ Sequence< sal_Int8 > OMySQLTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
+
 sal_Int64 OMySQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }
-// -------------------------------------------------------------------------
-// XAlterTable
+
+
 void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -187,26 +187,26 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
 
     if ( !isNew() )
     {
-        // first we have to check what should be altered
+        
         Reference<XPropertySet> xProp;
         m_pColumns->getByName(colName) >>= xProp;
-        // first check the types
+        
         sal_Int32 nOldType = 0,nNewType = 0,nOldPrec = 0,nNewPrec = 0,nOldScale = 0,nNewScale = 0;
 
         ::dbtools::OPropertyMap& rProp = OMetaConnection::getPropMap();
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
-        // and precsions and scale
+        
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
-        // second: check the "is nullable" value
+        
         sal_Int32 nOldNullable = 0,nNewNullable = 0;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))       >>= nOldNullable;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
 
-        // check also the auto_increment
+        
         sal_Bool bOldAutoIncrement = sal_False,bAutoIncrement = sal_False;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
@@ -222,8 +222,8 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
             ||  bOldAutoIncrement != bAutoIncrement
             || sOldDesc != sNewDesc )
         {
-            // special handling because they change dthe type names to distinguish
-            // if a column should be an auto_incmrement one
+            
+            
             if ( bOldAutoIncrement != bAutoIncrement )
             {
                 OUString sTypeName;
@@ -252,7 +252,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
             bColumnNameChanged = true;
         }
 
-        // third: check the default values
+        
         OUString sNewDefault,sOldDefault;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
@@ -266,7 +266,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
         else if(!sNewDefault.isEmpty())
             alterDefaultValue(sNewDefault,colName);
 
-        // now we should look if the name of the column changed
+        
         OUString sNewColumnName;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_NAME)) >>= sNewColumnName;
         if ( !sNewColumnName.equalsIgnoreAsciiCase(colName) && !bColumnNameChanged )
@@ -289,7 +289,7 @@ void SAL_CALL OMySQLTable::alterColumnByName( const OUString& colName, const Ref
     }
 
 }
-// -----------------------------------------------------------------------------
+
 void OMySQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
@@ -305,13 +305,13 @@ void OMySQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, 
     sSql += OTables::adjustSQL(::dbtools::createStandardColumnPart(xProp,getConnection(),static_cast<OTables*>(m_pTables),getTypeCreatePattern()));
     executeStatement(sSql);
 }
-// -----------------------------------------------------------------------------
+
 OUString OMySQLTable::getTypeCreatePattern() const
 {
     static const OUString s_sCreatePattern("(M,D)");
     return s_sCreatePattern;
 }
-// -----------------------------------------------------------------------------
+
 void OMySQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName)
 {
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
@@ -321,7 +321,7 @@ void OMySQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString&
 
     executeStatement(sSql);
 }
-// -----------------------------------------------------------------------------
+
 void OMySQLTable::dropDefaultValue(const OUString& _rColName)
 {
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
@@ -331,7 +331,7 @@ void OMySQLTable::dropDefaultValue(const OUString& _rColName)
 
     executeStatement(sSql);
 }
-// -----------------------------------------------------------------------------
+
 OUString OMySQLTable::getAlterTableColumnPart()
 {
     OUString sSql(  "ALTER TABLE " );
@@ -342,7 +342,7 @@ OUString OMySQLTable::getAlterTableColumnPart()
 
     return sSql;
 }
-// -----------------------------------------------------------------------------
+
 void OMySQLTable::executeStatement(const OUString& _rStatement )
 {
     OUString sSQL = _rStatement;
@@ -356,7 +356,7 @@ void OMySQLTable::executeStatement(const OUString& _rStatement )
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString OMySQLTable::getRenameStart() const
 {
     return OUString("RENAME TABLE ");

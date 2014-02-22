@@ -66,7 +66,7 @@ void SidebarDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
         sal_Int32 nAngle = static_cast< sal_Int32 >( fAngle / F_PI180 * 100.0 );
         if( nY < 0 )
             nAngle = 36000 - nAngle;
-        if( bInitial )  // round to entire 15 degrees
+        if( bInitial )  
             nAngle = ((nAngle + 750) / 1500) * 1500;
 
         if (Application::GetSettings().GetLayoutRTL())
@@ -75,6 +75,6 @@ void SidebarDialControl::HandleMouseEvent( const Point& rPos, bool bInitial )
     }
 }
 
-} } // end of namespace svx::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

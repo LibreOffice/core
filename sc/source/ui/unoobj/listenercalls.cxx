@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -23,7 +23,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 ScUnoListenerCalls::ScUnoListenerCalls()
 {
@@ -43,9 +43,9 @@ void ScUnoListenerCalls::Add( const uno::Reference<util::XModifyListener>& rList
 
 void ScUnoListenerCalls::ExecuteAndClear()
 {
-    //  Execute all stored calls and remove them from the list.
-    //  During each modified() call, Add may be called again.
-    //  These new calls are executed here, too.
+    
+    
+    
 
     if (!aEntries.empty())
     {
@@ -60,13 +60,13 @@ void ScUnoListenerCalls::ExecuteAndClear()
             }
             catch ( const uno::RuntimeException& )
             {
-                // the listener is an external object and may throw a RuntimeException
-                // for reasons we don't know
+                
+                
             }
 
-            //  New calls that are added during the modified() call are appended to the end
-            //  of aEntries, so the loop will catch them, too (as long as erase happens
-            //  after modified).
+            
+            
+            
 
             aItr = aEntries.erase(aItr);
         }

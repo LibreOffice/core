@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -33,7 +33,7 @@
 class ScXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
 private:
-    // #i120077# remember owned pool
+    
     SfxItemPool*    mpEditEnginePool;
 
     void AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const sal_Bool bExportDefaults);
@@ -99,8 +99,8 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(ScXMLExport& rExportP, 
 
         if(pStyle)
         {
-            // #i120077# remember the SfxItemPool in member variable before usage. The
-            // local EditEngine will not take over ownership of the pool.
+            
+            
             mpEditEnginePool = EditEngine::CreatePool();
             EditEngine aEditEngine(mpEditEnginePool);
 
@@ -149,7 +149,7 @@ ScXMLFontAutoStylePool_Impl::~ScXMLFontAutoStylePool_Impl()
 {
     if(mpEditEnginePool)
     {
-        // memory leak #i120077#
+        
         SfxItemPool::Free(mpEditEnginePool);
     }
 }
@@ -157,10 +157,10 @@ ScXMLFontAutoStylePool_Impl::~ScXMLFontAutoStylePool_Impl()
 XMLFontAutoStylePool* ScXMLExport::CreateFontAutoStylePool()
 {
     bool blockFontEmbedding = false;
-    // We write font info to both content.xml and styles.xml, but they are both
-    // written by different ScXMLExport instance, and would therefore write each
-    // font file twice without complicated checking for duplicates, so handle
-    // the embedding only in one of them.
+    
+    
+    
+    
     if(( getExportFlags() & EXPORT_CONTENT ) == 0 )
         blockFontEmbedding = true;
     if( !GetDocument()->IsUsingEmbededFonts())

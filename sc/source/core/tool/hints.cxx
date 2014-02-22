@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hints.hxx"
@@ -27,7 +27,7 @@ TYPEINIT1(ScAutoStyleHint, SfxHint);
 TYPEINIT1(ScDBRangeRefreshedHint, SfxHint);
 TYPEINIT1(ScDataPilotModifiedHint, SfxHint);
 
-// ScPaintHint - info what has to be repainted
+
 
 ScPaintHint::ScPaintHint( const ScRange& rRng, sal_uInt16 nPaint ) :
     aRange( rRng ),
@@ -40,7 +40,7 @@ ScPaintHint::~ScPaintHint()
 {
 }
 
-// ScUpdateRefHint - update references
+
 
 ScUpdateRefHint::ScUpdateRefHint( UpdateRefMode eMode, const ScRange& rR,
                                     SCsCOL nX, SCsROW nY, SCsTAB nZ ) :
@@ -56,13 +56,13 @@ ScUpdateRefHint::~ScUpdateRefHint()
 {
 }
 
-// ScPointerChangedHint - pointer has become invalid
+
 
 ScPointerChangedHint::~ScPointerChangedHint()
 {
 }
 
-//      ScLinkRefreshedHint - a link has been refreshed
+
 
 ScLinkRefreshedHint::ScLinkRefreshedHint() :
     nLinkType( SC_LINKREFTYPE_NONE ),
@@ -96,7 +96,7 @@ void ScLinkRefreshedHint::SetAreaLink( const ScAddress& rPos )
     aDestPos = rPos;
 }
 
-//      ScAutoStyleHint - STYLE() function has been called
+
 
 ScAutoStyleHint::ScAutoStyleHint( const ScRange& rR, const OUString& rSt1,
                                         sal_uLong nT, const OUString& rSt2 ) :

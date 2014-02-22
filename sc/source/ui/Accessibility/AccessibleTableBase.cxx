@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleTableBase.hxx"
@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
+
 
 ScAccessibleTableBase::ScAccessibleTableBase(
         const uno::Reference<XAccessible>& rxParent,
@@ -60,7 +60,7 @@ void SAL_CALL ScAccessibleTableBase::disposing()
     ScAccessibleContextBase::disposing();
 }
 
-    //=====  XInterface  =====================================================
+    
 
 uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType )
     throw (uno::RuntimeException)
@@ -88,7 +88,7 @@ void SAL_CALL ScAccessibleTableBase::release()
     ScAccessibleContextBase::release();
 }
 
-    //=====  XAccessibleTable  ================================================
+    
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
     throw (uno::RuntimeException, std::exception)
@@ -114,7 +114,7 @@ OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 
     if ((nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
 
-    //setAccessibleRowDescription(nRow, xAccessible); // to remember the created Description
+    
     return OUString();
 }
 
@@ -126,7 +126,7 @@ OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int
     if ((nColumn > (maRange.aEnd.Col() - maRange.aStart.Col())) || (nColumn < 0))
         throw lang::IndexOutOfBoundsException();
 
-    //setAccessibleColumnDescription(nColumn, xAccessible); // to remember the created Description
+    
     return OUString();
 }
 
@@ -140,7 +140,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
         (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
 
-    sal_Int32 nCount(1); // the same cell
+    sal_Int32 nCount(1); 
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
 
@@ -174,7 +174,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
         (nRow > (maRange.aEnd.Row() - maRange.aStart.Row())) || (nRow < 0))
         throw lang::IndexOutOfBoundsException();
 
-    sal_Int32 nCount(1); // the same cell
+    sal_Int32 nCount(1); 
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
 
@@ -204,7 +204,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
     uno::Reference< XAccessibleTable > xAccessibleTable;
     OSL_FAIL("Here should be a implementation to fill the row headers");
 
-    //CommitChange
+    
     return xAccessibleTable;
 }
 
@@ -214,7 +214,7 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
     uno::Reference< XAccessibleTable > xAccessibleTable;
     OSL_FAIL("Here should be a implementation to fill the column headers");
 
-    //CommitChange
+    
     return xAccessibleTable;
 }
 
@@ -279,7 +279,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow
     return false;
 }
 
-// =====  XAccessibleExtendedTable  ========================================
+
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
@@ -322,7 +322,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
     return nChildIndex % static_cast<sal_Int32>(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 }
 
-// =====  XAccessibleContext  ==============================================
+
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
     throw (uno::RuntimeException, std::exception)
@@ -330,8 +330,8 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
     SolarMutexGuard aGuard;
     IsObjectValid();
 
-    // FIXME: representing rows & columns this way is a plain and simple madness.
-    // this needs a radical re-think.
+    
+    
     sal_Int64 nMax = ((sal_Int64)(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
                       (sal_Int64)(maRange.aEnd.Col() - maRange.aStart.Col() + 1));
     if (nMax > SAL_MAX_INT32)
@@ -353,8 +353,8 @@ uno::Reference< XAccessible > SAL_CALL
     if (nIndex >= getAccessibleChildCount() || nIndex < 0)
         throw lang::IndexOutOfBoundsException();
 
-    // FIXME: representing rows & columns this way is a plain and simple madness.
-    // this needs a radical re-think.
+    
+    
 
     sal_Int32 nRow(0);
     sal_Int32 nColumn(0);
@@ -399,7 +399,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return xAccessibleStateSet;
 }
 
-    ///=====  XAccessibleSelection  ===========================================
+    
 
 void SAL_CALL ScAccessibleTableBase::selectAccessibleChild( sal_Int32 /* nChildIndex */ )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
@@ -410,7 +410,7 @@ sal_Bool SAL_CALL
         ScAccessibleTableBase::isAccessibleChildSelected( sal_Int32 nChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
-    // I don't need to guard, because the called functions have a guard
+    
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
     return isAccessibleSelected(getAccessibleRow(nChildIndex), getAccessibleColumn(nChildIndex));
@@ -448,7 +448,7 @@ void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 /* nSele
 {
 }
 
-    //=====  XServiceInfo  ====================================================
+    
 
 OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
         throw (uno::RuntimeException)
@@ -456,7 +456,7 @@ OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
     return OUString("ScAccessibleTableBase");
 }
 
-    //=====  XTypeProvider  ===================================================
+    
 
 uno::Sequence< uno::Type > SAL_CALL ScAccessibleTableBase::getTypes()
         throw (uno::RuntimeException)

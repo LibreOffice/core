@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,13 +74,13 @@ PathExpression::~PathExpression()
 
 void PathExpression::setExpression( const OUString& rExpression )
 {
-    // set new expression, and clear pre-computed results
+    
     ComputedExpression::setExpression( rExpression );
 
-    // check expression against regular expression to determine
-    // whether it contains only 'simple' (i.e. static) conditions. For
-    // now, we check whether it only contains number positions.
-    // (TODO: Only works for names containing only ASCII letters+digits.)
+    
+    
+    
+    
     mbIsSimple =
         _checkExpression( "( */@?[a-zA-Z0-9:]+( *\\[ *[0-9 ]+ *\\] *)?)+" );
 
@@ -97,18 +97,18 @@ const OUString PathExpression::_getExpressionForEvaluation() const
 
 bool PathExpression::evaluate( const EvaluationContext& rContext )
 {
-    // for simple expression we don't need to re-bind (if we were bound before)
-    // (we will evaluate empty expressions, since they are interpreted as ".")
+    
+    
     if( mxResult.is() && isSimpleExpression() )
         return true;
 
     bool bResult = _evaluate( rContext, _getExpressionForEvaluation() );
 
-    // clear old result, and copy new
+    
     maNodes.clear();
     if( mxResult.is() )
     {
-        // copy node list
+        
         Reference<XNodeList> xNodeList = mxResult->getNodeList();
         OSL_ENSURE( xNodeList.is(), "empty object (instead of empty list)" );
         sal_Int32 nLength = xNodeList.is() ? xNodeList->getLength() : 0;
@@ -139,6 +139,6 @@ Reference<XNodeList> PathExpression::getXNodeList() const
 }
 
 
-} // namespace xforms
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

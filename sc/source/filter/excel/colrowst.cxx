@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "colrowst.hxx"
@@ -29,17 +29,17 @@
 #include "xistyle.hxx"
 #include "queryparam.hxx"
 
-// for filter manager
+
 #include "excimp8.hxx"
 
-// ============================================================================
+
 
 const sal_uInt8 EXC_COLROW_USED         = 0x01;
 const sal_uInt8 EXC_COLROW_DEFAULT      = 0x02;
 const sal_uInt8 EXC_COLROW_HIDDEN       = 0x04;
 const sal_uInt8 EXC_COLROW_MAN          = 0x08;
 
-// ============================================================================
+
 
 XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -66,13 +66,13 @@ void XclImpColRowSettings::SetDefWidth( sal_uInt16 nDefWidth, bool bStdWidthRec 
 {
     if( bStdWidthRec )
     {
-        // STANDARDWIDTH record overrides DEFCOLWIDTH record
+        
         mnDefWidth = nDefWidth;
         mbHasStdWidthRec = true;
     }
     else if( !mbHasStdWidthRec )
     {
-        // use DEFCOLWIDTH record only, if no STANDARDWIDTH record exists
+        
         mnDefWidth = nDefWidth;
     }
 }
@@ -81,15 +81,15 @@ void XclImpColRowSettings::SetWidthRange( SCCOL nCol1, SCCOL nCol2, sal_uInt16 n
 {
     nCol2 = ::std::min( nCol2, MAXCOL );
     if (nCol2 == 256)
-        // In BIFF8, the column range is 0-255, and the use of 256 probably
-        // means the range should extend to the max column if the loading app
-        // support columns beyond 255.
+        
+        
+        
         nCol2 = MAXCOL;
 
     nCol1 = ::std::min( nCol1, nCol2 );
     maColWidths.insert_back(nCol1, nCol2+1, nWidth);
 
-    // We need to apply flag values individually since all flag values are aggregated for each column.
+    
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
         ApplyColFlag(nCol, EXC_COLROW_USED);
 }
@@ -199,7 +199,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
 
     ScDocument& rDoc = GetDoc();
 
-    // column widths ----------------------------------------------------------
+    
 
     maColWidths.build_tree();
     for( SCCOL nCol = 0; nCol <= MAXCOL; ++nCol )
@@ -223,12 +223,12 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
         rDoc.SetColWidthOnly( nCol, nScTab, nWidth );
     }
 
-    // row heights ------------------------------------------------------------
+    
 
-    // #i54252# set default row height
+    
     rDoc.SetRowHeightOnly( 0, MAXROW, nScTab, mnDefHeight );
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_UNSYNCED ) )
-        // first access to row flags, do not ask for old flags
+        
         rDoc.SetRowFlags( 0, MAXROW, nScTab, CR_MANUALSIZE );
 
     maRowHeights.build_tree();
@@ -260,7 +260,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
                         SCROW nLast;
                         if (!maRowHeights.search_tree(i, nHeight, NULL, &nLast).second)
                         {
-                            // search failed for some reason
+                            
                             return;
                         }
 
@@ -286,7 +286,7 @@ void XclImpColRowSettings::Convert( SCTAB nScTab )
         nPrevFlags = nFlags;
     }
 
-    // ------------------------------------------------------------------------
+    
 
     mbDirty = false;
 }
@@ -295,18 +295,18 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
 {
     ScDocument& rDoc = GetDoc();
 
-    // hide the columns
+    
     for( SCCOL nCol = 0; nCol <= MAXCOL; ++nCol )
         if (GetColFlag(nCol, EXC_COLROW_HIDDEN))
             rDoc.ShowCol( nCol, nScTab, false );
 
-    // #i38093# rows hidden by filter need extra flag
+    
     SCROW nFirstFilterScRow = SCROW_MAX;
     SCROW nLastFilterScRow = SCROW_MAX;
     if( GetBiff() == EXC_BIFF8 )
     {
         const XclImpAutoFilterData* pFilter = GetFilterManager().GetByTab( nScTab );
-        // #i70026# use IsFiltered() to set the CR_FILTERED flag for active filters only
+        
         if( pFilter && pFilter->IsActive() && pFilter->IsFiltered() )
         {
             nFirstFilterScRow = pFilter->StartRow();
@@ -314,8 +314,8 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
         }
     }
 
-    // In case the excel row limit is lower than calc's, use the visibility of
-    // the last row and extend it to calc's last row.
+    
+    
     SCROW nLastXLRow = GetRoot().GetXclMaxPos().Row();
     if (nLastXLRow < MAXROW)
     {
@@ -338,7 +338,7 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
             if (bPrevHidden)
             {
                 rDoc.SetRowHidden(nPrevRow, nRow-1, nScTab, true);
-                // #i38093# rows hidden by filter need extra flag
+                
                 if (nFirstFilterScRow <= nPrevRow && nPrevRow <= nLastFilterScRow)
                 {
                     SCROW nLast = ::std::min(nRow-1, nLastFilterScRow);
@@ -351,23 +351,23 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
         bPrevHidden = bHidden;
     }
 
-    // #i47438# if default row format is hidden, hide remaining rows
+    
     if( ::get_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN ) && (mnLastScRow < MAXROW) )
         rDoc.ShowRows( mnLastScRow + 1, MAXROW, nScTab, false );
 }
 
 void XclImpColRowSettings::ApplyColFlag(SCCOL nCol, sal_uInt8 nNewVal)
 {
-    // Get the original flag value.
+    
     sal_uInt8 nFlagVal = 0;
     std::pair<ColRowFlagsType::const_iterator,bool> r = maColFlags.search(nCol, nFlagVal);
     if (!r.second)
-        // Search failed.
+        
         return;
 
     ::set_flag(nFlagVal, nNewVal);
 
-    // Re-insert the flag value.
+    
     maColFlags.insert(r.first, nCol, nCol+1, nFlagVal);
 }
 
@@ -376,7 +376,7 @@ bool XclImpColRowSettings::GetColFlag(SCCOL nCol, sal_uInt8 nMask) const
     sal_uInt8 nFlagVal = 0;
     if (!maColFlags.search(nCol, nFlagVal).second)
         return false;
-        // Search failed.
+        
 
     return ::get_flag(nFlagVal, nMask);
 }

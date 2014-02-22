@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star;
 
-// FIXME
+
 static G_CONST_RETURN gchar *
 getAsConst( const OString& rString )
 {
@@ -102,7 +102,7 @@ action_wrapper_get_n_actions (AtkAction *action)
 static G_CONST_RETURN gchar *
 action_wrapper_get_description (AtkAction *, gint)
 {
-    // GAIL implement this only for cells
+    
     g_warning( "Not implemented: get_description()" );
     return "";
 }
@@ -110,7 +110,7 @@ action_wrapper_get_description (AtkAction *, gint)
 static G_CONST_RETURN gchar *
 action_wrapper_get_localized_name (AtkAction *, gint)
 {
-    // GAIL doesn't implement this as well
+    
     g_warning( "Not implemented: get_localized_name()" );
     return "";
 }
@@ -233,7 +233,7 @@ action_wrapper_get_keybinding (AtkAction *action,
                         aRet.append( (sal_Char) ';' );
                 }
 
-                // !! FIXME !! remember keystroke in wrapper object ?
+                
                 return getAsConst( aRet.makeStringAndClear() );
             }
         }
@@ -251,7 +251,7 @@ action_wrapper_set_description (AtkAction *, gint, const gchar *)
     return FALSE;
 }
 
-} // extern "C"
+} 
 
 void
 actionIfaceInit (AtkActionIface *iface)

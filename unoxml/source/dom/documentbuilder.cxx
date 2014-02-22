@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <documentbuilder.hxx>
@@ -87,9 +87,9 @@ namespace DOM
         : m_xFactory(xFactory)
         , m_xEntityResolver(new CDefaultEntityResolver())
     {
-        // init libxml. libxml will protect itself against multiple
-        // initializations so there is no problem here if this gets
-        // called multiple times.
+        
+        
+        
         xmlInitParser();
     }
 
@@ -160,7 +160,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        // create a new document
+        
         xmlDocPtr pDocument = xmlNewDoc((const xmlChar*)"1.0");
         Reference< XDocument > const xRet(
                 CDocument::CreateCDocument(pDocument).get());
@@ -179,11 +179,11 @@ namespace DOM
         return msg;
     }
 
-    // -- callbacks and context struct for parsing from stream
-    // -- c-linkage, so the callbacks can be used by libxml
+    
+    
     extern "C" {
 
-    // context struct passed to IO functions
+    
     typedef struct context {
         CDocumentBuilder *pBuilder;
         Reference< XInputStream > rInputStream;
@@ -193,16 +193,16 @@ namespace DOM
 
     static int xmlIO_read_func( void *context, char *buffer, int len)
     {
-        // get the context...
+        
         context_t *pctx = static_cast<context_t*>(context);
         if (!pctx->rInputStream.is())
             return -1;
         try {
-            // try to read the requested number of bytes
+            
             Sequence< sal_Int8 > chunk(len);
             int nread = pctx->rInputStream->readBytes(chunk, len);
 
-            // copy bytes to the provided buffer
+            
             memcpy(buffer, chunk.getConstArray(), nread);
             return nread;
         } catch (const com::sun::star::uno::Exception& ex) {
@@ -214,7 +214,7 @@ namespace DOM
 
     static int xmlIO_close_func(void* context)
     {
-        // get the context...
+        
         context_t *pctx = static_cast<context_t*>(context);
         if (!pctx->rInputStream.is())
             return 0;
@@ -236,7 +236,7 @@ namespace DOM
                                 const xmlChar *publicId,
                                 const xmlChar *systemId)
     {
-        // get the CDocumentBuilder object
+        
         xmlParserCtxtPtr ctxt = (xmlParserCtxtPtr)ctx;
         CDocumentBuilder *builder = static_cast< CDocumentBuilder* >(ctxt->_private);
         Reference< XEntityResolver > resolver = builder->getEntityResolver();
@@ -247,19 +247,19 @@ namespace DOM
         if (publicId != 0)
             pubid = OUString((sal_Char*)publicId, strlen((char*)publicId), RTL_TEXTENCODING_UTF8);
 
-        // resolve the entity
+        
         InputSource src = resolver->resolveEntity(pubid, sysid);
 
-        // create IO context on heap because this call will no longer be on the stack
-        // when IO is actually performed through the callbacks. The close function must
-        // free the memory which is indicated by the freeOnClose field in the context struct
+        
+        
+        
         context_t *c = new context_t;
         c->pBuilder = builder;
         c->rInputStream = src.aInputStream;
         c->close = true;
         c->freeOnClose = true;
 
-        // set up the inputBuffer and inputPtr for libxml
+        
         xmlParserInputBufferPtr pBuffer =
             xmlParserInputBufferCreateIO(xmlIO_read_func, xmlIO_close_func, c, XML_CHAR_ENCODING_NONE);
         xmlParserInputPtr pInput =
@@ -270,12 +270,12 @@ namespace DOM
 #if 0
     static xmlParserInputPtr external_entity_loader(const char *URL, const char * /*ID*/, xmlParserCtxtPtr ctxt)
     {
-        // just call our resolver function using the URL as systemId
+        
         return resolve_func(ctxt, 0, (const xmlChar*)URL);
     }
 #endif
 
-    // default warning handler does not trigger assertion
+    
     static void warning_func(void * ctx, const char * /*msg*/, ...)
     {
         SAL_INFO(
@@ -284,7 +284,7 @@ namespace DOM
                 << make_error_message(static_cast<xmlParserCtxtPtr>(ctx)));
     }
 
-    // default error handler triggers assertion
+    
     static void error_func(void * ctx, const char * /*msg*/, ...)
     {
         SAL_WARN(
@@ -293,7 +293,7 @@ namespace DOM
                 << make_error_message(static_cast<xmlParserCtxtPtr>(ctx)));
     }
 
-    } // extern "C"
+    } 
 
     void throwEx(xmlParserCtxtPtr ctxt)
     {
@@ -313,7 +313,7 @@ namespace DOM
 
         ::osl::MutexGuard const g(m_Mutex);
 
-        // encoding...
+        
         /*
         xmlChar *encstr = (xmlChar*) OUStringToOString(src.sEncoding, RTL_TEXTENCODING_UTF8).getStr();
         xmlCharEncoding enc = xmlParseCharEncoding(encstr);
@@ -322,18 +322,18 @@ namespace DOM
         ::boost::shared_ptr<xmlParserCtxt> const pContext(
                 xmlNewParserCtxt(), xmlFreeParserCtxt);
 
-        // register error functions to prevent errors being printed
-        // on the console
+        
+        
         pContext->_private = this;
         pContext->sax->error = error_func;
         pContext->sax->warning = warning_func;
         pContext->sax->resolveEntity = resolve_func;
 
-        // IO context struct
+        
         context_t c;
         c.pBuilder = this;
         c.rInputStream = is;
-        // we did not open the stream, thus we do not close it.
+        
         c.close = false;
         c.freeOnClose = false;
         xmlDocPtr const pDoc = xmlCtxtReadIO(pContext.get(),
@@ -358,7 +358,7 @@ namespace DOM
         pContext->sax->error = error_func;
         pContext->sax->warning = warning_func;
         pContext->sax->resolveEntity = resolve_func;
-        // xmlSetExternalEntityLoader(external_entity_loader);
+        
         OString oUri = OUStringToOString(sUri, RTL_TEXTENCODING_UTF8);
         char *uri = (char*) oUri.getStr();
         xmlDocPtr pDoc = xmlCtxtReadFile(pContext.get(), uri, 0, 0);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,9 +48,9 @@
 #include <vcl/pngread.hxx>
 #include <vcl/pngwrite.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
+
+
+
 
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::XInterface;
@@ -80,7 +80,7 @@ ModuleImageManager::~ModuleImageManager()
 {
 }
 
-// XComponent
+
 void SAL_CALL ModuleImageManager::dispose() throw (::com::sun::star::uno::RuntimeException)
 {
     m_pImpl->dispose();
@@ -97,13 +97,13 @@ void SAL_CALL ModuleImageManager::removeEventListener( const uno::Reference< XEv
     m_pImpl->removeEventListener(xListener);
 }
 
-// XInitialization
+
 void SAL_CALL ModuleImageManager::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     m_pImpl->initialize(aArguments);
 }
 
-// XImageManager
+
 void SAL_CALL ModuleImageManager::reset()
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -159,7 +159,7 @@ throw ( ::com::sun::star::container::ElementExistException,
     m_pImpl->insertImages(nImageType,aCommandURLSequence,aGraphicSequence);
 }
 
-// XUIConfiguration
+
 void SAL_CALL ModuleImageManager::addConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -172,7 +172,7 @@ throw (::com::sun::star::uno::RuntimeException)
     m_pImpl->removeConfigurationListener(xListener);
 }
 
-// XUIConfigurationPersistence
+
 void SAL_CALL ModuleImageManager::reload()
 throw ( ::com::sun::star::uno::Exception,
         ::com::sun::star::uno::RuntimeException )
@@ -203,6 +203,6 @@ sal_Bool SAL_CALL ModuleImageManager::isReadOnly() throw (::com::sun::star::uno:
     return m_pImpl->isReadOnly();
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

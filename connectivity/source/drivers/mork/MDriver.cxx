@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <cppuhelper/supportsservice.hxx>
@@ -33,18 +33,18 @@ MorkDriver::MorkDriver(css::uno::Reference< css::uno::XComponentContext > const 
     m_xFactory(context_->getServiceManager(), css::uno::UNO_QUERY)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::MorkDriver()" );
-//    css::uno::Reference< com::sun::star::lang::XMultiServiceFactory > xServiceFactory(;
+
     assert(context.is());
 }
 
-// static ServiceInfo
-//------------------------------------------------------------------------------
+
+
 OUString MorkDriver::getImplementationName_Static(  ) throw(css::uno::RuntimeException)
 {
     return OUString(MORK_DRIVER_IMPL_NAME);
 }
 
-//------------------------------------------------------------------------------
+
 css::uno::Sequence< OUString > MorkDriver::getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< OUString > aSNS(1);
@@ -77,10 +77,10 @@ css::uno::Reference< css::sdbc::XConnection > MorkDriver::connect(
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::connect()" );
 
-    (void) url; (void) info; // avoid warnings
+    (void) url; (void) info; 
     css::uno::Reference< css::sdbc::XConnection > xCon;
     OConnection* pCon = new OConnection(this);
-    xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
+    xCon = pCon;    
     pCon->construct(url, info);
     return xCon;
 }
@@ -89,17 +89,17 @@ sal_Bool MorkDriver::acceptsURL(OUString const & url)
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     SAL_INFO("connectivity.mork", "=> MorkDriver::acceptsURL()" );
-    // Skip 'sdbc:mozab: part of URL
+    
     //
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     OUString aAddrbookURI(url.copy(nLen+1));
-    // Get Scheme
+    
     nLen = aAddrbookURI.indexOf(':');
     OUString aAddrbookScheme;
     if ( nLen == -1 )
     {
-        // There isn't any subschema: - but could be just subschema
+        
         if ( !aAddrbookURI.isEmpty() )
         {
             aAddrbookScheme= aAddrbookURI;
@@ -132,18 +132,18 @@ css::uno::Sequence< css::sdbc::DriverPropertyInfo > MorkDriver::getPropertyInfo(
     css::uno::Sequence< css::beans::PropertyValue > const & info)
     throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
-    //... TODO
-    (void) url; (void) info; // avoid warnings
+    
+    (void) url; (void) info; 
     return css::uno::Sequence< css::sdbc::DriverPropertyInfo >();
 }
 
 sal_Int32 MorkDriver::getMajorVersion() throw (css::uno::RuntimeException) {
-    //... TODO
+    
     return 0;
 }
 
 sal_Int32 MorkDriver::getMinorVersion() throw (css::uno::RuntimeException) {
-    //... TODO
+    
     return 0;
 }
 

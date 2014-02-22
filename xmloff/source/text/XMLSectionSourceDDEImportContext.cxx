@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLSectionSourceDDEImportContext.hxx"
@@ -126,16 +126,16 @@ void XMLSectionSourceDDEImportContext::StartElement(
                 break;
             }
             default:
-                ; // ignore
+                ; 
                 break;
         }
     }
 
-    // DDE not supported on all platforms; query property first
+    
     if (rSectionPropertySet->getPropertySetInfo()->
         hasPropertyByName(sDdeCommandFile))
     {
-        // use multi property set to force single update of connection #83654#
+        
         Sequence<OUString> aNames(4);
         Sequence<Any> aValues(4);
 
@@ -156,13 +156,13 @@ void XMLSectionSourceDDEImportContext::StartElement(
         DBG_ASSERT(rMultiPropSet.is(), "we'd really like a XMultiPropertySet");
         if (rMultiPropSet.is())
             rMultiPropSet->setPropertyValues(aNames, aValues);
-        // else: ignore
+        
     }
 }
 
 void XMLSectionSourceDDEImportContext::EndElement()
 {
-    // nothing to be done!
+    
 }
 
 SvXMLImportContext* XMLSectionSourceDDEImportContext::CreateChildContext(
@@ -170,7 +170,7 @@ SvXMLImportContext* XMLSectionSourceDDEImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & )
 {
-    // ignore -> default context
+    
     return new SvXMLImportContext(GetImport(), nPrefix, rLocalName);
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -95,19 +95,19 @@ SelectionManager::~SelectionManager (void)
 
 void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
 {
-    // Create some locks to prevent updates of the model, view, selection
-    // state while modifying any of them.
+    
+    
     SlideSorterController::ModelChangeLock aLock (mrController);
     SlideSorterView::DrawLock aDrawLock (mrSlideSorter);
     PageSelector::UpdateLock aSelectionLock (mrSlideSorter);
 
-    // Hide focus.
+    
     bool bIsFocusShowing = mrController.GetFocusManager().IsFocusShowing();
     if (bIsFocusShowing)
         mrController.GetFocusManager().ToggleFocus();
 
-    // Store pointers to all selected page descriptors.  This is necessary
-    // because the pages get deselected when the first one is deleted.
+    
+    
     model::PageEnumeration aPageEnumeration (
         PageEnumerationProvider::CreateSelectedPagesEnumeration(mrSlideSorter.GetModel()));
     ::std::vector<SdPage*> aSelectedPages;
@@ -122,16 +122,16 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
     if (aSelectedPages.empty())
         return;
 
-    // Determine the slide to select (and thereby make the current slide)
-    // after the deletion.
+    
+    
     if (bSelectFollowingPage)
         nNewCurrentSlide -= aSelectedPages.size() - 1;
     else
         --nNewCurrentSlide;
 
-    // The actual deletion of the selected pages is done in one of two
-    // helper functions.  They are specialized for normal respectively for
-    // master pages.
+    
+    
+    
     mrSlideSorter.GetView().BegUndo (SdResId(STR_UNDO_DELETEPAGES));
     if (mrSlideSorter.GetModel().GetEditMode() == EM_PAGE)
         DeleteSelectedNormalPages(aSelectedPages);
@@ -142,11 +142,11 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
     mrController.HandleModelChange();
     aLock.Release();
 
-    // Show focus and move it to next valid location.
+    
     if (bIsFocusShowing)
         mrController.GetFocusManager().ToggleFocus();
 
-    // Set the new current slide.
+    
     if (nNewCurrentSlide < 0)
         nNewCurrentSlide = 0;
     else if (nNewCurrentSlide >= mrSlideSorter.GetModel().GetPageCount())
@@ -161,7 +161,7 @@ void SelectionManager::DeleteSelectedPages (const bool bSelectFollowingPage)
 
 void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& rSelectedPages)
 {
-    // Prepare the deletion via the UNO API.
+    
     OSL_ASSERT(mrSlideSorter.GetModel().GetEditMode() == EM_PAGE);
 
     try
@@ -169,14 +169,14 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
         Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY_THROW );
         Reference<drawing::XDrawPages> xPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
 
-        // Iterate over all pages that where seleted when this method was called
-        // and delete the draw page the notes page.  The iteration is done in
-        // reverse order so that when one slide is not deleted (to avoid an
-        // empty document) the remaining slide is the first one.
+        
+        
+        
+        
         ::std::vector<SdPage*>::const_reverse_iterator aI;
         for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); ++aI)
         {
-            // Do not delete the last slide in the document.
+            
             if (xPages->getCount() <= 1)
                 break;
 
@@ -197,7 +197,7 @@ void SelectionManager::DeleteSelectedNormalPages (const ::std::vector<SdPage*>& 
 
 void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& rSelectedPages)
 {
-    // Prepare the deletion via the UNO API.
+    
     OSL_ASSERT(mrSlideSorter.GetModel().GetEditMode() == EM_MASTERPAGE);
 
     try
@@ -205,14 +205,14 @@ void SelectionManager::DeleteSelectedMasterPages (const ::std::vector<SdPage*>& 
         Reference<drawing::XMasterPagesSupplier> xDrawPagesSupplier( mrSlideSorter.GetModel().GetDocument()->getUnoModel(), UNO_QUERY_THROW );
         Reference<drawing::XDrawPages> xPages( xDrawPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
 
-        // Iterate over all pages that where seleted when this method was called
-        // and delete the draw page the notes page.  The iteration is done in
-        // reverse order so that when one slide is not deleted (to avoid an
-        // empty document) the remaining slide is the first one.
+        
+        
+        
+        
         ::std::vector<SdPage*>::const_reverse_iterator aI;
         for (aI=rSelectedPages.rbegin(); aI!=rSelectedPages.rend(); ++aI)
         {
-            // Do not delete the last slide in the document.
+            
             if (xPages->getCount() <= 1)
                 break;
 
@@ -247,7 +247,7 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
         pViewShell->Invalidate(SID_DELETE_MASTER_PAGE);
         pViewShell->Invalidate(SID_ASSIGN_LAYOUT);
 
-        // StatusBar
+        
         pViewShell->Invalidate (SID_STATUS_PAGE);
         pViewShell->Invalidate (SID_STATUS_LAYOUT);
 
@@ -256,7 +256,7 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
         if (pDescriptor.get() != NULL)
             pViewShell->UpdatePreview(pDescriptor->GetPage());
 
-        // Tell the slection change listeners that the selection has changed.
+        
         ::std::vector<Link>::iterator iListener (maSelectionChangeListeners.begin());
         ::std::vector<Link>::iterator iEnd (maSelectionChangeListeners.end());
         for (; iListener!=iEnd; ++iListener)
@@ -264,8 +264,8 @@ void SelectionManager::SelectionHasChanged (const bool bMakeSelectionVisible)
             iListener->Call(NULL);
         }
 
-        // Reset the insertion position: until set again it is calculated from
-        // the current selection.
+        
+        
         mnInsertionPosition = -1;
     }
 }
@@ -307,14 +307,14 @@ sal_Int32 SelectionManager::GetInsertionPosition (void) const
         model::PageEnumeration aSelectedPages
             (model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
                 mrSlideSorter.GetModel()));
-        // Initialize (for the case of an empty selection) with the position
-        // at the end of the document.
+        
+        
         nInsertionPosition = mrSlideSorter.GetModel().GetPageCount();
         while (aSelectedPages.HasMoreElements())
         {
             const sal_Int32 nPosition (aSelectedPages.GetNextElement()->GetPage()->GetPageNum());
-            // Convert *2+1 index to straight index (n-1)/2 after the page
-            // (+1).
+            
+            
             nInsertionPosition = model::FromCoreIndex(nPosition) + 1;
         }
 
@@ -331,7 +331,7 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
         mnInsertionPosition = -1;
     else if (nInsertionPosition > mrSlideSorter.GetModel().GetPageCount())
     {
-        // Assert but then ignore invalid values.
+        
         OSL_ASSERT(nInsertionPosition<=mrSlideSorter.GetModel().GetPageCount());
         return;
     }
@@ -347,6 +347,6 @@ void SelectionManager::SetInsertionPosition (const sal_Int32 nInsertionPosition)
     return mpSelectionObserver;
 }
 
-} } } // end of namespace ::sd::slidesorter
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

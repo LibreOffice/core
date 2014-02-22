@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlfilti.hxx"
@@ -86,7 +86,7 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE :
             {
-                // not supported by StarOffice
+                
             }
             break;
             case XML_TOK_FILTER_ATTR_DISPLAY_DUPLICATES :
@@ -166,27 +166,27 @@ void ScXMLFilterContext::CloseConnection()
 
 bool ScXMLFilterContext::GetConnection()
 {
-    // For condition items in each stack, the first one gets the connection of
-    // the last stack, while the rest of them get that of the current stack.
+    
+    
 
     if (maConnStack.empty())
-        // This should never happen.
+        
         return true;
 
     ConnStackItem& rItem = maConnStack.back();
     if (rItem.mnCondCount)
-        // secondary item gets the current connection.
+        
         return rItem.mbOr;
 
     if (maConnStack.size() < 2)
-        // There is no last stack.  Likely the first condition in the first
-        // stack whose connection is not used.
+        
+        
         return true;
 
     ++rItem.mnCondCount;
     std::vector<ConnStackItem>::reverse_iterator itr = maConnStack.rbegin();
     ++itr;
-    return itr->mbOr; // connection of the last stack.
+    return itr->mbOr; 
 }
 
 ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
@@ -218,7 +218,7 @@ SvXMLImportContext *ScXMLAndContext::CreateChildContext( sal_uInt16 nPrefix,
     {
         case XML_TOK_FILTER_OR:
         {
-            // not supported in StarOffice
+            
         }
         break;
         case XML_TOK_FILTER_CONDITION:
@@ -435,7 +435,7 @@ void ScXMLConditionContext::EndElement()
 {
     ScQueryEntry& rEntry = mrQueryParam.AppendEntry();
 
-    // We currently don't support per-condition case sensitivity.
+    
     mrQueryParam.bCaseSens = bIsCaseSensitive;
 
     rEntry.bDoQuery = true;
@@ -521,7 +521,7 @@ void ScXMLSetItemContext::EndElement()
 {
 }
 
-//==========================================================================
+
 
 ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
@@ -574,7 +574,7 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
             break;
             case XML_TOK_FILTER_ATTR_CONDITION_SOURCE :
             {
-                // not supported by StarOffice
+                
             }
             break;
             case XML_TOK_FILTER_ATTR_DISPLAY_DUPLICATES :
@@ -676,7 +676,7 @@ SvXMLImportContext *ScXMLDPAndContext::CreateChildContext( sal_uInt16 nPrefix,
     {
         case XML_TOK_FILTER_OR:
         {
-            // not supported in StarOffice
+            
         }
         break;
         case XML_TOK_FILTER_CONDITION:

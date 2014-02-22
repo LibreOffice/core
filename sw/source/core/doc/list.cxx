@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <list.hxx>
@@ -26,7 +26,7 @@
 #include <pam.hxx>
 #include <SwNodeNum.hxx>
 
-// implementation class for SwList
+
 class SwListImpl
 {
     public:
@@ -52,12 +52,12 @@ class SwListImpl
         bool IsListLevelMarked( const int nListLevel ) const;
 
     private:
-        // unique identifier of the list
+        
         const OUString msListId;
-        // default list style for the list items, identified by the list style name
+        
         OUString msDefaultListStyleName;
 
-        // list trees for certain document ranges
+        
         typedef std::pair<SwNodeNum*, SwPaM*> tListTreeForRange;
         typedef std::vector<tListTreeForRange> tListTrees;
         tListTrees maListTrees;
@@ -75,7 +75,7 @@ SwListImpl::SwListImpl( const OUString sListId,
       maListTrees(),
       mnMarkedListLevel( MAXLEVEL )
 {
-    // create empty list trees for the document ranges
+    
     const SwNode* pNode = rNodes[0];
     do
     {
@@ -181,13 +181,13 @@ void SwListImpl::MarkListLevel( const int nListLevel,
         {
             if ( mnMarkedListLevel != MAXLEVEL )
             {
-                // notify former marked list nodes
+                
                 NotifyItemsOnListLevel( mnMarkedListLevel );
             }
 
             mnMarkedListLevel = nListLevel;
 
-            // notify new marked list nodes
+            
             NotifyItemsOnListLevel( mnMarkedListLevel );
         }
     }
@@ -195,7 +195,7 @@ void SwListImpl::MarkListLevel( const int nListLevel,
     {
         if ( mnMarkedListLevel != MAXLEVEL )
         {
-            // notify former marked list nodes
+            
             NotifyItemsOnListLevel( mnMarkedListLevel );
         }
 
@@ -219,7 +219,7 @@ void SwListImpl::NotifyItemsOnListLevel( const int nLevel )
     }
 }
 
-// SwList ---------------------------------------------------------------------
+
 SwList::SwList( const OUString sListId,
                 SwNumRule& rDefaultListStyle,
                 const SwNodes& rNodes )

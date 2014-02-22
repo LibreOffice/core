@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sendfunc.hxx"
@@ -21,27 +21,27 @@ namespace {
 
 OUString formulaCellToString( ScFormulaCell *pCell )
 {
-    (void)pCell; // FIXME: implement me
+    (void)pCell; 
     return OUString();
 }
 
 OUString editToString( const EditTextObject& /*rEditText*/ )
 {
-    // FIXME: implement me.
+    
     return OUString();
 }
 
 EditTextObject stringToEdit( const OUString& /* rStr */ )
 {
-    // FIXME: implement me.
-    // The code here only serves to make this file compilable.
+    
+    
     EditEngine aEditEngine(0);
     return *aEditEngine.CreateTextObject();
 }
 
 ScFormulaCell* stringToFormulaCell( const OUString &rString )
 {
-    (void)rString; // FIXME: implement me
+    (void)rString; 
     return NULL;
 }
 
@@ -55,8 +55,8 @@ class ScChangeOpReader {
 public:
     ScChangeOpReader( const OUString &rString)
     {
-        // will need to handle escaping etc.
-        // Surely someone else wrote this before ! [!?]
+        
+        
         enum {
             IN_TEXT, CHECK_QUOTE, FIND_LAST_QUOTE, SKIP_SEMI
         } eState = CHECK_QUOTE;
@@ -66,7 +66,7 @@ public:
         {
             if (rString[n] == '\\')
             {
-                n++; // skip next char
+                n++; 
                 continue;
             }
             switch (eState) {
@@ -77,7 +77,7 @@ public:
                     eState = FIND_LAST_QUOTE;
                     break;
                 }
-                // else drop through
+                
             case IN_TEXT:
                 if (rString[n] == ';')
                 {
@@ -161,10 +161,10 @@ public:
 
 };
 
-} // anonymous namespace
+} 
 
-// Ye noddy mangling - needs improvement ...
-// method name ';' then arguments ; separated
+
+
 class ScChangeOpWriter
 {
     OUStringBuffer aMessage;
@@ -240,7 +240,7 @@ void ScDocFuncSend::RecvMessage( const OString &rString )
         ScChangeOpReader aReader( OUString( rString.getStr(),
                                                  rString.getLength(),
                                                  RTL_TEXTENCODING_UTF8 ) );
-        // FIXME: have some hash to enumeration mapping here
+        
         if ( aReader.getMethod() == "setNormalString" )
         {
             bool bNumFmtSet = false;
@@ -292,8 +292,8 @@ void ScDocFuncSend::SendMessage( ScChangeOpWriter &rOp )
     mpCollaboration->SendPacket( rOp.toString() );
 }
 
-// FIXME: really ScDocFunc should be an abstract base, so
-// we don't need the rDocSh hack/pointer
+
+
 ScDocFuncSend::ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncDirect *pDirect, ScCollaboration* pCollaboration )
         : ScDocFunc( rDocSh ),
         mpDirect( pDirect ),
@@ -308,10 +308,10 @@ ScDocFuncSend::~ScDocFuncSend()
 
 void ScDocFuncSend::EnterListAction( sal_uInt16 nNameResId )
 {
-    // Want to group these operations for the other side ...
+    
     OUString aUndo( ScGlobal::GetRscString( nNameResId ) );
     ScChangeOpWriter aOp( "enterListAction" );
-    aOp.appendInt( nNameResId ); // nasty but translate-able ...
+    aOp.appendInt( nNameResId ); 
     SendMessage( aOp );
 }
 
@@ -337,7 +337,7 @@ sal_Bool ScDocFuncSend::SetNormalString( bool& o_rbNumFmtSet, const ScAddress& r
     if ( OUString( rText ) == "contacts" )
         mpCollaboration->DisplayContacts();
 
-    return true; // needs some code auditing action
+    return true; 
 }
 
 bool ScDocFuncSend::SetValueCell( const ScAddress& rPos, double fVal, bool bInteraction )
@@ -347,13 +347,13 @@ bool ScDocFuncSend::SetValueCell( const ScAddress& rPos, double fVal, bool bInte
     aOp.appendDouble( fVal );
     aOp.appendBool( bInteraction );
     SendMessage( aOp );
-    return true; // needs some code auditing action
+    return true; 
 }
 
 bool ScDocFuncSend::SetValueCells(
     const ScAddress& /*rPos*/, const std::vector<double>& /*aVals*/, bool /*bInteraction*/ )
 {
-    // TODO : Implement this.
+    
     return true;
 }
 
@@ -364,7 +364,7 @@ bool ScDocFuncSend::SetStringCell( const ScAddress& rPos, const OUString& rStr, 
     aOp.appendString( rStr );
     aOp.appendBool( bInteraction );
     SendMessage( aOp );
-    return true; // needs some code auditing action
+    return true; 
 }
 
 bool ScDocFuncSend::SetEditCell( const ScAddress& rPos, const EditTextObject& rStr, bool bInteraction )
@@ -374,7 +374,7 @@ bool ScDocFuncSend::SetEditCell( const ScAddress& rPos, const EditTextObject& rS
     aOp.appendEditText( rStr );
     aOp.appendBool( bInteraction );
     SendMessage( aOp );
-    return true; // needs some code auditing action
+    return true; 
 }
 
 bool ScDocFuncSend::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell, bool bInteraction )
@@ -385,7 +385,7 @@ bool ScDocFuncSend::SetFormulaCell( const ScAddress& rPos, ScFormulaCell* pCell,
     aOp.appendBool( bInteraction );
     SendMessage( aOp );
     delete pCell;
-    return true; // needs some code auditing action
+    return true; 
 }
 
 bool ScDocFuncSend::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, bool bApi )
@@ -408,7 +408,7 @@ bool ScDocFuncSend::ShowNote( const ScAddress& rPos, bool bShow )
     aOp.appendAddress( rPos );
     aOp.appendBool( bShow );
     SendMessage( aOp );
-    return true; // needs some code auditing action
+    return true; 
 }
 
 bool ScDocFuncSend::SetNoteText( const ScAddress& rPos, const OUString& rNoteText, sal_Bool bApi )
@@ -418,7 +418,7 @@ bool ScDocFuncSend::SetNoteText( const ScAddress& rPos, const OUString& rNoteTex
     aOp.appendString( rNoteText );
     aOp.appendBool( bApi );
     SendMessage( aOp );
-    return true; // needs some code auditing action
+    return true; 
 }
 
 sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const OUString& rName,
@@ -430,7 +430,7 @@ sal_Bool ScDocFuncSend::RenameTable( SCTAB nTab, const OUString& rName,
     aOp.appendBool( bRecord );
     aOp.appendBool( bApi );
     SendMessage( aOp );
-    return true; // needs some code auditing action
+    return true; 
 }
 
 sal_Bool ScDocFuncSend::ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,

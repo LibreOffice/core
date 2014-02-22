@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MergeElemTContext.hxx"
@@ -40,25 +40,25 @@ public:
 
     virtual ~XMLParagraphTransformerContext();
 
-    // Create a children element context. By default, the import's
-    // CreateContext method is called to create a new default context.
+    
+    
     virtual XMLTransformerContext *CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,
                                    const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    // StartElement is called after a context has been constructed and
-    // before a elements context is parsed. It may be used for actions that
-    // require virtual methods. The default is to do nothing.
+    
+    
+    
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
-    // EndElement is called before a context will be destructed, but
-    // after a elements context has been parsed. It may be used for actions
-    // that require virtual methods. The default is to do nothing.
+    
+    
+    
     virtual void EndElement();
 
-    // This method is called for all characters that are contained in the
-    // current element. The default is to ignore them.
+    
+    
     virtual void Characters( const OUString& rChars );
 };
 
@@ -306,7 +306,7 @@ XMLTransformerContext *XMLMergeElemTransformerContext::CreateChildContext(
         }
     }
 
-    // default is copying
+    
     if( !pContext )
     {
         if( !m_bStartElementExported )
@@ -329,7 +329,7 @@ void XMLMergeElemTransformerContext::EndElement()
 
 void XMLMergeElemTransformerContext::Characters( const OUString& )
 {
-    // ignore
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

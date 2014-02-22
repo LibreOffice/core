@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/framestatuslistener.hxx>
@@ -51,7 +51,7 @@ FrameStatusListener::~FrameStatusListener()
 {
 }
 
-// XInterface
+
 Any SAL_CALL FrameStatusListener::queryInterface( const Type& rType )
 throw ( RuntimeException )
 {
@@ -79,7 +79,7 @@ void SAL_CALL FrameStatusListener::release() throw ()
     OWeakObject::release();
 }
 
-// XComponent
+
 void SAL_CALL FrameStatusListener::dispose()
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -117,16 +117,16 @@ throw (::com::sun::star::uno::RuntimeException)
 void SAL_CALL FrameStatusListener::addEventListener( const Reference< XEventListener >& )
 throw ( RuntimeException )
 {
-    // helper class for status updates - no need to support listener
+    
 }
 
 void SAL_CALL FrameStatusListener::removeEventListener( const Reference< XEventListener >& )
 throw ( RuntimeException )
 {
-    // helper class for status updates - no need to support listener
+    
 }
 
-// XEventListener
+
 void SAL_CALL FrameStatusListener::disposing( const EventObject& Source )
 throw ( RuntimeException )
 {
@@ -137,7 +137,7 @@ throw ( RuntimeException )
     URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
     while ( pIter != m_aListenerMap.end() )
     {
-        // Compare references and release dispatch references if they are equal.
+        
         Reference< XInterface > xIfac( pIter->second, UNO_QUERY );
         if ( xSource == xIfac )
             pIter->second.clear();
@@ -165,21 +165,21 @@ void FrameStatusListener::addStatusListener( const OUString& aCommandURL )
         SolarMutexGuard aSolarMutexGuard;
         URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
 
-        // Already in the list of status listener. Do nothing.
+        
         if ( pIter != m_aListenerMap.end() )
             return;
 
-        // Check if we are already initialized. Implementation starts adding itself as status listener when
-        // intialize is called.
+        
+        
         if ( !m_bInitialized )
         {
-            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
+            
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }
         else
         {
-            // Add status listener directly as intialize has already been called.
+            
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( m_xContext.is() && xDispatchProvider.is() )
             {
@@ -210,7 +210,7 @@ void FrameStatusListener::addStatusListener( const OUString& aCommandURL )
         }
     }
 
-    // Call without locked mutex as we are called back from dispatch implementation
+    
     try
     {
         if ( xDispatch.is() )
@@ -233,7 +233,7 @@ void FrameStatusListener::bindListener()
         if ( !m_bInitialized )
             return;
 
-        // Collect all registered command URL's and store them temporary
+        
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
@@ -249,8 +249,8 @@ void FrameStatusListener::bindListener()
                 Reference< XDispatch > xDispatch( pIter->second );
                 if ( xDispatch.is() )
                 {
-                    // We already have a dispatch object => we have to requery.
-                    // Release old dispatch object and remove it as listener
+                    
+                    
                     try
                     {
                         xDispatch->removeStatusListener( xStatusListener, aTargetURL );
@@ -260,7 +260,7 @@ void FrameStatusListener::bindListener()
                     }
                 }
 
-                // Query for dispatch object. Old dispatch will be released with this, too.
+                
                 try
                 {
                     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
@@ -277,7 +277,7 @@ void FrameStatusListener::bindListener()
         }
     }
 
-    // Call without locked mutex as we are called back from dispatch implementation
+    
     if ( xStatusListener.is() )
     {
         try
@@ -302,7 +302,7 @@ void FrameStatusListener::unbindListener()
     if ( !m_bInitialized )
         return;
 
-    // Collect all registered command URL's and store them temporary
+    
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
     if ( m_xContext.is() && xDispatchProvider.is() )
     {
@@ -318,8 +318,8 @@ void FrameStatusListener::unbindListener()
             Reference< XDispatch > xDispatch( pIter->second );
             if ( xDispatch.is() )
             {
-                // We already have a dispatch object => we have to requery.
-                // Release old dispatch object and remove it as listener
+                
+                
                 try
                 {
                     xDispatch->removeStatusListener( xStatusListener, aTargetURL );
@@ -334,6 +334,6 @@ void FrameStatusListener::unbindListener()
     }
 }
 
-} // svt
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "interpre.hxx"
@@ -27,11 +27,11 @@ using namespace com::sun::star;
 
 namespace sc
 {
-    // punch through into the datastream impl.
+    
     extern double datastream_get_time( int nIdx );
 }
 
-// TODO: Add new methods for ScInterpreter here.
+
 
 void ScInterpreter::ScFilterXML()
 {
@@ -183,7 +183,7 @@ void ScInterpreter::ScWebservice()
         }
         catch (...)
         {
-            // don't let any exceptions pass
+            
             PushError( errNoValue );
             return;
         }
@@ -217,9 +217,9 @@ void ScInterpreter::ScWebservice()
 
 void ScInterpreter::ScDebugVar()
 {
-    // This is to be used by developers only!  Never document this for end
-    // users.  This is a convenient way to extract arbitrary internal state to
-    // a cell for easier debugging.
+    
+    
+    
 
     SvtMiscOptions aMiscOptions;
     if (!aMiscOptions.IsExperimentalMode())
@@ -245,7 +245,7 @@ void ScInterpreter::ScDebugVar()
 
     if (aStrUpper == "PIVOTCOUNT")
     {
-        // Set the number of pivot tables in the document.
+        
 
         double fVal = 0.0;
         if (pDok->HasPivotTable())

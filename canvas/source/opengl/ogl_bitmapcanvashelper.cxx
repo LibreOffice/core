@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ogl_bitmapcanvashelper.hxx"
@@ -43,7 +43,7 @@ namespace oglcanvas
                                        const rendering::ViewState&                          /*destViewState*/,
                                        const rendering::RenderState&                        /*destRenderState*/ )
     {
-        // TODO(F2): copyRect NYI
+        
     }
 
     geometry::IntegerSize2D BitmapCanvasHelper::getSize()
@@ -54,14 +54,14 @@ namespace oglcanvas
     uno::Reference< rendering::XBitmap > BitmapCanvasHelper::getScaledBitmap( const geometry::RealSize2D& /*newSize*/,
                                                                               sal_Bool                    /*beFast*/ )
     {
-        // TODO(F1):
+        
         return uno::Reference< rendering::XBitmap >();
     }
 
     uno::Sequence< sal_Int8 > BitmapCanvasHelper::getData( rendering::IntegerBitmapLayout&     /*bitmapLayout*/,
                                                            const geometry::IntegerRectangle2D& /*rect*/ )
     {
-        // TODO(F2): NYI - and improbable to ever be
+        
         return uno::Sequence< sal_Int8 >();
     }
 
@@ -69,20 +69,20 @@ namespace oglcanvas
                                       const rendering::IntegerBitmapLayout& /*bitmapLayout*/,
                                       const geometry::IntegerRectangle2D&   /*rect*/ )
     {
-        // TODO(F2): NYI - and improbable to ever be
+        
     }
 
     void BitmapCanvasHelper::setPixel( const uno::Sequence< sal_Int8 >&       /*color*/,
                                        const rendering::IntegerBitmapLayout&  /*bitmapLayout*/,
                                        const geometry::IntegerPoint2D&        /*pos*/ )
     {
-        // TODO(F2): NYI - and improbable to ever be
+        
     }
 
     uno::Sequence< sal_Int8 > BitmapCanvasHelper::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                             const geometry::IntegerPoint2D&   /*pos*/ )
     {
-        // TODO(F2): NYI - and improbable to ever be
+        
         return uno::Sequence< sal_Int8 >();
     }
 

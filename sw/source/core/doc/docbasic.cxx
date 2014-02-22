@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -89,21 +89,21 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
             if( pRet && SbxNULL <  pRetValue->GetType() &&
                         SbxVOID != pRetValue->GetType() )
             {
-                // valid value, so set it
+                
                 *pRet = pRetValue->GetOUString();
             }
         }
         break;
     case JAVASCRIPT:
-        // ignore JavaScript calls
+        
         break;
     case EXTENDED_STYPE:
         {
             boost::scoped_ptr<Sequence<Any> > pUnoArgs;
             if( pArgs )
             {
-                // better to rename the local function to lcl_translateBasic2Uno and
-                // a much shorter routine can be found in sfx2/source/doc/objmisc.cxx
+                
+                
                 pUnoArgs.reset(lcl_docbasic_convertArgs( *pArgs ));
             }
 
@@ -112,7 +112,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
                 pUnoArgs.reset(new Sequence< Any > (0));
             }
 
-            // TODO - return value is not handled
+            
             Any aRet;
             Sequence< sal_Int16 > aOutArgsIndex;
             Sequence< Any > aOutArgs;
@@ -133,7 +133,7 @@ bool SwDoc::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEvent,
                     bool bCheckPtr, SbxArray* pArgs, const Link* )
 {
-    if( !mpDocShell )        // we can't do that without a DocShell!
+    if( !mpDocShell )        
         return 0;
 
     sal_uInt16 nRet = 0;
@@ -149,7 +149,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_INETFMT, n ) )
                     && rCallEvent.PTR.pINetAttr == pItem )
                 {
-                    bCheckPtr = false;       // misuse as a flag
+                    bCheckPtr = false;       
                     break;
                 }
         }
@@ -164,7 +164,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
             if( bCheckPtr )
             {
                 if ( GetSpzFrmFmts()->Contains( pFmt ) )
-                    bCheckPtr = false;      // misuse as a flag
+                    bCheckPtr = false;      
             }
             if( !bCheckPtr )
                 pTbl = &pFmt->GetMacro().GetMacroTable();
@@ -184,7 +184,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                     for( sal_uInt16 nPos = pIMap->GetIMapObjectCount(); nPos; )
                         if( pIMapObj == pIMap->GetIMapObject( --nPos ))
                         {
-                            bCheckPtr = false;      // misuse as a flag
+                            bCheckPtr = false;      
                             break;
                         }
                 }
@@ -232,7 +232,7 @@ sal_uInt16 SwDoc::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCallEve
                 nRet += 0 == mpDocShell->CallXScript(
                     rMacro.GetMacName(), *pUnoArgs,aRet, aOutArgsIndex, aOutArgs) ? 1 : 0;
             }
-            // JavaScript calls are ignored
+            
         }
     }
     return nRet;

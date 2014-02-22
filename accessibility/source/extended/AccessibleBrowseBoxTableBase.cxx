@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "accessibility/extended/AccessibleBrowseBoxTableBase.hxx"
@@ -23,7 +23,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -33,13 +33,13 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
 
-// Ctor/Dtor/disposing --------------------------------------------------------
+
+
 
 AccessibleBrowseBoxTableBase::AccessibleBrowseBoxTableBase(
         const Reference< XAccessible >& rxParent,
@@ -53,7 +53,7 @@ AccessibleBrowseBoxTableBase::~AccessibleBrowseBoxTableBase()
 {
 }
 
-// XAccessibleContext ---------------------------------------------------------
+
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleChildCount()
     throw ( uno::RuntimeException )
@@ -71,7 +71,7 @@ sal_Int16 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRole()
     return AccessibleRole::TABLE;
 }
 
-// XAccessibleTable -----------------------------------------------------------
+
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRowCount()
     throw ( uno::RuntimeException )
@@ -99,7 +99,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleRowExtentAt(
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    return 1;   // merged cells not supported
+    return 1;   
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumnExtentAt(
@@ -110,21 +110,21 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumnExtentAt(
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    return 1;   // merged cells not supported
+    return 1;   
 }
 
 Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleCaption()
     throw ( uno::RuntimeException )
 {
     ensureIsAlive();
-    return NULL;    // not supported
+    return NULL;    
 }
 
 Reference< XAccessible > SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleSummary()
     throw ( uno::RuntimeException )
 {
     ensureIsAlive();
-    return NULL;    // not supported
+    return NULL;    
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleIndex(
@@ -158,7 +158,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTableBase::getAccessibleColumn( sal_Int32 
     return implGetColumn( nChildIndex );
 }
 
-// XInterface -----------------------------------------------------------------
+
 
 Any SAL_CALL AccessibleBrowseBoxTableBase::queryInterface( const uno::Type& rType )
     throw ( uno::RuntimeException )
@@ -178,7 +178,7 @@ void SAL_CALL AccessibleBrowseBoxTableBase::release() throw ()
     BrowseBoxAccessibleElement::release();
 }
 
-// XTypeProvider --------------------------------------------------------------
+
 
 Sequence< uno::Type > SAL_CALL AccessibleBrowseBoxTableBase::getTypes()
     throw ( uno::RuntimeException )
@@ -199,7 +199,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxTableBase::getImplementationId(
     return theAccessibleBrowseBoxTableBaseImplementationId::get().getSeq();
 }
 
-// internal virtual methods ---------------------------------------------------
+
 
 sal_Int32 AccessibleBrowseBoxTableBase::implGetRowCount() const
 {
@@ -209,13 +209,13 @@ sal_Int32 AccessibleBrowseBoxTableBase::implGetRowCount() const
 sal_Int32 AccessibleBrowseBoxTableBase::implGetColumnCount() const
 {
     sal_uInt16 nColumns = mpBrowseBox->GetColumnCount();
-    // do not count the "handle column"
+    
     if( nColumns && implHasHandleColumn() )
         --nColumns;
     return nColumns;
 }
 
-// internal helper methods ----------------------------------------------------
+
 
 sal_Bool AccessibleBrowseBoxTableBase::implHasHandleColumn() const
 {
@@ -227,7 +227,7 @@ sal_uInt16 AccessibleBrowseBoxTableBase::implToVCLColumnPos( sal_Int32 nColumn )
     sal_uInt16 nVCLPos = 0;
     if( (0 <= nColumn) && (nColumn < implGetColumnCount()) )
     {
-        // regard "handle column"
+        
         if( implHasHandleColumn() )
             ++nColumn;
         nVCLPos = static_cast< sal_uInt16 >( nColumn );
@@ -332,10 +332,10 @@ void AccessibleBrowseBoxTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
             OUString( "child index is invalid" ), *this );
 }
 
-// ============================================================================
 
-} // namespace accessibility
 
-// ============================================================================
+} 
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

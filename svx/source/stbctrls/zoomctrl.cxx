@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <i18nutil/unicode.hxx>
@@ -35,7 +35,7 @@
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxZoomStatusBarControl,SvxZoomItem);
 
-// class ZoomPopup_Impl --------------------------------------------------
+
 
 class ZoomPopup_Impl : public PopupMenu
 {
@@ -52,7 +52,7 @@ private:
     virtual void    Select();
 };
 
-// -----------------------------------------------------------------------
+
 
 ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
     : PopupMenu(ResId(RID_SVXMNU_ZOOM, DIALOG_MGR()))
@@ -75,7 +75,7 @@ ZoomPopup_Impl::ZoomPopup_Impl( sal_uInt16 nZ, sal_uInt16 nValueSet )
             EnableItem( aTable[nPos+1], false );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ZoomPopup_Impl::Select()
 {
@@ -96,7 +96,7 @@ void ZoomPopup_Impl::Select()
     }
 }
 
-// class SvxZoomStatusBarControl ------------------------------------------
+
 
 SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
                                                   sal_uInt16 _nId,
@@ -108,7 +108,7 @@ SvxZoomStatusBarControl::SvxZoomStatusBarControl( sal_uInt16 _nSlotId,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
@@ -138,7 +138,7 @@ void SvxZoomStatusBarControl::StateChanged( sal_uInt16, SfxItemState eState,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
 {
@@ -146,7 +146,7 @@ void SvxZoomStatusBarControl::Paint( const UserDrawEvent& )
     GetStatusBar().SetItemText( GetId(), aStr );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomStatusBarControl::Command( const CommandEvent& rCEvt )
 {

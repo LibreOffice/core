@@ -5,7 +5,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
@@ -144,9 +144,9 @@ namespace XSLT
                     "xsltExtFunctionTest: failed to get the transformation context\n");
                 return;
             }
-            // XXX: someone with better knowledge of libxslt might come up with a better
-            // idea to pass the OleHandler than by attaching it to tctxt->_private. See also
-            // below.
+            
+            
+            
             data = tctxt->_private;
             if (data == NULL) {
                 xsltGenericError(xsltGenericErrorContext,
@@ -190,8 +190,8 @@ namespace XSLT
                     "xsltExtFunctionTest: failed to get the transformation context\n");
                 return;
             }
-            // XXX: someone with better knowledge of libxslt might come up with a better
-            // idea to pass the OleHandler than by attaching it to tctxt->_private
+            
+            
             data = tctxt->_private;
             if (data == NULL) {
                 xsltGenericError(xsltGenericErrorContext,
@@ -218,7 +218,7 @@ namespace XSLT
     int
     Reader::read(char * buffer, int len)
     {
-        //        const char *ptr = (const char *) context;
+        
         if (buffer == NULL || len < 0)
             return (-1);
         sal_Int32 n;
@@ -286,7 +286,7 @@ namespace XSLT
         OSL_ASSERT(!m_transformer->getStyleSheetURL().isEmpty());
         ::std::map<const char*, OString>::iterator pit;
         ::std::map<const char*, OString> pmap = m_transformer->getParameters();
-        ::std::vector< const char* > params( pmap.size() * 2 + 1 ); // build parameters
+        ::std::vector< const char* > params( pmap.size() * 2 + 1 ); 
         int paramIndex = 0;
         for (pit = pmap.begin(); pit != pmap.end(); ++pit)
         {
@@ -496,7 +496,7 @@ namespace XSLT
                     }
                 else
                     {
-                        // ignore non-string parameters
+                        
                         continue;
                     }
                 if (nameUTF8.equals("StylesheetURL"))

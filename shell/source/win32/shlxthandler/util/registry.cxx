@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,18 +36,18 @@
 #pragma warning(pop)
 #endif
 
-//---------------------------------------
 
-// Size of a CLSID as a string
+
+
 const int CLSID_STRING_SIZE = 39;
 
-//---------------------------------------
+
 
 bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, const char* Value)
 {
     HKEY hSubKey;
 
-    // open or create the desired key
+    
     char dummy[] = "";
     int rc = RegCreateKeyExA(
         RootKey, const_cast<char*>(KeyName), 0, dummy, REG_OPTION_NON_VOLATILE, KEY_WRITE, 0, &hSubKey, 0);
@@ -64,7 +64,7 @@ bool SetRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, co
     return (ERROR_SUCCESS == rc);
 }
 
-//---------------------------------------
+
 
 bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
 {
@@ -90,7 +90,7 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
             &nMaxSubKeyLen,
             0, 0, 0, 0, 0, 0);
 
-        nMaxSubKeyLen++; // space for trailing '\0'
+        nMaxSubKeyLen++; 
 
         SubKey = reinterpret_cast<char*>(
             _alloca(nMaxSubKeyLen*sizeof(char)));
@@ -101,7 +101,7 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
 
             rc = RegEnumKeyExA(
                 hKey,
-                0,       // always index zero
+                0,       
                 SubKey,
                 &nLen,
                 0, 0, 0, 0);
@@ -116,11 +116,11 @@ bool DeleteRegistryKey(HKEY RootKey, const char* KeyName)
                 DeleteRegistryKey(hKey, SubKey);
             }
 
-        } // while
+        } 
 
         RegCloseKey(hKey);
 
-    } // if
+    } 
 
     return (ERROR_SUCCESS == rc);
 }
@@ -146,24 +146,24 @@ bool HasSubkeysRegistryKey(HKEY RootKey, const char* KeyName, /* out */ bool& bR
     return (ERROR_SUCCESS == rc);
 }
 
-// Convert a CLSID to a char string.
+
 std::string ClsidToString(const CLSID& clsid)
 {
-    // Get CLSID
+    
     LPOLESTR wszCLSID = NULL;
     StringFromCLSID(clsid, &wszCLSID);
 
     char buff[39];
-    // Covert from wide characters to non-wide.
+    
     wcstombs(buff, wszCLSID, sizeof(buff));
 
-    // Free memory.
+    
     CoTaskMemFree(wszCLSID) ;
 
     return std::string(buff);
 }
 
-//---------------------------------------
+
 
 bool QueryRegistryKey(HKEY RootKey, const char* KeyName, const char* ValueName, char *pszData, DWORD dwBufLen)
 {

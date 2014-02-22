@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlsubti.hxx"
@@ -108,7 +108,7 @@ void ScMyTables::NewSheet(const OUString& sTableName, const OUString& sStyleName
     {
         nCurrentColCount = 0;
         sCurrentSheetName = sTableName;
-        //reset cols and rows for new sheet, but increment tab
+        
         maCurrentCellPos.SetCol(-1);
         maCurrentCellPos.SetRow(-1);
         maCurrentCellPos.SetTab(maCurrentCellPos.Tab() + 1);
@@ -116,8 +116,8 @@ void ScMyTables::NewSheet(const OUString& sTableName, const OUString& sStyleName
         maProtectionData = rProtectData;
         ScDocument *pDoc = ScXMLConverter::GetScDocument(rImport.GetModel());
 
-        // The document contains one sheet when created. So for the first
-        // sheet, we only need to set its name.
+        
+        
         if (maCurrentCellPos.Tab() > 0)
             pDoc->AppendTabOnLoad(sTableName);
         else
@@ -127,8 +127,8 @@ void ScMyTables::NewSheet(const OUString& sTableName, const OUString& sStyleName
         xCurrentSheet = getCurrentSheet(rImport.GetModel(), maCurrentCellPos.Tab());
         if (xCurrentSheet.is())
         {
-            // We need to set the current cell range here regardless of
-            // presence of style name.
+            
+            
             xCurrentCellRange.set(xCurrentSheet, uno::UNO_QUERY);
             SetTableStyle(sStyleName);
         }
@@ -137,17 +137,17 @@ void ScMyTables::NewSheet(const OUString& sTableName, const OUString& sStyleName
 
 void ScMyTables::SetTableStyle(const OUString& sStyleName)
 {
-    //these uno calls are a bit difficult to remove, XMLTableStyleContext::FillPropertySet uses
-    //SvXMLImportPropertyMapper::FillPropertySet
+    
+    
     if ( !sStyleName.isEmpty() )
     {
-        // #i57869# All table style properties for all sheets are now applied here,
-        // before importing the contents.
-        // This is needed for the background color.
-        // Sheet visibility has special handling in ScDocFunc::SetTableVisible to
-        // allow hiding the first sheet.
-        // RTL layout is only remembered, not actually applied, so the shapes can
-        // be loaded before mirroring.
+        
+        
+        
+        
+        
+        
+        
 
         if ( xCurrentSheet.is() )
         {
@@ -176,7 +176,7 @@ void ScMyTables::SetTableStyle(const OUString& sStyleName)
 void ScMyTables::AddRow()
 {
     maCurrentCellPos.SetRow(maCurrentCellPos.Row() + 1);
-    maCurrentCellPos.SetCol(-1); //reset columns for new row
+    maCurrentCellPos.SetCol(-1); 
 }
 
 void ScMyTables::SetRowStyle(const OUString& rCellStyleName)
@@ -187,8 +187,8 @@ void ScMyTables::SetRowStyle(const OUString& rCellStyleName)
 void ScMyTables::AddColumn(bool bIsCovered)
 {
     maCurrentCellPos.SetCol( maCurrentCellPos.Col() + 1 );
-    //here only need to set column style if this is the first row and
-    //the cell is not covered.
+    
+    
     if(maCurrentCellPos.Row() == 0 && !bIsCovered)
         rImport.GetStylesImportHelper()->InsertCol(maCurrentCellPos.Col(), maCurrentCellPos.Tab(), rImport.GetDocument());
 }

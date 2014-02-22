@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "componenttools.hxx"
@@ -24,10 +24,10 @@
 #include <algorithm>
 #include <iterator>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::frame::XModel;
     using ::com::sun::star::uno::XInterface;
@@ -35,23 +35,23 @@ namespace frm
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::container::XChild;
 
-    //====================================================================
-    //= TypeBag
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     TypeBag::TypeBag( const TypeSequence& _rTypes1 )
     {
         addTypes( _rTypes1 );
     }
 
-    //--------------------------------------------------------------------
+    
     TypeBag::TypeBag( const TypeSequence& _rTypes1, const TypeSequence& _rTypes2 )
     {
         addTypes( _rTypes1 );
         addTypes( _rTypes2 );
     }
 
-    //--------------------------------------------------------------------
+    
     TypeBag::TypeBag( const TypeSequence& _rTypes1, const TypeSequence& _rTypes2, const TypeSequence& _rTypes3 )
     {
         addTypes( _rTypes1 );
@@ -59,7 +59,7 @@ namespace frm
         addTypes( _rTypes3 );
     }
 
-    //--------------------------------------------------------------------
+    
     void TypeBag::addTypes( const TypeSequence& _rTypes )
     {
         ::std::copy(
@@ -69,19 +69,19 @@ namespace frm
         );
     }
 
-    //--------------------------------------------------------------------
+    
     void TypeBag::addType( const Type& i_rType )
     {
         m_aTypes.insert( i_rType );
     }
 
-    //--------------------------------------------------------------------
+    
     void TypeBag::removeType( const TypeBag::Type& i_rType )
     {
         m_aTypes.erase( i_rType );
     }
 
-    //--------------------------------------------------------------------
+    
     TypeBag::TypeSequence TypeBag::getTypes() const
     {
         TypeSequence aTypes( m_aTypes.size() );
@@ -89,7 +89,7 @@ namespace frm
         return aTypes;
     }
 
-    //====================================================================
+    
     Reference< XModel >  getXModel( const Reference< XInterface >& _rxComponent )
     {
         Reference< XInterface > xParent = _rxComponent;
@@ -103,8 +103,8 @@ namespace frm
         return xModel;
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

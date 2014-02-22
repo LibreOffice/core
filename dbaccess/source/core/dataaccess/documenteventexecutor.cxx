@@ -62,7 +62,7 @@ namespace dbaccess
 
     using namespace ::com::sun::star;
 
-    // DocumentEventExecutor_Data
+    
     struct DocumentEventExecutor_Data
     {
         WeakReference< XEventsSupplier >    xDocument;
@@ -96,9 +96,9 @@ namespace dbaccess
             if ( _rDocExecData.xURLTransformer.is() )
                 _rDocExecData.xURLTransformer->parseStrict( aScriptURL );
 
-            // unfortunately, executing a script can trigger all kind of complex stuff, and unfortunately, not
-            // every component involved into this properly cares for thread safety. To be on the safe side,
-            // we lock the solar mutex here.
+            
+            
+            
             SolarMutexGuard aSolarGuard;
 
             Reference< XDispatch > xDispatch( xDispProv->queryDispatch( aScriptURL, OUString(), 0 ) );
@@ -115,7 +115,7 @@ namespace dbaccess
         }
     }
 
-    // DocumentEventExecutor
+    
     DocumentEventExecutor::DocumentEventExecutor( const Reference<XComponentContext> & _rContext,
             const Reference< XEventsSupplier >& _rxDocument )
         :m_pData( new DocumentEventExecutor_Data( _rxDocument ) )
@@ -158,8 +158,8 @@ namespace dbaccess
             Reference< XNameAccess > xDocEvents( xEventsSupplier->getEvents().get(), UNO_SET_THROW );
             if ( !xDocEvents->hasByName( _Event.EventName ) )
             {
-                // this is worth an assertion: We are listener at the very same document which we just asked
-                // for its events. So when EventName is fired, why isn't it supported by xDocEvents?
+                
+                
                 OSL_FAIL( "DocumentEventExecutor::documentEventOccurred: an unsupported event is notified!" );
                 return;
             }
@@ -173,7 +173,7 @@ namespace dbaccess
             bScriptAssigned = bScriptAssigned && aScriptDescriptor.get_ensureType( "Script", sScript );
 
             if ( !bScriptAssigned )
-                // no script is assigned to this event
+                
                 return;
 
             bool bDispatchScriptURL = ( sEventType == "Script" || sEventType == "Service" );
@@ -196,9 +196,9 @@ namespace dbaccess
 
     void SAL_CALL DocumentEventExecutor::disposing( const lang::EventObject& /*_Source*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
-} // namespace dbaccess
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

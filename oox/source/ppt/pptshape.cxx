@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ppt/pptshape.hxx"
@@ -117,7 +117,7 @@ void PPTShape::addShape(
         ::oox::drawingml::ShapeIdMap* pShapeMap )
 {
     SAL_INFO("oox.ppt","add shape id: " << msId << " location: " << ((meShapeLocation == Master) ? "master" : ((meShapeLocation == Slide) ? "slide" : ((meShapeLocation == Layout) ? "layout" : "other"))) << " subtype: " << mnSubType << " service: " << msServiceName);
-    // only placeholder from layout are being inserted
+    
     if ( mnSubType && ( meShapeLocation == Master ) )
         return;
     try
@@ -250,10 +250,10 @@ void PPTShape::addShape(
                 }
             }
 
-            // use placeholder index if possible
+            
             if( mnSubType && getSubTypeIndex().has() && rSlidePersist.getMasterPersist().get() ) {
                 oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholderByIndex( getSubTypeIndex().get(), rSlidePersist.getMasterPersist()->getShapes()->getChildren() );
-                // TODO: Check if this is required for non-notes slides as well...
+                
                 if( rSlidePersist.isNotesPage() && pPlaceholder.get() && pPlaceholder->getSubType() != getSubType() )
                     pPlaceholder.reset();
 
@@ -270,14 +270,14 @@ void PPTShape::addShape(
                         if( pPlaceholder->getMasterTextListStyle().get() )
                             pNewTextListStyle->apply( *pPlaceholder->getMasterTextListStyle() );
 
-                        // SAL_INFO("oox.ppt","placeholder body style");
-                        // pPlaceholder->getTextBody()->getTextListStyle().dump();
-                        // SAL_INFO("oox.ppt","master text list style");
-                        // pPlaceholder->getMasterTextListStyle()->dump();
+                        
+                        
+                        
+                        
 
                         aMasterTextListStyle = pNewTextListStyle;
-                        // SAL_INFO("oox.ppt","combined master text list style");
-                        // aMasterTextListStyle->dump();
+                        
+                        
                     }
                     if( pPPTPlaceholder->mpPlaceholder.get() ) {
                         SAL_INFO("oox.ppt","placeholder has parent placeholder: " << pPPTPlaceholder->mpPlaceholder->getId() << " type: " << lclDebugSubType( pPPTPlaceholder->mpPlaceholder->getSubType() ) << " index: " << pPPTPlaceholder->mpPlaceholder->getSubTypeIndex().get() );
@@ -287,7 +287,7 @@ void PPTShape::addShape(
                             pNewTextListStyle->apply( pPPTPlaceholder->mpPlaceholder->getTextBody()->getTextListStyle() );
                         if( pPlaceholderStyle.get() ) {
                             pNewTextListStyle->apply( *pPlaceholderStyle );
-                            //pPlaceholderStyle->dump();
+                            
                         }
                     }
                 } else if( !mpPlaceholder.get() ) {
@@ -302,7 +302,7 @@ void PPTShape::addShape(
                 {
                     bool isOther = !getTextBody().get() && !sServiceName.equalsAscii("com.sun.star.drawing.GroupShape");
                     TextListStylePtr aSlideStyle = isOther ? rSlidePersist.getOtherTextStyle() : rSlidePersist.getDefaultTextStyle();
-                    // Combine from MasterSlide details as well.
+                    
                     if( rSlidePersist.getMasterPersist().get() )
                     {
                         aMasterTextListStyle = isOther ? rSlidePersist.getMasterPersist()->getOtherTextStyle() : rSlidePersist.getMasterPersist()->getDefaultTextStyle();
@@ -336,7 +336,7 @@ void PPTShape::addShape(
                         OUString aTitleText;
                         Reference< XTextRange > xText( xShape, UNO_QUERY_THROW );
                         aTitleText = xText->getString();
-                        if ( !aTitleText.isEmpty() && ( aTitleText.getLength() < 64 ) )    // just a magic value, but we don't want to set slide names which are too long
+                        if ( !aTitleText.isEmpty() && ( aTitleText.getLength() < 64 ) )    
                         {
                             Reference< container::XNamed > xName( rSlidePersist.getPage(), UNO_QUERY_THROW );
                             xName->setName( aTitleText );
@@ -349,8 +349,8 @@ void PPTShape::addShape(
                 }
                 if( pShapeMap )
                 {
-                    // bnc#705982 - if optional model id reference is
-                    // there, use that to obtain target shape
+                    
+                    
                     if( !msModelId.isEmpty() )
                     {
                         (*pShapeMap)[ msModelId ] = shared_from_this();
@@ -361,7 +361,7 @@ void PPTShape::addShape(
                     }
                 }
 
-                // if this is a group shape, we have to add also each child shape
+                
                 Reference< XShapes > xShapes( xShape, UNO_QUERY );
                 if ( xShapes.is() )
                     addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap, aTransformation );

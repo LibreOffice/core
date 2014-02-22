@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
@@ -52,8 +52,8 @@ const char UNO_SETBORDERSTYLE[] = ".uno:SetBorderStyle";
 const char UNO_LINESTYLE[] = ".uno:LineStyle";
 const char UNO_FRAMELINECOLOR[] = ".uno:FrameLineColor";
 
-//////////////////////////////////////////////////////////////////////////////
-// helpers
+
+
 
 namespace
 {
@@ -61,14 +61,14 @@ namespace
     {
         return COL_TRANSPARENT;
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace open
+
+
 
 namespace sc { namespace sidebar {
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateFillColorPopupControl(svx::sidebar::PopupContainer* pParent)
 {
@@ -94,7 +94,7 @@ void CellAppearancePropertyPanel::SetFillColor(
     maBackColor = aColor;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateLineColorPopupControl(svx::sidebar::PopupContainer* pParent)
 {
@@ -118,7 +118,7 @@ void CellAppearancePropertyPanel::SetLineColor(
     maLineColor = aColor;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellLineStylePopupControl(svx::sidebar::PopupContainer* pParent)
 {
@@ -133,7 +133,7 @@ void CellAppearancePropertyPanel::EndCellLineStylePopupMode(void)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 svx::sidebar::PopupControl* CellAppearancePropertyPanel::CreateCellBorderStylePopupControl(svx::sidebar::PopupContainer* pParent)
 {
@@ -148,7 +148,7 @@ void CellAppearancePropertyPanel::EndCellBorderStylePopupMode(void)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     Window* pParent,
@@ -230,13 +230,13 @@ CellAppearancePropertyPanel::CellAppearancePropertyPanel(
     Initialize();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 CellAppearancePropertyPanel::~CellAppearancePropertyPanel()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void CellAppearancePropertyPanel::Initialize()
 {
@@ -275,7 +275,7 @@ void CellAppearancePropertyPanel::Initialize()
     mpTBLineStyle->SetAccessibleRelationLabeledBy(mpTBLineStyle);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxBKColorSelectHdl, ToolBox*, pToolBox)
 {
@@ -289,7 +289,7 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxBKColorSelectHdl, ToolBox*, pToolBox)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxLineColorSelectHdl, ToolBox*, pToolBox)
 {
@@ -303,7 +303,7 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxLineColorSelectHdl, ToolBox*, pToolBox
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBox)
 {
@@ -311,7 +311,7 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBo
 
     if(aCommand == UNO_SETBORDERSTYLE)
     {
-        // create popup on demand
+        
         if(!mpCellBorderStylePopup.get())
         {
             mpCellBorderStylePopup.reset(
@@ -328,7 +328,7 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxCellBorderSelectHdl, ToolBox*, pToolBo
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox)
 {
@@ -336,7 +336,7 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox
 
     if(aCommand == UNO_LINESTYLE)
     {
-        // create popup on demand
+        
         if(!mpCellLineStylePopup.get())
         {
             mpCellLineStylePopup.reset(
@@ -354,7 +354,7 @@ IMPL_LINK(CellAppearancePropertyPanel, TbxLineStyleSelectHdl, ToolBox*, pToolBox
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
 {
@@ -364,7 +364,7 @@ IMPL_LINK(CellAppearancePropertyPanel, CBOXGridShowClkHdl, void*, EMPTYARG)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 CellAppearancePropertyPanel* CellAppearancePropertyPanel::Create (
     Window* pParent,
@@ -384,7 +384,7 @@ CellAppearancePropertyPanel* CellAppearancePropertyPanel::Create (
         pBindings);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void CellAppearancePropertyPanel::DataChanged(
     const DataChangedEvent& rEvent)
@@ -392,14 +392,14 @@ void CellAppearancePropertyPanel::DataChanged(
     (void)rEvent;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void CellAppearancePropertyPanel::HandleContextChange(
     const ::sfx2::sidebar::EnumContext aContext)
 {
     if(maContext == aContext)
     {
-        // Nothing to do.
+        
         return;
     }
 
@@ -407,10 +407,10 @@ void CellAppearancePropertyPanel::HandleContextChange(
 
 
 
-    // todo
+    
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void CellAppearancePropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -461,7 +461,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
                 else
                 {
                     mbLineColorAvailable = true;
-                //  mpLineColorUpdater->Update(maLineColor);
+                
                 }
 
                 UpdateControlState();
@@ -471,7 +471,7 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
 
         mbLineColorAvailable = false;
         maLineColor.SetColor(COL_AUTO);
-        //  mpLineColorUpdater->Update(maLineColor);
+        
         UpdateControlState();
         break;
     case SID_FRAME_LINESTYLE:
@@ -690,37 +690,37 @@ void CellAppearancePropertyPanel::NotifyItemUpdate(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SfxBindings* CellAppearancePropertyPanel::GetBindings()
 {
     return mpBindings;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void CellAppearancePropertyPanel::SetStyleIcon()
 {
     const sal_uInt16 nIdBorderLineStyle = mpTBLineStyle->GetItemId( UNO_LINESTYLE );
 
-    //FIXME: update for new line border possibilities
-    if(mnOut == DEF_LINE_WIDTH_0 && mnIn == 0 && mnDis == 0)    //1
+    
+    if(mnOut == DEF_LINE_WIDTH_0 && mnIn == 0 && mnDis == 0)    
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle1);
-    else if(mnOut == DEF_LINE_WIDTH_2 && mnIn == 0 && mnDis == 0) //2
+    else if(mnOut == DEF_LINE_WIDTH_2 && mnIn == 0 && mnDis == 0) 
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle2);
-    else if(mnOut == DEF_LINE_WIDTH_3 && mnIn == 0 && mnDis == 0) //3
+    else if(mnOut == DEF_LINE_WIDTH_3 && mnIn == 0 && mnDis == 0) 
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle3);
-    else if(mnOut == DEF_LINE_WIDTH_4 && mnIn == 0 && mnDis == 0) //4
+    else if(mnOut == DEF_LINE_WIDTH_4 && mnIn == 0 && mnDis == 0) 
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle4);
-    else if(mnOut == DEF_LINE_WIDTH_0 && mnIn == DEF_LINE_WIDTH_0 && mnDis == DEF_LINE_WIDTH_1) //5
+    else if(mnOut == DEF_LINE_WIDTH_0 && mnIn == DEF_LINE_WIDTH_0 && mnDis == DEF_LINE_WIDTH_1) 
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle5);
-    else if(mnOut == DEF_LINE_WIDTH_0 && mnIn == DEF_LINE_WIDTH_0 && mnDis == DEF_LINE_WIDTH_2) //6
+    else if(mnOut == DEF_LINE_WIDTH_0 && mnIn == DEF_LINE_WIDTH_0 && mnDis == DEF_LINE_WIDTH_2) 
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle6);
-    else if(mnOut == DEF_LINE_WIDTH_1 && mnIn == DEF_LINE_WIDTH_2 && mnDis == DEF_LINE_WIDTH_1) //7
+    else if(mnOut == DEF_LINE_WIDTH_1 && mnIn == DEF_LINE_WIDTH_2 && mnDis == DEF_LINE_WIDTH_1) 
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle7);
-    else if(mnOut == DEF_LINE_WIDTH_2 && mnIn == DEF_LINE_WIDTH_0 && mnDis == DEF_LINE_WIDTH_2) //8
+    else if(mnOut == DEF_LINE_WIDTH_2 && mnIn == DEF_LINE_WIDTH_0 && mnDis == DEF_LINE_WIDTH_2) 
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle8);
-    else if(mnOut == DEF_LINE_WIDTH_2 && mnIn == DEF_LINE_WIDTH_2 && mnDis == DEF_LINE_WIDTH_2) //9
+    else if(mnOut == DEF_LINE_WIDTH_2 && mnIn == DEF_LINE_WIDTH_2 && mnDis == DEF_LINE_WIDTH_2) 
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle9);
     else
         mpTBLineStyle->SetItemImage(nIdBorderLineStyle, maIMGLineStyle1);
@@ -733,7 +733,7 @@ void CellAppearancePropertyPanel::UpdateControlState()
         mpTBLineColor->Enable();
         mpTBLineStyle->Enable();
 
-        //set line color state
+        
         if( mbLineColorAvailable && !mbTLBR && !mbBLTR )
             mpLineColorUpdater->Update(maLineColor);
         else if( !mbLineColorAvailable && mbTLBR && !mbBLTR )
@@ -764,7 +764,7 @@ void CellAppearancePropertyPanel::UpdateControlState()
         else
             mpLineColorUpdater->Update(COL_TRANSPARENT);
 
-        //set line style state
+        
         if( mbBorderStyleAvailable && !mbTLBR && !mbBLTR )
         {
         }
@@ -828,12 +828,12 @@ void CellAppearancePropertyPanel::UpdateControlState()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace close
 
-}} // end of namespace ::sc::sidebar
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+}} 
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

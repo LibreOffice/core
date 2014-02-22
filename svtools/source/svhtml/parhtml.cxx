@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,9 +47,9 @@ const sal_Int32 MAX_LEN( 1024L );
 const sal_Int32 MAX_ENTITY_LEN( 8L );
 
 
-// Tables to convert option values into strings
 
-// <INPUT TYPE=xxx>
+
+
 static HTMLOptionEnum const aInputTypeOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_IT_text,      HTML_IT_TEXT        },
@@ -67,7 +67,7 @@ static HTMLOptionEnum const aInputTypeOptEnums[] =
     { 0,                    0                   }
 };
 
-// <TABLE FRAME=xxx>
+
 static HTMLOptionEnum const aTableFrameOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_TF_void,  HTML_TF_VOID    },
@@ -82,7 +82,7 @@ static HTMLOptionEnum const aTableFrameOptEnums[] =
     { 0,                0               }
 };
 
-// <TABLE RULES=xxx>
+
 static HTMLOptionEnum const aTableRulesOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_TR_none,  HTML_TR_NONE    },
@@ -164,8 +164,8 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim
 
     if( bSpaceDelim )
     {
-        // This is a very simplified scanner: it only searches all
-        // numerals in the string.
+        
+        
         bool bInNum = false;
         sal_uLong nNum = 0;
         for( sal_Int32 i=0; i<aValue.getLength(); i++ )
@@ -191,8 +191,8 @@ void HTMLOption::GetNumbers( std::vector<sal_uInt32> &rNumbers, bool bSpaceDelim
     }
     else
     {
-        // Check whether numbers are separated by ',' and
-        // insert 0 if necessary
+        
+        
         sal_Int32 nPos = 0;
         while( nPos < aValue.getLength() )
         {
@@ -240,8 +240,8 @@ void HTMLOption::GetColor( Color& rColor ) const
         sal_Int32 nPos = 0;
         for (sal_uInt32 i=0; i<6; ++i)
         {
-            // Whatever Netscape does to get color values,
-            // at maximum three characters < '0' are ignored.
+            
+            
             sal_Unicode c = nPos<aTmp.getLength() ? aTmp[ nPos++ ] : '0';
             if( c < '0' )
             {
@@ -298,7 +298,7 @@ HTMLParser::HTMLParser( SvStream& rIn, bool bReadNewDoc ) :
     nPre_LinePos(0),
     mnPendingOffToken(0)
 {
-    //#i76649, default to UTF-8 for HTML unless we know differently
+    
     SetSrcEncoding(RTL_TEXTENCODING_UTF8);
 }
 
@@ -318,7 +318,7 @@ SvParserState HTMLParser::CallParser()
     AddRef();
     Continue( 0 );
     if( SVPAR_PENDING != eState )
-        ReleaseRef();       // Parser not needed anymore
+        ReleaseRef();       
 
     return eState;
 }
@@ -337,7 +337,7 @@ void HTMLParser::Continue( int nToken )
             NextToken( nToken );
 
         if( IsParserWorking() )
-            SaveState( 0 );         // continue with new token
+            SaveState( 0 );         
 
         nToken = GetNextToken();
     }
@@ -349,7 +349,7 @@ int HTMLParser::FilterToken( int nToken )
     {
     case sal_Unicode(EOF):
         nToken = 0;
-        break;          // don't pass
+        break;          
 
     case HTML_HEAD_OFF:
         bIsInBody = true;
@@ -372,7 +372,7 @@ int HTMLParser::FilterToken( int nToken )
     case HTML_HTML_OFF:
         nToken = 0;
         bReadPRE = bReadListing = bReadXMP = false;
-        break;      // HTML_ON hasn't been passed either !
+        break;      
 
     case HTML_PREFORMTXT_ON:
         StartPRE();
@@ -486,9 +486,9 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             cChar = OUString(&cEncodedChar, 1, eSrcEnc, convertFlags).toChar();
                             if( 0U == cChar )
                             {
-                                // If the character could not be
-                                // converted, because a conversion is not
-                                // available, do no conversion at all.
+                                
+                                
+                                
                                 cChar = cEncodedChar;
                             }
                         }
@@ -514,8 +514,8 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                         OUString sEntity(sEntityBuffer.getStr(), nPos);
                         cChar = GetHTMLCharName( sEntity );
 
-                        // not found ( == 0 ): plain text
-                        // or a character which is inserted as attribute
+                        
+                        
                         if( 0U == cChar && ';' != nNextCh )
                         {
                             DBG_ASSERT( rInput.Tell() - nStreamPos ==
@@ -539,10 +539,10 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             }
                         }
 
-                        if( !cChar )        // unknown character?
+                        if( !cChar )        
                         {
-                            // back in stream, insert '&'
-                            // and restart with next character
+                            
+                            
                             sTmpBuffer.append( '&' );
 
                             DBG_ASSERT( rInput.Tell()-nStreamPos ==
@@ -557,15 +557,15 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             break;
                         }
 
-                        // 1 == Non Breaking Space
-                        // 2 == SoftHyphen
+                        
+                        
 
                         if( cChar < 3U )
                         {
                             if( '>' == cBreak )
                             {
-                                // When reading the content of a tag we have
-                                // to change it to ' ' or '-'
+                                
+                                
                                 switch( cChar )
                                 {
                                 case 1U: cChar = ' '; break;
@@ -578,13 +578,13 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                             }
                             else
                             {
-                                // If not scanning a tag return token
+                                
                                 aToken += sTmpBuffer.makeStringAndClear();
                                 if( cChar )
                                 {
                                     if( !aToken.isEmpty() )
                                     {
-                                        // restart with character
+                                        
                                         nNextCh = '&';
                                         DBG_ASSERT( rInput.Tell()-nStreamPos ==
                                                     (sal_uLong)(nPos+1)*GetCharSize(),
@@ -598,8 +598,8 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                                         return HTML_TEXTTOKEN;
                                     }
 
-                                    // Hack: _GetNextChar shall not read the
-                                    // next character
+                                    
+                                    
                                     if( ';' != nNextCh )
                                         aToken += " ";
                                     if( 1U == cChar )
@@ -616,7 +616,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                     else
                         nNextCh = 0U;
                 }
-                // &{...};-JavaScript-Macros are not supported any longer.
+                
                 else if( IsParserWorking() )
                 {
                     sTmpBuffer.append( '&' );
@@ -628,11 +628,11 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 if( cBreak=='>' && (cChar=='\\' || cChar=='\'' ||
                                     cChar=='\"' || cChar==' ') )
                 {
-                    // ' and " have to be escaped withing tags to separate
-                    // them from ' and " enclosing options.
-                    // \ has to be escaped as well.
-                    // Space is protected because it's not a delimiter between
-                    // options.
+                    
+                    
+                    
+                    
+                    
                     sTmpBuffer.append( '\\' );
                     if( MAX_LEN == sTmpBuffer.getLength() )
                         aToken += sTmpBuffer.makeStringAndClear();
@@ -644,13 +644,13 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 }
                 else if( SVPAR_PENDING==eState && '>'!=cBreak )
                 {
-                    // Restart with '&', the remainder is returned as
-                    // text token.
+                    
+                    
                     if( !aToken.isEmpty() || !sTmpBuffer.isEmpty() )
                     {
-                        // _GetNextChar() returns the previous text and
-                        // during the next execution a new character is read.
-                        // Thus we have to position in front of the '&'.
+                        
+                        
+                        
                         nNextCh = 0U;
                         rInput.Seek( nStreamPos-(sal_uInt32)GetCharSize() );
                         nlLinePos = nLinePos-1;
@@ -670,7 +670,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         case '\\':
             if( '>'==cBreak )
             {
-                // Innerhalb von Tags kennzeichnen
+                
                 sTmpBuffer.append( '\\' );
                 if( MAX_LEN == sTmpBuffer.getLength() )
                     aToken += sTmpBuffer.makeStringAndClear();
@@ -707,18 +707,18 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             if( '>'==cBreak )
                 sTmpBuffer.append( nNextCh );
             else
-                bContinue = false;      // break, String zusammen
+                bContinue = false;      
             break;
 
         case '\f':
             if( '>' == cBreak )
             {
-                // If scanning options treat it like a space, ...
+                
                 sTmpBuffer.append( ' ' );
             }
             else
             {
-                // otherwise it's a separate token.
+                
                 bContinue = false;
             }
             break;
@@ -727,7 +727,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
         case '\n':
             if( '>'==cBreak )
             {
-                // cr/lf in tag is handled in _GetNextToken()
+                
                 sTmpBuffer.append( nNextCh );
                 break;
             }
@@ -736,16 +736,16 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 bContinue = false;
                 break;
             }
-            // Reduce sequence of CR/LF/BLANK/TAB to a single blank
-            // no break!!
+            
+            
         case '\t':
             if( '\t'==nNextCh && bReadPRE && '>'!=cBreak )
             {
-                // Pass Tabs up in <PRE>
+                
                 bContinue = false;
                 break;
             }
-            // no break
+            
         case '\x0b':
             if( '\x0b'==nNextCh && (bReadPRE || bReadXMP ||bReadListing) &&
                 '>'!=cBreak )
@@ -753,26 +753,26 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
                 break;
             }
             nNextCh = ' ';
-            // no break;
+            
         case ' ':
             sTmpBuffer.append( nNextCh );
             if( '>'!=cBreak && (!bReadListing && !bReadXMP &&
                                 !bReadPRE && !bReadTextArea) )
             {
-                // Reduce sequences of Blanks/Tabs/CR/LF to a single blank
+                
                 do {
                     if( sal_Unicode(EOF) == (nNextCh = GetNextChar()) &&
                         rInput.IsEof() )
                     {
                         if( !aToken.isEmpty() || sTmpBuffer.getLength() > 1L )
                         {
-                            // Have seen s.th. aside from blanks?
+                            
                             aToken += sTmpBuffer.makeStringAndClear();
                             return HTML_TEXTTOKEN;
                         }
                         else
-                            // Only read blanks: no text must be returned
-                            // and _GetNextToken has to read until EOF
+                            
+                            
                             return 0;
                     }
                 } while ( ' ' == nNextCh || '\t' == nNextCh ||
@@ -789,7 +789,7 @@ int HTMLParser::ScanText( const sal_Unicode cBreak )
             else
             {
                 do {
-                    // All remaining characters make their way into the text.
+                    
                     sTmpBuffer.append( nNextCh );
                     if( MAX_LEN == sTmpBuffer.getLength() )
                     {
@@ -827,8 +827,8 @@ int HTMLParser::_GetNextRawToken()
 
     if( bEndTokenFound )
     {
-        // During the last execution we already found the end token,
-        // thus we don't have to search it again.
+        
+        
         bReadScript = false;
         bReadStyle = false;
         aEndToken = "";
@@ -837,7 +837,7 @@ int HTMLParser::_GetNextRawToken()
         return 0;
     }
 
-    // Default return value: HTML_RAWDATA
+    
     bool bContinue = true;
     int nToken = HTML_RAWDATA;
     SaveState( 0 );
@@ -848,17 +848,17 @@ int HTMLParser::_GetNextRawToken()
         {
         case '<':
             {
-                // Maybe we've reached the end.
+                
 
-                // Save what we have read previously...
+                
                 aToken += sTmpBuffer.makeStringAndClear();
 
-                // and remember position in stream.
+                
                 sal_uLong nStreamPos = rInput.Tell();
                 sal_uLong nLineNr = GetLineNr();
                 sal_uLong nLinePos = GetLinePos();
 
-                // Start of an end token?
+                
                 bool bOffState = false;
                 if( '/' == (nNextCh = GetNextChar()) )
                 {
@@ -871,7 +871,7 @@ int HTMLParser::_GetNextRawToken()
                     nNextCh = GetNextChar();
                 }
 
-                // Read following letters
+                
                 while( (HTML_ISALPHA(nNextCh) || '-'==nNextCh) &&
                        IsParserWorking() && sTmpBuffer.getLength() < MAX_LEN )
                 {
@@ -893,8 +893,8 @@ int HTMLParser::_GetNextRawToken()
                         }
                         else
                         {
-                            // A script has to end with "</SCRIPT>". But
-                            // ">" is optional for security reasons
+                            
+                            
                             bDone = bOffState &&
                             0 == ( bReadScript
                                 ? aTok.compareTo(OOO_STRING_SVTOOLS_HTML_script)
@@ -903,13 +903,13 @@ int HTMLParser::_GetNextRawToken()
                     }
                     if( bReadComment && '>'==nNextCh && aTok.endsWith( "--" ) )
                     {
-                        // End of comment of style <!----->
+                        
                         bReadComment = false;
                     }
                 }
                 else
                 {
-                    // Style sheets can be closed by </STYLE>, </HEAD> or <BODY>
+                    
                     if( bOffState )
                         bDone = aTok.compareTo(OOO_STRING_SVTOOLS_HTML_style)
                                     == 0 ||
@@ -922,16 +922,16 @@ int HTMLParser::_GetNextRawToken()
 
                 if( bDone )
                 {
-                    // Done! Return the previously read string (if requested)
-                    // and continue.
+                    
+                    
 
                     bContinue = false;
 
-                    // nToken==0 means, _GetNextToken continues to read
+                    
                     if( aToken.isEmpty() && (bReadStyle || bReadScript) )
                     {
-                        // Immediately close environment (or context?)
-                        // and parse the end token
+                        
+                        
                         bReadScript = false;
                         bReadStyle = false;
                         aEndToken = "";
@@ -939,24 +939,24 @@ int HTMLParser::_GetNextRawToken()
                     }
                     else
                     {
-                        // Keep bReadScript/bReadStyle alive
-                        // and parse end token during next execution
+                        
+                        
                         bEndTokenFound = true;
                     }
 
-                    // Move backwards in stream to '<'
+                    
                     rInput.Seek( nStreamPos );
                     SetLineNr( nLineNr );
                     SetLinePos( nLinePos );
                     ClearTxtConvContext();
                     nNextCh = '<';
 
-                    // Don't append string to token.
+                    
                     sTmpBuffer.setLength( 0L );
                 }
                 else
                 {
-                    // remember "</" , everything else we find in the buffer
+                    
                     aToken += "<";
                     if( bOffState )
                         aToken += "/";
@@ -989,20 +989,20 @@ int HTMLParser::_GetNextRawToken()
             break;
 
         case '\r':
-            // \r\n? closes the current text token (even if it's empty)
+            
             nNextCh = GetNextChar();
             if( nNextCh=='\n' )
                 nNextCh = GetNextChar();
             bContinue = false;
             break;
         case '\n':
-            // \n closes the current text token (even if it's empty)
+            
             nNextCh = GetNextChar();
             bContinue = false;
             break;
         case sal_Unicode(EOF):
-            // eof closes the current text token and behaves like having read
-            // an end token
+            
+            
             if( rInput.IsEof() )
             {
                 bContinue = false;
@@ -1019,9 +1019,9 @@ int HTMLParser::_GetNextRawToken()
                 }
                 break;
             }
-            // no break
+            
         default:
-            // all remaining characters are appended to the buffer
+            
             sTmpBuffer.append( nNextCh );
             break;
         }
@@ -1042,7 +1042,7 @@ int HTMLParser::_GetNextRawToken()
     return nToken;
 }
 
-// Scan next token
+
 int HTMLParser::_GetNextToken()
 {
     int nRet = 0;
@@ -1050,18 +1050,18 @@ int HTMLParser::_GetNextToken()
 
     if (mnPendingOffToken)
     {
-        // HTML_<TOKEN>_OFF generated for HTML_<TOKEN>_ON
+        
         nRet = mnPendingOffToken;
         mnPendingOffToken = 0;
         aToken = "";
         return nRet;
     }
 
-    // Delete options
+    
     if (!maOptions.empty())
         maOptions.clear();
 
-    if( !IsParserWorking() )        // Don't continue if already an error occurred
+    if( !IsParserWorking() )        
         return 0;
 
     bool bReadNextCharSave = bReadNextChar;
@@ -1070,7 +1070,7 @@ int HTMLParser::_GetNextToken()
         DBG_ASSERT( !bEndTokenFound,
                     "Read a character despite </SCRIPT> was read?" );
         nNextCh = GetNextChar();
-        if( !IsParserWorking() )        // Don't continue if already an error occurred
+        if( !IsParserWorking() )        
             return 0;
         bReadNextChar = false;
     }
@@ -1112,7 +1112,7 @@ int HTMLParser::_GetNextToken()
                     if( !sTmpBuffer.isEmpty() )
                         aToken += sTmpBuffer.makeStringAndClear();
 
-                    // Skip blanks
+                    
                     while( HTML_ISSPACE( nNextCh ) && IsParserWorking() )
                         nNextCh = GetNextChar();
 
@@ -1123,33 +1123,33 @@ int HTMLParser::_GetNextToken()
                         break;
                     }
 
-                    // Search token in table:
+                    
                     sSaveToken = aToken;
                     aToken = aToken.toAsciiLowerCase();
                     if( 0 == (nRet = GetHTMLToken( aToken )) )
-                        // Unknown control
+                        
                         nRet = HTML_UNKNOWNCONTROL_ON;
 
-                    // If it's a token which can be switched off...
+                    
                     if( bOffState )
                     {
                          if( HTML_TOKEN_ONOFF & nRet )
                          {
-                            // and there is an off token, return off token instead
+                            
                             ++nRet;
                          }
                          else if( HTML_LINEBREAK!=nRet )
                          {
-                            // and there is no off token, return unknown token.
-                            // (except for </BR>, that is treated like <BR>)
+                            
+                            
                             nRet = HTML_UNKNOWNCONTROL_OFF;
                          }
                     }
 
                     if( nRet == HTML_COMMENT )
                     {
-                        // fix: due to being case sensitive use sSaveToken as start of comment
-                        //      and append a blank.
+                        
+                        
                         aToken = sSaveToken;
                         if( '>'!=nNextCh )
                             aToken += " ";
@@ -1159,7 +1159,7 @@ int HTMLParser::_GetNextToken()
                         sal_Int32 nCStrLen = 0;
 
                         bool bDone = false;
-                        // Read until closing -->. If not found restart at first >
+                        
                         while( !bDone && !rInput.IsEof() && IsParserWorking() )
                         {
                             if( '>'==nNextCh )
@@ -1194,28 +1194,28 @@ int HTMLParser::_GetNextToken()
                     }
                     else
                     {
-                        // TokenString not needed anymore
+                        
                         aToken = "";
                     }
 
-                    // Read until closing '>'
+                    
                     if( '>' != nNextCh && IsParserWorking() )
                     {
                         ScanText( '>' );
 
-                        // fdo#34666 fdo#36080 fdo#36390: closing "/>"?:
-                        // generate pending HTML_<TOKEN>_OFF for HTML_<TOKEN>_ON
-                        // Do not convert this to a single HTML_<TOKEN>_OFF
-                        // which lead to fdo#56772.
+                        
+                        
+                        
+                        
                         if ((HTML_TOKEN_ONOFF & nRet) && aToken.endsWith("/"))
                         {
-                            mnPendingOffToken = nRet + 1;       // HTML_<TOKEN>_ON -> HTML_<TOKEN>_OFF
-                            aToken = aToken.replaceAt( aToken.getLength()-1, 1, "");   // remove trailing '/'
+                            mnPendingOffToken = nRet + 1;       
+                            aToken = aToken.replaceAt( aToken.getLength()-1, 1, "");   
                         }
                         if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
                         {
-                            // Move back in front of < and restart there.
-                            // Return < as text.
+                            
+                            
                             rInput.Seek( nStreamPos );
                             SetLineNr( nLineNr );
                             SetLinePos( nLinePos );
@@ -1235,12 +1235,12 @@ int HTMLParser::_GetNextToken()
                 {
                     if( bOffState )
                     {
-                        // einfach alles wegschmeissen
+                        
                         ScanText( '>' );
                         if( sal_Unicode(EOF) == nNextCh && rInput.IsEof() )
                         {
-                            // Move back in front of < and restart there.
-                            // Return < as text.
+                            
+                            
                             rInput.Seek( nStreamPos );
                             SetLineNr( nLineNr );
                             SetLinePos( nLinePos );
@@ -1264,7 +1264,7 @@ int HTMLParser::_GetNextToken()
                         sal_uLong nCLineNr = GetLineNr(), nCLinePos = GetLinePos();
 
                         bool bDone = false;
-                        // Read until closing %>. If not found restart at first >.
+                        
                         while( !bDone && !rInput.IsEof() && IsParserWorking() )
                         {
                             bDone = '>'==nNextCh && aToken.endsWith("%");
@@ -1318,8 +1318,8 @@ int HTMLParser::_GetNextToken()
                         if( !bReadTextArea )
                         {
                             bReadScript = false;
-                            // JavaScript might modify the stream,
-                            // thus the last character has to be read again.
+                            
+                            
                             bReadNextChar = true;
                             bNextCh = false;
                         }
@@ -1344,14 +1344,14 @@ int HTMLParser::_GetNextToken()
             }
             else
             {
-                // Read normal text.
+                
                 goto scan_text;
             }
             break;
 
         case '\f':
-            // form feeds are passed upwards separately
-            nRet = HTML_LINEFEEDCHAR; // !!! should be FORMFEEDCHAR
+            
+            nRet = HTML_LINEFEEDCHAR; 
             break;
 
         case '\n':
@@ -1368,24 +1368,24 @@ int HTMLParser::_GetNextToken()
                 nRet = HTML_NEWPARA;
                 break;
             }
-            // no break !
+            
         case '\t':
             if( bReadPRE )
             {
                 nRet = HTML_TABCHAR;
                 break;
             }
-            // no break !
+            
         case ' ':
-            // no break !
+            
         default:
 
 scan_text:
-            // "normal" text to come
+            
             nRet = ScanText();
             bNextCh = 0 == aToken.getLength();
 
-            // the text should be processed
+            
             if( !bNextCh && eState == SVPAR_PENDING )
             {
                 eState = SVPAR_WORKING;
@@ -1408,7 +1408,7 @@ scan_text:
     } while( !nRet && SVPAR_WORKING == eState );
 
     if( SVPAR_PENDING == eState )
-        nRet = -1;      // s.th. invalid
+        nRet = -1;      
 
     return nRet;
 }
@@ -1436,15 +1436,15 @@ void HTMLParser::UnescapeToken()
 
 const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
 {
-    // If the options for the current token have already been returned,
-    // return them once again.
+    
+    
     if (!maOptions.empty())
         return maOptions;
 
     sal_Int32 nPos = 0;
     while( nPos < aToken.getLength() )
     {
-        // A letter? Option beginning here.
+        
         if( HTML_ISALPHA( aToken[nPos] ) )
         {
             int nToken;
@@ -1452,17 +1452,17 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
             sal_Int32 nStt = nPos;
             sal_Unicode cChar = 0;
 
-            // Actually only certain characters allowed.
-            // Netscape only looks for "=" and white space (c.f.
-            // Mozilla: PA_FetchRequestedNameValues in lipparse/pa_mdl.c)
+            
+            
+            
             while( nPos < aToken.getLength() && '=' != (cChar=aToken[nPos]) &&
                    HTML_ISPRINTABLE(cChar) && !HTML_ISSPACE(cChar) )
                 nPos++;
 
             OUString sName( aToken.copy( nStt, nPos-nStt ) );
 
-            // PlugIns require original token name. Convert to lower case only for searching.
-            nToken = GetHTMLOption( sName.toAsciiLowerCase() ); // Name is ready
+            
+            nToken = GetHTMLOption( sName.toAsciiLowerCase() ); 
             DBG_ASSERTWARNING( nToken!=HTML_O_UNKNOWN,
                         "GetOption: unknown HTML option" );
             bool bStripCRLF = (nToken < HTML_OPTION_SCRIPT_START ||
@@ -1474,7 +1474,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
                      HTML_ISSPACE(cChar) ) )
                 nPos++;
 
-            // Option with value?
+            
             if( nPos!=aToken.getLength() && '='==cChar )
             {
                 nPos++;
@@ -1535,7 +1535,7 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
                     }
                     else
                     {
-                        // More liberal than the standard: allow all printable characters
+                        
                         bool bEscape = false;
                         bool bDone = false;
                         while( nPos < aToken.getLength() && !bDone )
@@ -1584,14 +1584,14 @@ const HTMLOptions& HTMLParser::GetOptions( sal_uInt16 *pNoConvertToken )
                 }
             }
 
-            // Token is known and can be saved
+            
             std::auto_ptr<HTMLOption> pOption(
                 new HTMLOption(sal::static_int_cast<sal_uInt16>(nToken), sName, aValue));
 
             maOptions.push_back(pOption);
         }
         else
-            // Ignore white space and unexpected characters
+            
             nPos++;
     }
 
@@ -1602,7 +1602,7 @@ int HTMLParser::FilterPRE( int nToken )
 {
     switch( nToken )
     {
-    // in Netscape they only have impact in not empty paragraphs
+    
     case HTML_PARABREAK_ON:
         nToken = HTML_LINEBREAK;
     case HTML_LINEBREAK:
@@ -1626,7 +1626,7 @@ int HTMLParser::FilterPRE( int nToken )
             nToken = HTML_TEXTTOKEN;
         }
         break;
-    // Keep those
+    
     case HTML_TEXTTOKEN:
         nPre_LinePos += aToken.getLength();
         break;
@@ -1761,7 +1761,7 @@ int HTMLParser::FilterPRE( int nToken )
 
         break;
 
-    // The remainder is treated as an unknown token.
+    
     default:
         if( nToken )
         {
@@ -1788,7 +1788,7 @@ int HTMLParser::FilterXMP( int nToken )
     case HTML_TEXTTOKEN:
     case HTML_NONBREAKSPACE:
     case HTML_SOFTHYPH:
-        break;              // kept
+        break;              
 
     default:
         if( nToken )
@@ -1828,7 +1828,7 @@ int HTMLParser::FilterListing( int nToken )
     case HTML_TEXTTOKEN:
     case HTML_NONBREAKSPACE:
     case HTML_SOFTHYPH:
-        break;      // kept
+        break;      
 
     default:
         if( nToken )
@@ -1850,14 +1850,14 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
                                bool bSwitchToUCS2,
                                rtl_TextEncoding eEnc )
 {
-    // If the string matches one of the following regular expressions then
-    // the document is a HTML document.
+    
+    
     //
-    // ^[^<]*<[^ \t]*[> \t]
-    //        -------
-    // ^<!
+    
+    
+    
     //
-    // where the underlined subexpression has to be a HTML token
+    
     OString sCmp;
     bool bUCS2B = false;
     if( bSwitchToUCS2 )
@@ -1912,13 +1912,13 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
 
     sCmp = sCmp.toAsciiLowerCase();
 
-    // A HTML document must have a '<' in the first line
+    
     sal_Int32 nStart = sCmp.indexOf('<');
     if (nStart == -1)
         return false;
     nStart++;
 
-    // followed by arbitrary characters followed by a blank or '>'
+    
     sal_Char c;
     sal_Int32 nPos;
     for( nPos = nStart; nPos < sCmp.getLength(); ++nPos )
@@ -1927,29 +1927,29 @@ bool HTMLParser::IsHTMLFormat( const sal_Char* pHeader,
             break;
     }
 
-    // If the document ends after < it's no HTML
+    
     if( nPos==nStart )
         return false;
 
-    // the string following '<' has to be a known HTML token.
-    // <DIR> is not interpreted as HTML. Otherwise the output of the DOS command "DIR"
-    // could be interpreted as HTML.
+    
+    
+    
     OUString sTest(OStringToOUString(sCmp.copy(nStart, nPos-nStart), RTL_TEXTENCODING_ASCII_US));
     int nTok = GetHTMLToken( sTest );
     if( 0 != nTok && HTML_DIRLIST_ON != nTok )
         return true;
 
-    // "<!" at the very beginning of the file?
+    
     if( nStart == 1 && '!' == sCmp[1] )
         return true;
 
-    // <HTML> somewhere in the first 80 characters of the document
+    
     nStart = sCmp.indexOf(OOO_STRING_SVTOOLS_HTML_html);
     if( nStart>0 && '<'==sCmp[nStart-1] &&
         nStart+4 < sCmp.getLength() && '>'==sCmp[nStart+4] )
         return true;
 
-    // Else it's rather not a HTML document
+    
     return false;
 }
 
@@ -2037,7 +2037,7 @@ enum eHtmlMetas {
     HTML_META_CONTENT_TYPE
 };
 
-// <META NAME=xxx>
+
 static HTMLOptionEnum const aHTMLMetaNameTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_META_author,        HTML_META_AUTHOR        },
@@ -2095,20 +2095,20 @@ bool HTMLParser::ParseMetaOptionsImpl(
 
     if ( bHTTPEquiv || HTML_META_DESCRIPTION != nAction )
     {
-        // if it is not a Description, remove CRs and LFs from CONTENT
+        
         aContent = comphelper::string::remove(aContent, '\r');
         aContent = comphelper::string::remove(aContent, '\n');
     }
     else
     {
-        // convert line endings for Description
+        
         aContent = convertLineEnd(aContent, GetSystemLineEnd());
     }
 
 
     if ( bHTTPEquiv && i_pHTTPHeader )
     {
-        // Netscape seems to just ignore a closing ", so we do too
+        
         if ( aContent.endsWith("\"") )
         {
             aContent = aContent.copy( 0, aContent.getLength() - 1 );
@@ -2198,7 +2198,7 @@ bool HTMLParser::ParseMetaOptionsImpl(
                         AddMetaUserDefined(aName);
                         bChanged = true;
                     } catch (uno::Exception &) {
-                        // ignore
+                        
                     }
                 }
             }
@@ -2221,9 +2221,9 @@ bool HTMLParser::ParseMetaOptions(
                       GetOptions(&nContentOption),
                       eEnc );
 
-    // If the encoding is set by a META tag, it may only overwrite the
-    // current encoding if both, the current and the new encoding, are 1-sal_uInt8
-    // encodings. Everything else cannot lead to reasonable results.
+    
+    
+    
     if (RTL_TEXTENCODING_DONTKNOW != eEnc &&
         rtl_isOctetTextEncoding( eEnc ) &&
         rtl_isOctetTextEncoding( GetSrcEncoding() ) )

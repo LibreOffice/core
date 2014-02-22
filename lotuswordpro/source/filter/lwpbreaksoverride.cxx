@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -101,7 +101,7 @@ void    LwpBreaksOverride::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-//add by , 01/28/2005
+
 void LwpBreaksOverride::Override(LwpBreaksOverride* pOther)
 {
     if (m_nApply & BO_PAGEBEFORE)
@@ -218,7 +218,7 @@ void LwpBreaksOverride::OverridePageBreakAfter(sal_Bool bVal)
 }
 void LwpBreaksOverride::OverridePageBreakWithin(sal_Bool bVal)
 {
-    // Note the flipped logic
+    
     if(!bVal)
     {
         LwpOverride::Override(BO_KEEPTOGETHER, STATE_ON);
@@ -283,6 +283,6 @@ void LwpBreaksOverride::OverrideUseNextStyle(sal_Bool bVal)
         LwpOverride::Override(BO_USENEXTSTYLE, STATE_OFF);
     }
 }
-//end add
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

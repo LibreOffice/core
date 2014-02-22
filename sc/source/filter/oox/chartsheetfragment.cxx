@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "chartsheetfragment.hxx"
@@ -29,12 +29,12 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::oox::core;
 
 
-// ============================================================================
+
 
 ChartsheetFragment::ChartsheetFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath )
@@ -76,7 +76,7 @@ ContextHandlerRef ChartsheetFragment::onCreateContext( sal_Int32 nElement, const
                 case XLS_TOKEN( oddHeader ):
                 case XLS_TOKEN( oddFooter ):
                 case XLS_TOKEN( evenHeader ):
-                case XLS_TOKEN( evenFooter ):       return this;    // collect contents in onCharacters()
+                case XLS_TOKEN( evenFooter ):       return this;    
             }
         break;
     }
@@ -145,17 +145,17 @@ const RecordInfo* ChartsheetFragment::getRecordInfos() const
 
 void ChartsheetFragment::initializeImport()
 {
-    // initial processing in base class WorksheetHelper
+    
     initializeWorksheetImport();
 }
 
 void ChartsheetFragment::finalizeImport()
 {
-    // final processing in base class WorksheetHelper
+    
     finalizeWorksheetImport();
 }
 
-// private --------------------------------------------------------------------
+
 
 void ChartsheetFragment::importDrawing( const AttributeList& rAttribs )
 {
@@ -167,7 +167,7 @@ void ChartsheetFragment::importDrawing( SequenceInputStream& rStrm )
     setDrawingPath( getFragmentPathFromRelId( BiffHelper::readString( rStrm ) ) );
 }
 
-} // namespace xls
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

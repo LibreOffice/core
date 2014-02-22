@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ids.hrc"
@@ -37,11 +37,11 @@ OpenLockedQueryBox::OpenLockedQueryBox( Window* pParent, ResMgr* pResMgr, const 
     SetButtonHelpText( RET_NO, OUString() );
 
 #ifdef WNT
-    // bnc#656566
-    // Yes, it is silly to do this only for this dialog but not the
-    // other similar ones. But hey, it was about this dialog that the
-    // customer complained. You who read this and feel the itch, feel
-    // free to fix the problem in a better way.
+    
+    
+    
+    
+    
     EnableAlwaysOnTop( true );
 #endif
 }

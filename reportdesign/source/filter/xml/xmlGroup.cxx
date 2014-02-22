@@ -63,7 +63,7 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
 
     const SvXMLNamespaceMap& rMap = _rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = _rImport.GetGroupElemTokenMap();
-    m_xGroup->setSortAscending(sal_False);// the default value has to be set
+    m_xGroup->setSortAscending(sal_False);
     const sal_Int16 nLength = (_xAttrList.is()) ? _xAttrList->getLength() : 0;
     static const OUString s_sTRUE = ::xmloff::token::GetXMLToken(XML_TRUE);
     for(sal_Int16 i = 0; i < nLength; ++i)
@@ -185,13 +185,13 @@ OXMLGroup::OXMLGroup( ORptFilter& _rImport
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLGroup::~OXMLGroup()
 {
 
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLGroup::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -244,26 +244,26 @@ SvXMLImportContext* OXMLGroup::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLGroup::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 void OXMLGroup::EndElement()
 {
     try
     {
-        // the group elements end in the reverse order
+        
         m_xGroups->insertByIndex(0,uno::makeAny(m_xGroup));
     }catch(uno::Exception&)
     {
         OSL_FAIL("Exception catched!");
     }
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-} // namespace rptxml
-// -----------------------------------------------------------------------------
+
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

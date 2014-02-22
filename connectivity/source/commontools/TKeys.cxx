@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/TKeys.hxx"
@@ -50,7 +50,7 @@ OKeysHelper::OKeysHelper(   OTableHelper* _pTable,
     ,m_pTable(_pTable)
 {
 }
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType OKeysHelper::createObject(const OUString& _rName)
 {
     sdbcx::ObjectType xRet = NULL;
@@ -61,7 +61,7 @@ sdbcx::ObjectType OKeysHelper::createObject(const OUString& _rName)
         xRet = pRet;
     }
 
-    if(!xRet.is()) // we have a primary key with a system name
+    if(!xRet.is()) 
     {
         OTableKeyHelper* pRet = new OTableKeyHelper(m_pTable,_rName,m_pTable->getKeyProperties(_rName));
         xRet = pRet;
@@ -69,17 +69,17 @@ sdbcx::ObjectType OKeysHelper::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OKeysHelper::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshKeys();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OKeysHelper::createDescriptor()
 {
     return new OTableKeyHelper(m_pTable);
 }
-// -----------------------------------------------------------------------------
+
 /** returns the keyrule string for the primary key
 */
 OUString getKeyRuleString(sal_Bool _bUpdate,sal_Int32 _nKeyRule)
@@ -107,7 +107,7 @@ OUString getKeyRuleString(sal_Bool _bUpdate,sal_Int32 _nKeyRule)
         sRet = OUString::createFromAscii(pKeyRule);
     return sRet;
 }
-// -------------------------------------------------------------------------
+
 void OKeysHelper::cloneDescriptorColumns( const sdbcx::ObjectType& _rSourceDescriptor, const sdbcx::ObjectType& _rDestDescriptor )
 {
     Reference< XColumnsSupplier > xColSupp( _rSourceDescriptor, UNO_QUERY_THROW );
@@ -123,8 +123,8 @@ void OKeysHelper::cloneDescriptorColumns( const sdbcx::ObjectType& _rSourceDescr
         xDestAppend->appendByDescriptor( xColProp );
     }
 }
-// -------------------------------------------------------------------------
-// XAppend
+
+
 sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
@@ -155,8 +155,8 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
     }
     else
     {
-        // if we're here, we belong to a table which is not new, i.e. already exists in the database.
-        // In this case, really append the new index.
+        
+        
         OUStringBuffer aSql;
         aSql.appendAscii("ALTER TABLE ");
         OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString(  );
@@ -210,7 +210,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         xStmt->execute(aSql.makeStringAndClear());
     }
-    // find the name which the database gave the new key
+    
     OUString sNewName( _rForName );
     try
     {
@@ -236,7 +236,7 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
             while( xResult->next() )
             {
                 OUString sName = xRow->getString(nColumn);
-                if ( !m_pElements->exists(sName) ) // this name wasn't inserted yet so it must be te new one
+                if ( !m_pElements->exists(sName) ) 
                 {
                     descriptor->setPropertyValue( rPropMap.getNameByIndex( PROPERTY_ID_NAME ), makeAny( sName ) );
                     sNewName = sName;
@@ -254,13 +254,13 @@ sdbcx::ObjectType OKeysHelper::appendObject( const OUString& _rForName, const Re
 
     return createObject( sNewName );
 }
-// -----------------------------------------------------------------------------
+
 OUString OKeysHelper::getDropForeignKey() const
 {
     return OUString(" DROP CONSTRAINT ");
 }
-// -------------------------------------------------------------------------
-// XDrop
+
+
 void OKeysHelper::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
@@ -304,8 +304,8 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const OUString _sElementName)
         }
     }
 }
-// -----------------------------------------------------------------------------
-} // namespace connectivity
-// -----------------------------------------------------------------------------
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

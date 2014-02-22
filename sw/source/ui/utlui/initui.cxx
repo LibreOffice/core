@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/localedatawrapper.hxx>
@@ -35,11 +35,11 @@
 
 #include <unomid.h>
 
-// Global Pointer
+
 
 SwGlossaries*       pGlossaries = 0;
 
-// Provides all needed paths. Is initialized by UI.
+
 SwGlossaryList*     pGlossaryList = 0;
 
 namespace
@@ -142,7 +142,7 @@ std::vector<OUString>* pAuthFieldTypeList = 0;
 
 }
 
-// Finish UI
+
 
 void _FinitUI()
 {
@@ -163,11 +163,11 @@ void _FinitUI()
 
 }
 
-// Initialise
+
 
 void _InitUI()
 {
-    // ShellResource gives the CORE the possibility to work with resources.
+    
     SwViewShell::SetShellRes( new ShellResource );
     SwEditWin::_InitStaticData();
 }
@@ -190,7 +190,7 @@ ShellResource::ShellResource()
 
     aGetRefFld_Up( SW_RES( STR_GETREFFLD_UP ) ),
     aGetRefFld_Down( SW_RES( STR_GETREFFLD_DOWN ) ),
-    // #i81002#
+    
     aGetRefFld_RefItemNotFound( SW_RES( STR_GETREFFLD_REFITEMNOTFOUND ) ),
     aStrAllPageHeadFoot( SW_RES( STR_ALLPAGE_HEADFOOT ) ),
     aStrNone( SW_RES( STR_TEMPLATE_NONE )),
@@ -294,14 +294,14 @@ ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( std::vector<OUString>& rLst 
         if(STR_AUTOFMTREDL_TYPO == n)
         {
 #ifdef WNT
-            // For Windows, a special treatment is necessary because MS has
-            // forgotten some characters in the dialog font here.
+            
+            
             p = p.replaceFirst("%1", ",,");
             p = p.replaceFirst("%2", "''");
 #else
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& rLclD = aSysLocale.GetLocaleData();
-            // With real operating systems it also works without special handling.
+            
             p = p.replaceFirst("%1", rLclD.getDoubleQuotationMarkStart());
             p = p.replaceFirst("%2", rLclD.getDoubleQuotationMarkEnd());
 #endif

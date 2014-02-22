@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -49,7 +49,7 @@
 #include "clipdata.hxx"
 #include "clipparam.hxx"
 
-// for InitDocShell
+
 #include <editeng/paperinf.hxx>
 #include <editeng/sizeitem.hxx>
 #include <svx/algitem.hxx>
@@ -66,14 +66,14 @@
 
 using namespace com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 #define SCTRANS_TYPE_IMPEX          1
 #define SCTRANS_TYPE_EDIT_RTF       2
 #define SCTRANS_TYPE_EDIT_BIN       3
 #define SCTRANS_TYPE_EMBOBJ         4
 
-// -----------------------------------------------------------------------
+
 
 void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCROW& nRow, SCCOL& nCol )
 {
@@ -83,7 +83,7 @@ void ScTransferObj::GetAreaSize( ScDocument* pDoc, SCTAB nTab1, SCTAB nTab2, SCR
     {
         SCCOL nLastCol = 0;
         SCROW nLastRow = 0;
-        // GetPrintArea instead of GetCellArea - include drawing objects
+        
         if( pDoc->GetPrintArea( nTab, nLastCol, nLastRow ) )
         {
             if( nLastCol > nMaxCol )
@@ -103,7 +103,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
         return;
 
     Point aPoint;
-    Rectangle aBound( aPoint, pDev->GetOutputSize() );      //! use size from clip area?
+    Rectangle aBound( aPoint, pDev->GetOutputSize() );      
 
     ScViewData aViewData(NULL,NULL);
     aViewData.InitData( pDoc );
@@ -115,7 +115,7 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
     ScPrintFunc::DrawToDev( pDoc, pDev, nPrintFactor, aBound, &aViewData, bMetaFile );
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc ) :
     pDoc( pClipDoc ),
@@ -131,7 +131,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     OSL_ENSURE(pDoc->IsClipboard(), "wrong document");
 
     //
-    // get aBlock from clipboard doc
+    
     //
 
     SCCOL nCol1;
@@ -139,14 +139,14 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     SCCOL nCol2;
     SCROW nRow2;
     pDoc->GetClipStart( nCol1, nRow1 );
-    pDoc->GetClipArea( nCol2, nRow2, true );    // real source area - include filtered rows
+    pDoc->GetClipArea( nCol2, nRow2, true );    
     nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nCol1 );
     nRow2 = sal::static_int_cast<SCROW>( nRow2 + nRow1 );
 
     SCCOL nDummy;
     pDoc->GetClipArea( nDummy, nNonFiltered, false );
     bHasFiltered = (nNonFiltered < (nRow2 - nRow1));
-    ++nNonFiltered;     // to get count instead of diff
+    ++nNonFiltered;     
 
     SCTAB nTab1=0;
     SCTAB nTab2=0;
@@ -161,8 +161,8 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
         }
     OSL_ENSURE(!bFirst, "no sheet selected");
 
-    //  only limit to used cells if whole sheet was marked
-    //  (so empty cell areas can be copied)
+    
+    
     if ( nCol2>=MAXCOL && nRow2>=MAXROW )
     {
         SCROW nMaxRow;
@@ -175,7 +175,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     }
 
     aBlock = ScRange( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-    nVisibleTab = nTab1;    // valid table as default
+    nVisibleTab = nTab1;    
 
     Rectangle aMMRect = pDoc->GetMMRect( nCol1,nRow1, nCol2,nRow2, nTab1 );
     aObjDesc.maSize = aMMRect.GetSize();
@@ -198,11 +198,11 @@ ScTransferObj::~ScTransferObj()
         pScMod->ResetDragObject();
     }
 
-    delete pDoc;        // ScTransferObj is owner of clipboard document
+    delete pDoc;        
 
-    aDocShellRef.Clear();   // before releasing the mutex
+    aDocShellRef.Clear();   
 
-    aDrawPersistRef.Clear();                    // after the model
+    aDrawPersistRef.Clear();                    
 
 }
 
@@ -211,16 +211,16 @@ ScTransferObj* ScTransferObj::GetOwnClipboard( Window* pUIWin )
     ScTransferObj* pObj = SC_MOD()->GetClipData().pCellClipboard;
     if ( pObj && pUIWin )
     {
-        //  check formats to see if pObj is really in the system clipboard
+        
 
-        //  pUIWin is NULL when called from core (IsClipboardSource),
-        //  in that case don't access the system clipboard, because the call
-        //  may be from other clipboard operations (like flushing, #86059#)
+        
+        
+        
 
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pUIWin ) );
         if ( !aDataHelper.HasFormat( SOT_FORMATSTR_ID_DIF ) )
         {
-//          OSL_FAIL("ScTransferObj wasn't released");
+
             pObj = NULL;
         }
     }
@@ -235,7 +235,7 @@ void ScTransferObj::AddSupportedFormats()
     AddFormat( SOT_FORMATSTR_ID_PNG );
     AddFormat( SOT_FORMAT_BITMAP );
 
-    // ScImportExport formats
+    
     AddFormat( SOT_FORMATSTR_ID_HTML );
     AddFormat( SOT_FORMATSTR_ID_SYLK );
     AddFormat( SOT_FORMATSTR_ID_LINK );
@@ -261,7 +261,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         else if ( ( nFormat == SOT_FORMAT_RTF || nFormat == SOT_FORMATSTR_ID_EDITENGINE ) &&
                         aBlock.aStart == aBlock.aEnd )
         {
-            //  RTF from a single cell is handled by EditEngine
+            
 
             SCCOL nCol = aBlock.aStart.Col();
             SCROW nRow = aBlock.aStart.Row();
@@ -289,8 +289,8 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         }
         else if ( ScImportExport::IsFormatSupported( nFormat ) || nFormat == SOT_FORMAT_RTF )
         {
-            //  if this transfer object was used to create a DDE link, filtered rows
-            //  have to be included for subsequent calls (to be consistent with link data)
+            
+            
             if ( nFormat == SOT_FORMATSTR_ID_LINK )
                 bUsedForLink = true;
 
@@ -300,7 +300,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             if ( nFormat == SOT_FORMATSTR_ID_HTML && (aBlock.aEnd.Col() == MAXCOL || aBlock.aEnd.Row() == MAXROW) && aBlock.aStart.Tab() == aBlock.aEnd.Tab() )
             {
                 bool bShrunk = false;
-                //shrink the area to allow pasting to external applications
+                
                 SCCOL aStartCol = aReducedBlock.aStart.Col();
                 SCROW aStartRow = aReducedBlock.aStart.Row();
                 SCCOL aEndCol = aReducedBlock.aEnd.Col();
@@ -313,7 +313,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             ScExportTextOptions aTextOptions(ScExportTextOptions::None, 0, true);
             if ( bUsedForLink )
             {
-                // For a DDE link, convert line breaks and separators to space.
+                
                 aTextOptions.meNewlineConversion = ScExportTextOptions::ToSpace;
                 aTextOptions.mcSeparatorConvertTo = ' ';
                 aTextOptions.mbAddQuotes = false;
@@ -322,7 +322,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             aObj.SetFormulas( pDoc->GetViewOptions().GetOption( VOPT_FORMULAS ) );
             aObj.SetIncludeFiltered( bIncludeFiltered );
 
-            //  DataType depends on format type:
+            
 
             if ( rFlavor.DataType.equals( ::getCppuType( (const OUString*) 0 ) ) )
             {
@@ -332,7 +332,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             }
             else if ( rFlavor.DataType.equals( ::getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) ) )
             {
-                //  SetObject converts a stream into a Int8-Sequence
+                
                 bOK = SetObject( &aObj, SCTRANS_TYPE_IMPEX, rFlavor );
             }
             else
@@ -356,15 +356,15 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         }
         else if ( nFormat == SOT_FORMAT_GDIMETAFILE )
         {
-            // #i123405# Do not limit visual size calculation for metafile creation.
-            // It seems unlikely that removing the limitation causes problems since
-            // metafile creation means that no real pixel device in the needed size is
-            // created.
+            
+            
+            
+            
             InitDocShell(false);
 
             SfxObjectShell* pEmbObj = aDocShellRef;
 
-            // like SvEmbeddedTransfer::GetData:
+            
             GDIMetaFile     aMtf;
             VirtualDevice   aVDev;
             MapMode         aMapMode( pEmbObj->GetMapUnit() );
@@ -385,9 +385,9 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
         }
         else if ( nFormat == SOT_FORMATSTR_ID_EMBED_SOURCE )
         {
-            //TODO/LATER: differentiate between formats?!
-            // #i123405# Do limit visual size calculation to PageSize
-            InitDocShell(true);         // set aDocShellRef
+            
+            
+            InitDocShell(true);         
 
             SfxObjectShell* pEmbObj = aDocShellRef;
             bOK = SetObject( pEmbObj, SCTRANS_TYPE_EMBOBJ, rFlavor );
@@ -399,7 +399,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
                                         const datatransfer::DataFlavor& rFlavor )
 {
-    // called from SetObject, put data into stream
+    
 
     bool bRet = false;
     switch (nUserObjectId)
@@ -409,7 +409,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                 ScImportExport* pImpEx = (ScImportExport*)pUserObject;
 
                 sal_uInt32 nFormat = SotExchange::GetFormat( rFlavor );
-                // mba: no BaseURL for data exchange
+                
                 if ( pImpEx->ExportStream( *rxOStm, OUString(), nFormat ) )
                     bRet = ( rxOStm->GetError() == ERRCODE_NONE );
             }
@@ -426,9 +426,9 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                 }
                 else
                 {
-                    //  can't use Write for EditEngine format because that would
-                    //  write old format without support for unicode characters.
-                    //  Get the data from the EditEngine's transferable instead.
+                    
+                    
+                    
 
                     sal_Int32 nParCnt = pEngine->GetParagraphCount();
                     if ( nParCnt == 0 )
@@ -445,17 +445,17 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
 
         case SCTRANS_TYPE_EMBOBJ:
             {
-                // TODO/MBA: testing
+                
                 SfxObjectShell*   pEmbObj = (SfxObjectShell*) pUserObject;
                 ::utl::TempFile     aTempFile;
                 aTempFile.EnableKillingFile();
                 uno::Reference< embed::XStorage > xWorkStore =
                     ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
-                // write document storage
+                
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, false, false );
 
-                // mba: no relative ULRs for clipboard!
+                
                 SfxMedium aMedium( xWorkStore, OUString() );
                 bRet = pEmbObj->DoSaveObjectAs( aMedium, false );
                 pEmbObj->DoSaveCompleted();
@@ -499,13 +499,13 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
 {
     if ( nDropAction == DND_ACTION_MOVE && !bDragWasInternal && !(nDragSourceFlags & SC_DROP_NAVIGATOR) )
     {
-        //  move: delete source data
+        
         ScDocShell* pSourceSh = GetSourceDocShell();
         if (pSourceSh)
         {
             ScMarkData aMarkData = GetSourceMarkData();
-            //  external drag&drop doesn't copy objects, so they also aren't deleted:
-            //  bApi=TRUE, don't show error messages from drag&drop
+            
+            
             pSourceSh->GetDocFunc().DeleteContents( aMarkData, IDF_ALL & ~IDF_OBJECTS, true, true );
         }
     }
@@ -514,7 +514,7 @@ void ScTransferObj::DragFinished( sal_Int8 nDropAction )
     if ( pScMod->GetDragData().pCellTransfer == this )
         pScMod->ResetDragObject();
 
-    xDragSourceRanges = NULL;       // don't keep source after dropping
+    xDragSourceRanges = NULL;       
 
     TransferableHelper::DragFinished( nDropAction );
 }
@@ -571,7 +571,7 @@ ScDocShell* ScTransferObj::GetSourceDocShell()
     if (pRangesObj)
         return pRangesObj->GetDocShell();
 
-    return NULL;    // none set
+    return NULL;    
 }
 
 ScMarkData ScTransferObj::GetSourceMarkData()
@@ -587,17 +587,17 @@ ScMarkData ScTransferObj::GetSourceMarkData()
 }
 
 //
-//  initialize aDocShellRef with a live document from the ClipDoc
+
 //
-// #i123405# added parameter to allow size calculation without limitation
-// to PageSize, e.g. used for Metafile creation for clipboard.
+
+
 
 void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 {
     if ( !aDocShellRef.Is() )
     {
         ScDocShell* pDocSh = new ScDocShell;
-        aDocShellRef = pDocSh;      // ref must be there before InitNew
+        aDocShellRef = pDocSh;      
 
         pDocSh->DoInitNew(NULL);
 
@@ -605,11 +605,11 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         ScMarkData aDestMark;
         aDestMark.SelectTable( 0, true );
 
-        pDestDoc->SetDocOptions( pDoc->GetDocOptions() );   // #i42666#
+        pDestDoc->SetDocOptions( pDoc->GetDocOptions() );   
 
         OUString aTabName;
         pDoc->GetName( aBlock.aStart.Tab(), aTabName );
-        pDestDoc->RenameTab( 0, aTabName, false );          // no UpdateRef (empty)
+        pDestDoc->RenameTab( 0, aTabName, false );          
 
         pDestDoc->CopyStdStylesFrom( pDoc );
 
@@ -618,8 +618,8 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         SCCOL nEndX = aBlock.aEnd.Col();
         SCROW nEndY = aBlock.aEnd.Row();
 
-        //  widths / heights
-        //  (must be copied before CopyFromClip, for drawing objects)
+        
+        
 
         SCCOL nCol;
         SCTAB nSrcTab = aBlock.aStart.Tab();
@@ -638,7 +638,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
             {
                 pDestDoc->SetRowHeight( nRow, 0, pDoc->GetOriginalHeight( nRow, nSrcTab ) );
 
-                //  if height was set manually, that flag has to be copied, too
+                
                 bool bManual = pDoc->IsManualRowHeight(nRow, nSrcTab);
                 pDestDoc->SetManualHeight(nRow, nRow, 0, bManual);
             }
@@ -647,14 +647,14 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         if ( pDoc->GetDrawLayer() )
             pDocSh->MakeDrawLayer();
 
-        //  cell range is copied to the original position, but on the first sheet
-        //  -> bCutMode must be set
-        //  pDoc is always a Clipboard-document
+        
+        
+        
 
         ScRange aDestRange( nStartX,nStartY,0, nEndX,nEndY,0 );
         bool bWasCut = pDoc->IsCutMode();
         if (!bWasCut)
-            pDoc->SetClipArea( aDestRange, true );          // Cut
+            pDoc->SetClipArea( aDestRange, true );          
         pDestDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, false );
         pDoc->SetClipArea( aDestRange, bWasCut );
 
@@ -663,11 +663,11 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         ScRange aMergeRange = aDestRange;
         pDestDoc->ExtendMerge( aMergeRange, true );
 
-        pDoc->CopyDdeLinks( pDestDoc );         // copy values of DDE Links
+        pDoc->CopyDdeLinks( pDestDoc );         
 
-        //  page format (grid etc) and page size (maximum size for ole object)
+        
 
-        Size aPaperSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );       // Twips
+        Size aPaperSize = SvxPaperInfo::GetPaperSize( PAPER_A4 );       
         ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
         OUString aStyleName = pDoc->GetPageStyle( aBlock.aStart.Tab() );
         SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PAGE );
@@ -676,7 +676,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
             const SfxItemSet& rSourceSet = pStyleSheet->GetItemSet();
             aPaperSize = ((const SvxSizeItem&) rSourceSet.Get(ATTR_PAGE_SIZE)).GetSize();
 
-            //  CopyStyleFrom kopiert SetItems mit richtigem Pool
+            
             ScStyleSheetPool* pDestPool = pDestDoc->GetStyleSheetPool();
             pDestPool->CopyStyleFrom( pStylePool, aStyleName, SFX_STYLE_FAMILY_PAGE );
         }
@@ -688,8 +688,8 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 
         pDestDoc->SetViewOptions( pDoc->GetViewOptions() );
 
-        //      Size
-        //! get while copying sizes
+        
+        
 
         long nPosX = 0;
         long nPosY = 0;
@@ -701,7 +701,7 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         nPosY = (long) ( nPosY * HMM_PER_TWIPS );
 
 
-        aPaperSize.Width()  *= 2;       // limit OLE object to double of page size
+        aPaperSize.Width()  *= 2;       
         aPaperSize.Height() *= 2;
 
         long nSizeX = 0;
@@ -709,30 +709,30 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
         for (nCol=nStartX; nCol<=nEndX; nCol++)
         {
             long nAdd = pDestDoc->GetColWidth( nCol, 0 );
-            if ( bLimitToPageSize && nSizeX+nAdd > aPaperSize.Width() && nSizeX )   // above limit?
+            if ( bLimitToPageSize && nSizeX+nAdd > aPaperSize.Width() && nSizeX )   
                 break;
             nSizeX += nAdd;
         }
         for (SCROW nRow=nStartY; nRow<=nEndY; nRow++)
         {
             long nAdd = pDestDoc->GetRowHeight( nRow, 0 );
-            if ( bLimitToPageSize && nSizeY+nAdd > aPaperSize.Height() && nSizeY )  // above limit?
+            if ( bLimitToPageSize && nSizeY+nAdd > aPaperSize.Height() && nSizeY )  
                 break;
             nSizeY += nAdd;
         }
         nSizeX = (long) ( nSizeX * HMM_PER_TWIPS );
         nSizeY = (long) ( nSizeY * HMM_PER_TWIPS );
 
-//      pDocSh->SetVisAreaSize( Size(nSizeX,nSizeY) );
+
 
         Rectangle aNewArea( Point(nPosX,nPosY), Size(nSizeX,nSizeY) );
-        //TODO/LATER: why twice?!
-        //pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
+        
+        
         pDocSh->SetVisArea( aNewArea );
 
         pDocSh->UpdateOle(&aViewData, true);
 
-        //! SetDocumentModified?
+        
         if ( pDestDoc->IsChartListenerCollectionNeedsUpdate() )
             pDestDoc->UpdateChartListenerCollection();
     }
@@ -740,13 +740,13 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 
 SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
 {
-    // update ScGlobal::pDrawClipDocShellRef
+    
 
     delete ScGlobal::pDrawClipDocShellRef;
     if (bAnyOle)
     {
         ScGlobal::pDrawClipDocShellRef =
-                        new ScDocShellRef(new ScDocShell(SFX_CREATE_MODE_INTERNAL));      // there must be a ref
+                        new ScDocShellRef(new ScDocShell(SFX_CREATE_MODE_INTERNAL));      
         (*ScGlobal::pDrawClipDocShellRef)->DoInitNew(NULL);
         return *ScGlobal::pDrawClipDocShellRef;
     }
@@ -767,7 +767,7 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
         OSL_ENSURE(nSubX==0&&nSubY==0, "can't move within the document");
     }
 
-    //  In a clipboard doc the data don't have to be on the first sheet
+    
 
     SCTAB nSrcTab = 0;
     while (nSrcTab<pDoc->GetTableCount() && !pDoc->HasTable(nSrcTab))

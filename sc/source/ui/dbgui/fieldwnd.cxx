@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  * This file incorporates work covered by the following license notice:
@@ -32,7 +32,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  ************************************************************************/
 
 #include <config_lgpl.h>
@@ -109,7 +109,7 @@ void ScDPFieldControlBase::ScrollBar::Command( const CommandEvent& rCEvt )
 
 ScDPFieldControlBase::AccessRef::AccessRef( const com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > & rAccessible ) : mxRef( rAccessible ) {}
 
-// easy, safe access to the backing accessible for the lifetime of AccessRef
+
 ScAccessibleDataPilotControl *ScDPFieldControlBase::AccessRef::operator -> () const
 {
     if (!mxRef.is())
@@ -199,7 +199,7 @@ size_t ScDPFieldControlBase::AddField(
 bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& rnIndex)
 {
     if (nCurPos >= maFieldNames.size())
-        // out-of-bound
+        
         return false;
 
     size_t nNewIndex = GetFieldIndex(rPos);
@@ -207,14 +207,14 @@ bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& 
         return false;
 
     if (nNewIndex == nCurPos)
-        // Nothing to do.
+        
         return true;
 
     FieldName aName = maFieldNames[nCurPos];
     ScPivotFuncData aFunc = maFuncData[nCurPos];
     if (nNewIndex >= maFieldNames.size())
     {
-        // Move to the back.
+        
         maFieldNames.erase(maFieldNames.begin()+nCurPos);
         maFieldNames.push_back(aName);
         maFuncData.erase(maFuncData.begin()+nCurPos);
@@ -225,7 +225,7 @@ bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& 
     {
         maFieldNames.erase(maFieldNames.begin()+nCurPos);
         maFuncData.erase(maFuncData.begin()+nCurPos);
-        size_t nTmp = nNewIndex; // we need to keep the original index for accessible.
+        size_t nTmp = nNewIndex; 
         if (nNewIndex > nCurPos)
             --nTmp;
 
@@ -247,7 +247,7 @@ bool ScDPFieldControlBase::MoveField(size_t nCurPos, const Point& rPos, size_t& 
 void ScDPFieldControlBase::DeleteFieldByIndex( size_t nIndex )
 {
     if (!IsExistingIndex(nIndex))
-        // Nothing to delete.
+        
         return;
 
     AccessRef xRef(mxAccessible);
@@ -336,7 +336,7 @@ const vector<ScDPFieldControlBase::FieldName>& ScDPFieldControlBase::GetFieldNam
 
 void ScDPFieldControlBase::Paint( const Rectangle& /* rRect */ )
 {
-    // hiding the caption is now done from StateChanged
+    
     Redraw();
 }
 
@@ -378,8 +378,8 @@ void ScDPFieldControlBase::Command( const CommandEvent& rCEvt )
         const CommandWheelData* pData = rCEvt.GetWheelData();
         if (pData->GetMode() == COMMAND_WHEEL_SCROLL && !pData->IsHorz())
         {
-            // Handle vertical mouse wheel scrolls.
-            long nNotch = pData->GetNotchDelta(); // positive => up; negative => down
+            
+            long nNotch = pData->GetNotchDelta(); 
             HandleWheelScroll(nNotch);
         }
     }
@@ -392,7 +392,7 @@ void ScDPFieldControlBase::MouseButtonDown( const MouseEvent& rMEvt )
         size_t nNewSelectIndex = GetFieldIndex( rMEvt.GetPosPixel() );
         if (nNewSelectIndex != PIVOTFIELD_INVALID && IsExistingIndex(nNewSelectIndex))
         {
-            // grabbing after GetFieldIndex() will prevent to focus empty window
+            
             GrabFocusAndSelect( nNewSelectIndex );
 
             if( rMEvt.GetClicks() == 1 )
@@ -436,7 +436,7 @@ void ScDPFieldControlBase::MouseMove( const MouseEvent& rMEvt )
     }
     const FieldNames& rFields = GetFieldNames();
     size_t nIndex = GetFieldIndex(rMEvt.GetPosPixel());
-    // does the string not fit on the screen ? show a helpful helptext instead
+    
     if (nIndex != PIVOTFIELD_INVALID && (nIndex < rFields.size()) && !rFields[nIndex].mbFits)
     {
         Point aPos = OutputToScreenPixel( rMEvt.GetPosPixel() );
@@ -510,10 +510,10 @@ void ScDPFieldControlBase::GetFocus()
         size_t nOldCount = GetFieldCount();
         mpDlg->NotifyMoveFieldToEnd( GetFieldType() );
         if (GetFieldCount() > nOldCount)
-            // Scroll to the end only when a new field is inserted.
+            
             ScrollToEnd();
     }
-    else // notify change focus
+    else 
         mpDlg->NotifyFieldFocus( GetFieldType(), true );
 
     AccessRef xRef( mxAccessible );
@@ -603,7 +603,7 @@ void ScDPFieldControlBase::DrawField(
     Color aTextColor = rStyleSet.GetButtonTextColor();
 
     VirtualDevice aVirDev( rDev );
-    // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
+    
     aVirDev.EnableRTL( IsRTLEnabled() );
 
     OUString aText = rText.getDisplayedText();
@@ -614,7 +614,7 @@ void ScDPFieldControlBase::DrawField(
     long    nLabelWidth  = rDev.GetTextWidth( aText );
     long    nLabelHeight = rDev.GetTextHeight();
 
-    // #i31600# if text is too long, cut and add ellipsis
+    
     rText.mbFits = nLabelWidth + 6 <= nWidth;
     if (!rText.mbFits)
     {
@@ -715,7 +715,7 @@ void ScDPFieldControlBase::MoveSelection(size_t nIndex)
         return;
 
     if (nIndex >= rFields.size())
-        // Prevent it from going out-of-bound.
+        
         nIndex = rFields.size() - 1;
 
     if( mnFieldSelected != nIndex )
@@ -760,7 +760,7 @@ sal_uInt8 ScDPFieldControlBase::GetNextDupCount(const ScPivotFuncData& rData, si
     for (size_t i = 0, n = maFuncData.size(); i < n; ++i)
     {
         if (i == nSelfIndex)
-            // Skip itself.
+            
             continue;
 
         const ScPivotFuncData& r = maFuncData[i];
@@ -892,7 +892,7 @@ void ScDPFieldControlBase::Resize()
     CalcSize();
 }
 
-//=============================================================================
+
 
 ScDPHorFieldControl::ScDPHorFieldControl ( Window* pParent )  :
     ScDPFieldControlBase( pParent ),
@@ -955,7 +955,7 @@ size_t ScDPHorFieldControl::GetFieldIndex( const Point& rPos )
     }
 
     size_t nOffset = maScroll.GetThumbPos();
-    nCol += nOffset; // convert to logical column ID.
+    nCol += nOffset; 
     size_t nIndex = nCol * mnFieldBtnRowCount + nRow;
     size_t nFldCount = GetFieldCount();
     if (nIndex > nFldCount)
@@ -966,13 +966,13 @@ size_t ScDPHorFieldControl::GetFieldIndex( const Point& rPos )
 void ScDPHorFieldControl::Redraw()
 {
     VirtualDevice   aVirDev;
-    // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
+    
     aVirDev.EnableRTL( IsRTLEnabled() );
     aVirDev.SetMapMode( MAP_PIXEL );
 
     Point           aPos0;
     Size            aSize( GetSizePixel() );
-    Font            aFont( GetFont() );         // Font vom Window
+    Font            aFont( GetFont() );         
     aFont.SetTransparent( true );
     aVirDev.SetFont( aFont );
     aVirDev.SetOutputSizePixel( aSize );
@@ -1066,7 +1066,7 @@ size_t ScDPHorFieldControl::GetDisplayPosition(size_t nIndex) const
     size_t nCol = nIndex / mnFieldBtnRowCount;
     size_t nRow = nIndex % mnFieldBtnRowCount;
     if (nCol < nColFirst || nColLast < nCol)
-        // index is outside the visible area.
+        
         return INVALID_INDEX;
 
     size_t nPos = (nCol - nColFirst)*mnFieldBtnRowCount + nRow;
@@ -1090,12 +1090,12 @@ void ScDPHorFieldControl::ScrollToShowSelection()
     size_t nCol = GetSelectedField() / mnFieldBtnRowCount;
     if (nCol < nLower)
     {
-        // scroll to left.
+        
         maScroll.DoScroll(nCol);
     }
     else if (nUpper < nCol)
     {
-        // scroll to right.
+        
         maScroll.DoScroll(nCol - mnFieldBtnColCount + 1);
     }
 }
@@ -1116,7 +1116,7 @@ void ScDPHorFieldControl::ResetScrollBar()
 
 void ScDPHorFieldControl::HandleWheelScroll(long /*nNotch*/)
 {
-    // not handled for horizontal field controls.
+    
 }
 
 bool ScDPHorFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize)
@@ -1153,7 +1153,7 @@ IMPL_LINK_NOARG(ScDPHorFieldControl, EndScrollHdl)
     return 0;
 }
 
-//=============================================================================
+
 
 ScDPPageFieldControl::ScDPPageFieldControl ( Window* pParent )  :
     ScDPHorFieldControl( pParent )
@@ -1180,7 +1180,7 @@ OUString ScDPPageFieldControl::GetDescription() const
     return ScResId(STR_ACC_DATAPILOT_PAGE_DESCR);
 }
 
-//=============================================================================
+
 
 ScDPColFieldControl::ScDPColFieldControl ( Window* pParent )  :
     ScDPHorFieldControl( pParent )
@@ -1206,7 +1206,7 @@ OUString ScDPColFieldControl::GetDescription() const
     return ScResId(STR_ACC_DATAPILOT_COL_DESCR);
 }
 
-//=============================================================================
+
 
 ScDPRowFieldControl::ScDPRowFieldControl ( Window* pParent )  :
     ScDPFieldControlBase( pParent ),
@@ -1230,7 +1230,7 @@ ScDPRowFieldControl::~ScDPRowFieldControl()
 {
 }
 
-//-------------------------------------------------------------------
+
 
 Point ScDPRowFieldControl::GetFieldPosition(size_t nIndex)
 {
@@ -1272,7 +1272,7 @@ size_t ScDPRowFieldControl::GetFieldIndex( const Point& rPos )
 void ScDPRowFieldControl::Redraw()
 {
     VirtualDevice   aVirDev;
-    // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
+    
     aVirDev.EnableRTL( IsRTLEnabled() );
     aVirDev.SetMapMode( MAP_PIXEL );
 
@@ -1305,8 +1305,8 @@ void ScDPRowFieldControl::Redraw()
         }
     }
 
-    // Create a bitmap from the virtual device, and place that bitmap onto
-    // this control.
+    
+    
     DrawBitmap(aPos0, aVirDev.GetBitmap(aPos0, aWndSize));
 
     DrawPaintables();
@@ -1336,8 +1336,8 @@ void ScDPRowFieldControl::CalcSize()
 
 bool ScDPRowFieldControl::IsValidIndex(size_t /*nIndex*/) const
 {
-    // This method is here in case we decide to impose an arbitrary upper
-    // boundary on the number of fields.
+    
+    
     return true;
 }
 
@@ -1358,7 +1358,7 @@ size_t ScDPRowFieldControl::GetDisplayPosition(size_t nIndex) const
     return INVALID_INDEX;
 }
 
-//-------------------------------------------------------------------
+
 
 OUString ScDPRowFieldControl::GetDescription() const
 {
@@ -1382,12 +1382,12 @@ void ScDPRowFieldControl::ScrollToShowSelection()
     size_t nSel = GetSelectedField();
     if (nSel < nLower)
     {
-        // scroll up
+        
         maScroll.DoScroll(nSel);
     }
     else if (nUpper < nSel)
     {
-        // scroll down
+        
         size_t nD = nSel - nUpper;
         maScroll.DoScroll(nLower + nD);
     }
@@ -1442,7 +1442,7 @@ IMPL_LINK_NOARG(ScDPRowFieldControl, EndScrollHdl)
     return 0;
 }
 
-//=============================================================================
+
 
 ScDPSelectFieldControl::ScDPSelectFieldControl(  Window* pParent ):
     ScDPHorFieldControl( pParent )
@@ -1469,7 +1469,7 @@ OUString ScDPSelectFieldControl::GetDescription() const
     return ScResId(STR_ACC_DATAPILOT_SEL_DESCR);
 }
 
-//=============================================================================
+
 
 ScDPDataFieldControl::ScDPDataFieldControl(  Window* pParent ):
     ScDPHorFieldControl( pParent )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/treelistbox.hxx>
@@ -183,9 +183,9 @@ sal_Bool SvLBoxButtonData::IsRadio() {
     return pImpl->bShowRadioButton;
 }
 
-// ***************************************************************
-// class SvLBoxString
-// ***************************************************************
+
+
+
 
 DBG_NAME(SvLBoxString);
 
@@ -248,8 +248,8 @@ void SvLBoxString::InitViewData(
     if( !pViewData )
         pViewData = pView->GetViewDataItem( pEntry, this );
 
-    // fdo#72125: GetTextWidth() can get very expensive; let's just count
-    // an approximate width using a cached value when we have many entries
+    
+    
     long nTextWidth;
     if (pView->GetEntryCount() > 100)
     {
@@ -268,9 +268,9 @@ void SvLBoxString::InitViewData(
     pViewData->maSize = Size(nTextWidth, pView->GetTextHeight());
 }
 
-// ***************************************************************
-// class SvLBoxBmp
-// ***************************************************************
+
+
+
 
 DBG_NAME(SvLBoxBmp);
 
@@ -320,9 +320,9 @@ void SvLBoxBmp::Clone( SvLBoxItem* pSource )
     aBmp = ((SvLBoxBmp*)pSource)->aBmp;
 }
 
-// ***************************************************************
-// class SvLBoxButton
-// ***************************************************************
+
+
+
 
 DBG_NAME(SvLBoxButton);
 
@@ -383,9 +383,9 @@ void SvLBoxButton::Paint(
     sal_uInt16 nStyle = eKind != SvLBoxButtonKind_disabledCheckbox &&
         rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
 
-///
-//Native drawing
-///
+
+
+
     sal_Bool bNativeOK = sal_False;
     ControlType eCtrlType = (pData->IsRadio())? CTRL_RADIOBUTTON : CTRL_CHECKBOX;
     if ( nIndex != SV_BMP_STATICIMAGE && rDev.IsNativeControlSupported( eCtrlType, PART_ENTIRE_CONTROL) )
@@ -397,7 +397,7 @@ void SvLBoxButton::Paint(
         Rectangle           aCtrlRegion( rPos, aSize );
         ControlState        nState = 0;
 
-        //states CTRL_STATE_DEFAULT, CTRL_STATE_PRESSED and CTRL_STATE_ROLLOVER are not implemented
+        
         if ( IsStateHilighted() )                   nState |= CTRL_STATE_FOCUSED;
         if ( nStyle != IMAGE_DRAW_DISABLE )         nState |= CTRL_STATE_ENABLED;
 
@@ -451,7 +451,7 @@ void SvLBoxButton::ImplAdjustBoxSize( Size& io_rSize, ControlType i_eType, Windo
         if( bNativeOK )
         {
             Size aContentSize( aNativeContent.GetSize() );
-            // leave a little space around the box image (looks better)
+            
             if( aContentSize.Height() + 2 > io_rSize.Height() )
                 io_rSize.Height() = aContentSize.Height() + 2;
             if( aContentSize.Width() + 2 > io_rSize.Width() )
@@ -484,9 +484,9 @@ void SvLBoxButton::SetStateInvisible()
     isVis = false;
 }
 
-// ***************************************************************
-// class SvLBoxContextBmp
-// ***************************************************************
+
+
+
 
 struct SvLBoxContextBmp_Impl
 {
@@ -496,7 +496,7 @@ struct SvLBoxContextBmp_Impl
     bool        m_bExpanded;
 };
 
-// ***************************************************************
+
 DBG_NAME(SvLBoxContextBmp)
 
 SvLBoxContextBmp::SvLBoxContextBmp(
@@ -545,7 +545,7 @@ Image& SvLBoxContextBmp::implGetImageStore( sal_Bool _bFirst )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
 
-    // OJ: #i27071# wrong mode so we just return the normal images
+    
     return _bFirst ? m_pImpl->m_aImage1 : m_pImpl->m_aImage2;
 }
 
@@ -564,11 +564,11 @@ void SvLBoxContextBmp::Paint(
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
 
-    // get the image.
+    
     const Image& rImage = implGetImageStore(pView->IsExpanded() != m_pImpl->m_bExpanded);
 
     sal_Bool _bSemiTransparent = pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & pEntry->GetFlags( ) ) );
-    // draw
+    
     sal_uInt16 nStyle = _rDev.IsEnabled() ? 0 : IMAGE_DRAW_DISABLE;
     if ( _bSemiTransparent )
         nStyle |= IMAGE_DRAW_SEMITRANSPARENT;

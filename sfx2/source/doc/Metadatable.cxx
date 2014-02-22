@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -113,7 +113,7 @@ namespace sfx2 {
 
 static const char s_content [] = "content.xml";
 static const char s_styles  [] = "styles.xml";
-static const char s_prefix  [] = "id";  // prefix for generated xml:id
+static const char s_prefix  [] = "id";  
 
 static bool isContentFile(OUString const & i_rPath)
 {
@@ -126,8 +126,8 @@ static bool isStylesFile (OUString const & i_rPath)
 }
 
 
-//=============================================================================
-// XML ID handling ---------------------------------------------------
+
+
 
 /** handles registration of XMetadatable.
 
@@ -208,7 +208,7 @@ protected:
         const OUString & i_rIdref) const = 0;
 };
 
-// XmlIdRegistryDocument ---------------------------------------------
+
 
 /** non-clipboard documents */
 class XmlIdRegistryDocument : public XmlIdRegistry
@@ -240,7 +240,7 @@ public:
     /** merge i_rMerged and i_rOther into i_rMerged. */
     void JoinMetadatables(Metadatable & i_rMerged, Metadatable const& i_rOther);
 
-    // unfortunately public, Metadatable::RegisterAsCopyOf needs this
+    
     virtual bool LookupXmlId(const Metadatable& i_xObject,
         OUString & o_rStream, OUString & o_rIdref) const;
 
@@ -253,20 +253,20 @@ private:
     ::std::auto_ptr<XmlIdRegistry_Impl> m_pImpl;
 };
 
-// MetadatableUndo ---------------------------------------------------
+
 
 /** the horrible Undo Metadatable: is inserted into lists to track position */
 class MetadatableUndo : public Metadatable
 {
-    /// as determined by the stream of the source in original document
+    
     const bool m_isInContent;
 public:
     MetadatableUndo(const bool i_isInContent)
         : m_isInContent(i_isInContent) { }
     virtual ::sfx2::XmlIdRegistry& GetRegistry()
     {
-        // N.B. for Undo, m_pReg is initialized by registering this as copy in
-        // CreateUndo; it is never cleared
+        
+        
         OSL_ENSURE(m_pReg, "no m_pReg in MetadatableUndo ?");
         return *m_pReg;
     }
@@ -278,20 +278,20 @@ public:
     { OSL_FAIL("MetadatableUndo::MakeUnoObject"); throw; }
 };
 
-// MetadatableClipboard ----------------------------------------------
+
 
 /** the horrible Clipboard Metadatable: inserted into lists to track position */
 class MetadatableClipboard : public Metadatable
 {
-    /// as determined by the stream of the source in original document
+    
     const bool m_isInContent;
 public:
     MetadatableClipboard(const bool i_isInContent)
         : m_isInContent(i_isInContent) { }
     virtual ::sfx2::XmlIdRegistry& GetRegistry()
     {
-    // N.B. for Clipboard, m_pReg is initialized by registering this as copy in
-    // RegisterAsCopyOf; it is only cleared by OriginNoLongerInBusinessAnymore
+    
+    
         OSL_ENSURE(m_pReg, "no m_pReg in MetadatableClipboard ?");
         return *m_pReg;
     }
@@ -304,7 +304,7 @@ public:
     void OriginNoLongerInBusinessAnymore() { m_pReg = 0; }
 };
 
-// XmlIdRegistryClipboard --------------------------------------------
+
 
 class XmlIdRegistryClipboard : public XmlIdRegistry
 {
@@ -346,8 +346,8 @@ private:
 };
 
 
-//=============================================================================
-// XmlIdRegistry
+
+
 
 ::sfx2::IXmlIdRegistry * createXmlIdRegistry(const bool i_DocIsClipboard)
 {
@@ -389,7 +389,7 @@ XmlIdRegistry::GetXmlIdForElement(const Metadatable& i_rObject) const
 }
 
 
-/// generate unique xml:id
+
 template< typename T >
 /*static*/ OUString create_id(const
     ::boost::unordered_map< OUString, T, OUStringHash > & i_rXmlIdMap)
@@ -425,17 +425,17 @@ template< typename T >
     return id;
 }
 
-//=============================================================================
-// Document XML ID Registry (_Impl)
 
-/// element list
+
+
+
 typedef ::std::list< Metadatable* > XmlIdList_t;
 
-/// Idref -> (content.xml element list, styles.xml element list)
+
 typedef ::boost::unordered_map< OUString,
     ::std::pair< XmlIdList_t, XmlIdList_t >, OUStringHash > XmlIdMap_t;
 
-/// pointer hash template
+
 template<typename T> struct PtrHash
 {
     size_t operator() (T const * i_pT) const
@@ -444,7 +444,7 @@ template<typename T> struct PtrHash
     }
 };
 
-/// element -> (stream name, idref)
+
 typedef ::boost::unordered_map< const Metadatable*,
     ::std::pair< OUString, OUString>, PtrHash<Metadatable> >
     XmlIdReverseMap_t;
@@ -480,7 +480,7 @@ struct XmlIdRegistryDocument::XmlIdRegistry_Impl
     XmlIdReverseMap_t m_XmlIdReverseMap;
 };
 
-// -------------------------------------------------------------------
+
 
 static void
 rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
@@ -498,7 +498,7 @@ rmIter(XmlIdMap_t & i_rXmlIdMap, XmlIdMap_t::iterator const& i_rIter,
     }
 }
 
-// -------------------------------------------------------------------
+
 
 const XmlIdList_t *
 XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElementList(
@@ -593,9 +593,9 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
         }
         else
         {
-            // this is only called from TryRegister now, so check
-            // if all elements in the list are deleted (in undo) or
-            // placeholders, then "steal" the id from them
+            
+            
+            
             if ( pList->end() == ::std::find_if(pList->begin(), pList->end(),
                 ::boost::bind(
                     ::std::logical_not<bool>(),
@@ -623,8 +623,8 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::TryInsertMetadatable(
     }
 }
 
-//=============================================================================
-// Document XML ID Registry
+
+
 
 
 XmlIdRegistryDocument::XmlIdRegistryDocument()
@@ -651,7 +651,7 @@ removeLink(Metadatable* i_pObject)
 
 XmlIdRegistryDocument::~XmlIdRegistryDocument()
 {
-    // notify all list elements that are actually in the clipboard
+    
     for (XmlIdMap_t::iterator iter(m_pImpl->m_XmlIdMap.begin());
         iter != m_pImpl->m_XmlIdMap.end(); ++iter)
     {
@@ -743,7 +743,7 @@ XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
     const bool isInContent( i_rObject.IsInContent() );
     const OUString stream( OUString::createFromAscii(
         isInContent ? s_content : s_styles ) );
-    // check if we have a latent xmlid, and if yes, remove it
+    
     OUString old_path;
     OUString old_idref;
     m_pImpl->LookupXmlId(i_rObject, old_path, old_idref);
@@ -759,12 +759,12 @@ XmlIdRegistryDocument::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
         }
         else
         {
-            // remove latent xmlid
+            
             rmIter(m_pImpl->m_XmlIdMap, old_id, old_path, i_rObject);
         }
     }
 
-    // create id
+    
     const OUString id( create_id(m_pImpl->m_XmlIdMap) );
     OSL_ENSURE(m_pImpl->m_XmlIdMap.find(id) == m_pImpl->m_XmlIdMap.end(),
         "created id is in use");
@@ -806,7 +806,7 @@ void XmlIdRegistryDocument::RemoveXmlIdForElement(const Metadatable& i_rObject)
     }
 }
 
-// -------------------------------------------------------------------
+
 
 void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
     Metadatable & i_rCopy, const bool i_bCopyPrecedesSource)
@@ -814,9 +814,9 @@ void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
     OSL_TRACE("RegisterCopy: %p -> %p (%d)\n",
         &i_rSource, &i_rCopy, i_bCopyPrecedesSource);
 
-    // potential sources: clipboard, undo array, splitNode
-    // assumption: stream change can only happen via clipboard, and is handled
-    // by Metadatable::RegisterAsCopyOf
+    
+    
+    
     OSL_ENSURE(i_rSource.IsInUndo() || i_rCopy.IsInUndo() ||
         (i_rSource.IsInContent() == i_rCopy.IsInContent()),
         "RegisterCopy: not in same stream?");
@@ -844,7 +844,7 @@ void XmlIdRegistryDocument::RegisterCopy(Metadatable const& i_rSource,
     }
     else
     {
-        // for undo push_back does not work! must insert right after source
+        
         pList->insert( ++srcpos, &i_rCopy );
     }
     m_pImpl->m_XmlIdReverseMap.insert(::std::make_pair(&i_rCopy,
@@ -901,13 +901,13 @@ XmlIdRegistryDocument::JoinMetadatables(
         i_rMerged.RegisterAsCopyOf(i_rOther, true);
         return;
     }
-    // other cases: merged has actual ref and is nonempty,
-    // other has latent/actual ref and is nonempty: other loses => nothing to do
+    
+    
 }
 
 
-//=============================================================================
-// Clipboard XML ID Registry (_Impl)
+
+
 
 struct RMapEntry
 {
@@ -920,17 +920,17 @@ struct RMapEntry
         {}
     OUString m_Stream;
     OUString m_XmlId;
-    // this would have been an auto_ptr, if only that would have compiled...
+    
     ::boost::shared_ptr<MetadatableClipboard> m_pLink;
 };
 
-/// element -> (stream name, idref, source)
+
 typedef ::boost::unordered_map< const Metadatable*,
     struct RMapEntry,
     PtrHash<Metadatable> >
     ClipboardXmlIdReverseMap_t;
 
-/// Idref -> (content.xml element, styles.xml element)
+
 typedef ::boost::unordered_map< OUString,
     ::std::pair< Metadatable*, Metadatable* >, OUStringHash >
     ClipboardXmlIdMap_t;
@@ -965,7 +965,7 @@ struct XmlIdRegistryClipboard::XmlIdRegistry_Impl
     ClipboardXmlIdReverseMap_t m_XmlIdReverseMap;
 };
 
-// -------------------------------------------------------------------
+
 
 static void
 rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
@@ -987,7 +987,7 @@ rmIter(ClipboardXmlIdMap_t & i_rXmlIdMap,
     }
 }
 
-// -------------------------------------------------------------------
+
 
 Metadatable* const*
 XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupEntry(
@@ -1080,8 +1080,8 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::TryInsertMetadatable(
     }
 }
 
-//=============================================================================
-// Clipboard XML ID Registry
+
+
 
 
 XmlIdRegistryClipboard::XmlIdRegistryClipboard()
@@ -1186,15 +1186,15 @@ XmlIdRegistryClipboard::RegisterMetadatableAndCreateID(Metadatable & i_rObject)
         return;
     }
 
-    // create id
+    
     const OUString id( create_id(m_pImpl->m_XmlIdMap) );
     OSL_ENSURE(m_pImpl->m_XmlIdMap.find(id) == m_pImpl->m_XmlIdMap.end(),
         "created id is in use");
     m_pImpl->m_XmlIdMap.insert(::std::make_pair(id, isInContent
         ? ::std::make_pair( &i_rObject, static_cast<Metadatable*>(0) )
         : ::std::make_pair( static_cast<Metadatable*>(0), &i_rObject )));
-    // N.B.: if i_rObject had a latent XmlId, then we implicitly delete the
-    // MetadatableClipboard and thus the latent XmlId here
+    
+    
     m_pImpl->m_XmlIdReverseMap[&i_rObject] = RMapEntry(stream, id);
 }
 
@@ -1232,7 +1232,7 @@ void XmlIdRegistryClipboard::RemoveXmlIdForElement(const Metadatable& i_rObject)
     }
 }
 
-// -------------------------------------------------------------------
+
 
 ::boost::shared_ptr<MetadatableClipboard>
 XmlIdRegistryClipboard::CreateClipboard(const bool i_isInContent)
@@ -1256,9 +1256,9 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
             RTL_TEXTENCODING_UTF8).getStr(),
         i_isLatent);
 
-    // N.B.: when copying to the clipboard, the selection is always inserted
-    //       into the body, even if the source is a header/footer!
-    //       so we do not check whether the stream is right in this function
+    
+    
+    
 
     if (!isValidXmlId(i_rReference.First, i_rReference.Second))
     {
@@ -1268,7 +1268,7 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
 
     if (!i_isLatent)
     {
-        // this should succeed assuming clipboard has a single source document
+        
         const bool success( m_pImpl->TryInsertMetadatable(i_rCopy,
                 i_rReference.First, i_rReference.Second) );
         OSL_ENSURE(success, "RegisterCopyClipboard: TryInsert failed?");
@@ -1292,8 +1292,8 @@ XmlIdRegistryClipboard::SourceLink(Metadatable const& i_rObject)
 }
 
 
-//=============================================================================
-// Metadatable mixin
+
+
 
 
 Metadatable::~Metadatable()
@@ -1318,7 +1318,7 @@ void Metadatable::RemoveMetadataReference()
     }
 }
 
-// ::com::sun::star::rdf::XMetadatable:
+
 beans::StringPair
 Metadatable::GetMetadataReference() const
 {
@@ -1342,8 +1342,8 @@ Metadatable::SetMetadataReference(
         OUString streamName( i_rReference.First );
         if (streamName.isEmpty())
         {
-            // handle empty stream name as auto-detect.
-            // necessary for importing flat file format.
+            
+            
             streamName = OUString::createFromAscii(
                             IsInContent() ? s_content : s_styles );
         }
@@ -1411,7 +1411,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
                 }
                 return;
             }
-            // source is in different document
+            
             XmlIdRegistryDocument  * pRegDoc(
                 dynamic_cast<XmlIdRegistryDocument *>(&rReg) );
             XmlIdRegistryClipboard * pRegClp(
@@ -1426,7 +1426,7 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
                     dynamic_cast<XmlIdRegistryDocument*>(i_rSource.m_pReg) );
                 OSL_ENSURE(pSourceRegDoc, "RegisterAsCopyOf: 2 clipboards?");
                 if (!pSourceRegDoc) return;
-                // this is a copy _to_ the clipboard
+                
                 if (isLatent)
                 {
                     pSourceRegDoc->LookupXmlId(i_rSource,
@@ -1435,9 +1435,9 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
                 Metadatable & rLink(
                     pRegClp->RegisterCopyClipboard(*this, SourceRef, isLatent));
                 this->m_pReg = pRegClp;
-                // register as copy in the non-clipboard registry
+                
                 pSourceRegDoc->RegisterCopy(i_rSource, rLink,
-                    false); // i_bCopyPrecedesSource);
+                    false); 
                 rLink.m_pReg = pSourceRegDoc;
             }
             else if (pRegDoc)
@@ -1449,23 +1449,23 @@ Metadatable::RegisterAsCopyOf(Metadatable const & i_rSource,
                 if (!pSourceRegClp) return;
                 const MetadatableClipboard * pLink(
                     pSourceRegClp->SourceLink(i_rSource) );
-                // may happen if src got its id via UNO call
+                
                 if (!pLink) return;
-                // only register copy if clipboard content is from this SwDoc!
+                
                 if (pLink && (&GetRegistryConst(*pLink) == pRegDoc))
                 {
-                    // this is a copy _from_ the clipboard; check if the
-                    // element is still in the same stream
-                    // N.B.: we check the stream of pLink, not of i_rSource!
+                    
+                    
+                    
                     bool srcInContent( pLink->IsInContent() );
                     bool tgtInContent( this->IsInContent() );
                     if (srcInContent == tgtInContent)
                     {
                         pRegDoc->RegisterCopy(*pLink, *this,
-                            true); // i_bCopyPrecedesSource);
+                            true); 
                         this->m_pReg = pRegDoc;
                     }
-                    // otherwise: stream change! do not register!
+                    
                 }
             }
             else
@@ -1536,7 +1536,7 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 
     if (i_isOtherEmpty && !i_isMergedEmpty)
     {
-        // other is empty, thus loses => nothing to do
+        
         return;
     }
     if (i_isMergedEmpty && !i_isOtherEmpty)
@@ -1548,13 +1548,13 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 
     if (!i_rOther.m_pReg)
     {
-        // other doesn't have xmlid, thus loses => nothing to do
+        
         return;
     }
     if (!m_pReg)
     {
         this->RegisterAsCopyOf(i_rOther, true);
-        // assumption: i_rOther will be deleted, so don't unregister it here
+        
         return;
     }
     try
@@ -1574,17 +1574,17 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 }
 
 
-//=============================================================================
-// XMetadatable mixin
 
-// ::com::sun::star::rdf::XNode:
+
+
+
 OUString SAL_CALL MetadatableMixin::getStringValue()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return getNamespace() + getLocalName();
 }
 
-// ::com::sun::star::rdf::XURI:
+
 OUString SAL_CALL MetadatableMixin::getLocalName()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -1592,7 +1592,7 @@ OUString SAL_CALL MetadatableMixin::getLocalName()
     beans::StringPair mdref( getMetadataReference() );
     if (mdref.Second.isEmpty())
     {
-        ensureMetadataReference(); // N.B.: side effect!
+        ensureMetadataReference(); 
         mdref = getMetadataReference();
     }
     OUStringBuffer buf;
@@ -1611,7 +1611,7 @@ OUString SAL_CALL MetadatableMixin::getNamespace()
     return xDMA->getStringValue();
 }
 
-// ::com::sun::star::rdf::XMetadatable:
+
 beans::StringPair SAL_CALL
 MetadatableMixin::getMetadataReference()
 throw (uno::RuntimeException)
@@ -1663,10 +1663,10 @@ throw (uno::RuntimeException)
     return pObject->EnsureMetadataReference();
 }
 
-} // namespace sfx2
+} 
 
 
-//=============================================================================
+
 
 #if OSL_DEBUG_LEVEL > 1
 

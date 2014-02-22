@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,14 +44,14 @@ using namespace com::sun::star::test::performance;
 namespace benchmark_object
 {
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME);
     return Sequence< OUString >( &aName, 1 );
 }
 
-//==================================================================================================
+
 class ServiceImpl
     : public XServiceInfo
     , public XPerformanceTest
@@ -72,10 +72,10 @@ public:
         : _nRef( 0 )
         {}
 
-    // XInterface
+    
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException)
     {
-        // execution time remains appr. constant any time
+        
         Any aRet;
         if (aType == ::getCppuType( (const Reference< XInterface > *)0 ))
         {
@@ -99,12 +99,12 @@ public:
     virtual void SAL_CALL release() throw()
         { if (! osl_atomic_decrement( &_nRef )) delete this; }
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 
-    // Attributes
+    
     virtual sal_Int32 SAL_CALL getLong_attr() throw(::com::sun::star::uno::RuntimeException)
         { return 0; }
     virtual void SAL_CALL setLong_attr( sal_Int32 _attributelong ) throw(::com::sun::star::uno::RuntimeException)
@@ -142,7 +142,7 @@ public:
     virtual void SAL_CALL setStruct_attr( const ::com::sun::star::test::performance::ComplexTypes& _attributestruct ) throw(::com::sun::star::uno::RuntimeException)
         {}
 
-    // Methods
+    
     virtual sal_Int32 SAL_CALL getLong() throw(::com::sun::star::uno::RuntimeException)
         { return 0; }
     virtual void SAL_CALL setLong( sal_Int32 _long ) throw(::com::sun::star::uno::RuntimeException)
@@ -198,31 +198,31 @@ public:
         { throw _aDummyRE; }
 };
 
-//##################################################################################################
 
-// XServiceInfo
-//__________________________________________________________________________________________________
+
+
+
 OUString ServiceImpl::getImplementationName()
     throw (RuntimeException)
 {
     return OUString( IMPLNAME );
 }
-//__________________________________________________________________________________________________
+
 sal_Bool ServiceImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > ServiceImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return benchmark_object::getSupportedServiceNames();
 }
 
-// ...
 
-//==================================================================================================
+
+
 static Reference< XInterface > SAL_CALL ServiceImpl_create( const Reference< XMultiServiceFactory > & xSMgr )
 {
     return Reference< XInterface >( (XPerformanceTest *)new ServiceImpl( xSMgr ) );
@@ -231,9 +231,9 @@ static Reference< XInterface > SAL_CALL ServiceImpl_create( const Reference< XMu
 }
 
 
-//##################################################################################################
-//##################################################################################################
-//##################################################################################################
+
+
+
 
 
 extern "C"
@@ -259,7 +259,7 @@ sal_Bool SAL_CALL component_writeInfo(
     }
     return sal_False;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {

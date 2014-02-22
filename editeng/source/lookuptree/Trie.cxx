@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <editeng/Trie.hxx>
@@ -101,7 +101,7 @@ TrieNode* TrieNode::findChild(sal_Unicode aInputCharacter)
 
 void TrieNode::collectSuggestions(OUString sPath, vector<OUString>& rSuggestionList)
 {
-    // first traverse nodes for alphabet characters
+    
     for (int i=0; i<LATIN_ARRAY_SIZE; i++)
     {
         TrieNode* pCurrent = mLatinArray[i];
@@ -109,7 +109,7 @@ void TrieNode::collectSuggestions(OUString sPath, vector<OUString>& rSuggestionL
             collectSuggestionsForCurrentNode(pCurrent, sPath, rSuggestionList);
     }
 
-    // traverse nodes for other characters
+    
     vector<TrieNode*>::iterator iNode;
     for(iNode = mChildren.begin(); iNode != mChildren.end(); ++iNode)
     {
@@ -126,7 +126,7 @@ void TrieNode::collectSuggestionsForCurrentNode(TrieNode* pCurrent, OUString sPa
     {
         rSuggestionList.push_back(aStringPath);
     }
-    // recursivly descend tree
+    
     pCurrent->collectSuggestions(aStringPath, rSuggestionList);
 }
 
@@ -156,13 +156,13 @@ Trie::~Trie()
 
 void Trie::insert(OUString sInputString) const
 {
-    // adding an empty word is not allowed
+    
     if ( sInputString.isEmpty() )
     {
         return;
     }
 
-    // traverse the input string and modify the tree with new nodes / characters
+    
 
     TrieNode* pCurrent = mRoot.get();
     sal_Unicode aCurrentChar;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
@@ -77,7 +77,7 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
         if( rAttribs.hasAttribute( XML_idx ) )
             mpGroupShapePtr->setSubTypeIndex( rAttribs.getString( XML_idx ).get().toInt32() );
         break;
-    // nvSpPr CT_ShapeNonVisual end
+    
 
     case PPT_TOKEN( grpSpPr ):
         return new oox::drawingml::ShapePropertiesContext( *this, *mpGroupShapePtr );
@@ -87,27 +87,27 @@ ContextHandlerRef PPTShapeGroupContext::onCreateContext( sal_Int32 aElementToken
     case PPT_TOKEN( style ):
         return new ShapeStyleContext( getParser() );
 */
-    case PPT_TOKEN( cxnSp ):        // connector shape
+    case PPT_TOKEN( cxnSp ):        
         return new oox::drawingml::ConnectorShapeContext( *this, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.ConnectorShape" ) ) );
-    case PPT_TOKEN( grpSp ):        // group shape
+    case PPT_TOKEN( grpSp ):        
         return new PPTShapeGroupContext( *this, mpSlidePersistPtr, meShapeLocation, mpGroupShapePtr, oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) );
-    case PPT_TOKEN( sp ):           // Shape
+    case PPT_TOKEN( sp ):           
         {
             boost::shared_ptr<PPTShape> pShape( new PPTShape( meShapeLocation, "com.sun.star.drawing.CustomShape" ) );
             if( rAttribs.getBool( XML_useBgFill, false ) )
             {
                 ::oox::drawingml::FillProperties &aFill = pShape->getFillProperties();
                 aFill.moFillType = XML_solidFill;
-                // This is supposed to fill with slide (background) color, but
-                // TODO: We are using white here, because thats the closest we can assume (?)
+                
+                
                 aFill.maFillColor.setSrgbClr( API_RGB_WHITE );
             }
             pShape->setModelId(rAttribs.getString( XML_modelId ).get());
             return new PPTShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr, pShape );
         }
-    case PPT_TOKEN( pic ):          // CT_Picture
+    case PPT_TOKEN( pic ):          
         return new PPTGraphicShapeContext( *this, mpSlidePersistPtr, mpGroupShapePtr,  oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GraphicObjectShape" ) ) );
-    case PPT_TOKEN( graphicFrame ): // CT_GraphicalObjectFrame
+    case PPT_TOKEN( graphicFrame ): 
         {
             if( pGraphicShape )
                 importExtDrawings();

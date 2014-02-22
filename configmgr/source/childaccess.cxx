@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -265,8 +265,8 @@ css::uno::Any ChildAccess::asValue() {
             OUString locale(getRootAccess()->getLocale());
             if (!Components::allLocales(locale)) {
                 rtl::Reference< ChildAccess > child(getChild("*" + locale));
-                // As a last resort, return a nil value even though it may be
-                // illegal for the given property:
+                
+                
                 return child.is() ? child->asValue() : css::uno::Any();
             }
         }
@@ -299,7 +299,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
                 Data::NO_LAYER, *changedValue_);
             break;
         default:
-            assert(false); // this cannot happen
+            assert(false); 
             break;
         }
     }

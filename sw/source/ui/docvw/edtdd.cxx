@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -42,7 +42,7 @@
 
 using namespace ::com::sun::star;
 
-// no include "dbgoutsw.hxx" here!!!!!!
+
 
 extern bool bNoInterrupt;
 extern bool bFrmDrag;
@@ -77,7 +77,7 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         if( rSh.GetDrawView()->Command( aDragEvent, this ) )
         {
             m_rView.GetViewFrame()->GetBindings().InvalidateAll(sal_False);
-            return; // Event evaluated by SdrView
+            return; 
         }
     }
 
@@ -87,13 +87,13 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         SdrObject *pObj = NULL;
         Point aDocPos( PixelToLogic( rPosPixel ) );
         if ( !rSh.IsInSelect() && rSh.ChgCurrPam( aDocPos, sal_True, sal_True))
-            //We are not selecting and aren't at a selection
+            
             bStart = sal_True;
         else if ( !bFrmDrag && rSh.IsSelFrmMode() &&
                     rSh.IsInsideSelectedObj( aDocPos ) )
         {
-            //We are not dragging internally and are not at an
-            //object (frame, draw object)
+            
+            
 
             bStart = sal_True;
         }
@@ -159,7 +159,7 @@ void SwEditWin::DropCleanup()
 {
     SwWrtShell &rSh =  m_rView.GetWrtShell();
 
-    // reset statuses
+    
     bNoInterrupt = false;
     if ( m_bOldIdleSet )
     {
@@ -184,7 +184,7 @@ void SwEditWin::CleanupDropUserMarker()
 }
 
 
-//exhibition hack (MA,MBA)
+
 void SwView::SelectShellForDrop()
 {
     if ( !GetCurShell() )
@@ -197,7 +197,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     DropCleanup();
     sal_Int8 nRet = DND_ACTION_NONE;
 
-    //A Drop to an open OutlinerView doesn't concern us (also see QueryDrop)
+    
     SwWrtShell &rSh = m_rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rEvt.maPosPixel ));
     SdrObject *pObj = 0;
@@ -217,13 +217,13 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
         }
     }
 
-    // There's a special treatment for file lists with a single
-    // element, that depends on the actual content of the
-    // Transferable to be accessible. Since the transferable
-    // may only be accessed after the drop has been accepted
-    // (according to KA due to Java D&D), we'll have to
-    // reevaluate the drop action once more _with_ the
-    // Transferable.
+    
+    
+    
+    
+    
+    
+    
     sal_uInt16 nEventAction;
     sal_Int8 nUserOpt = rEvt.mbDefault ? EXCHG_IN_ACTION_DEFAULT
                                        : rEvt.mnAction;
@@ -241,7 +241,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                 m_nDropDestination, sal_False, rEvt.mbDefault, &aDocPt, nRet))
         nRet = DND_ACTION_NONE;
     else if ( SW_MOD()->pDragDrop )
-        //Don't clean up anymore at internal D&D!
+        
         SW_MOD()->pDragDrop->SetCleanUp( sal_False );
 
     return nRet;
@@ -260,7 +260,7 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
     SdrObject *pObj = NULL;
     const ObjCntType eType = rSh.GetObjCntType( aDocPt, pObj );
 
-    //Drop to OutlinerView (TextEdit in Drawing) should decide it on its own!
+    
     if( pObj )
     {
         OutlinerView* pOLV = rSh.GetDrawView()->GetTextEditOutlinerView();
@@ -274,10 +274,10 @@ sal_uInt16 SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject ** ppO
         }
     }
 
-    //What do we want to drop on now?
+    
     sal_uInt16 nDropDestination = 0;
 
-    //Did anything else arrive from the DrawingEngine?
+    
     if( OBJCNT_NONE != eType )
     {
         switch ( eType )
@@ -340,8 +340,8 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     Point aPixPt( rEvt.maPosPixel );
 
-    // If the cursor is near the inner boundary
-    // we attempt to scroll towards the desired direction.
+    
+    
     Point aPoint;
     Rectangle aWin(aPoint,GetOutputSizePixel());
     const int nMargin = 10;
@@ -394,12 +394,12 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
     {
         const Point aDocPt( PixelToLogic( aPixPt ) );
 
-        //With the default action we still want to have a say.
+        
         SwModule *pMod = SW_MOD();
         if( pMod->pDragDrop )
         {
             sal_Bool bCleanup = sal_False;
-            //Drawing objects in Headers/Footers are not allowed
+            
 
             SwWrtShell *pSrcSh = pMod->pDragDrop->GetShell();
             if( (pSrcSh->GetSelFrmType() == FRMTYPE_DRAWOBJ) &&
@@ -408,7 +408,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             {
                 bCleanup = sal_True;
             }
-            // don't more position protected objects!
+            
             else if( DND_ACTION_MOVE == rEvt.mnAction &&
                      pSrcSh->IsSelObjProtected( FLYPROTECT_POS ) )
             {
@@ -416,8 +416,8 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
             }
             else if( rEvt.mbDefault )
             {
-                // internal Drag&Drop: within same Doc a Move
-                // otherwise a Copy - Task 54974
+                
+                
                 nEventAction = pSrcSh->GetDoc() == rSh.GetDoc()
                                     ? DND_ACTION_MOVE
                                     : DND_ACTION_COPY;
@@ -431,7 +431,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         }
         else
         {
-            //D&D from outside of SW should be a Copy per default.
+            
             if( EXCHG_IN_ACTION_DEFAULT == nEventAction &&
                 DND_ACTION_MOVE == rEvt.mnAction )
                 nEventAction = DND_ACTION_COPY;
@@ -449,7 +449,7 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
         if ( EXCHG_IN_ACTION_DEFAULT != nEventAction )
             nUserOpt = (sal_Int8)nEventAction;
 
-        // show DropCursor or UserMarker ?
+        
         if( EXCHG_DEST_SWDOC_FREE_AREA_WEB == m_nDropDestination ||
             EXCHG_DEST_SWDOC_FREE_AREA == m_nDropDestination )
         {

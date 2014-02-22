@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -76,16 +76,16 @@ XMLFootnoteSeparatorImport::~XMLFootnoteSeparatorImport()
 void XMLFootnoteSeparatorImport::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    // get the values from the properties
+    
     sal_Int16 nLineWeight = 0;
     sal_Int32 nLineColor = 0;
     sal_Int8 nLineRelWidth = 0;
-    sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT; // enum text::HorizontalAdjust
+    sal_Int16 eLineAdjust = text::HorizontalAdjust_LEFT; 
     sal_Int32 nLineTextDistance = 0;
     sal_Int32 nLineDistance = 0;
     sal_Int8 nLineStyle = 0;
 
-    // iterate over xattribute list and fill values
+    
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
@@ -165,7 +165,7 @@ void XMLFootnoteSeparatorImport::StartElement(
         }
     }
 
-    // OK, now we have all values and can fill the XMLPropertyState vector
+    
     Any aAny;
     sal_Int32 nIndex;
 

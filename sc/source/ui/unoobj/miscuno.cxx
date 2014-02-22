@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/supportsservice.hxx>
@@ -26,11 +26,11 @@ using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScNameToIndexAccess, "ScNameToIndexAccess", "stardiv.unknown" )
 
-//------------------------------------------------------------------------
+
 
 uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::Any& rAny )
 {
@@ -38,7 +38,7 @@ uno::Reference<uno::XInterface> ScUnoHelpFunctions::AnyToInterface( const uno::A
     {
         return uno::Reference<uno::XInterface>(rAny, uno::UNO_QUERY);
     }
-    return uno::Reference<uno::XInterface>();   //! Exception?
+    return uno::Reference<uno::XInterface>();   
 }
 
 bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertySet>& xProp,
@@ -50,17 +50,17 @@ bool ScUnoHelpFunctions::GetBoolProperty( const uno::Reference<beans::XPropertyS
         try
         {
             uno::Any aAny(xProp->getPropertyValue( rName ));
-            //! type conversion???
-            //  operator >>= shouldn't be used for bool (?)
+            
+            
             if ( aAny.getValueTypeClass() == uno::TypeClass_BOOLEAN )
             {
-                //! safe way to get bool value from any???
+                
                 bRet = *(sal_Bool*)aAny.getValue();
             }
         }
         catch(uno::Exception&)
         {
-            // keep default
+            
         }
     }
     return bRet;
@@ -74,12 +74,12 @@ sal_Int32 ScUnoHelpFunctions::GetLongProperty( const uno::Reference<beans::XProp
     {
         try
         {
-            //! type conversion???
+            
             xProp->getPropertyValue( rName ) >>= nRet;
         }
         catch(uno::Exception&)
         {
-            // keep default
+            
         }
     }
     return nRet;
@@ -97,18 +97,18 @@ sal_Int32 ScUnoHelpFunctions::GetEnumProperty( const uno::Reference<beans::XProp
 
             if ( aAny.getValueTypeClass() == uno::TypeClass_ENUM )
             {
-                //! get enum value from any???
+                
                 nRet = *(sal_Int32*)aAny.getValue();
             }
             else
             {
-                //! type conversion???
+                
                 aAny >>= nRet;
             }
         }
         catch(uno::Exception&)
         {
-            // keep default
+            
         }
     }
     return nRet;
@@ -181,11 +181,11 @@ void ScUnoHelpFunctions::SetOptionalPropertyValue(
     }
     catch (const beans::UnknownPropertyException&)
     {
-        // ignored - not supported.
+        
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScIndexEnumeration::ScIndexEnumeration(const uno::Reference<container::XIndexAccess>& rInd,
                                        const OUString& rServiceName) :
@@ -199,7 +199,7 @@ ScIndexEnumeration::~ScIndexEnumeration()
 {
 }
 
-// XEnumeration
+
 
 sal_Bool SAL_CALL ScIndexEnumeration::hasMoreElements() throw(uno::RuntimeException)
 {
@@ -245,15 +245,15 @@ sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceNa
     return aRet;
 }
 
-//------------------------------------------------------------------------
 
-//------------------------------------------------------------------------
+
+
 
 ScNameToIndexAccess::ScNameToIndexAccess( const com::sun::star::uno::Reference<
                                             com::sun::star::container::XNameAccess>& rNameObj ) :
     xNameAccess( rNameObj )
 {
-    //! test for XIndexAccess interface at rNameObj, use that instead!
+    
 
     if ( xNameAccess.is() )
         aNames = xNameAccess->getElementNames();
@@ -263,7 +263,7 @@ ScNameToIndexAccess::~ScNameToIndexAccess()
 {
 }
 
-// XIndexAccess
+
 
 sal_Int32 SAL_CALL ScNameToIndexAccess::getCount(  ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -281,7 +281,7 @@ sal_Int32 SAL_CALL ScNameToIndexAccess::getCount(  ) throw(::com::sun::star::uno
     throw lang::IndexOutOfBoundsException();
 }
 
-// XElementAccess
+
 
 ::com::sun::star::uno::Type SAL_CALL ScNameToIndexAccess::getElementType(  )
                                 throw(::com::sun::star::uno::RuntimeException)
@@ -297,7 +297,7 @@ sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  ) throw(::com::sun::star::u
     return getCount() > 0;
 }
 
-//------------------------------------------------------------------------
+
 
 
 

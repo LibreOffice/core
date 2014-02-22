@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/macros.h>
@@ -396,7 +396,7 @@ CommandTypeEnum WpADOCommand::get_CommandType( ) const
     return eNum;
 }
 
-// returns the name of the field
+
 OUString WpADOCommand::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -489,7 +489,7 @@ sal_Int32 WpADOField::GetStatus() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
     sal_Int32 eADOSFieldAttributes=0;
-    //  pInterface->get_Status(&eADOSFieldAttributes);
+    
     return eADOSFieldAttributes;
 }
 
@@ -501,7 +501,7 @@ sal_Int32 WpADOField::GetDefinedSize() const
     return nDefinedSize;
 }
 
-// returns the name of the field
+
 OUString WpADOField::GetName() const
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -1554,7 +1554,7 @@ WpBase::WpBase(IDispatch* pInt)
     {
         ULONG nCount = pIUnknown->AddRef();
         (void)nCount;
-        //  OSL_ENSURE(nCount == 1,"Count is greater than 1");
+        
     }
 }
 
@@ -1565,7 +1565,7 @@ WpBase::WpBase(const WpBase& aWrapper)
         pIUnknown->AddRef();
 }
 
-//inline
+
 WpBase& WpBase::operator=(const WpBase& rhs)
 {
     if (rhs.pIUnknown != pIUnknown)
@@ -1622,12 +1622,12 @@ WpBase::operator IDispatch*()
 
 ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
-    // Create elements used in the array
+    
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[6];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
@@ -1636,22 +1636,22 @@ ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any
     if(catalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(catalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(schema.getLength() && schema.toChar() != '%')
         varCriteria[nPos].setString(schema);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     varCriteria[nPos].setString(table);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -1659,39 +1659,39 @@ ADORecordset* WpADOConnection::getExportedKeys( const ::com::sun::star::uno::Any
     OpenSchema(adSchemaForeignKeys,vsa,vtEmpty,&pRecordset);
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
-    // Create elements used in the array
+    
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[6];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
     sal_Int32 nPos=0;
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     if(catalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(catalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(schema.getLength() && schema.toChar() != '%')
         varCriteria[nPos].setString(schema);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     varCriteria[nPos].setString(table);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -1701,15 +1701,15 @@ ADORecordset* WpADOConnection::getImportedKeys( const ::com::sun::star::uno::Any
     return pRecordset;
 
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table )
 {
-    // Create elements used in the array
+    
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[3];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
@@ -1718,19 +1718,19 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any&
     if(catalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(catalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(schema.getLength() && schema.toChar() != '%')
         varCriteria[nPos].setString(schema);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     varCriteria[nPos].setString(table);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -1739,17 +1739,17 @@ ADORecordset* WpADOConnection::getPrimaryKeys( const ::com::sun::star::uno::Any&
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getIndexInfo(
     const ::com::sun::star::uno::Any& catalog, const OUString& schema, const OUString& table,
     sal_Bool /*unique*/, sal_Bool /*approximate*/ )
 {
-    // Create elements used in the array
+    
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[5];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
@@ -1758,22 +1758,22 @@ ADORecordset* WpADOConnection::getIndexInfo(
     if(catalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(catalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(schema.getLength() && schema.toChar() != '%')
         varCriteria[nPos].setString(schema);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// INDEX_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TYPE
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     varCriteria[nPos].setString(table);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -1782,7 +1782,7 @@ ADORecordset* WpADOConnection::getIndexInfo(
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern )
@@ -1791,7 +1791,7 @@ ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[5];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
@@ -1800,22 +1800,22 @@ ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::
     if(catalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(catalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(schemaPattern.getLength() && schemaPattern.toChar() != '%')
         varCriteria[nPos].setString(schemaPattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     if(tableNamePattern.toChar() != '%')
         varCriteria[nPos].setString(tableNamePattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// GRANTOR
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// GRANTEE
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -1824,7 +1824,7 @@ ADORecordset* WpADOConnection::getTablePrivileges( const ::com::sun::star::uno::
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::Any& primaryCatalog,
                                                   const OUString& primarySchema,
                                                   const OUString& primaryTable,
@@ -1832,12 +1832,12 @@ ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::A
                                                   const OUString& foreignSchema,
                                                   const OUString& foreignTable)
 {
-    // Create elements used in the array
+    
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[6];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
@@ -1846,29 +1846,29 @@ ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::A
     if(primaryCatalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(primaryCatalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(primarySchema.getLength() && primarySchema.toChar() != '%')
         varCriteria[nPos].setString(primarySchema);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     varCriteria[nPos].setString(primaryTable);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     if(foreignCatalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(foreignCatalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(foreignSchema.getLength() && foreignSchema.toChar() != '%')
         varCriteria[nPos].setString(foreignSchema);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     varCriteria[nPos].setString(foreignTable);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -1877,7 +1877,7 @@ ADORecordset* WpADOConnection::getCrossReference( const ::com::sun::star::uno::A
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& procedureNamePattern )
@@ -1886,7 +1886,7 @@ ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& 
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[3];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
@@ -1895,19 +1895,19 @@ ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& 
     if(catalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(catalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(schemaPattern.getLength() && schemaPattern.toChar() != '%')
         varCriteria[nPos].setString(schemaPattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     if(procedureNamePattern.toChar() != '%')
         varCriteria[nPos].setString(procedureNamePattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -1916,18 +1916,18 @@ ADORecordset* WpADOConnection::getProcedures( const ::com::sun::star::uno::Any& 
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& procedureNamePattern,
                                                   const OUString& columnNamePattern )
 {
-    // Create elements used in the array
+    
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[4];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
@@ -1936,23 +1936,23 @@ ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno:
     if(catalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(catalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(schemaPattern.getLength() && schemaPattern.toChar() != '%')
         varCriteria[nPos].setString(schemaPattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     if(procedureNamePattern.toChar() != '%')
         varCriteria[nPos].setString(procedureNamePattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     if(columnNamePattern.toChar() != '%')
         varCriteria[nPos].setString(columnNamePattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// COLUMN_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -1961,13 +1961,13 @@ ADORecordset* WpADOConnection::getProcedureColumns( const ::com::sun::star::uno:
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
                                                   const ::com::sun::star::uno::Sequence< OUString >& types )
 {
-    // Create elements used in the array
+    
     HRESULT hr = S_OK;
     OLEVariant varCriteria[4];
 
@@ -2000,14 +2000,14 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
     if ( sTypeNames.getLength() )
         varCriteria[nPos].setString(sTypeNames);
 
-    // Create SafeArray Bounds and initialize the array
+    
     const sal_Int32 nCrit = sizeof varCriteria / sizeof varCriteria[0];
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = nCrit;
     SAFEARRAY *psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
 
-    // Set the values for each element of the array
+    
     for( long i = 0 ; i < nCrit && SUCCEEDED( hr );i++)
     {
         hr  = SafeArrayPutElement(psa, &i,&varCriteria[i]);
@@ -2016,7 +2016,7 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -2025,18 +2025,18 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schemaPattern,
                                                   const OUString& tableNamePattern,
                                                   const OUString& columnNamePattern )
 {
-    // Create elements used in the array
+    
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[4];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
@@ -2045,22 +2045,22 @@ ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& cat
     if(catalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(catalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(schemaPattern.getLength() && schemaPattern.toChar() != '%')
         varCriteria[nPos].setString(schemaPattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     if(tableNamePattern.toChar() != '%')
         varCriteria[nPos].setString(tableNamePattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     varCriteria[nPos].setString(columnNamePattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// COLUMN_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -2069,18 +2069,18 @@ ADORecordset* WpADOConnection::getColumns( const ::com::sun::star::uno::Any& cat
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno::Any& catalog,
                                                   const OUString& schema,
                                                   const OUString& table,
                                                   const OUString& columnNamePattern )
 {
-    // Create elements used in the array
+    
     SAFEARRAYBOUND rgsabound[1];
     SAFEARRAY *psa = NULL;
     OLEVariant varCriteria[4];
 
-    // Create SafeArray Bounds and initialize the array
+    
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = sizeof varCriteria / sizeof varCriteria[0];
     psa         = SafeArrayCreate( VT_VARIANT, 1, rgsabound );
@@ -2089,21 +2089,21 @@ ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno:
     if(catalog.hasValue())
         varCriteria[nPos].setString(::comphelper::getString(catalog));
 
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_CATALOG
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     if(schema.getLength() && schema.toChar() != '%')
         varCriteria[nPos].setString(schema);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_SCHEMA
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     varCriteria[nPos].setString(table);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// TABLE_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     varCriteria[nPos].setString(columnNamePattern);
-    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;// COLUMN_NAME
+    SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
     OLEVariant  vtEmpty;
     vtEmpty.setNoArg();
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -2112,13 +2112,13 @@ ADORecordset* WpADOConnection::getColumnPrivileges( const ::com::sun::star::uno:
 
     return pRecordset;
 }
-// -----------------------------------------------------------------------------
+
 ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum /*_eType*/)
 {
-    // Create elements used in the array
+    
     OLEVariant varCriteria[2];
     const int nCrit = sizeof varCriteria / sizeof varCriteria[0];
-    // Create SafeArray Bounds and initialize the array
+    
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound   = 0;
     rgsabound[0].cElements = nCrit;
@@ -2128,7 +2128,7 @@ ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum /*_eType*/)
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
     SafeArrayPutElement(psa,&nPos,&varCriteria[nPos]);nPos++;
 
-    // Initialize and fill the SafeArray
+    
     OLEVariant vsa;
     vsa.setArray(psa,VT_VARIANT);
 
@@ -2140,7 +2140,7 @@ ADORecordset* WpADOConnection::getTypeInfo(DataTypeEnum /*_eType*/)
 
     return pRec;
 }
-// -----------------------------------------------------------------------------
+
 void WpADOColumn::put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -2148,7 +2148,7 @@ void WpADOColumn::put_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
     OSL_ENSURE(bRet,"Could not set ParentCatalog!");
     OSL_UNUSED(bRet);
 }
-// -----------------------------------------------------------------------------
+
 void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObject)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
@@ -2156,12 +2156,12 @@ void WpADOTable::putref_ParentCatalog(/* [in] */ _ADOCatalog __RPC_FAR *ppvObjec
     OSL_ENSURE(bRet,"Could not set ParentCatalog!");
     OSL_UNUSED(bRet);
 }
-// -----------------------------------------------------------------------------
+
 void WpBase::setIDispatch(IDispatch* _pIUnknown)
 {
     pIUnknown = _pIUnknown;
 }
-// -----------------------------------------------------------------------------
+
 void OTools::putValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition,const OLEVariant &_aValVar)
 {
     OSL_ENSURE(_rProps.IsValid(),"Properties are not valid!");
@@ -2173,7 +2173,7 @@ void OTools::putValue(const WpADOProperties& _rProps,const OLEVariant &_aPositio
         OSL_UNUSED(bRet);
     }
 }
-// -----------------------------------------------------------------------------
+
 OLEVariant OTools::getValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition)
 {
     WpADOProperty aProp(_rProps.GetItem(_aPosition));

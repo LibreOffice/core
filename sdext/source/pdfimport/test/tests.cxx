@@ -114,7 +114,7 @@ namespace
     private:
         GraphicsContext& getCurrentContext() { return m_aGCStack.back(); }
 
-        // ContentSink interface implementation
+        
         virtual void setPageNum( sal_Int32 nNumPages )
         {
             m_nNumPages = nNumPages;
@@ -327,7 +327,7 @@ namespace
             basegfx::B2DPolyPolygon aNewClip = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
             basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
-            if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
+            if( aCurClip.count() )  
                 aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
             getCurrentContext().Clip = aNewClip;
@@ -338,7 +338,7 @@ namespace
             basegfx::B2DPolyPolygon aNewClip = basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rPath);
             basegfx::B2DPolyPolygon aCurClip = getCurrentContext().Clip;
 
-            if( aCurClip.count() )  // #i92985# adapted API from (..., false, false) to (..., true, false)
+            if( aCurClip.count() )  
                 aNewClip = basegfx::tools::clipPolyPolygonOnPolyPolygon( aCurClip, aNewClip, true, false );
 
             getCurrentContext().Clip = aNewClip;
@@ -464,8 +464,8 @@ namespace
                                        OUString(),
                                        getComponentContext() );
 
-            // make destruction explicit, a bunch of things are
-            // checked in the destructor
+            
+            
             pSink.reset();
         }
 
@@ -476,7 +476,7 @@ namespace
 
             OUString tempFileURL;
             CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
-            osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
+            osl::File::remove( tempFileURL ); 
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
                                    aAdaptor.odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(tempFileURL),
@@ -491,7 +491,7 @@ namespace
 
             OUString tempFileURL;
             CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
-            osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
+            osl::File::remove( tempFileURL ); 
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
                                    aAdaptor.odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
                                                         new OutputWrap(tempFileURL),

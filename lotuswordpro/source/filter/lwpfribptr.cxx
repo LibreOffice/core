@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -110,17 +110,17 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
     LwpFrib* pCurFrib = m_pFribs = NULL;
     for(;;)
     {
-        // Get the frib type
+        
         sal_uInt8 FribTag = pObjStrm->QuickReaduInt8();
 
         sal_uInt8 FribType = FribTag & ~FRIB_TAG_TYPEMASK;
 
-        // Stop when we hit Elvis
+        
         if (FribType == FRIB_TAG_ELVIS)
             break;
 
-        // skip the editor ID
-        //pObjStrm->SeekRel(sizeof(sal_uInt8));
+        
+        
         sal_uInt8 FribEditor = pObjStrm->QuickReaduInt8();
         if( FribType != FT_MAXIMUM )
         {
@@ -133,7 +133,7 @@ void LwpFribPtr::ReadPara(LwpObjectStream* pObjStrm)
             {
                 pCurFrib->SetNext(pFrib);
             }
-            else//frist frib in the para,add by  2/1
+            else
             {
                 if (pFrib->GetType() == FRIB_TAG_TEXT)
                 {
@@ -163,26 +163,26 @@ void LwpFribPtr::XFConvert()
             if ( nFribType!= FRIB_TAG_TABLE && nFribType != FRIB_TAG_FIELD
                     && nFribType != FRIB_TAG_FRAME)
             {
-                //sal_uInt8 nRevisionType = pFrib->GetRevisionType();
+                
                 LwpGlobalMgr* pGlobal = LwpGlobalMgr::GetInstance();
                 LwpChangeMgr* pChangeMgr = pGlobal->GetLwpChangeMgr();
                 sChangeID = pChangeMgr->GetChangeID(pFrib);
                 if (!sChangeID.isEmpty())
                 {
-                /// if (nRevisionType == LwpFrib::REV_INSERT)
-                /// {
+                /
+                /
                         XFChangeStart* pChangeStart = new XFChangeStart;
                         pChangeStart->SetChangeID(sChangeID);
                         m_pXFPara->Add(pChangeStart);
-                /// }
-                /// else if (nRevisionType == LwpFrib::REV_DELETE)
-                /// {
-                ///     XFChange* pChange = new XFChange;
-                ///     pChange->SetChangeID(sChangeID);
-                ///     m_pXFPara->Add(pChange);
-                ///     pFrib = pFrib->GetNext();
-                ///     continue;
-                /// }
+                /
+                /
+                /
+                /
+                /
+                /
+                /
+                /
+                /
                 }
             }
         }
@@ -236,7 +236,7 @@ void LwpFribPtr::XFConvert()
                 }
                 else
                 {
-                    //parse pagebreak
+                    
                     XFParagraph *pPara = new XFParagraph();
                     pPara->SetStyleName(pFrib->GetStyleName());
                     SetXFPara(pPara);
@@ -259,9 +259,9 @@ void LwpFribPtr::XFConvert()
             m_pXFPara->Add(pLineBreak);
         }
             break;
-        case FRIB_TAG_UNICODE: //fall through
-        case FRIB_TAG_UNICODE2: //fall through
-        case FRIB_TAG_UNICODE3: //fall through
+        case FRIB_TAG_UNICODE: 
+        case FRIB_TAG_UNICODE2: 
+        case FRIB_TAG_UNICODE3: 
         {
             LwpFribUnicode* unicodeFrib= static_cast<LwpFribUnicode*>(pFrib);
             unicodeFrib->XFConvert(m_pXFPara,m_pPara->GetStory());
@@ -302,7 +302,7 @@ void LwpFribPtr::XFConvert()
         case FRIB_TAG_TABLE:
         {
             LwpFribTable* tableFrib = static_cast<LwpFribTable*>(pFrib);
-            //tableFrib->XFConvert(m_pPara->GetXFContainer());
+            
             tableFrib->XFConvert(m_pXFPara);
         }
             break;
@@ -358,7 +358,7 @@ void LwpFribPtr::XFConvert()
             break;
         }
 
-        if (bRevisionFlag )//&& pFrib->GetRevisionType() == LwpFrib::REV_INSERT)
+        if (bRevisionFlag )
         {
             if (nFribType!= FRIB_TAG_TABLE && nFribType != FRIB_TAG_FIELD
                     && nFribType != FRIB_TAG_FRAME)
@@ -395,7 +395,7 @@ void LwpFribPtr::FindLayouts()
                         LwpLayout::UseWhenType eSectionType = pLayout->GetUseWhenType();
                         if(eSectionType==LwpLayout::StartWithinColume)
                         {
-                            //StartWithinColume type not support now
+                            
                             break;
                         }
                         LwpStory* pStory = dynamic_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
@@ -457,9 +457,9 @@ void LwpFribPtr::GatherAllText()
             m_pPara->SetAllText(sText);
             break;
         }
-        case FRIB_TAG_UNICODE: //fall through
-        case FRIB_TAG_UNICODE2: //fall through
-        case FRIB_TAG_UNICODE3: //fall through  :
+        case FRIB_TAG_UNICODE: 
+        case FRIB_TAG_UNICODE2: 
+        case FRIB_TAG_UNICODE3: 
         {
             OUString sText = static_cast<LwpFribText*>(pFrib)->GetText();
             m_pPara->SetAllText(sText);
@@ -491,10 +491,10 @@ void LwpFribPtr::RegisterStyle()
             break;
         case FRIB_TAG_SECTION:
             {
-                //section registerstyle here;
+                
                 LwpFribSection* pSectionFrib = static_cast<LwpFribSection*>(pFrib);
                 pSectionFrib->RegisterSectionStyle();
-                //for bullet
+                
                 pSectionFrib->SetSectionName();
             }
             break;
@@ -510,9 +510,9 @@ void LwpFribPtr::RegisterStyle()
             breakFrib->RegisterBreakStyle(m_pPara);
         }
             break;
-        case FRIB_TAG_UNICODE: //fall through
-        case FRIB_TAG_UNICODE2: //fall through
-        case FRIB_TAG_UNICODE3: //fall through  :
+        case FRIB_TAG_UNICODE: 
+        case FRIB_TAG_UNICODE2: 
+        case FRIB_TAG_UNICODE3: 
         {
             pFrib->RegisterStyle(m_pPara->GetFoundry());
             OUString sText = static_cast<LwpFribUnicode*>(pFrib)->GetText();
@@ -531,8 +531,8 @@ void LwpFribPtr::RegisterStyle()
             LwpFribFrame* frameFrib = static_cast<LwpFribFrame*>(pFrib);
             frameFrib->SetParaDropcap(m_pPara);
             frameFrib->RegisterStyle(m_pPara->GetFoundry());
-            //register framelayout style, ,03/09/2005
-            //frameFrib->GetLayout()->RegisterStyle();
+            
+            
                 }
                     break;
                 case FRIB_TAG_CHBLOCK:

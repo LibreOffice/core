@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,7 +77,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
         if ( pDocShell )
         {
-            // document is loaded, is there a FrameView?
+            
             sal_uLong nSdViewShellCount = 0;
             ViewShellBase* pBase = NULL;
             SfxViewShell* pSfxViewSh = NULL;
@@ -85,8 +85,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
             while (pSfxViewFrame)
             {
-                // Count the FrameViews and remember the type of the main
-                // view shell.
+                
+                
                 pSfxViewSh = pSfxViewFrame->GetViewShell();
                 pBase = PTR_CAST(ViewShellBase, pSfxViewSh );
 
@@ -106,9 +106,9 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                     switch (framework::FrameworkHelper::GetViewId(sViewURL))
                     {
                         default:
-//                        case ViewShell::ST_IMPRESS:
-//                        case ViewShell::ST_NOTES:
-//                        case ViewShell::ST_HANDOUT:
+
+
+
                             mnPresViewShellId = SID_VIEWSHELL0;
                             break;
 
@@ -132,7 +132,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
     if (pFrameView)
     {
-        // initialize FrameView with the FrameView of the DocShell
+        
         SetRuler( pFrameView->HasRuler() );
         SetGridCoarse( pFrameView->GetGridCoarse() );
         SetGridFine( pFrameView->GetGridFine() );
@@ -186,7 +186,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         mbLayerMode = pFrameView->IsLayerMode();
         mbQuickEdit = pFrameView->IsQuickEdit();
 
-        // #i26631#
+        
         SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
 
         SetDragWithCopy( pFrameView->IsDragWithCopy() );
@@ -201,7 +201,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
     }
     else
     {
-        // initialize FrameView with the application data
+        
         maVisibleLayers.SetAll();
         maPrintableLayers.SetAll();
         SetGridCoarse( Size( 1000, 1000 ) );
@@ -233,7 +233,7 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
         SetPreviousViewShellType (ViewShell::ST_NONE);
         SetViewShellTypeOnLoad (ViewShell::ST_IMPRESS);
 
-        // get default for design mode
+        
         sal_Bool bInitDesignMode = pDrawDoc->GetOpenInDesignMode();
         if( pDrawDoc->OpenInDesignModeIsDefaulted() )
         {
@@ -316,7 +316,7 @@ void FrameView::Update(SdOptions* pOptions)
         SetSnapGridWidth(aFractX, aFractY);
         SetQuickEdit(pOptions->IsQuickEdit());
 
-        // #i26631#
+        
         SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
 
         SetDragWithCopy(pOptions->IsDragWithCopy());
@@ -1012,6 +1012,6 @@ bool FrameView::IsNavigatorShowingAllShapes (void) const
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

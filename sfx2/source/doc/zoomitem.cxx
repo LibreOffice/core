@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -24,7 +24,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <sfx2/sfx.hrc>
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxZoomItem,SfxUInt16Item, new SvxZoomItem);
 
@@ -33,7 +33,7 @@ TYPEINIT1_FACTORY(SvxZoomItem,SfxUInt16Item, new SvxZoomItem);
 #define ZOOM_PARAM_TYPE     "Type"
 #define ZOOM_PARAMS         3
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomItem::SvxZoomItem
 (
@@ -47,7 +47,7 @@ SvxZoomItem::SvxZoomItem
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomItem::SvxZoomItem( const SvxZoomItem& rOrig )
 :   SfxUInt16Item( rOrig.Which(), rOrig.GetValue() ),
@@ -56,20 +56,20 @@ SvxZoomItem::SvxZoomItem( const SvxZoomItem& rOrig )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomItem::~SvxZoomItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxZoomItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     return new SvxZoomItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) const
 {
@@ -82,7 +82,7 @@ SfxPoolItem* SvxZoomItem::Create( SvStream& rStrm, sal_uInt16 /*nVersion*/ ) con
     return pNew;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
@@ -92,7 +92,7 @@ SvStream& SvxZoomItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) con
     return rStrm;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxZoomItem::operator==( const SfxPoolItem& rAttr ) const
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -102,13 +102,13 @@ void SAL_CALL SwXTextDefaults::setPropertyValue( const OUString& rPropertyName, 
                 rtl::Reference< SwDocStyleSheet > xStyle( new SwDocStyleSheet( *(SwDocStyleSheet*)pStyle ) );
                 if (RES_PARATR_DROP == pMap->nWID)
                 {
-                    pDrop = (SwFmtDrop*)rItem.Clone();   // because rItem is const...
+                    pDrop = (SwFmtDrop*)rItem.Clone();   
                     pDrop->SetCharFmt(xStyle->GetCharFmt());
                     m_pDoc->SetDefault(*pDrop);
                 }
-                else // RES_TXTATR_CHARFMT == pMap->nWID
+                else 
                 {
-                    pCharFmt = (SwFmtCharFmt*)rItem.Clone();   // because rItem is const...
+                    pCharFmt = (SwFmtCharFmt*)rItem.Clone();   
                     pCharFmt->SetCharFmt(xStyle->GetCharFmt());
                     m_pDoc->SetDefault(*pCharFmt);
                 }
@@ -175,7 +175,7 @@ void SAL_CALL SwXTextDefaults::removeVetoableChangeListener( const OUString& /*r
 }
 
 
-// XPropertyState
+
 PropertyState SAL_CALL SwXTextDefaults::getPropertyState( const OUString& rPropertyName )
         throw(UnknownPropertyException, RuntimeException)
 {

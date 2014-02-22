@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -62,13 +62,13 @@ using namespace com::sun::star::beans;
 
 extern void InterpolateFixedBitmap( FixedBitmap * pBitmap );
 
-//ID for the config-data with the HTML-settings
+
 const sal_uInt16 nMagic = (sal_uInt16)0x1977;
 
-// Key for the soffice.ini
+
 #define KEY_QUALITY     "JPG-EXPORT-QUALITY"
 
-// The Help-IDs of the pages
+
 const char* aPageHelpIds[NOOFPAGES] =
 {
     HID_SD_HTMLEXPORT_PAGE1,
@@ -79,7 +79,7 @@ const char* aPageHelpIds[NOOFPAGES] =
     HID_SD_HTMLEXPORT_PAGE6
 };
 
-// This class has all the settings for the HTML-export autopilot
+
 class SdPublishingDesign
 {
 public:
@@ -87,36 +87,36 @@ public:
 
     HtmlPublishMode m_eMode;
 
-    // special WebCast options
+    
     PublishingScript m_eScript;
     OUString         m_aCGI;
     OUString         m_aURL;
 
-    // special Kiosk options
+    
     sal_Bool    m_bAutoSlide;
     sal_uInt32  m_nSlideDuration;
     sal_Bool    m_bEndless;
 
-    // special HTML options
+    
     sal_Bool    m_bContentPage;
     sal_Bool    m_bNotes;
 
-    // misc options
+    
     sal_uInt16  m_nResolution;
     OUString    m_aCompression;
     PublishingFormat m_eFormat;
     sal_Bool    m_bSlideSound;
     sal_Bool    m_bHiddenSlides;
 
-    // titel page information
+    
     OUString    m_aAuthor;
     OUString    m_aEMail;
     OUString    m_aWWW;
     OUString    m_aMisc;
     sal_Bool    m_bDownload;
-    sal_Bool    m_bCreated;         // not used
+    sal_Bool    m_bCreated;         
 
-    // buttons and colorscheme
+    
     sal_Int16   m_nButtonThema;
     sal_Bool    m_bUserAttr;
     Color   m_aBackColor;
@@ -134,7 +134,7 @@ public:
     friend SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDesign);
 };
 
-// load Default-settings
+
 SdPublishingDesign::SdPublishingDesign()
 {
     m_eMode = PUBLISH_HTML;
@@ -178,7 +178,7 @@ SdPublishingDesign::SdPublishingDesign()
     m_bHiddenSlides  = sal_False;
 }
 
-// Compares the values without paying attention to the name
+
 bool SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
 {
     return
@@ -188,7 +188,7 @@ bool SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
         m_aCompression == rDesign.m_aCompression &&
         m_eFormat      == rDesign.m_eFormat &&
         m_bHiddenSlides == rDesign.m_bHiddenSlides &&
-        (  // compare html options
+        (  
             (m_eMode != PUBLISH_HTML && m_eMode != PUBLISH_FRAMES) ||
             (
                 m_bContentPage == rDesign.m_bContentPage &&
@@ -210,7 +210,7 @@ bool SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
                 m_bUseColor    == rDesign.m_bUseColor
             )
         ) &&
-        (   // compare kiosk options
+        (   
             (m_eMode != PUBLISH_KIOSK) ||
             (
                 m_bAutoSlide  == rDesign.m_bAutoSlide &&
@@ -224,7 +224,7 @@ bool SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
                 )
             )
         ) &&
-        (   // compare WebCast options
+        (   
             (m_eMode != PUBLISH_WEBCAST) ||
             (
                 m_eScript == rDesign.m_eScript &&
@@ -240,7 +240,7 @@ bool SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
     );
 }
 
-// Load the design from the stream
+
 SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
 {
     SdIOCompat aIO(rIn, STREAM_READ);
@@ -267,7 +267,7 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     rDesign.m_aMisc = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIn,
         RTL_TEXTENCODING_UTF8);
     rIn.ReadUChar( rDesign.m_bDownload );
-    rIn.ReadUChar( rDesign.m_bCreated );      // not used
+    rIn.ReadUChar( rDesign.m_bCreated );      
     rIn.ReadInt16( rDesign.m_nButtonThema );
     rIn.ReadUChar( rDesign.m_bUserAttr );
     ReadColor( rIn, rDesign.m_aBackColor );
@@ -294,13 +294,13 @@ SvStream& operator >> (SvStream& rIn, SdPublishingDesign& rDesign)
     return rIn;
 }
 
-// Set the design to the stream
+
 SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDesign)
 {
-    // The last parameter is the versionnumber of the code
+    
     SdIOCompat aIO(rOut, STREAM_WRITE, 0);
 
-    // Name
+    
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aDesignName,
         RTL_TEXTENCODING_UTF8);
 
@@ -320,7 +320,7 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOut, rDesign.m_aMisc,
         RTL_TEXTENCODING_UTF8);
     rOut.WriteUChar( rDesign.m_bDownload );
-    rOut.WriteUChar( rDesign.m_bCreated );     // not used
+    rOut.WriteUChar( rDesign.m_bCreated );     
     rOut.WriteInt16( rDesign.m_nButtonThema );
     rOut.WriteUChar( rDesign.m_bUserAttr );
     WriteColor( rOut, rDesign.m_aBackColor );
@@ -346,7 +346,7 @@ SvStream& WriteSdPublishingDesign(SvStream& rOut, const SdPublishingDesign& rDes
     return rOut;
 }
 
-// Dialog for the entry of the name of the design
+
 class SdDesignNameDlg : public ModalDialog
 {
 private:
@@ -360,7 +360,7 @@ public:
     DECL_LINK(ModifyHdl, void *);
 };
 
-// SdPublishingDlg Methods
+
 
 SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
 :   ModalDialog(pWindow, SdResId( DLG_PUBLISHING ))
@@ -381,11 +381,11 @@ SdPublishingDlg::SdPublishingDlg(Window* pWindow, DocumentType eDocType)
     CreatePages();
     Load();
 
-    // sets the output page
+    
     aAssistentFunc.GotoPage(1);
     aLastPageButton.Disable();
 
-    // button assignment
+    
     aFinishButton.SetClickHdl(LINK(this,SdPublishingDlg,FinishHdl));
     aLastPageButton.SetClickHdl(LINK(this,SdPublishingDlg,LastPageHdl));
     aNextPageButton.SetClickHdl(LINK(this,SdPublishingDlg,NextPageHdl));
@@ -464,10 +464,10 @@ SdPublishingDlg::~SdPublishingDlg()
     RemovePages();
 }
 
-// Generate dialog controls and embed them in the pages
+
 void SdPublishingDlg::CreatePages()
 {
-    // Page 1
+    
     aAssistentFunc.InsertControl(1,
         pPage1_Titel = new FixedLine(this,SdResId(PAGE1_TITEL)));
     aAssistentFunc.InsertControl(1,
@@ -482,7 +482,7 @@ void SdPublishingDlg::CreatePages()
         pPage1_Desc = new FixedText(this,SdResId(PAGE1_DESC)));
 
 
-    // Page 2
+    
     aAssistentFunc.InsertControl(2,
         pPage2_Titel = new FixedLine(this,SdResId(PAGE2_TITEL )));
     aAssistentFunc.InsertControl(2,
@@ -543,7 +543,7 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(2,
         pPage2_Endless = new CheckBox(this,SdResId(PAGE2_ENDLESS)));
 
-    // Page 3
+    
     aAssistentFunc.InsertControl(3,
         pPage3_Titel1 = new FixedLine(this,SdResId(PAGE3_TITEL_1)));
     aAssistentFunc.InsertControl(3,
@@ -573,7 +573,7 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(3,
         pPage3_HiddenSlides = new CheckBox(this,SdResId(PAGE3_HIDDEN_SLIDES)));
 
-    // Page 4
+    
     aAssistentFunc.InsertControl(4,
         pPage4_Titel1 = new FixedLine(this,SdResId(PAGE4_TITEL_1)));
     aAssistentFunc.InsertControl(4,
@@ -596,7 +596,7 @@ void SdPublishingDlg::CreatePages()
         aAssistentFunc.InsertControl(4,
             pPage4_Download = new CheckBox(this,SdResId(PAGE4_DOWNLOAD)));
 
-    // Page 5
+    
     aAssistentFunc.InsertControl(5,
         pPage5_Titel = new FixedLine(this,SdResId(PAGE5_TITEL)));
     aAssistentFunc.InsertControl(5,
@@ -604,7 +604,7 @@ void SdPublishingDlg::CreatePages()
     aAssistentFunc.InsertControl(5,
         pPage5_Buttons = new ValueSet(this,SdResId(PAGE5_BUTTONS)));
 
-    // Page 6
+    
     aAssistentFunc.InsertControl(6,
         pPage6_Titel = new FixedLine(this,SdResId(PAGE6_TITEL)));
     aAssistentFunc.InsertControl(6,
@@ -632,7 +632,7 @@ void SdPublishingDlg::CreatePages()
     InterpolateFixedBitmap(pPage2_WebCast_FB);
 }
 
-// Delete the controls of the dialog
+
 void SdPublishingDlg::RemovePages()
 {
     delete pPage1_Titel;
@@ -718,7 +718,7 @@ void SdPublishingDlg::RemovePages()
     delete pPage6_Preview;
 }
 
-// Initialize dialog with default-values
+
 void SdPublishingDlg::SetDefaults()
 {
     SdPublishingDesign aDefault;
@@ -729,7 +729,7 @@ void SdPublishingDlg::SetDefaults()
     UpdatePage();
 }
 
-// Feed the SfxItemSet with the settings of the dialog
+
 void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
 {
     std::vector< PropertyValue > aProps;
@@ -737,7 +737,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     PropertyValue aValue;
 
 
-    // Page 2
+    
     aValue.Name = "PublishMode";
     aValue.Value <<= (sal_Int32)(pPage2_Standard->IsChecked()?PUBLISH_HTML:
                                           pPage2_Frames->IsChecked()?PUBLISH_FRAMES:
@@ -788,7 +788,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
         aProps.push_back( aValue );
     }
 
-    // Page 3
+    
 
     aValue.Name = "Width";
     sal_Int32 nTmpWidth = 512;
@@ -823,7 +823,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aValue.Value <<= pPage3_HiddenSlides->IsChecked() ? sal_True : sal_False;
     aProps.push_back( aValue );
 
-    // Page 4
+    
     aValue.Name = "Author";
     aValue.Value <<= OUString( pPage4_Author->GetText() );
     aProps.push_back( aValue );
@@ -832,9 +832,9 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     aValue.Value <<= OUString( pPage4_Email->GetText() );
     aProps.push_back( aValue );
 
-    // try to guess protocol for user's homepage
+    
     INetURLObject aHomeURL( pPage4_WWW->GetText(),
-                            INET_PROT_HTTP,     // default proto is HTTP
+                            INET_PROT_HTTP,     
                             INetURLObject::ENCODE_ALL );
 
     aValue.Name = "HomepageURL";
@@ -852,7 +852,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
         aProps.push_back( aValue );
     }
 
-    // Page 5
+    
     if( !pPage5_TextOnly->IsChecked() )
     {
         aValue.Name = "UseButtonSet";
@@ -860,7 +860,7 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
         aProps.push_back( aValue );
     }
 
-    // Page 6
+    
     if( pPage6_User->IsChecked() )
     {
         aValue.Name = "BackColor";
@@ -900,12 +900,12 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     }
 }
 
-// Clickhandler for the radiobuttons of the design-selection
+
 IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 {
     if(pButton == pPage1_NewDesign)
     {
-        pPage1_NewDesign->Check(true); // because of DesignDeleteHdl
+        pPage1_NewDesign->Check(true); 
         pPage1_OldDesign->Check(false);
         pPage1_Designs->Disable();
         pPage1_DelDesign->Disable();
@@ -934,7 +934,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
     return 0;
 }
 
-// Clickhandler for the choise of one design
+
 IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl)
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
@@ -949,7 +949,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl)
     return 0;
 }
 
-// Clickhandler for the delete of one design
+
 IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl)
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
@@ -972,7 +972,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl)
     return 0;
 }
 
-// Clickhandler for the other servertypess
+
 IMPL_LINK( SdPublishingDlg, WebServerHdl, RadioButton *, pButton )
 {
     sal_Bool bASP = pButton == pPage2_ASP;
@@ -984,7 +984,7 @@ IMPL_LINK( SdPublishingDlg, WebServerHdl, RadioButton *, pButton )
     return 0;
 }
 
-// Clickhandler for the Radiobuttons of the graphicformat choice
+
 IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
 {
     pPage3_Png->Check( pButton == pPage3_Png );
@@ -994,7 +994,7 @@ IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
     return 0;
 }
 
-// Clickhandler for the Radiobuttons Standard/Frames
+
 IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl)
 {
     UpdatePage();
@@ -1002,7 +1002,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl)
     return 0;
 }
 
-// Clickhandler for the Checkbox of the Title page
+
 IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl)
 {
     if(pPage2_Content->IsChecked())
@@ -1024,7 +1024,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl)
     return 0;
 }
 
-// Clickhandler for the Resolution Radiobuttons
+
 IMPL_LINK( SdPublishingDlg, ResolutionHdl, RadioButton *, pButton )
 {
     pPage3_Resolution_1->Check(pButton == pPage3_Resolution_1);
@@ -1034,15 +1034,15 @@ IMPL_LINK( SdPublishingDlg, ResolutionHdl, RadioButton *, pButton )
     return 0;
 }
 
-// Clickhandler for the ValueSet with the bitmap-buttons
+
 IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl)
 {
-    // if one bitmap-button is chosen, then disable TextOnly
+    
     pPage5_TextOnly->Check(false);
     return 0;
 }
 
-// Fill the SfxItemSet with the settings of the dialog
+
 IMPL_LINK( SdPublishingDlg, ColorHdl, PushButton *, pButton)
 {
     SvColorDialog aDlg(this);
@@ -1091,10 +1091,10 @@ IMPL_LINK_NOARG(SdPublishingDlg, SlideChgHdl)
     return 0;
 }
 
-// Clickhandler for the Ok Button
+
 IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 {
-    //End
+    
     SdPublishingDesign* pDesign = new SdPublishingDesign();
     GetDesign(pDesign);
 
@@ -1102,7 +1102,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 
     if(pPage1_OldDesign->IsChecked() && m_pDesign)
     {
-        // are there changes?
+        
         if(!(*pDesign == *m_pDesign))
             bSave = sal_True;
     }
@@ -1167,7 +1167,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
     return 0;
 }
 
-// Refresh the dialogs when changing from pages
+
 void SdPublishingDlg::ChangePage()
 {
     int nPage = aAssistentFunc.GetCurrentPage();
@@ -1336,7 +1336,7 @@ void SdPublishingDlg::LoadPreviewButtons()
     }
 }
 
-// Clickhandler for the Forward Button
+
 IMPL_LINK_NOARG(SdPublishingDlg, NextPageHdl)
 {
     aAssistentFunc.NextPage();
@@ -1344,7 +1344,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, NextPageHdl)
     return 0;
 }
 
-// Sets the Controlls in the dialog to the settings in the design
+
 void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
 {
     if(!pDesign)
@@ -1424,7 +1424,7 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
     UpdatePage();
 }
 
-// Transfer the status of the Design Dialog Controls
+
 void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
 {
     if(!pDesign)
@@ -1483,7 +1483,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_bEndless = pPage2_Endless->IsChecked();
 }
 
-// Clickhandler for the back Button
+
 IMPL_LINK_NOARG(SdPublishingDlg, LastPageHdl)
 {
     aAssistentFunc.PreviousPage();
@@ -1491,7 +1491,7 @@ IMPL_LINK_NOARG(SdPublishingDlg, LastPageHdl)
     return 0;
 }
 
-// Load Designs
+
 sal_Bool SdPublishingDlg::Load()
 {
     m_bDesignListDirty = sal_False;
@@ -1499,7 +1499,7 @@ sal_Bool SdPublishingDlg::Load()
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
     aURL.Append( OUString( "designs.sod" ) );
 
-    // check if file exists, SfxMedium shows an errorbox else
+    
     {
         com::sun::star::uno::Reference < com::sun::star::task::XInteractionHandler > xHandler;
         SvStream* pIStm = ::utl::UcbStreamHelper::CreateStream( aURL.GetMainURL( INetURLObject::NO_DECODE ), STREAM_READ, xHandler );
@@ -1544,7 +1544,7 @@ sal_Bool SdPublishingDlg::Load()
     return( pStream->GetError() == SVSTREAM_OK );
 }
 
-// Save Designs
+
 sal_Bool SdPublishingDlg::Save()
 {
     INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
@@ -1560,7 +1560,7 @@ sal_Bool SdPublishingDlg::Save()
     sal_uInt16 aCheck = nMagic;
     pStream->WriteUInt16( aCheck );
 
-    // Destroys the SdIOCompat before the Stream is being destributed
+    
     {
         SdIOCompat aIO(*pStream, STREAM_WRITE, 0);
 
@@ -1579,7 +1579,7 @@ sal_Bool SdPublishingDlg::Save()
     return( aMedium.GetError() == 0 );
 }
 
-// SdDesignNameDlg Methods
+
 SdDesignNameDlg::SdDesignNameDlg(Window* pWindow, const OUString& aName)
     : ModalDialog(pWindow, "NameDesignDialog", "modules/sdraw/ui/namedesign.ui")
 {

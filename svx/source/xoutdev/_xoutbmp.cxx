@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sot/factory.hxx>
@@ -58,10 +58,10 @@ Animation XOutBitmap::MirrorAnimation( const Animation& rAnimation, sal_Bool bHM
         {
             AnimationBitmap aAnimBmp( aNewAnim.Get( i ) );
 
-            // mirror the BitmapEx
+            
             aAnimBmp.aBmpEx.Mirror( nMirrorFlags );
 
-            // Adjust the positions inside the whole bitmap
+            
             if( bHMirr )
                 aAnimBmp.aPosPix.X() = rGlobalSize.Width() - aAnimBmp.aPosPix.X() -
                                        aAnimBmp.aSizePix.Width();
@@ -128,7 +128,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
 
         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "XOutBitmap::WriteGraphic(...): invalid URL" );
 
-        // calculate correct file name
+        
         if( !( nFlags & XOUTBMP_DONT_EXPAND_FILENAME ) )
         {
             OUString aName( aURL.getBase() );
@@ -142,7 +142,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
             aURL.setBase( aName );
         }
 
-        // #i121128# use shortcut to write SVG data in original form (if possible)
+        
         const SvgDataPtr aSvgDataPtr(rGraphic.getSvgData());
 
         if(aSvgDataPtr.get()
@@ -177,7 +177,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                 !( nFlags & XOUTBMP_MIRROR_VERT ) &&
                 ( rGraphic.GetType() != GRAPHIC_GDIMETAFILE ) && rGraphic.IsLink() )
             {
-                // try to write native link
+                
                 const GfxLink aGfxLink( ( (Graphic&) rGraphic ).GetLink() );
 
                 switch( aGfxLink.GetType() )
@@ -219,7 +219,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                                      ( nFlags & XOUTBMP_USE_GIF_IF_POSSIBLE ) ||
                                      ( ( nFlags & XOUTBMP_USE_GIF_IF_SENSIBLE ) && ( bAnimated || bTransparent ) );
 
-            // get filter and extension
+            
             if( bWriteTransGrf )
                 aFilter = FORMAT_GIF;
 
@@ -293,7 +293,7 @@ sal_uInt16 XOutBitmap::WriteGraphic( const Graphic& rGraphic, OUString& rFileNam
                         aGraphic = rGraphic.GetBitmap();
                 }
 
-                // mirror?
+                
                 if( ( nFlags & XOUTBMP_MIRROR_HORZ ) || ( nFlags & XOUTBMP_MIRROR_VERT ) )
                     aGraphic = MirrorGraphic( aGraphic, nFlags );
 
@@ -336,7 +336,7 @@ sal_uLong XOutBitmap::GraphicToBase64(const Graphic& rGraphic, OUString& rOUStri
             aMimeType = "image/svg+xml";
             break;
         default:
-            // save everything else (including gif) into png
+            
             aCvtType = CVT_PNG;
             aMimeType = "image/png";
             break;
@@ -410,7 +410,7 @@ Bitmap XOutBitmap::DetectEdges( const Bitmap& rBmp, const sal_uInt8 cThreshold )
                 long                nSum2;
                 long                lGray;
 
-                // initialize border with white pixels
+                
                 pWriteAcc->SetLineColor( Color( COL_WHITE) );
                 pWriteAcc->DrawLine( Point(), Point( nWidth - 1L, 0L ) );
                 pWriteAcc->DrawLine( Point( nWidth - 1L, 0L ), Point( nWidth - 1L, nHeight - 1L ) );
@@ -481,7 +481,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
 
     if( ( aWorkRect.GetWidth() > 4 ) && ( aWorkRect.GetHeight() > 4 ) )
     {
-        // if the flag is set, we need to detect edges
+        
         if( nFlags & XOUTBMP_CONTOUR_EDGEDETECT )
             aWorkBmp = DetectEdges( rBmp, cEdgeDetectThreshold );
         else
@@ -517,7 +517,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                 {
                     nY = nStartY1;
 
-                    // scan row from left to right
+                    
                     while( nY < nEndY1 )
                     {
                         if( aBlack == pAcc->GetPixel( nY, nX ) )
@@ -525,7 +525,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                             pPoints1[ nPolyPos ] = Point( nX, nY );
                             nY = nStartY2;
 
-                            // this loop always breaks eventually as there is at least one pixel
+                            
                             while( true )
                             {
                                 if( aBlack == pAcc->GetPixel( nY, nX ) )
@@ -554,7 +554,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                 {
                     nX = nStartX1;
 
-                    // scan row from left to right
+                    
                     while( nX < nEndX1 )
                     {
                         if( aBlack == pAcc->GetPixel( nY, nX ) )
@@ -562,7 +562,7 @@ Polygon XOutBitmap::GetCountour( const Bitmap& rBmp, const sal_uIntPtr nFlags,
                             pPoints1[ nPolyPos ] = Point( nX, nY );
                             nX = nStartX2;
 
-                            // this loop always breaks eventually as there is at least one pixel
+                            
                             while( true )
                             {
                                 if( aBlack == pAcc->GetPixel( nY, nX ) )

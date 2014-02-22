@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -98,7 +98,7 @@ void ImplUpdateJobSetupPaper( JobSetup& rJobSetup )
     }
 }
 
-// PrinterOptions
+
 PrinterOptions::PrinterOptions() :
     mbReduceTransparency( false ),
     meReducedTransparencyMode( PRINTER_TRANSPARENCY_AUTO ),
@@ -134,17 +134,17 @@ PrinterOptions::~PrinterOptions()
 bool PrinterOptions::ReadFromConfig( bool i_bFile )
 {
     bool bSuccess = false;
-    // save old state in case something goes wrong
+    
     PrinterOptions aOldValues( *this );
 
-    // get the configuration service
+    
     Reference< XMultiServiceFactory > xConfigProvider;
     Reference< XNameAccess > xConfigAccess;
     try
     {
-        // get service provider
+        
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
-        // create configuration hierachical access name
+        
         try
         {
             xConfigProvider = theDefaultProvider::get( xContext );
@@ -215,11 +215,11 @@ void Printer::SetPrinterOptions( const PrinterOptions& i_rOptions )
 
 bool Printer::HasMirroredGraphics() const
 {
-    // due to a "hotfix" for AOO bug i55719, this needs to return false
+    
     return false;
 }
 
-// QueueInfo
+
 QueueInfo::QueueInfo()
 {
     mnStatus    = 0;
@@ -321,7 +321,7 @@ void ImplPrnQueueList::Add( SalPrinterQueueInfo* pData )
         m_aQueueInfos.back().mpSalQueueInfo = pData;
         m_aPrinterList.push_back( pData->maPrinterName );
     }
-    else // this should not happen, but ...
+    else 
     {
         ImplPrnQueueData& rData = m_aQueueInfos[ it->second ];
         delete rData.mpQueueInfo;
@@ -439,7 +439,7 @@ void Printer::ImplInitData()
     mbIsQueuePrinter    = false;
     mpPrinterOptions    = new PrinterOptions;
 
-    // Add printer to the list
+    
     ImplSVData* pSVData = ImplGetSVData();
     mpNext = pSVData->maGDIData.mpFirstPrinter;
     mpPrev = NULL;
@@ -454,10 +454,10 @@ void Printer::ImplInitData()
 void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    // #i74084# update info for this specific SalPrinterQueueInfo
+    
     pSVData->mpDefInst->GetPrinterQueueState( pInfo );
 
-    // Test whether the driver actually matches the JobSetup
+    
     ImplJobSetup* pJobSetup = maJobSetup.ImplGetData();
 
     if ( pJobSetup->mpDriverData )
@@ -471,11 +471,11 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
         }
     }
 
-    // Remember printer name
+    
     maPrinterName = pInfo->maPrinterName;
     maDriver = pInfo->maDriver;
 
-    // Add printer name to JobSetup
+    
     pJobSetup->maPrinterName = maPrinterName;
     pJobSetup->maDriver = maDriver;
 
@@ -490,14 +490,14 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
         return;
     }
 
-    // we need a graphics
+    
     if ( !ImplGetGraphics() )
     {
         ImplInitDisplay( NULL );
         return;
     }
 
-    // Init data
+    
     ImplUpdatePageData();
     mpFontList = new ImplDevFontList();
     mpFontCache = new ImplFontCache();
@@ -534,19 +534,19 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
     ImplPrnQueueList* pPrnList = pSVData->maGDIData.mpPrinterQueueList;
     if ( pPrnList && pPrnList->m_aQueueInfos.size() )
     {
-        // first search for the printer name driectly
+        
         ImplPrnQueueData* pInfo = pPrnList->Get( rPrinterName );
         if( pInfo )
             return pInfo->mpSalQueueInfo;
 
-        // then search case insensitive
+        
         for( unsigned int i = 0; i < pPrnList->m_aQueueInfos.size(); i++ )
         {
             if( pPrnList->m_aQueueInfos[i].mpSalQueueInfo->maPrinterName.equalsIgnoreAsciiCase( rPrinterName ) )
                 return pPrnList->m_aQueueInfos[i].mpSalQueueInfo;
         }
 
-        // then search for driver name
+        
         if ( pDriver )
         {
             for( unsigned int i = 0; i < pPrnList->m_aQueueInfos.size(); i++ )
@@ -556,12 +556,12 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
             }
         }
 
-        // then the default printer
+        
         pInfo = pPrnList->Get( GetDefaultPrinterName() );
         if( pInfo )
             return pInfo->mpSalQueueInfo;
 
-        // last chance: the first available printer
+        
         return pPrnList->m_aQueueInfos[0].mpSalQueueInfo;
     }
 
@@ -571,7 +571,7 @@ SalPrinterQueueInfo* Printer::ImplGetQueueInfo( const OUString& rPrinterName,
 
 void Printer::ImplUpdatePageData()
 {
-    // we need a graphics
+    
     if ( !ImplGetGraphics() )
         return;
 
@@ -660,9 +660,9 @@ Printer::~Printer()
         delete mpDisplayDev;
     else
     {
-        // OutputDevice Dtor is tryig the same thing; that why we need to set
-        // the FontEntry to NULL here
-        // TODO: consolidate duplicate cleanup by Printer and OutputDevice
+        
+        
+        
         if ( mpFontEntry )
         {
             mpFontCache->Release( mpFontEntry );
@@ -680,10 +680,10 @@ Printer::~Printer()
         }
         delete mpFontCache;
         mpFontCache = NULL;
-        // font list deleted by OutputDevice dtor
+        
     }
 
-    // Add printer from the list
+    
     ImplSVData* pSVData = ImplGetSVData();
     if ( mpPrev )
         mpPrev->mpNext = mpNext;
@@ -811,7 +811,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
 
     if ( pPrinter->IsDisplayPrinter() )
     {
-        // Destroy old printer
+        
         if ( !IsDisplayPrinter() )
         {
             ImplReleaseGraphics();
@@ -831,7 +831,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
                 delete mpGetDevSizeList;
                 mpGetDevSizeList = NULL;
             }
-            // clean up font list
+            
             delete mpFontCache;
             delete mpFontList;
             mpFontCache = NULL;
@@ -842,12 +842,12 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             mpInfoPrinter = NULL;
         }
 
-        // Construct new printer
+        
         ImplInitDisplay( NULL );
         return true;
     }
 
-    // Destroy old printer?
+    
     if ( GetName() != pPrinter->GetName() )
     {
         ImplReleaseGraphics();
@@ -884,7 +884,7 @@ bool Printer::SetPrinterProps( const Printer* pPrinter )
             mpInfoPrinter = NULL;
         }
 
-        // Construct new printer
+        
         OUString aDriver = pPrinter->GetDriverName();
         SalPrinterQueueInfo* pInfo = ImplGetQueueInfo( pPrinter->GetName(), &aDriver );
         if ( pInfo )
@@ -987,7 +987,7 @@ sal_uInt16 Printer::GetPaperBin() const
 }
 
 
-// Map user paper format to a available printer paper formats
+
 void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNearest )
 {
     ImplJobSetup*   pSetupData = aJobSetup.ImplGetData();
@@ -998,7 +998,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
 
     PaperInfo aInfo(pSetupData->mnPaperWidth, pSetupData->mnPaperHeight);
 
-    // Compare all paper formats and get the appropriate one
+    
     for ( int i = 0; i < nPaperCount; i++ )
     {
         const PaperInfo& rPaperInfo = GetPaperInfo( i );
@@ -1013,9 +1013,9 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
         }
     }
 
-    // If the printer supports landscape orientation, check paper sizes again
-    // with landscape orientation. This is necessary as a printer driver provides
-    // all paper sizes with portrait orientation only!!
+    
+    
+    
     if ( pSetupData->mePaperFormat == PAPER_USER &&
          nLandscapeAngle != 0 &&
          HasSupport( SUPPORT_SET_ORIENTATION ))
@@ -1047,7 +1047,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
          {
              const PaperInfo& rPaperInfo = GetPaperInfo( i );
 
-             // check portrait match
+             
              sal_Int64 nDX = pSetupData->mnPaperWidth - rPaperInfo.getWidth();
              sal_Int64 nDY = pSetupData->mnPaperHeight - rPaperInfo.getHeight();
              sal_Int64 nMatch = nDX*nDX + nDY*nDY;
@@ -1058,7 +1058,7 @@ void Printer::ImplFindPaperFormatForUserSize( JobSetup& aJobSetup, bool bMatchNe
                  eBestOrientation = ORIENTATION_PORTRAIT;
              }
 
-             // check landscape match
+             
              nDX = pSetupData->mnPaperWidth - rPaperInfo.getHeight();
              nDY = pSetupData->mnPaperHeight - rPaperInfo.getWidth();
              nMatch = nDX*nDX + nDY*nDY;
@@ -1153,7 +1153,7 @@ bool Printer::SetPaperSizeUser( const Size& rSize, bool bMatchNearest )
         ImplReleaseGraphics();
         ImplFindPaperFormatForUserSize( aJobSetup, bMatchNearest );
 
-        // Changing the paper size can also change the orientation!
+        
         if ( mpInfoPrinter->SetData( SAL_JOBSET_PAPERSIZE|SAL_JOBSET_ORIENTATION, pSetupData ) )
         {
             ImplUpdateJobSetupPaper( aJobSetup );
@@ -1360,9 +1360,9 @@ bool Printer::EndJob()
 
         mbDevOutput = false;
         bRet = mpPrinter->EndJob();
-        // FIXME: Do not destroy the printer asynchronously as Win95
-        // can't handle destroying a printer object and printing
-        // at the same time
+        
+        
+        
         ImplGetSVData()->mpDefInst->DestroyPrinter( mpPrinter );
         mpPrinter = NULL;
     }
@@ -1386,7 +1386,7 @@ void Printer::ImplStartPage()
         }
         mbDevOutput = true;
 
-        // PrintJob not aborted ???
+        
         if ( IsJobActive() )
         {
             mbInPrintPage = true;
@@ -1431,7 +1431,7 @@ void Printer::updatePrinters()
         {
             ImplPrnQueueData& rInfo     = pPrnList->m_aQueueInfos[i];
             ImplPrnQueueData& rNewInfo  = pNewList->m_aQueueInfos[i];
-            if( ! rInfo.mpSalQueueInfo || ! rNewInfo.mpSalQueueInfo || // sanity check
+            if( ! rInfo.mpSalQueueInfo || ! rNewInfo.mpSalQueueInfo || 
                 rInfo.mpSalQueueInfo->maPrinterName != rNewInfo.mpSalQueueInfo->maPrinterName )
             {
                 bChanged = true;

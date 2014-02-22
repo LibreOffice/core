@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 
 using namespace sd;
 
-///////////////////////////////////////////////////////////////////////
+
 
 UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
 : mpUndoUsercall(0)
@@ -52,7 +52,7 @@ UndoRemovePresObjectImpl::UndoRemovePresObjectImpl( SdrObject& rObject )
     }
 }
 
-//---------------------------------------------------------------------
+
 
 UndoRemovePresObjectImpl::~UndoRemovePresObjectImpl()
 {
@@ -61,7 +61,7 @@ UndoRemovePresObjectImpl::~UndoRemovePresObjectImpl()
     delete mpUndoUsercall;
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoRemovePresObjectImpl::Undo()
 {
@@ -73,7 +73,7 @@ void UndoRemovePresObjectImpl::Undo()
         mpUndoAnimation->Undo();
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoRemovePresObjectImpl::Redo()
 {
@@ -85,7 +85,7 @@ void UndoRemovePresObjectImpl::Redo()
         mpUndoUsercall->Redo();
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 
 UndoRemoveObject::UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
@@ -94,7 +94,7 @@ UndoRemoveObject::UndoRemoveObject( SdrObject& rObject, bool bOrdNumDirect )
 {
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoRemoveObject::Undo()
 {
@@ -106,7 +106,7 @@ void UndoRemoveObject::Undo()
     }
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoRemoveObject::Redo()
 {
@@ -118,7 +118,7 @@ void UndoRemoveObject::Redo()
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 UndoDeleteObject::UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
 : SdrUndoDelObj( rObject, bOrdNumDirect )
@@ -127,7 +127,7 @@ UndoDeleteObject::UndoDeleteObject( SdrObject& rObject, bool bOrdNumDirect )
 {
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoDeleteObject::Undo()
 {
@@ -139,7 +139,7 @@ void UndoDeleteObject::Undo()
     }
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoDeleteObject::Redo()
 {
@@ -151,7 +151,7 @@ void UndoDeleteObject::Redo()
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObject, bool bOrdNumDirect )
 : SdrUndoReplaceObj( rOldObject, rNewObject, bOrdNumDirect )
@@ -160,7 +160,7 @@ UndoReplaceObject::UndoReplaceObject( SdrObject& rOldObject, SdrObject& rNewObje
 {
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoReplaceObject::Undo()
 {
@@ -172,7 +172,7 @@ void UndoReplaceObject::Undo()
     }
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoReplaceObject::Redo()
 {
@@ -184,7 +184,7 @@ void UndoReplaceObject::Redo()
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
 : SdrUndoObjSetText( rObject, nText )
@@ -203,14 +203,14 @@ UndoObjectSetText::UndoObjectSetText( SdrObject& rObject, sal_Int32 nText )
     }
 }
 
-//---------------------------------------------------------------------
+
 
 UndoObjectSetText::~UndoObjectSetText()
 {
     delete mpUndoAnimation;
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoObjectSetText::Undo()
 {
@@ -224,7 +224,7 @@ void UndoObjectSetText::Undo()
     }
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoObjectSetText::Redo()
 {
@@ -238,8 +238,8 @@ void UndoObjectSetText::Redo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Undo for SdrObject::SetUserCall()
+
+
 
 UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
 :   SdrUndoObj(rObject)
@@ -249,7 +249,7 @@ UndoObjectUserCall::UndoObjectUserCall(SdrObject& rObject)
 {
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoObjectUserCall::Undo()
 {
@@ -261,7 +261,7 @@ void UndoObjectUserCall::Undo()
     }
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoObjectUserCall::Redo()
 {
@@ -272,8 +272,8 @@ void UndoObjectUserCall::Redo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// Undo for SdPage::InsertPresObj() and SdPage::RemovePresObj()
+
+
 
 UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
 :   SdrUndoObj(rObject)
@@ -288,7 +288,7 @@ UndoObjectPresentationKind::UndoObjectPresentationKind(SdrObject& rObject)
         meOldKind = static_cast< SdPage* >( mxPage.get() )->GetPresObjKind( &rObject );
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoObjectPresentationKind::Undo()
 {
@@ -303,7 +303,7 @@ void UndoObjectPresentationKind::Undo()
     }
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoObjectPresentationKind::Redo()
 {
@@ -317,21 +317,21 @@ void UndoObjectPresentationKind::Redo()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 UndoAutoLayoutPosAndSize::UndoAutoLayoutPosAndSize( SdPage& rPage )
 : mxPage( &rPage )
 {
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoAutoLayoutPosAndSize::Undo()
 {
-    // do nothing
+    
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoAutoLayoutPosAndSize::Redo()
 {
@@ -340,7 +340,7 @@ void UndoAutoLayoutPosAndSize::Redo()
         pPage->SetAutoLayout( pPage->GetAutoLayout(), sal_False, sal_False );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 : SdrUndoGeoObj( rNewObj )
@@ -349,7 +349,7 @@ UndoGeoObject::UndoGeoObject( SdrObject& rNewObj )
 {
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoGeoObject::Undo()
 {
@@ -368,7 +368,7 @@ void UndoGeoObject::Undo()
     }
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoGeoObject::Redo()
 {
@@ -387,9 +387,9 @@ void UndoGeoObject::Redo()
     }
 }
 
-//---------------------------------------------------------------------
 
-//////////////////////////////////////////////////////////////////////////////
+
+
 
 UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSaveText )
 : SdrUndoAttrObj( rObject, bStyleSheet1 ? sal_True : sal_False, bSaveText ? sal_True : sal_False )
@@ -398,7 +398,7 @@ UndoAttrObject::UndoAttrObject( SdrObject& rObject, bool bStyleSheet1, bool bSav
 {
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoAttrObject::Undo()
 {
@@ -417,7 +417,7 @@ void UndoAttrObject::Undo()
     }
 }
 
-//---------------------------------------------------------------------
+
 
 void UndoAttrObject::Redo()
 {

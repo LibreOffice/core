@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleFrameSelector.hxx"
@@ -69,7 +69,7 @@ typedef ::com::sun::star::awt::Rectangle    AwtRectangle;
 typedef ::com::sun::star::awt::KeyEvent     AwtKeyEvent;
 typedef ::com::sun::star::awt::FocusEvent   AwtFocusEvent;
 
-// ============================================================================
+
 
 AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eBorder ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
@@ -89,14 +89,14 @@ AccFrameSelector::AccFrameSelector( FrameSelector& rFrameSel, FrameBorderType eB
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 AccFrameSelector::~AccFrameSelector()
 {
     RemoveFrameSelEventListener();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::RemoveFrameSelEventListener()
 {
@@ -106,7 +106,7 @@ void AccFrameSelector::RemoveFrameSelEventListener()
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 Reference< XAccessibleContext > AccFrameSelector::getAccessibleContext(  )
     throw (RuntimeException)
@@ -114,7 +114,7 @@ Reference< XAccessibleContext > AccFrameSelector::getAccessibleContext(  )
     return this;
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Int32 AccFrameSelector::getAccessibleChildCount(  ) throw (RuntimeException)
 {
@@ -123,7 +123,7 @@ sal_Int32 AccFrameSelector::getAccessibleChildCount(  ) throw (RuntimeException)
     return (meBorder == FRAMEBORDER_NONE) ? mpFrameSel->GetEnabledBorderCount() : 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 Reference< XAccessible > AccFrameSelector::getAccessibleChild( sal_Int32 i )
     throw (RuntimeException)
@@ -138,7 +138,7 @@ Reference< XAccessible > AccFrameSelector::getAccessibleChild( sal_Int32 i )
     return xRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 Reference< XAccessible > AccFrameSelector::getAccessibleParent(  )
     throw (RuntimeException)
@@ -153,7 +153,7 @@ Reference< XAccessible > AccFrameSelector::getAccessibleParent(  )
     return xRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Int32 AccFrameSelector::getAccessibleIndexInParent(  )
     throw (RuntimeException)
@@ -178,14 +178,14 @@ sal_Int32 AccFrameSelector::getAccessibleIndexInParent(  )
     return nIdx;
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Int16 AccFrameSelector::getAccessibleRole(  ) throw (RuntimeException)
 {
     return meBorder == FRAMEBORDER_NONE ? AccessibleRole::OPTION_PANE : AccessibleRole::CHECK_BOX;
 }
 
-// ----------------------------------------------------------------------------
+
 
 OUString AccFrameSelector::getAccessibleDescription(  )
     throw (RuntimeException)
@@ -195,7 +195,7 @@ OUString AccFrameSelector::getAccessibleDescription(  )
     return maDescriptions.GetString(meBorder);
 }
 
-// ----------------------------------------------------------------------------
+
 
 OUString AccFrameSelector::getAccessibleName(  )
     throw (RuntimeException)
@@ -205,7 +205,7 @@ OUString AccFrameSelector::getAccessibleName(  )
     return maNames.GetString(meBorder);
 }
 
-// ----------------------------------------------------------------------------
+
 
 Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet(  )
     throw (RuntimeException)
@@ -216,7 +216,7 @@ Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet( 
     Reference< XAccessibleRelationSet > xRet = pHelper = new utl::AccessibleRelationSetHelper;
     if(meBorder == FRAMEBORDER_NONE)
     {
-        //add the label relation
+        
         Window *pLabeledBy = mpFrameSel->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != mpFrameSel )
         {
@@ -239,7 +239,7 @@ Reference< XAccessibleRelationSet > AccFrameSelector::getAccessibleRelationSet( 
     return xRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
     throw (RuntimeException)
@@ -285,7 +285,7 @@ Reference< XAccessibleStateSet > AccFrameSelector::getAccessibleStateSet(  )
     return xRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 Locale AccFrameSelector::getLocale(  )
     throw (IllegalAccessibleComponentStateException, RuntimeException)
@@ -293,7 +293,7 @@ Locale AccFrameSelector::getLocale(  )
     return Application::GetSettings().GetUILanguageTag().getLocale();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::addPropertyChangeListener(
     const Reference< XPropertyChangeListener >& xListener )
@@ -302,7 +302,7 @@ void AccFrameSelector::addPropertyChangeListener(
     maPropertyListeners.addInterface( xListener );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::removePropertyChangeListener( const Reference< XPropertyChangeListener >& xListener )
     throw (RuntimeException)
@@ -310,18 +310,18 @@ void AccFrameSelector::removePropertyChangeListener( const Reference< XPropertyC
     maPropertyListeners.removeInterface( xListener );
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Bool AccFrameSelector::containsPoint( const AwtPoint& aPt )
     throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
     IsValid();
-    //aPt is relative to the frame selector
+    
     return mpFrameSel->ContainsClickPoint( Point( aPt.X, aPt.Y ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 Reference< XAccessible > AccFrameSelector::getAccessibleAtPoint(
     const AwtPoint& aPt )
@@ -329,7 +329,7 @@ Reference< XAccessible > AccFrameSelector::getAccessibleAtPoint(
 {
     SolarMutexGuard aGuard;
     IsValid();
-    //aPt is relative to the frame selector
+    
     return mpFrameSel->GetChildAccessible( Point( aPt.X, aPt.Y ) );
 }
 
@@ -358,7 +358,7 @@ AwtRectangle AccFrameSelector::getBounds(  ) throw (RuntimeException)
     return aRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 AwtPoint AccFrameSelector::getLocation(  ) throw (RuntimeException)
 {
@@ -378,7 +378,7 @@ AwtPoint AccFrameSelector::getLocation(  ) throw (RuntimeException)
     return aRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 AwtPoint AccFrameSelector::getLocationOnScreen(  ) throw (RuntimeException)
 {
@@ -399,7 +399,7 @@ AwtPoint AccFrameSelector::getLocationOnScreen(  ) throw (RuntimeException)
     return aRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 AwtSize AccFrameSelector::getSize(  ) throw (RuntimeException)
 {
@@ -419,7 +419,7 @@ AwtSize AccFrameSelector::getSize(  ) throw (RuntimeException)
     return aRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Bool AccFrameSelector::isShowing(  ) throw (RuntimeException)
 {
@@ -428,7 +428,7 @@ sal_Bool AccFrameSelector::isShowing(  ) throw (RuntimeException)
     return sal_True;
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Bool AccFrameSelector::isVisible(  ) throw (RuntimeException)
 {
@@ -437,7 +437,7 @@ sal_Bool AccFrameSelector::isVisible(  ) throw (RuntimeException)
     return sal_True;
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Bool AccFrameSelector::isFocusTraversable(  ) throw (RuntimeException)
 {
@@ -446,21 +446,21 @@ sal_Bool AccFrameSelector::isFocusTraversable(  ) throw (RuntimeException)
     return sal_True;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::addFocusListener( const Reference< XFocusListener >& xListener ) throw (RuntimeException)
 {
     maFocusListeners.addInterface( xListener );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::removeFocusListener( const Reference< XFocusListener >& xListener ) throw (RuntimeException)
 {
     maFocusListeners.removeInterface( xListener );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::grabFocus(  ) throw (RuntimeException)
 {
@@ -469,7 +469,7 @@ void AccFrameSelector::grabFocus(  ) throw (RuntimeException)
     mpFrameSel->GrabFocus();
 }
 
-// ----------------------------------------------------------------------------
+
 
 Any AccFrameSelector::getAccessibleKeyBinding(  ) throw (RuntimeException)
 {
@@ -505,7 +505,7 @@ Any AccFrameSelector::getAccessibleKeyBinding(  ) throw (RuntimeException)
     return aRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Int32 AccFrameSelector::getForeground(  )
         throw (RuntimeException)
@@ -515,7 +515,7 @@ sal_Int32 AccFrameSelector::getForeground(  )
     return mpFrameSel->GetControlForeground().GetColor();
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Int32 AccFrameSelector::getBackground(  )
         throw (RuntimeException)
@@ -525,7 +525,7 @@ sal_Int32 AccFrameSelector::getBackground(  )
     return mpFrameSel->GetControlBackground().GetColor();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
 {
@@ -541,7 +541,7 @@ void AccFrameSelector::addAccessibleEventListener( const Reference< XAccessibleE
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::removeAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener ) throw (RuntimeException)
 {
@@ -550,10 +550,10 @@ void AccFrameSelector::removeAccessibleEventListener( const Reference< XAccessib
     if ( xListener.is() && mnClientId != 0 &&
          ::comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener ) == 0 )
     {
-        // no listeners anymore
-        // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-        // and at least to us not firing any events anymore, in case somebody calls
-        // NotifyAccessibleEvent, again
+        
+        
+        
+        
         ::comphelper::AccessibleEventNotifier::TClientId nId( mnClientId );
         mnClientId = 0;
         ::comphelper::AccessibleEventNotifier::revokeClient( nId );
@@ -627,7 +627,7 @@ void    AccFrameSelector::NotifyFocusListeners(sal_Bool bGetFocus)
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 IMPL_LINK( AccFrameSelector, WindowEventListener, VclSimpleEvent*, pEvent )
 {
@@ -646,7 +646,7 @@ IMPL_LINK( AccFrameSelector, WindowEventListener, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -679,7 +679,7 @@ void AccFrameSelector::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::NotifyAccessibleEvent( const sal_Int16 _nEventId,
     const Any& _rOldValue, const Any& _rNewValue )
@@ -692,7 +692,7 @@ void AccFrameSelector::NotifyAccessibleEvent( const sal_Int16 _nEventId,
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AccFrameSelector::Invalidate()
 {
@@ -705,9 +705,9 @@ void AccFrameSelector::Invalidate()
     maPropertyListeners.disposeAndClear( aEvent );
 }
 
-// ============================================================================
 
-} // namespace a11y
-} // namespace svx
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

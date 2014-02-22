@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -75,8 +75,8 @@ void XMLTextExportPropertySetMapper::handleElementItem(
             if( pProperties && nIdx >= 3 )
             {
                 const XMLPropertyState& rTrans = (*pProperties)[nIdx-3];
-                // #99657# transparency may be there, but doesn't have to be.
-                // If it's there, it must be in the right position.
+                
+                
                 if( CTF_BACKGROUND_TRANSPARENCY == getPropertySetMapper()
                       ->GetEntryContextId( rTrans.mnIndex ) )
                     pTrans = &rTrans.maValue;
@@ -164,7 +164,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
     case CTF_SECTION_ENDNOTE_NUM_SUFFIX:
     case CTF_DEFAULT_OUTLINE_LEVEL:
     case CTF_OLD_FLOW_WITH_TEXT:
-        // There's nothing to do here!
+        
         break;
     default:
         SvXMLExportPropertyMapper::handleSpecialItem(rAttrList, rProperty, rUnitConverter, rNamespaceMap, pProperties, nIdx );
@@ -218,26 +218,26 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
     if( pFontCharsetState && (pFontCharsetState->maValue >>= nTmp ) )
         eEnc = (rtl_TextEncoding)nTmp;
 
-    //Resolves: fdo#67665 The purpose here appears to be to replace
-    //FontFamilyName and FontStyleName etc with a single FontName property. The
-    //problem is that repeated calls to here will first set
-    //pFontFamilyNameState->mnIndex to -1 to indicate it is disabled, so the
-    //next time pFontFamilyNameState is not passed here at all, which gives an
-    //empty sFamilyName resulting in disabling pFontNameState->mnIndex to -1.
-    //That doesn't seem right to me.
+    
+    
+    
+    
+    
+    
+    
     //
-    //So assuming that the main purpose is just to convert the properties in
-    //the main when we can, and to leave them alone when we can't. And with a
-    //secondary purpose to filter out empty font properties, then is would
-    //appear to make sense to base attempting the conversion if we have
-    //both of the major facts of the font description
+    
+    
+    
+    
+    
     //
-    //An alternative solution is to *not* fill the FontAutoStylePool with
-    //every font in the document, but to partition the fonts into the
-    //hard-attribute fonts which go into that pool and the style-attribute
-    //fonts which go into some additional pool which get merged just for
-    //the purposes of writing the embedded fonts but are not queried by
-    //"Find" which restores the original logic.
+    
+    
+    
+    
+    
+    
     if (pFontFamilyNameState || pFontStyleNameState)
     {
         OUString sName( ((SvXMLExport&)GetExport()).GetFontAutoStylePool()->Find(
@@ -245,9 +245,9 @@ void XMLTextExportPropertySetMapper::ContextFontFilter(
         if (!sName.isEmpty())
         {
             pFontNameState->maValue <<= sName;
-            //Resolves: fdo#68431 style:font-name unrecognized by LibreOffice
-            //<= 4.1 in styles (but recognized in autostyles) so add
-            //fo:font-family, etc
+            
+            
+            
             if (!bEnableFoFontFamily)
             {
                 if( pFontFamilyNameState )
@@ -319,7 +319,7 @@ void XMLTextExportPropertySetMapper::ContextFontHeightFilter(
 
 namespace {
 
-// helper method; implementation below
+
 static bool lcl_IsOutlineStyle(const SvXMLExport&, const OUString&);
 
 static void
@@ -490,7 +490,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& rProperties,
     Reference< XPropertySet > rPropSet ) const
 {
-    // filter font
+    
     XMLPropertyState *pFontNameState = 0;
     XMLPropertyState *pFontFamilyNameState = 0;
     XMLPropertyState *pFontStyleNameState = 0;
@@ -510,7 +510,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState *pFontPitchCTLState = 0;
     XMLPropertyState *pFontCharsetCTLState = 0;
 
-    // filter char height point/percent
+    
     XMLPropertyState* pCharHeightState = NULL;
     XMLPropertyState* pCharPropHeightState = NULL;
     XMLPropertyState* pCharDiffHeightState = NULL;
@@ -521,105 +521,105 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pCharPropHeightCTLState = NULL;
     XMLPropertyState* pCharDiffHeightCTLState = NULL;
 
-    // filter left margin measure/percent
+    
     XMLPropertyState* pParaLeftMarginState = NULL;
     XMLPropertyState* pParaLeftMarginRelState = NULL;
 
-    // filter right margin measure/percent
+    
     XMLPropertyState* pParaRightMarginState = NULL;
     XMLPropertyState* pParaRightMarginRelState = NULL;
 
-    // filter first line indent measure/percent
+    
     XMLPropertyState* pParaFirstLineState = NULL;
     XMLPropertyState* pParaFirstLineRelState = NULL;
 
-    // filter ParaTopMargin/Relative
+    
     XMLPropertyState* pParaTopMarginState = NULL;
     XMLPropertyState* pParaTopMarginRelState = NULL;
 
-    // filter ParaTopMargin/Relative
+    
     XMLPropertyState* pParaBottomMarginState = NULL;
     XMLPropertyState* pParaBottomMarginRelState = NULL;
 
-    // filter (Left|Right|Top|Bottom|)BorderWidth
+    
     XMLPropertyState* pAllBorderWidthState = NULL;
     XMLPropertyState* pLeftBorderWidthState = NULL;
     XMLPropertyState* pRightBorderWidthState = NULL;
     XMLPropertyState* pTopBorderWidthState = NULL;
     XMLPropertyState* pBottomBorderWidthState = NULL;
 
-    // filter (Left|Right|Top|)BorderDistance
+    
     XMLPropertyState* pAllBorderDistanceState = NULL;
     XMLPropertyState* pLeftBorderDistanceState = NULL;
     XMLPropertyState* pRightBorderDistanceState = NULL;
     XMLPropertyState* pTopBorderDistanceState = NULL;
     XMLPropertyState* pBottomBorderDistanceState = NULL;
 
-    // filter (Left|Right|Top|Bottom|)Border
+    
     XMLPropertyState* pAllBorderState = NULL;
     XMLPropertyState* pLeftBorderState = NULL;
     XMLPropertyState* pRightBorderState = NULL;
     XMLPropertyState* pTopBorderState = NULL;
     XMLPropertyState* pBottomBorderState = NULL;
 
-    // filter Char(Left|Right|Top|Bottom|)BorderWidth
+    
     XMLPropertyState* pCharAllBorderWidthState = NULL;
     XMLPropertyState* pCharLeftBorderWidthState = NULL;
     XMLPropertyState* pCharRightBorderWidthState = NULL;
     XMLPropertyState* pCharTopBorderWidthState = NULL;
     XMLPropertyState* pCharBottomBorderWidthState = NULL;
 
-    // filter Char(Left|Right|Top|)BorderDistance
+    
     XMLPropertyState* pCharAllBorderDistanceState = NULL;
     XMLPropertyState* pCharLeftBorderDistanceState = NULL;
     XMLPropertyState* pCharRightBorderDistanceState = NULL;
     XMLPropertyState* pCharTopBorderDistanceState = NULL;
     XMLPropertyState* pCharBottomBorderDistanceState = NULL;
 
-    // filter Char(Left|Right|Top|Bottom|)Border
+    
     XMLPropertyState* pCharAllBorderState = NULL;
     XMLPropertyState* pCharLeftBorderState = NULL;
     XMLPropertyState* pCharRightBorderState = NULL;
     XMLPropertyState* pCharTopBorderState = NULL;
     XMLPropertyState* pCharBottomBorderState = NULL;
 
-    // filter height properties
+    
     XMLPropertyState* pHeightMinAbsState = NULL;
     XMLPropertyState* pHeightMinRelState = NULL;
     XMLPropertyState* pHeightAbsState = NULL;
     XMLPropertyState* pHeightRelState = NULL;
     XMLPropertyState* pSizeTypeState = NULL;
 
-    // filter width properties
+    
     XMLPropertyState* pWidthMinAbsState = NULL;
     XMLPropertyState* pWidthMinRelState = NULL;
     XMLPropertyState* pWidthAbsState = NULL;
     XMLPropertyState* pWidthRelState = NULL;
     XMLPropertyState* pWidthTypeState = NULL;
 
-    // wrap
+    
     XMLPropertyState* pWrapState = NULL;
     XMLPropertyState* pWrapContourState = NULL;
     XMLPropertyState* pWrapContourModeState = NULL;
     XMLPropertyState* pWrapParagraphOnlyState = NULL;
 
-    // anchor
+    
     XMLPropertyState* pAnchorTypeState = NULL;
 
-    // horizontal position and relation
+    
     XMLPropertyState* pHoriOrientState = NULL;
     XMLPropertyState* pHoriOrientMirroredState = NULL;
     XMLPropertyState* pHoriOrientRelState = NULL;
     XMLPropertyState* pHoriOrientRelFrameState = NULL;
     XMLPropertyState* pHoriOrientMirrorState = NULL;
-    // Horizontal position and relation for shapes (#i28749#)
+    
     XMLPropertyState* pShapeHoriOrientState = NULL;
     XMLPropertyState* pShapeHoriOrientMirroredState = NULL;
     XMLPropertyState* pShapeHoriOrientRelState = NULL;
     XMLPropertyState* pShapeHoriOrientRelFrameState = NULL;
     XMLPropertyState* pShapeHoriOrientMirrorState = NULL;
 
-    // vertical position and relation
+    
     XMLPropertyState* pVertOrientState = NULL;
     XMLPropertyState* pVertOrientAtCharState = NULL;
     XMLPropertyState* pVertOrientRelState = NULL;
@@ -629,26 +629,26 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pRelWidthRel = NULL;
     XMLPropertyState* pRelHeightRel = NULL;
 
-    // Vertical position and relation for shapes (#i28749#)
+    
     XMLPropertyState* pShapeVertOrientState = NULL;
     XMLPropertyState* pShapeVertOrientAtCharState = NULL;
     XMLPropertyState* pShapeVertOrientRelState = NULL;
     XMLPropertyState* pShapeVertOrientRelPageState = NULL;
     XMLPropertyState* pShapeVertOrientRelFrameState = NULL;
 
-    // filter underline color
+    
     XMLPropertyState* pUnderlineState = NULL;
     XMLPropertyState* pUnderlineColorState = NULL;
     XMLPropertyState* pUnderlineHasColorState = NULL;
 
-    // filter list style name
+    
     XMLPropertyState* pListStyleName = NULL;
 
-    // filter fo:clip
+    
     XMLPropertyState* pClip11State = NULL;
     XMLPropertyState* pClipState = NULL;
 
-    // filter fo:margin
+    
     XMLPropertyState* pAllParaMarginRel = NULL;
     XMLPropertyState* pAllParaMargin = NULL;
     XMLPropertyState* pAllMargin = NULL;
@@ -749,7 +749,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsCharState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_RELHEIGHTREL:          pRelHeightRel = propertie; break;
 
-        // Handle new CTFs for shape positioning properties (#i28749#)
+        
         case CTF_SHAPE_HORIZONTALPOS:             pShapeHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_HORIZONTALPOS_MIRRORED:    pShapeHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_HORIZONTALREL:             pShapeHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
@@ -841,18 +841,18 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     lcl_checkMultiProperty(pParaFirstLineState, pParaFirstLineRelState);
 
     if (pAllParaMarginRel)
-    {   // because older OOo/LO versions can't read fo:margin:
-        pAllParaMarginRel->mnIndex = -1; // just export individual attributes...
+    {   
+        pAllParaMarginRel->mnIndex = -1; 
         pAllParaMarginRel->maValue.clear();
     }
     if (pAllParaMargin)
     {
-        pAllParaMargin->mnIndex = -1; // just export individual attributes...
+        pAllParaMargin->mnIndex = -1; 
         pAllParaMargin->maValue.clear();
     }
     if (pAllMargin)
     {
-        pAllMargin->mnIndex = -1; // just export individual attributes...
+        pAllMargin->mnIndex = -1; 
         pAllMargin->maValue.clear();
     }
 
@@ -887,7 +887,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pHeightMinAbsState->mnIndex = -1;
         }
 
-        // export SizeType::VARIABLE als min-width="0"
+        
         if( SizeType::VARIABLE == nSizeType )
             pHeightMinAbsState->maValue <<= static_cast<sal_Int32>( 0 );
     }
@@ -899,7 +899,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     if( pHeightRelState && SizeType::FIX != nSizeType)
         pHeightRelState->mnIndex = -1;
 
-    // frame width
+    
     nSizeType = SizeType::FIX;
     if( pWidthTypeState )
     {
@@ -916,7 +916,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pWidthMinAbsState->mnIndex = -1;
         }
 
-        // export SizeType::VARIABLE als min-width="0"
+        
         if( SizeType::VARIABLE == nSizeType )
             pWidthMinAbsState->maValue <<= static_cast<sal_Int32>( 0 );
     }
@@ -935,12 +935,12 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         switch( eVal )
         {
         case WrapTextMode_NONE:
-            // no wrapping: disable para-only and contour
+            
             if( pWrapParagraphOnlyState )
                 pWrapParagraphOnlyState->mnIndex = -1;
-            // no break
+            
         case WrapTextMode_THROUGHT:
-            // wrap through: disable only contour
+            
             if( pWrapContourState )
                 pWrapContourState->mnIndex = -1;
             break;
@@ -962,7 +962,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         aAny >>= eAnchor;
     }
 
-    // states for frame positioning attributes
+    
     {
         if( pHoriOrientState && pHoriOrientMirroredState )
         {
@@ -1009,13 +1009,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         }
     }
 
-    // States for shape positioning properties (#i28749#)
+    
     if ( eAnchor != TextContentAnchorType_AS_CHARACTER &&
          ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 )
     {
-        // no export of shape positioning properties,
-        // if shape isn't anchored as-character and
-        // destination file format is OpenOffice.org file format
+        
+        
+        
         if ( pShapeHoriOrientState )
             pShapeHoriOrientState->mnIndex = -1;
         if ( pShapeHoriOrientMirroredState )
@@ -1039,7 +1039,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     }
     else
     {
-        // handling of shape positioning property states as for frames - see above
+        
         if( pShapeHoriOrientState && pShapeHoriOrientMirroredState )
         {
             if( pShapeHoriOrientMirrorState &&
@@ -1069,7 +1069,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pShapeVertOrientRelFrameState->mnIndex = -1;
     }
 
-    // list style name: remove list style if it is the default outline style
+    
     if( pListStyleName != NULL )
     {
         OUString sListStyleName;

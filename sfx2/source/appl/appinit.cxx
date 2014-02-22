@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -75,12 +75,12 @@ class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper2< XTerminateList
 {
 public:
 
-    // XTerminateListener
+    
     virtual void SAL_CALL queryTermination( const EventObject& aEvent ) throw( TerminationVetoException, RuntimeException );
     virtual void SAL_CALL notifyTermination( const EventObject& aEvent ) throw( RuntimeException );
     virtual void SAL_CALL disposing( const EventObject& Source ) throw( RuntimeException );
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw (RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
@@ -134,26 +134,26 @@ OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (Runt
 
 Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames() throw (RuntimeException)
 {
-    // Note: That service  does not really exists .-)
-    // But this implementation is not thought to be registered really within our service.rdb.
-    // At least we need the implementation name only to identify these service at the global desktop instance.
-    // The desktop must know, which listener will terminate the SfxApplication in real !
-    // It must call this special listener as last one ... otherwise we shutdown the SfxApplication BEFORE other listener
-    // can react ...
+    
+    
+    
+    
+    
+    
     static const OUString SERVICENAME("com.sun.star.frame.TerminateListener");
     Sequence< OUString > lNames(1);
     lNames[0] = SERVICENAME;
     return lNames;
 }
 
-//====================================================================
+
 
 typedef bool ( *PFunc_getSpecialCharsForEdit)( Window* i_pParent, const Font& i_rFont, OUString& o_rOutString );
 
-//====================================================================
-// Lazy binding of the GetSpecialCharsForEdit function as it resides in
-// a library above us.
-//====================================================================
+
+
+
+
 
 #ifndef DISABLE_DYNLOADING
 
@@ -180,7 +180,7 @@ OUString GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
         oslModule handleMod = osl_loadModuleRelative(
             &thisModule, aLibName.pData, 0 );
 
-        // get symbol
+        
         OUString aSymbol( "GetSpecialCharsForEdit"  );
         pfunc_getSpecialCharsForEdit = (PFunc_getSpecialCharsForEdit)osl_getFunctionSymbol( handleMod, aSymbol.pData );
         DBG_ASSERT( pfunc_getSpecialCharsForEdit, "GetSpecialCharsForEdit() not found!" );
@@ -195,7 +195,7 @@ OUString GetSpecialCharsForEdit(Window* pParent, const Font& rFont)
     return aRet;
 }
 
-//====================================================================
+
 
 bool SfxApplication::Initialize_Impl()
 {
@@ -213,7 +213,7 @@ bool SfxApplication::Initialize_Impl()
     pAppData_Impl->pAppDispatch = new SfxStatusDispatcher;
     pAppData_Impl->pAppDispatch->acquire();
 
-    // SV-Look
+    
     Help::EnableContextHelp();
     Help::EnableExtHelp();
 
@@ -223,8 +223,8 @@ bool SfxApplication::Initialize_Impl()
 
 
 #ifdef DBG_UTIL
-    // The SimplerErrorHandler is for debugging. In the Product errors
-    // not processed are given to SFX as Errorcode 1.
+    
+    
     pAppData_Impl->m_pSimpleErrorHdl = new SimpleErrorHandler;
 #endif
     pAppData_Impl->m_pToolsErrorHdl = new SfxErrorHandler(
@@ -241,8 +241,8 @@ bool SfxApplication::Initialize_Impl()
     pAppData_Impl->m_pSbxErrorHdl = new SfxErrorHandler(
         RID_BASIC_START, ERRCODE_AREA_SBX, ERRCODE_AREA_SBX_END, pAppData_Impl->pBasicResMgr );
 #endif
-    //ensure instantiation of listener that manages the internal recently-used
-    //list
+    
+    
     SfxPickList::ensure();
 
     DBG_ASSERT( !pAppData_Impl->pAppDispat, "AppDispatcher already exists" );
@@ -260,25 +260,25 @@ bool SfxApplication::Initialize_Impl()
 
     Registrations_Impl();
 
-    // Subklasse initialisieren
+    
     pAppData_Impl->bDowning = sal_False;
     Init();
 
-    // get CHAOS item pool...
+    
     pAppData_Impl->pPool = NoChaos::GetItemPool();
     SetPool( pAppData_Impl->pPool );
 
     if ( pAppData_Impl->bDowning )
         return false;
 
-    // App-Dispatcher aufbauen
+    
     pAppData_Impl->pAppDispat->Push(*this);
     pAppData_Impl->pAppDispat->Flush();
     pAppData_Impl->pAppDispat->DoActivate_Impl( sal_True, NULL );
 
     {
         SolarMutexGuard aGuard;
-        // Set special characters callback on vcl edit control
+        
         Edit::SetGetSpecialCharsFunction(&GetSpecialCharsForEdit);
     }
 

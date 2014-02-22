@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/seriesconverter.hxx"
@@ -39,14 +39,14 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -64,7 +64,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         DataSourceModel* pValues, const OUString& rRole,
         TextModel* pTitle = 0 )
 {
-    // create data sequence for values
+    
     Reference< XDataSequence > xValueSeq;
     if( pValues )
     {
@@ -72,7 +72,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         xValueSeq = aSourceConv.createDataSequence( rRole );
     }
 
-    // create data sequence for title
+    
     Reference< XDataSequence > xTitleSeq;
     if( pTitle )
     {
@@ -80,7 +80,7 @@ Reference< XLabeledDataSequence > lclCreateLabeledDataSequence(
         xTitleSeq = aTextConv.createDataSequence( "label" );
     }
 
-    // create the labeled data sequence, if values or title are present
+    
     Reference< XLabeledDataSequence > xLabeledSeq;
     if( xValueSeq.is() || xTitleSeq.is() )
     {
@@ -124,7 +124,7 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     bool bShowCateg   = !rDataLabel.mbDeleted && rDataLabel.mobShowCatName.get( false );
     bool bShowSymbol  = !rDataLabel.mbDeleted && rDataLabel.mobShowLegendKey.get( false );
 
-    // type of attached label
+    
     if( bHasAnyElement || rDataLabel.mbDeleted )
     {
         DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
@@ -133,18 +133,18 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
 
     if( !rDataLabel.mbDeleted )
     {
-        // data label number format (percentage format wins over value format)
+        
         rFormatter.convertNumberFormat( rPropSet, rDataLabel.maNumberFormat, bShowPercent );
 
-        // data label text formatting (frame formatting not supported by Chart2)
+        
         rFormatter.convertTextFormatting( rPropSet, rDataLabel.mxTextProp, OBJECTTYPE_DATALABEL );
         rFormatter.convertTextRotation( rPropSet, rDataLabel.mxTextProp, false );
 
-        // data label separator (do not overwrite series separator, if no explicit point separator is present)
+        
         if( bDataSeriesLabel || rDataLabel.moaSeparator.has() )
             rPropSet.setProperty( PROP_LabelSeparator, rDataLabel.moaSeparator.get( "; " ) );
 
-        // data label placement (do not overwrite series placement, if no explicit point placement is present)
+        
         if( bDataSeriesLabel || rDataLabel.monLabelPos.has() )
         {
             namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
@@ -166,9 +166,9 @@ void lclConvertLabelFormatting( PropertySet& rPropSet, ObjectFormatter& rFormatt
     }
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 DataLabelConverter::DataLabelConverter( const ConverterRoot& rParent, DataLabelModel& rModel ) :
     ConverterBase< DataLabelModel >( rParent, rModel )
@@ -189,9 +189,9 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
         bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
         if( mrModel.mxLayout && !mrModel.mxLayout->mbAutoLayout && !bIsPie )
         {
-            // bnc#694340 - nasty hack - chart2 cannot individually
-            // place data labels, let's try to find a useful
-            // compromise instead
+            
+            
+            
             namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
             const sal_Int32 aPositionsLookupTable[] =
                 {
@@ -213,7 +213,7 @@ void DataLabelConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     }
 }
 
-// ============================================================================
+
 
 DataLabelsConverter::DataLabelsConverter( const ConverterRoot& rParent, DataLabelsModel& rModel ) :
     ConverterBase< DataLabelsModel >( rParent, rModel )
@@ -232,7 +232,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
         lclConvertLabelFormatting( aPropSet, getFormatter(), mrModel, rTypeGroup, true );
     }
 
-    // data point label settings
+    
     for( DataLabelsModel::DataLabelVector::iterator aIt = mrModel.maPointLabels.begin(), aEnd = mrModel.maPointLabels.end(); aIt != aEnd; ++aIt )
     {
         (*aIt)->maNumberFormat.maFormatCode = mrModel.maNumberFormat.maFormatCode;
@@ -244,7 +244,7 @@ void DataLabelsConverter::convertFromModel( const Reference< XDataSeries >& rxDa
     }
 }
 
-// ============================================================================
+
 
 ErrorBarConverter::ErrorBarConverter( const ConverterRoot& rParent, ErrorBarModel& rModel ) :
     ConverterBase< ErrorBarModel >( rParent, rModel )
@@ -264,39 +264,39 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
         Reference< XPropertySet > xErrorBar( createInstance( "com.sun.star.chart2.ErrorBar" ), UNO_QUERY_THROW );
         PropertySet aBarProp( xErrorBar );
 
-        // plus/minus bars
+        
         aBarProp.setProperty( PROP_ShowPositiveError, bShowPos );
         aBarProp.setProperty( PROP_ShowNegativeError, bShowNeg );
 
-        // type of displayed error
+        
         namespace cssc = ::com::sun::star::chart;
         switch( mrModel.mnValueType )
         {
             case XML_cust:
             {
-                // #i87806# manual error bars
+                
                 aBarProp.setProperty( PROP_ErrorBarStyle, cssc::ErrorBarStyle::FROM_DATA );
-                // attach data sequences to erorr bar
+                
                 Reference< XDataSink > xDataSink( xErrorBar, UNO_QUERY );
                 if( xDataSink.is() )
                 {
-                    // create vector of all value sequences
+                    
                     ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
-                    // add positive values
+                    
                     if( bShowPos )
                     {
                         Reference< XLabeledDataSequence > xValueSeq = createLabeledDataSequence( ErrorBarModel::PLUS );
                         if( xValueSeq.is() )
                             aLabeledSeqVec.push_back( xValueSeq );
                     }
-                    // add negative values
+                    
                     if( bShowNeg )
                     {
                         Reference< XLabeledDataSequence > xValueSeq = createLabeledDataSequence( ErrorBarModel::MINUS );
                         if( xValueSeq.is() )
                             aLabeledSeqVec.push_back( xValueSeq );
                     }
-                    // attach labeled data sequences to series
+                    
                     if( aLabeledSeqVec.empty() )
                         xErrorBar.clear();
                     else
@@ -326,7 +326,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
                 xErrorBar.clear();
         }
 
-        // error bar formatting
+        
         getFormatter().convertFrameFormatting( aBarProp, mrModel.mxShapeProp, OBJECTTYPE_ERRORBAR );
 
         if( xErrorBar.is() )
@@ -346,7 +346,7 @@ void ErrorBarConverter::convertFromModel( const Reference< XDataSeries >& rxData
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 Reference< XLabeledDataSequence > ErrorBarConverter::createLabeledDataSequence( ErrorBarModel::SourceType eSourceType )
 {
@@ -372,7 +372,7 @@ Reference< XLabeledDataSequence > ErrorBarConverter::createLabeledDataSequence( 
     return lclCreateLabeledDataSequence( *this, mrModel.maSources.get( eSourceType ).get(), aRole );
 }
 
-// ============================================================================
+
 
 TrendlineLabelConverter::TrendlineLabelConverter( const ConverterRoot& rParent, TrendlineLabelModel& rModel ) :
     ConverterBase< TrendlineLabelModel >( rParent, rModel )
@@ -385,11 +385,11 @@ TrendlineLabelConverter::~TrendlineLabelConverter()
 
 void TrendlineLabelConverter::convertFromModel( PropertySet& rPropSet )
 {
-    // formatting
+    
     getFormatter().convertFormatting( rPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_TRENDLINELABEL );
 }
 
-// ============================================================================
+
 
 TrendlineConverter::TrendlineConverter( const ConverterRoot& rParent, TrendlineModel& rModel ) :
     ConverterBase< TrendlineModel >( rParent, rModel )
@@ -404,7 +404,7 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
 {
     try
     {
-        // trend line type
+        
         OUString aServiceName;
         switch( mrModel.mnTypeId )
         {
@@ -434,40 +434,40 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
             Reference< XRegressionCurve > xRegCurve( createInstance( aServiceName ), UNO_QUERY_THROW );
             PropertySet aPropSet( xRegCurve );
 
-            // Name
+            
             aPropSet.setProperty( PROP_CurveName, mrModel.maName );
             aPropSet.setProperty( PROP_PolynomialDegree, mrModel.mnOrder );
             aPropSet.setProperty( PROP_MovingAveragePeriod, mrModel.mnPeriod );
 
-            // Intercept
+            
             sal_Bool hasIntercept = mrModel.mfIntercept.has();
             aPropSet.setProperty( PROP_ForceIntercept, hasIntercept);
             if (hasIntercept)
                 aPropSet.setProperty( PROP_InterceptValue,  mrModel.mfIntercept.get());
 
-            // Extrapolation
+            
             if (mrModel.mfForward.has())
                 aPropSet.setProperty( PROP_ExtrapolateForward, mrModel.mfForward.get() );
             if (mrModel.mfBackward.has())
                 aPropSet.setProperty( PROP_ExtrapolateBackward, mrModel.mfBackward.get() );
 
-            // trendline formatting
+            
             getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, OBJECTTYPE_TRENDLINE );
 
-            // #i83100# show equation and correlation coefficient
+            
             PropertySet aLabelProp( xRegCurve->getEquationProperties() );
             aLabelProp.setProperty( PROP_ShowEquation, mrModel.mbDispEquation );
             aLabelProp.setProperty( PROP_ShowCorrelationCoefficient, mrModel.mbDispRSquared );
 
-            // #i83100# formatting of the equation text box
+            
             if( mrModel.mbDispEquation || mrModel.mbDispRSquared )
             {
                 TrendlineLabelConverter aLabelConv( *this, mrModel.mxLabel.getOrCreate() );
                 aLabelConv.convertFromModel( aLabelProp );
             }
 
-            // unsupported: #i5085# manual trendline size
-            // unsupported: #i34093# manual crossing point
+            
+            
 
             Reference< XRegressionCurveContainer > xRegCurveCont( rxDataSeries, UNO_QUERY_THROW );
             xRegCurveCont->addRegressionCurve( xRegCurve );
@@ -479,7 +479,7 @@ void TrendlineConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     }
 }
 
-// ============================================================================
+
 
 DataPointConverter::DataPointConverter( const ConverterRoot& rParent, DataPointModel& rModel ) :
     ConverterBase< DataPointModel >( rParent, rModel )
@@ -497,15 +497,15 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     {
         PropertySet aPropSet( rxDataSeries->getDataPointByIndex( mrModel.mnIndex ) );
 
-        // data point marker
+        
         if( mrModel.monMarkerSymbol.differsFrom( rSeries.mnMarkerSymbol ) || mrModel.monMarkerSize.differsFrom( rSeries.mnMarkerSize ) )
             rTypeGroup.convertMarker( aPropSet, mrModel.monMarkerSymbol.get( rSeries.mnMarkerSymbol ), mrModel.monMarkerSize.get( rSeries.mnMarkerSize ) );
 
-        // data point pie explosion
+        
         if( mrModel.monExplosion.differsFrom( rSeries.mnExplosion ) )
             rTypeGroup.convertPieExplosion( aPropSet, mrModel.monExplosion.get() );
 
-        // point formatting
+        
         if( mrModel.mxShapeProp.is() )
         {
             if( rTypeGroup.getTypeInfo().mbPictureOptions )
@@ -519,7 +519,7 @@ void DataPointConverter::convertFromModel( const Reference< XDataSeries >& rxDat
     }
 }
 
-// ============================================================================
+
 
 SeriesConverter::SeriesConverter( const ConverterRoot& rParent, SeriesModel& rModel ) :
     ConverterBase< SeriesModel >( rParent, rModel )
@@ -544,18 +544,18 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
 {
     const TypeGroupInfo& rTypeInfo = rTypeGroup.getTypeInfo();
 
-    // create the data series object
+    
     Reference< XDataSeries > xDataSeries( createInstance( "com.sun.star.chart2.DataSeries" ), UNO_QUERY );
     PropertySet aSeriesProp( xDataSeries );
 
-    // attach data and title sequences to series
+    
     sal_Int32 nDataPointCount = 0;
     Reference< XDataSink > xDataSink( xDataSeries, UNO_QUERY );
     if( xDataSink.is() )
     {
-        // create vector of all value sequences
+        
         ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
-        // add Y values
+        
         Reference< XLabeledDataSequence > xYValueSeq = createValueSequence( "values-y" );
         if( xYValueSeq.is() )
         {
@@ -564,13 +564,13 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
             if( xValues.is() )
                 nDataPointCount = xValues->getData().getLength();
         }
-        // add X values of scatter and bubble charts
+        
         if( !rTypeInfo.mbCategoryAxis )
         {
             Reference< XLabeledDataSequence > xXValueSeq = createCategorySequence( "values-x" );
             if( xXValueSeq.is() )
                 aLabeledSeqVec.push_back( xXValueSeq );
-            // add size values of bubble charts
+            
             if( rTypeInfo.meTypeId == TYPEID_BUBBLE )
             {
                 Reference< XLabeledDataSequence > xSizeValueSeq = createLabeledDataSequence( SeriesModel::POINTS, "values-size", true );
@@ -578,37 +578,37 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
                     aLabeledSeqVec.push_back( xSizeValueSeq );
             }
         }
-        // attach labeled data sequences to series
+        
         if( !aLabeledSeqVec.empty() )
             xDataSink->setData( ContainerHelper::vectorToSequence( aLabeledSeqVec ) );
     }
 
-    // error bars
+    
     for( SeriesModel::ErrorBarVector::iterator aIt = mrModel.maErrorBars.begin(), aEnd = mrModel.maErrorBars.end(); aIt != aEnd; ++aIt )
     {
         ErrorBarConverter aErrorBarConv( *this, **aIt );
         aErrorBarConv.convertFromModel( xDataSeries );
     }
 
-    // trendlines
+    
     for( SeriesModel::TrendlineVector::iterator aIt = mrModel.maTrendlines.begin(), aEnd = mrModel.maTrendlines.end(); aIt != aEnd; ++aIt )
     {
         TrendlineConverter aTrendlineConv( *this, **aIt );
         aTrendlineConv.convertFromModel( xDataSeries );
     }
 
-    // data point markers
+    
     rTypeGroup.convertMarker( aSeriesProp, mrModel.mnMarkerSymbol, mrModel.mnMarkerSize );
 #if OOX_CHART_SMOOTHED_PER_SERIES
-    // #i66858# smoothed series lines
+    
     rTypeGroup.convertLineSmooth( aSeriesProp, mrModel.mbSmooth );
 #endif
-    // 3D bar style (not possible to set at chart type -> set at all series)
+    
     rTypeGroup.convertBarGeometry( aSeriesProp, mrModel.monShape.get( rTypeGroup.getModel().mnShape ) );
-    // pie explosion (restricted to [0%,100%] in Chart2)
+    
     rTypeGroup.convertPieExplosion( aSeriesProp, mrModel.mnExplosion );
 
-    // series formatting
+    
     ObjectFormatter& rFormatter = getFormatter();
     ObjectType eObjType = rTypeGroup.getSeriesObjectType();
     if( rTypeInfo.mbPictureOptions )
@@ -616,12 +616,12 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     else
         rFormatter.convertFrameFormatting( aSeriesProp, mrModel.mxShapeProp, eObjType, mrModel.mnIndex );
 
-    // set the (unused) property default value used by the Chart2 templates (true for pie/doughnut charts)
+    
     bool bIsPie = rTypeInfo.meTypeCategory == TYPECATEGORY_PIE;
     aSeriesProp.setProperty( PROP_VaryColorsByPoint, bIsPie );
 
-    // own area formatting for every data point (TODO: varying line color not supported)
-    // #i91271# always set area formatting for every point in pie/doughnut charts to override their automatic point formatting
+    
+    
     if( bIsPie || (bVaryColorsByPoint && rTypeGroup.isSeriesFrameFormat() && ObjectFormatter::isAutomaticFill( mrModel.mxShapeProp )) )
     {
         /*  Set the series point number as color cycle size at the object
@@ -645,7 +645,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
         rFormatter.setMaxSeriesIndex( nOldMax );
     }
 
-    // data point settings
+    
     for( SeriesModel::DataPointVector::iterator aIt = mrModel.maPoints.begin(), aEnd = mrModel.maPoints.end(); aIt != aEnd; ++aIt )
     {
         DataPointConverter aPointConv( *this, **aIt );
@@ -661,7 +661,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     {
         if( xLabels->maNumberFormat.maFormatCode.isEmpty() )
         {
-            // Use number format code from Value series
+            
             DataSourceModel* pValues = mrModel.maSources.get( SeriesModel::VALUES ).get();
             if( pValues )
                 xLabels->maNumberFormat.maFormatCode = pValues->mxDataSeq->maFormatCode;
@@ -673,7 +673,7 @@ Reference< XDataSeries > SeriesConverter::createDataSeries( const TypeGroupConve
     return xDataSeries;
 }
 
-// private --------------------------------------------------------------------
+
 
 Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
         SeriesModel::SourceType eSourceType, const OUString& rRole, bool bUseTextLabel )
@@ -683,10 +683,10 @@ Reference< XLabeledDataSequence > SeriesConverter::createLabeledDataSequence(
     return lclCreateLabeledDataSequence( *this, pValues, rRole, pTitle );
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

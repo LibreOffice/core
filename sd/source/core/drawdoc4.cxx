@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -117,11 +117,11 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::sd;
 
-// CreateLayoutTemplates
-// At the moment (31.03.1995), the StyleSheetPool only saves styleheets that
-// have an ItemSet. To save all stylesheets, we force the creation of an ItemSet
-// with a GetItemSet call.
-// We can remove this behavior once the pool saves styleheets even without an ItemSet
+
+
+
+
+
 void SdDrawDocument::CreateLayoutTemplates()
 {
     SdStyleSheetPool*       pSSPool = (SdStyleSheetPool*)GetStyleSheetPool();
@@ -129,7 +129,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     OUString                aHelpFile;
     OUString                aStdName(SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
 
-    // Default style
+    
 
     sal_uInt16 nMask = SFXSTYLEBIT_AUTO;
 
@@ -148,7 +148,7 @@ void SdDrawDocument::CreateLayoutTemplates()
               aNullGrad.SetEndIntens( 100 );
     XHatch    aNullHatch(aNullCol);
 
-                    // Line attributes (Extended OutputDevice)
+                    
     rISet.Put(XLineStyleItem(XLINE_SOLID));
     rISet.Put(XLineColorItem(OUString(), RGB_Color(COL_DEFAULT_SHAPE_STROKE)));
     rISet.Put(XLineWidthItem(0));
@@ -161,7 +161,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(XLineEndCenterItem());
     rISet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));
 
-                    // Fill attributes (Extended OutputDevice)
+                    
     rISet.Put(XFillStyleItem(XFILL_SOLID));
     rISet.Put(XFillColorItem(OUString(), RGB_Color(COL_DEFAULT_SHAPE_FILLING)));
 
@@ -173,10 +173,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     aNullBmp.Erase( aNullColor );
     rISet.Put(XFillBitmapItem(pPool, Graphic(aNullBmp)));
 
-                    // Shadow attributes (Drawing Engine)
+                    
     rISet.Put(SdrShadowItem(sal_False));
     rISet.Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
-    rISet.Put(SdrShadowXDistItem(200));         // 3 mm Shadow distance
+    rISet.Put(SdrShadowXDistItem(200));         
     rISet.Put(SdrShadowYDistItem(200));
 
     Font aLatinFont, aCJKFont, aCTLFont;
@@ -196,9 +196,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put( aSvxFontItemCJK );
     rISet.Put( aSvxFontItemCTL );
 
-    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT ) );     // sj: (i33745) changed default from 24 to 18 pt
-    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
-    rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
+    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT ) );     
+    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); 
+    rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); 
 
     rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
     rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
@@ -218,42 +218,42 @@ void SdDrawDocument::CreateLayoutTemplates()
     rISet.Put(SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF));
     rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
 
-    // Paragraph attributes (Edit Engine)
+    
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
-    rISet.Put( SdrTextLeftDistItem( 250 ) );    // sj: (i33745) using text frame distances seems to be a better default
+    rISet.Put( SdrTextLeftDistItem( 250 ) );    
     rISet.Put( SdrTextRightDistItem( 250 ) );
     rISet.Put( SdrTextUpperDistItem( 125 ) );
     rISet.Put( SdrTextLowerDistItem( 125 ) );
 
     rISet.Put( SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL ) );
 
-    // #i16874# enable kerning by default but only for new documents
+    
     rISet.Put( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
-    // Bullet
-    // BulletItem and BulletFont for title and outline
+    
+    
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
-                            // Identical in all layers
+                            
     aBulletItem.SetStyle(BS_BULLET);
     aBulletItem.SetStart(1);
-    aBulletItem.SetScale(45);           // In percent
+    aBulletItem.SetScale(45);           
 
     Font aBulletFont( pSSPool->GetBulletFont() );
 
-    aBulletFont.SetSize(Size(0,635));   // sj: (i33745) changed default from 24 to 18 pt
+    aBulletFont.SetSize(Size(0,635));   
 
     aBulletItem.SetFont(aBulletFont);
-    aBulletItem.SetSymbol( 0x25CF );                    // In points
+    aBulletItem.SetSymbol( 0x25CF );                    
     rISet.Put(aBulletItem);
 
-    // New BulletItem
+    
     pSSPool->PutNumBulletItem( pSheet, aBulletFont );
 
     SfxItemSet* pISet = NULL;
 
-    // Object with arrowhead
+    
     aName = SD_RESSTR(STR_POOLSHEET_OBJWITHARROW);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -275,7 +275,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineEndWidthItem(300));
     pISet->Put(XLineStartCenterItem(sal_True));
 
-    // Object with Shadow
+    
     aName = SD_RESSTR(STR_POOLSHEET_OBJWITHSHADOW);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -284,10 +284,10 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SdrShadowItem(sal_True));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));        // 3 mm shadow distance
+    pISet->Put(SdrShadowXDistItem(200));        
     pISet->Put(SdrShadowYDistItem(200));
 
-    // Object without fillung
+    
     aName = SD_RESSTR(STR_POOLSHEET_OBJWITHOUTFILL);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -297,7 +297,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(XFILL_NONE));
     pISet->Put(XLineColorItem(OUString(), RGB_Color(COL_BLACK)));
 
-    // Object no fill no line
+    
 
     aName = SD_RESSTR(STR_POOLSHEET_OBJNOLINENOFILL);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
@@ -308,7 +308,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(XFILL_NONE));
     pISet->Put(XLineStyleItem(XLINE_NONE));
 
-    // Text
+    
 
     aName = SD_RESSTR(STR_POOLSHEET_TEXT);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
@@ -319,7 +319,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    // Text body
+    
     aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -329,9 +329,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxFontHeightItem(564, 100, EE_CHAR_FONTHEIGHT));        // 16 pt
+    pISet->Put(SvxFontHeightItem(564, 100, EE_CHAR_FONTHEIGHT));        
 
-    // Text body, justified
+    
     aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY_JUSTIFY);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -343,7 +343,7 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxAdjustItem(SVX_ADJUST_BLOCK, EE_PARA_JUST ));
 
-    // Text body, indented
+    
     aName = SD_RESSTR(STR_POOLSHEET_TEXTBODY_INDENT);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -354,10 +354,10 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
     SvxLRSpaceItem aLRSpaceItem( EE_PARA_LRSPACE );
-    aLRSpaceItem.SetTxtFirstLineOfst(600);      // Indentation of first line: 6mm; right: 0
+    aLRSpaceItem.SetTxtFirstLineOfst(600);      
     pISet->Put(aLRSpaceItem);
 
-    // Title
+    
 
     aName = SD_RESSTR(STR_POOLSHEET_TITLE);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
@@ -368,9 +368,9 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxFontHeightItem(1551, 100, EE_CHAR_FONTHEIGHT ));      // 44 pt
+    pISet->Put(SvxFontHeightItem(1551, 100, EE_CHAR_FONTHEIGHT ));      
 
-    // Title1
+    
     aName = SD_RESSTR(STR_POOLSHEET_TITLE1);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -383,14 +383,14 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SdrShadowItem(sal_True));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));        // 2 mm shadow distance
+    pISet->Put(SdrShadowXDistItem(200));        
     pISet->Put(SdrShadowYDistItem(200));
 
-    pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));       // 24 pt
+    pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));       
 
     pISet->Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
 
-    // Title2
+    
 
     aName = SD_RESSTR(STR_POOLSHEET_TITLE2);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
@@ -400,26 +400,26 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(XLineWidthItem(50));
 
-    // Don't get color from the color table, because the color might have been
-    // deleted or changed there
+    
+    
     Color aOrange4(255, 204, 153);
     pISet->Put(XFillColorItem(OUString(), aOrange4));
 
     pISet->Put(SdrShadowItem(sal_True));
     pISet->Put(SdrShadowColorItem(RGB_Color(COL_GRAY)));
-    pISet->Put(SdrShadowXDistItem(200));        // 2 mm shadow distance
+    pISet->Put(SdrShadowXDistItem(200));        
     pISet->Put(SdrShadowYDistItem(200));
 
-    pISet->Put(SvxFontHeightItem(1270, 100, EE_CHAR_FONTHEIGHT ));      // 36 pt
+    pISet->Put(SvxFontHeightItem(1270, 100, EE_CHAR_FONTHEIGHT ));      
 
     SvxLRSpaceItem aLRSpItem( 200, 200, 0, 0, EE_PARA_LRSPACE);
-    pISet->Put( aLRSpItem );    // Indentation of first line: 0 mm; left and right: 2 mm
+    pISet->Put( aLRSpItem );    
 
-    pISet->Put(SvxULSpaceItem(100, 100, EE_PARA_ULSPACE ));      // Paragraph margin above/below: 1 mm
+    pISet->Put(SvxULSpaceItem(100, 100, EE_PARA_ULSPACE ));      
 
     pISet->Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
 
-    // Headline
+    
 
     aName = SD_RESSTR(STR_POOLSHEET_HEADLINE);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
@@ -430,12 +430,12 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_NONE));
     pISet->Put(XFillStyleItem(XFILL_NONE));
 
-    pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));        // 24 pt
+    pISet->Put(SvxFontHeightItem(846, 100, EE_CHAR_FONTHEIGHT ));        
 
-    pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      // Paragraph margin above: 4,2 mm,
-                                                // Paragraph margin below: 2,1 mm
+    pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      
+                                                
 
-    // Headline1
+    
     aName = SD_RESSTR(STR_POOLSHEET_HEADLINE1);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -447,12 +447,12 @@ void SdDrawDocument::CreateLayoutTemplates()
 
     pISet->Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT ));
 
-    pISet->Put(SvxFontHeightItem(635, 100, EE_CHAR_FONTHEIGHT ));       // 18 pt
+    pISet->Put(SvxFontHeightItem(635, 100, EE_CHAR_FONTHEIGHT ));       
 
-    pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      // Paragraph margin above: 4,2 mm,
-                                                // Paragraph margin below: 2,1 mm
+    pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      
+                                                
 
-    // Headline2
+    
     aName = SD_RESSTR(STR_POOLSHEET_HEADLINE2);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -465,12 +465,12 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(SvxPostureItem(ITALIC_NORMAL, EE_CHAR_ITALIC ));
     pISet->Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
 
-    pISet->Put(SvxFontHeightItem(494, 100, EE_CHAR_FONTHEIGHT ));        // 14 pt
+    pISet->Put(SvxFontHeightItem(494, 100, EE_CHAR_FONTHEIGHT ));        
 
-    pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      // Paragraph margin above: 4,2 mm,
-                                                // Paragraph margin below: 2,1 mm
+    pISet->Put(SvxULSpaceItem(420, 210, EE_PARA_ULSPACE ));      
+                                                
 
-    // Measurements
+    
     aName = SD_RESSTR(STR_POOLSHEET_MEASURE);
     pSheet = &(pSSPool->Make(aName, SD_STYLE_FAMILY_GRAPHICS, nMask));
     pSheet->SetParent(aStdName);
@@ -480,7 +480,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XFillStyleItem(XFILL_NONE));
     pISet->Put(XLineColorItem(OUString(), RGB_Color(COL_BLACK)));
 
-    pISet->Put(SvxFontHeightItem(423, 100, EE_CHAR_FONTHEIGHT ));         // 12 pt
+    pISet->Put(SvxFontHeightItem(423, 100, EE_CHAR_FONTHEIGHT ));         
 
     pISet->Put(XLineStartItem(SVX_RESSTR(RID_SVXSTR_ARROW),::basegfx::B2DPolyPolygon(aArrow)));
     pISet->Put(XLineStartWidthItem(200));
@@ -489,7 +489,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     pISet->Put(XLineStyleItem(XLINE_SOLID));
     pISet->Put(SdrMeasureShowUnitItem(true));
 
-    // Generate presentation templates for default layout.
+    
     OUString aPrefix = SD_RESSTR(STR_LAYOUT_DEFAULT_NAME);
     pSSPool->CreateLayoutStyleSheets(aPrefix);
 }
@@ -538,7 +538,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     Reference< XNameContainer > xTableFamily( pSSPool->getByName( "table" ), UNO_QUERY );
 
-    // ---- Default -----------------------------------------------
+    
 
     sal_uInt16 nMask = SFXSTYLEBIT_AUTO;
 
@@ -576,13 +576,13 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put( aSvxFontItemCJK );
     rISet.Put( aSvxFontItemCTL );
 
-    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT ) );     // sj: (i33745) changed default from 24 to 18 pt
-    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
-    rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
+    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT ) );     
+    rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); 
+    rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); 
 
     rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
 
-    // Paragraph attributes (Edit Engine)
+    
     rISet.Put(SvxLRSpaceItem(EE_PARA_LRSPACE));
     rISet.Put(SvxULSpaceItem(EE_PARA_ULSPACE));
 
@@ -608,7 +608,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     rISet.Put( aBoxItem );
 
-    // ---- default --------------------------------------------------
+    
 
     Any aGray1( implMakeSolidCellStyle( pSSPool, "gray1" , aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
     Any aGray2( implMakeSolidCellStyle( pSSPool, "gray2" , aDefaultCellStyleName, RGB_COLORDATA(204,204,204)));
@@ -616,7 +616,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "default" , aGray1, aGray3, aGray2 );
 
-    // ---- BW ------------------------------------------------
+    
 
     Any aBW1( implMakeSolidCellStyle( pSSPool, "bw1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,255)));
     Any aBW2( implMakeSolidCellStyle( pSSPool, "bw2" , aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
@@ -624,7 +624,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "bw" , aBW1, aBW3, aBW2 );
 
-    // ---- Orange --------------------------------------------------
+    
 
     Any aOrange1( implMakeSolidCellStyle( pSSPool, "orange1" , aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
     Any aOrange2( implMakeSolidCellStyle( pSSPool, "orange2" , aDefaultCellStyleName, RGB_COLORDATA(255,153,102)));
@@ -632,7 +632,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "orange" , aOrange1, aOrange3, aOrange2 );
 
-    // ---- Turquoise --------------------------------------------------
+    
 
     Any aTurquoise1( implMakeSolidCellStyle( pSSPool, "turquoise1" , aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
     Any aTurquoise2( implMakeSolidCellStyle( pSSPool, "turquoise2" , aDefaultCellStyleName, RGB_COLORDATA(51,163,163)));
@@ -640,7 +640,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "turquoise" , aTurquoise1, aTurquoise3, aTurquoise2 );
 
-    // ---- Gray ------------------------------------------------
+    
 
     Any aBlue1( implMakeSolidCellStyle( pSSPool, "blue1" , aDefaultCellStyleName, RGB_COLORDATA(153,204,255)));
     Any aBlue2( implMakeSolidCellStyle( pSSPool, "blue2" , aDefaultCellStyleName, RGB_COLORDATA(0,153,255)));
@@ -648,7 +648,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "blue" , aBlue1, aBlue3, aBlue2 );
 
-    // ---- Sun ------------------------------------------------
+    
 
     Any aSun1( implMakeSolidCellStyle( pSSPool, "sun1" , aDefaultCellStyleName, RGB_COLORDATA(230,230,255)));
     Any aSun2( implMakeSolidCellStyle( pSSPool, "sun2" , aDefaultCellStyleName, RGB_COLORDATA(204,204,255)));
@@ -656,7 +656,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "sun" , aSun1, aSun3, aSun2 );
 
-    // ---- Earth ----------------------------------------------
+    
 
     Any aEarth1( implMakeSolidCellStyle( pSSPool, "earth1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
     Any aEarth2( implMakeSolidCellStyle( pSSPool, "earth2" , aDefaultCellStyleName, RGB_COLORDATA(255,204,153)));
@@ -664,7 +664,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "earth" , aEarth1, aEarth3, aEarth2 );
 
-    // ---- Green ----------------------------------------------
+    
 
     Any aGreen1( implMakeSolidCellStyle( pSSPool, "green1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
     Any aGreen2( implMakeSolidCellStyle( pSSPool, "green2" , aDefaultCellStyleName, RGB_COLORDATA(148,189,94)));
@@ -672,7 +672,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "green" , aGreen1, aGreen3, aGreen2 );
 
-    // ---- Seaweed ----------------------------------------------
+    
 
     Any aSeetang1( implMakeSolidCellStyle( pSSPool, "seetang1" , aDefaultCellStyleName, RGB_COLORDATA(204,255,255)));
     Any aSeetang2( implMakeSolidCellStyle( pSSPool, "seetang2" , aDefaultCellStyleName, RGB_COLORDATA(71,184,184)));
@@ -680,7 +680,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "seetang" , aSeetang1, aSeetang3, aSeetang2 );
 
-    // ---- LightBlue ----------------------------------------------
+    
 
     Any aLightBlue1( implMakeSolidCellStyle( pSSPool, "lightblue1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,255)));
     Any aLightBlue2( implMakeSolidCellStyle( pSSPool, "lightblue2" , aDefaultCellStyleName, RGB_COLORDATA(230,230,255)));
@@ -688,7 +688,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     implCreateTableTemplate( xTableFamily, "lightblue" , aLightBlue1, aLightBlue3, aLightBlue2 );
 
-    // ---- Yellow ----------------------------------------------
+    
 
     Any aYellow1( implMakeSolidCellStyle( pSSPool, "yellow1" , aDefaultCellStyleName, RGB_COLORDATA(255,255,204)));
     Any aYellow2( implMakeSolidCellStyle( pSSPool, "yellow2" , aDefaultCellStyleName, RGB_COLORDATA(255,255,153)));
@@ -697,7 +697,7 @@ void SdDrawDocument::CreateDefaultCellStyles()
     implCreateTableTemplate( xTableFamily, "yellow" , aYellow1, aYellow3, aYellow2 );
 }
 
-// Number of pages that reference a master page
+
 sal_uInt16 SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
 {
     sal_uInt16 nResult = 0;
@@ -720,7 +720,7 @@ sal_uInt16 SdDrawDocument::GetMasterPageUserCount(SdrPage* pMaster) const
 }
 
 
-// Finish OnlineSpelling in the background
+
 
 void SdDrawDocument::StopOnlineSpelling()
 {
@@ -736,7 +736,7 @@ void SdDrawDocument::StopOnlineSpelling()
     mpOnlineSpellingList = NULL;
 }
 
-// Start OnlineSpelling in the background
+
 void SdDrawDocument::StartOnlineSpelling(sal_Bool bForceSpelling)
 {
     if (mbOnlineSpell && (bForceSpelling || mbInitialOnlineSpellingEnabled) &&
@@ -761,13 +761,13 @@ void SdDrawDocument::StartOnlineSpelling(sal_Bool bForceSpelling)
 
         for ( nPage = 0; nPage < GetPageCount(); nPage++ )
         {
-            // Search in all pages
+            
             FillOnlineSpellingList((SdPage*) GetPage(nPage));
         }
 
         for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
         {
-            // Search all master pages
+            
             FillOnlineSpellingList((SdPage*) GetMasterPage(nPage));
         }
 
@@ -779,7 +779,7 @@ void SdDrawDocument::StartOnlineSpelling(sal_Bool bForceSpelling)
     }
 }
 
-// Fill OnlineSpelling list
+
 void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 {
     SdrObject* pObj = NULL;
@@ -794,12 +794,12 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 
         if (pObj->GetOutlinerParaObject())
         {
-            // Found a text object
+            
             mpOnlineSpellingList->addShape(*pObj);
         }
         else if (pObj->GetObjIdentifier() == OBJ_GRUP)
         {
-            // Found a group object
+            
             SdrObjListIter aGroupIter(*((SdrObjGroup*)pObj)->GetSubList(),
                                       IM_DEEPNOGROUPS);
 
@@ -809,7 +809,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
             {
                 if (aGroupIter.Next()->GetOutlinerParaObject())
                 {
-                    // Found a text object in a group object
+                    
                     bSubTextObjFound = sal_True;
                 }
             }
@@ -822,25 +822,25 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
     }
 }
 
-// OnlineSpelling in the background
+
 IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
 {
     if (mpOnlineSpellingList!=NULL
         && ( !mbOnlineSpell || mpOnlineSpellingList->hasMore()))
     {
-        // Spell next object
+        
         SdrObject* pObj = mpOnlineSpellingList->getNextShape();
 
         if (pObj)
         {
             if (pObj->GetOutlinerParaObject() && pObj->ISA(SdrTextObj))
             {
-                // Spell text object
+                
                 SpellObject((SdrTextObj*) pObj);
             }
             else if (pObj->GetObjIdentifier() == OBJ_GRUP)
             {
-                // Found a group object
+                
                 SdrObjListIter aGroupIter(*((SdrObjGroup*)pObj)->GetSubList(),
                                           IM_DEEPNOGROUPS);
 
@@ -852,22 +852,22 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
 
                     if (pSubObj->GetOutlinerParaObject() && pSubObj->ISA(SdrTextObj))
                     {
-                        // Found a text object in a group object
+                        
                         SpellObject((SdrTextObj*) pSubObj);
                     }
                 }
             }
         }
 
-        // Continue search
+        
         mpOnlineSpellingTimer->Start();
     }
     else
     {
-        // Initial spelling has finished
+        
         mbInitialOnlineSpellingEnabled = false;
 
-        // Stop search
+        
         StopOnlineSpelling();
 
         delete mpOnlineSearchItem;
@@ -877,7 +877,7 @@ IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl)
     return(0);
 }
 
-// Spell object (for OnlineSpelling)
+
 void SdDrawDocument::SpellObject(SdrTextObj* pObj)
 {
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
@@ -897,12 +897,12 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
         }
         pOutl->Init( nOutlMode );
 
-        // Put text into the outliner
+        
         pOutl->SetText(*((SdrTextObj*) pObj)->GetOutlinerParaObject());
 
         if (!mpOnlineSearchItem || pOutl->HasText(*mpOnlineSearchItem))
         {
-            // Spelling
+            
             pOutl->CompleteOnlineSpelling();
 
             if (mbHasOnlineSpellErrors)
@@ -915,7 +915,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
                     bLock = pModel->isLocked();
                     pModel->setLock(true);
                 }
-                // taking text from the outliner
+                
                 ((SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
 
                 pObj->BroadcastObjectChange();
@@ -931,33 +931,33 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
     }
 }
 
-// Object was inserted into model
+
 void SdDrawDocument::InsertObject(SdrObject* pObj, SdPage* /*pPage*/)
 {
     if(mpOnlineSpellingList && pObj)
     {
         if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
         {
-            // Add object to OnlineSpelling list
+            
             mpOnlineSpellingList->addShape(*pObj);
         }
     }
 }
 
-// Object removed from model
+
 void SdDrawDocument::RemoveObject(SdrObject* pObj, SdPage* /*pPage*/)
 {
     if(mpOnlineSpellingList && pObj)
     {
         if (pObj->GetOutlinerParaObject() || (pObj->GetObjIdentifier() == OBJ_GRUP))
         {
-            // Replace object in OnlineSpelling list by 0 pointer
+            
             mpOnlineSpellingList->removeShape(*pObj);
         }
     }
 }
 
-// Callback for ExecuteSpellPopup()
+
 IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
 {
     sal_uLong nStat = pEditStat->GetStatusWord();
@@ -966,9 +966,9 @@ IMPL_LINK(SdDrawDocument, OnlineSpellEventHdl, EditStatus*, pEditStat)
     return(0);
 }
 
-// Callback for ExecuteSpellPopup()
 
-// removed link and replaced with Imp method
+
+
 void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject* pObj, SdrOutliner* pOutl)
 {
     delete mpOnlineSearchItem;
@@ -977,7 +977,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
     sal_uInt16 nCommand = pInfo->nCommand;
 
     if (nCommand == SPELLCMD_IGNOREWORD
-        // restart when add to dictionary takes place, too.
+        
         || nCommand == SPELLCMD_ADDTODICTIONARY)
     {
         if(pObj && pOutl && pObj->ISA(SdrTextObj))
@@ -999,8 +999,8 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
     }
 }
 
-// Replace the unambiguous names of the default layers by their names in the
-// native language
+
+
 void SdDrawDocument::RestoreLayerNames()
 {
     SdrLayerAdmin& rLayerAdmin = GetLayerAdmin();
@@ -1038,7 +1038,7 @@ void SdDrawDocument::RestoreLayerNames()
     }
 }
 
-// Return formatted page number (1, I, i, a, etc.)
+
 OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
 {
     OUString aPageNumValue;
@@ -1069,16 +1069,16 @@ OUString SdDrawDocument::CreatePageNumValue(sal_uInt16 nNum) const
 
 
 
-// Rename layout template
-// Keep in mind that rOldLayoutName contains the _complete_ name of the layout
-// (including ~LT~). This is unlike rNewName.
+
+
+
 void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const OUString& rNewName)
 {
     OUString aSep(SD_LT_SEPARATOR);
     OUString aOldName(rOldLayoutName);
     sal_Int32 nPos = aOldName.indexOf( aSep );
 
-    // erase everything after '~LT~'
+    
     if (nPos != -1)
         aOldName = aOldName.copy(0, nPos + aSep.getLength());
 
@@ -1090,7 +1090,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
     {
         OUString aSheetName = pSheet->GetName();
 
-        // if the sheetname starts with aOldName + "~LT~"
+        
         if (aSheetName.startsWith(aOldName))
         {
             aSheetName = aSheetName.replaceAt(0, aOldName.getLength() - aSep.getLength(), rNewName);
@@ -1108,13 +1108,13 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
         pSheet = aIter.Next();
     }
 
-    // Now set the layout name of the drawing and the notes page, as well as
-    // their master pages.
+    
+    
     OUString aPageLayoutName(rNewName);
     aPageLayoutName += aSep + SD_RESSTR(STR_LAYOUT_OUTLINE);
 
-    // Inform all text objects on pages that use the renamed layout and set the
-    // new name.
+    
+    
     sal_uInt16 nPage;
     for (nPage = 0; nPage < GetPageCount(); nPage++)
     {
@@ -1156,8 +1156,8 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
         }
     }
 
-    // Now do this again for all master pages.
-    // The affected master pages get the name of the layout as their page name.
+    
+    
     for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
     {
         SdPage* pPage = (SdPage*) GetMasterPage(nPage);
@@ -1200,24 +1200,24 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
     }
 }
 
-// Set outliner defaults (pool defaults)
+
 void SdDrawDocument::SetTextDefaults() const
 {
-    // BulletItem and BulletFont for Titel and Outline
+    
     SvxBulletItem aBulletItem(EE_PARA_BULLET);
     Font aBulletFont( static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->GetBulletFont() );
-    aBulletFont.SetSize(Size(0,846));       // 24 pt
+    aBulletFont.SetSize(Size(0,846));       
     aBulletItem.SetFont(aBulletFont);
     aBulletItem.SetStyle(BS_BULLET);
     aBulletItem.SetStart(1);
-    aBulletItem.SetScale(45);               // In percent
-    aBulletItem.SetSymbol( 0x25CF );                // In points
+    aBulletItem.SetScale(45);               
+    aBulletItem.SetSymbol( 0x25CF );                
     pItemPool->SetPoolDefaultItem( aBulletItem );
 
-    // New BulletItem
+    
     SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);
     aNumberFormat.SetBulletFont(&aBulletFont);
-    aNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
+    aNumberFormat.SetBulletChar( 0x25CF );  
     aNumberFormat.SetBulletRelSize(45);
     aNumberFormat.SetBulletColor(Color(COL_AUTO));
     aNumberFormat.SetStart(1);
@@ -1225,10 +1225,10 @@ void SdDrawDocument::SetTextDefaults() const
 
     SvxNumRule aNumRule( NUM_BULLET_REL_SIZE|NUM_BULLET_COLOR|NUM_CHAR_TEXT_DISTANCE, SVX_MAX_NUM, sal_False);
 
-    //aNumberFormat.SetLSpace( 0 );
-    //aNumberFormat.SetAbsLSpace( 0 );
-    //aNumberFormat.SetFirstLineOffset( 0 );
-    //aNumRule.SetLevel( 0, aNumberFormat );
+    
+    
+    
+    
 
     for( sal_uInt16 i = 0; i < aNumRule.GetLevelCount(); i++ )
     {
@@ -1298,9 +1298,9 @@ void SdDrawDocument::getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rC
 {
     LanguageType eLatin = GetLanguage( EE_CHAR_LANGUAGE );
 
-    //  If the UI language is Korean, the default Latin font has to
-    //  be queried for Korean, too (the Latin language from the document can't be Korean).
-    //  This is the same logic as in SwDocShell::InitNew.
+    
+    
+    
     LanguageType eUiLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
     if (MsLangId::isKorean(eUiLanguage))
         eLatin = eUiLanguage;
@@ -1316,10 +1316,10 @@ sal_uInt32 SdDrawDocument::convertFontHeightToCTL( sal_uInt32 nWesternFontHeight
     LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
     if( LANGUAGE_THAI == eRealCTLLanguage )
     {
-        // http://specs.openoffice.org/g11n/font_sizes/42775_42725_Individual_configurable_font_size_for_default_fonts.odt
+        
         double fTemp = double(nWesternFontHeight) * 1.333;
         nWesternFontHeight = (sal_uInt32)fTemp;
-        // make some nice values for UI that displays PT instead of 1/100th mm
+        
         nWesternFontHeight = ((nWesternFontHeight * 72) + 1270) / 2540L;
         nWesternFontHeight = ((nWesternFontHeight * 2540L) + 36) / 72;
     }

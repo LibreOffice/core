@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/ChapterFormat.hpp>
@@ -51,7 +51,7 @@ OUString removeControlChars(OUString sIn)
 
 }
 
-// SwChapterFieldType
+
 
 SwChapterFieldType::SwChapterFieldType()
     : SwFieldType( RES_CHAPTERFLD )
@@ -63,7 +63,7 @@ SwFieldType* SwChapterFieldType::Copy() const
     return new SwChapterFieldType();
 }
 
-// chapter field
+
 
 SwChapterField::SwChapterField(SwChapterFieldType* pTyp, sal_uInt32 nFmt)
     : SwField(pTyp, nFmt), nLevel( 0 )
@@ -82,7 +82,7 @@ OUString SwChapterField::Expand() const
         case CF_NUM_NOPREPST_TITLE:
             return sNumber + sTitle;
     }
-    // CF_NUMBER_NOPREPST
+    
     return sNumber;
 }
 
@@ -99,7 +99,7 @@ SwField* SwChapterField::Copy() const
     return pTmp;
 }
 
-// #i53420#
+
 void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
                                       const SwCntntNode* pCntntNode,
                                       sal_Bool bSrchNum )
@@ -122,13 +122,13 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
 
 void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 {
-    //i120759,this function is for both the reference chapter field and normal chapter field
-    //bSrchNum can distinguish the two types,to the latter type,the outline num rule is must...
+    
+    
     sNumber = OUString();
     sTitle = OUString();
     sPost = OUString();
     sPre = OUString();
-    //The reference chapter field of normal num rule will be handled in this code segment
+    
     if (bSrchNum && !rTxtNd.IsOutline())
     {
         SwNumRule* pRule(rTxtNd.GetNumRule());
@@ -156,7 +156,7 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
     }
     else
     {
-    //End
+    
     SwDoc* pDoc = (SwDoc*)rTxtNd.GetDoc();
     const SwTxtNode *pTxtNd = rTxtNd.FindOutlineNodeOfLevel( nLevel );
     if( pTxtNd )
@@ -191,13 +191,13 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
             } while( true );
         }
 
-        // get the number without Pre-/Post-fixstrings
+        
 
         if ( pTxtNd->IsOutline() )
         {
-            // correction of refactoring done by cws swnumtree:
-            // retrieve numbering string without prefix and suffix strings
-            // as stated in the above german comment.
+            
+            
+            
             sNumber = pTxtNd->GetNumString( false );
 
             SwNumRule* pRule( pTxtNd->GetNumRule() );

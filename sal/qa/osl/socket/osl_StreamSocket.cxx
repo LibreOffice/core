@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**  test coder preface:
@@ -62,11 +62,11 @@ using ::rtl::OString;
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
 
-// just used to test socket::close() when accepting
+
+
+
+
 class AcceptorThread : public Thread
 {
     ::osl::AcceptorSocket asAcceptorSocket;
@@ -78,7 +78,7 @@ protected:
             ::osl::SocketAddr saLocalSocketAddr( aHostIP, IP_PORT_MYPORT9 );
             ::osl::StreamSocket ssStreamConnection;
 
-            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //integer not sal_Bool : sal_True);
+            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); 
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
             if  ( sal_True != bOK1 )
             {
@@ -134,8 +134,8 @@ protected:
             ::osl::SocketAddr saLocalSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT9 );
             ::osl::StreamSocket ssStreamConnection;
 
-            //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
-            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //integer not sal_Bool : sal_True);
+            
+            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); 
             while ( schedule( ) == sal_True )
             {
                 sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
@@ -163,7 +163,7 @@ protected:
                 sal_Int32 nReadNumber1 = ssStreamConnection.recv( pReadBuffer, 11 );
                 sal_Int32 nReadNumber2 = ssStreamConnection.recv( pReadBuffer + nReadNumber1, 11 );
                 pReadBuffer[nReadNumber1 + nReadNumber2] = '\0';
-                //t_print("# read buffer content: %s\n", pReadBuffer );
+                
                 break;
             }
             ssStreamConnection.close();
@@ -173,18 +173,18 @@ protected:
 
     void SAL_CALL onTerminated( )
         {
-            //t_print("# normally terminate this server thread %d!\n",  m_id );
+            
         }
 
 public:
-    // public to check if data transmition is OK
+    
     sal_Char pReadBuffer[30];
     ServerSocketThread( osl::Condition &_aCond  ):m_aCondition(_aCond)
         {
             m_aCondition.reset();
             t_print("#init ServerSocketThread\n");
             m_id = getIdentifier( );
-            //t_print("# successfully creat this ServerSocketThread %d!\n",  m_id );
+            
         }
 
     ~ServerSocketThread( )
@@ -211,9 +211,9 @@ protected:
             pTimeout->Seconds = 5;
             pTimeout->Nanosec = 0;
 
-            /// if the thread should terminate, schedule return false
-            //while ( schedule( ) == sal_True )
-            //{
+            
+            
+            
             if ( osl::Condition::result_ok != m_aCondition.wait( pTimeout ) )
             {
                 free( pTimeout );
@@ -222,20 +222,20 @@ protected:
 
             if ( osl_Socket_Ok == m_csConnectorSocket.connect( m_saTargetSocketAddr, pTimeout ))
             {
-                m_csConnectorSocket.send( pTestString1, 11 ); // "test socket"
+                m_csConnectorSocket.send( pTestString1, 11 ); 
                 m_csConnectorSocket.send( pTestString2, 10);
             }
             else
                 t_print("# ClientSocketThread: connect failed! \n");
-            //  terminate();
-            //}
+            
+            
             m_csConnectorSocket.close();
             free( pTimeout );
         }
 
     void SAL_CALL onTerminated( )
         {
-            //t_print("# normally terminate this thread %d!\n",  m_id );
+            
         }
 
 public:
@@ -245,7 +245,7 @@ public:
             m_csConnectorSocket( )
         {
             m_id = getIdentifier( );
-            //t_print("# successfully creat this client thread %d!\n",  m_id );
+            
         }
 
     ~ClientSocketThread( )
@@ -256,8 +256,8 @@ public:
 
 };
 
-// -----------------------------------------------------------------------------
-// Helper functions, to create buffers, check buffers
+
+
 class ValueCheckProvider
 {
     bool m_bFoundFailure;
@@ -309,7 +309,7 @@ public:
 
 };
 
-// -----------------------------------------------------------------------------
+
 /** Client Socket Thread, served as a temp little client to communicate with server.
  */
 
@@ -356,7 +356,7 @@ protected:
                     printSocketResult(eResult);
                 }
 
-                //remove this line for deadlock on solaris( margritte.germany )
+                
                 m_aConnectorSocket.close();
                 free( pTimeout );
             }
@@ -364,7 +364,7 @@ protected:
 
     void SAL_CALL onTerminated( )
         {
-            //t_print("# normally terminate this thread %d!\n",  m_id );
+            
         }
 
 public:
@@ -378,7 +378,7 @@ public:
             t_print("#init ReadSocketThread\n");
             m_id = getIdentifier( );
 
-            //t_print("# successfully creat this client thread %d!\n",  m_id );
+            
             m_aValues.createBuffer(_nBufferSize, 0);
         }
 
@@ -413,12 +413,12 @@ protected:
 
             ::osl::StreamSocket ssStreamConnection;
 
-            //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
-            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 );    //sal_True);
+            
+            asAcceptorSocket.setOption( osl_Socket_OptionReuseAddr, 1 );    
 
-            /// if the thread should terminate, schedule return false
-            // while ( schedule( ) == sal_True )
-            // {
+            
+            
+            
             t_print("bind()\n");
             sal_Bool bOK1 = asAcceptorSocket.bind( saLocalSocketAddr );
             if  ( sal_True != bOK1 )
@@ -436,7 +436,7 @@ protected:
                 else
                 {
 
-                    // blocking mode, if read/recv failed, block until success
+                    
                     asAcceptorSocket.enableNonBlockingMode( sal_False);
                     t_print("acceptConnection()\n");
                     m_aCondition.set();
@@ -462,11 +462,11 @@ protected:
 
     void SAL_CALL onTerminated( )
         {
-            //t_print("# normally terminate this server thread %d!\n",  m_id );
+            
         }
 
 public:
-    // public to check if data transmition is OK
+    
     WriteSocketThread(sal_Int32 _nBufferSize, int _nValue, osl::Condition &_aCond )
             : m_aCondition(_aCond)
         {
@@ -474,7 +474,7 @@ public:
 
             t_print("#init WriteSocketThread\n");
             m_id = getIdentifier( );
-            //t_print("# successfully creat this server thread %d!\n",  m_id );
+            
 
             m_aValues.createBuffer(_nBufferSize, _nValue);
         }
@@ -487,7 +487,7 @@ public:
         }
 };
 
-// -----------------------------------------------------------------------------
+
 
 namespace osl_StreamSocket
 {
@@ -508,7 +508,7 @@ namespace osl_StreamSocket
     {
     public:
         oslSocket sHandle;
-        // initialization
+        
         void setUp( )
             {
                 sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
@@ -522,7 +522,7 @@ namespace osl_StreamSocket
 
         void ctors_none()
             {
-                /// Socket constructor.
+                
                 ::osl::StreamSocket ssSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
 
                 CPPUNIT_ASSERT_MESSAGE( "test for ctors_none constructor function: check if the stream socket was created successfully.",
@@ -531,7 +531,7 @@ namespace osl_StreamSocket
 
         void ctors_acquire()
             {
-                /// Socket constructor.
+                
                 ::osl::StreamSocket ssSocket( sHandle );
 
                 CPPUNIT_ASSERT_MESSAGE( "test for ctors_acquire constructor function: check if the socket was created successfully",
@@ -540,7 +540,7 @@ namespace osl_StreamSocket
 
         void ctors_no_acquire()
             {
-                /// Socket constructor.
+                
                 ::osl::StreamSocket ssSocket( sHandle, SAL_NO_ACQUIRE );
 
                 CPPUNIT_ASSERT_MESSAGE(" test for ctors_no_acquire constructor function: check if the socket was created successfully",
@@ -549,9 +549,9 @@ namespace osl_StreamSocket
 
         void ctors_copy_ctor()
             {
-                /// Socket constructor.
+                
                 ::osl::StreamSocket ssSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-                /// Socket copy constructor.
+                
                 ::osl::StreamSocket copySocket( ssSocket );
 
                 CPPUNIT_ASSERT_MESSAGE(" test for ctors_copy_ctor constructor function: create new Socket instance using copy constructor",
@@ -565,12 +565,12 @@ namespace osl_StreamSocket
         CPPUNIT_TEST( ctors_copy_ctor );
         CPPUNIT_TEST_SUITE_END();
 
-    }; // class ctors
+    }; 
 
     class send_recv: public CppUnit::TestFixture
     {
     public:
-        // initialization
+        
         void setUp( )
             {
             }
@@ -583,13 +583,13 @@ namespace osl_StreamSocket
         void send_recv1()
             {
                 osl::Condition aCondition;
-                //client sent two strings, and server received, check the order and value
+                
                 ServerSocketThread myServerThread( aCondition );
                 ClientSocketThread myClientThread( aCondition );
                 myServerThread.create( );
                 myClientThread.create( );
 
-                //wait until the thread terminate
+                
                 myClientThread.join( );
                 myServerThread.join( );
                 sal_Char myStr[30] = "";
@@ -600,7 +600,7 @@ namespace osl_StreamSocket
                                        nRes == 0 );
             }
 
-        // error when recv
+        
         void send_recv2()
             {
                 ::osl::AcceptorSocket asAcceptorSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
@@ -629,27 +629,27 @@ namespace osl_StreamSocket
                 CPPUNIT_ASSERT_MESSAGE(" test for send/recv, recv error!", nReadNumber == -1 );
             }
 
-        // LLA: This is a helper function, which create 2 threads, a server and a client.
-        // the server writes the buffersize to the client.
+        
+        
 
         void write_read(sal_Int32 _nBufferSize, int _nValue)
             {
-                //client sent two strings, and server received, check the order and value
+                
                 osl::Condition aCondition;
                 WriteSocketThread myServerThread(_nBufferSize, _nValue, aCondition);
                 ReadSocketThread myClientThread(_nBufferSize, _nValue, aCondition);
                 myServerThread.create( );
-//          thread_sleep( 1 );
+
                 myClientThread.create( );
 
-                //wait until the thread terminate
+                
                 myClientThread.join( );
                 myServerThread.join( );
 
-                //Maximum Packet Size is ( ARPANET, MILNET = 1007 Ethernet (10Mb) = 1500
-                // Proteon PRONET  = 2046), so here test read 4000 bytes
+                
+                
                 sal_Int32 nLength = myClientThread.getCount();
-                bool       bIsOk   = myClientThread.isOk(); // check if the values are right.
+                bool       bIsOk   = myClientThread.isOk(); 
 
                 t_print("Length:=%d\n", (int) nLength);
                 t_print(" bIsOk:=%d\n", bIsOk);
@@ -658,7 +658,7 @@ namespace osl_StreamSocket
                                        nLength == _nBufferSize && bIsOk == true);
             }
 
-        // Tests with different values and sizes
+        
         void write_read_001()
             {
                 write_read(50, 10);
@@ -688,11 +688,11 @@ namespace osl_StreamSocket
         CPPUNIT_TEST( write_read_005 );
         CPPUNIT_TEST( send_recv1 );
         CPPUNIT_TEST( send_recv2 );
-//      CPPUNIT_TEST( write_read );
-        CPPUNIT_TEST_SUITE_END();
-    }; // class send_recv
 
-// -----------------------------------------------------------------------------
+        CPPUNIT_TEST_SUITE_END();
+    }; 
+
+
 
     class SendClientThread : public Thread
     {
@@ -711,7 +711,7 @@ namespace osl_StreamSocket
 #if !SILENT_TEST
                     sal_Int32 nWrite1 =
 #endif
-                        m_csConnectorSocket.write( pTestString1, 11 ); // "test socket"
+                        m_csConnectorSocket.write( pTestString1, 11 ); 
 #if !SILENT_TEST
                     sal_Int32 nWrite2 =
 #endif
@@ -719,7 +719,7 @@ namespace osl_StreamSocket
                     thread_sleep( 2 );
                     m_csConnectorSocket.write( pTestString2, strlen( pTestString2 ) + 1 );
                     t_print("nWrite1 is %d, nWrite2 is %d\n", (int) nWrite1, (int) nWrite2 );
-                    //thread_sleep( 1 );
+                    
                 }
                 else
                     t_print("# SendClientThread: connect failed! \n");
@@ -732,7 +732,7 @@ namespace osl_StreamSocket
                 m_saTargetSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT9 ),
                 m_csConnectorSocket( )
             {
-                //t_print("# successfully creat this SendClientThread %d!\n",  m_id );
+                
             }
 
         ~SendClientThread( )
@@ -746,7 +746,7 @@ namespace osl_StreamSocket
     class shutdown: public CppUnit::TestFixture
     {
     public:
-        // initialization
+        
         void setUp( )
             {
             }
@@ -756,7 +756,7 @@ namespace osl_StreamSocket
 
             }
 
-        // similar to close_002
+        
         void shutdown_001()
             {
 #if defined(LINUX)
@@ -766,7 +766,7 @@ namespace osl_StreamSocket
 
                 thread_sleep( 1 );
 
-                //when accepting, shutdown the socket, the thread will not block for accepting
+                
                 asSocket.shutdown();
                 myAcceptorThread.join();
 
@@ -783,7 +783,7 @@ namespace osl_StreamSocket
                 CPPUNIT_ASSERT_MESSAGE("shutdown_002: bind fail", asSocket.bind( saLocalSocketAddr ) == sal_True);
                 CPPUNIT_ASSERT_MESSAGE("shutdown_002: listen fail", asSocket.listen( 1 ) == sal_True );
                 sal_Char pReadBuffer[40];
-//          osl::Condition aCondition;
+
                 SendClientThread mySendThread;
                 mySendThread.create();
 
@@ -800,10 +800,10 @@ namespace osl_StreamSocket
 
                 ssConnectionSocket.setOption( osl_Socket_OptionLinger,  &aLingerSet, nBufferLen );
                 thread_sleep( 1 );
-                //sal_uInt32 nRecv1 = 0;
+                
                 sal_Int32 nRead1 = ssConnectionSocket.read( pReadBuffer, 11 );
 
-                //shutdown read after client the first send complete
+                
                 ssConnectionSocket.shutdown( osl_Socket_DirRead );
 
                 sal_Int32 nRead2 = ssConnectionSocket.read( pReadBuffer + nRead1, 12 );
@@ -815,7 +815,7 @@ namespace osl_StreamSocket
                 asSocket.close();
 
                 /* on Linux, if send is before shutdown(DirRead), can read, nRecv2 still > 0,
-                   http://dbforums.com/arch/186/2002/12/586417
+                   http:
                    While on Solaris, after shutdown(DirRead), all read will return 0
                 */
 #ifdef LINUX
@@ -846,14 +846,14 @@ namespace osl_StreamSocket
                 CPPUNIT_ASSERT_MESSAGE("shutdown_002: acceptConnection fail", eResult == osl_Socket_Ok );
 
                 thread_sleep( 1 );
-                //shutdown write after client the first send complete
+                
                 ssConnectionSocket.shutdown( osl_Socket_DirWrite );
 
-                // recv should not shutdown
+                
                 sal_Int32 nRead1 = ssConnectionSocket.read( pReadBuffer, 11 );
 
                 sal_Int32 nWrite = ssConnectionSocket.write( pReadBuffer, 11 );
-                // still can read
+                
                 sal_Int32 nRead3 = ssConnectionSocket.read( pReadBuffer + nRead1 , 12 );
                 t_print("after read 2, nRead1 is %d, nWrite is %d, nRead3 is %d\n", (int) nRead1, (int) nWrite, (int) nRead3 );
                 mySendThread.join();
@@ -870,7 +870,7 @@ namespace osl_StreamSocket
         CPPUNIT_TEST( shutdown_002 );
         CPPUNIT_TEST( shutdown_003 );
         CPPUNIT_TEST_SUITE_END();
-    }; // class shutdown
+    }; 
 
     class isExceptionPending: public CppUnit::TestFixture
     {
@@ -895,9 +895,9 @@ namespace osl_StreamSocket
         CPPUNIT_TEST_SUITE( isExceptionPending );
         CPPUNIT_TEST( isExPending_001 );
         CPPUNIT_TEST_SUITE_END();
-    }; // class isExceptionPending
+    }; 
 
-// -----------------------------------------------------------------------------
+
 /** Client Socket Thread, served as a temp little client to communicate with server.
  */
 
@@ -929,11 +929,11 @@ namespace osl_StreamSocket
                     return;
                 }
 
-                // 10.16.66.252
+                
                 ::osl::SocketAddr aSocketAddr( rtl::OUString::createFromAscii(m_sAddr.getStr()), IP_PORT_TEST );
-                ::osl::ConnectorSocket aSocket; // ( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
+                ::osl::ConnectorSocket aSocket; 
 
-                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True;
+                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); 
 
                 m_aCondition.wait();
                 t_print("wait done\n");
@@ -944,7 +944,7 @@ namespace osl_StreamSocket
                 pTimeout->Nanosec = 0;
 
 
-                // blocking mode, if read/recv failed, block until success
+                
                 t_print("enableNonBlockingMode(false)\n");
                 aSocket.enableNonBlockingMode( sal_False );
 
@@ -967,7 +967,7 @@ namespace osl_StreamSocket
                     setFailed();
                 }
 
-                //remove this line for deadlock on solaris( margritte.germany )
+                
                 aSocket.close();
                 free( pTimeout );
             }
@@ -979,7 +979,7 @@ namespace osl_StreamSocket
 
         void SAL_CALL onTerminated( )
             {
-                //t_print("# normally terminate this thread %d!\n",  m_id );
+                
             }
 
     public:
@@ -1000,7 +1000,7 @@ namespace osl_StreamSocket
                 }
 
                 m_id = getIdentifier( );
-                //t_print("# successfully creat this client thread %d!\n",  m_id );
+                
             }
 
         void setAddr(rtl::OString const& _sAddr)
@@ -1017,13 +1017,13 @@ namespace osl_StreamSocket
 
     };
 
-    // -----------------------------------------------------------------------------
+    
 
     class justtest : public CppUnit::TestFixture
     {
         void send_Acceptor(rtl::OString const& _sAddr, osl::Condition &)
             {
-                ::osl::AcceptorSocket aSocket; // ( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
+                ::osl::AcceptorSocket aSocket; 
                 ::osl::SocketAddr aSocketAddr;
 
                 if (! aSocketAddr.setPort(IP_PORT_TEST))
@@ -1040,12 +1040,12 @@ namespace osl_StreamSocket
                 aSocketAddr.getPort();
 
 
-                //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
-                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True);
+                
+                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); 
 
-                /// if the thread should terminate, schedule return false
-                // while ( schedule( ) == sal_True )
-                // {
+                
+                
+                
                 if (! aSocket.bind( aSocketAddr ))
                 {
                     t_print("# can't bind.\n" );
@@ -1055,7 +1055,7 @@ namespace osl_StreamSocket
                     t_print("# can't listen. \n" );
                 }
 
-                // blocking mode, if read/recv failed, block until success
+                
                 aSocket.enableNonBlockingMode( sal_False);
                 ::osl::StreamSocket ssStreamConnection;
 
@@ -1063,19 +1063,19 @@ namespace osl_StreamSocket
                 if (eResult != osl_Socket_Ok )
                 {
                     t_print("WriteSocketThread: acceptConnection failed! \n");
-                    // break;
+                    
                 }
                 char const * pBuffer = "Test String\n";
                 sal_Int32 nBufferSize = strlen(pBuffer);
                 ssStreamConnection.write( pBuffer, nBufferSize );
-                // break;
-                // }
+                
+                
 
-                // ssStreamConnection.close();
+                
                 aSocket.close();
             }
 
-        // -----------------------------------------------------------------------------
+        
 
         void send_Connector(rtl::OString const& _sAddr, osl::Condition &/*_aCondition*/ )
             {
@@ -1088,8 +1088,8 @@ namespace osl_StreamSocket
                     return;
                 }
 
-                //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
-                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True;
+                
+                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); 
 
                 oslSocketResult aResult = aSocket.connect( aSocketAddr );
                 if  ( aResult != osl_Socket_Ok )
@@ -1098,10 +1098,10 @@ namespace osl_StreamSocket
                 }
                 else
                 {
-                    // blocking mode, if read/recv failed, block until success
-//                    aSocket.enableNonBlockingMode( sal_False );
+                    
 
-//                     _aCondition.set();
+
+
 
                     ::osl::StreamSocket ssStreamConnection(aSocket);
 
@@ -1121,9 +1121,9 @@ namespace osl_StreamSocket
 
                     rtl::OUString suError = ssStreamConnection.getErrorAsString();
                     free(pBuffer2);
-                    // ssStreamConnection.close();
+                    
 
-                    // ssStreamConnection.close();
+                    
                 }
                 aSocket.shutdown(osl_Socket_DirReadWrite);
                 aSocket.close();
@@ -1131,16 +1131,16 @@ namespace osl_StreamSocket
 
 
     public:
-        // LLA: send_Connector_2_margritte works, it send strings to echo server on margritte
-        //      but can not receive anything
+        
+        
 
         void send_Connector_2_margritte(rtl::OString const& _sAddr)
             {
                 ::osl::ConnectorSocket aSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
                 ::osl::SocketAddr aSocketAddr( rtl::OUString::createFromAscii(_sAddr.getStr()), IP_PORT_TEST );
 
-                //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
-                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True;
+                
+                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); 
 
                 oslSocketResult aResult = aSocket.connect( aSocketAddr );
                 if  ( aResult != osl_Socket_Ok )
@@ -1149,7 +1149,7 @@ namespace osl_StreamSocket
                 }
                 else
                 {
-                    // blocking mode, if read/recv failed, block until success
+                    
                     aSocket.enableNonBlockingMode( sal_False );
 
                     ::osl::StreamSocket ssStreamConnection(aSocket);
@@ -1178,62 +1178,62 @@ namespace osl_StreamSocket
                 send_Connector_2_margritte(sAddr);
             }
 
-        // -----------------------------------------------------------------------------
+        
 
         void send_recv()
             {
                 rtl::OString sAddr;
-                // if ( ifAvailable(rtl::OUString("margritte.germany")) == sal_True )
-                // {
-                //     t_print("margritte is alive ! \n");
-                //     sAddr = "margritte.germany";
-                // }
+                
+                
+                
+                
+                
 
                 sAddr = "margritte.germany.sun.com";
                 if ( ifAvailable(rtl::OUString::createFromAscii(sAddr.getStr())) == sal_True )
                 {
                     t_print("found %s!\n", sAddr.getStr());
                 }
-//                 else
-//                 {
-//                     if ( ifAvailable(rtl::OUString("192.168.7.2")) == sal_True )
-//                     {
-//                         sAddr = "192.168.7.2";
-//                         t_print("moon found ! \n");
-//                     }
-//                     else
-//                     {
-//                         if ( ifAvailable(rtl::OUString("moon.linux.bogus")) == sal_True )
-//                         {
-//                             sAddr = "moon.linux.bogus";
-//                             t_print("moon found ! \n");
-//                         }
-//                         else
-//                         {
-//                             if ( ifAvailable(rtl::OUString("moon")) == sal_True )
-//                             {
-//                                 sAddr = "moon";
-//                                 t_print("moon found ! \n");
-//                             }
-//                         }
-//                     }
-//                 }
 
-                // if ( ifAvailable(rtl::OUString("10.16.64.196")) == sal_False )
-                // {
-                //     t_print("ip 10.16.64.196 is not alive! \n");
-                //     return;
-                // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+                
+                
+                
+                
 
                 osl::Condition aCondition;
                 ReadSocket2Thread myReadThread(aCondition);
                 myReadThread.setAddr(sAddr);
-//                myReadThread.create();
+
 
                 thread_sleep( 2 );
                 if (! myReadThread.getFailed())
                 {
-                    // send_Acceptor(sAddr, aCondition);
+                    
                     send_Connector(sAddr, aCondition);
 
                     thread_sleep( 2 );
@@ -1241,9 +1241,9 @@ namespace osl_StreamSocket
                     {
                         myReadThread.join();
                     }
-                    // termAndJoinThread(&myReadThread);
+                    
 
-                    // statistics
+                    
 #if !SILENT_TEST
                     sal_uInt32 nLength =
 #endif
@@ -1252,7 +1252,7 @@ namespace osl_StreamSocket
 #if !SILENT_TEST
                     bool       bIsOk   =
 #endif
-                        myReadThread.isOk(); // check if the values are right.
+                        myReadThread.isOk(); 
 
                     t_print("Length:=%d\n", (int) nLength);
                     t_print(" bIsOk:=%d\n", bIsOk);
@@ -1267,8 +1267,8 @@ namespace osl_StreamSocket
         void getPage(rtl::OString const& _sAddr);
         void test_getPage()
             {
-                // rtl::OString sPage("lla-1.germany.sun.com");
-                // getPage(sPage);
+                
+                
 
                 rtl::OString sPage("lla-1");
                 getPage(sPage);
@@ -1278,7 +1278,7 @@ namespace osl_StreamSocket
         CPPUNIT_TEST( send_recv );
         CPPUNIT_TEST( test_getPage );
         CPPUNIT_TEST_SUITE_END();
-    }; // class isExceptionPending
+    }; 
 
 
     void justtest::getPage(rtl::OString const& _sAddr)
@@ -1288,7 +1288,7 @@ namespace osl_StreamSocket
                 ::osl::SocketAddr aSocketAddr( suAddr, 80 );
 
             {
-                // some checks
+                
                 aSocketAddr.getPort();
                 oslSocketResult aResult;
                 rtl::ByteSequence aSeq = aSocketAddr.getAddr(&aResult);
@@ -1308,19 +1308,19 @@ namespace osl_StreamSocket
 
                 oslSocketResult aResult;
 
-                // SocketAddr::resolveHostname(suAddr, aSocketAddr);
-                // if (! aSocketAddr.is())
-                // {
-                //     t_print("Can't resolve Hostname.\n");
-                //     return;
-                // }
-                // rtl::OUString sStr = aSocketAddr.getHostname(&aResult);
-                // if (aResult != osl_Socket_Ok)
-                // {
-                //     t_print("problem with hostname: ");
-                //     printSocketResult(aResult);
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 //
-                // }
+                
 
                 if (! aSocketAddr.is())
                 {
@@ -1328,8 +1328,8 @@ namespace osl_StreamSocket
                     return;
                 }
 
-                //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
-                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True;
+                
+                aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); 
 
                 aResult = aSocket.connect( aSocketAddr );
                 if  ( aResult != osl_Socket_Ok )
@@ -1338,10 +1338,10 @@ namespace osl_StreamSocket
                 }
                 else
                 {
-                    // blocking mode, if read/recv failed, block until success
-//                    aSocket.enableNonBlockingMode( sal_False );
+                    
 
-//                     _aCondition.set();
+
+
 
                     ::osl::StreamSocket ssStreamConnection(aSocket);
 
@@ -1372,21 +1372,21 @@ namespace osl_StreamSocket
                 aSocket.close();
             }
 
-// -----------------------------------------------------------------------------
+
 
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::ctors);
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::send_recv);
-//    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::shutdown);
+
     CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::isExceptionPending);
 
-//    CPPUNIT_TEST_SUITE_REGISTRATION(osl_StreamSocket::justtest);
 
-} // namespace osl_StreamSocket
 
-// -----------------------------------------------------------------------------
+} 
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

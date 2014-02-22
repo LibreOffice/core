@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -130,13 +130,13 @@ sal_Bool GallerySvDrawImport( SvStream& rIStm, SdrModel& rModel )
         }
         else if( 2 == nVersion )
         {
-            // recall to read as XML
+            
             bRet = GallerySvDrawImport( aMemStm, rModel );
         }
      }
     else
     {
-        // read as XML
+        
         uno::Reference< io::XInputStream > xInputStream( new utl::OInputStreamWrapper( rIStm ) );
 
         rModel.GetItemPool().SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
@@ -167,7 +167,7 @@ sal_Bool CreateIMapGraphic( const FmFormModel& rModel, Graphic& rGraphic, ImageM
         {
             const sal_uInt16 nCount = pObj->GetUserDataCount();
 
-            // Exist in the user data an IMap information?
+            
             for ( sal_uInt16 i = 0; i < nCount; i++ )
             {
                 const SdrObjUserData* pUserData = pObj->GetUserData( i );
@@ -378,9 +378,9 @@ GalleryProgress::GalleryProgress( GraphicFilter* pFilter ) :
             if( mpFilter )
             {
                 aProgressText = GAL_RESSTR(RID_SVXSTR_GALLERY_FILTER);
-//              mpFilter->SetUpdatePercentHdl( LINK( this, GalleryProgress, Update ) );     // sj: progress wasn't working up from SO7 at all
-//                                                                                          // so I am removing this. The gallery progress should
-//                                                                                          // be changed to use the XStatusIndicator instead of XProgressMonitor
+
+
+
             }
             else
                 aProgressText = "Gallery";
@@ -526,7 +526,7 @@ sal_Bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor )
     }
     else if( ( SOT_FORMATSTR_ID_SVIM == nFormat ) && mpImageMap )
     {
-        // TODO/MBA: do we need a BaseURL here?!
+        
         bRet = SetImageMap( *mpImageMap, rFlavor );
     }
     else if( ( FORMAT_FILE == nFormat ) && mpURL )

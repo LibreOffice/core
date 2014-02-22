@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -37,7 +37,7 @@
 
 
 
-// Core-Notify
+
 void ScrollMDI( SwViewShell* pVwSh, const SwRect &rRect,
                 sal_uInt16 nRangeX, sal_uInt16 nRangeY)
 {
@@ -46,7 +46,7 @@ void ScrollMDI( SwViewShell* pVwSh, const SwRect &rRect,
         ((SwView *)pSfxVwSh)->Scroll( rRect.SVRect(), nRangeX, nRangeY );
 }
 
-// Docmdi - movable
+
 sal_Bool IsScrollMDI( SwViewShell* pVwSh, const SwRect &rRect )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
@@ -55,7 +55,7 @@ sal_Bool IsScrollMDI( SwViewShell* pVwSh, const SwRect &rRect )
     return sal_False;
 }
 
-// Notify for size change
+
 void SizeNotify(SwViewShell* pVwSh, const Size &rSize)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
@@ -68,7 +68,7 @@ void SizeNotify(SwViewShell* pVwSh, const Size &rSize)
     }
 }
 
-// Notify for page number update
+
 void PageNumNotify( SwViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
                                                     const OUString& rPgStr)
 {
@@ -84,7 +84,7 @@ void FrameNotify( SwViewShell* pVwSh, FlyMode eMode )
         SwBaseShell::SetFrmMode( eMode, (SwWrtShell*)pVwSh );
 }
 
-// Notify for page number update
+
 sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVerticalMode)
 {
     SvxRuler& rRuler = bVerticalMode ?  m_rView.GetVRuler() : m_rView.GetHRuler();
@@ -93,9 +93,9 @@ sal_Bool SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, sal_Bool bVertical
             !rRuler.StartDocDrag( rMEvt, RULER_TYPE_MARGIN2));
 }
 
-// #i23726#
-// #i42921# - add 3rd parameter <bVerticalMode> in order
-// to consider vertical layout
+
+
+
 sal_Bool SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
                                  const bool bVerticalMode )
 {
@@ -156,8 +156,8 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 
     SwWrtShell* pSh = GetView().GetWrtShellPtr();
-    // DataChanged() is sometimes called prior to creating
-    // the SwWrtShell
+    
+    
     if(!pSh)
         return;
     sal_Bool bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = sal_False;
@@ -165,16 +165,16 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
-        // rearrange ScrollBars, respectively trigger resize, because
-        // the ScrollBar size can have change. For that, in the reset
-        // handler, the size of the ScrollBars also has to be queried
-        // from the settings.
+        
+        
+        
+        
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
             pSh->LockPaint();
             bUnlockPaint = sal_True;
             SwViewShell::DeleteReplacementBitmaps();
-            GetView().InvalidateBorder();               //Scrollbar work
+            GetView().InvalidateBorder();               
         }
         break;
 
@@ -184,7 +184,7 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     case DATACHANGED_FONTSUBSTITUTION:
         pSh->LockPaint();
         bUnlockPaint = sal_True;
-        GetView().GetDocShell()->UpdateFontList();  //e.g. printer change
+        GetView().GetDocShell()->UpdateFontList();  
         break;
     }
     pSh->LockView( bViewWasLocked );

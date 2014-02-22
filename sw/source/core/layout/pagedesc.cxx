@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/pbinitem.hxx>
@@ -98,11 +98,11 @@ SwPageDesc::~SwPageDesc()
 {
 }
 
-/// Only the margin is mirrored.
-/// Attributes like borders and so on are copied 1:1.
+
+
 void SwPageDesc::Mirror()
 {
-    //Only the margins are mirrored, all other values are just copied.
+    
     SvxLRSpaceItem aLR( RES_LR_SPACE );
     const SvxLRSpaceItem &rLR = aMaster.GetLRSpace();
     aLR.SetLeft(  rLR.GetRight() );
@@ -118,7 +118,7 @@ void SwPageDesc::Mirror()
     aSet.Put( aMaster.GetBackground() );
     aSet.Put( aMaster.GetShadow() );
     aSet.Put( aMaster.GetCol() );
-    aSet.Put( aMaster.GetFrmDir() );    // #112217#
+    aSet.Put( aMaster.GetFrmDir() );    
     aLeft.SetFmtAttr( aSet );
 }
 
@@ -126,16 +126,16 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
 {
     SwFrmFmt& rFmt = bLeft ? GetLeft() : GetMaster();
 
-    // #i73790# - method renamed
+    
     rFmt.ResetAllFmtAttr();
     rFmt.SetFmtAttr( SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP, RES_FRAMEDIR) );
 }
 
-// gets information from Modify
+
 bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 {
     if( !aMaster.GetInfo( rInfo ) )
-        return false;       // found
+        return false;       
     if ( !aLeft.GetInfo( rInfo ) )
         return false ;
     if ( !m_FirstMaster.GetInfo( rInfo ) )
@@ -143,7 +143,7 @@ bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
     return m_FirstLeft.GetInfo( rInfo );
 }
 
-/// set the style for the grid alignment
+
 void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
 {
     if( pFmt != GetRegisterFmtColl() )
@@ -157,19 +157,19 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
     }
 }
 
-/// retrieve the style for the grid alignment
+
 const SwTxtFmtColl* SwPageDesc::GetRegisterFmtColl() const
 {
     const SwModify* pReg = aDepend.GetRegisteredIn();
     return (SwTxtFmtColl*)pReg;
 }
 
-/// notifie all affected page frames
+
 void SwPageDesc::RegisterChange()
 {
-    // #117072# - During destruction of the document <SwDoc>
-    // the page description is modified. Thus, do nothing, if the document
-    // is in destruction respectively if no viewshell exists.
+    
+    
+    
     SwDoc* pDoc = GetMaster().GetDoc();
     if ( !pDoc || pDoc->IsInDtor() )
     {
@@ -217,7 +217,7 @@ void SwPageDesc::RegisterChange()
     }
 }
 
-/// special handling if the style of the grid alignment changes
+
 void SwPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
@@ -264,7 +264,7 @@ const SwPageDesc* SwPageDesc::GetPageDescOfNode(const SwNode& rNd)
 const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
                                               sal_Bool bCheckForThisPgDc ) const
 {
-    // which PageDescFormat is valid for this node?
+    
     const SwFrmFmt* pRet;
     const SwFrm* pChkFrm = lcl_GetFrmOfNode( rNd );
 
@@ -274,7 +274,7 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
                                 ((SwPageFrm*)pChkFrm)->GetPageDesc();
         pRet = &pPd->GetMaster();
         OSL_ENSURE( ((SwPageFrm*)pChkFrm)->GetPageDesc() == pPd, "Wrong node for detection of page format!" );
-        // this page is assigned to which format?
+        
         if( !pChkFrm->KnowsFormat(*pRet) )
         {
             pRet = &pPd->GetLeft();
@@ -296,7 +296,7 @@ sal_Bool SwPageDesc::IsFollowNextPageOfNode( const SwNode& rNd ) const
             pChkFrm->IsPageFrm() &&
             ( !pChkFrm->GetNext() || GetFollow() ==
                         ((SwPageFrm*)pChkFrm->GetNext())->GetPageDesc() ))
-            // the page on which the follow points was found
+            
             bRet = sal_True;
     }
     return bRet;
@@ -359,7 +359,7 @@ SwPageFtnInfo::SwPageFtnInfo() :
     nLineWidth(10),
     eLineStyle( table::BorderLineStyle::SOLID ),
     aWidth( 25, 100 ),
-    nTopDist( 57 ),         //1mm
+    nTopDist( 57 ),         
     nBottomDist( 57 )
 {
     eAdj = FRMDIR_HORI_RIGHT_TOP == GetDefaultFrameDirection(GetAppLanguage()) ?

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/main.h>
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 
-// Forward declaration
+
 void Main();
 
 
@@ -93,7 +93,7 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle ) :
     WorkWindow( pParent, nWinStyle ),
     m_aBitmap( Size( 256, 256 ), 32 )
 {
-    // prepare an alpha mask
+    
     BitmapWriteAccess* pAcc = m_aBitmap.AcquireWriteAccess();
     for( int nX = 0; nX < 256; nX++ )
     {
@@ -150,18 +150,18 @@ static Point project( const Point& rPoint )
     const double angle_x = M_PI / 6.0;
     const double angle_z = M_PI / 6.0;
 
-    // transform planar coordinates to 3d
+    
     double x = rPoint.X();
     double y = rPoint.Y();
 
-    // rotate around X axis
+    
     double x1 = x;
     double y1 = y * cos( angle_x );
     double z1 = y * sin( angle_x );
 
-    // rotate around Z axis
+    
     double x2 = x1 * cos( angle_z ) + y1 * sin( angle_z );
-    //double y2 = y1 * cos( angle_z ) - x1 * sin( angle_z );
+    
     double z2 = z1;
 
     return Point( (sal_Int32)x2, (sal_Int32)z2 );
@@ -171,7 +171,7 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
 {
     Color aColor;
     sal_uInt8 nDiff;
-    // approach red
+    
     if( rFrom.GetRed() < rTo.GetRed() )
     {
         nDiff = rTo.GetRed() - rFrom.GetRed();
@@ -185,7 +185,7 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
     else
         aColor.SetRed( rFrom.GetRed() );
 
-    // approach Green
+    
     if( rFrom.GetGreen() < rTo.GetGreen() )
     {
         nDiff = rTo.GetGreen() - rFrom.GetGreen();
@@ -199,7 +199,7 @@ static Color approachColor( const Color& rFrom, const Color& rTo )
     else
         aColor.SetGreen( rFrom.GetGreen() );
 
-    // approach blue
+    
     if( rFrom.GetBlue() < rTo.GetBlue() )
     {
         nDiff = rTo.GetBlue() - rFrom.GetBlue();
@@ -321,7 +321,7 @@ void MyWin::Paint( const Rectangle& rRect )
         aLineColor = approachColor( aLineColor, aApproachColor );
         SetLineColor( aLineColor );
 
-        // switch aproach color
+        
         if( aApproachColor.IsRGBEqual( aLineColor ) )
         {
             if( aApproachColor.GetRed() )

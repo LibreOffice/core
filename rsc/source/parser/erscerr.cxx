@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -329,10 +329,10 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
         StdErr( "\n" );
         StdErr( pFI->GetLine() );
         StdErr( "\n" );
-        // Fehlerposition anzeigen
+        
         for( i = 0; (i +1) < pFI->GetScanPos(); i++ )
             StdLstErr( " " );
-        LstOut( "     ^" ); //Zeilennummern beachten
+        LstOut( "     ^" ); 
         StdErr( "^" );
         StdLstErr( "\n" );
     }
@@ -374,7 +374,7 @@ void RscError::ErrorFormat( const ERRTYPE& rError, RscTop * pClass,
 void RscError::Error( const ERRTYPE& rError, RscTop * pClass,
                       const RscId & aId, const char * pMessage )
 {
-    if( WRN_LOCALID == rError ) // Keine Warning erzeugen
+    if( WRN_LOCALID == rError ) 
         return;
     if( rError.IsError() )
         nErrors++;

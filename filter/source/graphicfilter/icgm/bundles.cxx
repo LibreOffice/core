@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,7 +29,7 @@ Bundle& Bundle::operator=( Bundle& rSource )
     return *this;
 };
 
-// ---------------------------------------------------------------
+
 
 void Bundle::SetColor( sal_uInt32 nColor )
 {
@@ -41,7 +41,7 @@ sal_uInt32 Bundle::GetColor() const
     return mnColor;
 }
 
-// ---------------------------------------------------------------
+
 
 LineBundle& LineBundle::operator=( LineBundle& rSource )
 {
@@ -86,7 +86,7 @@ FillBundle& FillBundle::operator=( FillBundle& rSource )
     return *this;
 };
 
-// ---------------------------------------------------------------
+
 
 FontEntry::FontEntry() :
     pFontName       ( NULL ),
@@ -102,7 +102,7 @@ FontEntry::~FontEntry()
     delete pCharSetValue;
 }
 
-// ---------------------------------------------------------------
+
 
 CGMFList::CGMFList() :
     nFontNameCount      ( 0 ),
@@ -117,7 +117,7 @@ CGMFList::~CGMFList()
     ImplDeleteList();
 }
 
-// ---------------------------------------------------------------
+
 
 CGMFList& CGMFList::operator=( CGMFList& rSource )
 {
@@ -148,7 +148,7 @@ CGMFList& CGMFList::operator=( CGMFList& rSource )
     return *this;
 }
 
-// ---------------------------------------------------------------
+
 
 FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
 {
@@ -158,7 +158,7 @@ FontEntry* CGMFList::GetFontEntry( sal_uInt32 nIndex )
     return ( nInd < aFontEntryList.size() ) ? aFontEntryList[ nInd ] : NULL;
 }
 
-// ---------------------------------------------------------------
+
 
 static sal_Int8* ImplSearchEntry( sal_Int8* pSource, sal_Int8* pDest, sal_uInt32 nComp, sal_uInt32 nSize )
 {
@@ -238,7 +238,7 @@ void CGMFList::InsertName( sal_uInt8* pSource, sal_uInt32 nSize )
     delete[] pBuf;
 }
 
-//--------------------------------------------------------------------------
+
 
 void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_uInt32 nSize )
 {
@@ -260,7 +260,7 @@ void CGMFList::InsertCharSet( CharSetType eCharSetType, sal_uInt8* pSource, sal_
     memcpy( pFontEntry->pCharSetValue, pSource , nSize );
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMFList::ImplDeleteList()
 {

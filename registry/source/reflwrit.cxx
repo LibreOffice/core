@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -347,7 +347,7 @@ public:
                  RTFieldAccess     access,
                  RTValueType       constValueType,
                  RTConstValueUnion constValue);
-        // throws std::bad_alloc
+        
 };
 
 FieldEntry::FieldEntry()
@@ -675,7 +675,7 @@ public:
 
     void setSuperType(sal_uInt16 index, OString const & name);
 
-    void createBlop(); // throws std::bad_alloc
+    void createBlop(); 
 };
 
 TypeWriter::TypeWriter(typereg_Version version,
@@ -750,7 +750,7 @@ void TypeWriter::setSuperType(sal_uInt16 index, OString const & name)
 
 void TypeWriter::createBlop()
 {
-    //TODO: Fix memory leaks that occur when std::bad_alloc is thrown
+    
 
     sal_uInt8*  pBlopFields         = NULL;
     sal_uInt8*  pBlopMethods        = NULL;
@@ -777,15 +777,15 @@ void TypeWriter::createBlop()
 
     sal_uInt32 blopSize = blopHeaderEntrySize;
 
-    // create CP entry for this name
+    
     pInfo = new CPInfo(CP_TAG_UTF8_NAME, &root);
     pInfo->m_value.aUtf8 = m_typeName.getStr();
     cpIndexThisName = pInfo->m_index;
 
-    // nSuperTypes
+    
     blopSize += entrySize;
 
-    // create CP entry for super names
+    
     if (m_nSuperTypes)
     {
         blopSize += m_nSuperTypes * entrySize;
@@ -800,7 +800,7 @@ void TypeWriter::createBlop()
         }
     }
 
-    // create CP entry for uik
+    
     if (m_pUik != NULL)
     {
         pInfo = new CPInfo(CP_TAG_UIK, pInfo);
@@ -808,7 +808,7 @@ void TypeWriter::createBlop()
         cpIndexUik = pInfo->m_index;
     }
 
-    // create CP entry for doku
+    
     if (!m_doku.isEmpty())
     {
         pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
@@ -816,7 +816,7 @@ void TypeWriter::createBlop()
         cpIndexDoku = pInfo->m_index;
     }
 
-    // create CP entry for idl source filename
+    
     if (!m_fileName.isEmpty())
     {
         pInfo = new CPInfo(CP_TAG_UTF8_NAME, pInfo);
@@ -824,8 +824,8 @@ void TypeWriter::createBlop()
         cpIndexFileName = pInfo->m_index;
     }
 
-    // fields blop
-    blopSize += sizeof(sal_uInt16); // fieldCount + nFieldEntries
+    
+    blopSize += sizeof(sal_uInt16); 
 
     if (m_fieldCount)
     {
@@ -835,7 +835,7 @@ void TypeWriter::createBlop()
         sal_uInt16 cpIndexDoku2 = 0;
         sal_uInt16 cpIndexFileName2 = 0;
 
-        // nFieldEntries + n fields
+        
         blopFieldsSize = sizeof(sal_uInt16) + (m_fieldCount * blopFieldEntrySize);
 
         blopSize += blopFieldsSize;
@@ -897,8 +897,8 @@ void TypeWriter::createBlop()
         }
     }
 
-    // methods blop
-    blopSize += sizeof(sal_uInt16); // methodCount
+    
+    blopSize += sizeof(sal_uInt16); 
 
     if (m_methodCount)
     {
@@ -907,17 +907,17 @@ void TypeWriter::createBlop()
         sal_uInt16  cpIndexReturn = 0;
         sal_uInt16  cpIndexDoku2 = 0;
 
-        // nMethodEntries + nParamEntries
+        
         blopMethodsSize = (2 * sizeof(sal_uInt16));
 
         for (sal_uInt16 i = 0; i < m_methodCount; i++)
         {
             pMethodEntrySize[i] = (sal_uInt16)
-                ( blopMethodEntrySize +                                 // header
-                  sizeof(sal_uInt16) +                                  // parameterCount
-                  (m_methods[i].m_paramCount * blopParamEntrySize) +    // exceptions
-                  sizeof(sal_uInt16) +                                  // exceptionCount
-                  (m_methods[i].m_excCount * sizeof(sal_uInt16)) );     // exceptions
+                ( blopMethodEntrySize +                                 
+                  sizeof(sal_uInt16) +                                  
+                  (m_methods[i].m_paramCount * blopParamEntrySize) +    
+                  sizeof(sal_uInt16) +                                  
+                  (m_methods[i].m_excCount * sizeof(sal_uInt16)) );     
 
             blopMethodsSize += pMethodEntrySize[i];
         }
@@ -1014,15 +1014,15 @@ void TypeWriter::createBlop()
         delete[] pMethodEntrySize;
     }
 
-    // reference blop
-    blopSize += entrySize; // referenceCount
+    
+    blopSize += entrySize; 
 
     if (m_referenceCount)
     {
         sal_uInt16 cpIndexName = 0;
         sal_uInt16 cpIndexDoku2 = 0;
 
-        // nReferenceEntries + n references
+        
         blopReferenceSize = entrySize + (m_referenceCount * blopReferenceEntrySize);
 
         blopSize += blopReferenceSize;
@@ -1062,7 +1062,7 @@ void TypeWriter::createBlop()
     }
 
 
-    // get CP infos blop-length
+    
     pInfo = root.m_next;
     sal_uInt32 cpBlopSize = 0;
     sal_uInt16 cpCount = 0;
@@ -1075,15 +1075,15 @@ void TypeWriter::createBlop()
     }
 
     blopSize += cpBlopSize;
-    blopSize += sizeof(sal_uInt16);   // constantPoolCount
+    blopSize += sizeof(sal_uInt16);   
 
-    // write all in flat buffer
+    
 
     sal_uInt8 * blop = new sal_uInt8[blopSize];
 
     pBuffer = blop;
 
-    // Assumes two's complement arithmetic with modulo-semantics:
+    
     pBuffer += writeUINT32(pBuffer, magic + m_version);
     pBuffer += writeUINT32(pBuffer, blopSize);
     pBuffer += writeUINT16(pBuffer, minorVersion);
@@ -1097,7 +1097,7 @@ void TypeWriter::createBlop()
     pBuffer += writeUINT16(pBuffer, cpIndexDoku);
     pBuffer += writeUINT16(pBuffer, cpIndexFileName);
 
-    // write supertypes
+    
     pBuffer += writeUINT16(pBuffer, m_nSuperTypes);
     if (m_nSuperTypes)
     {
@@ -1110,7 +1110,7 @@ void TypeWriter::createBlop()
 
     pBuffer += writeUINT16(pBuffer, cpCount);
 
-    // write and delete CP infos
+    
     pInfo = root.m_next;
 
     while (pInfo)
@@ -1123,7 +1123,7 @@ void TypeWriter::createBlop()
         pInfo = pNextInfo;
     }
 
-    // write fields
+    
     pBuffer += writeUINT16(pBuffer, m_fieldCount);
     if (blopFieldsSize)
     {
@@ -1131,7 +1131,7 @@ void TypeWriter::createBlop()
         pBuffer += blopFieldsSize;
     }
 
-    // write methods
+    
     pBuffer += writeUINT16(pBuffer, m_methodCount);
     if (blopMethodsSize)
     {
@@ -1139,7 +1139,7 @@ void TypeWriter::createBlop()
         pBuffer += blopMethodsSize;
     }
 
-    // write references
+    
     pBuffer += writeUINT16(pBuffer, m_referenceCount);
     if (blopReferenceSize)
     {

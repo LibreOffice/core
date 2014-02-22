@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
+
+
+
 #include <sal/types.h>
 
 #include <osl/thread.hxx>
@@ -39,7 +39,7 @@
 #include <time.h>
 #endif
 
-// -----------------------------------------------------------------------------
+
 #define CONST_TEST_STRING "gregorian"
 
 namespace {
@@ -50,22 +50,22 @@ struct Gregorian : public rtl::StaticWithInit<rtl::OUString, Gregorian> {
 };
 }
 
-// -----------------------------------------------------------------------------
+
 namespace ThreadHelper
 {
-    // typedef enum {
-    //     QUIET=1,
-    //     VERBOSE
-    // } eSleepVerboseMode;
+    
+    
+    
+    
 
     void thread_sleep_tenth_sec(sal_Int32 _nTenthSec/*, eSleepVerboseMode nVerbose = VERBOSE*/)
     {
-        // if (nVerbose == VERBOSE)
-        // {
-        //     printf("wait %d tenth seconds. ", _nTenthSec );
-        //     fflush(stdout);
-        // }
-#ifdef WNT      //Windows
+        
+        
+        
+        
+        
+#ifdef WNT      
         Sleep(_nTenthSec * 100 );
 #endif
 #if ( defined UNX )
@@ -74,14 +74,14 @@ namespace ThreadHelper
         nTV.Nanosec = ( (_nTenthSec%10 ) * 100000000 );
         osl_waitThread(&nTV);
 #endif
-        // if (nVerbose == VERBOSE)
-        // {
-        //     printf("done\n");
-        // }
+        
+        
+        
+        
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** Simple thread for testing Thread-create.
  * Just add 1 of value 0, and after running, result is 1.
@@ -142,7 +142,7 @@ public:
         }
 };
 
-// -----------------------------------------------------------------------------
+
 namespace rtl_DoubleLocking
 {
 
@@ -153,7 +153,7 @@ namespace rtl_DoubleLocking
     {
     public:
 
-        // initialise your test code values here.
+        
         void setUp()
             {
             }
@@ -184,11 +184,11 @@ namespace rtl_DoubleLocking
 
         void getValue_002()
             {
-                // initial 5 threads with different priorities
+                
                 OGetThread* pThread = new OGetThread();
                 OGetThread* p2Thread = new OGetThread();
 
-                //Create them and start running at the same time
+                
                 pThread->create();
                 p2Thread->create();
 
@@ -237,13 +237,13 @@ namespace rtl_DoubleLocking
         CPPUNIT_TEST(getValue_001);
         CPPUNIT_TEST(getValue_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class create
-// -----------------------------------------------------------------------------
-    CPPUNIT_TEST_SUITE_REGISTRATION(rtl_DoubleLocking::getValue);
-} // namespace rtl_DoubleLocking
+    }; 
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+    CPPUNIT_TEST_SUITE_REGISTRATION(rtl_DoubleLocking::getValue);
+} 
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

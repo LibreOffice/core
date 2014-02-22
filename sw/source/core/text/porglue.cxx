@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swrect.hxx"
@@ -146,7 +146,7 @@ void SwGluePortion::MoveGlue( SwGluePortion *pTarget, const short nPrtGlue )
 
 void SwGluePortion::Join( SwGluePortion *pVictim )
 {
-    // Die GluePortion wird ausgesogen und weggespuelt ...
+    
     AddPrtWidth( pVictim->PrtWidth() );
     SetLen( pVictim->GetLen() + GetLen() );
     if( Height() < pVictim->Height() )
@@ -161,7 +161,7 @@ void SwGluePortion::Join( SwGluePortion *pVictim )
  *                class SwFixPortion
  *************************************************************************/
 
-// Wir erwarten ein framelokales SwRect !
+
 SwFixPortion::SwFixPortion( const SwRect &rRect )
        :SwGluePortion( KSHORT(rRect.Width()) ), nFix( KSHORT(rRect.Left()) )
 {
@@ -205,7 +205,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
     while( pRight != this )
     {
 
-        // 1) We search for the left Glue
+        
         SwLinePortion *pPos = (SwLinePortion*)this;
         SwGluePortion *pLeft = 0;
         while( pPos )
@@ -217,7 +217,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 pPos = 0;
         }
 
-        // Two adjoining FlyPortions are merged
+        
         if( pRight && pLeft && pLeft->GetPortion() == pRight )
         {
             pRight->MoveAllGlue( pLeft );
@@ -225,11 +225,11 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
         }
         KSHORT nRightGlue = pRight && 0 < pRight->GetPrtGlue()
                           ? KSHORT(pRight->GetPrtGlue()) : 0;
-        // 2) balance left and right Glue
-        //    But not for tabs ...
+        
+        
         if( pLeft && nRightGlue && !pRight->InTabGrp() )
         {
-            // pPrev is the portion immediately before pRight
+            
             SwLinePortion *pPrev = pRight->FindPrevPortion( pLeft );
 
             if ( pRight->IsFlyPortion() && pRight->GetLen() )
@@ -237,8 +237,8 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 SwFlyPortion *pFly = (SwFlyPortion *)pRight;
                 if ( pFly->GetBlankWidth() < nRightGlue )
                 {
-                    // Creating new TxtPortion, that takes over the
-                    // Blank previously swallowed by the Fly.
+                    
+                    
                     nRightGlue = nRightGlue - pFly->GetBlankWidth();
                     pFly->SubPrtWidth( pFly->GetBlankWidth() );
                     pFly->SetLen( 0 );
@@ -256,18 +256,18 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 if( bNoMove || pPrev->PrtWidth() >= nRightGlue ||
                     pPrev->InHyphGrp() || pPrev->IsKernPortion() )
                 {
-                    // The portion before the pRight cannot be moved
-                    // because no Glue is remaining.
-                    // We set the break condition:
+                    
+                    
+                    
                     pPrev = pLeft;
                 }
                 else
                 {
                     nRightGlue = nRightGlue - pPrev->PrtWidth();
-                    // pPrev is moved behind pRight. For this the
-                    // Glue value between pRight and pLeft gets balanced.
+                    
+                    
                     pRight->MoveGlue( pLeft, short( pPrev->PrtWidth() ) );
-                    // Now fix the linking of our portions.
+                    
                     SwLinePortion *pPrevPrev = pPrev->FindPrevPortion( pLeft );
                     pPrevPrev->SetPortion( pRight );
                     pPrev->SetPortion( pRight->GetPortion() );
@@ -290,7 +290,7 @@ void SwMarginPortion::AdjustRight( const SwLineLayout *pCurr )
                 }
             }
         }
-        // If no left Glue remaines we set the break condition.
+        
         pRight = pLeft ? pLeft : (SwGluePortion*)this;
     }
 }

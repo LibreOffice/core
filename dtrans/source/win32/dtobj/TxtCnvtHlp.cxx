@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -25,9 +25,9 @@
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::uno;
 
-//------------------------------------------------------------------
-// assuming a '\0' terminated string if no length specified
-//------------------------------------------------------------------
+
+
+
 
 int CalcBuffSizeForTextConversion( UINT code_page, LPCSTR lpMultiByteString, int nLen = -1 )
 {
@@ -39,9 +39,9 @@ int CalcBuffSizeForTextConversion( UINT code_page, LPCSTR lpMultiByteString, int
                                 0 ) * sizeof( sal_Unicode ) );
 }
 
-//------------------------------------------------------------------
-// assuming a '\0' terminated string if no length specified
-//------------------------------------------------------------------
+
+
+
 
 int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharString, int nLen = -1 )
 {
@@ -55,11 +55,11 @@ int CalcBuffSizeForTextConversion( UINT code_page, LPCWSTR lpWideCharString, int
                                 NULL );
 }
 
-//------------------------------------------------------------------
-// converts text in one code page into unicode text
-// automatically calculates the necessary buffer size and allocates
-// the buffer
-//------------------------------------------------------------------
+
+
+
+
+
 
 int MultiByteToWideCharEx( UINT cp_src,
                            LPCSTR lpMultiByteString,
@@ -70,19 +70,19 @@ int MultiByteToWideCharEx( UINT cp_src,
     OSL_ASSERT( IsValidCodePage( cp_src ) );
     OSL_ASSERT( NULL != lpMultiByteString );
 
-    // calculate the required buff size
+    
     int reqSize = CalcBuffSizeForTextConversion( cp_src, lpMultiByteString, lenStr );
 
     if ( bEnsureTrailingZero )
         reqSize += sizeof( sal_Unicode );
 
-    // initialize the data-transfer helper
+    
     refDTransHelper.init( reqSize );
 
-    // setup a global memory pointer
+    
     CRawHGlobalPtr ptrHGlob( refDTransHelper );
 
-    // do the converssion an return
+    
     return MultiByteToWideChar( cp_src,
                                 0,
                                 lpMultiByteString,
@@ -91,11 +91,11 @@ int MultiByteToWideCharEx( UINT cp_src,
                                 ptrHGlob.MemSize( ) );
 }
 
-//------------------------------------------------------------------
-// converts unicode text into text of the specified code page
-// automatically calculates the necessary buffer size and allocates
-// the buffer
-//------------------------------------------------------------------
+
+
+
+
+
 
 int WideCharToMultiByteEx( UINT cp_dest,
                            LPCWSTR lpWideCharString,
@@ -106,19 +106,19 @@ int WideCharToMultiByteEx( UINT cp_dest,
     OSL_ASSERT( IsValidCodePage( cp_dest ) );
     OSL_ASSERT( NULL != lpWideCharString );
 
-    // calculate the required buff size
+    
     int reqSize = CalcBuffSizeForTextConversion( cp_dest, lpWideCharString, lenStr );
 
     if ( bEnsureTrailingZero )
         reqSize += sizeof( sal_Int8 );
 
-    // initialize the data-transfer helper
+    
     refDTransHelper.init( reqSize );
 
-    // setup a global memory pointer
+    
     CRawHGlobalPtr ptrHGlob( refDTransHelper );
 
-    // do the converssion an return
+    
     return WideCharToMultiByte( cp_dest,
                                 0,
                                 lpWideCharString,

@@ -90,9 +90,9 @@ namespace skeleton
 
         const sal_Char* getPROPERTY_AUTOINCREMENTCREATION() { return    "AutoIncrementCreation"; }
         const sal_Char* getPROPERTY_PRIVILEGES()            { return    "Privileges"; }
-    //============================================================
-    //= error messages
-    //============================================================
+    
+    
+    
         const sal_Char* getERRORMSG_SEQUENCE()              { return    "Function sequence error"; }
         const sal_Char* getSQLSTATE_SEQUENCE()              { return    "HY010"; }
         const sal_Char* getSQLSTATE_GENERAL()               { return    "HY0000"; }
@@ -105,7 +105,7 @@ namespace skeleton
                 if(aIter->second)
                     rtl_uString_release(aIter->second);
         }
-        // ------------------------------------------------------------------------------
+        
         ::rtl::OUString OPropertyMap::getNameByIndex(sal_Int32 _nIndex) const
         {
             ::rtl::OUString sRet;
@@ -116,7 +116,7 @@ namespace skeleton
                 sRet = aIter->second;
             return sRet;
         }
-        // ------------------------------------------------------------------------------
+        
         ::rtl::OUString OPropertyMap::fillValue(sal_Int32 _nIndex)
         {
             rtl_uString* pStr = NULL;
@@ -132,7 +132,7 @@ namespace skeleton
                 case PROPERTY_ID_FETCHSIZE:                 { rtl_uString_newFromAscii(&pStr,getPROPERTY_FETCHSIZE()                ); break;   }
                 case PROPERTY_ID_ESCAPEPROCESSING:          { rtl_uString_newFromAscii(&pStr,getPROPERTY_ESCAPEPROCESSING()     ); break; }
                 case PROPERTY_ID_USEBOOKMARKS:              { rtl_uString_newFromAscii(&pStr,getPROPERTY_USEBOOKMARKS()         ); break; }
-                // Column
+                
                 case PROPERTY_ID_NAME:                      { rtl_uString_newFromAscii(&pStr,getPROPERTY_NAME()             ); break; }
                 case PROPERTY_ID_TYPE:                      { rtl_uString_newFromAscii(&pStr,getPROPERTY_TYPE()             ); break; }
                 case PROPERTY_ID_TYPENAME:                  { rtl_uString_newFromAscii(&pStr,getPROPERTY_TYPENAME()         ); break; }

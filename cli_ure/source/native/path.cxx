@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -47,10 +47,10 @@ WCHAR * buildPath(
     WCHAR * path, WCHAR const * frontBegin, WCHAR const * frontEnd,
     WCHAR const * backBegin, std::size_t backLength)
 {
-    // Remove leading ".." segments in the second path together with matching
-    // segments in the first path that are neither empty nor "." nor ".." nor
-    // end in ":" (which is not foolprove, as it can erroneously erase the start
-    // of a UNC path, but only if the input is bad data):
+    
+    
+    
+    
     while (backLength >= 2 && backBegin[0] == L'.' && backBegin[1] == L'.' &&
            (backLength == 2 || backBegin[2] == L'\\'))
     {
@@ -81,7 +81,7 @@ WCHAR * buildPath(
     }
     if (backLength <
         static_cast< std::size_t >(MAX_PATH - (frontEnd - frontBegin)))
-        // hopefully std::size_t is large enough
+        
     {
         WCHAR * p;
         if (frontBegin == path) {
@@ -135,9 +135,9 @@ WCHAR * resolveLink(WCHAR * path) {
             break;
         case ':':
             colon = true;
-            // fall through
+            
         default:
-            // Convert from UTF-8 to UTF-16:
+            
             if (c <= 0x7F) {
                 p2[n2++] = c;
             } else if (c >= 0xC2 && c <= 0xDF && i < n &&
@@ -195,10 +195,10 @@ WCHAR * resolveLink(WCHAR * path) {
     }
     WCHAR * end;
     if (colon || p2[0] == L'\\') {
-        // Interpret p2 as an absolute path:
+        
         end = path;
     } else {
-        // Interpret p2 as a relative path:
+        
         end = filename(path);
     }
     return buildPath(path, path, end, p2, n2);

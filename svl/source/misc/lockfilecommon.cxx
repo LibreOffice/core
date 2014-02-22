@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -53,7 +53,7 @@ using namespace ::com::sun::star;
 
 namespace svt {
 
-// ----------------------------------------------------------------------
+
 LockFileCommon::LockFileCommon( const OUString& aOrigURL, const OUString& aPrefix )
 {
     INetURLObject aDocURL = ResolveLinks( INetURLObject( aOrigURL ) );
@@ -61,16 +61,16 @@ LockFileCommon::LockFileCommon( const OUString& aOrigURL, const OUString& aPrefi
     OUString aShareURLString = aDocURL.GetPartBeforeLastName();
     aShareURLString += aPrefix;
     aShareURLString += aDocURL.GetName();
-    aShareURLString += "%23"; // '#'
+    aShareURLString += "%23"; 
     m_aURL = INetURLObject( aShareURLString ).GetMainURL( INetURLObject::NO_DECODE );
 }
 
-// ----------------------------------------------------------------------
+
 LockFileCommon::~LockFileCommon()
 {
 }
 
-// ----------------------------------------------------------------------
+
 INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
 {
     if ( aDocURL.HasError() )
@@ -78,23 +78,23 @@ INetURLObject LockFileCommon::ResolveLinks( const INetURLObject& aDocURL )
 
     OUString aURLToCheck = aDocURL.GetMainURL(INetURLObject::NO_DECODE);
 
-    // there is currently no UCB functionality to resolve the symbolic links;
-    // since the lock files are used only for local file systems the osl
-    // functionality is used directly
+    
+    
+    
     salhelper::LinkResolver aResolver(osl_FileStatus_Mask_FileName);
     osl::FileBase::RC eStatus = aResolver.fetchFileStatus(aURLToCheck);
     if (eStatus == osl::FileBase::E_None)
         aURLToCheck = aResolver.m_aStatus.getFileURL();
     else if (eStatus == osl::FileBase::E_MULTIHOP)
     {
-        // do not allow too deep links
+        
         throw io::IOException();
     }
 
     return INetURLObject( aURLToCheck );
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< uno::Sequence< OUString > > LockFileCommon::ParseList( const uno::Sequence< sal_Int8 >& aBuffer )
 {
     sal_Int32 nCurPos = 0;
@@ -113,7 +113,7 @@ uno::Sequence< uno::Sequence< OUString > > LockFileCommon::ParseList( const uno:
     return aResult;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< OUString > LockFileCommon::ParseEntry( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
     uno::Sequence< OUString > aResult( LOCKFILE_ENTRYSIZE );
@@ -130,7 +130,7 @@ uno::Sequence< OUString > LockFileCommon::ParseEntry( const uno::Sequence< sal_I
     return aResult;
 }
 
-// ----------------------------------------------------------------------
+
 OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sal_Int32& io_nCurPos )
 {
     OStringBuffer aResult;
@@ -168,7 +168,7 @@ OUString LockFileCommon::ParseName( const uno::Sequence< sal_Int8 >& aBuffer, sa
     return OStringToOUString( aResult.makeStringAndClear(), RTL_TEXTENCODING_UTF8 );
 }
 
-// ----------------------------------------------------------------------
+
 OUString LockFileCommon::EscapeCharacters( const OUString& aSource )
 {
     OUStringBuffer aBuffer;
@@ -183,7 +183,7 @@ OUString LockFileCommon::EscapeCharacters( const OUString& aSource )
     return aBuffer.makeStringAndClear();
 }
 
-// ----------------------------------------------------------------------
+
 OUString LockFileCommon::GetOOOUserName()
 {
     SvtUserOptions aUserOpt;
@@ -195,7 +195,7 @@ OUString LockFileCommon::GetOOOUserName()
     return aName;
 }
 
-// ----------------------------------------------------------------------
+
 OUString LockFileCommon::GetCurrentLocalTime()
 {
     OUString aTime;
@@ -219,7 +219,7 @@ OUString LockFileCommon::GetCurrentLocalTime()
     return aTime;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< OUString > LockFileCommon::GenerateOwnEntry()
 {
     uno::Sequence< OUString > aResult( LOCKFILE_ENTRYSIZE );
@@ -239,6 +239,6 @@ uno::Sequence< OUString > LockFileCommon::GenerateOwnEntry()
     return aResult;
 }
 
-} // namespace svt
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

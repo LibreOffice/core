@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/forbiddencharacterstable.hxx>
@@ -24,7 +24,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 static rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell* pDocSh )
 {
@@ -35,8 +35,8 @@ static rtl::Reference<SvxForbiddenCharactersTable> lcl_GetForbidden( ScDocShell*
         xRet = pDoc->GetForbiddenCharacters();
         if ( !xRet.is() )
         {
-            //  create an empty SvxForbiddenCharactersTable for SvxUnoForbiddenCharsTable,
-            //  so changes can be stored.
+            
+            
 
             xRet = new SvxForbiddenCharactersTable( comphelper::getProcessComponentContext() );
             pDoc->SetForbiddenCharacters( xRet );
@@ -64,7 +64,7 @@ void ScForbiddenCharsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // document gone
+        pDocShell = NULL;       
     }
 }
 

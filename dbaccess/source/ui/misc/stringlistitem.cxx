@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "stringlistitem.hxx"
@@ -24,7 +24,7 @@ namespace dbaui
 
 using namespace ::com::sun::star::uno;
 
-// OStringListItem
+
 TYPEINIT1(OStringListItem, SfxPoolItem);
 OStringListItem::OStringListItem(sal_Int16 _nWhich, const Sequence< OUString >& _rList)
     :SfxPoolItem(_nWhich)
@@ -44,7 +44,7 @@ bool OStringListItem::operator==(const SfxPoolItem& _rItem) const
     if ((!pCompare) || (pCompare->m_aList.getLength() != m_aList.getLength()))
         return false;
 
-    // compare all strings individually
+    
     const OUString* pMyStrings = m_aList.getConstArray();
     const OUString* pCompareStrings = pCompare->m_aList.getConstArray();
 
@@ -60,6 +60,6 @@ SfxPoolItem* OStringListItem::Clone(SfxItemPool* /* _pPool */) const
     return new OStringListItem(*this);
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

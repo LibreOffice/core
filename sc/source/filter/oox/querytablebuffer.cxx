@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "querytablebuffer.hxx"
@@ -33,7 +33,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -64,7 +64,7 @@ const sal_uInt32 BIFF12_QUERYTABLE_APPLYBORDER      = 0x00020000;
 const sal_uInt32 BIFF12_QUERYTABLE_APPLYFILL        = 0x00040000;
 const sal_uInt32 BIFF12_QUERYTABLE_APPLYPROTECTION  = 0x00080000;
 
-// ----------------------------------------------------------------------------
+
 
 void lclAppendWebQueryTableName( OUStringBuffer& rTables, const OUString& rTableName )
 {
@@ -130,9 +130,9 @@ Reference< XAreaLink > lclFindAreaLink(
     return Reference< XAreaLink >();
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 QueryTableModel::QueryTableModel() :
     mnConnId( -1 ),
@@ -152,7 +152,7 @@ QueryTableModel::QueryTableModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 QueryTable::QueryTable( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -182,7 +182,7 @@ void QueryTable::importQueryTable( const AttributeList& rAttribs )
     maModel.mbApplyAlignment   = rAttribs.getBool( XML_applyAlignmentFormats, false );
     maModel.mbApplyBorder      = rAttribs.getBool( XML_applyBorderFormats, false );
     maModel.mbApplyFill        = rAttribs.getBool( XML_applyPatternFormats, false );
-    // OOXML and BIFF12 documentation differ: OOXML mentions width/height, BIFF12 mentions protection
+    
     maModel.mbApplyProtection  = rAttribs.getBool( XML_applyWidthHeightFormats, false );
 }
 
@@ -203,7 +203,7 @@ void QueryTable::importQueryTable( SequenceInputStream& rStrm )
     maModel.mbFirstBackground   = getFlag( nFlags, BIFF12_QUERYTABLE_FIRSTBACKGROUND );
     maModel.mbRefreshOnLoad     = getFlag( nFlags, BIFF12_QUERYTABLE_REFRESHONLOAD );
     maModel.mbFillFormulas      = getFlag( nFlags, BIFF12_QUERYTABLE_FILLFORMULAS );
-    maModel.mbRemoveDataOnSave  = !getFlag( nFlags, BIFF12_QUERYTABLE_SAVEDATA ); // flag negated in BIFF12
+    maModel.mbRemoveDataOnSave  = !getFlag( nFlags, BIFF12_QUERYTABLE_SAVEDATA ); 
     maModel.mbDisableEdit       = getFlag( nFlags, BIFF12_QUERYTABLE_DISABLEEDIT );
     maModel.mbPreserveFormat    = getFlag( nFlags, BIFF12_QUERYTABLE_PRESERVEFORMAT );
     maModel.mbAdjustColWidth    = getFlag( nFlags, BIFF12_QUERYTABLE_ADJUSTCOLWIDTH );
@@ -222,14 +222,14 @@ void QueryTable::finalizeImport()
     OSL_ENSURE( xConnection.get(), "QueryTable::finalizeImport - missing connection object" );
     if( xConnection.get() && (xConnection->getConnectionType() == BIFF12_CONNECTION_HTML) )
     {
-        // check that valid web query properties exist
+        
         const WebPrModel* pWebPr = xConnection->getModel().mxWebPr.get();
         if( pWebPr && !pWebPr->mbXml )
         {
             OUString aFileUrl = getBaseFilter().getAbsoluteUrl( pWebPr->maUrl );
             if( !aFileUrl.isEmpty() )
             {
-                // resolve destination cell range (stored as defined name containing the range)
+                
                 OUString aDefName = maModel.maDefName.replace( ' ', '_' ).replace( '-', '_' );
                 DefinedNameRef xDefName = getDefinedNames().getByModelName( aDefName, getSheetIndex() );
                 OSL_ENSURE( xDefName.get(), "QueryTable::finalizeImport - missing defined name" );
@@ -241,7 +241,7 @@ void QueryTable::finalizeImport()
                     if( bIsRange && getAddressConverter().checkCellRange( aDestRange, false, true ) )
                     {
                         CellAddress aDestPos( aDestRange.Sheet, aDestRange.StartColumn, aDestRange.StartRow );
-                        // find tables mode: entire document, all tables, or specific tables
+                        
                         OUString aTables = pWebPr->mbHtmlTables ? lclBuildWebQueryTables( pWebPr->maTables ) : "HTML_all";
                         if( !aTables.isEmpty() ) try
                         {
@@ -250,7 +250,7 @@ void QueryTable::finalizeImport()
                             OUString aFilterName = "calc_HTML_WebQuery";
                             OUString aFilterOptions;
                             xAreaLinks->insertAtPosition( aDestPos, aFileUrl, aTables, aFilterName, aFilterOptions );
-                            // set refresh interval (convert minutes to seconds)
+                            
                             sal_Int32 nRefreshPeriod = xConnection->getModel().mnInterval * 60;
                             if( nRefreshPeriod > 0 )
                             {
@@ -268,7 +268,7 @@ void QueryTable::finalizeImport()
     }
 }
 
-// ============================================================================
+
 
 QueryTableBuffer::QueryTableBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper )
@@ -287,9 +287,9 @@ void QueryTableBuffer::finalizeImport()
     maQueryTables.forEachMem( &QueryTable::finalizeImport );
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

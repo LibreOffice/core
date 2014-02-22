@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -95,7 +95,7 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(OString const& rLineType)
                     aDXFLineInfo.nDashCount ++;
                 }
                 else {
-                    // It is impossible to be converted.
+                    
                 }
             }
             else {
@@ -103,7 +103,7 @@ DXFLineInfo DXF2GDIMetaFile::LTypeToDXFLineInfo(OString const& rLineType)
                     aDXFLineInfo.fDistance = -1 * x;
                 }
                 else {
-                    // It is impossible to be converted.
+                    
                 }
             }
 
@@ -742,7 +742,7 @@ void DXF2GDIMetaFile::DrawEntities(const DXFEntities & rEntities,
                 DrawDimensionEntity((DXFDimensionEntity&)*pE,*pT);
                 break;
             default:
-                break;  // four other values not handled -Wall
+                break;  
             }
         }
         pE=pE->pSucc;
@@ -826,7 +826,7 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
             fHeight=pDXF->aBoundingBox.fMaxY-pDXF->aBoundingBox.fMinY;
             if (fWidth<=0 || fHeight<=0) {
                 bStatus=sal_False;
-                fScale = 0;  // -Wall added this...
+                fScale = 0;  
             }
             else {
                     if (fWidth>fHeight)
@@ -868,8 +868,8 @@ sal_Bool DXF2GDIMetaFile::Convert(const DXFRepresentation & rDXF, GDIMetaFile & 
     if ( bStatus==sal_True )
     {
         rMTF.SetPrefSize( aPrefSize );
-        // simply set map mode to 1/100-mm (1/10-mm) if the graphic
-        // does not get not too small (<0.5cm)
+        
+        
         if( ( aPrefSize.Width() < 500 ) && ( aPrefSize.Height() < 500 ) )
             rMTF.SetPrefMapMode( MapMode( MAP_10TH_MM ) );
         else

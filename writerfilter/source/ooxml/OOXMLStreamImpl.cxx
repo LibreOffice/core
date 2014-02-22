@@ -95,9 +95,9 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
 {
     bool bFound = false;
     static uno::Reference< com::sun::star::uri::XUriReferenceFactory > xFac =  ::com::sun::star::uri::UriReferenceFactory::create( mxContext );
-    // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
-    // keep the XUriReference implementation happy )
-    // add mspath to represent the 'source' of this stream
+    
+    
+    
     uno::Reference< com::sun::star::uri::XUriReference > xBase = xFac->parse( OUString( "file:///"  ) + msPath );
 
     static OUString sType("Type");
@@ -209,7 +209,7 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                     bFound = true;
                 else if (aPair.First.compareTo(sTarget) == 0)
                 {
-                    // checking item[n].xml or activex[n].xml is not visited already.
+                    
                     if(customTarget != aPair.Second && (sStreamType == sCustomType || sStreamType == sActiveXType || sStreamType == sChartType))
                     {
                         bFound = false;
@@ -231,15 +231,15 @@ bool OOXMLStreamImpl::lcl_getTarget(uno::Reference<embed::XRelationshipAccess>
                     rDocumentTarget = sMyTarget;
                 else
                 {
-                    // 'Target' is a relative Uri, so a 'Target=/path'
-                    // with a base Uri of file://base/foo will resolve to
-                    // file://base/word. We need something more than some
-                    // simple string concatination here to handle that.
+                    
+                    
+                    
+                    
                     uno::Reference< com::sun::star::uri::XUriReference > xPart = xFac->parse(  sMyTarget );
                     uno::Reference< com::sun::star::uri::XUriReference > xAbs = xFac->makeAbsolute(  xBase, xPart, sal_True,  com::sun::star::uri::RelativeUriExcessParentSegments_RETAIN );
                     rDocumentTarget = xAbs->getPath();
-                    // path will start with the fragment separator. need to
-                    // remove that
+                    
+                    
                     rDocumentTarget = rDocumentTarget.copy( 1 );
                     if(sStreamType == sEmbeddingsType)
                         embeddingsTarget = rDocumentTarget;
@@ -304,7 +304,7 @@ uno::Reference<io::XInputStream> OOXMLStreamImpl::getDocumentStream()
     return xResult;
 }
 
-// Giving access to mxDocumentStream. It is needed by resolving custom xml to get list of customxml's used in document.
+
 uno::Reference<io::XStream> OOXMLStreamImpl::accessDocumentStream()
 {
     return mxDocumentStream;

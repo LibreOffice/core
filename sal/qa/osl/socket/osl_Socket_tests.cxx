@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
+
+
+
 #include <sal/types.h>
 #include <osl_Socket_Const.h>
 
@@ -27,13 +27,13 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 #include <osl/socket.hxx>
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
 
-//------------------------------------------------------------------------
-// tests cases begins here
-//------------------------------------------------------------------------
+
+
+
+
+
+
 
 namespace osl_Socket
 {
@@ -44,7 +44,7 @@ namespace osl_Socket
 
         void test_001()
             {
-                // _osl_getFullQualifiedDomainName( );
+                
                 oslSocketResult aResult;
                 rtl::OUString suHostname = osl::SocketAddr::getLocalHostname(&aResult);
                 CPPUNIT_ASSERT_MESSAGE("getLocalHostname failed", aResult == osl_Socket_Ok);
@@ -59,17 +59,17 @@ namespace osl_Socket
 }
 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
 
 /*#if (defined LINUX)
 
 void RegisterAdditionalFunctions( FktRegFuncPtr _pFunc )
 {
-    // for cover lines in _osl_getFullQualifiedDomainName( )
-    // STAR_OVERRIDE_DOMAINNAME is more an internal HACK for 5.2, which should remove from sal
+    
+    
     setenv( "STAR_OVERRIDE_DOMAINNAME", "PRC.Sun.COM", 0 );
 }
 
@@ -77,6 +77,6 @@ void RegisterAdditionalFunctions( FktRegFuncPtr _pFunc )
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-//#endif
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

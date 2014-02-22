@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -71,20 +71,20 @@ public:
         const view::Layouter& GetLayouter);
     void ResetOffsets (const controller::Animator::AnimationMode eMode);
 
-    /// Index of the row or column that this run represents.
+    
     sal_Int32 mnRunIndex;
-    /// The index at which to make place for the insertion indicator (-1 for
-    /// no indicator).
+    
+    
     sal_Int32 mnLocalInsertIndex;
-    /// Index of the first page in the run.
+    
     sal_Int32 mnStartIndex;
-    /// Index of the last page in the run.
+    
     sal_Int32 mnEndIndex;
-    /// Offset of each item in the run at the start of the current animation.
+    
     ::std::vector<Point> maStartOffset;
-    /// Target offset of each item in the run at the end of the current animation.
+    
     ::std::vector<Point> maEndOffset;
-    /// Time at which the current animation started.
+    
     double mnStartTime;
 
     class Comparator
@@ -113,7 +113,7 @@ Point Blend (const Point& rPointA, const Point& rPointB, const double nT)
         sal_Int32(rPointA.Y() * (1-nT) + rPointB.Y() * nT));
 }
 
-} // end of anonymous namespace
+} 
 
 
 
@@ -156,7 +156,7 @@ private:
 
 
 
-//===== InsertAnimator ========================================================
+
 
 InsertAnimator::InsertAnimator (SlideSorter& rSlideSorter)
     : mpImplementation(new Implementation(rSlideSorter))
@@ -182,7 +182,7 @@ void InsertAnimator::Reset (const controller::Animator::AnimationMode eMode)
 
 
 
-//===== InsertAnimator::Implementation ========================================
+
 
 InsertAnimator::Implementation::Implementation (SlideSorter& rSlideSorter)
     : mrModel(rSlideSorter.GetModel()),
@@ -216,8 +216,8 @@ void InsertAnimator::Implementation::SetInsertPosition (
     SharedPageObjectRun pCurrentRun (GetRun(mrView.GetLayouter(), rInsertPosition));
     maInsertPosition = rInsertPosition;
 
-    // When the new insert position is in a different run then move the page
-    // objects in the old run to their default positions.
+    
+    
     if (pOldRun != pCurrentRun)
     {
         if (pOldRun)
@@ -245,7 +245,7 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
     RunContainer::const_iterator iRun (maRuns.end());
     if (rLayouter.GetColumnCount() == 1)
     {
-        // There is only one run that contains all slides.
+        
         if (maRuns.empty() && bCreate)
             maRuns.insert(SharedPageObjectRun(new PageObjectRun(
                 *this,
@@ -259,7 +259,7 @@ SharedPageObjectRun InsertAnimator::Implementation::GetRun (
         iRun = FindRun(nRow);
         if (iRun == maRuns.end() && bCreate)
         {
-            // Create a new run.
+            
             const sal_Int32 nStartIndex (rLayouter.GetIndex(nRow, 0));
             const sal_Int32 nEndIndex (rLayouter.GetIndex(nRow, rLayouter.GetColumnCount()-1));
             if (nStartIndex <= nEndIndex)
@@ -318,7 +318,7 @@ void InsertAnimator::Implementation::RemoveRun (const ::boost::shared_ptr<PageOb
 {
     if (pRun)
     {
-        // Do not remove runs that show the space for the insertion indicator.
+        
         if (pRun->mnLocalInsertIndex == -1)
         {
             InsertAnimator::Implementation::RunContainer::const_iterator iRun (FindRun(pRun->mnRunIndex));
@@ -339,7 +339,7 @@ void InsertAnimator::Implementation::RemoveRun (const ::boost::shared_ptr<PageOb
 
 
 
-//===== PageObjectRun =========================================================
+
 
 PageObjectRun::PageObjectRun (
     AnimatorAccess& rAnimatorAccess,
@@ -438,13 +438,13 @@ void PageObjectRun::ResetOffsets (const controller::Animator::AnimationMode eMod
 
 void PageObjectRun::RestartAnimation (void)
 {
-    // Stop the current animation.
+    
     if (mnAnimationId != controller::Animator::NotAnAnimationId)
     {
         mrAnimatorAccess.GetAnimator()->RemoveAnimation(mnAnimationId);
     }
 
-    // Restart the animation.
+    
     mrAnimatorAccess.AddRun(shared_from_this());
     mnAnimationId = mrAnimatorAccess.GetAnimator()->AddAnimation(
         ::boost::ref(*this),
@@ -483,21 +483,21 @@ void PageObjectRun::operator () (const double nGlobalTime)
                 maEndOffset[nIndex-mnStartIndex],
                 nLocalTime));
 
-        // Request a repaint of the old and new bounding box (which largely overlap.)
+        
         rView.RequestRepaint(aOldBoundingBox);
         rView.RequestRepaint(pDescriptor);
     }
 
-    // Call Flush to make
-    // a) animations a bit more smooth and
-    // b) on Mac without the Flush a Reset of the page locations is not properly
-    // visualized when the mouse leaves the window during drag-and-drop.
+    
+    
+    
+    
     mrAnimatorAccess.GetContentWindow()->Flush();
 }
 
 
 
 
-} } } // end of namespace ::sd::slidesorter::view
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

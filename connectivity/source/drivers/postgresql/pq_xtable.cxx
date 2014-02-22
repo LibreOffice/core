@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -168,9 +168,9 @@ void Table::rename( const OUString& newName )
 
     OUString newTableName;
     OUString newSchemaName;
-    // OOo2.0 passes schema + dot + new-table-name while
-    // OO1.1.x passes new Name without schema
-    // in case name contains a dot, it is interpreted as schema.tablename
+    
+    
+    
     if( newName.indexOf( '.' ) >= 0 )
     {
         splitConcatenatedIdentifier( newName, &newSchemaName, &newTableName );
@@ -184,7 +184,7 @@ void Table::rename( const OUString& newName )
 
     if( extractStringProperty( this, st.TYPE ).equals( st.VIEW ) && m_pSettings->views.is() )
     {
-        // maintain view list (really strange API !)
+        
         Any a = m_pSettings->pViewsImpl->getByName( fullOldName );
         Reference< com::sun::star::sdbcx::XRename > Xrename;
         a >>= Xrename;
@@ -198,7 +198,7 @@ void Table::rename( const OUString& newName )
     {
         if( ! newSchemaName.equals(schema) )
         {
-            // try new schema name first
+            
             try
             {
                 OUStringBuffer buf(128);
@@ -220,7 +220,7 @@ void Table::rename( const OUString& newName )
             }
 
         }
-        if( ! newTableName.equals( oldName ) ) // might also be just the change of a schema name
+        if( ! newTableName.equals( oldName ) ) 
         {
             OUStringBuffer buf(128);
             buf.append( "ALTER TABLE" );
@@ -233,7 +233,7 @@ void Table::rename( const OUString& newName )
         }
     }
     setPropertyValue_NoBroadcast_public( st.NAME, makeAny(newTableName) );
-    // inform the container of the name change !
+    
     if( m_pSettings->tables.is() )
     {
         m_pSettings->pTablesImpl->rename( fullOldName, fullNewName );
@@ -259,7 +259,7 @@ void Table::alterColumnByName(
 
     if( colName !=  newName )
     {
-//         m_pColumns->rename( colName, newName );
+
         m_pColumns->refresh();
     }
 }
@@ -347,7 +347,7 @@ void Table::setName( const OUString& aName ) throw (::com::sun::star::uno::Runti
 
 
 
-//________________________________________________________________________
+
 TableDescriptor::TableDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const Reference< com::sun::star::sdbc::XConnection > & connection,
@@ -440,7 +440,7 @@ Reference< XPropertySet > TableDescriptor::createDataDescriptor(  ) throw (Runti
     TableDescriptor * pTable = new TableDescriptor(
         m_refMutex, m_conn, m_pSettings );
 
-    // TODO: deep copies
+    
     pTable->m_values = m_values;
 
     return Reference< XPropertySet > ( pTable );

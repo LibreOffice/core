@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbastrings.hrc"
@@ -63,7 +63,7 @@ namespace dbaccess
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-    // DataAccessDescriptor
+    
     typedef ::comphelper::OMutexAndBroadcastHelper  DataAccessDescriptor_MutexBase;
 
     typedef ::cppu::WeakImplHelper1             <   XServiceInfo
@@ -79,11 +79,11 @@ namespace dbaccess
     public:
         DataAccessDescriptor( const Reference<XComponentContext> & _rContext );
 
-        // UNO
+        
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
@@ -92,17 +92,17 @@ namespace dbaccess
         ~DataAccessDescriptor();
 
     protected:
-        // XPropertySet
+        
         virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(RuntimeException);
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-        // OPropertyArrayUsageHelper
+        
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
     private:
         Reference<XComponentContext> m_xContext;
 
-        // </properties>
+        
         OUString             m_sDataSourceName;
         OUString             m_sDatabaseLocation;
         OUString             m_sConnectionResource;
@@ -120,7 +120,7 @@ namespace dbaccess
         sal_Bool                    m_bBookmarkSelection;
         OUString             m_sColumnName;
         Reference< XPropertySet >   m_xColumn;
-        // </properties>
+        
     };
 
 #define REGISTER_PROPERTY( propname, member ) \
@@ -211,25 +211,25 @@ namespace dbaccess
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    // DataAccessDescriptorFactory
+    
     typedef ::cppu::WeakImplHelper2 <   XServiceInfo
                                     ,   XDataAccessDescriptorFactory
                                     >   DataAccessDescriptorFactory_Base;
     class DataAccessDescriptorFactory : public DataAccessDescriptorFactory_Base
     {
     public:
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
-        // XServiceInfo - static versions
+        
         static Sequence< OUString >  getSupportedServiceNames_static(void) throw( RuntimeException );
         static OUString              getImplementationName_static(void) throw( RuntimeException );
         static Reference< XInterface >      Create(const Reference< XComponentContext >& _rxContext);
         static OUString              getSingletonName_static();
 
-        // XDataAccessDescriptorFactory
+        
         virtual Reference< XPropertySet > SAL_CALL createDataAccessDescriptor(  ) throw (RuntimeException);
 
     protected:
@@ -291,7 +291,7 @@ namespace dbaccess
         return new DataAccessDescriptor( m_xContext );
     }
 
-} // namespace dbaccess
+} 
 
 extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory()
 {

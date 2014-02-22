@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "GroupBox.hxx"
@@ -24,7 +24,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -39,32 +39,32 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//==================================================================
-// OGroupBoxModel
-//==================================================================
 
-//------------------------------------------------------------------
+
+
+
+
 InterfaceRef SAL_CALL OGroupBoxModel_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OGroupBoxModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OGroupBoxModel::OGroupBoxModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, VCL_CONTROLMODEL_GROUPBOX, VCL_CONTROL_GROUPBOX)
 {
     m_nClassId = FormComponentType::GROUPBOX;
 }
 
-//------------------------------------------------------------------
+
 OGroupBoxModel::OGroupBoxModel( const OGroupBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
 {
 }
 
-// XServiceInfo
-//------------------------------------------------------------------------------
+
+
 StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControlModel::getSupportedServiceNames();
@@ -75,48 +75,48 @@ StringSequence SAL_CALL OGroupBoxModel::getSupportedServiceNames() throw(Runtime
     return aSupported;
 }
 
-//------------------------------------------------------------------
+
 OGroupBoxModel::~OGroupBoxModel()
 {
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OGroupBoxModel )
 
-//------------------------------------------------------------------------------
+
 void OGroupBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
     OControlModel::describeAggregateProperties( _rAggregateProps );
-    // don't want to have the TabStop property
+    
     RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OGroupBoxModel::getServiceName() throw(RuntimeException)
 {
-    return OUString(FRM_COMPONENT_GROUPBOX);  // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_GROUPBOX);  
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OGroupBoxModel::write(const Reference< XObjectOutputStream>& _rxOutStream)
     throw(IOException, RuntimeException)
 {
     OControlModel::write(_rxOutStream);
 
-    // Version
+    
     _rxOutStream->writeShort(0x0002);
     writeHelpTextCompatibly(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
     OControlModel::read( _rxInStream );
 
-    // Version
+    
     sal_uInt16 nVersion = _rxInStream->readShort();
     DBG_ASSERT(nVersion > 0, "OGroupBoxModel::read : version 0 ? this should never have been written !");
-        // ups, ist das Englisch richtig ? ;)
+        
 
     if (nVersion == 2)
         readHelpTextCompatibly(_rxInStream);
@@ -127,23 +127,23 @@ void SAL_CALL OGroupBoxModel::read(const Reference< XObjectInputStream>& _rxInSt
     }
 };
 
-//==================================================================
-// OGroupBoxControl
-//==================================================================
 
-//------------------------------------------------------------------
+
+
+
+
 InterfaceRef SAL_CALL OGroupBoxControl_CreateInstance(const Reference<starlang::XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OGroupBoxControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 OGroupBoxControl::OGroupBoxControl(const Reference<XComponentContext>& _rxFactory)
                    :OControl(_rxFactory, VCL_CONTROL_GROUPBOX)
 {
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(RuntimeException)
 {
     StringSequence aSupported = OControl::getSupportedServiceNames();
@@ -154,8 +154,8 @@ StringSequence SAL_CALL OGroupBoxControl::getSupportedServiceNames() throw(Runti
     return aSupported;
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

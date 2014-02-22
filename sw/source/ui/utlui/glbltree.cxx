@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/msgbox.hxx>
@@ -60,7 +60,7 @@
 
 using namespace ::com::sun::star::uno;
 
-// Context menu for GlobalTree
+
 #define CTX_INSERT_ANY_INDEX 10
 #define CTX_INSERT_FILE     11
 #define CTX_INSERT_NEW_FILE 12
@@ -79,7 +79,7 @@ using namespace ::com::sun::star::uno;
 
 #define GLOBAL_UPDATE_TIMEOUT 2000
 
-// Flags for PopupMenu-enable/disable
+
 #define ENABLE_INSERT_IDX   0x0001
 #define ENABLE_INSERT_FILE  0x0002
 #define ENABLE_INSERT_TEXT  0x0004
@@ -89,36 +89,36 @@ using namespace ::com::sun::star::uno;
 #define ENABLE_UPDATE_SEL   0x0040
 #define ENABLE_EDIT_LINK    0x0080
 
-// TabPos: push to left
+
 #define  GLBL_TABPOS_SUB 5
 
 const SfxObjectShell* SwGlobalTree::pShowShell = 0;
 static const char* aHelpForMenu[] =
 {
     0,                          //
-    HID_GLBLTREE_UPDATE,        //CTX_UPDATE
-    HID_GLBLTREE_INSERT,        //CTX_INSERT
-    HID_GLBLTREE_EDIT,          //CTX_EDIT
-    HID_GLBLTREE_DEL,           //CTX_DELETE
-    HID_GLBLTREE_EDIT_LINK,     //CTX_EDIT_LINK
+    HID_GLBLTREE_UPDATE,        
+    HID_GLBLTREE_INSERT,        
+    HID_GLBLTREE_EDIT,          
+    HID_GLBLTREE_DEL,           
+    HID_GLBLTREE_EDIT_LINK,     
     0,                        //
     0,                        //
     0,                        //
     0,                        //
-    HID_GLBLTREE_INS_IDX,       //CTX_INSERT_ANY_INDEX
-    HID_GLBLTREE_INS_FILE,      //CTX_INSERT_FILE
-    HID_GLBLTREE_INS_NEW_FILE,  //CTX_INSERT_NEW_FILE
-    HID_GLBLTREE_INS_TEXT,      //CTX_INSERT_TEXT
+    HID_GLBLTREE_INS_IDX,       
+    HID_GLBLTREE_INS_FILE,      
+    HID_GLBLTREE_INS_NEW_FILE,  
+    HID_GLBLTREE_INS_TEXT,      
     0,                          //
     0,                          //
     0,                          //
     0,                          //
     0,                          //
     0,                          //
-    HID_GLBLTREE_UPD_SEL,       //CTX_UPDATE_SEL
-    HID_GLBLTREE_UPD_IDX,       //CTX_UPDATE_INDEX
-    HID_GLBLTREE_UPD_LINK,      //CTX_UPDATE_LINK
-    HID_GLBLTREEUPD_ALL         //CTX_UPDATE_ALL
+    HID_GLBLTREE_UPD_SEL,       
+    HID_GLBLTREE_UPD_IDX,       
+    HID_GLBLTREE_UPD_LINK,      
+    HID_GLBLTREEUPD_ALL         
 };
 
 class SwGlobalFrameListener_Impl : public SfxListener
@@ -221,20 +221,20 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
                                     - 1;
             sal_uInt16 nEntryCount = (sal_uInt16)GetEntryCount();
 
-            // Get data
+            
             FileList aFileList;
             aData.GetFileList( FORMAT_FILE_LIST, aFileList );
             for ( sal_uInt16 n = (sal_uInt16)aFileList.Count(); n--; )
             {
                 sFileName = aFileList.GetFile(n);
                 InsertRegion(pCnt, &sFileName);
-                // The list of contents must be newly fetched after inserting,
-                // to not work on an old content.
+                
+                
                 if(n)
                 {
                     pActiveShell->GetGlobalDocContent(*pTempContents);
-                    // If the file was successfully inserted,
-                    // then the next content must also be fetched.
+                    
+                    
                     if(nEntryCount < pTempContents->size())
                     {
                         nEntryCount++;
@@ -250,7 +250,7 @@ sal_Int8 SwGlobalTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
         {
             INetURLObject aTemp(sFileName);
             GraphicDescriptor aDesc(aTemp);
-            if( !aDesc.Detect() )   // accept no graphics
+            if( !aDesc.Detect() )   
             {
                 nRet = rEvt.mnAction;
                 InsertRegion(pCnt, &sFileName);
@@ -266,7 +266,7 @@ sal_Int8 SwGlobalTree::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nRet = rEvt.mnAction;
 
-    //initiate scrolling
+    
     GetDropTarget( rEvt.maPosPixel );
     SvTreeListEntry* pLast = (SvTreeListEntry*)LastVisible();
     if( rEvt.mbLeaving )
@@ -364,7 +364,7 @@ PopupMenu* SwGlobalTree::CreateContextMenu()
         pPop->InsertItem(CTX_DELETE, aContextStrings[ST_DELETE - ST_GLOBAL_CONTEXT_FIRST]);
         pPop->SetHelpId(CTX_DELETE, aHelpForMenu[CTX_DELETE]);
 
-        //disabling if applicable
+        
         pSubPop1->EnableItem(CTX_INSERT_ANY_INDEX,  0 != (nEnableFlags & ENABLE_INSERT_IDX ));
         pSubPop1->EnableItem(CTX_INSERT_TEXT,       0 != (nEnableFlags & ENABLE_INSERT_TEXT));
         pSubPop1->EnableItem(CTX_INSERT_FILE,       0 != (nEnableFlags & ENABLE_INSERT_FILE));
@@ -578,8 +578,8 @@ void SwGlobalTree::DragFinished( sal_Int8 nAction )
     bIsInternalDrag = false;
 }
 
-// If a Ctrl+DoubleClick is executed in an empty area,
-// then the base function of the control should be called.
+
+
 
 void  SwGlobalTree::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -606,7 +606,7 @@ void     SwGlobalTree::KeyInput(const KeyEvent& rKEvt)
         switch(aCode.GetModifier())
         {
             case KEY_MOD2:
-                // Switch boxes
+                
                 GetParentWindow()->ToggleTree();
             break;
         }
@@ -643,7 +643,7 @@ void    SwGlobalTree::Display(bool bOnlyUpdateUserData)
     {
         SetUpdateMode( sal_False );
         SvTreeListEntry* pOldSelEntry = FirstSelected();
-        OUString sEntryName;  // Name of the entry
+        OUString sEntryName;  
         sal_uInt16 nSelPos = USHRT_MAX;
         if(pOldSelEntry)
         {
@@ -772,9 +772,9 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
 {
     SvTreeListEntry* pEntry = FirstSelected();
     SwGlblDocContent* pCont = pEntry ? (SwGlblDocContent*)pEntry->GetUserData() : 0;
-    // If a RequestHelp is called during the dialogue,
-    // then the content gets lost. Because of that a copy
-    // is created in which only the DocPos is set correctly.
+    
+    
+    
     SwGlblDocContent* pContCopy = 0;
     if(pCont)
         pContCopy = new SwGlblDocContent(pCont->GetDocPos());
@@ -785,7 +785,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
     {
         case CTX_UPDATE_SEL:
         {
-            // Two passes: first update the areas, then the directories.
+            
             SvTreeListEntry* pSelEntry = FirstSelected();
             while( pSelEntry )
             {
@@ -839,9 +839,9 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         break;
         case CTX_DELETE:
         {
-            // If several entries selected, then after each delete the array
-            // must be refilled. So you do not have to remember anything,
-            // deleting begins at the end.
+            
+            
+            
             SvTreeListEntry* pSelEntry = LastSelected();
             SwGlblDocContents* pTempContents  = 0;
             pActiveShell->StartAction();
@@ -913,7 +913,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             SwGlobalFrameListener_Impl aFrmListener(*pGlobFrm);
 
             sal_uLong nEntryPos = pEntry ? GetModel()->GetAbsPos(pEntry) : (sal_uLong)-1;
-            // Creating a new doc
+            
             SfxStringItem aFactory(SID_NEWDOCDIRECT,
                             SwDocShell::Factory().GetFilterContainer()->GetName());
 
@@ -921,7 +921,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                             rDispatch.Execute(SID_NEWDOCDIRECT,
                                 SFX_CALLMODE_SYNCHRON, &aFactory, 0L);
 
-            // save at
+            
             SfxFrame* pFrm = pItem ? pItem->GetFrame() : 0;
             SfxViewFrame* pFrame = pFrm ? pFrm->GetCurrentViewFrame() : 0;
             if( pFrame )
@@ -932,12 +932,12 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                 SfxObjectShell& rObj = *pFrame->GetObjectShell();
                 const SfxMedium* pMedium = rObj.GetMedium();
                 OUString sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
-                // Insert the area with the Doc-Name
-                // Bring the own Doc in the foreground
+                
+                
                 if(aFrmListener.IsValid() && !sNewFile.isEmpty())
                 {
                     pGlobFrm->ToTop();
-                    // Due to the update the entries are invalid
+                    
                     if(nEntryPos != (sal_uLong)-1)
                     {
                         Update( sal_False );
@@ -974,7 +974,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
                 pActiveShell->InsertGlobalDocContent(*pCont);
             else
             {
-                pActiveShell->SplitNode(); // Empty document
+                pActiveShell->SplitNode(); 
                 pActiveShell->Up( sal_False, 1 );
             }
             pActiveShell->GetView().GetEditWin().GrabFocus();
@@ -984,7 +984,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
             pCont = 0;
         break;
         default:;
-        // here nothing happens
+        
     }
     if(pCont)
         GotoContent(pCont);
@@ -1153,7 +1153,7 @@ sal_Bool    SwGlobalTree::Update(sal_Bool bHard)
         if(pSwGlblDocContents)
             pSwGlblDocContents->DeleteAndDestroyAll();
     }
-    // FIXME: Implement a test for changes!
+    
     return bRet;
 }
 
@@ -1215,7 +1215,7 @@ void SwGlobalTree::InitEntry(SvTreeListEntry* pEntry,
         const OUString& rStr ,const Image& rImg1,const Image& rImg2,
         SvLBoxButtonKind eButtonKind)
 {
-    sal_uInt16 nColToHilite = 1; //0==Bitmap;1=="Column1";2=="Column2"
+    sal_uInt16 nColToHilite = 1; 
     SvTreeListBox::InitEntry( pEntry, rStr, rImg1, rImg2, eButtonKind );
     SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nColToHilite );
     SwLBoxString* pStr = new SwLBoxString( pEntry, 0, pCol->GetText() );
@@ -1270,8 +1270,8 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         const OUString* pFileNames = _rFiles.getConstArray();
         SwWrtShell& rSh = GetParentWindow()->GetCreateView()->GetWrtShell();
         rSh.StartAction();
-        // after insertion of the first new content the 'pCont' parameter becomes invalid
-        // find the index of the 'anchor' content to always use a current anchor content
+        
+        
         size_t nAnchorContent = pSwGlblDocContents->size() - 1;
         if ( !bMove )
         {
@@ -1288,7 +1288,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
         SwGlblDocContents aTempContents;
         for ( sal_Int32 nFile = 0; nFile < nFiles; ++nFile )
         {
-            //update the global document content after each inserted document
+            
             rSh.GetGlobalDocContent(aTempContents);
             SwGlblDocContent* pAnchorContent = 0;
             OSL_ENSURE(aTempContents.size() > (nAnchorContent + nFile), "invalid anchor content -> last insertion failed");
@@ -1305,7 +1305,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             OUString sTempSectionName(sSectionName);
             sal_uInt16 nAddNumber = 0;
             sal_uInt16 nCount = 0;
-            // if applicable: add index if the range name is already in use.
+            
             while ( nCount < nSectCount )
             {
                 const SwSectionFmt& rFmt = rSh.GetSectionFmt(nCount);

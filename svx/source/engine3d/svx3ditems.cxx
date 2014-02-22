@@ -61,8 +61,8 @@ Svx3DDoubleSidedItem::Svx3DDoubleSidedItem(sal_Bool bVal)
 {}
 
 //////////////////////////////////////////////////////////////////////////////
-// #i28528#
-// Added extra Item (Bool) for chart2 to be able to show reduced line geometry
+
+
 
 Svx3DReducedLineGeometryItem::Svx3DReducedLineGeometryItem(sal_Bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_REDUCED_LINE_GEOMETRY, bVal)
@@ -261,7 +261,7 @@ Svx3DShadeModeItem::Svx3DShadeModeItem(sal_uInt16 nVal)
 {}
 
 //////////////////////////////////////////////////////////////////////////////
-// #107245#
+
 
 Svx3DSmoothNormalsItem::Svx3DSmoothNormalsItem(sal_Bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_NORMALS, bVal)
@@ -286,7 +286,7 @@ SfxPoolItem* Svx3DSmoothNormalsItem::Create(SvStream& rIn, sal_uInt16 nItemVersi
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// #107245#
+
 
 Svx3DSmoothLidsItem::Svx3DSmoothLidsItem(sal_Bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_SMOOTH_LIDS, bVal)
@@ -311,7 +311,7 @@ SfxPoolItem* Svx3DSmoothLidsItem::Create(SvStream& rIn, sal_uInt16 nItemVersion)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// #107245#
+
 
 Svx3DCharacterModeItem::Svx3DCharacterModeItem(sal_Bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CHARACTER_MODE, bVal)
@@ -336,7 +336,7 @@ SfxPoolItem* Svx3DCharacterModeItem::Create(SvStream& rIn, sal_uInt16 nItemVersi
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// #107245#
+
 
 Svx3DCloseFrontItem::Svx3DCloseFrontItem(sal_Bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_FRONT, bVal)
@@ -361,7 +361,7 @@ SfxPoolItem* Svx3DCloseFrontItem::Create(SvStream& rIn, sal_uInt16 nItemVersion)
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// #107245#
+
 
 Svx3DCloseBackItem::Svx3DCloseBackItem(sal_Bool bVal)
 :   SfxBoolItem(SDRATTR_3DOBJ_CLOSE_BACK, bVal)
@@ -387,7 +387,7 @@ SfxPoolItem* Svx3DCloseBackItem::Create(SvStream& rIn, sal_uInt16 nItemVersion) 
 
 //////////////////////////////////////////////////////////////////////////////
 
-// Svx3DNormalsKindItem: use drawing::NormalsKind
+
 bool Svx3DNormalsKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (drawing::NormalsKind)GetValue();
@@ -408,7 +408,7 @@ SfxPoolItem* Svx3DNormalsKindItem::Clone(SfxItemPool* /*pPool*/) const
     return new Svx3DNormalsKindItem(*this);
 }
 
-// Svx3DTextureProjectionXItem: use drawing::TextureProjectionMode
+
 bool Svx3DTextureProjectionXItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (drawing::TextureProjectionMode)GetValue();
@@ -429,7 +429,7 @@ SfxPoolItem* Svx3DTextureProjectionXItem::Clone(SfxItemPool* /*pPool*/) const
     return new Svx3DTextureProjectionXItem(*this);
 }
 
-// Svx3DTextureProjectionYItem: use drawing::TextureProjectionMode
+
 bool Svx3DTextureProjectionYItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (drawing::TextureProjectionMode)GetValue();
@@ -450,7 +450,7 @@ SfxPoolItem* Svx3DTextureProjectionYItem::Clone(SfxItemPool* /*pPool*/) const
     return new Svx3DTextureProjectionYItem(*this);
 }
 
-// Svx3DTextureKindItem: use drawing::TextureKind
+
 bool Svx3DTextureKindItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (drawing::TextureKind)GetValue();
@@ -471,7 +471,7 @@ SfxPoolItem* Svx3DTextureKindItem::Clone(SfxItemPool* /*pPool*/) const
     return new Svx3DTextureKindItem(*this);
 }
 
-// Svx3DTextureModeItem: use drawing:TextureMode
+
 bool Svx3DTextureModeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (drawing::TextureMode)GetValue();
@@ -492,7 +492,7 @@ SfxPoolItem* Svx3DTextureModeItem::Clone(SfxItemPool* /*pPool*/) const
     return new Svx3DTextureModeItem(*this);
 }
 
-// Svx3DPerspectiveItem: use drawing::ProjectionMode
+
 bool Svx3DPerspectiveItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (drawing::ProjectionMode)GetValue();
@@ -513,7 +513,7 @@ SfxPoolItem* Svx3DPerspectiveItem::Clone(SfxItemPool* /*pPool*/) const
     return new Svx3DPerspectiveItem(*this);
 }
 
-// Svx3DShadeModeItem: use drawing::ShadeMode
+
 bool Svx3DShadeModeItem::QueryValue( uno::Any& rVal, sal_uInt8 /*nMemberId*/) const
 {
     rVal <<= (drawing::ShadeMode)GetValue();
@@ -534,6 +534,6 @@ SfxPoolItem* Svx3DShadeModeItem::Clone(SfxItemPool* /*pPool*/) const
     return new Svx3DShadeModeItem(*this);
 }
 
-// EOF
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

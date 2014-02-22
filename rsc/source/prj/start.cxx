@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,20 +26,20 @@
 #ifdef UNX
 #include <unistd.h>
 #include <sys/wait.h>
-#else // UNX
+#else 
 
 #include <io.h>
 #include <process.h>
 #include <dos.h>
 
-#endif // UNX
+#endif 
 #include <rsctools.hxx>
 #include <rscerror.h>
 #include <sal/main.h>
 #include <rtl/strbuf.hxx>
 
 
-// Entry point declaration for modules rscpp and rsc2
+
 extern "C"
 {
     int rscpp_main(int, char**);
@@ -50,8 +50,8 @@ static bool CallPrePro( const OString& rInput,
                         const OString& rOutput, RscPtrPtr * pCmdLine,
                         bool bResponse )
 {
-    RscPtrPtr       aNewCmdL;   // Kommandozeile
-    RscPtrPtr       aRespCmdL;   // Kommandozeile
+    RscPtrPtr       aNewCmdL;   
+    RscPtrPtr       aRespCmdL;   
     RscPtrPtr *     pCmdL = &aNewCmdL;
     int             i, nRet;
     FILE*           fRspFile = NULL;
@@ -217,7 +217,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     RscStrList  aTmpList;
     char *      pStr;
     char **     ppStr;
-    RscPtrPtr   aCmdLine;       // Kommandozeile
+    RscPtrPtr   aCmdLine;       
     sal_uInt32  i;
     OString*    pString;
 
@@ -238,30 +238,30 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         {
             if( !rsc_stricmp( (*ppStr) + 1, "p" )
               || !rsc_stricmp( (*ppStr) + 1, "l" ) )
-            { // kein Preprozessor
+            { 
                 bPrePro = false;
             }
             else if( !rsc_stricmp( (*ppStr) + 1, "h" ) )
-            { // Hilfe anzeigen
+            { 
                 bHelp = true;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "presponse", 9 ) )
-            { // whether to use response file when parameterising preprocessor
+            { 
                 bResponse = true;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fo=", 3 ) )
-            { // anderer Name fuer .res-file
+            { 
                 aResName = (*ppStr) + 4;
             }
             else if( !rsc_strnicmp( (*ppStr) + 1, "fp=", 3 ) )
-            { // anderer Name fuer .srs-file
+            { 
                 bSetSrs  = true;
                 aSrsName = (*ppStr);
             }
         }
         else
         {
-            // Eingabedatei
+            
             aInputList.push_back( new OString(*ppStr) );
         }
         ppStr++;

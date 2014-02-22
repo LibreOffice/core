@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fuexpand.hxx"
@@ -70,7 +70,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
     if ( mpView && mpView->IsTextEdit() )
         mpView->SdrEndTextEdit();
 
-    // find selected page (only standard pages)
+    
     SdPage* pActualPage = NULL;
     sal_uInt16 i = 0;
     sal_uInt16 nCount = mpDoc->GetSdPageCount(PK_STANDARD);
@@ -110,11 +110,11 @@ void FuExpandPage::DoExecute( SfxRequest& )
             if( bUndo )
                 mpView->BegUndo(SD_RESSTR(STR_UNDO_EXPAND_PAGE));
 
-            // set current structuring-object into outliner
+            
             OutlinerParaObject* pParaObj = pActualOutline->GetOutlinerParaObject();
             pOutl->SetText(*pParaObj);
 
-            // remove hard paragraph- and character attributes
+            
             SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
             sal_Int32 nParaCount1 = pOutl->GetParagraphCount();
 
@@ -133,7 +133,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 sal_Int16 nDepth = pOutl->GetDepth( nParaPos );
                 if ( nDepth == 0 )
                 {
-                    // page with title & structuring!
+                    
                     SdPage* pPage = (SdPage*) mpDoc->AllocPage(false);
                     pPage->SetSize(pActualPage->GetSize() );
                     pPage->SetBorder(pActualPage->GetLftBorder(),
@@ -142,20 +142,20 @@ void FuExpandPage::DoExecute( SfxRequest& )
                                      pActualPage->GetLwrBorder() );
                     pPage->SetName(OUString());
 
-                    // insert page after current page
+                    
                     mpDoc->InsertPage(pPage, nActualPageNum + nPos);
                     nPos++;
 
                     if( bUndo )
                         mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pPage));
 
-                    // use MasterPage of the current page
+                    
                     pPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pPage->SetLayoutName(pActualPage->GetLayoutName());
                     pPage->SetAutoLayout(AUTOLAYOUT_ENUM, sal_True);
                     pPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
-                    // notes-page
+                    
                     SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(false);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
@@ -165,20 +165,20 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     pNotesPage->SetPageKind(PK_NOTES);
                     pNotesPage->SetName(OUString());
 
-                    // insert page after current page
+                    
                     mpDoc->InsertPage(pNotesPage, nActualPageNum + nPos);
                     nPos++;
 
                     if( bUndo )
                         mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
-                    // use MasterPage of the current page
+                    
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
                     pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), sal_True);
                     pNotesPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
 
-                    // create title text objects
+                    
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
 
                     OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( nParaPos, 1);
@@ -209,7 +209,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                     if (nChildCount > 0)
                     {
-                        // create structuring text objects
+                        
                         SdrTextObj* pOutlineObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_OUTLINE);
                         pPara = pOutl->GetParagraph( ++nParaPos );
 
@@ -234,7 +234,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         pOutlineObj->SetOutlinerParaObject( pOPO );
                         pOutlineObj->SetEmptyPresObj(false);
 
-                        // remove hard attributes (Flag to sal_True)
+                        
                         SfxItemSet aAttr(mpDoc->GetPool());
                         aAttr.Put(XLineStyleItem(XLINE_NONE));
                         aAttr.Put(XFillStyleItem(XFILL_NONE));
@@ -255,6 +255,6 @@ void FuExpandPage::DoExecute( SfxRequest& )
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

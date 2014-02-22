@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,16 +36,16 @@
 #define LID_RECORD_LABEL    1000
 #define LID_RECORD_FILLER   1001
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using ::com::sun::star::uno::makeAny;
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
 
-    //=====================================================================
-    //.....................................................................
+    
+    
     namespace
     {
         static bool isArtificialItem( sal_Int16 _nFeatureId )
@@ -95,9 +95,9 @@ namespace frm
         }
     }
 
-    //=====================================================================
-    //= ImplNavToolBar
-    //=====================================================================
+    
+    
+    
     class ImplNavToolBar : public ToolBox
     {
     protected:
@@ -116,29 +116,29 @@ namespace frm
         }
 
     protected:
-        // ToolBox overridables
+        
         virtual void        Select();
 
     };
 
-    //---------------------------------------------------------------------
+    
     void ImplNavToolBar::Select()
     {
         if ( m_pDispatcher )
         {
             if ( !m_pDispatcher->isEnabled( GetCurItemId() ) )
-                // the toolbox is a little bit buggy: With TIB_REPEAT, it sometimes
-                // happens that a select is reported, even though the respective
-                // item has just been disabled.
+                
+                
+                
                 return;
             m_pDispatcher->dispatch( GetCurItemId() );
         }
     }
 
-    //=====================================================================
-    //= NavigationToolBar
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     NavigationToolBar::NavigationToolBar( Window* _pParent, WinBits _nStyle, const PCommandImageProvider& _pImageProvider,
             const PCommandDescriptionProvider& _pDescriptionProvider )
         :Window( _pParent, _nStyle )
@@ -151,7 +151,7 @@ namespace frm
         implInit( );
     }
 
-    //---------------------------------------------------------------------
+    
     NavigationToolBar::~NavigationToolBar( )
     {
         for (   ::std::vector< Window* >::iterator loopChildWins = m_aChildWins.begin();
@@ -164,7 +164,7 @@ namespace frm
         delete m_pToolbar;
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::setDispatcher( const IFeatureDispatcher* _pDispatcher )
     {
         m_pDispatcher = _pDispatcher;
@@ -179,7 +179,7 @@ namespace frm
         updateFeatureStates( );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::updateFeatureStates( )
     {
         for ( sal_uInt16 nPos = 0; nPos < m_pToolbar->GetItemCount(); ++nPos )
@@ -189,13 +189,13 @@ namespace frm
             if ( ( nItemId == LID_RECORD_LABEL ) || ( nItemId == LID_RECORD_FILLER ) )
                 continue;
 
-            // is this item enabled?
+            
             bool bEnabled = m_pDispatcher ? m_pDispatcher->isEnabled( nItemId ) : false;
             implEnableItem( nItemId, bEnabled );
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::implEnableItem( sal_uInt16 _nItemId, bool _bEnabled )
     {
         m_pToolbar->EnableItem( _nItemId, _bEnabled );
@@ -207,7 +207,7 @@ namespace frm
             m_pToolbar->EnableItem( LID_RECORD_FILLER, _bEnabled );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::enableFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
@@ -216,7 +216,7 @@ namespace frm
         implEnableItem( (sal_uInt16)_nFeatureId, _bEnabled );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::checkFeature( sal_Int16 _nFeatureId, bool _bEnabled )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
@@ -225,7 +225,7 @@ namespace frm
         m_pToolbar->CheckItem( (sal_uInt16)_nFeatureId, _bEnabled );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::setFeatureText( sal_Int16 _nFeatureId, const OUString& _rText )
     {
         DBG_ASSERT( m_pToolbar->GetItemPos( (sal_uInt16)_nFeatureId ) != TOOLBOX_ITEM_NOTFOUND,
@@ -238,16 +238,16 @@ namespace frm
             m_pToolbar->SetItemText( (sal_uInt16)_nFeatureId, _rText );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::implInit( )
     {
         m_pToolbar = new ImplNavToolBar( this );
         m_pToolbar->SetOutStyle( TOOLBOX_STYLE_FLAT );
         m_pToolbar->Show();
 
-        // need the SfxApplication for retrieving information about our
-        // items. We could duplicate all the information here in our lib
-        // (such as the item text and the image), but why should we?
+        
+        
+        
 
         struct FeatureDescription
         {
@@ -287,11 +287,11 @@ namespace frm
         for ( ; pSupportedFeatures < pSupportedFeaturesEnd; ++pSupportedFeatures )
         {
             if ( pSupportedFeatures->nId )
-            {   // it's _not_ a separator
+            {   
 
-                // insert the entry
+                
                 m_pToolbar->InsertItem( pSupportedFeatures->nId, OUString(), pSupportedFeatures->bRepeat ? TIB_REPEAT : 0 );
-                m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, OUString() );  // TODO
+                m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId, OUString() );  
 
                 if ( !isArtificialItem( pSupportedFeatures->nId ) )
                 {
@@ -337,7 +337,7 @@ namespace frm
                 }
             }
             else
-            {   // a separator
+            {   
                 m_pToolbar->InsertSeparator( );
             }
         }
@@ -347,7 +347,7 @@ namespace frm
         implUpdateImages();
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::implUpdateImages()
     {
         OSL_ENSURE( m_pImageProvider, "NavigationToolBar::implUpdateImages: no image provider => no images!" );
@@ -356,7 +356,7 @@ namespace frm
 
         const sal_uInt16 nItemCount = m_pToolbar->GetItemCount();
 
-        // collect the FormFeatures in the toolbar
+        
         typedef ::std::vector< sal_Int16 >  FormFeatures;
         FormFeatures aFormFeatures;
         aFormFeatures.reserve( nItemCount );
@@ -368,7 +368,7 @@ namespace frm
                 aFormFeatures.push_back( nId );
         }
 
-        // translate them into command URLs
+        
         CommandURLs aCommandURLs( aFormFeatures.size() );
         for (   FormFeatures::const_iterator formFeature = aFormFeatures.begin();
                 formFeature != aFormFeatures.end();
@@ -378,10 +378,10 @@ namespace frm
             aCommandURLs[ formFeature - aFormFeatures.begin() ] = lcl_getCommandURL( *formFeature );
         }
 
-        // retrieve the images for the command URLs
+        
         CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge );
 
-        // and set them at the toolbar
+        
         CommandImages::const_iterator commandImage = aCommandImages.begin();
         for (   FormFeatures::const_iterator formFeature = aFormFeatures.begin();
                 formFeature != aFormFeatures.end();
@@ -391,11 +391,11 @@ namespace frm
             m_pToolbar->SetItemImage( *formFeature, *commandImage );
         }
 
-        // parts of our layout is dependent on the size of our icons
+        
         Resize();
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::implSetImageSize( ImageSize _eSize )
     {
         if ( _eSize != m_eImageSize )
@@ -405,13 +405,13 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::SetImageSize( ImageSize _eSize )
     {
         implSetImageSize( _eSize );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::ShowFunctionGroup( FunctionGroup _eGroup, bool _bShow )
     {
         const sal_uInt16* pGroupIds = NULL;
@@ -459,7 +459,7 @@ namespace frm
                 m_pToolbar->ShowItem( *pGroupIds++, _bShow );
     }
 
-    //---------------------------------------------------------------------
+    
     bool NavigationToolBar::IsFunctionGroupVisible( FunctionGroup _eGroup )
     {
         sal_uInt16 nIndicatorItem = 0;
@@ -476,7 +476,7 @@ namespace frm
         return m_pToolbar->IsItemVisible( nIndicatorItem );
     }
 
-    //------------------------------------------------------------------------------
+    
     void NavigationToolBar::StateChanged( StateChangedType nType )
     {
         Window::StateChanged( nType );
@@ -484,10 +484,10 @@ namespace frm
         switch ( nType )
         {
             case STATE_CHANGE_ZOOM:
-//                m_pToolbar->SetZoom( GetZoom() );
-//                forEachItemWindow( setItemWindowZoom, NULL );
-                // the ToolBox class is not zoomable at the moment, so
-                // we better have no zoom at all instead of only half a zoom ...
+
+
+                
+                
                 break;
 
             case STATE_CHANGE_CONTROLFONT:
@@ -510,10 +510,10 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::Resize()
     {
-        // resize/position the toolbox as a whole
+        
         sal_Int32 nToolbarHeight = m_pToolbar->CalcWindowSizePixel().Height();
 
         sal_Int32 nMyHeight = GetOutputSizePixel().Height();
@@ -523,7 +523,7 @@ namespace frm
         Window::Resize();
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::SetControlBackground()
     {
         Window::SetControlBackground();
@@ -533,7 +533,7 @@ namespace frm
         implUpdateImages();
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::SetControlBackground( const Color& _rColor )
     {
         Window::SetControlBackground( _rColor );
@@ -543,7 +543,7 @@ namespace frm
         implUpdateImages();
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::SetTextLineColor( )
     {
         Window::SetTextLineColor( );
@@ -551,7 +551,7 @@ namespace frm
         forEachItemWindow( &NavigationToolBar::setTextLineColor, NULL );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::SetTextLineColor( const Color& _rColor )
     {
         Window::SetTextLineColor( _rColor );
@@ -559,7 +559,7 @@ namespace frm
         forEachItemWindow( &NavigationToolBar::setTextLineColor, &_rColor );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::forEachItemWindow( ItemWindowHandler _handler, const void* _pParam )
     {
         for ( sal_uInt16 item = 0; item < m_pToolbar->GetItemCount(); ++item )
@@ -571,7 +571,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::setItemBackground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
     {
         if ( _pColor )
@@ -580,7 +580,7 @@ namespace frm
             _pItemWindow->SetControlBackground();
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::setTextLineColor( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* _pColor ) const
     {
         if ( _pColor )
@@ -589,14 +589,14 @@ namespace frm
             _pItemWindow->SetTextLineColor();
     }
 #if 0
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::setItemWindowZoom( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         _pItemWindow->SetZoom( GetZoom() );
         _pItemWindow->SetZoomedPointFont( IsControlFont() ? GetControlFont() : GetPointFont() );
     }
 #endif
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::setItemControlFont( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         if ( IsControlFont() )
@@ -605,7 +605,7 @@ namespace frm
             _pItemWindow->SetControlFont( );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::setItemControlForeground( sal_uInt16 /* _nItemId */, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         if ( IsControlForeground() )
@@ -615,7 +615,7 @@ namespace frm
         _pItemWindow->SetTextColor( GetTextColor() );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::adjustItemWindowWidth( sal_uInt16 _nItemId, Window* _pItemWindow, const void* /* _pParam */ ) const
     {
         OUString sItemText;
@@ -645,16 +645,16 @@ namespace frm
         m_pToolbar->SetItemWindow( _nItemId, _pItemWindow );
     }
 
-    //---------------------------------------------------------------------
+    
     void NavigationToolBar::enableItemRTL( sal_uInt16 /*_nItemId*/, Window* _pItemWindow, const void* _pIsRTLEnabled ) const
     {
         _pItemWindow->EnableRTL( *static_cast< const sal_Bool* >( _pIsRTLEnabled ) );
     }
 
-    //=====================================================================
-    //= RecordPositionInput
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     RecordPositionInput::RecordPositionInput( Window* _pParent )
         :NumericField( _pParent, WB_BORDER | WB_VCENTER )
         ,m_pDispatcher( NULL )
@@ -667,18 +667,18 @@ namespace frm
         SetBorderStyle( WINDOW_BORDER_MONO );
     }
 
-    //---------------------------------------------------------------------
+    
     RecordPositionInput::~RecordPositionInput()
     {
     }
 
-    //---------------------------------------------------------------------
+    
     void RecordPositionInput::setDispatcher( const IFeatureDispatcher* _pDispatcher )
     {
         m_pDispatcher = _pDispatcher;
     }
 
-    //---------------------------------------------------------------------
+    
     void RecordPositionInput::FirePosition( sal_Bool _bForce )
     {
         if ( _bForce || (GetText() != GetSavedValue()) )
@@ -694,13 +694,13 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void RecordPositionInput::LoseFocus()
     {
         FirePosition( sal_False );
     }
 
-    //---------------------------------------------------------------------
+    
     void RecordPositionInput::KeyInput( const KeyEvent& rKeyEvent )
     {
         if( rKeyEvent.GetKeyCode() == KEY_RETURN && !GetText().isEmpty() )
@@ -710,8 +710,8 @@ namespace frm
     }
 
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

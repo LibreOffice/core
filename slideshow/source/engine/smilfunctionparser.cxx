@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -33,10 +33,10 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 
-// Makes parser a static resource,
-// we're synchronized externally.
-// But watch out, the parser might have
-// state not visible to this code!
+
+
+
+
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
 #if defined(VERBOSE) && defined(DBG_UTIL)
 #include <typeinfo>
@@ -67,18 +67,18 @@ namespace slideshow
             {
                 typedef ::std::stack< ExpressionNodeSharedPtr > OperandStack;
 
-                // stores a stack of not-yet-evaluated operands. This is used
-                // by the operators (i.e. '+', '*', 'sin' etc.) to pop their
-                // arguments from. If all arguments to an operator are constant,
-                // the operator pushes a precalculated result on the stack, and
-                // a composite ExpressionNode otherwise.
+                
+                
+                
+                
+                
                 OperandStack                maOperandStack;
 
-                // bounds of the shape this expression is associated with
+                
                 ::basegfx::B2DRectangle     maShapeBounds;
 
-                // when true, enable usage of time-dependent variable '$'
-                // in expressions
+                
+                
                 bool                        mbParseAnimationFunction;
             };
 
@@ -155,7 +155,7 @@ namespace slideshow
 
                 void operator()( double n ) const
                 {
-                    // push constant value expression to the stack
+                    
                     mpContext->maOperandStack.push(
                         ExpressionNodeFactory::createConstantValueExpression( n ) );
                 }
@@ -184,7 +184,7 @@ namespace slideshow
                         throw ParseError();
                     }
 
-                    // push special t value expression to the stack
+                    
                     mpContext->maOperandStack.push(
                         ExpressionNodeFactory::createValueTExpression() );
                 }
@@ -241,11 +241,11 @@ namespace slideshow
                     if( rNodeStack.size() < 1 )
                         throw ParseError( "Not enough arguments for unary operator" );
 
-                    // retrieve arguments
+                    
                     ExpressionNodeSharedPtr pArg( rNodeStack.top() );
                     rNodeStack.pop();
 
-                    // check for constness
+                    
                     if( pArg->isConstant() )
                     {
                         rNodeStack.push(
@@ -254,7 +254,7 @@ namespace slideshow
                     }
                     else
                     {
-                        // push complex node, that calcs the value on demand
+                        
                         rNodeStack.push(
                             ExpressionNodeSharedPtr(
                                 new UnaryFunctionExpression(
@@ -268,11 +268,11 @@ namespace slideshow
                 ParserContextSharedPtr  mpContext;
             };
 
-            // TODO(Q2): Refactor makeUnaryFunctionFunctor,
-            // makeBinaryFunctionFunctor and the whole
-            // ExpressionNodeFactory, to use a generic
-            // makeFunctionFunctor template, which is overloaded for
-            // unary, binary, ternary, etc. function pointers.
+            
+            
+            
+            
+            
             template< typename Functor > UnaryFunctionFunctor<Functor>
                 makeUnaryFunctionFunctor( const Functor&                rFunctor,
                                           const ParserContextSharedPtr& rContext )
@@ -280,9 +280,9 @@ namespace slideshow
                 return UnaryFunctionFunctor<Functor>( rFunctor, rContext );
             }
 
-            // MSVC has problems instantiating above template function with plain function
-            // pointers (doesn't like the const reference there). Thus, provide it with
-            // a dedicated overload here.
+            
+            
+            
             UnaryFunctionFunctor< double (*)(double) >
                 makeUnaryFunctionFunctor( double (*pFunc)(double),
                                           const ParserContextSharedPtr& rContext )
@@ -316,28 +316,28 @@ namespace slideshow
                     if( rNodeStack.size() < 2 )
                         throw ParseError( "Not enough arguments for binary operator" );
 
-                    // retrieve arguments
+                    
                     ExpressionNodeSharedPtr pSecondArg( rNodeStack.top() );
                     rNodeStack.pop();
                     ExpressionNodeSharedPtr pFirstArg( rNodeStack.top() );
                     rNodeStack.pop();
 
-                    // create combined ExpressionNode
+                    
                     ExpressionNodeSharedPtr pNode( maGenerator( pFirstArg,
                                                                 pSecondArg ) );
-                    // check for constness
+                    
                     if( pFirstArg->isConstant() &&
                         pSecondArg->isConstant() )
                     {
-                        // call the operator() at pNode, store result
-                        // in constant value ExpressionNode.
+                        
+                        
                         rNodeStack.push(
                             ExpressionNodeFactory::createConstantValueExpression(
                                 (*pNode)( 0.0 ) ) );
                     }
                     else
                     {
-                        // push complex node, that calcs the value on demand
+                        
                         rNodeStack.push( pNode );
                     }
                 }
@@ -355,25 +355,25 @@ namespace slideshow
             }
 
 
-            // Workaround for MSVC compiler anomaly (stack trashing)
+            
             //
-            // The default ureal_parser_policies implementation of parse_exp
-            // triggers a really weird error in MSVC7 (Version 13.00.9466), in
-            // that the real_parser_impl::parse_main() call of parse_exp()
-            // overwrites the frame pointer _on the stack_ (EBP of the calling
-            // function gets overwritten while lying on the stack).
+            
+            
+            
+            
+            
             //
-            // For the time being, our parser thus can only read the 1.0E10
-            // notation, not the 1.0e10 one.
+            
+            
             //
-            // TODO(F1): Also handle the 1.0e10 case here.
+            
             template< typename T > struct custom_real_parser_policies : public ::boost::spirit::ureal_parser_policies<T>
             {
                 template< typename ScannerT >
                     static typename ::boost::spirit::parser_result< ::boost::spirit::chlit<>, ScannerT >::type
                 parse_exp(ScannerT& scan)
                 {
-                    // as_lower_d somehow breaks MSVC7
+                    
                     return ::boost::spirit::ch_p('E').parse(scan);
                 }
             };
@@ -421,7 +421,7 @@ namespace slideshow
                 template< typename ScannerT > class definition
                 {
                 public:
-                    // grammar definition
+                    
                     definition( const ExpressionGrammar& self )
                     {
                         using ::boost::spirit::str_p;
@@ -497,8 +497,8 @@ namespace slideshow
                     }
 
                 private:
-                    // the constituents of the Spirit arithmetic expression grammar.
-                    // For the sake of readability, without 'ma' prefix.
+                    
+                    
                     ::boost::spirit::rule< ScannerT >   additiveExpression;
                     ::boost::spirit::rule< ScannerT >   multiplicativeExpression;
                     ::boost::spirit::rule< ScannerT >   unaryExpression;
@@ -514,7 +514,7 @@ namespace slideshow
                 }
 
             private:
-                ParserContextSharedPtr  mpParserContext; // might get modified during parsing
+                ParserContextSharedPtr  mpParserContext; 
             };
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
@@ -522,8 +522,8 @@ namespace slideshow
             {
                 static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
 
-                // clear node stack (since we reuse the static object, that's
-                // the whole point here)
+                
+                
                 while( !lcl_parserContext->maOperandStack.empty() )
                     lcl_parserContext->maOperandStack.pop();
 
@@ -535,9 +535,9 @@ namespace slideshow
         ExpressionNodeSharedPtr SmilFunctionParser::parseSmilValue( const OUString&          rSmilValue,
                                                                     const ::basegfx::B2DRectangle&  rRelativeShapeBounds )
         {
-            // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
-            // gives better conversion robustness here (we might want to map space
-            // etc. to ASCII space here)
+            
+            
+            
             const OString& rAsciiSmilValue(
                 OUStringToOString( rSmilValue, RTL_TEXTENCODING_ASCII_US ) );
 
@@ -547,15 +547,15 @@ namespace slideshow
             ParserContextSharedPtr pContext;
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
-            // static parser context, because the actual
-            // Spirit parser is also a static object
+            
+            
             pContext = getParserContext();
 #else
             pContext.reset( new ParserContext() );
 #endif
 
             pContext->maShapeBounds = rRelativeShapeBounds;
-            pContext->mbParseAnimationFunction = false; // parse with '$' disabled
+            pContext->mbParseAnimationFunction = false; 
 
 
             ExpressionGrammar aExpressionGrammer( pContext );
@@ -564,14 +564,14 @@ namespace slideshow
                                           aEnd,
                                           aExpressionGrammer,
                                           ::boost::spirit::space_p ) );
-            OSL_DEBUG_ONLY(::std::cout.flush()); // needed to keep stdout and cout in sync
+            OSL_DEBUG_ONLY(::std::cout.flush()); 
 
-            // input fully congested by the parser?
+            
             if( !aParseInfo.full )
                 throw ParseError( "SmilFunctionParser::parseSmilValue(): string not fully parseable" );
 
-            // parser's state stack now must contain exactly _one_ ExpressionNode,
-            // which represents our formula.
+            
+            
             if( pContext->maOperandStack.size() != 1 )
                 throw ParseError( "SmilFunctionParser::parseSmilValue(): incomplete or empty expression" );
 
@@ -581,9 +581,9 @@ namespace slideshow
         ExpressionNodeSharedPtr SmilFunctionParser::parseSmilFunction( const OUString&           rSmilFunction,
                                                                        const ::basegfx::B2DRectangle&   rRelativeShapeBounds )
         {
-            // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
-            // gives better conversion robustness here (we might want to map space
-            // etc. to ASCII space here)
+            
+            
+            
             const OString& rAsciiSmilFunction(
                 OUStringToOString( rSmilFunction, RTL_TEXTENCODING_ASCII_US ) );
 
@@ -593,15 +593,15 @@ namespace slideshow
             ParserContextSharedPtr pContext;
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
-            // static parser context, because the actual
-            // Spirit parser is also a static object
+            
+            
             pContext = getParserContext();
 #else
             pContext.reset( new ParserContext() );
 #endif
 
             pContext->maShapeBounds = rRelativeShapeBounds;
-            pContext->mbParseAnimationFunction = true; // parse with '$' enabled
+            pContext->mbParseAnimationFunction = true; 
 
 
             ExpressionGrammar aExpressionGrammer( pContext );
@@ -610,14 +610,14 @@ namespace slideshow
                                           aEnd,
                                           aExpressionGrammer >> ::boost::spirit::end_p,
                                           ::boost::spirit::space_p ) );
-            OSL_DEBUG_ONLY(::std::cout.flush()); // needed to keep stdout and cout in sync
+            OSL_DEBUG_ONLY(::std::cout.flush()); 
 
-            // input fully congested by the parser?
+            
             if( !aParseInfo.full )
                 throw ParseError( "SmilFunctionParser::parseSmilFunction(): string not fully parseable" );
 
-            // parser's state stack now must contain exactly _one_ ExpressionNode,
-            // which represents our formula.
+            
+            
             if( pContext->maOperandStack.size() != 1 )
                 throw ParseError( "SmilFunctionParser::parseSmilFunction(): incomplete or empty expression" );
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/zforlist.hxx>
@@ -33,7 +33,7 @@
 
 using namespace ::com::sun::star;
 
-// Userfields
+
 
 SwUserField::SwUserField(SwUserFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt)
     : SwValueField(pTyp, nFmt),
@@ -73,13 +73,13 @@ void SwUserField::SetValue( const double& rVal )
     ((SwUserFieldType*)GetTyp())->SetValue(rVal);
 }
 
-/// Get name
+
 OUString SwUserField::GetPar1() const
 {
     return ((const SwUserFieldType*)GetTyp())->GetName();
 }
 
-/// Get content
+
 OUString SwUserField::GetPar2() const
 {
     return ((SwUserFieldType*)GetTyp())->GetContent(GetFormat());
@@ -164,7 +164,7 @@ SwUserFieldType::SwUserFieldType( SwDoc* pDocPtr, const OUString& aNam )
     aName = aNam;
 
     if (nType & nsSwGetSetExpType::GSE_STRING)
-        EnableFormat(sal_False);    // Do not use a Numberformatter
+        EnableFormat(sal_False);    
 }
 
 OUString SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt16 nLng)
@@ -175,7 +175,7 @@ OUString SwUserFieldType::Expand(sal_uInt32 nFmt, sal_uInt16 nSubType, sal_uInt1
         return ExpandValue(nValue, nFmt, nLng);
     }
 
-    EnableFormat(sal_False);    // Do not use a Numberformatter
+    EnableFormat(sal_False);    
     return aContent;
 }
 
@@ -203,7 +203,7 @@ void SwUserFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
     NotifyClients( pOld, pNew );
 
-    // update input fields that might be connected to the user field
+    
     if ( !IsModifyLocked() )
     {
         LockModify();
@@ -270,7 +270,7 @@ void SwUserFieldType::SetContent( const OUString& rStr, sal_uInt32 nFmt )
 
         sal_Bool bModified = GetDoc()->IsModified();
         GetDoc()->SetModified();
-        if( !bModified )    // Bug 57028
+        if( !bModified )    
         {
             GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
         }
@@ -309,9 +309,9 @@ bool SwUserFieldType::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             rAny >>= fVal;
             nValue = fVal;
 
-            // The following line is in fact wrong, since the language is unknown (is part of the
-            // field) and, thus, aContent should also belong to the field. Each field can have a
-            // differnt language, but the same content with just different formatting.
+            
+            
+            
             aContent = DoubleToString(nValue, static_cast<sal_uInt32>(LANGUAGE_SYSTEM));
         }
         break;

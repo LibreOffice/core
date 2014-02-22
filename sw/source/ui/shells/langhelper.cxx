@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,13 +65,13 @@ namespace SwLangHelper
         EditView& rEditView=pOLV->GetEditView();
         EditEngine* pEditEngine=rEditView.GetEditEngine();
 
-        // the value of used script types
+        
         const sal_uInt16 nScriptType =pOLV->GetSelectedScriptType();
-        OUString aScriptTypesInUse( OUString::number( nScriptType ) );//pEditEngine->GetScriptType(aSelection)
+        OUString aScriptTypesInUse( OUString::number( nScriptType ) );
 
         SvtLanguageTable aLangTable;
 
-        // get keyboard language
+        
         OUString aKeyboardLang;
         LanguageType nLang = LANGUAGE_DONTKNOW;
 
@@ -81,21 +81,21 @@ namespace SwLangHelper
         if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
             aKeyboardLang = aLangTable.GetString( nLang );
 
-        // get the language that is in use
+        
         OUString aCurrentLang("*");
         SfxItemSet aSet(pOLV->GetAttribs());
         nLang = SwLangHelper::GetCurrentLanguage( aSet,nScriptType );
         if (nLang != LANGUAGE_DONTKNOW)
             aCurrentLang = aLangTable.GetString( nLang );
 
-        // build sequence for status value
+        
         uno::Sequence< OUString > aSeq( 4 );
         aSeq[0] = aCurrentLang;
         aSeq[1] = aScriptTypesInUse;
         aSeq[2] = aKeyboardLang;
         aSeq[3] = SwLangHelper::GetTextForLanguageGuessing( pEditEngine, aSelection );
 
-        // set sequence as status value
+        
         SfxStringListItem aItem( SID_LANGUAGE_STATUS );
         aItem.SetStringList( aSeq );
         rSet.Put( aItem, SID_LANGUAGE_STATUS );
@@ -110,21 +110,21 @@ namespace SwLangHelper
         EditView   & rEditView   = pOLV->GetEditView();
         EditEngine * pEditEngine = rEditView.GetEditEngine();
 
-        // get the language
+        
         OUString aNewLangTxt;
 
         SFX_REQUEST_ARG( rReq, pItem, SfxStringItem, SID_LANGUAGE_STATUS , false );
         if (pItem)
             aNewLangTxt = pItem->GetValue();
 
-        //!! Remember the view frame right now...
-        //!! (call to GetView().GetViewFrame() will break if the
-        //!! SwTextShell got destroyed meanwhile.)
+        
+        
+        
         SfxViewFrame *pViewFrame = rView.GetViewFrame();
 
         if (aNewLangTxt == "*" )
         {
-            // open the dialog "Tools/Options/Language Settings - Language"
+            
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if (pFact)
             {
@@ -135,7 +135,7 @@ namespace SwLangHelper
         }
         else
         {
-            // setting the new language...
+            
             if (!aNewLangTxt.isEmpty())
             {
                 const OUString aSelectionLangPrefix("Current_");
@@ -149,20 +149,20 @@ namespace SwLangHelper
                 bool bForParagraph = false;
                 if (-1 != (nPos = aNewLangTxt.indexOf( aSelectionLangPrefix, 0 )))
                 {
-                    // ... for the current selection
+                    
                     aNewLangTxt = aNewLangTxt.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
                     bForSelection = true;
                 }
                 else if (-1 != (nPos = aNewLangTxt.indexOf( aParagraphLangPrefix , 0 )))
                 {
-                    // ... for the current paragraph language
+                    
                     aNewLangTxt = aNewLangTxt.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
                     bForSelection = true;
                     bForParagraph = true;
                 }
                 else if (-1 != (nPos = aNewLangTxt.indexOf( aDocumentLangPrefix , 0 )))
                 {
-                    // ... as default document language
+                    
                     aNewLangTxt = aNewLangTxt.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
                     bForSelection = false;
                 }
@@ -173,13 +173,13 @@ namespace SwLangHelper
                     SwLangHelper::SelectPara( rEditView, aSelection );
                     aSelection = pOLV->GetSelection();
                 }
-                if (!bForSelection) // document language to be changed...
+                if (!bForSelection) 
                 {
                     rSh.StartAction();
                     rSh.LockView( sal_True );
                     rSh.Push();
 
-                    // prepare to apply new language to all text in document
+                    
                     rSh.SelAll();
                     rSh.ExtendedSelectAll();
                 }
@@ -191,17 +191,17 @@ namespace SwLangHelper
                 else
                     SwLangHelper::SetLanguage( rSh, pOLV, aSelection, aNewLangTxt, bForSelection, aEditAttr );
 
-                // ugly hack, as it seems that EditView/EditEngine does not update their spellchecking marks
-                // when setting a new language attribute
+                
+                
                 if (bForSelection)
                 {
                     const SwViewOption* pVOpt = rView.GetWrtShellPtr()->GetViewOptions();
                     sal_uLong nCntrl = pEditEngine->GetControlWord();
-                    // turn off
+                    
                     nCntrl &= ~EE_CNTRL_ONLINESPELLING;
                     pEditEngine->SetControlWord(nCntrl);
 
-                    //turn back on
+                    
                     if (pVOpt->IsOnlineSpell())
                         nCntrl |= EE_CNTRL_ONLINESPELLING;
                     else
@@ -214,7 +214,7 @@ namespace SwLangHelper
 
                 if (!bForSelection)
                 {
-                    // need to release view and restore selection...
+                    
                     rSh.Pop( sal_False );
                     rSh.LockView( sal_False );
                     rSh.EndAction();
@@ -222,7 +222,7 @@ namespace SwLangHelper
             }
         }
 
-        // invalidate slot to get the new language displayed
+        
         pViewFrame->GetBindings().Invalidate( rReq.GetSlot() );
 
         rReq.Done();
@@ -245,7 +245,7 @@ namespace SwLangHelper
             EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : NULL;
             OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
 
-            //get ScriptType
+            
             sal_uInt16 nLangWhichId = 0;
             bool bIsSingleScriptType = true;
             switch (nScriptType)
@@ -259,12 +259,12 @@ namespace SwLangHelper
             }
             if (bIsSingleScriptType)
             {
-                // change language for selection or paragraph
-                // (for paragraph is handled by previosuly having set the selection to the
-                // whole paragraph)
+                
+                
+                
                 if (bIsForSelection)
                 {
-                    // apply language to current selection
+                    
                     if (pEditEngine)
                     {
                         rCoreSet.Put( SvxLanguageItem( nLang, nLangWhichId ));
@@ -277,28 +277,28 @@ namespace SwLangHelper
                         rWrtSh.SetAttrSet( rCoreSet );
                     }
                 }
-                else // change language for all text
+                else 
                 {
-                    // set document default language
+                    
                     switch (nLangWhichId)
                     {
                          case EE_CHAR_LANGUAGE :      nLangWhichId = RES_CHRATR_LANGUAGE; break;
                          case EE_CHAR_LANGUAGE_CJK :  nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
                          case EE_CHAR_LANGUAGE_CTL :  nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
                     }
-                    //Set the default document language
+                    
                     rWrtSh.SetDefault( SvxLanguageItem( nLang, nLangWhichId ) );
 
-                    //Resolves: fdo#35282 Clear the language from all Text Styles, and
-                    //fallback to default document language
+                    
+                    
                     const SwTxtFmtColls *pColls = rWrtSh.GetDoc()->GetTxtFmtColls();
                     for(sal_uInt16 i = 0, nCount = pColls->size(); i < nCount; ++i)
                     {
                         SwTxtFmtColl &rTxtColl = *(*pColls)[ i ];
                         rTxtColl.ResetFmtAttr(nLangWhichId);
                     }
-                    //Resolves: fdo#35282 Clear the language from all Character Styles,
-                    //and fallback to default document language
+                    
+                    
                     const SwCharFmts *pCharFmts = rWrtSh.GetDoc()->GetCharFmts();
                     for(sal_uInt16 i = 0, nCount = pCharFmts->size(); i < nCount; ++i)
                     {
@@ -306,8 +306,8 @@ namespace SwLangHelper
                         rCharFmt.ResetFmtAttr(nLangWhichId);
                     }
 
-                    // #i102191: hard set respective language attribute in text document
-                    // (for all text in the document - which should be selected by now...)
+                    
+                    
                     rWrtSh.SetAttrItem( SvxLanguageItem( nLang, nLangWhichId ) );
                 }
             }
@@ -321,7 +321,7 @@ namespace SwLangHelper
 
     void SetLanguage_None( SwWrtShell &rWrtSh, OutlinerView* pOLV, ESelection aSelection, bool bIsForSelection, SfxItemSet &rCoreSet )
     {
-        // EditEngine IDs
+        
         const sal_uInt16 aLangWhichId_EE[3] =
         {
             EE_CHAR_LANGUAGE,
@@ -329,7 +329,7 @@ namespace SwLangHelper
             EE_CHAR_LANGUAGE_CTL
         };
 
-        // Writewr IDs
+        
         const sal_uInt16 aLangWhichId_Writer[3] =
         {
             RES_CHRATR_LANGUAGE,
@@ -339,9 +339,9 @@ namespace SwLangHelper
 
         if (bIsForSelection)
         {
-            // change language for selection or paragraph
-            // (for paragraph is handled by previosuly having set the selection to the
-            // whole paragraph)
+            
+            
+            
 
             EditEngine* pEditEngine = pOLV ? pOLV->GetEditView().GetEditEngine() : NULL;
             OSL_ENSURE( !pOLV || pEditEngine, "OutlinerView without EditEngine???" );
@@ -359,7 +359,7 @@ namespace SwLangHelper
                 rWrtSh.SetAttrSet( rCoreSet );
             }
         }
-        else // change language for all text
+        else 
         {
             std::set<sal_uInt16> aAttribs;
             for (sal_uInt16 i = 0; i < 3; ++i)
@@ -368,8 +368,8 @@ namespace SwLangHelper
                 aAttribs.insert( aLangWhichId_Writer[i] );
             }
 
-            // set all language attributes to default
-            // (for all text in the document - which should be selected by now...)
+            
+            
             rWrtSh.ResetAttr( aAttribs );
         }
     }
@@ -384,10 +384,10 @@ namespace SwLangHelper
         (void) bIsForSelection;
         (void) aSelection;
 
-        // reset language for current selection.
-        // The selection should already have been expanded to the whole paragraph or
-        // to all text in the document if those are the ranges where to reset
-        // the language attributes
+        
+        
+        
+        
 
         if (pOLV)
         {
@@ -407,11 +407,11 @@ namespace SwLangHelper
     }
 
 
-    /// @returns : the language for the selected text that is set for the
-    ///     specified attribute (script type).
-    ///     If there are more than one languages used LANGUAGE_DONTKNOW will be returned.
-    /// @param nLangWhichId : one of
-    ///     RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+    
+    
+    
+    
+    
     LanguageType GetLanguage( SwWrtShell &rSh, sal_uInt16 nLangWhichId )
     {
         SfxItemSet aSet( rSh.GetAttrPool(), nLangWhichId, nLangWhichId );
@@ -429,17 +429,17 @@ namespace SwLangHelper
         SfxItemState nState = aSet.GetItemState( nLangWhichId, true, &pItem );
         if (nState > SFX_ITEM_DEFAULT && pItem)
         {
-            // the item is set and can be used
+            
             nLang = (dynamic_cast< const SvxLanguageItem* >(pItem))->GetLanguage();
         }
         else if (nState == SFX_ITEM_DEFAULT)
         {
-            // since the attribute is not set: retrieve the default value
+            
             nLang = (dynamic_cast< const SvxLanguageItem& >(aSet.GetPool()->GetDefaultItem( nLangWhichId ))).GetLanguage();
         }
         else if (nState == SFX_ITEM_DONTCARE)
         {
-            // there is more than one language...
+            
             nLang = LANGUAGE_DONTKNOW;
         }
         OSL_ENSURE( nLang != LANGUAGE_SYSTEM, "failed to get the language?" );
@@ -447,16 +447,16 @@ namespace SwLangHelper
         return nLang;
     }
 
-    /// @returns: the language in use for the selected text.
-    ///     'In use' means the language(s) matching the script type(s) of the
-    ///     selected text. Or in other words, the language a spell checker would use.
-    ///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
+    
+    
+    
+    
     LanguageType GetCurrentLanguage( SwWrtShell &rSh )
     {
-        // get all script types used in current selection
+        
         const sal_uInt16 nScriptType = rSh.GetScriptType();
 
-        //set language attribute to use according to the script type
+        
         sal_uInt16 nLangWhichId = 0;
         bool bIsSingleScriptType = true;
         switch (nScriptType)
@@ -467,15 +467,15 @@ namespace SwLangHelper
              default: bIsSingleScriptType = false; break;
         }
 
-        // get language according to the script type(s) in use
+        
         LanguageType nCurrentLang = LANGUAGE_SYSTEM;
         if (bIsSingleScriptType)
             nCurrentLang = GetLanguage( rSh, nLangWhichId );
         else
         {
-            // check if all script types are set to LANGUAGE_NONE and return
-            // that if this is the case. Otherwise, having multiple script types
-            // in use always means there are several languages in use...
+            
+            
+            
             const sal_uInt16 aScriptTypes[3] =
             {
                 RES_CHRATR_LANGUAGE,
@@ -498,13 +498,13 @@ namespace SwLangHelper
         return nCurrentLang;
     }
 
-    /// @returns: the language in use for the selected text.
-    ///     'In use' means the language(s) matching the script type(s) of the
-    ///     selected text. Or in other words, the language a spell checker would use.
-    ///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
+    
+    
+    
+    
     LanguageType GetCurrentLanguage( SfxItemSet aSet, sal_uInt16 nScriptType )
     {
-        //set language attribute to use according to the script type
+        
         sal_uInt16 nLangWhichId = 0;
         bool bIsSingleScriptType = true;
         switch (nScriptType)
@@ -515,15 +515,15 @@ namespace SwLangHelper
              default: bIsSingleScriptType = false;
         }
 
-        // get language according to the script type(s) in use
+        
         LanguageType nCurrentLang = LANGUAGE_SYSTEM;
         if (bIsSingleScriptType)
             nCurrentLang = GetLanguage( aSet, nLangWhichId );
         else
         {
-            // check if all script types are set to LANGUAGE_NONE and return
-            // that if this is the case. Otherwise, having multiple script types
-            // in use always means there are several languages in use...
+            
+            
+            
             const sal_uInt16 aScriptTypes[3] =
             {
                 EE_CHAR_LANGUAGE,
@@ -548,7 +548,7 @@ namespace SwLangHelper
 
     OUString GetTextForLanguageGuessing( SwWrtShell &rSh )
     {
-        // string for guessing language
+        
         OUString aText;
         SwPaM *pCrsr = rSh.GetCrsr();
         SwTxtNode *pNode = pCrsr->GetNode()->GetTxtNode();
@@ -558,9 +558,9 @@ namespace SwLangHelper
             if (!aText.isEmpty())
             {
                 sal_Int32 nEnd = pCrsr->GetPoint()->nContent.GetIndex();
-                // at most 100 chars to the left...
+                
                 const sal_Int32 nStt = nEnd > 100 ? nEnd - 100 : 0;
-                // ... and 100 to the right of the cursor position
+                
                 nEnd = aText.getLength() - nEnd > 100 ? nEnd + 100 : aText.getLength();
                 aText = aText.copy( nStt, nEnd - nStt );
             }
@@ -570,7 +570,7 @@ namespace SwLangHelper
 
     OUString GetTextForLanguageGuessing( EditEngine* rEditEngine, ESelection aDocSelection )
     {
-        // string for guessing language
+        
         OUString aText;
 
         aText = rEditEngine->GetText(aDocSelection);
@@ -578,9 +578,9 @@ namespace SwLangHelper
         {
             sal_Int32 nStt = 0;
             sal_Int32 nEnd = aDocSelection.nEndPos;
-            // at most 100 chars to the left...
+            
             nStt = nEnd > 100 ? nEnd - 100 : 0;
-            // ... and 100 to the right of the cursor position
+            
             nEnd = aText.getLength() - nEnd > 100 ? nEnd + 100 : aText.getLength();
             aText = aText.copy( nStt, nEnd - nStt );
         }
@@ -597,7 +597,7 @@ namespace SwLangHelper
 
     void SelectCurrentPara( SwWrtShell &rWrtSh )
     {
-        // select current para
+        
         if (!rWrtSh.IsSttPara())
             rWrtSh.MovePara( fnParaCurr, fnParaStart );
         if (!rWrtSh.HasMark())

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_RangeChooser.hxx"
@@ -51,7 +51,7 @@ namespace
         }
     }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -87,29 +87,29 @@ RangeChooserTabPage::RangeChooserTabPage( Window* pParent
     get(m_pRB_Columns, "RB_DATACOLS");
     get(m_pCB_FirstRowAsLabel, "CB_FIRST_ROW_ASLABELS");
     get(m_pCB_FirstColumnAsLabel, "CB_FIRST_COLUMN_ASLABELS");
-    get(m_pFTTitle, "STR_PAGE_DATA_RANGE");// OH:remove later with dialog title
+    get(m_pFTTitle, "STR_PAGE_DATA_RANGE");
     get(m_pCB_TimeBased, "CB_TIME_BASED");
     get(m_pEd_TimeStart, "ED_TIME_BASED_START");
     get(m_pEd_TimeEnd, "ED_TIME_BASED_END");
 
     m_pFT_Caption->Show(!bHideDescription);
 
-    this->SetText( m_pFTTitle->GetText());// OH:remove later with dialog
+    this->SetText( m_pFTTitle->GetText());
 
-    // set defaults as long as DetectArguments does not work
+    
     m_pRB_Columns->Check();
     m_pCB_FirstColumnAsLabel->Check();
     m_pCB_FirstRowAsLabel->Check();
 
-    // BM: Note, that the range selection is not available, if there is no view.
-    // This happens for charts having their own embedded spreadsheet.  If you
-    // force to get the range selection here, this would mean when entering this
-    // page the calc view would be created in this case.  So, I enable the
-    // button here, and in the worst case nothing happens when it is pressed.
-    // Not nice, but I see no better solution for the moment.
+    
+    
+    
+    
+    
+    
     m_pIB_Range->SetClickHdl( LINK( this, RangeChooserTabPage, ChooseRangeHdl ));
 
-    // #i75179# enable setting the background to a different color
+    
     m_pED_Range->SetStyle( m_pED_Range->GetStyle() | WB_FORCECTRLBACKGROUND );
 
     m_pED_Range->SetUpdateDataHdl( LINK( this, RangeChooserTabPage, ControlChangedHdl ));
@@ -175,11 +175,11 @@ void RangeChooserTabPage::commitPage()
 
 sal_Bool RangeChooserTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
-    //ranges may have been edited in the meanwhile (dirty is true in that case here)
+    
     if( isValid() )
     {
         changeDialogModelAccordingToControls();
-        return sal_True;//return false if this page should not be left
+        return sal_True;
     }
     else
         return sal_False;
@@ -221,7 +221,7 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
                         beans::PropertyState_DIRECT_VALUE );
         }
 
-        // only if range is valid
+        
         if( m_aLastValidRangeString.equals(m_pED_Range->GetText()))
         {
             m_rDialogModel.setTemplate( m_xCurrentChartTypeTemplate );
@@ -241,8 +241,8 @@ void RangeChooserTabPage::changeDialogModelAccordingToControls()
             }
         }
 
-        //@todo warn user that the selected range is not valid
-        //@todo better: disable OK-Button if range is invalid
+        
+        
     }
 }
 
@@ -274,9 +274,9 @@ bool RangeChooserTabPage::isValid()
             m_pTabPageNotifiable->setInvalidPage( this );
     }
 
-    // enable/disable controls
-    // #i79531# if the range is valid but an action of one of these buttons
-    // would render it invalid, the button should be disabled
+    
+    
+    
     if( bIsValid )
     {
         bool bDataInColumns = m_pRB_Columns->IsChecked();
@@ -331,7 +331,7 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedHdl)
 IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl)
 {
     OUString aRange = m_pED_Range->GetText();
-    // using assignment for broken gcc 3.3
+    
     OUString aTitle = m_pFTTitle->GetText();
 
     lcl_enableRangeChoosing( true, m_pParentDialog );
@@ -342,16 +342,16 @@ IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl)
 
 void RangeChooserTabPage::listeningFinished( const OUString & rNewRange )
 {
-    //user has selected a new range
+    
 
     OUString aRange( rNewRange );
 
     m_rDialogModel.startControllerLockTimer();
 
-    // stop listening
+    
     m_rDialogModel.getRangeSelectionHelper()->stopRangeListening();
 
-    //update dialog state
+    
     ToTop();
     GrabFocus();
     m_pED_Range->SetText( aRange );
@@ -374,6 +374,6 @@ void RangeChooserTabPage::setDirty()
         m_bIsDirty = true;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

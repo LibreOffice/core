@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,10 +36,10 @@
 
 #include <stdio.h>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     using ::com::sun::star::logging::XConsoleHandler;
     using ::com::sun::star::lang::XServiceInfo;
@@ -60,10 +60,10 @@ namespace logging
 
     namespace LogLevel = ::com::sun::star::logging::LogLevel;
 
-    //====================================================================
-    //= ConsoleHandler - declaration
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     typedef ::cppu::WeakComponentImplHelper3    <   XConsoleHandler
                                                 ,   XServiceInfo
                                                 ,   XInitialization
@@ -79,11 +79,11 @@ namespace logging
         ConsoleHandler( const Reference< XComponentContext >& _rxContext );
         virtual ~ConsoleHandler();
 
-        // XConsoleHandler
+        
         virtual ::sal_Int32 SAL_CALL getThreshold() throw (RuntimeException);
         virtual void SAL_CALL setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException);
 
-        // XLogHandler
+        
         virtual OUString SAL_CALL getEncoding() throw (RuntimeException);
         virtual void SAL_CALL setEncoding( const OUString& _encoding ) throw (RuntimeException);
         virtual Reference< XLogFormatter > SAL_CALL getFormatter() throw (RuntimeException);
@@ -93,19 +93,19 @@ namespace logging
         virtual void SAL_CALL flush(  ) throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException);
 
-        // XInitialization
+        
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-        // OComponentHelper
+        
         virtual void SAL_CALL disposing();
 
     public:
-        // XServiceInfo - static version
+        
         static OUString SAL_CALL getImplementationName_static();
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
         static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
@@ -116,10 +116,10 @@ namespace logging
         void    leaveMethod( MethodGuard::Access );
     };
 
-    //====================================================================
-    //= ConsoleHandler - implementation
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ConsoleHandler::ConsoleHandler( const Reference< XComponentContext >& _rxContext )
         :ConsoleHandler_Base( m_aMutex )
         ,m_aHandlerHelper( _rxContext, m_aMutex, rBHelper )
@@ -127,7 +127,7 @@ namespace logging
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ConsoleHandler::~ConsoleHandler()
     {
         if ( !rBHelper.bDisposed )
@@ -137,39 +137,39 @@ namespace logging
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ConsoleHandler::disposing()
     {
         m_aHandlerHelper.setFormatter( NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     void ConsoleHandler::enterMethod( MethodGuard::Access )
     {
         m_aHandlerHelper.enterMethod();
     }
 
-    //--------------------------------------------------------------------
+    
     void ConsoleHandler::leaveMethod( MethodGuard::Access )
     {
         m_aMutex.release();
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int32 SAL_CALL ConsoleHandler::getThreshold() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_nThreshold;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ConsoleHandler::setThreshold( ::sal_Int32 _threshold ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_nThreshold = _threshold;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL ConsoleHandler::getEncoding() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -178,42 +178,42 @@ namespace logging
         return sEncoding;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ConsoleHandler::setEncoding( const OUString& _rEncoding ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         OSL_VERIFY( m_aHandlerHelper.setEncoding( _rEncoding ) );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XLogFormatter > SAL_CALL ConsoleHandler::getFormatter() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getFormatter();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ConsoleHandler::setFormatter( const Reference< XLogFormatter >& _rxFormatter ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setFormatter( _rxFormatter );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int32 SAL_CALL ConsoleHandler::getLevel() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getLevel();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ConsoleHandler::setLevel( ::sal_Int32 _nLevel ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setLevel( _nLevel );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ConsoleHandler::flush(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -221,7 +221,7 @@ namespace logging
         fflush( stderr );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL ConsoleHandler::publish( const LogRecord& _rRecord ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -238,7 +238,7 @@ namespace logging
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ConsoleHandler::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -247,7 +247,7 @@ namespace logging
             throw AlreadyInitializedException();
 
         if ( _rArguments.getLength() == 0 )
-        {   // create() - nothing to init
+        {   
             m_aHandlerHelper.setIsInitialized();
             return;
         }
@@ -259,7 +259,7 @@ namespace logging
         if ( !( _rArguments[0] >>= aSettings ) )
             throw IllegalArgumentException( OUString(), *this, 1 );
 
-        // createWithSettings( [in] sequence< ::com::sun::star::beans::NamedValue > Settings )
+        
         ::comphelper::NamedValueCollection aTypedSettings( aSettings );
         m_aHandlerHelper.initFromSettings( aTypedSettings );
 
@@ -268,31 +268,31 @@ namespace logging
         m_aHandlerHelper.setIsInitialized();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL ConsoleHandler::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL ConsoleHandler::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL ConsoleHandler::getImplementationName_static()
     {
         return OUString( "com.sun.star.comp.extensions.ConsoleHandler" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ConsoleHandler::getSupportedServiceNames_static()
     {
         Sequence< OUString > aServiceNames(1);
@@ -300,20 +300,20 @@ namespace logging
         return aServiceNames;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XInterface > ConsoleHandler::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new ConsoleHandler( _rxContext ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void createRegistryInfo_ConsoleHandler()
     {
         static OAutoRegistration< ConsoleHandler > aAutoRegistration;
     }
 
-//........................................................................
-} // namespace logging
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

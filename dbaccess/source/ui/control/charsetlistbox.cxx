@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "charsetlistbox.hxx"
@@ -25,7 +25,7 @@
 
 namespace dbaui
 {
-    // CharSetListBox
+    
     CharSetListBox::CharSetListBox( Window* _pParent, const ResId& _rResId )
         :ListBox( _pParent, _rResId )
     {
@@ -61,9 +61,9 @@ namespace dbaui
             OUString sDisplayName = (*aFind).getDisplayName();
             if ( LISTBOX_ENTRY_NOTFOUND == GetEntryPos( sDisplayName ) )
             {
-                // in our settings, there was an encoding selected which is not valid for the current
-                // data source type
-                // This is worth at least an assertion.
+                
+                
+                
                 OSL_FAIL( "CharSetListBox::SelectEntryByIanaName: invalid character set!" );
                 sDisplayName = "";
             }
@@ -88,6 +88,6 @@ namespace dbaui
         return bChangedSomething;
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

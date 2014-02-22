@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/linkmgr.hxx>
@@ -49,23 +49,23 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// BaseProperties section
+
+
 
 sdr::properties::BaseProperties* SdrObjGroup::CreateObjectSpecificProperties()
 {
     return new sdr::properties::GroupProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// DrawContact section
+
+
 
 sdr::contact::ViewContact* SdrObjGroup::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfGroup(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrObjGroup,SdrObject);
 
@@ -128,7 +128,7 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
     }
     if(nObjAnz != 1)
     {
-        // only allowed if single object selected
+        
         rInfo.bTransparenceAllowed = false;
         rInfo.bGradientAllowed = false;
     }
@@ -137,8 +137,8 @@ void SdrObjGroup::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
 void SdrObjGroup::SetBoundRectDirty()
 {
-    // avoid resetting aOutRect which in case of this object is model data,
-    // not re-creatable view data
+    
+    
 }
 
 sal_uInt16 SdrObjGroup::GetObjIdentifier() const
@@ -191,27 +191,27 @@ void SdrObjGroup::SetModel(SdrModel* pNewModel)
 {
     if(pNewModel!=pModel)
     {
-        // #i30648#
-        // This method also needs to migrate the used ItemSet
-        // when the destination model uses a different pool
-        // than the current one. Else it is possible to create
-        // SdrObjGroups which reference the old pool which might
-        // be destroyed (as the bug shows).
+        
+        
+        
+        
+        
+        
         SdrModel* pOldModel = pModel;
 
-        // test for correct pool in ItemSet; move to new pool if necessary
+        
         if(pNewModel && GetObjectItemPool() && GetObjectItemPool() != &pNewModel->GetItemPool())
         {
             MigrateItemPool(GetObjectItemPool(), &pNewModel->GetItemPool(), pNewModel);
         }
 
-        // call parent
+        
         SdrObject::SetModel(pNewModel);
 
-        // set new model at content
+        
         pSub->SetModel(pNewModel);
 
-        // modify properties
+        
         GetProperties().SetModel(pOldModel, pNewModel);
     }
 }
@@ -243,7 +243,7 @@ SdrObjList* SdrObjGroup::GetSubList() const
 
 const Rectangle& SdrObjGroup::GetCurrentBoundRect() const
 {
-    // <aOutRect> has to contain the bounding rectangle
+    
     if ( pSub->GetObjCount()!=0 )
     {
         const_cast<SdrObjGroup*>(this)->aOutRect = pSub->GetAllObjBoundRect();
@@ -254,7 +254,7 @@ const Rectangle& SdrObjGroup::GetCurrentBoundRect() const
 
 const Rectangle& SdrObjGroup::GetSnapRect() const
 {
-    // <aOutRect> has to contain the bounding rectangle
+    
     if ( pSub->GetObjCount()!=0 )
     {
         return pSub->GetAllObjSnapRect();
@@ -274,17 +274,17 @@ SdrObjGroup& SdrObjGroup::operator=(const SdrObjGroup& rObj)
 {
     if( this == &rObj )
         return *this;
-    // copy SdrObject stuff
+    
     SdrObject::operator=(rObj);
 
-    // #i36404#
-    // copy SubList, init model and page first
+    
+    
     SdrObjList& rSourceSubList = *rObj.GetSubList();
     pSub->SetPage(rSourceSubList.GetPage());
     pSub->SetModel(rSourceSubList.GetModel());
     pSub->CopyObjects(*rObj.GetSubList());
 
-    // copy local parameters
+    
     aRefPoint  = rObj.aRefPoint;
     bRefPoint  = rObj.bRefPoint;
     return *this;
@@ -328,7 +328,7 @@ OUString SdrObjGroup::TakeObjNamePlural() const
 
 void SdrObjGroup::RecalcSnapRect()
 {
-    // TODO: unnecessary, because we use the Rects from the SubList
+    
 }
 
 basegfx::B2DPolyPolygon SdrObjGroup::TakeXorPoly() const
@@ -488,7 +488,7 @@ void SdrObjGroup::NbcRotate(const Point& rRef, long nWink, double sn, double cs)
 void SdrObjGroup::NbcMirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
-    MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
+    MirrorPoint(aRefPoint,rRef1,rRef2); 
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
     for (sal_uIntPtr i=0; i<nObjAnz; i++) {
@@ -566,7 +566,7 @@ void SdrObjGroup::Move(const Size& rSiz)
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         MovePoint(aRefPoint,rSiz);
         if (pSub->GetObjCount()!=0) {
-            // first move the connectors, then everything else
+            
             SdrObjList* pOL=pSub;
             sal_uIntPtr nObjAnz=pOL->GetObjCount();
             sal_uIntPtr i;
@@ -611,7 +611,7 @@ void SdrObjGroup::Resize(const Point& rRef, const Fraction& xFact, const Fractio
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         ResizePoint(aRefPoint,rRef,xFact,yFact);
         if (pSub->GetObjCount()!=0) {
-            // move the connectors first, everything else afterwards
+            
             SdrObjList* pOL=pSub;
             sal_uIntPtr nObjAnz=pOL->GetObjCount();
             sal_uIntPtr i;
@@ -641,7 +641,7 @@ void SdrObjGroup::Rotate(const Point& rRef, long nWink, double sn, double cs)
         SetGlueReallyAbsolute(true);
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         RotatePoint(aRefPoint,rRef,sn,cs);
-        // move the connectors first, everything else afterwards
+        
         SdrObjList* pOL=pSub;
         sal_uIntPtr nObjAnz=pOL->GetObjCount();
         sal_uIntPtr i;
@@ -666,8 +666,8 @@ void SdrObjGroup::Mirror(const Point& rRef1, const Point& rRef2)
 {
     SetGlueReallyAbsolute(true);
     Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
-    MirrorPoint(aRefPoint,rRef1,rRef2); // implementation missing in SvdEtc!
-    // move the connectors first, everything else afterwards
+    MirrorPoint(aRefPoint,rRef1,rRef2); 
+    
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
     sal_uIntPtr i;
@@ -693,7 +693,7 @@ void SdrObjGroup::Shear(const Point& rRef, long nWink, double tn, bool bVShear)
         SetGlueReallyAbsolute(true);
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         ShearPoint(aRefPoint,rRef,tn);
-        // move the connectors first, everything else afterwards
+        
         SdrObjList* pOL=pSub;
         sal_uIntPtr nObjAnz=pOL->GetObjCount();
         sal_uIntPtr i;
@@ -721,7 +721,7 @@ void SdrObjGroup::SetAnchorPos(const Point& rPnt)
     aAnchor=rPnt;
     Size aSiz(rPnt.X()-aAnchor.X(),rPnt.Y()-aAnchor.Y());
     MovePoint(aRefPoint,aSiz);
-    // move the connectors first, everything else afterwards
+    
     SdrObjList* pOL=pSub;
     sal_uIntPtr nObjAnz=pOL->GetObjCount();
     sal_uIntPtr i;
@@ -746,14 +746,14 @@ void SdrObjGroup::NbcSetRelativePos(const Point& rPnt)
 {
     Point aRelPos0(GetSnapRect().TopLeft()-aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
-    NbcMove(aSiz); // this also calls SetRectsDirty()
+    NbcMove(aSiz); 
 }
 
 void SdrObjGroup::SetRelativePos(const Point& rPnt)
 {
     Point aRelPos0(GetSnapRect().TopLeft()-aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
-    if (aSiz.Width()!=0 || aSiz.Height()!=0) Move(aSiz); // this also calls SetRectsDirty() and Broadcast, ...
+    if (aSiz.Width()!=0 || aSiz.Height()!=0) Move(aSiz); 
 }
 
 void SdrObjGroup::NbcReformatText()
@@ -776,7 +776,7 @@ SdrObject* SdrObjGroup::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) cons
         SdrObject* pIterObj = pSub->GetObj(a);
         SdrObject* pResult = pIterObj->DoConvertToPolyObj(bBezier, bAddText);
 
-        // pResult can be NULL e.g. for empty objects
+        
         if( pResult )
             pGroup->GetSubList()->NbcInsertObject(pResult);
     }

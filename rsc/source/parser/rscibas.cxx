@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -80,7 +80,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
     SetConstant( rNames.Put( "DONTKNOW", CONSTNAME, LANGUAGE_DONTKNOW ), LANGUAGE_DONTKNOW );
 
     sal_Int32 nIndex = 0;
-    mnLangId = 0x400; // stay away from selfdefined...
+    mnLangId = 0x400; 
 
     const ::std::vector< MsLangId::LanguagetagMapping > aList( MsLangId::getDefinedLanguagetags());
     for (::std::vector< MsLangId::LanguagetagMapping >::const_iterator iTag( aList.begin()); iTag != aList.end(); ++iTag)
@@ -111,7 +111,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
 #endif
         nIndex++;
     }
-    // hack - survive "x-no-translate"
+    
     /* XXX: that ^^^ was the original comment, but we're adding "x-comment"
      * here? Which is good anyway. */
     SetConstant( rNames.Put( "x-comment", CONSTNAME, mnLangId ), mnLangId );
@@ -154,12 +154,12 @@ Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )
     if( ! rNames.Get( nResult = pHS->getID( pLang ), &aStruct ) )
     {
         SetConstant( nResult = rNames.Put( pLang, CONSTNAME, mnLangId ), mnLangId );
-        // insert new lang to ULong_Iso_map
+        
         OString aLang( pLang );
         bAdd = (GetLangId( aLang ) == 0);
         if ( bAdd )
             ULong_Iso_map[ aLang ] = mnLangId;
-        // increase id counter
+        
         mnLangId++;
     }
 #if OSL_DEBUG_LEVEL > 2
@@ -423,7 +423,7 @@ RscTupel * RscTypCont::InitGeometry()
     RscTop *    pTupel;
     Atom        nId;
 
-    // Clientvariablen einfuegen
+    
     pTupel = new RscTupel( pHS->getID( "TupelDeltaSystem" ),
                                 RSC_NOTYPE, NULL );
     nId = aNmTb.Put( "X", VARNAME );
@@ -464,7 +464,7 @@ RscTupel * RscTypCont::InitStringTupel()
     RscTop *    pTupel;
     Atom        nId;
 
-    // Clientvariablen einfuegen
+    
     pTupel = new RscTupel( pHS->getID( "CharsTupel" ), RSC_NOTYPE, NULL );
     nId = aNmTb.Put( "FILTER", VARNAME );
     pTupel->SetVariable( nId, &aString );
@@ -479,7 +479,7 @@ RscTupel * RscTypCont::InitStringLongTupel()
     RscTop *    pTupel;
     Atom        nId;
 
-    // Clientvariablen einfuegen
+    
     pTupel = new RscTupel( pHS->getID( "CharsLongTupel" ), RSC_NOTYPE, NULL );
     nId = aNmTb.Put( "ItemText", VARNAME );
     pTupel->SetVariable( nId, &aString );

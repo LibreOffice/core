@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "exp_share.hxx"
@@ -62,7 +62,7 @@ static inline bool readFontProps( ElementDescriptor * element, Style & style )
 
 void ElementDescriptor::readMultiPageModel( StyleBag * all_styles )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -77,7 +77,7 @@ void ElementDescriptor::readMultiPageModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id" ,  all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readLongAttr( "MultiPageValue", XMLNS_DIALOGS_PREFIX ":value" );
     Any aDecorationAny( _xProps->getPropertyValue( "Decoration" ) );
@@ -97,7 +97,7 @@ void ElementDescriptor::readMultiPageModel( StyleBag * all_styles )
 
 void ElementDescriptor::readFrameModel( StyleBag * all_styles )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 );
 
     if (readProp( "TextColor" ) >>= aStyle._textColor)
@@ -111,7 +111,7 @@ void ElementDescriptor::readFrameModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id",  all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     OUString aTitle;
 
@@ -136,7 +136,7 @@ void ElementDescriptor::readFrameModel( StyleBag * all_styles )
 
 void ElementDescriptor::readPageModel( StyleBag * all_styles )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -151,7 +151,7 @@ void ElementDescriptor::readPageModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readStringAttr( "Title", XMLNS_DIALOGS_PREFIX ":title" );
     uno::Reference< container::XNameContainer > xControlContainer( _xProps, uno::UNO_QUERY );
@@ -167,7 +167,7 @@ void ElementDescriptor::readPageModel( StyleBag * all_styles )
 void ElementDescriptor::readButtonModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -182,7 +182,7 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "DefaultButton", XMLNS_DIALOGS_PREFIX ":default" );
@@ -204,7 +204,7 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
     readBoolAttr( "FocusOnClick", XMLNS_DIALOGS_PREFIX ":grab-focus" );
     readBoolAttr( "MultiLine",XMLNS_DIALOGS_PREFIX ":multiline" );
 
-    // State
+    
     sal_Int16 nState = 0;
     if (readProp( "State" ) >>= nState)
     {
@@ -228,7 +228,7 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
 void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 | 0x40 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -245,7 +245,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readStringAttr( "Label", XMLNS_DIALOGS_PREFIX ":value" );
@@ -271,7 +271,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
         case 1:
             addAttribute( XMLNS_DIALOGS_PREFIX ":checked", "true" );
             break;
-        case 2: // tristate=true exported, checked omitted => dont know!
+        case 2: 
             OSL_ENSURE( bTriState, "### detected tristate value, but TriState is not set!" );
             break;
         default:
@@ -285,7 +285,7 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
 void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -302,7 +302,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readStringAttr( "Text", XMLNS_DIALOGS_PREFIX ":value" );
@@ -313,11 +313,11 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
     readBoolAttr( "Dropdown", XMLNS_DIALOGS_PREFIX ":spin" );
     readShortAttr( "MaxTextLen", XMLNS_DIALOGS_PREFIX ":maxlength" );
     readShortAttr( "LineCount", XMLNS_DIALOGS_PREFIX ":linecount" );
-    // Cell Range, Ref Cell etc.
+    
     readDataAwareAttr( XMLNS_DIALOGS_PREFIX ":linked-cell" );
     readDataAwareAttr( XMLNS_DIALOGS_PREFIX ":source-cell-range" );
 
-    // string item list
+    
     Sequence< OUString > itemValues;
     if ((readProp( "StringItemList" ) >>= itemValues) &&  itemValues.getLength() > 0)
     {
@@ -339,7 +339,7 @@ void ElementDescriptor::readComboBoxModel( StyleBag * all_styles )
 void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -356,7 +356,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "MultiSelection", XMLNS_DIALOGS_PREFIX ":multiselection" );
@@ -366,7 +366,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
     readAlignAttr( "Align", XMLNS_DIALOGS_PREFIX ":align" );
     readDataAwareAttr( XMLNS_DIALOGS_PREFIX ":linked-cell" );
     readDataAwareAttr( XMLNS_DIALOGS_PREFIX ":source-cell-range" );
-    // string item list
+    
     Sequence< OUString > itemValues;
     if ((readProp( "StringItemList" ) >>= itemValues) && itemValues.getLength() > 0)
     {
@@ -401,7 +401,7 @@ void ElementDescriptor::readListBoxModel( StyleBag * all_styles )
 void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles  )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 | 0x40 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -418,7 +418,7 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles  )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id" , all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr("Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readStringAttr( "Label", XMLNS_DIALOGS_PREFIX ":value" );
@@ -452,7 +452,7 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles  )
 void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x2 | 0x8 | 0x20 );
     if (readProp( "TextColor" ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
@@ -465,7 +465,7 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
 
     OUString aTitle;
@@ -482,7 +482,7 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
 void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -499,7 +499,7 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readStringAttr( "Label", XMLNS_DIALOGS_PREFIX ":value" );
     readAlignAttr( "Align", XMLNS_DIALOGS_PREFIX ":align" );
@@ -513,7 +513,7 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
 void ElementDescriptor::readFixedHyperLinkModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -530,7 +530,7 @@ void ElementDescriptor::readFixedHyperLinkModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readStringAttr( "Label",XMLNS_DIALOGS_PREFIX ":value" );
     readStringAttr( "URL", XMLNS_DIALOGS_PREFIX ":url" );
@@ -546,7 +546,7 @@ void ElementDescriptor::readFixedHyperLinkModel( StyleBag * all_styles )
 void ElementDescriptor::readEditModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -563,7 +563,7 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "HideInactiveSelection", XMLNS_DIALOGS_PREFIX ":hide-inactive-selection" );
@@ -589,7 +589,7 @@ void ElementDescriptor::readEditModel( StyleBag * all_styles )
 void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x4 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -600,7 +600,7 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "ScaleImage", XMLNS_DIALOGS_PREFIX ":scale-image" );
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
@@ -611,7 +611,7 @@ void ElementDescriptor::readImageControlModel( StyleBag * all_styles )
 void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -628,7 +628,7 @@ void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "HideInactiveSelection", XMLNS_DIALOGS_PREFIX ":hide-inactive-selection" );
@@ -640,7 +640,7 @@ void ElementDescriptor::readFileControlModel( StyleBag * all_styles )
 void ElementDescriptor::readTreeControlModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -651,7 +651,7 @@ void ElementDescriptor::readTreeControlModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readSelectionTypeAttr( "SelectionType", XMLNS_DIALOGS_PREFIX ":selectiontype" );
@@ -668,7 +668,7 @@ void ElementDescriptor::readTreeControlModel( StyleBag * all_styles )
 void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -685,7 +685,7 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "ReadOnly", XMLNS_DIALOGS_PREFIX ":readonly" );
@@ -709,7 +709,7 @@ void ElementDescriptor::readCurrencyFieldModel( StyleBag * all_styles )
 void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -726,7 +726,7 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "ReadOnly", XMLNS_DIALOGS_PREFIX ":readonly" );
@@ -749,7 +749,7 @@ void ElementDescriptor::readDateFieldModel( StyleBag * all_styles )
 void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -766,7 +766,7 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "ReadOnly", XMLNS_DIALOGS_PREFIX ":readonly" );
@@ -788,7 +788,7 @@ void ElementDescriptor::readNumericFieldModel( StyleBag * all_styles )
 void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -805,7 +805,7 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop");
     readBoolAttr( "ReadOnly", XMLNS_DIALOGS_PREFIX ":readonly" );
@@ -826,7 +826,7 @@ void ElementDescriptor::readTimeFieldModel( StyleBag * all_styles )
 void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -843,7 +843,7 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "ReadOnly", XMLNS_DIALOGS_PREFIX ":readonly" );
@@ -859,7 +859,7 @@ void ElementDescriptor::readPatternFieldModel( StyleBag * all_styles )
 void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -876,7 +876,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readBoolAttr( "Tabstop", XMLNS_DIALOGS_PREFIX ":tabstop" );
     readBoolAttr( "ReadOnly", XMLNS_DIALOGS_PREFIX ":readonly" );
@@ -905,7 +905,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
     readDoubleAttr( "EffectiveMax", XMLNS_DIALOGS_PREFIX ":value-max" );
     readDoubleAttr( "EffectiveValue", XMLNS_DIALOGS_PREFIX ":value" );
 
-    // format spec
+    
     sal_Int32 nKey = 0;
     if (readProp( "FormatKey" ) >>= nKey)
     {
@@ -925,7 +925,7 @@ void ElementDescriptor::readFormattedFieldModel( StyleBag * all_styles )
 void ElementDescriptor::readSpinButtonModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x4 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -936,7 +936,7 @@ void ElementDescriptor::readSpinButtonModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readOrientationAttr( "Orientation", XMLNS_DIALOGS_PREFIX ":align" );
     readLongAttr( "SpinIncrement", XMLNS_DIALOGS_PREFIX ":increment" );
@@ -954,7 +954,7 @@ void ElementDescriptor::readSpinButtonModel( StyleBag * all_styles )
 void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x2 | 0x8 | 0x20 );
     if (readProp( "TextColor" ) >>= aStyle._textColor)
         aStyle._set |= 0x2;
@@ -967,7 +967,7 @@ void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readStringAttr( "Label", XMLNS_DIALOGS_PREFIX ":value" );
     readOrientationAttr( "Orientation", XMLNS_DIALOGS_PREFIX ":align" );
@@ -976,7 +976,7 @@ void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
 void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x4 | 0x10 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -989,7 +989,7 @@ void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readLongAttr( "ProgressValue", XMLNS_DIALOGS_PREFIX ":value" );
     readLongAttr( "ProgressValueMin", XMLNS_DIALOGS_PREFIX ":value-min" );
@@ -999,7 +999,7 @@ void ElementDescriptor::readProgressBarModel( StyleBag * all_styles )
 void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect styles
+    
     Style aStyle( 0x1 | 0x4 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -1010,7 +1010,7 @@ void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults();
     readOrientationAttr( "Orientation", XMLNS_DIALOGS_PREFIX ":align" );
     readLongAttr( "BlockIncrement", XMLNS_DIALOGS_PREFIX ":pageincrement" );
@@ -1029,11 +1029,11 @@ void ElementDescriptor::readScrollBarModel( StyleBag * all_styles )
 void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect elements
+    
     addAttribute( "xmlns:" XMLNS_DIALOGS_PREFIX, XMLNS_DIALOGS_URI );
     addAttribute( "xmlns:" XMLNS_SCRIPT_PREFIX, XMLNS_SCRIPT_URI );
 
-    // collect styles
+    
     Style aStyle( 0x1 | 0x2 | 0x8 | 0x20 );
     if (readProp( "BackgroundColor" ) >>= aStyle._backgroundColor)
         aStyle._set |= 0x1;
@@ -1048,7 +1048,7 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
         addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", all_styles->getStyleId( aStyle ) );
     }
 
-    // collect elements
+    
     readDefaults( false, false );
     readBoolAttr("Closeable", XMLNS_DIALOGS_PREFIX ":closeable" );
     readBoolAttr( "Moveable", XMLNS_DIALOGS_PREFIX ":moveable" );
@@ -1067,12 +1067,12 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
 void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
     SAL_THROW( (Exception) )
 {
-    // collect elements
+    
     ::std::vector< ElementDescriptor* > all_elements;
-    // read out all props
+    
     Reference<  container::XNameContainer > xDialogModel( _xProps, UNO_QUERY );
     if ( !xDialogModel.is() )
-        return; // #TODO throw???
+        return; 
     Sequence< OUString > aElements( xDialogModel->getElementNames() );
     OUString const * pElements = aElements.getConstArray();
 
@@ -1097,10 +1097,10 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
 
         ElementDescriptor * pElem = 0;
 
-        // group up radio buttons
+        
         if ( xServiceInfo->supportsService( "com.sun.star.awt.UnoControlRadioButtonModel" ) )
         {
-            if (! pRadioGroup) // open radiogroup
+            if (! pRadioGroup) 
             {
                 pRadioGroup = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":radiogroup", _xDocument );
                 all_elements.push_back( pRadioGroup );
@@ -1110,9 +1110,9 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
             pElem->readRadioButtonModel( all_styles );
             pRadioGroup->addSubElement( pElem );
         }
-        else // no radio
+        else 
         {
-            pRadioGroup = 0; // close radiogroup
+            pRadioGroup = 0; 
 
             if (xServiceInfo->supportsService( "com.sun.star.awt.UnoControlButtonModel" ) )
             {
@@ -1164,7 +1164,7 @@ void ElementDescriptor::readBullitinBoard( StyleBag * all_styles )
                 pElem = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":textfield", _xDocument );
                 pElem->readEditModel( all_styles );
             }
-            // FixedHyperLink
+            
             else if (xServiceInfo->supportsService( "com.sun.star.awt.UnoControlFixedHyperlinkModel" ) )
             {
                 pElem = new ElementDescriptor( xProps, xPropState, XMLNS_DIALOGS_PREFIX ":linklabel", _xDocument );

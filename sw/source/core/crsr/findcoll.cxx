@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/resid.hxx>
@@ -26,7 +26,7 @@
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
 
-/// parameters for a search for FormatCollections
+
 struct SwFindParaFmtColl : public SwFindParas
 {
     const SwTxtFmtColl *pFmtColl, *pReplColl;
@@ -62,12 +62,12 @@ bool SwFindParaFmtColl::IsReplaceMode() const
     return 0 != pReplColl;
 }
 
-/// search for Format-Collections
+
 sal_uLong SwCursor::Find( const SwTxtFmtColl& rFmtColl, SwDocPositions nStart,
                           SwDocPositions nEnd, sal_Bool& bCancel,
                           FindRanges eFndRngs, const SwTxtFmtColl* pReplFmtColl )
 {
-    // switch off OLE-notifications
+    
     SwDoc* pDoc = GetDoc();
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );

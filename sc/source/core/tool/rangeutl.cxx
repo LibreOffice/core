@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "rangeutl.hxx"
@@ -37,10 +37,10 @@ bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
                             SCTAB           nTab,
                             ScAddress::Details const & rDetails ) const
 {
-    // Input in rAreaStr: "$Tabelle1.$A1:$D17"
+    
 
-    // BROKEN BROKEN BROKEN
-    // but it is only used in the consolidate dialog.  Ignore for now.
+    
+    
 
     bool        nSuccess    = false;
     sal_Int32       nPointPos   = rAreaStr.indexOf('.');
@@ -52,7 +52,7 @@ bool ScRangeUtil::MakeArea( const OUString&   rAreaStr,
     if ( nColonPos == -1  && nPointPos != -1 )
     {
         aStrArea += ":";
-        aStrArea += rAreaStr.copy( nPointPos+1 ); // do not include '.' in copy
+        aStrArea += rAreaStr.copy( nPointPos+1 ); 
     }
 
     nSuccess = ConvertDoubleRef( pDoc, aStrArea, nTab, startPos, endPos, rDetails );
@@ -69,13 +69,13 @@ void ScRangeUtil::CutPosString( const OUString&   theAreaStr,
                                 OUString&         thePosStr ) const
 {
     OUString  aPosStr;
-    // BROKEN BROKEN BROKEN
-    // but it is only used in the consolidate dialog.  Ignore for now.
+    
+    
 
     sal_Int32  nColonPos = theAreaStr.indexOf(':');
 
     if ( nColonPos != -1 )
-        aPosStr = theAreaStr.copy( 0, nColonPos ); // do not include ':' in copy
+        aPosStr = theAreaStr.copy( 0, nColonPos ); 
     else
         aPosStr = theAreaStr;
 
@@ -93,8 +93,8 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
     if ( !pDoc )
         return false;
 
-    // BROKEN BROKEN BROKEN
-    // but it is only used in the consolidate dialog.  Ignore for now.
+    
+    
 
     /*
      * Expects strings like:
@@ -141,7 +141,7 @@ bool ScRangeUtil::IsAbsTabArea( const OUString&   rAreaStr,
 
                 bStrOk = true;
 
-                if ( pppAreas && pAreaCount ) // Array returned ?
+                if ( pppAreas && pAreaCount ) 
                 {
                     SCTAB       nStartTab   = aStartPos.Tab();
                     SCTAB       nEndTab     = aEndPos.Tab();
@@ -251,7 +251,7 @@ bool ScRangeUtil::MakeRangeFromName (
 
     if( eScope==RUTL_NAMES )
     {
-        //first handle ui names like local1 (Sheet1), which point to a local range name
+        
         OUString aName(rName);
         sal_Int32 nEndPos = aName.lastIndexOf(')');
         sal_Int32 nStartPos = aName.lastIndexOfAsciiL(" (",2);
@@ -266,7 +266,7 @@ bool ScRangeUtil::MakeRangeFromName (
             else
                 nTable = nCurTab;
         }
-        //then check for local range names
+        
         ScRangeName* pRangeNames = pDoc->GetRangeName( nTable );
         ScRangeData* pData = NULL;
         if ( pRangeNames )
@@ -415,7 +415,7 @@ void ScRangeStringConverter::GetTokenByOffset(
 
 void ScRangeStringConverter::AppendTableName(OUStringBuffer& rBuf, const OUString& rTabName, sal_Unicode /* cQuote */)
 {
-    // quote character is always "'"
+    
     OUString aQuotedTab(rTabName);
     ScCompiler::CheckTabQuotes(aQuotedTab, ::formula::FormulaGrammar::CONV_OOO);
     rBuf.append(aQuotedTab);
@@ -499,8 +499,8 @@ bool ScRangeStringConverter::GetRangeFromString(
 
             bResult = ((rRange.Parse(aUIString, const_cast<ScDocument*> (pDocument), eConv) & SCA_VALID) == SCA_VALID);
 
-            // #i77703# chart ranges in the file format contain both sheet names, even for an external reference sheet.
-            // This isn't parsed by ScRange, so try to parse the two Addresses then.
+            
+            
             if (!bResult)
             {
                 bResult = ((rRange.aStart.Parse( aUIString.copy(0, nIndex), const_cast<ScDocument*>(pDocument),
@@ -546,8 +546,8 @@ bool ScRangeStringConverter::GetRangeListFromString(
         }
         else if (nOffset > -1)
             bRet = false;
-        //if ownership transferred to rRangeList pRange was NULLed, otherwwise
-        //delete it
+        
+        
         delete pRange;
     }
     return bRet;
@@ -855,30 +855,30 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
         sal_Int32 nSepPos = IndexOf(aToken, ':', 0, cQuote);
         if (nSepPos >= 0)
         {
-            // Cell range
+            
             OUString aBeginCell = aToken.copy(0, nSepPos);
             OUString aEndCell   = aToken.copy(nSepPos+1);
 
             if (aBeginCell.isEmpty() || aEndCell.isEmpty())
-                // both cell addresses must exist for this to work.
+                
                 continue;
 
             sal_Int32 nEndCellDotPos = aEndCell.indexOf('.');
             if (nEndCellDotPos <= 0)
             {
-                // initialize buffer with table name...
+                
                 sal_Int32 nDotPos = IndexOf(aBeginCell, '.', 0, cQuote);
                 OUStringBuffer aBuf = aBeginCell.copy(0, nDotPos);
 
                 if (nEndCellDotPos == 0)
                 {
-                    // workaround for old syntax (probably pre-chart2 age?)
-                    // e.g. Sheet1.A1:.B2
+                    
+                    
                     aBuf.append(aEndCell);
                 }
                 else if (nEndCellDotPos < 0)
                 {
-                    // sheet name in the end cell is omitted (e.g. Sheet2.A1:B2).
+                    
                     aBuf.append('.');
                     aBuf.append(aEndCell);
                 }
@@ -890,34 +890,34 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
             sal_uInt16 nRet = aCell1.Parse(aBeginCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo1);
             if ((nRet & SCA_VALID) != SCA_VALID)
             {
-                // first cell is invalid.
+                
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
                 nRet = aCell1.Parse(aBeginCell, pDoc, eConv, &aExtInfo1);
                 if ((nRet & SCA_VALID) != SCA_VALID)
-                    // first cell is really invalid.
+                    
                     continue;
             }
 
             nRet = aCell2.Parse(aEndCell, pDoc, FormulaGrammar::CONV_OOO, &aExtInfo2);
             if ((nRet & SCA_VALID) != SCA_VALID)
             {
-                // second cell is invalid.
+                
                 if (eConv == FormulaGrammar::CONV_OOO)
                     continue;
 
                 nRet = aCell2.Parse(aEndCell, pDoc, eConv, &aExtInfo2);
                 if ((nRet & SCA_VALID) != SCA_VALID)
-                    // second cell is really invalid.
+                    
                     continue;
             }
 
             if (aExtInfo1.mnFileId != aExtInfo2.mnFileId || aExtInfo1.mbExternal != aExtInfo2.mbExternal)
-                // external info inconsistency.
+                
                 continue;
 
-            // All looks good!
+            
 
             if (bFirst)
                 bFirst = false;
@@ -928,7 +928,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
         }
         else
         {
-            // Chart always saves ranges using CONV_OOO convention.
+            
             ScAddress::ExternalInfo aExtInfo;
             ScAddress aCell;
             sal_uInt16 nRet = aCell.Parse(aToken, pDoc, ::formula::FormulaGrammar::CONV_OOO, &aExtInfo);
@@ -939,7 +939,7 @@ void ScRangeStringConverter::GetStringFromXMLRangeString( OUString& rString, con
                     continue;
             }
 
-            // Looks good!
+            
 
             if (bFirst)
                 bFirst = false;
@@ -1024,7 +1024,7 @@ bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
 {
     for (;;)
     {
-        if ( bFirstPass )                                   // erst Bereichsnamen
+        if ( bFirstPass )                                   
         {
             if ( pRangeName && maRNPos != maRNEnd )
             {
@@ -1034,7 +1034,7 @@ bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
                 if (bValid)
                 {
                     rName = rData.GetName();
-                    return true;                            // found
+                    return true;                            
                 }
             }
             else
@@ -1049,7 +1049,7 @@ bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
             }
         }
 
-        if ( !bFirstPass )                                  // dann DB-Bereiche
+        if ( !bFirstPass )                                  
         {
             if (pDBCollection && maDBPos != maDBEnd)
             {
@@ -1057,10 +1057,10 @@ bool ScAreaNameIterator::Next( OUString& rName, ScRange& rRange )
                 ++maDBPos;
                 rData.GetArea(rRange);
                 rName = rData.GetName();
-                return true;                                // found
+                return true;                                
             }
             else
-                return false;                               // nothing left
+                return false;                               
         }
     }
 }

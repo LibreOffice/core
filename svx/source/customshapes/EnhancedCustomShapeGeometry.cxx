@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -134,7 +134,7 @@ static const mso_CustomShape msoArc =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptArcHandle, SAL_N_ELEMENTS( mso_sptArcHandle )        // handles
+    (SvxMSDffHandle*)mso_sptArcHandle, SAL_N_ELEMENTS( mso_sptArcHandle )        
 };
 
 static const SvxMSDffVertPair mso_sptTextSimpleVert[] =
@@ -151,7 +151,7 @@ static const mso_CustomShape msoTextSimple =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptRectangleVert[] =
@@ -168,10 +168,10 @@ static const mso_CustomShape msoRectangle =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    NULL, 0     // handles
+    NULL, 0     
 };
 
-static const SvxMSDffVertPair mso_sptRoundRectangleVert[] = // adj value 0 -> 10800
+static const SvxMSDffVertPair mso_sptRoundRectangleVert[] = 
 {
     { 7 MSO_I, 0 }, { 0, 8 MSO_I }, { 0, 9 MSO_I }, { 7 MSO_I, 21600 },
     { 10 MSO_I, 21600 }, { 21600, 9 MSO_I }, { 21600, 8 MSO_I }, { 10 MSO_I, 0 }
@@ -213,7 +213,7 @@ static const mso_CustomShape msoRoundRectangle =
     21600, 21600,
     10800, 10800,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptRoundRectangleHandle, SAL_N_ELEMENTS( mso_sptRoundRectangleHandle )      // handles
+    (SvxMSDffHandle*)mso_sptRoundRectangleHandle, SAL_N_ELEMENTS( mso_sptRoundRectangleHandle )      
 };
 
 static const SvxMSDffVertPair mso_sptRightTriangleVert[] =
@@ -238,7 +238,7 @@ static const mso_CustomShape msoRightTriangle =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptRightTriangleGluePoints, SAL_N_ELEMENTS( mso_sptRightTriangleGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptEllipseVert[] =
@@ -267,10 +267,10 @@ static const mso_CustomShape msoEllipse =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
-static const SvxMSDffVertPair mso_sptParallelogramVert[] =  // adjustment1 : 0 - 21600
+static const SvxMSDffVertPair mso_sptParallelogramVert[] =  
 {
     { 0 MSO_I, 0 }, { 21600, 0 }, { 1 MSO_I, 21600 }, { 0, 21600 }
 };
@@ -318,7 +318,7 @@ static const mso_CustomShape msoParallelogram =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptParallelogramGluePoints, SAL_N_ELEMENTS( mso_sptParallelogramGluePoints ),
-    (SvxMSDffHandle*)mso_sptParallelogramHandle, SAL_N_ELEMENTS( mso_sptParallelogramHandle )        // handles
+    (SvxMSDffHandle*)mso_sptParallelogramHandle, SAL_N_ELEMENTS( mso_sptParallelogramHandle )        
 };
 
 static const SvxMSDffVertPair mso_sptDiamondVert[] =
@@ -339,10 +339,10 @@ static const mso_CustomShape msoDiamond =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
-static const SvxMSDffVertPair mso_sptTrapezoidVert[] =      // adjustment1 : 0 - 10800
+static const SvxMSDffVertPair mso_sptTrapezoidVert[] =      
 {
     { 0, 0 }, { 21600, 0 }, {0 MSO_I, 21600 }, { 1 MSO_I, 21600 }
 };
@@ -383,7 +383,7 @@ static const mso_CustomShape msoTrapezoid =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptTrapezoidGluePoints, SAL_N_ELEMENTS( mso_sptTrapezoidGluePoints ),
-    (SvxMSDffHandle*)mso_sptTrapezoidHandle, SAL_N_ELEMENTS( mso_sptTrapezoidHandle )        // handles
+    (SvxMSDffHandle*)mso_sptTrapezoidHandle, SAL_N_ELEMENTS( mso_sptTrapezoidHandle )        
 };
 
 /*
@@ -430,7 +430,7 @@ static const mso_CustomShape msoTrapezoid =
 
 */
 
-static const SvxMSDffVertPair mso_sptOctagonVert[] =        // adjustment1 : 0 - 10800
+static const SvxMSDffVertPair mso_sptOctagonVert[] =        
 {
     { 0 MSO_I, 0 }, { 2 MSO_I, 0 }, { 21600, 1 MSO_I }, { 21600, 3 MSO_I },
     { 2 MSO_I, 21600 }, { 0 MSO_I, 21600 }, { 0, 3 MSO_I }, { 0, 1 MSO_I }
@@ -474,10 +474,10 @@ static const mso_CustomShape msoOctagon =
     21600, 21600,
     10800, 10800,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    (SvxMSDffHandle*)mso_sptOctagonHandle, SAL_N_ELEMENTS( mso_sptOctagonHandle )        // handles
+    (SvxMSDffHandle*)mso_sptOctagonHandle, SAL_N_ELEMENTS( mso_sptOctagonHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptIsocelesTriangleVert[] =   // adjustment1 : 0 - 21600
+static const SvxMSDffVertPair mso_sptIsocelesTriangleVert[] =   
 {
     { 0 MSO_I, 0 }, { 21600, 21600 }, { 0, 21600 }
 };
@@ -520,10 +520,10 @@ static const mso_CustomShape msoIsocelesTriangle =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptIsocelesTriangleGluePoints, SAL_N_ELEMENTS( mso_sptIsocelesTriangleGluePoints ),
-    (SvxMSDffHandle*)mso_sptIsocelesTriangleHandle, SAL_N_ELEMENTS( mso_sptIsocelesTriangleHandle )      // handles
+    (SvxMSDffHandle*)mso_sptIsocelesTriangleHandle, SAL_N_ELEMENTS( mso_sptIsocelesTriangleHandle )      
 };
 
-static const SvxMSDffVertPair mso_sptHexagonVert[] =                // adjustment1 : 0 - 10800
+static const SvxMSDffVertPair mso_sptHexagonVert[] =                
 {
     { 0 MSO_I, 0 }, { 1 MSO_I, 0 }, { 21600, 10800 }, { 1 MSO_I, 21600 },
     { 0 MSO_I, 21600 }, { 0, 10800 }
@@ -559,7 +559,7 @@ static const mso_CustomShape msoHexagon =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    (SvxMSDffHandle*)mso_sptHexagonHandle, SAL_N_ELEMENTS( mso_sptHexagonHandle )        // handles
+    (SvxMSDffHandle*)mso_sptHexagonHandle, SAL_N_ELEMENTS( mso_sptHexagonHandle )        
 };
 
 static const SvxMSDffVertPair mso_sptPentagonVert[] =
@@ -586,10 +586,10 @@ static const mso_CustomShape msoPentagon =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptPentagonGluePoints, SAL_N_ELEMENTS( mso_sptPentagonGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
-static const SvxMSDffVertPair mso_sptPlusVert[] =               // adjustment1 : 0 - 10800
+static const SvxMSDffVertPair mso_sptPlusVert[] =               
 {
     { 1 MSO_I, 0 }, { 2 MSO_I, 0 }, { 2 MSO_I, 1 MSO_I }, { 21600, 1 MSO_I },
     { 21600, 3 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 2 MSO_I, 21600 }, { 1 MSO_I, 21600 },
@@ -621,23 +621,23 @@ static const mso_CustomShape msoPlus =
     21600, 21600,
     10800, 10800,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    (SvxMSDffHandle*)mso_sptPlusHandle, SAL_N_ELEMENTS( mso_sptPlusHandle )      // handles
+    (SvxMSDffHandle*)mso_sptPlusHandle, SAL_N_ELEMENTS( mso_sptPlusHandle )      
 };
 
-static const SvxMSDffVertPair mso_sptCanVert[] =        // adjustment1 : 0 - 10800
+static const SvxMSDffVertPair mso_sptCanVert[] =        
 {
     { 44, 0 },
-    { 20, 0 }, { 0, 2 MSO_I }, { 0, 0 MSO_I },          // ccp
-    { 0, 3 MSO_I },                                     // p
-    { 0, 4 MSO_I }, { 20, 21600 }, { 44, 21600 },       // ccp
-    { 68, 21600 }, { 88, 4 MSO_I }, { 88, 3 MSO_I },    // ccp
-    { 88, 0 MSO_I },                                    // p
-    { 88, 2 MSO_I }, { 68, 0 }, { 44, 0 },              // ccp
-    { 44, 0 },                                          // p
-    { 20, 0 }, { 0, 2 MSO_I }, { 0, 0 MSO_I },          // ccp
-    { 0, 5 MSO_I }, { 20, 6 MSO_I }, { 44, 6 MSO_I },   // ccp
-    { 68, 6 MSO_I },{ 88, 5 MSO_I }, { 88, 0 MSO_I },   // ccp
-    { 88, 2 MSO_I },{ 68, 0 }, { 44, 0 }                // ccp
+    { 20, 0 }, { 0, 2 MSO_I }, { 0, 0 MSO_I },          
+    { 0, 3 MSO_I },                                     
+    { 0, 4 MSO_I }, { 20, 21600 }, { 44, 21600 },       
+    { 68, 21600 }, { 88, 4 MSO_I }, { 88, 3 MSO_I },    
+    { 88, 0 MSO_I },                                    
+    { 88, 2 MSO_I }, { 68, 0 }, { 44, 0 },              
+    { 44, 0 },                                          
+    { 20, 0 }, { 0, 2 MSO_I }, { 0, 0 MSO_I },          
+    { 0, 5 MSO_I }, { 20, 6 MSO_I }, { 44, 6 MSO_I },   
+    { 68, 6 MSO_I },{ 88, 5 MSO_I }, { 88, 0 MSO_I },   
+    { 88, 2 MSO_I },{ 68, 0 }, { 44, 0 }                
 };
 static const sal_uInt16 mso_sptCanSegm[] =
 {
@@ -646,7 +646,7 @@ static const sal_uInt16 mso_sptCanSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptCanCalc[] =
 {
-    { 0x2001, { DFF_Prop_adjustValue, 2, 4 } },     // 1/4
+    { 0x2001, { DFF_Prop_adjustValue, 2, 4 } },     
     { 0x2001, { 0x0400, 6, 11 } },
     { 0xa000, { 0x0400, 0, 0x0401 } },
     { 0x8000, { 21600, 0, 0x0400 } },
@@ -678,11 +678,11 @@ static const mso_CustomShape msoCan =
     88, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptCanGluePoints, SAL_N_ELEMENTS( mso_sptCanGluePoints ),
-    (SvxMSDffHandle*)mso_sptCanHandle, SAL_N_ELEMENTS( mso_sptCanHandle )        // handles
+    (SvxMSDffHandle*)mso_sptCanHandle, SAL_N_ELEMENTS( mso_sptCanHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptArrowVert[] =  // adjustment1: x 0 - 21600
-{                                                   // adjustment2: y 0 - 10800
+static const SvxMSDffVertPair mso_sptArrowVert[] =  
+{                                                   
     { 0, 0 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 1 MSO_I, 0 }, { 21600, 10800 },
     { 1 MSO_I, 21600 }, { 1 MSO_I, 2 MSO_I }, { 0, 2 MSO_I }
 };
@@ -720,11 +720,11 @@ static const mso_CustomShape msoArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptArrowHandle, SAL_N_ELEMENTS( mso_sptArrowHandle )        // handles
+    (SvxMSDffHandle*)mso_sptArrowHandle, SAL_N_ELEMENTS( mso_sptArrowHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptLeftArrowVert[] =  // adjustment1: x 0 - 21600
-{                                                       // adjustment2: y 0 - 10800
+static const SvxMSDffVertPair mso_sptLeftArrowVert[] =  
+{                                                       
     { 21600, 0 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 1 MSO_I, 0 }, { 0, 10800 },
     { 1 MSO_I, 21600 }, { 1 MSO_I, 2 MSO_I }, { 21600, 2 MSO_I }
 };
@@ -755,11 +755,11 @@ static const mso_CustomShape msoLeftArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftArrowHandle, SAL_N_ELEMENTS( mso_sptLeftArrowHandle )        // handles
+    (SvxMSDffHandle*)mso_sptLeftArrowHandle, SAL_N_ELEMENTS( mso_sptLeftArrowHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptDownArrowVert[] =  // adjustment1: x 0 - 21600
-{                                                       // adjustment2: y 0 - 10800
+static const SvxMSDffVertPair mso_sptDownArrowVert[] =  
+{                                                       
     { 0 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 0, 1 MSO_I }, { 10800, 21600 },
     { 21600, 1 MSO_I }, { 2 MSO_I, 1 MSO_I }, { 2 MSO_I, 0 }
 };
@@ -786,11 +786,11 @@ static const mso_CustomShape msoDownArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptDownArrowHandle, SAL_N_ELEMENTS( mso_sptDownArrowHandle )        // handles
+    (SvxMSDffHandle*)mso_sptDownArrowHandle, SAL_N_ELEMENTS( mso_sptDownArrowHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptUpArrowVert[] =    // adjustment1: x 0 - 21600
-{                                                       // adjustment2: y 0 - 10800
+static const SvxMSDffVertPair mso_sptUpArrowVert[] =    
+{                                                       
     { 0 MSO_I, 21600 }, { 0 MSO_I, 1 MSO_I }, { 0, 1 MSO_I }, { 10800, 0 },
     { 21600, 1 MSO_I }, { 2 MSO_I, 1 MSO_I }, { 2 MSO_I, 21600 }
 };
@@ -821,11 +821,11 @@ static const mso_CustomShape msoUpArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptUpArrowHandle, SAL_N_ELEMENTS( mso_sptUpArrowHandle )        // handles
+    (SvxMSDffHandle*)mso_sptUpArrowHandle, SAL_N_ELEMENTS( mso_sptUpArrowHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptLeftRightArrowVert[] = // adjustment1: x 0 - 10800
-{                                                           // adjustment2: y 0 - 10800
+static const SvxMSDffVertPair mso_sptLeftRightArrowVert[] = 
+{                                                           
     { 0, 10800 }, { 0 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 2 MSO_I, 1 MSO_I },
     { 2 MSO_I, 0 }, { 21600, 10800 }, { 2 MSO_I, 21600 }, { 2 MSO_I, 3 MSO_I },
     { 0 MSO_I, 3 MSO_I }, { 0 MSO_I, 21600 }
@@ -870,11 +870,11 @@ static const mso_CustomShape msoLeftRightArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftRightArrowHandle, SAL_N_ELEMENTS( mso_sptLeftRightArrowHandle )      // handles
+    (SvxMSDffHandle*)mso_sptLeftRightArrowHandle, SAL_N_ELEMENTS( mso_sptLeftRightArrowHandle )      
 };
 
-static const SvxMSDffVertPair mso_sptUpDownArrowVert[] =    // adjustment1: x 0 - 10800
-{                                                           // adjustment2: y 0 - 10800
+static const SvxMSDffVertPair mso_sptUpDownArrowVert[] =    
+{                                                           
     { 0, 1 MSO_I }, { 10800, 0 }, { 21600, 1 MSO_I }, { 2 MSO_I, 1 MSO_I },
     { 2 MSO_I, 3 MSO_I }, { 21600, 3 MSO_I }, { 10800, 21600 }, { 0, 3 MSO_I },
     { 0 MSO_I, 3 MSO_I }, { 0 MSO_I, 1 MSO_I }
@@ -906,11 +906,11 @@ static const mso_CustomShape msoUpDownArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptUpDownArrowHandle, SAL_N_ELEMENTS( mso_sptUpDownArrowHandle )        // handles
+    (SvxMSDffHandle*)mso_sptUpDownArrowHandle, SAL_N_ELEMENTS( mso_sptUpDownArrowHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptQuadArrowVert[] =  // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
-{                                                       // adjustment3: y 0 - 10800
+static const SvxMSDffVertPair mso_sptQuadArrowVert[] =  
+{                                                       
     { 0, 10800 }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 2 MSO_I, 2 MSO_I },
     { 2 MSO_I, 0 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 10800, 0 }, { 3 MSO_I, 0 MSO_I },
     { 4 MSO_I, 0 MSO_I }, { 4 MSO_I, 2 MSO_I }, { 5 MSO_I, 2 MSO_I }, { 5 MSO_I, 1 MSO_I },
@@ -935,7 +935,7 @@ static const sal_Int32 mso_sptQuadArrowDefault[] =
 {
     3, 6500, 8600, 4300
 };
-static const SvxMSDffTextRectangles mso_sptQuadArrowTextRect[] =    // todo
+static const SvxMSDffTextRectangles mso_sptQuadArrowTextRect[] =    
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
@@ -956,11 +956,11 @@ static const mso_CustomShape msoQuadArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptQuadArrowHandle, SAL_N_ELEMENTS( mso_sptQuadArrowHandle )        // handles
+    (SvxMSDffHandle*)mso_sptQuadArrowHandle, SAL_N_ELEMENTS( mso_sptQuadArrowHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptLeftRightUpArrowVert[] =   // adjustment1: x 0 - 10800, adjustment2: x 0 - 10800
-{                                                               // adjustment3: y 0 - 21600
+static const SvxMSDffVertPair mso_sptLeftRightUpArrowVert[] =   
+{                                                               
     { 10800, 0 }, { 3 MSO_I, 2 MSO_I }, { 4 MSO_I, 2 MSO_I }, { 4 MSO_I, 1 MSO_I },
     { 5 MSO_I, 1 MSO_I }, { 5 MSO_I, 0 MSO_I }, { 21600, 10800 }, { 5 MSO_I, 3 MSO_I },
     { 5 MSO_I, 4 MSO_I }, { 2 MSO_I, 4 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 0, 10800 },
@@ -973,18 +973,18 @@ static const sal_uInt16 mso_sptLeftRightUpArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptLeftRightUpArrowCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             // 0
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            // 1
-    { 0x6001, { 0x0403, DFF_Prop_adjust3Value, 21600 } },   // 2
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },         // 3
-    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },        // 4
-    { 0x8000, { 21600, 0, 0x0402 } }                        // 5
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            
+    { 0x6001, { 0x0403, DFF_Prop_adjust3Value, 21600 } },   
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },         
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },        
+    { 0x8000, { 21600, 0, 0x0402 } }                        
 };
 static const sal_Int32 mso_sptLeftRightUpArrowDefault[] =
 {
     3, 6500, 8600, 6200
 };
-static const SvxMSDffTextRectangles mso_sptLeftRightUpArrowTextRect[] =     // todo
+static const SvxMSDffTextRectangles mso_sptLeftRightUpArrowTextRect[] =     
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
@@ -1005,11 +1005,11 @@ static const mso_CustomShape msoLeftRightUpArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftRightUpArrowHandle, SAL_N_ELEMENTS( mso_sptLeftRightUpArrowHandle )      // handles
+    (SvxMSDffHandle*)mso_sptLeftRightUpArrowHandle, SAL_N_ELEMENTS( mso_sptLeftRightUpArrowHandle )      
 };
 
-static const SvxMSDffVertPair mso_sptBentArrowVert[] =  // adjustment1 : x 12427 - 21600
-{                                                       // adjustment2 : y 0 - 6079
+static const SvxMSDffVertPair mso_sptBentArrowVert[] =  
+{                                                       
     { 0, 21600 }, { 0, 12160 }, { 12427, 1 MSO_I }, { 0 MSO_I, 1 MSO_I },
     { 0 MSO_I, 0 }, { 21600, 6079 }, { 0 MSO_I, 12158 }, { 0 MSO_I, 2 MSO_I },
     { 12427, 2 MSO_I }, { 4 MSO_I, 12160 }, { 4 MSO_I, 21600 }
@@ -1030,7 +1030,7 @@ static const sal_Int32 mso_sptBentArrowDefault[] =
 {
     2, 15100, 2900
 };
-static const SvxMSDffTextRectangles mso_sptBentArrowTextRect[] =    // todo
+static const SvxMSDffTextRectangles mso_sptBentArrowTextRect[] =    
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
@@ -1049,17 +1049,17 @@ static const mso_CustomShape msoBentArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBentArrowHandle, SAL_N_ELEMENTS( mso_sptBentArrowHandle )        // handles
+    (SvxMSDffHandle*)mso_sptBentArrowHandle, SAL_N_ELEMENTS( mso_sptBentArrowHandle )        
 };
 
 static const SvxMSDffVertPair mso_sptUturnArrowVert[] =
 {
-    { 0, 21600 }, { 0, 8550 },                                          // pp
-    { 0, 3540 }, { 4370, 0 }, { 9270, 0 },                              // ccp
-    { 13890, 0 }, { 18570, 3230 }, { 18600, 8300 },                     // ccp
-    { 21600, 8300 }, { 15680, 14260 }, { 9700, 8300 }, { 12500, 8300 }, // pppp
-    { 12320, 6380 }, { 10870, 5850 }, { 9320, 5850 },                   // ccp
-    { 7770, 5850 }, { 6040, 6410 }, { 6110, 8520 },                     // ccp
+    { 0, 21600 }, { 0, 8550 },                                          
+    { 0, 3540 }, { 4370, 0 }, { 9270, 0 },                              
+    { 13890, 0 }, { 18570, 3230 }, { 18600, 8300 },                     
+    { 21600, 8300 }, { 15680, 14260 }, { 9700, 8300 }, { 12500, 8300 }, 
+    { 12320, 6380 }, { 10870, 5850 }, { 9320, 5850 },                   
+    { 7770, 5850 }, { 6040, 6410 }, { 6110, 8520 },                     
     { 6110, 21600 }
 };
 static const sal_uInt16 mso_sptUturnArrowSegm[] =
@@ -1080,11 +1080,11 @@ static const mso_CustomShape msoUturnArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    NULL, 0     // handles
+    NULL, 0     
 };
 
-static const SvxMSDffVertPair mso_sptLeftUpArrowVert[] =    // adjustment1 : x 0 - 21600, adjustment2 : x 0 - 21600
-{                                                           // adjustment3 : y 0 - 21600
+static const SvxMSDffVertPair mso_sptLeftUpArrowVert[] =    
+{                                                           
     { 0, 5 MSO_I }, { 2 MSO_I, 0 MSO_I }, { 2 MSO_I, 7 MSO_I }, { 7 MSO_I, 7 MSO_I },
     { 7 MSO_I, 2 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 5 MSO_I, 0 }, { 21600, 2 MSO_I },
     { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 1 MSO_I }, { 2 MSO_I, 1 MSO_I }, { 2 MSO_I, 21600 }
@@ -1095,16 +1095,16 @@ static const sal_uInt16 mso_sptLeftUpArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptLeftUpArrowCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        // 1
-    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },        // 2
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 3
-    { 0x2001, { 0x0403, 1, 2 } },                       // 4
-    { 0x6000, { DFF_Prop_adjustValue, 0x0404, 0 } },    // 5
-    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },    // 6
-    { 0x6000, { DFF_Prop_adjustValue, 0x0406, 0 } },    // 7
-    { 0x8000, { 21600, 0, 0x406 } },                    // 8
-    { 0xa000, { 0x408, 0, 0x406 } }                 // 9
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },        
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, 
+    { 0x2001, { 0x0403, 1, 2 } },                       
+    { 0x6000, { DFF_Prop_adjustValue, 0x0404, 0 } },    
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },    
+    { 0x6000, { DFF_Prop_adjustValue, 0x0406, 0 } },    
+    { 0x8000, { 21600, 0, 0x406 } },                    
+    { 0xa000, { 0x408, 0, 0x406 } }                 
 };
 static const sal_Int32 mso_sptLeftUpArrowDefault[] =
 {
@@ -1132,11 +1132,11 @@ static const mso_CustomShape msoLeftUpArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptLeftUpArrowHandle, SAL_N_ELEMENTS( mso_sptLeftUpArrowHandle )        // handles
+    (SvxMSDffHandle*)mso_sptLeftUpArrowHandle, SAL_N_ELEMENTS( mso_sptLeftUpArrowHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptBentUpArrowVert[] =    // adjustment1 : x 0 - 21600, adjustment2 : x 0 - 21600
-{                                                           // adjustment3 : y 0 - 21600
+static const SvxMSDffVertPair mso_sptBentUpArrowVert[] =    
+{                                                           
     { 0, 8 MSO_I }, { 7 MSO_I, 8 MSO_I }, { 7 MSO_I, 2 MSO_I }, { 0 MSO_I, 2 MSO_I },
     { 5 MSO_I, 0 }, { 21600, 2 MSO_I }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 21600 },
     { 0, 21600 }
@@ -1147,17 +1147,17 @@ static const sal_uInt16 mso_sptBentUpArrowSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptBentUpArrowCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        // 1
-    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },        // 2
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 3
-    { 0x2001, { 0x0403, 1, 2 } },                       // 4
-    { 0x6000, { DFF_Prop_adjustValue, 0x0404, 0 } },    // 5
-    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },    // 6
-    { 0x6000, { DFF_Prop_adjustValue, 0x0406, 0 } },    // 7
-    { 0x6000, { 0x0407, 0x0406, 0 } },                  // 8
-    { 0x8000, { 21600, 0, 0x406 } },                    // 9
-    { 0xa000, { 0x409, 0, 0x406 } }                 // a
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        
+    { 0x2000, { DFF_Prop_adjust3Value, 0, 0 } },        
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, 
+    { 0x2001, { 0x0403, 1, 2 } },                       
+    { 0x6000, { DFF_Prop_adjustValue, 0x0404, 0 } },    
+    { 0x8000, { 21600, 0, DFF_Prop_adjust2Value } },    
+    { 0x6000, { DFF_Prop_adjustValue, 0x0406, 0 } },    
+    { 0x6000, { 0x0407, 0x0406, 0 } },                  
+    { 0x8000, { 21600, 0, 0x406 } },                    
+    { 0xa000, { 0x409, 0, 0x406 } }                 
 };
 static const sal_Int32 mso_sptBentUpArrowDefault[] =
 {
@@ -1510,8 +1510,8 @@ static const mso_CustomShape msoCurvedLeftArrow =
     (SvxMSDffHandle*)mso_sptCurvedLeftHandles, SAL_N_ELEMENTS( mso_sptCurvedLeftHandles )
 };
 
-static const SvxMSDffVertPair mso_sptStripedRightArrowVert[] =  // adjustment1 : x 3375 - 21600
-{                                                               // adjustment2 : y 0 - 10800
+static const SvxMSDffVertPair mso_sptStripedRightArrowVert[] =  
+{                                                               
     { 3375, 0 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 1 MSO_I, 0 }, { 21600, 10800 },
     { 1 MSO_I, 21600 }, { 1 MSO_I, 2 MSO_I }, { 3375, 2 MSO_I }, { 0, 0 MSO_I },
     { 675, 0 MSO_I }, { 675, 2 MSO_I }, { 0, 2 MSO_I }, { 1350, 0 MSO_I },
@@ -1554,8 +1554,8 @@ static const mso_CustomShape msoStripedRightArrow =
     (SvxMSDffHandle*)mso_sptStripedRightArrowHandle, SAL_N_ELEMENTS( mso_sptStripedRightArrowHandle )
 };
 
-static const SvxMSDffVertPair mso_sptNotchedRightArrowVert[] =  // adjustment1 : x 0 - 21600    (default 16200)
-{                                                               // adjustment2 : y 0 - 10800    (default 5400)
+static const SvxMSDffVertPair mso_sptNotchedRightArrowVert[] =  
+{                                                               
     { 0, 1 MSO_I }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 0 }, { 21600, 10800 },
     { 0 MSO_I, 21600 }, { 0 MSO_I, 2 MSO_I }, { 0, 2 MSO_I }, { 5 MSO_I, 10800 }, { 0, 1 MSO_I }
 };
@@ -1569,7 +1569,7 @@ static const SvxMSDffCalculationData mso_sptNotchedRightArrowCalc[] =
     { 0x6001, { 0x403, 0x404, 10800 } },
     { 0x8000, { 21600, 0, 0x405 }}
 };
-static const SvxMSDffTextRectangles mso_sptNotchedRightArrowTextRect[] =    // todo
+static const SvxMSDffTextRectangles mso_sptNotchedRightArrowTextRect[] =    
 {
     { { 5 MSO_I, 1 MSO_I }, { 6 MSO_I, 2 MSO_I } }
 };
@@ -1591,7 +1591,7 @@ static const mso_CustomShape msoNotchedRightArrow =
     (SvxMSDffHandle*)mso_sptNotchedRightArrowHandle, SAL_N_ELEMENTS( mso_sptNotchedRightArrowHandle )
 };
 
-static const SvxMSDffVertPair mso_sptHomePlateVert[] =  // adjustment1 : x 0 - 21600
+static const SvxMSDffVertPair mso_sptHomePlateVert[] =  
 {
     { 0, 0 }, { 0 MSO_I, 0 }, { 21600, 10800 }, { 0 MSO_I, 21600 },
     { 0, 21600 }
@@ -1608,7 +1608,7 @@ static const sal_Int32 mso_sptHomePlateDefault[] =
 {
     1, 16200
 };
-static const SvxMSDffTextRectangles mso_sptHomePlateTextRect[] =    // todo
+static const SvxMSDffTextRectangles mso_sptHomePlateTextRect[] =    
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
@@ -1630,7 +1630,7 @@ static const mso_CustomShape msoHomePlate =
     (SvxMSDffHandle*)mso_sptHomePlateHandle, SAL_N_ELEMENTS( mso_sptHomePlateHandle )
 };
 
-static const SvxMSDffVertPair mso_sptChevronVert[] =    // adjustment1 : x 0 - 21600
+static const SvxMSDffVertPair mso_sptChevronVert[] =    
 {
     { 0, 0 }, { 0 MSO_I, 0 }, { 21600, 10800 }, { 0 MSO_I, 21600 },
     { 0, 21600 }, { 1 MSO_I, 10800 }
@@ -1648,7 +1648,7 @@ static const sal_Int32 mso_sptChevronDefault[] =
 {
     1, 16200
 };
-static const SvxMSDffTextRectangles mso_sptChevronTextRect[] =  // todo
+static const SvxMSDffTextRectangles mso_sptChevronTextRect[] =  
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
@@ -1670,8 +1670,8 @@ static const mso_CustomShape msoChevron =
     (SvxMSDffHandle*)mso_sptChevronHandle, SAL_N_ELEMENTS( mso_sptChevronHandle )
 };
 
-static const SvxMSDffVertPair mso_sptRightArrowCalloutVert[] =  // adjustment1 : x 0 - 21000
-{                                                               // adjustment2 : y 0 - 10800
+static const SvxMSDffVertPair mso_sptRightArrowCalloutVert[] =  
+{                                                               
     { 0, 0 }, { 0 MSO_I, 0 }, { 0 MSO_I, 3 MSO_I }, { 2 MSO_I, 3 MSO_I },
     { 2 MSO_I, 1 MSO_I }, { 21600, 10800 }, { 2 MSO_I, 4 MSO_I }, { 2 MSO_I, 5 MSO_I },
     { 0 MSO_I, 5 MSO_I }, { 0 MSO_I, 21600 }, { 0, 21600 }
@@ -1719,8 +1719,8 @@ static const mso_CustomShape msoRightArrowCallout =
     (SvxMSDffHandle*)mso_sptRightArrowCalloutHandle, SAL_N_ELEMENTS( mso_sptRightArrowCalloutHandle )
 };
 
-static const SvxMSDffVertPair mso_sptLeftArrowCalloutVert[] =   // adjustment1 : x 0 - 21600, adjustment2 : y 0 - 10800
-{                                                               // adjustment3 : x 0 - 21600, adjustment4 : y 0 - 10800
+static const SvxMSDffVertPair mso_sptLeftArrowCalloutVert[] =   
+{                                                               
     { 0 MSO_I, 0 }, { 21600, 0 }, { 21600, 21600 }, { 0 MSO_I, 21600 },
     { 0 MSO_I, 5 MSO_I }, { 2 MSO_I, 5 MSO_I }, { 2 MSO_I, 4 MSO_I }, { 0, 10800 },
     { 2 MSO_I, 1 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 0 MSO_I, 3 MSO_I }
@@ -2100,7 +2100,7 @@ static const sal_Int32 mso_sptCircularArrowDefault[] =
 {
     3, 180, 0, 5500
 };
-static const SvxMSDffTextRectangles mso_sptCircularArrowTextRect[] =    // todo
+static const SvxMSDffTextRectangles mso_sptCircularArrowTextRect[] =    
 {
     { { 0, 0 }, { 21600, 21600 } }
 };
@@ -2121,7 +2121,7 @@ static const mso_CustomShape msoCircularArrow =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCircularArrowHandle, SAL_N_ELEMENTS( mso_sptCircularArrowHandle )        // handles
+    (SvxMSDffHandle*)mso_sptCircularArrowHandle, SAL_N_ELEMENTS( mso_sptCircularArrowHandle )        
 };
 
 static const SvxMSDffVertPair mso_sptCubeVert[] =
@@ -2143,14 +2143,14 @@ static const SvxMSDffCalculationData mso_sptCubeCalc[] =
     { 0x6000, { DFF_Prop_geoLeft, 0x400, 0 } },
     { 0xa000, { DFF_Prop_geoBottom, 0, 0x400 } },
     { 0xa000, { DFF_Prop_geoRight, 0, 0x400 } },
-    { 0xa000, { DFF_Prop_geoRight, 0, 0x402 } },    // 5
-    { 0x2001, { 0x405, 1, 2 } },                    // 6
-    { 0x6000, { 0x402, 0x406, 0 } },                // 7
-    { 0xa000, { DFF_Prop_geoBottom, 0, 0x401 } },   // 8
-    { 0x2001, { 0x408, 1, 2 } },                    // 9
-    { 0x6000, { 0x401, 0x409, 0 } },                // 10
-    { 0x2000, { DFF_Prop_geoRight, 0, 0 } },        // 11
-    { 0x2000, { DFF_Prop_geoBottom, 0, 0 } }        // 12
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x402 } },    
+    { 0x2001, { 0x405, 1, 2 } },                    
+    { 0x6000, { 0x402, 0x406, 0 } },                
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x401 } },   
+    { 0x2001, { 0x408, 1, 2 } },                    
+    { 0x6000, { 0x401, 0x409, 0 } },                
+    { 0x2000, { DFF_Prop_geoRight, 0, 0 } },        
+    { 0x2000, { DFF_Prop_geoBottom, 0, 0 } }        
 };
 static const SvxMSDffTextRectangles mso_sptCubeTextRect[] =
 {
@@ -2223,7 +2223,7 @@ static const mso_CustomShape msoBevel =
     (SvxMSDffHandle*)mso_sptBevelHandle, SAL_N_ELEMENTS( mso_sptBevelHandle )
 };
 
-static const SvxMSDffVertPair mso_sptFoldedCornerVert[] =   // adjustment1 : x 10800 - 21600
+static const SvxMSDffVertPair mso_sptFoldedCornerVert[] =   
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 0 MSO_I }, { 0 MSO_I, 21600 },
     { 0, 21600 }, { 0 MSO_I, 21600 }, { 3 MSO_I, 0 MSO_I }, { 8 MSO_I, 9 MSO_I },
@@ -2352,7 +2352,7 @@ static const sal_uInt16 mso_sptActionButtonHomeSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0007, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonHomeCalc[] =    // adj value 0 - 5400
+static const SvxMSDffCalculationData mso_sptActionButtonHomeCalc[] =    
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2360,38 +2360,38 @@ static const SvxMSDffCalculationData mso_sptActionButtonHomeCalc[] =    // adj v
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x0405, 1, 10800 } },                           // scaling   6
-    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
-    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
+    { 0x2001, { 0x0405, 1, 10800 } },                           
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   
 
-    { 0x4001, { -8000, 0x0406, 1 } },   // 9
-    { 0x6000, { 0x0409, 0x0408, 0 } },  // a
-    { 0x4001, { 2960, 0x0406, 1 } },    // b
-    { 0x6000, { 0x040b, 0x0407, 0 } },  // c
-    { 0x4001, { -5000, 0x0406, 1 } },   // d
-    { 0x6000, { 0x040d, 0x0408, 0 } },  // e
-    { 0x4001, { -7000, 0x0406, 1 } },   // f
-    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
-    { 0x4001, { 5000, 0x0406, 1 } },    // 11
-    { 0x6000, { 0x0411, 0x0407, 0 } },  // 12
-    { 0x4001, { -2960, 0x0406, 1 } },   // 13
-    { 0x6000, { 0x0413, 0x0408, 0 } },  // 14
-    { 0x4001, { 8000, 0x0406, 1 } },    // 15
-    { 0x6000, { 0x0415,0x0407, 0 } },   // 16
-    { 0x4001, { 6100, 0x0406, 1 } },    // 17
-    { 0x6000, { 0x0417,0x0407, 0 } },   // 18
-    { 0x4001, { 8260, 0x0406, 1 } },    // 19
-    { 0x6000, { 0x0419, 0x0408, 0 } },  // 1a
-    { 0x4001, { -6100, 0x0406, 1 } },   // 1b
-    { 0x6000, { 0x041b, 0x0407, 0 } },  // 1c
-    { 0x4001, { -8000, 0x0406, 1 } },   // 1d
-    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
-    { 0x4001, { -1060, 0x0406, 1 } },   // 1f
-    { 0x6000, { 0x041f, 0x0407, 0 } },  // 20
-    { 0x4001, { 1060, 0x0406, 1 } },    // 21
-    { 0x6000, { 0x0421, 0x0407, 0 } },  // 22
-    { 0x4001, { 4020, 0x0406, 1 } },    // 23
-    { 0x6000, { 0x0423, 0x0408, 0 } }   // 24
+    { 0x4001, { -8000, 0x0406, 1 } },   
+    { 0x6000, { 0x0409, 0x0408, 0 } },  
+    { 0x4001, { 2960, 0x0406, 1 } },    
+    { 0x6000, { 0x040b, 0x0407, 0 } },  
+    { 0x4001, { -5000, 0x0406, 1 } },   
+    { 0x6000, { 0x040d, 0x0408, 0 } },  
+    { 0x4001, { -7000, 0x0406, 1 } },   
+    { 0x6000, { 0x040f, 0x0408, 0 } },  
+    { 0x4001, { 5000, 0x0406, 1 } },    
+    { 0x6000, { 0x0411, 0x0407, 0 } },  
+    { 0x4001, { -2960, 0x0406, 1 } },   
+    { 0x6000, { 0x0413, 0x0408, 0 } },  
+    { 0x4001, { 8000, 0x0406, 1 } },    
+    { 0x6000, { 0x0415,0x0407, 0 } },   
+    { 0x4001, { 6100, 0x0406, 1 } },    
+    { 0x6000, { 0x0417,0x0407, 0 } },   
+    { 0x4001, { 8260, 0x0406, 1 } },    
+    { 0x6000, { 0x0419, 0x0408, 0 } },  
+    { 0x4001, { -6100, 0x0406, 1 } },   
+    { 0x6000, { 0x041b, 0x0407, 0 } },  
+    { 0x4001, { -8000, 0x0406, 1 } },   
+    { 0x6000, { 0x041d, 0x0407, 0 } },  
+    { 0x4001, { -1060, 0x0406, 1 } },   
+    { 0x6000, { 0x041f, 0x0407, 0 } },  
+    { 0x4001, { 1060, 0x0406, 1 } },    
+    { 0x6000, { 0x0421, 0x0407, 0 } },  
+    { 0x4001, { 4020, 0x0406, 1 } },    
+    { 0x6000, { 0x0423, 0x0408, 0 } }   
 
 };
 static const mso_CustomShape msoActionButtonHome =
@@ -2415,16 +2415,16 @@ static const SvxMSDffVertPair mso_sptActionButtonHelpVert[] =
     { 21600, 21600 }, { 0, 21600 }, { 1 MSO_I, 4 MSO_I }, { 3 MSO_I, 4 MSO_I },
     { 0, 21600 }, { 0, 0 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I,4 MSO_I },
     { 7 MSO_I, 0xc MSO_I }, { 0xa MSO_I, 0x3e MSO_I }, { 7 MSO_I, 0x10 MSO_I }, { 0xe MSO_I, 0x3e MSO_I }, { 7 MSO_I, 0xc MSO_I },
-    { 0x12 MSO_I, 0x14 MSO_I }, { 0x12 MSO_I, 0x16 MSO_I },                             // pp
-    { 0x12 MSO_I, 0x18 MSO_I }, { 0x1a MSO_I, 8 MSO_I }, { 0x1c MSO_I, 8 MSO_I },       // ccp
-    { 0x1e MSO_I, 8 MSO_I }, { 0x20 MSO_I, 0x22 MSO_I }, { 0x20 MSO_I, 0x24 MSO_I },    // ccp
-    { 0x20 MSO_I, 0x26 MSO_I }, { 0x28 MSO_I, 0x2a MSO_I }, { 7 MSO_I, 0x2a MSO_I },    // ccp
-    { 0x2c MSO_I, 0x2a MSO_I }, { 0x2e MSO_I, 0x26 MSO_I }, { 0x2e MSO_I, 0x24 MSO_I }, // ccp
-    { 0x30 MSO_I, 0x24 MSO_I }, { 0x30 MSO_I, 0x32 MSO_I }, { 0x34 MSO_I, 0x36 MSO_I }, // ccp
-    { 7 MSO_I, 0x36 MSO_I },                                                            // p
-    { 0x12 MSO_I, 0x36 MSO_I }, { 0x1c MSO_I, 0x32 MSO_I }, { 0x1c MSO_I, 0x24 MSO_I }, // ccp
-    { 0x1c MSO_I, 0x38 MSO_I }, { 0x3a MSO_I, 0x3c MSO_I }, { 0x12 MSO_I, 0x3c MSO_I }, // ccp
-    { 7 MSO_I, 0x3c MSO_I }, { 0x34 MSO_I, 8 MSO_I }, { 0x34 MSO_I, 0x16 MSO_I },       // ccp
+    { 0x12 MSO_I, 0x14 MSO_I }, { 0x12 MSO_I, 0x16 MSO_I },                             
+    { 0x12 MSO_I, 0x18 MSO_I }, { 0x1a MSO_I, 8 MSO_I }, { 0x1c MSO_I, 8 MSO_I },       
+    { 0x1e MSO_I, 8 MSO_I }, { 0x20 MSO_I, 0x22 MSO_I }, { 0x20 MSO_I, 0x24 MSO_I },    
+    { 0x20 MSO_I, 0x26 MSO_I }, { 0x28 MSO_I, 0x2a MSO_I }, { 7 MSO_I, 0x2a MSO_I },    
+    { 0x2c MSO_I, 0x2a MSO_I }, { 0x2e MSO_I, 0x26 MSO_I }, { 0x2e MSO_I, 0x24 MSO_I }, 
+    { 0x30 MSO_I, 0x24 MSO_I }, { 0x30 MSO_I, 0x32 MSO_I }, { 0x34 MSO_I, 0x36 MSO_I }, 
+    { 7 MSO_I, 0x36 MSO_I },                                                            
+    { 0x12 MSO_I, 0x36 MSO_I }, { 0x1c MSO_I, 0x32 MSO_I }, { 0x1c MSO_I, 0x24 MSO_I }, 
+    { 0x1c MSO_I, 0x38 MSO_I }, { 0x3a MSO_I, 0x3c MSO_I }, { 0x12 MSO_I, 0x3c MSO_I }, 
+    { 7 MSO_I, 0x3c MSO_I }, { 0x34 MSO_I, 8 MSO_I }, { 0x34 MSO_I, 0x16 MSO_I },       
     { 0x34 MSO_I, 0x14 MSO_I }
 };
 static const sal_uInt16 mso_sptActionButtonHelpSegm[] =
@@ -2437,7 +2437,7 @@ static const sal_uInt16 mso_sptActionButtonHelpSegm[] =
     0x4000, 0xa704, 0x6000, 0x8000,
     0x4000, 0x0001, 0x2004, 0x0001, 0x2004, 0x0001, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonHelpCalc[] =    // adj value 0 - 5400
+static const SvxMSDffCalculationData mso_sptActionButtonHelpCalc[] =    
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2445,64 +2445,64 @@ static const SvxMSDffCalculationData mso_sptActionButtonHelpCalc[] =    // adj v
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
-    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
-    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
+    { 0x2001, { 0x0405, 1, 10800 } },           
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   
 
-    { 0x4001, { -1690, 0x0406, 1 } },   // 9
-    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
-    { 0x4001, { 4600, 0x0406, 1 } },    // b
-    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
-    { 0x4001, { 1690, 0x0406, 1 } },    // d
-    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
-    { 0x4001, { 7980, 0x0406, 1 } },    // f
-    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
-    { 0x4001, { 1270, 0x0406, 1 } },    // 11
-    { 0x6000, { 0x0411, 0x0407, 0 } },  // 12
-    { 0x4001, { 4000, 0x0406, 1 } },    // 13
-    { 0x6000, { 0x0413, 0x0408, 0 } },  // 14
-    { 0x4001, { 1750, 0x0406, 1 } },    // 15
-    { 0x6000, { 0x0415, 0x0408, 0 } },  // 16
-    { 0x4001, { 800, 0x0406, 1 } },     // 17
-    { 0x6000, { 0x0417, 0x0408, 0 } },  // 18
-    { 0x4001, { 1650, 0x0406, 1 } },    // 19
-    { 0x6000, { 0x0419, 0x0407, 0 } },  // 1a
-    { 0x4001, { 2340, 0x0406, 1 } },    // 1b
-    { 0x6000, { 0x041b, 0x0407, 0 } },  // 1c
-    { 0x4001, { 3640, 0x0406, 1 } },    // 1d
-    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
-    { 0x4001, { 4670, 0x0406, 1 } },    // 1f
-    { 0x6000, { 0x041f, 0x0407, 0 } },  // 20
-    { 0x4001, { -1570, 0x0406, 1 } },   // 21
-    { 0x6000, { 0x0421, 0x0408, 0 } },  // 22
-    { 0x4001, { -3390, 0x0406, 1 } },   // 23
-    { 0x6000, { 0x0423, 0x0408, 0 } },  // 24
-    { 0x4001, { -6050, 0x0406, 1 } },   // 25
-    { 0x6000, { 0x0425, 0x0408, 0 } },  // 26
-    { 0x4001, { 2540, 0x0406, 1 } },    // 27
-    { 0x6000, { 0x0427, 0x0407, 0 } },  // 28
-    { 0x4001, { -8050, 0x0406, 1 } },   // 29
-    { 0x6000, { 0x0429, 0x0408, 0 } },  // 2a
-    { 0x4001, { -2540, 0x0406, 1 } },   // 2b
-    { 0x6000, { 0x042b, 0x0407, 0 } },  // 2c
-    { 0x4001, { -4460, 0x0406, 1 } },   // 2d
-    { 0x6000, { 0x042d, 0x0407, 0 } },  // 2e
-    { 0x4001, { -2330, 0x0406, 1 } },   // 2f
-    { 0x6000, { 0x042f, 0x0407, 0 } },  // 30
-    { 0x4001, { -4700, 0x0406, 1 } },   // 31
-    { 0x6000, { 0x0431, 0x0408, 0 } },  // 32
-    { 0x4001, { -1270, 0x0406, 1 } },   // 33
-    { 0x6000, { 0x0433, 0x0407, 0 } },  // 34
-    { 0x4001, { -5720, 0x0406, 1 } },   // 35
-    { 0x6000, { 0x0435, 0x0408, 0 } },  // 36
-    { 0x4001, { -2540, 0x0406, 1 } },   // 37
-    { 0x6000, { 0x0437, 0x0408, 0 } },  // 38
-    { 0x4001, { 1800, 0x0406, 1 } },    // 39
-    { 0x6000, { 0x0439, 0x0407, 0 } },  // 3a
-    { 0x4001, { -1700, 0x0406, 1 } },   // 3b
-    { 0x6000, { 0x043b, 0x0408, 0 } },  // 3c
-    { 0x4001, { 6290, 0x0406, 1 } },    // 3d
-    { 0x6000, { 0x043d, 0x0408, 0 } }   // 3e
+    { 0x4001, { -1690, 0x0406, 1 } },   
+    { 0x6000, { 0x0409, 0x0407, 0 } },  
+    { 0x4001, { 4600, 0x0406, 1 } },    
+    { 0x6000, { 0x040b, 0x0408, 0 } },  
+    { 0x4001, { 1690, 0x0406, 1 } },    
+    { 0x6000, { 0x040d, 0x0407, 0 } },  
+    { 0x4001, { 7980, 0x0406, 1 } },    
+    { 0x6000, { 0x040f, 0x0408, 0 } },  
+    { 0x4001, { 1270, 0x0406, 1 } },    
+    { 0x6000, { 0x0411, 0x0407, 0 } },  
+    { 0x4001, { 4000, 0x0406, 1 } },    
+    { 0x6000, { 0x0413, 0x0408, 0 } },  
+    { 0x4001, { 1750, 0x0406, 1 } },    
+    { 0x6000, { 0x0415, 0x0408, 0 } },  
+    { 0x4001, { 800, 0x0406, 1 } },     
+    { 0x6000, { 0x0417, 0x0408, 0 } },  
+    { 0x4001, { 1650, 0x0406, 1 } },    
+    { 0x6000, { 0x0419, 0x0407, 0 } },  
+    { 0x4001, { 2340, 0x0406, 1 } },    
+    { 0x6000, { 0x041b, 0x0407, 0 } },  
+    { 0x4001, { 3640, 0x0406, 1 } },    
+    { 0x6000, { 0x041d, 0x0407, 0 } },  
+    { 0x4001, { 4670, 0x0406, 1 } },    
+    { 0x6000, { 0x041f, 0x0407, 0 } },  
+    { 0x4001, { -1570, 0x0406, 1 } },   
+    { 0x6000, { 0x0421, 0x0408, 0 } },  
+    { 0x4001, { -3390, 0x0406, 1 } },   
+    { 0x6000, { 0x0423, 0x0408, 0 } },  
+    { 0x4001, { -6050, 0x0406, 1 } },   
+    { 0x6000, { 0x0425, 0x0408, 0 } },  
+    { 0x4001, { 2540, 0x0406, 1 } },    
+    { 0x6000, { 0x0427, 0x0407, 0 } },  
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x0429, 0x0408, 0 } },  
+    { 0x4001, { -2540, 0x0406, 1 } },   
+    { 0x6000, { 0x042b, 0x0407, 0 } },  
+    { 0x4001, { -4460, 0x0406, 1 } },   
+    { 0x6000, { 0x042d, 0x0407, 0 } },  
+    { 0x4001, { -2330, 0x0406, 1 } },   
+    { 0x6000, { 0x042f, 0x0407, 0 } },  
+    { 0x4001, { -4700, 0x0406, 1 } },   
+    { 0x6000, { 0x0431, 0x0408, 0 } },  
+    { 0x4001, { -1270, 0x0406, 1 } },   
+    { 0x6000, { 0x0433, 0x0407, 0 } },  
+    { 0x4001, { -5720, 0x0406, 1 } },   
+    { 0x6000, { 0x0435, 0x0408, 0 } },  
+    { 0x4001, { -2540, 0x0406, 1 } },   
+    { 0x6000, { 0x0437, 0x0408, 0 } },  
+    { 0x4001, { 1800, 0x0406, 1 } },    
+    { 0x6000, { 0x0439, 0x0407, 0 } },  
+    { 0x4001, { -1700, 0x0406, 1 } },   
+    { 0x6000, { 0x043b, 0x0408, 0 } },  
+    { 0x4001, { 6290, 0x0406, 1 } },    
+    { 0x6000, { 0x043d, 0x0408, 0 } }   
 };
 static const mso_CustomShape msoActionButtonHelp =
 {
@@ -2541,7 +2541,7 @@ static const sal_uInt16 mso_sptActionButtonInformationSegm[] =
     0x4000, 0xa704, 0x6000, 0x8000,
     0x4000, 0x0009, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonInformationCalc[] = // adj value 0 - 5400
+static const SvxMSDffCalculationData mso_sptActionButtonInformationCalc[] = 
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2549,47 +2549,47 @@ static const SvxMSDffCalculationData mso_sptActionButtonInformationCalc[] = // a
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
-    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
-    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
+    { 0x2001, { 0x0405, 1, 10800 } },           
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   
 
-    { 0x4001, { -8050, 0x0406, 1 } },   // 9
-    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
-    { 0x4001, { -8050, 0x0406, 1 } },   // b
-    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
-    { 0x4001, { 8050, 0x0406, 1 } },    // d
-    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
-    { 0x4001, { 8050, 0x0406, 1 } },    // f
-    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x0409, 0x0407, 0 } },  
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x040b, 0x0408, 0 } },  
+    { 0x4001, { 8050, 0x0406, 1 } },    
+    { 0x6000, { 0x040d, 0x0407, 0 } },  
+    { 0x4001, { 8050, 0x0406, 1 } },    
+    { 0x6000, { 0x040f, 0x0408, 0 } },  
 
-    { 0x4001, { -2060, 0x0406, 1 } },   // 11
-    { 0x6000, { 0x0411, 0x0407, 0 } },  // 12
-    { 0x4001, { -7620, 0x0406, 1 } },   // 13
-    { 0x6000, { 0x0413, 0x0408, 0 } },  // 14
-    { 0x4001, { 2060, 0x0406, 1 } },    // 15
-    { 0x6000, { 0x0415, 0x0407, 0 } },  // 16
-    { 0x4001, { -3500, 0x0406, 1 } },   // 17
-    { 0x6000, { 0x0417, 0x0408, 0 } },  // 18
+    { 0x4001, { -2060, 0x0406, 1 } },   
+    { 0x6000, { 0x0411, 0x0407, 0 } },  
+    { 0x4001, { -7620, 0x0406, 1 } },   
+    { 0x6000, { 0x0413, 0x0408, 0 } },  
+    { 0x4001, { 2060, 0x0406, 1 } },    
+    { 0x6000, { 0x0415, 0x0407, 0 } },  
+    { 0x4001, { -3500, 0x0406, 1 } },   
+    { 0x6000, { 0x0417, 0x0408, 0 } },  
 
-    { 0x4001, { -2960, 0x0406, 1 } },   // 19
-    { 0x6000, { 0x0419, 0x0407, 0 } },  // 1a
-    { 0x4001, { -2960, 0x0406, 1 } },   // 1b
-    { 0x6000, { 0x041b, 0x0408, 0 } },  // 1c
-    { 0x4001, { 1480, 0x0406, 1 } },    // 1d
-    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
-    { 0x4001, { 5080, 0x0406, 1 } },    // 1f
-    { 0x6000, { 0x041f, 0x0408, 0 } },  // 20
-    { 0x4001, { 2960, 0x0406, 1 } },    // 21
-    { 0x6000, { 0x0421, 0x0407, 0 } },  // 22
-    { 0x4001, { 6140, 0x0406, 1 } },    // 23
-    { 0x6000, { 0x0423, 0x0408, 0 } },  // 24
-    { 0x4001, { -1480, 0x0406, 1 } },   // 25
-    { 0x6000, { 0x0425, 0x0407, 0 } },  // 26
-    { 0x4001, { -1920, 0x0406, 1 } },   // 27
-    { 0x6000, { 0x0427, 0x0408, 0 } },  // 28
+    { 0x4001, { -2960, 0x0406, 1 } },   
+    { 0x6000, { 0x0419, 0x0407, 0 } },  
+    { 0x4001, { -2960, 0x0406, 1 } },   
+    { 0x6000, { 0x041b, 0x0408, 0 } },  
+    { 0x4001, { 1480, 0x0406, 1 } },    
+    { 0x6000, { 0x041d, 0x0407, 0 } },  
+    { 0x4001, { 5080, 0x0406, 1 } },    
+    { 0x6000, { 0x041f, 0x0408, 0 } },  
+    { 0x4001, { 2960, 0x0406, 1 } },    
+    { 0x6000, { 0x0421, 0x0407, 0 } },  
+    { 0x4001, { 6140, 0x0406, 1 } },    
+    { 0x6000, { 0x0423, 0x0408, 0 } },  
+    { 0x4001, { -1480, 0x0406, 1 } },   
+    { 0x6000, { 0x0425, 0x0407, 0 } },  
+    { 0x4001, { -1920, 0x0406, 1 } },   
+    { 0x6000, { 0x0427, 0x0408, 0 } },  
 
-    { 0x4001, { -5560, 0x0406, 1 } },   // 29
-    { 0x6000, { 0x0429, 0x0408, 0 } },  // 2a
+    { 0x4001, { -5560, 0x0406, 1 } },   
+    { 0x6000, { 0x0429, 0x0408, 0 } },  
 
 };
 static const mso_CustomShape msoActionButtonInformation =
@@ -2624,7 +2624,7 @@ static const sal_uInt16 mso_sptActionButtonForwardBackSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0002, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonForwardBackCalc[] = // adj value 0 - 5400
+static const SvxMSDffCalculationData mso_sptActionButtonForwardBackCalc[] = 
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2632,18 +2632,18 @@ static const SvxMSDffCalculationData mso_sptActionButtonForwardBackCalc[] = // a
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
-    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
-    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
+    { 0x2001, { 0x0405, 1, 10800 } },           
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   
 
-    { 0x4001, { -8050, 0x0406, 1 } },   // 9
-    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
-    { 0x4001, { -8050, 0x0406, 1 } },   // b
-    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
-    { 0x4001, { 8050, 0x0406, 1 } },    // d
-    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
-    { 0x4001, { 8050, 0x0406, 1 } },    // f
-    { 0x6000, { 0x040f, 0x0408, 0 } }   // 10
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x0409, 0x0407, 0 } },  
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x040b, 0x0408, 0 } },  
+    { 0x4001, { 8050, 0x0406, 1 } },    
+    { 0x6000, { 0x040d, 0x0407, 0 } },  
+    { 0x4001, { 8050, 0x0406, 1 } },    
+    { 0x6000, { 0x040f, 0x0408, 0 } }   
 };
 static const mso_CustomShape msoActionButtonBackPrevious =
 {
@@ -2703,7 +2703,7 @@ static const sal_uInt16 mso_sptActionButtonBeginningEndSegm[] =
     0x4000, 0x0002, 0x6001, 0x8000,
     0x4000, 0x0003, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonBeginningEndCalc[] =    // adj value 0 - 5400
+static const SvxMSDffCalculationData mso_sptActionButtonBeginningEndCalc[] =    
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2711,29 +2711,29 @@ static const SvxMSDffCalculationData mso_sptActionButtonBeginningEndCalc[] =    
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
-    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
-    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
+    { 0x2001, { 0x0405, 1, 10800 } },           
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   
 
-    { 0x4001, { -4020, 0x0406, 1 } },   // 9
-    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
-    { 0x4001, { -8050, 0x0406, 1 } },   // b
-    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
-    { 0x4001, { 8050, 0x0406, 1 } },    // d
-    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
-    { 0x4001, { 8050, 0x0406, 1 } },    // f
-    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
+    { 0x4001, { -4020, 0x0406, 1 } },   
+    { 0x6000, { 0x0409, 0x0407, 0 } },  
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x040b, 0x0408, 0 } },  
+    { 0x4001, { 8050, 0x0406, 1 } },    
+    { 0x6000, { 0x040d, 0x0407, 0 } },  
+    { 0x4001, { 8050, 0x0406, 1 } },    
+    { 0x6000, { 0x040f, 0x0408, 0 } },  
 
-    { 0x4001, { -8050, 0x0406, 1 } },   // 11
-    { 0x6000, { 0x0411, 0x0407, 0 } },  // 12
-    { 0x4001, { -6140, 0x0406, 1 } },   // 13
-    { 0x6000, { 0x0413, 0x0407, 0 } },  // 14
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x0411, 0x0407, 0 } },  
+    { 0x4001, { -6140, 0x0406, 1 } },   
+    { 0x6000, { 0x0413, 0x0407, 0 } },  
 
 
-    { 0x4001, { 4020, 0x0406, 1 } },    // 15
-    { 0x6000, { 0x0415, 0x0407, 0 } },  // 16
-    { 0x4001, { 6140, 0x0406, 1 } },    // 17
-    { 0x6000, { 0x0417, 0x0407, 0 } }   // 18
+    { 0x4001, { 4020, 0x0406, 1 } },    
+    { 0x6000, { 0x0415, 0x0407, 0 } },  
+    { 0x4001, { 6140, 0x0406, 1 } },    
+    { 0x6000, { 0x0417, 0x0407, 0 } }   
 };
 static const mso_CustomShape msoActionButtonBeginning =
 {
@@ -2781,15 +2781,15 @@ static const SvxMSDffVertPair mso_sptActionButtonReturnVert[] =
     { 21600, 21600 }, { 0, 21600 }, { 1 MSO_I, 4 MSO_I }, { 3 MSO_I, 4 MSO_I },
     { 0, 21600 }, { 0, 0 }, { 1 MSO_I, 2 MSO_I }, { 1 MSO_I, 4 MSO_I },
 
-    { 0xa MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0x10 MSO_I },                          // ppp
-    { 0xe MSO_I, 0x12 MSO_I }, { 0x14 MSO_I, 0x16 MSO_I }, { 0x18 MSO_I, 0x16 MSO_I },                      // ccp
-    { 7 MSO_I, 0x16 MSO_I },                                                                                // p
-    { 0x1a MSO_I, 0x16 MSO_I }, { 0x1c MSO_I, 0x12 MSO_I }, { 0x1c MSO_I, 0x10 MSO_I },                     // ccp
-    { 0x1c MSO_I, 0xc MSO_I }, { 7 MSO_I, 0xc MSO_I }, { 0x1e MSO_I, 0x20 MSO_I }, { 0x22 MSO_I, 0xc MSO_I },// pppp
-    { 0x24 MSO_I, 0xc MSO_I }, { 0x24 MSO_I, 0x10 MSO_I },                                                  // pp
-    { 0x24 MSO_I, 0x26 MSO_I }, { 0x28 MSO_I, 0x2a MSO_I }, { 7 MSO_I, 0x2a MSO_I },                        // ccp
-    { 0x18 MSO_I, 0x2a MSO_I },                                                                             // p
-    { 0x2c MSO_I, 0x2a MSO_I }, { 0xa MSO_I, 0x26 MSO_I }, { 0xa MSO_I, 0x10 MSO_I }                        // ccp
+    { 0xa MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0xc MSO_I }, { 0xe MSO_I, 0x10 MSO_I },                          
+    { 0xe MSO_I, 0x12 MSO_I }, { 0x14 MSO_I, 0x16 MSO_I }, { 0x18 MSO_I, 0x16 MSO_I },                      
+    { 7 MSO_I, 0x16 MSO_I },                                                                                
+    { 0x1a MSO_I, 0x16 MSO_I }, { 0x1c MSO_I, 0x12 MSO_I }, { 0x1c MSO_I, 0x10 MSO_I },                     
+    { 0x1c MSO_I, 0xc MSO_I }, { 7 MSO_I, 0xc MSO_I }, { 0x1e MSO_I, 0x20 MSO_I }, { 0x22 MSO_I, 0xc MSO_I },
+    { 0x24 MSO_I, 0xc MSO_I }, { 0x24 MSO_I, 0x10 MSO_I },                                                  
+    { 0x24 MSO_I, 0x26 MSO_I }, { 0x28 MSO_I, 0x2a MSO_I }, { 7 MSO_I, 0x2a MSO_I },                        
+    { 0x18 MSO_I, 0x2a MSO_I },                                                                             
+    { 0x2c MSO_I, 0x2a MSO_I }, { 0xa MSO_I, 0x26 MSO_I }, { 0xa MSO_I, 0x10 MSO_I }                        
 };
 static const sal_uInt16 mso_sptActionButtonReturnSegm[] =
 {
@@ -2800,7 +2800,7 @@ static const sal_uInt16 mso_sptActionButtonReturnSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0002, 0x2001, 0x0001, 0x2001, 0x0006,0x2001, 0x0001, 0x2001, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonReturnCalc[] =  // adj value 0 - 5400
+static const SvxMSDffCalculationData mso_sptActionButtonReturnCalc[] =  
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2808,46 +2808,46 @@ static const SvxMSDffCalculationData mso_sptActionButtonReturnCalc[] =  // adj v
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
-    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
-    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
+    { 0x2001, { 0x0405, 1, 10800 } },           
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   
 
-    { 0x4001, { -8050, 0x0406, 1 } },   // 9
-    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
-    { 0x4001, { -3800, 0x0406, 1 } },   // b
-    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
-    { 0x4001, { -4020, 0x0406, 1 } },   // d
-    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
-    { 0x4001, { 2330, 0x0406, 1 } },    // f
-    { 0x6000, { 0x040f, 0x0408, 0 } },  // 10
-    { 0x4001, { 3390, 0x0406, 1 } },    // 11
-    { 0x6000, { 0x0411, 0x0408, 0 } },  // 12
-    { 0x4001, { -3100, 0x0406, 1 } },   // 13
-    { 0x6000, { 0x0413, 0x0407, 0 } },  // 14
-    { 0x4001, { 4230, 0x0406, 1 } },    // 15
-    { 0x6000, { 0x0415, 0x0408, 0 } },  // 16
-    { 0x4001, { -1910, 0x0406, 1 } },   // 17
-    { 0x6000, { 0x0417, 0x0407, 0 } },  // 18
-    { 0x4001, { 1190, 0x0406, 1 } },    // 19
-    { 0x6000, { 0x0419, 0x0407, 0 } },  // 1a
-    { 0x4001, { 2110, 0x0406, 1 } },    // 1b
-    { 0x6000, { 0x041b, 0x0407, 0 } },  // 1c
-    { 0x4001, { 4030, 0x0406, 1 } },    // 1d
-    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
-    { 0x4001, { -7830, 0x0406, 1 } },   // 1f
-    { 0x6000, { 0x041f, 0x0408, 0 } },  // 20
-    { 0x4001, { 8250, 0x0406, 1 } },    // 21
-    { 0x6000, { 0x0421, 0x0407, 0 } },  // 22
-    { 0x4001, { 6140, 0x0406, 1 } },    // 23
-    { 0x6000, { 0x0423, 0x0407, 0 } },  // 24
-    { 0x4001, { 5510, 0x0406, 1 } },    // 25
-    { 0x6000, { 0x0425, 0x0408, 0 } },  // 26
-    { 0x4001, { 3180, 0x0406, 1 } },    // 27
-    { 0x6000, { 0x0427, 0x0407, 0 } },  // 28
-    { 0x4001, { 8450, 0x0406, 1 } },    // 29
-    { 0x6000, { 0x0429, 0x0408, 0 } },  // 2a
-    { 0x4001, { -5090, 0x0406, 1 } },   // 2b
-    { 0x6000, { 0x042b, 0x0407, 0 } }   // 2c
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x0409, 0x0407, 0 } },  
+    { 0x4001, { -3800, 0x0406, 1 } },   
+    { 0x6000, { 0x040b, 0x0408, 0 } },  
+    { 0x4001, { -4020, 0x0406, 1 } },   
+    { 0x6000, { 0x040d, 0x0407, 0 } },  
+    { 0x4001, { 2330, 0x0406, 1 } },    
+    { 0x6000, { 0x040f, 0x0408, 0 } },  
+    { 0x4001, { 3390, 0x0406, 1 } },    
+    { 0x6000, { 0x0411, 0x0408, 0 } },  
+    { 0x4001, { -3100, 0x0406, 1 } },   
+    { 0x6000, { 0x0413, 0x0407, 0 } },  
+    { 0x4001, { 4230, 0x0406, 1 } },    
+    { 0x6000, { 0x0415, 0x0408, 0 } },  
+    { 0x4001, { -1910, 0x0406, 1 } },   
+    { 0x6000, { 0x0417, 0x0407, 0 } },  
+    { 0x4001, { 1190, 0x0406, 1 } },    
+    { 0x6000, { 0x0419, 0x0407, 0 } },  
+    { 0x4001, { 2110, 0x0406, 1 } },    
+    { 0x6000, { 0x041b, 0x0407, 0 } },  
+    { 0x4001, { 4030, 0x0406, 1 } },    
+    { 0x6000, { 0x041d, 0x0407, 0 } },  
+    { 0x4001, { -7830, 0x0406, 1 } },   
+    { 0x6000, { 0x041f, 0x0408, 0 } },  
+    { 0x4001, { 8250, 0x0406, 1 } },    
+    { 0x6000, { 0x0421, 0x0407, 0 } },  
+    { 0x4001, { 6140, 0x0406, 1 } },    
+    { 0x6000, { 0x0423, 0x0407, 0 } },  
+    { 0x4001, { 5510, 0x0406, 1 } },    
+    { 0x6000, { 0x0425, 0x0408, 0 } },  
+    { 0x4001, { 3180, 0x0406, 1 } },    
+    { 0x6000, { 0x0427, 0x0407, 0 } },  
+    { 0x4001, { 8450, 0x0406, 1 } },    
+    { 0x6000, { 0x0429, 0x0408, 0 } },  
+    { 0x4001, { -5090, 0x0406, 1 } },   
+    { 0x6000, { 0x042b, 0x0407, 0 } }   
 };
 static const mso_CustomShape msoActionButtonReturn =
 {
@@ -2884,7 +2884,7 @@ static const sal_uInt16 mso_sptActionButtonDocumentSegm[] =
     0x4000, 0x0004, 0x6001, 0x8000,
     0x4000, 0x0002, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonDocumentCalc[] =    // adj value 0 - 5400
+static const SvxMSDffCalculationData mso_sptActionButtonDocumentCalc[] =    
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2892,22 +2892,22 @@ static const SvxMSDffCalculationData mso_sptActionButtonDocumentCalc[] =    // a
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
-    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
-    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
+    { 0x2001, { 0x0405, 1, 10800 } },           
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   
 
-    { 0x4001, { -6350, 0x0406, 1 } },   // 9
-    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
-    { 0x4001, { -7830, 0x0406, 1 } },   // b
-    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
-    { 0x4001, { 1690, 0x0406, 1 } },    // d
-    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
-    { 0x4001, { 6350, 0x0406, 1 } },    // f
-    { 0x6000, { 0x040f, 0x0407, 0 } },  // 10
-    { 0x4001, { -3810, 0x0406, 1 } },   // 11
-    { 0x6000, { 0x0411, 0x0408, 0 } },  // 12
-    { 0x4001, { 7830, 0x0406, 1 } },    // 13
-    { 0x6000, { 0x0413, 0x0408, 0 } }   // 14
+    { 0x4001, { -6350, 0x0406, 1 } },   
+    { 0x6000, { 0x0409, 0x0407, 0 } },  
+    { 0x4001, { -7830, 0x0406, 1 } },   
+    { 0x6000, { 0x040b, 0x0408, 0 } },  
+    { 0x4001, { 1690, 0x0406, 1 } },    
+    { 0x6000, { 0x040d, 0x0407, 0 } },  
+    { 0x4001, { 6350, 0x0406, 1 } },    
+    { 0x6000, { 0x040f, 0x0407, 0 } },  
+    { 0x4001, { -3810, 0x0406, 1 } },   
+    { 0x6000, { 0x0411, 0x0408, 0 } },  
+    { 0x4001, { 7830, 0x0406, 1 } },    
+    { 0x6000, { 0x0413, 0x0408, 0 } }   
 };
 static const mso_CustomShape msoActionButtonDocument =
 {
@@ -2950,7 +2950,7 @@ static const sal_uInt16 mso_sptActionButtonSoundSegm[] =
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonSoundCalc[] =   // adj value 0 - 5400
+static const SvxMSDffCalculationData mso_sptActionButtonSoundCalc[] =   
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -2958,32 +2958,32 @@ static const SvxMSDffCalculationData mso_sptActionButtonSoundCalc[] =   // adj v
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
-    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
-    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
+    { 0x2001, { 0x0405, 1, 10800 } },           
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   
 
-    { 0x4001, { -8050, 0x0406, 1 } },   // 9
-    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
-    { 0x4001, { -2750, 0x0406, 1 } },   // b
-    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
-    { 0x4001, { -2960, 0x0406, 1 } },   // d
-    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
-    { 0x4001, { 2120, 0x0406, 1 } },    // f
-    { 0x6000, { 0x040f, 0x0407, 0 } },  // 10
-    { 0x4001, { -8050, 0x0406, 1 } },   // 11
-    { 0x6000, { 0x0411, 0x0408, 0 } },  // 12
-    { 0x4001, { 8050, 0x0406, 1 } },    // 13
-    { 0x6000, { 0x0413, 0x0408, 0 } },  // 14
-    { 0x4001, { 2750, 0x0406, 1 } },    // 15
-    { 0x6000, { 0x0415, 0x0408, 0 } },  // 16
-    { 0x4001, { 4020, 0x0406, 1 } },    // 17
-    { 0x6000, { 0x0417, 0x0407, 0 } },  // 18
-    { 0x4001, { 8050, 0x0406, 1 } },    // 19
-    { 0x6000, { 0x0419, 0x0407, 0 } },  // 1a
-    { 0x4001, { -5930, 0x0406, 1 } },   // 1b
-    { 0x6000, { 0x041b, 0x0408, 0 } },  // 1c
-    { 0x4001, { 5930, 0x0406, 1 } },    // 1d
-    { 0x6000, { 0x041d, 0x0408, 0 } }   // 1e
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x0409, 0x0407, 0 } },  
+    { 0x4001, { -2750, 0x0406, 1 } },   
+    { 0x6000, { 0x040b, 0x0408, 0 } },  
+    { 0x4001, { -2960, 0x0406, 1 } },   
+    { 0x6000, { 0x040d, 0x0407, 0 } },  
+    { 0x4001, { 2120, 0x0406, 1 } },    
+    { 0x6000, { 0x040f, 0x0407, 0 } },  
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x0411, 0x0408, 0 } },  
+    { 0x4001, { 8050, 0x0406, 1 } },    
+    { 0x6000, { 0x0413, 0x0408, 0 } },  
+    { 0x4001, { 2750, 0x0406, 1 } },    
+    { 0x6000, { 0x0415, 0x0408, 0 } },  
+    { 0x4001, { 4020, 0x0406, 1 } },    
+    { 0x6000, { 0x0417, 0x0407, 0 } },  
+    { 0x4001, { 8050, 0x0406, 1 } },    
+    { 0x6000, { 0x0419, 0x0407, 0 } },  
+    { 0x4001, { -5930, 0x0406, 1 } },   
+    { 0x6000, { 0x041b, 0x0408, 0 } },  
+    { 0x4001, { 5930, 0x0406, 1 } },    
+    { 0x6000, { 0x041d, 0x0408, 0 } }   
 };
 static const mso_CustomShape msoActionButtonSound =
 {
@@ -3021,7 +3021,7 @@ static const sal_uInt16 mso_sptActionButtonMovieSegm[] =
     0x4000, 0x0003, 0x6001, 0x8000,
     0x4000, 0x0012, 0x6001, 0x8000
 };
-static const SvxMSDffCalculationData mso_sptActionButtonMovieCalc[] =   // adj value 0 - 5400
+static const SvxMSDffCalculationData mso_sptActionButtonMovieCalc[] =   
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x6000, { DFF_Prop_geoLeft, DFF_Prop_adjustValue, 0 } },
@@ -3029,46 +3029,46 @@ static const SvxMSDffCalculationData mso_sptActionButtonMovieCalc[] =   // adj v
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x0405, 1, 10800 } },           // scaling   6
-    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    // lr center 7
-    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   // ul center 8
+    { 0x2001, { 0x0405, 1, 10800 } },           
+    { 0x2001, { DFF_Prop_geoRight, 1, 2 } },    
+    { 0x2001, { DFF_Prop_geoBottom, 1, 2 } },   
 
-    { 0x4001, { -8050, 0x0406, 1 } },   // 9
-    { 0x6000, { 0x0409, 0x0407, 0 } },  // a
-    { 0x4001, { -4020, 0x0406, 1 } },   // b
-    { 0x6000, { 0x040b, 0x0408, 0 } },  // c
-    { 0x4001, { -7000, 0x0406, 1 } },   // d
-    { 0x6000, { 0x040d, 0x0407, 0 } },  // e
-    { 0x4001, { -6560, 0x0406, 1 } },   // f
-    { 0x6000, { 0x040f, 0x0407, 0 } },  // 10
-    { 0x4001, { -3600, 0x0406, 1 } },   // 11
-    { 0x6000, { 0x0411, 0x0408, 0 } },  // 12
-    { 0x4001, { 4020, 0x0406, 1 } },    // 13
-    { 0x6000, { 0x0413, 0x0407, 0 } },  // 14
-    { 0x4001, { 4660, 0x0406, 1 } },    // 15
-    { 0x6000, { 0x0415, 0x0407, 0 } },  // 16
-    { 0x4001, { -2960, 0x0406, 1 } },   // 17
-    { 0x6000, { 0x0417, 0x0408, 0 } },  // 18
-    { 0x4001, { -2330, 0x0406, 1 } },   // 19
-    { 0x6000, { 0x0419, 0x0408, 0 } },  // 1a
-    { 0x4001, { 6780, 0x0406, 1 } },    // 1b
-    { 0x6000, { 0x041b, 0x0407, 0 } },  // 1c
-    { 0x4001, { 7200, 0x0406, 1 } },    // 1d
-    { 0x6000, { 0x041d, 0x0407, 0 } },  // 1e
-    { 0x4001, { 8050, 0x0406, 1 } },    // 1f
-    { 0x6000, { 0x041f, 0x0407, 0 } },  // 20
-    { 0x4001, { 2960, 0x0406, 1 } },    // 21
-    { 0x6000, { 0x0421, 0x0408, 0 } },  // 22
-    { 0x4001, { 2330, 0x0406, 1 } },    // 23
-    { 0x6000, { 0x0423, 0x0408, 0 } },  // 24
-    { 0x4001, { 3800, 0x0406, 1 } },    // 25
-    { 0x6000, { 0x0425, 0x0408, 0 } },  // 26
-    { 0x4001, { -1060, 0x0406, 1 } },   // 27
-    { 0x6000, { 0x0427, 0x0408, 0 } },  // 28
-    { 0x4001, { -6350, 0x0406, 1 } },   // 29
-    { 0x6000, { 0x0429, 0x0407, 0 } },  // 2a
-    { 0x4001, { -640, 0x0406, 1 } },    // 2b
-    { 0x6000, { 0x042b, 0x0408, 0 } }   // 2c
+    { 0x4001, { -8050, 0x0406, 1 } },   
+    { 0x6000, { 0x0409, 0x0407, 0 } },  
+    { 0x4001, { -4020, 0x0406, 1 } },   
+    { 0x6000, { 0x040b, 0x0408, 0 } },  
+    { 0x4001, { -7000, 0x0406, 1 } },   
+    { 0x6000, { 0x040d, 0x0407, 0 } },  
+    { 0x4001, { -6560, 0x0406, 1 } },   
+    { 0x6000, { 0x040f, 0x0407, 0 } },  
+    { 0x4001, { -3600, 0x0406, 1 } },   
+    { 0x6000, { 0x0411, 0x0408, 0 } },  
+    { 0x4001, { 4020, 0x0406, 1 } },    
+    { 0x6000, { 0x0413, 0x0407, 0 } },  
+    { 0x4001, { 4660, 0x0406, 1 } },    
+    { 0x6000, { 0x0415, 0x0407, 0 } },  
+    { 0x4001, { -2960, 0x0406, 1 } },   
+    { 0x6000, { 0x0417, 0x0408, 0 } },  
+    { 0x4001, { -2330, 0x0406, 1 } },   
+    { 0x6000, { 0x0419, 0x0408, 0 } },  
+    { 0x4001, { 6780, 0x0406, 1 } },    
+    { 0x6000, { 0x041b, 0x0407, 0 } },  
+    { 0x4001, { 7200, 0x0406, 1 } },    
+    { 0x6000, { 0x041d, 0x0407, 0 } },  
+    { 0x4001, { 8050, 0x0406, 1 } },    
+    { 0x6000, { 0x041f, 0x0407, 0 } },  
+    { 0x4001, { 2960, 0x0406, 1 } },    
+    { 0x6000, { 0x0421, 0x0408, 0 } },  
+    { 0x4001, { 2330, 0x0406, 1 } },    
+    { 0x6000, { 0x0423, 0x0408, 0 } },  
+    { 0x4001, { 3800, 0x0406, 1 } },    
+    { 0x6000, { 0x0425, 0x0408, 0 } },  
+    { 0x4001, { -1060, 0x0406, 1 } },   
+    { 0x6000, { 0x0427, 0x0408, 0 } },  
+    { 0x4001, { -6350, 0x0406, 1 } },   
+    { 0x6000, { 0x0429, 0x0407, 0 } },  
+    { 0x4001, { -640, 0x0406, 1 } },    
+    { 0x6000, { 0x042b, 0x0408, 0 } }   
 };
 static const mso_CustomShape msoActionButtonMovie =
 {
@@ -3083,7 +3083,7 @@ static const mso_CustomShape msoActionButtonMovie =
     (SvxMSDffHandle*)mso_sptButtonHandle, SAL_N_ELEMENTS( mso_sptButtonHandle )
 };
 
-static const SvxMSDffVertPair mso_sptSmileyFaceVert[] = // adj value 15510 - 17520
+static const SvxMSDffVertPair mso_sptSmileyFaceVert[] = 
 {
     { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
     { 7305, 7515 }, { 1000, 1865 }, { 0, 360 },
@@ -3123,10 +3123,10 @@ static const mso_CustomShape msoSmileyFace =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
-    (SvxMSDffHandle*)mso_sptSmileyHandle, SAL_N_ELEMENTS( mso_sptSmileyHandle )      // handles
+    (SvxMSDffHandle*)mso_sptSmileyHandle, SAL_N_ELEMENTS( mso_sptSmileyHandle )      
 };
 
-static const SvxMSDffVertPair mso_sptDonutVert[] =  // adj value 0 - 10800
+static const SvxMSDffVertPair mso_sptDonutVert[] =  
 {
     { 10800, 10800 }, { 10800, 10800 }, { 0, 360 },
     { 10800, 10800 }, { 1 MSO_I, 1 MSO_I }, { 0, 360 }
@@ -3155,10 +3155,10 @@ static const mso_CustomShape msoDonut =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
-    (SvxMSDffHandle*)mso_sptDonutHandle, SAL_N_ELEMENTS( mso_sptDonutHandle )        // handles
+    (SvxMSDffHandle*)mso_sptDonutHandle, SAL_N_ELEMENTS( mso_sptDonutHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptNoSmokingVert[] =  // adj value 0 - 7200
+static const SvxMSDffVertPair mso_sptNoSmokingVert[] =  
 {
     { 10800, 10800 },  { 10800, 10800 }, { 0, 360 },
     { 0 MSO_I, 0 MSO_I }, { 1 MSO_I, 1 MSO_I },
@@ -3171,23 +3171,23 @@ static const sal_uInt16 mso_sptNoSmokingSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptNoSmokingCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         // 0
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },     // 1
-    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },     // 2
-    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },         // 3
-    { 0xa080, { 0x403, 0, 0x402 } },                    // 4
-    { 0x8000, { 10800, 0, 0x403 } },                    // 5 x1
-    { 0x4000, { 10800, 0x403, 0 } },                    // 6 x2
-    { 0x8000, { 10800, 0, 0x404 } },                    // 7 y1
-    { 0x4000, { 10800, 0x404, 0 } },                    // 8 y2
-    { 0x6081, { 0x405, 0x407, 45 } },                   // 9
-    { 0x6082, { 0x405, 0x407, 45 } },                   // a
-    { 0x6081, { 0x405, 0x408, 45 } },                   // b
-    { 0x6082, { 0x405, 0x408, 45 } },                   // c
-    { 0x6081, { 0x406, 0x408, 45 } },                   // d
-    { 0x6082, { 0x406, 0x408, 45 } },                   // e
-    { 0x6081, { 0x406, 0x407, 45 } },                   // f
-    { 0x6082, { 0x406, 0x407, 45 } }                    // 10
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } },     
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },     
+    { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },         
+    { 0xa080, { 0x403, 0, 0x402 } },                    
+    { 0x8000, { 10800, 0, 0x403 } },                    
+    { 0x4000, { 10800, 0x403, 0 } },                    
+    { 0x8000, { 10800, 0, 0x404 } },                    
+    { 0x4000, { 10800, 0x404, 0 } },                    
+    { 0x6081, { 0x405, 0x407, 45 } },                   
+    { 0x6082, { 0x405, 0x407, 45 } },                   
+    { 0x6081, { 0x405, 0x408, 45 } },                   
+    { 0x6082, { 0x405, 0x408, 45 } },                   
+    { 0x6081, { 0x406, 0x408, 45 } },                   
+    { 0x6082, { 0x406, 0x408, 45 } },                   
+    { 0x6081, { 0x406, 0x407, 45 } },                   
+    { 0x6082, { 0x406, 0x407, 45 } }                    
 };
 static const SvxMSDffHandle mso_sptNoSmokingHandle[] =
 {
@@ -3204,11 +3204,11 @@ static const mso_CustomShape msoNoSmoking =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
-    (SvxMSDffHandle*)mso_sptNoSmokingHandle, SAL_N_ELEMENTS( mso_sptNoSmokingHandle )        // handles
+    (SvxMSDffHandle*)mso_sptNoSmokingHandle, SAL_N_ELEMENTS( mso_sptNoSmokingHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptBlockArcVert[] =   // adj value 0 (degrees)
-{                                                       // adj value 1: 0 -> 10800;
+static const SvxMSDffVertPair mso_sptBlockArcVert[] =   
+{                                                       
     { 0, 0 }, { 21600, 21600 }, { 4 MSO_I, 3 MSO_I }, { 2 MSO_I, 3 MSO_I },
     { 5 MSO_I, 5 MSO_I }, { 6 MSO_I, 6 MSO_I }, { 2 MSO_I, 3 MSO_I }, { 4 MSO_I, 3 MSO_I }
 };
@@ -3247,47 +3247,47 @@ static const mso_CustomShape msoBlockArc =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBlockArcHandle, SAL_N_ELEMENTS( mso_sptBlockArcHandle )      // handles
+    (SvxMSDffHandle*)mso_sptBlockArcHandle, SAL_N_ELEMENTS( mso_sptBlockArcHandle )      
 };
 
-// aware : control points are always part of the bounding box
+
 static const SvxMSDffVertPair mso_sptHeartVert[] =
 {
-    { 10800, 21599 }, { 321, 6886 }, { 70, 6036 },      // ppp
-    { -9, 5766 }, { -1, 5474 }, { 2, 5192 },            // ccp
-    { 6, 4918 }, { 43, 4641 }, { 101, 4370 },           // ccp
-    { 159, 4103 }, { 245, 3837 }, { 353, 3582 },        // ccp
-    { 460, 3326 }, { 591, 3077 }, { 741, 2839 },        // ccp
-    { 892, 2598 }, { 1066, 2369 }, { 1253, 2155 },      // ccp
-    { 1443, 1938 }, { 1651, 1732 }, { 1874, 1543 },     // ccp
-    { 2097, 1351 }, { 2337, 1174 }, { 2587, 1014 },     // ccp
-    { 2839, 854 }, { 3106, 708 }, { 3380, 584 },        // ccp
-    { 3656, 459 }, { 3945, 350 }, { 4237, 264 },        // ccp
-    { 4533, 176 }, { 4838, 108 }, { 5144, 66 },         // ccp
-    { 5454, 22 }, { 5771, 1 }, { 6086, 3 },             // ccp
-    { 6407, 7 }, { 6731, 35 }, { 7048, 89 },            // ccp
-    { 7374, 144 }, { 7700, 226 }, { 8015, 335 },        // ccp
-    { 8344, 447 }, { 8667, 590 }, { 8972, 756 },        // ccp
-    { 9297, 932 }, { 9613, 1135 }, { 9907, 1363 },      // ccp
-    { 10224, 1609 }, { 10504, 1900 }, { 10802, 2169 },  // ccp
-    { 11697, 1363 },                                    // p
-    { 11971, 1116 }, { 12304, 934 }, { 12630, 756 },    // ccp
-    { 12935, 590 }, { 13528, 450 }, { 13589, 335 },     // ccp
-    { 13901, 226 }, { 14227, 144 }, { 14556, 89 },      // ccp
-    { 14872, 35 }, { 15195, 7 }, { 15517, 3 },          // ccp
-    { 15830, 0 }, { 16147, 22 }, { 16458, 66 },         // ccp
-    { 16764, 109 }, { 17068, 177 }, { 17365, 264 },     // ccp
-    { 17658, 349 }, { 17946, 458 }, { 18222, 584 },     // ccp
-    { 18496, 708 }, { 18762, 854 }, { 19015, 1014 },    // ccp
-    { 19264, 1172 }, { 19504, 1349 }, { 19730, 1543 },  // ccp
-    { 19950, 1731 }, { 20158, 1937 }, { 20350, 2155 },  // ccp
-    { 20536, 2369 }, { 20710, 2598 }, { 20861, 2839 },  // ccp
-    { 21010, 3074 }, { 21143, 3323 }, { 21251, 3582 },  // ccp
-    { 21357, 3835 }, { 21443, 4099 }, { 21502, 4370 },  // ccp
-    { 21561, 4639 }, { 21595, 4916 }, { 21600, 5192 },  // ccp
-    { 21606, 5474 }, { 21584, 5760 }, { 21532, 6036 },  // ccp
-    { 21478, 6326 }, { 21366, 6603 }, { 21282, 6887 },  // ccp
-    { 10802, 21602 }                                    // p
+    { 10800, 21599 }, { 321, 6886 }, { 70, 6036 },      
+    { -9, 5766 }, { -1, 5474 }, { 2, 5192 },            
+    { 6, 4918 }, { 43, 4641 }, { 101, 4370 },           
+    { 159, 4103 }, { 245, 3837 }, { 353, 3582 },        
+    { 460, 3326 }, { 591, 3077 }, { 741, 2839 },        
+    { 892, 2598 }, { 1066, 2369 }, { 1253, 2155 },      
+    { 1443, 1938 }, { 1651, 1732 }, { 1874, 1543 },     
+    { 2097, 1351 }, { 2337, 1174 }, { 2587, 1014 },     
+    { 2839, 854 }, { 3106, 708 }, { 3380, 584 },        
+    { 3656, 459 }, { 3945, 350 }, { 4237, 264 },        
+    { 4533, 176 }, { 4838, 108 }, { 5144, 66 },         
+    { 5454, 22 }, { 5771, 1 }, { 6086, 3 },             
+    { 6407, 7 }, { 6731, 35 }, { 7048, 89 },            
+    { 7374, 144 }, { 7700, 226 }, { 8015, 335 },        
+    { 8344, 447 }, { 8667, 590 }, { 8972, 756 },        
+    { 9297, 932 }, { 9613, 1135 }, { 9907, 1363 },      
+    { 10224, 1609 }, { 10504, 1900 }, { 10802, 2169 },  
+    { 11697, 1363 },                                    
+    { 11971, 1116 }, { 12304, 934 }, { 12630, 756 },    
+    { 12935, 590 }, { 13528, 450 }, { 13589, 335 },     
+    { 13901, 226 }, { 14227, 144 }, { 14556, 89 },      
+    { 14872, 35 }, { 15195, 7 }, { 15517, 3 },          
+    { 15830, 0 }, { 16147, 22 }, { 16458, 66 },         
+    { 16764, 109 }, { 17068, 177 }, { 17365, 264 },     
+    { 17658, 349 }, { 17946, 458 }, { 18222, 584 },     
+    { 18496, 708 }, { 18762, 854 }, { 19015, 1014 },    
+    { 19264, 1172 }, { 19504, 1349 }, { 19730, 1543 },  
+    { 19950, 1731 }, { 20158, 1937 }, { 20350, 2155 },  
+    { 20536, 2369 }, { 20710, 2598 }, { 20861, 2839 },  
+    { 21010, 3074 }, { 21143, 3323 }, { 21251, 3582 },  
+    { 21357, 3835 }, { 21443, 4099 }, { 21502, 4370 },  
+    { 21561, 4639 }, { 21595, 4916 }, { 21600, 5192 },  
+    { 21606, 5474 }, { 21584, 5760 }, { 21532, 6036 },  
+    { 21478, 6326 }, { 21366, 6603 }, { 21282, 6887 },  
+    { 10802, 21602 }                                    
 };
 static const sal_uInt16 mso_sptHeartSegm[] =
 {
@@ -3311,7 +3311,7 @@ static const mso_CustomShape msoHeart =
     21615, 21602,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptHeartGluePoints, SAL_N_ELEMENTS( mso_sptHeartGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptLightningBoldVert[] =
@@ -3339,10 +3339,10 @@ static const mso_CustomShape msoLightningBold =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptLightningBoldGluePoints, SAL_N_ELEMENTS( mso_sptLightningBoldGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
-static const SvxMSDffVertPair mso_sptSunVert[] =    // adj value 2700 -> 10125
+static const SvxMSDffVertPair mso_sptSunVert[] =    
 {
     { 0, 10800 },               { 4 MSO_I, 8 MSO_I },       { 4 MSO_I, 9 MSO_I },
     { 0x0a MSO_I, 0x0b MSO_I }, { 0x0c MSO_I, 0x0d MSO_I }, { 0x0e MSO_I, 0x0f MSO_I },
@@ -3376,52 +3376,52 @@ static const SvxMSDffCalculationData mso_sptSunCalc[] =
     { 0x8000, { 10125, 0, DFF_Prop_adjustValue } },
     { 0x2001, { 0x405, 2120, 7425 } },
     { 0x2000, { 0x406, 210, 0 } },
-    { 0x4000, { 10800, 0x407, 0 } },    // y1 (0x8)
-    { 0x8000, { 10800, 0, 0x407 } },    // y2 (0x9)
-    { 0x0081, { 0, 10800, 45 } },       // 0xa
-    { 0x0082, { 0, 10800, 45 } },       // 0xb
-    { 0x6081, { 0x404, 0x408, 45 } },   // 0xc
-    { 0x6082, { 0x404, 0x408, 45 } },   // 0xd
-    { 0x6081, { 0x404, 0x409, 45 } },   // 0xe
-    { 0x6082, { 0x404, 0x409, 45 } },   // 0xf
-    { 0x0081, { 0, 10800, 90 } },       // 0x10
-    { 0x0082, { 0, 10800, 90 } },       // 0x11
-    { 0x6081, { 0x404, 0x408, 90 } },   // 0x12
-    { 0x6082, { 0x404, 0x408, 90 } },   // 0x13
-    { 0x6081, { 0x404, 0x409, 90 } },   // 0x14
-    { 0x6082, { 0x404, 0x409, 90 } },   // 0x15
-    { 0x0081, { 0, 10800, 135 } },      // 0x16
-    { 0x0082, { 0, 10800, 135 } },      // 0x17
-    { 0x6081, { 0x404, 0x408, 135 } },  // 0x18
-    { 0x6082, { 0x404, 0x408, 135 } },  // 0x19
-    { 0x6081, { 0x404, 0x409, 135 } },  // 0x1a
-    { 0x6082, { 0x404, 0x409, 135 } },  // 0x1b
-    { 0x0081, { 0, 10800, 180 } },      // 0x1c
-    { 0x0082, { 0, 10800, 180 } },      // 0x1d
-    { 0x6081, { 0x404, 0x408, 180 } },  // 0x1e
-    { 0x6082, { 0x404, 0x408, 180 } },  // 0x1f
-    { 0x6081, { 0x404, 0x409, 180 } },  // 0x20
-    { 0x6082, { 0x404, 0x409, 180 } },  // 0x21
-    { 0x0081, { 0, 10800, 225 } },      // 0x22
-    { 0x0082, { 0, 10800, 225 } },      // 0x23
-    { 0x6081, { 0x404, 0x408, 225 } },  // 0x24
-    { 0x6082, { 0x404, 0x408, 225 } },  // 0x25
-    { 0x6081, { 0x404, 0x409, 225 } },  // 0x26
-    { 0x6082, { 0x404, 0x409, 225 } },  // 0x27
-    { 0x0081, { 0, 10800, 270 } },      // 0x28
-    { 0x0082, { 0, 10800, 270 } },      // 0x29
-    { 0x6081, { 0x404, 0x408, 270 } },  // 0x2a
-    { 0x6082, { 0x404, 0x408, 270 } },  // 0x2b
-    { 0x6081, { 0x404, 0x409, 270 } },  // 0x2c
-    { 0x6082, { 0x404, 0x409, 270 } },  // 0x2d
-    { 0x0081, { 0, 10800, 315 } },      // 0x2e
-    { 0x0082, { 0, 10800, 315 } },      // 0x2f
-    { 0x6081, { 0x404, 0x408, 315 } },  // 0x30
-    { 0x6082, { 0x404, 0x408, 315 } },  // 0x31
-    { 0x6081, { 0x404, 0x409, 315 } },  // 0x32
-    { 0x6082, { 0x404, 0x409, 315 } },  // 0x33
-    { 0x2081, { DFF_Prop_adjustValue, 10800, 45 } },    // 0x34 ( textbox )
-    { 0x2081, { DFF_Prop_adjustValue, 10800, 225 } },   // 0x35
+    { 0x4000, { 10800, 0x407, 0 } },    
+    { 0x8000, { 10800, 0, 0x407 } },    
+    { 0x0081, { 0, 10800, 45 } },       
+    { 0x0082, { 0, 10800, 45 } },       
+    { 0x6081, { 0x404, 0x408, 45 } },   
+    { 0x6082, { 0x404, 0x408, 45 } },   
+    { 0x6081, { 0x404, 0x409, 45 } },   
+    { 0x6082, { 0x404, 0x409, 45 } },   
+    { 0x0081, { 0, 10800, 90 } },       
+    { 0x0082, { 0, 10800, 90 } },       
+    { 0x6081, { 0x404, 0x408, 90 } },   
+    { 0x6082, { 0x404, 0x408, 90 } },   
+    { 0x6081, { 0x404, 0x409, 90 } },   
+    { 0x6082, { 0x404, 0x409, 90 } },   
+    { 0x0081, { 0, 10800, 135 } },      
+    { 0x0082, { 0, 10800, 135 } },      
+    { 0x6081, { 0x404, 0x408, 135 } },  
+    { 0x6082, { 0x404, 0x408, 135 } },  
+    { 0x6081, { 0x404, 0x409, 135 } },  
+    { 0x6082, { 0x404, 0x409, 135 } },  
+    { 0x0081, { 0, 10800, 180 } },      
+    { 0x0082, { 0, 10800, 180 } },      
+    { 0x6081, { 0x404, 0x408, 180 } },  
+    { 0x6082, { 0x404, 0x408, 180 } },  
+    { 0x6081, { 0x404, 0x409, 180 } },  
+    { 0x6082, { 0x404, 0x409, 180 } },  
+    { 0x0081, { 0, 10800, 225 } },      
+    { 0x0082, { 0, 10800, 225 } },      
+    { 0x6081, { 0x404, 0x408, 225 } },  
+    { 0x6082, { 0x404, 0x408, 225 } },  
+    { 0x6081, { 0x404, 0x409, 225 } },  
+    { 0x6082, { 0x404, 0x409, 225 } },  
+    { 0x0081, { 0, 10800, 270 } },      
+    { 0x0082, { 0, 10800, 270 } },      
+    { 0x6081, { 0x404, 0x408, 270 } },  
+    { 0x6082, { 0x404, 0x408, 270 } },  
+    { 0x6081, { 0x404, 0x409, 270 } },  
+    { 0x6082, { 0x404, 0x409, 270 } },  
+    { 0x0081, { 0, 10800, 315 } },      
+    { 0x0082, { 0, 10800, 315 } },      
+    { 0x6081, { 0x404, 0x408, 315 } },  
+    { 0x6082, { 0x404, 0x408, 315 } },  
+    { 0x6081, { 0x404, 0x409, 315 } },  
+    { 0x6082, { 0x404, 0x409, 315 } },  
+    { 0x2081, { DFF_Prop_adjustValue, 10800, 45 } },    
+    { 0x2081, { DFF_Prop_adjustValue, 10800, 225 } },   
     { 0x8000, { 10800, 0, DFF_Prop_adjustValue } }
 };
 static const SvxMSDffTextRectangles mso_sptSunTextRect[] =
@@ -3443,16 +3443,16 @@ static const mso_CustomShape msoSun =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    (SvxMSDffHandle*)mso_sptSunHandle, SAL_N_ELEMENTS( mso_sptSunHandle )        // handles
+    (SvxMSDffHandle*)mso_sptSunHandle, SAL_N_ELEMENTS( mso_sptSunHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptMoonVert[] =   // adj value 0 -> 18900
+static const SvxMSDffVertPair mso_sptMoonVert[] =   
 {
     { 21600, 0 },
-    { 3 MSO_I, 4 MSO_I },   { 0 MSO_I, 5080 },      { 0 MSO_I, 10800 }, // ccp
-    { 0 MSO_I, 16520 },     { 3 MSO_I, 5 MSO_I },   { 21600, 21600 },   // ccp
-    { 9740, 21600 },        { 0, 16730 },           { 0, 10800 },       // ccp
-    { 0, 4870 },            { 9740, 0 },            { 21600, 0  }       // ccp
+    { 3 MSO_I, 4 MSO_I },   { 0 MSO_I, 5080 },      { 0 MSO_I, 10800 }, 
+    { 0 MSO_I, 16520 },     { 3 MSO_I, 5 MSO_I },   { 21600, 21600 },   
+    { 9740, 21600 },        { 0, 16730 },           { 0, 10800 },       
+    { 0, 4870 },            { 9740, 0 },            { 21600, 0  }       
 };
 static const sal_uInt16 mso_sptMoonSegm[] =
 {
@@ -3495,16 +3495,16 @@ static const mso_CustomShape msoMoon =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptMoonGluePoints, SAL_N_ELEMENTS( mso_sptMoonGluePoints ),
-    (SvxMSDffHandle*)mso_sptMoonHandle, SAL_N_ELEMENTS( mso_sptMoonHandle )      // handles
+    (SvxMSDffHandle*)mso_sptMoonHandle, SAL_N_ELEMENTS( mso_sptMoonHandle )      
 };
 
-static const SvxMSDffVertPair mso_sptBracketPairVert[] =    // adj value 0 -> 10800
+static const SvxMSDffVertPair mso_sptBracketPairVert[] =    
 {
-    { 0 MSO_I, 0 },     { 0, 1 MSO_I },     // left top alignment
-    { 0, 2 MSO_I },     { 0 MSO_I, 21600 }, // left  bottom "
-    { 3 MSO_I, 21600 }, { 21600, 2 MSO_I }, // right bottom "
-    { 21600, 1 MSO_I }, { 3 MSO_I, 0 },     // right top    "
-    { 0 MSO_I, 0 },     { 0, 1 MSO_I },     // filling area
+    { 0 MSO_I, 0 },     { 0, 1 MSO_I },     
+    { 0, 2 MSO_I },     { 0 MSO_I, 21600 }, 
+    { 3 MSO_I, 21600 }, { 21600, 2 MSO_I }, 
+    { 21600, 1 MSO_I }, { 3 MSO_I, 0 },     
+    { 0 MSO_I, 0 },     { 0, 1 MSO_I },     
     { 0, 2 MSO_I },     { 0 MSO_I, 21600 },
     { 3 MSO_I, 21600 }, { 21600, 2 MSO_I },
     { 21600, 1 MSO_I }, { 3 MSO_I, 0 }
@@ -3513,7 +3513,7 @@ static const sal_uInt16 mso_sptBracketPairSegm[] =
 {
     0x4000, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
     0x4000, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
-    0x4000, 0xa701, 0x0001, 0xa801, 0x0001,             // filling area
+    0x4000, 0xa701, 0x0001, 0xa801, 0x0001,             
     0xa701, 0x0001, 0xa801, 0x6000, 0xab00, 0x8000
 };
 static const SvxMSDffCalculationData mso_sptBracketPairCalc[] =
@@ -3554,7 +3554,7 @@ static const mso_CustomShape msoBracketPair =
     21600, 21600,
     10800, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    (SvxMSDffHandle*)mso_sptBracketPairHandle, SAL_N_ELEMENTS( mso_sptBracketPairHandle )        // handles
+    (SvxMSDffHandle*)mso_sptBracketPairHandle, SAL_N_ELEMENTS( mso_sptBracketPairHandle )        
 };
 
 static const sal_uInt16 mso_sptPlaqueSegm[] =
@@ -3580,16 +3580,16 @@ static const mso_CustomShape msoPlaque =
     21600, 21600,
     10800, 10800,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    (SvxMSDffHandle*)mso_sptPlaqueHandle, SAL_N_ELEMENTS( mso_sptPlaqueHandle )      // handles
+    (SvxMSDffHandle*)mso_sptPlaqueHandle, SAL_N_ELEMENTS( mso_sptPlaqueHandle )      
 };
 
-static const SvxMSDffVertPair mso_sptBracePairVert[] =  // adj value 0 -> 5400
+static const SvxMSDffVertPair mso_sptBracePairVert[] =  
 {
-    { 4 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 6 MSO_I }, { 0 ,10800 },           // left bracket
+    { 4 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 6 MSO_I }, { 0 ,10800 },           
     { 0 MSO_I, 7 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 4 MSO_I, 21600 },
-    { 8 MSO_I, 21600 }, { 3 MSO_I, 2 MSO_I }, { 3 MSO_I, 7 MSO_I }, { 21600, 10800 },   // right bracket
+    { 8 MSO_I, 21600 }, { 3 MSO_I, 2 MSO_I }, { 3 MSO_I, 7 MSO_I }, { 21600, 10800 },   
     { 3 MSO_I, 6 MSO_I }, { 3 MSO_I, 1 MSO_I }, { 8 MSO_I, 0 },
-    { 4 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 6 MSO_I }, { 0 ,10800 },           // filling area
+    { 4 MSO_I, 0 }, { 0 MSO_I, 1 MSO_I }, { 0 MSO_I, 6 MSO_I }, { 0 ,10800 },           
     { 0 MSO_I, 7 MSO_I }, { 0 MSO_I, 2 MSO_I }, { 4 MSO_I, 21600 },
     { 8 MSO_I, 21600 }, { 3 MSO_I, 2 MSO_I }, { 3 MSO_I, 7 MSO_I }, { 21600, 10800 },
     { 3 MSO_I, 6 MSO_I }, { 3 MSO_I, 1 MSO_I }, { 8 MSO_I, 0 }
@@ -3598,7 +3598,7 @@ static const sal_uInt16 mso_sptBracePairSegm[] =
 {
     0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
     0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0xaa00, 0x8000,
-    0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x0001,                     // filling area
+    0x4000, 0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x0001,                     
     0xa701, 0x0001, 0xa801, 0xa701, 0x0001, 0xa801, 0x6000, 0xab00, 0x8000
 };
 static const SvxMSDffCalculationData mso_sptBracePairCalc[] =
@@ -3607,17 +3607,17 @@ static const SvxMSDffCalculationData mso_sptBracePairCalc[] =
     { 0x6000, { DFF_Prop_geoTop, DFF_Prop_adjustValue, 0 } },
     { 0xa000, { DFF_Prop_geoBottom, 0, DFF_Prop_adjustValue } },
     { 0xa000, { DFF_Prop_geoRight, 0, DFF_Prop_adjustValue } },
-    { 0x2001, { 0x400, 2, 1 } },                                    //  4
-    { 0x2001, { DFF_Prop_adjustValue, 2, 1 } },                     //  5
-    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },                 //  6
-    { 0x8000, { 21600, 0, 0x406 } },                                //  7
-    { 0xa000, { DFF_Prop_geoRight, 0, 0x405 } },                    //  8
-    { 0x2001, { DFF_Prop_adjustValue, 1, 3 } },                     //  9
-    { 0x6000, { 0x409, DFF_Prop_adjustValue, 0 } },                 // xa
-    { 0x6000, { DFF_Prop_geoLeft, 0x40a, 0 } },                     // xb
-    { 0x6000, { DFF_Prop_geoTop, 0x409, 0 } },                      // xc
-    { 0xa000, { DFF_Prop_geoRight, 0, 0x40a } },                    // xd
-    { 0xa000, { DFF_Prop_geoBottom, 0, 0x409 } }                    // xe
+    { 0x2001, { 0x400, 2, 1 } },                                    
+    { 0x2001, { DFF_Prop_adjustValue, 2, 1 } },                     
+    { 0x8000, { 10800, 0, DFF_Prop_adjustValue } },                 
+    { 0x8000, { 21600, 0, 0x406 } },                                
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x405 } },                    
+    { 0x2001, { DFF_Prop_adjustValue, 1, 3 } },                     
+    { 0x6000, { 0x409, DFF_Prop_adjustValue, 0 } },                 
+    { 0x6000, { DFF_Prop_geoLeft, 0x40a, 0 } },                     
+    { 0x6000, { DFF_Prop_geoTop, 0x409, 0 } },                      
+    { 0xa000, { DFF_Prop_geoRight, 0, 0x40a } },                    
+    { 0xa000, { DFF_Prop_geoBottom, 0, 0x409 } }                    
 };
 static const SvxMSDffTextRectangles mso_sptBracePairTextRect[] =
 {
@@ -3638,7 +3638,7 @@ static const mso_CustomShape msoBracePair =
     21600, 21600,
     10800, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    (SvxMSDffHandle*)mso_sptBracePairHandle, SAL_N_ELEMENTS( mso_sptBracePairHandle )        // handles
+    (SvxMSDffHandle*)mso_sptBracePairHandle, SAL_N_ELEMENTS( mso_sptBracePairHandle )        
 };
 
 static const SvxMSDffCalculationData mso_sptBracketCalc[] =
@@ -3653,7 +3653,7 @@ static const sal_uInt16 mso_sptBracketSegm[] =
 {
     0x4000, 0x2001, 0x0001, 0x2001, 0x8000
 };
-static const SvxMSDffVertPair mso_sptLeftBracketVert[] =    // adj value 0 -> 10800
+static const SvxMSDffVertPair mso_sptLeftBracketVert[] =    
 {
     { 21600, 0 }, { 10800,  0 }, { 0, 3 MSO_I }, { 0, 1 MSO_I },
     { 0, 2 MSO_I }, { 0, 4 MSO_I }, { 10800, 21600 }, { 21600, 21600 }
@@ -3681,9 +3681,9 @@ static const mso_CustomShape msoLeftBracket =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptLeftBracketGluePoints, SAL_N_ELEMENTS( mso_sptLeftBracketGluePoints ),
-    (SvxMSDffHandle*)mso_sptLeftBracketHandle, SAL_N_ELEMENTS( mso_sptLeftBracketHandle )        // handles
+    (SvxMSDffHandle*)mso_sptLeftBracketHandle, SAL_N_ELEMENTS( mso_sptLeftBracketHandle )        
 };
-static const SvxMSDffVertPair mso_sptRightBracketVert[] =   // adj value 0 -> 10800
+static const SvxMSDffVertPair mso_sptRightBracketVert[] =   
 {
     { 0, 0 }, { 10800, 0 }, { 21600, 3 MSO_I }, { 21600, 1 MSO_I },
     { 21600, 2 MSO_I }, { 21600, 4 MSO_I }, { 10800, 21600 }, { 0, 21600 }
@@ -3711,7 +3711,7 @@ static const mso_CustomShape msoRightBracket =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptRightBracketGluePoints, SAL_N_ELEMENTS( mso_sptRightBracketGluePoints ),
-    (SvxMSDffHandle*)mso_sptRightBracketHandle, SAL_N_ELEMENTS( mso_sptRightBracketHandle )      // handles
+    (SvxMSDffHandle*)mso_sptRightBracketHandle, SAL_N_ELEMENTS( mso_sptRightBracketHandle )      
 };
 
 static const SvxMSDffCalculationData mso_sptBraceCalc[] =
@@ -3738,13 +3738,13 @@ static const sal_Int32 mso_sptBraceDefault[] =
 };
 static const SvxMSDffVertPair mso_sptLeftBraceVert[] =
 {
-    { 21600, 0 },                                               // p
-    { 16200, 0 }, { 10800, 0 MSO_I }, { 10800, 1 MSO_I },       // ccp
-    { 10800, 2 MSO_I },                                         // p
-    { 10800, 3 MSO_I }, { 5400, 4 MSO_I }, { 0, 4 MSO_I },      // ccp
-    { 5400, 4 MSO_I },  { 10800, 5 MSO_I }, { 10800, 6 MSO_I }, // ccp
-    { 10800, 7 MSO_I },                                         // p
-    { 10800, 8 MSO_I }, { 16200, 21600 }, { 21600, 21600 }      // ccp
+    { 21600, 0 },                                               
+    { 16200, 0 }, { 10800, 0 MSO_I }, { 10800, 1 MSO_I },       
+    { 10800, 2 MSO_I },                                         
+    { 10800, 3 MSO_I }, { 5400, 4 MSO_I }, { 0, 4 MSO_I },      
+    { 5400, 4 MSO_I },  { 10800, 5 MSO_I }, { 10800, 6 MSO_I }, 
+    { 10800, 7 MSO_I },                                         
+    { 10800, 8 MSO_I }, { 16200, 21600 }, { 21600, 21600 }      
 };
 static const SvxMSDffTextRectangles mso_sptLeftBraceTextRect[] =
 {
@@ -3757,8 +3757,8 @@ static const SvxMSDffHandle mso_sptLeftBraceHandle[] =
     {   MSDFF_HANDLE_FLAGS_RANGE,
         0, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
-static const mso_CustomShape msoLeftBrace =     // adj value0 0 -> 5400
-{                                               // adj value1 0 -> 21600
+static const mso_CustomShape msoLeftBrace =     
+{                                               
     (SvxMSDffVertPair*)mso_sptLeftBraceVert, SAL_N_ELEMENTS( mso_sptLeftBraceVert ),
     (sal_uInt16*)mso_sptBraceSegm, sizeof( mso_sptBraceSegm ) >> 1,
     (SvxMSDffCalculationData*)mso_sptBraceCalc, SAL_N_ELEMENTS( mso_sptBraceCalc ),
@@ -3767,17 +3767,17 @@ static const mso_CustomShape msoLeftBrace =     // adj value0 0 -> 5400
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptLeftBracketGluePoints, SAL_N_ELEMENTS( mso_sptLeftBracketGluePoints ),
-    (SvxMSDffHandle*)mso_sptLeftBraceHandle, SAL_N_ELEMENTS( mso_sptLeftBraceHandle )        // handles
+    (SvxMSDffHandle*)mso_sptLeftBraceHandle, SAL_N_ELEMENTS( mso_sptLeftBraceHandle )        
 };
 static const SvxMSDffVertPair mso_sptRightBraceVert[] =
 {
-    { 0, 0 },                                                   // p
-    { 5400, 0 }, { 10800, 0 MSO_I }, { 10800, 1 MSO_I },        // ccp
-    { 10800, 2 MSO_I },                                         // p
-    { 10800, 3 MSO_I }, { 16200, 4 MSO_I }, { 21600, 4 MSO_I }, // ccp
-    { 16200, 4 MSO_I }, { 10800, 5 MSO_I }, { 10800, 6 MSO_I }, // ccp
-    { 10800, 7 MSO_I },                                         // p
-    { 10800, 8 MSO_I }, { 5400, 21600 }, { 0, 21600 }           // ccp
+    { 0, 0 },                                                   
+    { 5400, 0 }, { 10800, 0 MSO_I }, { 10800, 1 MSO_I },        
+    { 10800, 2 MSO_I },                                         
+    { 10800, 3 MSO_I }, { 16200, 4 MSO_I }, { 21600, 4 MSO_I }, 
+    { 16200, 4 MSO_I }, { 10800, 5 MSO_I }, { 10800, 6 MSO_I }, 
+    { 10800, 7 MSO_I },                                         
+    { 10800, 8 MSO_I }, { 5400, 21600 }, { 0, 21600 }           
 };
 static const SvxMSDffTextRectangles mso_sptRightBraceTextRect[] =
 {
@@ -3790,8 +3790,8 @@ static const SvxMSDffHandle mso_sptRightBraceHandle[] =
     {   MSDFF_HANDLE_FLAGS_RANGE,
         1, 0x101, 10800, 10800, MIN_INT32, 0x7fffffff, 0, 21600 }
 };
-static const mso_CustomShape msoRightBrace =        // adj value0 0 -> 5400
-{                                               // adj value1 0 -> 21600
+static const mso_CustomShape msoRightBrace =        
+{                                               
     (SvxMSDffVertPair*)mso_sptRightBraceVert, SAL_N_ELEMENTS( mso_sptRightBraceVert ),
     (sal_uInt16*)mso_sptBraceSegm, sizeof( mso_sptBraceSegm ) >> 1,
     (SvxMSDffCalculationData*)mso_sptBraceCalc, SAL_N_ELEMENTS( mso_sptBraceCalc ),
@@ -3800,7 +3800,7 @@ static const mso_CustomShape msoRightBrace =        // adj value0 0 -> 5400
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptRightBracketGluePoints, SAL_N_ELEMENTS( mso_sptRightBracketGluePoints ),
-    (SvxMSDffHandle*)mso_sptRightBraceHandle, SAL_N_ELEMENTS( mso_sptRightBraceHandle )      // handles
+    (SvxMSDffHandle*)mso_sptRightBraceHandle, SAL_N_ELEMENTS( mso_sptRightBraceHandle )      
 };
 
 static const SvxMSDffVertPair mso_sptIrregularSeal1Vert[] =
@@ -3830,7 +3830,7 @@ static const mso_CustomShape msoIrregularSeal1 =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptIrregularSeal1GluePoints, SAL_N_ELEMENTS( mso_sptIrregularSeal1GluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptIrregularSeal2Vert[] =
@@ -3862,10 +3862,10 @@ static const mso_CustomShape msoIrregularSeal2 =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptIrregularSeal2GluePoints, SAL_N_ELEMENTS( mso_sptIrregularSeal2GluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
-static const SvxMSDffVertPair mso_sptSeal4Vert[] =      // adjustment1 : 0 - 10800
+static const SvxMSDffVertPair mso_sptSeal4Vert[] =      
 {
     { 0, 10800 }, { 4 MSO_I, 4 MSO_I }, { 10800, 0 }, { 3 MSO_I, 4 MSO_I },
     { 21600, 10800 }, { 3 MSO_I, 3 MSO_I }, { 10800, 21600 }, { 4 MSO_I, 3 MSO_I },
@@ -3898,7 +3898,7 @@ static const mso_CustomShape msoSeal4 =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
+    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      
 };
 
 static const SvxMSDffVertPair mso_sptStarVert[] =
@@ -3921,16 +3921,16 @@ static const mso_CustomShape msoStar =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffCalculationData mso_sptSeal24Calc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0x00
-    { 0x2081, { 0x400, 10800, 315 } },              // 0x01 ( textframe )
-    { 0x2082, { 0x400, 10800, 315 } },              // 0x02
-    { 0x2081, { 0x400, 10800, 135 } },              // 0x03
-    { 0x2082, { 0x400, 10800, 135 } },              // 0x04
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     
+    { 0x2081, { 0x400, 10800, 315 } },              
+    { 0x2082, { 0x400, 10800, 315 } },              
+    { 0x2081, { 0x400, 10800, 135 } },              
+    { 0x2082, { 0x400, 10800, 135 } },              
     { 0x0081, { 0,   10800, 0 } },
     { 0x0082, { 0,   10800, 0 } },
     { 0x2081, { 0x400, 10800, 7 } },
@@ -4028,7 +4028,7 @@ static const SvxMSDffCalculationData mso_sptSeal24Calc[] =
     { 0x2081, { 0x400, 10800, 352 } },
     { 0x2082, { 0x400, 10800, 352 } }
 };
-static const SvxMSDffVertPair mso_sptSeal8Vert[] =  // adj value 0 -> 10800
+static const SvxMSDffVertPair mso_sptSeal8Vert[] =  
 {
     { 5 MSO_I, 6 MSO_I }, { 11 MSO_I, 12 MSO_I }, { 17 MSO_I, 18 MSO_I }, { 23 MSO_I, 24 MSO_I },
     { 29 MSO_I, 30 MSO_I }, { 35 MSO_I, 36 MSO_I }, { 41 MSO_I, 42 MSO_I }, { 47 MSO_I, 48 MSO_I },
@@ -4050,9 +4050,9 @@ static const mso_CustomShape msoSeal8 =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
+    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      
 };
-static const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
+static const SvxMSDffVertPair mso_sptSeal16Vert[] = 
 {
     { 0x05 MSO_I, 0x06 MSO_I }, { 0x07 MSO_I, 0x08 MSO_I }, { 0x09 MSO_I, 0x0a MSO_I }, { 0x0b MSO_I, 0x0c MSO_I },
     { 0x0d MSO_I, 0x0e MSO_I }, { 0x0f MSO_I, 0x10 MSO_I }, { 0x11 MSO_I, 0x12 MSO_I }, { 0x13 MSO_I, 0x14 MSO_I },
@@ -4066,11 +4066,11 @@ static const SvxMSDffVertPair mso_sptSeal16Vert[] = // adj value 0 -> 10800
 };
 static const SvxMSDffCalculationData mso_sptSeal16Calc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0x00
-    { 0x2081, { 0x400, 10800, 315 } },              // 0x01 ( textframe )
-    { 0x2082, { 0x400, 10800, 315 } },              // 0x02
-    { 0x2081, { 0x400, 10800, 135 } },              // 0x03
-    { 0x2082, { 0x400, 10800, 135 } },              // 0x04
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     
+    { 0x2081, { 0x400, 10800, 315 } },              
+    { 0x2082, { 0x400, 10800, 315 } },              
+    { 0x2081, { 0x400, 10800, 135 } },              
+    { 0x2082, { 0x400, 10800, 135 } },              
     { 0x0081, { 0,   10800, 0 } },
     { 0x0082, { 0,   10800, 0 } },
     { 0x2081, { 0x400, 10800, 11 } },
@@ -4146,7 +4146,7 @@ static const mso_CustomShape msoSeal16 =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
+    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      
 };
 static const SvxMSDffVertPair mso_sptSeal24Vert[] =
 {
@@ -4174,15 +4174,15 @@ static const mso_CustomShape msoSeal24 =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      // handles
+    (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )      
 };
 static const SvxMSDffCalculationData mso_sptSeal32Calc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 0x00
-    { 0x2081, { 0x400, 10800, 315 } },              // 0x01 ( textframe )
-    { 0x2082, { 0x400, 10800, 315 } },              // 0x02
-    { 0x2081, { 0x400, 10800, 135 } },              // 0x03
-    { 0x2082, { 0x400, 10800, 135 } },              // 0x04
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     
+    { 0x2081, { 0x400, 10800, 315 } },              
+    { 0x2082, { 0x400, 10800, 315 } },              
+    { 0x2081, { 0x400, 10800, 135 } },              
+    { 0x2082, { 0x400, 10800, 135 } },              
     { 0x0081, { 0,   10800, 0 } },
     { 0x0082, { 0,   10800, 0 } },
     { 0x2081, { 0x400, 10800, 5 } },
@@ -4345,33 +4345,33 @@ static const mso_CustomShape msoSeal32 =
     (SvxMSDffHandle*)mso_sptSealHandle, SAL_N_ELEMENTS( mso_sptSealHandle )
 };
 
-static const SvxMSDffVertPair mso_sptRibbon2Vert[] =    // adjustment1 : x 2700  - 8100     def 5400
-{                                                       // adjustment2 : y 14400 - 21600    def 18900
-    { 12 MSO_I, 1 MSO_I }, { 12 MSO_I, 13 MSO_I },                                      // pp
-    { 12 MSO_I, 14 MSO_I }, { 15 MSO_I, 21600 }, { 16 MSO_I, 21600 },                   // ccp
-    { 0, 21600 }, { 2750, 7 MSO_I }, { 0, 2 MSO_I }, { 0 MSO_I, 2 MSO_I },              // pppp
-    { 0 MSO_I, 4 MSO_I },                                                               // p
-    { 0 MSO_I, 5 MSO_I }, { 10 MSO_I, 0 }, { 11 MSO_I, 0 },                             // ccp
-    { 17 MSO_I, 0 },                                                                    // p
-    { 18 MSO_I, 0 }, { 19 MSO_I, 5 MSO_I }, { 19 MSO_I, 4 MSO_I },                      // ccp
-    { 19 MSO_I, 2 MSO_I }, { 21600, 2 MSO_I }, { 18850, 7 MSO_I }, { 21600, 21600 },    // pppp
-    { 20 MSO_I, 21600 },                                                                // p
-    { 21 MSO_I, 21600 }, { 22 MSO_I, 14 MSO_I }, { 22 MSO_I, 13 MSO_I },                // ccp
-    { 22 MSO_I, 1 MSO_I }, { 12 MSO_I, 1 MSO_I }, { 12 MSO_I, 13 MSO_I },               // ppp
-    { 12 MSO_I, 23 MSO_I }, { 15 MSO_I, 24 MSO_I }, { 16 MSO_I, 24 MSO_I },             // ccp
-    { 11 MSO_I, 24 MSO_I },                                                             // p
-    { 10 MSO_I, 24 MSO_I }, { 0 MSO_I, 26 MSO_I }, { 0 MSO_I, 25 MSO_I },               // ccp
-    { 0 MSO_I, 27 MSO_I }, { 10 MSO_I, 1 MSO_I }, { 11 MSO_I, 1 MSO_I },                // ccp
+static const SvxMSDffVertPair mso_sptRibbon2Vert[] =    
+{                                                       
+    { 12 MSO_I, 1 MSO_I }, { 12 MSO_I, 13 MSO_I },                                      
+    { 12 MSO_I, 14 MSO_I }, { 15 MSO_I, 21600 }, { 16 MSO_I, 21600 },                   
+    { 0, 21600 }, { 2750, 7 MSO_I }, { 0, 2 MSO_I }, { 0 MSO_I, 2 MSO_I },              
+    { 0 MSO_I, 4 MSO_I },                                                               
+    { 0 MSO_I, 5 MSO_I }, { 10 MSO_I, 0 }, { 11 MSO_I, 0 },                             
+    { 17 MSO_I, 0 },                                                                    
+    { 18 MSO_I, 0 }, { 19 MSO_I, 5 MSO_I }, { 19 MSO_I, 4 MSO_I },                      
+    { 19 MSO_I, 2 MSO_I }, { 21600, 2 MSO_I }, { 18850, 7 MSO_I }, { 21600, 21600 },    
+    { 20 MSO_I, 21600 },                                                                
+    { 21 MSO_I, 21600 }, { 22 MSO_I, 14 MSO_I }, { 22 MSO_I, 13 MSO_I },                
+    { 22 MSO_I, 1 MSO_I }, { 12 MSO_I, 1 MSO_I }, { 12 MSO_I, 13 MSO_I },               
+    { 12 MSO_I, 23 MSO_I }, { 15 MSO_I, 24 MSO_I }, { 16 MSO_I, 24 MSO_I },             
+    { 11 MSO_I, 24 MSO_I },                                                             
+    { 10 MSO_I, 24 MSO_I }, { 0 MSO_I, 26 MSO_I }, { 0 MSO_I, 25 MSO_I },               
+    { 0 MSO_I, 27 MSO_I }, { 10 MSO_I, 1 MSO_I }, { 11 MSO_I, 1 MSO_I },                
 
-    { 22 MSO_I, 1 MSO_I }, { 22 MSO_I, 13 MSO_I },                                      // pp
-    { 22 MSO_I, 23 MSO_I }, { 21 MSO_I, 24 MSO_I }, { 20 MSO_I, 24 MSO_I },             // ccp
-    { 17 MSO_I, 24 MSO_I },                                                             // p
-    { 18 MSO_I, 24 MSO_I }, { 19 MSO_I, 26 MSO_I }, { 19 MSO_I, 25 MSO_I },             // ccp
-    { 19 MSO_I, 27 MSO_I }, { 18 MSO_I, 1 MSO_I }, { 17 MSO_I, 1 MSO_I },               // ccp
+    { 22 MSO_I, 1 MSO_I }, { 22 MSO_I, 13 MSO_I },                                      
+    { 22 MSO_I, 23 MSO_I }, { 21 MSO_I, 24 MSO_I }, { 20 MSO_I, 24 MSO_I },             
+    { 17 MSO_I, 24 MSO_I },                                                             
+    { 18 MSO_I, 24 MSO_I }, { 19 MSO_I, 26 MSO_I }, { 19 MSO_I, 25 MSO_I },             
+    { 19 MSO_I, 27 MSO_I }, { 18 MSO_I, 1 MSO_I }, { 17 MSO_I, 1 MSO_I },               
 
-    { 0 MSO_I, 25 MSO_I }, { 0 MSO_I, 2 MSO_I },                                        // pp
+    { 0 MSO_I, 25 MSO_I }, { 0 MSO_I, 2 MSO_I },                                        
 
-    { 19 MSO_I, 25 MSO_I }, { 19 MSO_I, 2 MSO_I }                                       // pp
+    { 19 MSO_I, 25 MSO_I }, { 19 MSO_I, 2 MSO_I }                                       
 };
 static const sal_uInt16 mso_sptRibbon2Segm[] =
 {
@@ -4383,36 +4383,36 @@ static const sal_uInt16 mso_sptRibbon2Segm[] =
 };
 static const SvxMSDffCalculationData mso_sptRibbon2Calc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             // 00
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            // 01
-    { 0x8000, { 21600, 0, 0x401 } },                        // 02
-    { 0x2001, { 0x402, 1, 2 } },                            // 03
-    { 0x2001, { 0x403, 1, 2 } },                            // 04
-    { 0x2001, { 0x404, 1, 2 } },                            // 05
-    { 0x2001, { 0x401, 1, 2 } },                            // 06
-    { 0x8000, { 21600, 0, 0x406 } },                        // 07
-    { 0x0000, { 420, 0, 0 } },                              // 08
-    { 0x2001, { 0x408, 2, 1 } },                            // 09
-    { 0x6000, { 0x400, 0x408, 0 } },                        // 10
-    { 0x6000, { 0x400, 0x409, 0 } },                        // 11
-    { 0x2000, { 0x400, 2700, 0 } },                         // 12
-    { 0x8000, { 21600, 0, 0x404 } },                        // 13
-    { 0x8000, { 21600, 0, 0x405 } },                        // 14
-    { 0xa000, { 0x40c, 0, 0x408 } },                        // 15
-    { 0xa000, { 0x40c, 0, 0x409 } },                        // 16
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            
+    { 0x8000, { 21600, 0, 0x401 } },                        
+    { 0x2001, { 0x402, 1, 2 } },                            
+    { 0x2001, { 0x403, 1, 2 } },                            
+    { 0x2001, { 0x404, 1, 2 } },                            
+    { 0x2001, { 0x401, 1, 2 } },                            
+    { 0x8000, { 21600, 0, 0x406 } },                        
+    { 0x0000, { 420, 0, 0 } },                              
+    { 0x2001, { 0x408, 2, 1 } },                            
+    { 0x6000, { 0x400, 0x408, 0 } },                        
+    { 0x6000, { 0x400, 0x409, 0 } },                        
+    { 0x2000, { 0x400, 2700, 0 } },                         
+    { 0x8000, { 21600, 0, 0x404 } },                        
+    { 0x8000, { 21600, 0, 0x405 } },                        
+    { 0xa000, { 0x40c, 0, 0x408 } },                        
+    { 0xa000, { 0x40c, 0, 0x409 } },                        
 
-    { 0x8000, { 21600, 0, 0x40b } },                        // 17
-    { 0x8000, { 21600, 0, 0x40a } },                        // 18
-    { 0x8000, { 21600, 0, 0x400 } },                        // 19
-    { 0x8000, { 21600, 0, 0x410 } },                        // 20
-    { 0x8000, { 21600, 0, 0x40f } },                        // 21
-    { 0x8000, { 21600, 0, 0x40c } },                        // 22
+    { 0x8000, { 21600, 0, 0x40b } },                        
+    { 0x8000, { 21600, 0, 0x40a } },                        
+    { 0x8000, { 21600, 0, 0x400 } },                        
+    { 0x8000, { 21600, 0, 0x410 } },                        
+    { 0x8000, { 21600, 0, 0x40f } },                        
+    { 0x8000, { 21600, 0, 0x40c } },                        
 
-    { 0xa000, { 0x40d, 0, 0x405 } },                        // 23
-    { 0x6000, { 0x401, 0x403, 0 } },                        // 24
-    { 0x6000, { 0x401, 0x404, 0 } },                        // 25
-    { 0x6000, { 0x419, 0x405, 0 } },                        // 26
-    { 0xa000, { 0x419, 0, 0x405 } }                         // 27
+    { 0xa000, { 0x40d, 0, 0x405 } },                        
+    { 0x6000, { 0x401, 0x403, 0 } },                        
+    { 0x6000, { 0x401, 0x404, 0 } },                        
+    { 0x6000, { 0x419, 0x405, 0 } },                        
+    { 0xa000, { 0x419, 0, 0x405 } }                         
 };
 static const sal_Int32 mso_sptRibbon2Default[] =
 {
@@ -4470,26 +4470,26 @@ static const sal_uInt16 mso_sptRibbonSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptRibbonCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             // 00
-    { 0x2000, { 0x400, 675, 0 } },                          // 01
-    { 0x2000, { 0x401, 675, 0 } },                          // 02
-    { 0x2000, { 0x402, 675, 0 } },                          // 03
-    { 0x2000, { 0x403, 675, 0 } },                          // 04
-    { 0x8000, { 21600, 0, 0x404 } },                        // 05
-    { 0x8000, { 21600, 0, 0x403 } },                        // 06
-    { 0x8000, { 21600, 0, 0x402 } },                        // 07
-    { 0x8000, { 21600, 0, 0x401 } },                        // 08
-    { 0x8000, { 21600, 0, 0x400 } },                        // 09
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            // 10
-    { 0x2001, { 0x40a, 1, 4 } },                            // 11
-    { 0x2001, { 0x40b, 2, 1 } },                            // 12
-    { 0x2001, { 0x40b, 3, 1 } },                            // 13
-    { 0x8000, { 10800, 0, 0x40c } },                        // 14
-    { 0x8000, { 21600, 0, 0x40a } },                        // 15
-    { 0x8000, { 21600, 0, 0x40b } },                        // 16
-    { 0x0001, { 21600, 1, 2 } },                            // 17
-    { 0x0000, { 21600, 0, 2700 } },                         // 18
-    { 0x2000, { 0x411, 0, 2700 } }                          // 19
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },             
+    { 0x2000, { 0x400, 675, 0 } },                          
+    { 0x2000, { 0x401, 675, 0 } },                          
+    { 0x2000, { 0x402, 675, 0 } },                          
+    { 0x2000, { 0x403, 675, 0 } },                          
+    { 0x8000, { 21600, 0, 0x404 } },                        
+    { 0x8000, { 21600, 0, 0x403 } },                        
+    { 0x8000, { 21600, 0, 0x402 } },                        
+    { 0x8000, { 21600, 0, 0x401 } },                        
+    { 0x8000, { 21600, 0, 0x400 } },                        
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },            
+    { 0x2001, { 0x40a, 1, 4 } },                            
+    { 0x2001, { 0x40b, 2, 1 } },                            
+    { 0x2001, { 0x40b, 3, 1 } },                            
+    { 0x8000, { 10800, 0, 0x40c } },                        
+    { 0x8000, { 21600, 0, 0x40a } },                        
+    { 0x8000, { 21600, 0, 0x40b } },                        
+    { 0x0001, { 21600, 1, 2 } },                            
+    { 0x0000, { 21600, 0, 2700 } },                         
+    { 0x2000, { 0x411, 0, 2700 } }                          
 };
 static const sal_Int32 mso_sptRibbonDefault[] =
 {
@@ -4522,9 +4522,9 @@ static const mso_CustomShape msoRibbon =
     (SvxMSDffVertPair*)mso_sptRibbonGluePoints, SAL_N_ELEMENTS( mso_sptRibbonGluePoints ),
     (SvxMSDffHandle*)mso_sptRibbonHandle, SAL_N_ELEMENTS( mso_sptRibbonHandle )
 };
-//msosptEllipseRibbon
-//svg path = ar@9@38@8@37,0@27@0@26@9@13@8@4@0@25@22@25@9@38@8@37@22@26@3@27l@7@40@3,wa@9@35@8@10@3,0@21@33@9@36@8@1@21@31@20@31@9@35@8@10@20@33,,l@5@40xewr@9@36@8@1@20@31@0@32nfl@20@33ear@9@36@8@1@21@31@22@32nfl@21@33em@0@26nfl@0@32em@22@26nfl@22@32e
-//odp path = A ?f9 ?f38 ?f8 ?f37 0 ?f27 ?f0 ?f26 ?f9 ?f13 ?f8 ?f4 ?f0 ?f25 ?f22 ?f25 ?f9 ?f38 ?f8 ?f37 ?f22 ?f26 ?f3 ?f27 L ?f7 ?f40 ?f3 0 W ?f9 ?f35 ?f8 ?f10 ?f3 0 ?f21 ?f33 ?f9 ?f36 ?f8 ?f1 ?f21 ?f31 ?f20 ?f31 ?f9 ?f35 ?f8 ?f10 ?f20 ?f33 0 0 L ?f5 ?f40 Z N W ?f9 ?f36 ?f8 ?f1 ?f20 ?f31 ?f0 ?f32 F L ?f20 ?f33 N A ?f9 ?f36 ?f8 ?f1 ?f21 ?f31 ?f22 ?f32 F L ?f21 ?f33 N M ?f0 ?f26 F L ?f0 ?f32 N M ?f22 ?f26 F L ?f22 ?f32 N
+
+
+
 static const SvxMSDffVertPair mso_sptEllipseRibbonVert[] =
 {
     { 9 MSO_I , 38 MSO_I },
@@ -4582,58 +4582,58 @@ static const sal_uInt16 mso_sptEllipseRibbonSegm[] =
 
 static const SvxMSDffCalculationData mso_sptEllipseRibbonCalc[] =
 {
-    { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } }, //val #0
-    { 0x2000 , { DFF_Prop_adjust2Value , 0 , 0 } }, //val #1
-    { 0x2000 , { DFF_Prop_adjust3Value , 0 , 0 } }, //val #2
-    { 0x2000 , { DFF_Prop_geoRight , 0 , 0 } }, //val width
-    { 0x2000 , { DFF_Prop_geoBottom , 0 , 0 } }, //val height
-    { 0x2001 , { DFF_Prop_geoRight , 1 , 8 } }, //prod width 1 8
-    { 0x2001 , { DFF_Prop_geoRight , 1 , 2 } }, //prod width 1 2
-    { 0x2001 , { DFF_Prop_geoRight , 7 , 8 } }, //prod width 7 8
-    { 0x2001 , { DFF_Prop_geoRight , 3 , 2 } }, //prod width 3 2
-    { 0x8000 , { 0 , 0 , 0x406 } }, //sum 0 0 @6
-    { 0xa000 , { DFF_Prop_geoBottom , 0 , DFF_Prop_adjust3Value } }, //sum height 0 #2
-    { 0x2001 , { 0x40a , 30573 , 4096 } }, //prod @10 30573 4096
-    { 0x2001 , { 0x40b , 2 , 1 } }, //prod @11 2 1
-    { 0xa000 , { DFF_Prop_geoBottom , 0 , 0x40c } }, //sum height 0 @12
-    { 0x6000 , { 0x40b , DFF_Prop_adjust3Value , 0 } }, //sum @11 #2 0
-    { 0xe000 , { 0x40b , DFF_Prop_geoBottom , DFF_Prop_adjust2Value } }, //sum @11 height #1
-    { 0xa000 , { DFF_Prop_geoBottom , 0 , DFF_Prop_adjust2Value } }, //sum height 0 #1
-    { 0x2001 , { 0x410 , 1 , 2 } }, //prod @16 1 2
-    { 0x6000 , { 0x40b , 0x411 , 0 } }, //sum @11 @17 0
-    { 0xe000 , { 0x40e , DFF_Prop_adjust2Value , DFF_Prop_geoBottom } }, //sum @14 #1 height
-    { 0x6000 , { DFF_Prop_adjustValue , 0x405 , 0 } }, //sum #0 @5 0
-    { 0xa000 , { DFF_Prop_geoRight , 0 , 0x414 } }, //sum width 0 @20
-    { 0xa000 , { DFF_Prop_geoRight , 0 , DFF_Prop_adjustValue } }, //sum width 0 #0
-    { 0xa000 , { 0x406 , 0 , DFF_Prop_adjustValue } }, //sum @6 0 #0
-    { 0xe00f , { 0x417 , DFF_Prop_geoRight , 0x40b } }, //ellipse @23 width @11
-    { 0xe000 , { 0x418 , DFF_Prop_geoBottom , 0x40b } }, //sum @24 height @11
-    { 0xe000 , { 0x419 , 0x40b , 0x413 } }, //sum @25 @11 @19
-    { 0xe000 , { DFF_Prop_adjust3Value , 0x40b , 0x413 } }, //sum #2 @11 @19
-    { 0x2001 , { 0x40b , 2391 , 32768 } }, //prod @11 2391 32768
-    { 0xa000 , { 0x406 , 0 , 0x414 } }, //sum @6 0 @20
-    { 0xe00f , { 0x41d , DFF_Prop_geoRight , 0x40b } }, //ellipse @29 width @11
-    { 0xe000 , { DFF_Prop_adjust2Value , 0x41e , 0x40b } }, //sum #1 @30 @11
-    { 0xe000 , { 0x419 , DFF_Prop_adjust2Value , DFF_Prop_geoBottom } }, //sum @25 #1 height
-    { 0xe000 , { DFF_Prop_geoBottom , 0x41e , 0x40e } }, //sum height @30 @14
-    { 0x6000 , { 0x40b , 0x40e , 0 } }, //sum @11 @14 0
-    { 0xa000 , { DFF_Prop_geoBottom , 0 , 0x422 } }, //sum height 0 @34
-    { 0xe000 , { 0x423 , 0x413 , 0x40b } }, //sum @35 @19 @11
-    { 0xe000 , { 0x40a , 0x40f , 0x40b } }, //sum @10 @15 @11
-    { 0xe000 , { 0x423 , 0x40f , 0x40b } }, //sum @35 @15 @11
-    { 0xe000 , { 0x41c , 0x40e , 0x412 } }, //sum @28 @14 @18
-    { 0xa000 , { DFF_Prop_geoBottom , 0 , 0x427 } }, //sum height 0 @39
-    { 0xa000 , { 0x413 , 0 , 0x412 } }, //sum @19 0 @18
-    { 0x2001 , { 0x429 , 2 , 3 } }, //prod @41 2 3
-    { 0xa000 , { DFF_Prop_adjust2Value , 0 , 0x42a } }, //sum #1 0 @42
-    { 0xa000 , { DFF_Prop_adjust3Value , 0 , 0x42a } }, //sum #2 0 @42
-    { 0x2004 , { 0x42c , 20925 , 0 } }, //min @44 20925
-    { 0x2001 , { DFF_Prop_geoRight , 3 , 8 } }, //prod width 3 8
-    { 0x2000 , { 0x42e , 0 , 4 } }, //sum @46 0 4
+    { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } }, 
+    { 0x2000 , { DFF_Prop_adjust2Value , 0 , 0 } }, 
+    { 0x2000 , { DFF_Prop_adjust3Value , 0 , 0 } }, 
+    { 0x2000 , { DFF_Prop_geoRight , 0 , 0 } }, 
+    { 0x2000 , { DFF_Prop_geoBottom , 0 , 0 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 1 , 8 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 1 , 2 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 7 , 8 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 3 , 2 } }, 
+    { 0x8000 , { 0 , 0 , 0x406 } }, 
+    { 0xa000 , { DFF_Prop_geoBottom , 0 , DFF_Prop_adjust3Value } }, 
+    { 0x2001 , { 0x40a , 30573 , 4096 } }, 
+    { 0x2001 , { 0x40b , 2 , 1 } }, 
+    { 0xa000 , { DFF_Prop_geoBottom , 0 , 0x40c } }, 
+    { 0x6000 , { 0x40b , DFF_Prop_adjust3Value , 0 } }, 
+    { 0xe000 , { 0x40b , DFF_Prop_geoBottom , DFF_Prop_adjust2Value } }, 
+    { 0xa000 , { DFF_Prop_geoBottom , 0 , DFF_Prop_adjust2Value } }, 
+    { 0x2001 , { 0x410 , 1 , 2 } }, 
+    { 0x6000 , { 0x40b , 0x411 , 0 } }, 
+    { 0xe000 , { 0x40e , DFF_Prop_adjust2Value , DFF_Prop_geoBottom } }, 
+    { 0x6000 , { DFF_Prop_adjustValue , 0x405 , 0 } }, 
+    { 0xa000 , { DFF_Prop_geoRight , 0 , 0x414 } }, 
+    { 0xa000 , { DFF_Prop_geoRight , 0 , DFF_Prop_adjustValue } }, 
+    { 0xa000 , { 0x406 , 0 , DFF_Prop_adjustValue } }, 
+    { 0xe00f , { 0x417 , DFF_Prop_geoRight , 0x40b } }, 
+    { 0xe000 , { 0x418 , DFF_Prop_geoBottom , 0x40b } }, 
+    { 0xe000 , { 0x419 , 0x40b , 0x413 } }, 
+    { 0xe000 , { DFF_Prop_adjust3Value , 0x40b , 0x413 } }, 
+    { 0x2001 , { 0x40b , 2391 , 32768 } }, 
+    { 0xa000 , { 0x406 , 0 , 0x414 } }, 
+    { 0xe00f , { 0x41d , DFF_Prop_geoRight , 0x40b } }, 
+    { 0xe000 , { DFF_Prop_adjust2Value , 0x41e , 0x40b } }, 
+    { 0xe000 , { 0x419 , DFF_Prop_adjust2Value , DFF_Prop_geoBottom } }, 
+    { 0xe000 , { DFF_Prop_geoBottom , 0x41e , 0x40e } }, 
+    { 0x6000 , { 0x40b , 0x40e , 0 } }, 
+    { 0xa000 , { DFF_Prop_geoBottom , 0 , 0x422 } }, 
+    { 0xe000 , { 0x423 , 0x413 , 0x40b } }, 
+    { 0xe000 , { 0x40a , 0x40f , 0x40b } }, 
+    { 0xe000 , { 0x423 , 0x40f , 0x40b } }, 
+    { 0xe000 , { 0x41c , 0x40e , 0x412 } }, 
+    { 0xa000 , { DFF_Prop_geoBottom , 0 , 0x427 } }, 
+    { 0xa000 , { 0x413 , 0 , 0x412 } }, 
+    { 0x2001 , { 0x429 , 2 , 3 } }, 
+    { 0xa000 , { DFF_Prop_adjust2Value , 0 , 0x42a } }, 
+    { 0xa000 , { DFF_Prop_adjust3Value , 0 , 0x42a } }, 
+    { 0x2004 , { 0x42c , 20925 , 0 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 3 , 8 } }, 
+    { 0x2000 , { 0x42e , 0 , 4 } }, 
 };
 
 static const SvxMSDffTextRectangles mso_sptEllipseRibbonTextRect[] =
-{//@0,@1,@22,@25
+{
     { { 0 MSO_I, 1 MSO_I }, { 22 MSO_I, 25 MSO_I } }
 };
 
@@ -4644,9 +4644,9 @@ static const sal_Int32 mso_sptEllipseRibbonDefault[] =
 
 static const SvxMSDffHandle mso_sptEllipseRibbonHandle[] =
 {
-//position="#0,bottomRight" xrange="@5,@47
-//position="center,#1" yrange="@10,@43
-//position="topLeft,#2" yrange="@27,@45
+
+
+
     {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL| MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
         0x100, 21600, 0, 0, 0x8/*5+3*/, 0x32/*47+3*/, MIN_INT32, 0x7fffffff },
     {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
@@ -4668,8 +4668,8 @@ static const mso_CustomShape msosptEllipseRibbon =
     (SvxMSDffHandle*)mso_sptEllipseRibbonHandle, sizeof( mso_sptEllipseRibbonHandle ) / sizeof( SvxMSDffHandle )
 };
 
-//msosptEllipseRibbon2
-//svg path = wr@9@34@8@35,0@24@0@23@9,0@8@11@0@22@19@22@9@34@8@35@19@23@3@24l@7@36@3@4at@9@31@8@32@3@4@18@30@9@1@8@33@18@28@17@28@9@31@8@32@17@30,0@4l@5@36xear@9@1@8@33@17@28@0@29nfl@17@30ewr@9@1@8@33@18@28@19@29nfl@18@30em@0@23nfl@0@29em@19@23nfl@19@29e
+
+
 static const SvxMSDffVertPair mso_sptEllipseRibbon2Vert[] =
 {
     { 9 MSO_I , 34 MSO_I },
@@ -4726,54 +4726,54 @@ static const sal_uInt16 mso_sptEllipseRibbon2Segm[] =
 
 static const SvxMSDffCalculationData mso_sptEllipseRibbon2Calc[] =
 {
-    { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } }, //val #0
-    { 0x2000 , { DFF_Prop_adjust2Value , 0 , 0 } }, //val #1
-    { 0x2000 , { DFF_Prop_adjust3Value , 0 , 0 } }, //val #2
-    { 0x2000 , { DFF_Prop_geoRight , 0 , 0 } }, //val width
-    { 0x2000 , { DFF_Prop_geoBottom , 0 , 0 } }, //val height
-    { 0x2001 , { DFF_Prop_geoRight , 1 , 8 } }, //prod width 1 8
-    { 0x2001 , { DFF_Prop_geoRight , 1 , 2 } }, //prod width 1 2
-    { 0x2001 , { DFF_Prop_geoRight , 7 , 8 } }, //prod width 7 8
-    { 0x2001 , { DFF_Prop_geoRight , 3 , 2 } }, //prod width 3 2
-    { 0x8000 , { 0 , 0 , 0x406 } }, //sum 0 0 @6
-    { 0x2001 , { DFF_Prop_adjust3Value , 30573 , 4096 } }, //prod #2 30573 4096
-    { 0x2001 , { 0x40a , 2 , 1 } }, //prod @10 2 1
-    { 0xe000 , { 0x40a , DFF_Prop_geoBottom , DFF_Prop_adjust3Value } }, //sum @10 height #2
-    { 0x6000 , { 0x40a , DFF_Prop_adjust2Value , 0 } }, //sum @10 #1 0
-    { 0x2001 , { DFF_Prop_adjust2Value , 1 , 2 } }, //prod #1 1 2
-    { 0x6000 , { 0x40a , 0x40e , 0 } }, //sum @10 @14 0
-    { 0xa000 , { 0x40c , 0 , DFF_Prop_adjust2Value } }, //sum @12 0 #1
-    { 0x6000 , { DFF_Prop_adjustValue , 0x405 , 0 } }, //sum #0 @5 0
-    { 0xa000 , { DFF_Prop_geoRight , 0 , 0x411 } }, //sum width 0 @17
-    { 0xa000 , { DFF_Prop_geoRight , 0 , DFF_Prop_adjustValue } }, //sum width 0 #0
-    { 0xa000 , { 0x406 , 0 , DFF_Prop_adjustValue } }, //sum @6 0 #0
-    { 0xe00f , { 0x414 , DFF_Prop_geoRight , 0x40a } }, //ellipse @20 width @10
-    { 0xa000 , { 0x40a , 0 , 0x415 } }, //sum @10 0 @21
-    { 0xe000 , { 0x416 , 0x410 , 0x40a } }, //sum @22 @16 @10
-    { 0xe000 , { DFF_Prop_adjust3Value , 0x410 , 0x40a } }, //sum #2 @16 @10
-    { 0x2001 , { 0x40a , 2391 , 32768 } }, //prod @10 2391 32768
-    { 0xa000 , { 0x406 , 0 , 0x411 } }, //sum @6 0 @17
-    { 0xe00f , { 0x41a , DFF_Prop_geoRight , 0x40a } }, //ellipse @26 width @10
-    { 0xe000 , { 0x40a , DFF_Prop_adjust2Value , 0x41b } }, //sum @10 #1 @27
-    { 0x6000 , { 0x416 , DFF_Prop_adjust2Value , 0 } }, //sum @22 #1 0
-    { 0xa000 , { 0x40c , 0 , 0x41b } }, //sum @12 0 @27
-    { 0xa000 , { DFF_Prop_geoBottom , 0 , DFF_Prop_adjust3Value } }, //sum height 0 #2
-    { 0x6000 , { 0x40a , 0x40c , 0 } }, //sum @10 @12 0
-    { 0xe000 , { 0x420 , 0x40a , 0x410 } }, //sum @32 @10 @16
-    { 0xe000 , { 0x41f , 0x40a , 0x40d } }, //sum @31 @10 @13
-    { 0xe000 , { 0x420 , 0x40a , 0x40d } }, //sum @32 @10 @13
-    { 0xe000 , { 0x419 , 0x40c , 0x40f } }, //sum @25 @12 @15
-    { 0xa000 , { 0x410 , 0 , 0x40f } }, //sum @16 0 @15
-    { 0x2001 , { 0x425 , 2 , 3 } }, //prod @37 2 3
-    { 0x6000 , { 0x401 , 0x426 , 0 } }, //sum @1 @38 0
-    { 0x6000 , { DFF_Prop_adjust3Value , 0x426 , 0 } }, //sum #2 @38 0
-    { 0x2005 , { 0x428 , 675 , 0 } }, //max @40 675
-    { 0x2001 , { DFF_Prop_geoRight , 3 , 8 } }, //prod width 3 8
-    { 0x2000 , { 0x42a , 0 , 4 } } //sum @42 0 4
+    { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } }, 
+    { 0x2000 , { DFF_Prop_adjust2Value , 0 , 0 } }, 
+    { 0x2000 , { DFF_Prop_adjust3Value , 0 , 0 } }, 
+    { 0x2000 , { DFF_Prop_geoRight , 0 , 0 } }, 
+    { 0x2000 , { DFF_Prop_geoBottom , 0 , 0 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 1 , 8 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 1 , 2 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 7 , 8 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 3 , 2 } }, 
+    { 0x8000 , { 0 , 0 , 0x406 } }, 
+    { 0x2001 , { DFF_Prop_adjust3Value , 30573 , 4096 } }, 
+    { 0x2001 , { 0x40a , 2 , 1 } }, 
+    { 0xe000 , { 0x40a , DFF_Prop_geoBottom , DFF_Prop_adjust3Value } }, 
+    { 0x6000 , { 0x40a , DFF_Prop_adjust2Value , 0 } }, 
+    { 0x2001 , { DFF_Prop_adjust2Value , 1 , 2 } }, 
+    { 0x6000 , { 0x40a , 0x40e , 0 } }, 
+    { 0xa000 , { 0x40c , 0 , DFF_Prop_adjust2Value } }, 
+    { 0x6000 , { DFF_Prop_adjustValue , 0x405 , 0 } }, 
+    { 0xa000 , { DFF_Prop_geoRight , 0 , 0x411 } }, 
+    { 0xa000 , { DFF_Prop_geoRight , 0 , DFF_Prop_adjustValue } }, 
+    { 0xa000 , { 0x406 , 0 , DFF_Prop_adjustValue } }, 
+    { 0xe00f , { 0x414 , DFF_Prop_geoRight , 0x40a } }, 
+    { 0xa000 , { 0x40a , 0 , 0x415 } }, 
+    { 0xe000 , { 0x416 , 0x410 , 0x40a } }, 
+    { 0xe000 , { DFF_Prop_adjust3Value , 0x410 , 0x40a } }, 
+    { 0x2001 , { 0x40a , 2391 , 32768 } }, 
+    { 0xa000 , { 0x406 , 0 , 0x411 } }, 
+    { 0xe00f , { 0x41a , DFF_Prop_geoRight , 0x40a } }, 
+    { 0xe000 , { 0x40a , DFF_Prop_adjust2Value , 0x41b } }, 
+    { 0x6000 , { 0x416 , DFF_Prop_adjust2Value , 0 } }, 
+    { 0xa000 , { 0x40c , 0 , 0x41b } }, 
+    { 0xa000 , { DFF_Prop_geoBottom , 0 , DFF_Prop_adjust3Value } }, 
+    { 0x6000 , { 0x40a , 0x40c , 0 } }, 
+    { 0xe000 , { 0x420 , 0x40a , 0x410 } }, 
+    { 0xe000 , { 0x41f , 0x40a , 0x40d } }, 
+    { 0xe000 , { 0x420 , 0x40a , 0x40d } }, 
+    { 0xe000 , { 0x419 , 0x40c , 0x40f } }, 
+    { 0xa000 , { 0x410 , 0 , 0x40f } }, 
+    { 0x2001 , { 0x425 , 2 , 3 } }, 
+    { 0x6000 , { 0x401 , 0x426 , 0 } }, 
+    { 0x6000 , { DFF_Prop_adjust3Value , 0x426 , 0 } }, 
+    { 0x2005 , { 0x428 , 675 , 0 } }, 
+    { 0x2001 , { DFF_Prop_geoRight , 3 , 8 } }, 
+    { 0x2000 , { 0x42a , 0 , 4 } } 
 };
 
 static const SvxMSDffTextRectangles mso_sptEllipseRibbon2TextRect[] =
-{//@0,@22,@19,@1
+{
     { { 0 MSO_I, 22 MSO_I }, { 19 MSO_I, 1 MSO_I } }
 };
 
@@ -4784,9 +4784,9 @@ static const sal_Int32 mso_sptEllipseRibbon2Default[] =
 
 static const SvxMSDffHandle mso_sptEllipseRibbon2Handle[] =
 {
-//position="#0,topLeft" xrange="@5,@43
-//position="center,#1" yrange="@39,@31
-//position="topLeft,#2" yrange="@41,@24
+
+
+
     {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL| MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
         0x100, 0, 0, 0, 0x8/*5+3*/, 0x2e/*43+3*/, MIN_INT32, 0x7fffffff },
     {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_Y_MAX_IS_SPECIAL | MSDFF_HANDLE_FLAGS_RANGE_Y_MIN_IS_SPECIAL,
@@ -4807,8 +4807,8 @@ static const mso_CustomShape msosptEllipseRibbon2 =
     NULL, 0,
     (SvxMSDffHandle*)mso_sptEllipseRibbon2Handle, sizeof( mso_sptEllipseRibbon2Handle ) / sizeof( SvxMSDffHandle )
 };
-// End
-static const SvxMSDffVertPair mso_sptVerticalScrollVert[] = // adjustment1 : 0 - 5400
+
+static const SvxMSDffVertPair mso_sptVerticalScrollVert[] = 
 {
     { 1 MSO_I, 21600 }, { 0, 11 MSO_I }, { 1 MSO_I, 12 MSO_I }, { 0 MSO_I, 12 MSO_I },
     { 0 MSO_I, 1 MSO_I }, { 4 MSO_I, 0 }, { 2 MSO_I, 0 }, { 21600, 1 MSO_I },
@@ -4873,7 +4873,7 @@ static const mso_CustomShape msoVerticalScroll =
     NULL, 0,
     (SvxMSDffHandle*)mso_sptVerticalScrollHandle, SAL_N_ELEMENTS( mso_sptVerticalScrollHandle )
 };
-static const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   // adjustment1 : 0 - 5400
+static const SvxMSDffVertPair mso_sptHorizontalScrollVert[] =   
 {
     { 0, 4 MSO_I }, { 1 MSO_I, 0 MSO_I }, { 3 MSO_I, 0 MSO_I }, { 3 MSO_I, 1 MSO_I },
     { 2 MSO_I, 0 }, { 21600, 1 MSO_I }, { 21600, 13 MSO_I }, { 2 MSO_I, 12 MSO_I },
@@ -4934,7 +4934,7 @@ static const mso_CustomShape msoFlowChartProcess =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartAlternateProcessVert[] =
@@ -4971,7 +4971,7 @@ static const mso_CustomShape msoFlowChartAlternateProcess =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartDecisionVert[] =
@@ -4992,7 +4992,7 @@ static const mso_CustomShape msoFlowChartDecision =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartInputOutputVert[] =
@@ -5017,7 +5017,7 @@ static const mso_CustomShape msoFlowChartInputOutput =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartInputOutputGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartInputOutputGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartPredefinedProcessVert[] =
@@ -5048,7 +5048,7 @@ static const mso_CustomShape msoFlowChartPredefinedProcess =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartInternalStorageVert[] =
@@ -5079,14 +5079,14 @@ static const mso_CustomShape msoFlowChartInternalStorage =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartDocumentVert[] =
 {
     { 0, 0 }, { 21600, 0 }, { 21600, 17360 },
-    { 13050, 17220 }, { 13340, 20770 }, { 5620, 21600 },    // ccp
-    { 2860, 21100 }, { 1850, 20700 }, { 0,  20120 }         // ccp
+    { 13050, 17220 }, { 13340, 20770 }, { 5620, 21600 },    
+    { 2860, 21100 }, { 1850, 20700 }, { 0,  20120 }         
 };
 static const sal_uInt16 mso_sptFlowChartDocumentSegm[] =
 {
@@ -5110,7 +5110,7 @@ static const mso_CustomShape msoFlowChartDocument =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartDocumentGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartDocumentGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMultidocumentVert[] =
@@ -5118,8 +5118,8 @@ static const SvxMSDffVertPair mso_sptFlowChartMultidocumentVert[] =
     { 0, 3600 }, { 1500, 3600 }, { 1500, 1800 }, { 3000, 1800 },
     { 3000, 0 }, { 21600, 0 }, { 21600, 14409 }, { 21600 - 1500, 14409 },
     { 21600 - 1500, 14409 + 1800 }, { 21600 - 3000, 14409 + 1800 }, { 21600 - 3000, 14409 + 3600 },
-    { 11610, 14293 + 3600 }, { 11472, 17239 + 3600 }, { 4833, 17928 + 3600 },                       // ccp
-    { 2450, 17513 + 3600 }, { 1591, 17181 + 3600 }, { 0, 16700 + 3600 },                            // ccp
+    { 11610, 14293 + 3600 }, { 11472, 17239 + 3600 }, { 4833, 17928 + 3600 },                       
+    { 2450, 17513 + 3600 }, { 1591, 17181 + 3600 }, { 0, 16700 + 3600 },                            
 
     { 1500, 3600 }, { 21600 - 3000, 3600 }, { 21600 - 3000, 14409 + 1800 },
 
@@ -5128,8 +5128,8 @@ static const SvxMSDffVertPair mso_sptFlowChartMultidocumentVert[] =
 static const sal_uInt16 mso_sptFlowChartMultidocumentSegm[] =
 {
     0x4000, 0x000a, 0x2002, 0x6000, 0x8000,
-    0x4000, 0xaa00, 0x0002, 0x8000,         // NO FILL
-    0x4000, 0xaa00, 0x0002, 0x8000          // NO FILL
+    0x4000, 0xaa00, 0x0002, 0x8000,         
+    0x4000, 0xaa00, 0x0002, 0x8000          
 };
 static const SvxMSDffTextRectangles mso_sptFlowChartMultidocumentTextRect[] =
 {
@@ -5149,7 +5149,7 @@ static const mso_CustomShape msoFlowChartMultidocument =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartMultidocumentGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartMultidocumentGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartTerminatorVert[] =
@@ -5175,7 +5175,7 @@ static const mso_CustomShape msoFlowChartTerminator =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartPreparationVert[] =
@@ -5197,7 +5197,7 @@ static const mso_CustomShape msoFlowChartPreparation =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartManualInputVert[] =
@@ -5222,7 +5222,7 @@ static const mso_CustomShape msoFlowChartManualInput =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartManualInputGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartManualInputGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartManualOperationVert[] =
@@ -5247,7 +5247,7 @@ static const mso_CustomShape msoFlowChartManualOperation =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartManualOperationGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartManualOperationGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartConnectorVert[] =
@@ -5272,7 +5272,7 @@ static const mso_CustomShape msoFlowChartConnector =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartOffpageConnectorVert[] =
@@ -5294,7 +5294,7 @@ static const mso_CustomShape msoFlowChartOffpageConnector =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartPunchedCardVert[] =
@@ -5316,21 +5316,21 @@ static const mso_CustomShape msoFlowChartPunchedCard =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartPunchedTapeVert[] =
 {
-    { 0, 2230 },                                            // p
-    { 820, 3990 }, { 3410, 3980 }, { 5370, 4360 },          // ccp
-    { 7430, 4030 }, { 10110, 3890 }, { 10690, 2270 },       // ccp
-    { 11440, 300 }, { 14200, 160 }, { 16150, 0 },           // ccp
-    { 18670, 170 }, {  20690, 390 }, { 21600, 2230 },       // ccp
-    { 21600, 19420 },                                       // p
-    { 20640, 17510 }, { 18320, 17490 }, { 16140, 17240 },   // ccp
-    { 14710, 17370 }, { 11310, 17510 }, { 10770, 19430 },   // ccp
-    { 10150, 21150 }, { 7380, 21290 }, { 5290, 21600 },     // ccp
-    { 3220, 21250 }, { 610, 21130 }, { 0, 19420 }           // ccp
+    { 0, 2230 },                                            
+    { 820, 3990 }, { 3410, 3980 }, { 5370, 4360 },          
+    { 7430, 4030 }, { 10110, 3890 }, { 10690, 2270 },       
+    { 11440, 300 }, { 14200, 160 }, { 16150, 0 },           
+    { 18670, 170 }, {  20690, 390 }, { 21600, 2230 },       
+    { 21600, 19420 },                                       
+    { 20640, 17510 }, { 18320, 17490 }, { 16140, 17240 },   
+    { 14710, 17370 }, { 11310, 17510 }, { 10770, 19430 },   
+    { 10150, 21150 }, { 7380, 21290 }, { 5290, 21600 },     
+    { 3220, 21250 }, { 610, 21130 }, { 0, 19420 }           
 };
 static const sal_uInt16 mso_sptFlowChartPunchedTapeSegm[] =
 {
@@ -5354,7 +5354,7 @@ static const mso_CustomShape msoFlowChartPunchedTape =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartPunchedTapeGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartPunchedTapeGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartSummingJunctionVert[] =
@@ -5387,7 +5387,7 @@ static const mso_CustomShape msoFlowChartSummingJunction =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartOrVert[] =
@@ -5418,7 +5418,7 @@ static const mso_CustomShape msoFlowChartOr =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptEllipseGluePoints, SAL_N_ELEMENTS( mso_sptEllipseGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartCollateVert[] =
@@ -5443,7 +5443,7 @@ static const mso_CustomShape msoFlowChartCollate =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartCollateGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartCollateGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartSortVert[] =
@@ -5471,7 +5471,7 @@ static const mso_CustomShape msoFlowChartSort =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartExtractVert[] =
@@ -5496,7 +5496,7 @@ static const mso_CustomShape msoFlowChartExtract =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartExtractGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartExtractGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMergeVert[] =
@@ -5517,7 +5517,7 @@ static const mso_CustomShape msoFlowChartMerge =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartExtractGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartExtractGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartOnlineStorageVert[] =
@@ -5547,7 +5547,7 @@ static const mso_CustomShape msoFlowChartOnlineStorage =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartOnlineStorageGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartOnlineStorageGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartDelayVert[] =
@@ -5573,16 +5573,16 @@ static const mso_CustomShape msoFlowChartDelay =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMagneticTapeVert[] =
 {
     { 20980, 18150 }, { 20980, 21600 }, { 10670, 21600 },
-    { 4770, 21540 }, { 0, 16720 }, { 0, 10800 },            // ccp
-    { 0, 4840 }, { 4840, 0 }, { 10800, 0 },                 // ccp
-    { 16740, 0 }, { 21600, 4840 }, { 21600, 10800 },        // ccp
-    { 21600, 13520 }, { 20550, 16160 }, { 18670, 18170 }    // ccp
+    { 4770, 21540 }, { 0, 16720 }, { 0, 10800 },            
+    { 0, 4840 }, { 4840, 0 }, { 10800, 0 },                 
+    { 16740, 0 }, { 21600, 4840 }, { 21600, 10800 },        
+    { 21600, 13520 }, { 20550, 16160 }, { 18670, 18170 }    
 };
 static const sal_uInt16 mso_sptFlowChartMagneticTapeSegm[] =
 {
@@ -5602,7 +5602,7 @@ static const mso_CustomShape msoFlowChartMagneticTape =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMagneticDiskVert[] =
@@ -5635,7 +5635,7 @@ static const mso_CustomShape msoFlowChartMagneticDisk =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartMagneticDiskGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartMagneticDiskGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartMagneticDrumVert[] =
@@ -5668,7 +5668,7 @@ static const mso_CustomShape msoFlowChartMagneticDrum =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptFlowChartMagneticDrumGluePoints, SAL_N_ELEMENTS( mso_sptFlowChartMagneticDrumGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptFlowChartDisplayVert[] =
@@ -5694,7 +5694,7 @@ static const mso_CustomShape msoFlowChartDisplay =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptStandardGluePoints, SAL_N_ELEMENTS( mso_sptStandardGluePoints ),
-    NULL, 0     // handles
+    NULL, 0     
 };
 
 static const SvxMSDffVertPair mso_sptWedgeRectCalloutVert[] =
@@ -5715,47 +5715,47 @@ static const SvxMSDffVertPair mso_sptWedgeRectCalloutVert[] =
 };
 static const SvxMSDffCalculationData mso_sptWedgeRectCalloutCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },     //0x400
+    { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },     
     { 0x2000, { DFF_Prop_adjust2Value, 0,10800 } },
-    { 0x6006, { 0x412, DFF_Prop_adjustValue, 0 } },     //0x402
+    { 0x6006, { 0x412, DFF_Prop_adjustValue, 0 } },     
     { 0x6006, { 0x412, DFF_Prop_adjust2Value, 6280 } },
-    { 0x6006, { 0x417, DFF_Prop_adjustValue, 0 } },     //0x404
+    { 0x6006, { 0x417, DFF_Prop_adjustValue, 0 } },     
     { 0x6006, { 0x417, DFF_Prop_adjust2Value, 15320 } },
-    { 0x6006, { 0x41a, DFF_Prop_adjustValue, 6280 } },  //0x406
+    { 0x6006, { 0x41a, DFF_Prop_adjustValue, 6280 } },  
     { 0x6006, { 0x41a, DFF_Prop_adjust2Value, 21600 } },
-    { 0x6006, { 0x41d, DFF_Prop_adjustValue, 15320 } }, //0x408
+    { 0x6006, { 0x41d, DFF_Prop_adjustValue, 15320 } }, 
     { 0x6006, { 0x41d, DFF_Prop_adjust2Value, 21600 } },
-    { 0x6006, { 0x420, DFF_Prop_adjustValue, 21600 } }, //0x40a
+    { 0x6006, { 0x420, DFF_Prop_adjustValue, 21600 } }, 
     { 0x6006, { 0x420, DFF_Prop_adjust2Value, 15320 } },
-    { 0x6006, { 0x422, DFF_Prop_adjustValue, 21600 } }, //0x40c
+    { 0x6006, { 0x422, DFF_Prop_adjustValue, 21600 } }, 
     { 0x6006, { 0x422, DFF_Prop_adjust2Value, 6280 } },
-    { 0x6006, { 0x424, DFF_Prop_adjustValue, 15320 } }, //0x40e
+    { 0x6006, { 0x424, DFF_Prop_adjustValue, 15320 } }, 
     { 0x6006, { 0x424, DFF_Prop_adjust2Value, 0 } },
-    { 0x6006, { 0x426, DFF_Prop_adjustValue, 6280 } },  //0x410
+    { 0x6006, { 0x426, DFF_Prop_adjustValue, 6280 } },  
     { 0x6006, { 0x426, DFF_Prop_adjust2Value, 0 } },
-    { 0xa006, { DFF_Prop_adjustValue, -1, 0x413 } },    //0x412
+    { 0xa006, { DFF_Prop_adjustValue, -1, 0x413 } },    
     { 0xa006, { 0x401, -1, 0x416 } },
-    { 0x2003, { 0x400, 0, 0 } },                        //0x414
+    { 0x2003, { 0x400, 0, 0 } },                        
     { 0x2003, { 0x401, 0, 0 } },
-    { 0xa000, { 0x414, 0, 0x415 } },                    //0x416
+    { 0xa000, { 0x414, 0, 0x415 } },                    
     { 0xa006, { DFF_Prop_adjustValue, -1, 0x418 } },
-    { 0x6006, { 0x401, 0x416, -1 } },                   //0x418
+    { 0x6006, { 0x401, 0x416, -1 } },                   
     { 0x2000, { DFF_Prop_adjust2Value, 0, 21600 } },
-    { 0x6006, { 0x419, 0x41b, -1 } },                   //0x41a
+    { 0x6006, { 0x419, 0x41b, -1 } },                   
     { 0xa006, { 0x400, -1, 0x41c } },
-    { 0xa000, { 0x415, 0, 0x414 } },                    //0x41c
+    { 0xa000, { 0x415, 0, 0x414 } },                    
     { 0x6006, { 0x419, 0x41e, -1 } },
-    { 0x6006, { 0x400, 0x41c, -1 } },                   //0x41e
+    { 0x6006, { 0x400, 0x41c, -1 } },                   
     { 0x2000, { DFF_Prop_adjustValue, 0, 21600 } },
-    { 0x6006, { 0x41f, 0x421, -1 } },                   //0x420
+    { 0x6006, { 0x41f, 0x421, -1 } },                   
     { 0x6006, { 0x401, 0x416, -1 } },
-    { 0x6006, { 0x41f, 0x423, -1 } },                   //0x422
+    { 0x6006, { 0x41f, 0x423, -1 } },                   
     { 0xa006, { 0x401, -1, 0x416 } },
-    { 0xa006, { DFF_Prop_adjust2Value, -1, 0x425 } },   //0x424
+    { 0xa006, { DFF_Prop_adjust2Value, -1, 0x425 } },   
     { 0x6006, { 0x400, 0x41c, -1 } },
-    { 0xa006, { DFF_Prop_adjust2Value, -1, 0x427 } },   //0x426
+    { 0xa006, { DFF_Prop_adjust2Value, -1, 0x427 } },   
     { 0xa006, { 0x400, -1, 0x41c } },
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         //0x428
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         
     { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } }
 };
 static const sal_Int32 mso_sptWedgeRectCalloutDefault[] =
@@ -5787,7 +5787,7 @@ static const mso_CustomShape msoWedgeRectCallout =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptWedgeRectCalloutGluePoints, SAL_N_ELEMENTS( mso_sptWedgeRectCalloutGluePoints ),
-    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
+    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        
 };
 static const SvxMSDffVertPair mso_sptWedgeRRectCalloutVert[] =
 {
@@ -5823,7 +5823,7 @@ static const mso_CustomShape msoWedgeRRectCallout =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
+    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        
 };
 static const SvxMSDffVertPair mso_sptBalloonVert[] =
 {
@@ -5862,7 +5862,7 @@ static const mso_CustomShape msoBalloon =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptBalloonHandle, SAL_N_ELEMENTS( mso_sptBalloonHandle )        // handles
+    (SvxMSDffHandle*)mso_sptBalloonHandle, SAL_N_ELEMENTS( mso_sptBalloonHandle )        
 };
 static const SvxMSDffVertPair mso_sptWedgeEllipseCalloutVert[] =
 {
@@ -5874,30 +5874,30 @@ static const sal_uInt16 mso_sptWedgeEllipseCalloutSegm[] =
 };
 static const SvxMSDffCalculationData mso_sptWedgeEllipseCalloutCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },     // 00 rad x
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 10800 } },    // 01 rad y
-    { 0x6001, { 0x400, 0x400, 1 } },                    // 02 rad x^2
-    { 0x6001, { 0x401, 0x401, 1 } },                    // 03 rad y^2
-    { 0x6000, { 0x402, 0x403, 0 } },                    // 04
-    { 0x200d, { 0x404, 0, 0 } },                        // 05
-    { 0x2000, { 0x405, 0, 10800 } },                    // 06 > 0 ? spur needs to be drawn : 10800
-    { 0x6008, { 0x400, 0x401, 0 } },                    // 07 atan2 -> angle
-    { 0x2000, { 0x407, 0, 10 } },                       // 08
-    { 0x2000, { 0x407, 10, 0 } },                       // 09
-    { 0x400a, { 10800, 0x407, 0 } },                    // 0a
-    { 0x4009, { 10800, 0x407, 0 } },                    // 0b
-    { 0x2000, { 0x40a, 10800, 0 } },                    // 0c
-    { 0x2000, { 0x40b, 10800, 0 } },                    // 0d
-    { 0xe006, { 0x406, DFF_Prop_adjustValue, 0x40c } }, // 0e
-    { 0xe006, { 0x406, DFF_Prop_adjust2Value, 0x40d } },// 0f
-    { 0x400a, { 10800, 0x408, 0 } },                    // 10
-    { 0x4009, { 10800, 0x408, 0 } },                    // 11
-    { 0x2000, { 0x410, 10800, 0 } },                    // 12
-    { 0x2000, { 0x411, 10800, 0 } },                    // 13
-    { 0x400a, { 10800, 0x409, 0 } },                    // 14
-    { 0x4009, { 10800, 0x409, 0 } },                    // 15
-    { 0x2000, { 0x414, 10800, 0 } },                    // 16
-    { 0x2000, { 0x415, 10800, 0 } }                     // 17
+    { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },     
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 10800 } },    
+    { 0x6001, { 0x400, 0x400, 1 } },                    
+    { 0x6001, { 0x401, 0x401, 1 } },                    
+    { 0x6000, { 0x402, 0x403, 0 } },                    
+    { 0x200d, { 0x404, 0, 0 } },                        
+    { 0x2000, { 0x405, 0, 10800 } },                    
+    { 0x6008, { 0x400, 0x401, 0 } },                    
+    { 0x2000, { 0x407, 0, 10 } },                       
+    { 0x2000, { 0x407, 10, 0 } },                       
+    { 0x400a, { 10800, 0x407, 0 } },                    
+    { 0x4009, { 10800, 0x407, 0 } },                    
+    { 0x2000, { 0x40a, 10800, 0 } },                    
+    { 0x2000, { 0x40b, 10800, 0 } },                    
+    { 0xe006, { 0x406, DFF_Prop_adjustValue, 0x40c } }, 
+    { 0xe006, { 0x406, DFF_Prop_adjust2Value, 0x40d } },
+    { 0x400a, { 10800, 0x408, 0 } },                    
+    { 0x4009, { 10800, 0x408, 0 } },                    
+    { 0x2000, { 0x410, 10800, 0 } },                    
+    { 0x2000, { 0x411, 10800, 0 } },                    
+    { 0x400a, { 10800, 0x409, 0 } },                    
+    { 0x4009, { 10800, 0x409, 0 } },                    
+    { 0x2000, { 0x414, 10800, 0 } },                    
+    { 0x2000, { 0x415, 10800, 0 } }                     
 };
 static const sal_Int32 mso_sptWedgeEllipseCalloutDefault[] =
 {
@@ -5921,50 +5921,50 @@ static const mso_CustomShape msoWedgeEllipseCallout =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     (SvxMSDffVertPair*)mso_sptWedgeEllipseCalloutGluePoints, SAL_N_ELEMENTS( mso_sptWedgeEllipseCalloutGluePoints ),
-    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
+    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        
 };
 
 static const SvxMSDffVertPair mso_sptCloudCalloutVert[] =
 {
-    { 1930,7160 },                                      // p
-    { 1530,4490 }, { 3400,1970 }, { 5270,1970 },        // ccp
-    { 5860,1950 }, { 6470,2210 }, { 6970,2600 },        // ccp
-    { 7450,1390 }, { 8340,650 }, { 9340,650 },          // ccp
-    { 10004,690 }, { 10710,1050 }, { 11210,1700 },      // ccp
-    { 11570,630 }, { 12330,0 }, { 13150,0 },            // ccp
-    { 13840,0 }, { 14470,460 }, { 14870,1160 },         // ccp
-    { 15330,440 }, { 16020,0 }, { 16740,0 },            // ccp
-    { 17910,0 }, { 18900,1130 }, { 19110,2710 },        // ccp
-    { 20240,3150 }, { 21060,4580 }, { 21060,6220 },     // ccp
-    { 21060,6720 }, { 21000,7200 }, { 20830,7660 },     // ccp
-    { 21310,8460 }, { 21600,9450 }, { 21600,10460 },    // ccp
-    { 21600,12750 }, { 20310,14680 }, { 18650,15010 },  // ccp
-    { 18650,17200 }, { 17370,18920 }, { 15770,18920 },  // ccp
-    { 15220,18920 }, { 14700,18710 }, { 14240,18310 },  // ccp
-    { 13820,20240 }, { 12490,21600 }, { 11000,21600 },  // ccp
-    { 9890,21600 }, { 8840,20790 }, { 8210,19510 },     // ccp
-    { 7620,20000 }, { 7930,20290 }, { 6240,20290 },     // ccp
-    { 4850,20290 }, { 3570,19280 }, { 2900,17640 },     // ccp
-    { 1300,17600 }, { 480,16300 }, { 480,14660 },       // ccp
-    { 480,13900 }, { 690,13210 }, { 1070,12640 },       // ccp
-    { 380,12160 }, { 0,11210 }, { 0,10120 },            // ccp
-    { 0,8590 }, { 840,7330 }, { 1930,7160 },            // ccp
+    { 1930,7160 },                                      
+    { 1530,4490 }, { 3400,1970 }, { 5270,1970 },        
+    { 5860,1950 }, { 6470,2210 }, { 6970,2600 },        
+    { 7450,1390 }, { 8340,650 }, { 9340,650 },          
+    { 10004,690 }, { 10710,1050 }, { 11210,1700 },      
+    { 11570,630 }, { 12330,0 }, { 13150,0 },            
+    { 13840,0 }, { 14470,460 }, { 14870,1160 },         
+    { 15330,440 }, { 16020,0 }, { 16740,0 },            
+    { 17910,0 }, { 18900,1130 }, { 19110,2710 },        
+    { 20240,3150 }, { 21060,4580 }, { 21060,6220 },     
+    { 21060,6720 }, { 21000,7200 }, { 20830,7660 },     
+    { 21310,8460 }, { 21600,9450 }, { 21600,10460 },    
+    { 21600,12750 }, { 20310,14680 }, { 18650,15010 },  
+    { 18650,17200 }, { 17370,18920 }, { 15770,18920 },  
+    { 15220,18920 }, { 14700,18710 }, { 14240,18310 },  
+    { 13820,20240 }, { 12490,21600 }, { 11000,21600 },  
+    { 9890,21600 }, { 8840,20790 }, { 8210,19510 },     
+    { 7620,20000 }, { 7930,20290 }, { 6240,20290 },     
+    { 4850,20290 }, { 3570,19280 }, { 2900,17640 },     
+    { 1300,17600 }, { 480,16300 }, { 480,14660 },       
+    { 480,13900 }, { 690,13210 }, { 1070,12640 },       
+    { 380,12160 }, { 0,11210 }, { 0,10120 },            
+    { 0,8590 }, { 840,7330 }, { 1930,7160 },            
 
-    { 1930, 7160 }, { 1950, 7410 }, { 2040, 7690 }, { 2090, 7920 },         // pccp
-    { 6970, 2600 }, { 7200, 2790 }, { 7480, 3050 }, { 7670, 3310 },         // pccp
-    { 11210, 1700 }, { 11130, 1910 }, { 11080, 2160 }, { 11030, 2400 },     // pccp
-    { 14870, 1160 }, { 14720, 1400 }, { 14640, 1720 }, { 14540, 2010 },     // pccp
-    { 19110, 2710 }, { 19130, 2890 }, { 19230, 3290 }, { 19190, 3380 },     // pccp
-    { 20830, 7660 }, { 20660, 8170 }, { 20430, 8620 }, { 20110, 8990 },     // pccp
-    { 18660, 15010 }, { 18740, 14200 }, { 18280, 12200 }, { 17000, 11450 }, // pccp
-    { 14240, 18310 }, { 14320, 17980 }, { 14350, 17680 }, { 14370, 17360 }, // pccp
-    { 8220, 19510 }, { 8060, 19250 }, { 7960, 18950 }, { 7860, 18640 },     // pccp
-    { 2900, 17640 }, { 3090, 17600 }, { 3280, 17540 }, { 3460, 17450 },     // pccp
-    { 1070, 12640 }, { 1400, 12900 }, { 1780, 13130 }, { 2330, 13040 },     // pccp
+    { 1930, 7160 }, { 1950, 7410 }, { 2040, 7690 }, { 2090, 7920 },         
+    { 6970, 2600 }, { 7200, 2790 }, { 7480, 3050 }, { 7670, 3310 },         
+    { 11210, 1700 }, { 11130, 1910 }, { 11080, 2160 }, { 11030, 2400 },     
+    { 14870, 1160 }, { 14720, 1400 }, { 14640, 1720 }, { 14540, 2010 },     
+    { 19110, 2710 }, { 19130, 2890 }, { 19230, 3290 }, { 19190, 3380 },     
+    { 20830, 7660 }, { 20660, 8170 }, { 20430, 8620 }, { 20110, 8990 },     
+    { 18660, 15010 }, { 18740, 14200 }, { 18280, 12200 }, { 17000, 11450 }, 
+    { 14240, 18310 }, { 14320, 17980 }, { 14350, 17680 }, { 14370, 17360 }, 
+    { 8220, 19510 }, { 8060, 19250 }, { 7960, 18950 }, { 7860, 18640 },     
+    { 2900, 17640 }, { 3090, 17600 }, { 3280, 17540 }, { 3460, 17450 },     
+    { 1070, 12640 }, { 1400, 12900 }, { 1780, 13130 }, { 2330, 13040 },     
 
-    { 0x11 MSO_I, 0x12 MSO_I }, { 1800, 1800 }, { 0, 360 },                 // circ1
-    { 0x13 MSO_I, 0x14 MSO_I }, { 1200, 1200 }, { 0, 360 },                 // circ2
-    { 0xd MSO_I, 0xe MSO_I }, { 700, 700 }, { 0, 360 }                      // circ3
+    { 0x11 MSO_I, 0x12 MSO_I }, { 1800, 1800 }, { 0, 360 },                 
+    { 0x13 MSO_I, 0x14 MSO_I }, { 1200, 1200 }, { 0, 360 },                 
+    { 0xd MSO_I, 0xe MSO_I }, { 700, 700 }, { 0, 360 }                      
 };
 static const sal_uInt16 mso_sptCloudCalloutSegm[] =
 {
@@ -5989,24 +5989,24 @@ static const SvxMSDffCalculationData mso_sptCloudCalloutCalc[] =
     { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },
     { 0x2000, { DFF_Prop_adjust2Value, 0, 10800 } },
     { 0x6008, { 0x400, 0x401, 0 } },
-    { 0x400a, { 10800, 0x402, 0 } },                    // 3
-    { 0x4009, { 10800, 0x402, 0 } },                    // 4
-    { 0x2000, { 0x403, 10800, 0 } },                    // 5
-    { 0x2000, { 0x404, 10800, 0 } },                    // 6
-    { 0xa000, { DFF_Prop_adjustValue, 0, 0x405 } },     // 7
-    { 0xa000, { DFF_Prop_adjust2Value,0, 0x406 } },     // 8
-    { 0x2001, { 0x407, 1, 3 } },                        // 9
-    { 0x2001, { 0x408, 1, 3 } },                        // 0xa
-    { 0x2001, { 0x407, 2, 3 } },                        // 0xb
-    { 0x2001, { 0x408, 2, 3 } },                        // 0xc
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         // 0xd
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        // 0xe
-    { 0x2001, { 0x403, 1, 10800 / 900 } },              // 0xf  taking half x distance of the radius from the first bobble
-    { 0x2001, { 0x404, 1, 10800 / 900 } },              // 0x10
-    { 0xe000, { 0x409, 0x405, 0x40f } },                // 0x11
-    { 0xe000, { 0x40a, 0x406, 0x410 } },                // 0x12
-    { 0x6000, { 0x40b, 0x405, 0 } },                    // 0x13
-    { 0x6000, { 0x40c, 0x406, 0 } }                     // 0x14
+    { 0x400a, { 10800, 0x402, 0 } },                    
+    { 0x4009, { 10800, 0x402, 0 } },                    
+    { 0x2000, { 0x403, 10800, 0 } },                    
+    { 0x2000, { 0x404, 10800, 0 } },                    
+    { 0xa000, { DFF_Prop_adjustValue, 0, 0x405 } },     
+    { 0xa000, { DFF_Prop_adjust2Value,0, 0x406 } },     
+    { 0x2001, { 0x407, 1, 3 } },                        
+    { 0x2001, { 0x408, 1, 3 } },                        
+    { 0x2001, { 0x407, 2, 3 } },                        
+    { 0x2001, { 0x408, 2, 3 } },                        
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },         
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },        
+    { 0x2001, { 0x403, 1, 10800 / 900 } },              
+    { 0x2001, { 0x404, 1, 10800 / 900 } },              
+    { 0xe000, { 0x409, 0x405, 0x40f } },                
+    { 0xe000, { 0x40a, 0x406, 0x410 } },                
+    { 0x6000, { 0x40b, 0x405, 0 } },                    
+    { 0x6000, { 0x40c, 0x406, 0 } }                     
 };
 static const sal_Int32 mso_sptCloudCalloutDefault[] =
 {
@@ -6026,50 +6026,50 @@ static const mso_CustomShape msoCloudCallout =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        // handles
+    (SvxMSDffHandle*)mso_sptCalloutHandle, SAL_N_ELEMENTS( mso_sptCalloutHandle )        
 };
 
-static const SvxMSDffVertPair mso_sptWaveVert[] =   // adjustment1 : 0 - 4460
-{                                                   // adjustment2 : 8640 - 12960
+static const SvxMSDffVertPair mso_sptWaveVert[] =   
+{                                                   
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 24 MSO_I, 1 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 29 MSO_I, 1 MSO_I }
 };
 static const SvxMSDffCalculationData mso_sptWaveCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //400 (vert.adj)
-    { 0x8000, { 21600, 0, 0x400 } },            //401
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },//402 (horz.adj)
-    { 0x2000, { 0x402, 0, 10800 } },            //403 -2160 -> 2160 (horz.adj)
-    { 0x2001, { 0x403, 2, 1 } },                //404 -4320 -> 4320 (horz.adj)
-    { 0x2003, { 0x404, 0, 0 } },                //405 abs( 0x404 )  (horz.adj)
-    { 0x8000, { 4320, 0, 0x405 } },             //406
-    { 0xa006, { 0x403, 0, 0x405 } },            //407
-    { 0x4001, { 15800, 0x400, 4460 } },         //408 0 -> 15800    (vert.adj)
-    { 0xa000, { 0x400, 0, 0x408 } },            //409
-    { 0x6000, { 0x400, 0x408, 0 } },            //40a
-    { 0x8000, { 21600, 0, 0x404 } },            //40b
-    { 0x6006, { 0x403, 0x40b, 21600 } },        //40c
-    { 0xa000, { 0x40c, 0, 0x407 } },            //40d width between p0 and p1
-    { 0x2001, { 0x405, 1, 2 } },                //40e
-    { 0xa000, { 0x407, 7200, 0x40e } },         //40f
-    { 0x6000, { 0x40c, 0x40e, 7200 } },         //410
-    { 0x2001, { 0x40d, 1, 2 } },                //411 1/2 width
-    { 0x6000, { 0x407, 0x411, 0 } },            //412 top center glue xpos
-    { 0x8000, { 21600, 0, 0x412 } },            //413 bottom center glue xpos
-    { 0x2001, { 0x405, 1, 2 } },                //414 left glue x pos
-    { 0x8000, { 21600, 0, 0x414 } },            //415 right glue x pos
-    { 0x2001, { 0x400, 2, 1 } },                //416 y1 (textbox)
-    { 0x8000, { 21600, 0, 0x416 } },            //417 y2 (textbox)
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x8000, { 21600, 0, 0x400 } },            
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { 0x402, 0, 10800 } },            
+    { 0x2001, { 0x403, 2, 1 } },                
+    { 0x2003, { 0x404, 0, 0 } },                
+    { 0x8000, { 4320, 0, 0x405 } },             
+    { 0xa006, { 0x403, 0, 0x405 } },            
+    { 0x4001, { 15800, 0x400, 4460 } },         
+    { 0xa000, { 0x400, 0, 0x408 } },            
+    { 0x6000, { 0x400, 0x408, 0 } },            
+    { 0x8000, { 21600, 0, 0x404 } },            
+    { 0x6006, { 0x403, 0x40b, 21600 } },        
+    { 0xa000, { 0x40c, 0, 0x407 } },            
+    { 0x2001, { 0x405, 1, 2 } },                
+    { 0xa000, { 0x407, 7200, 0x40e } },         
+    { 0x6000, { 0x40c, 0x40e, 7200 } },         
+    { 0x2001, { 0x40d, 1, 2 } },                
+    { 0x6000, { 0x407, 0x411, 0 } },            
+    { 0x8000, { 21600, 0, 0x412 } },            
+    { 0x2001, { 0x405, 1, 2 } },                
+    { 0x8000, { 21600, 0, 0x414 } },            
+    { 0x2001, { 0x400, 2, 1 } },                
+    { 0x8000, { 21600, 0, 0x416 } },            
 
-    { 0x8000, { 21600, 0, 0x407 } },            //418 p2
+    { 0x8000, { 21600, 0, 0x407 } },            
 
-    { 0x8000, { 21600, 0, 0x40f } },            //419 c
-    { 0x6000, { 0x401, 0x408, 0 } },            //41a
+    { 0x8000, { 21600, 0, 0x40f } },            
+    { 0x6000, { 0x401, 0x408, 0 } },            
 
-    { 0x8000, { 21600, 0, 0x410 } },            //41b c
-    { 0xa000, { 0x401, 0, 0x408 } },            //41c
+    { 0x8000, { 21600, 0, 0x410 } },            
+    { 0xa000, { 0x401, 0, 0x408 } },            
 
-    { 0x8000, { 21600, 0, 0x40c } }             //41d p3
+    { 0x8000, { 21600, 0, 0x40c } }             
 };
 static const SvxMSDffVertPair mso_sptWaveGluePoints[] =
 {
@@ -6107,51 +6107,51 @@ static const mso_CustomShape msoWave =
     (SvxMSDffHandle*)mso_sptWaveHandle, SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptDoubleWaveVert[] = // adjustment1 : 0 - 2230
-{                                                       // adjustment2 : 8640 - 12960
+static const SvxMSDffVertPair mso_sptDoubleWaveVert[] = 
+{                                                       
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 0x1e MSO_I, 10 MSO_I }, { 0x12 MSO_I, 0 MSO_I }, { 0x1f MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 24 MSO_I, 1 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 0x21 MSO_I, 28 MSO_I }, { 0x13 MSO_I, 1 MSO_I }, { 0x20 MSO_I, 26 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 29 MSO_I, 1 MSO_I }
 };
 static const SvxMSDffCalculationData mso_sptDoubleWaveCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //400 (vert.adj)
-    { 0x8000, { 21600, 0, 0x400 } },            //401
-    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },//402 (horz.adj)
-    { 0x2000, { 0x402, 0, 10800 } },            //403 -2160 -> 2160 (horz.adj)
-    { 0x2001, { 0x403, 2, 1 } },                //404 -4320 -> 4320 (horz.adj)
-    { 0x2003, { 0x404, 0, 0 } },                //405 abs( 0x404 )  (horz.adj)
-    { 0x8000, { 4320, 0, 0x405 } },             //406 -> not used
-    { 0xa006, { 0x403, 0, 0x405 } },            //407
-    { 0x4001, { 7900, 0x400, 2230 } },          //408 0 -> 7900 (vert.adj)
-    { 0xa000, { 0x400, 0, 0x408 } },            //409
-    { 0x6000, { 0x400, 0x408, 0 } },            //40a
-    { 0x8000, { 21600, 0, 0x404 } },            //40b
-    { 0x6006, { 0x403, 0x40b, 21600 } },        //40c
-    { 0xa000, { 0x40c, 0, 0x407 } },            //40d width between p0 and p1
-    { 0x2001, { 0x405, 1, 2 } },                //40e
-    { 0xa000, { 0x407, 3600, 0x40e } },         //40f
-    { 0x6000, { 0x40c, 0x40e, 3600 } },         //410
-    { 0x2001, { 0x40d, 1, 2 } },                //411 1/2 width
-    { 0x6000, { 0x407, 0x411, 0 } },            //412 top center glue xpos
-    { 0x8000, { 21600, 0, 0x412 } },            //413 bottom center glue xpos
-    { 0x2001, { 0x405, 1, 2 } },                //414 left glue x pos
-    { 0x8000, { 21600, 0, 0x414 } },            //415 right glue x pos
-    { 0x2001, { 0x400, 2, 1 } },                //416 y1 (textbox)
-    { 0x8000, { 21600, 0, 0x416 } },            //417 y2 (textbox)
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x8000, { 21600, 0, 0x400 } },            
+    { 0x2000, { DFF_Prop_adjust2Value, 0, 0 } },
+    { 0x2000, { 0x402, 0, 10800 } },            
+    { 0x2001, { 0x403, 2, 1 } },                
+    { 0x2003, { 0x404, 0, 0 } },                
+    { 0x8000, { 4320, 0, 0x405 } },             
+    { 0xa006, { 0x403, 0, 0x405 } },            
+    { 0x4001, { 7900, 0x400, 2230 } },          
+    { 0xa000, { 0x400, 0, 0x408 } },            
+    { 0x6000, { 0x400, 0x408, 0 } },            
+    { 0x8000, { 21600, 0, 0x404 } },            
+    { 0x6006, { 0x403, 0x40b, 21600 } },        
+    { 0xa000, { 0x40c, 0, 0x407 } },            
+    { 0x2001, { 0x405, 1, 2 } },                
+    { 0xa000, { 0x407, 3600, 0x40e } },         
+    { 0x6000, { 0x40c, 0x40e, 3600 } },         
+    { 0x2001, { 0x40d, 1, 2 } },                
+    { 0x6000, { 0x407, 0x411, 0 } },            
+    { 0x8000, { 21600, 0, 0x412 } },            
+    { 0x2001, { 0x405, 1, 2 } },                
+    { 0x8000, { 21600, 0, 0x414 } },            
+    { 0x2001, { 0x400, 2, 1 } },                
+    { 0x8000, { 21600, 0, 0x416 } },            
 
-    { 0x8000, { 21600, 0, 0x407 } },            //418 p2
+    { 0x8000, { 21600, 0, 0x407 } },            
 
-    { 0x8000, { 21600, 0, 0x40f } },            //419 c
-    { 0x6000, { 0x401, 0x408, 0 } },            //41a
+    { 0x8000, { 21600, 0, 0x40f } },            
+    { 0x6000, { 0x401, 0x408, 0 } },            
 
-    { 0x8000, { 21600, 0, 0x410 } },            //41b c
-    { 0xa000, { 0x401, 0, 0x408 } },            //41c
+    { 0x8000, { 21600, 0, 0x410 } },            
+    { 0xa000, { 0x401, 0, 0x408 } },            
 
-    { 0x8000, { 21600, 0, 0x40c } },            //41d p3
-    { 0xa000, { 0x412, 0, 0x40e } },            //41e
-    { 0x6000, { 0x412, 0x40e, 0 } },            //41f
-    { 0xa000, { 0x413, 0, 0x40e } },            //420
-    { 0x6000, { 0x413, 0x40e, 0 } }             //421
+    { 0x8000, { 21600, 0, 0x40c } },            
+    { 0xa000, { 0x412, 0, 0x40e } },            
+    { 0x6000, { 0x412, 0x40e, 0 } },            
+    { 0xa000, { 0x413, 0, 0x40e } },            
+    { 0x6000, { 0x413, 0x40e, 0 } }             
 };
 static const SvxMSDffVertPair mso_sptDoubleWaveGluePoints[] =
 {
@@ -6189,7 +6189,7 @@ static const mso_CustomShape msoDoubleWave =
     (SvxMSDffHandle*)mso_sptDoubleWaveHandle, SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
-// for each shapetype a bit of 1 is indicating that the shape is NOT filled by default
+
 static const sal_uInt16 mso_DefaultFillingTable[] =
 {
     0x0000, 0x0018, 0x01ff, 0x0000, 0x0c00, 0x01e0, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0600, 0x0000, 0x0000, 0x0000, 0x0000
@@ -6229,16 +6229,16 @@ sal_Int16 GetCustomShapeConnectionTypeDefault( MSO_SPT eSpType )
     return nGluePointType;
 }
 
-// for each shapetype a bit of 1 is indicating that the shape is NOT stroked by default
-// #i28269#
+
+
 static const sal_uInt16 mso_DefaultStrokingTable[] =
 {
     0x0000, 0x0000, 0x0000, 0x0000,
-    0x0800, 0x0000, 0x0000, 0x0000, // #i28269# Added shape 75 (mso_sptPictureFrame)
+    0x0800, 0x0000, 0x0000, 0x0000, 
     0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000
 };
-// #i28269#
+
 sal_Bool IsCustomShapeStrokedByDefault( MSO_SPT eSpType )
 {
     sal_Bool bIsStrokedByDefault = sal_True;
@@ -6270,16 +6270,16 @@ static const SvxMSDffVertPair mso_sptTextPlainTextVert[] =
 {
     { 3 MSO_I, 0 }, { 5 MSO_I, 0 }, { 6 MSO_I, 21600 }, { 7 MSO_I, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextPlainTextCalc[] =   // adjustment1 : 6629 - 14971
+static const SvxMSDffCalculationData mso_sptTextPlainTextCalc[] =   
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 10800 } },
     { 0x2001, { 0x400, 2, 1 } },
     { 0x2003, { 0x401, 0, 0 } },
-    { 0xa006, { 0x401, 0, 0x402 } },        // x1(3)
+    { 0xa006, { 0x401, 0, 0x402 } },        
     { 0x8000, { 21600, 0, 0x402 } },
-    { 0x6006, { 0x401, 0x404, 21600 } },    // x2(5)
-    { 0x6006, { 0x401, 0x402, 0 } },        // x2
-    { 0xa006, { 0x401, 21600, 0x404 } }     // x3(7)
+    { 0x6006, { 0x401, 0x404, 21600 } },    
+    { 0x6006, { 0x401, 0x402, 0 } },        
+    { 0xa006, { 0x401, 21600, 0x404 } }     
 };
 static const sal_uInt16 mso_sptTextPlainTextSegm[] =
 {
@@ -6309,7 +6309,7 @@ static const SvxMSDffVertPair mso_sptTextStopVert[] =
     { 0, 0 MSO_I }, { 7200, 0 }, { 14400, 0 }, { 21600, 0 MSO_I },
     { 0, 1 MSO_I }, { 7200, 21600 }, { 14400, 21600 }, { 21600, 1 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextStopCalc[] =    // adjustment1 : 3080 - 10800
+static const SvxMSDffCalculationData mso_sptTextStopCalc[] =    
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
@@ -6345,7 +6345,7 @@ static const SvxMSDffVertPair mso_sptTextTriangleVert[] =
 {
     { 0, 0 MSO_I }, { 10800, 0 }, { 21600, 0 MSO_I }, { 0, 21600 }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextTriangleCalc[] =    // adjustment1 : 6629 - 14971
+static const SvxMSDffCalculationData mso_sptTextTriangleCalc[] =    
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }
 };
@@ -6397,7 +6397,7 @@ static const SvxMSDffVertPair mso_sptTextChevronVert[] =
 {
     { 0, 0 MSO_I }, { 10800, 0 }, { 21600, 0 MSO_I }, { 0, 21600 }, { 10800, 1 MSO_I }, { 21600, 21600 }
 };
-static const SvxMSDffCalculationData mso_sptTextChevronCalc[] = // adjustment1 : 6629 - 14971
+static const SvxMSDffCalculationData mso_sptTextChevronCalc[] = 
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
@@ -6429,7 +6429,7 @@ static const SvxMSDffVertPair mso_sptTextChevronInvertedVert[] =
 {
     { 0, 0 }, { 10800, 1 MSO_I }, { 21600, 0 }, { 0, 0 MSO_I }, { 10800, 21600 }, { 21600, 0 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextChevronInvertedCalc[] = // adjustment1 : 6629 - 14971
+static const SvxMSDffCalculationData mso_sptTextChevronInvertedCalc[] = 
 {
     { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },
     { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
@@ -6456,24 +6456,24 @@ static const mso_CustomShape msoTextChevronInverted =
     NULL, 0,
     (SvxMSDffHandle*)mso_sptTextChevronInvertedHandle, SAL_N_ELEMENTS( mso_sptTextChevronInvertedHandle )
 };
-//V 0 0 21600 ?f2 0 ?f0 21600 ?f0
-//W 0 0 21600 ?f2 21600 ?f0 0 ?f0 N
-//V 0 ?f3 21600 21600 0 ?f1 21600 ?f1
-//W 0 ?f3 21600 21600 21600 ?f1 0 ?f1 N
-//mso_sptTextRingInside
+
+
+
+
+
 static const SvxMSDffVertPair mso_sptTextRingInsideVert[] =
 {
-    { 0, 0 }, { 21600, 2 MSO_I }, { 0, 0 MSO_I },{ 21600, 0 MSO_I },//V
-    { 0, 0 }, { 21600, 2 MSO_I }, { 21600, 0 MSO_I },{ 0, 0 MSO_I },//W
-    { 0, 3 MSO_I }, { 21600, 21600 }, { 0, 1 MSO_I },{ 21600, 1 MSO_I },//V
-    { 0, 3 MSO_I }, { 21600, 21600 }, { 21600, 1 MSO_I },{ 0, 1 MSO_I }//W
+    { 0, 0 }, { 21600, 2 MSO_I }, { 0, 0 MSO_I },{ 21600, 0 MSO_I },
+    { 0, 0 }, { 21600, 2 MSO_I }, { 21600, 0 MSO_I },{ 0, 0 MSO_I },
+    { 0, 3 MSO_I }, { 21600, 21600 }, { 0, 1 MSO_I },{ 21600, 1 MSO_I },
+    { 0, 3 MSO_I }, { 21600, 21600 }, { 21600, 1 MSO_I },{ 0, 1 MSO_I }
 };
-static const SvxMSDffCalculationData mso_sptTextRingInsideCalc[] =  // adjustment1 : 6629 - 14971
+static const SvxMSDffCalculationData mso_sptTextRingInsideCalc[] =  
 {
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
     { 0x8000, { 21600, 0, 0x400 } },
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //$0
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }//21600-$0
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
 static const sal_uInt16 mso_sptTextRingInsideSegm[] =
 {
@@ -6497,21 +6497,21 @@ static const mso_CustomShape msoTextRingInside =
     NULL, 0,
     (SvxMSDffHandle*)mso_sptTextRingInsideHandle, sizeof( mso_sptTextRingInsideHandle ) / sizeof( SvxMSDffHandle )
 };
-//mso_sptTextRingOutside
-//path = U 10800 ?f0 21600 ?f2 180 539 N U 10800 ?f1 21600 ?f2 180 539 N
+
+
 static const SvxMSDffVertPair mso_sptTextRingOutsideVert[] =
 {
-    { 10800, 0 MSO_I }, { 21600, 2 MSO_I }, { 180, 539},//U
-    { 10800, 1 MSO_I }, { 21600, 2 MSO_I }, { 180, 539 }//U
-    //{ 10800, 0 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 },
-    //{ 10800, 1 MSO_I }, { 10800, 0 MSO_I }, { 180, 359 }
+    { 10800, 0 MSO_I }, { 21600, 2 MSO_I }, { 180, 539},
+    { 10800, 1 MSO_I }, { 21600, 2 MSO_I }, { 180, 539 }
+    
+    
 };
-static const SvxMSDffCalculationData mso_sptTextRingOutsideCalc[] = // adjustment1 : 6629 - 14971
+static const SvxMSDffCalculationData mso_sptTextRingOutsideCalc[] = 
 {
     { 0x2001, { DFF_Prop_adjustValue, 1, 2 } },
     { 0x8000, { 21600, 0, 0x400 } },
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, //$0
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }//21600-$0
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }
 };
 static const sal_uInt16 mso_sptTextRingOutsideSegm[] =
 {
@@ -6742,7 +6742,7 @@ static const SvxMSDffCalculationData mso_sptTextArchCurveCalc[] =
 };
 static const sal_uInt16 mso_sptTextArchUpCurveSegm[] =
 {
-    0xA504, 0x8000      // clockwíse arc
+    0xA504, 0x8000      
 };
 static const SvxMSDffHandle mso_sptTextArchUpCurveHandle[] =
 {
@@ -6772,7 +6772,7 @@ static const SvxMSDffVertPair mso_sptTextArchDownCurveVert[] =
 };
 static const sal_uInt16 mso_sptTextArchDownCurveSegm[] =
 {
-    0xA304, 0x8000      // counter clockwise arc to
+    0xA304, 0x8000      
 };
 static const SvxMSDffHandle mso_sptTextArchDownCurveHandle[] =
 {
@@ -6810,7 +6810,7 @@ static const SvxMSDffCalculationData mso_sptTextCircleCurveCalc[] =
 };
 static const sal_uInt16 mso_sptTextCircleCurveSegm[] =
 {
-    0xA504, 0x8000      // clockwise arc to
+    0xA504, 0x8000      
 };
 static const SvxMSDffHandle mso_sptTextCircleCurveHandle[] =
 {
@@ -6851,9 +6851,9 @@ static const SvxMSDffCalculationData mso_sptTextButtonCurveCalc[] =
 };
 static const sal_uInt16 mso_sptTextButtonCurveSegm[] =
 {
-    0xA504, 0x8000,     // clockwise arc
+    0xA504, 0x8000,     
     0x4000, 0x0001, 0x8000,
-    0xA304, 0x8000      // counter clockwise
+    0xA304, 0x8000      
 };
 static const SvxMSDffHandle mso_sptTextButtonCurveHandle[] =
 {
@@ -6890,11 +6890,11 @@ static const SvxMSDffCalculationData mso_sptTextArchPourCalc[] =
     { 0x2000, { 0x401, 10800, 0 } },
     { 0x8000, { 21600, 0, 0x402 } },
     { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },
-    { 0x600a, { 0x405, DFF_Prop_adjustValue, 0 } }, // 6
+    { 0x600a, { 0x405, DFF_Prop_adjustValue, 0 } }, 
     { 0x6009, { 0x405, DFF_Prop_adjustValue, 0 } },
-    { 0x2000, { 0x406, 10800, 0 } },                // 8
+    { 0x2000, { 0x406, 10800, 0 } },                
     { 0x2000, { 0x407, 10800, 0 } },
-    { 0x8000, { 21600, 0, 0x408 } },                // 10
+    { 0x8000, { 21600, 0, 0x408 } },                
     { 0x8000, { 21600, 0, 0x405 } }
 };
 static const sal_uInt16 mso_sptTextArchUpPourSegm[] =
@@ -6962,11 +6962,11 @@ static const SvxMSDffCalculationData mso_sptTextCirclePourCalc[] =
     { 0x2000, { 0x401, 10800, 0 } },
     { 0x8000, { 21600, 0, 0x403 } },
     { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },
-    { 0x600a, { 0x405, DFF_Prop_adjustValue, 0 } }, // 6
+    { 0x600a, { 0x405, DFF_Prop_adjustValue, 0 } }, 
     { 0x6009, { 0x405, DFF_Prop_adjustValue, 0 } },
-    { 0x2000, { 0x406, 10800, 0 } },                // 8
+    { 0x2000, { 0x406, 10800, 0 } },                
     { 0x2000, { 0x407, 10800, 0 } },
-    { 0x8000, { 21600, 0, 0x409 } },                // 10
+    { 0x8000, { 21600, 0, 0x409 } },                
     { 0x8000, { 21600, 0, 0x405 } },
     { 0x000, { 21600, 0, 0 } }
 };
@@ -7007,40 +7007,40 @@ static const SvxMSDffVertPair mso_sptTextButtonPourVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextButtonPourCalc[] =
 {
-    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },                 // 0x00
-    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },                 // 0x01
-    { 0x2000, { 0x400, 10800, 0 } },                                // 0x02
-    { 0x2000, { 0x401, 10800, 0 } },                                // 0x03
-    { 0x8000, { 21600, 0, 0x402 } },                                // 0x04
-    { 0x8000, { 21600, 0, 0x403 } },                                // 0x05
+    { 0x400a, { 10800, DFF_Prop_adjustValue, 0 } },                 
+    { 0x4009, { 10800, DFF_Prop_adjustValue, 0 } },                 
+    { 0x2000, { 0x400, 10800, 0 } },                                
+    { 0x2000, { 0x401, 10800, 0 } },                                
+    { 0x8000, { 21600, 0, 0x402 } },                                
+    { 0x8000, { 21600, 0, 0x403 } },                                
 
-    { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },                // 0x06
-    { 0x8000, { 21600, 0, 0x406 } },                                // 0x07
+    { 0x8000, { 10800, 0, DFF_Prop_adjust2Value } },                
+    { 0x8000, { 21600, 0, 0x406 } },                                
 
-    { 0x600a, { DFF_Prop_adjust2Value, DFF_Prop_adjustValue, 0 } }, // 0x08
-    { 0x6009, { DFF_Prop_adjust2Value, DFF_Prop_adjustValue, 0 } }, // 0x09
-    { 0x2000, { 0x408, 10800, 0 } },    // 0x0a
-    { 0x2000, { 0x409, 10800, 0 } },    // 0x0b
-    { 0x8000, { 21600, 0, 0x40a } },    // 0x0c
-    { 0x8000, { 21600, 0, 0x40b } },    // 0x0d
-    { 0x2001, { 0x406, 1, 2 } },        // 0x0e
-    { 0x4000, { 10800, 0x40e, 0 } },    // 0x0f
-    { 0x8000, { 10800, 0, 0x40e } },    // 0x10
-    { 0x6001, { 0x40e, 0x40e, 1 } },    // 0x11
-    { 0x6001, { DFF_Prop_adjust2Value, DFF_Prop_adjust2Value, 1 } },    // 0x12
-    { 0xA000, { 0x412, 0, 0x411 } },    // 0x13
-    { 0x200d, { 0x413, 0, 0 } },        // 0x14
-    { 0x4000, { 10800, 0x414, 0 } },    // 0x15
-    { 0x8000, { 10800, 0, 0x414 } }     // 0x16
+    { 0x600a, { DFF_Prop_adjust2Value, DFF_Prop_adjustValue, 0 } }, 
+    { 0x6009, { DFF_Prop_adjust2Value, DFF_Prop_adjustValue, 0 } }, 
+    { 0x2000, { 0x408, 10800, 0 } },    
+    { 0x2000, { 0x409, 10800, 0 } },    
+    { 0x8000, { 21600, 0, 0x40a } },    
+    { 0x8000, { 21600, 0, 0x40b } },    
+    { 0x2001, { 0x406, 1, 2 } },        
+    { 0x4000, { 10800, 0x40e, 0 } },    
+    { 0x8000, { 10800, 0, 0x40e } },    
+    { 0x6001, { 0x40e, 0x40e, 1 } },    
+    { 0x6001, { DFF_Prop_adjust2Value, DFF_Prop_adjust2Value, 1 } },    
+    { 0xA000, { 0x412, 0, 0x411 } },    
+    { 0x200d, { 0x413, 0, 0 } },        
+    { 0x4000, { 10800, 0x414, 0 } },    
+    { 0x8000, { 10800, 0, 0x414 } }     
 };
 static const sal_uInt16 mso_sptTextButtonPourSegm[] =
 {
-    0xA504, 0x8000,     // clockwise arc
-    0xA504, 0x8000,     // clockwise arc
+    0xA504, 0x8000,     
+    0xA504, 0x8000,     
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000,
-    0xA304, 0x8000,     // counter clockwise
-    0xA304, 0x8000      // counter clockwise
+    0xA304, 0x8000,     
+    0xA304, 0x8000      
 };
 static const SvxMSDffHandle mso_sptTextButtonPourHandle[] =
 {
@@ -7071,11 +7071,11 @@ static const SvxMSDffVertPair mso_sptTextCurveUpVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextCurveUpCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
-    { 0x4001, { 14250, 0x400, 12170 } },        // 401
-    { 0x4001, { 12800, 0x400, 12170 } },        // 402
-    { 0x4001, { 6380, 0x400, 12170 } },         // 403
-    { 0x8000, { 21600, 0, 0x403 } }             // 404
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x4001, { 14250, 0x400, 12170 } },        
+    { 0x4001, { 12800, 0x400, 12170 } },        
+    { 0x4001, { 6380, 0x400, 12170 } },         
+    { 0x8000, { 21600, 0, 0x403 } }             
 };
 static const sal_uInt16 mso_sptTextCurveUpSegm[] =
 {
@@ -7106,10 +7106,10 @@ static const mso_CustomShape msoTextCurveUp =
 
 static const SvxMSDffVertPair mso_sptTextCurveDownVert[] =
 {
-//  { 0, 0 MSO_I }, { 4900, 1 MSO_I /*12170->0 14250 ->0*/ }, { 11640, 2 MSO_I /*12170->0 12800 ->0*/ }, { 21600, 0 },
+
     { 0, 0 }, { 9960, 2 MSO_I }, { 16700, 1 MSO_I }, { 21600, 0 MSO_I },
 
-//  { 0, 4 MSO_I /*12170->0 17220 ->21600*/ }, { 3700, 21600 }, { 8500, 21600 }, { 10100, 21600 }, { 14110, 21600 }, { 15910, 21600 }, { 21600, 4 MSO_I /*12170->0 17220 ->21600*/ }
+
     { 0, 4 MSO_I }, { 5690, 21600 }, { 7490, 21600 }, { 11500, 21600 }, { 13100, 21600 }, { 17900, 21600 }, { 21600, 4 MSO_I }
 };
 static const SvxMSDffHandle mso_sptTextCurveDownHandle[] =
@@ -7137,11 +7137,11 @@ static const SvxMSDffVertPair mso_sptTextCanUpVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextCanUpCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 400
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 401
-    { 0x2000, { DFF_Prop_adjustValue, 0, 14400 } }, // 402
-    { 0x4001, { 5470, 0x402, 7200 } },              // 403
-    { 0x4000, { 16130, 0x403, 0 } }                 // 404
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, 
+    { 0x2000, { DFF_Prop_adjustValue, 0, 14400 } }, 
+    { 0x4001, { 5470, 0x402, 7200 } },              
+    { 0x4000, { 16130, 0x403, 0 } }                 
 };
 static const sal_uInt16 mso_sptTextCanUpSegm[] =
 {
@@ -7177,9 +7177,9 @@ static const SvxMSDffVertPair mso_sptTextCanDownVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextCanDownCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     // 400
-    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, // 401
-    { 0x4001, { 5470, 0x400, 7200 } }               // 402
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } },     
+    { 0x8000, { 21600, 0, DFF_Prop_adjustValue } }, 
+    { 0x4001, { 5470, 0x400, 7200 } }               
 };
 static const SvxMSDffHandle mso_sptTextCanDownHandle[] =
 {
@@ -7210,10 +7210,10 @@ static const SvxMSDffVertPair mso_sptTextInflateVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextInflateCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
-    { 0x4001, { 1530, 0x400, 4650 } },          // 401
-    { 0x8000, { 21600, 0, 0x400 } },            // 402
-    { 0x8000, { 21600, 0, 0x401 } }             // 403
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x4001, { 1530, 0x400, 4650 } },          
+    { 0x8000, { 21600, 0, 0x400 } },            
+    { 0x8000, { 21600, 0, 0x401 } }             
 };
 static const SvxMSDffHandle mso_sptTextInflateHandle[] =
 {
@@ -7244,10 +7244,10 @@ static const SvxMSDffVertPair mso_sptTextDeflateVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
-    { 0x2001, { 0x400, 5320, 7100 } },          // 401
-    { 0x8000, { 21600, 0, 0x400 } },            // 402
-    { 0x8000, { 21600, 0, 0x401 } }             // 403
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x2001, { 0x400, 5320, 7100 } },          
+    { 0x8000, { 21600, 0, 0x400 } },            
+    { 0x8000, { 21600, 0, 0x401 } }             
 };
 static const SvxMSDffHandle mso_sptTextDeflateHandle[] =
 {
@@ -7274,10 +7274,10 @@ static const SvxMSDffVertPair mso_sptTextInflateBottomVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextInflateBottomCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
-    { 0x2000, { 0x400, 0, 11150 } },            // 401 0->10450
-    { 0x2001, { 0x401, 3900, 10450 } },         // 402
-    { 0x2000, { 0x402, 17700, 0 } }             // 403
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x2000, { 0x400, 0, 11150 } },            
+    { 0x2001, { 0x401, 3900, 10450 } },         
+    { 0x2000, { 0x402, 17700, 0 } }             
 };
 static const sal_uInt16 mso_sptTextInflateBottomSegm[] =
 {
@@ -7313,10 +7313,10 @@ static const SvxMSDffVertPair mso_sptTextDeflateBottomVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateBottomCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
-    { 0x2000, { 0x400, 0, 1350 } },             // 401 0->20250
-    { 0x2001, { 0x401, 12070, 20250 } },        // 402
-    { 0x2000, { 0x402, 9530, 0 } }              // 403
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x2000, { 0x400, 0, 1350 } },             
+    { 0x2001, { 0x401, 12070, 20250 } },        
+    { 0x2000, { 0x402, 9530, 0 } }              
 };
 static const sal_uInt16 mso_sptTextDeflateBottomSegm[] =
 {
@@ -7352,8 +7352,8 @@ static const SvxMSDffVertPair mso_sptTextInflateTopVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextInflateTopCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
-    { 0x2001, { 0x400, 3900, 10450 } }          // 401
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x2001, { 0x400, 3900, 10450 } }          
 };
 static const sal_uInt16 mso_sptTextInflateTopSegm[] =
 {
@@ -7389,8 +7389,8 @@ static const SvxMSDffVertPair mso_sptTextDeflateTopVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateTopCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
-    { 0x2001, { 0x400, 12070, 20250 } }         // 402
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x2001, { 0x400, 12070, 20250 } }         
 };
 static const sal_uInt16 mso_sptTextDeflateTopSegm[] =
 {
@@ -7428,13 +7428,13 @@ static const SvxMSDffVertPair mso_sptTextDeflateInflateVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateInflateCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, // 400
-    { 0x8000, { 10800, 0, 0x400 } },            // 401
-    { 0x2001, { 0x401, 5770, 9500 } },          // 402
-    { 0x8000, { 10100, 0, 0x402 } },            // 403
-    { 0x8000, { 11500, 0, 0x402 } },            // 404
-    { 0x2000, { 0x400, 0, 700 } },              // 405
-    { 0x2000, { 0x400, 700, 0 } }               // 406
+    { 0x2000, { DFF_Prop_adjustValue, 0, 0 } }, 
+    { 0x8000, { 10800, 0, 0x400 } },            
+    { 0x2001, { 0x401, 5770, 9500 } },          
+    { 0x8000, { 10100, 0, 0x402 } },            
+    { 0x8000, { 11500, 0, 0x402 } },            
+    { 0x2000, { 0x400, 0, 700 } },              
+    { 0x2000, { 0x400, 700, 0 } }               
 };
 static const sal_uInt16 mso_sptTextDeflateInflateSegm[] =
 {
@@ -7476,17 +7476,17 @@ static const SvxMSDffVertPair mso_sptTextDeflateInflateDeflateVert[] =
 };
 static const SvxMSDffCalculationData mso_sptTextDeflateInflateDeflateCalc[] =
 {
-    { 0x2000, { DFF_Prop_adjustValue, 0, 850 } },       // 400
+    { 0x2000, { DFF_Prop_adjustValue, 0, 850 } },       
     { 0x2001, { 0x400, 6120, 8700 } },
     { 0x2000, { 0x401, 0, 4280 } },
     { 0x4000, { 6600, 0x402, 0 } },
-    { 0x2000, { DFF_Prop_adjustValue, 0, 450 } },       // 404
-    { 0x2000, { 0x403, 900, 0 } },                      // 405
-    { 0x2000, { 0x404, 900, 0 } },                      // 406
-    { 0x8000, { 21600, 0, 0x403 } },                    // 407
-    { 0x8000, { 21600, 0, 0x404 } },                    // 408
-    { 0x8000, { 21600, 0, 0x405 } },                    // 409
-    { 0x8000, { 21600, 0, 0x406 } }                     // 410
+    { 0x2000, { DFF_Prop_adjustValue, 0, 450 } },       
+    { 0x2000, { 0x403, 900, 0 } },                      
+    { 0x2000, { 0x404, 900, 0 } },                      
+    { 0x8000, { 21600, 0, 0x403 } },                    
+    { 0x8000, { 21600, 0, 0x404 } },                    
+    { 0x8000, { 21600, 0, 0x405 } },                    
+    { 0x8000, { 21600, 0, 0x406 } }                     
 };
 static const sal_uInt16 mso_sptTextDeflateInflateDeflateSegm[] =
 {
@@ -7519,8 +7519,8 @@ static const mso_CustomShape msoTextDeflateInflateDeflate =
     (SvxMSDffHandle*)mso_sptTextDeflateInflateDeflateHandle, SAL_N_ELEMENTS( mso_sptTextDeflateInflateDeflateHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextWave1Vert[] =  // adjustment1 : 0 - 4459
-{                                                   // adjustment2 : 8640 - 12960
+static const SvxMSDffVertPair mso_sptTextWave1Vert[] =  
+{                                                   
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 29 MSO_I, 1 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 24 MSO_I, 1 MSO_I }
 };
@@ -7542,8 +7542,8 @@ static const mso_CustomShape msoTextWave1 =
     (SvxMSDffHandle*)mso_sptWaveHandle, SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextWave2Vert[] =  // adjustment1 : 0 - 4459
-{                                                   // adjustment2 : 8640 - 12960
+static const SvxMSDffVertPair mso_sptTextWave2Vert[] =  
+{                                                   
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 10 MSO_I }, { 16 MSO_I, 9 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 29 MSO_I, 1 MSO_I }, { 27 MSO_I, 26 MSO_I }, { 25 MSO_I, 28 MSO_I }, { 24 MSO_I, 1 MSO_I }
 };
@@ -7560,8 +7560,8 @@ static const mso_CustomShape msoTextWave2 =
     (SvxMSDffHandle*)mso_sptWaveHandle, SAL_N_ELEMENTS( mso_sptWaveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextWave3Vert[] =  // adjustment1 : 0 - 2230
-{                                                       // adjustment2 : 8640 - 12960
+static const SvxMSDffVertPair mso_sptTextWave3Vert[] =  
+{                                                       
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 9 MSO_I }, { 0x1e MSO_I, 10 MSO_I }, { 0x12 MSO_I, 0 MSO_I }, { 0x1f MSO_I, 9 MSO_I }, { 16 MSO_I, 10 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 29 MSO_I, 1 MSO_I }, { 27 MSO_I, 28 MSO_I }, { 0x20 MSO_I, 26 MSO_I }, { 0x13 MSO_I, 1 MSO_I }, { 0x21 MSO_I, 28 MSO_I }, { 25 MSO_I, 26 MSO_I }, { 24 MSO_I, 1 MSO_I }
 };
@@ -7583,8 +7583,8 @@ static const mso_CustomShape msoTextWave3 =
     (SvxMSDffHandle*)mso_sptDoubleWaveHandle, SAL_N_ELEMENTS( mso_sptDoubleWaveHandle )
 };
 
-static const SvxMSDffVertPair mso_sptTextWave4Vert[] =  // adjustment1 : 0 - 2230
-{                                                       // adjustment2 : 8640 - 12960
+static const SvxMSDffVertPair mso_sptTextWave4Vert[] =  
+{                                                       
     { 7 MSO_I, 0 MSO_I }, { 15 MSO_I, 10 MSO_I }, { 0x1e MSO_I, 9 MSO_I }, { 0x12 MSO_I, 0 MSO_I }, { 0x1f MSO_I, 10 MSO_I }, { 16 MSO_I, 9 MSO_I }, { 12 MSO_I, 0 MSO_I },
     { 29 MSO_I, 1 MSO_I }, { 27 MSO_I, 26 MSO_I }, { 0x20 MSO_I, 28 MSO_I }, { 0x13 MSO_I, 1 MSO_I }, { 0x21 MSO_I, 26 MSO_I }, { 25 MSO_I, 28 MSO_I }, { 24 MSO_I, 1 MSO_I }
 };
@@ -7635,7 +7635,7 @@ static const sal_uInt16 mso_sptCalloutSegm1a[] =
 };
 static const sal_uInt16 mso_sptCalloutSegm1b[] =
 {
-    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
+    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, 
     0x4000, 0x0001, 0x8000
 };
 static const SvxMSDffVertPair mso_sptCallout1Vert[] =
@@ -7650,7 +7650,7 @@ static const sal_uInt16 mso_sptCallout1Segm1a[] =
 };
 static const sal_uInt16 mso_sptCallout1Segm1b[] =
 {
-    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
+    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, 
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
 };
@@ -7680,7 +7680,7 @@ static const sal_uInt16 mso_sptCallout2Segm1a[] =
 };
 static const sal_uInt16 mso_sptCallout2Segm1b[] =
 {
-    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
+    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, 
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000
@@ -7695,7 +7695,7 @@ static const sal_uInt16 mso_sptCallout2Segm1c[] =
 };
 static const sal_uInt16 mso_sptCallout2Segm1d[] =
 {
-    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
+    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, 
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000,
     0x4000, 0x0001, 0x8000,
@@ -7723,23 +7723,23 @@ static const SvxMSDffHandle mso_sptCalloutHandle3[] =
 static const sal_uInt16 mso_sptCallout3Segm1a[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
-    0x4000, 0xaa00, 0x0003, 0x8000          // NO_FILL
+    0x4000, 0xaa00, 0x0003, 0x8000          
 };
 static const sal_uInt16 mso_sptCallout3Segm1b[] =
 {
-    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
-    0x4000, 0xaa00, 0x0003, 0x8000          // NO FILL
+    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, 
+    0x4000, 0xaa00, 0x0003, 0x8000          
 };
 static const sal_uInt16 mso_sptCallout3Segm1c[] =
 {
     0x4000, 0x0003, 0x6000, 0x8000,
-    0x4000, 0xaa00, 0x0003, 0x8000,         // NO FILL
+    0x4000, 0xaa00, 0x0003, 0x8000,         
     0x4000, 0x0001, 0x8000
 };
 static const sal_uInt16 mso_sptCallout3Segm1d[] =
 {
-    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, // NO STROKE
-    0x4000, 0xaa00, 0x0003, 0x8000,         // NO FILL
+    0x4000, 0xab00, 0x0003, 0x6000, 0x8000, 
+    0x4000, 0xaa00, 0x0003, 0x8000,         
     0x4000, 0x0001, 0x8000
 };
 
@@ -8283,30 +8283,30 @@ static const mso_CustomShape msoCurvedConnector5 =
     (SvxMSDffHandle*)mso_sptCurvedConnector5Handle, SAL_N_ELEMENTS( mso_sptCurvedConnector5Handle )
 };
 
-/////////////////////////////teardrop////////////////////////////////////////////
+
 static const SvxMSDffVertPair mso_sptTearDropVert[] =
 {
     { 10800, 0 },
-    { 0, 10800 },                                                   // X
-    { 10800, 21600 },                                               // Y
-    { 21600, 10800 },                                               // X
-    { 21600, 10800 }, { 21600, 3 MSO_I }, { 0 MSO_I, 1 MSO_I },             // C
+    { 0, 10800 },                                                   
+    { 10800, 21600 },                                               
+    { 21600, 10800 },                                               
+    { 21600, 10800 }, { 21600, 3 MSO_I }, { 0 MSO_I, 1 MSO_I },             
     { 0 MSO_I, 1 MSO_I }, { 4 MSO_I, 0 }, { 10800, 0 }
 };
 
-//  the last number (0x***n)  :  0 = sum, 1 = prod, 2 = mid, 3 = abs, 4 = min, 5 = max, 6 = if, 13 = sqrt, 15 = eclipse ...
-//    the first number(0xn***)  :  2/4/8 the first/second/third value is not directly value
+
+
 static const SvxMSDffCalculationData mso_sptTearDropCalc[] =
 {
-    { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } },  // 0  adjust value #0
-    { 0x8000 , { 21600 , 0 , 0x0400 } },            // 1  21600 - @0                     y0
-    { 0x8000 , { 32400 , 0 , 0x0400 } },            // 2   (32400 - @0)
-    { 0x2001 , { 0x0402 , 1 , 2 } },                // 3   (32400 - @0)/2               y1
-    { 0x2002 , { 0x0400 , 10800 , 0 } },            // 4  (@0+10800)/2                  x2
+    { 0x2000 , { DFF_Prop_adjustValue , 0 , 0 } },  
+    { 0x8000 , { 21600 , 0 , 0x0400 } },            
+    { 0x8000 , { 32400 , 0 , 0x0400 } },            
+    { 0x2001 , { 0x0402 , 1 , 2 } },                
+    { 0x2002 , { 0x0400 , 10800 , 0 } },            
 };
 
-//m, qx, qy, qx,C,C
-//the last number(0x***n) : repeat number of this current Segm
+
+
 static const sal_uInt16 mso_sptTearDropSegm[] =
 {
     0x4000, 0xa701, 0xa801, 0xa701, 0x2002, 0x6000, 0x8000
@@ -8317,15 +8317,15 @@ static const SvxMSDffTextRectangles mso_sptTearDropTextRect[] =
     { { 2863, 2863 }, { 18737, 18737 } }
 };
 
-//the range of adjust values
+
 static const SvxMSDffHandle mso_sptTearDropHandle[] =
 {
-    //position="$0,0" xrange="10800,32400"
+    
     {   MSDFF_HANDLE_FLAGS_RANGE | MSDFF_HANDLE_FLAGS_RANGE_X_MAX_IS_SPECIAL| MSDFF_HANDLE_FLAGS_RANGE_X_MIN_IS_SPECIAL,
         0x100, 0, 10800, 10800, 10800, 32400, MIN_INT32, 0x7fffffff }
 };
 
-//the number of adjust values, the default values
+
 static const sal_Int32 mso_sptTearDropDefault[] =
 {
     1, 21600
@@ -8341,7 +8341,7 @@ static const mso_CustomShape msoTearDrop =
     21600, 21600,
     MIN_INT32, MIN_INT32,
     NULL, 0,
-    (SvxMSDffHandle*)mso_sptTearDropHandle, sizeof(mso_sptTearDropHandle)/sizeof(SvxMSDffHandle)        // handles
+    (SvxMSDffHandle*)mso_sptTearDropHandle, sizeof(mso_sptTearDropHandle)/sizeof(SvxMSDffHandle)        
 };
 
 
@@ -8435,8 +8435,8 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptSeal32 :                    pCustomShape = &msoSeal32; break;
         case mso_sptRibbon2 :                   pCustomShape = &msoRibbon2; break;
         case mso_sptRibbon :                    pCustomShape = &msoRibbon; break;
-        case mso_sptEllipseRibbon2 :            pCustomShape = &msosptEllipseRibbon2; break;    // SJ: TODO
-        case mso_sptEllipseRibbon :             pCustomShape = &msosptEllipseRibbon; break; // SJ: TODO
+        case mso_sptEllipseRibbon2 :            pCustomShape = &msosptEllipseRibbon2; break;    
+        case mso_sptEllipseRibbon :             pCustomShape = &msosptEllipseRibbon; break; 
         case mso_sptVerticalScroll :            pCustomShape = &msoVerticalScroll;  break;
         case mso_sptHorizontalScroll :          pCustomShape = &msoHorizontalScroll; break;
         case mso_sptFlowChartProcess :          pCustomShape = &msoFlowChartProcess; break;
@@ -8474,7 +8474,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptWave :                      pCustomShape = &msoWave; break;
         case mso_sptDoubleWave :                pCustomShape = &msoDoubleWave; break;
 
-        // callout
+        
         case mso_sptCallout1 :                  pCustomShape = &msoCallout1; break;
         case mso_sptCallout2 :                  pCustomShape = &msoCallout2; break;
         case mso_sptCallout3 :                  pCustomShape = &msoCallout3; break;
@@ -8492,7 +8492,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptBorderCallout90 :           pCustomShape = &msoBorderCallout90; break;
         case mso_sptAccentBorderCallout90 :     pCustomShape = &msoAccentBorderCallout90; break;
 
-        // connectors
+        
         case mso_sptStraightConnector1 :        pCustomShape = &msoStraightConnector1; break;
         case mso_sptBentConnector2 :            pCustomShape = &msoBentConnector2; break;
         case mso_sptBentConnector3 :            pCustomShape = &msoBentConnector3; break;
@@ -8503,7 +8503,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptCurvedConnector4 :          pCustomShape = &msoCurvedConnector4; break;
         case mso_sptCurvedConnector5 :          pCustomShape = &msoCurvedConnector5; break;
 
-        // Dont know, simply mapping to TextSimple
+        
         case mso_sptTextOnRing :
         case mso_sptTextOnCurve :
         case mso_sptTextRing :
@@ -8513,7 +8513,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptTextOctagon :
         case mso_sptTextBox :                   pCustomShape = &msoTextSimple; break;
 
-        // FontWork
+        
         case mso_sptTextSimple :
         case mso_sptTextPlainText :             pCustomShape = &msoTextPlainText; break;
         case mso_sptTextStop :                  pCustomShape = &msoTextStop; break;
@@ -8521,7 +8521,7 @@ const mso_CustomShape* GetCustomShapeContent( MSO_SPT eSpType )
         case mso_sptTextTriangleInverted :      pCustomShape = &msoTextTriangleInverted; break;
         case mso_sptTextChevron :               pCustomShape = &msoTextChevron; break;
         case mso_sptTextChevronInverted :       pCustomShape = &msoTextChevronInverted; break;
-        case mso_sptTextRingInside :            pCustomShape = &msoTextRingInside; break;   // SJ: TODO->the orientation of the ellipse needs to be changed
+        case mso_sptTextRingInside :            pCustomShape = &msoTextRingInside; break;   
         case mso_sptTextRingOutside :           pCustomShape = &msoTextRingOutside; break;
         case mso_sptTextFadeRight :             pCustomShape = &msoTextFadeRight; break;
         case mso_sptTextFadeLeft :              pCustomShape = &msoTextFadeLeft; break;

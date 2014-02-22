@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,10 +35,10 @@
 #include <comphelper/numbers.hxx>
 #include <unotools/sharedunocomponent.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -66,9 +66,9 @@ namespace dbtools
     namespace DataType = ::com::sun::star::sdbc::DataType;
     namespace NumberFormat = ::com::sun::star::util::NumberFormat;
 
-    //====================================================================
-    //= FormattedColumnValue_Data
-    //====================================================================
+    
+    
+    
     struct FormattedColumnValue_Data
     {
         Reference< XNumberFormatter >   m_xFormatter;
@@ -94,10 +94,10 @@ namespace dbtools
         }
     };
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
-        //................................................................
+        
         void lcl_clear_nothrow( FormattedColumnValue_Data& _rData )
         {
             _rData.m_xFormatter.clear();
@@ -110,7 +110,7 @@ namespace dbtools
             _rData.m_xColumnUpdate.clear();
         }
 
-        //................................................................
+        
         void lcl_initColumnDataValue_nothrow( FormattedColumnValue_Data& _rData,
             const Reference< XNumberFormatter >& i_rNumberFormatter, const Reference< XPropertySet >& _rxColumn )
         {
@@ -124,11 +124,11 @@ namespace dbtools
             {
                 Reference< XNumberFormatsSupplier > xNumberFormatsSupp( i_rNumberFormatter->getNumberFormatsSupplier(), UNO_SET_THROW );
 
-                // remember the column
+                
                 _rData.m_xColumn.set( _rxColumn, UNO_QUERY_THROW );
                 _rData.m_xColumnUpdate.set( _rxColumn, UNO_QUERY );
 
-                // determine the field type, and whether it's a numeric field
+                
                 OSL_VERIFY( _rxColumn->getPropertyValue("Type") >>= _rData.m_nFieldType );
 
                 switch ( _rData.m_nFieldType )
@@ -153,7 +153,7 @@ namespace dbtools
                         break;
                 }
 
-                // get the format key of our bound field
+                
                 Reference< XPropertySetInfo > xPSI( _rxColumn->getPropertySetInfo(), UNO_QUERY_THROW );
                 bool bHaveFieldFormat = false;
                 const OUString sFormatKeyProperty( "FormatKey" );
@@ -163,18 +163,18 @@ namespace dbtools
                 }
                 if ( !bHaveFieldFormat )
                 {
-                    // fall back to a format key as indicated by the field type
+                    
                     Locale aSystemLocale( LanguageTag( MsLangId::getSystemLanguage() ).getLocale() );
                     Reference< XNumberFormatTypes > xNumTypes( xNumberFormatsSupp->getNumberFormats(), UNO_QUERY_THROW );
                     _rData.m_nFormatKey = getDefaultNumberFormat( _rxColumn, xNumTypes, aSystemLocale );
                 }
 
-                // some more formatter settings
+                
                 _rData.m_nKeyType  = ::comphelper::getNumberFormatType( xNumberFormatsSupp->getNumberFormats(), _rData.m_nFormatKey );
                 Reference< XPropertySet > xFormatSettings( xNumberFormatsSupp->getNumberFormatSettings(), UNO_QUERY_THROW );
                 OSL_VERIFY( xFormatSettings->getPropertyValue("NullDate") >>= _rData.m_aNullDate );
 
-                // remember the formatter
+                
                 _rData.m_xFormatter = i_rNumberFormatter;
             }
             catch( const Exception& )
@@ -183,7 +183,7 @@ namespace dbtools
             }
         }
 
-        //................................................................
+        
         void lcl_initColumnDataValue_nothrow( const Reference<XComponentContext>& i_rContext, FormattedColumnValue_Data& i_rData,
             const Reference< XRowSet >& i_rRowSet, const Reference< XPropertySet >& i_rColumn )
         {
@@ -194,11 +194,11 @@ namespace dbtools
             Reference< XNumberFormatter > xNumberFormatter;
             try
             {
-                // get the number formats supplier of the connection of the form
+                
                 Reference< XConnection > xConnection( getConnection( i_rRowSet ), UNO_QUERY_THROW );
                 Reference< XNumberFormatsSupplier > xSupplier( getNumberFormats( xConnection, sal_True, i_rContext ), UNO_SET_THROW );
 
-                // create a number formatter for it
+                
                 xNumberFormatter.set( NumberFormatter::create( i_rContext ), UNO_QUERY_THROW );
                 xNumberFormatter->attachNumberFormatsSupplier( xSupplier );
             }
@@ -211,10 +211,10 @@ namespace dbtools
         }
     }
 
-    //====================================================================
-    //= FormattedColumnValue
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     FormattedColumnValue::FormattedColumnValue( const Reference< XComponentContext >& _rxContext,
             const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& i_rColumn )
         :m_pData( new FormattedColumnValue_Data )
@@ -222,7 +222,7 @@ namespace dbtools
         lcl_initColumnDataValue_nothrow( _rxContext, *m_pData, _rxRowSet, i_rColumn );
     }
 
-    //--------------------------------------------------------------------
+    
     FormattedColumnValue::FormattedColumnValue( const Reference< XNumberFormatter >& i_rNumberFormatter,
             const Reference< XPropertySet >& _rxColumn )
         :m_pData( new FormattedColumnValue_Data )
@@ -230,49 +230,49 @@ namespace dbtools
         lcl_initColumnDataValue_nothrow( *m_pData, i_rNumberFormatter, _rxColumn );
     }
 
-    //--------------------------------------------------------------------
+    
     void FormattedColumnValue::clear()
     {
         lcl_clear_nothrow( *m_pData );
     }
 
-    //--------------------------------------------------------------------
+    
     FormattedColumnValue::~FormattedColumnValue()
     {
         clear();
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 FormattedColumnValue::getFormatKey() const
     {
         return m_pData->m_nFormatKey;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 FormattedColumnValue::getFieldType() const
     {
         return m_pData->m_nFieldType;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int16 FormattedColumnValue::getKeyType() const
     {
         return m_pData->m_nKeyType;
     }
 
-    //--------------------------------------------------------------------
+    
     const Reference< XColumn >& FormattedColumnValue::getColumn() const
     {
         return m_pData->m_xColumn;
     }
 
-    //--------------------------------------------------------------------
+    
     const Reference< XColumnUpdate >& FormattedColumnValue::getColumnUpdate() const
     {
         return m_pData->m_xColumnUpdate;
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormattedColumnValue::setFormattedValue( const OUString& _rFormattedStringValue ) const
     {
         OSL_PRECOND( m_pData->m_xColumnUpdate.is(), "FormattedColumnValue::setFormattedValue: no column!" );
@@ -299,7 +299,7 @@ namespace dbtools
         return true;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString FormattedColumnValue::getFormattedValue() const
     {
         OSL_PRECOND( m_pData->m_xColumn.is(), "FormattedColumnValue::setFormattedValue: no column!" );
@@ -321,8 +321,8 @@ namespace dbtools
         return sStringValue;
     }
 
-//........................................................................
-} // namespace dbtools
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// prevent internal compiler error with MSVC6SP3
+
 #include <utility>
 
 #define TRANSLITERATION_Space_ja_JP
@@ -27,21 +27,21 @@
 namespace com { namespace sun { namespace star { namespace i18n {
 
 OneToOneMappingTable_t ignoreSpace_ja_JP_mappingTable[] = {
-    { 0x0020, 0xffff },  // SPACE
-    { 0x00A0, 0xffff },  // NO-BREAK SPACE
-    { 0x2002, 0xffff },  // EN SPACE
-    { 0x2003, 0xffff },  // EM SPACE
-    { 0x2004, 0xffff },  // THREE-PER-EM SPACE
-    { 0x2005, 0xffff },  // FOUR-PER-EM SPACE
-    { 0x2006, 0xffff },  // SIX-PER-EM SPACE
-    { 0x2007, 0xffff },  // FIGURE SPACE
-    { 0x2008, 0xffff },  // PUNCTUATION SPACE
-    { 0x2009, 0xffff },  // THIN SPACE
-    { 0x200A, 0xffff },  // HAIR SPACE
-    { 0x200B, 0xffff },  // ZERO WIDTH SPACE
-    { 0x202F, 0xffff },  // NARROW NO-BREAK SPACE
-    { 0x3000, 0xffff },  // IDEOGRAPHIC SPACE
-    { 0x303F, 0xffff }   // IDEOGRAPHIC HALF FILL SPACE
+    { 0x0020, 0xffff },  
+    { 0x00A0, 0xffff },  
+    { 0x2002, 0xffff },  
+    { 0x2003, 0xffff },  
+    { 0x2004, 0xffff },  
+    { 0x2005, 0xffff },  
+    { 0x2006, 0xffff },  
+    { 0x2007, 0xffff },  
+    { 0x2008, 0xffff },  
+    { 0x2009, 0xffff },  
+    { 0x200A, 0xffff },  
+    { 0x200B, 0xffff },  
+    { 0x202F, 0xffff },  
+    { 0x3000, 0xffff },  
+    { 0x303F, 0xffff }   
 };
 
 

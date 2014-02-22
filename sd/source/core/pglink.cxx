@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -87,7 +87,7 @@ SdPageLink::~SdPageLink()
             ******************************************************************/
             if (aBookmarkName.isEmpty())
             {
-                // no page name specified: we assume it is the first page
+                
                 aBookmarkName = pBookmarkDoc->GetSdPage(0, PK_STANDARD)->GetName();
                 pPage->SetBookmarkName(aBookmarkName);
             }
@@ -102,7 +102,7 @@ SdPageLink::~SdPageLink()
 
             if( pDoc->pDocLockedInsertingLinks )
             {
-                // resolving links while loading pDoc
+                
                 bNoDialogs = sal_True;
                 bCopy = sal_True;
             }
@@ -125,7 +125,7 @@ SdPageLink::~SdPageLink()
 
 void SdPageLink::Closed()
 {
-    // the connection is closed
+    
     pPage->SetFileName(OUString());
     pPage->SetBookmarkName(OUString());
 

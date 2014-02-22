@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dispatch/oxt_handler.hxx>
@@ -33,9 +33,9 @@
 
 namespace framework{
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
+
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE    (   Oxt_Handler                                                ,
                                         ::cppu::OWeakObject                                        ,
@@ -48,7 +48,7 @@ DEFINE_INIT_SERVICE                 (   Oxt_Handler,
                                         }
                                     )
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard ctor
     @descr      These initialize a new instance of this class with needed information for work.
 
@@ -59,16 +59,16 @@ DEFINE_INIT_SERVICE                 (   Oxt_Handler,
 
     @onerror    Show an assertion and do nothing else.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory )
-        //  Init baseclasses first
+        
         :   ThreadHelpBase      (          )
-        // Init member
+        
         ,   m_xFactory          ( xFactory )
 {
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard dtor
     @descr      -
 
@@ -79,7 +79,7 @@ Oxt_Handler::Oxt_Handler( const css::uno::Reference< css::lang::XMultiServiceFac
 
     @onerror    -
     @threadsafe -
-*//*-*************************************************************************************************************/
+*
 Oxt_Handler::~Oxt_Handler()
 {
     if ( m_xListener.is() )
@@ -91,7 +91,7 @@ Oxt_Handler::~Oxt_Handler()
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  ::com::sun::star::frame::XDispatch
 
     @short      try to load audio file
@@ -112,13 +112,13 @@ Oxt_Handler::~Oxt_Handler()
 
     @onerror    We do nothing.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
                                                      const css::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
     throw( css::uno::RuntimeException )
 {
-    // SAFE {
+    
     ResetableGuard aLock( m_aLock );
 
     OUString sServiceName = "com.sun.star.deployment.ui.PackageManagerDialog";
@@ -139,7 +139,7 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
         xListener->dispatchFinished( aEvent );
     }
 
-    // } SAFE
+    
     aLock.unlock();
 }
 
@@ -150,7 +150,7 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
     dispatchWithNotification( aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >() );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  ::com::sun::star::document::XExtendedFilterDetection
 
     @short      try to detect file (given as argument included in "lDescriptor")
@@ -173,34 +173,34 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
 
     @onerror    We return nothing.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
     throw( css::uno::RuntimeException )
 {
-    // Our default is "nothing". So we can return it, if detection failed or fily type is really unknown.
+    
     OUString sTypeName;
 
-    // Analyze given descriptor to find filename or input stream or ...
+    
     utl::MediaDescriptor aDescriptor( lDescriptor );
     OUString               sURL       = aDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );
 
     long nLength = sURL.getLength();
     if ( ( nLength > 4 ) && sURL.matchIgnoreAsciiCase( ".oxt", nLength-4 ) )
     {
-        // "IsSoundFile" idffer between different "wav" and "au" file versions ...
-        // couldn't return this information ... because: He use the OS to detect it!
-        // I think we can the following ones:
-        //  a) look for given extension of url to map our type decision HARD CODED!!!
-        //  b) return preferred type every time... it's easy :-)
+        
+        
+        
+        
+        
         sTypeName = "oxt_OpenOffice_Extension";
         aDescriptor[utl::MediaDescriptor::PROP_TYPENAME()] <<= sTypeName;
         aDescriptor >> lDescriptor;
     }
 
-    // Return our decision.
+    
     return sTypeName;
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

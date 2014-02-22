@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/table/XCell.hpp>
@@ -81,7 +81,7 @@ static PatternMap aPatternMap( lcl_getPatternMap() );
 
 ScVbaInterior::ScVbaInterior( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertySet >&  xProps, ScDocument* pScDoc ) throw ( lang::IllegalArgumentException) : ScVbaInterior_BASE( xParent, xContext ), m_xProps(xProps), m_pScDoc( pScDoc )
 {
-    // auto color
+    
     m_aPattColor.SetColor( (sal_uInt32)0x0 );
     m_nPattern = 0L;
     if ( !m_xProps.is() )
@@ -109,14 +109,14 @@ ScVbaInterior::setColor( const uno::Any& _color  ) throw (uno::RuntimeException)
 void
 ScVbaInterior::SetMixedColor()
 {
-    // pattern
+    
     uno::Any aPattern = GetUserDefinedAttributes( PATTERN );
     if( aPattern.hasValue() )
     {
         m_nPattern = GetAttributeData( aPattern );
     }
     sal_Int32 nPattern = aPatternMap[ m_nPattern ];
-    // pattern color
+    
     uno::Any aPatternColor = GetUserDefinedAttributes( PATTERNCOLOR );
     if( aPatternColor.hasValue() )
     {
@@ -124,9 +124,9 @@ ScVbaInterior::SetMixedColor()
         m_aPattColor.SetColor( nPatternColor );
     }
     sal_Int32 nPatternColor = m_aPattColor.GetColor();
-    // back color
+    
     Color aBackColor( GetBackColor() );
-    // set mixed color
+    
     Color aMixedColor;
     if( nPattern > 0 )
         aMixedColor = GetPatternColor( Color(nPatternColor), aBackColor, (sal_uInt32)nPattern );
@@ -152,16 +152,16 @@ ScVbaInterior::setColorIndex( const css::uno::Any& _colorindex ) throw (css::uno
     sal_Int32 nIndex = 0;
     _colorindex >>= nIndex;
 
-    // hackly for excel::XlColorIndex::xlColorIndexNone
+    
     if( nIndex == excel::XlColorIndex::xlColorIndexNone )
     {
         m_xProps->setPropertyValue( BACKCOLOR, uno::makeAny( sal_Int32( -1 ) ) );
     }
     else
     {
-        // setColor expects colors in XL RGB values
-        // #FIXME this is daft we convert OO RGB val to XL RGB val and
-        // then back again to OO RGB value
+        
+        
+        
         setColor( OORGBToXLRGB( GetIndexColor( nIndex ) ) );
     }
 }
@@ -169,11 +169,11 @@ uno::Any
 ScVbaInterior::GetIndexColor( const sal_Int32& nColorIndex )
 {
     sal_Int32 nIndex = nColorIndex;
-    // #FIXME  xlColorIndexAutomatic & xlColorIndexNone are not really
-    // handled properly here
+    
+    
     if ( !nIndex || ( nIndex == excel::XlColorIndex::xlColorIndexAutomatic ) || ( nIndex == excel::XlColorIndex::xlColorIndexNone )  )
-        nIndex = 2; // default is white ( this maybe will probably break, e.g. we may at some stage need to know what this interior is,  a cell or something else and then pick a default colour based on that )
-    --nIndex; // OOo indices are zero bases
+        nIndex = 2; 
+    --nIndex; 
     uno::Reference< container::XIndexAccess > xIndex = getPalette();
     return xIndex->getByIndex( nIndex );
 }
@@ -190,7 +190,7 @@ ScVbaInterior::GetColorIndex( const sal_Int32 nColor )
         xIndex->getByIndex( count ) >>= nPaletteColor;
         if ( nPaletteColor == nColor )
         {
-            nIndex = count + 1; // 1 based
+            nIndex = count + 1; 
             break;
         }
     }
@@ -201,7 +201,7 @@ uno::Any SAL_CALL
 ScVbaInterior::getColorIndex() throw ( css::uno::RuntimeException )
 {
     sal_Int32 nColor = 0;
-    // hackly for excel::XlColorIndex::xlColorIndexNone
+    
     uno::Any aColor = m_xProps->getPropertyValue( BACKCOLOR );
     if( ( aColor >>= nColor ) && ( nColor == -1 ) )
     {
@@ -209,10 +209,10 @@ ScVbaInterior::getColorIndex() throw ( css::uno::RuntimeException )
         return uno::makeAny( nColor );
     }
 
-    // getColor returns Xl ColorValue, need to convert it to OO val
-    // as the palette deals with OO RGB values
-    // #FIXME this is daft in getColor we convert OO RGB val to XL RGB val
-    // and then back again to OO RGB value
+    
+    
+    
+    
     XLRGBToOORGB( getColor() ) >>= nColor;
 
     return uno::makeAny( GetColorIndex( nColor ) );
@@ -220,13 +220,13 @@ ScVbaInterior::getColorIndex() throw ( css::uno::RuntimeException )
 Color
 ScVbaInterior::GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt32 nXclPattern )
 {
-    // 0x00 == 0% transparence (full rPattColor)
-    // 0x80 == 100% transparence (full rBackColor)
+    
+    
     static const sal_uInt8 pnRatioTable[] =
     {
-        0x80, 0x00, 0x40, 0x20, 0x60, 0x40, 0x40, 0x40,     // 00 - 07
-        0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
-        0x50, 0x70, 0x78                                    // 16 - 18
+        0x80, 0x00, 0x40, 0x20, 0x60, 0x40, 0x40, 0x40,     
+        0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     
+        0x50, 0x70, 0x78                                    
     };
     return ( nXclPattern < SAL_N_ELEMENTS( pnRatioTable ) ) ?
         GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
@@ -291,11 +291,11 @@ ScVbaInterior::SetUserDefinedAttributes( const OUString& sName, const uno::Any& 
         m_xProps->setPropertyValue("UserDefinedAttributes", uno::makeAny( xNameContainer ) );
     }
 }
-// OOo do not support below API
+
 uno::Any SAL_CALL
 ScVbaInterior::getPattern() throw (uno::RuntimeException)
 {
-    // XlPattern
+    
     uno::Any aPattern = GetUserDefinedAttributes( PATTERN );
     if( aPattern.hasValue() )
         return uno::makeAny( GetAttributeData( aPattern ) );
@@ -339,7 +339,7 @@ ScVbaInterior::GetBackColor()
 uno::Any SAL_CALL
 ScVbaInterior::getPatternColor() throw (uno::RuntimeException)
 {
-    // 0 is the default color. no filled.
+    
     uno::Any aPatternColor = GetUserDefinedAttributes( PATTERNCOLOR );
     if( aPatternColor.hasValue() )
     {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/core/contexthandler2.hxx"
@@ -23,26 +23,26 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 
-// ============================================================================
+
 
 /** Information about a processed element. */
 struct ElementInfo
 {
-    OUStringBuffer      maChars;            /// Collected element characters.
-    sal_Int32           mnElement;          /// The element identifier.
-    bool                mbTrimSpaces;       /// True = trims leading/trailing spaces from text data.
+    OUStringBuffer      maChars;            
+    sal_Int32           mnElement;          
+    bool                mbTrimSpaces;       
 
     inline explicit     ElementInfo() : maChars( 0), mnElement( XML_TOKEN_INVALID ), mbTrimSpaces( false ) {}
                         ElementInfo( sal_Int32 nElement ) : maChars( 0 ), mnElement( nElement ), mbTrimSpaces(false) {}
 };
 
-// ============================================================================
+
 
 ContextHandler2Helper::ContextHandler2Helper( bool bEnableTrimSpace ) :
     mxContextStack( new ContextStack ),
@@ -93,7 +93,7 @@ bool ContextHandler2Helper::isRootElement() const
 Reference< XFastContextHandler > ContextHandler2Helper::implCreateChildContext(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs )
 {
-    // #i76091# process collected characters (calls onCharacters() if needed)
+    
     processCollectedChars();
     ContextHandlerRef xContext = onCreateContext( nElement, AttributeList( rxAttribs ) );
     return Reference< XFastContextHandler >( xContext.get() );
@@ -108,18 +108,18 @@ void ContextHandler2Helper::implStartElement( sal_Int32 nElement, const Referenc
 
 void ContextHandler2Helper::implCharacters( const OUString& rChars )
 {
-    // #i76091# collect characters until new element starts or this element ends
+    
     if( !mxContextStack->empty() )
         mxContextStack->back().maChars.append(rChars);
 }
 
 void ContextHandler2Helper::implEndElement( sal_Int32 nElement )
 {
-    (void)nElement;     // prevent "unused parameter" warning in product build
+    (void)nElement;     
     OSL_ENSURE( getCurrentElementWithMce() == nElement, "ContextHandler2Helper::implEndElement - context stack broken" );
     if( !mxContextStack->empty() )
     {
-        // #i76091# process collected characters (calls onCharacters() if needed)
+        
         processCollectedChars();
         onEndElement();
         popElementInfo();
@@ -139,7 +139,7 @@ void ContextHandler2Helper::implStartRecord( sal_Int32 nRecId, SequenceInputStre
 
 void ContextHandler2Helper::implEndRecord( sal_Int32 nRecId )
 {
-    (void)nRecId;   // prevent "unused parameter" warning in product build
+    (void)nRecId;   
     OSL_ENSURE( getCurrentElementWithMce() == nRecId, "ContextHandler2Helper::implEndRecord - context stack broken" );
     if( !mxContextStack->empty() )
     {
@@ -179,7 +179,7 @@ void ContextHandler2Helper::processCollectedChars()
     }
 }
 
-// ============================================================================
+
 
 ContextHandler2::ContextHandler2( ContextHandler2Helper& rParent ) :
     ContextHandler( dynamic_cast< ContextHandler& >( rParent ) ),
@@ -191,7 +191,7 @@ ContextHandler2::~ContextHandler2()
 {
 }
 
-// com.sun.star.xml.sax.XFastContextHandler interface -------------------------
+
 
 Reference< XFastContextHandler > SAL_CALL ContextHandler2::createFastChildContext(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rxAttribs ) throw( SAXException, RuntimeException )
@@ -215,7 +215,7 @@ void SAL_CALL ContextHandler2::endFastElement( sal_Int32 nElement ) throw( SAXEx
     implEndElement( nElement );
 }
 
-// oox.core.RecordContext interface -------------------------------------------
+
 
 ContextHandlerRef ContextHandler2::createRecordContext( sal_Int32 nRecId, SequenceInputStream& rStrm )
 {
@@ -232,7 +232,7 @@ void ContextHandler2::endRecord( sal_Int32 nRecId )
     implEndRecord( nRecId );
 }
 
-// oox.core.ContextHandler2Helper interface -----------------------------------
+
 
 ContextHandlerRef ContextHandler2::onCreateContext( sal_Int32, const AttributeList& )
 {
@@ -264,9 +264,9 @@ void ContextHandler2::onEndRecord()
 {
 }
 
-// ============================================================================
 
-} // namespace core
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

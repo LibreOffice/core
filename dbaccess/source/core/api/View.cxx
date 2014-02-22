@@ -55,7 +55,7 @@ namespace dbaccess
         }
         return sSupportService;
     }
-    // View
+    
     View::View( const Reference< XConnection >& _rxConnection, sal_Bool _bCaseSensitive,
         const OUString& _rCatalogName,const OUString& _rSchemaName, const OUString& _rName )
         :View_Base( _bCaseSensitive, _rName, _rxConnection->getMetaData(), 0, OUString(), _rSchemaName, _rCatalogName )
@@ -120,8 +120,8 @@ namespace dbaccess
     {
         if ( _nHandle == m_nCommandHandle && m_xViewAccess.is() )
         {
-            // retrieve the very current command, don't rely on the base classes cached value
-            // (which we initialized empty, anyway)
+            
+            
             _rValue <<= m_xViewAccess->getCommand(const_cast<View*>(this));
             return;
         }
@@ -129,6 +129,6 @@ namespace dbaccess
         View_Base::getFastPropertyValue( _rValue, _nHandle );
     }
 
-} // namespace dbaccess
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

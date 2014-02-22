@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -81,16 +81,16 @@ using namespace ::xmloff::token;
 #define PMAP(name,prefix,token,type,context) _MAP(name,prefix,token,type|XML_TYPE_PROP_PARAGRAPH,context)
 #define MAP_END() { 0L, 0, 0, XML_EMPTY, 0 ,0, SvtSaveOptions::ODFVER_010, false }
 
-// entry list for graphic properties
+
 
 const XMLPropertyMapEntry aXMLSDProperties[] =
 {
-    // this entry must be first! this is needed for XMLShapeImportHelper::CreateExternalShapePropMapper
+    
     //
-    // ^^^though CreateExternalShapePropMapper is gone now, hmm^^^
+    
     GMAP( "UserDefinedAttributes",          XML_NAMESPACE_TEXT, XML_XMLNS,                  XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
 
-    // stroke attributes
+    
     GMAP( "LineStyle",                      XML_NAMESPACE_DRAW, XML_STROKE,                 XML_SD_TYPE_STROKE, 0 ),
     GMAP( "LineDashName",                   XML_NAMESPACE_DRAW, XML_STROKE_DASH,            XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT , CTF_DASHNAME ),
     GMAP( "LineWidth",                      XML_NAMESPACE_SVG,  XML_STROKE_WIDTH,           XML_TYPE_MEASURE, 0 ),
@@ -105,7 +105,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "LineJoint",                      XML_NAMESPACE_DRAW, XML_STROKE_LINEJOIN,        XML_SD_TYPE_LINEJOIN, 0 ),
     GMAP( "LineCap",                        XML_NAMESPACE_SVG , XML_STROKE_LINECAP,         XML_SD_TYPE_LINECAP, 0 ),
 
-    // fill attributes
+    
     GMAP( "FillStyle",                      XML_NAMESPACE_DRAW, XML_FILL,                   XML_SD_TYPE_FILLSTYLE, 0 ),
     GMAP_D("FillColor",                     XML_NAMESPACE_DRAW, XML_FILL_COLOR,             XML_TYPE_COLOR, 0),
     GMAP_D("FillColor2",                    XML_NAMESPACE_DRAW, XML_SECONDARY_FILL_COLOR,   XML_TYPE_COLOR, 0),
@@ -114,7 +114,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "FillHatchName",                  XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLHATCHNAME ),
     GMAP( "FillBackground",                 XML_NAMESPACE_DRAW, XML_FILL_HATCH_SOLID,       XML_TYPE_BOOL, 0 ),
     GMAP( "FillBitmapName",                 XML_NAMESPACE_DRAW, XML_FILL_IMAGE_NAME,        XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLBITMAPNAME ),
-    GMAP( "FillTransparence",               XML_NAMESPACE_DRAW, XML_OPACITY,            XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ),    // exists in SW, too
+    GMAP( "FillTransparence",               XML_NAMESPACE_DRAW, XML_OPACITY,            XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ),    
     GMAP( "FillTransparenceGradientName",   XML_NAMESPACE_DRAW, XML_OPACITY_NAME,       XML_TYPE_STYLENAME|MID_FLAG_NO_PROPERTY_IMPORT, CTF_FILLTRANSNAME ),
 
     GMAP( "FillBitmapSizeX",                    XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH,       XML_SD_TYPE_FILLBITMAPSIZE|MID_FLAG_MULTI_PROPERTY, 0 ),
@@ -128,7 +128,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "FillBitmapOffsetX",              XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETX|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_X ),
     GMAP( "FillBitmapOffsetY",              XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET,     XML_SD_TYPE_BITMAPREPOFFSETY|MID_FLAG_MULTI_PROPERTY, CTF_REPEAT_OFFSET_Y ),
 
-    // text frame attributes
+    
     GMAP( "TextHorizontalAdjust",           XML_NAMESPACE_DRAW, XML_TEXTAREA_HORIZONTAL_ALIGN,  XML_SD_TYPE_TEXT_ALIGN, 0 ),
     GMAP( "TextVerticalAdjust",             XML_NAMESPACE_DRAW, XML_TEXTAREA_VERTICAL_ALIGN,    XML_SD_TYPE_VERTICAL_ALIGN, 0 ),
     GMAP( "TextAutoGrowHeight",             XML_NAMESPACE_DRAW, XML_AUTO_GROW_HEIGHT,       XML_TYPE_BOOL, 0 ),
@@ -137,38 +137,38 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextContourFrame",               XML_NAMESPACE_DRAW, XML_FIT_TO_CONTOUR,         XML_TYPE_BOOL, 0 ),
     GMAP( "TextMaximumFrameHeight",         XML_NAMESPACE_FO,   XML_MAX_HEIGHT,             XML_TYPE_MEASURE, 0 ),
     GMAP( "TextMaximumFrameWidth",          XML_NAMESPACE_FO,   XML_MAX_WIDTH,              XML_TYPE_MEASURE, 0 ),
-    GMAP( "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   XML_MIN_HEIGHT,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
+    GMAP( "TextMinimumFrameHeight",         XML_NAMESPACE_FO,   XML_MIN_HEIGHT,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  
     GMAP( "TextMinimumFrameWidth",          XML_NAMESPACE_FO,   XML_MIN_WIDTH,              XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),
-    GMAP( "TextUpperDistance",              XML_NAMESPACE_FO,   XML_PADDING_TOP,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    GMAP( "TextLowerDistance",              XML_NAMESPACE_FO,   XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    GMAP( "TextLeftDistance",               XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    GMAP( "TextRightDistance",              XML_NAMESPACE_FO,   XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
+    GMAP( "TextUpperDistance",              XML_NAMESPACE_FO,   XML_PADDING_TOP,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  
+    GMAP( "TextLowerDistance",              XML_NAMESPACE_FO,   XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  
+    GMAP( "TextLeftDistance",               XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  
+    GMAP( "TextRightDistance",              XML_NAMESPACE_FO,   XML_PADDING_RIGHT,          XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  
     PMAP( "TextWritingMode",                XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_SD_TYPE_WRITINGMODE|MID_FLAG_MULTI_PROPERTY, CTF_WRITINGMODE ),
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE,             XML_SD_TYPE_NUMBULLET|MID_FLAG_ELEMENT_ITEM, CTF_NUMBERINGRULES ),
     GMAP( "NumberingRules",                 XML_NAMESPACE_TEXT, XML_LIST_STYLE_NAME,        XML_TYPE_STRING, CTF_SD_NUMBERINGRULES_NAME ),
     GMAP( "TextWordWrap",                   XML_NAMESPACE_FO,   XML_WRAP_OPTION,            XML_TYPE_WRAP_OPTION, 0 ),
 
-    // shadow attributes
+    
     GMAP( "Shadow",                         XML_NAMESPACE_DRAW, XML_SHADOW,                 XML_SD_TYPE_SHADOW, 0 ),
     GMAP( "ShadowXDistance",                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_X,        XML_TYPE_MEASURE, 0 ),
     GMAP( "ShadowYDistance",                    XML_NAMESPACE_DRAW, XML_SHADOW_OFFSET_Y,        XML_TYPE_MEASURE, 0 ),
     GMAP( "ShadowColor",                        XML_NAMESPACE_DRAW, XML_SHADOW_COLOR,           XML_TYPE_COLOR, 0 ),
     GMAP( "ShadowTransparence",             XML_NAMESPACE_DRAW, XML_SHADOW_OPACITY, XML_TYPE_NEG_PERCENT, 0 ),
 
-    // graphic attributes
-    GMAP( "GraphicColorMode",               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 ), // exists in SW, too, with same property name
-    GMAP( "AdjustLuminance",                XML_NAMESPACE_DRAW, XML_LUMINANCE,              XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "AdjustContrast",                 XML_NAMESPACE_DRAW, XML_CONTRAST,               XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "Gamma",                          XML_NAMESPACE_DRAW, XML_GAMMA,                  XML_TYPE_DOUBLE_PERCENT, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "AdjustRed",                      XML_NAMESPACE_DRAW, XML_RED,                    XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "AdjustGreen",                    XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAP( "AdjustBlue",                     XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 ), // signed? exists in SW, too, with same property name
-    GMAPV( "GraphicCrop",                   XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, CTF_TEXT_CLIP, SvtSaveOptions::ODFVER_012 ), // exists in SW, too, with same property name
-    GMAP( "GraphicCrop",                    XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP11, CTF_TEXT_CLIP11 ), // exists in SW, too, with same property name
-    GMAP( "Transparency",                   XML_NAMESPACE_DRAW, XML_IMAGE_OPACITY,          XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), // exists in SW, too, with same property name // #i25616#
-    GMAP( "IsMirrored",                     XML_NAMESPACE_STYLE,    XML_MIRROR,             XML_TYPE_SD_MIRROR|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too // #i40214#
+    
+    GMAP( "GraphicColorMode",               XML_NAMESPACE_DRAW, XML_COLOR_MODE,             XML_TYPE_COLOR_MODE, 0 ), 
+    GMAP( "AdjustLuminance",                XML_NAMESPACE_DRAW, XML_LUMINANCE,              XML_TYPE_PERCENT16, 0 ), 
+    GMAP( "AdjustContrast",                 XML_NAMESPACE_DRAW, XML_CONTRAST,               XML_TYPE_PERCENT16, 0 ), 
+    GMAP( "Gamma",                          XML_NAMESPACE_DRAW, XML_GAMMA,                  XML_TYPE_DOUBLE_PERCENT, 0 ), 
+    GMAP( "AdjustRed",                      XML_NAMESPACE_DRAW, XML_RED,                    XML_TYPE_PERCENT16, 0 ), 
+    GMAP( "AdjustGreen",                    XML_NAMESPACE_DRAW, XML_GREEN,                  XML_TYPE_PERCENT16, 0 ), 
+    GMAP( "AdjustBlue",                     XML_NAMESPACE_DRAW, XML_BLUE,                   XML_TYPE_PERCENT16, 0 ), 
+    GMAPV( "GraphicCrop",                   XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP, CTF_TEXT_CLIP, SvtSaveOptions::ODFVER_012 ), 
+    GMAP( "GraphicCrop",                    XML_NAMESPACE_FO,   XML_CLIP,                   XML_TYPE_TEXT_CLIP11, CTF_TEXT_CLIP11 ), 
+    GMAP( "Transparency",                   XML_NAMESPACE_DRAW, XML_IMAGE_OPACITY,          XML_TYPE_NEG_PERCENT16|MID_FLAG_MULTI_PROPERTY, 0 ), 
+    GMAP( "IsMirrored",                     XML_NAMESPACE_STYLE,    XML_MIRROR,             XML_TYPE_SD_MIRROR|MID_FLAG_MULTI_PROPERTY, 0 ),  
 
-    // animation text attributes
+    
     TMAP( "TextAnimationKind",              XML_NAMESPACE_STYLE,XML_TEXT_BLINKING,          XML_TYPE_TEXT_ANIMATION_BLINKING, CTF_TEXTANIMATION_BLINKING ),
     GMAP( "TextAnimationKind",              XML_NAMESPACE_TEXT, XML_ANIMATION,              XML_TYPE_TEXT_ANIMATION, CTF_TEXTANIMATION_KIND ),
     GMAP( "TextAnimationDirection",         XML_NAMESPACE_TEXT, XML_ANIMATION_DIRECTION,    XML_TYPE_TEXT_ANIMATION_DIRECTION, 0 ),
@@ -178,13 +178,13 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "TextAnimationDelay",             XML_NAMESPACE_TEXT, XML_ANIMATION_DELAY,        XML_TYPE_DURATION16_MS, 0 ),
     GMAP( "TextAnimationAmount",                XML_NAMESPACE_TEXT, XML_ANIMATION_STEPS,        XML_TYPE_TEXT_ANIMATION_STEPS, 0 ),
 
-    // connector attributes
+    
     GMAP( "EdgeNode1HorzDist",              XML_NAMESPACE_DRAW, XML_START_LINE_SPACING_HORIZONTAL,  XML_TYPE_MEASURE, 0 ),
     GMAP( "EdgeNode1VertDist",              XML_NAMESPACE_DRAW, XML_START_LINE_SPACING_VERTICAL,    XML_TYPE_MEASURE, 0 ),
     GMAP( "EdgeNode2HorzDist",              XML_NAMESPACE_DRAW, XML_END_LINE_SPACING_HORIZONTAL,    XML_TYPE_MEASURE, 0 ),
     GMAP( "EdgeNode2VertDist",              XML_NAMESPACE_DRAW, XML_END_LINE_SPACING_VERTICAL,      XML_TYPE_MEASURE, 0 ),
 
-    // measure attributes
+    
     GMAP( "MeasureLineDistance",                XML_NAMESPACE_DRAW, XML_LINE_DISTANCE,          XML_TYPE_MEASURE, 0 ),
     GMAP( "MeasureHelpLineOverhang",            XML_NAMESPACE_DRAW, XML_GUIDE_OVERHANG,         XML_TYPE_MEASURE, 0 ),
     GMAP( "MeasureHelpLineDistance",            XML_NAMESPACE_DRAW, XML_GUIDE_DISTANCE,         XML_TYPE_MEASURE, 0 ),
@@ -198,7 +198,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "MeasureTextRotate90",                XML_NAMESPACE_DRAW, XML_PARALLEL,               XML_TYPE_BOOL, 0 ),
     GMAP( "MeasureDecimalPlaces",           XML_NAMESPACE_DRAW, XML_DECIMAL_PLACES,         XML_TYPE_NUMBER16, 0 ),
 
-    // 3D geometry attributes
+    
     GMAP( "D3DHorizontalSegments",          XML_NAMESPACE_DR3D, XML_HORIZONTAL_SEGMENTS,    XML_TYPE_NUMBER, 0 ),
     GMAP( "D3DVerticalSegments",                XML_NAMESPACE_DR3D, XML_VERTICAL_SEGMENTS,      XML_TYPE_NUMBER, 0 ),
     GMAP( "D3DPercentDiagonal",             XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING,          XML_TYPE_PERCENT, 0 ),
@@ -207,31 +207,31 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "D3DDepth",                       XML_NAMESPACE_DR3D, XML_DEPTH,                  XML_TYPE_MEASURE, 0 ),
     GMAP( "D3DDoubleSided",                 XML_NAMESPACE_DR3D, XML_BACKFACE_CULLING,       XML_SD_TYPE_BACKFACE_CULLING, 0 ),
 
-    // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+    
     GMAP( "D3DCloseFront",                  XML_NAMESPACE_DR3D, XML_CLOSE_FRONT,            XML_TYPE_BOOL, 0 ),
     GMAP( "D3DCloseBack",                   XML_NAMESPACE_DR3D, XML_CLOSE_BACK,             XML_TYPE_BOOL, 0 ),
 
-    // 3D lighting attributes
+    
     GMAP( "D3DNormalsKind",                 XML_NAMESPACE_DR3D, XML_NORMALS_KIND,           XML_SD_TYPE_NORMALS_KIND, 0 ),
     GMAP( "D3DNormalsInvert",               XML_NAMESPACE_DR3D, XML_NORMALS_DIRECTION,      XML_SD_TYPE_NORMALS_DIRECTION, 0 ),
 
-    // 3D texture attributes
+    
     GMAP( "D3DTextureProjectionX",          XML_NAMESPACE_DR3D, XML_TEX_GENERATION_MODE_X,  XML_SD_TYPE_TEX_GENERATION_MODE_X, 0 ),
     GMAP( "D3DTextureProjectionY",          XML_NAMESPACE_DR3D, XML_TEX_GENERATION_MODE_Y,  XML_SD_TYPE_TEX_GENERATION_MODE_Y, 0 ),
     GMAP( "D3DTextureKind",                 XML_NAMESPACE_DR3D, XML_TEX_KIND,               XML_SD_TYPE_TEX_KIND, 0 ),
     GMAP( "D3DTextureMode",                 XML_NAMESPACE_DR3D, XML_TEX_MODE,               XML_SD_TYPE_TEX_MODE, 0 ),
     GMAP( "D3DTextureFilter",               XML_NAMESPACE_DR3D, XML_TEX_FILTER,             XML_SD_TYPE_BACKFACE_CULLING, 0 ),
 
-    // 3D material attributes
+    
     GMAP( "D3DMaterialColor",               XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR,          XML_TYPE_COLOR, 0 ),
     GMAP( "D3DMaterialEmission",                XML_NAMESPACE_DR3D, XML_EMISSIVE_COLOR,         XML_TYPE_COLOR, 0 ),
     GMAP( "D3DMaterialSpecular",                XML_NAMESPACE_DR3D, XML_SPECULAR_COLOR,         XML_TYPE_COLOR, 0 ),
     GMAP( "D3DMaterialSpecularIntensity",   XML_NAMESPACE_DR3D, XML_SHININESS,              XML_TYPE_PERCENT, 0 ),
 
-    // 3D shadow attributes
+    
     GMAP( "D3DShadow3D",                        XML_NAMESPACE_DR3D, XML_SHADOW,                 XML_SD_TYPE_SHADOW, 0 ),
 
-    // #FontWork# attributes
+    
     GMAP( "FontWorkStyle",                  XML_NAMESPACE_DRAW, XML_FONTWORK_STYLE,             XML_SD_TYPE_FONTWORK_STYLE, CTF_FONTWORK_STYLE  ),
     GMAP( "FontWorkAdjust",                 XML_NAMESPACE_DRAW, XML_FONTWORK_ADJUST,                XML_SD_TYPE_FONTWORK_ADJUST,CTF_FONTWORK_ADJUST ),
     GMAP( "FontWorkDistance",               XML_NAMESPACE_DRAW, XML_FONTWORK_DISTANCE,              XML_TYPE_MEASURE,           CTF_FONTWORK_DISTANCE   ),
@@ -246,7 +246,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "FontWorkHideForm",               XML_NAMESPACE_DRAW, XML_FONTWORK_HIDE_FORM,             XML_TYPE_BOOL,              CTF_FONTWORK_HIDEFORM   ),
     GMAP( "FontWorkShadowTransparence",     XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_TRANSPARENCE,   XML_TYPE_PERCENT,           CTF_FONTWORK_SHADOWTRANSPARENCE ),
 
-    // control attributes (border exists one mor time for the text additions of shapes)
+    
     GMAP( "ControlSymbolColor",             XML_NAMESPACE_DRAW, XML_SYMBOL_COLOR,           XML_TYPE_COLOR, 0 ),
     GMAP( "ControlBackground",              XML_NAMESPACE_FO,   XML_BACKGROUND_COLOR,       XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
     GMAP( "ControlBorder",                  XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
@@ -256,7 +256,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "ImageScaleMode",                 XML_NAMESPACE_STYLE,XML_REPEAT,                 XML_SD_TYPE_IMAGE_SCALE_MODE|MID_FLAG_MULTI_PROPERTY, 0 ),
     GMAP( "ControlWritingMode",             XML_NAMESPACE_STYLE,XML_WRITING_MODE,           XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT|MID_FLAG_MULTI_PROPERTY, CTF_CONTROLWRITINGMODE ),
 
-    // special entries for floating frames
+    
     GMAP( "FrameIsAutoScroll",          XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_SCROLLBAR,    XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_SCROLLBAR ),
     GMAP( "FrameIsBorder",              XML_NAMESPACE_DRAW, XML_FRAME_DISPLAY_BORDER,       XML_TYPE_BOOL|MID_FLAG_MULTI_PROPERTY,              CTF_FRAME_DISPLAY_BORDER ),
     GMAP( "FrameMarginWidth",           XML_NAMESPACE_DRAW, XML_FRAME_MARGIN_HORIZONTAL,    XML_TYPE_MEASURE_PX|MID_FLAG_MULTI_PROPERTY,        CTF_FRAME_MARGIN_HORI ),
@@ -273,7 +273,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
 
     GMAP( "Aspect",                     XML_NAMESPACE_DRAW, XML_DRAW_ASPECT,                XML_TYPE_TEXT_DRAW_ASPECT|MID_FLAG_MULTI_PROPERTY,  CTF_SD_OLE_ASPECT ),
 
-    // caption properties
+    
     GMAP( "CaptionType",                    XML_NAMESPACE_DRAW, XML_CAPTION_TYPE,               XML_SD_TYPE_CAPTION_TYPE, 0 ),
     GMAP( "CaptionIsFixedAngle",            XML_NAMESPACE_DRAW, XML_CAPTION_ANGLE_TYPE,         XML_SD_TYPE_CAPTION_ANGLE_TYPE, 0 ),
     GMAP( "CaptionAngle",               XML_NAMESPACE_DRAW, XML_CAPTION_ANGLE,              XML_TYPE_NUMBER, 0 ),
@@ -285,13 +285,13 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAP( "CaptionLineLength",          XML_NAMESPACE_DRAW, XML_CAPTION_LINE_LENGTH,        XML_TYPE_MEASURE, 0 ),
     GMAP( "CaptionIsFitLineLength",     XML_NAMESPACE_DRAW, XML_CAPTION_FIT_LINE_LENGTH,    XML_TYPE_BOOL, 0 ),
 
-    // misc object properties
+    
     GMAP( "MoveProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_MOVE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_MOVE_PROTECT ),
     GMAP( "SizeProtect",                    XML_NAMESPACE_STYLE, XML_PROTECT,               XML_SD_TYPE_SIZE_PROTECT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, CTF_SD_SIZE_PROTECT ),
     MAP_END()
 };
 
-// entry list for presentation page properties
+
 
 const XMLPropertyMapEntry aXMLSDPresPageProps[] =
 {
@@ -363,7 +363,7 @@ const XMLPropertyMapEntry aXMLTableShapeAttributes[] =
     MAP_END()
 };
 
-// implementation of factory for own graphic properties
+
 
 static SvXMLEnumMapEntry const aXML_LineStyle_EnumMap[] =
 {
@@ -387,7 +387,7 @@ static SvXMLEnumMapEntry const aXML_LineCap_EnumMap[] =
 {
     { XML_BUTT, drawing::LineCap_BUTT },
     { XML_ROUND, drawing::LineCap_ROUND },
-    // use XML_GRADIENTSTYLE_SQUARE as XML_SQUARE, is defined as "square" already
+    
     { XML_GRADIENTSTYLE_SQUARE, drawing::LineCap_SQUARE },
     { XML_TOKEN_INVALID, 0 }
 };
@@ -497,7 +497,7 @@ static SvXMLEnumMapEntry const   aXML_BitmapMode_EnumMap[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-// 3D EnumMaps
+
 
 static SvXMLEnumMapEntry const  aXML_NormalsKind_EnumMap[] =
 {
@@ -571,7 +571,7 @@ static SvXMLEnumMapEntry const aXML_WritingMode_EnumMap[] =
 static SvXMLEnumMapEntry const pXML_TextAnimation_Enum[] =
 {
     { XML_NONE,         drawing::TextAnimationKind_NONE },
-    { XML_BLINKING,     drawing::TextAnimationKind_BLINK }, // will be filtered
+    { XML_BLINKING,     drawing::TextAnimationKind_BLINK }, 
     { XML_SCROLL,       drawing::TextAnimationKind_SCROLL },
     { XML_ALTERNATE,    drawing::TextAnimationKind_ALTERNATE },
     { XML_SLIDE,        drawing::TextAnimationKind_SLIDE },
@@ -591,7 +591,7 @@ static SvXMLEnumMapEntry const pXML_TextAnimation_Blinking_Enum[] =
 static SvXMLEnumMapEntry const pXML_TextAnimationDirection_Enum[] =
 {
     { XML_LEFT,         drawing::TextAnimationDirection_LEFT },
-    { XML_RIGHT,        drawing::TextAnimationDirection_RIGHT },    // will be filtered
+    { XML_RIGHT,        drawing::TextAnimationDirection_RIGHT },    
     { XML_UP,           drawing::TextAnimationDirection_UP },
     { XML_DOWN,         drawing::TextAnimationDirection_DOWN },
     { XML_TOKEN_INVALID, 0 }
@@ -666,65 +666,65 @@ static SvXMLEnumMapEntry const pXML_Measure_VAlign_Enum[] =
     { XML_TOKEN_INVALID,0 }
 };
 
-// #FontWork#
+
 static SvXMLEnumMapEntry const pXML_Fontwork_Style_Enum[] =
 {
-    { XML_ROTATE,       0 }, //XFT_ROTATE,
-    { XML_UPRIGHT,      1 }, //XFT_UPRIGHT,
-    { XML_SLANT_X,      2 }, //XFT_SLANTX,
-    { XML_SLANT_Y,      3 }, //XFT_SLANTY,
-    { XML_NONE,         4 }, //XFT_NONE
+    { XML_ROTATE,       0 }, 
+    { XML_UPRIGHT,      1 }, 
+    { XML_SLANT_X,      2 }, 
+    { XML_SLANT_Y,      3 }, 
+    { XML_NONE,         4 }, 
     { XML_TOKEN_INVALID,0 }
 };
 
 static SvXMLEnumMapEntry const pXML_Fontwork_Adjust_Enum[] =
 {
-    { XML_LEFT,         0 }, //XFT_LEFT,
-    { XML_RIGHT,        1 }, //XFT_RIGHT,
-    { XML_AUTOSIZE,     2 }, //XFT_AUTOSIZE,
-    { XML_CENTER,       3 }, //XFT_CENTER
+    { XML_LEFT,         0 }, 
+    { XML_RIGHT,        1 }, 
+    { XML_AUTOSIZE,     2 }, 
+    { XML_CENTER,       3 }, 
     { XML_TOKEN_INVALID,0 }
 };
 
 static SvXMLEnumMapEntry const pXML_Fontwork_Shadow_Enum[] =
 {
-    { XML_NORMAL,       0 }, //XFTSHADOW_NORMAL,
-    { XML_SLANT,        1 }, //XFTSHADOW_SLANT,
-    { XML_NONE,         2 }, //XFTSHADOW_NONE
+    { XML_NORMAL,       0 }, 
+    { XML_SLANT,        1 }, 
+    { XML_NONE,         2 }, 
     { XML_TOKEN_INVALID,0 }
 };
 
 static SvXMLEnumMapEntry const pXML_Fontwork_Form_Enum[] =
 {
-    { XML_NONE,             0 }, //XFTFORM_NONE,
-    { XML_TOPCIRCLE,        1 }, //XFTFORM_TOPCIRC,
-    { XML_BOTTOMCIRCLE,     2 }, //XFTFORM_BOTCIRC,
-    { XML_LEFTCIRCLE,       3 }, //XFTFORM_LFTCIRC,
-    { XML_RIGHTCIRCLE,      4 }, //XFTFORM_RGTCIRC,
-    { XML_TOPARC,           5 }, //XFTFORM_TOPARC,
-    { XML_BOTTOMARC,        6 }, //XFTFORM_BOTARC,
-    { XML_LEFTARC,          7 }, //XFTFORM_LFTARC,
-    { XML_RIGHTARC,         8 }, //XFTFORM_RGTARC,
-    { XML_BUTTON1,          9 }, //XFTFORM_BUTTON1,
-    { XML_BUTTON2,          10 }, //XFTFORM_BUTTON2,
-    { XML_BUTTON3,          11 }, //XFTFORM_BUTTON3,
-    { XML_BUTTON4,          12 }, //XFTFORM_BUTTON4
+    { XML_NONE,             0 }, 
+    { XML_TOPCIRCLE,        1 }, 
+    { XML_BOTTOMCIRCLE,     2 }, 
+    { XML_LEFTCIRCLE,       3 }, 
+    { XML_RIGHTCIRCLE,      4 }, 
+    { XML_TOPARC,           5 }, 
+    { XML_BOTTOMARC,        6 }, 
+    { XML_LEFTARC,          7 }, 
+    { XML_RIGHTARC,         8 }, 
+    { XML_BUTTON1,          9 }, 
+    { XML_BUTTON2,          10 }, 
+    { XML_BUTTON3,          11 }, 
+    { XML_BUTTON4,          12 }, 
     { XML_TOKEN_INVALID,0 }
 };
 
 static SvXMLEnumMapEntry const pXML_Caption_Esc_Dir_Enum[] =
 {
-    { XML_HORIZONTAL,       0 }, //SDRCAPT_ESCHORIZONTAL,
-    { XML_VERTICAL,         1 }, //SDRCAPT_ESCVERTICAL,
-    { XML_AUTO,             2 }, //SDRCAPT_ESCBESTFIT,
+    { XML_HORIZONTAL,       0 }, 
+    { XML_VERTICAL,         1 }, 
+    { XML_AUTO,             2 }, 
     { XML_TOKEN_INVALID,0 }
 };
 
 static SvXMLEnumMapEntry const pXML_Caption_Type_Enum[] =
 {
-    { XML_STRAIGHT_LINE,            0 }, //SDRCAPT_TYPE1,
-    { XML_ANGLED_LINE,              1 }, //SDRCAPT_TYPE2,
-    { XML_ANGLED_CONNECTOR_LINE,    2 }, //SDRCAPT_TYPE3,
+    { XML_STRAIGHT_LINE,            0 }, 
+    { XML_ANGLED_LINE,              1 }, 
+    { XML_ANGLED_CONNECTOR_LINE,    2 }, 
     { XML_TOKEN_INVALID,0 }
 };
 
@@ -825,9 +825,9 @@ bool XMLSdHeaderFooterVisibilityTypeHdl::importXML(
         ::com::sun::star::uno::Any& rValue,
         const SvXMLUnitConverter& ) const
 {
-    // #i38644#
-    // attributes with this type where saved with VISIBLE|HIDDEN prior
-    // to src680m67. So we have to import that correctly
+    
+    
+    
     const sal_Bool bBool = IsXMLToken(rStrImpValue, XML_TRUE) || IsXMLToken(rStrImpValue, XML_VISIBLE);
     rValue <<= bBool;
     return bBool || IsXMLToken(rStrImpValue, XML_FALSE) || IsXMLToken(rStrImpValue, XML_HIDDEN);
@@ -950,13 +950,13 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
             }
 
-            // 3D Properties
+            
 
             case XML_SD_TYPE_BACKFACE_CULLING:
             {
-                // #87922# DoubleSided -> BackfaceCulling
-                // This sal_Bool needs to be flipped, DoubleSided sal_True -> NO Backface culling
-                // and vice versa.
+                
+                
+                
                 pHdl = new XMLNamedBoolPropertyHdl( GetXMLToken(XML_DISABLED), GetXMLToken(XML_ENABLED) );
                 break;
             }
@@ -1081,7 +1081,7 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 pHdl = new XMLClipPropertyHandler( false );
                 break;
 
-            // #FontWork#
+            
             case XML_SD_TYPE_FONTWORK_STYLE     :
                 pHdl = new XMLEnumPropertyHdl( pXML_Fontwork_Style_Enum , ::getCppuType((const sal_Int32*)0));
                 break;
@@ -1197,7 +1197,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pTextAnimationBlinking = NULL;
     XMLPropertyState* pTextAnimationKind = NULL;
 
-    // #FontWork#
+    
     XMLPropertyState* pFontWorkStyle = NULL;
     XMLPropertyState* pFontWorkAdjust = NULL;
     XMLPropertyState* pFontWorkDistance = NULL;
@@ -1212,19 +1212,19 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pFontWorkHideform = NULL;
     XMLPropertyState* pFontWorkShadowTransparence = NULL;
 
-    // OLE
+    
     XMLPropertyState* pOLEVisAreaLeft = NULL;
     XMLPropertyState* pOLEVisAreaTop = NULL;
     XMLPropertyState* pOLEVisAreaWidth = NULL;
     XMLPropertyState* pOLEVisAreaHeight = NULL;
     XMLPropertyState* pOLEIsInternal = NULL;
 
-    // caption
+    
     XMLPropertyState* pCaptionIsEscRel = NULL;
     XMLPropertyState* pCaptionEscRel = NULL;
     XMLPropertyState* pCaptionEscAbs = NULL;
 
-    // filter fo:clip
+    
     XMLPropertyState* pClip11State = NULL;
     XMLPropertyState* pClipState = NULL;
 
@@ -1232,7 +1232,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
     XMLPropertyState* pTextWritingMode = NULL;
     XMLPropertyState* pControlWritingMode = NULL;
 
-    // filter properties
+    
     for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
          ++aIter )
@@ -1241,8 +1241,8 @@ void XMLShapeExportPropertyMapper::ContextFilter(
         if( property->mnIndex == -1 )
             continue;
 
-        // find properties with context
-        // to prevent writing this property set mnIndex member to -1
+        
+        
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
         {
             case CTF_NUMBERINGRULES:
@@ -1253,10 +1253,10 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                 break;
             case CTF_SD_NUMBERINGRULES_NAME:
                 {
-                    // this property is not exported in the style:properties element
-                    // because its an XIndexAccess and not a string.
-                    // This will be handled in SvXMLAutoStylePoolP::exportStyleAttributes
-                    // This is suboptimal
+                    
+                    
+                    
+                    
                     if( !mbIsInAutoStyles )
                         property->mnIndex = -1;
                 }
@@ -1306,7 +1306,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
                 pTextAnimationKind = property;
                 break;
 
-            // #FontWork#
+            
             case CTF_FONTWORK_STYLE:                pFontWorkStyle = property;              break;
             case CTF_FONTWORK_ADJUST:               pFontWorkAdjust = property;             break;
             case CTF_FONTWORK_DISTANCE:             pFontWorkDistance = property;           break;
@@ -1321,7 +1321,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
             case CTF_FONTWORK_HIDEFORM:             pFontWorkHideform = property;           break;
             case CTF_FONTWORK_SHADOWTRANSPARENCE:   pFontWorkShadowTransparence = property; break;
 
-            // OLE
+            
             case CTF_SD_OLE_VIS_AREA_EXPORT_LEFT:           pOLEVisAreaLeft = property;     break;
             case CTF_SD_OLE_VIS_AREA_EXPORT_TOP:            pOLEVisAreaTop = property;      break;
             case CTF_SD_OLE_VIS_AREA_EXPORT_WIDTH:          pOLEVisAreaWidth = property;    break;
@@ -1365,7 +1365,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
         }
     }
 
-    // check for duplicate writing mode
+    
     if( pShapeWritingMode && (pTextWritingMode || pControlWritingMode) )
     {
         if( pTextWritingMode )
@@ -1378,7 +1378,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
         pControlWritingMode->mnIndex = -1;
     }
 
-    // do not export visual area for internal ole objects
+    
     if( pOLEIsInternal )
     {
         sal_Bool bInternal = sal_Bool();
@@ -1451,7 +1451,7 @@ void XMLShapeExportPropertyMapper::ContextFilter(
 
     if(pFontWorkStyle)
     {
-        // #FontWork#
+        
         sal_Int32 nStyle = 0;
 
         if(pFontWorkStyle->maValue >>= nStyle)
@@ -1523,7 +1523,7 @@ void XMLShapeExportPropertyMapper::handleSpecialItem(
     switch( getPropertySetMapper()->GetEntryContextId( rProperty.mnIndex ) )
     {
         case CTF_SD_CONTROL_SHAPE_DATA_STYLE:
-            // not to be handled by the base class
+            
             break;
 
         default:
@@ -1543,7 +1543,7 @@ void XMLShapeExportPropertyMapper::handleElementItem(
     {
         case CTF_NUMBERINGRULES:
             {
-                // only export list-styles as elements in styles section
+                
                 if( !mbIsInAutoStyles )
                 {
                     uno::Reference< container::XIndexReplace > xNumRule( rProperty.maValue, uno::UNO_QUERY );
@@ -1584,7 +1584,7 @@ void XMLPageExportPropertyMapper::ContextFilter(
 
     sal_Int16 nTransitionType = 0;
 
-    // filter properties
+    
     for( std::vector< XMLPropertyState >::iterator aIter = rProperties.begin();
          aIter != rProperties.end();
          ++aIter )
@@ -1593,8 +1593,8 @@ void XMLPageExportPropertyMapper::ContextFilter(
         if( property->mnIndex == -1 )
             continue;
 
-        // find properties with context
-        // to prevent writing this property set mnIndex member to -1
+        
+        
         switch( getPropertySetMapper()->GetEntryContextId( property->mnIndex ))
         {
 
@@ -1706,11 +1706,11 @@ void XMLPageExportPropertyMapper::ContextFilter(
         sal_Int32 nChange = 0;
         pTransType->maValue >>= nChange;
 
-        // only export duration for automatic
+        
         if( nChange != 1 )
             pTransDuration->mnIndex = -1;
 
-        // do not export default transition change
+        
         if( nChange == 0 )
             pTransType->mnIndex = -1;
     }

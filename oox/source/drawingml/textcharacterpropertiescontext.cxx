@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textcharacterpropertiescontext.hxx"
@@ -34,7 +34,7 @@ using namespace ::com::sun::star::awt;
 
 namespace oox { namespace drawingml {
 
-// CT_TextCharacterProperties
+
 TextCharacterPropertiesContext::TextCharacterPropertiesContext(
         ContextHandler2Helper& rParent,
         const AttributeList& rAttribs,
@@ -84,52 +84,52 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
 {
     switch( aElementToken )
     {
-// TODO unsupported yet
-//        case A_TOKEN( ln ):         // CT_LineProperties
-//            return new LinePropertiesContext( getHandler(), rAttribs, maTextOutlineProperties );
 
-        case A_TOKEN( solidFill ):  // EG_FillProperties
+
+
+
+        case A_TOKEN( solidFill ):  
             return new ColorContext( *this, mrTextCharacterProperties.maCharColor );
 
-        // EG_EffectProperties
-        case A_TOKEN( effectDag ):  // CT_EffectContainer 5.1.10.25
-        case A_TOKEN( effectLst ):  // CT_EffectList 5.1.10.26
+        
+        case A_TOKEN( effectDag ):  
+        case A_TOKEN( effectLst ):  
         break;
 
-        case A_TOKEN( highlight ):  // CT_Color
+        case A_TOKEN( highlight ):  
             return new ColorContext( *this, mrTextCharacterProperties.maHighlightColor );
 
-        // EG_TextUnderlineLine
-        case A_TOKEN( uLnTx ):      // CT_TextUnderlineLineFollowText
+        
+        case A_TOKEN( uLnTx ):      
             mrTextCharacterProperties.moUnderlineLineFollowText = true;
         break;
-// TODO unsupported yet
-//        case A_TOKEN( uLn ):        // CT_LineProperties
-//            return new LinePropertiesContext( getHandler(), rAttribs, maUnderlineProperties );
 
-        // EG_TextUnderlineFill
-        case A_TOKEN( uFillTx ):    // CT_TextUnderlineFillFollowText
+
+
+
+        
+        case A_TOKEN( uFillTx ):    
             mrTextCharacterProperties.moUnderlineFillFollowText = true;
         break;
-        case A_TOKEN( uFill ):      // CT_TextUnderlineFillGroupWrapper->EG_FillProperties (not supported)
+        case A_TOKEN( uFill ):      
             return new SimpleFillPropertiesContext( *this, mrTextCharacterProperties.maUnderlineColor );
 
-        // CT_FontCollection
-        case A_TOKEN( latin ):      // CT_TextFont
+        
+        case A_TOKEN( latin ):      
             mrTextCharacterProperties.maLatinFont.setAttributes( rAttribs );
         break;
-        case A_TOKEN( ea ):         // CT_TextFont
+        case A_TOKEN( ea ):         
             mrTextCharacterProperties.maAsianFont.setAttributes( rAttribs );
         break;
-        case A_TOKEN( cs ):         // CT_TextFont
+        case A_TOKEN( cs ):         
             mrTextCharacterProperties.maComplexFont.setAttributes( rAttribs );
         break;
-        case A_TOKEN( sym ):        // CT_TextFont
+        case A_TOKEN( sym ):        
             mrTextCharacterProperties.maSymbolFont.setAttributes( rAttribs );
         break;
 
-        case A_TOKEN( hlinkClick ):     // CT_Hyperlink
-        case A_TOKEN( hlinkMouseOver ): // CT_Hyperlink
+        case A_TOKEN( hlinkClick ):     
+        case A_TOKEN( hlinkMouseOver ): 
             return new HyperLinkContext( *this, rAttribs,  mrTextCharacterProperties.maHyperlinkPropertyMap );
         case OOX_TOKEN( doc, rFonts ):
             if( rAttribs.hasAttribute(OOX_TOKEN(doc, ascii)) )
@@ -160,7 +160,7 @@ ContextHandlerRef TextCharacterPropertiesContext::onCreateContext( sal_Int32 aEl
             if (rAttribs.getInteger(OOX_TOKEN(doc, val)).has())
             {
                 sal_Int32 nVal = rAttribs.getInteger(OOX_TOKEN(doc, val)).get();
-                // wml has half points, dml has hundred points
+                
                 mrTextCharacterProperties.moHeight = nVal * 50;
             }
             break;

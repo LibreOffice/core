@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <textmarkuphelper.hxx>
@@ -31,7 +31,7 @@
 
 using namespace com::sun::star;
 
-// helper functions
+
 namespace {
     const SwWrongList* getTextMarkupList( const SwTxtNode& rTxtNode,
                                           const sal_Int32 nTextMarkupType )
@@ -48,13 +48,13 @@ namespace {
             break;
             case text::TextMarkupType::PROOFREADING:
             {
-                // support not implemented yet
+                
                 pTextMarkupList = 0;
             }
             break;
             case text::TextMarkupType::SMARTTAG:
             {
-                // support not implemented yet
+                
                 pTextMarkupList = 0;
             }
             break;
@@ -68,17 +68,17 @@ namespace {
     }
 }
 
-// implementation of class <SwTextMarkupoHelper>
+
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwTxtNode& rTxtNode )
     : mrPortionData( rPortionData )
-    // #i108125#
+    
     , mpTxtNode( &rTxtNode )
     , mpTextMarkupList( 0 )
 {
 }
 
-// #i108125#
+
 SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                                         const SwWrongList& rTextMarkupList )
     : mrPortionData( rPortionData )
@@ -93,7 +93,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
 {
     sal_Int32 nTextMarkupCount( 0 );
 
-    // #i108125#
+    
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
@@ -123,7 +123,7 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
     aTextMarkupSegment.SegmentStart = -1;
     aTextMarkupSegment.SegmentEnd = -1;
 
-    // #i108125#
+    
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList
@@ -159,18 +159,18 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
                ::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException)
 {
-    // assumption:
-    // value of <nCharIndex> is in range [0..length of accessible text)
+    
+    
 
     const sal_Int32 nCoreCharIndex = mrPortionData.GetModelPosition( nCharIndex );
-    // Handling of portions with core length == 0 at the beginning of the
-    // paragraph - e.g. numbering portion.
+    
+    
     if ( mrPortionData.GetAccessiblePosition( nCoreCharIndex ) > nCharIndex )
     {
         return uno::Sequence< ::com::sun::star::accessibility::TextSegment >();
     }
 
-    // #i108125#
+    
     const SwWrongList* pTextMarkupList =
                             mpTextMarkupList
                             ? mpTextMarkupList

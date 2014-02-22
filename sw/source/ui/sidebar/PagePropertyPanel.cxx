@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PagePropertyPanel.hxx"
@@ -105,7 +105,7 @@ PagePropertyPanel::PagePropertyPanel(
     : PanelLayout(pParent, "PagePropertyPanel", "modules/swriter/ui/sidebarpage.ui", rxFrame)
     , mpBindings(pBindings)
 
-    // image resources
+    
     , maImgSize                 (NULL)
     , maImgSize_L                   (NULL)
     , mImgPortrait              (SW_RES(IMG_PAGE_PORTRAIT))
@@ -185,7 +185,7 @@ PagePropertyPanel::PagePropertyPanel(
 
     , mbInvalidateSIDAttrPageOnSIDAttrPageSizeNotify( false )
 {
-    // visible controls
+    
     get(mpToolBoxOrientation, "selectorientation");
     get(mpToolBoxMargin, "selectmargin");
     get(mpToolBoxSize, "selectsize");
@@ -203,7 +203,7 @@ PagePropertyPanel::~PagePropertyPanel()
 
 void PagePropertyPanel::Initialize()
 {
-    // popup for page orientation
+    
     const sal_uInt16 nIdOrientation = mpToolBoxOrientation->GetItemId(UNO_ORIENTATION);
     Link aLink = LINK( this, PagePropertyPanel, ClickOrientationHdl );
     mpToolBoxOrientation->SetDropdownClickHdl( aLink );
@@ -211,7 +211,7 @@ void PagePropertyPanel::Initialize()
     mpToolBoxOrientation->SetItemImage( nIdOrientation, mImgPortrait);
     mpToolBoxOrientation->SetItemBits( nIdOrientation, mpToolBoxOrientation->GetItemBits( nIdOrientation ) | TIB_DROPDOWNONLY );
 
-    // popup for page margins
+    
     const sal_uInt16 nIdMargin = mpToolBoxMargin->GetItemId(UNO_MARGIN);
     aLink = LINK( this, PagePropertyPanel, ClickMarginHdl );
     mpToolBoxMargin->SetDropdownClickHdl( aLink );
@@ -219,7 +219,7 @@ void PagePropertyPanel::Initialize()
     mpToolBoxMargin->SetItemImage(nIdMargin, mImgNormal);
     mpToolBoxMargin->SetItemBits( nIdMargin, mpToolBoxMargin->GetItemBits( nIdMargin ) | TIB_DROPDOWNONLY );
 
-    // popup for page size
+    
     const sal_uInt16 nIdSize = mpToolBoxSize->GetItemId(UNO_SIZE);
     aLink = LINK( this, PagePropertyPanel, ClickSizeHdl );
     mpToolBoxSize->SetDropdownClickHdl( aLink );
@@ -245,7 +245,7 @@ void PagePropertyPanel::Initialize()
     maImgSize_L[6] = mImgLetter_L;
     maImgSize_L[7] = mImgLegal_L;
 
-    // popup for page column property
+    
     const sal_uInt16 nIdColumn = mpToolBoxColumn->GetItemId(UNO_COLUMN);
     aLink = LINK( this, PagePropertyPanel, ClickColumnHdl );
     mpToolBoxColumn->SetDropdownClickHdl( aLink );
@@ -256,7 +256,7 @@ void PagePropertyPanel::Initialize()
     meFUnit = GetModuleFieldUnit();
     meUnit  = m_aSwPagePgSizeControl.GetCoreMetric();
 
-    // 'pull' for page style's attribute values
+    
     mpBindings->Update( SID_ATTR_PAGE_LRSPACE );
     mpBindings->Update( SID_ATTR_PAGE_ULSPACE );
     mpBindings->Update( SID_ATTR_PAGE );
@@ -283,18 +283,18 @@ void PagePropertyPanel::ExecuteOrientationChange( const sal_Bool bLandscape )
     StartUndo();
 
     {
-        // set new page orientation
+        
         mpPageItem->SetLandscape( bLandscape );
 
-        // swap the width and height of the page size
+        
         mpPageSizeItem->SetSize( Size( mpPageSizeItem->GetSize().Height(), mpPageSizeItem->GetSize().Width() ) );
 
-        // apply changed attributes
+        
         GetBindings()->GetDispatcher()->Execute( SID_ATTR_PAGE_SIZE, SFX_CALLMODE_RECORD, mpPageSizeItem.get(), mpPageItem.get(), 0L );
     }
 
-    // check, if margin values still fit to the changed page size.
-    // if not, adjust margin values
+    
+    
     {
         const long nML = mpPageLRMarginItem->GetLeft();
         const long nMR = mpPageLRMarginItem->GetRight();
@@ -641,7 +641,7 @@ void PagePropertyPanel::ChangeSizeImage()
     Size aTmpPaperSize = mpPageSizeItem->GetSize();
     if ( mpPageItem->IsLandscape() )
     {
-        Swap( aTmpPaperSize ); // Swap(..) defined in editeng/paperinf.hxx
+        Swap( aTmpPaperSize ); 
     }
 
     mePaper = SvxPaperInfo::GetSvxPaper( aTmpPaperSize, static_cast<MapUnit>(meUnit), true );
@@ -768,6 +768,6 @@ void PagePropertyPanel::EndUndo()
     }
 }
 
-} } // end of namespace ::sw::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

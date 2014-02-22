@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbaaxes.hxx"
@@ -30,11 +30,11 @@ using namespace ::ooo::vba;
 using namespace ::ooo::vba::excel::XlAxisType;
 using namespace ::ooo::vba::excel::XlAxisGroup;
 
-// each 'Item' in the Axes collection is  indexed via 2 indexes,  group and type.
-// We need to 'flatten' this into a single index in order to be able to wrap
-// iteration over the set of Axis(s) in a XIndexAccess implementation
+
+
+
 //
-typedef ::std::pair<sal_Int32, sal_Int32 > AxesCoordinate; // type and group combination
+typedef ::std::pair<sal_Int32, sal_Int32 > AxesCoordinate; 
 typedef ::std::vector< AxesCoordinate > vecAxesIndices;
 
 typedef ::cppu::WeakImplHelper1< container::XIndexAccess > AxisIndexWrapper_BASE;
@@ -81,9 +81,9 @@ ScVbaAxes::createAxis( const uno::Reference< excel::XChart >& xChart, const uno:
 
 class AxisIndexWrapper : public AxisIndexWrapper_BASE
 {
-    // if necessary for better performance we could change this into a map and cache the
-    // indices -> Axis, currently we create a new Axis object
-    // on each getByIndex
+    
+    
+    
     uno::Reference< uno::XComponentContext > mxContext;
     vecAxesIndices mCoordinates;
     uno::Reference< excel::XChart > mxChart;
@@ -93,7 +93,7 @@ public:
         if ( mxChart.is() )
         {
             ScVbaChart* pChart = static_cast< ScVbaChart* >( mxChart.get() );
-            // primary
+            
             sal_Bool bBool = false;
             uno::Reference< beans::XPropertySet > xDiagramPropertySet( pChart->xDiagramPropertySet() );
             if ( ( xDiagramPropertySet->getPropertyValue("HasXAxis") >>= bBool )  && bBool )
@@ -104,7 +104,7 @@ public:
             if (  pChart->is3D() )
                 mCoordinates.push_back( AxesCoordinate( xlPrimary, xlValue ) );
 
-            // secondary
+            
             if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryXAxis") >>= bBool )  && bBool )
                 mCoordinates.push_back( AxesCoordinate( xlSecondary, xlCategory ) );
             if ( ( xDiagramPropertySet->getPropertyValue("HasSecondaryYAxis") >>= bBool )  && bBool )
@@ -118,7 +118,7 @@ public:
             AxesCoordinate dIndexes = mCoordinates[ Index ];
             return uno::makeAny( ScVbaAxes::createAxis( mxChart, mxContext, dIndexes.second, dIndexes.first ) );
     }
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException)
     {
         return cppu::UnoType<excel::XAxis>::get();
@@ -134,7 +134,7 @@ uno::Reference< container::XIndexAccess > createIndexWrapper( const uno::Referen
     return new AxisIndexWrapper( xContext, xChart );
 }
 
-// #FIXME The collection semantics will never work as this object is not yet initialised correctly
+
 ScVbaAxes::ScVbaAxes( const uno::Reference< XHelperInterface >& xParent,const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< excel::XChart >& xChart ) : ScVbaAxes_BASE( xParent, xContext, createIndexWrapper( xChart, xContext )), moChartParent( xChart )
 {
 }
@@ -154,9 +154,9 @@ ScVbaAxes::createEnumeration() throw (css::uno::RuntimeException)
 uno::Any SAL_CALL
 ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) throw (css::uno::RuntimeException)
 {
-    // #TODO map the possible index combinations to a container::XIndexAccess wrapper impl
-    // using a vector of valid std::pair maybe?
-    // bodgy helperapi port bits
+    
+    
+    
     sal_Int32 nAxisGroup = xlPrimary;
     sal_Int32 nType = -1;
     if ( !_nType.hasValue() || ( ( _nType >>= nType ) == false )  )
@@ -171,7 +171,7 @@ ScVbaAxes::Item( const css::uno::Any& _nType, const css::uno::Any& _oAxisGroup) 
 uno::Any
 ScVbaAxes::createCollectionObject(const css::uno::Any& aSource)
 {
-    return aSource; // pass through ( it's already an XAxis object
+    return aSource; 
 }
 
 OUString

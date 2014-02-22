@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -63,7 +63,7 @@ SdXCustomPresentation::~SdXCustomPresentation() throw()
 
 UNO3_GETIMPLEMENTATION_IMPL( SdXCustomPresentation );
 
-// XServiceInfo
+
 OUString SAL_CALL SdXCustomPresentation::getImplementationName()
     throw(uno::RuntimeException)
 {
@@ -84,7 +84,7 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentation::getSupportedServiceNam
     return aSeq;
 }
 
-// XIndexContainer
+
 void SAL_CALL SdXCustomPresentation::insertByIndex( sal_Int32 Index, const uno::Any& Element )
     throw(lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -152,7 +152,7 @@ void SAL_CALL SdXCustomPresentation::removeByIndex( sal_Int32 Index )
         mpModel->SetModified();
 }
 
-// XIndexReplace
+
 void SAL_CALL SdXCustomPresentation::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
     throw(lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -160,7 +160,7 @@ void SAL_CALL SdXCustomPresentation::replaceByIndex( sal_Int32 Index, const uno:
     insertByIndex( Index, Element );
 }
 
-// XElementAccess
+
 uno::Type SAL_CALL SdXCustomPresentation::getElementType()
     throw(uno::RuntimeException)
 {
@@ -178,7 +178,7 @@ sal_Bool SAL_CALL SdXCustomPresentation::hasElements()
     return getCount() > 0;
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL SdXCustomPresentation::getCount()
     throw(uno::RuntimeException)
 {
@@ -215,7 +215,7 @@ uno::Any SAL_CALL SdXCustomPresentation::getByIndex( sal_Int32 Index )
     return aAny;
 }
 
-// XNamed
+
 OUString SAL_CALL SdXCustomPresentation::getName()
     throw(uno::RuntimeException)
 {
@@ -242,13 +242,13 @@ void SAL_CALL SdXCustomPresentation::setName( const OUString& aName )
         mpSdCustomShow->SetName( aName );
 }
 
-// XComponent
+
 void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
     if( bDisposing )
-        return; // catched a recursion
+        return; 
 
     bDisposing = sal_True;
 
@@ -261,7 +261,7 @@ void SAL_CALL SdXCustomPresentation::dispose() throw(uno::RuntimeException)
     mpSdCustomShow = NULL;
 }
 
-//----------------------------------------------------------------------
+
 void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
     throw(uno::RuntimeException)
 {
@@ -271,7 +271,7 @@ void SAL_CALL SdXCustomPresentation::addEventListener( const uno::Reference< lan
     aDisposeListeners.addInterface(xListener);
 }
 
-//----------------------------------------------------------------------
+
 void SAL_CALL SdXCustomPresentation::removeEventListener( const uno::Reference< lang::XEventListener >& aListener ) throw(uno::RuntimeException)
 {
     if( !bDisposing )
@@ -292,7 +292,7 @@ SdXCustomPresentationAccess::~SdXCustomPresentationAccess() throw()
 {
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SdXCustomPresentationAccess::getImplementationName()
     throw(uno::RuntimeException)
 {
@@ -313,7 +313,7 @@ uno::Sequence< OUString > SAL_CALL SdXCustomPresentationAccess::getSupportedServ
     return aSeq;
 }
 
-// XSingleServiceFactory
+
 uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createInstance()
     throw(uno::Exception, uno::RuntimeException)
 {
@@ -327,22 +327,22 @@ uno::Reference< uno::XInterface > SAL_CALL SdXCustomPresentationAccess::createIn
     return createInstance();
 }
 
-// XNameContainer
+
 void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    // get the documents custom show list
+    
     SdCustomShowList* pList = 0;
     if(mrModel.GetDoc())
         pList = mrModel.GetDoc()->GetCustomShowList(sal_True);
 
-    // no list, no cookies
+    
     if( NULL == pList)
         throw uno::RuntimeException();
 
-    // do we have an container::XIndexContainer?
+    
     SdXCustomPresentation* pXShow = NULL;
 
     uno::Reference< container::XIndexContainer > xContainer;
@@ -352,7 +352,7 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
     if( NULL == pXShow )
         throw lang::IllegalArgumentException();
 
-    // get the internal custom show from the api wrapper
+    
     SdCustomShow* pShow = pXShow->GetSdCustomShow();
     if( NULL == pShow )
     {
@@ -365,10 +365,10 @@ void SAL_CALL SdXCustomPresentationAccess::insertByName( const OUString& aName, 
             throw lang::IllegalArgumentException();
     }
 
-    // give it a name
+    
     pShow->SetName( aName);
 
-    // check if this or another customshow with the same name already exists
+    
     for( SdCustomShow* pCompare = pList->First();
          pCompare;
          pCompare = pList->Next() )
@@ -398,7 +398,7 @@ void SAL_CALL SdXCustomPresentationAccess::removeByName( const OUString& Name )
     mrModel.SetModified();
 }
 
-// XNameReplace
+
 void SAL_CALL SdXCustomPresentationAccess::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -406,7 +406,7 @@ void SAL_CALL SdXCustomPresentationAccess::replaceByName( const OUString& aName,
     insertByName( aName, aElement );
 }
 
-// XNameAccess
+
 uno::Any SAL_CALL SdXCustomPresentationAccess::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -458,7 +458,7 @@ sal_Bool SAL_CALL SdXCustomPresentationAccess::hasByName( const OUString& aName 
     return getSdCustomShow(aName) != NULL;
 }
 
-// XElementAccess
+
 uno::Type SAL_CALL SdXCustomPresentationAccess::getElementType()
     throw(uno::RuntimeException)
 {

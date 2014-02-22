@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "richtextcontrol.hxx"
@@ -40,16 +40,16 @@
 #include <svl/itempool.hxx>
 #include <sfx2/msgpool.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ORichTextControl()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ORichTextControl > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -75,24 +75,24 @@ namespace frm
     }   \
     return aReturn;
 
-    //==================================================================
-    // ORichTextControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ORichTextControl::ORichTextControl()
         :UnoEditControl()
     {
     }
 
-    //------------------------------------------------------------------
+    
     ORichTextControl::~ORichTextControl()
     {
     }
 
-    //------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextControl, UnoEditControl, ORichTextControl_Base )
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL ORichTextControl::queryAggregation( const Type& _rType ) throw ( RuntimeException )
     {
         Any aReturn = UnoEditControl::queryAggregation( _rType );
@@ -103,10 +103,10 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------
+    
     namespace
     {
-        //..............................................................
+        
         static void implAdjustTriStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
             WinBits& _rAllBits, WinBits _nPositiveFlag, WinBits nNegativeFlag )
         {
@@ -115,7 +115,7 @@ namespace frm
                 _rAllBits |= ( bFlagValue ? _nPositiveFlag : nNegativeFlag );
         }
 
-        //..............................................................
+        
         static void implAdjustTwoStateFlag( const Any& _rValue, WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
         {
             sal_Bool bFlagValue = sal_False;
@@ -130,14 +130,14 @@ namespace frm
             }
         }
 
-        //..............................................................
+        
         static void implAdjustTwoStateFlag( const Reference< XPropertySet >& _rxProps, const OUString& _rPropertyName,
             WinBits& _rAllBits, WinBits _nFlag, bool _bInvert = false )
         {
             implAdjustTwoStateFlag( _rxProps->getPropertyValue( _rPropertyName ), _rAllBits, _nFlag, _bInvert );
         }
 
-        //..............................................................
+        
         static void adjustTwoStateWinBit( Window* _pWindow, const Any& _rValue, WinBits _nFlag, bool _bInvert = false )
         {
             WinBits nBits = _pWindow->GetStyle();
@@ -145,7 +145,7 @@ namespace frm
             _pWindow->SetStyle( nBits );
         }
 
-        //..............................................................
+        
         static WinBits getWinBits( const Reference< XControlModel >& _rxModel, WinBits nBaseBits = 0 )
         {
             WinBits nBits = nBaseBits;
@@ -173,7 +173,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ORichTextControl::createPeer( const Reference< XToolkit >& _rToolkit, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException )
     {
         sal_Bool bReallyActAsRichText = sal_False;
@@ -200,7 +200,7 @@ namespace frm
         {
             mbCreatingPeer = sal_True;
 
-            // determine the VLC window for the parent
+            
             Window* pParentWin = NULL;
             if ( _rParentPeer.is() )
             {
@@ -210,19 +210,19 @@ namespace frm
                 DBG_ASSERT( pParentWin, "ORichTextControl::createPeer: could not obtain the VCL-level parent window!" );
             }
 
-            // create the peer
+            
             Reference< XControlModel > xModel( getModel() );
             ORichTextPeer* pPeer = ORichTextPeer::Create( xModel, pParentWin, getWinBits( xModel ) );
             DBG_ASSERT( pPeer, "ORichTextControl::createPeer: invalid peer returned!" );
             if ( pPeer )
             {
-                // by definition, the returned component is aquired once
+                
                 pPeer->release();
 
-                // announce the peer to the base class
+                
                 setPeer( pPeer );
 
-                // initialize ourself (and thus the peer) with the model properties
+                
                 updateFromModel();
 
                 Reference< XView >  xPeerView( getPeer(), UNO_QUERY );
@@ -232,7 +232,7 @@ namespace frm
                     xPeerView->setGraphics( mxGraphics );
                 }
 
-                // a lot of initial settings from our component infos
+                
                 setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, PosSize::POSSIZE );
 
                 pPeer->setVisible   ( maComponentInfos.bVisible && !mbDesignMode );
@@ -248,25 +248,25 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ORichTextControl::getImplementationName()  throw( RuntimeException )
     {
         return getImplementationName_Static();
     }
 
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames()  throw( RuntimeException )
     {
         return getSupportedServiceNames_Static();
     }
 
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ORichTextControl::getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.form.ORichTextControl" );
     }
 
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ORichTextControl::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aServices( 3 );
@@ -276,69 +276,69 @@ namespace frm
         return aServices;
     }
 
-    //------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL ORichTextControl::Create( const Reference< XMultiServiceFactory >& )
     {
         return *( new ORichTextControl() );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XDispatch > SAL_CALL ORichTextControl::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& _rTargetFrameName, sal_Int32 _nSearchFlags ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_3_RET( Reference< XDispatch >, XDispatchProvider, queryDispatch, _rURL, _rTargetFrameName, _nSearchFlags );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< Reference< XDispatch > > SAL_CALL ORichTextControl::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_1_RET( Sequence< Reference< XDispatch > >, XDispatchProvider, queryDispatches, _rRequests );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool ORichTextControl::requiresNewPeer( const OUString& _rPropertyName ) const
     {
         return UnoControl::requiresNewPeer( _rPropertyName ) || _rPropertyName.equals( PROPERTY_RICH_TEXT );
     }
 
-    //==================================================================
-    // ORichTextPeer
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ORichTextPeer* ORichTextPeer::Create( const Reference< XControlModel >& _rxModel, Window* _pParentWindow, WinBits _nStyle )
     {
         DBG_TESTSOLARMUTEX();
 
-        // the EditEngine of the model
+        
         RichTextEngine* pEngine = ORichTextModel::getEditEngine( _rxModel );
         OSL_ENSURE( pEngine, "ORichTextPeer::Create: could not obtaine the edit engine from the model!" );
         if ( !pEngine )
             return NULL;
 
-        // the peer itself
+        
         ORichTextPeer* pPeer = new ORichTextPeer;
-        pPeer->acquire();   // by definition, the returned object is aquired once
+        pPeer->acquire();   
 
-        // the VCL control for the peer
+        
         RichTextControl* pRichTextControl = new RichTextControl( pEngine, _pParentWindow, _nStyle, NULL, pPeer );
 
-        // some knittings
+        
         pRichTextControl->SetComponentInterface( pPeer );
 
-        // outta here
+        
         return pPeer;
     }
 
-    //------------------------------------------------------------------
+    
     ORichTextPeer::ORichTextPeer()
     {
     }
 
-    //------------------------------------------------------------------
+    
     ORichTextPeer::~ORichTextPeer()
     {
     }
 
-    //------------------------------------------------------------------
+    
     void ORichTextPeer::dispose( ) throw(RuntimeException)
     {
         {
@@ -364,7 +364,7 @@ namespace frm
         VCLXWindow::dispose();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextPeer::draw( sal_Int32 _nX, sal_Int32 _nY ) throw(::com::sun::star::uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -384,14 +384,14 @@ namespace frm
             aSize = pTargetDevice->PixelToLogic( aSize );
 
         ::Point aPos( _nX, _nY );
-        // the XView::draw API talks about pixels, always ...
+        
         if ( eTargetUnit != MAP_PIXEL )
             aPos = pTargetDevice->PixelToLogic( aPos );
 
         pControl->Draw( pTargetDevice, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue )
         throw (RuntimeException,
                std::exception)
@@ -435,7 +435,7 @@ namespace frm
             OSL_VERIFY( _rValue >>= bReadOnly );
             pControl->SetReadOnly( bReadOnly );
 
-            // update the dispatchers
+            
             for (   AttributeDispatchers::iterator aDispatcherLoop = m_aDispatchers.begin();
                     aDispatcherLoop != m_aDispatchers.end();
                     ++aDispatcherLoop
@@ -455,32 +455,32 @@ namespace frm
             VCLXWindow::setProperty( _rPropertyName, _rValue );
     }
 
-    //------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XINTERFACE2( ORichTextPeer, VCLXWindow, ORichTextPeer_Base )
 
-    //------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORichTextPeer, VCLXWindow, ORichTextPeer_Base )
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         static SfxSlotId lcl_translateConflictingSlot( SfxSlotId _nIDFromPool )
         {
-            // HACK HACK HACK
-            // unfortunately, some of our applications have some conflicting slots,
-            // i.e. slots which have the same UNO name as an existing other (common)
-            // slot.
-            // For instance, both the slots SID_SET_SUPER_SCRIPT (from SVX) and FN_SET_SUPER_SCRIPT
-            // (from SW) have the UNO name "SuperScript".
-            // Now, if the controls lives in a text document, and asks the SfxSlotPool for
-            // the id belonging to "SuperScript", it gets the FN_SET_SUPER_SCRIPT - which
-            // is completely unknown to the EditEngine.
-            // So, we need to translate such conflicting ids.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             //
-            // Note that the real solution would be to fix the applications to
-            // *not* define conflicting slots. Alternatively, if SFX would provide a slot pool
-            // which is *static* (i.e. independent on the active application), then we
-            // would also never encounter such a conflict.
+            
+            
+            
+            
             SfxSlotId nReturn( _nIDFromPool );
             switch ( _nIDFromPool )
             {
@@ -495,7 +495,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     ORichTextPeer::SingleAttributeDispatcher ORichTextPeer::implCreateDispatcher( SfxSlotId _nSlotId, const ::com::sun::star::util::URL& _rURL )
     {
         RichTextControl* pRichTextControl = static_cast< RichTextControl* >( GetWindow() );
@@ -541,7 +541,7 @@ namespace frm
 
         default:
         {
-            // is it a supported slot?
+            
             bool bSupportedSlot = false;
             if ( !bSupportedSlot )
             {
@@ -552,7 +552,7 @@ namespace frm
                 bSupportedSlot = RichTextControl::isMappableSlot( _nSlotId );
 
             if ( bSupportedSlot )
-            {   // it's really a slot which is supported by the EditEngine
+            {   
 
                 bool bNeedParametrizedDispatcher = true;
                 if  (  ( _nSlotId == SID_ATTR_CHAR_POSTURE )
@@ -638,7 +638,7 @@ namespace frm
         return xDispatcher;
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         SfxSlotId lcl_getSlotFromUnoName( SfxSlotPool& _rSlotPool, const OUString& _rUnoSlotName )
@@ -646,12 +646,12 @@ namespace frm
             const SfxSlot* pSlot = _rSlotPool.GetUnoSlot( _rUnoSlotName );
             if ( pSlot )
             {
-                // okay, there's a slot with the given UNO name
+                
                 return lcl_translateConflictingSlot( pSlot->GetSlotId() );
             }
 
-            // some hard-coded slots, which do not have a UNO name at SFX level, but which
-            // we nevertheless need to transport via UNO mechanisms, so we need a name
+            
+            
             if ( _rUnoSlotName == "AllowHangingPunctuation" )
                 return SID_ATTR_PARA_HANGPUNCTUATION;
             if ( _rUnoSlotName == "ApplyForbiddenCharacterRules" )
@@ -664,7 +664,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XDispatch > SAL_CALL ORichTextPeer::queryDispatch( const ::com::sun::star::util::URL& _rURL, const OUString& /*_rTargetFrameName*/, sal_Int32 /*_nSearchFlags*/ ) throw (RuntimeException)
     {
         Reference< XDispatch > xReturn;
@@ -674,7 +674,7 @@ namespace frm
             return xReturn;
         }
 
-        // is it an UNO slot?
+        
         OUString sUnoProtocolPrefix( ".uno:" );
         if ( _rURL.Complete.startsWith( sUnoProtocolPrefix ) )
         {
@@ -682,7 +682,7 @@ namespace frm
             SfxSlotId nSlotId = lcl_getSlotFromUnoName( SfxSlotPool::GetSlotPool( NULL ), sUnoSlotName );
             if ( nSlotId > 0 )
             {
-                // do we already have a dispatcher for this?
+                
                 AttributeDispatchers::const_iterator aDispatcherPos = m_aDispatchers.find( nSlotId );
                 if ( aDispatcherPos == m_aDispatchers.end() )
                 {
@@ -701,7 +701,7 @@ namespace frm
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< Reference< XDispatch > > SAL_CALL ORichTextPeer::queryDispatches( const Sequence< DispatchDescriptor >& _rRequests ) throw (RuntimeException)
     {
         Sequence< Reference< XDispatch > >  aReturn( _rRequests.getLength() );
@@ -716,7 +716,7 @@ namespace frm
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void ORichTextPeer::onSelectionChanged( const ESelection& /*_rSelection*/ )
     {
         AttributeDispatchers::iterator aDispatcherPos = m_aDispatchers.find( SID_COPY );
@@ -728,8 +728,8 @@ namespace frm
             aDispatcherPos->second.get()->invalidate();
     }
 
-//........................................................................
-}   // namespace frm
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

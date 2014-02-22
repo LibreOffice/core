@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/zformat.hxx>
@@ -68,9 +68,9 @@
     BROWSER_AUTO_HSCROLL | BROWSER_AUTO_VSCROLL | \
     BROWSER_HIGHLIGHT_NONE
 
-// BROWSER_HIDECURSOR would prevent flickering in edit fields, but navigating
-// with shift up/down, and entering non-editable cells would be problematic,
-// e.g.  the first cell, or when being in read-only mode
+
+
+
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -90,7 +90,7 @@ sal_Int32 lcl_getColumnInData( sal_uInt16 nCol )
     return static_cast< sal_Int32 >( nCol ) - 1;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -216,7 +216,7 @@ SeriesHeader::SeriesHeader( Window * pParent, Window *pColorParent ) :
         m_aPos( 0, 22 ),
         m_bSeriesNameChangePending( false )
 {
-    m_spSeriesName->EnableUpdateData( 4 * EDIT_UPDATEDATA_TIMEOUT ); // define is in vcl/edit.hxx
+    m_spSeriesName->EnableUpdateData( 4 * EDIT_UPDATEDATA_TIMEOUT ); 
     m_spSeriesName->SetUpdateDataHdl( LINK( this, SeriesHeader, SeriesNameChanged ));
     m_spSeriesName->SetModifyHdl( LINK( this, SeriesHeader, SeriesNameEdited ));
     m_spSeriesName->SetHelpId( HID_SCH_DATA_SERIES_LABEL );
@@ -256,13 +256,13 @@ void SeriesHeader::SetPos( const Point & rPos )
 {
     m_aPos = rPos;
 
-    // chart type symbol
+    
     Size aSize( nSymbolHeight, nSymbolHeight );
     aSize = m_pDevice->LogicToPixel( aSize, MAP_APPFONT );
     m_spSymbol->set_width_request(aSize.Width());
     m_spSymbol->set_height_request(aSize.Height());
 
-    // series name edit field
+    
     aSize.setWidth(nSymbolDistance);
     aSize = m_pDevice->LogicToPixel( aSize, MAP_APPFONT );
     m_spSeriesName->set_margin_left(aSize.Width() + 2);
@@ -273,7 +273,7 @@ void SeriesHeader::SetPos( const Point & rPos )
     m_spSeriesName->set_width_request(aSize.Width());
     m_spSeriesName->set_height_request(aSize.Height());
 
-    // color bar
+    
     aSize.setWidth(1);
     aSize = m_pDevice->LogicToPixel( aSize, MAP_APPFONT );
     m_spColorBar->set_margin_left(aSize.Width() + 2);
@@ -407,7 +407,7 @@ Image SeriesHeader::GetChartTypeImage(
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ))
     {
-        // @todo: correct image for candle-stick type
+        
         aResult = Image( SchResId( IMG_TYPE_STOCK ) );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ))
@@ -426,7 +426,7 @@ struct applyChangesFunctor : public ::std::unary_function< ::boost::shared_ptr< 
     }
 };
 
-} // namespace impl
+} 
 
 namespace
 {
@@ -468,7 +468,7 @@ sal_Int32 lcl_getColumnInDataOrHeader(
     return nColIdx;
 }
 
-} // anonymous namespace
+} 
 
 DataBrowser::DataBrowser( Window* pParent, WinBits nStyle, bool bLiveUpdate ) :
     ::svt::EditBrowseBox( pParent, nStyle, EBBF_SMART_TAB_TRAVEL | EBBF_HANDLE_COLUMN_TEXT, BROWSER_STANDARD_FLAGS ),
@@ -516,7 +516,7 @@ bool DataBrowser::MayDeleteRow() const
 
 bool DataBrowser::MayDeleteColumn() const
 {
-    // if a series header has the focus
+    
     if( lcl_SeriesHeaderHasFocus( m_aSeriesHeaders ))
         return true;
 
@@ -535,7 +535,7 @@ bool DataBrowser::MaySwapRows() const
 
 bool DataBrowser::MaySwapColumns() const
 {
-    // if a series header (except the last one) has the focus
+    
     {
         sal_Int32 nColIndex(0);
         if( lcl_SeriesHeaderHasFocus( m_aSeriesHeaders, &nColIndex ))
@@ -575,7 +575,7 @@ void DataBrowser::RenewTable()
     RemoveColumns();
     RowRemoved( 1, GetRowCount() );
 
-    // for row numbers
+    
     InsertHandleColumn( static_cast< sal_uInt16 >(
                             GetDataWindow().LogicToPixel( Size( 42, 0 )).getWidth() ));
 
@@ -584,7 +584,7 @@ void DataBrowser::RenewTable()
     sal_Int32 nColumnWidth = GetDataWindow().GetTextWidth( aDefaultSeriesName )
         + GetDataWindow().LogicToPixel( Point( 4 + impl::SeriesHeader::GetRelativeAppFontXPosForNameField(), 0 ), MAP_APPFONT ).X();
     sal_Int32 nColumnCount = m_apDataBrowserModel->getColumnCount();
-    // nRowCount is a member of a base class
+    
     sal_Int32 nRowCountLocal = m_apDataBrowserModel->getMaxRowCount();
     for( sal_Int32 nColIdx=1; nColIdx<=nColumnCount; ++nColIdx )
     {
@@ -599,7 +599,7 @@ void DataBrowser::RenewTable()
     Window* pWin = pDialog->get<VclContainer>("columns");
     Window* pColorWin = pDialog->get<VclContainer>("colorcolumns");
 
-    // fill series headers
+    
     clearHeaders();
     const DataBrowserModel::tDataHeaderVector& aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
@@ -611,7 +611,7 @@ void DataBrowser::RenewTable()
         ::boost::shared_ptr< impl::SeriesHeader > spHeader( new impl::SeriesHeader( pWin, pColorWin ));
         Reference< beans::XPropertySet > xSeriesProp( aIt->m_xDataSeries, uno::UNO_QUERY );
         sal_Int32 nColor = 0;
-        // @todo: Set "DraftColor", i.e. interpolated colors for gradients, bitmaps, etc.
+        
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( "Color" ) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
@@ -622,7 +622,7 @@ void DataBrowser::RenewTable()
                         (aIt->m_xChartType.is() ?
                          aIt->m_xChartType->getRoleOfSequenceForSeriesLabel() :
                          OUString("values-y")))));
-        // index is 1-based, as 0 is for the column that contains the row-numbers
+        
         spHeader->SetRange( aIt->m_nStartColumn + 1, aIt->m_nEndColumn + 1 );
         spHeader->SetGetFocusHdl( aFocusLink );
         spHeader->SetEditChangedHdl( aSeriesHeaderChangedLink );
@@ -870,7 +870,7 @@ void DataBrowser::InsertColumn()
     if( nColIdx >= 0 &&
         m_apDataBrowserModel.get())
     {
-        // save changes made to edit-field
+        
         if( IsModified() )
             SaveModified();
 
@@ -886,7 +886,7 @@ void DataBrowser::InsertTextColumn()
     if( nColIdx >= 0 &&
         m_apDataBrowserModel.get())
     {
-        // save changes made to edit-field
+        
         if( IsModified() )
             SaveModified();
 
@@ -902,7 +902,7 @@ void DataBrowser::RemoveColumn()
     if( nColIdx >= 0 &&
         m_apDataBrowserModel.get())
     {
-        // save changes made to edit-field
+        
         if( IsModified() )
             SaveModified();
 
@@ -919,7 +919,7 @@ void DataBrowser::InsertRow()
      if( nRowIdx >= 0 &&
         m_apDataBrowserModel.get())
     {
-        // save changes made to edit-field
+        
         if( IsModified() )
             SaveModified();
 
@@ -935,7 +935,7 @@ void DataBrowser::RemoveRow()
      if( nRowIdx >= 0 &&
         m_apDataBrowserModel.get())
     {
-        // save changes made to edit-field
+        
         if( IsModified() )
             SaveModified();
 
@@ -952,13 +952,13 @@ void DataBrowser::SwapColumn()
     if( nColIdx >= 0 &&
         m_apDataBrowserModel.get())
     {
-        // save changes made to edit-field
+        
         if( IsModified() )
             SaveModified();
 
         m_apDataBrowserModel->swapDataSeries( nColIdx );
 
-        // keep cursor in swapped column
+        
         if( GetCurColumnId() < ColCount() - 1 )
         {
             Dispatch( BROWSER_CURSORRIGHT );
@@ -974,13 +974,13 @@ void DataBrowser::SwapRow()
      if( nRowIdx >= 0 &&
         m_apDataBrowserModel.get())
     {
-        // save changes made to edit-field
+        
         if( IsModified() )
             SaveModified();
 
         m_apDataBrowserModel->swapDataPointForAllSeries( nRowIdx );
 
-        // keep cursor in swapped row
+        
         if( GetCurRow() < GetRowCount() - 1 )
         {
             Dispatch( BROWSER_CURSORDOWN );
@@ -994,7 +994,7 @@ void DataBrowser::SetCursorMovedHdl( const Link& rLink )
     m_aCursorMovedHdlLink = rLink;
 }
 
-// implementations for ::svt::EditBrowseBox (pure virtual methods)
+
 void DataBrowser::PaintCell(
     OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColumnId ) const
 {
@@ -1004,21 +1004,21 @@ void DataBrowser::PaintCell(
     OUString aText = GetCellText( m_nSeekRow, nColumnId );
     Size TxtSize( GetDataWindow().GetTextWidth( aText ), GetDataWindow().GetTextHeight());
 
-    // clipping
+    
     if( aPos.X() < rRect.Right() || aPos.X() + TxtSize.Width() > rRect.Right() ||
         aPos.Y() < rRect.Top() || aPos.Y() + TxtSize.Height() > rRect.Bottom())
         rDev.SetClipRegion(Region(rRect));
 
-    // allow for a disabled control ...
+    
     sal_Bool bEnabled = IsEnabled();
     Color aOriginalColor = rDev.GetTextColor();
     if( ! bEnabled )
         rDev.SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
 
-    // draw the text
+    
     rDev.DrawText( aPos, aText );
 
-    // reset the color (if necessary)
+    
     if( ! bEnabled )
         rDev.SetTextColor( aOriginalColor );
 
@@ -1044,7 +1044,7 @@ sal_Bool DataBrowser::IsTabAllowed( sal_Bool bForward ) const
     long nRow = GetCurRow();
     long nCol = GetCurColumnId();
 
-    // column 0 is header-column
+    
     long nBadCol = bForward
         ? GetColumnCount() - 1
         : 1;
@@ -1088,7 +1088,7 @@ void DataBrowser::InitController(
     }
     else if( rController == m_rNumberEditController )
     {
-        // treat invalid and empty text as Nan
+        
         m_aNumberEditField.EnableNotANumber( true );
         if( ::rtl::math::isNan( GetCellNumber( nRow, nCol )))
             m_aNumberEditField.SetTextValue( OUString());
@@ -1154,8 +1154,8 @@ sal_Bool DataBrowser::SaveModified()
             sal_uInt32 nDummy = 0;
             double fDummy = 0.0;
             OUString aText( m_aNumberEditField.GetText());
-            // an empty string is valid, if no numberformatter exists, all
-            // values are treated as valid
+            
+            
             if( !aText.isEmpty() && pSvNumberFormatter &&
                 ! pSvNumberFormatter->IsNumberFormat( aText, nDummy, fDummy ) )
             {
@@ -1187,7 +1187,7 @@ sal_Bool DataBrowser::SaveModified()
         break;
     }
 
-    // the first valid change changes this to true
+    
     if( bChangeValid )
     {
         RowModified( GetCurRow(), GetCurColumnId());
@@ -1205,7 +1205,7 @@ bool DataBrowser::EndEditing()
     if( IsModified())
         SaveModified();
 
-    // apply changes made to series headers
+    
     ::std::for_each( m_aSeriesHeaders.begin(), m_aSeriesHeaders.end(), impl::applyChangesFunctor());
 
     if( m_bDataValid )
@@ -1283,7 +1283,7 @@ void DataBrowser::ImplAdjustHeaderControls()
     sal_uInt32 nMaxPos = nCurrentPos + this->GetOutputSizePixel().getWidth();
     sal_uInt32 nStartPos = nCurrentPos;
 
-    // width of header column
+    
     nCurrentPos +=  this->GetColumnWidth( 0 );
 
     Dialog* pDialog = GetParentDialog();
@@ -1374,6 +1374,6 @@ IMPL_LINK( DataBrowser, SeriesHeaderChanged, impl::SeriesHeaderEdit*, pEdit )
     return 0;
 }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

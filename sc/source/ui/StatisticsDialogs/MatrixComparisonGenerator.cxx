@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -87,11 +87,11 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
     else
         aRangeList = MakeRowRangeList(inTab, mInputRange.aStart, mInputRange.aEnd);
 
-    // labels
+    
     output.writeString(getLabel());
     output.nextColumn();
 
-    // write labels to columns
+    
     for (size_t i = 0; i < aRangeList.size(); i++)
     {
         if (mGroupedBy == BY_COLUMN)
@@ -104,7 +104,7 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
         output.nextColumn();
     }
 
-    // write labels to rows
+    
     output.resetColumn();
     output.nextRow();
     for (size_t i = 0; i < aRangeList.size(); i++)
@@ -119,7 +119,7 @@ ScRange ScMatrixComparisonGenerator::ApplyOutput(ScDocShell* pDocShell)
         output.nextRow();
     }
 
-    // write correlation formulas
+    
     output.reset();
     output.push(1, 1);
 

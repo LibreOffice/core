@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ColumnModel.hxx"
@@ -100,7 +100,7 @@ void OColumnControlModel::registerProperties()
         &m_nWidth, ::getCppuType( &m_nWidth ) );
 }
 
-// XCloneable
+
 Reference< XCloneable > SAL_CALL OColumnControlModel::createClone( ) throw (RuntimeException)
 {
     return new OColumnControlModel( this, getORB() );
@@ -115,7 +115,7 @@ Any SAL_CALL OColumnControlModel::queryInterface( const Type& _rType ) throw (Ru
     return OColumnControlModel_BASE::queryInterface( _rType );
 }
 
-// com::sun::star::XAggregation
+
 Any SAL_CALL OColumnControlModel::queryAggregation( const Type& rType ) throw(RuntimeException)
 {
     Any aRet(OColumnControlModel_BASE::queryAggregation(rType));
@@ -131,14 +131,14 @@ OUString SAL_CALL OColumnControlModel::getServiceName() throw ( RuntimeException
 
 void OColumnControlModel::write(const Reference<XObjectOutputStream>& /*_rxOutStream*/) throw ( ::com::sun::star::io::IOException, RuntimeException)
 {
-    // TODO
+    
 }
 
 void OColumnControlModel::read(const Reference<XObjectInputStream>& /*_rxInStream*/) throw ( ::com::sun::star::io::IOException, RuntimeException)
 {
-    // TODO
+    
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

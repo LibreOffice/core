@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -64,9 +64,9 @@ sal::detail::textenc::handleBadInputTextToUnicodeConversion(
         else
             return BAD_INPUT_NO_OUTPUT;
 
-    default: // RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT,
-             // RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT,
-             // RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT
+    default: 
+             
+             
         if (*pDestBufPtr != pDestBufEnd)
         {
             *(*pDestBufPtr)++ = RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;
@@ -83,8 +83,8 @@ sal::detail::textenc::handleBadInputUnicodeToTextConversion(
     char * pDestBufEnd, sal_uInt32 * pInfo, char const * pPrefix,
     sal_Size nPrefixLen, bool * pPrefixWritten)
 {
-    // TODO! RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE
-    // RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR
+    
+    
 
     char cReplace;
 
@@ -131,8 +131,8 @@ sal::detail::textenc::handleBadInputUnicodeToTextConversion(
 
     case RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK:
     case RTL_UNICODETOTEXT_FLAGS_INVALID_QUESTIONMARK:
-    default: // RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT,
-             // RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT
+    default: 
+             
         cReplace = '?';
         break;
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/animations/XTimeContainer.hpp>
@@ -65,7 +65,7 @@ extern void implImportLabels( const Reference< XMultiServiceFactory >& xConfigPr
 
 TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
-    // first locate preset id
+    
     Sequence< NamedValue > aUserData( xNode->getUserData() );
     sal_Int32 nLength = aUserData.getLength();
     const NamedValue* p = aUserData.getConstArray();
@@ -78,7 +78,7 @@ TransitionPreset::TransitionPreset( const ::com::sun::star::uno::Reference< ::co
         }
     }
 
-    // second, locate transition filter element
+    
     Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
     Reference< XTransitionFilter > xTransition( xEnumeration->nextElement(), UNO_QUERY_THROW );
@@ -94,7 +94,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                                               UStringMap& rTransitionNameMape,
                                               OUString aURL )
 {
-    // import transition presets
+    
     Reference< XAnimationNode > xAnimationNode;
 
     try {
@@ -107,10 +107,10 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
             Reference< XAnimationNode > xChildNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
             if( xChildNode->getType() == AnimationNodeType::PAR )
             {
-                // create it
+                
                 TransitionPresetPtr pPreset( new TransitionPreset( xChildNode ) );
 
-                // name it
+                
                 OUString aPresetId( pPreset->getPresetId() );
                 if( !aPresetId.isEmpty() )
                 {
@@ -118,7 +118,7 @@ bool TransitionPreset::importTransitionsFile( TransitionPresetList& rList,
                     if( aIter != rTransitionNameMape.end() )
                         pPreset->maUIName = (*aIter).second;
 
-                                // add it
+                                
                     rList.push_back( pPreset );
                 }
             }
@@ -149,7 +149,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
         uno::Reference< util::XMacroExpander > xMacroExpander =
             util::theMacroExpander::get(xContext);
 
-        // import ui strings
+        
         Reference< XMultiServiceFactory > xConfigProvider =
             configuration::theDefaultProvider::get( xContext );
 
@@ -157,7 +157,7 @@ bool TransitionPreset::importTransitionPresetList( TransitionPresetList& rList )
         const OUString aTransitionPath("/org.openoffice.Office.UI.Effects/UserInterface/Transitions" );
         implImportLabels( xConfigProvider, aTransitionPath, aTransitionNameMape );
 
-        // read path to transition effects files from config
+        
         Any propValue = uno::makeAny(
             beans::PropertyValue("nodepath", -1,
                 uno::makeAny( OUString("/org.openoffice.Office.Impress/Misc")),

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "cliputil.hxx"
@@ -30,7 +30,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
                          pViewData->GetCurY(), pViewData->GetTabNo() );
     if ( pOwnClip && pDPObj )
     {
-        // paste from Calc into DataPilot table: sort (similar to drag & drop)
+        
 
         ScDocument* pClipDoc = pOwnClip->GetDocument();
         SCTAB nSourceTab = pOwnClip->GetVisibleTab();
@@ -42,7 +42,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
         pClipDoc->GetClipStart( nClipStartX, nClipStartY );
         pClipDoc->GetClipArea( nClipEndX, nClipEndY, true );
         nClipEndX = nClipEndX + nClipStartX;
-        nClipEndY = nClipEndY + nClipStartY;   // GetClipArea returns the difference
+        nClipEndY = nClipEndY + nClipStartY;   
 
         ScRange aSource( nClipStartX, nClipStartY, nSourceTab, nClipEndX, nClipEndY, nSourceTab );
         sal_Bool bDone = pTabViewShell->DataPilotMove( aSource, pViewData->GetCurPos() );
@@ -51,7 +51,7 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
     }
     else
     {
-        // normal paste
+        
         WaitObject aWait( pViewData->GetDialogParent() );
         if (!pOwnClip)
             pTabViewShell->PasteFromSystem();
@@ -60,15 +60,15 @@ void ScClipUtil::PasteFromClipboard( ScViewData* pViewData, ScTabViewShell* pTab
             ScDocument* pClipDoc = pOwnClip->GetDocument();
             sal_uInt16 nFlags = IDF_ALL;
             if (pClipDoc->GetClipParam().isMultiRange())
-                // For multi-range paste, we paste values by default.
+                
                 nFlags &= ~IDF_FORMULA;
 
             pTabViewShell->PasteFromClip( nFlags, pClipDoc,
                     PASTE_NOFUNC, false, false, false, INS_NONE, IDF_NONE,
-                    bShowDialog );      // allow warning dialog
+                    bShowDialog );      
         }
     }
-    pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
+    pTabViewShell->CellContentChanged();        
 }
 
 bool ScClipUtil::CheckDestRanges(
@@ -77,7 +77,7 @@ bool ScClipUtil::CheckDestRanges(
     for (size_t i = 0, n = rDest.size(); i < n; ++i)
     {
         ScRange aTest = *rDest[i];
-        // Check for filtered rows in all selected sheets.
+        
         ScMarkData::const_iterator itrTab = rMark.begin(), itrTabEnd = rMark.end();
         for (; itrTab != itrTabEnd; ++itrTab)
         {
@@ -85,19 +85,19 @@ bool ScClipUtil::CheckDestRanges(
             aTest.aEnd.SetTab(*itrTab);
             if (ScViewUtil::HasFiltered(aTest, pDoc))
             {
-                // I don't know how to handle pasting into filtered rows yet.
+                
                 return false;
             }
         }
 
-        // Destination range must be an exact multiple of the source range.
+        
         SCROW nRows = aTest.aEnd.Row() - aTest.aStart.Row() + 1;
         SCCOL nCols = aTest.aEnd.Col() - aTest.aStart.Col() + 1;
         SCROW nRowTest = (nRows / nSrcRows) * nSrcRows;
         SCCOL nColTest = (nCols / nSrcCols) * nSrcCols;
         if ( rDest.size() > 1 && ( nRows != nRowTest || nCols != nColTest ) )
         {
-            // Destination range is not a multiple of the source range. Bail out.
+            
             return false;
         }
     }

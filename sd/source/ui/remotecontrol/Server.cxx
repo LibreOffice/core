@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include <stdlib.h>
 #include <algorithm>
@@ -79,7 +79,7 @@ void RemoteServer::execute()
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     if (!xContext.is()/* || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext)*/)
     {
-        // SAL_INFO("sdremote", "not in experimental mode, disabling TCP server");
+        
         spServer = NULL;
         return;
     }
@@ -105,7 +105,7 @@ void RemoteServer::execute()
         {
             SAL_WARN( "sdremote", "accept failed" << mSocket.getErrorAsString() );
             spServer = NULL;
-            return; // Closed, or other issue.
+            return; 
         }
         BufferedStreamSocket *pSocket = new BufferedStreamSocket( aSocket);
         OString aLine;
@@ -129,15 +129,15 @@ void RemoteServer::execute()
                     RTL_TEXTENCODING_UTF8 ) );
             mAvailableClients.push_back( pClient );
 
-            // Read off any additional non-empty lines
-            // We know that we at least have the empty termination line to read.
+            
+            
             do
             {
                 pSocket->readLine( aLine );
             }
             while ( aLine.getLength() > 0 );
 
-            // Check if we already have this server.
+            
             Reference< XNameAccess > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get();
             Sequence< OUString > aNames = xConfig->getElementNames();
             bool aFound = false;
@@ -159,7 +159,7 @@ void RemoteServer::execute()
                 }
 
             }
-            // Pin not found so inform the client.
+            
             if ( !aFound )
             {
                 SAL_INFO( "sdremote", "client not found on validated list" );
@@ -172,7 +172,7 @@ void RemoteServer::execute()
         }
     }
     SAL_INFO( "sdremote", "shutting down RemoteServer" );
-    spServer = NULL; // Object is destroyed when Thread::execute() ends.
+    spServer = NULL; 
 }
 
 RemoteServer *sd::RemoteServer::spServer = NULL;
@@ -258,7 +258,7 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, OUString aPin )
     ClientInfoInternal *apClient = (ClientInfoInternal*) pClient;
     if ( apClient->mPin.equals( aPin ) )
     {
-        // Save in settings first
+        
         boost::shared_ptr< ConfigurationChanges > aChanges = ConfigurationChanges::create();
         Reference< XNameContainer > const xConfig = officecfg::Office::Impress::Misc::AuthorisedRemotes::get( aChanges );
 
@@ -268,7 +268,7 @@ sal_Bool RemoteServer::connectClient( ClientInfo* pClient, OUString aPin )
                 Any aValue;
         if (xChild.is())
         {
-            // Check whether the client is already saved
+            
             bool aSaved = false;
             Sequence< OUString > aNames = xConfig->getElementNames();
             for ( int i = 0; i < aNames.getLength(); i++ )
@@ -323,8 +323,8 @@ void SdDLL::RegisterRemotes()
 
 void RemoteServer::ensureDiscoverable()
 {
-    // FIXME: we could also enable listening on our WiFi
-    // socket here to significantly reduce the attack surface.
+    
+    
 #ifdef ENABLE_SDREMOTE_BLUETOOTH
     BluetoothServer::ensureDiscoverable();
 #endif

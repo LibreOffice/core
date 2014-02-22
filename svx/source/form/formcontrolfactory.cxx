@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,10 +49,10 @@
 
 #include <set>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -94,9 +94,9 @@ namespace svxform
     namespace ColumnValue = ::com::sun::star::sdbc::ColumnValue;
     namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 
-    //====================================================================
-    //= FormControlFactory_Data
-    //====================================================================
+    
+    
+    
     struct FormControlFactory_Data
     {
         Reference<XComponentContext>  m_xContext;
@@ -107,10 +107,10 @@ namespace svxform
         }
     };
 
-    //====================================================================
-    //= FormControlFactory
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     FormControlFactory::FormControlFactory( const Reference<XComponentContext>& _rContext )
         :m_pData( new FormControlFactory_Data( _rContext ) )
     {
@@ -121,12 +121,12 @@ namespace svxform
     {
     }
 
-    //--------------------------------------------------------------------
+    
     FormControlFactory::~FormControlFactory()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const SdrUnoObj& _rObject )
     {
         return initializeControlModel(
@@ -136,7 +136,7 @@ namespace svxform
         );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const Reference< XPropertySet >& _rxControlModel )
     {
         return initializeControlModel(
@@ -144,10 +144,10 @@ namespace svxform
         );
     }
 
-    // -----------------------------------------------------------------------------
+    
     namespace
     {
-        //....................................................................
+        
         static OUString lcl_getUniqueLabel_nothrow( const Reference< XPropertySet >& _rxControlModel, const OUString& _rBaseLabel )
         {
             OUString sLabel( _rBaseLabel );
@@ -158,7 +158,7 @@ namespace svxform
 
                 Reference< XFormComponent > xFormComponent( _rxControlModel, UNO_QUERY_THROW );
                 Reference< XIndexAccess > xContainer( xFormComponent->getParent(), UNO_QUERY_THROW );
-                // loop through all siblings of the control model, and collect their labels
+                
                 for ( sal_Int32 index=xContainer->getCount(); index>0; )
                 {
                     Reference< XPropertySet > xElement( xContainer->getByIndex( --index ), UNO_QUERY_THROW );
@@ -174,7 +174,7 @@ namespace svxform
                     aUsedLabels.insert( sElementLabel );
                 }
 
-                // now find a free label
+                
                 sal_Int32 i=2;
                 while ( aUsedLabels.find( sLabel ) != aUsedLabels.end() )
                 {
@@ -191,7 +191,7 @@ namespace svxform
             return sLabel;
         }
 
-        //....................................................................
+        
         static Sequence< PropertyValue > lcl_getDataSourceIndirectProperties( const Reference< XPropertySet >& _rxControlModel,
             const Reference<XComponentContext>& _rContext )
         {
@@ -206,7 +206,7 @@ namespace svxform
                     xForm = xForm.query( xChild->getParent() );
 
                 if ( Reference< XGridColumnFactory >( xForm, UNO_QUERY ).is() )
-                {   // hmm. the model is a grid column, in real
+                {   
                     xChild = xChild.query( xForm );
                     xForm = xForm.query( xChild->getParent() );
                 }
@@ -230,7 +230,7 @@ namespace svxform
             return aInfo;
         }
 
-        //....................................................................
+        
         static const sal_Char* aCharacterAndParagraphProperties[] =
         {
             "CharFontName",
@@ -361,14 +361,14 @@ namespace svxform
             NULL
         };
 
-        //....................................................................
+        
         static void lcl_initializeCharacterAttributes( const Reference< XPropertySet >& _rxModel )
         {
             try
             {
                 Reference< XPropertySet > xStyle( ControlLayouter::getDefaultDocumentTextStyle( _rxModel ), UNO_SET_THROW );
 
-                // transfer all properties which are described by the style
+                
                 Reference< XPropertySetInfo > xSourcePropInfo( xStyle->getPropertySetInfo(), UNO_SET_THROW );
                 Reference< XPropertySetInfo > xDestPropInfo( _rxModel->getPropertySetInfo(), UNO_SET_THROW );
 
@@ -391,7 +391,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int16 FormControlFactory::initializeControlModel( const DocumentType _eDocType, const Reference< XPropertySet >& _rxControlModel,
         const Rectangle& _rControlBoundRect )
     {
@@ -411,7 +411,7 @@ namespace svxform
             {
                 case FormComponentType::SCROLLBAR:
                     _rxControlModel->setPropertyValue("LiveScroll", makeAny( (sal_Bool)sal_True ) );
-                    // NO break!
+                    
                 case FormComponentType::SPINBUTTON:
                 {
                     sal_Int32 eOrientation = ScrollBarOrientation::HORIZONTAL;
@@ -466,7 +466,7 @@ namespace svxform
                 break;
             }
 
-            // initial default label for the control
+            
             if ( xPSI->hasPropertyByName( FM_PROP_LABEL ) )
             {
                 OUString sExistingLabel;
@@ -496,13 +496,13 @@ namespace svxform
                 }
             }
 
-            // strict format = yes is the default (i93467)
+            
             if ( xPSI->hasPropertyByName( FM_PROP_STRICTFORMAT ) )
             {
                 _rxControlModel->setPropertyValue( FM_PROP_STRICTFORMAT, makeAny( sal_Bool( sal_True ) ) );
             }
 
-            // mouse wheel: don't use it for scrolling by default (i110036)
+            
             if ( xPSI->hasPropertyByName( FM_PROP_MOUSE_WHEEL_BEHAVIOR ) )
             {
                 _rxControlModel->setPropertyValue( FM_PROP_MOUSE_WHEEL_BEHAVIOR, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
@@ -518,7 +518,7 @@ namespace svxform
         return nClassId;
     }
 
-    //------------------------------------------------------------------------------
+    
     void FormControlFactory::initializeTextFieldLineEnds( const Reference< XPropertySet >& _rxModel )
     {
         OSL_PRECOND( _rxModel.is(), "initializeTextFieldLineEnds: invalid model!" );
@@ -531,8 +531,8 @@ namespace svxform
             if ( !xInfo.is() || !xInfo->hasPropertyByName( FM_PROP_LINEENDFORMAT ) )
                 return;
 
-            // let's see if the data source which the form belongs to (if any)
-            // has a setting for the preferred line end format
+            
+            
             sal_Bool bDosLineEnds = sal_False;
             Sequence< PropertyValue > aInfo = lcl_getDataSourceIndirectProperties( _rxModel, m_pData->m_xContext );
             const PropertyValue* pInfo = aInfo.getConstArray();
@@ -555,7 +555,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void FormControlFactory::initializeFieldDependentProperties( const Reference< XPropertySet >& _rxDatabaseField,
         const Reference< XPropertySet >& _rxControlModel, const Reference< XNumberFormats >& _rxNumberFormats )
     {
@@ -566,8 +566,8 @@ namespace svxform
 
         try
         {
-            ////////////////////////////////////////////////////////////////////////
-            // if the field has a numeric format, and the model has a "Scale" property, sync it
+            
+            
             Reference< XPropertySetInfo > xFieldPSI( _rxDatabaseField->getPropertySetInfo(), UNO_SET_THROW );
             Reference< XPropertySetInfo > xModelPSI( _rxControlModel->getPropertySetInfo(), UNO_SET_THROW );
 
@@ -591,8 +591,8 @@ namespace svxform
                 _rxControlModel->setPropertyValue( FM_PROP_DECIMAL_ACCURACY, aScaleVal );
             }
 
-            ////////////////////////////////////////////////////////////////////////
-            // minimum and maximum of the control according to the type of the database field
+            
+            
             sal_Int32 nDataType = DataType::OTHER;
             OSL_VERIFY( _rxDatabaseField->getPropertyValue( FM_PROP_FIELDTYPE ) >>= nDataType );
 
@@ -606,12 +606,12 @@ namespace svxform
                     case DataType::TINYINT  : nMinValue = 0; nMaxValue = 255; break;
                     case DataType::SMALLINT : nMinValue = -32768; nMaxValue = 32767; break;
                     case DataType::INTEGER  : nMinValue = 0x80000000; nMaxValue = 0x7FFFFFFF; break;
-                        // double and singles are ignored
+                        
                 }
 
                 Any aValue;
 
-                // both the minimum and the maximum value properties can be either Long or Double
+                
                 Property aProperty = xModelPSI->getPropertyByName( FM_PROP_VALUEMIN );
                 if ( aProperty.Type.getTypeClass() == TypeClass_DOUBLE )
                     aValue <<= (double)nMinValue;
@@ -623,7 +623,7 @@ namespace svxform
                 }
                 _rxControlModel->setPropertyValue( FM_PROP_VALUEMIN, aValue );
 
-                // both the minimum and the maximum value properties can be either Long or Double
+                
                 aProperty = xModelPSI->getPropertyByName( FM_PROP_VALUEMAX );
                 if ( aProperty.Type.getTypeClass() == TypeClass_DOUBLE )
                     aValue <<= (double)nMaxValue;
@@ -636,8 +636,8 @@ namespace svxform
                 _rxControlModel->setPropertyValue( FM_PROP_VALUEMAX, aValue );
             }
 
-            ////////////////////////////////////////////////////////////////////////
-            // a check box can be tristate if and only if the column it is bound to is nullable
+            
+            
             sal_Int16 nClassId = FormComponentType::CONTROL;
             OSL_VERIFY( _rxControlModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId );
             if ( nClassId == FormComponentType::CHECKBOX )
@@ -653,7 +653,7 @@ namespace svxform
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     OUString FormControlFactory::getDefaultName( sal_Int16 _nClassId, const Reference< XServiceInfo >& _rxObject )
     {
         sal_uInt16 nResId(0);
@@ -694,7 +694,7 @@ namespace svxform
         return SVX_RESSTR(nResId);
     }
 
-    //------------------------------------------------------------------------------
+    
     OUString FormControlFactory::getDefaultUniqueName_ByComponentType( const Reference< XNameAccess >& _rxContainer,
         const Reference< XPropertySet >& _rxObject )
     {
@@ -705,7 +705,7 @@ namespace svxform
         return getUniqueName( _rxContainer, sBaseName );
     }
 
-    //------------------------------------------------------------------------------
+    
     OUString FormControlFactory::getUniqueName( const Reference< XNameAccess >& _rxContainer, const OUString& _rBaseName )
     {
         sal_Int32 n = 0;
@@ -722,8 +722,8 @@ namespace svxform
         return sName;
     }
 
-//........................................................................
-} // namespace svxform
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

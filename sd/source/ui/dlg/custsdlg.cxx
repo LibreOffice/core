@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "custsdlg.hxx"
@@ -31,9 +31,9 @@
 #include "svtools/treelistentry.hxx"
 
 
-/////////////////////
-// SdCustomShowDlg //
-/////////////////////
+
+
+
 
 
 SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
@@ -65,14 +65,14 @@ SdCustomShowDlg::SdCustomShowDlg( Window* pWindow,
     m_pCbxUseCustomShow->SetClickHdl( aLink );
     m_pLbCustomShows->SetSelectHdl( aLink );
 
-    m_pBtnStartShow->SetClickHdl( LINK( this, SdCustomShowDlg, StartShowHdl ) ); // for test
+    m_pBtnStartShow->SetClickHdl( LINK( this, SdCustomShowDlg, StartShowHdl ) ); 
 
-    // get CustomShow list of docs
+    
     pCustomShowList = rDoc.GetCustomShowList();
     if( pCustomShowList )
     {
         long nPosToSelect = pCustomShowList->GetCurPos();
-        // fill ListBox with CustomShows
+        
         for( pCustomShow = pCustomShowList->First();
              pCustomShow != NULL;
              pCustomShow = pCustomShowList->Next() )
@@ -112,7 +112,7 @@ void SdCustomShowDlg::CheckState()
  */
 IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 {
-    // new CustomShow
+    
     if( p == m_pBtnNew )
     {
         pCustomShow = NULL;
@@ -136,7 +136,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
         else if( pCustomShow )
             DELETEZ( pCustomShow );
     }
-    // edit CustomShow
+    
     else if( p == m_pBtnEdit )
     {
         sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
@@ -161,7 +161,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             }
         }
     }
-    // delete CustomShow
+    
     else if( p == m_pBtnRemove )
     {
         sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
@@ -174,7 +174,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
             bModified = sal_True;
         }
     }
-    // copy CustomShow
+    
     else if( p == m_pBtnCopy )
     {
         sal_uInt16 nPos = m_pLbCustomShows->GetSelectEntryPos();
@@ -192,15 +192,15 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                 nStrPos = aStr.indexOf( aStrCopy );
             }
             nStrPos = nStrPos + aStrCopy.getLength();
-            // that we do not access into the nirvana (--> endless loop)
+            
             if( nStrPos >= aStr.getLength() )
             {
                 aStr = aStr + " " + OUString::number( nNum );
             }
 
-            // check name...
+            
             sal_Bool bDifferent = sal_False;
-            //long nPosToSelect = pCustomShowList->GetCurPos();
+            
             while( !bDifferent )
             {
                 bDifferent = sal_True;
@@ -213,7 +213,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                 }
                 if( !bDifferent )
                 {
-                    // replace number by a number increased by 1
+                    
 
                     const CharClass* pCharClass = rDoc.GetCharClass();
                     while( pCharClass->isDigit( aStr, nStrPos ) )
@@ -222,7 +222,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
                 }
 
             }
-            //pCustomShowList->Seek( nPosToSelect );
+            
             pShow->SetName( aStr );
 
             pCustomShowList->push_back( pShow );
@@ -272,9 +272,9 @@ sal_Bool SdCustomShowDlg::IsCustomShow() const
 
 
 
-///////////////////////////
-// SdDefineCustomShowDlg //
-///////////////////////////
+
+
+
 
 
 SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
@@ -297,22 +297,22 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
     m_pBtnAdd->SetClickHdl( aLink );
     m_pBtnRemove->SetClickHdl( aLink );
     m_pEdtName->SetModifyHdl( aLink );
-    m_pLbPages->SetSelectHdl( aLink ); // because of status
-    m_pLbCustomPages->SetSelectHdl( aLink ); // because of status
+    m_pLbPages->SetSelectHdl( aLink ); 
+    m_pLbCustomPages->SetSelectHdl( aLink ); 
 
     m_pBtnOK->SetClickHdl( LINK( this, SdDefineCustomShowDlg, OKHdl ) );
 
-    // Hack: m_pLbPages used to be MultiLB. We don't have VCL builder equivalent
-    // of it yet. So enable selecting multiple items here
+    
+    
     m_pLbPages->EnableMultiSelection( true );
 
-    // shape 'em a bit
+    
     m_pLbPages->set_width_request(m_pLbPages->approximate_char_width() * 16);
     m_pLbCustomPages->set_width_request(m_pLbPages->approximate_char_width() * 16);
     m_pLbPages->SetDropDownLineCount(10);
 
     SdPage* pPage;
-    // fill Listbox with page names of Docs
+    
     for( long nPage = 0L;
          nPage < rDoc.GetSdPageCount( PK_STANDARD );
          nPage++ )
@@ -321,14 +321,14 @@ SdDefineCustomShowDlg::SdDefineCustomShowDlg( Window* pWindow,
         OUString aStr( pPage->GetName() );
         m_pLbPages->InsertEntry( aStr );
     }
-    //aLbPages.SelectEntryPos( 0 );
+    
 
     if( rpCustomShow )
     {
         aOldName = rpCustomShow->GetName();
         m_pEdtName->SetText( aOldName );
 
-        // fill ListBox with CustomShow pages
+        
         for( SdCustomShow::PageVec::iterator it = rpCustomShow->PagesVector().begin();
              it != rpCustomShow->PagesVector().end(); ++it )
         {
@@ -361,7 +361,7 @@ SdDefineCustomShowDlg::~SdDefineCustomShowDlg()
 void SdDefineCustomShowDlg::CheckState()
 {
     sal_Bool bPages = m_pLbPages->GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
-    //sal_Bool bCSPages = aLbCustomPages.GetSelectEntryPos() != LISTBOX_ENTRY_NOTFOUND;
+    
     sal_Bool bCSPages = m_pLbCustomPages->FirstSelected() != NULL;
     sal_Bool bCount = m_pLbCustomPages->GetEntryCount() > 0;
 
@@ -404,13 +404,13 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
     }
     else if( p == m_pBtnRemove )
     {
-        //sal_uInt16 nPos = aLbCustomPages.GetSelectEntryPos();
+        
         SvTreeListEntry* pEntry = m_pLbCustomPages->FirstSelected();
         if( pEntry )
         {
             sal_uLong nPos = m_pLbCustomPages->GetModel()->GetAbsPos( pEntry );
-            //rpCustomShow->Remove( nPos );
-            //aLbCustomPages.RemoveEntry( nPos );
+            
+            
             m_pLbCustomPages->GetModel()->Remove( m_pLbCustomPages->GetModel()->GetEntryAtAbsPos( nPos ) );
 
             bModified = sal_True;
@@ -418,7 +418,7 @@ IMPL_LINK( SdDefineCustomShowDlg, ClickButtonHdl, void *, p )
     }
     else if( p == m_pEdtName )
     {
-        //rpCustomShow->SetName( aEdtName.GetText() );
+        
 
         bModified = sal_True;
     }
@@ -437,14 +437,14 @@ void SdDefineCustomShowDlg::CheckCustomShow()
     sal_Bool bDifferent = sal_False;
     SvTreeListEntry* pEntry = NULL;
 
-    // compare count
+    
     if( rpCustomShow->PagesVector().size() != m_pLbCustomPages->GetEntryCount() )
     {
         rpCustomShow->PagesVector().clear();
         bDifferent = sal_True;
     }
 
-    // compare page pointer
+    
     if( !bDifferent )
     {
         SdCustomShow::PageVec::iterator it1 = rpCustomShow->PagesVector().begin();
@@ -460,7 +460,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
         }
     }
 
-    // set new page pointer
+    
     if( bDifferent )
     {
         SdPage* pPage = NULL;
@@ -474,7 +474,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
         bModified = sal_True;
     }
 
-    // compare name and set name if necessary
+    
     OUString aStr( m_pEdtName->GetText() );
     if( rpCustomShow->GetName() != aStr )
     {
@@ -488,7 +488,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
  */
 IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
 {
-    // check name...
+    
     sal_Bool bDifferent = sal_True;
     SdCustomShowList* pCustomShowList = rDoc.GetCustomShowList();
     if( pCustomShowList )

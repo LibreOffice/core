@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "drawingmanager.hxx"
@@ -36,7 +36,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::drawing;
@@ -45,15 +45,15 @@ using namespace ::com::sun::star::uno;
 using namespace ::oox::drawingml;
 
 
-// ============================================================================
+
 
 namespace {
 
-// OBJ record -----------------------------------------------------------------
 
-const sal_uInt16 BIFF_OBJTYPE_UNKNOWN       = 0xFFFF;   // for internal use only
 
-// line formatting ------------------------------------------------------------
+const sal_uInt16 BIFF_OBJTYPE_UNKNOWN       = 0xFFFF;   
+
+
 
 const sal_uInt8 BIFF_OBJ_LINE_AUTOCOLOR     = 64;
 
@@ -83,7 +83,7 @@ const sal_uInt8 BIFF_OBJ_ARROW_NARROW       = 0;
 const sal_uInt8 BIFF_OBJ_ARROW_MEDIUM       = 1;
 const sal_uInt8 BIFF_OBJ_ARROW_WIDE         = 2;
 
-// fill formatting ------------------------------------------------------------
+
 
 const sal_uInt8 BIFF_OBJ_FILL_AUTOCOLOR     = 65;
 
@@ -92,11 +92,11 @@ const sal_uInt8 BIFF_OBJ_PATT_SOLID         = 1;
 
 const sal_uInt8 BIFF_OBJ_FILL_AUTO          = 0x01;
 
-} // namespace
+} 
 
-// ============================================================================
-// Model structures for BIFF OBJ record data
-// ============================================================================
+
+
+
 
 BiffObjLineModel::BiffObjLineModel() :
     mnColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
@@ -114,7 +114,7 @@ BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjLineModel& rModel )
     return rStrm;
 }
 
-// ============================================================================
+
 
 BiffObjFillModel::BiffObjFillModel() :
     mnBackColorIdx( BIFF_OBJ_LINE_AUTOCOLOR ),
@@ -132,9 +132,9 @@ BiffInputStream& operator>>( BiffInputStream& rStrm, BiffObjFillModel& rModel )
     return rStrm;
 }
 
-// ============================================================================
-// BIFF drawing objects
-// ============================================================================
+
+
+
 
 BiffDrawingObjectContainer::BiffDrawingObjectContainer()
 {
@@ -145,7 +145,7 @@ void BiffDrawingObjectContainer::convertAndInsert( BiffDrawingBase& rDrawing, co
     maObjects.forEachMem( &BiffDrawingObjectBase::convertAndInsert, ::boost::ref( rDrawing ), ::boost::cref( rxShapes ), pParentRect );
 }
 
-// ============================================================================
+
 
 BiffDrawingObjectBase::BiffDrawingObjectBase( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -171,13 +171,13 @@ Reference< XShape > BiffDrawingObjectBase::convertAndInsert( BiffDrawingBase& rD
         const Reference< XShapes >& rxShapes, const css::awt::Rectangle* pParentRect ) const
 {
     Reference< XShape > xShape;
-    if( rxShapes.is() && mbProcessShape && !mbHidden )  // TODO: support for hidden objects?
+    if( rxShapes.is() && mbProcessShape && !mbHidden )  
     {
-        // base class 'ShapeAnchor' calculates the shape rectangle in 1/100 mm
-        // in BIFF3-BIFF5, all shapes have absolute anchor (also children of group shapes)
+        
+        
         css::awt::Rectangle aShapeRect = maAnchor.calcAnchorRectHmm( getDrawPageSize() );
 
-        // convert the shape, if the calculated rectangle is not empty
+        
         bool bHasWidth = aShapeRect.Width > 0;
         bool bHasHeight = aShapeRect.Height > 0;
         if( mbAreaObj ? (bHasWidth && bHasHeight) : (bHasWidth || bHasHeight) )
@@ -219,7 +219,7 @@ void BiffDrawingObjectBase::convertLineProperties( ShapePropertyMap& rPropMap, c
         aLineProps.moLineCap = XML_flat;
         aLineProps.moLineJoint = XML_round;
 
-        // line width: use 0.35 mm per BIFF line width step
+        
         sal_Int32 nLineWidth = 0;
         switch( rLineModel.mnWidth )
         {
@@ -231,7 +231,7 @@ void BiffDrawingObjectBase::convertLineProperties( ShapePropertyMap& rPropMap, c
         }
         aLineProps.moLineWidth = getLimitedValue< sal_Int32, sal_Int64 >( convertHmmToEmu( nLineWidth ), 0, SAL_MAX_INT32 );
 
-        // dash style and transparency
+        
         switch( rLineModel.mnStyle )
         {
             default:
@@ -264,7 +264,7 @@ void BiffDrawingObjectBase::convertLineProperties( ShapePropertyMap& rPropMap, c
             break;
         }
 
-        // line ends
+        
         bool bLineStart = false;
         bool bLineEnd = false;
         bool bFilled = false;
@@ -277,12 +277,12 @@ void BiffDrawingObjectBase::convertLineProperties( ShapePropertyMap& rPropMap, c
         }
         if( bLineStart || bLineEnd )
         {
-            // arrow type (open or closed)
+            
             sal_Int32 nArrowType = bFilled ? XML_triangle : XML_arrow;
             aLineProps.maStartArrow.moArrowType = bLineStart ? nArrowType : XML_none;
             aLineProps.maEndArrow.moArrowType   = bLineEnd   ? nArrowType : XML_none;
 
-            // arrow width
+            
             sal_Int32 nArrowWidth = XML_med;
             switch( extractValue< sal_uInt8 >( nArrows, 4, 4 ) )
             {
@@ -292,7 +292,7 @@ void BiffDrawingObjectBase::convertLineProperties( ShapePropertyMap& rPropMap, c
             }
             aLineProps.maStartArrow.moArrowWidth = aLineProps.maEndArrow.moArrowWidth = nArrowWidth;
 
-            // arrow length
+            
             sal_Int32 nArrowLength = XML_med;
             switch( extractValue< sal_uInt8 >( nArrows, 8, 4 ) )
             {
@@ -367,14 +367,14 @@ void BiffDrawingObjectBase::convertFillProperties( ShapePropertyMap& rPropMap, c
             { 0x80, 0x00, 0x08, 0x00, 0x80, 0x00, 0x08, 0x00 }
         };
         const sal_uInt8* const pnPattern = sppnPatterns[ ::std::min< size_t >( rFillData.mnPattern - 2, STATIC_ARRAY_SIZE( sppnPatterns ) ) ];
-        // create 2-colored 8x8 DIB
+        
         SvMemoryStream aMemStrm;
-//      { 0x0C, 0x00, 0x00, 0x00, 0x08, 0x00, 0x08, 0x00, 0x01, 0x00, 0x01, 0x00, 0xFF, 0xFF, 0xFF, 0x00, 0x00, 0x00 }
+
         aMemStrm << sal_uInt32( 12 ) << sal_Int16( 8 ) << sal_Int16( 8 ) << sal_uInt16( 1 ) << sal_uInt16( 1 );
         aMemStrm << sal_uInt8( 0xFF ) << sal_uInt8( 0xFF ) << sal_uInt8( 0xFF );
         aMemStrm << sal_uInt8( 0x00 ) << sal_uInt8( 0x00 ) << sal_uInt8( 0x00 );
         for( size_t nIdx = 0; nIdx < 8; ++nIdx )
-            aMemStrm << sal_uInt32( pnPattern[ nIdx ] ); // 32-bit little-endian
+            aMemStrm << sal_uInt32( pnPattern[ nIdx ] ); 
         aMemStrm.Seek( STREAM_SEEK_TO_BEGIN );
         Bitmap aBitmap;
         aBitmap.Read( aMemStrm, FALSE );
@@ -393,9 +393,9 @@ void BiffDrawingObjectBase::convertFillProperties( ShapePropertyMap& rPropMap, c
     aFillProps.pushToPropMap( rPropMap, getBaseFilter().getGraphicHelper() );
 }
 
-// ============================================================================
-// BIFF drawing page
-// ============================================================================
+
+
+
 
 BiffDrawingBase::BiffDrawingBase( const WorksheetHelper& rHelper, const Reference< XDrawPage >& rxDrawPage ) :
     WorksheetHelper( rHelper ),
@@ -410,16 +410,16 @@ void BiffDrawingBase::finalizeImport()
     if( !xShapes.is() )
         return;
 
-    // process list of objects to be skipped
+    
     for( BiffObjIdVector::const_iterator aIt = maSkipObjs.begin(), aEnd = maSkipObjs.end(); aIt != aEnd; ++aIt )
         if( BiffDrawingObjectBase* pDrawingObj = maObjMapId.get( *aIt ).get() )
             pDrawingObj->setProcessShape( false );
 
-    // process drawing objects without DFF data
+    
     maRawObjs.convertAndInsert( *this, xShapes );
 }
 
-// ============================================================================
+
 
 BiffSheetDrawing::BiffSheetDrawing( const WorksheetHelper& rHelper ) :
     BiffDrawingBase( rHelper, rHelper.getDrawPage() )
@@ -428,13 +428,13 @@ BiffSheetDrawing::BiffSheetDrawing( const WorksheetHelper& rHelper ) :
 
 void BiffSheetDrawing::notifyShapeInserted( const Reference< XShape >& /*rxShape*/, const css::awt::Rectangle& rShapeRect )
 {
-    // collect all shape positions in the WorksheetHelper base class
+    
     extendShapeBoundingBox( rShapeRect );
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/themeelementscontext.hxx"
@@ -35,7 +35,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 class FillStyleListContext : public ContextHandler2
 {
@@ -69,7 +69,7 @@ ContextHandlerRef FillStyleListContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-// ============================================================================
+
 
 class LineStyleListContext : public ContextHandler2
 {
@@ -98,7 +98,7 @@ ContextHandlerRef LineStyleListContext::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-// ============================================================================
+
 
 class EffectStyleListContext : public ContextHandler2
 {
@@ -124,7 +124,7 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
             mrEffectStyleList.push_back( EffectPropertiesPtr( new EffectProperties ) );
             return this;
 
-        case A_TOKEN( effectLst ):  // CT_EffectList
+        case A_TOKEN( effectLst ):  
             if( mrEffectStyleList.back() )
                 return new EffectPropertiesContext( *this, *mrEffectStyleList.back() );
             break;
@@ -132,7 +132,7 @@ ContextHandlerRef EffectStyleListContext::onCreateContext( sal_Int32 nElement, c
     return 0;
 }
 
-// ============================================================================
+
 
 class FontSchemeContext : public ContextHandler2
 {
@@ -192,7 +192,7 @@ void FontSchemeContext::onEndElement()
     }
 }
 
-// ============================================================================
+
 
 ThemeElementsContext::ThemeElementsContext( ContextHandler2Helper& rParent, Theme& rTheme ) :
     ContextHandler2( rParent ),
@@ -202,33 +202,33 @@ ThemeElementsContext::ThemeElementsContext( ContextHandler2Helper& rParent, Them
 
 ContextHandlerRef ThemeElementsContext::onCreateContext( sal_Int32 nElement, const AttributeList& rAttribs )
 {
-    // CT_BaseStyles
+    
     switch( nElement )
     {
-        case A_TOKEN( clrScheme ):  // CT_ColorScheme
+        case A_TOKEN( clrScheme ):  
             return new clrSchemeContext( *this, mrTheme.getClrScheme() );
-        case A_TOKEN( fontScheme ): // CT_FontScheme
+        case A_TOKEN( fontScheme ): 
             return new FontSchemeContext( *this, mrTheme.getFontScheme() );
 
-        case A_TOKEN( fmtScheme ):  // CT_StyleMatrix
+        case A_TOKEN( fmtScheme ):  
             mrTheme.setStyleName( rAttribs.getString( XML_name ).get() );
             return this;
 
-        case A_TOKEN( fillStyleLst ):   // CT_FillStyleList
+        case A_TOKEN( fillStyleLst ):   
             return new FillStyleListContext( *this, mrTheme.getFillStyleList() );
-        case A_TOKEN( lnStyleLst ):    // CT_LineStyleList
+        case A_TOKEN( lnStyleLst ):    
             return new LineStyleListContext( *this, mrTheme.getLineStyleList() );
-        case A_TOKEN( effectStyleLst ): // CT_EffectStyleList
+        case A_TOKEN( effectStyleLst ): 
             return new EffectStyleListContext( *this, mrTheme.getEffectStyleList() );
-        case A_TOKEN( bgFillStyleLst ): // CT_BackgroundFillStyleList
+        case A_TOKEN( bgFillStyleLst ): 
             return new FillStyleListContext( *this, mrTheme.getBgFillStyleList() );
     }
     return 0;
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

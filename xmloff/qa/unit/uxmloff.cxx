@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -75,14 +75,14 @@ void Test::testAutoStylePool()
     std::vector< XMLPropertyState > aProperties;
     OUString aName = xPool->Add( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
 
-    // not that interesting but worth checking
+    
     bool bHack = (getenv("LIBO_ONEWAY_STABLE_ODF_EXPORT") != NULL);
     if (bHack)
         CPPUNIT_ASSERT_MESSAGE( "style / naming changed", aName == "Bob" );
     else
         CPPUNIT_ASSERT_MESSAGE( "style / naming changed", aName == "Bob1" );
 
-    // find ourselves again:
+    
     OUString aSameName = xPool->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, "", aProperties );
     CPPUNIT_ASSERT_MESSAGE( "same style not found", aSameName == aName );
 }

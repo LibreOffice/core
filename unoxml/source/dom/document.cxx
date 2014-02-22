@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Sequence.h>
@@ -49,7 +49,7 @@ namespace DOM
 {
     static xmlNodePtr lcl_getDocumentType(xmlDocPtr const i_pDocument)
     {
-        // find the doc type
+        
         xmlNodePtr cur = i_pDocument->children;
         while (cur != NULL)
         {
@@ -61,10 +61,10 @@ namespace DOM
         return 0;
     }
 
-    /// get the pointer to the root element node of the document
+    /
     static xmlNodePtr lcl_getDocumentRootPtr(xmlDocPtr const i_pDocument)
     {
-        // find the document element
+        
         xmlNodePtr cur = i_pDocument->children;
         while (cur != NULL)
         {
@@ -87,7 +87,7 @@ namespace DOM
     ::rtl::Reference<CDocument> CDocument::CreateCDocument(xmlDocPtr const pDoc)
     {
         ::rtl::Reference<CDocument> const xDoc(new CDocument(pDoc));
-        // add the doc itself to its nodemap!
+        
         xDoc->m_NodeMap.insert(
             nodemap_t::value_type(reinterpret_cast<xmlNodePtr>(pDoc),
                 ::std::make_pair(
@@ -100,7 +100,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_Mutex);
 #ifdef DBG_UTIL
-        // node map must be empty now, otherwise CDocument must not die!
+        
         for (nodemap_t::iterator i = m_NodeMap.begin();
                 i != m_NodeMap.end(); ++i)
         {
@@ -131,14 +131,14 @@ namespace DOM
     {
         nodemap_t::iterator const i = m_NodeMap.find(pNode);
         if (i != m_NodeMap.end()) {
-            // #i113681# consider this scenario:
-            // T1 calls ~CNode
-            // T2 calls getCNode:    lookup will find i->second->first invalid
-            //                       so a new CNode is created and inserted
-            // T1 calls removeCNode: i->second->second now points to a
-            //                       different CNode instance!
+            
+            
+            
+            
+            
+            
             //
-            // check that the CNode is the right one
+            
             CNode *const pCurrent = i->second.second;
             if (pCurrent == pCNode) {
                 m_NodeMap.erase(i);
@@ -156,10 +156,10 @@ namespace DOM
         if (0 == pNode) {
             return 0;
         }
-        //check whether there is already an instance for this node
+        
         nodemap_t::const_iterator const i = m_NodeMap.find(pNode);
         if (i != m_NodeMap.end()) {
-            // #i113681# check that the CNode is still alive
+            
             uno::Reference<XNode> const xNode(i->second.first);
             if (xNode.is())
             {
@@ -171,49 +171,49 @@ namespace DOM
 
         if (!bCreate) { return 0; }
 
-        // there is not yet an instance wrapping this node,
-        // create it and store it in the map
+        
+        
 
         ::rtl::Reference<CNode> pCNode;
         switch (pNode->type)
         {
             case XML_ELEMENT_NODE:
-                // m_aNodeType = NodeType::ELEMENT_NODE;
+                
                 pCNode = static_cast< CNode* >(
                         new CElement(*this, m_Mutex, pNode));
             break;
             case XML_TEXT_NODE:
-                // m_aNodeType = NodeType::TEXT_NODE;
+                
                 pCNode = static_cast< CNode* >(
                         new CText(*this, m_Mutex, pNode));
             break;
             case XML_CDATA_SECTION_NODE:
-                // m_aNodeType = NodeType::CDATA_SECTION_NODE;
+                
                 pCNode = static_cast< CNode* >(
                         new CCDATASection(*this, m_Mutex, pNode));
             break;
             case XML_ENTITY_REF_NODE:
-                // m_aNodeType = NodeType::ENTITY_REFERENCE_NODE;
+                
                 pCNode = static_cast< CNode* >(
                         new CEntityReference(*this, m_Mutex, pNode));
             break;
             case XML_ENTITY_NODE:
-                // m_aNodeType = NodeType::ENTITY_NODE;
+                
                 pCNode = static_cast< CNode* >(new CEntity(*this, m_Mutex,
                             reinterpret_cast<xmlEntityPtr>(pNode)));
             break;
             case XML_PI_NODE:
-                // m_aNodeType = NodeType::PROCESSING_INSTRUCTION_NODE;
+                
                 pCNode = static_cast< CNode* >(
                         new CProcessingInstruction(*this, m_Mutex, pNode));
             break;
             case XML_COMMENT_NODE:
-                // m_aNodeType = NodeType::COMMENT_NODE;
+                
                 pCNode = static_cast< CNode* >(
                         new CComment(*this, m_Mutex, pNode));
             break;
             case XML_DOCUMENT_NODE:
-                // m_aNodeType = NodeType::DOCUMENT_NODE;
+                
                 OSL_ENSURE(false, "CDocument::GetCNode is not supposed to"
                         " create a CDocument!!!");
                 pCNode = static_cast< CNode* >(new CDocument(
@@ -221,26 +221,26 @@ namespace DOM
             break;
             case XML_DOCUMENT_TYPE_NODE:
             case XML_DTD_NODE:
-                // m_aNodeType = NodeType::DOCUMENT_TYPE_NODE;
+                
                 pCNode = static_cast< CNode* >(new CDocumentType(*this, m_Mutex,
                             reinterpret_cast<xmlDtdPtr>(pNode)));
             break;
             case XML_DOCUMENT_FRAG_NODE:
-                // m_aNodeType = NodeType::DOCUMENT_FRAGMENT_NODE;
+                
                 pCNode = static_cast< CNode* >(
                         new CDocumentFragment(*this, m_Mutex, pNode));
             break;
             case XML_NOTATION_NODE:
-                // m_aNodeType = NodeType::NOTATION_NODE;
+                
                 pCNode = static_cast< CNode* >(new CNotation(*this, m_Mutex,
                             reinterpret_cast<xmlNotationPtr>(pNode)));
             break;
             case XML_ATTRIBUTE_NODE:
-                // m_aNodeType = NodeType::ATTRIBUTE_NODE;
+                
                 pCNode = static_cast< CNode* >(new CAttr(*this, m_Mutex,
                             reinterpret_cast<xmlAttrPtr>(pNode)));
             break;
-            // unsupported node types
+            
             case XML_HTML_DOCUMENT_NODE:
             case XML_ELEMENT_DECL:
             case XML_ATTRIBUTE_DECL:
@@ -258,7 +258,7 @@ namespace DOM
                 ).second;
             OSL_ASSERT(bInserted);
             if (!bInserted) {
-                // if insertion failed, delete new instance and return null
+                
                 return 0;
             }
         }
@@ -304,10 +304,10 @@ namespace DOM
             case NodeType_COMMENT_NODE:
                 return true;
             case NodeType_ELEMENT_NODE:
-                 // there may be only one!
+                 
                 return 0 == lcl_getDocumentRootPtr(m_aDocPtr);
             case NodeType_DOCUMENT_TYPE_NODE:
-                 // there may be only one!
+                 
                 return 0 == lcl_getDocumentType(m_aDocPtr);
             default:
                 return false;
@@ -331,25 +331,25 @@ namespace DOM
         m_streamListeners.erase(aListener);
     }
 
-    // IO context functions for libxml2 interaction
+    
     typedef struct {
         Reference< XOutputStream > stream;
         bool allowClose;
     } IOContext;
 
     extern "C" {
-    // write callback
-    // int xmlOutputWriteCallback (void * context, const char * buffer, int len)
+    
+    
     static int writeCallback(void *context, const char* buffer, int len){
-        // create a sequence and write it to the stream
+        
         IOContext *pContext = static_cast<IOContext*>(context);
         Sequence<sal_Int8> bs(reinterpret_cast<const sal_Int8*>(buffer), len);
         pContext->stream->writeBytes(bs);
         return len;
     }
 
-    // clsoe callback
-    //int xmlOutputCloseCallback (void * context)
+    
+    
     static int closeCallback(void *context)
     {
         IOContext *pContext = static_cast<IOContext*>(context);
@@ -358,7 +358,7 @@ namespace DOM
         }
         return 0;
     }
-    } // extern "C"
+    } 
 
     void SAL_CALL CDocument::start()
         throw (RuntimeException)
@@ -371,7 +371,7 @@ namespace DOM
             streamListeners = m_streamListeners;
         }
 
-        // notify listeners about start
+        
         listenerlist_t::const_iterator iter1 = streamListeners.begin();
         while (iter1 != streamListeners.end()) {
             Reference< XStreamListener > aListener = *iter1;
@@ -382,17 +382,17 @@ namespace DOM
         {
             ::osl::MutexGuard const g(m_Mutex);
 
-            // check again! could have been reset...
+            
             if (! m_rOutputStream.is()) { throw RuntimeException(); }
 
-            // setup libxml IO and write data to output stream
+            
             IOContext ioctx = {m_rOutputStream, false};
             xmlOutputBufferPtr pOut = xmlOutputBufferCreateIO(
                 writeCallback, closeCallback, &ioctx, NULL);
             xmlSaveFileTo(pOut, m_aNodePtr->doc, NULL);
         }
 
-        // call listeners
+        
         listenerlist_t::const_iterator iter2 = streamListeners.begin();
         while (iter2 != streamListeners.end()) {
             Reference< XStreamListener > aListener = *iter2;
@@ -404,7 +404,7 @@ namespace DOM
     void SAL_CALL CDocument::terminate()
         throw (RuntimeException)
     {
-        // not supported
+        
     }
 
     void SAL_CALL CDocument::setOutputStream( const Reference< XOutputStream >& aStream )
@@ -422,7 +422,7 @@ namespace DOM
         return m_rOutputStream;
     }
 
-    // Creates an Attr of the given name.
+    
     Reference< XAttr > SAL_CALL CDocument::createAttribute(const OUString& name)
         throw (RuntimeException, DOMException)
     {
@@ -438,17 +438,17 @@ namespace DOM
         return pCAttr.get();
     };
 
-    // Creates an attribute of the given qualified name and namespace URI.
+    
     Reference< XAttr > SAL_CALL CDocument::createAttributeNS(
             const OUString& ns, const OUString& qname)
         throw (RuntimeException, DOMException)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        // libxml does not allow a NS definition to be attached to an
-        // attribute node - which is a good thing, since namespaces are
-        // only defined as parts of element nodes
-        // thus the namespace data is stored in CAttr::m_pNamespace
+        
+        
+        
+        
         sal_Int32 i = qname.indexOf(':');
         OString oPrefix, oName, oUri;
         if (i != -1)
@@ -467,14 +467,14 @@ namespace DOM
             dynamic_cast< CAttr* >(GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr)).get()));
         if (!pCAttr.is()) { throw RuntimeException(); }
-        // store the namespace data!
+        
         pCAttr->m_pNamespace.reset( new stringpair_t(oUri, oPrefix) );
         pCAttr->m_bUnlinked = true;
 
         return pCAttr.get();
     };
 
-    // Creates a CDATASection node whose value is the specified string.
+    
     Reference< XCDATASection > SAL_CALL CDocument::createCDATASection(const OUString& data)
         throw (RuntimeException)
     {
@@ -492,7 +492,7 @@ namespace DOM
         return xRet;
     }
 
-    // Creates a Comment node given the specified string.
+    
     Reference< XComment > SAL_CALL CDocument::createComment(const OUString& data)
         throw (RuntimeException)
     {
@@ -507,7 +507,7 @@ namespace DOM
         return xRet;
     }
 
-    //Creates an empty DocumentFragment object.
+    
     Reference< XDocumentFragment > SAL_CALL CDocument::createDocumentFragment()
         throw (RuntimeException)
     {
@@ -520,7 +520,7 @@ namespace DOM
         return xRet;
     }
 
-    // Creates an element of the type specified.
+    
     Reference< XElement > SAL_CALL CDocument::createElement(const OUString& tagName)
         throw (RuntimeException, DOMException)
     {
@@ -535,7 +535,7 @@ namespace DOM
         return xRet;
     }
 
-    // Creates an element of the given qualified name and namespace URI.
+    
     Reference< XElement > SAL_CALL CDocument::createElementNS(
             const OUString& ns, const OUString& qname)
         throw (RuntimeException, DOMException)
@@ -553,7 +553,7 @@ namespace DOM
             o2 = OUStringToOString(qname.copy(i+1, qname.getLength()-i-1), RTL_TEXTENCODING_UTF8);
             xName = (xmlChar*)o2.getStr();
         } else {
-            // default prefix
+            
             xPrefix = (xmlChar*)"";
             o2 = OUStringToOString(qname, RTL_TEXTENCODING_UTF8);
             xName = (xmlChar*)o2.getStr();
@@ -561,8 +561,8 @@ namespace DOM
         o3 = OUStringToOString(ns, RTL_TEXTENCODING_UTF8);
         xmlChar *xUri = (xmlChar*)o3.getStr();
 
-        // xmlNsPtr aNsPtr = xmlNewReconciledNs?
-        // xmlNsPtr aNsPtr = xmlNewGlobalNs?
+        
+        
         xmlNodePtr const pNode = xmlNewDocNode(m_aDocPtr, NULL, xName, NULL);
         xmlNsPtr const pNs = xmlNewNs(pNode, xUri, xPrefix);
         xmlSetNs(pNode, pNs);
@@ -572,7 +572,7 @@ namespace DOM
         return xRet;
     }
 
-    //Creates an EntityReference object.
+    
     Reference< XEntityReference > SAL_CALL CDocument::createEntityReference(const OUString& name)
         throw (RuntimeException, DOMException)
     {
@@ -587,8 +587,8 @@ namespace DOM
         return xRet;
     }
 
-    // Creates a ProcessingInstruction node given the specified name and
-    // data strings.
+    
+    
     Reference< XProcessingInstruction > SAL_CALL CDocument::createProcessingInstruction(
             const OUString& target, const OUString& data)
         throw (RuntimeException, DOMException)
@@ -607,7 +607,7 @@ namespace DOM
         return xRet;
     }
 
-    // Creates a Text node given the specified string.
+    
     Reference< XText > SAL_CALL CDocument::createTextNode(const OUString& data)
         throw (RuntimeException)
     {
@@ -622,8 +622,8 @@ namespace DOM
         return xRet;
     }
 
-    // The Document Type Declaration (see DocumentType) associated with this
-    // document.
+    
+    
     Reference< XDocumentType > SAL_CALL CDocument::getDoctype()
         throw (RuntimeException)
     {
@@ -636,8 +636,8 @@ namespace DOM
         return xRet;
     }
 
-    // This is a convenience attribute that allows direct access to the child
-    // node that is the root element of the document.
+    
+    
     Reference< XElement > SAL_CALL CDocument::getDocumentElement()
         throw (RuntimeException)
     {
@@ -656,7 +656,7 @@ namespace DOM
     {
         if (cur == NULL)
             return NULL;
-        // look in current node
+        
         if (cur->type == XML_ELEMENT_NODE)
         {
             xmlAttrPtr a = cur->properties;
@@ -669,7 +669,7 @@ namespace DOM
                 a = a->next;
             }
         }
-        // look in children
+        
         xmlNodePtr result = lcl_search_element_by_id(cur->children, id);
         if (result != NULL)
             return result;
@@ -677,14 +677,14 @@ namespace DOM
             return result;
     }
 
-    // Returns the Element whose ID is given by elementId.
+    
     Reference< XElement > SAL_CALL
     CDocument::getElementById(const OUString& elementId)
         throw (RuntimeException)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        // search the tree for an element with the given ID
+        
         OString o1 = OUStringToOString(elementId, RTL_TEXTENCODING_UTF8);
         xmlChar *xId = (xmlChar*)o1.getStr();
         xmlNodePtr const pStart = lcl_getDocumentRootPtr(m_aDocPtr);
@@ -723,11 +723,11 @@ namespace DOM
     Reference< XDOMImplementation > SAL_CALL CDocument::getImplementation()
         throw (RuntimeException)
     {
-        // does not need mutex currently
+        
         return Reference< XDOMImplementation >(CDOMImplementation::get());
     }
 
-    // helper function to recursively import siblings
+    
     static void lcl_ImportSiblings(
         Reference< XDocument > const& xTargetDocument,
         Reference< XNode > const& xTargetParent,
@@ -805,7 +805,7 @@ namespace DOM
                 xNewElement = xDocument->createElement(aQName);
             }
 
-            // get attributes
+            
             if (xElement->hasAttributes())
             {
                 Reference< XNamedNodeMap > attribs = xElement->getAttributes();
@@ -864,13 +864,13 @@ namespace DOM
         case NodeType_DOCUMENT_TYPE_NODE:
         case NodeType_NOTATION_NODE:
         default:
-            // can't be imported
+            
             throw RuntimeException();
 
         }
         if (deep)
         {
-            // get children and import them
+            
             Reference< XNode > const xChild = xImportedNode->getFirstChild();
             if (xChild.is())
             {
@@ -910,22 +910,22 @@ namespace DOM
     {
         if (!xImportedNode.is()) { throw RuntimeException(); }
 
-        // NB: this whole operation inherently accesses 2 distinct documents.
-        // The imported node could even be from a different DOM implementation,
-        // so this implementation cannot make any assumptions about the
-        // locking strategy of the imported node.
-        // So the import takes no lock on this document;
-        // it only calls UNO methods on this document that temporarily
-        // lock the document, and UNO methods on the imported node that
-        // may temporarily lock the other document.
-        // As a consequence, the import is not atomic with regard to
-        // concurrent modifications of either document, but it should not
-        // deadlock.
-        // To ensure that no members are accessed, the implementation is in
-        // static non-member functions.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         Reference< XDocument > const xDocument(this);
-        // already in doc?
+        
         if (xImportedNode->getOwnerDocument() == xDocument) {
             return xImportedNode;
         }
@@ -937,13 +937,13 @@ namespace DOM
 
     OUString SAL_CALL CDocument::getNodeName()throw (RuntimeException)
     {
-        // does not need mutex currently
+        
         return OUString("#document");
     }
 
     OUString SAL_CALL CDocument::getNodeValue() throw (RuntimeException)
     {
-        // does not need mutex currently
+        
         return OUString();
     }
 
@@ -965,7 +965,7 @@ namespace DOM
 
     Reference< XEvent > SAL_CALL CDocument::createEvent(const OUString& aType) throw (RuntimeException)
     {
-        // does not need mutex currently
+        
         events::CEvent *pEvent = 0;
         if ( aType == "DOMSubtreeModified" || aType == "DOMNodeInserted" || aType == "DOMNodeRemoved"
           || aType == "DOMNodeRemovedFromDocument" || aType == "DOMNodeInsertedIntoDocument" || aType == "DOMAttrModified"
@@ -981,14 +981,14 @@ namespace DOM
         {
             pEvent = new events::CMouseEvent;
         }
-        else // generic event
+        else 
         {
             pEvent = new events::CEvent;
         }
         return Reference< XEvent >(pEvent);
     }
 
-    // ::com::sun::star::xml::sax::XSAXSerializable
+    
     void SAL_CALL CDocument::serialize(
             const Reference< XDocumentHandler >& i_xHandler,
             const Sequence< beans::StringPair >& i_rNamespaces)
@@ -996,7 +996,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        // add new namespaces to root node
+        
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
         if (0 != pRoot) {
             const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
@@ -1006,17 +1006,17 @@ namespace DOM
                                     RTL_TEXTENCODING_UTF8);
                 OString href   = OUStringToOString(pNsDef->Second,
                                     RTL_TEXTENCODING_UTF8);
-                // this will only add the ns if it does not exist already
+                
                 xmlNewNs(pRoot, reinterpret_cast<const xmlChar*>(href.getStr()),
                          reinterpret_cast<const xmlChar*>(prefix.getStr()));
             }
-            // eliminate duplicate namespace declarations
+            
             nscleanup(pRoot->children, pRoot);
         }
         saxify(i_xHandler);
     }
 
-    // ::com::sun::star::xml::sax::XFastSAXSerializable
+    
     void SAL_CALL CDocument::fastSerialize( const Reference< XFastDocumentHandler >& i_xHandler,
                                             const Reference< XFastTokenHandler >& i_xTokenHandler,
                                             const Sequence< beans::StringPair >& i_rNamespaces,
@@ -1025,7 +1025,7 @@ namespace DOM
     {
         ::osl::MutexGuard const g(m_Mutex);
 
-        // add new namespaces to root node
+        
         xmlNodePtr const pRoot = lcl_getDocumentRootPtr(m_aDocPtr);
         if (0 != pRoot) {
             const beans::StringPair * pSeq = i_rNamespaces.getConstArray();
@@ -1035,18 +1035,18 @@ namespace DOM
                                     RTL_TEXTENCODING_UTF8);
                 OString href   = OUStringToOString(pNsDef->Second,
                                     RTL_TEXTENCODING_UTF8);
-                // this will only add the ns if it does not exist already
+                
                 xmlNewNs(pRoot, reinterpret_cast<const xmlChar*>(href.getStr()),
                          reinterpret_cast<const xmlChar*>(prefix.getStr()));
             }
-            // eliminate duplicate namespace declarations
+            
             nscleanup(pRoot->children, pRoot);
         }
 
         Context aContext(i_xHandler,
                          i_xTokenHandler);
 
-        // register namespace ids
+        
         const beans::Pair<OUString,sal_Int32>* pSeq = i_rRegisterNamespaces.getConstArray();
         for (const beans::Pair<OUString,sal_Int32>* pNs = pSeq;
              pNs < pSeq + i_rRegisterNamespaces.getLength(); ++pNs)

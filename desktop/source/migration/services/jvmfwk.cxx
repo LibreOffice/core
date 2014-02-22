@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -90,7 +90,7 @@ class JavaMigration : public ::cppu::WeakImplHelper4<
     css::configuration::backend::XLayerHandler>
 {
 public:
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
@@ -98,17 +98,17 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException);
 
-    //XInitialization
+    
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
         throw(css::uno::Exception, css::uno::RuntimeException);
 
-    //XJob
+    
     virtual css::uno::Any SAL_CALL execute(
         const css::uno::Sequence<css::beans::NamedValue >& Arguments )
         throw (css::lang::IllegalArgumentException, css::uno::Exception,
                css::uno::RuntimeException);
 
-        // XLayerHandler
+        
     virtual void SAL_CALL startLayer()
         throw(::com::sun::star::lang::WrappedTargetException);
 
@@ -196,7 +196,7 @@ public:
 
 
 
-    //----------------
+    
     ~JavaMigration();
 
 private:
@@ -226,7 +226,7 @@ css::uno::Sequence< OUString > jvmfwk_getSupportedServiceNames()
     return css::uno::Sequence< OUString >( &str_name, 1 );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL JavaMigration::getImplementationName()
     throw (css::uno::RuntimeException)
 {
@@ -245,7 +245,7 @@ css::uno::Sequence< OUString > SAL_CALL JavaMigration::getSupportedServiceNames(
     return jvmfwk_getSupportedServiceNames();
 }
 
-//XInitialization ----------------------------------------------------------------------
+
 void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
         throw(css::uno::Exception, css::uno::RuntimeException)
 {
@@ -288,7 +288,7 @@ void SAL_CALL JavaMigration::initialize( const css::uno::Sequence< css::uno::Any
 
 }
 
-//XJob
+
 css::uno::Any SAL_CALL JavaMigration::execute(
         const css::uno::Sequence<css::beans::NamedValue >& )
         throw (css::lang::IllegalArgumentException, css::uno::Exception,
@@ -313,7 +313,7 @@ void JavaMigration::migrateJavarc()
                        "] XJob::execute: Could not get Home entry from java.ini/javarc.");
     if (bSuccess == sal_True && !sValue.isEmpty())
     {
-        //get the directory
+        
         CJavaInfo aInfo;
         javaFrameworkError err = jfw_getJavaInfoByPath(sValue.pData, &aInfo.pData);
 
@@ -335,12 +335,12 @@ void JavaMigration::migrateJavarc()
 }
 
 
-// XLayerHandler
+
 void SAL_CALL JavaMigration::startLayer()
     throw(css::lang::WrappedTargetException)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL JavaMigration::endLayer()
     throw(
@@ -348,7 +348,7 @@ void SAL_CALL JavaMigration::endLayer()
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL JavaMigration::overrideNode(
         const OUString&,
@@ -361,7 +361,7 @@ void SAL_CALL JavaMigration::overrideNode(
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL JavaMigration::addOrReplaceNode(
         const OUString&,
@@ -378,7 +378,7 @@ void SAL_CALL  JavaMigration::endNode()
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::dropNode(
         const OUString& )
@@ -387,7 +387,7 @@ void SAL_CALL  JavaMigration::dropNode(
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::overrideProperty(
         const OUString& aName,
@@ -403,7 +403,7 @@ void SAL_CALL  JavaMigration::overrideProperty(
     else if ( aName == "UserClassPath" )
         m_aStack.push(TElementStack::value_type(aName, USER_CLASS_PATH));
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::setPropertyValue(
         const Any& aValue )
@@ -448,7 +448,7 @@ void SAL_CALL  JavaMigration::setPropertyValue(
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL JavaMigration::setPropertyValueForLocale(
         const Any&,
@@ -458,7 +458,7 @@ void SAL_CALL JavaMigration::setPropertyValueForLocale(
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::endProperty()
     throw(
@@ -468,7 +468,7 @@ void SAL_CALL  JavaMigration::endProperty()
             if (!m_aStack.empty())
                 m_aStack.pop();
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::addProperty(
         const OUString&,
@@ -479,7 +479,7 @@ void SAL_CALL  JavaMigration::addProperty(
         WrappedTargetException )
 {
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL  JavaMigration::addPropertyWithValue(
         const OUString&,
@@ -501,9 +501,9 @@ void SAL_CALL JavaMigration::addOrReplaceNodeFromTemplate(
 {
 }
 
-// -----------------------------------------------------------------------------
-//ToDo enable java, user class path
 
-} //end namespace jfw
+
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

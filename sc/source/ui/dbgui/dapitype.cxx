@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "dapitype.hxx"
 #include "scresid.hxx"
@@ -31,7 +31,7 @@
 
 using namespace com::sun::star;
 
-//-------------------------------------------------------------------------
+
 
 ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(Window* pParent, bool bEnableExternal)
     : ModalDialog( pParent, "SelectSourceDialog", "modules/scalc/ui/selectsource.ui" )
@@ -51,11 +51,11 @@ ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg(Window* pParent, bool bEnable
 
     m_pBtnSelection->Check();
 
-    // Disabled unless at least one named range exists.
+    
     m_pLbNamedRange->Disable();
     m_pBtnNamedRange->Disable();
 
-    // Intentionally hide this button to see if anyone complains.
+    
     m_pBtnExternal->Show(false);
 }
 
@@ -89,7 +89,7 @@ void ScDataPilotSourceTypeDlg::AppendNamedRange(const OUString& rName)
     m_pLbNamedRange->InsertEntry(rName);
     if (m_pLbNamedRange->GetEntryCount() == 1)
     {
-        // Select position 0 only for the first time.
+        
         m_pLbNamedRange->SelectEntryPos(0);
         m_pBtnNamedRange->Enable();
     }
@@ -101,7 +101,7 @@ IMPL_LINK( ScDataPilotSourceTypeDlg, RadioClickHdl, RadioButton*, pBtn )
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
                                 const uno::Sequence<OUString>& rServices ) :

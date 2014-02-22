@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/chartconverter.hxx"
@@ -31,7 +31,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -41,14 +41,14 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 static const sal_Unicode API_TOKEN_ARRAY_OPEN      = '{';
 static const sal_Unicode API_TOKEN_ARRAY_CLOSE     = '}';
 static const sal_Unicode API_TOKEN_ARRAY_ROWSEP    = '|';
 static const sal_Unicode API_TOKEN_ARRAY_COLSEP    = ';';
 
-// Code similar to oox/source/xls/formulabase.cxx
+
 static OUString lclGenerateApiString( const OUString& rString )
 {
     OUString aRetString = rString;
@@ -85,7 +85,7 @@ static OUString lclGenerateApiArray( const Matrix< Any >& rMatrix )
     return aBuffer.makeStringAndClear();
 }
 
-// ============================================================================
+
 
 ChartConverter::ChartConverter()
 {
@@ -128,10 +128,10 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
         OUString aRangeRep;
         if( !rDataSeq.maData.empty() )
         {
-            // create a single-row array from constant source data
+            
             Matrix< Any > aMatrix( rDataSeq.maData.size(), 1 );
             Matrix< Any >::iterator aMIt = aMatrix.begin();
-            // TODO: how to handle missing values in the map?
+            
             for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt, ++aMIt )
                 *aMIt = aDIt->second;
             aRangeRep = lclGenerateApiArray( aMatrix );
@@ -139,7 +139,7 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
 
         if( !aRangeRep.isEmpty() ) try
         {
-            // create the data sequence
+            
             xDataSeq = rxDataProvider->createDataSequenceByRangeRepresentation( aRangeRep );
             return xDataSeq;
         }
@@ -152,10 +152,10 @@ Reference< XDataSequence > ChartConverter::createDataSequence( const Reference< 
     return 0;
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

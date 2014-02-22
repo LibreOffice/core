@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,21 +14,21 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/color/bcolormodifier.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     BColorModifier::~BColorModifier()
     {
     }
-} // end of namespace basegfx
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -47,9 +47,9 @@ namespace basegfx
 
         return ::basegfx::BColor(fLuminance, fLuminance, fLuminance);
     }
-} // end of namespace basegfx
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -66,9 +66,9 @@ namespace basegfx
     {
         return ::basegfx::BColor(1.0 - aSourceColor.getRed(), 1.0 - aSourceColor.getGreen(), 1.0 - aSourceColor.getBlue());
     }
-} // end of namespace basegfx
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -87,9 +87,9 @@ namespace basegfx
 
         return ::basegfx::BColor(fAlpha, fAlpha, fAlpha);
     }
-} // end of namespace basegfx
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -113,9 +113,9 @@ namespace basegfx
     {
         return maBColor;
     }
-} // end of namespace basegfx
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -139,9 +139,9 @@ namespace basegfx
     {
         return interpolate(maBColor, aSourceColor, mfValue);
     }
-} // end of namespace basegfx
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -174,9 +174,9 @@ namespace basegfx
             return ::basegfx::BColor(1.0, 1.0, 1.0);
         }
     }
-} // end of namespace basegfx
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -205,7 +205,7 @@ namespace basegfx
             return false;
         }
 
-        // getValue is sufficient, mfInvValue and mbUseIt are only helper values
+        
         return getValue() == pCompare->getValue();
     }
 
@@ -226,9 +226,9 @@ namespace basegfx
             return aSourceColor;
         }
     }
-} // end of namespace basegfx
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -251,7 +251,7 @@ namespace basegfx
             || !basegfx::fTools::equalZero(mfLuminance)
             || !basegfx::fTools::equalZero(mfContrast))
         {
-            // calculate slope
+            
             if(mfContrast >= 0.0)
             {
                 mfContrastOff = 128.0 / (128.0 - (mfContrast * 127.0));
@@ -261,11 +261,11 @@ namespace basegfx
                 mfContrastOff = ( 128.0 + (mfContrast * 127.0)) / 128.0;
             }
 
-            // calculate unified contrast offset
+            
             const double fPreparedContrastOff((128.0 - mfContrastOff * 128.0) / 255.0);
             const double fCombinedOffset(mfLuminance + fPreparedContrastOff);
 
-            // set full offsets
+            
             mfRedOff = mfRed + fCombinedOffset;
             mfGreenOff = mfGreen + fCombinedOffset;
             mfBlueOff = mfBlue + fCombinedOffset;
@@ -287,7 +287,7 @@ namespace basegfx
             return false;
         }
 
-        // no need to compare other values, these are just helpers
+        
         return getRed() == pCompare->getRed()
             && getGreen() == pCompare->getGreen()
             && getBlue() == pCompare->getBlue()
@@ -309,9 +309,9 @@ namespace basegfx
             return aSourceColor;
         }
     }
-} // end of namespace basegfx
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -332,6 +332,6 @@ namespace basegfx
 
         return aRetval;
     }
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -94,15 +94,15 @@ bool XMLTextImportPropertyMapper::handleSpecialItem(
                             rProperty.mnIndex+1, rProperty.mnIndex+2,
                             rProperty.mnIndex+3, rProperty.mnIndex+4,
                             rProperty.mnIndex+5 );
-            bRet = sal_False; // the property hasn't been filled
+            bRet = sal_False; 
         }
         break;
 
-    // If we want to do StarMath/StarSymbol font conversion, then we'll
-    // want these special items to be treated just like regular ones...
-    // For the Writer, we'll catch and convert them in _FillPropertySet;
-    // the other apps probably don't care. For the other apps, we just
-    // imitate the default non-special-item mechanism.
+    
+    
+    
+    
+    
     case CTF_FONTFAMILYNAME:
     case CTF_FONTFAMILYNAME_CJK:
     case CTF_FONTFAMILYNAME_CTL:
@@ -248,14 +248,14 @@ void XMLTextImportPropertyMapper::FontDefaultsCheck(
 }
 
 namespace {
-//fdo#58730 The [UL|LR]Space class has a deficiency where "100%" also serves as
-//a flag that the value is an absolute value so we can't truly handle an
-//up/lower space property which wants to specify its 200% upper but 100% lower
-//of its parent (try typing 100% vs 200% into the edit style dialog and revisit
-//your style). So on xml load that ends up meaning 200%, 0 lower. This is a
-//crock.
+
+
+
+
+
+
 //
-//On import clear 100% all-margins relative sizes.
+
 static bool
 isNotDefaultRelSize(const XMLPropertyState* pRelState, const UniReference<XMLPropertySetMapper>& rPrMap)
 {
@@ -389,8 +389,8 @@ void XMLTextImportPropertyMapper::finished(
     XMLPropertyState* pCharBorderWidths[4] = { 0, 0, 0, 0 };
     XMLPropertyState* pVertOrient = 0;
     XMLPropertyState* pVertOrientRelAsChar = 0;
-    XMLPropertyState* pBackTransparency = NULL; // transparency in %
-    XMLPropertyState* pBackTransparent = NULL;  // transparency as boolean
+    XMLPropertyState* pBackTransparency = NULL; 
+    XMLPropertyState* pBackTransparent = NULL;  
     XMLPropertyState* pAllParaMargin = 0;
     XMLPropertyState* pParaMargins[4] = { 0, 0, 0, 0 };
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -468,17 +468,17 @@ void XMLTextImportPropertyMapper::finished(
 
         case CTF_FRAMEHEIGHT_MIN_ABS:
         case CTF_FRAMEHEIGHT_MIN_REL:
-//      case CTF_SYNCHEIGHT_MIN:
+
                                         bHasAnyMinHeight = sal_True;
-                                        // no break here!
+                                        
         case CTF_FRAMEHEIGHT_ABS:
         case CTF_FRAMEHEIGHT_REL:
-//      case CTF_SYNCHEIGHT:
+
                                         bHasAnyHeight = sal_True; break;
         case CTF_FRAMEWIDTH_MIN_ABS:
         case CTF_FRAMEWIDTH_MIN_REL:
                                         bHasAnyMinWidth = sal_True;
-                                        // no break here!
+                                        
         case CTF_FRAMEWIDTH_ABS:
         case CTF_FRAMEWIDTH_REL:
                                         bHasAnyWidth = sal_True; break;
@@ -648,7 +648,7 @@ void XMLTextImportPropertyMapper::finished(
                        pFontStyleNameCTL, pFontFamilyCTL, pFontPitchCTL, pFontCharSetCTL,
                        &pNewFontStyleNameCTL, &pNewFontFamilyCTL, &pNewFontPitchCTL, &pNewFontCharSetCTL );
 
-    // #i5775# don't overwrite %transparency with binary transparency
+    
     if( ( pBackTransparency != NULL ) && ( pBackTransparent != NULL ) )
     {
         if( ! *(sal_Bool*)(pBackTransparent->maValue.getValue()) )
@@ -656,9 +656,9 @@ void XMLTextImportPropertyMapper::finished(
     }
 
 
-    // insert newly created properties. This invalidates all iterators!
-    // Most of the pXXX variables in this method are iterators and will be
-    // invalidated!!!
+    
+    
+    
 
     if( pNewFontStyleName )
     {
@@ -820,10 +820,10 @@ void XMLTextImportPropertyMapper::finished(
         }
     }
 
-    // DO NOT USE ITERATORS/POINTERS INTO THE rProperties-VECTOR AFTER
-    // THIS LINE.  All iterators into the rProperties-vector, especially all
-    // pXXX-type variables set in the first switch statement of this method,
-    // may have been invalidated by the above push_back() calls!
+    
+    
+    
+    
 }
 
 

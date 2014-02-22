@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,17 +14,17 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svx/EnhancedCustomShape2d.hxx"
 #include <rtl/ustring.hxx>
 #include <tools/fract.hxx>
 
-// Makes parser a static resource,
-// we're synchronized externally.
-// But watch out, the parser might have
-// state not visible to this code!
+
+
+
+
 
 #define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
 #if OSL_DEBUG_LEVEL >= 2 && defined(DBG_UTIL)
@@ -64,7 +64,7 @@ void EnhancedCustomShape::FillEquationParameter( const EnhancedCustomShapeParame
             if ( nValue & 0x40000000 )
             {
                 nValue ^= 0x40000000;
-                rDest.nOperation |= 0x20000000 << nDestPara;    // the bit is indicating that this value has to be adjusted later
+                rDest.nOperation |= 0x20000000 << nDestPara;    
             }
             nValue |= 0x400;
         }
@@ -86,11 +86,11 @@ ExpressionNode::~ExpressionNode()
 namespace
 {
 
-//////////////////////
-//////////////////////
-// EXPRESSION NODES
-//////////////////////
-//////////////////////
+
+
+
+
+
 class ConstantValueExpression : public ExpressionNode
 {
     double  maValue;
@@ -200,7 +200,7 @@ public:
     {
         EnhancedCustomShapeParameter aRet;
         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
-        aRet.Value <<= mnIndex | 0x40000000;                        // the bit is indicating that this equation needs to be adjusted later
+        aRet.Value <<= mnIndex | 0x40000000;                        
         return aRet;
     }
 };
@@ -285,7 +285,7 @@ public:
 
         switch( meFunct )
         {
-            case ENUM_FUNC_WIDTH :  // TODO: do not use this as constant value
+            case ENUM_FUNC_WIDTH :  
             case ENUM_FUNC_HEIGHT :
             case ENUM_FUNC_LOGWIDTH :
             case ENUM_FUNC_LOGHEIGHT :
@@ -300,7 +300,7 @@ public:
             case ENUM_FUNC_RIGHT :  aRet.Type = EnhancedCustomShapeParameterType::RIGHT; break;
             case ENUM_FUNC_BOTTOM : aRet.Type = EnhancedCustomShapeParameterType::BOTTOM; break;
 
-            // not implemented so far
+            
             case ENUM_FUNC_XSTRETCH :
             case ENUM_FUNC_YSTRETCH :
             case ENUM_FUNC_HASSTROKE :
@@ -392,9 +392,9 @@ public:
 
                 EnhancedCustomShapeParameter aSource( mpArg->fillNode( rEquations, NULL, nFlags | EXPRESSION_FLAG_SUMANGLE_MODE ) );
                 if ( aSource.Type == EnhancedCustomShapeParameterType::NORMAL )
-                {   // sumangle needed :-(
+                {   
                     EnhancedCustomShapeEquation _aEquation;
-                    _aEquation.nOperation |= 0xe;   // sumangle
+                    _aEquation.nOperation |= 0xe;   
                     FillEquationParameter( aSource, 1, _aEquation );
                     aSource.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aSource.Value <<= (sal_Int32)rEquations.size();
@@ -417,9 +417,9 @@ public:
 
                 EnhancedCustomShapeParameter aSource( mpArg->fillNode( rEquations, NULL, nFlags | EXPRESSION_FLAG_SUMANGLE_MODE ) );
                 if ( aSource.Type == EnhancedCustomShapeParameterType::NORMAL )
-                {   // sumangle needed :-(
+                {   
                     EnhancedCustomShapeEquation aTmpEquation;
-                    aTmpEquation.nOperation |= 0xe; // sumangle
+                    aTmpEquation.nOperation |= 0xe; 
                     FillEquationParameter( aSource, 1, aTmpEquation );
                     aSource.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aSource.Value <<= (sal_Int32)rEquations.size();
@@ -442,9 +442,9 @@ public:
 
                 EnhancedCustomShapeParameter aSource( mpArg->fillNode( rEquations, NULL, nFlags | EXPRESSION_FLAG_SUMANGLE_MODE ) );
                 if ( aSource.Type == EnhancedCustomShapeParameterType::NORMAL )
-                {   // sumangle needed :-(
+                {   
                     EnhancedCustomShapeEquation aTmpEquation;
-                    aTmpEquation.nOperation |= 0xe; // sumangle
+                    aTmpEquation.nOperation |= 0xe; 
                     FillEquationParameter( aSource, 1, aTmpEquation );
                     aSource.Type = EnhancedCustomShapeParameterType::EQUATION;
                     aSource.Value <<= (sal_Int32)rEquations.size();
@@ -458,7 +458,7 @@ public:
             break;
             case UNARY_FUNC_ATAN:
             {
-// TODO:
+
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
             break;
@@ -539,7 +539,7 @@ public:
                     if ( mpFirstArg->getType() == ENUM_FUNC_ADJUSTMENT )
                     {
                         EnhancedCustomShapeEquation aEquation;
-                        aEquation.nOperation |= 0xe;    // sumangle
+                        aEquation.nOperation |= 0xe;    
                         FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
                         FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 1, aEquation );
                         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -549,7 +549,7 @@ public:
                     else if ( mpSecondArg->getType() == ENUM_FUNC_ADJUSTMENT )
                     {
                         EnhancedCustomShapeEquation aEquation;
-                        aEquation.nOperation |= 0xe;    // sumangle
+                        aEquation.nOperation |= 0xe;    
                         FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags ), 0, aEquation );
                         FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags ), 1, aEquation );
                         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
@@ -559,14 +559,14 @@ public:
                     else
                     {
                         EnhancedCustomShapeEquation aSumangle1;
-                        aSumangle1.nOperation |= 0xe;   // sumangle
+                        aSumangle1.nOperation |= 0xe;   
                         FillEquationParameter( mpFirstArg->fillNode( rEquations, NULL, nFlags &~EXPRESSION_FLAG_SUMANGLE_MODE ), 1, aSumangle1 );
                         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                         aRet.Value <<= (sal_Int32)rEquations.size();
                         rEquations.push_back( aSumangle1 );
 
                         EnhancedCustomShapeEquation aSumangle2;
-                        aSumangle2.nOperation |= 0xe;   // sumangle
+                        aSumangle2.nOperation |= 0xe;   
                         FillEquationParameter( mpSecondArg->fillNode( rEquations, NULL, nFlags &~EXPRESSION_FLAG_SUMANGLE_MODE ), 1, aSumangle2 );
                         aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                         aRet.Value <<= (sal_Int32)rEquations.size();
@@ -616,8 +616,8 @@ public:
             break;
             case BINARY_FUNC_MUL :
             {
-                // in the dest. format the cos function is using integer as result :-(
-                // so we can't use the generic algorithm
+                
+                
                 if ( ( mpFirstArg->getType() == UNARY_FUNC_SIN ) || ( mpFirstArg->getType() == UNARY_FUNC_COS ) || ( mpFirstArg->getType() == UNARY_FUNC_TAN ) )
                     aRet = mpFirstArg->fillNode( rEquations, mpSecondArg.get(), nFlags );
                 else if ( ( mpSecondArg->getType() == UNARY_FUNC_SIN ) || ( mpSecondArg->getType() == UNARY_FUNC_COS ) || ( mpSecondArg->getType() == UNARY_FUNC_TAN ) )
@@ -628,13 +628,13 @@ public:
                         aRet = mpSecondArg->fillNode( rEquations, NULL, nFlags );
                     else if ( mpSecondArg->isConstant() && (*mpSecondArg)() == 1 )
                         aRet = mpFirstArg->fillNode( rEquations, NULL, nFlags );
-                    else if ( ( mpFirstArg->getType() == BINARY_FUNC_DIV )      // don't care of (pi/180)
+                    else if ( ( mpFirstArg->getType() == BINARY_FUNC_DIV )      
                         && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpFirstArg.get())->mpFirstArg.get())->getType() == ENUM_FUNC_PI )
                         && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpFirstArg.get())->mpSecondArg.get())->getType() == FUNC_CONST ) )
                     {
                         aRet = mpSecondArg->fillNode( rEquations, NULL, nFlags );
                     }
-                    else if ( ( mpSecondArg->getType() == BINARY_FUNC_DIV )     // don't care of (pi/180)
+                    else if ( ( mpSecondArg->getType() == BINARY_FUNC_DIV )     
                         && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpSecondArg.get())->mpFirstArg.get())->getType() == ENUM_FUNC_PI )
                         && ( ((BinaryFunctionExpression*)((BinaryFunctionExpression*)mpSecondArg.get())->mpSecondArg.get())->getType() == FUNC_CONST ) )
                     {
@@ -754,11 +754,11 @@ public:
     }
 };
 
-////////////////////////
-////////////////////////
-// FUNCTION PARSER
-////////////////////////
-////////////////////////
+
+
+
+
+
 
 typedef const sal_Char* StringIteratorT;
 
@@ -766,11 +766,11 @@ struct ParserContext
 {
     typedef ::std::stack< ExpressionNodeSharedPtr > OperandStack;
 
-    // stores a stack of not-yet-evaluated operands. This is used
-    // by the operators (i.e. '+', '*', 'sin' etc.) to pop their
-    // arguments from. If all arguments to an operator are constant,
-    // the operator pushes a precalculated result on the stack, and
-    // a composite ExpressionNode otherwise.
+    
+    
+    
+    
+    
     OperandStack                maOperandStack;
 
     const EnhancedCustomShape2d* mpCustoShape;
@@ -852,13 +852,13 @@ public :
         if( rNodeStack.size() < 1 )
             throw ParseError( "Not enough arguments for unary operator" );
 
-        // retrieve arguments
+        
         ExpressionNodeSharedPtr pArg( rNodeStack.top() );
         rNodeStack.pop();
 
-        if( pArg->isConstant() )    // check for constness
+        if( pArg->isConstant() )    
             rNodeStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( UnaryFunctionExpression::getValue( meFunct, pArg ) ) ) );
-        else                        // push complex node, that calcs the value on demand
+        else                        
             rNodeStack.push( ExpressionNodeSharedPtr( new UnaryFunctionExpression( meFunct, pArg ) ) );
     }
 };
@@ -890,18 +890,18 @@ public:
         if( rNodeStack.size() < 2 )
             throw ParseError( "Not enough arguments for binary operator" );
 
-        // retrieve arguments
+        
         ExpressionNodeSharedPtr pSecondArg( rNodeStack.top() );
         rNodeStack.pop();
         ExpressionNodeSharedPtr pFirstArg( rNodeStack.top() );
         rNodeStack.pop();
 
-        // create combined ExpressionNode
+        
         ExpressionNodeSharedPtr pNode = ExpressionNodeSharedPtr( new BinaryFunctionExpression( meFunct, pFirstArg, pSecondArg ) );
-        // check for constness
-        if( pFirstArg->isConstant() && pSecondArg->isConstant() )   // call the operator() at pNode, store result in constant value ExpressionNode.
+        
+        if( pFirstArg->isConstant() && pSecondArg->isConstant() )   
             rNodeStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( (*pNode)() ) ) );
-        else                                                        // push complex node, that calcs the value on demand
+        else                                                        
             rNodeStack.push( pNode );
     }
 };
@@ -923,7 +923,7 @@ public :
         if( rNodeStack.size() < 3 )
             throw ParseError( "Not enough arguments for ternary operator" );
 
-        // retrieve arguments
+        
         ExpressionNodeSharedPtr pThirdArg( rNodeStack.top() );
         rNodeStack.pop();
         ExpressionNodeSharedPtr pSecondArg( rNodeStack.top() );
@@ -931,35 +931,35 @@ public :
         ExpressionNodeSharedPtr pFirstArg( rNodeStack.top() );
         rNodeStack.pop();
 
-        // create combined ExpressionNode
+        
         ExpressionNodeSharedPtr pNode( new IfExpression( pFirstArg, pSecondArg, pThirdArg ) );
-        // check for constness
+        
         if( pFirstArg->isConstant() && pSecondArg->isConstant() && pThirdArg->isConstant() )
-            rNodeStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( (*pNode)() ) ) );    // call the operator() at pNode, store result in constant value ExpressionNode.
+            rNodeStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( (*pNode)() ) ) );    
         else
-            rNodeStack.push( pNode );                                       // push complex node, that calcs the value on demand
+            rNodeStack.push( pNode );                                       
     }
 };
 
-// Workaround for MSVC compiler anomaly (stack trashing)
+
 //
-// The default ureal_parser_policies implementation of parse_exp
-// triggers a really weird error in MSVC7 (Version 13.00.9466), in
-// that the real_parser_impl::parse_main() call of parse_exp()
-// overwrites the frame pointer _on the stack_ (EBP of the calling
-// function gets overwritten while lying on the stack).
+
+
+
+
+
 //
-// For the time being, our parser thus can only read the 1.0E10
-// notation, not the 1.0e10 one.
+
+
 //
-// TODO(F1): Also handle the 1.0e10 case here.
+
 template< typename T > struct custom_real_parser_policies : public ::boost::spirit::ureal_parser_policies<T>
 {
     template< typename ScannerT >
         static typename ::boost::spirit::parser_result< ::boost::spirit::chlit<>, ScannerT >::type
     parse_exp(ScannerT& scan)
     {
-        // as_lower_d somehow breaks MSVC7
+        
         return ::boost::spirit::ch_p('E').parse(scan);
     }
 };
@@ -1008,7 +1008,7 @@ public:
     template< typename ScannerT > class definition
     {
     public:
-        // grammar definition
+        
         definition( const ExpressionGrammar& self )
         {
             using ::boost::spirit::str_p;
@@ -1110,8 +1110,8 @@ public:
         }
 
     private:
-        // the constituents of the Spirit arithmetic expression grammar.
-        // For the sake of readability, without 'ma' prefix.
+        
+        
         ::boost::spirit::rule< ScannerT >   additiveExpression;
         ::boost::spirit::rule< ScannerT >   multiplicativeExpression;
         ::boost::spirit::rule< ScannerT >   unaryExpression;
@@ -1132,7 +1132,7 @@ public:
     }
 
 private:
-    ParserContextSharedPtr          mpParserContext; // might get modified during parsing
+    ParserContextSharedPtr          mpParserContext; 
 };
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
@@ -1140,8 +1140,8 @@ const ParserContextSharedPtr& getParserContext()
 {
     static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
 
-    // clear node stack (since we reuse the static object, that's
-    // the whole point here)
+    
+    
     while( !lcl_parserContext->maOperandStack.empty() )
         lcl_parserContext->maOperandStack.pop();
 
@@ -1157,9 +1157,9 @@ namespace EnhancedCustomShape  {
 
 ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& rFunction, const EnhancedCustomShape2d& rCustoShape )
 {
-    // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
-    // gives better conversion robustness here (we might want to map space
-    // etc. to ASCII space here)
+    
+    
+    
     const OString& rAsciiFunction(
         OUStringToOString( rFunction, RTL_TEXTENCODING_ASCII_US ) );
 
@@ -1169,8 +1169,8 @@ ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& rFunction
     ParserContextSharedPtr pContext;
 
 #ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
-    // static parser context, because the actual
-    // Spirit parser is also a static object
+    
+    
     pContext = getParserContext();
 #else
     pContext.reset( new ParserContext() );
@@ -1183,16 +1183,16 @@ ExpressionNodeSharedPtr FunctionParser::parseFunction( const OUString& rFunction
                                     aEnd,
                                     aExpressionGrammer >> ::boost::spirit::end_p,
                                     ::boost::spirit::space_p ) );
-    OSL_DEBUG_ONLY(::std::cout.flush()); // needed to keep stdout and cout in sync
+    OSL_DEBUG_ONLY(::std::cout.flush()); 
 
 
 
-    // input fully congested by the parser?
+    
     if( !aParseInfo.full )
         throw ParseError( "EnhancedCustomShapeFunctionParser::parseFunction(): string not fully parseable" );
 
-    // parser's state stack now must contain exactly _one_ ExpressionNode,
-    // which represents our formula.
+    
+    
     if( pContext->maOperandStack.size() != 1 )
         throw ParseError( "EnhancedCustomShapeFunctionParser::parseFunction(): incomplete or empty expression" );
 

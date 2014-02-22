@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rsc/rscsfx.hxx>
@@ -200,18 +200,18 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 xSectPr->setPropertyValue(UNO_NAME_IS_VISIBLE, aVal);
             }
         }
-        // set properties
+        
      uno::Reference< beans::XPropertySet >  xIdxProps(pxIndexSectionsArr[nTOXIndex]->xDocumentIndex, uno::UNO_QUERY);
      uno::Reference< beans::XPropertySetInfo >  xInfo = xIdxProps->getPropertySetInfo();
         SwTOXDescription& rDesc = GetTOXDescription(eCurrentTOXType);
         sal_uInt16 nIdxOptions = rDesc.GetIndexOptions();
         if(bInitialCreate || !nPage || nPage == TOX_PAGE_SELECT)
         {
-            //title
+            
             if(rDesc.GetTitle())
                 lcl_SetProp(xInfo, xIdxProps, UNO_NAME_TITLE, *rDesc.GetTitle());
 
-            //stylenames
+            
             sal_uInt16  nContentOptions = rDesc.GetContentOptions();
             if(xInfo->hasPropertyByName(UNO_NAME_LEVEL_PARAGRAPH_STYLES))
             {
@@ -302,7 +302,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                     long nTokenIndex = 0;
                     long nParamCount = 2;
 
-                    // #i24377#
+                    
                     SwFormTokens aPattern = pForm->GetPattern(nCurrLevel);
                     SwFormTokens::iterator aIt = aPattern.begin();
 
@@ -311,12 +311,12 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         if( aSequPropVals.getLength() <= nTokenIndex)
                             aSequPropVals.realloc(nTokenIndex + 10);
 
-                        SwFormToken aToken = *aIt; // #i24377#
+                        SwFormToken aToken = *aIt; 
                         switch(aToken.eTokenType)
                         {
                             case TOKEN_ENTRY_NO     :
                                 sTokenType = "TokenEntryNumber";
-                                // numbering for content index
+                                
                             break;
                             case TOKEN_ENTRY_TEXT   :
                             case TOKEN_ENTRY        :
@@ -347,7 +347,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                                 sTokenType = "TokenBibliographyDataField";
                             }
                             break;
-                            default:; //prevent warning
+                            default:; 
                         }
                         beans::PropertyValues aPropVals(nParamCount);
                         beans::PropertyValue* pPropValArr = aPropVals.getArray();
@@ -377,7 +377,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                         pValues[nTokenIndex] = aPropVals;
                         nTokenIndex++;
 
-                        ++aIt; // #i24377#
+                        ++aIt; 
                     }
                     aSequPropVals.realloc(nTokenIndex);
 
@@ -410,7 +410,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
                 case TOX_CONTENT :
                     nEndLevel = 11;
                 break;
-                default:; //prevent warning
+                default:; 
             }
             for(sal_uInt16 i = 1; i < nEndLevel; i++)
             {

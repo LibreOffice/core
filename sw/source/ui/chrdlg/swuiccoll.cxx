@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cmdid.h"
@@ -44,9 +44,9 @@ static sal_uInt16 aPageRg[] = {
     0
 };
 
-// Warning! This table is indicated directly in code (0, 1, ...)
+
 static long nTabs[] =
-    {   2, // Number of Tabs
+    {   2, 
         0, 100
     };
 
@@ -80,7 +80,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
 
     SetExchangeSupport();
 
-    // Install handlers
+    
     m_pConditionCB->SetClickHdl(   LINK(this, SwCondCollPage, OnOffHdl));
     m_pTbLinks->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
     m_pStyleLB->SetDoubleClickHdl( LINK(this, SwCondCollPage, AssignRemoveHdl ));
@@ -93,7 +93,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     m_pTbLinks->SetStyle(m_pTbLinks->GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     m_pTbLinks->SetSelectionMode( SINGLE_SELECTION );
     m_pTbLinks->SetTabs( &nTabs[0], MAP_APPFONT );
-    m_pTbLinks->Resize();  // OS: Hack for the right selection
+    m_pTbLinks->Resize();  
     m_pTbLinks->SetSpaceBetweenEntries( 0 );
 
     SfxStyleFamilies aFamilies(SW_RES(DLG_STYLE_DESIGNER));

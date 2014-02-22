@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -40,15 +40,15 @@ using namespace com::sun::star;
 #include "chartarr.hxx"
 
 
-// STATIC DATA -----------------------------------------------------------
 
 
-//==================================================================
+
+
 
 void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rectangle& rRect,
                                 SCTAB nSrcTab, sal_uInt16 nX1, sal_uInt16 nY1, sal_uInt16 nX2, sal_uInt16 nY2 )
 {
-    //  wenn Chart nicht installiert ist, darf nicht auf SCH_MOD zugegriffen werden!
+    
     if ( !SvtModuleOptions().IsChart() )
         return;
 
@@ -71,20 +71,20 @@ void Sc10InsertObject::InsertChart( ScDocument* pDoc, SCTAB nDestTab, const Rect
         OSL_ENSURE(pPage,"Page ?");
         pPage->InsertObject(pSdrOle2Obj);
 
-        pSdrOle2Obj->SetLogicRect(rRect);               // erst nach InsertObject !!!
+        pSdrOle2Obj->SetLogicRect(rRect);               
         awt::Size aSz;
         aSz.Width = rRect.GetSize().Width();
         aSz.Height = rRect.GetSize().Height();
         xObj->setVisualAreaSize( embed::Aspects::MSOLE_CONTENT, aSz );
 
-        // #i121334# This call will change the chart's default background fill from white to transparent.
-        // Add here again if this is wanted (see task description for details)
-        // ChartHelper::AdaptDefaultsForChart( xObj );
+        
+        
+        
 
-            // hier kann das Chart noch nicht mit Daten gefuettert werden,
-            // weil die Formeln noch nicht berechnet sind.
-            // Deshalb in die ChartCollection, die Daten werden dann im
-            // Sc10Import dtor geholt.
+            
+            
+            
+            
 
         ScChartCollection* pColl = pDoc->GetChartCollection();
         pColl->push_back( new ScChartArray( pDoc, nSrcTab, static_cast<SCCOL>(nX1), static_cast<SCROW>(nY1), static_cast<SCCOL>(nX2), static_cast<SCROW>(nY2), aName ) );

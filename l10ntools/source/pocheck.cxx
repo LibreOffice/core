@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <iostream>
@@ -16,7 +16,7 @@
 #include <osl/file.hxx>
 #include "po.hxx"
 
-// Translated style names must be unique
+
 static void checkStyleNames(OString aLanguage)
 {
     std::map<OString,sal_uInt16> aLocalizedStyleNames;
@@ -129,7 +129,7 @@ static void checkStyleNames(OString aLanguage)
 
 }
 
-// Translated spreadsheet function names must be unique
+
 static void checkFunctionNames(OString aLanguage)
 {
     std::map<OString,sal_uInt16> aLocalizedFunctionNames;
@@ -349,9 +349,9 @@ static void checkFunctionNames(OString aLanguage)
     }
 }
 
-// In instsetoo_native/inc_openoffice/windows/msi_languages.po
-// where an en-US string ends with '|', translation must end
-// with '|', too.
+
+
+
 static void checkVerticalBar(OString aLanguage)
 {
     OString aPoPath = OString(getenv("SRC_ROOT")) +
@@ -398,8 +398,8 @@ static void checkVerticalBar(OString aLanguage)
         osl::File::remove(aPoPathURL + ".new");
 }
 
-// In starmath/source.po Math symbol names (from symbol.src)
-// must not contain spaces
+
+
 static void checkMathSymbolNames(OString aLanguage)
 {
     OString aPoPath = OString(getenv("SRC_ROOT")) +
@@ -453,7 +453,7 @@ int main()
         std::cerr << "Usage: make cmd cmd=solver/*/bin/pocheck\n";
         return 1;
     }
-    for(sal_Int32 i = 1;;++i) // skip en-US
+    for(sal_Int32 i = 1;;++i) 
     {
          OString aLanguage = aLanguages.getToken(i,' ');
          if( aLanguage.isEmpty() )

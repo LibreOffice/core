@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -25,24 +25,24 @@
 #include <osl/diagnose.h>
 #include <cppuhelper/implbase1.hxx>
 
-//.........................................................................
+
 namespace utl
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
-    //= OEventListenerImpl
-    //=====================================================================
+    
+    
+    
     class OEventListenerImpl : public ::cppu::WeakImplHelper1< XEventListener >
     {
     protected:
         OEventListenerAdapter*          m_pAdapter;
         Reference< XEventListener >     m_xKeepMeAlive;
-            // imagine an implementation of XComponent which holds it's listeners with a weak reference ...
-            // would be very bad if we don't hold ourself
+            
+            
         Reference< XComponent >         m_xComponent;
 
     public:
@@ -55,16 +55,16 @@ namespace utl
         virtual void SAL_CALL disposing( const EventObject& _rSource ) throw (RuntimeException);
     };
 
-    //---------------------------------------------------------------------
+    
     OEventListenerImpl::OEventListenerImpl( OEventListenerAdapter* _pAdapter, const Reference< XComponent >& _rxComp )
         :m_pAdapter(_pAdapter)
     {
         OSL_ENSURE(m_pAdapter, "OEventListenerImpl::OEventListenerImpl: invalid adapter!");
-        // no checks of _rxComp !!
-        // (OEventListenerAdapter is responsible for this)
+        
+        
 
-        // just in case addEventListener throws an exception ... don't initialize m_xKeepMeAlive before this
-        // is done
+        
+        
         Reference< XEventListener > xMeMyselfAndI = this;
         _rxComp->addEventListener(xMeMyselfAndI);
 
@@ -72,7 +72,7 @@ namespace utl
         m_xKeepMeAlive = xMeMyselfAndI;
     }
 
-    //---------------------------------------------------------------------
+    
     void OEventListenerImpl::dispose()
     {
         if (m_xComponent.is())
@@ -83,7 +83,7 @@ namespace utl
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OEventListenerImpl::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         Reference< XEventListener > xDeleteUponLeaving = m_xKeepMeAlive;
@@ -93,25 +93,25 @@ namespace utl
         m_pAdapter->_disposing(_rSource);
     }
 
-    //=====================================================================
-    //= OEventListenerAdapterImpl
-    //=====================================================================
+    
+    
+    
     struct OEventListenerAdapterImpl
     {
     public:
         ::std::vector< void* >  aListeners;
     };
 
-    //=====================================================================
-    //= OEventListenerAdapter
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OEventListenerAdapter::OEventListenerAdapter()
         :m_pImpl(new OEventListenerAdapterImpl)
     {
     }
 
-    //---------------------------------------------------------------------
+    
     OEventListenerAdapter::~OEventListenerAdapter()
     {
         stopAllComponentListening( );
@@ -119,7 +119,7 @@ namespace utl
         m_pImpl = NULL;
     }
 
-    //---------------------------------------------------------------------
+    
     void OEventListenerAdapter::stopComponentListening( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& _rxComp )
     {
         if ( m_pImpl->aListeners.empty() )
@@ -141,7 +141,7 @@ namespace utl
         while ( dispose != m_pImpl->aListeners.end() );
     }
 
-    //---------------------------------------------------------------------
+    
     void OEventListenerAdapter::stopAllComponentListening(  )
     {
         for (   ::std::vector< void* >::const_iterator aDisposeLoop = m_pImpl->aListeners.begin();
@@ -156,7 +156,7 @@ namespace utl
         m_pImpl->aListeners.clear();
     }
 
-    //---------------------------------------------------------------------
+    
     void OEventListenerAdapter::startComponentListening( const Reference< XComponent >& _rxComp )
     {
         if (!_rxComp.is())
@@ -170,8 +170,8 @@ namespace utl
         m_pImpl->aListeners.push_back(pListenerImpl);
     }
 
-//.........................................................................
-}   // namespace utl
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

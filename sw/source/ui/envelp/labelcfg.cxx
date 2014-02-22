@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -84,7 +84,7 @@ SwLabelConfig::SwLabelConfig() :
     OUString sName;
     OUString sMeasure;
 
-    // fill m_aLabels and m_aManufacturers with the predefined labels
+    
     res = reader.nextItem(
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
     assert(
@@ -94,11 +94,11 @@ SwLabelConfig::SwLabelConfig() :
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
     while (res != xmlreader::XmlReader::RESULT_END)
     {
-        // Opening manufacturer
+        
         assert(
             res == xmlreader::XmlReader::RESULT_BEGIN
             && name.equals("manufacturer"));
-        // Get the name
+        
         reader.nextAttribute(&nsId, &name);
         assert(
             nsId == xmlreader::XmlReader::NAMESPACE_NONE
@@ -106,7 +106,7 @@ SwLabelConfig::SwLabelConfig() :
         sManufacturer = reader.getAttributeValue(false).convertFromUtf8();
 
         for(;;) {
-            // Opening label or ending manufacturer
+            
             res = reader.nextItem(
                     xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
             if (res == xmlreader::XmlReader::RESULT_END)
@@ -114,18 +114,18 @@ SwLabelConfig::SwLabelConfig() :
             assert(
                 res == xmlreader::XmlReader::RESULT_BEGIN
                 && name.equals("label"));
-            // Get name value
+            
             sName = lcl_getValue(reader, xmlreader::Span("name"));
-            // Get measure value
+            
             sMeasure = lcl_getValue(reader, xmlreader::Span("measure"));
-            // Ending label mark
+            
             lcl_assertEndingItem(reader);
             if ( m_aLabels.find( sManufacturer ) == m_aLabels.end() )
                 m_aManufacturers.push_back( sManufacturer );
             m_aLabels[sManufacturer][sName].m_aMeasure = sMeasure;
             m_aLabels[sManufacturer][sName].m_bPredefined = true;
         }
-        // Get next manufacturer or end
+        
         res = reader.nextItem(
                 xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
     };
@@ -133,7 +133,7 @@ SwLabelConfig::SwLabelConfig() :
             xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
     assert(res == xmlreader::XmlReader::RESULT_DONE);
 
-    // add to m_aLabels and m_aManufacturers the custom labels
+    
     const Sequence<OUString>& rMan = GetNodeNames( OUString() );
     const OUString* pMan = rMan.getConstArray();
     for ( sal_Int32 nMan = 0; nMan < rMan.getLength(); nMan++ )
@@ -168,7 +168,7 @@ SwLabelConfig::~SwLabelConfig()
 {
 }
 
-// the config item is not writable ?:
+
 void SwLabelConfig::Commit() {}
 
 void SwLabelConfig::Notify( const ::com::sun::star::uno::Sequence< OUString >& ) {}
@@ -180,8 +180,8 @@ static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeas
     pNewRec->lPWidth = 0;
     pNewRec->lPHeight = 0;
     pNewRec->aType = rType;
-    //all values are contained as colon-separated 1/100 mm values
-    //except for the continuous flag ('C'/'S') and nCols, nRows (sal_Int32)
+    
+    
     OUString sMeasure(rMeasure);
     sal_uInt16 nTokenCount = comphelper::string::getTokenCount(sMeasure, ';');
     for(sal_uInt16 i = 0; i < nTokenCount; i++)
@@ -203,10 +203,10 @@ static SwLabRec* lcl_CreateSwLabRec(const OUString& rType, const OUString& rMeas
             case 10 : pNewRec->lPHeight  = MM100_TO_TWIP(nVal);  break;
         }
     }
-    // lines added for compatibility with custom label definitions saved before patch fdo#44516
+    
     if (pNewRec->lPWidth == 0 || pNewRec->lPHeight == 0)
     {
-        // old style definition (no paper dimensions), calculate probable values
+        
         pNewRec->lPWidth = 2 * pNewRec->lLeft + (pNewRec->nCols - 1) * pNewRec->lHDist + pNewRec->lWidth;
         pNewRec->lPHeight = ( pNewRec->bCont ? pNewRec->nRows * pNewRec->lVDist : 2 * pNewRec->lUpper + (pNewRec->nRows - 1) * pNewRec->lVDist + pNewRec->lHeight );
     }
@@ -249,7 +249,7 @@ static Sequence<PropertyValue> lcl_CreateProperties(
     return aRet;
 }
 
-// function fills SwLabDlg with label definitions for manufacturer rManufacturer
+
 void    SwLabelConfig::FillLabels(const OUString& rManufacturer, SwLabRecs& rLabArr)
 {
     if (m_aLabels.find(rManufacturer) == m_aLabels.end())
@@ -274,8 +274,8 @@ static bool lcl_Exists(const OUString& rNode, const Sequence<OUString>& rLabels)
     return false;
 }
 
-// label is always saved as a custom label
-// predefined labels can NOT be overwritten by custom labels with same manufacturer/name
+
+
 void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
         const OUString& rType, const SwLabRec& rRec )
 {
@@ -285,7 +285,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
          GetNodeNames( rManufacturer ).getLength() == 0 )
     {
         bManufacturerNodeFound = false;
-        // manufacturer node does not exist, add (and also to m_aManufacturers)
+        
         if ( !AddNode( OUString(), rManufacturer ) )
         {
             OSL_FAIL("New configuration node could not be created");
@@ -299,7 +299,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
     if ( !bManufacturerNodeFound ||
          m_aLabels[rManufacturer].find( rType ) == m_aLabels[rManufacturer].end() )
     {
-        // type does not yet exist, add to config
+        
         const Sequence<OUString> aLabels = GetNodeNames( rManufacturer );
         sal_Int32 nIndex = aLabels.getLength();
         OUString sPrefix( "Label" );
@@ -313,7 +313,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
     }
     else
     {
-        // get the appropiate node
+        
         OUString sManufacturer( wrapConfigurationElementName( rManufacturer ) );
         const Sequence<OUString> aLabels = GetNodeNames( sManufacturer );
         const OUString* pLabels = aLabels.getConstArray();
@@ -350,7 +350,7 @@ void SwLabelConfig::SaveLabel( const OUString& rManufacturer,
     Sequence<PropertyValue> aPropValues = lcl_CreateProperties( aPropNames, sMeasure, rRec );
     SetSetProperties( wrapConfigurationElementName( rManufacturer ), aPropValues );
 
-    //update m_aLabels
+    
     m_aLabels[rManufacturer][rType].m_aMeasure = sMeasure;
     m_aLabels[rManufacturer][rType].m_bPredefined = false;
 }

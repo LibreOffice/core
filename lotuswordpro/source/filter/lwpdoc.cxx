@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -94,7 +94,7 @@ void LwpDocument::Read()
 
     m_nPersistentFlags = m_pObjStrm->QuickReaduInt32();
 
-    //Skip the SortOption and UIDocument
+    
     {
         LwpSortOption m_DocSort( m_pObjStrm );
         LwpUIDocument m_UIDoc( m_pObjStrm );
@@ -102,14 +102,14 @@ void LwpDocument::Read()
 
     m_pLnOpts = new LwpLineNumberOptions(m_pObjStrm);
 
-    //Skip LwpUserDictFiles
+    
     {
         LwpUserDictFiles m_UsrDicts( m_pObjStrm );
     }
 
     if( !IsChildDoc())
     {
-        //Skip LwpPrinterInfo
+        
         LwpPrinterInfo m_PrtInfo( m_pObjStrm );
     }
 
@@ -124,7 +124,7 @@ void LwpDocument::Read()
     }
     else
     {
-        //Skip the docdata used in old version
+        
         LwpObjectID dummyDocData;
         dummyDocData.ReadIndexed(m_pObjStrm);
     }
@@ -150,10 +150,10 @@ void LwpDocument::ReadPlug()
  **/
 void LwpDocument::Parse(IXFStream* pOutputStream)
 {
-    //check the name and skip script division
+    
     if (!IsSkippedDivision())
     {
-        //the frames which anchor are to page must output before other contents
+        
         ParseFrameInPage(pOutputStream);
         ParseDocContent(pOutputStream);
     }
@@ -173,9 +173,9 @@ sal_Bool LwpDocument::IsSkippedDivision()
     if (pDiv == NULL)
         return sal_True;
     sDivName = pDiv->GetDivName();
-    if (!sDivName.isEmpty() && !pDiv->IsGotoable()) //including toa,scripts division
+    if (!sDivName.isEmpty() && !pDiv->IsGotoable()) 
         return sal_True;
-    //skip endnote division
+    
     OUString strClassName = pDiv->GetClassName();
     if (strClassName.equals(A2OUSTR(STR_DivisionEndnote))
         || strClassName.equals(A2OUSTR(STR_DivisionGroupEndnote))
@@ -187,8 +187,8 @@ sal_Bool LwpDocument::IsSkippedDivision()
             LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent()->obj(VO_STORY));
             if(pStory)
             {
-                //This judgement maybe have problem. If there is only one para in the story,
-                //this endnote division has no other contents except endnote table.
+                
+                
                 LwpObjectID* pFirst = pStory->GetFirstPara();
                 LwpObjectID* pLast = pStory->GetLastPara();
                 if(*pFirst == *pLast)
@@ -215,7 +215,7 @@ void LwpDocument::RegisterStyle()
     RegisterLinenumberStyles();
     RegisterFootnoteStyles();
 
-    //Register styles in other document connected with this document: next doc, children doc
+    
     LwpObject* pDocSock = GetSocket()->obj();
     if(pDocSock!=NULL)
     {
@@ -227,7 +227,7 @@ void LwpDocument::RegisterStyle()
  */
 void LwpDocument::RegisterTextStyles()
 {
-    //Register all text styles: para styles, character styles
+    
     LwpDLVListHeadHolder* pParaStyleHolder = dynamic_cast<LwpDLVListHeadHolder*>(m_pFoundry->GetTextStyleHead()->obj());
     if(pParaStyleHolder)
     {
@@ -239,7 +239,7 @@ void LwpDocument::RegisterTextStyles()
             pParaStyle = dynamic_cast<LwpParaStyle*>(pParaStyle->GetNext()->obj());
         }
     }
-    ChangeStyleName();//add by ,for click here block,05/5/26
+    ChangeStyleName();
 }
 /**
  * @descr  Register all layouts styles (page master and master page)
@@ -247,10 +247,10 @@ void LwpDocument::RegisterTextStyles()
  */
 void LwpDocument::RegisterLayoutStyles()
 {
-    //Register all layout styles, before register all styles in para
+    
     m_pFoundry->RegisterAllLayouts();
 
-    //set initial pagelayout in story for parsing pagelayout
+    
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj( VO_DIVISIONINFO));
     LwpPageLayout* pPageLayout = NULL;
     if(pDivInfo)
@@ -258,11 +258,11 @@ void LwpDocument::RegisterLayoutStyles()
         pPageLayout = dynamic_cast<LwpPageLayout*>(pDivInfo->GetInitialLayoutID()->obj(VO_PAGELAYOUT));
         if(pPageLayout)
         {
-            //In Ole division, the content of pagelayout is VO_OLEOBJECT
+            
             LwpStory* pStory = dynamic_cast<LwpStory*>(pPageLayout->GetContent()->obj(VO_STORY));
             if(pStory)
             {
-                //add all the pagelayout in order into the pagelayout list;
+                
                 pStory->SortPageLayout();
                 pStory->SetCurrentLayout(pPageLayout);
             }
@@ -274,14 +274,14 @@ void LwpDocument::RegisterLayoutStyles()
  */
 void LwpDocument::RegisterStylesInPara()
 {
-    //Register all automatic styles in para
+    
     LwpHeadContent* pContent = dynamic_cast<LwpHeadContent*> (m_pFoundry->GetContentManager()->GetContentList()->obj());
     if(pContent)
     {
         LwpStory* pStory = dynamic_cast<LwpStory*>(pContent->GetChildHead()->obj(VO_STORY));
         while(pStory)
         {
-            //Register the child para
+            
             pStory->SetFoundry(m_pFoundry);
             pStory->RegisterStyle();
             pStory = dynamic_cast<LwpStory*>(pStory->GetNext()->obj(VO_STORY));
@@ -293,7 +293,7 @@ void LwpDocument::RegisterStylesInPara()
  */
 void LwpDocument::RegisterBulletStyles()
 {
-    //Register bullet styles
+    
     LwpDLVListHeadHolder* mBulletHead = dynamic_cast<LwpDLVListHeadHolder*>
                 (m_pFoundry->GetBulletManagerID()->obj(VO_HEADHOLDER));
     if( mBulletHead )
@@ -313,7 +313,7 @@ void LwpDocument::RegisterBulletStyles()
  */
 void LwpDocument::RegisterGraphicsStyles()
 {
-    //Register all graphics styles, the first object should register the next;
+    
     LwpObject* pGraphic = m_pFoundry->GetGraphicListHead()->obj(VO_GRAPHIC);
     if(pGraphic)
     {
@@ -336,7 +336,7 @@ void LwpDocument::RegisterLinenumberStyles()
 */
 void LwpDocument::RegisterFootnoteStyles()
 {
-    //Register footnote and endnote configuration for the entire document
+    
     if(!m_FootnoteOpts.IsNull())
     {
         LwpFootnoteOptions* pFootnoteOpts = dynamic_cast<LwpFootnoteOptions*>(m_FootnoteOpts.obj());
@@ -346,8 +346,8 @@ void LwpDocument::RegisterFootnoteStyles()
             pFootnoteOpts->RegisterStyle();
         }
     }
-    //Register endnote page style for endnote configuration, use the last division that has endnote for the endnote page style
-    //This page style must register after its division default styles have registered
+    
+    
     LwpDocument* pEndnoteDiv = GetLastDivisionThatHasEndnote();
     if(this == pEndnoteDiv)
     {
@@ -376,8 +376,8 @@ void LwpDocument::RegisterDefaultParaStyles()
 {
     if(!IsChildDoc())
     {
-        //Get First Division
-        //LwpDocument* pFirstDoc = GetFirstDivision();
+        
+        
         LwpDocument* pFirstDoc = GetFirstDivisionWithContentsThatIsNotOLE();
         if(pFirstDoc)
         {
@@ -397,14 +397,14 @@ void LwpDocument::RegisterDefaultParaStyles()
  */
 void LwpDocument::ParseDocContent(IXFStream* pOutputStream)
 {
-    //Parse content in PageLayout
+    
     LwpDivInfo* pDivInfo = dynamic_cast<LwpDivInfo*> (m_DivInfo.obj());
     if(pDivInfo==NULL) return;
 
     LwpObject* pLayoutObj = pDivInfo->GetInitialLayoutID()->obj();
     if(pLayoutObj==NULL)
     {
-        //master document not supported now.
+        
         return;
     }
     pLayoutObj->SetFoundry(m_pFoundry);

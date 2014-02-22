@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define UNICODE
@@ -142,7 +142,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 
             lpAddress = (LPBYTE)lpAddress + Info.RegionSize;
         }
-        while (lpAddress < (void *)0x80000000); // 2GB address space
+        while (lpAddress < (void *)0x80000000); 
 
         pInfo->Fields |= osl_Process_HEAPUSAGE;
     }
@@ -408,7 +408,7 @@ oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **
 
 oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *ustrValue)
 {
-    // set Windows environment variable
+    
     LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
     LPCWSTR lpValue = reinterpret_cast<LPCWSTR>(ustrValue->buffer);
     if (SetEnvironmentVariableW(lpName, lpValue))
@@ -426,8 +426,8 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString *ustrVar, rtl_uString *u
 
 oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString *ustrVar)
 {
-    // delete the variable from the current process environment
-    // by setting SetEnvironmentVariable's second parameter to NULL
+    
+    
     LPCWSTR lpName = reinterpret_cast<LPCWSTR>(ustrVar->buffer);
     if (SetEnvironmentVariableW(lpName, NULL))
     {

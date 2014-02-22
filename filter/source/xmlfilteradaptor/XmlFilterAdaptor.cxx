@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <iostream>
@@ -88,12 +88,12 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
     if (aMediaMap.find(OUString( "URL" ))->second >>= aBaseURI)
     {
         INetURLObject aURLObj(aBaseURI);
-        // base URI in this case is the URI of the actual saving location
-        // aURLObj.removeSegment();
+        
+        
         aBaseURI = aURLObj.GetMainURL(INetURLObject::NO_DECODE);
     }
 
-    // create an XProperty set to configure the exporter for pretty printing
+    
     PropertyMapEntry aImportInfoMap[] =
      {
         { OUString("BaseURI"), 0, ::getCppuType((const OUString*)0), PropertyAttribute::MAYBEVOID, 0},
@@ -119,9 +119,9 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         xStatusIndicator->setValue(nSteps++);
     }
 
-    //*********************
-    // Creating a ConverterBridge instance
-    //*********************
+    
+    
+    
     Reference< XInterface > xConvBridge(mxContext->getServiceManager()->createInstanceWithContext(udConvertClass, mxContext), UNO_QUERY);
     if(! xConvBridge.is()){
         OSL_FAIL( "XMLReader::Read: %s service missing\n" );
@@ -132,16 +132,16 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
 
     Reference< XImportFilter > xConverter( xConvBridge, UNO_QUERY );
 
-     //********************
-    //Template Loading if Required
-    //********************
+     
+    
+    
     if (!msTemplateName.isEmpty()){
         Reference< XStyleFamiliesSupplier > xstylefamiliessupplier(mxDoc, UNO_QUERY);
         Reference< XStyleLoader > xstyleLoader (xstylefamiliessupplier->getStyleFamilies(), UNO_QUERY);
         if(xstyleLoader.is()){
             Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
-            //Load the Styles from the Template URL Supplied in the TypeDetection file
+            
             if(msTemplateName.indexOf(OUString( "file:" ))==-1)
             {
                 SvtPathOptions aOptions;
@@ -154,14 +154,14 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
         }
     }
 
-//    sal_Bool xconv_ret = sal_True;
+
 
     if (xStatusIndicator.is()){
         xStatusIndicator->setValue(nSteps++);
     }
-    //*********************
-    // Calling Filtering Component
-    //*********************
+    
+    
+    
     try {
         if (!xConverter->importer(aDescriptor,xHandler,msUserData)) {
             if (xStatusIndicator.is())
@@ -195,7 +195,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     OUString udConvertClass = msUserData[0];
     OUString udExport = msUserData[3];
 
-    // Status Bar
+    
     sal_Int32 nSteps= 1;
     sal_Int32 nProgressRange(3);
     utl::MediaDescriptor aMediaMap(aDescriptor);
@@ -205,7 +205,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     if (xStatusIndicator.is())
        xStatusIndicator->start(OUString( "Saving :" ),nProgressRange);
 
-    // Set up converter bridge.
+    
     Reference< com::sun::star::xml::XExportFilter > xConverter(mxContext->getServiceManager()->createInstanceWithContext( udConvertClass, mxContext ), UNO_QUERY);
     if(! xConverter.is()){
       OSL_FAIL( "xml export sub service missing" );
@@ -215,7 +215,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
     if (xStatusIndicator.is())
         xStatusIndicator->setValue(nSteps++);
 
-    //put filter component into exporting state
+    
     if (!xConverter->exporter(aDescriptor, msUserData)) {
         if (xStatusIndicator.is())
             xStatusIndicator->end();
@@ -225,33 +225,33 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         xStatusIndicator->setValue(nSteps++);
 
     try{
-        // create the xml exporter service and supply the converter component
-        // which implements the document handler
+        
+        
         Sequence < Any > aAnys (2);
         aAnys[0] <<= xConverter;
 
 
-        // pretty printing is confusing for some filters so it is disabled by default
+        
         sal_Bool bPrettyPrint =
             (msUserData.getLength() > 6 && msUserData[6].equalsIgnoreAsciiCase("true"));
 
-        // export of <text:number> element for <text:list-item> elements are
-        // needed for certain filters.
+        
+        
         sal_Bool bExportTextNumberElementForListItems =
                             ( msUserData.getLength() > 7 &&
                               msUserData[7].equalsIgnoreAsciiCase("true") );
 
-        // get the base URI, so we can use relative links
+        
         OUString aBaseURI;
         if (aMediaMap.find(OUString( "URL" ))->second >>= aBaseURI)
         {
             INetURLObject aURLObj(aBaseURI);
-            // base URI in this case is the URI of the actual saving location
-            // aURLObj.removeSegment();
+            
+            
             aBaseURI = aURLObj.GetMainURL(INetURLObject::NO_DECODE);
         }
 
-        // create an XProperty set to configure the exporter for pretty printing
+        
          PropertyMapEntry aImportInfoMap[] =
          {
              { OUString("UsePrettyPrinting"), 0, ::getCppuType((const sal_Bool*)0), PropertyAttribute::MAYBEVOID, 0},
@@ -274,16 +274,16 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         Reference< XExporter > xExporter( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext(
                        udExport, aAnys, mxContext ), UNO_QUERY_THROW );
 
-        // attach to source document
+        
         xExporter->setSourceDocument( mxDoc );
 
-        // get XFilter interface
+        
         Reference< XFilter > xFilter( xExporter, UNO_QUERY_THROW );
 
         if (xStatusIndicator.is())
             xStatusIndicator->setValue(nSteps++);
 
-        // call the actual filtering component
+        
         if (!xFilter->filter(aDescriptor))
         {
             if (xStatusIndicator.is())
@@ -303,7 +303,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
         return sal_False;
     }
 
-    // done
+    
     if (xStatusIndicator.is())
         xStatusIndicator->end();
     return sal_True;
@@ -318,7 +318,7 @@ void SAL_CALL XmlFilterAdaptor::cancel(  )
     throw (RuntimeException)
 {
 }
-// XExporter
+
 void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
@@ -326,14 +326,14 @@ void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< ::com::sun::
     mxDoc = xDoc;
 }
 
-// XImporter
+
 void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     meType = FILTER_IMPORT;
     mxDoc = xDoc;
 }
-// XInitialization
+
 void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
     throw (Exception, RuntimeException)
 {
@@ -372,7 +372,7 @@ Reference< XInterface > SAL_CALL XmlFilterAdaptor_createInstance( const Referenc
     return (cppu::OWeakObject*) new XmlFilterAdaptor( comphelper::getComponentContext(rSMgr) );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  )
     throw (RuntimeException)
 {

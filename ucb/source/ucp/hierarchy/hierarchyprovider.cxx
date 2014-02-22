@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,13 +40,13 @@
 using namespace com::sun::star;
 using namespace hierarchy_ucp;
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// HierarchyContentProvider Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 HierarchyContentProvider::HierarchyContentProvider(
             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -54,17 +54,17 @@ HierarchyContentProvider::HierarchyContentProvider(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 HierarchyContentProvider::~HierarchyContentProvider()
 {
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_4( HierarchyContentProvider,
                    lang::XTypeProvider,
@@ -72,11 +72,11 @@ XINTERFACE_IMPL_4( HierarchyContentProvider,
                    ucb::XContentProvider,
                    lang::XInitialization );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
                       lang::XTypeProvider,
@@ -84,31 +84,31 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
                       ucb::XContentProvider,
                       lang::XInitialization );
 
-//=========================================================================
+
 //
-// XServiceInfo methods.
+
 //
-//=========================================================================
+
 
 XSERVICEINFO_IMPL_1_CTX( HierarchyContentProvider,
                      OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ),
                      OUString( HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME ) );
 
-//=========================================================================
+
 //
-// Service factory implementation.
+
 //
-//=========================================================================
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyContentProvider );
 
-//=========================================================================
-//
-// XContentProvider methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Reference< ucb::XContent > SAL_CALL
 HierarchyContentProvider::queryContent(
         const uno::Reference< ucb::XContentIdentifier >& Identifier )
@@ -118,18 +118,18 @@ HierarchyContentProvider::queryContent(
     if ( !aUri.isValid() )
         throw ucb::IllegalIdentifierException();
 
-    // Encode URL and create new Id. This may "correct" user-typed-in URL's.
+    
     uno::Reference< ucb::XContentIdentifier > xCanonicId
         = new ::ucbhelper::ContentIdentifier( ::ucb_impl::urihelper::encodeURI( aUri.getUri() ) );
     osl::MutexGuard aGuard( m_aMutex );
 
-    // Check, if a content with given id already exists...
+    
     uno::Reference< ucb::XContent > xContent
         = queryExistingContent( xCanonicId ).get();
     if ( xContent.is() )
         return xContent;
 
-    // Create a new content.
+    
     xContent = HierarchyContent::create( m_xContext, this, xCanonicId );
     registerNewContent( xContent );
 
@@ -139,13 +139,13 @@ HierarchyContentProvider::queryContent(
     return xContent;
 }
 
-//=========================================================================
-//
-// XInitialization methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL HierarchyContentProvider::initialize(
                                 const uno::Sequence< uno::Any >& aArguments )
     throw( uno::Exception, uno::RuntimeException )
@@ -154,11 +154,11 @@ void SAL_CALL HierarchyContentProvider::initialize(
         OSL_FAIL( "HierarchyContentProvider::initialize : not supported!" );
 }
 
-//=========================================================================
+
 //
-//  Non-interface methods.
+
 //
-//=========================================================================
+
 
 uno::Reference< lang::XMultiServiceFactory >
 HierarchyContentProvider::getConfigProvider(
@@ -185,8 +185,8 @@ HierarchyContentProvider::getConfigProvider(
         }
         catch ( uno::Exception const & )
         {
-//            OSL_FAIL( //                        "HierarchyContentProvider::getConfigProvider - "
-//                        "caught exception!" );
+
+
         }
 
         OSL_FAIL( "HierarchyContentProvider::getConfigProvider - "
@@ -198,7 +198,7 @@ HierarchyContentProvider::getConfigProvider(
     return (*it).second.xConfigProvider;
 }
 
-//=========================================================================
+
 uno::Reference< container::XHierarchicalNameAccess >
 HierarchyContentProvider::getRootConfigReadNameAccess(
                                 const OUString & rServiceSpecifier )
@@ -210,7 +210,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
     {
         if ( !( (*it).second.xRootReadAccess.is() ) )
         {
-            if ( (*it).second.bTriedToGetRootReadAccess ) // #82494#
+            if ( (*it).second.bTriedToGetRootReadAccess ) 
             {
                 OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "Unable to read any config data! -> #82494#" );
@@ -227,7 +227,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
                     uno::Sequence< uno::Any > aArguments( 1 );
                     beans::PropertyValue      aProperty;
                     aProperty.Name = "nodepath" ;
-                    aProperty.Value <<= OUString(); // root path
+                    aProperty.Value <<= OUString(); 
                     aArguments[ 0 ] <<= aProperty;
 
                     (*it).second.bTriedToGetRootReadAccess = true;
@@ -246,7 +246,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
             }
             catch ( uno::Exception const & )
             {
-                // createInstance, createInstanceWithArguments
+                
 
                 OSL_FAIL( "HierarchyContentProvider::getRootConfigReadNameAccess - "
                     "caught Exception!" );
@@ -257,7 +257,7 @@ HierarchyContentProvider::getRootConfigReadNameAccess(
     return (*it).second.xRootReadAccess;
 }
 
-//=========================================================================
+
 uno::Reference< util::XOfficeInstallationDirectories >
 HierarchyContentProvider::getOfficeInstallationDirectories()
 {

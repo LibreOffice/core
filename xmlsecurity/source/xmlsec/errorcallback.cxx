@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,11 +38,11 @@ void errorCallback(const char * /*file*/,
                    const char  * /*msg*/)
 {
 #if OSL_DEBUG_LEVEL > 1
-//     const char * afunc = func ? func : "";
-//     const char * errObj = errorObject ? errorObject : "";
-//     const char * errSub = errorSubject ? errorSubject : "";
-//     const char * amsg = msg ? msg : "";
-//  fprintf(stdout, "xmlsec error: %s, %s,  %s, %i %s  \n", afunc, errObj, errSub, reason, amsg);
+
+
+
+
+
 #endif
 }
 

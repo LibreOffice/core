@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,11 +36,11 @@ using namespace com::sun::star::util;
 using namespace cppu;
 
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-// class ContentResultSetWrapper
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
+
+
+
 
 ContentResultSetWrapper::ContentResultSetWrapper(
                                 Reference< XResultSet > xOrigin )
@@ -62,7 +62,7 @@ ContentResultSetWrapper::ContentResultSetWrapper(
 
     OSL_ENSURE( m_xResultSetOrigin.is(), "XResultSet is required" );
 
-    //!! call impl_init() at the end of constructor of derived class
+    
 };
 
 
@@ -123,10 +123,10 @@ void SAL_CALL ContentResultSetWrapper::impl_init_xPropertySetOrigin()
 
 void SAL_CALL ContentResultSetWrapper::impl_init()
 {
-    //call this at the end of constructor of derived class
+    
     //
 
-    //listen to disposing from Origin:
+    
     Reference< XComponent > xComponentOrigin( m_xResultSetOrigin, UNO_QUERY );
     OSL_ENSURE( xComponentOrigin.is(), "interface XComponent is required" );
     xComponentOrigin->addEventListener( static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
@@ -134,7 +134,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init()
 
 ContentResultSetWrapper::~ContentResultSetWrapper()
 {
-    //call impl_deinit() at start of destructor of derived class
+    
 
     delete m_pDisposeEventListeners;
     delete m_pPropertyChangeListeners;
@@ -143,12 +143,12 @@ ContentResultSetWrapper::~ContentResultSetWrapper()
 
 void SAL_CALL ContentResultSetWrapper::impl_deinit()
 {
-    //call this at start of destructor of derived class
+    
     //
     m_pMyListenerImpl->impl_OwnerDies();
 }
 
-//virtual
+
 void SAL_CALL ContentResultSetWrapper
     ::impl_initPropertySetInfo()
 {
@@ -212,7 +212,7 @@ void SAL_CALL ContentResultSetWrapper
             return;
     }
 
-    // Notify listeners interested especially in the changed property.
+    
     OInterfaceContainerHelper* pContainer =
             m_pPropertyChangeListeners->getContainer( rEvt.PropertyName );
     if( pContainer )
@@ -227,7 +227,7 @@ void SAL_CALL ContentResultSetWrapper
         }
     }
 
-    // Notify listeners interested in all properties.
+    
     pContainer = m_pPropertyChangeListeners->getContainer( OUString() );
     if( pContainer )
     {
@@ -253,7 +253,7 @@ void SAL_CALL ContentResultSetWrapper
             return;
     }
 
-    // Notify listeners interested especially in the changed property.
+    
     OInterfaceContainerHelper* pContainer =
             m_pVetoableChangeListeners->getContainer( rEvt.PropertyName );
     if( pContainer )
@@ -268,7 +268,7 @@ void SAL_CALL ContentResultSetWrapper
         }
     }
 
-    // Notify listeners interested in all properties.
+    
     pContainer = m_pVetoableChangeListeners->getContainer( OUString() );
     if( pContainer )
     {
@@ -286,11 +286,11 @@ void SAL_CALL ContentResultSetWrapper
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::impl_isForwardOnly()
 {
-    //m_nForwardOnly == 2 -> don't know
-    //m_nForwardOnly == 1 -> YES
-    //m_nForwardOnly == 0 -> NO
+    
+    
+    
 
-    //@todo replace this with lines in comment
+    
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_nForwardOnly = 0;
     return false;
@@ -310,7 +310,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
         aGuard.reacquire();
 
         OUString aName("ResultSetType");
-        //find out, if we are ForwardOnly and cache the value:
+        
 
         impl_init_xPropertySetOrigin();
         if( !m_xPropertySetOrigin.is() )
@@ -335,10 +335,10 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     */
 }
 
-//--------------------------------------------------------------------------
-// XInterface methods.
-//--------------------------------------------------------------------------
-//list all interfaces inclusive baseclasses of interfaces
+
+
+
+
 QUERYINTERFACE_IMPL_START( ContentResultSetWrapper )
 
     (static_cast< XComponent* >(this)),
@@ -352,10 +352,10 @@ QUERYINTERFACE_IMPL_START( ContentResultSetWrapper )
 
 QUERYINTERFACE_IMPL_END
 
-//--------------------------------------------------------------------------
-// XComponent methods.
-//--------------------------------------------------------------------------
-// virtual
+
+
+
+
 void SAL_CALL ContentResultSetWrapper
     ::dispose() throw( RuntimeException )
 {
@@ -428,8 +428,8 @@ void SAL_CALL ContentResultSetWrapper
     m_bInDispose = sal_False;
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL ContentResultSetWrapper
     ::addEventListener( const Reference< XEventListener >& Listener )
     throw( RuntimeException )
@@ -444,8 +444,8 @@ void SAL_CALL ContentResultSetWrapper
     m_pDisposeEventListeners->addInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL ContentResultSetWrapper
     ::removeEventListener( const Reference< XEventListener >& Listener )
     throw( RuntimeException )
@@ -457,10 +457,10 @@ void SAL_CALL ContentResultSetWrapper
         m_pDisposeEventListeners->removeInterface( Listener );
 }
 
-//--------------------------------------------------------------------------
-//XCloseable methods.
-//--------------------------------------------------------------------------
-//virtual
+
+
+
+
 void SAL_CALL ContentResultSetWrapper
     ::close()
     throw( SQLException,
@@ -470,10 +470,10 @@ void SAL_CALL ContentResultSetWrapper
     dispose();
 }
 
-//--------------------------------------------------------------------------
-//XResultSetMetaDataSupplier methods.
-//--------------------------------------------------------------------------
-//virtual
+
+
+
+
 Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper
     ::getMetaData()
     throw( SQLException,
@@ -503,10 +503,10 @@ Reference< XResultSetMetaData > SAL_CALL ContentResultSetWrapper
 }
 
 
-//--------------------------------------------------------------------------
-// XPropertySet methods.
-//--------------------------------------------------------------------------
-// virtual
+
+
+
+
 Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper
     ::getPropertySetInfo() throw( RuntimeException )
 {
@@ -519,8 +519,8 @@ Reference< XPropertySetInfo > SAL_CALL ContentResultSetWrapper
     impl_initPropertySetInfo();
     return m_xPropertySetInfo;
 }
-//--------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL ContentResultSetWrapper
     ::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
     throw( UnknownPropertyException,
@@ -539,8 +539,8 @@ void SAL_CALL ContentResultSetWrapper
     m_xPropertySetOrigin->setPropertyValue( rPropertyName, rValue );
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 Any SAL_CALL ContentResultSetWrapper
     ::getPropertyValue( const OUString& rPropertyName )
     throw( UnknownPropertyException,
@@ -557,8 +557,8 @@ Any SAL_CALL ContentResultSetWrapper
     return m_xPropertySetOrigin->getPropertyValue( rPropertyName );
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL ContentResultSetWrapper
     ::addPropertyChangeListener(
             const OUString& aPropertyName,
@@ -578,7 +578,7 @@ void SAL_CALL ContentResultSetWrapper
     if( !aPropertyName.isEmpty() )
     {
         m_xPropertySetInfo->getPropertyByName( aPropertyName );
-        //throws UnknownPropertyException, if so
+        
     }
 
     impl_getPropertyChangeListenerContainer();
@@ -609,8 +609,8 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL ContentResultSetWrapper
     ::addVetoableChangeListener(
             const OUString& rPropertyName,
@@ -629,7 +629,7 @@ void SAL_CALL ContentResultSetWrapper
     if( !rPropertyName.isEmpty() )
     {
         m_xPropertySetInfo->getPropertyByName( rPropertyName );
-        //throws UnknownPropertyException, if so
+        
     }
 
     impl_getVetoableChangeListenerContainer();
@@ -660,8 +660,8 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL ContentResultSetWrapper
     ::removePropertyChangeListener(
             const OUString& rPropertyName,
@@ -673,7 +673,7 @@ void SAL_CALL ContentResultSetWrapper
     impl_EnsureNotDisposed();
 
     {
-        //noop, if no listener registered
+        
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( !m_pPropertyChangeListeners )
             return;
@@ -689,9 +689,9 @@ void SAL_CALL ContentResultSetWrapper
                 throw UnknownPropertyException();
 
             m_xPropertySetInfo->getPropertyByName( rPropertyName );
-            //throws UnknownPropertyException, if so
+            
         }
-        return; //the listener was not registered
+        return; 
     }
 
     m_pPropertyChangeListeners->removeInterface( rPropertyName, xListener );
@@ -719,8 +719,8 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL ContentResultSetWrapper
     ::removeVetoableChangeListener(
             const OUString& rPropertyName,
@@ -732,7 +732,7 @@ void SAL_CALL ContentResultSetWrapper
     impl_EnsureNotDisposed();
 
     {
-        //noop, if no listener registered
+        
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if( !m_pVetoableChangeListeners )
             return;
@@ -748,9 +748,9 @@ void SAL_CALL ContentResultSetWrapper
                 throw UnknownPropertyException();
 
             m_xPropertySetInfo->getPropertyByName( rPropertyName );
-            //throws UnknownPropertyException, if so
+            
         }
-        return; //the listener was not registered
+        return; 
     }
 
     m_pVetoableChangeListeners->removeInterface( rPropertyName, xListener );
@@ -778,11 +778,11 @@ void SAL_CALL ContentResultSetWrapper
     }
 }
 
-//--------------------------------------------------------------------------
-// own methods.
-//--------------------------------------------------------------------------
 
-//virtual
+
+
+
+
 void SAL_CALL ContentResultSetWrapper
     ::impl_disposing( const EventObject& )
     throw( RuntimeException )
@@ -794,7 +794,7 @@ void SAL_CALL ContentResultSetWrapper
     if( !m_xResultSetOrigin.is() )
         return;
 
-    //release all references to the broadcaster:
+    
     m_xResultSetOrigin.clear();
     if(m_xRowOrigin.is())
         m_xRowOrigin.clear();
@@ -807,7 +807,7 @@ void SAL_CALL ContentResultSetWrapper
         m_xPropertySetInfo.clear();
 }
 
-//virtual
+
 void SAL_CALL ContentResultSetWrapper
     ::impl_propertyChange( const PropertyChangeEvent& rEvt )
     throw( RuntimeException )
@@ -820,7 +820,7 @@ void SAL_CALL ContentResultSetWrapper
     impl_notifyPropertyChangeListeners( aEvt );
 }
 
-//virtual
+
 void SAL_CALL ContentResultSetWrapper
     ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
     throw( PropertyVetoException,
@@ -835,11 +835,11 @@ void SAL_CALL ContentResultSetWrapper
     impl_notifyVetoableChangeListeners( aEvt );
 }
 
-//--------------------------------------------------------------------------
-// XContentAccess methods.  ( -- position dependent )
-//--------------------------------------------------------------------------
 
-// virtual
+
+
+
+
 OUString SAL_CALL ContentResultSetWrapper
     ::queryContentIdentifierString()
     throw( RuntimeException )
@@ -854,8 +854,8 @@ OUString SAL_CALL ContentResultSetWrapper
     return m_xContentAccessOrigin->queryContentIdentifierString();
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper
     ::queryContentIdentifier()
     throw( RuntimeException )
@@ -870,8 +870,8 @@ Reference< XContentIdentifier > SAL_CALL ContentResultSetWrapper
     return m_xContentAccessOrigin->queryContentIdentifier();
 }
 
-//--------------------------------------------------------------------------
-// virtual
+
+
 Reference< XContent > SAL_CALL ContentResultSetWrapper
     ::queryContent()
     throw( RuntimeException )
@@ -886,10 +886,10 @@ Reference< XContent > SAL_CALL ContentResultSetWrapper
     return m_xContentAccessOrigin->queryContent();
 }
 
-//-----------------------------------------------------------------
-// XResultSet methods.
-//-----------------------------------------------------------------
-//virtual
+
+
+
+
 
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::next()
@@ -906,7 +906,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->next();
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::previous()
     throw( SQLException,
@@ -922,7 +922,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->previous();
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::absolute( sal_Int32 row )
     throw( SQLException,
@@ -938,7 +938,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->absolute( row );
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::relative( sal_Int32 rows )
     throw( SQLException,
@@ -955,7 +955,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::first()
     throw( SQLException,
@@ -971,7 +971,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->first();
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::last()
     throw( SQLException,
@@ -987,7 +987,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->last();
 }
 
-//virtual
+
 void SAL_CALL ContentResultSetWrapper
     ::beforeFirst()
     throw( SQLException,
@@ -1003,7 +1003,7 @@ void SAL_CALL ContentResultSetWrapper
     m_xResultSetOrigin->beforeFirst();
 }
 
-//virtual
+
 void SAL_CALL ContentResultSetWrapper
     ::afterLast()
     throw( SQLException,
@@ -1019,7 +1019,7 @@ void SAL_CALL ContentResultSetWrapper
     m_xResultSetOrigin->afterLast();
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::isAfterLast()
     throw( SQLException,
@@ -1035,7 +1035,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->isAfterLast();
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::isBeforeFirst()
     throw( SQLException,
@@ -1051,7 +1051,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->isBeforeFirst();
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::isFirst()
     throw( SQLException,
@@ -1067,7 +1067,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->isFirst();
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::isLast()
     throw( SQLException,
@@ -1084,7 +1084,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
 }
 
 
-//virtual
+
 sal_Int32 SAL_CALL ContentResultSetWrapper
     ::getRow()
     throw( SQLException,
@@ -1100,7 +1100,7 @@ sal_Int32 SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->getRow();
 }
 
-//virtual
+
 void SAL_CALL ContentResultSetWrapper
     ::refreshRow()
     throw( SQLException,
@@ -1116,7 +1116,7 @@ void SAL_CALL ContentResultSetWrapper
     m_xResultSetOrigin->refreshRow();
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::rowUpdated()
     throw( SQLException,
@@ -1131,7 +1131,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     }
     return m_xResultSetOrigin->rowUpdated();
 }
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::rowInserted()
     throw( SQLException,
@@ -1147,7 +1147,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->rowInserted();
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::rowDeleted()
     throw( SQLException,
@@ -1163,20 +1163,20 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xResultSetOrigin->rowDeleted();
 }
 
-//virtual
+
 Reference< XInterface > SAL_CALL ContentResultSetWrapper
     ::getStatement()
     throw( SQLException,
            RuntimeException )
 {
     impl_EnsureNotDisposed();
-    //@todo ?return anything
+    
     return Reference< XInterface >();
 }
 
-//-----------------------------------------------------------------
-// XRow methods.
-//-----------------------------------------------------------------
+
+
+
 
 #define XROW_GETXXX( getXXX )                                   \
 impl_EnsureNotDisposed();                                       \
@@ -1188,7 +1188,7 @@ if( !m_xRowOrigin.is() )                                        \
 }                                                               \
 return m_xRowOrigin->getXXX( columnIndex );
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::wasNull()
     throw( SQLException,
@@ -1204,7 +1204,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     return m_xRowOrigin->wasNull();
 }
 
-//virtual
+
 OUString SAL_CALL ContentResultSetWrapper
     ::getString( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1213,7 +1213,7 @@ OUString SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getString );
 }
 
-//virtual
+
 sal_Bool SAL_CALL ContentResultSetWrapper
     ::getBoolean( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1222,7 +1222,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getBoolean );
 }
 
-//virtual
+
 sal_Int8 SAL_CALL ContentResultSetWrapper
     ::getByte( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1231,7 +1231,7 @@ sal_Int8 SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getByte );
 }
 
-//virtual
+
 sal_Int16 SAL_CALL ContentResultSetWrapper
     ::getShort( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1240,7 +1240,7 @@ sal_Int16 SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getShort );
 }
 
-//virtual
+
 sal_Int32 SAL_CALL ContentResultSetWrapper
     ::getInt( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1249,7 +1249,7 @@ sal_Int32 SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getInt );
 }
 
-//virtual
+
 sal_Int64 SAL_CALL ContentResultSetWrapper
     ::getLong( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1258,7 +1258,7 @@ sal_Int64 SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getLong );
 }
 
-//virtual
+
 float SAL_CALL ContentResultSetWrapper
     ::getFloat( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1267,7 +1267,7 @@ float SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getFloat );
 }
 
-//virtual
+
 double SAL_CALL ContentResultSetWrapper
     ::getDouble( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1276,7 +1276,7 @@ double SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getDouble );
 }
 
-//virtual
+
 Sequence< sal_Int8 > SAL_CALL ContentResultSetWrapper
     ::getBytes( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1285,7 +1285,7 @@ Sequence< sal_Int8 > SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getBytes );
 }
 
-//virtual
+
 Date SAL_CALL ContentResultSetWrapper
     ::getDate( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1294,7 +1294,7 @@ Date SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getDate );
 }
 
-//virtual
+
 Time SAL_CALL ContentResultSetWrapper
     ::getTime( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1303,7 +1303,7 @@ Time SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getTime );
 }
 
-//virtual
+
 DateTime SAL_CALL ContentResultSetWrapper
     ::getTimestamp( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1312,7 +1312,7 @@ DateTime SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getTimestamp );
 }
 
-//virtual
+
 Reference< com::sun::star::io::XInputStream >
     SAL_CALL ContentResultSetWrapper
     ::getBinaryStream( sal_Int32 columnIndex )
@@ -1322,7 +1322,7 @@ Reference< com::sun::star::io::XInputStream >
     XROW_GETXXX( getBinaryStream );
 }
 
-//virtual
+
 Reference< com::sun::star::io::XInputStream >
     SAL_CALL ContentResultSetWrapper
     ::getCharacterStream( sal_Int32 columnIndex )
@@ -1332,7 +1332,7 @@ Reference< com::sun::star::io::XInputStream >
     XROW_GETXXX( getCharacterStream );
 }
 
-//virtual
+
 Any SAL_CALL ContentResultSetWrapper
     ::getObject( sal_Int32 columnIndex,
            const Reference<
@@ -1340,8 +1340,8 @@ Any SAL_CALL ContentResultSetWrapper
     throw( SQLException,
            RuntimeException )
 {
-    //if you change this macro please pay attention to
-    //define XROW_GETXXX, where this is similar implemented
+    
+    
 
     impl_EnsureNotDisposed();
     impl_init_xRowOrigin();
@@ -1353,7 +1353,7 @@ Any SAL_CALL ContentResultSetWrapper
     return m_xRowOrigin->getObject( columnIndex, typeMap );
 }
 
-//virtual
+
 Reference< XRef > SAL_CALL ContentResultSetWrapper
     ::getRef( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1362,7 +1362,7 @@ Reference< XRef > SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getRef );
 }
 
-//virtual
+
 Reference< XBlob > SAL_CALL ContentResultSetWrapper
     ::getBlob( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1371,7 +1371,7 @@ Reference< XBlob > SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getBlob );
 }
 
-//virtual
+
 Reference< XClob > SAL_CALL ContentResultSetWrapper
     ::getClob( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1380,7 +1380,7 @@ Reference< XClob > SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getClob );
 }
 
-//virtual
+
 Reference< XArray > SAL_CALL ContentResultSetWrapper
     ::getArray( sal_Int32 columnIndex )
     throw( SQLException,
@@ -1389,11 +1389,11 @@ Reference< XArray > SAL_CALL ContentResultSetWrapper
     XROW_GETXXX( getArray );
 }
 
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
-// class ContentResultSetWrapperListener
-//--------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+
+
+
+
+
 
 ContentResultSetWrapperListener::ContentResultSetWrapperListener(
     ContentResultSetWrapper* pOwner )
@@ -1405,10 +1405,10 @@ ContentResultSetWrapperListener::~ContentResultSetWrapperListener()
 {
 }
 
-//--------------------------------------------------------------------------
-// XInterface methods.
-//--------------------------------------------------------------------------
-//list all interfaces inclusive baseclasses of interfaces
+
+
+
+
 XINTERFACE_COMMON_IMPL( ContentResultSetWrapperListener )
 QUERYINTERFACE_IMPL_START( ContentResultSetWrapperListener )
 
@@ -1420,11 +1420,11 @@ QUERYINTERFACE_IMPL_START( ContentResultSetWrapperListener )
 QUERYINTERFACE_IMPL_END
 
 
-//--------------------------------------------------------------------------
-//XEventListener methods.
-//--------------------------------------------------------------------------
 
-//virtual
+
+
+
+
 void SAL_CALL ContentResultSetWrapperListener
     ::disposing( const EventObject& rEventObject )
     throw( RuntimeException )
@@ -1433,11 +1433,11 @@ void SAL_CALL ContentResultSetWrapperListener
         m_pOwner->impl_disposing( rEventObject );
 }
 
-//--------------------------------------------------------------------------
-//XPropertyChangeListener methods.
-//--------------------------------------------------------------------------
 
-//virtual
+
+
+
+
 void SAL_CALL ContentResultSetWrapperListener
     ::propertyChange( const PropertyChangeEvent& rEvt )
     throw( RuntimeException )
@@ -1446,10 +1446,10 @@ void SAL_CALL ContentResultSetWrapperListener
         m_pOwner->impl_propertyChange( rEvt );
 }
 
-//--------------------------------------------------------------------------
-//XVetoableChangeListener methods.
-//--------------------------------------------------------------------------
-//virtual
+
+
+
+
 void SAL_CALL ContentResultSetWrapperListener
     ::vetoableChange( const PropertyChangeEvent& rEvt )
     throw( PropertyVetoException,

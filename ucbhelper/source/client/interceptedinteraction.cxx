@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ucbhelper/interceptedinteraction.hxx>
@@ -40,7 +40,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::intercepted(
     const InterceptedRequest&,
     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >&)
 {
-    // default behaviour! see impl_interceptRequest() for further information ...
+    
     return E_NOT_INTERCEPTED;
 }
 
@@ -76,8 +76,8 @@ void InterceptedInteraction::impl_handleDefault(const ::com::sun::star::uno::Ref
     {
         case E_NOT_INTERCEPTED:
         {
-            // Non of the intercepted requests match to the given one.
-            // => forward request to the internal wrapped handler - if there is one.
+            
+            
             if (m_xInterceptedHandler.is())
                 m_xInterceptedHandler->handle(xRequest);
         }
@@ -85,9 +85,9 @@ void InterceptedInteraction::impl_handleDefault(const ::com::sun::star::uno::Ref
 
         case E_NO_CONTINUATION_FOUND:
         {
-            // Runtime error! The defined continuation could not be located
-            // inside the set of available containuations of the incoming request.
-            // Whats wrong - the interception list or the request?
+            
+            
+            
             OSL_FAIL("InterceptedInteraction::handle()\nCould intercept this interaction request - but cant locate the right continuation!");
         }
         break;
@@ -103,7 +103,7 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
     css::uno::Type                                                                   aRequestType   = aRequest.getValueType();
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
 
-    // check against the list of static requests
+    
     sal_Int32 nHandle = 0;
     ::std::vector< InterceptedRequest >::const_iterator pIt;
     for (  pIt  = m_lInterceptions.begin();
@@ -113,17 +113,17 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
         const InterceptedRequest& rInterception = *pIt;
         css::uno::Type aInterceptedType = rInterception.Request.getValueType();
 
-        // check the request
+        
         bool bMatch = false;
         if (rInterception.MatchExact)
             bMatch = aInterceptedType.equals(aRequestType);
         else
-            bMatch = aInterceptedType.isAssignableFrom(aRequestType); // dont change intercepted and request type here -> it will check the wrong direction!
+            bMatch = aInterceptedType.isAssignableFrom(aRequestType); 
 
-        // intercepted ...
-        // Call they might existing derived class, so they can handle that by its own.
-        // If its not interested on that (may be its not overwritten and the default implementation
-        // returns E_NOT_INTERCEPTED as default) -> break this loop and search for the right continuation.
+        
+        
+        
+        
         if (bMatch)
         {
             EInterceptionState eState = intercepted(rInterception, xRequest);
@@ -135,9 +135,9 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
         ++nHandle;
     }
 
-    if (pIt != m_lInterceptions.end()) // => can be true only if bMatch=TRUE!
+    if (pIt != m_lInterceptions.end()) 
     {
-        // match -> search required continuation
+        
         const InterceptedRequest& rInterception = *pIt;
         css::uno::Reference< css::task::XInteractionContinuation > xContinuation = InterceptedInteraction::extractContinuation(lContinuations, rInterception.Continuation);
         if (xContinuation.is())
@@ -146,14 +146,14 @@ InterceptedInteraction::EInterceptionState InterceptedInteraction::impl_intercep
             return E_INTERCEPTED;
         }
 
-        // Can be reached only, if the request does not support the given continuation!
-        // => RuntimeError!?
+        
+        
         return E_NO_CONTINUATION_FOUND;
     }
 
     return E_NOT_INTERCEPTED;
 }
 
-} // namespace ucbhelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <premac.h>
@@ -32,7 +32,7 @@
 #include "quartz/utils.h"
 #include <vcl/settings.hxx>
 
-// Horrible hack
+
 static int viewWidth = 1, viewHeight = 1;
 
 class IosSalData : public SalGenericData
@@ -125,8 +125,8 @@ bool IosSalInstance::AnyInput( sal_uInt16 nType )
     if( (nType & VCL_INPUT_TIMER) != 0 )
         return CheckTimeout( false );
 
-    // Unfortunately there is no way to check for a specific type of
-    // input being queued. That information is too hidden, sigh.
+    
+    
     return SvpSalInstance::s_pDefaultInstance->PostedEventsInQueue();
 }
 
@@ -187,7 +187,7 @@ public:
 
     virtual void UpdateSettings( AllSettings &rSettings )
     {
-        // Clobber the UI fonts
+        
         Font aFont( OUString( "Helvetica" ), Size( 0, 14 ) );
 
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
@@ -228,7 +228,7 @@ SalFrame *IosSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
 }
 
 
-// All the interesting stuff is slaved from the IosSalInstance
+
 void InitSalData()   {}
 void DeInitSalData() {}
 void InitSalMain()   {}
@@ -260,7 +260,7 @@ SalData::~SalData()
 {
 }
 
-// This is our main entry point:
+
 SalInstance *CreateSalInstance()
 {
     IosSalInstance* pInstance = new IosSalInstance( new SalYieldMutex() );
@@ -287,7 +287,7 @@ int IosSalSystem::ShowNativeDialog( const OUString& rTitle,
 
     if (IosSalInstance::getInstance() != NULL)
     {
-        // Temporary...
+        
 
         ErrorBox aVclErrBox( NULL, WB_OK, rTitle );
         aVclErrBox.SetText( rMessage );
@@ -321,8 +321,8 @@ void touch_lo_set_view_size(int width, int height)
     viewHeight = height;
 
     if (oldWidth > 1) {
-        // Inform about change in display size (well, just orientation
-        // presumably).
+        
+        
         IosSalInstance *pInstance = IosSalInstance::getInstance();
 
         if ( pInstance == NULL )
@@ -374,7 +374,7 @@ IMPL_LINK( IosSalInstance, RenderWindows, RenderWindowsArg*, arg )
                                kCGRenderingIntentDefault );
             CGContextDrawImage( arg->context, bbox, image );
              */
-            // if current frame covers the whole invalidRect then break
+            
             if (CGRectEqualToRect(CGRectIntersection(invalidRect, bbox), invalidRect))
             {
                 break;
@@ -535,8 +535,8 @@ void touch_lo_keyboard_input(int c)
 extern "C"
 void touch_lo_keyboard_did_hide()
 {
-    // Tell LO it has lost "focus", which will cause it to stop
-    // displaying any text insertion cursor etc
+    
+    
 
     SalFrame *pFocus = IosSalInstance::getInstance()->getFocusFrame();
     if (pFocus) {

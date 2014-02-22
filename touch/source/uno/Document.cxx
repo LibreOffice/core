@@ -4,10 +4,10 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
-// NOTE: Work in progress, most likely makes little sense
+
 
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
@@ -42,9 +42,9 @@ private:
     uno::Reference< awt::XToolkitExperimental > m_xToolkit;
     uno::Reference< frame::XController > m_xController;
 
-    // XRenderable.getRendererCount() and .render() need an XController in the
-    // properties, at least in the test Java code it seemed that a totally
-    // dummy one works, so try that here, too.
+    
+    
+    
 
     typedef ::cppu::WeakImplHelper1< frame::XController > MyXController_Base;
 
@@ -134,7 +134,7 @@ protected:
     }
 
 public:
-    // XInitialization
+    
     virtual void SAL_CALL
     initialize( const uno::Sequence< uno::Any >& arguments )
         throw ( uno::Exception, uno::RuntimeException )
@@ -145,7 +145,7 @@ public:
         uno::Sequence< beans::NamedValue > settings;
         if ( arguments[0] >>= m_sURI )
         {
-            // create( [in] string uri );
+            
             uno::Reference< frame::XDesktop2 > desktop = frame::Desktop::create( m_rContext );
 
             beans::PropertyValues loadProps(3);
@@ -164,7 +164,7 @@ public:
         }
     }
 
-    // XDocument
+    
     virtual sal_Int32 SAL_CALL
     getNumberOfPages()
         throw ( uno::RuntimeException )
@@ -231,6 +231,6 @@ public:
 
 };
 
-} } } // namespace org::libreoffice::touch
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

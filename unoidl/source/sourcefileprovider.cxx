@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -31,7 +31,7 @@ private:
 
     virtual rtl::Reference< Entity > getNext(OUString * name);
 
-    std::map< OUString, rtl::Reference<Entity> > const & map_; //TODO: extent
+    std::map< OUString, rtl::Reference<Entity> > const & map_; 
     std::map< OUString, rtl::Reference<Entity> >::const_iterator iterator_;
 };
 

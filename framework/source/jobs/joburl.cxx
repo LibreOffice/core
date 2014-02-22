@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <jobs/joburl.hxx>
@@ -47,50 +47,50 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
 
     m_eRequest = E_UNKNOWN;
 
-    // syntax: vnd.sun.star.job:{[event=<name>],[alias=<name>],[service=<name>]}
+    
 
-    // check for "vnd.sun.star.job:"
+    
     if (sURL.matchIgnoreAsciiCaseAsciiL(JOBURL_PROTOCOL_STR,JOBURL_PROTOCOL_LEN,0))
     {
         sal_Int32 t = JOBURL_PROTOCOL_LEN;
         do
         {
-            // separate all token of "{[event=<name>],[alias=<name>],[service=<name>]}"
+            
             OUString sToken = sURL.getToken(0, JOBURL_PART_SEPARATOR, t);
             OUString sPartValue    ;
             OUString sPartArguments;
 
-            // check for "event="
+            
             if (
                 (JobURL::implst_split(sToken,JOBURL_EVENT_STR,JOBURL_EVENT_LEN,sPartValue,sPartArguments)) &&
                 (!sPartValue.isEmpty())
                )
             {
-                // set the part value
+                
                 m_sEvent     = sPartValue    ;
                 m_sEventArgs = sPartArguments;
                 m_eRequest  |= E_EVENT       ;
             }
             else
-            // check for "alias="
+            
             if (
                 (JobURL::implst_split(sToken,JOBURL_ALIAS_STR,JOBURL_ALIAS_LEN,sPartValue,sPartArguments)) &&
                 (!sPartValue.isEmpty())
                )
             {
-                // set the part value
+                
                 m_sAlias     = sPartValue    ;
                 m_sAliasArgs = sPartArguments;
                 m_eRequest  |= E_ALIAS       ;
             }
             else
-            // check for "service="
+            
             if (
                 (JobURL::implst_split(sToken,JOBURL_SERVICE_STR,JOBURL_SERVICE_LEN,sPartValue,sPartArguments)) &&
                 (!sPartValue.isEmpty())
                )
             {
-                // set the part value
+                
                 m_sService     = sPartValue    ;
                 m_sServiceArgs = sPartArguments;
                 m_eRequest    |= E_SERVICE     ;
@@ -100,7 +100,7 @@ JobURL::JobURL( /*IN*/ const OUString& sURL )
     }
 }
 
-//________________________________
+
 /**
     @short      knows, if this job URL object hold a valid URL inside
 
@@ -113,7 +113,7 @@ sal_Bool JobURL::isValid() const
     return (m_eRequest!=E_UNKNOWN);
 }
 
-//________________________________
+
 /**
     @short      get the event item of this job URL
     @descr      Because the three possible parts of such URL (event, alias, service)
@@ -146,7 +146,7 @@ sal_Bool JobURL::getEvent( /*OUT*/ OUString& sEvent ) const
     return bSet;
 }
 
-//________________________________
+
 /**
     @short      get the alias item of this job URL
     @descr      Because the three possible parts of such URL (event, alias, service)
@@ -179,7 +179,7 @@ sal_Bool JobURL::getAlias( /*OUT*/ OUString& sAlias ) const
     return bSet;
 }
 
-//________________________________
+
 /**
     @short      get the service item of this job URL
     @descr      Because the three possible parts of such URL (event, service, service)
@@ -212,7 +212,7 @@ sal_Bool JobURL::getService( /*OUT*/ OUString& sService ) const
     return bSet;
 }
 
-//________________________________
+
 /**
     @short      searches for a special identifier in the given string and split it
     @descr      If the given identifier could be found at the beginning of the given string,
@@ -244,17 +244,17 @@ sal_Bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
                                /*OUT*/       OUString& rPartValue      ,
                                /*OUT*/       OUString& rPartArguments  )
 {
-    // first search for the given identifier
+    
     sal_Bool bPartFound = (sPart.matchIgnoreAsciiCaseAsciiL(pPartIdentifier,nPartLength,0));
 
-    // If it exist - we can split the part and return sal_True.
-    // Otherwhise we do nothing and return sal_False.
+    
+    
     if (bPartFound)
     {
-        // But may the part has optional arguments - separated by a "?".
-        // Do so - we set the return value with the whole part string.
-        // Arguments will be set to an empty string as default.
-        // If we detect the right sign - we split the arguments and overwrite the default.
+        
+        
+        
+        
         OUString sValueAndArguments = sPart.copy(nPartLength);
         OUString sValue             = sValueAndArguments     ;
         OUString sArguments;
@@ -263,7 +263,7 @@ sal_Bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
         if (nArgStart!=-1)
         {
             sValue     = sValueAndArguments.copy(0,nArgStart);
-            ++nArgStart; // ignore '?'!
+            ++nArgStart; 
             sArguments = sValueAndArguments.copy(nArgStart);
         }
 
@@ -274,7 +274,7 @@ sal_Bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
     return bPartFound;
 }
 
-//________________________________
+
 /**
     @short      special debug method
     @descr      It's the entry point method to start a self component check for this class.
@@ -287,15 +287,15 @@ sal_Bool JobURL::implst_split( /*IN*/  const OUString& sPart           ,
 
 void JobURL::impldbg_checkIt()
 {
-    // check simple URL's
+    
     JobURL::impldbg_checkURL("vnd.sun.star.job:event=onMyEvent"    , E_EVENT  , "onMyEvent", ""       , ""           , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:alias=myAlias"      , E_ALIAS  , ""         , "myAlias", ""           , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service", E_SERVICE, ""         , ""       , "css.Service", NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=;"          , E_UNKNOWN, ""         , ""       , ""           , NULL, NULL, NULL);
 
-    // check combinations
-    // Note: No additional spaces or tabs are allowed after a separator occurred.
-    // Tab and spaces before a separator will be used as value!
+    
+    
+    
     JobURL::impldbg_checkURL("vnd.sun.star.job:event=onMyEvent;alias=myAlias;service=css.Service"  , E_EVENT | E_ALIAS | E_SERVICE , "onMyEvent", "myAlias", "css.Service" , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service;alias=myAlias"                  , E_ALIAS | E_SERVICE           , ""         , "myAlias", "css.Service" , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.Service ;alias=myAlias"                 , E_ALIAS | E_SERVICE           , ""         , "myAlias", "css.Service ", NULL, NULL, NULL);
@@ -303,13 +303,13 @@ void JobURL::impldbg_checkIt()
     JobURL::impldbg_checkURL("vnd.sun.star.job : event=onMyEvent"                                  , E_UNKNOWN                     , ""         , ""       , ""            , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:event=onMyEvent;event=onMyEvent;service=css.Service", E_UNKNOWN                     , ""         , ""       , ""            , NULL, NULL, NULL);
 
-    // check upper/lower case
-    // fix parts of the URL are case insensitive (e.g. "vnd.SUN.star.job:eVEnt=")
-    // values are case sensitive                 (e.g. "myAlias"                )
+    
+    
+    
     JobURL::impldbg_checkURL("vnd.SUN.star.job:eVEnt=onMyEvent;aliAs=myAlias;serVice=css.Service", E_EVENT | E_ALIAS | E_SERVICE , "onMyEvent", "myAlias", "css.Service" , NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.SUN.star.job:eVEnt=onMyEVENT;aliAs=myALIAS;serVice=css.SERVICE", E_EVENT | E_ALIAS | E_SERVICE , "onMyEVENT", "myALIAS", "css.SERVICE" , NULL, NULL, NULL);
 
-    // check stupid URLs
+    
     JobURL::impldbg_checkURL("vnd.sun.star.jobs:service=css.Service"    , E_UNKNOWN, "", "", "", NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job service=css.Service"     , E_UNKNOWN, "", "", "", NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:service;css.Service"     , E_UNKNOWN, "", "", "", NULL, NULL, NULL);
@@ -317,14 +317,14 @@ void JobURL::impldbg_checkIt()
     JobURL::impldbg_checkURL("vnd.sun.star.job:;alias;service;event="   , E_UNKNOWN, "", "", "", NULL, NULL, NULL);
     JobURL::impldbg_checkURL("vnd.sun.star.job:alias=a;service=s;event=", E_UNKNOWN, "", "", "", NULL, NULL, NULL);
 
-    // check argument handling
+    
     JobURL::impldbg_checkURL("vnd.sun.star.job:event=onMyEvent?eventArg1,eventArg2=3,eventArg4,"            , E_EVENT          , "onMyEvent", ""       , ""             , "eventArg1,eventArg2=3,eventArg4,", NULL                 , NULL          );
     JobURL::impldbg_checkURL("vnd.sun.star.job:alias=myAlias?aliasArg1,aliasarg2"                           , E_EVENT          , ""         , "myAlias", ""             , NULL                              , "aliasArg1,aliasarg2", NULL          );
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.myService?serviceArg1"                           , E_EVENT          , ""         , ""       , "css.myService", NULL                              , NULL                 , "serviceArg1" );
     JobURL::impldbg_checkURL("vnd.sun.star.job:service=css.myService?serviceArg1;alias=myAlias?aliasArg=564", E_EVENT | E_ALIAS, ""         , "myAlias", "css.myService", NULL                              , "aliasArg=564"       , "serviceArg1" );
 }
 
-//________________________________
+
 /**
     @short      helper debug method
     @descr      It uses the given parameter to create a new instance of a JobURL.
@@ -376,11 +376,11 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
 
     JobURL aURL(sURL);
 
-    // check if URL is invalid
+    
     if (eExpectedPart==E_UNKNOWN)
         bOK = !aURL.isValid();
 
-    // check if URL has the expected event part
+    
     if (
         (bOK                                 ) &&
         ((eExpectedPart & E_EVENT) == E_EVENT)
@@ -402,7 +402,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
         };
     }
 
-    // check if URL has no event part
+    
     if (
         (bOK                                 ) &&
         ((eExpectedPart & E_EVENT) != E_EVENT)
@@ -416,7 +416,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
               );
     }
 
-    // check if URL has the expected alias part
+    
     if (
         (bOK                                 ) &&
         ((eExpectedPart & E_ALIAS) == E_ALIAS)
@@ -438,7 +438,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
         };
     }
 
-    // check if URL has the no alias part
+    
     if (
         (bOK                                 ) &&
         ((eExpectedPart & E_ALIAS) != E_ALIAS)
@@ -452,7 +452,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
               );
     }
 
-    // check if URL has the expected service part
+    
     if (
         (bOK                                     ) &&
         ((eExpectedPart & E_SERVICE) == E_SERVICE)
@@ -474,7 +474,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
         };
     }
 
-    // check if URL has the no service part
+    
     if (
         (bOK                                     ) &&
         ((eExpectedPart & E_SERVICE) != E_SERVICE)
@@ -528,7 +528,7 @@ void JobURL::impldbg_checkURL( /*IN*/ const sal_Char*  pURL                 ,
     SAL_INFO("fwk.joburl", OUString(sMsg));
 }
 
-//________________________________
+
 /**
     @short      helper debug method
     @descr      It returns a representation of the internal object state
@@ -565,7 +565,7 @@ OUString JobURL::impldbg_toString() const
     return sBuffer.makeStringAndClear();
 }
 
-//________________________________
+
 
 sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
 {
@@ -583,7 +583,7 @@ sal_Bool JobURL::getServiceArgs( /*OUT*/ OUString& sServiceArgs ) const
     return bSet;
 }
 
-//________________________________
+
 
 sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
 {
@@ -601,7 +601,7 @@ sal_Bool JobURL::getEventArgs( /*OUT*/ OUString& sEventArgs ) const
     return bSet;
 }
 
-//________________________________
+
 
 sal_Bool JobURL::getAliasArgs( /*OUT*/ OUString& sAliasArgs ) const
 {
@@ -619,8 +619,8 @@ sal_Bool JobURL::getAliasArgs( /*OUT*/ OUString& sAliasArgs ) const
     return bSet;
 }
 
-#endif // ENABLE_COMPONENT_SELF_CHECK
+#endif 
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

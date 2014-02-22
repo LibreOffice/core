@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/newmenucontroller.hxx>
@@ -46,9 +46,9 @@
 #include <unotools/moduleoptions.hxx>
 #include <osl/mutex.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -87,7 +87,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImage
 
                 AddInfoForId::const_iterator pInfo = m_aAddInfoForItem.find( nItemId );
                 if ( pInfo != m_aAddInfoForItem.end() )
-                    aImageId = pInfo->second.aImageId; // Retrieve image id for menu item
+                    aImageId = pInfo->second.aImageId; 
 
                 if ( !aImageId.isEmpty() )
                 {
@@ -124,7 +124,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
 
     if ( !m_aEmptyDocURL.isEmpty() )
     {
-        // Search for the empty document URL
+        
 
         for ( sal_uInt32 i = 0; i < sal_uInt32( nCount ); i++ )
         {
@@ -144,7 +144,7 @@ void NewMenuController::determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const
 
     if ( !bFound )
     {
-        // Search for the default module name
+        
         OUString aDefaultModuleName( SvtModuleOptions().GetDefaultModuleName() );
         if ( !aDefaultModuleName.isEmpty() )
         {
@@ -175,7 +175,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
 
         if ( !m_bAcceleratorCfg )
         {
-            // Retrieve references on demand
+            
             m_bAcceleratorCfg = sal_True;
             if ( !xDocAccelCfg.is() )
             {
@@ -242,7 +242,7 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
 
         Sequence< OUString > aSeq( nSeqCount );
 
-        // Add a special command for our "New" menu.
+        
         if ( m_bNewMenu )
         {
             aSeq[nSeqCount-1] = m_aCommandURL;
@@ -264,8 +264,8 @@ void NewMenuController::setAccelerators( PopupMenu* pPopupMenu )
         for ( sal_uInt32 i = 0; i < nCount2; i++ )
             pPopupMenu->SetAccelKey( sal_uInt16( aIds[i] ), aMenuShortCuts[i] );
 
-        // Special handling for "New" menu short-cut should be set at the
-        // document which will be opened using it.
+        
+        
         if ( m_bNewMenu )
         {
             if ( aMenuShortCuts[nSeqCount-1] != aEmptyKeyCode )
@@ -312,7 +312,7 @@ NewMenuController::~NewMenuController()
 {
 }
 
-// private function
+
 void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu* pPopupMenu    = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
@@ -334,14 +334,14 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
         else
             pSubMenu = (BmkMenu*)aMenuCfg.CreateBookmarkMenu( m_xFrame, BOOKMARK_WIZARDMENU );
 
-        // copy entries as we have to use the provided popup menu
+        
         *pVCLPopupMenu = *pSubMenu;
 
         Image           aImage;
         AddInfo         aAddInfo;
 
-        // retrieve additional parameters from bookmark menu and
-        // store it in a boost::unordered_map.
+        
+        
         for ( sal_uInt16 i = 0; i < pSubMenu->GetItemCount(); i++ )
         {
             sal_uInt16 nItemId = pSubMenu->GetItemId( sal::static_int_cast<sal_uInt16>( i ) );
@@ -366,7 +366,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
     }
 }
 
-// XEventListener
+
 void SAL_CALL NewMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -381,12 +381,12 @@ void SAL_CALL NewMenuController::disposing( const EventObject& ) throw ( Runtime
     m_xPopupMenu.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& ) throw ( RuntimeException )
 {
 }
 
-// XMenuListener
+
 void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException)
 {
     Reference< css::awt::XPopupMenu > xPopupMenu;
@@ -432,9 +432,9 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
 
     if ( xDispatch.is() )
     {
-        // Call dispatch asychronously as we can be destroyed while dispatch is
-        // executed. VCL is not able to survive this as it wants to call listeners
-        // after select!!!
+        
+        
+        
         NewDocument* pNewDocument = new NewDocument;
         pNewDocument->xDispatch  = xDispatch;
         pNewDocument->aTargetURL = aTargetURL;
@@ -467,14 +467,14 @@ void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& ) thr
     }
 }
 
-// XPopupMenuController
+
 void NewMenuController::impl_setPopupMenu()
 {
 
     if ( m_xPopupMenu.is() )
         fillPopupMenu( m_xPopupMenu );
 
-    // Identify module that we are attach to. It's our context that we need to know.
+    
     Reference< XModuleManager2 > xModuleManager = ModuleManager::create( m_xContext );
     try
     {
@@ -507,7 +507,7 @@ void NewMenuController::impl_setPopupMenu()
     }
 }
 
-// XInitialization
+
 void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     osl::MutexGuard aLock( m_aMutex );
@@ -534,9 +534,9 @@ IMPL_STATIC_LINK_NOINSTANCE( NewMenuController, ExecuteHdl_Impl, NewDocument*, p
     try
     {
 */
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
+        
+        
+        
         pNewDocument->xDispatch->dispatch( pNewDocument->aTargetURL, pNewDocument->aArgSeq );
     delete pNewDocument;
     return 0;

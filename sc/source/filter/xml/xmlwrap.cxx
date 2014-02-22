@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rsc/rscsfx.hxx>
@@ -74,7 +74,7 @@
 using namespace com::sun::star;
 
 
-// -----------------------------------------------------------------------
+
 
 ScXMLImportWrapper::ScXMLImportWrapper(ScDocument& rD, SfxMedium* pM, const uno::Reference < embed::XStorage >& xStor ) :
     rDoc(rD),
@@ -150,7 +150,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     else
         return SCERR_IMPORT_UNKNOWN;
 
-    // set Base URL
+    
     uno::Reference< beans::XPropertySet > xInfoSet;
     if( aArgs.getLength() > 0 )
         aArgs.getConstArray()[0] >>= xInfoSet;
@@ -162,7 +162,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     }
 
     sal_uInt32 nReturn = SCERR_NONE;
-    rDoc.SetRangeOverflowType(0);   // is modified by the importer if limits are exceeded
+    rDoc.SetRangeOverflowType(0);   
 
     uno::Reference<xml::sax::XDocumentHandler> xDocHandler(
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
@@ -178,7 +178,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     if (pImporterImpl)
         pImporterImpl->SetPostProcessData(&maPostProcessData);
 
-    // connect parser and filter
+    
     xParser->setDocumentHandler( xDocHandler );
 
     try
@@ -187,8 +187,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
     }
     catch( const xml::sax::SAXParseException& r )
     {
-        // sax parser sends wrapped exceptions,
-        // try to find the original one
+        
+        
         xml::sax::SAXException aSaxEx = *(xml::sax::SAXException*)(&r);
         sal_Bool bTryChild = sal_True;
 
@@ -251,7 +251,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
                 RTL_TEXTENCODING_ASCII_US));
             OSL_FAIL(aError.getStr());
 #endif
-            (void)r;    // avoid warning in product version
+            (void)r;    
 
             nReturn = SCERR_IMPORT_FORMAT;
         }
@@ -264,7 +264,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL( aError.getStr() );
 #endif
-        (void)r;    // avoid warning in product version
+        (void)r;    
 
         nReturn = ERRCODE_IO_BROKENPACKAGE;
     }
@@ -276,7 +276,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
 #endif
-        (void)r;    // avoid warning in product version
+        (void)r;    
 
         nReturn = SCERR_IMPORT_OPEN;
     }
@@ -288,23 +288,23 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(const uno::Reference<uno::XCo
             RTL_TEXTENCODING_ASCII_US));
         OSL_FAIL(aError.getStr());
 #endif
-        (void)r;    // avoid warning in product version
+        (void)r;    
 
         nReturn = SCERR_IMPORT_UNKNOWN;
     }
 
-    // #i31130# Can't use getImplementation here to get the ScXMLImport from xDocHandler,
-    // because when OOo 1.x files are loaded, xDocHandler is the OOo2OasisTransformer.
-    // So the overflow warning ErrorCode is now stored in the document.
-    // Export works differently, there getImplementation still works.
+    
+    
+    
+    
 
     if (rDoc.HasRangeOverflow() && !nReturn)
         nReturn = rDoc.GetRangeOverflowType();
 
-    // free the component
+    
     xParser->setDocumentHandler( NULL );
 
-    // success!
+    
     return nReturn;
 }
 
@@ -319,10 +319,10 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
     if ( !xStorage.is() && pMedium )
         xStorage = pMedium->GetStorage();
 
-    // get parser
+    
     uno::Reference<xml::sax::XParser> xXMLParser = xml::sax::Parser::create(xContext);
 
-    // get filter
+    
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     if ( pObjSh )
     {
@@ -350,7 +350,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
         };
         uno::Reference< beans::XPropertySet > xInfoSet( comphelper::GenericPropertySet_CreateInstance( new comphelper::PropertySetInfo( aImportInfoMap ) ) );
 
-        // ---- get BuildId from parent container if available
+        
 
         uno::Reference< container::XChild > xChild( xModel, uno::UNO_QUERY );
         if( xChild.is() )
@@ -367,7 +367,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
             }
         }
 
-        // -------------------------------------
+        
 
         uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
         if (xStatusIndicator.is())
@@ -377,13 +377,13 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
             xInfoSet->setPropertyValue("ProgressRange", uno::makeAny(nProgressRange));
         }
 
-        // Set base URI
+        
         OSL_ENSURE( pMedium, "There is no medium to get MediaDescriptor from!\n" );
         OUString aBaseURL = pMedium ? pMedium->GetBaseURL() : OUString();
         OUString sPropName("BaseURI");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
-        // TODO/LATER: do not do it for embedded links
+        
         OUString aName;
         if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
         {
@@ -417,7 +417,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
 
         if (!bStylesOnly && bOasis)
         {
-            // RDF metadata: ODF >= 1.2
+            
             try
             {
                 const uno::Reference< rdf::XDocumentMetadataAccess > xDMA(
@@ -446,7 +446,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
             }
         }
 
-        // #i103539#: always read meta.xml for generator
+        
         sal_uInt32 nMetaRetval(0);
         uno::Sequence<uno::Any> aMetaArgs(1);
         uno::Any* pMetaArgs = aMetaArgs.getArray();
@@ -489,8 +489,8 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
         sal_uInt32 nSettingsRetval(0);
         if (!bStylesOnly)
         {
-            //  Settings must be loaded first because of the printer setting,
-            //  which is needed in the page styles (paper tray).
+            
+            
 
             uno::Sequence<uno::Any> aSettingsArgs(1);
             uno::Any* pSettingsArgs = aSettingsArgs.getArray();
@@ -579,7 +579,7 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
                 bRet = true;
         }
 
-        // set BuildId on XModel for later OLE object loading
+        
         if( xInfoSet.is() )
         {
             uno::Reference< beans::XPropertySet > xModelSet( xModel, uno::UNO_QUERY );
@@ -593,13 +593,13 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
                 }
             }
 
-            // Set Code Names
+            
             uno::Any aAny = xInfoSet->getPropertyValue("ScriptConfiguration");
             uno::Reference <container::XNameAccess> xCodeNameAccess;
             if( aAny >>= xCodeNameAccess )
                 XMLCodeNameProvider::set( xCodeNameAccess, &rDoc );
 
-            // VBA compatibility
+            
             bool bVBACompat = false;
             if ( (xInfoSet->getPropertyValue("VBACompatibilityMode") >>= bVBACompat) && bVBACompat )
             {
@@ -618,8 +618,8 @@ bool ScXMLImportWrapper::Import(bool bStylesOnly, ErrCode& nError)
             }
         }
 
-        // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams
-        return bRet;//!bStylesOnly ? bDocRetval : bStylesRetval;
+        
+        return bRet;
     }
     return false;
 }
@@ -628,10 +628,10 @@ static bool lcl_HasValidStream(ScDocument& rDoc)
 {
     SfxObjectShell* pObjSh = rDoc.GetDocumentShell();
     if ( pObjSh->IsDocShared() )
-        return false;                       // never copy stream from shared file
+        return false;                       
 
-    // don't read remote file again
-    // (could instead re-use medium directly in that case)
+    
+    
     SfxMedium* pSrcMed = rDoc.GetDocumentShell()->GetMedium();
     if ( !pSrcMed || pSrcMed->IsRemote() )
         return false;
@@ -658,10 +658,10 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
 
     if( xStorage.is() )
     {
-        // #96807#; trunc stream before use, because it could be an existing stream
-        // and the new content could be shorter than the old content. In this case
-        // would not all be over written by the new content and the xml file
-        // would not be valid.
+        
+        
+        
+        
         xStream = xStorage->openStreamElement( sName, embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE );
         uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
         if (xSet.is())
@@ -669,14 +669,14 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
             xSet->setPropertyValue("MediaType", uno::makeAny(sMediaType));
             OUString aUseCommonPassPropName("UseCommonStoragePasswordEncryption");
 
-            // advise storage impl to use common encryption
+            
             xSet->setPropertyValue( aUseCommonPassPropName, uno::makeAny(sal_True) );
         }
 
         xOut = xStream->getOutputStream();
     }
 
-    // set Base URL
+    
     uno::Reference< beans::XPropertySet > xInfoSet;
     if( aArgs.getLength() > 0 )
         aArgs.getConstArray()[0] >>= xInfoSet;
@@ -704,18 +704,18 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
         ScXMLExport* pExport = static_cast<ScXMLExport*>(SvXMLExport::getImplementation(xFilter));
         pExport->SetSharedData(pSharedData);
 
-        // if there are sheets to copy, get the source stream
+        
         if ( sName == "content.xml" && lcl_HasValidStream(rDoc) && ( pExport->getExportFlags() & EXPORT_OASIS ) )
         {
-            // old stream is still in this file's storage - open read-only
+            
 
-            // #i106854# use the document's storage directly, without a temporary SfxMedium
+            
             uno::Reference<embed::XStorage> xTmpStorage = rDoc.GetDocumentShell()->GetStorage();
             uno::Reference<io::XStream> xSrcStream;
             uno::Reference<io::XInputStream> xSrcInput;
 
-            // #i108978# If an embedded object is saved and no events are notified, don't use the stream
-            // because without the ...DONE events, stream positions aren't updated.
+            
+            
             ScSheetSaveData* pSheetData = ScModelObj::getImplementation(xModel)->GetSheetSaveData();
             if (pSheetData && pSheetData->IsInSupportedSave())
             {
@@ -728,7 +728,7 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
                 }
                 catch ( const uno::Exception&)
                 {
-                    // stream not available (for example, password protected) - save normally (xSrcInput is null)
+                    
                 }
             }
 
@@ -736,10 +736,10 @@ bool ScXMLImportWrapper::ExportToComponent(const uno::Reference<uno::XComponentC
             bRet = xFilter->filter( aDescriptor );
             pExport->SetSourceStream( uno::Reference<io::XInputStream>() );
 
-            // If there was an error, reset all stream flags, so the next save attempt will use normal saving.
-            // #i110692# For embedded objects, the stream may be unavailable for one save operation (m_pAntiImpl)
-            // and become available again later. But after saving normally once, the stream positions aren't
-            // valid anymore, so the flags also have to be reset if the stream wasn't available.
+            
+            
+            
+            
             if ( !bRet || !xSrcInput.is() )
             {
                 SCTAB nTabCount = rDoc.GetTableCount();
@@ -798,7 +798,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
     if ( pObjSh && xStorage.is() )
     {
-        pObjSh->UpdateDocInfoForSave();     // update information
+        pObjSh->UpdateDocInfoForSave();     
 
         uno::Reference<frame::XModel> xModel(pObjSh->GetModel());
         uno::Reference<task::XStatusIndicator> xStatusIndicator(GetStatusIndicator());
@@ -819,7 +819,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         OUString sPropName("BaseURI");
         xInfoSet->setPropertyValue( sPropName, uno::makeAny( aBaseURL ) );
 
-        // TODO/LATER: do not do it for embedded links
+        
         if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
         {
             OUString aName("dummyObjectName");
@@ -846,7 +846,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
 
         sal_Bool bOasis = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
 
-        // RDF metadata: ODF >= 1.2
+        
         if ( !bStylesOnly && bOasis )
         {
             const uno::Reference< beans::XPropertySet > xPropSet( xStorage, uno::UNO_QUERY_THROW );
@@ -871,7 +871,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             }
         }
 
-        // meta export
+        
         if (!bStylesOnly && !bMetaRet)
         {
             uno::Sequence<uno::Any> aMetaArgs(3);
@@ -910,7 +910,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             xObjectResolver = pObjectHelper;
         }
 
-        // styles export
+        
 
         {
             uno::Sequence<uno::Any> aStylesArgs(5);
@@ -933,7 +933,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
             SAL_INFO( "sc.filter", "styles export end" );
         }
 
-        // content export
+        
 
         if (!bStylesOnly)
         {
@@ -963,7 +963,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         if( pObjectHelper )
             SvXMLEmbeddedObjectHelper::Destroy( pObjectHelper );
 
-        // settings export
+        
 
         if (!bStylesOnly)
         {
@@ -993,7 +993,7 @@ bool ScXMLImportWrapper::Export(bool bStylesOnly)
         return bStylesRet && ((!bStylesOnly && bDocRet && bMetaRet && bSettingsRet) || bStylesOnly);
     }
 
-    // later: give string descriptor as parameter for doc type
+    
 
     return false;
 }

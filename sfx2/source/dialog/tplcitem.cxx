@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/intitem.hxx>
@@ -29,14 +29,14 @@
 #include <sfx2/sfx.hrc>
 #include "dialog.hrc"
 
-// STATIC DATA -----------------------------------------------------------
 
-// Constructor
+
+
 
 SfxTemplateControllerItem::SfxTemplateControllerItem(
-        sal_uInt16 nSlotId,                 // ID
-        SfxCommonTemplateDialog_Impl &rDlg,  // Controller-Instance,
-                                             // which is assigned to this item.
+        sal_uInt16 nSlotId,                 
+        SfxCommonTemplateDialog_Impl &rDlg,  
+                                             
         SfxBindings &rBindings):
     SfxControllerItem(nSlotId, rBindings),
     rTemplateDlg(rDlg),
@@ -44,16 +44,16 @@ SfxTemplateControllerItem::SfxTemplateControllerItem(
     nUserEventId(0)
 {
 }
-// -----------------------------------------------------------------------
+
 SfxTemplateControllerItem::~SfxTemplateControllerItem()
 {
     if(nUserEventId)
         Application::RemoveUserEvent(nUserEventId);
 }
 
-// -----------------------------------------------------------------------
-// Notice about change of status, is  propagated through the Controller
-// passed on by the constructor
+
+
+
 
 void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                               const SfxPoolItem* pItem )
@@ -76,7 +76,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
                 rTemplateDlg.SetFamilyState( GetId(), pStateItem );
             }
             sal_Bool bDisable = eState == SFX_ITEM_DISABLED;
-            // Disable Familly
+            
             sal_uInt16 nFamily = 0;
             switch( GetId())
             {
@@ -106,7 +106,7 @@ void SfxTemplateControllerItem::StateChanged( sal_uInt16 nSID, SfxItemState eSta
                 DBG_ASSERT(pStateItem != 0, "BoolItem expected");
                 nWaterCanState = pStateItem->GetValue() ? 1 : 0;
             }
-            //not necessary if the last event is still on the way
+            
             if(!nUserEventId)
                 nUserEventId = Application::PostUserEvent( STATIC_LINK(
                             this, SfxTemplateControllerItem, SetWaterCanStateHdl_Impl ) );

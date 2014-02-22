@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/msgbox.hxx>
@@ -40,8 +40,8 @@ namespace swui
     SwAbstractDialogFactory * GetFactory();
 }
 
-//keep the state of the buttons on runtime
-static int nSaveButtonState = -1; // 0: tab, 1: semicolon, 2: paragraph, 3: other, -1: not yet used
+
+static int nSaveButtonState = -1; 
 static sal_Bool bIsKeepColumn = sal_True;
 static sal_Unicode uOther = ',';
 
@@ -51,7 +51,7 @@ void SwConvertTableDlg::GetValues(  sal_Unicode& rDelim,
 {
     if( mpTabBtn->IsChecked() )
     {
-        //0x0b mustn't be set when re-converting table into text
+        
         bIsKeepColumn = !mpKeepColumn->IsVisible() || mpKeepColumn->IsChecked();
         rDelim = bIsKeepColumn ? 0x09 : 0x0b;
         nSaveButtonState = 0;
@@ -145,7 +145,7 @@ SwConvertTableDlg::SwConvertTableDlg( SwView& rView, bool bToTable )
     }
     else
     {
-        //hide insert options
+        
         mpOptions->Hide();
     }
     mpKeepColumn->SaveValue();

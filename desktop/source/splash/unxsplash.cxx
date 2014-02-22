@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "unxsplash.hxx"
 #include <stdio.h>
 #include <osl/process.h>
-//#include <com/sun/star/registry/XRegistryKey.hpp>
+
 #include <cppuhelper/implementationentry.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -83,7 +83,7 @@ void SAL_CALL UnxSplashScreen::reset()
 void SAL_CALL UnxSplashScreen::setText( const OUString& /*aText*/ )
     throw ( RuntimeException )
 {
-    // TODO?
+    
 }
 
 void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
@@ -96,7 +96,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
     }
 }
 
-// XInitialize
+
 void SAL_CALL
 UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& )
     throw ( RuntimeException )
@@ -142,7 +142,7 @@ css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
 
 using namespace desktop;
 
-// get service instance...
+
 static uno::Reference< uno::XInterface > m_xINSTANCE;
 
 uno::Reference< uno::XInterface > UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )

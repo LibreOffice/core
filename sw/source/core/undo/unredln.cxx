@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <UndoRedline.hxx>
@@ -39,7 +39,7 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     pRedlData( 0 ), pRedlSaveData( 0 ), nUserId( nUsrId ),
     bHiddenRedlines( sal_False )
 {
-    // consider Redline
+    
     SwDoc& rDoc = *rRange.GetDoc();
     if( rDoc.IsRedlineOn() )
     {
@@ -64,7 +64,7 @@ SwUndoRedline::SwUndoRedline( SwUndoId nUsrId, const SwPaM& rRange )
     else
     {
         bHiddenRedlines = HasHiddenRedlines( *pRedlSaveData );
-        if( bHiddenRedlines )           // then the NodeIndices of SwUndRng need to be corrected
+        if( bHiddenRedlines )           
         {
             nEndExtra -= rDoc.GetNodes().GetEndOfExtras().GetIndex();
             nSttNode -= nEndExtra;
@@ -135,7 +135,7 @@ void SwUndoRedline::UndoRedlineImpl(SwDoc &, SwPaM &)
 {
 }
 
-// default: remove redlines
+
 void SwUndoRedline::RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
     rDoc.DeleteRedline(rPam, true, USHRT_MAX);
@@ -225,8 +225,8 @@ SwUndoRedlineSort::~SwUndoRedlineSort()
 
 void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 {
-    // rPam contains the sorted range
-    // aSaveRange contains copied (i.e. original) range
+    
+    
 
     SwPosition *const pStart = rPam.Start();
     SwPosition *const pEnd   = rPam.End();
@@ -236,9 +236,9 @@ void SwUndoRedlineSort::UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam)
 
     if( 0 == ( nsRedlineMode_t::REDLINE_SHOW_DELETE & rDoc.GetRedlineMode()) )
     {
-        // Search both Redline objects and make them visible to make the nodes
-        // consistent again. The 'delete' one is hidden, thus search for the
-        // 'insert' Redline object. The former is located directly after the latter.
+        
+        
+        
         sal_uInt16 nFnd = rDoc.GetRedlinePos(
                             *rDoc.GetNodes()[ nSttNode + 1 ],
                             nsRedlineType_t::REDLINE_INSERT );
@@ -370,7 +370,7 @@ SwUndoCompDoc::SwUndoCompDoc( const SwPaM& rRg, sal_Bool bIns )
 SwUndoCompDoc::SwUndoCompDoc( const SwRangeRedline& rRedl )
     : SwUndo( UNDO_COMPAREDOC ), SwUndRng( rRedl ), pRedlData( 0 ),
     pUnDel( 0 ), pUnDel2( 0 ), pRedlSaveData( 0 ),
-    // for MergeDoc the corresponding inverse is needed
+    
     bInsert( nsRedlineType_t::REDLINE_DELETE == rRedl.GetType() )
 {
     SwDoc* pDoc = (SwDoc*)rRedl.GetDoc();
@@ -400,7 +400,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
 
     if( !bInsert )
     {
-        // delete Redlines
+        
         RedlineMode_t eOld = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode_intern((RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON));
 
@@ -408,14 +408,14 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
 
         pDoc->SetRedlineMode_intern( eOld );
 
-        // per definition Point is end (in SwUndRng!)
+        
         SwCntntNode* pCSttNd = pPam->GetCntntNode( false );
         SwCntntNode* pCEndNd = pPam->GetCntntNode( true );
 
-        // if start- and end-content is zero, then the doc-compare moves
-        // complete nodes into the current doc. And then the selection
-        // must be from end to start, so the delete join into the right
-        // direction.
+        
+        
+        
+        
         if( !nSttCntnt && !nEndCntnt )
             pPam->Exchange();
 
@@ -429,7 +429,7 @@ void SwUndoCompDoc::UndoImpl(::sw::UndoRedoContext & rContext)
 
         if( pCSttNd && !pCEndNd)
         {
-            // #112139# Do not step behind the end of content.
+            
             SwNode * pTmp = pPam->GetNode(true);
             if (pTmp)
             {
@@ -491,7 +491,7 @@ void SwUndoCompDoc::RedoImpl(::sw::UndoRedoContext & rContext)
 
         SwRangeRedline* pTmp = new SwRangeRedline( *pRedlData, *pPam );
         ((SwRedlineTbl&)pDoc->GetRedlineTbl()).Insert( pTmp );
-        if (pTmp) // #i19649#
+        if (pTmp) 
             pTmp->InvalidateRange();
     }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <node.hxx>
@@ -48,7 +48,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
         {
             if (! bFound)
             {
-                // assure that text is in the correct nodes array
+                
                 if ( &(pTxtNd->GetNodes()) == this )
                 {
                     pOutlineNds->insert(pTxtNd);
@@ -67,20 +67,20 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
 
         pTxtNd->UpdateOutlineState();
 
-        // update the structure fields
+        
         GetDoc()->GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();
     }
 }
 
 void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
 {
-    if( pOutlineNds->empty() )     // no OutlineNodes present ?
+    if( pOutlineNds->empty() )     
         return;
 
     const SwNodePtr pSrch = (SwNodePtr)&rNd;
     sal_uInt16 nPos;
     pOutlineNds->Seek_Entry( pSrch, &nPos );
-    if( nPos == pOutlineNds->size() )      // none present for updating ?
+    if( nPos == pOutlineNds->size() )      
         return;
 
     if( nPos )

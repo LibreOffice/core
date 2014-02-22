@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//------------------------------------------------------------------------
-// header file
-//------------------------------------------------------------------------
+
+
+
 #ifdef WNT
 #include <windows.h>
 #undef min
@@ -33,15 +33,15 @@ using namespace osl;
 using namespace rtl;
 
 
-//------------------------------------------------------------------------
-// helper functions and classes
-//------------------------------------------------------------------------
+
+
+
 
 /** print Boolean value.
 */
 inline void printBool( bool bOk )
 {
-    //t_print("#printBool# " );
+    
     bOk ? t_print("TRUE!\n" ): t_print("FALSE!\n" );
 }
 
@@ -51,15 +51,15 @@ inline void printUString( const ::rtl::OUString & str )
 {
     rtl::OString aString;
 
-    //t_print("#printUString_u# " );
+    
     aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
     t_print("%s\n", aString.getStr( ) );
 }
 
 
-//------------------------------------------------------------------------
-// test code start here
-//------------------------------------------------------------------------
+
+
+
 
 namespace osl_Security
 {
@@ -83,7 +83,7 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE( ctors );
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class ctors
+    }; 
 
 
     /** testing the methods:
@@ -119,17 +119,17 @@ namespace osl_Security
 
         CPPUNIT_TEST_SUITE( logonUser );
         if  ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) ==  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
-        /// if user name and passwd are forwarded
+        
         {
             CPPUNIT_TEST( logonUser_user_pwd );
         }
         if  ( !aStringForward.isEmpty() && aStringForward.indexOf( (sal_Unicode)' ' ) != -1 && ( aStringForward.indexOf( ( sal_Unicode ) ' ' ) !=  aStringForward.lastIndexOf( ( sal_Unicode ) ' ' ) ) )
-        /// if user name and passwd and file server are forwarded
+        
         {
             CPPUNIT_TEST( logonUser_user_pwd_server );
         }
         CPPUNIT_TEST_SUITE_END( );
-    }; // class logonUser
+    }; 
 
 
     /** testing the method:
@@ -160,7 +160,7 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE( getUserIdent );
         CPPUNIT_TEST( getUserIdent_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getUserIdent
+    }; 
 
 
     /** testing the method:
@@ -193,7 +193,7 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE( getUserName );
         CPPUNIT_TEST( getUserName_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getUserName
+    }; 
 
 
     /** testing the method:
@@ -216,7 +216,7 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE( getConfigDir );
         CPPUNIT_TEST( getConfigDir_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getConfigDir
+    }; 
 
     /** testing the method:
         inline sal_Bool SAL_CALL isAdministrator() const;
@@ -238,7 +238,7 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE( isAdministrator );
         CPPUNIT_TEST( isAdministrator_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class isAdministrator
+    }; 
 
     /** testing the method:
         inline oslSecurity getHandle() const;
@@ -260,7 +260,7 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE( getHandle );
         CPPUNIT_TEST( getHandle_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getHandle
+    }; 
 
 
     class UserProfile : public CppUnit::TestFixture
@@ -286,7 +286,7 @@ namespace osl_Security
         CPPUNIT_TEST( loadUserProfile );
         CPPUNIT_TEST( unloadUserProfile );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class UserProfile
+    }; 
 
     class loginUserOnFileServer : public CppUnit::TestFixture
     {
@@ -308,9 +308,9 @@ namespace osl_Security
         CPPUNIT_TEST_SUITE( loginUserOnFileServer );
         CPPUNIT_TEST( loginUserOnFileServer_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class loginUserOnFileServer
+    }; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::logonUser);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getUserIdent);
@@ -321,9 +321,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::getHandle);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::UserProfile);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Security::loginUserOnFileServer);
 
-// -----------------------------------------------------------------------------
 
-} // namespace osl_Security
+
+} 
 
 
 /* This defines an own TestPlugIn implementation with an own initialize()
@@ -343,7 +343,7 @@ class MyTestPlugInImpl: public CPPUNIT_NS::TestPlugInDefaultImpl
 void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
                    const CPPUNIT_NS::PlugInParameters & )
 {
-    /// start message
+    
     t_print("#Initializing ...\n" );
     t_print("#\n#logonUser function need root/Administrator account to test.\n" );
     t_print("#You can test by login with root/Administrator, and excute:\n" );
@@ -351,43 +351,43 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     t_print("#      where username and password are forwarded account info.\n" );
     t_print("#if no text forwarded, this function will be skipped.\n" );
 
-    /// get system information
+    
 #if ( defined UNX )
-    /// some initialization work for UNIX OS
+    
 
 
     struct passwd* pw;
     CPPUNIT_ASSERT_MESSAGE( "getpwuid: no password entry\n",( pw = getpwuid( getuid() ) ) != NULL );
 
-    /// get user ID;
+    
     strUserID = OUString::number( getuid( ) );
 
-    /// get user Name;
+    
     strUserName = ::rtl::OUString::createFromAscii( pw->pw_name );
 
-    /// get home directory;
+    
     char *pw_dir = pw->pw_dir;
     if( getenv( "FAKEROOTKEY" ) )
         pw_dir = getenv("HOME");
     CPPUNIT_ASSERT_MESSAGE( "#Convert from system path to URL failed.",
                             ::osl::File::E_None == ::osl::File::getFileURLFromSystemPath( ::rtl::OUString::createFromAscii( pw_dir ), strHomeDirectory ) );
 
-    /// get config directory;
+    
     strConfigDirectory = strHomeDirectory.copy(0);
 
-    /// is administrator;
+    
     if( !getuid( ) )
         isAdmin = true;
 
 #endif
 #if defined ( WNT )
-    /// some initialization work for Windows OS
+    
 
 
-    /// Get the user name, computer name, user home directory.
-    LPTSTR lpszSystemInfo;      // pointer to system information string
-    DWORD cchBuff = BUFSIZE;    // size of computer or user name
-    TCHAR tchBuffer[BUFSIZE];   // buffer for string
+    
+    LPTSTR lpszSystemInfo;      
+    DWORD cchBuff = BUFSIZE;    
+    TCHAR tchBuffer[BUFSIZE];   
 
     lpszSystemInfo = tchBuffer;
     cchBuff = BUFSIZE;
@@ -397,7 +397,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     if( GetComputerName(lpszSystemInfo, &cchBuff) )
         strComputerName = ::rtl::OUString::createFromAscii( lpszSystemInfo );
 
-    /// Get user home directory.
+    
     HKEY hRegKey;
     sal_Char PathA[_MAX_PATH];
     ::rtl::OUString strHome;
@@ -424,9 +424,9 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     }
 
 
-    /// Get user Security ID:
+    
 
-    // Create buffers that may be large enough. If a buffer is too small, the count parameter will be set to the size needed.
+    
      const DWORD INITIAL_SIZE = 32;
     DWORD cbSid = 0;
     DWORD dwSidBufferSize = INITIAL_SIZE;
@@ -438,7 +438,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
     LPCWSTR wszAccName = ( LPWSTR ) strUserName.getStr( );
 
-    // Create buffers for the SID and the domain name.
+    
     PSID pSid = (PSID) new BYTE[dwSidBufferSize];
     CPPUNIT_ASSERT_MESSAGE("# creating SID buffer failed.\n", pSid!= NULL );
     memset( pSid, 0, dwSidBufferSize);
@@ -447,18 +447,18 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     CPPUNIT_ASSERT_MESSAGE("# creating Domain name buffer failed.\n", wszDomainName != NULL );
     memset(wszDomainName, 0, dwDomainBufferSize*sizeof(WCHAR));
 
-    // Obtain the SID for the account name passed.
+    
     for ( ; ; )
     {
-        // Set the count variables to the buffer sizes and retrieve the SID.
+        
         cbSid = dwSidBufferSize;
         cchDomainName = dwDomainBufferSize;
         if (LookupAccountNameW(
-                           NULL,            // Computer name. NULL for the local computer
+                           NULL,            
                            wszAccName,
-                           pSid,          // Pointer to the SID buffer. Use NULL to get the size needed,
-                           &cbSid,          // Size of the SID buffer needed.
-                           wszDomainName,   // wszDomainName,
+                           pSid,          
+                           &cbSid,          
+                           wszDomainName,   
                            &cchDomainName,
                            &eSidType
                            ))
@@ -469,12 +469,12 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         }
         dwErrorCode = GetLastError();
 
-        // Check if one of the buffers was too small.
+        
         if (dwErrorCode == ERROR_INSUFFICIENT_BUFFER)
         {
             if (cbSid > dwSidBufferSize)
             {
-                // Reallocate memory for the SID buffer.
+                
                 wprintf(L"# The SID buffer was too small. It will be reallocated.\n");
                 FreeSid( pSid);
                 pSid = (PSID) new BYTE[cbSid];
@@ -484,7 +484,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
             }
             if (cchDomainName > dwDomainBufferSize)
             {
-                // Reallocate memory for the domain name buffer.
+                
                 wprintf(L"# The domain name buffer was too small. It will be reallocated.\n");
                 delete [] wszDomainName;
                 wszDomainName = new WCHAR[cchDomainName];
@@ -500,7 +500,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         }
     }
 
-    // now got SID successfully, only need to compare SID, so I copied the rest lines from source to convert SID to OUString.
+    
     PSID_IDENTIFIER_AUTHORITY psia;
     DWORD dwSubAuthorities;
     DWORD dwSidRev=SID_REVISION;
@@ -556,7 +556,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     delete [] wszDomainName;
 
 
-    /// check if logged in user is administrator:
+    
 
     BOOL b;
     SID_IDENTIFIER_AUTHORITY NtAuthority = { SECURITY_NT_AUTHORITY };
@@ -581,7 +581,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
 
 #endif
 
-    /// print the information.
+    
     t_print("#\n#Retrieved system information is below:\n");
 
     t_print("Computer Name:              ");
@@ -620,7 +620,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     else
         t_print("Administrator.\n" );
 
-    /// get and display forwarded text if available.
+    
     rtl::OUString args[ 3 ];
     int argsCount = 0;
     sal_uInt32 n = rtl_getAppCommandArgCount();
@@ -637,7 +637,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         }
         args[ argsCount++ ] = arg;
     }
-    /// only forwarded two parameters, username and password.
+    
     if( argsCount == 2 )
     {
         aLogonUser = args[ 0 ];
@@ -651,7 +651,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
         t_print("\n" );
     }
     else if( argsCount == 3 )
-    /// forwarded three parameters, username, password and fileserver.
+    
     {
         aLogonUser = args[ 0 ];
         t_print("#Forwarded username: ");

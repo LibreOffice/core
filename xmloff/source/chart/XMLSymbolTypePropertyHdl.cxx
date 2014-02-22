@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLSymbolTypePropertyHdl.hxx"
@@ -42,7 +42,7 @@ const SvXMLSignedEnumMapEntry aXMLChartSymbolTypeEnumMap[] =
 
 const SvXMLSignedEnumMapEntry aXMLChartSymbolNameMap[] =
 {
-    { XML_GRADIENTSTYLE_SQUARE, 0 },  // "square"
+    { XML_GRADIENTSTYLE_SQUARE, 0 },  
     { XML_DIAMOND,              1 },
     { XML_ARROW_DOWN,           2 },
     { XML_ARROW_UP,             3 },
@@ -100,7 +100,7 @@ bool lcl_convertEnum(
     return false;
 }
 
-} // anonymous namespace
+} 
 
 using namespace com::sun::star;
 
@@ -118,13 +118,13 @@ bool XMLSymbolTypePropertyHdl::importXML( const OUString& rStrImpValue,
 
     if( m_bIsNamedSymbol )
     {
-        sal_Int32 nValue = -3; // NONE
+        sal_Int32 nValue = -3; 
         bResult = lcl_convertEnum( nValue, rStrImpValue, aXMLChartSymbolNameMap );
         rValue <<= nValue;
     }
     else
     {
-        sal_Int32 nValue = -3; // NONE
+        sal_Int32 nValue = -3; 
         bResult = lcl_convertEnum( nValue, rStrImpValue, aXMLChartSymbolTypeEnumMap );
         rValue <<= nValue;
     }
@@ -137,7 +137,7 @@ bool XMLSymbolTypePropertyHdl::exportXML( OUString& rStrExpValue,
 {
     bool bResult = false;
 
-    sal_Int32 nType = -3; // NONE
+    sal_Int32 nType = -3; 
     rValue >>= nType;
 
     if( m_bIsNamedSymbol )

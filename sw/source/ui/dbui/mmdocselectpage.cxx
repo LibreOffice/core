@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/pathoptions.hxx>
@@ -75,7 +75,7 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pParent)
                             m_pWizard->GetConfigItem().GetSavedDocuments();
     for(sal_Int32 nDoc = 0; nDoc < rDocs.getLength(); ++nDoc)
     {
-        //insert in reverse order
+        
         m_pRecentDocLB->InsertEntry(rDocs[nDoc], 0);
     }
     m_pRecentDocLB->SelectEntryPos(0);
@@ -84,8 +84,8 @@ SwMailMergeDocSelectPage::SwMailMergeDocSelectPage(SwMailMergeWizard* pParent)
         m_pRecentDocRB->Enable(false);
     }
 
-    //Temp hack until all pages are converted to .ui and wizard
-    //base class adapted
+    
+    
     SetSizePixel(LogicToPixel(Size(260 , 250), MapMode(MAP_APPFONT)));
 }
 
@@ -140,7 +140,7 @@ IMPL_LINK(SwMailMergeDocSelectPage, FileSelectHdl, PushButton*, pButton)
                 const OUString sWild = pFlt->GetWildcard().getGlob();
                 xFltMgr->appendFilter( pFlt->GetUIName(), sWild );
 
-                // #i40125
+                
                 if(pFlt->GetFilterFlags() & SFX_FILTER_DEFAULT)
                     xFltMgr->setCurrentFilter( pFlt->GetUIName() ) ;
             }

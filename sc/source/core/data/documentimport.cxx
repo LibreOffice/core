@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "documentimport.hxx"
@@ -119,11 +119,11 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
     switch (aCell.meType)
     {
         case CELLTYPE_STRING:
-            // string is copied.
+            
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), *aCell.mpString);
         break;
         case CELLTYPE_EDIT:
-            // Cell takes the ownership of the text object.
+            
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpEditText);
             aCell.mpEditText = NULL;
         break;
@@ -131,7 +131,7 @@ void ScDocumentImport::setAutoInput(const ScAddress& rPos, const OUString& rStr,
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mfValue);
         break;
         case CELLTYPE_FORMULA:
-            // This formula cell instance is directly placed in the document without copying.
+            
             pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aCell.mpFormula);
             aCell.mpFormula = NULL;
         break;
@@ -262,17 +262,17 @@ void ScDocumentImport::setMatrixCells(
 
     sc::CellStoreType& rCells = pTab->aCol[rBasePos.Col()].maCells;
 
-    // Set the master cell.
+    
     ScFormulaCell* pCell = new ScFormulaCell(&mpImpl->mrDoc, rBasePos, rArray, eGram, MM_FORMULA);
 
     pBlockPos->miCellPos =
         rCells.set(pBlockPos->miCellPos, rBasePos.Row(), pCell);
 
-    // Matrix formulas currently need re-calculation on import.
+    
     pCell->SetMatColsRows(
         rRange.aEnd.Col()-rRange.aStart.Col()+1, rRange.aEnd.Row()-rRange.aStart.Row()+1, true);
 
-    // Set the reference cells.
+    
     ScSingleRefData aRefData;
     aRefData.InitFlags();
     aRefData.SetColRel(true);
@@ -280,15 +280,15 @@ void ScDocumentImport::setMatrixCells(
     aRefData.SetTabRel(true);
     aRefData.SetAddress(rBasePos, rBasePos);
 
-    ScTokenArray aArr; // consists only of one single reference token.
+    ScTokenArray aArr; 
     ScToken* t = static_cast<ScToken*>(aArr.AddMatrixSingleReference(aRefData));
 
     ScAddress aPos = rBasePos;
     for (SCROW nRow = rRange.aStart.Row()+1; nRow <= rRange.aEnd.Row(); ++nRow)
     {
-        // Token array must be cloned so that each formula cell receives its own copy.
+        
         aPos.SetRow(nRow);
-        // Reference in each cell must point to the origin cell relative to the current cell.
+        
         aRefData.SetAddress(rBasePos, aPos);
         t->GetSingleRef() = aRefData;
         boost::scoped_ptr<ScTokenArray> pTokArr(aArr.Clone());
@@ -338,7 +338,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
     aFormulaBuf.append(ScCompiler::GetNativeSymbol(ocOpen));
 
     OUString aSep = ScCompiler::GetNativeSymbol(ocSep);
-    if (rParam.meMode == ScTabOpParam::Column) // column only
+    if (rParam.meMode == ScTabOpParam::Column) 
     {
         aRef.Set(rParam.aRefFormulaCell.GetAddress(), true, false, false);
         aFormulaBuf.append(aRef.GetRefString(pDoc, nTab));
@@ -351,7 +351,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
         nCol2 = std::min( nCol2, (SCCOL)(rParam.aRefFormulaEnd.Col() -
                     rParam.aRefFormulaCell.Col() + nCol1 + 1));
     }
-    else if (rParam.meMode == ScTabOpParam::Row) // row only
+    else if (rParam.meMode == ScTabOpParam::Row) 
     {
         aRef.Set(rParam.aRefFormulaCell.GetAddress(), false, true, false);
         aFormulaBuf.append(aRef.GetRefString(pDoc, nTab));
@@ -364,7 +364,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
         nRow2 = std::min(
             nRow2, rParam.aRefFormulaEnd.Row() - rParam.aRefFormulaCell.Row() + nRow1 + 1);
     }
-    else // both
+    else 
     {
         aFormulaBuf.append(rParam.aRefFormulaCell.GetRefString(pDoc, nTab));
         aFormulaBuf.append(aSep);
@@ -393,7 +393,7 @@ void ScDocumentImport::setTableOpCells(const ScRange& rRange, const ScTabOpParam
             mpImpl->maBlockPosSet.getBlockPosition(nTab, nCol);
 
         if (!pBlockPos)
-            // Something went horribly wrong.
+            
             return;
 
         sc::CellStoreType& rColCells = pTab->aCol[nCol].maCells;
@@ -412,17 +412,17 @@ namespace {
 
 class CellStoreInitializer
 {
-    // The pimpl pattern here is intentional.
+    
     //
-    // The problem with having the attributes in CellStoreInitializer
-    // directly is that, as a functor, it might be copied around. In
-    // that case miPos in _copied_ object points ot maAttrs in the
-    // original object, not in the copy. So later, deep in mdds, we end
-    // up comparing iterators from different sequences.
+    
+    
+    
+    
+    
     //
-    // This could be solved by defining copy constructor and operator=,
-    // but given the limited usage of the class, I think it is simpler
-    // to let copies share the state.
+    
+    
+    
     struct Impl
     {
         sc::CellTextAttrStoreType maAttrs;
@@ -451,7 +451,7 @@ public:
         if (node.type == sc::element_type_empty)
             return;
 
-        // Fill with default values for non-empty cell segments.
+        
         sc::CellTextAttr aDefault;
         if (node.type == sc::element_type_numeric)
             aDefault.mnScriptType = mpImpl->mnScriptNumeric;
@@ -460,7 +460,7 @@ public:
 
         if (node.type == sc::element_type_formula)
         {
-            // Have all formula cells start listening to the document.
+            
             sc::formula_block::iterator it = sc::formula_block::begin(*node.data);
             sc::formula_block::iterator itEnd = sc::formula_block::end(*node.data);
             for (; it != itEnd; ++it)
@@ -481,8 +481,8 @@ public:
 
 void ScDocumentImport::finalize()
 {
-    // Populate the text width and script type arrays in all columns. Also
-    // activate all formula cells.
+    
+    
     ScDocument::TableContainer::iterator itTab = mpImpl->mrDoc.maTabs.begin(), itTabEnd = mpImpl->mrDoc.maTabs.end();
     for (; itTab != itTabEnd; ++itTab)
     {

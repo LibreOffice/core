@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scenariobuffer.hxx"
@@ -35,14 +35,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 ScenarioCellModel::ScenarioCellModel() :
     mnNumFmtId( 0 ),
@@ -50,7 +50,7 @@ ScenarioCellModel::ScenarioCellModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScenarioModel::ScenarioModel() :
     mbLocked( false ),
@@ -58,7 +58,7 @@ ScenarioModel::ScenarioModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 Scenario::Scenario( const WorkbookHelper& rHelper, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
@@ -87,8 +87,8 @@ void Scenario::importInputCells( const AttributeList& rAttribs )
 
 void Scenario::importScenario( SequenceInputStream& rStrm )
 {
-    rStrm.skip( 2 );    // cell count
-    // two longs instead of flag field
+    rStrm.skip( 2 );    
+    
     maModel.mbLocked = rStrm.readInt32() != 0;
     maModel.mbHidden = rStrm.readInt32() != 0;
     rStrm >> maModel.maName >> maModel.maComment >> maModel.maUser;
@@ -96,7 +96,7 @@ void Scenario::importScenario( SequenceInputStream& rStrm )
 
 void Scenario::importInputCells( SequenceInputStream& rStrm )
 {
-    // TODO: where is the deleted flag?
+    
     ScenarioCellModel aModel;
     BinAddress aPos;
     rStrm >> aPos;
@@ -122,18 +122,18 @@ void Scenario::finalizeImport()
         Reference< XNameAccess > xSheetsNA( getDocument()->getSheets(), UNO_QUERY_THROW );
         OUString aScenName = ContainerHelper::getUnusedName( xSheetsNA, maModel.maName, '_' );
 
-        // create the new scenario sheet
+        
         Reference< XScenariosSupplier > xScenariosSupp( getSheetFromDoc( mnSheet ), UNO_QUERY_THROW );
         Reference< XScenarios > xScenarios( xScenariosSupp->getScenarios(), UNO_SET_THROW );
         xScenarios->addNewByName( aScenName, ContainerHelper::vectorToSequence( aRanges ), maModel.maComment );
 
-        // write scenario cell values
+        
         Reference< XSpreadsheet > xSheet( getSheetFromDoc( aScenName ), UNO_SET_THROW );
         for( ScenarioCellVector::iterator aIt = maCells.begin(), aEnd = maCells.end(); aIt != aEnd; ++aIt )
         {
             if( !aIt->mbDeleted ) try
             {
-                // use XCell::setFormula to auto-detect values and strings
+                
                 Reference< XCell > xCell( xSheet->getCellByPosition( aIt->maPos.Column, aIt->maPos.Row ), UNO_SET_THROW );
                 xCell->setFormula( aIt->maValue );
             }
@@ -142,14 +142,14 @@ void Scenario::finalizeImport()
             }
         }
 
-        // scenario properties
+        
         PropertySet aPropSet( xScenarios->getByName( aScenName ) );
         aPropSet.setProperty( PROP_IsActive, false );
         aPropSet.setProperty( PROP_CopyBack, false );
         aPropSet.setProperty( PROP_CopyStyles, false );
         aPropSet.setProperty( PROP_CopyFormulas, false );
         aPropSet.setProperty( PROP_Protected, maModel.mbLocked );
-        // #112621# do not show/print scenario border
+        
         aPropSet.setProperty( PROP_ShowBorder, false );
         aPropSet.setProperty( PROP_PrintBorder, false );
     }
@@ -158,7 +158,7 @@ void Scenario::finalizeImport()
     }
 }
 
-// ============================================================================
+
 
 SheetScenariosModel::SheetScenariosModel() :
     mnCurrent( 0 ),
@@ -166,7 +166,7 @@ SheetScenariosModel::SheetScenariosModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 SheetScenarios::SheetScenarios( const WorkbookHelper& rHelper, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
@@ -197,7 +197,7 @@ void SheetScenarios::finalizeImport()
 {
     maScenarios.forEachMem( &Scenario::finalizeImport );
 
-    // activate a scenario
+    
     try
     {
         Reference< XScenariosSupplier > xScenariosSupp( getSheetFromDoc( mnSheet ), UNO_QUERY_THROW );
@@ -210,7 +210,7 @@ void SheetScenarios::finalizeImport()
     }
 }
 
-// ============================================================================
+
 
 ScenarioBuffer::ScenarioBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -230,9 +230,9 @@ void ScenarioBuffer::finalizeImport()
     maSheetScenarios.forEachMem( &SheetScenarios::finalizeImport );
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

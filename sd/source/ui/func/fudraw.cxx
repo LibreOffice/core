@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,7 +91,7 @@ FuDraw::~FuDraw()
 
 sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     sal_Bool bReturn = sal_False;
@@ -110,21 +110,21 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 
         if (mpView->IsDragObj())
         {
-            // object is dragged (move, resize,...)
+            
             const SdrHdl* pHdl = mpView->GetDragStat().GetHdl();
 
             if (!pHdl || (!pHdl->IsCornerHdl() && !pHdl->IsVertexHdl()))
             {
-                // Move
+                
                 bRestricted = sal_False;
             }
         }
 
-        // #i33136#
+        
         if(bRestricted && doConstructOrthogonal())
         {
-            // Restrict movement:
-            // rectangle->quadrat, ellipse->circle etc.
+            
+            
             bOrtho = !rMEvt.IsShift();
         }
         else
@@ -192,7 +192,7 @@ sal_Bool FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         SdrPageView* pPV = 0;
         sal_uInt16 nHitLog = sal_uInt16 ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-        // look only for HelpLines when they are visible (!)
+        
         sal_Bool bHelpLine(sal_False);
         if(mpView->IsHlplVisible())
             bHelpLine = mpView->PickHelpLine(aMDPos, nHitLog, *mpWindow, nHelpLine, pPV);
@@ -225,23 +225,23 @@ sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 
     if (mpView->IsDragObj())
     {
-        // object is dragged (move, resize, ...)
+        
         const SdrHdl* pHdl = mpView->GetDragStat().GetHdl();
 
         if (!pHdl || (!pHdl->IsCornerHdl() && !pHdl->IsVertexHdl()))
         {
-            // Move
+            
             bRestricted = sal_False;
         }
     }
 
     if (mpView->IsAction())
     {
-        // #i33136#
+        
         if(bRestricted && doConstructOrthogonal())
         {
-            // Restrict movement:
-            // rectangle->quadrat, ellipse->circle etc.
+            
+            
             bOrtho = !rMEvt.IsShift();
         }
         else
@@ -313,7 +313,7 @@ sal_Bool FuDraw::MouseMove(const MouseEvent& rMEvt)
 
     if (mpView->IsAction())
     {
-        // Because the flag set back if necessary in MouseMove
+        
         if (mpView->IsOrtho() != bOrtho)
             mpView->SetOrtho(bOrtho);
     }
@@ -398,9 +398,9 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
                     if (pIPClient && pIPClient->IsObjectInPlaceActive())
                         pIPClient->SetSdrGrafObj(NULL);
 
-                    // wait-mousepointer while deleting object
+                    
                     WaitObject aWait( (Window*)mpViewShell->GetActiveWindow() );
-                    // delete object
+                    
                     mpView->DeleteMarked();
                 }
             }
@@ -414,23 +414,23 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( !aCode.IsMod1() && !aCode.IsMod2() )
             {
-                // Moved next line which was a bugfix itself into
-                // the scope which really does the object selection travel
-                // and thus is allowed to call SelectionHasChanged().
+                
+                
+                
 
-                // Switch to FuSelect.
+                
                 mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                     SID_OBJECT_SELECT,
                     SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
-                // changeover to the next object
+                
                 if(!mpView->MarkNextObj( !aCode.IsShift() ))
                 {
-                    //If there is only one object, don't do the UnmarkAlllObj() & MarkNextObj().
+                    
                     if ( mpView->GetMarkableObjCount() > 1 && mpView->AreObjectsMarked() )
                     {
-                        // No next object: go over open end and get first from
-                        // the other side
+                        
+                        
                         mpView->UnmarkAllObj();
                         mpView->MarkNextObj(!aCode.IsShift());
                     }
@@ -450,7 +450,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( aCode.IsMod1() )
             {
-                // mark last object
+                
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj(sal_False);
 
@@ -468,7 +468,7 @@ sal_Bool FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( aCode.IsMod1() )
             {
-                // mark first object
+                
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj(sal_True);
 
@@ -535,7 +535,7 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
     {
         if (SD_MOD()->GetWaterCan() && !mpView->PickHandle(aPnt))
         {
-            // water can mode
+            
             bDefPointer = sal_False;
             mpWindow->SetPointer(Pointer(POINTER_FILL));
         }
@@ -546,14 +546,14 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
         if (SD_MOD()->GetWaterCan() && !pHdl)
         {
-            // water can mode
+            
             bDefPointer = sal_False;
             mpWindow->SetPointer(Pointer(POINTER_FILL));
         }
         else if (!pHdl &&
                  mpViewShell->GetViewFrame()->HasChildWindow(SvxBmpMaskChildWindow::GetChildWindowId()))
         {
-            // pipette mode
+            
             SvxBmpMask* pMask = (SvxBmpMask*) mpViewShell->GetViewFrame()->GetChildWindow(SvxBmpMaskChildWindow::GetChildWindowId())->GetWindow();
 
             if (pMask && pMask->IsEyedropping())
@@ -577,22 +577,22 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
             if ((eDragMode == SDRDRAG_ROTATE) && (eHit == SDRHIT_MARKEDOBJECT))
             {
-                // The goal of this request is show always the rotation-arrow for 3D-objects at rotation-modus
-                // Independent of the settings at Extras->Optionen->Grafik "Objekte immer verschieben"
-                // 2D-objects acquit in an other way. Otherwise, the rotation of 3d-objects around any axises
-                // wouldn't be possible per default.
+                
+                
+                
+                
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
                 SdrObject* pObject = rMarkList.GetMark(0)->GetMarkedSdrObj();
                 if ((pObject->ISA(E3dObject)) && (rMarkList.GetMarkCount() == 1))
                 {
                     mpWindow->SetPointer(Pointer(POINTER_ROTATE));
-                    bDefPointer = sal_False;     // Otherwise it'll be calles Joes routine and the mousepointer will reconfigurate again
+                    bDefPointer = sal_False;     
                 }
             }
 
             if (eHit == SDRHIT_NONE)
             {
-                // found nothing -> look after at the masterpage
+                
                 mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER);
             }
             else if (eHit == SDRHIT_UNMARKEDOBJECT)
@@ -616,12 +616,12 @@ void FuDraw::ForcePointer(const MouseEvent* pMEvt)
 
             if (pObj && pMEvt && !pMEvt->IsMod2() && this->ISA(FuSelection))
             {
-                // test for animation or ImageMap
+                
                 bDefPointer = !SetPointer(pObj, aPnt);
 
                 if (bDefPointer && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dPolyScene)))
                 {
-                    // take a glance into the group
+                    
                     if (mpView->PickObj(aPnt, mpView->getHitTolLog(), pObj, pPV, SDRSEARCH_ALSOONMASTER | SDRSEARCH_DEEP))
                         bDefPointer = !SetPointer(pObj, aPnt);
                 }
@@ -704,7 +704,7 @@ sal_Bool FuDraw::SetPointer(SdrObject* pObj, const Point& rPos)
                           ( pInfo->meEffect != presentation::AnimationEffect_NONE ||
                             pInfo->meTextEffect != presentation::AnimationEffect_NONE )))))
                     {
-                        // Animation object
+                        
                         bSet = sal_True;
                         mpWindow->SetPointer(Pointer(POINTER_REFHAND));
                     }
@@ -775,7 +775,7 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
             }
             else if (nInv == SdrInventor &&  nSdrObjKind == OBJ_GRUP)
             {
-                // hit group -> select subobject
+                
                 mpView->UnMarkAll();
                 mpView->MarkObj(aMDPos, nHitLog, rMEvt.IsShift(), sal_True);
             }
@@ -808,7 +808,7 @@ sal_Bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 
             if (!bReturn && (pObj->ISA(SdrObjGroup) || pObj->ISA(E3dPolyScene)))
             {
-                // take a glance into the group
+                
                 SdrPageView* pPV = NULL;
 
                 Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(aPosPixel)));
@@ -835,19 +835,19 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
     OUString aHelpText;
     Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));
 
-    // URL for IMapObject underneath pointer is help text
+    
     if ( mpDoc->GetIMapInfo(pObj) )
     {
         IMapObject* pIMapObj = mpDoc->GetHitIMapObject(pObj, aPos, *mpWindow );
 
         if ( pIMapObj )
         {
-            // show name
+            
             aHelpText = pIMapObj->GetAltText();
 
             if (aHelpText.isEmpty())
             {
-                // show url if no name is available
+                
                 aHelpText = INetURLObject::decode( pIMapObj->GetURL(), '%', INetURLObject::DECODE_WITH_CHARSET );
             }
         }
@@ -860,35 +860,35 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
         {
             case presentation::ClickAction_PREVPAGE:
             {
-                // jump to the prior page
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_PREVPAGE);
             }
             break;
 
             case presentation::ClickAction_NEXTPAGE:
             {
-                // jump to the next page
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_NEXTPAGE);
             }
             break;
 
             case presentation::ClickAction_FIRSTPAGE:
             {
-                // jump to the first page
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_FIRSTPAGE);
             }
             break;
 
             case presentation::ClickAction_LASTPAGE:
             {
-                // jump to the last page
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_LASTPAGE);
             }
             break;
 
             case presentation::ClickAction_BOOKMARK:
             {
-                // jump to object/page
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_BOOKMARK);
                 aHelpText += ": ";
                 aHelpText += INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET );
@@ -897,7 +897,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
 
             case presentation::ClickAction_DOCUMENT:
             {
-                // jump to document (object/page)
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_DOCUMENT);
                 aHelpText += ": ";
                 aHelpText += INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET );
@@ -906,7 +906,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
 
             case presentation::ClickAction_PROGRAM:
             {
-                // execute program
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_PROGRAM);
                 aHelpText += ": ";
                 aHelpText += INetURLObject::decode( pInfo->GetBookmark(), '%', INetURLObject::DECODE_WITH_CHARSET );
@@ -915,7 +915,7 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
 
             case presentation::ClickAction_MACRO:
             {
-                // execute program
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_MACRO);
                 aHelpText += ": ";
 
@@ -937,21 +937,21 @@ sal_Bool FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrV
 
             case presentation::ClickAction_SOUND:
             {
-                // play-back sound
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_SOUND);
             }
             break;
 
             case presentation::ClickAction_VERB:
             {
-                // execute OLE-verb
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_VERB);
             }
             break;
 
             case presentation::ClickAction_STOPPRESENTATION:
             {
-                // quit presentation
+                
                 aHelpText = SD_RESSTR(STR_CLICK_ACTION_STOPPRESENTATION);
             }
             break;
@@ -1022,7 +1022,7 @@ bool FuDraw::cancel()
             mpView->UnmarkAll();
         }
 
-        // Switch to FuSelect.
+        
         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
             SID_OBJECT_SELECT,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
@@ -1033,6 +1033,6 @@ bool FuDraw::cancel()
     return bReturn;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

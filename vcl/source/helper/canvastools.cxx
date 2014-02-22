@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@
 #include <basegfx/point/b2ipoint.hxx>
 #include <basegfx/range/b2irectangle.hxx>
 
-// #i79917#
+
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -113,15 +113,15 @@ namespace vcl
                     }
                     catch( rendering::VolatileContentDestroyedException& )
                     {
-                        // re-read bmp from the start
+                        
                         return false;
                     }
                     if( !(aCurrLayout == rLayout) )
-                        return false; // re-read bmp from the start
+                        return false; 
 
                     if( rAlphaAcc.get() )
                     {
-                        // read ARGB color
+                        
                         aARGBColors = rLayout.ColorSpace->convertIntegerToARGB(aPixelData);
 
                         if( rWriteAcc->HasPalette() )
@@ -154,7 +154,7 @@ namespace vcl
                     }
                     else
                     {
-                        // read RGB color
+                        
                         aRGBColors = rLayout.ColorSpace->convertIntegerToRGB(aPixelData);
                         if( rWriteAcc->HasPalette() )
                         {
@@ -193,19 +193,19 @@ namespace vcl
             if( !xInputBitmap.is() )
                 return ::BitmapEx();
 
-            // tunnel directly for known implementation
+            
             VclCanvasBitmap* pImplBitmap = dynamic_cast<VclCanvasBitmap*>(xInputBitmap.get());
             if( pImplBitmap )
                 return pImplBitmap->getBitmapEx();
 
-            // retrieve data via UNO interface
+            
 
-            // volatile bitmaps are a bit more complicated to read
-            // from..
+            
+            
             uno::Reference<rendering::XVolatileBitmap> xVolatileBitmap(
                 xInputBitmap, uno::UNO_QUERY);
 
-            // loop a few times, until successfully read (for XVolatileBitmap)
+            
             for( int i=0; i<10; ++i )
             {
                 sal_Int32 nDepth=0;
@@ -222,7 +222,7 @@ namespace vcl
 
                 if( xInputBitmap->hasAlpha() )
                 {
-                    // determine alpha channel depth
+                    
                     const uno::Sequence<sal_Int8> aTags(
                         aLayout.ColorSpace->getComponentTags() );
                     const sal_Int8* pStart(aTags.getConstArray());
@@ -260,7 +260,7 @@ namespace vcl
                             sal::static_int_cast<sal_uInt16>(
                                 std::min(sal_Int32(255), nEntryCount)));
 
-                        // copy palette entries
+                        
                         aPalette.SetEntryCount(nPaletteEntries);
                         uno::Reference<rendering::XBitmapPalette> xPalette( aLayout.Palette );
                         uno::Reference<rendering::XColorSpace>    xPalColorSpace( xPalette->getColorSpace() );
@@ -287,7 +287,7 @@ namespace vcl
                 const ::Size aPixelSize(
                     sizeFromIntegerSize2D(xInputBitmap->getSize()));
 
-                // normalize bitcount
+                
                 nDepth =
                     ( nDepth <= 1 ) ? 1 :
                     ( nDepth <= 4 ) ? 4 :
@@ -303,7 +303,7 @@ namespace vcl
                                        &::Bitmap::GetGreyPalette(
                                            sal::static_int_cast<sal_uInt16>(1L << nAlphaDepth)) );
 
-                { // limit scoped access
+                { 
                     Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
                     Bitmap::ScopedWriteAccess pAlphaWriteAccess( nAlphaDepth ? aAlpha.AcquireWriteAccess() : NULL,
                                                                aAlpha );
@@ -317,7 +317,7 @@ namespace vcl
                     if( !readBmp(nWidth,nHeight,aLayout,xInputBitmap,
                                  pWriteAccess,pAlphaWriteAccess) )
                         continue;
-                } // limit scoped access
+                } 
 
                 if( nAlphaDepth )
                     return ::BitmapEx( aBitmap,
@@ -326,7 +326,7 @@ namespace vcl
                     return ::BitmapEx( aBitmap );
             }
 
-            // failed to read data 10 times - bail out
+            
             return ::BitmapEx();
         }
 
@@ -448,8 +448,8 @@ namespace vcl
                                                                             const uno::Reference< rendering::XColorSpace >& targetColorSpace ) throw (lang::IllegalArgumentException,
                                                                                                                                                       uno::RuntimeException)
                 {
-                    // TODO(P3): if we know anything about target
-                    // colorspace, this can be greatly sped up
+                    
+                    
                     uno::Sequence<rendering::ARGBColor> aIntermediate(
                         convertToARGB(deviceColor));
                     return targetColorSpace->convertFromARGB(aIntermediate);
@@ -584,7 +584,7 @@ namespace vcl
             pRet[1] = toDoubleColor(rColor.GetGreen());
             pRet[2] = toDoubleColor(rColor.GetBlue());
 
-            // VCL's notion of alpha is different from the rest of the world's
+            
             pRet[3] = 1.0 - toDoubleColor(rColor.GetTransparency());
 
             return aRet;
@@ -600,7 +600,7 @@ namespace vcl
             aColor.SetRed  ( toByteColor(rColor[0]) );
             aColor.SetGreen( toByteColor(rColor[1]) );
             aColor.SetBlue ( toByteColor(rColor[2]) );
-            // VCL's notion of alpha is different from the rest of the world's
+            
             aColor.SetTransparency( 255 - toByteColor(rColor[3]) );
 
             return aColor;
@@ -634,8 +634,8 @@ namespace vcl
         }
 
 
-    } // namespace vcltools
+    } 
 
-} // namespace canvas
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

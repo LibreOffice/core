@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -47,7 +47,7 @@ SbxCollection::SbxCollection( const OUString& rClass )
         nRemoveHash = MakeHashCode( pRemove );
     }
     Initialize();
-    // For Access on itself
+    
     StartListening( GetBroadcaster(), true );
 }
 
@@ -162,7 +162,7 @@ void SbxCollection::SFX_NOTIFY( SfxBroadcaster& rCst, const TypeId& rId1,
     SbxObject::SFX_NOTIFY( rCst, rId1, rHint, rId2 );
 }
 
-// Default: argument is object
+
 
 void SbxCollection::CollAdd( SbxArray* pPar_ )
 {
@@ -184,7 +184,7 @@ void SbxCollection::CollAdd( SbxArray* pPar_ )
     }
 }
 
-// Default: index from 1 or object name
+
 
 void SbxCollection::CollItem( SbxArray* pPar_ )
 {
@@ -216,7 +216,7 @@ void SbxCollection::CollItem( SbxArray* pPar_ )
     }
 }
 
-// Default: index from 1
+
 
 void SbxCollection::CollRemove( SbxArray* pPar_ )
 {
@@ -270,7 +270,7 @@ SbxStdCollection& SbxStdCollection::operator=( const SbxStdCollection& r )
 SbxStdCollection::~SbxStdCollection()
 {}
 
-// Default: Error, if wrong object
+
 
 void SbxStdCollection::Insert( SbxVariable* p )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 
 class FilterConfigItem;
 
-//============================ TGAReader ==================================
+
 
 struct TGAFileHeader
 {
@@ -90,10 +90,10 @@ private:
 
     sal_Bool                mbStatus;
 
-    sal_uLong               mnTGAVersion;       // Enhanced TGA is defined as Version 2.0
+    sal_uLong               mnTGAVersion;       
     sal_uInt16              mnDestBitDepth;
-    sal_Bool                mbIndexing;         // sal_True if source contains indexing color values
-    sal_Bool                mbEncoding;         // sal_True if source is compressed
+    sal_Bool                mbIndexing;         
+    sal_Bool                mbEncoding;         
 
     sal_Bool                ImplReadHeader();
     sal_Bool                ImplReadPalette();
@@ -105,7 +105,7 @@ public:
     sal_Bool                ReadTGA(Graphic &rGraphic);
 };
 
-//=================== Methoden von TGAReader ==============================
+
 
 TGAReader::TGAReader(SvStream &rTGA)
     : m_rTGA(rTGA)
@@ -130,7 +130,7 @@ TGAReader::~TGAReader()
     delete mpFileFooter;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 sal_Bool TGAReader::ReadTGA(Graphic & rGraphic)
 {
@@ -139,7 +139,7 @@ sal_Bool TGAReader::ReadTGA(Graphic & rGraphic)
 
     m_rTGA.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    // Kopf einlesen:
+    
 
     if ( !m_rTGA.GetError() )
     {
@@ -170,7 +170,7 @@ sal_Bool TGAReader::ReadTGA(Graphic & rGraphic)
     return mbStatus;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 sal_Bool TGAReader::ImplReadHeader()
 {
@@ -188,9 +188,9 @@ sal_Bool TGAReader::ImplReadHeader()
     if ( mpFileHeader->nColorMapType == 1 )
         mbIndexing = sal_True;
 
-    // first we want to get the version
-    mpFileFooter = new TGAFileFooter;       // read the TGA-File-Footer to determine whether
-    if ( mpFileFooter )                     // we got an old TGA format or the new one
+    
+    mpFileFooter = new TGAFileFooter;       
+    if ( mpFileFooter )                     
     {
         sal_uLong nCurStreamPos = m_rTGA.Tell();
         m_rTGA.Seek( STREAM_SEEK_TO_END );
@@ -203,7 +203,7 @@ sal_Bool TGAReader::ImplReadHeader()
         if ( !m_rTGA.good())
             return sal_False;
 
-        // check for sal_True, VISI, ON-X, FILE in the signatures
+        
         if ( mpFileFooter->nSignature[ 0 ] == (('T'<<24)|('R'<<16)|('U'<<8)|'E') &&
              mpFileFooter->nSignature[ 1 ] == (('V'<<24)|('I'<<16)|('S'<<8)|'I') &&
              mpFileFooter->nSignature[ 2 ] == (('O'<<24)|('N'<<16)|('-'<<8)|'X') &&
@@ -241,15 +241,15 @@ sal_Bool TGAReader::ImplReadHeader()
         m_rTGA.Seek( nCurStreamPos );
     }
 
-    //  using the TGA file specification this was the correct form but adobe photoshop sets nImageDescriptor
-    //  equal to nPixelDepth
-    //  mnDestBitDepth = mpFileHeader->nPixelDepth - ( mpFileHeader->nImageDescriptor & 0xf );
+    
+    
+    
     mnDestBitDepth = mpFileHeader->nPixelDepth;
 
-    if ( mnDestBitDepth == 8 )                  // this is a patch for grayscale pictures not including a palette
+    if ( mnDestBitDepth == 8 )                  
         mbIndexing = sal_True;
 
-    if ( mnDestBitDepth > 32 )                  // maybe the pixeldepth is invalid
+    if ( mnDestBitDepth > 32 )                  
         return sal_False;
     else if ( mnDestBitDepth > 8 )
         mnDestBitDepth = 24;
@@ -263,20 +263,20 @@ sal_Bool TGAReader::ImplReadHeader()
 
     switch ( mpFileHeader->nImageType )
     {
-        case 9  :                               // encoding for colortype 9, 10, 11
+        case 9  :                               
         case 10 :
         case 11 :
             mbEncoding = sal_True;
             break;
     };
 
-    if ( mpFileHeader->nImageIDLength )         // skip the Image ID
+    if ( mpFileHeader->nImageIDLength )         
         m_rTGA.SeekRel( mpFileHeader->nImageIDLength );
 
     return mbStatus;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 sal_Bool TGAReader::ImplReadBody()
 {
@@ -284,7 +284,7 @@ sal_Bool TGAReader::ImplReadBody()
     sal_uInt16  nXCount, nYCount, nRGB16;
     sal_uInt8   nRed, nGreen, nBlue, nRunCount, nDummy, nDepth;
 
-    // this four variables match the image direction
+    
     long    nY, nYAdd, nX, nXAdd, nXStart;
 
     nX = nXStart = nY = 0;
@@ -311,14 +311,14 @@ sal_Bool TGAReader::ImplReadBody()
         {
             switch( nDepth )
             {
-                // 16 bit encoding + indexing
+                
                 case 16 :
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         m_rTGA.ReadUChar( nRunCount );
                         if ( !m_rTGA.good())
                             return sal_False;
-                        if ( nRunCount & 0x80 )     // a run length packet
+                        if ( nRunCount & 0x80 )     
                         {
                             m_rTGA.ReadUInt16( nRGB16 );
                             if ( nRGB16 >= mpFileHeader->nColorMapLength )
@@ -345,7 +345,7 @@ sal_Bool TGAReader::ImplReadBody()
                                 }
                             }
                         }
-                        else                        // a raw packet
+                        else                        
                         {
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
@@ -377,14 +377,14 @@ sal_Bool TGAReader::ImplReadBody()
                     }
                     break;
 
-                // 8 bit encoding + indexing
+                
                 case 8 :
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         m_rTGA.ReadUChar( nRunCount );
                         if ( !m_rTGA.good())
                             return sal_False;
-                        if ( nRunCount & 0x80 )     // a run length packet
+                        if ( nRunCount & 0x80 )     
                         {
                             m_rTGA.ReadUChar( nDummy );
                             if ( !m_rTGA.good())
@@ -408,7 +408,7 @@ sal_Bool TGAReader::ImplReadBody()
                                 }
                             }
                         }
-                        else                        // a raw packet
+                        else                        
                         {
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
@@ -443,7 +443,7 @@ sal_Bool TGAReader::ImplReadBody()
         {
             switch( nDepth )
             {
-                // 32 bit transparent true color encoding
+                
                 case 32 :
                     {
                         while ( nYCount < mpFileHeader->nImageHeight )
@@ -451,7 +451,7 @@ sal_Bool TGAReader::ImplReadBody()
                             m_rTGA.ReadUChar( nRunCount );
                             if ( !m_rTGA.good())
                                 return sal_False;
-                            if ( nRunCount & 0x80 )     // a run length packet
+                            if ( nRunCount & 0x80 )     
                             {
                                 m_rTGA.ReadUChar( nBlue ).ReadUChar( nGreen ).ReadUChar( nRed ).ReadUChar( nDummy );
                                 if ( !m_rTGA.good())
@@ -473,7 +473,7 @@ sal_Bool TGAReader::ImplReadBody()
                                     }
                                 }
                             }
-                            else                        // a raw packet
+                            else                        
                             {
                                 for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                                 {
@@ -499,14 +499,14 @@ sal_Bool TGAReader::ImplReadBody()
                     }
                     break;
 
-                // 24 bit true color encoding
+                
                 case 24 :
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         m_rTGA.ReadUChar( nRunCount );
                         if ( !m_rTGA.good())
                             return sal_False;
-                        if ( nRunCount & 0x80 )     // a run length packet
+                        if ( nRunCount & 0x80 )     
                         {
                             m_rTGA.ReadUChar( nBlue ).ReadUChar( nGreen ).ReadUChar( nRed );
                             if ( !m_rTGA.good())
@@ -528,7 +528,7 @@ sal_Bool TGAReader::ImplReadBody()
                                 }
                             }
                         }
-                        else                        // a raw packet
+                        else                        
                         {
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
@@ -553,14 +553,14 @@ sal_Bool TGAReader::ImplReadBody()
                     }
                     break;
 
-                // 16 bit true color encoding
+                
                 case 16 :
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
                         m_rTGA.ReadUChar( nRunCount );
                         if ( !m_rTGA.good())
                             return sal_False;
-                        if ( nRunCount & 0x80 )     // a run length packet
+                        if ( nRunCount & 0x80 )     
                         {
                             m_rTGA.ReadUInt16( nRGB16 );
                             if ( !m_rTGA.good())
@@ -585,7 +585,7 @@ sal_Bool TGAReader::ImplReadBody()
                                 }
                             }
                         }
-                        else                        // a raw packet
+                        else                        
                         {
                             for ( sal_uInt16 i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
@@ -629,7 +629,7 @@ sal_Bool TGAReader::ImplReadBody()
             {
                 switch( nDepth )
                 {
-                    // 16 bit indexing
+                    
                     case 16 :
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
@@ -645,7 +645,7 @@ sal_Bool TGAReader::ImplReadBody()
                         }
                         break;
 
-                    // 8 bit indexing
+                    
                     case 8 :
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
@@ -665,7 +665,7 @@ sal_Bool TGAReader::ImplReadBody()
             {
                 switch( nDepth )
                 {
-                    // 32 bit true color
+                    
                     case 32 :
                         {
                             for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
@@ -678,7 +678,7 @@ sal_Bool TGAReader::ImplReadBody()
                         }
                         break;
 
-                    // 24 bit true color
+                    
                     case 24 :
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
@@ -689,7 +689,7 @@ sal_Bool TGAReader::ImplReadBody()
                         }
                         break;
 
-                    // 16 bit true color
+                    
                     case 16 :
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
@@ -711,23 +711,23 @@ sal_Bool TGAReader::ImplReadBody()
     return mbStatus;
 }
 
-// -------------------------------------------------------------------------------------------
+
 
 sal_Bool TGAReader::ImplReadPalette()
 {
-    if ( mbIndexing )                           // read the colormap
+    if ( mbIndexing )                           
     {
         sal_uInt16 nColors = mpFileHeader->nColorMapLength;
 
-        if ( !nColors )                             // colors == 0 ? -> we will build a grayscale palette
+        if ( !nColors )                             
         {
             if ( mpFileHeader->nPixelDepth != 8 )
                 return sal_False;
             nColors = 256;
             mpFileHeader->nColorMapLength = 256;
-            mpFileHeader->nColorMapEntrySize = 0x3f;    // patch for the following switch routine
+            mpFileHeader->nColorMapEntrySize = 0x3f;    
         }
-        mpColorMap = new sal_uInt32[ nColors ];     // we will always index dwords
+        mpColorMap = new sal_uInt32[ nColors ];     
 
         switch( mpFileHeader->nColorMapEntrySize )
         {
@@ -789,11 +789,11 @@ sal_Bool TGAReader::ImplReadPalette()
     return mbStatus;
 }
 
-//================== GraphicImport - die exportierte Funktion ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicImport itgGraphicImport
 #endif

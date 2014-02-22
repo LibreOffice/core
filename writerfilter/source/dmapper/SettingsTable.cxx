@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -41,13 +41,13 @@ struct SettingsTable_Impl
 
     OUString     m_sCharacterSpacing;
     OUString     m_sDecimalSymbol;
-    OUString     m_sListSeparatorForFields; //2.15.1.56 listSeparator (List Separator for Field Code Evaluation)
+    OUString     m_sListSeparatorForFields; 
 
     int                 m_nDefaultTabStop;
     int                 m_nHyphenationZone;
 
     bool                m_bNoPunctuationKerning;
-    bool                m_doNotIncludeSubdocsInStats; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
+    bool                m_doNotIncludeSubdocsInStats; 
     bool                m_bRecordChanges;
     int                 m_nEdit;
     bool                m_bFormatting;
@@ -79,7 +79,7 @@ struct SettingsTable_Impl
     SettingsTable_Impl( DomainMapper& rDMapper, const uno::Reference< lang::XMultiServiceFactory > xTextFactory ) :
     m_rDMapper( rDMapper )
     , m_xTextFactory( xTextFactory )
-    , m_nDefaultTabStop( 720 ) //default is 1/2 in
+    , m_nDefaultTabStop( 720 ) 
     , m_nHyphenationZone(0)
     , m_bNoPunctuationKerning(false)
     , m_doNotIncludeSubdocsInStats(false)
@@ -164,57 +164,57 @@ void SettingsTable::lcl_sprm(Sprm& rSprm)
 
     switch(nSprmId)
     {
-    case NS_ooxml::LN_CT_Settings_zoom: //  92469;
-    case NS_ooxml::LN_CT_Settings_proofState: //  92489;
-    case NS_ooxml::LN_CT_Settings_attachedTemplate: //  92491;
-    case NS_ooxml::LN_CT_Settings_hdrShapeDefaults: //  92544;
-    case NS_ooxml::LN_CT_Settings_footnotePr: //  92545;
-    case NS_ooxml::LN_CT_Settings_endnotePr: //  92546;
-    case NS_ooxml::LN_CT_Settings_compat: //  92547;
-    case NS_ooxml::LN_CT_Settings_themeFontLang: //  92552;
-    case NS_ooxml::LN_CT_Settings_shapeDefaults: //  92560;
+    case NS_ooxml::LN_CT_Settings_zoom: 
+    case NS_ooxml::LN_CT_Settings_proofState: 
+    case NS_ooxml::LN_CT_Settings_attachedTemplate: 
+    case NS_ooxml::LN_CT_Settings_hdrShapeDefaults: 
+    case NS_ooxml::LN_CT_Settings_footnotePr: 
+    case NS_ooxml::LN_CT_Settings_endnotePr: 
+    case NS_ooxml::LN_CT_Settings_compat: 
+    case NS_ooxml::LN_CT_Settings_themeFontLang: 
+    case NS_ooxml::LN_CT_Settings_shapeDefaults: 
     case NS_ooxml::LN_CT_Settings_view:
 
-    //PropertySetValues - need to be resolved
+    
     {
         writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
         if( pProperties.get())
         pProperties->resolve(*this);
     }
     break;
-    case NS_ooxml::LN_CT_Settings_stylePaneFormatFilter: // 92493;
+    case NS_ooxml::LN_CT_Settings_stylePaneFormatFilter: 
     break;
-    case NS_ooxml::LN_CT_Settings_defaultTabStop: //  92505;
+    case NS_ooxml::LN_CT_Settings_defaultTabStop: 
     m_pImpl->m_nDefaultTabStop = nIntValue;
     break;
-    case NS_ooxml::LN_CT_Settings_linkStyles: // 92663;
+    case NS_ooxml::LN_CT_Settings_linkStyles: 
     m_pImpl->m_bLinkStyles = nIntValue;
     break;
     case NS_ooxml::LN_CT_Settings_evenAndOddHeaders:
     m_pImpl->m_bEvenAndOddHeaders = nIntValue;
     break;
-    case NS_ooxml::LN_CT_Settings_noPunctuationKerning: //  92526;
+    case NS_ooxml::LN_CT_Settings_noPunctuationKerning: 
     m_pImpl->m_bNoPunctuationKerning = nIntValue ? true : false;
     break;
-    case NS_ooxml::LN_CT_Settings_characterSpacingControl: //  92527;
-    m_pImpl->m_sCharacterSpacing = sStringValue; // doNotCompress, compressPunctuation, compressPunctuationAndJapaneseKana
+    case NS_ooxml::LN_CT_Settings_characterSpacingControl: 
+    m_pImpl->m_sCharacterSpacing = sStringValue; 
     break;
-    case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
+    case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: 
     m_pImpl->m_doNotIncludeSubdocsInStats = nIntValue? true : false;
     break;
-    case NS_ooxml::LN_CT_Settings_decimalSymbol: //  92562;
+    case NS_ooxml::LN_CT_Settings_decimalSymbol: 
     m_pImpl->m_sDecimalSymbol = sStringValue;
     break;
-    case NS_ooxml::LN_CT_Settings_listSeparator: //  92563;
+    case NS_ooxml::LN_CT_Settings_listSeparator: 
     m_pImpl->m_sListSeparatorForFields = sStringValue;
     break;
-    case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
+    case NS_ooxml::LN_CT_Settings_rsids: 
     break;
-    case NS_ooxml::LN_CT_Settings_hyphenationZone: // 92508;
+    case NS_ooxml::LN_CT_Settings_hyphenationZone: 
     m_pImpl->m_nHyphenationZone = nIntValue;
     break;
-    case NS_ooxml::LN_CT_Compat_useFELayout: // 92422;
-    // useFELayout (Do Not Bypass East Asian/Complex Script Layout Code - support of old versions of Word - ignored)
+    case NS_ooxml::LN_CT_Compat_useFELayout: 
+    
     break;
     case NS_ooxml::LN_CT_Settings_trackRevisions:
     {
@@ -257,7 +257,7 @@ void SettingsTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::
 {
     ref->resolve(*this);
 }
-//returns default TabStop in 1/100th mm
+
 
 
 
@@ -325,13 +325,13 @@ void SettingsTable::ApplyProperties( uno::Reference< text::XTextDocument > xDoc 
 {
     uno::Reference< beans::XPropertySet> xDocProps( xDoc, uno::UNO_QUERY );
 
-    // Record changes value
+    
     if (xDocProps.is())
         xDocProps->setPropertyValue("RecordChanges", uno::makeAny( m_pImpl->m_bRecordChanges ) );
 }
 
 
-}//namespace dmapper
-} //namespace writerfilter
+}
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

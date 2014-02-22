@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/supportsservice.hxx>
@@ -46,7 +46,7 @@ DropTarget::~DropTarget()
         m_pSelectionManager->deregisterDropTarget( m_aTargetWindow );
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception )
 {
@@ -65,7 +65,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::su
         m_xSelectionManager = static_cast< XDragSource* >(m_pSelectionManager);
         m_pSelectionManager->initialize( arguments );
 
-        if( m_pSelectionManager->getDisplay() ) // #136582# sanity check
+        if( m_pSelectionManager->getDisplay() ) 
         {
             sal_Size aWindow = None;
             arguments.getConstArray()[1] >>= aWindow;
@@ -76,7 +76,7 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( ::com::su
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw()
 {
@@ -85,7 +85,7 @@ void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& 
     m_aListeners.push_back( xListener );
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw()
 {
@@ -94,14 +94,14 @@ void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener 
     m_aListeners.remove( xListener );
 }
 
-// --------------------------------------------------------------------------
+
 
 sal_Bool DropTarget::isActive() throw()
 {
     return m_bActive;
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::setActive( sal_Bool active ) throw()
 {
@@ -110,14 +110,14 @@ void DropTarget::setActive( sal_Bool active ) throw()
     m_bActive = active;
 }
 
-// --------------------------------------------------------------------------
+
 
 sal_Int8 DropTarget::getDefaultActions() throw()
 {
     return m_nDefaultActions;
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::setDefaultActions( sal_Int8 actions ) throw()
 {
@@ -126,7 +126,7 @@ void DropTarget::setDefaultActions( sal_Int8 actions ) throw()
     m_nDefaultActions = actions;
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
 {
@@ -140,7 +140,7 @@ void DropTarget::drop( const DropTargetDropEvent& dtde ) throw()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
 {
@@ -154,7 +154,7 @@ void DropTarget::dragEnter( const DropTargetDragEnterEvent& dtde ) throw()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
 {
@@ -168,7 +168,7 @@ void DropTarget::dragExit( const DropTargetEvent& dte ) throw()
     }
 }
 
-// --------------------------------------------------------------------------
+
 
 void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 {
@@ -182,7 +182,7 @@ void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
     }
 }
 
-// XServiceInfo
+
 OUString DropTarget::getImplementationName() throw()
 {
     return OUString(XDND_DROPTARGET_IMPLEMENTATION_NAME);

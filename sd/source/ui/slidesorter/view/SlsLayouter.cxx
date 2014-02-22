@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,13 +49,13 @@ public:
     sal_Int32 mnPageCount;
     sal_Int32 mnColumnCount;
     sal_Int32 mnRowCount;
-    /// The maximum number of columns.  Can only be larger than the current
-    /// number of columns when there are not enough pages to fill all
-    /// available columns.
+    
+    
+    
     sal_Int32 mnMaxColumnCount;
-    /// The maximum number of rows.  Can only be larger than the current
-    /// number of rows when there are not enough pages to fill all available
-    /// rows.
+    
+    
+    
     sal_Int32 mnMaxRowCount;
     Size maPageObjectSize;
     ::boost::shared_ptr<PageObjectLayouter> mpPageObjectLayouter;
@@ -65,13 +65,13 @@ public:
       page objects.
     */
     enum GapMembership {
-        GM_NONE,       // Gap is not associated with any page object.
-        GM_PREVIOUS,   // The whole gap is associated with the previous page
-                       // object (left or above the gap.)
-        GM_BOTH,       // Half of the gap is associated with previous, half
-                       // with the next page object.
-        GM_NEXT,       // The whole gap is associated with the next page
-                       // object (right or below the gap.)
+        GM_NONE,       
+        GM_PREVIOUS,   
+                       
+        GM_BOTH,       
+                       
+        GM_NEXT,       
+                       
         GM_PAGE_BORDER
     };
 
@@ -299,7 +299,7 @@ protected:
 
 
 
-//===== Layouter ==============================================================
+
 
 Layouter::Layouter (
     const SharedSdWindow& rpWindow,
@@ -463,7 +463,7 @@ sal_Int32 Layouter::GetIndexAtPoint (
 
 
 
-//===== Layouter::Implementation ==============================================
+
 
 Layouter::Implementation* Layouter::Implementation::Create (
     const Implementation& rImplementation,
@@ -559,7 +559,7 @@ bool Layouter::Implementation::Rearrange  (
 {
     mnPageCount = nPageCount;
 
-    // Return early when the window or the model have not yet been initialized.
+    
     if (rWindowSize.Width()<=0 || rWindowSize.Height()<=0)
         return false;
     if (rPreviewModelSize.Width()<=0 || rPreviewModelSize.Height()<=0)
@@ -567,7 +567,7 @@ bool Layouter::Implementation::Rearrange  (
 
     CalculateRowAndColumnCount(rWindowSize);
 
-    // Update the border values.
+    
     mnLeftBorder = mnRequestedLeftBorder;
     mnTopBorder = mnRequestedTopBorder;
     mnRightBorder = mnRequestedRightBorder;
@@ -617,15 +617,15 @@ sal_Int32 Layouter::Implementation::GetRowAtPosition (
     const sal_Int32 nY = nYPosition - mnTopBorder;
     if (nY >= 0)
     {
-        // Vertical distance from one row to the next.
+        
         const sal_Int32 nRowOffset (maPageObjectSize.Height() + mnVerticalGap);
 
-        // Calculate row consisting of page objects and gap below.
+        
         nRow = nY / nRowOffset;
 
         const sal_Int32 nDistanceIntoGap ((nY - nRow*nRowOffset) - maPageObjectSize.Height());
-        // When inside the gap below then nYPosition is not over a page
-        // object.
+        
+        
         if (nDistanceIntoGap > 0)
             nRow = ResolvePositionInGap (
                 nDistanceIntoGap,
@@ -635,8 +635,8 @@ sal_Int32 Layouter::Implementation::GetRowAtPosition (
     }
     else if (bIncludeBordersAndGaps)
     {
-        // We are in the top border area.  Set nRow to the first row when
-        // the top border shall be considered to belong to the first row.
+        
+        
         nRow = 0;
     }
 
@@ -656,10 +656,10 @@ sal_Int32 Layouter::Implementation::GetColumnAtPosition (
     sal_Int32 nX = nXPosition - mnLeftBorder;
     if (nX >= 0)
     {
-        // Horizontal distance from one column to the next.
+        
         const sal_Int32 nColumnOffset (maPageObjectSize.Width() + mnHorizontalGap);
 
-        // Calculate row consisting of page objects and gap below.
+        
         nColumn = nX / nColumnOffset;
         if (nColumn < 0)
             nColumn = 0;
@@ -667,8 +667,8 @@ sal_Int32 Layouter::Implementation::GetColumnAtPosition (
             nColumn = mnColumnCount-1;
 
         const sal_Int32 nDistanceIntoGap ((nX - nColumn*nColumnOffset) - maPageObjectSize.Width());
-        // When inside the gap at the right then nXPosition is not over a
-        // page object.
+        
+        
         if (nDistanceIntoGap > 0)
             nColumn = ResolvePositionInGap (
                 nDistanceIntoGap,
@@ -678,9 +678,9 @@ sal_Int32 Layouter::Implementation::GetColumnAtPosition (
     }
     else if (bIncludeBordersAndGaps)
     {
-        // We are in the left border area.  Set nColumn to the first column
-        // when the left border shall be considered to belong to the first
-        // column.
+        
+        
+        
         nColumn = 0;
     }
     return nColumn;
@@ -698,13 +698,13 @@ sal_Int32 Layouter::Implementation::ResolvePositionInGap (
     switch (eGapMembership)
     {
         case GM_NONE:
-            // The gap is no man's land.
+            
             nIndex = -1;
             break;
 
         case GM_BOTH:
         {
-            // The lower half of the gap belongs to the next row or column.
+            
             sal_Int32 nFirstHalfGapWidth = nGap / 2;
             if (nDistanceIntoGap > nFirstHalfGapWidth)
                 nIndex ++;
@@ -712,11 +712,11 @@ sal_Int32 Layouter::Implementation::ResolvePositionInGap (
         }
 
         case GM_PREVIOUS:
-            // Row or column already at correct value.
+            
             break;
 
         case GM_NEXT:
-            // The complete gap belongs to the next row or column.
+            
             nIndex ++;
             break;
 
@@ -725,12 +725,12 @@ sal_Int32 Layouter::Implementation::ResolvePositionInGap (
             {
                 if (nDistanceIntoGap > nGap)
                 {
-                    // Inside the border of the next row or column.
+                    
                     nIndex ++;
                 }
                 else
                 {
-                    // Inside the gap between the page borders.
+                    
                     nIndex = -1;
                 }
             }
@@ -752,8 +752,8 @@ void Layouter::Implementation::CalculateGeometricPosition (
     const bool bIsVertical,
     model::SlideSorterModel& rModel) const
 {
-    // 1. Determine right/bottom of the leading page and the left/top of the
-    // trailing page object and how to distribute the missing space.
+    
+    
     sal_Int32 nLeadingLocation (0);
     sal_Int32 nTrailingLocation (0);
     bool bIsLeadingFixed (false);
@@ -763,7 +763,7 @@ void Layouter::Implementation::CalculateGeometricPosition (
 
     if (rPosition.IsAtRunStart())
     {
-        // Place indicator at the top of the column.
+        
         const Rectangle aOuterBox (GetPageObjectBox(nIndex));
         const Rectangle aInnerBox (GetInnerBoundingBox(rModel, nIndex));
         if (bIsVertical)
@@ -782,7 +782,7 @@ void Layouter::Implementation::CalculateGeometricPosition (
     }
     else if (rPosition.IsAtRunEnd())
     {
-        // Place indicator at the bottom/right of the column/row.
+        
 
         const Rectangle aOuterBox (GetPageObjectBox(nIndex-1));
         const Rectangle aInnerBox (GetInnerBoundingBox(rModel, nIndex-1));
@@ -804,7 +804,7 @@ void Layouter::Implementation::CalculateGeometricPosition (
     }
     else
     {
-        // Place indicator between two rows/columns.
+        
         const Rectangle aBox1 (GetInnerBoundingBox(rModel, nIndex-1));
         const Rectangle aBox2 (GetInnerBoundingBox(rModel, nIndex));
         if (bIsVertical)
@@ -821,8 +821,8 @@ void Layouter::Implementation::CalculateGeometricPosition (
         }
     }
 
-    // 2. Calculate the location of the insert indicator and the offsets of
-    // leading and trailing pages.
+    
+    
     const sal_Int32 nAvailableSpace (nTrailingLocation - nLeadingLocation);
     const sal_Int32 nRequiredSpace (bIsVertical ? rIndicatorSize.Height():rIndicatorSize.Width());
     const sal_Int32 nMissingSpace (::std::max(sal_Int32(0), nRequiredSpace - nAvailableSpace));
@@ -917,8 +917,8 @@ Range Layouter::Implementation::GetRangeOfVisiblePageObjects (const Rectangle& a
     const sal_Int32 nRow1 (GetRowAtPosition(aVisibleArea.Bottom(), true, GM_PREVIOUS));
     const sal_Int32 nCol1 (GetColumnAtPosition(aVisibleArea.Right(), true, GM_PREVIOUS));
 
-    // When start and end lie in different rows then the range may include
-    // slides outside (left or right of) the given area.
+    
+    
     return Range(GetIndex(nRow0,nCol0,true), GetIndex(nRow1,nCol1,true));
 }
 
@@ -941,7 +941,7 @@ Size Layouter::Implementation::GetTargetSize (
         return maPreferredSize;
     }
 
-    // Calculate the width of each page object.
+    
     Size aTargetSize (0,0);
     if (bCalculateWidth)
         aTargetSize.setWidth(
@@ -1113,7 +1113,7 @@ void Layouter::Implementation::CalculateVerticalLogicalInsertPosition (
 
 
 
-//===== HorizontalImplementation ================================================
+
 
 HorizontalImplementation::HorizontalImplementation (const Implementation& rImplementation)
     : Implementation(rImplementation)
@@ -1135,7 +1135,7 @@ void HorizontalImplementation::CalculateRowAndColumnCount (const Size& rWindowSi
 {
     (void)rWindowSize;
 
-    // Row and column count are fixed (for a given page count.)
+    
     mnColumnCount = mnPageCount;
     mnRowCount = 1;
 }
@@ -1182,7 +1182,7 @@ void HorizontalImplementation::CalculateLogicalInsertPosition (
 
 
 
-//===== VerticalImplementation ================================================
+
 
 VerticalImplementation::VerticalImplementation (const Implementation& rImplementation)
     : Implementation(rImplementation)
@@ -1204,7 +1204,7 @@ void VerticalImplementation::CalculateRowAndColumnCount (const Size& rWindowSize
 {
     (void)rWindowSize;
 
-    // Row and column count are fixed (for a given page count.)
+    
     mnRowCount = mnPageCount;
     mnColumnCount = 1;
 
@@ -1243,7 +1243,7 @@ void VerticalImplementation::CalculateLogicalInsertPosition (
 
 
 
-//===== GridImplementation ================================================
+
 
 GridImplementation::GridImplementation (
     const SharedSdWindow& rpWindow,
@@ -1273,7 +1273,7 @@ Layouter::Orientation GridImplementation::GetOrientation (void) const
 
 void GridImplementation::CalculateRowAndColumnCount (const Size& rWindowSize)
 {
-    // Calculate the column count.
+    
     mnColumnCount
         = (rWindowSize.Width() - mnRequestedLeftBorder - mnRequestedRightBorder)
         / (maPreferredSize.Width()  + mnHorizontalGap);
@@ -1319,7 +1319,7 @@ void GridImplementation::CalculateLogicalInsertPosition (
     }
     else
     {
-        // Handle the general case of more than one column.
+        
         sal_Int32 nRow (::std::min(
             mnRowCount-1,
             GetRowAtPosition (rModelPosition.Y(), true, GM_BOTH)));
@@ -1350,7 +1350,7 @@ void GridImplementation::CalculateLogicalInsertPosition (
 
 
 
-//===== InsertPosition ========================================================
+
 
 InsertPosition::InsertPosition (void)
     : mnRow(-1),
@@ -1390,7 +1390,7 @@ InsertPosition& InsertPosition::operator= (const InsertPosition& rInsertPosition
 
 bool InsertPosition::operator== (const InsertPosition& rInsertPosition) const
 {
-    // Do not compare the geometrical information (maLocation).
+    
     return mnRow==rInsertPosition.mnRow
         && mnColumn==rInsertPosition.mnColumn
         && mnIndex==rInsertPosition.mnIndex
@@ -1441,6 +1441,6 @@ void InsertPosition::SetGeometricalPosition(
 
 
 
-} } } // end of namespace ::sd::slidesorter::namespace
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

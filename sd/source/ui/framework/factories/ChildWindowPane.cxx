@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -57,17 +57,17 @@ ChildWindowPane::ChildWindowPane (
             {
                 if (pViewFrame->HasChildWindow(mnChildWindowId))
                 {
-                    // The ViewShellBase has already been activated.  Make
-                    // the child window visible as soon as possible.
+                    
+                    
                     pViewFrame->SetChildWindow(mnChildWindowId, sal_True);
                     OSL_TRACE("ChildWindowPane:activating now");
                 }
                 else
                 {
-                    // The window is created asynchronously.  Rely on the
-                    // ConfigurationUpdater to try another update, and with
-                    // that another request for this window, in a short
-                    // time.
+                    
+                    
+                    
+                    
                     OSL_TRACE("ChildWindowPane:activated asynchronously");
                 }
             }
@@ -78,9 +78,9 @@ ChildWindowPane::ChildWindowPane (
         }
         else
         {
-            // The ViewShellBase has not yet been activated.  Hide the
-            // window and wait a little before it is made visible.  See
-            // comments in the GetWindow() method for an explanation.
+            
+            
+            
             pViewFrame->SetChildWindow(mnChildWindowId, sal_False);
             OSL_TRACE("ChildWindowPane:base not active");
         }
@@ -105,8 +105,8 @@ void ChildWindowPane::Hide (void)
             if (pViewFrame->HasChildWindow(mnChildWindowId))
                 pViewFrame->SetChildWindow(mnChildWindowId, sal_False);
 
-    // Release the window because when the child window is shown again it
-    // may use a different window.
+    
+    
     mxWindow = NULL;
 }
 
@@ -136,16 +136,16 @@ void SAL_CALL ChildWindowPane::disposing (void)
     do
     {
         if (mxWindow.is())
-            // Window already exists => nothing to do.
+            
             break;
 
-        // When the window is not yet present then obtain it only when the
-        // shell has already been activated.  The activation is not
-        // necessary for the code to work properly but is used to optimize
-        // the layouting and displaying of the window.  When it is made
-        // visible to early then some layouting seems to be made twice or at
-        // an inconvenient time and the overall process of initializing the
-        // Impress takes longer.
+        
+        
+        
+        
+        
+        
+        
         if ( ! mbHasBeenActivated && mpShell.get()!=NULL && ! mpShell->IsActive())
             break;
 
@@ -153,9 +153,9 @@ void SAL_CALL ChildWindowPane::disposing (void)
         SfxViewFrame* pViewFrame = mrViewShellBase.GetViewFrame();
         if (pViewFrame == NULL)
             break;
-        // The view frame has to know the child window.  This can be the
-        // case, when for example the document is in read-only mode:  the
-        // task pane is then not available.
+        
+        
+        
         if ( ! pViewFrame->KnowsChildWindow(mnChildWindowId))
             break;
 
@@ -164,30 +164,30 @@ void SAL_CALL ChildWindowPane::disposing (void)
         if (pChildWindow == NULL)
             if (pViewFrame->HasChildWindow(mnChildWindowId))
             {
-                // The child window is not yet visible.  Ask the view frame
-                // to show it and try again to get access to the child
-                // window.
+                
+                
+                
                 pViewFrame->ShowChildWindow(mnChildWindowId, sal_True);
                 pChildWindow = pViewFrame->GetChildWindow(mnChildWindowId);
             }
 
-        // When the child window is still not visible then we have to try later.
+        
         if (pChildWindow == NULL)
             break;
 
-        // From the child window get the docking window and from that the
-        // content window that is the container for the actual content.
+        
+        
         PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(
             pChildWindow->GetWindow());
         if (pDockingWindow == NULL)
             break;
 
-        // At last, we have access to the window and its UNO wrapper.
+        
         mpWindow = &pDockingWindow->GetContentWindow();
         mxWindow = VCLUnoHelper::GetInterface(mpWindow);
 
-        // Register as window listener to be informed when the child window
-        // is hidden.
+        
+        
         if (mxWindow.is())
             mxWindow->addEventListener(this);
     }
@@ -221,7 +221,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(
 
 
 
-//----- XEventListener --------------------------------------------------------
+
 
 void SAL_CALL ChildWindowPane::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -230,8 +230,8 @@ void SAL_CALL ChildWindowPane::disposing (const lang::EventObject& rEvent)
 
     if (rEvent.Source == mxWindow)
     {
-        // The window is gone but the pane remains alive.  The next call to
-        // GetWindow() may create the window anew.
+        
+        
         mxWindow = NULL;
         mpWindow = NULL;
     }
@@ -240,6 +240,6 @@ void SAL_CALL ChildWindowPane::disposing (const lang::EventObject& rEvent)
 
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

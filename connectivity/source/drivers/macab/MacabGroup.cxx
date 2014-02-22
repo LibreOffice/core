@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 
 using namespace connectivity::macab;
 
-// -------------------------------------------------------------------------
+
 /* A MacabGroup is basically a MacabRecords with a different constructor.
  * It only exists as a different entity for clarification purposes (a group
  * is its own entity in the Mac OS X Address Book) and because its
@@ -41,13 +41,13 @@ MacabGroup::MacabGroup(const ABAddressBookRef _addressBook, const MacabRecords *
     sal_Bool bFound;
     macabfield *xRecordField;
 
-    // Set the group's name (stored in MacabRecords as m_sName)
+    
     CFStringRef sGroupName;
     sGroupName = (CFStringRef) ABRecordCopyValue(_xGroup, kABGroupNameProperty);
     m_sName = CFStringToOUString(sGroupName);
     CFRelease(sGroupName);
 
-    // The _group's_ records (remember MacabGroup inherits from MacabRecords)
+    
     recordsSize = (sal_Int32) CFArrayGetCount(xGroupMembers);
     records = new MacabRecord *[recordsSize];
     setHeader(_allRecords->getHeader());

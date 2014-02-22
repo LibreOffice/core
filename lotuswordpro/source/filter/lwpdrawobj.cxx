@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -102,19 +102,19 @@ LwpDrawObj::LwpDrawObj(SvStream * pStream, DrawingOffsetAndScale* pTransData)
  */
 void LwpDrawObj::ReadObjHeaderRecord()
 {
-    //flags
+    
     m_pStream->SeekRel(1);
 
-    //record Length
+    
     m_pStream->ReadUInt16( m_aObjHeader.nRecLen );
 
-    //boundrect
+    
     m_pStream->ReadInt16( m_aObjHeader.nLeft );
     m_pStream->ReadInt16( m_aObjHeader.nTop );
     m_pStream->ReadInt16( m_aObjHeader.nRight );
     m_pStream->ReadInt16( m_aObjHeader.nBottom );
 
-    //nextObj, prevObj
+    
     m_pStream->SeekRel(4);
 }
 
@@ -131,25 +131,25 @@ void LwpDrawObj::ReadClosedObjStyle()
     m_pStream->ReadUChar( m_aClosedObjStyleRec.nLineWidth );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.nLineStyle );
 
-    // pen color
+    
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aPenColor.nR );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aPenColor.nG );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aPenColor.nB );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aPenColor.unused );
 
-    // foreground color
+    
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aForeColor.nR );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aForeColor.nG );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aForeColor.nB );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aForeColor.unused );
 
-    // background color
+    
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aBackColor.nR );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aBackColor.nG );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aBackColor.nB );
     m_pStream->ReadUChar( m_aClosedObjStyleRec.aBackColor.unused );
 
-    // fill style
+    
     m_pStream->ReadUInt16( m_aClosedObjStyleRec.nFillType );
     m_pStream->Read(m_aClosedObjStyleRec.pFillPattern,
         sizeof(m_aClosedObjStyleRec.pFillPattern));
@@ -174,10 +174,10 @@ void LwpDrawObj::SetFillStyle(XFDrawStyle* pStyle)
 
     switch (m_aClosedObjStyleRec.nFillType)
     {
-    default: //fall through!
+    default: 
     case FT_TRANSPARENT:
         {
-            // set fill style : none
+            
             break;
         }
     case FT_SOLID:
@@ -246,7 +246,7 @@ void LwpDrawObj::SetLineStyle(XFDrawStyle* pStyle, sal_uInt8 nWidth, sal_uInt8 n
 
     if (nLineStyle == LS_NULL)
     {
-        // set stroke:none
+        
         return;
     }
 
@@ -255,10 +255,10 @@ void LwpDrawObj::SetLineStyle(XFDrawStyle* pStyle, sal_uInt8 nWidth, sal_uInt8 n
         pStyle->SetLineDashStyle(enumXFLineDash, 1, 1, 0.05, 0.05, 0.05);
     }
 
-    // line width
+    
     double fWidth = (double)nWidth/TWIPS_PER_CM;
 
-    // line color
+    
     XFColor aXFColor(rColor.nR, rColor.nG, rColor.nB);
 
     pStyle->SetLineStyle(fWidth, aXFColor);
@@ -293,7 +293,7 @@ void LwpDrawObj::SetPosition(XFFrame* pObj)
  */
 void LwpDrawObj::SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag, sal_uInt8 nLineWidth)
 {
-    // no arrowhead
+    
     if (!nArrowFlag)
     {
         return;
@@ -305,10 +305,10 @@ void LwpDrawObj::SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag
         return;
     }
 
-    // arrowhead flag of an object's start side
+    
     sal_uInt8 nLeftArrow = nArrowFlag & 0x0F;
 
-    // arrowhead flag of an object's end side
+    
     sal_uInt8 nRightArrow = (nArrowFlag & 0xF0) >> 4;
 
     double fWidth_inch = (double)nLineWidth/TWIPS_PER_CM;
@@ -333,7 +333,7 @@ void LwpDrawObj::SetArrowHead(XFDrawStyle* pOpenedObjStyle, sal_uInt8 nArrowFlag
  */
 OUString LwpDrawObj::GetArrowName(sal_uInt8 nArrowStyle)
 {
-    // style name of arrowhead
+    
     OUString aArrowName;
 
     switch(nArrowStyle)
@@ -377,13 +377,13 @@ OUString LwpDrawObj::GetArrowName(sal_uInt8 nArrowStyle)
  */
 XFFrame* LwpDrawObj::CreateXFDrawObject()
 {
-    // read records
+    
     this->Read();
 
-    // register style
+    
     OUString aStyleName = this->RegisterStyle();
 
-    // create XF-Objects
+    
     XFFrame* pXFObj = NULL;
     if (m_pTransData
         && FABS(m_pTransData->fOffsetX - m_pTransData->fLeftMargin) < THRESHOLD
@@ -398,7 +398,7 @@ XFFrame* LwpDrawObj::CreateXFDrawObject()
         pXFObj = this->CreateDrawObj(aStyleName);
     }
 
-    // set anchor type
+    
     if (pXFObj)
     {
         pXFObj->SetAnchorType(enumXFAnchorFrame);
@@ -439,10 +439,10 @@ OUString LwpDrawLine::RegisterStyle()
 {
     XFDrawStyle* pStyle = new XFDrawStyle();
 
-    // set line style
+    
     this->SetLineStyle(pStyle, m_aLineRec.nLineWidth, m_aLineRec.nLineStyle, m_aLineRec.aPenColor);
 
-    // set arrow head
+    
     this->SetArrowHead(pStyle, m_aLineRec.nLineEnd, m_aLineRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -518,11 +518,11 @@ OUString LwpDrawPolyLine::RegisterStyle()
 {
     XFDrawStyle* pStyle = new XFDrawStyle();
 
-    // set line style
+    
     this->SetLineStyle(pStyle, m_aPolyLineRec.nLineWidth, m_aPolyLineRec.nLineStyle,
         m_aPolyLineRec.aPenColor);
 
-    // set arrow head
+    
     this->SetArrowHead(pStyle, m_aPolyLineRec.nLineEnd, m_aPolyLineRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -598,11 +598,11 @@ OUString LwpDrawPolygon::RegisterStyle()
 {
     XFDrawStyle* pStyle = new XFDrawStyle();
 
-    // set line style
+    
     this->SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
         m_aClosedObjStyleRec.aPenColor);
 
-    // set fill style
+    
     this->SetFillStyle(pStyle);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -660,7 +660,7 @@ void LwpDrawRectangle::Read()
     if (m_eType == OT_RNDRECT)
     {
         nPointsCount = 16;
-        m_pStream->SeekRel(4); // corner points
+        m_pStream->SeekRel(4); 
     }
     else
     {
@@ -678,11 +678,11 @@ OUString LwpDrawRectangle::RegisterStyle()
 {
     XFDrawStyle* pStyle = new XFDrawStyle();
 
-    // set line style
+    
     this->SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
         m_aClosedObjStyleRec.aPenColor);
 
-    // set fill style
+    
     this->SetFillStyle(pStyle);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -801,7 +801,7 @@ XFFrame* LwpDrawRectangle::CreateStandardDrawObj(const  OUString& rStyleName)
 
         if (aSdwRect.IsRectRotated())
         {
-            pRect->SetRotate( fRotAngle / PI * 180);// aXFCenter);
+            pRect->SetRotate( fRotAngle / PI * 180);
         }
 
         pRect->SetStyleName(rStyleName);
@@ -837,11 +837,11 @@ OUString LwpDrawEllipse::RegisterStyle()
 {
     XFDrawStyle* pStyle = new XFDrawStyle();
 
-    // set line style
+    
     this->SetLineStyle(pStyle, m_aClosedObjStyleRec.nLineWidth, m_aClosedObjStyleRec.nLineStyle,
         m_aClosedObjStyleRec.aPenColor);
 
-    // set fill style
+    
     this->SetFillStyle(pStyle);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -895,7 +895,7 @@ LwpDrawArc::LwpDrawArc(SvStream * pStream, DrawingOffsetAndScale* pTransData)
  */
 void LwpDrawArc::Read()
 {
-    m_pStream->SeekRel(16);// arcRect, startPt, endPt
+    m_pStream->SeekRel(16);
 
     m_pStream->ReadUChar( m_aArcRec.nLineWidth );
     m_pStream->ReadUChar( m_aArcRec.nLineStyle );
@@ -916,11 +916,11 @@ OUString LwpDrawArc::RegisterStyle()
 {
     XFDrawStyle* pStyle = new XFDrawStyle();
 
-    // set line style
+    
     this->SetLineStyle(pStyle, m_aArcRec.nLineWidth, m_aArcRec.nLineStyle,
         m_aArcRec.aPenColor);
 
-    // set arrow head
+    
     this->SetArrowHead(pStyle, m_aArcRec.nLineEnd, m_aArcRec.nLineWidth);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -971,17 +971,17 @@ LwpDrawTextBox::~LwpDrawTextBox()
 
 void LwpDrawTextBox::SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec)
 {
-    // color
+    
     XFColor aXFColor(pRec->aTextColor.nR, pRec->aTextColor.nG,
             pRec->aTextColor.nB);
     pFont->SetColor(aXFColor);
-    //size
+    
     pFont->SetFontSize(pRec->nTextSize/20);
-    // bold
+    
     pFont->SetBold((sal_Bool)((pRec->nTextAttrs & TA_BOLD) != 0));
-    // italic
+    
     pFont->SetItalic((sal_Bool)((pRec->nTextAttrs & TA_ITALIC) != 0));
-    // strike-through
+    
     if (pRec->nTextAttrs & TA_STRIKETHRU)
     {
         pFont->SetCrossout(enumXFCrossoutSignel);
@@ -990,7 +990,7 @@ void LwpDrawTextBox::SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec)
     {
         pFont->SetCrossout(enumXFCrossoutNone);
     }
-    // underline
+    
     if (pRec->nTextAttrs & TA_UNDERLINE)
     {
         pFont->SetUnderline(enumXFUnderlineSingle);
@@ -1007,7 +1007,7 @@ void LwpDrawTextBox::SetFontStyle(XFFont* pFont, SdwTextBoxRecord* pRec)
     {
         pFont->SetUnderline(enumXFUnderlineNone);
     }
-    // small-caps
+    
     if (pRec->nTextAttrs & TA_SMALLCAPS)
     {
         pFont->SetTransform(enumXFTransformSmallCaps);
@@ -1028,14 +1028,14 @@ void LwpDrawTextBox::Read()
 
     m_pStream->ReadInt16( m_aTextRec.nTextHeight );
     m_pStream->Read(m_aTextRec.tmpTextFaceName, DRAW_FACESIZE);
-    m_pStream->SeekRel(1);// PitchAndFamily
+    m_pStream->SeekRel(1);
 
     m_pStream->ReadInt16( m_aTextRec.nTextSize );
 
     if (m_aTextRec.nTextSize < 0)
         m_aTextRec.nTextSize = -m_aTextRec.nTextSize;
 
-    //color
+    
     m_pStream->ReadUChar( m_aTextRec.aTextColor.nR );
     m_pStream->ReadUChar( m_aTextRec.aTextColor.nG );
     m_pStream->ReadUChar( m_aTextRec.aTextColor.nB );
@@ -1046,10 +1046,10 @@ void LwpDrawTextBox::Read()
     m_pStream->ReadInt16( m_aTextRec.nTextRotation );
     m_pStream->ReadInt16( m_aTextRec.nTextExtraSpacing );
 
-    // some draw files in version 1.2 have an extra byte following '\0'.
-    // can't rely on that, so read in the whole string into memory.
+    
+    
 
-    // the 71 is the fixed length before text content in textbox record
+    
     sal_Int16 TextLength = m_aObjHeader.nRecLen - 71;
     m_aTextRec.pTextString = new sal_uInt8 [TextLength];
 
@@ -1060,8 +1060,8 @@ OUString LwpDrawTextBox::RegisterStyle()
 {
     XFParaStyle* pStyle = new XFParaStyle();
 
-    // font style
-    // the pFont need to be deleted myself?
+    
+    
     XFFont* pFont = new XFFont();
 
     rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
@@ -1089,7 +1089,7 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
     }
     else
     {
-        // temporary code, need to create Encoding from the value of nTextCharacterSet
+        
         aEncoding = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
     }
 
@@ -1106,12 +1106,12 @@ XFFrame* LwpDrawTextBox::CreateDrawObj(const OUString& rStyleName )
     OUString sName = pXFStyleManager->AddStyle(pBoxStyle)->GetStyleName();
     pTextBox->SetStyleName(sName);
 
-    //todo: add the interface for rotating textbox
-//  if (m_aTextRec.nTextRotation)
-//  {
-//      double fAngle = double(3600-m_aTextRec.nTextRotation)/10;
-//      pTextBox->SetRotate(fAngle);
-//  }
+    
+
+
+
+
+
 
     return pTextBox;
 }
@@ -1225,7 +1225,7 @@ void LwpDrawTextArt::Read()
     m_pStream->SeekRel(1);
 
     m_pStream->Read(m_aTextArtRec.tmpTextFaceName, DRAW_FACESIZE);
-    m_pStream->SeekRel(1);// PitchAndFamily
+    m_pStream->SeekRel(1);
 
     m_pStream->ReadInt16( m_aTextArtRec.nTextSize );
 
@@ -1252,8 +1252,8 @@ OUString LwpDrawTextArt::RegisterStyle()
 {
     XFParaStyle* pStyle = new XFParaStyle();
 
-    // font style
-    // the pFont need to be deleted myself?
+    
+    
     XFFont* pFont = new XFFont();
 
     rtl_TextEncoding aEncoding =  RTL_TEXTENCODING_MS_1252;
@@ -1288,7 +1288,7 @@ XFFrame* LwpDrawTextArt::CreateDrawObj(const OUString& rStyleName)
     }
     else
     {
-        // temporary code, need to create Encoding from the value of nTextCharacterSet
+        
         aEncoding = LwpCharSetMgr::GetInstance()->GetTextCharEncoding();
     }
 
@@ -1350,8 +1350,8 @@ void LwpDrawBitmap::Read()
     m_pStream->ReadUInt16( m_aBmpRec.nTranslation );
     m_pStream->ReadUInt16( m_aBmpRec.nRotation );
 
-    // 20 == length of draw-specific fields.
-    // 14 == length of bmp file header.
+    
+    
     m_aBmpRec.nFileSize = m_aObjHeader.nRecLen - 20 + 14;
     m_pImageData = new sal_uInt8 [m_aBmpRec.nFileSize];
 

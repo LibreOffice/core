@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -52,7 +52,7 @@ static void lcl_AddTwoDigits( OUStringBuffer& rStr, sal_Int32 nVal )
 OUString
 SvXMLMetaExport::GetISODateTimeString( const util::DateTime& rDateTime )
 {
-    //  return ISO date string "YYYY-MM-DDThh:mm:ss"
+    
 
     OUStringBuffer sTmp;
     sTmp.append( (sal_Int32) rDateTime.Year );
@@ -83,7 +83,7 @@ void SvXMLMetaExport::SimpleStringElement( const OUString& rText,
 void SvXMLMetaExport::SimpleDateTimeElement( const util::DateTime & rDate,
         sal_uInt16 nNamespace, enum XMLTokenEnum eElementName )
 {
-    if (rDate.Month != 0) { // invalid dates are 0-0-0
+    if (rDate.Month != 0) { 
         OUString sValue = GetISODateTimeString( rDate );
         if ( !sValue.isEmpty() ) {
             SvXMLElementExport aElem( mrExport, nNamespace, eElementName,
@@ -95,44 +95,44 @@ void SvXMLMetaExport::SimpleDateTimeElement( const util::DateTime & rDate,
 
 void SvXMLMetaExport::_MExport()
 {
-    //  generator
+    
     {
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_META, XML_GENERATOR,
                                   sal_True, sal_True );
         mrExport.Characters( ::utl::DocInfoHelper::GetGeneratorString() );
     }
 
-    //  document title
+    
     SimpleStringElement  ( mxDocProps->getTitle(),
                            XML_NAMESPACE_DC, XML_TITLE );
 
-    //  description
+    
     SimpleStringElement  ( mxDocProps->getDescription(),
                            XML_NAMESPACE_DC, XML_DESCRIPTION );
 
-    //  subject
+    
     SimpleStringElement  ( mxDocProps->getSubject(),
                            XML_NAMESPACE_DC, XML_SUBJECT );
 
-    //  created...
+    
     SimpleStringElement  ( mxDocProps->getAuthor(),
                            XML_NAMESPACE_META, XML_INITIAL_CREATOR );
     SimpleDateTimeElement( mxDocProps->getCreationDate(),
                            XML_NAMESPACE_META, XML_CREATION_DATE );
 
-    //  modified...
+    
     SimpleStringElement  ( mxDocProps->getModifiedBy(),
                            XML_NAMESPACE_DC, XML_CREATOR );
     SimpleDateTimeElement( mxDocProps->getModificationDate(),
                            XML_NAMESPACE_DC, XML_DATE );
 
-    //  printed...
+    
     SimpleStringElement  ( mxDocProps->getPrintedBy(),
                            XML_NAMESPACE_META, XML_PRINTED_BY );
     SimpleDateTimeElement( mxDocProps->getPrintDate(),
                            XML_NAMESPACE_META, XML_PRINT_DATE );
 
-    //  keywords
+    
     const uno::Sequence< OUString > keywords = mxDocProps->getKeywords();
     for (sal_Int32 i = 0; i < keywords.getLength(); ++i) {
         SvXMLElementExport aKwElem( mrExport, XML_NAMESPACE_META, XML_KEYWORD,
@@ -140,7 +140,7 @@ void SvXMLMetaExport::_MExport()
         mrExport.Characters( keywords[i] );
     }
 
-    //  document language
+    
     {
         OUString sValue = LanguageTag( mxDocProps->getLanguage()).getBcp47( false);
         if (!sValue.isEmpty()) {
@@ -150,7 +150,7 @@ void SvXMLMetaExport::_MExport()
         }
     }
 
-    //  editing cycles
+    
     {
         SvXMLElementExport aElem( mrExport,
                                   XML_NAMESPACE_META, XML_EDITING_CYCLES,
@@ -159,8 +159,8 @@ void SvXMLMetaExport::_MExport()
             mxDocProps->getEditingCycles() ) );
     }
 
-    //  editing duration
-    //  property is a int32 (seconds)
+    
+    
     {
         sal_Int32 secs = mxDocProps->getEditingDuration();
         SvXMLElementExport aElem( mrExport,
@@ -172,14 +172,14 @@ void SvXMLMetaExport::_MExport()
         mrExport.Characters(buf.makeStringAndClear());
     }
 
-    //  default target
+    
     const OUString sDefTarget = mxDocProps->getDefaultTarget();
     if ( !sDefTarget.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME,
                                sDefTarget );
 
-        //! define strings for xlink:show values
+        
         const XMLTokenEnum eShow = sDefTarget == "_blank" ? XML_NEW : XML_REPLACE;
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, eShow );
 
@@ -188,7 +188,7 @@ void SvXMLMetaExport::_MExport()
                                   sal_True, sal_False );
     }
 
-    //  auto-reload
+    
     const OUString sReloadURL = mxDocProps->getAutoloadURL();
     const sal_Int32 sReloadDelay = mxDocProps->getAutoloadSecs();
     if (sReloadDelay != 0 || !sReloadURL.isEmpty())
@@ -206,22 +206,22 @@ void SvXMLMetaExport::_MExport()
                                   sal_True, sal_False );
     }
 
-    //  template
+    
     const OUString sTplPath = mxDocProps->getTemplateURL();
     if ( !sTplPath.isEmpty() )
     {
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
 
-        //  template URL
+        
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
                               mrExport.GetRelativeReference(sTplPath) );
 
-        //  template name
+        
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TITLE,
                               mxDocProps->getTemplateName() );
 
-        //  template date
+        
         mrExport.AddAttribute( XML_NAMESPACE_META, XML_DATE,
                 GetISODateTimeString( mxDocProps->getTemplateDate() ) );
 
@@ -229,7 +229,7 @@ void SvXMLMetaExport::_MExport()
                                   sal_True, sal_False );
     }
 
-    //  user defined fields
+    
     uno::Reference< beans::XPropertyAccess > xUserDefined(
         mxDocProps->getUserDefinedProperties(), uno::UNO_QUERY_THROW);
     const uno::Sequence< beans::PropertyValue > props =
@@ -251,7 +251,7 @@ void SvXMLMetaExport::_MExport()
 
     const uno::Sequence< beans::NamedValue > aDocStatistic =
             mxDocProps->getDocumentStatistics();
-    // write document statistic if there is any provided
+    
     if ( aDocStatistic.getLength() )
     {
         for ( sal_Int32 nInd = 0; nInd < aDocStatistic.getLength(); nInd++ )
@@ -329,7 +329,7 @@ void SvXMLMetaExport::Export()
             if (attrname.matchAsciiL(s_xmlns2, strlen(s_xmlns2))) {
                 ns.First  = attrname.copy(strlen(s_xmlns2));
             } else if (attrname.equalsAsciiL(s_xmlns, strlen(s_xmlns))) {
-                // default initialized empty string
+                
             } else {
             OSL_FAIL("namespace attribute not starting with xmlns unexpected");
             }
@@ -338,20 +338,20 @@ void SvXMLMetaExport::Export()
         }
         xSAXable->serialize(this, namespaces.getAsConstList());
     } else {
-        // office:meta
+        
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_OFFICE, XML_META,
                                   sal_True, sal_True );
-        // fall back to using public interface of XDocumentProperties
+        
         _MExport();
     }
 }
 
-// ::com::sun::star::xml::sax::XDocumentHandler:
+
 void SAL_CALL
 SvXMLMetaExport::startDocument()
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    // ignore: has already been done by SvXMLExport::exportDoc
+    
     DBG_ASSERT( m_level == 0, "SvXMLMetaExport: level error" );
 }
 
@@ -359,11 +359,11 @@ void SAL_CALL
 SvXMLMetaExport::endDocument()
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    // ignore: will be done by SvXMLExport::exportDoc
+    
     DBG_ASSERT( m_level == 0, "SvXMLMetaExport: level error" );
 }
 
-// unfortunately, this method contains far too much ugly namespace mangling.
+
 void SAL_CALL
 SvXMLMetaExport::startElement(const OUString & i_rName,
     const uno::Reference< xml::sax::XAttributeList > & i_xAttribs)
@@ -371,8 +371,8 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
 {
 
     if (m_level == 0) {
-        // namepace decls: default ones have been written at the root element
-        // non-default ones must be preserved here
+        
+        
         const sal_Int16 nCount = i_xAttribs->getLength();
         for (sal_Int16 i = 0; i < nCount; ++i) {
             const OUString name(i_xAttribs->getNameByIndex(i));
@@ -392,18 +392,18 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
                 }
             }
         }
-        // ignore the root: it has been written already
+        
         ++m_level;
         return;
     }
 
     if (m_level == 1) {
-        // attach preserved namespace decls from root node here
+        
         for (std::vector<beans::StringPair>::const_iterator iter =
                 m_preservedNSs.begin(); iter != m_preservedNSs.end(); ++iter) {
             const OUString ns(iter->First);
             bool found(false);
-            // but only if it is not already there
+            
             const sal_Int16 nCount = i_xAttribs->getLength();
             for (sal_Int16 i = 0; i < nCount; ++i) {
                 const OUString name(i_xAttribs->getNameByIndex(i));
@@ -418,10 +418,10 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
         }
     }
 
-    // attach the attributes
+    
     if (i_rName.matchAsciiL(s_meta, strlen(s_meta))) {
-        // special handling for all elements that may have
-        // xlink:href attributes; these must be made relative
+        
+        
         const sal_Int16 nLength = i_xAttribs->getLength();
         for (sal_Int16 i = 0; i < nLength; ++i) {
             const OUString name (i_xAttribs->getNameByIndex (i));
@@ -440,9 +440,9 @@ SvXMLMetaExport::startElement(const OUString & i_rName,
         }
     }
 
-    // finally, start the element
-    // #i107240# no whitespace here, because the DOM may already contain
-    // whitespace, which is not cleared when loading and thus accumulates.
+    
+    
+    
     mrExport.StartElement(i_rName, (m_level > 1) ? sal_False : sal_True);
     ++m_level;
 }
@@ -453,7 +453,7 @@ SvXMLMetaExport::endElement(const OUString & i_rName)
 {
     --m_level;
     if (m_level == 0) {
-        // ignore the root; see startElement
+        
         return;
     }
     DBG_ASSERT( m_level >= 0, "SvXMLMetaExport: level error" );
@@ -479,7 +479,7 @@ SvXMLMetaExport::processingInstruction(const OUString & i_rTarget,
     const OUString & i_rData)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    // ignore; the exporter cannot handle these
+    
     (void) i_rTarget;
     (void) i_rData;
 }
@@ -488,7 +488,7 @@ void SAL_CALL
 SvXMLMetaExport::setDocumentLocator(const uno::Reference<xml::sax::XLocator>&)
     throw (uno::RuntimeException, xml::sax::SAXException)
 {
-    // nothing to do here, move along...
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

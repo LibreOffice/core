@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/contact/viewcontactofsdrobj.hxx>
@@ -34,14 +34,14 @@
 #include <svx/sdrpaintwindow.hxx>
 #include <svx/svdhdl.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace contact
     {
-        // Create a Object-Specific ViewObjectContact, set ViewContact and
-        // ObjectContact. Always needs to return something.
+        
+        
         ViewObjectContact& ViewContactOfSdrObj::CreateObjectSpecificViewObjectContact(ObjectContact& rObjectContact)
         {
             ViewObjectContact* pRetval = new ViewObjectContactOfSdrObj(rObjectContact, *this);
@@ -55,7 +55,7 @@ namespace sdr
             mrObject(rObj),
             meRememberedAnimationKind(SDRTEXTANI_NONE)
         {
-            // init AnimationKind
+            
             if(GetSdrObject().ISA(SdrTextObj))
             {
                 SdrTextObj& rTextObj = (SdrTextObj&)GetSdrObject();
@@ -67,7 +67,7 @@ namespace sdr
         {
         }
 
-        // Access to possible sub-hierarchy
+        
         sal_uInt32 ViewContactOfSdrObj::GetObjectCount() const
         {
             if(GetSdrObject().GetSubList())
@@ -96,12 +96,12 @@ namespace sdr
             {
                 if(pObjList->ISA(SdrPage))
                 {
-                    // Is a page
+                    
                     pRetval = &(((SdrPage*)pObjList)->GetViewContact());
                 }
                 else
                 {
-                    // Is a group?
+                    
                     if(pObjList->GetOwnerObj())
                     {
                         pRetval = &(pObjList->GetOwnerObj()->GetViewContact());
@@ -112,35 +112,35 @@ namespace sdr
             return pRetval;
         }
 
-        // React on changes of the object of this ViewContact
+        
         void ViewContactOfSdrObj::ActionChanged()
         {
-            // look for own changes
+            
             if(GetSdrObject().ISA(SdrTextObj))
             {
                 SdrTextObj& rTextObj = (SdrTextObj&)GetSdrObject();
 
                 if(rTextObj.GetTextAniKind() != meRememberedAnimationKind)
                 {
-                    // #i38135# now remember new type
+                    
                     meRememberedAnimationKind = rTextObj.GetTextAniKind();
                 }
             }
 
-            // call parent
+            
             ViewContact::ActionChanged();
         }
 
-        // overload for acessing the SdrObject
+        
         SdrObject* ViewContactOfSdrObj::TryToGetSdrObject() const
         {
             return &GetSdrObject();
         }
 
-        //////////////////////////////////////////////////////////////////////////////
-        // primitive stuff
+        
+        
 
-        // add Gluepoints (if available)
+        
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrObj::createGluePointPrimitive2DSequence() const
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
@@ -152,10 +152,10 @@ namespace sdr
 
                 if(nCount)
                 {
-                    // prepare point vector
+                    
                     std::vector< basegfx::B2DPoint > aGluepointVector;
 
-                    // create GluePoint primitives. ATM these are relative to the SnapRect
+                    
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
                         const SdrGluePoint& rCandidate = (*pGluePointList)[(sal_uInt16)a];
@@ -197,7 +197,7 @@ namespace sdr
             return rSource;
         }
 
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "APNDataObject.hxx"
@@ -31,9 +31,9 @@
 #define FREE_HGLOB_ON_RELEASE   TRUE
 #define KEEP_HGLOB_ON_RELEASE   FALSE
 
-//------------------------------------------------------------------------
-// ctor
-//------------------------------------------------------------------------
+
+
+
 
 CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
     m_rIDataObjectOrg( rIDataObject ),
@@ -43,9 +43,9 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
 
     OSL_ENSURE( m_rIDataObjectOrg.get( ), "constructing CAPNDataObject with empty data object" );
 
-    // we marshal the IDataObject interface pointer here so
-    // that it can be unmarshaled multiple times when this
-    // class will be used from another apartment
+    
+    
+    
     IStreamPtr pStm;
     HRESULT hr = CreateStreamOnHGlobal( 0, KEEP_HGLOB_ON_RELEASE, &pStm );
 
@@ -63,18 +63,18 @@ CAPNDataObject::CAPNDataObject( IDataObjectPtr rIDataObject ) :
 
         OSL_ENSURE( CO_E_NOTINITIALIZED != hr_marshal, "COM is not initialized" );
 
-        // marshalling may fail if COM is not initialized
-        // for the calling thread which is a program time
-        // error or because of stream errors which are runtime
-        // errors for instance E_OUTOFMEMORY etc.
+        
+        
+        
+        
 
         hr = GetHGlobalFromStream(pStm.get(), &m_hGlobal );
 
         OSL_ENSURE( E_INVALIDARG != hr, "invalid stream passed to GetHGlobalFromStream" );
 
-        // if the marshalling failed we free the
-        // global memory again and set m_hGlobal
-        // to a defined value
+        
+        
+        
         if (FAILED(hr_marshal))
         {
             OSL_FAIL("marshalling failed");
@@ -106,9 +106,9 @@ CAPNDataObject::~CAPNDataObject( )
     }
 }
 
-//------------------------------------------------------------------------
-// IUnknown->QueryInterface
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
@@ -130,23 +130,23 @@ STDMETHODIMP CAPNDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IUnknown->AddRef
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP_(ULONG) CAPNDataObject::AddRef( )
 {
     return static_cast< ULONG >( InterlockedIncrement( &m_nRefCnt ) );
 }
 
-//------------------------------------------------------------------------
-// IUnknown->Release
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP_(ULONG) CAPNDataObject::Release( )
 {
-    // we need a helper variable because it's not allowed to access
-    // a member variable after an object is destroyed
+    
+    
     ULONG nRefCnt = static_cast< ULONG >( InterlockedDecrement( &m_nRefCnt ) );
 
     if ( 0 == nRefCnt )
@@ -155,9 +155,9 @@ STDMETHODIMP_(ULONG) CAPNDataObject::Release( )
     return nRefCnt;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->GetData
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
@@ -174,9 +174,9 @@ STDMETHODIMP CAPNDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmediu
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->EnumFormatEtc
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
 {
@@ -193,9 +193,9 @@ STDMETHODIMP CAPNDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** 
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->QueryGetData
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
@@ -212,9 +212,9 @@ STDMETHODIMP CAPNDataObject::QueryGetData( LPFORMATETC pFormatetc )
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->GetDataHere
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium )
 {
@@ -231,9 +231,9 @@ STDMETHODIMP CAPNDataObject::GetDataHere( LPFORMATETC pFormatetc, LPSTGMEDIUM pm
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->GetCanonicalFormatEtc
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc(LPFORMATETC pFormatectIn, LPFORMATETC pFormatetcOut)
 {
@@ -250,9 +250,9 @@ STDMETHODIMP CAPNDataObject::GetCanonicalFormatEtc(LPFORMATETC pFormatectIn, LPF
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->SetData
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium, BOOL fRelease )
 {
@@ -269,9 +269,9 @@ STDMETHODIMP CAPNDataObject::SetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmediu
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->DAdvise
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVISESINK pAdvSink, DWORD * pdwConnection )
 {
@@ -288,9 +288,9 @@ STDMETHODIMP CAPNDataObject::DAdvise( LPFORMATETC pFormatetc, DWORD advf, LPADVI
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->DUnadvise
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::DUnadvise( DWORD dwConnection )
 {
@@ -307,9 +307,9 @@ STDMETHODIMP CAPNDataObject::DUnadvise( DWORD dwConnection )
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->EnumDAdvise
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CAPNDataObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
 {
@@ -326,18 +326,18 @@ STDMETHODIMP CAPNDataObject::EnumDAdvise( LPENUMSTATDATA * ppenumAdvise )
     return hr;
 }
 
-//------------------------------------------------------------------------
-// for our convenience
-//------------------------------------------------------------------------
+
+
+
 
 CAPNDataObject::operator IDataObject*( )
 {
     return static_cast< IDataObject* >( this );
 }
 
-//------------------------------------------------------------------------
-// helper function
-//------------------------------------------------------------------------
+
+
+
 
 HRESULT CAPNDataObject::MarshalIDataObjectIntoCurrentApartment( IDataObject** ppIDataObj )
 {

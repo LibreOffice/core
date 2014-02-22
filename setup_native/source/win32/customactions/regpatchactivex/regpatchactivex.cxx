@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define UNICODE
 
 #ifdef _MSC_VER
-#pragma warning(push,1) // disable warnings within system headers
+#pragma warning(push,1) 
 #endif
 #include <windows.h>
 #include <msiquery.h>
@@ -32,7 +32,7 @@
 #include <malloc.h>
 #include <stdio.h>
 
-//----------------------------------------------------------
+
 BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
 {
     if ( pStr1 == NULL && pStr2 == NULL )
@@ -46,7 +46,7 @@ BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
     return ( *pStr1 == 0 && *pStr2 == 0 );
 }
 
-//----------------------------------------------------------
+
 BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
@@ -65,7 +65,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
     return FALSE;
 }
 
-//----------------------------------------------------------
+
 BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
@@ -79,10 +79,10 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
     return bResult;
 }
 
-//----------------------------------------------------------
+
 extern "C" UINT __stdcall PatchActiveXControl( MSIHANDLE hMSI )
 {
-    // MessageBox(NULL, L"PatchActiveXControl", L"Information", MB_OK | MB_ICONINFORMATION);
+    
 
     INSTALLSTATE current_state;
     INSTALLSTATE future_state;
@@ -105,7 +105,7 @@ extern "C" UINT __stdcall PatchActiveXControl( MSIHANDLE hMSI )
     }
     else
     {
-        // assert( FALSE );
+        
     }
 
     return ERROR_SUCCESS;

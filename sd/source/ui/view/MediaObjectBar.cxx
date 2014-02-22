@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,19 +48,19 @@ using namespace sd;
 
 namespace sd {
 
-// ------------------
-// - MediaObjectBar -
-// ------------------
+
+
+
 
 TYPEINIT1( MediaObjectBar, SfxShell );
 
-// -----------------------------------------------------------------------------
+
 
 SFX_IMPL_INTERFACE( MediaObjectBar, SfxShell, SdResId( STR_MEDIAOBJECTBARSHELL ) )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SfxShell( pSdViewShell->GetViewShell() ),
@@ -76,14 +76,14 @@ MediaObjectBar::MediaObjectBar( ViewShell* pSdViewShell, ::sd::View* pSdView ) :
     SetName(SD_RESSTR(RID_DRAW_MEDIA_TOOLBOX));
 }
 
-// -----------------------------------------------------------------------------
+
 
 MediaObjectBar::~MediaObjectBar()
 {
     SetRepeatTarget( NULL );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaObjectBar::GetState( SfxItemSet& rSet )
 {
@@ -121,7 +121,7 @@ void MediaObjectBar::GetState( SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void MediaObjectBar::Execute( SfxRequest& rReq )
 {
@@ -146,7 +146,7 @@ void MediaObjectBar::Execute( SfxRequest& rReq )
                     static_cast< sdr::contact::ViewContactOfSdrMediaObj& >( pObj->GetViewContact() ).executeMediaItem(
                         static_cast< const ::avmedia::MediaItem& >( *pItem ) );
 
-                    //fdo #32598: after changing playback opts, set document's modified flag
+                    
                     SdDrawDocument& rDoc = mpView->GetDoc();
                     rDoc.SetChanged(true);
                 }
@@ -157,6 +157,6 @@ void MediaObjectBar::Execute( SfxRequest& rReq )
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

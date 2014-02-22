@@ -35,7 +35,7 @@ sal_Unicode oneToOneMapping::find(const sal_Unicode nKey) const
 {
     if( mpTable )
     {
-        // binary search
+        
         int bottom = 0;
         int top = mnSize - 1;
         int current;
@@ -108,7 +108,7 @@ sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const
     {
         if( mbHasIndex )
         {
-            // index search
+            
             int high, low;
             high = (nKey >> 8) & 0xFF;
             low = nKey & 0xFF;
@@ -121,7 +121,7 @@ sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const
         }
         else
         {
-            // binary search
+            
             int bottom = 0;
             int top = mnSize - 1;
             int current;

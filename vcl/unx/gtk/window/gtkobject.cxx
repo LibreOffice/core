@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,21 +36,21 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
 {
     if( pParent )
     {
-        // our plug window
+        
         m_pSocket = gtk_drawing_area_new();
         Show( bShow );
-        // insert into container
+        
         gtk_fixed_put( pParent->getFixedContainer(),
                        m_pSocket,
                        0, 0 );
-        // realize so we can get a window id
+        
         gtk_widget_realize( m_pSocket );
 
-        // make it transparent; some plugins may not insert
-        // their own window here but use the socket window itself
+        
+        
         gtk_widget_set_app_paintable( m_pSocket, TRUE );
 
-        // system data
+        
         SalDisplay* pDisp = GetGenericData()->GetSalDisplay();
         m_aSystemData.nSize         = sizeof( SystemEnvData );
         m_aSystemData.pDisplay      = pDisp->GetDisplay();
@@ -71,7 +71,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent, bool bShow )
         g_signal_connect( G_OBJECT(m_pSocket), "focus-out-event", G_CALLBACK(signalFocus), this );
         g_signal_connect( G_OBJECT(m_pSocket), "destroy", G_CALLBACK(signalDestroy), this );
 
-        // #i59255# necessary due to sync effects with java child windows
+        
         pParent->Sync();
     }
 }
@@ -88,13 +88,13 @@ GtkSalObject::~GtkSalObject()
     }
     if( m_pSocket )
     {
-        // remove socket from parent frame's fixed container
+        
         gtk_container_remove( GTK_CONTAINER(gtk_widget_get_parent(m_pSocket)),
                               m_pSocket );
-        // get rid of the socket
-        // actually the gtk_container_remove should let the ref count
-        // of the socket sink to 0 and destroy it (see signalDestroy)
-        // this is just a sanity check
+        
+        
+        
+        
         if( m_pSocket )
             gtk_widget_destroy( m_pSocket );
     }

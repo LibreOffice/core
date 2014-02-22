@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <fmtwrapinfluenceonobjpos.hxx>
@@ -86,7 +86,7 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId 
     {
         sal_Int16 nNewWrapInfluence = 0;
         rVal >>= nNewWrapInfluence;
-        // #i35017# - constant names have changed and <ITERATIVE> has been added
+        
         if ( nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
              nNewWrapInfluence == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
              nNewWrapInfluence == text::WrapInfluenceOnPosition::ITERATIVE )
@@ -108,7 +108,7 @@ bool SwFmtWrapInfluenceOnObjPos::PutValue( const Any& rVal, sal_uInt8 nMemberId 
 
 void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition )
 {
-    // #i35017# - constant names have changed and consider new value <ITERATIVE>
+    
     if ( _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_SUCCESSIVE ||
          _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ONCE_CONCURRENT ||
          _nWrapInfluenceOnPosition == text::WrapInfluenceOnPosition::ITERATIVE )
@@ -121,8 +121,8 @@ void SwFmtWrapInfluenceOnObjPos::SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInflu
     }
 }
 
-// #i35017# - add parameter <_bIterativeAsOnceConcurrent> to control, if
-// value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
+
+
 sal_Int16 SwFmtWrapInfluenceOnObjPos::GetWrapInfluenceOnObjPos(
                                 const bool _bIterativeAsOnceConcurrent ) const
 {

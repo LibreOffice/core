@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -39,11 +39,11 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::util;
 
 
-//=========================================================================
+
 //
-// struct PropertyTableEntry
+
 //
-//=========================================================================
+
 
 struct PropertyTableEntry
 {
@@ -53,11 +53,11 @@ struct PropertyTableEntry
     const com::sun::star::uno::Type& (*pGetCppuType)();
 };
 
-//////////////////////////////////////////////////////////////////////////
+
 //
-// CPPU type access functions.
+
 //
-//////////////////////////////////////////////////////////////////////////
+
 
 static const com::sun::star::uno::Type& OUString_getCppuType()
 {
@@ -66,25 +66,25 @@ static const com::sun::star::uno::Type& OUString_getCppuType()
 
 static const com::sun::star::uno::Type& sal_uInt16_getCppuType()
 {
-    // ! uInt -> Int, because of Java !!!
+    
     return getCppuType( static_cast< const sal_Int16 * >( 0 ) );
 }
 
 static const com::sun::star::uno::Type& sal_uInt32_getCppuType()
 {
-    // ! uInt -> Int, because of Java !!!
+    
     return getCppuType( static_cast< const sal_Int32 * >( 0 ) );
 }
 
 static const com::sun::star::uno::Type& sal_uInt64_getCppuType()
 {
-    // ! uInt -> Int, because of Java !!!
+    
     return getCppuType( static_cast< const sal_Int64 * >( 0 ) );
 }
 
 static const com::sun::star::uno::Type& enum_getCppuType()
 {
-    // ! enum -> Int, because of Java !!!
+    
     return getCppuType( static_cast< const sal_Int16 * >( 0 ) );
 }
 
@@ -158,9 +158,9 @@ static const com::sun::star::uno::Type& Sequence_SendMediaTypes_getCppuType()
                         com::sun::star::ucb::SendMediaTypes > * >( 0 ) );
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// A table with all well-known UCB properties.
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 #define ATTR_DEFAULT ( PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID | PropertyAttribute::MAYBEDEFAULT )
 
@@ -278,20 +278,20 @@ static const PropertyTableEntry __aPropertyTable[] =
     { "VIMPostOfficePath",  -1,                                 ATTR_DEFAULT,   &OUString_getCppuType },
     { "VerificationMode",   -1,                                 ATTR_DEFAULT,   &enum_getCppuType },
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    // EOT.
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     { 0, 0, 0, 0 }
 };
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// UcbPropertiesManager Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 UcbPropertiesManager::UcbPropertiesManager(
                         const Reference< XMultiServiceFactory >& )
@@ -299,60 +299,60 @@ UcbPropertiesManager::UcbPropertiesManager(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 UcbPropertiesManager::~UcbPropertiesManager()
 {
     delete m_pProps;
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_3( UcbPropertiesManager,
                    XTypeProvider,
                    XServiceInfo,
                    XPropertySetInfo );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_3( UcbPropertiesManager,
                           XTypeProvider,
                       XServiceInfo,
                           XPropertySetInfo );
 
-//=========================================================================
+
 //
-// XServiceInfo methods.
+
 //
-//=========================================================================
+
 
 XSERVICEINFO_IMPL_1( UcbPropertiesManager,
                      OUString( "com.sun.star.comp.ucb.UcbPropertiesManager" ),
                      OUString( PROPERTIES_MANAGER_SERVICE_NAME ) );
 
-//=========================================================================
+
 //
-// Service factory implementation.
+
 //
-//=========================================================================
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbPropertiesManager );
 
-//=========================================================================
-//
-// XPropertySetInfo methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 Sequence< Property > SAL_CALL UcbPropertiesManager::getProperties()
     throw( RuntimeException )
 {
@@ -365,9 +365,9 @@ Sequence< Property > SAL_CALL UcbPropertiesManager::getProperties()
         sal_Int32 nPos  = 0;
         sal_Int32 nSize = m_pProps->getLength();
 
-        //////////////////////////////////////////////////////////////////
-        // Get info for well-known properties.
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         const PropertyTableEntry* pCurr = &__aPropertyTable[ 0 ];
         while ( pCurr->pName )
@@ -401,8 +401,8 @@ Sequence< Property > SAL_CALL UcbPropertiesManager::getProperties()
     return *m_pProps;
 }
 
-//=========================================================================
-// virtual
+
+
 Property SAL_CALL UcbPropertiesManager::getPropertyByName( const OUString& aName )
     throw( UnknownPropertyException, RuntimeException )
 {
@@ -413,8 +413,8 @@ Property SAL_CALL UcbPropertiesManager::getPropertyByName( const OUString& aName
     throw UnknownPropertyException();
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name )
     throw( RuntimeException )
 {
@@ -422,11 +422,11 @@ sal_Bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name 
     return queryProperty( Name, aProp );
 }
 
-//=========================================================================
+
 //
-// Non-Interface methods.
+
 //
-//=========================================================================
+
 
 sal_Bool UcbPropertiesManager::queryProperty(
                                 const OUString& rName, Property& rProp )

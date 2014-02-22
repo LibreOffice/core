@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -106,7 +106,7 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
         && !pContainer->IsCell())
     {
         pXFContentContainer = m_pPara->GetXFContainer();
-        //delete the additional blank para, 06/28/2005
+        
         XFParagraph* pCurrPara = m_pPara->GetFribs()->GetXFPara();
         if(!pCurrPara->HasContents())
         {
@@ -115,18 +115,18 @@ void LwpFribTable::XFConvert(XFContentContainer* pCont)
                 pXFContentContainer->RemoveLastContent();
             }
         }
-        //end,06/28/2005
+        
     }
     else if( LwpLayoutRelativityGuts::LAY_PARA_RELATIVE == nType)
     {
-        //same page as text and in frame
+        
         if(pContainer->IsFrame())
         {
             pXFContentContainer = m_pPara->GetXFContainer();
         }
         else if(pContainer->IsCell())
         {
-            //same page as text and in cell, get the first xfpara
+            
             XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(pCont->FindFirstContent(enumXFContentPara));
             if(pXFFirtPara)
                 pXFContentContainer = pXFFirtPara;

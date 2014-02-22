@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -49,8 +49,8 @@ namespace configmgr {
 
 namespace {
 
-// Conservatively merge a template or component (and its recursive parts) into
-// an existing instance:
+
+
 void merge(
     rtl::Reference< Node > const & original,
     rtl::Reference< Node > const & update)
@@ -65,7 +65,7 @@ void merge(
         case Node::KIND_PROPERTY:
         case Node::KIND_LOCALIZED_PROPERTY:
         case Node::KIND_LOCALIZED_VALUE:
-            break; //TODO: merge certain parts?
+            break; 
         case Node::KIND_GROUP:
             for (NodeMap::const_iterator i2(update->getMembers().begin());
                  i2 != update->getMembers().end(); ++i2)
@@ -105,7 +105,7 @@ void merge(
             }
             break;
         case Node::KIND_ROOT:
-            assert(false); // this cannot happen
+            assert(false); 
             break;
         }
     }
@@ -140,9 +140,9 @@ bool XcsParser::startElement(
             return true;
         }
     } else {
-        //TODO: ignoring component-schema import, component-schema uses, and
-        // prop constraints; accepting all four at illegal places (and with
-        // illegal content):
+        
+        
+        
         if (ignoring_ > 0 ||
             (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
              (name.equals("info") || name.equals("import") ||
@@ -160,7 +160,7 @@ bool XcsParser::startElement(
                 state_ = STATE_TEMPLATES;
                 return true;
             }
-            // fall through
+            
         case STATE_TEMPLATES_DONE:
             if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
                 name.equals("component"))
@@ -190,7 +190,7 @@ bool XcsParser::startElement(
                 }
                 break;
             }
-            // fall through
+            
         case STATE_COMPONENT:
             assert(!elements_.empty());
             switch (elements_.top().node->kind()) {
@@ -239,15 +239,15 @@ bool XcsParser::startElement(
                     return true;
                 }
                 break;
-            default: // Node::KIND_LOCALIZED_VALUE
-                assert(false); // this cannot happen
+            default: 
+                assert(false); 
                 break;
             }
             break;
         case STATE_COMPONENT_DONE:
             break;
-        default: // STATE_START
-            assert(false); // this cannot happen
+        default: 
+            assert(false); 
             break;
         }
     }
@@ -311,8 +311,8 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
     } else {
         switch (state_) {
         case STATE_COMPONENT_SCHEMA:
-            // To support old, broken extensions with .xcs files that contain
-            // empty <component-schema> elements:
+            
+            
             state_ = STATE_COMPONENT_DONE;
             break;
         case STATE_TEMPLATES:
@@ -325,7 +325,7 @@ void XcsParser::endElement(xmlreader::XmlReader const & reader) {
         case STATE_COMPONENT_DONE:
             break;
         default:
-            assert(false); // this cannot happen
+            assert(false); 
         }
     }
 }
@@ -335,7 +335,7 @@ void XcsParser::characters(xmlreader::Span const & text) {
 }
 
 void XcsParser::handleComponentSchema(xmlreader::XmlReader & reader) {
-    //TODO: oor:version, xml:lang attributes
+    
     OStringBuffer buf;
     buf.append('.');
     bool hasPackage = false;
@@ -422,8 +422,8 @@ void XcsParser::handleNodeRef(xmlreader::XmlReader & reader) {
             xmldata::parseTemplateReference(
                 component, hasNodeType, nodeType, 0)));
     if (!tmpl.is()) {
-        //TODO: this can erroneously happen as long as import/uses attributes
-        // are not correctly processed
+        
+        
         throw css::uno::RuntimeException(
             "unknown node-ref " + name + " in " + reader.getUrl(),
             css::uno::Reference< css::uno::XInterface >());

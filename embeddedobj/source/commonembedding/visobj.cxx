@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/Aspects.hpp>
@@ -37,11 +37,11 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
-        // no representation can be retrieved
+        
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
@@ -56,7 +56,7 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
     {
         changeState( embed::EmbedStates::RUNNING );
 
-        // the links should be switched back to loaded state for now to avoid locking problems
+        
         bBackToLoaded = m_bIsLink;
     }
 
@@ -66,7 +66,7 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         changeState( embed::EmbedStates::LOADED );
 
     if ( !bSuccess )
-        throw uno::Exception(); // TODO:
+        throw uno::Exception(); 
 }
 
 awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
@@ -77,7 +77,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The own object has no persistence!\n" ),
@@ -93,7 +93,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     {
         changeState( embed::EmbedStates::RUNNING );
 
-        // the links should be switched back to loaded state for now to avoid locking problems
+        
         bBackToLoaded = m_bIsLink;
     }
 
@@ -104,7 +104,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         changeState( embed::EmbedStates::LOADED );
 
     if ( !bSuccess )
-        throw uno::Exception(); // TODO:
+        throw uno::Exception(); 
 
     return aResult;
 }
@@ -115,11 +115,11 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
-        // no representation can be retrieved
+        
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
@@ -135,7 +135,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
     {
         changeState( embed::EmbedStates::RUNNING );
 
-        // the links should be switched back to loaded state for now to avoid locking problems
+        
         bBackToLoaded = m_bIsLink;
     }
 
@@ -145,7 +145,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         changeState( embed::EmbedStates::LOADED );
 
     if ( nResult < 0  )
-        throw uno::Exception(); // TODO:
+        throw uno::Exception(); 
 
     return nResult;
 }
@@ -158,7 +158,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The own object has no persistence!\n" ),
@@ -167,7 +167,7 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
 
     SAL_WARN_IF( nAspect == embed::Aspects::MSOLE_ICON, "embeddedobj.common", "For iconified objects no graphical replacement is required!" );
     if ( nAspect == embed::Aspects::MSOLE_ICON )
-        // no representation can be retrieved
+        
         throw embed::WrongStateException( OUString( "Illegal call!\n" ),
                                     uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
@@ -176,13 +176,13 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
     {
         changeState( embed::EmbedStates::RUNNING );
 
-        // the links should be switched back to loaded state for now to avoid locking problems
+        
         bBackToLoaded = m_bIsLink;
     }
 
     SAL_WARN_IF( !m_pDocHolder->GetComponent().is(), "embeddedobj.common", "Running or Active object has no component!" );
 
-    // TODO: return for the aspect of the document
+    
     embed::VisualRepresentation aVisualRepresentation;
 
     uno::Reference< embed::XVisualObject > xVisualObject( m_pDocHolder->GetComponent(), uno::UNO_QUERY );

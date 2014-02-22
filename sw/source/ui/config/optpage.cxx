@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <optpage.hxx>
@@ -131,12 +131,12 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
             case FUNIT_POINT:
             case FUNIT_PICA:
             case FUNIT_INCH:
-            case FUNIT_CHAR:    // add two units , 'character' and 'line' , their ticks are not fixed
+            case FUNIT_CHAR:    
             case FUNIT_LINE:
             {
-                // only use these metrics
-                // a horizontal ruler has not the 'line' unit
-                // there isn't 'line' unit in HTML format
+                
+                
+                
                 if ( eFUnit != FUNIT_LINE )
                 {
                    sal_uInt16 nPos = m_pMetricLB->InsertEntry( sMetric );
@@ -144,14 +144,14 @@ SwContentOptPage::SwContentOptPage( Window* pParent,
                    m_pHMetric->InsertEntry( sMetric );
                    m_pHMetric->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
                 }
-                // a vertical ruler has not the 'character' unit
+                
                 if ( eFUnit != FUNIT_CHAR )
                 {
                    sal_uInt16 nPos = m_pVMetric->InsertEntry( sMetric );
                    m_pVMetric->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
                 }
             }
-            default:;//prevent warning
+            default:;
         }
     }
 }
@@ -244,7 +244,7 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     sal_uInt16 nGlobalMetricPos = nMPos;
     if ( nMPos != m_pMetricLB->GetSavedValue() )
     {
-        // Double-Cast for VA3.0
+        
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
@@ -253,7 +253,7 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     nMPos = m_pHMetric->GetSelectEntryPos();
     if ( nMPos != m_pHMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
     {
-        // Double-Cast for VA3.0
+        
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pHMetric->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_HSCROLL_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
@@ -261,7 +261,7 @@ sal_Bool SwContentOptPage::FillItemSet(SfxItemSet& rSet)
     nMPos = m_pVMetric->GetSelectEntryPos();
     if ( nMPos != m_pVMetric->GetSavedValue() || nMPos != nGlobalMetricPos )
     {
-        // Double-Cast for VA3.0
+        
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pVMetric->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( FN_VSCROLL_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
@@ -348,7 +348,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage(Window* pParent,
         m_pPrintHiddenTextCB->Hide();
         m_pPrintTextPlaceholderCB->Hide();
 
-        // hide m_pPrintEmptyPagesCB
+        
         m_pPrintEmptyPagesCB->Hide();
     }
     m_pProspectCB_RTL->Disable();
@@ -375,8 +375,8 @@ sal_Bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
     {
         SwAddPrinterItem aAddPrinterAttr (FN_PARAM_ADDPRINTER);
         aAddPrinterAttr.bPrintGraphic   = m_pGrfCB->IsChecked();
-        aAddPrinterAttr.bPrintTable     = sal_True; // always enabled since CWS printerpullgpages /*aTabCB.IsChecked();*/
-        aAddPrinterAttr.bPrintDraw      = m_pGrfCB->IsChecked(); // UI merged with m_pGrfCB in CWS printerpullgpages
+        aAddPrinterAttr.bPrintTable     = sal_True; 
+        aAddPrinterAttr.bPrintDraw      = m_pGrfCB->IsChecked(); 
         aAddPrinterAttr.bPrintControl   = m_pCtrlFldCB->IsChecked();
         aAddPrinterAttr.bPrintPageBackground = m_pBackgroundCB->IsChecked();
         aAddPrinterAttr.bPrintBlackFont = m_pBlackFontCB->IsChecked();
@@ -385,12 +385,12 @@ sal_Bool    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
         aAddPrinterAttr.bPrintLeftPages     = m_pLeftPageCB->IsChecked();
         aAddPrinterAttr.bPrintRightPages    = m_pRightPageCB->IsChecked();
-        aAddPrinterAttr.bPrintReverse       = sal_False; // handled by vcl itself since CWS printerpullpages /*aReverseCB.IsChecked()*/;
+        aAddPrinterAttr.bPrintReverse       = sal_False; 
         aAddPrinterAttr.bPrintProspect      = m_pProspectCB->IsChecked();
         aAddPrinterAttr.bPrintProspectRTL   = m_pProspectCB_RTL->IsChecked();
         aAddPrinterAttr.bPaperFromSetup     = m_pPaperFromSetupCB->IsChecked();
         aAddPrinterAttr.bPrintEmptyPages    = m_pPrintEmptyPagesCB->IsChecked();
-        aAddPrinterAttr.bPrintSingleJobs    = sal_True; // handled by vcl in new print dialog since CWS printerpullpages /*aSingleJobsCB.IsChecked()*/;
+        aAddPrinterAttr.bPrintSingleJobs    = sal_True; 
 
         if (m_pNoRB->IsChecked())  aAddPrinterAttr.nPrintPostIts =
                                                         POSTITS_NONE;
@@ -783,10 +783,10 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     }
     delete pFontList;
     pFontList = new FontList( pPrt );
-    // #i94536# prevent duplication of font entries when 'reset' button is pressed
+    
     if( !pStandardBox->GetEntryCount() )
     {
-        // get the set of disctinct available family names
+        
         std::set< OUString > aFontNames;
         int nFontNames = pPrt->GetDevFontCount();
         for( int i = 0; i < nFontNames; i++ )
@@ -795,7 +795,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
             aFontNames.insert( aInf.GetName() );
         }
 
-        // insert to listboxes
+        
         for( std::set< OUString >::const_iterator it = aFontNames.begin();
              it != aFontNames.end(); ++it )
         {
@@ -1127,8 +1127,8 @@ sal_Bool SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
     if(eMode != pModOpt->GetTblMode())
     {
         pModOpt->SetTblMode(eMode);
-        // the table-keyboard-mode has changed, now the current
-        // table should know about that too.
+        
+        
         if(pWrtShell && nsSelectionType::SEL_TBL & pWrtShell->GetSelectionType())
         {
             pWrtShell->SetTblChgMode(eMode);
@@ -1217,7 +1217,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
         bHTMLMode = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
     }
 
-    // hide certain controls for html
+    
     if(bHTMLMode)
     {
         pRepeatHeaderCB->Hide();
@@ -1456,7 +1456,7 @@ struct CharAttr
     sal_uInt16 nAttr;
 };
 
-// Edit corresponds to Paste-attributes
+
 static CharAttr aRedlineAttr[] =
 {
     { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_NOT_MAPPED },
@@ -1471,16 +1471,16 @@ static CharAttr aRedlineAttr[] =
     { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_TITEL },
     { SID_ATTR_BRUSH,               0 }
 };
-// Items from aRedlineAttr relevant for InsertAttr: strikethrough is
-// not used
+
+
 static sal_uInt16 aInsertAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 
-// Items from aRedlineAttr relevant for DeleteAttr: underline and
-// double underline is not used
+
+
 static sal_uInt16 aDeletedAttrMap[] = { 0, 1, 2, 5, 6, 7, 8, 9, 10 };
 
-// Items from aRedlineAttr relevant for ChangeAttr: strikethrough is
-// not used
+
+
 static sal_uInt16 aChangedAttrMap[] = { 0, 1, 2, 3, 4, 6, 7, 8, 9, 10 };
 
 /*-----------------------------------------------------------------------
@@ -1510,7 +1510,7 @@ SwMarkPreview::~SwMarkPreview()
 
 void SwMarkPreview::InitColors( void )
 {
-    // m_aTransCol and m_aMarkCol are _not_ changed because they are set from outside!
+    
 
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
     m_aBgCol = Color( rSettings.GetWindowColor() );
@@ -1534,13 +1534,13 @@ void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
 {
     const Size aSz(GetOutputSizePixel());
 
-    // Page
+    
     aPage.SetSize(Size(aSz.Width() - 3, aSz.Height() - 3));
 
     sal_uLong nOutWPix = aPage.GetWidth();
     sal_uLong nOutHPix = aPage.GetHeight();
 
-    // PrintArea
+    
     sal_uLong nLBorder = 8;
     sal_uLong nRBorder = 8;
     sal_uLong nTBorder = 4;
@@ -1554,15 +1554,15 @@ void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
     aRightPagePrtArea = aLeftPagePrtArea;
     aRightPagePrtArea.Move(aLeftPagePrtArea.GetWidth() + nLBorder + nRBorder + 1, 0);
 
-    // draw shadow
+    
     Rectangle aShadow(aPage);
     aShadow += Point(3, 3);
     DrawRect( aShadow, m_aShadowCol, m_aTransCol );
 
-    // draw page
+    
     DrawRect( aPage, m_aBgCol, m_aLineCol );
 
-    // draw separator
+    
     Rectangle aPageSeparator(aPage);
     aPageSeparator.SetSize(Size(2, aPageSeparator.GetHeight()));
     aPageSeparator.Move(aPage.GetWidth() / 2 - 1, 0);
@@ -1576,23 +1576,23 @@ void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
 
     switch (nMarkPos)
     {
-        case 1:     // left
+        case 1:     
             aRightMark.SetPos(Point(aRightPagePrtArea.Left() - 2 - aRightMark.GetWidth(), aRightMark.Top()));
             break;
 
-        case 2:     // right
+        case 2:     
             aLeftMark.SetPos(Point(aLeftPagePrtArea.Right() + 2, aLeftMark.Top()));
             break;
 
-        case 3:     // outside
+        case 3:     
             break;
 
-        case 4:     // inside
+        case 4:     
             aLeftMark.SetPos(Point(aLeftPagePrtArea.Right() + 2, aLeftMark.Top()));
             aRightMark.SetPos(Point(aRightPagePrtArea.Left() - 2 - aRightMark.GetWidth(), aRightMark.Top()));
             break;
 
-        case 0:     // none
+        case 0:     
         default:
             return;
     }
@@ -1602,10 +1602,10 @@ void SwMarkPreview::Paint(const Rectangle &/*rRect*/)
 
 void SwMarkPreview::PaintPage(const Rectangle &rRect)
 {
-    // draw PrintArea
+    
     DrawRect(rRect, m_aTransCol, m_aPrintAreaCol );
 
-    // draw Testparagraph
+    
     sal_uLong nLTxtBorder = 4;
     sal_uLong nRTxtBorder = 4;
     sal_uLong nTTxtBorder = 4;
@@ -1622,7 +1622,7 @@ void SwMarkPreview::PaintPage(const Rectangle &rRect)
     nStep = aTextLine.GetHeight() + 2;
     nLines = (sal_uInt16)(rRect.GetHeight() / (aTextLine.GetHeight() + 2)) - 1;
 
-    // simulate text
+    
     for (sal_uInt16 i = 0; i < nLines; ++i)
     {
         if (i == (nLines - 1))
@@ -1708,8 +1708,8 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
         pChangedLB->InsertEntry(sEntry);
     };
 
-    // remove strikethrough from insert and change and underline + double
-    // underline from delete
+    
+    
     pInsertLB->RemoveEntry(5);
     pChangedLB->RemoveEntry(5);
     pDeletedLB->RemoveEntry(4);
@@ -1729,7 +1729,7 @@ SwRedlineOptionsTabPage::SwRedlineOptionsTabPage( Window* pParent,
     pMarkPosLB->SetSelectHdl( aLk );
     pMarkColorLB->SetSelectHdl( aLk );
 /*
-    //solution: set different accessible name of four color box
+    
     pInsertColorLB->SetAccessibleName(OUString( aInsertFT.GetDisplayText()) + OUString(aInsertColorFT.GetDisplayText()));
     pDeletedColorLB->SetAccessibleName(OUString( aDeletedFT.GetDisplayText()) + OUString( aDeletedColorFT.GetDisplayText()));
     pChangedColorLB->SetAccessibleName(OUString( aChangedFT.GetDisplayText()) + OUString( aChangedColorFT.GetDisplayText()));
@@ -1858,7 +1858,7 @@ sal_Bool SwRedlineOptionsTabPage::FillItemSet( SfxItemSet& )
        nOldMarkColor != pOpt->GetMarkAlignColor().GetColor() ||
        nOldMarkMode != pOpt->GetMarkAlignMode())
     {
-        // update all documents
+        
         TypeId aType(TYPE(SwDocShell));
         SwDocShell* pDocShell = (SwDocShell*)SfxObjectShell::GetFirst(&aType);
 
@@ -1880,12 +1880,12 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     const AuthorCharAttr &rDeletedAttr = pOpt->GetDeletedAuthorAttr();
     const AuthorCharAttr &rChangedAttr = pOpt->GetFormatAuthorAttr();
 
-    // initialise preview
+    
     InitFontStyle(*pInsertedPreviewWN);
     InitFontStyle(*pDeletedPreviewWN);
     InitFontStyle(*pChangedPreviewWN);
 
-    // initialise colour list box
+    
     pInsertColorLB->SetUpdateMode(false);
     pDeletedColorLB->SetUpdateMode(false);
     pChangedColorLB->SetUpdateMode(false);
@@ -1982,7 +1982,7 @@ void SwRedlineOptionsTabPage::Reset( const SfxItemSet&  )
     }
     pMarkPosLB->SelectEntryPos(nPos);
 
-    // show settings in preview
+    
     AttribHdl(pInsertLB);
     ColorHdl(pInsertColorLB);
     AttribHdl(pDeletedLB);
@@ -2052,7 +2052,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, AttribHdl, ListBox *, pLB )
         nPos = 0;
 
     CharAttr*   pAttr = ( CharAttr* ) pLB->GetEntryData( nPos );
-    //switch off preview background color
+    
     pPrev->ResetColor();
     switch (pAttr->nItemId)
     {
@@ -2222,7 +2222,7 @@ void SwRedlineOptionsTabPage::InitFontStyle(SvxFontPrevWindow& rExampleWin)
 }
 
 
-//----------------------------------------------------------
+
 SwCompareOptionsTabPage::SwCompareOptionsTabPage(  Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage( pParent,"OptComparison","modules/swriter/ui/optcomparison.ui", rSet )
 {
@@ -2420,7 +2420,7 @@ void SwTestTabPage::Reset( const SfxItemSet& )
 
 void SwTestTabPage::Init()
 {
-    // handler
+    
     Link aLk = LINK( this, SwTestTabPage, AutoClickHdl );
     m_pTest1CBox->SetClickHdl( aLk );
     m_pTest2CBox->SetClickHdl( aLk );

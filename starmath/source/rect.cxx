@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -29,12 +29,12 @@
 #include "smmod.hxx"
 
 
-////////////////////////////////////////////////////////////////////////////////
 
 
-// '\0' terminated Array with symbol, which should be treat as letters in
-// StarMath Font, (to get a normal (non-clipped) SmRect in contrast to the
-// other operators and symbols).
+
+
+
+
 static sal_Unicode const aMathAlpha[] =
 {
     MS_ALEPH,               MS_IM,                  MS_RE,
@@ -49,7 +49,7 @@ static sal_Unicode const aMathAlpha[] =
 };
 
 bool SmIsMathAlpha(const OUString &rText)
-    // true iff symbol (from StarMath Font) should be treated as letter
+    
 {
     if (rText.isEmpty())
         return false;
@@ -57,12 +57,12 @@ bool SmIsMathAlpha(const OUString &rText)
     OSL_ENSURE(rText.getLength() == 1, "Sm : string must be exactly one character long");
     sal_Unicode cChar = rText[0];
 
-    // is it a greek symbol?
+    
     if (sal_Unicode(0xE0AC) <= cChar  &&  cChar <= sal_Unicode(0xE0D4))
         return true;
     else
     {
-        // appears it in 'aMathAlpha'?
+        
         const sal_Unicode *pChar = aMathAlpha;
         while (*pChar  &&  *pChar != cChar)
             pChar++;
@@ -71,14 +71,14 @@ bool SmIsMathAlpha(const OUString &rText)
 }
 
 
-////////////////////////////////////////
+
 //
-// SmRect members
+
 //
 
 
 SmRect::SmRect()
-    // constructs empty rectangle at (0, 0) with width and height 0.
+    
 {
     OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
     OSL_ENSURE(aSize == Size(0, 0), "Sm: ooops...");
@@ -143,13 +143,13 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     nBaseline     = aFM.GetAscent();
     nAlignT       = nBaseline - nFontHeight * 750L / 1000L;
     nAlignM       = nBaseline - nFontHeight * 121L / 422L;
-        // that's where the horizontal bars of '+', '-', ... are
-        // (1/3 of ascent over baseline)
-        // (121 = 1/3 of 12pt ascent, 422 = 12pt fontheight)
+        
+        
+        
     nAlignB       = nBaseline;
 
-    // workaround for printer fonts with very small (possible 0 or even
-    // negative(!)) leading
+    
+    
     if (aFM.GetIntLeading() < 5  &&  rDev.GetOutDevType() == OUTDEV_PRINTER)
     {
         OutputDevice    *pWindow = Application::GetDefaultDevice();
@@ -161,8 +161,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
         long  nDelta = pWindow->GetFontMetric().GetIntLeading();
         if (nDelta == 0)
-        {   // this value approx. fits a Leading of 80 at a
-            // Fontheight of 422 (12pt)
+        {   
+            
             nDelta = nFontHeight * 8L / 43;
         }
         SetTop(GetTop() - nDelta);
@@ -170,7 +170,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
         pWindow->Pop();
     }
 
-    // get GlyphBoundRect
+    
     Rectangle  aGlyphRect;
     bool bSuccess = SmGetGlyphBoundRect(rDev, rText, aGlyphRect);
     if (!bSuccess)
@@ -196,8 +196,8 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     if (bAllowSmaller)
     {
-        // for symbols and operators from the StarMath Font
-        // we adjust upper and lower margin of the symbol
+        
+        
         SetTop(nGlyphTop);
         SetBottom(nGlyphBottom);
     }
@@ -215,7 +215,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
 void SmRect::Init(const OutputDevice &rDev, const SmFormat *pFormat,
                   const OUString &rText, sal_uInt16 nEBorderWidth)
-    // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
+    
 {
     BuildRect(rDev, pFormat, rText, nEBorderWidth);
 }
@@ -232,10 +232,10 @@ SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
 
 SmRect::SmRect(long nWidth, long nHeight)
-    // this constructor should never be used for anything textlike because
-    // it will not provide useful values for baseline, AlignT and AlignB!
-    // It's purpose is to get a 'SmRect' for the horizontal line in fractions
-    // as used in 'SmBinVerNode'.
+    
+    
+    
+    
 :   aSize(nWidth, nHeight)
 {
     OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
@@ -245,7 +245,7 @@ SmRect::SmRect(long nWidth, long nHeight)
     nBaseline     = 0;
     nAlignT       = GetTop();
     nAlignB       = GetBottom();
-    nAlignM       = (nAlignT + nAlignB) / 2;        // this is the default
+    nAlignM       = (nAlignT + nAlignB) / 2;        
     nItalicLeftSpace = nItalicRightSpace = 0;
     nGlyphTop    = nHiAttrFence  = GetTop();
     nGlyphBottom = nLoAttrFence  = GetBottom();
@@ -286,7 +286,7 @@ void SmRect::SetTop(long nTop)
 
 
 void SmRect::Move(const Point &rPosition)
-    // move rectangle by position 'rPosition'.
+    
 {
     aTopLeft  += rPosition;
 
@@ -305,10 +305,10 @@ void SmRect::Move(const Point &rPosition)
 const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                             RectHorAlign eHor, RectVerAlign eVer) const
 {   Point  aPos (GetTopLeft());
-        // will become the topleft point of the new rectangle position
+        
 
-    // set horizontal or vertical new rectangle position depending on
-    // 'ePos' is one of 'RP_LEFT', 'RP_RIGHT' or 'RP_TOP', 'RP_BOTTOM'
+    
+    
     switch (ePos)
     {   case RP_LEFT :
             aPos.X() = rRect.GetItalicLeft() - GetItalicRightSpace()
@@ -331,9 +331,9 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
             SAL_WARN("starmath", "unknown case");
     }
 
-    // check if horizontal position is already set
+    
     if (ePos == RP_LEFT  ||  ePos == RP_RIGHT  ||  ePos == RP_ATTRIBUT)
-        // correct error in current vertical position
+        
         switch (eVer)
         {   case RVA_TOP :
                 aPos.Y() += rRect.GetAlignT() - GetAlignT();
@@ -342,7 +342,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.Y() += rRect.GetAlignM() - GetAlignM();
                 break;
             case RVA_BASELINE :
-                // align baselines if possible else align mid's
+                
                 if (HasBaseline() && rRect.HasBaseline())
                     aPos.Y() += rRect.GetBaseline() - GetBaseline();
                 else
@@ -368,9 +368,9 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 SAL_WARN("starmath", "unknown case");
         }
 
-    // check if vertical position is already set
+    
     if (ePos == RP_TOP  ||  ePos == RP_BOTTOM)
-        // correct error in current horizontal position
+        
         switch (eHor)
         {   case RHA_LEFT :
                 aPos.X() += rRect.GetItalicLeft() - GetItalicLeft();
@@ -390,10 +390,10 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
 
 
 SmRect & SmRect::Union(const SmRect &rRect)
-    // rectangle union of current one with 'rRect'. The result is to be the
-    // smallest rectangles that covers the space of both rectangles.
-    // (empty rectangles cover no space)
-    //! Italic correction is NOT taken into account here!
+    
+    
+    
+    
 {
     if (rRect.IsEmpty())
         return *this;
@@ -433,14 +433,14 @@ SmRect & SmRect::Union(const SmRect &rRect)
 
 
 SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
-    // let current rectangle be the union of itself and 'rRect'
-    // (the smallest rectangle surrounding both). Also adapt values for
-    // 'AlignT', 'AlignM', 'AlignB', baseline and italic-spaces.
-    // The baseline is set according to 'eCopyMode'.
-    // If one of the rectangles has no relevant info the other one is copied.
+    
+    
+    
+    
+    
 {
-    // get some values used for (italic) spaces adaption
-    // ! (need to be done before changing current SmRect) !
+    
+    
     long  nL = std::min(GetItalicLeft(),  rRect.GetItalicLeft()),
           nR = std::max(GetItalicRight(), rRect.GetItalicRight());
 
@@ -459,7 +459,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
 
         switch (eCopyMode)
         {   case RCP_THIS:
-                // already done
+                
                 break;
             case RCP_ARG:
                 CopyMBL(rRect);
@@ -483,10 +483,10 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
 
 SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                           long nNewAlignM)
-    // as 'ExtendBy' but sets AlignM value to 'nNewAlignM'.
-    // (this version will be used in 'SmBinVerNode' to provide means to
-    // align eg "{a over b} over c" correctly where AlignM should not
-    // be (AlignT + AlignB) / 2)
+    
+    
+    
+    
 {
     OSL_ENSURE(HasAlignInfo(), "Sm: no align info");
 
@@ -499,15 +499,15 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
 
 SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                           bool bKeepVerAlignParams)
-    // as 'ExtendBy' but keeps original values for AlignT, -M and -B and
-    // baseline.
-    // (this is used in 'SmSupSubNode' where the sub-/supscripts shouldn't
-    // be allowed to modify these values.)
+    
+    
+    
+    
 {
     long  nOldAlignT   = GetAlignT(),
           nOldAlignM   = GetAlignM(),
           nOldAlignB   = GetAlignB(),
-          nOldBaseline = nBaseline;     //! depends not on 'HasBaseline'
+          nOldBaseline = nBaseline;     
     bool  bOldHasAlignInfo = HasAlignInfo();
 
     ExtendBy(rRect, eCopyMode);
@@ -525,14 +525,14 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
 
 
 long SmRect::OrientedDist(const Point &rPoint) const
-    // return oriented distance of rPoint to the current rectangle,
-    // especially the return value is <= 0 iff the point is inside the
-    // rectangle.
-    // For simplicity the maximum-norm is used.
+    
+    
+    
+    
 {
     bool  bIsInside = IsInsideItalicRect(rPoint);
 
-    // build reference point to define the distance
+    
     Point  aRef;
     if (bIsInside)
     {   Point  aIC (GetItalicCenterX(), GetCenterY());
@@ -542,14 +542,14 @@ long SmRect::OrientedDist(const Point &rPoint) const
     }
     else
     {
-        // x-coordinate
+        
         if (rPoint.X() > GetItalicRight())
             aRef.X() = GetItalicRight();
         else if (rPoint.X() < GetItalicLeft())
             aRef.X() = GetItalicLeft();
         else
             aRef.X() = rPoint.X();
-        // y-coordinate
+        
         if (rPoint.Y() > GetBottom())
             aRef.Y() = GetBottom();
         else if (rPoint.Y() < GetTop())
@@ -558,7 +558,7 @@ long SmRect::OrientedDist(const Point &rPoint) const
             aRef.Y() = rPoint.Y();
     }
 
-    // build distance vector
+    
     Point  aDist (aRef - rPoint);
 
     long nAbsX = labs(aDist.X()),
@@ -595,24 +595,24 @@ SmRect SmRect::AsGlyphRect() const
 
 bool SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const OUString &rText, Rectangle &rRect)
-    // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
-    // but with a string as argument.
+    
+    
 {
-    // handle special case first
+    
     if (rText.isEmpty())
     {
         rRect.SetEmpty();
         return true;
     }
 
-    // get a device where 'OutputDevice::GetTextBoundRect' will be successful
+    
     OutputDevice *pGlyphDev;
     if (rDev.GetOutDevType() != OUTDEV_PRINTER)
         pGlyphDev = (OutputDevice *) &rDev;
     else
     {
-        // since we format for the printer (where GetTextBoundRect will fail)
-        // we need a virtual device here.
+        
+        
         pGlyphDev = &SM_MOD()->GetDefaultVirtualDev();
     }
 
@@ -622,12 +622,12 @@ bool SmGetGlyphBoundRect(const OutputDevice &rDev,
     Font aFnt(rDev.GetFont());
     aFnt.SetAlign(ALIGN_TOP);
 
-    // use scale factor when calling GetTextBoundRect to counter
-    // negative effects from antialiasing which may otherwise result
-    // in significant incorrect bounding rectangles for some characters.
+    
+    
+    
     Size aFntSize = aFnt.GetSize();
 
-    // Workaround to avoid HUGE font sizes and resulting problems
+    
     long nScaleFactor = 1;
     while( aFntSize.Height() > 2000 * nScaleFactor )
         nScaleFactor *= 2;
@@ -660,8 +660,8 @@ bool SmGetGlyphBoundRect(const OutputDevice &rDev,
         }
     }
 
-    // move rectangle to match possibly different baselines
-    // (because of different devices)
+    
+    
     long nDelta = aDevFM.GetAscent() - pGlyphDev->GetFontMetric().GetAscent() * nScaleFactor;
     aResult.Move(0, nDelta);
 

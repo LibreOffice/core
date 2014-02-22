@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xexptran.hxx"
@@ -36,11 +36,11 @@
 
 using namespace ::com::sun::star;
 
-// Defines
+
 
 #define BORDER_INTEGERS_ARE_EQUAL       (4)
 
-// Predeclarations
+
 
 void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen);
 void Imp_CalcVectorValues(::basegfx::B2DVector& aVec1, ::basegfx::B2DVector& aVec2, bool& bSameLength, bool& bSameDirection)
@@ -56,7 +56,7 @@ void Imp_CalcVectorValues(::basegfx::B2DVector& aVec1, ::basegfx::B2DVector& aVe
     bSameDirection = (nLen3 <= BORDER_INTEGERS_ARE_EQUAL);
 }
 
-// parsing help functions for simple chars
+
 void Imp_SkipSpaces(const OUString& rStr, sal_Int32& rPos, const sal_Int32 nLen)
 {
     while(rPos < nLen
@@ -85,7 +85,7 @@ void Imp_SkipSpacesAndClosingBraces(const OUString& rStr, sal_Int32& rPos, const
         rPos++;
 }
 
-// parsing help functions for integer numbers
+
 
 bool Imp_IsOnNumberChar(const OUString& rStr, const sal_Int32 nPos, bool bSignAllowed = true)
 {
@@ -145,7 +145,7 @@ void Imp_PutNumberCharWithSpace(OUString& rStr, sal_Int32 nValue)
     Imp_PutNumberChar(rStr, nValue);
 }
 
-// parsing help functions for double numbers
+
 
 void Imp_SkipDouble(const OUString& rStr, sal_Int32& rPos, const sal_Int32)
 {
@@ -268,7 +268,7 @@ void Imp_PutDoubleChar(OUString& rStr, const SvXMLUnitConverter& rConv, double f
     rStr += OUString(sStringBuffer.makeStringAndClear());
 }
 
-// base class of all 2D transform objects
+
 
 struct ImpSdXMLExpTransObj2DBase
 {
@@ -277,7 +277,7 @@ struct ImpSdXMLExpTransObj2DBase
     :   mnType(nType) {}
 };
 
-// possible object types for 2D
+
 
 #define IMP_SDXMLEXP_TRANSOBJ2D_ROTATE          0x0000
 #define IMP_SDXMLEXP_TRANSOBJ2D_SCALE           0x0001
@@ -286,7 +286,7 @@ struct ImpSdXMLExpTransObj2DBase
 #define IMP_SDXMLEXP_TRANSOBJ2D_SKEWY           0x0004
 #define IMP_SDXMLEXP_TRANSOBJ2D_MATRIX          0x0005
 
-// classes of objects, different sizes
+
 
 struct ImpSdXMLExpTransObj2DRotate : public ImpSdXMLExpTransObj2DBase
 {
@@ -325,7 +325,7 @@ struct ImpSdXMLExpTransObj2DMatrix : public ImpSdXMLExpTransObj2DBase
     :   ImpSdXMLExpTransObj2DBase(IMP_SDXMLEXP_TRANSOBJ2D_MATRIX), maMatrix(rNew) {}
 };
 
-// delete all entries in list
+
 
 void SdXMLImExTransform2D::EmptyList()
 {
@@ -377,7 +377,7 @@ void SdXMLImExTransform2D::EmptyList()
     maList.clear();
 }
 
-// add members
+
 
 void SdXMLImExTransform2D::AddRotate(double fNew)
 {
@@ -397,7 +397,7 @@ void SdXMLImExTransform2D::AddSkewX(double fNew)
         maList.push_back(new ImpSdXMLExpTransObj2DSkewX(fNew));
 }
 
-// gen string for export
+
 const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& rConv)
 {
     OUString aNewString;
@@ -453,27 +453,27 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
             {
                 aNewString += "matrix (";
 
-                // a
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix.get(0, 0));
                 aNewString += aEmptySpace;
 
-                // b
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix.get(1, 0));
                 aNewString += aEmptySpace;
 
-                // c
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix.get(0, 1));
                 aNewString += aEmptySpace;
 
-                // d
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix.get(1, 1));
                 aNewString += aEmptySpace;
 
-                // e
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix.get(0, 2), true);
                 aNewString += aEmptySpace;
 
-                // f
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj2DMatrix*)pObj)->maMatrix.get(1, 2), true);
 
                 aNewString += aClosingBrace;
@@ -486,20 +486,20 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
             }
         }
 
-        // if not the last entry, add one space to next tag
+        
         if(a + 1UL != maList.size())
         {
             aNewString += aEmptySpace;
         }
     }
 
-    // fill string form OUString
+    
     msString = aNewString;
 
     return msString;
 }
 
-// sets new string, parses it and generates entries
+
 void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConverter& rConv)
 {
     msString = rNew;
@@ -521,10 +521,10 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
 
         while(nPos < nLen)
         {
-            // skip spaces
+            
             Imp_SkipSpaces(aStr, nPos, nLen);
 
-            // look for tag
+            
             if(nPos < nLen)
             {
                 if(nPos == aStr.indexOf(aString_rotate, nPos))
@@ -595,27 +595,27 @@ void SdXMLImExTransform2D::SetString(const OUString& rNew, const SvXMLUnitConver
                     nPos += 6;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
 
-                    // a
+                    
                     aValue.set(0, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 0)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // b
+                    
                     aValue.set(1, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 0)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // c
+                    
                     aValue.set(0, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 1)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // d
+                    
                     aValue.set(1, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 1)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // e
+                    
                     aValue.set(0, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 2), true));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // f
+                    
                     aValue.set(1, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 2), true));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
@@ -645,12 +645,12 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
         {
             case IMP_SDXMLEXP_TRANSOBJ2D_ROTATE     :
             {
-                // #i78696#
-                // mfRotate is mathematically wrong oriented since we export/import the angle
-                // values mirrored. This error is fixed in the API, but not yet in the FileFormat.
-                // For the FileFormat there is a follow-up task (#i78698#) to fix this in the next
-                // ODF FileFormat version. For now - to emulate the old behaviour - it is necessary
-                // to mirror the value here
+                
+                
+                
+                
+                
+                
                 rFullTrans.rotate(((ImpSdXMLExpTransObj2DRotate*)pObj)->mfRotate * -1.0);
                 break;
             }
@@ -690,7 +690,7 @@ void SdXMLImExTransform2D::GetFullTransform(::basegfx::B2DHomMatrix& rFullTrans)
     }
 }
 
-// base class of all 3D transform objects
+
 
 struct ImpSdXMLExpTransObj3DBase
 {
@@ -699,7 +699,7 @@ struct ImpSdXMLExpTransObj3DBase
     :   mnType(nType) {}
 };
 
-// possible object types for 3D
+
 
 #define IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_X        0x0000
 #define IMP_SDXMLEXP_TRANSOBJ3D_ROTATE_Y        0x0001
@@ -708,7 +708,7 @@ struct ImpSdXMLExpTransObj3DBase
 #define IMP_SDXMLEXP_TRANSOBJ3D_TRANSLATE       0x0004
 #define IMP_SDXMLEXP_TRANSOBJ3D_MATRIX          0x0005
 
-// classes of objects, different sizes
+
 
 struct ImpSdXMLExpTransObj3DRotateX : public ImpSdXMLExpTransObj3DBase
 {
@@ -747,7 +747,7 @@ struct ImpSdXMLExpTransObj3DMatrix : public ImpSdXMLExpTransObj3DBase
     :   ImpSdXMLExpTransObj3DBase(IMP_SDXMLEXP_TRANSOBJ3D_MATRIX), maMatrix(rNew) {}
 };
 
-// delete all entries in list
+
 
 void SdXMLImExTransform3D::EmptyList()
 {
@@ -799,7 +799,7 @@ void SdXMLImExTransform3D::EmptyList()
     maList.clear();
 }
 
-// add members
+
 
 void SdXMLImExTransform3D::AddMatrix(const ::basegfx::B3DHomMatrix& rNew)
 {
@@ -827,7 +827,7 @@ void SdXMLImExTransform3D::AddHomogenMatrix(const drawing::HomogenMatrix& xHomMa
     AddMatrix(aExportMatrix);
 }
 
-// gen string for export
+
 const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& rConv)
 {
     OUString aNewString;
@@ -887,51 +887,51 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
             {
                 aNewString += "matrix (";
 
-                // a
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(0, 0));
                 aNewString += aEmptySpace;
 
-                // b
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(1, 0));
                 aNewString += aEmptySpace;
 
-                // c
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(2, 0));
                 aNewString += aEmptySpace;
 
-                // d
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(0, 1));
                 aNewString += aEmptySpace;
 
-                // e
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(1, 1));
                 aNewString += aEmptySpace;
 
-                // f
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(2, 1));
                 aNewString += aEmptySpace;
 
-                // g
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(0, 2));
                 aNewString += aEmptySpace;
 
-                // h
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(1, 2));
                 aNewString += aEmptySpace;
 
-                // i
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(2, 2));
                 aNewString += aEmptySpace;
 
-                // j
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(0, 3), true);
                 aNewString += aEmptySpace;
 
-                // k
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(1, 3), true);
                 aNewString += aEmptySpace;
 
-                // l
+                
                 Imp_PutDoubleChar(aNewString, rConv, ((ImpSdXMLExpTransObj3DMatrix*)pObj)->maMatrix.get(2, 3), true);
 
                 aNewString += aClosingBrace;
@@ -944,26 +944,26 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
             }
         }
 
-        // if not the last entry, add one space to next tag
+        
         if(a + 1UL != maList.size())
         {
             aNewString += aEmptySpace;
         }
     }
 
-    // fill string form OUString
+    
     msString = aNewString;
 
     return msString;
 }
 
-// for Import: constructor with string, parses it and generates entries
+
 SdXMLImExTransform3D::SdXMLImExTransform3D(const OUString& rNew, const SvXMLUnitConverter& rConv)
 {
     SetString(rNew, rConv);
 }
 
-// sets new string, parses it and generates entries
+
 void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConverter& rConv)
 {
     msString = rNew;
@@ -985,10 +985,10 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
 
         while(nPos < nLen)
         {
-            // skip spaces
+            
             Imp_SkipSpaces(aStr, nPos, nLen);
 
-            // look for tag
+            
             if(nPos < nLen)
             {
                 if(nPos == aStr.indexOf(aString_rotatex, nPos))
@@ -1068,51 +1068,51 @@ void SdXMLImExTransform3D::SetString(const OUString& rNew, const SvXMLUnitConver
                     nPos += 6;
                     Imp_SkipSpacesAndOpeningBraces(aStr, nPos, nLen);
 
-                    // a
+                    
                     aValue.set(0, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 0)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // b
+                    
                     aValue.set(1, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 0)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // c
+                    
                     aValue.set(2, 0, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 0)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // d
+                    
                     aValue.set(0, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 1)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // e
+                    
                     aValue.set(1, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 1)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // f
+                    
                     aValue.set(2, 1, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 1)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // g
+                    
                     aValue.set(0, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 2)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // h
+                    
                     aValue.set(1, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 2)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // i
+                    
                     aValue.set(2, 2, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 2)));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // j
+                    
                     aValue.set(0, 3, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(0, 3), true));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // k
+                    
                     aValue.set(1, 3, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(1, 3), true));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-                    // l
+                    
                     aValue.set(2, 3, Imp_GetDoubleChar(aStr, nPos, nLen, rConv, aValue.get(2, 3), true));
                     Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
@@ -1222,7 +1222,7 @@ SdXMLImExViewBox::SdXMLImExViewBox(double fX, double fY, double fW, double fH)
 {
 }
 
-// #100617# Asked vincent hardy: svg:viewBox values may be double precision.
+
 SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverter& rConv)
 :   msString(rNew),
     mfX( 0.0 ),
@@ -1236,28 +1236,28 @@ SdXMLImExViewBox::SdXMLImExViewBox(const OUString& rNew, const SvXMLUnitConverte
         const sal_Int32 nLen(aStr.getLength());
         sal_Int32 nPos(0);
 
-        // skip starting spaces
+        
         Imp_SkipSpaces(aStr, nPos, nLen);
 
-        // get mX, #100617# be prepared for doubles
+        
         mfX = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfX);
 
-        // skip spaces and commas
+        
         Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-        // get mY, #100617# be prepared for doubles
+        
         mfY = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfY);
 
-        // skip spaces and commas
+        
         Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-        // get mW, #100617# be prepared for doubles
+        
         mfW = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfW);
 
-        // skip spaces and commas
+        
         Imp_SkipSpacesAndCommas(aStr, nPos, nLen);
 
-        // get mH, #100617# be prepared for doubles
+        
         mfH = Imp_GetDoubleChar(aStr, nPos, nLen, rConv, mfH);
     }
 }
@@ -1278,7 +1278,7 @@ const OUString& SdXMLImExViewBox::GetExportString()
 
     Imp_PutDoubleChar(aNewString, mfH);
 
-    // set new string
+    
     msString = aNewString;
 
     return msString;

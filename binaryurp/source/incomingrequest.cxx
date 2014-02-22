@@ -78,7 +78,7 @@ void IncomingRequest::execute() const {
                      OStringToOUString(
                          OString(e.what()), RTL_TEXTENCODING_ASCII_US)),
                     css::uno::Reference< css::uno::XInterface >());
-                    // best-effort string conversion
+                    
             }
         } catch (const css::uno::RuntimeException &) {
             css::uno::Any exc(cppu::getCaughtException());
@@ -133,7 +133,7 @@ bool IncomingRequest::execute_throw(
     bool isExc = false;
     switch (functionId_) {
     case SPECIAL_FUNCTION_ID_RESERVED:
-        OSL_ASSERT(false); // this cannot happen
+        OSL_ASSERT(false); 
         break;
     case SPECIAL_FUNCTION_ID_RELEASE:
         bridge_->releaseStub(oid_, type_);
@@ -175,7 +175,7 @@ bool IncomingRequest::execute_throw(
             }
             break;
         }
-        // fall through
+        
     default:
         {
             OSL_ASSERT(object_.is());
@@ -231,7 +231,7 @@ bool IncomingRequest::execute_throw(
                     break;
                 }
             default:
-                OSL_ASSERT(false); // this cannot happen
+                OSL_ASSERT(false); 
                 break;
             }
             size_t nSize = 0;

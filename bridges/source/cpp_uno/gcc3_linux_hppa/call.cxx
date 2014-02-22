@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <malloc.h>
@@ -78,9 +78,9 @@ void MapReturn(sal_uInt32 ret0, sal_uInt32 ret1, typelib_TypeDescription *pRetur
     }
 }
 
-//Moved callVirtual into this .cxx so that I can do this and get gcc to not
-//touch r28 without having to learn any more pa-risc assembly than is
-//strictly necessary
+
+
+
 register sal_uInt32 r28 __asm__("%r28");
 
 void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
@@ -109,7 +109,7 @@ void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
         fprintf(stderr, "stack bytes are %x\n", pStack[i]);
 #endif
 
-    //Always reserve 4 slots, and align to 8 bytes
+    
     sal_uInt32 nStackBytes = ( ( nStack + 4 + 1 ) >> 1 ) * 8;
     __builtin_alloca(nStackBytes);
     sal_uInt32 *stack = sp-8;

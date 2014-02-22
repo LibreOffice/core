@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -165,7 +165,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pMtrFldBottom->SetText( "" );
     m_pMtrFldBottom->SaveValue();
 
-    // adjust to height
+    
     if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbAutoGrowHeight->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
@@ -176,7 +176,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbAutoGrowHeight->SetState( STATE_DONTKNOW );
     m_pTsbAutoGrowHeight->SaveValue();
 
-    // adjust to width
+    
     if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWWIDTH ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbAutoGrowWidth->SetState( ( ( const SdrTextAutoGrowWidthItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWWIDTH ) ).
@@ -187,7 +187,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbAutoGrowWidth->SetState( STATE_DONTKNOW );
     m_pTsbAutoGrowWidth->SaveValue();
 
-    // autogrowsize
+    
     if ( rAttrs.GetItemState( SDRATTR_TEXT_AUTOGROWSIZE ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbAutoGrowSize->SetState( ( ( const SdrTextAutoGrowHeightItem& )rAttrs.Get( SDRATTR_TEXT_AUTOGROWHEIGHT ) ).
@@ -198,7 +198,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbAutoGrowSize->SetState( STATE_DONTKNOW );
     m_pTsbAutoGrowSize->SaveValue();
 
-    // wordwrap text
+    
     if ( rAttrs.GetItemState( SDRATTR_TEXT_WORDWRAP ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbWordWrapText->SetState( ( ( const SdrTextWordWrapItem& )rAttrs.Get( SDRATTR_TEXT_WORDWRAP ) ).
@@ -210,21 +210,21 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     m_pTsbWordWrapText->SaveValue();
 
 
-    // #103516# Do the setup based on states of hor/ver adjust
-    // Setup center field and FullWidth
+    
+    
     SfxItemState eVState = rAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
     SfxItemState eHState = rAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
 
     if(SFX_ITEM_DONTCARE != eVState && SFX_ITEM_DONTCARE != eHState)
     {
-        // VertAdjust and HorAdjust are unequivocal, thus
+        
         SdrTextVertAdjust eTVA = (SdrTextVertAdjust)((const SdrTextVertAdjustItem&)rAttrs.Get(SDRATTR_TEXT_VERTADJUST)).GetValue();
         SdrTextHorzAdjust eTHA = (SdrTextHorzAdjust)((const SdrTextHorzAdjustItem&)rAttrs.Get(SDRATTR_TEXT_HORZADJUST)).GetValue();
         RECT_POINT eRP = RP_LB;
 
         m_pTsbFullWidth->EnableTriState( false );
 
-        // Translate item values into local anchor position.
+        
         switch (eTVA)
         {
             case SDRTEXTVERTADJUST_TOP:
@@ -265,12 +265,12 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
                 break;
         }
 
-        // See if we have to check the "full width" check button.
+        
         sal_Bool bLeftToRight(IsTextDirectionLeftToRight());
 
         if((bLeftToRight && (SDRTEXTHORZADJUST_BLOCK == eTHA)) || (!bLeftToRight && (SDRTEXTVERTADJUST_BLOCK == eTVA)))
         {
-            // Move anchor to valid position.
+            
             ClickFullWidthHdl_Impl(NULL);
             m_pTsbFullWidth->SetState(STATE_CHECK);
         }
@@ -279,7 +279,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
     }
     else
     {
-        // VertAdjust or HorAdjust is not unequivocal
+        
         m_pCtlPosition->Reset();
 
         m_pCtlPosition->SetState(STATE_DONTKNOW);
@@ -289,7 +289,7 @@ void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
         m_pFlPosition->Enable( false );
     }
 
-    // adjust to border
+    
     if ( rAttrs.GetItemState( SDRATTR_TEXT_FITTOSIZE ) != SFX_ITEM_DONTCARE )
     {
         SdrFitToSizeType eFTS = (SdrFitToSizeType)
@@ -389,7 +389,7 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         SdrFitToSizeType eFTS;
         switch( eState )
         {
-            default: ; //prevent warning
+            default: ; 
                 OSL_FAIL( "svx::SvxTextAttrPage::FillItemSet(), unhandled state!" );
                 /* Fall through */
             case STATE_NOCHECK: eFTS = SDRTEXTFIT_NONE; break;
@@ -398,7 +398,7 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
         rAttrs.Put( SdrTextFitToSizeTypeItem( eFTS ) );
     }
 
-    // centered
+    
     RECT_POINT eRP = m_pCtlPosition->GetActualRP();
     SdrTextVertAdjust eTVA, eOldTVA;
     SdrTextHorzAdjust eTHA, eOldTHA;
@@ -426,7 +426,7 @@ sal_Bool SvxTextAttrPage::FillItemSet( SfxItemSet& rAttrs)
                     eTHA = SDRTEXTHORZADJUST_RIGHT; break;
     }
 
-    // #103516# Do not change values if adjust controls were disabled.
+    
     sal_Bool bIsDisabled(m_pCtlPosition->IsCompletelyDisabled());
 
     if(!bIsDisabled)
@@ -486,10 +486,10 @@ void SvxTextAttrPage::Construct()
                 {
                     if(pObj->HasText())
                     {
-                        // contour NOT possible for pure text objects
+                        
                         bContourEnabled = sal_False;
 
-                        // adjusting width and height is ONLY possible for pure text objects
+                        
                         bAutoGrowWidthEnabled = bAutoGrowHeightEnabled = sal_True;
                     }
                 }
@@ -501,7 +501,7 @@ void SvxTextAttrPage::Construct()
                     bWordWrapTextEnabled = sal_True;
                 }
                 break;
-                default: ;//prevent warning
+                default: ;
             }
         }
     }
@@ -536,8 +536,8 @@ void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
 {
     if (m_pTsbFullWidth->GetState() == STATE_CHECK)
     {
-        // Depending on write direction and currently checked anchor we have
-        // to uncheck the "full width" button.
+        
+        
         if (IsTextDirectionLeftToRight())
             switch( eRP )
             {
@@ -549,7 +549,7 @@ void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
                 case RP_RB:
                     m_pTsbFullWidth->SetState( STATE_NOCHECK );
                 break;
-                default: ;//prevent warning
+                default: ;
             }
         else
             switch (eRP)
@@ -562,7 +562,7 @@ void SvxTextAttrPage::PointChanged( Window*, RECT_POINT eRP )
                 case RP_RB:
                     m_pTsbFullWidth->SetState( STATE_NOCHECK );
                 break;
-                default: ;//prevent warning
+                default: ;
             }
     }
 }
@@ -583,7 +583,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
     {
         if (IsTextDirectionLeftToRight())
         {
-            // Move text anchor to horizontal middle axis.
+            
             switch( m_pCtlPosition->GetActualRP() )
             {
                 case RP_LT:
@@ -600,12 +600,12 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
                 case RP_RB:
                     m_pCtlPosition->SetActualRP( RP_MB );
                     break;
-                default: ;//prevent warning
+                default: ;
             }
         }
         else
         {
-            // Move text anchor to vertical middle axis.
+            
             switch( m_pCtlPosition->GetActualRP() )
             {
                 case RP_LT:
@@ -622,7 +622,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickFullWidthHdl_Impl)
                 case RP_RB:
                     m_pCtlPosition->SetActualRP( RP_RM );
                 break;
-                default: ;//prevent warning
+                default: ;
             }
         }
     }
@@ -658,7 +658,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
                           !( bContour && bContourEnabled ) &&
                           bFitToSizeEnabled );
 
-    // #101901# enable/disable metric fields and decorations dependent of contour
+    
     m_pFlDistance->Enable(!bContour);
 
     if( bContour && bContourEnabled )
@@ -669,12 +669,12 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
         m_pMtrFldBottom->SetValue( 0 );
     }
 
-    // #103516# Do the setup based on states of hor/ver adjust
+    
     SfxItemState eVState = rOutAttrs.GetItemState( SDRATTR_TEXT_VERTADJUST );
     SfxItemState eHState = rOutAttrs.GetItemState( SDRATTR_TEXT_HORZADJUST );
     sal_Bool bHorAndVer(SFX_ITEM_DONTCARE == eVState || SFX_ITEM_DONTCARE == eHState);
 
-    // #83698# enable/disable text anchoring dependent of contour
+    
     m_pFlPosition->Enable(!bContour && !bHorAndVer);
 
     return( 0L );
@@ -683,7 +683,7 @@ IMPL_LINK_NOARG(SvxTextAttrPage, ClickHdl_Impl)
 
 bool SvxTextAttrPage::IsTextDirectionLeftToRight (void) const
 {
-    // Determine the text writing direction with left to right as default.
+    
     bool bLeftToRightDirection = true;
     SfxItemState eState = rOutAttrs.GetItemState(SDRATTR_TEXTDIRECTION);
 

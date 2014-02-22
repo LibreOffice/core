@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "res_DataLabel.hxx"
@@ -22,22 +22,22 @@
 #include "chartview/ChartSfxItemIds.hxx"
 #include "dlg_NumberFormat.hxx"
 
-// header for class SvxNumberInfoItem
+
 #include <svx/numinf.hxx>
 #include <svl/eitem.hxx>
-// for SfxUInt32Item
+
 #include <svl/intitem.hxx>
-// header for class SfxStringItem
+
 #include <svl/stritem.hxx>
-//SfxIntegerListItem
+
 #include <svl/ilstitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 
-// header for define RET_OK
+
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
-// header for SvNumberFormatter
+
 #include <svl/zforlist.hxx>
 #include <svtools/controldims.hrc>
 
@@ -89,7 +89,7 @@ void lcl_setBoolItemToCheckBox( const SfxItemSet& rInAttrs, sal_uInt16 nWhichId,
     }
 }
 
-}//end anonymous namespace
+}
 
 DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, Window* pParent, const SfxItemSet& rInAttrs )
     :
@@ -134,7 +134,7 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, Window* pPa
     m_aEntryMap[2] = "; ";
     m_aEntryMap[3] = "\n" ;
 
-    //fill label placement list
+    
     std::map< sal_Int32, OUString > aPlacementToStringMap;
     for( sal_Int32 nEnum=0; nEnum<m_pLB_LabelPlacement->GetEntryCount(); ++nEnum )
         aPlacementToStringMap[nEnum] = m_pLB_LabelPlacement->GetEntry(static_cast<sal_uInt16>(nEnum));
@@ -155,7 +155,7 @@ DataLabelResources::DataLabelResources(VclBuilderContainer* pWindow, Window* pPa
     }
     m_pLB_LabelPlacement->SetDropDownLineCount(m_pLB_LabelPlacement->GetEntryCount());
 
-    //some click handler
+    
     m_pPB_NumberFormatForValue->SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
     m_pPB_NumberFormatForPercent->SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
     m_pCBNumber->SetClickHdl( LINK( this, DataLabelResources, CheckHdl ));
@@ -226,7 +226,7 @@ IMPL_LINK( DataLabelResources, NumberFormatDialogHdl, PushButton *, pButton )
 
             rbMixedState = !lcl_ReadNumberFormatFromItemSet( *pResult, SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_SOURCE, rnFormatKey, rUseSourceFormat, rbSourceMixedState );
 
-            //todo this maybe can be removed when the numberformatter dialog does handle mixed state for source format correctly
+            
             if( bOldMixedState && bOldSource == rUseSourceFormat && nOldFormat == rnFormatKey )
                 rbMixedState = rbSourceMixedState = true;
         }
@@ -247,8 +247,8 @@ void DataLabelResources::EnableControls()
     m_pCBSymbol->Enable( m_pCBNumber->IsChecked() || (m_pCBPercent->IsChecked() && m_pCBPercent->IsEnabled())
     || m_pCBCategory->IsChecked() );
 
-    // Enable or disable separator, placement and direction based on the check
-    // box states. Note that the check boxes are tri-state.
+    
+    
     {
         long nNumberOfCheckedLabelParts = 0;
         if (m_pCBNumber->GetState() != STATE_NOCHECK)
@@ -323,7 +323,7 @@ sal_Bool DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
 
 void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
 {
-    // default state
+    
     m_pCBSymbol->Enable( false );
 
     lcl_setBoolItemToCheckBox( rInAttrs, SCHATTR_DATADESCR_SHOW_NUMBER, *m_pCBNumber );
@@ -374,6 +374,6 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
     EnableControls();
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

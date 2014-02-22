@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
@@ -44,12 +44,12 @@ const char UNO_ALIGNRIGHT[]            = ".uno:AlignRight";
 const char UNO_ALIGNTOP[]              = ".uno:AlignTop";
 const char UNO_ALIGNVCENTER[]          = ".uno:AlignVCenter";
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace open
+
+
 
 namespace sc { namespace sidebar {
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 AlignmentPropertyPanel::AlignmentPropertyPanel(
     Window* pParent,
@@ -87,13 +87,13 @@ AlignmentPropertyPanel::AlignmentPropertyPanel(
     mpFtRotate->SetBackground(Wallpaper());
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 AlignmentPropertyPanel::~AlignmentPropertyPanel()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::Initialize()
 {
@@ -105,7 +105,7 @@ void AlignmentPropertyPanel::Initialize()
 
     mpFTLeftIndent->Disable();
     mpMFLeftIndent->Disable();
-    mpMFLeftIndent->SetAccessibleName(OUString( "Left Indent"));    //wj acc
+    mpMFLeftIndent->SetAccessibleName(OUString( "Left Indent"));    
     aLink = LINK(this, AlignmentPropertyPanel, MFLeftIndentMdyHdl);
     mpMFLeftIndent->SetModifyHdl ( aLink );
 
@@ -115,16 +115,16 @@ void AlignmentPropertyPanel::Initialize()
     aLink = LINK(this, AlignmentPropertyPanel, CBOXWrapTextClkHdl);
     mpCBXWrapText->SetClickHdl ( aLink );
 
-    //rotation control
-    mpCtrlDial->SetAccessibleName(OUString( "Text Orientation"));   //wj acc
+    
+    mpCtrlDial->SetAccessibleName(OUString( "Text Orientation"));   
     mpCtrlDial->SetModifyHdl(LINK( this, AlignmentPropertyPanel, RotationHdl));
 
-    //rotation
-    mpMtrAngle->SetAccessibleName(OUString( "Text Orientation"));   //wj acc
+    
+    mpMtrAngle->SetAccessibleName(OUString( "Text Orientation"));   
     mpMtrAngle->SetModifyHdl(LINK( this, AlignmentPropertyPanel, AngleModifiedHdl));
     mpMtrAngle->EnableAutocomplete( false );
 
-    //Vertical stacked
+    
     mpCbStacked->SetClickHdl( LINK( this, AlignmentPropertyPanel, ClickStackHdl ) );
 
     mpMtrAngle->InsertValue(0, FUNIT_CUSTOM);
@@ -146,7 +146,7 @@ void AlignmentPropertyPanel::Initialize()
 #endif
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
 {
@@ -154,7 +154,7 @@ IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
 
     sal_Unicode nChar = sTmp.isEmpty() ? 0 : sTmp[0];
     if((sTmp.getLength()== 1 &&  nChar == '-') ||
-        (nChar != '-' && ((nChar < '0') || (nChar > '9') ) ))   ////modify
+        (nChar != '-' && ((nChar < '0') || (nChar > '9') ) ))   
         return 0;
 
     double dTmp = sTmp.toDouble();
@@ -168,7 +168,7 @@ IMPL_LINK( AlignmentPropertyPanel, AngleModifiedHdl, void *, EMPTYARG )
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
 {
@@ -181,7 +181,7 @@ IMPL_LINK( AlignmentPropertyPanel, RotationHdl, void *, EMPTYARG )
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
 {
@@ -192,7 +192,7 @@ IMPL_LINK( AlignmentPropertyPanel, ClickStackHdl, void *, EMPTYARG )
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, TbxHorAlignSelectHdl, ToolBox*, pToolBox)
 {
@@ -232,7 +232,7 @@ IMPL_LINK(AlignmentPropertyPanel, TbxHorAlignSelectHdl, ToolBox*, pToolBox)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, TbxVerAlignSelectHdl, ToolBox*, pToolBox)
 {
@@ -265,7 +265,7 @@ IMPL_LINK(AlignmentPropertyPanel, TbxVerAlignSelectHdl, ToolBox*, pToolBox)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
 {
@@ -277,26 +277,26 @@ IMPL_LINK(AlignmentPropertyPanel, MFLeftIndentMdyHdl, void*, EMPTYARG)
     return( 0L );
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, CBOXMergnCellClkHdl, void*, EMPTYARG)
 {
     bool bState = mpCBXMergeCell->IsChecked();
 
-    //Modified
-    //SfxBoolItem aItem( FID_MERGE_TOGGLE , bState);
-    //GetBindings()->GetDispatcher()->Execute(FID_MERGE_TOGGLE, SFX_CALLMODE_RECORD, &aItem, false, 0L);
+    
+    
+    
     if(bState)
         GetBindings()->GetDispatcher()->Execute(FID_MERGE_ON, SFX_CALLMODE_RECORD);
     else
         GetBindings()->GetDispatcher()->Execute(FID_MERGE_OFF, SFX_CALLMODE_RECORD);
     GetBindings()->Invalidate(FID_MERGE_TOGGLE,true,false);
-    //modified end
+    
 
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
 {
@@ -306,7 +306,7 @@ IMPL_LINK(AlignmentPropertyPanel, CBOXWrapTextClkHdl, void*, EMPTYARG)
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
     Window* pParent,
@@ -326,7 +326,7 @@ AlignmentPropertyPanel* AlignmentPropertyPanel::Create (
         pBindings);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::DataChanged(
     const DataChangedEvent& rEvent)
@@ -334,14 +334,14 @@ void AlignmentPropertyPanel::DataChanged(
     (void)rEvent;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::HandleContextChange(
     const ::sfx2::sidebar::EnumContext aContext)
 {
     if(maContext == aContext)
     {
-        // Nothing to do.
+        
         return;
     }
 
@@ -349,10 +349,10 @@ void AlignmentPropertyPanel::HandleContextChange(
 
 
 
-    // todo
+    
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -450,7 +450,7 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
         if (eState >= SFX_ITEM_AVAILABLE)
         {
             long nTmp = ((const SfxInt32Item*)pState)->GetValue();
-            mpMtrAngle->SetValue( nTmp / 100);  //wj
+            mpMtrAngle->SetValue( nTmp / 100);  
             mpCtrlDial->SetRotation( nTmp );
             switch(nTmp)
             {
@@ -520,24 +520,24 @@ void AlignmentPropertyPanel::NotifyItemUpdate(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SfxBindings* AlignmentPropertyPanel::GetBindings()
 {
     return mpBindings;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::FormatDegrees(double& dTmp)
 {
     while(dTmp<0)
         dTmp += 360;
-    while (dTmp > 359)  //modify
+    while (dTmp > 359)  
         dTmp = 359;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::UpdateHorAlign()
 {
@@ -589,7 +589,7 @@ void AlignmentPropertyPanel::UpdateHorAlign()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void AlignmentPropertyPanel::UpdateVerAlign()
 {
@@ -610,12 +610,12 @@ void AlignmentPropertyPanel::UpdateVerAlign()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace close
 
-}} // end of namespace ::sc::sidebar
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+}} 
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

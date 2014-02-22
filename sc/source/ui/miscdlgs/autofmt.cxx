@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -53,8 +53,8 @@
 #define FRAME_OFFSET 4
 
 
-//========================================================================
-// ScAutoFmtPreview
+
+
 
 ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc ) :
         Window          ( pParent, rRes ),
@@ -81,14 +81,14 @@ ScAutoFmtPreview::ScAutoFmtPreview( Window* pParent, const ResId& rRes, ScDocume
     Init();
 }
 
-//------------------------------------------------------------------------
+
 
 ScAutoFmtPreview::~ScAutoFmtPreview()
 {
     delete pNumFmt;
 }
 
-//------------------------------------------------------------------------
+
 
 static void lcl_SetFontProperties(
         Font& rFont,
@@ -152,7 +152,7 @@ rFont.MethodName( Value ); rCJKFont.MethodName( Value ); rCTLFont.MethodName( Va
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScAutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 {
@@ -179,15 +179,15 @@ const SvxLineItem& ScAutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool
     return *static_cast< const SvxLineItem* >( pCurData->GetItem( GetFormatIndex( nCol, nRow ), bTLBR ? ATTR_BORDER_TLBR : ATTR_BORDER_BLTR ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 {
     if ( pCurData )
     {
-        //------------------------
-        // Ausgabe des Zelltextes:
-        //------------------------
+        
+        
+        
 
         OUString  cellString;
         sal_Bool    bNumFormat  = pCurData->GetIncludeValueFormat();
@@ -253,9 +253,9 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
             SvxHorJustifyItem    aHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
             SvxCellHorJustify      eJustification;
 
-            //-------------
-            // Ausrichtung:
-            //-------------
+            
+            
+            
             eJustification  = mbRTL ? SVX_HOR_JUSTIFY_RIGHT : bJustify ?
                 (SvxCellHorJustify)(((const SvxHorJustifyItem*)pCurData->GetItem( nFmtIndex, ATTR_HOR_JUSTIFY ))->GetValue()) :
                 SVX_HOR_JUSTIFY_STANDARD;
@@ -277,9 +277,9 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 
                 if ( theMaxStrSize.Height() < aStrSize.Height() )
                 {
-                    // wenn der String in diesem Font nicht
-                    // in die Zelle passt, wird wieder der
-                    // Standard-Font genommen:
+                    
+                    
+                    
                     aScriptedText.SetDefaultFont();
                     aStrSize = aScriptedText.GetTextSize();
                 }
@@ -306,14 +306,14 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                                   - aStrSize.Width()
                                   - FRAME_OFFSET );
 
-            //-----------------------------
-            // vertikal (immer zentrieren):
-            //-----------------------------
+            
+            
+            
             aPos.Y() += (mnRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
 
-            //-----------
-            // horizontal
-            //-----------
+            
+            
+            
             if ( eJustification != SVX_HOR_JUSTIFY_STANDARD )
             {
                 sal_uInt16 nHorPos = (sal_uInt16)
@@ -334,37 +334,37 @@ void ScAutoFmtPreview::DrawString( size_t nCol, size_t nRow )
                         break;
                     case SVX_HOR_JUSTIFY_STANDARD:
                     default:
-                        // Standard wird hier nicht behandelt
+                        
                         break;
                 }
             }
             else
             {
-                //---------------------
-                // Standardausrichtung:
-                //---------------------
+                
+                
+                
                 if ( (nCol == 0) || (nRow == 0) )
                 {
-                    // Text-Label links oder Summe linksbuendig
+                    
                     aPos.X() += FRAME_OFFSET;
                 }
                 else
                 {
-                     // Zahlen/Datum rechtsbuendig
+                     
                     aPos.X() += nRightX;
                 }
             }
 
-            //-------------------------------
+            
             aScriptedText.DrawText( aPos );
-            //-------------------------------
+            
         }
     }
 }
 
 #undef FRAME_OFFSET
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::DrawStrings()
 {
@@ -373,7 +373,7 @@ void ScAutoFmtPreview::DrawStrings()
             DrawString( nCol, nRow );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::DrawBackground()
 {
@@ -396,26 +396,26 @@ void ScAutoFmtPreview::DrawBackground()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::PaintCells()
 {
     if ( pCurData )
     {
-        // 1) background
+        
         if ( pCurData->GetIncludeBackground() )
             DrawBackground();
 
-        // 2) values
+        
         DrawStrings();
 
-        // 3) border
+        
         if ( pCurData->GetIncludeFrame() )
             maArray.DrawArray( aVD );
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::Init()
 {
@@ -436,7 +436,7 @@ void ScAutoFmtPreview::Init()
     mbRTL = pDoc->IsLayoutRTL( nCurrentTab );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
 {
@@ -452,7 +452,7 @@ void ScAutoFmtPreview::CalcCellArray( bool bFitWidthP )
     aPrvSize.Height() = maArray.GetHeight() + 4;
 }
 
-//------------------------------------------------------------------------
+
 
 inline void lclSetStyleFromBorder( svx::frame::Style& rStyle, const ::editeng::SvxBorderLine* pBorder )
 {
@@ -488,7 +488,7 @@ void ScAutoFmtPreview::CalcLineMap()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 {
@@ -508,7 +508,7 @@ void ScAutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
     DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 {
@@ -540,7 +540,7 @@ void ScAutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
     aVD.SetDrawMode( nOldDrawMode );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAutoFmtPreview::Paint( const Rectangle& rRect )
 {

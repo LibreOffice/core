@@ -4,7 +4,7 @@
 *
 * This Source Code Form is subject to the terms of the Mozilla Public
 * License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+* file, You can obtain one at http:
 */
 
 #include <comphelper/namedvaluecollection.hxx>
@@ -99,7 +99,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
         Reference< XComponentContext > xContext(::comphelper::getProcessComponentContext());
         Reference< graphic::XGraphicProvider> xProvider(graphic::GraphicProvider::create(xContext));
 
-        // get the option
+        
         sal_uInt16 nOpt = pInsTypeCombo->GetSelectEntryPos();
         if ( nOpt == ONE_IMAGE )
         {
@@ -115,7 +115,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl, xProvider);
 
                 Image aImg(xGraphic);
-                // Save the original size, multiplied with 100
+                
                 ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
                 Reference< drawing::XShape > xShape(
@@ -137,7 +137,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                 if(pASRCheck->IsChecked())
                 {
-                    // Resize the image, with keeping ASR
+                    
                     aPicSize = createASRSize(aPicSize, aPageSize);
                 }
                 else
@@ -163,10 +163,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
             {
                 OUString* pData = NULL;
 
-                // create the slide
+                
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
-                //Slide dimensions
+                
                 ::awt::Size aPageSize;
 
                 xSlideProps->getPropertyValue(
@@ -174,11 +174,11 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 xSlideProps->getPropertyValue(
                     OUString("Height")) >>= aPageSize.Height;
 
-                // grab the left one
+                
                 void* pD1 = pImagesLst->GetEntryData(i);
                 pData = (OUString*) pD1;
                 sUrl1 = pData ? OUString(*pData) : "";
-                // grab the right one
+                
                 void* pD2 = pImagesLst->GetEntryData(i+1);
                 pData = (OUString*) pD2;
                 sUrl2 = pData ? OUString(*pData) : "";
@@ -189,7 +189,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl1, xProvider);
 
                     Image aImg(xGraphic);
-                    // Save the original size, multiplied with 100
+                    
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
@@ -203,7 +203,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                     if(pASRCheck->IsChecked())
                     {
-                        // Resize the image, with keeping ASR
+                        
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
                     }
                     else
@@ -224,7 +224,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl2, xProvider);
 
                     Image aImg(xGraphic);
-                    // Save the original size, multiplied with 100
+                    
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
@@ -238,7 +238,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                     if(pASRCheck->IsChecked())
                     {
-                        // Resize the image, with keeping ASR
+                        
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
                     }
                     else
@@ -265,10 +265,10 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
             for( sal_Int32 i = 0; i < pImagesLst->GetEntryCount(); i+=4 )
             {
                 OUString* pData = NULL;
-                // create the slide
+                
                 Reference< drawing::XDrawPage > xSlide = appendNewSlide(AUTOLAYOUT_NONE, xDrawPages);
                 Reference< beans::XPropertySet > xSlideProps( xSlide, uno::UNO_QUERY );
-                //Slide dimensions
+                
                 ::awt::Size aPageSize;
 
                 xSlideProps->getPropertyValue(
@@ -276,22 +276,22 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                 xSlideProps->getPropertyValue(
                     OUString("Height")) >>= aPageSize.Height;
 
-                // grab the upper left one
+                
                 void* pD1 = pImagesLst->GetEntryData(i);
                 pData = (OUString*) pD1;
                 sUrl1 = pData ? OUString(*pData) : "";
 
-                // grab the upper right one
+                
                 void* pD2 = pImagesLst->GetEntryData(i+1);
                 pData = (OUString*) pD2;
                 sUrl2 = pData ? OUString(*pData) : "";
 
-                // grab the lower left one
+                
                 void* pD3 = pImagesLst->GetEntryData(i+2);
                 pData = (OUString*) pD3;
                 sUrl3 = pData ? OUString(*pData) : "";
 
-                // grab the lower right one
+                
                 void* pD4 = pImagesLst->GetEntryData(i+3);
                 pData = (OUString*) pD4;
                 sUrl4 = pData ? OUString(*pData) : "";
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl1, xProvider);
 
                     Image aImg(xGraphic);
-                    // Save the original size, multiplied with 100
+                    
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
@@ -315,7 +315,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                     if(pASRCheck->IsChecked())
                     {
-                        // Resize the image, with keeping ASR
+                        
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
                     }
                     else
@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl2, xProvider);
 
                     Image aImg(xGraphic);
-                    // Save the original size, multiplied with 100
+                    
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
@@ -349,7 +349,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                     if(pASRCheck->IsChecked())
                     {
-                        // Resize the image, with keeping ASR
+                        
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
                     }
                     else
@@ -370,7 +370,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl3, xProvider);
 
                     Image aImg(xGraphic);
-                    // Save the original size, multiplied with 100
+                    
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
@@ -384,7 +384,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                     if(pASRCheck->IsChecked())
                     {
-                        // Resize the image, with keeping ASR
+                        
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
                     }
                     else
@@ -405,7 +405,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl4, xProvider);
 
                     Image aImg(xGraphic);
-                    // Save the original size, multiplied with 100
+                    
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
                     Reference< drawing::XShape > xShape(
@@ -419,7 +419,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl)
 
                     if(pASRCheck->IsChecked())
                     {
-                        // Resize the image, with keeping ASR
+                        
                         aPicSize = createASRSize(aPicSize, ::awt::Size(aPageSize.Width/2 - 100, aPageSize.Height/2 - 100));
                     }
                     else
@@ -453,7 +453,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
         css::ui::dialogs::TemplateDescription::FILEOPEN_LINK_PREVIEW,
         SFXWB_GRAPHIC | SFXWB_MULTISELECTION
     );
-    // Read configuration
+    
     OUString sUrl(officecfg::Office::Impress::Pictures::Path::get());
 
     INetURLObject aFile( SvtPathOptions().GetPalettePath() );
@@ -468,7 +468,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
         if( aFilesArr.getLength() )
         {
             sUrl = aDlg.GetDisplayDirectory();
-            // Write out configuration
+            
             {
                 boost::shared_ptr< comphelper::ConfigurationChanges > batch(
                     comphelper::ConfigurationChanges::create());
@@ -478,7 +478,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, FileHdl)
 
             for ( sal_Int32 i = 0; i < aFilesArr.getLength(); i++ )
             {
-                // Store full path, show filename only. Use INetURLObject to display spaces in filename correctly
+                
                 INetURLObject aUrl = INetURLObject(aFilesArr[i]);
                 sal_Int16 nPos = pImagesLst->InsertEntry( aUrl.GetLastName(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8) );
                 pImagesLst->SetEntryData(nPos, new OUString(aUrl.GetMainURL(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8)));
@@ -496,12 +496,12 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, UpHdl)
     {
         sal_uInt16 nActPos = pImagesLst->GetSelectEntryPos();
         OUString sActEntry( pImagesLst->GetEntry(nActPos) );
-        // actual data
+        
         OUString* pActData = (OUString*) pImagesLst->GetEntryData(nActPos);
         OUString sAct(*pActData);
 
         OUString sUpperEntry( pImagesLst->GetEntry(nActPos - 1) );
-        // upper data
+        
         OUString* pUpperData = (OUString*) pImagesLst->GetEntryData(nActPos - 1);
         OUString sUpper(*pUpperData);
 
@@ -579,7 +579,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, SelectHdl)
         }
 
         sal_uInt32 nFilterImportFlags = GRFILTER_I_FLAGS_SET_LOGSIZE_FOR_JPEG;
-        // remote?
+        
         if ( INET_PROT_FILE != aURLObj.GetProtocol() )
         {
             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( sImgUrl, STREAM_READ );
@@ -623,11 +623,11 @@ Reference< drawing::XDrawPage > SdPhotoAlbumDialog::appendNewSlide(AutoLayout aL
     Reference< drawing::XDrawPages > xDrawPages
 )
 {
-    Reference< drawing::XDrawPage > xSlide; // Create the slide
+    Reference< drawing::XDrawPage > xSlide; 
     Reference< container::XIndexAccess > xIndexAccess( xDrawPages, uno::UNO_QUERY );
     xSlide = xDrawPages->insertNewByIndex( xIndexAccess->getCount() );
     SdPage* pSlide = pDoc->GetSdPage( pDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD);
-    pSlide->SetAutoLayout(aLayout, sal_True); // Set the layout here
+    pSlide->SetAutoLayout(aLayout, sal_True); 
     return xSlide;
 }
 
@@ -656,7 +656,7 @@ Reference< graphic::XGraphic> SdPhotoAlbumDialog::createXGraphicFromUrl(const OU
     Reference< graphic::XGraphicProvider> xProvider
 )
 {
-    // The same as above, except this returns an XGraphic from the image URL
+    
     ::comphelper::NamedValueCollection aMediaProperties;
     aMediaProperties.put( "URL", OUString( sUrl ) );
     Reference< graphic::XGraphic> xGraphic =
@@ -679,6 +679,6 @@ void SdPhotoAlbumDialog::EnableDisableButtons()
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

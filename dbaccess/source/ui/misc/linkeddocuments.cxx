@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "linkeddocuments.hxx"
@@ -43,7 +43,7 @@
 #include "browserids.hxx"
 #include <sfx2/new.hxx>
 #include "moduledbu.hxx"
-// for calling basic
+
 #include <sfx2/app.hxx>
 #include <basic/sbx.hxx>
 #include <basic/sbuno.hxx>
@@ -102,7 +102,7 @@ namespace dbaui
         }
     }
 
-    // OLinkedDocumentsAccess
+    
     OLinkedDocumentsAccess::OLinkedDocumentsAccess( Window* _pDialogParent, const Reference< XDatabaseDocumentUI >& i_rDocumentUI,
         const Reference< XComponentContext >& _rxContext, const Reference< XNameAccess >& _rxContainer,
         const Reference< XConnection>& _xConnection, const OUString& _sDataSourceName )
@@ -140,7 +140,7 @@ namespace dbaui
 
             case E_OPEN_FOR_MAIL:
                 aArguments.put( "Hidden", true );
-                // fall through
+                
 
             case E_OPEN_DESIGN:
                 sOpenMode = "openDesign";
@@ -230,7 +230,7 @@ namespace dbaui
         const ::comphelper::NamedValueCollection& i_rCreationArgs, Reference< XComponent >& o_rDefinition )
     {
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::newDocument: invalid document container!");
-        // determine the class ID to use for the new document
+        
         Sequence<sal_Int8> aClassId;
         if  (   !i_rCreationArgs.has( "ClassID" )
             &&  !i_rCreationArgs.has( "MediaType" )
@@ -263,10 +263,10 @@ namespace dbaui
             }
         }
 
-        // load the document as template
+        
         Reference< XComponent > xNewDocument;
         try
-        {   // get the desktop object
+        {   
 
             Reference<XMultiServiceFactory> xORB(m_xDocumentContainer,UNO_QUERY);
             if ( xORB.is() )
@@ -276,7 +276,7 @@ namespace dbaui
                     aCreationArgs.put( "ClassID", aClassId );
                 aCreationArgs.put( (OUString)PROPERTY_ACTIVE_CONNECTION, m_xConnection );
 
-                // separate values which are real creation args from args relevant for opening the doc
+                
                 ::comphelper::NamedValueCollection aCommandArgs;
                 if ( aCreationArgs.has( "Hidden" ) )
                 {
@@ -292,7 +292,7 @@ namespace dbaui
                 );
                 o_rDefinition.set( xContent, UNO_QUERY );
 
-                // put the OpenMode into the OpenArgs
+                
                 OpenCommandArgument aOpenModeArg;
                 aOpenModeArg.Mode = OpenMode::DOCUMENT;
                 aCommandArgs.put( "OpenMode", aOpenModeArg );
@@ -338,7 +338,7 @@ namespace dbaui
             aSQLException.Context = e.Context;
             aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
-            // more like a hack, insert an empty message
+            
             OUString sText( ModuleRes( RID_STR_EXTENSION_NOT_PRESENT ) );
             sText = sText.replaceFirst("$file$",_rLinkName);
             aInfo.prepend(sText);
@@ -358,7 +358,7 @@ namespace dbaui
                 aSQLException.Context = e.Context;
                 aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
-                // more like a hack, insert an empty message
+                
                 aInfo.prepend(OUString(" \n"));
 
                 OUString sMessage = ModuleRes(STR_COULDNOTOPEN_LINKEDDOC);
@@ -373,6 +373,6 @@ namespace dbaui
         return xRet;
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

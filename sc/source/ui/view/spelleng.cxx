@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "spelleng.hxx"
@@ -62,7 +62,7 @@ ScConversionEngineBase::ScConversionEngineBase(
     mbFinished( false )
 {
     maSelState.GetCellCursor().GetVars( mnStartCol, mnStartRow, mnStartTab );
-    // start with cell A1 in cell/range/multi-selection, will seek to first selected
+    
     if( maSelState.GetSelectionType() == SC_SELECTTYPE_SHEET )
     {
         mnStartCol = 0;
@@ -98,8 +98,8 @@ bool ScConversionEngineBase::FindNextConversionCell()
 
         for( SCTAB nTab = 0, nTabCount = mrDoc.GetTableCount(); nTab < nTabCount; ++nTab )
         {
-            //  always change the cell on the visible tab,
-            //  on the other selected tabs only if they contain the same text
+            
+            
 
             if ((nTab == mnStartTab) ||
                 (bMultiTab && rMark.GetTableSelect(nTab) && mrDoc.GetString(mnCurrCol, mnCurrRow, nTab) == aVisibleStr))
@@ -156,18 +156,18 @@ bool ScConversionEngineBase::FindNextConversionCell()
             }
             else if( nNewCol > MAXCOL )
             {
-                // no more cells in the sheet - try to restart at top of sheet
+                
 
                 if( bSheetSel || ((mnStartCol == 0) && (mnStartRow == 0)) )
                 {
-                    // conversion started at cell A1 or in selection, do not query to restart at top
+                    
                     ShowFinishDialog();
                     bLoop = false;
                     mbFinished = true;
                 }
                 else if( ShowTableWrapDialog() )
                 {
-                    // conversion started anywhere but in cell A1, user wants to restart
+                    
                     nNewRow = MAXROW + 2;
                     mbWrappedInTable = true;
                 }
@@ -187,13 +187,13 @@ bool ScConversionEngineBase::FindNextConversionCell()
                     pLastPattern = pPattern;
                 }
 
-                // language changed?
+                
                 const SfxPoolItem* pItem = mrDoc.GetAttr( nNewCol, nNewRow, mnStartTab, ATTR_FONT_LANGUAGE );
                 if( const SvxLanguageItem* pLangItem = PTR_CAST( SvxLanguageItem, pItem ) )
                 {
                     LanguageType eLang = static_cast< LanguageType >( pLangItem->GetValue() );
                     if( eLang == LANGUAGE_SYSTEM )
-                        eLang = Application::GetSettings().GetLanguageTag().getLanguageType();   // never use SYSTEM for spelling
+                        eLang = Application::GetSettings().GetLanguageTag().getLanguageType();   
                     if( eLang != meCurrLang )
                     {
                         meCurrLang = eLang;
@@ -214,7 +214,7 @@ bool ScConversionEngineBase::FindNextConversionCell()
         pViewShell->SetCursor( nNewCol, nNewRow, true );
         mrViewData.GetView()->MakeEditView( this, nNewCol, nNewRow );
         EditView* pEditView = mrViewData.GetSpellingView();
-        // maSelState.GetEditSelection() returns (0,0) if not in edit mode -> ok
+        
         pEditView->SetSelection( maSelState.GetEditSelection() );
 
         ClearModifyFlag();
@@ -233,16 +233,16 @@ void ScConversionEngineBase::RestoreCursorPos()
 
 bool ScConversionEngineBase::ShowTableWrapDialog()
 {
-    // default: no dialog, always restart at top
+    
     return true;
 }
 
 void ScConversionEngineBase::ShowFinishDialog()
 {
-    // default: no dialog
+    
 }
 
-// private --------------------------------------------------------------------
+
 
 void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
@@ -268,7 +268,7 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     }
 }
 
-// ============================================================================
+
 
 ScSpellingEngine::ScSpellingEngine(
         SfxItemPool* pEnginePoolP, ScViewData& rViewData,
@@ -331,11 +331,11 @@ Window* ScSpellingEngine::GetDialogParent()
                 if( pWin->IsVisible() )
                     return pWin;
 
-    // fall back to standard dialog parent
+    
     return mrDocShell.GetActiveDialogParent();
 }
 
-// ============================================================================
+
 
 ScConversionParam::ScConversionParam( ScConversionType eConvType ) :
     meConvType( eConvType ),
@@ -375,7 +375,7 @@ ScConversionParam::ScConversionParam( ScConversionType eConvType,
         mnOptions = i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScTextConversionEngine::ScTextConversionEngine(
         SfxItemPool* pEnginePoolP, ScViewData& rViewData,
@@ -393,7 +393,7 @@ void ScTextConversionEngine::ConvertAll( EditView& rEditView )
         rEditView.StartTextConversion(
             maConvParam.GetSourceLang(), maConvParam.GetTargetLang(), maConvParam.GetTargetFont(),
             maConvParam.GetOptions(), maConvParam.IsInteractive(), true );
-        // #i34769# restore initial cursor position
+        
         RestoreCursorPos();
     }
 }
@@ -408,6 +408,6 @@ bool ScTextConversionEngine::NeedsConversion()
     return HasConvertibleTextPortion( maConvParam.GetSourceLang() );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

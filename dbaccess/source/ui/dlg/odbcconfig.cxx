@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -49,20 +49,20 @@
 #endif
 #endif
 
-// just to go with calling convention of windows
-// so don't touch this
+
+
 #if defined(WNT)
 #undef SQL_API
 #define SQL_API __stdcall
-// At least under some circumstances, the below #include <odbc/sqlext.h> re-
-// defines SQL_API to an empty string, leading to a compiler warning on MSC; to
-// not break the current behavior, this is worked around by locally disabling
-// that warning:
+
+
+
+
 #if defined _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4005)
 #endif
-#endif // defined(WNT)
+#endif 
 
 #ifdef SYSTEM_ODBC_HEADERS
 #include <sqlext.h>
@@ -76,14 +76,14 @@
 #endif
 #undef SQL_API
 #define SQL_API __stdcall
-#endif // defined(WNT)
-// from here on you can do what you want to
+#endif 
+
 
 #else
 
 #define ODBC_LIBRARY    ""
 
-#endif  // HAVE_ODBC_SUPPORT
+#endif  
 
 namespace dbaui
 {
@@ -102,7 +102,7 @@ typedef SQLRETURN (SQL_API* TSQLDataSources) (SQLHENV EnvironmentHandle, SQLUSMA
 #define NSQLDataSources(a,b,c,d,e,f,g,h) (*(TSQLDataSources)(m_pDataSources))(a,b,c,d,e,f,g,h)
 #endif
 
-// OOdbcLibWrapper
+
 #ifdef HAVE_ODBC_SUPPORT
 OOdbcLibWrapper::OOdbcLibWrapper()
     :m_pOdbcLib(NULL)
@@ -116,7 +116,7 @@ sal_Bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
 {
     m_sLibPath = OUString::createFromAscii(_pLibPath);
 #ifdef HAVE_ODBC_SUPPORT
-    // load the module
+    
     m_pOdbcLib = osl_loadModule(m_sLibPath.pData, SAL_LOADMODULE_NOW);
     return (NULL != m_pOdbcLib);
 #else
@@ -146,7 +146,7 @@ OOdbcLibWrapper::~OOdbcLibWrapper()
 
 }
 
-// OOdbcEnumeration
+
 struct OdbcTypesImpl
 {
 #ifdef HAVE_ODBC_SUPPORT
@@ -175,13 +175,13 @@ OOdbcEnumeration::OOdbcEnumeration()
     if ( bLoaded )
     {
 #ifdef HAVE_ODBC_SUPPORT
-        // load the generic functions
+        
         m_pAllocHandle = loadSymbol("SQLAllocHandle");
         m_pFreeHandle = loadSymbol("SQLFreeHandle");
         m_pSetEnvAttr = loadSymbol("SQLSetEnvAttr");
         m_pDataSources = loadSymbol("SQLDataSources");
 
-        // all or nothing
+        
         if (!m_pAllocHandle || !m_pSetEnvAttr || !m_pDataSources || !m_pFreeHandle)
         {
             unload();
@@ -206,11 +206,11 @@ sal_Bool OOdbcEnumeration::allocEnv()
 
 #ifdef HAVE_ODBC_SUPPORT
     if (m_pImpl->hEnvironment)
-        // nothing to do
+        
         return sal_True;
     SQLRETURN nResult = NSQLAllocHandle(SQL_HANDLE_ENV, SQL_NULL_HANDLE, &m_pImpl->hEnvironment);
     if (SQL_SUCCESS != nResult)
-        // can't do anything without environment
+        
         return sal_False;
 
     NSQLSetEnvAttr(m_pImpl->hEnvironment, SQL_ATTR_ODBC_VERSION, (SQLPOINTER)SQL_OV_ODBC3, SQL_IS_INTEGER);
@@ -242,7 +242,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
     }
 
 #ifdef HAVE_ODBC_SUPPORT
-    // now that we have an environment collect the data source names
+    
     UCHAR szDSN[SQL_MAX_DSN_LENGTH+1];
     SWORD pcbDSN;
     UCHAR szDescription[1024+1];
@@ -256,7 +256,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
         )
     {
         if (nResult != SQL_SUCCESS)
-            // no further error handling
+            
             break;
         else
         {
@@ -271,7 +271,7 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
 
 #ifdef HAVE_ODBC_ADMINISTRATION
 
-// ProcessTerminationWait
+
 class ProcessTerminationWait : public ::osl::Thread
 {
     oslProcess  m_hProcessHandle;
@@ -293,7 +293,7 @@ protected:
     }
 };
 
-// OOdbcManagement
+
 OOdbcManagement::OOdbcManagement( const Link& _rAsyncFinishCallback )
     :m_pProcessWait( NULL )
     ,m_aAsyncFinishCallback( _rAsyncFinishCallback )
@@ -302,7 +302,7 @@ OOdbcManagement::OOdbcManagement( const Link& _rAsyncFinishCallback )
 
 OOdbcManagement::~OOdbcManagement()
 {
-    // wait for our thread to be finished
+    
     if ( m_pProcessWait.get() )
         m_pProcessWait->join();
 }
@@ -313,10 +313,10 @@ bool OOdbcManagement::manageDataSources_async()
     if ( isRunning() )
         return false;
 
-    // this is done in an external process, due to #i78733#
-    // (and note this whole functionality is supported on Windows only, ATM)
+    
+    
     OUString sExecutableName( "$BRAND_BASE_DIR/" LIBO_LIBEXEC_FOLDER "/odbcconfig.exe" );
-    ::rtl::Bootstrap::expandMacros( sExecutableName ); //TODO: detect failure
+    ::rtl::Bootstrap::expandMacros( sExecutableName ); 
     oslProcess hProcessHandle(0);
     oslProcessError eError = osl_executeProcess( sExecutableName.pData, NULL, 0, 0, NULL, NULL, NULL, 0, &hProcessHandle );
     if ( eError != osl_Process_E_None )
@@ -332,8 +332,8 @@ bool OOdbcManagement::isRunning() const
     return ( m_pProcessWait.get() && m_pProcessWait->isRunning() );
 }
 
-#endif // HAVE_ODBC_ADMINISTRATION
+#endif 
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

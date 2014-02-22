@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include "basictest.hxx"
 #include <vcl/svapp.hxx>
@@ -23,14 +23,14 @@ namespace
         ~VBATest(){}
         void testMiscVBAFunctions();
         void testMiscOLEStuff();
-        // Adds code needed to register the test suite
+        
         CPPUNIT_TEST_SUITE(VBATest);
 
-        // Declares the method as a test to call
+        
         CPPUNIT_TEST(testMiscVBAFunctions);
         CPPUNIT_TEST(testMiscOLEStuff);
 
-        // End of test suite definition
+        
         CPPUNIT_TEST_SUITE_END();
 
     };
@@ -39,10 +39,10 @@ void VBATest::testMiscVBAFunctions()
 {
     const char* macroSource[] = {
         "bytearraystring.vb",
-// datevalue test seems to depend on both locale and language
-// settings, should try and rewrite the test to deal with that
-// for some reason tinderboxes don't seem to complain leaving enabled
-// for the moment
+
+
+
+
         "datevalue.vb",
         "partition.vb",
         "strconv.vb",
@@ -52,7 +52,7 @@ void VBATest::testMiscVBAFunctions()
         "stringplusdouble.vb"
     };
     OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
-    // Some test data expects the uk locale
+    
     AllSettings aSettings = Application::GetSettings();
     aSettings.SetLanguageTag( LanguageTag( LANGUAGE_ENGLISH_UK ) );
     Application::SetSettings( aSettings );
@@ -76,10 +76,10 @@ void VBATest::testMiscVBAFunctions()
 
 void VBATest::testMiscOLEStuff()
 {
-// not much point even trying to run except on windows
+
 #if defined(WNT)
-    // test if we have the necessary runtime environment
-    // to run the OLE tests.
+    
+    
     uno::Reference< lang::XMultiServiceFactory > xOLEFactory;
     uno::Reference< uno::XComponentContext > xContext(
         comphelper::getProcessComponentContext() );
@@ -99,7 +99,7 @@ void VBATest::testMiscOLEStuff()
        bOk = xExcel.is() && xADODB.is();
     }
     if ( !bOk )
-        return; // can't do anything, skip test
+        return; 
 
     const char* macroSource[] = {
         "ole_ObjAssignNoDflt.vb",
@@ -110,7 +110,7 @@ void VBATest::testMiscOLEStuff()
     OUString sMacroPathURL = getURLFromSrc("/basic/qa/vba_tests/");
 
     uno::Sequence< uno::Any > aArgs(1);
-    // path to test document
+    
     OUString sPath = getPathFromSrc("/basic/qa/vba_tests/data/");
     sPath += "ADODBdata.xls";
     sPath = sPath.replaceAll( "/", "\\" );
@@ -135,11 +135,11 @@ void VBATest::testMiscOLEStuff()
 #endif
 }
 
-  // Put the test suite in the registry
+  
 
-  // Put the test suite in the registry
+  
   CPPUNIT_TEST_SUITE_REGISTRATION(VBATest);
-} // namespace
+} 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

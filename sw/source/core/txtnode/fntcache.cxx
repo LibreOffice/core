@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <i18nlangtag/mslangid.hxx>
@@ -51,12 +51,12 @@
 
 using namespace ::com::sun::star;
 
-// global variables declared in fntcache.hxx
-// FontCache is created in txtinit.cxx _TextInit and deleted in _TextFinit
+
+
 SwFntCache *pFntCache = NULL;
-// last Font set by ChgFntCache
+
 SwFntObj *pLastFont = NULL;
-// "MagicNumber" used to identify Fonts
+
 sal_uInt8* pMagicNo = NULL;
 
 Color *pWaveCol = 0;
@@ -229,7 +229,7 @@ static void lcl_calcLinePos( const CalcLinePosData &rData,
            nBlank -= rData.nHalfSpace;
    }
 
-   // determine start, end and length of wave line
+   
    sal_Int32 nKernStart = nStart ? rData.pKernArray[ sal_uInt16( nStart - 1 ) ] : 0;
    sal_Int32 nKernEnd = rData.pKernArray[ sal_uInt16( nEnd - 1 ) ];
 
@@ -294,7 +294,7 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
     }
     else
     {
-        if (nPrtAscent == USHRT_MAX) // printer ascent unknown?
+        if (nPrtAscent == USHRT_MAX) 
         {
             CreatePrtFont( rOut );
             const Font aOldFnt( rRefDev.GetFont() );
@@ -307,8 +307,8 @@ sal_uInt16 SwFntObj::GetFontAscent( const SwViewShell *pSh, const OutputDevice& 
         nRet = nPrtAscent;
     }
 
-#if !defined(MACOSX) // #i89844# extleading is below the line for Mac
-    // TODO: move extleading below the line for all platforms too
+#if !defined(MACOSX) 
+    
     nRet += GetFontLeading( pSh, rRefDev );
 #endif
 
@@ -337,7 +337,7 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
     }
     else
     {
-        if (nPrtHeight == USHRT_MAX) // printer height unknown?
+        if (nPrtHeight == USHRT_MAX) 
         {
             CreatePrtFont( rOut );
             const Font aOldFnt( rRefDev.GetFont() );
@@ -345,11 +345,11 @@ sal_uInt16 SwFntObj::GetFontHeight( const SwViewShell* pSh, const OutputDevice& 
             nPrtHeight = static_cast<sal_uInt16>(rRefDev.GetTextHeight());
 
 #if OSL_DEBUG_LEVEL > 0
-            // Check if vcl did not change the meading of GetTextHeight
+            
             const FontMetric aOutMet( rRefDev.GetFontMetric() );
             long nTmpPrtHeight = (sal_uInt16)aOutMet.GetAscent() + aOutMet.GetDescent();
             (void) nTmpPrtHeight;
-            // #i106098#: do not compare with == here due to rounding error
+            
             OSL_ENSURE( abs(nTmpPrtHeight - nPrtHeight) < 3,
                     "GetTextHeight != Ascent + Descent" );
 #endif
@@ -429,40 +429,40 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
     if ( pScrFont )
         return;
 
-    // any changes to the output device are reset at the end of the function
+    
     OutputDevice* pOut = (OutputDevice*)&rOut;
 
-    // Save old font
+    
     Font aOldOutFont( pOut->GetFont() );
 
     nScrHeight = USHRT_MAX;
 
-    // Condition for output font / refdev font adjustment
+    
     OutputDevice* pPrt = &rSh.GetRefDev();
 
     if( !rSh.GetWin() ||
         !rSh.GetViewOptions()->getBrowseMode() ||
          rSh.GetViewOptions()->IsPrtFormat() )
     {
-        // After CreatePrtFont pPrtFont is the font which is actually used
-        // by the reference device
+        
+        
         CreatePrtFont( *pPrt );
         pPrinter = pPrt;
 
-        // save old reference device font
+        
         Font aOldPrtFnt( pPrt->GetFont() );
 
-        // set the font used at the reference device at the reference device
-        // and the output device
+        
+        
         pPrt->SetFont( *pPrtFont );
         pOut->SetFont( *pPrtFont );
 
-        // This should be the default for pScrFont.
+        
         pScrFont = pPrtFont;
 
         FontMetric aMet = pPrt->GetFontMetric( );
-        //Don't loose "faked" properties of the logical font that don't truly
-        //exist in the physical font metrics which vcl which fake up for us
+        
+        
         aMet.SetWeight(pScrFont->GetWeight());
         aMet.SetItalic(pScrFont->GetItalic());
 
@@ -474,7 +474,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
         if ( USHRT_MAX == nExtLeading )
             nExtLeading = static_cast<sal_uInt16>(aMet.GetExtLeading());
 
-        // reset the original reference device font
+        
         pPrt->SetFont( aOldPrtFnt );
     }
     else
@@ -483,18 +483,18 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
         if ( nGuessedLeading == USHRT_MAX )
             nGuessedLeading = 0;
 
-        // no external leading in browse mode
+        
         if ( nExtLeading == USHRT_MAX )
             nExtLeading = 0;
 
         pScrFont = pPrtFont;
     }
 
-    // check zoom factor, e.g. because of PrtOle2 during export
+    
     {
-        // In case the zoom factor of the output device differs from the
-        // one in the ViewOptions, this Font must not be cached,
-        // hence set zoom factor to an invalid value
+        
+        
+        
         long nTmp;
         if( pOut->GetMapMode().GetScaleX().IsValid() &&
             pOut->GetMapMode().GetScaleY().IsValid() &&
@@ -513,7 +513,7 @@ void SwFntObj::CreateScrFont( const SwViewShell& rSh, const OutputDevice& rOut )
     if ( USHRT_MAX == nScrHeight )
         nScrHeight = (sal_uInt16)pOut->GetTextHeight();
 
-    // reset original output device font
+    
     pOut->SetFont( aOldOutFont );
 }
 
@@ -524,8 +524,8 @@ void SwFntObj::GuessLeading( const SwViewShell&
 #endif
                              , const FontMetric& rMet )
 {
-    // If leading >= 5, this seems to be enough leading.
-    // Nothing has to be done.
+    
+    
     if ( rMet.GetIntLeading() >= 5 )
     {
         nGuessedLeading = 0;
@@ -547,8 +547,8 @@ void SwFntObj::GuessLeading( const SwViewShell&
         const sal_uInt16 nWinHeight = sal_uInt16( aWinMet.GetSize().Height() );
         if( pPrtFont->GetName().indexOf( aWinMet.GetName() ) != -1 )
         {
-            // If the Leading on the Window is also 0, then it has to stay
-            // that way (see also StarMath).
+            
+            
             long nTmpLeading = (long)aWinMet.GetIntLeading();
             if( nTmpLeading <= 0 )
             {
@@ -562,14 +562,14 @@ void SwFntObj::GuessLeading( const SwViewShell&
             else
             {
                 nGuessedLeading = sal_uInt16(nTmpLeading);
-                // Manta-Hack #50153#:
-                // Wer beim Leading luegt, luegt moeglicherweise auch beim
-                // Ascent/Descent, deshalb wird hier ggf. der Font ein wenig
-                // tiefergelegt, ohne dabei seine Hoehe zu aendern.
-                // (above original comment preserved for cultural reasons)
-                // Those who lie about their Leading, may lie about their
-                // Ascent/Descent as well, hence the Font will be lowered a
-                // litte without changing its height.
+                
+                
+                
+                
+                
+                
+                
+                
                 long nDiff = std::min( rMet.GetDescent() - aWinMet.GetDescent(),
                     aWinMet.GetAscent() - rMet.GetAscent() - nTmpLeading );
                 if( nDiff > 0 )
@@ -582,8 +582,8 @@ void SwFntObj::GuessLeading( const SwViewShell&
         }
         else
         {
-            // If all else fails, take 15% of the height, as emprically
-            // determined by CL
+            
+            
             nGuessedLeading = (nWinHeight * 15) / 100;
         }
         pWin->SetFont( aOldFnt );
@@ -622,8 +622,8 @@ void SwFntObj::SetDevFont( const SwViewShell *pSh, OutputDevice& rOut )
             rOut.SetFont( *pPrtFont );
     }
 
-    // Here, we actually do not need the leading values, but by calling
-    // GetFontLeading() we assure that the values are calculated for later use.
+    
+    
     GetFontLeading( pSh, rRefDev );
 }
 
@@ -648,7 +648,7 @@ static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
             ( cChar < 0x3008 || cChar > 0x3011 ) &&
             ( cChar < 0x3014 || cChar > 0x301F ) &&
               0xFF62 != cChar && 0xFF63 != cChar )
-        // no punctuation
+        
         return SwScriptInfo::NONE;
     else if ( 0x3001 == cChar || 0x3002 == cChar ||
               0x3009 == cChar || 0x300B == cChar ||
@@ -657,7 +657,7 @@ static sal_uInt8 lcl_WhichPunctuation( sal_Unicode cChar )
               0x3017 == cChar || 0x3019 == cChar ||
               0x301B == cChar || 0x301E == cChar ||
               0x301F == cChar || 0xFF63 == cChar )
-        // right punctuation
+        
         return SwScriptInfo::SPECIAL_RIGHT;
 
     return SwScriptInfo::SPECIAL_LEFT;
@@ -689,7 +689,7 @@ static void lcl_DrawLineForWrongListData(
     sal_Int32 nStart = rInf.GetIdx();
     sal_Int32 nWrLen = rInf.GetLen();
 
-    // check if respective data is available in the current text range
+    
     if (!pWList->Check( nStart, nWrLen ))
     {
         return;
@@ -697,8 +697,8 @@ static void lcl_DrawLineForWrongListData(
 
     long nHght = rInf.GetOut().LogicToPixel( rPrtFontSize ).Height();
 
-    // Draw wavy lines for spell and grammar errors only if font is large enough.
-    // Lines for smart tags will always be drawn.
+    
+    
     if (pWList != rInf.GetSmartTags() && WRONG_SHOW_MIN >= nHght)
     {
         return;
@@ -710,7 +710,7 @@ static void lcl_DrawLineForWrongListData(
 
     const Color aCol( rInf.GetOut().GetLineColor() );
 
-    // iterate over all ranges stored in the respective SwWrongList
+    
     do
     {
         nStart -= rInf.GetIdx();
@@ -727,7 +727,7 @@ static void lcl_DrawLineForWrongListData(
 
             if( pIter == rForbidden.end() || nNextEnd <= pIter->first )
             {
-                // No overlapping mark up found
+                
                 std::pair< sal_Int32, sal_Int32 > aNew;
                 aNew.first = nNextStart;
                 aNew.second = nNextEnd;
@@ -746,7 +746,7 @@ static void lcl_DrawLineForWrongListData(
                 else
                     continue;
             }
-            // determine line pos
+            
             Point aStart( rInf.GetPos() );
             Point aEnd;
             lcl_calcLinePos( rCalcLinePosData, aStart, aEnd, nNextStart, nNextEnd - nNextStart );
@@ -776,7 +776,7 @@ static void lcl_DrawLineForWrongListData(
                 {
                     rInf.GetOut().SetLineColor( wrongArea->mColor );
 
-                    // get wavy line type to use
+                    
                     sal_uInt16 nWave =
                         WRONG_SHOW_MEDIUM < nHght ? WAVE_NORMAL :
                         ( WRONG_SHOW_SMALL < nHght ? WAVE_SMALL : WAVE_FLAT );
@@ -824,7 +824,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     OutputDevice& rRefDev = rInf.GetShell()->GetRefDev();
     OutputDevice* pWin = rInf.GetShell()->GetWin();
 
-    // true if pOut is the printer and the printer has been used for formatting
+    
     const bool bPrt = OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() &&
                       OUTDEV_PRINTER == rRefDev.GetOutDevType();
     const bool bBrowse = ( pWin &&
@@ -837,29 +837,29 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                           !rInf.GetSmartTags() &&
                           !rInf.GetGreyWave() );
 
-    // bDirectPrint indicates that we can enter the branch which calls
-    // the DrawText functions instead of calling the DrawTextArray functions
+    
+    
     const bool bDirectPrint = bPrt || bBrowse;
 
-    // Condition for output font / refdev font adjustment
+    
     const bool bUseScrFont =
         lcl_IsFontAdjustNecessary( rInf.GetOut(), rRefDev );
 
     Font* pTmpFont = bUseScrFont ? pScrFont : pPrtFont;
 
     //
-    //  bDirectPrint and bUseScrFont should have these values:
+    
     //
-    //  Outdev / RefDef  | Printer | VirtPrinter | Window
-    // ----------------------------------------------------
-    //  Printer          | 1 - 0   | 0 - 1       | -
-    // ----------------------------------------------------
-    //  VirtPrinter/PDF  | 0 - 1   | 0 - 1       | -
-    // ----------------------------------------------------
-    //  Window/VirtWindow| 0 - 1   | 0 - 1       | 1 - 0
+    
+    
+    
+    
+    
+    
+    
     //
-    // Exception: During painting of a Writer OLE object, we do not have
-    // a window. Therefore bUseSrcFont is always 0 in this case.
+    
+    
     //
 
 #if OSL_DEBUG_LEVEL > 0
@@ -871,7 +871,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
     if ( OUTDEV_PRINTER == rInf.GetOut().GetOutDevType() )
     {
-        // Printer output
+        
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( bNoAdjust && !bUseScrFont, "Outdev Check failed" );
@@ -887,7 +887,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     }
     else if ( OUTDEV_VIRDEV == rInf.GetOut().GetOutDevType() && ! pWin )
     {
-        // PDF export
+        
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
@@ -904,7 +904,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     else if ( OUTDEV_WINDOW == rInf.GetOut().GetOutDevType() ||
                ( OUTDEV_VIRDEV == rInf.GetOut().GetOutDevType() && pWin ) )
     {
-        // Window or virtual window
+        
         if ( OUTDEV_PRINTER == rRefDev.GetOutDevType() )
         {
             OSL_ENSURE( !bNoAdjust && bUseScrFont, "Outdev Check failed" );
@@ -929,13 +929,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 #endif
 
-    // robust: better use the printer font instead of using no font at all
+    
     OSL_ENSURE( pTmpFont, "No screen or printer font?" );
     if ( ! pTmpFont )
         pTmpFont = pPrtFont;
 
-    // HACK: UNDERLINE_WAVE must not be abused any more, hence the grey wave
-    // line of the ExtendedAttributeSets will appear in the font color first
+    
+    
 
     const sal_Bool bSwitchH2V = rInf.GetFrm() && rInf.GetFrm()->IsVertical();
     const bool bSwitchL2R = rInf.GetFrm() && rInf.GetFrm()->IsRightToLeft() &&
@@ -944,7 +944,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     const sal_Bool bBidiPor = ( bSwitchL2R !=
                             ( 0 != ( TEXT_LAYOUT_BIDI_RTL & nMode ) ) );
 
-    // be sure to have the correct layout mode at the printer
+    
     if ( pPrinter )
     {
         pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
@@ -977,7 +977,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
 
     //
-    // ASIAN LINE AND CHARACTER GRID MODE START: snap to characters
+    
     //
 
     if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
@@ -986,8 +986,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         GETGRID( rInf.GetFrm()->FindPageFrm() )
         if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && pGrid->IsSnapToChars())
         {
-            //for textgrid refactor
-            //const sal_uInt16 nGridWidth = pGrid->GetBaseHeight();
+            
+            
             const SwDoc* pDoc = rInf.GetShell()->GetDoc();
             const sal_uInt16 nGridWidth = GETGRIDWIDTH(pGrid, pDoc);
             sal_Int32* pKernArray = new sal_Int32[rInf.GetLen()];
@@ -1007,13 +1007,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             nWidthPerChar = i * nGridWidth;
 
-            // position of first character, we take the printer position
+            
             long nCharWidth = pKernArray[ 0 ];
             sal_uLong nHalfWidth = nWidthPerChar / 2;
 
             long nNextFix;
 
-            // punctuation characters are not centered
+            
             sal_Unicode cChar = rInf.GetText()[ rInf.GetIdx() ];
             sal_uInt8 nType = lcl_WhichPunctuation( cChar );
             switch ( nType )
@@ -1030,13 +1030,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 nNextFix = nCharWidth - nHalfWidth;
             }
 
-            // calculate offsets
+            
             for( sal_Int32 j = 1; j < rInf.GetLen(); ++j )
             {
                 long nScr = pKernArray[ j ] - pKernArray[ j - 1 ];
                 nNextFix += nWidthPerChar;
 
-                // punctuation characters are not centered
+                
                 cChar = rInf.GetText()[ rInf.GetIdx() + j ];
                 nType = lcl_WhichPunctuation( cChar );
                 switch ( nType )
@@ -1052,7 +1052,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
-            // the layout engine requires the total width of the output
+            
             pKernArray[ rInf.GetLen() - 1 ] = rInf.GetWidth() -
                                               aPos.X() + rInf.GetPos().X() ;
 
@@ -1067,8 +1067,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
     }
 
-    // For text grid refactor
-    // ASIAN LINE AND CHARACTER GRID MODE START: not snap to characters
+    
+    
     //
     if ( rInf.GetFrm() && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
@@ -1104,7 +1104,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     bool bSpecialJust = false;
                     const SwScriptInfo* pSI = rInf.GetScriptInfo();
                     const sal_uInt8 nActual = rInf.GetFont()->GetActual();
-                    ///Kana Compression
+                    
                     if( SW_CJK == nActual && rInf.GetKanaComp() &&
                         pSI && pSI->CountCompChg() &&
                         lcl_IsMonoSpaceFont( *(rInf.GetpOut()) ) )
@@ -1113,7 +1113,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             rInf.GetKanaComp(), (sal_uInt16)aFont.GetSize().Height(),&aPos );
                         bSpecialJust = true;
                     }
-                    ///Asian Justification
+                    
                     if ( ( SW_CJK == nActual || SW_LATIN == nActual ) && nSpaceAdd )
                     {
                         LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
@@ -1143,13 +1143,13 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                 nKernSum += nSpaceAdd;
                             pKernArray[i] += nKernSum;
                         }
-                        ///With through/uderstr. Grouped style requires a blank at the end
-                        ///of a text edition special measures:
+                        
+                        
                         if( bPaintBlank && rInf.GetLen() && (CH_BLANK ==
                             rInf.GetText()[ rInf.GetIdx() + rInf.GetLen() - 1 ] ) )
                         {
-                            ///If it concerns a singular, underlined space acts,
-                            ///we must spend two:
+                            
+                            
                             if( 1 == rInf.GetLen() )
                             {
                                 pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
@@ -1196,7 +1196,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
             else
             {
-                //long nKernAdd = rInf.GetKern();
+                
         long nKernAdd = 0;
                 long nGridAddSum = nGridWidthAdd + nKernAdd;
                 for(sal_Int32 i = 0; i < rInf.GetLen(); i++,nGridAddSum += nGridWidthAdd + nKernAdd )
@@ -1212,7 +1212,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     }
 
     //
-    // DIRECT PAINTING WITHOUT SCREEN ADJUSTMENT
+    
     //
 
     if ( bDirectPrint )
@@ -1227,11 +1227,11 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         if ( bSwitchH2V )
             rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
 
-        // In the good old days we used to have a simple DrawText if the
-        // output device is the printer. Now we need a DrawTextArray if
-        // 1. KanaCompression is enabled
-        // 2. Justified alignment
-        // Simple kerning is handled by DrawStretchText
+        
+        
+        
+        
+        
         if( rInf.GetSpace() || rInf.GetKanaComp() )
         {
             sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
@@ -1267,7 +1267,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
 
             //
-            // Modify Array for special justifications
+            
             //
             long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
             bool bSpecialJust = false;
@@ -1277,7 +1277,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 const SwScriptInfo* pSI = rInf.GetScriptInfo();
                 const sal_uInt8 nActual = rInf.GetFont()->GetActual();
 
-                // Kana Compression
+                
                 if ( SW_CJK == nActual && rInf.GetKanaComp() &&
                      pSI && pSI->CountCompChg() &&
                      lcl_IsMonoSpaceFont( rInf.GetOut() ) )
@@ -1288,7 +1288,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     bSpecialJust = true;
                 }
 
-                // Asian Justification
+                
                 if ( SW_CJK == nActual && nSpaceAdd )
                 {
                     LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
@@ -1307,7 +1307,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     }
                 }
 
-                // Kashida Justification
+                
                 if ( SW_CTL == nActual && nSpaceAdd )
                 {
                     if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
@@ -1322,21 +1322,21 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     }
                 }
 
-                // Thai Justification
+                
                 if ( SW_CTL == nActual && nSpaceAdd )
                 {
                     LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
 
                     if ( LANGUAGE_THAI == aLang )
                     {
-                        // Use rInf.GetSpace() because it has more precision than
-                        // nSpaceAdd:
+                        
+                        
                         SwScriptInfo::ThaiJustify( rInf.GetText(), pKernArray, 0,
                                                    rInf.GetIdx(), rInf.GetLen(),
                                                    rInf.GetNumberOfBlanks(),
                                                    rInf.GetSpace() );
 
-                        // adding space to blanks is already done
+                        
                         bSpecialJust = true;
                         nSpaceAdd = 0;
                     }
@@ -1355,12 +1355,12 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     pKernArray[i] += nKernSum;
                 }
 
-                // In case of underlined/strike-through justified text
-                // a blank at the end requires special handling:
+                
+                
                 if( bPaintBlank && rInf.GetLen() && ( CH_BLANK ==
                     rInf.GetText()[ rInf.GetIdx()+rInf.GetLen()-1 ] ) )
                 {
-                    // If it is a single underlined space, output 2 spaces:
+                    
                     if( 1 == rInf.GetLen() )
                     {
                            pKernArray[0] = rInf.GetWidth() + nSpaceAdd;
@@ -1436,7 +1436,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
     }
 
     //
-    // PAINTING WITH FORMATTING DEVICE/SCREEN ADJUSTMENT
+    
     //
 
     else
@@ -1451,16 +1451,16 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         CreateScrFont( *rInf.GetShell(), rInf.GetOut() );
         long nScrPos;
 
-        // get screen array
+        
         sal_Int32* pScrArray = new sal_Int32[ rInf.GetLen() ];
         rInf.GetOut().GetTextArray( rInf.GetText(), pScrArray,
                                     rInf.GetIdx(), rInf.GetLen() );
 
-        // OLE: no printer available
-        // OSL_ENSURE( pPrinter, "DrawText needs pPrinter" )
+        
+        
         if ( pPrinter )
         {
-            // pTmpFont has already been set as current font for rInf.GetOut()
+            
             if ( pPrinter != rInf.GetpOut() || pTmpFont != pPrtFont )
             {
                 if( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) )
@@ -1476,7 +1476,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         }
 
         //
-        // Modify Printer and ScreenArrays for special justifications
+        
         //
         long nSpaceAdd = rInf.GetSpace() / SPACING_PRECISION_FACTOR;
         bool bNoHalfSpace = false;
@@ -1486,7 +1486,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             const sal_uInt8 nActual = rInf.GetFont()->GetActual();
             const SwScriptInfo* pSI = rInf.GetScriptInfo();
 
-            // Kana Compression
+            
             if ( SW_CJK == nActual && rInf.GetKanaComp() &&
                  pSI && pSI->CountCompChg() &&
                  lcl_IsMonoSpaceFont( rInf.GetOut() ) )
@@ -1500,7 +1500,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                (sal_uInt16)aFont.GetSize().Height(), &aPos );
             }
 
-            // Asian Justification
+            
             if ( SW_CJK == nActual && nSpaceAdd )
             {
                 LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
@@ -1519,7 +1519,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
-            // Kashida Justification
+            
             if ( SW_CTL == nActual && nSpaceAdd )
             {
                 if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
@@ -1533,7 +1533,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
             }
 
-            // Thai Justification
+            
             if ( SW_CTL == nActual && nSpaceAdd )
             {
                 LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
@@ -1546,7 +1546,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                                                rInf.GetNumberOfBlanks(),
                                                rInf.GetSpace() );
 
-                    // adding space to blanks is already done
+                    
                     nSpaceAdd = 0;
                 }
             }
@@ -1556,9 +1556,9 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
         if( bBullet )
         {
-            // !!! HACK !!!
-            // The Arabic layout engine requires some context of the string
-            // which should be painted.
+            
+            
+            
             sal_Int32 nCopyStart = rInf.GetIdx();
             if ( nCopyStart )
                 --nCopyStart;
@@ -1603,8 +1603,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         long nKernSum = rInf.GetKern();
         sal_Unicode cChPrev = rInf.GetText()[ rInf.GetIdx() ];
 
-        // In case of a single underlined space in justified text,
-        // have to output 2 spaces:
+        
+        
         if ( ( nCnt == 1 ) && rInf.GetSpace() && ( cChPrev == CH_BLANK ) )
         {
             pKernArray[0] = rInf.GetWidth() +
@@ -1627,8 +1627,8 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
         {
             sal_Unicode nCh;
 
-            // In case of Pair Kerning the printer influence on the positioning
-            // grows
+            
+            
             sal_uInt16 nMul = 3;
 
             if ( pPrtFont->GetKerning() )
@@ -1636,18 +1636,18 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             const sal_uInt16 nDiv = nMul+1;
 
-            // nSpaceSum contains the sum of the intermediate space distributed
-            // among Spaces by the Justification.
-            // The Spaces themselves will be positioned in the middle of the
-            // intermediate space, hence the nSpace/2.
-            // In case of word-by-word underlining they have to be positioned
-            // at the beginning of the intermediate space, so that the space
-            // is not underlined.
-            // A Space at the beginning or end of the text must be positioned
-            // before (resp. after) the whole intermediate space, otherwise
-            // the underline/strike-through would have gaps.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             long nSpaceSum = 0;
-            // in word line mode and for Arabic, we disable the half space trick:
+            
             const long nHalfSpace = pPrtFont->IsWordLineMode() || bNoHalfSpace ? 0 : nSpaceAdd / 2;
             const long nOtherHalf = nSpaceAdd - nHalfSpace;
             if ( nSpaceAdd && ( cChPrev == CH_BLANK ) )
@@ -1660,10 +1660,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 long nScr;
                 nScr = pScrArray[ i ] - pScrArray[ i - 1 ];
 
-                // If there is an (ex-)Space before us, position optimally,
-                // i.e., our right margin to the 100% printer position;
-                // if we _are_ an ex-Space, position us left-aligned to the
-                // printer position.
+                
+                
+                
+                
                 if ( nCh == CH_BLANK )
                 {
                     nScrPos = pKernArray[i-1] + nScr;
@@ -1680,7 +1680,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                     if ( cChPrev == CH_BLANK )
                     {
                         nScrPos = pKernArray[i-1] + nScr;
-                        // no Pixel is lost:
+                        
                         nSpaceSum += nOtherHalf;
                     }
                     else if ( cChPrev == '-' )
@@ -1693,15 +1693,15 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                 }
                 cChPrev = nCh;
                 pKernArray[i-1] = nScrPos - nScr + nKernSum + nSpaceSum;
-                // In word line mode and for Arabic, we disabled the half space trick. If a portion
-                // ends with a blank, the full nSpaceAdd value has been added to the character in
-                // front of the blank. This leads to painting artifacts, therefore we remove the
-                // nSpaceAdd value again:
+                
+                
+                
+                
                 if ( (bNoHalfSpace || pPrtFont->IsWordLineMode()) && i+1 == nCnt && nCh == CH_BLANK )
                     pKernArray[i-1] = pKernArray[i-1] - nSpaceAdd;
             }
 
-            // the layout engine requires the total width of the output
+            
             pKernArray[ rInf.GetLen() - 1 ] += nKernSum + nSpaceSum;
 
             if( rInf.GetGreyWave() )
@@ -1778,7 +1778,7 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
             }
             else if( !bSymbol && rInf.GetLen() )
             {
-                // anything to do?
+                
                 if (rInf.GetWrong() || rInf.GetGrammarCheck() || rInf.GetSmartTags())
                 {
                     CalcLinePosData aCalcLinePosData(rInf, *GetFont(),
@@ -1786,14 +1786,14 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
                             nHalfSpace, pKernArray, bBidiPor);
 
                     SwForbidden aForbidden;
-                    // draw line for smart tag data
+                    
                     lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetSmartTags(), aCalcLinePosData, Size() );
-                    // draw wave line for spell check errors
-                    // draw them BEFORE the grammar check lines to 'override' the latter in case of conflict.
-                    // reason: some grammar errors can only be found if spelling errors are fixed,
-                    // therefore we don't want the user to miss a spelling error.
+                    
+                    
+                    
+                    
                     lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetWrong(), aCalcLinePosData, pPrtFont->GetSize() );
-                    // draw wave line for grammar check errors
+                    
                     lcl_DrawLineForWrongListData( aForbidden, rInf, rInf.GetGrammarCheck(), aCalcLinePosData, pPrtFont->GetSize() );
                 }
             }
@@ -1803,10 +1803,10 @@ void SwFntObj::DrawText( SwDrawTextInfo &rInf )
 
             if( nOffs < nLen )
             {
-                // If we paint bullets instead of spaces, we use a copy of
-                // the paragraph string. For the layout engine, the copy
-                // of the string has to be an environment of the range which
-                // is painted
+                
+                
+                
+                
                 sal_Int32 nTmpIdx = bBullet ?
                                               ( rInf.GetIdx() ? 1 : 0 ) :
                                               rInf.GetIdx();
@@ -1855,7 +1855,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     const sal_Int32 nLn = ( COMPLETE_STRING != rInf.GetLen() ) ? rInf.GetLen() :
                            rInf.GetText().getLength();
 
-    // be sure to have the correct layout mode at the printer
+    
     if ( pPrinter )
     {
         pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
@@ -1903,7 +1903,7 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
         }
     }
 
-    //for textgrid refactor
+    
     if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
@@ -1931,8 +1931,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
             aTxtSize.Height() = pOutDev->GetTextHeight() +
                                 GetFontLeading( rInf.GetShell(), rInf.GetOut() );
             aTxtSize.Width() += (nLn) * long( nGridWidthAdd );
-            //if ( rInf.GetKern() && nLn )
-            //    aTxtSize.Width() += ( nLn ) * long( rInf.GetKern() );
+            
+            
 
             rInf.SetKanaDiff( 0 );
             return aTxtSize;
@@ -1949,8 +1949,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
     OSL_ENSURE( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
             CountCompChg()), "Compression without info" );
 
-    // This is the part used e.g., for cursor travelling
-    // See condition for DrawText or DrawTextArray (bDirectPrint)
+    
+    
     if ( pPrinter && pPrinter != rInf.GetpOut() )
     {
         if( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) )
@@ -1990,8 +1990,8 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 
             sal_Unicode nCh;
 
-            // In case of Pair Kerning the printer influence on the positioning
-            // grows
+            
+            
             sal_uInt16 nMul = 3;
             if ( pPrtFont->GetKerning() )
                 nMul = 1;
@@ -2069,7 +2069,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
     sal_Int32 *pKernArray = new sal_Int32[ rInf.GetLen() ];
 
-    // be sure to have the correct layout mode at the printer
+    
     if ( pPrinter )
     {
         pPrinter->SetLayoutMode( rInf.GetOut().GetLayoutMode() );
@@ -2086,7 +2086,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     {
         const sal_uInt8 nActual = rInf.GetFont()->GetActual();
 
-        // Kana Compression
+        
         if ( SW_CJK == nActual && rInf.GetKanaComp() &&
              pSI && pSI->CountCompChg() &&
              lcl_IsMonoSpaceFont( rInf.GetOut() ) )
@@ -2096,7 +2096,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
                            (sal_uInt16) aFont.GetSize().Height() );
         }
 
-        // Asian Justification
+        
         if ( SW_CJK == rInf.GetFont()->GetActual() )
         {
             LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CJK );
@@ -2115,7 +2115,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 
         }
 
-        // Kashida Justification
+        
         if ( SW_CTL == nActual && rInf.GetSpace() )
         {
             if ( SwScriptInfo::IsArabicText( rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) )
@@ -2127,7 +2127,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
             }
         }
 
-        // Thai Justification
+        
         if ( SW_CTL == nActual && nSpaceAdd )
         {
             LanguageType aLang = rInf.GetFont()->GetLanguage( SW_CTL );
@@ -2139,7 +2139,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
                                            rInf.GetNumberOfBlanks(),
                                            rInf.GetSpace() );
 
-                // adding space to blanks is already done
+                
                 nSpaceAdd = 0;
             }
         }
@@ -2177,7 +2177,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         }
     }
 
-    //for textgrid refactor
+    
     if ( rInf.GetFrm() && rInf.GetLen() && rInf.SnapToGrid() &&
          rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
@@ -2216,8 +2216,8 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     sal_Int32 nLastIdx = nIdx;
     const sal_Int32 nEnd = rInf.GetIdx() + rInf.GetLen();
 
-    // #i105901#
-    // skip character cells for all script types
+    
+    
     if ( g_pBreakIt->GetBreakIter().is() )
     {
         aLang = rInf.GetFont()->GetLanguage();
@@ -2229,7 +2229,7 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         if ( nSpaceAdd && CH_BLANK == rInf.GetText()[ nIdx ] )
             nSpaceSum += nSpaceAdd;
 
-        // go to next character (cell).
+        
         nLastIdx = nIdx;
 
         if ( bSkipCharacterCells )
@@ -2248,15 +2248,15 @@ sal_Int32 SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
         nKernSum += nKern;
     }
 
-    // step back if position is before the middle of the character
-    // or if we do not want to go to the next character
+    
+    
     if ( nIdx > rInf.GetIdx() &&
          ( rInf.IsPosMatchesBounds() ||
            ( ( nRight > long( rInf.GetOfst() ) ) &&
              ( nRight - rInf.GetOfst() > rInf.GetOfst() - nLeft ) ) ) )
-        nCnt = nLastIdx - rInf.GetIdx(); // first half
+        nCnt = nLastIdx - rInf.GetIdx(); 
     else
-        nCnt = nIdx - rInf.GetIdx(); // second half
+        nCnt = nIdx - rInf.GetIdx(); 
 
     if ( pSI )
         rInf.SetCursorBidiLevel( pSI->DirType( nLastIdx ) );
@@ -2278,17 +2278,17 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
   SwCacheAccess( *pFntCache, rMagic, rIndex ),
   pShell( pSh )
 {
-    // the used ctor of SwCacheAccess searches for rMagic+rIndex in the cache
+    
     if ( IsAvail() )
     {
-        // fast case: known Font (rMagic), no need to check printer and zoom
+        
         if ( !bCheck )
             return;
 
-        // Font is known, but has to be checked
+        
     }
     else
-    {   // Font not known, must be searched
+    {   
         bCheck = sal_False;
     }
 
@@ -2297,7 +2297,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
         OutputDevice* pOut = 0;
         sal_uInt16 nZoom = USHRT_MAX;
 
-        // Get the reference device
+        
         if ( pSh )
         {
             pOut = &pSh->GetRefDev();
@@ -2313,14 +2313,14 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                    pFntObj->GetPropWidth() ==
                         ((SwSubFont*)pOwn)->GetPropWidth() )
             {
-                return; // result of Check: Drucker+Zoom okay.
+                return; 
             }
-            pFntObj->Unlock(); // forget this object, printer/zoom differs
+            pFntObj->Unlock(); 
             pObj = NULL;
         }
 
-        // Search by font comparison, quite expensive!
-        // Look for same font and same printer
+        
+        
         pFntObj = pFntCache->First();
         while ( pFntObj && !( pFntObj->aFont == *(Font *)pOwn &&
                               pFntObj->GetZoom() == nZoom &&
@@ -2331,8 +2331,8 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
 
         if( pFntObj && pFntObj->pPrinter != pOut )
         {
-            // found one without printer, let's see if there is one with
-            // the same printer as well
+            
+            
             SwFntObj *pTmpObj = pFntObj;
             while( pTmpObj && !( pTmpObj->aFont == *(Font *)pOwn &&
                    pTmpObj->GetZoom()==nZoom && pTmpObj->pPrinter==pOut &&
@@ -2343,18 +2343,18 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
                 pFntObj = pTmpObj;
         }
 
-        if ( !pFntObj ) // Font has not been found, create one
+        if ( !pFntObj ) 
         {
-            // Have to create new Object, hence Owner must be a SwFont, later
-            // the Owner will be the "MagicNumber"
+            
+            
             SwCacheAccess::pOwner = pOwn;
-            pFntObj = Get(); // will create via NewObj() and lock
+            pFntObj = Get(); 
             OSL_ENSURE(pFntObj, "No Font, no Fun.");
         }
-        else  // Font has been found, so we lock it.
+        else  
         {
             pFntObj->Lock();
-            if (pFntObj->pPrinter != pOut) // if no printer is known by now
+            if (pFntObj->pPrinter != pOut) 
             {
                 OSL_ENSURE( !pFntObj->pPrinter, "SwFntAccess: Printer Changed" );
                 pFntObj->CreatePrtFont( *pOut );
@@ -2368,9 +2368,9 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
             pObj = pFntObj;
         }
 
-        // no matter if new or found, now the Owner of the Object is a
-        // MagicNumber, and will be given to the SwFont, as well as the Index
-        // for later direct access
+        
+        
+        
         rMagic = pFntObj->GetOwner();
         SwCacheAccess::pOwner = rMagic;
         rIndex = pFntObj->GetCachePos();
@@ -2379,7 +2379,7 @@ SwFntAccess::SwFntAccess( const void* &rMagic,
 
 SwCacheObj *SwFntAccess::NewObj( )
 {
-    // a new Font, a new "MagicNumber".
+    
     return new SwFntObj( *(SwSubFont *)pOwner, ++pMagicNo, pShell );
 }
 
@@ -2441,7 +2441,7 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
         }
     }
 
-    //for text grid enhancement
+    
     if ( rInf.GetFrm() && nLn && rInf.SnapToGrid() && rInf.GetFont() &&
          SW_CJK == rInf.GetFont()->GetActual() )
     {
@@ -2500,16 +2500,16 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
             const bool bTitle = SVX_CASEMAP_TITEL == aSub[nActual].GetCaseMap() &&
                                 g_pBreakIt->GetBreakIter().is();
 
-            // Uaaaaahhhh!!! In title case mode, we would get wrong results
+            
             if ( bTitle && nLn )
             {
-                // check if rInf.GetIdx() is begin of word
+                
                 if ( !g_pBreakIt->GetBreakIter()->isBeginWord(
                      rInf.GetText(), rInf.GetIdx(),
                      g_pBreakIt->GetLocale( aSub[nActual].GetLanguage() ),
                      i18n::WordType::ANYWORD_IGNOREWHITESPACES ) )
                 {
-                    // In this case, the beginning of aTmpText is wrong.
+                    
                     OUString aSnippetTmp(aSnippet.copy(0, 1));
                     aSnippetTmp = aSub[nActual].CalcCaseMap( aSnippetTmp );
                     aTmpText = aTmpText.replaceAt( 0, aSnippetTmp.getLength(), OUString(aSnippet[0]) );
@@ -2572,7 +2572,7 @@ sal_Int32 SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                 ++nTxtBreak2;
             }
             if( rInf.GetHyphPos() )
-                *rInf.GetHyphPos() += nTxtBreak2 - nTmpBreak; // It's not perfect
+                *rInf.GetHyphPos() += nTxtBreak2 - nTmpBreak; 
         }
         delete[] pKernArray;
     }
@@ -2602,10 +2602,10 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
     }
     else
     {
-        // FontColor has to be changed if:
-        // 1. FontColor = AUTO or 2. IsAlwaysAutoColor is set
-        // LineColor has to be changed if:
-        // 1. IsAlwaysAutoColor is set
+        
+        
+        
+        
 
         bChgLineColor = ! bPrt && GetShell() &&
                 GetShell()->GetAccessibilityOptions()->IsAlwaysAutoColor();
@@ -2614,7 +2614,7 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
 
         if ( bChgFntColor )
         {
-            // check if current background has a user defined setting
+            
             const Color* pCol = GetFont() ? GetFont()->GetBackColor() : NULL;
             if( ! pCol || COL_TRANSPARENT == pCol->GetColor() )
             {
@@ -2623,12 +2623,12 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
                 const XFillGradientItem* pFillGradientItem;
                 SwRect aOrigBackRect;
 
-                /// OD 21.08.2002
-                ///     consider, that [GetBackgroundBrush(...)] can set <pCol>
-                ///     - see implementation in /core/layout/paintfrm.cxx
-                /// OD 21.08.2002 #99657#
-                ///     There is a user defined setting for the background, if there
-                ///     is a background brush and its color is *not* "no fill"/"auto fill".
+                
+                
+                
+                
+                
+                
                 if( GetFrm()->GetBackgroundBrush( pItem, pFillStyleItem, pFillGradientItem, pCol, aOrigBackRect, sal_False ) )
                 {
                     if ( !pCol )
@@ -2636,8 +2636,8 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
                         pCol = &pItem->GetColor();
                     }
 
-                    /// OD 30.08.2002 #99657#
-                    /// determined color <pCol> can be <COL_TRANSPARENT>. Thus, check it.
+                    
+                    
                     if ( pCol->GetColor() == COL_TRANSPARENT)
                         pCol = NULL;
                 }
@@ -2645,23 +2645,23 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
                     pCol = NULL;
             }
 
-            // no user defined color at paragraph or font background
+            
             if ( ! pCol )
                 pCol = &aGlobalRetoucheColor;
 
             if( GetShell() && GetShell()->GetWin() )
             {
-                // here we determine the preferred window text color for painting
+                
                 const SwViewOption* pViewOption = GetShell()->GetViewOptions();
                 if(pViewOption->IsPagePreview() &&
                         !SW_MOD()->GetAccessibilityOptions().GetIsForPagePreviews())
                     nNewColor = COL_BLACK;
                 else
-                    // we take the font color from the appearance page
+                    
                     nNewColor = SwViewOption::GetFontColor().GetColor();
             }
 
-            // change painting color depending of dark/bright background
+            
             Color aTmpColor( nNewColor );
             if ( pCol->IsDark() && aTmpColor.IsDark() )
                 nNewColor = COL_WHITE;
@@ -2678,22 +2678,22 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFont )
         {
             if ( pFont && aNewColor != pFont->GetColor() )
             {
-                // only set the new color at the font passed as argument
+                
                 pFont->SetColor( aNewColor );
             }
             else if ( aNewColor != GetOut().GetFont().GetColor() )
             {
-                // set new font with new color at output device
+                
                 Font aFont( rFnt );
                 aFont.SetColor( aNewColor );
                 GetOut().SetFont( aFont );
             }
         }
 
-        // the underline and overline colors have to be set separately
+        
         if ( bChgLineColor )
         {
-            // get current font color or color set at output device
+            
             aNewColor = pFont ? pFont->GetColor() : GetOut().GetFont().GetColor();
             if ( aNewColor != GetOut().GetLineColor() )
                 GetOut().SetLineColor( aNewColor );

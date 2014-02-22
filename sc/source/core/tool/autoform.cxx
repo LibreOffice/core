@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "autoform.hxx"
@@ -45,43 +45,43 @@ const sal_Char *linker_dummy = "";
 
 static const sal_Char sAutoTblFmtName[] = "autotbl.fmt";
 
-// till SO5PF
+
 const sal_uInt16 AUTOFORMAT_ID_X        = 9501;
 const sal_uInt16 AUTOFORMAT_ID_358      = 9601;
 const sal_uInt16 AUTOFORMAT_DATA_ID_X   = 9502;
 
-// from SO5 on
-// in following versions the value of the IDs must be higher
+
+
 const sal_uInt16 AUTOFORMAT_ID_504      = 9801;
 const sal_uInt16 AUTOFORMAT_DATA_ID_504 = 9802;
 
 const sal_uInt16 AUTOFORMAT_DATA_ID_552 = 9902;
 
-// --- from 641 on: CJK and CTL font settings
+
 const sal_uInt16 AUTOFORMAT_DATA_ID_641 = 10002;
 
-// --- from 680/dr14 on: diagonal frame lines
+
 const sal_uInt16 AUTOFORMAT_ID_680DR14      = 10011;
 const sal_uInt16 AUTOFORMAT_DATA_ID_680DR14 = 10012;
 
-// --- from 680/dr25 on: store strings as UTF-8
+
 const sal_uInt16 AUTOFORMAT_ID_680DR25      = 10021;
 
-// --- from DEV300/overline2 on: overline support
+
 const sal_uInt16 AUTOFORMAT_ID_300OVRLN      = 10031;
 const sal_uInt16 AUTOFORMAT_DATA_ID_300OVRLN = 10032;
 
-// --- Bug fix to fdo#31005: Table Autoformats does not save/apply all properties (Writer and Calc)
+
 const sal_uInt16 AUTOFORMAT_ID_31005      = 10041;
 const sal_uInt16 AUTOFORMAT_DATA_ID_31005 = 10042;
 
-// current version
+
 const sal_uInt16 AUTOFORMAT_ID          = AUTOFORMAT_ID_31005;
 const sal_uInt16 AUTOFORMAT_DATA_ID     = AUTOFORMAT_DATA_ID_31005;
 
 namespace
 {
-    /// Read an AutoFormatSwBlob from stream.
+    
     SvStream& operator>>(SvStream &stream, AutoFormatSwBlob &blob)
     {
         blob.Reset();
@@ -91,8 +91,8 @@ namespace
 
         const sal_uInt64 currentPosition = stream.Tell();
         const sal_uInt64 blobSize = endOfBlob - currentPosition;
-        // A zero-size indicates an empty blob. This happens when Calc creates a new autoformat,
-        // since it (naturally) doesn't have any writer-specific data to write.
+        
+        
         if (blobSize)
         {
             blob.pData = new sal_uInt8[blobSize];
@@ -103,7 +103,7 @@ namespace
         return stream;
     }
 
-    /// Write an AutoFormatSwBlob to stream.
+    
     SvStream& WriteAutoFormatSwBlob(SvStream &stream, AutoFormatSwBlob &blob)
     {
         const sal_uInt64 endOfBlob = stream.Tell() + sizeof(sal_uInt64) + blob.size;
@@ -202,7 +202,7 @@ void ScAfVersions::Write(SvStream& rStream, sal_uInt16 fileVersion)
     rStream.WriteUInt16( SfxInt32Item(ATTR_ROTATE_VALUE).GetVersion(fileVersion) );
     rStream.WriteUInt16( SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD,0).GetVersion(fileVersion) );
 
-    rStream.WriteUInt16( (sal_uInt16)0 );       // Num-Format
+    rStream.WriteUInt16( (sal_uInt16)0 );       
 }
 
 ScAutoFormatDataField::ScAutoFormatDataField() :
@@ -301,7 +301,7 @@ bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
     READ( aHeight,      SvxFontHeightItem,  rVersions.nFontHeightVersion)
     READ( aWeight,      SvxWeightItem,      rVersions.nWeightVersion)
     READ( aPosture,     SvxPostureItem,     rVersions.nPostureVersion)
-    // --- from 641 on: CJK and CTL font settings
+    
     if( AUTOFORMAT_DATA_ID_641 <= nVer )
     {
         READ( aCJKFont,     SvxFontItem,        rVersions.nFontVersion)
@@ -324,7 +324,7 @@ bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
     READ( aColor,       SvxColorItem,       rVersions.nColorVersion)
     READ( aBox,         SvxBoxItem,         rVersions.nBoxVersion)
 
-    // --- from 680/dr14 on: diagonal frame lines
+    
     if( AUTOFORMAT_DATA_ID_680DR14 <= nVer )
     {
         READ( aTLBR, SvxLineItem, rVersions.nLineVersion)
@@ -361,12 +361,12 @@ bool ScAutoFormatDataField::Load( SvStream& rStream, const ScAfVersions& rVersio
 
     if( 0 == rVersions.nNumFmtVersion )
     {
-        // --- from 680/dr25 on: store strings as UTF-8
+        
         rtl_TextEncoding eCharSet = (nVer >= AUTOFORMAT_ID_680DR25) ? RTL_TEXTENCODING_UTF8 : rStream.GetStreamCharSet();
         aNumFormat.Load( rStream, eCharSet );
     }
 
-    //  adjust charset in font
+    
     rtl_TextEncoding eSysSet = osl_getThreadTextEncoding();
     rtl_TextEncoding eSrcSet = rStream.GetStreamCharSet();
     if( eSrcSet != eSysSet && aFont.GetCharSet() == eSrcSet )
@@ -386,7 +386,7 @@ bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
     aHeight.Store       ( rStream, aHeight.GetVersion( fileVersion ) );
     aWeight.Store       ( rStream, aWeight.GetVersion( fileVersion ) );
     aPosture.Store      ( rStream, aPosture.GetVersion( fileVersion ) );
-    // --- from 641 on: CJK and CTL font settings
+    
     aCJKFont.Store      ( rStream, aCJKFont.GetVersion( fileVersion ) );
     aCJKHeight.Store    ( rStream, aCJKHeight.GetVersion( fileVersion ) );
     aCJKWeight.Store    ( rStream, aCJKWeight.GetVersion( fileVersion ) );
@@ -397,7 +397,7 @@ bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
     aCTLPosture.Store   ( rStream, aCTLPosture.GetVersion( fileVersion ) );
 
     aUnderline.Store    ( rStream, aUnderline.GetVersion( fileVersion ) );
-    // --- from DEV300/overline2 on: overline support
+    
     aOverline.Store     ( rStream, aOverline.GetVersion( fileVersion ) );
     aCrossedOut.Store   ( rStream, aCrossedOut.GetVersion( fileVersion ) );
     aContour.Store      ( rStream, aContour.GetVersion( fileVersion ) );
@@ -405,7 +405,7 @@ bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
     aColor.Store        ( rStream, aColor.GetVersion( fileVersion ) );
     aBox.Store          ( rStream, aBox.GetVersion( fileVersion ) );
 
-    // --- from 680/dr14 on: diagonal frame lines
+    
     aTLBR.Store         ( rStream, aTLBR.GetVersion( fileVersion ) );
     aBLTR.Store         ( rStream, aBLTR.GetVersion( fileVersion ) );
 
@@ -420,11 +420,11 @@ bool ScAutoFormatDataField::Save( SvStream& rStream, sal_uInt16 fileVersion )
     aOrientation.Store  ( rStream, aOrientation.GetVersion( fileVersion ) );
     aMargin.Store       ( rStream, aMargin.GetVersion( fileVersion ) );
     aLinebreak.Store    ( rStream, aLinebreak.GetVersion( fileVersion ) );
-    // Rotation ab SO5
+    
     aRotateAngle.Store  ( rStream, aRotateAngle.GetVersion( fileVersion ) );
     aRotateMode.Store   ( rStream, aRotateMode.GetVersion( fileVersion ) );
 
-    // --- from 680/dr25 on: store strings as UTF-8
+    
     aNumFormat.Save( rStream, RTL_TEXTENCODING_UTF8 );
 
     return (rStream.GetError() == 0);
@@ -646,7 +646,7 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
         rItemSet.Put( rField.GetHeight() );
         rItemSet.Put( rField.GetWeight() );
         rItemSet.Put( rField.GetPosture() );
-        // do not insert empty CJK font
+        
         const SvxFontItem& rCJKFont = rField.GetCJKFont();
         if (!rCJKFont.GetStyleName().isEmpty())
         {
@@ -661,7 +661,7 @@ void ScAutoFormatData::FillToItemSet( sal_uInt16 nIndex, SfxItemSet& rItemSet, S
             rItemSet.Put( rField.GetWeight(), ATTR_CJK_FONT_WEIGHT );
             rItemSet.Put( rField.GetPosture(), ATTR_CJK_FONT_POSTURE );
         }
-        // do not insert empty CTL font
+        
         const SvxFontItem& rCTLFont = rField.GetCTLFont();
         if (rCTLFont.GetStyleName().isEmpty())
         {
@@ -746,7 +746,7 @@ bool ScAutoFormatData::Load( SvStream& rStream, const ScAfVersions& rVersions )
     if( bRet && (nVer == AUTOFORMAT_DATA_ID_X ||
             (AUTOFORMAT_DATA_ID_504 <= nVer && nVer <= AUTOFORMAT_DATA_ID)) )
     {
-        // --- from 680/dr25 on: store strings as UTF-8
+        
         if (nVer >= AUTOFORMAT_ID_680DR25)
         {
             aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStream,
@@ -793,7 +793,7 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
     sal_uInt16 nVal = AUTOFORMAT_DATA_ID;
     bool b;
     rStream.WriteUInt16( nVal );
-    // --- from 680/dr25 on: store strings as UTF-8
+    
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStream, aName, RTL_TEXTENCODING_UTF8);
 
     rStream.WriteUInt16( nStrResId );
@@ -817,12 +817,12 @@ bool ScAutoFormatData::Save(SvStream& rStream, sal_uInt16 fileVersion)
 ScAutoFormat::ScAutoFormat() :
     mbSaveLater(false)
 {
-    //  create default autoformat
+    
     ScAutoFormatData* pData = new ScAutoFormatData;
     OUString aName(ScGlobal::GetRscString(STR_STYLENAME_STANDARD));
     pData->SetName(aName);
 
-    //  default font, default height
+    
     Font aStdFont = OutputDevice::GetDefaultFont(
         DEFAULTFONT_LATIN_SPREADSHEET, LANGUAGE_ENGLISH_US, DEFAULTFONT_FLAGS_ONLYONE );
     SvxFontItem aFontItem(
@@ -841,9 +841,9 @@ ScAutoFormat::ScAutoFormat() :
         aStdFont.GetFamily(), aStdFont.GetName(), aStdFont.GetStyleName(),
         aStdFont.GetPitch(), aStdFont.GetCharSet(), ATTR_CTL_FONT );
 
-    SvxFontHeightItem aHeight( 200, 100, ATTR_FONT_HEIGHT );      // 10 pt;
+    SvxFontHeightItem aHeight( 200, 100, ATTR_FONT_HEIGHT );      
 
-    //  black thin border
+    
     Color aBlack( COL_BLACK );
     ::editeng::SvxBorderLine aLine( &aBlack, DEF_LINE_WIDTH_0 );
     SvxBoxItem aBox( ATTR_BORDER );
@@ -873,22 +873,22 @@ ScAutoFormat::ScAutoFormat() :
         pData->PutItem( i, aHeight );
         aHeight.SetWhich( ATTR_CTL_FONT_HEIGHT );
         pData->PutItem( i, aHeight );
-        if (i<4)                                    // top: white on blue
+        if (i<4)                                    
         {
             pData->PutItem( i, aWhiteText );
             pData->PutItem( i, aBlueBack );
         }
-        else if ( i%4 == 0 )                        // left: white on gray70
+        else if ( i%4 == 0 )                        
         {
             pData->PutItem( i, aWhiteText );
             pData->PutItem( i, aGray70Back );
         }
-        else if ( i%4 == 3 || i >= 12 )             // right and bottom: black on gray20
+        else if ( i%4 == 3 || i >= 12 )             
         {
             pData->PutItem( i, aBlackText );
             pData->PutItem( i, aGray20Back );
         }
-        else                                        // center: black on white
+        else                                        
         {
             pData->PutItem( i, aBlackText );
             pData->PutItem( i, aWhiteBack );
@@ -904,8 +904,8 @@ ScAutoFormat::ScAutoFormat(const ScAutoFormat& r) :
 
 ScAutoFormat::~ScAutoFormat()
 {
-    //  When modified via StarOne then only the SaveLater flag is set and no saving is done.
-    //  If the flag is set then save now.
+    
+    
 
     if (mbSaveLater)
         Save();
@@ -1018,7 +1018,7 @@ bool ScAutoFormat::Load()
     if (bRet)
     {
         SvStream& rStream = *pStream;
-        // Attention: A common header has to be read
+        
         sal_uInt16 nVal = 0;
         rStream.ReadUInt16( nVal );
         bRet = 0 == rStream.GetError();
@@ -1044,7 +1044,7 @@ bool ScAutoFormat::Load()
             if( nVal == AUTOFORMAT_ID_358 || nVal == AUTOFORMAT_ID_X ||
                     (AUTOFORMAT_ID_504 <= nVal && nVal <= AUTOFORMAT_ID) )
             {
-                m_aVersions.Load( rStream, nVal );        // Item-Versionen
+                m_aVersions.Load( rStream, nVal );        
 
                 ScAutoFormatData* pData;
                 sal_uInt16 nAnz = 0;
@@ -1082,10 +1082,10 @@ bool ScAutoFormat::Save()
         SvStream& rStream = *pStream;
         rStream.SetVersion( fileVersion );
 
-        // Attention: A common header has to be saved
+        
         sal_uInt16 nVal = AUTOFORMAT_ID;
         rStream.WriteUInt16( nVal )
-               .WriteUChar( (sal_uInt8)2 )         // Number of chars of the header including this
+               .WriteUChar( (sal_uInt8)2 )         
                .WriteUChar( (sal_uInt8)::GetSOStoreTextEncoding(
                     osl_getThreadTextEncoding() ) );
         m_aVersions.Write(rStream, fileVersion);
@@ -1097,7 +1097,7 @@ bool ScAutoFormat::Save()
         MapType::iterator it = maData.begin(), itEnd = maData.end();
         if (it != itEnd)
         {
-            for (++it; bRet && it != itEnd; ++it) // Skip the first item.
+            for (++it; bRet && it != itEnd; ++it) 
             {
                 bRet &= it->second->Save(rStream, fileVersion);
             }

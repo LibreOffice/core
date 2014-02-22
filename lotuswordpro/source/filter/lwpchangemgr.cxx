@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -142,7 +142,7 @@ void LwpChangeMgr::ConvertAllChange(IXFStream* pStream)
     pStream->GetAttrList()->Clear();
     if (m_ChangeList.empty())
             return;
-    // Add for disable change tracking
+    
     pStream->GetAttrList()->AddAttribute( A2OUSTR("text:track-changes"),A2OUSTR("false"));
     pStream->StartElement( A2OUSTR("text:tracked-changes") );
     for (iter1=m_ChangeList.begin();iter1 !=m_ChangeList.end();++iter1)

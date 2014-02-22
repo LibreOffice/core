@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -119,12 +119,12 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
             case UNDER_WORD_DOUBLE:
                 pFont->SetUnderline(enumXFUnderlineSingle, true);
                 break;
-            case UNDER_DONTCARE:    //fall through
-            case UNDER_OFF:         //fall through
-            case UNDER_STYLE:       //fall through
+            case UNDER_DONTCARE:    
+            case UNDER_OFF:         
+            case UNDER_STYLE:       
             default:
                 break;
-                //do nothing;
+                
         }
     }
 
@@ -144,28 +144,28 @@ void LwpFontAttrEntry::Override( XFFont*pFont )
         case CASE_INITCAPS:
             pFont->SetTransform(enumXFTransformCapitalize);
             break;
-        case CASE_STYLE:        //fall through
-        case CASE_DONTCARE: //fall through
+        case CASE_STYLE:        
+        case CASE_DONTCARE: 
         default:
-            //do nothing
+            
             ;
         }
     }
 
-    //Please note that, put the SmallCaps setting after the case setting,
-    //for SmallCaps has higher priority than LowerCase but low
+    
+    
     if (IsSmallCapsOverridden())
     {
-        if( pFont->GetTransform()!=enumXFTransformUpper )   //SmallCaps should not override upper case
+        if( pFont->GetTransform()!=enumXFTransformUpper )   
         {
             if(Is(SMALLCAPS))
                 pFont->SetTransform(enumXFTransformSmallCaps);
         }
     }
 
-    // TODO: tightness
-    //if (IsTightnessOverridden())
-    //  pFont->SetTightness(cTightness);*/
+    
+    
+    
 }
 
 sal_Bool LwpFontAttrEntry::Is(sal_uInt16 Attr)
@@ -214,11 +214,11 @@ void LwpFontTableEntry::Read(LwpObjectStream *pStrm)
 {
     m_WindowsFaceName.Read(pStrm);
 
-    // use the m_WindowsFaceName to set the m_FaceName temporarily
+    
     m_FaceName = m_WindowsFaceName;
 
-    //Skip the panoseNumber
-    //m_PanoseNumber.Read(pStrm);
+    
+    
     LwpPanoseNumber thePanoseToSkip;
     thePanoseToSkip.Read(pStrm);
 
@@ -260,7 +260,7 @@ void LwpFontTable::Read(LwpObjectStream *pStrm)
     pStrm->SkipExtra();
 }
 
-OUString LwpFontTable::GetFaceName(sal_uInt16 index) //index: start from 1
+OUString LwpFontTable::GetFaceName(sal_uInt16 index) 
 {
     assert(index <= m_nCount && index > 0);
     return (index <= m_nCount && index > 0) ? m_pFontEntries[index-1].GetFaceName() : OUString();
@@ -277,7 +277,7 @@ LwpFontTable::~LwpFontTable()
 
 void LwpFontNameEntry::Read(LwpObjectStream *pStrm)
 {
-    //Read CFontDescriptionOverrideBase
+    
     m_nOverrideBits = pStrm->QuickReaduInt8();
     m_nApplyBits = pStrm->QuickReaduInt8();
     m_nPointSize = pStrm->QuickReaduInt32();
@@ -287,7 +287,7 @@ void LwpFontNameEntry::Read(LwpObjectStream *pStrm)
     m_BackColor.Read(pStrm);
     pStrm->SkipExtra();
 
-    //Read data of LwpFontNameEntry
+    
     m_nFaceName = pStrm->QuickReaduInt16();
     m_nAltFaceName = pStrm->QuickReaduInt16();
     pStrm->SkipExtra();
@@ -318,9 +318,9 @@ void LwpFontNameEntry::Override(XFFont* pFont)
         }
     }
 
-    // TODO: tightness
-    //if (IsTightnessOverridden())
-    //  pFont->SetTightness(cTightness);
+    
+    
+    
 }
 
 sal_Bool LwpFontNameEntry::IsFaceNameOverridden()
@@ -348,16 +348,16 @@ sal_Bool LwpFontNameEntry::IsBackgroundColorOverridden()
     return (0 != (m_nOverrideBits & BKCOLOR));
 }
 
-//TODO
-//sal_Bool LwpFontNameEntry::IsTightnessOverridden()
-//{
-//    return (0 != (m_nOverrideBits & TIGHTNESS));
-//}
 
-//sal_Bool LwpFontNameEntry::IsAnythingOverridden()
-//{
-//    return (0 != (m_nOverrideBits & ALL_BITS));
-//}
+
+
+
+
+
+
+
+
+
 
 
 LwpFontNameManager::LwpFontNameManager()
@@ -389,7 +389,7 @@ void LwpFontNameManager::Read(LwpObjectStream *pStrm)
 }
 
 void    LwpFontNameManager::Override(sal_uInt16 index, XFFont* pFont)
-    //index: start from 1
+    
 {
     if (index > m_nCount || index < 1)
         return ;
@@ -419,7 +419,7 @@ void LwpFontAttrManager::Read(LwpObjectStream *pStrm)
 }
 
 void    LwpFontAttrManager::Override(sal_uInt16 index, XFFont* pFont)
-    //index: start from 1
+    
 {
     if (index > m_nCount || index < 1)
         return ;
@@ -449,11 +449,11 @@ VO_PARASTYLE call this method to add its style to XFStyleManager based on the fo
 2. Add the style to XFStyleManager, and return the <office:styles> style name
 3. Add it to LwpParaStyleMap.
 Note: A temporary method for only font support phase. The next AddStyle should be used later.
-// To be replaced by LwpStyleManager::AddStyle() and the following CreateFont()
+
 */
 /*void LwpFontManager::AddStyle(LwpObjectID styleObjID, sal_uInt32 fontID, OUString styleName)
 {
-    XFTextStyle* pStyle = new XFTextStyle();        //to be deleted by XFStyleManager
+    XFTextStyle* pStyle = new XFTextStyle();        
     AddStyle(styleObjID, fontID, styleName, pStyle);
 }*/
 
@@ -463,7 +463,7 @@ VO_PARASTYLE/VO_CHARACTERSTYLE call this method to add its style to XFStyleManag
 2. Add the style to XFStyleManager, and return the <office:styles> style name
 3. Add it to LwpParaStyleMap.
 Prerequisite: pStyle has been created and the paragraph properties has been set to it.
-//To be replaced by LwpStyleManager::AddStyle() and the following CreateFont()
+
 */
 /*void LwpFontManager::AddStyle(LwpObjectID styleObjID, sal_uInt32 fontID, OUString styleName, XFTextStyle* pStyle)
 {
@@ -490,10 +490,10 @@ XFFont* LwpFontManager::CreateFont(sal_uInt32 fontID)
 Called XFFont based on the override result of two font ids.
 Refer to CFontManager::OverrideID
 */
-//OUString LwpFontManager::GetOverrideStyle(sal_uInt32 fontID, sal_uInt32 overID)
+
 XFFont* LwpFontManager::CreateOverrideFont(sal_uInt32 fontID, sal_uInt32 overID)
 {
-    XFFont* pFont = new XFFont();   //To be deleted by XFFontFactory
+    XFFont* pFont = new XFFont();   
     if(fontID)
     {
         Override(fontID, pFont);
@@ -513,7 +513,7 @@ void LwpFontManager::Override(sal_uInt32 fontID, XFFont* pFont)
 
 OUString LwpFontManager::GetNameByID(sal_uInt32 fontID)
 {
-    return ( m_FNMgr.GetNameByIndex(GetFontNameIndex(fontID)) );//use font id for bullet?
+    return ( m_FNMgr.GetNameByIndex(GetFontNameIndex(fontID)) );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

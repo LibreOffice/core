@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/XHatchWindowFactory.hpp>
@@ -37,10 +37,10 @@ class OHatchWindowFactory : public ::cppu::WeakImplHelper2<
 public:
     OHatchWindowFactory() {}
 
-    // XHatchWindowFactory
+    
     virtual uno::Reference< embed::XHatchWindow > SAL_CALL createHatchWindowInstance( const uno::Reference< awt::XWindowPeer >& xParent, const awt::Rectangle& aBounds, const awt::Size& aSize ) throw (uno::RuntimeException);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (uno::RuntimeException);
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException);
@@ -53,7 +53,7 @@ uno::Reference< embed::XHatchWindow > SAL_CALL OHatchWindowFactory::createHatchW
     throw (uno::RuntimeException)
 {
     if ( !xParent.is() )
-        throw lang::IllegalArgumentException(); // TODO
+        throw lang::IllegalArgumentException(); 
 
     SolarMutexGuard aGuard;
     VCLXHatchWindow* pResult = new VCLXHatchWindow();

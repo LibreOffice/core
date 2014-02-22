@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
+
+
+
 #include <sal/types.h>
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
@@ -30,9 +30,9 @@
 using namespace osl;
 using namespace rtl;
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
+
+
+
 
 /** print a UNI_CODE String.
 */
@@ -66,19 +66,19 @@ namespace ThreadHelper
     }
     void thread_sleep( sal_uInt32 _nSec )
     {
-        /// print statement in thread process must use fflush() to force display.
-        // t_print("# wait %d seconds. ", _nSec );
+        
+        
         fflush(stdout);
 
         thread_sleep_tenth_sec( _nSec * 10 );
-        // printf("# done\n" );
+        
     }
 }
 
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for osl_Mutex class
-//------------------------------------------------------------------------
+
+
+
 
 
 /** mutually exclusive data
@@ -109,7 +109,7 @@ protected:
         for( sal_Int8 i = 0; i < 3; i++ )
         {
             pResource->data1++;
-            yield( );  //yield() give CPU time to other thread, other thread if not block, they will change the data;
+            yield( );  
         }
         if ( pResource->data2 == 0 )
             pResource->data2 = ( pResource->data1 > 0 ? pResource->data1 : 0 - pResource->data1 );
@@ -137,7 +137,7 @@ protected:
         for( sal_Int8 i = 0; i < 3; i++ )
         {
             pResource->data1--;
-            yield( );  //yield() give CPU time to other thread, other thread if not block, they will change the data;
+            yield( );  
         }
         if ( pResource->data2 == 0 )
             pResource->data2 = ( pResource->data1 > 0 ? pResource->data1 : 0 - pResource->data1 );
@@ -159,7 +159,7 @@ struct chain {
 class PutThread : public Thread
 {
 public:
-    //get the struct pointer to write data to buffer
+    
     PutThread( struct chain* pData ): pChain( pData ) { }
 
     ~PutThread( )
@@ -171,23 +171,23 @@ protected:
 
     void SAL_CALL run( )
     {
-        //block here if the mutex has been acquired
+        
         pChain->lock.acquire( );
 
-        //current position in buffer to write
+        
         sal_Int8 nPos = pChain->pos;
         oslThreadIdentifier oId = getIdentifier( );
-        //write data
+        
                 sal_Int8 i;
         for ( i = 0; i < 5; i++ )
         {
             pChain->buffer[ nPos + i ] = oId;
             yield( );
         }
-        //revise the position
+        
         pChain->pos = nPos + i;
 
-        //finish writing, release the mutex
+        
         pChain->lock.release();
     }
 };
@@ -197,7 +197,7 @@ protected:
 class HoldThread : public Thread
 {
 public:
-    //get the Mutex pointer to operate
+    
     HoldThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
 
     ~HoldThread( )
@@ -209,7 +209,7 @@ protected:
 
     void SAL_CALL run()
     {
-        // block here if the mutex has been acquired
+        
         pMyMutex->acquire( );
         printf("# Mutex acquired. \n" );
         pMyMutex->release( );
@@ -219,7 +219,7 @@ protected:
 class WaitThread : public Thread
 {
 public:
-    //get the Mutex pointer to operate
+    
     WaitThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
 
     ~WaitThread( )
@@ -231,7 +231,7 @@ protected:
 
     void SAL_CALL run( )
     {
-        // block here if the mutex has been acquired
+        
         pMyMutex->acquire( );
         ThreadHelper::thread_sleep_tenth_sec( 2 );
         pMyMutex->release( );
@@ -243,7 +243,7 @@ protected:
 class GlobalMutexThread : public Thread
 {
 public:
-    //get the Mutex pointer to operate
+    
     GlobalMutexThread( ){ }
 
     ~GlobalMutexThread( )
@@ -253,7 +253,7 @@ public:
 protected:
     void SAL_CALL run( )
     {
-        // block here if the mutex has been acquired
+        
         Mutex* pGlobalMutex;
         pGlobalMutex = Mutex::getGlobalMutex( );
         pGlobalMutex->acquire( );
@@ -263,7 +263,7 @@ protected:
 };
 
 
-//--------------------------------------------------------------
+
 namespace osl_Mutex
 {
 
@@ -272,7 +272,7 @@ namespace osl_Mutex
     class ctor : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
+        
         struct chain m_Data;
         struct resource m_Res;
 
@@ -303,14 +303,14 @@ namespace osl_Mutex
             myThread1.create( );
             myThread2.create( );
 
-            //wait until the two threads terminate
+            
             myThread1.join( );
             myThread2.join( );
 
             bool bRes = false;
 
-            // every 5 datas should the same
-            // LLA: this is not a good check, it's too fix
+            
+            
             if (m_Data.buffer[0] == m_Data.buffer[1] &&
                 m_Data.buffer[1] == m_Data.buffer[2] &&
                 m_Data.buffer[2] == m_Data.buffer[3] &&
@@ -342,13 +342,13 @@ namespace osl_Mutex
             myThread1.create( );
             myThread2.create( );
 
-            //wait until the two threads terminate
+            
             myThread1.join( );
             myThread2.join( );
 
             bool bRes = false;
 
-            // every 5 datas should the same
+            
             if ( ( m_Res.data1 == 0 ) && ( m_Res.data2 == 3 ) )
                 bRes = true;
 
@@ -359,7 +359,7 @@ namespace osl_Mutex
         CPPUNIT_TEST( ctor_001 );
         CPPUNIT_TEST( ctor_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class ctor
+    }; 
 
 
     /** Test of the osl::Mutex::acquire method
@@ -367,38 +367,38 @@ namespace osl_Mutex
     class acquire : public CppUnit::TestFixture
     {
     public:
-        // acquire mutex in main thread, and then call acquire again in myThread,
-        // the child thread should block, wait 2 secs, it still block.
-        // Then release mutex in main thread, the child thread could return from acquire,
-        // and go to exec next statement, so could terminate quickly.
+        
+        
+        
+        
         void acquire_001( )
         {
             Mutex aMutex;
-            //acquire here
+            
             bool bRes = aMutex.acquire( );
-            // pass the pointer of mutex to child thread
+            
             HoldThread myThread( &aMutex );
             myThread.create( );
 
             ThreadHelper::thread_sleep_tenth_sec( 2 );
-            // if acquire in myThread does not work, 2 secs is long enough,
-            // myThread should terminate now, and bRes1 should be sal_False
+            
+            
             bool bRes1 = myThread.isRunning( );
 
             aMutex.release( );
             ThreadHelper::thread_sleep_tenth_sec( 1 );
-            // after release mutex, myThread stops blocking and will terminate immediately
+            
             bool bRes2 = myThread.isRunning( );
             myThread.join( );
 
             CPPUNIT_ASSERT_MESSAGE( "Mutex acquire", bRes && bRes1 && !bRes2 );
         }
 
-        //in the same thread, acquire twice should success
+        
         void acquire_002()
         {
             Mutex aMutex;
-            //acquire here
+            
             bool bRes = aMutex.acquire();
             bool bRes1 = aMutex.acquire();
 
@@ -414,7 +414,7 @@ namespace osl_Mutex
         CPPUNIT_TEST( acquire_001 );
         CPPUNIT_TEST( acquire_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class acquire
+    }; 
 
 
     /** Test of the osl::Mutex::tryToAcquire method
@@ -422,23 +422,23 @@ namespace osl_Mutex
     class tryToAcquire : public CppUnit::TestFixture
     {
     public:
-        // First let child thread acquire the mutex, and wait 2 secs, during the 2 secs,
-        // in main thread, tryToAcquire mutex should return False
-        // then after the child thread terminated, tryToAcquire should return True
+        
+        
+        
         void tryToAcquire_001()
         {
             Mutex aMutex;
             WaitThread myThread(&aMutex);
             myThread.create();
 
-            // ensure the child thread acquire the mutex
+            
             ThreadHelper::thread_sleep_tenth_sec(1);
 
             bool bRes1 = aMutex.tryToAcquire();
 
             if (bRes1)
                 aMutex.release();
-            // wait the child thread terminate
+            
             myThread.join();
 
             bool bRes2 = aMutex.tryToAcquire();
@@ -452,7 +452,7 @@ namespace osl_Mutex
         CPPUNIT_TEST_SUITE(tryToAcquire);
         CPPUNIT_TEST(tryToAcquire_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class tryToAcquire
+    }; 
 
     /** Test of the osl::Mutex::release method
      */
@@ -468,12 +468,12 @@ namespace osl_Mutex
             WaitThread myThread( &aMutex );
             myThread.create( );
 
-            // ensure the child thread acquire the mutex
+            
             ThreadHelper::thread_sleep_tenth_sec( 1 );
 
             bool bRunning = myThread.isRunning( );
             bool bRes1 = aMutex.tryToAcquire( );
-            // wait the child thread terminate
+            
             myThread.join( );
 
             bool bRes2 = aMutex.tryToAcquire( );
@@ -486,7 +486,7 @@ namespace osl_Mutex
 
         }
 
-        // how about release twice?
+        
         void release_002()
         {
         }
@@ -495,7 +495,7 @@ namespace osl_Mutex
         CPPUNIT_TEST( release_001 );
         CPPUNIT_TEST( release_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class release
+    }; 
 
 
 
@@ -504,7 +504,7 @@ namespace osl_Mutex
     class getGlobalMutex : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
+        
         void getGlobalMutex_001()
         {
             Mutex* pGlobalMutex;
@@ -519,7 +519,7 @@ namespace osl_Mutex
 
             pGlobalMutex->release();
             ThreadHelper::thread_sleep_tenth_sec(1);
-            // after release mutex, myThread stops blocking and will terminate immediately
+            
             bool bRes2 = myThread.isRunning();
 
             CPPUNIT_ASSERT_MESSAGE("Global Mutex works", bRes1 && !bRes2);
@@ -546,25 +546,25 @@ namespace osl_Mutex
         CPPUNIT_TEST(getGlobalMutex_001);
         CPPUNIT_TEST(getGlobalMutex_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class getGlobalMutex
+    }; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::ctor, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::acquire, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::tryToAcquire, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::release, "osl_Mutex");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Mutex::getGlobalMutex, "osl_Mutex");
-} // namespace osl_Mutex
+} 
 
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for osl_Guard class
-//------------------------------------------------------------------------
+
+
+
 
 class GuardThread : public Thread
 {
 public:
-    //get the Mutex pointer to operate
+    
     GuardThread( Mutex* pMutex ): pMyMutex( pMutex ) { }
 
     ~GuardThread( )
@@ -576,7 +576,7 @@ protected:
 
     void SAL_CALL run( )
     {
-        // block here if the mutex has been acquired
+        
         MutexGuard aGuard( pMyMutex );
         ThreadHelper::thread_sleep_tenth_sec( 2 );
     }
@@ -588,7 +588,7 @@ namespace osl_Guard
     class ctor : public CppUnit::TestFixture
     {
     public:
-        // insert your test code here.
+        
         void ctor_001()
         {
             Mutex aMutex;
@@ -597,7 +597,7 @@ namespace osl_Guard
 
             ThreadHelper::thread_sleep_tenth_sec(1);
             bool bRes = aMutex.tryToAcquire();
-            // after 1 second, the mutex has been guarded, and the child thread should be running
+            
             bool bRes1 = myThread.isRunning();
 
             myThread.join();
@@ -611,18 +611,18 @@ namespace osl_Guard
         {
             Mutex aMutex;
 
-            /// use reference constructor here
+            
             MutexGuard myGuard( aMutex );
 
-            /// the GuardThread will block here when it is initialised.
+            
             GuardThread myThread( &aMutex );
             myThread.create( );
 
-            /// is it still blocking?
+            
             ThreadHelper::thread_sleep_tenth_sec( 2 );
             bool bRes = myThread.isRunning( );
 
-            /// oh, release him.
+            
             aMutex.release( );
             myThread.join( );
 
@@ -634,23 +634,23 @@ namespace osl_Guard
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ctor
+    }; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(osl_Guard::ctor, "osl_Guard");
-} // namespace osl_Guard
+} 
 
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for osl_ClearableGuard class
-//------------------------------------------------------------------------
+
+
+
 
 /** Thread for test ClearableGuard
  */
 class ClearGuardThread : public Thread
 {
 public:
-    //get the Mutex pointer to operate
+    
     ClearGuardThread( Mutex* pMutex ): pMyMutex( pMutex ) {}
 
     ~ClearGuardThread( )
@@ -662,18 +662,18 @@ protected:
 
     void SAL_CALL run( )
     {
-        // acquire the mutex
-        // printf("# ClearGuardThread" );
+        
+        
         ClearableMutexGuard aGuard( pMyMutex );
         ThreadHelper::thread_sleep( 5 );
 
-        // release the mutex
+        
         aGuard.clear( );
         ThreadHelper::thread_sleep( 2 );
     }
 };
 
-// -----------------------------------------------------------------------------
+
 namespace osl_ClearableGuard
 {
 
@@ -684,10 +684,10 @@ namespace osl_ClearableGuard
         {
             Mutex aMutex;
 
-            /// now, the aMutex has been guarded.
+            
             ClearableMutexGuard myMutexGuard( &aMutex );
 
-            /// it will return sal_False if the aMutex has not been Guarded.
+            
             bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initilized.",
@@ -698,10 +698,10 @@ namespace osl_ClearableGuard
         {
             Mutex aMutex;
 
-            /// now, the aMutex has been guarded, this time, we use reference constructor.
+            
             ClearableMutexGuard myMutexGuard( aMutex );
 
-            /// it will return sal_False if the aMutex has not been Guarded.
+            
             bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE("ClearableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.",
@@ -712,7 +712,7 @@ namespace osl_ClearableGuard
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ctor
+    }; 
 
     class clear : public CppUnit::TestFixture
     {
@@ -725,7 +725,7 @@ namespace osl_ClearableGuard
 
             TimeValue aTimeVal_befor;
             osl_getSystemTime( &aTimeVal_befor );
-            // wait 1 second to assure the child thread has begun
+            
             ThreadHelper::thread_sleep(1);
 
             while (true)
@@ -751,18 +751,18 @@ namespace osl_ClearableGuard
         {
             Mutex aMutex;
 
-            /// now, the aMutex has been guarded.
+            
             ClearableMutexGuard myMutexGuard( &aMutex );
 
-            /// launch the HoldThread, it will be blocked here.
+            
             HoldThread myThread( &aMutex );
             myThread.create( );
 
-            /// is it blocking?
+            
             ThreadHelper::thread_sleep_tenth_sec( 4 );
             bool bRes = myThread.isRunning( );
 
-            /// use clear to release.
+            
             myMutexGuard.clear( );
             myThread.join( );
             bool bRes1 = myThread.isRunning( );
@@ -775,24 +775,24 @@ namespace osl_ClearableGuard
         CPPUNIT_TEST( clear_001 );
         CPPUNIT_TEST( clear_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class clear
+    }; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::ctor, "osl_ClearableGuard" );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( osl_ClearableGuard::clear, "osl_ClearableGuard" );
-} // namespace osl_ClearableGuard
+} 
 
 
-//------------------------------------------------------------------------
-// Beginning of the test cases for osl_ResettableGuard class
-//------------------------------------------------------------------------
+
+
+
 
 /** Thread for test ResettableGuard
  */
 class ResetGuardThread : public Thread
 {
 public:
-    //get the Mutex pointer to operate
+    
     ResetGuardThread( Mutex* pMutex ): pMyMutex( pMutex ) {}
 
     ~ResetGuardThread( )
@@ -804,16 +804,16 @@ protected:
 
     void SAL_CALL run( )
     {
-        // acquire the mutex
+        
         printf("# ResettableGuard\n" );
         ResettableMutexGuard aGuard( pMyMutex );
-        // release the mutex
+        
         aGuard.clear( );
         ThreadHelper::thread_sleep_tenth_sec( 2 );
     }
 };
 
-// -----------------------------------------------------------------------------
+
 namespace osl_ResettableGuard
 {
     class ctor : public CppUnit::TestFixture
@@ -823,10 +823,10 @@ namespace osl_ResettableGuard
         {
             Mutex aMutex;
 
-            /// now, the aMutex has been guarded.
+            
             ResettableMutexGuard myMutexGuard( &aMutex );
 
-            /// it will return sal_False if the aMutex has not been Guarded.
+            
             bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE("ResettableMutexGuard constructor, test the acquire operation when initilized.",
@@ -837,10 +837,10 @@ namespace osl_ResettableGuard
         {
             Mutex aMutex;
 
-            /// now, the aMutex has been guarded, this time, we use reference constructor.
+            
             ResettableMutexGuard myMutexGuard( aMutex );
 
-            /// it will return sal_False if the aMutex has not been Guarded.
+            
             bool bRes = aMutex.release( );
 
             CPPUNIT_ASSERT_MESSAGE( "ResettableMutexGuard constructor, test the acquire operation when initilized, we use reference constructor this time.",
@@ -852,7 +852,7 @@ namespace osl_ResettableGuard
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ctor
+    }; 
 
     class reset : public CppUnit::TestFixture
     {
@@ -864,12 +864,12 @@ namespace osl_ResettableGuard
             ResettableMutexGuard myMutexGuard( aMutex );
             myThread.create( );
 
-            /// is it running? and clear done?
+            
             bool bRes = myThread.isRunning( );
             myMutexGuard.clear( );
             ThreadHelper::thread_sleep_tenth_sec( 1 );
 
-            /// if reset is not success, the release will return sal_False
+            
             myMutexGuard.reset( );
             bool bRes1 = aMutex.release( );
             myThread.join( );
@@ -883,11 +883,11 @@ namespace osl_ResettableGuard
             Mutex aMutex;
             ResettableMutexGuard myMutexGuard( &aMutex );
 
-            /// shouldn't release after clear;
+            
             myMutexGuard.clear( );
             bool bRes = aMutex.release( );
 
-            /// can release after reset.
+            
             myMutexGuard.reset( );
             bool bRes1 = aMutex.release( );
 
@@ -901,18 +901,18 @@ namespace osl_ResettableGuard
         CPPUNIT_TEST(reset_002);
 #endif
         CPPUNIT_TEST_SUITE_END();
-    }; // class reset
+    }; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::ctor);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_ResettableGuard::reset);
-} // namespace osl_ResettableGuard
+} 
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
-// The following sets variables for GNU EMACS
-// Local Variables:
-// tab-width:4
-// End:
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

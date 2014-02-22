@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 const sal_Unicode cDialogExtraDataClose = '}';
 const char sDialogImpExtraData[] = "EncImpDlg:{";
 const char sDialogExpExtraData[] = "EncExpDlg:{";
-const sal_uInt16 nDialogExtraDataLen = 11;      // 12345678901
+const sal_uInt16 nDialogExtraDataLen = 11;      
 
 SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                                     SvStream* pStream )
@@ -85,7 +85,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         }
     }
 
-    // read the first chars and check the charset, (language - with L&H)
+    
     if( pStream )
     {
         char aBuffer[ 4098 ];
@@ -134,7 +134,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
         sal_uInt16 nAppScriptType = GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
         SwDoc* pDoc = rDocSh.GetDoc();
 
-        // initialize language
+        
         {
             if( !aOpt.GetLanguage() )
             {
@@ -156,7 +156,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                         case SCRIPTTYPE_COMPLEX:
                             aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, SCRIPTTYPE_COMPLEX));
                         break;
-                        //SCRIPTTYPE_LATIN:
+                        
                         default:
                             aOpt.SetLanguage(MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage, SCRIPTTYPE_LATIN));
                     }
@@ -180,7 +180,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 bDelPrinter = true;
             }
 
-            // get the set of disctinct available family names
+            
             std::set< OUString > aFontNames;
             int nFontNames = pPrt->GetDevFontCount();
             for( int i = 0; i < nFontNames; i++ )
@@ -189,7 +189,7 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 aFontNames.insert( aInf.GetName() );
             }
 
-            // insert into listbox
+            
             for( std::set< OUString >::const_iterator it = aFontNames.begin();
                  it != aFontNames.end(); ++it )
             {
@@ -213,14 +213,14 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
     }
     else
     {
-        // hide the unused Controls for Export
+        
         m_pFontFT->Hide();
         m_pFontLB->Hide();
         m_pLanguageFT->Hide();
         m_pLanguageLB->Hide();
     }
 
-    // initialize character set
+    
     m_pCharSetLB->FillFromTextEncodingTable( pStream != NULL );
     m_pCharSetLB->SelectTextEncoding( aOpt.GetCharSet()  );
 
@@ -258,7 +258,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
     rOptions.SetLanguage( sal_uInt16( nLng ) );
     rOptions.SetParaFlags( GetCRLF() );
 
-    // save the user settings
+    
     OUString sData;
     rOptions.WriteUserData( sData );
     if (!sData.isEmpty())
@@ -269,7 +269,7 @@ void SwAsciiFilterDlg::FillOptions( SwAsciiOptions& rOptions )
         sal_Int32 nEnd, nStt = GetExtraData().indexOf( sFindNm );
         if( -1 != nStt )
         {
-            // called twice, so remove "old" settings
+            
             nEnd = GetExtraData().indexOf( cDialogExtraDataClose,
                                             nStt + nDialogExtraDataLen );
             if( -1 != nEnd )
@@ -324,15 +324,15 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
 #ifdef UNX
             eEnd = LINEEND_LF;
 #else
-            eEnd = LINEEND_CRLF;                // ANSI
+            eEnd = LINEEND_CRLF;                
 #endif
             break;
 
-        case RTL_TEXTENCODING_APPLE_ROMAN:      // MAC
+        case RTL_TEXTENCODING_APPLE_ROMAN:      
             eEnd = LINEEND_CR;
             break;
 
-        case RTL_TEXTENCODING_IBM_850:          // DOS
+        case RTL_TEXTENCODING_IBM_850:          
             eEnd = LINEEND_CRLF;
             break;
 
@@ -361,14 +361,14 @@ IMPL_LINK( SwAsciiFilterDlg, CharSetSelHdl, SvxTextEncodingBox*, pBox )
     }
 
     m_bSaveLineStatus = false;
-    if( eEnd != (LineEnd)-1 )       // changed?
+    if( eEnd != (LineEnd)-1 )       
     {
         if( eOldEnd != eEnd )
             SetCRLF( eEnd );
     }
     else
     {
-        // restore old user choise (not the automatic!)
+        
         m_pCRLF_RB->Check( m_pCRLF_RB->GetSavedValue() );
         m_pCR_RB->Check( m_pCR_RB->GetSavedValue() );
         m_pLF_RB->Check( m_pLF_RB->GetSavedValue() );

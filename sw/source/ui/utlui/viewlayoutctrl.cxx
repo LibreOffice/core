@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <viewlayoutctrl.hxx>
@@ -30,7 +30,7 @@ SFX_IMPL_STATUSBAR_CONTROL( SwViewLayoutControl, SvxViewLayoutItem );
 
 struct SwViewLayoutControl::SwViewLayoutControl_Impl
 {
-    sal_uInt16      mnState; // 0 = single, 1 = auto, 2 = book, 3 = none
+    sal_uInt16      mnState; 
     Image       maImageSingleColumn;
     Image       maImageSingleColumn_Active;
     Image       maImageAutomatic;
@@ -62,7 +62,7 @@ SwViewLayoutControl::SwViewLayoutControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, 
         for (int i = 0; i < 6; i++)
         {
             BitmapEx b = arr[i].GetBitmapEx();
-            //Don't scale width, no space.
+            
             b.Scale(1.0, rStb.GetDPIScaleFactor(), BMP_SCALE_FAST);
             arr[i] = Image(b);
         }
@@ -94,13 +94,13 @@ void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
         const sal_uInt16 nColumns  = static_cast<const SvxViewLayoutItem*>( pState )->GetValue();
         const bool   bBookMode = static_cast<const SvxViewLayoutItem*>( pState )->IsBookMode();
 
-        // SingleColumn Mode
+        
         if ( 1 == nColumns )
             mpImpl->mnState = 0;
-        // Automatic Mode
+        
         else if ( 0 == nColumns )
             mpImpl->mnState = 1;
-        // Book Mode
+        
         else if ( bBookMode && 2 == nColumns )
             mpImpl->mnState = 2;
         else
@@ -108,7 +108,7 @@ void SwViewLayoutControl::StateChanged( sal_uInt16 /*nSID*/, SfxItemState eState
     }
 
     if ( GetStatusBar().AreItemsVisible() )
-        GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
+        GetStatusBar().SetItemData( GetId(), 0 );    
 }
 
 void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
@@ -132,14 +132,14 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     aRect.Left() = aRect.Left() + nXOffset;
     aRect.Top()  = aRect.Top() + nYOffset;
 
-    // draw single column image:
+    
     pDev->DrawImage( aRect.TopLeft(), bSingleColumn ? mpImpl->maImageSingleColumn_Active : mpImpl->maImageSingleColumn );
 
-    // draw automatic image:
+    
     aRect.Left() += mpImpl->maImageSingleColumn.GetSizePixel().Width();
     pDev->DrawImage( aRect.TopLeft(), bAutomatic ? mpImpl->maImageAutomatic_Active       : mpImpl->maImageAutomatic );
 
-    // draw bookmode image:
+    
     aRect.Left() += mpImpl->maImageAutomatic.GetSizePixel().Width();
     pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
 }
@@ -162,22 +162,22 @@ sal_Bool SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )
 
     if ( nXDiff < nXOffset + nImageWidthSingle )
     {
-        mpImpl->mnState = 0; // single
+        mpImpl->mnState = 0; 
         nColumns = 1;
     }
     else if ( nXDiff < nXOffset + nImageWidthSingle + nImageWidthAuto )
     {
-        mpImpl->mnState = 1; // auto
+        mpImpl->mnState = 1; 
         nColumns = 0;
     }
     else
     {
-        mpImpl->mnState = 2; // book
+        mpImpl->mnState = 2; 
         nColumns = 2;
         bBookMode = true;
     }
 
-    // commit state change
+    
     SvxViewLayoutItem aViewLayout( nColumns, bBookMode );
 
     ::com::sun::star::uno::Any a;

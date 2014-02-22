@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/numinf.hxx>
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1(SvxNumberInfoItem, SfxPoolItem);
 
-// class SvxNumberInfoItem -----------------------------------------------
+
 
 #define INIT(pNum,eVal,nDouble,rStr)    \
     SfxPoolItem     ( nId ),            \
@@ -42,7 +42,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( const sal_uInt16 nId ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const sal_uInt16 nId ) :
@@ -52,7 +52,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const OUString& rVal, const sal_uInt16 nId ) :
@@ -62,7 +62,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const sal_uInt16 nId ) :
@@ -72,7 +72,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
                                       const double& rVal, const OUString& rValueStr,
@@ -85,7 +85,7 @@ SvxNumberInfoItem::SvxNumberInfoItem( SvNumberFormatter* pNumFormatter,
 
 #undef INIT
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
 
@@ -108,14 +108,14 @@ SvxNumberInfoItem::SvxNumberInfoItem( const SvxNumberInfoItem& rItem ) :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberInfoItem::~SvxNumberInfoItem()
 {
     delete [] pDelFormatArr;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxNumberInfoItem::GetPresentation
 (
@@ -129,7 +129,7 @@ SfxItemPresentation SvxNumberInfoItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -163,29 +163,29 @@ bool SvxNumberInfoItem::operator==( const SfxPoolItem& rItem ) const
     return bEqual;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxNumberInfoItem::Clone( SfxItemPool * ) const
 {
     return new SvxNumberInfoItem( *this );
 }
 
-// Laden/Speichern wird nicht gebraucht!
-// -----------------------------------------------------------------------
+
+
 
 SfxPoolItem* SvxNumberInfoItem::Create( SvStream& /*rStream*/, sal_uInt16 ) const
 {
     return new SvxNumberInfoItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxNumberInfoItem::Store( SvStream &rStream, sal_uInt16 /*nItemVersion*/ ) const
 {
     return rStream;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberInfoItem::SetDelFormatArray( const sal_uInt32* pData,
                                            const sal_uInt32 nCount )

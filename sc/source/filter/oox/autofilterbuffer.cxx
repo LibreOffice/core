@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "autofilterbuffer.hxx"
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -59,7 +59,7 @@ const sal_uInt8 BIFF_FILTER_DATATYPE_BOOLEAN        = 8;
 const sal_uInt8 BIFF_FILTER_DATATYPE_EMPTY          = 12;
 const sal_uInt8 BIFF_FILTER_DATATYPE_NOTEMPTY       = 14;
 
-// ----------------------------------------------------------------------------
+
 
 bool lclGetApiOperatorFromToken( sal_Int32& rnApiOperator, sal_Int32 nToken )
 {
@@ -112,7 +112,7 @@ bool lclTrimTrailingAsterisks( OUString& rValue )
     @return  True = passed string has been changed (RE needs to be enabled). */
 bool lclConvertWildcardsToRegExp( OUString& rValue )
 {
-    // check existence of the wildcard characters '*' and '?'
+    
     if( !rValue.isEmpty() && ((rValue.indexOf( '*' ) >= 0) || (rValue.indexOf( '?' ) >= 0)) )
     {
         OUStringBuffer aBuffer;
@@ -130,7 +130,7 @@ bool lclConvertWildcardsToRegExp( OUString& rValue )
                     aBuffer.append( '.' ).append( '*' );
                 break;
                 case '\\': case '.': case '|': case '(': case ')': case '^': case '$':
-                    // quote RE meta characters
+                    
                     aBuffer.append( '\\' ).append( *pcChar );
                 break;
                 default:
@@ -143,9 +143,9 @@ bool lclConvertWildcardsToRegExp( OUString& rValue )
     return false;
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 ApiFilterSettings::ApiFilterSettings()
 {
@@ -188,7 +188,7 @@ void ApiFilterSettings::appendField( bool bAnd, const std::vector<OUString>& rVa
     }
 }
 
-// ============================================================================
+
 
 FilterSettingsBase::FilterSettingsBase( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -208,7 +208,7 @@ ApiFilterSettings FilterSettingsBase::finalizeImport( sal_Int32 /*nMaxCount*/ )
     return ApiFilterSettings();
 }
 
-// ============================================================================
+
 
 DiscreteFilter::DiscreteFilter( const WorkbookHelper& rHelper ) :
     FilterSettingsBase( rHelper ),
@@ -270,10 +270,10 @@ ApiFilterSettings DiscreteFilter::finalizeImport( sal_Int32 nMaxCount )
     {
         aSettings.maFilterFields.reserve( maValues.size() );
 
-        // insert all filter values
+        
         aSettings.appendField( true, maValues );
 
-        // extra field for 'show empty'
+        
         if( mbShowBlank )
             aSettings.appendField( false, FilterOperator2::EMPTY, OUString() );
 
@@ -285,7 +285,7 @@ ApiFilterSettings DiscreteFilter::finalizeImport( sal_Int32 nMaxCount )
     return aSettings;
 }
 
-// ============================================================================
+
 
 Top10Filter::Top10Filter( const WorkbookHelper& rHelper ) :
     FilterSettingsBase( rHelper ),
@@ -326,7 +326,7 @@ ApiFilterSettings Top10Filter::finalizeImport( sal_Int32 /*nMaxCount*/ )
     return aSettings;
 }
 
-// ============================================================================
+
 
 FilterCriterionModel::FilterCriterionModel() :
     mnOperator( XML_equal ),
@@ -381,7 +381,7 @@ void FilterCriterionModel::readBiffData( SequenceInputStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 CustomFilter::CustomFilter( const WorkbookHelper& rHelper ) :
     FilterSettingsBase( rHelper ),
@@ -434,32 +434,32 @@ ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
     OSL_ENSURE( maCriteria.size() <= 2, "CustomFilter::finalizeImport - too many filter criteria" );
     for( FilterCriterionVector::iterator aIt = maCriteria.begin(), aEnd = maCriteria.end(); aIt != aEnd; ++aIt )
     {
-        // first extract the filter operator
+        
         sal_Int32 nOperator = 0;
         bool bValidOperator = lclGetApiOperatorFromToken( nOperator, aIt->mnOperator );
         if( bValidOperator )
         {
             if( aIt->maValue.has< OUString >() )
             {
-                // string argument
+                
                 OUString aValue;
                 aIt->maValue >>= aValue;
-                // check for 'empty', 'contains', 'begins with', or 'ends with' text filters
+                
                 bool bEqual = nOperator == FilterOperator2::EQUAL;
                 bool bNotEqual = nOperator == FilterOperator2::NOT_EQUAL;
                 if( bEqual || bNotEqual )
                 {
                     if( aValue.isEmpty() )
                     {
-                        // empty comparison string: create empty/not empty filters
+                        
                         nOperator = bNotEqual ? FilterOperator2::NOT_EMPTY : FilterOperator2::EMPTY;
                     }
                     else
                     {
-                        // compare to something: try to find begins/ends/contains
+                        
                         bool bHasLeadingAsterisk = lclTrimLeadingAsterisks( aValue );
                         bool bHasTrailingAsterisk = lclTrimTrailingAsterisks( aValue );
-                        // just '***' matches everything, do not create a filter field
+                        
                         bValidOperator = !aValue.isEmpty();
                         if( bValidOperator )
                         {
@@ -469,23 +469,23 @@ ApiFilterSettings CustomFilter::finalizeImport( sal_Int32 /*nMaxCount*/ )
                                 nOperator = bNotEqual ? FilterOperator2::DOES_NOT_END_WITH : FilterOperator2::ENDS_WITH;
                             else if( bHasTrailingAsterisk )
                                 nOperator = bNotEqual ? FilterOperator2::DOES_NOT_BEGIN_WITH : FilterOperator2::BEGINS_WITH;
-                            // else: no asterisks, stick to equal/not equal
+                            
                         }
                     }
                 }
 
                 if( bValidOperator )
                 {
-                    // if wildcards are present, require RE mode, otherwise keep don't care state
+                    
                     if( lclConvertWildcardsToRegExp( aValue ) )
                         aSettings.mobNeedsRegExp = true;
-                    // create a new UNO API filter field
+                    
                     aSettings.appendField( mbAnd, nOperator, aValue );
                 }
             }
             else if( aIt->maValue.has< double >() )
             {
-                // floating-point argument
+                
                 double fValue = 0.0;
                 aIt->maValue >>= fValue;
                 aSettings.appendField( mbAnd, nOperator, fValue );
@@ -501,7 +501,7 @@ void CustomFilter::appendCriterion( const FilterCriterionModel& rCriterion )
         maCriteria.push_back( rCriterion );
 }
 
-// ============================================================================
+
 
 FilterColumn::FilterColumn( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -531,16 +531,16 @@ ApiFilterSettings FilterColumn::finalizeImport( sal_Int32 nMaxCount )
     ApiFilterSettings aSettings;
     if( (0 <= mnColId) && mxSettings.get() )
     {
-        // filter settings object creates a sequence of filter fields
+        
         aSettings = mxSettings->finalizeImport( nMaxCount );
-        // add column index to all filter fields
+        
         for( ApiFilterSettings::FilterFieldVector::iterator aIt = aSettings.maFilterFields.begin(), aEnd = aSettings.maFilterFields.end(); aIt != aEnd; ++aIt )
             aIt->Field = mnColId;
     }
     return aSettings;
 }
 
-// ============================================================================
+
 
 AutoFilter::AutoFilter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -571,7 +571,7 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
 {
     if( rxFilterDesc.is() )
     {
-        // set some common properties for the auto filter range
+        
         PropertySet aDescProps( rxFilterDesc );
         aDescProps.setProperty( PROP_IsCaseSensitive, false );
         aDescProps.setProperty( PROP_SkipDuplicates, false );
@@ -579,15 +579,15 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
         aDescProps.setProperty( PROP_ContainsHeader, true );
         aDescProps.setProperty( PROP_CopyOutputData, false );
 
-        // maximum number of UNO API filter fields
+        
         sal_Int32 nMaxCount = 0;
         aDescProps.getProperty( nMaxCount, PROP_MaxFieldCount );
         OSL_ENSURE( nMaxCount > 0, "AutoFilter::finalizeImport - invalid maximum filter field count" );
 
-        // resulting list of all UNO API filter fields
+        
         ::std::vector<TableFilterField3> aFilterFields;
 
-        // track if columns require to enable or disable regular expressions
+        
         OptValue< bool > obNeedsRegExp;
 
         /*  Track whether the filter fields of the first filter column are
@@ -599,14 +599,14 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
             '(A1 and B1) or (B2 and C1)'. */
         bool bHasOrConnection = false;
 
-        // process all filter column objects, exit when 'or' connection exists
+        
         for( FilterColumnVector::iterator aIt = maFilterColumns.begin(), aEnd = maFilterColumns.end(); !bHasOrConnection && (aIt != aEnd); ++aIt )
         {
-            // the filter settings object creates a list of filter fields
+            
             ApiFilterSettings aSettings = (*aIt)->finalizeImport( nMaxCount );
             ApiFilterSettings::FilterFieldVector& rColumnFields = aSettings.maFilterFields;
 
-            // new total number of filter fields
+            
             sal_Int32 nNewCount = static_cast< sal_Int32 >( aFilterFields.size() + rColumnFields.size() );
 
             /*  Check whether mode for regular expressions is compatible with
@@ -615,7 +615,7 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
                 equal. */
             bool bRegExpCompatible = !obNeedsRegExp || !aSettings.mobNeedsRegExp || (obNeedsRegExp.get() == aSettings.mobNeedsRegExp.get());
 
-            // check whether fields are connected by 'or' (see comments above).
+            
             if( rColumnFields.size() >= 2 )
                 for( ApiFilterSettings::FilterFieldVector::iterator aSIt = rColumnFields.begin() + 1, aSEnd = rColumnFields.end(); !bHasOrConnection && (aSIt != aSEnd); ++aSIt )
                     bHasOrConnection = aSIt->Connection == FilterConnection_OR;
@@ -630,25 +630,25 @@ void AutoFilter::finalizeImport( const Reference<XSheetFilterDescriptor3>& rxFil
                     it to the existing filter fields of other columns. */
                 rColumnFields[ 0 ].Connection = FilterConnection_AND;
 
-                // insert the new filter fields
+                
                 aFilterFields.insert( aFilterFields.end(), rColumnFields.begin(), rColumnFields.end() );
 
-                // update the regular expressions mode
+                
                 obNeedsRegExp.assignIfUsed( aSettings.mobNeedsRegExp );
             }
         }
 
-        // insert all filter fields to the filter descriptor
+        
         if( !aFilterFields.empty() )
             rxFilterDesc->setFilterFields3( ContainerHelper::vectorToSequence( aFilterFields ) );
 
-        // regular expressions
+        
         bool bUseRegExp = obNeedsRegExp.get( false );
         aDescProps.setProperty( PROP_UseRegularExpressions, bUseRegExp );
     }
 }
 
-// ============================================================================
+
 
 AutoFilterBuffer::AutoFilterBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -664,35 +664,35 @@ AutoFilter& AutoFilterBuffer::createAutoFilter()
 
 void AutoFilterBuffer::finalizeImport( sal_Int16 nSheet )
 {
-    // rely on existence of the defined name '_FilterDatabase' containing the range address of the filtered area
+    
     if( const DefinedName* pFilterDBName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_FILTERDATABASE, nSheet ).get() )
     {
         CellRangeAddress aFilterRange;
         if( pFilterDBName->getAbsoluteRange( aFilterRange ) && (aFilterRange.Sheet == nSheet) )
         {
-            // use the same name for the database range as used for the defined name '_FilterDatabase'
+            
             Reference< XDatabaseRange > xDatabaseRange = createUnnamedDatabaseRangeObject( aFilterRange );
-            // first, try to create an auto filter
+            
             bool bHasAutoFilter = finalizeImport( xDatabaseRange );
-            // no success: try to create an advanced filter
+            
             if( !bHasAutoFilter && xDatabaseRange.is() )
             {
-                // the built-in defined name 'Criteria' must exist
+                
                 if( const DefinedName* pCriteriaName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_CRITERIA, nSheet ).get() )
                 {
                     CellRangeAddress aCriteriaRange;
                     if( pCriteriaName->getAbsoluteRange( aCriteriaRange ) )
                     {
-                        // set some common properties for the filter descriptor
+                        
                         PropertySet aDescProps( xDatabaseRange->getFilterDescriptor() );
                         aDescProps.setProperty( PROP_IsCaseSensitive, false );
                         aDescProps.setProperty( PROP_SkipDuplicates, false );
                         aDescProps.setProperty( PROP_Orientation, TableOrientation_ROWS );
                         aDescProps.setProperty( PROP_ContainsHeader, true );
-                        // criteria range may contain wildcards, but these are incompatible with REs
+                        
                         aDescProps.setProperty( PROP_UseRegularExpressions, false );
 
-                        // position of output data (if built-in defined name 'Extract' exists)
+                        
                         DefinedNameRef xExtractName = getDefinedNames().getByBuiltinId( BIFF_DEFNAME_EXTRACT, nSheet );
                         CellRangeAddress aOutputRange;
                         bool bHasOutputRange = xExtractName.get() && xExtractName->getAbsoluteRange( aOutputRange );
@@ -722,13 +722,13 @@ bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxData
     AutoFilter* pAutoFilter = getActiveAutoFilter();
     if( pAutoFilter && rxDatabaseRange.is() ) try
     {
-        // the property 'AutoFilter' enables the drop-down buttons
+        
         PropertySet aRangeProps( rxDatabaseRange );
         aRangeProps.setProperty( PROP_AutoFilter, true );
-        // convert filter settings using the filter descriptor of the database range
+        
         Reference< XSheetFilterDescriptor3 > xFilterDesc( rxDatabaseRange->getFilterDescriptor(), UNO_QUERY_THROW );
         pAutoFilter->finalizeImport( xFilterDesc );
-        // return true to indicate enabled autofilter
+        
         return true;
     }
     catch( Exception& )
@@ -739,15 +739,15 @@ bool AutoFilterBuffer::finalizeImport( const Reference< XDatabaseRange >& rxData
 
 AutoFilter* AutoFilterBuffer::getActiveAutoFilter()
 {
-    // Excel expects not more than one auto filter per sheet or table
+    
     OSL_ENSURE( maAutoFilters.size() <= 1, "AutoFilterBuffer::getActiveAutoFilter - too many auto filters" );
-    // stick to the last imported auto filter
+    
     return maAutoFilters.empty() ? 0 : maAutoFilters.back().get();
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

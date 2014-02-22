@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -67,8 +67,8 @@ static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8* pDest, sal_uLo
     return NULL;
 }
 
-//--------------------------------------------------------------------------
-// SecurityCount is the buffersize of the buffer in which we will parse for a number
+
+
 static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
 {
     sal_Bool    bValid = sal_True;
@@ -82,7 +82,7 @@ static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
         switch ( nByte )
         {
             case '.' :
-                // we'll only use the integer format
+                
                 bValid = sal_False;
                 break;
             case '-' :
@@ -90,7 +90,7 @@ static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
                 break;
             default :
                 if ( ( nByte < '0' ) || ( nByte > '9' ) )
-                    nSecurityCount = 1;         // error parsing the bounding box values
+                    nSecurityCount = 1;         
                 else if ( bValid )
                 {
                     nRetValue *= 10;
@@ -106,7 +106,7 @@ static long ImplGetNumber( sal_uInt8 **pBuf, int& nSecurityCount )
     return nRetValue;
 }
 
-//--------------------------------------------------------------------------
+
 
 static int ImplGetLen( sal_uInt8* pBuf, int nMax )
 {
@@ -294,14 +294,14 @@ static bool RenderAsBMPThroughConvert(const sal_uInt8* pBuf, sal_uInt32 nBytesRe
     Graphic &rGraphic)
 {
     OUString fileName("convert" EXESUFFIX);
-    // density in pixel/inch
+    
     OUString arg1("-density");
-    // since the preview is also used for PDF-Export & printing on non-PS-printers,
-    // use some better quality - 300x300 should allow some resizing as well
+    
+    
     OUString arg2("300x300");
-    // read eps from STDIN
+    
     OUString arg3("eps:-");
-    // write bmp to STDOUT
+    
     OUString arg4("bmp:-");
     rtl_uString *args[] =
     {
@@ -348,8 +348,8 @@ static bool RenderAsBMP(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
         return RenderAsBMPThroughConvert(pBuf, nBytesRead, rGraphic);
 }
 
-// this method adds a replacement action containing the original wmf or tiff replacement,
-// so the original eps can be written when storing to ODF.
+
+
 void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 nOrigPos, sal_uInt32 nPSSize,
                                 sal_uInt32 nPosWMF, sal_uInt32 nSizeWMF, sal_uInt32 nPosTIFF, sal_uInt32 nSizeTIFF )
 {
@@ -387,7 +387,7 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
         rMtf.AddAction( (MetaAction*)( new MetaCommentAction( aComment, 0, NULL, 0 ) ) );
 }
 
-//there is no preview -> make a red box
+
 void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     long nWidth, long nHeight, Graphic &rGraphic)
 {
@@ -401,7 +401,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     aVDev.SetFillColor();
 
     aFont.SetColor( COL_LIGHTRED );
-//  aFont.SetSize( Size( 0, 32 ) );
+
 
     aVDev.Push( PUSH_FONT );
     aVDev.SetFont( aFont );
@@ -471,11 +471,11 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
 }
 
 
-//================== GraphicImport - the exported function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicImport ipsGraphicImport
 #endif
@@ -503,7 +503,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
     {
         rStream.ReadUInt32( nPSStreamPos ).ReadUInt32( nPSSize ).ReadUInt32( nPosWMF ).ReadUInt32( nSizeWMF );
 
-        // first we try to get the metafile grafix
+        
 
         if ( nSizeWMF )
         {
@@ -518,7 +518,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
         {
             rStream.ReadUInt32( nPosTIFF ).ReadUInt32( nSizeTIFF );
 
-            // else we have to get the tiff grafix
+            
 
             if ( nPosTIFF && nSizeTIFF )
             {
@@ -534,12 +534,12 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
     }
     else
     {
-        nPSStreamPos = nOrigPos;            // no preview available _>so we must get the size manually
+        nPSStreamPos = nOrigPos;            
         nPSSize = rStream.Seek( STREAM_SEEK_TO_END ) - nOrigPos;
     }
     sal_uInt8* pHeader = new sal_uInt8[ 22 ];
     rStream.Seek( nPSStreamPos );
-    rStream.Read( pHeader, 22 );    // check PostScript header
+    rStream.Read( pHeader, 22 );    
     if ( ImplSearchEntry( pHeader, (sal_uInt8*)"%!PS-Adobe", 10, 10 ) &&
         ImplSearchEntry( &pHeader[ 15 ], (sal_uInt8*)"EPS", 3, 3 ) )
     {
@@ -552,7 +552,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
             if ( nBytesRead == nPSSize )
             {
                 int nSecurityCount = 32;
-                if ( !bHasPreview )     // if there is no tiff/wmf preview, we will parse for an preview in the eps prolog
+                if ( !bHasPreview )     
                 {
                     sal_uInt8* pDest = ImplSearchEntry( pBuf, (sal_uInt8*)"%%BeginPreview:", nBytesRead - 32, 15 );
                     if ( pDest  )
@@ -562,7 +562,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                         long nHeight = ImplGetNumber( &pDest, nSecurityCount );
                         long nBitDepth = ImplGetNumber( &pDest, nSecurityCount );
                         long nScanLines = ImplGetNumber( &pDest, nSecurityCount );
-                        pDest = ImplSearchEntry( pDest, (sal_uInt8*)"%", 16, 1 );       // go to the first Scanline
+                        pDest = ImplSearchEntry( pDest, (sal_uInt8*)"%", 16, 1 );       
                         if ( nSecurityCount && pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines )
                         {
                             rStream.Seek( nBufStartPos + ( pDest - pBuf ) );
@@ -601,7 +601,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                                                         {
                                                             if ( nByte > '9' )
                                                             {
-                                                                nByte &=~0x20;  // case none sensitive for hexadecimal values
+                                                                nByte &=~0x20;  
                                                                 nByte -= ( 'A' - 10 );
                                                                 if ( nByte > 15 )
                                                                     bIsValid = sal_False;
@@ -610,7 +610,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                                                                 nByte -= '0';
                                                             nBitsLeft += 4;
                                                             nDat <<= 4;
-                                                            nDat |= ( nByte ^ 0xf ); // in epsi a zero bit represents white color
+                                                            nDat |= ( nByte ^ 0xf ); 
                                                         }
                                                         else
                                                             bIsValid = sal_False;
@@ -623,7 +623,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                                             pAcc->SetPixelIndex( y, x, static_cast<sal_uInt8>(nDat >> nBitsLeft) & 1 );
                                         else
                                         {
-                                            pAcc->SetPixelIndex( y, x, nDat ? 1 : 0 );  // nBitDepth == 8
+                                            pAcc->SetPixelIndex( y, x, nDat ? 1 : 0 );  
                                             nBitsLeft = 0;
                                         }
                                     }
@@ -674,7 +674,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                         long nWidth =  nNumb[2] - nNumb[0] + 1;
                         long nHeight = nNumb[3] - nNumb[1] + 1;
 
-                        // if there is no preview -> try with gs to make one
+                        
                         if( !bHasPreview )
                         {
                             bHasPreview = RenderAsEMF(pBuf, nBytesRead, aGraphic);
@@ -682,7 +682,7 @@ GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, sal_Boo
                                 bHasPreview = RenderAsBMP(pBuf, nBytesRead, aGraphic);
                         }
 
-                        // if there is no preview -> make a red box
+                        
                         if( !bHasPreview )
                         {
                             MakePreview(pBuf, nBytesRead, nWidth, nHeight,

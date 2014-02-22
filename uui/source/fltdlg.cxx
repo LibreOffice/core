@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fltdlg.hxx"
@@ -35,7 +35,7 @@
 namespace uui
 {
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      initialize filter dialog with start values
     @descr      We set some necessary information on these instance for later working and create internal structures.
                 After construction user should call "SetFilters()" and "SetURL()" to fill listbox with selectable filter
@@ -50,7 +50,7 @@ namespace uui
 
     @onerror    -
     @threadsafe no
-*//*-*************************************************************************************************************/
+*
 FilterDialog::FilterDialog( Window* pParentWindow ,
                             ResMgr* pResMgr       )
     :   ModalDialog  (pParentWindow, ResId( DLG_FILTER_SELECT, *pResMgr ) )
@@ -64,7 +64,7 @@ FilterDialog::FilterDialog( Window* pParentWindow ,
     FreeResource();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      set file name on dialog control
     @descr      We convert given URL (it must be an URL!) into valid file name and show it on our dialog.
 
@@ -75,14 +75,14 @@ FilterDialog::FilterDialog( Window* pParentWindow ,
 
     @onerror    -
     @threadsafe no
-*//*-*************************************************************************************************************/
+*
 void FilterDialog::SetURL( const OUString& sURL )
 {
-    // convert it and use given pure string as fallback if conversion failed
+    
     m_ftURL.SetText( impl_buildUIFileName(sURL) );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      change list of filter names
     @descr      We save given pointer internal and use it to fill our listbox with given names.
                 Saved list pointer is used on method "AskForFilter()" too, to find user selected item
@@ -100,7 +100,7 @@ void FilterDialog::SetURL( const OUString& sURL )
 
     @onerror    We clear list box and forget our currently set filter information completely!
     @threadsafe no
-*//*-*************************************************************************************************************/
+*
 void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
 {
     m_pFilterNames = pFilterNames;
@@ -116,7 +116,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      ask user for his decision
     @descr      We show the dialog and if user finish it with "OK" - we try to find selected item in internal saved
                 name list (which you must set in "ChangeFilters()"!). If we return sal_True as result, you can use out
@@ -133,7 +133,7 @@ void FilterDialog::ChangeFilters( const FilterNameList* pFilterNames )
 
     @onerror    We return false ... but don't change pSelectedItem!
     @threadsafe no
-*//*-*************************************************************************************************************/
+*
 bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
 {
     bool bSelected = false;
@@ -159,7 +159,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
     return bSelected;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      helper class to calculate length of given string
     @descr      Instances of it can be used as callback for INetURLObject::getAbbreviated() method to build
                 short URLs to show it on GUI. We use in ctor set OutputDevice to call special VCL method ...
@@ -172,7 +172,7 @@ bool FilterDialog::AskForFilter( FilterNameListPtr& pSelectedItem )
 
     @onerror    -
     @threadsafe no
-*//*-*************************************************************************************************************/
+*
 class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util::XStringWidth >
 {
     public:
@@ -190,7 +190,7 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
         const OutputDevice* m_pDevice;
 };
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      try to build short name of given URL to show it n GUI
     @descr      We detect type of given URL automaticly and build this short name depend on this type ...
                 If we couldnt make it right we return full given string without any changes ...
@@ -203,18 +203,18 @@ class StringCalculator : public ::cppu::WeakImplHelper1< ::com::sun::star::util:
 
     @onerror    We return given name without any changes.
     @threadsafe no
-*//*-*************************************************************************************************************/
+*
 OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
 {
     OUString sShortName( sName );
 
     if( ::utl::LocalFileHelper::ConvertURLToSystemPath( sName, sShortName ) )
     {
-        // it's a system file ... build short name by using osl functionality
+        
     }
     else
     {
-        // otherwise its really a url ... build short name by using INetURLObject
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XStringWidth > xStringCalculator( new StringCalculator(&m_ftURL) );
         if( xStringCalculator.is() )
         {
@@ -227,6 +227,6 @@ OUString FilterDialog::impl_buildUIFileName( const OUString& sName )
     return sShortName;
 }
 
-}   // namespace uui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

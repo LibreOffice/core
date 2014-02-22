@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TitleHelper.hxx"
@@ -213,7 +213,7 @@ uno::Reference< XTitle > TitleHelper::createTitle(
 
         if(xTitle.is())
         {
-            // default char height (main: 13.0 == default)
+            
             float fDefaultCharHeightSub = 11.0;
             float fDefaultCharHeightAxis = 9.0;
             switch( eTitleType )
@@ -237,13 +237,13 @@ uno::Reference< XTitle > TitleHelper::createTitle(
                     break;
             }
 
-            // set/clear autoscale
+            
             if( pRefSizeProvider )
                 pRefSizeProvider->setValuesAtTitle( xTitle );
 
             xTitled->setTitleObject( xTitle );
 
-            //default rotation 90 degree for y axis title in normal coordinatesystems or for x axis title for swapped coordinatesystems
+            
             if( eTitleType == TitleHelper::X_AXIS_TITLE ||
                 eTitleType == TitleHelper::Y_AXIS_TITLE ||
                 eTitleType == TitleHelper::SECONDARY_X_AXIS_TITLE ||
@@ -295,7 +295,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
                     , const uno::Reference< uno::XComponentContext > & xContext
                     , float * pDefaultCharHeight /* = 0 */ )
 {
-    //the format of the first old text portion will be maintained if there is any
+    
     if(!xTitle.is())
         return;
 
@@ -308,7 +308,7 @@ void TitleHelper::setCompleteString( const OUString& rNewText
 
     if( bStacked )
     {
-        //#i99841# remove linebreaks that were added for vertical stacking
+        
         OUStringBuffer aUnstackedStr;
         OUStringBuffer aSource(rNewText);
 
@@ -419,6 +419,6 @@ bool TitleHelper::getTitleType( eTitleType& rType
     return false;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

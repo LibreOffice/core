@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "uifactory/factoryconfiguration.hxx"
@@ -33,18 +33,18 @@
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/weak.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+
+
+
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-//_________________________________________________________________________________________________________________
-//  Namespace
-//_________________________________________________________________________________________________________________
+
+
+
 
 namespace framework
 {
@@ -56,9 +56,9 @@ OUString getHashKeyFromStrings( const OUString& aCommandURL, const OUString& aMo
     return aKey.makeStringAndClear();
 }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
+
+
 ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( const Reference< XComponentContext >& rxContext, const OUString& _sRoot,bool _bAskValue ) :
     ThreadHelpBase(),
     m_aPropCommand( "Command" ),
@@ -74,7 +74,7 @@ ConfigurationAccess_ControllerFactory::ConfigurationAccess_ControllerFactory( co
 
 ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
 
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
@@ -84,7 +84,7 @@ ConfigurationAccess_ControllerFactory::~ConfigurationAccess_ControllerFactory()
 
 OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
 
@@ -92,7 +92,7 @@ OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( con
         return pIter->second.m_aImplementationName;
     else if ( !rModule.isEmpty() )
     {
-        // Try to detect if we have a generic popup menu controller
+        
         pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, OUString() ));
 
         if ( pIter != m_aMenuControllerMap.end() )
@@ -103,7 +103,7 @@ OUString ConfigurationAccess_ControllerFactory::getServiceFromCommandModule( con
 }
 OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const OUString& rCommandURL, const OUString& rModule ) const
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
 
     MenuControllerMap::const_iterator pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, rModule ));
@@ -112,7 +112,7 @@ OUString ConfigurationAccess_ControllerFactory::getValueFromCommandModule( const
         return pIter->second.m_aValue;
     else if ( !rModule.isEmpty() )
     {
-        // Try to detect if we have a generic popup menu controller
+        
         pIter = m_aMenuControllerMap.find( getHashKeyFromStrings( rCommandURL, OUString() ));
 
         if ( pIter != m_aMenuControllerMap.end() )
@@ -128,7 +128,7 @@ void ConfigurationAccess_ControllerFactory::addServiceToCommandModule(
     const OUString& rModule,
     const OUString& rServiceSpecifier )
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
 
     OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
@@ -139,14 +139,14 @@ void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
     const OUString& rCommandURL,
     const OUString& rModule )
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
 
     OUString aHashKey = getHashKeyFromStrings( rCommandURL, rModule );
     m_aMenuControllerMap.erase( aHashKey );
 }
 
-// container.XContainerListener
+
 void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
     OUString   aCommand;
@@ -154,13 +154,13 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const Cont
     OUString   aService;
     OUString   aValue;
 
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
 
     if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
-        // Create hash key from command and module as they are together a primary key to
-        // the UNO service that implements the popup menu controller.
+        
+        
         OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
         ControllerInfo& rControllerInfo = m_aMenuControllerMap[ aHashKey ];
         rControllerInfo.m_aImplementationName = aService;
@@ -175,13 +175,13 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const Cont
     OUString   aService;
     OUString   aValue;
 
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
 
     if ( impl_getElementProps( aEvent.Element, aCommand, aModule, aService, aValue ))
     {
-        // Create hash key from command and module as they are together a primary key to
-        // the UNO service that implements the popup menu controller.
+        
+        
         OUString aHashKey( getHashKeyFromStrings( aCommand, aModule ));
         m_aMenuControllerMap.erase( aHashKey );
     }
@@ -192,18 +192,18 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementReplaced( const Cont
     elementInserted(aEvent);
 }
 
-// lang.XEventListener
+
 void SAL_CALL ConfigurationAccess_ControllerFactory::disposing( const EventObject& ) throw(RuntimeException)
 {
-    // SAFE
-    // remove our reference to the config access
+    
+    
     ResetableGuard aLock( m_aLock );
     m_xConfigAccess.clear();
 }
 
 void ConfigurationAccess_ControllerFactory::readConfigurationData()
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
 
     if ( !m_bConfigAccessInitialized )
@@ -228,11 +228,11 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 
     if ( m_xConfigAccess.is() )
     {
-        // Read and update configuration data
+        
         updateConfigurationData();
 
         uno::Reference< container::XContainer > xContainer( m_xConfigAccess, uno::UNO_QUERY );
-        // UNSAFE
+        
         aLock.unlock();
 
         if ( xContainer.is() )
@@ -245,7 +245,7 @@ void ConfigurationAccess_ControllerFactory::readConfigurationData()
 
 void ConfigurationAccess_ControllerFactory::updateConfigurationData()
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
     if ( m_xConfigAccess.is() )
     {
@@ -264,8 +264,8 @@ void ConfigurationAccess_ControllerFactory::updateConfigurationData()
             {
                 if ( impl_getElementProps( m_xConfigAccess->getByName( aPopupMenuControllers[i] ), aCommand, aModule, aService,aValue ))
                 {
-                    // Create hash key from command and module as they are together a primary key to
-                    // the UNO service that implements the popup menu controller.
+                    
+                    
                     aHashKey = getHashKeyFromStrings( aCommand, aModule );
                     m_aMenuControllerMap.insert( MenuControllerMap::value_type( aHashKey, ControllerInfo(aService,aValue) ));
                 }
@@ -307,6 +307,6 @@ sal_Bool ConfigurationAccess_ControllerFactory::impl_getElementProps( const Any&
 
     return sal_True;
 }
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uifactory/menubarfactory.hxx>
@@ -52,7 +52,7 @@ MenuBarFactory::~MenuBarFactory()
 {
 }
 
-// XUIElementFactory
+
 Reference< XUIElement > SAL_CALL MenuBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
@@ -94,7 +94,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
     if (!aResourceURL.startsWith(ResourceType))
         throw IllegalArgumentException();
 
-    // Identify frame and determine document based ui configuration manager/module ui configuration manager
+    
     if ( xFrame.is() && !xConfigSource.is() )
     {
         bool bHasSettings( false );
@@ -155,7 +155,7 @@ void MenuBarFactory::CreateUIElement(const OUString& ResourceURL
     xInit->initialize( aPropSeq );
 }
 
-} // namespace framework
+} 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_MenuBarFactory_get_implementation(

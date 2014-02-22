@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/whiter.hxx>
@@ -28,13 +28,13 @@
 
 #include "dialog.hrc"
 
-// class SfxStyleDialog --------------------------------------------------
+
 
 SfxStyleDialog::SfxStyleDialog
 (
-    Window* pParent,           // Parent
+    Window* pParent,           
     const OString& rID, const OUString& rUIXMLDescription,
-    SfxStyleSheetBase& rStyle  // stylesheet to be processed
+    SfxStyleSheetBase& rStyle  
 )
 
 /*  [Description]
@@ -44,8 +44,8 @@ SfxStyleDialog::SfxStyleDialog
 
     : SfxTabDialog( pParent, rID, rUIXMLDescription,
                   rStyle.GetItemSet().Clone(),
-                  // return TRUE also without ParentSupport , but extended
-                  // to suppress the standardButton
+                  
+                  
                   rStyle.HasParentSupport() ? sal_True : 2 )
 
     , pStyle( &rStyle )
@@ -53,7 +53,7 @@ SfxStyleDialog::SfxStyleDialog
 {
     m_nOrganizerId = AddTabPage("organizer", SfxManageStyleSheetPage::Create, 0);
 
-    // With new template always set the management page as the current page
+    
 
     if( rStyle.GetName().isEmpty() )
         SetCurPageId(m_nOrganizerId);
@@ -62,13 +62,13 @@ SfxStyleDialog::SfxStyleDialog
         OUString sTxt = OUString(GetText()) + ": " + rStyle.GetName();
         SetText( sTxt );
     }
-    delete pExampleSet; // in SfxTabDialog::Ctor() already created
+    delete pExampleSet; 
     pExampleSet = &pStyle->GetItemSet();
 
     GetCancelButton().SetClickHdl( LINK(this, SfxStyleDialog, CancelHdl) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxStyleDialog::~SfxStyleDialog()
 
@@ -84,7 +84,7 @@ SfxStyleDialog::~SfxStyleDialog()
     delete GetInputSetImpl();
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxItemSet* SfxStyleDialog::GetRefreshedSet()
 
@@ -98,7 +98,7 @@ const SfxItemSet* SfxStyleDialog::GetRefreshedSet()
     return GetInputSetImpl();
 }
 
-// -----------------------------------------------------------------------
+
 
 short SfxStyleDialog::Ok()
 
@@ -112,7 +112,7 @@ short SfxStyleDialog::Ok()
     return RET_OK;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 
@@ -123,7 +123,7 @@ IMPL_LINK( SfxStyleDialog, CancelHdl, Button *, pButton )
 */
 
 {
-    (void)pButton; //unused
+    (void)pButton; 
     SfxTabPage* pPage = GetTabPage(m_nOrganizerId);
 
     const SfxItemSet* pInSet = GetInputSetImpl();

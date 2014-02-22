@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -24,7 +24,7 @@
 #include "document.hxx"
 
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine )
 {
@@ -42,15 +42,15 @@ void ScTabViewShell::SetDefaultFrameLine( const ::editeng::SvxBorderLine* pLine 
     }
 }
 
-//------------------------------------------------------------------
+
 
 sal_Bool ScTabViewShell::HasSelection( sal_Bool bText ) const
 {
     sal_Bool bHas = false;
-    ScViewData* pData = (ScViewData*)GetViewData();     // const weggecasted
+    ScViewData* pData = (ScViewData*)GetViewData();     
     if ( bText )
     {
-        //  Text enthalten: Anzahl2 >= 1
+        
         ScDocument* pDoc = pData->GetDocument();
         ScMarkData& rMark = pData->GetMarkData();
         ScAddress aCursor( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
@@ -63,24 +63,24 @@ sal_Bool ScTabViewShell::HasSelection( sal_Bool bText ) const
         ScRange aRange;
         ScMarkType eMarkType = pData->GetSimpleArea( aRange );
         if ( eMarkType == SC_MARK_SIMPLE )
-            bHas = ( aRange.aStart != aRange.aEnd );    // more than 1 cell
+            bHas = ( aRange.aStart != aRange.aEnd );    
         else
-            bHas = sal_True;                                // multiple selection or filtered
+            bHas = sal_True;                                
     }
     return bHas;
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::UIDeactivated( SfxInPlaceClient* pClient )
 {
     ClearHighlightRanges();
 
-    //  Move an der ViewShell soll eigentlich vom Sfx gerufen werden, wenn sich
-    //  das Frame-Window wegen unterschiedlicher Toolboxen o.ae. verschiebt
-    //  (um nicht aus Versehen z.B. Zeichenobjekte zu verschieben, #56515#).
-    //  Dieser Mechanismus funktioniert aber momentan nicht, darum hier der Aufruf
-    //  per Hand (im Move wird verglichen, ob die Position wirklich geaendert ist).
+    
+    
+    
+    
+    
     ForceMove();
     SfxViewShell::UIDeactivated( pClient );
 }

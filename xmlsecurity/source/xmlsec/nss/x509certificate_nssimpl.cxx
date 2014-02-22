@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "nssrenam.h"
@@ -52,7 +52,7 @@ X509Certificate_NssImpl :: ~X509Certificate_NssImpl() {
     }
 }
 
-//Methods from XCertificate
+
 sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::star::uno::RuntimeException) {
     if( m_pCert != NULL ) {
         if( m_pCert->version.len > 0 ) {
@@ -104,7 +104,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
             return DateTime() ;
         }
 
-        //Convert the time to readable local time
+        
         PR_ExplodeTime( notBefore, PR_LocalTimeParameters, &explTime ) ;
 
         dateTime.NanoSeconds = static_cast< sal_Int32 >( explTime.tm_usec * ::Time::nanoPerMicro  );
@@ -133,7 +133,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
             return DateTime() ;
         }
 
-        //Convert the time to readable local time
+        
         PR_ExplodeTime( notAfter, PR_LocalTimeParameters, &explTime ) ;
 
         dateTime.NanoSeconds = static_cast< sal_Int16 >( explTime.tm_usec * ::Time::nanoPerMicro );
@@ -188,7 +188,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
             const SECItem id = (*extns)->id;
             OString oidString(CERT_GetOidString(&id));
 
-            // remove "OID." prefix if existing
+            
             OString objID;
             OString oid("OID.");
             if (oidString.match(oid))
@@ -264,7 +264,7 @@ OUString SAL_CALL X509Certificate_NssImpl :: getSubjectName() throw ( ::com::sun
     }
 }
 
-//Helper methods
+
 void X509Certificate_NssImpl :: setCert( CERTCertificate* cert ) {
     if( m_pCert != NULL ) {
         CERT_DestroyCertificate( m_pCert ) ;

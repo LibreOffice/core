@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -170,7 +170,7 @@ sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
                     OUString::number(objType) + ")");
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
-    // all privileges
+    
     return ret;
 }
 
@@ -178,7 +178,7 @@ sal_Int32 User::getGrantablePrivileges( const OUString& objName, sal_Int32 objTy
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     (void) objName; (void) objType;
-    // all privileges
+    
     return 0xffffffff;
 }
 
@@ -198,7 +198,7 @@ void User::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int
                                              *this, OUString(), 1, Any() );
 }
 
-//______________________________________________________________________________________
+
 UserDescriptor::UserDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const Reference< com::sun::star::sdbc::XConnection > & connection,

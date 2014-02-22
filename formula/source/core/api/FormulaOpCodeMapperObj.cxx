@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "formula/FormulaOpCodeMapperObj.hxx"
 #include "formula/opcode.hxx"
@@ -80,17 +80,17 @@ SAL_CALL FormulaOpCodeMapperObj::getAvailableMappings(
         throw lang::IllegalArgumentException();
     return xMap->createSequenceOfAvailableMappings( *m_pCompiler,nGroups);
 }
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL FormulaOpCodeMapperObj::getImplementationName_Static()
 {
     return OUString( "simple.formula.FormulaOpCodeMapperObj" );
 }
-// --------------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL FormulaOpCodeMapperObj::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
@@ -110,10 +110,10 @@ uno::Reference< uno::XInterface > SAL_CALL FormulaOpCodeMapperObj::create(
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-// -----------------------------------------------------------------------------
 
-// =============================================================================
-} // formula
-// =============================================================================
+
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

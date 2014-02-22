@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AppView.hxx"
@@ -58,7 +58,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::container;
 using ::com::sun::star::sdb::application::NamedDatabaseObject;
 
-// class OAppBorderWindow
+
 OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_pPanel(NULL)
     ,m_pDetailView(NULL)
@@ -85,7 +85,7 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 
 OAppBorderWindow::~OAppBorderWindow()
 {
-    // destroy children
+    
     if ( m_pPanel )
     {
         m_pPanel->Hide();
@@ -113,7 +113,7 @@ void OAppBorderWindow::GetFocus()
 
 void OAppBorderWindow::Resize()
 {
-    // parent window dimension
+    
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
@@ -187,7 +187,7 @@ OApplicationDetailView* OAppBorderWindow::getDetailView() const
     return m_pDetailView;
 }
 
-// class OApplicationView
+
 OApplicationView::OApplicationView( Window* pParent
                                     ,const Reference< XComponentContext >& _rxOrb
                                     ,IApplicationController& _rAppController
@@ -264,7 +264,7 @@ void OApplicationView::resizeDocumentView(Rectangle& _rPlayground)
 
         m_pWin->SetPosSizePixel(_rPlayground.TopLeft() , _rPlayground.GetSize() );
     }
-    // just for completeness: there is no space left, we occupied it all ...
+    
     _rPlayground.SetPos( _rPlayground.BottomRight() );
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
@@ -284,12 +284,12 @@ bool OApplicationView::PreNotify( NotifyEvent& rNEvt )
         case EVENT_KEYINPUT:
         {
             const KeyEvent* pKeyEvent = rNEvt.GetKeyEvent();
-            // give the pane the chance to intercept mnemonic accelerators
-            // #i34790#
+            
+            
             if ( getPanel() && getPanel()->interceptKeyInput( *pKeyEvent ) )
                 return true;
-            // and ditto the detail view
-            // #i72799#
+            
+            
             if ( getDetailView() && getDetailView()->interceptKeyInput( *pKeyEvent ) )
                 return true;
         }

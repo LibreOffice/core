@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -69,7 +69,7 @@ struct UUID
 static  void write_v3( sal_uInt8 *pUuid  )
 {
     UUID uuid;
-    // copy to avoid alignment problems
+    
     memcpy( &uuid , pUuid , 16 );
 
     SWAP_NETWORK_TO_INT32( uuid.time_low );
@@ -101,17 +101,17 @@ extern "C" void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
             pool = rtl_random_createPool();
             if (pool == NULL) {
                 abort();
-                    // only possible way to signal failure here (rtl_createUuid
-                    // being part of a fixed C API)
+                    
+                    
             }
         }
         if (rtl_random_getBytes(pool, pTargetUUID, 16) != rtl_Random_E_None) {
             abort();
-                // only possible way to signal failure here (rtl_createUuid
-                // being part of a fixed C API)
+                
+                
         }
     }
-    // See ITU-T Recommendation X.667:
+    
     pTargetUUID[6] &= 0x0F;
     pTargetUUID[6] |= 0x40;
     pTargetUUID[8] &= 0x3F;

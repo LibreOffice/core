@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -72,7 +72,7 @@ private:
 
 
 
-//===== SlideSorter ===========================================================
+
 
 ::boost::shared_ptr<SlideSorter> SlideSorter::CreateSlideSorter(
     ViewShell& rViewShell,
@@ -169,7 +169,7 @@ void SlideSorter::Init (void)
     if (mpViewShellBase != NULL)
         mxControllerWeak = mpViewShellBase->GetController();
 
-    // Reinitialize colors in Properties with window specific values.
+    
     if (mpContentWindow)
     {
         mpProperties->SetBackgroundColor(
@@ -186,7 +186,7 @@ void SlideSorter::Init (void)
 
     SetupListeners ();
 
-    // Initialize the window.
+    
     SharedSdWindow pContentWindow (GetContentWindow());
     if (pContentWindow)
     {
@@ -195,13 +195,13 @@ void SlideSorter::Init (void)
             pParentWindow->SetBackground(Wallpaper());
         pContentWindow->SetBackground(Wallpaper());
         pContentWindow->SetViewOrigin (Point(0,0));
-        // We do our own scrolling while dragging a page selection.
+        
         pContentWindow->SetUseDropScroll (false);
-        // Change the winbits so that the active window accepts the focus.
+        
         pContentWindow->SetStyle ((pContentWindow->GetStyle() & ~WB_DIALOGCONTROL) | WB_TABSTOP);
         pContentWindow->Hide();
 
-        // Set view pointer of base class.
+        
         SetupControls(pParentWindow);
 
         mbIsValid = true;
@@ -217,13 +217,13 @@ SlideSorter::~SlideSorter (void)
 
     ReleaseListeners();
 
-    // Dispose model, view and controller to avoid calls between them when
-    // they are being destructed and one or two of them are already gone.
+    
+    
     mpSlideSorterController->Dispose();
     mpSlideSorterView->Dispose();
     mpSlideSorterModel->Dispose();
 
-    // Reset the auto pointers explicitly to control the order of destruction.
+    
     mpSlideSorterController.reset();
     mpSlideSorterView.reset();
     mpSlideSorterModel.reset();
@@ -238,8 +238,8 @@ SlideSorter::~SlideSorter (void)
     }
     else
     {
-        // Assume that outside this class only the owner holds a reference
-        // to the content window.
+        
+        
         OSL_ASSERT(mpContentWindow.use_count()==2);
     }
     mpContentWindow.reset();
@@ -432,8 +432,8 @@ void SlideSorter::CreateModelViewController (void)
     DBG_ASSERT (mpSlideSorterController.get()!=NULL,
         "Can not create controller for slide browser");
 
-    // Now that model, view, and controller are constructed, do the
-    // initialization that relies on all three being in place.
+    
+    
     mpSlideSorterModel->Init();
     mpSlideSorterController->Init();
     mpSlideSorterView->Init();
@@ -444,7 +444,7 @@ void SlideSorter::CreateModelViewController (void)
 
 model::SlideSorterModel* SlideSorter::CreateModel (void)
 {
-    // Get pointers to the document.
+    
     ViewShellBase* pViewShellBase = GetViewShellBase();
     if (pViewShellBase != NULL)
     {
@@ -488,8 +488,8 @@ void SlideSorter::ArrangeGUIElements (
         && GetContentWindow()
         && GetContentWindow()->IsVisible())
     {
-        // Prevent untimely redraws while the view is not yet correctly
-        // resized.
+        
+        
         view::SlideSorterView::DrawLock aLock (*this);
         GetContentWindow()->EnablePaint (false);
 
@@ -524,7 +524,7 @@ SvBorder SlideSorter::GetBorder (void)
 
 bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
 {
-   // Stop all animations for they have been started for the old window.
+   
     mpSlideSorterController->GetAnimator()->RemoveAllAnimations();
 
     ReleaseListeners();
@@ -535,11 +535,11 @@ bool SlideSorter::RelocateToWindow (::Window* pParentWindow)
     SetupControls(mpViewShell->GetParentWindow());
     SetupListeners();
 
-    // For accessibility we have to shortly hide the content window.  This
-    // triggers the construction of a new accessibility object for the new
-    // view shell.  (One is created earlier while the construtor of the base
-    // class is executed.  But because at that time the correct
-    // accessibility object can not be constructed we do that now.)
+    
+    
+    
+    
+    
     if (mpContentWindow.get() !=NULL)
     {
         mpContentWindow->Hide();
@@ -588,7 +588,7 @@ void SlideSorter::SetCurrentFunction (const rtl::Reference<FuPoor>& rpFunction)
 
 
 
-//===== ContentWindow =========================================================
+
 
 namespace {
 
@@ -681,12 +681,12 @@ bool ContentWindow::Notify (NotifyEvent&)
 
 
 
-} // end of anonymous namespace
+} 
 
 
 
 
 
-} } // end of namespace ::sd::slidesorter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

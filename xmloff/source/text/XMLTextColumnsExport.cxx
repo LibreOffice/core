@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustrbuf.hxx>
@@ -67,7 +67,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLUMN_COUNT,
                               sValue.makeStringAndClear() );
 
-    // handle 'automatic' columns
+    
     Reference < XPropertySet > xPropSet( xColumns, UNO_QUERY );
     if( xPropSet.is() )
     {
@@ -94,7 +94,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
         Any aAny = xPropSet->getPropertyValue( sSeparatorLineIsOn );
         if( *(sal_Bool *)aAny.getValue() )
         {
-            // style:width
+            
             aAny = xPropSet->getPropertyValue( sSeparatorLineWidth );
             sal_Int32 nWidth = 0;
             aAny >>= nWidth;
@@ -103,7 +103,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_WIDTH,
                                       sValue.makeStringAndClear() );
 
-            // style:color
+            
             aAny = xPropSet->getPropertyValue( sSeparatorLineColor );
             sal_Int32 nColor = 0;
             aAny >>= nColor;
@@ -111,7 +111,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_COLOR,
                                       sValue.makeStringAndClear() );
 
-            // style:height
+            
             aAny = xPropSet->getPropertyValue( sSeparatorLineRelativeHeight );
             sal_Int8 nHeight = 0;
             aAny >>= nHeight;
@@ -119,7 +119,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_HEIGHT,
                                       sValue.makeStringAndClear() );
 
-            // style::style
+            
             aAny = xPropSet->getPropertyValue( sSeparatorLineStyle );
             sal_Int8 nStyle = 0;
             aAny >>= nStyle;
@@ -137,7 +137,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             if ( eStr != XML_TOKEN_INVALID )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_STYLE, eStr );
 
-            // style:vertical-align
+            
             aAny = xPropSet->getPropertyValue( sSeparatorLineVerticalAlignment );
             VerticalAlignment eVertAlign;
             aAny >>= eVertAlign;
@@ -145,7 +145,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
             eStr = XML_TOKEN_INVALID;
             switch( eVertAlign )
             {
-//          case VerticalAlignment_TOP: eStr = XML_TOP;
+
             case VerticalAlignment_MIDDLE: eStr = XML_MIDDLE; break;
             case VerticalAlignment_BOTTOM: eStr = XML_BOTTOM; break;
             default:
@@ -156,7 +156,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
                 GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                           XML_VERTICAL_ALIGN, eStr );
 
-            // style:column-sep
+            
             SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE,
                                       XML_COLUMN_SEP,
                                       sal_True, sal_True );
@@ -165,25 +165,25 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
 
     while( nCount-- )
     {
-        // style:rel-width
+        
         ::sax::Converter::convertNumber( sValue, pColumns->Width );
         sValue.append( '*' );
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_REL_WIDTH,
                                   sValue.makeStringAndClear() );
 
-        // fo:margin-left
+        
         GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
                                                        pColumns->LeftMargin );
         GetExport().AddAttribute( XML_NAMESPACE_FO, XML_START_INDENT,
                                        sValue.makeStringAndClear() );
 
-        // fo:margin-right
+        
         GetExport().GetMM100UnitConverter().convertMeasureToXML( sValue,
                                                        pColumns->RightMargin );
         GetExport().AddAttribute( XML_NAMESPACE_FO, XML_END_INDENT,
                                     sValue.makeStringAndClear() );
 
-        // style:column
+        
         SvXMLElementExport aElement( GetExport(), XML_NAMESPACE_STYLE, XML_COLUMN,
                                   sal_True, sal_True );
         pColumns++;

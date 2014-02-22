@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <memory>
@@ -91,7 +91,7 @@ SFTreeListBox::SFTreeListBox(Window* pParent)
                    WB_HASLINES | WB_HASLINESATROOT | WB_TABSTOP );
     SetNodeDefaultImages();
 
-    nMode = 0xFF;    // everything
+    nMode = 0xFF;    
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSFTreeListBox(Window *pParent, VclBuilder::stringmap &)
@@ -112,10 +112,10 @@ void SFTreeListBox::delUserData( SvTreeListEntry* pEntry )
         if ( pUserData )
         {
             delete pUserData;
-            // TBD seem to get a Select event on node that is remove ( below )
-            // so need to be able to detect that this node is not to be
-            // processed in order to do this, setting userData to NULL ( must
-            // be a better way to do this )
+            
+            
+            
+            
             pUserData = 0;
             pEntry->SetUserData( pUserData );
         }
@@ -140,7 +140,7 @@ void SFTreeListBox::deleteAllTree()
 {
     SvTreeListEntry* pEntry =  GetEntry( 0 );
 
-    // TBD - below is a candidate for a destroyAllTrees method
+    
     if ( pEntry )
     {
         while ( pEntry )
@@ -185,7 +185,7 @@ void SFTreeListBox::Init( const OUString& language  )
         OSL_TRACE("Exception getting root browse node from factory: %s",
             OUStringToOString(
                 e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        // TODO exception handling
+        
     }
 
     Reference<XModel> xDocumentModel;
@@ -214,7 +214,7 @@ void SFTreeListBox::Init( const OUString& language  )
             {
                 Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
 
-                // get the long name of the document:
+                
                 Sequence<beans::PropertyValue> moduleDescr;
                 try{
                     OUString appModule = xModuleManager->identify( xDocumentModel );
@@ -294,8 +294,8 @@ SFTreeListBox::getLangNodeFromRootNode( Reference< browse::XBrowseNode >& rootNo
     }
     catch ( Exception& )
     {
-        // if getChildNodes() throws an exception we just return
-        // the empty Reference
+        
+        
     }
     return langNode;
 }
@@ -315,7 +315,7 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
     }
     catch ( Exception& )
     {
-        // if we catch an exception in getChildNodes then no entries are added
+        
     }
 
     for ( sal_Int32 n = 0; n < children.getLength(); n++ )
@@ -360,7 +360,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
         Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
         p = InsertEntry(
             rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
-            aUserData.release()); // XXX possible leak
+            aUserData.release()); 
     }
     else
     {
@@ -394,7 +394,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     }
     SvTreeListEntry * p = InsertEntry(
         rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
-        aUserData.release()); // XXX possible leak
+        aUserData.release()); 
    return p;
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -423,9 +423,9 @@ void SFTreeListBox::ExpandedHdl()
 {
 }
 
-// ----------------------------------------------------------------------------
-// CuiInputDialog ------------------------------------------------------------
-// ----------------------------------------------------------------------------
+
+
+
 CuiInputDialog::CuiInputDialog(Window * pParent, sal_uInt16 nMode )
     : ModalDialog(pParent, "NewLibDialog",
         "cui/ui/newlibdialog.ui")
@@ -451,9 +451,9 @@ CuiInputDialog::CuiInputDialog(Window * pParent, sal_uInt16 nMode )
     }
 }
 
-// ----------------------------------------------------------------------------
-// ScriptOrgDialog ------------------------------------------------------------
-// ----------------------------------------------------------------------------
+
+
+
 SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, OUString language )
     : SfxModalDialog(pParent, "ScriptOrganizerDialog",
         "cui/ui/scriptorganizer.ui")
@@ -475,8 +475,8 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, OUString language )
     get(m_pEditButton, "edit");
     get(m_pRenameButton, "rename");
     get(m_pDelButton, "delete");
-    // must be a neater way to deal with the strings than as above
-    // append the language to the dialog title
+    
+    
     OUString winTitle( GetText() );
     winTitle = winTitle.replaceFirst( "%MACROLANG", m_sLanguage );
     SetText( winTitle );
@@ -501,7 +501,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, OUString language )
 
 SvxScriptOrgDialog::~SvxScriptOrgDialog()
 {
-    // clear the SelectHdl so that it isn't called during the dtor
+    
     m_pScriptsBox->SetSelectHdl( Link() );
 };
 
@@ -510,7 +510,7 @@ short SvxScriptOrgDialog::Execute()
 
     SfxObjectShell *pDoc = SfxObjectShell::GetFirst();
 
-    // force load of MSPs for all documents
+    
     while ( pDoc )
     {
         Reference< provider::XScriptProviderSupplier > xSPS =
@@ -602,7 +602,7 @@ void SvxScriptOrgDialog::CheckButtons( Reference< browse::XBrowseNode >& node )
     }
     else
     {
-        // no node info available, disable all configurable actions
+        
         m_pDelButton->Disable();
         m_pCreateButton->Disable();
         m_pEditButton->Disable();
@@ -693,7 +693,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
 
                         if (!xEmbeddedScripts->getAllowMacroExecution())
                         {
-                            // Please FIXME: Show a message box if AllowMacroExecution is false
+                            
                             return 0;
                         }
                     }
@@ -758,7 +758,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         Sequence< sal_Int16 > outIndex;
                         try
                         {
-                            // ISSUE need code to run script here
+                            
                             xInv->invoke( "Editable", args, outIndex, outArgs );
                         }
                         catch( Exception& e )
@@ -837,13 +837,13 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             aNewStdName = "Macro" ;
             nMode = INPUTMODE_NEWMACRO;
         }
-        //do we need L10N for this? ie somethng like:
-        //String aNewStdName( ResId( STR_STDMODULENAME ) );
+        
+        
         sal_Bool bValid = sal_False;
         sal_uInt16 i = 1;
 
         Sequence< Reference< browse::XBrowseNode > > childNodes;
-        // no children => ok to create Parcel1 or Script1 without checking
+        
         try
         {
             if( node->hasChildNodes() == sal_False )
@@ -858,7 +858,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         }
         catch ( Exception& )
         {
-            // ignore, will continue on with empty sequence
+            
         }
 
         OUString extn;
@@ -919,14 +919,14 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
             }
             else
             {
-                // user hit cancel or hit OK with nothing in the editbox
+                
 
                 return;
             }
         }
         while ( !bValid );
 
-        // open up parent node (which ensures it's loaded)
+        
         m_pScriptsBox->RequestingChildren( pEntry );
 
         Sequence< Any > args( 1 );
@@ -955,12 +955,12 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
 
         Reference<XModel> xDocumentModel = getModel( pEntry );
 
-        // ISSUE do we need to remove all entries for parent
-        // to achieve sort? Just need to determine position
-        // SvTreeListBox::InsertEntry can take position arg
-        // -- Basic doesn't do this on create.
-        // Suppose we could avoid this too. -> created nodes are
-        // not in alphabetical order
+        
+        
+        
+        
+        
+        
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -976,10 +976,10 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
                 RID_CUIIMG_LIB, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) ) );
             SAL_WNODEPRECATED_DECLARATIONS_POP
 
-            // If the Parent is not loaded then set to
-            // loaded, this will prevent RequestingChildren ( called
-            // from vcl via RequestingChildren ) from
-            // creating new ( duplicate ) children
+            
+            
+            
+            
             SFEntry* userData = (SFEntry*)pEntry->GetUserData();
             if ( userData &&  !userData->isLoaded() )
             {
@@ -992,7 +992,7 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
     }
     else
     {
-        //ISSUE L10N & message from exception?
+        
         OUString aError( m_createErrStr );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
         aErrorBox.SetText( m_createErrTitleStr );
@@ -1034,7 +1034,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
             }
             else
             {
-                // user hit cancel or hit OK with nothing in the editbox
+                
                 return;
             }
         }
@@ -1068,7 +1068,7 @@ void SvxScriptOrgDialog::renameEntry( SvTreeListEntry* pEntry )
     }
     else
     {
-        //ISSUE L10N & message from exception?
+        
         OUString aError( m_renameErrStr );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
         aErrorBox.SetText( m_renameErrTitleStr );
@@ -1079,7 +1079,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
 {
     sal_Bool result = sal_False;
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
-    // ISSUE L10N string & can we centre list?
+    
     OUString aQuery = m_delQueryStr + getListOfChildren( node, 0 );
     QueryBox aQueryBox( static_cast<Window*>(this), WB_YES_NO | WB_DEF_YES, aQuery );
     aQueryBox.SetText( m_delQueryTitleStr );
@@ -1098,7 +1098,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
         {
             Any aResult;
             aResult = xInv->invoke( "Deletable", args, outIndex, outArgs );
-            aResult >>= result; // or do we just assume true if no exception ?
+            aResult >>= result; 
         }
         catch( Exception& e )
         {
@@ -1115,7 +1115,7 @@ void SvxScriptOrgDialog::deleteEntry( SvTreeListEntry* pEntry )
     }
     else
     {
-        //ISSUE L10N & message from exception?
+        
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, m_delErrStr );
         aErrorBox.SetText( m_delErrTitleStr );
         aErrorBox.Execute();
@@ -1163,7 +1163,7 @@ OUString SvxScriptOrgDialog::getListOfChildren( Reference< browse::XBrowseNode >
     }
     catch ( Exception& )
     {
-        // ignore, will return an empty string
+        
     }
 
     return result;
@@ -1412,34 +1412,34 @@ OUString GetErrorMessage( const com::sun::star::uno::Any& aException )
         aException >>= ite;
         if ( ite.TargetException.getValueType() == ::getCppuType( ( const provider::ScriptErrorRaisedException* ) NULL ) )
         {
-            // Error raised by script
+            
             provider::ScriptErrorRaisedException scriptError;
             ite.TargetException >>= scriptError;
             return GetErrorMessage( scriptError );
         }
         else if ( ite.TargetException.getValueType() == ::getCppuType( ( const provider::ScriptExceptionRaisedException* ) NULL ) )
         {
-            // Exception raised by script
+            
             provider::ScriptExceptionRaisedException scriptException;
             ite.TargetException >>= scriptException;
             return GetErrorMessage( scriptException );
         }
         else
         {
-            // Unknown error, shouldn't happen
-            // OSL_ASSERT(...)
+            
+            
         }
 
     }
     else if ( aException.getValueType() == ::getCppuType( ( const provider::ScriptFrameworkErrorException* ) NULL ) )
     {
-        // A Script Framework error has occurred
+        
         provider::ScriptFrameworkErrorException sfe;
         aException >>= sfe;
         return GetErrorMessage( sfe );
 
     }
-    // unknown exception
+    
     Exception e;
     RuntimeException rte;
     if ( aException >>= rte )
@@ -1466,10 +1466,10 @@ SvxScriptErrorDialog::~SvxScriptErrorDialog()
 
 short SvxScriptErrorDialog::Execute()
 {
-    // Show Error dialog asynchronously
+    
     //
-    // Pass a copy of the message to the ShowDialog method as the
-    // SvxScriptErrorDialog may be deleted before ShowDialog is called
+    
+    
     Application::PostUserEvent(
         LINK( this, SvxScriptErrorDialog, ShowDialog ),
         new OUString( m_sMessage ) );

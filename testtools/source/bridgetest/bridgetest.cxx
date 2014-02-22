@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -72,7 +72,7 @@ namespace bridge_test
 template< class T>
 Sequence<T> cloneSequence(const Sequence<T>& val);
 
-//--------------------------------------------------------------------------------------------------
+
 inline static Sequence< OUString > getSupportedServiceNames()
 {
     OUString aName( SERVICENAME );
@@ -100,7 +100,7 @@ bool checkEmpty(OUString const & string, char const * message) {
 
 }
 
-//==================================================================================================
+
 class TestBridgeImpl : public osl::DebugBase<TestBridgeImpl>,
                        public WeakImplHelper2< XMain, XServiceInfo >
 {
@@ -114,16 +114,16 @@ public:
     {
     }
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException);
 
-    // XMain
+    
     virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) throw (RuntimeException);
 };
 
-//==================================================================================================
+
 static sal_Bool equals( const TestElement & rData1, const TestElement & rData2 )
 {
     check( rData1.Bool == rData2.Bool, "### bool does not match!" );
@@ -158,7 +158,7 @@ static sal_Bool equals( const TestElement & rData1, const TestElement & rData2 )
             rData1.Interface == rData2.Interface &&
             rData1.Any == rData2.Any);
 }
-//==================================================================================================
+
 static sal_Bool equals( const TestData & rData1, const TestData & rData2 )
 {
     sal_Int32 nLen;
@@ -167,7 +167,7 @@ static sal_Bool equals( const TestData & rData1, const TestData & rData2 )
         equals( (const TestElement &)rData1, (const TestElement &)rData2 ) &&
         (nLen = rData1.Sequence.getLength()) == rData2.Sequence.getLength())
     {
-        // once again by hand sequence ==
+        
         const TestElement * pElements1 = rData1.Sequence.getConstArray();
         const TestElement * pElements2 = rData2.Sequence.getConstArray();
         for ( ; nLen--; )
@@ -182,7 +182,7 @@ static sal_Bool equals( const TestData & rData1, const TestData & rData2 )
     }
     return sal_False;
 }
-//==================================================================================================
+
 static void assign( TestElement & rData,
                     sal_Bool bBool, sal_Unicode cChar, sal_Int8 nByte,
                     sal_Int16 nShort, sal_uInt16 nUShort,
@@ -282,7 +282,7 @@ static sal_Bool performAnyTest( const Reference< XBridgeTest > &xLBT, const Test
     return bReturn;
 }
 
-//_______________________________________________________________________________________
+
 static sal_Bool performSequenceOfCallTest( const Reference < XBridgeTest > &xLBT )
 {
     sal_Int32 i,nRounds;
@@ -292,12 +292,12 @@ static sal_Bool performSequenceOfCallTest( const Reference < XBridgeTest > &xLBT
     {
         for( i = 0 ; i < nRounds ; i ++ )
         {
-            // fire oneways
+            
             xLBT->callOneway( nGlobalIndex , nWaitTimeSpanMUSec );
             nGlobalIndex ++;
         }
 
-        // call synchron
+        
         xLBT->call( nGlobalIndex , nWaitTimeSpanMUSec );
         nGlobalIndex ++;
     }
@@ -327,11 +327,11 @@ public:
 };
 
 
-//_______________________________________________________________________________________
+
 static sal_Bool performRecursiveCallTest( const Reference < XBridgeTest > & xLBT )
 {
     xLBT->startRecursiveCall( new ORecursiveCall , 50 );
-    // on failure, the test would lock up or crash
+    
     return sal_True;
 }
 
@@ -344,26 +344,26 @@ public:
     virtual void SAL_CALL release() throw ();
 };
 
-//______________________________________________________________________________
+
 MyClass::MyClass()
 {
 }
-//______________________________________________________________________________
+
 MyClass::~MyClass()
 {
 }
-//______________________________________________________________________________
+
 void MyClass::acquire() throw ()
 {
     OWeakObject::acquire();
 }
-//______________________________________________________________________________
+
 void MyClass::release() throw ()
 {
     OWeakObject::release();
 }
 
-//==================================================================================================
+
 static sal_Bool performTest(
     const Reference<XComponentContext> & xContext,
     const Reference<XBridgeTest > & xLBT,
@@ -372,9 +372,9 @@ static sal_Bool performTest(
     check(xLBT.is(), "### no test interface!");
     bool bRet = true;
     if (xLBT.is()) {
-        // this data is never ever granted access to by calls other than
-        // equals(), assign()!
-        TestData aData; // test against this data
+        
+        
+        TestData aData; 
         Reference< XInterface > xI(new MyClass);
         assign(
             (TestElement &) aData, true, '@', 17, 0x1234, 0xFEDC, 0x12345678,
@@ -386,8 +386,8 @@ static sal_Bool performTest(
         bRet &= check(!(aData.Any != xI), "### unexpected any!");
         aData.Sequence.realloc(2);
         aData.Sequence[0] = *(TestElement const *) &aData;
-        // aData.Sequence[1] is empty
-        // aSetData is a manually copy of aData for first setting:
+        
+        
         TestData aSetData;
         assign(
             (TestElement &) aSetData, aData.Bool, aData.Char, aData.Byte,
@@ -396,7 +396,7 @@ static sal_Bool performTest(
             xI, Any(&xI, getCppuType((Reference< XInterface > const *) 0)));
         aSetData.Sequence.realloc(2);
         aSetData.Sequence[0] = *(TestElement const *) &aSetData;
-        // aSetData.Sequence[1] is empty
+        
         xLBT->setValues(
             aSetData.Bool, aSetData.Char, aSetData.Byte, aSetData.Short,
             aSetData.UShort, aSetData.Long, aSetData.ULong, aSetData.Hyper,
@@ -413,15 +413,15 @@ static sal_Bool performTest(
                 aRet.Sequence, aRet2);
             bRet &= check(
                 equals(aData, aRet) && equals(aData, aRet2), "getValues test");
-            // Set last retrieved values:
+            
             TestData aSV2ret(
                 xLBT->setValues2(
                     aRet.Bool, aRet.Char, aRet.Byte, aRet.Short, aRet.UShort,
                     aRet.Long, aRet.ULong, aRet.Hyper, aRet.UHyper, aRet.Float,
                     aRet.Double, aRet.Enum, aRet.String, aRet.Interface,
                     aRet.Any, aRet.Sequence, aRet2));
-            // Check inout sequence order (=> inout sequence parameter was
-            // switched by test objects):
+            
+            
             TestElement temp(aRet.Sequence[0]);
             aRet.Sequence[0] = aRet.Sequence[1];
             aRet.Sequence[1] = temp;
@@ -462,7 +462,7 @@ static sal_Bool performTest(
                 (equals(aData, aRet) && equals(aData, aRet2) &&
                  equals(aData, aGVret)),
                 "getValues test");
-            // Set last retrieved values:
+            
             xLBT->setBool(aRet.Bool);
             xLBT->setChar(aRet.Char);
             xLBT->setByte(aRet.Byte);
@@ -533,7 +533,7 @@ static sal_Bool performTest(
                     0.6, 0.7, 0.8, 0.9, 1.0);
                 bRet &= check(d1 == 5.5, "armhf doubles test");
             }
-            // Test extended attributes that raise exceptions:
+            
             try {
                 xLBT->getRaiseAttr1();
                 bRet &= check(false, "getRaiseAttr1 did not throw");
@@ -555,7 +555,7 @@ static sal_Bool performTest(
             } catch (...) {
                 bRet &= check(false, "getRaiseAttr2 threw wrong type");
             }
-            // Test instantiated polymorphic struct types:
+            
             {
                 bRet &= check(
                     (xLBT->transportPolyBoolean(
@@ -613,17 +613,17 @@ static sal_Bool performTest(
                     !xLBT->getNullPolyInterface().member.is(),
                     "getNullPolyInterface");
             }
-            // Any test:
+            
             bRet &= check(performAnyTest(xLBT , aData), "any test");
-            // Sequence of call test:
+            
             bRet &= check(
                 performSequenceOfCallTest(xLBT), "sequence of call test");
-            // Recursive call test:
+            
             bRet &= check(performRecursiveCallTest(xLBT), "recursive test");
             bRet &= check(
                 equals(aData, aRet) && equals(aData, aRet2),
                 "recursive test results");
-            // Multiple inheritance test:
+            
             bRet &= checkEmpty(
                 testtools::bridgetest::testMulti(xLBT->getMulti()),
                 "remote multi");
@@ -637,8 +637,8 @@ static sal_Bool performTest(
         if (!xBT2.is()) {
             return bRet;
         }
-        // Perform sequence tests (XBridgeTest2); create the sequence which is
-        // compared with the results:
+        
+        
         sal_Bool _arBool[] = { true, false, true };
         sal_Unicode _arChar[] = { 0x0065, 0x0066, 0x0067 };
         sal_Int8 _arByte[] = { 1, 2, -1 };
@@ -828,7 +828,7 @@ static sal_Bool performTest(
                 "sequence test");
         }
         {
-            // Test with empty sequences:
+            
             Sequence< Sequence< sal_Int32 > > arLong2;
             Sequence< Sequence< sal_Int32 > > seqSeqRet(xBT2->setDim2(arLong2));
             bRet &= check(seqSeqRet == arLong2, "sequence test");
@@ -890,9 +890,9 @@ static sal_Bool performTest(
                 xBT2->setSequenceStruct(arStruct));
             bRet &= check(seqStructRet == arStruct, "sequence test");
         }
-        // Issue #i60341# shows that the most interesting case is were Java
-        // calls the constructors; however, since this client is currently not
-        // available in Java, while the server is, the logic is reversed here:
+        
+        
+        
         try {
             xBT2->testConstructorsService(xContext);
         } catch (const BadConstructorArguments &) {
@@ -931,15 +931,15 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
     Reference<XInterface> const x(xLBT->getInterface());
     try
     {
-        // Note : the exception may fly or not (e.g. remote scenario).
-        //        When it flies, it must contain the correct elements.
+        
+        
         xLBT->raiseRuntimeExceptionOneway( sCompare, x );
     }
     catch( const RuntimeException & e )
     {
         bReturn = (
 #if OSL_DEBUG_LEVEL == 0
-            // java stack traces trash Message
+            
             e.Message == sCompare &&
 #endif
             xLBT->getInterface() == e.Context &&
@@ -948,7 +948,7 @@ static sal_Bool raiseOnewayException( const Reference < XBridgeTest > & xLBT )
     return bReturn;
 }
 
-//==================================================================================================
+
 static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
 {
     sal_Int32 nCount = 0;
@@ -967,15 +967,15 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
             {
                 if (rExc.ArgumentPosition == 5 &&
 #if OSL_DEBUG_LEVEL == 0
-                    // java stack traces trash Message
+                    
                     rExc.Message.equalsAscii( STRING_TEST_CONSTANT ) &&
 #endif
                     rExc.Context == xLBT->getInterface())
                 {
 #ifdef COMPCHECK
-                    //When we check if a new compiler still works then we must not call
-                    //getRuntimeException because it uses cppu::getCaughtException which
-                    //does only work if all libs are build with the same runtime.
+                    
+                    
+                    
                     return true;
 #else
                     ++nCount;
@@ -994,7 +994,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
         {
             if (rExc.Context == xLBT->getInterface()
 #if OSL_DEBUG_LEVEL == 0
-                    // java stack traces trash Message
+                    
                 && rExc.Message.equalsAscii( STRING_TEST_CONSTANT )
 #endif
                 )
@@ -1014,7 +1014,7 @@ static sal_Bool raiseException( const Reference< XBridgeTest > & xLBT )
     {
         if (rExc.Context == xLBT->getInterface()
 #if OSL_DEBUG_LEVEL == 0
-            // java stack traces trash Message
+            
             && rExc.Message.equalsAscii( STRING_TEST_CONSTANT )
 #endif
             )
@@ -1095,11 +1095,11 @@ inline bool makeSurrogate(
         CPPU_CURRENT_LANGUAGE_BINDING_NAME );
     OUString aUnoEnvTypeName(
         UNO_LB_UNO );
-    // official:
+    
     uno_getEnvironment(
         reinterpret_cast< uno_Environment ** >( &aCppEnv_official ),
         aCppEnvTypeName.pData, 0 );
-    // anonymous:
+    
     uno_createEnvironment(
         reinterpret_cast< uno_Environment ** >( &aCppEnv_ano ),
         aCppEnvTypeName.pData, 0 );
@@ -1138,7 +1138,7 @@ inline bool makeSurrogate(
     return rOut.is();
 }
 
-//==================================================================================================
+
 sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     throw (RuntimeException)
 {
@@ -1233,29 +1233,29 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     return bRet ? 0 : 1;
 }
 
-// XServiceInfo
-//__________________________________________________________________________________________________
+
+
 OUString TestBridgeImpl::getImplementationName()
     throw (RuntimeException)
 {
     return OUString( IMPLNAME );
 }
-//__________________________________________________________________________________________________
+
 sal_Bool TestBridgeImpl::supportsService( const OUString & rServiceName )
     throw (RuntimeException)
 {
     return cppu::supportsService(this, rServiceName);
 }
-//__________________________________________________________________________________________________
+
 Sequence< OUString > TestBridgeImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return bridge_test::getSupportedServiceNames();
 }
 
-// ...
 
-//==================================================================================================
+
+
 static Reference< XInterface > SAL_CALL TestBridgeImpl_create(
     const Reference< XComponentContext > & xContext )
 {
@@ -1267,7 +1267,7 @@ static Reference< XInterface > SAL_CALL TestBridgeImpl_create(
 
 extern "C"
 {
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager,
     SAL_UNUSED_PARAMETER void * )

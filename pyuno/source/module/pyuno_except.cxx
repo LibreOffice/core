@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "pyuno_impl.hxx"
 
@@ -81,8 +81,8 @@ void raisePyExceptionWithAny( const com::sun::star::uno::Any &anyExc )
 static PyRef createClass( const OUString & name, const Runtime &runtime )
     throw ( RuntimeException )
 {
-    // assuming that this is never deleted !
-    // note I don't have the knowledge how to initialize these type objects correctly !
+    
+    
     TypeDescription desc( name );
     if( ! desc.is() )
     {
@@ -105,7 +105,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         throw RuntimeException( buf.makeStringAndClear(), Reference< XInterface>() );
     }
 
-    // retrieve base class
+    
     PyRef base;
     if( isInterface )
     {
@@ -116,7 +116,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         }
         else
         {
-            // must be XInterface !
+            
         }
     }
     else
@@ -129,7 +129,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         else
         {
             if( isExc )
-                // we are currently creating the root UNO exception
+                
                 base = PyRef(PyExc_Exception);
         }
     }
@@ -140,7 +140,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
     PyRef bases;
     if( base.is() )
     {
-        { // for CC, keeping ref-count being 1
+        { 
         bases = PyRef( PyTuple_New( 1 ), SAL_NO_ACQUIRE );
         }
         PyTuple_SetItem( bases.get(), 0 , base.getAcquired() );
@@ -158,7 +158,7 @@ static PyRef createClass( const OUString & name, const Runtime &runtime )
         PyObject_CallObject(reinterpret_cast<PyObject *>(&PyType_Type) , args.get()),
         SAL_NO_ACQUIRE );
 
-    // now overwrite ctor and attrib functions
+    
     if( isInterface )
     {
         PyObject_SetAttrString(

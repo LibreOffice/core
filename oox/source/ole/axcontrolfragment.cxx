@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ole/axcontrolfragment.hxx"
@@ -29,7 +29,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
@@ -39,7 +39,7 @@ using ::oox::core::ContextHandlerRef;
 using ::oox::core::FragmentHandler2;
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 AxControlPropertyContext::AxControlPropertyContext( FragmentHandler2& rFragment, ControlModelBase& rModel ) :
     ContextHandler2( rFragment ),
@@ -62,7 +62,7 @@ ContextHandlerRef AxControlPropertyContext::onCreateContext( sal_Int32 nElement,
                         return 0;
                     case XML_Picture:
                     case XML_MouseIcon:
-                        return this;        // import picture path from ax:picture child element
+                        return this;        
                     default:
                         mrModel.importProperty( mnPropId, rAttribs.getString( AX_TOKEN( value ), OUString() ) );
                 }
@@ -84,7 +84,7 @@ ContextHandlerRef AxControlPropertyContext::onCreateContext( sal_Int32 nElement,
     return 0;
 }
 
-// ============================================================================
+
 
 AxControlFragment::AxControlFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, EmbeddedControl& rControl ) :
     FragmentHandler2( rFilter, rFragmentPath, true ),
@@ -112,7 +112,7 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
                     BinaryXInputStream aInStrm( getFilter().openInputStream( aFragmentPath ), true );
                     if( !aInStrm.isEof() )
                     {
-                        // binary stream contains a copy of the class ID, must be equal to attribute value
+                        
                         OUString aStrmClassId = OleHelper::importGuid( aInStrm );
                         OSL_ENSURE( aClassId.equalsIgnoreAsciiCase( aStrmClassId ),
                             "AxControlFragment::importBinaryControl - form control class ID mismatch" );
@@ -145,9 +145,9 @@ ContextHandlerRef AxControlFragment::onCreateContext( sal_Int32 nElement, const 
     return 0;
 }
 
-// ============================================================================
 
-} // namespace ole
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

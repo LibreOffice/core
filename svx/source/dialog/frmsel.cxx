@@ -79,7 +79,7 @@ const long FRAMESEL_GEOM_ADD_CLICK_OUTER = 5;
 /** Additional margin for click area of inner lines. */
 const long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
 
-// ----------------------------------------------------------------------------
+
 
 /** Returns the corresponding flag for a frame border. */
 FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )

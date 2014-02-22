@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TitleBar.hxx"
@@ -83,7 +83,7 @@ void TitleBar::Paint (const Rectangle& rUpdateArea)
 {
     (void)rUpdateArea;
 
-    // Paint title bar background.
+    
     Size aWindowSize (GetOutputSizePixel());
     Rectangle aTitleBarBox(
         0,
@@ -120,7 +120,7 @@ void TitleBar::setPosSizePixel (
 {
     Window::setPosSizePixel(nX,nY,nWidth,nHeight,nFlags);
 
-    // Place the toolbox.
+    
     const sal_Int32 nToolBoxWidth (maToolBox.GetItemPosRect(0).GetWidth());
     maToolBox.setPosSizePixel(nWidth-nToolBoxWidth,0, nToolBoxWidth,nHeight, WINDOW_POSSIZE_POSSIZE);
     maToolBox.Show();
@@ -148,7 +148,7 @@ const ToolBox& TitleBar::GetToolBox (void) const
 void TitleBar::HandleToolBoxItemClick (const sal_uInt16 nItemIndex)
 {
     (void)nItemIndex;
-    // Any real processing has to be done in derived class.
+    
 }
 
 
@@ -169,8 +169,8 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
 
     Rectangle aTitleBox (rTitleBox);
 
-    // When there is an icon then paint it at the left of the given
-    // box.
+    
+    
     if ( !! maIcon)
     {
         DrawImage(
@@ -185,7 +185,7 @@ void TitleBar::PaintTitle (const Rectangle& rTitleBox)
     aFont.SetWeight(WEIGHT_BOLD);
     SetFont(aFont);
 
-    // Paint title bar text.
+    
     SetTextColor(GetTextColor());
     DrawText(
         aTitleBox,
@@ -239,6 +239,6 @@ IMPL_LINK(TitleBar, SelectionHandler, ToolBox*, pToolBox)
     return sal_True;
 }
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

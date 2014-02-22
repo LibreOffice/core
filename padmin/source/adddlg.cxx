@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unistd.h>
@@ -93,7 +93,7 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
         rInfo.m_aFeatures = "";
 }
 
-//--------------------------------------------------------------------
+
 
 APChooseDriverPage::APChooseDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_CHOOSEDRIVER ) ),
@@ -199,7 +199,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
             OUString aDriver( *(OUString*)m_aDriverBox.GetEntryData( nSelect ) );
             if( !aDriver.isEmpty() )
             {
-                // never delete the default driver
+                
                 if( aDriver.equalsIgnoreAsciiCase( "SGENPRT" ) )
                 {
                     OUString aText( PaResId( RID_ERR_REMOVESGENPRT ) );
@@ -211,7 +211,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 }
 
                 PrinterInfo aDefInfo( rPIManager.getPrinterInfo( rPIManager.getDefaultPrinter() ) );
-                // for comparisons convert to a OUString
+                
                 OUString aPPD( aDriver );
                 if( aDefInfo.m_aDriverName == aPPD )
                 {
@@ -252,7 +252,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                         continue;
                 }
 
-                // remove the printers using this driver
+                
                 for( it = aPrinters.begin(); it != aPrinters.end(); ++it )
                 {
                     PrinterInfo aInfo( rPIManager.getPrinterInfo( *it ) );
@@ -261,7 +261,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
                 }
 
                 std::list< OUString > aDirs;
-                // get only psprint's directories, not eventual system dirs
+                
                 psp::getPrinterPathList( aDirs, NULL );
                 std::list< OUString >::iterator dir;
                 for( dir = aDirs.begin(); dir != aDirs.end(); ++dir )
@@ -304,7 +304,7 @@ IMPL_LINK( APChooseDriverPage, ClickBtnHdl, PushButton*, pButton )
     return 0;
 }
 
-//--------------------------------------------------------------------
+
 
 APNamePage::APNamePage( AddPrinterDialog* pParent, const OUString& rInitName, DeviceKind::type eKind )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_NAME ) ),
@@ -352,7 +352,7 @@ void APNamePage::fill( PrinterInfo& rInfo )
     rInfo.m_aPrinterName = m_aNameEdt.GetText();
 }
 
-//--------------------------------------------------------------------
+
 
 APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_COMMAND ) ),
@@ -386,7 +386,7 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
         case DeviceKind::Fax:       CommandStore::getFaxCommands( aCommands );break;
         case DeviceKind::Pdf:       CommandStore::getPdfCommands( aCommands );break;
     }
-    // adjust height of command text and help button
+    
     Rectangle aPosSize( m_aCommandTxt.GetPosPixel(), m_aCommandTxt.GetSizePixel() );
     Rectangle aTextSize = m_aCommandTxt.GetTextRect( Rectangle( Point(), aPosSize.GetSize() ), m_aCommandTxt.GetText() );
     if( aTextSize.GetWidth() <= 2*(aPosSize.GetWidth()+1) )
@@ -400,7 +400,7 @@ APCommandPage::APCommandPage( AddPrinterDialog* pParent, DeviceKind::type eKind 
         m_aHelpBtn.SetPosPixel( aNewPos );
     }
 
-    // fill in commands
+    
     ::std::list< OUString >::iterator it;
     for( it = aCommands.begin(); it != aCommands.end(); ++it )
         m_aCommandBox.InsertEntry( *it );
@@ -468,7 +468,7 @@ void APCommandPage::fill( PrinterInfo& rInfo )
     rInfo.m_aCommand = m_aCommandBox.GetText();
 }
 
-//--------------------------------------------------------------------
+
 
 APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_OLDPRINTERS ) ),
@@ -484,7 +484,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
     OUString aFileName( AddPrinterDialog::getOldPrinterLocation() );
     Config aConfig( aFileName );
 
-    // read defaults
+    
     aConfig.SetGroup( "Xprinter,PostScript" );
     OString aDefPageSize( aConfig.ReadKey( "PageSize" ) );
     OString aDefOrientation( aConfig.ReadKey( "Orientation" ) );
@@ -522,7 +522,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
             continue;
         }
 
-        // read the command
+        
         aConfig.SetGroup( "ports" );
         OString aCommand( aConfig.ReadKey( aPort ) );
         if (!aCommand.isEmpty())
@@ -544,7 +544,7 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         aInfo.m_aPrinterName    = aUPrinter;
         aInfo.m_aCommand = OStringToOUString(aCommand, aEncoding);
 
-        // read the printer settings
+        
         OStringBuffer aGroup(aDriver);
         aGroup.append(",PostScript,");
         aGroup.append(aPort);
@@ -592,11 +592,11 @@ APOldPrinterPage::APOldPrinterPage( AddPrinterDialog* pParent )
         for( int nPPDKey = 0; nPPDKey < nGroupKeys; nPPDKey++ )
         {
             OString aPPDKey( aConfig.GetKeyName( nPPDKey ) );
-            // ignore page region
-            // there are some ppd keys in old Xpdefaults that
-            // should never have been writte because they are defaults
-            // PageRegion leads to problems in conjunction
-            // with a not matching PageSize
+            
+            
+            
+            
+            
             if (aPPDKey.match("PPD_") && aPPDKey != "PPD_PageRegion")
             {
                 aValue = aConfig.ReadKey( nPPDKey );
@@ -656,7 +656,7 @@ void APOldPrinterPage::fill( PrinterInfo& )
 {
 }
 
-//--------------------------------------------------------------------
+
 
 APFaxDriverPage::APFaxDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_FAXDRIVER ) ),
@@ -688,7 +688,7 @@ void APFaxDriverPage::fill( PrinterInfo& rInfo )
     }
 }
 
-//--------------------------------------------------------------------
+
 
 APPdfDriverPage::APPdfDriverPage( AddPrinterDialog* pParent )
         : APTabPage( pParent, PaResId( RID_ADDP_PAGE_PDFDRIVER ) ),
@@ -722,7 +722,7 @@ void APPdfDriverPage::fill( PrinterInfo& rInfo )
         rInfo.m_aDriverName = "ADISTILL";
 }
 
-//--------------------------------------------------------------------
+
 
 AddPrinterDialog::AddPrinterDialog( Window* pParent )
         : ModalDialog( pParent, PaResId( RID_ADD_PRINTER_DIALOG ) ),

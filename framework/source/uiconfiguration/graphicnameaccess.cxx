@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uiconfiguration/graphicnameaccess.hxx>
@@ -39,7 +39,7 @@ void GraphicNameAccess::addElement( const OUString& rName, const uno::Reference<
     m_aNameToElementMap.insert( NameGraphicHashMap::value_type( rName, rElement ));
 }
 
-// XNameAccess
+
 uno::Any SAL_CALL GraphicNameAccess::getByName( const OUString& aName )
 throw( container::NoSuchElementException,
        lang::WrappedTargetException,
@@ -78,7 +78,7 @@ throw(::com::sun::star::uno::RuntimeException)
     return ( pIter != m_aNameToElementMap.end() );
 }
 
-// XElementAccess
+
 sal_Bool SAL_CALL GraphicNameAccess::hasElements()
 throw( uno::RuntimeException )
 {
@@ -91,6 +91,6 @@ throw( uno::RuntimeException )
     return ::getCppuType( (const uno::Reference< graphic::XGraphic > *)NULL );
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

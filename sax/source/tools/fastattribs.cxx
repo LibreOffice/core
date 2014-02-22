@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -27,7 +27,7 @@ using namespace ::com::sun::star::xml::sax;
 namespace sax_fastparser
 {
 
-// wasteage to keep MSVC happy vs. an in-line {}
+
 FastTokenHandlerBase::~FastTokenHandlerBase()
 {
 }
@@ -57,7 +57,7 @@ FastAttributeList::FastAttributeList( const ::com::sun::star::uno::Reference< ::
 : mxTokenHandler( xTokenHandler ),
   mpTokenHandler( pTokenHandler )
 {
-    // random initial size of buffer to store attribute values
+    
     mnChunkLength = 58;
     mpChunk = (sal_Char *) malloc( mnChunkLength );
     maAttributeValues.push_back( 0 );
@@ -107,7 +107,7 @@ void FastAttributeList::addUnknown( const OString& rName, const sal_Char* pValue
     maUnknownAttributes.push_back( UnknownAttribute( rName, pValue ) );
 }
 
-// XFastAttributeList
+
 sal_Bool FastAttributeList::hasAttribute( ::sal_Int32 Token ) throw (RuntimeException)
 {
     for (size_t i = 0; i < maAttributeTokens.size(); ++i)
@@ -139,7 +139,7 @@ sal_Int32 FastAttributeList::getOptionalValueToken( ::sal_Int32 Token, ::sal_Int
     return Default;
 }
 
-// performance sensitive shortcuts to avoid allocation ...
+
 bool FastAttributeList::getAsInteger( sal_Int32 nToken, sal_Int32 &rInt)
 {
     rInt = 0;
@@ -219,7 +219,7 @@ Sequence< FastAttribute > FastAttributeList::getFastAttributes(  ) throw (Runtim
 
 sal_Int32 FastAttributeList::AttributeValueLength(sal_Int32 i)
 {
-    // Pointers to null terminated strings
+    
     return maAttributeValues[i + 1] - maAttributeValues[i] - 1;
 }
 
@@ -246,7 +246,7 @@ sal_Int32 FastTokenLookup::getTokenFromChars(
         nRet = pTokenHandler->getTokenDirect( pToken, (sal_Int32) nLen );
     else
     {
-        // heap allocate, copy & then free
+        
         Sequence< sal_Int8 > aSeq( (sal_Int8*)pToken, nLen );
         nRet = xTokenHandler->getTokenFromUTF8( aSeq );
     }

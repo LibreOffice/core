@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "autofiltercontext.hxx"
@@ -27,7 +27,7 @@ namespace xls {
 
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 FilterSettingsContext::FilterSettingsContext( WorksheetContextBase& rParent, FilterSettingsBase& rFilterSettings ) :
     WorksheetContextBase( rParent ),
@@ -73,7 +73,7 @@ void FilterSettingsContext::onStartRecord( SequenceInputStream& rStrm )
     mrFilterSettings.importRecord( getCurrentElement(), rStrm );
 }
 
-// ============================================================================
+
 
 FilterColumnContext::FilterColumnContext( WorksheetContextBase& rParent, FilterColumn& rFilterColumn ) :
     WorksheetContextBase( rParent ),
@@ -119,7 +119,7 @@ void FilterColumnContext::onStartRecord( SequenceInputStream& rStrm )
     mrFilterColumn.importFilterColumn( rStrm );
 }
 
-// ============================================================================
+
 
 AutoFilterContext::AutoFilterContext( WorksheetFragmentBase& rFragment, AutoFilter& rAutoFilter ) :
     WorksheetContextBase( rFragment ),
@@ -151,9 +151,9 @@ void AutoFilterContext::onStartRecord( SequenceInputStream& rStrm )
     mrAutoFilter.importAutoFilter( rStrm, getSheetIndex() );
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

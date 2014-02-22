@@ -24,7 +24,7 @@
 
 #include "svx/hlnkitem.hxx"
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxHyperlinkItem, SfxPoolItem, new SvxHyperlinkItem(0));
 

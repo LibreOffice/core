@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,9 +74,9 @@
 
 struct ImplScrollBarData
 {
-    AutoTimer       maTimer; // Timer
+    AutoTimer       maTimer; 
     bool            mbHide;
-    Rectangle       maTrackRect; // TODO: move to ScrollBar class when binary incompatibility of ScrollBar class is no longer problematic
+    Rectangle       maTrackRect; 
 };
 
 void ScrollBar::ImplInit( Window* pParent, WinBits nStyle )
@@ -99,7 +99,7 @@ void ScrollBar::ImplInit( Window* pParent, WinBits nStyle )
     mbCalcSize          = true;
     mbFullDrag          = false;
 
-    if( !mpData )  // TODO: remove when maTrackRect is no longer in mpData
+    if( !mpData )  
     {
         mpData = new ImplScrollBarData;
         mpData->maTimer.SetTimeoutHdl( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
@@ -179,7 +179,7 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
     mnStateFlags  &= ~SCRBAR_STATE_BTN1_DISABLE;
     mnStateFlags  &= ~SCRBAR_STATE_BTN2_DISABLE;
 
-    Rectangle& maTrackRect = mpData->maTrackRect; // TODO: remove when maTrackRect is no longer in mpData
+    Rectangle& maTrackRect = mpData->maTrackRect; 
     if ( mnThumbPixRange )
     {
         if ( GetStyle() & WB_HORZ )
@@ -243,8 +243,8 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
 
     if( !IsNativeControlSupported(CTRL_SCROLLBAR, PART_ENTIRE_CONTROL) )
     {
-        // disable scrollbar buttons only in VCL's own 'theme'
-        // as it is uncommon on other platforms
+        
+        
         if ( mnThumbPos == mnMinRange )
             mnStateFlags |= SCRBAR_STATE_BTN1_DISABLE;
         if ( mnThumbPos >= (mnMaxRange-mnVisibleSize) )
@@ -273,7 +273,7 @@ void ScrollBar::ImplUpdateRects( bool bUpdate )
 
 long ScrollBar::ImplCalcThumbPos( long nPixPos )
 {
-    // Calculate position
+    
     long nCalcThumbPos;
     nCalcThumbPos = ImplMulDiv( nPixPos, mnMaxRange-mnVisibleSize-mnMinRange,
                                 mnThumbPixRange-mnThumbPixSize );
@@ -286,11 +286,11 @@ long ScrollBar::ImplCalcThumbPosPix( long nPos )
 {
     long nCalcThumbPos;
 
-    // Calculate position
+    
     nCalcThumbPos = ImplMulDiv( nPos-mnMinRange, mnThumbPixRange-mnThumbPixSize,
                                 mnMaxRange-mnVisibleSize-mnMinRange );
 
-    // At the start and end of the ScrollBar, we try to show the display correctly
+    
     if ( !nCalcThumbPos && (mnThumbPos > mnMinRange) )
         nCalcThumbPos = 1;
     if ( nCalcThumbPos &&
@@ -307,7 +307,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
     const Size aSize = GetOutputSizePixel();
     const long nMinThumbSize = GetSettings().GetStyleSettings().GetMinThumbSize();
 
-    Rectangle& maTrackRect = mpData->maTrackRect;  // TODO: remove when maTrackRect is no longer in mpData
+    Rectangle& maTrackRect = mpData->maTrackRect;  
     if ( mbCalcSize )
     {
         Size aOldSize = getCurrentCalcSize();
@@ -340,7 +340,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
             else
                 maTrackRect = Rectangle( maBtn1Rect.TopRight(), maBtn2Rect.BottomLeft() );
 
-            // Check if available space is big enough for thumb ( min thumb size = ScrBar width/height )
+            
             mnThumbPixRange = maTrackRect.Right() - maTrackRect.Left();
             if( mnThumbPixRange > 0 )
             {
@@ -381,7 +381,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
             else
                 maTrackRect = Rectangle( maBtn1Rect.BottomLeft()+Point(0,1), maBtn2Rect.TopRight() );
 
-            // Check if available space is big enough for thumb
+            
             mnThumbPixRange = maTrackRect.Bottom() - maTrackRect.Top();
             if( mnThumbPixRange > 0 )
             {
@@ -412,7 +412,7 @@ void ScrollBar::ImplCalc( bool bUpdate )
 
     if ( mnThumbPixRange )
     {
-        // Calculate values
+        
         if ( (mnVisibleSize >= (mnMaxRange-mnMinRange)) ||
              ((mnMaxRange-mnMinRange) <= 0) )
         {
@@ -439,9 +439,9 @@ void ScrollBar::ImplCalc( bool bUpdate )
         }
     }
 
-    // If we're ought to ouput again and we have been triggered
-    // a Paint event via an Action, we don't output directly,
-    // but invalidate everything
+    
+    
+    
     if ( bUpdate && HasPaintEvent() )
     {
         Invalidate();
@@ -458,7 +458,7 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& /* rSiz
     pDev->SetMapMode();
     if ( !(nFlags & WINDOW_DRAW_MONO) )
     {
-        // DecoView uses the FaceColor...
+        
         AllSettings aSettings = pDev->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         if ( IsControlBackground() )
@@ -470,11 +470,11 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& /* rSiz
         pDev->SetSettings( aSettings );
     }
 
-    // For printing:
-    // - calculate the size of the rects
-    // - because this is zero-based add the correct offset
-    // - print
-    // - force recalculate
+    
+    
+    
+    
+    
 
     if ( mbCalcSize )
         ImplCalc( false );
@@ -482,7 +482,7 @@ void ScrollBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& /* rSiz
     maBtn1Rect+=aPos;
     maBtn2Rect+=aPos;
     maThumbRect+=aPos;
-    mpData->maTrackRect+=aPos; // TODO: update when maTrackRect is no longer in mpData
+    mpData->maTrackRect+=aPos; 
     maPage1Rect+=aPos;
     maPage2Rect+=aPos;
 
@@ -503,7 +503,7 @@ bool ScrollBar::ImplDrawNative( sal_uInt16 nDrawFlags )
 
     bool bHorz = (GetStyle() & WB_HORZ ? true : false);
 
-    // Draw the entire background if the control supports it
+    
     if( IsNativeControlSupported(CTRL_SCROLLBAR, bHorz ? PART_DRAW_BACKGROUND_HORZ : PART_DRAW_BACKGROUND_VERT) )
     {
         ControlState        nState = ( IsEnabled() ? CTRL_STATE_ENABLED : 0 ) | ( HasFocus() ? CTRL_STATE_FOCUSED : 0 );
@@ -663,7 +663,7 @@ void ScrollBar::ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev )
     SymbolType              eSymbolType;
     bool                    bEnabled = IsEnabled();
 
-    // Finish some open calculations (if any)
+    
     if ( mbCalcSize )
         ImplCalc( false );
 
@@ -671,7 +671,7 @@ void ScrollBar::ImplDraw( sal_uInt16 nDrawFlags, OutputDevice* pOutDev )
     if( pOutDev->GetOutDevType() == OUTDEV_WINDOW )
         pWin = (Window*) pOutDev;
 
-    // Draw the entire control if the native theme engine needs it
+    
     if ( nDrawFlags && pWin && pWin->IsNativeControlSupported(CTRL_SCROLLBAR, PART_DRAW_BACKGROUND_HORZ) )
     {
         ImplDrawNative( SCRBAR_DRAW_BACKGROUND );
@@ -855,7 +855,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
             break;
 
         case SCROLL_PAGEUP:
-            // HitTestNativeControl, see remark at top of file
+            
             if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_LEFT: PART_TRACK_VERT_UPPER,
                                        maPage1Rect, rMousePos, bIsInside )?
                     bIsInside:
@@ -869,7 +869,7 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
             break;
 
         case SCROLL_PAGEDOWN:
-            // HitTestNativeControl, see remark at top of file
+            
             if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_RIGHT: PART_TRACK_VERT_LOWER,
                                        maPage2Rect, rMousePos, bIsInside )?
                     bIsInside:
@@ -899,7 +899,7 @@ void ScrollBar::ImplDragThumb( const Point& rMousePos )
     else
         nMovePix = rMousePos.Y()-(maThumbRect.Top()+mnMouseOff);
 
-    // Move thumb if necessary
+    
     if ( nMovePix )
     {
         mnThumbPixPos += nMovePix;
@@ -974,9 +974,9 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 if( mpData )
                 {
-                    mpData->mbHide = true; // disable focus blinking
+                    mpData->mbHide = true; 
                     if( HasFocus() )
-                        ImplDraw( SCRBAR_DRAW_THUMB, this ); // paint without focus
+                        ImplDraw( SCRBAR_DRAW_THUMB, this ); 
                 }
 
                 if ( mnVisibleSize < mnMaxRange-mnMinRange )
@@ -985,7 +985,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
                     meScrollType    = SCROLL_DRAG;
                     mnDragDraw      = SCRBAR_DRAW_THUMB;
 
-                    // calculate mouse offset
+                    
                     if (bWarp && (!bThumbHit || !bPrimaryWarping))
                     {
                         bDragToMouse = true;
@@ -1012,7 +1012,7 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             {
                 nTrackFlags = STARTTRACK_BUTTONREPEAT;
 
-                // HitTestNativeControl, see remark at top of file
+                
                 if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER,
                                            maPage1Rect, rMousePos, bIsInside )?
                     bIsInside:
@@ -1029,14 +1029,14 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             }
         }
 
-        // Should we start Tracking?
+        
         if ( meScrollType != SCROLL_DONTKNOW )
         {
-            // store original position for cancel and EndScroll delta
+            
             mnStartPos = mnThumbPos;
-            // #92906# Call StartTracking() before ImplDoMouseAction(), otherwise
-            // MouseButtonUp() / EndTracking() may be called if somebody is spending
-            // a lot of time in the scroll handler
+            
+            
+            
             StartTracking( nTrackFlags );
             ImplDoMouseAction( rMousePos );
 
@@ -1051,7 +1051,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
 {
     if ( rTEvt.IsTrackingEnded() )
     {
-        // Restore Button and PageRect status
+        
         sal_uInt16 nOldStateFlags = mnStateFlags;
         mnStateFlags &= ~(SCRBAR_STATE_BTN1_DOWN | SCRBAR_STATE_BTN2_DOWN |
                           SCRBAR_STATE_PAGE1_DOWN | SCRBAR_STATE_PAGE2_DOWN |
@@ -1060,7 +1060,7 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
             ImplDraw( mnDragDraw, this );
         mnDragDraw = 0;
 
-        // Restore the old ThumbPosition when canceled
+        
         if ( rTEvt.IsTrackingCanceled() )
         {
             long nOldPos = mnThumbPos;
@@ -1071,8 +1071,8 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
 
         if ( meScrollType == SCROLL_DRAG )
         {
-            // On a SCROLLDRAG we recalculate the Thumb, so that it's back to a
-            // rounded ThumbPosition
+            
+            
             ImplCalc();
 
             if ( !mbFullDrag && (mnStartPos != mnThumbPos) )
@@ -1089,20 +1089,20 @@ void ScrollBar::Tracking( const TrackingEvent& rTEvt )
         meScrollType = SCROLL_DONTKNOW;
 
         if( mpData )
-            mpData->mbHide = false; // re-enable focus blinking
+            mpData->mbHide = false; 
     }
     else
     {
         const Point rMousePos = rTEvt.GetMouseEvent().GetPosPixel();
 
-        // Dragging is treated in a special way
+        
         if ( meScrollType == SCROLL_DRAG )
             ImplDragThumb( rMousePos );
         else
             ImplDoMouseAction( rMousePos, rTEvt.IsTrackingRepeat() );
 
-        // If ScrollBar values are translated in a way that there's
-        // nothing left to track, we cancel here
+        
+        
         if ( !IsVisible() || (mnVisibleSize >= (mnMaxRange-mnMinRange)) )
             EndTracking();
     }
@@ -1196,7 +1196,7 @@ void ScrollBar::GetFocus()
         mpData->maTimer.SetTimeoutHdl( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
         mpData->mbHide = false;
     }
-    ImplInvert(); // react immediately
+    ImplInvert(); 
     mpData->maTimer.SetTimeout( GetSettings().GetStyleSettings().GetCursorBlinkTime() );
     mpData->maTimer.Start();
     Control::GetFocus();
@@ -1282,19 +1282,19 @@ Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
             bIsInside:
             maBtn2Rect.IsInside( rPt ) )
         return &maBtn2Rect;
-    // HitTestNativeControl, see remark at top of file
+    
     else if( HitTestNativeControl( CTRL_SCROLLBAR,  bHorizontal ? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER,
                 maPage1Rect, rPt, bIsInside)?
             bIsInside:
             maPage1Rect.IsInside( rPt ) )
         return &maPage1Rect;
-    // HitTestNativeControl, see remark at top of file
+    
     else if( HitTestNativeControl( CTRL_SCROLLBAR,  bHorizontal ? PART_TRACK_HORZ_RIGHT : PART_TRACK_VERT_LOWER,
                 maPage2Rect, rPt, bIsInside)?
             bIsInside:
             maPage2Rect.IsInside( rPt ) )
         return &maPage2Rect;
-    // HitTestNativeControl, see remark at top of file
+    
     else if( HitTestNativeControl( CTRL_SCROLLBAR,  bHorizontal ? PART_THUMB_HORZ : PART_THUMB_VERT,
                 maThumbRect, rPt, bIsInside)?
              bIsInside:
@@ -1312,7 +1312,7 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
-            // Trigger a redraw if mouse over state has changed
+            
             if( IsNativeControlSupported(CTRL_SCROLLBAR, PART_ENTIRE_CONTROL) )
             {
                 Rectangle* pRect = ImplFindPartRect( GetPointerPosPixel() );
@@ -1327,7 +1327,7 @@ bool ScrollBar::PreNotify( NotifyEvent& rNEvt )
                     if ( pLastRect )
                         aClipRegion.Union( *pLastRect );
 
-                    // Support for 3-button scroll bars
+                    
                     bool bHas3Buttons = IsNativeControlSupported( CTRL_SCROLLBAR, HAS_THREE_BUTTONS );
                     if ( bHas3Buttons && ( pRect == &maBtn1Rect || pLastRect == &maBtn1Rect ) )
                     {
@@ -1398,20 +1398,20 @@ void ScrollBar::SetRangeMax( long nNewRange )
 
 void ScrollBar::SetRange( const Range& rRange )
 {
-    // Adapt Range
+    
     Range aRange = rRange;
     aRange.Justify();
     long nNewMinRange = aRange.Min();
     long nNewMaxRange = aRange.Max();
 
-    // If Range differs, set a new one
+    
     if ( (mnMinRange != nNewMinRange) ||
          (mnMaxRange != nNewMaxRange) )
     {
         mnMinRange = nNewMinRange;
         mnMaxRange = nNewMaxRange;
 
-        // Adapt Thumb
+        
         if ( mnThumbPos > mnMaxRange-mnVisibleSize )
             mnThumbPos = mnMaxRange-mnVisibleSize;
         if ( mnThumbPos < mnMinRange )
@@ -1441,7 +1441,7 @@ void ScrollBar::SetVisibleSize( long nNewSize )
     {
         mnVisibleSize = nNewSize;
 
-        // Adapt Thumb
+        
         if ( mnThumbPos > mnMaxRange-mnVisibleSize )
             mnThumbPos = mnMaxRange-mnVisibleSize;
         if ( mnThumbPos < mnMinRange )
@@ -1500,8 +1500,8 @@ ScrollBarBox::ScrollBarBox( Window* pParent, WinBits nStyle ) :
 
 void ScrollBarBox::ImplInitSettings()
 {
-    // FIXME: Hack so that we can build DockingWindows even without background
-    // and not everything has been switched over yet
+    
+    
     if ( IsBackground() )
     {
         Color aColor;

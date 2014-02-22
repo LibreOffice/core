@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <CellColorHandler.hxx>
 #include <PropertyMap.hxx>
@@ -46,12 +46,12 @@ CellColorHandler::~CellColorHandler()
 {
 }
 
-// ST_Shd strings are converted to integers by the tokenizer, store strings in
-// the InteropGrabBag
+
+
 uno::Any lcl_ConvertShd(sal_Int32 nIntValue)
 {
     OUString aRet;
-    // This should be in sync with the ST_Shd list in ooxml's model.xml.
+    
     switch (nIntValue)
     {
         case 0: aRet = "clear"; break;
@@ -104,22 +104,22 @@ void CellColorHandler::lcl_attribute(Id rName, Value & rVal)
         case NS_ooxml::LN_CT_Shd_val:
         {
             createGrabBag("val", lcl_ConvertShd(nIntValue));
-            //might be clear, pct5...90, some hatch types
-            //TODO: The values need symbolic names!
-            m_nShadingPattern = nIntValue; //clear == 0, solid: 1, pct5: 2, pct50:8, pct95: x3c, horzStripe:0x0e, thinVertStripe: 0x15
+            
+            
+            m_nShadingPattern = nIntValue; 
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
             createGrabBag("fill", uno::makeAny(OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8)));
             if( nIntValue == OOXML_COLOR_AUTO )
-                nIntValue = 0xffffff; //fill color auto means white
+                nIntValue = 0xffffff; 
             m_nFillColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_color:
             createGrabBag("color", uno::makeAny(OStringToOUString(msfilter::util::ConvertColor(nIntValue, /*bAutoColor=*/true), RTL_TEXTENCODING_UTF8)));
             if( nIntValue == OOXML_COLOR_AUTO )
-                nIntValue = 0; //shading color auto means black
-            //color of the shading
+                nIntValue = 0; 
+            
             m_nColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_themeFill:
@@ -145,78 +145,78 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
 {
     TablePropertyMapPtr pPropertyMap(new TablePropertyMap);
 
-    // Code from binary word filter (the values are out of 1000)
+    
     static const sal_Int32 eMSGrayScale[] =
     {
-        // Clear-Brush
-           0,   // 0    clear
-        // Solid-Brush
-        1000,   // 1    solid
-        // Percent values
-          50,   // 2    pct5
-         100,   // 3    pct10
-         200,   // 4    pct20
-         250,   // 5    pct25
-         300,   // 6    pct30
-         400,   // 7    pct40
-         500,   // 8    pct50
-         600,   // 9    pct60
-         700,   // 10   pct70
-         750,   // 11   pct75
-         800,   // 12   pct80
-         900,   // 13   pct90
-        // Special cases
-         333,   // 14   Dark Horizontal
-         333,   // 15   Dark Vertical
-         333,   // 16   Dark Forward Diagonal
-         333,   // 17   Dark Backward Diagonal
-         333,   // 18   Dark Cross
-         333,   // 19   Dark Diagonal Cross
-         333,   // 20   Horizontal
-         333,   // 21   Vertical
-         333,   // 22   Forward Diagonal
-         333,   // 23   Backward Diagonal
-         333,   // 24   Cross
-         333,   // 25   Diagonal Cross
-        // Undefined values in DOC spec-sheet
-         500,   // 26
-         500,   // 27
-         500,   // 28
-         500,   // 29
-         500,   // 30
-         500,   // 31
-         500,   // 32
-         500,   // 33
-         500,   // 34
-        // Different shading types
-          25,   // 35   [available in DOC, not available in DOCX]
-          75,   // 36   [available in DOC, not available in DOCX]
-         125,   // 37   pct12
-         150,   // 38   pct15
-         175,   // 39   [available in DOC, not available in DOCX]
-         225,   // 40   [available in DOC, not available in DOCX]
-         275,   // 41   [available in DOC, not available in DOCX]
-         325,   // 42   [available in DOC, not available in DOCX]
-         350,   // 43   pct35
-         375,   // 44   pct37
-         425,   // 45   [available in DOC, not available in DOCX]
-         450,   // 46   pct45
-         475,   // 47   [available in DOC, not available in DOCX]
-         525,   // 48   [available in DOC, not available in DOCX]
-         550,   // 49   pct55
-         575,   // 50   [available in DOC, not available in DOCX]
-         625,   // 51   pct62
-         650,   // 52   pct65
-         675,   // 53   [available in DOC, not available in DOCX]
-         725,   // 54   [available in DOC, not available in DOCX]
-         775,   // 55   [available in DOC, not available in DOCX]
-         825,   // 56   [available in DOC, not available in DOCX]
-         850,   // 57   pct85
-         875,   // 58   pct87
-         925,   // 59   [available in DOC, not available in DOCX]
-         950,   // 60   pct95
-         975    // 61   [available in DOC, not available in DOCX]
-    };// 62
+        
+           0,   
+        
+        1000,   
+        
+          50,   
+         100,   
+         200,   
+         250,   
+         300,   
+         400,   
+         500,   
+         600,   
+         700,   
+         750,   
+         800,   
+         900,   
+        
+         333,   
+         333,   
+         333,   
+         333,   
+         333,   
+         333,   
+         333,   
+         333,   
+         333,   
+         333,   
+         333,   
+         333,   
+        
+         500,   
+         500,   
+         500,   
+         500,   
+         500,   
+         500,   
+         500,   
+         500,   
+         500,   
+        
+          25,   
+          75,   
+         125,   
+         150,   
+         175,   
+         225,   
+         275,   
+         325,   
+         350,   
+         375,   
+         425,   
+         450,   
+         475,   
+         525,   
+         550,   
+         575,   
+         625,   
+         650,   
+         675,   
+         725,   
+         775,   
+         825,   
+         850,   
+         875,   
+         925,   
+         950,   
+         975    
+    };
 
     if( m_nShadingPattern >= (sal_Int32)SAL_N_ELEMENTS( eMSGrayScale ) )
         m_nShadingPattern = 0;
@@ -225,7 +225,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
     sal_Int32 nApplyColor = 0;
     if( !nWW8BrushStyle )
     {
-        // Clear-Brush
+        
         nApplyColor = m_nFillColor;
     }
     else
@@ -243,7 +243,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
         nApplyColor = ( (nRed/1000) << 0x10 ) + ((nGreen/1000) << 8) + nBlue/1000;
     }
 
-    // Check if it is a 'Character'
+    
     if (m_OutputFormat == Character)
     {
         static sal_Int32 aWWShadingPatterns[ ] =
@@ -312,7 +312,7 @@ TablePropertyMapPtr  CellColorHandler::getProperties()
             ShadingPattern::PCT97
         };
 
-        // Write the shading pattern property
+        
         pPropertyMap->Insert(PROP_CHAR_SHADING_VALUE, uno::makeAny( aWWShadingPatterns[m_nShadingPattern] ));
     }
 
@@ -363,7 +363,7 @@ sal_Bool CellColorHandler::isInteropGrabBagEnabled()
     return !(m_aInteropGrabBagName.isEmpty());
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

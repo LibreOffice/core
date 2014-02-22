@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -129,12 +129,12 @@ uno::Reference<rdf::XURI> createBaseURI(
         throw uno::RuntimeException();
     }
 
-    // #i108078# workaround non-hierarchical vnd.sun.star.expand URIs
-    // this really should be done somewhere else, not here.
+    
+    
     OUString pkgURI(i_rPkgURI);
     if (pkgURI.matchIgnoreAsciiCase("vnd.sun.star.expand:"))
     {
-        // expand it here (makeAbsolute requires hierarchical URI)
+        
         pkgURI = pkgURI.copy( RTL_CONSTASCII_LENGTH("vnd.sun.star.expand:") );
         if (!pkgURI.isEmpty()) {
             pkgURI = ::rtl::Uri::decode(
@@ -154,9 +154,9 @@ uno::Reference<rdf::XURI> createBaseURI(
         xUriFactory->parse(pkgURI), uno::UNO_SET_THROW );
     xPkgURI->clearFragment();
 
-    // need to know whether the storage is a FileSystemStorage
-    // XServiceInfo would be better, but it is not implemented
-//    if ( pkgURI.getLength() && ::utl::UCBContentHelper::IsFolder(pkgURI) )
+    
+    
+
     if (true) {
         xBaseURI.set( xPkgURI, uno::UNO_SET_THROW );
     }
@@ -193,7 +193,7 @@ uno::Reference<rdf::XURI> createBaseURI(
 
 struct DocumentMetadataAccess_Impl
 {
-    // note: these are all initialized in constructor, and loadFromStorage
+    
     const uno::Reference<uno::XComponentContext> m_xContext;
     const IXmlIdRegistrySupplier & m_rXmlIdRegistrySupplier;
     uno::Reference<rdf::XURI> m_xBaseURI;
@@ -212,7 +212,7 @@ struct DocumentMetadataAccess_Impl
     }
 };
 
-// this is... a hack.
+
 template<sal_Int16 Constant>
 /*static*/ uno::Reference<rdf::XURI>
 getURI(uno::Reference< uno::XComponentContext > const & i_xContext)
@@ -227,16 +227,16 @@ getURI(uno::Reference< uno::XComponentContext > const & i_xContext)
 static bool isFileNameValid(const OUString & i_rFileName)
 {
     if (i_rFileName.isEmpty()) return false;
-    if (i_rFileName[0] == '/')        return false; // no absolute paths!
+    if (i_rFileName[0] == '/')        return false; 
     sal_Int32 idx(0);
     do {
       const OUString segment(
         i_rFileName.getToken(0, static_cast<sal_Unicode> ('/'), idx) );
-      if (segment.isEmpty()      ||  // no empty segments
-          segment == "."         ||  // no . segments
-          segment == ".."        ||  // no .. segments
+      if (segment.isEmpty()      ||  
+          segment == "."         ||  
+          segment == ".."        ||  
           !::comphelper::OStorageHelper::IsValidZipEntryFileName(
-              segment, false))      // no invalid characters
+              segment, false))      
                                       return false;
     } while (idx >= 0);
     return true;
@@ -253,7 +253,7 @@ splitPath(OUString const & i_rPath,
         o_rRest = i_rPath;
         return true;
     } else if (idx == 0 || idx == i_rPath.getLength() - 1) {
-        // input must not start or end with '/'
+        
         return false;
     } else {
         o_rDir  = (i_rPath.copy(0, idx));
@@ -472,7 +472,7 @@ handleError( ucb::InteractiveAugmentedIOException const & i_rException,
 
     pRequest->addContinuation( pApprove.get() );
     pRequest->addContinuation( pAbort.get() );
-    // actually call the handler
+    
     i_xHandler->handle( pRequest.get() );
     if (pRetry->wasSelected()) {
         return true;
@@ -617,7 +617,7 @@ exportStream(struct DocumentMetadataAccess_Impl & i_rImpl,
         uno::UNO_SET_THROW);
     const uno::Reference< beans::XPropertySet > xStreamProps(xStream,
         uno::UNO_QUERY);
-    if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
+    if (xStreamProps.is()) { 
         xStreamProps->setPropertyValue(
             OUString("MediaType"),
             uno::makeAny(OUString(s_rdfxml)));
@@ -686,12 +686,12 @@ initLoading(struct DocumentMetadataAccess_Impl & i_rImpl,
     const uno::Reference<task::XInteractionHandler> & i_xHandler)
 {
 retry:
-    // clear old data
+    
     i_rImpl.m_xManifest.clear();
-    // init BaseURI
+    
     i_rImpl.m_xBaseURI = i_xBaseURI;
 
-    // create repository
+    
     i_rImpl.m_xRepository.clear();
     i_rImpl.m_xRepository.set(rdf::Repository::create(i_rImpl.m_xContext),
             uno::UNO_SET_THROW);
@@ -699,7 +699,7 @@ retry:
     const OUString manifest (
             OUString::createFromAscii(s_manifest));
     const OUString baseURI( i_xBaseURI->getStringValue() );
-    // try to delay raising errors until after initialization is done
+    
     uno::Any rterr;
     ucb::InteractiveAugmentedIOException iaioe;
     bool err(false);
@@ -709,7 +709,7 @@ retry:
     try {
         readStream(i_rImpl, i_xStorage, manifest, baseURI);
     } catch (const ucb::InteractiveAugmentedIOException & e) {
-        // no manifest.rdf: this is not an error in ODF < 1.2
+        
         if (!(ucb::IOErrorCode_NOT_EXISTING_PATH == e.Code)) {
             iaioe = e;
             err = true;
@@ -718,7 +718,7 @@ retry:
         rterr <<= e;
     }
 
-    // init manifest graph
+    
     const uno::Reference<rdf::XNamedGraph> xManifestGraph(
         i_rImpl.m_xRepository->getGraph(xManifest));
     i_rImpl.m_xManifest.set(xManifestGraph.is() ? xManifestGraph :
@@ -728,7 +728,7 @@ retry:
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
             getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get()));
 
-    // document statement
+    
     i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI.get(),
         getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
         getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get());
@@ -759,7 +759,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
                 OUString::createFromAscii(s_manifest))),
             uno::UNO_SET_THROW);
 
-        // insert the document statement
+        
         i_rImpl.m_xManifest->addStatement(i_rImpl.m_xBaseURI.get(),
             getURI<rdf::URIs::RDF_TYPE>(i_rImpl.m_xContext),
             getURI<rdf::URIs::PKG_DOCUMENT>(i_rImpl.m_xContext).get());
@@ -769,7 +769,7 @@ static void init(struct DocumentMetadataAccess_Impl & i_rImpl)
             uno::makeAny(e));
     }
 
-    // add top-level content files
+    
     if (!addContentOrStylesFileImpl(i_rImpl,
             OUString::createFromAscii(s_content))) {
         throw uno::RuntimeException();
@@ -787,7 +787,7 @@ DocumentMetadataAccess::DocumentMetadataAccess(
         const IXmlIdRegistrySupplier & i_rRegistrySupplier)
     : m_pImpl(new DocumentMetadataAccess_Impl(i_xContext, i_rRegistrySupplier))
 {
-    // no initalization: must call loadFrom...
+    
 }
 
 DocumentMetadataAccess::DocumentMetadataAccess(
@@ -803,7 +803,7 @@ DocumentMetadataAccess::DocumentMetadataAccess(
     m_pImpl->m_xRepository.set(rdf::Repository::create(m_pImpl->m_xContext),
             uno::UNO_SET_THROW);
 
-    // init repository
+    
     init(*m_pImpl);
 
     OSL_ENSURE(m_pImpl->m_xBaseURI.is(), "base URI is null");
@@ -815,7 +815,7 @@ DocumentMetadataAccess::~DocumentMetadataAccess()
 {
 }
 
-// ::com::sun::star::rdf::XRepositorySupplier:
+
 uno::Reference< rdf::XRepository > SAL_CALL
 DocumentMetadataAccess::getRDFRepository() throw (uno::RuntimeException)
 {
@@ -823,14 +823,14 @@ DocumentMetadataAccess::getRDFRepository() throw (uno::RuntimeException)
     return m_pImpl->m_xRepository;
 }
 
-// ::com::sun::star::rdf::XNode:
+
 OUString SAL_CALL
 DocumentMetadataAccess::getStringValue() throw (uno::RuntimeException)
 {
     return m_pImpl->m_xBaseURI->getStringValue();
 }
 
-// ::com::sun::star::rdf::XURI:
+
 OUString SAL_CALL
 DocumentMetadataAccess::getNamespace() throw (uno::RuntimeException)
 {
@@ -843,7 +843,7 @@ DocumentMetadataAccess::getLocalName() throw (uno::RuntimeException)
     return m_pImpl->m_xBaseURI->getLocalName();
 }
 
-// ::com::sun::star::rdf::XDocumentMetadataAccess:
+
 uno::Reference< rdf::XMetadatable > SAL_CALL
 DocumentMetadataAccess::getElementByMetadataReference(
     const ::com::sun::star::beans::StringPair & i_rReference)
@@ -941,7 +941,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             OUString(
                 "DocumentMetadataAccess::addMetadataFile: exception"),
             *this, uno::makeAny(e));
-        // note: all other exceptions are propagated
+        
     }
 
     addMetadataFileImpl(*m_pImpl, i_rFileName, i_rTypes);
@@ -988,10 +988,10 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             OUString(
                 "DocumentMetadataAccess::importMetadataFile: "
                 "RepositoryException"), *this, uno::makeAny(e));
-        // note: all other exceptions are propagated
+        
     }
 
-    // add to manifest
+    
     addMetadataFileImpl(*m_pImpl, i_rFileName, i_rTypes);
     return xGraphName;
 }
@@ -1009,10 +1009,10 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             OUString(
                 "DocumentMetadataAccess::removeMetadataFile: "
                 "RepositoryException"), *this, uno::makeAny(e));
-        // note: all other exceptions are propagated
+        
     }
 
-    // remove file from manifest
+    
     removeFile(*m_pImpl, i_xGraphName.get());
 }
 
@@ -1064,7 +1064,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 *this);
         }
 
-        // remove file from manifest
+        
         removeFile(*m_pImpl, xPart);
 
     } catch (const uno::RuntimeException &) {
@@ -1142,13 +1142,13 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                     "found ourselves a recursive manifest!");
                 continue;
             }
-            // remove found items from StgFiles
+            
             StgFiles.erase(relName);
             if (isContentFile(relName)) {
                 if (!isPartOfType(*m_pImpl, *it, xContentFile)) {
                     const uno::Reference <rdf::XURI> xName(
                         getURIForStream(*m_pImpl, relName) );
-                    // add missing type statement
+                    
                     m_pImpl->m_xManifest->addStatement(xName.get(),
                         getURI<rdf::URIs::RDF_TYPE>(m_pImpl->m_xContext),
                         xContentFile.get());
@@ -1157,7 +1157,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 if (!isPartOfType(*m_pImpl, *it, xStylesFile)) {
                     const uno::Reference <rdf::XURI> xName(
                         getURIForStream(*m_pImpl, relName) );
-                    // add missing type statement
+                    
                     m_pImpl->m_xManifest->addStatement(xName.get(),
                         getURI<rdf::URIs::RDF_TYPE>(m_pImpl->m_xContext),
                         xStylesFile.get());
@@ -1169,8 +1169,8 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 if (isPartOfType(*m_pImpl, *it, xMetadataFile)) {
                     MfstMetadataFiles.push_back(relName);
                 }
-                // do not add statement for MetadataFile; it could be
-                // something else! just ignore it...
+                
+                
             }
         }
     } catch (const uno::RuntimeException &) {
@@ -1201,7 +1201,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "storage is null"), *this, 0);
     }
 
-    // export manifest
+    
     const OUString manifest (
             OUString::createFromAscii(s_manifest));
     const uno::Reference <rdf::XURI> xManifest(
@@ -1220,7 +1220,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
                 "storeMetadataToStorage: exception"), *this, uno::makeAny(e));
     }
 
-    // export metadata streams
+    
     try {
         const uno::Sequence<uno::Reference<rdf::XURI> > graphs(
             m_pImpl->m_xRepository->getGraphNames());
@@ -1292,7 +1292,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
         if (xIn.is()) {
             xStorage = ::comphelper::OStorageHelper::GetStorageFromInputStream(
                             xIn, m_pImpl->m_xContext);
-        } else { // fallback to url
+        } else { 
             xStorage = ::comphelper::OStorageHelper::GetStorageFromURL2(
                             URL, embed::ElementModes::READ, m_pImpl->m_xContext);
         }
@@ -1315,7 +1315,7 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     try {
         xBaseURI = createBaseURI(m_pImpl->m_xContext, xStorage, BaseURL);
     } catch (const uno::Exception &) {
-        // fall back to URL
+        
         try {
             xBaseURI = createBaseURI(m_pImpl->m_xContext, xStorage, URL);
         } catch (const uno::Exception &) {
@@ -1358,14 +1358,14 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
             "DocumentMetadataAccess::storeMetadataToMedium: "
             "cannot get Storage"), *this);
     }
-    // set MIME type of the storage
+    
     utl::MediaDescriptor::const_iterator iter
         = md.find(utl::MediaDescriptor::PROP_MEDIATYPE());
     if (iter != md.end()) {
         uno::Reference< beans::XPropertySet > xProps(xStorage,
             uno::UNO_QUERY_THROW);
         try {
-            // this is NOT supported in FileSystemStorage
+            
             xProps->setPropertyValue(
                 utl::MediaDescriptor::PROP_MEDIATYPE(),
                 iter->second);
@@ -1391,6 +1391,6 @@ throw (uno::RuntimeException, lang::IllegalArgumentException,
     }
 }
 
-} // namespace sfx2
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

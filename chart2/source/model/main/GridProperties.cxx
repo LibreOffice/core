@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "GridProperties.hxx"
@@ -71,9 +71,9 @@ private:
 
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_GRID_SHOW, false );
 
-        // override other defaults
+        
         ::chart::PropertyHelper::setPropertyValue< sal_Int32 >(
-            rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_COLOR, 0xb3b3b3 );  // gray30
+            rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_COLOR, 0xb3b3b3 );  
     }
 };
 
@@ -123,7 +123,7 @@ struct StaticGridInfo : public rtl::StaticAggregate< uno::Reference< beans::XPro
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -150,7 +150,7 @@ GridProperties::GridProperties( const GridProperties & rOther ) :
 GridProperties::~GridProperties()
 {}
 
-// ____ OPropertySet ____
+
 uno::Any GridProperties::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -166,21 +166,21 @@ uno::Any GridProperties::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticGridInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL GridProperties::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticGridInfo::get();
 }
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL GridProperties::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new GridProperties( *this ));
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL GridProperties::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -209,21 +209,21 @@ void SAL_CALL GridProperties::removeModifyListener( const Reference< util::XModi
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL GridProperties::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL GridProperties::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void GridProperties::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -242,15 +242,15 @@ Sequence< OUString > GridProperties::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( GridProperties, lcl_aServiceName );
 
-// needed by MSC compiler
+
 using impl::GridProperties_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( GridProperties, GridProperties_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( GridProperties, GridProperties_Base, ::property::OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

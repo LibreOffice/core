@@ -47,7 +47,7 @@ bool RemoveForwardStringDecl::VisitNamespaceDecl( const NamespaceDecl* declarati
                 canRemove = false;
             }
         }
-    if( canRemove ) // contained only forward decls that we removed
+    if( canRemove ) 
         removeText( declaration->getSourceRange(), RemoveLineIfEmpty );
     return true;
     }
@@ -58,7 +58,7 @@ bool RemoveForwardStringDecl::tryRemoveStringForwardDecl( const Decl* decl )
     if( classdecl == NULL )
         return false;
     if( !classdecl->isFreeStanding() || classdecl->isCompleteDefinition())
-        return false; // not a simple forward declaration
+        return false; 
     if( classdecl->getName() == "OString" || classdecl->getName() == "OUString"
         || classdecl->getName() == "OStringBuffer" || classdecl->getName() == "OUStringBuffer"
         || classdecl->getName() == "OStringHash" || classdecl->getName() == "OUStringHash"
@@ -73,6 +73,6 @@ bool RemoveForwardStringDecl::tryRemoveStringForwardDecl( const Decl* decl )
 
 static Plugin::Registration< RemoveForwardStringDecl > X( "removeforwardstringdecl" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

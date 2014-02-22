@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -69,7 +69,7 @@ ScRange ScMovingAverageDialog::ApplyOutput(ScDocShell* pDocShell)
     {
         output.resetRow();
 
-        // Write label
+        
         if (mGroupedBy == BY_COLUMN)
             aTemplate.setTemplate(SC_STRLOAD(RID_STATISTICS_DLGS, STR_COLUMN_LABEL_TEMPLATE));
         else

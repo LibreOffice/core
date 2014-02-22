@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sheetdatabuffer.hxx"
@@ -58,7 +58,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
@@ -68,7 +68,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 
-// ============================================================================
+
 
 CellModel::CellModel() :
     mnCellType( XML_TOKEN_INVALID ),
@@ -77,7 +77,7 @@ CellModel::CellModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 CellFormulaModel::CellFormulaModel() :
     mnFormulaType( XML_TOKEN_INVALID ),
@@ -101,7 +101,7 @@ bool CellFormulaModel::isValidSharedRef( const CellAddress& rCellAddr )
         (maFormulaRef.StartRow <= rCellAddr.Row) && (rCellAddr.Row <= maFormulaRef.EndRow);
 }
 
-// ----------------------------------------------------------------------------
+
 
 DataTableModel::DataTableModel() :
     mb2dTable( false ),
@@ -111,7 +111,7 @@ DataTableModel::DataTableModel() :
 {
 }
 
-// ============================================================================
+
 
 CellBlockBuffer::CellBlockBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -131,7 +131,7 @@ void CellBlockBuffer::finalizeImport()
 {
 }
 
-// ============================================================================
+
 
 SheetDataBuffer::SheetDataBuffer( const WorksheetHelper& rHelper ) :
     WorksheetHelper( rHelper ),
@@ -189,10 +189,10 @@ void SheetDataBuffer::setStringCell( const CellModel& rModel, sal_Int32 nStringI
 
 void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const ::com::sun::star::util::DateTime& rDateTime )
 {
-    // write serial date/time value into the cell
+    
     double fSerial = getUnitConverter().calcSerialFromDateTime( rDateTime );
     setValueCell( rModel, fSerial );
-    // set appropriate number format
+    
     using namespace ::com::sun::star::util::NumberFormat;
     sal_Int16 nStdFmt = (fSerial < 1.0) ? TIME : (((rDateTime.Hours > 0) || (rDateTime.Minutes > 0) || (rDateTime.Seconds > 0)) ? DATETIME : DATE);
     setStandardNumFmt( rModel.maCellAddr, nStdFmt );
@@ -203,7 +203,7 @@ void SheetDataBuffer::setBooleanCell( const CellModel& rModel, bool bValue )
     getFormulaBuffer().setCellFormula(
         rModel.maCellAddr, bValue ? OUString("TRUE()") : OUString("FALSE()"));
 
-    // #108770# set 'Standard' number format for all Boolean cells
+    
     setCellFormat( rModel, 0 );
 }
 
@@ -263,7 +263,7 @@ void SheetDataBuffer::setFormulaCell( const CellModel& rModel, const ApiTokenSeq
     }
     else
     {
-        // simple formula, use the passed token array
+        
         aTokens = rTokens;
     }
 
@@ -289,10 +289,10 @@ void SheetDataBuffer::createTableOperation( const CellRangeAddress& rRange, cons
 
 void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCustomFormat )
 {
-    // set row formatting
+    
     if( bCustomFormat )
     {
-        // try to expand cached row range, if formatting is equal
+        
         if( (maXfIdRowRange.maRowRange.mnLast < 0) || !maXfIdRowRange.tryExpand( nRow, nXfId ) )
         {
 
@@ -302,7 +302,7 @@ void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCusto
     }
     else if( maXfIdRowRange.maRowRange.mnLast >= 0 )
     {
-        // finish last cached row range
+        
         maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
         maXfIdRowRange.set( -1, -1 );
     }
@@ -338,10 +338,10 @@ void addIfNotInMyMap( StylesBuffer& rStyles, std::map< std::pair< sal_Int32, sal
             if ( it->first.second == nFormatId )
             {
                 Xf* pXf2 = rStyles.getCellXf( it->first.first ).get();
-                if ( *pXf1 == *pXf2 ) // already exists
+                if ( *pXf1 == *pXf2 ) 
                 {
-                    // add ranges from the rangelist to the existing rangelist for the
-                    // matching style ( should we check if they overlap ? )
+                    
+                    
                     for ( ApiCellRangeList::const_iterator iter = rRangeList.begin(), iter_end =  rRangeList.end(); iter != iter_end; ++iter )
                        it->second.push_back( *iter );
                     return;
@@ -366,13 +366,13 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
         else
         {
             RowStyles& rRowStyles =  maStylesPerColumn[ nCol ];
-            // If the rowrange style includes rows already
-            // allocated to a style then we need to split
-            // the range style Rows into sections ( to
-            // occupy only rows that have no style definition )
+            
+            
+            
+            
 
-            // We dont want to set any rowstyle 'rows'
-            // for rows where there is an existing 'style' )
+            
+            
             std::vector< RowRangeStyle > aRangeRowsSplits;
 
             RowStyles::iterator rows_it = rRowStyles.begin();
@@ -381,13 +381,13 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
             for ( ; rows_it != rows_end; ++rows_it )
             {
                 const RowRangeStyle& r = *rows_it;
-                // if row is completely within existing style, discard it
+                
                 if ( aStyleRows.mnStartRow >= r.mnStartRow && aStyleRows.mnEndRow <= r.mnEndRow )
                     bAddRange = false;
                 else if ( aStyleRows.mnStartRow <= r.mnStartRow )
                 {
-                    // not intersecting at all?, if so finish as none left
-                    // to check ( row ranges are in ascending order
+                    
+                    
                     if ( aStyleRows.mnEndRow < r.mnStartRow )
                         break;
                     else if ( aStyleRows.mnEndRow <= r.mnEndRow )
@@ -414,18 +414,18 @@ void SheetDataBuffer::addColXfStyle( sal_Int32 nXfId, sal_Int32 nFormatId, const
 }
 void SheetDataBuffer::finalizeImport()
 {
-    // insert all cells of all open cell blocks
+    
     maCellBlocks.finalizeImport();
 
-    // create all array formulas
+    
     for( ArrayFormulaList::iterator aIt = maArrayFormulas.begin(), aEnd = maArrayFormulas.end(); aIt != aEnd; ++aIt )
         finalizeArrayFormula( aIt->first, aIt->second );
 
-    // create all table operations
+    
     for( TableOperationList::iterator aIt = maTableOperations.begin(), aEnd = maTableOperations.end(); aIt != aEnd; ++aIt )
         finalizeTableOperation( aIt->first, aIt->second );
 
-    // write default formatting of remaining row range
+    
     maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
 
     std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList > rangeStyleListMap;
@@ -433,7 +433,7 @@ void SheetDataBuffer::finalizeImport()
     {
         addIfNotInMyMap( getStyles(), rangeStyleListMap, aIt->first.first, aIt->first.second, aIt->second );
     }
-    // gather all ranges that have the same style and apply them in bulk
+    
     for (  std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
     {
         const ApiCellRangeList& rRanges( it->second );
@@ -445,10 +445,10 @@ void SheetDataBuffer::finalizeImport()
     {
         ApiCellRangeList rangeList;
         AddressConverter& rAddrConv = getAddressConverter();
-        // get all row ranges for id
+        
         for ( std::vector< ValueRange >::iterator rangeIter = it->second.begin(), rangeIter_end = it->second.end(); rangeIter != rangeIter_end; ++rangeIter )
         {
-            if ( it->first == -1 ) // it's a dud skip it
+            if ( it->first == -1 ) 
                 continue;
             CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Column, rangeIter->mnLast );
 
@@ -488,14 +488,14 @@ void SheetDataBuffer::finalizeImport()
         rDoc.SetAttrEntries(nScCol, getSheetIndex(), pData, static_cast<SCSIZE>(nAttrSize));
     }
 
-    // merge all cached merged ranges and update right/bottom cell borders
+    
     for( MergedRangeList::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
         applyCellMerging( aIt->maRange );
     for( MergedRangeList::iterator aIt = maCenterFillRanges.begin(), aEnd = maCenterFillRanges.end(); aIt != aEnd; ++aIt )
         applyCellMerging( aIt->maRange );
 }
 
-// private --------------------------------------------------------------------
+
 
 SheetDataBuffer::XfIdRowRange::XfIdRowRange() :
     maRowRange( -1 ),
@@ -551,7 +551,7 @@ bool SheetDataBuffer::MergedRange::tryExpand( const CellAddress& rAddress, sal_I
     return false;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void SheetDataBuffer::setCellFormula( const CellAddress& rCellAddr, const ApiTokenSequence& rTokens )
 {
@@ -600,7 +600,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
 
     if (rModel.mb2dTable)
     {
-        // Two-variable data table.
+        
         if (rModel.mbRef2Deleted)
             return;
 
@@ -619,7 +619,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
         aScRange.aStart.IncRow(-1);
         aScRange.aStart.IncCol(-1);
 
-        // Ref1 is row input cell and Ref2 is column input cell.
+        
         aParam.aRefRowCell.Set(aRef1.Column, aRef1.Row, aRef1.Sheet, false, false, false);
         aParam.aRefColCell.Set(aRef2.Column, aRef2.Row, aRef2.Sheet, false, false, false);
         rDoc.setTableOpCells(aScRange, aParam);
@@ -627,11 +627,11 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
         return;
     }
 
-    // One-variable data table.
+    
 
     if (rModel.mbRowTable)
     {
-        // One-variable row input cell (horizontal).
+        
         aParam.meMode = ScTabOpParam::Row;
         aParam.aRefRowCell.Set(aRef1.Column, aRef1.Row, aRef1.Sheet, false, false, false);
         aParam.aRefFormulaCell.Set(rRange.StartColumn-1, rRange.StartRow, nSheet, false, true, false);
@@ -641,7 +641,7 @@ void SheetDataBuffer::finalizeTableOperation( const CellRangeAddress& rRange, co
     }
     else
     {
-        // One-variable column input cell (vertical).
+        
         aParam.meMode = ScTabOpParam::Column;
         aParam.aRefColCell.Set(aRef1.Column, aRef1.Row, aRef1.Sheet, false, false, false);
         aParam.aRefFormulaCell.Set(rRange.StartColumn, rRange.StartRow-1, nSheet, true, false, false);
@@ -666,7 +666,7 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
                 aIt->StartRow       == rModel.maCellAddr.Row &&
                 (aIt->EndColumn+1)  == rModel.maCellAddr.Column )
         {
-            aIt->EndColumn++;       // Expand Column
+            aIt->EndColumn++;       
         }
         else
         {
@@ -692,14 +692,14 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
                     break;
                 }
                 else if( aIt->StartRow > aItM->EndRow + 1 )
-                    break; // Un-necessary to check with any other rows
+                    break; 
             }
             else
                 break;
             ++aItM;
         }
 
-        // update merged ranges for 'center across selection' and 'fill'
+        
         if( const Xf* pXf = getStyles().getCellXf( rModel.mnXfId ).get() )
         {
             sal_Int32 nHorAlign = pXf->getAlignment().getModel().mnHorAlign;
@@ -741,16 +741,16 @@ void SheetDataBuffer::applyCellMerging( const CellRangeAddress& rRange )
     const ScAddress& rStart = aRange.aStart;
     const ScAddress& rEnd = aRange.aEnd;
     ScDocument& rDoc = getScDocument();
-    // set correct right border
+    
     if( bMultiCol )
         lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), BOX_LINE_RIGHT );
-        // set correct lower border
+        
     if( bMultiRow )
         lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), BOX_LINE_BOTTOM );
-    // do merge
+    
     if( bMultiCol || bMultiRow )
         rDoc.DoMerge( getSheetIndex(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
-    // #i93609# merged range in a single row: test if manual row height is needed
+    
     if( !bMultiRow )
     {
         bool bTextWrap = static_cast< const SfxBoolItem* >( rDoc.GetAttr( rStart.Col(), rStart.Row(), rStart.Tab(), ATTR_LINEBREAK ) )->GetValue();
@@ -762,7 +762,7 @@ void SheetDataBuffer::applyCellMerging( const CellRangeAddress& rRange )
     }
 }
 
-} // namespace xls
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

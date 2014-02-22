@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xicontent.hxx"
@@ -64,7 +64,7 @@
 using ::com::sun::star::uno::Sequence;
 using ::std::auto_ptr;
 
-// Shared string table ========================================================
+
 
 XclImpSst::XclImpSst( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -92,7 +92,7 @@ const XclImpString* XclImpSst::GetString( sal_uInt32 nSstIndex ) const
     return (nSstIndex < maStrings.size()) ? &maStrings[ nSstIndex ] : 0;
 }
 
-// Hyperlinks =================================================================
+
 
 namespace {
 
@@ -103,7 +103,7 @@ void lclAppendString32( OUString& rString, XclImpStream& rStrm, sal_uInt32 nChar
 {
     sal_uInt16 nReadChars = ulimit_cast< sal_uInt16 >( nChars );
     rString += rStrm.ReadRawUniString( nReadChars, b16Bit );
-    // ignore remaining chars
+    
     sal_Size nIgnore = nChars - nReadChars;
     if( b16Bit )
         nIgnore *= 2;
@@ -145,7 +145,7 @@ void lclGetAbsPath( OUString& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShel
     {
         bool bWasAbs = false;
         rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr.makeStringAndClear(), bWasAbs ).GetMainURL( INetURLObject::NO_DECODE );
-        // full path as stored in SvxURLField must be encoded
+        
     }
     else
         rPath = aTmpStr.makeStringAndClear();
@@ -159,7 +159,7 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
     CellType eCellType = rDoc.getDoc().GetCellType(aScPos);
     switch( eCellType )
     {
-        // #i54261# hyperlinks in string cells
+        
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:
         {
@@ -188,21 +188,21 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
                 }
             }
 
-            // The cell will own the text object instance.
+            
             rDoc.setEditCell(aScPos, rEE.CreateTextObject());
         }
         break;
 
         default:
-        // Handle other cell types e.g. formulas ( and ? ) that have associated
-        // hyperlinks.
-        // Ideally all hyperlinks should be treated  as below. For the moment,
-        // given the current absence of ods support lets just handle what we
-        // previously didn't handle the new way.
-        // Unfortunately we won't be able to preserve such hyperlinks when
-        // saving to ods. Note: when we are able to save such hyperlinks to ods
-        // we should handle *all* imported hyperlinks as below ( e.g. as cell
-        // attribute ) for better interoperability.
+        
+        
+        
+        
+        
+        
+        
+        
+        
         {
             SfxStringItem aItem( ATTR_HYPERLINK, rUrl );
             rDoc.getDoc().ApplyAttr(nScCol, nScRow, nScTab, aItem);
@@ -211,15 +211,15 @@ void lclInsertUrl( XclImpRoot& rRoot, const OUString& rUrl, SCCOL nScCol, SCROW 
     }
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
 {
     XclRange aXclRange( ScAddress::UNINITIALIZED );
     rStrm >> aXclRange;
-    // #i80006# Excel silently ignores invalid hi-byte of column index (TODO: everywhere?)
+    
     aXclRange.maFirst.mnCol &= 0xFF;
     aXclRange.maLast.mnCol &= 0xFF;
     OUString aString = ReadEmbeddedData( rStrm );
@@ -243,37 +243,37 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     OSL_ENSURE( aGuid == XclTools::maGuidStdLink, "XclImpHyperlink::ReadEmbeddedData - unknown header GUID" );
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr< OUString > xLongName;    // link / file name
-    ::std::auto_ptr< OUString > xShortName;   // 8.3-representation of file name
-    ::std::auto_ptr< OUString > xTextMark;    // text mark
+    ::std::auto_ptr< OUString > xLongName;    
+    ::std::auto_ptr< OUString > xShortName;   
+    ::std::auto_ptr< OUString > xTextMark;    
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    // description (ignore)
+    
     if( ::get_flag( nFlags, EXC_HLINK_DESCR ) )
         lclIgnoreString32( rStrm, true );
-    // target frame (ignore) !! DESCR/FRAME - is this the right order? (never seen them together)
+    
     if( ::get_flag( nFlags, EXC_HLINK_FRAME ) )
         lclIgnoreString32( rStrm, true );
 
-    // URL fields are zero-terminated - do not let the stream replace them
-    // in the lclAppendString32() with the '?' character.
+    
+    
     rStrm.SetNulSubstChar( '\0' );
 
-    // UNC path
+    
     if( ::get_flag( nFlags, EXC_HLINK_UNC ) )
     {
         xLongName.reset( new OUString );
         lclAppendString32( *xLongName, rStrm, true );
         lclGetAbsPath( *xLongName, 0, pDocShell );
     }
-    // file link or URL
+    
     else if( ::get_flag( nFlags, EXC_HLINK_BODY ) )
     {
         rStrm >> aGuid;
 
         if( aGuid == XclTools::maGuidFileMoniker )
         {
-            sal_uInt16 nLevel = 0; // counter for level to climb down in path
+            sal_uInt16 nLevel = 0; 
             rStrm >> nLevel;
             xShortName.reset( new OUString );
             lclAppendString32( *xShortName, rStrm, false );
@@ -285,7 +285,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
             {
                 nStrLen = 0;
                 rStrm >> nStrLen;
-                nStrLen /= 2;       // it's byte count here...
+                nStrLen /= 2;       
                 rStrm.Ignore( 2 );
                 xLongName.reset( new OUString );
                 lclAppendString32( *xLongName, rStrm, nStrLen, true );
@@ -298,7 +298,7 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
         {
             sal_uInt32 nStrLen(0);
             rStrm >> nStrLen;
-            nStrLen /= 2;       // it's byte count here...
+            nStrLen /= 2;       
             xLongName.reset( new OUString );
             lclAppendString32( *xLongName, rStrm, nStrLen, true );
             if( !::get_flag( nFlags, EXC_HLINK_ABS ) )
@@ -310,14 +310,14 @@ OUString XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
         }
     }
 
-    // text mark
+    
     if( ::get_flag( nFlags, EXC_HLINK_MARK ) )
     {
         xTextMark.reset( new OUString );
         lclAppendString32( *xTextMark, rStrm, true );
     }
 
-    rStrm.SetNulSubstChar();    // back to default
+    rStrm.SetNulSubstChar();    
 
     OSL_ENSURE( rStrm.GetRecLeft() == 0, "XclImpHyperlink::ReadEmbeddedData - record size mismatch" );
 
@@ -344,11 +344,11 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
 {
     sal_Int32 n = rUrl.getLength();
     if (n < 4)
-        // Needs at least 4 characters.
+        
         return;
 
     if (rUrl[0] != '#')
-        // the 1st character must be '#'.
+        
         return;
 
     OUString aNewUrl('#'), aTabName;
@@ -362,9 +362,9 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
         {
             if (bInQuote && i+1 < n && rUrl[i+1] == '\'')
             {
-                // Two consecutive single quotes ('') signify a single literal
-                // quite.  When this occurs, the whole table name needs to be
-                // quoted.
+                
+                
+                
                 bQuoteTabName = true;
                 aTabName += OUString(c);
                 aTabName += OUString(c);
@@ -389,10 +389,10 @@ void XclImpHyperlink::ConvertToValidTabName(OUString& rUrl)
     }
 
     if (bInQuote)
-        // It should be outside the quotes!
+        
         return;
 
-    // All is good.  Pass the new URL.
+    
     rUrl = aNewUrl;
 }
 
@@ -414,7 +414,7 @@ void XclImpHyperlink::InsertUrl( XclImpRoot& rRoot, const XclRange& rXclRange, c
     }
 }
 
-// Label ranges ===============================================================
+
 
 void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
 {
@@ -430,7 +430,7 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     XclRangeList aRowXclRanges, aColXclRanges;
     rStrm >> aRowXclRanges >> aColXclRanges;
 
-    // row label ranges
+    
     ScRangeList aRowScRanges;
     rAddrConv.ConvertRangeList( aRowScRanges, aRowXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetRowNameRangesRef();
@@ -451,7 +451,7 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
         xLabelRangesRef->Append( ScRangePair( *pScRange, aDataRange ) );
     }
 
-    // column label ranges
+    
     ScRangeList aColScRanges;
     rAddrConv.ConvertRangeList( aColScRanges, aColXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetColNameRangesRef();
@@ -474,7 +474,7 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     }
 }
 
-// Conditional formatting =====================================================
+
 
 XclImpCondFormat::XclImpCondFormat( const XclImpRoot& rRoot, sal_uInt32 nFormatIndex ) :
     XclImpRoot( rRoot ),
@@ -506,7 +506,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         return;
     }
 
-    // entire conditional format outside of valid range?
+    
     if( maRanges.empty() )
         return;
 
@@ -517,7 +517,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     rStrm >> nType >> nOperator >> nFmlaSize1 >> nFmlaSize2 >> nFlags;
     rStrm.Ignore( 2 );
 
-    // *** mode and comparison operator ***
+    
 
     ScConditionMode eMode = SC_COND_NONE;
     switch( nType )
@@ -549,14 +549,14 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
             return;
     }
 
-    // *** create style sheet ***
+    
 
     OUString aStyleName( XclTools::GetCondFormatStyleName( GetCurrScTab(), mnFormatIndex, mnCondIndex ) );
     SfxItemSet& rStyleItemSet = ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), aStyleName, true ).GetItemSet();
 
     const XclImpPalette& rPalette = GetPalette();
 
-    // *** font block ***
+    
 
     if( ::get_flag( nFlags, EXC_CF_BLOCK_FONT ) )
     {
@@ -565,7 +565,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         aFont.FillToItemSet( rStyleItemSet, EXC_FONTITEM_CELL );
     }
 
-    // *** border block ***
+    
 
     if( ::get_flag( nFlags, EXC_CF_BLOCK_BORDER ) )
     {
@@ -579,7 +579,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         aBorder.FillToItemSet( rStyleItemSet, rPalette );
     }
 
-    // *** pattern block ***
+    
 
     if( ::get_flag( nFlags, EXC_CF_BLOCK_AREA ) )
     {
@@ -591,9 +591,9 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         aArea.FillToItemSet( rStyleItemSet, rPalette );
     }
 
-    // *** formulas ***
+    
 
-    const ScAddress& rPos = maRanges.front()->aStart;    // assured above that maRanges is not empty
+    const ScAddress& rPos = maRanges.front()->aStart;    
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -604,7 +604,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
         rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize1, false, FT_CondFormat );
-        // formula converter owns pTokArr -> create a copy of the token array
+        
         if( pTokArr )
             xTokArr1.reset( pTokArr->Clone() );
     }
@@ -617,12 +617,12 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset( rPos );
         rFmlaConv.Convert( pTokArr, rStrm, nFmlaSize2, false, FT_CondFormat );
-        // formula converter owns pTokArr -> create a copy of the token array
+        
         if( pTokArr )
             pTokArr2.reset( pTokArr->Clone() );
     }
 
-    // *** create the Calc conditional formatting ***
+    
 
     if( !mxScCondFmt.get() )
     {
@@ -651,7 +651,7 @@ void XclImpCondFormat::Apply()
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpCondFormatManager::XclImpCondFormatManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -679,7 +679,7 @@ void XclImpCondFormatManager::Apply()
     maCondFmtList.clear();
 }
 
-// Data Validation ============================================================
+
 
 XclImpValidationManager::DVItem::DVItem( const ScRangeList& rRanges, const ScValidationData& rValidData ) :
     maRanges(rRanges), maValidData(rValidData) {}
@@ -713,11 +713,11 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     SCTAB nScTab = rRoot.GetCurrScTab();
     ExcelToSc& rFmlaConv = rRoot.GetOldFmlaConverter();
 
-    // flags
+    
     sal_uInt32 nFlags(0);
     rStrm >> nFlags;
 
-    // message strings
+    
     /*  Empty strings are single NUL characters in Excel (string length is 1).
         -> Do not let the stream replace them with '?' characters. */
     rStrm.SetNulSubstChar( '\0' );
@@ -725,16 +725,16 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     OUString aErrorTitle(    rStrm.ReadUniString() );
     OUString aPromptMessage( rStrm.ReadUniString() );
     OUString aErrorMessage(  rStrm.ReadUniString() );
-    rStrm.SetNulSubstChar();    // back to default
+    rStrm.SetNulSubstChar();    
 
-    // formula(s)
+    
     if ( rStrm.GetRecLeft() <= 8 )
-        // Not enough bytes left in the record.  Bail out.
+        
         return;
 
 
-    // first formula
-    // string list is single tStr token with NUL separators -> replace them with LF
+    
+    
     rStrm.SetNulSubstChar( '\n' );
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ScTokenArray > xTokArr1;
@@ -748,13 +748,13 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset();
             rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_CondFormat );
-        // formula converter owns pTokArr -> create a copy of the token array
+        
         if( pTokArr )
             xTokArr1.reset( pTokArr->Clone() );
     }
-    rStrm.SetNulSubstChar();    // back to default
+    rStrm.SetNulSubstChar();    
 
-    // second formula
+    
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ScTokenArray > xTokArr2;
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -767,24 +767,24 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
         const ScTokenArray* pTokArr = 0;
         rFmlaConv.Reset();
             rFmlaConv.Convert( pTokArr, rStrm, nLen, false, FT_CondFormat );
-        // formula converter owns pTokArr -> create a copy of the token array
+        
         if( pTokArr )
             xTokArr2.reset( pTokArr->Clone() );
     }
 
-    // read all cell ranges
+    
     XclRangeList aXclRanges;
     rStrm >> aXclRanges;
 
-    // convert to Calc range list
+    
     ScRangeList aScRanges;
     rRoot.GetAddressConverter().ConvertRangeList( aScRanges, aXclRanges, nScTab, true );
 
-    // only continue if there are valid ranges
+    
     if ( aScRanges.empty() )
         return;
 
-    bool bIsValid = true;   // valid settings in flags field
+    bool bIsValid = true;   
 
     ScValidationMode eValMode = SC_VALID_ANY;
     switch( nFlags & EXC_DV_MODE_MASK )
@@ -816,14 +816,14 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     }
 
     if ( !bIsValid )
-        // No valid validation found.  Bail out.
+        
         return;
 
 
-    // first range for base address for relative references
-    const ScRange& rScRange = *aScRanges.front();    // aScRanges is not empty
+    
+    const ScRange& rScRange = *aScRanges.front();    
 
-    // process string list of a list validity (convert to list of string tokens)
+    
     if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
         XclTokenArrayHelper::ConvertStringToList( *xTokArr1, '\n', true );
 
@@ -834,23 +834,23 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rItem.maValidData.SetIgnoreBlank( ::get_flag( nFlags, EXC_DV_IGNOREBLANK ) );
     rItem.maValidData.SetListType( ::get_flagvalue( nFlags, EXC_DV_SUPPRESSDROPDOWN, ValidListType::INVISIBLE, ValidListType::UNSORTED ) );
 
-    // *** prompt box ***
+    
     if( !aPromptTitle.isEmpty() || !aPromptMessage.isEmpty() )
     {
-        // set any text stored in the record
+        
         rItem.maValidData.SetInput( aPromptTitle, aPromptMessage );
         if( !::get_flag( nFlags, EXC_DV_SHOWPROMPT ) )
             rItem.maValidData.ResetInput();
     }
 
-    // *** error box ***
+    
     ScValidErrorStyle eErrStyle = SC_VALERR_STOP;
     switch( nFlags & EXC_DV_ERROR_MASK )
     {
         case EXC_DV_ERROR_WARNING:  eErrStyle = SC_VALERR_WARNING;  break;
         case EXC_DV_ERROR_INFO:     eErrStyle = SC_VALERR_INFO;     break;
     }
-    // set texts and error style
+    
     rItem.maValidData.SetError( aErrorTitle, aErrorMessage, eErrStyle );
     if( !::get_flag( nFlags, EXC_DV_SHOWERROR ) )
         rItem.maValidData.ResetError();
@@ -863,12 +863,12 @@ void XclImpValidationManager::Apply()
     for (; itr != itrEnd; ++itr)
     {
         DVItem& rItem = *itr;
-        // set the handle ID
+        
         sal_uLong nHandle = rDoc.AddValidationEntry( rItem.maValidData );
         ScPatternAttr aPattern( rDoc.GetPool() );
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
-        // apply all ranges
+        
         for ( size_t i = 0, nRanges = rItem.maRanges.size(); i < nRanges; ++i )
         {
             const ScRange* pScRange = rItem.maRanges[ i ];
@@ -879,7 +879,7 @@ void XclImpValidationManager::Apply()
     maDVItems.clear();
 }
 
-// Web queries ================================================================
+
 
 XclImpWebQuery::XclImpWebQuery( const ScRange& rDestRange ) :
     maDestRange( rDestRange ),
@@ -963,7 +963,7 @@ void XclImpWebQuery::Apply( ScDocument& rDoc, const OUString& rFilterName )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpWebQueryBuffer::XclImpWebQueryBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -977,10 +977,10 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
         rStrm.Ignore( 10 );
         OUString aXclName( rStrm.ReadUniString() );
 
-        // #i64794# Excel replaces spaces with underscores
+        
         aXclName = aXclName.replaceAll( " ", "_" );
 
-        // find the defined name used in Calc
+        
         if( const XclImpName* pName = GetNameManager().FindName( aXclName, GetCurrScTab() ) )
         {
             if( const ScRangeData* pRangeData = pName->GetScRangeData() )
@@ -1029,7 +1029,7 @@ void XclImpWebQueryBuffer::Apply()
         itQuery->Apply( rDoc, aFilterName );
 }
 
-// Decryption =================================================================
+
 
 namespace {
 
@@ -1065,7 +1065,7 @@ XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
 
 XclImpDecrypterRef lclReadFilepass8_Strong( XclImpStream& /*rStrm*/ )
 {
-    // not supported
+    
     return XclImpDecrypterRef();
 }
 
@@ -1107,16 +1107,16 @@ XclImpDecrypterRef lclReadFilepass8( XclImpStream& rStrm )
     return xDecr;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
 {
     XclImpDecrypterRef xDecr;
     rStrm.DisableDecryption();
 
-    // read the FILEPASS record and create a new decrypter object
+    
     switch( rStrm.GetRoot().GetBiff() )
     {
         case EXC_BIFF2:
@@ -1127,18 +1127,18 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
         default:        DBG_ERROR_BIFF();
     };
 
-    // set decrypter at import stream
+    
     rStrm.SetDecrypter( xDecr );
 
-    // request and verify a password (decrypter implements IDocPasswordVerifier)
+    
     if( xDecr )
         rStrm.GetRoot().RequestEncryptionData( *xDecr );
 
-    // return error code (success, wrong password, etc.)
+    
     return xDecr ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
 }
 
-// Document protection ========================================================
+
 
 XclImpDocProtectBuffer::XclImpDocProtectBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -1167,8 +1167,8 @@ void XclImpDocProtectBuffer::ReadPasswordHash( XclImpStream& rStrm )
 void XclImpDocProtectBuffer::Apply() const
 {
     if (!mbDocProtect && !mbWinProtect)
-        // Excel requires either the structure or windows protection is set.
-        // If neither is set then the document is not protected at all.
+        
+        
         return;
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -1178,21 +1178,21 @@ void XclImpDocProtectBuffer::Apply() const
 
     if (mnPassHash)
     {
-        // 16-bit password pash.
+        
         Sequence<sal_Int8> aPass(2);
         aPass[0] = (mnPassHash >> 8) & 0xFF;
         aPass[1] = mnPassHash & 0xFF;
         pProtect->setPasswordHash(aPass, PASSHASH_XL);
     }
 
-    // document protection options
+    
     pProtect->setOption(ScDocProtection::STRUCTURE, mbDocProtect);
     pProtect->setOption(ScDocProtection::WINDOWS,   mbWinProtect);
 
     GetDoc().SetDocProtection(pProtect.get());
 }
 
-// Sheet Protection ===========================================================
+
 
 XclImpSheetProtectBuffer::Sheet::Sheet() :
     mbProtected(false),
@@ -1201,7 +1201,7 @@ XclImpSheetProtectBuffer::Sheet::Sheet() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpSheetProtectBuffer::Sheet::Sheet(const Sheet& r) :
     mbProtected(r.mbProtected),
@@ -1229,27 +1229,27 @@ void XclImpSheetProtectBuffer::ReadOptions( XclImpStream& rStrm, SCTAB nTab )
 {
     rStrm.Ignore(12);
 
-    // feature type can be either 2 or 4.  If 2, this record stores flag for
-    // enhanced protection, whereas if 4 it stores flag for smart tag.
+    
+    
     sal_uInt16 nFeatureType(0);
     rStrm >> nFeatureType;
     if (nFeatureType != 2)
-        // We currently only support import of enhanced protection data.
+        
         return;
 
-    rStrm.Ignore(1); // always 1
+    rStrm.Ignore(1); 
 
-    // The flag size specifies the size of bytes that follows that stores
-    // feature data.  If -1 it depends on the feature type imported earlier.
-    // For enhanced protection data, the size is always 4.  For the most xls
-    // documents out there this value is almost always -1.
+    
+    
+    
+    
     sal_Int32 nFlagSize(0);
     rStrm >> nFlagSize;
     if (nFlagSize != -1)
         return;
 
-    // There are actually 4 bytes to read, but the upper 2 bytes currently
-    // don't store any bits.
+    
+    
     sal_uInt16 nOptions(0);
     rStrm >> nOptions;
 
@@ -1273,7 +1273,7 @@ void XclImpSheetProtectBuffer::Apply() const
          itr != itrEnd; ++itr)
     {
         if (!itr->second.mbProtected)
-            // This sheet is (for whatever reason) not protected.
+            
             continue;
 
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -1281,7 +1281,7 @@ void XclImpSheetProtectBuffer::Apply() const
         SAL_WNODEPRECATED_DECLARATIONS_POP
         pProtect->setProtected(true);
 
-        // 16-bit hash password
+        
         const sal_uInt16 nHash = itr->second.mnPasswordHash;
         if (nHash)
         {
@@ -1291,7 +1291,7 @@ void XclImpSheetProtectBuffer::Apply() const
             pProtect->setPasswordHash(aPass, PASSHASH_XL);
         }
 
-        // sheet protection options
+        
         const sal_uInt16 nOptions = itr->second.mnOptions;
         pProtect->setOption( ScTableProtection::OBJECTS,               (nOptions & 0x0001) );
         pProtect->setOption( ScTableProtection::SCENARIOS,             (nOptions & 0x0002) );
@@ -1309,7 +1309,7 @@ void XclImpSheetProtectBuffer::Apply() const
         pProtect->setOption( ScTableProtection::PIVOT_TABLES,          (nOptions & 0x2000) );
         pProtect->setOption( ScTableProtection::SELECT_UNLOCKED_CELLS, (nOptions & 0x4000) );
 
-        // all done.  now commit.
+        
         GetDoc().SetTabProtection(itr->first, pProtect.get());
     }
 }
@@ -1319,7 +1319,7 @@ XclImpSheetProtectBuffer::Sheet* XclImpSheetProtectBuffer::GetSheetItem( SCTAB n
     ProtectedSheetMap::iterator itr = maProtectedSheets.find(nTab);
     if (itr == maProtectedSheets.end())
     {
-        // new sheet
+        
         if ( !maProtectedSheets.insert( ProtectedSheetMap::value_type(nTab, Sheet()) ).second )
             return NULL;
 
@@ -1329,6 +1329,6 @@ XclImpSheetProtectBuffer::Sheet* XclImpSheetProtectBuffer::GetSheetItem( SCTAB n
     return &itr->second;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

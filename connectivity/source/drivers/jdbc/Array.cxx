@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "java/sql/Array.hxx"
@@ -22,9 +22,9 @@
 #include "java/sql/ResultSet.hxx"
 
 using namespace connectivity;
-//**************************************************************
-//************ Class: java.sql.Array
-//**************************************************************
+
+
+
 
 jclass java_sql_Array::theClass = 0;
 
@@ -33,7 +33,7 @@ java_sql_Array::~java_sql_Array()
 
 jclass java_sql_Array::getMyClass() const
 {
-    // the class must be fetched once, therefore its static
+    
     if( !theClass )
         theClass = findMyClass("java/sql/Array");
 
@@ -61,12 +61,12 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         static const char * cMethodName = "getArray";
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
-        // submit Java-Call
+        
         t.pEnv->CallObjectMethod( object, mID, obj);
         ThrowSQLException(t.pEnv,*this);
-        // and clean up
+        
         t.pEnv->DeleteLocalRef(obj);
-    } //t.pEnv
+    } 
     return ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >();
 }
 
@@ -77,12 +77,12 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
         static const char * cSignature = "(IILjava/util/Map;)[Ljava/lang/Object;";
         static const char * cMethodName = "getArray";
-        // submit Java-Call
+        
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         t.pEnv->CallObjectMethod( object, mID, index,count,obj);
         ThrowSQLException(t.pEnv,*this);
-        // and clean up
+        
         t.pEnv->DeleteLocalRef(obj);
     }
     return ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >();
@@ -92,17 +92,17 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
-        // convert Parameter
+        
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
-        // initialize temporary variable
+        
         static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getResultSet";
-        // submit Java-Call
+        
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         t.pEnv->CallObjectMethod( object, mID, obj);
         ThrowSQLException(t.pEnv,*this);
-        // and cleanup
+        
         t.pEnv->DeleteLocalRef(obj);
     }
     return NULL;
@@ -112,17 +112,17 @@ sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(::com::sun::star::sdbc:
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
-        // convert parameter
+        
         jobject obj = convertTypeMapToJavaMap(t.pEnv,typeMap);
-        // initialize temporary variable
+        
         static const char * cSignature = "(Ljava/util/Map;)Ljava/sql/ResultSet;";
         static const char * cMethodName = "getResultSetAtIndex";
-        // submit Java-Call
+        
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         t.pEnv->CallObjectMethod( object, mID, index,count,obj);
         ThrowSQLException(t.pEnv,*this);
-        // and cleanup
+        
         t.pEnv->DeleteLocalRef(obj);
     }
     return NULL;

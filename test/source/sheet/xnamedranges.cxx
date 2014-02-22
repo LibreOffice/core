@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/sheet/xnamedranges.hxx>
@@ -105,14 +105,14 @@ void XNamedRanges::testAddNewFromTitles()
 
     for (sal_Int32 i = 1; i < 4; i++)
     {
-        // verify namedrange exists
+        
         xCell = xSheet->getCellByPosition(i,0);
         uno::Reference< text::XTextRange > xTextRange(xCell, UNO_QUERY_THROW);
         aString = xTextRange->getString();
         std::cout << "addNewFromTitles: verify " << aString << std::endl;
         CPPUNIT_ASSERT_MESSAGE("Non existing NamedRange", xNamedRanges->hasByName(aString));
 
-        // verify it points on the right cell
+        
         uno::Any aNr = xNamedRangesNameAccess->getByName(aString);
         uno::Reference< sheet::XNamedRange > xNamedRange(aNr, UNO_QUERY_THROW);
 
@@ -130,14 +130,14 @@ void XNamedRanges::testAddNewFromTitles()
 
     for (sal_Int32 i = 1; i < 4; i++)
     {
-        // verify namedrange exists
+        
         xCell = xSheet->getCellByPosition(0,i);
         uno::Reference< text::XTextRange > xTextRange(xCell, UNO_QUERY_THROW);
         aString = xTextRange->getString();
         std::cout << "verify " << aString << std::endl;
         CPPUNIT_ASSERT_MESSAGE("Non existing NamedRange", xNamedRanges->hasByName(aString));
 
-        // verify it points on the right cell
+        
         uno::Any aNr= xNamedRangesNameAccess->getByName(aString);
         uno::Reference< sheet::XNamedRange > xNamedRange(aNr, UNO_QUERY_THROW);
 
@@ -162,15 +162,15 @@ void XNamedRanges::testRemoveByName()
 
     if (bHasIt)
     {
-        // remove existing
+        
         sal_Int32 nInitialCount = xIndex->getCount();
         xNamedRanges->removeByName(maNameToRemove);
         sal_Int32 nNewCount = xIndex->getCount();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("NamedRange initial1 not removed", nNewCount, nInitialCount - 1);
         CPPUNIT_ASSERT_MESSAGE("Wrong NamedRange removed, initial1 still present", !xNamedRanges->hasByName(maNameToRemove));
-        // try to remove non existing
+        
         OUString aNr2("dummyNonExistingNamedRange");
-        xNamedRanges->removeByName(aNr2);// an exception should be raised here
+        xNamedRanges->removeByName(aNr2);
     }
 }
 

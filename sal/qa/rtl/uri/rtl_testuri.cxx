@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@ void Test::test_Uri() {
     rtl::OUString aText1;
     rtl::OUString aText2;
 
-    // Check that all characters map back to themselves when encoded/decoded:
+    
 
     aText1 = rtl::OUString(
         RTL_CONSTASCII_USTRINGPARAM(
@@ -195,13 +195,13 @@ void Test::test_Uri() {
              == aText2));
     }
 
-    // Check surrogate handling:
+    
 
-    aBuffer.append(static_cast< sal_Unicode >(0xD800)); // %ED%A0%80
-    aBuffer.append(static_cast< sal_Unicode >(0xD800)); // %F0%90%8F%BF
+    aBuffer.append(static_cast< sal_Unicode >(0xD800)); 
+    aBuffer.append(static_cast< sal_Unicode >(0xD800)); 
     aBuffer.append(static_cast< sal_Unicode >(0xDFFF));
-    aBuffer.append(static_cast< sal_Unicode >(0xDFFF)); // %ED%BF%BF
-    aBuffer.append('A'); // A
+    aBuffer.append(static_cast< sal_Unicode >(0xDFFF)); 
+    aBuffer.append('A'); 
     aText1 = aBuffer.makeStringAndClear();
     aText2 = rtl::OUString(
             "%ED%A0%80" "%F0%90%8F%BF" "%ED%BF%BF" "A");
@@ -242,10 +242,10 @@ void Test::test_Uri() {
             aText1, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8)
          == aText2));
 
-    // Check UTF-8 handling:
+    
 
     aText1 = rtl::OUString("%E0%83%BF");
-        // \U+00FF encoded with three instead of two bytes
+        
     aText2 = aText1;
     CPPUNIT_ASSERT_MESSAGE(
         "failure 16",
@@ -255,7 +255,7 @@ void Test::test_Uri() {
          == aText2));
 
     aText1 = rtl::OUString("%EF%BF%BF");
-        // \U+FFFF is no legal character
+        
     aText2 = aText1;
     CPPUNIT_ASSERT_MESSAGE(
         "failure 17",
@@ -264,7 +264,7 @@ void Test::test_Uri() {
             RTL_TEXTENCODING_UTF8)
          == aText2));
 
-    // Check IURI handling:
+    
 
     aText1 = rtl::OUString("%30%C3%BF");
     aBuffer.append("%30");
@@ -275,7 +275,7 @@ void Test::test_Uri() {
         (rtl::Uri::decode(aText1, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8)
          == aText2));
 
-    // Check modified rtl_UriCharClassUnoParamValue (removed '[' and ']'):
+    
 
     aText1 = rtl::OUString("[]%5B%5D");
     aText2 = rtl::OUString("%5B%5D%5B%5D");
@@ -286,7 +286,7 @@ void Test::test_Uri() {
             RTL_TEXTENCODING_ASCII_US)
          == aText2));
 
-    // Check Uri::convertRelToAbs:
+    
 
     struct RelToAbsTest
     {
@@ -295,56 +295,56 @@ void Test::test_Uri() {
         char const * pAbs;
     };
     static RelToAbsTest const aRelToAbsTest[]
-        = { // The following tests are taken from RFC 2396:
-            { "http://a/b/c/d;p?q", "g:h", "g:h" },
-            { "http://a/b/c/d;p?q", "g", "http://a/b/c/g" },
-            { "http://a/b/c/d;p?q", "./g", "http://a/b/c/g" },
-            { "http://a/b/c/d;p?q", "g/", "http://a/b/c/g/" },
-            { "http://a/b/c/d;p?q", "/g", "http://a/g" },
-            { "http://a/b/c/d;p?q", "//g", "http://g" },
-            { "http://a/b/c/d;p?q", "?y", "http://a/b/c/?y" },
-            { "http://a/b/c/d;p?q", "g?y", "http://a/b/c/g?y" },
-            { "http://a/b/c/d;p?q", "#s", "http://a/b/c/d;p?q#s" },
-            { "http://a/b/c/d;p?q", "g#s", "http://a/b/c/g#s" },
-            { "http://a/b/c/d;p?q", "g?y#s", "http://a/b/c/g?y#s" },
-            { "http://a/b/c/d;p?q", ";x", "http://a/b/c/;x" },
-            { "http://a/b/c/d;p?q", "g;x", "http://a/b/c/g;x" },
-            { "http://a/b/c/d;p?q", "g;x?y#s", "http://a/b/c/g;x?y#s" },
-            { "http://a/b/c/d;p?q", ".", "http://a/b/c/" },
-            { "http://a/b/c/d;p?q", "./", "http://a/b/c/" },
-            { "http://a/b/c/d;p?q", "..", "http://a/b/" },
-            { "http://a/b/c/d;p?q", "../", "http://a/b/" },
-            { "http://a/b/c/d;p?q", "../g", "http://a/b/g" },
-            { "http://a/b/c/d;p?q", "../..", "http://a/" },
-            { "http://a/b/c/d;p?q", "../../", "http://a/" },
-            { "http://a/b/c/d;p?q", "../../g", "http://a/g" },
-            { "http://a/b/c/d;p?q", "", "http://a/b/c/d;p?q" },
-            { "http://a/b/c/d;p?q", "../../../g", "http://a/../g" },
-            { "http://a/b/c/d;p?q", "../../../../g", "http://a/../../g" },
-            { "http://a/b/c/d;p?q", "/./g", "http://a/./g" },
-            { "http://a/b/c/d;p?q", "/../g", "http://a/../g" },
-            { "http://a/b/c/d;p?q", "g.", "http://a/b/c/g." },
-            { "http://a/b/c/d;p?q", ".g", "http://a/b/c/.g" },
-            { "http://a/b/c/d;p?q", "g..", "http://a/b/c/g.." },
-            { "http://a/b/c/d;p?q", "..g", "http://a/b/c/..g" },
-            { "http://a/b/c/d;p?q", "./../g", "http://a/b/g" },
-            { "http://a/b/c/d;p?q", "./g/.", "http://a/b/c/g/" },
-            { "http://a/b/c/d;p?q", "g/./h", "http://a/b/c/g/h" },
-            { "http://a/b/c/d;p?q", "g/../h", "http://a/b/c/h" },
-            { "http://a/b/c/d;p?q", "g;x=1/./y", "http://a/b/c/g;x=1/y" },
-            { "http://a/b/c/d;p?q", "g;x=1/../y", "http://a/b/c/y" },
-            { "http://a/b/c/d;p?q", "g?y/./x", "http://a/b/c/g?y/./x" },
-            { "http://a/b/c/d;p?q", "g?y/../x", "http://a/b/c/g?y/../x" },
-            { "http://a/b/c/d;p?q", "g#s/./x", "http://a/b/c/g#s/./x" },
-            { "http://a/b/c/d;p?q", "g#s/../x", "http://a/b/c/g#s/../x" },
-            { "http://a/b/c/d;p?q", "http:g", "http:g" },
-            { "http!://a/b/c/d;p?q", "g:h", "g:h" },
-            { "http!://a/b/c/d;p?q", "g", 0 },
+        = { 
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http:
+            { "http!:
+            { "http!:
             { "http:b/c/d;p?q", "g:h", "g:h" },
             { "http:b/c/d;p?q", "g", 0 },
-            { "http://a/b/../", "../c", "http://a/b/../../c" },
-            { "http://a/b/..", "../c", "http://a/c" },
-            { "http://a/./b/", ".././.././../c", "http://a/./../../c" } };
+            { "http:
+            { "http:
+            { "http:
     for (std::size_t i = 0; i < sizeof aRelToAbsTest / sizeof (RelToAbsTest); ++i)
     {
         rtl::OUString aAbs;
@@ -374,7 +374,7 @@ void Test::test_Uri() {
         }
     }
 
-    // Check encode with unusual text encodings:
+    
 
     {
         sal_Unicode const aText1U[] = { ' ', '!', 0x0401, 0x045F, 0 };
@@ -427,7 +427,7 @@ void Test::test_Uri() {
              == aText1));
     }
 
-    // Check strict mode:
+    
 
     {
         sal_Unicode const aText1U[] = { ' ', '!', 0x0401, 0x0700, 0x045F, 0 };
@@ -488,7 +488,7 @@ void Test::test_Uri() {
              == aText2));
     }
 
-    // Check rtl_UriEncodeStrictKeepEscapes mode:
+    
 
     {
         aText1 = rtl::OUString("%%ea%c3%aa");
@@ -527,6 +527,6 @@ void Test::test_Uri() {
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
-// NOADDITIONAL;
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@
 BufferStream::BufferStream(IStream *str) :
     stream(str)
 {
-    // These next few lines work around the "Seek pointer" bug found on Vista.
+    
     char cBuf[20];
     unsigned long nCount;
     ULARGE_INTEGER nNewPosition;
@@ -106,7 +106,7 @@ long BufferStream::sseek (long offset, int origin)
 FileStream::FileStream(const char *filename) :
     file(0)
 {
-    // fdo#67534: avoid locking to not interfere with soffice opening the file
+    
     file = _fsopen(filename, "rb", _SH_DENYNO);
 }
 

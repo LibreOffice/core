@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ZipPackageEntry.hxx>
@@ -49,11 +49,11 @@ ZipPackageEntry::ZipPackageEntry ( bool bNewFolder )
 
 ZipPackageEntry::~ZipPackageEntry()
 {
-    // When the entry is destroyed it must be already disconnected from the parent
+    
     OSL_ENSURE( !pParent, "The parent must be disconnected already! Memory corruption is possible!\n" );
 }
 
-// XChild
+
 OUString SAL_CALL ZipPackageEntry::getName(  )
     throw(RuntimeException)
 {
@@ -65,8 +65,8 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
     if ( pParent && !msName.isEmpty() && pParent->hasByName ( msName ) )
         pParent->removeByName ( msName );
 
-    // unfortunately no other exception than RuntimeException can be thrown here
-    // usually the package is used through storage implementation, the problem should be detected there
+    
+    
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( aName, true ) )
         throw RuntimeException(THROW_WHERE "Unexpected character is used in file name.", uno::Reference< XInterface >() );
 
@@ -78,13 +78,13 @@ void SAL_CALL ZipPackageEntry::setName( const OUString& aName )
 uno::Reference< XInterface > SAL_CALL ZipPackageEntry::getParent(  )
         throw(RuntimeException)
 {
-    // return uno::Reference< XInterface >( xParent, UNO_QUERY );
+    
     return uno::Reference< XInterface >( static_cast< ::cppu::OWeakObject* >( pParent ), UNO_QUERY );
 }
 
 void ZipPackageEntry::doSetParent ( ZipPackageFolder * pNewParent, sal_Bool bInsert )
 {
-    // xParent = pParent = pNewParent;
+    
     pParent = pNewParent;
     if ( bInsert && !msName.isEmpty() && !pNewParent->hasByName ( msName ) )
         pNewParent->doInsertByName ( this, sal_False );
@@ -107,7 +107,7 @@ void SAL_CALL ZipPackageEntry::setParent( const uno::Reference< XInterface >& xN
         doSetParent ( pNewParent, sal_True );
     }
 }
-    //XPropertySet
+    
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ZipPackageEntry::getPropertySetInfo(  )
         throw(RuntimeException)
 {

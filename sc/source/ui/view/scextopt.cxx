@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scextopt.hxx"
@@ -23,7 +23,7 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 
-// ============================================================================
+
 
 ScExtDocSettings::ScExtDocSettings() :
     mfTabBarWidth( -1.0 ),
@@ -32,7 +32,7 @@ ScExtDocSettings::ScExtDocSettings() :
 {
 }
 
-// ============================================================================
+
 
 ScExtTabSettings::ScExtTabSettings() :
     maUsedArea( ScAddress::INITIALIZE_INVALID ),
@@ -52,7 +52,7 @@ ScExtTabSettings::ScExtTabSettings() :
 {
 }
 
-// ============================================================================
+
 
 /** A container for ScExtTabSettings objects.
     @descr  Internally, a std::map with shared pointers to ScExtTabSettings is
@@ -80,7 +80,7 @@ private:
     ScExtTabSettingsMap maMap;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScExtTabSettingsCont::ScExtTabSettingsCont()
 {
@@ -123,17 +123,17 @@ void ScExtTabSettingsCont::CopyFromMap( const ScExtTabSettingsMap& rMap )
         maMap[ aIt->first ].reset( new ScExtTabSettings( *aIt->second ) );
 }
 
-// ============================================================================
+
 
 /** Implementation struct for ScExtDocOptions containing all members. */
 struct ScExtDocOptionsImpl
 {
     typedef ::std::vector< OUString > StringVec;
 
-    ScExtDocSettings    maDocSett;          /// Global document settings.
-    ScExtTabSettingsCont maTabSett;         /// Settings for all sheets.
-    StringVec           maCodeNames;        /// Codenames for all sheets (VBA module names).
-    bool                mbChanged;          /// Use only if something has been changed.
+    ScExtDocSettings    maDocSett;          
+    ScExtTabSettingsCont maTabSett;         
+    StringVec           maCodeNames;        
+    bool                mbChanged;          
 
     explicit            ScExtDocOptionsImpl();
 };
@@ -143,7 +143,7 @@ ScExtDocOptionsImpl::ScExtDocOptionsImpl() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScExtDocOptions::ScExtDocOptions() :
     mxImpl( new ScExtDocOptionsImpl )
@@ -223,6 +223,6 @@ void ScExtDocOptions::SetCodeName( SCTAB nTab, const OUString& rCodeName )
     }
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

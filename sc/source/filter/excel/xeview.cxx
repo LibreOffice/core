@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xeview.hxx"
@@ -27,7 +27,7 @@
 using namespace ::oox;
 
 
-// Workbook view settings records =============================================
+
 
 XclExpWindow1::XclExpWindow1( const XclExpRoot& rRoot ) :
     XclExpRecord( EXC_ID_WINDOW1, 18 ),
@@ -49,8 +49,8 @@ void XclExpWindow1::SaveXml( XclExpXmlStream& rStrm )
     const XclExpTabInfo& rTabInfo = rStrm.GetRoot().GetTabInfo();
 
     rStrm.GetCurrentStream()->singleElement( XML_workbookView,
-            // OOXTODO: XML_visibility, // ST_visibilty
-            // OOXTODO: XML_minimized,  // bool
+            
+            
             XML_showHorizontalScroll,   XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_HOR_SCROLLBAR ) ),
             XML_showVerticalScroll,     XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_VER_SCROLLBAR ) ),
             XML_showSheetTabs,          XclXmlUtils::ToPsz( ::get_flag( mnFlags, EXC_WIN1_TABBAR ) ),
@@ -61,7 +61,7 @@ void XclExpWindow1::SaveXml( XclExpXmlStream& rStrm )
             XML_tabRatio,               OString::number( mnTabBarSize ).getStr(),
             XML_firstSheet,             OString::number( rTabInfo.GetFirstVisXclTab() ).getStr(),
             XML_activeTab,              OString::number( rTabInfo.GetDisplayedXclTab() ).getStr(),
-            // OOXTODO: XML_autoFilterDateGrouping,     // bool; AUTOFILTER12? 87Eh
+            
             FSEND );
 }
 
@@ -69,10 +69,10 @@ void XclExpWindow1::WriteBody( XclExpStream& rStrm )
 {
     const XclExpTabInfo& rTabInfo = rStrm.GetRoot().GetTabInfo();
 
-    rStrm   << sal_uInt16( 0 )              // X position of the window
-            << sal_uInt16( 0 )              // Y position of the window
-            << sal_uInt16( 0x4000 )         // width of the window
-            << sal_uInt16( 0x2000 )         // height of the window
+    rStrm   << sal_uInt16( 0 )              
+            << sal_uInt16( 0 )              
+            << sal_uInt16( 0x4000 )         
+            << sal_uInt16( 0x2000 )         
             << mnFlags
             << rTabInfo.GetDisplayedXclTab()
             << rTabInfo.GetFirstVisXclTab()
@@ -80,7 +80,7 @@ void XclExpWindow1::WriteBody( XclExpStream& rStrm )
             << mnTabBarSize;
 }
 
-// Sheet view settings records ================================================
+
 
 XclExpWindow2::XclExpWindow2( const XclExpRoot& rRoot,
         const XclTabViewData& rData, sal_uInt32 nGridColorId ) :
@@ -131,7 +131,7 @@ void XclExpWindow2::WriteBody( XclExpStream& rStrm )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpScl::XclExpScl( sal_uInt16 nZoom ) :
     XclExpRecord( EXC_ID_SCL, 4 ),
@@ -157,7 +157,7 @@ void XclExpScl::WriteBody( XclExpStream& rStrm )
     rStrm << mnNum << mnDenom;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpPane::XclExpPane( const XclTabViewData& rData ) :
     XclExpRecord( EXC_ID_PANE, 10 ),
@@ -174,10 +174,10 @@ static const char* lcl_GetActivePane( sal_uInt8 nActivePane )
 {
     switch( nActivePane )
     {
-        case EXC_PANE_TOPLEFT:      return "topLeft";       //break;
-        case EXC_PANE_TOPRIGHT:     return "topRight";      //break;
-        case EXC_PANE_BOTTOMLEFT:   return "bottomLeft";    //break;
-        case EXC_PANE_BOTTOMRIGHT:  return "bottomRight";   //break;
+        case EXC_PANE_TOPLEFT:      return "topLeft";       
+        case EXC_PANE_TOPRIGHT:     return "topRight";      
+        case EXC_PANE_BOTTOMLEFT:   return "bottomLeft";    
+        case EXC_PANE_BOTTOMRIGHT:  return "bottomRight";   
     }
     return "**error: lcl_GetActivePane";
 }
@@ -203,7 +203,7 @@ void XclExpPane::WriteBody( XclExpStream& rStrm )
         rStrm << sal_uInt8( 0 );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpSelection::XclExpSelection( const XclTabViewData& rData, sal_uInt8 nPane ) :
     XclExpRecord( EXC_ID_SELECTION, 15 ),
@@ -212,7 +212,7 @@ XclExpSelection::XclExpSelection( const XclTabViewData& rData, sal_uInt8 nPane )
     if( const XclSelectionData* pSelData = rData.GetSelectionData( nPane ) )
         maSelData = *pSelData;
 
-    // find the cursor position in the selection list (or add it)
+    
     XclRangeList& rXclSel = maSelData.maXclSelection;
     bool bFound = false;
     for( XclRangeList::const_iterator aIt = rXclSel.begin(), aEnd = rXclSel.end(); !bFound && (aIt != aEnd); ++aIt )
@@ -240,20 +240,20 @@ void XclExpSelection::SaveXml( XclExpXmlStream& rStrm )
 
 void XclExpSelection::WriteBody( XclExpStream& rStrm )
 {
-    rStrm   << mnPane                   // pane for this selection
-            << maSelData.maXclCursor    // cell cursor
-            << maSelData.mnCursorIdx;   // index to range containing cursor
+    rStrm   << mnPane                   
+            << maSelData.maXclCursor    
+            << maSelData.mnCursorIdx;   
     maSelData.maXclSelection.Write( rStrm, false );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpTabBgColor::XclExpTabBgColor( const XclTabViewData& rTabViewData ) :
     XclExpRecord( EXC_ID_SHEETEXT, 18 ),
     mrTabViewData( rTabViewData )
 {
 }
-//TODO Fix savexml...
+
 /*void XclExpTabBgColor::SaveXml( XclExpXmlStream& rStrm )
 {
 }*/
@@ -262,20 +262,20 @@ void XclExpTabBgColor::WriteBody( XclExpStream& rStrm )
 {
     if ( mrTabViewData.IsDefaultTabBgColor() )
         return;
-    sal_uInt16 rt = 0x0862; //rt
-    sal_uInt16 grbitFrt = 0x0000; //grbit must be set to 0
-    sal_uInt32 unused = 0x00000000; //Use twice...
-    sal_uInt32 cb = 0x00000014; // Record Size, may be larger in future...
-    sal_uInt16 reserved = 0x0000; //trailing bits are 0
+    sal_uInt16 rt = 0x0862; 
+    sal_uInt16 grbitFrt = 0x0000; 
+    sal_uInt32 unused = 0x00000000; 
+    sal_uInt32 cb = 0x00000014; 
+    sal_uInt16 reserved = 0x0000; 
     sal_uInt16 TabBgColorIndex;
     XclExpPalette& rPal = rStrm.GetRoot().GetPalette();
     TabBgColorIndex = rPal.GetColorIndex(mrTabViewData.mnTabBgColorId);
-    if (TabBgColorIndex < 8 || TabBgColorIndex > 63 ) // only numbers 8 - 63 are valid numbers
-        TabBgColorIndex = 127; //Excel specs: 127 makes excel ignore tab color information.
+    if (TabBgColorIndex < 8 || TabBgColorIndex > 63 ) 
+        TabBgColorIndex = 127; 
     rStrm << rt << grbitFrt << unused << unused << cb << TabBgColorIndex << reserved;
 }
 
-// Sheet view settings ========================================================
+
 
 namespace {
 
@@ -286,15 +286,15 @@ sal_uInt16 lclGetXclZoom( long nScZoom, sal_uInt16 nDefXclZoom )
     return (nXclZoom == nDefXclZoom) ? 0 : nXclZoom;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nScTab ) :
     XclExpRoot( rRoot ),
     mnGridColorId( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT ) )
 {
-    // *** sheet flags ***
+    
 
     const XclExpTabInfo& rTabInfo = GetTabInfo();
     maData.mbSelected       = rTabInfo.IsSelectedTab( nScTab );
@@ -307,22 +307,22 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
     maData.mbShowZeros      = rViewOpt.GetOption( VOPT_NULLVALS );
     maData.mbShowOutline    = rViewOpt.GetOption( VOPT_OUTLINER );
 
-    // *** sheet options: cursor, selection, splits, grid color, zoom ***
+    
 
     if( const ScExtTabSettings* pTabSett = GetExtDocOptions().GetTabSettings( nScTab ) )
     {
         const ScExtTabSettings& rTabSett = *pTabSett;
         XclExpAddressConverter& rAddrConv = GetAddressConverter();
 
-        // first visible cell in top-left pane
+        
         if( (rTabSett.maFirstVis.Col() >= 0) && (rTabSett.maFirstVis.Row() >= 0) )
             maData.maFirstXclPos = rAddrConv.CreateValidAddress( rTabSett.maFirstVis, false );
 
-        // first visible cell in additional pane(s)
+        
         if( (rTabSett.maSecondVis.Col() >= 0) && (rTabSett.maSecondVis.Row() >= 0) )
             maData.maSecondXclPos = rAddrConv.CreateValidAddress( rTabSett.maSecondVis, false );
 
-        // active pane
+        
         switch( rTabSett.meActivePane )
         {
             case SCEXT_PANE_TOPLEFT:        maData.mnActivePane = EXC_PANE_TOPLEFT;     break;
@@ -331,7 +331,7 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
             case SCEXT_PANE_BOTTOMRIGHT:    maData.mnActivePane = EXC_PANE_BOTTOMRIGHT; break;
         }
 
-        // freeze/split position
+        
         maData.mbFrozenPanes = rTabSett.mbFrozenPanes;
         if( maData.mbFrozenPanes )
         {
@@ -343,10 +343,10 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
             SCROW nFreezeScRow = rTabSett.maFreezePos.Row();
             if( (0 < nFreezeScRow) && (nFreezeScRow <= GetXclMaxPos().Row()) )
                 maData.mnSplitY = static_cast< sal_uInt32 >( nFreezeScRow ) - maData.maFirstXclPos.mnRow;
-            // if both splits are left out (address overflow), remove the frozen flag
+            
             maData.mbFrozenPanes = maData.IsSplit();
 
-            // #i20671# frozen panes: mostright/mostbottom pane is active regardless of cursor position
+            
             if( maData.HasPane( EXC_PANE_BOTTOMRIGHT ) )
                 maData.mnActivePane = EXC_PANE_BOTTOMRIGHT;
             else if( maData.HasPane( EXC_PANE_TOPRIGHT ) )
@@ -356,18 +356,18 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
         }
         else
         {
-            // split window: position is in twips
+            
             maData.mnSplitX = static_cast<sal_uInt16>(rTabSett.maSplitPos.X());
             maData.mnSplitY = static_cast<sal_uInt32>(rTabSett.maSplitPos.Y());
         }
 
-        // selection
+        
         CreateSelectionData( EXC_PANE_TOPLEFT,     rTabSett.maCursor, rTabSett.maSelection );
         CreateSelectionData( EXC_PANE_TOPRIGHT,    rTabSett.maCursor, rTabSett.maSelection );
         CreateSelectionData( EXC_PANE_BOTTOMLEFT,  rTabSett.maCursor, rTabSett.maSelection );
         CreateSelectionData( EXC_PANE_BOTTOMRIGHT, rTabSett.maCursor, rTabSett.maSelection );
 
-        // grid color
+        
         const Color& rGridColor = rTabSett.maGridColor;
         maData.mbDefGridColor = rGridColor.GetColor() == COL_AUTO;
         if( !maData.mbDefGridColor )
@@ -379,14 +379,14 @@ XclExpTabViewSettings::XclExpTabViewSettings( const XclExpRoot& rRoot, SCTAB nSc
         }
         maData.mbShowGrid       = rTabSett.mbShowGrid;
 
-        // view mode and zoom
+        
         maData.mbPageMode       = (GetBiff() == EXC_BIFF8) && rTabSett.mbPageMode;
         maData.mnNormalZoom     = lclGetXclZoom( rTabSett.mnNormalZoom, EXC_WIN2_NORMALZOOM_DEF );
         maData.mnPageZoom       = lclGetXclZoom( rTabSett.mnPageZoom, EXC_WIN2_PAGEZOOM_DEF );
         maData.mnCurrentZoom    = maData.mbPageMode ? maData.mnPageZoom : maData.mnNormalZoom;
     }
 
-    // Tab Bg Color
+    
     if ( GetBiff() == EXC_BIFF8 && !GetDoc().IsDefaultTabBgColor(nScTab) )
     {
         XclExpPalette& rPal = GetPalette();
@@ -432,19 +432,19 @@ void XclExpTabViewSettings::SaveXml( XclExpXmlStream& rStrm )
             XML_showZeros,                  XclXmlUtils::ToPsz( maData.mbShowZeros ),
             XML_rightToLeft,                XclXmlUtils::ToPsz( maData.mbMirrored ),
             XML_tabSelected,                XclXmlUtils::ToPsz( maData.mbSelected ),
-            // OOXTODO: XML_showRuler,
+            
             XML_showOutlineSymbols,         XclXmlUtils::ToPsz( maData.mbShowOutline ),
             XML_defaultGridColor,           mnGridColorId == XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT ) ? "true" : "false",
-            // OOXTODO: XML_showWhiteSpace,
-            XML_view,                       maData.mbPageMode ? "pageBreakPreview" : "normal",  // OOXTODO: pageLayout
+            
+            XML_view,                       maData.mbPageMode ? "pageBreakPreview" : "normal",  
             XML_topLeftCell,                XclXmlUtils::ToOString( maData.maFirstXclPos ).getStr(),
             XML_colorId,                    OString::number(  rStrm.GetRoot().GetPalette().GetColorIndex( mnGridColorId ) ).getStr(),
             XML_zoomScale,                  lcl_GetZoom( maData.mnCurrentZoom ).getStr(),
             XML_zoomScaleNormal,            lcl_GetZoom( maData.mnNormalZoom ).getStr(),
-            // OOXTODO: XML_zoomScaleSheetLayoutView,
+            
             XML_zoomScalePageLayoutView,    lcl_GetZoom( maData.mnPageZoom ).getStr(),
-            XML_workbookViewId,             "0",    // OOXTODO? 0-based index of document(xl/workbook.xml)/workbook/bookviews/workbookView
-                                                    //          should always be 0, as we only generate 1 such element.
+            XML_workbookViewId,             "0",    
+                                                    
             FSEND );
     if( maData.IsSplit() )
     {
@@ -456,11 +456,11 @@ void XclExpTabViewSettings::SaveXml( XclExpXmlStream& rStrm )
     lcl_WriteSelection( rStrm, maData, EXC_PANE_BOTTOMLEFT );
     lcl_WriteSelection( rStrm, maData, EXC_PANE_BOTTOMRIGHT );
     rWorksheet->endElement( XML_sheetView );
-    // OOXTODO: XML_extLst
+    
     rWorksheet->endElement( XML_sheetViews );
 }
 
-// private --------------------------------------------------------------------
+
 
 void XclExpTabViewSettings::CreateSelectionData( sal_uInt8 nPane,
         const ScAddress& rCursor, const ScRangeList& rSelection )
@@ -469,20 +469,20 @@ void XclExpTabViewSettings::CreateSelectionData( sal_uInt8 nPane,
     {
         XclSelectionData& rSelData = maData.CreateSelectionData( nPane );
 
-        // first step: use top-left visible cell as cursor
+        
         rSelData.maXclCursor.mnCol = ((nPane == EXC_PANE_TOPLEFT) || (nPane == EXC_PANE_BOTTOMLEFT)) ?
             maData.maFirstXclPos.mnCol : maData.maSecondXclPos.mnCol;
         rSelData.maXclCursor.mnRow = ((nPane == EXC_PANE_TOPLEFT) || (nPane == EXC_PANE_TOPRIGHT)) ?
             maData.maFirstXclPos.mnRow : maData.maSecondXclPos.mnRow;
 
-        // second step, active pane: create actual selection data with current cursor position
+        
         if( nPane == maData.mnActivePane )
         {
             XclExpAddressConverter& rAddrConv = GetAddressConverter();
-            // cursor position (keep top-left pane position from above, if rCursor is invalid)
+            
             if( (rCursor.Col() >= 0) && (rCursor.Row() >= 0) )
                 rSelData.maXclCursor = rAddrConv.CreateValidAddress( rCursor, false );
-            // selection
+            
             rAddrConv.ConvertRangeList( rSelData.maXclSelection, rSelection, false );
         }
     }
@@ -490,8 +490,8 @@ void XclExpTabViewSettings::CreateSelectionData( sal_uInt8 nPane,
 
 void XclExpTabViewSettings::WriteWindow2( XclExpStream& rStrm ) const
 {
-//  #i43553# GCC 3.3 parse error
-//    XclExpWindow2( GetRoot(), maData, mnGridColorId ).Save( rStrm );
+
+
     XclExpWindow2 aWindow2( GetRoot(), maData, mnGridColorId );
     aWindow2.Save( rStrm );
 }
@@ -505,8 +505,8 @@ void XclExpTabViewSettings::WriteScl( XclExpStream& rStrm ) const
 void XclExpTabViewSettings::WritePane( XclExpStream& rStrm ) const
 {
     if( maData.IsSplit() )
-//  #i43553# GCC 3.3 parse error
-//        XclExpPane( GetRoot(), maData ).Save( rStrm );
+
+
     {
         XclExpPane aPane( maData );
         aPane.Save( rStrm );
@@ -524,6 +524,6 @@ void XclExpTabViewSettings::WriteTabBgColor( XclExpStream& rStrm ) const
     if ( !maData.IsDefaultTabBgColor() )
         XclExpTabBgColor( maData ).Save( rStrm );
 }
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

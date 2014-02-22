@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/supportsservice.hxx>
@@ -56,11 +56,11 @@ typedef struct
     OUString Port;
 } ProxyEntry;
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
 
-namespace // private
+
+
+
+namespace 
 {
     ProxyEntry ReadProxyEntry(const OUString& aProxy, sal_Int32& i)
     {
@@ -79,11 +79,11 @@ namespace // private
 
         do
         {
-            // get the next token, e.g. ftp=server:port
+            
             OUString nextToken = aProxyList.getToken( 0, SPACE, nIndex );
 
-            // split the next token again into the parts separated
-            // through '=', e.g. ftp=server:port -> ftp and server:port
+            
+            
             sal_Int32 i = 0;
             if( nextToken.indexOf( EQUAL_SIGN ) > -1 )
             {
@@ -98,9 +98,9 @@ namespace // private
         return ProxyEntry();
     }
 
-} // end private namespace
+} 
 
-//------------------------------------------------------------------------------
+
 
 WinInetBackend::WinInetBackend()
 {
@@ -114,12 +114,12 @@ WinInetBackend::WinInetBackend()
                 GetProcAddress( hWinInetDll.module, "InternetQueryOptionA" ) );
         if (lpfnInternetQueryOption)
         {
-            // Some Windows versions would fail the InternetQueryOption call
-            // with ERROR_OUTOFMEMORY when the initial dwLength were zero (and
-            // are apparently fine with the initial sizeof (INTERNET_PROXY_INFO)
-            // and need no reallocation), while other versions fail with
-            // ERROR_INSUFFICIENT_BUFFER upon that initial dwLength and need a
-            // reallocation:
+            
+            
+            
+            
+            
+            
             INTERNET_PROXY_INFO pi;
             LPINTERNET_PROXY_INFO lpi = &pi;
             DWORD dwLength = sizeof (INTERNET_PROXY_INFO);
@@ -133,14 +133,14 @@ WinInetBackend::WinInetBackend()
                 DWORD err = GetLastError();
                 if (err == ERROR_INSUFFICIENT_BUFFER)
                 {
-                    // allocate sufficient space on the heap
-                    // insufficient space on the heap results
-                    // in a stack overflow exception, we assume
-                    // this never happens, because of the relatively
-                    // small amount of memory we need
-                    // alloca is nice because it is fast and we don't
-                    // have to free the allocated memory, it will be
-                    // automatically done
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     lpi = reinterpret_cast< LPINTERNET_PROXY_INFO >(
                         alloca( dwLength ) );
                     ok = lpfnInternetQueryOption(
@@ -163,20 +163,20 @@ WinInetBackend::WinInetBackend()
                 }
             }
 
-            // if a proxy is disabled, InternetQueryOption returns
-            // an empty proxy list, so we don't have to check if
-            // proxy is enabled or not
+            
+            
+            
 
             OUString aProxyList       = OUString::createFromAscii( lpi->lpszProxy );
             OUString aProxyBypassList = OUString::createFromAscii( lpi->lpszProxyBypass );
 
-            // override default for ProxyType, which is "0" meaning "No proxies".
+            
             sal_Int32 nProperties = 1;
 
             valueProxyType_.IsPresent = true;
             valueProxyType_.Value <<= nProperties;
 
-            // fill proxy bypass list
+            
             if( aProxyBypassList.getLength() > 0 )
             {
                 OUStringBuffer aReverseList;
@@ -205,22 +205,22 @@ WinInetBackend::WinInetBackend()
 
             if( aProxyList.getLength() > 0 )
             {
-                //-------------------------------------------------
-                // this implementation follows the algorithm
-                // of the internet explorer
-                // if there are type-dependent proxy settings
-                // and type independent proxy settings in the
-                // registry the internet explorer chooses the
-                // type independent proxy for all settings
-                // e.g. imagine the following registry entry
-                // ftp=server:port;http=server:port;server:port
-                // the last token server:port is type independent
-                // so the ie chooses this proxy server
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
 
-                // if there is no port specified for a type independent
-                // server the ie uses the port of an http server if
-                // there is one and it has a port
-                //-------------------------------------------------
+                
+                
+                
+                
 
                 ProxyEntry aTypeIndepProxy = FindProxyEntry( aProxyList, OUString());
                 ProxyEntry aHttpProxy = FindProxyEntry( aProxyList, OUString(
@@ -250,42 +250,42 @@ WinInetBackend::WinInetBackend()
                     }
                 }
 
-                // http proxy name
+                
                 if( aHttpProxy.Server.getLength() > 0 )
                 {
                     valueHttpProxyName_.IsPresent = true;
                     valueHttpProxyName_.Value <<= aHttpProxy.Server;
                 }
 
-                // http proxy port
+                
                 if( aHttpProxy.Port.getLength() > 0 )
                 {
                     valueHttpProxyPort_.IsPresent = true;
                     valueHttpProxyPort_.Value <<= aHttpProxy.Port.toInt32();
                 }
 
-                // https proxy name
+                
                 if( aHttpsProxy.Server.getLength() > 0 )
                 {
                     valueHttpsProxyName_.IsPresent = true;
                     valueHttpsProxyName_.Value <<= aHttpsProxy.Server;
                 }
 
-                // https proxy port
+                
                 if( aHttpsProxy.Port.getLength() > 0 )
                 {
                     valueHttpsProxyPort_.IsPresent = true;
                     valueHttpsProxyPort_.Value <<= aHttpsProxy.Port.toInt32();
                 }
 
-                // ftp proxy name
+                
                 if( aFtpProxy.Server.getLength() > 0 )
                 {
                     valueFtpProxyName_.IsPresent = true;
                     valueFtpProxyName_.Value <<= aFtpProxy.Server;
                 }
 
-                // ftp proxy port
+                
                 if( aFtpProxy.Port.getLength() > 0 )
                 {
                     valueFtpProxyPort_.IsPresent = true;
@@ -296,20 +296,20 @@ WinInetBackend::WinInetBackend()
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 WinInetBackend::~WinInetBackend(void)
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 WinInetBackend* WinInetBackend::createInstance()
 {
     return new WinInetBackend;
 }
 
-// ---------------------------------------------------------------------------------------
+
 
 void WinInetBackend::setPropertyValue(
     OUString const &, css::uno::Any const &)
@@ -360,13 +360,13 @@ css::uno::Any WinInetBackend::getPropertyValue(
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL WinInetBackend::getBackendName(void) {
     return OUString("com.sun.star.comp.configuration.backend.WinInetBackend") ;
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL WinInetBackend::getImplementationName(void)
     throw (uno::RuntimeException)

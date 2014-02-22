@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,7 +60,7 @@ void ExceptionTree::add(
         list.push_back(n);
         rtl::Reference< unoidl::Entity > ent;
         codemaker::UnoType::Sort s = manager->getSort(b2u(n), &ent);
-        (void) s; // WaE: unused variable
+        (void) s; 
         assert(s == codemaker::UnoType::SORT_EXCEPTION_TYPE);
         n = u2b(
             static_cast< unoidl::ExceptionTypeEntity * >(ent.get())->

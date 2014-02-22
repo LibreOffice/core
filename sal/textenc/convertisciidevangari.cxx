@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "converter.hxx"
@@ -109,8 +109,8 @@ sal_Size IsciiDevanagariToUnicode::convert(
         sal_uInt8 nNext = nConverted < nSrcBytes + 1 ? static_cast<sal_uInt8>(pSrcBuf[nConverted+1]) : 0;
         bool bNormal = true;
         bool bDouble = false;
-        //halant + halant     E8 E8  -> halant + ZWNJ   094D 200C
-        //halant + nukta    E8 E9   halant + ZWJ    094D 200D
+        
+        
         if (m_cPrevChar == 0xE8 && nIn == 0xE8)
         {
             cChar = 0x200C;
@@ -269,8 +269,8 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
             goto bad_input;
         }
 
-        //halant + halant     E8 E8  -> halant + ZWNJ   094D 200C
-        //halant + nukta    E8 E9   halant + ZWJ    094D 200D
+        
+        
         if (m_cPrevChar == 0x094D && c == 0x200C)
             cSpecialChar = '\xE8';
         else if (m_cPrevChar == 0x094D && c == 0x200D)
@@ -349,8 +349,8 @@ sal_Size UnicodeToIsciiDevanagari::convert(sal_Unicode const* pSrcBuf, sal_Size 
             goto done;
         }
 
-        // Linearly searching through the ranges if probably fastest, assuming
-        // that most converted characters belong to the ASCII subset:
+        
+        
         for (size_t i = 0; i < entries; ++i)
         {
             if (c < ranges[i].unicode)

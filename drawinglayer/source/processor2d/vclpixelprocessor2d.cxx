@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vclpixelprocessor2d.hxx"
@@ -56,7 +56,7 @@
 
 #include <com/sun/star/table/BorderLineStyle.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
@@ -105,14 +105,14 @@ namespace drawinglayer
             :   VclProcessor2D(rViewInformation, rOutDev)
             ,   m_pImpl(new Impl(rOutDev))
         {
-            // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
+            
             maCurrentTransformation = rViewInformation.getObjectToViewTransformation();
 
-            // prepare output directly to pixels
+            
                mpOutputDevice->Push(PUSH_MAPMODE);
             mpOutputDevice->SetMapMode();
 
-            // react on AntiAliasing settings
+            
             if(getOptionsDrawinglayer().IsAntiAliasing())
             {
                 mpOutputDevice->SetAntialiasing(
@@ -127,10 +127,10 @@ namespace drawinglayer
 
         VclPixelProcessor2D::~VclPixelProcessor2D()
         {
-            // restore MapMode
+            
                mpOutputDevice->Pop();
 
-            // restore AntiAliasing
+            
             mpOutputDevice->SetAntialiasing(m_pImpl->m_nOrigAntiAliasing);
         }
 
@@ -140,7 +140,7 @@ namespace drawinglayer
 
             if(!aLocalPolyPolygon.count())
             {
-                // no geometry, done
+                
                 return true;
             }
 
@@ -162,7 +162,7 @@ namespace drawinglayer
 
             if(!aLocalPolygon.count())
             {
-                // no geometry, done
+                
                 return true;
             }
 
@@ -172,7 +172,7 @@ namespace drawinglayer
             mpOutputDevice->SetLineColor(Color(aLineColor));
             aLocalPolygon.transform(maCurrentTransformation);
 
-            // try drawing; if it did not work, use standard fallback
+            
             if(mpOutputDevice->TryDrawPolyLineDirect(
                 aLocalPolygon,
                 0.0,
@@ -190,7 +190,7 @@ namespace drawinglayer
 
             if(!aLocalPolygon.count())
             {
-                // no geometry, done
+                
                 return true;
             }
 
@@ -199,12 +199,12 @@ namespace drawinglayer
 
             if(rSource.getStrokeAttribute().isDefault() || 0.0 == rSource.getStrokeAttribute().getFullDotDashLen())
             {
-                // no line dashing, just copy
+                
                 aHairLinePolyPolygon.append(aLocalPolygon);
             }
             else
             {
-                // apply LineStyle
+                
                 basegfx::tools::applyLineDashing(
                     aLocalPolygon,
                     rSource.getStrokeAttribute().getDotDashArray(),
@@ -215,7 +215,7 @@ namespace drawinglayer
 
             if(!aHairLinePolyPolygon.count())
             {
-                // no geometry, done
+                
                 return true;
             }
 
@@ -262,7 +262,7 @@ namespace drawinglayer
 
             if(!bTryWorked && !bHasPoints)
             {
-                // no geometry despite try
+                
                 bTryWorked = true;
             }
 
@@ -283,15 +283,15 @@ namespace drawinglayer
             bool bHorizontal = false;
             if (fX1 == fX2)
             {
-                // Vertical line.
+                
             }
             else if (fY1 == fY2)
             {
-                // Horizontal line.
+                
                 bHorizontal = true;
             }
             else
-                // Neither.  Bail out.
+                
                 return false;
 
             switch (rSource.getStyle())
@@ -309,7 +309,7 @@ namespace drawinglayer
 
                     if (bHorizontal)
                     {
-                        // Horizontal line.  Draw it as a rectangle.
+                        
 
                         aTarget = makeRectPolygon(fX1, fY1, fX2-fX1, nThick);
                         aTarget.transform(maCurrentTransformation);
@@ -319,7 +319,7 @@ namespace drawinglayer
 
                         if (bDouble)
                         {
-                            // Double line
+                            
                             drawHairLine(
                                 mpOutputDevice, aRange.getMinX(), aRange.getMinY()-1.0, aRange.getMaxX(), aRange.getMinY()-1.0,
                                 aLineColor);
@@ -333,7 +333,7 @@ namespace drawinglayer
 
                         if (fH <= 1.0)
                         {
-                            // Draw it as a line.
+                            
                             drawHairLine(
                                 mpOutputDevice, aRange.getMinX(), aRange.getMinY(), aRange.getMaxX(), aRange.getMinY(),
                                 aLineColor);
@@ -344,7 +344,7 @@ namespace drawinglayer
                         double fOffset = rtl::math::round(fH/2.0, 0, rtl_math_RoundingMode_Down);
                         if (fOffset != 0.0)
                         {
-                            // Move it up a bit to align it vertically centered.
+                            
                             basegfx::B2DHomMatrix aMat;
                             aMat.set(1, 2, -fOffset);
                             aTarget.transform(aMat);
@@ -352,7 +352,7 @@ namespace drawinglayer
                     }
                     else
                     {
-                        // Vertical line.  Draw it as a rectangle.
+                        
 
                         aTarget = makeRectPolygon(fX1, fY1, nThick, fY2-fY1);
                         aTarget.transform(maCurrentTransformation);
@@ -362,7 +362,7 @@ namespace drawinglayer
 
                         if (bDouble)
                         {
-                            // Draw it as a line.
+                            
                             drawHairLine(
                                 mpOutputDevice, aRange.getMinX()-1.0, aRange.getMinY(), aRange.getMinX()-1.0, aRange.getMaxY(),
                                 aLineColor);
@@ -376,7 +376,7 @@ namespace drawinglayer
 
                         if (fW <= 1.0)
                         {
-                            // Draw it as a line.
+                            
                             drawHairLine(
                                 mpOutputDevice, aRange.getMinX(), aRange.getMinY(), aRange.getMinX(), aRange.getMaxY(),
                                 aLineColor);
@@ -387,7 +387,7 @@ namespace drawinglayer
                         double fOffset = rtl::math::round(fW/2.0, 0, rtl_math_RoundingMode_Down);
                         if (fOffset != 0.0)
                         {
-                            // Move it to the left a bit to center it horizontally.
+                            
                             basegfx::B2DHomMatrix aMat;
                             aMat.set(0, 2, -fOffset);
                             aTarget.transform(aMat);
@@ -408,7 +408,7 @@ namespace drawinglayer
                         svtools::GetLineDashing(rSource.getStyle(), rSource.getPatternScale()*10.0);
 
                     if (aPattern.empty())
-                        // Failed to get pattern values.
+                        
                         return false;
 
                     double nThick = rtl::math::round(rSource.getLeftWidth());
@@ -416,7 +416,7 @@ namespace drawinglayer
                     const basegfx::BColor aLineColor =
                         maBColorModifierStack.getModifiedColor(rSource.getRGBColorLeft());
 
-                    // Transform the current line range before using it for rendering.
+                    
                     basegfx::B2DRange aRange(fX1, fY1, fX2, fY2);
                     aRange.transform(maCurrentTransformation);
                     fX1 = aRange.getMinX();
@@ -428,16 +428,16 @@ namespace drawinglayer
 
                     if (bHorizontal)
                     {
-                        // Horizontal line.
+                        
 
                         if (basegfx::fTools::equalZero(nThick))
                         {
-                            // Dash line segment too small to draw.  Substitute it with a solid line.
+                            
                             drawHairLine(mpOutputDevice, fX1, fY1, fX2, fY1, aLineColor);
                             return true;
                         }
 
-                        // Create a dash unit polygon set.
+                        
                         basegfx::B2DPolyPolygon aDashes;
                         std::vector<double>::const_iterator it = aPattern.begin(), itEnd = aPattern.end();
                         for (; it != itEnd; ++it)
@@ -446,8 +446,8 @@ namespace drawinglayer
                         aDashes.transform(maCurrentTransformation);
                         rtl::math::setNan(&nThick);
 
-                        // Pixelize the dash unit.  We use the same height for
-                        // all dash polygons.
+                        
+                        
                         basegfx::B2DPolyPolygon aDashesPix;
 
                         for (sal_uInt32 i = 0, n = aDashes.count(); i < n; ++i)
@@ -457,7 +457,7 @@ namespace drawinglayer
                             double fW = rtl::math::round(aRange.getWidth());
                             if (basegfx::fTools::equalZero(fW))
                             {
-                                // Dash line segment too small to draw.  Substitute it with a solid line.
+                                
                                 drawHairLine(mpOutputDevice, fX1, fY1, fX2, fY1, aLineColor);
                                 return true;
                             }
@@ -468,7 +468,7 @@ namespace drawinglayer
                             aDashesPix.append(makeRectPolygon(0, 0, fW, nThick));
                         }
 
-                        // Make all dash polygons and render them.
+                        
                         double fX = fX1;
                         bool bLine = true;
                         sal_uInt32 i = 0, n = aDashesPix.count();
@@ -480,7 +480,7 @@ namespace drawinglayer
                             {
                                 double fBlockW = aRange.getWidth();
                                 if (fX + fBlockW > fX2)
-                                    // Clip the right end in case it spills over the range.
+                                    
                                     fBlockW = fX2 - fX + 1;
 
                                 double fH = aRange.getHeight();
@@ -490,7 +490,7 @@ namespace drawinglayer
                                 aTarget.append(makeRectPolygon(fX, fY1, fBlockW, fH));
                             }
 
-                            bLine = !bLine; // line and blank alternate.
+                            bLine = !bLine; 
                             fX += aRange.getWidth();
 
                             ++i;
@@ -501,7 +501,7 @@ namespace drawinglayer
                         double fOffset = rtl::math::round(nThick/2.0, 0, rtl_math_RoundingMode_Down);
                         if (fOffset != 0.0)
                         {
-                            // Move it up a bit to align it vertically centered.
+                            
                             basegfx::B2DHomMatrix aMat;
                             aMat.set(1, 2, -fOffset);
                             aTarget.transform(aMat);
@@ -509,16 +509,16 @@ namespace drawinglayer
                     }
                     else
                     {
-                        // Vertical line.
+                        
 
                         if (basegfx::fTools::equalZero(nThick))
                         {
-                            // Dash line segment too small to draw.  Substitute it with a solid line.
+                            
                             drawHairLine(mpOutputDevice, fX1, fY1, fX1, fY2, aLineColor);
                             return true;
                         }
 
-                        // Create a dash unit polygon set.
+                        
                         basegfx::B2DPolyPolygon aDashes;
                         std::vector<double>::const_iterator it = aPattern.begin(), itEnd = aPattern.end();
                         for (; it != itEnd; ++it)
@@ -527,8 +527,8 @@ namespace drawinglayer
                         aDashes.transform(maCurrentTransformation);
                         rtl::math::setNan(&nThick);
 
-                        // Pixelize the dash unit.  We use the same width for
-                        // all dash polygons.
+                        
+                        
                         basegfx::B2DPolyPolygon aDashesPix;
 
                         for (sal_uInt32 i = 0, n = aDashes.count(); i < n; ++i)
@@ -538,7 +538,7 @@ namespace drawinglayer
                             double fH = rtl::math::round(aRange.getHeight());
                             if (basegfx::fTools::equalZero(fH))
                             {
-                                // Dash line segment too small to draw.  Substitute it with a solid line.
+                                
                                 drawHairLine(mpOutputDevice, fX1, fY1, fX1, fY2, aLineColor);
                                 return true;
                             }
@@ -549,7 +549,7 @@ namespace drawinglayer
                             aDashesPix.append(makeRectPolygon(0, 0, nThick, fH));
                         }
 
-                        // Make all dash polygons and render them.
+                        
                         double fY = fY1;
                         bool bLine = true;
                         sal_uInt32 i = 0, n = aDashesPix.count();
@@ -561,7 +561,7 @@ namespace drawinglayer
                             {
                                 double fBlockH = aRange.getHeight();
                                 if (fY + fBlockH > fY2)
-                                    // Clip the bottom end in case it spills over the range.
+                                    
                                     fBlockH = fY2 - fY + 1;
 
                                 double fW = aRange.getWidth();
@@ -571,7 +571,7 @@ namespace drawinglayer
                                 aTarget.append(makeRectPolygon(fX1, fY, fW, fBlockH));
                             }
 
-                            bLine = !bLine; // line and blank alternate.
+                            bLine = !bLine; 
                             fY += aRange.getHeight();
 
                             ++i;
@@ -582,7 +582,7 @@ namespace drawinglayer
                         double fOffset = rtl::math::round(nThick/2.0, 0, rtl_math_RoundingMode_Down);
                         if (fOffset != 0.0)
                         {
-                            // Move it to the left a bit to center it horizontally.
+                            
                             basegfx::B2DHomMatrix aMat;
                             aMat.set(0, 2, -fOffset);
                             aTarget.transform(aMat);
@@ -608,7 +608,7 @@ namespace drawinglayer
             {
                 case PRIMITIVE2D_ID_WRONGSPELLPRIMITIVE2D :
                 {
-                    // directdraw of wrong spell primitive; added test possibility to check wrong spell decompose
+                    
                     static bool bHandleWrongSpellDirectly(true);
 
                     if(bHandleWrongSpellDirectly)
@@ -621,7 +621,7 @@ namespace drawinglayer
                             maCurrentTransformation,
                             maBColorModifierStack))
                         {
-                            // fallback to decomposition (MetaFile)
+                            
                             process(rWrongSpellPrimitive.get2DDecomposition(getViewInformation2D()));
                         }
                     }
@@ -633,10 +633,10 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
                 {
-                    // directdraw of text simple portion; added test possibility to check text decompose
+                    
                     static bool bForceSimpleTextDecomposition(false);
 
-                    // Adapt evtl. used special DrawMode
+                    
                     const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
                     adaptTextToFillDrawMode();
 
@@ -649,17 +649,17 @@ namespace drawinglayer
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
 
-                    // restore DrawMode
+                    
                     mpOutputDevice->SetDrawMode(nOriginalDrawMode);
 
                     break;
                 }
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
-                    // directdraw of decorated text portion; added test possibility to check text decompose
+                    
                     static bool bForceComplexTextDecomposition(false);
 
-                    // Adapt evtl. used special DrawMode
+                    
                     const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
                     adaptTextToFillDrawMode();
 
@@ -672,14 +672,14 @@ namespace drawinglayer
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
 
-                    // restore DrawMode
+                    
                     mpOutputDevice->SetDrawMode(nOriginalDrawMode);
 
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
                 {
-                    // try to use directly
+                    
                     const primitive2d::PolygonHairlinePrimitive2D& rPolygonHairlinePrimitive2D = static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate);
                     static bool bAllowed(true);
 
@@ -688,16 +688,16 @@ namespace drawinglayer
                         break;
                     }
 
-                    // direct draw of hairline
+                    
                     RenderPolygonHairlinePrimitive2D(rPolygonHairlinePrimitive2D, true);
                     break;
                 }
                 case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
                 {
-                    // direct draw of transformed BitmapEx primitive
+                    
                     const primitive2d::BitmapPrimitive2D& rBitmapCandidate = static_cast< const primitive2d::BitmapPrimitive2D& >(rCandidate);
 
-                    // check if graphic content is inside discrete local ViewPort
+                    
                     const basegfx::B2DRange& rDiscreteViewPort(getViewInformation2D().getDiscreteViewport());
                     const basegfx::B2DHomMatrix aLocalTransform(maCurrentTransformation * rBitmapCandidate.getTransform());
 
@@ -709,7 +709,7 @@ namespace drawinglayer
 
                         if(!aUnitRange.overlaps(rDiscreteViewPort))
                         {
-                            // content is outside discrete local ViewPort
+                            
                             break;
                         }
                     }
@@ -719,13 +719,13 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D :
                 {
-                    // direct draw of fillBitmapPrimitive
+                    
                     RenderFillGraphicPrimitive2D(static_cast< const primitive2d::FillGraphicPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
                 {
-                    // direct draw of gradient
+                    
                     const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate = static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate);
                     const attribute::FillGradientAttribute& rGradient(rPolygonCandidate.getFillGradient());
                     basegfx::BColor aStartColor(maBColorModifierStack.getModifiedColor(rGradient.getStartColor()));
@@ -738,14 +738,14 @@ namespace drawinglayer
 
                         if(aStartColor == aEndColor)
                         {
-                            // no gradient at all, draw as polygon in AA and non-AA case
+                            
                             mpOutputDevice->SetLineColor();
                             mpOutputDevice->SetFillColor(Color(aStartColor));
                             mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
                         }
                         else
                         {
-                            // use the primitive decomposition of the metafile
+                            
                             process(rPolygonCandidate.get2DDecomposition(getViewInformation2D()));
                         }
                     }
@@ -753,24 +753,24 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D :
                 {
-                    // direct draw of bitmap
+                    
                     RenderPolyPolygonGraphicPrimitive2D(static_cast< const primitive2d::PolyPolygonGraphicPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
-                    // try to use directly
+                    
                     const primitive2d::PolyPolygonColorPrimitive2D& rPolyPolygonColorPrimitive2D = static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate);
                     basegfx::B2DPolyPolygon aLocalPolyPolygon;
                     static bool bAllowed(true);
 
                     if(bAllowed && tryDrawPolyPolygonColorPrimitive2DDirect(rPolyPolygonColorPrimitive2D, 0.0))
                     {
-                        // okay, done. In this case no gaps should have to be repaired, too
+                        
                     }
                     else
                     {
-                        // direct draw of PolyPolygon with color
+                        
                         const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolyPolygonColorPrimitive2D.getBColor()));
 
                         mpOutputDevice->SetFillColor(Color(aPolygonColor));
@@ -780,9 +780,9 @@ namespace drawinglayer
                         mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
                     }
 
-                    // when AA is on and this filled polygons are the result of stroked line geometry,
-                    // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
-                    // Caution: This is needed in both cases (!)
+                    
+                    
+                    
                     if(mnPolygonStrokePrimitive2D
                         && getOptionsDrawinglayer().IsAntiAliasing()
                         && (mpOutputDevice->GetAntialiasing() & ANTIALIASING_ENABLE_B2DDRAW))
@@ -810,7 +810,7 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 {
-                    // #i98289#
+                    
                     const bool bForceLineSnap(getOptionsDrawinglayer().IsAntiAliasing() && getOptionsDrawinglayer().IsSnapHorVerLinesToDiscrete());
                     const sal_uInt16 nOldAntiAliase(mpOutputDevice->GetAntialiasing());
 
@@ -824,13 +824,13 @@ namespace drawinglayer
                     static bool bTestMetaFilePrimitiveDecomposition( true );
                     if( bTestMetaFilePrimitiveDecomposition && !rMetafilePrimitive.getMetaFile().GetUseCanvas() )
                     {
-                        // use new Metafile decomposition
-                        // TODO EMF+ stuffed into METACOMMENT support required
+                        
+                        
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
                     else
                     {
-                        // direct draw of MetaFile
+                        
                         RenderMetafilePrimitive2D( rMetafilePrimitive );
                     }
 
@@ -843,20 +843,20 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
                 {
-                    // mask group.
+                    
                     RenderMaskPrimitive2DPixel(static_cast< const primitive2d::MaskPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D :
                 {
-                    // modified color group. Force output to unified color.
+                    
                     RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_UNIFIEDTRANSPARENCEPRIMITIVE2D :
                 {
-                    // Detect if a single PolyPolygonColorPrimitive2D is contained; in that case,
-                    // use the faster OutputDevice::DrawTransparent method
+                    
+                    
                     const primitive2d::UnifiedTransparencePrimitive2D& rUniTransparenceCandidate = static_cast< const primitive2d::UnifiedTransparencePrimitive2D& >(rCandidate);
                     const primitive2d::Primitive2DSequence rContent = rUniTransparenceCandidate.getChildren();
 
@@ -864,15 +864,15 @@ namespace drawinglayer
                     {
                         if(0.0 == rUniTransparenceCandidate.getTransparence())
                         {
-                            // not transparent at all, use content
+                            
                             process(rUniTransparenceCandidate.getChildren());
                         }
                         else if(rUniTransparenceCandidate.getTransparence() > 0.0 && rUniTransparenceCandidate.getTransparence() < 1.0)
                         {
                             bool bDrawTransparentUsed(false);
 
-                            // since DEV300 m33 DrawTransparent is supported in VCL (for some targets
-                            // natively), so i am now enabling this shortcut
+                            
+                            
                             static bool bAllowUsingDrawTransparent(true);
 
                             if(bAllowUsingDrawTransparent && 1 == rContent.getLength())
@@ -886,7 +886,7 @@ namespace drawinglayer
                                     {
                                         case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D:
                                         {
-                                            // single transparent PolyPolygon identified, use directly
+                                            
                                             const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = static_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(pBasePrimitive);
                                             OSL_ENSURE(pPoPoColor, "OOps, PrimitiveID and PrimitiveType do not match (!)");
                                             bDrawTransparentUsed = tryDrawPolyPolygonColorPrimitive2DDirect(*pPoPoColor, rUniTransparenceCandidate.getTransparence());
@@ -894,15 +894,15 @@ namespace drawinglayer
                                         }
                                         case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D:
                                         {
-                                            // single transparent PolygonHairlinePrimitive2D identified, use directly
+                                            
                                             const primitive2d::PolygonHairlinePrimitive2D* pPoHair = static_cast< const primitive2d::PolygonHairlinePrimitive2D* >(pBasePrimitive);
                                             OSL_ENSURE(pPoHair, "OOps, PrimitiveID and PrimitiveType do not match (!)");
 
-                                            // do no tallow by default - problem is that self-overlapping parts of this geometry will
-                                            // not be in a all-same transparency but will already alpha-cover themselves with blending.
-                                            // This is not what the UnifiedTransparencePrimitive2D defines: It requires all it's
-                                            // content to be uniformely transparent.
-                                            // For hairline the effect is pretty minimal, but still not correct.
+                                            
+                                            
+                                            
+                                            
+                                            
                                             static bool bAllowed(false);
 
                                             bDrawTransparentUsed = bAllowed && tryDrawPolygonHairlinePrimitive2DDirect(*pPoHair, rUniTransparenceCandidate.getTransparence());
@@ -910,15 +910,15 @@ namespace drawinglayer
                                         }
                                         case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
                                         {
-                                            // single transparent PolygonStrokePrimitive2D identified, use directly
+                                            
                                             const primitive2d::PolygonStrokePrimitive2D* pPoStroke = static_cast< const primitive2d::PolygonStrokePrimitive2D* >(pBasePrimitive);
                                             OSL_ENSURE(pPoStroke, "OOps, PrimitiveID and PrimitiveType do not match (!)");
 
-                                            // do no tallow by default - problem is that self-overlapping parts of this geometry will
-                                            // not be in a all-same transparency but will already alpha-cover themselves with blending.
-                                            // This is not what the UnifiedTransparencePrimitive2D defines: It requires all it's
-                                            // content to be uniformely transparent.
-                                            // To check, acitvate and draw a wide transparent self-crossing line/curve
+                                            
+                                            
+                                            
+                                            
+                                            
                                             static bool bAllowed(false);
 
                                             bDrawTransparentUsed = bAllowed && tryDrawPolygonStrokePrimitive2DDirect(*pPoStroke, rUniTransparenceCandidate.getTransparence());
@@ -930,7 +930,7 @@ namespace drawinglayer
 
                             if(!bDrawTransparentUsed)
                             {
-                                // unified sub-transparence. Draw to VDev first.
+                                
                                 RenderUnifiedTransparencePrimitive2D(rUniTransparenceCandidate);
                             }
                         }
@@ -940,82 +940,82 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_TRANSPARENCEPRIMITIVE2D :
                 {
-                    // sub-transparence group. Draw to VDev first.
+                    
                     RenderTransparencePrimitive2D(static_cast< const primitive2d::TransparencePrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
                 {
-                    // transform group.
+                    
                     RenderTransformPrimitive2D(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_PAGEPREVIEWPRIMITIVE2D :
                 {
-                    // new XDrawPage for ViewInformation2D
+                    
                     RenderPagePreviewPrimitive2D(static_cast< const primitive2d::PagePreviewPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
                 {
-                    // marker array
+                    
                     RenderMarkerArrayPrimitive2D(static_cast< const primitive2d::MarkerArrayPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_POINTARRAYPRIMITIVE2D :
                 {
-                    // point array
+                    
                     RenderPointArrayPrimitive2D(static_cast< const primitive2d::PointArrayPrimitive2D& >(rCandidate));
                     break;
                 }
                 case PRIMITIVE2D_ID_CONTROLPRIMITIVE2D :
                 {
-                    // control primitive
+                    
                     const primitive2d::ControlPrimitive2D& rControlPrimitive = static_cast< const primitive2d::ControlPrimitive2D& >(rCandidate);
                     const uno::Reference< awt::XControl >& rXControl(rControlPrimitive.getXControl());
 
                     try
                     {
-                        // remember old graphics and create new
+                        
                         uno::Reference< awt::XView > xControlView(rXControl, uno::UNO_QUERY_THROW);
                         const uno::Reference< awt::XGraphics > xOriginalGraphics(xControlView->getGraphics());
                         const uno::Reference< awt::XGraphics > xNewGraphics(mpOutputDevice->CreateUnoGraphics());
 
                         if(xNewGraphics.is())
                         {
-                            // link graphics and view
+                            
                             xControlView->setGraphics(xNewGraphics);
 
-                            // get position
+                            
                             const basegfx::B2DHomMatrix aObjectToPixel(maCurrentTransformation * rControlPrimitive.getTransform());
                             const basegfx::B2DPoint aTopLeftPixel(aObjectToPixel * basegfx::B2DPoint(0.0, 0.0));
 
-                            // find out if the control is already visualized as a VCL-ChildWindow. If yes,
-                            // it does not need to be painted at all.
+                            
+                            
                             uno::Reference< awt::XWindow2 > xControlWindow(rXControl, uno::UNO_QUERY_THROW);
                             const bool bControlIsVisibleAsChildWindow(rXControl->getPeer().is() && xControlWindow->isVisible());
 
                             if(!bControlIsVisibleAsChildWindow)
                             {
-                                // draw it. Do not forget to use the evtl. offsetted origin of the target device,
-                                // e.g. when used with mask/transparence buffer device
+                                
+                                
                                 const Point aOrigin(mpOutputDevice->GetMapMode().GetOrigin());
                                 xControlView->draw(
                                     aOrigin.X() + basegfx::fround(aTopLeftPixel.getX()),
                                     aOrigin.Y() + basegfx::fround(aTopLeftPixel.getY()));
                             }
 
-                            // restore original graphics
+                            
                             xControlView->setGraphics(xOriginalGraphics);
                         }
                     }
                     catch(const uno::Exception&)
                     {
-                        // #i116763# removing since there is a good alternative when the xControlView
-                        // is not found and it is allowed to happen
-                        // DBG_UNHANDLED_EXCEPTION();
+                        
+                        
+                        
 
-                        // process recursively and use the decomposition as Bitmap
+                        
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
 
@@ -1023,7 +1023,7 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
                 {
-                    // try to use directly
+                    
                     const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive2D = static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate);
 
                     if(tryDrawPolygonStrokePrimitive2DDirect(rPolygonStrokePrimitive2D, 0.0))
@@ -1031,38 +1031,38 @@ namespace drawinglayer
                         break;
                     }
 
-                    // the stroke primitive may be decomposed to filled polygons. To keep
-                    // evtl. set DrawModes aka DRAWMODE_BLACKLINE, DRAWMODE_GRAYLINE,
-                    // DRAWMODE_GHOSTEDLINE, DRAWMODE_WHITELINE or DRAWMODE_SETTINGSLINE
-                    // working, these need to be copied to the corresponding fill modes
+                    
+                    
+                    
+                    
                     const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
                     adaptLineToFillDrawMode();
 
-                    // polygon stroke primitive
+                    
                     static bool bSuppressFatToHairlineCorrection(false);
 
                     if(bSuppressFatToHairlineCorrection)
                     {
-                        // remember that we enter a PolygonStrokePrimitive2D decomposition,
-                        // used for AA thick line drawing
+                        
+                        
                         mnPolygonStrokePrimitive2D++;
 
-                        // with AA there is no need to handle thin lines special
+                        
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
 
-                        // leave PolygonStrokePrimitive2D
+                        
                         mnPolygonStrokePrimitive2D--;
                     }
                     else
                     {
-                        // Lines with 1 and 2 pixel width without AA need special treatment since their vsiualisation
-                        // as filled polygons is geometrically corret but looks wrong since polygon filling avoids
-                        // the right and bottom pixels. The used method evaluates that and takes the correct action,
-                        // including calling recursively with decomposition if line is wide enough
+                        
+                        
+                        
+                        
                         RenderPolygonStrokePrimitive2D(rPolygonStrokePrimitive2D);
                     }
 
-                    // restore DrawMode
+                    
                     mpOutputDevice->SetDrawMode(nOriginalDrawMode);
 
                     break;
@@ -1073,27 +1073,27 @@ namespace drawinglayer
 
                     if(bForceIgnoreHatchSmoothing || getOptionsDrawinglayer().IsAntiAliasing())
                     {
-                        // if AA is used (or ignore smoothing is on), there is no need to smooth
-                        // hatch painting, use decomposition
+                        
+                        
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
                     else
                     {
-                        // without AA, use VCL to draw the hatch. It snaps hatch distances to the next pixel
-                        // and forces hatch distance to be >= 3 pixels to make the hatch display look smoother.
-                        // This is wrong in principle, but looks nicer. This could also be done here directly
-                        // without VCL usage if needed
+                        
+                        
+                        
+                        
                         const primitive2d::FillHatchPrimitive2D& rFillHatchPrimitive = static_cast< const primitive2d::FillHatchPrimitive2D& >(rCandidate);
                         const attribute::FillHatchAttribute& rFillHatchAttributes = rFillHatchPrimitive.getFillHatch();
 
-                        // create hatch polygon in range size and discrete coordinates
+                        
                         basegfx::B2DRange aHatchRange(rFillHatchPrimitive.getObjectRange());
                         aHatchRange.transform(maCurrentTransformation);
                         const basegfx::B2DPolygon aHatchPolygon(basegfx::tools::createPolygonFromRect(aHatchRange));
 
                         if(rFillHatchAttributes.isFillBackground())
                         {
-                            // #i111846# background fill is active; draw fill polygon
+                            
                             const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
 
                             mpOutputDevice->SetFillColor(Color(aPolygonColor));
@@ -1101,17 +1101,17 @@ namespace drawinglayer
                             mpOutputDevice->DrawPolygon(aHatchPolygon);
                         }
 
-                        // set hatch line color
+                        
                         const basegfx::BColor aHatchColor(maBColorModifierStack.getModifiedColor(rFillHatchPrimitive.getBColor()));
                         mpOutputDevice->SetFillColor();
                         mpOutputDevice->SetLineColor(Color(aHatchColor));
 
-                        // get hatch style
+                        
                         HatchStyle eHatchStyle(HATCH_SINGLE);
 
                         switch(rFillHatchAttributes.getStyle())
                         {
-                            default : // HATCHSTYLE_SINGLE
+                            default : 
                             {
                                 break;
                             }
@@ -1127,66 +1127,66 @@ namespace drawinglayer
                             }
                         }
 
-                        // create hatch
+                        
                         const basegfx::B2DVector aDiscreteDistance(maCurrentTransformation * basegfx::B2DVector(rFillHatchAttributes.getDistance(), 0.0));
                         const sal_uInt32 nDistance(basegfx::fround(aDiscreteDistance.getLength()));
                         const sal_uInt16 nAngle10((sal_uInt16)basegfx::fround(rFillHatchAttributes.getAngle() / F_PI1800));
                         ::Hatch aVCLHatch(eHatchStyle, Color(rFillHatchAttributes.getColor()), nDistance, nAngle10);
 
-                        // draw hatch using VCL
+                        
                         mpOutputDevice->DrawHatch(PolyPolygon(Polygon(aHatchPolygon)), aVCLHatch);
                     }
                     break;
                 }
                 case PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D :
                 {
-                    // #i98404# Handle directly, especially when AA is active
+                    
                     const primitive2d::BackgroundColorPrimitive2D& rPrimitive = static_cast< const primitive2d::BackgroundColorPrimitive2D& >(rCandidate);
                     const sal_uInt16 nOriginalAA(mpOutputDevice->GetAntialiasing());
 
-                    // switch AA off in all cases
+                    
                     mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
 
-                    // create color for fill
+                    
                     const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPrimitive.getBColor()));
                     mpOutputDevice->SetFillColor(Color(aPolygonColor));
                     mpOutputDevice->SetLineColor();
 
-                    // create rectangle for fill
+                    
                     const basegfx::B2DRange& aViewport(getViewInformation2D().getDiscreteViewport());
                     const Rectangle aRectangle(
                         (sal_Int32)floor(aViewport.getMinX()), (sal_Int32)floor(aViewport.getMinY()),
                         (sal_Int32)ceil(aViewport.getMaxX()), (sal_Int32)ceil(aViewport.getMaxY()));
                     mpOutputDevice->DrawRect(aRectangle);
 
-                    // restore AA setting
+                    
                     mpOutputDevice->SetAntialiasing(nOriginalAA);
                     break;
                 }
                 case PRIMITIVE2D_ID_TEXTHIERARCHYEDITPRIMITIVE2D :
                 {
-                    // #i97628#
-                    // This primitive means that the content is derived from an active text edit,
-                    // not from model data itself. Some renderers need to suppress this content, e.g.
-                    // the pixel renderer used for displaying the edit view (like this one). It's
-                    // not to be suppressed by the MetaFile renderers, so that the edited text is
-                    // part of the MetaFile, e.g. needed for presentation previews.
-                    // Action: Ignore here, do nothing.
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     break;
                 }
                 case PRIMITIVE2D_ID_INVERTPRIMITIVE2D :
                 {
-                    // invert primitive (currently only used for HighContrast fallback for selection in SW and SC).
-                    // Set OutDev to XOR and switch AA off (XOR does not work with AA)
+                    
+                    
                     mpOutputDevice->Push();
                     mpOutputDevice->SetRasterOp( ROP_XOR );
                     const sal_uInt16 nAntiAliasing(mpOutputDevice->GetAntialiasing());
                     mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
 
-                    // process content recursively
+                    
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
 
-                    // restore OutDev
+                    
                     mpOutputDevice->Pop();
                     mpOutputDevice->SetAntialiasing(nAntiAliasing);
                     break;
@@ -1208,9 +1208,9 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_BORDERLINEPRIMITIVE2D:
                 {
-                    // process recursively, but turn off anti-aliasing. Border
-                    // lines are always rectangular, and look horrible when
-                    // the anti-aliasing is enabled.
+                    
+                    
+                    
                     sal_uInt16 nAntiAliasing = mpOutputDevice->GetAntialiasing();
                     mpOutputDevice->SetAntialiasing(nAntiAliasing & ~ANTIALIASING_ENABLE_B2DDRAW);
 
@@ -1225,13 +1225,13 @@ namespace drawinglayer
                 }
                 default :
                 {
-                    // process recursively
+                    
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     break;
                 }
             }
         }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XNameContainer.hpp>
@@ -78,12 +78,12 @@ XMLPropTokens_Impl aPropTokens[MAX_PROP_TYPES] =
     ENTRY(SECTION)
 };
 
-// public methods
 
-// Take all properties of the XPropertySet which are also found in the
-// XMLPropertyMapEntry-array and which are not set to their default-value,
-// if a state is available.
-// After that I call the method 'ContextFilter'.
+
+
+
+
+
 
 typedef std::list<XMLPropertyState> XMLPropertyStateList_Impl;
 
@@ -117,7 +117,7 @@ void XMLPropertyStates_Impl::AddPropertyState(
     }
     do
     {
-        // TODO: one path required only
+        
         if (aItr == aPropStates.end())
         {
             aLastItr = aPropStates.insert(aPropStates.end(), rPropState);
@@ -157,7 +157,7 @@ public:
     const OUString& GetApiName() const { return sApiName; }
     std::list<sal_uInt32>& GetIndexes() { return aIndexes; }
 
-    // for sort
+    
     sal_Bool operator< ( const FilterPropertyInfo_Impl& rArg ) const
     {
         return (GetApiName() < rArg.GetApiName());
@@ -228,15 +228,15 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
     OSL_ENSURE(nCount == aPropInfos.size(), "wrong property count");
     if( !pApiNames )
     {
-        // we have to do three things:
-        // 1) sort API names,
-        // 2) merge duplicates,
-        // 3) construct sequence
+        
+        
+        
+        
 
-        // sort names
+        
         aPropInfos.sort();
 
-        // merge duplicates
+        
         if ( nCount > 1 )
         {
             FilterPropertyInfoList_Impl::iterator aOld = aPropInfos.begin();
@@ -246,25 +246,25 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
 
             while ( aCurrent != aEnd )
             {
-                // equal to next element?
+                
                 if ( aOld->GetApiName().equals( aCurrent->GetApiName() ) )
                 {
-                    // if equal: merge index lists
+                    
                     aOld->GetIndexes().merge( aCurrent->GetIndexes() );
-                    // erase element, and continue with next
+                    
                     aCurrent = aPropInfos.erase( aCurrent );
                     nCount--;
                 }
                 else
                 {
-                    // remember old element and continue with next
+                    
                     aOld = aCurrent;
                     ++aCurrent;
                 }
             }
         }
 
-        // construct sequence
+        
         pApiNames = new Sequence < OUString >( nCount );
         OUString *pNames = pApiNames->getArray();
         FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
@@ -368,7 +368,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
             Sequence < Any > aValues;
             if( pStates )
             {
-                // step 1: get value count
+                
                 sal_uInt32 nValueCount = 0;
                 sal_uInt32 i;
 
@@ -380,7 +380,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
 
                 if( nValueCount )
                 {
-                    // step 2: collect property names
+                    
                     Sequence < OUString > aAPINames( nValueCount );
                     OUString *pAPINames = aAPINames.getArray();
 
@@ -439,7 +439,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
                 for(sal_uInt32 i = 0; i < nCount; ++i)
                 {
-                    // The value is stored in the PropertySet itself, add to list.
+                    
                     XMLPropertyState aNewProperty( -1 );
                     aNewProperty.maValue = *pValues;
                     ++pValues;
@@ -464,7 +464,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     !pStates || *pStates == PropertyState_DIRECT_VALUE;
                 if( bDirectValue || bDefault )
                 {
-                    // The value is stored in the PropertySet itself, add to list.
+                    
                     sal_Bool bGotValue = sal_False;
                     XMLPropertyState aNewProperty( -1 );
                     for( std::list<sal_uInt32>::const_iterator aIndexItr =
@@ -489,7 +489,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                             }
                             catch( UnknownPropertyException& )
                             {
-                                // might be a problem of getImplemenetationId
+                                
                                 OSL_ENSURE( !this, "unknown property in getPropertyValue" );
                             }
 
@@ -526,7 +526,7 @@ struct SvXMLExportPropertyMapper::Impl
     }
 };
 
-// ctor/dtor , class SvXMLExportPropertyMapper
+
 
 SvXMLExportPropertyMapper::SvXMLExportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper ) :
@@ -543,12 +543,12 @@ SvXMLExportPropertyMapper::~SvXMLExportPropertyMapper()
 void SvXMLExportPropertyMapper::ChainExportMapper(
         const UniReference< SvXMLExportPropertyMapper>& rMapper )
 {
-    // add map entries from rMapper to current map
+    
     mpImpl->mxPropMapper->AddMapperEntry( rMapper->getPropertySetMapper() );
-    // rMapper uses the same map as 'this'
+    
     rMapper->mpImpl->mxPropMapper = mpImpl->mxPropMapper;
 
-    // set rMapper as last mapper in current chain
+    
     UniReference< SvXMLExportPropertyMapper > xNext = mpImpl->mxNextMapper;
     if( xNext.is())
     {
@@ -559,8 +559,8 @@ void SvXMLExportPropertyMapper::ChainExportMapper(
     else
         mpImpl->mxNextMapper = rMapper;
 
-    // if rMapper was already chained, correct
-    // map pointer of successors
+    
+    
     xNext = rMapper;
 
     while (xNext->mpImpl->mxNextMapper.is())
@@ -576,7 +576,7 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
 {
     vector< XMLPropertyState > aPropStateArray;
 
-    // Retrieve XPropertySetInfo and XPropertyState
+    
     Reference< XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
     if( !xInfo.is() )
         return aPropStateArray;
@@ -592,8 +592,8 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         aImplId = xTypeProv->getImplementationId();
         if( aImplId.getLength() == 16 )
         {
-            // The key must not be created outside this block, because it
-            // keeps a reference to the property set info.
+            
+            
             PropertySetInfoKey aKey( xInfo, aImplId );
             Impl::CacheType::iterator aIter = mpImpl->maCache.find(aKey);
             if (aIter != mpImpl->maCache.end())
@@ -607,8 +607,8 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         pFilterInfo = new FilterPropertiesInfo_Impl;
         for( sal_Int32 i=0; i < nProps; i++ )
         {
-            // Are we allowed to ask for the property? (MID_FLAG_NO_PROP..)
-            // Does the PropertySet contain name of mpEntries-array ?
+            
+            
             const OUString& rAPIName = mpImpl->mxPropMapper->GetEntryAPIName( i );
             const sal_Int32 nFlags = mpImpl->mxPropMapper->GetEntryFlags( i );
             if( (0 == (nFlags & MID_FLAG_NO_PROPERTY_EXPORT)) &&
@@ -627,10 +627,10 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
 
         if( xTypeProv.is() && aImplId.getLength() == 16 )
         {
-            // Check whether the property set info is destroyed if it is
-            // assigned to a weak reference only. If it is destroyed, then
-            // every instance of getPropertySetInfo returns a new object.
-            // Such property set infos must not be cached.
+            
+            
+            
+            
             WeakReference < XPropertySetInfo > xWeakInfo( xInfo );
             xInfo = 0;
             xInfo = xWeakInfo;
@@ -658,16 +658,16 @@ vector< XMLPropertyState > SvXMLExportPropertyMapper::_Filter(
         }
         catch( UnknownPropertyException& )
         {
-            // might be a problem of getImplemenetationId
+            
             OSL_ENSURE( !this, "unknown property in getPropertyStates" );
         }
     }
 
-    // Call centext-filter
+    
     if( !aPropStateArray.empty() )
         ContextFilter(bEnableFoFontFamily, aPropStateArray, xPropSet);
 
-    // Have to do if we change from a vector to a list or something like that
+    
 
     if( bDelInfo )
         delete pFilterInfo;
@@ -680,15 +680,15 @@ void SvXMLExportPropertyMapper::ContextFilter(
         vector< XMLPropertyState >& rProperties,
         Reference< XPropertySet > rPropSet ) const
 {
-    // Derived class could implement this.
+    
     if (mpImpl->mxNextMapper.is())
         mpImpl->mxNextMapper->ContextFilter(bEnableFoFontFamily, rProperties, rPropSet);
 }
 
-// Compares two Sequences of XMLPropertyState:
-//  1.Number of elements equal ?
-//  2.Index of each element equal ? (So I know whether the propertynames are the same)
-//  3.Value of each element equal ?
+
+
+
+
 sal_Bool SvXMLExportPropertyMapper::Equals(
         const vector< XMLPropertyState >& aProperties1,
         const vector< XMLPropertyState >& aProperties2 ) const
@@ -704,18 +704,18 @@ sal_Bool SvXMLExportPropertyMapper::Equals(
             const XMLPropertyState& rProp1 = aProperties1[ nIndex ];
             const XMLPropertyState& rProp2 = aProperties2[ nIndex ];
 
-            // Compare index. If equal, compare value
+            
             if( rProp1.mnIndex == rProp2.mnIndex )
             {
                 if( rProp1.mnIndex != -1 )
                 {
-                    // Now compare values
+                    
                     if ( (mpImpl->mxPropMapper->GetEntryType( rProp1.mnIndex ) &
                           XML_TYPE_BUILDIN_CMP ) != 0 )
-                        // simple type ( binary compare )
+                        
                         bRet = ( rProp1.maValue == rProp2.maValue );
                     else
-                        // complex type ( ask for compare-function )
+                        
                         bRet = mpImpl->mxPropMapper->GetPropertyHandler(
                                     rProp1.mnIndex )->equals( rProp1.maValue,
                                                               rProp2.maValue );
@@ -830,7 +830,7 @@ void SvXMLExportPropertyMapper::handleElementItem(
         mpImpl->mxNextMapper->handleElementItem(rExport, rProperty, nFlags, pProperties, nIdx);
 }
 
-// protected methods
+
 
 /** fills the given attribute list with the items in the given set */
 void SvXMLExportPropertyMapper::_exportXML(
@@ -855,7 +855,7 @@ void SvXMLExportPropertyMapper::_exportXML(
     {
         sal_Int32 nPropMapIdx = rProperties[nIndex].mnIndex;
         if( nPropMapIdx >= nPropMapStartIdx &&
-            nPropMapIdx < nPropMapEndIdx  )// valid entry?
+            nPropMapIdx < nPropMapEndIdx  )
         {
             sal_uInt32 nEFlags = mpImpl->mxPropMapper->GetEntryFlags(nPropMapIdx);
             sal_uInt16 nEPType = GET_PROP_TYPE(nEFlags);
@@ -864,11 +864,11 @@ void SvXMLExportPropertyMapper::_exportXML(
             rPropTypeFlags |= (1 << nEPType);
             if( nEPType == nPropType )
             {
-                // we have a valid map entry here, so lets use it...
+                
                 if( ( nEFlags & MID_FLAG_ELEMENT_ITEM_EXPORT ) != 0 )
                 {
-                    // element items do not add any properties,
-                    // we export it later
+                    
+                    
                     if( pIndexArray )
                     {
                         pIndexArray->push_back( (sal_uInt16)nIndex );
@@ -915,7 +915,7 @@ void SvXMLExportPropertyMapper::_exportXML(
                 xAttrContainer->getByName( *pAttribName ) >>= aData;
                 OUString sAttribName( *pAttribName );
 
-                // extract namespace prefix from attribute name if it exists
+                
                 OUString sPrefix;
                 const sal_Int32 nColonPos =
                     pAttribName->indexOf( ':' );
@@ -926,27 +926,27 @@ void SvXMLExportPropertyMapper::_exportXML(
                 {
                     OUString sNamespace( aData.Namespace );
 
-                    // if the prefix isn't defined yet or has another meaning,
-                    // we have to redefine it now.
+                    
+                    
                     sal_uInt16 nKey = pNamespaceMap->GetKeyByPrefix( sPrefix );
                     if( USHRT_MAX == nKey || pNamespaceMap->GetNameByKey( nKey ) != sNamespace )
                     {
                         sal_Bool bAddNamespace = sal_False;
                         if( USHRT_MAX == nKey )
                         {
-                            // The prefix is unused, so it is sufficient
-                            // to add it to the namespace map.
+                            
+                            
                             bAddNamespace = sal_True;
                         }
                         else
                         {
-                            // check if there is a prefix registered for the
-                            // namepsace URI
+                            
+                            
                             nKey = pNamespaceMap->GetKeyByName( sNamespace );
                             if( XML_NAMESPACE_UNKNOWN == nKey )
                             {
-                                // There is no prefix for the namespace, so
-                                // we have to generate one and have to add it.
+                                
+                                
                                 sal_Int32 n=0;
                                 OUString sOrigPrefix( sPrefix );
                                 do
@@ -962,11 +962,11 @@ void SvXMLExportPropertyMapper::_exportXML(
                             }
                             else
                             {
-                                // If there is a prefix for the namespace,
-                                // we reuse that.
+                                
+                                
                                 sPrefix = pNamespaceMap->GetPrefixByKey( nKey );
                             }
-                            // In any case, the attribute name has to be adapted.
+                            
                             sNameBuffer.append( sPrefix + ":" + pAttribName->copy( nColonPos+1 ) );
                             sAttribName = sNameBuffer.makeStringAndClear();
                         }

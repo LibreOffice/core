@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,7 +38,7 @@ using ::sd::framework::FrameworkHelper;
 namespace sd { namespace framework {
 
 
-//===== SlideSorterModule ==================================================
+
 
 SlideSorterModule::SlideSorterModule (
     const Reference<frame::XController>& rxController,
@@ -100,8 +100,8 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
     {
         if (rEvent.ResourceId->compareTo(mxViewTabBarId) == 0)
         {
-            // Update the view tab bar because the view tab bar has just
-            // become active.
+            
+            
             UpdateViewTabBar(Reference<XTabBar>(rEvent.ResourceObject,UNO_QUERY));
         }
         else if (rEvent.ResourceId->getResourceTypePrefix().equals(
@@ -110,8 +110,8 @@ void SAL_CALL SlideSorterModule::notifyConfigurationChange (
                 FrameworkHelper::CreateResourceId(FrameworkHelper::msCenterPaneURL),
                 AnchorBindingMode_DIRECT))
         {
-            // Update the view tab bar because the view in the center pane
-            // has changed.
+            
+            
             UpdateViewTabBar(NULL);
         }
     }
@@ -155,6 +155,6 @@ void SlideSorterModule::UpdateViewTabBar (const Reference<XTabBar>& rxTabBar)
 
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

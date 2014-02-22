@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dpitemdata.hxx"
@@ -60,8 +60,8 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
 {
     if (rA.meType != rB.meType)
     {
-        // group value, value and string in this order. Ensure that the empty
-        // type comes last.
+        
+        
         return rA.meType < rB.meType ? -1 : 1;
     }
 
@@ -90,7 +90,7 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
         case String:
         case Error:
             if (rA.mpString == rB.mpString)
-                // strings may be interned.
+                
                 return 0;
 
             return ScGlobal::GetCollator()->compareString(rA.GetString(), rB.GetString());
@@ -230,7 +230,7 @@ bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
     }
 
     if (mpString == r.mpString)
-        // Fast equality check for interned strings.
+        
         return true;
 
     return ScGlobal::GetpTransliteration()->isEqual(GetString(), r.GetString());
@@ -253,7 +253,7 @@ bool ScDPItemData::operator== (const ScDPItemData& r) const
             ;
     }
 
-    // need exact equality until we have a safe case insensitive string hash
+    
     return GetString() == r.GetString();
 }
 

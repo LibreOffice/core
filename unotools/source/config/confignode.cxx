@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,10 +37,10 @@
 #include <rtl/strbuf.hxx>
 #endif
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -49,28 +49,28 @@ namespace utl
     using namespace ::com::sun::star::container;
     using namespace ::com::sun::star::configuration;
 
-    //========================================================================
-    //= OConfigurationNode
-    //========================================================================
-    //------------------------------------------------------------------------
+    
+    
+    
+    
     OConfigurationNode::OConfigurationNode(const Reference< XInterface >& _rxNode )
         :m_bEscapeNames(false)
     {
         OSL_ENSURE(_rxNode.is(), "OConfigurationNode::OConfigurationNode: invalid node interface!");
         if (_rxNode.is())
         {
-            // collect all interfaces necessary
+            
             m_xHierarchyAccess = Reference< XHierarchicalNameAccess >(_rxNode, UNO_QUERY);
             m_xDirectAccess = Reference< XNameAccess >(_rxNode, UNO_QUERY);
 
-            // reset _all_ interfaces if _one_ of them is not supported
+            
             if (!m_xHierarchyAccess.is() || !m_xDirectAccess.is())
             {
                 m_xHierarchyAccess = NULL;
                 m_xDirectAccess = NULL;
             }
 
-            // now for the non-critical interfaces
+            
             m_xReplaceAccess = Reference< XNameReplace >(_rxNode, UNO_QUERY);
             m_xContainerAccess = Reference< XNameContainer >(_rxNode, UNO_QUERY);
         }
@@ -83,7 +83,7 @@ namespace utl
             setEscape(isSetNode());
     }
 
-    //------------------------------------------------------------------------
+    
     OConfigurationNode::OConfigurationNode(const OConfigurationNode& _rSource)
         :OEventListenerAdapter()
         ,m_xHierarchyAccess(_rSource.m_xHierarchyAccess)
@@ -98,7 +98,7 @@ namespace utl
             startComponentListening(xConfigNodeComp);
     }
 
-    //------------------------------------------------------------------------
+    
     const OConfigurationNode& OConfigurationNode::operator=(const OConfigurationNode& _rSource)
     {
         stopAllComponentListening();
@@ -117,7 +117,7 @@ namespace utl
         return *this;
     }
 
-    //------------------------------------------------------------------------
+    
     void OConfigurationNode::_disposing( const EventObject& _rSource )
     {
         Reference< XComponent > xDisposingSource(_rSource.Source, UNO_QUERY);
@@ -126,7 +126,7 @@ namespace utl
             clear();
     }
 
-    //------------------------------------------------------------------------
+    
     OUString OConfigurationNode::getLocalName() const
     {
         OUString sLocalName;
@@ -142,7 +142,7 @@ namespace utl
         return sLocalName;
     }
 
-    //------------------------------------------------------------------------
+    
     OUString OConfigurationNode::getNodePath() const
     {
         OUString sNodePath;
@@ -158,7 +158,7 @@ namespace utl
         return sNodePath;
     }
 
-    //------------------------------------------------------------------------
+    
     OUString OConfigurationNode::normalizeName(const OUString& _rName, NAMEORIGIN _eOrigin) const
     {
         OUString sName(_rName);
@@ -183,7 +183,7 @@ namespace utl
         return sName;
     }
 
-    //------------------------------------------------------------------------
+    
     Sequence< OUString > OConfigurationNode::getNodeNames() const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::getNodeNames: object is invalid!");
@@ -193,7 +193,7 @@ namespace utl
             try
             {
                 aReturn = m_xDirectAccess->getElementNames();
-                // normalize the names
+                
                 OUString* pNames = aReturn.getArray();
                 for (sal_Int32 i=0; i<aReturn.getLength(); ++i, ++pNames)
                     *pNames = normalizeName(*pNames, NO_CONFIGURATION);
@@ -207,7 +207,7 @@ namespace utl
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+    
     bool OConfigurationNode::removeNode(const OUString& _rName) const throw()
     {
         OSL_ENSURE(m_xContainerAccess.is(), "OConfigurationNode::removeNode: object is invalid!");
@@ -240,7 +240,7 @@ namespace utl
         }
         return false;
     }
-    //------------------------------------------------------------------------
+    
     OConfigurationNode OConfigurationNode::insertNode(const OUString& _rName,const Reference< XInterface >& _xNode) const throw()
     {
         if(_xNode.is())
@@ -249,7 +249,7 @@ namespace utl
             {
                 OUString sName = normalizeName(_rName, NO_CALLER);
                 m_xContainerAccess->insertByName(sName, makeAny(_xNode));
-                // if we're here, all was ok ...
+                
                 return OConfigurationNode( _xNode );
             }
             catch(const Exception&)
@@ -257,7 +257,7 @@ namespace utl
                 DBG_UNHANDLED_EXCEPTION();
             }
 
-            // dispose the child if it has already been created, but could not be inserted
+            
             Reference< XComponent > xChildComp(_xNode, UNO_QUERY);
             if (xChildComp.is())
                 try { xChildComp->dispose(); } catch(Exception&) { }
@@ -265,13 +265,13 @@ namespace utl
 
         return OConfigurationNode();
     }
-    //------------------------------------------------------------------------
+    
     OConfigurationNode OConfigurationNode::createNode(const OUString& _rName) const throw()
     {
         Reference< XSingleServiceFactory > xChildFactory(m_xContainerAccess, UNO_QUERY);
         OSL_ENSURE(xChildFactory.is(), "OConfigurationNode::createNode: object is invalid or read-only!");
 
-        if (xChildFactory.is()) // implies m_xContainerAccess.is()
+        if (xChildFactory.is()) 
         {
             Reference< XInterface > xNewChild;
             try
@@ -288,7 +288,7 @@ namespace utl
         return OConfigurationNode();
     }
 
-    //------------------------------------------------------------------------
+    
     OConfigurationNode OConfigurationNode::openNode(const OUString& _rPath) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::openNode: object is invalid!");
@@ -328,13 +328,13 @@ namespace utl
         return OConfigurationNode();
     }
 
-    //------------------------------------------------------------------------
+    
     void OConfigurationNode::setEscape(bool _bEnable)
     {
         m_bEscapeNames = _bEnable && Reference< XStringEscape >::query(m_xDirectAccess).is();
     }
 
-    //------------------------------------------------------------------------
+    
     bool OConfigurationNode::isSetNode() const
     {
         bool bIsSet = false;
@@ -364,7 +364,7 @@ namespace utl
         return false;
     }
 
-    //------------------------------------------------------------------------
+    
     bool OConfigurationNode::hasByName(const OUString& _rName) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
@@ -380,7 +380,7 @@ namespace utl
         return false;
     }
 
-    //------------------------------------------------------------------------
+    
     bool OConfigurationNode::setNodeValue(const OUString& _rPath, const Any& _rValue) const throw()
     {
         bool bResult = false;
@@ -390,7 +390,7 @@ namespace utl
         {
             try
             {
-                // check if _rPath is a level-1 path
+                
                 OUString sNormalizedName = normalizeName(_rPath, NO_CALLER);
                 if (m_xReplaceAccess->hasByName(sNormalizedName))
                 {
@@ -398,7 +398,7 @@ namespace utl
                     bResult = true;
                 }
 
-                // check if the name refers to a indirect descendant
+                
                 else if (m_xHierarchyAccess.is() && m_xHierarchyAccess->hasByHierarchicalName(_rPath))
                 {
                     OSL_ASSERT(!_rPath.isEmpty());
@@ -441,7 +441,7 @@ namespace utl
         return bResult;
     }
 
-    //------------------------------------------------------------------------
+    
     Any OConfigurationNode::getNodeValue(const OUString& _rPath) const throw()
     {
         OSL_ENSURE(m_xDirectAccess.is(), "OConfigurationNode::hasByName: object is invalid!");
@@ -466,7 +466,7 @@ namespace utl
         return aReturn;
     }
 
-    //------------------------------------------------------------------------
+    
     void OConfigurationNode::clear() throw()
     {
         m_xHierarchyAccess.clear();
@@ -475,12 +475,12 @@ namespace utl
         m_xContainerAccess.clear();
     }
 
-    //========================================================================
-    //= helper
-    //========================================================================
+    
+    
+    
     namespace
     {
-        //--------------------------------------------------------------------
+        
         Reference< XMultiServiceFactory > lcl_getConfigProvider( const Reference<XComponentContext> & i_rContext )
         {
             try
@@ -495,7 +495,7 @@ namespace utl
             return NULL;
         }
 
-        //--------------------------------------------------------------------
+        
         Reference< XInterface > lcl_createConfigurationRoot( const Reference< XMultiServiceFactory >& i_rxConfigProvider,
             const OUString& i_rNodePath, const bool i_bUpdatable, const sal_Int32 i_nDepth, const bool i_bLazyWrite )
         {
@@ -525,14 +525,14 @@ namespace utl
         }
     }
 
-    //------------------------------------------------------------------------
+    
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference< XInterface >& _rxRootNode )
         :OConfigurationNode( _rxRootNode )
         ,m_xCommitter( _rxRootNode, UNO_QUERY )
     {
     }
 
-    //------------------------------------------------------------------------
+    
     OConfigurationTreeRoot::OConfigurationTreeRoot( const Reference<XComponentContext> & i_rContext, const OUString& i_rNodePath, const bool i_bUpdatable )
         :OConfigurationNode( lcl_createConfigurationRoot( lcl_getConfigProvider( i_rContext ),
             i_rNodePath, i_bUpdatable, -1, false ).get() )
@@ -545,14 +545,14 @@ namespace utl
         }
     }
 
-    //------------------------------------------------------------------------
+    
     void OConfigurationTreeRoot::clear() throw()
     {
         OConfigurationNode::clear();
         m_xCommitter.clear();
     }
 
-    //------------------------------------------------------------------------
+    
     bool OConfigurationTreeRoot::commit() const throw()
     {
         OSL_ENSURE(isValid(), "OConfigurationTreeRoot::commit: object is invalid!");
@@ -574,7 +574,7 @@ namespace utl
         return false;
     }
 
-    //------------------------------------------------------------------------
+    
     OConfigurationTreeRoot OConfigurationTreeRoot::createWithProvider(const Reference< XMultiServiceFactory >& _rxConfProvider, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, bool _bLazyWrite)
     {
         Reference< XInterface > xRoot( lcl_createConfigurationRoot(
@@ -584,13 +584,13 @@ namespace utl
         return OConfigurationTreeRoot();
     }
 
-    //------------------------------------------------------------------------
+    
     OConfigurationTreeRoot OConfigurationTreeRoot::createWithComponentContext( const Reference< XComponentContext >& _rxContext, const OUString& _rPath, sal_Int32 _nDepth, CREATION_MODE _eMode, bool _bLazyWrite )
     {
         return createWithProvider( lcl_getConfigProvider( _rxContext ), _rPath, _nDepth, _eMode, _bLazyWrite );
     }
 
-    //------------------------------------------------------------------------
+    
     OConfigurationTreeRoot OConfigurationTreeRoot::tryCreateWithComponentContext( const Reference< XComponentContext >& rxContext,
         const OUString& _rPath, sal_Int32 _nDepth , CREATION_MODE _eMode , bool _bLazyWrite )
     {
@@ -602,13 +602,13 @@ namespace utl
         }
         catch(const Exception&)
         {
-            // silence this, 'cause the contract of this method states "no assertions"
+            
         }
         return OConfigurationTreeRoot();
     }
 
-//........................................................................
-}   // namespace utl
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

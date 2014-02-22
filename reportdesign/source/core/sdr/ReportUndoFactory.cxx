@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "ReportUndoFactory.hxx"
 #include "RptObject.hxx"
@@ -24,7 +24,7 @@
 namespace rptui
 {
     using namespace ::com::sun::star;
-// -----------------------------------------------------------------------------
+
 SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCommentId)
 {
     OObjectBase* pObj = dynamic_cast<OObjectBase*>(&rObject);
@@ -40,17 +40,17 @@ SdrUndoAction* lcl_createUndo(SdrObject& rObject,Action _eAction,sal_uInt16 _nCo
         pUndo = new OUndoReportSectionAction(*rObject.GetModel(),_eAction,OReportHelper::getMemberFunction(xSection),xSection->getReportDefinition(),xReportComponent,_nCommentId);
     return pUndo;
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 OReportUndoFactory::OReportUndoFactory() : m_pUndoFactory(new SdrUndoFactory)
 {
 }
-// -----------------------------------------------------------------------------
+
 OReportUndoFactory::~OReportUndoFactory()
 {
 }
-///////////////////////////////////////////////////////////////////////
-// shapes
+
+
 SdrUndoAction* OReportUndoFactory::CreateUndoMoveObject( SdrObject& rObject )
 {
     return m_pUndoFactory->CreateUndoMoveObject( rObject );
@@ -116,7 +116,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoObjectSetText( SdrObject& rNewObj, 
     return m_pUndoFactory->CreateUndoObjectSetText( rNewObj, nText );
 }
 
-// layer
+
 SdrUndoAction* OReportUndoFactory::CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel)
 {
     return m_pUndoFactory->CreateUndoNewLayer( nLayerNum, rNewLayerAdmin, rNewModel );
@@ -132,7 +132,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoMoveLayer(sal_uInt16 nLayerNum, Sdr
     return m_pUndoFactory->CreateUndoMoveLayer( nLayerNum, rNewLayerAdmin, rNewModel, nNeuPos1 );
 }
 
-// page
+
 SdrUndoAction*  OReportUndoFactory::CreateUndoDeletePage(SdrPage& rPage)
 {
     return m_pUndoFactory->CreateUndoDeletePage( rPage );
@@ -152,7 +152,7 @@ SdrUndoAction* OReportUndoFactory::CreateUndoSetPageNum(SdrPage& rNewPg, sal_uIn
 {
     return m_pUndoFactory->CreateUndoSetPageNum( rNewPg, nOldPageNum1, nNewPageNum1 );
 }
-    // master page
+    
 SdrUndoAction* OReportUndoFactory::CreateUndoPageRemoveMasterPage(SdrPage& rChangedPage)
 {
     return m_pUndoFactory->CreateUndoPageRemoveMasterPage( rChangedPage );
@@ -163,8 +163,8 @@ SdrUndoAction* OReportUndoFactory::CreateUndoPageChangeMasterPage(SdrPage& rChan
     return m_pUndoFactory->CreateUndoPageChangeMasterPage(rChangedPage);
 }
 
-//==================================================================
-}   //rptui
-//==================================================================
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -22,14 +22,14 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <i18nutil/scripttypedetector.hxx>
 
-//      class UnoScriptTypeDetector
+
 sal_Int16 SAL_CALL
 UnoScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ScriptTypeDetector::getScriptDirection(Text, nPos, defaultScriptDirection);
 }
 
-// return value '-1' means either the direction on nPos is not same as scriptDirection or nPos is out of range.
+
 sal_Int32 SAL_CALL
 UnoScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -48,14 +48,14 @@ UnoScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 nPos ) 
     return ScriptTypeDetector::getCTLScriptType(Text, nPos);
 }
 
-// Begin of Script Type is inclusive.
+
 sal_Int32 SAL_CALL
 UnoScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
 {
     return ScriptTypeDetector::beginOfCTLScriptType(Text, nPos);
 }
 
-// End of the Script Type is exclusive, the return value pointing to the begin of next script type
+
 sal_Int32 SAL_CALL
 UnoScriptTypeDetector::endOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (::com::sun::star::uno::RuntimeException)
 {

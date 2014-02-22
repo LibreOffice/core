@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cuires.hrc>
@@ -130,7 +130,7 @@ SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
     m_pTsbAutoPosV->SetClickHdl( LINK( this, SvxMeasurePage, ClickAutoPosHdl_Impl ) );
     m_pTsbAutoPosH->SetClickHdl( LINK( this, SvxMeasurePage, ClickAutoPosHdl_Impl ) );
 
-    // set background and border of iconchoicectrl
+    
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     m_pCtlPreview->SetBackground ( rStyles.GetWindowColor() );
     m_pCtlPreview->SetBorderStyle(WINDOW_BORDER_MONO);
@@ -172,7 +172,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 
     const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_MEASURELINEDIST );
 
-    // SdrMeasureLineDistItem
+    
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASURELINEDIST );
     if( pItem )
@@ -186,7 +186,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pMtrFldLineDist->SaveValue();
 
-    // SdrMeasureHelplineOverhangItem
+    
     pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINEOVERHANG );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEOVERHANG );
@@ -201,7 +201,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pMtrFldHelplineOverhang->SaveValue();
 
-    // SdrMeasureHelplineDistItem
+    
     pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINEDIST );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINEDIST );
@@ -216,7 +216,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pMtrFldHelplineDist->SaveValue();
 
-    // SdrMeasureHelpline1LenItem
+    
     pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINE1LEN );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE1LEN );
@@ -231,7 +231,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pMtrFldHelpline1Len->SaveValue();
 
-    // SdrMeasureHelpline2LenItem
+    
     pItem = GetItem( rAttrs, SDRATTR_MEASUREHELPLINE2LEN );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREHELPLINE2LEN );
@@ -246,7 +246,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pMtrFldHelpline2Len->SaveValue();
 
-    // SdrMeasureBelowRefEdgeItem
+    
     if( rAttrs.GetItemState( SDRATTR_MEASUREBELOWREFEDGE ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbBelowRefEdge->SetState( ( ( const SdrMeasureBelowRefEdgeItem& )rAttrs.Get( SDRATTR_MEASUREBELOWREFEDGE ) ).
@@ -259,7 +259,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pTsbBelowRefEdge->SaveValue();
 
-    // SdrMeasureDecimalPlacesItem
+    
     pItem = GetItem( rAttrs, SDRATTR_MEASUREDECIMALPLACES );
     if( pItem == NULL )
         pItem = &pPool->GetDefaultItem( SDRATTR_MEASUREDECIMALPLACES );
@@ -274,8 +274,8 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pMtrFldDecimalPlaces->SaveValue();
 
-    // SdrMeasureTextRota90Item
-    // Attention: negate !
+    
+    
     if( rAttrs.GetItemState( SDRATTR_MEASURETEXTROTA90 ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbParallel->SetState( ( ( const SdrMeasureTextRota90Item& )rAttrs.Get( SDRATTR_MEASURETEXTROTA90 ) ).
@@ -288,7 +288,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pTsbParallel->SaveValue();
 
-    // SdrMeasureShowUnitItem
+    
     if( rAttrs.GetItemState( SDRATTR_MEASURESHOWUNIT ) != SFX_ITEM_DONTCARE )
     {
         m_pTsbShowUnit->SetState( ( ( const SdrMeasureShowUnitItem& )rAttrs.Get( SDRATTR_MEASURESHOWUNIT ) ).
@@ -301,7 +301,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pTsbShowUnit->SaveValue();
 
-    // SdrMeasureUnitItem
+    
     if( rAttrs.GetItemState( SDRATTR_MEASUREUNIT ) != SFX_ITEM_DONTCARE )
     {
         long nFieldUnit = (long) ( ( const SdrMeasureUnitItem& )rAttrs.
@@ -322,7 +322,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
     }
     m_pLbUnit->SaveValue();
 
-    // Position
+    
     if ( rAttrs.GetItemState( SDRATTR_MEASURETEXTVPOS ) != SFX_ITEM_DONTCARE )
     {
         SdrMeasureTextVPos eVPos = (SdrMeasureTextVPos)
@@ -374,7 +374,7 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
                     case SDRMEASURE_TEXTHAUTO:          eRP = RP_MM; break;
                     }
                     break;
-                 default: ;//prevent warning
+                 default: ;
                 }
 
                 CTL_STATE nState = 0;
@@ -403,9 +403,9 @@ void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
         m_pTsbAutoPosH->SetState( STATE_DONTKNOW );
     }
 
-    // put the attributes to the preview-control,
-    // otherwise the control don't know about
-    // the settings of the dialog (#67930)
+    
+    
+    
     ChangeAttrHdl_Impl( m_pTsbShowUnit );
     m_pCtlPreview->SetAttributes( rAttrs );
 
@@ -503,7 +503,7 @@ sal_Bool SvxMeasurePage::FillItemSet( SfxItemSet& rAttrs)
 
     if( bPositionModified )
     {
-        // Position
+        
         SdrMeasureTextVPos eVPos, eOldVPos;
         SdrMeasureTextHPos eHPos, eOldHPos;
 
@@ -629,7 +629,7 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
             case RP_RB:
                 m_pCtlPosition->SetActualRP( RP_MB );
             break;
-            default: ;//prevent warning
+            default: ;
         }
     }
     if( m_pTsbAutoPosV->GetState() == STATE_CHECK )
@@ -650,7 +650,7 @@ IMPL_LINK( SvxMeasurePage, ClickAutoPosHdl_Impl, void *, p )
             case RP_RB:
                 m_pCtlPosition->SetActualRP( RP_RM );
             break;
-            default: ;//prevent warning
+            default: ;
         }
     }
     ChangeAttrHdl_Impl( p );
@@ -734,7 +734,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
     {
         bPositionModified = sal_True;
 
-        // Position
+        
         RECT_POINT eRP = m_pCtlPosition->GetActualRP();
         SdrMeasureTextVPos eVPos;
         SdrMeasureTextHPos eHPos;
@@ -791,7 +791,7 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrHdl_Impl, void *, p )
 
 void SvxMeasurePage::FillUnitLB()
 {
-    // fill ListBox with metrics
+    
     SvxStringArray aMetricArr( SVX_RES( RID_SVXSTR_FIELDUNIT_TABLE ) );
 
     sal_IntPtr nUnit = FUNIT_NONE;

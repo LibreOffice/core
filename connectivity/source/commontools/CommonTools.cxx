@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -50,10 +50,10 @@ namespace connectivity
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::java;
     using namespace dbtools;
-    //------------------------------------------------------------------------------
+    
     const sal_Unicode CHAR_PLACE = '_';
     const sal_Unicode CHAR_WILD  = '%';
-    // -------------------------------------------------------------------------
+    
     sal_Bool match(const sal_Unicode* pWild, const sal_Unicode* pStr, const sal_Unicode cEscape)
     {
         int    pos=0;
@@ -76,8 +76,8 @@ namespace connectivity
                         else
                             pWild += pos;
                     else
-                        break;          // WARNING in certain circumstances
-                // it will run into the next 'case'!!
+                        break;          
+                
                 case CHAR_WILD:
                     while ( *pWild == CHAR_WILD )
                         pWild++;
@@ -111,7 +111,7 @@ namespace connectivity
         }
         return ( *pStr == 0 ) && ( *pWild == 0 );
     }
-    //------------------------------------------------------------------
+    
 #if HAVE_FEATURE_JAVA
     ::rtl::Reference< jvmaccess::VirtualMachine > getJavaVM(const Reference<XComponentContext >& _rxContext)
     {
@@ -132,7 +132,7 @@ namespace connectivity
             Any uaJVM = xVM->getJavaVM( processID );
 
             if (!uaJVM.hasValue())
-                throw Exception(); // -5
+                throw Exception(); 
             else
             {
                 sal_Int32 nValue = 0;
@@ -154,7 +154,7 @@ namespace connectivity
 
         return aRet;
     }
-    //------------------------------------------------------------------------------
+    
     sal_Bool existsJavaClassByName( const ::rtl::Reference< jvmaccess::VirtualMachine >& _pJVM,const OUString& _sClassName )
     {
         sal_Bool bRet = sal_False;
@@ -179,7 +179,7 @@ namespace connectivity
 #include <ctype.h>
 namespace dbtools
 {
-//------------------------------------------------------------------
+
 sal_Bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
 {
 
@@ -187,11 +187,11 @@ sal_Bool isCharOk(sal_Unicode c,const OUString& _rSpecials)
           c == '_' || _rSpecials.indexOf(c) != -1);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
 {
-    // Test for correct naming (in SQL sense)
-    // This is important for table names for example
+    
+    
     const sal_Unicode* pStr = rName.getStr();
     if (*pStr > 127 || isdigit(*pStr))
         return sal_False;
@@ -208,15 +208,15 @@ sal_Bool isValidSQLName(const OUString& rName,const OUString& _rSpecials)
             )
         )
         return sal_False;
-    // the SQL-Standard requires the first character to be an alphabetic character, which
-    // isn't easy to decide in UniCode ...
-    // So we just prohibit the characters which already lead to problems ....
-    // 11.04.00 - 74902 - FS
+    
+    
+    
+    
 
     return sal_True;
 }
-//------------------------------------------------------------------
-// Creates a new name if necessary
+
+
 OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
 {
     if(isValidSQLName(rName,_rSpecials))
@@ -237,7 +237,7 @@ OUString convertName2SQLName(const OUString& rName,const OUString& _rSpecials)
 
     return aNewName;
 }
-//------------------------------------------------------------------------------
+
 OUString quoteName(const OUString& _rQuote, const OUString& _rName)
 {
     OUString sName = _rName;

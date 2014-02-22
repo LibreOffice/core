@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -66,7 +66,7 @@
 
 using namespace ::com::sun::star;
 
-///////////////////////////////////////////////////////////////////////
+
 
 enum CompareStatus           { CMP_NOTYET = 0, CMP_EQUAL = 1, CMP_NOTEQUAL = 2, CMP_NOTAVAILABLE = 3 };
 static ColorData gColors[] = { COL_BLACK,      COL_GREEN,     COL_RED,          COL_CYAN };
@@ -136,7 +136,7 @@ public:
 private:
     Atom( const DffRecordHeader& rRecordHeader, SvStream& rStCtrl );
 
-    // statics for compare
+    
     static Atom* skipAtoms( Atom* pContainer, Atom* pAtom, Atom* pSkipTo );
     static Atom* findFirstEqualAtom( Atom* pCompare, Atom* pContainer, Atom* pSearch, int& nDistance );
 
@@ -261,7 +261,7 @@ Atom::Atom( const DffRecordHeader& rRecordHeader, SvStream& rStream )
   meStatus( CMP_NOTYET ),
   mpCompareAtom( 0 )
 {
-    // check if we need to force this to a container
+    
     if( maRecordHeader.nRecVer != DFF_PSFLAG_CONTAINER )
     {
         AtomConfig* pAtomConfig = dynamic_cast< AtomConfig* >( gAtomConfigMap[ maRecordHeader.nRecType ].get() );
@@ -473,9 +473,9 @@ void Atom::compare( Atom* pAtom )
     }
 }
 
-//////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////
+
+
 
 class AtomBoxString : public SvLBoxString
 {
@@ -504,7 +504,7 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 class AtomContainerTreeListBox : public SvTreeListBox
 {
@@ -552,8 +552,8 @@ AtomContainerTreeListBox::AtomContainerTreeListBox( Window* pParent )
     maImgCollapsed = Image( ResId( RID_IMG_TREENODE_COLLAPSED, mpResMgr ) );
     maImgExpanded = Image( ResId( RID_IMG_TREENODE_EXPANDED, mpResMgr ) );
 
-//  SetDefaultExpandedEntryBmp( aExpanded );
-//  SetDefaultCollapsedEntryBmp(aCollapsed );
+
+
 
     maImgFolder = Image( ResId( IMG_SVT_FOLDER, mpResMgr ) );
     maImgAtom = Image( ResId( IMG_SVT_DOCTEMPLATE_DOCINFO_SMALL, mpResMgr ) );
@@ -705,7 +705,7 @@ void AtomContainerTreeListBox::InsertAtom( const Atom* pAtom, SvTreeListEntry* p
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 extern void load_config( const OUString& rPath );
 
@@ -760,7 +760,7 @@ Atom* PPTDocument::getRootAtom() const
     return mpAtom;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 class MSViewerWorkWindow : public WorkWindow
 {
@@ -793,7 +793,7 @@ private:
     DECL_LINK( implMenuHdl, Menu* );
 };
 
-// -----------------------------------------------------------------------
+
 
 void MSViewerWorkWindow::onView()
 {
@@ -858,8 +858,8 @@ PPTDocumentPtr MSViewerWorkWindow::Load()
         ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
     String aStrFilterType(  "*.ppt"  );
     aDlg.AddFilter( aStrFilterType, aStrFilterType );
-//  INetURLObject aFile( SvtPathOptions().GetPalettePath() );
-//  aDlg.SetDisplayDirectory( aFile.GetMainURL( INetURLObject::NO_DECODE ) );
+
+
 
     PPTDocumentPtr pDocument;
     if ( aDlg.Execute() == ERRCODE_NONE )
@@ -870,7 +870,7 @@ PPTDocumentPtr MSViewerWorkWindow::Load()
     return pDocument;
 }
 
-// -----------------------------------------------------------------------
+
 
 MSViewerWorkWindow::MSViewerWorkWindow() :
     WorkWindow( 0, WB_APP | WB_STDWORK | WB_3DLOOK ),mbSelectHdlGuard(false)
@@ -909,7 +909,7 @@ MSViewerWorkWindow::MSViewerWorkWindow() :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static String GetAtomText( const Atom* pAtom )
 {
@@ -960,7 +960,7 @@ IMPL_LINK(MSViewerWorkWindow,implSelectHdl, AtomContainerTreeListBox*, pListBox 
         if(!mbSelectHdlGuard)
         {
             mbSelectHdlGuard = true;
-            // select other
+            
             AtomContainerEntryPair aPair( pListBox, pEntry );
             Sync( &aPair, 2 );
             mbSelectHdlGuard = false;
@@ -1035,7 +1035,7 @@ IMPL_LINK( MSViewerWorkWindow, implMenuHdl, Menu*, pMenu )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 MSViewerWorkWindow::~MSViewerWorkWindow()
 {
@@ -1050,7 +1050,7 @@ MSViewerWorkWindow::~MSViewerWorkWindow()
     delete mpMenuBar;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MSViewerWorkWindow::Resize()
 {
@@ -1076,9 +1076,9 @@ void MSViewerWorkWindow::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
     SAL_IMPLEMENT_MAIN()
 {

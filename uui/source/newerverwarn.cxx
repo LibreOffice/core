@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -70,14 +70,14 @@ NewerVersionWarningDialog::~NewerVersionWarningDialog()
 
 IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
 {
-    // detect execute path
+    
     OUString sProgramPath;
     osl_getExecutableFile( &sProgramPath.pData );
     sal_uInt32 nLastIndex = sProgramPath.lastIndexOf( '/' );
     if ( nLastIndex > 0 )
         sProgramPath = sProgramPath.copy( 0, nLastIndex + 1 );
 
-    // read keys from soffice.ini (sofficerc)
+    
     OUString sIniFileName = sProgramPath;
 #if HAVE_FEATURE_MACOSX_MACLIKE_APP_STRUCTURE
     sIniFileName += "../" LIBO_ETC_FOLDER "/";
@@ -102,11 +102,11 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
         }
         else
         {
-            // TODO: do we need to respect the /org.openoffice.Office.Jobs/Jobs/
-            // UpdateCheck/Arguments/AutoCheckEnabled configuration flag?
-            // Finally, its meaning is "are automatic updates enabled", but this
-            // here is not an automatic update, but one triggered explicitly by
-            // the user.
+            
+            
+            
+            
+            
             css::uno::Reference< css::container::XHierarchicalNameAccess > xOfficeHelp(officecfg::Office::Addons::AddonUI::OfficeHelp::get(xContext), css::uno::UNO_QUERY_THROW);
 
             util::URL aURL;
@@ -146,12 +146,12 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, LaterHdl)
 
 void NewerVersionWarningDialog::InitButtonWidth()
 {
-    // one button too small for its text?
+    
     long nBtnTextWidth = m_aUpdateBtn.GetCtrlTextWidth( m_aUpdateBtn.GetText() );
     long nTemp = m_aLaterBtn.GetCtrlTextWidth( m_aLaterBtn.GetText() );
     if ( nTemp > nBtnTextWidth )
         nBtnTextWidth = nTemp;
-    nBtnTextWidth = nBtnTextWidth * 115 / 100; // a little offset
+    nBtnTextWidth = nBtnTextWidth * 115 / 100; 
     long nMaxBtnWidth = LogicToPixel( Size( MAX_BUTTON_WIDTH, 0 ), MAP_APPFONT ).Width();
     nBtnTextWidth = std::min( nBtnTextWidth, nMaxBtnWidth );
     long nButtonWidth = m_aUpdateBtn .GetSizePixel().Width();
@@ -170,6 +170,6 @@ void NewerVersionWarningDialog::InitButtonWidth()
     }
 }
 
-} // end of namespace uui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

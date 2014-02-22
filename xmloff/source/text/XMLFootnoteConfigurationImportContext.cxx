@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,10 +51,10 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::xmloff::token;
 
 //
-//  XMLFootnoteConfigHelper
+
 //
 
-/// local helper class for import of quo-vadis and ergo-sum elements
+
 class XMLFootnoteConfigHelper : public SvXMLImportContext
 {
     OUStringBuffer sBuffer;
@@ -101,7 +101,7 @@ void XMLFootnoteConfigHelper::EndElement()
     {
         rConfig.SetEndNotice(sBuffer.makeStringAndClear());
     }
-//  rConfig = NULL; // import contexts are ref-counted
+
 }
 
 void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
@@ -111,7 +111,7 @@ void XMLFootnoteConfigHelper::Characters( const OUString& rChars )
 
 
 //
-// XMLFootnoteConfigurationImportContext
+
 //
 
 
@@ -198,7 +198,7 @@ static const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
     { XML_NAMESPACE_TEXT, XML_START_NUMBERING_AT, XML_TOK_FTNCONFIG_START_AT},
     { XML_NAMESPACE_TEXT, XML_FOOTNOTES_POSITION, XML_TOK_FTNCONFIG_POSITION},
 
-    // for backwards compatibility with SRC630 & earlier
+    
     { XML_NAMESPACE_TEXT, XML_NUM_PREFIX, XML_TOK_FTNCONFIG_NUM_PREFIX },
     { XML_NAMESPACE_TEXT, XML_NUM_SUFFIX, XML_TOK_FTNCONFIG_NUM_SUFFIX },
     { XML_NAMESPACE_TEXT, XML_OFFSET, XML_TOK_FTNCONFIG_OFFSET },
@@ -284,7 +284,7 @@ void XMLFootnoteConfigurationImportContext::StartElement(
                 bPosition = IsXMLToken( sValue, XML_DOCUMENT );
                 break;
             default:
-                ; // ignore
+                ; 
         }
     }
 }
@@ -314,15 +314,15 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
                                                        nPrefix, rLocalName,
                                                        *this, true);
             }
-            // else: default context
+            
         }
-        // else: unknown namespace -> default context
+        
     }
-    // else: endnote -> default context
+    
 
     if (pContext == NULL)
     {
-        // default: delegate to super class
+        
         pContext = SvXMLStyleContext::CreateChildContext(nPrefix,
                                                          rLocalName,
                                                          xAttrList);
@@ -331,7 +331,7 @@ SvXMLImportContext *XMLFootnoteConfigurationImportContext::CreateChildContext(
     return pContext;
 }
 
-// Rename method <CreateAndInsertLate(..)> to <Finish(..)> (#i40597#)
+
 void XMLFootnoteConfigurationImportContext::Finish( bool bOverwrite )
 {
 
@@ -356,7 +356,7 @@ void XMLFootnoteConfigurationImportContext::Finish( bool bOverwrite )
             }
         }
     }
-    // else: ignore (there's only one configuration, so we can only overwrite)
+    
 }
 
 void XMLFootnoteConfigurationImportContext::ProcessSettings(
@@ -401,8 +401,8 @@ void XMLFootnoteConfigurationImportContext::ProcessSettings(
     sal_Int16 nNumType = NumberingType::ARABIC;
     GetImport().GetMM100UnitConverter().convertNumFormat( nNumType, sNumFormat,
                                                      sNumSync );
-    // #i61399: Corrupt file? It contains "Bullet" as numbering style for footnotes.
-    // Okay, even it seems to be corrupt, we will oversee this and set the style to ARABIC
+    
+    
     if( NumberingType::CHAR_SPECIAL == nNumType )
         nNumType = NumberingType::ARABIC;
 

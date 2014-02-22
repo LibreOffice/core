@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -161,11 +161,11 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
         case TOX_SORT_CONTENT:
         case TOX_SORT_PARA:
         case TOX_SORT_TABLE:
-            // If they are in a special areas, we should get the position at the
-            // body
+            
+            
             if( nPos < pNd->GetNodes().GetEndOfExtras().GetIndex() )
             {
-                // Then get the 'anchor' (body) position
+                
                 Point aPt;
                 const SwCntntFrm* pFrm = pNd->getLayoutFrm( pNd->GetDoc()->GetCurrentLayout(), &aPt, 0, sal_False );
                 if( pFrm )
@@ -174,7 +174,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                     const SwDoc& rDoc = *pNd->GetDoc();
                     bool const bResult = GetBodyTxtNode( rDoc, aPos, *pFrm );
                     OSL_ENSURE(bResult, "where is the text node");
-                    (void) bResult; // unused in non-debug
+                    (void) bResult; 
                     nPos = aPos.nNode.GetIndex();
                     nCntPos = aPos.nContent.GetIndex();
                 }
@@ -211,8 +211,8 @@ bool SwTOXSortTabBase::operator==( const SwTOXSortTabBase& rCmp )
 
         if( bRet )
         {
-            // Both pointers exist -> compare text
-            // else -> compare AlternativeText
+            
+            
             const sal_Int32 *pEnd  = pTxtMark->End();
             const sal_Int32 *pEndCmp = rCmp.pTxtMark->End();
 
@@ -251,8 +251,8 @@ bool SwTOXSortTabBase::operator<( const SwTOXSortTabBase& rCmp )
                         const sal_Int32 *pEnd = pTxtMark->End();
                         const sal_Int32 *pEndCmp = rCmp.pTxtMark->End();
 
-                        // Both pointers exist -> compare text
-                        // else -> compare AlternativeText
+                        
+                        
                         if( ( pEnd && pEndCmp ) || ( !pEnd && !pEndCmp ) )
                             pTOXIntl->IsEqual( GetTxt(), GetLocale(),
                                                rCmp.GetTxt(), rCmp.GetLocale() );
@@ -289,7 +289,7 @@ SwTOXIndex::SwTOXIndex( const SwTxtNode& rNd,
 }
 
 //
-// Compare keywords. Only relates to the text.
+
 //
 
 
@@ -297,7 +297,7 @@ bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 {
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
 
-    // Respect case taking dependencies into account
+    
     if(GetLevel() != rCmp.GetLevel() || nKeyLevel != rCmp.nKeyLevel)
         return false;
 
@@ -306,7 +306,7 @@ bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
     bool bRet = pTOXIntl->IsEqual( GetTxt(), GetLocale(),
                                    rCmp.GetTxt(), rCmp.GetLocale() );
 
-    // If we don't summarize we need to evaluate the Pos
+    
     if(bRet && !(GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY))
         bRet = nPos == rCmp.nPos;
 
@@ -314,7 +314,7 @@ bool SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
 }
 
 //
-// operator, only depends on the text
+
 
 bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 {
@@ -329,7 +329,7 @@ bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
                 pTOXIntl->IsLess( aMyTaR, GetLocale(),
                                   aOtherTaR, rCmp.GetLocale() );
 
-    // If we don't summarize we need to evaluate the Pos
+    
     if( !bRet && !(GetOptions() & nsSwTOIOptions::TOI_SAME_ENTRY) )
     {
         bRet = pTOXIntl->IsEqual( aMyTaR, GetLocale(),
@@ -341,7 +341,7 @@ bool SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 }
 
 //
-// The keyword itself
+
 
 TextAndReading SwTOXIndex::GetText_Impl() const
 {
@@ -370,7 +370,7 @@ TextAndReading SwTOXIndex::GetText_Impl() const
         }
         break;
     }
-    // if TOI_INITIAL_CAPS is set, first character is to be capitalized
+    
     if( nsSwTOIOptions::TOI_INITIAL_CAPS & nOpt && pTOXIntl && !aRet.sText.isEmpty())
     {
         aRet.sText = pTOXIntl->ToUpper( aRet.sText, 0 ) + aRet.sText.copy(1);
@@ -474,7 +474,7 @@ SwTOXContent::SwTOXContent( const SwTxtNode& rNd, const SwTxtTOXMark* pMark,
 }
 
 
-// The content's text
+
 
 TextAndReading SwTOXContent::GetText_Impl() const
 {
@@ -505,7 +505,7 @@ void SwTOXContent::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, sal_uInt16 
 }
 
 //
-// The level for displaying it
+
 //
 
 
@@ -551,7 +551,7 @@ TextAndReading SwTOXPara::GetText_Impl() const
     case nsSwTOXElement::TOX_GRAPHIC:
     case nsSwTOXElement::TOX_FRAME:
         {
-            // Find the FlyFormat; the object/graphic name is there
+            
             SwFrmFmt* pFly = pNd->GetFlyFmt();
             if( pFly )
                 return TextAndReading(pFly->GetName(), OUString());
@@ -624,7 +624,7 @@ OUString SwTOXPara::GetURL() const
     case nsSwTOXElement::TOX_GRAPHIC:
     case nsSwTOXElement::TOX_FRAME:
         {
-            // Find the FlyFormat; the object/graphic name is there
+            
             SwFrmFmt* pFly = pNd->GetFlyFmt();
             if( pFly )
             {
@@ -718,14 +718,14 @@ SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
 sal_uInt16 SwTOXAuthority::GetLevel() const
 {
     OUString sText(((SwAuthorityField*)m_rField.GetField())->GetFieldText(AUTH_FIELD_AUTHORITY_TYPE));
-    //#i18655# the level '0' is the heading level therefor the values are incremented here
+    
     sal_uInt16 nRet = 1;
     if( pTOXIntl->IsNumeric( sText ) )
     {
         nRet = (sal_uInt16)sText.toInt32();
         nRet++;
     }
-    //illegal values are also set to 'ARTICLE' as non-numeric values are
+    
     if(nRet > AUTH_TYPE_END)
         nRet = 1;
     return nRet;

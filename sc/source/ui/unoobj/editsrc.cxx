@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -66,7 +66,7 @@ void ScHeaderFooterEditSource::UpdateData()
     mrTextData.UpdateData();
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellEditSource::ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
     pCellTextData(new ScCellTextData(pDocSh, rP)) {}
@@ -106,7 +106,7 @@ ScEditEngineDefaulter* ScCellEditSource::GetEditEngine()
     return pCellTextData->GetEditEngine();
 }
 
-//------------------------------------------------------------------------
+
 
 ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
     pDocShell( pDocSh ),
@@ -121,7 +121,7 @@ ScAnnotationEditSource::ScAnnotationEditSource(ScDocShell* pDocSh, const ScAddre
 
 ScAnnotationEditSource::~ScAnnotationEditSource()
 {
-    SolarMutexGuard aGuard;     //  needed for EditEngine dtor
+    SolarMutexGuard aGuard;     
 
     if (pDocShell)
         pDocShell->GetDocument()->RemoveUnoObject(*this);
@@ -145,7 +145,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
 {
     if (!pEditEngine)
     {
-        // Notizen haben keine Felder
+        
         if ( pDocShell )
         {
             pEditEngine = new ScNoteEditEngine( pDocShell->GetDocument()->GetNoteEngine() );
@@ -165,7 +165,7 @@ SvxTextForwarder* ScAnnotationEditSource::GetTextForwarder()
     if ( pDocShell )
         if ( ScPostIt* pNote = pDocShell->GetDocument()->GetNote(aCellPos) )
             if ( const EditTextObject* pEditObj = pNote->GetEditTextObject() )
-                pEditEngine->SetText( *pEditObj );      // incl. Umbrueche
+                pEditEngine->SetText( *pEditObj );      
 
     bDataValid = true;
     return pForwarder;
@@ -187,11 +187,11 @@ void ScAnnotationEditSource::UpdateData()
             pObj->ActionChanged();
         }
 
-        //! Undo !!!
+        
 
         aModificator.SetDocumentModified();
 
-        // bDataValid wird bei SetDocumentModified zurueckgesetzt
+        
     }
 }
 
@@ -199,31 +199,31 @@ void ScAnnotationEditSource::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        //! Ref-Update
+        
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
         sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
-            pDocShell = NULL;                       // ungueltig geworden
+            pDocShell = NULL;                       
 
             DELETEZ( pForwarder );
-            DELETEZ( pEditEngine );     // EditEngine uses document's pool
+            DELETEZ( pEditEngine );     
         }
         else if ( nId == SFX_HINT_DATACHANGED )
-            bDataValid = false;                     // Text muss neu geholt werden
+            bDataValid = false;                     
     }
 }
 
-//------------------------------------------------------------------------
+
 
 ScSimpleEditSource::ScSimpleEditSource( SvxTextForwarder* pForw ) :
     pForwarder( pForw )
 {
-    //  The same forwarder (and EditEngine) is shared by all children of the same Text object.
-    //  Text range and cursor keep a reference to their parent text, so the text object is
-    //  always alive and the forwarder is valid as long as there are children.
+    
+    
+    
 }
 
 ScSimpleEditSource::~ScSimpleEditSource()
@@ -242,10 +242,10 @@ SvxTextForwarder* ScSimpleEditSource::GetTextForwarder()
 
 void ScSimpleEditSource::UpdateData()
 {
-    //  nothing
+    
 }
 
-//------------------------------------------------------------------------
+
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScAccessibilityEditSource::ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData )

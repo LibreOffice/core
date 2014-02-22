@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "apitools.hxx"
@@ -108,10 +108,10 @@ namespace dbaccess
             inline void remove(const ODatabaseModelImpl& _rModelImpl) { m_aDatabaseDocuments.remove(&_rModelImpl); }
 
         private:
-            // XTerminateListener
+            
             virtual void SAL_CALL queryTermination( const lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException);
             virtual void SAL_CALL notifyTermination( const lang::EventObject& Event ) throw (RuntimeException);
-            // XEventListener
+            
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
         };
 
@@ -163,7 +163,7 @@ namespace dbaccess
         {
         }
 
-// ODatabaseContext
+
 
 ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxContext )
     :DatabaseAccessContext_Base(m_aMutex)
@@ -200,7 +200,7 @@ ODatabaseContext::~ODatabaseContext()
     m_xDatabaseRegistrations.clear();
 }
 
-// Helper
+
 OUString ODatabaseContext::getImplementationName_static() throw( RuntimeException )
 {
     return OUString("com.sun.star.comp.dba.ODatabaseContext");
@@ -218,7 +218,7 @@ Sequence< OUString > ODatabaseContext::getSupportedServiceNames_static(void) thr
     return aSNS;
 }
 
-// XServiceInfo
+
 OUString ODatabaseContext::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_static();
@@ -244,8 +244,8 @@ Reference< XInterface > ODatabaseContext::impl_createNewDataSource()
 
 Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exception, RuntimeException)
 {
-    // for convenience of the API user, we ensure the document is fully initialized (effectively: XLoadable::initNew
-    // has been called at the DatabaseDocument).
+    
+    
     return impl_createNewDataSource();
 }
 
@@ -264,15 +264,15 @@ Reference< XInterface > SAL_CALL ODatabaseContext::createInstanceWithArguments( 
     return xDataSource;
 }
 
-// DatabaseAccessContext_Base
+
 void ODatabaseContext::disposing()
 {
-    // notify our listener
+    
     com::sun::star::lang::EventObject aDisposeEvent(static_cast< XContainer* >(this));
     m_aContainerListeners.disposeAndClear(aDisposeEvent);
 
-    // dispose the data sources
-    // disposing seems to remove elements, so work on copy for valid iterators
+    
+    
     ObjectCache objCopy(m_aDatabaseObjects);
     ObjectCache::iterator const aEnd = objCopy.end();
     for (   ObjectCache::iterator aIter = objCopy.begin();
@@ -281,14 +281,14 @@ void ODatabaseContext::disposing()
         )
     {
         rtl::Reference< ODatabaseModelImpl > obj(aIter->second);
-            // make sure obj is acquired and does not delete itself from within
-            // dispose()
+            
+            
         obj->dispose();
     }
     m_aDatabaseObjects.clear();
 }
 
-// XNamingService
+
 Reference< XInterface >  ODatabaseContext::getRegisteredObject(const OUString& _rName) throw( Exception, RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
@@ -297,10 +297,10 @@ Reference< XInterface >  ODatabaseContext::getRegisteredObject(const OUString& _
     OUString sURL( getDatabaseLocation( _rName ) );
 
     if ( sURL.isEmpty() )
-        // there is a registration for this name, but no URL
+        
         throw IllegalArgumentException();
 
-    // check if URL is already loaded
+    
     Reference< XInterface > xExistent = getObject( sURL );
     if ( xExistent.is() )
         return xExistent;
@@ -329,7 +329,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const OUString& _rNa
             ||  ( e.Code == IOErrorCode_NOT_EXISTING_PATH )
             )
         {
-            // #i40463# #i39187#
+            
             OUString sErrorMessage( DBACORE_RESSTRING( RID_STR_FILE_DOES_NOT_EXIST ) );
             ::svt::OFileNotation aTransformer( _sURL );
 
@@ -434,7 +434,7 @@ void ODatabaseContext::registerObject(const OUString& _rName, const Reference< X
 
     ODatabaseSource::setName( xDocDataSource, _rName, ODatabaseSource::DBContextAccess() );
 
-    // notify our container listeners
+    
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rName), makeAny(_rxObject), Any());
     m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 }
@@ -446,7 +446,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
 
     try
     {
-        // get the info about the properties, check which ones are transient and not readonly
+        
         Reference< XPropertySetInfo > xSetInfo;
         if (xSource.is())
             xSetInfo = xSource->getPropertySetInfo();
@@ -463,7 +463,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
                     &&  ( ( pProperties->Attributes & PropertyAttribute::READONLY) == 0 )
                     )
                 {
-                    // found such a property
+                    
                     aRememberProps.put( pProperties->Name, xSource->getPropertyValue( pProperties->Name ) );
                 }
             }
@@ -474,8 +474,8 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    // additionally, remember the "failed password", which is not available as property
-    // #i86178#
+    
+    
     aRememberProps.put( "AuthFailedPassword", _rModelImpl.m_sFailedPassword );
 
     OUString sDocumentURL( _rModelImpl.getURL() );
@@ -486,7 +486,7 @@ void ODatabaseContext::storeTransientProperties( ODatabaseModelImpl& _rModelImpl
     else if ( m_aDatabaseObjects.find( _rModelImpl.m_sName ) != m_aDatabaseObjects.end() )
     {
         OSL_FAIL( "ODatabaseContext::storeTransientProperties: a database document register by name? This shouldn't happen anymore!" );
-            // all the code should have been changed so that registration is by URL only
+            
         m_aDatasourceProperties[ _rModelImpl.m_sName ] = aRememberProps.getPropertyValues();
     }
     else
@@ -514,19 +514,19 @@ void ODatabaseContext::revokeObject(const OUString& _rName) throw( Exception, Ru
     OUString sURL = getDatabaseLocation( _rName );
 
     revokeDatabaseLocation( _rName );
-        // will throw if something goes wrong
+        
 
     if ( m_aDatabaseObjects.find( _rName ) != m_aDatabaseObjects.end() )
     {
         m_aDatasourceProperties[ sURL ] = m_aDatasourceProperties[ _rName ];
     }
 
-    // check if URL is already loaded
+    
     ObjectCache::iterator aExistent = m_aDatabaseObjects.find( sURL );
     if ( aExistent != m_aDatabaseObjects.end() )
         m_aDatabaseObjects.erase( aExistent );
 
-    // notify our container listeners
+    
     ContainerEvent aEvent( *this, makeAny( _rName ), Any(), Any() );
     aGuard.clear();
     m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, aEvent );
@@ -577,7 +577,7 @@ void SAL_CALL ODatabaseContext::removeDatabaseRegistrationsListener( const Refer
     m_xDatabaseRegistrations->removeDatabaseRegistrationsListener( _Listener );
 }
 
-// ::com::sun::star::container::XElementAccess
+
 Type ODatabaseContext::getElementType(  ) throw(RuntimeException)
 {
     return::getCppuType(static_cast<Reference<XDataSource>*>(NULL));
@@ -591,14 +591,14 @@ sal_Bool ODatabaseContext::hasElements(void) throw( RuntimeException )
     return 0 != getElementNames().getLength();
 }
 
-// ::com::sun::star::container::XEnumerationAccess
+
 Reference< ::com::sun::star::container::XEnumeration >  ODatabaseContext::createEnumeration(void) throw( RuntimeException )
 {
     MutexGuard aGuard(m_aMutex);
     return new ::comphelper::OEnumerationByName(static_cast<XNameAccess*>(this));
 }
 
-// ::com::sun::star::container::XNameAccess
+
 Any ODatabaseContext::getByName(const OUString& _rName) throw( NoSuchElementException,
                                                           WrappedTargetException, RuntimeException )
 {
@@ -613,37 +613,37 @@ Any ODatabaseContext::getByName(const OUString& _rName) throw( NoSuchElementExce
         if ( xExistent.is() )
             return makeAny( xExistent );
 
-        // see whether this is an registered name
+        
         OUString sURL;
         if ( hasRegisteredDatabase( _rName ) )
         {
             sURL = getDatabaseLocation( _rName );
-            // is the object cached under its URL?
+            
             xExistent = getObject( sURL );
         }
         else
-            // interpret the name as URL
+            
             sURL = _rName;
 
         if ( !xExistent.is() )
-            // try to load this as URL
+            
             xExistent = loadObjectFromURL( _rName, sURL );
         return makeAny( xExistent );
     }
     catch (const NoSuchElementException&)
-    {   // let these exceptions through
+    {   
         throw;
     }
     catch (const WrappedTargetException&)
-    {   // let these exceptions through
+    {   
         throw;
     }
     catch (const RuntimeException&)
-    {   // let these exceptions through
+    {   
         throw;
     }
     catch (const Exception&)
-    {   // exceptions other than the speciafied ones -> wrap
+    {   
         Any aError = ::cppu::getCaughtException();
         throw WrappedTargetException(_rName, *this, aError );
     }
@@ -743,9 +743,9 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
     (void) _rxForDocument;
     (void) _rBasicManager;
 #else
-    // if it's a database document ...
+    
     Reference< XOfficeDatabaseDocument > xDatabaseDocument( _rxForDocument, UNO_QUERY );
-    // ... or a sub document of a database document ...
+    
     if ( !xDatabaseDocument.is() )
     {
         Reference< XChild > xDocAsChild( _rxForDocument, UNO_QUERY );
@@ -753,12 +753,12 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
             xDatabaseDocument.set( xDocAsChild->getParent(), UNO_QUERY );
     }
 
-    // ... whose BasicManager has just been created, then add the global DatabaseDocument variable to its scope.
+    
     if ( xDatabaseDocument.is() )
         _rBasicManager.SetGlobalUNOConstant( "ThisDatabaseDocument", makeAny( xDatabaseDocument ) );
 #endif
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -170,11 +170,11 @@ void ReadJPEG( JPEGReader* pJPEGReader, void* pInputStream, long* pLines,
         for ( *pLines = 0; *pLines < nHeight; (*pLines)++ )
         {
             if (pScanLineBuffer != NULL)
-            { // in other words cinfo.out_color_space == JCS_CMYK
+            { 
                 int i;
                 int j;
                 jpeg_read_scanlines( &cinfo, (JSAMPARRAY) &pScanLineBuffer, 1 );
-                // convert CMYK to RGB
+                
                 for( i=0, j=0; i < nScanLineBufferComponents; i+=4, j+=3 )
                 {
                     int color_C = 255 - pScanLineBuffer[i+0];
@@ -259,17 +259,17 @@ bool WriteJPEG( JPEGWriter* pJPEGWriter, void* pOutputStream,
     if ( ( nWidth > 128 ) || ( nHeight > 128 ) )
         jpeg_simple_progression( &cinfo );
 
-    if (aChromaSubsampling == 1) // YUV 4:4:4
+    if (aChromaSubsampling == 1) 
     {
         cinfo.comp_info[0].h_samp_factor = 1;
         cinfo.comp_info[0].v_samp_factor = 1;
     }
-    else if (aChromaSubsampling == 2) // YUV 4:2:2
+    else if (aChromaSubsampling == 2) 
     {
         cinfo.comp_info[0].h_samp_factor = 2;
         cinfo.comp_info[0].v_samp_factor = 1;
     }
-    else if (aChromaSubsampling == 3) // YUV 4:2:0
+    else if (aChromaSubsampling == 3) 
     {
         cinfo.comp_info[0].h_samp_factor = 2;
         cinfo.comp_info[0].v_samp_factor = 2;
@@ -316,8 +316,8 @@ long Transform(void* pInputStream, void* pOutputStream, long nAngle)
     aTransformOption.perfect         = FALSE;
     aTransformOption.crop            = FALSE;
 
-    // Angle to transform option
-    // 90 Clockwise = 270 Counterclockwise
+    
+    
     switch (nAngle)
     {
         case 2700:
@@ -333,12 +333,12 @@ long Transform(void* pInputStream, void* pOutputStream, long nAngle)
             aTransformOption.transform  = JXFORM_NONE;
     }
 
-    // Decompression
+    
     aSourceInfo.err                 = jpeg_std_error(&aSourceError.pub);
     aSourceInfo.err->error_exit     = errorExit;
     aSourceInfo.err->output_message = outputMessage;
 
-    // Compression
+    
     aDestinationInfo.err                 = jpeg_std_error(&aDestinationError.pub);
     aDestinationInfo.err->error_exit     = errorExit;
     aDestinationInfo.err->output_message = outputMessage;
@@ -367,7 +367,7 @@ long Transform(void* pInputStream, void* pOutputStream, long nAngle)
     aDestinationCoefArrays = jtransform_adjust_parameters(&aSourceInfo, &aDestinationInfo, aSourceCoefArrays, &aTransformOption);
     jpeg_svstream_dest (&aDestinationInfo, pOutputStream);
 
-    // Compute optimal Huffman coding tables instead of precomuted tables
+    
     aDestinationInfo.optimize_coding = 1;
     jpeg_write_coefficients(&aDestinationInfo, aDestinationCoefArrays);
     jcopy_markers_execute(&aSourceInfo, &aDestinationInfo, aCopyOption);

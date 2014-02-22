@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
 
 #ifdef _MSC_VER
-#pragma warning(disable:4738) // storing 32-bit float result in memory, possible loss of performance
+#pragma warning(disable:4738) 
 #endif
 
 #include <cassert>
@@ -238,12 +238,12 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompare_WithLength( const sal_Unicode
     if ( *pStr2 )
     {
         OSL_ENSURE( pStr1 == pStr1End, "pStr1 == pStr1End failed" );
-        // first is a substring of the second string => less (negative value)
+        
         nRet = -1;
     }
     else
     {
-        // greater or equal
+        
         nRet = pStr1End - pStr1;
     }
 
@@ -438,12 +438,12 @@ sal_Int32 SAL_CALL rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( co
     if ( *pStr2 )
     {
         OSL_ENSURE( pStr1 == pStr1End, "pStr1 == pStr1End failed" );
-        // first is a substring of the second string => less (negative value)
+        
         nRet = -1;
     }
     else
     {
-        // greater or equal
+        
         nRet = pStr1End - pStr1;
     }
 
@@ -848,15 +848,15 @@ void SAL_CALL rtl_uString_intern( rtl_uString ** newStr,
 
 static int rtl_canGuessUOutputLength( int len, rtl_TextEncoding eTextEncoding )
 {
-    // FIXME: Maybe we should use a bit flag in the higher bits of the
-    // eTextEncoding value itself to determine the encoding type.  But if we
-    // do, be sure to mask the value in certain places that expect the values
-    // to be numbered serially from 0 and up.  One such place is
-    // Impl_getTextEncodingData().
+    
+    
+    
+    
+    
 
     switch ( eTextEncoding )
     {
-        // 1 to 1 (with no zero elements)
+        
         case RTL_TEXTENCODING_IBM_437:
         case RTL_TEXTENCODING_IBM_850:
         case RTL_TEXTENCODING_IBM_860:
@@ -886,7 +886,7 @@ void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
     }
 
     if ( len < 256 )
-    { // try various optimisations
+    { 
         sal_Int32 ulen;
         if ( len < 0 )
             len = strlen( str );
@@ -1050,7 +1050,7 @@ void rtl_uString_newReplaceFirst(
             std::abort();
         }
         sal_Int32 n = str->length - from->length + to->length;
-        rtl_uString_acquire(str); // in case *newStr == str
+        rtl_uString_acquire(str); 
         rtl_uString_new_WithLength(newStr, n);
         if (n != 0) {
             (*newStr)->length = n;
@@ -1092,7 +1092,7 @@ void rtl_uString_newReplaceFirstAsciiL(
             std::abort();
         }
         sal_Int32 n = str->length - fromLength + to->length;
-        rtl_uString_acquire(str); // in case *newStr == str
+        rtl_uString_acquire(str); 
         if (n != 0) {
             rtl_uString_new_WithLength(newStr, n);
             (*newStr)->length = n;
@@ -1135,7 +1135,7 @@ void rtl_uString_newReplaceFirstAsciiLAsciiL(
             std::abort();
         }
         sal_Int32 n = str->length - fromLength + toLength;
-        rtl_uString_acquire(str); // in case *newStr == str
+        rtl_uString_acquire(str); 
         if (n != 0) {
             rtl_uString_new_WithLength(newStr, n);
             (*newStr)->length = n;

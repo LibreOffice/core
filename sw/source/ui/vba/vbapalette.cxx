@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbapalette.hxx"
@@ -30,23 +30,23 @@ using namespace ::com::sun::star;
 
 static const sal_Int32 ColorTable[] =
 {
-WdColor::wdColorAutomatic, // 0
-WdColor::wdColorBlack,             // 1
-WdColor::wdColorBlue,               // 2
-WdColor::wdColorTurquoise,     // 3
-WdColor::wdColorBrightGreen, // 4
-WdColor::wdColorPink,               // 5
-WdColor::wdColorRed,                 // 6
-WdColor::wdColorYellow,           // 7
-WdColor::wdColorWhite,             // 8
-WdColor::wdColorDarkBlue,       // 9
-WdColor::wdColorTeal,               // 10
-WdColor::wdColorGreen,             // 11
-WdColor::wdColorViolet,           // 12
-WdColor::wdColorDarkRed,         // 13
-WdColor::wdColorDarkYellow,   // 14
-WdColor::wdColorGray50,           // 15
-WdColor::wdColorGray25,           // 16
+WdColor::wdColorAutomatic, 
+WdColor::wdColorBlack,             
+WdColor::wdColorBlue,               
+WdColor::wdColorTurquoise,     
+WdColor::wdColorBrightGreen, 
+WdColor::wdColorPink,               
+WdColor::wdColorRed,                 
+WdColor::wdColorYellow,           
+WdColor::wdColorWhite,             
+WdColor::wdColorDarkBlue,       
+WdColor::wdColorTeal,               
+WdColor::wdColorGreen,             
+WdColor::wdColorViolet,           
+WdColor::wdColorDarkRed,         
+WdColor::wdColorDarkYellow,   
+WdColor::wdColorGray50,           
+WdColor::wdColorGray25,           
 };
 
 typedef ::cppu::WeakImplHelper1< container::XIndexAccess > XIndexAccess_BASE;
@@ -56,7 +56,7 @@ class DefaultPalette : public XIndexAccess_BASE
 public:
    DefaultPalette(){}
 
-    // Methods XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException)
     {
         return SAL_N_ELEMENTS(ColorTable);
@@ -69,7 +69,7 @@ public:
         return uno::makeAny( sal_Int32( ColorTable[ Index ] ) );
     }
 
-    // Methods XElementAcess
+    
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException)
     {
         return ::getCppuType( (sal_Int32*)0 );

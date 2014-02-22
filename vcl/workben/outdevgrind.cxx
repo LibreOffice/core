@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// bootstrap stuff
+
 #include <rtl/bootstrap.hxx>
 #include <rtl/ustring.hxx>
 #include <comphelper/processfactory.hxx>
@@ -112,7 +112,7 @@ void setupMethodStubs( functor_vector_type& res )
     const OUString    aString("This is a test");
     const LineInfo    aLineInfo(LINE_SOLID,5);
 
-    // unfortunately, VDevs have inaccessible copy constructors
+    
     static VirtualDevice aVDev;
     static VirtualDevice aVDevBW(1);
 
@@ -807,9 +807,9 @@ void grindFunc( OutputDevice&                       rTarget,
  */
 void outDevGrind( OutputDevice& rTarget, sal_Int32 nTurns=100 )
 {
-    // TODO(F1): also profile pure complex clip setup times!
+    
 
-    // State: fill/line color, draw mode, w/o clip, rect clip, complex clip
+    
     functor_vector_type aMethods;
     setupMethodStubs( aMethods );
 
@@ -900,7 +900,7 @@ int GrindApp::Main()
         return EXIT_SUCCESS;
     }
 
-    // create the global service-manager
+    
     uno::Reference< lang::XMultiServiceFactory > xFactory;
     try
     {
@@ -927,7 +927,7 @@ int GrindApp::Main()
     return EXIT_SUCCESS;
 }
 
-} // namespace
+} 
 
 GrindApp aGrindApp;
 

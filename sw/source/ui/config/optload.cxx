@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <officecfg/Office/Writer.hxx>
@@ -97,11 +97,11 @@ SwLoadOptPage::SwLoadOptPage(Window* pParent, const SfxItemSet& rSet)
             case FUNIT_PICA:
             case FUNIT_INCH:
             {
-                // use only these metrics
+                
                 sal_uInt16 nPos = m_pMetricLB->InsertEntry( sMetric );
                 m_pMetricLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
             }
-            default:; //prevent warning
+            default:; 
         }
     }
     m_pMetricLB->SetSelectHdl(LINK(this, SwLoadOptPage, MetricHdl));
@@ -168,7 +168,7 @@ sal_Bool SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     const sal_uInt16 nMPos = m_pMetricLB->GetSelectEntryPos();
     if ( nMPos != m_pMetricLB->GetSavedValue() )
     {
-        // Double-Cast for VA3.0
+        
         sal_uInt16 nFieldUnit = (sal_uInt16)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
         rSet.Put( SfxUInt16Item( SID_ATTR_METRIC, (sal_uInt16)nFieldUnit ) );
         bRet = sal_True;
@@ -271,7 +271,7 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
     }
     m_pTabMF->SaveValue();
 
-    //default page mode loading
+    
     if(m_pWrtShell)
     {
         bool bSquaredPageMode = m_pWrtShell->GetDoc()->IsSquaredPageMode();
@@ -299,7 +299,7 @@ IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
     const sal_uInt16 nMPos = m_pMetricLB->GetSelectEntryPos();
     if(nMPos != USHRT_MAX)
     {
-        // Double-Cast for VA3.0
+        
         FieldUnit eFieldUnit = (FieldUnit)(sal_IntPtr)m_pMetricLB->GetEntryData( nMPos );
         sal_Bool bModified = m_pTabMF->IsModified();
         long nVal = bModified ?
@@ -318,7 +318,7 @@ SwCaptionOptDlg::SwCaptionOptDlg(Window* pParent, const SfxItemSet& rSet)
     : SfxSingleTabDialog(pParent, rSet, "CaptionDialog",
         "modules/swriter/ui/captiondialog.ui")
 {
-    // create TabPage
+    
     SetTabPage(SwCaptionOptPage::Create(get_content_area(), rSet));
 }
 
@@ -417,7 +417,7 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     sal_uInt16 i, nCount;
     SwWrtShell *pSh = ::GetActiveWrtShell();
 
-    // m_pFormatBox
+    
     sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
     if (pSh)
     {
@@ -500,7 +500,7 @@ sal_Bool SwCaptionOptPage::FillItemSet( SfxItemSet&  )
     sal_Bool bRet = sal_False;
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
 
-    SaveEntry(m_pCheckLB->FirstSelected());    // apply current entry
+    SaveEntry(m_pCheckLB->FirstSelected());    
 
     SvTreeListEntry* pEntry = m_pCheckLB->First();
 
@@ -529,9 +529,9 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     }
 
     DelUserData();
-    m_pCheckLB->GetModel()->Clear();   // remove all entries
+    m_pCheckLB->GetModel()->Clear();   
 
-    // Writer objects
+    
     sal_uInt16 nPos = 0;
     m_pCheckLB->InsertEntry(m_sSWTable);
     SetOptions(nPos++, TABLE_CAP);
@@ -540,7 +540,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
     m_pCheckLB->InsertEntry(m_sSWGraphic);
     SetOptions(nPos++, GRAPHIC_CAP);
 
-    // get Productname and -version
+    
     OUString sWithoutVersion( utl::ConfigManager::getProductName() );
     OUString sComplete(
         sWithoutVersion + " " +
@@ -548,7 +548,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
 
     SvObjectServerList aObjS;
     aObjS.FillInsertObjects();
-    aObjS.Remove( SvGlobalName( SO3_SW_CLASSID ) ); // remove Writer-ID
+    aObjS.Remove( SvGlobalName( SO3_SW_CLASSID ) ); 
 
     for ( sal_uLong i = 0; i < aObjS.Count(); ++i )
     {
@@ -558,7 +558,7 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
             sClass = aObjS[i].GetHumanName();
         else
             sClass = m_sOLE;
-        // don't show product version
+        
         sClass = sClass.replaceFirst( sComplete, sWithoutVersion );
         m_pCheckLB->InsertEntry( sClass );
         SetOptions( nPos++, OLE_CAP, &rOleId );
@@ -710,7 +710,7 @@ IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl)
 {
     SvTreeListEntry* pEntry = m_pCheckLB->GetHdlEntry();
 
-    if (pEntry) // save all
+    if (pEntry) 
         SaveEntry(pEntry);
 
     return 0;
@@ -793,17 +793,17 @@ void SwCaptionOptPage::DrawSample()
 
     if( m_pCategoryBox->GetText() != m_sNone)
     {
-        //#i61007# order of captions
+        
         bool bOrderNumberingFirst = m_pLbCaptionOrder->GetSelectEntryPos() == 1;
-        // number
+        
         sal_uInt16 nNumFmt = (sal_uInt16)(sal_uLong)m_pFormatBox->GetEntryData(
                                         m_pFormatBox->GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
-            //#i61007# order of captions
+            
             if( !bOrderNumberingFirst )
             {
-                // category
+                
                 aStr += m_pCategoryBox->GetText();
                 aStr += " ";
             }
@@ -836,11 +836,11 @@ void SwCaptionOptPage::DrawSample()
                 case SVX_NUM_CHARS_LOWER_LETTER_N:  aStr += "a"; break;
                 case SVX_NUM_ROMAN_UPPER:           aStr += "I"; break;
                 case SVX_NUM_ROMAN_LOWER:           aStr += "i"; break;
-                //case ARABIC:
+                
                 default:                    aStr += "1"; break;
             }
         }
-        //#i61007# order of captions
+        
         if( bOrderNumberingFirst )
         {
             aStr += m_pNumberingSeparatorED->GetText();
@@ -851,7 +851,7 @@ void SwCaptionOptPage::DrawSample()
     m_pPreview->SetPreviewText( aStr );
 }
 
-// Description: ComboBox without Spaces
+
 void CaptionComboBox::KeyInput(const KeyEvent& rEvt)
 {
     if( rEvt.GetKeyCode().GetCode() != KEY_SPACE )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <attributesmap.hxx>
@@ -159,7 +159,7 @@ namespace DOM
     CAttributesMap::removeNamedItem(OUString const& name)
     throw (RuntimeException)
     {
-        // no MutexGuard needed: m_pElement is const
+        
         Reference< XAttr > const xAttr(m_pElement->getAttributeNode(name));
         if (!xAttr.is()) {
             throw DOMException(OUString(
@@ -173,14 +173,14 @@ namespace DOM
     }
 
     /**
-    // Removes a node specified by local name and namespace URI.
+    
     */
     Reference< XNode > SAL_CALL
     CAttributesMap::removeNamedItemNS(
             OUString const& namespaceURI, OUString const& localName)
     throw (RuntimeException)
     {
-        // no MutexGuard needed: m_pElement is const
+        
         Reference< XAttr > const xAttr(
             m_pElement->getAttributeNodeNS(namespaceURI, localName));
         if (!xAttr.is()) {
@@ -195,7 +195,7 @@ namespace DOM
     }
 
     /**
-    // Adds a node using its nodeName attribute.
+    
     */
     Reference< XNode > SAL_CALL
     CAttributesMap::setNamedItem(Reference< XNode > const& xNode)
@@ -208,7 +208,7 @@ namespace DOM
                 static_cast<OWeakObject*>(this),
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }
-        // no MutexGuard needed: m_pElement is const
+        
         Reference< XNode > const xRet(
             m_pElement->setAttributeNode(xAttr), UNO_QUERY);
         return xRet;
@@ -228,7 +228,7 @@ namespace DOM
                 static_cast<OWeakObject*>(this),
                 DOMExceptionType_HIERARCHY_REQUEST_ERR);
         }
-        // no MutexGuard needed: m_pElement is const
+        
         Reference< XNode > const xRet(
             m_pElement->setAttributeNodeNS(xAttr), UNO_QUERY);
         return xRet;

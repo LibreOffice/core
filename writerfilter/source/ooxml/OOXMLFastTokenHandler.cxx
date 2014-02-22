@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <iostream>
@@ -46,7 +46,7 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
 : m_xContext(context)
 {}
 
-// ::com::sun::star::xml::sax::XFastTokenHandler:
+
 ::sal_Int32 SAL_CALL OOXMLFastTokenHandler::getToken(const OUString & Identifier)
     throw (css::uno::RuntimeException)
 {
@@ -73,15 +73,15 @@ OOXMLFastTokenHandler::OOXMLFastTokenHandler
 OUString SAL_CALL OOXMLFastTokenHandler::getIdentifier(::sal_Int32)
     throw (css::uno::RuntimeException)
 {
-    // we use a Boost tokenmap, but tokenmaps cannot be indexed by an integer
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    
+    for (;;) { std::abort(); } 
 }
 
 css::uno::Sequence< ::sal_Int8 > SAL_CALL OOXMLFastTokenHandler::getUTF8Identifier(::sal_Int32)
     throw (css::uno::RuntimeException)
 {
-    // we use a Boost tokenmap, but tokenmaps cannot be indexed by an integer
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    
+    for (;;) { std::abort(); } 
 }
 
 sal_Int32 OOXMLFastTokenHandler::getTokenDirect( const char *pStr, sal_Int32 nLength ) const

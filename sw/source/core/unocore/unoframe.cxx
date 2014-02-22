@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
@@ -114,7 +114,7 @@
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 
-// from fefly1.cxx
+
 extern sal_Bool sw_ChkAndSetNewAnchor( SwEditShell& rEditShell, const SwFlyFrm& rFly, SfxItemSet& rSet );
 
 using namespace ::com::sun::star;
@@ -161,7 +161,7 @@ bool BaseFrameProperties_Impl::GetProperty(sal_uInt16 nWID, sal_uInt8 nMemberId,
 bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSet, const SfxItemSet& rFromSet, bool& rSizeFound)
 {
     bool bRet = true;
-    //Anker kommt auf jeden Fall in den Set
+    
     SwFmtAnchor aAnchor ( static_cast < const SwFmtAnchor & > ( rFromSet.Get ( RES_ANCHOR ) ) );
     {
         const ::uno::Any* pAnchorPgNo;
@@ -202,7 +202,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
                 bRet &= ((SfxPoolItem&)aBrush).PutValue(*pRGBCol, MID_BACK_COLOR_R_G_B);
             if(pTrans)
             {
-                // don't overwrite transparency with a non-transparence flag
+                
                 if(!pColTrans || Any2Bool( *pTrans ))
                     bRet &= ((SfxPoolItem&)aBrush).PutValue(*pTrans, MID_GRAPHIC_TRANSPARENT);
             }
@@ -240,14 +240,14 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
             if (pFillGradient)
             {
                 bRet &= ((SfxPoolItem*)pItem)->PutValue(*pFillGradient, MID_FILLGRADIENT);
-                // If gradient is set directly, we always generate an associated style name for it.
+                
                 SdrModel* pModel = pDoc->GetDrawModel();
                 pItem = pItem->checkForUniqueItem( pModel );
             }
             if (pName)
             {
                 bRet &= ((SfxPoolItem*)pItem)->PutValue(*pName, MID_NAME);
-                // Look up the associated style name.
+                
                 SfxItemPool& rPool = pDoc->GetDrawModel()->GetItemPool();
                 const sal_uInt32 nCount = rPool.GetItemCount2(XATTR_FILLGRADIENT);
                 const XFillGradientItem* pStyleItem;
@@ -266,7 +266,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
                 rToSet.Put(*pItem);
                 if(pItem != &aFillGradient)
                 {
-                    // New name was generated? Then insert it to the drawinglayer style table.
+                    
                     uno::Reference<frame::XModel> xModel(pDoc->GetDocShell()->GetModel());
                     uno::Reference<lang::XMultiServiceFactory> xServiceFact(xModel, uno::UNO_QUERY);
                     uno::Reference< container::XNameContainer > xGradients(xServiceFact->createInstance("com.sun.star.drawing.GradientTable"), uno::UNO_QUERY);
@@ -569,7 +569,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
         rToSet.Put(aAttr);
     }
 
-    // #i18732#
+    
     const ::uno::Any* pFollowTextFlow = 0;
     GetProperty(RES_FOLLOW_TEXT_FLOW, 0, pFollowTextFlow);
     if ( pFollowTextFlow )
@@ -579,7 +579,7 @@ bool BaseFrameProperties_Impl::FillBaseProperties(SwDoc* pDoc, SfxItemSet& rToSe
         rToSet.Put(aFmtFollowTextFlow);
     }
 
-    // #i28701# - RES_WRAP_INFLUENCE_ON_OBJPOS
+    
     const ::uno::Any* pWrapInfluenceOnObjPos = 0;
     GetProperty(RES_WRAP_INFLUENCE_ON_OBJPOS, MID_WRAP_INFLUENCE, pWrapInfluenceOnObjPos);
     if ( pWrapInfluenceOnObjPos )
@@ -629,7 +629,7 @@ static inline void lcl_FillCol ( SfxItemSet &rToSet, const :: SfxItemSet &rFromS
 
 bool SwFrameProperties_Impl::AnyToItemSet(SwDoc *pDoc, SfxItemSet& rSet, SfxItemSet&, bool& rSizeFound)
 {
-    //Properties fuer alle Frames
+    
     const ::uno::Any *pStyleName;
     SwDocStyleSheet* pStyle = NULL;
     bool bRet;
@@ -705,7 +705,7 @@ bool SwGraphicProperties_Impl::AnyToItemSet(
             SfxItemSet& rGrSet,
             bool& rSizeFound)
 {
-    //Properties fuer alle Frames
+    
     bool bRet;
     const ::uno::Any *pStyleName;
     SwDocStyleSheet* pStyle = NULL;
@@ -797,7 +797,7 @@ bool SwOLEProperties_Impl::AnyToItemSet(
 class SwXFrame::Impl
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
 
 public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
@@ -858,20 +858,20 @@ SwXFrame::SwXFrame(FlyCntType eSet, const :: SfxItemPropertySet* pSet, SwDoc *pD
     bIsDescriptor(true),
     m_pCopySource( 0 )
 {
-    // Register ourselves as a listener to the document (via the page descriptor)
+    
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-    // get the property set for the default style data
-    // First get the model
+    
+    
     uno::Reference < XModel > xModel = pDoc->GetDocShell()->GetBaseModel();
-    // Ask the model for it's family supplier interface
+    
     uno::Reference < XStyleFamiliesSupplier > xFamilySupplier ( xModel, uno::UNO_QUERY );
-    // Get the style families
+    
     uno::Reference < XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
-    // Get the Frame family (and keep it for later)
+    
     const ::uno::Any aAny = xFamilies->getByName ("FrameStyles");
     aAny >>= mxStyleFamily;
-    // In the derived class, we'll ask mxStyleFamily for the relevant default style
-    // mxStyleFamily is initialised in the SwXFrame constructor
+    
+    
     switch(eType)
     {
         case FLYCNTTYPE_FRM:
@@ -993,7 +993,7 @@ SdrObject *SwXFrame::GetOrCreateSdrObject( SwFlyFrmFmt *pFmt )
     if( !pObject )
     {
         SwDoc *pDoc = pFmt->GetDoc();
-        // #i52858# - method name changed
+        
         SdrModel *pDrawModel = pDoc->GetOrCreateDrawModel();
         SwFlyDrawContact* pContactObject
                     = new SwFlyDrawContact( pFmt, pDrawModel );
@@ -1078,7 +1078,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                                 Point aPoint(pPoints[j].X, pPoints[j].Y);
                                 aSet.SetPoint(aPoint, (sal_uInt16)j);
                             }
-                            // Close polygon if it isn't closed already.
+                            
                             aSet.Optimize( POLY_OPTIMIZE_CLOSE );
                             aPoly.Insert( aSet );
                         }
@@ -1093,10 +1093,10 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
                 else if(pEntry->nWID == FN_UNO_IS_PIXEL_CONTOUR )
                 {
-                    // The IsPixelContour property can only be set if there
-                    // is no contour, or if the contour has been set by the
-                    // API itself (or in other words, if the contour isn't
-                    // used already).
+                    
+                    
+                    
+                    
                     if( !pNoTxt->_HasContour() ||
                         !pNoTxt->IsContourMapModeValid() )
                         pNoTxt->SetPixelContour( *(sal_Bool *)aValue.getValue() );
@@ -1111,7 +1111,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 }
             }
         }
-        // New attribute Title
+        
         else if( FN_UNO_TITLE == pEntry->nWID )
         {
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
@@ -1119,11 +1119,11 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     "unexpected type of <pFmt> --> crash" );
             OUString sTitle;
             aValue >>= sTitle;
-            // assure that <SdrObject> instance exists.
+            
             GetOrCreateSdrObject( pFlyFmt );
             pFlyFmt->GetDoc()->SetFlyFrmTitle( *(pFlyFmt), sTitle );
         }
-        // New attribute Description
+        
         else if( FN_UNO_DESCRIPTION == pEntry->nWID )
         {
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
@@ -1131,7 +1131,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     "unexpected type of <pFmt> --> crash" );
             OUString sDescription;
             aValue >>= sDescription;
-            // assure that <SdrObject> instance exists.
+            
             GetOrCreateSdrObject( pFlyFmt );
             pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), sDescription );
         }
@@ -1143,12 +1143,12 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 UnoActionContext aAction(pFmt->GetDoc());
 
                 SfxItemSet* pSet = 0;
-                // #i31771#, #i25798# - No adjustment of
-                // anchor ( no call of method <sw_ChkAndSetNewAnchor(..)> ),
-                // if document is currently in reading mode.
+                
+                
+                
                 if ( !pFmt->GetDoc()->IsInReading() )
                 {
-                    // see SwFEShell::SetFrmFmt( SwFrmFmt *pNewFmt, bool bKeepOrient, Point* pDocPos )
+                    
                     SwFlyFrm *pFly = 0;
                     {
                         const :: SwFrmFmt* pFmtXX = pFmt;
@@ -1216,7 +1216,7 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
-//              SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+
                 SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
                 if(!pGrfNode)
                 {
@@ -1261,8 +1261,8 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                 OUString aGrfUrl;
                 aValue >>= aGrfUrl;
 
-                // the package URL based graphics are handled in different way currently
-                // TODO/LATER: actually this is the correct place to handle them
+                
+                
                 OUString aGraphicProtocol( sGraphicObjectProtocol );
                 if( aGrfUrl.startsWith( aGraphicProtocol ) )
                 {
@@ -1423,12 +1423,12 @@ void SwXFrame::setPropertyValue(const :: OUString& rPropertyName, const :: uno::
                     aSet.Put(aAnchor);
                 }
 
-                // #i31771#, #i25798# - No adjustment of
-                // anchor ( no call of method <sw_ChkAndSetNewAnchor(..)> ),
-                // if document is currently in reading mode.
+                
+                
+                
                 if ( !pFmt->GetDoc()->IsInReading() )
                 {
-                    // see SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
+                    
                     SwFlyFrm *pFly = 0;
                     if (PTR_CAST(SwFlyFrmFmt, pFmt))
                         pFly = ((SwFlyFrmFmt*)pFmt)->GetFrm();
@@ -1564,7 +1564,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
-//              SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+
                 SwGrfNode* pGrfNode = aIdx.GetNode().GetGrfNode();
                 if(!pGrfNode)
                     throw uno::RuntimeException();
@@ -1627,36 +1627,36 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         {
             aAny <<= OUString(SwStyleNameMapper::GetProgName(pFmt->DerivedFrom()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_FRMFMT ) );
         }
-        // #i73249#
-        // Attribute AlternativeText was never published.
-        // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
-//        else if(eType != FLYCNTTYPE_FRM &&
-//                FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID)
-//        {
-//            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
-//            if(pIdx)
-//            {
-//                SwNodeIndex aIdx(*pIdx, 1);
-//                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-//                aAny <<= OUString(pNoTxt->GetAlternateText());
-//            }
-//        }
+        
+        
+        
+
+
+
+
+
+
+
+
+
+
+
         else if( FN_UNO_TITLE == pEntry->nWID )
         {
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
             OSL_ENSURE( pFmt,
                     "unexpected type of <pFmt> --> crash" );
-            // assure that <SdrObject> instance exists.
+            
             GetOrCreateSdrObject( pFlyFmt );
             aAny <<= OUString(pFlyFmt->GetObjTitle());
         }
-        // New attribute Description
+        
         else if( FN_UNO_DESCRIPTION == pEntry->nWID )
         {
             SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
             OSL_ENSURE( pFmt,
                     "unexpected type of <pFmt> --> crash" );
-            // assure that <SdrObject> instance exists.
+            
             GetOrCreateSdrObject( pFlyFmt );
             aAny <<= OUString(pFlyFmt->GetObjDescription());
         }
@@ -1667,9 +1667,9 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
-                // --> OD #i85105#
-//                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-//                Size aActSize = ((SwGrfNode*)pNoTxt)->GetTwipSize();
+                
+
+
                 Size aActSize;
                 {
                     SwGrfNode* pGrfNode = dynamic_cast<SwGrfNode*>(aIdx.GetNode().GetNoTxtNode());
@@ -1684,7 +1684,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                         }
                     }
                 }
-                // <--
+                
                 awt::Size aTmp;
                 aTmp.Width = TWIP_TO_MM100(aActSize.Width());
                 aTmp.Height = TWIP_TO_MM100(aActSize.Height());
@@ -1730,7 +1730,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
                         uno::Reference < frame::XModel > xModel( xComp, uno::UNO_QUERY );
                         if ( FN_EMBEDDED_OBJECT == pEntry->nWID )
                         {
-                            // ensure the
+                            
                             OSL_ENSURE( pDoc->GetDocShell(), "no doc shell => no client site" );
                             if ( pDoc->GetDocShell() )
                                 pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xIP, embed::Aspects::MSOLE_CONTENT ) );
@@ -1757,7 +1757,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         }
         else if(WID_LAYOUT_SIZE == pEntry->nWID)
         {
-            // format document completely in order to get correct value
+            
             pFmt->GetDoc()->GetEditShell()->CalcLayout();
 
             SwFrm* pTmpFrm = SwIterator<SwFrm,SwFmt>::FirstElement( *pFmt );
@@ -1781,7 +1781,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
     {
         if ( ! m_pDoc )
             throw uno::RuntimeException();
-        if(WID_LAYOUT_SIZE != pEntry->nWID)  // there is no LayoutSize in a descriptor
+        if(WID_LAYOUT_SIZE != pEntry->nWID)  
         {
             const uno::Any* pAny = 0;
             if( !pProps->GetProperty( pEntry->nWID, pEntry->nMemberId, pAny ) )
@@ -1930,36 +1930,36 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
                     }
                 }
             }
-            // #i73249#
-            // Attribute AlternativeText was never published.
-            // Now it has been replaced by Attribute Title - valid for all <SwXFrame> instances
-//            else if( eType != FLYCNTTYPE_FRM && FN_UNO_ALTERNATIVE_TEXT == pEntry->nWID )
-//            {
-//                const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
-//                if(pIdx)
-//                {
-//                    SwNodeIndex aIdx(*pIdx, 1);
-//                    SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-//                    pNoTxt->SetAlternateText(aEmptyOUStr);
-//                }
-//            }
-            // New attribute Title
+            
+            
+            
+
+
+
+
+
+
+
+
+
+
+            
             else if( FN_UNO_TITLE == pEntry->nWID )
             {
                 SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
                 OSL_ENSURE( pFmt,
                         "unexpected type of <pFmt> --> crash" );
-                // assure that <SdrObject> instance exists.
+                
                 GetOrCreateSdrObject( pFlyFmt );
                 pFlyFmt->GetDoc()->SetFlyFrmTitle( *(pFlyFmt), aEmptyOUStr );
             }
-            // New attribute Description
+            
             else if( FN_UNO_DESCRIPTION == pEntry->nWID )
             {
                 SwFlyFrmFmt* pFlyFmt = dynamic_cast<SwFlyFrmFmt*>(pFmt);
                 OSL_ENSURE( pFmt,
                         "unexpected type of <pFmt> --> crash" );
-                // assure that <SdrObject> instance exists.
+                
                 GetOrCreateSdrObject( pFlyFmt );
                 pFlyFmt->GetDoc()->SetFlyFrmDescription( *(pFlyFmt), aEmptyOUStr );
             }
@@ -2024,7 +2024,7 @@ void SAL_CALL SwXFrame::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -2032,7 +2032,7 @@ void SAL_CALL SwXFrame::removeEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -2056,9 +2056,9 @@ void SwXFrame::dispose(void) throw( uno::RuntimeException )
     if ( pFmt )
     {
         SdrObject* pObj = pFmt->FindSdrObject();
-        // OD 11.09.2003 #112039# - add condition to perform delete of
-        // format/anchor sign, not only if the object is inserted, but also
-        // if a contact object is registered, which isn't in the destruction.
+        
+        
+        
         if ( pObj &&
              ( pObj->IsInserted() ||
                ( pObj->GetUserCall() &&
@@ -2086,8 +2086,8 @@ uno::Reference< text::XTextRange >  SwXFrame::getAnchor(void) throw( uno::Runtim
     if(pFmt)
     {
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-        // return an anchor for non-page bound frames
-        // and for page bound frames that have a page no == NULL and a content position
+        
+        
         if ((rAnchor.GetAnchorId() != FLY_AT_PAGE) ||
             (rAnchor.GetCntntAnchor() && !rAnchor.GetPageNum()))
         {
@@ -2129,7 +2129,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     if(pDoc)
     {
         SwUnoInternalPaM aIntPam(*pDoc);
-        //das muss jetzt true liefern
+        
         ::sw::XTextRangeToSwPaM(aIntPam, xTextRange);
 
         SwNode& rNode = pDoc->GetNodes().GetEndOfContent();
@@ -2150,11 +2150,11 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         SfxItemSet aGrSet(pDoc->GetAttrPool(), aGrAttrRange );
 
         SfxItemSet aFrmSet(pDoc->GetAttrPool(), aFrmAttrRange );
-        //jetzt muessen die passenden Items in den Set
+        
         bool bSizeFound;
         if(!pProps->AnyToItemSet( pDoc, aFrmSet, aGrSet, bSizeFound))
             throw lang::IllegalArgumentException();
-        //der TextRange wird einzeln behandelt
+        
         *aPam.GetPoint() = *aIntPam.GetPoint();
         if(aIntPam.HasMark())
         {
@@ -2170,7 +2170,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             if( FLY_AT_FLY == eAnchorId &&
                 !aPam.GetNode()->FindFlyStartNode())
             {
-                //rahmengebunden geht nur dort, wo ein Rahmen ist!
+                
                 SwFmtAnchor aAnchor(FLY_AT_PARA);
                 aFrmSet.Put(aAnchor);
             }
@@ -2195,16 +2195,16 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
             if(m_pCopySource)
             {
                 SwFmtAnchor* pAnchorItem = 0;
-                // the frame is inserted bound to page
-                // to prevent conflicts if the to-be-anchored position is part of the to-be-copied text
+                
+                
                 if (eAnchorId != FLY_AT_PAGE)
                 {
                     pAnchorItem = static_cast<SwFmtAnchor*>(aFrmSet.Get(RES_ANCHOR).Clone());
                     aFrmSet.Put( SwFmtAnchor( FLY_AT_PAGE, 1 ));
                 }
 
-                aPam.DeleteMark(); // mark position node will be deleted!
-                aIntPam.DeleteMark(); // mark position node will be deleted!
+                aPam.DeleteMark(); 
+                aIntPam.DeleteMark(); 
                 pFmt = pDoc->MakeFlyAndMove( *m_pCopySource, aFrmSet,
                                0,
                                pParentFrmFmt );
@@ -2230,7 +2230,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 if(!m_sName.isEmpty())
                     pDoc->SetFlyName((SwFlyFrmFmt&)*pFmt, m_sName);
             }
-            //den SwXText wecken
+            
             ((SwXTextFrame*)this)->SetDoc( bIsDescriptor ? m_pDoc : GetFrmFmt()->GetDoc() );
         }
         else if( eType == FLYCNTTYPE_GRF)
@@ -2336,26 +2336,26 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                 }
                 if ( xIPObj.is() )
                 {
-                    //TODO/LATER: MISCSTATUS_RESIZEONPRINTERCHANGE
-                    //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xIPObj->GetMiscStatus() && pDoc->getPrinter( false ) )
-                    //    xIPObj->OnDocumentPrinterChanged( pDoc->getPrinter( false ) );
+                    
+                    
+                    
 
                     UnoActionContext aAction(pDoc);
                     pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
                     if(!bSizeFound)
                     {
-                        //TODO/LATER: from where do I get a ViewAspect? And how do I transport it to the OLENode?
+                        
                         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
 
-                        // TODO/LEAN: VisualArea still needs running state
+                        
                         svt::EmbeddedObjectRef::TryRunningState( xIPObj );
 
-                        // set parent to get correct VisArea(in case of object needing parent printer)
+                        
                         uno::Reference < container::XChild > xChild( xIPObj, uno::UNO_QUERY );
                         if ( xChild.is() )
                             xChild->setParent( pDoc->GetDocShell()->GetModel() );
 
-                        //The Size should be suggested by the OLE server if not manually set
+                        
                         MapUnit aRefMap = VCLUnoHelper::UnoEmbed2VCLMapUnit( xIPObj->getMapUnit( nAspect ) );
                         awt::Size aSize;
                         try
@@ -2364,7 +2364,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                         }
                         catch ( embed::NoVisualAreaSizeException& )
                         {
-                            // the default size will be set later
+                            
                         }
 
                         Size aSz( aSize.Width, aSize.Height );
@@ -2382,7 +2382,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
                     }
                     SwFlyFrmFmt* pFmt2 = 0;
 
-                    // TODO/LATER: Is it the only possible aspect here?
+                    
                     sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                     ::svt::EmbeddedObjectRef xObjRef( xIPObj, nAspect );
                     pFmt2 = pDoc->Insert(aPam, xObjRef, &aFrmSet, NULL, NULL );
@@ -2416,9 +2416,9 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
 
                 pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
-                // Not sure if these setParent() and InsertEmbeddedObject() calls are really
-                // needed, it seems to work without, but logic from code elsewhere suggests
-                // they should be done.
+                
+                
+                
                 SfxObjectShell& mrPers = *pDoc->GetPersist();
                 uno::Reference < container::XChild > xChild( obj, uno::UNO_QUERY );
                 if ( xChild.is() )
@@ -2442,13 +2442,13 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
         const ::uno::Any* pReplacement;
         if( pProps->GetProperty(FN_UNO_REPLACEMENT_GRAPHIC, 0, pReplacement) )
             setPropertyValue(UNO_NAME_GRAPHIC, *pReplacement);
-        // new attribute Title
+        
         const ::uno::Any* pTitle;
         if ( pProps->GetProperty(FN_UNO_TITLE, 0, pTitle) )
         {
             setPropertyValue(UNO_NAME_TITLE, *pTitle);
         }
-        // new attribute Description
+        
         const ::uno::Any* pDescription;
         if ( pProps->GetProperty(FN_UNO_DESCRIPTION, 0, pDescription) )
         {
@@ -2457,7 +2457,7 @@ void SwXFrame::attachToRange(const uno::Reference< text::XTextRange > & xTextRan
     }
     else
         throw lang::IllegalArgumentException();
-    //setzt das Flag zurueck und loescht den Descriptor-Pointer
+    
     ResetDescriptor();
 }
 
@@ -2630,8 +2630,8 @@ uno::Reference< text::XTextCursor >  SwXTextFrame::createTextCursor(void) throw(
     SwFrmFmt* pFmt = GetFrmFmt();
     if(pFmt)
     {
-        //save current start node to be able to check if there is content after the table -
-        //otherwise the cursor would be in the body text!
+        
+        
         const SwNode& rNode = pFmt->GetCntnt().GetCntntIdx()->GetNode();
         const SwStartNode* pOwnStartNode = rNode.FindSttNodeByType(SwFlyStartNode);
 
@@ -2708,11 +2708,11 @@ uno::Reference< container::XEnumeration >  SwXTextFrame::createEnumeration(void)
         ::std::auto_ptr<SwUnoCrsr> pUnoCursor(
                 GetDoc()->CreateUnoCrsr(aPos, false));
         pUnoCursor->Move(fnMoveForward, fnGoNode);
-//      // no Cursor in protected sections
-//      SwCrsrSaveState aSave( *pUnoCrsr );
-//      if(pUnoCrsr->IsInProtectTable(true) ||
-//          pUnoCrsr->IsSelOvr( SELOVER_TOGGLE | SELOVER_CHANGEPOS ))
-//          throw  uno::RuntimeException() );
+
+
+
+
+
         aRef = new SwXParagraphEnumeration(this, pUnoCursor, CURSOR_FRAME);
     }
     return aRef;
@@ -2810,7 +2810,7 @@ sal_Int64 SAL_CALL SwXTextFrame::getSomething( const uno::Sequence< sal_Int8 >& 
     if(rPropertyName == UNO_NAME_START_REDLINE||
             rPropertyName == UNO_NAME_END_REDLINE)
     {
-        //redline can only be returned if it's a living object
+        
         if(!IsDescriptor())
             aRet = SwXText::getPropertyValue(rPropertyName);
     }
@@ -3061,7 +3061,7 @@ uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(voi
         uno::Reference < embed::XEmbeddedObject > xIP = pOleNode->GetOLEObj().GetOleRef();
         if ( svt::EmbeddedObjectRef::TryRunningState( xIP ) )
         {
-            // TODO/LATER: the listener registered after client creation should be able to handle scaling, after that the client is not necessary here
+            
             if ( pDoc->GetDocShell() )
                 pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xIP, embed::Aspects::MSOLE_CONTENT ) );
 
@@ -3071,7 +3071,7 @@ uno::Reference< lang::XComponent >  SwXTextEmbeddedObject::getEmbeddedObject(voi
             if( xBrdcst.is() && xModel.is() )
             {
                 SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>::FirstElement( *pFmt );
-                //create a new one if the OLE object doesn't have one already
+                
                 if( !pListener )
                 {
                     uno::Reference< util::XModifyListener > xOLEListener = new SwXOLEListener(*pFmt, xModel);
@@ -3101,7 +3101,7 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
         xResult = pOleNode->GetOLEObj().GetOleRef();
         if ( svt::EmbeddedObjectRef::TryRunningState( xResult ) )
         {
-            // TODO/LATER: the listener registered after client creation should be able to handle scaling, after that the client is not necessary here
+            
             if ( pDoc->GetDocShell() )
                 pDoc->GetDocShell()->GetIPClient( svt::EmbeddedObjectRef( xResult, embed::Aspects::MSOLE_CONTENT ) );
 
@@ -3111,7 +3111,7 @@ uno::Reference< embed::XEmbeddedObject > SAL_CALL SwXTextEmbeddedObject::getExte
             if( xBrdcst.is() && xModel.is() )
             {
                 SwXOLEListener* pListener = SwIterator<SwXOLEListener,SwFmt>::FirstElement( *pFmt );
-                //create a new one if the OLE object doesn't have one already
+                
                 if( !pListener )
                 {
                     uno::Reference< util::XModifyListener > xOLEListener = new SwXOLEListener(*pFmt, xModel);
@@ -3137,7 +3137,7 @@ sal_Int64 SAL_CALL SwXTextEmbeddedObject::getAspect() throw (uno::RuntimeExcepti
         return pDoc->GetNodes()[ pCnt->GetCntntIdx()->GetIndex() + 1 ]->GetOLENode()->GetAspect();
     }
 
-    return embed::Aspects::MSOLE_CONTENT; // return the default value
+    return embed::Aspects::MSOLE_CONTENT; 
 }
 
 void SAL_CALL SwXTextEmbeddedObject::setAspect( sal_Int64 nAspect ) throw (uno::RuntimeException)
@@ -3251,7 +3251,7 @@ void SwXOLEListener::modified( const lang::EventObject& /*rEvent*/ )
             return;
     }
 
-    // if the OLE-Node is UI-Active do nothing
+    
     pNd->SetOLESizeInvalid(true);
     pNd->GetDoc()->SetOLEObjModified();
 }

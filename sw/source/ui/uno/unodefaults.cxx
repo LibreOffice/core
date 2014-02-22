@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unodefaults.hxx>
@@ -37,11 +37,11 @@ SfxItemPool* SwSvxUnoDrawPool::getModelPool( bool /*bReadOnly*/ ) throw()
     if(m_pDoc)
     {
 
-        // DVO, OD 01.10.2003 #i18732# - return item pool of writer document;
-        // it contains draw model item pool as secondary pool.
-        //SdrModel* pModel = m_pDoc->MakeDrawModel();
-        //return &pModel->GetItemPool();
-        // #i52858# - method name changed
+        
+        
+        
+        
+        
         m_pDoc->GetOrCreateDrawModel();
         return &(m_pDoc->GetAttrPool());
     }

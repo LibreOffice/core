@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -44,7 +44,7 @@
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////
+
 
 SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
        LanguageType nSourceLanguage, LanguageType nTargetLanguage,
@@ -75,7 +75,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     pOutlView = new OutlinerView( this, &(pView->GetEditWin()) );
     pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().getIDocumentDeviceAccess()->getPrinter( false ));
 
-    // Hack: all SdrTextObj attributes should be transferred to EditEngine
+    
     pOutlView->SetBackgroundColor( Color( COL_WHITE ) );
 
 
@@ -83,7 +83,7 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
     Point aPoint( 0, 0 );
      Rectangle aRect( aPoint, aSize );
     pOutlView->SetOutputArea( aRect );
-//  SetText( NULL );
+
     ClearModifyFlag();
 }
 
@@ -141,11 +141,11 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
 
                 ClearModifyFlag();
 
-                //!! update mode needs to be set to true otherwise
-                //!! the call to 'HasConvertibleTextPortion' will not always
-                //!! work correctly because the document may not be properly
-                //!! formatted when some information is accessed, and thus
-                //!! incorrect results get returned.
+                
+                
+                
+                
+                
                 SetUpdateMode(sal_True);
                 if (HasConvertibleTextPortion( nSourceLang ))
                 {
@@ -177,6 +177,6 @@ sal_Bool SdrHHCWrapper::ConvertNextDocument()
     return bNextDoc;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

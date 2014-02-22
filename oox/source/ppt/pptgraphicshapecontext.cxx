@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
@@ -46,14 +46,14 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-// CT_Shape
+
 PPTGraphicShapeContext::PPTGraphicShapeContext( ContextHandler2Helper& rParent, const SlidePersistPtr pSlidePersistPtr, oox::drawingml::ShapePtr pMasterShapePtr, oox::drawingml::ShapePtr pShapePtr )
 : oox::drawingml::GraphicShapeContext( rParent, pMasterShapePtr, pShapePtr )
 , mpSlidePersistPtr( pSlidePersistPtr )
 {
 }
 
-// if nFirstPlaceholder can't be found, it will be searched for nSecondPlaceholder
+
 static oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
 {
     oox::drawingml::ShapePtr pPlaceholder = PPTShape::findPlaceholder( nFirstPlaceholder, rShapes );
@@ -64,9 +64,9 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
 {
     switch( aElementToken )
     {
-    // nvSpPr CT_ShapeNonVisual begin
-//  case NMSP_PPT|XML_drElemPr:
-//      break;
+    
+
+
     case PPT_TOKEN(cNvPr):
         mpShapePtr->setId( rAttribs.getString( XML_id ).get() );
         mpShapePtr->setName( rAttribs.getString( XML_name ).get() );
@@ -91,52 +91,52 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
 
                 if ( bHasIdx && eShapeLocation == Slide )
                 {
-                    // TODO: use id to shape map
+                    
                     SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                     if ( pMasterPersist.get() && rAttribs.hasAttribute( XML_idx ) )
                         pPlaceholder = PPTShape::findPlaceholderByIndex( nIdx, pMasterPersist->getShapes()->getChildren() );
                 }
                 if ( !pPlaceholder.get() && ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) ) )
                 {
-                    // inheriting properties from placeholder objects by cloning shape
+                    
 
                     sal_Int32 nFirstPlaceholder = 0;
                     sal_Int32 nSecondPlaceholder = 0;
                     switch( nSubType )
                     {
-                        case XML_ctrTitle :     // slide/layout
+                        case XML_ctrTitle :     
                             nFirstPlaceholder = XML_ctrTitle;
                             nSecondPlaceholder = XML_title;
                             break;
-                        case XML_subTitle :     // slide/layout
+                        case XML_subTitle :     
                             nFirstPlaceholder = XML_subTitle;
                             nSecondPlaceholder = XML_title;
                             break;
-                        case XML_obj :          // slide/layout
+                        case XML_obj :          
                             nFirstPlaceholder = XML_body;
                             break;
-                        case XML_dt :           // slide/layout/master/notes/notesmaster/handoutmaster
-                        case XML_sldNum :       // slide/layout/master/notes/notesmaster/handoutmaster
-                        case XML_ftr :          // slide/layout/master/notes/notesmaster/handoutmaster
-                        case XML_hdr :          // notes/notesmaster/handoutmaster
-                        case XML_body :         // slide/layout/master/notes/notesmaster
-                        case XML_title :        // slide/layout/master/
-                        case XML_chart :        // slide/layout
-                        case XML_tbl :          // slide/layout
-                        case XML_clipArt :      // slide/layout
-                        case XML_dgm :          // slide/layout
-                        case XML_media :        // slide/layout
-                        case XML_sldImg :       // notes/notesmaster
-                        case XML_pic :          // slide/layout
+                        case XML_dt :           
+                        case XML_sldNum :       
+                        case XML_ftr :          
+                        case XML_hdr :          
+                        case XML_body :         
+                        case XML_title :        
+                        case XML_chart :        
+                        case XML_tbl :          
+                        case XML_clipArt :      
+                        case XML_dgm :          
+                        case XML_media :        
+                        case XML_sldImg :       
+                        case XML_pic :          
                             nFirstPlaceholder = nSubType;
                         default:
                             break;
                     }
                     if ( nFirstPlaceholder )
                     {
-                        if ( eShapeLocation == Layout )     // for layout objects the referenced object can be found within the same shape tree
+                        if ( eShapeLocation == Layout )     
                             pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, mpSlidePersistPtr->getShapes()->getChildren() );
-                        else if ( eShapeLocation == Slide ) // normal slide shapes have to search within the corresponding master tree for referenced objects
+                        else if ( eShapeLocation == Slide ) 
                         {
                             SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                             if ( pMasterPersist.get() )
@@ -177,7 +177,7 @@ ContextHandlerRef PPTGraphicShapeContext::onCreateContext( sal_Int32 aElementTok
         }
         break;
     }
-    // nvSpPr CT_ShapeNonVisual end
+    
 
     case PPT_TOKEN(spPr):
         return new PPTShapePropertiesContext( *this, *mpShapePtr );

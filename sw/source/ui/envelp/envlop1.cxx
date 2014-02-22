@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbmgr.hxx"
@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 using namespace ::rtl;
 
 
-//impl in envimg.cxx
+
 extern SW_DLLPUBLIC OUString MakeSender();
 
 SwEnvPreview::SwEnvPreview(Window* pParent, WinBits nStyle)
@@ -97,7 +97,7 @@ void SwEnvPreview::Paint(const Rectangle &)
 
     SetLineColor( aFront );
 
-    // Envelope
+    
     long   nW = (sal_uInt16) (f * nPageW),
            nH = (sal_uInt16) (f * nPageH),
            nX = (GetOutputSizePixel().Width () - nW) / 2,
@@ -105,7 +105,7 @@ void SwEnvPreview::Paint(const Rectangle &)
     SetFillColor( aBack );
     DrawRect(Rectangle(Point(nX, nY), Size(nW, nH)));
 
-    // Sender
+    
     if (rItem.bSend)
     {
         long   nSendX = nX + (sal_uInt16) (f * rItem.lSendFromLeft),
@@ -117,7 +117,7 @@ void SwEnvPreview::Paint(const Rectangle &)
         DrawRect(Rectangle(Point(nSendX, nSendY), Size(nSendW, nSendH)));
     }
 
-    // Addressee
+    
     long   nAddrX = nX + (sal_uInt16) (f * rItem.lAddrFromLeft),
            nAddrY = nY + (sal_uInt16) (f * rItem.lAddrFromTop ),
            nAddrW = (sal_uInt16) (f * (nPageW - rItem.lAddrFromLeft - 566)),
@@ -125,7 +125,7 @@ void SwEnvPreview::Paint(const Rectangle &)
     SetFillColor( aMedium );
     DrawRect(Rectangle(Point(nAddrX, nAddrY), Size(nAddrW, nAddrH)));
 
-    // Stamp
+    
     long   nStmpW = (sal_uInt16) (f * 1417 /* 2,5 cm */),
            nStmpH = (sal_uInt16) (f * 1701 /* 3,0 cm */),
            nStmpX = nX + nW - (sal_uInt16) (f * 566) - nStmpW,
@@ -220,7 +220,7 @@ SwEnvPage::SwEnvPage(Window* pParent, const SfxItemSet& rSet)
     SetExchangeSupport();
     pSh = GetParentSwEnvDlg()->pSh;
 
-    // Install handlers
+    
     m_pDatabaseLB->SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
     m_pTableLB->SetSelectHdl(LINK(this, SwEnvPage, DatabaseHdl     ));
     m_pInsertBT->SetClickHdl (LINK(this, SwEnvPage, FieldHdl        ));

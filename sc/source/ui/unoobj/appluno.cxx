@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,15 +42,15 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
-// Calc document
+
+
 extern uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScDocument_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
             const uno::Reference< lang::XMultiServiceFactory > & rSMgr, const sal_uInt64 _nCreationFlags ) throw( uno::Exception );
 
-// Calc XML import
+
 extern uno::Sequence< OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScXMLImport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
@@ -72,7 +72,7 @@ extern OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
             const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
 
-// Calc XML export
+
 extern uno::Sequence< OUString > SAL_CALL ScXMLOOoExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScXMLOOoExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_createInstance(
@@ -95,7 +95,7 @@ extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOOoExport_Settings_create
             const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
                 throw( uno::Exception, std::exception );
 
-// Calc XML Oasis export
+
 extern uno::Sequence< OUString > SAL_CALL ScXMLOasisExport_getSupportedServiceNames() throw();
 extern OUString SAL_CALL ScXMLOasisExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_createInstance(
@@ -118,24 +118,24 @@ extern OUString SAL_CALL ScXMLOasisExport_Settings_getImplementationName() throw
 extern uno::Reference< uno::XInterface > SAL_CALL ScXMLOasisExport_Settings_createInstance(
             const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
 
-//------------------------------------------------------------------------
 
-//  Anzahl der Funktionen, die als zuletzt benutzt gespeichert werden
-//! Define mit funcpage.hxx und dwfunctr.hxx zusammenfassen !!!
+
+
+
 #define LRU_MAX 10
 
-//  Spezial-Werte fuer Zoom
-//! irgendwo zentral
+
+
 #define SC_ZOOMVAL_OPTIMAL      (-1)
 #define SC_ZOOMVAL_WHOLEPAGE    (-2)
 #define SC_ZOOMVAL_PAGEWIDTH    (-3)
 
-//  Anzahl der PropertyValues in einer Function-Description
+
 #define SC_FUNCDESC_PROPCOUNT   5
 
-//------------------------------------------------------------------------
 
-//  alles ohne Which-ID, Map nur fuer PropertySetInfo
+
+
 
 static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
 {
@@ -164,7 +164,7 @@ static const SfxItemPropertyMapEntry* lcl_GetSettingsPropertyMap()
     return aSettingsPropertyMap_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 #define SCFUNCTIONLISTOBJ_SERVICE       "com.sun.star.sheet.FunctionDescriptions"
 #define SCRECENTFUNCTIONSOBJ_SERVICE    "com.sun.star.sheet.RecentFunctions"
@@ -174,7 +174,7 @@ SC_SIMPLE_SERVICE_INFO( ScFunctionListObj, "ScFunctionListObj", SCFUNCTIONLISTOB
 SC_SIMPLE_SERVICE_INFO( ScRecentFunctionsObj, "ScRecentFunctionsObj", SCRECENTFUNCTIONSOBJ_SERVICE )
 SC_SIMPLE_SERVICE_INFO( ScSpreadsheetSettings, "ScSpreadsheetSettings", SCSPREADSHEETSETTINGS_SERVICE )
 
-//------------------------------------------------------------------------
+
 
 extern "C" {
 
@@ -381,9 +381,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL sc_component_getFactory(
     return pRet;
 }
 
-}   // extern C
+}   
 
-//------------------------------------------------------------------------
+
 
 ScSpreadsheetSettings::ScSpreadsheetSettings() :
     aPropSet( lcl_GetSettingsPropertyMap() )
@@ -432,7 +432,7 @@ sal_Int16 ScSpreadsheetSettings::getPropertyInt16(const OUString& aPropertyName)
    return b;
 }
 
-// XPropertySet
+
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSpreadsheetSettings::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -457,7 +457,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     ScInputOptions aInpOpt(pScMod->GetInputOptions());
     sal_Bool bSaveApp = false;
     sal_Bool bSaveInp = false;
-    // print options aren't loaded until needed
+    
 
     if (aString.equalsAscii( SC_UNONAME_DOAUTOCP ))
     {
@@ -556,10 +556,10 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
         uno::Sequence<OUString> aSeq;
         if ( pUserList && ( aValue >>= aSeq ) )
         {
-            //  es wird direkt die "lebende" Liste veraendert,
-            //  mehr tut ScGlobal::SetUserList auch nicht
+            
+            
 
-            pUserList->clear();                 // alle Eintraege raus
+            pUserList->clear();                 
             sal_uInt16 nCount = (sal_uInt16)aSeq.getLength();
             const OUString* pAry = aSeq.getConstArray();
             for (sal_uInt16 i=0; i<nCount; i++)
@@ -568,7 +568,7 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
                 ScUserListData* pData = new ScUserListData(aEntry);
                 pUserList->push_back(pData);
             }
-            bSaveApp = sal_True;    // Liste wird mit den App-Optionen gespeichert
+            bSaveApp = sal_True;    
         }
     }
     else if (aString.equalsAscii( SC_UNONAME_PRALLSH ))
@@ -580,9 +580,9 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     else if (aString.equalsAscii( SC_UNONAME_PREMPTY ))
     {
         ScPrintOptions aPrintOpt(pScMod->GetPrintOptions());
-        aPrintOpt.SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );    // reversed
+        aPrintOpt.SetSkipEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );    
         pScMod->SetPrintOptions( aPrintOpt );
-        SFX_APP()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );    // update previews
+        SFX_APP()->Broadcast( SfxSimpleHint( SID_SCPRINTOPTIONS ) );    
     }
 
     if ( bSaveApp )
@@ -602,7 +602,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
     ScModule* pScMod = SC_MOD();
     ScAppOptions   aAppOpt = pScMod->GetAppOptions();
     ScInputOptions aInpOpt = pScMod->GetInputOptions();
-    // print options aren't loaded until needed
+    
 
     if (aString.equalsAscii( SC_UNONAME_DOAUTOCP ))     ScUnoHelpFunctions::SetBoolInAny( aRet, aAppOpt.GetAutoComplete() );
     else if (aString.equalsAscii( SC_UNONAME_ENTERED )) ScUnoHelpFunctions::SetBoolInAny( aRet, aInpOpt.GetEnterEdit() );
@@ -629,7 +629,7 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
             case SVX_ZOOM_PAGEWIDTH: nZoomVal = SC_ZOOMVAL_PAGEWIDTH; break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
         aRet <<= (sal_Int16) nZoomVal;
@@ -653,14 +653,14 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const OUString& aProp
     else if (aString.equalsAscii( SC_UNONAME_PRALLSH ))
         ScUnoHelpFunctions::SetBoolInAny( aRet, pScMod->GetPrintOptions().GetAllSheets() );
     else if (aString.equalsAscii( SC_UNONAME_PREMPTY ))
-        ScUnoHelpFunctions::SetBoolInAny( aRet, !pScMod->GetPrintOptions().GetSkipEmpty() );    // reversed
+        ScUnoHelpFunctions::SetBoolInAny( aRet, !pScMod->GetPrintOptions().GetSkipEmpty() );    
 
     return aRet;
 }
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScSpreadsheetSettings )
 
-//------------------------------------------------------------------------
+
 
 ScRecentFunctionsObj::ScRecentFunctionsObj()
 {
@@ -670,7 +670,7 @@ ScRecentFunctionsObj::~ScRecentFunctionsObj()
 {
 }
 
-// stuff for exService_...
+
 
 uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
@@ -694,7 +694,7 @@ uno::Sequence<OUString> ScRecentFunctionsObj::getSupportedServiceNames_Static()
     return aRet;
 }
 
-// XRecentFunctions
+
 
 uno::Sequence<sal_Int32> SAL_CALL ScRecentFunctionsObj::getRecentFunctionIds()
                                                         throw(uno::RuntimeException)
@@ -724,14 +724,14 @@ void SAL_CALL ScRecentFunctionsObj::setRecentFunctionIds(
 
     sal_uInt16* pFuncs = nCount ? new sal_uInt16[nCount] : NULL;
     for (sal_uInt16 i=0; i<nCount; i++)
-        pFuncs[i] = (sal_uInt16)pAry[i];        //! auf gueltige Werte testen?
+        pFuncs[i] = (sal_uInt16)pAry[i];        
 
     ScModule* pScMod = SC_MOD();
     ScAppOptions aNewOpts(pScMod->GetAppOptions());
     aNewOpts.SetLRUFuncList(pFuncs, nCount);
     pScMod->SetAppOptions(aNewOpts);
 
-    pScMod->RecentFunctionsChanged();       // update function list child window
+    pScMod->RecentFunctionsChanged();       
 
     delete[] pFuncs;
 }
@@ -741,7 +741,7 @@ sal_Int32 SAL_CALL ScRecentFunctionsObj::getMaxRecentFunctions() throw(uno::Runt
     return LRU_MAX;
 }
 
-//------------------------------------------------------------------------
+
 
 ScFunctionListObj::ScFunctionListObj()
 {
@@ -751,7 +751,7 @@ ScFunctionListObj::~ScFunctionListObj()
 {
 }
 
-// stuff for exService_...
+
 
 uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
                         const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
@@ -778,7 +778,7 @@ uno::Sequence<OUString> ScFunctionListObj::getSupportedServiceNames_Static()
 
 static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, const ScFuncDesc& rDesc )
 {
-    rDesc.initArgumentInfo();   // full argument info is needed
+    rDesc.initArgumentInfo();   
 
     OSL_ENSURE( rSequence.getLength() == SC_FUNCDESC_PROPCOUNT, "Falscher Count" );
 
@@ -832,7 +832,7 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
     }
 }
 
-// XFunctionDescriptions
+
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int32 nId )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
@@ -853,13 +853,13 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int
             }
         }
 
-        throw lang::IllegalArgumentException();         // not found
+        throw lang::IllegalArgumentException();         
     }
     else
-        throw uno::RuntimeException();                  // should not happen
+        throw uno::RuntimeException();                  
 }
 
-// XNameAccess
+
 
 uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
             throw(container::NoSuchElementException,
@@ -874,7 +874,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
         for (sal_uInt16 nIndex=0; nIndex<nCount; nIndex++)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
-            //! Case-insensitiv ???
+            
             if ( pDesc && pDesc->pFuncName && aNameStr == *pDesc->pFuncName )
             {
                 uno::Sequence<beans::PropertyValue> aSeq( SC_FUNCDESC_PROPCOUNT );
@@ -883,13 +883,13 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const OUString& aName )
             }
         }
 
-        throw container::NoSuchElementException();      // not found
+        throw container::NoSuchElementException();      
     }
     else
-        throw uno::RuntimeException();                  // should not happen
+        throw uno::RuntimeException();                  
 }
 
-// XIndexAccess
+
 
 sal_Int32 SAL_CALL ScFunctionListObj::getCount() throw(uno::RuntimeException)
 {
@@ -920,13 +920,13 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
             }
         }
 
-        throw lang::IndexOutOfBoundsException();        // illegal index
+        throw lang::IndexOutOfBoundsException();        
     }
     else
-        throw uno::RuntimeException();                  // should not happen
+        throw uno::RuntimeException();                  
 }
 
-// XEnumerationAccess
+
 
 uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumeration()
                                                     throw(uno::RuntimeException)
@@ -935,7 +935,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumer
     return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.FunctionDescriptionEnumeration"));
 }
 
-// XElementAccess
+
 
 uno::Type SAL_CALL ScFunctionListObj::getElementType() throw(uno::RuntimeException)
 {
@@ -980,7 +980,7 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )
         for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
         {
             const ScFuncDesc* pDesc = pFuncList->GetFunction(nIndex);
-            //! Case-insensitiv ???
+            
             if ( pDesc && pDesc->pFuncName && aName == *pDesc->pFuncName )
                 return sal_True;
         }
@@ -988,7 +988,7 @@ sal_Bool SAL_CALL ScFunctionListObj::hasByName( const OUString& aName )
     return false;
 }
 
-//------------------------------------------------------------------------
+
 
 
 

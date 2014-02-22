@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "osl/security.hxx"
@@ -55,12 +55,12 @@ namespace stoc_connector
     public:
         OConnector(const Reference< XComponentContext > &xCtx);
         ~OConnector();
-        // Methods
+        
         virtual Reference< XConnection > SAL_CALL connect(
             const OUString& sConnectionDescription )
             throw( NoConnectException, ConnectionSetupException, RuntimeException);
 
-    public: // XServiceInfo
+    public: 
                 virtual OUString              SAL_CALL getImplementationName() throw();
                 virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames(void) throw();
                 virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw();
@@ -81,7 +81,7 @@ namespace stoc_connector
             OUStringToOString(
                 sConnectionDescription, RTL_TEXTENCODING_ASCII_US).getStr());
 
-        // split string into tokens
+        
         try
         {
             cppu::UnoUrlDescriptor aDesc(sConnectionDescription);

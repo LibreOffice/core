@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -57,9 +57,9 @@ sal_Char _TAC_celltype_inputcheck[17][17] = {
 
 sal_Bool _TAC_Composible[3][5] = {
         /*  'A',    'C',        'S',        'R',        'X'   */
-/* Mode 0 */    {sal_True,  sal_True,   sal_True,   sal_True,   sal_True}, // PASSTHROUGH = 0
-/* Mode 1 */    {sal_True,  sal_True,   sal_True,   sal_False,      sal_True}, // BASIC = 1
-/* Mode 2 */    {sal_True,  sal_True,   sal_False,      sal_False,      sal_True}  // STRICT = 2
+/* Mode 0 */    {sal_True,  sal_True,   sal_True,   sal_True,   sal_True}, 
+/* Mode 1 */    {sal_True,  sal_True,   sal_True,   sal_False,      sal_True}, 
+/* Mode 2 */    {sal_True,  sal_True,   sal_False,      sal_False,      sal_True}  
 };
 
 static sal_Bool SAL_CALL check(sal_Unicode ch1, sal_Unicode ch2, sal_Int16 inputCheckMode)
@@ -92,7 +92,7 @@ InputSequenceChecker_th::correctInputSequence(OUString& Text,
 {
 /* 9 rules for input sequence correction, see issue i42661 for detail,
 
-http://www.openoffice.org/issues/show_bug.cgi?id=42661
+http:
 
 <abv> = <av1>|<av2>|<av3>|<bv1>|<bv2>
 <abv1> = <av1>|<bv1>
@@ -115,22 +115,22 @@ http://www.openoffice.org/issues/show_bug.cgi?id=42661
         Text = Text.replaceAt(++nStartPos, 0, OUString(inputChar));
     else if (nStartPos > 0 && getCharType(Text[nStartPos-1]) == CT_CONS) {
         sal_uInt16 t1=getCharType(Text[nStartPos]), t2=getCharType(inputChar);
-        if ( (CT_ABV(t1) && CT_ABV(t2)) || // 1.
-                (t1==CT_TONE && t2==CT_TONE) )// 2.
+        if ( (CT_ABV(t1) && CT_ABV(t2)) || 
+                (t1==CT_TONE && t2==CT_TONE) )
             Text = Text.replaceAt(nStartPos, 1, OUString(inputChar));
-        else if ( (t1==CT_TONE && CT_ABV(t2)) ||  // 5.
-                (t1==CT_FV1 && t2==CT_TONE) ||  // 6.
-                (Text[nStartPos]==0x0E4C && CT_ABV1(t2)) ) // 8.
+        else if ( (t1==CT_TONE && CT_ABV(t2)) ||  
+                (t1==CT_FV1 && t2==CT_TONE) ||  
+                (Text[nStartPos]==0x0E4C && CT_ABV1(t2)) ) 
             Text = Text.replaceAt(nStartPos++, 0, OUString(inputChar));
         else
             nStartPos=Text.getLength();
     } else if (nStartPos > 1 && getCharType(Text[nStartPos-2]) == CT_CONS) {
         sal_uInt16 t1=getCharType(Text[nStartPos-1]), t2=getCharType(Text[nStartPos]), t3=getCharType(inputChar);
-        if (CT_ABV(t1) && t2==CT_TONE && t3==CT_TONE) // 3.
+        if (CT_ABV(t1) && t2==CT_TONE && t3==CT_TONE) 
             Text = Text.replaceAt(nStartPos, 1, OUString(inputChar));
-        else if ( (CT_ABV(t1) && t2==CT_TONE && CT_ABV(t3)) || // 4.
-                (t1==CT_TONE && t2==CT_FV1 && t3==CT_TONE) || // 7.
-                (CT_ABV1(t1) && Text[nStartPos]==0x0E4C && CT_ABV1(t3)) ) // 9.
+        else if ( (CT_ABV(t1) && t2==CT_TONE && CT_ABV(t3)) || 
+                (t1==CT_TONE && t2==CT_FV1 && t3==CT_TONE) || 
+                (CT_ABV1(t1) && Text[nStartPos]==0x0E4C && CT_ABV1(t3)) ) 
             Text = Text.replaceAt(nStartPos-1, 1, OUString(inputChar));
         else
             nStartPos=Text.getLength();

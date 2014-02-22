@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -51,7 +51,7 @@
 #include <editeng/editrids.hrc>
 #include <svx/svxids.hrc>
 
-// #i4219#
+
 #include <svtools/optionsdrawinglayer.hxx>
 #include <svl/slstitm.hxx>
 #include <svl/aeitem.hxx>
@@ -59,11 +59,11 @@
 
 #include <numpages.hxx>
 
-// static ----------------------------------------------------------------
 
-static const long MINBODY       = 284;  // 0,5 cm rounded up in twips
-//static const long PRINT_OFFSET    = 17;   // 0,03 cm rounded down in twips
-static const long PRINT_OFFSET  = 0;    // why was this ever set to 17 ? it led to wrong right and bottom margins.
+
+static const long MINBODY       = 284;  
+
+static const long PRINT_OFFSET  = 0;    
 
 static sal_uInt16 pRanges[] =
 {
@@ -75,7 +75,7 @@ static sal_uInt16 pRanges[] =
     SID_SWREGISTER_MODE,
     0
 };
-// ------- Mapping page layout ------------------------------------------
+
 
 sal_uInt16 aArr[] =
 {
@@ -85,7 +85,7 @@ sal_uInt16 aArr[] =
     SVX_PAGE_LEFT
 };
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
 {
@@ -95,7 +95,7 @@ sal_uInt16 PageUsageToPos_Impl( sal_uInt16 nUsage )
     return SVX_PAGE_ALL;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 PosToPageUsage_Impl( sal_uInt16 nPos )
 {
@@ -104,7 +104,7 @@ sal_uInt16 PosToPageUsage_Impl( sal_uInt16 nPos )
     return aArr[nPos];
 }
 
-// -----------------------------------------------------------------------
+
 
 Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxItem& rBox )
 {
@@ -116,7 +116,7 @@ Size GetMinBorderSpace_Impl( const SvxShadowItem& rShadow, const SvxBoxItem& rBo
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ConvertLong_Impl( const long nIn, SfxMapUnit eUnit )
 {
@@ -136,7 +136,7 @@ sal_Bool IsEqualSize_Impl( const SvxSizeItem* pSize, const Size& rSize )
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 #define MARGIN_LEFT     ( (MarginPosition)0x0001 )
 #define MARGIN_RIGHT    ( (MarginPosition)0x0002 )
@@ -157,22 +157,22 @@ struct SvxPage_Impl
     ~SvxPage_Impl() { if ( mbDelPrinter ) delete mpDefPrinter; }
 };
 
-// class SvxPageDescPage --------------------------------------------------
 
-// returns the range of the Which values
+
+
 sal_uInt16* SvxPageDescPage::GetRanges()
 {
     return pRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxPageDescPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SvxPageDescPage( pParent, rSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
 
@@ -220,7 +220,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     get(m_pVertBox,"checkbuttonVert");
 
     get(m_pAdaptBox,"checkAdaptBox");
-    // Strings stored in UI
+    
     get(m_pInsideLbl,"labelInner");
     get(m_pOutsideLbl,"labelOuter");
     get(m_pPrintRangeQueryText,"labelMsg");
@@ -228,7 +228,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     bBorderModified = false;
     m_pBspWin->EnableRTL( false );
 
-    // this page needs ExchangeSupport
+    
     SetExchangeSupport();
 
     SvtLanguageOptions aLangOptions;
@@ -243,7 +243,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
                     0 != (pItem = pShell->GetItem(SID_HTML_MODE))))
         bWeb = 0 != (((const SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON);
 
-    //  fill text flow listbox with valid entries
+    
 
     m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_HORI ), FRMDIR_HORI_LEFT_TOP );
 
@@ -252,17 +252,17 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
         m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_HORI ), FRMDIR_HORI_RIGHT_TOP );
 
 
-    // #109989# do not show vertical directions in Writer/Web
+    
     if( !bWeb )
     {
         if( bCJK )
         {
             m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_RTL_VERT ), FRMDIR_VERT_TOP_RIGHT );
-//            m_pTextFlowBox->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_PAGEDIR_LTR_VERT ), FRMDIR_VERT_TOP_LEFT );
+
         }
     }
 
-    // #109989# show the text direction box in Writer/Web too
+    
     if( (bCJK || bCTL) &&
         SFX_ITEM_UNKNOWN < rAttr.GetItemState(GetWhich( SID_ATTR_FRAMEDIRECTION )))
     {
@@ -293,7 +293,7 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     MapMode aOldMode = pImpl->mpDefPrinter->GetMapMode();
     pImpl->mpDefPrinter->SetMapMode( MAP_TWIP );
 
-    // set first- and last-values for the margins
+    
     Size aPaperSize = pImpl->mpDefPrinter->GetPaperSize();
     Size aPrintSize = pImpl->mpDefPrinter->GetOutputSize();
     /*
@@ -330,17 +330,17 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     m_pBottomMarginEdit->SetLast( m_pBottomMarginEdit->Normalize( aPrintOffset.Y() + aPrintSize.Height() ), FUNIT_TWIP );
     nLastBottomMargin = static_cast<long>(m_pBottomMarginEdit->GetLast());
 
-    // #i4219# get DrawingLayer options
+    
     const SvtOptionsDrawinglayer aDrawinglayerOpt;
 
-    // #i4219# take Maximum now from configuration (1/100th cm)
-    // was: 11900 -> 119 cm ;new value 3 meters -> 300 cm -> 30000
+    
+    
     m_pPaperWidthEdit->SetMax(m_pPaperWidthEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
     m_pPaperWidthEdit->SetLast(m_pPaperWidthEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperWidth()), FUNIT_CM);
     m_pPaperHeightEdit->SetMax(m_pPaperHeightEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
     m_pPaperHeightEdit->SetLast(m_pPaperHeightEdit->Normalize(aDrawinglayerOpt.GetMaximumPaperHeight()), FUNIT_CM);
 
-    // #i4219# also for margins (1/100th cm). Was: 9999, keeping.
+    
     m_pLeftMarginEdit->SetMax(aDrawinglayerOpt.GetMaximumPaperLeftMargin());
     m_pLeftMarginEdit->SetLast(aDrawinglayerOpt.GetMaximumPaperLeftMargin());
     m_pRightMarginEdit->SetMax(aDrawinglayerOpt.GetMaximumPaperRightMargin());
@@ -353,22 +353,22 @@ SvxPageDescPage::SvxPageDescPage( Window* pParent, const SfxItemSet& rAttr ) :
     m_pPortraitBtn->SetAccessibleRelationMemberOf(m_pOrientationFT);
     m_pLandscapeBtn->SetAccessibleRelationMemberOf(m_pOrientationFT);
 
-    // Get the i18n framework numberings and add them to the listbox.
+    
     SvxNumOptionsTabPage::GetI18nNumbering( *m_pNumberFormatBox, ::std::numeric_limits<sal_uInt16>::max());
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPageDescPage::~SvxPageDescPage()
 {
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::Init_Impl()
 {
-        // adjust the handler
+        
     m_pLayoutBox->SetSelectHdl( LINK( this, SvxPageDescPage, LayoutHdl_Impl ) );
     m_pPaperSizeBox->SetDropDownLineCount(10);
 
@@ -398,7 +398,7 @@ void SvxPageDescPage::Init_Impl()
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::Reset( const SfxItemSet& rSet )
 {
@@ -406,7 +406,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     DBG_ASSERT( pPool, "Wo ist der Pool" );
     SfxMapUnit eUnit = pPool->GetMetric( GetWhich( SID_ATTR_LRSPACE ) );
 
-    // adjust margins (right/left)
+    
     const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_LRSPACE );
 
     if ( pItem )
@@ -420,7 +420,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             (sal_uInt16)ConvertLong_Impl( (long)rLRSpace.GetRight(), eUnit ) );
     }
 
-    // adjust margins (top/bottom)
+    
     pItem = GetItem( rSet, SID_ATTR_ULSPACE );
 
     if ( pItem )
@@ -434,7 +434,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             (sal_uInt16)ConvertLong_Impl( (long)rULSpace.GetLower(), eUnit ) );
     }
 
-    // general page data
+    
     SvxNumType eNumType = SVX_ARABIC;
     bLandscape = ( pImpl->mpDefPrinter->GetOrientation() == ORIENTATION_LANDSCAPE );
     sal_uInt16 nUse = (sal_uInt16)SVX_PAGE_ALL;
@@ -448,13 +448,13 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         bLandscape = rItem.IsLandscape();
     }
 
-    // alignment
+    
     m_pLayoutBox->SelectEntryPos( ::PageUsageToPos_Impl( nUse ) );
     m_pBspWin->SetUsage( nUse );
     LayoutHdl_Impl( 0 );
 
-    //adjust numeration type of the page style
-    //Get the Position of the saved NumType
+    
+    
     for(int i=0; i<m_pNumberFormatBox->GetEntryCount(); i++)
         if(eNumType == (sal_uInt16)(sal_uLong)m_pNumberFormatBox->GetEntryData(i)){
             m_pNumberFormatBox->SelectEntryPos( i );
@@ -507,7 +507,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( bLandscape )
         Swap( aPaperSize );
 
-    // Actual Paper Format
+    
     Paper ePaper = SvxPaperInfo::GetSvxPaper( aPaperSize, MAP_100TH_MM, true );
 
     if ( PAPER_USER != ePaper )
@@ -516,7 +516,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     if ( bLandscape )
         Swap( aPaperSize );
 
-    // write values into the edits
+    
     SetMetricValue( *m_pPaperHeightEdit, aPaperSize.Height(), SFX_MAPUNIT_100TH_MM );
     SetMetricValue( *m_pPaperWidthEdit, aPaperSize.Width(), SFX_MAPUNIT_100TH_MM );
     m_pPaperSizeBox->Clear();
@@ -542,10 +542,10 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
         if( eSize == PAPER_USER )
             nUserPos = nPos;
     }
-    // preselect current paper format - #115915#: ePaper might not be in aPaperSizeBox so use PAPER_USER instead
+    
     m_pPaperSizeBox->SelectEntryPos( nActPos != LISTBOX_ENTRY_NOTFOUND ? nActPos : nUserPos );
 
-    // application specific
+    
 
     switch ( eMode )
     {
@@ -556,17 +556,17 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             m_pVertBox->Show();
             DisableVerticalPageDir();
 
-            // horizontal alignment
+            
             pItem = GetItem( rSet, SID_ATTR_PAGE_EXT1 );
             m_pHorzBox->Check( pItem ? ( (const SfxBoolItem*)pItem )->GetValue()
                                   : sal_False );
 
-            // vertical alignment
+            
             pItem = GetItem( rSet, SID_ATTR_PAGE_EXT2 );
             m_pVertBox->Check( pItem ? ( (const SfxBoolItem*)pItem )->GetValue()
                                   : sal_False );
 
-            // set example window on the table
+            
             m_pBspWin->SetTable( sal_True );
             m_pBspWin->SetHorz( m_pHorzBox->IsChecked() );
             m_pBspWin->SetVert( m_pVertBox->IsChecked() );
@@ -582,19 +582,19 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
             m_pAdaptBox->Check( pItem ?
                 ( (const SfxBoolItem*)pItem )->GetValue() : sal_False );
 
-            //!!! hidden, because not implemented by StarDraw
+            
             m_pLayoutBox->Hide();
             m_pPageText->Hide();
 
             break;
         }
-        default: ;//prevent warning
+        default: ;
     }
 
 
-    // display background and border in the example
+    
     ResetBackground_Impl( rSet );
-//! UpdateExample_Impl();
+
     RangeHdl_Impl( 0 );
 
     InitHeadFoot_Impl( rSet );
@@ -650,7 +650,7 @@ void SvxPageDescPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::FillUserData()
 {
@@ -659,7 +659,7 @@ void SvxPageDescPage::FillUserData()
 
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -671,10 +671,10 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     SfxMapUnit eUnit = pPool->GetMetric( nWhich );
     const SfxPoolItem* pOld = 0;
 
-    // copy old left and right margins
+    
     SvxLRSpaceItem aMargin( (const SvxLRSpaceItem&)rOldSet.Get( nWhich ) );
 
-    // copy old top and bottom margins
+    
     nWhich = GetWhich( SID_ATTR_ULSPACE );
     SvxULSpaceItem aTopMargin( (const SvxULSpaceItem&)rOldSet.Get( nWhich ) );
 
@@ -690,7 +690,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         bModified |= sal_True;
     }
 
-    // set left and right margins
+    
     if ( bModified )
     {
         pOld = GetOldItem( rSet, SID_ATTR_LRSPACE );
@@ -715,7 +715,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         bMod |= sal_True;
     }
 
-    // set top and bottom margins
+    
     //
     if ( bMod )
     {
@@ -728,7 +728,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    // paper tray
+    
     nWhich = GetWhich( SID_ATTR_PAGE_PAPERBIN );
     sal_uInt16 nPos = m_pPaperTrayBox->GetSelectEntryPos();
     sal_uInt16 nBin = (sal_uInt16)(sal_uLong)m_pPaperTrayBox->GetEntryData( nPos );
@@ -796,7 +796,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
         bMod |= sal_True;
     }
 
-    //Get the NumType value
+    
     nPos = m_pNumberFormatBox->GetSelectEntryPos();
     sal_uInt16 nEntryData = (sal_uInt16)(sal_uLong)m_pNumberFormatBox->GetEntryData(nPos);
     if ( nPos != m_pNumberFormatBox->GetSavedValue() )
@@ -820,7 +820,7 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     else
         rSet.Put( rOldSet.Get( nWhich ) );
 
-    // evaluate mode specific controls
+    
 
     switch ( eMode )
     {
@@ -846,13 +846,13 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
 
         case SVX_PAGE_MODE_PRESENTATION:
         {
-            // always put so that draw can evaluate this
+            
             rSet.Put( SfxBoolItem( GetWhich( SID_ATTR_PAGE_EXT1 ),
                       m_pAdaptBox->IsChecked() ) );
             bModified |= sal_True;
             break;
         }
-        default: ;//prevent warning
+        default: ;
 
     }
 
@@ -884,11 +884,11 @@ sal_Bool SvxPageDescPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl)
 {
-    // switch inside outside
+    
     const sal_uInt16 nPos = PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() );
 
     if ( nPos == SVX_PAGE_MIRROR )
@@ -909,12 +909,12 @@ IMPL_LINK_NOARG(SvxPageDescPage, LayoutHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
 {
     if ( m_pPaperTrayBox->GetEntryCount() > 1 )
-        // already filled
+        
         return 0;
 
     OUString aOldName = m_pPaperTrayBox->GetSelectEntry();
@@ -946,7 +946,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperBinHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
 {
@@ -976,13 +976,13 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
 
         if ( eMode == SVX_PAGE_MODE_PRESENTATION )
         {
-            // Draw: if paper format the margin shall be 1 cm
+            
             long nTmp = 0;
             sal_Bool bScreen = (( PAPER_SCREEN_4_3 == ePaper )||( PAPER_SCREEN_16_9 == ePaper)||( PAPER_SCREEN_16_10 == ePaper));
 
             if ( !bScreen )
-                // no margin if screen
-                nTmp = 1; // accordingly 1 cm
+                
+                nTmp = 1; 
 
             if ( bScreen || m_pRightMarginEdit->GetValue() == 0 )
             {
@@ -1018,7 +1018,7 @@ IMPL_LINK( SvxPageDescPage, PaperSizeSelect_Impl, ListBox *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl)
 {
@@ -1043,7 +1043,7 @@ IMPL_LINK_NOARG(SvxPageDescPage, PaperSizeModify_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
 {
@@ -1057,11 +1057,11 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
         const long lWidth = GetCoreValue( *m_pPaperWidthEdit, SFX_MAPUNIT_100TH_MM );
         const long lHeight = GetCoreValue( *m_pPaperHeightEdit, SFX_MAPUNIT_100TH_MM );
 
-        // swap with and height
+        
         SetMetricValue( *m_pPaperWidthEdit, lHeight, SFX_MAPUNIT_100TH_MM );
         SetMetricValue( *m_pPaperHeightEdit, lWidth, SFX_MAPUNIT_100TH_MM );
 
-        // recalculate margins if necessary
+        
         CalcMargin_Impl();
 
         PaperSizeSelect_Impl( m_pPaperSizeBox );
@@ -1072,7 +1072,7 @@ IMPL_LINK( SvxPageDescPage, SwapOrientation_Impl, RadioButton *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
 {
@@ -1085,7 +1085,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
     pImpl->mpDefPrinter->SetOrientation( eOri );
     pImpl->mpDefPrinter->SetMapMode( MAP_TWIP );
 
-    // set first- and last-values for margins
+    
     Size aPaperSize = pImpl->mpDefPrinter->GetPaperSize();
     Size aPrintSize = pImpl->mpDefPrinter->GetOutputSize();
     /*
@@ -1141,7 +1141,7 @@ void SvxPageDescPage::SwapFirstValues_Impl( bool bSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxPageDescPage, BorderModify_Impl)
 {
@@ -1152,30 +1152,30 @@ IMPL_LINK_NOARG_INLINE_START(SvxPageDescPage, BorderModify_Impl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxPageDescPage, BorderModify_Impl)
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::UpdateExample_Impl( bool bResetbackground )
 {
-    // Size
+    
     Size aSize( GetCoreValue( *m_pPaperWidthEdit, SFX_MAPUNIT_TWIP ),
                 GetCoreValue( *m_pPaperHeightEdit, SFX_MAPUNIT_TWIP ) );
 
     m_pBspWin->SetSize( aSize );
 
-    // Margins
+    
     m_pBspWin->SetTop( GetCoreValue( *m_pTopMarginEdit, SFX_MAPUNIT_TWIP ) );
     m_pBspWin->SetBottom( GetCoreValue( *m_pBottomMarginEdit, SFX_MAPUNIT_TWIP ) );
     m_pBspWin->SetLeft( GetCoreValue( *m_pLeftMarginEdit, SFX_MAPUNIT_TWIP ) );
     m_pBspWin->SetRight( GetCoreValue( *m_pRightMarginEdit, SFX_MAPUNIT_TWIP ) );
 
-    // Layout
+    
     m_pBspWin->SetUsage( PosToPageUsage_Impl( m_pLayoutBox->GetSelectEntryPos() ) );
     if ( bResetbackground )
         m_pBspWin->ResetBackground();
     m_pBspWin->Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::ResetBackground_Impl( const SfxItemSet& rSet )
 {
@@ -1263,7 +1263,7 @@ void SvxPageDescPage::ResetBackground_Impl( const SfxItemSet& rSet )
         m_pBspWin->SetBorder( (SvxBoxItem&)*pItem );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 {
@@ -1275,7 +1275,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
 
     const SvxSetItem* pSetItem = 0;
 
-    // evaluate header attributes
+    
 
     if ( SFX_ITEM_SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_HEADERSET ),
@@ -1303,7 +1303,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         else
             m_pBspWin->SetHeader( sal_False );
 
-        // show background and border in the example
+        
         sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
 
         if ( rHeaderSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
@@ -1322,7 +1322,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         }
     }
 
-    // evaluate footer attributes
+    
 
     if ( SFX_ITEM_SET ==
          rSet.GetItemState( GetWhich( SID_ATTR_PAGE_FOOTERSET ),
@@ -1350,7 +1350,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
         else
             m_pBspWin->SetFooter( sal_False );
 
-        // show background and border in the example
+        
         sal_uInt16 nWhich = GetWhich( SID_ATTR_BRUSH );
 
         if ( rFooterSet.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
@@ -1370,7 +1370,7 @@ void SvxPageDescPage::InitHeadFoot_Impl( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
 {
@@ -1379,13 +1379,13 @@ void SvxPageDescPage::ActivatePage( const SfxItemSet& rSet )
     RangeHdl_Impl( 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
 {
-    // Inquiry whether the page margins are beyond the printing area.
-    // If not, ask user whether they shall be taken.
-    // If not, stay on the TabPage.
+    
+    
+    
     sal_uInt16 nPos = m_pPaperSizeBox->GetSelectEntryPos();
     Paper ePaper = (Paper)(sal_uLong)m_pPaperSizeBox->GetEntryData( nPos );
 
@@ -1418,13 +1418,13 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     {
         FillItemSet( *_pSet );
 
-        // put portray/landscape if applicable
+        
         sal_uInt16 nWh = GetWhich( SID_ATTR_PAGE_SIZE );
         SfxMapUnit eUnit = GetItemSet().GetPool()->GetMetric( nWh );
         Size aSize( GetCoreValue( *m_pPaperWidthEdit, eUnit ),
                     GetCoreValue( *m_pPaperHeightEdit, eUnit ) );
 
-        // put, if current size is different to the value in _pSet
+        
         const SvxSizeItem* pSize = (const SvxSizeItem*)GetItem( *_pSet, SID_ATTR_PAGE_SIZE );
         if ( aSize.Width() && ( !pSize || !IsEqualSize_Impl( pSize, aSize ) ) )
             _pSet->Put( SvxSizeItem( nWh, aSize ) );
@@ -1433,11 +1433,11 @@ int SvxPageDescPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
 {
-    // example window
+    
     long nHHeight = m_pBspWin->GetHdHeight();
     long nHDist = m_pBspWin->GetHdDist();
 
@@ -1447,13 +1447,13 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
     long nHFLeft = std::max( m_pBspWin->GetHdLeft(), m_pBspWin->GetFtLeft() );
     long nHFRight = std::max( m_pBspWin->GetHdRight(), m_pBspWin->GetFtRight() );
 
-    // current values for page margins
+    
     long nBT = static_cast<long>(m_pTopMarginEdit->Denormalize(m_pTopMarginEdit->GetValue(FUNIT_TWIP)));
     long nBB = static_cast<long>(m_pBottomMarginEdit->Denormalize(m_pBottomMarginEdit->GetValue(FUNIT_TWIP)));
     long nBL = static_cast<long>(m_pLeftMarginEdit->Denormalize(m_pLeftMarginEdit->GetValue(FUNIT_TWIP)));
     long nBR = static_cast<long>(m_pRightMarginEdit->Denormalize(m_pRightMarginEdit->GetValue(FUNIT_TWIP)));
 
-    // calculate width of page border
+    
     const SfxItemSet* _pSet = &GetItemSet();
     Size aBorder;
 
@@ -1470,8 +1470,8 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
     long nH  = static_cast<long>(m_pPaperHeightEdit->Denormalize(m_pPaperHeightEdit->GetValue(FUNIT_TWIP)));
     long nW  = static_cast<long>(m_pPaperWidthEdit->Denormalize(m_pPaperWidthEdit->GetValue(FUNIT_TWIP)));
 
-    // limits paper
-    // maximum is 54 cm
+    
+    
     //
     long nMin = nHHeight + nHDist + nFDist + nFHeight + nBT + nBB +
                 MINBODY + aBorder.Height();
@@ -1480,37 +1480,37 @@ IMPL_LINK_NOARG(SvxPageDescPage, RangeHdl_Impl)
     nMin = MINBODY + nBL + nBR + aBorder.Width();
     m_pPaperWidthEdit->SetMin(m_pPaperWidthEdit->Normalize(nMin), FUNIT_TWIP);
 
-    // if the paper size has been changed
+    
     nH = static_cast<long>(m_pPaperHeightEdit->Denormalize(m_pPaperHeightEdit->GetValue(FUNIT_TWIP)));
     nW = static_cast<long>(m_pPaperWidthEdit->Denormalize(m_pPaperWidthEdit->GetValue(FUNIT_TWIP)));
 
-    // Top
+    
     long nMax = nH - nBB - aBorder.Height() - MINBODY -
                 nFDist - nFHeight - nHDist - nHHeight;
 
     m_pTopMarginEdit->SetMax(m_pTopMarginEdit->Normalize(nMax), FUNIT_TWIP);
 
-    // Bottom
+    
     nMax = nH - nBT - aBorder.Height() - MINBODY -
            nFDist - nFHeight - nHDist - nHHeight;
 
     m_pBottomMarginEdit->SetMax(m_pTopMarginEdit->Normalize(nMax), FUNIT_TWIP);
 
-    // Left
+    
     nMax = nW - nBR - MINBODY - aBorder.Width() - nHFLeft - nHFRight;
     m_pLeftMarginEdit->SetMax(m_pLeftMarginEdit->Normalize(nMax), FUNIT_TWIP);
 
-    // Right
+    
     nMax = nW - nBL - MINBODY - aBorder.Width() - nHFLeft - nHFRight;
     m_pRightMarginEdit->SetMax(m_pRightMarginEdit->Normalize(nMax), FUNIT_TWIP);
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::CalcMargin_Impl()
 {
-    // current values for page margins
+    
     long nBT = GetCoreValue( *m_pTopMarginEdit, SFX_MAPUNIT_TWIP );
     long nBB = GetCoreValue( *m_pBottomMarginEdit, SFX_MAPUNIT_TWIP );
 
@@ -1549,7 +1549,7 @@ void SvxPageDescPage::CalcMargin_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxPageDescPage, CenterHdl_Impl)
 {
@@ -1560,7 +1560,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxPageDescPage, CenterHdl_Impl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxPageDescPage, CenterHdl_Impl)
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
 {
@@ -1576,7 +1576,7 @@ void SvxPageDescPage::SetCollectionList(const std::vector<OUString> &aList)
     m_pRegisterCB->SetClickHdl(LINK(this, SvxPageDescPage, RegisterModify));
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
 {
@@ -1592,7 +1592,7 @@ IMPL_LINK( SvxPageDescPage, RegisterModify, CheckBox*, pBox )
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void SvxPageDescPage::DisableVerticalPageDir()
 {

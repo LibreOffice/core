@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "charttest.hxx"
@@ -63,7 +63,7 @@ public:
     CPPUNIT_TEST(testUpDownBars);
     CPPUNIT_TEST(testDoughnutChart);
     CPPUNIT_TEST(testDisplayUnits);
-    // CPPUNIT_TEST(testFdo74115WallGradientFill);
+    
     CPPUNIT_TEST(testFdo74115WallBitmapFill);
     CPPUNIT_TEST(testBarChartRotation);
     CPPUNIT_TEST(testShapeFollowedByChart);
@@ -146,7 +146,7 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rF
 {
     boost::shared_ptr<utl::TempFile> pTempFile = reload(rFilterFormat);
 
-    // Read the XML stream we're interested in.
+    
     uno::Reference<packages::zip::XZipFileAccess2> xNameAccess = packages::zip::ZipFileAccess::createWithURL(comphelper::getComponentContext(m_xSFactory), pTempFile->GetURL());
     uno::Reference<io::XInputStream> xInputStream(xNameAccess->getByName(findChartFile(rDir, xNameAccess)), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xInputStream.is());
@@ -162,21 +162,21 @@ xmlDocPtr Chart2ExportTest::parseExport(const OUString& rDir, const OUString& rF
         aDocument.append(ch);
     }
 
-    // Parse the XML.
+    
     return xmlParseMemory((const char*)aDocument.getStr(), aDocument.getLength());
 }
 
 xmlNodeSetPtr Chart2ExportTest::getXPathNode(xmlDocPtr pXmlDoc, const OString& rXPath)
 {
     xmlXPathContextPtr pXmlXpathCtx = xmlXPathNewContext(pXmlDoc);
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http://schemas.openxmlformats.org/wordprocessingml/2006/main"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("w"), BAD_CAST("http:
     xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("v"), BAD_CAST("urn:schemas-microsoft-com:vml"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/chart"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/main"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("mc"), BAD_CAST("http://schemas.openxmlformats.org/markup-compatibility/2006"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wps"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingShape"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wpg"), BAD_CAST("http://schemas.microsoft.com/office/word/2010/wordprocessingGroup"));
-    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wp"), BAD_CAST("http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing"));
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("c"), BAD_CAST("http:
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("a"), BAD_CAST("http:
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("mc"), BAD_CAST("http:
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wps"), BAD_CAST("http:
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wpg"), BAD_CAST("http:
+    xmlXPathRegisterNs(pXmlXpathCtx, BAD_CAST("wp"), BAD_CAST("http:
     xmlXPathObjectPtr pXmlXpathObj = xmlXPathEvalExpression(BAD_CAST(rXPath.getStr()), pXmlXpathCtx);
     return pXmlXpathObj->nodesetval;
 }
@@ -366,12 +366,12 @@ void checkTrendlinesInChart(uno::Reference< chart2::XChartDocument > xChartDoc)
 
 }
 
-// improve the test
+
 void Chart2ExportTest::testErrorBarXLSX()
 {
     load("/chart2/qa/extras/data/ods/", "error_bar.ods");
     {
-        // make sure the ODS import was successful
+        
         uno::Reference< chart2::XChartDocument > xChartDoc = getChartDocFromSheet( 0, mxComponent );
         CPPUNIT_ASSERT(xChartDoc.is());
 
@@ -381,7 +381,7 @@ void Chart2ExportTest::testErrorBarXLSX()
         Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
         CPPUNIT_ASSERT( xPropSet.is() );
 
-        // test that y error bars are there
+        
         Reference< beans::XPropertySet > xErrorBarYProps;
         xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
         testErrorBar(xErrorBarYProps);
@@ -398,15 +398,15 @@ void Chart2ExportTest::testErrorBarXLSX()
         Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
         CPPUNIT_ASSERT( xPropSet.is() );
 
-        // test that y error bars are there
+        
         Reference< beans::XPropertySet > xErrorBarYProps;
         xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
         testErrorBar(xErrorBarYProps);
     }
 }
 
-// This method tests the preservation of properties for trendlines / regression curves
-// in an export -> import cycle using different file formats - ODS, XLS and XLSX.
+
+
 void Chart2ExportTest::testTrendline()
 {
     load("/chart2/qa/extras/data/ods/", "trendline.ods");
@@ -487,16 +487,16 @@ void Chart2ExportTest::testChartExternalData()
 
 void Chart2ExportTest::testEmbeddingsGrabBag()
 {
-   // The problem was that .xlsx files were missing from docx file from embeddings folder
-   // after saving file.
-   // This test case tests whether embeddings files grabbagged properly in correct object.
+   
+   
+   
 
    load("/chart2/qa/extras/data/docx/", "testMultiplechartembeddings.docx" );
    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
    uno::Reference<beans::XPropertySet> xTextDocumentPropertySet(xTextDocument, uno::UNO_QUERY);
    uno::Sequence<beans::PropertyValue> aGrabBag(0);
    xTextDocumentPropertySet->getPropertyValue(OUString("InteropGrabBag")) >>= aGrabBag;
-   CPPUNIT_ASSERT(aGrabBag.hasElements()); // Grab Bag not empty
+   CPPUNIT_ASSERT(aGrabBag.hasElements()); 
    bool bEmbeddings = false;
    const char* testEmbeddedFileNames[3] = {"word/embeddings/Microsoft_Excel_Worksheet3.xlsx",
                                         "word/embeddings/Microsoft_Excel_Worksheet2.xlsx",
@@ -509,19 +509,19 @@ void Chart2ExportTest::testEmbeddingsGrabBag()
            uno::Sequence<beans::PropertyValue> aEmbeddingsList(0);
            uno::Reference<io::XInputStream> aEmbeddingXlsxStream;
            OUString aEmbeddedfileName;
-           CPPUNIT_ASSERT(aGrabBag[i].Value >>= aEmbeddingsList); // PropertyValue of proper type
+           CPPUNIT_ASSERT(aGrabBag[i].Value >>= aEmbeddingsList); 
            sal_Int32 length = aEmbeddingsList.getLength();
            CPPUNIT_ASSERT_EQUAL(sal_Int32(3), length);
            for(int j = 0; j < length; ++j)
            {
                aEmbeddingsList[j].Value >>= aEmbeddingXlsxStream;
                aEmbeddedfileName = aEmbeddingsList[j].Name;
-               CPPUNIT_ASSERT(aEmbeddingXlsxStream.get()); // Reference not empty
+               CPPUNIT_ASSERT(aEmbeddingXlsxStream.get()); 
                CPPUNIT_ASSERT_EQUAL(OUString::createFromAscii(testEmbeddedFileNames[j]),aEmbeddedfileName);
            }
        }
    }
-   CPPUNIT_ASSERT(bEmbeddings); // Grab Bag has all the expected elements
+   CPPUNIT_ASSERT(bEmbeddings); 
 }
 
 void Chart2ExportTest::testAreaChartLoad()

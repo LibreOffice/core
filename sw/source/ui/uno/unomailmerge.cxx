@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -90,9 +90,9 @@ osl::Mutex &    GetMailMergeMutex()
 
 enum CloseResult
 {
-    eSuccess,       // successfully closed
-    eVetoed,        // vetoed, ownership transferred to the vetoing instance
-    eFailed         // failed for some unknown reason
+    eSuccess,       
+    eVetoed,        
+    eFailed         
 };
 static CloseResult CloseModelAndDocSh(
        Reference< frame::XModel > &rxModel,
@@ -102,22 +102,22 @@ static CloseResult CloseModelAndDocSh(
 
     rxDocSh = 0;
 
-    //! models/documents should never be disposed (they may still be
-    //! used for printing which is called asynchronously for example)
-    //! instead call close
+    
+    
+    
     Reference< util::XCloseable > xClose( rxModel, UNO_QUERY );
     if (xClose.is())
     {
         try
         {
-            //! 'sal_True' -> transfer ownership to vetoing object if vetoed!
-            //! I.e. now that object is responsible for closing the model and doc shell.
+            
+            
             xClose->close( sal_True );
         }
         catch (const util::CloseVetoException&)
         {
-            //! here we have the problem that the temporary file that is
-            //! currently being printed will never be deleted. :-(
+            
+            
             eResult = eVetoed;
         }
         catch (const uno::RuntimeException&)
@@ -135,7 +135,7 @@ static bool LoadFromURL_impl(
         bool bClose )
     throw (RuntimeException)
 {
-    // try to open the document readonly and hidden
+    
     Reference< frame::XModel > xTmpModel;
     Sequence < PropertyValue > aArgs( 1 );
     aArgs[0].Name = "Hidden";
@@ -152,7 +152,7 @@ static bool LoadFromURL_impl(
         return false;
     }
 
-    // try to get the DocShell
+    
     SwDocShell *pTmpDocShell = 0;
     Reference < XUnoTunnel > xTunnel( xTmpModel, UNO_QUERY );
     if (xTunnel.is())
@@ -163,18 +163,18 @@ static bool LoadFromURL_impl(
     }
 
     bool bRes = false;
-    if (xTmpModel.is() && pTmpDocShell)    // everything available?
+    if (xTmpModel.is() && pTmpDocShell)    
     {
         if (bClose)
             CloseModelAndDocSh( rxModel, rxDocSh );
-        // set new stuff
+        
         rxModel = xTmpModel;
         rxDocSh = pTmpDocShell;
         bRes = true;
     }
     else
     {
-        // SfxObjectShellRef is ok here, since the document will be explicitly closed
+        
         SfxObjectShellRef xTmpDocSh = pTmpDocShell;
         CloseModelAndDocSh( xTmpModel, xTmpDocSh );
     }
@@ -200,11 +200,11 @@ namespace
     protected:
         ~DelayedFileDeletion( );
 
-        // XCloseListener
+        
         virtual void SAL_CALL queryClosing( const EventObject& _rSource, sal_Bool _bGetsOwnership ) throw (util::CloseVetoException, RuntimeException);
         virtual void SAL_CALL notifyClosing( const EventObject& _rSource ) throw (RuntimeException);
 
-        // XEventListener
+        
         virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
 
     private:
@@ -212,8 +212,8 @@ namespace
         DECL_LINK( OnTryDeleteFile, void* );
 
     private:
-        DelayedFileDeletion( const DelayedFileDeletion& );                  // never implemented
-        DelayedFileDeletion& operator=( const DelayedFileDeletion& );       // never implemented
+        DelayedFileDeletion( const DelayedFileDeletion& );                  
+        DelayedFileDeletion& operator=( const DelayedFileDeletion& );       
     };
 
     DelayedFileDeletion::DelayedFileDeletion( const Reference< XModel >& _rxModel, const OUString& _rTemporaryFile )
@@ -228,7 +228,7 @@ namespace
             if ( m_xDocument.is() )
             {
                 m_xDocument->addCloseListener( this );
-                // successfully added -> keep ourself alive
+                
                 acquire();
             }
             else {
@@ -250,42 +250,42 @@ namespace
         try
         {
             sal_Bool bDeliverOwnership = ( 0 == m_nPendingDeleteAttempts );
-                // if this is our last attemt, then anybody which vetoes this has to take the consequences
-                // (means take the ownership)
+                
+                
             m_xDocument->close( bDeliverOwnership );
             bSuccess = true;
         }
         catch (const util::CloseVetoException&)
         {
-            // somebody vetoed -> next try
+            
             if ( m_nPendingDeleteAttempts )
             {
-                // next attempt
+                
                 --m_nPendingDeleteAttempts;
                 m_aDeleteTimer.Start();
             }
             else
-                bSuccess = true;    // can't do anything here ...
+                bSuccess = true;    
         }
         catch (const Exception&)
         {
             OSL_FAIL("DelayedFileDeletion::OnTryDeleteFile: caught a strange exception!" );
             bSuccess = true;
-                // can't do anything here ...
+                
         }
 
         if ( bSuccess )
         {
             SWUnoHelper::UCB_DeleteFile( m_sTemporaryFile );
             aGuard.clear();
-            release();  // this should be our last reference, we should be dead after this
+            release();  
         }
         return 0L;
     }
 
     void DelayedFileDeletion::implTakeOwnership( )
     {
-        // revoke ourself as listener
+        
         try
         {
             m_xDocument->removeCloseListener( this );
@@ -295,9 +295,9 @@ namespace
             OSL_FAIL("DelayedFileDeletion::implTakeOwnership: could not revoke the listener!" );
         }
 
-        m_aDeleteTimer.SetTimeout( 3000 );  // 3 seconds
+        m_aDeleteTimer.SetTimeout( 3000 );  
         m_aDeleteTimer.SetTimeoutHdl( LINK( this, DelayedFileDeletion, OnTryDeleteFile ) );
-        m_nPendingDeleteAttempts = 3;   // try 3 times at most
+        m_nPendingDeleteAttempts = 3;   
         m_aDeleteTimer.Start( );
     }
 
@@ -307,25 +307,25 @@ namespace
         if ( _bGetsOwnership )
             implTakeOwnership( );
 
-        // always veto: We want to take the ownership ourself, as this is the only chance to delete
-        // the temporary file which the model is based on
+        
+        
         throw util::CloseVetoException( );
     }
 
     void SAL_CALL DelayedFileDeletion::notifyClosing( const EventObject&  ) throw (RuntimeException)
     {
         OSL_FAIL("DelayedFileDeletion::notifyClosing: how this?" );
-        // this should not happen:
-        // Either, a foreign instance closes the document, then we should veto this, and take the ownership
-        // Or, we ourself close the document, then we should not be a listener anymore
+        
+        
+        
     }
 
     void SAL_CALL DelayedFileDeletion::disposing( const EventObject&  ) throw (RuntimeException)
     {
         OSL_FAIL("DelayedFileDeletion::disposing: how this?" );
-        // this should not happen:
-        // Either, a foreign instance closes the document, then we should veto this, and take the ownership
-        // Or, we ourself close the document, then we should not be a listener anymore
+        
+        
+        
     }
 
     DelayedFileDeletion::~DelayedFileDeletion( )
@@ -344,27 +344,27 @@ static bool DeleteTmpFile_Impl(
         bool bDelete = true;
         if ( eVetoed == CloseModelAndDocSh( rxModel, rxDocSh ) )
         {
-            // somebody vetoed the closing, and took the ownership of the document
-            // -> ensure that the temporary file is deleted later on
+            
+            
             Reference< XEventListener > xEnsureDelete( new DelayedFileDeletion( rxModel, rTmpFileURL ) );
-                // note: as soon as #106931# is fixed, the whole DelayedFileDeletion is to be superseeded by
-                // a better solution
+                
+                
             bDelete = false;
         }
 
         rxModel = 0;
-        rxDocSh = 0; // destroy doc shell
+        rxDocSh = 0; 
 
         if ( bDelete )
         {
             if ( !SWUnoHelper::UCB_DeleteFile( rTmpFileURL ) )
             {
                 Reference< XEventListener > xEnsureDelete( new DelayedFileDeletion( rxModel, rTmpFileURL ) );
-                    // same not as above: as soon as #106931#, ...
+                    
             }
         }
         else
-            bRes = true;    // file will be deleted delayed
+            bRes = true;    
     }
     return bRes;
 }
@@ -376,7 +376,7 @@ SwXMailMerge::SwXMailMerge() :
     pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_MAILMERGE ) ),
     nDataCommandType(sdb::CommandType::TABLE),
     nOutputType(MailMergeType::PRINTER),
-    bEscapeProcessing(sal_True),     //!! allow to process properties like "Filter", "Order", ...
+    bEscapeProcessing(sal_True),     
     bSinglePrintJobs(sal_False),
     bFileNameFromColumn(sal_False),
     bSendAsHTML(sal_False),
@@ -385,13 +385,13 @@ SwXMailMerge::SwXMailMerge() :
     bDisposing(sal_False),
     m_pMgr(0)
 {
-    // create empty document
-    // like in: SwModule::InsertEnv (appenv.cxx)
+    
+    
     xDocSh = new SwDocShell( SFX_CREATE_MODE_STANDARD );
     xDocSh->DoInitNew( 0 );
     SfxViewFrame *pFrame = SfxViewFrame::LoadHiddenDocument( *xDocSh, 0 );
     SwView *pView = (SwView*) pFrame->GetViewShell();
-    pView->AttrChangedNotify( &pView->GetWrtShell() ); //So that SelectShell is called.
+    pView->AttrChangedNotify( &pView->GetWrtShell() ); 
     xModel = xDocSh->GetModel();
 }
 
@@ -399,20 +399,20 @@ SwXMailMerge::~SwXMailMerge()
 {
     if (!aTmpFileName.isEmpty())
         DeleteTmpFile_Impl( xModel, xDocSh, aTmpFileName );
-    else    // there was no temporary file in use
+    else    
     {
-        //! we still need to close the model and doc shell manually
-        //! because there is no automatism that will do that later.
-        //! #120086#
+        
+        
+        
         if ( eVetoed == CloseModelAndDocSh( xModel, xDocSh ) )
             OSL_FAIL("owner ship transfered to vetoing object!" );
 
         xModel = 0;
-        xDocSh = 0; // destroy doc shell
+        xDocSh = 0; 
     }
 }
 
-// Guarantee object consistence in case of an exception
+
 class MailMergeExecuteFinalizer {
 public:
     MailMergeExecuteFinalizer(SwXMailMerge *mailmerge) {
@@ -425,7 +425,7 @@ public:
     }
 
 private:
-    // Disallow copy
+    
     MailMergeExecuteFinalizer(const MailMergeExecuteFinalizer&) {}
 
     SwXMailMerge *m_aMailMerge;
@@ -438,9 +438,9 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     SolarMutexGuard aGuard;
     MailMergeExecuteFinalizer aFinalizer(this);
 
-    // get property values to be used
-    // (use values from the service as default and override them with
-    // the values that are provided as arguments)
+    
+    
+    
 
     uno::Sequence< uno::Any >           aCurSelection   = aSelection;
     uno::Reference< sdbc::XResultSet >  xCurResultSet   = xResultSet;
@@ -458,7 +458,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     sal_Bool   bCurSinglePrintJobs      = bSinglePrintJobs;
     sal_Bool   bCurFileNameFromColumn   = bFileNameFromColumn;
 
-    SfxObjectShellRef xCurDocSh = xDocSh;   // the document
+    SfxObjectShellRef xCurDocSh = xDocSh;   
 
     const beans::NamedValue *pArguments = rArguments.getConstArray();
     sal_Int32 nArgs = rArguments.getLength();
@@ -551,8 +551,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             throw IllegalArgumentException("Property type mismatch or property not set: " + rName, static_cast < cppu::OWeakObject * > ( this ), 0 );
     }
 
-    // need to translate the selection: the API here requires a sequence of bookmarks, but the MergeNew
-    // method we will call below requires a sequence of indicies.
+    
+    
     if ( aCurSelection.getLength() )
     {
         Sequence< Any > aTranslated( aCurSelection.getLength() );
@@ -603,12 +603,12 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         throw RuntimeException();
     SwWrtShell &rSh = *pView->GetWrtShellPtr();
 
-    // avoid assertion in 'Update' from Sfx by supplying a shell
-    // and thus avoiding the SelectShell call in Writers GetState function
-    // while still in Update of Sfx.
-    // (GetSelection in Update is not allowed)
+    
+    
+    
+    
     if (!aCurDocumentURL.isEmpty())
-        pView->AttrChangedNotify( &pView->GetWrtShell() );//So that SelectShell is called.
+        pView->AttrChangedNotify( &pView->GetWrtShell() );
 
     SharedComponent aRowSetDisposeHelper;
     if (!xCurResultSet.is())
@@ -620,7 +620,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         }
 
         //
-        // build ResultSet from DataSourceName, DataCommand and DataCommandType
+        
         //
         Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
         if (xMgr.is())
@@ -642,7 +642,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
                 Reference< sdbc::XRowSet > xRowSet( xInstance, UNO_QUERY );
                 if (xRowSet.is())
-                    xRowSet->execute(); // build ResultSet from properties
+                    xRowSet->execute(); 
                 if( !xCurConnection.is() )
                     xCurConnection.set( xRowSetPropSet->getPropertyValue( "ActiveConnection" ), UNO_QUERY );
                 xCurResultSet = Reference< sdbc::XResultSet >( xRowSet, UNO_QUERY );
@@ -658,8 +658,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     aDescriptor[ svx::daCommandType ]        <<= nCurDataCommandType;
     aDescriptor[ svx::daEscapeProcessing ]   <<= bCurEscapeProcessing;
     aDescriptor[ svx::daCursor ]             <<= xCurResultSet;
-    // aDescriptor[ svx::daColumnName ]      not used
-    // aDescriptor[ svx::daColumnObject ]    not used
+    
+    
     aDescriptor[ svx::daSelection ]          <<= aCurSelection;
 
     sal_uInt16 nMergeType;
@@ -673,7 +673,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     }
 
     SwNewDBMgr* pMgr = rSh.GetNewDBMgr();
-    //force layout creation
+    
     rSh.CalcLayout();
     OSL_ENSURE( pMgr, "database manager missing" );
     m_pMgr = pMgr;
@@ -688,8 +688,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         SwPrintData aPrtData( pIDDA->getPrintData() );
         aPrtData.SetPrintSingleJobs( bCurSinglePrintJobs );
         pIDDA->setPrintData( aPrtData );
-        // #i25686# printing should not be done asynchronously to prevent dangling offices
-        // when mail merge is called as command line macro
+        
+        
         aMergeDesc.bPrintAsync = sal_False;
         aMergeDesc.aPrintOptions = aPrintSettings;
         aMergeDesc.bCreateSingleFile = true;
@@ -701,18 +701,18 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
         if (!aCurDocumentURL.isEmpty())
         {
-            // if OutputURL or FileNamePrefix are missing get
-            // them from DocumentURL
+            
+            
             aURLObj.SetSmartURL( aCurDocumentURL );
             if (aCurFileNamePrefix.isEmpty())
-                aCurFileNamePrefix = aURLObj.GetBase(); // filename without extension
+                aCurFileNamePrefix = aURLObj.GetBase(); 
             if (aCurOutputURL.isEmpty())
             {
                 aURLObj.removeSegment();
                 aCurOutputURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
             }
         }
-        else    // default empty document without URL
+        else    
         {
             if (aCurOutputURL.isEmpty())
                 throw RuntimeException("OutputURL is not set and can not be obtained.", static_cast < cppu::OWeakObject * > ( this ) );
@@ -766,7 +766,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
         }
     }
 
-    // save document with temporary filename
+    
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
             OUString( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
@@ -790,10 +790,10 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     if ( !bStoredAsTemporary )
         throw RuntimeException("Failed to save temporary file.", static_cast < cppu::OWeakObject * > ( this ) );
 
-    pMgr->SetMergeSilent( sal_True );       // suppress dialogs, message boxes, etc.
+    pMgr->SetMergeSilent( sal_True );       
     const SwXMailMerge *pOldSrc = pMgr->GetMailMergeEvtSrc();
     OSL_ENSURE( !pOldSrc || pOldSrc == this, "Ooops... different event source already set." );
-    pMgr->SetMailMergeEvtSrc( this );   // launch events for listeners
+    pMgr->SetMailMergeEvtSrc( this );   
 
     SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), xCurDocSh));
     sal_Bool bSucc = pMgr->MergeNew( aMergeDesc );
@@ -802,16 +802,16 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     pMgr->SetMailMergeEvtSrc( pOldSrc );
 
     if ( xCurModel.get() != xModel.get() )
-    {   // in case it was a temporary model -> close it, and delete the file
+    {   
         DeleteTmpFile_Impl( xCurModel, xCurDocSh, aTmpFileName );
         aTmpFileName = "";
     }
-    // (in case it wasn't a temporary model, it will be closed in the dtor, at the latest)
+    
 
     if (!bSucc)
         throw Exception("Mail merge failed. Sorry, no further information available.", static_cast < cppu::OWeakObject * > ( this ) );
 
-    //de-initialize services
+    
     if(xInService.is() && xInService->isConnected())
         xInService->disconnect();
     if(aMergeDesc.xSmtpServer.is() && aMergeDesc.xSmtpServer->isConnected())
@@ -822,8 +822,8 @@ uno::Any SAL_CALL SwXMailMerge::execute(
 
 void SAL_CALL SwXMailMerge::cancel() throw (com::sun::star::uno::RuntimeException)
 {
-    // Cancel may be called from a second thread, so this protects from m_pMgr
-    /// cleanup in the execute function.
+    
+    
     osl::MutexGuard pMgrGuard( GetMailMergeMutex() );
     if (m_pMgr)
         m_pMgr->MergeCancel();
@@ -1110,7 +1110,7 @@ void SAL_CALL SwXMailMerge::addVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rListener*/ )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // no vetoable property, thus no support for vetoable change listeners
+    
     OSL_FAIL("not implemented");
 }
 
@@ -1119,7 +1119,7 @@ void SAL_CALL SwXMailMerge::removeVetoableChangeListener(
         const uno::Reference< beans::XVetoableChangeListener >& /*rListener*/ )
     throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // no vetoable property, thus no support for vetoable change listeners
+    
     OSL_FAIL("not implemented");
 }
 
@@ -1218,7 +1218,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMailMerge_createInstance(
 {
     SolarMutexGuard aGuard;
 
-    //the module may not be loaded
+    
     SwGlobals::ensure();
     uno::Reference< uno::XInterface > xRef = (cppu::OWeakObject *) new SwXMailMerge();
     return xRef;

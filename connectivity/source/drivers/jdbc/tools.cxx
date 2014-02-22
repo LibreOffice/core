@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,13 +42,13 @@ void java_util_Properties::setProperty(const OUString key, const OUString& value
 
     {
         jvalue args[2];
-        // Convert Parameter
+        
         args[0].l = convertwchar_tToJavaString(t.pEnv,key);
         args[1].l = convertwchar_tToJavaString(t.pEnv,value);
-        // Initialize temporary Variables
+        
         static const char * cSignature = "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/Object;";
         static const char * cMethodName = "setProperty";
-        // Turn off Java-Call
+        
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallObjectMethod(object, mID, args[0].l,args[1].l);
@@ -58,8 +58,8 @@ void java_util_Properties::setProperty(const OUString key, const OUString& value
         ThrowSQLException(t.pEnv,0);
         if(out)
             t.pEnv->DeleteLocalRef(out);
-    } //t.pEnv
-    // WARNING: The caller will be owner of the returned pointers!!!
+    } 
+    
 }
 jclass java_util_Properties::theClass = 0;
 
@@ -68,20 +68,20 @@ java_util_Properties::~java_util_Properties()
 
 jclass java_util_Properties::getMyClass() const
 {
-    // the class needs only be called once, that is why it is static
+    
     if( !theClass )
         theClass = findMyClass("java/util/Properties");
     return theClass;
 }
 
-//--------------------------------------------------------------------------
+
 java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)NULL )
 {
     SDBThreadAttach t;
     if( !t.pEnv )
         return;
-    // Turn off Java-Call for the constructor
-    // Initialize temperary Variables
+    
+    
     static const char * cSignature = "()V";
     jobject tempObj;
     static jmethodID mID(NULL);
@@ -91,7 +91,7 @@ java_util_Properties::java_util_Properties( ): java_lang_Object( NULL, (jobject)
     t.pEnv->DeleteLocalRef( tempObj );
 }
 
-// --------------------------------------------------------------------------------
+
 jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const OUString& _rTemp)
 {
     OSL_ENSURE(pEnv,"Environment is NULL!");
@@ -101,7 +101,7 @@ jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const OUString& _r
     return pStr;
 }
 
-// --------------------------------------------------------------------------------
+
 java_util_Properties* connectivity::createStringPropertyArray(const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
 {
     java_util_Properties* pProps = new java_util_Properties();
@@ -110,7 +110,7 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
 
     for(;pBegin != pEnd;++pBegin)
     {
-        // this is a special property to find the jdbc driver
+        
         if  (   pBegin->Name.compareToAscii( "JavaDriverClass" )
             &&  pBegin->Name.compareToAscii( "JavaDriverClassPath" )
             &&  pBegin->Name.compareToAscii( "SystemProperties" )
@@ -152,7 +152,7 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
     }
     return pProps;
 }
-// --------------------------------------------------------------------------------
+
 OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring _Str)
 {
     OUString aStr;
@@ -169,7 +169,7 @@ OUString connectivity::JavaString2String(JNIEnv *pEnv,jstring _Str)
     }
     return aStr;
 }
-// --------------------------------------------------------------------------------
+
 jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< ::com::sun::star::container::XNameAccess > & _rMap)
 {
     if ( _rMap.is() )
@@ -180,7 +180,7 @@ jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< 
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
 {
     if ( !pEnv )
@@ -208,14 +208,14 @@ sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
 
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
 {
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )
         return NULL;
-    // Turn off Java-Call for the constructor
-    // Initialize temperary variables
+    
+    
     jclass clazz = java_lang_Object::findMyClass("java/io/ByteArrayInputStream");
     static jmethodID mID(NULL);
     if  ( !mID )
@@ -225,7 +225,7 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
         OSL_ENSURE( mID, cSignature );
         if  ( !mID )
             throw SQLException();
-    } // if  ( !_inout_MethodID )
+    } 
     jbyteArray pByteArray = t.pEnv->NewByteArray(length);
     Sequence< sal_Int8 > aData;
     x->readBytes(aData,length);
@@ -235,14 +235,14 @@ jobject connectivity::createByteInputStream(const ::com::sun::star::uno::Referen
     t.pEnv->DeleteLocalRef((jbyteArray)pByteArray);
     return out;
 }
-// -----------------------------------------------------------------------------
+
 jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& x,sal_Int32 length)
 {
     SDBThreadAttach t;
     if( !t.pEnv || !x.is() )
         return NULL;
-    // Turn off Java-Call for the constructor
-    // Initialize temperary Variables
+    
+    
     jclass clazz = java_lang_Object::findMyClass("java/io/CharArrayReader");
     static jmethodID mID(NULL);
     if  ( !mID )
@@ -252,7 +252,7 @@ jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Referen
         OSL_ENSURE( mID, cSignature );
         if  ( !mID )
             throw SQLException();
-    } // if  ( !_inout_MethodID )
+    } 
     jcharArray pCharArray = t.pEnv->NewCharArray(length);
     Sequence< sal_Int8 > aData;
     x->readBytes(aData,length);
@@ -262,6 +262,6 @@ jobject connectivity::createCharArrayReader(const ::com::sun::star::uno::Referen
     t.pEnv->DeleteLocalRef((jcharArray)pCharArray);
     return out;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

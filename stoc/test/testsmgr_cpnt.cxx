@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/alloc.h>
@@ -92,14 +92,14 @@ public:
     Test_Manager_Impl(){ nInstanceCount++;}
     ~Test_Manager_Impl();
 
-    // XServiceInfo
+    
     OUString                    SAL_CALL getImplementationName() throw();
     sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw();
     Sequence< OUString >        SAL_CALL getSupportedServiceNames(void) throw();
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(void) throw();
 
 private:
-//  static XIdlClassRef     getStaticIdlClass();
+
 };
 
 Test_Manager_Impl::~Test_Manager_Impl()
@@ -108,15 +108,15 @@ Test_Manager_Impl::~Test_Manager_Impl()
 }
 
 
-// old, is no longer needed by the new Mimic
+
 Reference< XInterface > SAL_CALL Test_Manager_Impl_CreateInstance_Impl()
 {
     return (OWeakObject *)new Test_Manager_Impl();
 }
 
 
-//*************************************************************************
-// Test_Manager_Impl_CreateInstance()
+
+
 //
 Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
     const Reference< XMultiServiceFactory > & /*rSMgr*/ ) throw (Exception)
@@ -127,30 +127,30 @@ Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
 }
 
 
-//*************************************************************************
-// Test_Manager_Impl::getImplementationName
+
+
 //
 OUString Test_Manager_Impl::getImplementationName() throw()
 {
     return OUString(IMPLEMENTATION_NAME);
 }
 
-// Test_Manager_Impl::supportsService
+
 sal_Bool Test_Manager_Impl::supportsService( const OUString& ServiceName ) throw()
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-//*************************************************************************
-// Test_Manager_Impl::getSupportedServiceNames
+
+
 //
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames(void) throw ()
 {
     return getSupportedServiceNames_Static();
 }
 
-//*************************************************************************
-// Test_Manager_Impl::getSupportedServiceNames_Static
+
+
 //
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static(void) throw ()
 {
@@ -181,10 +181,10 @@ extern "C" void SAL_CALL test_ServiceManager()
 #endif
      OUString atUModule2 = SAL_DLLPREFIX "testsmgr_component" SAL_DLLEXTENSION ;
 
-    // expand shared library name
+    
     OString  atModule2( OUStringToOString(atUModule2, RTL_TEXTENCODING_ASCII_US) );
 
-    // get the process servicemanager
+    
     Reference <XMultiServiceFactory>  xSMgr = getProcessServiceManager();
 
     OSL_ENSURE( xSMgr.is() , "query on XServiceManager failed" );
@@ -215,11 +215,11 @@ extern "C" void SAL_CALL test_ServiceManager()
     }
     OSL_ENSURE( nLen == 8, "more than 6 factories" );
 
-    // try to get an instance for a unknown service
+    
     OSL_VERIFY( !xSMgr->createInstance("bla.blup.Q").is() );
 
     //
-    // First test : register service via the internal function of the component itself
+    
     //
     {
         Reference< XImplementationRegistration >
@@ -227,25 +227,25 @@ extern "C" void SAL_CALL test_ServiceManager()
         OSL_ENSURE( xInst.is(), "no ImplementationRegistration" );
 
         try {
-            // register the services via writeComponentRegInfo (see at end of this file)
+            
             xInst->registerImplementation(OUString("com.sun.star.loader.SharedLibrary"), atUModule2, Reference< XSimpleRegistry >() );
         }
         catch(const CannotRegisterImplementationException &) {
             OSL_ENSURE( 0, "register implementation failed" );
         }
 
-        // getImplementations() check
+        
          Sequence<OUString> seqImpl = xInst->getImplementations(OUString("com.sun.star.loader.SharedLibrary"), atUModule2);
         OSL_ENSURE( seqImpl.getLength() == 1, "count of implementantions is wrong" );
         OSL_ENSURE( seqImpl.getConstArray()[0] == "com.sun.star.DummyService.V10", "implementation name is not equal" );
 
 
-        // tests, if a service provider can be instantiated.
+        
 
         Reference< XInterface > xIFace(xSMgr->createInstance("com.sun.star.ts.TestManagerImpl"));
         OSL_ENSURE( xIFace.is(), "loadable service not found" );
 
-        // remove the service
+        
         OSL_VERIFY( xInst->revokeImplementation(atUModule2, Reference< XSimpleRegistry > ()) );
     }
 
@@ -260,7 +260,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 
 extern "C"
 {
-//==================================================================================================
+
 sal_Bool SAL_CALL component_writeInfo(
     void * /*pServiceManager*/, void * pRegistryKey )
 {
@@ -287,7 +287,7 @@ sal_Bool SAL_CALL component_writeInfo(
     }
     return sal_False;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {

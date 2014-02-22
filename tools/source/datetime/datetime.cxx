@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <tools/datetime.hxx>
 #include <rtl/math.hxx>
@@ -177,12 +177,12 @@ DateTime& DateTime::operator +=( double fTimeInDays )
         fInt = ::rtl::math::approxFloor( fTimeInDays );
         fFrac = fInt >= fTimeInDays ? 0.0 : fTimeInDays - fInt;
     }
-    Date::operator+=( long(fInt) );     // full days
+    Date::operator+=( long(fInt) );     
     if ( fFrac )
     {
-        Time aTime(0);  // default ctor calls system time, we don't need that
-        fFrac *= ::Time::nanoSecPerDay;   // time expressed in nanoseconds
-        aTime.MakeTimeFromNS( static_cast<sal_Int64>(fFrac) );    // method handles negative ns
+        Time aTime(0);  
+        fFrac *= ::Time::nanoSecPerDay;   
+        aTime.MakeTimeFromNS( static_cast<sal_Int64>(fFrac) );    
         operator+=( aTime );
     }
     return *this;
@@ -202,7 +202,7 @@ double operator -( const DateTime& rDateTime1, const DateTime& rDateTime2 )
     if ( nTime )
     {
         double fTime = double(nTime);
-        fTime /= ::Time::nanoSecPerDay; // convert from nanoseconds to fraction
+        fTime /= ::Time::nanoSecPerDay; 
         if ( nDays < 0 && fTime > 0.0 )
             fTime = 1.0 - fTime;
         return double(nDays) + fTime;

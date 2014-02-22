@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XComponent.hpp>
@@ -56,14 +56,14 @@
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
-// -----------------------------------------------------------------------
 
-// Forward declaration
+
+
 void Main();
 
 String aEmptyStr;
 
-// -----------------------------------------------------------------------
+
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -85,7 +85,7 @@ SAL_IMPLEMENT_MAIN()
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 class MyWin : public WorkWindow
 {
@@ -107,7 +107,7 @@ private:
 
 };
 
-// -----------------------------------------------------------------------
+
 
 void Main()
 {
@@ -118,7 +118,7 @@ void Main()
     Application::Execute();
 }
 
-// -----------------------------------------------------------------------
+
 
 MyWin::MyWin( Window* pParent, WinBits nWinStyle )
     :WorkWindow( pParent, nWinStyle )
@@ -129,56 +129,56 @@ MyWin::MyWin( Window* pParent, WinBits nWinStyle )
     aOKBtn.Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::MouseMove( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseMove( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::MouseButtonDown( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonDown( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::MouseButtonUp( const MouseEvent& rMEvt )
 {
     WorkWindow::MouseButtonUp( rMEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::KeyInput( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::KeyUp( const KeyEvent& rKEvt )
 {
     WorkWindow::KeyUp( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::Paint( const Rectangle& rRect )
 {
     WorkWindow::Paint( rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MyWin::Resize()
 {
     WorkWindow::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( MyWin, Test, PushButton*, pBtn )
 {

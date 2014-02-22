@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/docfile.hxx>
@@ -43,14 +43,14 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
 {
     if( rHint.ISA( INetURLHistoryHint ) && pDoc->GetCurrentViewShell() )
     {
-        // This URL has been changed:
+        
         const INetURLObject* pIURL = ((INetURLHistoryHint&)rHint).GetObject();
         OUString sURL( pIURL->GetMainURL( INetURLObject::NO_DECODE ) ), sBkmk;
 
         SwEditShell* pESh = pDoc->GetEditShell();
 
         if( pDoc->GetDocShell() && pDoc->GetDocShell()->GetMedium() &&
-            // If this is our Doc, we can also have local jumps!
+            
             pDoc->GetDocShell()->GetMedium()->GetName().equals(sURL) )
             sBkmk = OUString(INET_MARK_TOKEN) + pIURL->GetMark();
 
@@ -93,8 +93,8 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
     }
 }
 
-// Check if the URL has been visited before. Via the Doc, if only one Bookmark is set
-// We need to put the Doc's name before it!
+
+
 bool SwDoc::IsVisitedURL( const OUString& rURL ) const
 {
     bool bRet = false;
@@ -110,7 +110,7 @@ bool SwDoc::IsVisitedURL( const OUString& rURL ) const
         else
             bRet = pHist->QueryUrl( rURL );
 
-        // We also want to be informed about status updates in the History
+        
         if( !mpURLStateChgd )
         {
             SwDoc* pD = (SwDoc*)this;

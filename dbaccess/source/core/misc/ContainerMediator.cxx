@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ContainerMediator.hxx"
@@ -207,10 +207,10 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
     ::std::vector< OUString > aPropertyList;
     try
     {
-        // initially copy from the settings object (if existent) to the newly created object
+        
         impl_initSettings_nothrow( _sName, _xDest );
 
-        // collect the to-be-monitored properties
+        
         Reference< XPropertySetInfo > xPSI( _xDest->getPropertySetInfo(), UNO_QUERY_THROW );
         Sequence< Property > aProperties( xPSI->getProperties() );
         const Property* property = aProperties.getConstArray();
@@ -234,6 +234,6 @@ void OContainerMediator::notifyElementCreated( const OUString& _sName, const Ref
     m_aForwardList[ _sName ] = pForward;
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

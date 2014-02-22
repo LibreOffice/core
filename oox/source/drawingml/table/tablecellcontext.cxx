@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -52,23 +52,23 @@ TableCellContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeLis
 {
     switch( aElementToken )
     {
-    case A_TOKEN( txBody ):     // CT_TextBody
+    case A_TOKEN( txBody ):     
         {
             oox::drawingml::TextBodyPtr xTextBody( new oox::drawingml::TextBody );
             mrTableCell.setTextBody( xTextBody );
             return new oox::drawingml::TextBodyContext( *this, *xTextBody );
         }
 
-    case A_TOKEN( tcPr ):       // CT_TableCellProperties
+    case A_TOKEN( tcPr ):       
         {
             mrTableCell.setLeftMargin( rAttribs.getInteger( XML_marL, 91440 ) );
             mrTableCell.setRightMargin( rAttribs.getInteger( XML_marR, 91440 ) );
             mrTableCell.setTopMargin( rAttribs.getInteger( XML_marT, 45720 ) );
             mrTableCell.setBottomMargin( rAttribs.getInteger( XML_marB, 45720 ) );
-            mrTableCell.setVertToken( rAttribs.getToken( XML_vert, XML_horz ) );                  // ST_TextVerticalType
-            mrTableCell.setAnchorToken( rAttribs.getToken( XML_anchor, XML_t ) );                 // ST_TextAnchoringType
+            mrTableCell.setVertToken( rAttribs.getToken( XML_vert, XML_horz ) );                  
+            mrTableCell.setAnchorToken( rAttribs.getToken( XML_anchor, XML_t ) );                 
             mrTableCell.setAnchorCtr( rAttribs.getBool( XML_anchorCtr, false ) );
-            mrTableCell.setHorzOverflowToken( rAttribs.getToken( XML_horzOverflow, XML_clip ) );  // ST_TextHorzOverflowType
+            mrTableCell.setHorzOverflowToken( rAttribs.getToken( XML_horzOverflow, XML_clip ) );  
         }
         break;
         case A_TOKEN( lnL ):
@@ -83,10 +83,10 @@ TableCellContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeLis
                 return new oox::drawingml::LinePropertiesContext( *this, rAttribs, mrTableCell.maLinePropertiesTopLeftToBottomRight );
         case A_TOKEN( lnBlToTr ):
                 return new oox::drawingml::LinePropertiesContext( *this, rAttribs, mrTableCell.maLinePropertiesBottomLeftToTopRight );
-        case A_TOKEN( cell3D ): // CT_Cell3D
+        case A_TOKEN( cell3D ): 
         break;
 
-    case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
+    case A_TOKEN( extLst ):     
     break;
 
     default:

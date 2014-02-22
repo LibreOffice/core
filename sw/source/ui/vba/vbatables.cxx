@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbatables.hxx"
@@ -70,7 +70,7 @@ class TableCollectionHelper : public TableCollectionHelper_Base
 public:
     TableCollectionHelper( const uno::Reference< frame::XModel >& xDocument )
     {
-        // only count the tables in the body text, not in the header/footer
+        
         uno::Reference< container::XIndexAccess > xTables = lcl_getTables( xDocument );
         sal_Int32 nCount = xTables->getCount();
         for( sal_Int32 i = 0; i < nCount; i++ )
@@ -81,7 +81,7 @@ public:
         }
         cachePos = mxTables.begin();
     }
-    // XIndexAccess
+    
     virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         return mxTables.size();
@@ -93,10 +93,10 @@ public:
         uno::Reference< text::XTextTable > xTable( mxTables[ Index ], uno::UNO_QUERY_THROW );
         return uno::makeAny( xTable );
     }
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<text::XTextTable>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0 ; }
-    // XNameAcess
+    
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
@@ -166,11 +166,11 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
     sal_Int32 nCols = 0;
     sal_Int32 nRows = 0;
     SwVbaRange* pVbaRange = dynamic_cast< SwVbaRange* >( Range.get() );
-    // Preconditions
+    
     if ( !( pVbaRange && ( NumRows >>= nRows ) && ( NumColumns >>= nCols ) ) )
-        throw uno::RuntimeException(); // #FIXME better exception??
+        throw uno::RuntimeException(); 
     if ( nCols <= 0 || nRows <= 0 )
-        throw uno::RuntimeException(); // #FIXME better exception??
+        throw uno::RuntimeException(); 
 
     uno::Reference< frame::XModel > xModel( pVbaRange->getDocument(), uno::UNO_QUERY_THROW );
     uno::Reference< lang::XMultiServiceFactory > xMsf( xModel, uno::UNO_QUERY_THROW );
@@ -185,7 +185,7 @@ SwVbaTables::Add( const uno::Reference< word::XRange >& Range, const uno::Any& N
 
     xText->insertTextContent( xTextRange, xContext, true );
 
-    // move the current cursor to the first table cell
+    
     uno::Reference< table::XCellRange > xCellRange( xTable, uno::UNO_QUERY_THROW );
     uno::Reference< text::XText> xFirstCellText( xCellRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
     word::getXTextViewCursor( mxDocument )->gotoRange( xFirstCellText->getStart(), sal_False );
@@ -200,21 +200,21 @@ SwVbaTables::createEnumeration() throw (uno::RuntimeException)
     return new TableEnumerationImpl( mxParent, mxContext, mxDocument, m_xIndexAccess );
 }
 
-// ScVbaCollectionBaseImpl
+
 uno::Any
 SwVbaTables::createCollectionObject( const uno::Any& aSource )
 {
     return lcl_createTable( mxParent, mxContext, mxDocument, aSource );
 }
 
-// XHelperInterface
+
 OUString
 SwVbaTables::getServiceImplName()
 {
     return OUString("SwVbaTables");
 }
 
-// XEnumerationAccess
+
 uno::Type SAL_CALL
 SwVbaTables::getElementType() throw (uno::RuntimeException)
 {

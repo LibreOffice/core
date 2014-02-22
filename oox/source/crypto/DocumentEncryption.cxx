@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -59,8 +59,8 @@ bool DocumentEncryption::encrypt()
     BinaryXInputStream aDocumentInputStream( xInputStream, false );
     aDocumentInputStream.seekToStart();
 
-    aEncryptedPackageStream.writeValue<sal_uInt32>( aLength ); // size
-    aEncryptedPackageStream.writeValue<sal_uInt32>( 0 );       // reserved
+    aEncryptedPackageStream.writeValue<sal_uInt32>( aLength ); 
+    aEncryptedPackageStream.writeValue<sal_uInt32>( 0 );       
 
     mEngine.encrypt(aDocumentInputStream, aEncryptedPackageStream);
 
@@ -73,7 +73,7 @@ bool DocumentEncryption::encrypt()
     return true;
 }
 
-} // namespace core
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

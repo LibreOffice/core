@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,13 +27,13 @@ using namespace com::sun::star::beans;
 
 inline sal_Int32 implMap( Window& /*rWnd*/, sal_Int32 nVal )
 {
-    //return( rWnd.LogicToLogic( Size( nVal, nVal ) ).Height(), MAP_APPFONT, MAP_APPFONT );
+    
     return( nVal << 1 );
 }
 
-// ----------------
-// - ImpSVGDialog -
-// ----------------
+
+
+
 
 ImpSVGDialog::ImpSVGDialog( Window* pParent, Sequence< PropertyValue >& rFilterData ) :
     ModalDialog( pParent ),
@@ -91,13 +91,13 @@ ImpSVGDialog::ImpSVGDialog( Window* pParent, Sequence< PropertyValue >& rFilterD
     maBTHelp.Show();
 }
 
-// -----------------------------------------------------------------------------
+
 
 ImpSVGDialog::~ImpSVGDialog()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
 {
@@ -108,7 +108,7 @@ Sequence< PropertyValue > ImpSVGDialog::GetFilterData()
     return( maConfigItem.GetFilterData() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( ImpSVGDialog, OnToggleCheckbox, CheckBox*, pBox )
 {

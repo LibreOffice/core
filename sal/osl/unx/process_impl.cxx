@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "osl/process.h"
@@ -208,7 +208,7 @@ oslProcessError SAL_CALL osl_getCommandArg (sal_uInt32 nArg, rtl_uString ** strC
  **************************************/
 void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
 {
-    // special case for argc == 0: set up fake command line
+    
     int nArgs(argc ? argc : 1);
     pthread_mutex_lock (&(g_command_args.m_mutex));
     assert (g_command_args.m_nCount == 0);
@@ -218,7 +218,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
             (rtl_uString**)rtl_allocateZeroMemory(nArgs * sizeof(rtl_uString*));
         if (ppArgs != 0 && argc == 0)
         {
-            // special case: set up fake command line
+            
             char const*const arg =
                 "this is just a fake and cheap imitation of a command line";
             rtl_string2UString(&ppArgs[0],
@@ -239,7 +239,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
             }
             if (ppArgs[0] != 0)
             {
-#if !defined(ANDROID) && !defined(IOS) // No use searching PATH on Android or iOS
+#if !defined(ANDROID) && !defined(IOS) 
                 /* see @ osl_getExecutableFile(). */
                 if (rtl_ustr_indexOfChar (rtl_uString_getStr(ppArgs[0]), '/') == -1)
                 {
@@ -344,7 +344,7 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
         rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length,
             rtl_string_getStr(pstr_val), rtl_string_getLength(pstr_val) );
 
-        rtl_string_acquire(pBuffer); // argument to putenv must leak on success
+        rtl_string_acquire(pBuffer); 
 
         if (putenv(rtl_string_getStr(pBuffer)) == 0)
             result = osl_Process_E_None;
@@ -390,16 +390,16 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
             rtl_string_getLength(pstr_env_var) + 1, pstr_env_var );
         rtl_stringbuffer_insert( &pBuffer, &nCapacity, pBuffer->length, "=", 1);
 
-        rtl_string_acquire(pBuffer); // argument to putenv must leak on success
+        rtl_string_acquire(pBuffer); 
 
         if (putenv(rtl_string_getStr(pBuffer)) == 0)
             result = osl_Process_E_None;
         else
             rtl_string_release(pBuffer);
 #elif (defined(MACOSX) || defined(NETBSD) || defined(FREEBSD))
-        //MacOSX baseline is 10.4, which has an old-school void return
-        //for unsetenv.
-                //See: http://developer.apple.com/mac/library/documentation/Darwin/Reference/ManPages/10.4/man3/unsetenv.3.html?useVersion=10.4
+        
+        
+                
         unsetenv(rtl_string_getStr(pstr_env_var));
         result = osl_Process_E_None;
 #else

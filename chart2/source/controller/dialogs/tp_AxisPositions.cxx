@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_AxisPositions.hxx"
@@ -27,17 +27,17 @@
 
 #include <svx/svxids.hrc>
 #include <rtl/math.hxx>
-// header for class SvxDoubleItem
+
 #include <svx/chrtitem.hxx>
-// header for class SfxBoolItem
+
 #include <svl/eitem.hxx>
-// header for SfxInt32Item
+
 #include <svl/intitem.hxx>
 
-// header for class WarningBox
+
 #include <vcl/msgbox.hxx>
 
-// header for class SvNumberformat
+
 #include <svl/zformat.hxx>
 
 #include <svtools/controldims.hrc>
@@ -77,11 +77,11 @@ AxisPositionsTabPage::AxisPositionsTabPage(Window* pWindow,const SfxItemSet& rIn
     get(m_pBxPlaceTicks, "boxPLACE_TICKS");
     get(m_pLB_PlaceTicks, "LB_PLACE_TICKS");
 
-    // these are not used/implemented
-//     get(m_pCB_MajorGrid, "CB_MAJOR_GRID");
-//     get(m_pPB_MajorGrid, "PB_MAJOR_GRID");
-//     get(m_pCB_MinorGrid, "CB_MINOR_GRID");
-//     get(m_pPB_MinorGrid, "PB_MINOR_GRID");
+    
+
+
+
+
 
 
     m_pLB_CrossesAt->SetSelectHdl( LINK( this, AxisPositionsTabPage, CrossesAtSelectHdl ) );
@@ -100,7 +100,7 @@ SfxTabPage* AxisPositionsTabPage::Create(Window* pWindow,const SfxItemSet& rOutA
 
 sal_Bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    // axis line
+    
     sal_uInt16 nPos = m_pLB_CrossesAt->GetSelectEntryPos();
     rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_POSITION, nPos+1 ));
     if( 2==nPos )
@@ -111,12 +111,12 @@ sal_Bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
         rOutAttrs.Put(SvxDoubleItem(fCrossover,SCHATTR_AXIS_POSITION_VALUE));
     }
 
-    // labels
+    
     sal_uInt16 nLabelPos = m_pLB_PlaceLabels->GetSelectEntryPos();
     if( nLabelPos != LISTBOX_ENTRY_NOTFOUND )
         rOutAttrs.Put( SfxInt32Item( SCHATTR_AXIS_LABEL_POSITION, nLabelPos ));
 
-    // tick marks
+    
     long nTicks=0;
     long nMinorTicks=0;
 
@@ -141,7 +141,7 @@ sal_Bool AxisPositionsTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 
 void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
 {
-    //init and enable controls
+    
     m_pED_CrossesAt->Show( !m_bCrossingAxisIsCategoryAxis );
     m_pED_CrossesAtCategory->Show( m_bCrossingAxisIsCategoryAxis );
     const sal_Int32 nMaxCount = LISTBOX_ENTRY_NOTFOUND;
@@ -164,17 +164,17 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
             m_pLB_CrossesAt->RemoveEntry(3);
     }
 
-    //fill controls
+    
     const SfxPoolItem *pPoolItem = NULL;
 
-    //axis line
+    
     if(rInAttrs.GetItemState(SCHATTR_AXIS_POSITION,true, &pPoolItem)== SFX_ITEM_SET)
     {
         bool bZero = false;
         sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
         if(nPos==0)
         {
-            //switch to value
+            
             bZero = true;
             nPos = 2;
         }
@@ -207,7 +207,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
         m_pED_CrossesAt->Enable( false );
     }
 
-    // Labels
+    
     if( rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_POSITION, false, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
@@ -218,7 +218,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
         m_pLB_PlaceLabels->SetNoSelection();
     PlaceLabelsSelectHdl( (void*)0 );
 
-    // Tick marks
+    
     long nTicks=0,nMinorTicks=0;
     if(rInAttrs.GetItemState(SCHATTR_AXIS_TICKS,true, &pPoolItem)== SFX_ITEM_SET)
         nTicks=((const SfxInt32Item*)pPoolItem)->GetValue();
@@ -230,7 +230,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
     m_pCB_MinorInner->Check(sal_Bool(nMinorTicks&CHAXIS_MARK_INNER));
     m_pCB_MinorOuter->Check(sal_Bool(nMinorTicks&CHAXIS_MARK_OUTER));
 
-    // Tick position
+    
     if( rInAttrs.GetItemState( SCHATTR_AXIS_MARK_POSITION, false, &pPoolItem ) == SFX_ITEM_SET )
     {
         sal_uInt16 nPos = (sal_uInt16)static_cast< const SfxInt32Item * >( pPoolItem )->GetValue();
@@ -257,7 +257,7 @@ void AxisPositionsTabPage::Reset(const SfxItemSet& rInAttrs)
 
         m_pBxPlaceTicks->Enable(false);
 
-        //todo: maybe set a special help id to all those controls
+        
     }
 }
 
@@ -329,6 +329,6 @@ IMPL_LINK_NOARG(AxisPositionsTabPage, PlaceLabelsSelectHdl)
     return 0;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

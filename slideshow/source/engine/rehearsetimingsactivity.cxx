@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -88,7 +88,7 @@ public:
                            nCurrentTime - nElapsedTime + mnNextTime );
     }
 
-    /// Start the internal timer
+    
     void start() { maTimer.reset(); }
 
     /** Set the next timeout this object should generate.
@@ -117,7 +117,7 @@ public:
     void reset();
     bool hasBeenClicked() const { return mbHasBeenClicked; }
 
-    // MouseEventHandler
+    
     virtual bool handleMousePressed( awt::MouseEvent const & evt );
     virtual bool handleMouseReleased( awt::MouseEvent const & evt );
     virtual bool handleMouseEntered( awt::MouseEvent const & evt );
@@ -158,7 +158,7 @@ RehearseTimingsActivity::RehearseTimingsActivity( const SlideShowContext& rConte
     maFont.SetAlign( ALIGN_BASELINE );
     maFont.SetColor( COL_BLACK );
 
-    // determine sprite size (in pixel):
+    
     VirtualDevice blackHole;
     blackHole.EnableOutput(false);
     blackHole.SetFont( maFont );
@@ -216,7 +216,7 @@ void RehearseTimingsActivity::start()
     mbDrawPressed = false;
     mbActive = true;
 
-    // paint and show all sprites:
+    
     paintAllSprites();
     for_each_sprite( boost::bind( &cppcanvas::Sprite::show, _1 ) );
 
@@ -234,7 +234,7 @@ double RehearseTimingsActivity::stop()
     mrEventMultiplexer.removeMouseMoveHandler( mpMouseHandler );
     mrEventMultiplexer.removeClickHandler( mpMouseHandler );
 
-    mbActive = false; // will be removed from queue
+    mbActive = false; 
 
     for_each_sprite( boost::bind( &cppcanvas::Sprite::hide, _1 ) );
 
@@ -248,7 +248,7 @@ bool RehearseTimingsActivity::hasBeenClicked() const
     return false;
 }
 
-// Disposable:
+
 void RehearseTimingsActivity::dispose()
 {
     stop();
@@ -259,7 +259,7 @@ void RehearseTimingsActivity::dispose()
     ViewsVecT().swap( maViews );
 }
 
-// Activity:
+
 double RehearseTimingsActivity::calcTimeLag() const
 {
     return 0.0;
@@ -279,11 +279,11 @@ bool RehearseTimingsActivity::perform()
 
     paintAllSprites();
 
-    // sprites changed, need screen update
+    
     mrScreenUpdater.notifyUpdate();
 
-    return false; // don't reinsert, WakeupEvent will perform
-                  // that after the given timeout
+    return false; 
+                  
 }
 
 bool RehearseTimingsActivity::isActive() const
@@ -293,7 +293,7 @@ bool RehearseTimingsActivity::isActive() const
 
 void RehearseTimingsActivity::dequeued()
 {
-    // not used here
+    
 }
 
 void RehearseTimingsActivity::end()
@@ -313,7 +313,7 @@ basegfx::B2DRange RehearseTimingsActivity::calcSpriteRectangle( UnoViewSharedPtr
         return basegfx::B2DRange();
 
     const geometry::IntegerSize2D realSize( xBitmap->getSize() );
-    // pixel:
+    
     basegfx::B2DPoint spritePos(
         std::min<sal_Int32>( realSize.Width, LEFT_BORDER_SPACE ),
         std::max<sal_Int32>( 0, realSize.Height - maSpriteSizePixel.getY()
@@ -336,8 +336,8 @@ void RehearseTimingsActivity::viewAdded( const UnoViewSharedPtr& rView )
         rView->createSprite( basegfx::B2DSize(
                                  maSpriteSizePixel.getX()+2,
                                  maSpriteSizePixel.getY()+2 ),
-                             1001.0 )); // sprite should be in front of all
-                                        // other sprites
+                             1001.0 )); 
+                                        
     sprite->setAlpha( 0.8 );
     const basegfx::B2DRange spriteRectangle(
         calcSpriteRectangle( rView ) );
@@ -362,14 +362,14 @@ void RehearseTimingsActivity::viewRemoved( const UnoViewSharedPtr& rView )
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
-                // select view:
+                
                 boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))),
         maViews.end() );
 }
 
 void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
 {
-    // find entry corresponding to modified view
+    
     ViewsVecT::iterator aModifiedEntry(
         std::find_if(
             maViews.begin(),
@@ -377,20 +377,20 @@ void RehearseTimingsActivity::viewChanged( const UnoViewSharedPtr& rView )
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
-                // select view:
+                
                 boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))));
 
     OSL_ASSERT( aModifiedEntry != maViews.end() );
     if( aModifiedEntry == maViews.end() )
         return;
 
-    // new sprite pos, transformation might have changed:
+    
     maSpriteRectangle = calcSpriteRectangle( rView );
 
-    // reposition sprite:
+    
     aModifiedEntry->second->move( maSpriteRectangle.getMinimum() );
 
-    // sprites changed, need screen update
+    
     mrScreenUpdater.notifyUpdate( rView );
 }
 
@@ -398,15 +398,15 @@ void RehearseTimingsActivity::viewsChanged()
 {
     if( !maViews.empty() )
     {
-        // new sprite pos, transformation might have changed:
+        
         maSpriteRectangle = calcSpriteRectangle( maViews.front().first );
 
-        // reposition sprites
+        
         for_each_sprite( boost::bind( &cppcanvas::Sprite::move,
                                       _1,
                                       boost::cref(maSpriteRectangle.getMinimum())) );
 
-        // sprites changed, need screen update
+        
         mrScreenUpdater.notifyUpdate();
     }
 }
@@ -415,14 +415,14 @@ void RehearseTimingsActivity::paintAllSprites() const
 {
     for_each_sprite(
         boost::bind( &RehearseTimingsActivity::paint, this,
-                     // call getContentCanvas() on each sprite:
+                     
                      boost::bind(
                          &cppcanvas::CustomSprite::getContentCanvas, _1 ) ) );
 }
 
 void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas ) const
 {
-    // build timer string:
+    
     const sal_Int32 nTimeSecs =
         static_cast<sal_Int32>(maElapsedTime.getElapsedTime());
     OUStringBuffer buf;
@@ -442,7 +442,7 @@ void RehearseTimingsActivity::paint( cppcanvas::CanvasSharedPtr const & canvas )
     buf.append( n );
     const OUString time = buf.makeStringAndClear();
 
-    // create the MetaFile:
+    
     GDIMetaFile metaFile;
     VirtualDevice blackHole;
     metaFile.Record( &blackHole );
@@ -514,7 +514,7 @@ void RehearseTimingsActivity::MouseHandler::updatePressedState(
     }
 }
 
-// MouseEventHandler
+
 bool RehearseTimingsActivity::MouseHandler::handleMousePressed(
     awt::MouseEvent const & evt )
 {
@@ -522,7 +522,7 @@ bool RehearseTimingsActivity::MouseHandler::handleMousePressed(
     {
         mbMouseStartedInArea = true;
         updatePressedState(true);
-        return true; // consume event
+        return true; 
     }
     return false;
 }
@@ -532,11 +532,11 @@ bool RehearseTimingsActivity::MouseHandler::handleMouseReleased(
 {
     if( evt.Buttons == awt::MouseButton::LEFT && mbMouseStartedInArea )
     {
-        mbHasBeenClicked = isInArea(evt); // fini if in
+        mbHasBeenClicked = isInArea(evt); 
         mbMouseStartedInArea = false;
         updatePressedState(false);
         if( !mbHasBeenClicked )
-            return true; // consume event, else next slide (manual advance)
+            return true; 
     }
     return false;
 }
@@ -567,7 +567,7 @@ bool RehearseTimingsActivity::MouseHandler::handleMouseMoved(
     return false;
 }
 
-} // namespace internal
-} // namespace presentation
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

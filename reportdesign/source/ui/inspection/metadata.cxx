@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "metadata.hxx"
 #include <svtools/localresaccess.hxx>
@@ -27,17 +27,17 @@
 #include <functional>
 #include <algorithm>
 
-//............................................................................
+
 namespace rptui
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star;
 
-    //========================================================================
-    //= OPropertyInfoImpl
-    //========================================================================
+    
+    
+    
     struct OPropertyInfoImpl
     {
         OUString        sName;
@@ -54,7 +54,7 @@ namespace rptui
                         sal_uInt32             _nUIFlags);
     };
 
-    //------------------------------------------------------------------------
+    
     OPropertyInfoImpl::OPropertyInfoImpl(const OUString& _rName, sal_Int32 _nId,
                                    const OUString& aString, const OString& sHid, sal_uInt32 _nUIFlags)
        :sName(_rName)
@@ -65,8 +65,8 @@ namespace rptui
     {
     }
 
-    //------------------------------------------------------------------------
-    // Vergleichen von PropertyInfo
+    
+    
     struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
         bool operator()( const OPropertyInfoImpl& _lhs, const OPropertyInfoImpl& _rhs )
@@ -75,9 +75,9 @@ namespace rptui
         }
     };
 
-    //========================================================================
-    //= OPropertyInfoService
-    //========================================================================
+    
+    
+    
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
             OUString( ModuleRes( RID_STR_##uinameres ) ), HID_RPT_PROP_##helpid, flags )
@@ -90,14 +90,14 @@ namespace rptui
 
     sal_uInt16              OPropertyInfoService::s_nCount = 0;
     OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
-    //------------------------------------------------------------------------
+    
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
         if ( s_pPropertyInfos )
             return s_pPropertyInfos;
 
         OModuleClient aResourceAccess;
-        // this ensures that we have our resource file loaded
+        
 
         static OPropertyInfoImpl aPropertyInfos[] =
         {
@@ -155,38 +155,38 @@ namespace rptui
         return s_pPropertyInfos;
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Int32 OPropertyInfoService::getPropertyId(const OUString& _rName) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_rName);
         return pInfo ? pInfo->nId : -1;
     }
 
-    //------------------------------------------------------------------------
+    
     OUString OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sTranslation : OUString();
     }
 
-    //------------------------------------------------------------------------
+    
     OString OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sHelpId : OString();
     }
 
-    //------------------------------------------------------------------------
+    
     sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nUIFlags : 0;
     }
 
-    //------------------------------------------------------------------------
+    
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const OUString& _rName)
     {
-        // intialisierung
+        
         if(!s_pPropertyInfos)
             getPropertyInfo();
         OPropertyInfoImpl  aSearch(_rName, 0L, OUString(), "", 0);
@@ -201,14 +201,14 @@ namespace rptui
     }
 
 
-    //------------------------------------------------------------------------
+    
     const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
-        // intialisierung
+        
         if(!s_pPropertyInfos)
             getPropertyInfo();
 
-        // TODO: a real structure which allows quick access by name as well as by id
+        
         for (sal_uInt16 i = 0; i < s_nCount; i++)
             if (s_pPropertyInfos[i].nId == _nId)
                 return &s_pPropertyInfos[i];
@@ -216,7 +216,7 @@ namespace rptui
         return NULL;
     }
 
-    //------------------------------------------------------------------------
+    
     bool OPropertyInfoService::isComposable( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _rxFormComponentHandler )
     {
         sal_Int32 nId = getPropertyId( _rPropertyName );
@@ -229,7 +229,7 @@ namespace rptui
         return _rxFormComponentHandler->isComposable( _rPropertyName );
     }
 
-    //------------------------------------------------------------------------
+    
     void OPropertyInfoService::getExcludeProperties(::std::vector< beans::Property >& _rExcludeProperties,const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyHandler >& _xFormComponentHandler)
     {
         uno::Sequence< beans::Property > aProps = _xFormComponentHandler->getSupportedProperties();
@@ -256,9 +256,9 @@ namespace rptui
                 OUString("SpinIncrement"),
                 OUString("Repeat"),
                 OUString("RepeatDelay"),
-                OUString("ControlLabel"), /// TODO: has to be checked
+                OUString("ControlLabel"), 
                 OUString("LabelControl"),
-                OUString("Title"), // comment this out if you want to have title feature for charts
+                OUString("Title"), 
                 OUString(PROPERTY_MAXTEXTLEN),
                 OUString(PROPERTY_EFFECTIVEDEFAULT),
                 OUString(PROPERTY_EFFECTIVEMAX),
@@ -303,8 +303,8 @@ namespace rptui
     }
 
 
-//............................................................................
-} // namespace pcr
-//............................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

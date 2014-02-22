@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/urlobj.hxx>
@@ -106,7 +106,7 @@ bool operator==(const util::DateTime &i_rLeft, const util::DateTime &i_rRight)
         && i_rLeft.IsUTC            == i_rRight.IsUTC;
 }
 
-// STATIC DATA -----------------------------------------------------------
+
 TYPEINIT1_AUTOFACTORY(SfxDocumentInfoItem, SfxStringItem);
 
 const sal_uInt16 HI_NAME = 1;
@@ -116,7 +116,7 @@ const sal_uInt16 HI_ACTION = 4;
 
 static const char DOCUMENT_SIGNATURE_MENU_CMD[] = "Signature";
 
-//------------------------------------------------------------------------
+
 namespace {
 
 OUString CreateSizeText( sal_Int64 nSize )
@@ -193,7 +193,7 @@ OUString ConvertDateTime_Impl( const OUString& rName,
 }
 
 }
-//------------------------------------------------------------------------
+
 
 SfxDocumentInfoItem::SfxDocumentInfoItem()
     : SfxStringItem()
@@ -220,7 +220,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
@@ -260,7 +260,7 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
             sal_Int32 nCount = lProps.getLength();
             for ( sal_Int32 i = 0; i < nCount; ++i )
             {
-                // "fix" property? => not a custom property => ignore it!
+                
                 if (!(pProps[i].Attributes &
                         ::com::sun::star::beans::PropertyAttribute::REMOVABLE))
                 {
@@ -274,13 +274,13 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const OUString& rFile,
             }
         }
 
-        // get CMIS properties
+        
         m_aCmisProperties = i_cmisProps;
     }
     catch ( Exception& ) {}
 }
 
-//------------------------------------------------------------------------
+
 
 SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     : SfxStringItem( rItem )
@@ -315,19 +315,19 @@ SfxDocumentInfoItem::SfxDocumentInfoItem( const SfxDocumentInfoItem& rItem )
     m_aCmisProperties = rItem.m_aCmisProperties;
 }
 
-//------------------------------------------------------------------------
+
 SfxDocumentInfoItem::~SfxDocumentInfoItem()
 {
     ClearCustomProperties();
 }
 
-//------------------------------------------------------------------------
+
 SfxPoolItem* SfxDocumentInfoItem::Clone( SfxItemPool * ) const
 {
     return new SfxDocumentInfoItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
 {
     if (!(rItem.Type() == Type() && SfxStringItem::operator==(rItem)))
@@ -357,7 +357,7 @@ bool SfxDocumentInfoItem::operator==( const SfxPoolItem& rItem) const
          m_aCmisProperties.getLength() == rInfoItem.m_aCmisProperties.getLength();
 }
 
-//------------------------------------------------------------------------
+
 void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
 {
     setAuthor(i_rAuthor);
@@ -373,7 +373,7 @@ void SfxDocumentInfoItem::resetUserData(const OUString & i_rAuthor)
     setEditingCycles(1);
 }
 
-//------------------------------------------------------------------------
+
 void SfxDocumentInfoItem::UpdateDocumentInfo(
         const uno::Reference<document::XDocumentProperties>& i_xDocProps,
         bool i_bDoNotUpdateUserDefined) const
@@ -400,12 +400,12 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
     i_xDocProps->setSubject(getSubject());
     i_xDocProps->setTitle(getTitle());
 
-    // this is necessary in case of replaying a recorded macro:
-    // in this case, the macro may contain the 4 old user-defined DocumentInfo
-    // fields, but not any of the DocumentInfo properties;
-    // as a consequence, most of the UserDefined properties of the
-    // DocumentProperties would be summarily deleted here, which does not
-    // seem like a good idea.
+    
+    
+    
+    
+    
+    
     if (i_bDoNotUpdateUserDefined)
         return;
 
@@ -445,7 +445,7 @@ void SfxDocumentInfoItem::UpdateDocumentInfo(
     }
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool SfxDocumentInfoItem::IsDeleteUserData() const
 {
     return m_bDeleteUserData;
@@ -578,7 +578,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
                 SetUseUserData( bValue );
             break;
         case MID_DOCINFO_DELETEUSERDATA:
-            // QUESTION: deleting user data was done here; seems to be superfluous!
+            
             bRet = (rVal >>= bValue);
             if ( bRet )
                 SetDeleteUserData( bValue );
@@ -631,7 +631,7 @@ bool SfxDocumentInfoItem::PutValue( const Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-//------------------------------------------------------------------------
+
 SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "DescriptionInfoPage", "sfx/ui/descriptioninfopage.ui", rItemSet)
     , m_pInfoItem   ( NULL )
@@ -643,16 +643,16 @@ SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rI
     get(m_pCommentEd, "comments");
 }
 
-//------------------------------------------------------------------------
+
 SfxTabPage *SfxDocumentDescPage::Create(Window *pParent, const SfxItemSet &rItemSet)
 {
      return new SfxDocumentDescPage(pParent, rItemSet);
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
 {
-    // Test whether a change is present
+    
     const sal_Bool bTitleMod = m_pTitleEd->IsModified();
     const sal_Bool bThemeMod = m_pThemaEd->IsModified();
     const sal_Bool bKeywordsMod = m_pKeywordsEd->IsModified();
@@ -662,7 +662,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
         return sal_False;
     }
 
-    // Generating the output data
+    
     const SfxPoolItem* pItem = NULL;
     SfxDocumentInfoItem* pInfo = NULL;
     SfxTabDialog* pDlg = GetTabDialog();
@@ -707,7 +707,7 @@ sal_Bool SfxDocumentDescPage::FillItemSet(SfxItemSet &rSet)
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
 {
     m_pInfoItem = &(SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
@@ -727,7 +727,7 @@ void SfxDocumentDescPage::Reset(const SfxItemSet &rSet)
     }
 }
 
-//------------------------------------------------------------------------
+
 namespace
 {
     OUString GetDateTimeString( sal_Int32 _nDate, sal_Int32 _nTime )
@@ -742,7 +742,7 @@ namespace
         return aStr;
     }
 
-    // copy from xmlsecurity/source/dialog/resourcemanager.cxx
+    
     OUString GetContentPart( const OUString& _rRawString, const OUString& _rPartId )
     {
         OUString s;
@@ -751,7 +751,7 @@ namespace
         if ( nContStart != -1 )
         {
             nContStart = nContStart + _rPartId.getLength();
-            ++nContStart; // now it's start of content, directly after Id
+            ++nContStart; 
 
             sal_Int32  nContEnd = _rRawString.indexOf( ',', nContStart );
 
@@ -769,7 +769,7 @@ SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
 {
     get(m_pBmp, "icon");
     get(m_pNameED, "nameed");
-//FIXME    m_pNameED->SetAccessibleName( SfxResId( EDIT_FILE_NAME ).toString() );
+
     get(m_pChangePassBtn, "changepass");
 
     get(m_pShowTypeFT, "showtype");
@@ -801,15 +801,15 @@ SfxDocumentPage::SfxDocumentPage(Window* pParent, const SfxItemSet& rItemSet)
     m_pSignatureBtn->SetClickHdl( LINK( this, SfxDocumentPage, SignatureHdl ) );
     m_pDeleteBtn->SetClickHdl( LINK( this, SfxDocumentPage, DeleteHdl ) );
 
-    // [i96288] Check if the document signature command is enabled
-    // on the main list enable/disable the pushbutton accordingly
+    
+    
     SvtCommandOptions aCmdOptions;
     if ( aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED,
                              OUString( DOCUMENT_SIGNATURE_MENU_CMD ) ) )
         m_pSignatureBtn->Disable();
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
 {
@@ -923,14 +923,14 @@ void SfxDocumentPage::ImplCheckPasswordState()
     m_pChangePassBtn->Disable();
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SfxDocumentPage::Create( Window* pParent, const SfxItemSet& rItemSet )
 {
      return new SfxDocumentPage( pParent, rItemSet );
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxDocumentPage::EnableUseUserData()
 {
@@ -939,7 +939,7 @@ void SfxDocumentPage::EnableUseUserData()
     m_pDeleteBtn->Show();
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -998,15 +998,15 @@ sal_Bool SfxDocumentPage::FillItemSet( SfxItemSet& rSet )
     return bRet;
 }
 
-//------------------------------------------------------------------------
+
 
 void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 {
-    // Determine the document information
+    
     const SfxDocumentInfoItem *m_pInfoItem =
         &(const SfxDocumentInfoItem &)rSet.Get(SID_DOCINFO);
 
-    // template data
+    
     if ( m_pInfoItem->HasTemplate() )
         m_pTemplValFt->SetText( m_pInfoItem->getTemplateName() );
     else
@@ -1015,7 +1015,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         m_pTemplValFt->Hide();
     }
 
-    // determine file name
+    
     OUString aFile( m_pInfoItem->GetValue() );
     OUString aFactory( aFile );
     if ( aFile.getLength() > 2 && aFile[0] == '[' )
@@ -1025,7 +1025,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aFile = aFile.copy( nPos+1 );
     }
 
-    // determine name
+    
     OUString aName;
     const SfxPoolItem* pItem = 0;
     if ( SFX_ITEM_SET != rSet.GetItemState( ID_FILETP_TITLE, false, &pItem ) )
@@ -1044,14 +1044,14 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     m_pNameED->SetText( aName );
     m_pNameED->ClearModifyFlag();
 
-    // determine RO-Flag
+    
     if ( SFX_ITEM_UNKNOWN == rSet.GetItemState( ID_FILETP_READONLY, false, &pItem )
          || !pItem )
         m_pReadOnlyCB->Hide();
     else
         m_pReadOnlyCB->Check( ( (SfxBoolItem*)pItem )->GetValue() );
 
-    // determine context symbol
+    
     INetURLObject aURL;
     aURL.SetSmartProtocol( INET_PROT_FILE );
     aURL.SetSmartURL( aFactory);
@@ -1067,7 +1067,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
 
     m_pBmp->SetImage( aImage );
 
-    // determine size and type
+    
     OUString aSizeText( m_aUnknownSize );
     if ( aURL.GetProtocol() == INET_PROT_FILE )
         aSizeText = CreateSizeText( SfxContentHelper::GetSize( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) );
@@ -1078,22 +1078,22 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
         aDescription = SfxResId( STR_SFX_NEWOFFICEDOC ).toString();
     m_pShowTypeFT->SetText( aDescription );
 
-    // determine location
+    
     aURL.SetSmartURL( aFile);
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
         INetURLObject aPath( aURL );
         aPath.setFinalSlash();
         aPath.removeSegment();
-        // we know it's a folder -> don't need the final slash, but it's better for WB_PATHELLIPSIS
+        
         aPath.removeFinalSlash();
-        OUString aText( aPath.PathToFileName() ); //! (pb) MaxLen?
+        OUString aText( aPath.PathToFileName() ); 
         m_pFileValFt->SetText( aText );
     }
     else if ( aURL.GetProtocol() != INET_PROT_PRIVATE )
         m_pFileValFt->SetText( aURL.GetPartBeforeLastName() );
 
-    // handle access data
+    
     sal_Bool m_bUseUserData = m_pInfoItem->IsUseUserData();
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     m_pCreateValFt->SetText( ConvertDateTime_Impl( m_pInfoItem->getAuthor(),
@@ -1127,7 +1127,7 @@ void SfxDocumentPage::Reset( const SfxItemSet& rSet )
     m_pDeleteBtn->Enable( bEnableUseUserData );
 }
 
-//------------------------------------------------------------------------
+
 SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
                                               const SfxItemSet& rItemSet )
     : SfxTabDialog(0, pParent, "DocumentPropertiesDialog",
@@ -1142,13 +1142,13 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     DBG_ASSERT( pURLItem, "No BaseURL provided for InternetTabPage!" );
 #endif
 
-     // Determine the Titels
+     
     const SfxPoolItem* pItem = 0;
     OUString aTitle( GetText() );
     if ( SFX_ITEM_SET !=
          rItemSet.GetItemState( SID_EXPLORER_PROPS_START, false, &pItem ) )
     {
-        // File name
+        
         OUString aFile( m_pInfoItem->GetValue() );
 
         INetURLObject aURL;
@@ -1173,7 +1173,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     }
     SetText( aTitle );
 
-    // Property Pages
+    
     m_nDocInfoId = AddTabPage("general", SfxDocumentPage::Create, 0);
     AddTabPage("description", SfxDocumentDescPage::Create, 0);
     AddTabPage("customprops", SfxCustomPropertiesPage::Create, 0);
@@ -1181,7 +1181,7 @@ SfxDocumentInfoDialog::SfxDocumentInfoDialog( Window* pParent,
     AddTabPage("security", SfxSecurityPage::Create, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxDocumentInfoDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -1194,7 +1194,7 @@ void SfxDocumentInfoDialog::AddFontTabPage()
     AddTabPage( FONT_PAGE_ID, SfxResId( STR_FONT_TABPAGE ).toString(), SfxDocumentFontsPage::Create, 0);
 }
 
-// class CustomPropertiesYesNoButton -------------------------------------
+
 
 CustomPropertiesYesNoButton::CustomPropertiesYesNoButton( Window* pParent, const ResId& rResId ) :
     Control( pParent, rResId ),
@@ -1323,7 +1323,7 @@ IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl)
     delete pDurationDlg;
     return 1;
 }
-//--------------------------------------------------------------------------
+
 void CustomPropertiesYesNoButton::Resize()
 {
     const long nWidth = GetSizePixel().Width();
@@ -1338,7 +1338,7 @@ void CustomPropertiesYesNoButton::Resize()
     m_aNoButton.SetPosSizePixel( aPos, aSize );
 }
 
-// struct CustomPropertyLine ---------------------------------------------
+
 CustomPropertyLine::CustomPropertyLine( Window* pParent ) :
     m_aNameBox      ( pParent, SfxResId( SFX_CB_PROPERTY_NAME ) ),
     m_aTypeBox      ( pParent, SfxResId( SFX_LB_PROPERTY_TYPE ), this ),
@@ -1434,7 +1434,7 @@ IMPL_LINK( CustomPropertiesWindow, TypeHdl, CustomPropertiesTypeBox*, pBox )
     pLine->m_aDurationField.Show( CUSTOM_TYPE_DURATION == nType );
     pLine->m_aEditButton.Show( CUSTOM_TYPE_DURATION == nType );
     pLine->m_aYesNoButton.Show( CUSTOM_TYPE_BOOLEAN == nType );
-    //adjust positions of date and time controls
+    
     if ( nType == CUSTOM_TYPE_DATE )
         pLine->m_aDateField.SetPosSizePixel(pLine->m_aValueEdit.GetPosPixel(), pLine->m_aValueEdit.GetSizePixel());
     else if ( nType == CUSTOM_TYPE_DATETIME)
@@ -1546,7 +1546,7 @@ bool CustomPropertiesWindow::IsLineValid( CustomPropertyLine* pLine ) const
         bIsValid = const_cast< SvNumberFormatter& >(
             m_aNumberFormatter ).IsNumberFormat( sValue, nIndex, fDummy );
         if ( bIsValid && nTemp != nIndex )
-            // sValue is a number but the format doesn't match the index
+            
             bIsValid = false;
     }
 
@@ -1557,7 +1557,7 @@ void CustomPropertiesWindow::ValidateLine( CustomPropertyLine* pLine, bool bIsFr
 {
     if ( !IsLineValid( pLine ) )
     {
-        if ( bIsFromTypeBox ) // LoseFocus of TypeBox
+        if ( bIsFromTypeBox ) 
             pLine->m_bTypeLostFocus = true;
         Window* pParent = GetParent()->GetParent();
         if ( QueryBox( pParent, SfxResId( SFX_QB_WRONG_TYPE ) ).Execute() == RET_OK )
@@ -1676,7 +1676,7 @@ void CustomPropertiesWindow::AddLine( const OUString& sName, Any& rAny )
     pNewLine->m_aTypeBox.SetSelectHdl( LINK( this, CustomPropertiesWindow, TypeHdl ) );
     pNewLine->m_aRemoveButton.SetClickHdl( LINK( this, CustomPropertiesWindow, RemoveHdl ) );
     pNewLine->m_aValueEdit.SetLoseFocusHdl( LINK( this, CustomPropertiesWindow, EditLoseFocusHdl ) );
-    //add lose focus handlers of date/time fields
+    
 
     pNewLine->m_aTypeBox.SetLoseFocusHdl( LINK( this, CustomPropertiesWindow, BoxLoseFocusHdl ) );
 
@@ -2040,7 +2040,7 @@ void CustomPropertiesControl::AddLine( const OUString& sName, Any& rAny, bool bI
         m_pVertScroll->DoScroll( m_pPropertiesWin->GetVisibleLineCount() + 1 );
 }
 
-// class SfxCustomPropertiesPage -----------------------------------------
+
 SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "CustomInfoPage", "sfx/ui/custominfopage.ui", rItemSet)
 {
@@ -2077,7 +2077,7 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
 
     if ( pInfo )
     {
-        // If it's a CMIS document, we can't save custom properties
+        
         if ( pInfo->isCmisDocument( ) )
         {
             if ( bMustDelete )
@@ -2095,7 +2095,7 @@ sal_Bool SfxCustomPropertiesPage::FillItemSet( SfxItemSet& rSet )
         }
     }
 
-    bModified = sal_True; //!!!
+    bModified = sal_True; 
     if ( bModified )
         rSet.Put( *pInfo );
     if ( bMustDelete )
@@ -2160,7 +2160,7 @@ CmisYesNo::CmisYesNo( Window* pParent, bool bValue )
         m_aNoButton->Check( );
 }
 
-// struct CmisPropertyLine ---------------------------------------------
+
 CmisPropertyLine::CmisPropertyLine( Window* pParent )
 {
     m_nNumValue = 1;
@@ -2209,7 +2209,7 @@ long CmisPropertyLine::getItemHeight() const
     return VclContainer::getLayoutRequisition(*m_pFrame).Height();
 }
 
-// class CmisPropertiesWindow -----------------------------------------
+
 
 CmisPropertiesWindow::CmisPropertiesWindow(SfxTabPage* pParent):
     m_aNumberFormatter( ::comphelper::getProcessComponentContext(),
@@ -2515,7 +2515,7 @@ void CmisPropertiesControl::AddLine( const OUString& sId, const OUString& sName,
     checkAutoVScroll();
 }
 
-// class SfxCmisPropertiesPage -----------------------------------------
+
 SfxCmisPropertiesPage::SfxCmisPropertiesPage( Window* pParent, const SfxItemSet& rItemSet )
     : SfxTabPage(pParent, "CmisInfoPage", "sfx/ui/cmisinfopage.ui", rItemSet)
     , m_pPropertiesCtrl( this )
@@ -2555,8 +2555,8 @@ sal_Bool SfxCmisPropertiesPage::FillItemSet( SfxItemSet& rSet )
                 {
                     Sequence< util::DateTime > oldValue;
                     aOldProps[i].Value >>= oldValue;
-                    // We only edit hours and minutes
-                    // don't compare NanoSeconds and Seconds
+                    
+                    
                     for ( sal_Int32 ii = 0; ii < oldValue.getLength( ); ++ii )
                     {
                         oldValue[ii].NanoSeconds = 0;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include <time.h>
 #include <iostream>
@@ -155,9 +155,9 @@ static void client_callback(AvahiClient *c, AvahiClientState state, AVAHI_GCC_UN
 }
 
 void AvahiNetworkService::setup() {
-    // Avahi internally uses D-Bus, which requires the following in order to be
-    // thread-safe (and we potentially access D-Bus from different threads in
-    // different places of the code base):
+    
+    
+    
     if (!dbus_threads_init_default()) {
         throw std::bad_alloc();
     }

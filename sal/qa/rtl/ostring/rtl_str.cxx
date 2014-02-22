@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -69,9 +69,9 @@ namespace rtl_str
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(compare);
     CPPUNIT_TEST(compare_000);
@@ -80,7 +80,7 @@ namespace rtl_str
     CPPUNIT_TEST(compare_002);
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST_SUITE_END();
-}; // class compare
+}; 
 
 
     class compareIgnoreAsciiCase : public CppUnit::TestFixture
@@ -133,9 +133,9 @@ namespace rtl_str
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(compareIgnoreAsciiCase);
     CPPUNIT_TEST(compare_000);
@@ -145,9 +145,9 @@ namespace rtl_str
     CPPUNIT_TEST(compare_002_1);
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST_SUITE_END();
-    }; // class compareIgnoreAsciiCase
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class shortenedCompareIgnoreAsciiCase_WithLength : public CppUnit::TestFixture
     {
@@ -216,9 +216,9 @@ namespace rtl_str
                 CPPUNIT_ASSERT_MESSAGE("compare failed, strings differ.", nValue != 0);
             }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(shortenedCompareIgnoreAsciiCase_WithLength);
     CPPUNIT_TEST(compare_000);
@@ -229,10 +229,10 @@ namespace rtl_str
     CPPUNIT_TEST(compare_003);
     CPPUNIT_TEST(compare_004);
     CPPUNIT_TEST_SUITE_END();
-}; // class compare
+}; 
 
 
-// -----------------------------------------------------------------------------
+
 
     class hashCode : public CppUnit::TestFixture
     {
@@ -248,7 +248,7 @@ namespace rtl_str
                 rtl::OString aStr1 = "Line for a hashCode.";
                 sal_Int32 nHashCode = rtl_str_hashCode( aStr1.getStr() );
                 printf("hashcode: %d\n", nHashCode);
-                // CPPUNIT_ASSERT_MESSAGE("failed.", nValue == 0);
+                
             }
 
         void hashCode_002()
@@ -273,9 +273,9 @@ namespace rtl_str
                 CPPUNIT_ASSERT_MESSAGE("hashcodes must differ.", nHashCode1 != nHashCode2 );
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(hashCode);
         CPPUNIT_TEST(hashCode_000);
@@ -283,10 +283,10 @@ namespace rtl_str
         CPPUNIT_TEST(hashCode_002);
         CPPUNIT_TEST(hashCode_003);
         CPPUNIT_TEST_SUITE_END();
-    }; // class compare
+    }; 
 
 
-// -----------------------------------------------------------------------------
+
 
     class indexOfChar : public CppUnit::TestFixture
     {
@@ -322,18 +322,18 @@ namespace rtl_str
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(indexOfChar);
         CPPUNIT_TEST(indexOfChar_000);
         CPPUNIT_TEST(indexOfChar_001);
         CPPUNIT_TEST(indexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class compare
+    }; 
 
-// -----------------------------------------------------------------------------
+
     class lastIndexOfChar : public CppUnit::TestFixture
     {
     public:
@@ -368,19 +368,19 @@ namespace rtl_str
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(lastIndexOfChar);
         CPPUNIT_TEST(lastIndexOfChar_000);
         CPPUNIT_TEST(lastIndexOfChar_001);
         CPPUNIT_TEST(lastIndexOfChar_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class lastIndexOfChar
+    }; 
 
 
-// -----------------------------------------------------------------------------
+
 
     class indexOfStr : public CppUnit::TestFixture
     {
@@ -422,17 +422,17 @@ namespace rtl_str
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == -1 );
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(indexOfStr);
         CPPUNIT_TEST(indexOfStr_000);
         CPPUNIT_TEST(indexOfStr_001);
         CPPUNIT_TEST(indexOfStr_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class compare
-// -----------------------------------------------------------------------------
+    }; 
+
 
 
     class lastIndexOfStr : public CppUnit::TestFixture
@@ -485,9 +485,9 @@ namespace rtl_str
                 CPPUNIT_ASSERT_MESSAGE("index is wrong.", nIndex == 20 );
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(lastIndexOfStr);
         CPPUNIT_TEST(lastIndexOfStr_000);
@@ -495,9 +495,9 @@ namespace rtl_str
         CPPUNIT_TEST(lastIndexOfStr_002);
         CPPUNIT_TEST(lastIndexOfStr_003);
         CPPUNIT_TEST_SUITE_END();
-    }; // class lastIndexOfStr
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class replaceChar : public CppUnit::TestFixture
     {
@@ -523,17 +523,17 @@ namespace rtl_str
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(replaceChar);
         CPPUNIT_TEST(replaceChar_000);
         CPPUNIT_TEST(replaceChar_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class replaceChar_WithLength : public CppUnit::TestFixture
     {
@@ -563,19 +563,19 @@ namespace rtl_str
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(replaceChar_WithLength);
         CPPUNIT_TEST(replaceChar_WithLength_000);
         CPPUNIT_TEST(replaceChar_WithLength_000_1);
         CPPUNIT_TEST(replaceChar_WithLength_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
 
-// -----------------------------------------------------------------------------
+
 
     class toAsciiLowerCase : public CppUnit::TestFixture
     {
@@ -601,15 +601,15 @@ namespace rtl_str
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(toAsciiLowerCase);
         CPPUNIT_TEST(toAsciiLowerCase_000);
         CPPUNIT_TEST(toAsciiLowerCase_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
 
     class toAsciiLowerCase_WithLength : public CppUnit::TestFixture
@@ -637,17 +637,17 @@ namespace rtl_str
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(toAsciiLowerCase_WithLength);
         CPPUNIT_TEST(toAsciiLowerCase_WithLength_000);
         CPPUNIT_TEST(toAsciiLowerCase_WithLength_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
     class toAsciiUpperCase : public CppUnit::TestFixture
     {
@@ -673,15 +673,15 @@ namespace rtl_str
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(toAsciiUpperCase);
         CPPUNIT_TEST(toAsciiUpperCase_000);
         CPPUNIT_TEST(toAsciiUpperCase_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
 
     class toAsciiUpperCase_WithLength : public CppUnit::TestFixture
@@ -709,18 +709,18 @@ namespace rtl_str
                 free(pStr);
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(toAsciiUpperCase_WithLength);
         CPPUNIT_TEST(toAsciiUpperCase_WithLength_000);
         CPPUNIT_TEST(toAsciiUpperCase_WithLength_001);
         CPPUNIT_TEST_SUITE_END();
-    }; // class replaceChar
+    }; 
 
 
-    // -----------------------------------------------------------------------------
+    
 
     class trim_WithLength : public CppUnit::TestFixture
     {
@@ -728,7 +728,7 @@ namespace rtl_str
         void trim_WithLength_000()
         {
             rtl_str_trim_WithLength(NULL, 0);
-            // should not GPF
+            
         }
 
         void trim_WithLength_000_1()
@@ -807,9 +807,9 @@ namespace rtl_str
             }
         }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(trim_WithLength);
         CPPUNIT_TEST(trim_WithLength_000);
@@ -822,7 +822,7 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     };
 
-    // -----------------------------------------------------------------------------
+    
 
     class valueOfChar : public CppUnit::TestFixture
     {
@@ -830,7 +830,7 @@ namespace rtl_str
         void valueOfChar_000()
             {
                 rtl_str_valueOfChar(NULL, 0);
-                // should not GPF
+                
             }
         void valueOfChar_001()
             {
@@ -844,9 +844,9 @@ namespace rtl_str
                 }
             }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE(valueOfChar);
         CPPUNIT_TEST(valueOfChar_000);
@@ -854,7 +854,7 @@ namespace rtl_str
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::compare);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::compareIgnoreAsciiCase);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::shortenedCompareIgnoreAsciiCase_WithLength);
@@ -876,12 +876,12 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::toAsciiUpperCase_WithLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::trim_WithLength);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_str::valueOfChar);
 
-} // namespace rtl_str
+} 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

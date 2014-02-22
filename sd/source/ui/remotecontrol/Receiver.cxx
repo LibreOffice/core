@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include "Receiver.hxx"
 #include <string.h>
@@ -44,7 +44,7 @@ Receiver::~Receiver()
 {
 }
 
-// Bounce the commands to the main thread to avoid threading woes
+
 void Receiver::pushCommand( const std::vector<OString> &rCommand )
 {
     SolarMutexGuard aGuard;
@@ -77,7 +77,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
         uno::Reference<presentation::XPresentationSupplier> xPS ( xFrame->getController()->getModel(), uno::UNO_QUERY_THROW);
         xPresentation = uno::Reference<presentation::XPresentation2>(
             xPS->getPresentation(), uno::UNO_QUERY_THROW);
-        // Throws an exception if now slideshow running
+        
         xSlideShowController =  uno::Reference<presentation::XSlideShowController>(
            xPresentation->getController(), uno::UNO_QUERY_THROW );
         xSlideShow = uno::Reference<presentation::XSlideShow>(
@@ -99,7 +99,7 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if ( aCommand[0].equals( "goto_slide" ) )
     {
-        // FIXME: if 0 returned, then not a valid number
+        
         sal_Int32 aSlide = aCommand[1].toInt32();
         if ( xSlideShowController.is() &&
             xSlideShowController->getCurrentSlideIndex() != aSlide )
@@ -119,11 +119,11 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if ( aCommand[0].equals( "presentation_blank_screen" ) )
     {
-        sal_Int32 aColour = 0; // Default is black
+        sal_Int32 aColour = 0; 
         if ( aCommand.size() > 1 )
         {
-//             aColour = FIXME: get the colour in some format from this string
-//              Determine the formatting first.
+
+
         }
         if ( xSlideShowController.is() )
         {
@@ -132,17 +132,17 @@ void Receiver::executeCommand( const std::vector<OString> &aCommand )
     }
     else if (aCommand[0].equals( "pointer_started" ))
     {
-        // std::cerr << "pointer_started" << std::endl;
+        
         float x = aCommand[1].toFloat();
         float y = aCommand[2].toFloat();
         SolarMutexGuard aSolarGuard;
 
         const ::com::sun::star::geometry::RealPoint2D pos(x,y);
-        // std::cerr << "Pointer at ("<<pos.X<<","<<pos.Y<<")" << std::endl;
+        
 
         if (xSlideShow.is()) try
         {
-            // std::cerr << "pointer_coordination in the is" << std::endl;
+            
             xSlideShow->setProperty(
                         beans::PropertyValue( "PointerPosition" ,
                             -1,

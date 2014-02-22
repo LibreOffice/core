@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbacharacters.hxx"
 
@@ -29,19 +29,19 @@ ScVbaCharacters::ScVbaCharacters( const uno::Reference< XHelperInterface >& xPar
 {
     Start >>= nStart;
     if ( nStart < 1 )
-        nStart = 1; // silently correct user error ( as ms )
-    nStart--; // OOo is 0 based
+        nStart = 1; 
+    nStart--; 
     Length >>=nLength;
     uno::Reference< text::XTextCursor > xTextCursor( m_xSimpleText->createTextCursor(), uno::UNO_QUERY_THROW );
     xTextCursor->collapseToStart();
     if ( nStart )
     {
         if ( ( nStart + 1 ) > m_xSimpleText->getString().getLength() )
-            //nStart = m_xSimpleText->getString().getLength();
+            
             xTextCursor->gotoEnd( false );
         xTextCursor->goRight( nStart, false );
     }
-    if ( nLength < 0 ) // expand to end
+    if ( nLength < 0 ) 
         xTextCursor->gotoEnd( sal_True );
     else
         xTextCursor->goRight( nLength, sal_True );
@@ -86,12 +86,12 @@ ScVbaCharacters::getFont() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) throw (css::uno::RuntimeException)
 {
-    // #TODO #FIXME needs implementation, or can't be done?
+    
     throw uno::RuntimeException("Not Implemented", uno::Reference< XInterface >() );
 }
 
 
-// Methods
+
 void SAL_CALL
 ScVbaCharacters::Insert( const OUString& rString ) throw (css::uno::RuntimeException)
 {
@@ -101,8 +101,8 @@ ScVbaCharacters::Insert( const OUString& rString ) throw (css::uno::RuntimeExcep
 void SAL_CALL
 ScVbaCharacters::Delete(  ) throw (css::uno::RuntimeException)
 {
-    // #FIXME #TODO is this a bit suspect?, I wonder should the contents
-    // of the cell be deleted from the parent ( range )
+    
+    
     m_xSimpleText->setString(OUString());
 }
 

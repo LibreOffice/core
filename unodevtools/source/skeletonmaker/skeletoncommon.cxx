@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "osl/thread.hxx"
@@ -53,7 +53,7 @@ void printLicenseHeader(std::ostream& o, rtl::OString const & filename)
          " *\n"
          " * This Source Code Form is subject to the terms of the Mozilla Public\n"
          " * License, v. 2.0. If a copy of the MPL was not distributed with this\n"
-         " * file, You can obtain one at http://mozilla.org/MPL/2.0/.\n"
+         " * file, You can obtain one at http:
          " */\n\n";
 }
 
@@ -103,7 +103,7 @@ bool containsAttribute(AttributeInfo& attributes, OUString const & attrname)
     return false;
 }
 
-// collect attributes including inherited attributes
+
 void checkAttributes(rtl::Reference< TypeManager > const & manager,
                      OUString const & name,
                      AttributeInfo& attributes,
@@ -197,9 +197,9 @@ void checkType(rtl::Reference< TypeManager > const & manager,
     rtl::Reference< unoidl::Entity > ent;
     switch (manager->getSort(name, &ent)) {
     case codemaker::UnoType::SORT_INTERFACE_TYPE:
-        // com.sun.star.lang.XComponent should be also not in the list
-        // but it will be used for checking the impl helper and will be
-        // removed later if necessary.
+        
+        
+        
         if ( name == "com.sun.star.lang.XTypeProvider" ||
              name == "com.sun.star.uno.XWeak" )
             return;
@@ -216,10 +216,10 @@ void checkType(rtl::Reference< TypeManager > const & manager,
             assert(ent2.is());
             if (interfaceTypes.find(ent2->getBase()) == interfaceTypes.end()) {
                 interfaceTypes.insert(ent2->getBase());
-                // check if constructors are specified, if yes automatically
-                // support of XInitialization. We will take care of the default
-                // constructor because in this case XInitialization is not
-                // called.
+                
+                
+                
+                
                 if (ent2->getConstructors().size() > 1 ||
                     (ent2->getConstructors().size() == 1 &&
                      !ent2->getConstructors()[0].defaultConstructor))
@@ -404,8 +404,8 @@ bool checkXComponentSupport(
 }
 
 
-// if XComponent is directly specified, return true and remove it from the
-// supported interfaces list
+
+
 bool checkXComponentSupport(rtl::Reference< TypeManager > const & manager,
                             std::set< OUString >& interfaces)
 {
@@ -457,9 +457,9 @@ checkAdditionalPropertyFlags(
     return unoidl::AccumulationBasedServiceEntity::Property::Attributes(flags);
 }
 
-// This function checks if the specified types for parameters and return
-// types are allowed add-in types, for more info see the com.sun.star.sheet.AddIn
-// service description
+
+
+
 bool checkAddinType(rtl::Reference< TypeManager > const & manager,
                     OUString const & type, bool & bLastAny,
                     bool & bHasXPropertySet, bool bIsReturn)
@@ -566,7 +566,7 @@ void generateFunctionParameterMap(std::ostream& o,
     if ( name == "com.sun.star.uno.XInterface" ||
          name == "com.sun.star.lang.XLocalizable" ||
          name == "com.sun.star.lang.XServiceInfo" ||
-         // the next three checks becomes obsolete when configuration is used
+         
          name == "com.sun.star.sheet.XAddIn" ||
          name == "com.sun.star.sheet.XCompatibilityNames" ||
          name == "com.sun.star.lang.XServiceName" )
@@ -585,7 +585,7 @@ void generateFunctionParameterMap(std::ostream& o,
         dynamic_cast< unoidl::InterfaceTypeEntity * >(ent.get()));
     assert(ent2.is());
 
-    // check if the specified add-in functions supports valid types
+    
     checkAddInTypes(manager, name, ent2);
 
     for (std::vector< unoidl::AnnotatedReference >::const_iterator i(

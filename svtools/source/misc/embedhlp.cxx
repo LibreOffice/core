@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -105,7 +105,7 @@ EmbedEventListener_Impl* EmbedEventListener_Impl::Create( EmbeddedObjectRef* p )
         {
             uno::Reference < util::XModifiable > xMod( p->GetObject()->getComponent(), uno::UNO_QUERY );
             if ( xMod.is() )
-                // listen for changes in running state (update replacements in case of changes)
+                
                 xMod->addModifyListener( xRet );
         }
     }
@@ -134,27 +134,27 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
     uno::Reference < util::XModifiable > xMod( pObject->GetObject()->getComponent(), uno::UNO_QUERY );
     if ( nNewState == embed::EmbedStates::RUNNING )
     {
-        // TODO/LATER: container must be set before!
-        // When is this event created? Who sets the new container when it changed?
+        
+        
         if( ( pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON ) && nOldState != embed::EmbedStates::LOADED && !pObject->IsChart() )
-            // get new replacement after deactivation
+            
             pObject->UpdateReplacement();
 
         if( pObject->IsChart() && nOldState == embed::EmbedStates::UI_ACTIVE )
         {
-            //create a new metafile replacement when leaving the edit mode
-            //for buggy documents where the old image looks different from the correct one
-            if( xMod.is() && !xMod->isModified() )//in case of modification a new replacement will be requested anyhow
+            
+            
+            if( xMod.is() && !xMod->isModified() )
                 pObject->UpdateReplacementOnDemand();
         }
 
         if ( xMod.is() && nOldState == embed::EmbedStates::LOADED )
-            // listen for changes (update replacements in case of changes)
+            
             xMod->addModifyListener( this );
     }
     else if ( nNewState == embed::EmbedStates::LOADED )
     {
-        // in loaded state we can't listen
+        
         if ( xMod.is() )
             xMod->removeModifyListener( this );
     }
@@ -167,7 +167,7 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
     {
         if ( nState == embed::EmbedStates::RUNNING )
         {
-            // updates only necessary in non-active states
+            
             if( pObject->IsChart() )
                 pObject->UpdateReplacementOnDemand();
             else
@@ -177,7 +177,7 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
                   nState == embed::EmbedStates::UI_ACTIVE ||
                   nState == embed::EmbedStates::INPLACE_ACTIVE )
         {
-            // in case the object is inplace or UI active the replacement image should be updated on demand
+            
             pObject->UpdateReplacementOnDemand();
         }
     }
@@ -196,9 +196,9 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
 void SAL_CALL EmbedEventListener_Impl::queryClosing( const lang::EventObject& Source, ::sal_Bool )
         throw ( util::CloseVetoException, uno::RuntimeException)
 {
-    // An embedded object can be shared between several objects (f.e. for undo purposes)
-    // the object will not be closed before the last "customer" is destroyed
-    // Now the EmbeddedObjectRef helper class works like a "lock" on the object
+    
+    
+    
     if ( pObject && pObject->IsLocked() && Source.Source == pObject->GetObject() )
         throw util::CloseVetoException();
 }
@@ -234,9 +234,9 @@ struct EmbeddedObjectRef_Impl
     bool                                        bIsLocked:1;
     bool                                        bNeedUpdate:1;
 
-    // #i104867#
+    
     sal_uInt32                                  mnGraphicVersion;
-    awt::Size                                   aDefaultSizeForChart_In_100TH_MM;//#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this member
+    awt::Size                                   aDefaultSizeForChart_In_100TH_MM;
 
     EmbeddedObjectRef_Impl() :
         xListener(0),
@@ -313,7 +313,7 @@ void EmbeddedObjectRef::Assign( const uno::Reference < embed::XEmbeddedObject >&
     mpImpl->mxObj = xObj;
     mpImpl->xListener = EmbedEventListener_Impl::Create( this );
 
-    //#i103460#
+    
     if ( IsChart() )
     {
         uno::Reference < chart2::XDefaultSizeTransmitter > xSizeTransmitter( xObj, uno::UNO_QUERY );
@@ -348,7 +348,7 @@ void EmbeddedObjectRef::Clear()
                 }
                 catch (const util::CloseVetoException&)
                 {
-                    // there's still someone who needs the object!
+                    
                 }
                 catch (const uno::Exception&)
                 {
@@ -448,7 +448,7 @@ const Graphic* EmbeddedObjectRef::GetGraphic( OUString* pMediaType ) const
     try
     {
         if ( mpImpl->bNeedUpdate )
-            // bNeedUpdate will be set to false while retrieving new replacement
+            
             const_cast < EmbeddedObjectRef* >(this)->GetReplacement(true);
         else if ( !mpImpl->pGraphic )
             const_cast < EmbeddedObjectRef* >(this)->GetReplacement(false);
@@ -575,7 +575,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
     if ( mpImpl->pContainer && !bUpdate )
     {
         SAL_INFO( "svtools.misc", "getting stream from container" );
-        // try to get graphic stream from container storage
+        
         xStream = mpImpl->pContainer->GetGraphicStream(mpImpl->mxObj, &mpImpl->aMediaType);
         if ( xStream.is() )
         {
@@ -606,7 +606,7 @@ SvStream* EmbeddedObjectRef::GetGraphicStream( bool bUpdate ) const
     if ( !xStream.is() )
     {
         SAL_INFO( "svtools.misc", "getting stream from object" );
-        // update wanted or no stream in container storage available
+        
         xStream = GetGraphicReplacementStream(mpImpl->nViewAspect, mpImpl->mxObj, &mpImpl->aMediaType);
 
         if ( xStream.is() )
@@ -641,8 +641,8 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
 
     Point aPt;
 
-    // Now scale text such that it fits in the rectangle
-    // We start with the default size and decrease 1-AppFont
+    
+    
     for( sal_uInt16 i = 8; i > 2; i-- )
     {
         aPt.X() = (rRect.GetWidth()  - pOut->GetTextWidth( rText )) / 2;
@@ -653,7 +653,7 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
         if( aPt.Y() < 0 ) bTiny = true, aPt.Y() = 0;
         if( bTiny )
         {
-            // decrease for small images
+            
             aFnt.SetSize( Size( 0, aAppFontSz.Height() * i / 8 ) );
             pOut->SetFont( aFnt );
         }
@@ -669,23 +669,23 @@ void EmbeddedObjectRef::DrawPaintReplacement( const Rectangle &rRect, const OUSt
         aPt.Y() = nHeight;
         Point   aP = rRect.TopLeft();
         Size    aBmpSize = aBmp.GetSizePixel();
-        // fit bitmap in
+        
         if( nHeight * 10 / nWidth
           > aBmpSize.Height() * 10 / aBmpSize.Width() )
         {
-            // adjust to the width
-            // keep proportions
+            
+            
             long nH = nWidth * aBmpSize.Height() / aBmpSize.Width();
-            // center
+            
             aP.Y() += (nHeight - nH) / 2;
             nHeight = nH;
         }
         else
         {
-            // adjust to the height
-            // keep proportions
+            
+            
             long nW = nHeight * aBmpSize.Width() / aBmpSize.Height();
-            // center
+            
             aP.X() += (nWidth - nW) / 2;
             nWidth = nW;
         }
@@ -790,19 +790,19 @@ void EmbeddedObjectRef::UpdateReplacementOnDemand()
 
     if( mpImpl->pContainer )
     {
-        //remove graphic from container thus a new up to date one is requested on save
+        
         mpImpl->pContainer->RemoveGraphicStream( mpImpl->aPersistName );
     }
 }
 
 bool EmbeddedObjectRef::IsChart() const
 {
-    //todo maybe for 3.0:
-    //if the changes work good for chart
-    //we should apply them for all own ole objects
+    
+    
+    
 
-    //#i83708# #i81857# #i79578# request an ole replacement image only if really necessary
-    //as this call can be very expensive and does block the user interface as long at it takes
+    
+    
 
     if (!mpImpl->mxObj.is())
         return false;
@@ -820,7 +820,7 @@ bool EmbeddedObjectRef::IsChart() const
     return false;
 }
 
-// MT: Only used for getting accessible attributes, which are not localized
+
 OUString EmbeddedObjectRef::GetChartType()
 {
     OUString Style;
@@ -838,7 +838,7 @@ OUString EmbeddedObjectRef::GetChartType()
                         return OUString();
                     uno::Reference< chart2::XCoordinateSystemContainer > xCooSysCnt( xDiagram, uno::UNO_QUERY_THROW );
                     uno::Sequence< uno::Reference< chart2::XCoordinateSystem > > aCooSysSeq( xCooSysCnt->getCoordinateSystems());
-                    // IA2 CWS. Unused: int nCoordinateCount = aCooSysSeq.getLength();
+                    
                     sal_Bool bGetChartType = sal_False;
                     for( sal_Int32 nCooSysIdx=0; nCooSysIdx<aCooSysSeq.getLength(); ++nCooSysIdx )
                     {
@@ -914,7 +914,7 @@ OUString EmbeddedObjectRef::GetChartType()
     return Style;
 }
 
-// #i104867#
+
 sal_uInt32 EmbeddedObjectRef::getGraphicVersion() const
 {
     return mpImpl->mnGraphicVersion;
@@ -922,9 +922,9 @@ sal_uInt32 EmbeddedObjectRef::getGraphicVersion() const
 
 void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
 {
-    //#i103460# charts do not necessaryly have an own size within ODF files,
-    //for this case they need to use the size settings from the surrounding frame,
-    //which is made available with this method
+    
+    
+    
 
     mpImpl->aDefaultSizeForChart_In_100TH_MM = awt::Size( rSizeIn_100TH_MM.getWidth(), rSizeIn_100TH_MM.getHeight() );
 
@@ -934,6 +934,6 @@ void EmbeddedObjectRef::SetDefaultSizeForChart( const Size& rSizeIn_100TH_MM )
         xSizeTransmitter->setDefaultSize( mpImpl->aDefaultSizeForChart_In_100TH_MM );
 }
 
-} // namespace svt
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

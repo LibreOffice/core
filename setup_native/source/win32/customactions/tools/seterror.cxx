@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define UNICODE
 
 #ifdef _MSC_VER
-#pragma warning(push,1) // disable warnings within system headers
+#pragma warning(push,1) 
 #endif
 #include <windows.h>
 #ifdef _MSC_VER
@@ -34,7 +34,7 @@
 
 #include <seterror.hxx>
 
-//----------------------------------------------------------
+
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
 {
@@ -51,7 +51,7 @@ static inline void OutputDebugStringFormat( LPCTSTR, ... )
 }
 #endif
 
-//----------------------------------------------------------
+
 void SetMsiErrorCode( int nErrorCode )
 {
     const TCHAR sMemMapName[] = TEXT( "Global\\MsiErrorObject" );
@@ -60,18 +60,18 @@ void SetMsiErrorCode( int nErrorCode )
     int *pBuf;
 
     hMapFile = OpenFileMapping(
-                    FILE_MAP_ALL_ACCESS,    // read/write access
-                    FALSE,                  // do not inherit the name
-                    sMemMapName );          // name of mapping object
+                    FILE_MAP_ALL_ACCESS,    
+                    FALSE,                  
+                    sMemMapName );          
 
-    if ( hMapFile == NULL )                 // can not set error code
+    if ( hMapFile == NULL )                 
     {
         OutputDebugStringFormat( TEXT("Could not open map file (%d).\n"), GetLastError() );
         return;
     }
 
-    pBuf = (int*) MapViewOfFile( hMapFile,   // handle to map object
-                        FILE_MAP_ALL_ACCESS, // read/write permission
+    pBuf = (int*) MapViewOfFile( hMapFile,   
+                        FILE_MAP_ALL_ACCESS, 
                         0,
                         0,
                         sizeof( int ) );

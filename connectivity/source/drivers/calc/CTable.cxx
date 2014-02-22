@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "calc/CTable.hxx"
@@ -67,8 +67,8 @@ using namespace ::com::sun::star::util;
 
 static void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& rEndCol, sal_Int32& rEndRow )
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_UpdateArea" );
-    //  update rEndCol, rEndRow if any non-empty cell in xUsedRange is right/below
+    
+    
 
     const Reference<XCellRangesQuery> xUsedQuery( xUsedRange, UNO_QUERY );
     if ( xUsedQuery.is() )
@@ -91,7 +91,7 @@ static void lcl_UpdateArea( const Reference<XCellRange>& xUsedRange, sal_Int32& 
 
 static void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& rColumnCount, sal_Int32& rRowCount )
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetDataArea" );
+    
     Reference<XSheetCellCursor> xCursor = xSheet->createCursor();
     Reference<XCellRangeAddressable> xRange( xCursor, UNO_QUERY );
     if ( !xRange.is() )
@@ -100,10 +100,10 @@ static void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& r
         return;
     }
 
-    // first find the contiguous cell area starting at A1
+    
 
-    xCursor->collapseToSize( 1, 1 );        // single (first) cell
-    xCursor->collapseToCurrentRegion();     // contiguous data area
+    xCursor->collapseToSize( 1, 1 );        
+    xCursor->collapseToCurrentRegion();     
 
     CellRangeAddress aRegionAddr = xRange->getRangeAddress();
     sal_Int32 nEndCol = aRegionAddr.EndColumn;
@@ -112,9 +112,9 @@ static void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& r
     Reference<XUsedAreaCursor> xUsed( xCursor, UNO_QUERY );
     if ( xUsed.is() )
     {
-        //  The used area from XUsedAreaCursor includes visible attributes.
-        //  If the used area is larger than the contiguous cell area, find non-empty
-        //  cells in that area.
+        
+        
+        
 
         xUsed->gotoEndOfUsedArea( sal_False );
         CellRangeAddress aUsedAddr = xRange->getRangeAddress();
@@ -128,20 +128,20 @@ static void lcl_GetDataArea( const Reference<XSpreadsheet>& xSheet, sal_Int32& r
 
         if ( aUsedAddr.EndRow > aRegionAddr.EndRow )
         {
-            //  only up to the last column of aRegionAddr, the other columns are handled above
+            
             Reference<XCellRange> xUsedRange = xSheet->getCellRangeByPosition(
                 0, aRegionAddr.EndRow + 1, aRegionAddr.EndColumn, aUsedAddr.EndRow );
             lcl_UpdateArea( xUsedRange, nEndCol, nEndRow );
         }
     }
 
-    rColumnCount = nEndCol + 1;     // number of columns
-    rRowCount = nEndRow;            // first row (headers) is not counted
+    rColumnCount = nEndCol + 1;     
+    rRowCount = nEndRow;            
 }
 
 static CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell )
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetContentOrResultType" );
+    
     CellContentType eCellType = xCell->getType();
     if ( eCellType == CellContentType_FORMULA )
     {
@@ -149,11 +149,11 @@ static CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell
         Reference<XPropertySet> xProp( xCell, UNO_QUERY );
         try
         {
-            xProp->getPropertyValue( s_sFormulaResultType ) >>= eCellType;      // type of formula result
+            xProp->getPropertyValue( s_sFormulaResultType ) >>= eCellType;      
         }
         catch (UnknownPropertyException&)
         {
-            eCellType = CellContentType_VALUE;  // if FormulaResultType property not available
+            eCellType = CellContentType_VALUE;  
         }
     }
     return eCellType;
@@ -161,11 +161,11 @@ static CellContentType lcl_GetContentOrResultType( const Reference<XCell>& xCell
 
 static Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetUsedCell" );
+    
     Reference<XCell> xCell = xSheet->getCellByPosition( nDocColumn, nDocRow );
     if ( xCell.is() && xCell->getType() == CellContentType_EMPTY )
     {
-        //  get first non-empty cell
+        
 
         Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
         if (xAddr.is())
@@ -175,7 +175,7 @@ static Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, 
             Reference<XCellRangesQuery> xQuery( xSheet->getCellRangeByPosition( nDocColumn, nDocRow, nDocColumn, nLastRow ), UNO_QUERY );
             if (xQuery.is())
             {
-                // queryIntersection to get a ranges object
+                
                 Reference<XSheetCellRanges> xRanges = xQuery->queryIntersection( aTotalRange );
                 if (xRanges.is())
                 {
@@ -185,10 +185,10 @@ static Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, 
                         Reference<XEnumeration> xEnum = xCells->createEnumeration();
                         if ( xEnum.is() && xEnum->hasMoreElements() )
                         {
-                            // get first non-empty cell from enumeration
+                            
                             xCell.set(xEnum->nextElement(),UNO_QUERY);
                         }
-                        // otherwise, keep empty cell
+                        
                     }
                 }
             }
@@ -199,8 +199,8 @@ static Reference<XCell> lcl_GetUsedCell( const Reference<XSpreadsheet>& xSheet, 
 
 static bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int32 nDocColumn, sal_Int32 nDocRow )
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_HasTextInColumn" );
-    // look for any text cell or text result in the column
+    
+    
 
     Reference<XCellRangeAddressable> xAddr( xSheet, UNO_QUERY );
     if (xAddr.is())
@@ -210,12 +210,12 @@ static bool lcl_HasTextInColumn( const Reference<XSpreadsheet>& xSheet, sal_Int3
         Reference<XCellRangesQuery> xQuery( xSheet->getCellRangeByPosition( nDocColumn, nDocRow, nDocColumn, nLastRow ), UNO_QUERY );
         if (xQuery.is())
         {
-            // are there text cells in the column?
+            
             Reference<XSheetCellRanges> xTextContent = xQuery->queryContentCells( CellFlags::STRING );
             if ( xTextContent.is() && xTextContent->hasElements() )
                 return true;
 
-            // are there formulas with text results in the column?
+            
             Reference<XSheetCellRanges> xTextFormula = xQuery->queryFormulaCells( FormulaResult::STRING );
             if ( xTextFormula.is() && xTextFormula->hasElements() )
                 return true;
@@ -229,10 +229,10 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
                         sal_Int32 nDocColumn, sal_Int32 nStartRow, sal_Bool bHasHeaders,
                         OUString& rName, sal_Int32& rDataType, sal_Bool& rCurrency )
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetColumnInfo" );
-    //! avoid duplicate field names
+    
+    
 
-    //  get column name from first row, if range contains headers
+    
 
     if ( bHasHeaders )
     {
@@ -241,7 +241,7 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
             rName = xHeaderText->getString();
     }
 
-    // get column type from first data row
+    
 
     sal_Int32 nDataRow = nStartRow;
     if ( bHasHeaders )
@@ -251,15 +251,15 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
     Reference<XPropertySet> xProp( xDataCell, UNO_QUERY );
     if ( xProp.is() )
     {
-        rCurrency = sal_False;          // set to true for currency below
+        rCurrency = sal_False;          
 
         const CellContentType eCellType = lcl_GetContentOrResultType( xDataCell );
-        // #i35178# use "text" type if there is any text cell in the column
+        
         if ( eCellType == CellContentType_TEXT || lcl_HasTextInColumn( xSheet, nDocColumn, nDataRow ) )
             rDataType = DataType::VARCHAR;
         else if ( eCellType == CellContentType_VALUE )
         {
-            //  get number format to distinguish between different types
+            
 
             sal_Int16 nNumType = NumberFormat::NUMBER;
             try
@@ -291,7 +291,7 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
             }
             else if ( ( nNumType & NumberFormat::DATETIME ) == NumberFormat::DATETIME )
             {
-                //  NumberFormat::DATETIME is DATE | TIME
+                
                 rDataType = DataType::TIMESTAMP;
             }
             else if ( nNumType & NumberFormat::DATE )
@@ -305,21 +305,21 @@ static void lcl_GetColumnInfo( const Reference<XSpreadsheet>& xSheet, const Refe
         }
         else
         {
-            //  whole column empty
+            
             rDataType = DataType::VARCHAR;
         }
     }
 }
 
-// -------------------------------------------------------------------------
+
 
 static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& xSheet,
                     sal_Int32 nStartCol, sal_Int32 nStartRow, sal_Bool bHasHeaders,
                     const ::Date& rNullDate,
                     sal_Int32 nDBRow, sal_Int32 nDBColumn, sal_Int32 nType )
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_SetValue" );
-    sal_Int32 nDocColumn = nStartCol + nDBColumn - 1;   // database counts from 1
+    
+    sal_Int32 nDocColumn = nStartCol + nDBColumn - 1;   
     sal_Int32 nDocRow = nStartRow + nDBRow - 1;
     if (bHasHeaders)
         ++nDocRow;
@@ -335,7 +335,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     rValue.setNull();
                 else
                 {
-                    // #i25840# still let Calc convert numbers to text
+                    
                     const Reference<XText> xText( xCell, UNO_QUERY );
                     if ( xText.is() )
                         rValue = xText->getString();
@@ -343,7 +343,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                 break;
             case DataType::DECIMAL:
                 if ( eCellType == CellContentType_VALUE )
-                    rValue = xCell->getValue();         // double
+                    rValue = xCell->getValue();         
                 else
                     rValue.setNull();
                 break;
@@ -371,7 +371,7 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     double fTime = fCellVal - rtl::math::approxFloor( fCellVal );
                     sal_Int64 nIntTime = static_cast<sal_Int64>(rtl::math::round( fTime * static_cast<double>(::Time::nanoSecPerDay) ));
                     if ( nIntTime ==  ::Time::nanoSecPerDay)
-                        nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
+                        nIntTime = 0;                       
                     ::com::sun::star::util::Time aTime;
                     aTime.NanoSeconds = (sal_uInt32)( nIntTime % ::Time::nanoSecPerSec );
                     nIntTime /= ::Time::nanoSecPerSec;
@@ -396,8 +396,8 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                     sal_Int64 nIntTime = ::rtl::math::round( fTime * static_cast<double>(::Time::nanoSecPerDay) );
                     if ( nIntTime == ::Time::nanoSecPerDay )
                     {
-                        nIntTime = 0;                       // 23:59:59.9999999995 and above is 00:00:00.00
-                        ++nIntDays;                         // (next day)
+                        nIntTime = 0;                       
+                        ++nIntDays;                         
                     }
 
                     ::com::sun::star::util::DateTime aDateTime;
@@ -422,17 +422,17 @@ static void lcl_SetValue( ORowSetValue& rValue, const Reference<XSpreadsheet>& x
                 else
                     rValue.setNull();
                 break;
-        } // switch (nType)
+        } 
     }
 
-//  rValue.setTypeKind(nType);
+
 }
 
-// -------------------------------------------------------------------------
+
 
 static OUString lcl_GetColumnStr( sal_Int32 nColumn )
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::lcl_GetColumnStr" );
+    
     if ( nColumn < 26 )
         return OUString( (sal_Unicode) ( 'A' + nColumn ) );
     else
@@ -467,8 +467,8 @@ void OCalcTable::fillColumns()
         if ( aColumnName.isEmpty() )
             aColumnName = lcl_GetColumnStr( i );
 
-        sal_Int32 nPrecision = 0;   //! ...
-        sal_Int32 nDecimals = 0;    //! ...
+        sal_Int32 nPrecision = 0;   
+        sal_Int32 nDecimals = 0;    
 
         switch ( eType )
         {
@@ -498,7 +498,7 @@ void OCalcTable::fillColumns()
                 aTypeName = "";
         }
 
-        // check if the column name already exists
+        
         OUString aAlias = aColumnName;
         OSQLColumns::Vector::const_iterator aFind = connectivity::find(m_aColumns->get().begin(),m_aColumns->get().end(),aAlias,aCase);
         sal_Int32 nExprCnt = 0;
@@ -521,7 +521,7 @@ void OCalcTable::fillColumns()
     }
 }
 
-// -------------------------------------------------------------------------
+
 OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnection,
                     const OUString& _Name,
                     const OUString& _Type,
@@ -543,11 +543,11 @@ OCalcTable::OCalcTable(sdbcx::OCollection* _pTables,OCalcConnection* _pConnectio
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::OCalcTable" );
 }
-// -----------------------------------------------------------------------------
+
 void OCalcTable::construct()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::construct" );
-    //  get sheet object
+    
     Reference< XSpreadsheetDocument> xDoc = m_pConnection->acquireDoc();
     if (xDoc.is())
     {
@@ -559,10 +559,10 @@ void OCalcTable::construct()
             {
                 lcl_GetDataArea( m_xSheet, m_nDataCols, m_nDataRows );
                 m_bHasHeaders = sal_True;
-                // whole sheet is always assumed to include a header row
+                
             }
         }
-        else        // no sheet -> try database range
+        else        
         {
             Reference<XPropertySet> xDocProp( xDoc, UNO_QUERY );
             if ( xDocProp.is() )
@@ -575,8 +575,8 @@ void OCalcTable::construct()
                     Reference<XCellRangeReferrer> xRefer( xDBRange, UNO_QUERY );
                     if ( xRefer.is() )
                     {
-                        //  Header flag is always stored with database range
-                        //  Get flag from FilterDescriptor
+                        
+                        
 
                         sal_Bool bRangeHeader = sal_True;
                         Reference<XPropertySet> xFiltProp( xDBRange->getFilterDescriptor(), UNO_QUERY );
@@ -592,11 +592,11 @@ void OCalcTable::construct()
                             m_nStartCol = aRangeAddr.StartColumn;
                             m_nStartRow = aRangeAddr.StartRow;
                             m_nDataCols = aRangeAddr.EndColumn - m_nStartCol + 1;
-                            //  m_nDataRows is excluding header row
+                            
                             m_nDataRows = aRangeAddr.EndRow - m_nStartRow;
                             if ( !bRangeHeader )
                             {
-                                //  m_nDataRows counts the whole range
+                                
                                 m_nDataRows += 1;
                             }
 
@@ -620,13 +620,13 @@ void OCalcTable::construct()
         }
     }
 
-    //! default if no null date available?
+    
 
     fillColumns();
 
     refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 void OCalcTable::refreshColumns()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::refreshColumns" );
@@ -643,14 +643,14 @@ void OCalcTable::refreshColumns()
     else
         m_pColumns  = new OCalcColumns(this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void OCalcTable::refreshIndexes()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::refreshIndexes" );
-    //  Calc table has no index
+    
 }
 
-// -------------------------------------------------------------------------
+
 void SAL_CALL OCalcTable::disposing(void)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::disposing" );
@@ -662,10 +662,10 @@ void SAL_CALL OCalcTable::disposing(void)
     m_pConnection = NULL;
 
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getTypes" );
+    
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     ::std::vector<Type> aOwnTypes;
     aOwnTypes.reserve(aTypes.getLength());
@@ -687,7 +687,7 @@ Sequence< Type > SAL_CALL OCalcTable::getTypes(  ) throw(RuntimeException)
     return Sequence< Type >(pAttrs, aOwnTypes.size());
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( rType == ::getCppuType((const Reference<XKeysSupplier>*)0) ||
@@ -701,10 +701,10 @@ Any SAL_CALL OCalcTable::queryInterface( const Type & rType ) throw(RuntimeExcep
     return aRet.hasValue() ? aRet : OTable_TYPEDEF::queryInterface(rType);
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getUnoTunnelImplementationId" );
+    
     static ::cppu::OImplementationId * pId = 0;
     if (! pId)
     {
@@ -718,27 +718,27 @@ Sequence< sal_Int8 > OCalcTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
+
 sal_Int64 OCalcTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getSomething" );
+    
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OCalcTable_BASE::getSomething(rId);
 }
-//------------------------------------------------------------------
+
 sal_Int32 OCalcTable::getCurrentLastPos() const
 {
-    //SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::getCurrentLastPos" );
+    
     return m_nDataRows;
 }
-//------------------------------------------------------------------
+
 sal_Bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::seekRow" );
-    // ----------------------------------------------------------
-    // prepare positioning:
+    
+    
 
     sal_uInt32 nNumberOfRecords = m_nDataRows;
     sal_uInt32 nTempPos = m_nFilePos;
@@ -776,7 +776,7 @@ sal_Bool OCalcTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
         goto Error;
     else
     {
-        //! read buffer / setup row object etc?
+        
     }
     goto End;
 
@@ -797,21 +797,21 @@ Error:
                 m_nFilePos = 0;
             break;
         case IResultSetHelper::BOOKMARK:
-            m_nFilePos = nTempPos;   // previous position
+            m_nFilePos = nTempPos;   
     }
-    //  aStatus.Set(SDB_STAT_NO_DATA_FOUND);
+    
     return sal_False;
 
 End:
     nCurPos = m_nFilePos;
     return sal_True;
 }
-//------------------------------------------------------------------
+
 sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
                                 sal_Bool _bUseTableDefs, sal_Bool bRetrieveData )
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::fetchRow" );
-    // read the bookmark
+    
 
     sal_Bool bIsCurRecordDeleted = sal_False;
     _rRow->setDeleted(bIsCurRecordDeleted);
@@ -820,7 +820,7 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
     if (!bRetrieveData)
         return sal_True;
 
-    // fields
+    
 
     OSQLColumns::Vector::const_iterator aIter = _rCols.get().begin();
     OSQLColumns::Vector::const_iterator aEnd = _rCols.get().end();
@@ -843,7 +843,7 @@ sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
     }
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 void OCalcTable::FileClose()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcTable::FileClose" );
@@ -851,6 +851,6 @@ void OCalcTable::FileClose()
 
     OCalcTable_BASE::FileClose();
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

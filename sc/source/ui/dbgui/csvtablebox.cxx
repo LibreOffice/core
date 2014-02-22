@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "csvtablebox.hxx"
@@ -22,10 +22,10 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/settings.hxx>
 
-// ause
+
 #include "editutil.hxx"
 
-// ============================================================================
+
 
 ScCsvTableBox::ScCsvTableBox( Window* pParent, WinBits nBits ) :
     ScCsvControl( pParent, maData, nBits ),
@@ -38,7 +38,7 @@ ScCsvTableBox::ScCsvTableBox( Window* pParent, WinBits nBits ) :
     mbFixedMode = false;
     mnFixedWidth = 1;
 
-    maHScroll.EnableRTL( false ); // RTL
+    maHScroll.EnableRTL( false ); 
     maHScroll.SetLineSize( 1 );
     maVScroll.SetLineSize( 1 );
 
@@ -69,18 +69,18 @@ Size ScCsvTableBox::GetOptimalSize() const
     return aDefault;
 }
 
-// common table box handling --------------------------------------------------
+
 
 void ScCsvTableBox::SetSeparatorsMode()
 {
     if( mbFixedMode )
     {
-        // rescue data for fixed width mode
+        
         mnFixedWidth = GetPosCount();
         maFixColStates = maGrid.GetColumnStates();
-        // switch to separators mode
+        
         mbFixedMode = false;
-        // reset and reinitialize controls
+        
         DisableRepaint();
         Execute( CSVCMD_SETLINEOFFSET, 0 );
         Execute( CSVCMD_SETPOSCOUNT, 1 );
@@ -95,11 +95,11 @@ void ScCsvTableBox::SetFixedWidthMode()
 {
     if( !mbFixedMode )
     {
-        // rescue data for separators mode
+        
         maSepColStates = maGrid.GetColumnStates();
-        // switch to fixed width mode
+        
         mbFixedMode = true;
-        // reset and reinitialize controls
+        
         DisableRepaint();
         Execute( CSVCMD_SETLINEOFFSET, 0 );
         Execute( CSVCMD_SETPOSCOUNT, mnFixedWidth );
@@ -129,7 +129,7 @@ void ScCsvTableBox::InitControls()
 
     if( mbFixedMode )
     {
-        // ruler sets height internally
+        
         maRuler.setPosSizePixel( 0, 0, nDataWidth, 0 );
         sal_Int32 nY = maRuler.GetSizePixel().Height();
         maData.mnWinHeight -= nY;
@@ -140,12 +140,12 @@ void ScCsvTableBox::InitControls()
     maGrid.Show();
     maRuler.Show( mbFixedMode );
 
-    // scrollbars always visible
+    
     maHScroll.setPosSizePixel( 0, nDataHeight, nDataWidth, nScrollBarSize );
     InitHScrollBar();
     maHScroll.Show();
 
-    // scrollbars always visible
+    
     maVScroll.setPosSizePixel( nDataWidth, 0, nScrollBarSize, nDataHeight );
     InitVScrollBar();
     maVScroll.Show();
@@ -155,7 +155,7 @@ void ScCsvTableBox::InitControls()
         maScrollBox.setPosSizePixel( nDataWidth, nDataHeight, nScrollBarSize, nScrollBarSize );
     maScrollBox.Show( bScrBox );
 
-    // let the controls self-adjust to visible area
+    
     Execute( CSVCMD_SETPOSOFFSET, GetFirstVisPos() );
     Execute( CSVCMD_SETLINEOFFSET, GetFirstVisLine() );
 }
@@ -188,14 +188,14 @@ void ScCsvTableBox::MakePosVisible( sal_Int32 nPos )
 }
 
 
-// cell contents --------------------------------------------------------------
+
 
 void ScCsvTableBox::SetUniStrings(
         const OUString* pTextLines, const OUString& rSepChars,
         sal_Unicode cTextSep, bool bMergeSep )
 {
-    // assuming that pTextLines is a string array with size CSV_PREVIEW_LINES
-    // -> will be dynamic sometime
+    
+    
     DisableRepaint();
     sal_Int32 nEndLine = GetFirstVisLine() + CSV_PREVIEW_LINES;
     const OUString* pString = pTextLines;
@@ -210,7 +210,7 @@ void ScCsvTableBox::SetUniStrings(
 }
 
 
-// column settings ------------------------------------------------------------
+
 
 void ScCsvTableBox::InitTypes( const ListBox& rListBox )
 {
@@ -230,7 +230,7 @@ void ScCsvTableBox::FillColumnData( ScAsciiOptions& rOptions ) const
 }
 
 
-// event handling -------------------------------------------------------------
+
 
 void ScCsvTableBox::Resize()
 {
@@ -371,7 +371,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
         break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
 
@@ -414,20 +414,20 @@ IMPL_LINK( ScCsvTableBox, ScrollEndHdl, ScrollBar*, pScrollBar )
 }
 
 
-// accessibility --------------------------------------------------------------
+
 
 ScCsvTableBox::XAccessibleRef ScCsvTableBox::CreateAccessible()
 {
-    // do not use the ScCsvControl mechanism, return default accessible object
+    
     return Control::CreateAccessible();
 }
 
 ScAccessibleCsvControl* ScCsvTableBox::ImplCreateAccessible()
 {
-    return NULL;    // not used, see CreateAccessible()
+    return NULL;    
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

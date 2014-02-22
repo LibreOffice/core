@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,7 +54,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 
-//==================================================================================================
+
 
 #define SERVICENAME     "com.sun.star.linguistic2.LanguageGuessing"
 #define IMPLNAME        "com.sun.star.lingu2.LanguageGuessing"
@@ -87,8 +87,8 @@ class LangGuess_Impl :
     bool            m_bInitialized;
     css::uno::Reference< css::uno::XComponentContext >  m_xContext;
 
-    LangGuess_Impl( const LangGuess_Impl & ); // not defined
-    LangGuess_Impl & operator =( const LangGuess_Impl & ); // not defined
+    LangGuess_Impl( const LangGuess_Impl & ); 
+    LangGuess_Impl & operator =( const LangGuess_Impl & ); 
 
     virtual ~LangGuess_Impl() {}
     void    EnsureInitialized();
@@ -96,13 +96,13 @@ class LangGuess_Impl :
 public:
     explicit LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
 
-    // XServiceInfo implementation
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
     static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
-    // XLanguageGuessing implementation
+    
     virtual ::com::sun::star::lang::Locale SAL_CALL guessPrimaryLanguage( const OUString& aText, ::sal_Int32 nStartPos, ::sal_Int32 nLen ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL disableLanguages( const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >& aLanguages ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL enableLanguages( const ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale >& aLanguages ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -110,14 +110,14 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getEnabledLanguages(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getDisabledLanguages(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // implementation specific
+    
     void SetFingerPrintsDB( const OUString &fileName ) throw (RuntimeException);
 
     static const OUString & SAL_CALL getImplementationName_Static() throw();
 
 };
 
-//*************************************************************************
+
 
 LangGuess_Impl::LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext > const & rxContext) :
     m_bInitialized( false ),
@@ -125,17 +125,17 @@ LangGuess_Impl::LangGuess_Impl(css::uno::Reference< css::uno::XComponentContext 
 {
 }
 
-//*************************************************************************
+
 
 void LangGuess_Impl::EnsureInitialized()
 {
     if (!m_bInitialized)
     {
-        // set this to true at the very start to prevent loops because of
-        // implicitly called functions below
+        
+        
         m_bInitialized = true;
 
-        // set default fingerprint path to where those get installed
+        
         OUString aPhysPath;
         OUString aURL( SvtPathOptions().GetFingerprintPath() );
         utl::LocalFileHelper::ConvertURLToPhysicalName( aURL, aPhysPath );
@@ -149,7 +149,7 @@ void LangGuess_Impl::EnsureInitialized()
 
 #if !defined(EXTTEXTCAT_VERSION_MAJOR)
         //
-        // disable currently not functional languages...
+        
         //
         struct LangCountry
         {
@@ -158,8 +158,8 @@ void LangGuess_Impl::EnsureInitialized()
         };
         LangCountry aDisable[] =
         {
-            // not functional in modified libtextcat, but fixed in >= libexttextcat 3.1.0
-            // which is the first with EXTTEXTCAT_VERSION_MAJOR defined
+            
+            
 
             {"sco", ""}, {"zh", "CN"}, {"zh", "TW"}, {"ja", ""}, {"ko", ""},
             {"ka", ""}, {"hi", ""}, {"mr", ""}, {"ne", ""}, {"sa", ""},
@@ -181,7 +181,7 @@ void LangGuess_Impl::EnsureInitialized()
     }
 }
 
-//*************************************************************************
+
 
 Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
         const OUString& rText,
@@ -207,14 +207,14 @@ Locale SAL_CALL LangGuess_Impl::guessPrimaryLanguage(
     return aRes;
 }
 
-//*************************************************************************
+
 #define DEFAULT_CONF_FILE_NAME "fpdb.conf"
 
 void LangGuess_Impl::SetFingerPrintsDB(
         const OUString &filePath )
     throw (RuntimeException)
 {
-    //! text encoding for file name / path needs to be in the same encoding the OS uses
+    
     OString path = OUStringToOString( filePath, osl_getThreadTextEncoding() );
     OString conf_file_name( DEFAULT_CONF_FILE_NAME );
     OString conf_file_path(path);
@@ -223,7 +223,7 @@ void LangGuess_Impl::SetFingerPrintsDB(
     m_aGuesser.SetDBPath((const char*)conf_file_path.getStr(), (const char*)path.getStr());
 }
 
-//*************************************************************************
+
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
         throw (uno::RuntimeException)
 {
@@ -247,7 +247,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getAvailableLanguages(  )
     return aRes;
 }
 
-//*************************************************************************
+
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
         throw (uno::RuntimeException)
 {
@@ -271,7 +271,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getEnabledLanguages(  )
     return aRes;
 }
 
-//*************************************************************************
+
 uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
         throw (uno::RuntimeException)
 {
@@ -295,7 +295,7 @@ uno::Sequence< Locale > SAL_CALL LangGuess_Impl::getDisabledLanguages(  )
     return aRes;
 }
 
-//*************************************************************************
+
 void SAL_CALL LangGuess_Impl::disableLanguages(
         const uno::Sequence< Locale >& rLanguages )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -321,7 +321,7 @@ void SAL_CALL LangGuess_Impl::disableLanguages(
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL LangGuess_Impl::enableLanguages(
         const uno::Sequence< Locale >& rLanguages )
     throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -384,9 +384,9 @@ Reference< XInterface > SAL_CALL LangGuess_Impl_create(
     return static_cast< ::cppu::OWeakObject * >( new LangGuess_Impl(xContext) );
 }
 
-//##################################################################################################
-//#### EXPORTED ### functions to allow for registration and creation of the UNO component
-//##################################################################################################
+
+
+
 
 static const struct ::cppu::ImplementationEntry s_component_entries [] =
 {

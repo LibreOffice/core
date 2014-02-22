@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "accessibility/extended/AccessibleBrowseBoxTable.hxx"
 #include <svtools/accessibletableprovider.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -30,13 +30,13 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
 
-// Ctor/Dtor/disposing --------------------------------------------------------
+
+
 
 AccessibleBrowseBoxTable::AccessibleBrowseBoxTable(
         const Reference< XAccessible >& rxParent,
@@ -49,7 +49,7 @@ AccessibleBrowseBoxTable::~AccessibleBrowseBoxTable()
 {
 }
 
-// XAccessibleContext ---------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleBrowseBoxTable::getAccessibleChild( sal_Int32 nChildIndex )
@@ -70,7 +70,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxTable::getAccessibleIndexInParent()
     return BBINDEX_TABLE;
 }
 
-// XAccessibleComponent -------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleBrowseBoxTable::getAccessibleAtPoint( const awt::Point& rPoint )
@@ -102,10 +102,10 @@ Any SAL_CALL AccessibleBrowseBoxTable::getAccessibleKeyBinding()
     throw ( uno::RuntimeException )
 {
     ensureIsAlive();
-    return Any();   // no special key bindings for data table
+    return Any();   
 }
 
-// XAccessibleTable -----------------------------------------------------------
+
 
 OUString SAL_CALL AccessibleBrowseBoxTable::getAccessibleRowDescription( sal_Int32 nRow )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
@@ -209,7 +209,7 @@ sal_Bool SAL_CALL AccessibleBrowseBoxTable::isAccessibleSelected(
     return implIsRowSelected( nRow ) || implIsColumnSelected( nColumn );
 }
 
-// XServiceInfo ---------------------------------------------------------------
+
 
 OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
     throw ( uno::RuntimeException )
@@ -217,7 +217,7 @@ OUString SAL_CALL AccessibleBrowseBoxTable::getImplementationName()
     return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxTable" );
 }
 
-// internal virtual methods ---------------------------------------------------
+
 
 Rectangle AccessibleBrowseBoxTable::implGetBoundingBox()
 {
@@ -229,7 +229,7 @@ Rectangle AccessibleBrowseBoxTable::implGetBoundingBoxOnScreen()
     return mpBrowseBox->calcTableRect();
 }
 
-// internal helper methods ----------------------------------------------------
+
 
 Reference< XAccessibleTable > AccessibleBrowseBoxTable::implGetHeaderBar(
         sal_Int32 nChildIndex )
@@ -247,15 +247,15 @@ Reference< XAccessibleTable > AccessibleBrowseBoxTable::implGetHeaderBar(
         {
             OSL_FAIL( "implGetHeaderBar - wrong child index" );
         }
-        // RuntimeException goes to caller
+        
     }
     return Reference< XAccessibleTable >( xRet, uno::UNO_QUERY );
 }
 
-// ============================================================================
 
-} // namespace accessibility
 
-// ============================================================================
+} 
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

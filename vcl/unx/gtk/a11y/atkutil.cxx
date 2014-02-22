@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@
 
 #include <set>
 
-// #define ENABLE_TRACING
+
 
 #ifdef ENABLE_TRACING
 #include <stdio.h>
@@ -80,7 +80,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
     if( xAccessible.get() == reinterpret_cast < accessibility::XAccessible * > (data) )
     {
         AtkObject *atk_obj = xAccessible.is() ? atk_object_wrapper_ref( xAccessible ) : NULL;
-        // Gail does not notify focus changes to NULL, so do we ..
+        
         if( atk_obj )
         {
 #ifdef ENABLE_TRACING
@@ -89,10 +89,10 @@ atk_wrapper_focus_idle_handler (gpointer data)
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             atk_focus_tracker_notify(atk_obj);
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            // #i93269#
-            // emit text_caret_moved event for <XAccessibleText> object,
-            // if cursor is inside the <XAccessibleText> object.
-            // also emit state-changed:focused event under the same condition.
+            
+            
+            
+            
             {
                 AtkObjectWrapper* wrapper_obj = ATK_OBJECT_WRAPPER (atk_obj);
                 if( wrapper_obj && !wrapper_obj->mpText && wrapper_obj->mpContext )
@@ -123,7 +123,7 @@ atk_wrapper_focus_idle_handler (gpointer data)
     return FALSE;
 }
 
-} // extern "C"
+} 
 
 /*****************************************************************************/
 
@@ -180,10 +180,10 @@ public:
     static uno::Reference< accessibility::XAccessible > getAccessible(const lang::EventObject& aEvent )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 
-    // XEventListener
+    
     virtual void disposing( const lang::EventObject& Source ) throw (uno::RuntimeException);
 
-    // XAccessibleEventListener
+    
     virtual void notifyEvent( const accessibility::AccessibleEventObject& aEvent ) throw( uno::RuntimeException );
 };
 
@@ -193,8 +193,8 @@ void DocumentFocusListener::disposing( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
 
-    // Unref the object here, but do not remove as listener since the object
-    // might no longer be in a state that safely allows this.
+    
+    
     if( aEvent.Source.is() )
         m_aRefList.erase(aEvent.Source);
 
@@ -313,7 +313,7 @@ void DocumentFocusListener::attachRecursive(
     if (!xBroadcaster.is())
         return;
 
-    // If not already done, add the broadcaster to the list and attach as listener.
+    
     uno::Reference< uno::XInterface > xInterface = xBroadcaster;
     if( m_aRefList.insert(xInterface).second )
     {
@@ -439,7 +439,7 @@ static void handle_toolbox_highlight(Window *pWindow)
 {
     ToolBox *pToolBox = static_cast <ToolBox *> (pWindow);
 
-    // Make sure either the toolbox or its parent toolbox has the focus
+    
     if ( ! pToolBox->HasFocus() )
     {
         ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pToolBox->GetParent() );
@@ -455,7 +455,7 @@ static void handle_toolbox_highlightoff(Window *pWindow)
     ToolBox *pToolBox = static_cast <ToolBox *> (pWindow);
     ToolBox* pToolBoxParent = dynamic_cast< ToolBox* >( pToolBox->GetParent() );
 
-    // Notify when leaving sub toolboxes
+    
     if( pToolBoxParent && pToolBoxParent->HasFocus() )
         notify_toolbox_item_focus( pToolBoxParent );
 }
@@ -471,7 +471,7 @@ static void create_wrapper_for_child(
         uno::Reference< accessibility::XAccessible > xChild(xContext->getAccessibleChild(index));
         if( xChild.is() )
         {
-            // create the wrapper object - it will survive the unref unless it is a transient object
+            
             g_object_unref( atk_object_wrapper_ref( xChild ) );
         }
     }
@@ -506,11 +506,11 @@ static void handle_get_focus(::VclWindowEvent const * pEvent)
 
     Window *pWindow = pEvent->GetWindow();
 
-    // The menu bar is handled through VCLEVENT_MENU_HIGHLIGHTED
+    
     if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
         return;
 
-    // ToolBoxes are handled through VCLEVENT_TOOLBOX_HIGHLIGHT
+    
     if( pWindow->GetType() == WINDOW_TOOLBOX )
         return;
 
@@ -647,7 +647,7 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
 
         case VCLEVENT_OBJECT_DYING:
             g_aWindowList.erase( static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow() );
-            // fallthrough intentional !
+            
         case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
             handle_toolbox_highlightoff(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
             break;
@@ -657,11 +657,11 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
             break;
 
         case VCLEVENT_COMBOBOX_SETTEXT:
-            // This looks quite strange to me. Stumbled over this when fixing #i104290#.
-            // This kicked in when leaving the combobox in the toolbar, after that the events worked.
-            // I guess this was a try to work around missing combobox events, which didn't do the full job, and shouldn't be necessary anymore.
-            // Fix for #i104290# was done in toolkit/source/awt/vclxaccessiblecomponent, FOCUSED state for compound controls in general.
-            // create_wrapper_for_children(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+            
+            
+            
+            
+            
             break;
 
         default:
@@ -716,7 +716,7 @@ ooo_atk_util_class_init (AtkUtilClass *)
     Application::AddEventListener( g_aEventListenerLink );
 }
 
-} // extern "C"
+} 
 
 /*****************************************************************************/
 

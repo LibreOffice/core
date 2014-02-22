@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -187,12 +187,12 @@ OGLTransitionImpl::displaySlide(
         const ::sal_Int32 glSlideTex, const Primitives_t& primitives,
         double SlideWidthScale, double SlideHeightScale )
 {
-   //TODO change to foreach
+   
     glBindTexture(GL_TEXTURE_2D, glSlideTex);
 
-    // display slide reflection
-    // note that depth test is turned off while blending the shadow
-    // so the slides has to be rendered in right order, see rochade as example
+    
+    
+    
     if( maSettings.mbReflectSlides ) {
         double surfaceLevel = -0.04;
 
@@ -253,8 +253,8 @@ void Primitive::applyOperations(double nTime, double WidthScale, double HeightSc
 void SceneObject::display(double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight ) const
 {
     for(unsigned int i(0); i < maPrimitives.size(); ++i) {
-        // fixme: allow various model spaces, now we make it so that
-        // it is regular -1,-1 to 1,1, where the whole display fits in
+        
+        
         glPushMatrix();
         if (DispHeight > DispWidth)
             glScaled(DispHeight/DispWidth, 1, 1);
@@ -628,14 +628,14 @@ boost::shared_ptr<OGLTransitionImpl> makeRochade()
     return makeRochadeTransition(aLeavingSlide, aEnteringSlide, aSettings);
 }
 
-// TODO(Q3): extract to basegfx
+
 inline basegfx::B2DVector clamp(const basegfx::B2DVector& v)
 {
     return basegfx::B2DVector(min(max(v.getX(),-1.0),1.0),
                               min(max(v.getY(),-1.0),1.0));
 }
 
-// TODO(Q3): extract to basegfx
+
 inline basegfx::B3DVector clamp(const basegfx::B3DVector& v)
 {
     return basegfx::B3DVector(min(max(v.getX(),-1.0),1.0),
@@ -648,7 +648,7 @@ inline double randFromNeg1to1()
     return ( ( static_cast<double>( rand() ) / static_cast<double>( RAND_MAX ) ) * 2.0 ) - 1.0;
 }
 
-// TODO(Q3): extract to basegfx
+
 inline basegfx::B3DVector randNormVectorInXYPlane()
 {
     basegfx::B3DVector toReturn(randFromNeg1to1(),randFromNeg1to1(),0.0);
@@ -668,11 +668,11 @@ boost::shared_ptr<OGLTransitionImpl> makeRevolvingCircles( ::sal_uInt16 nCircles
     double LastRadius(0.0);
     double NextRadius(2*Radius);
 
-    /// now we know there is at least two circles
-    /// the first will always be a full circle
-    /// the last will always be the outer shell of the slide with a circle hole
+    
+    
+    
 
-    //add the full circle
+    
     vector<basegfx::B2DVector> unScaledTexCoords;
     double TempAngle(0.0);
     for(unsigned int Point(0); Point < nPointsOnCircles; ++Point)
@@ -820,7 +820,7 @@ boost::shared_ptr<OGLTransitionImpl> makeNByMTileFlip( ::sal_uInt16 n, ::sal_uIn
 
             Tile.pushTriangle(basegfx::B2DVector( iPDn , jDm ) , basegfx::B2DVector( iDn , jDm ) , basegfx::B2DVector( iDn , jPDm ));
 
-            Tile.pushTriangle(basegfx::B2DVector( iPDn , jPDm ) , basegfx::B2DVector( iPDn , jDm ) , basegfx::B2DVector( iDn , jPDm ));//bottom left corner of tile
+            Tile.pushTriangle(basegfx::B2DVector( iPDn , jPDm ) , basegfx::B2DVector( iPDn , jDm ) , basegfx::B2DVector( iDn , jPDm ));
 
             Tile.Operations.push_back( makeSRotate( basegfx::B3DVector( 1 , 1 , 0 ) , ( Tile.getVertices()[1] + Tile.getVertices()[3] )/2.0 , 180 , true, iDn*jDm/2.0 , ((iPDn*jPDm)+1.0)/2.0 ) );
             aLeavingSlide.push_back(Tile);
@@ -1039,15 +1039,15 @@ void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const base
     Verts.push_back(basegfx::B3DVector( 2*SlideLocation1.getX() - 1, -2*SlideLocation1.getY() + 1 , 0.0 ));
     Verts.push_back(basegfx::B3DVector( 2*SlideLocation2.getX() - 1, -2*SlideLocation2.getY() + 1 , 0.0 ));
 
-    //figure out if they're facing the correct way, and make them face the correct way.
+    
     basegfx::B3DVector Normal( basegfx::cross( Verts[0] - Verts[1] , Verts[1] - Verts[2] ) );
-    if(Normal.getZ() >= 0.0)//if the normal is facing us
+    if(Normal.getZ() >= 0.0)
     {
         Texs.push_back(SlideLocation0);
         Texs.push_back(SlideLocation1);
         Texs.push_back(SlideLocation2);
     }
-    else // if the normal is facing away from us, make it face us
+    else 
     {
         Texs.push_back(SlideLocation0);
         Texs.push_back(SlideLocation2);
@@ -1066,9 +1066,9 @@ void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const base
     TexCoords.push_back(Texs[1]);
     TexCoords.push_back(Texs[2]);
 
-    Normals.push_back(basegfx::B3DVector(0,0,1));//all normals always face the screen when untransformed.
-    Normals.push_back(basegfx::B3DVector(0,0,1));//all normals always face the screen when untransformed.
-    Normals.push_back(basegfx::B3DVector(0,0,1));//all normals always face the screen when untransformed.
+    Normals.push_back(basegfx::B3DVector(0,0,1));
+    Normals.push_back(basegfx::B3DVector(0,0,1));
+    Normals.push_back(basegfx::B3DVector(0,0,1));
 }
 
 namespace
@@ -1083,7 +1083,7 @@ public:
 
 private:
     virtual void prepare_( double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight );
-    // mmPrepare = &OGLTransitionImpl::prepareDiamond;
+    
 };
 
 void DiamondTransition::prepare_( double nTime, double /* SlideWidth */, double /* SlideHeight */, double /* DispWidth */, double /* DispHeight */ )
@@ -1514,7 +1514,7 @@ void ShaderTransition::impl_preparePermShader()
 
         GLint location = OGLShaders::glGetUniformLocation( m_nProgramObject, "leavingSlideTexture" );
         if( location != -1 ) {
-            OGLShaders::glUniform1i( location, 0 );  // texture unit 0
+            OGLShaders::glUniform1i( location, 0 );  
         }
 
         OGLShaders::glActiveTexture(GL_TEXTURE1);
@@ -1524,12 +1524,12 @@ void ShaderTransition::impl_preparePermShader()
 
         location = OGLShaders::glGetUniformLocation( m_nProgramObject, "permTexture" );
         if( location != -1 ) {
-            OGLShaders::glUniform1i( location, 1 );  // texture unit 1
+            OGLShaders::glUniform1i( location, 1 );  
         }
 
         location = OGLShaders::glGetUniformLocation( m_nProgramObject, "enteringSlideTexture" );
         if( location != -1 ) {
-            OGLShaders::glUniform1i( location, 2 );  // texture unit 2
+            OGLShaders::glUniform1i( location, 2 );  
         }
     }
 #endif

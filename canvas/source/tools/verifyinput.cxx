@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -593,8 +593,8 @@ namespace canvas
                           const uno::Reference< uno::XInterface >&  /*xIf*/,
                           ::sal_Int16                               /*nArgPos*/ )
         {
-            // TODO(E3): Implement FontDescription checks, once the
-            // Panose stuff is ready.
+            
+            
         }
 
         void verifyInput( const rendering::FontRequest&             fontRequest,
@@ -739,8 +739,8 @@ namespace canvas
         }
 
 
-    } // namespace tools
+    } 
 
-} // namespace canvas
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

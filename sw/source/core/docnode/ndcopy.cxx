@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/formatbreakitem.hxx>
@@ -71,9 +71,9 @@ namespace
     {
         sal_uLong nStart = rPam.Start()->nNode.GetIndex();
         sal_uLong nEnd = rPam.End()->nNode.GetIndex();
-        if( rLastIdx.GetIndex() < nNewIdx ) // Moving forward?
+        if( rLastIdx.GetIndex() < nNewIdx ) 
         {
-            do // count "non-copy" nodes
+            do 
             {
                 SwNode& rNode = rLastIdx.GetNode();
                 if( ( rNode.IsSectionNode() && rNode.EndOfSectionIndex() >= nEnd )
@@ -83,8 +83,8 @@ namespace
             }
             while( rLastIdx.GetIndex() < nNewIdx );
         }
-        else if( rDelCount ) // optimization: if there are no "non-copy" nodes until now,
-                             // no move backward needed
+        else if( rDelCount ) 
+                             
         {
             while( rLastIdx.GetIndex() > nNewIdx )
             {
@@ -108,11 +108,11 @@ namespace
         nNdOff -= nDelCount;
         sal_Int32 nCntntPos = rOrigPos.nContent.GetIndex();
 
-        // Always adjust <nNode> at to be changed <SwPosition> instance <rChgPos>
+        
         rChgPos.nNode = nNdOff + rCpyStt.nNode.GetIndex();
         if( !nNdOff )
         {
-            // dann nur den Content anpassen
+            
             if( nCntntPos > rOrigStt.nContent.GetIndex() )
                 nCntntPos -= rOrigStt.nContent.GetIndex();
             else
@@ -122,7 +122,7 @@ namespace
         rChgPos.nContent.Assign( rChgPos.nNode.GetNode().GetCntntNode(), nCntntPos );
     }
 
-    // TODO: use SaveBookmark (from _DelBookmarks)
+    
     static void lcl_CopyBookmarks(
         const SwPaM& rPam,
         SwPaM& rCpyPam )
@@ -145,12 +145,12 @@ namespace
 
             const SwPosition& rMarkStart = pMark->GetMarkStart();
             const SwPosition& rMarkEnd = pMark->GetMarkEnd();
-            // only include marks that are in the range and not touching both start and end
-            // - not for annotation marks.
+            
+            
             const bool bIsNotOnBoundary =
                 pMark->IsExpanded()
-                ? (rMarkStart != rStt || rMarkEnd != rEnd)  // rMarkStart != rMarkEnd
-                : (rMarkStart != rStt && rMarkEnd != rEnd); // rMarkStart == rMarkEnd
+                ? (rMarkStart != rStt || rMarkEnd != rEnd)  
+                : (rMarkStart != rStt && rMarkEnd != rEnd); 
             if ( rMarkStart >= rStt && rMarkEnd <= rEnd
                  && ( bIsNotOnBoundary
                       || IDocumentMarkAccess::GetType( *pMark ) == IDocumentMarkAccess::ANNOTATIONMARK ) )
@@ -158,7 +158,7 @@ namespace
                 vMarksToCopy.push_back(pMark);
             }
         }
-        // We have to count the "non-copied" nodes..
+        
         SwNodeIndex aCorrIdx(rStt.nNode);
         sal_uLong nDelCount = 0;
         for(mark_vector_t::const_iterator ppMark = vMarksToCopy.begin();
@@ -180,11 +180,11 @@ namespace
                 aTmpPam,
                 pMark->GetName(),
                 IDocumentMarkAccess::GetType(*pMark));
-            // Explicitly try to get exactly the same name as in the source
-            // because NavigatorReminders, DdeBookmarks etc. ignore the proposed name
+            
+            
             pDestDoc->getIDocumentMarkAccess()->renameMark(pNewMark, pMark->GetName());
 
-            // copying additional attributes for bookmarks or fieldmarks
+            
             ::sw::mark::IBookmark* const pNewBookmark =
                 dynamic_cast< ::sw::mark::IBookmark* const >(pNewMark);
             if(pNewBookmark)
@@ -221,8 +221,8 @@ namespace
     }
 }
 
-// Structure for the mapping from old and new frame formats to the
-// boxes and lines of a table
+
+
 struct _MapTblFrmFmt
 {
     const SwFrmFmt *pOld, *pNew;
@@ -235,14 +235,14 @@ typedef std::vector<_MapTblFrmFmt> _MapTblFrmFmts;
 
 SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
-    // the Copy-Textnode is the Node with the Text, the Copy-Attrnode is the
-    // node with the collection and hard attributes. Normally is the same
-    // node, but if insert a glossary without formatting, then the Attrnode
-    // is the prev node of the destionation position in dest. document.
+    
+    
+    
+    
     SwTxtNode* pCpyTxtNd = (SwTxtNode*)this;
     SwTxtNode* pCpyAttrNd = pCpyTxtNd;
 
-    // Copy the formats to the other document
+    
     SwTxtFmtColl* pColl = 0;
     if( pDoc->IsInsOnlyTextGlossary() )
     {
@@ -258,16 +258,16 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     SwTxtNode* pTxtNd = pDoc->GetNodes().MakeTxtNode( rIdx, pColl );
 
-    // METADATA: register copy
+    
     pTxtNd->RegisterAsCopyOf(*pCpyTxtNd);
 
-    // Copy Attribute/Text
+    
     if( !pCpyAttrNd->HasSwAttrSet() )
-        // An AttrSet was added for numbering, so delete it
+        
         pTxtNd->ResetAllAttr();
 
-    // if Copy-Textnode unequal to Copy-Attrnode, then copy first
-    // the attributes into the new Node.
+    
+    
     if( pCpyAttrNd != pCpyTxtNd )
     {
         pCpyAttrNd->CopyAttr( pTxtNd, 0, 0 );
@@ -280,8 +280,8 @@ SwCntntNode* SwTxtNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         }
     }
 
-    // Is that enough? What about PostIts/Fields/FieldTypes?
-    // #i96213# - force copy of all attributes
+    
+    
     pCpyTxtNd->CopyText( pTxtNd, SwIndex( pCpyTxtNd ),
         pCpyTxtNd->GetTxt().getLength(), true );
 
@@ -324,7 +324,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
     for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
         if ( !lcl_SrchNew( *it, (const SwFrmFmt**)&pBoxFmt ) )
             break;
-    if( pBoxFmt == pBox->GetFrmFmt() ) // Create a new one?
+    if( pBoxFmt == pBox->GetFrmFmt() ) 
     {
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == pBoxFmt->GetItemState( RES_BOXATR_FORMULA, sal_False,
@@ -376,7 +376,7 @@ static void lcl_CopyTblBox( SwTableBox* pBox, _CopyTable* pCT )
             lcl_CopyTblLine( pLine, &aPara );
     }
     else if( pNewBox->IsInHeadline( &pCT->pTblNd->GetTable() ))
-        // In the headline, the paragraphs must match conditional styles
+        
         pNewBox->GetSttNd()->CheckSectionCondColl();
 }
 
@@ -386,7 +386,7 @@ static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT )
     for( _MapTblFrmFmts::const_iterator it = pCT->rMapArr.begin(); it != pCT->rMapArr.end(); ++it )
         if ( !lcl_SrchNew( *it, (const SwFrmFmt**)&pLineFmt ) )
             break;
-    if( pLineFmt == pLine->GetFrmFmt() ) // Create a new one?
+    if( pLineFmt == pLine->GetFrmFmt() ) 
     {
         pLineFmt = pCT->pDoc->MakeTableLineFmt();
         pLineFmt->CopyAttrs( *pLine->GetFrmFmt() );
@@ -394,7 +394,7 @@ static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT )
     }
     SwTableLine* pNewLine = new SwTableLine( pLineFmt,
                             pLine->GetTabBoxes().size(), pCT->pInsBox );
-    // Insert the new row into the table
+    
     if( pCT->pInsBox )
     {
         pCT->pInsBox->GetTabLines().push_back( pNewLine );
@@ -411,7 +411,7 @@ static void lcl_CopyTblLine( const SwTableLine* pLine, _CopyTable* pCT )
 
 SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
-    // In which array are we? Nodes? UndoNodes?
+    
     SwNodes& rNds = (SwNodes&)GetNodes();
 
     {
@@ -420,7 +420,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             return 0;
     }
 
-    // Copy the TableFrmFmt
+    
     OUString sTblName( GetTable().GetFrmFmt()->GetName() );
     if( !pDoc->IsCopyIsMove() )
     {
@@ -449,8 +449,8 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwDDEFieldType* pDDEType = 0;
     if( IS_TYPE( SwDDETable, &GetTable() ))
     {
-        // We're copying a DDE table
-        // Is the field type available in the new document?
+        
+        
         pDDEType = ((SwDDETable&)GetTable()).GetDDEFldType();
         if( pDDEType->IsDeleted() )
             pDoc->InsDeletedFldType( *pDDEType );
@@ -458,24 +458,24 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
             pDDEType = (SwDDEFieldType*)pDoc->InsertFldType( *pDDEType );
         OSL_ENSURE( pDDEType, "unknown FieldType" );
 
-        // Swap the table pointers in the node
+        
         SwDDETable* pNewTable = new SwDDETable( pTblNd->GetTable(), pDDEType );
         pTblNd->SetNewTable( pNewTable, sal_False );
     }
-    // First copy the content of the tables, we will later assign the
-    // boxes/lines and create the frames
+    
+    
     SwNodeRange aRg( *this, +1, *EndOfSectionNode() );
 
-    // If there is a table in this table, the table format for the outer table
-    // does not seem to be used, because the table does not have any contents yet
-    // (see IsUsed). Therefore the inner table gets the same name as the outer table.
-    // We have to make sure that the table node of the SwTable is accessible, even
-    // without any content in m_TabSortContentBoxes. #i26629#
+    
+    
+    
+    
+    
     pTblNd->GetTable().SetTableNode( pTblNd );
     rNds._Copy( aRg, aInsPos, sal_False );
     pTblNd->GetTable().SetTableNode( 0 );
 
-    // Special case for a single box
+    
     if( 1 == GetTable().GetTabSortBoxes().size() )
     {
         aRg.aStart.Assign( *pTblNd, 1 );
@@ -483,8 +483,8 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         pDoc->GetNodes().SectionDown( &aRg, SwTableBoxStartNode );
     }
 
-    // Delete all frames from the copied area, they will be created
-    // during the generation of the table frame
+    
+    
     pTblNd->DelFrms();
 
     _MapTblFrmFmts aMapArr;
@@ -502,15 +502,15 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
 void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
 {
-    // Copy the formats into the other document:
-    // Special case for PageBreak/PageDesc/ColBrk
+    
+    
     SwDoc* pDestDoc = rDestNd.GetDoc();
     SwAttrSet aPgBrkSet( pDestDoc->GetAttrPool(), aBreakSetRange );
     const SwAttrSet* pSet;
 
     if( 0 != ( pSet = rDestNd.GetpSwAttrSet() ) )
     {
-        // Special cases for Break-Attributes
+        
         const SfxPoolItem* pAttr;
         if( SFX_ITEM_SET == pSet->GetItemState( RES_BREAK, false, &pAttr ) )
             aPgBrkSet.Put( *pAttr );
@@ -527,8 +527,8 @@ void SwTxtNode::CopyCollFmt( SwTxtNode& rDestNd )
         rDestNd.SetAttr( aPgBrkSet );
 }
 
-// Copy method from SwDoc
-// Prevent copying in Flys that are anchored in the area
+
+
 static sal_Bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
                         sal_uLong nInsNd )
 {
@@ -555,12 +555,12 @@ static sal_Bool lcl_ChkFlyFly( SwDoc* pDoc, sal_uLong nSttNd, sal_uLong nEndNd,
 
             if( pSNd->GetIndex() < nInsNd &&
                 nInsNd < pSNd->EndOfSectionIndex() )
-                // Do not copy !
+                
                 return sal_True;
 
             if( lcl_ChkFlyFly( pDoc, pSNd->GetIndex(),
                         pSNd->EndOfSectionIndex(), nInsNd ) )
-                // Do not copy !
+                
                 return sal_True;
         }
     }
@@ -578,7 +578,7 @@ static void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
         SwPosition* pCpyStt = rCpyPam.Start(), *pCpyEnd = rCpyPam.End();
         SwPaM* pDelPam = 0;
         const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
-        // We have to count the "non-copied" nodes
+        
         sal_uLong nDelCount = 0;
         SwNodeIndex aCorrIdx( pStt->nNode );
 
@@ -596,12 +596,12 @@ static void lcl_DeleteRedlines( const SwPaM& rPam, SwPaM& rCpyPam )
                 {
                 case POS_COLLIDE_END:
                 case POS_BEFORE:
-                    // Pos1 is before Pos2
+                    
                     break;
 
                 case POS_COLLIDE_START:
                 case POS_BEHIND:
-                    // Pos1 is after Pos2
+                    
                     n = rTbl.size();
                     break;
 
@@ -660,7 +660,7 @@ static void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
     }
 }
 
-// Copy an area into this document or into another document
+
 bool
 SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
 {
@@ -669,14 +669,14 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
     SwDoc* pDoc = rPos.nNode.GetNode().GetDoc();
     bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
 
-    // Catch if there's no copy to do
+    
     if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) )
         return false;
 
-    // Prevent copying in Flys that are anchored in the area
+    
     if( pDoc == this )
     {
-        // Correct the Start-/EndNode
+        
         sal_uLong nStt = pStt->nNode.GetIndex(),
                 nEnd = pEnd->nNode.GetIndex(),
                 nDiff = nEnd - nStt +1;
@@ -703,33 +703,33 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
     bool bRet = false;
 
     if( pDoc != this )
-    {   // ordinary copy
+    {   
         bRet = CopyImpl( rPam, rPos, true, bCopyAll, pRedlineRange );
     }
     else if( ! ( *pStt <= rPos && rPos < *pEnd &&
             ( pStt->nNode != pEnd->nNode ||
               !pStt->nNode.GetNode().IsTxtNode() )) )
     {
-        // Copy to a position outside of the area, or copy a single TextNode
-        // Do an ordinary copy
+        
+        
         bRet = CopyImpl( rPam, rPos, true, bCopyAll, pRedlineRange );
     }
     else
     {
-        // Copy the area in itself
-        // Special case for handling an area with several nodes,
-        // or a single node that is not a TextNode
+        
+        
+        
         OSL_ENSURE( this == pDoc, " invalid copy branch!" );
         OSL_FAIL("mst: i thought this could be dead code;"
                 "please tell me what you did to get here!");
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
-        // Then copy the area to the underlying document area
-        // (with start/end nodes clamped) and move them to
-        // the desired position.
+        
+        
+        
 
         SwUndoCpyDoc* pUndo = 0;
-        // Save the Undo area
+        
         SwPaM aPam( rPos );
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
@@ -742,7 +742,7 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
             SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection(
                                 SwNodeIndex( GetNodes().GetEndOfAutotext() ));
             aPam.GetPoint()->nNode = *pSttNd->EndOfSectionNode();
-            // copy without Frames
+            
             pDoc->CopyImpl( rPam, *aPam.GetPoint(), false, bCopyAll, 0 );
 
             aPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfAutotext();
@@ -754,17 +754,17 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
             aPam.GetPoint()->nNode = *aPam.GetNode()->StartOfSectionNode();
             pNode = pDoc->GetNodes().GoNext( &aPam.GetPoint()->nNode );
             pNode->MakeStartIndex( &aPam.GetPoint()->nContent );
-            // move to desired position
+            
             pDoc->MoveRange( aPam, rPos, DOC_MOVEDEFAULT );
 
             pNode = aPam.GetCntntNode();
-            *aPam.GetPoint() = rPos;      // Move the cursor for Undo
-            aPam.SetMark();               // also move the Mark
-            aPam.DeleteMark();            // But don't mark any area
-            pDoc->DeleteSection( pNode ); // Delete the area again
+            *aPam.GetPoint() = rPos;      
+            aPam.SetMark();               
+            aPam.DeleteMark();            
+            pDoc->DeleteSection( pNode ); 
         }
 
-        // if Undo is enabled, store the insertion range
+        
         if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             pUndo->SetInsertRange( aPam );
@@ -817,7 +817,7 @@ static bool lcl_MarksWholeNode(const SwPaM & rPam)
     return bResult;
 }
 
-// #i86492#
+
 static bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
 {
     bool bRet = false;
@@ -856,10 +856,10 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     SwPosition* pStt = rPam.Start();
     SwPosition* pEnd = rPam.End();
 
-    // Catch when there's no copy to do.
+    
     if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) ||
-        //JP 29.6.2001: 88963 - dont copy if inspos is in region of start to end
-        //JP 15.11.2001: don't test inclusive the end, ever exclusive
+        
+        
         ( pDoc == this && *pStt <= rPos && rPos < *pEnd ))
     {
         return false;
@@ -867,10 +867,10 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     const bool bEndEqualIns = pDoc == this && rPos == *pEnd;
 
-    // If Undo is enabled, create the UndoCopy object
+    
     SwUndoCpyDoc* pUndo = 0;
-    // lcl_DeleteRedlines may delete the start or end node of the cursor when
-    // removing the redlines so use cursor that is corrected by PaMCorrAbs
+    
+    
     ::boost::scoped_ptr<SwUnoCrsr> const pCopyPam(pDoc->CreateUnoCrsr(rPos));
 
     SwTblNumFmtMerge aTNFM( *this, *pDoc );
@@ -884,15 +884,15 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     RedlineMode_t eOld = pDoc->GetRedlineMode();
     pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
-    // Move the PaM one node back from the insert position, so that
-    // the position doesn't get moved
+    
+    
     pCopyPam->SetMark();
     bool bCanMoveBack = pCopyPam->Move(fnMoveBackward, fnGoCntnt);
-    // If the position was shifted from more than one node, an end node has been skipped
+    
     bool bAfterTable = false;
     if ((rPos.nNode.GetIndex() - pCopyPam->GetPoint()->nNode.GetIndex()) > 1)
     {
-        // First go back to the original place
+        
         pCopyPam->GetPoint()->nNode = rPos.nNode;
         pCopyPam->GetPoint()->nContent = rPos.nContent;
 
@@ -914,17 +914,17 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     bool bCopyBookmarks = true;
     sal_Bool bStartIsTxtNode = 0 != pSttTxtNd;
 
-    // #i104585# copy outline num rule to clipboard (for ASCII filter)
+    
     if (pDoc->IsClipBoard() && GetOutlineNumRule())
     {
         pDoc->SetOutlineNumRule(*GetOutlineNumRule());
     }
 
-    // #i86492#
-    // Correct the search for a previous list:
-    // First search for non-outline numbering list. Then search for non-outline
-    // bullet list.
-    // Keep also the <ListId> value for possible propagation.
+    
+    
+    
+    
+    
     OUString aListIdToPropagate;
     const SwNumRule* pNumRuleToPropagate =
         pDoc->SearchNumRule( rPos, false, true, false, 0, aListIdToPropagate, true );
@@ -933,10 +933,10 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pNumRuleToPropagate =
             pDoc->SearchNumRule( rPos, false, false, false, 0, aListIdToPropagate, true );
     }
-    // #i86492#
-    // Do not propagate previous found list, if
-    // - destination is an empty paragraph which is not in a list and
-    // - source contains at least one paragraph which is not in a list
+    
+    
+    
+    
     if ( pNumRuleToPropagate &&
          pDestTxtNd && !pDestTxtNd->GetTxt().getLength() &&
          !pDestTxtNd->IsInList() &&
@@ -945,11 +945,11 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pNumRuleToPropagate = 0;
     }
 
-    // This do/while block is only there so that we can break out of it!
+    
     do {
         if( pSttTxtNd )
         {
-            // Don't copy the beginning completely?
+            
             if( !bCopyCollFmt || bColumnSel || pStt->nContent.GetIndex() )
             {
                 SwIndex aDestIdx( rPos.nContent );
@@ -977,7 +977,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                     if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
                     {
-                        // after the SplitNode, span the CpyPam correctly again
+                        
                         pCopyPam->Move( fnMoveBackward, fnGoCntnt );
                         pCopyPam->Move( fnMoveBackward, fnGoCntnt );
                     }
@@ -986,7 +986,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     aDestIdx.Assign(
                             pDestTxtNd, pDestTxtNd->GetTxt().getLength());
 
-                    // Correct the area again
+                    
                     if( bEndEqualIns )
                     {
                         bool bChg = pEnd != rPam.GetPoint();
@@ -1001,7 +1001,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     }
                     else if( rPos == *pEnd )
                     {
-                        // The end was also moved
+                        
                         pEnd->nNode--;
                         pEnd->nContent.Assign( pDestTxtNd, nCntntEnd );
                         aRg.aEnd = pEnd->nNode;
@@ -1009,8 +1009,8 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                     }
                 }
 
-                // Safe numrule item at destination.
-                // #i86492# - Safe also <ListId> item of destination.
+                
+                
                 int aNumRuleState = SFX_ITEM_UNKNOWN;
                 SwNumRuleItem aNumRuleItem;
                 int aListIdState = SFX_ITEM_UNKNOWN;
@@ -1053,7 +1053,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                         /* If only a part of one paragraph is copied
                            restore the numrule at the destination. */
-                        // #i86492# - restore also <ListId> item
+                        
                         if ( !lcl_MarksWholeNode(rPam) )
                         {
                             if (SFX_ITEM_SET == aNumRuleState)
@@ -1083,17 +1083,17 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         }
         else if( pDestTxtNd )
         {
-            // Problems with insertion of table selections into "normal" text solved.
-            // We have to set the correct PaM for Undo, if this PaM starts in a textnode,
-            // the undo operation will try to merge this node after removing the table.
-            // If we didn't split a textnode, the PaM should start at the inserted table node
+            
+            
+            
+            
             if( rPos.nContent.GetIndex() == pDestTxtNd->Len() )
-            {    // Insertion at the last position of a textnode (empty or not)
-                ++aInsPos; // The table will be inserted behind the text node
+            {    
+                ++aInsPos; 
             }
             else if( rPos.nContent.GetIndex() )
-            {   // Insertion in the middle of a text node, it has to be split
-                // (and joined from undo)
+            {   
+                
                 bStartIsTxtNode = sal_True;
 
                 const sal_Int32 nCntntEnd = pEnd->nContent.GetIndex();
@@ -1104,15 +1104,15 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
                 if (bCanMoveBack && rPos == *pCopyPam->GetPoint())
                 {
-                    // after the SplitNode, span the CpyPam correctly again
+                    
                     pCopyPam->Move( fnMoveBackward, fnGoCntnt );
                     pCopyPam->Move( fnMoveBackward, fnGoCntnt );
                 }
 
-                // Correct the area again
+                
                 if( bEndEqualIns )
                     aRg.aEnd--;
-                // The end would also be moved
+                
                 else if( rPos == *pEnd )
                 {
                     rPos.nNode-=2;
@@ -1123,12 +1123,12 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 }
             }
             else if( bCanMoveBack )
-            {   //Insertion at the first position of a text node. It will not be splitted, the table
-                // will be inserted before the text node.
-                // See below, before the SetInsertRange funciton of the undo object will be called,
-                // the CpyPam would be moved to the next content position. This has to be avoided
-                // We want to be moved to the table node itself thus we have to set bCanMoveBack
-                // and to manipulate pCopyPam.
+            {   
+                
+                
+                
+                
+                
                 bCanMoveBack = false;
                 pCopyPam->GetPoint()->nNode--;
             }
@@ -1145,17 +1145,17 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 aDestIdx.Assign( pDestTxtNd, 0  );
                 aInsPos--;
 
-                // if we have to insert an extra text node
-                // at the destination, this node will be our new destination
-                // (text) node, and thus we set bStartisTxtNode to true. This
-                // will ensure that this node will be deleted during Undo
-                // using JoinNext.
+                
+                
+                
+                
+                
                 OSL_ENSURE( !bStartIsTxtNode, "Oops, undo may be instable now." );
                 bStartIsTxtNode = sal_True;
             }
 
-            // Save numrule at destination
-            // #i86492# - Safe also <ListId> item of destination.
+            
+            
             int aNumRuleState = SFX_ITEM_UNKNOWN;
             SwNumRuleItem aNumRuleItem;
             int aListIdState = SFX_ITEM_UNKNOWN;
@@ -1182,7 +1182,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
             pEndTxtNd->CopyText( pDestTxtNd, aDestIdx, SwIndex( pEndTxtNd ),
                             pEnd->nContent.GetIndex() );
 
-            // Also copy all format templates
+            
             if( bCopyCollFmt && ( bOneNode || bEmptyDestNd ))
             {
                 pEndTxtNd->CopyCollFmt( *pDestTxtNd );
@@ -1191,7 +1191,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
                 {
                     /* If only a part of one paragraph is copied
                        restore the numrule at the destination. */
-                    // #i86492# - restore also <ListId> item
+                    
                     if ( !lcl_MarksWholeNode(rPam) )
                     {
                         if (SFX_ITEM_SET == aNumRuleState)
@@ -1240,7 +1240,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
             bCopyBookmarks = false;
 
-            // Put the breaks back into the first node
+            
             if( aBrkSet.Count() && 0 != ( pDestTxtNd = pDoc->GetNodes()[
                     pCopyPam->GetPoint()->nNode.GetIndex()+1 ]->GetTxtNode()))
             {
@@ -1249,7 +1249,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         }
     } while( false );
 
-    // Adjust position (in case it was moved / in another node)
+    
     rPos.nContent.Assign( rPos.nNode.GetNode().GetCntntNode(),
                             rPos.nContent.GetIndex() );
 
@@ -1266,32 +1266,32 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pCopyPam->Move( fnMoveForward, bCanMoveBack ? fnGoCntnt : fnGoNode );
     else
     {
-        // Reset the offset to 0 as it was before the insertion
+        
         pCopyPam->GetPoint()->nContent -= pCopyPam->GetPoint()->nContent;
 
         pCopyPam->GetPoint()->nNode++;
-        // If the next node is a start node, then step back: the start node
-        // has been copied and needs to be in the selection for the undo
+        
+        
         if (pCopyPam->GetPoint()->nNode.GetNode().IsStartNode())
             pCopyPam->GetPoint()->nNode--;
 
     }
     pCopyPam->Exchange();
 
-    // Also copy all bookmarks
+    
     if( bCopyBookmarks && getIDocumentMarkAccess()->getAllMarksCount() )
         lcl_CopyBookmarks( rPam, *pCopyPam );
 
     if( nsRedlineMode_t::REDLINE_DELETE_REDLINES & eOld )
     {
         assert(*pCopyPam->GetPoint() == rPos);
-        // the Node rPos points to may be deleted so unregister ...
+        
         rPos.nContent = SwIndex(0);
         lcl_DeleteRedlines(rPam, *pCopyPam);
-        rPos = *pCopyPam->GetPoint(); // ... and restore.
+        rPos = *pCopyPam->GetPoint(); 
     }
 
-    // If Undo is enabled, store the inserted area
+    
     if (pDoc->GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo->SetInsertRange( *pCopyPam, sal_True, bStartIsTxtNode );
@@ -1306,7 +1306,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
 
     if ( pNumRuleToPropagate )
     {
-        // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
+        
         pDoc->SetNumRule( *pCopyPam, *pNumRuleToPropagate, false,
                           aListIdToPropagate, true, true );
     }
@@ -1317,7 +1317,7 @@ bool SwDoc::CopyImpl( SwPaM& rPam, SwPosition& rPos,
     return true;
 }
 
-// Copy method from SwDoc - "copy Flys in Flys"
+
 void SwDoc::CopyWithFlyInFly(
     const SwNodeRange& rRg,
     const sal_Int32 nEndContentIndex,
@@ -1342,9 +1342,9 @@ void SwDoc::CopyWithFlyInFly(
 
 #if OSL_DEBUG_LEVEL > 0
     {
-        //JP 17.06.99: Bug 66973 - check count only if the selection is in
-        // the same section or there's no section, because sections that are
-        // not fully selected are not copied.
+        
+        
+        
         const SwSectionNode* pSSectNd = rRg.aStart.GetNode().FindSectionNode();
         SwNodeIndex aTmpI( rRg.aEnd, -1 );
         const SwSectionNode* pESectNd = aTmpI.GetNode().FindSectionNode();
@@ -1366,7 +1366,7 @@ void SwDoc::CopyWithFlyInFly(
 
     SwNodeRange aCpyRange( aSavePos, rInsPos );
 
-    // Also copy all bookmarks
+    
     if( getIDocumentMarkAccess()->getAllMarksCount() )
     {
         SwPaM aRgTmp( rRg.aStart, rRg.aEnd );
@@ -1405,9 +1405,9 @@ void SwDoc::CopyFlyInFlyImpl(
     const SwNodeIndex& rStartIdx,
     const bool bCopyFlyAtFly ) const
 {
-    // First collect all Flys, sort them according to their ordering number,
-    // and then only copy them. This maintains the ordering numbers (which are only
-    // managed in the DrawModel).
+    
+    
+    
     SwDoc *const pDest = rStartIdx.GetNode().GetDoc();
     ::std::set< _ZSortFly > aSet;
     sal_uInt16 nArrLen = GetSpzFrmFmts()->size();
@@ -1429,19 +1429,19 @@ void SwDoc::CopyFlyInFlyImpl(
                             : rRg.aStart <= pAPos->nNode )) &&
              pAPos->nNode <= rRg.aEnd )
         {
-            //frames at the last source node are not always copied:
-            //- if the node is empty and is the last node of the document or a table cell
-            //  or a text frame then tey have to be copied
-            //- if the content index in this node is > 0 then paragph and frame bound objects are copied
-            //- to-character bound objects are copied if their index is <= nEndContentIndex
+            
+            
+            
+            
+            
             bool bAdd = false;
             if( pAPos->nNode < rRg.aEnd )
                 bAdd = true;
-            if (!bAdd && !IsRedlineMove()) // fdo#40599: not for redline move
+            if (!bAdd && !IsRedlineMove()) 
             {
                 bool bEmptyNode = false;
                 bool bLastNode = false;
-                // is the node empty?
+                
                 const SwNodes& rNodes = pAPos->nNode.GetNodes();
                 SwTxtNode* pTxtNode;
                 if( 0 != ( pTxtNode = pAPos->nNode.GetNode().GetTxtNode() ))
@@ -1449,9 +1449,9 @@ void SwDoc::CopyFlyInFlyImpl(
                     bEmptyNode = pTxtNode->GetTxt().isEmpty();
                     if( bEmptyNode )
                     {
-                        //last node information is only necessary to know for the last TextNode
+                        
                         SwNodeIndex aTmp( pAPos->nNode );
-                        ++aTmp;//goto next node
+                        ++aTmp;
                         while (aTmp.GetNode().IsEndNode())
                         {
                             if( aTmp == rNodes.GetEndOfContent().GetIndex() )
@@ -1477,30 +1477,30 @@ void SwDoc::CopyFlyInFlyImpl(
         }
     }
 
-    // Store all copied (and also the newly created) frames in another array.
-    // They are stored as matching the originals, so that we will be later
-    // able to build the chains accordingly.
+    
+    
+    
     ::std::vector< SwFrmFmt* > aVecSwFrmFmt;
     ::std::set< _ZSortFly >::const_iterator it=aSet.begin();
 
     while (it != aSet.end())
     {
-        // #i59964#
-        // correct determination of new anchor position
+        
+        
         SwFmtAnchor aAnchor( *(*it).GetAnchor() );
         SwPosition* pNewPos = (SwPosition*)aAnchor.GetCntntAnchor();
-        // for at-paragraph and at-character anchored objects the new anchor
-        // position can *not* be determined by the difference of the current
-        // anchor position to the start of the copied range, because not
-        // complete selected sections in the copied range aren't copied - see
-        // method <SwNodes::_CopyNodes(..)>.
-        // Thus, the new anchor position in the destination document is found
-        // by counting the text nodes.
+        
+        
+        
+        
+        
+        
+        
         if ((aAnchor.GetAnchorId() == FLY_AT_PARA) ||
             (aAnchor.GetAnchorId() == FLY_AT_CHAR) )
         {
-            // First, determine number of anchor text node in the copied range.
-            // Note: The anchor text node *have* to be inside the copied range.
+            
+            
             sal_uLong nAnchorTxtNdNumInRange( 0L );
             bool bAnchorTxtNdFound( false );
             SwNodeIndex aIdx( rRg.aStart );
@@ -1516,14 +1516,14 @@ void SwDoc::CopyFlyInFlyImpl(
             }
             if ( !bAnchorTxtNdFound )
             {
-                // This case can *not* happen, but to be robust take the first
-                // text node in the destination document.
+                
+                
                 OSL_FAIL( "<SwDoc::_CopyFlyInFly(..)> - anchor text node in copied range not found" );
                 nAnchorTxtNdNumInRange = 1;
             }
-            // Second, search corresponding text node in destination document
-            // by counting forward from start insert position <rStartIdx> the
-            // determined number of text nodes.
+            
+            
+            
             aIdx = rStartIdx;
             SwNodeIndex aAnchorNdIdx( rStartIdx );
             const SwNode& aEndOfContentNd =
@@ -1541,8 +1541,8 @@ void SwDoc::CopyFlyInFlyImpl(
             }
             if ( !aAnchorNdIdx.GetNode().IsTxtNode() )
             {
-                // This case can *not* happen, but to be robust take the first
-                // text node in the destination document.
+                
+                
                 OSL_FAIL( "<SwDoc::_CopyFlyInFly(..)> - found anchor node index isn't a text node" );
                 aAnchorNdIdx = rStartIdx;
                 while ( !aAnchorNdIdx.GetNode().IsTxtNode() )
@@ -1550,7 +1550,7 @@ void SwDoc::CopyFlyInFlyImpl(
                     ++aAnchorNdIdx;
                 }
             }
-            // apply found anchor text node as new anchor position
+            
             pNewPos->nNode = aAnchorNdIdx;
         }
         else
@@ -1559,7 +1559,7 @@ void SwDoc::CopyFlyInFlyImpl(
             SwNodeIndex aIdx( rStartIdx, nOffset );
             pNewPos->nNode = aIdx;
         }
-        // Set the character bound Flys back at the original character
+        
         if ((FLY_AT_CHAR == aAnchor.GetAnchorId()) &&
              pNewPos->nNode.GetNode().IsTxtNode() )
         {
@@ -1571,7 +1571,7 @@ void SwDoc::CopyFlyInFlyImpl(
             pNewPos->nContent.Assign( 0, 0 );
         }
 
-        // Check recursion: copy content in its own frame, then don't copy it.
+        
         bool bMakeCpy = true;
         if( pDest == this )
         {
@@ -1588,14 +1588,14 @@ void SwDoc::CopyFlyInFlyImpl(
             }
         }
 
-        // Copy the format and set the new anchor
+        
         if( bMakeCpy )
             aVecSwFrmFmt.push_back( pDest->CopyLayoutFmt( *(*it).GetFmt(),
                         aAnchor, false, true ) );
         ++it;
     }
 
-    // Rebuild as much as possible of all chains that are available in the original,
+    
     OSL_ENSURE( aSet.size() == aVecSwFrmFmt.size(), "Missing new Flys" );
     if ( aSet.size() == aVecSwFrmFmt.size() )
     {

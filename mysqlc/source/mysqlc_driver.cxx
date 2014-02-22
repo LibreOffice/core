@@ -20,7 +20,7 @@
 *
 * You should have received a copy of the GNU Lesser General Public License
 * version 3 along with OpenOffice.org.  If not, see
-* <http://www.openoffice.org/license.html>
+* <http:
 * for a copy of the LGPLv3 License.
 ************************************************************************/
 #include "mysqlc_driver.hxx"
@@ -61,7 +61,7 @@ void MysqlCDriver::disposing()
     OSL_TRACE("MysqlCDriver::disposing");
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // when driver will be destroied so all our connections have to be destroied as well
+    
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
@@ -75,7 +75,7 @@ void MysqlCDriver::disposing()
 }
 /* }}} */
 
-// static ServiceInfo
+
 /* {{{ MysqlCDriver::getImplementationName_Static() -I- */
 OUString MysqlCDriver::getImplementationName_Static()
     throw(RuntimeException)
@@ -90,8 +90,8 @@ Sequence< OUString > MysqlCDriver::getSupportedServiceNames_Static()
     throw(RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::getSupportedServiceNames_Static");
-    // which service is supported
-    // for more information @see com.sun.star.sdbc.Driver
+    
+    
     Sequence< OUString > aSNS(1);
     aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
@@ -141,14 +141,14 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
         m_bAttemptedLoadCConn = true;
     }
 
-    // attempted to load - was it successful?
+    
     if ( !m_hCConnModule )
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not load the " BUNDLE_MARIADB " library!");
         throw SQLException(
             OUString( "Unable to load the " BUNDLE_MARIADB " library."  ),
             *this,
-            OUString( "08001"  ),  // "unable to connect"
+            OUString( "08001"  ),  
             0,
             Any()
         );
@@ -161,20 +161,20 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
         m_bAttemptedLoadCppConn = true;
     }
 
-    // attempted to load - was it successful?
+    
     if ( !m_hCppConnModule )
     {
         OSL_FAIL( "MysqlCDriver::impl_initCppConn_lck_throw: could not load the " CPPCONN_LIB " library!");
         throw SQLException(
             OUString( "Unable to load the " CPPCONN_LIB " library."  ),
             *this,
-            OUString( "08001"  ),  // "unable to connect"
+            OUString( "08001"  ),  
             0,
             Any()
         );
     }
 
-    // find the factory symbol
+    
     const OUString sSymbolName = "sql_mysql_get_driver_instance";
     typedef void* (* FGetMySQLDriver)();
 
@@ -185,7 +185,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
         throw SQLException(
             OUString( CPPCONN_LIB " is invalid: missing the driver factory function."  ),
             *this,
-            OUString( "08001"  ),  // "unable to connect"
+            OUString( "08001"  ),  
             0,
             Any()
         );
@@ -198,7 +198,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
         throw SQLException(
             OUString( "Unable to obtain the MySQL_Driver instance from Connector/C++."  ),
             *this,
-            OUString( "08001"  ),  // "unable to connect"
+            OUString( "08001"  ),  
             0,
             Any()
         );
@@ -225,7 +225,7 @@ Reference< XConnection > SAL_CALL MysqlCDriver::connect(const OUString& url, con
     }
 
     Reference< XConnection > xConn;
-    // create a new connection with the given properties and append it to our vector
+    
     try {
         OConnection* pCon = new OConnection(*this, cppDriver);
         xConn = pCon;
@@ -318,7 +318,7 @@ void release(oslInterlockedCount& _refCount,
         osl_atomic_increment(&_refCount);
 
         if (!rBHelper.bDisposed && !rBHelper.bInDispose) {
-            // remember the parent
+            
             Reference< XInterface > xParent;
             {
                 ::osl::MutexGuard aGuard(rBHelper.rMutex);
@@ -326,13 +326,13 @@ void release(oslInterlockedCount& _refCount,
                 _xInterface = NULL;
             }
 
-            // First dispose
+            
             _pObject->dispose();
 
-            // only the alive ref holds the object
+            
             OSL_ASSERT(_refCount == 1);
 
-            // release the parent in the destructor
+            
             if (xParent.is()) {
                 ::osl::MutexGuard aGuard(rBHelper.rMutex);
                 _xInterface = xParent;

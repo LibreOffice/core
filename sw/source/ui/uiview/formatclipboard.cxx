@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,20 +27,20 @@
 #include <frmfmt.hxx>
 #include <docstyle.hxx>
 #include <fchrfmt.hxx>
-// header for class SdrView
+
 #include <svx/svdview.hxx>
-//SvxBrushItem
+
 #include <editeng/brushitem.hxx>
 #include <editeng/shaditem.hxx>
-// header for class SvxBoxInfoItem
+
 #include <editeng/boxitem.hxx>
-// header for class SvxFmtBreakItem
+
 #include <editeng/formatbreakitem.hxx>
-// header for class SwFmtLayoutSplit
+
 #include <fmtlsplt.hxx>
-// header for class SvxFmtKeepItem
+
 #include <editeng/keepitem.hxx>
-// header for class SvxFrameDirectionItem
+
 #include <editeng/frmdiritem.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtrowsplt.hxx>
@@ -78,7 +78,7 @@ SfxItemSet* lcl_CreateEmptyItemSet( int nSelectionType, SfxItemPool& rPool, bool
     }
     else if( nSelectionType & nsSelectionType::SEL_DRW )
     {
-        //is handled different
+        
     }
     else if( nSelectionType & nsSelectionType::SEL_TXT )
     {
@@ -172,37 +172,37 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     SwFrmFmt* pFrmFmt = rSh.GetTableFmt();
     if(pFrmFmt)
     {
-        //RES_SHADOW
+        
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_SHADOW), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
-        //RES_BREAK
+        
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_BREAK), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
-        //RES_PAGEDESC
+        
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_PAGEDESC), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
-        //RES_LAYOUT_SPLIT
+        
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_LAYOUT_SPLIT), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
-        //RES_KEEP
+        
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_KEEP), false, &pItem);
         if(pItem)
             pFrmFmt->SetFmtAttr( *pItem );
 
-        //RES_FRAMEDIR
+        
         pItem=0;
         rSet.GetItemState(rSet.GetPool()->GetWhich(RES_FRAMEDIR), false, &pItem);
         if(pItem)
@@ -222,7 +222,7 @@ void lcl_setTableAttributes( const SfxItemSet& rSet, SwWrtShell &rSh )
     if( SFX_ITEM_SET == rSet.GetItemState( RES_ROW_SPLIT, false, &pItem) )
         rSh.SetRowSplit(*static_cast<const SwFmtRowSplit*>(pItem));
 }
-}//end anonymous namespace
+}
 
 SwFormatClipboard::SwFormatClipboard()
         : m_nSelectionType(0)
@@ -278,7 +278,7 @@ bool SwFormatClipboard::CanCopyThisType( int nSelectionType ) const
 
 void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bPersistentCopy )
 {
-    // first clear the previously stored attributes
+    
     this->Erase();
     m_bPersistentCopy = bPersistentCopy;
 
@@ -289,14 +289,14 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     rWrtShell.StartAction();
     rWrtShell.Push();
 
-    // modify the "Point and Mark" of the cursor
-    // in order to select only the last character of the
-    // selection(s) and then to get the attributes of this single character
+    
+    
+    
     if( nSelectionType == nsSelectionType::SEL_TXT )
     {
-        // get the current PaM, the cursor
-        // if there several selection it curently point
-        // on the last (sort by there creation time) selection
+        
+        
+        
         SwPaM* pCrsr = rWrtShell.GetCrsr();
 
         sal_Bool bHasSelection = pCrsr->HasMark();
@@ -304,12 +304,12 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 
         if(!bHasSelection && pCrsr->GetPrev() != pCrsr && pCrsr->GetPrev() != 0)
         {
-            // if cursor has multiple selections
+            
 
-            // clear all the selections except the last
+            
             rWrtShell.KillPams();
 
-            // reset the cursor to the remaining selection
+            
             pCrsr = rWrtShell.GetCrsr();
             bHasSelection = true;
         }
@@ -319,19 +319,19 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         {
             bForwardSelection = (*pCrsr->GetPoint()) > (*pCrsr->GetMark());
 
-            // clear the selection leaving just the cursor
+            
             pCrsr->DeleteMark();
             pCrsr->SetMark();
         }
         else
         {
             bool rightToLeft = rWrtShell.IsInRightToLeftText();
-            // if there were no selection (only a cursor) and the cursor was at
-            // the end of the paragraph then don't move
+            
+            
             if ( rWrtShell.IsEndPara() && !rightToLeft )
                 dontMove = true;
 
-            // revert left and right
+            
             if ( rightToLeft )
             {
                 if (pCrsr->GetPoint()->nContent == 0)
@@ -341,7 +341,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             }
         }
 
-        // move the cursor in order to select one character
+        
         if (!dontMove)
             pCrsr->Move( bForwardSelection ? fnMoveBackward : fnMoveForward );
     }
@@ -352,13 +352,13 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             rWrtShell.GetFlyFrmAttr(*pItemSet_TxtAttr);
         else
         {
-            // get the text attributes from named and automatic formatting
+            
             rWrtShell.GetCurAttr(*pItemSet_TxtAttr);
 
             if( nSelectionType & nsSelectionType::SEL_TXT )
             {
-                // get the paragraph attributes (could be character properties)
-                // from named and automatic formatting
+                
+                
                 rWrtShell.GetCurParAttr(*pItemSet_ParAttr);
             }
         }
@@ -372,7 +372,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
             if( pDrawView->AreObjectsMarked() )
             {
                 pItemSet_TxtAttr = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
-                //remove attributes defining the type/data of custom shapes
+                
                 pItemSet_TxtAttr->ClearItem(SDRATTR_CUSTOMSHAPE_ENGINE);
                 pItemSet_TxtAttr->ClearItem(SDRATTR_CUSTOMSHAPE_DATA);
                 pItemSet_TxtAttr->ClearItem(SDRATTR_CUSTOMSHAPE_GEOMETRY);
@@ -381,11 +381,11 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
         }
     }
 
-    if( nSelectionType & nsSelectionType::SEL_TBL_CELLS )//only copy table attributes if really cells are selected (not only text in tables)
+    if( nSelectionType & nsSelectionType::SEL_TBL_CELLS )
     {
         m_pTableItemSet = new SfxItemSet(rPool,
-                        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_SHADOW, //SID_ATTR_BORDER_OUTER is inbetween
-                        RES_BACKGROUND,         RES_SHADOW, //RES_BOX is inbetween
+                        SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_SHADOW, 
+                        RES_BACKGROUND,         RES_SHADOW, 
                         SID_ATTR_BRUSH_ROW,     SID_ATTR_BRUSH_TABLE,
                         RES_BREAK,              RES_BREAK,
                         RES_PAGEDESC,           RES_PAGEDESC,
@@ -406,12 +406,12 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 
     if( nSelectionType & nsSelectionType::SEL_TXT )
     {
-        // if text is selected save the named character format
+        
         SwFmt* pFmt = rWrtShell.GetCurCharFmt();
         if( pFmt )
             m_aCharStyle = pFmt->GetName();
 
-        // and the named paragraph format
+        
         pFmt = rWrtShell.GetCurTxtFmtColl();
         if( pFmt )
             m_aParaStyle = pFmt->GetName();
@@ -423,7 +423,7 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
 
 typedef boost::shared_ptr< SfxPoolItem > SfxPoolItemSharedPtr;
 typedef std::vector< SfxPoolItemSharedPtr > ItemVector;
-// collect all PoolItems from the applied styles
+
 static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
 {
     const sal_uInt16*  pRanges = rStyleAttrSet.GetRanges();
@@ -440,7 +440,7 @@ static void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyl
         pRanges += 2;
     }
 }
-// remove all items that are inherited from the styles
+
 static void lcl_RemoveEqualItems( SfxItemSet& rTemplateItemSet, const ItemVector& rItemVector )
 {
     ItemVector::const_iterator aEnd = rItemVector.end();
@@ -475,64 +475,64 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
 
     if( nSelectionType & nsSelectionType::SEL_TXT )
     {
-        // apply the named text and paragraph formatting
+        
         if( pPool )
         {
-            // if there is a named text format recorded and the user wants to apply it
+            
             if(!m_aCharStyle.isEmpty() && !bNoCharacterFormats )
             {
-                // look for the named text format in the pool
+                
                 SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aCharStyle, SFX_STYLE_FAMILY_CHAR));
 
-                // if the style is found
+                
                 if( pStyle )
                 {
                     SwFmtCharFmt aFmt(pStyle->GetCharFmt());
-                    // store the attributes from this style in aItemVector in order
-                    // not to apply them as automatic formatting attributes later in the code
+                    
+                    
                     lcl_AppendSetItems( aItemVector, aFmt.GetCharFmt()->GetAttrSet());
 
-                    // apply the named format
+                    
                     rWrtShell.SetAttrItem( aFmt );
                 }
             }
 
-            // if there is a named paragraph format recorded and the user wants to apply it
+            
             if(!m_aParaStyle.isEmpty() && !bNoParagraphFormats )
             {
-                // look for the named pragraph format in the pool
+                
                 SwDocStyleSheet* pStyle = static_cast<SwDocStyleSheet*>(pPool->Find(m_aParaStyle, SFX_STYLE_FAMILY_PARA));
                 if( pStyle )
                 {
-                    // store the attributes from this style in aItemVector in order
-                    // not to apply them as automatic formatting attributes later in the code
+                    
+                    
                     lcl_AppendSetItems( aItemVector, pStyle->GetCollection()->GetAttrSet());
 
-                    // apply the named format
+                    
                     rWrtShell.SetTxtFmtColl( pStyle->GetCollection() );
                 }
             }
         }
 
-        // apply the paragraph automatic attributes
+        
         if ( m_pItemSet_ParAttr && m_pItemSet_ParAttr->Count() != 0 && !bNoParagraphFormats )
         {
-            // temporary SfxItemSet
+            
             SfxItemSet* pTemplateItemSet = lcl_CreateEmptyItemSet(
                     nSelectionType, *m_pItemSet_ParAttr->GetPool(), false);
-            // no need to verify the existance of pTemplateItemSet as we
-            // know that here the selection type is SEL_TXT
+            
+            
 
             pTemplateItemSet->Put( *m_pItemSet_ParAttr );
 
-            // remove attribute that were applied by named text and paragraph formatting
+            
             lcl_RemoveEqualItems( *pTemplateItemSet, aItemVector );
 
-            // apply the paragraph automatic attributes to all the nodes in the selection
+            
             rWrtShell.SetAttrSet(*pTemplateItemSet);
 
-            // store the attributes in aItemVector in order not to apply them as
-            // text automatic formatting attributes later in the code
+            
+            
             lcl_AppendSetItems( aItemVector, *pTemplateItemSet);
 
             delete pTemplateItemSet;
@@ -552,20 +552,20 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
         }
         else
         {
-            // temporary SfxItemSet
+            
             SfxItemSet* pTemplateItemSet = lcl_CreateEmptyItemSet(
                     nSelectionType, *m_pItemSet_TxtAttr->GetPool(), true );
 
             if(pTemplateItemSet)
             {
-                // copy the stored automatic text attributes in a temporary SfxItemSet
+                
                 pTemplateItemSet->Put( *m_pItemSet_TxtAttr );
 
-                // only attributes that were not apply by named style attributes and automatic
-                // paragraph attributes should be applied
+                
+                
                 lcl_RemoveEqualItems( *pTemplateItemSet, aItemVector );
 
-                // apply the character automatic attributes
+                
                 if( nSelectionType & (nsSelectionType::SEL_FRM | nsSelectionType::SEL_OLE | nsSelectionType::SEL_GRF) )
                     rWrtShell.SetFlyFrmAttr(*pTemplateItemSet);
                 else if ( !bNoCharacterFormats )

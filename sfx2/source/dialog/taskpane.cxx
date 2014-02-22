@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,10 +54,10 @@
 #include <tools/urlobj.hxx>
 #include <boost/noncopyable.hpp>
 
-//......................................................................................................................
+
 namespace sfx2
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -89,12 +89,12 @@ namespace sfx2
 
     namespace PosSize = ::com::sun::star::awt::PosSize;
 
-    //==================================================================================================================
-    //= helpers
-    //==================================================================================================================
+    
+    
+    
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+        
         ::utl::OConfigurationTreeRoot lcl_getModuleUIElementStatesConfig( const OUString& i_rModuleIdentifier,
             const OUString& i_rResourceURL = OUString() )
         {
@@ -122,7 +122,7 @@ namespace sfx2
             return ::utl::OConfigurationTreeRoot( xContext, aPathComposer.makeStringAndClear(), false );
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         OUString lcl_identifyModule( const Reference< XFrame >& i_rDocumentFrame )
         {
             OUString sModuleName;
@@ -139,7 +139,7 @@ namespace sfx2
             return sModuleName;
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         Reference< XFrame > lcl_getFrame( const SfxBindings* i_pBindings )
         {
             const SfxViewFrame* pViewFrame = i_pBindings->GetDispatcher()->GetFrame();
@@ -148,14 +148,14 @@ namespace sfx2
             return xFrame;
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         OUString lcl_getPanelHelpURL( const ::utl::OConfigurationNode& i_rPanelConfigNode )
         {
             const OUString sHelpURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "HelpURL" ) ) );
             return sHelpURL;
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         Image lcl_getPanelImage( const Reference< XFrame >& i_rDocFrame, const ::utl::OConfigurationNode& i_rPanelConfigNode )
         {
             const OUString sImageURL( ::comphelper::getString( i_rPanelConfigNode.getNodeValue( "ImageURL" ) ) );
@@ -166,7 +166,7 @@ namespace sfx2
                     ::comphelper::NamedValueCollection aMediaProperties;
                     aMediaProperties.put( "URL", sImageURL );
 
-                    // special handling: if the ImageURL denotes a CommandName, then retrieve the image for that command
+                    
                     static const sal_Char pCommandImagePrefix[] = "private:commandimage/";
                     const sal_Int32 nCommandImagePrefixLen = strlen( pCommandImagePrefix );
                     if ( sImageURL.startsWith( pCommandImagePrefix ) )
@@ -180,7 +180,7 @@ namespace sfx2
                         return aPanelImage;
                     }
 
-                    // otherwise, delegate to the GraphicProvider
+                    
                     const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     const Reference< XGraphicProvider > xGraphicProvider( com::sun::star::graphic::GraphicProvider::create(xContext) );
 
@@ -196,10 +196,10 @@ namespace sfx2
         }
     }
 
-    //==================================================================================================================
-    //= TaskPaneDockingWindow
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     TaskPaneDockingWindow::TaskPaneDockingWindow( SfxBindings* i_pBindings, TaskPaneWrapper& i_rWrapper, Window* i_pParent, WinBits i_nBits )
         :TitledDockingWindow( i_pBindings, &i_rWrapper, i_pParent, i_nBits )
         ,m_aTaskPane( GetContentWindow(), lcl_getFrame( i_pBindings ) )
@@ -209,32 +209,32 @@ namespace sfx2
         SetText( SfxResId( SID_TASKPANE ).toString() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneDockingWindow::ActivateToolPanel( const OUString& i_rPanelURL )
     {
         m_aPaneController.ActivateToolPanel( i_rPanelURL );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneDockingWindow::GetFocus()
     {
         TitledDockingWindow::GetFocus();
         m_aTaskPane.GrabFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneDockingWindow::onLayoutDone()
     {
         m_aTaskPane.SetPosSizePixel( Point(), GetContentWindow().GetOutputSizePixel() );
     }
 
-    //==================================================================================================================
-    //= TaskPaneWrapper
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     SFX_IMPL_DOCKINGWINDOW( TaskPaneWrapper, SID_TASKPANE );
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TaskPaneWrapper::TaskPaneWrapper( Window* i_pParent, sal_uInt16 i_nId, SfxBindings* i_pBindings, SfxChildWinInfo* i_pInfo )
         :SfxChildWindow( i_pParent, i_nId )
     {
@@ -251,7 +251,7 @@ namespace sfx2
         pWindow->Show();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneWrapper::ActivateToolPanel( const OUString& i_rPanelURL )
     {
         TaskPaneDockingWindow* pDockingWindow = dynamic_cast< TaskPaneDockingWindow* >( GetWindow() );
@@ -259,9 +259,9 @@ namespace sfx2
         pDockingWindow->ActivateToolPanel( i_rPanelURL );
     }
 
-    //==================================================================================================================
-    //= CustomPanelUIElement
-    //==================================================================================================================
+    
+    
+    
     class CustomPanelUIElement
     {
     public:
@@ -291,9 +291,9 @@ namespace sfx2
         Reference< XWindow >    m_xPanelWindow;
     };
 
-    //==================================================================================================================
-    //= CustomToolPanel
-    //==================================================================================================================
+    
+    
+    
     class CustomToolPanel : public ::svt::ToolPanelBase
     {
     public:
@@ -331,7 +331,7 @@ namespace sfx2
         bool                    m_bAttemptedCreation;
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     CustomToolPanel::CustomToolPanel( const ::utl::OConfigurationNode& i_rPanelWindowState, const Reference< XFrame >& i_rFrame )
         :m_sUIName( ::comphelper::getString( i_rPanelWindowState.getNodeValue( "UIName" ) ) )
         ,m_aPanelImage( lcl_getPanelImage( i_rFrame, i_rPanelWindowState ) )
@@ -344,12 +344,12 @@ namespace sfx2
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     CustomToolPanel::~CustomToolPanel()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool CustomToolPanel::impl_ensureToolPanelWindow( Window& i_rPanelParentWindow )
     {
         if ( m_bAttemptedCreation )
@@ -377,7 +377,7 @@ namespace sfx2
         return m_aCustomPanel.is();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void CustomToolPanel::impl_updatePanelConfig( const bool i_bVisible ) const
     {
         ::utl::OConfigurationTreeRoot aConfig( ::comphelper::getProcessComponentContext(), m_sPanelConfigPath, true );
@@ -386,13 +386,13 @@ namespace sfx2
         aConfig.commit();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString CustomToolPanel::GetDisplayName() const
     {
         return m_sUIName;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Image CustomToolPanel::GetImage() const
     {
         return m_aPanelImage;
@@ -407,37 +407,37 @@ namespace sfx2
             return OUStringToOString( _rHelpURL, RTL_TEXTENCODING_UTF8 );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OString CustomToolPanel::GetHelpID() const
     {
         return lcl_getHelpId( m_aPanelHelpURL );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void CustomToolPanel::Activate( Window& i_rParentWindow )
     {
         ENSURE_OR_RETURN_VOID( impl_ensureToolPanelWindow( i_rParentWindow ), "no panel to activate!" );
 
-        // TODO: we might need a mechanism to decide whether the panel should be destroyed/re-created, or (as it is
-        // done now) hidden/shown
+        
+        
         m_aCustomPanel.getPanelWindow()->setVisible( sal_True );
 
-        // update the panel's configuration
+        
         impl_updatePanelConfig( true );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void CustomToolPanel::Deactivate()
     {
         ENSURE_OR_RETURN_VOID( m_aCustomPanel.is(), "no panel to deactivate!" );
 
         m_aCustomPanel.getPanelWindow()->setVisible( sal_False );
 
-        // update the panel's configuration
+        
         impl_updatePanelConfig( false );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void CustomToolPanel::SetSizePixel( const Size& i_rPanelWindowSize )
     {
         ENSURE_OR_RETURN_VOID( m_aCustomPanel.is(), "no panel/window to position!" );
@@ -453,7 +453,7 @@ namespace sfx2
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void CustomToolPanel::GrabFocus()
     {
         ENSURE_OR_RETURN_VOID( m_aCustomPanel.is(), "no panel/window to focus!" );
@@ -461,11 +461,11 @@ namespace sfx2
         m_aCustomPanel.getPanelWindow()->setFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void CustomToolPanel::Dispose()
     {
         if ( !m_bAttemptedCreation )
-            // nothing to dispose
+            
             return;
 
         ENSURE_OR_RETURN_VOID( m_aCustomPanel.is(), "no panel to destroy!" );
@@ -480,7 +480,7 @@ namespace sfx2
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XAccessible > CustomToolPanel::CreatePanelAccessible( const Reference< XAccessible >& i_rParentAccessible )
     {
         ENSURE_OR_RETURN( m_aCustomPanel.is(), "no panel to ask!", NULL );
@@ -497,9 +497,9 @@ namespace sfx2
         return xPanelAccessible;
     }
 
-    //==================================================================================================================
-    //= ModuleTaskPane_Impl
-    //==================================================================================================================
+    
+    
+    
     class ModuleTaskPane_Impl : public ::boost::noncopyable
     {
     public:
@@ -550,32 +550,32 @@ namespace sfx2
         ::svt::ToolPanelDeck        m_aPanelDeck;
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ModuleTaskPane_Impl::OnResize()
     {
         m_aPanelDeck.SetPosSizePixel( Point(), m_rAntiImpl.GetOutputSizePixel() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ModuleTaskPane_Impl::OnGetFocus()
     {
         m_aPanelDeck.GrabFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     IMPL_LINK( ModuleTaskPane_Impl, OnActivatePanel, void*, i_pArg )
     {
         m_aPanelDeck.ActivatePanel( reinterpret_cast< size_t >( i_pArg ) );
         return 1L;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool ModuleTaskPane_Impl::impl_isToolPanelResource( const OUString& i_rResourceURL )
     {
         return i_rResourceURL.startsWith( "private:resource/toolpanel/" );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ModuleTaskPane_Impl::impl_initFromConfiguration( const IToolPanelCompare* i_pPanelCompare )
     {
         const ::utl::OConfigurationTreeRoot aWindowStateConfig( lcl_getModuleUIElementStatesConfig( m_sModuleIdentifier ) );
@@ -602,7 +602,7 @@ namespace sfx2
             size_t nPanelPos = m_aPanelDeck.GetPanelCount();
             if ( i_pPanelCompare )
             {
-                // assuming that nobody will insert hundreths of panels, a simple O(n) search should suffice here ...
+                
                 while ( nPanelPos > 0 )
                 {
                     const short nCompare = i_pPanelCompare->compareToolPanelsURLs(
@@ -634,7 +634,7 @@ namespace sfx2
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool ModuleTaskPane_Impl::ModuleHasToolPanels( const OUString& i_rModuleIdentifier )
     {
         const ::utl::OConfigurationTreeRoot aWindowStateConfig( lcl_getModuleUIElementStatesConfig( i_rModuleIdentifier ) );
@@ -653,7 +653,7 @@ namespace sfx2
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< size_t > ModuleTaskPane_Impl::GetPanelPos( const OUString& i_rResourceURL )
     {
         ::boost::optional< size_t > aPanelPos;
@@ -676,7 +676,7 @@ namespace sfx2
         return aPanelPos;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString ModuleTaskPane_Impl::GetPanelResourceURL( const size_t i_nPanelPos ) const
     {
         ENSURE_OR_RETURN( i_nPanelPos < m_aPanelDeck.GetPanelCount(), "ModuleTaskPane_Impl::GetPanelResourceURL: illegal panel position!", OUString() );
@@ -686,18 +686,18 @@ namespace sfx2
         return pCustomPanel->GetResourceURL();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ModuleTaskPane_Impl::SetDrawersLayout()
     {
         const ::svt::PDeckLayouter pLayouter( m_aPanelDeck.GetLayouter() );
         const ::svt::DrawerDeckLayouter* pDrawerLayouter = dynamic_cast< const ::svt::DrawerDeckLayouter* >( pLayouter.get() );
         if ( pDrawerLayouter != NULL )
-            // already have the proper layout
+            
             return;
         m_aPanelDeck.SetLayouter( new ::svt::DrawerDeckLayouter( m_aPanelDeck, m_aPanelDeck ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ModuleTaskPane_Impl::SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent )
     {
         ::svt::PDeckLayouter pLayouter( m_aPanelDeck.GetLayouter() );
@@ -706,12 +706,12 @@ namespace sfx2
             &&  ( pTabLayouter->GetTabAlignment() == i_eTabAlignment )
             &&  ( pTabLayouter->GetTabItemContent() == i_eTabContent )
             )
-            // already have the requested layout
+            
             return;
 
         if ( pTabLayouter && ( pTabLayouter->GetTabAlignment() == i_eTabAlignment ) )
         {
-            // changing only the item content does not require a new layouter instance
+            
             pTabLayouter->SetTabItemContent( i_eTabContent );
             return;
         }
@@ -719,74 +719,74 @@ namespace sfx2
         m_aPanelDeck.SetLayouter( new ::svt::TabDeckLayouter( m_aPanelDeck, m_aPanelDeck, i_eTabAlignment, i_eTabContent ) );
     }
 
-    //==================================================================================================================
-    //= ModuleTaskPane
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     ModuleTaskPane::ModuleTaskPane( Window& i_rParentWindow, const Reference< XFrame >& i_rDocumentFrame )
         :Window( &i_rParentWindow, WB_DIALOGCONTROL )
         ,m_pImpl( new ModuleTaskPane_Impl( *this, i_rDocumentFrame, NULL ) )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ModuleTaskPane::~ModuleTaskPane()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool ModuleTaskPane::ModuleHasToolPanels( const Reference< XFrame >& i_rDocumentFrame )
     {
         return ModuleTaskPane_Impl::ModuleHasToolPanels( lcl_identifyModule( i_rDocumentFrame ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ModuleTaskPane::Resize()
     {
         Window::Resize();
         m_pImpl->OnResize();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ModuleTaskPane::GetFocus()
     {
         Window::GetFocus();
         m_pImpl->OnGetFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::svt::ToolPanelDeck& ModuleTaskPane::GetPanelDeck()
     {
         return m_pImpl->GetPanelDeck();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     const ::svt::ToolPanelDeck& ModuleTaskPane::GetPanelDeck() const
     {
         return m_pImpl->GetPanelDeck();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< size_t > ModuleTaskPane::GetPanelPos( const OUString& i_rResourceURL )
     {
         return m_pImpl->GetPanelPos( i_rResourceURL );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ModuleTaskPane::SetDrawersLayout()
     {
         m_pImpl->SetDrawersLayout();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ModuleTaskPane::SetTabsLayout( const ::svt::TabAlignment i_eTabAlignment, const ::svt::TabItemContent i_eTabContent )
     {
         m_pImpl->SetTabsLayout( i_eTabAlignment, i_eTabContent );
     }
 
-    // =====================================================================================================================
-    // = PanelSelectorLayout
-    // =====================================================================================================================
+    
+    
+    
     enum PanelSelectorLayout
     {
         LAYOUT_DRAWERS,
@@ -796,9 +796,9 @@ namespace sfx2
         LAYOUT_TABS_BOTTOM
     };
 
-    //==================================================================================================================
-    //= helper
-    //==================================================================================================================
+    
+    
+    
     namespace
     {
         PanelSelectorLayout lcl_getTabLayoutFromAlignment( const SfxChildAlignment i_eAlignment )
@@ -817,9 +817,9 @@ namespace sfx2
         }
     }
 
-    // =====================================================================================================================
-    // = PanelDescriptor
-    // =====================================================================================================================
+    
+    
+    
     /** is a helper class for TaskPaneController_Impl, holding the details about a single panel which is not
         contained in the IToolPanel implementation itself.
     */
@@ -841,9 +841,9 @@ namespace sfx2
         }
     };
 
-    //==================================================================================================================
-    //= TaskPaneController_Impl
-    //==================================================================================================================
+    
+    
+    
     class TaskPaneController_Impl   :public ::boost::noncopyable
                                     ,public ::svt::IToolPanelDeckListener
     {
@@ -858,7 +858,7 @@ namespace sfx2
         void    ActivateToolPanel( const OUString& i_rPanelURL );
 
     protected:
-        // IToolPanelDeckListener overridables
+        
         virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
         virtual void PanelRemoved( const size_t i_nPosition );
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
@@ -873,10 +873,10 @@ namespace sfx2
         ::std::auto_ptr< PopupMenu > impl_createPopupMenu() const;
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
-        /// sets the given layout for the panel selector
+        
         void    impl_setLayout( const PanelSelectorLayout i_eLayout, const bool i_bForce = false );
 
-        /// returns the current layout of the panel selector
+        
         PanelSelectorLayout
                 impl_getLayout() const { return m_eCurrentLayout; }
 
@@ -906,7 +906,7 @@ namespace sfx2
         OUString         m_sDefaultTitle;
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TaskPaneController_Impl::TaskPaneController_Impl( ModuleTaskPane& i_rTaskPane, TitledDockingWindow& i_rDockingWindow )
         :m_rTaskPane( i_rTaskPane )
         ,m_rDockingWindow( i_rDockingWindow )
@@ -927,7 +927,7 @@ namespace sfx2
 
         m_rTaskPane.GetPanelDeck().AddListener( *this );
 
-        // initialize the panel repository
+        
         for ( size_t i = 0; i < m_rTaskPane.GetPanelDeck().GetPanelCount(); ++i )
         {
             ::svt::PToolPanel pPanel( m_rTaskPane.GetPanelDeck().GetPanel( i ) );
@@ -937,13 +937,13 @@ namespace sfx2
         SetDefaultTitle( SfxResId( STR_SFX_TASKS ).toString() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TaskPaneController_Impl::~TaskPaneController_Impl()
     {
         m_rTaskPane.GetPanelDeck().RemoveListener( *this );
         int i = 0;
 
-        // remove the panels which are not under the control of the panel deck currently
+        
         for (   PanelDescriptors::iterator panelPos = m_aPanelRepository.begin();
                 panelPos != m_aPanelRepository.end();
                 ++panelPos, ++i
@@ -955,14 +955,14 @@ namespace sfx2
         m_aPanelRepository.clear();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::SetDefaultTitle( const OUString& i_rTitle )
     {
         m_sDefaultTitle = i_rTitle;
         impl_updateDockingWindowTitle();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::ActivateToolPanel( const OUString& i_rPanelURL )
     {
         ::boost::optional< size_t > aPanelPos( m_rTaskPane.GetPanelPos( i_rPanelURL ) );
@@ -979,7 +979,7 @@ namespace sfx2
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     IMPL_LINK( TaskPaneController_Impl, DockingChanged, TitledDockingWindow*, i_pDockingWindow )
     {
         ENSURE_OR_RETURN( i_pDockingWindow && &m_rDockingWindow, "TaskPaneController_Impl::DockingChanged: where does this come from?", 0L );
@@ -991,7 +991,7 @@ namespace sfx2
         return 1L;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     IMPL_LINK( TaskPaneController_Impl, OnToolboxClicked, ToolBox*, i_pToolBox )
     {
         if ( i_pToolBox->GetCurItemId() == m_nViewMenuID )
@@ -1003,7 +1003,7 @@ namespace sfx2
             SAL_WNODEPRECATED_DECLARATIONS_POP
             pMenu->SetSelectHdl( LINK( this, TaskPaneController_Impl, OnMenuItemSelected ) );
 
-            // pass toolbox button rect so the menu can stay open on button up
+            
             Rectangle aMenuRect( i_pToolBox->GetItemRect( m_nViewMenuID ) );
             aMenuRect.SetPos( i_pToolBox->GetPosPixel() );
             pMenu->Execute( &m_rDockingWindow, aMenuRect, POPUPMENU_EXECUTE_DOWN );
@@ -1012,7 +1012,7 @@ namespace sfx2
         return 0;
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     IMPL_LINK( TaskPaneController_Impl, OnMenuItemSelected, Menu*, i_pMenu )
     {
         ENSURE_OR_RETURN( i_pMenu, "TaskPaneController_Impl::OnMenuItemSelected: illegal menu!", 0L );
@@ -1047,7 +1047,7 @@ namespace sfx2
         return 1L;
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     size_t TaskPaneController_Impl::impl_getLogicalPanelIndex( const size_t i_nVisibleIndex )
     {
         size_t nLogicalIndex = 0;
@@ -1065,7 +1065,7 @@ namespace sfx2
         return nLogicalIndex;
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         if ( m_bTogglingPanelVisibility )
@@ -1075,7 +1075,7 @@ namespace sfx2
         m_aPanelRepository.insert( m_aPanelRepository.begin() + nLogicalIndex, PanelDescriptor( i_pPanel ) );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::PanelRemoved( const size_t i_nPosition )
     {
         if ( m_bTogglingPanelVisibility )
@@ -1085,11 +1085,11 @@ namespace sfx2
         m_aPanelRepository.erase( m_aPanelRepository.begin() + nLogicalIndex );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
         if ( impl_getLayout() == LAYOUT_DRAWERS )
-            // no adjustment of the title when we use the classical "drawers" layout
+            
             return;
 
         impl_updateDockingWindowTitle( );
@@ -1097,27 +1097,27 @@ namespace sfx2
         (void)i_rNewActive;
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
     {
-        // not interested in
+        
         (void)i_rNewLayouter;
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::Dying()
     {
         OSL_FAIL( "TaskPaneController_Impl::Dying: unexpected call!" );
-        // We are expected to live longer than the ToolPanelDeck we work with. Since we remove ourself, in our dtor,
-        // as listener from the panel deck, this method here should never be called.
+        
+        
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::impl_togglePanelVisibility( const size_t i_nLogicalPanelIndex )
     {
         ENSURE_OR_RETURN_VOID( i_nLogicalPanelIndex < m_aPanelRepository.size(), "illegal index" );
 
-        // get the actual panel index, within the deck
+        
         size_t nActualPanelIndex(0);
         for ( size_t i=0; i < i_nLogicalPanelIndex; ++i )
         {
@@ -1131,7 +1131,7 @@ namespace sfx2
         if ( m_aPanelRepository[ i_nLogicalPanelIndex ].bHidden )
         {
             OSL_VERIFY( m_rTaskPane.GetPanelDeck().InsertPanel( m_aPanelRepository[ i_nLogicalPanelIndex ].pPanel, nActualPanelIndex ) == nActualPanelIndex );
-            // if there has not been an active panel before, activate the newly inserted one
+            
             ::boost::optional< size_t > aActivePanel( m_rTaskPane.GetPanelDeck().GetActivePanel() );
             if ( !aActivePanel )
                 aActivatePanel = nActualPanelIndex;
@@ -1147,7 +1147,7 @@ namespace sfx2
             m_rTaskPane.GetPanelDeck().ActivatePanel( *aActivatePanel );
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::impl_setLayout( const PanelSelectorLayout i_eLayout, const bool i_bForce )
     {
         if ( !i_bForce && ( m_eCurrentLayout == i_eLayout ) )
@@ -1176,7 +1176,7 @@ namespace sfx2
         impl_updateDockingWindowTitle();
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController_Impl::impl_updateDockingWindowTitle()
     {
         ::boost::optional< size_t > aActivePanel( m_rTaskPane.GetPanelDeck().GetActivePanel() );
@@ -1200,7 +1200,7 @@ namespace sfx2
         }
     }
 
-    // ---------------------------------------------------------------------------------------------------------------------
+    
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< PopupMenu > TaskPaneController_Impl::impl_createPopupMenu() const
     {
@@ -1211,8 +1211,8 @@ namespace sfx2
             pMenuWindow->SetPopupModeFlags ( pMenuWindow->GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE );
         }
 
-        // Add one entry for every tool panel element to individually make
-        // them visible or hide them.
+        
+        
         sal_uInt16 nIndex = MID_FIRST_PANEL;
         for ( size_t i=0; i<m_aPanelRepository.size(); ++i, ++nIndex )
         {
@@ -1234,7 +1234,7 @@ namespace sfx2
         }
 #endif
 
-        // Add entry for docking or un-docking the tool panel.
+        
         if ( m_rDockingWindow.IsFloatingMode() )
             pMenu->InsertItem(
                 MID_LOCK_TASK_PANEL,
@@ -1252,28 +1252,28 @@ namespace sfx2
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    //==================================================================================================================
-    //= TaskPaneController
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     TaskPaneController::TaskPaneController( ModuleTaskPane& i_rTaskPane, TitledDockingWindow& i_rDockingWindow )
         :m_pImpl( new TaskPaneController_Impl( i_rTaskPane, i_rDockingWindow ) )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TaskPaneController::~TaskPaneController()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TaskPaneController::ActivateToolPanel( const OUString& i_rPanelURL )
     {
         m_pImpl->ActivateToolPanel( i_rPanelURL );
     }
 
-//......................................................................................................................
-} // namespace sfx2
-//......................................................................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleEditObject.hxx"
@@ -50,7 +50,7 @@ using ::com::sun::star::uno::RuntimeException;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
+
 
 ScAccessibleEditObject::ScAccessibleEditObject(
         const uno::Reference<XAccessible>& rxParent,
@@ -88,9 +88,9 @@ ScAccessibleEditObject::~ScAccessibleEditObject()
 {
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        
         osl_atomic_increment( &m_refCount );
-        // call dispose to inform object which have a weak reference to this object
+        
         dispose();
     }
 }
@@ -120,7 +120,7 @@ void ScAccessibleEditObject::GotFocus()
         mpTextHelper->SetFocus(sal_True);
 }
 
-//=====  XInterface  ==========================================================
+
 
 com::sun::star::uno::Any SAL_CALL
     ScAccessibleEditObject::queryInterface (const com::sun::star::uno::Type & rType)
@@ -145,7 +145,7 @@ void SAL_CALL
 {
     ScAccessibleContextBase::release ();
 }
-    //=====  XAccessibleComponent  ============================================
+    
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleEditObject::getAccessibleAtPoint(
         const awt::Point& rPoint )
@@ -227,7 +227,7 @@ Rectangle ScAccessibleEditObject::GetBoundingBox(void) const
     return aBounds;
 }
 
-    //=====  XAccessibleContext  ==============================================
+    
 
 sal_Int32 SAL_CALL
     ScAccessibleEditObject::getAccessibleChildCount(void)
@@ -268,7 +268,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
         pStateSet->AddState(AccessibleStateType::DEFUNC);
     else
     {
-        // all states are const, because this object exists only in one state
+        
         pStateSet->AddState(AccessibleStateType::EDITABLE);
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::SENSITIVE);
@@ -284,7 +284,7 @@ OUString SAL_CALL
     ScAccessibleEditObject::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
-//    OSL_FAIL("Should never be called, because is set in the constructor.")
+
     return OUString();
 }
 
@@ -296,7 +296,7 @@ OUString SAL_CALL
     return OUString();
 }
 
-    ///=====  XAccessibleEventBroadcaster  =====================================
+    
 
 void SAL_CALL
     ScAccessibleEditObject::addAccessibleEventListener(const uno::Reference<XAccessibleEventListener>& xListener)
@@ -322,7 +322,7 @@ void SAL_CALL
     ScAccessibleContextBase::removeAccessibleEventListener(xListener);
 }
 
-    //=====  XServiceInfo  ====================================================
+    
 
 OUString SAL_CALL ScAccessibleEditObject::getImplementationName(void)
         throw (uno::RuntimeException)
@@ -330,7 +330,7 @@ OUString SAL_CALL ScAccessibleEditObject::getImplementationName(void)
     return OUString("ScAccessibleEditObject");
 }
 
-//=====  XTypeProvider  =======================================================
+
 
 namespace
 {
@@ -344,7 +344,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     return theScAccessibleEditObjectImplementationId::get().getSeq();
 }
 
-    //====  internal  =========================================================
+    
 
 bool ScAccessibleEditObject::IsDefunc(
     const uno::Reference<XAccessibleStateSet>& rxParentStates)
@@ -378,10 +378,10 @@ void ScAccessibleEditObject::CreateTextHelper()
         mpTextHelper->SetEventSource(this);
         mpTextHelper->SetFocus(mbHasFocus);
 
-        // #i54814# activate cell in edit mode
+        
         if( meObjectType == CellInEditMode )
         {
-            // do not activate cell object, if top edit line is active
+            
             const ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
             if( pInputHdl && !pInputHdl->IsTopMode() )
             {
@@ -441,13 +441,13 @@ sal_Int32 ScAccessibleEditObject::GetFgBgColor( const OUString &strPropColor)
     }
     return nColor;
 }
-//=====  XAccessibleSelection  ============================================
-//--------------------------------------------------------------------------------
+
+
 void SAL_CALL ScAccessibleEditObject::selectAccessibleChild( sal_Int32 )
 throw ( IndexOutOfBoundsException, RuntimeException )
 {
 }
-//----------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ScAccessibleEditObject::isAccessibleChildSelected( sal_Int32 nChildIndex )
 throw ( IndexOutOfBoundsException,
        RuntimeException )
@@ -470,17 +470,17 @@ throw ( IndexOutOfBoundsException,
     }
     return sal_False;
 }
-//---------------------------------------------------------------------
+
 void SAL_CALL ScAccessibleEditObject::clearAccessibleSelection(  )
 throw ( RuntimeException )
 {
 }
-//-------------------------------------------------------------------------
+
 void SAL_CALL ScAccessibleEditObject::selectAllAccessibleChildren(  )
 throw ( RuntimeException )
 {
 }
-//----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ScAccessibleEditObject::getSelectedAccessibleChildCount()
 throw ( RuntimeException )
 {
@@ -490,7 +490,7 @@ throw ( RuntimeException )
         if( isAccessibleChildSelected(i) ) nCount++;
     return nCount;
 }
-//--------------------------------------------------------------------------------------
+
 uno::Reference<XAccessible> SAL_CALL ScAccessibleEditObject::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
 throw ( IndexOutOfBoundsException, RuntimeException)
 {

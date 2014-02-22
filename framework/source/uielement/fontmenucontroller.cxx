@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/fontmenucontroller.hxx>
@@ -36,9 +36,9 @@
 #include <vcl/mnemonic.hxx>
 #include <osl/mutex.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -74,7 +74,7 @@ FontMenuController::~FontMenuController()
 {
 }
 
-// private function
+
 void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq, Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     const OUString*    pFontNameArray = rFontNameSeq.getConstArray();
@@ -105,17 +105,17 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
             m_xPopupMenu->insertItem( i+1, rName, css::awt::MenuItemStyle::RADIOCHECK | css::awt::MenuItemStyle::AUTOCHECK, i );
             if ( rName == m_aFontFamilyName )
                 m_xPopupMenu->checkItem( i+1, sal_True );
-            // use VCL popup menu pointer to set vital information that are not part of the awt implementation
+            
             OUStringBuffer aCommandBuffer( aFontNameCommandPrefix );
             aCommandBuffer.append( INetURLObject::encode( rName, INetURLObject::PART_HTTP_QUERY, '%', INetURLObject::ENCODE_ALL ));
             OUString aFontNameCommand = aCommandBuffer.makeStringAndClear();
-            pVCLPopupMenu->SetItemCommand( i+1, aFontNameCommand ); // Store font name into item command.
+            pVCLPopupMenu->SetItemCommand( i+1, aFontNameCommand ); 
         }
 
     }
 }
 
-// XEventListener
+
 void SAL_CALL FontMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -130,7 +130,7 @@ void SAL_CALL FontMenuController::disposing( const EventObject& ) throw ( Runtim
     m_xPopupMenu.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     com::sun::star::awt::FontDescriptor aFontDescriptor;
@@ -149,7 +149,7 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
     }
 }
 
-// XMenuListener
+
 void FontMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
     Sequence<PropertyValue>      aArgs;
@@ -164,7 +164,7 @@ void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& ) th
 
     if ( m_xPopupMenu.is() )
     {
-        // find new font name and set check mark!
+        
         sal_uInt16        nChecked = 0;
         sal_uInt16        nItemCount = m_xPopupMenu->getItemCount();
         OUString aEmpty;
@@ -177,11 +177,11 @@ void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& ) th
 
             OUString aText = m_xPopupMenu->getItemText( nItemId );
 
-            // TODO: must be replaced by implementation of VCL, when available
+            
             sal_Int32 nIndex = aText.indexOf( (sal_Unicode)'~' );
             if ( nIndex >= 0 )
                 aText = aText.replaceAt( nIndex, 1, aEmpty );
-            // TODO: must be replaced by implementation of VCL, when available
+            
 
             if ( aText == m_aFontFamilyName )
             {
@@ -195,13 +195,13 @@ void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& ) th
     }
 }
 
-// XPopupMenuController
+
 void FontMenuController::impl_setPopupMenu()
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 
     com::sun::star::util::URL aTargetURL;
-    // Register for font list updates to get the current font list from the controller
+    
     aTargetURL.Complete = ".uno:FontNameList";
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive2d/graphicprimitivehelper2d.hxx>
@@ -29,8 +29,8 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// helper class for animated graphics
+
+
 
 #include <vcl/animate.hxx>
 #include <vcl/graph.hxx>
@@ -38,10 +38,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/metaact.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// includes for testing MetafilePrimitive2D::create2DDecomposition
 
-//////////////////////////////////////////////////////////////////////////////
+
+
+
 
 namespace
 {
@@ -72,19 +72,19 @@ namespace
         const AnimationBitmap& rAnimBitmap = maAnimation.Get(sal_uInt16(nIndex));
         sal_uInt32 nWaitTime(rAnimBitmap.nWait * 10);
 
-        // #115934#
-        // Take care of special value for MultiPage TIFFs. ATM these shall just
-        // show their first page. Later we will offer some switching when object
-        // is selected.
+        
+        
+        
+        
         if(ANIMATION_TIMEOUT_ON_CLICK == rAnimBitmap.nWait)
         {
-            // ATM the huge value would block the timer, so
-            // use a long time to show first page (whole day)
+            
+            
             nWaitTime = 100 * 60 * 60 * 24;
         }
 
-        // Bad trap: There are animated gifs with no set WaitTime (!).
-        // In that case use a default value.
+        
+        
         if(0L == nWaitTime)
         {
             nWaitTime = 100L;
@@ -98,14 +98,14 @@ namespace
     {
         OSL_ENSURE(GRAPHIC_BITMAP == rGraphic.GetType() && rGraphic.IsAnimated(), "animatedBitmapExPreparator: graphic is not animated (!)");
 
-        // #128539# secure access to Animation, looks like there exist animated GIFs out there
-        // with a step count of zero
+        
+        
         if(maAnimation.Count())
         {
             VirtualDevice aVirtualDevice(*Application::GetDefaultDevice());
             VirtualDevice aVirtualDeviceMask(*Application::GetDefaultDevice(), 1L);
 
-            // Prepare VirtualDevices and their states
+            
             aVirtualDevice.EnableMapMode(false);
             aVirtualDeviceMask.EnableMapMode(false);
             aVirtualDevice.SetOutputSizePixel(maAnimation.GetDisplaySizePixel());
@@ -118,7 +118,7 @@ namespace
                 animationStep aNextStep;
                 aNextStep.mnTime = generateStepTime(a);
 
-                // prepare step
+                
                 const AnimationBitmap& rAnimBitmap = maAnimation.Get(sal_uInt16(a));
 
                 switch(rAnimBitmap.eDisposal)
@@ -145,7 +145,7 @@ namespace
                     }
                     case DISPOSE_BACK:
                     {
-                        // #i70772# react on no mask, for primitives, too.
+                        
                         const Bitmap aMask(rAnimBitmap.aBmpEx.GetMask());
                         const Bitmap aContent(rAnimBitmap.aBmpEx.GetBitmap());
 
@@ -179,7 +179,7 @@ namespace
                     }
                 }
 
-                // create BitmapEx
+                
                 Bitmap aMainBitmap = aVirtualDevice.GetBitmap(Point(), aVirtualDevice.GetOutputSizePixel());
 #if defined(MACOSX)
                 AlphaMask aMaskBitmap( aVirtualDeviceMask.GetBitmap( Point(), aVirtualDeviceMask.GetOutputSizePixel()));
@@ -188,14 +188,14 @@ namespace
 #endif
                 aNextStep.maBitmapEx = BitmapEx(aMainBitmap, aMaskBitmap);
 
-                // add to vector
+                
                 maSteps.push_back(aNextStep);
             }
         }
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -213,12 +213,12 @@ namespace drawinglayer
                 {
                     if(rGraphic.IsAnimated())
                     {
-                        // prepare animation data
+                        
                         animatedBitmapExPreparator aData(rGraphic);
 
                         if(aData.count())
                         {
-                            // create sub-primitives for animated bitmap and the needed animation loop
+                            
                             animation::AnimationEntryLoop aAnimationLoop(aData.loopCount() ? aData.loopCount() : 0xffff);
                             Primitive2DSequence aBitmapPrimitives(aData.count());
 
@@ -231,11 +231,11 @@ namespace drawinglayer
                                     rTransform);
                             }
 
-                            // prepare animation list
+                            
                             animation::AnimationEntryList aAnimationList;
                             aAnimationList.append(aAnimationLoop);
 
-                            // create and add animated switch primitive
+                            
                             aRetval.realloc(1);
                             aRetval[0] = new AnimatedSwitchPrimitive2D(
                                 aAnimationList,
@@ -245,12 +245,12 @@ namespace drawinglayer
                     }
                     else if(rGraphic.getSvgData().get())
                     {
-                        // embedded Svg fill, create embed transform
+                        
                         const basegfx::B2DRange& rSvgRange(rGraphic.getSvgData()->getRange());
 
                         if(basegfx::fTools::more(rSvgRange.getWidth(), 0.0) && basegfx::fTools::more(rSvgRange.getHeight(), 0.0))
                         {
-                            // translate back to origin, scale to unit coordinates
+                            
                             basegfx::B2DHomMatrix aEmbedSvg(
                                 basegfx::tools::createTranslateB2DHomMatrix(
                                     -rSvgRange.getMinX(),
@@ -260,10 +260,10 @@ namespace drawinglayer
                                 1.0 / rSvgRange.getWidth(),
                                 1.0 / rSvgRange.getHeight());
 
-                            // apply created object transformation
+                            
                             aEmbedSvg = rTransform * aEmbedSvg;
 
-                            // add Svg primitives embedded
+                            
                             aRetval.realloc(1);
                             aRetval[0] = new TransformPrimitive2D(
                                 aEmbedSvg,
@@ -283,7 +283,7 @@ namespace drawinglayer
 
                 case GRAPHIC_GDIMETAFILE :
                 {
-                    // create MetafilePrimitive2D
+                    
                     const GDIMetaFile& rMetafile = rGraphic.GetGDIMetaFile();
 
                     aRetval.realloc(1);
@@ -291,9 +291,9 @@ namespace drawinglayer
                         rTransform,
                         rMetafile);
 
-                    // #i100357# find out if clipping is needed for this primitive. Unfortunately,
-                    // there exist Metafiles who's content is bigger than the proposed PrefSize set
-                    // at them. This is an error, but we need to work around this
+                    
+                    
+                    
                     const Size aMetaFilePrefSize(rMetafile.GetPrefSize());
                     const Size aMetaFileRealSize(
                         const_cast< GDIMetaFile& >(rMetafile).GetBoundRect(
@@ -302,7 +302,7 @@ namespace drawinglayer
                     if(aMetaFileRealSize.getWidth() > aMetaFilePrefSize.getWidth()
                         || aMetaFileRealSize.getHeight() > aMetaFilePrefSize.getHeight())
                     {
-                        // clipping needed. Embed to MaskPrimitive2D. Create children and mask polygon
+                        
                         basegfx::B2DPolygon aMaskPolygon(basegfx::tools::createUnitPolygon());
                         aMaskPolygon.transform(rTransform);
 
@@ -316,17 +316,17 @@ namespace drawinglayer
 
                 default:
                 {
-                    // nothing to create
+                    
                     break;
                 }
             }
 
             return aRetval;
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -347,32 +347,32 @@ namespace drawinglayer
 
             if(!rChildren.getLength())
             {
-                // no child content, done
+                
                 return aRetval;
             }
 
-            // set child content as retval; that is what will be used as child content in all
-            // embeddings from here
+            
+            
             aRetval = rChildren;
 
             if(GRAPHICDRAWMODE_WATERMARK == aGraphicDrawMode)
             {
-                // this is solved by applying fixed values additionally to luminance
-                // and contrast, do it here and reset DrawMode to GRAPHICDRAWMODE_STANDARD
-                // original in svtools uses:
-                // #define WATERMARK_LUM_OFFSET        50
-                // #define WATERMARK_CON_OFFSET        -70
+                
+                
+                
+                
+                
                 fLuminance = basegfx::clamp(fLuminance + 0.5, -1.0, 1.0);
                 fContrast = basegfx::clamp(fContrast - 0.7, -1.0, 1.0);
                 aGraphicDrawMode = GRAPHICDRAWMODE_STANDARD;
             }
 
-            // DrawMode (GRAPHICDRAWMODE_WATERMARK already handled)
+            
             switch(aGraphicDrawMode)
             {
                 case GRAPHICDRAWMODE_GREYS:
                 {
-                    // convert to grey
+                    
                     const Primitive2DReference aPrimitiveGrey(
                         new ModifiedColorPrimitive2D(
                             aRetval,
@@ -384,7 +384,7 @@ namespace drawinglayer
                 }
                 case GRAPHICDRAWMODE_MONO:
                 {
-                    // convert to mono (black/white with threshold 0.5)
+                    
                     const Primitive2DReference aPrimitiveBlackAndWhite(
                         new ModifiedColorPrimitive2D(
                             aRetval,
@@ -397,17 +397,17 @@ namespace drawinglayer
                 case GRAPHICDRAWMODE_WATERMARK:
                 {
                     OSL_ENSURE(false, "OOps, GRAPHICDRAWMODE_WATERMARK should already be handled (see above)");
-                    // fallthrough intended
+                    
                 }
-                default: // case GRAPHICDRAWMODE_STANDARD:
+                default: 
                 {
-                    // nothing to do
+                    
                     break;
                 }
             }
 
-            // mnContPercent, mnLumPercent, mnRPercent, mnGPercent, mnBPercent
-            // handled in a single call
+            
+            
             if(!basegfx::fTools::equalZero(fLuminance)
                 || !basegfx::fTools::equalZero(fContrast)
                 || !basegfx::fTools::equalZero(fRed)
@@ -428,7 +428,7 @@ namespace drawinglayer
                 aRetval = Primitive2DSequence(&aPrimitiveRGBLuminannceContrast, 1);
             }
 
-            // gamma (boolean)
+            
             if(!basegfx::fTools::equal(fGamma, 1.0))
             {
                 const Primitive2DReference aPrimitiveGamma(
@@ -441,7 +441,7 @@ namespace drawinglayer
                 aRetval = Primitive2DSequence(&aPrimitiveGamma, 1);
             }
 
-            // invert (boolean)
+            
             if(bInvert)
             {
                 const Primitive2DReference aPrimitiveInvert(
@@ -456,7 +456,7 @@ namespace drawinglayer
             return aRetval;
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

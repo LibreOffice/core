@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,10 +14,10 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// TODO: StreamMode <-> AllocateMemory
+
 
 #include <string.h>
 #include <limits.h>
@@ -29,7 +29,7 @@
 #include <osl/thread.h>
 #include <tools/stream.hxx>
 
-// class FileBase
+
 #include <osl/file.hxx>
 using namespace osl;
 
@@ -55,7 +55,7 @@ static sal_uIntPtr GetSvError( DWORD nWntError )
         { ERROR_ACCOUNT_RESTRICTION,    SVSTREAM_ACCESS_DENIED },
         { ERROR_ATOMIC_LOCKS_NOT_SUPPORTED, SVSTREAM_INVALID_PARAMETER },
         { ERROR_BAD_PATHNAME,           SVSTREAM_PATH_NOT_FOUND },
-        // Filename too long
+        
         { ERROR_BUFFER_OVERFLOW,        SVSTREAM_INVALID_PARAMETER },
         { ERROR_DIRECTORY,              SVSTREAM_INVALID_PARAMETER },
         { ERROR_DRIVE_LOCKED,           SVSTREAM_LOCKING_VIOLATION },
@@ -86,7 +86,7 @@ static sal_uIntPtr GetSvError( DWORD nWntError )
         { (DWORD)0xFFFFFFFF, SVSTREAM_GENERALERROR }
     };
 
-    sal_uIntPtr nRetVal = SVSTREAM_GENERALERROR;    // default error
+    sal_uIntPtr nRetVal = SVSTREAM_GENERALERROR;    
     int i=0;
     do
     {
@@ -108,7 +108,7 @@ SvFileStream::SvFileStream( const OUString& rFileName, StreamMode nMode )
     pInstanceData       = new StreamData;
 
     SetBufferSize( 8192 );
-    // convert URL to SystemPath, if necessary
+    
     OUString aFileName, aNormPath;
 
     if ( FileBase::getSystemPathFromFileURL( rFileName, aFileName ) != FileBase::E_None )
@@ -138,7 +138,7 @@ sal_uInt16 SvFileStream::IsA() const
     return ID_FILESTREAM;
 }
 
-/// Does not check for EOF, makes isEof callable
+
 sal_uIntPtr SvFileStream::GetData( void* pData, sal_uIntPtr nSize )
 {
     DWORD nCount = 0;
@@ -171,7 +171,7 @@ sal_uIntPtr SvFileStream::SeekPos( sal_uIntPtr nPos )
     if( IsOpen() )
     {
         if( nPos != STREAM_SEEK_TO_END )
-            // 64-Bit files are not supported
+            
             nNewPos=SetFilePointer(pInstanceData->hFile,nPos,NULL,FILE_BEGIN);
         else
             nNewPos=SetFilePointer(pInstanceData->hFile,0L,NULL,FILE_END);
@@ -278,11 +278,11 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     SvStream::ClearBuffer();
 
     eStreamMode = nMode;
-    eStreamMode &= ~STREAM_TRUNC; // don't truncate on reopen
+    eStreamMode &= ~STREAM_TRUNC; 
 
     aFilename = aParsedFilename;
     OString aFileNameA(OUStringToOString(aFilename, osl_getThreadTextEncoding()));
-    SetLastError( ERROR_SUCCESS );  // might be changed by Redirector
+    SetLastError( ERROR_SUCCESS );  
 
     DWORD   nOpenAction;
     DWORD   nShareMode      = FILE_SHARE_READ | FILE_SHARE_WRITE;
@@ -303,10 +303,10 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     if( (nMode & STREAM_WRITE) )
         nAccessMode |= GENERIC_WRITE;
 
-    if( nAccessMode == GENERIC_READ )       // ReadOnly ?
-        nMode |= STREAM_NOCREATE;   // Don't create if readonly
+    if( nAccessMode == GENERIC_READ )       
+        nMode |= STREAM_NOCREATE;   
 
-    // Assignment based on true/false table above
+    
     if( !(nMode & STREAM_NOCREATE) )
     {
         if( nMode & STREAM_TRUNC )
@@ -333,17 +333,17 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     );
 
     if(  pInstanceData->hFile!=INVALID_HANDLE_VALUE && (
-        // Did Create Always overwrite a file?
+        
         GetLastError() == ERROR_ALREADY_EXISTS ||
-        // Did Create Always open a new file?
+        
         GetLastError() == ERROR_FILE_NOT_FOUND  ))
     {
-        // If so, no error
+        
         if( nOpenAction == OPEN_ALWAYS || nOpenAction == CREATE_ALWAYS )
             SetLastError( ERROR_SUCCESS );
     }
 
-    // Otherwise, determine if we're allowed to read
+    
     if( (pInstanceData->hFile==INVALID_HANDLE_VALUE) &&
          (nAccessMode & GENERIC_WRITE))
     {
@@ -352,8 +352,8 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
         {
             nMode &= (~STREAM_WRITE);
             nAccessMode = GENERIC_READ;
-            // OV, 28.1.97: Win32 sets file to length 0
-            // if Openaction is CREATE_ALWAYS
+            
+            
             nOpenAction = OPEN_EXISTING;
             SetLastError( ERROR_SUCCESS );
             pInstanceData->hFile = CreateFile(
@@ -378,7 +378,7 @@ void SvFileStream::Open( const OUString& rFilename, StreamMode nMode )
     else
     {
         bIsOpen     = true;
-        // pInstanceData->bIsEof = false;
+        
         if( nAccessMode & GENERIC_WRITE )
             bIsWritable = true;
     }
@@ -404,7 +404,7 @@ void SvFileStream::Close()
     SvStream::ClearError();
 }
 
-/// Reset filepointer to beginning of file
+
 void SvFileStream::ResetError()
 {
     SvStream::ClearError();

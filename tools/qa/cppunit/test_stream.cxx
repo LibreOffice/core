@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/types.h>
@@ -15,7 +15,7 @@
 #include <tools/stream.hxx>
 #include <sstream>
 
-//Tests for eofbit/badbit/goodbit/failbit
+
 
 namespace
 {
@@ -53,41 +53,41 @@ namespace
         CPPUNIT_ASSERT(tools_a == 'f');
 
         iss.seekg(0, std::ios_base::end);
-        //seeking to end doesn't set eof, reading past eof does
+        
         CPPUNIT_ASSERT(!iss.eof());
         CPPUNIT_ASSERT(iss.good());
 
         aMemStream.Seek(STREAM_SEEK_TO_END);
-        //seeking to end doesn't set eof, reading past eof does
+        
         CPPUNIT_ASSERT(!aMemStream.eof());
         CPPUNIT_ASSERT(aMemStream.good());
 
         std_a = 78;
         iss >> std_a;
-        //so, now eof is set
+        
         CPPUNIT_ASSERT(iss.eof());
-        //a failed read doesn't change the data, it remains unchanged
+        
         CPPUNIT_ASSERT(std_a == 78);
-        //nothing wrong with the stream, so not bad
+        
         CPPUNIT_ASSERT(!iss.bad());
-        //yet, the read didn't succeed
+        
         CPPUNIT_ASSERT(!iss.good());
         CPPUNIT_ASSERT(iss.rdstate() == (std::ios::failbit|std::ios::eofbit));
 
         tools_a = 78;
         aMemStream.ReadChar( tools_a );
-        //so, now eof is set
+        
         CPPUNIT_ASSERT(aMemStream.eof());
-        //a failed read doesn't change the data, it remains unchanged
+        
         CPPUNIT_ASSERT(tools_a == 78);
-        //nothing wrong with the stream, so not bad
+        
         CPPUNIT_ASSERT(!aMemStream.bad());
-        //yet, the read didn't succeed
+        
         CPPUNIT_ASSERT(!aMemStream.good());
 
-        //set things up so that there is only one byte available on an attempt
-        //to read a two-byte sal_uInt16.  The byte should be consumed, but the
-        //operation should fail, and tools_b should remain unchanged,
+        
+        
+        
         sal_uInt16 tools_b = 0x1122;
         aMemStream.SeekRel(-1);
         CPPUNIT_ASSERT(!aMemStream.eof());
@@ -108,7 +108,7 @@ namespace
         aMemStream.ReadChar( tools_a );
         CPPUNIT_ASSERT(tools_a == 'f');
 
-        //failbit is rather subtle wrt e.g seeks
+        
 
         char buffer[1024];
 
@@ -238,7 +238,7 @@ namespace
         CPPUNIT_ASSERT(aFoo.isEmpty());
         CPPUNIT_ASSERT(aMemStream.eof());
 
-        foo[3] = 0; //test reading embedded nulls
+        foo[3] = 0; 
 
         aMemStream.Seek(0);
         bRet = aMemStream.ReadLine(aFoo);
@@ -249,7 +249,7 @@ namespace
         std::string sStr(foo, RTL_CONSTASCII_LENGTH(foo));
         std::istringstream iss(sStr, std::istringstream::in);
         std::getline(iss, sStr, '\n');
-        //embedded null read as expected
+        
         CPPUNIT_ASSERT(sStr.size() == 7 && sStr[3] == 0);
         CPPUNIT_ASSERT(iss.good());
 
@@ -276,12 +276,12 @@ namespace
         bRet = aMemStreamB.ReadLine(aFoo);
         CPPUNIT_ASSERT(bRet);
         CPPUNIT_ASSERT(aFoo == "foo");
-        CPPUNIT_ASSERT(!aMemStreamB.eof()); //<-- diff A
+        CPPUNIT_ASSERT(!aMemStreamB.eof()); 
 
         std::istringstream issB(bar, std::istringstream::in);
         std::getline(issB, sStr, '\n');
         CPPUNIT_ASSERT(sStr == "foo");
-        CPPUNIT_ASSERT(issB.eof());         //<-- diff A
+        CPPUNIT_ASSERT(issB.eof());         
     }
 
     CPPUNIT_TEST_SUITE_REGISTRATION(Test);

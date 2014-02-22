@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/XMLEventsImportContext.hxx>
@@ -72,20 +72,20 @@ XMLEventsImportContext::XMLEventsImportContext(
 
 XMLEventsImportContext::~XMLEventsImportContext()
 {
-//  // if, for whatever reason, the object gets destroyed prematurely,
-//  // we need to delete the collected events
+
+
 }
 
 
 void XMLEventsImportContext::StartElement(
     const Reference<XAttributeList> &)
 {
-    // nothing to be done
+    
 }
 
 void XMLEventsImportContext::EndElement()
 {
-    // nothing to be done
+    
 }
 
 SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
@@ -93,13 +93,13 @@ SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList> & xAttrList )
 {
-    // a) search for script:language and script:event-name attribute
-    // b) delegate to factory. The factory will:
-    //    1) translate XML event name into API event name
-    //    2) get proper event context factory from import
-    //    3) instantiate context
+    
+    
+    
+    
+    
 
-    // a) search for script:language and script:event-name attribute
+    
     OUString sLanguage;
     OUString sEventName;
     sal_Int16 nCount = xAttrList->getLength();
@@ -119,12 +119,12 @@ SvXMLImportContext* XMLEventsImportContext::CreateChildContext(
             {
                 sLanguage = xAttrList->getValueByIndex(nAttr);
             }
-            // else: ignore -> let child context handle this
+            
         }
-        // else: ignore -> let child context handle this
+        
     }
 
-    // b) delegate to factory
+    
     return GetImport().GetEventImport().CreateContext(
         GetImport(), p_nPrefix, rLocalName, xAttrList,
         this, sEventName, sLanguage);
@@ -146,7 +146,7 @@ void XMLEventsImportContext::SetEvents(
     {
         xEvents = xNameRepl;
 
-        // now iterate over vector and a) insert b) delete all elements
+        
         EventsVector::iterator aEnd = aCollectEvents.end();
         for(EventsVector::iterator aIter = aCollectEvents.begin();
             aIter != aEnd;
@@ -162,18 +162,18 @@ sal_Bool XMLEventsImportContext::GetEventSequence(
     const OUString& rName,
     Sequence<PropertyValue> & rSequence )
 {
-    // search through the vector
-    // (This shouldn't take a lot of time, since this method should only get
-    //  called if only one (or few) events are being expected)
+    
+    
+    
 
-    // iterate over vector until end or rName is found;
+    
     EventsVector::iterator aIter = aCollectEvents.begin();
     while( (aIter != aCollectEvents.end()) && (aIter->first != rName) )
     {
         ++aIter;
     }
 
-    // if we're not at the end, set the sequence
+    
     sal_Bool bRet = (aIter != aCollectEvents.end());
     if (bRet)
         rSequence = aIter->second;
@@ -185,10 +185,10 @@ void XMLEventsImportContext::AddEventValues(
     const OUString& rEventName,
     const Sequence<PropertyValue> & rValues )
 {
-    // if we already have the events, set them; else just collect
+    
     if (xEvents.is())
     {
-        // set event (if name is known)
+        
         if (xEvents->hasByName(rEventName))
         {
             Any aAny;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -22,48 +22,48 @@
 #include <editeng/scripttypeitem.hxx>
 #include "format.hxx"
 
-/////////////////////////////////////////////////////////////////
 
-// Latin default-fonts
+
+
 static const sal_uInt16 aLatinDefFnts[FNT_END] =
 {
-    DEFAULTFONT_SERIF,  // FNT_VARIABLE
-    DEFAULTFONT_SERIF,  // FNT_FUNCTION
-    DEFAULTFONT_SERIF,  // FNT_NUMBER
-    DEFAULTFONT_SERIF,  // FNT_TEXT
-    DEFAULTFONT_SERIF,  // FNT_SERIF
-    DEFAULTFONT_SANS,   // FNT_SANS
-    DEFAULTFONT_FIXED   // FNT_FIXED
-    //OpenSymbol,    // FNT_MATH
+    DEFAULTFONT_SERIF,  
+    DEFAULTFONT_SERIF,  
+    DEFAULTFONT_SERIF,  
+    DEFAULTFONT_SERIF,  
+    DEFAULTFONT_SERIF,  
+    DEFAULTFONT_SANS,   
+    DEFAULTFONT_FIXED   
+    
 };
 
-// CJK default-fonts
-//! we use non-asian fonts for variables, functions and numbers since they
-//! look better and even in asia only latin letters will be used for those.
-//! At least that's what I was told...
+
+
+
+
 static const sal_uInt16 aCJKDefFnts[FNT_END] =
 {
-    DEFAULTFONT_SERIF,          // FNT_VARIABLE
-    DEFAULTFONT_SERIF,          // FNT_FUNCTION
-    DEFAULTFONT_SERIF,          // FNT_NUMBER
-    DEFAULTFONT_CJK_TEXT,       // FNT_TEXT
-    DEFAULTFONT_CJK_TEXT,       // FNT_SERIF
-    DEFAULTFONT_CJK_DISPLAY,    // FNT_SANS
-    DEFAULTFONT_CJK_TEXT        // FNT_FIXED
-    //OpenSymbol,    // FNT_MATH
+    DEFAULTFONT_SERIF,          
+    DEFAULTFONT_SERIF,          
+    DEFAULTFONT_SERIF,          
+    DEFAULTFONT_CJK_TEXT,       
+    DEFAULTFONT_CJK_TEXT,       
+    DEFAULTFONT_CJK_DISPLAY,    
+    DEFAULTFONT_CJK_TEXT        
+    
 };
 
-// CTL default-fonts
+
 static const sal_uInt16 aCTLDefFnts[FNT_END] =
 {
-    DEFAULTFONT_CTL_TEXT,    // FNT_VARIABLE
-    DEFAULTFONT_CTL_TEXT,    // FNT_FUNCTION
-    DEFAULTFONT_CTL_TEXT,    // FNT_NUMBER
-    DEFAULTFONT_CTL_TEXT,    // FNT_TEXT
-    DEFAULTFONT_CTL_TEXT,    // FNT_SERIF
-    DEFAULTFONT_CTL_TEXT,    // FNT_SANS
-    DEFAULTFONT_CTL_TEXT     // FNT_FIXED
-    //OpenSymbol,    // FNT_MATH
+    DEFAULTFONT_CTL_TEXT,    
+    DEFAULTFONT_CTL_TEXT,    
+    DEFAULTFONT_CTL_TEXT,    
+    DEFAULTFONT_CTL_TEXT,    
+    DEFAULTFONT_CTL_TEXT,    
+    DEFAULTFONT_CTL_TEXT,    
+    DEFAULTFONT_CTL_TEXT     
+    
 };
 
 
@@ -93,7 +93,7 @@ OUString GetDefaultFontName( LanguageType nLang, sal_uInt16 nIdent )
     }
 }
 
-/////////////////////////////////////////////////////////////////
+
 
 SmFormat::SmFormat()
 :   aBaseSize(0, SmPtsTo100th_mm(12))

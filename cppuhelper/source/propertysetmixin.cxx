@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -173,9 +173,9 @@ void Data::initProperties(
                 css::reflection::XCompoundTypeDescription > > excs(
                     attr->getGetExceptions());
                 bool getUnknown = false;
-                //XXX  Special interpretation of getter/setter exceptions only
-                // works if the specified exceptions are of the exact type, not
-                // of a supertype:
+                
+                
+                
                 for (sal_Int32 j = 0; j < excs.getLength(); ++j) {
                     if ( excs[j]->getName() == "com.sun.star.beans.UnknownPropertyException" )
                     {
@@ -527,15 +527,15 @@ void PropertySetMixinImpl::Impl::setProperty(
                 object);
         }
     } catch (css::lang::IllegalAccessException &) {
-        //TODO  Clarify whether PropertyVetoException is the correct exception
-        // to throw when trying to set a read-only property:
+        
+        
         throw css::beans::PropertyVetoException(
             "cannot set read-only property " + name, object);
     } catch (css::lang::WrappedTargetRuntimeException & e) {
-        //FIXME  A WrappedTargetRuntimeException from XIdlField2.get is not
-        // guaranteed to originate directly within XIdlField2.get (and thus have
-        // the expected semantics); it might also be passed through from lower
-        // layers.
+        
+        
+        
+        
         if (e.TargetException.isExtractableTo(
                 getCppuType(
                     static_cast< css::beans::UnknownPropertyException * >(0)))
@@ -584,10 +584,10 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
              + e.Message),
             object);
     } catch (css::lang::WrappedTargetRuntimeException & e) {
-        //FIXME  A WrappedTargetRuntimeException from XIdlField2.get is not
-        // guaranteed to originate directly within XIdlField2.get (and thus have
-        // the expected semantics); it might also be passed through from lower
-        // layers.
+        
+        
+        
+        
         if (e.TargetException.isExtractableTo(
                 getCppuType(
                     static_cast< css::beans::UnknownPropertyException * >(0)))
@@ -709,8 +709,8 @@ css::uno::Any PropertySetMixinImpl::Impl::getProperty(
         }
     }
     if (state != 0) {
-        //XXX  If isAmbiguous && isDefaulted, arbitrarily choose AMBIGUOUS_VALUE
-        // over DEFAULT_VALUE:
+        
+        
         *state = isAmbiguous
             ? css::beans::PropertyState_AMBIGUOUS_VALUE
             : isDefaulted
@@ -1024,7 +1024,7 @@ void PropertySetMixinImpl::addPropertyChangeListener(
         css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::beans::XPropertyChangeListener >(
-        listener, css::uno::UNO_SET_THROW); // reject NULL listener
+        listener, css::uno::UNO_SET_THROW); 
     checkUnknown(propertyName);
     bool disposed;
     {
@@ -1069,7 +1069,7 @@ void PropertySetMixinImpl::addVetoableChangeListener(
         css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::beans::XVetoableChangeListener >(
-        listener, css::uno::UNO_SET_THROW); // reject NULL listener
+        listener, css::uno::UNO_SET_THROW); 
     checkUnknown(propertyName);
     bool disposed;
     {

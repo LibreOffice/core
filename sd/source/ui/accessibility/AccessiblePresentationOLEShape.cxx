@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessiblePresentationOLEShape.hxx"
@@ -30,7 +30,7 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
-//=====  internal  ============================================================
+
 
 AccessiblePresentationOLEShape::AccessiblePresentationOLEShape (
     const AccessibleShapeInfo& rShapeInfo,
@@ -43,7 +43,7 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape (void)
 {
 }
 
-//=====  XServiceInfo  ========================================================
+
 
 OUString SAL_CALL
     AccessiblePresentationOLEShape::getImplementationName (void)
@@ -52,7 +52,7 @@ OUString SAL_CALL
     return OUString("AccessiblePresentationOLEShape");
 }
 
-/// Set this object's name if it is different to the current name.
+
 OUString
     AccessiblePresentationOLEShape::CreateAccessibleBaseName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -85,24 +85,24 @@ OUString
     AccessiblePresentationOLEShape::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    //    return createAccessibleName();
+    
     DescriptionGenerator aDG (mxShape);
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
     switch (nShapeType)
     {
         case PRESENTATION_OLE:
             aDG.Initialize ("PresentationOLEShape");
-            //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
+            
             aDG.AddProperty ("CLSID" ,DescriptionGenerator::STRING);
             break;
         case PRESENTATION_CHART:
             aDG.Initialize ("PresentationChartShape");
-            //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
+            
             aDG.AddProperty ( "CLSID" , DescriptionGenerator::STRING);
             break;
         case PRESENTATION_TABLE:
             aDG.Initialize ("PresentationTableShape");
-            //SVX_RESSTR(RID_SVXSTR_A11Y_ST_RECTANGLE));
+            
             aDG.AddProperty ("CLSID" , DescriptionGenerator::STRING);
             break;
         default:
@@ -118,13 +118,13 @@ OUString
     return aDG();
 }
 
-//  Return this object's role.
+
 sal_Int16 SAL_CALL AccessiblePresentationOLEShape::getAccessibleRole ()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return  AccessibleRole::EMBEDDED_OBJECT ;
 }
 
-} // end of namespace accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

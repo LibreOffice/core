@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/io/XMarkableStream.hpp>
@@ -31,9 +31,9 @@
 
 #define UNOCONTROL_STREAMVERSION    (short)2
 
-//  ----------------------------------------------------
-//  class UnoControlModelEntryList
-//  ----------------------------------------------------
+
+
+
 UnoControlModelEntryList::UnoControlModelEntryList()
 {
 }
@@ -86,9 +86,9 @@ void UnoControlModelEntryList::insert( size_t i, UnoControlModelEntry* item ) {
 }
 
 
-//  ----------------------------------------------------
-//  class StdTabControllerModel
-//  ----------------------------------------------------
+
+
+
 StdTabControllerModel::StdTabControllerModel()
 {
     mbGroupControl = sal_True;
@@ -162,8 +162,8 @@ void ImplWriteControls( const ::com::sun::star::uno::Reference< ::com::sun::star
     sal_uInt32 nStoredControls = 0;
     sal_Int32 nDataBeginMark = xMark->createMark();
 
-    OutStream->writeLong( 0L ); // DataLen
-    OutStream->writeLong( 0L ); // nStoredControls
+    OutStream->writeLong( 0L ); 
+    OutStream->writeLong( 0L ); 
 
     sal_uInt32 nCtrls = rCtrls.getLength();
     for ( sal_uInt32 n = 0; n < nCtrls; n++ )
@@ -203,7 +203,7 @@ void ImplWriteControls( const ::com::sun::star::uno::Reference< ::com::sun::star
         aSeq.getArray()[n] = xI;
     }
 
-    // Skip remainder if more data exists than this version recognizes
+    
     xMark->jumpToMark( nDataBeginMark );
     InStream->skipBytes( nDataLen );
     xMark->deleteMark(nDataBeginMark);
@@ -211,7 +211,7 @@ void ImplWriteControls( const ::com::sun::star::uno::Reference< ::com::sun::star
 }
 
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any StdTabControllerModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -222,7 +222,7 @@ void ImplWriteControls( const ::com::sun::star::uno::Reference< ::com::sun::star
     return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( StdTabControllerModel )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo>* ) NULL ),
@@ -265,9 +265,9 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    // The controls might occur as a flat list and will be grouped.
-    // Nested groups are not possible.
-    // The first element of a group determines its position.
+    
+    
+    
     UnoControlModelEntry* pNewEntry = new UnoControlModelEntry;
     pNewEntry->bGroup = sal_True;
     pNewEntry->pGroup = new UnoControlModelEntryList;
@@ -282,7 +282,7 @@ void StdTabControllerModel::setGroup( const ::com::sun::star::uno::Sequence< ::c
         if ( !pEntry->bGroup )
         {
             sal_uInt32 nPos = ImplGetControlPos( *pEntry->pxControl, maControls );
-            // At the beginning, all Controls should be in a flattened list
+            
             DBG_ASSERT( nPos != CONTROLPOS_NOTFOUND, "setGroup - Element not found" );
             if ( nPos != CONTROLPOS_NOTFOUND )
             {
@@ -303,8 +303,8 @@ sal_Int32 StdTabControllerModel::getGroupCount(  ) throw(::com::sun::star::uno::
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    // Start with only one group layer, even though Model and Impl-methods
-    // work recursively, this is not presented to the outside.
+    
+    
 
     sal_Int32 nGroups = 0;
     size_t nEntries = maControls.size();
@@ -367,7 +367,7 @@ void StdTabControllerModel::getGroupByName( const OUString& rName, ::com::sun::s
 }
 
 
-// ::com::sun::star::io::XPersistObject
+
 OUString StdTabControllerModel::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return OUString::createFromAscii( szServiceName_TabControllerModel );

@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -171,12 +171,12 @@ void IndexColumns::appendByDescriptor(
     throw com::sun::star::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.appendByDescriptor not yet implemented",
         *this, OUString(), 1, Any() );
-//     osl::MutexGuard guard( m_refMutex->mutex );
-//     Statics & st = getStatics();
-//     Reference< XPropertySet > past = createDataDescriptor();
-//     past->setPropertyValue( st.IS_NULLABLE, makeAny( com::sun::star::sdbc::ColumnValue::NULLABLE ) );
-//     alterColumnByDescriptor(
-//         m_schemaName, m_tableName, m_pSettings->encoding, m_origin->createStatement() , past, future  );
+
+
+
+
+
+
 
 }
 
@@ -189,21 +189,21 @@ void IndexColumns::dropByName( const OUString& elementName )
     throw com::sun::star::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.dropByName not yet implemented",
         *this, OUString(), 1, Any() );
-//     String2IntMap::const_iterator ii = m_name2index.find( elementName );
-//     if( ii == m_name2index.end() )
-//     {
-//         OUStringBuffer buf( 128 );
-//         buf.appendAscii( "Column " );
-//         buf.append( elementName );
-//         buf.appendAscii( " is unknown in table " );
-//         buf.append( m_schemaName );
-//         buf.appendAscii( "." );
-//         buf.append( m_tableName );
-//         buf.appendAscii( ", so it can't be dropped" );
-//         throw com::sun::star::container::NoSuchElementException(
-//             buf.makeStringAndClear(), *this );
-//     }
-//     dropByIndex( ii->second );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 void IndexColumns::dropByIndex( sal_Int32 index )
@@ -215,33 +215,33 @@ void IndexColumns::dropByIndex( sal_Int32 index )
     throw com::sun::star::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.dropByIndex not yet implemented",
         *this, OUString(), 1, Any() );
-//     osl::MutexGuard guard( m_refMutex->mutex );
-//     if( index < 0 ||  index >= m_values.getLength() )
-//     {
-//         OUStringBuffer buf( 128 );
-//         buf.appendAscii( "COLUMNS: Index out of range (allowed 0 to " );
-//         buf.append((sal_Int32)(m_values.getLength() -1) );
-//         buf.appendAscii( ", got " );
-//         buf.append( index );
-//         buf.appendAscii( ")" );
-//         throw com::sun::star::lang::IndexOutOfBoundsException(
-//             buf.makeStringAndClear(), *this );
-//     }
 
-//     Reference< XPropertySet > set;
-//     m_values[index] >>= set;
-//     Statics &st = getStatics();
-//     OUString name;
-//     set->getPropertyValue( st.NAME ) >>= name;
 
-//     OUStringBuffer update( 128 );
-//     update.appendAscii( "ALTER TABLE ONLY");
-//     bufferQuoteQualifiedIdentifier( update, m_schemaName, m_tableName );
-//     update.appendAscii( "DROP COLUMN" );
-//     bufferQuoteIdentifier( update, name );
-//     Reference< XStatement > stmt = m_origin->createStatement( );
-//     DisposeGuard disposeIt( stmt );
-//     stmt->executeUpdate( update.makeStringAndClear() );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
@@ -269,7 +269,7 @@ Reference< com::sun::star::container::XNameAccess > IndexColumns::create(
     return ret;
 }
 
-//_________________________________________________________________________________________
+
 IndexColumnDescriptors::IndexColumnDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,

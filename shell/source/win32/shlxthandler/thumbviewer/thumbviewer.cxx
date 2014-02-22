@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifndef DONT_HAVE_GDIPLUS
@@ -114,12 +114,12 @@ class StreamOnZipBuffer : public IStream
 public:
     StreamOnZipBuffer(const ZipFile::ZipContentBuffer_t& zip_buffer);
 
-    // IUnknown
+    
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release( void);
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject);
 
-    // IStream
+    
     virtual HRESULT STDMETHODCALLTYPE Read(void *pv, ULONG cb, ULONG *pcbRead);
     virtual HRESULT STDMETHODCALLTYPE Write(void const *pv, ULONG cb, ULONG *pcbWritten);
     virtual HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
@@ -145,7 +145,7 @@ StreamOnZipBuffer::StreamOnZipBuffer(const ZipFile::ZipContentBuffer_t& zip_buff
 {
 }
 
-// IUnknown methods
+
 
 ULONG STDMETHODCALLTYPE StreamOnZipBuffer::AddRef(void)
 {
@@ -307,7 +307,7 @@ CThumbviewer::~CThumbviewer()
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-// IUnknown methods
+
 
 HRESULT STDMETHODCALLTYPE CThumbviewer::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
@@ -346,7 +346,7 @@ ULONG STDMETHODCALLTYPE CThumbviewer::Release( void)
     return refcnt;
 }
 
-// IExtractImage2 methods
+
 
 const std::string THUMBNAIL_CONTENT = "Thumbnails/thumbnail.png";
 
@@ -379,7 +379,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::Extract(HBITMAP *phBmpImage)
 
             if (memDC)
             {
-                UINT offset = 3; // reserve a little border space
+                UINT offset = 3; 
 
                 Gdiplus::Rect canvas(0, 0, thumbnail_size_.cx, thumbnail_size_.cy);
                 Gdiplus::Rect canvas_thumbnail(offset, offset, thumbnail_size_.cx - 2 * offset, thumbnail_size_.cy - 2 * offset);
@@ -473,14 +473,14 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::GetLocation(
     thumbnail_size_ = *prgSize;
     color_depth_ = dwRecClrDepth;
 
-    *pdwFlags = IEIFLAG_CACHE; // we don't cache the image
+    *pdwFlags = IEIFLAG_CACHE; 
 
     wcsncpy(pszPathBuffer, filename_.c_str(), cchMax);
 
     return NOERROR;
 }
 
-// IPersist methods
+
 
 HRESULT STDMETHODCALLTYPE CThumbviewer::GetClassID(CLSID* pClassID)
 {
@@ -488,7 +488,7 @@ HRESULT STDMETHODCALLTYPE CThumbviewer::GetClassID(CLSID* pClassID)
     return S_OK;
 }
 
-// IPersistFile methods
+
 
 HRESULT STDMETHODCALLTYPE CThumbviewer::Load(LPCOLESTR pszFileName, DWORD)
 {
@@ -520,6 +520,6 @@ Gdiplus::Rect CThumbviewer::CalcScaledAspectRatio(Gdiplus::Rect src, Gdiplus::Re
     return result;
 }
 
-#endif // DONT_HAVE_GDIPLUS
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "colorformat.hxx"
@@ -121,7 +121,7 @@ void ScDataBarSettingsDlg::Init()
     }
     if ( pColorTable.is() )
     {
-        // filling the line color box
+        
         mpLbPos->SetUpdateMode( false );
         mpLbNeg->SetUpdateMode( false );
         mpLbAxisCol->SetUpdateMode( false );
@@ -176,7 +176,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
     ScDataBarFormatData* pData = new ScDataBarFormatData();
     pData->maPositiveColor = mpLbPos->GetSelectEntryColor();
     pData->mpNegativeColor.reset(new Color(mpLbNeg->GetSelectEntryColor()));
-    pData->mbGradient = true; //FIXME
+    pData->mbGradient = true; 
     pData->mpUpperLimit.reset(new ScColorScaleEntry());
     pData->mpLowerLimit.reset(new ScColorScaleEntry());
     pData->maAxisColor = mpLbAxisCol->GetSelectEntryColor();
@@ -190,7 +190,7 @@ ScDataBarFormatData* ScDataBarSettingsDlg::GetData()
 
 IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 {
-    //check that min < max
+    
     bool bWarn = false;
     sal_Int32 nSelectMin = mpLbTypeMin->GetSelectEntryPos();
     if( nSelectMin == COLORSCALE_MAX )
@@ -219,7 +219,7 @@ IMPL_LINK_NOARG( ScDataBarSettingsDlg, OkBtnHdl )
 
     if(bWarn)
     {
-        //show warning message and don't close
+        
         WarningBox aWarn(this, WB_OK, maStrWarnSameValue );
         aWarn.Execute();
     }

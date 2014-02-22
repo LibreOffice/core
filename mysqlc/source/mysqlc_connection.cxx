@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "mysqlc_connection.hxx"
@@ -48,7 +48,7 @@ using namespace connectivity::mysqlc;
 
 #include <stdio.h>
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
@@ -115,8 +115,8 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
     m_settings.encoding = m_rDriver.getDefaultEncoding();
     m_settings.quoteIdentifier = OUString();
 
-    // parse url. Url has the following format:
-    // external server: sdbc:mysqlc:[hostname]:[port]/[dbname]
+    
+    
 
     if (!url.compareTo(OUString(MYSQLC_URI_PREFIX), sizeof(MYSQLC_URI_PREFIX)-1)) {
         nIndex = 12;
@@ -143,7 +143,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
         }
     }
 
-    // get user and password for mysql connection
+    
     const PropertyValue *pIter  = info.getConstArray();
     const PropertyValue *pEnd   = pIter + info.getLength();
     OUString aUser, aPass, sUnixSocket, sNamedPipe;
@@ -164,7 +164,7 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
             namedPipePassed = true;
         } else if ( pIter->Name.equalsAscii("PublicConnectionURL")) {
             OSL_VERIFY( pIter->Value >>= m_settings.connectionURL );
-        } else if ( pIter->Name.equalsAscii("NewURL")) {    // legacy name for "PublicConnectionURL"
+        } else if ( pIter->Name.equalsAscii("NewURL")) {    
             OSL_VERIFY( pIter->Value >>= m_settings.connectionURL );
         }
     }
@@ -200,13 +200,13 @@ void OConnection::construct(const OUString& url, const Sequence< PropertyValue >
             mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
         }
     } else {
-        // TODO: support for embedded server
+        
     }
 
     m_settings.schema = aDbName;
     OSL_TRACE("%s", OUStringToOString(m_settings.schema, getConnectionEncoding()).getStr());
 
-    // Check if the server is 4.1 or above
+    
     if (this->getMysqlVersion() < 40100) {
         throw SQLException(
             OUString( "MariaDB LibreOffice Connector requires MySQL Server 4.1 or above"  ),
@@ -248,9 +248,9 @@ Reference< XStatement > SAL_CALL OConnection::createStatement()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // create a statement
+    
     Reference< XStatement > xReturn;
-    // the statement can only be executed once
+    
     try {
         xReturn = new OStatement(this, m_settings.cppConnection->createStatement());
         m_aStatements.push_back(WeakReferenceHelper(xReturn));
@@ -274,8 +274,8 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const OUS
 
     Reference< XPreparedStatement > xStatement;
     try {
-        // create a statement
-        // the statement can only be executed more than once
+        
+        
         xStatement = new OPreparedStatement(this,
                     m_settings.cppConnection->prepareStatement(OUStringToOString(sSqlStatement, getConnectionEncoding()).getStr()));
         m_aStatements.push_back( WeakReferenceHelper( xStatement ) );
@@ -342,8 +342,8 @@ sal_Bool SAL_CALL OConnection::getAutoCommit()
     throw(SQLException, RuntimeException)
 {
     OSL_TRACE("OConnection::getAutoCommit");
-    // you have to distinguish which if you are in autocommit mode or not
-    // at normal case true should be fine here
+    
+    
 
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -398,7 +398,7 @@ sal_Bool SAL_CALL OConnection::isClosed()
     OSL_TRACE("OConnection::isClosed");
     MutexGuard aGuard(m_aMutex);
 
-    // just simple -> we are close when we are disposed that means someone called dispose(); (XComponent)
+    
     return (OConnection_BASE::rBHelper.bDisposed);
 }
 /* }}} */
@@ -415,7 +415,7 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
     if (!xMetaData.is()) {
         try {
-            xMetaData = new ODatabaseMetaData(*this); // need the connection because it can return it
+            xMetaData = new ODatabaseMetaData(*this); 
         } catch (const sql::SQLException & e) {
             mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
         }
@@ -448,7 +448,7 @@ sal_Bool SAL_CALL OConnection::isReadOnly()
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // return if your connection to readonly
+    
     return (m_settings.readOnly);
 }
 /* }}} */
@@ -463,7 +463,7 @@ void SAL_CALL OConnection::setCatalog(const OUString& catalog)
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     try {
-//      m_settings.cppConnection->setCatalog(OUStringToOString(catalog, m_settings.encoding).getStr());
+
         m_settings.cppConnection->setSchema(OUStringToOString(catalog, getConnectionEncoding()).getStr());
     } catch (sql::SQLException & e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, getConnectionEncoding());
@@ -584,7 +584,7 @@ void SAL_CALL OConnection::setTypeMap(const Reference<XNameAccess >& typeMap)
 /* }}} */
 
 
-// XCloseable
+
 /* {{{ OConnection::close() -I- */
 void SAL_CALL OConnection::close()
     throw(SQLException, RuntimeException)
@@ -595,7 +595,7 @@ void SAL_CALL OConnection::close()
       which will guard the block
     */
     {
-        // we just dispose us
+        
         MutexGuard aGuard(m_aMutex);
         checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     }
@@ -604,14 +604,14 @@ void SAL_CALL OConnection::close()
 /* }}} */
 
 
-// XWarningsSupplier
+
 /* {{{ OConnection::getWarnings() -I- */
 Any SAL_CALL OConnection::getWarnings()
     throw(SQLException, RuntimeException)
 {
     Any x = Any();
     OSL_TRACE("OConnection::getWarnings");
-    // when you collected some warnings -> return it
+    
     return x;
 }
 /* }}} */
@@ -622,7 +622,7 @@ void SAL_CALL OConnection::clearWarnings()
     throw(SQLException, RuntimeException)
 {
     OSL_TRACE("OConnection::clearWarnings");
-    // you should clear your collected warnings here#
+    
 }
 /* }}} */
 
@@ -640,7 +640,7 @@ void OConnection::buildTypeInfo()
 void OConnection::disposing()
 {
     OSL_TRACE("OConnection::disposing");
-    // we noticed that we should be destroied in near future so we have to dispose our statements
+    
     MutexGuard aGuard(m_aMutex);
 
     for (OWeakRefArray::iterator i = m_aStatements.begin(); i != m_aStatements.end() ; ++i) {
@@ -714,22 +714,22 @@ sal_Int32 OConnection::getMysqlVersion()
 
 
 /* {{{ OConnection::sdbcColumnType() -I- */
-// TODO: Not used
-//sal_Int32 OConnection::sdbcColumnType(OUString typeName)
-//{
-//  OSL_TRACE("OConnection::sdbcColumnType");
-//  int i = 0;
-//  while (mysqlc_types[i].typeName) {
-//      if (OUString::createFromAscii(mysqlc_types[i].typeName).equals(
-//          typeName.toAsciiUpperCase()))
-//      {
-//          return mysqlc_types[i].dataType;
-//      }
-//      i++;
-//  }
-//  return 0;
-//}
-// -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 OUString OConnection::transFormPreparedStatement(const OUString& _sSQL)
 {
     OUString sSqlStatement = _sSQL;

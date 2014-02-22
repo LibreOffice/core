@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -93,7 +93,7 @@ namespace dxcanvas
 
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->SetCompositingMode(
-                    Gdiplus::CompositingModeSourceCopy ), // force set, don't blend
+                    Gdiplus::CompositingModeSourceCopy ), 
                 "BitmapCanvasHelper::clear(): GDI+ SetCompositingMode call failed" );
             ENSURE_OR_THROW(
                 Gdiplus::Ok == pGraphics->Clear( aClearColor ),
@@ -137,7 +137,7 @@ namespace dxcanvas
                                        const rendering::ViewState&                          /*destViewState*/,
                                        const rendering::RenderState&                        /*destRenderState*/ )
     {
-        // TODO(F2): copyRect NYI
+        
     }
 
     geometry::IntegerSize2D BitmapCanvasHelper::getSize()
@@ -151,7 +151,7 @@ namespace dxcanvas
     uno::Reference< rendering::XBitmap > BitmapCanvasHelper::getScaledBitmap( const geometry::RealSize2D& /*newSize*/,
                                                                               sal_Bool                    /*beFast*/ )
     {
-        // TODO(F1):
+        
         return uno::Reference< rendering::XBitmap >();
     }
 
@@ -217,14 +217,14 @@ namespace dxcanvas
 
     uno::Reference< rendering::XBitmapPalette > BitmapCanvasHelper::getPalette()
     {
-        // TODO(F1): Palette bitmaps NYI
+        
         return uno::Reference< rendering::XBitmapPalette >();
     }
 
     rendering::IntegerBitmapLayout BitmapCanvasHelper::getMemoryLayout()
     {
         if( !mpTarget )
-            return rendering::IntegerBitmapLayout(); // we're disposed
+            return rendering::IntegerBitmapLayout(); 
 
         return ::canvas::tools::getStdMemoryLayout(getSize());
     }

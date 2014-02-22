@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -110,7 +110,7 @@ private:
 
 
 
-//===== AccessibleSlideSorterView =============================================
+
 
 AccessibleSlideSorterView::AccessibleSlideSorterView(
     ::sd::slidesorter::SlideSorter& rSlideSorter,
@@ -195,7 +195,7 @@ void AccessibleSlideSorterView::Destroyed (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    // Send a disposing to all listeners.
+    
     if (mnClientId != 0)
     {
         comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
@@ -203,7 +203,7 @@ void AccessibleSlideSorterView::Destroyed (void)
     }
 }
 
-//=====  XAccessible  =========================================================
+
 
 Reference<XAccessibleContext > SAL_CALL
     AccessibleSlideSorterView::getAccessibleContext (void)
@@ -213,7 +213,7 @@ Reference<XAccessibleContext > SAL_CALL
     return this;
 }
 
-//=====  XAccessibleContext  ==================================================
+
 
 sal_Int32 SAL_CALL AccessibleSlideSorterView::getAccessibleChildCount (void)
     throw (RuntimeException)
@@ -367,7 +367,7 @@ lang::Locale SAL_CALL AccessibleSlideSorterView::getLocale (void)
     if (xParentContext.is())
         return xParentContext->getLocale();
     else
-        // Strange, no parent!  Anyway, return the default locale.
+        
         return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
@@ -414,10 +414,10 @@ void SAL_CALL AccessibleSlideSorterView::removeAccessibleEventListener(
                 mnClientId, rxListener );
             if ( !nListenerCount )
             {
-                // no listeners anymore -> revoke ourself. This may lead to
-                // the notifier thread dying (if we were the last client),
-                // and at least to us not firing any events anymore, in case
-                // somebody calls NotifyAccessibleEvent, again
+                
+                
+                
+                
                 comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
                 mnClientId = 0;
             }
@@ -428,7 +428,7 @@ void SAL_CALL AccessibleSlideSorterView::removeAccessibleEventListener(
 
 
 
-//===== XAccessibleComponent ==================================================
+
 
 sal_Bool SAL_CALL AccessibleSlideSorterView::containsPoint (const awt::Point& aPoint)
     throw (RuntimeException)
@@ -592,7 +592,7 @@ sal_Int32 SAL_CALL AccessibleSlideSorterView::getBackground (void)
 
 
 
-//===== XAccessibleSelection ==================================================
+
 
 void SAL_CALL AccessibleSlideSorterView::selectAccessibleChild (sal_Int32 nChildIndex)
     throw (lang::IndexOutOfBoundsException,
@@ -714,7 +714,7 @@ void SAL_CALL AccessibleSlideSorterView::deselectAccessibleChild (sal_Int32 nChi
         throw lang::IndexOutOfBoundsException();
 }
 
-//=====  XServiceInfo  ========================================================
+
 OUString SAL_CALL
        AccessibleSlideSorterView::getImplementationName (void)
     throw (::com::sun::star::uno::RuntimeException)
@@ -763,7 +763,7 @@ sal_Bool AccessibleSlideSorterView::IsDisposed (void)
 
 
 
-//===== AccessibleSlideSorterView::Implementation =============================
+
 
 AccessibleSlideSorterView::Implementation::Implementation (
     AccessibleSlideSorterView& rAccessibleSlideSorter,
@@ -814,15 +814,15 @@ void AccessibleSlideSorterView::Implementation::RequestUpdateChildren (void)
 
 void AccessibleSlideSorterView::Implementation::UpdateChildren (void)
 {
-      //By default, all children should be accessable. So here workaround is to make all children visible.
-      // MT: THis was in UpdateVisibility, which has some similarity, and hg merge automatically has put it here. Correct?!
-      // In the IA2 CWS, also setting mnFirst/LastVisibleChild was commented out!
+      
+      
+      
       mnLastVisibleChild = maPageObjects.size();
 
     if (mbModelChangeLocked)
     {
-        // Do nothing right now.  When the flag is reset, this method is
-        // called again.
+        
+        
         return;
     }
 
@@ -830,13 +830,13 @@ void AccessibleSlideSorterView::Implementation::UpdateChildren (void)
     mnFirstVisibleChild = aRange.A();
     mnLastVisibleChild = aRange.B();
 
-    // Release all children.
+    
     Clear();
 
-    // Create new children for the modified visible range.
+    
     maPageObjects.resize(mrSlideSorter.GetModel().GetPageCount());
 
-    // No Visible children
+    
     if (mnFirstVisibleChild == -1 && mnLastVisibleChild == -1)
         return;
 
@@ -1016,7 +1016,7 @@ void AccessibleSlideSorterView::Implementation::Notify (
 
 void AccessibleSlideSorterView::SwitchViewActivated (void)
 {
-    // Firstly, set focus to view
+    
     this->FireAccessibleEvent(AccessibleEventId::STATE_CHANGED,
                     Any(),
                     Any(AccessibleStateType::FOCUSED));
@@ -1090,7 +1090,7 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener)
     if (!bHasFocus)
         nNewFocusedIndex = -1;
 
-    // add a checker whether the focus event is sent out. Only after sent, the mnFocusedIndex should be updated.
+    
     sal_Bool bSentFocus = sal_False;
     if (nNewFocusedIndex != mnFocusedIndex)
     {
@@ -1144,6 +1144,6 @@ IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, VisibilityChangeListe
     return 1;
 }
 
-} // end of namespace ::accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

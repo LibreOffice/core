@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ole/vbacontrol.hxx"
@@ -77,7 +77,7 @@ const sal_uInt32 VBA_SITE_DEFFLAGS              = 0x00000033;
 const sal_uInt8 VBA_SITEINFO_COUNT              = 0x80;
 const sal_uInt8 VBA_SITEINFO_MASK               = 0x7F;
 
-// ----------------------------------------------------------------------------
+
 
 /** Collects names of all controls in a user form or container control. Allows
     to generate unused names for dummy controls separating option groups.
@@ -124,7 +124,7 @@ OUString VbaControlNamesSet::generateDummyName()
     return aCtrlName;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Functor that inserts the name of a control into a VbaControlNamesSet. */
 struct VbaControlNameInserter
@@ -135,7 +135,7 @@ public:
     inline void         operator()( const VbaFormControl& rControl ) { mrCtrlNames.insertName( rControl ); }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A dummy invisible form control (fixed label without text) that is used to
     separate two groups of option buttons.
@@ -157,9 +157,9 @@ VbaDummyFormControl::VbaDummyFormControl( const OUString& rName )
     mxCtrlModel->importProperty( XML_Size, "10;10" );
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 VbaSiteModel::VbaSiteModel() :
     maPos( 0, 0 ),
@@ -202,7 +202,7 @@ bool VbaSiteModel::importBinaryModel( BinaryInputStream& rInStrm )
     aReader.readIntProperty< sal_uInt16 >( mnGroupId );
     aReader.skipUndefinedProperty();
     aReader.readStringProperty( maToolTip );
-    aReader.skipStringProperty();   // license key
+    aReader.skipStringProperty();   
     aReader.readStringProperty( maControlSource );
     aReader.readStringProperty( maRowSource );
     return aReader.finalizeImport();
@@ -285,10 +285,10 @@ ControlModelRef VbaSiteModel::createControlModel( const AxClassTable& rClassTabl
 
     if( xCtrlModel.get() )
     {
-        // user form controls are AWT models
+        
         xCtrlModel->setAwtModelMode();
 
-        // check that container model matches container flag in site data
+        
         bool bModelIsContainer = dynamic_cast< const AxContainerModelBase* >( xCtrlModel.get() ) != 0;
         bool bTypeMatch = bModelIsContainer == isContainer();
         OSL_ENSURE( bTypeMatch, "VbaSiteModel::createControlModel - container type does not match container flag" );
@@ -308,17 +308,17 @@ void VbaSiteModel::convertProperties( PropertyMap& rPropMap,
     {
         rPropMap.setProperty( PROP_HelpText, maToolTip );
         rPropMap.setProperty( PROP_EnableVisible, getFlag( mnFlags, VBA_SITE_VISIBLE ) );
-        // we need to set the passed control index to make option button groups work
+        
         if( (0 <= nCtrlIndex) && (nCtrlIndex <= SAL_MAX_INT16) )
             rPropMap.setProperty( PROP_TabIndex, static_cast< sal_Int16 >( nCtrlIndex ) );
-        // progress bar and group box support TabIndex, but not Tabstop...
+        
         if( (eCtrlType != API_CONTROL_PROGRESSBAR) && (eCtrlType != API_CONTROL_GROUPBOX) && (eCtrlType != API_CONTROL_FRAME) && (eCtrlType != API_CONTROL_PAGE) )
             rPropMap.setProperty( PROP_Tabstop, getFlag( mnFlags, VBA_SITE_TABSTOP ) );
         rConv.convertPosition( rPropMap, maPos );
     }
 }
 
-// ============================================================================
+
 
 VbaFormControl::VbaFormControl()
 {
@@ -358,15 +358,15 @@ void VbaFormControl::createAndConvert( sal_Int32 nCtrlIndex,
 {
     if( rxParentNC.is() && mxSiteModel.get() && mxCtrlModel.get() ) try
     {
-        // create the control model
+        
         OUString aServiceName = mxCtrlModel->getServiceName();
         Reference< XMultiServiceFactory > xModelFactory( rxParentNC, UNO_QUERY_THROW );
         Reference< XControlModel > xCtrlModel( xModelFactory->createInstance( aServiceName ), UNO_QUERY_THROW );
 
-        // convert all properties and embedded controls
+        
         if( convertProperties( xCtrlModel, rConv, nCtrlIndex ) )
         {
-            // insert into parent container
+            
             const OUString& rCtrlName = mxSiteModel->getName();
             OSL_ENSURE( !rxParentNC->hasByName( rCtrlName ), "VbaFormControl::createAndConvert - multiple controls with equal name" );
             ContainerHelper::insertByName( rxParentNC, rCtrlName, Any( xCtrlModel ) );
@@ -377,7 +377,7 @@ void VbaFormControl::createAndConvert( sal_Int32 nCtrlIndex,
     }
 }
 
-// protected ------------------------------------------------------------------
+
 
 void VbaFormControl::importControlModel( BinaryInputStream& rInStrm, const AxClassTable& rClassTable )
 {
@@ -418,8 +418,8 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
             maControls.forEachMem( &VbaFormControl::importModelOrStorage,
                 ::boost::ref( aOStrm ), ::boost::ref( rStrg ), ::boost::cref( maClassTable ) );
 
-            // Special handling for multi-page which has non-standard
-            // containment and additionally needs to re-order Page children
+            
+            
             if ( pContainerModel->getControlType() == API_CONTROL_MULTIPAGE )
             {
                 AxMultiPageModel* pMultiPage = dynamic_cast< AxMultiPageModel* >( pContainerModel );
@@ -451,13 +451,13 @@ void VbaFormControl::importStorage( StorageBase& rStrg, const AxClassTable& rCla
                         pMultiPage->mnTabStyle = pTabStrip->mnTabStyle;
                     }
                 }
-                // apply caption/titles to pages
+                
                 UInt32Array::iterator itCtrlId = pMultiPage->mnIDs.begin();
                 UInt32Array::iterator itCtrlId_end = pMultiPage->mnIDs.end();
                 AxArrayString::iterator itCaption = sCaptions.begin();
 
                 maControls.clear();
-                // need to sort the controls according to the order of the ids
+                
                 for ( sal_Int32 index = 1 ; ( sCaptions.size() == idToPage.size() ) && itCtrlId != itCtrlId_end; ++itCtrlId, ++itCaption, ++index )
                 {
                     IdToPageMap::iterator iter = idToPage.find( *itCtrlId );
@@ -488,7 +488,7 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
         OSL_ENSURE( !rCtrlName.isEmpty(), "VbaFormControl::convertProperties - control without name" );
         if( !rCtrlName.isEmpty() )
         {
-            // convert all properties
+            
             PropertyMap aPropMap;
             mxSiteModel->convertProperties( aPropMap, rConv, mxCtrlModel->getControlType(), nCtrlIndex );
             rConv.bindToSources( rxCtrlModel, mxSiteModel->getControlSource(), mxSiteModel->getRowSource() );
@@ -497,7 +497,7 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
             PropertySet aPropSet( rxCtrlModel );
             aPropSet.setProperties( aPropMap );
 
-            // create and convert all embedded controls
+            
             if( !maControls.empty() ) try
             {
                 Reference< XNameContainer > xCtrlModelNC( rxCtrlModel, UNO_QUERY_THROW );
@@ -517,11 +517,11 @@ bool VbaFormControl::convertProperties( const Reference< XControlModel >& rxCtrl
     return false;
 }
 
-// private --------------------------------------------------------------------
+
 
 void VbaFormControl::createControlModel( const AxClassTable& rClassTable )
 {
-    // derived classes may have created their own control model
+    
     if( !mxCtrlModel && mxSiteModel.get() )
         mxCtrlModel = mxSiteModel->createControlModel( rClassTable );
 }
@@ -539,12 +539,12 @@ bool VbaFormControl::importEmbeddedSiteModels( BinaryInputStream& rInStrm )
     rInStrm >> nSiteCount >> nSiteDataSize;
     sal_Int64 nSiteEndPos = rInStrm.tell() + nSiteDataSize;
 
-    // skip the site info structure
+    
     sal_uInt32 nSiteIndex = 0;
     while( !rInStrm.isEof() && (nSiteIndex < nSiteCount) )
     {
-        rInStrm.skip( 1 ); // site depth
-        sal_uInt8 nTypeCount = rInStrm.readuInt8(); // 'type-or-count' byte
+        rInStrm.skip( 1 ); 
+        sal_uInt8 nTypeCount = rInStrm.readuInt8(); 
         if( getFlag( nTypeCount, VBA_SITEINFO_COUNT ) )
         {
             /*  Count flag is set: the 'type-or-count' byte contains the number
@@ -562,10 +562,10 @@ bool VbaFormControl::importEmbeddedSiteModels( BinaryInputStream& rInStrm )
             ++nSiteIndex;
         }
     }
-    // align the stream to 32bit, relative to start of entire site info
+    
     rInStrm.alignToBlock( 4, nAnchorPos );
 
-    // import the site models for all embedded controls
+    
     maControls.clear();
     bool bValid = !rInStrm.isEof();
     for( nSiteIndex = 0; bValid && (nSiteIndex < nSiteCount); ++nSiteIndex )
@@ -589,7 +589,7 @@ void VbaFormControl::finalizeEmbeddedControls()
             control (UNO group boxes cannot contain other controls).
      */
 
-    // first, sort all controls by original tab index
+    
     ::std::sort( maControls.begin(), maControls.end(), &compareByTabIndex );
 
     /*  Collect the programmatical names of all embedded controls (needed to be
@@ -626,7 +626,7 @@ void VbaFormControl::finalizeEmbeddedControls()
 
         if( const AxOptionButtonModel* pOptButtonModel = dynamic_cast< const AxOptionButtonModel* >( pCtrlModel ) )
         {
-            // check if a new option group needs to be created
+            
             const OUString& rGroupName = pOptButtonModel->getGroupName();
             VbaFormControlVectorRef& rxOptionGroup = aOptionGroups[ rGroupName ];
             if( !rxOptionGroup )
@@ -653,18 +653,18 @@ void VbaFormControl::finalizeEmbeddedControls()
         }
         else
         {
-            // open a new control group, if the last group is an option group
+            
             if( bLastWasOptionButton || aControlGroups.empty() )
             {
                 VbaFormControlVectorRef xControlGroup( new VbaFormControlVector );
                 aControlGroups.push_back( xControlGroup );
             }
-            // append the control to the last control group
+            
             VbaFormControlVector& rLastGroup = *aControlGroups.back();
             rLastGroup.push_back( xControl );
             bLastWasOptionButton = false;
 
-            // if control is a group box, move all its children to this control
+            
             if( pCtrlModel && (pCtrlModel->getControlType() == API_CONTROL_GROUPBOX) )
             {
                 /*  Move all embedded controls of the group box relative to the
@@ -674,13 +674,13 @@ void VbaFormControl::finalizeEmbeddedControls()
                     group (following the group box). */
                 rLastGroup.insert( rLastGroup.end(), xControl->maControls.begin(), xControl->maControls.end() );
                 xControl->maControls.clear();
-                // check if last control of the group box is an option button
+                
                 bLastWasOptionButton = dynamic_cast< const AxOptionButtonModel* >( rLastGroup.back()->mxCtrlModel.get() ) != 0;
             }
         }
     }
 
-    // flatten the vector of vectors of form controls to a single vector
+    
     maControls.clear();
     for( VbaFormControlVectorVector::iterator aIt = aControlGroups.begin(), aEnd = aControlGroups.end(); aIt != aEnd; ++aIt )
         maControls.insert( maControls.end(), (*aIt)->begin(), (*aIt)->end() );
@@ -696,7 +696,7 @@ void VbaFormControl::moveEmbeddedToAbsoluteParent()
 {
     if( mxSiteModel.get() && !maControls.empty() )
     {
-        // distance to move is equal to position of this control in its parent
+        
         AxPairData aDistance = mxSiteModel->getPosition();
 
         /*  For group boxes: add half of the font height to Y position (VBA
@@ -704,25 +704,25 @@ void VbaFormControl::moveEmbeddedToAbsoluteParent()
         const AxFontDataModel* pFontModel = dynamic_cast< const AxFontDataModel* >( mxCtrlModel.get() );
         if( pFontModel && (pFontModel->getControlType() == API_CONTROL_GROUPBOX) )
         {
-            // convert points to 1/100 mm (1 pt = 1/72 inch = 2.54/72 cm = 2540/72 1/100 mm)
+            
             sal_Int32 nFontHeight = static_cast< sal_Int32 >( pFontModel->getFontHeight() * 2540 / 72 );
             aDistance.second += nFontHeight / 2;
         }
 
-        // move the embedded controls
+        
         maControls.forEachMem( &VbaFormControl::moveRelative, ::boost::cref( aDistance ) );
     }
 }
 
 bool VbaFormControl::compareByTabIndex( const VbaFormControlRef& rxLeft, const VbaFormControlRef& rxRight )
 {
-    // sort controls without model to the end
+    
     sal_Int32 nLeftTabIndex = rxLeft->mxSiteModel.get() ? rxLeft->mxSiteModel->getTabIndex() : SAL_MAX_INT32;
     sal_Int32 nRightTabIndex = rxRight->mxSiteModel.get() ? rxRight->mxSiteModel->getTabIndex() : SAL_MAX_INT32;
     return nLeftTabIndex < nRightTabIndex;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -736,12 +736,12 @@ OUString lclGetQuotedString( const OUString& rCodeLine )
         for( sal_Int32 nIndex = 1; !bExitLoop && (nIndex < nLen); ++nIndex )
         {
             sal_Unicode cChar = rCodeLine[ nIndex ];
-            // exit on closing quote char (but check on double quote chars)
+            
             bExitLoop = (cChar == '"') && ((nIndex + 1 == nLen) || (rCodeLine[ nIndex + 1 ] != '"'));
             if( !bExitLoop )
             {
                 aBuffer.append( cChar );
-                // skip second quote char
+                
                 if( cChar == '"' )
                     ++nIndex;
             }
@@ -768,15 +768,15 @@ bool lclEatKeyword( OUString& rCodeLine, const OUString& rKeyword )
     if( rCodeLine.matchIgnoreAsciiCase( rKeyword ) )
     {
         rCodeLine = rCodeLine.copy( rKeyword.getLength() );
-        // success, if code line ends after keyword, or if whitespace follows
+        
         return rCodeLine.isEmpty() || lclEatWhitespace( rCodeLine );
     }
     return false;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 VbaUserForm::VbaUserForm( const Reference< XComponentContext >& rxContext,
         const Reference< XModel >& rxDocModel, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr ) :
@@ -795,13 +795,13 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     if( !mxContext.is() || !mxDocModel.is() || !rxDialogLib.is() )
         return;
 
-    // check that the '03VBFrame' stream exists, this is required for forms
+    
     BinaryXInputStream aInStrm( rVbaFormStrg.openInputStream( "\003VBFrame" ), true );
     OSL_ENSURE( !aInStrm.isEof(), "VbaUserForm::importForm - missing \\003VBFrame stream" );
     if( aInStrm.isEof() )
         return;
 
-    // scan for the line 'Begin {GUID} <FormName>'
+    
     TextInputStream aFrameTextStrm( mxContext, aInStrm, eTextEnc );
     const OUString aBegin = "Begin";
     OUString aLine;
@@ -811,11 +811,11 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         aLine = aFrameTextStrm.readLine().trim();
         bBeginFound = lclEatKeyword( aLine, aBegin );
     }
-    // check for the specific GUID that represents VBA forms
+    
     if( !bBeginFound || !lclEatKeyword( aLine, "{C62A69F0-16DC-11CE-9E98-00AA00574A4F}" ) )
         return;
 
-    // remaining line is the form name
+    
     OUString aFormName = aLine.trim();
     OSL_ENSURE( !aFormName.isEmpty(), "VbaUserForm::importForm - missing form name" );
     OSL_ENSURE( rModuleName.equalsIgnoreAsciiCase( aFormName ), "VbaUserForm::importFrameStream - form and module name mismatch" );
@@ -826,7 +826,7 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     mxSiteModel.reset( new VbaSiteModel );
     mxSiteModel->importProperty( XML_Name, aFormName );
 
-    // read the form properties (caption is contained in this '03VBFrame' stream, not in the 'f' stream)
+    
     mxCtrlModel.reset( new AxUserFormModel );
     OUString aKey, aValue;
     bool bExitLoop = false;
@@ -843,21 +843,21 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
         }
     }
 
-    // use generic container control functionality to import the embedded controls
+    
     importStorage( rVbaFormStrg, AxClassTable() );
 
     try
     {
-        // create the dialog model
+        
         OUString aServiceName = mxCtrlModel->getServiceName();
         Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
         Reference< XControlModel > xDialogModel( xFactory->createInstance( aServiceName ), UNO_QUERY_THROW );
         Reference< XNameContainer > xDialogNC( xDialogModel, UNO_QUERY_THROW );
 
-        // convert properties and embedded controls
+        
         if( convertProperties( xDialogModel, maConverter, 0 ) )
         {
-            // export the dialog to XML and insert it into the dialog library
+            
             Reference< XInputStreamProvider > xDialogSource( ::xmlscript::exportDialogModel( xDialogNC, mxContext, mxDocModel ), UNO_SET_THROW );
             OSL_ENSURE( !rxDialogLib->hasByName( aFormName ), "VbaUserForm::importForm - multiple dialogs with equal name" );
             ContainerHelper::insertByName( rxDialogLib, aFormName, Any( xDialogSource ) );
@@ -868,9 +868,9 @@ void VbaUserForm::importForm( const Reference< XNameContainer >& rxDialogLib,
     }
 }
 
-// ============================================================================
 
-} // namespace ole
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

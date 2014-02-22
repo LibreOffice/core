@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/wrkwin.hxx>
@@ -40,7 +40,7 @@
 #define METH_SETDATA            24
 #define METH_SETTEXT            25
 
-//------------------------------------------------------------------------------
+
 SbStdFactory::SbStdFactory()
 {
 }
@@ -55,7 +55,7 @@ SbxObject* SbStdFactory::CreateObject( const OUString& rClassName )
         return NULL;
 }
 
-//------------------------------------------------------------------------------
+
 
 
 
@@ -115,7 +115,7 @@ TYPEINIT1( SbStdPicture, SbxObject );
 SbStdPicture::SbStdPicture() :
     SbxObject( OUString("Picture"))
 {
-    // Properties
+    
     SbxVariable* p = Make( OUString("Type"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READ | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_TYPE );
@@ -134,7 +134,7 @@ SbStdPicture::~SbStdPicture()
 
 SbxVariable* SbStdPicture::Find( const OUString& rName, SbxClassType t )
 {
-    // entered already?
+    
     return SbxObject::Find( rName, t );
 }
 
@@ -159,7 +159,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
         sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
-        // Propteries
+        
         switch( nWhich )
         {
             case ATTR_IMP_TYPE:     PropType( pVar, pPar_, bWrite ); return;
@@ -171,7 +171,7 @@ void SbStdPicture::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SbStdFont::PropBold( SbxVariable* pVar, SbxArray*, sal_Bool bWrite )
 {
@@ -231,7 +231,7 @@ TYPEINIT1( SbStdFont, SbxObject );
 SbStdFont::SbStdFont() :
     SbxObject( OUString("Font") )
 {
-    // Properties
+    
     SbxVariable* p = Make( OUString("Bold"), SbxCLASS_PROPERTY, SbxVARIANT );
     p->SetFlags( SBX_READWRITE | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_BOLD );
@@ -248,7 +248,7 @@ SbStdFont::SbStdFont() :
     p->SetFlags( SBX_READWRITE | SBX_DONTSTORE );
     p->SetUserData( ATTR_IMP_SIZE );
 
-    // handle name property yourself
+    
     p = Find( OUString("Name"), SbxCLASS_PROPERTY );
     DBG_ASSERT( p, "No Name Property" );
     p->SetUserData( ATTR_IMP_NAME );
@@ -284,7 +284,7 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
         sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
-        // Propteries
+        
         switch( nWhich )
         {
             case ATTR_IMP_BOLD:         PropBold( pVar, pPar_, bWrite ); return;
@@ -300,7 +300,7 @@ void SbStdFont::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
 }
 
 
-//-----------------------------------------------------------------------------
+
 
 
 void SbStdClipboard::MethClear( SbxVariable*, SbxArray* pPar_, sal_Bool )
@@ -402,7 +402,7 @@ SbStdClipboard::SbStdClipboard() :
     DBG_ASSERT( p, "No Name Property" );
     p->SetUserData( ATTR_IMP_NAME );
 
-    // register methods
+    
     p = Make( OUString("Clear"), SbxCLASS_METHOD, SbxEMPTY );
     p->SetFlag( SBX_DONTSTORE );
     p->SetUserData( METH_CLEAR );
@@ -453,7 +453,7 @@ void SbStdClipboard::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
         sal_uInt16       nWhich = (sal_uInt16)pVar->GetUserData();
         sal_Bool         bWrite = pHint->GetId() == SBX_HINT_DATACHANGED;
 
-        // Methods
+        
         switch( nWhich )
         {
             case METH_CLEAR:            MethClear( pVar, pPar_, bWrite ); return;

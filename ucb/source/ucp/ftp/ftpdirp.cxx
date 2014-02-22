@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -575,11 +575,11 @@ sal_Bool FTPDirectoryParser::parseVMS (
         const sal_Char *p = pBuffer;
         if (bFirstLine)
         {
-            // Skip <*lws> part:
+            
             while (*p == '\t' || *p == ' ')
                 ++p;
 
-            // Parse <filename "."> part:
+            
             const sal_Char *pFileName = p;
             while ((*p >= 'A' && *p <= 'Z') ||
                    (*p >= 'a' && *p <= 'z') ||
@@ -595,7 +595,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
                     return sal_False;
             }
 
-            // Parse <filetype ";"> part:
+            
             const sal_Char *pFileType = ++p;
             while ((*p >= 'A' && *p <= 'Z') ||
                    (*p >= 'a' && *p <= 'z') ||
@@ -612,7 +612,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
             }
             ++p;
 
-            // Set entry's name and mode (ISDIR flag):
+            
             if ((p - pFileType == 4) &&
                 (pFileType[0] == 'D' || pFileType[0] == 'd') &&
                 (pFileType[1] == 'I' || pFileType[1] == 'i') &&
@@ -627,7 +627,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
                 rEntry.m_nMode = 0;
             }
 
-            // Skip <version> part:
+            
             if (*p < '1' || *p > '9')
             {
                 if (!aFirstLineName.isEmpty())
@@ -639,7 +639,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
             while (*p >= '0' && *p <= '9')
                 ++p;
 
-            // Parse <1*lws> or <*lws <NEWLINE>> part:
+            
             sal_Bool bLWS = false;
             while (*p == '\t' || *p == ' ')
             {
@@ -677,7 +677,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
             rEntry.m_aName = aFirstLineName;
             rEntry.m_nMode = (bFirstLineDir ? INETCOREFTP_FILEMODE_ISDIR : 0);
 
-            // Skip <1*lws> part:
+            
             if (*p != '\t' && *p != ' ')
                 return sal_False;
             ++p;
@@ -685,7 +685,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
                 ++p;
         }
 
-        // Parse <size> part and set entry's size:
+        
         if (*p < '0' || *p > '9')
             return sal_False;
         ULONG nSize = *p - '0';
@@ -694,14 +694,14 @@ sal_Bool FTPDirectoryParser::parseVMS (
                 nSize = 10 * rEntry.m_nSize + (*p++ - '0');
         rEntry.m_nSize = 512 * nSize;
 
-        // Skip <1*lws> part:
+        
         if (*p != '\t' && *p != ' ')
             return sal_False;
         ++p;
         while (*p == '\t' || *p == ' ')
             ++p;
 
-        // Parse <day "-"> part and set entry date's day:
+        
         sal_uInt16 nDay;
         if (*p == '0')
         {
@@ -730,7 +730,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
         if (*p++ != '-')
             return sal_False;
 
-        // Parse <month "-"> part and set entry date's month:
+        
         sal_Char const * pMonth = p;
         sal_Int32 const monthLen = 3;
         for (int i = 0; i < monthLen; ++i)
@@ -780,7 +780,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
         if (*p++ != '-')
             return sal_False;
 
-        // Parse <year> part and set entry date's year:
+        
         sal_uInt16 nYear = 0;
         for (int i = 0; i < 2; ++i)
         {
@@ -797,14 +797,14 @@ sal_Bool FTPDirectoryParser::parseVMS (
         }
         setYear (rEntry.m_aDate, nYear);
 
-        // Skip <1*lws> part:
+        
         if (*p != '\t' && *p != ' ')
             return sal_False;
         ++p;
         while (*p == '\t' || *p == ' ')
             ++p;
 
-        // Parse <hour ":"> part and set entry time's hour:
+        
         sal_uInt16 nHour;
         if (*p == '0' || *p == '1')
         {
@@ -842,7 +842,7 @@ sal_Bool FTPDirectoryParser::parseVMS (
         rEntry.m_aDate.SetSec(0);
         rEntry.m_aDate.SetNanoSec(0);
 
-        // Skip <rest> part:
+        
         if (*p && (*p != '\t' && *p != ' '))
             return sal_False;
 
@@ -863,14 +863,14 @@ sal_Bool FTPDirectoryParser::parseUNIX (
     if (!((*p1 == '-') || (*p1 == 'd') || (*p1 == 'l')))
         return sal_False;
 
-    // 1st column: FileMode.
+    
     if (*p1 == 'd')
         rEntry.m_nMode |= INETCOREFTP_FILEMODE_ISDIR;
 
     if (*p1 == 'l')
         rEntry.m_nMode |= INETCOREFTP_FILEMODE_ISLINK;
 
-    // Skip to end of column and set rights by the way
+    
     while (*p1 && !ascii_isWhitespace(*p1)) {
         if(*p1 == 'r')
             rEntry.m_nMode |= INETCOREFTP_FILEMODE_READ;
@@ -948,11 +948,11 @@ sal_Bool FTPDirectoryParser::parseUNIX (
 
     if (eMode == FOUND_YEAR_TIME)
     {
-        // 9th column: FileName (rest of line).
+        
         while (*p1 && ascii_isWhitespace(*p1)) p1++;
         setPath (rEntry.m_aName, p1);
 
-        // Done.
+        
         return sal_True;
     }
     return sal_False;
@@ -1204,12 +1204,12 @@ sal_Bool FTPDirectoryParser::parseUNIX_isTime (
     rDateTime.SetSec (0);
     rDateTime.SetNanoSec (0);
 
-//      Date aCurDate;
-//      if (rDateTime.GetMonth() > aCurDate.GetMonth())
-//          rDateTime.SetYear(aCurDate.GetYear() - 1);
-//      else
-//          rDateTime.SetYear(aCurDate.GetYear());
-//      return sal_True;
+
+
+
+
+
+
 
     TimeValue aTimeVal;
     osl_getSystemTime(&aTimeVal);
@@ -1241,7 +1241,7 @@ sal_Bool FTPDirectoryParser::setYear (
         oslDateTime aCurrDateTime;
         osl_getDateTimeFromTimeValue(&aTimeVal,&aCurrDateTime);
         sal_uInt16 nCurrentYear = aCurrDateTime.Year;
-//        sal_uInt16 nCurrentYear = Date().GetYear();
+
         sal_uInt16 nCurrentCentury = nCurrentYear / 100;
         nCurrentYear %= 100;
         if (nCurrentYear < 50)

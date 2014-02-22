@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -53,7 +53,7 @@ namespace vclcanvas
         maFont->SetCharSet( (rFontRequest.FontDescription.IsSymbolFont==com::sun::star::util::TriState_YES) ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE );
         maFont->SetVertical( (rFontRequest.FontDescription.IsVertical==com::sun::star::util::TriState_YES) ? sal_True : sal_False );
 
-        // TODO(F2): improve panose->vclenum conversion
+        
         maFont->SetWeight( static_cast<FontWeight>(rFontRequest.FontDescription.FontDescription.Weight) );
         maFont->SetItalic( (rFontRequest.FontDescription.FontDescription.Letterform<=8) ? ITALIC_NONE : ITALIC_NORMAL );
         maFont->SetPitch(
@@ -62,7 +62,7 @@ namespace vclcanvas
 
         maFont->SetLanguage( LanguageTag::convertToLanguageType( rFontRequest.Locale, false));
 
-        // adjust to stretched/shrinked font
+        
         if( !::rtl::math::approxEqual( rFontMatrix.m00, rFontMatrix.m11) )
         {
             OutputDevice& rOutDev( rOutDevProvider->getOutDev() );
@@ -99,7 +99,7 @@ namespace vclcanvas
         SolarMutexGuard aGuard;
 
         if( !mpRefDevice.is() )
-            return uno::Reference< rendering::XTextLayout >(); // we're disposed
+            return uno::Reference< rendering::XTextLayout >(); 
 
         return new TextLayout( aText,
                                nDirection,
@@ -139,7 +139,7 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        // TODO(F1)
+        
         return uno::Sequence< double >();
     }
 
@@ -147,7 +147,7 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        // TODO(F1)
+        
         return uno::Sequence< beans::PropertyValue >();
     }
 

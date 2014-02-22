@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <comphelper/processfactory.hxx>
@@ -107,27 +107,27 @@ IMPL_LINK ( TiledRenderingDialog, RenderHdl, Button *, EMPTYARG )
     long tileWidth = mpTileWidth->GetValue();
     long tileHeight = mpTileHeight->GetValue();
 
-    // do the same thing we are doing in touch_lo_draw_tile()
+    
     SwWrtShell *pViewShell = GetActiveWrtShell();
 
     if (pViewShell)
     {
-        // TODO create a VirtualDevice based on SystemGraphicsData instead so
-        // that we get direct rendering; something like:
+        
+        
         //
-        // SystemGraphicsData aData;
-        // [setup the aData]
-        // VirtualDevice aDevice(&aData, [color depth]);
+        
+        
+        
         VirtualDevice aDevice;
 
-        // paint to it
+        
         pViewShell->PaintTile(aDevice, contextWidth, contextHeight, tilePosX, tilePosY, tileWidth, tileHeight);
 
-        // copy the aDevice content to mpImage
+        
         Bitmap aBitmap(aDevice.GetBitmap(aDevice.PixelToLogic(Point(0,0)), aDevice.PixelToLogic(Size(contextWidth, contextHeight))));
         mpImage->SetImage(Image(aBitmap));
 
-        // update the dialog size
+        
         setOptimalLayoutSize();
     }
 
@@ -165,8 +165,8 @@ void TiledRenderingApp::Init()
     xSFactory.set(uno::Reference<lang::XMultiServiceFactory> (xFactory, uno::UNO_QUERY_THROW));
     comphelper::setProcessServiceFactory(xSFactory);
 
-    // Create UCB (for backwards compatibility, in case some code still uses
-    // plain createInstance w/o args directly to obtain an instance):
+    
+    
     ::ucb::UniversalContentBroker::create(comphelper::getProcessComponentContext() );
 
     xDesktop.set(xFactory->createInstanceWithContext(OUString("com.sun.star.frame.Desktop"), xContext));

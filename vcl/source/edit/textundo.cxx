@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "textundo.hxx"
@@ -40,22 +40,22 @@ TYPEINIT1( TextUndoRemoveChars, TextUndo );
 namespace
 {
 
-// Shorten() -- inserts ellipsis (...) in the middle of a long text
+
 void Shorten (OUString& rString)
 {
     unsigned nLen = rString.getLength();
     if (nLen > 48)
     {
-        // If possible, we don't break a word, hence first we look for a space.
-        // Space before the ellipsis:
+        
+        
         int iFirst = rString.lastIndexOf(' ', 32);
         if (iFirst == -1 || unsigned(iFirst) < 16)
-            iFirst = 24; // not possible
-        // Space after the ellipsis:
+            iFirst = 24; 
+        
         int iLast = rString.indexOf(' ', nLen - 16);
         if (iLast == -1 || unsigned(iLast) > nLen - 4)
-            iLast = nLen - 8; // not possible
-        // finally:
+            iLast = nLen - 8; 
+        
         rString =
             rString.copy(0, iFirst + 1) +
             "..." +
@@ -63,7 +63,7 @@ void Shorten (OUString& rString)
     }
 }
 
-} // namespace
+} 
 
 
 TextUndoManager::TextUndoManager( TextEngine* p )
@@ -164,7 +164,7 @@ TextUndoDelPara::~TextUndoDelPara()
 void TextUndoDelPara::Undo()
 {
     GetTextEngine()->InsertContent( mpNode, mnPara );
-    mbDelObject = false;    // belongs again to the engine
+    mbDelObject = false;    
 
     if ( GetView() )
     {
@@ -175,17 +175,17 @@ void TextUndoDelPara::Undo()
 
 void TextUndoDelPara::Redo()
 {
-    // pNode is not valid anymore in case an Undo joined paragraphs
+    
     mpNode = GetDoc()->GetNodes().GetObject( mnPara );
 
     delete GetTEParaPortions()->GetObject( mnPara );
     GetTEParaPortions()->Remove( mnPara );
 
-    // do not delete Node because of Undo!
+    
     GetDoc()->GetNodes().Remove( mnPara );
     GetTextEngine()->ImpParagraphRemoved( mnPara );
 
-    mbDelObject = true; // belongs again to the Undo
+    mbDelObject = true; 
 
     sal_uLong nParas = GetDoc()->GetNodes().Count();
     sal_uLong n = mnPara < nParas ? mnPara : (nParas-1);
@@ -298,7 +298,7 @@ bool TextUndoInsertChars::Merge( SfxUndoAction* pNextAction )
 
 OUString TextUndoInsertChars::GetComment () const
 {
-    // multiple lines?
+    
     OUString sText(maText);
     Shorten(sText);
     return ResId(STR_TEXTUNDO_INSERTCHARS, *ImplGetResMgr()).toString().replaceAll("$1", sText);
@@ -328,7 +328,7 @@ void TextUndoRemoveChars::Redo()
 
 OUString TextUndoRemoveChars::GetComment () const
 {
-    // multiple lines?
+    
     OUString sText(maText);
     Shorten(sText);
     return OUString(ResId(STR_TEXTUNDO_REMOVECHARS, *ImplGetResMgr())).replaceAll("$1", sText);

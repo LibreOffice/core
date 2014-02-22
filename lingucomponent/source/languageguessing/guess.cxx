@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -61,7 +61,7 @@ Guess::Guess(const char * guess_str)
     string country;
     string enc;
 
-    //if the guess is not like "UNKNOWN" or "SHORT", go into the brackets
+    
         if(strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_UNKNOWN_STR) != 0
            &&
            strcmp((const char*)(guess_str + 1), TEXTCAT_RESULT_SHORT_STR) != 0)
@@ -69,38 +69,38 @@ Guess::Guess(const char * guess_str)
 
         int current_pointer = 0;
 
-        //this is to go to the first char of the guess string ( the '[' of "[en-US-utf8]" )
+        
         while(!isSeparator(guess_str[current_pointer])){
             current_pointer++;
         }
         current_pointer++;
 
-        //this is to pick up the language ( the "en" from "[en-US-utf8]" )
+        
         while(!isSeparator(guess_str[current_pointer])){
             lang+=guess_str[current_pointer];
             current_pointer++;
         }
         current_pointer++;
 
-        //this is to pick up the country ( the "US" from "[en-US-utf8]" )
+        
         while(!isSeparator(guess_str[current_pointer])){
             country+=guess_str[current_pointer];
             current_pointer++;
         }
         current_pointer++;
 
-        //this is to pick up the encoding ( the "utf8" from "[en-US-utf8]" )
+        
         while(!isSeparator(guess_str[current_pointer])){
             enc+=guess_str[current_pointer];
             current_pointer++;
         }
 
-        if(lang!=""){//if not we use the default value
+        if(lang!=""){
             language_str=lang;
         }
         country_str=country;
 
-        if(enc!=""){//if not we use the default value
+        if(enc!=""){
             encoding_str=enc;
         }
     }

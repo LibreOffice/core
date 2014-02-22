@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <doc.hxx>
@@ -37,7 +37,7 @@ sal_Bool SwEditShell::IsGlobalDoc() const
 void SwEditShell::SetGlblDocSaveLinks( sal_Bool bFlag )
 {
     getIDocumentSettingAccess()->set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, bFlag);
-    if( !GetDoc()->IsModified() )   // Bug 57028
+    if( !GetDoc()->IsModified() )   
     {
         GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
     }
@@ -56,7 +56,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
     if( !getIDocumentSettingAccess()->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         return 0;
 
-    // then all linked areas on the topmost level
+    
     SwDoc* pMyDoc = GetDoc();
     const SwSectionFmts& rSectFmts = pMyDoc->GetSections();
     sal_uInt16 n;
@@ -70,7 +70,7 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             switch( pSect->GetType() )
             {
             case TOX_HEADER_SECTION:
-                break;      // ignore
+                break;      
             case TOX_CONTENT_SECTION:
                 OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
                 pNew = new SwGlblDocContent( (SwTOXBaseSection*)pSect );
@@ -85,14 +85,14 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
         }
     }
 
-    // and finally add the dummies (other text)
+    
     SwNode* pNd;
     sal_uLong nSttIdx = pMyDoc->GetNodes().GetEndOfExtras().GetIndex() + 2;
     for( n = 0; n < rArr.size(); ++n )
     {
         const SwGlblDocContent& rNew = *rArr[ n ];
-        // Search from StartPos until rNew.DocPos for a content node.
-        // If one exists then a dummy entry is needed.
+        
+        
         for( ; nSttIdx < rNew.GetDocPos(); ++nSttIdx )
             if( ( pNd = pMyDoc->GetNodes()[ nSttIdx ])->IsCntntNode()
                 || pNd->IsSectionNode() || pNd->IsTableNode() )
@@ -101,16 +101,16 @@ sal_uInt16 SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
                 if( !rArr.insert( pNew ).second )
                     delete pNew;
                 else
-                    ++n; // to the next position
+                    ++n; 
                 break;
             }
 
-        // set StartPosition to the end
+        
         nSttIdx = pMyDoc->GetNodes()[ rNew.GetDocPos() ]->EndOfSectionIndex();
         ++nSttIdx;
     }
 
-    // Should the end also be set?
+    
     if( !rArr.empty() )
     {
         sal_uLong nNdEnd = pMyDoc->GetNodes().GetEndOfContent().GetIndex();
@@ -258,7 +258,7 @@ sal_Bool SwEditShell::DeleteGlobalDocContent( const SwGlblDocContents& rArr ,
     sal_uLong nDelIdx = rDelPos.GetDocPos();
     if( 1 == rArr.size() )
     {
-        // we need at least one node!
+        
         rPos.nNode = nDelIdx - 1;
         rPos.nContent.Assign( 0, 0 );
 

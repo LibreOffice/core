@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ModifyListenerCallBack.hxx"
@@ -41,17 +41,17 @@ public:
     void startListening( const Reference< util::XModifyBroadcaster >& xBroadcaster );
     void stopListening();
 
-    //XModifyListener
+    
     virtual void SAL_CALL modified( const lang::EventObject& aEvent ) throw (uno::RuntimeException);
 
-    //XEventListener
+    
     virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException);
 
     using ::cppu::WeakComponentImplHelperBase::disposing;
 
 private:
-    Link m_aLink;//will be callef on modify
-    Reference< util::XModifyBroadcaster > m_xBroadcaster;//broadcaster to listen at
+    Link m_aLink;
+    Reference< util::XModifyBroadcaster > m_xBroadcaster;
 };
 
 ModifyListenerCallBack_impl::ModifyListenerCallBack_impl( const Link& rCallBack )
@@ -65,13 +65,13 @@ ModifyListenerCallBack_impl::~ModifyListenerCallBack_impl()
 {
 }
 
-//XModifyListener
+
 void SAL_CALL ModifyListenerCallBack_impl::modified( const lang::EventObject& /*aEvent*/ ) throw (uno::RuntimeException)
 {
     m_aLink.Call(0);
 }
 
-//XEventListener
+
 void SAL_CALL ModifyListenerCallBack_impl::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     m_xBroadcaster.clear();
@@ -116,6 +116,6 @@ void ModifyListenerCallBack::stopListening()
     pModifyListener_impl->stopListening();
 }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

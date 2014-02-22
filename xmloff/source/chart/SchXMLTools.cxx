@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,22 +14,22 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "SchXMLTools.hxx"
 
 #include <rtl/ustrbuf.hxx>
 #include <comphelper/InlineContainer.hxx>
-// header for class SvXMLUnitConverter
+
 #include <xmloff/xmluconv.hxx>
-// header for struct SvXMLEnumMapEntry
+
 #include <xmloff/xmlement.hxx>
-// header for class SvXMLImportPropertyMapper
+
 #include <xmloff/xmlimppr.hxx>
-// header for class XMLPropStyleContext
+
 #include <xmloff/prstylei.hxx>
-// header for class XMLPropertySetMapper
+
 #include <xmloff/xmlprmap.hxx>
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -77,7 +77,7 @@ OUString lcl_getGeneratorFromModel( const uno::Reference< frame::XModel >& xChar
 OUString lcl_getGeneratorFromModelOrItsParent( const uno::Reference< frame::XModel >& xChartModel )
 {
     OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
-    if( aGenerator.isEmpty() ) //try to get the missing info from the parent document
+    if( aGenerator.isEmpty() ) 
     {
         uno::Reference< container::XChild > xChild( xChartModel, uno::UNO_QUERY );
         if( xChild.is() )
@@ -88,7 +88,7 @@ OUString lcl_getGeneratorFromModelOrItsParent( const uno::Reference< frame::XMod
 
 sal_Int32 lcl_getBuildIDFromGenerator( const OUString& rGenerator )
 {
-    //returns -1 if nothing found
+    
     sal_Int32 nBuildId = -1;
     const OUString sBuildCompare(  "$Build-"  );
     sal_Int32 nBegin = rGenerator.indexOf( sBuildCompare );
@@ -123,7 +123,7 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
     return xRet;
 }
 
-} // anonymous namespace
+} 
 
 namespace SchXMLTools
 {
@@ -140,7 +140,7 @@ static const SvXMLEnumMapEntry aXMLChartClassMap[] =
     { XML_BAR,          XML_CHART_CLASS_BAR     },
     { XML_STOCK,        XML_CHART_CLASS_STOCK   },
     { XML_BUBBLE,       XML_CHART_CLASS_BUBBLE  },
-    { XML_SURFACE,      XML_CHART_CLASS_BAR     }, //@todo change this if a surface chart is available
+    { XML_SURFACE,      XML_CHART_CLASS_BAR     }, 
     { XML_ADD_IN,       XML_CHART_CLASS_ADDIN   },
     { XML_TOKEN_INVALID, XML_CHART_CLASS_UNKNOWN }
 };
@@ -155,10 +155,10 @@ SchXMLChartTypeEnum GetChartTypeEnum( const OUString& rClassName )
 }
 
 typedef ::comphelper::MakeMap< OUString, OUString > tMakeStringStringMap;
-//static
+
 const tMakeStringStringMap& lcl_getChartTypeNameMap()
 {
-    //shape property -- chart model object property
+    
     static const tMakeStringStringMap g_aChartTypeNameMap =
         tMakeStringStringMap
         ( OUString( "com.sun.star.chart.LineDiagram" )
@@ -232,7 +232,7 @@ OUString GetChartTypeByClassName(
         else
         {
             aResultBuffer.append("Column");
-            // @todo: might be Bar
+            
         }
     }
     else if( IsXMLToken( rClassName, XML_CIRCLE ))
@@ -262,7 +262,7 @@ OUString GetChartTypeByClassName(
     }
     else if( IsXMLToken( rClassName, XML_SURFACE ))
     {
-        //@todo change this if a surface chart is available
+        
         if( bUseOldNames )
             aResultBuffer.append("Bar");
         else
@@ -305,7 +305,7 @@ XMLTokenEnum getTokenByChartType(
         sal_Int32 nSkip = aPrefix.getLength();
         SAL_WARN_IF( rChartTypeService.getLength() < nSkip, "xmloff.chart", "ChartTypeService.getLength() < nSkip" );
         sal_Int32 nTypeLength = rChartTypeService.getLength() - nSkip - aPostfix.getLength();
-        // if postfix matches and leaves a non-empty type
+        
         if( nTypeLength > 0 && rChartTypeService.match( aPostfix, nSkip + nTypeLength ))
         {
             OUString aServiceName( rChartTypeService.copy( nSkip, nTypeLength ));
@@ -381,7 +381,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
         }
         catch (const beans::UnknownPropertyException&)
         {
-            // Do nothing
+            
         }
     }
 
@@ -400,7 +400,7 @@ Reference< chart2::data::XDataSequence > CreateDataSequence(
 
     if( !xRet.is() && !xChartDoc->hasInternalDataProvider() && !rRange.isEmpty() )
     {
-        //#i103911# switch to internal data in case the parent cannot provide the requested data
+        
         xChartDoc->createInternalDataProvider( sal_True /* bCloneExistingData */ );
         xDataProvider = xChartDoc->getDataProvider();
         try
@@ -478,7 +478,7 @@ void CreateCategories(
                                 aData.Categories.set( xLabeledSeq );
                                 if( pLSequencesPerIndex )
                                 {
-                                    // register for setting local data if external data provider is not present
+                                    
                                     pLSequencesPerIndex->insert(
                                         tSchXMLLSequencesPerIndex::value_type(
                                             tSchXMLIndexWithPart( SCH_XML_CATEGORIES_INDEX, SCH_XML_PART_VALUES ), xLabeledSeq ));
@@ -535,7 +535,7 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
             cChar = rText[ nPos ];
             switch( cChar )
             {
-                case 0x0009:        // tabulator
+                case 0x0009:        
                     {
                         if( nPos > nStartPos )
                             rExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
@@ -547,7 +547,7 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
                     }
                     break;
 
-                case 0x000A:        // linefeed
+                case 0x000A:        
                     {
                         if( nPos > nStartPos )
                             rExport.GetDocHandler()->characters( rText.copy( nStartPos, (nPos - nStartPos)) );
@@ -568,7 +568,7 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
                 rExport.GetDocHandler()->characters( rText.copy( nStartPos, (nEndPos - nStartPos)) );
         }
     }
-    else // do not convert tabs and linefeeds (eg for numbers coming from unit converter)
+    else 
     {
         rExport.GetDocHandler()->characters( rText );
     }
@@ -576,17 +576,17 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
 
 void exportRangeToSomewhere( SvXMLExport& rExport, const OUString& rValue )
 {
-    //with issue #i366# and CWS chart20 ranges for error bars were introduced
-    //to keep them during copy paste from calc to impress for example it
-    //was necessary to introduce a mapping between the used ranges within calc and the data written to the local table
-    //this is why we write this ranges here
+    
+    
+    
+    
 
-    //#i113950# first the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore within ODF 1.2
-    //as an alternative the range info is now saved into the description at an empty group element (not very nice, but ODF conform)
+    
+    
 
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
     if( nCurrentODFVersion == SvtSaveOptions::ODFVER_010 || nCurrentODFVersion == SvtSaveOptions::ODFVER_011 )
-        return;//svg:desc is not allowed at draw:g in ODF1.0; but as the ranges for error bars are anyhow not allowed within ODF1.0 nor ODF1.1 we do not need the information
+        return;
 
     SvXMLElementExport aEmptyShapeGroup( rExport, XML_NAMESPACE_DRAW,
                               ::xmloff::token::GetXMLToken( ::xmloff::token::XML_G ),
@@ -634,7 +634,7 @@ bool getXMLRangePropertyFromDataSequence(
                 ( xInfo.is() && xInfo->hasPropertyByName( aXMLRangePropName ) &&
                   ( xProp->getPropertyValue( aXMLRangePropName ) >>= rOutXMLRange ) &&
                   !rOutXMLRange.isEmpty());
-            // clear the property after usage
+            
             if( bClearProp && bResult )
                 xProp->setPropertyValue( aXMLRangePropName, uno::Any( OUString()));
         }
@@ -679,7 +679,7 @@ void copyProperties(
 
 bool switchBackToDataProviderFromParent( const Reference< chart2::XChartDocument >& xChartDoc, const tSchXMLLSequencesPerIndex & rLSequencesPerIndex )
 {
-    //return whether the switch is successful
+    
     if( !xChartDoc.is() || !xChartDoc->hasInternalDataProvider() )
         return false;
     Reference< chart2::data::XDataProvider > xDataProviderFromParent( SchXMLTools::getDataProviderFromParent( xChartDoc ) );
@@ -726,7 +726,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan3_3( const uno::Reference< frame:
             if( aGenerator.indexOf( "OpenOffice.org_project/300m" ) != -1 )
             {
                 sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( lcl_getGeneratorFromModel(xChartModel) );
-                if( nBuilId>0 && nBuilId<9491 ) //9491 is build id of dev300m76
+                if( nBuilId>0 && nBuilId<9491 ) 
                     bResult= true;
             }
             else if( aGenerator.indexOf( "OpenOffice.org_project/310m" ) != -1 )
@@ -758,7 +758,7 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_4( const uno::Reference< frame:
     if( isDocumentGeneratedWithOpenOfficeOlderThan3_0( xChartModel ) )
     {
         sal_Int32 nBuilId = lcl_getBuildIDFromGenerator( lcl_getGeneratorFromModel(xChartModel) );
-        if( nBuilId>0 && nBuilId<=9238 ) //9238 is build id of OpenOffice.org 2.3.1
+        if( nBuilId>0 && nBuilId<=9238 ) 
             return true;
     }
     return false;
@@ -768,22 +768,22 @@ bool isDocumentGeneratedWithOpenOfficeOlderThan2_3( const uno::Reference< frame:
 {
     bool bResult = false;
     OUString aGenerator( lcl_getGeneratorFromModel(xChartModel) );
-    //if there is a meta stream at the chart object it was not written with an older OpenOffice version < 2.3
+    
     if( aGenerator.isEmpty() )
     {
-        //if there is no meta stream at the chart object we need to check whether the parent document is OpenOffice at all
+        
         uno::Reference< container::XChild > xChild( xChartModel, uno::UNO_QUERY );
         if( xChild.is() )
         {
             aGenerator = lcl_getGeneratorFromModel( uno::Reference< frame::XModel >( xChild->getParent(), uno::UNO_QUERY) );
             if( aGenerator.indexOf( "OpenOffice.org_project" ) != -1 )
             {
-                //the chart application has not created files without a meta stream since OOo 2.3 (OOo 2.3 has written a metastream already)
-                //only the report builder extension has created some files with OOo 3.1 that do not have a meta stream
+                
+                
                 if( aGenerator.indexOf( "OpenOffice.org_project/31" ) != -1 )
-                    bResult = false;//#i100102# probably generated with OOo 3.1 by the report designer
+                    bResult = false;
                 else
-                    bResult= true; //in this case the OLE chart was created by an older version, as OLE objects are sometimes stream copied the version can differ from the parents version, so the parents version is not a reliable indicator
+                    bResult= true; 
             }
             else if( isDocumentGeneratedWithOpenOfficeOlderThan2_0(xChartModel) )
                 bResult= true;
@@ -829,6 +829,6 @@ Reference< chart2::data::XDataProvider > getDataProviderFromParent( const Refere
     return xRet;
 }
 
-} // namespace SchXMLTools
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

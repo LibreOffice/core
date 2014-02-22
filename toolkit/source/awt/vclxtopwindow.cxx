@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/SystemDependent.hpp>
@@ -59,7 +59,7 @@ Any VCLXTopWindow_Base::queryInterface( const Type & rType ) throw(RuntimeExcept
 {
     ::com::sun::star::uno::Any aRet( VCLXTopWindow_XBase::queryInterface( rType ) );
 
-    // do not expose XSystemDependentWindowPeer if we do not have a system window handle
+    
     if ( !aRet.hasValue() && m_bWHWND )
         aRet = VCLXTopWindow_SBase::queryInterface( rType );
 
@@ -78,7 +78,7 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    // TODO, check the process id
+    
     ::com::sun::star::uno::Any aRet;
     Window* pWindow = GetWindowImpl();
     if ( pWindow )
@@ -97,10 +97,10 @@ Sequence< Type > VCLXTopWindow_Base::getTypes() throw(RuntimeException)
                  aRet <<= (sal_IntPtr)pSysData->mpNSView;
             }
 #elif (defined ANDROID)
-            // Nothing
+            
             (void) SystemType;
 #elif (defined IOS)
-            // Nothing
+            
             (void) SystemType;
 #elif (defined UNX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
@@ -161,7 +161,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
     mxMenuBar = rxMenu;
 }
 
-//--------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMaximized() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -173,7 +173,7 @@ void VCLXTopWindow_Base::setMenuBar( const ::com::sun::star::uno::Reference< ::c
     return pWindow->IsMaximized();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -185,7 +185,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
     pWindow->Maximize( _ismaximized );
 }
 
-//--------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL VCLXTopWindow_Base::getIsMinimized() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -197,7 +197,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMaximized( ::sal_Bool _ismaximized ) thro
     return pWindow->IsMinimized();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -209,7 +209,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) thro
     _isMinimized ? pWindow->Minimize() : pWindow->Restore();
 }
 
-//--------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL VCLXTopWindow_Base::getDisplay() throw (RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -221,7 +221,7 @@ void SAL_CALL VCLXTopWindow_Base::setIsMinimized( ::sal_Bool _isMinimized ) thro
     return pWindow->GetScreenNumber();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display ) throw (RuntimeException, IndexOutOfBoundsException)
 {
     SolarMutexGuard aGuard;
@@ -236,9 +236,9 @@ void SAL_CALL VCLXTopWindow_Base::setDisplay( ::sal_Int32 _display ) throw (Runt
     pWindow->SetScreenNumber( _display );
 }
 
-//  ----------------------------------------------------
-//  class VCLXTopWindow
-//  ----------------------------------------------------
+
+
+
 
 void VCLXTopWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -264,7 +264,7 @@ Window* VCLXTopWindow::GetWindowImpl()
     return GetTopWindowListeners();
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXTopWindow::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet( VCLXTopWindow_Base::queryInterface( rType ) );

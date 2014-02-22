@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,7 +37,7 @@ BreakIterator_CTL::BreakIterator_CTL() :
     cellIndexSize( 512 )
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_CTL";
-    // to improve performance, alloc big enough memory in construct.
+    
     nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
     previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
 }
@@ -58,10 +58,10 @@ sal_Int32 SAL_CALL BreakIterator_CTL::previousCharacters( const OUString& Text,
 {
     if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) {
         nDone = 0;
-        if (nStartPos > 0) {    // for others to skip cell.
+        if (nStartPos > 0) {    
             makeIndex(Text, nStartPos);
 
-            if (nextCellIndex[nStartPos-1] == 0) // not a CTL character
+            if (nextCellIndex[nStartPos-1] == 0) 
                 return BreakIterator_Unicode::previousCharacters(Text, nStartPos, rLocale,
                     nCharacterIteratorMode, nCount, nDone);
             else while (nCount > 0 && nextCellIndex[nStartPos - 1] > 0) {
@@ -70,7 +70,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::previousCharacters( const OUString& Text,
             }
         } else
             nStartPos = 0;
-    } else { // for BS to delete one char.
+    } else { 
         nDone = (nStartPos > nCount) ? nCount : nStartPos;
         nStartPos -= nDone;
     }
@@ -89,7 +89,7 @@ sal_Int32 SAL_CALL BreakIterator_CTL::nextCharacters(const OUString& Text,
         if (nStartPos < len) {
             makeIndex(Text, nStartPos);
 
-            if (nextCellIndex[nStartPos] == 0) // not a CTL character
+            if (nextCellIndex[nStartPos] == 0) 
                 return BreakIterator_Unicode::nextCharacters(Text, nStartPos, rLocale,
                     nCharacterIteratorMode, nCount, nDone);
             else while (nCount > 0 && nextCellIndex[nStartPos] > 0) {
@@ -106,14 +106,14 @@ sal_Int32 SAL_CALL BreakIterator_CTL::nextCharacters(const OUString& Text,
     return nStartPos;
 }
 
-// This method should be overwritten by derived language specific class.
+
 void SAL_CALL BreakIterator_CTL::makeIndex(const OUString& /*text*/, sal_Int32 /*pos*/)
     throw(RuntimeException)
 {
     throw RuntimeException();
 }
 
-// Make sure line is broken on cell boundary if we implement cell iterator.
+
 LineBreakResults SAL_CALL BreakIterator_CTL::getLineBreak(
     const OUString& Text, sal_Int32 nStartPos,
     const lang::Locale& rLocale, sal_Int32 nMinBreakPos,

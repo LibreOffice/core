@@ -38,12 +38,12 @@
 #include <uno/lbnames.h>
 #include <cppuhelper/queryinterface.hxx>
 #include <cppuhelper/factory.hxx>
-// generated c++ interfaces
+
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
 
-// include our specific addon header to get access to functions and definitions
+
 #include <addon.hxx>
 
 using namespace ::rtl;
@@ -53,9 +53,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
-//##################################################################################################
-//#### EXPORTED ####################################################################################
-//##################################################################################################
+
+
+
 
 /**
  * This function is called to get service factories for an implementation.

@@ -158,7 +158,7 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
     if ( aModName.isEmpty() )
         aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
-    // maybe there's an suspended one?
+    
     pWin = FindBasWin( rDocument, aLibName, aModName, false, true );
 
     if ( !pWin )
@@ -175,13 +175,13 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
             pWin = FindBasWin( rDocument, aLibName, aModName, false, true );
             if( !pWin )
             {
-                // new module window
+                
                 if (!pModulLayout)
                     pModulLayout.reset(new ModulWindowLayout(&GetViewFrame()->GetWindow(), aObjectCatalog));
                 pWin = new ModulWindow(pModulLayout.get(), rDocument, aLibName, aModName, aModule);
                 nKey = InsertWindowInTable( pWin );
             }
-            else // we've gotten called recursively ( via listener from createModule above ), get outta here
+            else 
                 return pWin;
         }
     }
@@ -193,8 +193,8 @@ ModulWindow* Shell::CreateBasWin( const ScriptDocument& rDocument, const OUStrin
     }
     if( nKey && xLib.is() && rDocument.isInVBAMode() )
     {
-        // display a nice friendly name in the ObjectModule tab,
-        // combining the objectname and module name, e.g. Sheet1 ( Financials )
+        
+        
         OUString sObjName;
         ModuleInfoHelper::getObjectName( xLib, rModName, sObjName );
         if( !sObjName.isEmpty() )
@@ -237,7 +237,7 @@ void Shell::ShowCursor( bool bOn )
         pMCurWin->ShowCursor(bOn);
 }
 
-// only if basic window above:
+
 void Shell::ExecuteBasic( SfxRequest& rReq )
 {
     if (dynamic_cast<ModulWindow*>(pCurWin))
@@ -248,6 +248,6 @@ void Shell::ExecuteBasic( SfxRequest& rReq )
     }
 }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

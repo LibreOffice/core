@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/addonstoolbarwrapper.hxx>
@@ -52,7 +52,7 @@ using namespace framework;
 
 namespace {
 
-class AddonsToolBarFactory :  protected ThreadHelpBase,   // Struct for right initalization of mutex member! Must be first of baseclasses.
+class AddonsToolBarFactory :  protected ThreadHelpBase,   
                               public ::cppu::WeakImplHelper2< css::lang::XServiceInfo ,
                                                               css::ui::XUIElementFactory >
 {
@@ -80,7 +80,7 @@ public:
         return aSeq;
     }
 
-    // XUIElementFactory
+    
     virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     sal_Bool hasButtonsInContext( const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rPropSeq,
@@ -134,8 +134,8 @@ sal_Bool AddonsToolBarFactory::hasButtonsInContext(
     {
     }
 
-    // Check before we create a toolbar that we have at least one button in
-    // the current frame context.
+    
+    
     for ( sal_uInt32 i = 0; i < (sal_uInt32)rPropSeqSeq.getLength(); i++ )
     {
         sal_Bool    bIsButton( sal_True );
@@ -171,7 +171,7 @@ sal_Bool AddonsToolBarFactory::hasButtonsInContext(
     return sal_False;
 }
 
-// XUIElementFactory
+
 Reference< XUIElement > SAL_CALL AddonsToolBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
@@ -179,7 +179,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
         ::com::sun::star::lang::IllegalArgumentException,
         ::com::sun::star::uno::RuntimeException )
 {
-    // SAFE
+    
     ResetableGuard aLock( m_aLock );
 
     Sequence< Sequence< PropertyValue > >   aConfigData;
@@ -199,7 +199,7 @@ throw ( ::com::sun::star::container::NoSuchElementException,
     if ( !aResourceURL.startsWith("private:resource/toolbar/addon_") )
         throw IllegalArgumentException();
 
-    // Identify frame and determine module identifier to look for context based buttons
+    
     Reference< ::com::sun::star::ui::XUIElement > xToolBar;
     if ( xFrame.is() &&
          ( aConfigData.getLength()> 0 ) &&

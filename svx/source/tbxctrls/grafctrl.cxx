@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string>
@@ -157,7 +157,7 @@ IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl)
 {
     const sal_Int64 nVal = GetValue();
 
-    // Convert value to an any to be usable with dispatch API
+    
     Any a;
     if ( maCommand == ".uno:GrafRed" ||
          maCommand == ".uno:GrafGreen" ||
@@ -277,7 +277,7 @@ ImplGrafControl::ImplGrafControl(
 
     maImage.SetImage( aImage );
     maImage.SetSizePixel( aImgSize );
-    // we want to see the backbround of the toolbox, not of the FixedImage or Control
+    
     maImage.SetBackground( Wallpaper( COL_TRANSPARENT ) );
     SetBackground( Wallpaper( COL_TRANSPARENT ) );
 
@@ -292,7 +292,7 @@ ImplGrafControl::ImplGrafControl(
     SetSizePixel( Size( aImgSize.Width() + aFldSize.Width() + SYMBOL_TO_FIELD_OFFSET + nOffset,
                   std::max( aImgSize.Height(), aFldSize.Height() ) ) );
 
-    SetBackground( Wallpaper() ); // transparent background
+    SetBackground( Wallpaper() ); 
 
     maImage.Show();
 
@@ -758,7 +758,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                         {
                             aUndoStr += SVX_RESSTR( RID_SVXSTR_UNDO_GRAFCROP );
 
-                            // set crop attributes
+                            
                             if( SFX_ITEM_SET <= pOutAttr->GetItemState( SDRATTR_GRAFCROP ) )
                             {
                                 const SdrGrafCropItem& rNewCrop = (const SdrGrafCropItem&) pOutAttr->Get( SDRATTR_GRAFCROP );
@@ -768,7 +768,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                 aSet.Put( SdrGrafCropItem( aLTSize.Width(), aLTSize.Height(), aRBSize.Width(), aRBSize.Height() ) );
                             }
 
-                            // set new logic rect
+                            
                             if( SFX_ITEM_SET <= pOutAttr->GetItemState( SID_ATTR_GRAF_FRMSIZE ) )
                             {
                                 Point       aNewOrigin( pObj->GetLogicRect().TopLeft() );
@@ -780,14 +780,14 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                 Point aOffset( (aNewGrfSize.Width() - aOldGrfSize.Width()) >> 1,
                                             (aNewGrfSize.Height() - aOldGrfSize.Height()) >> 1 );
 
-                                // #106181# rotate snap rect before setting it
+                                
                                 const GeoStat& aGeo = pObj->GetGeoStat();
 
                                 if (aGeo.nDrehWink!=0 || aGeo.nShearWink!=0)
                                 {
                                     Polygon aPol(aNewRect);
 
-                                    // also transform origin offset
+                                    
                                     if (aGeo.nShearWink!=0)
                                     {
                                         ShearPoly(aPol,
@@ -803,7 +803,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                         RotatePoint(aOffset, Point(0,0), aGeo.nSin,aGeo.nCos);
                                     }
 
-                                    // apply offset
+                                    
                                     aPol.Move( -aOffset.X(), -aOffset.Y() );
                                     aNewRect=aPol.GetBoundRect();
                                 }

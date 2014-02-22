@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "xmlcondformat.hxx"
@@ -231,7 +231,7 @@ ScXMLDataBarFormatContext::ScXMLDataBarFormatContext( ScXMLImport& rImport, sal_
 
     if(!sNegativeColor.isEmpty())
     {
-        // we might check here for 0xff0000 and don't write it
+        
         sal_Int32 nColor = 0;
         sax::Converter::convertColor( nColor, sNegativeColor );
         mpFormatData->mpNegativeColor.reset(new Color(nColor));
@@ -605,7 +605,7 @@ void setColorEntryType(const OUString& rType, ScColorScaleEntry* pEntry, const O
     else if(rType == "formula")
     {
         pEntry->SetType(COLORSCALE_FORMULA);
-        //position does not matter, only table is important
+        
         pEntry->SetFormula(rFormula, rImport.GetDocument(), ScAddress(0,0,rImport.GetTables().GetCurrentSheet()), formula::FormulaGrammar::GRAM_ODFF);
     }
     else if(rType == "auto-minimum")

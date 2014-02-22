@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -65,7 +65,7 @@ SwGrfNode::SwGrfNode(
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     maGrfObj(),
     mpReplacementGraphic(0),
-    // #i73788#
+    
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
 {
@@ -75,7 +75,7 @@ SwGrfNode::SwGrfNode(
 
     bGraphicArrived = sal_True;
 
-    // fdo#50763 inline image has already been read into memory
+    
     if (rGrfName.startsWith("data:")) {
         maGrfObj.SetGraphic( *pGraphic, rGrfName );
     }
@@ -90,7 +90,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     maGrfObj(rGrfObj),
     mpReplacementGraphic(0),
-    // #i73788#
+    
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
 {
@@ -115,7 +115,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
     SwNoTxtNode( rWhere, ND_GRFNODE, pGrfColl, pAutoAttr ),
     maGrfObj(),
     mpReplacementGraphic(0),
-    // #i73788#
+    
     mbLinkedInputStreamReady( false ),
     mbIsStreamReadOnly( sal_False )
 {
@@ -135,7 +135,7 @@ SwGrfNode::SwGrfNode( const SwNodeIndex & rWhere,
         if( INET_PROT_FILE == aUrl.GetProtocol() &&
             FStatHelper::IsDocument( aUrl.GetMainURL( INetURLObject::NO_DECODE ) ))
         {
-            // file exists, so create connection without an update
+            
             ((SwBaseLink*)&refLink)->Connect();
         }
     }
@@ -153,14 +153,14 @@ sal_Bool SwGrfNode::ReRead(
     OSL_ENSURE( pGraphic || pGrfObj || !rGrfName.isEmpty(),
             "GraphicNode without a name, Graphic or GraphicObject" );
 
-    // with name
+    
     if( refLink.Is() )
     {
         OSL_ENSURE( !bInSwapIn, "ReRead: I am still in SwapIn" );
 
         if( !rGrfName.isEmpty() )
         {
-            // Note: If there is DDE in the FltName, than it is a DDE-linked graphic
+            
             OUString sCmd( rGrfName );
             if( !rFltName.isEmpty() )
             {
@@ -182,7 +182,7 @@ sal_Bool SwGrfNode::ReRead(
 
             refLink->SetLinkSourceName( sCmd );
         }
-        else // no name anymore, so remove link
+        else 
         {
             GetDoc()->GetLinkManager().Remove( refLink );
             refLink.Clear();
@@ -205,8 +205,8 @@ sal_Bool SwGrfNode::ReRead(
         }
         else
         {
-            // reset data of the old graphic so that the correct placeholder is
-            // shown in case the new link could not be loaded
+            
+            
             Graphic aGrf; aGrf.SetDefaultType();
             maGrfObj.SetGraphic( aGrf, rGrfName );
 
@@ -217,10 +217,10 @@ sal_Bool SwGrfNode::ReRead(
                     SwMsgPoolItem aMsgHint( RES_GRF_REREAD_AND_INCACHE );
                     ModifyNotification( &aMsgHint, &aMsgHint );
                 }
-                // #i59688# - do not load linked graphic, if it isn't a new linked graphic.
+                
                 else if ( bNewGrf )
                 {
-                    //TODO refLink->setInputStream(getInputStream());
+                    
                     ((SwBaseLink*)&refLink)->SwapIn();
                 }
             }
@@ -230,7 +230,7 @@ sal_Bool SwGrfNode::ReRead(
     }
     else if( pGraphic && rGrfName.isEmpty() )
     {
-        // Old stream must be deleted before the new one is set.
+        
         if( HasStreamName() )
             DelStreamName();
 
@@ -240,7 +240,7 @@ sal_Bool SwGrfNode::ReRead(
     }
     else if( pGrfObj && rGrfName.isEmpty() )
     {
-        // Old stream must be deleted before the new one is set.
+        
         if( HasStreamName() )
             DelStreamName();
 
@@ -250,7 +250,7 @@ sal_Bool SwGrfNode::ReRead(
             maGrfObj.SetSwapState();
         bReadGrf = sal_True;
     }
-    // Was the graphic already loaded?
+    
     else if( !bNewGrf && GRAPHIC_NONE != maGrfObj.GetType() )
         return sal_True;
     else
@@ -258,7 +258,7 @@ sal_Bool SwGrfNode::ReRead(
         if( HasStreamName() )
             DelStreamName();
 
-        // create new link for the graphic object
+        
         InsertLink( rGrfName, rFltName );
 
         if( GetNodes().IsDocNodes() )
@@ -268,7 +268,7 @@ sal_Bool SwGrfNode::ReRead(
                 maGrfObj.SetGraphic( *pGraphic, rGrfName );
                 onGraphicChanged();
                 bReadGrf = sal_True;
-                // create connection without update, as we have the graphic
+                
                 ((SwBaseLink*)&refLink)->Connect();
             }
             else if( pGrfObj )
@@ -277,17 +277,17 @@ sal_Bool SwGrfNode::ReRead(
                 maGrfObj.SetLink( rGrfName );
                 onGraphicChanged();
                 bReadGrf = sal_True;
-                // create connection without update, as we have the graphic
+                
                 ((SwBaseLink*)&refLink)->Connect();
             }
             else
             {
-                // reset data of the old graphic so that the correct placeholder is
-                // shown in case the new link could not be loaded
+                
+                
                 Graphic aGrf; aGrf.SetDefaultType();
                 maGrfObj.SetGraphic( aGrf, rGrfName );
                 onGraphicChanged();
-                // #i59688# - do not load linked graphic, if it isn't a new linked graphic.
+                
                 if ( bNewGrf )
                 {
                     ((SwBaseLink*)&refLink)->SwapIn();
@@ -296,12 +296,12 @@ sal_Bool SwGrfNode::ReRead(
         }
     }
 
-    // Bug 39281: Do not delete Size immediately - Events on ImageMaps should have
-    // something to work with when swapping
+    
+    
     if( bSetTwipSize )
         SetTwipSize( ::GetGraphicSizeTwip( maGrfObj.GetGraphic(), 0 ) );
 
-    // create an updates for the frames
+    
     if( bReadGrf && bNewGrf )
     {
         SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
@@ -316,7 +316,7 @@ SwGrfNode::~SwGrfNode()
     delete mpReplacementGraphic;
     mpReplacementGraphic = 0;
 
-    // #i73788#
+    
     mpThreadConsumer.reset();
 
     SwDoc* pDoc = GetDoc();
@@ -328,30 +328,30 @@ SwGrfNode::~SwGrfNode()
     }
     else
     {
-        // #i40014# - A graphic node, which is in a linked
-        // section, whose link is another section in the document, doesn't
-        // have to remove the stream from the storage.
-        // Because it's hard to detect this case here and it would only fix
-        // one problem with shared graphic files - there are also problems,
-        // a certain graphic file is referenced by two independent graphic nodes,
-        // brush item or drawing objects, the stream isn't no longer removed here.
-        // To do this stuff correctly, a reference counting on shared streams
-        // inside one document has to be implemented.
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
-    //#39289# delete frames already here since the Frms' dtor needs the graphic for its StopAnimation
+    
     if( GetDepends() )
         DelFrms();
 }
 
-/// allow reaction on change of content of GraphicObject
+
 void SwGrfNode::onGraphicChanged()
 {
-    if (GetGrfObj().IsSwappedOut()) // don't force swap-in for this
+    if (GetGrfObj().IsSwappedOut()) 
         return;
 
-    // try to access SwFlyFrmFmt; since title/desc/name are set there, there is no
-    // use to continue if it is not yet set. If not yet set, call onGraphicChanged()
-    // when it is set.
+    
+    
+    
     SwFlyFrmFmt* pFlyFmt = dynamic_cast< SwFlyFrmFmt* >(GetFlyFmt());
 
     if(pFlyFmt)
@@ -431,7 +431,7 @@ SwGrfNode * SwNodes::MakeGrfNode( const SwNodeIndex & rWhere,
 {
     OSL_ENSURE( pGrfColl, "MakeGrfNode: Formatpointer ist 0." );
     SwGrfNode *pNode;
-    // create object delayed, only from a SW/G-reader
+    
     if( bDelayed )
         pNode = new SwGrfNode( rWhere, rGrfName,
                                 rFltName, pGrfColl, pAutoAttr );
@@ -492,7 +492,7 @@ StreamAndStorageNames lcl_GetStreamStorageNames( const OUString sUserData )
     const OUString aProt( "vnd.sun.star.Package:" );
     if (sUserData.startsWithIgnoreAsciiCase(aProt))
     {
-        // 6.0 (XML) Package
+        
         const sal_Int32 nPos = sUserData.indexOf('/');
         if (nPos<0)
         {
@@ -522,7 +522,7 @@ StreamAndStorageNames lcl_GetStreamStorageNames( const OUString sUserData )
  */
 short SwGrfNode::SwapIn( sal_Bool bWaitForData )
 {
-    if( bInSwapIn ) // not recursively!
+    if( bInSwapIn ) 
         return short(!maGrfObj.IsSwappedOut());
 
     short nRet = 0;
@@ -534,12 +534,12 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
         if( GRAPHIC_NONE == maGrfObj.GetType() ||
             GRAPHIC_DEFAULT == maGrfObj.GetType() )
         {
-            // link was not loaded yet
+            
             if( pLink->SwapIn( bWaitForData ) )
                 nRet = -1;
             else if( GRAPHIC_DEFAULT == maGrfObj.GetType() )
             {
-                // no default bitmap anymore, thus re-paint
+                
                 delete mpReplacementGraphic;
                 mpReplacementGraphic = 0;
 
@@ -550,7 +550,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
             }
         }
         else if( maGrfObj.IsSwappedOut() ) {
-            // link to download
+            
             nRet = pLink->SwapIn( bWaitForData ) ? 1 : 0;
         }
         else
@@ -558,7 +558,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
     }
     else if( maGrfObj.IsSwappedOut() )
     {
-        // graphic is in storage or in a temp file
+        
         if( !HasStreamName() )
             nRet = (short)maGrfObj.SwapIn();
         else
@@ -577,7 +577,7 @@ short SwGrfNode::SwapIn( sal_Bool bWaitForData )
             }
             catch (const uno::Exception&)
             {
-                // #i48434#
+                
                 OSL_FAIL( "<SwGrfNode::SwapIn(..)> - unhandled exception!" );
             }
         }
@@ -609,14 +609,14 @@ short SwGrfNode::SwapOut()
     {
         if( !refLink.Is() )
         {
-            // Swapping is only needed for embedded pictures.
-            // The graphic will be written into a temp file if it is new, i.e.
-            // if there is no stream name in the storage yet
+            
+            
+            
             if( !HasStreamName() )
                 if( !maGrfObj.SwapOut() )
                     return 0;
         }
-        // written graphics and links are removed here
+        
         return (short) maGrfObj.SwapOut( NULL );
     }
     return 1;
@@ -663,22 +663,22 @@ sal_Bool SwGrfNode::SavePersistentData()
         return sal_True;
     }
 
-    // swap in first if already in storage
+    
     if( HasStreamName() && !SwapIn() )
         return sal_False;
 
-    // #i44367#
-    // Do not delete graphic file in storage, because the graphic file could
-    // be referenced by other graphic nodes.
-    // Because it's hard to detect this case here and it would only fix
-    // one problem with shared graphic files - there are also problems, if
-    // a certain graphic file is referenced by two independent graphic nodes,
-    // brush item or drawing objects, the stream isn't no longer removed here.
-    // To do this stuff correct, a reference counting on shared streams
-    // inside one document has to be implemented.
-    // Important note: see also fix for #i40014#
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    // swap out into temp file
+    
     return (sal_Bool) SwapOut();
 }
 
@@ -731,7 +731,7 @@ void SwGrfNode::ReleaseLink()
 {
     if( refLink.Is() )
     {
-        // #i15508# remember some stuff from the linked graphic
+        
         const OUString aFileName(maGrfObj.GetLink());
         const Graphic aLocalGraphic(maGrfObj.GetGraphic());
         const bool bHasOriginalData(aLocalGraphic.IsLink());
@@ -747,27 +747,27 @@ void SwGrfNode::ReleaseLink()
         refLink.Clear();
         maGrfObj.SetLink();
 
-        // #i15508# added extra processing after getting rid of the link. Use whatever is
-        // known from the formally linked graphic to get to a state as close to a directly
-        // unlinked insterted graphic as possible. Goal is to have a valid GfxLink at the
-        // ImplGraphic (see there) that holds temporary data to the original data and type
-        // information about the original data. Only when this is given will
-        // SvXMLGraphicHelper::ImplInsertGraphicURL which is used at export use that type
-        // and use the original graphic at export for the ODF, without evtl. recoding
-        // of trhe bitmap graphic data to something without loss (e.g. PNG) but bigger
+        
+        
+        
+        
+        
+        
+        
+        
         if(bHasOriginalData)
         {
-            // #i15508# if we have the original data at the Graphic, let it survive
-            // by using that Graphic again, this time at a GraphicObject without link.
-            // This happens e.g. when inserting a linked graphic and breaking the link
+            
+            
+            
             maGrfObj.SetGraphic(aLocalGraphic);
         }
         else if(!aFileName.isEmpty())
         {
-            // #i15508# we have no original data, but a file name. This happens e.g.
-            // when inserting a linked graphic and save, reload document. Try to access
-            // that data from the original file; if this works, use it. Else use the
-            // data we have (but without knowing the original format)
+            
+            
+            
+            
             int nRes = GRFILTER_OK;
             GraphicFilter& rFlt = GraphicFilter::GetGraphicFilter();
             Graphic aNew;
@@ -786,10 +786,10 @@ void SwGrfNode::SetTwipSize( const Size& rSz )
     nGrfSize = rSz;
     if( IsScaleImageMap() && nGrfSize.Width() && nGrfSize.Height() )
     {
-        // resize Image-Map to size of the graphic
+        
         ScaleImageMap();
 
-        // do not re-scale Image-Map
+        
         SetScaleImageMap( sal_False );
     }
 }
@@ -799,7 +799,7 @@ void SwGrfNode::ScaleImageMap()
     if( !nGrfSize.Width() || !nGrfSize.Height() )
         return;
 
-    // re-scale Image-Map
+    
     SwFrmFmt* pFmt = GetFlyFmt();
 
     if( !pFmt )
@@ -858,7 +858,7 @@ void SwGrfNode::DelStreamName()
 {
     if( HasStreamName() )
     {
-        // then remove graphic from storage
+        
         uno::Reference < embed::XStorage > xDocStg = GetDoc()->GetDocStorage();
         if( xDocStg.is() )
         {
@@ -875,7 +875,7 @@ void SwGrfNode::DelStreamName()
             }
             catch (const uno::Exception&)
             {
-                // #i48434#
+                
                 OSL_FAIL( "<SwGrfNode::DelStreamName()> - unhandled exception!" );
             }
         }
@@ -924,12 +924,12 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
     if( _refPics.is() && !rStreamName.isEmpty() )
     {
         OUString sStreamName(rStreamName);
-        // If stream doesn't exist in the storage, try access the graphic file by
-        // re-generating its name.
-        // A save action can have changed the filename of the embedded graphic,
-        // because a changed unique ID of the graphic is calculated.
-        // --> recursive calls of <GetUniqueID()> have to be avoided.
-        // Thus, use local static boolean to assure this.
+        
+        
+        
+        
+        
+        
         if ( !_refPics->hasByName( sStreamName ) ||
              !_refPics->isStreamElement( sStreamName ) )
         {
@@ -942,7 +942,7 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
             }
         }
 
-        // assure that graphic file exist in the storage.
+        
         if ( _refPics->hasByName( sStreamName ) &&
              _refPics->isStreamElement( sStreamName ) )
         {
@@ -960,7 +960,7 @@ SvStream* SwGrfNode::_GetStreamForEmbedGrf(
 
 SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 {
-    // copy formats into the other document
+    
     SwGrfFmtColl* pColl = pDoc->CopyGrfColl( *GetGrfColl() );
 
     Graphic aTmpGrf;
@@ -981,7 +981,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         }
         catch (const uno::Exception& e)
         {
-            // #i48434#
+            
             SAL_WARN("sw.core", "<SwGrfNode::MakeCopy(..)> - unhandled exception!" << e.Message);
         }
     }
@@ -1017,16 +1017,16 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
 {
     SvStream* pRet;
 
-    // Keep graphic while in swap in. That's at least important
-    // when breaking links, because in this situation a reschedule call and
-    // a DataChanged call lead to a paint of the graphic.
+    
+    
+    
     if( pGrfObj->IsInSwapOut() && (IsSelected() || bInSwapIn) )
         pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
     else if( refLink.Is() )
     {
         if( pGrfObj->IsInSwapIn() )
         {
-            // then make it by your self
+            
             if( !bInSwapIn )
             {
                 bool bIsModifyLocked = IsModifyLocked();
@@ -1067,7 +1067,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
             }
             catch (const uno::Exception&)
             {
-                // #i48434#
+                
                 OSL_FAIL( "<SwapGraphic> - unhandled exception!" );
             }
         }
@@ -1076,12 +1076,12 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
     return (sal_IntPtr)pRet;
 }
 
-/// delete all QuickDraw-Bitmaps in the specified document
+
 void DelAllGrfCacheEntries( SwDoc* pDoc )
 {
     if( pDoc )
     {
-        // delete all Graphic-Links with this name from cache
+        
         const sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
         const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         SwGrfNode* pGrfNd;
@@ -1100,7 +1100,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
     }
 }
 
-/// returns the Graphic-Attr-Structure filled with our graphic attributes
+
 GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
                                         const SwFrm* pFrm ) const
 {
@@ -1159,7 +1159,7 @@ GraphicAttr& SwGrfNode::GetGraphicAttr( GraphicAttr& rGA,
 sal_Bool SwGrfNode::IsTransparent() const
 {
     sal_Bool bRet = maGrfObj.IsTransparent();
-    if( !bRet ) // ask the attribut
+    if( !bRet ) 
         bRet = 0 != GetSwAttrSet().GetTransparencyGrf().GetValue();
 
     return bRet;
@@ -1186,7 +1186,7 @@ sal_Bool SwGrfNode::IsSelected() const
     return bRet;
 }
 
-// #i73788#
+
 boost::weak_ptr< SwAsyncRetrieveInputStreamThreadConsumer > SwGrfNode::GetThreadConsumer()
 {
     return mpThreadConsumer;
@@ -1240,7 +1240,7 @@ void SwGrfNode::ApplyInputStream(
 
 void SwGrfNode::UpdateLinkWithInputStream()
 {
-    // do not work on link, if a <SwapIn> has been triggered.
+    
     if ( !bInSwapIn && IsLinkedFile() )
     {
         GetLink()->setStreamToLoadFrom( mxInputStream, mbIsStreamReadOnly );
@@ -1248,7 +1248,7 @@ void SwGrfNode::UpdateLinkWithInputStream()
         SwMsgPoolItem aMsgHint( RES_GRAPHIC_ARRIVED );
         ModifyNotification( &aMsgHint, &aMsgHint );
 
-        // #i88291#
+        
         mxInputStream.clear();
         GetLink()->clearStreamToLoadFrom();
         mbLinkedInputStreamReady = false;
@@ -1256,7 +1256,7 @@ void SwGrfNode::UpdateLinkWithInputStream()
     }
 }
 
-// #i90395#
+
 bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
 {
     bool bRet = false;

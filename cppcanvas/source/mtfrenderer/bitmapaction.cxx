@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -92,13 +92,13 @@ namespace cppcanvas
             {
                 tools::initRenderState(maState,rState);
 
-                // Setup transformation such that the next render call is
-                // moved rPoint away.
+                
+                
                 const basegfx::B2DHomMatrix aLocalTransformation(basegfx::tools::createTranslateB2DHomMatrix(rDstPoint));
                 ::canvas::tools::appendToRenderState( maState,
                                                       aLocalTransformation );
 
-                // correct clip (which is relative to original transform)
+                
                 tools::modifyClip( maState,
                                    rState,
                                    rCanvas,
@@ -120,9 +120,9 @@ namespace cppcanvas
             {
                 tools::initRenderState(maState,rState);
 
-                // Setup transformation such that the next render call is
-                // moved rPoint away, and scaled according to the ratio
-                // given by src and dst size.
+                
+                
+                
                 const ::Size aBmpSize( rBmpEx.GetSizePixel() );
 
                 const ::basegfx::B2DVector aScale( rDstSize.getX() / aBmpSize.Width(),
@@ -131,7 +131,7 @@ namespace cppcanvas
                     aScale, rDstPoint));
                 ::canvas::tools::appendToRenderState( maState, aLocalTransformation );
 
-                // correct clip (which is relative to original transform)
+                
                 tools::modifyClip( maState,
                                    rState,
                                    rCanvas,
@@ -159,8 +159,8 @@ namespace cppcanvas
             bool BitmapAction::renderSubset( const ::basegfx::B2DHomMatrix&   rTransformation,
                                              const Subset&                    rSubset ) const
             {
-                // bitmap only contains a single action, fail if subset
-                // requests different range
+                
+                
                 if( rSubset.mnSubsetBegin != 0 ||
                     rSubset.mnSubsetEnd != 1 )
                     return false;
@@ -185,8 +185,8 @@ namespace cppcanvas
             ::basegfx::B2DRange BitmapAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation,
                                                          const Subset&                  rSubset ) const
             {
-                // bitmap only contains a single action, empty bounds
-                // if subset requests different range
+                
+                
                 if( rSubset.mnSubsetBegin != 0 ||
                     rSubset.mnSubsetEnd != 1 )
                     return ::basegfx::B2DRange();

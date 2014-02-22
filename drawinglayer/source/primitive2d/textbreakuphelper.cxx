@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive2d/textbreakuphelper.hxx>
@@ -25,7 +25,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/CharType.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -44,7 +44,7 @@ namespace drawinglayer
 
             if(mbNoDXArray)
             {
-                // init TextLayouter when no dxarray
+                
                 maTextLayouter.setFontAttribute(
                     mrSource.getFontAttribute(),
                     maDecTrans.getScale().getX(),
@@ -61,14 +61,14 @@ namespace drawinglayer
         {
             if(nLength && !(nIndex == mrSource.getTextPosition() && nLength == mrSource.getTextLength()))
             {
-                // prepare values for new portion
+                
                 basegfx::B2DHomMatrix aNewTransform;
                 ::std::vector< double > aNewDXArray;
                 const bool bNewStartIsNotOldStart(nIndex > mrSource.getTextPosition());
 
                 if(!mbNoDXArray)
                 {
-                    // prepare new DXArray for the single word
+                    
                     aNewDXArray = ::std::vector< double >(
                         mrSource.getDXArray().begin() + (nIndex - mrSource.getTextPosition()),
                         mrSource.getDXArray().begin() + ((nIndex + nLength) - mrSource.getTextPosition()));
@@ -76,24 +76,24 @@ namespace drawinglayer
 
                 if(bNewStartIsNotOldStart)
                 {
-                    // needs to be moved to a new start position
+                    
                     double fOffset(0.0);
 
                     if(mbNoDXArray)
                     {
-                        // evaluate using TextLayouter
+                        
                         fOffset = maTextLayouter.getTextWidth(mrSource.getText(), mrSource.getTextPosition(), nIndex);
                     }
                     else
                     {
-                        // get from DXArray
+                        
                         const sal_Int32 nIndex2(nIndex - mrSource.getTextPosition());
                         fOffset = mrSource.getDXArray()[nIndex2 - 1];
                     }
 
-                    // need offset without FontScale for building the new transformation. The
-                    // new transformation will be multiplied with the current text transformation
-                    // so FontScale would be double
+                    
+                    
+                    
                     double fOffsetNoScale(fOffset);
                     const double fFontScaleX(maDecTrans.getScale().getX());
 
@@ -103,13 +103,13 @@ namespace drawinglayer
                         fOffsetNoScale /= fFontScaleX;
                     }
 
-                    // apply needed offset to transformation
+                    
                     aNewTransform.translate(fOffsetNoScale, 0.0);
 
                     if(!mbNoDXArray)
                     {
-                        // DXArray values need to be corrected with the offset, too. Here,
-                        // take the scaled offset since the DXArray is scaled
+                        
+                        
                         const sal_uInt32 nArraySize(aNewDXArray.size());
 
                         for(sal_uInt32 a(0); a < nArraySize; a++)
@@ -119,21 +119,21 @@ namespace drawinglayer
                     }
                 }
 
-                // add text transformation to new transformation
+                
                 aNewTransform = maDecTrans.getB2DHomMatrix() * aNewTransform;
 
-                // callback to allow evtl. changes
+                
                 const bool bCreate(allowChange(rTempResult.size(), aNewTransform, nIndex, nLength));
 
                 if(bCreate)
                 {
-                    // check if we have a decorated primitive as source
+                    
                     const TextDecoratedPortionPrimitive2D* pTextDecoratedPortionPrimitive2D =
                         dynamic_cast< const TextDecoratedPortionPrimitive2D* >(&mrSource);
 
                     if(pTextDecoratedPortionPrimitive2D)
                     {
-                        // create a TextDecoratedPortionPrimitive2D
+                        
                         rTempResult.push_back(
                             new TextDecoratedPortionPrimitive2D(
                                 aNewTransform,
@@ -152,7 +152,7 @@ namespace drawinglayer
                                 pTextDecoratedPortionPrimitive2D->getUnderlineAbove(),
                                 pTextDecoratedPortionPrimitive2D->getTextStrikeout(),
 
-                                // reset WordLineMode when BreakupUnit_word is executed; else copy original
+                                
                                 bWordLineMode ? false : pTextDecoratedPortionPrimitive2D->getWordLineMode(),
 
                                 pTextDecoratedPortionPrimitive2D->getTextEmphasisMark(),
@@ -163,7 +163,7 @@ namespace drawinglayer
                     }
                     else
                     {
-                        // create a SimpleTextPrimitive
+                        
                         rTempResult.push_back(
                             new TextSimplePortionPrimitive2D(
                                 aNewTransform,
@@ -240,7 +240,7 @@ namespace drawinglayer
 
                                 nCurrent = a;
 
-                                // skip spaces (maybe enhanced with a bool later if needed)
+                                
                                 {
                                     const sal_Int32 nEndOfSpaces(xBreakIterator->endOfCharBlock(rTxt, a, rLocale, ::com::sun::star::i18n::CharType::SPACE_SEPARATOR));
 
@@ -294,7 +294,7 @@ namespace drawinglayer
             return mxResult;
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,14 +30,14 @@
 using namespace ::com::sun::star;
 
 
-// =======================================================================
+
 
 MnemonicGenerator::MnemonicGenerator()
 {
     memset( maMnemonics, 1, sizeof( maMnemonics ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
 {
@@ -62,7 +62,7 @@ sal_uInt16 MnemonicGenerator::ImplGetMnemonicIndex( sal_Unicode c )
     return MNEMONIC_INDEX_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
 {
@@ -78,22 +78,22 @@ sal_Unicode MnemonicGenerator::ImplFindMnemonic( const OUString& rKey )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MnemonicGenerator::RegisterMnemonic( const OUString& rKey )
 {
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
-    // Don't crash even when we don't have access to i18n service
+    
     if ( !xCharClass.is() )
         return;
 
     OUString aKey = xCharClass->toUpper( rKey, 0, rKey.getLength(), rLocale );
 
-    // If we find a Mnemonic, set the flag. In other case count the
-    // characters, because we need this to set most as possible
-    // Mnemonics
+    
+    
+    
     sal_Unicode cMnemonic = ImplFindMnemonic( aKey );
     if ( cMnemonic )
     {
@@ -121,7 +121,7 @@ void MnemonicGenerator::RegisterMnemonic( const OUString& rKey )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
 {
@@ -131,7 +131,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
     const ::com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILanguageTag().getLocale();
     uno::Reference < i18n::XCharacterClassification > xCharClass = GetCharClass();
 
-    // Don't crash even when we don't have access to i18n service
+    
     if ( !xCharClass.is() )
         return _rKey;
 
@@ -142,11 +142,11 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
 
     bool bCJK = MsLangId::isCJK(Application::GetSettings().GetUILanguageTag().getLanguageType());
 
-    // #107889# in CJK versions ALL strings (even those that contain latin characters)
-    // will get mnemonics in the form: xyz (M)
-    // thus steps 1) and 2) are skipped for CJK locales
+    
+    
+    
 
-    // #110720#, avoid CJK-style mnemonics for latin-only strings that do not contain useful mnemonic chars
+    
     if( bCJK )
     {
         bool bLatinOnly = true;
@@ -157,8 +157,8 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
         for( nIndex=0; nIndex < nLen; nIndex++ )
         {
             c = aKey[ nIndex ];
-            if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    // cjk
-                 ((c >= 0xFF61) && (c <= 0xFFDC)) )     // halfwidth forms
+            if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    
+                 ((c >= 0xFF61) && (c <= 0xFFDC)) )     
             {
                 bLatinOnly = false;
                 break;
@@ -177,21 +177,21 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
     sal_Int32       nIndex = 0;
     if( !bCJK )
     {
-        // 1) first try the first character of a word
+        
         do
         {
             c = aKey[ nIndex ];
 
             if ( nCJK != 2 )
             {
-                if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    // cjk
-                    ((c >= 0xFF61) && (c <= 0xFFDC)) )     // halfwidth forms
+                if ( ((c >= 0x3000) && (c <= 0xD7FF)) ||    
+                    ((c >= 0xFF61) && (c <= 0xFFDC)) )     
                     nCJK = 1;
-                else if ( ((c >= 0x0030) && (c <= 0x0039)) || // digits
-                        ((c >= 0x0041) && (c <= 0x005A)) || // latin capitals
-                        ((c >= 0x0061) && (c <= 0x007A)) || // latin small
-                        ((c >= 0x0370) && (c <= 0x037F)) || // greek numeral signs
-                        ((c >= 0x0400) && (c <= 0x04FF)) )  // cyrillic
+                else if ( ((c >= 0x0030) && (c <= 0x0039)) || 
+                        ((c >= 0x0041) && (c <= 0x005A)) || 
+                        ((c >= 0x0061) && (c <= 0x007A)) || 
+                        ((c >= 0x0370) && (c <= 0x037F)) || 
+                        ((c >= 0x0400) && (c <= 0x04FF)) )  
                     nCJK = 2;
             }
 
@@ -207,7 +207,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
                 }
             }
 
-            // Search for next word
+            
             nIndex++;
             while ( nIndex < nLen )
             {
@@ -220,7 +220,7 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
         }
         while ( nIndex < nLen );
 
-        // 2) search for a unique/uncommon character
+        
         if ( !bChanged )
         {
             sal_uInt16      nBestCount = 0xFFFF;
@@ -261,10 +261,10 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
     else
         nCJK = 1;
 
-    // 3) Add English Mnemonic for CJK Text
+    
     if ( !bChanged && (nCJK == 1) && !rKey.isEmpty() )
     {
-        // Append Ascii Mnemonic
+        
         for ( c = MNEMONIC_RANGE_2_START; c <= MNEMONIC_RANGE_2_END; c++ )
         {
             nMnemonicIndex = ImplGetMnemonicIndex( c );
@@ -306,46 +306,46 @@ OUString MnemonicGenerator::CreateMnemonic( const OUString& _rKey )
         }
     }
 
-// #i87415# Duplicates mnemonics are bad for consistent keyboard accessibility
-// It's probably better to not have mnemonics for some widgets, than to have ambiguous ones.
-//    if( ! bChanged )
-//    {
-//        /*
-//         *  #97809# if all else fails use the first character of a word
-//         *  anyway and live with duplicate mnemonics
-//         */
-//        nIndex = 0;
-//        do
-//        {
-//            c = aKey.GetChar( nIndex );
+
+
+
+
+
+
+
+
+
+
+
+
 //
-//            nMnemonicIndex = ImplGetMnemonicIndex( c );
-//            if ( nMnemonicIndex != MNEMONIC_INDEX_NOTFOUND )
-//            {
-//                maMnemonics[nMnemonicIndex] = 0;
-//                rKey.Insert( MNEMONIC_CHAR, nIndex );
-//                bChanged = sal_True;
-//                break;
-//            }
+
+
+
+
+
+
+
+
 //
-//            // Search for next word
-//            do
-//            {
-//                nIndex++;
-//                c = aKey.GetChar( nIndex );
-//                if ( c == ' ' )
-//                    break;
-//            }
-//            while ( nIndex < nLen );
-//            nIndex++;
-//        }
-//        while ( nIndex < nLen );
-//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     return rKey;
 }
 
-// -----------------------------------------------------------------------
+
 
 uno::Reference< i18n::XCharacterClassification > MnemonicGenerator::GetCharClass()
 {
@@ -354,7 +354,7 @@ uno::Reference< i18n::XCharacterClassification > MnemonicGenerator::GetCharClass
     return mxCharClass;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
 {
@@ -366,7 +366,7 @@ OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
     {
         if ( aStr[ i ] == '~' )
         {
-            // check for CJK-style mnemonic
+            
             if( i > 0 && (i+2) < nLen )
             {
                 sal_Unicode c = aStr[i+1];
@@ -381,7 +381,7 @@ OUString MnemonicGenerator::EraseAllMnemonicChars( const OUString& rStr )
                 }
             }
 
-            // remove standard mnemonics
+            
             aStr = aStr.replaceAt( i, 1, "" );
             nLen--;
         }

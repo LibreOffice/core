@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  *   Some portions were adapted from JDBC PostgreSQL driver:
  *
@@ -110,17 +110,17 @@ std::vector
 #define QUOTEME(X)  #X
 #define STRINGIFY(X) QUOTEME(X)
 
-// These are pre-processor versions of KeyRule.idl declarations
-// These are inherited from JDBC, and thus won't change anytime soon.
-// Having them as pre-processor definitions allows to include them
-// into compile-time strings (through STRINGIFY), which can be passed to ASCII_STR.
-// That is without resorting to horrendeous hacks in template meta-programming.
+
+
+
+
+
 #define KEYRULE_CASCADE      0
 #define KEYRULE_RESTRICT     1
 #define KEYRULE_SET_NULL     2
 #define KEYRULE_NO_ACTION    4
 #define KEYRULE_SET_DEFAULT  4
-// Ditto for Deferrability.idl
+
 #define DEFERRABILITY_INITIALLY_DEFERRED  5
 #define DEFERRABILITY_INITIALLY_IMMEDIATE 6
 #define DEFERRABILITY_NONE                7
@@ -145,7 +145,7 @@ DatabaseMetaData::DatabaseMetaData(
 
 sal_Bool DatabaseMetaData::allProceduresAreCallable(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
+    
     return sal_False;
 }
 
@@ -156,8 +156,8 @@ sal_Bool DatabaseMetaData::allTablesAreSelectable(  ) throw (SQLException, Runti
 
 OUString DatabaseMetaData::getURL(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
-    // LEM TODO: implement
+    
+    
     return OUString();
 }
 
@@ -174,9 +174,9 @@ sal_Bool DatabaseMetaData::isReadOnly(  ) throw (SQLException, RuntimeException)
 
 sal_Bool DatabaseMetaData::nullsAreSortedHigh(  ) throw (SQLException, RuntimeException)
 {
-    // Whether NULL values are considered, for sorting purposes, LARGER than any other value.
-    // Specification: http://download.oracle.com/javase/6/docs/api/java/sql/DatabaseMetaData.html#nullsAreSortedHigh()
-    // PostgreSQL behaviour: http://www.postgresql.org/docs/9.1/static/queries-order.htlm
+    
+    
+    
     return sal_True;
 }
 
@@ -226,12 +226,12 @@ sal_Int32 DatabaseMetaData::getDriverMinorVersion(  ) throw (RuntimeException)
 
 sal_Bool DatabaseMetaData::usesLocalFiles(  ) throw (SQLException, RuntimeException)
 {
-    // LEM TODO:
-    //           http://wiki.openoffice.org/wiki/Documentation/DevGuide/Database/XDatabaseMetaData_Interface
-    //           says "Returns true when the catalog name of the
-    //           database should not appear in the DatasourceBrowser
-    //           of OpenOffice.org API, otherwise false is returned."
-    //           So, hmmm, think about it.
+    
+    
+    
+    
+    
+    
     return sal_False;
 }
 
@@ -292,47 +292,47 @@ OUString DatabaseMetaData::getIdentifierQuoteString(  ) throw (SQLException, Run
 
 OUString DatabaseMetaData::getSQLKeywords(  ) throw (SQLException, RuntimeException)
 {
-    // In Java 6, this is all keywords that are not SQL:2003
-    // In Java 2 v1.4 and as per LibreOffice SDK doc, this is all keywords that are not SQL92
-    // I understand this to mean "reserved keywords" only.
-    // See http://www.postgresql.org/docs/current/static/sql-keywords-appendix.html
-    // LEM TODO: consider using pg_get_keywords(), filter on catcode
+    
+    
+    
+    
+    
     return OUString(
         "ANALYSE,"
         "ANALYZE,"
-        "ARRAY," //SQL:1999
-        "ASYMMETRIC," //SQL:2003
-        "BINARY," //SQL:1999
+        "ARRAY," 
+        "ASYMMETRIC," 
+        "BINARY," 
         "CONCURRENTLY,"
-        "CURRENT_CATALOG," //SQL:2008
-        "CURRENT_ROLE," //SQL:1999
-        "CURRENT_SCHEMA," //SQL:2008
+        "CURRENT_CATALOG," 
+        "CURRENT_ROLE," 
+        "CURRENT_SCHEMA," 
         "DO,"
         "FREEZE,"
         "ILIKE,"
         "ISNULL,"
-        "LIMIT," //SQL:1999; non-reserved in SQL:2003
-        "LOCALTIME," //SQL:1999
-        "LOCALTIMESTAMP," //SQL:1999
+        "LIMIT," 
+        "LOCALTIME," 
+        "LOCALTIMESTAMP," 
         "NOTNULL,"
-        "OFFSET," //SQL:2008
-        "OVER," //SQL:2003
-        "PLACING," //non-reserved in SQL:2003
-        "RETURNING," //non-reserved in SQL:2008
-        "SIMILAR," //SQL:2003
+        "OFFSET," 
+        "OVER," 
+        "PLACING," 
+        "RETURNING," 
+        "SIMILAR," 
         "VARIADIC,"
         "VERBOSE,"
-        "WINDOW" //SQL:2003
+        "WINDOW" 
  );
 }
 OUString DatabaseMetaData::getNumericFunctions(  ) throw (SQLException, RuntimeException)
 {
-    // See http://www.postgresql.org/docs/9.1/static/functions-math.html
-    // LEM TODO: Err... http://wiki.openoffice.org/wiki/Documentation/DevGuide/Database/Support_Scalar_Functions
-    //           says this should be "Open Group CLI" names, not PostgreSQL names.
-    //           Currently this is just a list of supported functions in PostgreSQL, with PostgreSQL names.
-    //           And it is my job to map from Open Group CLI names/syntax to PostgreSQL names/syntax. Where? By parsing the SQL???
-    //           Should look at what the JDBC driver is doing.
+    
+    
+    
+    
+    
+    
     return OUString(
         "abs,"
         "cbrt,"
@@ -368,7 +368,7 @@ OUString DatabaseMetaData::getNumericFunctions(  ) throw (SQLException, RuntimeE
 
 OUString DatabaseMetaData::getStringFunctions(  ) throw (SQLException, RuntimeException)
 {
-    // See http://www.postgresql.org/docs/9.1/static/functions-string.html
+    
     return OUString(
         "bit_length,"
         "char_length,"
@@ -422,8 +422,8 @@ OUString DatabaseMetaData::getStringFunctions(  ) throw (SQLException, RuntimeEx
 
 OUString DatabaseMetaData::getSystemFunctions(  ) throw (SQLException, RuntimeException)
 {
-    // See http://www.postgresql.org/docs/9.1/static/functions-info.html
-    // and http://www.postgresql.org/docs/9.1/static/functions-admin.html
+    
+    
     return OUString(
         "current_catalog,"
         "current_database,"
@@ -551,7 +551,7 @@ OUString DatabaseMetaData::getSystemFunctions(  ) throw (SQLException, RuntimeEx
 }
 OUString DatabaseMetaData::getTimeDateFunctions(  ) throw (SQLException, RuntimeException)
 {
-    // TODO
+    
     return OUString(
         "age,"
         "age,"
@@ -609,8 +609,8 @@ sal_Bool DatabaseMetaData::nullPlusNonNullIsNull(  ) throw (SQLException, Runtim
 
 sal_Bool DatabaseMetaData::supportsTypeConversion(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: this is specifically whether the "CONVERT" function is supported
-    //      It seems that in PostgreSQL, that function is only for string encoding, so no.
+    
+    
     return sal_False;
 }
 
@@ -622,7 +622,7 @@ sal_Bool DatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType
 
 sal_Bool DatabaseMetaData::supportsTableCorrelationNames(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: A correlation name is "bar" in "SELECT foo FROM qux [AS] bar WHERE ..."
+    
     return sal_True;
 }
 
@@ -668,7 +668,7 @@ sal_Bool DatabaseMetaData::supportsMultipleResultSets(  ) throw (SQLException, R
 
 sal_Bool DatabaseMetaData::supportsMultipleTransactions(  ) throw (SQLException, RuntimeException)
 {
-    // Allows multiple transactions open at once (on different connections!)
+    
     return sal_True;
 }
 
@@ -685,12 +685,12 @@ sal_Bool DatabaseMetaData::supportsMinimumSQLGrammar(  ) throw (SQLException, Ru
 
 sal_Bool DatabaseMetaData::supportsCoreSQLGrammar(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: jdbc driver says not, although the comments in it seem old
-    //      fdo#45249 Base query design won't use any aggregate function
-    //      (except COUNT(*) unless we say yes, so say yes.
-    //      Actually, Base assumes *also* support for aggregate functions "collect, fusion, intersection"
-    //      as soon as supportsCoreSQLGrammar() returns true.
-    //      Those are *not* Core SQL, though. They are in optional feature S271 "Basic multiset support"
+    
+    
+    
+    
+    
+    
     return sal_True;
 }
 
@@ -706,19 +706,19 @@ sal_Bool DatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw (SQLException, 
 
 sal_Bool DatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: jdbc driver says not, although the comments in it seem old
+    
     return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsANSI92FullSQL(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: jdbc driver says not, although the comments in it seem old
+    
     return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: jdbc driver says yes, although comment says they are not sure what this means...
+    
     return sal_True;
 }
 
@@ -816,19 +816,19 @@ sal_Bool DatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw (SQL
 }
 
 
-// LEM TODO: positioned (through cursor) updates and deletes seem
-// to be supported; see {UPDATE,DELETE} /table/ (...) WHERE CURRENT OF /cursor_name/" syntax
-// and http://www.postgresql.org/docs/9.1/static/view-pg-cursors.html
-// http://www.postgresql.org/docs/9.1/static/libpq-example.html actually uses a cursor :)
+
+
+
+
 sal_Bool DatabaseMetaData::supportsPositionedDelete(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: jdbc driver says not, although the comments in it seem old
+    
     return sal_False;
 }
 
 sal_Bool DatabaseMetaData::supportsPositionedUpdate(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: jdbc driver says not, although the comments in it seem old
+    
     return sal_False;
 }
 
@@ -862,7 +862,7 @@ sal_Bool DatabaseMetaData::supportsSubqueriesInIns(  ) throw (SQLException, Runt
 
 sal_Bool DatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: jdbc driver says yes, although comment says they don't know what this means...
+    
     return sal_True;
 }
 
@@ -909,7 +909,7 @@ sal_Int32 DatabaseMetaData::getMaxCharLiteralLength(  ) throw (SQLException, Run
     return 0;
 }
 
-// Copied / adapted / simplified from JDBC driver
+
 sal_Int32 DatabaseMetaData::getIntSetting(OUString settingName)
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
@@ -975,18 +975,18 @@ sal_Int32 DatabaseMetaData::getMaxColumnsInTable(  ) throw (SQLException, Runtim
 
 sal_Int32 DatabaseMetaData::getMaxConnections(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: The JDBC driver returns an arbitrary 8192; truth is as much as OS / hardware supports
+    
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxCursorNameLength(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxCursorNameLength(  ) throw (SQLException, RuntimeException) 
 {
     return getMaxNameLength();
 }
 
-sal_Int32 DatabaseMetaData::getMaxIndexLength(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxIndexLength(  ) throw (SQLException, RuntimeException) 
 {
-    // LEM: that's the index itself, not its name
+    
     return 0;
 }
 
@@ -1007,28 +1007,28 @@ sal_Int32 DatabaseMetaData::getMaxCatalogNameLength(  ) throw (SQLException, Run
 
 sal_Int32 DatabaseMetaData::getMaxRowSize(  ) throw (SQLException, RuntimeException)
 {
-    // jdbc driver says 1GB, but http://www.postgresql.org/about/ says 1.6TB
-    // and that 1GB is the maximum _field_ size
-    // The row limit does not fit into a sal_Int32
+    
+    
+    
     return 0;
 }
 
 sal_Bool DatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: Err... PostgreSQL basically does not do BLOBs well
-    //      In any case, BLOBs do not change the maximal row length AFAIK
+    
+    
     return sal_True;
 }
 
 sal_Int32 DatabaseMetaData::getMaxStatementLength(  ) throw (SQLException, RuntimeException)
 {
-    // LEM: actually, that would be 2^sizeof(size_t)-1
-    //      on the server? on the client (because of libpq)? minimum of the two? not sure
-    //      Anyway, big, so say unlimited.
+    
+    
+    
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxStatements(  ) throw (SQLException, RuntimeException) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxStatements(  ) throw (SQLException, RuntimeException) 
 {
     return 0;
 }
@@ -1096,20 +1096,20 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     const OUString& procedureNamePattern ) throw (SQLException, RuntimeException)
 {
     (void) catalog; (void) schemaPattern; (void) procedureNamePattern;
-//        1.  PROCEDURE_CAT string =&gt; procedure catalog (may be NULL )
-//        2. PROCEDURE_SCHEM string =&gt; procedure schema (may be NULL )
-//        3. PROCEDURE_NAME string =&gt; procedure name
-//        4. reserved for future use
-//        5. reserved for future use
-//        6. reserved for future use
-//        7. REMARKS string =&gt; explanatory comment on the procedure
-//        8. PROCEDURE_TYPE short =&gt; kind of procedure:
-//               * UNKNOWN - May return a result
-//               * NO - Does not return a result
-//               * RETURN - Returns a result
 
-// LEM TODO: implement
-// LEM TODO: at least fake the columns, even if no row.
+
+
+
+
+
+
+
+
+
+
+
+
+
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1125,8 +1125,8 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
     (void) catalog; (void) schemaPattern; (void) procedureNamePattern; (void) columnNamePattern;
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
-// LEM TODO: implement
-// LEM TODO: at least fake the columns, even if no row.
+
+
     return new SequenceResultSet(
         m_refMutex, *this, Sequence< OUString >(), Sequence< Sequence< Any > > (), m_pSettings->tc );
 }
@@ -1153,21 +1153,21 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
         buf.append( tableNamePattern );
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
-    // ignore catalog, as a single pq connection does not support multiple catalogs
+    
 
-    // LEM TODO: this does not give the right column names, not the right number of columns, etc.
-    // Take "inspiration" from JDBC driver
-    // Ah, this is used to create a XResultSet manually... Try to do it directly in SQL
+    
+    
+    
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
             "SELECT "
-            "DISTINCT ON (pg_namespace.nspname, relname ) " // avoid duplicates (pg_settings !)
+            "DISTINCT ON (pg_namespace.nspname, relname ) " 
             "pg_namespace.nspname, relname, relkind, pg_description.description "
             "FROM pg_namespace, pg_class LEFT JOIN pg_description ON pg_class.oid = pg_description.objoid "
             "WHERE relnamespace = pg_namespace.oid "
             "AND ( relkind = 'r' OR relkind = 'v') "
             "AND pg_namespace.nspname LIKE ? "
             "AND relname LIKE ? "
-//            "ORDER BY pg_namespace.nspname || relname"
+
             );
 
     Reference< XParameters > parameters( statement, UNO_QUERY_THROW );
@@ -1207,7 +1207,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
         }
         row[4] <<= xRow->getString(4);
 
-        // no description in postgresql AFAIK
+        
         vec.push_back( row );
     }
     Reference< XCloseable > closeable( statement, UNO_QUERY );
@@ -1238,15 +1238,15 @@ struct SortInternalSchemasLastAndPublicFirst
         else if( valueA.startsWith( "pg_" ) &&
             valueB.startsWith( "pg_" ) )
         {
-            ret = valueA.compareTo( valueB ) < 0; // sorts equal !
+            ret = valueA.compareTo( valueB ) < 0; 
         }
         else if( valueA.startsWith( "pg_" ))
         {
-            ret = false; // sorts last !
+            ret = false; 
         }
         else if( valueB.startsWith( "pg_" ) )
         {
-            ret = true; // sorts first !
+            ret = true; 
         }
         else
         {
@@ -1266,12 +1266,12 @@ struct SortInternalSchemasLastAndPublicFirst
     {
         log( m_pSettings, LogLevel::INFO, "DatabaseMetaData::getSchemas() got called" );
     }
-    // <b>TABLE_SCHEM</b> string =&amp;gt; schema name
+    
     Reference< XStatement > statement = m_origin->createStatement();
     Reference< XResultSet > rs = statement->executeQuery(
         "SELECT nspname from pg_namespace" );
-    // LEM TODO: look at JDBC driver and consider doing the same
-    //           in particular, excluding temporary schemas, but maybe better through pg_is_other_temp_schema(oid) OR  == pg_my_temp_schema()
+    
+    
 
     Reference< XRow > xRow( rs, UNO_QUERY_THROW );
     SequenceAnyVector vec;
@@ -1282,7 +1282,7 @@ struct SortInternalSchemasLastAndPublicFirst
         vec.push_back( row );
     }
 
-    // sort public first, sort internal schemas last, sort rest in alphabetic order
+    
     std::sort( vec.begin(), vec.end(), SortInternalSchemasLastAndPublicFirst() );
 
     Reference< XCloseable > closeable( statement, UNO_QUERY );
@@ -1295,8 +1295,8 @@ struct SortInternalSchemasLastAndPublicFirst
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
     throw (SQLException, RuntimeException)
 {
-    // LEM TODO: return the current catalog like JDBC driver?
-    //           at least fake the columns, even if no content
+    
+    
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1306,7 +1306,7 @@ struct SortInternalSchemasLastAndPublicFirst
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTableTypes(  )
     throw (SQLException, RuntimeException)
 {
-    // LEM TODO: this can be made dynamic, see JDBC driver
+    
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1319,22 +1319,22 @@ struct SortInternalSchemasLastAndPublicFirst
  */
 sal_Int32 typeNameToDataType( const OUString &typeName, const OUString &typtype )
 {
-//     sal_Int32 ret = com::sun::star::sdbc::DataType::DISTINCT;
-    // map all unknown types to memo (longvarchar). This allows to show them in
-    // string representation. Additionally, the edit-table-type-selection-box
-    // is not so unuseable anymore.
+
+    
+    
+    
     sal_Int32 ret = com::sun::star::sdbc::DataType::LONGVARCHAR;
     if( typtype.equalsAscii( "b" ) )
     {
-        // as long as the OOo framework does not support arrays,
-        // the user is better of with interpreting arrays as strings !
-//         if( typeName.getLength() && '_' == typeName[0] )
-//         {
-//             its just a naming convention, but as long as we don't have anything better,
-//             we take it as granted
-//             ret = com::sun::star::sdbc::DataType::ARRAY;
-//         }
-        // base type
+        
+        
+
+
+
+
+
+
+        
         Statics &statics = getStatics();
         BaseTypeMap::iterator ii = statics.baseTypeMap.find( typeName );
         if( ii != statics.baseTypeMap.end() )
@@ -1360,12 +1360,12 @@ inline bool isSystemColumn( sal_Int16 attnum )
 }
 }
 
-// is not exported by the postgres header
+
 const static int PQ_VARHDRSZ = sizeof( sal_Int32 );
 
-// Oh, quelle horreur
-// LEM TODO: Need to severely rewrite that!
-// should probably just "do the same" as ODBC or JDBC drivers...
+
+
+
 static void extractPrecisionAndScale(
     sal_Int32 dataType, sal_Int32 atttypmod, sal_Int32 *precision, sal_Int32 *scale )
 {
@@ -1468,10 +1468,10 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& columnNamePattern ) throw (SQLException, RuntimeException)
 {
     (void) catalog;
-    // LEM TODO: review in comparison with JDBC driver
+    
     Statics &statics = getStatics();
 
-    // continue !
+    
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
@@ -1487,71 +1487,71 @@ static void columnMetaData2DatabaseTypeDescription(
         log( m_pSettings, LogLevel::INFO, buf.makeStringAndClear() );
     }
 
-    // ignore catalog, as a single pq connection
-    // does not support multiple catalogs anyway
-    // We don't use information_schema.columns because it contains
-    // only the columns the current user has any privilege over.
+    
+    
+    
+    
 
-    //  1. TABLE_CAT string => table catalog (may be NULL)
-    //               => not supported
-    //  2. TABLE_SCHEM string => table schema (may be NULL)
-    //               => pg_namespace.nspname
-    //  3. TABLE_NAME string => table name
-    //               => pg_class.relname
-    //  4. COLUMN_NAME string => column name
-    //               => pg_attribure.attname
-    //  5. DATA_TYPE short => SQL type from java.sql.Types
-    //               => pg_type.typname => sdbc.DataType
-    //  6. TYPE_NAME string => Data source dependent type name, for a UDT the
-    //                         type name is fully qualified
-    //               => pg_type.typname
-    //  7. COLUMN_SIZE long => column size. For char or date types this is
-    //                         the maximum number of characters, for numeric
-    //                         or decimal types this is precision.
-    //               => pg_attribute.atttypmod
-    //  8. BUFFER_LENGTH is not used.
-    //               => not used
-    //  9. DECIMAL_DIGITS long => the number of fractional digits
-    //               => don't know ! TODO !
-    //  10. NUM_PREC_RADIX long => Radix (typically either 10 or 2)
-    //               => TODO ??
-    //  11. NULLABLE long => is NULL allowed?
-    //                      NO_NULLS - might not allow NULL values
-    //                      NULABLE - definitely allows NULL values
-    //                      NULLABLE_UNKNOWN - nullability unknown
-    //               => pg_attribute.attnotnull
-    //  12. REMARKS string => comment describing column (may be NULL )
-    //               => pg_description.description
-    //  13. COLUMN_DEF string => default value (may be NULL)
-    //               => pg_type.typdefault
-    //  14. SQL_DATA_TYPE long => unused
-    //               => empty
-    //  15. SQL_DATETIME_SUB long => unused
-    //               => empty
-    //  16. CHAR_OCTET_LENGTH long => for char types the maximum number of
-    //                                bytes in the column
-    //               => pg_type.typlen
-    //  17. ORDINAL_POSITION int => index of column in table (starting at 1)
-    //                              pg_attribute.attnum
-    //  18. IS_NULLABLE string => "NO" means column definitely does not allow
-    //                            NULL values; "YES" means the column might
-    //                            allow NULL values. An empty string means
-    //                            nobody knows.
-    //               => pg_attribute.attnotnull
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     Reference< XPreparedStatement > statement = m_origin->prepareStatement(
-            "SELECT pg_namespace.nspname, "  // 1
-            "pg_class.relname, "             // 2
-            "pg_attribute.attname, "         // 3
-            "pg_type.typname, "              // 4
-            "pg_attribute.atttypmod, "       // 5
-            "pg_attribute.attnotnull, "      // 6
-            "pg_type.typdefault, "           // 7
-            "pg_type.typtype, "              // 8
-            "pg_attrdef.adsrc, "             // 9
-            "pg_description.description, "   // 10
-            "pg_type.typbasetype, "          // 11
-            "pg_attribute.attnum "           // 12
+            "SELECT pg_namespace.nspname, "  
+            "pg_class.relname, "             
+            "pg_attribute.attname, "         
+            "pg_type.typname, "              
+            "pg_attribute.atttypmod, "       
+            "pg_attribute.attnotnull, "      
+            "pg_type.typdefault, "           
+            "pg_type.typtype, "              
+            "pg_attrdef.adsrc, "             
+            "pg_description.description, "   
+            "pg_type.typbasetype, "          
+            "pg_attribute.attnum "           
             "FROM pg_class, "
                  "pg_attribute LEFT JOIN pg_attrdef ON pg_attribute.attrelid = pg_attrdef.adrelid AND pg_attribute.attnum = pg_attrdef.adnum "
                               "LEFT JOIN pg_description ON pg_attribute.attrelid = pg_description.objoid AND pg_attribute.attnum=pg_description.objsubid,"
@@ -1616,9 +1616,9 @@ static void columnMetaData2DatabaseTypeDescription(
             row[4] <<= type;
             row[5] <<= xRow->getString(4);
             row[6] <<= precision;
-            // row[7] BUFFER_LENGTH not used
+            
             row[8] <<= scale;
-            // row[9] RADIX TODO
+            
             if( xRow->getBoolean( 6 ) && ! isSystemColumn(xRow->getInt( 12 )) )
             {
                 row[10] <<= OUString::number(com::sun::star::sdbc::ColumnValue::NO_NULLS);
@@ -1630,10 +1630,10 @@ static void columnMetaData2DatabaseTypeDescription(
                 row[17] <<= statics.YES;
             }
 
-            row[11] <<= xRow->getString( 10 ); // comment
-            row[12] <<= xRow->getString( 9 ); // COLUMN_DEF = pg_type.typdefault
-            // row[13] SQL_DATA_TYPE    not used
-            // row[14] SQL_DATETIME_SUB not used
+            row[11] <<= xRow->getString( 10 ); 
+            row[12] <<= xRow->getString( 9 ); 
+            
+            
             row[15] <<= precision;
             row[16] <<= colNum ;
 
@@ -1717,7 +1717,7 @@ static void columnMetaData2DatabaseTypeDescription(
     sal_Bool nullable ) throw (SQLException, RuntimeException)
 {
     (void) catalog; (void) schema; (void) table; (void) scope; (void) nullable;
-    //LEM TODO: implement! See JDBC driver
+    
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1730,7 +1730,7 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& table ) throw (SQLException, RuntimeException)
 {
     (void) catalog; (void) schema; (void) table;
-    //LEM TODO: implement! See JDBC driver
+    
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(
@@ -1743,16 +1743,16 @@ static void columnMetaData2DatabaseTypeDescription(
     const OUString& table ) throw (SQLException, RuntimeException)
 {
     (void) catalog;
-    //LEM TODO: review
+    
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
-//        1.  TABLE_CAT string =&gt; table catalog (may be NULL )
-//        2. TABLE_SCHEM string =&gt; table schema (may be NULL )
-//        3. TABLE_NAME string =&gt; table name
-//        4. COLUMN_NAME string =&gt; column name
-//        5. KEY_SEQ short =&gt; sequence number within primary key
-//        6. PK_NAME string =&gt; primary key name (may be NULL )
+
+
+
+
+
+
 
     if( isLog( m_pSettings, LogLevel::INFO ) )
     {
@@ -1789,19 +1789,19 @@ static void columnMetaData2DatabaseTypeDescription(
         row[1] <<= xRow->getString(1);  //
         row[2] <<= xRow->getString(2);
         OUString array = xRow->getString(3);
-        row[4] <<= xRow->getString(5); // the relid
+        row[4] <<= xRow->getString(5); 
         row[5] <<= xRow->getString(4);
 
         int i = 0;
-        // now retrieve the columns information
-        // unfortunately, postgresql does not allow array of variable size in
-        // WHERE clauses (in the default installation), so we have to choose
-        // this expensive and somewhat ugly way
-        // annotation: postgresql shouldn't have choosen an array here, instead they
-        //             should have multiple rows per table
-        // LEM: to transform an array into several rows, see unnest;
-        //      it is as simple as "SELECT foo, bar, unnest(qux) FROM ..."
-        //      where qux is the column that contains an array.
+        
+        
+        
+        
+        
+        
+        
+        
+        
         while( array[i] && '}' != array[i] )
         {
             i++;
@@ -1846,7 +1846,7 @@ static void columnMetaData2DatabaseTypeDescription(
         xRow = Reference< XRow >( rs, UNO_QUERY_THROW );
         if( rs->next() )
         {
-            // column name
+            
             row[3] <<= xRow->getString( 1 );
             if( tableOid != lastTableOid )
                 index = 1;
@@ -1866,7 +1866,7 @@ static void columnMetaData2DatabaseTypeDescription(
         m_refMutex, *this, getStatics().primaryKeyNames, ret , m_pSettings->tc );
 }
 
-// Copied / adapted / simplified from JDBC driver
+
 #define SQL_CASE_KEYRULE "  WHEN 'c' THEN " STRINGIFY(KEYRULE_CASCADE) \
                          "  WHEN 'n' THEN " STRINGIFY(KEYRULE_SET_NULL) \
                          "  WHEN 'd' THEN " STRINGIFY(KEYRULE_SET_DEFAULT) \
@@ -2032,8 +2032,8 @@ void DatabaseMetaData::init_getPrivs_stmt ()
             "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
             "  FROM information_schema.table_privileges");
     if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
-        // information_schema.table_privileges does not fill in default ACLs when no ACL
-        // assume default ACL is "owner has all privileges" and add it
+        
+        
         sSQL.append(
             " UNION "
             "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME,"
@@ -2062,8 +2062,8 @@ void DatabaseMetaData::init_getPrivs_stmt ()
             "         grantor, grantee, privilege_type AS PRIVILEGE, is_grantable"
             "  FROM information_schema.column_privileges");
     if ( PQserverVersion( m_pSettings->pConnection ) < 90200 )
-        // information_schema.table_privileges does not fill in default ACLs when no ACL
-        // assume default ACL is "owner has all privileges" and add it
+        
+        
         sSQL.append(
             " UNION "
             "  SELECT current_database() AS TABLE_CAT, pn.nspname AS TABLE_SCHEM, c.relname AS TABLE_NAME, a.attname AS column_name,"
@@ -2174,20 +2174,20 @@ struct TypeInfoByDataTypeSorter
         }
 
         return valueA.toInt32() < valueB.toInt32();
-//         sal_Int32 valueA;
-//         sal_Int32 valueB;
-//         a[1 /*DATA_TYPE*/] >>= valueA;
-//         b[1 /*DATA_TYPE*/] >>= valueB;
-//         if( valueB == valueA )
-//         {
-//             OUString nameA;
-//             OUString nameB;
-//             a[0 /*TYPE_NAME*/] >>= nameA;
-//             b[0 /*TYPE_NAME*/] >>= nameB;
-//             return nameA.compareTo( nameB ) < 0;
-//         }
 
-//         return valueA < valueB;
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 };
 
@@ -2204,14 +2204,14 @@ static sal_Int32 calcSearchable( sal_Int32 dataType )
 
 static sal_Int32 getMaxScale( sal_Int32 dataType )
 {
-    // LEM TODO: review, see where used, see JDBC, ...
+    
     sal_Int32 ret = 0;
     if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
-        ret = 1000; // see pg-docs DataType/numeric
-//     else if( dataType == DataType::DOUBLE )
-//         ret = 308;
-//     else if( dataType == DataType::FLOAT )
-//         ret =
+        ret = 1000; 
+
+
+
+
     return ret;
 }
 
@@ -2231,29 +2231,29 @@ static void pgTypeInfo2ResultSet(
      SequenceAnyVector &vec,
      const Reference< XResultSet > &rs )
 {
-    static const sal_Int32 TYPE_NAME = 0;  // string Type name
-    static const sal_Int32 DATA_TYPE = 1;  // short SQL data type from java.sql.Types
-    static const sal_Int32 PRECISION = 2;  // long maximum precision
-    static const sal_Int32 CREATE_PARAMS = 5; // string => parameters used in creating the type (may be NULL )
-    static const sal_Int32 NULLABLE  = 6;  // short ==> can you use NULL for this type?
-                                           // - NO_NULLS - does not allow NULL values
-                                           // - NULLABLE - allows NULL values
-                                           // - NULLABLE_UNKNOWN - nullability unknown
+    static const sal_Int32 TYPE_NAME = 0;  
+    static const sal_Int32 DATA_TYPE = 1;  
+    static const sal_Int32 PRECISION = 2;  
+    static const sal_Int32 CREATE_PARAMS = 5; 
+    static const sal_Int32 NULLABLE  = 6;  
+                                           
+                                           
+                                           
 
-    static const sal_Int32 CASE_SENSITIVE = 7; // boolean==> is it case sensitive
-    static const sal_Int32 SEARCHABLE = 8;  // short ==>; can you use
-                                            // "WHERE" based on this type:
-                                            //   - NONE - No support
-                                            //   - CHAR - Only supported with WHERE .. LIKE
-                                            //   - BASIC - Supported except for WHERE .. LIKE
-                                            //   - FULL - Supported for all WHERE ..
-    static const sal_Int32 UNSIGNED_ATTRIBUTE = 9; // boolean ==> is it unsigned?
-    static const sal_Int32 FIXED_PREC_SCALE = 10; // boolean ==> can it be a money value?
-    static const sal_Int32 AUTO_INCREMENT = 11; // boolean ==> can it be used for
-                                                // an auto-increment value?
-    static const sal_Int32 MINIMUM_SCALE = 13; // short ==> minimum scale supported
-    static const sal_Int32 MAXIMUM_SCALE = 14; // short ==> maximum scale supported
-    static const sal_Int32 NUM_PREC_RADIX = 17; // long ==> usually 2 or 10
+    static const sal_Int32 CASE_SENSITIVE = 7; 
+    static const sal_Int32 SEARCHABLE = 8;  
+                                            
+                                            
+                                            
+                                            
+                                            
+    static const sal_Int32 UNSIGNED_ATTRIBUTE = 9; 
+    static const sal_Int32 FIXED_PREC_SCALE = 10; 
+    static const sal_Int32 AUTO_INCREMENT = 11; 
+                                                
+    static const sal_Int32 MINIMUM_SCALE = 13; 
+    static const sal_Int32 MAXIMUM_SCALE = 14; 
+    static const sal_Int32 NUM_PREC_RADIX = 17; 
 
     /*  not filled so far
         3. LITERAL_PREFIX string ==> prefix used to quote a literal
@@ -2277,11 +2277,11 @@ static void pgTypeInfo2ResultSet(
             ( dataType == com::sun::star::sdbc::DataType::VARCHAR &&
               xRow->getString(TYPE_NAME+1).equalsIgnoreAsciiCase("varchar") ) )
         {
-            // reflect varchar as varchar with upper limit !
-            //NOTE: the sql spec requires varchar to have an upper limit, however
-            //      in postgresql the upper limit is optional, no limit means unlimited
-            //      length (=1GB).
-            precision = 0x40000000; // about 1 GB, see character type docs in postgresql
+            
+            
+            
+            
+            precision = 0x40000000; 
             row[CREATE_PARAMS] <<= OUString("length");
         }
         else if( dataType == com::sun::star::sdbc::DataType::NUMERIC )
@@ -2302,12 +2302,12 @@ static void pgTypeInfo2ResultSet(
         row[UNSIGNED_ATTRIBUTE] <<= OUString("0"); //
         if( com::sun::star::sdbc::DataType::INTEGER == dataType ||
             com::sun::star::sdbc::DataType::BIGINT == dataType )
-            row[AUTO_INCREMENT] <<= OUString("1");     // TODO
+            row[AUTO_INCREMENT] <<= OUString("1");     
         else
-            row[AUTO_INCREMENT] <<= OUString("0");     // TODO
-        row[MINIMUM_SCALE] <<= OUString("0");      // TODO: what is this ?
+            row[AUTO_INCREMENT] <<= OUString("0");     
+        row[MINIMUM_SCALE] <<= OUString("0");      
         row[MAXIMUM_SCALE] <<= OUString::number( getMaxScale( dataType ) );
-        row[NUM_PREC_RADIX] <<= OUString("10");    // TODO: what is this ?
+        row[NUM_PREC_RADIX] <<= OUString("10");    
         (void)FIXED_PREC_SCALE;
         vec.push_back( row );
     }
@@ -2318,7 +2318,7 @@ static void pgTypeInfo2ResultSet(
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
     throw (SQLException, RuntimeException)
 {
-    // Note: Indexes start at 0 (in the API doc, they start at 1)
+    
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
@@ -2329,11 +2329,11 @@ static void pgTypeInfo2ResultSet(
 
     Reference< XStatement > statement = m_origin->createStatement();
     Reference< XResultSet > rs = statement->executeQuery(
-          "SELECT pg_type.typname AS typname," //1
-          "pg_type.typtype AS typtype,"        //2
-          "pg_type.typlen AS typlen,"          //3
-          "pg_type.typnotnull AS typnotnull,"  //4
-          "pg_type.typname AS typname "        //5
+          "SELECT pg_type.typname AS typname," 
+          "pg_type.typtype AS typtype,"        
+          "pg_type.typlen AS typlen,"          
+          "pg_type.typnotnull AS typnotnull,"  
+          "pg_type.typname AS typname "        
           "FROM pg_type "
           "WHERE pg_type.typtype = 'b' "
           "OR pg_type.typtype = 'p'"
@@ -2342,7 +2342,7 @@ static void pgTypeInfo2ResultSet(
     SequenceAnyVector vec;
     pgTypeInfo2ResultSet( vec, rs );
 
-    // check for domain types
+    
     rs = statement->executeQuery(
         "SELECT t1.typname as typname,"
         "t2.typtype AS typtype,"
@@ -2387,7 +2387,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
     sal_Bool approximate ) throw (SQLException, RuntimeException)
 {
     (void) catalog; (void) approximate;
-    //LEM TODO: review
+    
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
 
@@ -2438,13 +2438,13 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
     static const sal_Int32 R_COLUMN_NAME = 8;
 
     Reference< XPreparedStatement > stmt = m_origin->prepareStatement(
-            "SELECT nspname, "          // 1
-                   "pg_class.relname, " // 2
-                   "class2.relname, "   // 3
-                   "indisclustered, "   // 4
-                   "indisunique, "      // 5
-                   "indisprimary, "     // 6
-                   "indkey "            // 7
+            "SELECT nspname, "          
+                   "pg_class.relname, " 
+                   "class2.relname, "   
+                   "indisclustered, "   
+                   "indisunique, "      
+                   "indisprimary, "     
+                   "indkey "            
             "FROM pg_index INNER JOIN pg_class ON indrelid = pg_class.oid "
                           "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                           "INNER JOIN pg_class as class2 ON pg_index.indexrelid = class2.oid "
@@ -2495,7 +2495,7 @@ static sal_Int32 seqContains( const Sequence< sal_Int32 > &seq, sal_Int32 value 
                     Any( &isNonUnique, getBooleanCppuType() );
                 result[R_TYPE] = makeAny( indexType );
                 result[R_COLUMN_NAME] = makeAny( rowColumn->getString(2) );
-                sal_Int32 nPos = ((sal_Int32)pos+1); // MSVC++ nonsense
+                sal_Int32 nPos = ((sal_Int32)pos+1); 
                 result[R_ORDINAL_POSITION] = makeAny( nPos );
                 vec.push_back( result );
             }
@@ -2578,7 +2578,7 @@ sal_Bool DatabaseMetaData::supportsBatchUpdates(  ) throw (SQLException, Runtime
 ::com::sun::star::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const ::com::sun::star::uno::Any& catalog, const OUString& schemaPattern, const OUString& typeNamePattern, const ::com::sun::star::uno::Sequence< sal_Int32 >& types ) throw (SQLException, RuntimeException)
 {
     (void) catalog; (void) schemaPattern; (void) typeNamePattern; (void) types;
-    //LEM TODO: implement! See JDBC driver
+    
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
     return new SequenceResultSet(

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -67,7 +67,7 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//Search Parameter
+
 
 struct SwSearchOptions
 {
@@ -105,7 +105,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
         m_pWrtShell->LeaveBlockMode();
     switch (nSlot)
     {
-    // for now do nothing
+    
     case SID_SEARCH_ITEM:
     {
         delete m_pSrchItem;
@@ -121,7 +121,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
     case FID_SEARCH_OFF:
         if(pArgs)
         {
-            // Unregister dialog
+            
             delete m_pSrchItem;
             m_pSrchItem = (SvxSearchItem*) pArgs->Get(SID_SEARCH_ITEM).Clone();
 
@@ -131,7 +131,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             m_pSrchDlg = GetSearchDialog();
             if (m_pSrchDlg)
             {
-                // We will remember the search-/replace items.
+                
                 const SearchAttrItemList* pList = m_pSrchDlg->GetSearchItemList();
                 if( pList && pList->Count() )
                     m_pSrchList = new SearchAttrItemList( *pList );
@@ -174,7 +174,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             }
             else
             {
-                // Get SearchItem from request
+                
                 OSL_ENSURE(pArgs, "Args missing");
                 if ( pArgs )
                 {
@@ -228,16 +228,16 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
             case SVX_SEARCHCMD_REPLACE:
                 {
 
-                    // 1) Replace selection (Not if only attributes should be replaced)
-//JP 27.04.95: Why ?
-//      what if you only want to assign attributes to the found??
+                    
+
+
 
                     sal_uInt16 nCmd = SVX_SEARCHCMD_FIND;
                     if( !m_pSrchItem->GetReplaceString().isEmpty() ||
                         !m_pReplList )
                     {
-                        // Prevent, that the replaced string will be found again
-                        // if the replacement string is containing the search string.
+                        
+                        
                         sal_Bool bBack = m_pSrchItem->GetBackward();
                         if (bBack)
                             m_pWrtShell->Push();
@@ -261,7 +261,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     else if( m_pReplList )
                         nCmd = SVX_SEARCHCMD_REPLACE;
 
-                    // 2) Search further (without replacing!)
+                    
 
                     sal_uInt16 nOldCmd = m_pSrchItem->GetCommand();
                     m_pSrchItem->SetCommand( nCmd );
@@ -290,15 +290,15 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                     m_bExtra = false;
                     sal_uLong nFound;
 
-                    {   //Scope for SwWait-Object
+                    {   
                         SwWait aWait( *GetDocShell(), true );
                         m_pWrtShell->StartAllAction();
                         if (!m_pSrchItem->GetSelection())
                         {
-                            // if we don't want to search in the selection...
+                            
                             m_pWrtShell->KillSelection(0, false);
-                            // i#8288 "replace all" should not change cursor
-                            // position, so save current cursor
+                            
+                            
                             m_pWrtShell->Push();
                             if (DOCPOS_START == aOpts.eEnd)
                             {
@@ -312,9 +312,9 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
                         nFound = FUNC_Search( aOpts );
                         if (!m_pSrchItem->GetSelection())
                         {
-                            // create it just to overwrite it with stack cursor
+                            
                             m_pWrtShell->CreateCrsr();
-                            // i#8288 restore the original cursor position
+                            
                             m_pWrtShell->Pop(false);
                         }
                         m_pWrtShell->EndAllAction();
@@ -351,7 +351,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 
             uno::Reference< frame::XDispatchRecorder > xRecorder =
                     GetViewFrame()->GetBindings().GetRecorder();
-            //prevent additional dialogs in recorded macros
+            
             if ( xRecorder.is() )
                 rReq.AppendItem(SfxBoolItem(SID_SEARCH_QUIET, true));
 
@@ -370,7 +370,7 @@ void SwView::ExecSearch(SfxRequest& rReq, sal_Bool bNoMessage)
 /* 8 */         RES_CHRATR_BACKGROUND,  RES_CHRATR_BACKGROUND,
 /*10 */         RES_CHRATR_ROTATE,      RES_CHRATR_ROTATE,
 /*12 */         RES_CHRATR_SCALEW,      RES_CHRATR_RELIEF,
-// insert position for CJK/CTL attributes!
+
 /*14 */         RES_PARATR_LINESPACING, RES_PARATR_HYPHENZONE,
 /*16 */         RES_PARATR_REGISTER,    RES_PARATR_REGISTER,
 /*18 */         RES_PARATR_VERTALIGN,   RES_PARATR_VERTALIGN,
@@ -443,18 +443,18 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
 {
     SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
 
-        // Remember starting position of the search for wraparound
-        // Start- / EndAction perhaps because existing selections of 'search all'
+        
+        
     m_pWrtShell->StartAllAction();
     m_pWrtShell->Push();
 
-    // fdo#65014 : Ensure that the point of the cursor is at the extremity of the
-    // selection closest to the end being searched to as to exclude the selected
-    // region from the search. (This doesn't work in the case of multiple
-    // selected regions as the cursor doesn't mark the selection in that case.)
+    
+    
+    
+    
     m_pWrtShell->GetCrsr()->Normalize( m_pSrchItem->GetBackward() );
 
-        // If you want to search in selected areas, they must not be unselected.
+        
     if (!m_pSrchItem->GetSelection())
         m_pWrtShell->KillSelection(0, false);
 
@@ -473,8 +473,8 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     }
     pWait.reset();
 
-        // Search in the specialized areas when no search is present in selections.
-        // When searching selections will already searched in these special areas.
+        
+        
     bool bHasSrchInOther = m_bExtra;
     if (!m_pSrchItem->GetSelection() && !m_bExtra )
     {
@@ -491,7 +491,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
     else
         m_bExtra = !m_bExtra;
 
-        // If starting position is at the end or beginning of the document.
+        
     if (aOpts.bDontWrap)
     {
         m_pWrtShell->EndAllAction();
@@ -502,7 +502,7 @@ sal_Bool SwView::SearchAndWrap(sal_Bool bApi)
         return sal_False;
     }
     m_pWrtShell->EndAllAction();
-        // Try again with WrapAround?
+        
 
     m_pWrtShell->StartAllAction();
     m_pWrtShell->Pop(sal_False);
@@ -543,7 +543,7 @@ sal_Bool SwView::SearchAll(sal_uInt16* pFound)
 
     if (!m_pSrchItem->GetSelection())
     {
-        // Cancel existing selections, if should not be sought in selected areas.
+        
         m_pWrtShell->KillSelection(0, false);
 
         if( DOCPOS_START == aOpts.eEnd )
@@ -568,7 +568,7 @@ void SwView::Replace()
 
     m_pWrtShell->StartAllAction();
 
-    if( m_pSrchItem->GetPattern() ) // Templates?
+    if( m_pSrchItem->GetPattern() ) 
     {
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, m_pSrchItem->GetSearchString());
@@ -593,23 +593,23 @@ void SwView::Replace()
         if(m_pWrtShell->HasSelection())
         {
             /* check that the selection match the search string*/
-            //save state
+            
             SwPosition aStartPos = (* m_pWrtShell->GetSwCrsr()->Start());
             SwPosition aEndPos = (* m_pWrtShell->GetSwCrsr()->End());
             sal_Bool   bHasSelection = m_pSrchItem->GetSelection();
             sal_uInt16 nOldCmd = m_pSrchItem->GetCommand();
 
-            //set state for checking if current selection has a match
+            
             m_pSrchItem->SetCommand( SVX_SEARCHCMD_FIND );
             m_pSrchItem->SetSelection(true);
 
-            //check if it matchs
+            
             SwSearchOptions aOpts( m_pWrtShell, m_pSrchItem->GetBackward() );
             if( ! FUNC_Search(aOpts) )
             {
 
-                //no matching therefore should not replace selection
-                // => remove selection
+                
+                
 
                 if(! m_pSrchItem->GetBackward() )
                 {
@@ -624,7 +624,7 @@ void SwView::Replace()
                 bReqReplace = false;
             }
 
-            //set back old search state
+            
             m_pSrchItem->SetCommand( nOldCmd );
             m_pSrchItem->SetSelection(bHasSelection);
         }
@@ -698,7 +698,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     {
         m_pSrchList->Get( aSrchSet );
 
-        // -- Page break with page template
+        
         ::SfxToSwPageDescAttr( *m_pWrtShell, aSrchSet );
     }
 
@@ -709,15 +709,15 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
                                         aSearchAttrRange );
         m_pReplList->Get( *pReplSet );
 
-        // -- Page break with page template
+        
         ::SfxToSwPageDescAttr( *m_pWrtShell, *pReplSet );
 
-        if( !pReplSet->Count() )        // too bad, we don't know
-            DELETEZ( pReplSet );        // the attributes
+        if( !pReplSet->Count() )        
+            DELETEZ( pReplSet );        
     }
 
     //
-    // build SearchOptions to be used
+    
     //
     SearchOptions aSearchOpt( m_pSrchItem->GetSearchOptions() );
     aSearchOpt.Locale = GetAppLanguageTag().getLocale();
@@ -738,7 +738,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     }
     else if( m_pSrchItem->GetPattern() )
     {
-        // Searching (and replacing) templates
+        
         const OUString sRplStr( m_pSrchItem->GetReplaceString() );
         nFound = m_pWrtShell->SearchTempl( m_pSrchItem->GetSearchString(),
             rOptions.eStart,
@@ -748,7 +748,7 @@ sal_uLong SwView::FUNC_Search( const SwSearchOptions& rOptions )
     }
     else
     {
-        // Normal search
+        
         nFound = m_pWrtShell->SearchPattern(aSearchOpt, m_pSrchItem->GetNotes(),
                                           rOptions.eStart,
                                           rOptions.eEnd,

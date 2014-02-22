@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PositionAndSizeHelper.hxx"
@@ -27,7 +27,7 @@
 #include <com/sun/star/chart2/RelativeSize.hpp>
 #include "chartview/ExplicitValueProvider.hxx"
 
-// header for class Rectangle
+
 #include <tools/gen.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
@@ -49,10 +49,10 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
 
     if( OBJECTTYPE_TITLE==eObjectType )
     {
-        //@todo decide whether x is primary or secondary
+        
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_CENTER;
-        //the anchor point at the title object is top/middle
+        
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = (double(aPos.X())+double(aObjectRect.getWidth())/2.0)/double(aPageRect.getWidth());
         aRelativePosition.Secondary = (double(aPos.Y())+double(aObjectRect.getHeight())/2.0)/double(aPageRect.getHeight());
@@ -60,10 +60,10 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     }
     else if( OBJECTTYPE_DATA_CURVE_EQUATION==eObjectType )
     {
-        //@todo decide whether x is primary or secondary
+        
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_TOP_LEFT;
-        //the anchor point at the title object is top/middle
+        
         Point aPos = aObjectRect.TopLeft();
         aRelativePosition.Primary = double(aPos.X())/double(aPageRect.getWidth());
         aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getHeight());
@@ -101,9 +101,9 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
     }
     else if(OBJECTTYPE_DIAGRAM==eObjectType || OBJECTTYPE_DIAGRAM_WALL==eObjectType || OBJECTTYPE_DIAGRAM_FLOOR==eObjectType)
     {
-        //@todo decide whether x is primary or secondary
+        
 
-        //set position:
+        
         chart2::RelativePosition aRelativePosition;
         aRelativePosition.Anchor = drawing::Alignment_CENTER;
 
@@ -112,10 +112,10 @@ bool PositionAndSizeHelper::moveObject( ObjectType eObjectType
         aRelativePosition.Secondary = double(aPos.Y())/double(aPageRect.getHeight());
         xObjectProp->setPropertyValue( "RelativePosition", uno::makeAny(aRelativePosition) );
 
-        //set size:
+        
         RelativeSize aRelativeSize;
-        //the anchor points for the diagram are in the middle of the diagram
-        //and in the middle of the page
+        
+        
         aRelativeSize.Primary = double(aObjectRect.getWidth())/double(aPageRect.getWidth());
         aRelativeSize.Secondary = double(aObjectRect.getHeight())/double(aPageRect.getHeight());
         xObjectProp->setPropertyValue( "RelativeSize", uno::makeAny(aRelativeSize) );
@@ -146,6 +146,6 @@ bool PositionAndSizeHelper::moveObject( const OUString& rObjectCID
     return moveObject( eObjectType, xObjectProp, aNewPositionAndSize, rPageRectangle );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

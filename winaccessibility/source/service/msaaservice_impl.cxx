@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ref.hxx>
@@ -35,8 +35,8 @@
 #include <windows.h>
 #include <postwin.h>
 
-using namespace ::com::sun::star; // for odk interfaces
-using namespace ::com::sun::star::uno; // for basic types
+using namespace ::com::sun::star; 
+using namespace ::com::sun::star::uno; 
 using namespace ::com::sun::star::accessibility;
 
 using namespace ::com::sun::star::awt;
@@ -68,17 +68,17 @@ public:
     MSAAServiceImpl ();
     virtual ~MSAAServiceImpl();
 
-    // XComponent - as used by VCL to lifecycle manage this bridge.
+    
     virtual void SAL_CALL dispose();
     virtual void SAL_CALL addEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& )    { /* dummy */ }
     virtual void SAL_CALL removeEventListener( const ::css::uno::Reference< ::css::lang::XEventListener >& ) { /* dummy */ }
 
-    // XMSAAService
+    
     virtual sal_Int64 SAL_CALL getAccObjectPtr(
             sal_Int64 hWnd, sal_Int64 lParam, sal_Int64 wParam);
     virtual void SAL_CALL handleWindowOpened(sal_Int64);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName();
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName );
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames();
@@ -156,22 +156,22 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
 
         SAL_INFO( "iacc2", "Decide whether to register existing window with IAccessible2" );
 
-        // Test for combo box - drop down floating windows first
+        
         Window * pParentWindow = pWindow->GetParent();
 
         if ( pParentWindow )
         {
             try
             {
-                // The parent window of a combo box floating window should have the role COMBO_BOX
+                
                 css::uno::Reference< css::accessibility::XAccessible > xParentAccessible(pParentWindow->GetAccessible());
                 if ( xParentAccessible.is() )
                 {
                     css::uno::Reference< css::accessibility::XAccessibleContext > xParentAC( xParentAccessible->getAccessibleContext() );
                     if ( xParentAC.is() && (css::accessibility::AccessibleRole::COMBO_BOX == xParentAC->getAccessibleRole()) )
                     {
-                        // O.k. - this is a combo box floating window corresponding to the child of role LIST of the parent.
-                        // Let's not rely on a specific child order, just search for the child with the role LIST
+                        
+                        
                         sal_Int32 nCount = xParentAC->getAccessibleChildCount();
                         for ( sal_Int32 n = 0; (n < nCount) && !xAccessible.is(); n++)
                         {
@@ -190,16 +190,16 @@ static void AccessBridgeHandleExistingWindow(const Reference< XMSAAService > &xA
             }
             catch (::com::sun::star::uno::RuntimeException e)
             {
-                // Ignore show events that throw DisposedExceptions in getAccessibleContext(),
-                // but keep revoking these windows in hide(s).
+                
+                
                 if (bShow)
                     return;
             }
         }
 
-        // We have to rely on the fact that Window::GetAccessible()->getAccessibleContext() returns a valid XAccessibleContext
-        // also for other menus than menubar or toplevel popup window. Otherwise we had to traverse the hierarchy to find the
-        // context object to this menu floater. This makes the call to Window->IsMenuFloatingWindow() obsolete.
+        
+        
+        
         if ( ! xAccessible.is() )
             xAccessible = pWindow->GetAccessible();
 
@@ -277,12 +277,12 @@ void MSAAServiceImpl::dispose()
 {
     SolarMutexGuard g;
 
-    // As all folders and streams contain references to their parents,
-    // we must remove these references so that they will be deleted when
-    // the hash_map of the root folder is cleared, releasing all subfolders
-    // and substreams which in turn release theirs, etc. When xRootFolder is
-    // released when this destructor completes, the folder tree should be
-    // deleted fully (and automagically).
+    
+    
+    
+    
+    
+    
     m_pTopWindowListener.clear();
 }
 

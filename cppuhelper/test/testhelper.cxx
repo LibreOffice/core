@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
@@ -64,7 +64,7 @@ SAL_IMPLEMENT_MAIN()
         aEntry.name = "bla, bla";
         aEntry.value = makeAny( (sal_Int32)5 );
         Reference< XComponentContext > xContext( createComponentContext( &aEntry, 1, xInitialContext ) );
-        OSL_ASSERT( xContext->getServiceManager() != xMgr ); // must be wrapped one
+        OSL_ASSERT( xContext->getServiceManager() != xMgr ); 
         OSL_ASSERT(
             Reference< beans::XPropertySet >(
                 xContext->getServiceManager(), UNO_QUERY )->getPropertyValue(

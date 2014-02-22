@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
+
+
+
 #include <osl_Module_Const.h>
 
 using namespace osl;
@@ -28,9 +28,9 @@ using namespace osl;
 using ::rtl::OUString;
 using ::rtl::OUStringToOString;
 using ::rtl::OString;
-//------------------------------------------------------------------------
-// helper functions and classes
-//------------------------------------------------------------------------
+
+
+
 
 /** print Boolean value.
 */
@@ -55,7 +55,7 @@ inline void printUString( const ::rtl::OUString & str )
 */
 inline ::rtl::OUString getDllURL( void )
 {
-#if ( defined WNT )        // lib in Unix and lib in Windows are not same in file name.
+#if ( defined WNT )        
     ::rtl::OUString libPath( "test_Module_DLL.dll" );
 #else
     ::rtl::OUString libPath( "libtest_Module_DLL.so" );
@@ -71,7 +71,7 @@ inline ::rtl::OUString getDllURL( void )
 
 inline bool isURL( const ::rtl::OUString pathname )
 {
-    return pathname.startsWith( "file:///" );
+    return pathname.startsWith( "file:
 }
 
 /** create a temp test directory using OUString name of full qualified URL or system path.
@@ -82,7 +82,7 @@ inline void createTestDirectory( const ::rtl::OUString dirname )
     ::osl::FileBase::RC nError;
 
     if ( !isURL( dirname ) )
-        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
+        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); 
     nError = ::osl::Directory::create( aPathURL );
     CPPUNIT_ASSERT_MESSAGE( "In createTestDirectory Function: creation: ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
 }
@@ -94,19 +94,19 @@ inline void deleteTestDirectory( const ::rtl::OUString dirname )
     ::rtl::OUString     aPathURL   = dirname.copy( 0 );
     ::osl::FileBase::RC nError;
     if ( !isURL( dirname ) )
-        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); //convert if not full qualified URL
+        ::osl::FileBase::getFileURLFromSystemPath( dirname, aPathURL ); 
 
     ::osl::Directory testDir( aPathURL );
     if ( testDir.isOpen( ) )
     {
-            testDir.close( );  //close if still open.
+            testDir.close( );  
         }
 
     nError = ::osl::Directory::remove( aPathURL );
      CPPUNIT_ASSERT_MESSAGE( "In deleteTestDirectory function: remove ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_NOENT ) );
 }
 
-//check if the file exist
+
 inline bool ifFileExist( const ::rtl::OUString & str )
 {
     ::rtl::OUString     aUStr;
@@ -133,9 +133,9 @@ inline void deleteTestFile( const ::rtl::OUString filename )
     ::osl::FileBase::RC nError;
 
     if ( !isURL( filename ) )
-        ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
+        ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); 
 
-    nError = ::osl::File::setAttributes( aPathURL, osl_File_Attribute_GrpWrite| osl_File_Attribute_OwnWrite| osl_File_Attribute_OthWrite ); // if readonly, make writtenable.
+    nError = ::osl::File::setAttributes( aPathURL, osl_File_Attribute_GrpWrite| osl_File_Attribute_OwnWrite| osl_File_Attribute_OthWrite ); 
     CPPUNIT_ASSERT_MESSAGE( "In deleteTestFile Function: set writtenable ", ( ::osl::FileBase::E_None == nError ) || ( ::osl::FileBase::E_NOENT == nError ) );
 
     nError = ::osl::File::remove( aPathURL );
@@ -143,9 +143,9 @@ inline void deleteTestFile( const ::rtl::OUString filename )
 }
 
 
-//------------------------------------------------------------------------
-// test code start here
-//------------------------------------------------------------------------
+
+
+
 
 namespace osl_Module
 {
@@ -203,7 +203,7 @@ namespace osl_Module
         CPPUNIT_TEST( ctors_none );
         CPPUNIT_TEST( ctors_name_mode );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class ctors
+    }; 
 
 
     /** testing the methods:
@@ -230,7 +230,7 @@ namespace osl_Module
         void getUrlFromAddress_002( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            
             ::osl::Module aMod( getDllURL( ) );
             FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString("firstfunc") );
 
@@ -253,7 +253,7 @@ namespace osl_Module
         CPPUNIT_TEST( getUrlFromAddress_001 );
         CPPUNIT_TEST( getUrlFromAddress_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getUrlFromAddress
+    }; 
 
 
     /** testing the method:
@@ -282,7 +282,7 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE( load );
         CPPUNIT_TEST( load_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class load
+    }; 
 
 
     /** testing the method:
@@ -307,7 +307,7 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE( unload );
         CPPUNIT_TEST( unload_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class unload
+    }; 
 
 
     /** testing the methods:
@@ -339,7 +339,7 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE( is );
         CPPUNIT_TEST( is_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class is
+    }; 
 
 
     /** testing the methods:
@@ -353,7 +353,7 @@ namespace osl_Module
         void getSymbol_001( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            
             ::osl::Module aMod( getDllURL( ) );
             FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString("firstfunc") );
             bRes = false;
@@ -369,7 +369,7 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE( getSymbol );
         CPPUNIT_TEST( getSymbol_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getSymbol
+    }; 
 
 
     /** testing the methods:
@@ -383,7 +383,7 @@ namespace osl_Module
         void optr_oslModule_001( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            
             ::osl::Module aMod;
             bRes = ( (oslModule)aMod == NULL );
 
@@ -400,7 +400,7 @@ namespace osl_Module
         void optr_oslModule_002( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            
             ::osl::Module aMod( getDllURL( ) );
             ::rtl::OUString funcName( "firstfunc" );
 
@@ -420,7 +420,7 @@ namespace osl_Module
         CPPUNIT_TEST( optr_oslModule_001 );
         CPPUNIT_TEST( optr_oslModule_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class optr_oslModule
+    }; 
 
     /** testing the methods:
         oslGenericFunction SAL_CALL getFunctionSymbol( const ::rtl::OUString& ustrFunctionSymbolName )
@@ -433,7 +433,7 @@ namespace osl_Module
         void getFunctionSymbol_001( )
         {
 #if !defined( MACOSX )
-            // TODO: Find out why this fails on Mac OS X
+            
             ::osl::Module aMod( getDllURL( ) );
             oslGenericFunction oslFunc = aMod.getFunctionSymbol( rtl::OUString("firstfunc") );
             ::rtl::OUString aLibraryURL;
@@ -447,9 +447,9 @@ namespace osl_Module
         CPPUNIT_TEST_SUITE( getFunctionSymbol );
         CPPUNIT_TEST( getFunctionSymbol_001 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class getFunctionSymbol
+    }; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getUrlFromAddress);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::load);
@@ -458,14 +458,14 @@ CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::is);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getSymbol);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::optr_oslModule);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Module::getFunctionSymbol);
-// -----------------------------------------------------------------------------
 
-} // namespace osl_Module
 
-// -----------------------------------------------------------------------------
+} 
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

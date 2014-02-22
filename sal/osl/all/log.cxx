@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -40,15 +40,15 @@
 
 #if HAVE_SYSLOG_H
 #include <syslog.h>
-// sal/osl/unx/salinit.cxx::sal_detail_initialize updates this:
+
 bool sal_use_syslog;
 #else
 enum { sal_use_syslog = false };
 #endif
 
-// Avoid the use of other sal code in this file as much as possible, so that
-// this code can be called from other sal code without causing endless
-// recursion.
+
+
+
 
 namespace {
 
@@ -63,8 +63,8 @@ bool equalStrings(
 char const * toString(sal_detail_LogLevel level) {
     switch (level) {
     default:
-        assert(false); // this cannot happen
-        // fall through
+        assert(false); 
+        
     case SAL_DETAIL_LOG_LEVEL_INFO:
         return "info";
     case SAL_DETAIL_LOG_LEVEL_WARN:
@@ -75,9 +75,9 @@ char const * toString(sal_detail_LogLevel level) {
 }
 #endif
 
-// getenv is not thread safe, so minimize use of result; except on Android, see
-// 60628799633ffde502cb105b98d3f254f93115aa "Notice if SAL_LOG is changed while
-// the process is running":
+
+
+
 #if defined ANDROID
 
 char const * getEnvironmentVariable() {
@@ -91,9 +91,9 @@ char const * getEnvironmentVariable_() {
     if (p1 == 0) {
         return 0;
     }
-    char const * p2 = strdup(p1); // leaked
+    char const * p2 = strdup(p1); 
     if (p2 == 0) {
-        std::abort(); // cannot do much here
+        std::abort(); 
     }
     return p2;
 }
@@ -116,18 +116,18 @@ bool report(sal_detail_LogLevel level, char const * area) {
     std::size_t areaLen = std::strlen(area);
     enum Sense { POSITIVE = 0, NEGATIVE = 1 };
     std::size_t senseLen[2] = { 0, 1 };
-        // initial senseLen[POSITIVE] < senseLen[NEGATIVE], so that if there are
-        // no matching switches at all, the result will be negative (and
-        // initializing with 1 is safe as the length of a valid switch, even
-        // without the "+"/"-" prefix, will always be > 1)
+        
+        
+        
+        
     for (char const * p = env;;) {
         Sense sense;
         switch (*p++) {
         case '\0':
             return senseLen[POSITIVE] >= senseLen[NEGATIVE];
-                // if a specific item is both postiive and negative
-                // (senseLen[POSITIVE] == senseLen[NEGATIVE]), default to
-                // positive
+                
+                
+                
         case '+':
             sense = POSITIVE;
             break;
@@ -135,7 +135,7 @@ bool report(sal_detail_LogLevel level, char const * area) {
             sense = NEGATIVE;
             break;
         default:
-            return true; // upon an illegal SAL_LOG value, enable everything
+            return true; 
         }
         char const * p1 = p;
         while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
@@ -149,8 +149,8 @@ bool report(sal_detail_LogLevel level, char const * area) {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
         } else {
             return true;
-                // upon an illegal SAL_LOG value, everything is considered
-                // positive
+                
+                
         }
         char const * p2 = p1;
         while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
@@ -180,8 +180,8 @@ void log(
 {
     std::ostringstream s;
 #if !defined ANDROID
-    // On Android, the area will be used as the "tag," and log info already
-    // contains the PID
+    
+    
     if (!sal_use_syslog) {
         s << toString(level) << ':';
     }
@@ -227,8 +227,8 @@ void log(
             prio = LOG_INFO;
             break;
         default:
-            assert(false); // this cannot happen
-            // fall through
+            assert(false); 
+            
         case SAL_DETAIL_LOG_LEVEL_WARN:
             prio = LOG_WARNING;
             break;

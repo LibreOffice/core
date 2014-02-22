@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/svtools.hrc>
@@ -111,15 +111,15 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
      com::sun::star::java::JavaDisabledException                e3;
     com::sun::star::java::JavaVMCreationFailureException    e4;
     com::sun::star::java::RestartRequiredException e5;
-    // Try to recover the Exception type in the any and
-    // react accordingly.
+    
+    
     sal_uInt16      nResult = RET_CANCEL;
 
     if ( anyExc >>= e1 )
     {
         if( ! (m_bShowErrorsOnce && m_bJavaNotFound_Handled))
         {
-           // No suitable JRE found
+           
             SolarMutexGuard aSolarGuard;
             m_bJavaNotFound_Handled = true;
             WarningBox aWarningBox( NULL, SvtResId( WARNINGBOX_JAVANOTFOUND ) );
@@ -135,7 +135,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     {
         if( !(m_bShowErrorsOnce && m_bInvalidSettings_Handled))
         {
-           // javavendors.xml was updated and Java has not been configured yet
+           
             SolarMutexGuard aSolarGuard;
             m_bInvalidSettings_Handled = true;
 #ifdef MACOSX
@@ -157,7 +157,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
         {
             SolarMutexGuard aSolarGuard;
             m_bJavaDisabled_Handled = true;
-            // Java disabled. Give user a chance to enable Java inside Office.
+            
             QueryBox aQueryBox( NULL, SvtResId( QBX_JAVADISABLED ) );
             aQueryBox.SetText(SvtResId( STR_QUESTION_JAVADISABLED ).toString());
             nResult = aQueryBox.Execute();
@@ -178,7 +178,7 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     {
         if( !(m_bShowErrorsOnce && m_bVMCreationFailure_Handled))
         {
-            // Java not correctly installed, or damaged
+            
             SolarMutexGuard aSolarGuard;
             m_bVMCreationFailure_Handled = true;
 #ifdef MACOSX
@@ -198,8 +198,8 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
     {
         if( !(m_bShowErrorsOnce && m_bRestartRequired_Handled))
         {
-            // a new JRE was selected, but office needs to be restarted
-            //before it can be used.
+            
+            
             SolarMutexGuard aSolarGuard;
             m_bRestartRequired_Handled = true;
             svtools::executeRestartDialog(
@@ -211,13 +211,13 @@ void SAL_CALL JavaInteractionHandler::handle( const Reference< XInteractionReque
 
     if ( nResult == RET_CANCEL || nResult == RET_NO)
     {
-        // Unknown exception type or user wants to cancel
+        
         if ( abort.is() )
             abort->select();
     }
-    else // nResult == RET_OK
+    else 
     {
-        // User selected OK => retry Java usage
+        
         if ( retry.is() )
             retry->select();
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vcl/svapp.hxx"
@@ -126,7 +126,7 @@ PresenterButton::PresenterButton (
                 sal_False,
                 sal_False);
 
-        // Make the background transparent.
+        
         Reference<awt::XWindowPeer> xPeer (mxWindow, UNO_QUERY_THROW);
         if (xPeer.is())
         {
@@ -189,7 +189,7 @@ void PresenterButton::SetCenter (const css::geometry::RealPoint2D& rLocation)
     }
     else
     {
-        // The button can not be painted but we can at least store the new center.
+        
         maCenter = rLocation;
     }
 }
@@ -229,7 +229,7 @@ css::geometry::IntegerSize2D PresenterButton::GetSize (void)
     return maButtonSize;
 }
 
-//----- XWindowListener -------------------------------------------------------
+
 
 void SAL_CALL PresenterButton::windowResized (const css::awt::WindowEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -259,7 +259,7 @@ void SAL_CALL PresenterButton::windowHidden (const css::lang::EventObject& rEven
     ThrowIfDisposed();
 }
 
-//----- XPaintListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -292,7 +292,7 @@ void SAL_CALL PresenterButton::windowPaint (const css::awt::PaintEvent& rEvent)
     }
 }
 
-//----- XMouseListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterButton::mousePressed (const css::awt::MouseEvent& rEvent)
     throw(css::uno::RuntimeException)
@@ -336,7 +336,7 @@ void SAL_CALL PresenterButton::mouseExited (const css::awt::MouseEvent& rEvent)
     Invalidate();
 }
 
-//----- XMouseMotionListener --------------------------------------------------
+
 
 void SAL_CALL PresenterButton::mouseMoved (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -352,7 +352,7 @@ void SAL_CALL PresenterButton::mouseDragged (const css::awt::MouseEvent& rEvent)
     ThrowIfDisposed();
 }
 
-//----- lang::XEventListener --------------------------------------------------
+
 
 void SAL_CALL PresenterButton::disposing (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException)
@@ -361,7 +361,7 @@ void SAL_CALL PresenterButton::disposing (const css::lang::EventObject& rEvent)
         mxWindow = NULL;
 }
 
-//-----------------------------------------------------------------------------
+
 
 css::geometry::IntegerSize2D PresenterButton::CalculateButtonSize (void)
 {
@@ -414,7 +414,7 @@ void PresenterButton::RenderButton (
     aRenderState.AffineTransform.m02 = (rSize.Width - aTextBBox.X2 + aTextBBox.X1)/2;
     aRenderState.AffineTransform.m12 = (rSize.Height - aTextBBox.Y2 + aTextBBox.Y1)/2 - aTextBBox.Y1;
 
-    /// this is responsible of the close button
+    
     rxCanvas->drawTextLayout(
         xLayout,
         rendering::ViewState(geometry::AffineMatrix2D(1,0,0, 0,1,0), NULL),
@@ -446,7 +446,7 @@ void PresenterButton::SetupButtonBitmaps (void)
     if ( ! mxCanvas->getDevice().is())
         return;
 
-    // Get the bitmaps for the button border.
+    
     SharedBitmapDescriptor pLeftBitmap (mpTheme->GetBitmap("ButtonFrameLeft"));
     SharedBitmapDescriptor pCenterBitmap(mpTheme->GetBitmap("ButtonFrameCenter"));
     SharedBitmapDescriptor pRightBitmap(mpTheme->GetBitmap("ButtonFrameRight"));
@@ -514,6 +514,6 @@ void PresenterButton::ThrowIfDisposed (void) const
     }
 }
 
-} } // end of namespace sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

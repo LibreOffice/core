@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/errcode.hxx>
@@ -190,7 +190,7 @@ start:
         case SbxBYREF | SbxBOOL:
             nRes = *p->pInteger; break;
 
-        // from here had to be tested
+        
         case SbxBYREF | SbxLONG:
             aTmp.nLong = *p->pLong; goto ref;
         case SbxBYREF | SbxULONG:
@@ -224,7 +224,7 @@ void ImpPutInteger( SbxValues* p, sal_Int16 n )
 start:
     switch( +p->eType )
     {
-        // here had to be tested
+        
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -240,7 +240,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // from here no tests needed
+        
         case SbxINTEGER:
         case SbxBOOL:
             p->nInteger = n; break;
@@ -335,7 +335,7 @@ start:
 }
 
 
-// sal_Int64 / hyper
+
 
 sal_Int64 ImpDoubleToSalInt64( double d )
 {
@@ -438,7 +438,7 @@ start:
                 nRes = aOStr.toInt64();
                 if( nRes == 0 )
                 {
-                    // Check if really 0 or invalid conversion
+                    
                     double d;
                     SbxDataType t;
                     if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
@@ -476,7 +476,7 @@ start:
         case SbxBYREF | SbxSALINT64:
             nRes = *p->pnInt64; break;
 
-        // from here the values has to be checked
+        
         case SbxBYREF | SbxSALUINT64:
             aTmp.uInt64 = *p->puInt64; goto ref;
 
@@ -505,7 +505,7 @@ void ImpPutInt64( SbxValues* p, sal_Int64 n )
 start:
     switch( +p->eType )
     {
-        // Check necessary
+        
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -670,7 +670,7 @@ start:
         case SbxDATE:
         case SbxDOUBLE:
             {
-//TODO overflow check
+
             nRes = (sal_uInt64) p->nDouble;
             break;
             }
@@ -699,7 +699,7 @@ start:
                 sal_Int64 n64 = aOStr.toInt64();
                 if( n64 == 0 )
                 {
-                    // Check if really 0 or invalid conversion
+                    
                     double d;
                     SbxDataType t;
                     if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
@@ -751,7 +751,7 @@ start:
         case SbxBYREF | SbxSALUINT64:
             nRes = *p->puInt64; break;
 
-        // from here on the value has to be checked
+        
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             aTmp.nUShort = *p->pUShort; goto ref;
@@ -780,7 +780,7 @@ void ImpPutUInt64( SbxValues* p, sal_uInt64 n )
 start:
     switch( +p->eType )
     {
-        // Check necessary
+        
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -808,7 +808,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // Check not necessary
+        
         case SbxSALUINT64:
             p->uInt64 = n; break;
 

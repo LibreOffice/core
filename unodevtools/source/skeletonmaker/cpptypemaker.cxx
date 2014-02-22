@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -481,7 +481,7 @@ void printMethods(std::ostream & o,
 
     if (body && options.componenttype == 2) {
         if (name == "com.sun.star.lang.XServiceName") {
-            o << "// ::com::sun::star::lang::XServiceName:\n"
+            o << "
                 "::rtl::OUString SAL_CALL " << classname << "getServiceName() "
                 "throw (css::uno::RuntimeException)\n{\n    "
                 "return ::rtl::OUString("
@@ -492,7 +492,7 @@ void printMethods(std::ostream & o,
             generateXAddInBodies(o, classname);
             generated.add(u2b(name));
 
-            // special handling of XLocalizable -> parent of XAddIn
+            
             if (!generated.contains("com.sun.star.lang.XLocalizable")) {
                 generateXLocalizable(o, classname);
                 generated.add("com.sun.star.lang.XLocalizable");
@@ -548,7 +548,7 @@ void printMethods(std::ostream & o,
         if (!(ent2->getDirectAttributes().empty()
               && ent2->getDirectMethods().empty()))
         {
-            o << indentation << "// ";
+            o << indentation << "
             printType(o, options, manager, name, 0);
             o << ":\n";
         }
@@ -647,18 +647,18 @@ void printMethods(std::ostream & o,
             if (defaultbody) {
                 o << "\n{\n";
                 if (i->returnType != "void") {
-                    o << "    // TODO: Exchange the default return implementation for \""
+                    o << "    
                       << i->name << "\" !!!\n";
-                    o << "    // Exchange the default return implementation.\n"
-                        "    // NOTE: Default initialized polymorphic structs "
-                        "can cause problems because of\n    // missing default "
+                    o << "    
+                        "    
+                        "can cause problems because of\n    
                         "initialization of primitive types of some C++ compilers or"
-                        "\n    // different Any initialization in Java and C++ "
+                        "\n    
                         "polymorphic structs.\n    return ";
                     printType(o, options, manager, i->returnType, 8, true);
                     o << ";";
                 } else {
-                    o << "    // TODO: Insert your implementation for \""
+                    o << "    
                       << i->name << "\" here.";
                 }
                 o << "\n}\n\n";
@@ -741,24 +741,24 @@ void printServiceMembers(
              entity->getDirectMandatoryBaseServices().begin());
          i != entity->getDirectMandatoryBaseServices().end(); ++i)
     {
-        o << "\n// exported service " << i->name << "\n";
+        o << "\n
         generateDocumentation(o, options, manager, u2b(i->name), delegate);
-        o << "\n// end of exported service " << i->name << "\n";
+        o << "\n
     }
     for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity->getDirectMandatoryBaseInterfaces().begin());
          i != entity->getDirectMandatoryBaseInterfaces().end(); ++i)
     {
-        o << "\n// supported interface " << i->name << "\n";
+        o << "\n
         generateDocumentation(o, options, manager, u2b(i->name), delegate);
     }
     if (delegate.isEmpty()) {
-        o << "\n// properties of service \""<< name << "\"\n";
+        o << "\n
         for (std::vector< unoidl::AccumulationBasedServiceEntity::Property >::
                  const_iterator i(entity->getDirectProperties().begin());
              i != entity->getDirectProperties().end(); ++i)
         {
-            o << "// private ";
+            o << "
             printType(o, options, manager, i->type, 1);
             o << " "
               << codemaker::cpp::translateUnoToCppIdentifier(
@@ -811,7 +811,7 @@ void generateDocumentation(std::ostream & o,
     }
 
     if (comment) {
-        o << "\n// UNO";
+        o << "\n
         if (rank != 0) {
             o << " sequence type";
         } else if (sort <= codemaker::UnoType::SORT_ANY) {
@@ -996,7 +996,7 @@ void generateDocumentation(std::ostream & o,
         case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
             if (comment)
                 o << ("does not map to C++\n"
-                      "// the service members are generated instead\n");
+                      "
             printServiceMembers(
                 o, options, manager, nucleus,
                 dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(

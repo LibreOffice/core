@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef ENABLE_QUICKSTART_APPLET
@@ -40,7 +40,7 @@
 #include <gio/gio.h>
 #endif
 
-// Cut/paste from vcl/inc/svids.hrc
+
 #define SV_ICON_SMALL_START                 25000
 
 #define SV_ICON_ID_OFFICE                       1
@@ -91,8 +91,8 @@ static void systray_disable_cb()
 static void exit_quickstarter_cb( GtkWidget * )
 {
     plugin_shutdown_sys_tray();
-    //terminate may cause this .so to be unloaded. So we must be hands off
-    //all calls into this .so after this call
+    
+    
     ShutdownIcon::terminateDesktop();
 }
 
@@ -189,7 +189,7 @@ static void add_item( GtkMenuShell *pMenuShell, const char *pAsciiURL,
     gtk_menu_shell_append( pMenuShell, pMenuItem );
 }
 
-// Unbelievably nasty
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::lang;
@@ -343,9 +343,9 @@ static gboolean display_menu_cb( GtkWidget *,
 static void notify_file_changed(GFileMonitor * /*gfilemonitor*/, GFile * /*arg1*/,
     GFile * /*arg2*/, GFileMonitorEvent event_type, gpointer /*user_data*/)
 {
-    //Shutdown the quick starter if anything has happened to make it unsafe
-    //to remain running, e.g. rpm --erased and all libs deleted, or
-    //rpm --upgrade and libs being overwritten
+    
+    
+    
     switch (event_type)
     {
         case G_FILE_MONITOR_EVENT_DELETED:
@@ -392,7 +392,7 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
     g_signal_connect (pMenu, "deactivate",
                       G_CALLBACK (menu_deactivate_cb), NULL);
 
-    // disable shutdown
+    
     pShutdownIcon->SetVeto( true );
     pShutdownIcon->addTerminateListener();
 
@@ -436,6 +436,6 @@ void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
     pDisableMenuItem = NULL;
 }
 
-#endif // ENABLE_QUICKSTART_APPLET
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

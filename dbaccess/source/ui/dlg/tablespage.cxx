@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tablespage.hxx"
@@ -70,7 +70,7 @@ namespace dbaui
     using namespace ::dbtools;
     using namespace ::comphelper;
 
-    // OTableSubscriptionPage
+    
     OTableSubscriptionPage::OTableSubscriptionPage(Window* pParent, const SfxItemSet& _rCoreAttrs,
         OTableSubscriptionDialog* _pTablesDlg)
         : OGenericAdministrationPage(pParent, "TablesFilterPage",
@@ -86,7 +86,7 @@ namespace dbaui
 
         m_pTablesList->SetCheckHandler(getControlModifiedLink());
 
-        // initialize the TabListBox
+        
         m_pTablesList->SetSelectionMode( MULTIPLE_SELECTION );
         m_pTablesList->SetDragDropMode( 0 );
         m_pTablesList->EnableInplaceEditing( false );
@@ -100,7 +100,7 @@ namespace dbaui
 
     OTableSubscriptionPage::~OTableSubscriptionPage()
     {
-        // just to make sure that our connection will be removed
+        
         try
         {
             ::comphelper::disposeComponent(m_xCurrentConnection);
@@ -115,7 +115,7 @@ namespace dbaui
 
         if ( nType == STATE_CHANGE_CONTROLBACKGROUND )
         {
-            // Check if we need to get new images for normal/high contrast mode
+            
             m_pTablesList->notifyHiContrastChanged();
         }
     }
@@ -127,7 +127,7 @@ namespace dbaui
             ( rDCEvt.GetType() == DATACHANGED_DISPLAY   ))  &&
             ( rDCEvt.GetFlags() & SETTINGS_STYLE        ))
         {
-            // Check if we need to get new images for normal/high contrast mode
+            
             m_pTablesList->notifyHiContrastChanged();
         }
     }
@@ -145,7 +145,7 @@ namespace dbaui
     }
     void OTableSubscriptionPage::implCheckTables(const Sequence< OUString >& _rTables)
     {
-        // the meta data for the current connection, used for splitting up table names
+        
         Reference< XDatabaseMetaData > xMeta;
         try
         {
@@ -157,10 +157,10 @@ namespace dbaui
             OSL_FAIL("OTableSubscriptionPage::implCheckTables : could not retrieve the current connection's meta data!");
         }
 
-        // uncheck all
+        
         CheckAll(sal_False);
 
-        // check the ones which are in the list
+        
         OUString sCatalog, sSchema, sName;
 
         SvTreeListEntry* pRootEntry = m_pTablesList->getAllObjectsEntry();
@@ -178,10 +178,10 @@ namespace dbaui
             bAllTables = (1 == sName.getLength()) && ('%' == sName[0]);
             bAllSchemas = (1 == sSchema.getLength()) && ('%' == sSchema[0]);
 
-            // the catalog entry
+            
             SvTreeListEntry* pCatalog = m_pTablesList->GetEntryPosByName(sCatalog, pRootEntry);
             if (!(pCatalog || sCatalog.isEmpty()))
-                // the table (resp. its catalog) refered in this filter entry does not exist anymore
+                
                 continue;
 
             if (bAllSchemas && pCatalog)
@@ -190,10 +190,10 @@ namespace dbaui
                 continue;
             }
 
-            // the schema entry
+            
             SvTreeListEntry* pSchema = m_pTablesList->GetEntryPosByName(sSchema, (pCatalog ? pCatalog : pRootEntry));
             if (!(pSchema || sSchema.isEmpty()))
-                // the table (resp. its schema) refered in this filter entry does not exist anymore
+                
                 continue;
 
             if (bAllTables && pSchema)
@@ -212,13 +212,13 @@ namespace dbaui
     void OTableSubscriptionPage::implCompleteTablesCheck( const ::com::sun::star::uno::Sequence< OUString >& _rTableFilter )
     {
         if (!_rTableFilter.getLength())
-        {   // no tables visible
+        {   
             CheckAll(sal_False);
         }
         else
         {
             if ((1 == _rTableFilter.getLength()) && _rTableFilter[0] == "%")
-            {   // all tables visible
+            {   
                 CheckAll(sal_True);
             }
             else
@@ -228,19 +228,19 @@ namespace dbaui
 
     void OTableSubscriptionPage::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
-        // check whether or not the selection is invalid or readonly (invalid implies readonly, but not vice versa)
+        
         sal_Bool bValid, bReadonly;
         getFlags(_rSet, bValid, bReadonly);
 
-        // get the name of the data source we're working for
+        
         SFX_ITEMSET_GET(_rSet, pNameItem, SfxStringItem, DSID_NAME, true);
         OSL_ENSURE(pNameItem, "OTableSubscriptionPage::implInitControls: missing the name attribute!");
         OUString sDSName = pNameItem->GetValue();
 
         if (bValid && !sDSName.isEmpty() && !m_xCurrentConnection.is() )
-        {   // get the current table list from the connection for the current settings
+        {   
 
-            // the PropertyValues for the current dialog settings
+            
             Sequence< PropertyValue > aConnectionParams;
             OSL_ENSURE(m_pTablesDlg, "OTableSubscriptionPage::implInitControls: need a parent dialog doing the translation!");
             if ( m_pTablesDlg )
@@ -255,7 +255,7 @@ namespace dbaui
 
             if (!m_xCollator.is())
             {
-                // the collator for the string compares
+                
                 try
                 {
                     m_xCollator = Collator::create(m_xORB);
@@ -267,9 +267,9 @@ namespace dbaui
                 }
             }
 
-            // fill the table list with this connection information
+            
             SQLExceptionInfo aErrorInfo;
-            // the current DSN
+            
             OUString sURL;
             if ( m_pTablesDlg )
                 sURL = m_pTablesDlg->getConnectionURL();
@@ -321,7 +321,7 @@ namespace dbaui
 
             if (aErrorInfo.isValid())
             {
-                // establishing the connection failed. Show an error window and exit.
+                
                 OSQLMessageBox aMessageBox( GetParentDialog(), aErrorInfo );
                 aMessageBox.Execute();
                 m_pTables->Enable(false);
@@ -335,9 +335,9 @@ namespace dbaui
             }
             else
             {
-                // in addition, we need some infos about the connection used
-                m_sCatalogSeparator = ".";    // (default)
-                m_bCatalogAtStart = sal_True;   // (default)
+                
+                m_sCatalogSeparator = ".";    
+                m_bCatalogAtStart = sal_True;   
                 try
                 {
                     Reference< XDatabaseMetaData > xMeta;
@@ -359,7 +359,7 @@ namespace dbaui
         bValid = bValid && m_xCurrentConnection.is();
         bReadonly = bReadonly || !bValid;
 
-        // get the current table filter
+        
         SFX_ITEMSET_GET(_rSet, pTableFilter, OStringListItem, DSID_TABLEFILTER, true);
         Sequence< OUString > aTableFilter;
         if (pTableFilter)
@@ -367,7 +367,7 @@ namespace dbaui
 
         implCompleteTablesCheck( aTableFilter );
 
-        // expand the first entry by default
+        
         SvTreeListEntry* pExpand = m_pTablesList->getAllObjectsEntry();
         while (pExpand)
         {
@@ -377,7 +377,7 @@ namespace dbaui
                 pExpand = NULL;
         }
 
-        // update the toolbox according the current selection and check state
+        
         OGenericAdministrationPage::implInitControls(_rSet, _bSaveValue);
     }
 
@@ -399,7 +399,7 @@ namespace dbaui
     {
         int nResult = OGenericAdministrationPage::DeactivatePage(_pSet);
 
-        // dispose the connection, we don't need it anymore, so we're not wasting resources
+        
         try
         {
             ::comphelper::disposeComponent(m_xCurrentConnection);
@@ -425,7 +425,7 @@ namespace dbaui
         OUString sLeftText = pLeftTextItem->GetText();
         OUString sRightText = pRightTextItem->GetText();
 
-        sal_Int32 nCompareResult = 0;   // equal by default
+        sal_Int32 nCompareResult = 0;   
 
         if (m_xCollator.is())
         {
@@ -438,7 +438,7 @@ namespace dbaui
             }
         }
         else
-            // default behaviour if we do not have a collator -> do the simple string compare
+            
             nCompareResult = sLeftText.compareTo(sRightText);
 
         return nCompareResult;
@@ -463,26 +463,26 @@ namespace dbaui
             SvTreeListEntry* pCatalog = NULL;
 
             if (m_pTablesList->GetCheckButtonState(pEntry) == SV_BUTTON_CHECKED && !m_pTablesList->GetModel()->HasChildren(pEntry))
-            {   // checked and a leaf, which means it's no catalog, no schema, but a real table
+            {   
                 OUString sCatalog;
                 if(m_pTablesList->GetModel()->HasParent(pEntry))
                 {
                     pSchema = m_pTablesList->GetModel()->GetParent(pEntry);
                     if (pAllObjectsEntry == pSchema)
-                        // do not want to have the root entry
+                        
                         pSchema = NULL;
 
                     if (pSchema)
-                    {   // it's a real schema entry, not the "all objects" root
+                    {   
                         if(m_pTablesList->GetModel()->HasParent(pSchema))
                         {
                             pCatalog = m_pTablesList->GetModel()->GetParent(pSchema);
                             if (pAllObjectsEntry == pCatalog)
-                                // do not want to have the root entry
+                                
                                 pCatalog = NULL;
 
                             if (pCatalog)
-                            {   // it's a real catalog entry, not the "all objects" root
+                            {   
                                 bCatalogWildcard = m_pTablesList->isWildcardChecked(pCatalog);
                                 if (m_bCatalogAtStart)
                                 {
@@ -516,13 +516,13 @@ namespace dbaui
                 if (!m_bCatalogAtStart && !bCatalogWildcard)
                     sComposedName += sCatalog;
 
-                // need some space
+                
                 sal_Int32 nOldLen = aTableFilter.getLength();
                 aTableFilter.realloc(nOldLen + 1);
-                // add the new name
+                
                 aTableFilter[nOldLen] = sComposedName;
 
-                // reset the composed name
+                
                 sComposedName = "";
             }
 
@@ -555,12 +555,12 @@ namespace dbaui
         getFlags(_rCoreAttrs, bValid, bReadonly);
 
         if (!bValid || bReadonly)
-            // don't store anything if the data we're working with is invalid or readonly
+            
             return sal_True;
 
-        // create the output string which contains all the table names
+        
         if ( m_xCurrentConnection.is() )
-        {   // collect the table filter data only if we have a connection - else no tables are displayed at all
+        {   
             Sequence< OUString > aTableFilter;
             if (m_pTablesList->isWildcardChecked(m_pTablesList->getAllObjectsEntry()))
             {
@@ -585,6 +585,6 @@ namespace dbaui
     {
         _rControlList.push_back(new ODisableWrapper<VclContainer>(m_pTables));
     }
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

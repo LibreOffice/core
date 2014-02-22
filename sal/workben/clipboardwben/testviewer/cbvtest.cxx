@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// TestWin32.cpp : Defines the entry point for the application.
+
 //
 
 #define _WIN32_DCOM
@@ -41,17 +41,17 @@
 
 #define MAX_LOADSTRING 100
 
-// Global variables:
-HINSTANCE           g_hInst;                        // current instance
+
+HINSTANCE           g_hInst;                        
 HWND                g_hwndMain;
-WCHAR               szTitle[MAX_LOADSTRING];            // Text for title
-WCHAR               szWindowClass[MAX_LOADSTRING];  // Text for title
+WCHAR               szTitle[MAX_LOADSTRING];            
+WCHAR               szWindowClass[MAX_LOADSTRING];  
 LPSTREAM            g_pStm    = NULL;
 char*               pTextBuff = NULL;
 DWORD               lData     = 0;
 UINT                g_nCBChanges = 0;
 
-// forward declaration
+
 ATOM  MyRegisterClass( HINSTANCE hInstance );
 BOOL  InitInstance( HINSTANCE, int );
 HMENU GetSubMenuHandle( HWND hwndParent, UINT uiTopLevelIndex );
@@ -65,33 +65,33 @@ void    CALLBACK OnClipboardContentChange( void );
 LRESULT CALLBACK WndProc( HWND, UINT, WPARAM, LPARAM );
 LRESULT CALLBACK About( HWND, UINT, WPARAM, LPARAM );
 
-//----------------------------------------------------
-// WinMain
-//----------------------------------------------------
+
+
+
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow )
 {
-    // TODO: Add code here.
+    
     MSG     msg;
     HACCEL  hAccelTable;
     HRESULT hr = E_FAIL;
 
-    // it's important to initialize ole
-    // in order to use the clipboard
-    //hr = OleInitialize( NULL );
+    
+    
+    
     hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
 
     g_hInst = hInstance;
 
-    // Initialize global strings
+    
     LoadStringW(g_hInst, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(g_hInst, IDC_TESTWIN32, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(g_hInst);
 
-    // Initialization of the applications to carry out
+    
     if( !InitInstance( g_hInst, nCmdShow ) )
     {
         return FALSE;
@@ -99,7 +99,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_TESTWIN32);
 
-    // Main message loop:
+    
     while( GetMessage(&msg, NULL, 0, 0) )
     {
         if( !TranslateAccelerator (msg.hwnd, hAccelTable, &msg) )
@@ -109,8 +109,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         }
     }
 
-    // uninitializing the ole libraries
-    //OleUninitialize( );
+    
+    
     CoUninitialize( );
 
     return msg.wParam;
@@ -119,15 +119,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 
 //
-//  FUNCTION: MyRegisterClass()
+
 //
-//  PURPOSE: Registers the window class.
+
 //
-//  COMMENTS:
-//    This function and its usage are only necessary if this code
-//    needs to be compatible with Win32 systems prior to 'RegisterClassEx'
-//    function, which was added to Windows 95. If it important to call
-//    this function to allow the use of small icons in the correct proportions.
+
+
+
+
+
 //
 ATOM MyRegisterClass( HINSTANCE hInstance )
 {
@@ -151,13 +151,13 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 }
 
 //
-//   FUNKTION: InitInstance(HANDLE, int)
+
 //
-//   PURPOSE: Saves instance access number and creates main window
+
 //
-//   Comments:
-//        In this function, the instance access number is stored in a global variable
-//        and the main program window is displayed.
+
+
+
 //
 
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
@@ -177,15 +177,15 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 }
 
 //
-//  FUNKTION: WndProc(HWND, unsigned, WORD, LONG)
+
 //
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
+
 //
-//  PURPOSE: Processes messages for the main window.
+
 //
-//  WM_COMMAND  - Handle application menu
-//  WM_PAINT    - Display main windows
-//  WM_DESTROY  - Output completion message and return
+
+
+
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -205,7 +205,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case WM_COMMAND:
             wmId    = LOWORD(wParam);
-            // Analyze menu selections:
+            
             switch( wmId )
             {
                 case IDD_CBVIEWER:
@@ -224,7 +224,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case WM_PAINT:
             hdc = BeginPaint (hWnd, &ps);
-            // TODO: Add any code for drawing
+            
             RECT rt;
             GetClientRect( hWnd, &rt );
 
@@ -293,7 +293,7 @@ void RegisterClipboardViewer( BOOL bRegister )
 {
     if ( bRegister )
         MTARegisterClipboardViewer( OnClipboardContentChange );
-    else // unregister
+    else 
         MTARegisterClipboardViewer( NULL );
 
     InvalidateRect( g_hwndMain, NULL, TRUE );
@@ -328,7 +328,7 @@ void ClearClipboardContent( HWND hWnd )
     }
 }
 
-// clipboard viewer callback function
+
 void CALLBACK OnClipboardContentChange( void )
 {
     ++g_nCBChanges;

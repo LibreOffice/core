@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/frame/XConfigManager.hpp>
@@ -102,7 +102,7 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog(Window* pParent,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, PushButton *, pButton )
 {
@@ -141,7 +141,7 @@ IMPL_LINK(XMLFilterSettingsDialog, ClickHdl_Impl, PushButton *, pButton )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl)
 {
@@ -149,7 +149,7 @@ IMPL_LINK_NOARG(XMLFilterSettingsDialog, SelectionChangedHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(XMLFilterSettingsDialog, DoubleClickHdl_Impl)
 {
@@ -162,7 +162,7 @@ bool XMLFilterSettingsDialog::isClosable()
     return m_bIsClosable;
 }
 
-// -----------------------------------------------------------------------
+
 
 short XMLFilterSettingsDialog::Execute()
 {
@@ -175,7 +175,7 @@ short XMLFilterSettingsDialog::Execute()
     return ModelessDialog::Execute();
 }
 
-// -----------------------------------------------------------------------
+
 
 void XMLFilterSettingsDialog::updateStates()
 {
@@ -209,48 +209,48 @@ void XMLFilterSettingsDialog::updateStates()
     m_pPBSave->Enable( bHasSelection );
 }
 
-// -----------------------------------------------------------------------
+
 
 /** is called when the user clicks on the "New" button */
 void XMLFilterSettingsDialog::onNew()
 {
     filter_info_impl aTempInfo;
 
-    // create a unique filter name
+    
     aTempInfo.maFilterName = createUniqueFilterName(RESIDSTR(STR_DEFAULT_FILTER_NAME));
 
-    // init default extension
+    
     OUString aDefaultExtension(RESIDSTR(STR_DEFAULT_EXTENSION));
     aTempInfo.maExtension = aDefaultExtension;
 
-    // set default ui name
+    
     aTempInfo.maInterfaceName = createUniqueInterfaceName(RESIDSTR(STR_DEFAULT_UI_NAME));
 
-    // set default application
+    
     aTempInfo.maDocumentService = "com.sun.star.text.TextDocument";
 
-    // execute XML Filter Dialog
+    
     XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxContext, &aTempInfo );
     if ( aDlg.Execute() == RET_OK )
     {
-        // insert the new filter
+        
         insertOrEdit( aDlg.getNewFilterInfo() );
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 /** is called when the user clicks on the "Edit" Button */
 void XMLFilterSettingsDialog::onEdit()
 {
-    // get selected filter entry
+    
     SvTreeListEntry* pEntry = m_pFilterListBox->FirstSelected();
     if( pEntry )
     {
-        // get its filter info
+        
         filter_info_impl* pOldInfo = (filter_info_impl*)pEntry->GetUserData();
 
-        // execute XML Filter Dialog
+        
         XMLFilterTabDialog aDlg( this, *getXSLTDialogResMgr(), mxContext, pOldInfo );
         if ( aDlg.Execute() == RET_OK )
         {
@@ -258,29 +258,29 @@ void XMLFilterSettingsDialog::onEdit()
 
             if( !(*pOldInfo == *pNewInfo) )
             {
-                // change filter
+                
                 insertOrEdit( pNewInfo, pOldInfo );
             }
         }
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 /** helper to create a sequence of strings from an extensions strings
     "ext1;ext2;ext3" will become { "ext1", "ext2", "ext3" } */
 static Sequence< OUString > createExtensionsSequence( const OUString& rExtensions )
 {
-    // first count how many extensions we have inside the string
+    
     int nExtensions = 0;
 
     int nLength = rExtensions.getLength();
     if( nLength )
     {
-        // a non empty string has at least one extension
+        
         nExtensions++;
 
-        // now count the delimiters ';'
+        
         const sal_Unicode * pString = rExtensions.getStr();
         int i;
         for( i = 0; i < nLength; i++, pString++ )
@@ -292,7 +292,7 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
 
     Sequence< OUString > aExtensions( nExtensions );
 
-    // extract the extensions from the source string and fill the sequence
+    
 
     int nLastIndex = 0;
     int nCurrentIndex = 0;
@@ -318,7 +318,7 @@ static Sequence< OUString > createExtensionsSequence( const OUString& rExtension
     return aExtensions;
 }
 
-// -----------------------------------------------------------------------
+
 
 /** checks if the given name is unique inside the filter factory. If not,
     numbers are added until the returned name is unique */
@@ -339,7 +339,7 @@ OUString XMLFilterSettingsDialog::createUniqueFilterName( const OUString& rFilte
     return aFilterName;
 }
 
-// -----------------------------------------------------------------------
+
 
 /** checks if the given name is unique inside the type detection. If not,
     numbers are added until the returned name is unique */
@@ -393,11 +393,11 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
                     pValues->Value >>= aInterfaceName;
 
 
-                    // see if this filter matches our default filter name
+                    
                     if( aInterfaceName.match( rInterfaceName ) )
                     {
-                        // if yes, make sure we generate a unique name with a higher number
-                        // this is dump but fast
+                        
+                        
                         sal_Int32 nNumber = aInterfaceName.copy( rInterfaceName.getLength() ).toInt32();
                         if( nNumber >= nDefaultNumber )
                             nDefaultNumber = nNumber + 1;
@@ -420,7 +420,7 @@ OUString XMLFilterSettingsDialog::createUniqueInterfaceName( const OUString& rIn
     return aInterfaceName;
 }
 
-// -----------------------------------------------------------------------
+
 
 /** inserts a new filter into the ui and configuration if pOldInfo is NULL.
     If pOldInfo is not null, the old filter will be replaced with the new settings */
@@ -430,7 +430,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
     if( pOldInfo )
     {
-        // see if we need to update the type name
+        
         if( pOldInfo->maFilterName != pNewInfo->maFilterName )
         {
             if( pOldInfo->maType == pOldInfo->maFilterName )
@@ -439,14 +439,14 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             }
         }
 
-        // see if we need to clean up old stuff first
+        
         try
         {
-            // if filter name changed, we need to remove the old filter first
+            
             if( pOldInfo->maFilterName != pNewInfo->maFilterName )
                 mxFilterContainer->removeByName( pOldInfo->maFilterName );
 
-            // if type name changed, we need to remove the old type first
+            
             if( pOldInfo->maType != pNewInfo->maType )
                 mxTypeDetection->removeByName( pOldInfo->maType );
         }
@@ -461,21 +461,21 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
     if( bOk )
     {
-        // create or copy filter info
+        
         if( pOldInfo )
         {
-            // change existing filter entry in filter list box
+            
             pFilterEntry = const_cast<filter_info_impl*>(pOldInfo);
             *pFilterEntry = *pNewInfo;
         }
         else
         {
-            // add new entry to filter list box
+            
             pFilterEntry = new filter_info_impl( *pNewInfo );
         }
     }
 
-    // check if we need to copy the template
+    
     if( !pFilterEntry->maImportTemplate.isEmpty() )
     {
         if( !pFilterEntry->maImportTemplate.matchIgnoreAsciiCase( m_sTemplatePath ) )
@@ -508,7 +508,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             pFilterEntry->maType = createUniqueTypeName( pNewInfo->maFilterName );
         }
 
-        // update import/export flags
+        
         if( !pFilterEntry->maImportXSLT.isEmpty() )
         {
             pFilterEntry->maFlags |= 1;
@@ -528,10 +528,10 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
         pFilterEntry->maFlags |= 0x80040;
 
-        // 2. create user data for filter entry
+        
         Sequence< OUString > aUserData( pFilterEntry->getFilterUserData());
 
-        // 3. create property values for filter entry
+        
         Sequence< PropertyValue > aFilterData( 8 );
 
         aFilterData[0].Name = "Type";
@@ -558,7 +558,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         aFilterData[7].Name = "TemplateName";
         aFilterData[7].Value <<= pFilterEntry->maImportTemplate;
 
-        // 4. insert new or replace existing filter
+        
         try
         {
             Any aAny( makeAny( aFilterData ) );
@@ -578,7 +578,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
     }
 
-    // 5. prepare type information
+    
     if( bOk )
     {
         Sequence< PropertyValue > aValues(4);
@@ -607,7 +607,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         aValues[3].Name = "Extensions";
         aValues[3].Value <<= createExtensionsSequence( pFilterEntry->maExtension );
 
-        // the detect service will only be registered, if a doctype/search token was specified
+        
         if (aDocType.getLength() > m_sDocTypePrefix.getLength())
         {
             aValues.realloc(5);
@@ -615,7 +615,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
             aValues[4].Value <<= OUString( "com.sun.star.comp.filters.XMLFilterDetect" );
         }
 
-        // 6. insert new or replace existing type information
+        
         if( mxTypeDetection.is() )
         {
             try
@@ -654,7 +654,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
         if( !bOk )
         {
-            // we failed to add the type, so lets remove the filter
+            
             try
             {
                 mxFilterContainer->removeByName( pFilterEntry->maFilterName );
@@ -683,7 +683,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
 
                 if( !bOk )
                 {
-                    // we failed to add the filter, so lets remove the type
+                    
                     try
                     {
                         mxTypeDetection->removeByName( pFilterEntry->maType );
@@ -748,7 +748,7 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
         }
     }
 
-    // update ui
+    
     if( bOk )
     {
         if( pOldInfo )
@@ -765,12 +765,12 @@ bool XMLFilterSettingsDialog::insertOrEdit( filter_info_impl* pNewInfo, const fi
     return bOk;
 }
 
-// -----------------------------------------------------------------------
+
 
 /** is called when the user clicks the "Test" button */
 void XMLFilterSettingsDialog::onTest()
 {
-    // get the first selected filter
+    
     SvTreeListEntry* pEntry = m_pFilterListBox->FirstSelected();
     if( pEntry )
     {
@@ -781,7 +781,7 @@ void XMLFilterSettingsDialog::onTest()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void XMLFilterSettingsDialog::onDelete()
 {
@@ -805,7 +805,7 @@ void XMLFilterSettingsDialog::onDelete()
 
                     bool bTypeStillUsed = false;
 
-                    // now loop over all filter and see if someone else uses the same type
+                    
                     Sequence< OUString > aFilterNames( mxFilterContainer->getElementNames() );
                     OUString* pFilterName = aFilterNames.getArray();
 
@@ -837,7 +837,7 @@ void XMLFilterSettingsDialog::onDelete()
                         }
                     }
 
-                    // if the type is not used anymore, remove it also
+                    
                     if( !bTypeStillUsed )
                     {
                         if( mxTypeDetection->hasByName( pInfo->maType ) )
@@ -854,10 +854,10 @@ void XMLFilterSettingsDialog::onDelete()
                     if( xFlushable.is() )
                         xFlushable->flush();
 
-                    // now remove entry from ui
+                    
                     m_pFilterListBox->RemoveSelection();
 
-                    // and delete the filter entry
+                    
                     maFilterVector.erase(std::find( maFilterVector.begin(), maFilterVector.end(), pInfo ));
 
                     delete pInfo;
@@ -873,7 +873,7 @@ void XMLFilterSettingsDialog::onDelete()
     updateStates();
 }
 
-// -----------------------------------------------------------------------
+
 
 void XMLFilterSettingsDialog::onSave()
 {
@@ -890,7 +890,7 @@ void XMLFilterSettingsDialog::onSave()
         nFilters++;
     }
 
-    // Open Fileopen-Dialog
+    
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION,
         0 );
@@ -929,13 +929,13 @@ void XMLFilterSettingsDialog::onSave()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void XMLFilterSettingsDialog::onOpen()
 {
     XMLFilterVector aFilters;
 
-    // Open Fileopen-Dialog
+    
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
 
@@ -995,7 +995,7 @@ void XMLFilterSettingsDialog::onOpen()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void XMLFilterSettingsDialog::onClose()
 {
@@ -1004,7 +1004,7 @@ void XMLFilterSettingsDialog::onClose()
 
 bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
 {
-    // Because of of tab control first call the base class.
+    
     bool nRet = ModelessDialog::Notify( rNEvt );
     if ( !nRet )
     {
@@ -1026,7 +1026,7 @@ bool XMLFilterSettingsDialog::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void XMLFilterSettingsDialog::disposeFilterList()
 {
@@ -1040,7 +1040,7 @@ void XMLFilterSettingsDialog::disposeFilterList()
     m_pFilterListBox->Clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void XMLFilterSettingsDialog::initFilterList()
 {
@@ -1114,20 +1114,20 @@ void XMLFilterSettingsDialog::initFilterList()
                     }
                 }
 
-                // if this is not a XmlFilterAdaptor entry, skip it
+                
                 if( aFilterService != "com.sun.star.comp.Writer.XmlFilterAdaptor" )
                     continue;
 
 
-                // if we don't have the needed user data, skip it
+                
                 if( aUserData.getLength() < 6 )
                     continue;
 
-                // if this is not an XSLTFilter entry, skip it
+                
                 if( aUserData[0] != "com.sun.star.documentconversion.XSLTFilter" )
                     continue;
 
-                // get filter information from userdata
+                
                 pTempFilter->mbNeedsXSLT2 = aUserData[1].toBoolean();
                 pTempFilter->maImportService = aUserData[2];
                 pTempFilter->maExportService = aUserData[3];
@@ -1136,7 +1136,7 @@ void XMLFilterSettingsDialog::initFilterList()
                 if( aUserData.getLength() >= 8 )
                     pTempFilter->maComment = aUserData[7];
 
-                // get type information
+                
                 if( mxTypeDetection.is() )
                 {
                     try
@@ -1186,7 +1186,7 @@ void XMLFilterSettingsDialog::initFilterList()
                                 }
                                 else if ( pValues2->Name == "Finalized" )
                                 {
-                                    // both the filter and the type may be finalized
+                                    
                                     sal_Bool bTemp = sal_False;
                                     pValues2->Value >>= bTemp;
                                     pTempFilter->mbReadonly |= bTemp;
@@ -1196,11 +1196,11 @@ void XMLFilterSettingsDialog::initFilterList()
                     }
                     catch( const ::com::sun::star::container::NoSuchElementException& )
                     {
-                        OSL_FAIL( "Type not found, user error?" ); // TODO: error?
+                        OSL_FAIL( "Type not found, user error?" ); 
                     }
                 }
 
-                // add entry to internal container and to ui filter list box
+                
                 maFilterVector.push_back( pTempFilter );
                 m_pFilterListBox->addFilterEntry( pTempFilter );
 
@@ -1222,9 +1222,9 @@ void XMLFilterSettingsDialog::initFilterList()
         m_pFilterListBox->Select( pEntry );
 }
 
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
 application_info_impl::application_info_impl( const sal_Char * pDocumentService, ResId& rUINameRes, const sal_Char * mpXMLImporter, const sal_Char * mpXMLExporter )
 :   maDocumentService( pDocumentService, strlen( pDocumentService ), RTL_TEXTENCODING_ASCII_US ),
@@ -1234,7 +1234,7 @@ application_info_impl::application_info_impl( const sal_Char * pDocumentService,
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 std::vector< application_info_impl* >& getApplicationInfos()
 {
@@ -1270,7 +1270,7 @@ std::vector< application_info_impl* >& getApplicationInfos()
             "com.sun.star.comp.Draw.XMLImporter",
             "com.sun.star.comp.Draw.XMLExporter" ) );
 
-        // --- oasis file formats...
+        
         ResId aResId5( STR_APPL_NAME_OASIS_WRITER, *getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.text.TextDocument",
@@ -1303,7 +1303,7 @@ std::vector< application_info_impl* >& getApplicationInfos()
     return aInfos;
 }
 
-// -----------------------------------------------------------------------
+
 
 const application_info_impl* getApplicationInfo( const OUString& rServiceName )
 {
@@ -1320,7 +1320,7 @@ const application_info_impl* getApplicationInfo( const OUString& rServiceName )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString getApplicationUIName( const OUString& rServiceName )
 {
@@ -1424,7 +1424,7 @@ XMLFilterListBox::XMLFilterListBox(SvxPathControl* pParent)
     m_pHeaderBar->Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void XMLFilterListBox::Paint( const Rectangle& rRect )
 {
@@ -1443,7 +1443,7 @@ IMPL_LINK( XMLFilterListBox, TabBoxScrollHdl_Impl, SvTabListBox*, /* pList */ )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
@@ -1474,7 +1474,7 @@ IMPL_LINK( XMLFilterListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 /** adds a new filter info entry to the ui filter list */
 void XMLFilterListBox::addFilterEntry( const filter_info_impl* pInfo )
@@ -1483,7 +1483,7 @@ void XMLFilterListBox::addFilterEntry( const filter_info_impl* pInfo )
     InsertEntryToColumn( aEntryStr, LIST_APPEND, 0xffff, (void*)pInfo );
 }
 
-// -----------------------------------------------------------------------
+
 
 void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
 {
@@ -1501,7 +1501,7 @@ void XMLFilterListBox::changeEntry( const filter_info_impl* pInfo )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
 {
@@ -1535,9 +1535,9 @@ OUString XMLFilterListBox::getEntryString( const filter_info_impl* pInfo ) const
     return aEntryStr;
 }
 
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 
 filter_info_impl::filter_info_impl()
 :   maFlags(0x00080040),
@@ -1548,7 +1548,7 @@ filter_info_impl::filter_info_impl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
     maFilterName( rInfo.maFilterName ),
@@ -1572,7 +1572,7 @@ filter_info_impl::filter_info_impl( const filter_info_impl& rInfo ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool filter_info_impl::operator==( const filter_info_impl& r ) const
 {
@@ -1594,7 +1594,7 @@ bool filter_info_impl::operator==( const filter_info_impl& r ) const
         mbNeedsXSLT2 == r.mbNeedsXSLT2;
 }
 
-// -----------------------------------------------------------------------
+
 
 Sequence< OUString > filter_info_impl::getFilterUserData() const
 {
@@ -1612,7 +1612,7 @@ Sequence< OUString > filter_info_impl::getFilterUserData() const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 OUString string_encode( const OUString & rText )
 {
@@ -1632,21 +1632,21 @@ OUString string_encode( const OUString & rText )
     return Uri::encode( rText, aCharClass, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8 );
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString string_decode( const OUString & rText )
 {
     return Uri::decode( rText, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool isFileURL( const OUString & rURL )
 {
     return rURL.startsWith("file:");
 }
 
-// -----------------------------------------------------------------------
+
 
 bool copyStreams( Reference< XInputStream > xIS, Reference< XOutputStream > xOS )
 {
@@ -1685,11 +1685,11 @@ bool copyStreams( Reference< XInputStream > xIS, Reference< XOutputStream > xOS 
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool createDirectory( OUString& rURL )
 {
-    sal_Int32 nLastIndex = sizeof( "file:///" ) - 2;
+    sal_Int32 nLastIndex = sizeof( "file:
     while( nLastIndex != -1 )
     {
         nLastIndex = rURL.indexOf( '/', nLastIndex + 1);

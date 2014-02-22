@@ -72,22 +72,22 @@ ImpSvNumberformatScan::ImpSvNumberformatScan( SvNumberFormatter* pFormatterP )
     bConvertMode = false;
     bConvertSystemToSystem = false;
     //! All keywords MUST be UPPERCASE!
-    sKeyword[NF_KEY_E] =     "E";        // Exponent
-    sKeyword[NF_KEY_AMPM] =  "AM/PM";    // AM/PM
-    sKeyword[NF_KEY_AP] =    "A/P";      // AM/PM short
-    sKeyword[NF_KEY_MI] =    "M";        // Minute
-    sKeyword[NF_KEY_MMI] =   "MM";       // Minute 02
-    sKeyword[NF_KEY_S] =     "S";        // Second
-    sKeyword[NF_KEY_SS] =    "SS";       // Second 02
-    sKeyword[NF_KEY_Q] =     "Q";        // Quarter short 'Q'
-    sKeyword[NF_KEY_QQ] =    "QQ";       // Quarter long
-    sKeyword[NF_KEY_NN] =    "NN";       // Day of week short
-    sKeyword[NF_KEY_NNN] =   "NNN";      // Day of week long
-    sKeyword[NF_KEY_NNNN] =  "NNNN";     // Day of week long incl. separator
-    sKeyword[NF_KEY_WW] =    "WW";       // Week of year
-    sKeyword[NF_KEY_CCC] =   "CCC";      // Currency abbreviation
-    bKeywordsNeedInit = true;            // locale dependent keywords
-    bCompatCurNeedInit = true;           // locale dependent compatibility currency strings
+    sKeyword[NF_KEY_E] =     "E";        
+    sKeyword[NF_KEY_AMPM] =  "AM/PM";    
+    sKeyword[NF_KEY_AP] =    "A/P";      
+    sKeyword[NF_KEY_MI] =    "M";        
+    sKeyword[NF_KEY_MMI] =   "MM";       
+    sKeyword[NF_KEY_S] =     "S";        
+    sKeyword[NF_KEY_SS] =    "SS";       
+    sKeyword[NF_KEY_Q] =     "Q";        
+    sKeyword[NF_KEY_QQ] =    "QQ";       
+    sKeyword[NF_KEY_NN] =    "NN";       
+    sKeyword[NF_KEY_NNN] =   "NNN";      
+    sKeyword[NF_KEY_NNNN] =  "NNNN";     
+    sKeyword[NF_KEY_WW] =    "WW";       
+    sKeyword[NF_KEY_CCC] =   "CCC";      
+    bKeywordsNeedInit = true;            
+    bCompatCurNeedInit = true;           
 
     StandardColor[0]  =  Color(COL_BLACK);
     StandardColor[1]  =  Color(COL_LIGHTBLUE);
@@ -117,7 +117,7 @@ void ImpSvNumberformatScan::ChangeIntl()
 {
     bKeywordsNeedInit = true;
     bCompatCurNeedInit = true;
-    // may be initialized by InitSpecialKeyword()
+    
     sKeyword[NF_KEY_TRUE] = "";
     sKeyword[NF_KEY_FALSE] = "";
 }
@@ -152,9 +152,9 @@ void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
 void ImpSvNumberformatScan::InitCompatCur() const
 {
     ImpSvNumberformatScan* pThis = (ImpSvNumberformatScan*)this;
-    // currency symbol for old style ("automatic") compatibility format codes
+    
     pFormatter->GetCompatibilityCurrency( pThis->sCurSymbol, pThis->sCurAbbrev );
-    // currency symbol upper case
+    
     pThis->sCurString = pFormatter->GetCharClass()->uppercase( sCurSymbol );
     bCompatCurNeedInit = false;
 }
@@ -174,7 +174,7 @@ static OUString lcl_extractStandardGeneralName( const OUString & rCode )
     OUString aStr;
     const sal_Unicode* p = rCode.getStr();
     const sal_Unicode* const pStop = p + rCode.getLength();
-    const sal_Unicode* pBeg = p;    // name begins here
+    const sal_Unicode* pBeg = p;    
     bool bMod = false;
     bool bDone = false;
     while (p < pStop && !bDone)
@@ -190,14 +190,14 @@ static OUString lcl_extractStandardGeneralName( const OUString & rCode )
                 bMod = false;
                 pBeg = p+1;
             }
-            // else: would be a locale data error, easily to be spotted in
-            // UI dialog
+            
+            
             break;
         case ';':
             if (!bMod)
             {
                 bDone = true;
-                --p;    // put back, increment by one follows
+                --p;    
             }
             break;
         }
@@ -221,8 +221,8 @@ void ImpSvNumberformatScan::SetDependentKeywords()
 
     const CharClass* pCharClass = pFormatter->GetCharClass();
     const LocaleDataWrapper* pLocaleData = pFormatter->GetLocaleData();
-    // #80023# be sure to generate keywords for the loaded Locale, not for the
-    // requested Locale, otherwise number format codes might not match
+    
+    
     const LanguageTag& rLoadedLocale = pLocaleData->getLoadedLanguageTag();
     LanguageType eLang = rLoadedLocale.getLanguageType( false);
     NumberFormatCodeWrapper aNumberFormatCode( pFormatter->GetComponentContext(),
@@ -232,7 +232,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     sNameStandardFormat = lcl_extractStandardGeneralName( aFormat.Code);
     sKeyword[NF_KEY_GENERAL] = pCharClass->uppercase( sNameStandardFormat );
 
-    // preset new calendar keywords
+    
     sKeyword[NF_KEY_AAA] =   "AAA";
     sKeyword[NF_KEY_AAAA] =  "AAAA";
     sKeyword[NF_KEY_EC] =    "E";
@@ -243,8 +243,8 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     sKeyword[NF_KEY_R] =     "R";
     sKeyword[NF_KEY_RR] =    "RR";
 
-    // Thai T NatNum special. Other locale's small letter 't' results in upper
-    // case comparison not matching but length does in conversion mode. Ugly.
+    
+    
     if (eLang == LANGUAGE_THAI)
     {
         sKeyword[NF_KEY_THAI_T] = "T";
@@ -261,13 +261,13 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     case LANGUAGE_GERMAN_LUXEMBOURG:
     case LANGUAGE_GERMAN_LIECHTENSTEIN:
         //! all capital letters
-        sKeyword[NF_KEY_M] =         "M";     // month 1
-        sKeyword[NF_KEY_MM] =        "MM";    // month 01
-        sKeyword[NF_KEY_MMM] =       "MMM";   // month Jan
-        sKeyword[NF_KEY_MMMM] =      "MMMM";  // month Januar
-        sKeyword[NF_KEY_MMMMM] =     "MMMMM"; // month J
-        sKeyword[NF_KEY_H] =         "H";     // hour 2
-        sKeyword[NF_KEY_HH] =        "HH";    // hour 02
+        sKeyword[NF_KEY_M] =         "M";     
+        sKeyword[NF_KEY_MM] =        "MM";    
+        sKeyword[NF_KEY_MMM] =       "MMM";   
+        sKeyword[NF_KEY_MMMM] =      "MMMM";  
+        sKeyword[NF_KEY_MMMMM] =     "MMMMM"; 
+        sKeyword[NF_KEY_H] =         "H";     
+        sKeyword[NF_KEY_HH] =        "HH";    
         sKeyword[NF_KEY_D] =         "T";
         sKeyword[NF_KEY_DD] =        "TT";
         sKeyword[NF_KEY_DDD] =       "TTT";
@@ -288,7 +288,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         sKeyword[NF_KEY_WHITE] =     "WEISS";
         break;
     default:
-        // day
+        
         switch ( eLang )
         {
         case LANGUAGE_ITALIAN:
@@ -297,7 +297,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_DD] = "GG";
             sKeyword[NF_KEY_DDD] = "GGG";
             sKeyword[NF_KEY_DDDD] = "GGGG";
-            // must exchange the era code, same as Xcl
+            
             sKeyword[NF_KEY_G] = "X";
             sKeyword[NF_KEY_GG] = "XX";
             sKeyword[NF_KEY_GGG] = "XXX";
@@ -325,7 +325,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_DDD] = "DDD";
             sKeyword[NF_KEY_DDDD] = "DDDD";
         }
-        // month
+        
         switch ( eLang )
         {
         case LANGUAGE_FINNISH:
@@ -342,7 +342,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_MMMM] = "MMMM";
             sKeyword[NF_KEY_MMMMM] = "MMMMM";
         }
-        // year
+        
         switch ( eLang )
         {
         case LANGUAGE_ITALIAN:
@@ -377,7 +377,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         case LANGUAGE_SPANISH_PUERTO_RICO:
             sKeyword[NF_KEY_YY] = "AA";
             sKeyword[NF_KEY_YYYY] = "AAAA";
-            // must exchange the day of week name code, same as Xcl
+            
             sKeyword[NF_KEY_AAA] =   "OOO";
             sKeyword[NF_KEY_AAAA] =  "OOOO";
             break;
@@ -394,7 +394,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_YY] = "YY";
             sKeyword[NF_KEY_YYYY] = "YYYY";
         }
-        // hour
+        
         switch ( eLang )
         {
         case LANGUAGE_DUTCH:
@@ -416,9 +416,9 @@ void ImpSvNumberformatScan::SetDependentKeywords()
             sKeyword[NF_KEY_H] = "H";
             sKeyword[NF_KEY_HH] = "HH";
         }
-        // boolean
+        
         sKeyword[NF_KEY_BOOLEAN] = "BOOLEAN";
-        // colours
+        
         sKeyword[NF_KEY_COLOR] =     "COLOR";
         sKeyword[NF_KEY_BLACK] =     "BLACK";
         sKeyword[NF_KEY_BLUE] =      "BLUE";
@@ -433,11 +433,11 @@ void ImpSvNumberformatScan::SetDependentKeywords()
         break;
     }
 
-    // boolean keyords
+    
     InitSpecialKeyword( NF_KEY_TRUE );
     InitSpecialKeyword( NF_KEY_FALSE );
 
-    // compatibility currency strings
+    
     InitCompatCur();
 }
 
@@ -489,7 +489,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
             if (bConvertMode)
             {
                 pFormatter->ChangeIntl(eNewLnge);
-                sStr = GetKeywords()[NF_KEY_COLOR] + sStr; // Color -> FARBE
+                sStr = GetKeywords()[NF_KEY_COLOR] + sStr; 
                 pFormatter->ChangeIntl(eTmpLnge);
             }
             else
@@ -515,7 +515,7 @@ Color* ImpSvNumberformatScan::GetColor(OUString& sStr)
         if (bConvertMode)
         {
             pFormatter->ChangeIntl(eNewLnge);
-            sStr = GetKeywords()[NF_KEY_FIRSTCOLOR+i]; // red -> rot
+            sStr = GetKeywords()[NF_KEY_FIRSTCOLOR+i]; 
             pFormatter->ChangeIntl(eTmpLnge);
         }
         else
@@ -531,7 +531,7 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
 {
     OUString sString = pFormatter->GetCharClass()->uppercase( sSymbol, nPos, sSymbol.getLength() - nPos );
     const NfKeywordTable & rKeyword = GetKeywords();
-    // #77026# for the Xcl perverts: the GENERAL keyword is recognized anywhere
+    
     if ( sString.startsWith( rKeyword[NF_KEY_GENERAL] ))
     {
         return NF_KEY_GENERAL;
@@ -547,10 +547,10 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
             break;
         }
     }
-    // new keywords take precedence over old keywords
+    
     if ( !bFound )
     {
-        // skip the gap of colors et al between new and old keywords and search on
+        
         i = NF_KEY_LASTKEYWORD;
         while ( i > 0 && sString.indexOf(rKeyword[i]) != 0 )
         {
@@ -558,8 +558,8 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
         }
         if ( i > NF_KEY_LASTOLDKEYWORD && sString != rKeyword[i] )
         {
-            // found something, but maybe it's something else?
-            // e.g. new NNN is found in NNNN, for NNNN we must search on
+            
+            
             short j = i - 1;
             while ( j > 0 && sString.indexOf(rKeyword[j]) != 0 )
             {
@@ -571,7 +571,7 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
             }
         }
     }
-    // The Thai T NatNum modifier during Xcl import.
+    
     if (i == 0 && bConvertMode &&
         sString[0] == 'T' &&
         eTmpLnge == LANGUAGE_ENGLISH_US &&
@@ -579,7 +579,7 @@ short ImpSvNumberformatScan::GetKeyWord( const OUString& sSymbol, sal_Int32 nPos
     {
         i = NF_KEY_THAI_T;
     }
-    return i; // 0 => not found
+    return i; 
 }
 
 /**
@@ -654,12 +654,12 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
         switch (eState)
         {
         case SsStart:
-            // Fetch any currency longer than one character and don't get
-            // confused later on by "E/" or other combinations of letters
-            // and meaningful symbols. Necessary for old automatic currency.
-            // #96158# But don't do it if we're starting a "[...]" section,
-            // for example a "[$...]" new currency symbol to not parse away
-            // "$U" (symbol) of "[$UYU]" (abbreviation).
+            
+            
+            
+            
+            
+            
             if ( nCurrPos >= 0 && sCurString.getLength() > 1 &&
                  nPos-1 + sCurString.getLength() <= rStr.getLength() &&
                  !(nPos > 1 && rStr[nPos-2] == '[') )
@@ -729,7 +729,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                     StringEqualsChar( pLoc->getTimeSep(), cToken) ||
                     StringEqualsChar( pLoc->getTime100SecSep(), cToken))
                 {
-                    // Another separator than pre-known ASCII
+                    
                     eType = NF_SYMBOLTYPE_DEL;
                     sSymbol += OUString(cToken);
                     eState = SsStop;
@@ -740,8 +740,8 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                     if ( nTmpType )
                     {
                         bool bCurrency = false;
-                        // "Automatic" currency may start with keyword,
-                        // like "R" (Rand) and 'R' (era)
+                        
+                        
                         if ( nCurrPos >= 0 &&
                              nPos-1 + sCurString.getLength() <= rStr.getLength() &&
                              sCurString.startsWith( sKeyword[nTmpType] ) )
@@ -768,13 +768,13 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                                 switch ( cNext )
                                 {
                                 case '+' :
-                                case '-' :  // E+ E- combine to one symbol
+                                case '-' :  
                                     sSymbol += OUString(cNext);
                                     eType = NF_KEY_E;
                                     nPos++;
                                     break;
                                 case '0' :
-                                case '#' :  // scientific E without sign
+                                case '#' :  
                                     eType = NF_KEY_E;
                                     break;
                                 }
@@ -816,7 +816,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                 short nTmpType = GetKeyWord( rStr, nPos-1 );
                 if ( nTmpType )
                 {
-                    // beginning of keyword, stop scan and put back
+                    
                     eType = NF_SYMBOLTYPE_STRING;
                     eState = SsStop;
                     nPos--;
@@ -832,7 +832,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                 sal_Unicode cNext;
                 switch (cToken)
                 {
-                case '/': // AM/PM, A/P
+                case '/': 
                     cNext = rStr[nPos];
                     if ( cNext == 'P' || cNext == 'p' )
                     {
@@ -849,7 +849,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
                     }
                     break;
                 }
-                // anything not recognized will stop the scan
+                
                 if ( eState != SsStop && !bDontStop )
                 {
                     eState = SsStop;
@@ -861,7 +861,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
         case SsGetStar:
             eState = SsStop;
             sSymbol += OUString(cToken);
-            nRepPos = (nPos - nStart) - 1; // everytime > 0!!
+            nRepPos = (nPos - nStart) - 1; 
             break;
         case SsGetBlank:
             eState = SsStop;
@@ -869,8 +869,8 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
             break;
         default:
             break;
-        } // of switch
-    } // of while
+        } 
+    } 
     if (eState == SsGetWord)
     {
         eType = NF_SYMBOLTYPE_STRING;
@@ -881,7 +881,7 @@ short ImpSvNumberformatScan::Next_Symbol( const OUString& rStr,
 sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
 {
     nCurrPos = -1;
-    // Do we have some sort of currency?
+    
     OUString sString = pFormatter->GetCharClass()->uppercase(rString);
     sal_Int32 nCPos = 0;
     while (nCPos >= 0)
@@ -889,31 +889,31 @@ sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
         nCPos = sString.indexOf(GetCurString(),nCPos);
         if (nCPos >= 0)
         {
-            // In Quotes?
+            
             sal_Int32 nQ = SvNumberformat::GetQuoteEnd( sString, nCPos );
             if ( nQ < 0 )
             {
                 sal_Unicode c;
                 if ( nCPos == 0 ||
                     ((c = sString[nCPos-1]) != '"'
-                            && c != '\\') ) // dm can be protected by "dm \d
+                            && c != '\\') ) 
                 {
                     nCurrPos = nCPos;
                     nCPos = -1;
                 }
                 else
                 {
-                    nCPos++; // Continue search
+                    nCPos++; 
                 }
             }
             else
             {
-                nCPos = nQ + 1; // Continue search
+                nCPos = nQ + 1; 
             }
         }
     }
     nAnzStrings = 0;
-    bool bStar = false; // Is set on detecting '*'
+    bool bStar = false; 
     Reset();
 
     sal_Int32 nPos = 0;
@@ -922,10 +922,10 @@ sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
     {
         nTypeArray[nAnzStrings] = Next_Symbol(rString, nPos, sStrArray[nAnzStrings]);
         if (nTypeArray[nAnzStrings] == NF_SYMBOLTYPE_STAR)
-        { // Monitoring the '*'
+        { 
             if (bStar)
             {
-                return nPos; // Error: double '*'
+                return nPos; 
             }
             else
             {
@@ -935,7 +935,7 @@ sal_Int32 ImpSvNumberformatScan::Symbol_Division(const OUString& rString)
         nAnzStrings++;
     }
 
-    return 0; // 0 => ok
+    return 0; 
 }
 
 void ImpSvNumberformatScan::SkipStrings(sal_uInt16& i, sal_Int32& nPos)
@@ -1064,14 +1064,14 @@ bool ImpSvNumberformatScan::IsLastBlankBeforeFrac(sal_uInt16 i)
                 res = false;
             }
         }
-        if (!bStop) // no '/'{
+        if (!bStop) 
         {
             res = false;
         }
     }
     else
     {
-        res = false; // no '/' any more
+        res = false; 
     }
     return res;
 }
@@ -1103,7 +1103,7 @@ bool ImpSvNumberformatScan::Is100SecZero( sal_uInt16 i, bool bHadDecSep )
     return (nIndexPre == NF_KEY_S || nIndexPre == NF_KEY_SS) &&
             (bHadDecSep ||
              ( i > 0 && nTypeArray[i-1] == NF_SYMBOLTYPE_STRING));
-              // SS"any"00  take "any" as a valid decimal separator
+              
 }
 
 sal_Int32 ImpSvNumberformatScan::ScanType()
@@ -1114,80 +1114,80 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
     sal_uInt16 i = 0;
     short eNewType;
     bool bMatchBracket = false;
-    bool bHaveGeneral = false; // if General/Standard encountered
+    bool bHaveGeneral = false; 
 
     SkipStrings(i, nPos);
     while (i < nAnzStrings)
     {
         if (nTypeArray[i] > 0)
-        {   // keyword
+        {   
             sal_uInt16 nIndexPre;
             sal_uInt16 nIndexNex;
             sal_Unicode cChar;
 
             switch (nTypeArray[i])
             {
-            case NF_KEY_E:                          // E
+            case NF_KEY_E:                          
                 eNewType = NUMBERFORMAT_SCIENTIFIC;
                 break;
-            case NF_KEY_AMPM:                       // AM,A,PM,P
+            case NF_KEY_AMPM:                       
             case NF_KEY_AP:
-            case NF_KEY_H:                          // H
-            case NF_KEY_HH:                         // HH
-            case NF_KEY_S:                          // S
-            case NF_KEY_SS:                         // SS
+            case NF_KEY_H:                          
+            case NF_KEY_HH:                         
+            case NF_KEY_S:                          
+            case NF_KEY_SS:                         
                 eNewType = NUMBERFORMAT_TIME;
                 break;
-            case NF_KEY_M:                          // M
-            case NF_KEY_MM:                         // MM
-                // minute or month
+            case NF_KEY_M:                          
+            case NF_KEY_MM:                         
+                
                 nIndexPre = PreviousKeyword(i);
                 nIndexNex = NextKeyword(i);
                 cChar = PreviousChar(i);
-                if (nIndexPre == NF_KEY_H   ||      // H
-                    nIndexPre == NF_KEY_HH  ||      // HH
-                    nIndexNex == NF_KEY_S   ||      // S
-                    nIndexNex == NF_KEY_SS  ||      // SS
-                    cChar == '['  )                 // [M
+                if (nIndexPre == NF_KEY_H   ||      
+                    nIndexPre == NF_KEY_HH  ||      
+                    nIndexNex == NF_KEY_S   ||      
+                    nIndexNex == NF_KEY_SS  ||      
+                    cChar == '['  )                 
                 {
                     eNewType = NUMBERFORMAT_TIME;
-                    nTypeArray[i] -= 2;             // 6 -> 4, 7 -> 5
+                    nTypeArray[i] -= 2;             
                 }
                 else
                 {
                     eNewType = NUMBERFORMAT_DATE;
                 }
                 break;
-            case NF_KEY_MMM:                        // MMM
-            case NF_KEY_MMMM:                       // MMMM
-            case NF_KEY_MMMMM:                      // MMMMM
-            case NF_KEY_Q:                          // Q
-            case NF_KEY_QQ:                         // QQ
-            case NF_KEY_D:                          // D
-            case NF_KEY_DD:                         // DD
-            case NF_KEY_DDD:                        // DDD
-            case NF_KEY_DDDD:                       // DDDD
-            case NF_KEY_YY:                         // YY
-            case NF_KEY_YYYY:                       // YYYY
-            case NF_KEY_NN:                         // NN
-            case NF_KEY_NNN:                        // NNN
-            case NF_KEY_NNNN:                       // NNNN
-            case NF_KEY_WW :                        // WW
-            case NF_KEY_AAA :                       // AAA
-            case NF_KEY_AAAA :                      // AAAA
-            case NF_KEY_EC :                        // E
-            case NF_KEY_EEC :                       // EE
-            case NF_KEY_G :                         // G
-            case NF_KEY_GG :                        // GG
-            case NF_KEY_GGG :                       // GGG
-            case NF_KEY_R :                         // R
-            case NF_KEY_RR :                        // RR
+            case NF_KEY_MMM:                        
+            case NF_KEY_MMMM:                       
+            case NF_KEY_MMMMM:                      
+            case NF_KEY_Q:                          
+            case NF_KEY_QQ:                         
+            case NF_KEY_D:                          
+            case NF_KEY_DD:                         
+            case NF_KEY_DDD:                        
+            case NF_KEY_DDDD:                       
+            case NF_KEY_YY:                         
+            case NF_KEY_YYYY:                       
+            case NF_KEY_NN:                         
+            case NF_KEY_NNN:                        
+            case NF_KEY_NNNN:                       
+            case NF_KEY_WW :                        
+            case NF_KEY_AAA :                       
+            case NF_KEY_AAAA :                      
+            case NF_KEY_EC :                        
+            case NF_KEY_EEC :                       
+            case NF_KEY_G :                         
+            case NF_KEY_GG :                        
+            case NF_KEY_GGG :                       
+            case NF_KEY_R :                         
+            case NF_KEY_RR :                        
                 eNewType = NUMBERFORMAT_DATE;
                 break;
-            case NF_KEY_CCC:                        // CCC
+            case NF_KEY_CCC:                        
                 eNewType = NUMBERFORMAT_CURRENCY;
                 break;
-            case NF_KEY_GENERAL:                    // Standard
+            case NF_KEY_GENERAL:                    
                 eNewType = NUMBERFORMAT_NUMBER;
                 bHaveGeneral = true;
                 break;
@@ -1197,7 +1197,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             }
         }
         else
-        {                                           // control character
+        {                                           
             switch ( sStrArray[i][0] )
             {
             case '#':
@@ -1209,12 +1209,12 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 {
                     if ( Is100SecZero( i, bDecSep ) )
                     {
-                        bDecSep = true;                 // subsequent 0's
+                        bDecSep = true;                 
                         eNewType = NUMBERFORMAT_TIME;
                     }
                     else
                     {
-                        return nPos;                    // Error
+                        return nPos;                    
                     }
                 }
                 else
@@ -1232,30 +1232,30 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 if ( i < nAnzStrings-1 &&
                      nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                      sStrArray[i+1][0] == '$' )
-                {   // as of SV_NUMBERFORMATTER_VERSION_NEW_CURR
+                {   
                     eNewType = NUMBERFORMAT_CURRENCY;
                     bMatchBracket = true;
                 }
                 else if ( i < nAnzStrings-1 &&
                           nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                           sStrArray[i+1][0] == '~' )
-                {   // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
+                {   
                     eNewType = NUMBERFORMAT_DATE;
                     bMatchBracket = true;
                 }
                 else
                 {
                     sal_uInt16 nIndexNex = NextKeyword(i);
-                    if (nIndexNex == NF_KEY_H   ||  // H
-                        nIndexNex == NF_KEY_HH  ||  // HH
-                        nIndexNex == NF_KEY_M   ||  // M
-                        nIndexNex == NF_KEY_MM  ||  // MM
-                        nIndexNex == NF_KEY_S   ||  // S
-                        nIndexNex == NF_KEY_SS   )  // SS
+                    if (nIndexNex == NF_KEY_H   ||  
+                        nIndexNex == NF_KEY_HH  ||  
+                        nIndexNex == NF_KEY_M   ||  
+                        nIndexNex == NF_KEY_MM  ||  
+                        nIndexNex == NF_KEY_S   ||  
+                        nIndexNex == NF_KEY_SS   )  
                         eNewType = NUMBERFORMAT_TIME;
                     else
                     {
-                        return nPos;                // Error
+                        return nPos;                
                     }
                 }
                 break;
@@ -1265,7 +1265,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             default:
                 if (pLoc->getTime100SecSep().equals(sStrArray[i]))
                 {
-                    bDecSep = true;                  // for SS,0
+                    bDecSep = true;                  
                 }
                 eNewType = NUMBERFORMAT_UNDEFINED;
                 break;
@@ -1277,10 +1277,10 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
         }
         else if (eScannedType == NUMBERFORMAT_TEXT || eNewType == NUMBERFORMAT_TEXT)
         {
-            eScannedType = NUMBERFORMAT_TEXT; // Text always remains text
+            eScannedType = NUMBERFORMAT_TEXT; 
         }
         else if (eNewType == NUMBERFORMAT_UNDEFINED)
-        { // Remains as is
+        { 
         }
         else if (eScannedType != eNewType)
         {
@@ -1292,7 +1292,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 case NUMBERFORMAT_TIME:
                     eScannedType = NUMBERFORMAT_DATETIME;
                     break;
-                case NUMBERFORMAT_FRACTION:         // DD/MM
+                case NUMBERFORMAT_FRACTION:         
                     break;
                 default:
                     if (nCurrPos >= 0)
@@ -1311,7 +1311,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 case NUMBERFORMAT_DATE:
                     eScannedType = NUMBERFORMAT_DATETIME;
                     break;
-                case NUMBERFORMAT_FRACTION:         // MM/SS
+                case NUMBERFORMAT_FRACTION:         
                     break;
                 default:
                     if (nCurrPos >= 0)
@@ -1331,7 +1331,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 case NUMBERFORMAT_TIME:
                 case NUMBERFORMAT_DATE:
                     break;
-                case NUMBERFORMAT_FRACTION:         // DD/MM
+                case NUMBERFORMAT_FRACTION:         
                     break;
                 default:
                     if (nCurrPos >= 0)
@@ -1348,7 +1348,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             case NUMBERFORMAT_PERCENT:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_NUMBER:   // Only number to percent
+                case NUMBERFORMAT_NUMBER:   
                     break;
                 default:
                     return nPos;
@@ -1357,7 +1357,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             case NUMBERFORMAT_SCIENTIFIC:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_NUMBER:   // Only number to E
+                case NUMBERFORMAT_NUMBER:   
                     break;
                 default:
                     return nPos;
@@ -1386,7 +1386,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             case NUMBERFORMAT_FRACTION:
                 switch (eNewType)
                 {
-                case NUMBERFORMAT_NUMBER:   // Only number to fraction
+                case NUMBERFORMAT_NUMBER:   
                     break;
                 default:
                     return nPos;
@@ -1396,10 +1396,10 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
                 break;
             }
         }
-        nPos = nPos + sStrArray[i].getLength(); // Position of correction
+        nPos = nPos + sStrArray[i].getLength(); 
         i++;
         if ( bMatchBracket )
-        {   // no type detection inside of matching brackets if [$...], [~...]
+        {   
             while ( bMatchBracket && i < nAnzStrings )
             {
                 if ( nTypeArray[i] == NF_SYMBOLTYPE_DEL
@@ -1416,7 +1416,7 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
             }
             if ( bMatchBracket )
             {
-                return nPos; // missing closing bracket at end of code
+                return nPos; 
             }
         }
         SkipStrings(i, nPos);
@@ -1426,13 +1426,13 @@ sal_Int32 ImpSvNumberformatScan::ScanType()
          eScannedType == NUMBERFORMAT_UNDEFINED) &&
         nCurrPos >= 0 && !bHaveGeneral)
     {
-        eScannedType = NUMBERFORMAT_CURRENCY; // old "automatic" currency
+        eScannedType = NUMBERFORMAT_CURRENCY; 
     }
     if (eScannedType == NUMBERFORMAT_UNDEFINED)
     {
         eScannedType = NUMBERFORMAT_DEFINED;
     }
-    return 0; // All is fine
+    return 0; 
 }
 
 bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType eType, const OUString& rStr )
@@ -1443,7 +1443,7 @@ bool ImpSvNumberformatScan::InsertSymbol( sal_uInt16 & nPos, svt::NfSymbolType e
     }
     if (nPos > 0 && nTypeArray[nPos-1] == NF_SYMBOLTYPE_EMPTY)
     {
-        --nPos; // reuse position
+        --nPos; 
     }
     else
     {
@@ -1472,21 +1472,21 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
          nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
          sStrArray[i+1][0] == '~' )
     {
-        // [~calendarID]
-        // as of SV_NUMBERFORMATTER_VERSION_CALENDAR
-        nPos = nPos + sStrArray[i].getLength();           // [
+        
+        
+        nPos = nPos + sStrArray[i].getLength();           
         nTypeArray[i] = NF_SYMBOLTYPE_CALDEL;
-        nPos = nPos + sStrArray[++i].getLength();         // ~
-        sStrArray[i-1] += sStrArray[i];                   // [~
+        nPos = nPos + sStrArray[++i].getLength();         
+        sStrArray[i-1] += sStrArray[i];                   
         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
         rAnzResStrings--;
         if ( ++i >= nAnzStrings )
         {
-            return -1; // error
+            return -1; 
         }
-        nPos = nPos + sStrArray[i].getLength();           // calendarID
+        nPos = nPos + sStrArray[i].getLength();           
         OUString& rStr = sStrArray[i];
-        nTypeArray[i] = NF_SYMBOLTYPE_CALENDAR;          // convert
+        nTypeArray[i] = NF_SYMBOLTYPE_CALENDAR;          
         i++;
         while ( i < nAnzStrings && sStrArray[i][0] != ']' )
         {
@@ -1505,7 +1505,7 @@ int ImpSvNumberformatScan::FinalScanGetCalendar( sal_Int32& nPos, sal_uInt16& i,
         }
         else
         {
-            return -1; // error
+            return -1; 
         }
         return 1;
     }
@@ -1516,7 +1516,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
 {
     const LocaleDataWrapper* pLoc = pFormatter->GetLocaleData();
 
-    // save values for convert mode
+    
     OUString sOldDecSep       = pFormatter->GetNumDecimalSep();
     OUString sOldThousandSep  = pFormatter->GetNumThousandSep();
     OUString sOldDateSep      = pFormatter->GetDateSep();
@@ -1528,15 +1528,15 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     sal_Unicode cOldKeyMI   = sKeyword[NF_KEY_MI][0];
     sal_Unicode cOldKeyS    = sKeyword[NF_KEY_S][0];
 
-    // If the group separator is a Non-Breaking Space (French) continue with a
-    // normal space instead so queries on space work correctly.
-    // The format string is adjusted to allow both.
-    // For output of the format code string the LocaleData characters are used.
+    
+    
+    
+    
     if ( sOldThousandSep[0] == cNonBreakingSpace && sOldThousandSep.getLength() == 1 )
     {
         sOldThousandSep = " ";
     }
-    // change locale data et al
+    
     if (bConvertMode)
     {
         pFormatter->ChangeIntl(eNewLnge);
@@ -1547,12 +1547,12 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     }
     const CharClass* pChrCls = pFormatter->GetCharClass();
 
-    sal_Int32 nPos = 0;                    // error correction position
-    sal_uInt16 i = 0;                      // symbol loop counter
-    sal_uInt16 nCounter = 0;               // counts digits
-    nAnzResStrings = nAnzStrings;          // counts remaining symbols
-    bDecSep = false;                       // reset in case already used in TypeCheck
-    bool bThaiT = false;                   // Thai T NatNum modifier present
+    sal_Int32 nPos = 0;                    
+    sal_uInt16 i = 0;                      
+    sal_uInt16 nCounter = 0;               
+    nAnzResStrings = nAnzStrings;          
+    bDecSep = false;                       
+    bool bThaiT = false;                   
     bool bTimePart = false;
 
     switch (eScannedType)
@@ -1566,7 +1566,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             case NF_SYMBOLTYPE_BLANK:
             case NF_SYMBOLTYPE_STAR:
                 break;
-            case NF_KEY_GENERAL : // #77026# "General" is the same as "@"
+            case NF_KEY_GENERAL : 
                 break;
             default:
                 if ( nTypeArray[i] != NF_SYMBOLTYPE_DEL ||
@@ -1578,7 +1578,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             }
             nPos = nPos + sStrArray[i].getLength();
             i++;
-        } // of while
+        } 
         break;
 
     case NUMBERFORMAT_NUMBER:
@@ -1588,22 +1588,22 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     case NUMBERFORMAT_FRACTION:
         while (i < nAnzStrings)
         {
-            // TODO: rechecking eScannedType is unnecessary.
-            // This switch-case is for eScannedType == NUMBERFORMAT_FRACTION anyway
-            if (eScannedType == NUMBERFORMAT_FRACTION &&        // special case
-                nTypeArray[i] == NF_SYMBOLTYPE_DEL &&           // # ### #/#
-                StringEqualsChar( sOldThousandSep, ' ' ) &&     // e.g. France or Sweden
+            
+            
+            if (eScannedType == NUMBERFORMAT_FRACTION &&        
+                nTypeArray[i] == NF_SYMBOLTYPE_DEL &&           
+                StringEqualsChar( sOldThousandSep, ' ' ) &&     
                 StringEqualsChar( sStrArray[i], ' ' ) &&
                 !bFrac                          &&
                 IsLastBlankBeforeFrac(i) )
             {
-                nTypeArray[i] = NF_SYMBOLTYPE_STRING;           // del->string
-            }                                                   // No thousands marker
+                nTypeArray[i] = NF_SYMBOLTYPE_STRING;           
+            }                                                   
 
             if (nTypeArray[i] == NF_SYMBOLTYPE_BLANK    ||
                 nTypeArray[i] == NF_SYMBOLTYPE_STAR ||
-                nTypeArray[i] == NF_KEY_CCC         ||          // CCC
-                nTypeArray[i] == NF_KEY_GENERAL )               // Standard
+                nTypeArray[i] == NF_KEY_CCC         ||          
+                nTypeArray[i] == NF_KEY_GENERAL )               
             {
                 if (nTypeArray[i] == NF_KEY_GENERAL)
                 {
@@ -1616,13 +1616,13 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
             }
-            else if (nTypeArray[i] == NF_SYMBOLTYPE_STRING ||   // No Strings or
-                     nTypeArray[i] > 0)                         // Keywords
+            else if (nTypeArray[i] == NF_SYMBOLTYPE_STRING ||   
+                     nTypeArray[i] > 0)                         
             {
                 if (eScannedType == NUMBERFORMAT_SCIENTIFIC &&
-                    nTypeArray[i] == NF_KEY_E)                  // E+
+                    nTypeArray[i] == NF_KEY_E)                  
                 {
-                    if (bExp)                                   // Double
+                    if (bExp)                                   
                     {
                         return nPos;
                     }
@@ -1642,11 +1642,11 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 else if (eScannedType == NUMBERFORMAT_FRACTION &&
                          sStrArray[i][0] == ' ')
                 {
-                    if (!bBlank && !bFrac) // Not double or after a /
+                    if (!bBlank && !bFrac) 
                     {
-                        if (bDecSep && nCounter > 0) // Decimal places
+                        if (bDecSep && nCounter > 0) 
                         {
-                            return nPos; // Error
+                            return nPos; 
                         }
                         bBlank = true;
                         nBlankPos = i;
@@ -1671,12 +1671,12 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                     if (OUString::number(sDiv.toInt32()) == sDiv)
                     {
-                        // Found a Divisor
+                        
                         while (i < j)
                         {
                             nTypeArray[i++] = NF_SYMBOLTYPE_FRAC_FDIV;
                         }
-                        i = j - 1; // Stop the loop
+                        i = j - 1; 
                         if (nCntPost)
                         {
                             nCounter = nCntPost;
@@ -1685,7 +1685,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         {
                             nCounter = nCntPre;
                         }
-                        // don't artificially increment nCntPre for forced denominator
+                        
                         if ( ( eScannedType != NUMBERFORMAT_FRACTION ) && (!nCntPre) )
                         {
                             nCntPre++;
@@ -1703,7 +1703,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             {
                 sal_Unicode cHere = sStrArray[i][0];
                 sal_Unicode cSaved = cHere;
-                // Handle not pre-known separators in switch.
+                
                 sal_Unicode cSimplified;
                 if (StringEqualsChar( pFormatter->GetNumThousandSep(), cHere))
                 {
@@ -1725,13 +1725,13 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 case '#':
                 case '0':
                 case '?':
-                    if (nThousand > 0)                  // #... #
+                    if (nThousand > 0)                  
                     {
-                        return nPos;                    // Error
+                        return nPos;                    
                     }
                     else if (bFrac && cHere == '0')
                     {
-                        return nPos;                    // Denominator is 0
+                        return nPos;                    
                     }
                     nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                     nPos = nPos + rStr.getLength();
@@ -1752,7 +1752,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     if ( bDecSep && nDecPos+1 == i &&
                          nTypeArray[nDecPos] == NF_SYMBOLTYPE_DECSEP )
                     {
-                        // "0.--"
+                        
                         nTypeArray[i] = NF_SYMBOLTYPE_DIGIT;
                         nPos = nPos + rStr.getLength();
                         i++;
@@ -1760,10 +1760,10 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         while (i < nAnzStrings &&
                                (sStrArray[i][0] == '-') )
                         {
-                            // If more than two dashes are present in
-                            // currency formats the last dash will be
-                            // interpreted literally as a minus sign.
-                            // Has to be this ugly. Period.
+                            
+                            
+                            
+                            
                             if ( eScannedType == NUMBERFORMAT_CURRENCY
                                  && rStr.getLength() >= 2 &&
                                  (i == nAnzStrings-1 ||
@@ -1792,18 +1792,18 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 case ' ':
                     if ( StringEqualsChar( sOldThousandSep, cSaved ) )
                     {
-                        // previous char with skip empty
+                        
                         sal_Unicode cPre = PreviousChar(i);
                         sal_Unicode cNext;
                         if (bExp || bBlank || bFrac)
                         {
-                            // after E, / or ' '
+                            
                             if ( !StringEqualsChar( sOldThousandSep, ' ' ) )
                             {
                                 nPos = nPos + sStrArray[i].getLength();
                                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                                 nAnzResStrings--;
-                                i++; // eat it
+                                i++; 
                             }
                             else
                             {
@@ -1812,14 +1812,14 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         }
                         else if (i > 0 && i < nAnzStrings-1   &&
                                  (cPre == '#' || cPre == '0')      &&
-                                 ((cNext = NextChar(i)) == '#' || cNext == '0')) // #,#
+                                 ((cNext = NextChar(i)) == '#' || cNext == '0')) 
                         {
                             nPos = nPos + sStrArray[i].getLength();
-                            if (!bThousand) // only once
+                            if (!bThousand) 
                             {
                                 bThousand = true;
                             }
-                            // Eat it, will be reinserted at proper grouping positions further down.
+                            
                             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                             nAnzResStrings--;
                             i++;
@@ -1827,18 +1827,18 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         else if (i > 0 && (cPre == '#' || cPre == '0')
                                  && PreviousType(i) == NF_SYMBOLTYPE_DIGIT
                                  && nThousand < FLAG_STANDARD_IN_FORMAT )
-                        {   // #,,,,
+                        {   
                             if ( StringEqualsChar( sOldThousandSep, ' ' ) )
                             {
-                                // strange, those French..
+                                
                                 bool bFirst = true;
-                                //  set a hard Non-Breaking Space or ConvertMode
+                                
                                 const OUString& rSepF = pFormatter->GetNumThousandSep();
                                 while ( i < nAnzStrings &&
                                         sStrArray[i] == sOldThousandSep &&
                                         StringEqualsChar( sOldThousandSep, NextChar(i) ) )
-                                {   // last was a space or another space
-                                    // is following => separator
+                                {   
+                                    
                                     nPos = nPos + sStrArray[i].getLength();
                                     if ( bFirst )
                                     {
@@ -1858,9 +1858,9 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 if ( i < nAnzStrings-1 &&
                                      sStrArray[i] == sOldThousandSep )
                                 {
-                                    // something following last space
-                                    // => space if currency contained,
-                                    // else separator
+                                    
+                                    
+                                    
                                     nPos = nPos + sStrArray[i].getLength();
                                     if ( (nPos <= nCurrPos &&
                                           nCurrPos < nPos + sStrArray[i+1].getLength()) ||
@@ -1903,7 +1903,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 while (i < nAnzStrings && sStrArray[i] == sOldThousandSep);
                             }
                         }
-                        else // any grsep
+                        else 
                         {
                             nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                             nPos = nPos + rStr.getLength();
@@ -1920,18 +1920,18 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                     else if ( StringEqualsChar( sOldDecSep, cSaved ) )
                     {
-                        if (bBlank || bFrac)    // . behind / or ' '
+                        if (bBlank || bFrac)    
                         {
-                            return nPos;        // error
+                            return nPos;        
                         }
-                        else if (bExp)          // behind E
+                        else if (bExp)          
                         {
                             nPos = nPos + sStrArray[i].getLength();
                             nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                             nAnzResStrings--;
-                            i++;                // eat it
+                            i++;                
                         }
-                        else if (bDecSep)       // any .
+                        else if (bDecSep)       
                         {
                             nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                             nPos = nPos + rStr.getLength();
@@ -1957,18 +1957,18 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
 
                             i++;
                         }
-                    } // of else = DecSep
-                    else // . without meaning
+                    } 
+                    else 
                     {
                         if (cSaved == ' ' &&
                             eScannedType == NUMBERFORMAT_FRACTION &&
                             StringEqualsChar( sStrArray[i], ' ' ) )
                         {
-                            if (!bBlank && !bFrac)  // no dups
-                            {                       // or behind /
-                                if (bDecSep && nCounter > 0) // dec.
+                            if (!bBlank && !bFrac)  
+                            {                       
+                                if (bDecSep && nCounter > 0) 
                                 {
-                                    return nPos; // error
+                                    return nPos; 
                                 }
                                 bBlank = true;
                                 nBlankPos = i;
@@ -2001,7 +2001,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                              (nTypeArray[i-1] != NF_SYMBOLTYPE_DIGIT &&
                               nTypeArray[i-1] != NF_SYMBOLTYPE_EMPTY) )
                         {
-                            return nPos ? nPos : 1; // /? not allowed
+                            return nPos ? nPos : 1; 
                         }
                         else if (!bFrac || (bDecSep && nCounter > 0))
                         {
@@ -2012,9 +2012,9 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                             nPos = nPos + sStrArray[i].getLength();
                             i++;
                         }
-                        else // / double or in , in the denominator
+                        else 
                         {
-                            return nPos; // Error
+                            return nPos; 
                         }
                     }
                     else
@@ -2030,21 +2030,21 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                          nTypeArray[i+1] == NF_SYMBOLTYPE_STRING &&
                          sStrArray[i+1][0] == '$' )
                     {
-                        // [$DM-xxx]
-                        // As of SV_NUMBERFORMATTER_VERSION_NEW_CURR
-                        nPos = nPos + sStrArray[i].getLength();     // [
+                        
+                        
+                        nPos = nPos + sStrArray[i].getLength();     
                         nTypeArray[i] = NF_SYMBOLTYPE_CURRDEL;
-                        nPos = nPos + sStrArray[++i].getLength();   // $
-                        sStrArray[i-1] += sStrArray[i];             // [$
+                        nPos = nPos + sStrArray[++i].getLength();   
+                        sStrArray[i-1] += sStrArray[i];             
                         nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                         nAnzResStrings--;
                         if ( ++i >= nAnzStrings )
                         {
-                            return nPos; // Error
+                            return nPos; 
                         }
-                        nPos = nPos + sStrArray[i].getLength();     // DM
+                        nPos = nPos + sStrArray[i].getLength();     
                         OUString* pStr = &sStrArray[i];
-                        nTypeArray[i] = NF_SYMBOLTYPE_CURRENCY; // convert
+                        nTypeArray[i] = NF_SYMBOLTYPE_CURRENCY; 
                         bool bHadDash = false;
                         i++;
                         while ( i < nAnzStrings && sStrArray[i][0] != ']' )
@@ -2081,7 +2081,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         }
                         else
                         {
-                            return nPos; // Error
+                            return nPos; 
                         }
                     }
                     else
@@ -2091,7 +2091,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                         i++;
                     }
                     break;
-                default: // Other Dels
+                default: 
                     if (eScannedType == NUMBERFORMAT_PERCENT && cHere == '%')
                     {
                         nTypeArray[i] = NF_SYMBOLTYPE_PERCENT;
@@ -2103,15 +2103,15 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     nPos = nPos + sStrArray[i].getLength();
                     i++;
                     break;
-                } // of switch (Del)
-            } // of else Del
+                } 
+            } 
             else
             {
                 SAL_WARN( "svl.numbers", "unknown NF_SYMBOLTYPE_..." );
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
             }
-        } // of while
+        } 
         if (eScannedType == NUMBERFORMAT_FRACTION)
         {
             if (bFrac)
@@ -2142,7 +2142,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 nCntPre = nCounter;
             }
         }
-        if (bThousand) // Expansion of grouping separators
+        if (bThousand) 
         {
             sal_uInt16 nMaxPos;
             if (bFrac)
@@ -2153,22 +2153,22 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 }
                 else
                 {
-                    nMaxPos = 0;                // no grouping
+                    nMaxPos = 0;                
                 }
             }
-            else if (bDecSep)                   // decimal separator present
+            else if (bDecSep)                   
             {
                 nMaxPos = nDecPos;
             }
-            else if (bExp)                      // 'E' exponent present
+            else if (bExp)                      
             {
                 nMaxPos = nExpPos;
             }
-            else                                // up to end
+            else                                
             {
                 nMaxPos = i;
             }
-            // Insert separators at proper positions.
+            
             sal_Int32 nCount = 0;
             utl::DigitGroupingIterator aGrouping( pLoc->getDigitGrouping());
             size_t nFirstDigitSymbol = nMaxPos;
@@ -2179,33 +2179,33 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
                 {
                     nFirstDigitSymbol = i;
-                    nCount = nCount + sStrArray[i].getLength(); // MSC converts += to int and then warns, so ...
-                    // Insert separator only if not leftmost symbol.
+                    nCount = nCount + sStrArray[i].getLength(); 
+                    
                     if (i > 0 && nCount >= aGrouping.getPos())
                     {
                         DBG_ASSERT( sStrArray[i].getLength() == 1,
                                     "ImpSvNumberformatScan::FinalScan: combined digits in group separator insertion");
                         if (!InsertSymbol( i, NF_SYMBOLTYPE_THSEP, pFormatter->GetNumThousandSep()))
                         {
-                            // nPos isn't correct here, but signals error
+                            
                             return nPos;
                         }
-                        // i may have been decremented by 1
+                        
                         nFirstDigitSymbol = i + 1;
                         nFirstGroupingSymbol = i;
                         aGrouping.advance();
                     }
                 }
             }
-            // Generated something like "string",000; remove separator again.
+            
             if (nFirstGroupingSymbol < nFirstDigitSymbol)
             {
                 nTypeArray[nFirstGroupingSymbol] = NF_SYMBOLTYPE_EMPTY;
                 nAnzResStrings--;
             }
         }
-        // Combine digits into groups to save memory (Info will be copied
-        // later, taking only non-empty symbols).
+        
+        
         for (i = 0; i < nAnzStrings; ++i)
         {
             if (nTypeArray[i] == NF_SYMBOLTYPE_DIGIT)
@@ -2219,7 +2219,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 }
             }
         }
-        break; // of NUMBERFORMAT_NUMBER
+        break; 
     case NUMBERFORMAT_DATE:
         while (i < nAnzStrings)
         {
@@ -2247,7 +2247,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 {
                     if ( nCalRet < 0  )
                     {
-                        return nPos; // error
+                        return nPos; 
                     }
                 }
                 else
@@ -2259,45 +2259,45 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 break;
             case NF_KEY_THAI_T :
                 bThaiT = true;
-                // fall thru
-            case NF_KEY_M:                          // M
-            case NF_KEY_MM:                         // MM
-            case NF_KEY_MMM:                        // MMM
-            case NF_KEY_MMMM:                       // MMMM
-            case NF_KEY_MMMMM:                      // MMMMM
-            case NF_KEY_Q:                          // Q
-            case NF_KEY_QQ:                         // QQ
-            case NF_KEY_D:                          // D
-            case NF_KEY_DD:                         // DD
-            case NF_KEY_DDD:                        // DDD
-            case NF_KEY_DDDD:                       // DDDD
-            case NF_KEY_YY:                         // YY
-            case NF_KEY_YYYY:                       // YYYY
-            case NF_KEY_NN:                         // NN
-            case NF_KEY_NNN:                        // NNN
-            case NF_KEY_NNNN:                       // NNNN
-            case NF_KEY_WW :                        // WW
-            case NF_KEY_AAA :                       // AAA
-            case NF_KEY_AAAA :                      // AAAA
-            case NF_KEY_EC :                        // E
-            case NF_KEY_EEC :                       // EE
-            case NF_KEY_G :                         // G
-            case NF_KEY_GG :                        // GG
-            case NF_KEY_GGG :                       // GGG
-            case NF_KEY_R :                         // R
-            case NF_KEY_RR :                        // RR
-                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                
+            case NF_KEY_M:                          
+            case NF_KEY_MM:                         
+            case NF_KEY_MMM:                        
+            case NF_KEY_MMMM:                       
+            case NF_KEY_MMMMM:                      
+            case NF_KEY_Q:                          
+            case NF_KEY_QQ:                         
+            case NF_KEY_D:                          
+            case NF_KEY_DD:                         
+            case NF_KEY_DDD:                        
+            case NF_KEY_DDDD:                       
+            case NF_KEY_YY:                         
+            case NF_KEY_YYYY:                       
+            case NF_KEY_NN:                         
+            case NF_KEY_NNN:                        
+            case NF_KEY_NNNN:                       
+            case NF_KEY_WW :                        
+            case NF_KEY_AAA :                       
+            case NF_KEY_AAAA :                      
+            case NF_KEY_EC :                        
+            case NF_KEY_EEC :                       
+            case NF_KEY_G :                         
+            case NF_KEY_GG :                        
+            case NF_KEY_GGG :                       
+            case NF_KEY_R :                         
+            case NF_KEY_RR :                        
+                sStrArray[i] = sKeyword[nTypeArray[i]]; 
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
-            default: // Other keywords
+            default: 
                 nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
             }
-        } // of while
-        break; // of NUMBERFORMAT_DATE
+        } 
+        break; 
     case NUMBERFORMAT_TIME:
         while (i < nAnzStrings)
         {
@@ -2342,23 +2342,23 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 case '?':
                     return nPos;
                 case '[':
-                    if (bThousand) // Double
+                    if (bThousand) 
                     {
                         return nPos;
                     }
-                    bThousand = true; // Empty for Time
+                    bThousand = true; 
                     cChar = pChrCls->uppercase(OUString(NextChar(i)))[0];
                     if ( cChar == cOldKeyH )
                     {
-                        nThousand = 1;      // H
+                        nThousand = 1;      
                     }
                     else if ( cChar == cOldKeyMI )
                     {
-                        nThousand = 2;      // M
+                        nThousand = 2;      
                     }
                     else if ( cChar == cOldKeyS )
                     {
-                        nThousand = 3;      // S
+                        nThousand = 3;      
                     }
                     else
                     {
@@ -2368,7 +2368,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     i++;
                     break;
                 case ']':
-                    if (!bThousand) // No preceding [
+                    if (!bThousand) 
                     {
                         return nPos;
                     }
@@ -2406,39 +2406,39 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
-            case NF_KEY_AMPM:                       // AM/PM
-            case NF_KEY_AP:                         // A/P
-                bExp = true;                        // Abuse for A/P
-                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+            case NF_KEY_AMPM:                       
+            case NF_KEY_AP:                         
+                bExp = true;                        
+                sStrArray[i] = sKeyword[nTypeArray[i]]; 
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
             case NF_KEY_THAI_T :
                 bThaiT = true;
-                // fall thru
-            case NF_KEY_MI:                         // M
-            case NF_KEY_MMI:                        // MM
-            case NF_KEY_H:                          // H
-            case NF_KEY_HH:                         // HH
-            case NF_KEY_S:                          // S
-            case NF_KEY_SS:                         // SS
-                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                
+            case NF_KEY_MI:                         
+            case NF_KEY_MMI:                        
+            case NF_KEY_H:                          
+            case NF_KEY_HH:                         
+            case NF_KEY_S:                          
+            case NF_KEY_SS:                         
+                sStrArray[i] = sKeyword[nTypeArray[i]]; 
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
-            default: // Other keywords
+            default: 
                 nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
             }
-        }                                       // of while
-        nCntPost = nCounter;                    // Zero counter
+        }                                       
+        nCntPost = nCounter;                    
         if (bExp)
         {
-            nCntExp = 1;                        // Remembers AM/PM
+            nCntExp = 1;                        
         }
-        break;                                 // of NUMBERFORMAT_TIME
+        break;                                 
     case NUMBERFORMAT_DATETIME:
         while (i < nAnzStrings)
         {
@@ -2456,7 +2456,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 {
                     if ( nCalRet < 0  )
                     {
-                        return nPos; // Error
+                        return nPos; 
                     }
                 }
                 else
@@ -2535,53 +2535,53 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     }
                 }
                 break;
-            case NF_KEY_AMPM:                       // AM/PM
-            case NF_KEY_AP:                         // A/P
+            case NF_KEY_AMPM:                       
+            case NF_KEY_AP:                         
                 bTimePart = true;
-                bExp = true;                        // Abuse for A/P
-                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                bExp = true;                        
+                sStrArray[i] = sKeyword[nTypeArray[i]]; 
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
-            case NF_KEY_MI:                         // M
-            case NF_KEY_MMI:                        // MM
-            case NF_KEY_H:                          // H
-            case NF_KEY_HH:                         // HH
-            case NF_KEY_S:                          // S
-            case NF_KEY_SS:                         // SS
+            case NF_KEY_MI:                         
+            case NF_KEY_MMI:                        
+            case NF_KEY_H:                          
+            case NF_KEY_HH:                         
+            case NF_KEY_S:                          
+            case NF_KEY_SS:                         
                 bTimePart = true;
-                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                sStrArray[i] = sKeyword[nTypeArray[i]]; 
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
-            case NF_KEY_M:                          // M
-            case NF_KEY_MM:                         // MM
-            case NF_KEY_MMM:                        // MMM
-            case NF_KEY_MMMM:                       // MMMM
-            case NF_KEY_MMMMM:                      // MMMMM
-            case NF_KEY_Q:                          // Q
-            case NF_KEY_QQ:                         // QQ
-            case NF_KEY_D:                          // D
-            case NF_KEY_DD:                         // DD
-            case NF_KEY_DDD:                        // DDD
-            case NF_KEY_DDDD:                       // DDDD
-            case NF_KEY_YY:                         // YY
-            case NF_KEY_YYYY:                       // YYYY
-            case NF_KEY_NN:                         // NN
-            case NF_KEY_NNN:                        // NNN
-            case NF_KEY_NNNN:                       // NNNN
-            case NF_KEY_WW :                        // WW
-            case NF_KEY_AAA :                       // AAA
-            case NF_KEY_AAAA :                      // AAAA
-            case NF_KEY_EC :                        // E
-            case NF_KEY_EEC :                       // EE
-            case NF_KEY_G :                         // G
-            case NF_KEY_GG :                        // GG
-            case NF_KEY_GGG :                       // GGG
-            case NF_KEY_R :                         // R
-            case NF_KEY_RR :                        // RR
+            case NF_KEY_M:                          
+            case NF_KEY_MM:                         
+            case NF_KEY_MMM:                        
+            case NF_KEY_MMMM:                       
+            case NF_KEY_MMMMM:                      
+            case NF_KEY_Q:                          
+            case NF_KEY_QQ:                         
+            case NF_KEY_D:                          
+            case NF_KEY_DD:                         
+            case NF_KEY_DDD:                        
+            case NF_KEY_DDDD:                       
+            case NF_KEY_YY:                         
+            case NF_KEY_YYYY:                       
+            case NF_KEY_NN:                         
+            case NF_KEY_NNN:                        
+            case NF_KEY_NNNN:                       
+            case NF_KEY_WW :                        
+            case NF_KEY_AAA :                       
+            case NF_KEY_AAAA :                      
+            case NF_KEY_EC :                        
+            case NF_KEY_EEC :                       
+            case NF_KEY_G :                         
+            case NF_KEY_GG :                        
+            case NF_KEY_GGG :                       
+            case NF_KEY_R :                         
+            case NF_KEY_RR :                        
                 bTimePart = false;
-                sStrArray[i] = sKeyword[nTypeArray[i]]; // tTtT -> TTTT
+                sStrArray[i] = sKeyword[nTypeArray[i]]; 
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
@@ -2591,19 +2591,19 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
-            default: // Other keywords
+            default: 
                 nTypeArray[i] = NF_SYMBOLTYPE_STRING;
                 nPos = nPos + sStrArray[i].getLength();
                 i++;
                 break;
             }
-        } // of while
-        nCntPost = nCounter; // decimals (100th seconds)
+        } 
+        nCntPost = nCounter; 
         if (bExp)
         {
-            nCntExp = 1; // Remembers AM/PM
+            nCntExp = 1; 
         }
-        break; // of NUMBERFORMAT_DATETIME
+        break; 
     default:
         break;
     }
@@ -2622,8 +2622,8 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
     }
     if ( bConvertMode )
     {
-        // strings containing keywords of the target locale must be quoted, so
-        // the user sees the difference and is able to edit the format string
+        
+        
         for ( i=0; i < nAnzStrings; i++ )
         {
             if ( nTypeArray[i] == NF_SYMBOLTYPE_STRING &&
@@ -2631,12 +2631,12 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             {
                 if ( bConvertSystemToSystem && eScannedType == NUMBERFORMAT_CURRENCY )
                 {
-                    // don't stringize automatic currency, will be converted
+                    
                     if ( sStrArray[i] == sOldCurSymbol )
                     {
-                        continue; // for
+                        continue; 
                     }
-                    // DM might be splitted into D and M
+                    
                     if ( sStrArray[i].getLength() < sOldCurSymbol.getLength() &&
                          pChrCls->uppercase( sStrArray[i], 0, 1 )[0] ==
                          sOldCurString[0] )
@@ -2658,7 +2658,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                                 nAnzResStrings--;
                             }
                             i = j - 1;
-                            continue; // for
+                            continue; 
                         }
                     }
                 }
@@ -2669,13 +2669,13 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                     if ( (j == 0 || rStr[j - 1] != '\\') && GetKeyWord( rStr, j ) )
                     {
                         rStr = "\"" + rStr + "\"";
-                        break; // for
+                        break; 
                     }
                 }
             }
         }
     }
-    // Concatenate strings, remove quotes for output, and rebuild the format string
+    
     rString = "";
     i = 0;
     while (i < nAnzStrings)
@@ -2692,11 +2692,11 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 if (sStrArray[i].getLength() == 2 &&
                     sStrArray[i][0] == '\\')
                 {
-                    // Unescape some simple forms of symbols even in the UI
-                    // visible string to prevent duplicates that differ
-                    // only in notation, originating from import.
-                    // e.g. YYYY-MM-DD and YYYY\-MM\-DD are identical,
-                    // but 0\ 000 0 and 0 000 0 in a French locale are not.
+                    
+                    
+                    
+                    
+                    
 
                     sal_Unicode c = sStrArray[i][1];
 
@@ -2746,11 +2746,11 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
                 }
                 if ( RemoveQuotes( sStrArray[i] ) > 0 )
                 {
-                    // update currency up to quoted string
+                    
                     if ( eScannedType == NUMBERFORMAT_CURRENCY )
                     {
-                        // dM -> DM  or  DM -> $  in old automatic
-                        // currency formats, oh my ..., why did we ever introduce them?
+                        
+                        
                         OUString aTmp( pChrCls->uppercase( sStrArray[iPos], nArrPos,
                                                            sStrArray[iPos].getLength()-nArrPos ) );
                         sal_Int32 nCPos = aTmp.indexOf( sOldCurString );
@@ -2788,11 +2788,11 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
 
             if ( i < nAnzStrings )
             {
-                i--; // enter switch on next symbol again
+                i--; 
             }
             if ( eScannedType == NUMBERFORMAT_CURRENCY && nStringPos < rString.getLength() )
             {
-                // same as above, since last RemoveQuotes
+                
                 OUString aTmp( pChrCls->uppercase( sStrArray[iPos], nArrPos,
                                                    sStrArray[iPos].getLength()-nArrPos ) );
                 sal_Int32 nCPos = aTmp.indexOf( sOldCurString );
@@ -2815,7 +2815,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
         case NF_KEY_THAI_T:
             if (bThaiT && GetNatNumModifier() == 1)
             {
-                // Remove T from format code, will be replaced with a [NatNum1] prefix.
+                
                 nTypeArray[i] = NF_SYMBOLTYPE_EMPTY;
                 nAnzResStrings--;
             }
@@ -2825,7 +2825,7 @@ sal_Int32 ImpSvNumberformatScan::FinalScan( OUString& rString )
             }
             break;
         case NF_SYMBOLTYPE_EMPTY :
-            // nothing
+            
             break;
         default:
             rString += sStrArray[i];
@@ -2857,16 +2857,16 @@ sal_Int32 ImpSvNumberformatScan::RemoveQuotes( OUString& rStr )
 
 sal_Int32 ImpSvNumberformatScan::ScanFormat( OUString& rString )
 {
-    sal_Int32 res = Symbol_Division(rString); // Lexical analysis
+    sal_Int32 res = Symbol_Division(rString); 
     if (!res)
     {
-        res = ScanType(); // Recognizing the Format type
+        res = ScanType(); 
     }
     if (!res)
     {
-        res = FinalScan( rString ); // Type dependent final analysis
+        res = FinalScan( rString ); 
     }
-    return res; // res = control position; res = 0 => Format ok
+    return res; 
 }
 
 void ImpSvNumberformatScan::CopyInfo(ImpSvNumberformatInfo* pInfo, sal_uInt16 nAnz)

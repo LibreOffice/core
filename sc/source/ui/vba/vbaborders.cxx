@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaborders.hxx"
 
@@ -38,13 +38,13 @@ using namespace ::ooo::vba::excel;
 typedef ::cppu::WeakImplHelper1<container::XIndexAccess > RangeBorders_Base;
 typedef InheritedHelperInterfaceImpl1<excel::XBorder > ScVbaBorder_Base;
 
-// #TODO sort these indexes to match the order in which Excel iterates over the
-// borders, the enumeration will match the order in this list
+
+
 static const sal_Int16 supportedIndexTable[] = {  XlBordersIndex::xlEdgeLeft, XlBordersIndex::xlEdgeTop, XlBordersIndex::xlEdgeBottom, XlBordersIndex::xlEdgeRight, XlBordersIndex::xlDiagonalDown, XlBordersIndex::xlDiagonalUp, XlBordersIndex::xlInsideVertical, XlBordersIndex::xlInsideHorizontal };
 
 const static OUString sTableBorder("TableBorder");
 
-//  Equiv widths in in 1/100 mm
+
 const static sal_Int32 OOLineThin = 35;
 const static sal_Int32 OOLineMedium = 88;
 const static sal_Int32 OOLineThick = 141;
@@ -90,8 +90,8 @@ private:
                 break;
             case XlBordersIndex::xlDiagonalDown:
             case XlBordersIndex::xlDiagonalUp:
-                // #TODO have to ignore at the momement, would be
-                // nice to investigate what we can do here
+                
+                
                 break;
             default:
                     return false;
@@ -134,15 +134,15 @@ private:
 
             case XlBordersIndex::xlDiagonalDown:
             case XlBordersIndex::xlDiagonalUp:
-                // #TODO have to ignore at the momement, would be
-                // nice to investigate what we can do here
+                
+                
                 break;
             default:
                     return false;
         }
         return true;
     }
-    ScVbaBorder(); // no impl
+    ScVbaBorder(); 
 protected:
     virtual OUString getServiceImplName()
     {
@@ -161,7 +161,7 @@ protected:
 public:
     ScVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType, ScVbaPalette& rPalette) : ScVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ), m_Palette( rPalette ) {}
 
-    // XBorder
+    
     uno::Any SAL_CALL getColor() throw (uno::RuntimeException)
     {
         table::BorderLine aBorderLine;
@@ -218,7 +218,7 @@ public:
         {
             switch ( aBorderLine.OuterLineWidth )
             {
-                case 0: // Thin = default OO thickness
+                case 0: 
                 case OOLineThin:
                     return uno::makeAny( XlBorderWeight::xlThin );
                 case OOLineMedium:
@@ -265,13 +265,13 @@ public:
 
     uno::Any SAL_CALL getLineStyle() throw (uno::RuntimeException)
     {
-        // always return xlContinuous;
+        
         return uno::makeAny( XlLineStyle::xlContinuous );
     }
     void SAL_CALL setLineStyle( const uno::Any& _linestyle ) throw (uno::RuntimeException)
     {
-        // Urk no choice but to silently ignore we don't support this attribute
-        // #TODO would be nice to support the excel line styles
+        
+        
         sal_Int32 nLineStyle = 0;
         _linestyle >>= nLineStyle;
         table::BorderLine aBorderLine;
@@ -306,7 +306,7 @@ private:
     ScVbaPalette m_Palette;
     sal_Int32 getTableIndex( sal_Int32 nConst )
     {
-        // hokay return position of the index in the table
+        
         sal_Int32 nIndexes = getCount();
         sal_Int32 realIndex = 0;
         const sal_Int16* pTableEntry = supportedIndexTable;
@@ -315,13 +315,13 @@ private:
             if ( *pTableEntry == nConst )
                 return realIndex;
         }
-        return getCount(); // error condition
+        return getCount(); 
     }
 public:
     RangeBorders(  const uno::Reference< table::XCellRange >& xRange,  const uno::Reference< uno::XComponentContext > & xContext, ScVbaPalette& rPalette ) : m_xRange( xRange ), m_xContext( xContext ), m_Palette( rPalette )
     {
     }
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         return sizeof( supportedIndexTable ) / sizeof( supportedIndexTable[0] );
@@ -389,7 +389,7 @@ ScVbaBorders::createEnumeration() throw (uno::RuntimeException)
 uno::Any
 ScVbaBorders::createCollectionObject( const css::uno::Any& aSource )
 {
-    return aSource; // its already a Border object
+    return aSource; 
 }
 
 uno::Type

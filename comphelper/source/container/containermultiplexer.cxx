@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,32 +14,32 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/containermultiplexer.hxx"
 #include "comphelper/uno3.hxx"
 #include <osl/diagnose.h>
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::container;
 
-    //=====================================================================
-    //= OContainerListener
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OContainerListener::OContainerListener(::osl::Mutex& _rMutex)
         :m_pAdapter(NULL)
         ,m_rMutex(_rMutex)
     {
     }
 
-    //---------------------------------------------------------------------
+    
     OContainerListener::~OContainerListener()
     {
         if (m_pAdapter)
@@ -49,27 +49,27 @@ namespace comphelper
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void OContainerListener::_elementInserted( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
     }
 
-    //---------------------------------------------------------------------
+    
     void OContainerListener::_elementRemoved( const ContainerEvent& ) throw(RuntimeException)
     {
     }
 
-    //---------------------------------------------------------------------
+    
     void OContainerListener::_elementReplaced( const ContainerEvent& /*_rEvent*/ ) throw(RuntimeException)
     {
     }
 
-    //---------------------------------------------------------------------
+    
     void OContainerListener::_disposing(const EventObject& ) throw( RuntimeException)
     {
     }
 
-    //------------------------------------------------------------------
+    
     void OContainerListener::setAdapter(OContainerListenerAdapter* pAdapter)
     {
         if (m_pAdapter)
@@ -87,10 +87,10 @@ namespace comphelper
         }
     }
 
-    //=====================================================================
-    //= OContainerListenerAdapter
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OContainerListenerAdapter::OContainerListenerAdapter(OContainerListener* _pListener,
             const  Reference< XContainer >& _rxContainer)
         :m_xContainer(_rxContainer)
@@ -112,12 +112,12 @@ namespace comphelper
         ::comphelper::decrement(m_refCount);
     }
 
-    //---------------------------------------------------------------------
+    
     OContainerListenerAdapter::~OContainerListenerAdapter()
     {
     }
 
-    //------------------------------------------------------------------
+    
     void OContainerListenerAdapter::dispose()
     {
         if (m_xContainer.is())
@@ -137,15 +137,15 @@ namespace comphelper
         }
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OContainerListenerAdapter::disposing( const  EventObject& _rSource) throw(RuntimeException)
     {
         if (m_pListener)
         {
-             // tell the listener
+             
             if (!locked())
                 m_pListener->_disposing(_rSource);
-            // disconnect the listener
+            
             if ( m_pListener )
                 m_pListener->setAdapter(NULL);
         }
@@ -154,29 +154,29 @@ namespace comphelper
         m_pListener = NULL;
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OContainerListenerAdapter::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException)
     {
         if (m_pListener && !locked())
             m_pListener->_elementInserted(_rEvent);
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OContainerListenerAdapter::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException)
     {
         if (m_pListener && !locked())
             m_pListener->_elementRemoved(_rEvent);
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OContainerListenerAdapter::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException)
     {
         if (m_pListener && !locked())
             m_pListener->_elementReplaced(_rEvent);
     }
 
-//.........................................................................
-}   // namespace comphelper
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

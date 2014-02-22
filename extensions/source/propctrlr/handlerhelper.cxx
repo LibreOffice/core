@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "handlerhelper.hxx"
@@ -41,10 +41,10 @@
 
 #include <algorithm>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -54,14 +54,14 @@ namespace pcr
     using namespace ::com::sun::star::script;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
-    //= PropertyHandlerHelper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     void PropertyHandlerHelper::describePropertyLine( const Property& _rProperty,
         LineDescriptor& /* [out] */ _out_rDescriptor, const Reference< XPropertyControlFactory >& _rxControlFactory )
     {
-        // display the pure property name - no L10N
+        
         _out_rDescriptor.DisplayName = _rProperty.Name;
 
         OSL_PRECOND( _rxControlFactory.is(), "PropertyHandlerHelper::describePropertyLine: no factory -> no control!" );
@@ -70,7 +70,7 @@ namespace pcr
 
         sal_Bool bReadOnlyControl = requiresReadOnlyControl( _rProperty.Attributes );
 
-        // special handling for booleans (this will become a list)
+        
         if ( _rProperty.Type.getTypeClass() == TypeClass_BOOLEAN )
         {
             ::std::vector< OUString > aListEntries;
@@ -100,18 +100,18 @@ namespace pcr
 
         default:
             OSL_FAIL( "PropertyHandlerHelper::describePropertyLine: don't know how to represent this at the UI!" );
-            // NO break!
+            
 
         case TypeClass_STRING:
             nControlType = PropertyControlType::TextField;
             break;
         }
 
-        // create a control
+        
         _out_rDescriptor.Control = _rxControlFactory->createPropertyControl( nControlType, bReadOnlyControl );
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         Reference< XPropertyControl > lcl_implCreateListLikeControl(
@@ -142,21 +142,21 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertyControl > PropertyHandlerHelper::createListBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
         return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, sal_True );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertyControl > PropertyHandlerHelper::createComboBoxControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
                 const ::std::vector< OUString >& _rInitialListEntries, sal_Bool _bReadOnlyControl, sal_Bool _bSorted )
     {
         return lcl_implCreateListLikeControl( _rxControlFactory, _rInitialListEntries, _bReadOnlyControl, _bSorted, sal_False );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertyControl > PropertyHandlerHelper::createNumericControl( const Reference< XPropertyControlFactory >& _rxControlFactory,
             sal_Int16 _nDigits, const Optional< double >& _rMinValue, const Optional< double >& _rMaxValue, sal_Bool _bReadOnlyControl )
     {
@@ -172,17 +172,17 @@ namespace pcr
         return xNumericControl.get();
     }
 
-    //--------------------------------------------------------------------
+    
     Any PropertyHandlerHelper::convertToPropertyValue( const Reference< XComponentContext >& _rxContext,const Reference< XTypeConverter >& _rxTypeConverter,
         const Property& _rProperty, const Any& _rControlValue )
     {
         Any aPropertyValue( _rControlValue );
         if ( !aPropertyValue.hasValue() )
-            // NULL is converted to NULL
+            
             return aPropertyValue;
 
         if ( aPropertyValue.getValueType().equals( _rProperty.Type ) )
-            // nothing to do, type is already as desired
+            
             return aPropertyValue;
 
         if ( _rControlValue.getValueType().getTypeClass() == TypeClass_STRING )
@@ -209,13 +209,13 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //--------------------------------------------------------------------
+    
     Any PropertyHandlerHelper::convertToControlValue( const Reference< XComponentContext >& _rxContext,const Reference< XTypeConverter >& _rxTypeConverter,
         const Any& _rPropertyValue, const Type& _rControlValueType )
     {
         Any aControlValue( _rPropertyValue );
         if ( !aControlValue.hasValue() )
-            // NULL is converted to NULL
+            
             return aControlValue;
 
         if ( _rControlValueType.getTypeClass() == TypeClass_STRING )
@@ -239,7 +239,7 @@ namespace pcr
         return aControlValue;
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyHandlerHelper::setContextDocumentModified( const Reference<XComponentContext> & _rContext )
     {
         try
@@ -275,7 +275,7 @@ namespace pcr
         return xI;
     }
 
-    //--------------------------------------------------------------------
+    
     Window* PropertyHandlerHelper::getDialogParentWindow( const Reference<XComponentContext>& _rContext )
     {
         Window* pInspectorWindow = NULL;
@@ -291,8 +291,8 @@ namespace pcr
         return pInspectorWindow;
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

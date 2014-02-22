@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -72,15 +72,15 @@ namespace
         return res;
     }
 
-    // #i98791# - adjust sorting
-    // Utility to sort SwTxtFmtColl's by their assigned outline style list level
+    
+    
     class outlinecmp : public
         std::binary_function<const SwTxtFmtColl*, const SwTxtFmtColl*, bool>
     {
     public:
         bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
         {
-            // #i98791#
+            
             bool bResult( false );
             const bool bIsAAssignedToOutlineStyle( pA->IsAssignedToListLevelOfOutlineStyle() );
             const bool bIsBAssignedToOutlineStyle( pB->IsAssignedToListLevelOfOutlineStyle() );
@@ -90,8 +90,8 @@ namespace
             }
             else if ( !bIsAAssignedToOutlineStyle )
             {
-                // pA and pB are equal regarding the sorting criteria.
-                // Thus return value does not matter.
+                
+                
                 bResult = false;
             }
             else
@@ -142,7 +142,7 @@ namespace
         return aRet;
     }
 
-    //Utility to test if a frame is anchored at a given node index
+    
     class anchoredto: public std::unary_function<const sw::Frame&, bool>
     {
     private:
@@ -158,7 +158,7 @@ namespace
 
 namespace sw
 {
-    //For i120928,size conversion before exporting graphic of bullet
+    
     Frame::Frame(const Graphic &rGrf, const SwPosition &rPos)
         : mpFlyFrm(NULL)
         , maPos(rPos)
@@ -188,12 +188,12 @@ namespace sw
         : mpFlyFrm(&rFmt)
         , maPos(rPos)
         , maSize()
-        , maLayoutSize() // #i43447#
+        , maLayoutSize() 
         , meWriterType(eTxtBox)
         , mpStartFrameContent(0)
-        // #i43447# - move to initialization list
+        
         , mbIsInline( (rFmt.GetAnchor().GetAnchorId() == FLY_AS_CHAR) )
-        // #i120928# - handle graphic of bullet within existing implementation
+        
         , mbForBullet(false)
         , maGrf()
     {
@@ -205,12 +205,12 @@ namespace sw
                     SwNodeIndex aIdx(*pIdx, 1);
                     const SwNode &rNd = aIdx.GetNode();
                     using sw::util::GetSwappedInSize;
-                    // #i43447# - determine layout size
+                    
                     {
                         SwRect aLayRect( rFmt.FindLayoutRect() );
                         Rectangle aRect( aLayRect.SVRect() );
-                        // The Object is not rendered (e.g. something in unused
-                        // header/footer) - thus, get the values from the format.
+                        
+                        
                         if ( aLayRect.IsEmpty() )
                         {
                             aRect.SetSize( rFmt.GetFrmSize().GetSize() );
@@ -229,7 +229,7 @@ namespace sw
                             break;
                         default:
                             meWriterType = eTxtBox;
-                            // #i43447# - Size equals layout size for text boxes
+                            
                             maSize = maLayoutSize;
                             break;
                     }
@@ -387,7 +387,7 @@ namespace sw
             }
         }
 
-        //SetLayer boilerplate begin
+        
         void SetLayer::Swap(SetLayer& rOther) throw()
         {
             std::swap(mnHeavenLayer, rOther.mnHeavenLayer);
@@ -395,7 +395,7 @@ namespace sw
             std::swap(mnFormLayer, rOther.mnFormLayer);
         }
 
-        // #i38889# - by default put objects into the invisible layers.
+        
         SetLayer::SetLayer(const SwDoc &rDoc)
             : mnHeavenLayer(rDoc.GetInvisibleHeavenId()),
               mnHellLayer(rDoc.GetInvisibleHellId()),
@@ -416,7 +416,7 @@ namespace sw
             Swap(aTemp);
             return *this;
         }
-        //SetLayer boilerplate end
+        
 
         void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems, bool bExportParentItemSet )
         {
@@ -483,14 +483,14 @@ namespace sw
 
         SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const OUString& rName)
         {
-            // Search first in the Doc-Styles
+            
             SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName(rName);
             if (!pColl)
             {
-                // Collection not found, try in Pool ?
+                
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
-                if (n != SAL_MAX_UINT16)       // found or standard
+                if (n != SAL_MAX_UINT16)       
                     pColl = rDoc.GetTxtCollFromPool(n, false);
             }
             return pColl;
@@ -501,16 +501,16 @@ namespace sw
             SwCharFmt *pFmt = rDoc.FindCharFmtByName(rName);
             if (!pFmt)
             {
-                // Collection not found, try in Pool ?
+                
                 sal_uInt16 n = SwStyleNameMapper::GetPoolIdFromUIName(rName,
                     nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
-                if (n != SAL_MAX_UINT16)       // found or standard
+                if (n != SAL_MAX_UINT16)       
                     pFmt = rDoc.GetCharFmtFromPool(n);
             }
             return pFmt;
         }
 
-        // #i98791# - adjust sorting algorithm
+        
         void SortByAssignedOutlineStyleListLevel(ParaStyles &rStyles)
         {
             std::sort(rStyles.begin(), rStyles.end(), outlinecmp());
@@ -631,10 +631,10 @@ namespace sw
             }
             else
             {
-                // This method will now just concatenate the polygons contained
-                // in the given PolyPolygon. Anything else which might be thought of
-                // for reducing to a single polygon will just need nore power and
-                // cannot create more correct results.
+                
+                
+                
+                
                 sal_uInt32 nPointCount(0L);
                 sal_uInt16 a;
 
@@ -710,7 +710,7 @@ namespace sw
 
         bool RedlineStack::close(const SwPosition& rPos, RedlineType_t eType)
         {
-            //Search from end for same type
+            
             myriter aResult = std::find_if(maStack.rbegin(), maStack.rend(),
                 SameOpenRedlineType(eType));
             if (aResult != maStack.rend())
@@ -752,8 +752,8 @@ namespace sw
                         pFltRedline->aStamp, OUString(), 0);
 
                 SwRangeRedline *const pNewRedline(new SwRangeRedline(aData, aRegion));
-                // the point node may be deleted in AppendRedline, so park
-                // the PaM somewhere safe
+                
+                
                 aRegion.DeleteMark();
                 *aRegion.GetPoint() = SwPosition(SwNodeIndex(mrDoc.GetNodes()));
                 mrDoc.AppendRedline(pNewRedline, true);
@@ -772,8 +772,8 @@ namespace sw
             const SwFltRedline *pTwo= static_cast<const SwFltRedline*>
                 (pTwoE->pAttr);
 
-            //Return the earlier time, if two have the same time, prioritize
-            //inserts over deletes
+            
+            
             if (pOne->aStamp == pTwo->aStamp)
                 return (pOne->eType == nsRedlineType_t::REDLINE_INSERT && pTwo->eType != nsRedlineType_t::REDLINE_INSERT);
             else
@@ -827,8 +827,8 @@ namespace sw
             TblMapIter aEnd = maTables.end();
             for (TblMapIter aIter = maTables.begin(); aIter != aEnd; ++aIter)
             {
-                // exitiert schon ein Layout, dann muss an dieser Tabelle die BoxFrames
-                // neu erzeugt
+                
+                
                 SwTableNode *pTable = aIter->first->GetTableNode();
                 OSL_ENSURE(pTable, "Why no expected table");
                 if (pTable)
@@ -849,8 +849,8 @@ namespace sw
         {
             if (!mbHasRoot)
                 return;
-            //Associate this tablenode with this after position, replace an //old
-            //node association if necessary
+            
+            
 
             InsertedTableClient * pClient = new InsertedTableClient(rTableNode);
 

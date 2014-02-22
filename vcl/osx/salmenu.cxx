@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -90,7 +90,7 @@ const AquaSalMenu* AquaSalMenu::pCurrentMenuBar = NULL;
 @end
 
 
-// FIXME: currently this is leaked
+
 static MainMenuSelector* pMainMenuSelector = nil;
 
 static void initAppMenu()
@@ -103,18 +103,18 @@ static void initAppMenu()
         ResMgr* pMgr = ImplGetResMgr();
         if( pMgr )
         {
-            // get the main menu
+            
             NSMenu* pMainMenu = [NSApp mainMenu];
             if( pMainMenu != nil )
             {
-                // create the action selector
+                
                 pMainMenuSelector = [[MainMenuSelector alloc] init];
 
-                // get the proper submenu
+                
                 NSMenu* pAppMenu = [[pMainMenu itemAtIndex: 0] submenu];
                 if( pAppMenu )
                 {
-                    // insert about entry
+                    
                     OUString aAbout( ResId( SV_STDTEXT_ABOUT, *pMgr ) );
                     NSString* pString = CreateNSString( aAbout );
                     NSMenuItem* pNewItem = [pAppMenu insertItemWithTitle: pString
@@ -129,7 +129,7 @@ static void initAppMenu()
                         [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 1];
                     }
 
-                    // insert preferences entry
+                    
                     OUString aPref( ResId( SV_STDTEXT_PREFERENCES, *pMgr ) );
                     pString = CreateNSString( aPref );
                     pNewItem = [pAppMenu insertItemWithTitle: pString
@@ -145,10 +145,10 @@ static void initAppMenu()
                         [pAppMenu insertItem: [NSMenuItem separatorItem] atIndex: 3];
                     }
 
-                    // WARNING: ultra ugly code ahead
+                    
 
-                    // rename standard entries
-                    // rename "Services"
+                    
+                    
                     pNewItem = [pAppMenu itemAtIndex: 4];
                     if( pNewItem )
                     {
@@ -158,7 +158,7 @@ static void initAppMenu()
                             [pString release];
                     }
 
-                    // rename "Hide NewApplication"
+                    
                     pNewItem = [pAppMenu itemAtIndex: 6];
                     if( pNewItem )
                     {
@@ -168,7 +168,7 @@ static void initAppMenu()
                             [pString release];
                     }
 
-                    // rename "Hide Others"
+                    
                     pNewItem = [pAppMenu itemAtIndex: 7];
                     if( pNewItem )
                     {
@@ -178,7 +178,7 @@ static void initAppMenu()
                             [pString release];
                     }
 
-                    // rename "Show all"
+                    
                     pNewItem = [pAppMenu itemAtIndex: 8];
                     if( pNewItem )
                     {
@@ -188,7 +188,7 @@ static void initAppMenu()
                             [pString release];
                     }
 
-                    // rename "Quit NewApplication"
+                    
                     pNewItem = [pAppMenu itemAtIndex: 10];
                     if( pNewItem )
                     {
@@ -203,7 +203,7 @@ static void initAppMenu()
     }
 }
 
-// =======================================================================
+
 
 SalMenu* AquaSalInstance::CreateMenu( sal_Bool bMenuBar, Menu* pVCLMenu )
 {
@@ -236,7 +236,7 @@ void AquaSalInstance::DestroyMenuItem( SalMenuItem* pSalMenuItem )
 }
 
 
-// =======================================================================
+
 
 
 /*
@@ -264,36 +264,36 @@ AquaSalMenu::AquaSalMenu( bool bMenuBar ) :
 
 AquaSalMenu::~AquaSalMenu()
 {
-    // actually someone should have done AquaSalFrame::SetMenu( NULL )
-    // on our frame, alas it is not so
+    
+    
     if( mpFrame && AquaSalFrame::isAlive( mpFrame ) && mpFrame->mpMenu == this )
         const_cast<AquaSalFrame*>(mpFrame)->mpMenu = NULL;
 
-    // this should normally be empty already, but be careful...
+    
     for( size_t i = 0; i < maButtons.size(); i++ )
         releaseButtonEntry( maButtons[i] );
     maButtons.clear();
 
-    // is this leaking in some cases ? the release often leads to a duplicate release
-    // it seems the parent item gets ownership of the menu
+    
+    
     if( mpMenu )
     {
         if( mbMenuBar )
         {
             if( pCurrentMenuBar == this )
             {
-                // if the current menubar gets destroyed, set the default menubar
+                
                 setDefaultMenu();
             }
         }
         else
-            // the system may still hold a reference on mpMenu
+            
         {
-            // so set the pointer to this AquaSalMenu to NULL
-            // to protect from calling a dead object
+            
+            
 
-            // in ! mbMenuBar case our mpMenu is actually a SalNSMenu*
-            // so we can safely cast here
+            
+            
             [static_cast<SalNSMenu*>(mpMenu) setSalMenu: NULL];
             /* #i89860# FIXME:
                using [autorelease] here (and in AquaSalMenuItem::~AquaSalMenuItem)
@@ -339,45 +339,45 @@ sal_Int32 removeUnusedItemsRunner(NSMenu * pMenu)
 
 bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rRect, sal_uLong nFlags)
 {
-    // do not use native popup menu when AQUA_NATIVE_MENUS is set to sal_False
+    
     if( ! VisibleMenuBar() ) {
         return false;
     }
 
-    // set offsets for positioning
+    
     const float offset = 9.0;
 
-    // get the pointers
+    
     AquaSalFrame * pParentAquaSalFrame = (AquaSalFrame *) pWin->ImplGetWindowImpl()->mpRealParent->ImplGetFrame();
     NSWindow* pParentNSWindow = pParentAquaSalFrame->mpNSWindow;
     NSView* pParentNSView = [pParentNSWindow contentView];
     NSView* pPopupNSView = ((AquaSalFrame *) pWin->ImplGetWindow()->ImplGetFrame())->mpNSView;
     NSRect popupFrame = [pPopupNSView frame];
 
-    // since we manipulate the menu below (removing entries)
-    // let's rather make a copy here and work with that
+    
+    
     NSMenu* pCopyMenu = [mpMenu copy];
 
-    // filter disabled elements
+    
     removeUnusedItemsRunner( pCopyMenu );
 
-    // create frame rect
+    
     NSRect displayPopupFrame = NSMakeRect( rRect.Left()+(offset-1), rRect.Top()+(offset+1), popupFrame.size.width, 0 );
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
 
-    // do the same strange semantics as vcl popup windows to arrive at a frame geometry
-    // in mirrored UI case; best done by actually executing the same code
+    
+    
     sal_uInt16 nArrangeIndex;
     pWin->SetPosPixel( pWin->ImplCalcPos( pWin, rRect, nFlags, nArrangeIndex ) );
     displayPopupFrame.origin.x = pWin->ImplGetFrame()->maGeometry.nX - pParentAquaSalFrame->maGeometry.nX + offset;
     displayPopupFrame.origin.y = pWin->ImplGetFrame()->maGeometry.nY - pParentAquaSalFrame->maGeometry.nY + offset;
     pParentAquaSalFrame->VCLToCocoa(displayPopupFrame, false);
 
-    // #i111992# if this menu was opened due to a key event, prevent dispatching that yet again
+    
     if( [pParentNSView respondsToSelector: @selector(clearLastEvent)] )
         [pParentNSView performSelector:@selector(clearLastEvent)];
 
-    // open popup menu
+    
     NSPopUpButtonCell * pPopUpButtonCell = [[NSPopUpButtonCell alloc] initTextCell:@"" pullsDown:NO];
     [pPopUpButtonCell setMenu: pCopyMenu];
     [pPopUpButtonCell selectItem:nil];
@@ -386,7 +386,7 @@ bool AquaSalMenu::ShowNativePopupMenu(FloatingWindow * pWin, const Rectangle& rR
     [pPopUpButtonCell release];
     [AquaA11yWrapper setPopupMenuOpen: NO];
 
-    // clean up the copy
+    
     [pCopyMenu release];
     return true;
 }
@@ -413,7 +413,7 @@ void AquaSalMenu::unsetMainMenu()
 {
     pCurrentMenuBar = NULL;
 
-    // remove items from main menu
+    
     NSMenu* pMenu = [NSApp mainMenu];
     for( int nItems = [pMenu numberOfItems]; nItems > 1; nItems-- )
         [pMenu removeItemAtIndex: 1];
@@ -427,7 +427,7 @@ void AquaSalMenu::setMainMenu()
         if( pCurrentMenuBar != this )
         {
             unsetMainMenu();
-            // insert our items
+            
             for( unsigned int i = 0; i < maItems.size(); i++ )
             {
                 NSMenuItem* pItem = maItems[i]->mpMenuItem;
@@ -435,7 +435,7 @@ void AquaSalMenu::setMainMenu()
             }
             pCurrentMenuBar = this;
 
-            // change status item
+            
             statusLayout();
         }
         enableMainMenu( true );
@@ -448,7 +448,7 @@ void AquaSalMenu::setDefaultMenu()
 
     unsetMainMenu();
 
-    // insert default items
+    
     std::vector< NSMenuItem* >& rFallbackMenu( GetSalData()->maFallbackMenu );
     for( unsigned int i = 0, nAddItems = rFallbackMenu.size(); i < nAddItems; i++ )
     {
@@ -463,7 +463,7 @@ void AquaSalMenu::enableMainMenu( bool bEnable )
     NSMenu* pMainMenu = [NSApp mainMenu];
     if( pMainMenu )
     {
-        // enable/disable items from main menu
+        
         int nItems = [pMainMenu numberOfItems];
         for( int n = 1; n < nItems; n++ )
         {
@@ -479,7 +479,7 @@ void AquaSalMenu::addFallbackMenuItem( NSMenuItem* pNewItem )
 
     std::vector< NSMenuItem* >& rFallbackMenu( GetSalData()->maFallbackMenu );
 
-    // prevent duplicate insertion
+    
     int nItems = rFallbackMenu.size();
     for( int i = 0; i < nItems; i++ )
     {
@@ -487,7 +487,7 @@ void AquaSalMenu::addFallbackMenuItem( NSMenuItem* pNewItem )
             return;
     }
 
-    // push the item to the back and retain it
+    
     [pNewItem retain];
     rFallbackMenu.push_back( pNewItem );
 
@@ -499,13 +499,13 @@ void AquaSalMenu::removeFallbackMenuItem( NSMenuItem* pOldItem )
 {
     std::vector< NSMenuItem* >& rFallbackMenu( GetSalData()->maFallbackMenu );
 
-    // find item
+    
     unsigned int nItems = rFallbackMenu.size();
     for( unsigned int i = 0; i < nItems; i++ )
     {
         if( rFallbackMenu[i] == pOldItem )
         {
-            // remove item and release
+            
             rFallbackMenu.erase( rFallbackMenu.begin() + i );
             [pOldItem release];
 
@@ -519,16 +519,16 @@ void AquaSalMenu::removeFallbackMenuItem( NSMenuItem* pOldItem )
 
 bool AquaSalMenu::VisibleMenuBar()
 {
-    // Enable/disable experimental native menus code?
+    
     //
-    // To disable native menus, set the environment variable AQUA_NATIVE_MENUS to FALSE
+    
 
     static const char *pExperimental = getenv ("AQUA_NATIVE_MENUS");
 
     if ( pExperimental && !strcasecmp(pExperimental, "FALSE") )
         return false;
 
-    // End of experimental code enable/disable part
+    
 
     return true;
 }
@@ -602,18 +602,18 @@ void AquaSalMenu::SetSubMenu( SalMenuItem* pSalMenuItem, SalMenu* pSubMenu, unsi
             subAquaSalMenu->mpParentSalMenu = this;
             [pAquaSalMenuItem->mpMenuItem setSubmenu: subAquaSalMenu->mpMenu];
 
-            // set title of submenu
+            
             [subAquaSalMenu->mpMenu setTitle: [pAquaSalMenuItem->mpMenuItem title]];
         }
         else if( subAquaSalMenu->mpParentSalMenu != this )
         {
-            // cocoa doesn't allow menus to be submenus of multiple
-            // menu items, so place a copy in the menu item instead ?
-            // let's hope that NSMenu copy does the right thing
+            
+            
+            
             NSMenu* pCopy = [subAquaSalMenu->mpMenu copy];
             [pAquaSalMenuItem->mpMenuItem setSubmenu: pCopy];
 
-            // set title of submenu
+            
             [pCopy setTitle: [pAquaSalMenuItem->mpMenuItem title]];
         }
     }
@@ -667,7 +667,7 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
 
     AquaSalMenuItem *pAquaSalMenuItem = (AquaSalMenuItem *) i_pSalMenuItem;
 
-    // Delete mnemonics
+    
     OUString aText( comphelper::string::remove(i_rText, '~') );
 
     /* #i90015# until there is a correct solution
@@ -688,7 +688,7 @@ void AquaSalMenu::SetItemText( unsigned /*i_nPos*/, SalMenuItem* i_pSalMenuItem,
     if (pString)
     {
         [pAquaSalMenuItem->mpMenuItem setTitle: pString];
-        // if the menu item has a submenu, change its title as well
+        
         if (pAquaSalMenuItem->mpSubMenu)
             [pAquaSalMenuItem->mpSubMenu->mpMenu setTitle: pString];
         [pString release];
@@ -703,11 +703,11 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
     sal_uInt16 nKeyCode=rKeyCode.GetCode();
     if( nKeyCode )
     {
-        if ((nKeyCode>=KEY_A) && (nKeyCode<=KEY_Z))           // letter A..Z
+        if ((nKeyCode>=KEY_A) && (nKeyCode<=KEY_Z))           
             nCommandKey = nKeyCode-KEY_A + 'a';
-        else if ((nKeyCode>=KEY_0) && (nKeyCode<=KEY_9))      // numbers 0..9
+        else if ((nKeyCode>=KEY_0) && (nKeyCode<=KEY_9))      
             nCommandKey = nKeyCode-KEY_0 + '0';
-        else if ((nKeyCode>=KEY_F1) && (nKeyCode<=KEY_F26))   // function keys F1..F26
+        else if ((nKeyCode>=KEY_F1) && (nKeyCode<=KEY_F26))   
             nCommandKey = nKeyCode-KEY_F1 + NSF1FunctionKey;
         else if( nKeyCode == KEY_REPEAT )
             nCommandKey = NSRedoFunctionKey;
@@ -744,19 +744,19 @@ void AquaSalMenu::SetAccelerator( unsigned /*nPos*/, SalMenuItem* pSalMenuItem, 
             }
         }
     }
-    else // not even a code ? nonsense -> ignore
+    else 
         return;
 
     DBG_ASSERT( nCommandKey, "unmapped accelerator key" );
 
     nModifier=rKeyCode.GetAllModifier();
 
-    // should always use the command key
+    
     int nItemModifier = 0;
 
     if (nModifier & KEY_SHIFT)
     {
-        nItemModifier |= NSShiftKeyMask;   // actually useful only for function keys
+        nItemModifier |= NSShiftKeyMask;   
         if( nKeyCode >= KEY_A && nKeyCode <= KEY_Z )
             nCommandKey = nKeyCode - KEY_A + 'A';
     }
@@ -797,7 +797,7 @@ void AquaSalMenu::statusLayout()
     if( GetSalData()->mpStatusItem )
     {
         NSView* pNSView = [GetSalData()->mpStatusItem view];
-        if( [pNSView isMemberOfClass: [OOStatusItemView class]] ) // well of course it is
+        if( [pNSView isMemberOfClass: [OOStatusItemView class]] ) 
             [(OOStatusItemView*)pNSView layout];
         else
             OSL_FAIL( "someone stole our status view" );
@@ -839,7 +839,7 @@ bool AquaSalMenu::AddMenuBarButton( const SalMenuButtonItem& i_rNewItem )
         maButtons.back().mpToolTipString = CreateNSString( i_rNewItem.maToolTipText );
     }
 
-    // lazy create status item
+    
     SalData::getStatusItem();
 
     if( pCurrentMenuBar == this )
@@ -854,7 +854,7 @@ void AquaSalMenu::RemoveMenuBarButton( sal_uInt16 i_nId )
     if( pEntry )
     {
         releaseButtonEntry( *pEntry );
-        // note: vector guarantees that its contents are in a plain array
+        
         maButtons.erase( maButtons.begin() + (pEntry - &maButtons[0]) );
     }
 
@@ -886,7 +886,7 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame
     NSRect aRect = [pNSWin frame];
     aRect.origin = [pNSWin convertBaseToScreen: NSMakePoint( 0, 0 )];
 
-    // make coordinates relative to reference frame
+    
     static_cast<AquaSalFrame*>(i_pReferenceFrame)->CocoaToVCL( aRect.origin );
     aRect.origin.x -= i_pReferenceFrame->maGeometry.nX;
     aRect.origin.y -= i_pReferenceFrame->maGeometry.nY + aRect.size.height;
@@ -900,7 +900,7 @@ Rectangle AquaSalMenu::GetMenuBarButtonRectPixel( sal_uInt16 i_nItemId, SalFrame
             );
 }
 
-// =======================================================================
+
 
 /*
  * SalMenuItem
@@ -913,14 +913,14 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
     mpSubMenu( NULL ),
     mpMenuItem( nil )
 {
-    // Delete mnemonics
+    
     OUString aText( comphelper::string::remove(pItemData->aText, '~') );
 
     if (pItemData->eType == MENUITEM_SEPARATOR)
     {
         mpMenuItem = [NSMenuItem separatorItem];
-        // these can go occasionally go in and out of a menu, ensure their lifecycle
-        // also for the release in AquaSalMenuItem destructor
+        
+        
         [mpMenuItem retain];
     }
     else
@@ -933,7 +933,7 @@ AquaSalMenuItem::AquaSalMenuItem( const SalItemParams* pItemData ) :
             [mpMenuItem setTitle: pString];
             [pString release];
         }
-        // anything but a separator should set a menu to dispatch to
+        
         DBG_ASSERT( mpVCLMenu, "no menu" );
     }
 }
@@ -950,6 +950,6 @@ AquaSalMenuItem::~AquaSalMenuItem()
         [mpMenuItem autorelease];
 }
 
-// -------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

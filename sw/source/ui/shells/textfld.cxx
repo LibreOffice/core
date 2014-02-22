@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -69,7 +69,7 @@
 
 using namespace nsSwDocInfoSubType;
 
-extern bool bNoInterrupt;       // in mainwn.cxx
+extern bool bNoInterrupt;       
 
 static OUString& lcl_AppendRedlineStr( OUString& rStr, sal_uInt16 nRedlId )
 {
@@ -197,7 +197,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
     }
     if(bMore)
     {
-        // Here come the slots with FldMgr.
+        
         SwFldMgr aFldMgr(GetShellPtr());
         switch(nSlot)
         {
@@ -282,7 +282,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     bRes = aFldMgr.InsertFld( aData );
                 }
                 else
-                        //#i5788# prevent closing of the field dialog while a modal dialog ( Input field dialog ) is active
+                        
                         if(!GetView().GetViewFrame()->IsInModalMode())
                 {
                     SfxViewFrame* pVFrame = GetView().GetViewFrame();
@@ -300,9 +300,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             {
                 SfxViewFrame* pVFrame = GetView().GetViewFrame();
                 if (!pVFrame->HasChildWindow(FN_INSERT_FIELD))
-                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);    // Show dialog
+                    pVFrame->ToggleChildWindow(FN_INSERT_FIELD);    
 
-                // Switch Flddlg at a new TabPage
+                
                 sal_uInt16 nId = SwFldDlgWrapper::GetChildWindowId();
                 SwFldDlgWrapper *pWrp = (SwFldDlgWrapper*)pVFrame->GetChildWindow(nId);
                 if (pWrp)
@@ -363,8 +363,8 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         rSh.KillPams();
                     }
 
-                    // #i120513# Inserting a comment into an autocompletion crashes
-                    // --> suggestion has to be removed before
+                    
+                    
                     GetView().GetEditWin().StopQuickHelp();
 
                     SwInsertFld_Data aData(TYP_POSTITFLD, 0, sAuthor, OUString(), 0);
@@ -373,7 +373,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.Push();
                     rSh.SwCrsrShell::Left(1, CRSR_SKIP_CHARS, sal_False);
                     pPostIt = (SwPostItField*)aFldMgr.GetCurFld();
-                    rSh.Pop(sal_False); // Restore cursor position
+                    rSh.Pop(sal_False); 
                  }
 
                 if (pPostIt)
@@ -429,15 +429,15 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                                 pRedline->GetRedlineData().GetTimeStamp() ),
                                 SID_ATTR_POSTIT_DATE ));
 
-                    // Traveling only if more than one field.
+                    
                     rSh.StartAction();
 
                     rSh.Push();
                     const SwRangeRedline *pActRed = rSh.SelPrevRedline();
 
                     if (pActRed == pRedline)
-                    {   // New cursor is at the beginning of the current redlines.
-                        rSh.Pop();  // Throw old cursor away
+                    {   
+                        rSh.Pop();  
                         rSh.Push();
                         pActRed = rSh.SelPrevRedline();
                     }
@@ -447,13 +447,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     rSh.EndAction();
 
                     rSh.ClearMark();
-                    rSh.SelNextRedline();   // Select current redline.
+                    rSh.SelNextRedline();   
 
                     rSh.StartAction();
                     rSh.Push();
                     pActRed = rSh.SelNextRedline();
                     sal_Bool bNext = pActRed != 0;
-                    rSh.Pop(sal_False); // Restore cursor position
+                    rSh.Pop(sal_False); 
 
                     if( rSh.IsCrsrPtAtEnd() )
                         rSh.SwapPam();
@@ -488,7 +488,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                         OUString sMsg(((const SvxPostItTextItem&)pOutSet->Get(SID_ATTR_POSTIT_TEXT)).GetValue());
 
-                        // Insert or change a comment
+                        
                         rSh.SetRedlineComment(sMsg);
                     }
 
@@ -570,7 +570,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_PGNUMBER:
                 nInsertType = TYP_PAGENUMBERFLD;
-                nInsertFormat = SVX_NUM_PAGEDESC; // Like page template
+                nInsertFormat = SVX_NUM_PAGEDESC; 
                 bIsText = false;
                 goto FIELD_INSERT;
             case FN_INSERT_FLD_PGCOUNT :
@@ -593,7 +593,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
 FIELD_INSERT:
             {
-                //format conversion should only be done for number formatter formats
+                
                 if(!nInsertFormat)
                     nInsertFormat = aFldMgr.GetDefaultFormat(nInsertType, bIsText, rSh.GetNumberFormatter());
                 SwInsertFld_Data aData(nInsertType, nInsertSubType,
@@ -656,7 +656,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 else if( RES_DDEFLD == nTempWhich &&
                     !((SwDDEFieldType*)pField->GetTyp())->GetBaseLink().IsVisible())
                 {
-                    // nested links cannot be edited
+                    
                     rSet.DisableItem( nWhich );
                 }
             }
@@ -683,7 +683,7 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 else
                 {
                     SfxViewFrame* pVFrame = GetView().GetViewFrame();
-                    //#i5788# prevent closing of the field dialog while a modal dialog ( Input field dialog ) is active
+                    
                     if(!pVFrame->IsInModalMode() &&
                         pVFrame->KnowsChildWindow(FN_INSERT_FIELD) && !pVFrame->HasChildWindow(FN_INSERT_FIELD_DATA_ONLY) )
                         rSet.Put(SfxBoolItem( FN_INSERT_FIELD, pVFrame->HasChildWindow(nWhich)));
@@ -781,7 +781,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         const SfxPoolItem* pItem;
         if(SFX_ITEM_SET == aSet.GetItemState(RES_TXTATR_INETFMT, false, &pItem))
         {
-            // Select links
+            
             rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT, sal_False);
         }
         switch (nType)
@@ -826,16 +826,16 @@ IMPL_LINK( SwTextShell, RedlineNextHdl, AbstractSvxPostItDialog *, pBtn )
     SwWrtShell* pSh = GetShellPtr();
     AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
 
-    // Insert or change a comment.
+    
     pSh->SetRedlineComment(pDlg->GetNote());
 
     const SwRangeRedline *pRedline = pSh->GetCurrRedline();
 
     if (pRedline)
     {
-        // Traveling only if more than one field.
+        
         if( !pSh->IsCrsrPtAtEnd() )
-            pSh->SwapPam(); // Move the cursor behind the Redline.
+            pSh->SwapPam(); 
 
         pSh->Push();
         const SwRangeRedline *pActRed = pSh->SelNextRedline();
@@ -879,14 +879,14 @@ IMPL_LINK( SwTextShell, RedlinePrevHdl, AbstractSvxPostItDialog *, pBtn )
     SwWrtShell* pSh = GetShellPtr();
     AbstractSvxPostItDialog *pDlg = (AbstractSvxPostItDialog*)pBtn;
 
-    // Insert or change a comment.
+    
     pSh->SetRedlineComment(pDlg->GetNote());
 
     const SwRangeRedline *pRedline = pSh->GetCurrRedline();
 
     if (pRedline)
     {
-        // Traveling only if more than one field.
+        
         pSh->Push();
         const SwRangeRedline *pActRed = pSh->SelPrevRedline();
         pSh->Pop(pActRed != 0);

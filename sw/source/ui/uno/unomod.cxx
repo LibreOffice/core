@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <swtypes.hxx>
@@ -562,7 +562,7 @@ SwXViewSettings::SwXViewSettings(sal_Bool bWebView, SwView* pVw)
 , eVRulerUnit( FUNIT_CM )
 , mbApplyVRulerMetric( sal_False )
 {
-    // This property only exists if we have a view (ie, not at the module )
+    
     if ( !pView )
         mpInfo->remove ( OUString ( "HelpURL"  ) );
 
@@ -598,7 +598,7 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
 {
     sal_Bool bVal = HANDLE_VIEWSET_ZOOM != rInfo.mnHandle ?
         *(sal_Bool*)rValue.getValue() : sal_False;
-    // the API flag should not be set to the application's view settings
+    
     switch( rInfo.mnHandle )
     {
         case  HANDLE_VIEWSET_SHOW_RULER            :   mpViewOption->SetViewAnyRuler(bVal); break;
@@ -717,11 +717,11 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 pView->GetWrtShell().ApplyViewOptions( aOpt );
                 pView->RecheckBrowseMode();
 
-                // must be set in mpViewOption as this will overwrite settings in _post!
+                
                 if(mpViewOption)
                     mpViewOption->setBrowseMode(bVal);
 
-                // disable multiple layout
+                
                 pView->GetDocShell()->ToggleBrowserMode(bVal, pView );
             }
         }

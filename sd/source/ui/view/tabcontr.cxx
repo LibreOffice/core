@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,29 +45,29 @@
 
 namespace sd {
 
-// -----------------------------------------
-// - SdTabControl::SdPageObjsTransferable -
-// -----------------------------------------
+
+
+
 
 TabControl::TabControlTransferable::~TabControlTransferable()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TabControl::TabControlTransferable::AddSupportedFormats()
 {
     AddFormat( SOT_FORMATSTR_ID_STARDRAW_TABBAR );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool TabControl::TabControlTransferable::GetData( const ::com::sun::star::datatransfer::DataFlavor& )
 {
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TabControl::TabControlTransferable::DragFinished( sal_Int8 nDropAction )
 {
@@ -111,7 +111,7 @@ void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
         Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
         sal_uInt16 aPageId = GetPageId(aPos);
 
-        //initialize
+        
         if(RrePageID!=aPageId)
             pDrViewSh->FreshNavigatrEntry();
         RrePageID=aPageId;
@@ -124,19 +124,19 @@ void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
         }
     }
 
-    // A single left click with pressed control key on a tab page first
-    // switches to that page before the usual handling (copying with drag
-    // and drop) takes place.
+    
+    
+    
     else if (rMEvt.IsLeft() && rMEvt.IsMod1() && !rMEvt.IsMod2() && !rMEvt.IsShift())
     {
         pDrViewSh->SwitchPage (GetPageId (rMEvt.GetPosPixel()) - 1);
     }
 
-    // When only the right button is pressed then first process a
-    // synthesized left button click to make the page the current one
-    // whose tab has been clicked.  When then the actual right button
-    // click is processed the resulting context menu relates to the
-    // now current page.
+    
+    
+    
+    
+    
     if (rMEvt.IsRight() && ! rMEvt.IsLeft())
     {
         MouseEvent aSyntheticEvent (
@@ -166,7 +166,7 @@ void TabControl::StartDrag( sal_Int8, const Point& )
 {
     bInternalMove = sal_True;
 
-    // object is delete by reference mechanismn
+    
     ( new TabControl::TabControlTransferable( *this ) )->StartDrag( this, DND_ACTION_COPYMOVE );
 }
 
@@ -239,29 +239,29 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
             case DND_ACTION_COPY:
             {
-                // Copying the selected page to the place that rEvt points
-                // takes place in three steps:
-                // 1. Create a copy of the selected page.  This copy will
-                // lie directly behind the selected page.
-                // 2. Move the copy to the desired place.
-                // 3. Select the copy.
+                
+                
+                
+                
+                
+                
                 if (pDrViewSh->IsSwitchPageAllowed())
                 {
-                    // 1. Create a copy.
+                    
                     sal_uInt16 nPageNumOfCopy = pDoc->DuplicatePage (GetCurPageId() - 1);
-                    // 2. Move page.  For this first switch to the copy:
-                    // MovePages operates on the currently selected page(s).
+                    
+                    
                     pDrViewSh->SwitchPage (nPageNumOfCopy);
-                    // Adapt target page id when necessary, i.e. page copy
-                    // has been inserted in front of the target page.
+                    
+                    
                     sal_uInt16 nPageNum = nPageId;
                     if ((nPageNumOfCopy <= nPageNum) && (nPageNum != (sal_uInt16)-1))
                         nPageNum += 1;
                     if (pDoc->MovePages(nPageNum))
                     {
-                        // 3. Switch to the copy that has been moved to its
-                        // final destination.  Use an asynchron slot call to
-                        // be executed after the still pending ones.
+                        
+                        
+                        
                         if (nPageNumOfCopy >= nPageNum || (nPageNum == (sal_uInt16)-1))
                             nPageNum += 1;
                         SetCurPageId (GetPageId(nPageNum));
@@ -333,7 +333,7 @@ long TabControl::AllowRenaming()
 
     if( aCompareName != aNewName )
     {
-        // rename page
+        
         if( pDrViewSh->GetDocSh()->CheckPageName( this, aNewName ) )
         {
             SetEditText( aNewName );
@@ -386,6 +386,6 @@ void TabControl::SendDeactivatePageEvent (void)
         reinterpret_cast<void*>(GetCurPageId()));
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

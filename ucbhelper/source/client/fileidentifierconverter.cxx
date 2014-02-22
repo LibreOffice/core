@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ucbhelper/fileidentifierconverter.hxx>
@@ -31,27 +31,27 @@ using namespace com::sun::star;
 
 namespace ucbhelper {
 
-//============================================================================
+
 //
-//  getLocalFileURL
+
 //
-//============================================================================
+
 
 OUString
 getLocalFileURL() SAL_THROW((uno::RuntimeException))
 {
-    // If there were more file systems than just "file:///" (e.g., the obsolete
-    // "vnd.sun.star.wfs:///"), this code should query all relevant UCPs for
-    // their com.sun.star.ucb.XFileIdentifierConverter.getFileProviderLocality
-    // and return the most local one:
-    return OUString("file:///");
+    
+    
+    
+    
+    return OUString("file:
 }
 
-//============================================================================
+
 //
-//  getFileURLFromSystemPath
+
 //
-//============================================================================
+
 
 OUString
 getFileURLFromSystemPath(
@@ -70,11 +70,11 @@ getFileURLFromSystemPath(
         return OUString();
 }
 
-//============================================================================
+
 //
-//  getSystemPathFromFileURL
+
 //
-//============================================================================
+
 
 OUString
 getSystemPathFromFileURL(

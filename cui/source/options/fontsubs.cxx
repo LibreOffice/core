@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -122,7 +122,7 @@ SvTreeListEntry* SvxFontSubstTabPage::CreateEntry(OUString& rFont1, OUString& rF
     if( !pCheckButtonData )
         pCheckButtonData = new SvLBoxButtonData( m_pCheckLB );
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    // Sonst Puff!
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false));    
 
     pEntry->AddItem( new SvLBoxButton( pEntry,
                                            SvLBoxButtonKind_enabledCheckbox, 0,
@@ -152,7 +152,7 @@ SfxTabPage*  SvxFontSubstTabPage::Create( Window* pParent,
 
 sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
 {
-    pConfig->ClearSubstitutions();// remove all entries
+    pConfig->ClearSubstitutions();
 
     pConfig->Enable(m_pUseTableCB->IsChecked());
 
@@ -181,7 +181,7 @@ sal_Bool  SvxFontSubstTabPage::FillItemSet( SfxItemSet& )
         officecfg::Office::Common::Font::SourceViewFont::
             NonProportionalFontsOnly::set(
                 m_pNonPropFontsOnlyCB->IsChecked(), batch);
-    //font name changes cannot be detected by saved values
+    
     OUString sFontName;
     if(m_pFontNameLB->GetSelectEntryPos())
         sFontName = m_pFontNameLB->GetSelectEntry();
@@ -219,7 +219,7 @@ void  SvxFontSubstTabPage::Reset( const SfxItemSet& )
     CheckEnable();
     m_pCheckLB->SetUpdateMode(sal_True);
 
-    //fill font name box first
+    
     m_pNonPropFontsOnlyCB->Check(
         officecfg::Office::Common::Font::SourceViewFont::
         NonProportionalFontsOnly::get());
@@ -244,21 +244,21 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
     if (pWin == m_pApply || pWin == m_pDelete)
     {
         SvTreeListEntry* pEntry;
-        // nCol is stupidly the nCol'th text column, not counted!
-        // Therefor "0" as column.
+        
+        
         sal_uLong nPos = m_pCheckLB->GetEntryPos(m_pFont1CB->GetText(), 0);
 
         if (pWin == m_pApply)
         {
             if (nPos != 0xffffffff)
             {
-                // change entry
+                
                 m_pCheckLB->SetEntryText(m_pFont2CB->GetText(), nPos, 1);
                 pEntry = m_pCheckLB->GetEntry(nPos);
             }
             else
             {
-                // new entry
+                
                 OUString sFont1 = m_pFont1CB->GetText();
                 OUString sFont2 = m_pFont2CB->GetText();
 
@@ -315,7 +315,7 @@ IMPL_LINK(SvxFontSubstTabPage, SelectHdl, Window*, pWin)
     return 0;
 }
 
-//--------------------------------------------------------------------------
+
 IMPL_LINK(SvxFontSubstTabPage, NonPropFontsHdl, CheckBox*, pBox)
 {
     OUString sFontName = m_pFontNameLB->GetSelectEntry();
@@ -348,7 +348,7 @@ void SvxFontSubstTabPage::CheckEnable()
         sEntry += "\t";
         sEntry += m_pFont2CB->GetText();
 
-        // because of OS/2 optimization error (Bug #56267) a bit more intricate:
+        
         if (m_pFont1CB->GetText().isEmpty() || m_pFont2CB->GetText().isEmpty())
             bApply = sal_False;
         else if(m_pFont1CB->GetText() == m_pFont2CB->GetText())
@@ -395,7 +395,7 @@ void SvxFontSubstCheckListBox::setColSizes()
         return;
     long nW1 = rBar.GetTextWidth(rBar.GetItemText(3));
     long nW2 = rBar.GetTextWidth(rBar.GetItemText(4));
-    long nMax = std::max( nW1, nW2 ) + 6; // width of the longest header + a little offset
+    long nMax = std::max( nW1, nW2 ) + 6; 
     long nMin = rBar.LogicToPixel(Size(10, 0), MAP_APPFONT).Width();
     nMax = std::max( nMax, nMin );
     const long nDoubleMax = 2*nMax;

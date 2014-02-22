@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+
 
 DBG_NAME(SfxFlagItem)
 
@@ -35,11 +35,11 @@ sal_uInt16 nSfxFlagVal[16] =
 };
 
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1(SfxFlagItem, SfxPoolItem);
 
-// -----------------------------------------------------------------------
+
 
 SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
     SfxPoolItem( nW ),
@@ -48,7 +48,7 @@ SfxFlagItem::SfxFlagItem( sal_uInt16 nW, sal_uInt16 nV ) :
     DBG_CTOR(SfxFlagItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
     SfxPoolItem( rItem ),
@@ -57,7 +57,7 @@ SfxFlagItem::SfxFlagItem( const SfxFlagItem& rItem ) :
     DBG_CTOR(SfxFlagItem, 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
 {
@@ -66,7 +66,7 @@ SvStream& SfxFlagItem::Store(SvStream &rStream, sal_uInt16) const
     return rStream;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemPresentation SfxFlagItem::GetPresentation
 (
@@ -84,7 +84,7 @@ SfxItemPresentation SfxFlagItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt8 SfxFlagItem::GetFlagCount() const
 {
@@ -93,7 +93,7 @@ sal_uInt8 SfxFlagItem::GetFlagCount() const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
 {
@@ -102,7 +102,7 @@ SfxPoolItem* SfxFlagItem::Create(SvStream &, sal_uInt16) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -111,7 +111,7 @@ bool SfxFlagItem::operator==( const SfxPoolItem& rItem ) const
     return (((SfxFlagItem&)rItem).nVal == nVal);
 }
 
-// -----------------------------------------------------------------------
+
 
 
 SfxPoolItem* SfxFlagItem::Clone(SfxItemPool *) const

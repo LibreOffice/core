@@ -57,8 +57,8 @@ Adapter::Adapter( const PyRef & ref, const Sequence< Type > &types )
 
 Adapter::~Adapter()
 {
-    // Problem: We don't know, if we have the python interpreter lock
-    //       There is no runtime function to get to know this.
+    
+    
     decreaseRefCount( mInterpreter, mWrappedObject.get() );
     mWrappedObject.scratch();
 }
@@ -94,7 +94,7 @@ void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
 Reference< XIntrospectionAccess > Adapter::getIntrospection()
     throw ( RuntimeException )
 {
-    // not supported
+    
     return Reference< XIntrospectionAccess > ();
 }
 
@@ -109,14 +109,14 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
         {
             PyThreadDetach antiguard;
 
-            // retrieve the adapter object again. It will be the same instance as before,
-            // (the adapter factory keeps a weak map inside, which I couldn't have outside)
+            
+            
             Reference< XInterface > unoAdapterObject =
                 runtime.getImpl()->cargo->xAdapterFactory->createAdapter( this, mTypes );
 
-            // uuuh, that's really expensive. The alternative would have been, to store
-            // an instance of the introspection at (this), but this results in a cyclic
-            // reference, which is never broken (as it is up to OOo1.1.0).
+            
+            
+            
             Reference< XIntrospectionAccess > introspection =
                 runtime.getImpl()->cargo->xIntrospection->inspect( makeAny( unoAdapterObject ) );
 
@@ -144,7 +144,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
                 if( seqInfo[i].aMode == com::sun::star::reflection::ParamMode_OUT ||
                     seqInfo[i].aMode == com::sun::star::reflection::ParamMode_INOUT )
                 {
-                    // sequence must be interpreted as return value/outparameter tuple !
+                    
                     nOuts ++;
                 }
             }
@@ -164,7 +164,7 @@ Sequence< sal_Int16 > Adapter::getOutIndexes( const OUString & functionName )
                 }
             }
         }
-        // guard active again !
+        
         m_methodOutIndexMap[ functionName ] = ret;
     }
     else
@@ -182,8 +182,8 @@ Any Adapter::invoke( const OUString &aFunctionName,
 {
     Any ret;
 
-    // special hack for the uno object identity concept. The XUnoTunnel.getSomething() call is
-    // always handled by the adapter directly.
+    
+    
     if( aParams.getLength() == 1 && aFunctionName.equalsAscii( "getSomething" ) )
     {
         Sequence< sal_Int8 > id;
@@ -197,8 +197,8 @@ Any Adapter::invoke( const OUString &aFunctionName,
     {
     PyThreadAttach guard( mInterpreter );
     {
-        // convert parameters to python args
-        // TODO: Out parameter
+        
+        
         Runtime runtime;
         cargo = runtime.getImpl()->cargo;
         if( isLog( cargo, LogLevel::CALL ) )
@@ -210,21 +210,21 @@ Any Adapter::invoke( const OUString &aFunctionName,
         sal_Int32 size = aParams.getLength();
         PyRef argsTuple(PyTuple_New( size ), SAL_NO_ACQUIRE );
         int i;
-        // fill tuple with default values in case of exceptions
+        
         for(  i = 0 ;i < size ; i ++ )
         {
             Py_INCREF( Py_None );
             PyTuple_SetItem( argsTuple.get(), i, Py_None );
         }
 
-        // convert args to python
+        
         for( i = 0; i < size ; i ++  )
         {
             PyRef val = runtime.any2PyObject( aParams[i] );
             PyTuple_SetItem( argsTuple.get(), i, val.getAcquired() );
         }
 
-        // get callable
+        
         PyRef method(PyObject_GetAttrString( mWrappedObject.get(), (char*)TO_ASCII(aFunctionName)),
                      SAL_NO_ACQUIRE);
         raiseInvocationTargetExceptionWhenNeeded( runtime);
@@ -246,19 +246,19 @@ Any Adapter::invoke( const OUString &aFunctionName,
 
             if( ret.hasValue() &&
                 ret.getValueTypeClass() == com::sun::star::uno::TypeClass_SEQUENCE &&
-                ! aFunctionName.equalsAscii( "getTypes" ) &&  // needed by introspection itself !
-                ! aFunctionName.equalsAscii( "getImplementationId" ) ) // needed by introspection itself !
+                ! aFunctionName.equalsAscii( "getTypes" ) &&  
+                ! aFunctionName.equalsAscii( "getImplementationId" ) ) 
             {
-                // the sequence can either be
-                // 1)  a simple sequence return value
-                // 2)  a sequence, where the first element is the return value
-                //     and the following elements are interpreted as the outparameter
-                // I can only decide for one solution by checking the method signature,
-                // so I need the reflection of the adapter !
+                
+                
+                
+                
+                
+                
                 aOutParamIndex = getOutIndexes( aFunctionName );
                 if( aOutParamIndex.getLength() )
                 {
-                    // out parameters exist, extract the sequence
+                    
                     Sequence< Any  > seq;
                     if( ! ( ret >>= seq ) )
                     {
@@ -287,11 +287,11 @@ Any Adapter::invoke( const OUString &aFunctionName,
                         aOutParam[i] = seq[1+i];
                     }
                 }
-                // else { sequence is a return value !}
+                
             }
         }
 
-        // log the reply, if desired
+        
         if( isLog( cargo, LogLevel::CALL ) )
         {
             logReply( cargo, "success uno->py[0x" ,

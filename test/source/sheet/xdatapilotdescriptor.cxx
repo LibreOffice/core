@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "test/sheet/xdatapilotdescriptor.hxx"
@@ -56,7 +56,7 @@ void XDataPilotDescriptor::testSourceRange()
     CPPUNIT_ASSERT(aAddress.EndColumn == aReturn.EndColumn);
     CPPUNIT_ASSERT(aAddress.EndRow == aReturn.EndRow);
 
-    //restore old settings
+    
     xDescr->setSourceRange(aOldAddress);
 }
 
@@ -69,7 +69,7 @@ void XDataPilotDescriptor::testGetFilterDescriptor()
 
 void XDataPilotDescriptor::testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr)
 {
-    //this method should only be called once but needs to be called before any of the other tests
+    
     static bool bCalled = false;
     if (bCalled)
         return;
@@ -157,7 +157,7 @@ void XDataPilotDescriptor::testGetRowFields()
     testGetDataPilotFields_Impl( xDescr );
     uno::Reference< container::XIndexAccess > xIndex(xDescr->getRowFields(), UNO_QUERY_THROW);
 
-    //checkName( xIndex, 1 );
+    
 }
 
 void XDataPilotDescriptor::testGetPageFields()

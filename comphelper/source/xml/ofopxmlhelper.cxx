@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,7 +37,7 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
-// -----------------------------------
+
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadRelationsInfoSequence( const uno::Reference< io::XInputStream >& xInStream, const OUString aStreamName, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -46,7 +46,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
     return ReadSequence_Impl( xInStream, aStringID, RELATIONINFO_FORMAT, xContext );
 }
 
-// -----------------------------------
+
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadContentTypeSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -54,7 +54,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
     return ReadSequence_Impl( xInStream, aStringID, CONTENTTYPE_FORMAT, xContext );
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< uno::Sequence< beans::StringPair > >& aSequence, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -74,13 +74,13 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
     OUString aCDATAString( "CDATA" );
     OUString aWhiteSpace( " " );
 
-    // write the namespace
+    
     AttributeList* pRootAttrList = new AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
         OUString( "xmlns" ),
         aCDATAString,
-        OUString( "http://schemas.openxmlformats.org/package/2006/relationships" ) );
+        OUString( "http:
 
     xWriter->startDocument();
     xWriter->startElement( aRelListElement, xRootAttrList );
@@ -100,7 +100,7 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
             }
             else
             {
-                // TODO/LATER: should the extensions be allowed?
+                
                 throw lang::IllegalArgumentException();
             }
         }
@@ -115,7 +115,7 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
     xWriter->endDocument();
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOutputStream >& xOutStream, const uno::Sequence< beans::StringPair >& aDefaultsSequence, const uno::Sequence< beans::StringPair >& aOverridesSequence, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -135,13 +135,13 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
     OUString aCDATAString( "CDATA" );
     OUString aWhiteSpace( " " );
 
-    // write the namespace
+    
     AttributeList* pRootAttrList = new AttributeList;
     uno::Reference< xml::sax::XAttributeList > xRootAttrList( pRootAttrList );
     pRootAttrList->AddAttribute(
         OUString( "xmlns" ),
         aCDATAString,
-        OUString( "http://schemas.openxmlformats.org/package/2006/content-types" ) );
+        OUString( "http:
 
     xWriter->startDocument();
     xWriter->startElement( aTypesElement, xRootAttrList );
@@ -176,9 +176,9 @@ void SAL_CALL OFOPXMLHelper::WriteContentSequence( const uno::Reference< io::XOu
 
 }
 
-// ==================================================================================
 
-// -----------------------------------
+
+
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::ReadSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, sal_uInt16 nFormat, const uno::Reference< uno::XComponentContext > xContext )
     throw( uno::Exception )
 {
@@ -199,7 +199,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OFOPXMLHelper::Read
     return pHelper->GetParsingResult();
 }
 
-// -----------------------------------
+
 OFOPXMLHelper::OFOPXMLHelper( sal_uInt16 nFormat )
 : m_nFormat( nFormat )
 , m_aRelListElement( "Relationships" )
@@ -217,33 +217,33 @@ OFOPXMLHelper::OFOPXMLHelper( sal_uInt16 nFormat )
 {
 }
 
-// -----------------------------------
+
 OFOPXMLHelper::~OFOPXMLHelper()
 {
 }
 
-// -----------------------------------
+
 uno::Sequence< uno::Sequence< beans::StringPair > > OFOPXMLHelper::GetParsingResult()
 {
     if ( m_aElementsSeq.getLength() )
-        throw uno::RuntimeException(); // the parsing has still not finished!
+        throw uno::RuntimeException(); 
 
     return m_aResultSeq;
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::startDocument()
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::endDocument()
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
         throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -254,18 +254,18 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
 
             if ( nNewLength != 1 )
-                throw xml::sax::SAXException(); // TODO: this element must be the first level element
+                throw xml::sax::SAXException(); 
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
 
-            return; // nothing to do
+            return; 
         }
         else if ( aName == m_aRelElement )
         {
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
             if ( nNewLength != 2 )
-                throw xml::sax::SAXException(); // TODO: this element must be the second level element
+                throw xml::sax::SAXException(); 
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
@@ -273,11 +273,11 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
             sal_Int32 nNewEntryNum = m_aResultSeq.getLength() + 1;
             m_aResultSeq.realloc( nNewEntryNum );
             sal_Int32 nAttrNum = 0;
-            m_aResultSeq[nNewEntryNum-1].realloc( 4 ); // the maximal expected number of arguments is 4
+            m_aResultSeq[nNewEntryNum-1].realloc( 4 ); 
 
             OUString aIDValue = xAttribs->getValueByName( m_aIDAttr );
             if ( aIDValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the ID value must present
+                throw xml::sax::SAXException(); 
 
             OUString aTypeValue = xAttribs->getValueByName( m_aTypeAttr );
             OUString aTargetValue = xAttribs->getValueByName( m_aTargetAttr );
@@ -307,7 +307,7 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
             m_aResultSeq[nNewEntryNum-1].realloc( nAttrNum );
         }
         else
-            throw xml::sax::SAXException(); // TODO: no other elements expected!
+            throw xml::sax::SAXException(); 
     }
     else if ( m_nFormat == CONTENTTYPE_FORMAT )
     {
@@ -316,7 +316,7 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
 
             if ( nNewLength != 1 )
-                throw xml::sax::SAXException(); // TODO: this element must be the first level element
+                throw xml::sax::SAXException(); 
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
@@ -324,13 +324,13 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
             if ( !m_aResultSeq.getLength() )
                 m_aResultSeq.realloc( 2 );
 
-            return; // nothing to do
+            return; 
         }
         else if ( aName == m_aDefaultElement )
         {
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
             if ( nNewLength != 2 )
-                throw xml::sax::SAXException(); // TODO: this element must be the second level element
+                throw xml::sax::SAXException(); 
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
@@ -343,11 +343,11 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
 
             OUString aExtensionValue = xAttribs->getValueByName( m_aExtensionAttr );
             if ( aExtensionValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the Extension value must present
+                throw xml::sax::SAXException(); 
 
             OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
             if ( aContentTypeValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the ContentType value must present
+                throw xml::sax::SAXException(); 
 
             sal_Int32 nNewResultLen = m_aResultSeq[0].getLength() + 1;
             m_aResultSeq[0].realloc( nNewResultLen );
@@ -359,7 +359,7 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
         {
             sal_Int32 nNewLength = m_aElementsSeq.getLength() + 1;
             if ( nNewLength != 2 )
-                throw xml::sax::SAXException(); // TODO: this element must be the second level element
+                throw xml::sax::SAXException(); 
 
             m_aElementsSeq.realloc( nNewLength );
             m_aElementsSeq[nNewLength-1] = aName;
@@ -372,11 +372,11 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
 
             OUString aPartNameValue = xAttribs->getValueByName( m_aPartNameAttr );
             if ( aPartNameValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the PartName value must present
+                throw xml::sax::SAXException(); 
 
             OUString aContentTypeValue = xAttribs->getValueByName( m_aContentTypeAttr );
             if ( aContentTypeValue.isEmpty() )
-                throw xml::sax::SAXException(); // TODO: the ContentType value must present
+                throw xml::sax::SAXException(); 
 
             sal_Int32 nNewResultLen = m_aResultSeq[1].getLength() + 1;
             m_aResultSeq[1].realloc( nNewResultLen );
@@ -385,13 +385,13 @@ void SAL_CALL OFOPXMLHelper::startElement( const OUString& aName, const uno::Ref
             m_aResultSeq[1][nNewResultLen-1].Second = aContentTypeValue;
         }
         else
-            throw xml::sax::SAXException(); // TODO: no other elements expected!
+            throw xml::sax::SAXException(); 
     }
     else
-        throw xml::sax::SAXException(); // TODO: no other elements expected!
+        throw xml::sax::SAXException(); 
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::endElement( const OUString& aName )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
@@ -399,39 +399,39 @@ void SAL_CALL OFOPXMLHelper::endElement( const OUString& aName )
     {
         sal_Int32 nLength = m_aElementsSeq.getLength();
         if ( nLength <= 0 )
-            throw xml::sax::SAXException(); // TODO: no other end elements expected!
+            throw xml::sax::SAXException(); 
 
         if ( !m_aElementsSeq[nLength-1].equals( aName ) )
-            throw xml::sax::SAXException(); // TODO: unexpected element ended
+            throw xml::sax::SAXException(); 
 
         m_aElementsSeq.realloc( nLength - 1 );
     }
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::characters( const OUString& /*aChars*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// -----------------------------------
+
 void SAL_CALL OFOPXMLHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
         throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-} // namespace comphelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

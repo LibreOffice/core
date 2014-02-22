@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -109,7 +109,7 @@ TextConversion_zh::getCharConversion(const OUString& aText, sal_Int32 nStartPos,
     for (sal_Int32 i = 0; i < nLength; i++)
         newStr->buffer[i] =
             getOneCharConversion(aText[nStartPos+i], Data, Index);
-    return OUString(newStr, SAL_NO_ACQUIRE); //take ownership
+    return OUString(newStr, SAL_NO_ACQUIRE); 
 }
 
 OUString SAL_CALL
@@ -161,7 +161,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
     }
 #endif
 
-    if ((!wordData || !index || !entry) && !xCDL.is()) // no word mapping defined, do char2char conversion.
+    if ((!wordData || !index || !entry) && !xCDL.is()) 
         return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
 
     sal_Unicode *newStr = new sal_Unicode[nLength * 2 + 1];
@@ -174,7 +174,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
         for (; len > 0 && ! found; len--) {
             OUString word = aText.copy(nStartPos + currPos, len);
             sal_Int32 current = 0;
-            // user dictionary
+            
             if (xCDL.is()) {
                 Sequence < OUString > conversions;
                 try {
@@ -184,14 +184,14 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                             nConversionOptions);
                 }
                 catch ( NoSupportException & ) {
-                    // clear reference (when there is no user dictionary) in order
-                    // to not always have to catch this exception again
-                    // in further calls. (save time)
+                    
+                    
+                    
                     xCDL = 0;
                 }
                 catch (...) {
-                    // catch all other exceptions to allow
-                    // querying the system dictionary in the next line
+                    
+                    
                 }
                 if (conversions.getLength() > 0) {
                     if (offset.getLength() > 0) {
@@ -202,7 +202,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                                     word.getLength() / conversions[0].getLength());
                             newStr[count++] = conversions[0][current++];
                         }
-                        // offset[count-1] = nStartPos + currPos + word.getLength() - 1;
+                        
                     } else {
                         while (current < conversions[0].getLength())
                             newStr[count++] = conversions[0][current++];
@@ -224,9 +224,9 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                     else if (result > 0)
                         bottom = current + 1;
                     else {
-                        if (toSChinese)   // Traditionary/Simplified conversion,
+                        if (toSChinese)   
                             for (current = entry[current]-1; current > 0 && wordData[current-1]; current--) ;
-                        else  // Simplified/Traditionary conversion, forwards search for next word
+                        else  
                             current = entry[current] + word.getLength() + 1;
                         sal_Int32 start=current;
                         if (offset.getLength() > 0) {
@@ -238,7 +238,7 @@ TextConversion_zh::getWordConversion(const OUString& aText, sal_Int32 nStartPos,
                                     word.getLength() / convertedLength);
                                 newStr[count++] = wordData[current++];
                             }
-                            // offset[count-1]=nStartPos + currPos + word.getLength() - 1;
+                            
                         } else {
                             while (wordData[current])
                                 newStr[count++] = wordData[current++];
@@ -290,15 +290,15 @@ TextConversion_zh::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
         sal_Bool toSChinese = nConversionType == TextConversionType::TO_SCHINESE;
 
         if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER)
-            // char to char dictionary
+            
             return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
         else {
             Sequence <sal_Int32> offset;
-            // word to word dictionary
+            
             return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions, offset);
         }
     } else
-        throw NoSupportException(); // Conversion type is not supported in this service.
+        throw NoSupportException(); 
 }
 
 OUString SAL_CALL
@@ -313,16 +313,16 @@ TextConversion_zh::getConversionWithOffset( const OUString& aText, sal_Int32 nSt
 
         if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER) {
             offset.realloc(0);
-            // char to char dictionary
+            
             return getCharConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions);
         } else {
             if (offset.getLength() < 2*nLength)
                 offset.realloc(2*nLength);
-            // word to word dictionary
+            
             return  getWordConversion(aText, nStartPos, nLength, toSChinese, nConversionOptions, offset);
         }
     } else
-        throw NoSupportException(); // Conversion type is not supported in this service.
+        throw NoSupportException(); 
 }
 
 sal_Bool SAL_CALL

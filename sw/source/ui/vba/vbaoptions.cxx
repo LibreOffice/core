@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaoptions.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -98,8 +98,8 @@ void SwVbaOptions::setValueEvent( const uno::Any& value )
     uno::Reference< util::XPathSettings > xPathSettings = util::thePathSettings::get( comphelper::getProcessComponentContext() );
     OUString sOldPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sOldPathUrl;
-    // path could be a multipath, Microsoft doesn't support this feature in Word currently
-    // only the last path is from interest.
+    
+    
     sal_Int32 nIndex = sOldPathUrl.lastIndexOf( ';' );
     if( nIndex != -1 )
     {
@@ -113,8 +113,8 @@ uno::Any SwVbaOptions::getValueEvent()
     uno::Reference< util::XPathSettings > xPathSettings = util::thePathSettings::get( comphelper::getProcessComponentContext() );
     OUString sPathUrl;
     xPathSettings->getPropertyValue( msDefaultFilePath ) >>= sPathUrl;
-    // path could be a multipath, Microsoft doesn't support this feature in Word currently
-    // only the last path is from interest.
+    
+    
     sal_Int32 nIndex = sPathUrl.lastIndexOf( ';' );
     if( nIndex != -1 )
     {
@@ -132,7 +132,7 @@ sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderLineStyle() throw (uno::Runtime
 
 void SAL_CALL SwVbaOptions::setDefaultBorderLineStyle( ::sal_Int32 /*_defaultborderlinestyle*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderLineWidth() throw (uno::RuntimeException)
@@ -142,7 +142,7 @@ sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderLineWidth() throw (uno::Runtime
 
 void SAL_CALL SwVbaOptions::setDefaultBorderLineWidth( ::sal_Int32 /*_defaultborderlinewidth*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderColorIndex() throw (uno::RuntimeException)
@@ -152,7 +152,7 @@ sal_Int32 SAL_CALL SwVbaOptions::getDefaultBorderColorIndex() throw (uno::Runtim
 
 void SAL_CALL SwVbaOptions::setDefaultBorderColorIndex( ::sal_Int32 /*_defaultbordercolorindex*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getReplaceSelection() throw (uno::RuntimeException)
@@ -162,7 +162,7 @@ void SAL_CALL SwVbaOptions::setDefaultBorderColorIndex( ::sal_Int32 /*_defaultbo
 
 void SAL_CALL SwVbaOptions::setReplaceSelection( ::sal_Bool /*_replaceselection*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getMapPaperSize() throw (uno::RuntimeException)
@@ -172,7 +172,7 @@ void SAL_CALL SwVbaOptions::setReplaceSelection( ::sal_Bool /*_replaceselection*
 
 void SAL_CALL SwVbaOptions::setMapPaperSize( ::sal_Bool /*_mappapersize*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyHeadings() throw (uno::RuntimeException)
@@ -182,7 +182,7 @@ void SAL_CALL SwVbaOptions::setMapPaperSize( ::sal_Bool /*_mappapersize*/ ) thro
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyHeadings( ::sal_Bool /*_autoformatasyoutypeapplyheadings*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyBulletedLists() throw (uno::RuntimeException)
@@ -192,7 +192,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyHeadings( ::sal_Bool /*_a
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyBulletedLists( ::sal_Bool /*_autoformatasyoutypeapplybulletedlists*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeApplyNumberedLists() throw (uno::RuntimeException)
@@ -202,7 +202,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyBulletedLists( ::sal_Bool
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyNumberedLists( ::sal_Bool /*_autoformatasyoutypeapplynumberedlists*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeFormatListItemBeginning() throw (uno::RuntimeException)
@@ -212,7 +212,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeApplyNumberedLists( ::sal_Bool
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeFormatListItemBeginning( ::sal_Bool /*_autoformatasyoutypeformatlistitembeginning*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getAutoFormatAsYouTypeDefineStyles() throw (uno::RuntimeException)
@@ -222,7 +222,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeFormatListItemBeginning( ::sal
 
 void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeDefineStyles( ::sal_Bool /*_autoformatasyoutypedefinestyles*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getAutoFormatApplyHeadings() throw (uno::RuntimeException)
@@ -232,7 +232,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatAsYouTypeDefineStyles( ::sal_Bool /*_au
 
 void SAL_CALL SwVbaOptions::setAutoFormatApplyHeadings( ::sal_Bool /*_autoformatapplyheadings*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getAutoFormatApplyLists() throw (uno::RuntimeException)
@@ -242,7 +242,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyHeadings( ::sal_Bool /*_autoformat
 
 void SAL_CALL SwVbaOptions::setAutoFormatApplyLists( ::sal_Bool /*_autoformatapplylists*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL SwVbaOptions::getAutoFormatApplyBulletedLists() throw (uno::RuntimeException)
@@ -252,7 +252,7 @@ void SAL_CALL SwVbaOptions::setAutoFormatApplyLists( ::sal_Bool /*_autoformatapp
 
 void SAL_CALL SwVbaOptions::setAutoFormatApplyBulletedLists( ::sal_Bool /*_autoformatapplybulletedlists*/ ) throw (uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 OUString

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::drawing::framework;
 
 #undef VERBOSE
-//#define VERBOSE 1
+
 
 namespace sd { namespace framework {
 
@@ -44,7 +44,7 @@ ResourceFactoryManager::ResourceFactoryManager (const Reference<XControllerManag
       mxControllerManager(rxManager),
       mxURLTransformer()
 {
-    // Create the URL transformer.
+    
     Reference<uno::XComponentContext> xContext(::comphelper::getProcessComponentContext());
     mxURLTransformer = util::URLTransformer::create(xContext);
 }
@@ -76,7 +76,7 @@ void ResourceFactoryManager::AddFactory (
 
     if (rsURL.indexOf('*') >= 0 || rsURL.indexOf('?') >= 0)
     {
-        // The URL is a URL pattern not an single URL.
+        
         maFactoryPatternList.push_back(FactoryPatternList::value_type(rsURL, rxFactory));
 
 #if defined VERBOSE && VERBOSE>=1
@@ -116,7 +116,7 @@ void ResourceFactoryManager::RemoveFactoryForURL (
     }
     else
     {
-        // The URL may be a pattern.  Look that up.
+        
         FactoryPatternList::iterator iPattern;
         for (iPattern=maFactoryPatternList.begin();
              iPattern!=maFactoryPatternList.end();
@@ -124,7 +124,7 @@ void ResourceFactoryManager::RemoveFactoryForURL (
         {
             if (iPattern->first == rsURL)
             {
-                // Found the pattern.  Remove it.
+                
                 maFactoryPatternList.erase(iPattern);
                 break;
             }
@@ -142,20 +142,20 @@ void ResourceFactoryManager::RemoveFactoryForReference(
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    // Collect a list with all keys that map to the given factory.
+    
     ::std::vector<OUString> aKeys;
     FactoryMap::const_iterator iFactory;
     for (iFactory=maFactoryMap.begin(); iFactory!=maFactoryMap.end(); ++iFactory)
         if (iFactory->second == rxFactory)
             aKeys.push_back(iFactory->first);
 
-    // Remove the entries whose keys we just have collected.
+    
     ::std::vector<OUString>::const_iterator iKey;
     for (iKey=aKeys.begin(); iKey!=aKeys.end();  ++iKey)
         maFactoryMap.erase(maFactoryMap.find(*iKey));
 
-    // Remove the pattern entries whose factories are identical to the given
-    // factory.
+    
+    
     FactoryPatternList::iterator iNewEnd (
         std::remove_if(
             maFactoryPatternList.begin(),
@@ -191,9 +191,9 @@ Reference<XResourceFactory> ResourceFactoryManager::GetFactory (
         Reference<XModuleController> xModuleController(mxControllerManager->getModuleController());
         if (xModuleController.is())
         {
-            // Ask the module controller to provide a factory of the
-            // requested view type.  Note that this can (and should) cause
-            // intermediate calls to AddFactory().
+            
+            
+            
             xModuleController->requestResource(sURLBase);
 
             xFactory = FindFactory(sURLBase);
@@ -215,7 +215,7 @@ Reference<XResourceFactory> ResourceFactoryManager::FindFactory (const OUString&
         return iFactory->second;
     else
     {
-        // Check the URL patterns.
+        
         FactoryPatternList::const_iterator iPattern;
         for (iPattern=maFactoryPatternList.begin();
              iPattern!=maFactoryPatternList.end();
@@ -229,6 +229,6 @@ Reference<XResourceFactory> ResourceFactoryManager::FindFactory (const OUString&
     return NULL;
 }
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

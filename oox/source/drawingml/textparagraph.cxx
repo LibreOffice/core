@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textparagraph.hxx"
@@ -91,8 +91,8 @@ void TextParagraph::insertAt(
             for( TextRunVector::const_iterator aIt = maRuns.begin(), aEnd = maRuns.end(); aIt != aEnd; ++aIt )
             {
                 sal_Int32 nLen = (*aIt)->getText().getLength();
-                // n#759180: Force use, maEndProperties for the last segment
-                // This is currently applied to only empty runs
+                
+                
                 if( !nLen && ( ( aIt + 1 ) == aEnd ) )
                     (*aIt)->getTextCharacterProperties().assignUsed( maEndProperties );
                 nCharHeight = std::max< sal_Int32 >( nCharHeight, (*aIt)->insertAt( rFilterBase, xText, xAt, aTextCharacterStyle, nDefaultCharHeight ) );
@@ -109,7 +109,7 @@ void TextParagraph::insertAt(
             aParaProp.apply( *pTextParagraphStyle );
             aParaProp.apply( maProperties );
 
-            // bullets have same color as following texts by default
+            
             if( !aioBulletList.hasProperty( PROP_BulletColor ) && maRuns.size() > 0
                 && (*maRuns.begin())->getTextCharacterProperties().maCharColor.isUsed() )
                 aioBulletList[ PROP_BulletColor ] <<= (*maRuns.begin())->getTextCharacterProperties().maCharColor.getColor( rFilterBase.getGraphicHelper() );
@@ -118,17 +118,17 @@ void TextParagraph::insertAt(
             aParaProp.pushToPropSet( &rFilterBase, xProps, aioBulletList, &pTextParagraphStyle->getBulletList(), sal_True, fCharacterSize, true );
         }
 
-        // empty paragraphs do not have bullets in ppt
+        
         if ( !nParagraphSize )
         {
             const OUString sNumberingLevel( "NumberingLevel" );
             xProps->setPropertyValue( sNumberingLevel, Any( static_cast< sal_Int16 >( -1 ) ) );
         }
 
-// FIXME this is causing a lot of dispruption (ie does not work). I wonder what to do -- Hub
-//          Reference< XTextRange > xEnd( xAt, UNO_QUERY );
-//      Reference< XPropertySet > xProps2( xEnd, UNO_QUERY );
-//          mpEndProperties->pushToPropSet( xProps2 );
+
+
+
+
     }
     catch( Exception & )
     {

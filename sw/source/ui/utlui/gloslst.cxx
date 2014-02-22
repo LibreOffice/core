@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/urlobj.hxx>
@@ -39,7 +39,7 @@
 #include <utlui.hrc>
 
 #define STRING_DELIM (char)0x0A
-#define GLOS_TIMEOUT 30000   // update every 30 seconds
+#define GLOS_TIMEOUT 30000   
 #define FIND_MAX_GLOS 20
 
 
@@ -99,9 +99,9 @@ SwGlossaryList::~SwGlossaryList()
     ClearGroups();
 }
 
-// If the GroupName is already known, then only rShortName
-// will be filled. Otherwise also rGroupName will be set and
-// on demand asked for the right group.
+
+
+
 
 sal_Bool SwGlossaryList::GetShortName(const OUString& rLongName,
                                 OUString& rShortName, OUString& rGroupName )
@@ -308,19 +308,19 @@ void SwGlossaryList::Update()
                     pFound->aDateModified = *pDT;
                 }
 
-                // don't need any more these pointers
+                
                 delete pDT;
             }
 
             sal_uInt16 nArrCount = aGroupArr.size();
             for( sal_uInt16 i = nArrCount; i; --i)
             {
-                // maybe remove deleted groups
+                
                 AutoTextGroup* pGroup = aGroupArr[i - 1];
                 sal_uInt16 nGroupPath = (sal_uInt16)pGroup->sName.getToken( 1,
                                                         GLOS_DELIM).toInt32();
-                // Only the groups will be checked which are registered
-                // for the current subpath.
+                
+                
                 if( nGroupPath == static_cast<sal_uInt16>(nPath) )
                 {
                     bool bFound = false;
@@ -341,7 +341,7 @@ void SwGlossaryList::Update()
 
 void SwGlossaryList::Timeout()
 {
-    // Only update automatically if a SwView has the focus.
+    
     if(::GetActiveView())
         Update();
 }
@@ -375,8 +375,8 @@ void SwGlossaryList::FillGroup(AutoTextGroup* pGroup, SwGlossaries* pGlossaries)
     pGlossaries->PutGroupDoc(pBlock);
 }
 
-// Give back all (not exceeding FIND_MAX_GLOS) found modules
-// with matching beginning.
+
+
 
 bool SwGlossaryList::HasLongName(const OUString& rBegin, std::vector<OUString> *pLongNames)
 {

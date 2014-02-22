@@ -127,14 +127,14 @@ sal_Bool XFNumberStyle::Equal(IXFStyle *pStyle)
 
 void XFNumberStyle::ToXml(IXFStream *pStrm)
 {
-    // for Text content number format
+    
     if (m_eType == enumXFText)
     {
         ToXml_StartElement(pStrm);
         ToXml_EndElement(pStrm);
         return;
     }
-    // END for Text content number format
+    
 
     if( !m_bRedIfNegative )
     {
@@ -173,12 +173,12 @@ void XFNumberStyle::ToXml_StartElement(IXFStream *pStrm)
     {
         pStrm->StartElement( A2OUSTR("number:number-style") );
     }
-    // for Text content number format
+    
     else if (m_eType == enumXFText)
     {
         pStrm->StartElement( A2OUSTR("number:text-content"));
     }
-    // END for Text content number format
+    
 
 }
 
@@ -206,12 +206,12 @@ void XFNumberStyle::ToXml_EndElement(IXFStream *pStrm)
     {
         pStrm->EndElement( A2OUSTR("number:number-style") );
     }
-    // for Text content number format
+    
     else if (m_eType == enumXFText)
     {
         pStrm->EndElement( A2OUSTR("number:text-content"));
     }
-    // END for Text content number format
+    
 
 }
 void XFNumberStyle::ToXml_Normal(IXFStream *pStrm)
@@ -277,7 +277,7 @@ void XFNumberStyle::ToXml_Content(IXFStream *pStrm, sal_Bool nagetive)
         if( !m_strNegativePrefix.isEmpty() )
         {
             pStrm->StartElement( A2OUSTR("number:text") );
-            // pStrm->Characters(m_strNegativePrefix);
+            
             pStrm->Characters(m_strNegativePrefix + A2OUSTR("-"));
             pStrm->EndElement( A2OUSTR("number:text") );
         }

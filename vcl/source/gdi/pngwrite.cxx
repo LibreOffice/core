@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -68,15 +68,15 @@ private:
     BitmapReadAccess*   mpMaskAccess;
     ZCodec*             mpZCodec;
 
-    sal_uInt8*              mpDeflateInBuf;         // as big as the size of a scanline + alphachannel + 1
-    sal_uInt8*              mpPreviousScan;         // as big as mpDeflateInBuf
+    sal_uInt8*              mpDeflateInBuf;         
+    sal_uInt8*              mpPreviousScan;         
     sal_uInt8*              mpCurrentScan;
     sal_uLong               mnDeflateInSize;
 
     sal_uLong               mnWidth, mnHeight;
     sal_uInt8               mnBitsPerPixel;
-    sal_uInt8               mnFilterType;           // 0 oder 4;
-    sal_uLong               mnBBP;                  // bytes per pixel ( needed for filtering )
+    sal_uInt8               mnFilterType;           
+    sal_uLong               mnBBP;                  
     bool                mbTrueAlpha;
     sal_uLong               mnCRC;
 
@@ -107,9 +107,9 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
     {
         Bitmap aBmp( rBmpEx.GetBitmap() );
 
-        mnInterlaced = 0;   // ( aBmp.GetSizePixel().Width() > 128 ) || ( aBmp.GetSizePixel().Height() > 128 ) ? 1 : 0; #i67236#
+        mnInterlaced = 0;   
 
-        // #i67234# defaulting max chunk size to 256kb when using interlace mode
+        
         mnMaxChunkSize = mnInterlaced == 0 ? std::numeric_limits< sal_uInt32 >::max() : 0x40000;
 
         if ( pFilterData )
@@ -139,7 +139,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
                 mnBitsPerPixel = 24;
             }
 
-            if ( mnBitsPerPixel <= 8 )                  // transparent palette
+            if ( mnBitsPerPixel <= 8 )                  
             {
                 aBmp.Convert( BMP_CONVERSION_8BIT_TRANS );
                 aBmp.Replace( rBmpEx.GetMask(), BMP_COL_TRANS );
@@ -161,7 +161,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
             }
             else
             {
-                mpAccess = aBmp.AcquireReadAccess();    // sal_True RGB with alphachannel
+                mpAccess = aBmp.AcquireReadAccess();    
                 if( mpAccess )
                 {
                     if ( ( mbTrueAlpha = rBmpEx.IsAlpha() ) )
@@ -204,7 +204,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
         }
         else
         {
-            mpAccess = aBmp.AcquireReadAccess();        // palette + RGB without alphachannel
+            mpAccess = aBmp.AcquireReadAccess();        
             if( mpAccess )
             {
                 if ( ImplWriteHeader() )
@@ -222,7 +222,7 @@ PNGWriterImpl::PNGWriterImpl( const BitmapEx& rBmpEx,
         }
         if ( mbStatus )
         {
-            ImplOpenChunk( PNGCHUNK_IEND );     // create an IEND chunk
+            ImplOpenChunk( PNGCHUNK_IEND );     
             ImplCloseChunk();
         }
     }
@@ -283,10 +283,10 @@ bool PNGWriterImpl::ImplWriteHeader()
         else
             mnFilterType = 4;
 
-        sal_uInt8 nColorType = 2;                   // colortype:
-                                                // bit 0 -> palette is used
-        if ( mpAccess->HasPalette() )           // bit 1 -> color is used
-            nColorType |= 1;                    // bit 2 -> alpha channel is used
+        sal_uInt8 nColorType = 2;                   
+                                                
+        if ( mpAccess->HasPalette() )           
+            nColorType |= 1;                    
         else
             nBitDepth /= 3;
 
@@ -294,10 +294,10 @@ bool PNGWriterImpl::ImplWriteHeader()
             nColorType |= 4;
 
         ImplWriteChunk( nBitDepth );
-        ImplWriteChunk( nColorType );           // colortype
-        ImplWriteChunk((sal_uInt8) 0 );             // compression type
-        ImplWriteChunk((sal_uInt8) 0 );             // filter type - is not supported in this version
-        ImplWriteChunk((sal_uInt8) mnInterlaced );  // interlace type
+        ImplWriteChunk( nColorType );           
+        ImplWriteChunk((sal_uInt8) 0 );             
+        ImplWriteChunk((sal_uInt8) 0 );             
+        ImplWriteChunk((sal_uInt8) mnInterlaced );  
         ImplCloseChunk();
     }
     else
@@ -369,7 +369,7 @@ void PNGWriterImpl::ImplWriteIDAT ()
 
     mpDeflateInBuf = new sal_uInt8[ mnDeflateInSize ];
 
-    if ( mnFilterType )         // using filter type 4 we need memory for the scanline 3 times
+    if ( mnFilterType )         
     {
         mpPreviousScan = new sal_uInt8[ mnDeflateInSize ];
         mpCurrentScan = new sal_uInt8[ mnDeflateInSize ];
@@ -385,39 +385,39 @@ void PNGWriterImpl::ImplWriteIDAT ()
     }
     else
     {
-        // interlace mode
+        
         sal_uLong nY;
-        for ( nY = 0; nY < mnHeight; nY+=8 )                                                // pass 1
+        for ( nY = 0; nY < mnHeight; nY+=8 )                                                
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 8 ) );
         ImplClearFirstScanline();
 
-        for ( nY = 0; nY < mnHeight; nY+=8 )                                                // pass 2
+        for ( nY = 0; nY < mnHeight; nY+=8 )                                                
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 4, 8 ) );
         ImplClearFirstScanline();
 
-        if ( mnHeight >= 5 )                                                                // pass 3
+        if ( mnHeight >= 5 )                                                                
         {
             for ( nY = 4; nY < mnHeight; nY+=8 )
                 mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 4 ) );
             ImplClearFirstScanline();
         }
 
-        for ( nY = 0; nY < mnHeight; nY+=4 )                                                // pass 4
+        for ( nY = 0; nY < mnHeight; nY+=4 )                                                
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 2, 4 ) );
         ImplClearFirstScanline();
 
-        if ( mnHeight >= 3 )                                                                // pass 5
+        if ( mnHeight >= 3 )                                                                
         {
             for ( nY = 2; nY < mnHeight; nY+=4 )
                 mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 2 ) );
             ImplClearFirstScanline();
         }
 
-        for ( nY = 0; nY < mnHeight; nY+=2 )                                                // pass 6
+        for ( nY = 0; nY < mnHeight; nY+=2 )                                                
             mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 1, 2 ) );
         ImplClearFirstScanline();
 
-        if ( mnHeight >= 2 )                                                                // pass 7
+        if ( mnHeight >= 2 )                                                                
         {
             for ( nY = 1; nY < mnHeight; nY+=2 )
                 mpZCodec->Write( aOStm, mpDeflateInBuf, ImplGetFilter ( nY, 0, 1 ) );
@@ -426,7 +426,7 @@ void PNGWriterImpl::ImplWriteIDAT ()
     mpZCodec->EndCompression();
     mnCRC = mpZCodec->GetCRC();
 
-    if ( mnFilterType )         // using filter type 4 we need memory for the scanline 3 times
+    if ( mnFilterType )         
     {
         delete[] mpCurrentScan;
         delete[] mpPreviousScan;
@@ -445,9 +445,9 @@ void PNGWriterImpl::ImplWriteIDAT ()
     }
 }
 
-// ImplGetFilter writes the complete Scanline (nY) - in interlace mode the parameter nXStart and nXAdd
-// appends to the currently used pass
-// the complete size of scanline will be returned - in interlace mode zero is possible!
+
+
+
 
 sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uLong nXAdd )
 {
@@ -460,9 +460,9 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
 
     if ( nXStart < mnWidth )
     {
-        *pDest++ = mnFilterType;        // in this version the filter type is either 0 or 4
+        *pDest++ = mnFilterType;        
 
-        if ( mpAccess->HasPalette() )   // alphachannel is not allowed by pictures including palette entries
+        if ( mpAccess->HasPalette() )   
         {
             switch ( mnBitsPerPixel )
             {
@@ -479,8 +479,8 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
                         else
                             *pDest |= mpAccess->GetPixelIndex( nY, nX ) << nShift;
                     }
-                    if ( ( nXIndex & 7 ) != 0 ) pDest++;    // byte is not completely used, so the
-                }                                           // bufferpointer is to correct
+                    if ( ( nXIndex & 7 ) != 0 ) pDest++;    
+                }                                           
                 break;
 
                 case( 4 ):
@@ -511,7 +511,7 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
         }
         else
         {
-            if ( mpMaskAccess )             // mpMaskAccess != NULL -> alphachannel is to create
+            if ( mpMaskAccess )             
             {
                 if ( mbTrueAlpha )
                 {
@@ -554,20 +554,20 @@ sal_uLong PNGWriterImpl::ImplGetFilter ( sal_uLong nY, sal_uLong nXStart, sal_uL
             }
         }
     }
-    // filter type4 ( PAETH ) will be used only for 24bit graphics
+    
     if ( mnFilterType )
     {
         mnDeflateInSize = pDest - mpCurrentScan;
         pDest = mpDeflateInBuf;
-        *pDest++ = 4;                                   // filter type
+        *pDest++ = 4;                                   
 
         sal_uLong na, nb, nc;
         long  np, npa, npb, npc;
 
-        sal_uInt8* p1 = mpCurrentScan + 1;                  // Current Pixel
-        sal_uInt8* p2 = p1 - mnBBP;                         // left pixel
-        sal_uInt8* p3 = mpPreviousScan;                     // upper pixel
-        sal_uInt8* p4 = p3 - mnBBP;                         // upperleft Pixel;
+        sal_uInt8* p1 = mpCurrentScan + 1;                  
+        sal_uInt8* p2 = p1 - mnBBP;                         
+        sal_uInt8* p3 = mpPreviousScan;                     
+        sal_uInt8* p4 = p3 - mnBBP;                         
 
         while ( pDest < mpDeflateInBuf + mnDeflateInSize )
         {
@@ -642,7 +642,7 @@ void PNGWriterImpl::ImplWriteChunk ( unsigned char* pSource, sal_uInt32 nDatSize
     }
 }
 
-// nothing to do
+
 void PNGWriterImpl::ImplCloseChunk ( void ) const
 {
 }
@@ -668,6 +668,6 @@ std::vector< vcl::PNGWriter::ChunkData >& PNGWriter::GetChunks()
     return mpImpl->GetChunks();
 }
 
-} // namespace vcl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

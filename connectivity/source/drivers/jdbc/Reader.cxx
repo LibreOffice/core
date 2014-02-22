@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "java/io/Reader.hxx"
 #include <string.h>
 using namespace connectivity;
 
-//**************************************************************
-//************ Class: java.io.Reader
-//**************************************************************
+
+
+
 
 jclass java_io_Reader::theClass = 0;
 java_io_Reader::java_io_Reader( JNIEnv * pEnv, jobject myObj )
@@ -38,7 +38,7 @@ java_io_Reader::~java_io_Reader()
 
 jclass java_io_Reader::getMyClass() const
 {
-    // the class must be fetched only once, therefore static
+    
     if( !theClass )
         theClass = findMyClass("java/io/Reader");
     return theClass;
@@ -63,12 +63,12 @@ sal_Int32 SAL_CALL java_io_Reader::available(  ) throw(::com::sun::star::io::Not
     {
         static const char * cSignature = "()Z";
         static const char * cMethodName = "available";
-        // Java-Call
+        
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallBooleanMethod( object, mID);
         ThrowSQLException(t.pEnv,*this);
-    } //t.pEnv
+    } 
     return out;
 }
 
@@ -77,7 +77,7 @@ void SAL_CALL java_io_Reader::closeInput(  ) throw(::com::sun::star::io::NotConn
     static jmethodID mID(NULL);
     callVoidMethod("close",mID);
 }
-// -----------------------------------------------------
+
 sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OSL_ENSURE(aData.getLength() < nBytesToRead," Sequence is smaller than BytesToRead");
@@ -88,7 +88,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< s
         jcharArray pCharArray = t.pEnv->NewCharArray(nBytesToRead);
         static const char * cSignature = "([CII)I";
         static const char * cMethodName = "read";
-        // Java-Call
+        
         static jmethodID mID(NULL);
         obtainMethodId(t.pEnv, cMethodName,cSignature, mID);
         out = t.pEnv->CallIntMethod( object, mID, pCharArray, 0, nBytesToRead );
@@ -103,7 +103,7 @@ sal_Int32 SAL_CALL java_io_Reader::readBytes( ::com::sun::star::uno::Sequence< s
             memcpy(aData.getArray(),t.pEnv->GetCharArrayElements(pCharArray,&p),out);
         }
         t.pEnv->DeleteLocalRef((jcharArray)pCharArray);
-    } //t.pEnv
+    } 
     return out;
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/imagemgr.hxx>
@@ -42,7 +42,7 @@
 #include <osl/mutex.hxx>
 #include <vcl/lazydelete.hxx>
 
-// globals *******************************************************************
+
 
 #define NO_INDEX        (-1)
 #define CONTENT_HELPER  ::utl::UCBContentHelper
@@ -178,7 +178,7 @@ struct SvtFactory2ExtensionMapping_Impl
     const char*   _pExtension;
 };
 
-// mapping from "private:factory" url to extension
+
 
 static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
 {
@@ -193,7 +193,7 @@ static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
     { NULL, NULL }
 };
 
-//****************************************************************************
+
 
 static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
 {
@@ -208,20 +208,20 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
         {
             if ( aPath.equalsAscii( Fac2ExtMap_Impl[ nIndex ]._pFactory ) )
             {
-                // extension found
+                
                 aExtension = OUString::createFromAscii(Fac2ExtMap_Impl[ nIndex ]._pExtension);
-                // and return it
+                
                 return aExtension;
             }
             ++nIndex;
         }
     }
 
-    // no extension found, so use the type detection (performance brake)
+    
 
     try
     {
-        // get the TypeDetection service to access all registered types
+        
         ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         ::com::sun::star::uno::Reference < ::com::sun::star::document::XTypeDetection > xTypeDetector(
             xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
@@ -252,11 +252,11 @@ static OUString GetImageExtensionByFactory_Impl( const OUString& rURL )
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        throw; // dont hide it!
+        throw; 
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        // type detection failed -> no extension
+        
     }
 
     return aExtension;
@@ -311,11 +311,11 @@ static sal_Bool GetVolumeProperties_Impl( ::ucbhelper::Content& rContent, svtool
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        throw; // dont hide it!
+        throw; 
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        // type detection failed -> no extension
+        
     }
 
     return bRet;
@@ -342,11 +342,11 @@ static sal_uInt16 GetFolderImageId_Impl( const OUString& rURL )
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        throw; // dont hide it!
+        throw; 
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        // ...
+        
     }
     return nRet;
 }
@@ -362,7 +362,7 @@ static sal_uInt16 GetImageId_Impl( const INetURLObject& rObject, sal_Bool bDetec
         OUString aType = aURLPath.getToken( 0, INET_PATH_TOKEN );
         if ( aType == "factory" )
         {
-            // detect an image id for our "private:factory" urls
+            
             aExt = GetImageExtensionByFactory_Impl( sURL );
             if ( !aExt.isEmpty() )
                 nImage = GetImageId_Impl( aExt );
@@ -468,11 +468,11 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const OUString& rURL )
     }
     catch( const ::com::sun::star::uno::RuntimeException& )
     {
-        throw; // dont hide it!
+        throw; 
     }
     catch( const ::com::sun::star::uno::Exception& )
     {
-        // ...
+        
     }
     return nRet;
 }
@@ -480,7 +480,7 @@ static sal_uInt16 GetFolderDescriptionId_Impl( const OUString& rURL )
 static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
 {
     if ( !bBig && IMG_FOLDER == nImageId )
-        // return our new small folder image (256 colors)
+        
         return Image( SvtResId( IMG_SVT_FOLDER ) );
 
     ImageList* pList = NULL;
@@ -489,7 +489,7 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, sal_Bool bBig )
     static vcl::DeleteOnDeinit< ImageList > xBigImageList( NULL );
     static OUString style = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
 
-    // If the style has been changed, throw away our cache of the older images
+    
     OUString currentStyle = Application::GetSettings().GetStyleSettings().DetermineIconTheme();
     if ( style != currentStyle)
     {
@@ -540,7 +540,7 @@ OUString SvFileInformationManager::GetDescription_Impl( const INetURLObject& rOb
 
             if ( !bDetected )
             {
-                // search a description by extension
+                
                 bool bExt = !sExtension.isEmpty();
                 if ( bExt )
                 {

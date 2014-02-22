@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <string.h>
 #include <dxfentrd.hxx>
 
-//--------------------------DXFBasicEntity--------------------------------------
+
 
 DXFBasicEntity::DXFBasicEntity(DXFEntityType eThisType)
     : m_sLayer("0")
@@ -63,7 +63,7 @@ DXFBasicEntity::~DXFBasicEntity()
 {
 }
 
-//--------------------------DXFLineEntity---------------------------------------
+
 
 DXFLineEntity::DXFLineEntity() : DXFBasicEntity(DXF_LINE)
 {
@@ -82,7 +82,7 @@ void DXFLineEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFPointEntity--------------------------------------
+
 
 DXFPointEntity::DXFPointEntity() : DXFBasicEntity(DXF_POINT)
 {
@@ -98,7 +98,7 @@ void DXFPointEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFCircleEntity-------------------------------------
+
 
 DXFCircleEntity::DXFCircleEntity() : DXFBasicEntity(DXF_CIRCLE)
 {
@@ -116,7 +116,7 @@ void DXFCircleEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFArcEntity----------------------------------------
+
 
 DXFArcEntity::DXFArcEntity() : DXFBasicEntity(DXF_ARC)
 {
@@ -138,7 +138,7 @@ void DXFArcEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFTraceEntity--------------------------------------
+
 
 DXFTraceEntity::DXFTraceEntity() : DXFBasicEntity(DXF_TRACE)
 {
@@ -163,7 +163,7 @@ void DXFTraceEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFSolidEntity--------------------------------------
+
 
 DXFSolidEntity::DXFSolidEntity() : DXFBasicEntity(DXF_SOLID)
 {
@@ -188,7 +188,7 @@ void DXFSolidEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFTextEntity---------------------------------------
+
 
 DXFTextEntity::DXFTextEntity()
     : DXFBasicEntity(DXF_TEXT)
@@ -225,7 +225,7 @@ void DXFTextEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFShapeEntity--------------------------------------
+
 
 DXFShapeEntity::DXFShapeEntity() : DXFBasicEntity(DXF_SHAPE)
 {
@@ -250,7 +250,7 @@ void DXFShapeEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFInsertEntity-------------------------------------
+
 
 DXFInsertEntity::DXFInsertEntity() : DXFBasicEntity(DXF_INSERT)
 {
@@ -285,7 +285,7 @@ void DXFInsertEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFAttDefEntity-------------------------------------
+
 
 DXFAttDefEntity::DXFAttDefEntity()
     : DXFBasicEntity(DXF_ATTDEF)
@@ -328,7 +328,7 @@ void DXFAttDefEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFAttribEntity-------------------------------------
+
 
 DXFAttribEntity::DXFAttribEntity()
     : DXFBasicEntity(DXF_ATTRIB)
@@ -370,7 +370,7 @@ void DXFAttribEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFPolyLine-----------------------------------------
+
 
 DXFPolyLineEntity::DXFPolyLineEntity() : DXFBasicEntity(DXF_POLYLINE)
 {
@@ -401,7 +401,7 @@ void DXFPolyLineEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFLWPolyLine---------------------------------------
+
 
 DXFLWPolyLineEntity::DXFLWPolyLineEntity() :
     DXFBasicEntity( DXF_LWPOLYLINE ),
@@ -451,7 +451,7 @@ DXFLWPolyLineEntity::~DXFLWPolyLineEntity()
     delete[] pP;
 }
 
-//--------------------------DXFHatchEntity-------------------------------------
+
 
 DXFEdgeTypeLine::DXFEdgeTypeLine() :
     DXFEdgeType( 1 )
@@ -670,9 +670,9 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
 {
     switch ( rDGR.GetG() )
     {
-//      case 10 : aElevationPoint.fx = rDGR.GetF(); break;
-//      case 20 : aElevationPoint.fy = rDGR.GetF(); break;
-//      case 30 : aElevationPoint.fz = rDGR.GetF(); break;
+
+
+
         case 70 : nFlags = rDGR.GetI(); break;
         case 71 : nAssociativityFlag = rDGR.GetI(); break;
         case 91 :
@@ -699,7 +699,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
 
         case 92:
             nCurrentBoundaryPathIndex++;
-            //fallthrough
+            
         default:
         {
             sal_Bool bExecutingGroupCode = sal_False;
@@ -721,7 +721,7 @@ DXFHatchEntity::~DXFHatchEntity()
     delete[] pBoundaryPathData;
 }
 
-//--------------------------DXFVertexEntity-------------------------------------
+
 
 DXFVertexEntity::DXFVertexEntity() : DXFBasicEntity(DXF_VERTEX)
 {
@@ -748,13 +748,13 @@ void DXFVertexEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//--------------------------DXFSeqEndEntity-------------------------------------
+
 
 DXFSeqEndEntity::DXFSeqEndEntity() : DXFBasicEntity(DXF_SEQEND)
 {
 }
 
-//--------------------------DXF3DFace-------------------------------------------
+
 
 DXF3DFaceEntity::DXF3DFaceEntity() : DXFBasicEntity(DXF_3DFACE)
 {
@@ -782,7 +782,7 @@ void DXF3DFaceEntity::EvaluateGroup(DXFGroupReader & rDGR)
 }
 
 
-//--------------------------DXFDimensionEntity----------------------------------
+
 
 DXFDimensionEntity::DXFDimensionEntity() : DXFBasicEntity(DXF_DIMENSION)
 {
@@ -796,7 +796,7 @@ void DXFDimensionEntity::EvaluateGroup(DXFGroupReader & rDGR)
     }
 }
 
-//---------------------------- DXFEntites --------------------------------------
+
 
 void DXFEntities::Read(DXFGroupReader & rDGR)
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,9 +29,9 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//      ----------------------------------------------------
-//      class BreakIterator_CJK
-//      ----------------------------------------------------;
+
+
+
 
 BreakIterator_CJK::BreakIterator_CJK() :
     dict( NULL ),
@@ -46,7 +46,7 @@ BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
 {
     if (dict) {
         result = dict->previousWord(text, anyPos, wordType);
-        // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
+        
         if (result.endPos - result.startPos != 1 ||
                 getScriptType(text, result.startPos) == ScriptType::ASIAN)
             return result;
@@ -63,7 +63,7 @@ BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
 {
     if (dict) {
         result = dict->nextWord(text, anyPos, wordType);
-        // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
+        
         if (result.endPos - result.startPos != 1 ||
                 getScriptType(text, result.startPos) == ScriptType::ASIAN)
             return result;
@@ -81,7 +81,7 @@ BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
 {
     if (dict) {
         result = dict->getWordBoundary(text, anyPos, wordType, bDirection);
-        // #109813# for non-CJK, single character word, fallback to ICU breakiterator.
+        
         if (result.endPos - result.startPos != 1 ||
                 getScriptType(text, result.startPos) == ScriptType::ASIAN)
             return result;
@@ -100,7 +100,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
     if (bOptions.allowPunctuationOutsideMargin &&
             hangingCharacters.indexOf(Text[nStartPos]) != -1 &&
             (Text.iterateCodePoints( &nStartPos, 1), nStartPos == Text.getLength())) {
-        ; // do nothing
+        ; 
     } else if (bOptions.applyForbiddenRules && 0 < nStartPos && nStartPos < Text.getLength()) {
         while (nStartPos > 0 &&
                 (bOptions.forbiddenBeginCharacters.indexOf(Text[nStartPos]) != -1 ||
@@ -114,9 +114,9 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
 }
 
 #define LOCALE(language, country) lang::Locale(OUString::createFromAscii(language), OUString::createFromAscii(country), OUString())
-//      ----------------------------------------------------
-//      class BreakIterator_zh
-//      ----------------------------------------------------;
+
+
+
 BreakIterator_zh::BreakIterator_zh()
 {
     dict = new xdictionary("zh");
@@ -129,9 +129,9 @@ BreakIterator_zh::~BreakIterator_zh()
     delete dict;
 }
 
-//      ----------------------------------------------------
-//      class BreakIterator_zh_TW
-//      ----------------------------------------------------;
+
+
+
 BreakIterator_zh_TW::BreakIterator_zh_TW()
 {
     dict = new xdictionary("zh");
@@ -144,9 +144,9 @@ BreakIterator_zh_TW::~BreakIterator_zh_TW()
     delete dict;
 }
 
-//      ----------------------------------------------------
-//      class BreakIterator_ja
-//      ----------------------------------------------------;
+
+
+
 BreakIterator_ja::BreakIterator_ja()
 {
     dict = new xdictionary("ja");
@@ -160,9 +160,9 @@ BreakIterator_ja::~BreakIterator_ja()
     delete dict;
 }
 
-//      ----------------------------------------------------
-//      class BreakIterator_ko
-//      ----------------------------------------------------;
+
+
+
 BreakIterator_ko::BreakIterator_ko()
 {
     hangingCharacters = LocaleDataImpl().getHangingCharacters(LOCALE("ko", "KR"));

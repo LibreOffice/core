@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartTypeManager.hxx"
@@ -121,8 +121,8 @@ enum TemplateId
     TEMPLATE_STOCKVOLUMELOWHIGHCLOSE,
     TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE,
     TEMPLATE_BUBBLE,
-//    TEMPLATE_SURFACE,
-//     TEMPLATE_ADDIN,
+
+
     TEMPLATE_NOT_FOUND = 0xffff
 };
 
@@ -196,8 +196,8 @@ const tTemplateMapType & lcl_DefaultChartTypeMap()
         ( "com.sun.star.chart2.template.StockVolumeLowHighClose",        TEMPLATE_STOCKVOLUMELOWHIGHCLOSE )
         ( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose",    TEMPLATE_STOCKVOLUMEOPENLOWHIGHCLOSE )
         ( "com.sun.star.chart2.template.Bubble",                         TEMPLATE_BUBBLE )
-//      ( "com.sun.star.chart2.template.Surface",                        TEMPLATE_SURFACE )
-//      ( "com.sun.star.chart2.template.Addin",                          TEMPLATE_ADDIN )
+
+
         );
 
     return aMap;
@@ -215,7 +215,7 @@ TemplateId lcl_GetTemplateIdForService( const OUString & rServiceName )
     return eResult;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -229,7 +229,7 @@ ChartTypeManager::ChartTypeManager(
 ChartTypeManager::~ChartTypeManager()
 {}
 
-// ____ XMultiServiceFactory ____
+
 uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
     const OUString& aServiceSpecifier )
     throw (uno::Exception,
@@ -245,14 +245,14 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             xResult = m_xContext->getServiceManager()->createInstanceWithContext(
                 aServiceSpecifier, m_xContext );
         }
-//         catch( registry::InvalidValueException & ex )
+
         catch( const uno::Exception & ex )
         {
-            // couldn't create service via factory
+            
 
-            // As XMultiServiceFactory does not specify, what to do in case
-            // createInstance is called with an unknown service-name, this
-            // function will just return an empty XInterface.
+            
+            
+            
             ASSERT_EXCEPTION( ex );
             SAL_WARN("chart2", "Couldn't instantiate service: "<< aServiceSpecifier );
             xResult.set( 0 );
@@ -263,7 +263,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
         uno::Reference< chart2::XChartTypeTemplate > xTemplate;
         switch( nId )
         {
-            // Point (category x axis)
+            
             case TEMPLATE_SYMBOL:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     StackMode_NONE, true, false ));
@@ -276,7 +276,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     StackMode_Y_STACKED_PERCENT, true, false ));
                 break;
-            // Line (category x axis)
+            
             case TEMPLATE_LINE:
                 xTemplate.set( new LineChartTypeTemplate( m_xContext, aServiceSpecifier,
                     StackMode_NONE, false ));
@@ -318,7 +318,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                     StackMode_Z_STACKED, false, true, 3 ));
                 break;
 
-            // Bar/Column
+            
             case TEMPLATE_COLUMN:
                 xTemplate.set( new BarChartTypeTemplate( m_xContext, aServiceSpecifier,
                     StackMode_NONE, BarChartTypeTemplate::VERTICAL ));
@@ -376,7 +376,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                     StackMode_Y_STACKED_PERCENT, BarChartTypeTemplate::HORIZONTAL, 3 ));
                 break;
 
-            // Combi-Chart Line/Column
+            
             case TEMPLATE_COLUMNWITHLINE:
             case TEMPLATE_STACKEDCOLUMNWITHLINE:
             {
@@ -388,7 +388,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
             }
             break;
 
-            // Area
+            
             case TEMPLATE_AREA:
                 xTemplate.set( new AreaChartTypeTemplate( m_xContext, aServiceSpecifier, StackMode_NONE ));
                 break;
@@ -454,7 +454,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                 xTemplate.set( new ScatterChartTypeTemplate( m_xContext, aServiceSpecifier, /* bSymbols */ false, /* bHasLines */ true, 3 ));
                 break;
 
-            // NetChart
+            
             case TEMPLATE_NET:
                 xTemplate.set( new NetChartTypeTemplate( m_xContext, aServiceSpecifier,
                     StackMode_NONE, true ));
@@ -524,14 +524,14 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
                     StockChartTypeTemplate::VOL_OPEN_LOW_HI_CLOSE, true ));
                 break;
 
-            //BubbleChart
+            
             case TEMPLATE_BUBBLE:
                 xTemplate.set( new BubbleChartTypeTemplate( m_xContext, aServiceSpecifier ));
                 break;
 
-//            case TEMPLATE_SURFACE:
-//            case TEMPLATE_ADDIN:
-//               break;
+
+
+
 
             case TEMPLATE_NOT_FOUND:
                 OSL_ASSERT( false );
@@ -560,11 +560,11 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
     const tTemplateMapType & rMap = lcl_DefaultChartTypeMap();
     aServices.reserve( rMap.size());
 
-    // get own default templates
+    
     ::std::transform( rMap.begin(), rMap.end(), ::std::back_inserter( aServices ),
                       ::o3tl::select1st< tTemplateMapType::value_type >());
 
-    // add components that were registered in the context's factory
+    
     uno::Reference< container::XContentEnumerationAccess > xEnumAcc(
         m_xContext->getServiceManager(), uno::UNO_QUERY );
     if( xEnumAcc.is())
@@ -590,7 +590,7 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
     return ContainerHelper::ContainerToSequence( aServices );
 }
 
-// ____ XServiceInfo ____
+
 Sequence< OUString > ChartTypeManager::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
@@ -599,9 +599,9 @@ Sequence< OUString > ChartTypeManager::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ChartTypeManager,
                              OUString("com.sun.star.comp.chart.ChartTypeManager") );
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

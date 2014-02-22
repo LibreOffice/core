@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "funcdesc.hxx"
@@ -59,9 +59,9 @@ public:
 
 };
 
-//========================================================================
-// class ScFuncDesc:
-//========================================================================
+
+
+
 
 ScFuncDesc::ScFuncDesc() :
         pFuncName       (NULL),
@@ -135,8 +135,8 @@ OUString ScFuncDesc::GetParamList() const
                     }
                 }
             }
-            // If only suppressed parameters follow the last added parameter,
-            // remove one "; "
+            
+            
             if (nLastSuppressed < nArgCount && nLastAdded < nLastSuppressed &&
                     aSig.getLength() >= 2)
                 aSig.setLength(aSig.getLength() - 2);
@@ -212,7 +212,7 @@ OUString ScFuncDesc::getSignature() const
         {
             aSig.appendAscii( "( " );
             aSig.append(aParamList);
-            // U+00A0 (NBSP) prevents automatic line break
+            
             aSig.append( static_cast< sal_Unicode >(0xA0) );
             aSig.appendAscii( ")" );
         }
@@ -328,18 +328,18 @@ void ScFuncDesc::fillVisibleArgumentMapping(::std::vector<sal_uInt16>& _rArgumen
 
 void ScFuncDesc::initArgumentInfo()  const
 {
-    // get the full argument description
-    // (add-in has to be instantiated to get the type information)
+    
+    
 
     if ( bIncomplete && pFuncName )
     {
         ScUnoAddInCollection& rAddIns = *ScGlobal::GetAddInCollection();
-        OUString aIntName(rAddIns.FindFunction( *pFuncName, true ));         // pFuncName is upper-case
+        OUString aIntName(rAddIns.FindFunction( *pFuncName, true ));         
 
         if ( !aIntName.isEmpty() )
         {
-            // GetFuncData with bComplete=true loads the component and updates
-            // the global function list if needed.
+            
+            
 
             rAddIns.GetFuncData( aIntName, true );
         }
@@ -347,7 +347,7 @@ void ScFuncDesc::initArgumentInfo()  const
         if ( bIncomplete )
         {
             OSL_FAIL( "couldn't initialize add-in function" );
-            const_cast<ScFuncDesc*>(this)->bIncomplete = false;         // even if there was an error, don't try again
+            const_cast<ScFuncDesc*>(this)->bIncomplete = false;         
         }
     }
 }
@@ -382,9 +382,9 @@ bool ScFuncDesc::compareByName(const ScFuncDesc* a, const ScFuncDesc* b)
     return (ScGlobal::GetCaseCollator()->compareString(*a->pFuncName, *b->pFuncName ) < 0);
 }
 
-//===================================================================
-// class ScFunctionList:
-//===================================================================
+
+
+
 
 ScFunctionList::ScFunctionList() :
         nMaxFuncNameLen ( 0 )
@@ -403,23 +403,23 @@ ScFunctionList::ScFunctionList() :
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
         SAL_WNODEPRECATED_DECLARATIONS_POP
-        // Browse for all possible OpCodes. This is not the fastest method, but
-        // otherwise the sub resources within the resource blocks and the
-        // resource blocks themselfs would had to be ordered according to
-        // OpCodes, which is utopian..
+        
+        
+        
+        
         for (sal_uInt16 i = 0; i <= SC_OPCODE_LAST_OPCODE_ID; ++i)
         {
             ScResId aRes(i);
             aRes.SetRT(RSC_RESOURCE);
-            // Sub resource of OpCode available?
+            
             if (pBlock->IsAvailableRes(aRes))
             {
                 pDesc = new ScFuncDesc;
                 bool bSuppressed = false;
                 ScFuncRes aSubRes( aRes, pDesc, bSuppressed);
-                // Instead of dealing with this exceptional case at 1001 places
-                // we simply don't add an entirely suppressed function to the
-                // list and delete it.
+                
+                
+                
                 if (bSuppressed)
                     delete pDesc;
                 else
@@ -435,9 +435,9 @@ ScFunctionList::ScFunctionList() :
         }
     }
 
-    sal_uInt16 nNextId = SC_OPCODE_LAST_OPCODE_ID + 1; // FuncID for AddIn functions
+    sal_uInt16 nNextId = SC_OPCODE_LAST_OPCODE_ID + 1; 
 
-    // Interpretation of AddIn list
+    
     OUString aDefArgNameValue   = "value";
     OUString aDefArgNameString  = "string";
     OUString aDefArgNameValues  = "values";
@@ -460,7 +460,7 @@ ScFunctionList::ScFunctionList() :
         pDesc = new ScFuncDesc;
         sal_uInt16 nArgs = pAddInFuncData->GetParamCount() - 1;
         pAddInFuncData->getParamDesc( aArgName, aArgDesc, 0 );
-        pDesc->nFIndex     = nNextId++; //  ??? OpCode vergeben
+        pDesc->nFIndex     = nNextId++; 
         pDesc->nCategory   = ID_FUNCTION_GRP_ADDINS;
         pDesc->pFuncName   = new OUString(pAddInFuncData->GetInternalName().toAsciiUpperCase());
 
@@ -545,7 +545,7 @@ ScFunctionList::ScFunctionList() :
             nMaxFuncNameLen = nStrLen;
     }
 
-    // StarOne AddIns
+    
 
     ScUnoAddInCollection* pUnoAddIns = ScGlobal::GetAddInCollection();
     long nUnoCount = pUnoAddIns->GetFuncCount();
@@ -565,12 +565,12 @@ ScFunctionList::ScFunctionList() :
             delete pDesc;
     }
 
-    //Move list to vector for better random access performance
+    
     ::std::vector<const ScFuncDesc*> tmp(tmpFuncList.begin(), tmpFuncList.end());
     tmpFuncList.clear();
     aFunctionList.swap(tmp);
 
-    //Initialize iterator
+    
     aFunctionListIter = aFunctionList.end();
 }
 
@@ -614,9 +614,9 @@ const ScFuncDesc* ScFunctionList::GetFunction( sal_uInt32 nIndex ) const
     return pDesc;
 }
 
-//===================================================================
-// class ScFunctionCategory:
-//===================================================================
+
+
+
 
 sal_uInt32 ScFunctionCategory::getCount() const
 {
@@ -648,9 +648,9 @@ sal_uInt32 ScFunctionCategory::getNumber() const
     return m_nCategory;
 }
 
-//========================================================================
-// class ScFunctionMgr:
-//========================================================================
+
+
+
 
 ScFunctionMgr::ScFunctionMgr() :
     pFuncList( ScGlobal::GetStarCalcFunctionList() )
@@ -661,8 +661,8 @@ ScFunctionMgr::ScFunctionMgr() :
     aCatLists[0] = new ::std::vector<const ScFuncDesc*>();
     aCatLists[0]->reserve(pFuncList->GetCount());
 
-    // Retrieve all functions, store in cumulative ("All") category, and count
-    // number of functions in each category
+    
+    
     for(const ScFuncDesc* pDesc = pFuncList->First(); pDesc; pDesc = pFuncList->Next())
     {
         OSL_ENSURE((pDesc->nCategory) < MAX_FUNCCAT, "Unknown category");
@@ -671,24 +671,24 @@ ScFunctionMgr::ScFunctionMgr() :
         aCatLists[0]->push_back(pDesc);
     }
 
-    // Sort functions in cumulative category by name
+    
     ::std::sort(aCatLists[0]->begin(), aCatLists[0]->end(), ScFuncDesc::compareByName);
 
-    // Allocate correct amount of space for categories
+    
     for (sal_uInt16 i = 1; i < MAX_FUNCCAT; ++i)
     {
         aCatLists[i] = new ::std::vector<const ScFuncDesc*>();
         aCatLists[i]->reserve(catCount[i]);
     }
 
-    // Fill categories with the corresponding functions (still sorted by name)
+    
     for(::std::vector<const ScFuncDesc*>::iterator iter = aCatLists[0]->begin(); iter!=aCatLists[0]->end(); ++iter)
     {
         if (((*iter)->nCategory) < MAX_FUNCCAT)
             aCatLists[(*iter)->nCategory]->push_back(*iter);
     }
 
-    // Initialize iterators
+    
     pCurCatListIter = aCatLists[0]->end();
     pCurCatListEnd = aCatLists[0]->end();
 }
@@ -766,7 +766,7 @@ const formula::IFunctionCategory* ScFunctionMgr::getCategory(sal_uInt32 nCategor
     formula::IFunctionCategory* pRet = NULL;
     if ( nCategory < (MAX_FUNCCAT-1) )
     {
-         pRet = new ScFunctionCategory(const_cast<ScFunctionMgr*>(this),aCatLists[nCategory+1],nCategory); // aCatLists[0] is "all"
+         pRet = new ScFunctionCategory(const_cast<ScFunctionMgr*>(this),aCatLists[nCategory+1],nCategory); 
     }
     return pRet;
 }
@@ -821,9 +821,9 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
     return 0;
 }
 
-//========================================================================
-// class ScFuncRes:
-//========================================================================
+
+
+
 
 ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
  : Resource(aRes)
@@ -845,8 +845,8 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
             pDesc->pDefArgFlags[i].bOptional = (bool)GetNum();
         }
     }
-    // Need to read the value from the resource even if nArgs==0 to advance the
-    // resource position pointer, so this can't be in the if(nArgs) block above.
+    
+    
     sal_uInt16 nSuppressed = GetNum();
     if (nSuppressed)
     {
@@ -854,7 +854,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc, bool & rbSuppressed )
         {
             OSL_TRACE( "ScFuncRes: suppressed parameters count mismatch on OpCode %u: suppressed %d > params %d",
                     aRes.GetId(), (int)nSuppressed, (int)nArgs);
-            nSuppressed = nArgs;    // sanitize
+            nSuppressed = nArgs;    
         }
         for (sal_uInt16 i = 0; i < nSuppressed; ++i)
         {

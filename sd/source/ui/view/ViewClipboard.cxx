@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,8 +54,8 @@ ViewClipboard::~ViewClipboard (void)
 
 void ViewClipboard::HandlePageDrop (const SdTransferable& rTransferable)
 {
-    // Determine whether to insert the given set of slides or to assign a
-    // given master page.
+    
+    
     SdPage* pMasterPage = GetFirstMasterPage (rTransferable);
     if (pMasterPage != NULL)
         AssignMasterPage (rTransferable, pMasterPage);
@@ -93,21 +93,21 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
                 OUString sName (*pIter);
                 sal_Bool bIsMasterPage;
 
-                // SdPage* GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
-                // sal_uInt16 GetMasterSdPageCount(PageKind ePgKind) const;
+                
+                
 
                 sal_uInt16 nBMPage = pDocument->GetPageByName (
                     sName, bIsMasterPage);
                 if ( ! bIsMasterPage)
                 {
-                    // At least one regular slide: return NULL to indicate
-                    // that not all bookmarks point to master pages.
+                    
+                    
                     pFirstMasterPage = NULL;
                     break;
                 }
                 else if (pFirstMasterPage == NULL)
                 {
-                    // Remember the first master page for later.
+                    
                     if (nBMPage != SDRPAGE_NOTFOUND)
                         pFirstMasterPage = static_cast<SdPage*>(
                             pDocument->GetMasterPage(nBMPage));
@@ -130,7 +130,7 @@ void ViewClipboard::AssignMasterPage (
     if (pMasterPage == NULL)
         return;
 
-    // Get the target page to which the master page is assigned.
+    
     SdrPageView* pPageView = mrView.GetSdrPageView();
     if (pPageView == NULL)
         return;
@@ -152,8 +152,8 @@ void ViewClipboard::AssignMasterPage (
     if (pSourceDocument == NULL)
         return;
 
-    // We have to remove the layout suffix from the layout name which is
-    // appended again by SetMasterPage() to the given name.  Don't ask.
+    
+    
     OUString sLayoutSuffix = SD_LT_SEPARATOR + SD_RESSTR(STR_LAYOUT_OUTLINE);
     sal_Int32 nLength = sLayoutSuffix.getLength();
     OUString sLayoutName = pMasterPage->GetLayoutName();
@@ -164,8 +164,8 @@ void ViewClipboard::AssignMasterPage (
         pPage->GetPageNum() / 2,
         sLayoutName,
         pSourceDocument,
-        sal_False, // Exchange the master page of only the target page.
-        sal_False // Keep unused master pages.
+        sal_False, 
+        sal_False 
         );
 }
 
@@ -178,8 +178,8 @@ sal_uInt16 ViewClipboard::DetermineInsertPosition  (
     SdDrawDocument& rDoc = mrView.GetDoc();
     sal_uInt16 nPgCnt = rDoc.GetSdPageCount( PK_STANDARD );
 
-    // Insert position is the behind the last selected page or behind the
-    // last page when the selection is empty.
+    
+    
     sal_uInt16 nInsertPos = rDoc.GetSdPageCount( PK_STANDARD ) * 2 + 1;
     for( sal_uInt16 nPage = 0; nPage < nPgCnt; nPage++ )
     {
@@ -204,21 +204,21 @@ sal_uInt16 ViewClipboard::InsertSlides (
     sal_uInt16 nInsertPgCnt = 0;
     sal_Bool bMergeMasterPages = !rTransferable.HasSourceDoc( &rDoc );
 
-    // Prepare the insertion.
+    
     const std::vector<OUString> *pBookmarkList = NULL;
     DrawDocShell* pDataDocSh;
     if (rTransferable.HasPageBookmarks())
     {
-        // When the transferable contains page bookmarks then the referenced
-        // pages are inserted.
+        
+        
         pBookmarkList = &rTransferable.GetPageBookmarks();
         pDataDocSh = rTransferable.GetPageDocShell();
         nInsertPgCnt = (sal_uInt16)pBookmarkList->size();
     }
     else
     {
-        // Otherwise all pages of the document of the transferable are
-        // inserted.
+        
+        
         SfxObjectShell* pShell = rTransferable.GetDocShell();
         pDataDocSh = (DrawDocShell*) pShell;
         SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
@@ -255,6 +255,6 @@ sal_uInt16 ViewClipboard::InsertSlides (
 }
 
 
-} // end of namespace ::sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

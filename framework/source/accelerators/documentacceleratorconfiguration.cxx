@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accelerators/acceleratorconfiguration.hxx>
@@ -55,7 +55,7 @@ class DocumentAcceleratorConfiguration : public DocumentAcceleratorConfiguration
 {
 private:
 
-    //----------------------------------
+    
     /** points to the root storage of the outside document,
         where we can read/save our configuration data. */
     css::uno::Reference< css::embed::XStorage > m_xDocumentRoot;
@@ -93,7 +93,7 @@ public:
         return aSeq;
     }
 
-    // XUIConfigurationStorage
+    
     virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
         throw(css::uno::RuntimeException);
 
@@ -110,7 +110,7 @@ private:
     void impl_ts_clearCache();
 };
 
-//-----------------------------------------------
+
 DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& lArguments)
@@ -136,24 +136,24 @@ DocumentAcceleratorConfiguration::DocumentAcceleratorConfiguration(
     impl_ts_fillCache();
 }
 
-//-----------------------------------------------
+
 DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
 {
     m_aPresetHandler.removeStorageListener(this);
 }
 
-//-----------------------------------------------
+
 void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
     throw(css::uno::RuntimeException)
 {
-    // Attention! xStorage must be accepted too, if it's NULL !
+    
 
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
     sal_Bool bForgetOldStorages = m_xDocumentRoot.is();
     m_xDocumentRoot = xStorage;
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     if (bForgetOldStorages)
         impl_ts_clearCache();
@@ -162,43 +162,43 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
         impl_ts_fillCache();
 }
 
-//-----------------------------------------------
+
 sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
     throw(css::uno::RuntimeException)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     return m_xDocumentRoot.is();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 void DocumentAcceleratorConfiguration::impl_ts_fillCache()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xDocumentRoot = m_xDocumentRoot;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // Sometimes we must live without a document root.
-    // E.g. if the document is readonly ...
+    
+    
     if (!xDocumentRoot.is())
         return;
 
-    // get current office locale ... but dont cache it.
-    // Otherwise we must be listener on the configuration layer
-    // which seems to superflous for this small implementation .-)
+    
+    
+    
     LanguageTag aLanguageTag( impl_ts_getLocale());
 
-    // May be the current document does not contain any
-    // accelerator config? Handle it gracefully :-)
+    
+    
     try
     {
-        // Note: The used preset class is threadsafe by itself ... and live if we live!
-        // We do not need any mutex here.
+        
+        
 
-        // open the folder, where the configuration exists
+        
         m_aPresetHandler.connectToResource(
             PresetHandler::E_DOCUMENT,
             PresetHandler::RESOURCETYPE_ACCELERATOR(),
@@ -213,13 +213,13 @@ void DocumentAcceleratorConfiguration::impl_ts_fillCache()
     {}
 }
 
-//-----------------------------------------------
+
 void DocumentAcceleratorConfiguration::impl_ts_clearCache()
 {
     m_aPresetHandler.forgetCachedStorages();
 }
 
-} // namespace framework
+} 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_DocumentAcceleratorConfiguration_get_implementation(

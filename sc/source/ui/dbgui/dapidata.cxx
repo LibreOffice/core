@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include <vcl/waitobj.hxx>
 #include <comphelper/processfactory.hxx>
@@ -44,15 +44,15 @@ using namespace com::sun::star;
 #include "miscuno.hxx"
 #include "dpsdbtab.hxx"
 
-//-------------------------------------------------------------------------
 
 
-//  entries in the "type" ListBox
+
+
 #define DP_TYPELIST_TABLE   0
 #define DP_TYPELIST_QUERY   1
 #define DP_TYPELIST_SQLNAT  3
 
-//-------------------------------------------------------------------------
+
 
 ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     ModalDialog(pParent, "SelectDataSourceDialog",
@@ -62,11 +62,11 @@ ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     get(m_pCbObject, "datasource");
     get(m_pLbType, "type");
 
-    WaitObject aWait( this );       // initializing the database service the first time takes a while
+    WaitObject aWait( this );       
 
     try
     {
-        //  get database names
+        
 
         uno::Reference<sdb::XDatabaseContext> xContext = sdb::DatabaseContext::create(
                 comphelper::getProcessComponentContext() );
@@ -128,11 +128,11 @@ void ScDataPilotDatabaseDlg::FillObjects()
 
     sal_uInt16 nSelect = m_pLbType->GetSelectEntryPos();
     if ( nSelect > DP_TYPELIST_QUERY )
-        return;                                 // only tables and queries
+        return;                                 
 
     try
     {
-        //  open connection (for tables or queries)
+        
 
         uno::Reference<sdb::XDatabaseContext> xContext = sdb::DatabaseContext::create(
                 comphelper::getProcessComponentContext() );
@@ -151,7 +151,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
         uno::Sequence<OUString> aNames;
         if ( nSelect == DP_TYPELIST_TABLE )
         {
-            //  get all tables
+            
 
             uno::Reference<sdbcx::XTablesSupplier> xTablesSupp( xConnection, uno::UNO_QUERY );
             if ( !xTablesSupp.is() ) return;
@@ -163,7 +163,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
         }
         else
         {
-            //  get all queries
+            
 
             uno::Reference<sdb::XQueriesSupplier> xQueriesSupp( xConnection, uno::UNO_QUERY );
             if ( !xQueriesSupp.is() ) return;
@@ -174,7 +174,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
             aNames = xQueries->getElementNames();
         }
 
-        //  fill list
+        
 
         long nCount = aNames.getLength();
         const OUString* pArray = aNames.getConstArray();
@@ -186,7 +186,7 @@ void ScDataPilotDatabaseDlg::FillObjects()
     }
     catch(uno::Exception&)
     {
-        //  this may happen if an invalid database is selected -> no DBG_ERROR
+        
         OSL_FAIL("exception in database");
     }
 }

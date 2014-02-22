@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/charclass.hxx>
@@ -35,7 +35,7 @@
 #include <switerator.hxx>
 #include <fieldhint.hxx>
 
-/// count field types with a ResId, if 0 count all
+
 sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
@@ -57,10 +57,10 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) cons
         }
     }
 
-    // all types with the same ResId
+    
     sal_uInt16 nIdx  = 0;
     for(sal_uInt16 i = 0; i < nSize; ++i)
-    {   // same ResId -> increment index
+    {   
         SwFieldType& rFldType = *((*pFldTypes)[i]);
         if(rFldType.Which() == nResId)
             nIdx++;
@@ -68,7 +68,7 @@ sal_uInt16 SwEditShell::GetFldTypeCount(sal_uInt16 nResId, sal_Bool bUsed ) cons
     return nIdx;
 }
 
-/// get field types with a ResId, if 0 get all
+
 SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, sal_Bool bUsed ) const
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
@@ -96,7 +96,7 @@ SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, sal_Boo
 
     sal_uInt16 nIdx = 0;
     for(sal_uInt16 i = 0; i < nSize; ++i)
-    {   // same ResId -> increment index
+    {   
         SwFieldType* pFldType = (*pFldTypes)[i];
         if(pFldType->Which() == nResId)
         {
@@ -111,13 +111,13 @@ SwFieldType* SwEditShell::GetFldType(sal_uInt16 nFld, sal_uInt16 nResId, sal_Boo
     return 0;
 }
 
-/// get first type with given ResId and name
+
 SwFieldType* SwEditShell::GetFldType(sal_uInt16 nResId, const OUString& rName) const
 {
     return GetDoc()->GetFldType( nResId, rName, false );
 }
 
-/// delete field type
+
 void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
 {
     if( USHRT_MAX == nResId )
@@ -130,7 +130,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
     const sal_uInt16 nSize = pFldTypes->size();
     sal_uInt16 nIdx = 0;
     for( sal_uInt16 i = 0; i < nSize; ++i )
-        // Gleiche ResId -> Index erhoehen
+        
         if( (*pFldTypes)[i]->Which() == nResId &&
             nIdx++ == nFld )
         {
@@ -139,7 +139,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nFld, sal_uInt16 nResId)
         }
 }
 
-/// delete field type based on its name
+
 void SwEditShell::RemoveFldType(sal_uInt16 nResId, const OUString& rStr)
 {
     const SwFldTypes* pFldTypes = GetDoc()->GetFldTypes();
@@ -150,7 +150,7 @@ void SwEditShell::RemoveFldType(sal_uInt16 nResId, const OUString& rStr)
 
     for(sal_uInt16 i = 0; i < nSize; ++i)
     {
-        // same ResId -> increment index
+        
         SwFieldType* pFldType = (*pFldTypes)[i];
         if( pFldType->Which() == nResId )
         {
@@ -187,7 +187,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
     EndUndo( UNDO_DELETE );
 }
 
-/// add a field at the cursor position
+
 void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
 {
     SET_CURR_SHELL( this );
@@ -198,7 +198,7 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
         ? nsSetAttrMode::SETATTR_FORCEHINTEXPAND
         : nsSetAttrMode::SETATTR_DEFAULT;
 
-    FOREACHPAM_START(GetCrsr()) // for each PaM
+    FOREACHPAM_START(GetCrsr()) 
         const bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
         OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
@@ -208,10 +208,10 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
 }
 
 
-/// Are the PaMs positioned on fields?
+
 static SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
 {
-    // Search field via its address. For input fields this needs to be done in protected fields.
+    
     SwTxtFld* pTFld = 0;
     if( RES_INPUTFLD == rFld.Which() )
     {
@@ -248,7 +248,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
     SET_CURR_SHELL( this );
     StartAllAction();
     {
-        // // If there are no selections so take the value of the current cursor position.
+        
         SwMsgPoolItem* pMsgHnt = 0;
         SwRefMarkFldUpdate aRefMkHt( GetOut() );
         sal_uInt16 nFldWhich = rFld.GetTyp()->Which();
@@ -263,26 +263,26 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         {
             pTxtFld = GetTxtFldAtPos( pCrsr->Start(), true );
 
-            if (!pTxtFld) // #i30221#
+            if (!pTxtFld) 
                 pTxtFld = lcl_FindInputFld( GetDoc(), rFld);
 
             if (pTxtFld != 0)
                 GetDoc()->UpdateFld(pTxtFld, rFld, pMsgHnt, true);
         }
 
-        // bOkay (instead of return because of EndAllAction) becomes false,
-        // 1) if only one PaM has more than one field or
-        // 2) if there are mixed field types
+        
+        
+        
         bool bOkay = true;
         sal_Bool bTblSelBreak = sal_False;
 
-        SwMsgPoolItem aFldHint( RES_TXTATR_FIELD );  // Search-Hint
+        SwMsgPoolItem aFldHint( RES_TXTATR_FIELD );  
         SwMsgPoolItem aAnnotationFldHint( RES_TXTATR_ANNOTATION );
         SwMsgPoolItem aInputFldHint( RES_TXTATR_INPUTFIELD );
-        FOREACHPAM_START(GetCrsr())               // for each PaM
-            if( PCURCRSR->HasMark() && bOkay )    // ... with selection
+        FOREACHPAM_START(GetCrsr())               
+            if( PCURCRSR->HasMark() && bOkay )    
             {
-                // copy of the PaM
+                
                 SwPaM aCurPam( *PCURCRSR->GetMark(), *PCURCRSR->GetPoint() );
                 SwPaM aPam( *PCURCRSR->GetPoint() );
 
@@ -294,14 +294,14 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                  * the loop terminates because Start = End.
                  */
 
-                // Search for SwTxtFld ...
+                
                 while(  bOkay
                      && pCurStt->nContent != pCurEnd->nContent
                      && ( aPam.Find( aFldHint, false, fnMoveForward, &aCurPam )
                           || aPam.Find( aAnnotationFldHint, false, fnMoveForward, &aCurPam )
                           || aPam.Find( aInputFldHint, false, fnMoveForward, &aCurPam ) ) )
                 {
-                    // if only one PaM has more than one field  ...
+                    
                     if( aPam.Start()->nContent != pCurStt->nContent )
                         bOkay = false;
 
@@ -310,7 +310,7 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                         pFmtFld = (SwFmtFld*)&pTxtFld->GetFmtFld();
                         SwField *pCurFld = pFmtFld->GetField();
 
-                        // if there are mixed field types
+                        
                         if( pCurFld->GetTyp()->Which() !=
                             rFld.GetTyp()->Which() )
                             bOkay = false;
@@ -318,12 +318,12 @@ void SwEditShell::UpdateFlds( SwField &rFld )
                         bTblSelBreak = GetDoc()->UpdateFld(pTxtFld, rFld,
                                                            pMsgHnt, false);
                     }
-                    // The search area is reduced by the found area:
+                    
                     pCurStt->nContent++;
                 }
             }
 
-            if( bTblSelBreak ) // If table section and table formula are updated -> finish
+            if( bTblSelBreak ) 
                 break;
 
         FOREACHPAM_END()
@@ -359,14 +359,14 @@ void SwEditShell::ChangeDBFields( const std::vector<OUString>& rOldNames,
     GetDoc()->ChangeDBFields( rOldNames, rNewName );
 }
 
-/// Update all expression fields
+
 void SwEditShell::UpdateExpFlds(sal_Bool bCloseDB)
 {
     SET_CURR_SHELL( this );
     StartAllAction();
     GetDoc()->UpdateExpFlds(NULL, true);
     if (bCloseDB)
-        GetDoc()->GetNewDBMgr()->CloseAll(); // close all database connections
+        GetDoc()->GetNewDBMgr()->CloseAll(); 
     EndAllAction();
 }
 
@@ -375,7 +375,7 @@ SwNewDBMgr* SwEditShell::GetNewDBMgr() const
     return GetDoc()->GetNewDBMgr();
 }
 
-/// insert field type
+
 SwFieldType* SwEditShell::InsertFldType(const SwFieldType& rFldType)
 {
     return GetDoc()->InsertFldType(rFldType);

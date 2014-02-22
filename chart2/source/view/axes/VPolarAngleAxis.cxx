@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/numeric/ftools.hxx>
@@ -61,7 +61,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
     FixedNumberFormatter aFixedNumberFormatter(
         m_xNumberFormatsSupplier, rAxisLabelProperties.nNumberFormatKey );
 
-    //prepare text properties for multipropertyset-interface of shape
+    
     tNameSequence aPropNames;
     tAnySequence aPropValues;
 
@@ -77,35 +77,35 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
 
     const uno::Sequence< OUString >* pLabels = m_bUseTextLabels? &m_aTextLabels : 0;
 
-    //TickInfo* pLastVisibleNeighbourTickInfo = NULL;
+    
     sal_Int32 nTick = 0;
 
     for( TickInfo* pTickInfo = rTickIter.firstInfo()
         ; pTickInfo
         ; pTickInfo = rTickIter.nextInfo(), nTick++ )
     {
-        //don't create labels which does not fit into the rhythm
+        
         if( nTick%rAxisLabelProperties.nRhythm != 0)
             continue;
 
-        //don't create labels for invisible ticks
+        
         if( !pTickInfo->bPaintIt )
             continue;
 
-        //if NO OVERLAP -> don't create labels where the
-        //anchor position is the same as for the last label
-        //@todo
+        
+        
+        
 
         if(!pTickInfo->xTextShape.is())
         {
-            //create single label
+            
             bool bHasExtraColor=false;
             sal_Int32 nExtraColor=0;
 
             OUString aLabel;
             if(pLabels)
             {
-                sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->getUnscaledTickValue()) - 1; //first category (index 0) matches with real number 1.0
+                sal_Int32 nIndex = static_cast< sal_Int32 >(pTickInfo->getUnscaledTickValue()) - 1; 
                 if( nIndex>=0 && nIndex<pLabels->getLength() )
                     aLabel = (*pLabels)[nIndex];
             }
@@ -124,7 +124,7 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
                     eLabelAlignment, fLogicAngle, fLogicRadius, fLogicZ, nScreenValueOffsetInRadiusDirection ));
             LabelPositionHelper::changeTextAdjustment( aPropValues, aPropNames, eLabelAlignment );
 
-            // #i78696# use mathematically correct rotation now
+            
             const double fRotationAnglePi(rAxisLabelProperties.fRotationAngleDegree * (F_PI / -180.0));
 
             uno::Any aATransformation = AbstractShapeFactory::makeTransformation( aAnchorScreenPosition2D, fRotationAnglePi );
@@ -133,8 +133,8 @@ bool VPolarAngleAxis::createTextShapes_ForAngleAxis(
             pTickInfo->xTextShape = pShapeFactory->createText( xTarget, aStackedLabel, aPropNames, aPropValues, aATransformation );
         }
 
-        //if NO OVERLAP -> remove overlapping shapes
-        //@todo
+        
+        
     }
     return true;
 }
@@ -149,7 +149,7 @@ void VPolarAngleAxis::createMaximumLabels()
 
 void VPolarAngleAxis::updatePositions()
 {
-    //todo: really only update the positions
+    
 
     if( !prepareShapeCreation() )
         return;
@@ -166,11 +166,11 @@ void VPolarAngleAxis::createLabels()
 
     if( m_aAxisProperties.m_bDisplayLabels )
     {
-        //get the transformed screen values for all tickmarks in aAllTickInfos
+        
         boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
 
-        //create tick mark text shapes
-        //@todo: iterate through all tick depth which should be labeled
+        
+        
 
         EquidistantTickIter aTickIter( m_aAllTickInfos, m_aIncrement, 0, 0 );
         this->updateUnscaledValuesAtTicks( aTickIter );
@@ -179,7 +179,7 @@ void VPolarAngleAxis::createLabels()
 
         AxisLabelProperties aAxisLabelProperties( m_aAxisLabelProperties );
         aAxisLabelProperties.bOverlapAllowed = true;
-        double fLogicZ      = 1.0;//as defined
+        double fLogicZ      = 1.0;
         while( !createTextShapes_ForAngleAxis( m_xTextTarget, aTickIter
                         , aAxisLabelProperties
                         , fLogicRadius, fLogicZ
@@ -187,7 +187,7 @@ void VPolarAngleAxis::createLabels()
         {
         };
 
-        //no staggering for polar angle axis
+        
     }
 }
 
@@ -197,20 +197,20 @@ void VPolarAngleAxis::createShapes()
         return;
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = 1.0;//as defined
+    double fLogicZ      = 1.0;
 
-    //create axis main lines
+    
     drawing::PointSequenceSequence aPoints(1);
     VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, m_aAllTickInfos, m_aIncrement, m_aScale, m_pPosHelper, fLogicRadius, fLogicZ );
     uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
             m_xGroupShape_Shapes, aPoints, &m_aAxisProperties.m_aLineProperties );
-    //because of this name this line will be used for marking the axis
+    
     m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
 
-    //create labels
+    
     createLabels();
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

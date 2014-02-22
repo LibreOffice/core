@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
@@ -117,17 +117,17 @@ SdrItemPool::SdrItemPool(
     sal_Bool bLoadRefCounts)
 :   XOutdevItemPool(_pMaster, SDRATTR_START, SDRATTR_END, bLoadRefCounts)
 {
-    // prepare some constants
+    
     const Color aNullCol(RGB_Color(COL_BLACK));
-    const sal_Int32 nDefEdgeDist(500L); // Defaulting hard for Draw (100TH_MM) currently. MapMode will have to be taken into account in the future.
+    const sal_Int32 nDefEdgeDist(500L); 
 
-    // init the non-persistent items
+    
     for(sal_uInt16 i(SDRATTR_NOTPERSIST_FIRST); i <= SDRATTR_NOTPERSIST_LAST; i++)
     {
         mpLocalItemInfos[i - SDRATTR_START]._nFlags=0;
     }
 
-    // init own PoolDefaults
+    
     mppLocalPoolDefaults[SDRATTR_SHADOW            -SDRATTR_START]=new SdrShadowItem;
     mppLocalPoolDefaults[SDRATTR_SHADOWCOLOR       -SDRATTR_START]=new SdrShadowColorItem(aNullCol);
     mppLocalPoolDefaults[SDRATTR_SHADOWXDIST       -SDRATTR_START]=new SdrShadowXDistItem;
@@ -321,14 +321,14 @@ SdrItemPool::SdrItemPool(
     SvxBoxInfoItem* pBoxInfoItem = new SvxBoxInfoItem( SDRATTR_TABLE_BORDER_INNER );
 
     pBoxInfoItem->SetTable( true );
-    pBoxInfoItem->SetDist( true);        // always show margin field
-    pBoxInfoItem->SetValid( VALID_DISABLE, true ); // some lines may have DontCare state only in tables
+    pBoxInfoItem->SetDist( true);        
+    pBoxInfoItem->SetValid( VALID_DISABLE, true ); 
 
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_INNER - SDRATTR_START ] =  pBoxInfoItem;
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_TLBR );
     mppLocalPoolDefaults[ SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ] = new SvxLineItem( SDRATTR_TABLE_BORDER_BLTR );
 
-    // set own ItemInfos
+    
     mpLocalItemInfos[SDRATTR_SHADOW-SDRATTR_START]._nSID=SID_ATTR_FILL_SHADOW;
     mpLocalItemInfos[SDRATTR_TEXT_FITTOSIZE-SDRATTR_START]._nSID=SID_ATTR_TEXT_FITTOSIZE;
     mpLocalItemInfos[SDRATTR_GRAFCROP-SDRATTR_START]._nSID=SID_ATTR_GRAF_CROP;
@@ -338,7 +338,7 @@ SdrItemPool::SdrItemPool(
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_TLBR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_TLBR;
     mpLocalItemInfos[SDRATTR_TABLE_BORDER_BLTR - SDRATTR_START ]._nSID = SID_ATTR_BORDER_DIAG_BLTR;
 
-    // it's my own creation level, set Defaults and ItemInfos
+    
     SetDefaults(mppLocalPoolDefaults);
     SetItemInfos(mpLocalItemInfos);
 }
@@ -374,10 +374,10 @@ SfxItemPool* SdrItemPool::Clone() const
 
 SdrItemPool::~SdrItemPool()
 {
-    // dtor of SfxItemPool
+    
     Delete();
 
-    // clear own static Defaults
+    
     if(mppLocalPoolDefaults)
     {
         const sal_uInt16 nBeg(SDRATTR_SHADOW_FIRST - SDRATTR_START);
@@ -391,7 +391,7 @@ SdrItemPool::~SdrItemPool()
         }
     }
 
-    // split pools before destroying
+    
     SetSecondaryPool(NULL);
 }
 
@@ -636,14 +636,14 @@ void SdrItemPool::TakeItemName(sal_uInt16 nWhich, OUString& rItemName)
         case EE_FEATURE_LINEBR  : nResId = SIP_EE_FEATURE_LINEBR;break;
         case EE_FEATURE_NOTCONV : nResId = SIP_EE_FEATURE_NOTCONV;break;
         case EE_FEATURE_FIELD   : nResId = SIP_EE_FEATURE_FIELD;break;
-    } // switch
+    } 
 
     rItemName = ResId( nResId, *pResMgr );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// FractionItem
-////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 TYPEINIT1_AUTOFACTORY(SdrFractionItem,SfxPoolItem);
 
@@ -709,9 +709,9 @@ SfxPoolItem* SdrFractionItem::Clone(SfxItemPool * /*pPool*/) const
     return new SdrFractionItem(Which(),GetValue());
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// ScaleItem
-////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 TYPEINIT1_AUTOFACTORY(SdrScaleItem,SdrFractionItem);
 
@@ -751,9 +751,9 @@ SfxPoolItem* SdrScaleItem::Clone(SfxItemPool * /*pPool*/) const
     return new SdrScaleItem(Which(),GetValue());
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// OnOffItem
-////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 TYPEINIT1_AUTOFACTORY(SdrOnOffItem,SfxBoolItem);
 
@@ -819,9 +819,9 @@ SfxItemPresentation SdrYesNoItem::GetPresentation(SfxItemPresentation ePres,
     return ePres;
 }
 
-//------------------------------------------------------------
-// class SdrPercentItem
-//------------------------------------------------------------
+
+
+
 
 TYPEINIT1_AUTOFACTORY(SdrPercentItem,SfxUInt16Item);
 
@@ -853,9 +853,9 @@ SfxItemPresentation SdrPercentItem::GetPresentation(
     return ePres;
 }
 
-//------------------------------------------------------------
-// class SdrAngleItem
-//------------------------------------------------------------
+
+
+
 
 TYPEINIT1_AUTOFACTORY(SdrAngleItem,SfxInt32Item);
 
@@ -903,7 +903,7 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
 
         if(bNull2)
         {
-            // no decimal place(s)
+            
             sal_Int32 idx = nLen-2;
             aText.remove(idx, aText.getLength()-idx);
         }
@@ -942,9 +942,9 @@ SfxItemPresentation SdrAngleItem::GetPresentation(
     return ePres;
 }
 
-//------------------------------------------------------------
-// class SdrMetricItem
-//------------------------------------------------------------
+
+
+
 
 TYPEINIT1_AUTOFACTORY(SdrMetricItem,SfxInt32Item);
 
@@ -968,7 +968,7 @@ bool SdrMetricItem::ScaleMetrics(long nMul, long nDiv)
     if (GetValue()!=0) {
         BigInt aVal(GetValue());
         aVal*=nMul;
-        aVal+=nDiv/2; // to round accurately
+        aVal+=nDiv/2; 
         aVal/=nDiv;
         SetValue(long(aVal));
     }
@@ -993,9 +993,9 @@ SfxItemPresentation SdrMetricItem::GetPresentation(SfxItemPresentation ePres,
     return ePres;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// items of the legend object
-////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 TYPEINIT1_AUTOFACTORY(SdrCaptionTypeItem,SfxEnumItem);
 
@@ -1049,11 +1049,11 @@ SfxItemPresentation SdrCaptionEscDirItem::GetPresentation(SfxItemPresentation eP
     return ePres;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// MiscItems
-////////////////////////////////////////////////////////////////////////////////
 
-// FitToSize
+
+
+
+
 TYPEINIT1_AUTOFACTORY(SdrTextFitToSizeTypeItem,SfxEnumItem);
 
 SfxPoolItem* SdrTextFitToSizeTypeItem::Clone(SfxItemPool* /*pPool*/) const         { return new SdrTextFitToSizeTypeItem(*this); }
@@ -1345,7 +1345,7 @@ bool SdrTextAniAmountItem::ScaleMetrics(long nMul, long nDiv)
     if (GetValue()>0) {
         BigInt aVal(GetValue());
         aVal*=nMul;
-        aVal+=nDiv/2; // to round accurately
+        aVal+=nDiv/2; 
         aVal/=nDiv;
         SetValue(short(aVal));
         return true;
@@ -1599,11 +1599,11 @@ bool SdrCustomShapeAdjustmentItem::PutValue( const uno::Any& rVal, sal_uInt8 /*n
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Edge
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-// EdgeKind
+
+
+
+
 TYPEINIT1_AUTOFACTORY(SdrEdgeKindItem,SfxEnumItem);
 
 SfxPoolItem* SdrEdgeKindItem::Clone(SfxItemPool* /*pPool*/) const            { return new SdrEdgeKindItem(*this); }
@@ -1789,9 +1789,9 @@ bool SdrEdgeLine3DeltaItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberI
     return true;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Measure
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1_AUTOFACTORY(SdrMeasureKindItem,SfxEnumItem);
 
@@ -1986,9 +1986,9 @@ bool SdrMeasureUnitItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/
     return true;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Circ
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1_AUTOFACTORY(SdrCircKindItem,SfxEnumItem);
 
@@ -2038,9 +2038,9 @@ bool SdrCircKindItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/)
     return true;
 }
 
-//------------------------------------------------------------
-// class SdrSignedPercentItem
-//------------------------------------------------------------
+
+
+
 
 TYPEINIT1_AUTOFACTORY( SdrSignedPercentItem, SfxInt16Item );
 
@@ -2073,9 +2073,9 @@ SfxItemPresentation SdrSignedPercentItem::GetPresentation(
     return ePres;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafRedItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafRedItem, SdrSignedPercentItem );
 
@@ -2089,9 +2089,9 @@ SfxPoolItem* SdrGrafRedItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SdrGrafRedItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafGreenItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafGreenItem, SdrSignedPercentItem );
 
@@ -2105,9 +2105,9 @@ SfxPoolItem* SdrGrafGreenItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SdrGrafGreenItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafBlueItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafBlueItem, SdrSignedPercentItem );
 
@@ -2121,9 +2121,9 @@ SfxPoolItem* SdrGrafBlueItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) const
     return new SdrGrafBlueItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafLuminanceItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafLuminanceItem, SdrSignedPercentItem );
 
@@ -2137,9 +2137,9 @@ SfxPoolItem* SdrGrafLuminanceItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) c
     return new SdrGrafLuminanceItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafContrastItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafContrastItem, SdrSignedPercentItem );
 
@@ -2153,9 +2153,9 @@ SfxPoolItem* SdrGrafContrastItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) co
     return new SdrGrafContrastItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafGamma100Item
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafGamma100Item, SfxUInt32Item );
 
@@ -2185,9 +2185,9 @@ bool SdrGrafGamma100Item::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*
     return true;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafInvertItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafInvertItem, SdrOnOffItem );
 
@@ -2201,9 +2201,9 @@ SfxPoolItem* SdrGrafInvertItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/) cons
     return new SdrGrafInvertItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafTransparenceItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafTransparenceItem, SdrPercentItem );
 
@@ -2217,9 +2217,9 @@ SfxPoolItem* SdrGrafTransparenceItem::Create( SvStream& rIn, sal_uInt16 /*nVer*/
     return new SdrGrafTransparenceItem( rIn );
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafModeItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafModeItem, SfxEnumItem );
 
@@ -2286,9 +2286,9 @@ SfxItemPresentation SdrGrafModeItem::GetPresentation( SfxItemPresentation ePres,
     return ePres;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// SdrGrafCropItem
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
 
 TYPEINIT1( SdrGrafCropItem, SvxGrfCrop );
 
@@ -2304,7 +2304,7 @@ SfxPoolItem* SdrGrafCropItem::Create( SvStream& rIn, sal_uInt16 nVer ) const
 
 sal_uInt16 SdrGrafCropItem::GetVersion( sal_uInt16 /*nFileVersion*/) const
 {
-    // GRFCROP_VERSION_MOVETOSVX is 1
+    
     return GRFCROP_VERSION_MOVETOSVX;
 }
 

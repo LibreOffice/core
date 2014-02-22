@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <txtfrm.hxx>
 #include <fmtornt.hxx>
-// --> #i28701#
+
 #include <doc.hxx>
 #include <fmtsrnd.hxx>
 #include <dcontact.hxx>
@@ -27,30 +27,30 @@
 #include <editeng/lrspitem.hxx>
 #include <sortedobjs.hxx>
 #include <pagefrm.hxx>
-// --> #i35911#
+
 #include <layouter.hxx>
 
 using namespace ::com::sun::star;
 
-// --> #i28701# -
-// implementation of helper class <SwObjPositioningInProgress>
+
+
 
 SwObjPositioningInProgress::SwObjPositioningInProgress( SdrObject& _rSdrObj ) :
     mpAnchoredObj( 0L ),
-    // --> #i52904#
+    
     mbOldObjPositioningInProgress( false )
 {
     mpAnchoredObj = ::GetUserCall( &_rSdrObj )->GetAnchoredObj( &_rSdrObj );
-    // --> #i52904#
+    
     mbOldObjPositioningInProgress = mpAnchoredObj->IsPositioningInProgress();
     mpAnchoredObj->SetPositioningInProgress( true );
 }
 SwObjPositioningInProgress::SwObjPositioningInProgress( SwAnchoredObject& _rAnchoredObj ) :
     mpAnchoredObj( &_rAnchoredObj ),
-    // --> #i52904#
+    
     mbOldObjPositioningInProgress( false )
 {
-    // --> #i52904#
+    
     mbOldObjPositioningInProgress = mpAnchoredObj->IsPositioningInProgress();
     mpAnchoredObj->SetPositioningInProgress( true );
 }
@@ -59,36 +59,36 @@ SwObjPositioningInProgress::~SwObjPositioningInProgress()
 {
     if ( mpAnchoredObj )
     {
-        // --> #i52904#
+        
         mpAnchoredObj->SetPositioningInProgress( mbOldObjPositioningInProgress );
     }
 }
 
-// SwAnchoredObject
+
 
 TYPEINIT0(SwAnchoredObject);
 
 SwAnchoredObject::SwAnchoredObject() :
     mpDrawObj( 0L ),
     mpAnchorFrm( 0L ),
-    // --> #i28701#
+    
     mpPageFrm( 0L ),
     maRelPos(),
     maLastCharRect(),
     mnLastTopOfLine( 0L ),
     mpVertPosOrientFrm( 0L ),
-    // --> #i28701#
+    
     mbPositioningInProgress( false ),
     mbConsiderForTextWrap( false ),
     mbPositionLocked( false ),
-    // --> #i40147#
+    
     mbKeepPositionLockedForSection( false ),
     mbRestartLayoutProcess( false ),
-    // --> #i35911#
+    
     mbClearedEnvironment( false ),
-    // --> #i3317#
+    
     mbTmpConsiderWrapInfluence( false ),
-    // --> #i68520#
+    
     maObjRectWithSpaces(),
     mbObjRectWithSpacesValid( false ),
     maLastObjRect()
@@ -177,8 +177,8 @@ void SwAnchoredObject::SetPageFrm( SwPageFrm* _pNewPageFrm )
 {
     if ( mpPageFrm != _pNewPageFrm )
     {
-        // clear member, which denotes the layout frame at which the vertical
-        // position is oriented at, if it doesn't fit to the new page frame.
+        
+        
         if ( GetVertPosOrientFrm() &&
              ( !_pNewPageFrm ||
                _pNewPageFrm != GetVertPosOrientFrm()->FindPageFrm() ) )
@@ -186,7 +186,7 @@ void SwAnchoredObject::SetPageFrm( SwPageFrm* _pNewPageFrm )
             ClearVertPosOrientFrm();
         }
 
-        // assign new page frame
+        
         mpPageFrm = _pNewPageFrm;
     }
 }
@@ -223,9 +223,9 @@ void SwAnchoredObject::SetVertPosOrientFrm( const SwLayoutFrm& _rVertPosOrientFr
     mpVertPosOrientFrm = &_rVertPosOrientFrm;
     const_cast<SwLayoutFrm*>(mpVertPosOrientFrm)->SetVertPosOrientFrmFor(this);
 
-    // #i28701# - take over functionality of deleted method
-    // <SwFlyAtCntFrm::AssertPage()>: assure for at-paragraph and at-character
-    // an anchored object, that it is registered at the correct page frame
+    
+    
+    
     RegisterAtCorrectPage();
 }
 
@@ -234,7 +234,7 @@ SwTwips SwAnchoredObject::GetLastTopOfLine() const
     return mnLastTopOfLine;
 }
 
-// #i28701# - follow-up of #i22341#
+
 void SwAnchoredObject::AddLastTopOfLineY( SwTwips _nDiff )
 {
     mnLastTopOfLine += _nDiff;
@@ -260,13 +260,13 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine(
         if ( (rAnch.GetAnchorId() == FLY_AT_CHAR) &&
              rAnch.GetCntntAnchor() )
         {
-            // --> if requested, assure that anchor frame,
-            // which contains the anchor character, has a paragraph portion information.
-            // The paragraph portion information is needed to determine the
-            // anchor character rectangle respectively the top of the line.
-            // Thus, a format of this frame is avoided to determine the
-            // paragraph portion information.
-            // --> #i26945# - use new method <FindAnchorCharFrm()>
+            
+            
+            
+            
+            
+            
+            
             const SwTxtFrm& aAnchorCharFrm = *(FindAnchorCharFrm());
             if ( !_bCheckForParaPorInf || aAnchorCharFrm.HasPara() )
             {
@@ -290,26 +290,26 @@ void SwAnchoredObject::CheckCharRectAndTopOfLine(
 void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch,
                                        const SwTxtFrm& _rAnchorCharFrm )
 {
-    // determine rectangle of anchor character. If not exist, abort operation
+    
     SwRect aCharRect;
     if ( !_rAnchorCharFrm.GetAutoPos( aCharRect, *_rAnch.GetCntntAnchor() ) )
     {
         return;
     }
-    // check, if anchor character rectangle has changed
+    
     if ( aCharRect != maLastCharRect )
     {
-        // check positioning and alignment for invalidation of position
+        
         {
             SWRECTFN( (&_rAnchorCharFrm) );
-            // determine positioning and alignment
+            
             SwFmtVertOrient aVert( GetFrmFmt().GetVertOrient() );
             SwFmtHoriOrient aHori( GetFrmFmt().GetHoriOrient() );
-            // check for anchor character rectangle changes for certain
-            // positionings and alignments
-            // add condition to invalidate position,
-            // if vertical aligned at frame/page area and vertical position
-            // of anchor character has changed.
+            
+            
+            
+            
+            
             const sal_Int16 eVertRelOrient = aVert.GetRelationOrient();
             if ( ( aHori.GetRelationOrient() == text::RelOrientation::CHAR &&
                    (aCharRect.*fnRect->fnGetLeft)() !=
@@ -326,9 +326,9 @@ void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch,
                    ( (aCharRect.*fnRect->fnGetTop)() !=
                         (maLastCharRect.*fnRect->fnGetTop)() ) ) )
             {
-                // #i26945#, #i35911# - unlock position of
-                // anchored object, if it isn't registered at the page,
-                // where its anchor character frame is on.
+                
+                
+                
                 if ( GetPageFrm() != _rAnchorCharFrm.FindPageFrm() )
                 {
                     UnlockPosition();
@@ -336,7 +336,7 @@ void SwAnchoredObject::_CheckCharRect( const SwFmtAnchor& _rAnch,
                 InvalidateObjPos();
             }
         }
-        // keep new anchor character rectangle
+        
         maLastCharRect = aCharRect;
     }
 }
@@ -359,19 +359,19 @@ void SwAnchoredObject::_CheckTopOfLine( const SwFmtAnchor& _rAnch,
     {
         if ( nTopOfLine != mnLastTopOfLine )
         {
-            // check alignment for invalidation of position
+            
             if ( GetFrmFmt().GetVertOrient().GetRelationOrient() == text::RelOrientation::TEXT_LINE )
             {
-                // #i26945#, #i35911# - unlock position of
-                // anchored object, if it isn't registered at the page,
-                // where its anchor character frame is on.
+                
+                
+                
                 if ( GetPageFrm() != _rAnchorCharFrm.FindPageFrm() )
                 {
                     UnlockPosition();
                 }
                 InvalidateObjPos();
             }
-            // keep new top of line value
+            
             mnLastTopOfLine = nTopOfLine;
         }
     }
@@ -394,8 +394,8 @@ void SwAnchoredObject::SetCurrRelPos( Point _aRelPos )
 
 void SwAnchoredObject::ObjectAttachedToAnchorFrame()
 {
-    // default behaviour:
-    // update layout direction, the anchored object is assigned to
+    
+    
     UpdateLayoutDir();
 }
 
@@ -437,13 +437,13 @@ void SwAnchoredObject::InvalidateObjPosForConsiderWrapInfluence(
 {
     if ( ConsiderObjWrapInfluenceOnObjPos() )
     {
-        // indicate that object has not to be considered for text wrap
+        
         SetConsiderForTextWrap( false );
-        // unlock position
+        
         UnlockPosition();
-        // invalidate position
+        
         InvalidateObjPos();
-        // invalidate 'background', if requested
+        
         if ( _bNotifyBackgrd )
         {
             NotifyBackground( GetPageFrm(), GetObjRectWithSpaces(), PREP_FLY_LEAVE );
@@ -464,11 +464,11 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
 
     const SwFrmFmt& rObjFmt = GetFrmFmt();
 
-    // --> #i3317# - add condition <IsTmpConsiderWrapInfluence()>
-    // --> #i55204#
-    // - correction: wrapping style influence has been considered, if condition
-    //   <IsTmpConsiderWrapInfluence()> is hold, regardless of its anchor type
-    //   or its wrapping style.
+    
+    
+    
+    
+    
     if ( IsTmpConsiderWrapInfluence() )
     {
         bRet = true;
@@ -480,9 +480,9 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
               (rAnchor.GetAnchorId() == FLY_AT_PARA)) &&
              rObjFmt.GetSurround().GetSurround() != SURROUND_THROUGHT )
         {
-            // --> #i34520# - text also wraps around anchored
-            // objects in the layer Hell - see the text formatting.
-            // Thus, it hasn't to be checked here.
+            
+            
+            
             bRet = true;
         }
     }
@@ -493,7 +493,7 @@ bool SwAnchoredObject::ConsiderObjWrapInfluenceOnObjPos() const
 /** method to determine, if other anchored objects, also attached at
     to the anchor frame, have to consider its wrap influence.
 
-    // --> #i43255#
+    
 */
 bool SwAnchoredObject::ConsiderObjWrapInfluenceOfOtherObjs() const
 {
@@ -552,7 +552,7 @@ void SwAnchoredObject::SetRestartLayoutProcess( const bool _bRestartLayoutProces
     mbRestartLayoutProcess = _bRestartLayoutProcess;
 }
 
-// --> #i35911#
+
 bool SwAnchoredObject::ClearedEnvironment() const
 {
     if ( ConsiderObjWrapInfluenceOnObjPos() )
@@ -574,7 +574,7 @@ bool SwAnchoredObject::HasClearedEnvironment() const
 {
     bool bHasClearedEnvironment( false );
 
-    // --> #i43913# - layout frame, vertical position is orient at, has to be set.
+    
     OSL_ENSURE( GetVertPosOrientFrm(),
             "<SwAnchoredObject::HasClearedEnvironment()> - layout frame missing, at which the vertical position is oriented at." );
     if ( GetVertPosOrientFrm() &&
@@ -640,7 +640,7 @@ const SwRect& SwAnchoredObject::GetObjRectWithSpaces() const
     return maObjRectWithSpaces;
 }
 
-// --> #i68520#
+
 void SwAnchoredObject::SetObjTop( const SwTwips _nTop)
 {
     const bool bTopChanged( _SetObjTop( _nTop ) );
@@ -673,11 +673,11 @@ void SwAnchoredObject::UpdateObjInSortedList()
     {
         if ( GetFrmFmt().getIDocumentSettingAccess()->get(IDocumentSettingAccess::CONSIDER_WRAP_ON_OBJECT_POSITION) )
         {
-            // invalidate position of all anchored objects at anchor frame
+            
             if ( GetAnchorFrm()->GetDrawObjs() )
             {
                 const SwSortedObjs* pObjs = GetAnchorFrm()->GetDrawObjs();
-                // determine start index
+                
                 sal_uInt32 i = 0;
                 for ( ; i < pObjs->Count(); ++i )
                 {
@@ -688,11 +688,11 @@ void SwAnchoredObject::UpdateObjInSortedList()
                         pAnchoredObj->InvalidateObjPos();
                 }
             }
-            // invalidate all following anchored objects on the page frame
+            
             if ( GetPageFrm() && GetPageFrm()->GetSortedObjs() )
             {
                 const SwSortedObjs* pObjs = GetPageFrm()->GetSortedObjs();
-                // determine start index
+                
                 sal_uInt32 i = pObjs->ListPosOf( *this ) + 1;
                 for ( ; i < pObjs->Count(); ++i )
                 {
@@ -704,10 +704,10 @@ void SwAnchoredObject::UpdateObjInSortedList()
                 }
             }
         }
-        // update its position in the sorted object list of its anchor frame
+        
         AnchorFrm()->GetDrawObjs()->Update( *this );
-        // update its position in the sorted object list of its page frame
-        // note: as-character anchored object aren't registered at a page frame
+        
+        
         if ( GetFrmFmt().GetAnchor().GetAnchorId() != FLY_AS_CHAR )
         {
             GetPageFrm()->GetSortedObjs()->Update( *this );
@@ -721,8 +721,8 @@ void SwAnchoredObject::UpdateObjInSortedList()
 */
 bool SwAnchoredObject::InvalidationOfPosAllowed() const
 {
-    // --> Check, if page frame layout is in progress,
-    // isn't needed, because of anchored object, whose are moved forward.
+    
+    
     return !PositionLocked();
 }
 
@@ -740,10 +740,10 @@ SwPageFrm* SwAnchoredObject::FindPageFrmOfAnchor()
 {
     SwPageFrm* pRetPageFrm = 0L;
 
-    // --> #i44339# - check, if anchor frame exists.
+    
     if ( mpAnchorFrm )
     {
-        // --> #i26945# - use new method <GetAnchorFrmContainingAnchPos()>
+        
         pRetPageFrm = GetAnchorFrmContainingAnchPos()->FindPageFrm();
     }
 
@@ -763,7 +763,7 @@ SwTxtFrm* SwAnchoredObject::FindAnchorCharFrm()
 {
     SwTxtFrm* pAnchorCharFrm( 0L );
 
-    // --> #i44339# - check, if anchor frame exists.
+    
     if ( mpAnchorFrm )
     {
         const SwFmtAnchor& rAnch = GetFrmFmt().GetAnchor();
@@ -789,11 +789,11 @@ bool SwAnchoredObject::IsFormatPossible() const
     return GetFrmFmt().GetDoc()->IsVisibleLayerId( GetDrawObj()->GetLayer() );
 }
 
-// --> #i3317#
+
 void SwAnchoredObject::SetTmpConsiderWrapInfluence( const bool _bTmpConsiderWrapInfluence )
 {
     mbTmpConsiderWrapInfluence = _bTmpConsiderWrapInfluence;
-    // --> #i35911#
+    
     if ( mbTmpConsiderWrapInfluence )
     {
         SwLayouter::InsertObjForTmpConsiderWrapInfluence( *(GetFrmFmt().GetDoc()),
@@ -896,8 +896,8 @@ Point SwAnchoredObject::GetRelPosToPageFrm( const bool _bFollowTextFlow,
             "<SwAnchoredObject::GetRelPosToPageFrm()> - missing page frame." );
 
     aRelPos = GetObjRect().Pos();
-    // --> #i33818# - search for cell frame, if object has to
-    // follow the text flow.
+    
+    
     const SwFrm* pFrm( 0L );
     if ( _bFollowTextFlow && !GetAnchorFrm()->IsPageFrm() )
     {

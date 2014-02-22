@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,7 +29,7 @@ namespace internal {
 
 ::basegfx::B2DPolyPolygon DoubleDiamondWipe::operator () ( double t )
 {
-    // outer:
+    
     const double a = ::basegfx::pruneScaleValue( 0.25 + (t * 0.75) );
     ::basegfx::B2DPolygon poly;
     poly.append( ::basegfx::B2DPoint( 0.5 + a, 0.5 ) );
@@ -39,7 +39,7 @@ namespace internal {
     poly.setClosed(true);
     ::basegfx::B2DPolyPolygon res(poly);
 
-    // inner (reverse order to clip):
+    
     const double b = ::basegfx::pruneScaleValue( (1.0 - t) * 0.25 );
     poly.clear();
     poly.append( ::basegfx::B2DPoint( 0.5 + b, 0.5 ) );

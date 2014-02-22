@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ColumnLineDataInterpreter.hxx"
@@ -39,7 +39,7 @@ using ::com::sun::star::uno::Sequence;
 namespace chart
 {
 
-// explicit
+
 ColumnLineDataInterpreter::ColumnLineDataInterpreter(
     sal_Int32 nNumberOfLines,
     const Reference< uno::XComponentContext > & xContext ) :
@@ -50,7 +50,7 @@ ColumnLineDataInterpreter::ColumnLineDataInterpreter(
 ColumnLineDataInterpreter::~ColumnLineDataInterpreter()
 {}
 
-// ____ XDataInterpreter ____
+
 InterpretedData SAL_CALL ColumnLineDataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
@@ -59,13 +59,13 @@ InterpretedData SAL_CALL ColumnLineDataInterpreter::interpretDataSource(
 {
     InterpretedData aResult(  DataInterpreter::interpretDataSource( xSource, aArguments, aSeriesToReUse ));
 
-    // the base class should return one group
+    
     OSL_ASSERT( aResult.Series.getLength() == 1 );
     if( aResult.Series.getLength() == 1 )
     {
         sal_Int32 nNumberOfSeries = aResult.Series[0].getLength();
 
-        // if we have more than one series put the last nNumOfLines ones into a new group
+        
         if( nNumberOfSeries > 1 && m_nNumberOfLines > 0 )
         {
             sal_Int32 nNumOfLines = ::std::min( m_nNumberOfLines, nNumberOfSeries - 1 );
@@ -84,6 +84,6 @@ InterpretedData SAL_CALL ColumnLineDataInterpreter::interpretDataSource(
     return aResult;
 }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "gtkprintwrapper.hxx"
@@ -154,7 +154,7 @@ namespace
 static GtkInstance const&
 lcl_getGtkSalInstance()
 {
-    // we _know_ this is GtkInstance
+    
     return *static_cast<GtkInstance*>(GetGtkSalData()->m_pInstance);
 }
 
@@ -255,13 +255,13 @@ GtkSalPrinter::StartJob(
     int nCopies = 1;
     bool bCollate = false;
 
-    //To-Do proper name, watch for encodings
+    
     sFileName = OString("/tmp/hacking.ps");
     m_pImpl->m_sSpoolFile = sFileName;
 
     OUString aFileName = OStringToOUString(sFileName, osl_getThreadTextEncoding());
 
-    //To-Do, swap ps/pdf for gtk_printer_accepts_ps()/gtk_printer_accepts_pdf() ?
+    
 
     return impl_doJob(&aFileName, i_rJobName, i_rAppName, io_pSetupData, nCopies, bCollate, io_rController);
 }
@@ -284,7 +284,7 @@ GtkSalPrinter::EndJob()
 
     GtkPageSetup* pPageSetup = pWrapper->page_setup_new();
 #if 0
-    //todo
+    
     gtk_page_setup_set_orientation(pPageSetup,);
     gtk_page_setup_set_paper_size(pPageSetup,);
     gtk_page_setup_set_top_margin(pPageSetup,);
@@ -303,7 +303,7 @@ GtkSalPrinter::EndJob()
         pWrapper->print_job_send(pJob, NULL, NULL, NULL);
     else
     {
-        //To-Do, do something with this
+        
         fprintf(stderr, "error was %s\n", error->message);
         g_error_free(error);
     }
@@ -311,7 +311,7 @@ GtkSalPrinter::EndJob()
     g_object_unref(pPageSetup);
     m_pImpl.reset();
 
-    //To-Do, remove temp spool file
+    
 
     return bRet;
 }
@@ -419,7 +419,7 @@ GtkPrintDialog::GtkPrintDialog(vcl::PrinterController& io_rController)
 void
 GtkPrintDialog::impl_initDialog()
 {
-    //To-Do, like fpicker, set UI language
+    
     m_pDialog = m_pWrapper->print_unix_dialog_new(NULL, NULL);
 
     Window* const pTopWindow(Application::GetActiveTopWindow());
@@ -483,8 +483,8 @@ GtkPrintDialog::impl_initCustomTab()
         GtkWidget* pGroup = NULL;
         bool bGtkInternal = false;
 
-        //Fix fdo#69381
-        //Next options if this one is empty
+        
+        
         if ( aOptProp.getLength() == 0)
             continue;
 
@@ -531,7 +531,7 @@ GtkPrintDialog::impl_initCustomTab()
                     for (int j = 0; j != nLen; ++j)
                         aHelpTexts[j] = pHelp->GetHelpText(aHelpIds[j], 0);
                 }
-                else // fallback
+                else 
                     aHelpTexts = aHelpIds;
             }
             else if ( rEntry.Name == "HelpText" )
@@ -540,13 +540,13 @@ GtkPrintDialog::impl_initCustomTab()
                 rEntry.Value >>= bIgnore;
             else if ( rEntry.Name == "Enabled" )
             {
-                // Ignore this. We use UIControlOptions::isUIOptionEnabled
-                // to check whether a control should be enabled.
+                
+                
             }
             else if ( rEntry.Name == "GroupingHint" )
             {
-                // Ignore this. We cannot add/modify controls to/on existing
-                // tabs of the Gtk print dialog.
+                
+                
             }
             else
             {
@@ -577,12 +577,12 @@ GtkPrintDialog::impl_initCustomTab()
             pCurSubGroup = lcl_makeFrame(pCurParent, aText, aHelpTexts, NULL);
             gtk_box_pack_start(GTK_BOX(pCurTabPage), pCurSubGroup, FALSE, FALSE, 0);
         }
-        // special case: we need to map these to controls of the gtk print dialog
+        
         else if (bGtkInternal)
         {
             if ( aPropertyName == "PrintContent" )
             {
-                // What to print? And, more importantly, is there a selection?
+                
                 impl_initPrintContent(aChoicesDisabled);
             }
         }
@@ -590,13 +590,13 @@ GtkPrintDialog::impl_initCustomTab()
             continue;
         else
         {
-            // change handlers for all the controls set up in this block
-            // should be set _after_ the control has been made (in)active,
-            // because:
-            // 1. value of the property is _known_--we are using it to
-            //    _set_ the control, right?--no need to change it back .-)
-            // 2. it may cause warning because the widget may not
-            //    have been placed in m_aControlToPropertyMap yet
+            
+            
+            
+            
+            
+            
+            
 
             GtkWidget* pWidget = NULL;
             beans::PropertyValue* pVal = NULL;
@@ -771,10 +771,10 @@ GtkPrintDialog::impl_initPrintContent(uno::Sequence<sal_Bool> const& i_rDisabled
 
     GtkPrintUnixDialog* const pDialog(GTK_PRINT_UNIX_DIALOG(m_pDialog));
 
-    // XXX: This is a hack that depends on the number and the ordering of
-    // the controls in the rDisabled sequence (cf. the intialization of
-    // the "PrintContent" UI option in SwPrintUIOptions::SwPrintUIOptions,
-    // sw/source/core/view/printdata.cxx)
+    
+    
+    
+    
     if (m_pWrapper->supportsPrintSelection() && !i_rDisabled[2])
     {
         m_pWrapper->print_unix_dialog_set_support_selection(pDialog, TRUE);
@@ -1057,7 +1057,7 @@ void
 GtkPrintDialog::updateControllerPrintRange()
 {
     GtkPrintSettings* const pSettings(getSettings());
-    // TODO: use get_print_pages
+    
     if (const gchar* const pStr = m_pWrapper->print_settings_get(pSettings, GTK_PRINT_SETTINGS_PRINT_PAGES))
     {
         beans::PropertyValue* pVal = m_rController.getValue(OUString("PrintRange"));
@@ -1140,7 +1140,7 @@ GtkPrintDialog::impl_readFromSettings()
         bChanged = true;
         m_pWrapper->print_settings_set_collate(pSettings, bCollate);
     }
-    // TODO: wth was this var. meant for?
+    
     (void) bChanged;
 
     m_pWrapper->print_unix_dialog_set_settings(GTK_PRINT_UNIX_DIALOG(m_pDialog), pSettings);
@@ -1165,7 +1165,7 @@ const
                 ? OUString("true")
                 : OUString("false"))
         ;
-    // pItem->setValue(aPrintDialog, OUString("ToFile"), );
+    
     g_object_unref(G_OBJECT(pSettings));
     pItem->Commit();
 }

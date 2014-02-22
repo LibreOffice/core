@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlcvali.hxx"
@@ -168,7 +168,7 @@ public:
     virtual void EndElement();
 };
 
-//------------------------------------------------------------------
+
 
 ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
@@ -177,7 +177,7 @@ ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rIm
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    // here are no attributes
+    
 }
 
 ScXMLContentValidationsContext::~ScXMLContentValidationsContext()
@@ -261,7 +261,7 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
                 }
                 else if (IsXMLToken(sValue, XML_SORTED_ASCENDING))
                 {
-                    // Read old wrong value, fdo#72548
+                    
                     nShowList = sheet::TableValidationVisibility::SORTEDASCENDING;
                 }
             }
@@ -315,7 +315,7 @@ sheet::ValidationAlertStyle ScXMLContentValidationContext::GetAlertStyle() const
         return sheet::ValidationAlertStyle_WARNING;
     if (IsXMLToken(sErrorMessageType, XML_INFORMATION))
         return sheet::ValidationAlertStyle_INFO;
-    // default for unknown
+    
     return sheet::ValidationAlertStyle_STOP;
 }
 
@@ -325,14 +325,14 @@ void ScXMLContentValidationContext::SetFormula( OUString& rFormula, OUString& rF
     reGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
     if( bHasNmsp )
     {
-        // the entire attribute contains a namespace: internal namespace not allowed
+        
         rFormula = rCondition;
         rFormulaNmsp = rGlobNmsp;
         reGrammar = eGlobGrammar;
     }
     else
     {
-        // the attribute does not contain a namespace: try to find a namespace of an external grammar
+        
         GetScImport().ExtractFormulaNamespaceGrammar( rFormula, rFormulaNmsp, reGrammar, rCondition, true );
         if( reGrammar != FormulaGrammar::GRAM_EXTERNAL )
             reGrammar = eGlobGrammar;
@@ -341,18 +341,18 @@ void ScXMLContentValidationContext::SetFormula( OUString& rFormula, OUString& rF
 
 void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidation ) const
 {
-    rValidation.aValidationType = sheet::ValidationType_ANY;    // default if no condition is given
+    rValidation.aValidationType = sheet::ValidationType_ANY;    
     rValidation.aOperator = sheet::ConditionOperator_NONE;
 
     if( !sCondition.isEmpty() )
     {
-        // extract leading namespace from condition string
+        
         OUString aCondition, aConditionNmsp;
         FormulaGrammar::Grammar eGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
         GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eGrammar, sCondition );
         bool bHasNmsp = aCondition.getLength() < sCondition.getLength();
 
-        // parse a condition from the attribute string
+        
         ScXMLConditionParseResult aParseResult;
         ScXMLConditionHelper::parseCondition( aParseResult, aCondition, 0 );
 
@@ -362,23 +362,23 @@ void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidat
         bool bSecondaryPart = false;
         switch( aParseResult.meToken )
         {
-            case XML_COND_TEXTLENGTH:               // condition is 'cell-content-text-length()<operator><expression>'
-            case XML_COND_TEXTLENGTH_ISBETWEEN:     // condition is 'cell-content-text-length-is-between(<expression1>,<expression2>)'
-            case XML_COND_TEXTLENGTH_ISNOTBETWEEN:  // condition is 'cell-content-text-length-is-not-between(<expression1>,<expression2>)'
-            case XML_COND_ISINLIST:                 // condition is 'cell-content-is-in-list(<expression>)'
+            case XML_COND_TEXTLENGTH:               
+            case XML_COND_TEXTLENGTH_ISBETWEEN:     
+            case XML_COND_TEXTLENGTH_ISNOTBETWEEN:  
+            case XML_COND_ISINLIST:                 
                 rValidation.aValidationType = aParseResult.meValidation;
                 rValidation.aOperator = aParseResult.meOperator;
             break;
 
-            case XML_COND_ISWHOLENUMBER:            // condition is 'cell-content-is-whole-number() and <condition>'
-            case XML_COND_ISDECIMALNUMBER:          // condition is 'cell-content-is-decimal-number() and <condition>'
-            case XML_COND_ISDATE:                   // condition is 'cell-content-is-date() and <condition>'
-            case XML_COND_ISTIME:                   // condition is 'cell-content-is-time() and <condition>'
+            case XML_COND_ISWHOLENUMBER:            
+            case XML_COND_ISDECIMALNUMBER:          
+            case XML_COND_ISDATE:                   
+            case XML_COND_ISTIME:                   
                 rValidation.aValidationType = aParseResult.meValidation;
                 bSecondaryPart = true;
             break;
 
-            default:;   // unacceptable or unknown condition
+            default:;   
         }
 
         /*  Parse the following 'and <condition>' part of some conditions. This
@@ -392,21 +392,21 @@ void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidat
                 ScXMLConditionHelper::parseCondition( aParseResult, aCondition, aParseResult.mnEndIndex );
                 switch( aParseResult.meToken )
                 {
-                    case XML_COND_CELLCONTENT:  // condition is 'and cell-content()<operator><expression>'
-                    case XML_COND_ISBETWEEN:    // condition is 'and cell-content-is-between(<expression1>,<expression2>)'
-                    case XML_COND_ISNOTBETWEEN: // condition is 'and cell-content-is-not-between(<expression1>,<expression2>)'
+                    case XML_COND_CELLCONTENT:  
+                    case XML_COND_ISBETWEEN:    
+                    case XML_COND_ISNOTBETWEEN: 
                         rValidation.aOperator = aParseResult.meOperator;
                     break;
-                    default:;   // unacceptable or unknown condition
+                    default:;   
                 }
             }
         }
 
-        // a validation type (date, integer) without a condition isn't possible
+        
         if( rValidation.aOperator == sheet::ConditionOperator_NONE )
             rValidation.aValidationType = sheet::ValidationType_ANY;
 
-        // parse the formulas
+        
         if( rValidation.aValidationType != sheet::ValidationType_ANY )
         {
             SetFormula( rValidation.sFormula1, rValidation.sFormulaNmsp1, rValidation.eGrammar1,
@@ -419,7 +419,7 @@ void ScXMLContentValidationContext::GetCondition( ScMyImportValidation& rValidat
 
 void ScXMLContentValidationContext::EndElement()
 {
-    // #i36650# event-listeners element moved up one level
+    
     if (xEventContext.Is())
     {
         OUString sOnError("OnError");
@@ -431,7 +431,7 @@ void ScXMLContentValidationContext::EndElement()
         sal_Int32 nLength = aValues.getLength();
         for( sal_Int32 i = 0; i < nLength; i++ )
         {
-            // #i47525# must allow "MacroName" or "Script"
+            
             if ( aValues[i].Name == "MacroName" ||
                  aValues[i].Name == "Script" )
             {

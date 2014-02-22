@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -161,7 +161,7 @@ sal_Size ImplConvertGb18030ToUnicode(void const * pData,
             {
                 nCode = nCode * 10 + (nChar - 0x30);
 
-                // 90 30 81 30 to E3 32 9A 35 maps to U+10000 to U+10FFFF:
+                
                 if (nCode >= 189000 && nCode <= 1237575)
                     if (pDestBufEnd - pDestBufPtr >= 2)
                     {

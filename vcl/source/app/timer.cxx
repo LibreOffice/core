@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,12 +32,12 @@
 
 struct ImplTimerData
 {
-    ImplTimerData*  mpNext;         // Pointer to the next Instance
-    Timer*          mpTimer;        // Pointer to VCL Timer instance
-    sal_uLong       mnUpdateTime;   // Last Update Time
-    sal_uLong       mnTimerUpdate;  // TimerCallbackProcs on stack
-    bool            mbDelete;       // Was timer deleted during Update()?
-    bool            mbInTimeout;    // Are we in a timeout handler?
+    ImplTimerData*  mpNext;         
+    Timer*          mpTimer;        
+    sal_uLong       mnUpdateTime;   
+    sal_uLong       mnTimerUpdate;  
+    bool            mbDelete;       
+    bool            mbInTimeout;    
 };
 
 void Timer::ImplDeInitTimer()
@@ -94,29 +94,29 @@ void Timer::ImplTimerCallbackProc()
     pSVData->mnTimerUpdate++;
     pSVData->mbNotAllTimerCalled = true;
 
-    // find timer where the timer handler needs to be called
+    
     pTimerData = pSVData->mpFirstTimerData;
     while ( pTimerData )
     {
-        // If the timer is not new, was not deleted, and if it is not in the timeout handler, then
-        // call the handler as soon as the time is up.
+        
+        
         if ( (pTimerData->mnTimerUpdate < pSVData->mnTimerUpdate) &&
              !pTimerData->mbDelete && !pTimerData->mbInTimeout )
         {
-            // time has expired
+            
             if ( (pTimerData->mnUpdateTime+pTimerData->mpTimer->mnTimeout) <= nTime )
             {
-                // set new update time
+                
                 pTimerData->mnUpdateTime = nTime;
 
-                // if no AutoTimer than stop
+                
                 if ( !pTimerData->mpTimer->mbAuto )
                 {
                     pTimerData->mpTimer->mbActive = false;
                     pTimerData->mbDelete = true;
                 }
 
-                // call Timeout
+                
                 pTimerData->mbInTimeout = true;
                 pTimerData->mpTimer->Timeout();
                 pTimerData->mbInTimeout = false;
@@ -126,19 +126,19 @@ void Timer::ImplTimerCallbackProc()
         pTimerData = pTimerData->mpNext;
     }
 
-    // determine new time
+    
     sal_uLong nNewTime = Time::GetSystemTicks();
     pPrevTimerData = NULL;
     pTimerData = pSVData->mpFirstTimerData;
     while ( pTimerData )
     {
-        // ignore if timer is still in timeout handler
+        
         if ( pTimerData->mbInTimeout )
         {
             pPrevTimerData = pTimerData;
             pTimerData = pTimerData->mpNext;
         }
-        // Was timer destroyed in the meantime?
+        
         else if ( pTimerData->mbDelete )
         {
             if ( pPrevTimerData )
@@ -154,7 +154,7 @@ void Timer::ImplTimerCallbackProc()
         else
         {
             pTimerData->mnTimerUpdate = 0;
-            // determine smallest time slot
+            
             if ( pTimerData->mnUpdateTime == nTime )
             {
                 nDeltaTime = pTimerData->mpTimer->mnTimeout;
@@ -178,7 +178,7 @@ void Timer::ImplTimerCallbackProc()
         }
     }
 
-    // delete clock if no more timers available
+    
     if ( !pSVData->mpFirstTimerData )
     {
         pSVData->mpSalTimer->Stop();
@@ -228,7 +228,7 @@ void Timer::SetTimeout( sal_uLong nNewTimeout )
 {
     mnTimeout = nNewTimeout;
 
-    // if timer is active then renew clock
+    
     if ( mbActive )
     {
         ImplSVData* pSVData = ImplGetSVData();
@@ -254,7 +254,7 @@ void Timer::Start()
             }
         }
 
-        // insert timer and start
+        
         mpTimerData = new ImplTimerData;
         mpTimerData->mpTimer        = this;
         mpTimerData->mnUpdateTime   = Time::GetSystemTicks();
@@ -262,7 +262,7 @@ void Timer::Start()
         mpTimerData->mbDelete       = false;
         mpTimerData->mbInTimeout    = false;
 
-        // insert last due to SFX!
+        
         ImplTimerData* pPrev = NULL;
         ImplTimerData* pData = pSVData->mpFirstTimerData;
         while ( pData )
@@ -279,7 +279,7 @@ void Timer::Start()
         if ( mnTimeout < pSVData->mnTimerPeriod )
             ImplStartTimer( pSVData, mnTimeout );
     }
-    else if( !mpTimerData->mpTimer ) // TODO: remove when guilty found
+    else if( !mpTimerData->mpTimer ) 
     {
         OSL_FAIL( "Timer::Start() on a destroyed Timer!" );
     }

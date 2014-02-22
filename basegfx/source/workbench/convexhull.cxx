@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -23,7 +23,7 @@
 
 #include "bezierclip.hxx"
 
-// -----------------------------------------------------------------------------
+
 
 /* Implements the theta function from Sedgewick: Algorithms in XXX, chapter 24 */
 template <class PointType> double theta( const PointType& p1, const PointType& p2 )
@@ -52,7 +52,7 @@ public:
 
     bool operator() ( const PointType& p1, const PointType& p2 )
     {
-        // return true, if p1 precedes p2 in the angle relative to maRefPoint
+        
         return theta(maRefPoint, p1) < theta(maRefPoint, p2);
     }
 
@@ -78,8 +78,8 @@ template <class PointType, class CmpFunctor> typename PointType::value_type ccw(
         theta0 == theta2 ||
         theta1 == theta2 )
     {
-        // cannot reliably compare, as at least two points are
-        // theta-equal. See bug description below
+        
+        
         return 0;
     }
 #endif
@@ -158,14 +158,14 @@ Polygon2D convexHull( const Polygon2D& rPoly )
     ::std::copy(rPoly.begin(), rPoly.end(), result.begin()+1 );
     Polygon2D::size_type min, i;
 
-    // determine safe point on hull (smallest y value)
+    
     for( min=1, i=2; i<=N; ++i )
     {
         if( result[i].y < result[min].y )
             min = i;
     }
 
-    // determine safe point on hull (largest x value)
+    
     for( i=1; i<=N; ++i )
     {
         if( result[i].y == result[min].y &&
@@ -175,18 +175,18 @@ Polygon2D convexHull( const Polygon2D& rPoly )
         }
     }
 
-    // TODO: add inner elimination optimization from Sedgewick: Algorithms in XXX, chapter 25
-    // TODO: use radix sort instead of ::std::sort(), calc theta only once and store
+    
+    
 
-    // setup first point and sort
+    
     ::std::swap( result[1], result[min] );
     ThetaCompare<Point2D> cmpFunc(result[1]);
     ::std::sort( result.begin()+1, result.end(), cmpFunc );
 
-    // setup sentinel
+    
     result[0] = result[N];
 
-    // generate convex hull
+    
     Polygon2D::size_type M;
     for( M=3, i=4; i<=N; ++i )
     {
@@ -197,7 +197,7 @@ Polygon2D convexHull( const Polygon2D& rPoly )
         ::std::swap( result[M], result[i] );
     }
 
-    // copy range [1,M] to output
+    
     return Polygon2D( result.begin()+1, result.begin()+M+1 );
 }
 

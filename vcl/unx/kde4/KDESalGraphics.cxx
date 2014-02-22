@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define Region QtXRegion
@@ -54,7 +54,7 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
         ( (nControlState & CTRL_STATE_PRESSED)?  QStyle::State_Sunken:    QStyle::State_None ) |
         ( (nControlState & CTRL_STATE_SELECTED)? QStyle::State_Selected : QStyle::State_None ) |
         ( (nControlState & CTRL_STATE_ROLLOVER)? QStyle::State_MouseOver: QStyle::State_None );
-        //TODO ( (nControlState & CTRL_STATE_HIDDEN)?   QStyle::State_:   QStyle::State_None ) |
+        
 
     switch ( aValue.getTristateVal() )
     {
@@ -116,8 +116,8 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
 
     if (type == CTRL_SPINBOX && (part == PART_ENTIRE_CONTROL || part == HAS_BACKGROUND_TEXTURE) ) return true;
 
-    // no spinbuttons for KDE, paint spinbox complete
-    //if (type == CTRL_SPINBUTTONS) return true;
+    
+    
 
     if (type == CTRL_GROUPBOX) return true;
 
@@ -136,12 +136,12 @@ bool KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
 
     if ( (type == CTRL_TAB_ITEM) && (part == PART_ENTIRE_CONTROL) ) return true;
     if ( (type == CTRL_TAB_PANE) && (part == PART_ENTIRE_CONTROL) ) return true;
-    // no CTRL_TAB_BODY for KDE
+    
 
     return false;
 }
 
-/// helper drawing methods
+
 namespace
 {
     void draw( QStyle::ControlElement element, QStyleOption* option, QImage* image, QStyle::State state, QRect rect = QRect())
@@ -176,7 +176,7 @@ namespace
         static int s_nFrameWidth = -1;
         if( s_nFrameWidth < 0 )
         {
-            // fill in a default
+            
             QFrame aFrame( NULL );
             aFrame.setFrameRect( QRect(0, 0, 100, 30) );
             aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
@@ -216,17 +216,17 @@ namespace
 #endif
 
 #ifdef IMAGE_BASED_PAINTING
-// There is a small catch with this function, although hopefully only philosophical.
-// Officially Xlib's Region is an opaque data type, with only functions for manipulating it.
-// However, whoever designed it apparently didn't give it that much thought, as it's impossible
-// to find out what exactly a region actually is (except for really weird ways like XClipBox()
-// and repeated XPointInRegion(), which would be awfully slow). Fortunately, the header file
-// describing the structure actually happens to be installed too, and there's at least one
-// widely used software using it (Compiz). So access the data directly too and assume that
-// everybody who compiles with Qt4 support has Xlib new enough and good enough to support this.
-// In case this doesn't work for somebody, try #include <X11/region.h> instead, or build
-// without IMAGE_BASED_PAINTING (in which case QApplication::setGraphicsSystem( "native" ) may
-// be needed too).
+
+
+
+
+
+
+
+
+
+
+
 #include <X11/Xregion.h>
 static QRegion XRegionToQRegion( XLIB_Region xr )
 {
@@ -236,7 +236,7 @@ static QRegion XRegionToQRegion( XLIB_Region xr )
          ++i )
     {
         BOX& b = xr->rects[ i ];
-        qr |= QRect( b.x1, b.y1, b.x2 - b.x1, b.y2 - b.y1 ); // x2,y2 is outside, not the bottom-right corner
+        qr |= QRect( b.x1, b.y1, b.x2 - b.x1, b.y2 - b.y1 ); 
     }
     return qr;
 }
@@ -250,7 +250,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     if( lastPopupRect.isValid() && ( type != CTRL_MENU_POPUP || part != PART_MENU_ITEM ))
         lastPopupRect = QRect();
 
-    // put not implemented types here
+    
     if (type == CTRL_SPINBUTTONS)
     {
         return false;
@@ -271,7 +271,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                             aButtonRect.Right(), aButtonRect.Bottom() );
     }
 
-    //if no image, or resized, make a new image
+    
     if (!m_image || m_image->size() != widgetRect.size())
     {
         if (m_image)
@@ -301,8 +301,8 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                 && kapp->style()->styleHint( QStyle::SH_MenuBar_MouseTracking ) )
                 option.state |= QStyle::State_Selected;
 
-            if ( nControlState & CTRL_STATE_SELECTED ) // Passing State_Sunken is currently not documented.
-                option.state |= QStyle::State_Sunken;  // But some kinds of QStyle interpret it.
+            if ( nControlState & CTRL_STATE_SELECTED ) 
+                option.state |= QStyle::State_Sunken;  
 
             draw( QStyle::CE_MenuBarItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
@@ -326,11 +326,11 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             QStyleOptionMenuItem option;
             draw( QStyle::CE_MenuItem, &option, m_image,
                   vclStateValue2StateFlag(nControlState, value) );
-            // HACK: LO core first paints the entire popup and only then it paints menu items,
-            // but QMenu::paintEvent() paints popup frame after all items. That means highlighted
-            // items here would paint the highlight over the frame border. Since calls to PART_MENU_ITEM
-            // are always preceded by calls to PART_ENTIRE_CONTROL, just remember the size for the whole
-            // popup (otherwise not possible to get here) and draw the border afterwards.
+            
+            
+            
+            
+            
             QRect framerect( lastPopupRect.topLeft() - widgetRect.topLeft(),
                 widgetRect.size().expandedTo( lastPopupRect.size()));
             QStyleOptionFrame frame;
@@ -340,16 +340,16 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         {
             QStyleOptionMenuItem option;
             option.menuItemType = QStyleOptionMenuItem::Separator;
-            // Painting the whole menu item area results in different background
-            // with at least Plastique style, so clip only to the separator itself
-            // (QSize( 2, 2 ) is hardcoded in Qt)
+            
+            
+            
             option.rect = m_image->rect();
             QSize size = kapp->style()->sizeFromContents( QStyle::CT_MenuItem, &option, QSize( 2, 2 ));
             QRect rect = m_image->rect();
             QPoint center = rect.center();
             rect.setHeight( size.height());
             rect.moveCenter( center );
-            // don't paint over popup frame border (like the hack above, but here it can be simpler)
+            
             int fw = kapp->style()->pixelMetric( QStyle::PM_MenuPanelWidth );
             clipRegion = new QRegion( rect.translated( widgetRect.topLeft()).adjusted( fw, 0, -fw, 0 ));
             draw( QStyle::CE_MenuItem, &option, m_image,
@@ -361,10 +361,10 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             option.checkType = ( part == PART_MENU_ITEM_CHECK_MARK )
                 ? QStyleOptionMenuItem::NonExclusive : QStyleOptionMenuItem::Exclusive;
             option.checked = ( nControlState & CTRL_STATE_PRESSED );
-            // widgetRect is now the rectangle for the checkbox/radiobutton itself, but Qt
-            // paints the whole menu item, so translate position (and it'll be clipped);
-            // it is also necessary to fill the background transparently first, as this
-            // is painted after menuitem highlight, otherwise there would be a grey area
+            
+            
+            
+            
             assert( value.getType() == CTRL_MENU_POPUP );
             const MenupopupValue* menuVal = static_cast<const MenupopupValue*>(&value);
             QRect menuItemRect( region2QRect( menuVal->maItemRect ));
@@ -410,7 +410,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
               vclStateValue2StateFlag(nControlState, value) );
     }
     else if ( (type == CTRL_TOOLBAR) && (part == PART_THUMB_VERT) )
-    {   // reduce paint area only to the handle area
+    {   
         const int width = kapp->style()->pixelMetric(QStyle::PM_ToolBarHandleExtent);
         QRect rect( 0, 0, width, widgetRect.height());
         clipRegion = new QRegion( widgetRect.x(), widgetRect.y(), width, widgetRect.height());
@@ -487,24 +487,24 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             OSL_ASSERT( value.getType() == CTRL_SCROLLBAR );
             const ScrollbarValue* sbVal = static_cast<const ScrollbarValue *>(&value);
 
-            //if the scroll bar is active (aka not degenrate...allow for hover events
+            
             if (sbVal->mnVisibleSize < sbVal->mnMax)
                 option.state = QStyle::State_MouseOver;
 
-            bool horizontal = ( part == PART_DRAW_BACKGROUND_HORZ ); //horizontal or vertical
+            bool horizontal = ( part == PART_DRAW_BACKGROUND_HORZ ); 
             option.orientation = horizontal ? Qt::Horizontal : Qt::Vertical;
             if( horizontal )
                 option.state |= QStyle::State_Horizontal;
 
-            //setup parameters from the OO values
+            
             option.minimum = sbVal->mnMin;
             option.maximum = sbVal->mnMax - sbVal->mnVisibleSize;
-            option.maximum = qMax( option.maximum, option.minimum ); // bnc#619772
+            option.maximum = qMax( option.maximum, option.minimum ); 
             option.sliderValue = sbVal->mnCur;
             option.sliderPosition = sbVal->mnCur;
             option.pageStep = sbVal->mnVisibleSize;
 
-            //setup the active control...always the slider
+            
             if (sbVal->mnThumbState & CTRL_STATE_ROLLOVER)
                 option.activeSubControls = QStyle::SC_ScrollBarSlider;
 
@@ -520,7 +520,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     {
         QStyleOptionSpinBox option;
 
-        // determine active control
+        
         if( value.getType() == CTRL_SPINBUTTONS )
         {
             const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue *>(&value);
@@ -557,7 +557,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         lcl_drawFrame( QStyle::PE_Frame, m_image,
                        vclStateValue2StateFlag(nControlState, value) );
 
-        // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
+        
         int fw = getFrameWidth();
         clipRegion = new QRegion( QRegion( widgetRect ).subtracted( widgetRect.adjusted( fw, fw, -fw, -fw )));
     }
@@ -585,7 +585,7 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         option.maximum     = slVal->mnMax;
         option.minimum     = slVal->mnMin;
         option.sliderPosition = option.sliderValue = slVal->mnCur;
-        bool horizontal = ( part == PART_TRACK_HORZ_AREA ); //horizontal or vertical
+        bool horizontal = ( part == PART_TRACK_HORZ_AREA ); 
         option.orientation = horizontal ? Qt::Horizontal : Qt::Vertical;
         if( horizontal )
             option.state |= QStyle::State_Horizontal;
@@ -612,11 +612,11 @@ bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     if (returnVal)
     {
 #ifdef IMAGE_BASED_PAINTING
-        // Create a wrapper QPixmap around the destination pixmap, allowing the use of QPainter.
-        // Using X11SalGraphics::CopyScreenArea() would require using QPixmap and if Qt uses
-        // other graphics system than native, QPixmap::handle() would be 0 (i.e. it wouldn't work),
-        // I have no idea how to create QPixmap with non-null handle() in such case, so go this way.
-        // See XRegionToQRegion() comment for a small catch (although not real hopefully).
+        
+        
+        
+        
+        
         QPixmap destPixmap = QPixmap::fromX11Pixmap( GetDrawable(), QPixmap::ExplicitlyShared );
         QPainter paint( &destPixmap );
         if( clipRegion && mpClipRegion )
@@ -686,7 +686,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
 
     switch ( type )
     {
-        // Metrics of the push button
+        
         case CTRL_PUSHBUTTON:
             if (part == PART_ENTIRE_CONTROL)
             {
@@ -706,7 +706,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         case CTRL_EDITBOX:
         {
             int nFontHeight    = kapp->fontMetrics().height();
-            //int nFrameSize     = kapp->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+            
             int nLayoutTop     = kapp->style()->pixelMetric(QStyle::PM_LayoutTopMargin);
             int nLayoutBottom  = kapp->style()->pixelMetric(QStyle::PM_LayoutBottomMargin);
             int nLayoutLeft    = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
@@ -761,8 +761,8 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 {
                     int size = kapp->style()->pixelMetric(QStyle::PM_ComboBoxFrameWidth) - 2;
 
-                    // find out the minimum size that should be used
-                    // assume contents is a text ling
+                    
+                    
                     int nHeight = kapp->fontMetrics().height();
                     QSize aContentSize( contentRect.width(), nHeight );
                     QSize aMinSize = kapp->style()->
@@ -770,9 +770,9 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                     if( aMinSize.height() > contentRect.height() )
                         contentRect.adjust( 0, 0, 0, aMinSize.height() - contentRect.height() );
                     boundingRect = contentRect;
-                    // FIXME: why this difference between comboboxes and listboxes ?
-                    // because a combobox has a sub edit and that is positioned
-                    // inside the outer bordered control ?
+                    
+                    
+                    
                     if( type == CTRL_COMBOBOX )
                         contentRect.adjust(-size,-size,size,size);
                     retVal = true;
@@ -838,7 +838,7 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         }
         case CTRL_MENU_POPUP:
             if (part == PART_MENU_ITEM_CHECK_MARK || part == PART_MENU_ITEM_RADIO_MARK)
-            { // core uses this to detect radio/checkbox sizes, so just set a square
+            { 
                 contentRect.setWidth(contentRect.height());
                 retVal = true;
             }
@@ -851,9 +851,9 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
                 sal_uInt16 nStyle = val.getNumericVal();
                 if( nStyle & FRAME_DRAW_NODRAW )
                 {
-                    // in this case the question is: how thick would a frame be
-                    // see brdwin.cxx, decoview.cxx
-                    // most probably the behavior in decoview.cxx is wrong.
+                    
+                    
+                    
                     contentRect.adjust(nFrameWidth, nFrameWidth, -nFrameWidth, -nFrameWidth);
                 }
                 retVal = true;
@@ -896,32 +896,32 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         }
         case CTRL_SCROLLBAR:
         {
-            // core can't handle 3-button scrollbars well, so we fix that in hitTestNativeControl(),
-            // for the rest also provide the track area (i.e. area not taken by buttons)
+            
+            
             if( part == PART_TRACK_VERT_AREA || part == PART_TRACK_HORZ_AREA )
             {
                 QStyleOptionSlider option;
-                bool horizontal = ( part == PART_TRACK_HORZ_AREA ); //horizontal or vertical
+                bool horizontal = ( part == PART_TRACK_HORZ_AREA ); 
                 option.orientation = horizontal ? Qt::Horizontal : Qt::Vertical;
                 if( horizontal )
                     option.state |= QStyle::State_Horizontal;
-                // getNativeControlRegion usually gets ImplControlValue as 'val' (i.e. not the proper
-                // subclass), so use random sensible values (doesn't matter anyway, as the wanted
-                // geometry here depends only on button sizes)
+                
+                
+                
                 option.maximum = 10;
                 option.minimum = 0;
                 option.sliderPosition = option.sliderValue = 4;
                 option.pageStep = 2;
-                // Adjust coordinates to make the widget appear to be at (0,0), i.e. make
-                // widget and screen coordinates the same. QStyle functions should use screen
-                // coordinates but at least QPlastiqueStyle::subControlRect() is buggy
-                // and sometimes uses widget coordinates.
+                
+                
+                
+                
                 QRect rect = contentRect;
                 rect.moveTo( 0, 0 );
                 option.rect = rect;
                 rect = kapp->style()->subControlRect( QStyle::CC_ScrollBar, &option,
                     QStyle::SC_ScrollBarGroove );
-                rect.translate( contentRect.topLeft()); // reverse the workaround above
+                rect.translate( contentRect.topLeft()); 
                 contentRect = boundingRect = rect;
                 retVal = true;
             }
@@ -931,12 +931,12 @@ bool KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
     }
     if (retVal)
     {
-        // Bounding region
+        
         Point aBPoint( boundingRect.x(), boundingRect.y() );
         Size aBSize( boundingRect.width(), boundingRect.height() );
         nativeBoundingRegion = Rectangle( aBPoint, aBSize );
 
-        // Region of the content
+        
         Point aPoint( contentRect.x(), contentRect.y() );
         Size  aSize( contentRect.width(), contentRect.height() );
         nativeContentRegion = Rectangle( aPoint, aSize );
@@ -958,18 +958,18 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
     {
         if( nPart != PART_BUTTON_UP && nPart != PART_BUTTON_DOWN
             && nPart != PART_BUTTON_LEFT && nPart != PART_BUTTON_RIGHT )
-        { // we adjust only for buttons (because some scrollbars have 3 buttons,
-          // and LO core doesn't handle such scrollbars well)
+        { 
+          
             return FALSE;
         }
         rIsInside = FALSE;
         bool bHorizontal = ( nPart == PART_BUTTON_LEFT || nPart == PART_BUTTON_RIGHT );
         QRect rect = region2QRect( rControlRegion );
         QPoint pos( rPos.X(), rPos.Y());
-        // Adjust coordinates to make the widget appear to be at (0,0), i.e. make
-        // widget and screen coordinates the same. QStyle functions should use screen
-        // coordinates but at least QPlastiqueStyle::subControlRect() is buggy
-        // and sometimes uses widget coordinates.
+        
+        
+        
+        
         pos -= rect.topLeft();
         rect.moveTo( 0, 0 );
         QStyleOptionSlider options;
@@ -977,8 +977,8 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
         if( bHorizontal )
             options.state |= QStyle::State_Horizontal;
         options.rect = rect;
-        // some random sensible values, since we call this code only for scrollbar buttons,
-        // the slider position does not exactly matter
+        
+        
         options.maximum = 10;
         options.minimum = 0;
         options.sliderPosition = options.sliderValue = 4;
@@ -986,7 +986,7 @@ bool KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
         QStyle::SubControl control = kapp->style()->hitTestComplexControl( QStyle::CC_ScrollBar, &options, pos );
         if( nPart == PART_BUTTON_UP || nPart == PART_BUTTON_LEFT )
             rIsInside = ( control == QStyle::SC_ScrollBarSubLine );
-        else // DOWN, RIGHT
+        else 
             rIsInside = ( control == QStyle::SC_ScrollBarAddLine );
         return TRUE;
     }

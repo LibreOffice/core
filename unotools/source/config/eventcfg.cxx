@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -80,7 +80,7 @@ const char* pEventAsciiNames[] =
 GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     :   ConfigItem( ROOTNODE_EVENTS, CONFIG_MODE_IMMEDIATE_UPDATE )
 {
-    // the supported event names
+    
     m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_STARTAPP] ) );
     m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_CLOSEAPP] ) );
     m_supportedEvents.push_back(OUString::createFromAscii( pEventAsciiNames[STR_EVENT_DOCCREATED] ) );
@@ -113,19 +113,19 @@ GlobalEventConfig_Impl::GlobalEventConfig_Impl()
     initBindingInfo();
 
 /*TODO: Not used in the moment! see Notify() ...
-    // Enable notification mechanism of our baseclass.
-    // We need it to get information about changes outside these class on our used configuration keys! */
+    
+    
     Sequence< OUString > aNotifySeq( 1 );
     aNotifySeq[0] = "Events";
     EnableNotification( aNotifySeq, true );
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 GlobalEventConfig_Impl::~GlobalEventConfig_Impl()
 {
-    // We must save our current values .. if user forget it!
+    
     if( IsModified() )
     {
         Commit();
@@ -140,17 +140,17 @@ OUString GlobalEventConfig_Impl::GetEventName( sal_Int32 nIndex )
         return OUString();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
 {
     MutexGuard aGuard( GlobalEventConfig::GetOwnStaticMutex() );
 
     initBindingInfo();
 
-    // dont forget to update all existing frames and her might cached dispatch objects!
-    // But look for already killed frames. We hold weak references instead of hard ones ...
+    
+    
     for (FrameVector::const_iterator pIt  = m_lFrames.begin();
                                         pIt != m_lFrames.end()  ;
                                       ++pIt                     )
@@ -161,42 +161,42 @@ void GlobalEventConfig_Impl::Notify( const Sequence< OUString >& )
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 void GlobalEventConfig_Impl::Commit()
 {
-    //DF need to check it this is correct??
+    
     OSL_TRACE("In GlobalEventConfig_Impl::Commit");
     EventBindingHash::const_iterator it = m_eventBindingHash.begin();
     EventBindingHash::const_iterator it_end = m_eventBindingHash.end();
-    // clear the existing nodes
+    
     ClearNodeSet( SETNODE_BINDINGS );
     Sequence< beans::PropertyValue > seqValues( 1 );
     OUString sNode;
     static const OUString sPrefix(SETNODE_BINDINGS + PATHDELIMITER + "BindingType['");
     static const OUString sPostfix("']" + PATHDELIMITER + PROPERTYNAME_BINDINGURL);
-    //step through the list of events
+    
     for(int i=0;it!=it_end;++it,++i)
     {
-        //no point in writing out empty bindings!
+        
         if(it->second.isEmpty() )
             continue;
         sNode = sPrefix + it->first + sPostfix;
         OSL_TRACE("writing binding for: %s",OUStringToOString(sNode , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
         seqValues[ 0 ].Name = sNode;
         seqValues[ 0 ].Value <<= it->second;
-        //write the data to the registry
+        
         SetSetProperties(SETNODE_BINDINGS,seqValues);
     }
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 void GlobalEventConfig_Impl::initBindingInfo()
 {
-    // Get ALL names of current existing list items in configuration!
+    
     Sequence< OUString > lEventNames      = GetNodeNames( SETNODE_BINDINGS, utl::CONFIG_NAME_LOCAL_PATH );
 
     OUString aSetNode( SETNODE_BINDINGS );
@@ -205,7 +205,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
     OUString aCommandKey( PATHDELIMITER );
     aCommandKey += PROPERTYNAME_BINDINGURL;
 
-    // Expand all keys
+    
     Sequence< OUString > lMacros(1);
     for (sal_Int32 i=0; i<lEventNames.getLength(); ++i )
     {
@@ -235,7 +235,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
 void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
 {
     Sequence< beans::PropertyValue > props;
-    //DF should we prepopulate the hash with a list of valid event Names?
+    
     if( !( aElement >>= props ) )
     {
         throw lang::IllegalArgumentException( OUString(),
@@ -266,7 +266,7 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
     }
     else
     {
-        // not yet accessed - is it a supported name?
+        
         SupportedEventsVector::const_iterator pos = ::std::find(
             m_supportedEvents.begin(), m_supportedEvents.end(), aName );
         if ( pos == m_supportedEvents.end() )
@@ -289,7 +289,7 @@ bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (
     if ( m_eventBindingHash.find( aName ) != m_eventBindingHash.end() )
         return true;
 
-    // never accessed before - is it supported in general?
+    
     SupportedEventsVector::const_iterator pos = ::std::find(
         m_supportedEvents.begin(), m_supportedEvents.end(), aName );
     if ( pos != m_supportedEvents.end() )
@@ -300,7 +300,7 @@ bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (
 
 Type SAL_CALL GlobalEventConfig_Impl::getElementType(  ) throw (RuntimeException)
 {
-    //DF definitly not sure about this??
+    
     return ::getCppuType((const Sequence<beans::PropertyValue>*)0);
 }
 
@@ -309,20 +309,20 @@ bool SAL_CALL GlobalEventConfig_Impl::hasElements(  ) throw (RuntimeException)
     return ( m_eventBindingHash.empty() );
 }
 
-// and now the wrapper
 
 
-//initialize static member
+
+
 GlobalEventConfig_Impl*     GlobalEventConfig::m_pImpl = NULL  ;
 sal_Int32                   GlobalEventConfig::m_nRefCount      = 0     ;
 
 GlobalEventConfig::GlobalEventConfig()
 {
-    // Global access, must be guarded (multithreading!).
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Increase our refcount ...
+    
     ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
+    
     if( m_pImpl == NULL )
     {
         m_pImpl = new GlobalEventConfig_Impl;
@@ -332,12 +332,12 @@ GlobalEventConfig::GlobalEventConfig()
 
 GlobalEventConfig::~GlobalEventConfig()
 {
-    // Global access, must be guarded (multithreading!)
+    
     MutexGuard aGuard( GetOwnStaticMutex() );
-    // Decrease our refcount.
+    
     --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
+    
+    
     if( m_nRefCount <= 0 )
     {
         delete m_pImpl;

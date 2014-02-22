@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "SidebarDockingWindow.hxx"
 #include <sfx2/sidebar/SidebarChildWindow.hxx>
@@ -39,7 +39,7 @@ SidebarDockingWindow::SidebarDockingWindow(
     : SfxDockingWindow(pSfxBindings, &rChildWindow, pParentWindow, nBits),
       mpSidebarController()
 {
-    // Get the XFrame from the bindings.
+    
     if (pSfxBindings==NULL || pSfxBindings->GetDispatcher()==NULL)
     {
         OSL_ASSERT(pSfxBindings!=NULL);
@@ -91,8 +91,8 @@ bool SidebarDockingWindow::Close (void)
 {
     if (mpSidebarController.is())
     {
-        // Do not close the floating window.
-        // Dock it and close just the deck instead.
+        
+        
         SetFloatingMode(false);
         mpSidebarController->RequestCloseDeck();
         mpSidebarController->NotifyResize();
@@ -133,6 +133,6 @@ SfxChildAlignment SidebarDockingWindow::CheckAlignment (
 }
 
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/TColumnsHelper.hxx"
@@ -68,13 +68,13 @@ OColumnsHelper::OColumnsHelper( ::cppu::OWeakObject& _rParent
     ,m_pTable(NULL)
 {
 }
-// -----------------------------------------------------------------------------
+
 OColumnsHelper::~OColumnsHelper()
 {
     delete m_pImpl;
     m_pImpl = NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
 {
@@ -90,7 +90,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     sal_Int32 nDataType     = DataType::OTHER;
 
     ColumnInformationMap::iterator aFind = m_pImpl->m_aColumnInfo.find(_rName);
-    if ( aFind == m_pImpl->m_aColumnInfo.end() ) // we have to fill it
+    if ( aFind == m_pImpl->m_aColumnInfo.end() ) 
     {
         OUString sComposedName = ::dbtools::composeTableNameForSelect( xConnection, m_pTable );
         collectColumnInformation(xConnection,sComposedName,OUString("*") ,m_pImpl->m_aColumnInfo);
@@ -102,7 +102,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
         bAutoIncrement  = aFind->second.first.first;
         bIsCurrency     = aFind->second.first.second;
         nDataType       = aFind->second.second;
-    } // if ( aFind != m_pImpl->m_aColumnInfo.end() )
+    } 
 
     sdbcx::ObjectType xRet;
     const ColumnDesc* pColDesc = m_pTable->getColumnDescription(_rName);
@@ -114,7 +114,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
         if ( nField11 != ColumnValue::NO_NULLS && xPrimaryKeyColumns.is() && xPrimaryKeyColumns->hasByName(_rName) )
         {
             nField11 = ColumnValue::NO_NULLS;
-        } // if ( xKeys.is() )
+        } 
         ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
         OUString aCatalog, aSchema, aTable;
         m_pTable->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_CATALOGNAME)) >>= aCatalog;
@@ -153,7 +153,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
     return xRet;
 }
 
-// -------------------------------------------------------------------------
+
 void OColumnsHelper::impl_refresh() throw(RuntimeException)
 {
     if ( m_pTable )
@@ -162,13 +162,13 @@ void OColumnsHelper::impl_refresh() throw(RuntimeException)
         m_pTable->refreshColumns();
     }
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OColumnsHelper::createDescriptor()
 {
     return new OColumn(sal_True);
 }
-// -----------------------------------------------------------------------------
-// XAppend
+
+
 sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
@@ -190,8 +190,8 @@ sdbcx::ObjectType OColumnsHelper::appendObject( const OUString& _rForName, const
     }
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
-// XDrop
+
+
 void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     OSL_ENSURE(m_pTable,"OColumnsHelper::dropByName: Table is null!");
@@ -212,7 +212,7 @@ void OColumnsHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// Include ---------------------------------------------------------------
+
 #include <vcl/msgbox.hxx>
 
 #include <sfx2/passwd.hxx>
@@ -27,7 +27,7 @@
 
 #include "dialog.hrc"
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
 {
@@ -61,7 +61,7 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
 }
 IMPL_LINK_INLINE_END(SfxPasswordDialog, EditModifyHdl, Edit *, pEdit)
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
 {
@@ -81,7 +81,7 @@ IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
     return 0;
 }
 
-// CTOR / DTOR -----------------------------------------------------------
+
 
 SfxPasswordDialog::SfxPasswordDialog(Window* pParent, const OUString* pGroupText)
     : ModalDialog(pParent, "PasswordDialog", "sfx/ui/password.ui")
@@ -120,15 +120,15 @@ SfxPasswordDialog::SfxPasswordDialog(Window* pParent, const OUString* pGroupText
     if (pGroupText)
         mpPassword1Box->set_label(*pGroupText);
 
-    //set the text to the password length
+    
     SetPasswdText();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxPasswordDialog::SetPasswdText( )
 {
-//set the new string to the minimum password length
+
     if( mnMinLen == 0 )
         mpMinLengthFT->SetText(maEmptyPwdStr);
     else
@@ -139,7 +139,7 @@ void SfxPasswordDialog::SetPasswdText( )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SfxPasswordDialog::SetMinLen( sal_uInt16 nLen )
 {
@@ -153,7 +153,7 @@ void SfxPasswordDialog::ShowMinLengthText(bool bShow)
     mpMinLengthFT->Show(bShow);
 }
 
-// -----------------------------------------------------------------------
+
 
 short SfxPasswordDialog::Execute()
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,14 +74,14 @@ namespace vcl
     static StringEntryIdentifier findMatchingEntry( const OUString& _searchString, QuickSelectionEngine_Data& _engineData )
     {
         const vcl::I18nHelper& rI18nHelper = Application::GetSettings().GetLocaleI18nHelper();
-        // TODO: do we really need the Window's settings here? The original code used it ...
+        
 
         OUString sEntryText;
-        // get the "current + 1" entry
+        
         StringEntryIdentifier pSearchEntry = _engineData.rEntryList.CurrentEntry( sEntryText );
         if ( pSearchEntry )
             pSearchEntry = _engineData.rEntryList.NextEntry( pSearchEntry, sEntryText );
-        // loop 'til we find another matching entry
+        
         StringEntryIdentifier pStartedWith = pSearchEntry;
         while ( pSearchEntry )
         {
@@ -123,13 +123,13 @@ namespace vcl
                 OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: searching for %s", OUStringToOString(m_pData->sCurrentSearchString, RTL_TEXTENCODING_UTF8).getStr() );
 
                 if ( m_pData->sCurrentSearchString.getLength() == 1 )
-                {   // first character in the search -> remmeber
+                {   
                     m_pData->aSingleSearchChar.reset( c );
                 }
                 else if ( m_pData->sCurrentSearchString.getLength() > 1 )
                 {
                     if ( !!m_pData->aSingleSearchChar && ( *m_pData->aSingleSearchChar != c ) )
-                        // we already have a "single char", but the current one is different -> reset
+                        
                         m_pData->aSingleSearchChar.reset();
                 }
 
@@ -139,7 +139,7 @@ namespace vcl
                 OSL_TRACE( "QuickSelectionEngine::HandleKeyEvent: found %p", pMatchingEntry );
                 if ( !pMatchingEntry && (aSearchTemp.getLength() > 1) && !!m_pData->aSingleSearchChar )
                 {
-                    // if there's only one letter in the search string, use a different search mode
+                    
                     aSearchTemp = OUString(*m_pData->aSingleSearchChar);
                     pMatchingEntry = findMatchingEntry( aSearchTemp, *m_pData );
                 }
@@ -170,6 +170,6 @@ namespace vcl
             lcl_reset( *m_pData );
     }
 
-} // namespace vcl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

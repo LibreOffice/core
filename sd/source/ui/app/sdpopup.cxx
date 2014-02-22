@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/eeitem.hxx>
@@ -65,27 +65,27 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        //SVXDATEFORMAT_APPDEFAULT,     // is not used
-        //SVXDATEFORMAT_SYSTEM,         // is not used
+        
+        
         InsertItem( nID++, SD_RESSTR( STR_STANDARD_SMALL ), nStyle );
         InsertItem( nID++, SD_RESSTR( STR_STANDARD_BIG ), nStyle );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aDateField.SetFormat( SVXDATEFORMAT_A );    // 13.02.96
+        aDateField.SetFormat( SVXDATEFORMAT_A );    
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_B );    // 13.02.1996
+        aDateField.SetFormat( SVXDATEFORMAT_B );    
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_C );    // 13.Feb 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-
-        aDateField.SetFormat( SVXDATEFORMAT_D );    // 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_E );    // Die, 13.Februar 1996
-        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aDateField.SetFormat( SVXDATEFORMAT_F );    // Dienstag, 13.Februar 1996
+        aDateField.SetFormat( SVXDATEFORMAT_C );    
         InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
 
-        CheckItem( (sal_uInt16) ( pDateField->GetFormat() ) + 1 ); // - 2 + 3 !
+        aDateField.SetFormat( SVXDATEFORMAT_D );    
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        aDateField.SetFormat( SVXDATEFORMAT_E );    
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+        aDateField.SetFormat( SVXDATEFORMAT_F );    
+        InsertItem( nID++, aDateField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
+
+        CheckItem( (sal_uInt16) ( pDateField->GetFormat() ) + 1 ); 
     }
     else if( pField->ISA( SvxExtTimeField ) )
     {
@@ -97,34 +97,34 @@ void SdFieldPopup::Fill( LanguageType eLanguage )
         else
             CheckItem( 2 );
 
-        //SVXTIMEFORMAT_APPDEFAULT,     // is not used
-        //SVXTIMEFORMAT_SYSTEM,         // is not used
+        
+        
         InsertItem( nID++, SD_RESSTR( STR_STANDARD_NORMAL ), nStyle );
 
         SvNumberFormatter* pNumberFormatter = SD_MOD()->GetNumberFormatter();
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    // 13:49
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HM );    
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   // 13:49:38
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMS );   
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  // 13:49:38.78
+        aTimeField.SetFormat( SVXTIMEFORMAT_24_HMSH );  
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
 
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    // 01:49
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HM );    
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   // 01:49:38
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMS );   
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  // 01:49:38.78
+        aTimeField.SetFormat( SVXTIMEFORMAT_12_HMSH );  
         InsertItem( nID++, aTimeField.GetFormatted( *pNumberFormatter, eLanguage ), nStyle );
-        //SVXTIMEFORMAT_AM_HM,  // 01:49 PM
-        //SVXTIMEFORMAT_AM_HMS, // 01:49:38 PM
-        //SVXTIMEFORMAT_AM_HMSH // 01:49:38.78 PM
+        
+        
+        
 
-        CheckItem( (sal_uInt16) ( pTimeField->GetFormat() ) + 1 ); // - 2 + 3 !
+        CheckItem( (sal_uInt16) ( pTimeField->GetFormat() ) + 1 ); 
     }
     else if( pField->ISA( SvxExtFileField ) )
     {
         const SvxExtFileField* pFileField = (const SvxExtFileField*) pField;
-        //SvxExtFileField aFileField( *pFileField );
+        
 
         if( pFileField->GetType() == SVXFILETYPE_FIX )
             CheckItem( 1 );
@@ -266,7 +266,7 @@ SvxFieldData* SdFieldPopup::GetField()
                 if( pDocSh->HasName() )
                     aName = pDocSh->GetMedium()->GetName();
 
-                // Get current filename, not the one stored in the old field
+                
                 pNewField = new SvxExtFileField( aName );
                 ( (SvxExtFileField*) pNewField )->SetType( eType );
                 ( (SvxExtFileField*) pNewField )->SetFormat( eFormat );
@@ -295,7 +295,7 @@ SvxFieldData* SdFieldPopup::GetField()
         if( pAuthorField->GetFormat() != eFormat ||
             pAuthorField->GetType() != eType )
         {
-            // Get current state of address, not the old one
+            
             SvtUserOptions aUserOptions;
             pNewField = new SvxAuthorField( aUserOptions.GetFirstName(), aUserOptions.GetLastName(), aUserOptions.GetID() );
             ( (SvxAuthorField*) pNewField )->SetType( eType );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -80,7 +80,7 @@
 #include "random.hxx"
 #include "editutil.hxx"
 
-// -----------------------------------------------------------------------
+
 
 
 ScDocShellRef*  ScGlobal::pDrawClipDocShellRef = NULL;
@@ -129,24 +129,24 @@ sal_uInt16          ScGlobal::nStdRowHeight         = 256;
 long            ScGlobal::nLastRowHeightExtra   = 0;
 long            ScGlobal::nLastColWidthExtra    = STD_EXTRA_WIDTH;
 
-static sal_uInt16 nPPTZoom = 0;     // ScreenZoom used to determine nScreenPPTX/Y
+static sal_uInt16 nPPTZoom = 0;     
 
 
 class SfxViewShell;
-SfxViewShell* pScActiveViewShell = NULL;            //! als Member !!!!!
-sal_uInt16 nScClickMouseModifier = 0;                   //! dito
-sal_uInt16 nScFillModeMouseModifier = 0;                //! dito
+SfxViewShell* pScActiveViewShell = NULL;            
+sal_uInt16 nScClickMouseModifier = 0;                   
+sal_uInt16 nScFillModeMouseModifier = 0;                
 
-// Hack: ScGlobal::GetUserList() muss InitAppOptions in der UI aufrufen,
-//       damit UserList aus Cfg geladen wird
+
+
 
 void global_InitAppOptions();
 
-//========================================================================
+
 //
-//      statische Funktionen
+
 //
-//========================================================================
+
 
 bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                                const SfxItemSet&  rOldAttrs,
@@ -156,19 +156,19 @@ bool ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
     const SfxItemState  eNewState   = rNewAttrs.GetItemState( nWhich );
     const SfxItemState  eOldState   = rOldAttrs.GetItemState( nWhich );
 
-    //----------------------------------------------------------
+    
 
     if ( eNewState == eOldState )
     {
-        // beide Items gesetzt
-        // PoolItems, d.h. Pointer-Vergleich zulaessig
+        
+        
         if ( SFX_ITEM_SET == eOldState )
             bInvalidate = (&rNewAttrs.Get( nWhich ) != &rOldAttrs.Get( nWhich ));
     }
     else
     {
-        // ein Default-Item dabei
-        // PoolItems, d.h. Item-Vergleich noetig
+        
+        
 
         const SfxPoolItem& rOldItem = ( SFX_ITEM_SET == eOldState )
                     ? rOldAttrs.Get( nWhich )
@@ -221,14 +221,14 @@ SvNumberFormatter* ScGlobal::GetEnglishFormatter()
 }
 
 
-//------------------------------------------------------------------------
+
 
 bool ScGlobal::CheckWidthInvalidate( bool& bNumFormatChanged,
                                      const SfxItemSet& rNewAttrs,
                                      const SfxItemSet& rOldAttrs )
 {
-    // Ueberpruefen, ob Attributaenderungen in rNewAttrs gegnueber
-    // rOldAttrs die Textbreite an einer Zelle ungueltig machen
+    
+    
 
     bNumFormatChanged =
             HasAttrChanged( rNewAttrs, rOldAttrs, ATTR_VALUE_FORMAT );
@@ -271,7 +271,7 @@ const SvxSearchItem& ScGlobal::GetSearchItem()
 
 void ScGlobal::SetSearchItem( const SvxSearchItem& rNew )
 {
-    // Hier waere ein Zuweisungsoperator ganz nett:
+    
     delete pSearchItem;
     pSearchItem = (SvxSearchItem*)rNew.Clone();
 
@@ -320,7 +320,7 @@ ScUnoAddInCollection* ScGlobal::GetAddInCollection()
 
 ScUserList* ScGlobal::GetUserList()
 {
-    // Hack: Cfg-Item an der App ggF. laden
+    
 
     global_InitAppOptions();
 
@@ -351,7 +351,7 @@ const OUString& ScGlobal::GetRscString( sal_uInt16 nIndex )
     if( !ppRscString[ nIndex ] )
     {
         OpCode eOp = ocNone;
-        // Map former globstr.src strings moved to compiler.src
+        
         switch (nIndex)
         {
             case STR_NULL_ERROR:
@@ -376,7 +376,7 @@ const OUString& ScGlobal::GetRscString( sal_uInt16 nIndex )
                 eOp = ocErrNA;
                 break;
             default:
-                ;   // nothing
+                ;   
         }
         if (eOp != ocNone)
             ppRscString[ nIndex ] = new OUString( ScCompiler::GetNativeSymbol( eOp));
@@ -529,13 +529,13 @@ void ScGlobal::Init()
 {
     pEmptyOUString = new OUString;
 
-    //  Die Default-Sprache fuer Zahlenformate (ScGlobal::eLnge)
-    //  muss immer LANGUAGE_SYSTEM sein
-    //! Dann kann auch die Variable raus
+    
+    
+    
     eLnge = LANGUAGE_SYSTEM;
 
-    //! Wenn Sortierung etc. von der Sprache der installierten Offfice-Version
-    //! abhaengen sollen, hier "Application::GetSettings().GetUILanguage()"
+    
+    
     pSysLocale = new SvtSysLocale;
     pCharClass = pSysLocale->GetCharClassPtr();
     pLocaleData = pSysLocale->GetLocaleDataPtr();
@@ -549,20 +549,20 @@ void ScGlobal::Init()
     pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ), ATTR_BACKGROUND );
 
     UpdatePPT(NULL);
-    //ScCompiler::InitSymbolsNative();
-    // ScParameterClassification _after_ Compiler, needs function resources if
-    // arguments are to be merged in, which in turn need strings of function
-    // names from the compiler.
+    
+    
+    
+    
     ScParameterClassification::Init();
-    srand( (unsigned) time( NULL ) );       // Random Seed Init fuer Interpreter
-    sc::rng::seed( time( NULL ) );          // seed for libc rand() replacement
+    srand( (unsigned) time( NULL ) );       
+    sc::rng::seed( time( NULL ) );          
 
     InitAddIns();
 
     pStrClipDocName = new OUString( ScResId( SCSTR_NONAME ) );
     *pStrClipDocName += "1";
 
-    //  ScDocumentPool::InitVersionMaps() ist schon vorher gerufen worden
+    
 }
 
 void ScGlobal::UpdatePPT( OutputDevice* pDev )
@@ -570,10 +570,10 @@ void ScGlobal::UpdatePPT( OutputDevice* pDev )
     sal_uInt16 nCurrentZoom = Application::GetSettings().GetStyleSettings().GetScreenZoom();
     if ( nCurrentZoom != nPPTZoom )
     {
-        //  Screen PPT values must be updated when ScreenZoom has changed.
-        //  If called from Window::DataChanged, the window is passed as pDev,
-        //  to make sure LogicToPixel uses a device which already uses the new zoom.
-        //  For the initial settings, NULL is passed and GetDefaultDevice used.
+        
+        
+        
+        
 
         if ( !pDev )
             pDev = Application::GetDefaultDevice();
@@ -614,7 +614,7 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
     VirtualDevice aVirtWindow( *pDefaultDev );
     aVirtWindow.SetMapMode(MAP_PIXEL);
     Font aDefFont;
-    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);        // font color doesn't matter here
+    pPattern->GetFont(aDefFont, SC_AUTOCOL_BLACK, &aVirtWindow);        
     aVirtWindow.SetFont(aDefFont);
     sal_uInt16 nTest = static_cast<sal_uInt16>(
         aVirtWindow.PixelToLogic(Size(0, aVirtWindow.GetTextHeight()), MAP_TWIP).Height());
@@ -633,7 +633,7 @@ void ScGlobal::InitTextHeight(SfxItemPool* pPool)
 
 void ScGlobal::Clear()
 {
-    // asyncs _vor_ ExitExternalFunc zerstoeren!
+    
     for( ScAddInAsyncs::iterator it = theAddInAsyncTbl.begin(); it != theAddInAsyncTbl.end(); ++it )
     {
         delete *it;
@@ -651,11 +651,11 @@ void ScGlobal::Clear()
     delete[] ppRscString;
     ppRscString = NULL;
 
-    DELETEZ(pStarCalcFunctionList);     // vor ResMgr zerstoeren!
+    DELETEZ(pStarCalcFunctionList);     
     DELETEZ(pStarCalcFunctionMgr);
     ScParameterClassification::Exit();
     ScCompiler::DeInit();
-    ScInterpreter::GlobalExit();            // statischen Stack loeschen
+    ScInterpreter::GlobalExit();            
 
     DELETEZ(pEmptyBrushItem);
     DELETEZ(pButtonBrushItem);
@@ -668,9 +668,9 @@ void ScGlobal::Clear()
     DELETEZ(pCaseCollator);
     DELETEZ(pCollator);
     DELETEZ(pCalendar);
-    //! do NOT delete pCharClass since it is a pointer to the single SvtSysLocale instance
+    
     pCharClass = NULL;
-    //! do NOT delete pLocaleData since it is a pointer to the single SvtSysLocale instance
+    
     pLocaleData = NULL;
     DELETEZ(pSysLocale);
     DELETEZ(pLocale);
@@ -685,11 +685,11 @@ void ScGlobal::Clear()
     DELETEZ(pEmptyOUString);
 }
 
-//------------------------------------------------------------------------
+
 
 rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
 {
-    // new TextEncoding values
+    
     if ( CharClass::isAsciiNumeric( rCharSet ) )
     {
         sal_Int32 nVal = rCharSet.toInt32();
@@ -697,7 +697,7 @@ rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
             return osl_getThreadTextEncoding();
         return (rtl_TextEncoding) nVal;
     }
-    // old CharSet values for compatibility
+    
     else if (rCharSet.equalsIgnoreAsciiCase("ANSI")     ) return RTL_TEXTENCODING_MS_1252;
     else if (rCharSet.equalsIgnoreAsciiCase("MAC")      ) return RTL_TEXTENCODING_APPLE_ROMAN;
     else if (rCharSet.equalsIgnoreAsciiCase("IBMPC")    ) return RTL_TEXTENCODING_IBM_850;
@@ -710,17 +710,17 @@ rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )
     else return osl_getThreadTextEncoding();
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
 {
     const sal_Char* pChar;
     switch ( eVal )
     {
-        // old CharSet strings for compatibility
+        
         case RTL_TEXTENCODING_MS_1252:      pChar = "ANSI";         break;
         case RTL_TEXTENCODING_APPLE_ROMAN:  pChar = "MAC";          break;
-        // IBMPC == IBMPC_850
+        
         case RTL_TEXTENCODING_IBM_437:      pChar = "IBMPC_437";    break;
         case RTL_TEXTENCODING_IBM_850:      pChar = "IBMPC_850";    break;
         case RTL_TEXTENCODING_IBM_860:      pChar = "IBMPC_860";    break;
@@ -728,14 +728,14 @@ OUString ScGlobal::GetCharsetString( rtl_TextEncoding eVal )
         case RTL_TEXTENCODING_IBM_863:      pChar = "IBMPC_863";    break;
         case RTL_TEXTENCODING_IBM_865:      pChar = "IBMPC_865";    break;
         case RTL_TEXTENCODING_DONTKNOW:     pChar = "SYSTEM";       break;
-        // new string of TextEncoding value
+        
         default:
             return OUString::number( eVal );
     }
     return OUString::createFromAscii(pChar);
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScGlobal::HasStarCalcFunctionList()
 {
@@ -750,7 +750,7 @@ ScFunctionList* ScGlobal::GetStarCalcFunctionList()
     return pStarCalcFunctionList;
 }
 
-//------------------------------------------------------------------------
+
 
 ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
 {
@@ -762,13 +762,13 @@ ScFunctionMgr* ScGlobal::GetStarCalcFunctionMgr()
 
 void ScGlobal::ResetFunctionList()
 {
-    // FunctionMgr has pointers into FunctionList, must also be updated
+    
 
     DELETEZ( pStarCalcFunctionMgr );
     DELETEZ( pStarCalcFunctionList );
 }
 
-//------------------------------------------------------------------------
+
 
 ScUnitConverter* ScGlobal::GetUnitConverter()
 {
@@ -779,7 +779,7 @@ ScUnitConverter* ScGlobal::GetUnitConverter()
 }
 
 
-//------------------------------------------------------------------------
+
 
 const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
             sal_Unicode c )
@@ -795,7 +795,7 @@ const sal_Unicode* ScGlobal::UnicodeStrChr( const sal_Unicode* pStr,
     return NULL;
 }
 
-// ----------------------------------------------------------------------------
+
 
 OUString ScGlobal::addToken(const OUString& rTokenList, const OUString& rToken,
     sal_Unicode cSep, sal_Int32 nSepCount, bool bForceSep)
@@ -888,17 +888,17 @@ const sal_Unicode* ScGlobal::FindUnquoted( const sal_Unicode* pString, sal_Unico
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
                                const EditTextObject* pObj2 )
 {
-    if ( pObj1 == pObj2 )               // both empty or the same object
+    if ( pObj1 == pObj2 )               
         return true;
 
     if ( pObj1 && pObj2 )
     {
-        //  first test for equal text content
+        
         sal_Int32 nParCount = pObj1->GetParagraphCount();
         if ( nParCount != pObj2->GetParagraphCount() )
             return false;
@@ -921,22 +921,22 @@ bool ScGlobal::EETextObjEqual( const EditTextObject* pObj1,
 
 void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
 {
-    //  OpenURL wird immer ueber irgendwelche Umwege durch Mausklicks im GridWindow
-    //  aufgerufen, darum stimmen pScActiveViewShell und nScClickMouseModifier.
-    //SvtSecurityOptions to access Libreoffice global security parameters
+    
+    
+    
     SvtSecurityOptions aSecOpt;
     bool bCtrlClickHappened = (nScClickMouseModifier & KEY_MOD1);
     bool bCtrlClickSecOption = aSecOpt.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
     if( bCtrlClickHappened && !( bCtrlClickSecOption ) )
     {
-        //return since ctrl+click happened when the
-        //ctrl+click security option was disabled, link should not open
+        
+        
         return;
     }
     else if( !( bCtrlClickHappened ) && bCtrlClickSecOption )
     {
-        //ctrl+click did not happen; only click happened maybe with some
-        //other key combo. and security option is set, so return
+        
+        
         return;
     }
     SfxStringItem aUrl( SID_FILE_NAME, rURL );
@@ -958,7 +958,7 @@ void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
     SfxBoolItem aBrowsing( SID_BROWSE, true );
 
-    //  kein SID_SILENT mehr
+    
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if (pViewFrm)
@@ -970,7 +970,7 @@ void ScGlobal::OpenURL( const OUString& rURL, const OUString& rTarget )
                                     0L );
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScGlobal::IsSystemRTL()
 {
@@ -979,17 +979,17 @@ bool ScGlobal::IsSystemRTL()
 
 sal_uInt8 ScGlobal::GetDefaultScriptType()
 {
-    //  Used when text contains only WEAK characters.
-    //  Script type of office language is used then (same as GetEditDefaultLanguage,
-    //  to get consistent behavior of text in simple cells and EditEngine,
-    //  also same as GetAppLanguage() in Writer)
+    
+    
+    
+    
 
     return (sal_uInt8) SvtLanguageOptions::GetScriptTypeOfLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
 }
 
 LanguageType ScGlobal::GetEditDefaultLanguage()
 {
-    //  used for EditEngine::SetDefaultLanguage
+    
 
     return Application::GetSettings().GetLanguageTag().getLanguageType();
 }
@@ -1001,8 +1001,8 @@ sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhic
         case SCRIPTTYPE_LATIN:
         case SCRIPTTYPE_ASIAN:
         case SCRIPTTYPE_COMPLEX:
-        break;      // take exact matches
-        default:    // prefer one, first COMPLEX, then ASIAN
+        break;      
+        default:    
             if ( nScriptType & SCRIPTTYPE_COMPLEX )
                 nScriptType = SCRIPTTYPE_COMPLEX;
             else if ( nScriptType & SCRIPTTYPE_ASIAN )
@@ -1082,7 +1082,7 @@ sal_uInt16 ScGlobal::GetScriptedWhichID( sal_uInt8 nScriptType, sal_uInt16 nWhic
     return nWhich;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 {
@@ -1095,7 +1095,7 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
         const SvNumberformat* pHardFormat = rFormatter.GetEntry(
             ((const SfxUInt32Item*)pHardItem)->GetValue() );
 
-        sal_uLong nParentFmt = 0;   // pool default
+        sal_uLong nParentFmt = 0;   
         const SfxItemSet* pParent = rSet.GetParent();
         if ( pParent )
             nParentFmt = ((const SfxUInt32Item&)pParent->Get( ATTR_VALUE_FORMAT )).GetValue();
@@ -1108,11 +1108,11 @@ void ScGlobal::AddLanguage( SfxItemSet& rSet, SvNumberFormatter& rFormatter )
 }
 
 
-//--------------------------------------------------------------------
 
 
 
-//------------------------------------------------------------------------
+
+
 
 utl::TransliterationWrapper* ScGlobal::GetpTransliteration()
 {
@@ -1194,10 +1194,10 @@ ScFieldEditEngine& ScGlobal::GetStaticFieldEditEngine()
 {
     if (!pFieldEditEngine)
     {
-        // Creating a ScFieldEditEngine with pDocument=NULL leads to document
-        // specific fields not being resolvable! See
-        // ScFieldEditEngine::CalcFieldValue(). pEnginePool=NULL lets
-        // EditEngine internally create and delete a default pool.
+        
+        
+        
+        
         pFieldEditEngine = new ScFieldEditEngine( NULL, NULL);
     }
     return *pFieldEditEngine;

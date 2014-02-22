@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -83,7 +83,7 @@ SFX_IMPL_INTERFACE(SwDrawShell, SwDrawBaseShell, SW_RES(STR_SHELLNAME_DRAW))
 
 TYPEINIT1(SwDrawShell,SwDrawBaseShell)
 
-// #i123922# check as the name implies
+
 SdrObject* SwDrawShell::IsSingleFillableNonOLESelected()
 {
     SwWrtShell &rSh = GetShell();
@@ -119,7 +119,7 @@ SdrObject* SwDrawShell::IsSingleFillableNonOLESelected()
     return pPickObj;
 }
 
-// #i123922# insert given graphic data dependent of the object type in focus
+
 void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 {
     SwWrtShell &rSh = GetShell();
@@ -147,9 +147,9 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
                     pNewGrafObj->SetGraphic(aGraphic);
 
-                    // #i123922#  for handling MasterObject and virtual ones correctly, SW
-                    // wants us to call ReplaceObject at the page, but that also
-                    // triggers the same assertion (I tried it), so stay at the view method
+                    
+                    
+                    
                     pSdrView->ReplaceObjectAtView(&rObject, *pSdrView->GetSdrPageView(), pNewGrafObj);
 
                     OUString aReferer;
@@ -158,7 +158,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
                         aReferer = pDocShell->GetMedium()->GetName();
                     }
 
-                    // set in all cases - the Clone() will have copied an existing link (!)
+                    
                     pNewGrafObj->SetGraphicLink(
                         bAsLink ? aDlg.GetPath() : OUString(),
                         aReferer,
@@ -166,7 +166,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
                     pResult = pNewGrafObj;
                 }
-                else // if(rObject.IsClosedObj() && !dynamic_cast< SdrOle2Obj* >(&rObject))
+                else 
                 {
                     pSdrView->AddUndo(new SdrUndoAttrObj(rObject));
 
@@ -181,7 +181,7 @@ void SwDrawShell::InsertPictureFromFile(SdrObject& rObject)
 
                 if(pResult)
                 {
-                    // we are done; mark the modified/new object
+                    
                     pSdrView->MarkObj(pResult, pSdrView->GetSdrPageView());
                 }
             }
@@ -228,7 +228,7 @@ void SwDrawShell::Execute(SfxRequest &rReq)
             }
             GetView().FlipDrawSelMode();
             pSdrView->SetFrameDragSingles(GetView().IsDrawSelMode());
-            GetView().AttrChangedNotify(&rSh); // Shell switch
+            GetView().AttrChangedNotify(&rSh); 
             break;
 
         case SID_OBJECT_HELL:
@@ -382,12 +382,12 @@ void SwDrawShell::Execute(SfxRequest &rReq)
 
         case SID_INSERT_GRAPHIC:
         {
-            // #i123922# check if we can do something
+            
             SdrObject* pObj = IsSingleFillableNonOLESelected();
 
             if(pObj)
             {
-                // ...and if yes, do something
+                
                 InsertPictureFromFile(*pObj);
             }
 
@@ -412,7 +412,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
-    if (!bProtected)    // Check the parent
+    if (!bProtected)    
         bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     while( nWhich )
@@ -456,8 +456,8 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 }
                 else
                 {
-                    // TTTT - needs to be adapted in aw080:
-                    // state is not kept for drawing objects --> provide not flipped state
+                    
+                    
                     rSet.Put( SfxBoolItem( nWhich, false ) );
                 }
                 break;
@@ -469,8 +469,8 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
                 }
                 else
                 {
-                    // TTTT - needs to be adapted in aw080:
-                    // state is not kept for drawing objects --> provide not flipped state
+                    
+                    
                     rSet.Put( SfxBoolItem( nWhich, false ) );
                 }
                 break;
@@ -489,7 +489,7 @@ void SwDrawShell::GetState(SfxItemSet& rSet)
 
             case SID_INSERT_GRAPHIC:
             {
-                // #i123922# check if we can do something
+                
                 SdrObject* pObj = IsSingleFillableNonOLESelected();
 
                 if(!pObj)
@@ -515,7 +515,7 @@ SwDrawShell::SwDrawShell(SwView &_rView) :
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Draw));
 }
 
-// Edit SfxRequests for FontWork
+
 
 void SwDrawShell::ExecFormText(SfxRequest& rReq)
 {
@@ -545,7 +545,7 @@ void SwDrawShell::ExecFormText(SfxRequest& rReq)
             pDrView->GetModel()->SetChanged(true);
 }
 
-//Return status values for FontWork
+
 
 void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
 {
@@ -569,7 +569,7 @@ void SwDrawShell::GetFormTextState(SfxItemSet& rSet)
         !pObj ||
         !pTextObj ||
         !pTextObj->HasText() ||
-        dynamic_cast< const SdrObjCustomShape* >(pObj)); // #121538# no FontWork for CustomShapes
+        dynamic_cast< const SdrObjCustomShape* >(pObj)); 
 
     if(bDeactivate)
     {

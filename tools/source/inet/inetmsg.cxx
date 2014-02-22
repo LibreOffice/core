@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -55,7 +55,7 @@ INetMessage::~INetMessage()
 
 void INetMessage::ListCleanup_Impl()
 {
-    // Cleanup.
+    
     sal_uIntPtr i, n = m_aHeaderList.size();
     for (i = 0; i < n; i++)
         delete m_aHeaderList[ i ];
@@ -66,10 +66,10 @@ void INetMessage::ListCopy (const INetMessage &rMsg)
 {
     if (!(this == &rMsg))
     {
-        // Cleanup.
+        
         ListCleanup_Impl();
 
-        // Copy.
+        
         sal_uIntPtr i, n = rMsg.GetHeaderCount();
         for (i = 0; i < n; i++)
         {
@@ -116,14 +116,14 @@ SvStream& INetMessage::operator<< (SvStream& rStrm) const
 
 SvStream& INetMessage::operator>> (SvStream& rStrm)
 {
-    // Cleanup.
+    
     m_nDocSize = 0;
     m_xDocLB.Clear();
     ListCleanup_Impl();
 
     sal_uInt32 nTemp;
 
-    // Copy.
+    
     rStrm.ReadUInt32( nTemp );
     m_nDocSize = nTemp;
     m_aDocName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rStrm, RTL_TEXTENCODING_UTF8);
@@ -139,7 +139,7 @@ SvStream& INetMessage::operator>> (SvStream& rStrm)
         m_aHeaderList.push_back( p );
     }
 
-    // Done.
+    
     return rStrm;
 }
 
@@ -275,10 +275,10 @@ bool INetRFC822Message::ParseDateField (
 
     if (aDateField.indexOf(':') != -1)
     {
-        // Some DateTime format.
+        
         sal_uInt16 nIndex = 0;
 
-        // Skip over <Wkd> or <Weekday>, leading and trailing space.
+        
         while ((nIndex < aDateField.getLength()) &&
                (aDateField[nIndex] == ' '))
             nIndex++;
@@ -295,7 +295,7 @@ bool INetRFC822Message::ParseDateField (
 
         if (ascii_isLetter (aDateField[nIndex]))
         {
-            // Format: ctime().
+            
             if ((aDateField.getLength() - nIndex) < 20) return false;
 
             rDateTime.SetMonth  (ParseMonth  (aDateField, nIndex)); nIndex++;
@@ -312,7 +312,7 @@ bool INetRFC822Message::ParseDateField (
         }
         else
         {
-            // Format: RFC1036 or RFC1123.
+            
             if ((aDateField.getLength() - nIndex) < 17) return false;
 
             rDateTime.SetDay    (ParseNumber (aDateField, nIndex)); nIndex++;
@@ -330,7 +330,7 @@ bool INetRFC822Message::ParseDateField (
             if ((aDateField[nIndex] == '+') ||
                 (aDateField[nIndex] == '-')    )
             {
-                // Offset from GMT: "(+|-)HHMM".
+                
                 bool bEast   = (aDateField[nIndex++] == '+');
                 sal_uInt16 nOffset = ParseNumber (aDateField, nIndex);
                 if (nOffset > 0)
@@ -351,7 +351,7 @@ bool INetRFC822Message::ParseDateField (
     }
     else if (comphelper::string::isdigitAsciiString(aDateField))
     {
-        // Format: delta seconds.
+        
         Time aDelta (0);
         aDelta.SetTime (aDateField.toInt32() * 100);
 
@@ -364,7 +364,7 @@ bool INetRFC822Message::ParseDateField (
     }
     else
     {
-        // Junk.
+        
         return false;
     }
 
@@ -374,7 +374,7 @@ bool INetRFC822Message::ParseDateField (
               (rDateTime.GetHour() > 23)    ));
 }
 
-// Header Field Parser
+
 sal_uIntPtr INetRFC822Message::SetHeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex)
 {
@@ -597,7 +597,7 @@ sal_uIntPtr INetRFC822Message::SetHeaderField (
                 nNewIndex = m_nIndex[nIdx];
                 break;
 
-            default: // INETMSG_RFC822_JUNK
+            default: 
                 pData = pStop;
                 nNewIndex = INetMessage::SetHeaderField (rHeader, nNewIndex);
                 break;
@@ -687,7 +687,7 @@ INetMIMEMessage& INetMIMEMessage::operator= (
 {
     if (this != &rMsg)
     {
-        // Assign base.
+        
         INetRFC822Message::operator= (rMsg);
 
         CleanupImp();
@@ -738,7 +738,7 @@ INetMIMEMessage *INetMIMEMessage::CreateMessage (
     return (new INetMIMEMessage (rMsg));
 }
 
-// Header Field Parser
+
 sal_uIntPtr INetMIMEMessage::SetHeaderField (
     const INetMessageHeader &rHeader, sal_uIntPtr nNewIndex)
 {
@@ -875,7 +875,7 @@ sal_uIntPtr INetMIMEMessage::SetHeaderField (
                 nNewIndex = m_nIndex[nIdx];
                 break;
 
-            default: // INETMSG_MIME_JUNK
+            default: 
                 pData = pStop;
                 nNewIndex = INetRFC822Message::SetHeaderField (
                     rHeader, nNewIndex);
@@ -934,11 +934,11 @@ OUString INetMIMEMessage::GetDefaultContentType()
 
 bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
 {
-    // Check context.
+    
     if (IsContainer())
         return false;
 
-    // Setup Content-Type header field.
+    
     OStringBuffer aContentType;
     switch (eType)
     {
@@ -971,13 +971,13 @@ bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
             break;
     }
 
-    // Setup boundary for multipart types.
+    
     if (aContentType.toString().equalsIgnoreAsciiCase("multipart/"))
     {
-        // Generate a unique boundary from current time.
+        
         sal_Char sTail[16 + 1];
         Time aCurTime( Time::SYSTEM );
-        sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); // we can be on a 64bit architecture
+        sal_uInt64 nThis = reinterpret_cast< sal_uIntPtr >( this ); 
         nThis = ( ( nThis >> 32 ) ^ nThis ) & SAL_MAX_UINT32;
         sprintf (sTail, "%08X%08X",
                  static_cast< unsigned int >(aCurTime.GetTime()),
@@ -985,17 +985,17 @@ bool INetMIMEMessage::EnableAttachChild (INetMessageContainerType eType)
         m_aBoundary = "------------_4D48";
         m_aBoundary += sTail;
 
-        // Append boundary as ContentType parameter.
+        
         aContentType.append("; boundary=");
         aContentType.append(m_aBoundary);
     }
 
-    // Set header fields.
+    
     SetMIMEVersion(OUString("1.0"));
     SetContentType(OStringToOUString(aContentType.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US));
     SetContentTransferEncoding(OUString("7bit"));
 
-    // Done.
+    
     return true;
 }
 

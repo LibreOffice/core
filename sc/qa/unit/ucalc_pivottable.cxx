@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ucalc.hxx"
@@ -43,11 +43,11 @@ struct DPFieldDef
 template<size_t _Size>
 ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nFieldCount, const char* aData[][_Size], size_t nDataCount)
 {
-    // Insert field names in row 0.
+    
     for (size_t i = 0; i < nFieldCount; ++i)
         pDoc->SetString(static_cast<SCCOL>(i), 0, 0, OUString(aFields[i].pName, strlen(aFields[i].pName), RTL_TEXTENCODING_UTF8));
 
-    // Insert data into row 1 and downward.
+    
     for (size_t i = 0; i < nDataCount; ++i)
     {
         SCROW nRow = static_cast<SCROW>(i) + 1;
@@ -117,7 +117,7 @@ ScDPObject* createDPFromSourceDesc(
     pDPObj->SetOutRange(ScAddress(0, 0, 1));
 
     ScDPSaveData aSaveData;
-    // Set data pilot table output options.
+    
     aSaveData.SetIgnoreEmptyRows(false);
     aSaveData.SetRepeatIfEmpty(false);
     aSaveData.SetColumnGrand(true);
@@ -125,13 +125,13 @@ ScDPObject* createDPFromSourceDesc(
     aSaveData.SetFilterButton(bFilterButton);
     aSaveData.SetDrillDown(true);
 
-    // Check the sanity of the source range.
+    
     const ScRange& rSrcRange = rDesc.GetSourceRange();
     SCROW nRow1 = rSrcRange.aStart.Row();
     SCROW nRow2 = rSrcRange.aEnd.Row();
     CPPUNIT_ASSERT_MESSAGE("source range contains no data!", nRow2 - nRow1 > 1);
 
-    // Set the dimension information.
+    
     for (size_t i = 0; i < nFieldCount; ++i)
     {
         OUString aDimName = OUString::createFromAscii(aFields[i].pName);
@@ -167,7 +167,7 @@ ScDPObject* createDPFromSourceDesc(
         }
     }
 
-    // Don't forget the data layout dimension.
+    
     ScDPSaveDimension* pDim = aSaveData.GetDataLayoutDimension();
     pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
     pDim->SetShowEmpty(true);
@@ -200,8 +200,8 @@ ScRange refresh(ScDPObject* pDPObj)
 
 ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
 {
-    // We need to first create group data in the cache, then the group data in
-    // the object.
+    
+    
     std::set<ScDPObject*> aRefs;
     bool bSuccess = pDPs->ReloadGroupsInCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_MESSAGE("Failed to reload group data in cache.", bSuccess);
@@ -218,14 +218,14 @@ void Test::testPivotTable()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0 },
         { "Score", sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
-    // Raw data
+    
     const char* aData[][3] = {
         { "Andy",    "A", "30" },
         { "Bruce",   "A", "20" },
@@ -259,7 +259,7 @@ void Test::testPivotTable()
     pDPObj->Output(aOutRange.aStart);
     aOutRange = pDPObj->GetOutRange();
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][5] = {
             { "Sum - Score", "Group", 0, 0, 0 },
             { "Name", "A", "B", "C", "Total Result" },
@@ -277,7 +277,7 @@ void Test::testPivotTable()
     }
     CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
 
-    // Update the cell values.
+    
     double aData2[] = { 100, 200, 300, 400, 500, 600 };
     for (size_t i = 0; i < SAL_N_ELEMENTS(aData2); ++i)
     {
@@ -287,9 +287,9 @@ void Test::testPivotTable()
 
     printRange(m_pDoc, ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0), "Data sheet content (modified)");
 
-    // Now, create a copy of the datapilot object for the updated table, but
-    // don't reload the cache which should force the copy to use the old data
-    // from the cache.
+    
+    
+    
     ScDPObject* pDPObj2 = new ScDPObject(*pDPObj);
     pDPs->InsertNewTable(pDPObj2);
 
@@ -297,7 +297,7 @@ void Test::testPivotTable()
     pDPObj2->ClearTableData();
     pDPObj2->Output(aOutRange.aStart);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][5] = {
             { "Sum - Score", "Group", 0, 0, 0 },
             { "Name", "A", "B", "C", "Total Result" },
@@ -316,13 +316,13 @@ void Test::testPivotTable()
 
     CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
 
-    // Free the first datapilot object after the 2nd one gets reloaded, to
-    // prevent the data cache from being deleted before the reload.
+    
+    
     pDPs->FreeTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("There should be only one data cache.", pDPs->GetSheetCaches().size() == 1);
 
-    // This time clear the cache to refresh the data from the source range.
+    
     CPPUNIT_ASSERT_MESSAGE("This datapilot should be based on sheet data.", pDPObj2->IsSheetData());
     std::set<ScDPObject*> aRefs;
     sal_uLong nErrId = pDPs->ReloadCache(pDPObj2, aRefs);
@@ -334,7 +334,7 @@ void Test::testPivotTable()
     pDPObj2->Output(aOutRange.aStart);
 
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][5] = {
             { "Sum - Score", "Group", 0, 0, 0 },
             { "Name", "A", "B", "C", "Total Result" },
@@ -353,7 +353,7 @@ void Test::testPivotTable()
 
     CPPUNIT_ASSERT_MESSAGE("Cache should be here.", pDPs->GetSheetCaches().hasCache(aSrcRange));
 
-    // Swap the two sheets.
+    
     m_pDoc->MoveTab(1, 0);
     CPPUNIT_ASSERT_MESSAGE("Swapping the sheets shouldn't remove the cache.",
                            pDPs->GetSheetCaches().size() == 1);
@@ -369,8 +369,8 @@ void Test::testPivotTable()
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more data cache.",
                            pDPs->GetSheetCaches().size() == 0);
 
-    // Insert a brand new pivot table object once again, but this time, don't
-    // create the output to avoid creating a data cache.
+    
+    
     m_pDoc->DeleteTab(1);
     m_pDoc->InsertTab(1, OUString("Table"));
 
@@ -384,8 +384,8 @@ void Test::testPivotTable()
     CPPUNIT_ASSERT_MESSAGE("Data cache shouldn't exist yet before creating the table output.",
                            pDPs->GetSheetCaches().size() == 0);
 
-    // Now, "refresh" the table.  This should still return a reference to self
-    // even with the absence of data cache.
+    
+    
     aRefs.clear();
     pDPs->ReloadCache(pDPObj, aRefs);
     CPPUNIT_ASSERT_MESSAGE("It should return the same object as a reference.",
@@ -402,14 +402,14 @@ void Test::testPivotTableLabels()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Software", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Version",  sheet::DataPilotFieldOrientation_COLUMN, 0 },
         { "1.2.3",    sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
-    // Raw data
+    
     const char* aData[][3] = {
         { "LibreOffice", "3.3.0", "30" },
         { "LibreOffice", "3.3.1", "20" },
@@ -435,7 +435,7 @@ void Test::testPivotTableLabels()
 
     ScRange aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][5] = {
             { "Sum - 1.2.3", "Version", 0, 0, 0 },
             { "Software", "3.3.0", "3.3.1", "3.4.0", "Total Result" },
@@ -458,14 +458,14 @@ void Test::testPivotTableDateLabels()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Date",  sheet::DataPilotFieldOrientation_COLUMN, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
-    // Raw data
+    
     const char* aData[][3] = {
         { "Zena",   "2011-1-1", "30" },
         { "Yodel",  "2011-1-2", "20" },
@@ -491,7 +491,7 @@ void Test::testPivotTableDateLabels()
 
     ScRange aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][5] = {
             { "Sum - Value", "Date", 0, 0, 0 },
             { "Name", "2011-01-01", "2011-01-02", "2011-01-03", "Total Result" },
@@ -510,7 +510,7 @@ void Test::testPivotTableDateLabels()
             "2011-01-01", "2011-01-02", "2011-01-03"
         };
 
-        // Make sure those cells that contain dates are numeric.
+        
         SCROW nRow = aOutRange.aStart.Row() + 1;
         nCol1 = aOutRange.aStart.Col() + 1;
         nCol2 = nCol1 + 2;
@@ -534,7 +534,7 @@ void Test::testPivotTableFilters()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name",   sheet::DataPilotFieldOrientation_HIDDEN, 0 },
         { "Group1", sheet::DataPilotFieldOrientation_HIDDEN, 0 },
@@ -543,7 +543,7 @@ void Test::testPivotTableFilters()
         { "Val2",   sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
-    // Raw data
+    
     const char* aData[][5] = {
         { "A", "1", "A", "1", "10" },
         { "B", "1", "A", "1", "10" },
@@ -574,7 +574,7 @@ void Test::testPivotTableFilters()
 
     ScRange aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Filter", 0 },
             { "Group2", "- all -" },
@@ -588,7 +588,7 @@ void Test::testPivotTableFilters()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calculation.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
     ScAddress aFormulaAddr = aOutRange.aEnd;
     aFormulaAddr.IncRow(2);
@@ -597,7 +597,7 @@ void Test::testPivotTableFilters()
     double fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 80.0);
 
-    // Set current page of 'Group2' to 'A'.
+    
     pDPObj->BuildAllDimensionMembers();
     ScDPSaveData aSaveData(*pDPObj->GetSaveData());
     ScDPSaveDimension* pPageDim = aSaveData.GetDimensionByName(
@@ -608,7 +608,7 @@ void Test::testPivotTableFilters()
     pDPObj->SetSaveData(aSaveData);
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Filter", 0 },
             { "Group2", "A" },
@@ -625,19 +625,19 @@ void Test::testPivotTableFilters()
     fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 40.0);
 
-    // Set query filter.
+    
     ScSheetSourceDesc aDesc(*pDPObj->GetSheetDesc());
     ScQueryParam aQueryParam(aDesc.GetQueryParam());
     CPPUNIT_ASSERT_MESSAGE("There should be at least one query entry.", aQueryParam.GetEntryCount() > 0);
     ScQueryEntry& rEntry = aQueryParam.GetEntry(0);
     rEntry.bDoQuery = true;
-    rEntry.nField = 1;  // Group1
+    rEntry.nField = 1;  
     rEntry.GetQueryItem().mfVal = 1;
     aDesc.SetQueryParam(aQueryParam);
     pDPObj->SetSheetDesc(aDesc);
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Filter", 0 },
             { "Group2", "A" },
@@ -654,13 +654,13 @@ void Test::testPivotTableFilters()
     fTest = m_pDoc->GetValue(aFormulaAddr);
     CPPUNIT_ASSERT_MESSAGE("Incorrect formula value that references a cell in the pivot table output.", fTest == 20.0);
 
-    // Set the current page of 'Group2' back to '- all -'. The query filter
-    // should still be in effect.
-    pPageDim->SetCurrentPage(NULL); // Remove the page.
+    
+    
+    pPageDim->SetCurrentPage(NULL); 
     pDPObj->SetSaveData(aSaveData);
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Filter", 0 },
             { "Group2", "- all -" },
@@ -688,14 +688,14 @@ void Test::testPivotTableNamedSource()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Group", sheet::DataPilotFieldOrientation_COLUMN, 0 },
         { "Score", sheet::DataPilotFieldOrientation_DATA, 0 }
     };
 
-    // Raw data
+    
     const char* aData[][3] = {
         { "Andy",    "A", "30" },
         { "Bruce",   "A", "20" },
@@ -708,11 +708,11 @@ void Test::testPivotTableNamedSource()
     size_t nFieldCount = SAL_N_ELEMENTS(aFields);
     size_t nDataCount = SAL_N_ELEMENTS(aData);
 
-    // Insert the raw data.
+    
     ScRange aSrcRange = insertDPSourceData(m_pDoc, aFields, nFieldCount, aData, nDataCount);
     OUString aRangeStr(aSrcRange.Format(SCR_ABS_3D, m_pDoc));
 
-    // Name this range.
+    
     OUString aRangeName("MyData");
     ScRangeName* pNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to get global range name container.", pNames);
@@ -735,7 +735,7 @@ void Test::testPivotTableNamedSource()
 
     ScRange aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][5] = {
             { "Sum - Score", "Group", 0, 0, 0 },
             { "Name", "A", "B", "C", "Total Result" },
@@ -755,7 +755,7 @@ void Test::testPivotTableNamedSource()
     CPPUNIT_ASSERT_MESSAGE("There should be one named range data cache.",
                            pDPs->GetNameCaches().size() == 1 && pDPs->GetSheetCaches().size() == 0);
 
-    // Move the table with pivot table to the left of the source data sheet.
+    
     m_pDoc->MoveTab(1, 0);
     OUString aTabName;
     m_pDoc->GetName(0, aTabName);
@@ -787,7 +787,7 @@ void Test::testPivotTableCache()
 {
     m_pDoc->InsertTab(0, OUString("Data"));
 
-    // Raw data
+    
     const char* aData[][3] = {
         { "F1", "F2", "F3" },
         { "Z",  "A", "30" },
@@ -813,12 +813,12 @@ void Test::testPivotTableCache()
     aDimName = aCache.GetDimensionName(2);
     CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F3"));
 
-    // In each dimension, member ID values also represent their sort order (in
-    // source dimensions only, not in group dimensions). Value items are
-    // sorted before string ones. Also, no duplicate dimension members should
-    // exist.
+    
+    
+    
+    
 
-    // Dimension 0 - a mix of strings and values.
+    
     long nMemCount = aCache.GetDimMemberCount(0);
     CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 6);
     const ScDPItemData* pItem = aCache.GetItemDataById(0, 0);
@@ -848,7 +848,7 @@ void Test::testPivotTableCache()
     pItem = aCache.GetItemDataById(0, 6);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
-    // Dimension 1 - duplicate values in source.
+    
     nMemCount = aCache.GetDimMemberCount(1);
     CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 3);
     pItem = aCache.GetItemDataById(1, 0);
@@ -866,7 +866,7 @@ void Test::testPivotTableCache()
     pItem = aCache.GetItemDataById(1, 3);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
-    // Dimension 2 - values only.
+    
     nMemCount = aCache.GetDimMemberCount(2);
     CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 6);
     pItem = aCache.GetItemDataById(2, 0);
@@ -897,12 +897,12 @@ void Test::testPivotTableCache()
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
 
     {
-        // Check the integrity of the source data.
+        
         ScDPItemData aTest;
         long nDim;
 
         {
-            // Dimension 0: Z, R, A, F, Y, 12
+            
             nDim = 0;
             const char* aChecks[] = { "Z", "R", "A", "F", "Y" };
             for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -918,7 +918,7 @@ void Test::testPivotTableCache()
         }
 
         {
-            // Dimension 1: A, A, B, B, C, C
+            
             nDim = 1;
             const char* aChecks[] = { "A", "A", "B", "B", "C", "C" };
             for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -930,7 +930,7 @@ void Test::testPivotTableCache()
         }
 
         {
-            // Dimension 2: 30, 20, 45, 12, 8, 15
+            
             nDim = 2;
             double aChecks[] = { 30, 20, 45, 12, 8, 15 };
             for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -942,10 +942,10 @@ void Test::testPivotTableCache()
         }
     }
 
-    // Now, on to testing the filtered cache.
+    
 
     {
-        // Non-filtered cache - everything should be visible.
+        
         ScDPFilteredCache aFilteredCache(aCache);
         aFilteredCache.fillTable();
 
@@ -963,7 +963,7 @@ void Test::testPivotTableCache()
         }
     }
 
-    // TODO : Add test for filtered caches.
+    
 
     m_pDoc->DeleteTab(0);
 }
@@ -973,7 +973,7 @@ void Test::testPivotTableDuplicateDataFields()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Name", "Value" },
         { "A",       "45" },
@@ -988,7 +988,7 @@ void Test::testPivotTableDuplicateDataFields()
         { "B",       "68" }
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -1012,7 +1012,7 @@ void Test::testPivotTableDuplicateDataFields()
 
     ScRange aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][3] = {
             { "Name", "Data", 0 },
             { "A", "Sum - Value", "144" },
@@ -1027,7 +1027,7 @@ void Test::testPivotTableDuplicateDataFields()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    // Move the data layout dimension from row to column.
+    
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT_MESSAGE("No save data!?", pSaveData);
     ScDPSaveDimension* pDataLayout = pSaveData->GetDataLayoutDimension();
@@ -1035,10 +1035,10 @@ void Test::testPivotTableDuplicateDataFields()
     pDataLayout->SetOrientation(sheet::DataPilotFieldOrientation_COLUMN);
     pDPObj->SetSaveData(*pSaveData);
 
-    // Refresh the table output.
+    
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][3] = {
             { 0, "Data", 0 },
             { "Name", "Sum - Value", "Count - Value" },
@@ -1070,7 +1070,7 @@ void Test::testPivotTableNormalGrouping()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Name", "Value" },
         { "A", "1" },
@@ -1082,7 +1082,7 @@ void Test::testPivotTableNormalGrouping()
         { "G", "7" }
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -1105,7 +1105,7 @@ void Test::testPivotTableNormalGrouping()
 
     ScRange aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", "1" },
@@ -1133,7 +1133,7 @@ void Test::testPivotTableNormalGrouping()
         pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, NULL);
 
     {
-        // Group A, B and C together.
+        
         ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
         OUString aGroupName = aGroupDim.CreateGroupName(aGroupPrefix);
         CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group1"));
@@ -1147,13 +1147,13 @@ void Test::testPivotTableNormalGrouping()
 
         ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aGroupDimName);
         pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
-        pSaveData->SetPosition(pDim, 0); // Set it before the base dimension.
+        pSaveData->SetPosition(pDim, 0); 
     }
 
     pDPObj->SetSaveData(*pSaveData);
     aOutRange = refreshGroups(pDPs, pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][3] = {
             { "Name2", "Name", 0 },
             { "D", "D", "4" },
@@ -1174,7 +1174,7 @@ void Test::testPivotTableNormalGrouping()
     pDimData = pSaveData->GetDimensionData();
 
     {
-        // Group D, E, F together.
+        
         ScDPSaveGroupDimension* pGroupDim = pDimData->GetGroupDimAccForBase(aBaseDimName);
         CPPUNIT_ASSERT_MESSAGE("There should be an existing group dimension.", pGroupDim);
         OUString aGroupName = pGroupDim->CreateGroupName(aGroupPrefix);
@@ -1190,7 +1190,7 @@ void Test::testPivotTableNormalGrouping()
     pDPObj->SetSaveData(*pSaveData);
     aOutRange = refreshGroups(pDPs, pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][3] = {
             { "Name2", "Name", 0 },
             { "G", "G", "7" },
@@ -1221,7 +1221,7 @@ void Test::testPivotTableNumberGrouping()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Order", "Score" },
         { "43", "171" },
@@ -1244,7 +1244,7 @@ void Test::testPivotTableNumberGrouping()
         { "69", "170" }
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Order", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Score", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -1287,7 +1287,7 @@ void Test::testPivotTableNumberGrouping()
     pDPObj->SetSaveData(*pSaveData);
     ScRange aOutRange = refreshGroups(pDPs, pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Order", 0 },
             { "<30",   "423" },
@@ -1316,7 +1316,7 @@ void Test::testPivotTableDateGrouping()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Date", "Value" },
         { "2011-01-01", "1" },
@@ -1329,7 +1329,7 @@ void Test::testPivotTableDateGrouping()
         { "2012-12-25", "8" }
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Date", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -1362,15 +1362,15 @@ void Test::testPivotTableDateGrouping()
     aInfo.mbAutoStart = true;
     aInfo.mbAutoEnd = true;
     {
-        // Turn the Date dimension into months.  The first of the date
-        // dimensions is always a number-group dimension which replaces the
-        // original dimension.
+        
+        
+        
         ScDPSaveNumGroupDimension aGroup(aBaseDimName, aInfo, sheet::DataPilotFieldGroupBy::MONTHS);
         pDimData->AddNumGroupDimension(aGroup);
     }
 
     {
-        // Add quarter dimension.  This will be an additional dimension.
+        
         OUString aGroupDimName =
             pDimData->CreateDateGroupDimName(
                 sheet::DataPilotFieldGroupBy::QUARTERS, *pDPObj, true, NULL);
@@ -1378,14 +1378,14 @@ void Test::testPivotTableDateGrouping()
         aGroupDim.SetDateInfo(aInfo, sheet::DataPilotFieldGroupBy::QUARTERS);
         pDimData->AddGroupDimension(aGroupDim);
 
-        // Set orientation.
+        
         ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aGroupDimName);
         pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
-        pSaveData->SetPosition(pDim, 0); // set it to the left end.
+        pSaveData->SetPosition(pDim, 0); 
     }
 
     {
-        // Add year dimension.  This is a new dimension also.
+        
         OUString aGroupDimName =
             pDimData->CreateDateGroupDimName(
                 sheet::DataPilotFieldGroupBy::YEARS, *pDPObj, true, NULL);
@@ -1393,16 +1393,16 @@ void Test::testPivotTableDateGrouping()
         aGroupDim.SetDateInfo(aInfo, sheet::DataPilotFieldGroupBy::YEARS);
         pDimData->AddGroupDimension(aGroupDim);
 
-        // Set orientation.
+        
         ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aGroupDimName);
         pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
-        pSaveData->SetPosition(pDim, 0); // set it to the left end.
+        pSaveData->SetPosition(pDim, 0); 
     }
 
     pDPObj->SetSaveData(*pSaveData);
     ScRange aOutRange = refreshGroups(pDPs, pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][4] = {
             { "Years", "Quarters", "Date", 0 },
             { "2011", "Q1", "Jan", "1" },
@@ -1420,7 +1420,7 @@ void Test::testPivotTableDateGrouping()
     }
 
     {
-        // Let's hide year 2012.
+        
         pSaveData = pDPObj->GetSaveData();
         ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(OUString("Years"));
         CPPUNIT_ASSERT_MESSAGE("Years dimension should exist.", pDim);
@@ -1434,7 +1434,7 @@ void Test::testPivotTableDateGrouping()
 
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][4] = {
             { "Years", "Quarters", "Date", 0 },
             { "2011", "Q1", "Jan", "1" },
@@ -1447,9 +1447,9 @@ void Test::testPivotTableDateGrouping()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    // Remove all date grouping. The source dimension "Date" has two
-    // external dimensions ("Years" and "Quarters") and one internal ("Date"
-    // the same name but different hierarchy).  Remove all of them.
+    
+    
+    
     pSaveData = pDPObj->GetSaveData();
     pSaveData->RemoveAllGroupDimensions(aBaseDimName);
     pDPObj->SetSaveData(*pSaveData);
@@ -1458,7 +1458,7 @@ void Test::testPivotTableDateGrouping()
 
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Date", 0 },
             { "2011-01-01", "1" },
@@ -1490,7 +1490,7 @@ void Test::testPivotTableEmptyRows()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Name", "Value" },
         { "A", "1" },
@@ -1499,7 +1499,7 @@ void Test::testPivotTableEmptyRows()
         { "D", "4" },
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -1509,7 +1509,7 @@ void Test::testPivotTableEmptyRows()
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
     CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
 
-    // Extend the range downward to include some trailing empty rows.
+    
     aDataRange.aEnd.IncRow(2);
 
     ScDPObject* pDPObj = createDPFromRange(
@@ -1526,7 +1526,7 @@ void Test::testPivotTableEmptyRows()
     ScRange aOutRange = refresh(pDPObj);
 
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", "1" },
@@ -1541,7 +1541,7 @@ void Test::testPivotTableEmptyRows()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    // This time, ignore empty rows.
+    
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
     CPPUNIT_ASSERT_MESSAGE("Save data doesn't exist.", pSaveData);
     pSaveData->SetIgnoreEmptyRows(true);
@@ -1549,7 +1549,7 @@ void Test::testPivotTableEmptyRows()
     aOutRange = refresh(pDPObj);
 
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", "1" },
@@ -1563,7 +1563,7 @@ void Test::testPivotTableEmptyRows()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    // Modify the source to remove member 'A', then refresh the table.
+    
     m_pDoc->SetString(1, 2, 0, "B");
 
     std::set<ScDPObject*> aRefs;
@@ -1576,7 +1576,7 @@ void Test::testPivotTableEmptyRows()
     aOutRange = refresh(pDPObj);
 
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "B", "3" },
@@ -1603,7 +1603,7 @@ void Test::testPivotTableTextNumber()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Name", "Value" },
         { "0001", "1" },
@@ -1612,13 +1612,13 @@ void Test::testPivotTableTextNumber()
         { "0004", "4" },
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
     };
 
-    // Insert raw data such that the first column values are entered as text.
+    
     size_t nRowCount = SAL_N_ELEMENTS(aData);
     for (size_t nRow = 0; nRow < nRowCount; ++nRow)
     {
@@ -1630,10 +1630,10 @@ void Test::testPivotTableTextNumber()
         m_pDoc->SetString(1, nRow, 0, OUString::createFromAscii(aData[nRow][1]), &aParam);
 
         if (nRow == 0)
-            // Don't check the header row.
+            
             continue;
 
-        // Check the data rows.
+        
         CPPUNIT_ASSERT_MESSAGE("This cell is supposed to be text.", m_pDoc->HasStringData(0, nRow, 0));
         CPPUNIT_ASSERT_MESSAGE("This cell is supposed to be numeric.", m_pDoc->HasValueData(1, nRow, 0));
     }
@@ -1654,7 +1654,7 @@ void Test::testPivotTableTextNumber()
     ScRange aOutRange = refresh(pDPObj);
 
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "0001", "1" },
@@ -1682,14 +1682,14 @@ void Test::testPivotTableCaseInsensitiveStrings()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Name", "Value" },
         { "A", "1" },
         { "a", "2" },
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -1713,7 +1713,7 @@ void Test::testPivotTableCaseInsensitiveStrings()
     ScRange aOutRange = refresh(pDPObj);
 
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", "3" },
@@ -1737,7 +1737,7 @@ void Test::testPivotTableNumStability()
 {
     FormulaGrammarSwitch aFGSwitch(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_R1C1);
 
-    // Raw Data
+    
     const char* aData[][4] = {
         { "Name",   "Time Start", "Time End", "Total"          },
         { "Sam",    "07:48 AM",   "09:00 AM", "=RC[-1]-RC[-2]" },
@@ -1765,7 +1765,7 @@ void Test::testPivotTableNumStability()
         { "Dennis", "01:00 PM",   "02:00 PM", "=RC[-1]-RC[-2]" }
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Total", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -1778,14 +1778,14 @@ void Test::testPivotTableNumStability()
     ScAddress aPos(1,1,0);
     ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, nRowCount);
 
-    // Insert formulas to manually calculate sums for each name.
+    
     m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab(), "=SUMIF(R[-23]C:R[-1]C;\"Dennis\";R[-23]C[3]:R[-1]C[3])");
     m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab(), "=SUMIF(R[-24]C:R[-2]C;\"Mike\";R[-24]C[3]:R[-2]C[3])");
     m_pDoc->SetString(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab(), "=SUMIF(R[-25]C:R[-3]C;\"Sam\";R[-25]C[3]:R[-3]C[3])");
 
     m_pDoc->CalcAll();
 
-    // Get correct sum values.
+    
     double fDennisTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+1, aDataRange.aStart.Tab());
     double fMikeTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+2, aDataRange.aStart.Tab());
     double fSamTotal = m_pDoc->GetValue(aDataRange.aStart.Col(), aDataRange.aEnd.Row()+3, aDataRange.aStart.Tab());
@@ -1803,19 +1803,19 @@ void Test::testPivotTableNumStability()
 
     ScRange aOutRange = refresh(pDPObj);
 
-    // Manually check the total value for each name.
+    
     //
-    // +--------------+----------------+
-    // | Name         |                |
-    // +--------------+----------------+
-    // | Dennis       | <Dennis total> |
-    // +--------------+----------------+
-    // | Mike         | <Miks total>   |
-    // +--------------+----------------+
-    // | Sam          | <Sam total>    |
-    // +--------------+----------------+
-    // | Total Result | ...            |
-    // +--------------+----------------+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     aPos = aOutRange.aStart;
     aPos.IncCol();
@@ -1843,7 +1843,7 @@ void Test::testPivotTableFieldReference()
     m_pDoc->InsertTab(0, OUString("Data"));
     m_pDoc->InsertTab(1, OUString("Table"));
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Name", "Value" },
         { "A", "1" },
@@ -1852,7 +1852,7 @@ void Test::testPivotTableFieldReference()
         { "D", "8" },
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -1876,7 +1876,7 @@ void Test::testPivotTableFieldReference()
     ScRange aOutRange = refresh(pDPObj);
 
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", "1" },
@@ -1903,7 +1903,7 @@ void Test::testPivotTableFieldReference()
 
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", 0 },
@@ -1923,7 +1923,7 @@ void Test::testPivotTableFieldReference()
 
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", "100.00%" },
@@ -1943,7 +1943,7 @@ void Test::testPivotTableFieldReference()
 
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", 0 },
@@ -1963,7 +1963,7 @@ void Test::testPivotTableFieldReference()
 
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", "1" },
@@ -1983,7 +1983,7 @@ void Test::testPivotTableFieldReference()
 
     aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", "6.67%" },
@@ -2011,7 +2011,7 @@ void Test::testPivotTableDocFunc()
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Name",      "Value" },
         { "Sun",       "1" },
@@ -2022,7 +2022,7 @@ void Test::testPivotTableDocFunc()
         { "Microsoft", "32" },
     };
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -2037,7 +2037,7 @@ void Test::testPivotTableDocFunc()
 
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table object.", pDPObj);
 
-    // Craete a new pivot table output.
+    
     ScDBDocFunc aFunc(getDocShell());
     bool bSuccess = aFunc.CreatePivotTable(*pDPObj, false, true);
     CPPUNIT_ASSERT_MESSAGE("Failed to create pivot table output via ScDBDocFunc.", bSuccess);
@@ -2048,7 +2048,7 @@ void Test::testPivotTableDocFunc()
     CPPUNIT_ASSERT_MESSAGE("Failed to retrieve pivot table object from the collection", pDPObj);
     ScRange aOutRange = pDPObj->GetOutRange();
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "Apple", "16" },
@@ -2064,8 +2064,8 @@ void Test::testPivotTableDocFunc()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    // Remove this pivot table output. This should also clear the pivot cache
-    // it was referencing.
+    
+    
     bSuccess = aFunc.RemovePivotTable(*pDPObj, false, true);
     CPPUNIT_ASSERT_MESSAGE("Failed to remove pivot table output via ScDBDocFunc.", bSuccess);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pDPs->GetCount());
@@ -2080,7 +2080,7 @@ void Test::testFuncGETPIVOTDATA()
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Name", "Value" },
         { "A", "1" },
@@ -2098,7 +2098,7 @@ void Test::testFuncGETPIVOTDATA()
     ScDPObject* pDPObj = NULL;
 
     {
-        // Dimension definition
+        
         DPFieldDef aFields[] = {
             { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
             { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -2117,7 +2117,7 @@ void Test::testFuncGETPIVOTDATA()
 
     ScRange aOutRange = refresh(pDPObj);
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][2] = {
             { "Name", 0 },
             { "A", "6" },
@@ -2130,13 +2130,13 @@ void Test::testFuncGETPIVOTDATA()
     }
 
     aPos = aOutRange.aEnd;
-    aPos.IncRow(2); // Move 2 rows down from the table outout.
+    aPos.IncRow(2); 
 
     OUString aPivotPosStr(aOutRange.aStart.Format(SCA_ABS));
 
-    sc::AutoCalcSwitch aSwitch(*m_pDoc, true); // turn autocalc on.
+    sc::AutoCalcSwitch aSwitch(*m_pDoc, true); 
 
-    // First, get the grand total.
+    
     OUString aFormula("=GETPIVOTDATA(\"Value\";");
     aFormula += aPivotPosStr;
     aFormula += ")";
@@ -2144,24 +2144,24 @@ void Test::testFuncGETPIVOTDATA()
     double fVal = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_EQUAL(21.0, fVal);
 
-    // Get the subtotal for 'A'.
+    
     aFormula = "=GETPIVOTDATA(\"Value\";" + aPivotPosStr + ";\"Name\";\"A\")";
     m_pDoc->SetString(aPos, aFormula);
     fVal = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_EQUAL(6.0, fVal);
 
-    // Get the subtotal for 'B'.
+    
     aFormula = "=GETPIVOTDATA(\"Value\";" + aPivotPosStr + ";\"Name\";\"B\")";
     m_pDoc->SetString(aPos, aFormula);
     fVal = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_EQUAL(15.0, fVal);
 
-    clearRange(m_pDoc, aPos); // Delete the formula.
+    clearRange(m_pDoc, aPos); 
 
     pDPs->FreeTable(pDPObj);
 
     {
-        // Dimension definition
+        
         DPFieldDef aFields[] = {
             { "Name", sheet::DataPilotFieldOrientation_ROW, 0 },
             { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
@@ -2175,7 +2175,7 @@ void Test::testFuncGETPIVOTDATA()
     aOutRange = refresh(pDPObj);
 
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][3] = {
             { "Name",                "Data",           0   },
             { "A",                   "Sum - Value",   "6"  },
@@ -2191,11 +2191,11 @@ void Test::testFuncGETPIVOTDATA()
     }
 
     aPos = aOutRange.aEnd;
-    aPos.IncRow(2); // move 2 rows down from the output.
+    aPos.IncRow(2); 
 
     aPivotPosStr = aOutRange.aStart.Format(SCA_ABS);
 
-    // First, get the grand totals.
+    
     aFormula = ("=GETPIVOTDATA(\"Sum - Value\";") + aPivotPosStr + ")";
     m_pDoc->SetString(aPos, aFormula);
     fVal = m_pDoc->GetValue(aPos);
@@ -2205,7 +2205,7 @@ void Test::testFuncGETPIVOTDATA()
     fVal = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_EQUAL(6.0, fVal);
 
-    // Get the subtotals for 'A'.
+    
     aFormula = "=GETPIVOTDATA(\"Sum - Value\";" + aPivotPosStr + ";\"Name\";\"A\")";
     m_pDoc->SetString(aPos, aFormula);
     fVal = m_pDoc->GetValue(aPos);
@@ -2215,7 +2215,7 @@ void Test::testFuncGETPIVOTDATA()
     fVal = m_pDoc->GetValue(aPos);
     CPPUNIT_ASSERT_EQUAL(3.0, fVal);
 
-    // Get the subtotals for 'B'.
+    
     aFormula = "=GETPIVOTDATA(\"Sum - Value\";" + aPivotPosStr + ";\"Name\";\"B\")";
     m_pDoc->SetString(aPos, aFormula);
     fVal = m_pDoc->GetValue(aPos);
@@ -2240,7 +2240,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     m_pDoc->InsertTab(0, "Data");
     m_pDoc->InsertTab(1, "Table");
 
-    // Raw data
+    
     const char* aData[][3] = {
         { "Type", "Member", "Value" },
         { "A", "Anna", "1" },
@@ -2255,14 +2255,14 @@ void Test::testFuncGETPIVOTDATALeafAccess()
 
     ScDPObject* pDPObj = NULL;
 
-    // Dimension definition
+    
     DPFieldDef aFields[] = {
         { "Type", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Member", sheet::DataPilotFieldOrientation_ROW, 0 },
         { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
     };
 
-    // Create pivot table at A1 on 2nd sheet.
+    
     pDPObj = createDPFromRange(m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
 
     ScDPCollection* pDPs = m_pDoc->GetDPCollection();
@@ -2275,7 +2275,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
     ScRange aOutRange = refresh(pDPObj);
 
     {
-        // Expected output table content.  0 = empty cell
+        
         const char* aOutputCheck[][3] = {
             { "Type",         "Member",     0  },
             { "A",            "Anna",     "1"  },
@@ -2289,7 +2289,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
-    // Insert formulas with GETPIVOTDATA in column E, and check their results.
+    
 
     struct Check
     {
@@ -2309,7 +2309,7 @@ void Test::testFuncGETPIVOTDATALeafAccess()
 
     m_pDoc->CalcAll();
 
-    const sal_uInt16 nNoError = 0; // no error
+    const sal_uInt16 nNoError = 0; 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
         sal_uInt16 nErr = m_pDoc->GetErrCode(ScAddress(4,i,1));

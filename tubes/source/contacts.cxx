@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -140,8 +140,8 @@ public:
 
         AccountContactPairV aPairs = TeleManager::getContacts();
         AccountContactPairV::iterator it;
-        // make sure we have enough memory to not need re-allocation
-        // which would invalidate pointers stored in mpList entries
+        
+        
         maACs.reserve( aPairs.size() );
         for( it = aPairs.begin(); it != aPairs.end(); ++it )
         {
@@ -165,7 +165,7 @@ public:
             aEntry.append( "    -    " );
             aEntry.append( fromUTF8 ( tp_contact_get_identifier( it->second ) ) );
             mpList->InsertEntry( aEntry.makeStringAndClear(), aImage);
-            // FIXME: ref the TpAccount, TpContact ...
+            
             maACs.push_back( AccountContactPair( it->first, it->second ) );
 
             g_object_unref (it->first);
@@ -205,7 +205,7 @@ IMPL_LINK_NOARG( TubeContacts, BtnListenHdl )
     return 0;
 }
 
-} // anonymous namespace
+} 
 
 void Collaboration::DisplayContacts()
 {

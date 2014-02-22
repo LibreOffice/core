@@ -34,9 +34,7 @@
 
 #include <comphelper/stl_types.hxx>
 
-//........................................................................
 namespace basctl { namespace docs {
-//........................................................................
 
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::Reference;
@@ -59,9 +57,7 @@ namespace basctl { namespace docs {
 
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
 
-    //====================================================================
-    //= DocumentEnumeration_Data
-    //====================================================================
+    
     struct DocumentEnumeration_Data
     {
         Reference< com::sun::star::uno::XComponentContext > aContext;
@@ -74,24 +70,18 @@ namespace basctl { namespace docs {
         }
     };
 
-    //====================================================================
-    //= DocumentEnumeration
-    //====================================================================
-    //--------------------------------------------------------------------
+    
     DocumentEnumeration::DocumentEnumeration( Reference< com::sun::star::uno::XComponentContext > const & _rContext, const IDocumentDescriptorFilter* _pFilter )
         :m_pData( new DocumentEnumeration_Data( _rContext, _pFilter ) )
     {
     }
 
-    //--------------------------------------------------------------------
     DocumentEnumeration::~DocumentEnumeration()
     {
     }
 
-    //--------------------------------------------------------------------
     namespace
     {
-        //................................................................
         void lcl_getDocumentControllers_nothrow( DocumentDescriptor& _io_rDocDesc )
         {
             OSL_PRECOND( _io_rDocDesc.xModel.is(), "lcl_getDocumentControllers_nothrow: illegal model!" );
@@ -118,11 +108,10 @@ namespace basctl { namespace docs {
             }
         }
 
-        //................................................................
         void lcl_getDocuments_nothrow( const Sequence< Reference< XFrame > >& _rFrames, Documents& _out_rDocuments,
             const IDocumentDescriptorFilter* _pFilter )
         {
-            // ensure we don't encounter some models multiple times
+            
             ::std::set< Reference< XModel >, ::comphelper::OInterfaceCompare< XModel > > aEncounteredModels;
 
             for (   const Reference< XFrame >* pFrame = _rFrames.getConstArray();
@@ -141,22 +130,22 @@ namespace basctl { namespace docs {
 
                     Reference< XModel > xModel( xController->getModel() );
                     if ( !xModel.is() )
-                        // though it's legal for a controller to not have a model, we're not interested in
-                        // those
+                        
+                        
                         continue;
 
                     if ( aEncounteredModels.find( xModel ) != aEncounteredModels.end() )
-                        // there might be multiple frames for the same model
-                        // handle it only once
+                        
+                        
                         continue;
                     aEncounteredModels.insert( xModel );
 
-                    // create a DocumentDescriptor
+                    
                     DocumentDescriptor aDescriptor;
                     aDescriptor.xModel = xModel;
                     lcl_getDocumentControllers_nothrow( aDescriptor );
 
-                    // consult filter, if there is one
+                    
                     if ( _pFilter && !_pFilter->includeDocument( aDescriptor ) )
                         continue;
 
@@ -170,7 +159,6 @@ namespace basctl { namespace docs {
         }
     }
 
-    //--------------------------------------------------------------------
     void DocumentEnumeration::getDocuments( Documents& _out_rDocuments ) const
     {
         _out_rDocuments.clear();
@@ -189,8 +177,6 @@ namespace basctl { namespace docs {
         }
     }
 
-//........................................................................
-} } // namespace basctl::docs
-//........................................................................
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

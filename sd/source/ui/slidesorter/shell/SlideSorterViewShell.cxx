@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -190,11 +190,11 @@ void SlideSorterViewShell::Initialize (void)
     SetPool( &GetDoc()->GetPool() );
     SetUndoManager( GetDoc()->GetDocSh()->GetUndoManager() );
 
-    // For accessibility we have to shortly hide the content window.
-    // This triggers the construction of a new accessibility object for
-    // the new view shell.  (One is created earlier while the construtor
-    // of the base class is executed.  At that time the correct
-    // accessibility object can not be constructed.)
+    
+    
+    
+    
+    
     SharedSdWindow pWindow (mpSlideSorter->GetContentWindow());
     if (pWindow)
     {
@@ -210,7 +210,7 @@ void SlideSorterViewShell::Init (bool bIsMainViewShell)
 {
     ViewShell::Init(bIsMainViewShell);
 
-    // since the updatePageList will show focus, the window.show() must be called ahead. This show is deferred from Init()
+    
     ::sd::Window* pActiveWindow = GetActiveWindow();
     if (pActiveWindow)
         pActiveWindow->Show();
@@ -227,7 +227,7 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
 {
     SlideSorterViewShell* pViewShell = NULL;
 
-    // Test the center and left pane for showing a slide sorter.
+    
     OUString aPaneURLs[] = {
         FrameworkHelper::msCenterPaneURL,
         FrameworkHelper::msFullScreenPaneURL,
@@ -259,7 +259,7 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
 
     if (IsMainViewShell())
     {
-        // Create uno controller for the main view shell.
+        
         xSubController = Reference<drawing::XDrawSubController>(
             new SdUnoSlideView (
                 *mpSlideSorter));
@@ -280,8 +280,8 @@ Reference<drawing::XDrawSubController> SlideSorterViewShell::CreateSubController
     ::com::sun::star::accessibility::XAccessible>
     SlideSorterViewShell::CreateAccessibleDocumentView (::sd::Window* pWindow)
 {
-    // When the view is not set then the initialization is not yet complete
-    // and we can not yet provide an accessibility object.
+    
+    
     if (mpView == NULL || mpSlideSorter.get() == NULL)
         return NULL;
 
@@ -344,15 +344,15 @@ bool SlideSorterViewShell::RelocateToParentWindow (::Window* pParentWindow)
     SfxShell* pObjectBar = GetViewShellBase().GetViewShellManager()->GetTopShell();
     if (pObjectBar != NULL)
     {
-        // When it exists then return the undo manager of the currently
-        // active object bar.  The object bar is missing when the
-        // SlideSorterViewShell is not the main view shell.
+        
+        
+        
         return pObjectBar->GetUndoManager();
     }
     else
     {
-        // Return the undo manager of this  shell when there is no object or
-        // tool bar.
+        
+        
         return const_cast<SlideSorterViewShell*>(this)->GetUndoManager();
     }
 }
@@ -380,9 +380,9 @@ void SlideSorterViewShell::LoseFocus (void)
 
 SdPage* SlideSorterViewShell::getCurrentPage(void) const
 {
-    // since SlideSorterViewShell::GetActualPage() currently also
-    // returns master pages, which is a wrong behaviour for GetActualPage(),
-    // we can just use that for now
+    
+    
+    
     return const_cast<SlideSorterViewShell*>(this)->GetActualPage();
 }
 
@@ -393,8 +393,8 @@ SdPage* SlideSorterViewShell::GetActualPage (void)
 {
     SdPage* pCurrentPage = NULL;
 
-    // 1. Try to get the current page from the view shell in the center pane
-    // (if we are that not ourself).
+    
+    
     if ( ! IsMainViewShell())
     {
         ::boost::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
@@ -568,7 +568,7 @@ void SlideSorterViewShell::Activate (sal_Bool bIsMDIActivate)
     if (mbIsArrangeGUIElementsPending)
         ArrangeGUIElements();
 
-    // Determine and broadcast the context that belongs to the main view shell.
+    
     EnumContext::Context eContext = EnumContext::Context_Unknown;
     ::boost::shared_ptr<ViewShell> pMainViewShell (GetViewShellBase().GetMainViewShell());
     ViewShell::ShellType eMainViewShellType (
@@ -648,14 +648,14 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
                 mpFrameView->GetSelectedPage());
         mpSlideSorter->GetController().Rearrange(true);
 
-        // DrawMode for 'main' window
+        
         if (GetActiveWindow()->GetDrawMode() != pFrameView->GetDrawMode() )
             GetActiveWindow()->SetDrawMode( pFrameView->GetDrawMode() );
     }
 
-    // When this slide sorter is not displayed in the main window then we do
-    // not share the same frame view and have to find other ways to acquire
-    // certain values.
+    
+    
+    
     if ( ! IsMainViewShell())
     {
         ::boost::shared_ptr<ViewShell> pMainViewShell = GetViewShellBase().GetMainViewShell();
@@ -676,7 +676,7 @@ void SlideSorterViewShell::WriteFrameViewData (void)
         view::SlideSorterView& rView (mpSlideSorter->GetView());
         mpFrameView->SetSlidesPerRow((sal_uInt16)rView.GetLayouter().GetColumnCount());
 
-        // DrawMode for 'main' window
+        
         if( mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode() )
             mpFrameView->SetDrawMode( GetActiveWindow()->GetDrawMode() );
 
@@ -685,14 +685,14 @@ void SlideSorterViewShell::WriteFrameViewData (void)
         {
             if (IsMainViewShell())
                 mpFrameView->SetSelectedPage((pActualPage->GetPageNum()- 1) / 2);
-            // else
-            // The slide sorter is not expected to switch the current page
-            // other then by double clicks.  That is handled separately.
+            
+            
+            
         }
         else
         {
-            // We have no current page to set but at least we can make sure
-            // that the index of the frame view has a legal value.
+            
+            
             if (mpFrameView->GetSelectedPage() >= mpSlideSorter->GetModel().GetPageCount())
                 mpFrameView->SetSelectedPage((sal_uInt16)mpSlideSorter->GetModel().GetPageCount()-1);
         }
@@ -704,9 +704,9 @@ void SlideSorterViewShell::WriteFrameViewData (void)
 
 void SlideSorterViewShell::SetZoom (long int )
 {
-    // Ignored.
-    // The zoom scale is adapted internally to fit a number of columns in
-    // the window.
+    
+    
+    
 }
 
 
@@ -756,8 +756,8 @@ void SlideSorterViewShell::SetZoomRect (const Rectangle& rZoomRect)
 
 void SlideSorterViewShell::UpdateScrollBars (void)
 {
-    // Do not call the overwritten method of the base class: We do all the
-    // scroll bar setup by ourselves.
+    
+    
     mpSlideSorter->GetController().GetScrollBarManager().UpdateScrollBars (false);
 }
 
@@ -864,6 +864,6 @@ void SlideSorterViewShell::RemoveSelectionChangeListener (
 
 
 
-} } // end of namespace ::sd::slidesorter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

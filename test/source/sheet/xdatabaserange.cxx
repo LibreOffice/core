@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/sheet/xdatabaserange.hxx>
@@ -69,7 +69,7 @@ void XDatabaseRange::testGetSortDescriptor()
     for (sal_Int32 i = 0; i < xSortDescr.getLength(); ++i)
     {
         beans::PropertyValue xProp = xSortDescr[i];
-        //std::cout << "Prop " << i << " Name: " << OUString(xProp.Name) << std::endl;
+        
 
         if (xProp.Name == "IsSortColumns")
         {

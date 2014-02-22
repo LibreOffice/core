@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -62,7 +62,7 @@ SwHyphWrapper::SwHyphWrapper( SwView* pVw,
     SetHyphen();
 }
 
-// -----------------------------------------------------------------------
+
 void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
 {
     if( SVX_SPELL_OTHER == eSpell && nPageCount )
@@ -74,11 +74,11 @@ void SwHyphWrapper::SpellStart( SvxSpellArea eSpell )
     pView->HyphStart( eSpell );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SwHyphWrapper::SpellContinue()
 {
-    // for automatic separation, make actions visible only at the end
+    
     boost::scoped_ptr<SwWait> pWait;
     if( bAutomatic )
     {
@@ -91,7 +91,7 @@ sal_Bool SwHyphWrapper::SpellContinue()
                 PSH->HyphContinue( &nPageCount, &nPageStart );
         SetLast( xHyphWord );
 
-    // for automatic separation, make actions visible only at the end
+    
     if( bAutomatic )
     {
         PSH->EndAllAction();
@@ -101,14 +101,14 @@ sal_Bool SwHyphWrapper::SpellContinue()
     return GetLast().is();
 }
 
-// -----------------------------------------------------------------------
+
 void SwHyphWrapper::SpellEnd()
 {
     PSH->HyphEnd();
     SvxSpellWrapper::SpellEnd();
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool SwHyphWrapper::SpellMore()
 {
     PSH->Push();
@@ -117,19 +117,19 @@ sal_Bool SwHyphWrapper::SpellMore()
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SwHyphWrapper::InsertHyphen( const sal_uInt16 nPos )
 {
     if( nPos)
-        PSH->InsertSoftHyph( nPos + 1); // does nPos == 1 really mean
-                                        // insert hyphen after first char?
-                                        // (instead of nPos == 0)
+        PSH->InsertSoftHyph( nPos + 1); 
+                                        
+                                        
     else
         PSH->HyphIgnore();
 }
 
-// -----------------------------------------------------------------------
+
 SwHyphWrapper::~SwHyphWrapper()
 {
     if( nPageCount )

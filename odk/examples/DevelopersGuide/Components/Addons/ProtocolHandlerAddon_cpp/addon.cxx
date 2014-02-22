@@ -53,7 +53,7 @@ using namespace com::sun::star::awt;
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::util::URL;
 
-// This is the service name an Add-On has to implement
+
 #define SERVICE_NAME "com.sun.star.frame.ProtocolHandler"
 
 
@@ -64,7 +64,7 @@ static void ShowMessageBox( const Reference< XToolkit >& rToolkit, const Referen
 {
     if ( rFrame.is() && rToolkit.is() )
     {
-        // describe window properties.
+        
         WindowDescriptor                aDescriptor;
         aDescriptor.Type              = WindowClass_MODALTOP;
         aDescriptor.WindowServiceName = "infobox";
@@ -103,7 +103,7 @@ void SAL_CALL Addon::initialize( const Sequence< Any >& aArguments ) throw ( Exc
         mxFrame = xFrame;
     }
 
-    // Create the toolkit to have access to it later
+    
     mxToolkit = Reference< XToolkit >( Toolkit::create(mxContext), UNO_QUERY_THROW );
 }
 
@@ -151,7 +151,7 @@ void SAL_CALL Addon::dispatch( const URL& aURL, const Sequence < PropertyValue >
         }
         else if ( aURL.Path.equalsAscii( "Help" ) )
         {
-            // Show info box
+            
             ShowMessageBox( mxToolkit, mxFrame,
                             OUString( "About SDK Add-On example" ),
                             OUString( "This is the SDK Add-On example" ) );
@@ -194,7 +194,7 @@ void SAL_CALL Addon::removeStatusListener( const Reference< XStatusListener >& x
 {
 }
 
-// Helper functions for the implementation of UNO component interfaces.
+
 OUString Addon_getImplementationName()
 throw (RuntimeException)
 {
@@ -216,8 +216,8 @@ Reference< XInterface > SAL_CALL Addon_createInstance( const Reference< XCompone
     return (cppu::OWeakObject*) new Addon( rContext );
 }
 
-// Implementation of the recommended/mandatory interfaces of a UNO component.
-// XServiceInfo
+
+
 ::rtl::OUString SAL_CALL Addon::getImplementationName(  )
     throw (RuntimeException)
 {

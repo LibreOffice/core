@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xsddatatypes.hxx"
@@ -25,19 +25,19 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <tools/debug.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::xsd;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
-    //= helper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     template< typename INTERFACE, typename ARGUMENT >
     void setSave( INTERFACE* pObject, void ( SAL_CALL INTERFACE::*pSetter )( ARGUMENT ), ARGUMENT _rArg )
     {
@@ -51,7 +51,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     template< typename INTERFACE, typename ARGUMENT >
     ARGUMENT getSave( INTERFACE* pObject, ARGUMENT ( SAL_CALL INTERFACE::*pGetter )( ) )
     {
@@ -82,10 +82,10 @@ namespace pcr
         return aReturn;
     }
 
-    //====================================================================
-    //= XSDDataType
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     XSDDataType::XSDDataType( const Reference< XDataType >& _rxDataType )
         :m_xDataType( _rxDataType )
         ,m_refCount( 0 )
@@ -95,13 +95,13 @@ namespace pcr
             m_xFacetInfo = m_xDataType->getPropertySetInfo();
     }
 
-    //--------------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL XSDDataType::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL XSDDataType::release()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -112,12 +112,12 @@ namespace pcr
         return m_refCount;
     }
 
-    //--------------------------------------------------------------------
+    
     XSDDataType::~XSDDataType()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int16 XSDDataType::classify() const SAL_THROW(())
     {
         sal_Int16 nTypeClass = DataTypeClass::STRING;
@@ -133,19 +133,19 @@ namespace pcr
         return nTypeClass;
     }
 
-    //--------------------------------------------------------------------
+    
     bool XSDDataType::isBasicType() const SAL_THROW(())
     {
         return getSave( m_xDataType.get(), &XDataType::getIsBasic );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString XSDDataType::getName() const SAL_THROW(())
     {
         return getSave( m_xDataType.get(), &XDataType::getName );
     }
 
-     //--------------------------------------------------------------------
+     
     void XSDDataType::setFacet( const OUString& _rFacetName, const Any& _rValue ) SAL_THROW(())
     {
         try
@@ -158,7 +158,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     bool XSDDataType::hasFacet( const OUString& _rFacetName ) const SAL_THROW(())
     {
         bool bReturn = false;
@@ -172,7 +172,7 @@ namespace pcr
         }
         return bReturn;
     }
-    //--------------------------------------------------------------------
+    
     Any XSDDataType::getFacet( const OUString& _rFacetName ) SAL_THROW(())
     {
         Any aReturn;
@@ -187,7 +187,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         void lcl_copyProperties( const Reference< XPropertySet >& _rxSource, const Reference< XPropertySet >& _rxDest )
@@ -213,7 +213,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void XSDDataType::copyFacetsFrom( const ::rtl::Reference< XSDDataType >& _pSourceType )
     {
         OSL_ENSURE( _pSourceType.is(), "XSDDataType::copyFacetsFrom: invalid source type!" );
@@ -232,8 +232,8 @@ namespace pcr
         }
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

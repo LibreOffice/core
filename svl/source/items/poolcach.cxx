@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 #include <svl/itemset.hxx>
 #include <svl/poolcach.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+
 
 DBG_NAME(SfxItemPoolCache)
 
@@ -74,24 +74,24 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
     DBG_ASSERT( IsDefaultItem( &rOrigItem ) || IsPooledItem( &rOrigItem ),
                 "original not in pool" );
 
-    // Find whether this Transformations ever occurred
+    
     for ( size_t nPos = 0; nPos < pCache->size(); ++nPos )
     {
         SfxItemModifyImpl &rMapEntry = (*pCache)[nPos];
         if ( rMapEntry.pOrigItem == &rOrigItem )
         {
-            // aendert sich ueberhaupt etwas?
+            
             if ( rMapEntry.pPoolItem != &rOrigItem )
             {
-                rMapEntry.pPoolItem->AddRef(2); // einen davon fuer den Cache
+                rMapEntry.pPoolItem->AddRef(2); 
                 if ( bNew )
-                    pPool->Put( rOrigItem );    //! AddRef??
+                    pPool->Put( rOrigItem );    
             }
             return *rMapEntry.pPoolItem;
         }
     }
 
-    // die neue Attributierung in einem neuen Set eintragen
+    
     SfxSetItem *pNewItem = (SfxSetItem *)rOrigItem.Clone();
     if ( pItemToPut )
     {
@@ -105,12 +105,12 @@ const SfxSetItem& SfxItemPoolCache::ApplyTo( const SfxSetItem &rOrigItem, bool b
     DBG_ASSERT( pNewPoolItem != pNewItem, "Pool: rein == raus?" );
     delete pNewItem;
 
-    // Refernzzaehler anpassen, je einen davon fuer den Cache
+    
     pNewPoolItem->AddRef( pNewPoolItem != &rOrigItem ? 2 : 1 );
     if ( bNew )
-        pPool->Put( rOrigItem );    //! AddRef??
+        pPool->Put( rOrigItem );    
 
-    // die Transformation im Cache eintragen
+    
     SfxItemModifyImpl aModify;
     aModify.pOrigItem = &rOrigItem;
     aModify.pPoolItem = (SfxSetItem*) pNewPoolItem;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/core/binarycodec.hxx"
@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 namespace {
 
@@ -104,9 +104,9 @@ sal_uInt16 lclGetHash( const sal_uInt8* pnPassData, sal_Int32 nBufferSize )
     return nHash;
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int32 nElement )
 {
@@ -115,7 +115,7 @@ sal_uInt16 CodecHelper::getPasswordHash( const AttributeList& rAttribs, sal_Int3
     return static_cast< sal_uInt16 >( ((0 <= nPasswordHash) && (nPasswordHash <= SAL_MAX_UINT16)) ? nPasswordHash : 0 );
 }
 
-// ============================================================================
+
 
 BinaryCodec_XOR::BinaryCodec_XOR( CodecType eCodecType ) :
     meCodecType( eCodecType ),
@@ -134,7 +134,7 @@ BinaryCodec_XOR::~BinaryCodec_XOR()
 
 void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
 {
-    // calculate base key and hash from passed password
+    
     mnBaseKey = lclGetKey( pnPassData, 16 );
     mnHash = lclGetHash( pnPassData, 16 );
 
@@ -153,16 +153,16 @@ void BinaryCodec_XOR::initKey( const sal_uInt8 pnPassData[ 16 ] )
     for( nIndex = nLen; nIndex < static_cast< sal_Int32 >( sizeof( mpnKey ) ); ++nIndex, ++pnFillChar )
         mpnKey[ nIndex ] = *pnFillChar;
 
-    // rotation of key values is application dependent
+    
     size_t nRotateSize = 0;
     switch( meCodecType )
     {
         case CODEC_WORD:    nRotateSize = 7;    break;
         case CODEC_EXCEL:   nRotateSize = 2;    break;
-        // compiler will warn, if new codec type is introduced and not handled here
+        
     }
 
-    // use little-endian base key to create key array
+    
     sal_uInt8 pnBaseKeyLE[ 2 ];
     pnBaseKeyLE[ 0 ] = static_cast< sal_uInt8 >( mnBaseKey );
     pnBaseKeyLE[ 1 ] = static_cast< sal_uInt8 >( mnBaseKey >> 8 );
@@ -220,7 +220,7 @@ bool BinaryCodec_XOR::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
     const sal_uInt8* pnCurrKey = mpnKey + mnOffset;
     const sal_uInt8* pnKeyLast = mpnKey + 0x0F;
 
-    // switch/case outside of the for loop (performance)
+    
     const sal_uInt8* pnSrcDataEnd = pnSrcData + nBytes;
     switch( meCodecType )
     {
@@ -246,10 +246,10 @@ bool BinaryCodec_XOR::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
             }
         }
         break;
-        // compiler will warn, if new codec type is introduced and not handled here
+        
     }
 
-    // update offset and leave
+    
     return skip( nBytes );
 }
 
@@ -259,7 +259,7 @@ bool BinaryCodec_XOR::skip( sal_Int32 nBytes )
     return true;
 }
 
-// ============================================================================
+
 
 BinaryCodec_RCF::BinaryCodec_RCF()
 {
@@ -318,7 +318,7 @@ uno::Sequence< beans::NamedValue > BinaryCodec_RCF::getEncryptionData()
 void BinaryCodec_RCF::initKey( const sal_uInt16 pnPassData[ 16 ], const sal_uInt8 pnSalt[ 16 ] )
 {
     uno::Sequence< sal_Int8 > aKey = ::comphelper::DocPasswordHelper::GenerateStd97Key( pnPassData, uno::Sequence< sal_Int8 >( (sal_Int8*)pnSalt, 16 ) );
-    // Fill raw digest of above updates into DigestValue.
+    
 
     if ( aKey.getLength() == sizeof(mpnDigestValue) )
         (void)memcpy ( mpnDigestValue, (const sal_uInt8*)aKey.getConstArray(), sizeof(mpnDigestValue) );
@@ -336,24 +336,24 @@ bool BinaryCodec_RCF::verifyKey( const sal_uInt8 pnVerifier[ 16 ], const sal_uIn
     sal_uInt8 pnDigest[ RTL_DIGEST_LENGTH_MD5 ];
     sal_uInt8 pnBuffer[ 64 ];
 
-    // decode salt data into buffer
+    
     rtl_cipher_decode( mhCipher, pnVerifier, 16, pnBuffer, sizeof( pnBuffer ) );
 
     pnBuffer[ 16 ] = 0x80;
     (void)memset( pnBuffer + 17, 0, sizeof( pnBuffer ) - 17 );
     pnBuffer[ 56 ] = 0x80;
 
-    // fill raw digest of buffer into digest
+    
     rtl_digest_updateMD5( mhDigest, pnBuffer, sizeof( pnBuffer ) );
     rtl_digest_rawMD5( mhDigest, pnDigest, sizeof( pnDigest ) );
 
-    // decode original salt digest into buffer
+    
     rtl_cipher_decode( mhCipher, pnVerifierHash, 16, pnBuffer, sizeof( pnBuffer ) );
 
-    // compare buffer with computed digest
+    
     bool bResult = memcmp( pnBuffer, pnDigest, sizeof( pnDigest ) ) == 0;
 
-    // erase buffer and digest arrays and leave
+    
     (void)memset( pnBuffer, 0, sizeof( pnBuffer ) );
     (void)memset( pnDigest, 0, sizeof( pnDigest ) );
     return bResult;
@@ -361,14 +361,14 @@ bool BinaryCodec_RCF::verifyKey( const sal_uInt8 pnVerifier[ 16 ], const sal_uIn
 
 bool BinaryCodec_RCF::startBlock( sal_Int32 nCounter )
 {
-    // initialize key data array
+    
     sal_uInt8 pnKeyData[ 64 ];
     (void)memset( pnKeyData, 0, sizeof( pnKeyData ) );
 
-    // fill 40 bit of digest value into [0..4]
+    
     (void)memcpy( pnKeyData, mpnDigestValue, 5 );
 
-    // fill little-endian counter into [5..8], static_cast masks out unneeded bits
+    
     pnKeyData[ 5 ] = static_cast< sal_uInt8 >( nCounter );
     pnKeyData[ 6 ] = static_cast< sal_uInt8 >( nCounter >> 8 );
     pnKeyData[ 7 ] = static_cast< sal_uInt8 >( nCounter >> 16 );
@@ -377,15 +377,15 @@ bool BinaryCodec_RCF::startBlock( sal_Int32 nCounter )
     pnKeyData[ 9 ] = 0x80;
     pnKeyData[ 56 ] = 0x48;
 
-    // fill raw digest of key data into key data
+    
     (void)rtl_digest_updateMD5( mhDigest, pnKeyData, sizeof( pnKeyData ) );
     (void)rtl_digest_rawMD5( mhDigest, pnKeyData, RTL_DIGEST_LENGTH_MD5 );
 
-    // initialize cipher with key data (for decoding)
+    
     rtlCipherError eResult =
         rtl_cipher_init( mhCipher, rtl_Cipher_DirectionDecode, pnKeyData, RTL_DIGEST_LENGTH_MD5, 0, 0 );
 
-    // rrase key data array and leave
+    
     (void)memset( pnKeyData, 0, sizeof( pnKeyData ) );
     return eResult == rtl_Cipher_E_None;
 }
@@ -400,7 +400,7 @@ bool BinaryCodec_RCF::decode( sal_uInt8* pnDestData, const sal_uInt8* pnSrcData,
 
 bool BinaryCodec_RCF::skip( sal_Int32 nBytes )
 {
-    // decode dummy data in memory to update internal state of RC4 cipher
+    
     sal_uInt8 pnDummy[ 1024 ];
     sal_Int32 nBytesLeft = nBytes;
     bool bResult = true;
@@ -413,9 +413,9 @@ bool BinaryCodec_RCF::skip( sal_Int32 nBytes )
     return bResult;
 }
 
-// ============================================================================
 
-} // namespace core
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

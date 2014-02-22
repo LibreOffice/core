@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -38,11 +38,11 @@ using namespace com::sun::star;
 
 using namespace comphelper;
 
-//=========================================================================
-// helpers
-//=========================================================================
 
-//=========================================================================
+
+
+
+
 static bool makeCanonicalFileURL( OUString & rURL )
 {
     OSL_ENSURE( rURL.matchAsciiL( "file:", sizeof( "file:" ) - 1 , 0 ) ,
@@ -81,13 +81,13 @@ static bool makeCanonicalFileURL( OUString & rURL )
     return false;
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// OfficeInstallationDirectories Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 OfficeInstallationDirectories::OfficeInstallationDirectories(
         const uno::Reference< uno::XComponentContext > & xCtx )
@@ -100,19 +100,19 @@ OfficeInstallationDirectories::OfficeInstallationDirectories(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 OfficeInstallationDirectories::~OfficeInstallationDirectories()
 {
     delete m_pOfficeBrandDir;
     delete m_pUserDir;
 }
 
-//=========================================================================
-// util::XOfficeInstallationDirectories
-//=========================================================================
 
-// virtual
+
+
+
+
 OUString SAL_CALL
 OfficeInstallationDirectories::getOfficeInstallationDirectoryURL()
     throw ( uno::RuntimeException )
@@ -121,8 +121,8 @@ OfficeInstallationDirectories::getOfficeInstallationDirectoryURL()
     return OUString( *m_pOfficeBrandDir );
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL
 OfficeInstallationDirectories::getOfficeUserDataDirectoryURL()
     throw ( uno::RuntimeException )
@@ -132,8 +132,8 @@ OfficeInstallationDirectories::getOfficeUserDataDirectoryURL()
 }
 
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL
 OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
     throw ( uno::RuntimeException )
@@ -168,8 +168,8 @@ OfficeInstallationDirectories::makeRelocatableURL( const OUString& URL )
     return OUString( URL );
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL
 OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
     throw ( uno::RuntimeException )
@@ -203,11 +203,11 @@ OfficeInstallationDirectories::makeAbsoluteURL( const OUString& URL )
     return OUString( URL );
 }
 
-//=========================================================================
-// lang::XServiceInfo
-//=========================================================================
 
-// virtual
+
+
+
+
 OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName()
     throw ( uno::RuntimeException )
@@ -215,7 +215,7 @@ OfficeInstallationDirectories::getImplementationName()
     return getImplementationName_static();
 }
 
-// virtual
+
 sal_Bool SAL_CALL
 OfficeInstallationDirectories::supportsService( const OUString& ServiceName )
     throw ( uno::RuntimeException )
@@ -223,7 +223,7 @@ OfficeInstallationDirectories::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-// virtual
+
 uno::Sequence< OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames()
     throw ( uno::RuntimeException )
@@ -231,16 +231,16 @@ OfficeInstallationDirectories::getSupportedServiceNames()
     return getSupportedServiceNames_static();
 }
 
-//=========================================================================
-// static
+
+
 OUString SAL_CALL
 OfficeInstallationDirectories::getImplementationName_static()
 {
     return OUString("com.sun.star.comp.util.OfficeInstallationDirectories");
 }
 
-//=========================================================================
-// static
+
+
 uno::Sequence< OUString > SAL_CALL
 OfficeInstallationDirectories::getSupportedServiceNames_static()
 {
@@ -248,15 +248,15 @@ OfficeInstallationDirectories::getSupportedServiceNames_static()
     return uno::Sequence< OUString >( &aServiceName, 1 );
 }
 
-//=========================================================================
-// static
+
+
 OUString SAL_CALL OfficeInstallationDirectories::getSingletonName_static()
 {
     return OUString("com.sun.star.util.theOfficeInstallationDirectories");
 }
 
-//=========================================================================
-// static
+
+
 uno::Reference< uno::XInterface > SAL_CALL
 OfficeInstallationDirectories::Create(
         const uno::Reference< uno::XComponentContext > & rxContext )
@@ -265,9 +265,9 @@ OfficeInstallationDirectories::Create(
         new OfficeInstallationDirectories( rxContext ) );
 }
 
-//=========================================================================
-// non-UNO
-//=========================================================================
+
+
+
 
 void OfficeInstallationDirectories::initDirs()
 {

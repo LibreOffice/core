@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dbaccess/controllerframe.hxx>
@@ -65,7 +65,7 @@ namespace dbaui
     using ::com::sun::star::document::XDocumentEventBroadcaster;
     using ::com::sun::star::awt::XWindow;
 
-    // FrameWindowActivationListener
+    
     typedef ::cppu::WeakImplHelper1 <   XTopWindowListener
                                     >   FrameWindowActivationListener_Base;
     class FrameWindowActivationListener : public FrameWindowActivationListener_Base
@@ -78,7 +78,7 @@ namespace dbaui
     protected:
         ~FrameWindowActivationListener();
 
-        // XTopWindowListener
+        
         virtual void SAL_CALL windowOpened( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowClosing( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowClosed( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
@@ -87,7 +87,7 @@ namespace dbaui
         virtual void SAL_CALL windowActivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
 
-        // XEventListener
+        
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
@@ -98,7 +98,7 @@ namespace dbaui
         ControllerFrame_Data*   m_pData;
     };
 
-    // ControllerFrame_Data
+    
     struct ControllerFrame_Data
     {
         ControllerFrame_Data( IController& _rController )
@@ -119,24 +119,24 @@ namespace dbaui
         bool                                                m_bIsTopLevelDocumentWindow;
     };
 
-    // helper
+    
     static void lcl_setFrame_nothrow( ControllerFrame_Data& _rData, const Reference< XFrame >& _rxFrame )
     {
-        // release old listener
+        
         if ( _rData.m_pListener.get() )
         {
             _rData.m_pListener->dispose();
             _rData.m_pListener = NULL;
         }
 
-        // remember new frame
+        
         _rData.m_xFrame = _rxFrame;
 
-        // create new listener
+        
         if ( _rData.m_xFrame.is() )
             _rData.m_pListener = new FrameWindowActivationListener( _rData );
 
-        // at this point in time, we can assume the controller also has a model set, if it supports models
+        
         try
         {
             Reference< XController > xController( _rData.m_rController.getXController(), UNO_SET_THROW );
@@ -187,7 +187,7 @@ namespace dbaui
 
             if ( _rData.m_bActive && _rData.m_bIsTopLevelDocumentWindow )
             {
-                // set the "current component" at the SfxObjectShell
+                
                 Reference< XModel > xModel( xCompController->getModel() );
                 Reference< XInterface > xCurrentComponent;
                 if ( xModel.is() )
@@ -286,27 +286,27 @@ namespace dbaui
 
     void SAL_CALL FrameWindowActivationListener::windowOpened( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
     void SAL_CALL FrameWindowActivationListener::windowClosing( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
     void SAL_CALL FrameWindowActivationListener::windowClosed( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
     void SAL_CALL FrameWindowActivationListener::windowMinimized( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
     void SAL_CALL FrameWindowActivationListener::windowNormalized( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
     void SAL_CALL FrameWindowActivationListener::windowActivated( const EventObject& /*_rEvent*/ ) throw (RuntimeException)
@@ -326,7 +326,7 @@ namespace dbaui
         dispose();
     }
 
-    // ControllerFrame
+    
     ControllerFrame::ControllerFrame( IController& _rController )
         :m_pData( new ControllerFrame_Data( _rController ) )
     {
@@ -338,13 +338,13 @@ namespace dbaui
 
     const Reference< XFrame >& ControllerFrame::attachFrame( const Reference< XFrame >& _rxFrame )
     {
-        // set new frame, including listener handling
+        
         lcl_setFrame_nothrow( *m_pData, _rxFrame );
 
-        // determine whether we're active
+        
         m_pData->m_bActive = lcl_isActive_nothrow( m_pData->m_xFrame );
 
-        // update active component
+        
         if ( m_pData->m_bActive )
         {
             lcl_updateActiveComponents_nothrow( *m_pData );
@@ -387,6 +387,6 @@ namespace dbaui
         lcl_updateActive_nothrow( *m_pData, bActive );
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

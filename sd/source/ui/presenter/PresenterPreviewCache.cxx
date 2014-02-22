@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,7 +49,7 @@ public:
     void AddPreviewCreationNotifyListener (const Reference<drawing::XSlidePreviewCacheListener>& rxListener);
     void RemovePreviewCreationNotifyListener (const Reference<drawing::XSlidePreviewCacheListener>& rxListener);
 
-    // CacheContext
+    
     virtual void NotifyPreviewCreation (
         CacheKey aKey,
         const Bitmap& rPreview);
@@ -74,7 +74,7 @@ private:
 
 
 
-//===== Service ===============================================================
+
 
 Reference<XInterface> SAL_CALL PresenterPreviewCache_createInstance (
     const Reference<XComponentContext>& rxContext)
@@ -103,7 +103,7 @@ Sequence<OUString> SAL_CALL PresenterPreviewCache_getSupportedServiceNames (void
 
 
 
-//===== PresenterPreviewCache =================================================
+
 
 PresenterPreviewCache::PresenterPreviewCache (const Reference<XComponentContext>& rxContext)
     : PresenterPreviewCacheInterfaceBase(m_aMutex),
@@ -124,7 +124,7 @@ PresenterPreviewCache::~PresenterPreviewCache (void)
 
 
 
-//----- XInitialize -----------------------------------------------------------
+
 
 void SAL_CALL PresenterPreviewCache::initialize (const Sequence<Any>& rArguments)
     throw(Exception, RuntimeException)
@@ -136,7 +136,7 @@ void SAL_CALL PresenterPreviewCache::initialize (const Sequence<Any>& rArguments
 
 
 
-//----- XSlidePreviewCache ----------------------------------------------------
+
 
 void SAL_CALL PresenterPreviewCache::setDocumentSlides (
     const Reference<container::XIndexAccess>& rxSlides,
@@ -253,7 +253,7 @@ void SAL_CALL PresenterPreviewCache::resume (void)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterPreviewCache::ThrowIfDisposed (void)
     throw (::com::sun::star::lang::DisposedException)
@@ -268,7 +268,7 @@ void PresenterPreviewCache::ThrowIfDisposed (void)
 
 
 
-//===== PresenterPreviewCache::PresenterCacheContext ==========================
+
 
 
 PresenterPreviewCache::PresenterCacheContext::PresenterCacheContext (void)
@@ -348,7 +348,7 @@ void PresenterPreviewCache::PresenterCacheContext::RemovePreviewCreationNotifyLi
 
 
 
-//----- CacheContext ----------------------------------------------------------
+
 
 void PresenterPreviewCache::PresenterCacheContext::NotifyPreviewCreation (
     CacheKey aKey,
@@ -453,7 +453,7 @@ Reference<XInterface> PresenterPreviewCache::PresenterCacheContext::GetModel (vo
 
 
 
-//-----------------------------------------------------------------------------
+
 
 const SdrPage* PresenterPreviewCache::PresenterCacheContext::GetPage (
     const sal_Int32 nSlideIndex) const
@@ -489,6 +489,6 @@ void PresenterPreviewCache::PresenterCacheContext::CallListeners (
     }
 }
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

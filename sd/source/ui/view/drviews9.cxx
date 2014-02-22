@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ namespace sd {
 
 void DrawViewShell::ExecGallery(SfxRequest& rReq)
 {
-    // nothing is executed during a slide show!
+    
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -78,27 +78,27 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
     GetDocSh()->SetWaitCursor( sal_True );
 
     sal_Int8 nType( pGalleryItem->GetType() );
-    // insert graphic
+    
     if (nType == com::sun::star::gallery::GalleryItemType::GRAPHIC)
     {
         Graphic aGraphic( pGalleryItem->GetGraphic() );
 
-        // reduce size if necessary
+        
         Window aWindow (GetActiveWindow());
         aWindow.SetMapMode(aGraphic.GetPrefMapMode());
         Size aSizePix = aWindow.LogicToPixel(aGraphic.GetPrefSize());
         aWindow.SetMapMode( MapMode(MAP_100TH_MM) );
         Size aSize = aWindow.PixelToLogic(aSizePix);
 
-        // constrain size to page size if necessary
+        
         SdrPage* pPage = mpDrawView->GetSdrPageView()->GetPage();
         Size aPageSize = pPage->GetSize();
         aPageSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
 
 
-        // Falls Grafik zu gross, wird die Grafik
-        // in die Seite eingepasst
+        
+        
         if ( ( ( aSize.Height() > aPageSize.Height() ) || ( aSize.Width()   > aPageSize.Width() ) ) &&
             aSize.Height() && aPageSize.Height() )
         {
@@ -107,7 +107,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
             float fWinWH =  (float)aPageSize.Width() /
                             (float)aPageSize.Height();
 
-            // constrain size to page size if necessary
+            
             if ((fGrfWH != 0.F) && (fGrfWH < fWinWH))
             {
                 aSize.Width() = (long)(aPageSize.Height() * fGrfWH);
@@ -120,7 +120,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
             }
         }
 
-        // set output rectangle for graphic
+        
         Point aPnt ((aPageSize.Width()  - aSize.Width())  / 2,
                     (aPageSize.Height() - aSize.Height()) / 2);
         aPnt += Point(pPage->GetLftBorder(), pPage->GetUppBorder());
@@ -132,7 +132,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
         if ( mpDrawView->AreObjectsMarked() )
         {
-            // is there a empty graphic object?
+            
             const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
 
             if (rMarkList.GetMarkCount() == 1)
@@ -146,7 +146,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
 
                     if( pGrafObj->IsEmptyPresObj() )
                     {
-                        // the empty graphic object gets a new graphic
+                        
                         bInsertNewObject = sal_False;
 
                         SdrGrafObj* pNewGrafObj = (SdrGrafObj*) pGrafObj->Clone();
@@ -173,7 +173,7 @@ void DrawViewShell::ExecGallery(SfxRequest& rReq)
             mpDrawView->InsertObjectAtView(pGrafObj, *pPV, SDRINSERT_SETDEFLAYER);
         }
     }
-    // insert sound
+    
     else if( nType == com::sun::star::gallery::GalleryItemType::MEDIA )
     {
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
@@ -201,7 +201,7 @@ void DrawViewShell::GetGalleryState(SfxItemSet& )
    5. insert item into set      */
 void DrawViewShell::AttrExec (SfxRequest &rReq)
 {
-    // nothing is executed during a slide show!
+    
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -215,7 +215,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
     switch (rReq.GetSlot ())
     {
-        // set new fill-style
+        
         case SID_SETFILLSTYLE :
             if (pArgs)
                 if (pArgs->Count () == 1)
@@ -237,7 +237,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // determine new line style
+        
         case SID_SETLINESTYLE :
             if (pArgs)
                 if (pArgs->Count () == 1)
@@ -259,7 +259,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // set line width
+        
         case SID_SETLINEWIDTH :
             if (pArgs)
                 if (pArgs->Count () == 1)
@@ -436,7 +436,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // einstellungen fuer liniendash
+        
         case SID_DASH :
             if (pArgs)
                 if (pArgs->Count () == 7)
@@ -486,7 +486,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // configuration for gradients
+        
         case SID_GRADIENT :
             if (pArgs)
                 if (pArgs->Count () == 8)
@@ -563,7 +563,7 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 #endif
             break;
 
-        // configuration for hatch
+        
         case SID_HATCH :
             if (pArgs)
                 if (pArgs->Count () == 4)
@@ -842,6 +842,6 @@ void DrawViewShell::AttrState (SfxItemSet& rSet)
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

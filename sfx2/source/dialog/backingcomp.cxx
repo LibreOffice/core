@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "backingwindow.hxx"
@@ -78,8 +78,8 @@ const char SPECIALTARGET_MENUBAR[] = "_menubar";
 class BackingComp : public  css::lang::XTypeProvider
                   , public  css::lang::XServiceInfo
                   , public  css::lang::XInitialization
-                  , public  css::frame::XController  // => XComponent
-                  , public  css::awt::XKeyListener // => XEventListener
+                  , public  css::frame::XController  
+                  , public  css::awt::XKeyListener 
                   , public css::frame::XDispatchProvider
                   , public css::frame::XDispatch
                   , public  ::cppu::OWeakObject
@@ -100,24 +100,24 @@ public:
              BackingComp( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~BackingComp(                                                                    );
 
-    // XInterface
+    
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw(css::uno::RuntimeException);
     virtual void          SAL_CALL acquire       (                             ) throw(                          );
     virtual void          SAL_CALL release       (                             ) throw(                          );
 
-    // XTypeProvide
+    
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes           () throw(css::uno::RuntimeException);
     virtual css::uno::Sequence< sal_Int8 >       SAL_CALL getImplementationId() throw(css::uno::RuntimeException);
 
-    // XServiceInfo
+    
     virtual OUString                       SAL_CALL getImplementationName   (                                     ) throw(css::uno::RuntimeException);
     virtual sal_Bool                              SAL_CALL supportsService         ( const OUString& sServiceName ) throw(css::uno::RuntimeException);
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(                                     ) throw(css::uno::RuntimeException);
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& lArgs ) throw(css::uno::Exception, css::uno::RuntimeException);
 
-    // XController
+    
     virtual void SAL_CALL attachFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw(css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL attachModel( const css::uno::Reference< css::frame::XModel >& xModel ) throw(css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL suspend( sal_Bool bSuspend ) throw(css::uno::RuntimeException);
@@ -126,23 +126,23 @@ public:
     virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel() throw(css::uno::RuntimeException);
     virtual css::uno::Reference< css::frame::XFrame > SAL_CALL getFrame() throw(css::uno::RuntimeException);
 
-    // XKeyListener
+    
     virtual void SAL_CALL keyPressed ( const css::awt::KeyEvent& aEvent ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& aEvent ) throw(css::uno::RuntimeException);
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException);
 
-    // XComponent
+    
     virtual void SAL_CALL dispose            (                                                                   ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL addEventListener   ( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException);
 
-    // XDispatchProvider
+    
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTargetFrameName , sal_Int32 nSearchFlags ) throw( css::uno::RuntimeException );
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException );
 
-    // XDispatch
+    
     virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException );
     virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) throw( css::uno::RuntimeException );
     virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener, const css::util::URL& aURL ) throw( css::uno::RuntimeException );
@@ -153,13 +153,13 @@ BackingComp::BackingComp( const css::uno::Reference< css::uno::XComponentContext
 {
 }
 
-//_______________________________________________
+
 
 BackingComp::~BackingComp()
 {
 }
 
-//_______________________________________________
+
 
 /** return information about supported interfaces.
 
@@ -181,7 +181,7 @@ css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type&
 {
     css::uno::Any aResult;
 
-    // first look for own supported interfaces
+    
     aResult = ::cppu::queryInterface(
                 aType,
                 static_cast< css::lang::XTypeProvider* >(this),
@@ -194,9 +194,9 @@ css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type&
                 static_cast< css::frame::XDispatchProvider* >(this),
                 static_cast< css::frame::XDispatch* >(this) );
 
-    // then look for supported window interfaces
-    // Note: They exist only, if this instance was initialized
-    // with a valid window reference. It's aggregation on demand ...
+    
+    
+    
     if (!aResult.hasValue())
     {
         /* SAFE { */
@@ -206,14 +206,14 @@ css::uno::Any SAL_CALL BackingComp::queryInterface( /*IN*/ const css::uno::Type&
         /* } SAFE */
     }
 
-    // look for XWeak and XInterface
+    
     if (!aResult.hasValue())
         aResult = OWeakObject::queryInterface(aType);
 
     return aResult;
 }
 
-//_______________________________________________
+
 
 /** increase ref count of this instance.
  */
@@ -224,7 +224,7 @@ void SAL_CALL BackingComp::acquire()
     OWeakObject::acquire();
 }
 
-//_______________________________________________
+
 
 /** decrease ref count of this instance.
  */
@@ -235,7 +235,7 @@ void SAL_CALL BackingComp::release()
     OWeakObject::release();
 }
 
-//_______________________________________________
+
 
 /** return collection about all supported interfaces.
 
@@ -256,7 +256,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
     {
         /* GLOBAL SAFE { */
         ::osl::MutexGuard aGlobalLock(::osl::Mutex::getGlobalMutex());
-        // Control these pointer again ... it can be, that another instance will be faster then this one!
+        
         if (!pTypeCollection)
         {
             /* LOCAL SAFE { */
@@ -285,7 +285,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL BackingComp::getTypes()
     return pTypeCollection->getTypes();
 }
 
-//_______________________________________________
+
 
 /** create one unique Id for all instances of this class.
 
@@ -304,7 +304,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
     {
         /* GLOBAL SAFE { */
         ::osl::MutexGuard aLock(::osl::Mutex::getGlobalMutex());
-        // Control these pointer again ... it can be, that another instance will be faster then this one!
+        
         if (!pID)
         {
             static ::cppu::OImplementationId aID(false);
@@ -336,7 +336,7 @@ css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
     return lNames;
 }
 
-//_______________________________________________
+
 
 /**
     attach this component to a target frame.
@@ -355,25 +355,25 @@ css::uno::Sequence< OUString > SAL_CALL BackingComp::getSupportedServiceNames()
             XController.class,
             xSMGR.createInstance(SERVICENAME_STARTMODULE));
 
-        // at this time XWindow isn't present at this instance!
+        
         XWindow xBackingComp = (XWindow)UnoRuntime.queryInterface(
             XWindow.class,
             xBackingComp);
 
-        // attach controller to the frame
-        // We will use it's container window, to create
-        // the component window. From now we offer the window interfaces!
+        
+        
+        
         xBackingComp.attachFrame(xFrame);
 
         XWindow xBackingComp = (XWindow)UnoRuntime.queryInterface(
             XWindow.class,
             xBackingComp);
 
-        // Our user can set us at the frame as new component
+        
         xFrame.setComponent(xBackingWin, xBackingComp);
 
-        // But that had no effect to our view state.
-        // We must be started to create our UI elements like e.g. menu, title, background ...
+        
+        
         XInitialization xBackingInit = (XInitialization)UnoRuntime.queryInterface(
             XInitialization.class,
             xBackingComp);
@@ -397,7 +397,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     /* SAFE */
     SolarMutexGuard aGuard;
 
-    // check some required states
+    
     if (m_xFrame.is())
         throw css::uno::RuntimeException(
                 OUString("already attached"),
@@ -409,24 +409,24 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!m_xWindow.is())
-        return; // disposed
+        return; 
 
-    // safe the frame reference
+    
     m_xFrame = xFrame;
 
-    // initialize the component and it's parent window
+    
     css::uno::Reference< css::awt::XWindow > xParentWindow = xFrame->getContainerWindow();
     WorkWindow* pParent = (WorkWindow*)VCLUnoHelper::GetWindow(xParentWindow);
     Window*     pWindow = VCLUnoHelper::GetWindow(m_xWindow);
 
-    // disable full screen mode of the frame!
+    
     if (pParent && pParent->IsFullScreenMode())
     {
         pParent->ShowFullScreenMode(false);
         pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
     }
 
-    // create the menu bar for the backing component
+    
     css::uno::Reference< css::beans::XPropertySet > xPropSet(m_xFrame, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
     xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
@@ -439,16 +439,16 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
 
     if (pWindow)
     {
-        // set help ID for our canvas
+        
         pWindow->SetHelpId(HID_BACKINGWINDOW);
     }
 
-    // inform BackingWindow about frame
+    
     BackingWindow* pBack = dynamic_cast<BackingWindow*>(pWindow );
     if( pBack )
         pBack->setOwningFrame( m_xFrame );
 
-    // Set a minimum size for Start Center
+    
     if( pParent && pBack )
     {
         long nMenuHeight = 0;
@@ -465,7 +465,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -481,7 +481,7 @@ sal_Bool SAL_CALL BackingComp::attachModel( /*IN*/ const css::uno::Reference< cs
     return sal_False;
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -497,7 +497,7 @@ css::uno::Reference< css::frame::XModel > SAL_CALL BackingComp::getModel()
     return css::uno::Reference< css::frame::XModel >();
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -510,7 +510,7 @@ css::uno::Any SAL_CALL BackingComp::getViewData()
     return css::uno::Any();
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -523,7 +523,7 @@ void SAL_CALL BackingComp::restoreViewData( /*IN*/ const css::uno::Any& )
 {
 }
 
-//_______________________________________________
+
 
 /** returns the attached frame for this component.
 
@@ -542,7 +542,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL BackingComp::getFrame()
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /** ask controller for it's current working state.
 
@@ -564,7 +564,7 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
     return sal_True;
 }
 
-//_______________________________________________
+
 
 /** callback from our window member.
 
@@ -584,8 +584,8 @@ sal_Bool SAL_CALL BackingComp::suspend( /*IN*/ sal_Bool )
 void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEvent )
     throw(css::uno::RuntimeException)
 {
-    // Attention: dont free m_pAccExec here! see comments inside dtor and
-    // keyPressed() for further details.
+    
+    
 
     /* SAFE { */
     SolarMutexGuard aGuard;
@@ -600,7 +600,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /** kill this instance.
 
@@ -616,7 +616,7 @@ void SAL_CALL BackingComp::dispose()
     /* SAFE { */
     SolarMutexGuard aGuard;
 
-    // kill the menu
+    
     css::util::URL aURL;
     aURL.Complete = ".uno:close";
     css::uno::Reference< css::util::XURLTransformer > xParser = css::util::URLTransformer::create(m_xContext);
@@ -631,7 +631,7 @@ void SAL_CALL BackingComp::dispose()
             xDispatch->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue>());
     }
 
-    // stop listening at the window
+    
     if (m_xWindow.is())
     {
         css::uno::Reference< css::lang::XComponent > xBroadcaster(m_xWindow, css::uno::UNO_QUERY);
@@ -645,14 +645,14 @@ void SAL_CALL BackingComp::dispose()
         m_xWindow = css::uno::Reference< css::awt::XWindow >();
     }
 
-    // forget all other used references
+    
     m_xFrame.clear();
     m_xContext.clear();
 
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -672,7 +672,7 @@ void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< c
             static_cast< ::cppu::OWeakObject* >(this));
 }
 
-//_______________________________________________
+
 
 /** not supported.
 
@@ -687,7 +687,7 @@ void SAL_CALL BackingComp::removeEventListener( /*IN*/ const css::uno::Reference
 {
 }
 
-//_______________________________________________
+
 
 /**
     force initialiation for this component.
@@ -730,7 +730,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
-    // create the component window
+    
     Window* pParent   = VCLUnoHelper::GetWindow(xParentWindow);
     Window* pWindow   = new BackingWindow(pParent);
             m_xWindow = VCLUnoHelper::GetInterface(pWindow);
@@ -740,8 +740,8 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
                 OUString("couldn't create component window"),
                 static_cast< ::cppu::OWeakObject* >(this));
 
-    // start listening for window disposing
-    // It's set at our owner frame as component window later too. So it will may be disposed there ...
+    
+    
     css::uno::Reference< css::lang::XComponent > xBroadcaster(m_xWindow, css::uno::UNO_QUERY);
     if (xBroadcaster.is())
         xBroadcaster->addEventListener(static_cast< css::lang::XEventListener* >(this));
@@ -751,7 +751,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
     /* } SAFE */
 }
 
-//_______________________________________________
+
 
 /**
  */
@@ -761,7 +761,7 @@ void SAL_CALL BackingComp::keyPressed( /*IN*/ const css::awt::KeyEvent&  )
 {
 }
 
-//_______________________________________________
+
 
 /**
  */
@@ -778,7 +778,7 @@ void SAL_CALL BackingComp::keyReleased( /*IN*/ const css::awt::KeyEvent& )
      */
 }
 
-// XDispatchProvider
+
 css::uno::Reference< css::frame::XDispatch > SAL_CALL BackingComp::queryDispatch( const css::util::URL& aURL, const OUString& /*sTargetFrameName*/, sal_Int32 /*nSearchFlags*/ ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XDispatch > xDispatch;
@@ -799,10 +799,10 @@ css::uno::Sequence < css::uno::Reference< css::frame::XDispatch > > SAL_CALL Bac
     return lDispatcher;
 }
 
-// XDispatch
+
 void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const css::uno::Sequence < css::beans::PropertyValue >& /*lArgs*/ ) throw( css::uno::RuntimeException )
 {
-    // vnd.org.libreoffice.recentdocs:ClearRecentFileList  - clear recent files
+    
     if ( aURL.Path == "ClearRecentFileList" )
     {
         Window* pWindow = VCLUnoHelper::GetWindow(m_xWindow);
@@ -811,7 +811,7 @@ void SAL_CALL BackingComp::dispatch( const css::util::URL& aURL, const css::uno:
         {
             pBack->clearRecentFileList();
 
-            // Recalculate minimum width
+            
             css::uno::Reference< css::awt::XWindow > xParentWindow = m_xFrame->getContainerWindow();
             WorkWindow* pParent = (WorkWindow*)VCLUnoHelper::GetWindow(xParentWindow);
             if( pParent )

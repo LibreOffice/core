@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -37,7 +37,7 @@
 
 #include "helpid.hrc"
 
-// class SvxPostItDialog -------------------------------------------------
+
 
 SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
     bool bPrevNext)
@@ -110,7 +110,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
 
     ShowLastAuthor(aAuthorStr, aDateStr);
 
-    //lock to initial .ui placeholder size before replacing contents
+    
     Size aSize(m_pEditED->get_preferred_size());
     m_pEditED->set_width_request(aSize.Width());
     m_pEditED->set_height_request(aSize.Height());
@@ -121,7 +121,7 @@ SvxPostItDialog::SvxPostItDialog(Window* pParent, const SfxItemSet& rCoreSet,
         SetText( get<FixedText>("alttitle")->GetText() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPostItDialog::~SvxPostItDialog()
 {
@@ -129,7 +129,7 @@ SvxPostItDialog::~SvxPostItDialog()
     pOutSet = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rDate)
 {
@@ -139,7 +139,7 @@ void SvxPostItDialog::ShowLastAuthor(const OUString& rAuthor, const OUString& rD
     m_pLastEditFT->SetText( sTxt );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16* SvxPostItDialog::GetRanges()
 {
@@ -152,7 +152,7 @@ sal_uInt16* SvxPostItDialog::GetRanges()
     return pRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPostItDialog::EnableTravel(sal_Bool bNext, sal_Bool bPrev)
 {
@@ -160,7 +160,7 @@ void SvxPostItDialog::EnableTravel(sal_Bool bNext, sal_Bool bPrev)
     m_pNextBtn->Enable(bNext);
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, PrevHdl)
 {
@@ -169,7 +169,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, PrevHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxPostItDialog, PrevHdl)
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, NextHdl)
 {
@@ -178,7 +178,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, NextHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxPostItDialog, NextHdl)
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
 {
@@ -208,7 +208,7 @@ IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPostItDialog, OKHdl)
 {

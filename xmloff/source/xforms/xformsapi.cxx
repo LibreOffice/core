@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -87,10 +87,10 @@ void xforms_addXFormsModel(
     }
     catch( const Exception& )
     {
-        ; // no success!
+        ; 
     }
 
-    // TODO: implement proper error handling
+    
     DBG_ASSERT( bSuccess, "can't import model" );
     (void)bSuccess;
 }
@@ -100,21 +100,21 @@ static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
     const OUString& rBindingID,
     bool bBinding )
 {
-    // find binding by iterating over all models, and look for the
-    // given binding ID
+    
+    
 
     Reference<XPropertySet> xRet;
     try
     {
-        // get supplier
+        
         Reference<XFormsSupplier> xSupplier( xDocument, UNO_QUERY );
         if( xSupplier.is() )
         {
-            // get XForms models
+            
             Reference<XNameContainer> xForms = xSupplier->getXForms();
             if( xForms.is() )
             {
-                // iterate over all models
+                
                 Sequence<OUString> aNames = xForms->getElementNames();
                 const OUString* pNames = aNames.getConstArray();
                 sal_Int32 nNames = aNames.getLength();
@@ -124,14 +124,14 @@ static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
                         xForms->getByName( pNames[n] ), UNO_QUERY );
                     if( xModel.is() )
                     {
-                        // ask model for bindings
+                        
                         Reference<XNameAccess> xBindings(
                             bBinding
                                 ? xModel->getBindings()
                                 : xModel->getSubmissions(),
                             UNO_QUERY_THROW );
 
-                        // finally, ask binding for name
+                        
                         if( xBindings->hasByName( rBindingID ) )
                             xRet.set( xBindings->getByName( rBindingID ),
                                       UNO_QUERY );
@@ -142,10 +142,10 @@ static Reference<XPropertySet> lcl_findXFormsBindingOrSubmission(
     }
     catch( const Exception& )
     {
-        ; // no success!
+        ; 
     }
 
-    // TODO: if (!xRet.is()) rImport.SetError(...);
+    
 
     return xRet;
 }
@@ -198,7 +198,7 @@ sal_uInt16 xforms_getTypeClass(
     const SvXMLNamespaceMap& rNamespaceMap,
     const OUString& rXMLName )
 {
-    // translate name into token for local name
+    
     OUString sLocalName;
     sal_uInt16 nPrefix = rNamespaceMap.GetKeyByAttrName(rXMLName, &sLocalName);
     SvXMLTokenMap aMap( aTypes );
@@ -207,7 +207,7 @@ sal_uInt16 xforms_getTypeClass(
     sal_uInt16 nTypeClass = com::sun::star::xsd::DataTypeClass::STRING;
     if( mnToken != XML_TOK_UNKNOWN )
     {
-        // we found an XSD name: then get the proper API name for it
+        
         DBG_ASSERT( xRepository.is(), "can't find type without repository");
         switch( mnToken )
         {

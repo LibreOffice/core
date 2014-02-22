@@ -18,7 +18,7 @@ namespace
     const ::rtl::OUString AVMEDIA_VLC_PLAYER_IMPLEMENTATIONNAME = "com.sun.star.comp.avmedia.Player_VLC";
     const ::rtl::OUString AVMEDIA_VLC_PLAYER_SERVICENAME = "com.sun.star.media.Player_VLC";
 
-    const int MS_IN_SEC = 1000; // Millisec in sec
+    const int MS_IN_SEC = 1000; 
 }
 
 VLCPlayer::VLCPlayer( const rtl::OUString& url,
@@ -52,7 +52,7 @@ void SAL_CALL VLCPlayer::start() throw ( ::com::sun::star::uno::RuntimeException
     ::osl::MutexGuard aGuard(m_aMutex);
     if (!mPlayer.play())
     {
-        // TODO: Error
+        
     }
 }
 
@@ -159,8 +159,8 @@ css::awt::Size SAL_CALL VLCPlayer::getPreferredPlayerWindowSize() throw ( ::com:
 
 namespace
 {
-    // TODO: Move this function to the common space for avoiding duplication with
-    // gstreamer/gstwindow::createPlayerWindow functionality
+    
+    
     intptr_t GetWindowID( const uno::Sequence< uno::Any >& arguments )
     {
         if (arguments.getLength() <= 2)

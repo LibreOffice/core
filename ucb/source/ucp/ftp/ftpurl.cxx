@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**************************************************************************
@@ -81,7 +81,7 @@ int MemoryContainer::append(
     sal_uInt32 nLen = size*nmemb;
     sal_uInt32 tmp(nLen + m_nWritePos);
 
-    if(m_nLen < tmp) { // enlarge in steps of multiples of 1K
+    if(m_nLen < tmp) { 
         do {
             m_nLen+=1024;
         } while(m_nLen < tmp);
@@ -135,7 +135,7 @@ FTPURL::FTPURL(const OUString& url,
       m_bShowPassword(false),
       m_aPort("21")
 {
-    parse(url);  // can reset m_bShowPassword
+    parse(url);  
 }
 
 
@@ -156,7 +156,7 @@ void FTPURL::parse(const OUString& url)
 
     OString lower = aIdent.toAsciiLowerCase();
     if(lower.getLength() < 6 ||
-       strncmp("ftp://",lower.getStr(),6))
+       strncmp("ftp:
         throw malformed_exception();
 
     char *buffer = new char[1+aIdent.getLength()];
@@ -164,7 +164,7 @@ void FTPURL::parse(const OUString& url)
     p2 += 6;
 
     char ch;
-    char *p1 = buffer;      // determine "username:password@host:port"
+    char *p1 = buffer;      
     while((ch = *p2++) != '/' && ch)
         *p1++ = ch;
     *p1 = 0;
@@ -175,7 +175,7 @@ void FTPURL::parse(const OUString& url)
     m_aHost = aExpr.copy(1+l);
 
     if(l != -1) {
-        // Now username and password.
+        
         aExpr = aExpr.copy(0,l);
         l = aExpr.indexOf(':');
         if(l != -1) {
@@ -184,7 +184,7 @@ void FTPURL::parse(const OUString& url)
                 m_bShowPassword = true;
         }
         if(l > 0)
-            // Overwritte only if the username is not empty.
+            
             m_aUsername = aExpr.copy(0,l);
         else if(!aExpr.isEmpty())
             m_aUsername = aExpr;
@@ -192,9 +192,9 @@ void FTPURL::parse(const OUString& url)
 
     l = m_aHost.lastIndexOf(':');
     sal_Int32 ipv6Back = m_aHost.lastIndexOf(']');
-    if((ipv6Back == -1 && l != -1) // not ipv6, but a port
+    if((ipv6Back == -1 && l != -1) 
        ||
-       (ipv6Back != -1 && 1+ipv6Back == l) // ipv6, and a port
+       (ipv6Back != -1 && 1+ipv6Back == l) 
     )
     {
         if(1+l<m_aHost.getLength())
@@ -202,7 +202,7 @@ void FTPURL::parse(const OUString& url)
         m_aHost = m_aHost.copy(0,l);
     }
 
-    while(ch) {  // now determine the pathsegments ...
+    while(ch) {  
         p1 = buffer;
         while((ch = *p2++) != '/' && ch)
             *p1++ = ch;
@@ -212,9 +212,9 @@ void FTPURL::parse(const OUString& url)
             if( strcmp(buffer,"..") == 0 && !m_aPathSegmentVec.empty() && m_aPathSegmentVec.back() != ".." )
                 m_aPathSegmentVec.pop_back();
             else if(strcmp(buffer,".") == 0)
-                ; // Ignore
+                ; 
             else
-                // This is a legal name.
+                
                 m_aPathSegmentVec.push_back(
                     OUString(buffer,
                                   strlen(buffer),
@@ -231,7 +231,7 @@ void FTPURL::parse(const OUString& url)
                         aPassword,
                         aAccount);
 
-    // now check for something like ";type=i" at end of url
+    
     if(m_aPathSegmentVec.size() &&
        (l = m_aPathSegmentVec.back().indexOf(';')) != -1) {
         m_aType = m_aPathSegmentVec.back().copy(l);
@@ -242,12 +242,12 @@ void FTPURL::parse(const OUString& url)
 
 OUString FTPURL::ident(bool withslash,bool internal) const
 {
-    // rebuild the url as one without ellipses,
-    // and more important, as one without username and
-    // password. ( These are set together with the command. )
+    
+    
+    
 
     OUStringBuffer bff;
-    bff.appendAscii("ftp://");
+    bff.appendAscii("ftp:
 
     if( m_aUsername != "anonymous" ) {
         bff.append(m_aUsername);
@@ -293,7 +293,7 @@ OUString FTPURL::parent(bool internal) const
 {
     OUStringBuffer bff;
 
-    bff.appendAscii("ftp://");
+    bff.appendAscii("ftp:
 
     if( m_aUsername != "anonymous" ) {
         bff.append(m_aUsername);
@@ -448,7 +448,7 @@ std::vector<FTPDirentry> FTPURL::list(
     if(err != CURLE_OK)
         throw curl_exception(err);
 
-    // now evaluate the error messages
+    
 
     sal_uInt32 len = data.m_nWritePos;
     char* fwd = (char*) data.m_pBuffer;
@@ -458,7 +458,7 @@ std::vector<FTPDirentry> FTPURL::list(
     OS osKind(FTP_UNKNOWN);
     std::vector<FTPDirentry> resvec;
     FTPDirentry aDirEntry;
-    // ensure slash at the end
+    
     OUString viewurl(ident(true,false));
 
     while(true) {
@@ -467,10 +467,10 @@ std::vector<FTPDirentry> FTPURL::list(
 
         *p2 = 0;
         switch(osKind) {
-            // While FTP knows the 'system'-command,
-            // which returns the operating system type,
-            // this is not usable here: There are Windows-server
-            // formatting the output like UNIX-ls command.
+            
+            
+            
+            
         case FTP_DOS:
             FTPDirectoryParser::parseDOS(aDirEntry,p1);
             break;
@@ -521,9 +521,9 @@ OUString FTPURL::net_title() const
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       
     struct curl_slist *slist = 0;
-    // post request
+    
     slist = curl_slist_append(slist,"PWD");
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
@@ -535,22 +535,22 @@ OUString FTPURL::net_title() const
         OUString url(ident(false,true));
 
         if(try_more && !url.endsWith("/"))
-            url += "/";  // add end-slash
+            url += "/";  
         else if(!try_more && url.endsWith("/"))
-            url = url.copy(0,url.getLength()-1);         // remove end-slash
+            url = url.copy(0,url.getLength()-1);         
 
         SET_URL(url);
         err = curl_easy_perform(curl);
 
-        if(err == CURLE_OK) {       // get the title from the server
+        if(err == CURLE_OK) {       
             char* fwd = (char*) control.m_pBuffer;
             sal_uInt32 len = (sal_uInt32) control.m_nWritePos;
 
             aNetTitle = OUString(fwd,len,RTL_TEXTENCODING_UTF8);
-            // the buffer now contains the name of the file;
-            // analyze the output:
-            // Format of current working directory:
-            // 257 "/bla/bla" is current directory
+            
+            
+            
+            
             sal_Int32 index1 = aNetTitle.lastIndexOf("257");
             index1 = aNetTitle.indexOf('"', index1 + std::strlen("257")) + 1;
             sal_Int32 index2 = aNetTitle.indexOf('"', index1);
@@ -562,24 +562,24 @@ OUString FTPURL::net_title() const
             }
             try_more = false;
         } else if(err == CURLE_BAD_PASSWORD_ENTERED)
-            // the client should retry after getting the correct
-            // username + password
+            
+            
             throw curl_exception(err);
 #if LIBCURL_VERSION_NUM>=0x070d01 /* 7.13.1 */
         else if(err == CURLE_LOGIN_DENIED)
-            // the client should retry after getting the correct
-            // username + password
+            
+            
             throw curl_exception(err);
 #endif
         else if(try_more && err == CURLE_FTP_ACCESS_DENIED) {
-            // We  were  either denied access when trying to login to
-            //  an FTP server or when trying to change working directory
-            //  to the one given in the URL.
+            
+            
+            
             if(!m_aPathSegmentVec.empty())
-                // determine title form url
+                
                 aNetTitle = decodePathSegment(m_aPathSegmentVec.back());
             else
-                // must be root
+                
                 aNetTitle = "/";
             try_more = false;
         }
@@ -601,7 +601,7 @@ FTPDirentry FTPURL::direntry() const
     OUString nettitle = net_title();
     FTPDirentry aDirentry;
 
-    aDirentry.m_aName = nettitle;                 // init aDirentry
+    aDirentry.m_aName = nettitle;                 
     if( nettitle == "/" || nettitle == ".." )
         aDirentry.m_nMode = INETCOREFTP_FILEMODE_ISDIR;
     else
@@ -610,13 +610,13 @@ FTPDirentry FTPURL::direntry() const
     aDirentry.m_nSize = 0;
 
     if( nettitle != "/" ) {
-        // try to open the parent directory
+        
         FTPURL aURL(parent(),m_pFCP);
 
         std::vector<FTPDirentry> aList = aURL.list(OpenMode::ALL);
 
         for(unsigned i = 0; i < aList.size(); ++i) {
-            if(aList[i].m_aName == nettitle) { // the relevant file is found
+            if(aList[i].m_aName == nettitle) { 
                 aDirentry = aList[i];
                 break;
             }
@@ -645,17 +645,17 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
     throw(curl_exception)
 {
     if(!replaceExisting) {
-//          FTPDirentry aDirentry(direntry());
-//          if(aDirentry.m_nMode == INETCOREFTP_FILEMODE_UNKNOWN)
-        // throw curl_exception(FILE_EXIST_DURING_INSERT);
+
+
+        
         throw curl_exception(FILE_MIGHT_EXIST_DURING_INSERT);
-    } // else
-    // overwrite is default in libcurl
+    } 
+    
 
     CURL *curl = m_pFCP->handle();
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,false);    // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,false);    
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,0);
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
     curl_easy_setopt(curl,CURLOPT_READFUNCTION,memory_read);
@@ -686,7 +686,7 @@ void FTPURL::mkdir(bool ReplaceExisting) const
                             RTL_TEXTENCODING_UTF8);
     }
     else
-        // will give an error
+        
         title = OString("/");
 
     OString aDel("del "); aDel += title;
@@ -696,8 +696,8 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
     FTPDirentry aDirentry(direntry());
     if(!ReplaceExisting) {
-//          if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
-//              throw curl_exception(FOLDER_EXIST_DURING_INSERT);
+
+
         throw curl_exception(FOLDER_MIGHT_EXIST_DURING_INSERT);
     } else if(aDirentry.m_nMode != INETCOREFTP_FILEMODE_UNKNOWN)
         slist = curl_slist_append(slist,aDel.getStr());
@@ -706,10 +706,10 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
     CURL *curl = m_pFCP->handle();
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
-    // post request
+    
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     OUString url(parent(true));
@@ -729,7 +729,7 @@ OUString FTPURL::ren(const OUString& NewTitle)
 {
     CURL *curl = m_pFCP->handle();
 
-    // post request
+    
     OString renamefrom("RNFR ");
     OUString OldTitle = net_title();
     renamefrom +=
@@ -749,7 +749,7 @@ OUString FTPURL::ren(const OUString& NewTitle)
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     OUString url(parent(true));
@@ -792,14 +792,14 @@ void FTPURL::del() const
     else
         return;
 
-    // post request
+    
     CURL *curl = m_pFCP->handle();
     struct curl_slist *slist = 0;
     slist = curl_slist_append(slist,dele.getStr());
     curl_easy_setopt(curl,CURLOPT_POSTQUOTE,slist);
 
     SET_CONTROL_CONTAINER;
-    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       // no data => no transfer
+    curl_easy_setopt(curl,CURLOPT_NOBODY,true);       
     curl_easy_setopt(curl,CURLOPT_QUOTE,0);
 
     OUString url(parent(true));

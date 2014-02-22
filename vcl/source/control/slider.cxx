@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 
 #include "thumbpos.hxx"
 
-// =======================================================================
+
 
 #define SLIDER_DRAW_THUMB           ((sal_uInt16)0x0001)
 #define SLIDER_DRAW_CHANNEL1        ((sal_uInt16)0x0002)
@@ -48,13 +48,13 @@
 
 #define SLIDER_VIEW_STYLE           (WB_3DLOOK | WB_HORZ | WB_VERT)
 
-// =======================================================================
+
 
 void Slider::ImplInit( Window* pParent, WinBits nStyle )
 {
     mnThumbPixOffset    = 0;
     mnThumbPixRange     = 0;
-    mnThumbPixPos       = 0;    // between mnThumbPixOffset and mnThumbPixOffset+mnThumbPixRange
+    mnThumbPixPos       = 0;    
     mnChannelPixOffset  = 0;
     mnChannelPixRange   = 0;
     mnChannelPixTop     = 0;
@@ -78,7 +78,7 @@ void Slider::ImplInit( Window* pParent, WinBits nStyle )
     SetSizePixel( CalcWindowSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 Slider::Slider( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_SLIDER )
@@ -86,7 +86,7 @@ Slider::Slider( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplInitSettings()
 {
@@ -111,7 +111,7 @@ void Slider::ImplInitSettings()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplUpdateRects( bool bUpdate )
 {
@@ -220,25 +220,25 @@ void Slider::ImplUpdateRects( bool bUpdate )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplCalcThumbPos( long nPixPos )
 {
-    // calculate position
+    
     long nCalcThumbPos;
     nCalcThumbPos = ImplMulDiv( nPixPos-mnThumbPixOffset, mnMaxRange-mnMinRange, mnThumbPixRange-1 );
     nCalcThumbPos += mnMinRange;
     return nCalcThumbPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplCalcThumbPosPix( long nPos )
 {
-    // calculate position
+    
     long nCalcThumbPos;
     nCalcThumbPos = ImplMulDiv( nPos-mnMinRange, mnThumbPixRange-1, mnMaxRange-mnMinRange );
-    // at the beginning and end we try to display Slider correctly
+    
     if ( !nCalcThumbPos && (mnThumbPos > mnMinRange) )
         nCalcThumbPos = 1;
     if ( nCalcThumbPos &&
@@ -248,7 +248,7 @@ long Slider::ImplCalcThumbPosPix( long nPos )
     return nCalcThumbPos+mnThumbPixOffset;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplCalc( bool bUpdate )
 {
@@ -319,7 +319,7 @@ void Slider::ImplCalc( bool bUpdate )
     ImplUpdateRects( bUpdate );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplDraw( sal_uInt16 nDrawFlags )
 {
@@ -328,7 +328,7 @@ void Slider::ImplDraw( sal_uInt16 nDrawFlags )
     const StyleSettings&    rStyleSettings = GetSettings().GetStyleSettings();
     bool                    bEnabled = IsEnabled();
 
-    // do missing calculations
+    
     if ( mbCalcSize )
         ImplCalc( false );
 
@@ -459,7 +459,7 @@ void Slider::ImplDraw( sal_uInt16 nDrawFlags )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Slider::ImplIsPageUp( const Point& rPos )
 {
@@ -478,7 +478,7 @@ bool Slider::ImplIsPageUp( const Point& rPos )
     return aRect.IsInside( rPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Slider::ImplIsPageDown( const Point& rPos )
 {
@@ -497,7 +497,7 @@ bool Slider::ImplIsPageDown( const Point& rPos )
     return aRect.IsInside( rPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
 {
@@ -515,7 +515,7 @@ long Slider::ImplSlide( long nNewPos, bool bCallEndSlide )
     return nDelta;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplDoAction( bool bCallEndSlide )
 {
@@ -549,7 +549,7 @@ long Slider::ImplDoAction( bool bCallEndSlide )
     return nDelta;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
 {
@@ -599,7 +599,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
     {
         if ( ImplDoAction( false ) )
         {
-            // Update the channel complete
+            
             if ( mnDragDraw & SLIDER_DRAW_CHANNEL )
             {
                 Update();
@@ -611,7 +611,7 @@ void Slider::ImplDoMouseAction( const Point& rMousePos, bool bCallAction )
         ImplDraw( mnDragDraw );
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplDoSlide( long nNewPos )
 {
@@ -624,7 +624,7 @@ long Slider::ImplDoSlide( long nNewPos )
     return nDelta;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Slider::ImplDoSlideAction( ScrollType eScrollType )
 {
@@ -639,7 +639,7 @@ long Slider::ImplDoSlideAction( ScrollType eScrollType )
     return nDelta;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -654,7 +654,7 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
             meScrollType    = SCROLL_DRAG;
             mnDragDraw      = SLIDER_DRAW_THUMB;
 
-            // calculate additional values
+            
             Point aCenterPos = maThumbRect.Center();
             if ( GetStyle() & WB_HORZ )
                 mnMouseOff = rMousePos.X()-aCenterPos.X();
@@ -686,10 +686,10 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
             mnDragDraw = SLIDER_DRAW_CHANNEL;
         }
 
-        // Shall we start Tracking?
+        
         if( meScrollType != SCROLL_DONTKNOW )
         {
-            // store Start position for cancel and EndScroll delta
+            
             mnStartPos = mnThumbPos;
             ImplDoMouseAction( rMousePos, meScrollType != SCROLL_SET );
             Update();
@@ -700,13 +700,13 @@ void Slider::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::MouseButtonUp( const MouseEvent& )
 {
     if( SCROLL_SET == meScrollType )
     {
-        // reset Button and PageRect state
+        
         const sal_uInt16 nOldStateFlags = mnStateFlags;
 
         mnStateFlags &= ~( SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN | SLIDER_STATE_THUMB_DOWN );
@@ -720,13 +720,13 @@ void Slider::MouseButtonUp( const MouseEvent& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::Tracking( const TrackingEvent& rTEvt )
 {
     if ( rTEvt.IsTrackingEnded() )
     {
-        // reset Button and PageRect state
+        
         sal_uInt16 nOldStateFlags = mnStateFlags;
         mnStateFlags &= ~(SLIDER_STATE_CHANNEL1_DOWN | SLIDER_STATE_CHANNEL2_DOWN |
                           SLIDER_STATE_THUMB_DOWN);
@@ -734,7 +734,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
             ImplDraw( mnDragDraw );
         mnDragDraw = 0;
 
-        // on cancel, reset the previous Thumb position
+        
         if ( rTEvt.IsTrackingCanceled() )
         {
             long nOldPos = mnThumbPos;
@@ -745,7 +745,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
 
         if ( meScrollType == SCROLL_DRAG )
         {
-            // after dragging, recalculate to a rounded Thumb position
+            
             ImplCalc();
             Update();
 
@@ -766,7 +766,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
     {
         const Point rMousePos = rTEvt.GetMouseEvent().GetPosPixel();
 
-        // special handling for dragging
+        
         if ( meScrollType == SCROLL_DRAG )
         {
             long nMovePix;
@@ -775,7 +775,7 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
                 nMovePix = rMousePos.X()-(aCenterPos.X()+mnMouseOff);
             else
                 nMovePix = rMousePos.Y()-(aCenterPos.Y()+mnMouseOff);
-            // only if the mouse moves in Scroll direction we have to act
+            
             if ( nMovePix )
             {
                 mnThumbPixPos += nMovePix;
@@ -801,13 +801,13 @@ void Slider::Tracking( const TrackingEvent& rTEvt )
         else
             ImplDoMouseAction( rMousePos, rTEvt.IsTrackingRepeat() );
 
-        // end tracking if ScrollBar values indicate we are done
+        
         if ( !IsVisible() )
             EndTracking();
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::KeyInput( const KeyEvent& rKEvt )
 {
@@ -849,14 +849,14 @@ void Slider::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::Paint( const Rectangle& )
 {
     ImplDraw( SLIDER_DRAW_ALL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::Resize()
 {
@@ -867,14 +867,14 @@ void Slider::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::RequestHelp( const HelpEvent& rHEvt )
 {
     Control::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::StateChanged( StateChangedType nType )
 {
@@ -920,7 +920,7 @@ void Slider::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -934,38 +934,38 @@ void Slider::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::Slide()
 {
     maSlideHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::EndSlide()
 {
     maEndSlideHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::SetRange( const Range& rRange )
 {
-    // adjust Range
+    
     Range aRange = rRange;
     aRange.Justify();
     long nNewMinRange = aRange.Min();
     long nNewMaxRange = aRange.Max();
 
-    // reset Range if different
+    
     if ( (mnMinRange != nNewMinRange) ||
          (mnMaxRange != nNewMaxRange) )
     {
         mnMinRange = nNewMinRange;
         mnMaxRange = nNewMaxRange;
 
-        // adjust Thumb
+        
         if ( mnThumbPos > mnMaxRange )
             mnThumbPos = mnMaxRange;
         if ( mnThumbPos < mnMinRange )
@@ -975,7 +975,7 @@ void Slider::SetRange( const Range& rRange )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Slider::SetThumbPos( long nNewThumbPos )
 {
@@ -991,7 +991,7 @@ void Slider::SetThumbPos( long nNewThumbPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size Slider::CalcWindowSizePixel()
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -130,7 +130,7 @@ void testConnection( const OUString &sConnectionDescription  ,
         {
             try
             {
-                // Why is this wait necessary ????
+                
                 TimeValue value = {1,0};
                 osl_waitThread( &value );
                 r = rConnector->connect( sConnectionDescription );
@@ -156,7 +156,7 @@ void testConnection( const OUString &sConnectionDescription  ,
         }
         catch ( IOException & )
         {
-            // everything is ok
+            
         }
         catch ( ... )
         {
@@ -207,7 +207,7 @@ int SAL_CALL main( int argc, char * argv[] )
     testConnection( OUString("pipe,name=bla") , rAcceptorPipe , rConnector );
     printf( " Done\n" );
 
-    // check, if errornous strings make any problem
+    
     rAcceptor = Reference< XAcceptor > (
         xMgr->createInstance("com.sun.star.connection.Acceptor"),
         UNO_QUERY );
@@ -219,7 +219,7 @@ int SAL_CALL main( int argc, char * argv[] )
     }
     catch( IllegalArgumentException & )
     {
-        // everything is fine
+        
     }
     catch( ... )
     {
@@ -233,7 +233,7 @@ int SAL_CALL main( int argc, char * argv[] )
     }
     catch( ConnectionSetupException & )
     {
-        // everything is fine
+        
     }
     catch( ... )
     {
@@ -253,7 +253,7 @@ int SAL_CALL main( int argc, char * argv[] )
     }
     catch( AlreadyAcceptingException & )
     {
-        // everything is fine
+        
     }
     catch( ... )
     {

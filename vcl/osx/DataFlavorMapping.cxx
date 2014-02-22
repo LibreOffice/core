@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -46,7 +46,7 @@ using namespace cppu;
 using namespace std;
 
 
-namespace // private
+namespace 
 {
   /* Determine whether or not a DataFlavor is valid.
    */
@@ -105,7 +105,7 @@ namespace // private
     const NSString* SystemFlavor;
     const char* OOoFlavor;
     const char* HumanPresentableName;
-    bool DataTypeOUString; // sequence<byte> otherwise
+    bool DataTypeOUString; 
   };
 
   /* At the moment it appears as if only MS Office pastes "public.html" to the clipboard.
@@ -144,10 +144,10 @@ namespace // private
     return (theType == getCppuType( (OUString*)0 ));
   }
 
-} // namespace private
+} 
 
 
-//###########################
+
 
 /* A base class for other data provider.
  */
@@ -160,7 +160,7 @@ public:
 
 protected:
   Any mData;
-  //NSData* mSystemData;
+  
   id mSystemData;
 };
 
@@ -185,7 +185,7 @@ DataProviderBaseImpl::~DataProviderBaseImpl()
     }
 }
 
-//#################################
+
 
 class UniDataProvider : public DataProviderBaseImpl
 {
@@ -238,7 +238,7 @@ Any UniDataProvider::getOOoData()
   return oOOData;
 }
 
-//###########################
+
 
 class ByteSequenceDataProvider : public DataProviderBaseImpl
 {
@@ -292,7 +292,7 @@ Any ByteSequenceDataProvider::getOOoData()
 }
 
 
-//###########################
+
 
 class HTMLFormatDataProvider : public DataProviderBaseImpl
 {
@@ -357,7 +357,7 @@ Any HTMLFormatDataProvider::getOOoData()
   return oOOData;
 }
 
-//###########################
+
 
 class PNGDataProvider : public DataProviderBaseImpl
 {
@@ -423,7 +423,7 @@ Any PNGDataProvider::getOOoData()
   return oOOData;
 }
 
-//######################
+
 
 class FileListDataProvider : public DataProviderBaseImpl
 {
@@ -487,7 +487,7 @@ Any FileListDataProvider::getOOoData()
   return oOOData;
 }
 
-//###########################
+
 
 DataFlavorMapper::DataFlavorMapper()
 {
@@ -497,7 +497,7 @@ DataFlavorMapper::DataFlavorMapper()
 
 DataFlavorMapper::~DataFlavorMapper()
 {
-    // release potential NSStrings
+    
     for( OfficeOnlyTypes::iterator it = maOfficeOnlyTypes.begin(); it != maOfficeOnlyTypes.end(); ++it )
     {
         [it->second release];
@@ -518,10 +518,10 @@ DataFlavor DataFlavorMapper::systemToOpenOfficeFlavor( const NSString* systemDat
           oOOFlavor.DataType = flavorMap[i].DataTypeOUString ? getCppuType( (OUString*)0 ) : getCppuType((Sequence<sal_Int8>*)0);
           return oOOFlavor;
         }
-    } // for
+    } 
 
-    // look if this might be an internal type; if it comes in here it must have
-    // been through openOfficeToSystemFlavor before, so it should then be in the map
+    
+    
     OUString aTryFlavor( NSStringToOUString( systemDataFlavor ) );
     if( maOfficeOnlyTypes.find( aTryFlavor ) != maOfficeOnlyTypes.end() )
     {
@@ -605,7 +605,7 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
               dp = DataProviderPtr_t(new ByteSequenceDataProvider(data));
             }
         }
-      else // Must be OUString type
+      else 
         {
           SAL_WARN_IF(
               !isOUStringType(data.getValueType()), "vcl",
@@ -615,8 +615,8 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
     }
   catch(UnsupportedFlavorException&)
     {
-      // Somebody violates the contract of the clipboard
-      // interface @see XTransferable
+      
+      
     }
 
   return dp;
@@ -645,7 +645,7 @@ DataProviderPtr_t DataFlavorMapper::getDataProvider( const NSString* systemFlavo
     }
   else if ([systemFlavor caseInsensitiveCompare: NSFilenamesPboardType] == NSOrderedSame)
     {
-      //dp = DataProviderPtr_t(new FileListDataProvider(systemData));
+      
     }
   else
     {
@@ -696,9 +696,9 @@ NSArray* DataFlavorMapper::flavorSequenceToTypesArray(const com::sun::star::uno:
       }
   }
 
-   // #i89462# #i90747#
-   // in case no system flavor was found to report
-   // report at least one so D&D between OOo targets works
+   
+   
+   
   if( [array count] == 0 || bNeedDummyInternalFlavor)
   {
       [array addObject: PBTYPE_DUMMY_INTERNAL];

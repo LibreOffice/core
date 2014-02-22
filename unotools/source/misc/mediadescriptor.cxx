@@ -386,7 +386,7 @@ bool MediaDescriptor::isStreamReadOnly() const
     return bReadOnly;
 }
 
-// ----------------------------------------------------------------------------
+
 
 css::uno::Any MediaDescriptor::getComponentDataEntry( const OUString& rName ) const
 {

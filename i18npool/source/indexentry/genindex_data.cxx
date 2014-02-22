@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,7 +39,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     if (argc < 4) exit(-1);
 
-    fp = fopen(argv[1], "rb");  // open the source file for read;
+    fp = fopen(argv[1], "rb");  
     if (fp == NULL) {
         fprintf(stderr, "Opening the rule source file %s for reading failed: %s\n", argv[1], strerror(errno));
         exit(1);
@@ -55,17 +55,17 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     sal_Char str[1024];
     while (fgets(str, 1024, fp)) {
-        // don't convert last new line character to Ostr.
+        
         sal_Int32 len = strlen(str) - 1;
-        // skip comment line
+        
         if (len == 0 || str[0] == '#')
             continue;
 
-        // input file is in UTF-8 encoding
+        
         OUString Ostr = OUString((const sal_Char *)str, len, RTL_TEXTENCODING_UTF8);
         len = Ostr.getLength();
         if (len == 0)
-            continue; // skip empty line.
+            continue; 
 
         sal_Int32 nPos=0;
         sal_uInt32 nChar = Ostr.iterateCodePoints(&nPos, 2);
@@ -154,6 +154,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     fclose(fp);
     return 0;
-}   // End of main
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

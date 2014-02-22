@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "align.hxx"
@@ -44,9 +44,9 @@
 
 namespace svx {
 
-// item connections ===========================================================
 
-// horizontal alignment -------------------------------------------------------
+
+
 
 typedef sfx::ValueItemWrapper< SvxHorJustifyItem, SvxCellHorJustify, sal_uInt16 > HorJustItemWrapper;
 typedef sfx::ListBoxConnection< HorJustItemWrapper > HorJustConnection;
@@ -63,7 +63,7 @@ static const HorJustConnection::MapEntryType s_pHorJustMap[] =
     { LISTBOX_ENTRY_NOTFOUND,   SVX_HOR_JUSTIFY_STANDARD    }
 };
 
-// vertical alignment ---------------------------------------------------------
+
 
 typedef sfx::ValueItemWrapper< SvxVerJustifyItem, SvxCellVerJustify, sal_uInt16 > VerJustItemWrapper;
 typedef sfx::ListBoxConnection< VerJustItemWrapper > VerJustConnection;
@@ -79,7 +79,7 @@ static const VerJustConnection::MapEntryType s_pVerJustMap[] =
     { LISTBOX_ENTRY_NOTFOUND,   SVX_VER_JUSTIFY_STANDARD    }
 };
 
-// cell rotate mode -----------------------------------------------------------
+
 
 typedef sfx::ValueItemWrapper< SvxRotateModeItem, SvxRotateMode, sal_uInt16 > RotateModeItemWrapper;
 typedef sfx::ValueSetConnection< RotateModeItemWrapper > RotateModeConnection;
@@ -92,7 +92,7 @@ static const RotateModeConnection::MapEntryType s_pRotateModeMap[] =
     { VALUESET_ITEM_NOTFOUND,   SVX_ROTATE_MODE_STANDARD    }
 };
 
-// ============================================================================
+
 
 static sal_uInt16 s_pRanges[] =
 {
@@ -108,7 +108,7 @@ static sal_uInt16 s_pRanges[] =
     0
 };
 
-// ============================================================================
+
 
 namespace {
 
@@ -118,23 +118,23 @@ void lcl_MaybeResetAlignToDistro(
 {
     const SfxPoolItem* pItem;
     if (rCoreAttrs.GetItemState(nWhichAlign, true, &pItem) != SFX_ITEM_SET)
-        // alignment not set.
+        
         return;
 
     const SfxEnumItem* p = static_cast<const SfxEnumItem*>(pItem);
     _JustContainerType eVal = static_cast<_JustContainerType>(p->GetEnumValue());
     if (eVal != eBlock)
-        // alignment is not 'justify'.  No need to go further.
+        
         return;
 
     if (rCoreAttrs.GetItemState(nWhichJM, true, &pItem) != SFX_ITEM_SET)
-        // justification method is not set.
+        
         return;
 
     p = static_cast<const SfxEnumItem*>(pItem);
     SvxCellJustifyMethod eMethod = static_cast<SvxCellJustifyMethod>(p->GetEnumValue());
     if (eMethod == SVX_JUSTIFY_METHOD_DISTRIBUTE)
-        // Select the 'distribute' entry in the specified list box.
+        
         rLB.SelectEntryPos(nListPos);
 }
 
@@ -148,23 +148,23 @@ void lcl_SetJustifyMethodToItemSet(SfxItemSet& rSet, sal_uInt16 nWhichJM, const 
     rSet.Put(aItem);
 }
 
-}//namespace
+}
 
-// ============================================================================
+
 
 AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
     SfxTabPage( pParent, "CellAlignPage","cui/ui/cellalignment.ui", rCoreAttrs )
 
 {
-    // text alignment
+    
     get(m_pLbHorAlign,"comboboxHorzAlign");
     get(m_pFtIndent,"labelIndent");
     get(m_pEdIndent,"spinIndentFrom");
     get(m_pFtVerAlign,"labelVertAlign");
     get(m_pLbVerAlign,"comboboxVertAlign");
 
-    //text rotation
+    
     get(m_pNfRotate,"spinDegrees");
     get(m_pCtrlDial,"dialcontrol");
     get(m_pFtRotate,"labelDegrees");
@@ -172,19 +172,19 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     get(m_pVsRefEdge,"references");
     get(m_pBoxDirection,"boxDirection");
 
-    //Asian mode
+    
     get(m_pCbStacked,"checkVertStack");
     get(m_pCbAsianMode,"checkAsianMode");
 
     m_pOrientHlp = new OrientationHelper(*m_pCtrlDial, *m_pNfRotate, *m_pCbStacked);
 
-    // Properties
+    
     get(m_pBtnWrap,"checkWrapTextAuto");
     get(m_pBtnHyphen,"checkHyphActive");
     get(m_pBtnShrink,"checkShrinkFitCellSize");
     get(m_pLbFrameDir,"comboTextDirBox");
 
-    //ValueSet hover strings
+    
     get(m_pFtBotLock,"labelSTR_BOTTOMLOCK");
     get(m_pFtTopLock,"labelSTR_TOPLOCK");
     get(m_pFtCelLock,"labelSTR_CELLLOCK");
@@ -198,11 +198,11 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
 
     InitVsRefEgde();
 
-    // windows to be disabled, if stacked text is turned ON
+    
     m_pOrientHlp->AddDependentWindow( *m_pFtRotate,     STATE_CHECK );
     m_pOrientHlp->AddDependentWindow( *m_pFtRefEdge,    STATE_CHECK );
     m_pOrientHlp->AddDependentWindow( *m_pVsRefEdge,    STATE_CHECK );
-    // windows to be disabled, if stacked text is turned OFF
+    
     m_pOrientHlp->AddDependentWindow( *m_pCbAsianMode,  STATE_NOCHECK );
 
     Link aLink = LINK( this, AlignmentTabPage, UpdateEnableHdl );
@@ -210,7 +210,7 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     m_pLbHorAlign->SetSelectHdl( aLink );
     m_pBtnWrap->SetClickHdl( aLink );
 
-    // Asian vertical mode
+    
     m_pCbAsianMode->Show( SvtCJKOptions().IsVerticalTextEnabled() );
 
 
@@ -220,14 +220,14 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
     }
     else
     {
-       // CTL frame direction
+       
        m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_LTR ), FRMDIR_HORI_LEFT_TOP );
        m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_RTL ), FRMDIR_HORI_RIGHT_TOP );
        m_pLbFrameDir->InsertEntryValue( CUI_RESSTR( RID_SVXSTR_FRAMEDIR_SUPER ), FRMDIR_ENVIRONMENT );
        m_pBoxDirection->Show();
     }
 
-    // This page needs ExchangeSupport.
+    
     SetExchangeSupport();
 
     AddItemConnection( new HorJustConnection( SID_ATTR_ALIGN_HOR_JUSTIFY, *m_pLbHorAlign, s_pHorJustMap, sfx::ITEMCONN_HIDE_UNKNOWN ) );
@@ -269,8 +269,8 @@ sal_Bool AlignmentTabPage::FillItemSet( SfxItemSet& rSet )
 {
     bool bChanged = SfxTabPage::FillItemSet(rSet);
 
-    // Special treatment for distributed alignment; we need to set the justify
-    // method to 'distribute' to distinguish from the normal justification.
+    
+    
 
     sal_uInt16 nWhichHorJM = GetWhich(SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD);
     lcl_SetJustifyMethodToItemSet(rSet, nWhichHorJM, *m_pLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED);
@@ -289,8 +289,8 @@ void AlignmentTabPage::Reset( const SfxItemSet& rCoreAttrs )
 {
     SfxTabPage::Reset( rCoreAttrs );
 
-    // Special treatment for distributed alignment; we need to set the justify
-    // method to 'distribute' to distinguish from the normal justification.
+    
+    
 
     lcl_MaybeResetAlignToDistro<SvxCellHorJustify, SvxCellHorJustify>(
         *m_pLbHorAlign, ALIGNDLG_HORALIGN_DISTRIBUTED, rCoreAttrs,
@@ -324,7 +324,7 @@ void AlignmentTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void AlignmentTabPage::InitVsRefEgde()
 {
-    // remember selection - is deleted in call to ValueSet::Clear()
+    
     sal_uInt16 nSel = m_pVsRefEdge->GetSelectItemId();
 
     ResId aResId( IL_LOCK_BMPS, CUI_MGR() );
@@ -364,20 +364,20 @@ void AlignmentTabPage::UpdateEnableControls()
     bool bHorFill  = (nHorAlign == ALIGNDLG_HORALIGN_FILL);
     bool bHorDist  = (nHorAlign == ALIGNDLG_HORALIGN_DISTRIBUTED);
 
-    // indent edit field only for left alignment
+    
     m_pFtIndent->Enable( bHorLeft );
     m_pEdIndent->Enable( bHorLeft );
 
-    // rotation/stacked disabled for fill alignment
+    
     m_pOrientHlp->Enable( !bHorFill );
 
-    // hyphenation only for automatic line breaks or for block alignment
+    
     m_pBtnHyphen->Enable( m_pBtnWrap->IsChecked() || bHorBlock );
 
-    // shrink only without automatic line break, and not for block, fill or distribute.
+    
     m_pBtnShrink->Enable( (m_pBtnWrap->GetState() == STATE_NOCHECK) && !bHorBlock && !bHorFill && !bHorDist );
 
-    // visibility of frames
+    
     m_pAlignmentFrame->Show(m_pLbHorAlign->IsVisible() || m_pEdIndent->IsVisible() ||
         m_pLbVerAlign->IsVisible());
     m_pOrientFrame->Show(m_pCtrlDial->IsVisible() || m_pVsRefEdge->IsVisible() ||
@@ -413,8 +413,8 @@ IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl)
     return 0;
 }
 
-// ============================================================================
 
-} // namespace svx
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

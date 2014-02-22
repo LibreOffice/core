@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -177,12 +177,12 @@ sal_Bool ReadIdl( SvIdlWorkingBase * pDataBase, const SvCommand & rCommand )
 
 static sal_Bool ResponseFile( StringList * pList, int argc, char ** argv )
 {
-    // program name
+    
     pList->push_back( OUString::createFromAscii(*argv) );
     for( int i = 1; i < argc; i++ )
     {
         if( '@' == **(argv +i) )
-        { // when @, then response file
+        { 
             SvFileStream aStm( OUString::createFromAscii((*(argv +i)) +1), STREAM_STD_READ | STREAM_NOCREATE );
             if( aStm.GetError() != SVSTREAM_OK )
                 return sal_False;
@@ -231,11 +231,11 @@ SvCommand::SvCommand( int argc, char ** argv )
                     aFirstChar = aParam[0];
                     OUString aName( aParam.copy( 1 ) );
                     if( 's' == aFirstChar )
-                    { // name of slot output
+                    { 
                         aSlotMapFile = aName;
                     }
                     else if( 'l' == aFirstChar )
-                    { // name of listing
+                    { 
                         aListFile = aName;
                     }
                     else if( 'i' == aFirstChar )
@@ -245,7 +245,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                     {
                     }
                     else if( 'd' == aFirstChar )
-                    { // name of data set file
+                    { 
                         aDataBaseFile = aName;
                     }
                     else if( 'D' == aFirstChar )
@@ -267,22 +267,22 @@ SvCommand::SvCommand( int argc, char ** argv )
                     {
                     }
                     else if( 'm' == aFirstChar )
-                    { // name of info file
+                    { 
                         aTargetFile = aName;
                     }
                     else if( 'r' == aFirstChar )
                     {
                     }
                     else if( 'z' == aFirstChar )
-                    { // name of HelpId file
+                    { 
                         aHelpIdFile = aName;
                     }
                     else if( 'y' == aFirstChar )
-                    { // name of CSV file
+                    { 
                         aCSVFile = aName;
                     }
                     else if( 'x' == aFirstChar )
-                    { // name of IDL file for the CSV file
+                    { 
                         aExportFile = aName;
                     }
                     else if( 'M' == aFirstChar )
@@ -299,7 +299,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                     }
                 }
                 else if( aParam.equalsIgnoreAsciiCase( "help" ) || aParam.equalsIgnoreAsciiCase( "?" ) )
-                { // help
+                { 
                     printf( "%s", CommandLineSyntax );
                 }
                 else if( aParam.equalsIgnoreAsciiCase( "quiet" ) )
@@ -311,20 +311,20 @@ SvCommand::SvCommand( int argc, char ** argv )
                     nVerbosity = 2;
                 }
                 else if( aParam.equalsIgnoreAsciiCase( "syntax" ) )
-                { // help
+                { 
                     int j = 0;
                     while(SyntaxStrings[j])
                         printf("%s\n",SyntaxStrings[j++]);
                 }
                 else if( aParam.startsWithIgnoreAsciiCase( "i" ) )
-                { // define include paths
+                { 
                     OUString aName( aParam.copy( 1 ) );
                     if( !aPath.isEmpty() )
                         aPath += OUString( SAL_PATHSEPARATOR );
                     aPath += aName;
                 }
                 else if( aParam.startsWithIgnoreAsciiCase( "rsc" ) )
-                { // first line in *.srs file
+                { 
                     OSL_ENSURE(false, "does anything use this option, doesn't look like it belong here");
                     if( !aList[ i + 1 ].isEmpty() )
                     {
@@ -333,7 +333,7 @@ SvCommand::SvCommand( int argc, char ** argv )
                 }
                 else
                 {
-                    // temporary compatibility hack
+                    
                     printf(
                         "unknown switch: %s\n",
                         OUStringToOString(
@@ -355,7 +355,7 @@ SvCommand::SvCommand( int argc, char ** argv )
     aList.clear();
 
     OString aInc(getenv("INCLUDE"));
-    // append include environment variable
+    
     if( aInc.getLength() )
     {
         if( !aPath.isEmpty() )
@@ -366,7 +366,7 @@ SvCommand::SvCommand( int argc, char ** argv )
 
 SvCommand::~SvCommand()
 {
-    // release String list
+    
     aInFileList.clear();
 }
 

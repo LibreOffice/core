@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PageMasterPropHdl.hxx"
@@ -39,7 +39,7 @@ using namespace ::xmloff::token;
 
 #define DEFAULT_PAPERTRAY   (sal_Int32(-1))
 
-// property handler for style:page-usage (style::PageStyleLayout)
+
 
 XMLPMPropHdl_PageStyleLayout::~XMLPMPropHdl_PageStyleLayout()
 {
@@ -105,7 +105,7 @@ bool XMLPMPropHdl_PageStyleLayout::exportXML(
     return bRet;
 }
 
-// property handler for style:num-format (style::NumberingType)
+
 
 XMLPMPropHdl_NumFormat::~XMLPMPropHdl_NumFormat()
 {
@@ -123,9 +123,9 @@ bool XMLPMPropHdl_NumFormat::importXML(
     if( !(rValue >>= nSync) )
         nSync = NumberingType::NUMBER_NONE;
 
-    // if num-letter-sync appears before num-format, the function
-    // XMLPMPropHdl_NumLetterSync::importXML() sets the value
-    // NumberingType::CHARS_LOWER_LETTER_N
+    
+    
+    
     if( nSync == NumberingType::CHARS_LOWER_LETTER_N )
     {
         switch( nNumType )
@@ -161,7 +161,7 @@ bool XMLPMPropHdl_NumFormat::exportXML(
     return bRet;
 }
 
-// property handler for style:num-letter-sync (style::NumberingType)
+
 
 XMLPMPropHdl_NumLetterSync::~XMLPMPropHdl_NumLetterSync()
 {
@@ -215,7 +215,7 @@ bool XMLPMPropHdl_NumLetterSync::exportXML(
     return bRet;
 }
 
-// property handler for style:paper-tray-number
+
 
 XMLPMPropHdl_PaperTrayNumber::~XMLPMPropHdl_PaperTrayNumber()
 {
@@ -269,7 +269,7 @@ bool XMLPMPropHdl_PaperTrayNumber::exportXML(
     return bRet;
 }
 
-// property handler for style:print
+
 
 XMLPMPropHdl_Print::XMLPMPropHdl_Print( enum XMLTokenEnum eValue ) :
     sAttrValue( GetXMLToken( eValue ) )
@@ -314,7 +314,7 @@ bool XMLPMPropHdl_Print::exportXML(
     return true;
 }
 
-// property handler for style:table-centering
+
 
 XMLPMPropHdl_CenterHorizontal::~XMLPMPropHdl_CenterHorizontal()
 {

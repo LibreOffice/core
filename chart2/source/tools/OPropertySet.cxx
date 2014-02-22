@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "OPropertySet.hxx"
@@ -35,7 +35,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
-// needed for MS compiler
+
 using ::cppu::OBroadcastHelper;
 using ::cppu::OPropertySetHelper;
 using ::cppu::OWeakObject;
@@ -45,7 +45,7 @@ namespace property
 
 OPropertySet::OPropertySet( ::osl::Mutex & par_rMutex ) :
         OBroadcastHelper( par_rMutex ),
-        // the following causes a warning; there seems to be no way to avoid it
+        
         OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
         m_rMutex( par_rMutex ),
         m_pImplProperties( new impl::ImplOPropertySet() ),
@@ -55,7 +55,7 @@ OPropertySet::OPropertySet( ::osl::Mutex & par_rMutex ) :
 
 OPropertySet::OPropertySet( const OPropertySet & rOther, ::osl::Mutex & par_rMutex ) :
         OBroadcastHelper( par_rMutex ),
-        // the following causes a warning; there seems to be no way to avoid it
+        
         OPropertySetHelper( static_cast< OBroadcastHelper & >( *this )),
         m_rMutex( par_rMutex ),
         m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault(false)
@@ -94,7 +94,7 @@ Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
 
 #define LCL_PROP_CPPUTYPE(t) (::getCppuType( reinterpret_cast< const Reference<t> *>(0)))
 
-// // ____ XTypeProvider ____
+
 Sequence< uno::Type > SAL_CALL
     OPropertySet::getTypes()
     throw (uno::RuntimeException)
@@ -133,7 +133,7 @@ Sequence< sal_Int8 > SAL_CALL
     return theOPropertySetImplementationId::get().getSeq();
 }
 
-// ____ XPropertyState ____
+
 beans::PropertyState SAL_CALL
     OPropertySet::getPropertyState( const OUString& PropertyName )
     throw (beans::UnknownPropertyException,
@@ -183,10 +183,10 @@ Any SAL_CALL
     return GetDefaultValue( rPH.getHandleByName( aPropertyName ) );
 }
 
-// ____ XMultiPropertyStates ____
 
-// Note: getPropertyStates() is already implemented in XPropertyState with the
-// same signature
+
+
+
 
 void SAL_CALL
     OPropertySet::setAllPropertiesToDefault()
@@ -242,7 +242,7 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
     throw (lang::IllegalArgumentException)
 {
     getFastPropertyValue( rOldValue, nHandle );
-    //accept longs also for short values
+    
     {
         sal_Int16 nValue;
         if( (rOldValue>>=nValue) && !(rValue>>=nValue) )
@@ -264,7 +264,7 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
     }
     rConvertedValue = rValue;
     if( !m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault && rOldValue == rConvertedValue )
-        return sal_False;//no change necessary
+        return sal_False;
     return sal_True;
 }
 
@@ -294,7 +294,7 @@ void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
         aDefault.clear();
     }
     m_pImplProperties->SetPropertyValueByHandle( nHandle, rValue );
-    if( !m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault && aDefault.hasValue() && aDefault == rValue ) //#i98893# don't export defaults to file
+    if( !m_bSetNewValuesExplicitlyEvenIfTheyEqualDefault && aDefault.hasValue() && aDefault == rValue ) 
         m_pImplProperties->SetPropertyToDefault( nHandle );
     else
         m_pImplProperties->SetPropertyValueByHandle( nHandle, rValue );
@@ -306,14 +306,14 @@ void SAL_CALL OPropertySet::getFastPropertyValue
 {
     if( ! m_pImplProperties->GetPropertyValueByHandle( rValue, nHandle ))
     {
-        // property was not set -> try style
+        
         uno::Reference< beans::XFastPropertySet > xStylePropSet( m_pImplProperties->GetStyle(), uno::UNO_QUERY );
         if( xStylePropSet.is() )
         {
 #ifdef DBG_UTIL
             {
-                // check if the handle of the style points to the same property
-                // name as the handle in this property set
+                
+                
                 uno::Reference< beans::XPropertySet > xPropSet( xStylePropSet, uno::UNO_QUERY );
                 if( xPropSet.is())
                 {
@@ -321,21 +321,21 @@ void SAL_CALL OPropertySet::getFastPropertyValue
                                                                      uno::UNO_QUERY );
                     if( xInfo.is() )
                     {
-                        // for some reason the virtual method getInfoHelper() is
-                        // not const
+                        
+                        
                         ::cppu::IPropertyArrayHelper & rPH =
                               const_cast< OPropertySet * >( this )->getInfoHelper();
 
-                        // find the Property with Handle nHandle in Style
+                        
                         Sequence< beans::Property > aProps( xInfo->getProperties() );
                         sal_Int32 nI = aProps.getLength() - 1;
                         while( ( nI >= 0 ) && nHandle != aProps[ nI ].Handle )
                             --nI;
 
-                        if( nI >= 0 ) // => nHandle == aProps[nI].Handle
+                        if( nI >= 0 ) 
                         {
-                            // check whether the handle in this property set is
-                            // the same as the one in the style
+                            
+                            
                             beans::Property aProp( rPH.getPropertyByName( aProps[ nI ].Name ) );
                             OSL_ENSURE( nHandle == aProp.Handle,
                                         "HandleCheck: Handles for same property differ!" );
@@ -364,8 +364,8 @@ void SAL_CALL OPropertySet::getFastPropertyValue
         }
         else
         {
-            // there is no style (or the style does not support XFastPropertySet)
-            // => take the default value
+            
+            
             try
             {
                 rValue = GetDefaultValue( nHandle );
@@ -380,10 +380,10 @@ void SAL_CALL OPropertySet::getFastPropertyValue
 
 void OPropertySet::firePropertyChangeEvent()
 {
-    // nothing in base class
+    
 }
 
-// ____ XStyleSupplier ____
+
 Reference< style::XStyle > SAL_CALL OPropertySet::getStyle()
     throw (uno::RuntimeException)
 {
@@ -401,7 +401,7 @@ void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
             0 );
 }
 
-// ____ XMultiPropertySet ____
+
 void SAL_CALL OPropertySet::setPropertyValues(
     const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values )
     throw(beans::PropertyVetoException,
@@ -414,7 +414,7 @@ void SAL_CALL OPropertySet::setPropertyValues(
     firePropertyChangeEvent();
 }
 
-// ____ XFastPropertySet ____
+
 void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
     throw(beans::UnknownPropertyException,
           beans::PropertyVetoException,
@@ -426,6 +426,6 @@ void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& 
     firePropertyChangeEvent();
 }
 
-} //  namespace property
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

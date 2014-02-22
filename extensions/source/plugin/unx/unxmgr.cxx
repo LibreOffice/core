@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -49,7 +49,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::plugin;
 
 
-// Unix specific implementation
+
 static bool CheckPlugin( const OString& rPath, list< PluginDescription* >& rDescriptions )
 {
 #if OSL_DEBUG_LEVEL > 1
@@ -128,11 +128,11 @@ static bool CheckPlugin( const OString& rPath, list< PluginDescription* >& rDesc
                 sal_Int32 nTypeIndex = 0;
                 OString aMimetype   = aType.getToken( 0, ':', nTypeIndex );
                 OString aExtLine    = aType.getToken( 0, ':', nTypeIndex );
-                if( nTypeIndex < 0 ) // ensure at least three tokens
+                if( nTypeIndex < 0 ) 
                     continue;
                 OString aDesc       = aType.getToken( 0, ':', nTypeIndex );
 
-                // create extension list string
+                
                 sal_Int32 nExtIndex = 0;
                 OStringBuffer aExtension;
                 while( nExtIndex != -1 )
@@ -146,13 +146,13 @@ static bool CheckPlugin( const OString& rPath, list< PluginDescription* >& rDesc
                 }
 
                 PluginDescription* pNew = new PluginDescription;
-                // set plugin name (path to library)
+                
                 pNew->PluginName    = OStringToOUString( rPath, aEncoding );
-                // set mimetype
+                
                 pNew->Mimetype  = OStringToOUString( aMimetype, aEncoding );
-                // set extension line
+                
                 pNew->Extension = OStringToOUString( aExtension.makeStringAndClear(), aEncoding );
-                // set description
+                
                 pNew->Description= OStringToOUString( aDesc, aEncoding );
                 rDescriptions.push_back( pNew );
 #if OSL_DEBUG_LEVEL > 1
@@ -208,7 +208,7 @@ static void CheckPluginRegistryFiles( const OString& rPath, list< PluginDescript
         fclose( fp );
     }
 
-    // check subdirectories
+    
     DIR* pDIR = opendir( rPath.getStr() );
     struct dirent* pDirEnt = NULL;
     struct stat aStat;
@@ -244,13 +244,13 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         list<PluginDescription*> aPlugins;
         int i;
 
-        // unix: search for plugins in /usr/lib/netscape/plugins,
-        //       ~/.netscape/plugins und NPX_PLUGIN_PATH
-        // additionally: search in PluginsPath
+        
+        
+        
         static const char* pHome = getenv( "HOME" );
         static const char* pNPXPluginPath = getenv( "NPX_PLUGIN_PATH" );
 
-        // netscape!, quick, beam me back to the 90's when Motif roamed the earth
+        
         OStringBuffer aSearchBuffer("/usr/lib/netscape/plugins");
         if( pHome )
             aSearchBuffer.append(':').append(pHome).append("/.netscape/plugins");
@@ -293,13 +293,13 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         }
         while ( nIndex >= 0 );
 
-        // try ~/.mozilla/pluginreg.dat
+        
         OStringBuffer aBuf(256);
         aBuf.append( pHome );
         aBuf.append( "/.mozilla" );
         CheckPluginRegistryFiles( aBuf.makeStringAndClear(), aPlugins );
 
-        // create return value
+        
         aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "found %" SAL_PRI_SIZET "u plugins\n", aPlugins.size() );

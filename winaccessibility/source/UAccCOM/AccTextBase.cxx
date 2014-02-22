@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//////////////////////////////////////////////////////////////////////
-// AccTextBase.cpp: implementation of the CAccTextBase class.
-//////////////////////////////////////////////////////////////////////
+
+
+
 #include "stdafx.h"
 #include <string>
 
@@ -38,9 +38,9 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star::uno;
 using namespace rtl;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+
+
+
 
 static OUString ReplaceFourChar(OUString oldOUString);
 
@@ -64,7 +64,7 @@ STDMETHODIMP CAccTextBase::get_addSelection(long startOffset, long endOffset)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK XInterface#
+    
     if(pUNOInterface == NULL)
         return E_FAIL;
 
@@ -102,7 +102,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
 
     if (startOffset == NULL || endOffset == NULL || textAttributes == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
     {
         return E_FAIL;
@@ -160,7 +160,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
             bHaveNumberingRules = 0;
         }
         if( (bHaveNumberingPrefixAttr && i > 1 ) ||
-            (!bHaveNumberingPrefixAttr && i > 0 ) ) //element 0 is NumberingPrefix, not write alone
+            (!bHaveNumberingPrefixAttr && i > 0 ) ) 
         {
             strAttrs+=L";";
         }
@@ -189,7 +189,7 @@ STDMETHODIMP CAccTextBase::get_attributes(long offset, long * startOffset, long 
         strAttrs +=pTemp;
     }
     strAttrs +=L";";
-    // #CHECK#
+    
     if(*textAttributes)
         SysFreeString(*textAttributes);
     *textAttributes = SysAllocString(strAttrs.c_str());
@@ -224,7 +224,7 @@ STDMETHODIMP CAccTextBase::get_caretOffset(long * offset)
 
     if (offset == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
     {
         *offset = 0;
@@ -250,7 +250,7 @@ STDMETHODIMP CAccTextBase::get_characterCount(long * nCharacters)
 
     if (nCharacters == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
     {
         *nCharacters = 0;
@@ -280,7 +280,7 @@ STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType c
 
     if (x == NULL || height == NULL || y == NULL || width == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
         return E_FAIL;
 
@@ -290,7 +290,7 @@ STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType c
     com::sun::star::awt::Rectangle rectangle;
     rectangle = GetXInterface()->getCharacterBounds(offset);
 
-    //IA2Point aPoint;
+    
     com::sun::star::awt::Point aPoint;
 
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();
@@ -320,9 +320,9 @@ STDMETHODIMP CAccTextBase::get_characterExtents(long offset, IA2CoordinateType c
     *x = rectangle.X;
     *y = rectangle.Y;
 
-    // GetXInterface()->getCharacterBounds() have different implement in different acc component
-    // But we need return the width/height == 1 for every component when offset == text length.
-    // So we ignore the return result of GetXInterface()->getCharacterBounds() when offset == text length.
+    
+    
+    
     if( offset == GetXInterface()->getCharacterCount() )
     {
         *width = 1;
@@ -352,7 +352,7 @@ STDMETHODIMP CAccTextBase::get_nSelections(long * nSelections)
 
     if (nSelections == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(pUNOInterface == NULL)
     {
         *nSelections = 0;
@@ -398,7 +398,7 @@ STDMETHODIMP CAccTextBase::get_offsetAtPoint(long x, long y, IA2CoordinateType, 
 
     if (offset == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
         return E_FAIL;
 
@@ -427,7 +427,7 @@ STDMETHODIMP CAccTextBase::get_selection(long selectionIndex, long * startOffset
 
     if (startOffset == NULL || endOffset == NULL )
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(pUNOInterface == NULL )
         return E_FAIL;
 
@@ -476,7 +476,7 @@ STDMETHODIMP CAccTextBase::get_text(long startOffset, long endOffset, BSTR * tex
 
     if (text == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
         return E_FAIL;
 
@@ -521,33 +521,33 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if (startOffset == NULL || endOffset == NULL || text == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
         return E_FAIL;
 
-    // In New UNO IAccessibleText.idl these constant values are defined as follows:
+    
     //
-    //  const long TEXT_BOUNDARY_CHAR = -1;
-    //  const long TEXT_BOUNDARY_TO_CURSOR_POS = -2;
-    //  const long TEXT_BOUNDARY_START_OF_WORD = -3;
-    //  const long TEXT_BOUNDARY_END_OF_WORD = -4;
-    //  const long TEXT_BOUNDARY_START_OF_SENTENCE = -5;
-    //  const long TEXT_BOUNDARY_END_OF_SENTENCE = -6;
-    //  const long TEXT_BOUNDARY_START_OF_LINE = -7;
-    //  const long TEXT_BOUNDARY_END_OF_LINE = -8;
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    // In UNO, the corresponding values are as follows:
+    
     //
-    //  const short CHARACTER = 1;
-    //  const short WORD = 2;
-    //  const short SENTENCE = 3;
-    //  const short PARAGRAPH = 4;
-    //  const short LINE = 5;
-    //  const short GLYPH = 6;
-    //  const short ATTRIBUTE_RUN = 7;
+    
+    
+    
+    
+    
+    
+    
     //
 
     long            lUnoBoundaryType;
@@ -555,16 +555,16 @@ STDMETHODIMP CAccTextBase::get_textBeforeOffset(long offset, IA2TextBoundaryType
     switch(boundaryType)
     {
     case IA2_TEXT_BOUNDARY_CHAR:
-        lUnoBoundaryType = 1; // CHARACTER;
+        lUnoBoundaryType = 1; 
         break;
     case IA2_TEXT_BOUNDARY_WORD:
-        lUnoBoundaryType = 2; // WORD;
+        lUnoBoundaryType = 2; 
         break;
     case IA2_TEXT_BOUNDARY_SENTENCE:
-        lUnoBoundaryType = 3; // SENTENCE;
+        lUnoBoundaryType = 3; 
         break;
     case IA2_TEXT_BOUNDARY_LINE:
-        lUnoBoundaryType = 5; // LINE;
+        lUnoBoundaryType = 5; 
         break;
     case IA2_TEXT_BOUNDARY_PARAGRAPH:
         lUnoBoundaryType = 4;
@@ -611,46 +611,46 @@ STDMETHODIMP CAccTextBase::get_textAfterOffset(long offset, IA2TextBoundaryType 
 
     if (startOffset == NULL || endOffset == NULL || text == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
         return E_FAIL;
 
-    // In New UNO IAccessibleText.idl these constant values are defined as follows:
+    
     //
-    //  const long TEXT_BOUNDARY_CHAR = -1;
-    //  const long TEXT_BOUNDARY_TO_CURSOR_POS = -2;
-    //  const long TEXT_BOUNDARY_START_OF_WORD = -3;
-    //  const long TEXT_BOUNDARY_END_OF_WORD = -4;
-    //  const long TEXT_BOUNDARY_START_OF_SENTENCE = -5;
-    //  const long TEXT_BOUNDARY_END_OF_SENTENCE = -6;
-    //  const long TEXT_BOUNDARY_START_OF_LINE = -7;
-    //  const long TEXT_BOUNDARY_END_OF_LINE = -8;
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    // In UNO, the corresponding values are as follows:
+    
     //
-    //  const short CHARACTER = 1;
-    //  const short WORD = 2;
-    //  const short SENTENCE = 3;
-    //  const short PARAGRAPH = 4;
-    //  const short LINE = 5;
-    //  const short GLYPH = 6;
-    //  const short ATTRIBUTE_RUN = 7;
+    
+    
+    
+    
+    
+    
+    
     //
 
     long            lUnoBoundaryType;
     switch(boundaryType)
     {
     case IA2_TEXT_BOUNDARY_CHAR:
-        lUnoBoundaryType = 1; // CHARACTER;
+        lUnoBoundaryType = 1; 
         break;
     case IA2_TEXT_BOUNDARY_WORD:
-        lUnoBoundaryType = 2; // WORD;
+        lUnoBoundaryType = 2; 
         break;
     case IA2_TEXT_BOUNDARY_SENTENCE:
-        lUnoBoundaryType = 3; // SENTENCE;
+        lUnoBoundaryType = 3; 
         break;
     case IA2_TEXT_BOUNDARY_LINE:
-        lUnoBoundaryType = 5; // LINE;
+        lUnoBoundaryType = 5; 
         break;
     case IA2_TEXT_BOUNDARY_PARAGRAPH:
         lUnoBoundaryType = 4;
@@ -697,30 +697,30 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
 
     if (startOffset == NULL || text == NULL ||endOffset == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
         return E_FAIL;
 
-    // In New UNO IAccessibleText.idl these constant values are defined as follows:
+    
     //
-    //  const long TEXT_BOUNDARY_CHAR = -1;
-    //  const long TEXT_BOUNDARY_TO_CURSOR_POS = -2;
-    //  const long TEXT_BOUNDARY_START_OF_WORD = -3;
-    //  const long TEXT_BOUNDARY_END_OF_WORD = -4;
-    //  const long TEXT_BOUNDARY_START_OF_SENTENCE = -5;
-    //  const long TEXT_BOUNDARY_END_OF_SENTENCE = -6;
-    //  const long TEXT_BOUNDARY_START_OF_LINE = -7;
-    //  const long TEXT_BOUNDARY_END_OF_LINE = -8;
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    // In UNO, the corresponding values are as follows:
+    
     //
-    //  const short CHARACTER = 1;
-    //  const short WORD = 2;
-    //  const short SENTENCE = 3;
-    //  const short PARAGRAPH = 4;
-    //  const short LINE = 5;
-    //  const short GLYPH = 6;
-    //  const short ATTRIBUTE_RUN = 7;
+    
+    
+    
+    
+    
+    
+    
     //
 
     long            lUnoBoundaryType;
@@ -728,16 +728,16 @@ STDMETHODIMP CAccTextBase::get_textAtOffset(long offset, IA2TextBoundaryType bou
     switch(boundaryType)
     {
     case IA2_TEXT_BOUNDARY_CHAR:
-        lUnoBoundaryType = 1; // CHARACTER;
+        lUnoBoundaryType = 1; 
         break;
     case IA2_TEXT_BOUNDARY_WORD:
-        lUnoBoundaryType = 2; // WORD;
+        lUnoBoundaryType = 2; 
         break;
     case IA2_TEXT_BOUNDARY_SENTENCE:
-        lUnoBoundaryType = 3; // SENTENCE;
+        lUnoBoundaryType = 3; 
         break;
     case IA2_TEXT_BOUNDARY_LINE:
-        lUnoBoundaryType = 5; // LINE;
+        lUnoBoundaryType = 5; 
         break;
     case IA2_TEXT_BOUNDARY_PARAGRAPH:
         lUnoBoundaryType = 4;
@@ -779,7 +779,7 @@ STDMETHODIMP CAccTextBase::removeSelection(long selectionIndex)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK XInterface#
+    
     if(pUNOInterface == NULL)
     {
         return E_FAIL;
@@ -815,7 +815,7 @@ STDMETHODIMP CAccTextBase::setCaretOffset(long offset)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
         return E_FAIL;
 
@@ -840,7 +840,7 @@ STDMETHODIMP CAccTextBase::setSelection(long, long startOffset, long endOffset)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
     {
         return E_FAIL;
@@ -866,7 +866,7 @@ STDMETHODIMP CAccTextBase::get_nCharacters(long * nCharacters)
 
     if (nCharacters == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXText.is())
     {
         *nCharacters = 0;
@@ -880,7 +880,7 @@ STDMETHODIMP CAccTextBase::get_nCharacters(long * nCharacters)
     LEAVE_PROTECTED_BLOCK
 }
 
-// added by qiuhd, 2006/07/03, for direver 07/11
+
 STDMETHODIMP CAccTextBase::get_newText( IA2TextSegment *)
 {
     return E_NOTIMPL;
@@ -914,12 +914,12 @@ STDMETHODIMP CAccTextBase::scrollSubstringTo(long, long, IA2ScrollType)
 */
 STDMETHODIMP CAccTextBase::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
 
     CUNOXWrapper::put_XInterface(pXInterface);
-    //special query.
+    
     if(pUNOInterface == NULL)
         return E_FAIL;
     Reference<XAccessibleContext> pRContext = pUNOInterface->getAccessibleContext();

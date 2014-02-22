@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/virdev.hxx>
@@ -33,7 +33,7 @@
 #include <sfx2/sfxresid.hxx>
 #include "view.hrc"
 
-// struct SfxPrinter_Impl ------------------------------------------------
+
 
 struct SfxPrinter_Impl
 {
@@ -58,7 +58,7 @@ struct SfxPrintOptDlg_Impl
         mbHelpDisabled  ( sal_False ) {}
 };
 
-// class SfxPrinter ------------------------------------------------------
+
 
 SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 
@@ -74,16 +74,16 @@ SfxPrinter* SfxPrinter::Create( SvStream& rStream, SfxItemSet* pOptions )
 */
 
 {
-    // Load JobSetup
+    
     JobSetup aFileJobSetup;
     ReadJobSetup( rStream, aFileJobSetup );
 
-    // Get printers
+    
     SfxPrinter *pPrinter = new SfxPrinter( pOptions, aFileJobSetup );
     return pPrinter;
 }
 
-//--------------------------------------------------------------------
+
 
 SvStream& SfxPrinter::Store( SvStream& rStream ) const
 
@@ -96,7 +96,7 @@ SvStream& SfxPrinter::Store( SvStream& rStream ) const
     return WriteJobSetup( rStream, GetJobSetup() );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
 
@@ -112,7 +112,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions ) :
     pImpl = new SfxPrinter_Impl;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const JobSetup& rTheOrigJobSetup ) :
@@ -128,7 +128,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
         SetJobSetup( rTheOrigJobSetup );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
                         const OUString& rPrinterName ) :
@@ -141,7 +141,7 @@ SfxPrinter::SfxPrinter( SfxItemSet* pTheOptions,
     pImpl = new SfxPrinter_Impl;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
 
@@ -160,7 +160,7 @@ SfxPrinter::SfxPrinter( const SfxPrinter& rPrinter ) :
     pImpl->mbRange = rPrinter.pImpl->mbRange;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter* SfxPrinter::Clone() const
 {
@@ -181,7 +181,7 @@ SfxPrinter* SfxPrinter::Clone() const
         return new SfxPrinter( *this );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrinter::~SfxPrinter()
 {
@@ -189,14 +189,14 @@ SfxPrinter::~SfxPrinter()
     delete pImpl;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxPrinter::SetOptions( const SfxItemSet &rNewOptions )
 {
     pOptions->Set(rNewOptions);
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrintOptionsDialog::SfxPrintOptionsDialog(Window *pParent,
                                               SfxViewShell *pViewShell,
@@ -210,7 +210,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(Window *pParent,
 {
     VclContainer *pVBox = get_content_area();
 
-    // Insert TabPage
+    
     pPage = pViewSh->CreatePrintOptionsPage(pVBox, *pOptions);
     DBG_ASSERT( pPage, "CreatePrintOptions != SFX_VIEW_HAS_PRINTOPTIONS" );
     if( pPage )
@@ -221,7 +221,7 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog(Window *pParent,
     }
 }
 
-//--------------------------------------------------------------------
+
 
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
@@ -230,7 +230,7 @@ SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
     delete pOptions;
 }
 
-//--------------------------------------------------------------------
+
 
 short SfxPrintOptionsDialog::Execute()
 {
@@ -245,20 +245,20 @@ short SfxPrintOptionsDialog::Execute()
     return nRet;
 }
 
-//--------------------------------------------------------------------
+
 
 bool SfxPrintOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         if ( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F1 && pDlgImpl->mbHelpDisabled )
-            return true; // help disabled -> <F1> does nothing
+            return true; 
     }
 
     return ModalDialog::Notify( rNEvt );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxPrintOptionsDialog::DisableHelp()
 {

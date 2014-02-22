@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,14 +46,14 @@ static const unsigned long k32BitRedColorMask   = 0x00ff0000;
 static const unsigned long k32BitGreenColorMask = 0x0000ff00;
 static const unsigned long k32BitBlueColorMask  = 0x000000ff;
 
-// =======================================================================
+
 
 static bool isValidBitCount( sal_uInt16 nBitCount )
 {
     return (nBitCount == 1) || (nBitCount == 4) || (nBitCount == 8) || (nBitCount == 16) || (nBitCount == 24) || (nBitCount == 32);
 }
 
-// =======================================================================
+
 
 QuartzSalBitmap::QuartzSalBitmap()
 : mxGraphicContext( NULL )
@@ -66,21 +66,21 @@ QuartzSalBitmap::QuartzSalBitmap()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 QuartzSalBitmap::~QuartzSalBitmap()
 {
     Destroy();
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     int nX, int nY, int nWidth, int nHeight )
 {
     DBG_ASSERT( xLayer, "QuartzSalBitmap::Create() from non-layered context" );
 
-    // sanitize input parameters
+    
     if( nX < 0 )
         nWidth += nX, nX = 0;
     if( nY < 0 )
@@ -93,29 +93,29 @@ bool QuartzSalBitmap::Create( CGLayerRef xLayer, int nBitmapBits,
     if( (nWidth < 0) || (nHeight < 0) )
         nWidth = nHeight = 0;
 
-    // initialize properties
+    
     mnWidth  = nWidth;
     mnHeight = nHeight;
     mnBits   = nBitmapBits ? nBitmapBits : 32;
 
-    // initialize drawing context
+    
     CreateContext();
 
-    // copy layer content into the bitmap buffer
+    
     const CGPoint aSrcPoint = { static_cast<CGFloat>(-nX), static_cast<CGFloat>(-nY) };
-    if(mxGraphicContext) // remove warning
+    if(mxGraphicContext) 
         CGContextDrawLayerAtPoint( mxGraphicContext, aSrcPoint, xLayer );
     return true;
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( CGImageRef xImage, int nBitmapBits,
                              int nX, int nY, int nWidth, int nHeight )
 {
     DBG_ASSERT( xImage, "QuartzSalBitmap::Create() from null image" );
 
-    // sanitize input parameters
+    
     if( nX < 0 )
         nWidth += nX, nX = 0;
     if( nY < 0 )
@@ -128,18 +128,18 @@ bool QuartzSalBitmap::Create( CGImageRef xImage, int nBitmapBits,
     if( (nWidth < 0) || (nHeight < 0) )
         nWidth = nHeight = 0;
 
-    // initialize properties
+    
     mnWidth  = nWidth;
     mnHeight = nHeight;
     mnBits   = nBitmapBits ? nBitmapBits : 32;
 
-    // initialize drawing context
+    
     CreateContext();
 
-    // copy layer content into the bitmap buffer
-    if(mxGraphicContext) // remove warning
+    
+    if(mxGraphicContext) 
     {
-        // Flip the image right side up & draw
+        
         CGContextSaveGState(mxGraphicContext);
 
         CGContextScaleCTM(mxGraphicContext, 1.0, -1.0);
@@ -152,7 +152,7 @@ bool QuartzSalBitmap::Create( CGImageRef xImage, int nBitmapBits,
                                       aLayerSize.height),
                            xImage );
 
-        // Restore the context so that the coordinate system is restored
+        
         CGContextRestoreGState(mxGraphicContext);
 
     }
@@ -163,7 +163,7 @@ bool QuartzSalBitmap::Create( CGImageRef xImage, int nBitmapBits,
 
 bool QuartzSalBitmap::Create( BitmapBuffer& buffer)
 {
-    // initialize properties
+    
     mnWidth  = buffer.mnWidth;
     mnHeight = buffer.mnHeight;
     mnBits   = buffer.mnBitCount;
@@ -171,13 +171,13 @@ bool QuartzSalBitmap::Create( BitmapBuffer& buffer)
     maExternalData = buffer.mpBits;
     maPalette = buffer.maPalette;
 
-    // initialize drawing context
+    
     CreateContext();
 
     return true;
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapPalette& rBitmapPalette )
 {
@@ -190,21 +190,21 @@ bool QuartzSalBitmap::Create( const Size& rSize, sal_uInt16 nBits, const BitmapP
     return AllocateUserData();
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp )
 {
     return Create( rSalBmp, rSalBmp.GetBitCount() );
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, SalGraphics* pGraphics )
 {
     return Create( rSalBmp, pGraphics ? pGraphics->GetBitCount() : rSalBmp.GetBitCount() );
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount )
 {
@@ -226,14 +226,14 @@ bool QuartzSalBitmap::Create( const SalBitmap& rSalBmp, sal_uInt16 nNewBitCount 
     return false;
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
 {
     return false;
 }
 
-// ------------------------------------------------------------------
+
 
 void QuartzSalBitmap::Destroy()
 {
@@ -242,7 +242,7 @@ void QuartzSalBitmap::Destroy()
     maExternalData = NULL;
 }
 
-// ------------------------------------------------------------------
+
 
 void QuartzSalBitmap::DestroyContext()
 {
@@ -257,19 +257,19 @@ void QuartzSalBitmap::DestroyContext()
     }
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::CreateContext()
 {
     DestroyContext();
 
-    // prepare graphics context
-    // convert image from user input if available
+    
+    
     const bool bSkipConversion = !maUserBuffer && !maExternalData;
     if( bSkipConversion )
         AllocateUserData();
 
-    // default to RGBA color space
+    
 #ifdef IOS
     CGColorSpaceRef aCGColorSpace = CGColorSpaceCreateDeviceRGB();
 #else
@@ -277,14 +277,14 @@ bool QuartzSalBitmap::CreateContext()
 #endif
     CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
 
-    // convert data into something accepted by CGBitmapContextCreate()
+    
     size_t bitsPerComponent = (mnBits == 16) ? 5 : 8;
     sal_uInt32 nContextBytesPerRow = mnBytesPerRow;
     if( (mnBits == 16) || (mnBits == 32) )
     {
         if (!maExternalData)
         {
-            // no conversion needed for truecolor
+            
             maContextBuffer = maUserBuffer;
         }
     }
@@ -294,7 +294,7 @@ bool QuartzSalBitmap::CreateContext()
 #endif
             )
     {
-        // no conversion needed for grayscale
+        
         if (!maExternalData)
         {
             maContextBuffer = maUserBuffer;
@@ -307,10 +307,10 @@ bool QuartzSalBitmap::CreateContext()
         aCGBmpInfo = kCGImageAlphaNone;
         bitsPerComponent = mnBits;
     }
-    // TODO: is special handling for 1bit input buffers worth it?
+    
     else
     {
-        // convert user data to 32 bit
+        
         nContextBytesPerRow = mnWidth << 2;
         try
         {
@@ -344,7 +344,7 @@ bool QuartzSalBitmap::CreateContext()
     return mxGraphicContext != NULL;
 }
 
-// ------------------------------------------------------------------
+
 
 bool QuartzSalBitmap::AllocateUserData()
 {
@@ -382,7 +382,7 @@ bool QuartzSalBitmap::AllocateUserData()
     return maUserBuffer.get() != 0;
 }
 
-// ------------------------------------------------------------------
+
 
 class ImplPixelFormat
 {
@@ -399,7 +399,7 @@ public:
 };
 
 class ImplPixelFormat32 : public ImplPixelFormat
-// currently ARGB-format for 32bit depth
+
 {
 public:
     virtual void SkipPixel( sal_uInt32 nPixel )
@@ -422,7 +422,7 @@ public:
 };
 
 class ImplPixelFormat24 : public ImplPixelFormat
-// currently BGR-format for 24bit depth
+
 {
 public:
     virtual void SkipPixel( sal_uInt32 nPixel )
@@ -444,7 +444,7 @@ public:
 };
 
 class ImplPixelFormat16 : public ImplPixelFormat
-// currently R5G6B5-format for 16bit depth
+
 {
 protected:
     sal_uInt16* pData16;
@@ -597,17 +597,17 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
 {
     if( (nDestBytesPerRow == nSrcBytesPerRow) && (nDestBits == nSrcBits) && ((nSrcBits != 8) || (rDestPalette.operator==( rSrcPalette ))) )
     {
-        // simple case, same format, so just copy
+        
         memcpy( pDestData, pSrcData, nHeight * nDestBytesPerRow );
         return;
     }
 
-    // try accelerated conversion if possible
-    // TODO: are other truecolor conversions except BGR->ARGB worth it?
+    
+    
     bool bConverted = false;
     if( (nSrcBits == 24) && (nDestBits == 32) )
     {
-        // TODO: extend bmpfast.cxx with a method that can be directly used here
+        
         BitmapBuffer aSrcBuf;
         aSrcBuf.mnFormat = BMP_FORMAT_24BIT_TC_BGR;
         aSrcBuf.mpBits = pSrcData;
@@ -632,7 +632,7 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
 
     if( !bConverted )
     {
-        // TODO: this implementation is for clarety, not for speed
+        
 
         ImplPixelFormat* pD = ImplPixelFormat::GetFormat( nDestBits, rDestPalette );
         ImplPixelFormat* pS = ImplPixelFormat::GetFormat( nSrcBits, rSrcPalette );
@@ -658,21 +658,21 @@ void QuartzSalBitmap::ConvertBitmapData( sal_uInt32 nWidth, sal_uInt32 nHeight,
     }
 }
 
-// ------------------------------------------------------------------
+
 
 Size QuartzSalBitmap::GetSize() const
 {
     return Size( mnWidth, mnHeight );
 }
 
-// ------------------------------------------------------------------
+
 
 sal_uInt16 QuartzSalBitmap::GetBitCount() const
 {
     return mnBits;
 }
 
-// ------------------------------------------------------------------
+
 
 static struct pal_entry
 {
@@ -705,8 +705,8 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
     if( bMonochrome )
         return Bitmap::GetGreyPalette( 1U << mnBits );
 
-    // at this point we should provide some kind of default palette
-    // since all other platforms do so, too.
+    
+    
     static bool bDefPalInit = false;
     static BitmapPalette aDefPalette256;
     static BitmapPalette aDefPalette16;
@@ -718,7 +718,7 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
         aDefPalette16.SetEntryCount( 16 );
         aDefPalette2.SetEntryCount( 2 );
 
-        // Standard colors
+        
         unsigned int i;
         for( i = 0; i < 16; i++ )
         {
@@ -731,7 +731,7 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
         aDefPalette2[0] = BitmapColor( 0, 0, 0 );
         aDefPalette2[1] = BitmapColor( 0xff, 0xff, 0xff );
 
-        // own palette (6/6/6)
+        
         const int DITHER_PAL_STEPS = 6;
         const sal_uInt8 DITHER_PAL_DELTA = 51;
         int nB, nG, nR;
@@ -749,7 +749,7 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
         }
     }
 
-    // now fill in appropriate palette
+    
     switch( mnBits )
     {
     case 1: return aDefPalette2;
@@ -765,10 +765,10 @@ const BitmapPalette& GetDefaultPalette( int mnBits, bool bMonochrome )
 BitmapBuffer* QuartzSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
 {
     if( !maUserBuffer.get() )
-//  || maContextBuffer.get() && (maUserBuffer.get() != maContextBuffer.get()) )
+
     {
-        // fprintf(stderr,"ASB::Acq(%dx%d,d=%d)\n",mnWidth,mnHeight,mnBits);
-        // TODO: AllocateUserData();
+        
+        
         return NULL;
     }
 
@@ -794,18 +794,18 @@ BitmapBuffer* QuartzSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
     }
     pBuffer->mnFormat |= BMP_FORMAT_BOTTOM_UP;
 
-    // some BitmapBuffer users depend on a complete palette
+    
     if( (mnBits <= 8) && !maPalette )
         pBuffer->maPalette = GetDefaultPalette( mnBits, true );
 
     return pBuffer;
 }
 
-// ------------------------------------------------------------------
+
 
 void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 {
-    // invalidate graphic context if we have different data
+    
     if( !bReadOnly )
     {
         maPalette = pBuffer->maPalette;
@@ -816,7 +816,7 @@ void QuartzSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
     delete pBuffer;
 }
 
-// ------------------------------------------------------------------
+
 
 CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, int nNewHeight ) const
 {
@@ -830,7 +830,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
     }
 
     CGImageRef xCroppedImage = NULL;
-    // short circuit if there is nothing to crop
+    
     if( !nX && !nY && (mnWidth == nNewWidth) && (mnHeight == nNewHeight) )
     {
           xCroppedImage = mxCachedImage;
@@ -838,7 +838,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
     }
     else
     {
-        nY = mnHeight - (nY + nNewHeight); // adjust for y-mirrored context
+        nY = mnHeight - (nY + nNewHeight); 
         const CGRect aCropRect = { { static_cast<CGFloat>(nX), static_cast<CGFloat>(nY) }, { static_cast<CGFloat>(nNewWidth), static_cast<CGFloat>(nNewHeight) } };
         xCroppedImage = CGImageCreateWithImageInRect( mxCachedImage, aCropRect );
     }
@@ -846,7 +846,7 @@ CGImageRef QuartzSalBitmap::CreateCroppedImage( int nX, int nY, int nNewWidth, i
     return xCroppedImage;
 }
 
-// ------------------------------------------------------------------
+
 
 static void CFRTLFree(void* /*info*/, const void* data, size_t /*size*/)
 {
@@ -864,14 +864,14 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
     if( !xMask )
         return xImage;
 
-    // CGImageCreateWithMask() only likes masks or greyscale images => convert if needed
-    // TODO: isolate in an extra method?
-    if( !CGImageIsMask(xMask) || rMask.GetBitCount() != 8)//(CGImageGetColorSpace(xMask) != GetSalData()->mxGraySpace) )
+    
+    
+    if( !CGImageIsMask(xMask) || rMask.GetBitCount() != 8)
     {
-        const CGRect xImageRect=CGRectMake( 0, 0, nWidth, nHeight );//the rect has no offset
+        const CGRect xImageRect=CGRectMake( 0, 0, nWidth, nHeight );
 
-        // create the alpha mask image fitting our image
-        // TODO: is caching the full mask or the subimage mask worth it?
+        
+        
         int nMaskBytesPerRow = ((nWidth + 3) & ~3);
         void* pMaskMem = rtl_allocateMemory( nMaskBytesPerRow * nHeight );
         CGContextRef xMaskContext = CGBitmapContextCreate( pMaskMem,
@@ -889,14 +889,14 @@ CGImageRef QuartzSalBitmap::CreateWithMask( const QuartzSalBitmap& rMask,
     if( !xMask )
         return xImage;
 
-    // combine image and alpha mask
+    
     CGImageRef xMaskedImage = CGImageCreateWithMask( xImage, xMask );
     CFRelease( xMask );
     CFRelease( xImage );
     return xMaskedImage;
 }
 
-// ------------------------------------------------------------------
+
 
 /** creates an image from the given rectangle, replacing all black pixels with nMaskColor and make all other full transparent */
 CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHeight, SalColor nMaskColor ) const
@@ -949,7 +949,7 @@ CGImageRef QuartzSalBitmap::CreateColorMask( int nX, int nY, int nWidth, int nHe
     return xMask;
 }
 
-// =======================================================================
+
 
 /** QuartzSalBitmap::GetSystemData Get platform native image data from existing image
  *
@@ -976,7 +976,7 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
 
             CGImageRef xImage = CGBitmapContextCreateImage (mxGraphicContext);
 
-            // re-create the context with single change: include kCGBitmapByteOrder32Host flag.
+            
             CGContextRef mxGraphicContextNew = CGBitmapContextCreate( CGBitmapContextGetData(mxGraphicContext),
                                                                       CGBitmapContextGetWidth(mxGraphicContext),
                                                                       CGBitmapContextGetHeight(mxGraphicContext),
@@ -986,14 +986,14 @@ bool QuartzSalBitmap::GetSystemData( BitmapSystemData& rData )
                                                                       CGBitmapContextGetBitmapInfo(mxGraphicContext) | kCGBitmapByteOrder32Host);
             CFRelease(mxGraphicContext);
 
-            // Needs to be flipped
+            
             CGContextSaveGState( mxGraphicContextNew );
             CGContextTranslateCTM (mxGraphicContextNew, 0, CGBitmapContextGetHeight(mxGraphicContextNew));
             CGContextScaleCTM (mxGraphicContextNew, 1.0, -1.0);
 
             CGContextDrawImage(mxGraphicContextNew, CGRectMake( 0, 0, CGImageGetWidth(xImage), CGImageGetHeight(xImage)), xImage);
 
-            // Flip back
+            
             CGContextRestoreGState( mxGraphicContextNew );
 
             CGImageRelease( xImage );

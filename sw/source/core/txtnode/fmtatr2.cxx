@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -100,7 +100,7 @@ SfxPoolItem* SwFmtCharFmt::Clone( SfxItemPool* ) const
 
 
 
-// weiterleiten an das TextAttribut
+
 void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( pTxtAttr )
@@ -109,7 +109,7 @@ void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 
 
 
-// weiterleiten an das TextAttribut
+
 bool SwFmtCharFmt::GetInfo( SfxPoolItem& rInfo ) const
 {
     return pTxtAttr ? pTxtAttr->GetInfo( rInfo ) : false;
@@ -168,7 +168,7 @@ bool SwFmtAutoFmt::QueryValue( uno::Any& rVal, sal_uInt8 ) const
 
 bool SwFmtAutoFmt::PutValue( const uno::Any& , sal_uInt8 )
 {
-    //the format is not renameable via API
+    
     return false;
 }
 
@@ -339,13 +339,13 @@ bool SwFmtINetFmt::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         break;
         case MID_URL_HYPERLINKEVENTS:
         {
-            // create (and return) event descriptor
+            
             SwHyperlinkEventDescriptor* pEvents =
                 new SwHyperlinkEventDescriptor();
             pEvents->copyMacrosFromINetFmt(*this);
             uno::Reference<container::XNameReplace> xNameReplace(pEvents);
 
-            // all others return a string; so we just set rVal here and exit
+            
             rVal <<= xNameReplace;
         }
         break;
@@ -360,17 +360,17 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
     bool bRet = true;
     nMemberId &= ~CONVERT_TWIPS;
 
-    // all properties except HyperlinkEvents are of type string, hence
-    // we treat HyperlinkEvents specially
+    
+    
     if (MID_URL_HYPERLINKEVENTS == nMemberId)
     {
         uno::Reference<container::XNameReplace> xReplace;
         rVal >>= xReplace;
         if (xReplace.is())
         {
-            // Create hyperlink event descriptor. Then copy events
-            // from argument into descriptor. Then copy events from
-            // the descriptor into the format.
+            
+            
+            
             SwHyperlinkEventDescriptor* pEvents = new SwHyperlinkEventDescriptor();
             uno::Reference< lang::XServiceInfo> xHold = pEvents;
             pEvents->copyMacrosFromNameReplace(xReplace);
@@ -378,13 +378,13 @@ bool SwFmtINetFmt::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
         }
         else
         {
-            // wrong type!
+            
             bRet = false;
         }
     }
     else
     {
-        // all string properties:
+        
         if(rVal.getValueType() != ::getCppuType((OUString*)0))
             return false;
 
@@ -586,7 +586,7 @@ SwFmtMeta::SwFmtMeta( ::boost::shared_ptr< ::sw::Meta > const & i_pMeta,
    OSL_ENSURE((RES_TXTATR_META == i_nWhich) || (RES_TXTATR_METAFIELD == i_nWhich),
             "ERROR: SwFmtMeta: invalid which id!");
     OSL_ENSURE(m_pMeta, "SwFmtMeta: no Meta ?");
-    // DO NOT call m_pMeta->SetFmtMeta(this) here; only from SetTxtAttr!
+    
 }
 
 SwFmtMeta::~SwFmtMeta()
@@ -607,8 +607,8 @@ bool SwFmtMeta::operator==( const SfxPoolItem & i_rOther ) const
 
 SfxPoolItem * SwFmtMeta::Clone( SfxItemPool * /*pPool*/ ) const
 {
-    // if this is indeed a copy, then DoCopy must be called later!
-    return (m_pMeta) // #i105148# pool default may be cloned also!
+    
+    return (m_pMeta) 
         ? new SwFmtMeta( m_pMeta, Which() ) : new SwFmtMeta( Which() );
 }
 
@@ -620,7 +620,7 @@ void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)
         "SwFmtMeta::SetTxtAttr: no attribute to remove?");
     m_pTxtAttr = i_pTxtAttr;
     OSL_ENSURE(m_pMeta, "inserted SwFmtMeta has no sw::Meta?");
-    // the sw::Meta must be able to find the current text attribute!
+    
     if (m_pMeta)
     {
         if (i_pTxtAttr)
@@ -628,7 +628,7 @@ void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)
             m_pMeta->SetFmtMeta(this);
         }
         else if (m_pMeta->GetFmtMeta() == this)
-        {   // text attribute gone => de-register from text node!
+        {   
             NotifyChangeTxtNode(0);
             m_pMeta->SetFmtMeta(0);
         }
@@ -637,17 +637,17 @@ void SwFmtMeta::SetTxtAttr(SwTxtMeta * const i_pTxtAttr)
 
 void SwFmtMeta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
 {
-    // N.B.: do not reset m_pTxtAttr here: see call in nodes.cxx,
-    // where the hint is not deleted!
+    
+    
     OSL_ENSURE(m_pMeta, "SwFmtMeta::NotifyChangeTxtNode: no Meta?");
     if (m_pMeta && (m_pMeta->GetFmtMeta() == this))
-    {   // do not call Modify, that would call SwXMeta::Modify!
+    {   
         m_pMeta->NotifyChangeTxtNode(pTxtNode);
     }
 }
 
-// this SwFmtMeta has been cloned and points at the same sw::Meta as the source
-// this method copies the sw::Meta
+
+
 void SwFmtMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
         SwTxtNode & i_rTargetTxtNode)
 {
@@ -666,9 +666,9 @@ void SwFmtMeta::DoCopy(::sw::MetaFieldManager & i_rTargetDocManager,
             m_pMeta = i_rTargetDocManager.makeMetaField( this,
                 pMetaField->m_nNumberFormat, pMetaField->IsFixedLanguage() );
         }
-        // Meta must have a text node before calling RegisterAsCopyOf
+        
         m_pMeta->NotifyChangeTxtNode(& i_rTargetTxtNode);
-        // this cannot be done in Clone: a Clone is not necessarily a copy!
+        
         m_pMeta->RegisterAsCopyOf(*pOriginal);
     }
 }
@@ -717,30 +717,30 @@ void Meta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
 {
     m_pTxtNode = pTxtNode;
     NotifyChangeTxtNodeImpl();
-    if (!pTxtNode) // text node gone? invalidate UNO object!
+    if (!pTxtNode) 
     {
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
-            &static_cast<SwModify&>(*this) ); // cast to base class!
+            &static_cast<SwModify&>(*this) ); 
         this->Modify(&aMsgHint, &aMsgHint);
     }
 }
 
-// SwClient
+
 void Meta::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 {
     NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
-    {   // invalidate cached uno object
+    {   
         SetXMeta(uno::Reference<rdf::XMetadatable>(0));
     }
 }
 
-// sfx2::Metadatable
+
 ::sfx2::IXmlIdRegistry& Meta::GetRegistry()
 {
     SwTxtNode * const pTxtNode( GetTxtNode() );
-    // GetRegistry may only be called on a meta that is actually in the
-    // document, which means it has a pointer to its text node
+    
+    
     OSL_ENSURE(pTxtNode, "ERROR: GetRegistry: no text node?");
     if (!pTxtNode)
         throw uno::RuntimeException();
@@ -750,14 +750,14 @@ void Meta::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 bool Meta::IsInClipboard() const
 {
     const SwTxtNode * const pTxtNode( GetTxtNode() );
-// no text node: in UNDO  OSL_ENSURE(pTxtNode, "IsInClipboard: no text node?");
+
     return (pTxtNode) ? pTxtNode->IsInClipboard() : false;
 }
 
 bool Meta::IsInUndo() const
 {
     const SwTxtNode * const pTxtNode( GetTxtNode() );
-// no text node: in UNDO  OSL_ENSURE(pTxtNode, "IsInUndo: no text node?");
+
     return (pTxtNode) ? pTxtNode->IsInUndo() : true;
 }
 
@@ -811,7 +811,7 @@ void MetaField::GetPrefixAndSuffix(
 
 sal_uInt32 MetaField::GetNumberFormat(OUString const & rContent) const
 {
-    //TODO: this probably lacks treatment for some special cases
+    
     sal_uInt32 nNumberFormat( m_nNumberFormat );
     SwTxtNode * const pTxtNode( GetTxtNode() );
     if (pTxtNode)
@@ -827,8 +827,8 @@ sal_uInt32 MetaField::GetNumberFormat(OUString const & rContent) const
 
 void MetaField::SetNumberFormat(sal_uInt32 nNumberFormat)
 {
-    // effectively, the member is only a default:
-    // GetNumberFormat checks if the text actually conforms
+    
+    
     m_nNumberFormat = nNumberFormat;
 }
 
@@ -871,25 +871,25 @@ struct MakeUnoObject
 ::std::vector< uno::Reference<text::XTextField> >
 MetaFieldManager::getMetaFields()
 {
-    // erase deleted fields
+    
     const MetaFieldList_t::iterator iter(
         ::std::remove_if(m_MetaFields.begin(), m_MetaFields.end(),
             ::boost::bind(&::boost::weak_ptr<MetaField>::expired, _1)));
     m_MetaFields.erase(iter, m_MetaFields.end());
-    // filter out fields in UNDO
+    
     MetaFieldList_t filtered(m_MetaFields.size());
     const MetaFieldList_t::iterator iter2(
     ::std::remove_copy_if(m_MetaFields.begin(), m_MetaFields.end(),
         filtered.begin(), IsInUndo()));
     filtered.erase(iter2, filtered.end());
-    // create uno objects
+    
     ::std::vector< uno::Reference<text::XTextField> > ret(filtered.size());
     ::std::transform(filtered.begin(), filtered.end(), ret.begin(),
             MakeUnoObject());
     return ret;
 }
 
-} // namespace sw
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

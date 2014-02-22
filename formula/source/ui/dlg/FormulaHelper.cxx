@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formula/formulahelper.hxx"
@@ -26,7 +26,7 @@ namespace formula
 
     namespace
     {
-        //============================================================================
+        
         class OEmptyFunctionDescription : public IFunctionDescription
         {
         public:
@@ -48,9 +48,9 @@ namespace formula
             virtual bool isParameterOptional(sal_uInt32 ) const { return false; }
         };
     }
-//===================================================================
-//  class FormulaHelper - static Method
-//===================================================================
+
+
+
 
 #define FUNC_NOTFOUND 0xffff
 
@@ -68,10 +68,10 @@ FormulaHelper::FormulaHelper(const IFunctionManager* _pFunctionManager)
 
 bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
                                      bool             bBack,
-                                     sal_Int32&       rFStart,   // Input and output
-                                     sal_Int32*       pFEnd,     // = NULL
-                                     const IFunctionDescription**   ppFDesc,   // = NULL
-                                     ::std::vector< OUString>*   pArgs )  const // = NULL
+                                     sal_Int32&       rFStart,   
+                                     sal_Int32*       pFEnd,     
+                                     const IFunctionDescription**   ppFDesc,   
+                                     ::std::vector< OUString>*   pArgs )  const 
 {
     sal_Int32  nOldStart = rFStart;
     OUString   aFname;
@@ -101,7 +101,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
                         *ppFDesc = pCurrent;
                         break;
                     }
-                }// for(sal_uInt32 i = 0 ; i < nCount; ++i)
+                }
             }
             if ( *ppFDesc && pArgs )
             {
@@ -120,7 +120,7 @@ bool FormulaHelper::GetNextFunc( const OUString&  rFormula,
     return bFound;
 }
 
-//------------------------------------------------------------------------
+
 
 void FormulaHelper::FillArgStrings( const OUString&   rFormula,
                                     sal_Int32         nFuncPos,
@@ -136,7 +136,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
     {
         nStart = GetArgStart( rFormula, nFuncPos, i );
 
-        if ( i+1<nArgs ) // last argument?
+        if ( i+1<nArgs ) 
         {
             nEnd = GetArgStart( rFormula, nFuncPos, i+1 );
 
@@ -160,7 +160,7 @@ void FormulaHelper::FillArgStrings( const OUString&   rFormula,
             _rArgs.push_back(OUString());
 }
 
-//------------------------------------------------------------------------
+
 
 void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
                                    const OUString& rFormula,
@@ -173,15 +173,15 @@ void FormulaHelper::GetArgStrings( ::std::vector< OUString >& _rArgs,
     }
 }
 
-//------------------------------------------------------------------------
+
 
 inline sal_Bool IsFormulaText( const CharClass* _pCharClass,const OUString& rStr, sal_Int32 nPos )
 {
     if( _pCharClass->isLetterNumeric( rStr, nPos ) )
         return sal_True;
     else
-    {   // In internationalized versions function names may contain a dot
-        //  and in every version also an underscore... ;-)
+    {   
+        
         sal_Unicode c = rStr[nPos];
         return c == '.' || c == '_';
     }
@@ -253,11 +253,11 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
         {
             if ( IsFormulaText( m_pCharClass,rFormula, nFStart ) )
             {
-                                    //  Function found
+                                    
                 if ( pFuncName )
                     *pFuncName = rFormula.copy( nFStart, nParPos-nFStart );
             }
-            else                    // Brackets without function -> keep searching
+            else                    
             {
                 bRepeat = sal_True;
                 if ( !bBack )
@@ -268,7 +268,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
                     bRepeat = sal_False;
             }
         }
-        else                        // No brackets found
+        else                        
         {
             nFStart = FUNC_NOTFOUND;
             if ( pFuncName )
@@ -280,7 +280,7 @@ sal_Int32 FormulaHelper::GetFunctionStart( const OUString&   rFormula,
     return nFStart;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart ) const
 {
@@ -313,7 +313,7 @@ sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart
             else if ( nParCount < 0 )
             {
                 bFound = sal_True;
-                nStart--;   // read one too far
+                nStart--;   
             }
         }
         else if ( c == arrayOpen )
@@ -329,16 +329,16 @@ sal_Int32  FormulaHelper::GetFunctionEnd( const OUString& rStr, sal_Int32 nStart
             if ( !bInArray && nParCount == 0 )
             {
                 bFound = sal_True;
-                nStart--;   // read one too far
+                nStart--;   
             }
         }
-        nStart++; // Set behind found position
+        nStart++; 
     }
 
     return nStart;
 }
 
-//------------------------------------------------------------------
+
 
 sal_Int32 FormulaHelper::GetArgStart( const OUString& rStr, sal_Int32 nStart, sal_uInt16 nArg ) const
 {
@@ -392,8 +392,8 @@ sal_Int32 FormulaHelper::GetArgStart( const OUString& rStr, sal_Int32 nStart, sa
 
     return nStart;
 }
-// =============================================================================
-} // formula
-// =============================================================================
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

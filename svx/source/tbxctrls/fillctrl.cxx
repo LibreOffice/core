@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string>
@@ -77,7 +77,7 @@ SvxFillToolBoxControl::SvxFillToolBoxControl( sal_uInt16 nSlotId, sal_uInt16 nId
     addStatusListener( OUString( ".uno:BitmapListState" ));
 }
 
-//========================================================================
+
 
 SvxFillToolBoxControl::~SvxFillToolBoxControl()
 {
@@ -88,7 +88,7 @@ SvxFillToolBoxControl::~SvxFillToolBoxControl()
     delete pBitmapItem;
 }
 
-//========================================================================
+
 
 void SvxFillToolBoxControl::StateChanged(
 
@@ -157,12 +157,12 @@ void SvxFillToolBoxControl::StateChanged(
 
             if( pStyleItem )
             {
-                // ensure that the correct entry is selected in pFillTypeLB. It
-                // might have been changed by nSID == SID_ATTR_FILL_STYLE, but
-                // it might also be in an in-between state when user had started to
-                // change fillstyle, but not yet changed fillvalue for new style
-                // and when nSID == SID_ATTR_FILL_COLOR/SID_ATTR_FILL_GRADIENT/
-                // SID_ATTR_FILL_HATCH/SID_ATTR_FILL_BITMAP value change is triggered
+                
+                
+                
+                
+                
+                
                 eLastXFS = pFillTypeLB->GetSelectEntryPos();
                 XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
 
@@ -177,7 +177,7 @@ void SvxFillToolBoxControl::StateChanged(
 
             if( bEnableControls )
             {
-                //pFillTypeLB->Enable();
+                
                 pFillAttrLB->Enable();
 
                 bUpdate = sal_True;
@@ -187,7 +187,7 @@ void SvxFillToolBoxControl::StateChanged(
         }
         else
         {
-            // empty or ambiguous status
+            
             if( nSID == SID_ATTR_FILL_STYLE )
             {
                 pFillTypeLB->SetNoSelection();
@@ -207,14 +207,14 @@ void SvxFillToolBoxControl::StateChanged(
                     ( nSID == SID_ATTR_FILL_BITMAP   && eXFS == XFILL_BITMAP ) )
                 {
                     pFillAttrLB->SetNoSelection();
-                    //bUpdate = sal_False;
+                    
                 }
             }
         }
     }
 }
 
-//========================================================================
+
 
 void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
 {
@@ -224,11 +224,11 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
 
         XFillStyle eXFS = (XFillStyle)pStyleItem->GetValue();
 
-        // Check if the fill style was already active
-        //if( eTmpXFS != eXFS )
+        
+        
         if( (XFillStyle) eLastXFS != eXFS )
             pFillControl->SelectFillTypeHdl( NULL );
-            //eLastXFS = eXFS;
+            
 
         switch( eXFS )
         {
@@ -248,7 +248,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                          pFillAttrLB->GetSelectEntryColor() != aColor )
                         pFillAttrLB->SelectEntry( aColor );
 
-                    // Check if the entry is not in the list
+                    
                     if( pFillAttrLB->GetSelectEntryPos() ==
                         LISTBOX_ENTRY_NOTFOUND ||
                         pFillAttrLB->GetSelectEntryColor() != aColor )
@@ -257,7 +257,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         OUString aTmpStr;
                         if( nCount > 0 )
                         {
-                            // Last entry gets tested against temporary color
+                            
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
                             if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
                                  aTmpStr.endsWith(TMP_STR_END) )
@@ -267,9 +267,9 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         }
                         aTmpStr = TMP_STR_BEGIN + aString + TMP_STR_END;
 
-                        //pFillAttrLB->SetUpdateMode( sal_False );
+                        
                         sal_uInt16 nPos = pFillAttrLB->InsertEntry( aColor, aTmpStr );
-                        //pFillAttrLB->SetUpdateMode( sal_True );
+                        
                         pFillAttrLB->SelectEntryPos( nPos );
                     }
                 }
@@ -284,14 +284,14 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                 {
                     OUString aString( pGradientItem->GetName() );
                     pFillAttrLB->SelectEntry( aString );
-                    // Check if the entry is not in the list
+                    
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
                         OUString aTmpStr;
                         if( nCount > 0 )
                         {
-                            // Last entry gets tested against temporary entry
+                            
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
                             if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
                                  aTmpStr.endsWith(TMP_STR_END) )
@@ -311,7 +311,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         {
                             pFillAttrLB->InsertEntry(pEntry->GetName(), Image(aBmp));
                             pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
-                            //delete pBmp;
+                            
                         }
 
                         aGradientList.Remove( 0 );
@@ -329,14 +329,14 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                 {
                     OUString aString( pHatchItem->GetName() );
                     pFillAttrLB->SelectEntry( aString );
-                    // Check if the entry is not in the list
+                    
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
                         OUString aTmpStr;
                         if( nCount > 0 )
                         {
-                            // Last entry gets tested against temporary entry
+                            
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
                             if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
                                  aTmpStr.endsWith(TMP_STR_END) )
@@ -356,7 +356,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
                         {
                             pFillAttrLB->InsertEntry(pEntry->GetName(), Image(aBmp));
                             pFillAttrLB->SelectEntryPos( pFillAttrLB->GetEntryCount() - 1 );
-                            //delete pBmp;
+                            
                         }
 
                         aHatchList.Remove( 0 );
@@ -371,24 +371,24 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
             case XFILL_BITMAP:
             {
                 if ( pBitmapItem )
-                    // &&
-                    // SfxObjectShell::Current()    &&
-                    // SfxObjectShell::Current()->GetItem( SID_BITMAP_LIST ) )
+                    
+                    
+                    
                 {
                     OUString aString( pBitmapItem->GetName() );
-                    // Bitmap aBitmap( pBitmapItem->GetValue() );
+                    
 
-                    // SvxBitmapListItem aItem( *(const SvxBitmapListItem*)(
-                    //  SfxObjectShell::Current()->GetItem( SID_BITMAP_LIST ) ) );
+                    
+                    
                     pFillAttrLB->SelectEntry( aString );
-                    // Check if the entry is not in the list
+                    
                     if( pFillAttrLB->GetSelectEntry() != aString )
                     {
                         sal_uInt16 nCount = pFillAttrLB->GetEntryCount();
                         OUString aTmpStr;
                         if( nCount > 0 )
                         {
-                            // Last entry gets tested against temporary entry
+                            
                             aTmpStr = pFillAttrLB->GetEntry( nCount - 1 );
                             if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
                                  aTmpStr.endsWith(TMP_STR_END) )
@@ -425,7 +425,7 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
     {
         XFillStyle eXFS = (XFillStyle) pStyleItem->GetValue();
 
-        // Does the lists have changed?
+        
         if( pState->ISA( SvxColorListItem ) &&
             eXFS == XFILL_SOLID )
         {
@@ -461,15 +461,15 @@ void SvxFillToolBoxControl::Update( const SfxPoolItem* pState )
     }
 }
 
-//========================================================================
+
 
 Window* SvxFillToolBoxControl::CreateItemWindow( Window *pParent )
 {
     if ( GetSlotId() == SID_ATTR_FILL_STYLE )
     {
         pFillControl = new FillControl( pParent );
-        // Thus the FillControl is known by SvxFillToolBoxControl
-        // (and in order to remain compatible)
+        
+        
         pFillControl->SetData( this );
 
         pFillAttrLB = (SvxFillAttrBox*)pFillControl->pLbFillAttr;
@@ -500,7 +500,7 @@ FillControl::FillControl( Window* pParent, WinBits nStyle ) :
     Size aAttrSize(LogicToPixel(aLogicalAttrSize, MAP_APPFONT));
     pLbFillType->SetSizePixel(aTypeSize);
     pLbFillAttr->SetSizePixel(aAttrSize);
-    //to get the base height
+    
     aTypeSize = pLbFillType->GetSizePixel();
     aAttrSize = pLbFillAttr->GetSizePixel();
     Point aAttrPnt = pLbFillAttr->GetPosPixel();
@@ -516,7 +516,7 @@ FillControl::FillControl( Window* pParent, WinBits nStyle ) :
     aDelayTimer.Start();
 }
 
-//------------------------------------------------------------------------
+
 
 FillControl::~FillControl()
 {
@@ -524,35 +524,35 @@ FillControl::~FillControl()
     delete pLbFillAttr;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(FillControl, DelayHdl)
 {
     SelectFillTypeHdl( NULL );
     ( (SvxFillToolBoxControl*)GetData() )->updateStatus( OUString( ".uno:FillStyle" ));
-//  ( (SvxFillToolBoxControl*)GetData() )->GetBindings().Invalidate( SID_ATTR_FILL_STYLE );
+
     return 0;
 }
 IMPL_LINK_INLINE_END( FillControl, DelayHdl, Timer *, pTimer )
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
 {
     XFillStyle  eXFS = (XFillStyle)pLbFillType->GetSelectEntryPos();
 
-    // Later, an optimization should be accomplished,
-    // that the lists or tables can only be deleted and rebuilt
-    // when the lists, or tables have actually changed (in the LBs of course).
+    
+    
+    
 
     if ( ( pBox && !pBox->IsTravelSelect() ) || !pBox )
     {
-        // So that we can show a status in the following case:
-        // One type was selected but no attribute.
-        // The selection has exactly the same attributes as the previous one.
-//      SvxFillToolBoxControl* pControlerItem = (SvxFillToolBoxControl*)GetData();
-//      if( pControlerItem )
-//          pControlerItem->ClearCache();
+        
+        
+        
+
+
+
 
         pLbFillAttr->Clear();
         SfxObjectShell* pSh = SfxObjectShell::Current();
@@ -624,12 +624,12 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
             break;
         }
 
-        if( eXFS != XFILL_NONE ) // Has already been done
+        if( eXFS != XFILL_NONE ) 
         {
             if ( pBox )
                 pLbFillType->Selected();
 
-            // release focus
+            
             if ( pBox && pLbFillType->IsRelease() )
             {
                 SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -641,7 +641,7 @@ IMPL_LINK( FillControl, SelectFillTypeHdl, ListBox *, pBox )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 {
@@ -655,7 +655,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
         Any a;
         Sequence< PropertyValue > aArgs( 1 );
 
-        // First set the style
+        
         aArgs[0].Name = "FillStyle";
         aXFillStyleItem.QueryValue(  a );
         aArgs[0].Value = a;
@@ -671,7 +671,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
 
             case XFILL_SOLID:
             {
-                // Entry gets tested against temporary color
+                
                 OUString aTmpStr = pLbFillAttr->GetSelectEntry();
                 if( aTmpStr.startsWith(TMP_STR_BEGIN) && aTmpStr.endsWith(TMP_STR_END) )
                 {
@@ -696,7 +696,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     SvxGradientListItem aItem(
                         *(const SvxGradientListItem*)( pSh->GetItem( SID_GRADIENT_LIST ) ) );
 
-                    if ( nPos < aItem.GetGradientList()->Count() )  // no temporary entry?
+                    if ( nPos < aItem.GetGradientList()->Count() )  
                     {
                         XGradient aGradient = aItem.GetGradientList()->GetGradient( nPos )->GetGradient();
                         XFillGradientItem aXFillGradientItem( pLbFillAttr->GetSelectEntry(), aGradient );
@@ -719,7 +719,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                 {
                     SvxHatchListItem aItem( *(const SvxHatchListItem*)( pSh->GetItem( SID_HATCH_LIST ) ) );
 
-                    if ( nPos < aItem.GetHatchList()->Count() )  // no temporary entry?
+                    if ( nPos < aItem.GetHatchList()->Count() )  
                     {
                         XHatch aHatch = aItem.GetHatchList()->GetHatch( nPos )->GetHatch();
                         XFillHatchItem aXFillHatchItem( pLbFillAttr->GetSelectEntry(), aHatch );
@@ -743,7 +743,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
                     SvxBitmapListItem aItem(
                         *(const SvxBitmapListItem*)( pSh->GetItem( SID_BITMAP_LIST ) ) );
 
-                    if ( nPos < aItem.GetBitmapList()->Count() )  // no temporary entry?
+                    if ( nPos < aItem.GetBitmapList()->Count() )  
                     {
                         const XBitmapEntry* pXBitmapEntry = aItem.GetBitmapList()->GetBitmap(nPos);
                         const XFillBitmapItem aXFillBitmapItem(pLbFillAttr->GetSelectEntry(), pXBitmapEntry->GetGraphicObject());
@@ -758,7 +758,7 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
             break;
         }
 
-        // release focus
+        
         if ( pLbFillAttr->IsRelease()  && pBox )
         {
             SfxViewShell* pViewShell = SfxViewShell::Current();
@@ -772,14 +772,14 @@ IMPL_LINK( FillControl, SelectFillAttrHdl, ListBox *, pBox )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 void FillControl::Resize()
 {
-    // Width of the two list boxes not 1/2 : 1/2, but 2/5 : 3/5
+    
     long nW = GetOutputSizePixel().Width() / 5;
     long nH = 180;
-    long nSep = 0; // was previously 4
+    long nSep = 0; 
 
     pLbFillType->SetSizePixel( Size( nW * 2 - nSep, nH ) );
     pLbFillAttr->SetPosSizePixel( Point( nW * 2 + nSep, 0 ), Size( nW * 3 - nSep, nH ) );
@@ -794,7 +794,7 @@ void FillControl::DataChanged( const DataChangedEvent& rDCEvt )
         Size aAttrSize(LogicToPixel(aLogicalAttrSize, MAP_APPFONT));
         pLbFillType->SetSizePixel(aTypeSize);
         pLbFillAttr->SetSizePixel(aAttrSize);
-        //to get the base height
+        
         aTypeSize = pLbFillType->GetSizePixel();
         aAttrSize = pLbFillAttr->GetSizePixel();
         Point aAttrPnt = pLbFillAttr->GetPosPixel();

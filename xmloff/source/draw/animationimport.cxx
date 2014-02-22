@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
@@ -317,8 +317,8 @@ static bool isTime( const OUString& rValue )
             break;
     }
 
-    // return true if this is a double (if someone forgot the 's' we silently ignore it)
-    // or if it's a double that ends with a 's' or 'S'
+    
+    
     return (nLength == 0) || ((*pStr == 's' || *pStr == 'S') && (nLength == 1));
 }
 
@@ -365,7 +365,7 @@ Any AnimationsImportHelperImpl::convertTarget( const OUString& rValue )
             {
                 xEnumeration->nextElement() >>= xRange;
 
-                // break if start of selection is prior to end of current paragraph
+                
                 if( xRange.is() && (xTextRangeCompare->compareRegionEnds( xStart, xRange ) >= 0 ) )
                 {
                     return makeAny( ParagraphTarget( xShape, nParagraph ) );
@@ -468,15 +468,15 @@ Sequence< Any > AnimationsImportHelperImpl::convertValueSequence( XMLTokenEnum e
 {
     Sequence< Any > aValues;
 
-    // do we have any value at all?
+    
     if( !rValue.isEmpty() )
     {
-        sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';') + 1; // a non empty string has at least one value
+        sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';') + 1; 
 
-        // prepare the sequence
+        
         aValues.realloc( nElements );
 
-        // fill the sequence
+        
         Any* pValues = aValues.getArray();
         sal_Int32 nIndex;
         for( nIndex = 0; nElements && (nIndex >= 0); nElements-- )
@@ -492,11 +492,11 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
 {
     Any aAny;
 
-    // do we have any value at all?
+    
     if( !rValue.isEmpty() )
     {
-        // count the values
-        sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
+        
+        sal_Int32 nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; 
 
         if( nElements == 1 )
         {
@@ -529,7 +529,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
                 {
                     aEventTrigger = rValue.copy( 0, nPos );
 
-                    // convert offset
+                    
                     aEvent.Offset <<= convertTiming( rValue.copy( nPos + 1 ) );
                 }
 
@@ -555,7 +555,7 @@ Any AnimationsImportHelperImpl::convertTiming( const OUString& rValue )
         }
         else
         {
-            // fill the sequence
+            
             Sequence< Any > aValues( nElements );
             Any* pValues = aValues.getArray();
             sal_Int32 nIndex = 0;
@@ -573,7 +573,7 @@ Sequence< double > AnimationsImportHelperImpl::convertKeyTimes( const OUString& 
     sal_Int32 nElements = 0;
 
     if( !rValue.isEmpty() )
-        nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
+        nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; 
 
     Sequence< double > aKeyTimes( nElements );
 
@@ -593,7 +593,7 @@ Sequence< TimeFilterPair > AnimationsImportHelperImpl::convertTimeFilter( const 
     sal_Int32 nElements = 0;
 
     if( !rValue.isEmpty() )
-        nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; // a non empty string has at least one value
+        nElements = count_codes( rValue, (sal_Unicode)';' ) + 1; 
 
     Sequence< TimeFilterPair > aTimeFilter( nElements );
 
@@ -732,10 +732,10 @@ AnimationNodeContext::~AnimationNodeContext()
 
 void AnimationNodeContext::StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& )
 {
-    // code of StartElement is moved to init_node that is now called
-    // in c'tor before appending this node to its parent.
-    // This is needed for random nodes that need the correct target
-    // set when child nodes are appended.
+    
+    
+    
+    
 }
 
 void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList )
@@ -744,7 +744,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
     {
         const sal_Int16 nNodeType = mxNode->getType();
 
-        // query for optional interfaces that are often used later
+        
         Reference< XAnimate > xAnimate( mxNode, UNO_QUERY );
         Reference< XCommand > xCommand( mxNode, UNO_QUERY );
         Reference< XTransitionFilter > xTransitionFilter( mxNode, UNO_QUERY );
@@ -881,7 +881,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                 }
 
             }
-            // fall through intented!
+            
             case ANA_Target:
             {
                 {
@@ -1085,7 +1085,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
                         case AnimationTransformType::ROTATE: meAttributeName = XML_ROTATE; break;
                         case AnimationTransformType::SKEWX: meAttributeName = XML_SKEWX; break;
                         case AnimationTransformType::SKEWY: meAttributeName = XML_SKEWY; break;
-                        //case AnimationTransformType::TRANSLATE:
+                        
                         default:
                             meAttributeName = XML_TRANSLATE; break;
                         }
@@ -1193,7 +1193,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             break;
 
             default:
-                // push all unknown attributes within the presentation namespace as user data
+                
                 if( nPrefix == XML_NAMESPACE_PRESENTATION )
                 {
                     aUserData.push_back( NamedValue( aLocalName, makeAny( rValue ) ) );
@@ -1221,7 +1221,7 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             mxNode->setUserData( aUnoUserData );
         }
 
-        // convert values
+        
         if( xAnimate.is() )
         {
             if( !aFrom.isEmpty() )
@@ -1260,12 +1260,12 @@ public:
 
     SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList);
 
-    // XInterface
+    
     virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException);
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
 
-    // XAnimationNodeSupplier
+    
     Reference< XAnimationNode > SAL_CALL getAnimationNode() throw (RuntimeException);
 
 private:
@@ -1274,11 +1274,11 @@ private:
 
 AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxContext )
 : SvXMLImport( rxContext, AnimationsImport_getImplementationName(), IMPORT_META )
-    //FIXME: the above "IMPORT_META" used to be a nonsensical "true", question
-    // remainst whether this should be IMPORT_META (same numerical value as
-    // true) or default IMPORT_ALL
+    
+    
+    
 {
-    // add namespaces
+    
     GetNamespaceMap().Add(
         GetXMLToken(XML_NP_PRESENTATION),
         GetXMLToken(XML_N_PRESENTATION),
@@ -1301,7 +1301,7 @@ AnimationsImport::~AnimationsImport() throw ()
 {
 }
 
-// XInterface
+
 Any SAL_CALL AnimationsImport::queryInterface( const Type& aType ) throw (RuntimeException)
 {
     if ( aType == ::getCppuType((Reference<XAnimationNodeSupplier> *)0) )
@@ -1340,7 +1340,7 @@ SvXMLImportContext *AnimationsImport::CreateContext(sal_uInt16 nPrefix, const OU
     return pContext;
 }
 
-// XAnimationNodeSupplier
+
 Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode() throw (RuntimeException)
 {
     return mxRootNode;
@@ -1360,7 +1360,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
                 Event aEvent;
                 if( (xNode->getBegin() >>= aEvent) && (aEvent.Trigger == EventTrigger::BEGIN_EVENT) )
                 {
-                    // found transition node
+                    
                     Reference< XEnumerationAccess > xChildEnumerationAccess( xNode, UNO_QUERY_THROW );
                     Reference< XEnumeration > xChildEnumeration( xChildEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
                     while( xChildEnumeration->hasMoreElements() )
@@ -1424,7 +1424,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
     }
 }
 
-} // namespace xmloff
+} 
 
 Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
 {

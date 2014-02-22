@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ImageButton.hxx"
@@ -26,10 +26,8 @@
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/MouseButton.hpp>
 
-//.........................................................................
 namespace frm
 {
-//.........................................................................
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
@@ -42,40 +40,32 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//==================================================================
-//= OImageButtonModel
-//==================================================================
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OImageButtonModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
      return *(new OImageButtonModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------
 OImageButtonModel::OImageButtonModel(const Reference<XComponentContext>& _rxFactory)
                     :OClickableImageBaseModel( _rxFactory, VCL_CONTROLMODEL_IMAGEBUTTON, FRM_SUN_CONTROL_IMAGEBUTTON )
-                                    // use the old control name for compytibility reasons
+                                    
 {
     m_nClassId = FormComponentType::IMAGEBUTTON;
 }
 
-//------------------------------------------------------------------
 OImageButtonModel::OImageButtonModel( const OImageButtonModel* _pOriginal, const Reference<XComponentContext>& _rxFactory)
     :OClickableImageBaseModel( _pOriginal, _rxFactory )
 {
     implInitializeImageURL();
 }
 
-//------------------------------------------------------------------------------
 IMPLEMENT_DEFAULT_CLONING( OImageButtonModel )
 
-//------------------------------------------------------------------------------
 OImageButtonModel::~OImageButtonModel()
 {
 }
 
-// XServiceInfo
-//------------------------------------------------------------------------------
+
 StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseModel::getSupportedServiceNames();
@@ -86,7 +76,6 @@ StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
 void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OClickableImageBaseModel )
@@ -98,18 +87,16 @@ void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
 OUString OImageButtonModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return OUString(FRM_COMPONENT_IMAGEBUTTON);   // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_IMAGEBUTTON);   
 }
 
-//------------------------------------------------------------------------------
 void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OControlModel::write(_rxOutStream);
 
-    // Version
+    
     _rxOutStream->writeShort(0x0003);
     _rxOutStream->writeShort((sal_uInt16)m_eButtonType);
 
@@ -119,12 +106,11 @@ void OImageButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream
     writeHelpTextCompatibly(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
 void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OControlModel::read(_rxInStream);
 
-    // Version
+    
     sal_uInt16 nVersion = _rxInStream->readShort();
 
     switch (nVersion)
@@ -159,16 +145,12 @@ void OImageButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) t
     }
 }
 
-//==================================================================
-// OImageButtonControl
-//==================================================================
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OImageButtonControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OImageButtonControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
 Sequence<Type> OImageButtonControl::_getTypes()
 {
     static Sequence<Type> aTypes;
@@ -177,7 +159,6 @@ Sequence<Type> OImageButtonControl::_getTypes()
     return aTypes;
 }
 
-//------------------------------------------------------------------------------
 StringSequence  OImageButtonControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OClickableImageBaseControl::getSupportedServiceNames();
@@ -188,13 +169,12 @@ StringSequence  OImageButtonControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
 OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rxFactory)
             :OClickableImageBaseControl(_rxFactory, VCL_CONTROL_IMAGEBUTTON)
 {
     increment(m_refCount);
     {
-        // als MouseListener anmelden
+        
         Reference< awt::XWindow >  xComp;
         query_aggregation( m_xAggregate, xComp);
         if (xComp.is())
@@ -203,8 +183,7 @@ OImageButtonControl::OImageButtonControl(const Reference<XComponentContext>& _rx
     decrement(m_refCount);
 }
 
-// UNO Anbindung
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OClickableImageBaseControl::queryAggregation(_rType);
@@ -214,7 +193,6 @@ Any SAL_CALL OImageButtonControl::queryAggregation(const Type& _rType) throw (Ru
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
 void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -225,37 +203,31 @@ void OImageButtonControl::mousePressed(const awt::MouseEvent& e) throw ( ::com::
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if( m_aApproveActionListeners.getLength() )
     {
-        // if there are listeners, start the action in an own thread, to not allow
-        // them to block us here (we're in the application's main thread)
+        
+        
         getImageProducerThread()->OComponentEventThread::addEvent( &e );
     }
     else
     {
-        // Sonst nicht. Dann darf man aber auf keinen Fal die Listener
-        // benachrichtigen, auch dann nicht, wenn er spaeter hinzukommt.
+        
+        
         aGuard.clear();
         actionPerformed_Impl( sal_False, e );
     }
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL OImageButtonControl::mouseReleased(const awt::MouseEvent& /*e*/) throw ( RuntimeException)
 {
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL OImageButtonControl::mouseEntered(const awt::MouseEvent& /*e*/) throw ( RuntimeException)
 {
 }
 
-//------------------------------------------------------------------------------
 void SAL_CALL OImageButtonControl::mouseExited(const awt::MouseEvent& /*e*/) throw ( RuntimeException)
 {
 }
 
-
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

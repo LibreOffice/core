@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "unocontroltablemodel.hxx"
@@ -35,10 +35,10 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
-// .....................................................................................................................
+
 namespace svt { namespace table
 {
-// .....................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::RuntimeException;
@@ -63,9 +63,9 @@ namespace svt { namespace table
     using ::com::sun::star::awt::grid::XSortableGridData;
     using ::com::sun::star::beans::Pair;
 
-    //==================================================================================================================
-    //= UnoControlTableModel_Impl
-    //==================================================================================================================
+    
+    
+    
     typedef ::std::vector< PTableModelListener >    ModellListeners;
     typedef ::std::vector< PColumnModel >           ColumnModels;
     struct UnoControlTableModel_Impl
@@ -123,23 +123,23 @@ namespace svt { namespace table
         }
     };
 
-    //==================================================================================================================
-    //= UnoControlTableModel
-    //==================================================================================================================
+    
+    
+    
 #ifdef DBG_UTIL
     const char* UnoControlTableModel_checkInvariants( const void* _pInstance )
     {
         return static_cast< const UnoControlTableModel* >( _pInstance )->checkInvariants();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     const char* UnoControlTableModel::checkInvariants() const
     {
         Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
         if ( !xDataModel.is() )
             return "data model anymore";
 
-        // TODO: more?
+        
 
         return NULL;
     }
@@ -149,7 +149,7 @@ namespace svt { namespace table
     DBG_TESTSOLARMUTEX(); \
     DBG_CHKTHIS( UnoControlTableModel, UnoControlTableModel_checkInvariants )
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     DBG_NAME( UnoControlTableModel )
     UnoControlTableModel::UnoControlTableModel()
         :m_pImpl( new UnoControlTableModel_Impl )
@@ -162,21 +162,21 @@ namespace svt { namespace table
         m_pImpl->pInputHandler.reset( new DefaultInputHandler );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     UnoControlTableModel::~UnoControlTableModel()
     {
         DBG_DTOR( UnoControlTableModel, UnoControlTableModel_checkInvariants );
         DELETEZ( m_pImpl );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TableSize UnoControlTableModel::getColumnCount() const
     {
         DBG_CHECK_ME();
         return (TableSize)m_pImpl->aColumns.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TableSize UnoControlTableModel::getRowCount() const
     {
         DBG_CHECK_ME();
@@ -195,21 +195,21 @@ namespace svt { namespace table
         return nRowCount;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool UnoControlTableModel::hasColumnHeaders() const
     {
         DBG_CHECK_ME();
         return m_pImpl->bHasColumnHeaders;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool UnoControlTableModel::hasRowHeaders() const
     {
         DBG_CHECK_ME();
         return m_pImpl->bHasRowHeaders;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setRowHeaders(bool _bRowHeaders)
     {
         DBG_CHECK_ME();
@@ -220,7 +220,7 @@ namespace svt { namespace table
         impl_notifyTableMetricsChanged();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setColumnHeaders(bool _bColumnHeaders)
     {
         DBG_CHECK_ME();
@@ -231,7 +231,7 @@ namespace svt { namespace table
         impl_notifyTableMetricsChanged();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool UnoControlTableModel::isCellEditable( ColPos col, RowPos row ) const
     {
         DBG_CHECK_ME();
@@ -240,7 +240,7 @@ namespace svt { namespace table
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     PColumnModel UnoControlTableModel::getColumnModel( ColPos column )
     {
         DBG_CHECK_ME();
@@ -249,14 +249,14 @@ namespace svt { namespace table
         return m_pImpl->aColumns[ column ];
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::appendColumn( Reference< XGridColumn > const & i_column )
     {
         DBG_CHECK_ME();
         insertColumn( m_pImpl->aColumns.size(), i_column );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::insertColumn( ColPos const i_position, Reference< XGridColumn > const & i_column )
     {
         DBG_CHECK_ME();
@@ -266,7 +266,7 @@ namespace svt { namespace table
         const PColumnModel pColumn( new UnoGridColumnFacade( *this, i_column ) );
         m_pImpl->aColumns.insert( m_pImpl->aColumns.begin() + i_position, pColumn );
 
-        // notify listeners
+        
         ModellListeners aListeners( m_pImpl->m_aListeners );
         for (   ModellListeners::const_iterator loop = aListeners.begin();
                 loop != aListeners.end();
@@ -277,19 +277,19 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::removeColumn( ColPos const i_position )
     {
         DBG_CHECK_ME();
         ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( size_t( i_position ) <= m_pImpl->aColumns.size() ),
             "UnoControlTableModel::removeColumn: illegal position!" );
 
-        // remove the column
+        
         ColumnModels::iterator pos = m_pImpl->aColumns.begin() + i_position;
         const PColumnModel pColumn = *pos;
         m_pImpl->aColumns.erase( pos );
 
-        // notify listeners
+        
         ModellListeners aListeners( m_pImpl->m_aListeners );
         for (   ModellListeners::const_iterator loop = aListeners.begin();
                 loop != aListeners.end();
@@ -299,21 +299,21 @@ namespace svt { namespace table
             (*loop)->columnRemoved( i_position );
         }
 
-        // dispose the column
+        
         UnoGridColumnFacade* pColumnImpl = dynamic_cast< UnoGridColumnFacade* >( pColumn.get() );
         OSL_ENSURE( pColumnImpl != NULL, "UnoControlTableModel::removeColumn: illegal column implementation!" );
         if ( pColumnImpl )
             pColumnImpl->dispose();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::removeAllColumns()
     {
         DBG_CHECK_ME();
         if ( m_pImpl->aColumns.empty() )
             return;
 
-        // dispose the column instances
+        
         for (   ColumnModels::const_iterator col = m_pImpl->aColumns.begin();
                 col != m_pImpl->aColumns.end();
                 ++col
@@ -330,7 +330,7 @@ namespace svt { namespace table
         }
         m_pImpl->aColumns.clear();
 
-        // notify listeners
+        
         ModellListeners aListeners( m_pImpl->m_aListeners );
         for (   ModellListeners::const_iterator loop = aListeners.begin();
                 loop != aListeners.end();
@@ -341,7 +341,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::impl_notifyTableMetricsChanged() const
     {
         ModellListeners aListeners( m_pImpl->m_aListeners );
@@ -354,28 +354,28 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     PTableRenderer UnoControlTableModel::getRenderer() const
     {
         DBG_CHECK_ME();
         return m_pImpl->pRenderer;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     PTableInputHandler UnoControlTableModel::getInputHandler() const
     {
         DBG_CHECK_ME();
         return m_pImpl->pInputHandler;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TableMetrics UnoControlTableModel::getRowHeight() const
     {
         DBG_CHECK_ME();
         return m_pImpl->nRowHeight;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setRowHeight(TableMetrics _nRowHeight)
     {
         DBG_CHECK_ME();
@@ -386,7 +386,7 @@ namespace svt { namespace table
         impl_notifyTableMetricsChanged();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TableMetrics UnoControlTableModel::getColumnHeaderHeight() const
     {
         DBG_CHECK_ME();
@@ -394,14 +394,14 @@ namespace svt { namespace table
         return m_pImpl->nColumnHeaderHeight;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TableMetrics UnoControlTableModel::getRowHeaderWidth() const
     {
         DBG_CHECK_ME();
         DBG_ASSERT( hasRowHeaders(), "DefaultTableModel::getRowHeaderWidth: invalid call!" );
         return m_pImpl->nRowHeaderWidth;
     }
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setColumnHeaderHeight(TableMetrics _nHeight)
     {
         DBG_CHECK_ME();
@@ -412,7 +412,7 @@ namespace svt { namespace table
         impl_notifyTableMetricsChanged();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setRowHeaderWidth(TableMetrics _nWidth)
     {
         DBG_CHECK_ME();
@@ -423,21 +423,21 @@ namespace svt { namespace table
         impl_notifyTableMetricsChanged();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ScrollbarVisibility UnoControlTableModel::getVerticalScrollbarVisibility() const
     {
         DBG_CHECK_ME();
         return m_pImpl->eVScrollMode;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ScrollbarVisibility UnoControlTableModel::getHorizontalScrollbarVisibility() const
     {
         DBG_CHECK_ME();
         return m_pImpl->eHScrollMode;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::addTableModelListener( const PTableModelListener& i_listener )
     {
         DBG_CHECK_ME();
@@ -445,7 +445,7 @@ namespace svt { namespace table
         m_pImpl->m_aListeners.push_back( i_listener );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::removeTableModelListener( const PTableModelListener& i_listener )
     {
         DBG_CHECK_ME();
@@ -463,63 +463,63 @@ namespace svt { namespace table
         OSL_ENSURE( false, "UnoControlTableModel::removeTableModelListener: listener is not registered - sure you're doing the right thing here?" );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setVerticalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const
     {
         DBG_CHECK_ME();
         m_pImpl->eVScrollMode = i_visibility;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setHorizontalScrollbarVisibility( ScrollbarVisibility const i_visibility ) const
     {
         DBG_CHECK_ME();
         m_pImpl->eHScrollMode = i_visibility;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setDataModel( Reference< XGridDataModel > const & i_gridDataModel )
     {
         DBG_CHECK_ME();
         m_pImpl->m_aDataModel = i_gridDataModel;
-        // TODO: register as listener, so we're notified of row/data changes, and can multiplex them to our
-        // own listeners
+        
+        
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XGridDataModel > UnoControlTableModel::getDataModel() const
     {
         Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
         return xDataModel;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool UnoControlTableModel::hasDataModel() const
     {
         return getDataModel().is();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setColumnModel( Reference< XGridColumnModel > const & i_gridColumnModel )
     {
         DBG_CHECK_ME();
         m_pImpl->m_aColumnModel = i_gridColumnModel;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XGridColumnModel > UnoControlTableModel::getColumnModel() const
     {
         Reference< XGridColumnModel > const xColumnModel( m_pImpl->m_aColumnModel );
         return xColumnModel;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool UnoControlTableModel::hasColumnModel() const
     {
         return getColumnModel().is();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::getCellContent( ColPos const i_col, RowPos const i_row, Any& o_cellContent )
     {
         DBG_CHECK_ME();
@@ -537,9 +537,9 @@ namespace svt { namespace table
 
             if ( nDataColumnIndex >= xDataModel->getColumnCount() )
             {
-                // this is allowed, in case the column model has been dynamically extended, but the data model does
-                // not (yet?) know about it.
-                // So, handle it gracefully.
+                
+                
+                
             #if OSL_DEBUG_LEVEL > 0
                 {
                     Reference< XGridColumnModel > const xColumnModel( m_pImpl->m_aColumnModel );
@@ -559,7 +559,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::getCellToolTip( ColPos const i_col, RowPos const i_row, Any& o_cellToolTip )
     {
         DBG_CHECK_ME();
@@ -576,7 +576,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Any UnoControlTableModel::getRowHeading( RowPos const i_rowPos ) const
     {
         DBG_CHECK_ME();
@@ -597,7 +597,7 @@ namespace svt { namespace table
         return aRowHeading;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     namespace
     {
         void lcl_setColor( Any const & i_color, ::boost::optional< ::Color > & o_convertedColor )
@@ -619,140 +619,140 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::Color > UnoControlTableModel::getLineColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aGridLineColor;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setLineColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aGridLineColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::Color > UnoControlTableModel::getHeaderBackgroundColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aHeaderBackgroundColor;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setHeaderBackgroundColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aHeaderBackgroundColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::Color > UnoControlTableModel::getHeaderTextColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aHeaderTextColor;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::Color > UnoControlTableModel::getActiveSelectionBackColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aActiveSelectionBackColor;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::Color > UnoControlTableModel::getInactiveSelectionBackColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aInactiveSelectionBackColor;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::Color > UnoControlTableModel::getActiveSelectionTextColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aActiveSelectionTextColor;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::Color > UnoControlTableModel::getInactiveSelectionTextColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aInactiveSelectionTextColor;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setHeaderTextColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aHeaderTextColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setActiveSelectionBackColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aActiveSelectionBackColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setInactiveSelectionBackColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aInactiveSelectionBackColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setActiveSelectionTextColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aActiveSelectionTextColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setInactiveSelectionTextColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aInactiveSelectionTextColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::Color > UnoControlTableModel::getTextColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aTextColor;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setTextColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aTextColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::Color > UnoControlTableModel::getTextLineColor() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aTextColor;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setTextLineColor( Any const & i_color )
     {
         DBG_CHECK_ME();
         lcl_setColor( i_color, m_pImpl->m_aTextLineColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::boost::optional< ::std::vector< ::Color > > UnoControlTableModel::getRowBackgroundColors() const
     {
         DBG_CHECK_ME();
         return m_pImpl->m_aRowColors;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setRowBackgroundColors( ::com::sun::star::uno::Any const & i_APIValue )
     {
         DBG_CHECK_ME();
@@ -770,21 +770,21 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     VerticalAlignment UnoControlTableModel::getVerticalAlign() const
     {
         DBG_CHECK_ME();
         return  m_pImpl->m_eVerticalAlign;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setVerticalAlign( VerticalAlignment _xAlign )
     {
         DBG_CHECK_ME();
         m_pImpl->m_eVerticalAlign = _xAlign;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ColPos UnoControlTableModel::getColumnPos( UnoGridColumnFacade const & i_column ) const
     {
         DBG_CHECK_ME();
@@ -800,7 +800,7 @@ namespace svt { namespace table
         return COL_INVALID;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ITableDataSort* UnoControlTableModel::getSortAdapter()
     {
         DBG_CHECK_ME();
@@ -811,21 +811,21 @@ namespace svt { namespace table
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool UnoControlTableModel::isEnabled() const
     {
         DBG_CHECK_ME();
         return m_pImpl->bEnabled;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::setEnabled( bool _bEnabled )
     {
         DBG_CHECK_ME();
         m_pImpl->bEnabled = _bEnabled;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::sortByColumn( ColPos const i_column, ColumnSortDirection const i_sortDirection )
     {
         DBG_CHECK_ME();
@@ -841,7 +841,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ColumnSort UnoControlTableModel::getCurrentSortOrder() const
     {
         DBG_CHECK_ME();
@@ -861,7 +861,7 @@ namespace svt { namespace table
         return currentSort;
     }
 
-    //--------------------------------------------------------------------
+    
     void UnoControlTableModel::notifyColumnChange( ColPos const i_columnPos, ColumnAttributeGroup const i_attributeGroup ) const
     {
         DBG_CHECK_ME();
@@ -878,33 +878,33 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::notifyRowsInserted( GridDataEvent const & i_event ) const
     {
-        // check sanity of the event
+        
         ENSURE_OR_RETURN_VOID( i_event.FirstRow >= 0, "UnoControlTableModel::notifyRowsInserted: invalid first row!" );
         ENSURE_OR_RETURN_VOID( i_event.LastRow >= i_event.FirstRow, "UnoControlTableModel::notifyRowsInserted: invalid row indexes!" );
 
-        // check own sanity
+        
         Reference< XGridColumnModel > const xColumnModel( m_pImpl->m_aColumnModel );
         ENSURE_OR_RETURN_VOID( xColumnModel.is(), "UnoControlTableModel::notifyRowsInserted: no column model anymore!" );
 
         Reference< XGridDataModel > const xDataModel( m_pImpl->m_aDataModel );
         ENSURE_OR_RETURN_VOID( xDataModel.is(), "UnoControlTableModel::notifyRowsInserted: no data model anymore!" );
 
-        // implicitly add columns to the column model
-        // TODO: is this really a good idea?
+        
+        
         sal_Int32 const dataColumnCount = xDataModel->getColumnCount();
         OSL_ENSURE( dataColumnCount > 0, "UnoControlTableModel::notifyRowsInserted: no columns at all?" );
 
         sal_Int32 const modelColumnCount = xColumnModel->getColumnCount();
         if ( ( modelColumnCount == 0 ) && ( dataColumnCount > 0 ) )
         {
-            // TODO: shouldn't we clear the mutexes guard for this call?
+            
             xColumnModel->setDefaultColumns( dataColumnCount );
         }
 
-        // multiplex the event to our own listeners
+        
         ModellListeners aListeners( m_pImpl->m_aListeners );
         for (   ModellListeners::const_iterator loop = aListeners.begin();
                 loop != aListeners.end();
@@ -915,7 +915,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::notifyRowsRemoved( GridDataEvent const & i_event ) const
     {
         ModellListeners aListeners( m_pImpl->m_aListeners );
@@ -928,7 +928,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::notifyDataChanged( ::com::sun::star::awt::grid::GridDataEvent const & i_event ) const
     {
         ColPos const firstCol = i_event.FirstColumn == -1 ? 0 : i_event.FirstColumn;
@@ -946,7 +946,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void UnoControlTableModel::notifyAllDataChanged() const
     {
         ModellListeners aListeners( m_pImpl->m_aListeners );
@@ -959,7 +959,7 @@ namespace svt { namespace table
         }
     }
 
-// .....................................................................................................................
-} } // svt::table
-// .....................................................................................................................
+
+} } 
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

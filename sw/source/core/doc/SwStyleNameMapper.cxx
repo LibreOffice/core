@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <SwStyleNameMapper.hxx>
@@ -27,7 +27,7 @@
 #endif
 
 extern ResMgr* pSwResMgr;
-// Initialise UI names to 0
+
 ::std::vector<OUString> *SwStyleNameMapper::pTextUINameArray = 0,
                 *SwStyleNameMapper::pListsUINameArray = 0,
                 *SwStyleNameMapper::pExtraUINameArray = 0,
@@ -40,7 +40,7 @@ extern ResMgr* pSwResMgr;
                 *SwStyleNameMapper::pPageDescUINameArray = 0,
                 *SwStyleNameMapper::pNumRuleUINameArray = 0,
 
-// Initialise programmatic names to 0
+
                 *SwStyleNameMapper::pTextProgNameArray = 0,
                 *SwStyleNameMapper::pListsProgNameArray = 0,
                 *SwStyleNameMapper::pExtraProgNameArray = 0,
@@ -65,7 +65,7 @@ NameToIdHash    *SwStyleNameMapper::pParaUIMap = 0,
                 *SwStyleNameMapper::pFrameProgMap = 0,
                 *SwStyleNameMapper::pNumRuleProgMap = 0;
 
-// SwTableEntry so we can pass the length to the String CTOR
+
 struct SwTableEntry
 {
     sal_uInt8 nLength;
@@ -77,17 +77,17 @@ namespace
 
 #define ENTRY( s ) { sizeof (s)-1, s }
 
-// Hard coded Programmatic Name tables
+
 const struct SwTableEntry TextProgNameTable [] =
 {
-    ENTRY( "Standard" ), // RES_POOLCOLL_STANDARD
+    ENTRY( "Standard" ), 
     ENTRY( "Text body" ),
     ENTRY( "First line indent" ),
     ENTRY( "Hanging indent" ),
     ENTRY( "Text body indent" ),
     ENTRY( "Salutation" ),
     ENTRY( "Signature" ),
-    ENTRY( "List Indent" ), // RES_POOLCOLL_CONFRONTATION
+    ENTRY( "List Indent" ), 
     ENTRY( "Marginalia" ),
     ENTRY( "Heading" ),
     ENTRY( "Heading 1" ),
@@ -99,14 +99,14 @@ const struct SwTableEntry TextProgNameTable [] =
     ENTRY( "Heading 7" ),
     ENTRY( "Heading 8" ),
     ENTRY( "Heading 9" ),
-    ENTRY( "Heading 10" ), // RES_POOLCOLL_TEXT_END
+    ENTRY( "Heading 10" ), 
     { 0, NULL }
 };
 
 const struct SwTableEntry ListsProgNameTable [] =
 {
-    ENTRY( "List" ), // STR_POCO_PRGM_NUMBUL_BASE
-    ENTRY( "Numbering 1 Start" ), // STR_POCO_PRGM_NUM_LEVEL1S
+    ENTRY( "List" ), 
+    ENTRY( "Numbering 1 Start" ), 
     ENTRY( "Numbering 1" ),
     ENTRY( "Numbering 1 End" ),
     ENTRY( "Numbering 1 Cont." ),
@@ -145,13 +145,13 @@ const struct SwTableEntry ListsProgNameTable [] =
     ENTRY( "List 5 Start" ),
     ENTRY( "List 5" ),
     ENTRY( "List 5 End" ),
-    ENTRY( "List 5 Cont." ), // STR_POCO_PRGM_BUL_NONUM5
+    ENTRY( "List 5 Cont." ), 
     { 0, NULL }
 };
 
 const struct SwTableEntry ExtraProgNameTable [] =
 {
-    ENTRY( "Header" ), // RES_POOLCOLL_EXTRA_BEGIN
+    ENTRY( "Header" ), 
     ENTRY( "Header left" ),
     ENTRY( "Header right" ),
     ENTRY( "Footer" ),
@@ -168,14 +168,14 @@ const struct SwTableEntry ExtraProgNameTable [] =
     ENTRY( "Addressee" ),
     ENTRY( "Sender" ),
     ENTRY( "Endnote" ),
-    ENTRY( "Drawing" ), // RES_POOLCOLL_LABEL_DRAWING
+    ENTRY( "Drawing" ), 
     { 0, NULL }
 };
 
 const struct SwTableEntry RegisterProgNameTable [] =
 {
-    ENTRY( "Index" ), // STR_POCO_PRGM_REGISTER_BASE
-    ENTRY( "Index Heading" ), // STR_POCO_PRGM_TOX_IDXH
+    ENTRY( "Index" ), 
+    ENTRY( "Index Heading" ), 
     ENTRY( "Index 1" ),
     ENTRY( "Index 2" ),
     ENTRY( "Index 3" ),
@@ -209,13 +209,13 @@ const struct SwTableEntry RegisterProgNameTable [] =
     ENTRY( "User Index 7" ),
     ENTRY( "User Index 8" ),
     ENTRY( "User Index 9" ),
-    ENTRY( "User Index 10" ), // STR_POCO_PRGM_TOX_USER10
+    ENTRY( "User Index 10" ), 
     { 0, NULL }
 };
 
 const struct SwTableEntry DocProgNameTable [] =
 {
-    ENTRY( "Title" ), // STR_POCO_PRGM_DOC_TITEL
+    ENTRY( "Title" ), 
     ENTRY( "Subtitle" ),
     { 0, NULL }
 };
@@ -226,25 +226,25 @@ const struct SwTableEntry HTMLProgNameTable [] =
     ENTRY( "Preformatted Text" ),
     ENTRY( "Horizontal Line" ),
     ENTRY( "List Contents" ),
-    ENTRY( "List Heading" ), // STR_POCO_PRGM_HTML_DT
+    ENTRY( "List Heading" ), 
     { 0, NULL }
 };
 
 const struct SwTableEntry FrmFmtProgNameTable [] =
 {
-    ENTRY( "Frame" ), // RES_POOLFRM_FRAME
+    ENTRY( "Frame" ), 
     ENTRY( "Graphics" ),
     ENTRY( "OLE" ),
     ENTRY( "Formula" ),
     ENTRY( "Marginalia" ),
     ENTRY( "Watermark" ),
-    ENTRY( "Labels" ), // RES_POOLFRM_LABEL
+    ENTRY( "Labels" ), 
     { 0, NULL }
 };
 
 const struct SwTableEntry ChrFmtProgNameTable [] =
 {
-    ENTRY( "Footnote Symbol" ), // RES_POOLCHR_FOOTNOTE
+    ENTRY( "Footnote Symbol" ), 
     ENTRY( "Page Number" ),
     ENTRY( "Caption characters" ),
     ENTRY( "Drop Caps" ),
@@ -259,14 +259,14 @@ const struct SwTableEntry ChrFmtProgNameTable [] =
     ENTRY( "Main index entry" ),
     ENTRY( "Footnote anchor" ),
     ENTRY( "Endnote anchor" ),
-    ENTRY( "Rubies" ), // RES_POOLCHR_RUBYTEXT
-    ENTRY( "Vertical Numbering Symbols" ), // RES_POOLCHR_VERT_NUMBER
+    ENTRY( "Rubies" ), 
+    ENTRY( "Vertical Numbering Symbols" ), 
     { 0, NULL }
 };
 
 const struct SwTableEntry HTMLChrFmtProgNameTable [] =
 {
-    ENTRY( "Emphasis" ), // RES_POOLCHR_HTML_EMPHASIS
+    ENTRY( "Emphasis" ), 
     ENTRY( "Citation" ),
     ENTRY( "Strong Emphasis" ),
     ENTRY( "Source Text" ),
@@ -274,13 +274,13 @@ const struct SwTableEntry HTMLChrFmtProgNameTable [] =
     ENTRY( "User Entry" ),
     ENTRY( "Variable" ),
     ENTRY( "Definition" ),
-    ENTRY( "Teletype" ), // RES_POOLCHR_HTML_TELETYPE
+    ENTRY( "Teletype" ), 
     { 0, NULL }
 };
 
 const struct SwTableEntry PageDescProgNameTable [] =
 {
-    ENTRY( "Standard" ), // STR_POOLPAGE_PRGM_STANDARD
+    ENTRY( "Standard" ), 
     ENTRY( "First Page" ),
     ENTRY( "Left Page" ),
     ENTRY( "Right Page" ),
@@ -288,14 +288,14 @@ const struct SwTableEntry PageDescProgNameTable [] =
     ENTRY( "Index" ),
     ENTRY( "HTML" ),
     ENTRY( "Footnote" ),
-    ENTRY( "Endnote" ), // STR_POOLPAGE_PRGM_ENDNOTE
+    ENTRY( "Endnote" ), 
     ENTRY( "Landscape" ),
     { 0, NULL }
 };
 
 const struct SwTableEntry NumRuleProgNameTable [] =
 {
-    ENTRY( "Numbering 1" ), // STR_POOLNUMRULE_PRGM_NUM1
+    ENTRY( "Numbering 1" ), 
     ENTRY( "Numbering 2" ),
     ENTRY( "Numbering 3" ),
     ENTRY( "Numbering 4" ),
@@ -304,7 +304,7 @@ const struct SwTableEntry NumRuleProgNameTable [] =
     ENTRY( "List 2" ),
     ENTRY( "List 3" ),
     ENTRY( "List 4" ),
-    ENTRY( "List 5" ), // STR_POOLNUMRULE_PRGM_BUL5
+    ENTRY( "List 5" ), 
     { 0, NULL }
 };
 #undef ENTRY
@@ -664,7 +664,7 @@ const NameToIdHash & SwStyleNameMapper::getHashTable ( SwGetPoolIdFromName eFlag
     return *pHash;
 }
 
-// This gets the UI name from the programmatic name
+
 const OUString& SwStyleNameMapper::GetUIName(const OUString& rName,
                                              SwGetPoolIdFromName const eFlags)
 {
@@ -672,7 +672,7 @@ const OUString& SwStyleNameMapper::GetUIName(const OUString& rName,
     return nId != USHRT_MAX ? GetUIName( nId, rName ) : rName;
 }
 
-// Get the programmatic name from the UI name
+
 const OUString& SwStyleNameMapper::GetProgName(
         const OUString& rName, SwGetPoolIdFromName const eFlags)
 {
@@ -680,7 +680,7 @@ const OUString& SwStyleNameMapper::GetProgName(
     return nId != USHRT_MAX ? GetProgName( nId, rName ) : rName;
 }
 
-// Get the programmatic name from the UI name in rName and put it into rFillName
+
 void SwStyleNameMapper::FillProgName(
         const OUString& rName, OUString& rFillName,
         SwGetPoolIdFromName const eFlags, bool const bDisambiguate)
@@ -688,31 +688,31 @@ void SwStyleNameMapper::FillProgName(
     sal_uInt16 nId = GetPoolIdFromUIName ( rName, eFlags );
     if ( bDisambiguate && nId == USHRT_MAX )
     {
-        // rName isn't in our UI name table...check if it's in the programmatic one
+        
         nId = GetPoolIdFromProgName ( rName, eFlags );
 
         rFillName = rName;
         if (nId == USHRT_MAX )
         {
-            // It isn't ...make sure the suffix isn't already " (user)"...if it is,
-            // we need to add another one
+            
+            
             if (lcl_SuffixIsUser(rFillName))
                 rFillName += " (user)";
         }
         else
         {
-            // It's in the programmatic name table...append suffix
+            
             rFillName += " (user)";
         }
     }
     else
     {
-        // If we aren't trying to disambiguate, then just do a normal fill
+        
         fillNameFromId(nId, rFillName, true);
     }
 }
 
-// Get the UI name from the programmatic name in rName and put it into rFillName
+
 void SwStyleNameMapper::FillUIName(
         const OUString& rName, OUString& rFillName,
         SwGetPoolIdFromName const eFlags, bool const bDisambiguate)
@@ -721,12 +721,12 @@ void SwStyleNameMapper::FillUIName(
     if ( bDisambiguate && nId == USHRT_MAX )
     {
         rFillName = rName;
-        // rName isn't in our Prog name table...check if it has a " (user)" suffix, if so remove it
+        
         lcl_CheckSuffixAndDelete ( rFillName );
     }
     else
     {
-        // If we aren't trying to disambiguate, then just do a normal fill
+        
         fillNameFromId(nId, rFillName, false);
     }
 }
@@ -824,33 +824,33 @@ void SwStyleNameMapper::fillNameFromId(
     rFillName = getNameFromId(nId, rFillName, bProgName);
 }
 
-// Get the UI name from the pool ID
+
 void SwStyleNameMapper::FillUIName(sal_uInt16 const nId, OUString& rFillName)
 {
     fillNameFromId(nId, rFillName, false);
 }
 
-// Get the UI name from the pool ID
+
 const OUString& SwStyleNameMapper::GetUIName(
         sal_uInt16 const nId, const OUString& rName)
 {
     return getNameFromId(nId, rName, false);
 }
 
-// Get the programmatic name from the pool ID
+
 void SwStyleNameMapper::FillProgName(sal_uInt16 nId, OUString& rFillName)
 {
     fillNameFromId(nId, rFillName, true);
 }
 
-// Get the programmatic name from the pool ID
+
 const OUString&
 SwStyleNameMapper::GetProgName(sal_uInt16 const nId, const OUString& rName)
 {
     return getNameFromId(nId, rName, true);
 }
 
-// This gets the PoolId from the UI Name
+
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName(
         const OUString& rName, SwGetPoolIdFromName const eFlags)
 {
@@ -859,7 +859,7 @@ sal_uInt16 SwStyleNameMapper::GetPoolIdFromUIName(
     return aIter != rHashMap.end() ? (*aIter).second : USHRT_MAX;
 }
 
-// Get the Pool ID from the programmatic name
+
 sal_uInt16 SwStyleNameMapper::GetPoolIdFromProgName(
             const OUString& rName, SwGetPoolIdFromName const eFlags)
 {

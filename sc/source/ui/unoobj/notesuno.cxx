@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "notesuno.hxx"
@@ -38,7 +38,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 static const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
 {
@@ -47,19 +47,19 @@ static const SvxItemPropertySet* lcl_GetAnnotationPropertySet()
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
+        SVX_UNOEDIT_NUMBERING_PROPERTIE,    
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static SvxItemPropertySet aAnnotationPropertySet_Impl( aAnnotationPropertyMap_Impl, SdrObject::GetGlobalDrawObjectItemPool() );
     return &aAnnotationPropertySet_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScAnnotationObj, "ScAnnotationObj", "com.sun.star.sheet.CellAnnotation" )
-//SC_SIMPLE_SERVICE_INFO( ScAnnotationShapeObj, "ScAnnotationShapeObj", "com.sun.star.sheet.CellAnnotationShape" )
 
-//------------------------------------------------------------------------
+
+
 
 ScAnnotationObj::ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos) :
     pDocShell( pDocSh ),
@@ -68,8 +68,8 @@ ScAnnotationObj::ScAnnotationObj(ScDocShell* pDocSh, const ScAddress& rPos) :
 {
     pDocShell->GetDocument()->AddUnoObject(*this);
 
-    //  pUnoText is allocated on demand (GetUnoText)
-    //  can't be aggregated because getString/setString is handled here
+    
+    
 }
 
 ScAnnotationObj::~ScAnnotationObj()
@@ -85,26 +85,26 @@ void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
-        //! Ref-Update
+
+        
     }
     else if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       
     }
 }
 
 
-// XChild
+
 
 uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    //  Parent der Notiz ist die zugehoerige Zelle
-    //! existierendes Objekt finden und zurueckgeben ???
+    
+    
 
     if (pDocShell)
         return (cppu::OWeakObject*)new ScCellObj( pDocShell, aCellPos );
@@ -115,17 +115,17 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent() throw(uno:
 void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<uno::XInterface>& /* Parent */ )
                                     throw(lang::NoSupportException, uno::RuntimeException)
 {
-    //  hamma nich
-    //! Exception oder so ??!
+    
+    
 }
 
-// XSimpleText
+
 
 uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursor()
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //  Notizen brauchen keine Extrawurst
+    
     return GetUnoText().createTextCursor();
 }
 
@@ -134,7 +134,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScAnnotationObj::createTextCursorByRa
                                                     throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    //  Notizen brauchen keine Extrawurst
+    
     return GetUnoText().createTextCursorByRange(aTextPosition);
 }
 
@@ -184,7 +184,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScAnnotationObj::getEnd() throw(uno::R
     return GetUnoText().getEnd();
 }
 
-// XSheetAnnotation
+
 
 table::CellAddress SAL_CALL ScAnnotationObj::getPosition() throw(uno::RuntimeException)
 {
@@ -222,12 +222,12 @@ sal_Bool SAL_CALL ScAnnotationObj::getIsVisible() throw(uno::RuntimeException, s
 void SAL_CALL ScAnnotationObj::setIsVisible( sal_Bool bIsVisible ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    // show/hide note with undo action
+    
     if( pDocShell )
         pDocShell->GetDocFunc().ShowNote( aCellPos, bIsVisible );
 }
 
-// XSheetAnnotationShapeSupplier
+
 uno::Reference < drawing::XShape > SAL_CALL ScAnnotationObj::getAnnotationShape()
                                 throw(::com::sun::star::uno::RuntimeException,
                                       std::exception)

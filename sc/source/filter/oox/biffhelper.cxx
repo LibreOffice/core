@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "biffhelper.hxx"
@@ -28,10 +28,10 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
 
 
-// ============================================================================
+
+
 
 namespace {
 
@@ -48,11 +48,11 @@ union DecodedDouble
     inline explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
 };
 
-} // namespace
+} 
 
-// ============================================================================
 
-// conversion -----------------------------------------------------------------
+
+
 
 /*static*/ double BiffHelper::calcDoubleFromRk( sal_Int32 nRkValue )
 {
@@ -94,7 +94,7 @@ union DecodedDouble
     return aDecDbl.mfValue;
 }
 
-// BIFF12 import --------------------------------------------------------------
+
 
 /*static*/ OUString BiffHelper::readString( SequenceInputStream& rStrm, bool b32BitLen, bool bAllowNulChars )
 {
@@ -102,11 +102,11 @@ union DecodedDouble
     if( !rStrm.isEof() )
     {
         sal_Int32 nCharCount = b32BitLen ? rStrm.readValue< sal_Int32 >() : rStrm.readValue< sal_Int16 >();
-        // string length -1 is often used to indicate a missing string
+        
         OSL_ENSURE( !rStrm.isEof() && (nCharCount >= -1), "BiffHelper::readString - invalid string length" );
         if( !rStrm.isEof() && (nCharCount > 0) )
         {
-            // SequenceInputStream always supports getRemaining()
+            
             nCharCount = ::std::min( nCharCount, static_cast< sal_Int32 >( rStrm.getRemaining() / 2 ) );
             aString = rStrm.readUnicodeArray( nCharCount, bAllowNulChars );
         }
@@ -114,7 +114,7 @@ union DecodedDouble
     return aString;
 }
 
-// BIFF2-BIFF8 import ---------------------------------------------------------
+
 
 /*static*/ bool BiffHelper::isBofRecord( BiffInputStream& rStrm )
 {
@@ -134,7 +134,7 @@ union DecodedDouble
     return !rStrm.isEof() && (rStrm.getRecId() == nEndRecId);
 }
 
-} // namespace xls
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

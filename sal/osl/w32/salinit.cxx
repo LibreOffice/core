@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -31,10 +31,10 @@
 extern "C" {
 #endif
 
-//From time.c
+
 void sal_initGlobalTimer();
 
-// _set_invalid_parameter_handler appears unavailable with MinGW:
+
 #if defined _MSC_VER
 namespace {
 
@@ -51,15 +51,15 @@ extern "C" void invalidParameterHandler(
 }
 #endif
 
-// Prototypes for initialization and deinitialization of SAL library
+
 
 void sal_detail_initialize(int argc, char ** argv)
 {
     sal_initGlobalTimer();
-    // SetProcessDEPPolicy(PROCESS_DEP_ENABLE);
-    // SetDllDirectoryW(L"");
-    // SetSearchPathMode(
-    //   BASE_SEARCH_PATH_ENABLE_SAFE_SEARCHMODE | BASE_SEARCH_PATH_PERMANENT);
+    
+    
+    
+    
     HMODULE h = GetModuleHandleW(L"kernel32.dll");
     if (h != 0) {
         FARPROC p;
@@ -95,19 +95,19 @@ void sal_detail_initialize(int argc, char ** argv)
             ((LOBYTE(wsaData.wVersion) == wMajorVersionRequired) &&
             ((HIBYTE(wsaData.wVersion) < wMinorVersionRequired))))
             {
-                // How to handle a very unlikely error ???
+                
             }
     }
     else
     {
-        // How to handle a very unlikely error ???
+        
     }
 
-#if defined _MSC_VER // appears unavailable with MinGW
-    // It appears that at least some jvm.dll versions can cause calls to
-    // _fileno(NULL), which leads to a call of the invalid parameter handler,
-    // and the default handler causes the application to crash, so install a
-    // "harmless" one (cf. fdo#38913):
+#if defined _MSC_VER 
+    
+    
+    
+    
     _set_invalid_parameter_handler(&invalidParameterHandler);
 #endif
 
@@ -118,14 +118,14 @@ void sal_detail_deinitialize()
 {
     if ( SOCKET_ERROR == WSACleanup() )
     {
-        // We should never reach this point or we did wrong elsewhere
+        
     }
 }
 
 
 
 #ifdef __cplusplus
-}   // extern "C"
+}   
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

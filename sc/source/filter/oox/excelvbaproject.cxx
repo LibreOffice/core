@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "excelvbaproject.hxx"
@@ -35,7 +35,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 ExcelVbaProject::ExcelVbaProject( const Reference< XComponentContext >& rxContext, const Reference< XSpreadsheetDocument >& rxDocument ) :
     ::oox::ole::VbaProject( rxContext, Reference< XModel >( rxDocument, UNO_QUERY ), "Calc" ),
@@ -54,14 +54,14 @@ ExcelVbaProject::ExcelVbaProject( const Reference< XComponentContext >& rxContex
 {
 }
 
-// protected ------------------------------------------------------------------
+
 
 namespace {
 
 struct SheetCodeNameInfo
 {
-    PropertySet         maSheetProps;       /// Property set of the sheet without codename.
-    OUString            maPrefix;           /// Prefix for the codename to be generated.
+    PropertySet         maSheetProps;       
+    OUString            maPrefix;           
 
     inline explicit     SheetCodeNameInfo( PropertySet& rSheetProps, const OUString& rPrefix ) :
                             maSheetProps( rSheetProps ), maPrefix( rPrefix ) {}
@@ -70,7 +70,7 @@ struct SheetCodeNameInfo
 typedef ::std::set< OUString >              CodeNameSet;
 typedef ::std::list< SheetCodeNameInfo >    SheetCodeNameInfoList;
 
-} // namespace
+} 
 
 void ExcelVbaProject::prepareImport()
 {
@@ -78,16 +78,16 @@ void ExcelVbaProject::prepareImport()
         codenames if not. */
     if( mxDocument.is() ) try
     {
-        // collect existing codenames (do not use them when creating new codenames)
+        
         CodeNameSet aUsedCodeNames;
 
-        // collect sheets without codenames
+        
         SheetCodeNameInfoList aCodeNameInfos;
 
-        // iterate over all imported sheets
+        
         Reference< XEnumerationAccess > xSheetsEA( mxDocument->getSheets(), UNO_QUERY_THROW );
         Reference< XEnumeration > xSheetsEnum( xSheetsEA->createEnumeration(), UNO_SET_THROW );
-        // own try/catch for every sheet
+        
         while( xSheetsEnum->hasMoreElements() ) try
         {
             PropertySet aSheetProp( xSheetsEnum->nextElement() );
@@ -99,7 +99,7 @@ void ExcelVbaProject::prepareImport()
             }
             else
             {
-                // TODO: once we have chart sheets we need a switch/case on sheet type ('SheetNNN' vs. 'ChartNNN')
+                
                 aCodeNameInfos.push_back( SheetCodeNameInfo( aSheetProp, "Sheet" ) );
             }
         }
@@ -107,10 +107,10 @@ void ExcelVbaProject::prepareImport()
         {
         }
 
-        // create new codenames if sheets do not have one
+        
         for( SheetCodeNameInfoList::iterator aIt = aCodeNameInfos.begin(), aEnd = aCodeNameInfos.end(); aIt != aEnd; ++aIt )
         {
-            // search for an unused codename
+            
             sal_Int32 nCounter = 1;
             OUString aCodeName;
             do
@@ -120,10 +120,10 @@ void ExcelVbaProject::prepareImport()
             while( aUsedCodeNames.count( aCodeName ) > 0 );
             aUsedCodeNames.insert( aCodeName );
 
-            // set codename at sheet
+            
             aIt->maSheetProps.setProperty( PROP_CodeName, aCodeName );
 
-            // tell base class to create a dummy module
+            
             addDummyModule( aCodeName, ModuleType::DOCUMENT );
         }
     }
@@ -132,9 +132,9 @@ void ExcelVbaProject::prepareImport()
     }
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

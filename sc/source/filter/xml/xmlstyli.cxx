@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlstyli.hxx"
@@ -101,7 +101,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     XMLPropertyState* pAllBorderWidthProperty = NULL;
     XMLPropertyState* pBorderWidths[4] = { NULL, NULL, NULL, NULL };
     XMLPropertyState* pDiagBorders[2] = { 0 };
-    XMLPropertyState* pOldDiagBorderWidths[2] = { 0 };      // old attribute names without "s"
+    XMLPropertyState* pOldDiagBorderWidths[2] = { 0 };      
     XMLPropertyState* pDiagBorderWidths[2] = { 0 };
 
     ::std::vector< XMLPropertyState >::iterator endproperty(rProperties.end());
@@ -140,7 +140,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
     }
     sal_uInt16 i;
 
-    // #i27594#; copy Value, but don't insert
+    
     if (pAllBorderWidthProperty)
         pAllBorderWidthProperty->mnIndex = -1;
     if (pAllBorderProperty)
@@ -167,9 +167,9 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             pBorders[i]->maValue >>= aBorderLine;
             if( pBorderWidths[i] )
             {
-                // Merge style:border-line-width values to fo:border values. Do
-                // not override fo:border line width or line style with an
-                // empty value!
+                
+                
+                
                 table::BorderLine2 aBorderLineWidth;
                 pBorderWidths[i]->maValue >>= aBorderLineWidth;
                 aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
@@ -187,7 +187,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             pDiagBorders[i]->maValue >>= aBorderLine;
             table::BorderLine2 aBorderLineWidth;
             if (pDiagBorderWidths[i])
-                pDiagBorderWidths[i]->maValue >>= aBorderLineWidth;     // prefer new attribute
+                pDiagBorderWidths[i]->maValue >>= aBorderLineWidth;     
             else
                 pOldDiagBorderWidths[i]->maValue >>= aBorderLineWidth;
             aBorderLine.OuterLineWidth = aBorderLineWidth.OuterLineWidth;
@@ -197,7 +197,7 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
             if (pDiagBorderWidths[i])
                 pDiagBorderWidths[i]->mnIndex = -1;
             if (pOldDiagBorderWidths[i])
-                pOldDiagBorderWidths[i]->mnIndex = -1;      // reset mnIndex for old and new attribute if both are present
+                pOldDiagBorderWidths[i]->mnIndex = -1;      
         }
     }
 
@@ -260,8 +260,8 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
         {
             if (pHeight)
             {
-                // set the stored height, but keep "optimal" flag:
-                // pass the height value as OptimalHeight property (only allowed while loading!)
+                
+                
                 pOptimalHeight->maValue = pHeight->maValue;
                 pHeight->mnIndex = -1;
             }
@@ -273,7 +273,7 @@ void ScXMLRowImportPropertyMapper::finished(::std::vector< XMLPropertyState >& r
     {
         rProperties.push_back(XMLPropertyState(maPropMapper->FindEntryIndex(CTF_SC_ROWOPTIMALHEIGHT), ::cppu::bool2any( false )));
     }
-    // don't access pointers to rProperties elements after push_back!
+    
 }
 
 class XMLTableCellPropsContext : public SvXMLPropertySetContext
@@ -313,9 +313,9 @@ SvXMLImportContext* XMLTableCellPropsContext::CreateChildContext( sal_uInt16 nPr
            ::std::vector< XMLPropertyState > &rProperties,
            const XMLPropertyState& rProp )
 {
-    // no need for a custom context or indeed a SvXMLTokenMap to grab just the
-    // single attribute ( href ) that we are interested in.
-    // still though, we will check namesspaces etc.
+    
+    
+    
     if ( ( XML_NAMESPACE_STYLE == nPrefix) &&
         IsXMLToken(rLocalName, XML_HYPERLINK ) )
     {
@@ -376,7 +376,7 @@ ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
         sal_uInt16 nPrefix(GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName ));
         const OUString& rValue(xAttrList->getValueByIndex( i ));
 
-        // TODO: use a map here
+        
         if( XML_NAMESPACE_STYLE == nPrefix )
         {
             if( IsXMLToken(aLocalName, XML_CONDITION ) )
@@ -396,13 +396,13 @@ ScCondFormatEntry* ScXMLMapContext::CreateConditionEntry()
     GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eGrammar, msCondition );
     bool bHasNmsp = aCondition.getLength() < msCondition.getLength();
 
-    // parse a condition from the attribute string
+    
     ScXMLConditionParseResult aParseResult;
     ScXMLConditionHelper::parseCondition( aParseResult, aCondition, 0 );
 
     if( !bHasNmsp )
     {
-        // the attribute does not contain a namespace: try to find a namespace of an external grammar
+        
         FormulaGrammar::Grammar eNewGrammar = FormulaGrammar::GRAM_UNSPECIFIED;
         GetScImport().ExtractFormulaNamespaceGrammar( aCondition, aConditionNmsp, eNewGrammar, aCondition, true );
         if( eNewGrammar != FormulaGrammar::GRAM_EXTERNAL )
@@ -428,7 +428,7 @@ void XMLTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
                                         const OUString& rValue )
 {
-    // TODO: use a map here
+    
     if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
         sDataStyleName = rValue;
     else if ( IsXMLToken(rLocalName, XML_MASTER_PAGE_NAME ) )
@@ -588,11 +588,11 @@ void XMLTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::An
 {
     XMLPropertyState* property = FindProperty(nContextID);
     if (property)
-        property->mnIndex = -1; // #i46996# remove old property, so it isn't double
+        property->mnIndex = -1; 
     sal_Int32 nIndex(static_cast<XMLTableStylesContext *>(pStyles)->GetIndex(nContextID));
     OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
-    GetProperties().push_back(aPropState); // has to be insertes in a sort order later
+    GetProperties().push_back(aPropState); 
 }
 
 XMLPropertyState* XMLTableStyleContext::FindProperty(const sal_Int16 nContextID)
@@ -646,14 +646,14 @@ sal_Int32 XMLTableStyleContext::GetNumberFormat()
     return nNumberFormat;
 }
 
-// ----------------------------------------------------------------------------
+
 
 SvXMLStyleContext *XMLTableStylesContext::CreateStyleStyleChildContext(
         sal_uInt16 nFamily, sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & xAttrList )
 {
     SvXMLStyleContext *pStyle;
-    // use own wrapper for text and paragraph, to record style usage
+    
     if (nFamily == XML_STYLE_FAMILY_TEXT_PARAGRAPH || nFamily == XML_STYLE_FAMILY_TEXT_TEXT)
         pStyle = new ScCellTextStyleContext( GetImport(), nPrefix, rLocalName,
                                             xAttrList, *this, nFamily );
@@ -845,9 +845,9 @@ uno::Reference < XNameContainer >
                 }
                 catch ( uno::Exception& )
                 {
-                    // #i97680# Named table/column/row styles aren't supported, getByName will throw an exception.
-                    // For better interoperability, these styles should then be handled as automatic styles.
-                    // For now, NULL is returned (and the style is ignored).
+                    
+                    
+                    
                 }
                 switch( nFamily )
                 {
@@ -929,7 +929,7 @@ sal_Int32 XMLTableStylesContext::GetIndex(const sal_Int16 nContextID)
         return -1;
 }
 
-// ---------------------------------------------------------------------------
+
 TYPEINIT1( ScXMLMasterStylesContext, SvXMLStylesContext );
 
 bool ScXMLMasterStylesContext::InsertStyleFamily( sal_uInt16 ) const
@@ -963,7 +963,7 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
                         GetImport(), nPrefix, rLocalName, xAttrList,
                         !GetImport().GetTextImport()->IsInsertMode() );
 
-    // any other style will be ignored here!
+    
 
     return pContext;
 }
@@ -1057,7 +1057,7 @@ void ScMasterPageContext::Finish( bool bOverwrite )
         ClearContent(OUString(SC_UNO_PAGE_RIGHTHDRCON));
 }
 
-// ---------------------------------------------------------------------------
+
 
 ScCellTextStyleContext::ScCellTextStyleContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName, const uno::Reference<xml::sax::XAttributeList> & xAttrList,
@@ -1105,8 +1105,8 @@ void ScCellTextStyleContext::FillPropertySet( const uno::Reference<beans::XPrope
             }
         }
 
-        // if it's a different shape, BlockSheet is called from XMLTableShapeImportHelper::finishShape
-        // formatted text in page headers/footers can be ignored
+        
+        
     }
 }
 

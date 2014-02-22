@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
@@ -46,7 +46,7 @@
 
 using namespace ::com::sun::star;
 
-// Adjust line height (dialogue)
+
 void SwTableFUNC::ColWidthDlg( Window *pParent )
 {
     InitTabCols();
@@ -59,7 +59,7 @@ void SwTableFUNC::ColWidthDlg( Window *pParent )
     delete pDlg;
 }
 
-// Determine the width
+
 SwTwips SwTableFUNC::GetColWidth(sal_uInt16 nNum) const
 {
     SwTwips nWidth = 0;
@@ -96,8 +96,8 @@ SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
 
     if ( GetColCount() > 0 )
     {
-        // The maximum width arises from the own width and
-        // the width each of the neighbor cells reduced by MINLAY.
+        
+        
         SwTwips nMax =  nNum == 0 ?
             GetColWidth(1) - MINLAY :
                 nNum == GetColCount() ?
@@ -112,8 +112,8 @@ SwTwips SwTableFUNC::GetMaxColWidth( sal_uInt16 nNum ) const
 
 void SwTableFUNC::SetColWidth(sal_uInt16 nNum, SwTwips nNewWidth )
 {
-    // set current width
-    // move all of the following
+    
+    
     sal_Bool bCurrentOnly = sal_False;
 
     if ( aCols.Count() > 0 )
@@ -160,7 +160,7 @@ SwTableFUNC::SwTableFUNC(SwWrtShell *pShell, sal_Bool bCopyFmt)
       pSh(pShell),
       bCopy(bCopyFmt)
 {
-    // if applicable copy the format for edit
+    
     if( pFmt && bCopy )
         pFmt = new SwFrmFmt( *pFmt );
 }
@@ -173,8 +173,8 @@ SwTableFUNC::~SwTableFUNC()
 
 void SwTableFUNC::UpdateChart()
 {
-    //Update of the fields triggered by the user, all Charts of
-    //the table will be brought up to date
+    
+    
     SwFrmFmt *pFmt2 = pSh->GetTableFmt();
     if ( pFmt2 && pSh->HasOLEObj( pFmt2->GetName() ) )
     {
@@ -198,18 +198,18 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     if (pSh->IsCrsrInTbl())
     {
         aName = pSh->GetTableFmt()->GetName();
-        // insert node before table
+        
         pSh->MoveTable( fnTableCurr, fnTableStart );
         pSh->Up( sal_False, 1, sal_False );
         if ( pSh->IsCrsrInTbl() )
         {
             if ( aName != pSh->GetTableFmt()->GetName() )
-                pSh->Down( sal_False, 1, sal_False ); // two adjacent tables
+                pSh->Down( sal_False, 1, sal_False ); 
         }
         pSh->SplitNode();
     }
 
-    // insert chart
+    
     OUString aObjName;
     comphelper::EmbeddedObjectContainer aCnt;
     uno::Reference < embed::XEmbeddedObject > xObj =
@@ -229,10 +229,10 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         {
             xChartModel.set( xCompSupp->getComponent(), uno::UNO_QUERY );
             if( xChartModel.is() )
-                xChartModel->lockControllers(); //#i79578# don't request a new replacement image for charts to often - block change notifications
+                xChartModel->lockControllers(); 
         }
 
-        // set the table name at the OLE-node
+        
         if (!aName.isEmpty())
             pSh->SetChartName( aName );
     }
@@ -240,7 +240,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
     if ( xObj.is() )
     {
-        // Let the chart be activated after the inserting
+        
         SfxInPlaceClient* pClient = pSh->GetView().FindIPClient( xObj, &pSh->GetView().GetEditWin() );
         if ( !pClient )
         {
@@ -248,12 +248,12 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
             pSh->SetCheckForOLEInCaption( sal_True );
         }
         pSh->CalcAndSetScale( aEmbObjRef );
-        //#50270# We don't need to handle errors,
-        //this does the DoVerb in the SfxViewShell.
+        
+        
         ErrCode nErr = pClient->DoVerb( SVVERB_SHOW );
         (void) nErr;
 
-        // #i121334#
+        
         ChartHelper::AdaptDefaultsForChart( xObj );
     }
 
@@ -265,7 +265,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
         uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pSh->GetView().GetDocShell()->GetModel(), uno::UNO_QUERY );
         xDataReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
-        // default values for ranges that do not consist of a single row or column
+        
         bool bHasCategories = true;
         bool bFirstCellAsLabel = true;
         chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
@@ -310,7 +310,7 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
     pSh->EndUndo( UNDO_UI_INSERT_CHART );
 
     if( xChartModel.is() )
-        xChartModel->unlockControllers(); //#i79578# don't request a new replacement image for charts to often
+        xChartModel->unlockControllers(); 
     return xChartModel;
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -99,7 +99,7 @@ static sal_Bool readOption( OUString * pValue, const sal_Char * pOpt,
 
     if (aOpt.equalsIgnoreAsciiCase( aArg.copy(1) ))
     {
-        // take next argument
+        
         ++(*pnIndex);
 
         rtl_getAppCommandArg(*pnIndex, &pValue->pData);
@@ -192,7 +192,7 @@ static Reference< XInterface > loadComponent(
     const OUString & rImplName, const OUString & rLocation )
     throw (Exception)
 {
-    // determine loader to be used
+    
     sal_Int32 nDot = rLocation.lastIndexOf( '.' );
     if (nDot > 0 && nDot < rLocation.getLength())
     {
@@ -223,7 +223,7 @@ static Reference< XInterface > loadComponent(
 
         Reference< XInterface > xInstance;
 
-        // activate
+        
         Reference< XInterface > xFactory( xLoader->activate(
             rImplName, OUString(), rLocation, Reference< XRegistryKey >() ) );
         if (xFactory.is())
@@ -295,7 +295,7 @@ public:
         , _aInstanceName( rInstanceName )
         {}
 
-    // XInstanceProvider
+    
     virtual Reference< XInterface > SAL_CALL getInstance( const OUString & rName )
         throw (NoSuchElementException, RuntimeException);
 };
@@ -304,12 +304,12 @@ inline Reference< XInterface > OInstanceProvider::createInstance()
     throw (Exception)
 {
     Reference< XInterface > xRet;
-    if (!_aImplName.isEmpty()) // manually via loader
+    if (!_aImplName.isEmpty()) 
         xRet = loadComponent( _xContext, _aImplName, _aLocation );
-    else // via service manager
+    else 
         unoexe::createInstance( xRet, _xContext, _aServiceName );
 
-    // opt XInit
+    
     Reference< XInitialization > xInit( xRet, UNO_QUERY );
     if (xInit.is())
         xInit->initialize( _aInitParams );
@@ -365,7 +365,7 @@ struct ODisposingListener : public WeakImplHelper1< XEventListener >
 {
     Condition cDisposed;
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const EventObject & rEvt )
         throw (RuntimeException);
 
@@ -387,7 +387,7 @@ void ODisposingListener::waitFor( const Reference< XComponent > & xComp )
     pListener->cDisposed.wait();
 }
 
-} // namespace unoexe
+} 
 
 using namespace unoexe;
 
@@ -411,10 +411,10 @@ SAL_IMPLEMENT_MAIN()
         sal_Bool bSingleAccept = sal_False;
         sal_Bool bSingleInstance = sal_False;
 
-        // read command line arguments
+        
 
         sal_uInt32 nPos = 0;
-        // read up to arguments
+        
         while (nPos < nCount)
         {
             OUString arg;
@@ -460,7 +460,7 @@ SAL_IMPLEMENT_MAIN()
         if (!aServiceName.isEmpty() && !aLocation.isEmpty())
             out( "\n> warning: service name given, will ignore location!" );
 
-        // read component params
+        
         aParams.realloc( nCount - nPos );
         OUString * pParams = aParams.getArray();
 
@@ -472,9 +472,9 @@ SAL_IMPLEMENT_MAIN()
 
         xContext = defaultBootstrap_InitialComponentContext();
 
-        // accept, instanciate, etc.
+        
 
-        if (!aUnoUrl.isEmpty()) // accepting connections
+        if (!aUnoUrl.isEmpty()) 
         {
             sal_Int32 nIndex = 0, nTokens = 0;
             do { aUnoUrl.getToken( 0, ';', nIndex ); nTokens++; } while( nIndex != -1 );
@@ -484,12 +484,12 @@ SAL_IMPLEMENT_MAIN()
                 throw RuntimeException("illegal uno url given!", Reference< XInterface >() );
             }
             nIndex = 0;
-            OUString aConnectDescr( aUnoUrl.getToken( 0, ';', nIndex ).copy( 4 ) ); // uno:CONNECTDESCR;iiop;InstanceName
+            OUString aConnectDescr( aUnoUrl.getToken( 0, ';', nIndex ).copy( 4 ) ); 
             OUString aInstanceName( aUnoUrl.getToken( 1, ';', nIndex ) );
 
             Reference< XAcceptor > xAcceptor = Acceptor::create(xContext);
 
-            // init params
+            
             Sequence< Any > aInitParams( aParams.getLength() );
             const OUString * p = aParams.getConstArray();
             Any * pInitParams = aInitParams.getArray();
@@ -498,7 +498,7 @@ SAL_IMPLEMENT_MAIN()
                 pInitParams[i] = makeAny( p[i] );
             }
 
-            // instance provider
+            
             Reference< XInstanceProvider > xInstanceProvider( new OInstanceProvider(
                 xContext, aImplName, aLocation, aServiceName, aInitParams,
                 bSingleInstance, aInstanceName ) );
@@ -507,7 +507,7 @@ SAL_IMPLEMENT_MAIN()
             OUString aUnoUrlToken( aUnoUrl.getToken( 1, ';', nIndex ) );
             for (;;)
             {
-                // accepting
+                
                 out( "\n> accepting " );
                 out( aConnectDescr );
                 out( "..." );
@@ -519,7 +519,7 @@ SAL_IMPLEMENT_MAIN()
                     xBridgeFactory, xContext,
                     OUString("com.sun.star.bridge.BridgeFactory") );
 
-                // bridge
+                
                 Reference< XBridge > xBridge( xBridgeFactory->createBridge(
                     OUString(), aUnoUrlToken,
                     xConnection, xInstanceProvider ) );
@@ -531,22 +531,22 @@ SAL_IMPLEMENT_MAIN()
                         throw RuntimeException( OUString( "bridge factory does not export interface \"com.sun.star.lang.XComponent\"!" ), Reference< XInterface >() );
                     ODisposingListener::waitFor( xComp );
                     xComp->dispose();
-                        // explicitly dispose the remote bridge so that it joins
-                        // on all spawned threads before process exit (see
-                        // binaryurp/source/bridge.cxx for details)
+                        
+                        
+                        
                     break;
                 }
             }
         }
-        else // no uno url
+        else 
         {
             Reference< XInterface > xInstance;
-            if (!aImplName.isEmpty()) // manually via loader
+            if (!aImplName.isEmpty()) 
                 xInstance = loadComponent( xContext, aImplName, aLocation );
-            else // via service manager
+            else 
                 createInstance( xInstance, xContext, aServiceName );
 
-            // execution
+            
             Reference< XMain > xMain( xInstance, UNO_QUERY );
             if (xMain.is())
             {
@@ -569,7 +569,7 @@ SAL_IMPLEMENT_MAIN()
         nRet = 1;
     }
 
-    // cleanup
+    
     Reference< XComponent > xComp( xContext, UNO_QUERY );
     if (xComp.is())
         xComp->dispose();

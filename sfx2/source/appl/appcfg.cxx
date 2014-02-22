@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -78,7 +78,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-//-------------------------------------------------------------------------
+
 
 class SfxEventAsyncer_Impl : public SfxListener
 {
@@ -93,7 +93,7 @@ public:
     DECL_LINK( TimerHdl, Timer*);
 };
 
-// -----------------------------------------------------------------------
+
 
 void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
@@ -105,7 +105,7 @@ void SfxEventAsyncer_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
  : aHint( rHint )
@@ -118,18 +118,18 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
     pTimer->Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
 {
     delete pTimer;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 {
-    (void)pAsyncTimer; // unused variable
+    (void)pAsyncTimer; 
     SfxObjectShellRef xRef( aHint.GetObjShell() );
     pAsyncTimer->Stop();
 #ifdef DBG_UTIL
@@ -148,7 +148,7 @@ IMPL_LINK(SfxEventAsyncer_Impl, TimerHdl, Timer*, pAsyncTimer)
 }
 
 
-//--------------------------------------------------------------------
+
 
 sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
 {
@@ -495,7 +495,7 @@ sal_Bool SfxApplication::GetOptions( SfxItemSet& rSet )
     return bRet;
 }
 
-// TODO/CLEANUP: Why two SetOptions Methods?
+
 void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
 {
     const SfxPoolItem *pItem = 0;
@@ -525,111 +525,111 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         SfxViewFrame* pCurrViewFrame = SfxViewFrame::GetFirst();
         while ( pCurrViewFrame )
         {
-            // update all "final" dispatchers
+            
             if ( !pCurrViewFrame->GetActiveChildFrame_Impl() )
                 pCurrViewFrame->GetDispatcher()->Update_Impl(sal_True);
             pCurrViewFrame = SfxViewFrame::GetNext(*pCurrViewFrame);
         }
     }
 
-    // Backup
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_BACKUP), true, &pItem) )
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetBackup( ( (const SfxBoolItem*)pItem )->GetValue() );
     }
 
-    // PrettyPrinting
+    
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_PRETTYPRINTING ), true, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA( SfxBoolItem ), "BoolItem expected" );
         aSaveOptions.SetPrettyPrinting( static_cast< const SfxBoolItem*> ( pItem )->GetValue() );
     }
 
-    // WarnAlienFormat
+    
     if ( SFX_ITEM_SET == rSet.GetItemState( rPool.GetWhich( SID_ATTR_WARNALIENFORMAT ), true, &pItem ) )
     {
         DBG_ASSERT( pItem->ISA( SfxBoolItem ), "BoolItem expected" );
         aSaveOptions.SetWarnAlienFormat( static_cast< const SfxBoolItem*> ( pItem )->GetValue() );
     }
 
-    // AutoSave
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVE), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetAutoSave( ( (const SfxBoolItem*)pItem )->GetValue() );
     }
 
-    // AutoSave-Propt
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEPROMPT), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetAutoSavePrompt(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // AutoSave-Time
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_AUTOSAVEMINUTE), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
         aSaveOptions.SetAutoSaveTime(((const SfxUInt16Item *)pItem)->GetValue());
     }
 
-    // UserAutoSave
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_USERAUTOSAVE), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetUserAutoSave( ( (const SfxBoolItem*)pItem )->GetValue() );
     }
 
-    // DocInfo
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_DOCINFO), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetDocInfoSave(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // Mark open Documents
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WORKINGSET), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveWorkingSet(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // Save window settings
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_SAVEDOCVIEW), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveDocView(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // Metric
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_METRIC), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
     }
 
-    // HelpBalloons
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELPBALLOONS), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aHelpOptions.SetExtendedHelp(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // HelpTips
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_HELPTIPS), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aHelpOptions.SetHelpTips(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // WelcomeScreen
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_WELCOMESCREEN ), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aHelpOptions.SetWelcomeScreen( ((const SfxBoolItem *)pItem)->GetValue() );
     }
 
-    // WelcomeScreen
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_WELCOMESCREEN_RESET ), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
@@ -645,37 +645,37 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         aHelpOptions.SetHelpStyleSheet( ((const SfxStringItem *)pItem)->GetValue() );
     }
 
-    // SaveRelINet
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_INET), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveRelINet(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // SaveRelFSys
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_SAVEREL_FSYS), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         aSaveOptions.SetSaveRelFSys(((const SfxBoolItem *)pItem)->GetValue());
     }
 
-    // Undo-Count
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_UNDO_COUNT), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "UInt16Item expected");
         sal_uInt16 nUndoCount = ((const SfxUInt16Item*)pItem)->GetValue();
         officecfg::Office::Common::Undo::Steps::set(nUndoCount, batch);
 
-        // To catch all Undo-Managers: Iterate over all Frames
+        
         for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst();
               pFrame;
               pFrame = SfxViewFrame::GetNext(*pFrame) )
         {
-            // Get the Dispatcher of the Frames
+            
             SfxDispatcher *pDispat = pFrame->GetDispatcher();
             pDispat->Flush();
 
-            // Iterate over all SfxShells on the Dispatchers Stack
+            
             sal_uInt16 nIdx = 0;
             for ( SfxShell *pSh = pDispat->GetShell(nIdx);
                   pSh;
@@ -688,21 +688,21 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         }
     }
 
-    // Office autostart
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_QUICKLAUNCHER), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "BoolItem expected");
         ShutdownIcon::SetAutostart( ( (const SfxBoolItem*)pItem )->GetValue() );
     }
 
-    // StarBasic Enable
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_BASIC_ENABLED, true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxUInt16Item), "SfxInt16Item expected");
         aSecurityOptions.SetBasicMode( (EBasicSecurityMode)( (const SfxUInt16Item*)pItem )->GetValue() );
     }
 
-    // Execute PlugIns
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_INET_EXE_PLUGIN, true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxBoolItem), "SfxBoolItem expected");
@@ -747,7 +747,7 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
             static_cast< SfxStringItem const * >(pItem)->GetValue(), batch);
     }
 
-    // Secure-Referers
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SECURE_URL, true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxStringListItem), "StringListItem expected");
@@ -767,22 +767,22 @@ void SfxApplication::SetOptions_Impl( const SfxItemSet& rSet )
         aSecurityOptions.SetConfirmationEnabled( ( (const SfxBoolItem *)pItem )->GetValue() );
     }
 
-    // Store changed data
+    
     batch->commit();
 }
 
-//--------------------------------------------------------------------
+
 void SfxApplication::SetOptions(const SfxItemSet &rSet)
 {
     SvtPathOptions aPathOptions;
 
-    // Data is saved in DocInfo and IniManager
+    
     const SfxPoolItem *pItem = 0;
     SfxItemPool &rPool = GetPool();
 
     SfxAllItemSet aSendSet( rSet );
 
-    // PathName
+    
     if ( SFX_ITEM_SET == rSet.GetItemState(rPool.GetWhich(SID_ATTR_PATHNAME), true, &pItem))
     {
         DBG_ASSERT(pItem->ISA(SfxAllEnumItem), "AllEnumItem expected");
@@ -869,11 +869,11 @@ void SfxApplication::SetOptions(const SfxItemSet &rSet)
 
     SetOptions_Impl( rSet );
 
-    // Undo-Count
+    
     Broadcast( SfxItemSetHint( rSet ) );
 }
 
-//--------------------------------------------------------------------
+
 void SfxApplication::NotifyEvent( const SfxEventHint& rEventHint, bool bSynchron )
 {
     SfxObjectShell *pDoc = rEventHint.GetObjShell();

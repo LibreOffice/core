@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -39,7 +39,7 @@
 
 using namespace ::com::sun::star;
 
-/// Glue class to call RtfImport as an internal filter, needed by copy&paste support.
+
 class SwRTFReader : public Reader
 {
     virtual sal_uLong Read( SwDoc &, const OUString& rBaseURL, SwPaM &,const OUString &);
@@ -50,22 +50,22 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& r
     if (!pStrm)
         return ERR_SWG_READ_ERROR;
 
-    // We want to work in an empty paragraph.
-    // Step 1: XTextRange will be updated when content is inserted, so we know
-    // the end position.
+    
+    
+    
     const uno::Reference<text::XTextRange> xInsertPosition =
         SwXTextRange::CreateXTextRange(rDoc, *rPam.GetPoint(), 0);
     SwNodeIndex *pSttNdIdx = new SwNodeIndex(rDoc.GetNodes());
     const SwPosition* pPos = rPam.GetPoint();
 
-    // Step 2: Split once and remember the node that has been split.
+    
     rDoc.SplitNode( *pPos, false );
     *pSttNdIdx = pPos->nNode.GetIndex()-1;
 
-    // Step 3: Split again.
+    
     rDoc.SplitNode( *pPos, false );
 
-    // Step 4: Insert all content into the new node
+    
     rPam.Move( fnMoveBackward );
     rDoc.SetTxtFmtColl
         ( rPam, rDoc.GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ) );
@@ -101,30 +101,30 @@ sal_uLong SwRTFReader::Read( SwDoc &rDoc, const OUString& /*rBaseURL*/, SwPaM& r
         ret = ERR_SWG_READ_ERROR;
     }
 
-    // Clean up the fake paragraphs.
+    
     SwUnoInternalPaM aPam(rDoc);
     ::sw::XTextRangeToSwPaM(aPam, xInsertPosition);
     if (pSttNdIdx->GetIndex())
     {
-        // If we are in insert mode, join the split node that is in front
-        // of the new content with the first new node. Or in other words:
-        // Revert the first split node.
+        
+        
+        
         SwTxtNode* pTxtNode = pSttNdIdx->GetNode().GetTxtNode();
         SwNodeIndex aNxtIdx( *pSttNdIdx );
         if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ) &&
                 pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
         {
-            // If the PaM points to the first new node, move the PaM to the
-            // end of the previous node.
+            
+            
             if( aPam.GetPoint()->nNode == aNxtIdx )
             {
                 aPam.GetPoint()->nNode = *pSttNdIdx;
                 aPam.GetPoint()->nContent.Assign( pTxtNode,
                         pTxtNode->GetTxt().getLength() );
             }
-            // If the first new node isn't empty, convert  the node's text
-            // attributes into hints. Otherwise, set the new node's
-            // paragraph style at the previous (empty) node.
+            
+            
+            
             SwTxtNode* pDelNd = aNxtIdx.GetNode().GetTxtNode();
             if (pTxtNode->GetTxt().getLength())
                 pDelNd->FmtToTxtAttr( pTxtNode );

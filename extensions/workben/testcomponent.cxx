@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//------------------------------------------------------
-// testcomponent - Loads a service and its testcomponent from dlls performs a test.
-// Expands the dll-names depending on the actual environment.
-// Example : testcomponent com.sun.star.io.Pipe stm
+
+
+
+
 //
-// Therefor the testcode must exist in teststm and the testservice must be named test.com.sun.star.io.Pipe
+
 //
 
 #include <stdio.h>
@@ -43,7 +43,7 @@ using namespace usr;
 using ::rtl::OWStringToOString;
 
 
-// Needed to switch on solaris threads
+
 #ifdef SOLARIS
 extern "C" void ChangeGlobalInit();
 #endif
@@ -56,12 +56,12 @@ int SAL_CALL main (int argc, char **argv)
         exit( 0 );
     }
 #ifdef SOLARIS
-    // switch on threads in solaris
+    
     ChangeGlobalInit();
 #endif
 
-    // create service manager
-//  XMultiServiceFactoryRef xSMgr = getProcessServiceManager();
+    
+
     XMultiServiceFactoryRef xSMgr = createRegistryServiceManager();
     OSL_ASSERT( xSMgr.is() );
     registerUsrServices( xSMgr );
@@ -71,7 +71,7 @@ int SAL_CALL main (int argc, char **argv)
     XSimpleRegistryRef xSimpleReg;
 
     try {
-        // Create registration service
+        
         XInterfaceRef x = xSMgr->createInstance(
             UString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.ImplementationRegistration" )) );
         x->queryInterface( XImplementationRegistration::getSmartUik() , xReg );
@@ -86,7 +86,7 @@ int SAL_CALL main (int argc, char **argv)
     OString sTestName;
 
     try {
-        // Load dll for the tested component
+        
         for( int n = 2 ; n <argc ; n ++ ) {
             ORealDynamicLoader::computeModuleName( argv[n] , szBuf, 1024 );
             UString aDllName( OStringToOWString( szBuf, CHARSET_SYSTEM ) );
@@ -106,7 +106,7 @@ int SAL_CALL main (int argc, char **argv)
 
 
     try {
-        // Load dll for the test component
+        
         sTestName = "test";
         sTestName += argv[2];
 
@@ -124,7 +124,7 @@ int SAL_CALL main (int argc, char **argv)
     }
 
 
-    // Instantiate test service
+    
     sTestName = "test.";
     sTestName += argv[1];
 
@@ -142,17 +142,17 @@ int SAL_CALL main (int argc, char **argv)
     INT32 nErrorCount = 0;
     INT32 nWarningCount = 0;
 
-    // loop until all test are performed
+    
     while( nHandle != -1 ) {
 
-        // Instantiate serivce
+        
         XInterfaceRef x = xSMgr->createInstance( OStringToOWString( argv[1] , CHARSET_SYSTEM ) );
         if( ! x.is() ) {
             printf( "Couldn't instantiate service !\n" );
             exit( 1 );
         }
 
-        // do the test
+        
         try {
             nNewHandle = xTest->test( OStringToOWString( argv[1] , CHARSET_SYSTEM ) , x , nHandle );
         }
@@ -167,7 +167,7 @@ int SAL_CALL main (int argc, char **argv)
         }
 
 
-        // print errors and warning
+        
         Sequence<UString> seqErrors = xTest->getErrors();
         Sequence<UString> seqWarnings = xTest->getWarnings();
         if( seqWarnings.getLen() > nWarningCount ) {

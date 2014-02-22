@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -107,7 +107,7 @@ private:
     SlideSorterController& mrController;
     const bool mbIsCurrentSlideTrackingActive;
 };
-} // end of anonymous namespace
+} 
 
 class Clipboard::UndoContext
 {
@@ -206,9 +206,9 @@ void Clipboard::HandleSlotCall (SfxRequest& rRequest)
             break;
 
         case SID_PASTE:
-            // Prevent redraws while inserting pages from the clipboard
-            // because the intermediate inconsistent state might lead to
-            // a crash.
+            
+            
+            
             if (mrSlideSorter.GetModel().GetEditMode() != EM_MASTERPAGE)
             {
                 view::SlideSorterView::DrawLock aLock (mrSlideSorter);
@@ -272,10 +272,10 @@ void Clipboard::DoPaste (::Window* pWindow)
 
         if (nInsertPosition >= 0)
         {
-            // Paste the pages from the clipboard.
+            
             sal_Int32 nInsertPageCount = PasteTransferable(nInsertPosition);
-            // Select the pasted pages and make the first of them the
-            // current page.
+            
+            
             mrSlideSorter.GetContentWindow()->GrabFocus();
             SelectPageRange(nInsertPosition, nInsertPageCount);
         }
@@ -289,30 +289,30 @@ sal_Int32 Clipboard::GetInsertionPosition (::Window* pWindow)
 {
     sal_Int32 nInsertPosition = -1;
 
-    // Determine the insertion position:
-    // a) When the insertion indicator is visible, then at that position.
-    // b) When the focus indicator is visible, then before or after the
-    // focused page, depending on user input to a dialog.
-    // c) When there is a selection but no focus, then after the
-    // selection.
-    // d) After the last page when there is no selection and no focus.
+    
+    
+    
+    
+    
+    
+    
 
     ::boost::shared_ptr<controller::InsertionIndicatorHandler> pInsertionIndicatorHandler (
         mrController.GetInsertionIndicatorHandler());
     if (pInsertionIndicatorHandler->IsActive())
     {
-        // Use the insertion index of an active insertion indicator.
+        
         nInsertPosition = pInsertionIndicatorHandler->GetInsertionPageIndex();
     }
     else if (mrController.GetSelectionManager()->GetInsertionPosition() >= 0)
     {
-        // Use the insertion index of an insertion indicator that has been
-        // deactivated a short while ago.
+        
+        
         nInsertPosition = mrController.GetSelectionManager()->GetInsertionPosition();
     }
     else if (mrController.GetFocusManager().IsFocusShowing())
     {
-        // Use the focus to determine the insertion position.
+        
         SdInsertPasteDlg aDialog (pWindow);
         if (aDialog.Execute() == RET_OK)
         {
@@ -388,8 +388,8 @@ sal_Int32 Clipboard::PasteTransferable (sal_Int32 nInsertPosition)
 
 void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
 {
-    // Select the newly inserted pages.  That are the nInsertPageCount pages
-    // after the nInsertIndex position.
+    
+    
     PageSelector& rSelector (mrController.GetPageSelector());
     rSelector.DeselectAllPages();
     for (sal_uInt16 i=0; i<nPageCount; i++)
@@ -399,7 +399,7 @@ void Clipboard::SelectPageRange (sal_Int32 nFirstIndex, sal_Int32 nPageCount)
         if (pDescriptor.get() != NULL)
         {
             rSelector.SelectPage(pDescriptor);
-            // The first page of the new selection is made the current page.
+            
             if (i == 0)
             {
                 mrController.GetCurrentSlideManager()->SwitchCurrentSlide(pDescriptor);
@@ -417,8 +417,8 @@ void Clipboard::CreateSlideTransferable (
 {
     std::vector<OUString> aBookmarkList;
 
-    // Insert all selected pages into a bookmark list and remember them in
-    // maPagesToRemove for possible later removal.
+    
+    
     model::PageEnumeration aSelectedPages
         (model::PageEnumerationProvider::CreateSelectedPagesEnumeration(
             mrSlideSorter.GetModel()));
@@ -429,9 +429,9 @@ void Clipboard::CreateSlideTransferable (
         maPagesToRemove.push_back (pDescriptor->GetPage());
     }
 
-    // Create a small set of representatives of the selection for which
-    // previews are included into the transferable so that an insertion
-    // indicator can be rendered.
+    
+    
+    
     aSelectedPages.Rewind();
     ::std::vector<TransferableData::Representative> aRepresentatives;
     aRepresentatives.reserve(3);
@@ -516,20 +516,20 @@ void Clipboard::CreateSlideTransferable (
         if (pTreeListBoxTransferable == NULL)
             break;
 
-        // Find view shell for the document of the transferable.
+        
         ::sd::ViewShell* pViewShell
               = SdPageObjsTLB::GetViewShellForDocShell(pTreeListBoxTransferable->GetDocShell());
         if (pViewShell == NULL)
             break;
 
-        // Find slide sorter for the document of the transferable.
+        
         SlideSorterViewShell* pSlideSorterViewShell
             = SlideSorterViewShell::GetSlideSorter(pViewShell->GetViewShellBase());
         if (pSlideSorterViewShell == NULL)
             break;
         SlideSorter& rSlideSorter (pSlideSorterViewShell->GetSlideSorter());
 
-        // Get bookmark from transferable.
+        
         TransferableDataHelper  aDataHelper (pTransferable);
         INetBookmark aINetBookmark;
         if ( ! aDataHelper.GetINetBookmark(SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark))
@@ -540,7 +540,7 @@ void Clipboard::CreateSlideTransferable (
             break;
         OUString sBookmark (sURL.copy(nIndex+1));
 
-        // Make sure that the bookmark points to a page.
+        
         SdDrawDocument* pTransferableDocument = rSlideSorter.GetModel().GetDocument();
         if (pTransferableDocument == NULL)
             break;
@@ -549,7 +549,7 @@ void Clipboard::CreateSlideTransferable (
         if (nPageIndex == SDRPAGE_NOTFOUND)
             break;
 
-        // Create preview.
+        
         ::std::vector<TransferableData::Representative> aRepresentatives;
         aRepresentatives.reserve(1);
         ::boost::shared_ptr<cache::PageCache> pPreviewCache (
@@ -562,28 +562,28 @@ void Clipboard::CreateSlideTransferable (
                 aPreview,
                 pDescriptor->HasState(model::PageDescriptor::ST_Excluded)));
 
-        // Remember the page in maPagesToRemove so that it can be removed
-        // when drag and drop action is "move".
+        
+        
         Clipboard& rOtherClipboard (pSlideSorterViewShell->GetSlideSorter().GetController().GetClipboard());
         rOtherClipboard.maPagesToRemove.clear();
         rOtherClipboard.maPagesToRemove.push_back(pDescriptor->GetPage());
 
-        // Create the new transferable.
+        
         ::boost::shared_ptr<SdTransferable::UserData> pNewTransferable (
             new TransferableData(
                 pSlideSorterViewShell,
                 aRepresentatives));
         pTransferable->SetWorkDocument( dynamic_cast<SdDrawDocument*>(
                 pTreeListBoxTransferable->GetSourceDoc()->AllocModel()));
-        //        pTransferable->SetView(&mrSlideSorter.GetView());
+        
 
-        // Set page bookmark list.
+        
         std::vector<OUString> aPageBookmarks;
         aPageBookmarks.push_back(sBookmark);
         pTransferable->SetPageBookmarks(aPageBookmarks, false);
 
-        // Replace the view referenced by the transferable with the
-        // corresponding slide sorter view.
+        
+        
         pTransferable->SetView(&pSlideSorterViewShell->GetSlideSorter().GetView());
 
         return pNewTransferable;
@@ -636,7 +636,7 @@ IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData)
 
     mnDragFinishedUserEventId = 0;
 
-    // Hide the substitution display and insertion indicator.
+    
     ::rtl::Reference<SelectionFunction> pFunction (mrController.GetCurrentSelectionFunction());
     if (pFunction.is())
         pFunction->NotifyDragFinished();
@@ -645,8 +645,8 @@ IMPL_LINK(Clipboard, ProcessDragFinished, void*, pUserData)
     if ((nDropAction & DND_ACTION_MOVE) != 0
         && ! maPagesToRemove.empty())
     {
-        // Remove the pages that have been moved to another place (possibly
-        // in the same document.)
+        
+        
         rSelector.DeselectAllPages();
         PageList::iterator aDraggedPage;
         for (aDraggedPage=maPagesToRemove.begin();
@@ -682,12 +682,12 @@ sal_Int8 Clipboard::AcceptDrop (
         case DT_PAGE:
         case DT_PAGE_FROM_NAVIGATOR:
         {
-            // Accept a drop.
+            
             nAction = rEvent.mnAction;
 
-            // Use the copy action when the drop action is the default, i.e. not
-            // explicitly set to move or link, and when the source and
-            // target models are not the same.
+            
+            
+            
             SdTransferable* pDragTransferable = SD_MOD()->pTransferDrag;
             if (pDragTransferable != NULL
                 && pDragTransferable->IsPageTransferable()
@@ -703,14 +703,14 @@ sal_Int8 Clipboard::AcceptDrop (
                 nAction = DND_ACTION_NONE;
             }
 
-            // Show the insertion marker and the substitution for a drop.
+            
             SelectionFunction* pSelectionFunction = dynamic_cast<SelectionFunction*>(
                 mrSlideSorter.GetViewShell()->GetCurrentFunction().get());
             if (pSelectionFunction != NULL)
                 pSelectionFunction->MouseDragged(rEvent, nAction);
 
-            // Scroll the window when the mouse reaches the window border.
-            //            mrController.GetScrollBarManager().AutoScroll (rEvent.maPosPixel);
+            
+            
         }
         break;
 
@@ -766,26 +766,26 @@ sal_Int8 Clipboard::ExecuteDrop (
 
             ::boost::shared_ptr<InsertionIndicatorHandler> pInsertionIndicatorHandler(
                         mrController.GetInsertionIndicatorHandler());
-            // Get insertion position and then turn off the insertion indicator.
+            
             pInsertionIndicatorHandler->UpdatePosition(aEventModelPosition, rEvent.mnAction);
-            //            sal_uInt16 nIndex = DetermineInsertPosition(*pDragTransferable);
+            
 
-            // Do not process the insertion when it is trivial,
-            // i.e. would insert pages at their original place.
+            
+            
             if (IsInsertionTrivial(pDragTransferable, rEvent.mnAction))
                 bContinue = false;
 
-            // Tell the insertion indicator handler to hide before the model
-            // is modified.  Doing it later may result in page objects whose
-            // animation state is not properly reset because they are then
-            // in another run then before the model change.
+            
+            
+            
+            
             pInsertionIndicatorHandler->End(Animator::AM_Immediate);
 
             if (bContinue)
             {
                 SlideSorterController::ModelChangeLock aModelChangeLock (mrController);
 
-                // Handle a general drop operation.
+                
                 mpUndoContext.reset(new UndoContext (
                     mrSlideSorter.GetModel().GetDocument(),
                     mrSlideSorter.GetViewShell()->GetViewShellBase().GetMainViewShell()));
@@ -794,16 +794,16 @@ sal_Int8 Clipboard::ExecuteDrop (
                 HandlePageDrop(*pDragTransferable);
                 nResult = rEvent.mnAction;
 
-                // We leave the undo context alive for when moving or
-                // copying inside one view then the actions in
-                // NotifyDragFinished should be covered as well as
-                // well as the ones above.
+                
+                
+                
+                
             }
 
-            // When the pages originated in another slide sorter then
-            // only that is notified automatically about the drag
-            // operation being finished.  Because the target slide sorter
-            // has be notified, too, add a callback for that.
+            
+            
+            
+            
             ::boost::shared_ptr<TransferableData> pSlideSorterTransferable (
                 TransferableData::GetFromTransferable(pDragTransferable));
             BOOST_ASSERT(pSlideSorterTransferable);
@@ -813,8 +813,8 @@ sal_Int8 Clipboard::ExecuteDrop (
                 DragFinished(nResult);
             }
 
-            // Notify the receiving selection function that drag-and-drop is
-            // finished and the substitution handler can be released.
+            
+            
             ::rtl::Reference<SelectionFunction> pFunction (
                 mrController.GetCurrentSelectionFunction());
             if (pFunction.is())
@@ -873,13 +873,13 @@ void Clipboard::Abort (void)
 
 sal_uInt16 Clipboard::DetermineInsertPosition (const SdTransferable& )
 {
-    // Tell the model to move the dragged pages behind the one with the
-    // index nInsertionIndex which first has to be transformed into an index
-    // understandable by the document.
+    
+    
+    
     const sal_Int32 nInsertionIndex (
         mrController.GetInsertionIndicatorHandler()->GetInsertionPageIndex());
 
-    // Convert to insertion index to that of an SdModel.
+    
     if (nInsertionIndex >= 0)
         return mrSlideSorter.GetModel().GetCoreIndex(nInsertionIndex);
     else
@@ -897,8 +897,8 @@ sal_uInt16 Clipboard::InsertSlides (
         rTransferable,
         nInsertPosition);
 
-    // Remember the inserted pages so that they can be selected when the
-    // operation is finished.
+    
+    
     maPagesToSelect.clear();
     SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
     if (pDocument != NULL)
@@ -950,11 +950,11 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
 {
     sal_Int8 nResult = 0;
 
-    // The dropping of a shape is accepted or executed only when there is
-    // DrawViewShell available to which we can forward this call.  This has
-    // technical reasons:  The actual code to accept or execute a shape drop
-    // is implemented in the ViewShell class and uses the page view of the
-    // main edit view.  This is not possible without a DrawViewShell.
+    
+    
+    
+    
+    
     ::boost::shared_ptr<DrawViewShell> pDrawViewShell;
     if (mrSlideSorter.GetViewShell() != NULL)
         pDrawViewShell = ::boost::dynamic_pointer_cast<DrawViewShell>(
@@ -963,9 +963,9 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
         && (pDrawViewShell->GetShellType() == ViewShell::ST_IMPRESS
             || pDrawViewShell->GetShellType() == ViewShell::ST_DRAW))
     {
-        // The drop is only accepted or executed when it takes place over a
-        // page object.  Therefore we replace a missing page number by the
-        // number of the page under the mouse.
+        
+        
+        
         if (nPage == SDRPAGE_NOTFOUND)
         {
             model::SharedPageDescriptor pDescriptor (
@@ -975,9 +975,9 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
                 nPage = pDescriptor->GetPageIndex();
         }
 
-        // Now comes the code that is different for the Execute and Accept:
-        // We simply forward the call to the AcceptDrop() or ExecuteDrop()
-        // methods of the DrawViewShell in the center pane.
+        
+        
+        
         if (nPage != SDRPAGE_NOTFOUND)
             switch (eCommand)
             {
@@ -1006,6 +1006,6 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
 
 
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

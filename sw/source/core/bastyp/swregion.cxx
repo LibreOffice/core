@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swrect.hxx"
@@ -29,8 +29,8 @@ SwRegionRects::SwRegionRects( const SwRect &rStartRect, sal_uInt16 nInit ) :
     push_back( aOrigin );
 }
 
-// If <rDel> is sal_True then this Rect will be overwritten by <rRect> at
-// position <nPos>. Otherwise <rRect> is attached at the end.
+
+
 inline void SwRegionRects::InsertRect( const SwRect &rRect,
                                        const sal_uInt16 nPos, bool &rDel )
 {
@@ -62,12 +62,12 @@ void SwRegionRects::operator-=( const SwRect &rRect )
             SwRect aInter( aTmp );
             aInter._Intersection( rRect );
 
-            // The first Rect that should be inserted takes position of i.
-            // This avoids one Delete() call.
+            
+            
             bool bDel = true;
 
-            // now split; only those rectangles should be left over that are in
-            // the "old" but not in the "new" area; hence, not in intersection.
+            
+            
             long nTmp;
             if ( 0 < (nTmp = aInter.Top() - aTmp.Top()) )
             {
@@ -91,15 +91,15 @@ void SwRegionRects::operator-=( const SwRect &rRect )
                 aTmp.Width( nOldVal );
             }
 
-            aTmp.Left( aInter.Left() + aInter.Width() ); //+1?
+            aTmp.Left( aInter.Left() + aInter.Width() ); 
             if ( aTmp.Width() > 0 )
                 InsertRect( aTmp, i, bDel );
 
             if( bDel )
             {
                 erase( begin() + i );
-                --i;     // so that we don't forget any
-                --nMax;  // so that we don't check too much
+                --i;     
+                --nMax;  
             }
         }
     }
@@ -114,18 +114,18 @@ void SwRegionRects::operator-=( const SwRect &rRect )
 */
 void SwRegionRects::Invert()
 {
-    // not very elegant and fast, but efficient:
-    // Create a new region and remove all areas that are left over. Afterwards
-    // copy all values.
+    
+    
+    
 
-    // To avoid unnecessary memory requirements, create a "useful" initial size:
-    // Number of rectangles in this area * 2 + 2 for the special case of a
-    // single hole (so four Rects in the inverse case).
+    
+    
+    
     SwRegionRects aInvRegion( aOrigin, size()*2+2 );
     for( const_iterator it = begin(); it != end(); ++it )
         aInvRegion -= *it;
 
-    // overwrite all existing
+    
     swap( aInvRegion );
 }
 
@@ -134,15 +134,15 @@ inline SwTwips CalcArea( const SwRect &rRect )
     return rRect.Width() * rRect.Height();
 }
 
-// combine all adjacent rectangles
+
 void SwRegionRects::Compress( bool bFuzzy )
 {
     for ( size_type i = 0; i < size(); ++i )
     {
         for ( size_type j = i+1; j < size(); ++j )
         {
-            // If one rectangle contains a second completely than the latter
-            // does not need to be stored and can be deleted
+            
+            
             if ( (*this)[i].IsInside( (*this)[j] ) )
             {
                 erase( begin() + j );
@@ -157,12 +157,12 @@ void SwRegionRects::Compress( bool bFuzzy )
             }
             else
             {
-                // If two rectangles have the same area of their union minus the
-                // intersection then one of them can be deleted.
-                // For combining as much as possible (and for having less single
-                // paints), the area of the union can be a little bit larger:
-                // ( 9622 * 141.5 = 1361513 ~= a quarter (1/4) centimeter wider
-                // than the width of a A4 page
+                
+                
+                
+                
+                
+                
                 const long nFuzzy = bFuzzy ? 1361513 : 0;
                 SwRect aUnion( (*this)[i] );
                 aUnion.Union( (*this)[j] );

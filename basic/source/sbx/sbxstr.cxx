@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/errcode.hxx>
@@ -24,8 +24,8 @@
 #include "runtime.hxx"
 #include <rtl/ustrbuf.hxx>
 
-// The conversion of an item onto String was handled via the Put-Methods
-// of the several data types to avoid duplicated code.
+
+
 
 OUString ImpGetString( const SbxValues* p )
 {
@@ -84,7 +84,7 @@ OUString ImpGetString( const SbxValues* p )
             else if( p->pObj && p->pObj->IsFixed()
                     && (p->pObj->GetType() == (SbxARRAY | SbxBYTE )) )
             {
-                // convert byte array to string
+                
                 SbxArray* pArr = PTR_CAST(SbxArray, p->pObj);
                 if( pArr )
                 {
@@ -98,7 +98,7 @@ OUString ImpGetString( const SbxValues* p )
             break;
         }
         case SbxERROR:
-            // Here the String "Error n" is generated
+            
             aRes = SbxRes( STRING_ERRORMSG );
             aRes += OUString( p->nUShort ); break;
         case SbxDATE:
@@ -135,10 +135,10 @@ OUString ImpGetString( const SbxValues* p )
     return aRes;
 }
 
-// From 1997-04-10, new function for SbxValue::GetCoreString()
+
 OUString ImpGetCoreString( const SbxValues* p )
 {
-    // For now only for double
+    
     if( ( p->eType & (~SbxBYREF) ) == SbxDOUBLE )
     {
         SbxValues aTmp;
@@ -146,9 +146,9 @@ OUString ImpGetCoreString( const SbxValues* p )
         aTmp.eType = SbxSTRING;
         aTmp.pOUString = &aRes;
         if( p->eType == SbxDOUBLE )
-            ImpPutDouble( &aTmp, p->nDouble, true );    // true = bCoreString
+            ImpPutDouble( &aTmp, p->nDouble, true );    
         else
-            ImpPutDouble( &aTmp, *p->pDouble, true );   // true = bCoreString
+            ImpPutDouble( &aTmp, *p->pDouble, true );   
         return aRes;
     }
     else
@@ -160,7 +160,7 @@ void ImpPutString( SbxValues* p, const OUString* n )
     SbxValues aTmp;
     aTmp.eType = SbxSTRING;
     OUString* pTmp = NULL;
-    // as a precaution, if a NULL-Ptr appears
+    
     if( !n )
         n = pTmp = new OUString;
     aTmp.pOUString = (OUString*)n;
@@ -254,7 +254,7 @@ void ImpPutString( SbxValues* p, const OUString* n )
 }
 
 
-// Convert string to an array of bytes, preserving unicode (2bytes per character)
+
 SbxArray* StringToByteArray(const OUString& rStr)
 {
     sal_Int32 nArraySize = rStr.getLength() * 2;
@@ -290,7 +290,7 @@ SbxArray* StringToByteArray(const OUString& rStr)
     return pArray;
 }
 
-// Convert an array of bytes to string (2bytes per character)
+
 OUString ByteArrayToString(SbxArray* pArr)
 {
     sal_uInt16 nCount = pArr->Count();

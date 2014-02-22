@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -30,7 +30,7 @@
 
 namespace {
 
-enum ImplIso2022CnToUnicodeState // order is important:
+enum ImplIso2022CnToUnicodeState 
 {
     IMPL_ISO_2022_CN_TO_UNICODE_STATE_ASCII,
     IMPL_ISO_2022_CN_TO_UNICODE_STATE_SO,
@@ -142,12 +142,12 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
         switch (eState)
         {
         case IMPL_ISO_2022_CN_TO_UNICODE_STATE_ASCII:
-            if (nChar == 0x0E) // SO
+            if (nChar == 0x0E) 
             {
                 bSo = true;
                 eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_SO;
             }
-            else if (nChar == 0x1B) // ESC
+            else if (nChar == 0x1B) 
                 eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC;
             else if (nChar < 0x80)
                 if (pDestBufPtr != pDestBufEnd)
@@ -162,12 +162,12 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
             break;
 
         case IMPL_ISO_2022_CN_TO_UNICODE_STATE_SO:
-            if (nChar == 0x0F) // SI
+            if (nChar == 0x0F) 
             {
                 bSo = false;
                 eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ASCII;
             }
-            else if (nChar == 0x1B) // ESC
+            else if (nChar == 0x1B) 
                 eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC;
             else if (nChar >= 0x21 && nChar <= 0x7E)
             {
@@ -244,9 +244,9 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
             break;
 
         case IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC:
-            if (nChar == 0x24) // $
+            if (nChar == 0x24) 
                 eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC_DOLLAR;
-            else if (nChar == 0x4E) // N
+            else if (nChar == 0x4E) 
                 eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_116432;
             else
             {
@@ -256,9 +256,9 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
             break;
 
         case IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC_DOLLAR:
-            if (nChar == 0x29) // )
+            if (nChar == 0x29) 
                 eState = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC_DOLLAR_RPAREN;
-            else if (nChar == 0x2A) // *
+            else if (nChar == 0x2A) 
                 eState
                     = IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC_DOLLAR_ASTERISK;
             else
@@ -269,13 +269,13 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
             break;
 
         case IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC_DOLLAR_RPAREN:
-            if (nChar == 0x41) // A
+            if (nChar == 0x41) 
             {
                 b116431 = false;
                 eState = bSo ? IMPL_ISO_2022_CN_TO_UNICODE_STATE_SO :
                                IMPL_ISO_2022_CN_TO_UNICODE_STATE_ASCII;
             }
-            else if (nChar == 0x47) // G
+            else if (nChar == 0x47) 
             {
                 b116431 = true;
                 eState = bSo ? IMPL_ISO_2022_CN_TO_UNICODE_STATE_SO :
@@ -289,7 +289,7 @@ sal_Size ImplConvertIso2022CnToUnicode(void const * pData,
             break;
 
         case IMPL_ISO_2022_CN_TO_UNICODE_STATE_ESC_DOLLAR_ASTERISK:
-            if (nChar == 0x48) // H
+            if (nChar == 0x48) 
                 eState = bSo ? IMPL_ISO_2022_CN_TO_UNICODE_STATE_SO :
                                IMPL_ISO_2022_CN_TO_UNICODE_STATE_ASCII;
             else
@@ -560,13 +560,13 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
             goto bad_input;
         }
 
-        if (nChar == 0x0A || nChar == 0x0D) // LF, CR
+        if (nChar == 0x0A || nChar == 0x0D) 
         {
             if (bSo)
             {
                 if (pDestBufPtr != pDestBufEnd)
                 {
-                    *pDestBufPtr++ = 0x0F; // SI
+                    *pDestBufPtr++ = 0x0F; 
                     bSo = false;
                     eSoDesignator
                         = IMPL_UNICODE_TO_ISO_2022_CN_DESIGNATOR_NONE;
@@ -588,7 +588,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
             {
                 if (pDestBufPtr != pDestBufEnd)
                 {
-                    *pDestBufPtr++ = 0x0F; // SI
+                    *pDestBufPtr++ = 0x0F; 
                     bSo = false;
                 }
                 else
@@ -678,7 +678,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
                     {
                         if (pDestBufPtr != pDestBufEnd)
                         {
-                            *pDestBufPtr++ = 0x0F; // SI
+                            *pDestBufPtr++ = 0x0F; 
                             bSo = false;
                         }
                         else
@@ -686,13 +686,13 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
                     }
                     if (pDestBufEnd - pDestBufPtr >= 4)
                     {
-                        *pDestBufPtr++ = 0x1B; // ESC
-                        *pDestBufPtr++ = 0x24; // $
-                        *pDestBufPtr++ = 0x29; // )
+                        *pDestBufPtr++ = 0x1B; 
+                        *pDestBufPtr++ = 0x24; 
+                        *pDestBufPtr++ = 0x29; 
                         *pDestBufPtr++
                             = eNewDesignator
                               == IMPL_UNICODE_TO_ISO_2022_CN_DESIGNATOR_2312 ?
-                                  0x41 : 0x47; // A, G
+                                  0x41 : 0x47; 
                         eSoDesignator = eNewDesignator;
                     }
                     else
@@ -702,7 +702,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
                 {
                     if (pDestBufPtr != pDestBufEnd)
                     {
-                        *pDestBufPtr++ = 0x0E; // SO
+                        *pDestBufPtr++ = 0x0E; 
                         bSo = true;
                     }
                     else
@@ -742,10 +742,10 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
                 {
                     if (pDestBufEnd - pDestBufPtr >= 4)
                     {
-                        *pDestBufPtr++ = 0x1B; // ESC
-                        *pDestBufPtr++ = 0x24; // $
-                        *pDestBufPtr++ = 0x2A; // *
-                        *pDestBufPtr++ = 0x48; // H
+                        *pDestBufPtr++ = 0x1B; 
+                        *pDestBufPtr++ = 0x24; 
+                        *pDestBufPtr++ = 0x2A; 
+                        *pDestBufPtr++ = 0x48; 
                         b116432Designator = true;
                     }
                     else
@@ -753,8 +753,8 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
                 }
                 if (pDestBufEnd - pDestBufPtr >= 4)
                 {
-                    *pDestBufPtr++ = 0x1B; // ESC
-                    *pDestBufPtr++ = 0x4E; // N
+                    *pDestBufPtr++ = 0x1B; 
+                    *pDestBufPtr++ = 0x4E; 
                     *pDestBufPtr++
                         = static_cast< char >(0x20 + pCns116431992Data[nOffset++]);
                     *pDestBufPtr++
@@ -827,7 +827,7 @@ sal_Size ImplConvertUnicodeToIso2022Cn(void const * pData,
         {
             if (pDestBufPtr != pDestBufEnd)
             {
-                *pDestBufPtr++ = 0x0F; // SI
+                *pDestBufPtr++ = 0x0F; 
                 bSo = false;
             }
             else

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/lckbitem.hxx>
@@ -22,17 +22,17 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SfxLockBytesItem, SfxPoolItem);
 
-// -----------------------------------------------------------------------
+
 
 SfxLockBytesItem::SfxLockBytesItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
 :   SfxPoolItem( nW )
@@ -44,7 +44,7 @@ SfxLockBytesItem::SfxLockBytesItem( sal_uInt16 nW, SvStream &rStream )
     rStream.ReadStream( aLockBytesStream );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
 :   SfxPoolItem( rItem ),
@@ -52,27 +52,27 @@ SfxLockBytesItem::SfxLockBytesItem( const SfxLockBytesItem& rItem )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxLockBytesItem::~SfxLockBytesItem()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SfxLockBytesItem::operator==( const SfxPoolItem& rItem ) const
 {
     return ((SfxLockBytesItem&)rItem)._xVal == _xVal;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SfxLockBytesItem::Clone(SfxItemPool *) const
 {
     return new SfxLockBytesItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 #define MAX_BUF 32000
 
@@ -97,7 +97,7 @@ SfxPoolItem* SfxLockBytesItem::Create( SvStream &rStream, sal_uInt16 ) const
     return new SfxLockBytesItem( Which(), aNewStream );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
 {
@@ -111,7 +111,7 @@ SvStream& SfxLockBytesItem::Store(SvStream &rStream, sal_uInt16 ) const
     return rStream;
 }
 
-// virtual
+
 bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     com::sun::star::uno::Sequence< sal_Int8 > aSeq;
@@ -135,7 +135,7 @@ bool SfxLockBytesItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     return true;
 }
 
-// virtual
+
 bool SfxLockBytesItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
     if ( _xVal.Is() )

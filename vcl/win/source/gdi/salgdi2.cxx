@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,7 +55,7 @@ bool WinSalGraphics::supportsOperation( OutDevSupportType eType ) const
     return bRet;
 }
 
-// =======================================================================
+
 
 void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraphics )
 {
@@ -96,7 +96,7 @@ void WinSalGraphics::copyBits( const SalTwoRect& rPosAry, SalGraphics* pSrcGraph
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplCalcOutSideRgn( const RECT& rSrcRect,
                          int nLeft, int nTop, int nRight, int nBottom,
@@ -104,7 +104,7 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
 {
     HRGN hTempRgn;
 
-    // calculate area outside the visible region
+    
     if ( rSrcRect.left < nLeft )
     {
         if ( !rhInvalidateRgn )
@@ -139,7 +139,7 @@ void ImplCalcOutSideRgn( const RECT& rSrcRect,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::copyArea( long nDestX, long nDestY,
                             long nSrcX, long nSrcY,
@@ -151,12 +151,12 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
     int     nOldClipRgnType = ERROR;
     HRGN    hInvalidateRgn = 0;
 
-    // do we have to invalidate also the overlapping regions?
+    
     if ( (nFlags & SAL_COPYAREA_WINDOWINVALIDATE) && mbWindow )
     {
-        // compute and invalidate those parts that were either off-screen or covered by other windows
-        //  while performing the above BitBlt
-        // those regions then have to be invalidated as they contain useless/wrong data
+        
+        
+        
         RECT    aSrcRect;
         RECT    aClipRect;
         RECT    aTempRect;
@@ -164,7 +164,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
         HRGN    hTempRgn;
         HWND    hWnd;
 
-        // restrict srcRect to this window (calc intersection)
+        
         aSrcRect.left   = (int)nSrcX;
         aSrcRect.top    = (int)nSrcY;
         aSrcRect.right  = aSrcRect.left+(int)nSrcWidth;
@@ -172,7 +172,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
         GetClientRect( mhWnd, &aClipRect );
         if ( IntersectRect( &aSrcRect, &aSrcRect, &aClipRect ) )
         {
-            // transform srcRect to screen coordinates
+            
             POINT aPt;
             aPt.x = 0;
             aPt.y = 0;
@@ -183,16 +183,16 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
             aSrcRect.bottom += aPt.y;
             hInvalidateRgn = 0;
 
-            // compute the parts that are off screen (ie invisible)
+            
             RECT theScreen;
-            ImplSalGetWorkArea( NULL, &theScreen, NULL );  // find the screen area taking multiple monitors into account
+            ImplSalGetWorkArea( NULL, &theScreen, NULL );  
             ImplCalcOutSideRgn( aSrcRect, theScreen.left, theScreen.top, theScreen.right, theScreen.bottom, hInvalidateRgn );
 
-            // calculate regions that are covered by other windows
+            
             HRGN hTempRgn2 = 0;
             HWND hWndTopWindow = mhWnd;
-            // Find the TopLevel Window, because only Windows which are in
-            // in the foreground of our TopLevel window must be considered
+            
+            
             if ( GetWindowStyle( hWndTopWindow ) & WS_CHILD )
             {
                 RECT aTempRect3 = aSrcRect;
@@ -200,7 +200,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                 {
                     hWndTopWindow = ::GetParent( hWndTopWindow );
 
-                    // Test if the Parent clips our window
+                    
                     GetClientRect( hWndTopWindow, &aTempRect );
                     POINT aPt2;
                     aPt2.x = 0;
@@ -214,8 +214,8 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                 }
                 while ( GetWindowStyle( hWndTopWindow ) & WS_CHILD );
 
-                // If one or more Parents clip our window, than we must
-                // calculate the outside area
+                
+                
                 if ( !EqualRect( &aSrcRect, &aTempRect3 ) )
                 {
                     ImplCalcOutSideRgn( aSrcRect,
@@ -224,7 +224,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                                         hInvalidateRgn );
                 }
             }
-            // retrieve the top-most (z-order) child window
+            
             hWnd = GetWindow( GetDesktopWindow(), GW_CHILD );
             while ( hWnd )
             {
@@ -235,56 +235,56 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
                     GetWindowRect( hWnd, &aTempRect );
                     if ( IntersectRect( &aTempRect2, &aSrcRect, &aTempRect ) )
                     {
-                        // hWnd covers part or all of aSrcRect
+                        
                         if ( !hInvalidateRgn )
                             hInvalidateRgn = CreateRectRgnIndirect( &aSrcRect );
 
-                        // get full bounding box of hWnd
+                        
                         hTempRgn = CreateRectRgnIndirect( &aTempRect );
 
-                        // get region of hWnd (the window may be shaped)
+                        
                         if ( !hTempRgn2 )
                             hTempRgn2 = CreateRectRgn( 0, 0, 0, 0 );
                         int nRgnType = GetWindowRgn( hWnd, hTempRgn2 );
                         if ( (nRgnType != ERROR) && (nRgnType != NULLREGION) )
                         {
-                            // convert window region to screen coordinates
+                            
                             OffsetRgn( hTempRgn2, aTempRect.left, aTempRect.top );
-                            // and intersect with the window's bounding box
+                            
                             CombineRgn( hTempRgn, hTempRgn, hTempRgn2, RGN_AND );
                         }
-                        // finally compute that part of aSrcRect which is not covered by any parts of hWnd
+                        
                         CombineRgn( hInvalidateRgn, hInvalidateRgn, hTempRgn, RGN_DIFF );
                         DeleteRegion( hTempRgn );
                     }
                 }
-                // retrieve the next window in the z-order, i.e. the window below hwnd
+                
                 hWnd = GetWindow( hWnd, GW_HWNDNEXT );
             }
             if ( hTempRgn2 )
                 DeleteRegion( hTempRgn2 );
             if ( hInvalidateRgn )
             {
-                // hInvalidateRgn contains the fully visible parts of the original srcRect
+                
                 hTempRgn = CreateRectRgnIndirect( &aSrcRect );
-                // substract it from the original rect to get the occluded parts
+                
                 int nRgnType = CombineRgn( hInvalidateRgn, hTempRgn, hInvalidateRgn, RGN_DIFF );
                 DeleteRegion( hTempRgn );
 
                 if ( (nRgnType != ERROR) && (nRgnType != NULLREGION) )
                 {
-                    // move the occluded parts to the destination pos
+                    
                     int nOffX = (int)(nDestX-nSrcX);
                     int nOffY = (int)(nDestY-nSrcY);
                     OffsetRgn( hInvalidateRgn, nOffX-aPt.x, nOffY-aPt.y );
 
-                    // by excluding hInvalidateRgn from the system's clip region
-                    // we will prevent bitblt from copying useless data
-                    // epsecially now shadows from overlapping windows will appear (#i36344)
+                    
+                    
+                    
                     hOldClipRgn = CreateRectRgn( 0, 0, 0, 0 );
                     nOldClipRgnType = GetClipRgn( getHDC(), hOldClipRgn );
 
-                    bRestoreClipRgn = TRUE; // indicate changed clipregion and force invalidate
+                    bRestoreClipRgn = TRUE; 
                     ExtSelectClipRgn( getHDC(), hInvalidateRgn, RGN_DIFF );
                 }
             }
@@ -300,15 +300,15 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 
     if( bRestoreClipRgn )
     {
-        // restore old clip region
+        
         if( nOldClipRgnType != ERROR )
             SelectClipRgn( getHDC(), hOldClipRgn);
         DeleteRegion( hOldClipRgn );
 
-        // invalidate regions that were not copied
+        
         bool    bInvalidate = true;
 
-        // Combine Invalidate Region with existing ClipRegion
+        
         HRGN    hTempRgn = CreateRectRgn( 0, 0, 0, 0 );
         if ( GetClipRgn( getHDC(), hTempRgn ) == 1 )
         {
@@ -321,9 +321,9 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
         if ( bInvalidate )
         {
             InvalidateRgn( mhWnd, hInvalidateRgn, TRUE );
-            // here we only initiate an update if this is the MainThread,
-            // so that there is no deadlock when handling the Paint event,
-            // as the SolarMutex is already held by this Thread
+            
+            
+            
             SalData*    pSalData = GetSalData();
             DWORD       nCurThreadId = GetCurrentThreadId();
             if ( pSalData->mnAppThreadId == nCurThreadId )
@@ -335,7 +335,7 @@ void WinSalGraphics::copyArea( long nDestX, long nDestY,
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDrawBitmap( HDC hDC,
                      const SalTwoRect& rPosAry, const WinSalBitmap& rSalBitmap,
@@ -386,8 +386,8 @@ void ImplDrawBitmap( HDC hDC,
             {
                 COLORREF nBkColor = RGB( 0xFF, 0xFF, 0xFF );
                 COLORREF nTextColor = RGB( 0x00, 0x00, 0x00 );
-                //fdo#33455 handle 1 bit depth pngs with palette entries
-                //to set fore/back colors
+                
+                
                 if (const BitmapBuffer* pBitmapBuffer = const_cast<WinSalBitmap&>(rSalBitmap).AcquireBuffer(true))
                 {
                     const BitmapPalette& rPalette = pBitmapBuffer->maPalette;
@@ -443,7 +443,7 @@ void ImplDrawBitmap( HDC hDC,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSalBitmap)
 {
@@ -451,28 +451,28 @@ void WinSalGraphics::drawBitmap(const SalTwoRect& rPosAry, const SalBitmap& rSal
 
     if(bTryDirectPaint)
     {
-        // only paint direct when no scaling and no MapMode, else the
-        // more expensive conversions may be done for short-time Bitmap/BitmapEx
-        // used for buffering only
+        
+        
+        
         if(rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
         {
             bTryDirectPaint = false;
         }
     }
 
-    // try to draw using GdiPlus directly
+    
     if(bTryDirectPaint && tryDrawBitmapGdiPlus(rPosAry, rSalBitmap))
     {
         return;
     }
 
-    // fall back old stuff
+    
     ImplDrawBitmap(getHDC(), rPosAry, static_cast<const WinSalBitmap&>(rSalBitmap),
         mbPrinter,
         mbXORMode ? SRCINVERT : SRCCOPY );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
@@ -521,14 +521,14 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
 
     ImplReleaseCachedDC( CACHED_HDC_1 );
 
-    // hMaskBitmap is destroyed by new SalBitmap 'pMask' ( bDIB==FALSE, bCopy == FALSE )
+    
     if( pMask->Create( hMaskBitmap, FALSE, FALSE ) )
         drawBitmap( rPosAry, rSalBitmap, *pMask );
 
     delete pMask;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
                               const SalBitmap& rSSalBitmap,
@@ -539,16 +539,16 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
 
     if(bTryDirectPaint)
     {
-        // only paint direct when no scaling and no MapMode, else the
-        // more expensive conversions may be done for short-time Bitmap/BitmapEx
-        // used for buffering only
+        
+        
+        
         if(rPosAry.mnSrcWidth == rPosAry.mnDestWidth && rPosAry.mnSrcHeight == rPosAry.mnDestHeight)
         {
             bTryDirectPaint = false;
         }
     }
 
-    // try to draw using GdiPlus directly
+    
     if(bTryDirectPaint && drawAlphaBitmap(rPosAry, rSSalBitmap, rSTransparentBitmap))
     {
         return;
@@ -578,8 +578,8 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     aPosAry.mnDestX = aPosAry.mnDestY = 0;
     BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hDC, nDstX, nDstY, SRCCOPY );
 
-    // WIN/WNT seems to have a minor problem mapping the correct color of the
-    // mask to the palette if we draw the DIB directly ==> draw DDB
+    
+    
     if( ( GetBitCount() <= 8 ) && rTransparentBitmap.ImplGethDIB() && rTransparentBitmap.GetBitCount() == 1 )
     {
         WinSalBitmap aTmp;
@@ -590,32 +590,32 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     else
         ImplDrawBitmap( hMaskDC, aPosAry, rTransparentBitmap, FALSE, SRCCOPY );
 
-    // now MemDC contains background, MaskDC the transparency mask
+    
 
-    // #105055# Respect XOR mode
+    
     if( mbXORMode )
     {
         ImplDrawBitmap( hMaskDC, aPosAry, rSalBitmap, FALSE, SRCERASE );
-        // now MaskDC contains the bitmap area with black background
+        
         BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCINVERT );
-        // now MemDC contains background XORed bitmap area ontop
+        
     }
     else
     {
         BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCAND );
-        // now MemDC contains background with masked-out bitmap area
+        
         ImplDrawBitmap( hMaskDC, aPosAry, rSalBitmap, FALSE, SRCERASE );
-        // now MaskDC contains the bitmap area with black background
+        
         BitBlt( hMemDC, 0, 0, nDstWidth, nDstHeight, hMaskDC, 0, 0, SRCPAINT );
-        // now MemDC contains background and bitmap merged together
+        
     }
-    // copy to output DC
+    
     BitBlt( hDC, nDstX, nDstY, nDstWidth, nDstHeight, hMemDC, 0, 0, SRCCOPY );
 
     ImplReleaseCachedDC( CACHED_HDC_1 );
     ImplReleaseCachedDC( CACHED_HDC_2 );
 
-    // hMemBitmap != 0 ==> hMaskBitmap != 0
+    
     if( hMemBitmap )
     {
         DeleteObject( hMemBitmap );
@@ -623,13 +623,13 @@ void WinSalGraphics::drawBitmap( const SalTwoRect& rPosAry,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
                                     long nHeight, sal_uInt8 nTransparency )
 {
     if( mbPen || !mbBrush || mbXORMode )
-        return false; // can only perform solid fills without XOR.
+        return false; 
 
     HDC hMemDC = ImplGetCachedDC( CACHED_HDC_1, 0 );
     SetPixel( hMemDC, (int)0, (int)0, mnBrushColor );
@@ -641,8 +641,8 @@ bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
         0
     };
 
-    // hMemDC contains a 1x1 bitmap of the right color - stretch-blit
-    // that to dest hdc
+    
+    
     bool bRet = AlphaBlend( getHDC(), nX, nY, nWidth, nHeight,
                             hMemDC, 0,0,1,1,
                             aFunc ) == TRUE;
@@ -652,7 +652,7 @@ bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
                             const SalBitmap& rSSalBitmap,
@@ -670,8 +670,8 @@ void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
     HBRUSH      hMaskBrush = CreateSolidBrush( RGB( cRed, cGreen, cBlue ) );
     HBRUSH      hOldBrush = SelectBrush( hDC, hMaskBrush );
 
-    // WIN/WNT seems to have a minor problem mapping the correct color of the
-    // mask to the palette if we draw the DIB directly ==> draw DDB
+    
+    
     if( ( GetBitCount() <= 8 ) && rSalBitmap.ImplGethDIB() && rSalBitmap.GetBitCount() == 1 )
     {
         WinSalBitmap aTmp;
@@ -686,7 +686,7 @@ void WinSalGraphics::drawMask( const SalTwoRect& rPosAry,
     DeleteBrush( hMaskBrush );
 }
 
-// -----------------------------------------------------------------------
+
 
 SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
 {
@@ -717,14 +717,14 @@ SalBitmap* WinSalGraphics::getBitmap( long nX, long nY, long nDX, long nDY )
     }
     else
     {
-        // #124826# avoid resource leak ! happens when runing without desktop access (remote desktop, service, may be screensavers)
+        
         DeleteBitmap( hBmpBitmap );
     }
 
     return pSalBitmap;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalColor WinSalGraphics::getPixel( long nX, long nY )
 {
@@ -738,7 +738,7 @@ SalColor WinSalGraphics::getPixel( long nX, long nY )
                               GetBValue( aWinCol ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInvert nFlags )
 {
@@ -783,7 +783,7 @@ void WinSalGraphics::invert( long nX, long nY, long nWidth, long nHeight, SalInv
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInvert nSalFlags )
 {
@@ -821,12 +821,12 @@ void WinSalGraphics::invert( sal_uInt32 nPoints, const SalPoint* pPtAry, SalInve
     hOldPen = SelectPen( getHDC(), hPen );
 
     POINT* pWinPtAry;
-    // for NT, we can handover the array directly
+    
     DBG_ASSERT( sizeof( POINT ) == sizeof( SalPoint ),
                 "WinSalGraphics::DrawPolyLine(): POINT != SalPoint" );
 
     pWinPtAry = (POINT*)pPtAry;
-    // for Windows 95 and its maximum number of points
+    
     if ( nSalFlags & SAL_INVERT_TRACKFRAME )
     {
         if ( !Polyline( getHDC(), pWinPtAry, (int)nPoints ) && (nPoints > MAX_64KSALPOINTS) )

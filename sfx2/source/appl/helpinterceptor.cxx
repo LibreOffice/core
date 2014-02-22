@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,9 +36,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::lang;
 
-extern void AppendConfigToken_Impl( OUString& rURL, sal_Bool bQuestionMark ); // sfxhelp.cxx
+extern void AppendConfigToken_Impl( OUString& rURL, sal_Bool bQuestionMark ); 
 
-// class HelpInterceptor_Impl --------------------------------------------
+
 
 HelpInterceptor_Impl::HelpInterceptor_Impl() :
 
@@ -49,7 +49,7 @@ HelpInterceptor_Impl::HelpInterceptor_Impl() :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 HelpInterceptor_Impl::~HelpInterceptor_Impl()
 {
@@ -61,7 +61,7 @@ HelpInterceptor_Impl::~HelpInterceptor_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HelpInterceptor_Impl::addURL( const OUString& rURL )
 {
@@ -92,7 +92,7 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
     Any aEmptyViewData;
     m_pHistory->push_back( new HelpHistoryEntry_Impl( rURL, aEmptyViewData ) );
     m_nCurPos = m_pHistory->size() - 1;
-// TODO ?
+
     if ( m_xListener.is() )
     {
         ::com::sun::star::frame::FeatureStateEvent aEvent;
@@ -106,7 +106,7 @@ void HelpInterceptor_Impl::addURL( const OUString& rURL )
     m_pWindow->UpdateToolbox();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
 {
@@ -116,7 +116,7 @@ void HelpInterceptor_Impl::setInterception( Reference< XFrame > xFrame )
         m_xIntercepted->registerDispatchProviderInterceptor( (XDispatchProviderInterceptor*)this );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool HelpInterceptor_Impl::HasHistoryPred() const
 {
@@ -129,8 +129,8 @@ sal_Bool HelpInterceptor_Impl::HasHistorySucc() const
 }
 
 
-// -----------------------------------------------------------------------
-// XDispatchProvider
+
+
 
 Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
 
@@ -155,7 +155,7 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
     return xResult;
 }
 
-// -----------------------------------------------------------------------
+
 
 Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatches(
 
@@ -174,8 +174,8 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatc
     return aReturn;
 }
 
-// -----------------------------------------------------------------------
-// XDispatchProviderInterceptor
+
+
 
 Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getSlaveDispatchProvider()
 
@@ -185,7 +185,7 @@ Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getSlaveDispatchPr
     return m_xSlaveDispatcher;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< XDispatchProvider >& xNewSlave )
 
@@ -195,7 +195,7 @@ void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< X
     m_xSlaveDispatcher = xNewSlave;
 }
 
-// -----------------------------------------------------------------------
+
 
 Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getMasterDispatchProvider()
 
@@ -205,7 +205,7 @@ Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getMasterDispatchP
     return m_xMasterDispatcher;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< XDispatchProvider >& xNewMaster )
 
@@ -215,8 +215,8 @@ void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< 
     m_xMasterDispatcher = xNewMaster;
 }
 
-// -----------------------------------------------------------------------
-// XInterceptorInfo
+
+
 
 Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
@@ -224,12 +224,12 @@ Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
 {
     Sequence< OUString > aURLList( 1 );
-    aURLList[0] = "vnd.sun.star.help://*";
+    aURLList[0] = "vnd.sun.star.help:
     return aURLList;
 }
 
-// -----------------------------------------------------------------------
-// XDispatch
+
+
 
 void SAL_CALL HelpInterceptor_Impl::dispatch(
     const URL& aURL, const Sequence< ::com::sun::star::beans::PropertyValue >& ) throw( RuntimeException )
@@ -260,7 +260,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
             {
                 HelpHistoryEntry_Impl* pEntry = m_pHistory->at( nPos );
                 if ( pEntry )
-                    m_pWindow->loadHelpContent(pEntry->aURL, sal_False); // false => dont add item to history again!
+                    m_pWindow->loadHelpContent(pEntry->aURL, sal_False); 
             }
 
             m_pWindow->UpdateToolbox();
@@ -268,7 +268,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL HelpInterceptor_Impl::addStatusListener(
     const Reference< XStatusListener >& xControl, const URL& ) throw( RuntimeException )
@@ -277,7 +277,7 @@ void SAL_CALL HelpInterceptor_Impl::addStatusListener(
     m_xListener = xControl;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL HelpInterceptor_Impl::removeStatusListener(
     const Reference< XStatusListener >&, const URL&) throw( RuntimeException )
@@ -285,7 +285,7 @@ void SAL_CALL HelpInterceptor_Impl::removeStatusListener(
     m_xListener = 0;
 }
 
-// HelpListener_Impl -----------------------------------------------------
+
 
 HelpListener_Impl::HelpListener_Impl( HelpInterceptor_Impl* pInter )
 {
@@ -293,7 +293,7 @@ HelpListener_Impl::HelpListener_Impl( HelpInterceptor_Impl* pInter )
     pInterceptor->addStatusListener( this, ::com::sun::star::util::URL() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL HelpListener_Impl::statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event )
 
@@ -305,7 +305,7 @@ void SAL_CALL HelpListener_Impl::statusChanged( const ::com::sun::star::frame::F
     aChangeLink.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL HelpListener_Impl::disposing( const ::com::sun::star::lang::EventObject& )
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustring.h>
 #include <osl/diagnose.h>
 #include "DTransHelper.hxx"
 
-//------------------------------------------------------------------------
-// implementation
-//------------------------------------------------------------------------
+
+
+
 
 CStgTransferHelper::CStgTransferHelper( sal_Bool bAutoInit,
                                         HGLOBAL hGlob,
@@ -35,9 +35,9 @@ CStgTransferHelper::CStgTransferHelper( sal_Bool bAutoInit,
         init( hGlob, m_bDelStgOnRelease );
 }
 
-//------------------------------------------------------------------------
-// dtor
-//------------------------------------------------------------------------
+
+
+
 
 
 CStgTransferHelper::~CStgTransferHelper( )
@@ -46,9 +46,9 @@ CStgTransferHelper::~CStgTransferHelper( )
         m_lpStream->Release( );
 }
 
-//------------------------------------------------------------------------
-// TransferData into the
-//------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG* cbWritten )
 {
@@ -71,9 +71,9 @@ void SAL_CALL CStgTransferHelper::write( const void* lpData, ULONG cb, ULONG* cb
 #endif
 }
 
-//------------------------------------------------------------------------
-// read
-//------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL CStgTransferHelper::read( LPVOID pv, ULONG cb, ULONG* pcbRead )
 {
@@ -86,9 +86,9 @@ void SAL_CALL CStgTransferHelper::read( LPVOID pv, ULONG cb, ULONG* pcbRead )
         throw CStgTransferException( hr );
 }
 
-//------------------------------------------------------------------------
-// GetHGlobal
-//------------------------------------------------------------------------
+
+
+
 
 HGLOBAL SAL_CALL CStgTransferHelper::getHGlobal( ) const
 {
@@ -106,9 +106,9 @@ HGLOBAL SAL_CALL CStgTransferHelper::getHGlobal( ) const
     return hGlob;
 }
 
-//------------------------------------------------------------------------
-// getIStream
-//------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL CStgTransferHelper::getIStream( LPSTREAM* ppStream )
 {
@@ -118,9 +118,9 @@ void SAL_CALL CStgTransferHelper::getIStream( LPSTREAM* ppStream )
         static_cast< LPUNKNOWN >( *ppStream )->AddRef( );
 }
 
-//------------------------------------------------------------------------
-// Init
-//------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
                                         sal_uInt32 uiFlags,
@@ -149,9 +149,9 @@ void SAL_CALL CStgTransferHelper::init( SIZE_T newSize,
 #endif
 }
 
-//------------------------------------------------------------------------
-// Init
-//------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL CStgTransferHelper::init( HGLOBAL hGlob,
                                          sal_Bool bDelStgOnRelease )
@@ -165,9 +165,9 @@ void SAL_CALL CStgTransferHelper::init( HGLOBAL hGlob,
         throw CStgTransferException( hr );
 }
 
-//------------------------------------------------------------------------
-// free the global memory and invalidate the stream pointer
-//------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL CStgTransferHelper::cleanup( )
 {
@@ -185,9 +185,9 @@ void SAL_CALL CStgTransferHelper::cleanup( )
     }
 }
 
-//------------------------------------------------------------------------
-// return the size of memory we point to
-//------------------------------------------------------------------------
+
+
+
 
 sal_uInt32 SAL_CALL CStgTransferHelper::memSize( CLIPFORMAT cf ) const
 {
@@ -203,7 +203,7 @@ sal_uInt32 SAL_CALL CStgTransferHelper::memSize( CLIPFORMAT cf ) const
             sal_Char* pText = static_cast< sal_Char* >( GlobalLock( hGlob ) );
             if ( pText )
             {
-                dwSize = strlen(pText) + 1; // strlen + trailing '\0'
+                dwSize = strlen(pText) + 1; 
                 GlobalUnlock( hGlob );
             }
         }

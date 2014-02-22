@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,33 +27,33 @@
 #include <com/sun/star/awt/XListBox.hpp>
 #include <tools/debug.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::form::validation;
 
-    //====================================================================
-    //= helper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     static void setUnderline( const Reference< XVclWindowPeer >& _rxPeer, const UnderlineDescriptor& _rUnderline )
     {
         OSL_ENSURE( _rxPeer.is(), "setUnderline: invalid peer!" );
 
-        // the underline type is an aspect of the font
+        
         FontDescriptor aFont;
         OSL_VERIFY( _rxPeer->getProperty( FM_PROP_FONT ) >>= aFont );
         aFont.Underline = _rUnderline.nUnderlineType;
         _rxPeer->setProperty( FM_PROP_FONT, makeAny( aFont ) );
-        // the underline color is a separate property
+        
         _rxPeer->setProperty( FM_PROP_TEXTLINECOLOR, makeAny( _rUnderline.nUnderlineColor ) );
     }
 
-    //--------------------------------------------------------------------
+    
     static void getUnderline( const Reference< XVclWindowPeer >& _rxPeer, UnderlineDescriptor& _rUnderline )
     {
         OSL_ENSURE( _rxPeer.is(), "getUnderline: invalid peer!" );
@@ -65,7 +65,7 @@ namespace svxform
         OSL_VERIFY( _rxPeer->getProperty( FM_PROP_TEXTLINECOLOR ) >>= _rUnderline.nUnderlineColor );
     }
 
-    //--------------------------------------------------------------------
+    
     static void getBorder( const Reference< XVclWindowPeer >& _rxPeer, BorderDescriptor& _rBoder )
     {
         OSL_ENSURE( _rxPeer.is(), "getBorder: invalid peer!" );
@@ -74,7 +74,7 @@ namespace svxform
         OSL_VERIFY( _rxPeer->getProperty( FM_PROP_BORDERCOLOR ) >>= _rBoder.nBorderColor );
     }
 
-    //--------------------------------------------------------------------
+    
     static void setBorder( const Reference< XVclWindowPeer >& _rxPeer, const BorderDescriptor& _rBoder )
     {
         OSL_ENSURE( _rxPeer.is(), "setBorder: invalid peer!" );
@@ -83,10 +83,10 @@ namespace svxform
         _rxPeer->setProperty( FM_PROP_BORDERCOLOR, makeAny( _rBoder.nBorderColor ) );
     }
 
-    //====================================================================
-    //= ControlBorderManager
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ControlBorderManager::ControlBorderManager()
         :m_nFocusColor    ( 0x000000FF )
         ,m_nMouseHoveColor( 0x007098BE )
@@ -95,12 +95,12 @@ namespace svxform
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ControlBorderManager::~ControlBorderManager()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     bool ControlBorderManager::canColorBorder( const Reference< XVclWindowPeer >& _rxPeer )
     {
         OSL_PRECOND( _rxPeer.is(), "ControlBorderManager::canColorBorder: invalid peer!" );
@@ -113,10 +113,10 @@ namespace svxform
         if ( aPos != m_aNonColorableControls.end() )
             return false;
 
-        // this peer is not yet known
+        
 
-        // no border coloring for controls which are not for text input
-        // #i37434# / 2004-11-19 / frank.schoenheit@sun.com
+        
+        
         Reference< XTextComponent > xText( _rxPeer, UNO_QUERY );
         Reference< XListBox > xListBox( _rxPeer, UNO_QUERY );
         if ( xText.is() || xListBox.is() )
@@ -124,7 +124,7 @@ namespace svxform
             sal_Int16 nBorderStyle = VisualEffect::NONE;
             OSL_VERIFY( _rxPeer->getProperty( FM_PROP_BORDER ) >>= nBorderStyle );
             if ( nBorderStyle == VisualEffect::FLAT )
-                // if you change this to also accept LOOK3D, then this would also work, but look ugly
+                
             {
                 m_aColorableControls.insert( _rxPeer );
                 return true;
@@ -135,7 +135,7 @@ namespace svxform
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     ControlStatus ControlBorderManager::getControlStatus( const Reference< XControl >& _rxControl ) SAL_THROW(())
     {
         ControlStatus nStatus = CONTROL_STATUS_NONE;
@@ -152,18 +152,18 @@ namespace svxform
         return nStatus;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 ControlBorderManager::getControlColorByStatus( ControlStatus _nStatus )
     {
-        // "invalid" is ranked highest
+        
         if ( _nStatus & CONTROL_STATUS_INVALID )
             return m_nInvalidColor;
 
-        // then, "focused" is more important than ...
+        
         if ( _nStatus & CONTROL_STATUS_FOCUSED )
             return m_nFocusColor;
 
-        // ... "mouse over"
+        
         if ( _nStatus & CONTROL_STATUS_MOUSE_HOVER )
             return m_nMouseHoveColor;
 
@@ -171,7 +171,7 @@ namespace svxform
         return 0x00000000;
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::updateBorderStyle( const Reference< XControl >& _rxControl, const Reference< XVclWindowPeer >& _rxPeer, const BorderDescriptor& _rFallback ) SAL_THROW(())
     {
         OSL_PRECOND( _rxControl.is() && _rxPeer.is(), "ControlBorderManager::updateBorderStyle: invalid parameters!" );
@@ -187,7 +187,7 @@ namespace svxform
         setBorder( _rxPeer, aBorder );
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::determineOriginalBorderStyle( const Reference< XControl >& _rxControl, BorderDescriptor& _rData ) const
     {
         _rData = ControlData();
@@ -214,11 +214,11 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::controlStatusGained( const Reference< XInterface >& _rxControl, ControlData& _rControlData ) SAL_THROW(())
     {
         if ( _rxControl == _rControlData.xControl )
-            // nothing to do - though suspicious
+            
             return;
 
         Reference< XControl > xAsControl( _rxControl, UNO_QUERY );
@@ -231,8 +231,8 @@ namespace svxform
             Reference< XVclWindowPeer > xPeer( xAsControl->getPeer(), UNO_QUERY );
             if ( xPeer.is() && canColorBorder( xPeer ) )
             {
-                // remember the control and it's current border color
-                _rControlData.xControl.clear(); // so determineOriginalBorderStyle doesn't get confused
+                
+                _rControlData.xControl.clear(); 
 
                 determineOriginalBorderStyle( xAsControl, _rControlData );
 
@@ -247,11 +247,11 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::controlStatusLost( const Reference< XInterface >& _rxControl, ControlData& _rControlData ) SAL_THROW(())
     {
         if ( _rxControl != _rControlData.xControl )
-            // nothing to do
+            
             return;
 
         OSL_PRECOND( _rControlData.xControl.is(), "ControlBorderManager::controlStatusLost: invalid control data - this will crash!" );
@@ -271,20 +271,20 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::enableDynamicBorderColor( )
     {
         m_bDynamicBorderColors = true;
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::disableDynamicBorderColor( )
     {
         m_bDynamicBorderColors = false;
         restoreAll();
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::setStatusColor( ControlStatus _nStatus, sal_Int32 _nColor )
     {
         switch ( _nStatus )
@@ -303,7 +303,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::restoreAll()
     {
         if ( m_aFocusControl.xControl.is() )
@@ -329,35 +329,35 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::focusGained( const Reference< XInterface >& _rxControl ) SAL_THROW(())
     {
         if ( m_bDynamicBorderColors )
             controlStatusGained( _rxControl, m_aFocusControl );
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::focusLost( const Reference< XInterface >& _rxControl ) SAL_THROW(())
     {
         if ( m_bDynamicBorderColors )
             controlStatusLost( _rxControl, m_aFocusControl );
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::mouseEntered( const Reference< XInterface >& _rxControl ) SAL_THROW(())
     {
         if ( m_bDynamicBorderColors )
             controlStatusGained( _rxControl, m_aMouseHoverControl );
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::mouseExited( const Reference< XInterface >& _rxControl ) SAL_THROW(())
     {
         if ( m_bDynamicBorderColors )
             controlStatusLost( _rxControl, m_aMouseHoverControl );
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlBorderManager::validityChanged( const Reference< XControl >& _rxControl, const Reference< XValidatableFormComponent >& _rxValidatable ) SAL_THROW(())
     {
         try
@@ -375,11 +375,11 @@ namespace svxform
             {
                 ControlBag::iterator aPos = m_aInvalidControls.find( aData );
                 if ( aPos != m_aInvalidControls.end() )
-                {   // invalid before, valid now
+                {   
                     ControlData aOriginalLayout( *aPos );
                     m_aInvalidControls.erase( aPos );
 
-                    // restore all the things we used to indicate invalidity
+                    
                     if ( m_bDynamicBorderColors )
                         updateBorderStyle( _rxControl, xPeer, aOriginalLayout );
                     xPeer->setProperty( FM_PROP_HELPTEXT, makeAny( aOriginalLayout.sOriginalHelpText ) );
@@ -388,30 +388,30 @@ namespace svxform
                 return;
             }
 
-            // we're here in the INVALID case
+            
             if ( m_aInvalidControls.find( _rxControl ) == m_aInvalidControls.end() )
-            {   // valid before, invalid now
+            {   
 
-                // remember the current border
+                
                 determineOriginalBorderStyle( _rxControl, aData );
-                // and tool tip
+                
                 xPeer->getProperty( FM_PROP_HELPTEXT ) >>= aData.sOriginalHelpText;
-                // and font
+                
                 getUnderline( xPeer, aData );
 
                 m_aInvalidControls.insert( aData );
 
-                // update the border to the new invalidity
+                
                 if ( m_bDynamicBorderColors && canColorBorder( xPeer ) )
                     updateBorderStyle( _rxControl, xPeer, aData );
                 else
                 {
-                    // and also the new font
+                    
                     setUnderline( xPeer, UnderlineDescriptor( com::sun::star::awt::FontUnderline::WAVE, m_nInvalidColor ) );
                 }
             }
 
-            // update the explanation for invalidity (this is always done, even if the validity did not change)
+            
             Reference< XValidator > xValidator = _rxValidatable->getValidator();
             OSL_ENSURE( xValidator.is(), "ControlBorderManager::validityChanged: invalid, but no validator?" );
             OUString sExplainInvalidity = xValidator.is() ? xValidator->explainInvalid( _rxValidatable->getCurrentValue() ) : OUString();
@@ -423,8 +423,8 @@ namespace svxform
         }
     }
 
-//........................................................................
-} // namespace svxform
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

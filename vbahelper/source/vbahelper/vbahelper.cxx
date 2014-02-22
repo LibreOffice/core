@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -80,7 +80,7 @@ namespace vba
 
 namespace { const double factor =  2540.0 / 72.0; }
 
-// helper method to determine if the view ( calc ) is in print-preview mode
+
 bool isInPrintPreview( SfxViewFrame* pView )
 {
     sal_uInt16 nViewNo = SID_VIEWSHELL1 - SID_VIEWSHELL0;
@@ -164,7 +164,7 @@ dispatchRequests (const uno::Reference< frame::XModel>& xModel, const OUString &
     if ( nProps )
     {
         dispatchProps.realloc( nProps + 1 );
-        // need to accquire pDest after realloc
+        
         beans::PropertyValue* pDest = dispatchProps.getArray();
         const beans::PropertyValue* pSrc = sProps.getConstArray();
         for ( sal_Int32 index=0; index<nProps; ++index, ++pSrc, ++pDest )
@@ -239,7 +239,7 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
 getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel;
-     // try fallback to calling doc
+     
      css::uno::Reference< css::container::XNameAccess > xNameAccess( xContext, css::uno::UNO_QUERY_THROW );
      xModel.set( xNameAccess->getByName( ctxName ), uno::UNO_QUERY_THROW );
      return xModel;
@@ -351,7 +351,7 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
     To >>= nTo;
     Copies >>= nCopies;
     Preview >>= bPreview;
-    if ( nCopies > 1 ) // Collate only useful when more that 1 copy
+    if ( nCopies > 1 ) 
         Collate >>= bCollate;
 
     OUString sRange(   "-"  );
@@ -403,8 +403,8 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
             {
                 if ( !pViewFrame->GetFrame().IsInPlace() )
                 {
-                    // #TODO is this necessary ( calc specific )
-//                  SC_MOD()->InputEnterHandler();
+                    
+
                     pViewFrame->GetDispatcher()->Execute( SID_VIEWSHELL1, SFX_CALLMODE_SYNCHRON );
                     WaitUntilPreviewIsClosed( pViewFrame );
                 }
@@ -415,15 +415,15 @@ void PrintOutHelper( SfxViewShell* pViewShell, const uno::Any& From, const uno::
 
     }
 
-    // #FIXME #TODO
-    // 1 ActivePrinter ( how/can we switch a printer via API? )
-    // 2 PrintToFile ( ms behaviour if this option is specified but no
-    //   filename supplied 'PrToFileName' then the user will be prompted )
-    // 3 Need to check behaviour of Selected sheets with range ( e.g. From & To
-    //    values ) in oOO these options are mutually exclusive
-    // 4 There is a pop up to do with transparent objects in the print source
-    //   should be able to disable that via configuration for the duration
-    //   of this method
+    
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
  void PrintPreviewHelper( const css::uno::Any& /*EnableChanges*/, SfxViewShell* pViewShell )
@@ -541,9 +541,9 @@ ContainerUtilities::FieldInList( const uno::Sequence< OUString >& SearchList, co
     sal_Int32 retvalue = -1;
     for (sal_Int32 i = 0; i < FieldLen; i++)
     {
-        // I wonder why comparing lexicographically is done
-        // when it's a match is whats interesting?
-        //if (SearchList[i].compareTo(SearchString) == 0)
+        
+        
+        
         if ( SearchList[i].equals( SearchString ) )
         {
             retvalue = i;
@@ -590,7 +590,7 @@ OUString VBAToRegexp(const OUString &rIn, bool bForLike )
                 sResult.append(*(++start));
                 start++;
                 break;
-                // dump the ~ and escape the next characture
+                
             case ']':
                 sResult.append('\\');
                 sResult.append(*start++);
@@ -689,7 +689,7 @@ sal_Int32 getPointerStyle( const uno::Reference< frame::XModel >& xModel )
         const uno::Reference< frame::XController > xController( xModel->getCurrentController(),     uno::UNO_SET_THROW );
         const uno::Reference< frame::XFrame >      xFrame     ( xController->getFrame(),        uno::UNO_SET_THROW );
         const uno::Reference< awt::XWindow >       xWindow    ( xFrame->getContainerWindow(),   uno::UNO_SET_THROW );
-        // why the heck isn't there an XWindowPeer::getPointer, but a setPointer only?
+        
         const Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
         if ( pWindow )
             nPointerStyle = pWindow->GetSystemWindow()->GetPointer().GetStyle();
@@ -701,9 +701,9 @@ sal_Int32 getPointerStyle( const uno::Reference< frame::XModel >& xModel )
     return nPointerStyle;
 }
 
-// #FIXME this method looks wrong, shouldn't it just affect calc *or* writer
-// document/frame/window(s) but not both ( and depending on what api called
-// this )
+
+
+
 void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Pointer& rPointer, sal_Bool bOverWrite )
 {
     ::std::vector< uno::Reference< frame::XController > > aControllers;
@@ -749,7 +749,7 @@ void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue
 {
     uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObj ) );
 
-    // #MAYBE #FIXME sort of a bit of a hack,
+    
     uno::Reference<  script::XDefaultProperty > xDflt( aObj, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xPropSet;
 
@@ -794,15 +794,15 @@ void setOrAppendPropertyValue( uno::Sequence< beans::PropertyValue >& aProp, con
    if( setPropertyValue( aProp, aName, aValue ) )
     return;
 
-  // append the property
+  
   sal_Int32 nLength = aProp.getLength();
   aProp.realloc( nLength + 1 );
   aProp[ nLength ].Name = aName;
   aProp[ nLength ].Value = aValue;
 }
 
-// ====UserFormGeomentryHelper====
-//---------------------------------------------
+
+
 UserFormGeometryHelper::UserFormGeometryHelper(
         const uno::Reference< uno::XComponentContext >& /*xContext*/,
         const uno::Reference< awt::XControl >& xControl,
@@ -889,7 +889,7 @@ double UserFormGeometryHelper::getOffsetY() const
     return mfOffsetY;
 }
 
-// ----------------------------------------------------------------------------
+
 
 static const char saPosXName[] = "PositionX";
 static const char saPosYName[] = "PositionY";
@@ -899,19 +899,19 @@ static const char saHeightName[] = "Height";
 double UserFormGeometryHelper::implGetPos( bool bPosY ) const
 {
     sal_Int32 nPosAppFont = mxModelProps->getPropertyValue( bPosY ? OUString(saPosYName) : OUString(saPosXName) ).get< sal_Int32 >();
-    // appfont to pixel
+    
     awt::Point aPosPixel = mxUnitConv->convertPointToPixel( awt::Point( nPosAppFont, nPosAppFont ), util::MeasureUnit::APPFONT );
-    // pixel to VBA points
+    
     awt::Point aPosPoint = mxUnitConv->convertPointToLogic( aPosPixel, util::MeasureUnit::POINT );
     return bPosY ? (aPosPoint.Y - mfOffsetY) : (aPosPoint.X - mfOffsetX);
 }
 
 void UserFormGeometryHelper::implSetPos( double fPos, bool bPosY )
 {
-    // convert passed VBA points to pixels
+    
     sal_Int32 nPosPixel = static_cast< sal_Int32 >( fPos + (bPosY ? mfOffsetY : mfOffsetX) );
     awt::Point aPosPixel = mxUnitConv->convertPointToPixel( awt::Point( nPosPixel, nPosPixel ), util::MeasureUnit::POINT );
-    // pixel to appfont
+    
     awt::Point aPosAppFont = mxUnitConv->convertPointToLogic( aPosPixel, util::MeasureUnit::APPFONT );
     mxModelProps->setPropertyValue( bPosY ? OUString(saPosYName) : OUString(saPosXName), uno::Any( bPosY ? aPosAppFont.Y : aPosAppFont.X ) );
 }
@@ -919,7 +919,7 @@ void UserFormGeometryHelper::implSetPos( double fPos, bool bPosY )
 double UserFormGeometryHelper::implGetSize( bool bHeight, bool bOuter ) const
 {
     sal_Int32 nSizeAppFont = mxModelProps->getPropertyValue( bHeight ? OUString(saHeightName) : OUString(saWidthName) ).get< sal_Int32 >();
-    // appfont to pixel
+    
     awt::Size aSizePixel = mxUnitConv->convertSizeToPixel( awt::Size( nSizeAppFont, nSizeAppFont ), util::MeasureUnit::APPFONT );
 
     /*  The VBA symbols 'Width' and 'Height' return the outer size including
@@ -934,14 +934,14 @@ double UserFormGeometryHelper::implGetSize( bool bHeight, bool bOuter ) const
         }
     }
 
-    // pixel to VBA points
+    
     awt::Size aSizePoint = mxUnitConv->convertSizeToLogic( aSizePixel, util::MeasureUnit::POINT );
     return bHeight ? aSizePoint.Height : aSizePoint.Width;
 }
 
 void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOuter )
 {
-    // convert passed VBA points to pixels
+    
     sal_Int32 nSize = static_cast< sal_Int32 >( fSize );
     awt::Size aSizePixel = mxUnitConv->convertSizeToPixel( awt::Size( nSize, nSize ), util::MeasureUnit::POINT );
 
@@ -969,7 +969,7 @@ void UserFormGeometryHelper::implSetSize( double fSize, bool bHeight, bool bOute
     mxModelProps->setPropertyValue( bHeight ? OUString(saHeightName) : OUString(saWidthName), uno::Any( bHeight ? aSizeAppFont.Height : aSizeAppFont.Width ) );
 }
 
-// ============================================================================
+
 
 double ConcreteXShapeGeometryAttributes::getLeft() const
 {
@@ -1080,7 +1080,7 @@ void ShapeHelper::setTop(double _fTop)
 
 void DebugHelper::exception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
 {
-    // #TODO #FIXME ( do we want to support additionalArg here )
+    
     throw css::script::BasicErrorException( DetailedMessage.concat( " " ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, OUString() );
 }
 
@@ -1164,7 +1164,7 @@ SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) 
     return pFoundShell;
 }
 
-} // openoffice
-} //org
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

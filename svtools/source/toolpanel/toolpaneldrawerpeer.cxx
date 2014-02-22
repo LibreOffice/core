@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,10 +30,10 @@
 #include <vcl/vclevent.hxx>
 #include <vcl/svapp.hxx>
 
-//......................................................................................................................
+
 namespace svt
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -51,9 +51,9 @@ namespace svt
     namespace AccessibleStateType = ::com::sun::star::accessibility::AccessibleStateType;
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
 
-    //==================================================================================================================
-    //= ToolPanelDrawerContext
-    //==================================================================================================================
+    
+    
+    
     class ToolPanelDrawerContext : public VCLXAccessibleComponent
     {
     public:
@@ -71,7 +71,7 @@ namespace svt
         }
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ToolPanelDrawerContext::ProcessWindowEvent( const VclWindowEvent& i_rVclWindowEvent )
     {
         VCLXAccessibleComponent::ProcessWindowEvent( i_rVclWindowEvent );
@@ -87,7 +87,7 @@ namespace svt
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void ToolPanelDrawerContext::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet )
     {
         VCLXAccessibleComponent::FillAccessibleStateSet( i_rStateSet );
@@ -106,29 +106,29 @@ namespace svt
             i_rStateSet.AddState( AccessibleStateType::FOCUSED );
     }
 
-    //==================================================================================================================
-    //= ToolPanelDrawerPeer
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     ToolPanelDrawerPeer::ToolPanelDrawerPeer()
         :VCLXWindow()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ToolPanelDrawerPeer::~ToolPanelDrawerPeer()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XAccessibleContext > ToolPanelDrawerPeer::CreateAccessibleContext()
     {
         SolarMutexGuard aSolarGuard;
         return new ToolPanelDrawerContext( *this );
     }
 
-//......................................................................................................................
-} // namespace svt
-//......................................................................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

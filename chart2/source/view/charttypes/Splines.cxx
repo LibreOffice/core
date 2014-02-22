@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Splines.hxx"
@@ -72,16 +72,16 @@ public:
     double GetInterpolatedValue( double x );
 
 private:
-    /// a copy of the points given in the CTOR
+    
     tPointVecType            m_aPoints;
 
-    /// the result of the Calculate() method
+    
     ::std::vector< double >         m_aSecDerivY;
 
     double m_fYp1;
     double m_fYpN;
 
-    // these values are cached for performance reasons
+    
     lcl_tSizeType m_nKLow;
     lcl_tSizeType m_nKHigh;
     double m_fLastInterpolatedValue;
@@ -105,7 +105,7 @@ private:
             Veranstaltung im WS 2007/2008
             Fachhochschule Aachen, 2009-09-19
             Numerik_01.pdf, downloaded 2011-04-19 via
-            http://www.fh-aachen.de/index.php?id=11424&no_cache=1&file=5016&uid=44191
+            http:
             Section 5.3, page 129
     */
     void CalculatePeriodic();
@@ -144,14 +144,14 @@ void lcl_SplineCalculation::Calculate()
     if( m_aPoints.size() <= 1 )
         return;
 
-    // n is the last valid index to m_aPoints
+    
     const lcl_tSizeType n = m_aPoints.size() - 1;
     ::std::vector< double > u( n );
     m_aSecDerivY.resize( n + 1, 0.0 );
 
     if( ::rtl::math::isInf( m_fYp1 ) )
     {
-        // natural spline
+        
         m_aSecDerivY[ 0 ] = 0.0;
         u[ 0 ] = 0.0;
     }
@@ -185,8 +185,8 @@ void lcl_SplineCalculation::Calculate()
               - sig * u[ i - 1 ] ) / p;
     }
 
-    // initialize to values for natural splines (used for m_fYpN equal to
-    // infinity)
+    
+    
     double qn = 0.0;
     double un = 0.0;
 
@@ -200,9 +200,9 @@ void lcl_SplineCalculation::Calculate()
 
     m_aSecDerivY[ n ] = ( un - qn * u[ n - 1 ] ) * ( qn * m_aSecDerivY[ n - 1 ] + 1.0 );
 
-    // note: the algorithm in [1] iterates from n-1 to 0, but as size_type
-    // may be (usuall is) an unsigned type, we can not write k >= 0, as this
-    // is always true.
+    
+    
+    
     for( lcl_tSizeType k = n; k > 0; --k )
     {
         ( m_aSecDerivY[ k - 1 ] *= m_aSecDerivY[ k ] ) += u[ k - 1 ];
@@ -214,35 +214,35 @@ void lcl_SplineCalculation::CalculatePeriodic()
     if( m_aPoints.size() <= 1 )
         return;
 
-    // n is the last valid index to m_aPoints
+    
     const lcl_tSizeType n = m_aPoints.size() - 1;
 
-    // u is used for vector f in A*c=f in [3], vector a in  Ax=a in [2],
-    // vector z in Rtranspose z = a and Dr=z in [2]
+    
+    
     ::std::vector< double > u( n + 1, 0.0 );
 
-    // used for vector c in A*c=f and vector x in Ax=a in [2]
+    
     m_aSecDerivY.resize( n + 1, 0.0 );
 
-    // diagonal of matrix A, used index 1 to n
+    
     ::std::vector< double > Adiag( n + 1, 0.0 );
 
-    // secondary diagonal of matrix A with index 1 to n-1 and upper right element in A[n]
+    
     ::std::vector< double > Aupper( n + 1, 0.0 );
 
-    // diagonal of matrix D in A=(R transpose)*D*R in [2], used index 1 to n
+    
     ::std::vector< double > Ddiag( n+1, 0.0 );
 
-    // right column of matrix R, used index 1 to n-2
+    
     ::std::vector< double > Rright( n-1, 0.0 );
 
-    // secondary diagonal of matrix R, used index 1 to n-1
+    
     ::std::vector< double > Rupper( n, 0.0 );
 
     if (n<4)
     {
         if (n==3)
-        {   // special handling of three polynomials, that are four points
+        {   
             double xDiff0 = m_aPoints[ 1 ].first - m_aPoints[ 0 ].first ;
             double xDiff1 = m_aPoints[ 2 ].first - m_aPoints[ 1 ].first ;
             double xDiff2 = m_aPoints[ 3 ].first - m_aPoints[ 2 ].first ;
@@ -260,7 +260,7 @@ void lcl_SplineCalculation::CalculatePeriodic()
         }
         else if (n==2)
         {
-        // special handling of two polynomials, that are three points
+        
             double xDiff0 = m_aPoints[ 1 ].first - m_aPoints[ 0 ].first;
             double xDiff1 = m_aPoints[ 2 ].first - m_aPoints[ 1 ].first;
             double fHelp = 3.0 * (m_aPoints[ 0 ].second - m_aPoints[ 1 ].second) / (xDiff0*xDiff1);
@@ -270,16 +270,16 @@ void lcl_SplineCalculation::CalculatePeriodic()
         }
         else
         {
-            // should be handled with natural spline, periodic not possible.
+            
         }
     }
     else
     {
-        double xDiff_i =1.0; // values are dummy;
+        double xDiff_i =1.0; 
         double xDiff_im1 =1.0;
         double yDiff_i = 1.0;
         double yDiff_im1 = 1.0;
-        // fill matrix A and fill right side vector u
+        
         for( lcl_tSizeType i=1; i<n; ++i )
         {
             xDiff_im1 = m_aPoints[ i ].first - m_aPoints[ i-1 ].first;
@@ -298,7 +298,7 @@ void lcl_SplineCalculation::CalculatePeriodic()
         Aupper[ n ] = xDiff_i;
         u [ n ] = 3 * (yDiff_i - yDiff_im1);
 
-        // decomposite A=(R transpose)*D*R
+        
         Ddiag[1] = Adiag[1];
         Rupper[1] = Aupper[1] / Ddiag[1];
         Rright[1] = Aupper[n] / Ddiag[1];
@@ -315,9 +315,9 @@ void lcl_SplineCalculation::CalculatePeriodic()
         {
             fSum += Ddiag[ i ] * Rright[ i ] * Rright[ i ];
         }
-        Ddiag[ n ] = Adiag[ n ] - fSum - Ddiag[ n-1 ] * Rupper[ n-1 ] * Rupper[ n-1 ]; // bug in [2]!
+        Ddiag[ n ] = Adiag[ n ] - fSum - Ddiag[ n-1 ] * Rupper[ n-1 ] * Rupper[ n-1 ]; 
 
-        // solve forward (R transpose)*z=u, overwrite u with z
+        
         for ( lcl_tSizeType i=2; i<=n-1; ++i )
         {
             u[ i ] -= u[ i-1 ]* Rupper[ i-1 ];
@@ -329,24 +329,24 @@ void lcl_SplineCalculation::CalculatePeriodic()
         }
         u[ n ] = u[ n ] - fSum - Rupper[ n - 1] * u[ n-1 ];
 
-        // solve forward D*r=z, z is in u, overwrite u with r
+        
         for ( lcl_tSizeType i=1; i<=n; ++i )
         {
             u[ i ] = u[i] / Ddiag[ i ];
         }
 
-        // solve backward R*x= r, r is in u
+        
         m_aSecDerivY[ n ] = u[ n ];
         m_aSecDerivY[ n-1 ] = u[ n-1 ] - Rupper[ n-1 ] * m_aSecDerivY[ n ];
         for ( lcl_tSizeType i=n-2; i>=1; --i)
         {
             m_aSecDerivY[ i ] = u[ i ] - Rupper[ i ] * m_aSecDerivY[ i+1 ] - Rright[ i ] * m_aSecDerivY[ n ];
         }
-        // periodic
+        
         m_aSecDerivY[ 0 ] = m_aSecDerivY[ n ];
     }
 
-    // adapt m_aSecDerivY for usage in GetInterpolatedValue()
+    
     for( lcl_tSizeType i = 0; i <= n ; ++i )
     {
         m_aSecDerivY[ i ] *= 2.0;
@@ -366,8 +366,8 @@ double lcl_SplineCalculation::GetInterpolatedValue( double x )
         m_nKLow = 0;
         m_nKHigh = n;
 
-        // calculate m_nKLow and m_nKHigh
-        // first initialization is done in CTOR
+        
+        
         while( m_nKHigh - m_nKLow > 1 )
         {
             lcl_tSizeType k = ( m_nKHigh + m_nKLow ) / 2;
@@ -402,24 +402,24 @@ double lcl_SplineCalculation::GetInterpolatedValue( double x )
              ( h*h ) / 6.0 );
 }
 
-// helper methods for B-spline
 
-// Create parameter t_0 to t_n using the centripetal method with a power of 0.5
+
+
 bool createParameterT(const tPointVecType aUniquePoints, double* t)
-{   // precondition: no adjacent identical points
-    // postcondition: 0 = t_0 < t_1 < ... < t_n = 1
+{   
+    
     bool bIsSuccessful = true;
     const lcl_tSizeType n = aUniquePoints.size() - 1;
     t[0]=0.0;
     double dx = 0.0;
     double dy = 0.0;
-    double fDiffMax = 1.0; //dummy values
-    double fDenominator = 0.0; // initialized for summing up
+    double fDiffMax = 1.0; 
+    double fDenominator = 0.0; 
     for (lcl_tSizeType i=1; i<=n ; ++i)
-    {   // 4th root(dx^2+dy^2)
+    {   
         dx = aUniquePoints[i].first - aUniquePoints[i-1].first;
         dy = aUniquePoints[i].second - aUniquePoints[i-1].second;
-        // scaling to avoid underflow or overflow
+        
         fDiffMax = (fabs(dx)>fabs(dy)) ? fabs(dx) : fabs(dy);
         if (fDiffMax == 0.0)
         {
@@ -447,7 +447,7 @@ bool createParameterT(const tPointVecType aUniquePoints, double* t)
                 dx = aUniquePoints[i].first - aUniquePoints[i-1].first;
                 dy = aUniquePoints[i].second - aUniquePoints[i-1].second;
                 fDiffMax = (fabs(dx)>fabs(dy)) ? fabs(dx) : fabs(dy);
-                // same as above, so should not be zero
+                
                 dx /= fDiffMax;
                 dy /= fDiffMax;
                 fNumerator += sqrt(sqrt(dx * dx + dy * dy)) * sqrt(fDiffMax);
@@ -455,7 +455,7 @@ bool createParameterT(const tPointVecType aUniquePoints, double* t)
             t[j] = fNumerator / fDenominator;
 
         }
-        // postcondition check
+        
         t[n] = 1.0;
         double fPrevious = 0.0;
         for (lcl_tSizeType i=1; i <= n && bIsSuccessful ; ++i)
@@ -474,7 +474,7 @@ bool createParameterT(const tPointVecType aUniquePoints, double* t)
 }
 
 void createKnotVector(const lcl_tSizeType n, const sal_uInt32 p, double* t, double* u)
-{  // precondition: 0 = t_0 < t_1 < ... < t_n = 1
+{  
         for (lcl_tSizeType j = 0; j <= p; ++j)
         {
             u[j] = 0.0;
@@ -498,41 +498,41 @@ void createKnotVector(const lcl_tSizeType n, const sal_uInt32 p, double* t, doub
 
 void applyNtoParameterT(const lcl_tSizeType i,const double tk,const sal_uInt32 p,const double* u, double* rowN)
 {
-    // get N_p(t_k) recursively, only N_(i-p) till N_(i) are relevant, all other N_# are zero
+    
     double fRightFactor = 0.0;
     double fLeftFactor = 0.0;
 
-    // initialize with indicator function degree 0
-    rowN[p] = 1.0; // all others are zero
+    
+    rowN[p] = 1.0; 
 
-    // calculate up to degree p
+    
     for (sal_uInt32 s = 1; s <= p; ++s)
     {
-        // first element
+        
         fRightFactor = ( u[i+1] - tk ) / ( u[i+1]- u[i-s+1] );
-        // i-s "true index" - (i-p)"shift" = p-s
+        
         rowN[p-s] = fRightFactor * rowN[p-s+1];
 
-        // middle elements
+        
         for (sal_uInt32 j = s-1; j>=1 ; --j)
         {
             fLeftFactor = ( tk - u[i-j] ) / ( u[i-j+s] - u[i-j] ) ;
             fRightFactor = ( u[i-j+s+1] - tk ) / ( u[i-j+s+1] - u[i-j+1] );
-            // i-j "true index" - (i-p)"shift" = p-j
+            
             rowN[p-j] = fLeftFactor * rowN[p-j] + fRightFactor *  rowN[p-j+1];
         }
 
-        // last element
+        
         fLeftFactor = ( tk - u[i] ) / ( u[i+s] - u[i] );
-        // i "true index" - (i-p)"shift" = p
+        
         rowN[p] = fLeftFactor * rowN[p];
     }
 }
 
-} //  anonymous namespace
+} 
 
-// Calculates uniform parametric splines with subinterval length 1,
-// according ODF1.2 part 1, chapter 'chart interpolation'.
+
+
 void SplineCalculater::CalculateCubicSplines(
     const drawing::PolyPolygonShape3D& rInput
     , drawing::PolyPolygonShape3D& rResult
@@ -555,9 +555,9 @@ void SplineCalculater::CalculateCubicSplines(
     for( sal_uInt32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {
         if( rInput.SequenceX[nOuter].getLength() <= 1 )
-            continue; //we need at least two points
+            continue; 
 
-        sal_uInt32 nMaxIndexPoints = rInput.SequenceX[nOuter].getLength()-1; // is >=1
+        sal_uInt32 nMaxIndexPoints = rInput.SequenceX[nOuter].getLength()-1; 
         const double* pOldX = rInput.SequenceX[nOuter].getConstArray();
         const double* pOldY = rInput.SequenceY[nOuter].getConstArray();
         const double* pOldZ = rInput.SequenceZ[nOuter].getConstArray();
@@ -569,7 +569,7 @@ void SplineCalculater::CalculateCubicSplines(
             aParameter[nIndex]=aParameter[nIndex-1]+1;
         }
 
-        // Split the calculation to X, Y and Z coordinate
+        
         tPointVecType aInputX;
         aInputX.resize(nMaxIndexPoints+1);
         tPointVecType aInputY;
@@ -586,26 +586,26 @@ void SplineCalculater::CalculateCubicSplines(
           aInputZ[ nN ].second=pOldZ[ nN ];
         }
 
-        // generate a spline for each coordinate. It holds the complete
-        // information to calculate each point of the curve
+        
+        
         double fXDerivation;
         double fYDerivation;
         lcl_SplineCalculation* aSplineX;
         lcl_SplineCalculation* aSplineY;
-        // lcl_SplineCalculation* aSplineZ; the z-coordinates of all points in
-        // a data series are equal. No spline calculation needed, but copy
-        // coordinate to output
+        
+        
+        
 
         if( pOldX[ 0 ] == pOldX[nMaxIndexPoints] &&
             pOldY[ 0 ] == pOldY[nMaxIndexPoints] &&
             pOldZ[ 0 ] == pOldZ[nMaxIndexPoints] &&
             nMaxIndexPoints >=2 )
-        {   // periodic spline
+        {   
             aSplineX = new lcl_SplineCalculation( aInputX) ;
             aSplineY = new lcl_SplineCalculation( aInputY) ;
-            // aSplineZ = new lcl_SplineCalculation( aInputZ) ;
+            
         }
-        else // generate the kind "natural spline"
+        else 
         {
             double fInfty;
             ::rtl::math::setInf( &fInfty, false );
@@ -615,7 +615,7 @@ void SplineCalculater::CalculateCubicSplines(
             aSplineY = new lcl_SplineCalculation( aInputY, fYDerivation, fYDerivation );
         }
 
-        // fill result polygon with calculated values
+        
         rResult.SequenceX[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
         rResult.SequenceY[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
         rResult.SequenceZ[nOuter].realloc( nMaxIndexPoints*nGranularity + 1);
@@ -624,21 +624,21 @@ void SplineCalculater::CalculateCubicSplines(
         double* pNewY = rResult.SequenceY[nOuter].getArray();
         double* pNewZ = rResult.SequenceZ[nOuter].getArray();
 
-        sal_uInt32 nNewPointIndex = 0; // Index in result points
-        // needed for inner loop
-        double    fInc;   // step for intermediate points
-        sal_uInt32 nj;     // for loop
-        double    fParam; // a intermediate parameter value
+        sal_uInt32 nNewPointIndex = 0; 
+        
+        double    fInc;   
+        sal_uInt32 nj;     
+        double    fParam; 
 
         for( sal_uInt32 ni = 0; ni < nMaxIndexPoints; ni++ )
         {
-            // given point is surely a curve point
+            
             pNewX[nNewPointIndex] = pOldX[ni];
             pNewY[nNewPointIndex] = pOldY[ni];
             pNewZ[nNewPointIndex] = pOldZ[ni];
             nNewPointIndex++;
 
-            // calculate intermediate points
+            
             fInc = ( aParameter[ ni+1 ] - aParameter[ni] ) / static_cast< double >( nGranularity );
             for(nj = 1; nj < nGranularity; nj++)
             {
@@ -646,43 +646,43 @@ void SplineCalculater::CalculateCubicSplines(
 
                 pNewX[nNewPointIndex]=aSplineX->GetInterpolatedValue( fParam );
                 pNewY[nNewPointIndex]=aSplineY->GetInterpolatedValue( fParam );
-                // pNewZ[nNewPointIndex]=aSplineZ->GetInterpolatedValue( fParam );
+                
                 pNewZ[nNewPointIndex] = pOldZ[ni];
                 nNewPointIndex++;
             }
         }
-        // add last point
+        
         pNewX[nNewPointIndex] = pOldX[nMaxIndexPoints];
         pNewY[nNewPointIndex] = pOldY[nMaxIndexPoints];
         pNewZ[nNewPointIndex] = pOldZ[nMaxIndexPoints];
         delete aSplineX;
         delete aSplineY;
-        // delete aSplineZ;
+        
     }
 }
 
-// The implementation follows closely ODF1.2 spec, chapter chart:interpolation
-// using the same names as in spec as far as possible, without prefix.
-// More details can be found on
-// Dr. C.-K. Shene: CS3621 Introduction to Computing with Geometry Notes
-// Unit 9: Interpolation and Approximation/Curve Global Interpolation
-// Department of Computer Science, Michigan Technological University
-// http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/
-// [last called 2011-05-20]
+
+
+
+
+
+
+
+
 void SplineCalculater::CalculateBSplines(
             const ::com::sun::star::drawing::PolyPolygonShape3D& rInput
             , ::com::sun::star::drawing::PolyPolygonShape3D& rResult
             , sal_uInt32 nResolution
             , sal_uInt32 nDegree )
 {
-    // nResolution is ODF1.2 file format attribut chart:spline-resolution and
-    // ODF1.2 spec variable k. Causion, k is used as index in the spec in addition.
-    // nDegree is ODF1.2 file format attribut chart:spline-order and
-    // ODF1.2 spec variable p
+    
+    
+    
+    
     OSL_ASSERT( nResolution > 1 );
     OSL_ASSERT( nDegree >= 1 );
 
-    // limit the b-spline degree to prevent insanely large sets of points
+    
     sal_uInt32 p = std::min<sal_uInt32>(nDegree, MAX_BSPLINE_DEGREE);
 
     rResult.SequenceX.realloc(0);
@@ -691,7 +691,7 @@ void SplineCalculater::CalculateBSplines(
 
     sal_Int32 nOuterCount = rInput.SequenceX.getLength();
     if( !nOuterCount )
-        return; // no input
+        return; 
 
     rResult.SequenceX.realloc(nOuterCount);
     rResult.SequenceY.realloc(nOuterCount);
@@ -700,12 +700,12 @@ void SplineCalculater::CalculateBSplines(
     for( sal_Int32 nOuter = 0; nOuter < nOuterCount; ++nOuter )
     {
         if( rInput.SequenceX[nOuter].getLength() <= 1 )
-            continue; // need at least 2 points, next piece of the series
+            continue; 
 
-        // Copy input to vector of points and remove adjacent double points. The
-        // Z-coordinate is equal for all points in a series and holds the depth
-        // in 3D mode, simple copying is enough.
-        lcl_tSizeType nMaxIndexPoints = rInput.SequenceX[nOuter].getLength()-1; // is >=1
+        
+        
+        
+        lcl_tSizeType nMaxIndexPoints = rInput.SequenceX[nOuter].getLength()-1; 
         const double* pOldX = rInput.SequenceX[nOuter].getConstArray();
         const double* pOldY = rInput.SequenceY[nOuter].getConstArray();
         const double* pOldZ = rInput.SequenceZ[nOuter].getConstArray();
@@ -720,29 +720,29 @@ void SplineCalculater::CalculateBSplines(
         aPointsIn.erase( ::std::unique( aPointsIn.begin(), aPointsIn.end()),
                      aPointsIn.end() );
 
-        // n is the last valid index to the reduced aPointsIn
-        // There are n+1 valid data points.
+        
+        
         const lcl_tSizeType n = aPointsIn.size() - 1;
         if (n < 1 || p > n)
-            continue; // need at least 2 points, degree p needs at least n+1 points
-                      // next piece of series
+            continue; 
+                      
 
         double* t = new double [n+1];
         if (!createParameterT(aPointsIn, t))
         {
             delete[] t;
-            continue; // next piece of series
+            continue; 
         }
 
         lcl_tSizeType m = n + p + 1;
         double* u = new double [m+1];
         createKnotVector(n, p, t, u);
 
-        // The matrix N contains the B-spline basis functions applied to parameters.
-        // In each row only p+1 adjacent elements are non-zero. The starting
-        // column in a higher row is equal or greater than in the lower row.
-        // To store this matrix the non-zero elements are shifted to column 0
-        // and the amount of shifting is remembered in an array.
+        
+        
+        
+        
+        
         double** aMatN = new double*[n+1];
         for (lcl_tSizeType row = 0; row <=n; ++row)
         {
@@ -751,42 +751,42 @@ void SplineCalculater::CalculateBSplines(
             aMatN[row][col] = 0.0;
         }
         lcl_tSizeType* aShift = new lcl_tSizeType[n+1];
-        aMatN[0][0] = 1.0; //all others are zero
+        aMatN[0][0] = 1.0; 
         aShift[0] = 0;
         aMatN[n][0] = 1.0;
         aShift[n] = n;
         for (lcl_tSizeType k = 1; k<=n-1; ++k)
-        { // all basis functions are applied to t_k,
-            // results are elements in row k in matrix N
+        { 
+            
 
-            // find the one interval with u_i <= t_k < u_(i+1)
-            // remember u_0 = ... = u_p = 0.0 and u_(m-p) = ... u_m = 1.0 and 0<t_k<1
+            
+            
             lcl_tSizeType i = p;
             while (!(u[i] <= t[k] && t[k] < u[i+1]))
             {
                 ++i;
             }
 
-            // index in reduced matrix aMatN = (index in full matrix N) - (i-p)
+            
             aShift[k] = i - p;
 
             applyNtoParameterT(i, t[k], p, u, aMatN[k]);
-        } // next row k
+        } 
 
-        // Get matrix C of control points from the matrix equation aMatN * C = aPointsIn
-        // aPointsIn is overwritten with C.
-        // Gaussian elimination is possible without pivoting, see reference
-        lcl_tSizeType r = 0; // true row index
-        lcl_tSizeType c = 0; // true column index
-        double fDivisor = 1.0; // used for diagonal element
-        double fEliminate = 1.0; // used for the element, that will become zero
+        
+        
+        
+        lcl_tSizeType r = 0; 
+        lcl_tSizeType c = 0; 
+        double fDivisor = 1.0; 
+        double fEliminate = 1.0; 
         double fHelp;
         tPointType aHelp;
-        lcl_tSizeType nHelp; // used in triangle change
+        lcl_tSizeType nHelp; 
         bool bIsSuccessful = true;
         for (c = 0 ; c <= n && bIsSuccessful; ++c)
         {
-            // search for first non-zero downwards
+            
             r = c;
             while ( r < n && aMatN[r][c-aShift[r]] == 0 )
             {
@@ -794,12 +794,12 @@ void SplineCalculater::CalculateBSplines(
             }
             if (aMatN[r][c-aShift[r]] == 0.0)
             {
-                // Matrix N is singular, although this is mathematically impossible
+                
                 bIsSuccessful = false;
             }
             else
             {
-                // exchange total row r with total row c if necessary
+                
                 if (r != c)
                 {
                     for ( sal_uInt32 i = 0; i <= p ; ++i)
@@ -816,8 +816,8 @@ void SplineCalculater::CalculateBSplines(
                     aShift[c] = nHelp;
                 }
 
-                // divide row c, so that element(c,c) becomes 1
-                fDivisor = aMatN[c][c-aShift[c]]; // not zero, see above
+                
+                fDivisor = aMatN[c][c-aShift[c]]; 
                 for (sal_uInt32 i = 0; i <= p; ++i)
                 {
                     aMatN[c][i] /= fDivisor;
@@ -825,13 +825,13 @@ void SplineCalculater::CalculateBSplines(
                 aPointsIn[c].first /= fDivisor;
                 aPointsIn[c].second /= fDivisor;
 
-                // eliminate forward, examine row c+1 to n-1 (worst case)
-                // stop if first non-zero element in row has an higher column as c
-                // look at nShift for that, elements in nShift are equal or increasing
+                
+                
+                
                 for ( r = c+1; r < n && aShift[r]<=c ; ++r)
                 {
                     fEliminate = aMatN[r][0];
-                    if (fEliminate != 0.0) // else accidentally zero, nothing to do
+                    if (fEliminate != 0.0) 
                     {
                         for (sal_uInt32 i = 1; i <= p; ++i)
                         {
@@ -844,23 +844,23 @@ void SplineCalculater::CalculateBSplines(
                     }
                 }
             }
-        }// upper triangle form is reached
+        }
         if( bIsSuccessful)
         {
-            // eliminate backwards, begin with last column
+            
             for (lcl_tSizeType cc = n; cc >= 1; --cc )
             {
-                // In row cc the diagonal element(cc,cc) == 1 and all elements left from
-                // diagonal are zero and do not influence other rows.
-                // Full matrix N has semibandwidth < p, therefore element(r,c) is
-                // zero, if abs(r-cc)>=p.  abs(r-cc)=cc-r, because r<cc.
+                
+                
+                
+                
                 r = cc - 1;
                 while ( r !=0 && cc-r < p )
                 {
                     fEliminate = aMatN[r][ cc - aShift[r] ];
-                    if ( fEliminate != 0.0) // else element is accidentically zero, no action needed
+                    if ( fEliminate != 0.0) 
                     {
-                        // row r -= fEliminate * row cc only relevant for right side
+                        
                         aMatN[r][cc - aShift[r]] = 0.0;
                         aPointsIn[r].first -= fEliminate * aPointsIn[cc].first;
                         aPointsIn[r].second -= fEliminate * aPointsIn[cc].second;
@@ -868,11 +868,11 @@ void SplineCalculater::CalculateBSplines(
                     --r;
                 }
             }
-        }   // aPointsIn contains the control points now.
+        }   
         if (bIsSuccessful)
         {
-            // calculate the intermediate points according given resolution
-            // using deBoor-Cox algorithm
+            
+            
             lcl_tSizeType nNewSize = nResolution * n + 1;
             rResult.SequenceX[nOuter].realloc(nNewSize);
             rResult.SequenceY[nOuter].realloc(nNewSize);
@@ -882,7 +882,7 @@ void SplineCalculater::CalculateBSplines(
             double* pNewZ = rResult.SequenceZ[nOuter].getArray();
             pNewX[0] = aPointsIn[0].first;
             pNewY[0] = aPointsIn[0].second;
-            pNewZ[0] = fZCoordinate; // Precondition: z-coordinates of all points of a series are equal
+            pNewZ[0] = fZCoordinate; 
             pNewX[nNewSize -1 ] = aPointsIn[n].first;
             pNewY[nNewSize -1 ] = aPointsIn[n].second;
             pNewZ[nNewSize -1 ] = fZCoordinate;
@@ -897,15 +897,15 @@ void SplineCalculater::CalculateBSplines(
                     lcl_tSizeType nNewIndex = nTIndex * nResolution + nResolutionStep;
                     double ux = t[nTIndex] + nResolutionStep * ( t[nTIndex+1] - t[nTIndex]) /nResolution;
 
-                    // get index nLow, so that u[nLow]<= ux < u[nLow +1]
-                    // continue from previous nLow
+                    
+                    
                     while ( u[nLow] <= ux)
                     {
                         ++nLow;
                     }
                     --nLow;
 
-                    // x-coordinate
+                    
                     for (lcl_tSizeType i = nLow-p; i <= nLow; ++i)
                     {
                         aP[i] = aPointsIn[i].first;
@@ -921,7 +921,7 @@ void SplineCalculater::CalculateBSplines(
                     }
                     pNewX[nNewIndex] = aP[nLow];
 
-                    // y-coordinate
+                    
                     for (lcl_tSizeType i = nLow - p; i <= nLow; ++i)
                     {
                         aP[i] = aPointsIn[i].second;
@@ -950,9 +950,9 @@ void SplineCalculater::CalculateBSplines(
         delete[] u;
         delete[] t;
 
-    } // next piece of the series
+    } 
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

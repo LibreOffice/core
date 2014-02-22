@@ -73,7 +73,7 @@ void OResultColumn::impl_determineIsRowVersion_nothrow()
         {
             Reference< XResultSet > xVersionColumns = m_xDBMetaData->getVersionColumns(
                 makeAny( sCatalog ), sSchema, sTable );
-            if ( xVersionColumns.is() ) // allowed to be NULL
+            if ( xVersionColumns.is() ) 
             {
                 Reference< XRow > xResultRow( xVersionColumns, UNO_QUERY_THROW );
                 while ( xVersionColumns->next() )
@@ -100,7 +100,7 @@ OResultColumn::~OResultColumn()
 {
 }
 
-// com::sun::star::lang::XTypeProvider
+
 Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeException)
 {
     static OImplementationId * pId = 0;
@@ -116,7 +116,7 @@ Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeExceptio
     return pId->getImplementationId();
 }
 
-// XServiceInfo
+
 OUString OResultColumn::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.sdb.OResultColumn");
@@ -130,7 +130,7 @@ Sequence< OUString > OResultColumn::getSupportedServiceNames(  ) throw (RuntimeE
     return aSNS;
 }
 
-// OComponentHelper
+
 void OResultColumn::disposing()
 {
     OColumn::disposing();
@@ -139,7 +139,7 @@ void OResultColumn::disposing()
     m_xMetaData = NULL;
 }
 
-// comphelper::OPropertyArrayUsageHelper
+
 ::cppu::IPropertyArrayHelper* OResultColumn::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_HELPER(21)
@@ -167,7 +167,7 @@ void OResultColumn::disposing()
     END_PROPERTY_HELPER();
 }
 
-// cppu::OPropertySetHelper
+
 ::cppu::IPropertyArrayHelper& OResultColumn::getInfoHelper()
 {
     return *static_cast< ::comphelper::OPropertyArrayUsageHelper< OResultColumn >* >(this)->getArrayHelper();
@@ -265,7 +265,7 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
     }
     catch (SQLException& )
     {
-        // default handling if we caught an exception
+        
         switch (nHandle)
         {
             case PROPERTY_ID_LABEL:
@@ -274,7 +274,7 @@ void OResultColumn::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
             case PROPERTY_ID_TABLENAME:
             case PROPERTY_ID_SCHEMANAME:
             case PROPERTY_ID_CATALOGNAME:
-                // empty string'S
+                
                 rValue <<= OUString();
                 break;
             case PROPERTY_ID_ISROWVERSION:

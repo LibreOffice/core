@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "basidesh.hrc"
@@ -45,11 +45,11 @@ ObjectCatalog::ObjectCatalog (Window* pParent) :
     SetHelpId("basctl:FloatingWindow:RID_BASICIDE_OBJCAT");
     SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
 
-    // title
+    
     aTitle.SetText(IDEResId(RID_BASICIDE_OBJCAT).toString());
     aTitle.SetStyle(WB_CENTER);
 
-    // tree list
+    
     aTree.Hide();
     aTree.SetStyle(
         WB_BORDER | WB_TABSTOP | WB_HSCROLL |
@@ -62,7 +62,7 @@ ObjectCatalog::ObjectCatalog (Window* pParent) :
     aTree.GrabFocus();
 
     {
-        // centered after AppWin:
+        
         Window const& rParent = *GetParent();
         Point aPos = rParent.OutputToScreenPixel(Point(0, 0));
         Size const aParentSize = rParent.GetSizePixel();
@@ -72,7 +72,7 @@ ObjectCatalog::ObjectCatalog (Window* pParent) :
         SetPosPixel(aPos);
     }
 
-    // make object catalog keyboard accessible
+    
     GetParent()->GetSystemWindow()->GetTaskPaneList()->AddWindow(this);
 }
 
@@ -81,30 +81,30 @@ ObjectCatalog::~ObjectCatalog ()
     GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow(this);
 }
 
-// Resize() -- called by Window
+
 void ObjectCatalog::Resize ()
 {
-    // arranging the controls
+    
     ArrangeWindows();
 }
 
-// ToggleFloatingMode() -- called by DockingWindow when IsFloatingMode() changes
+
 void ObjectCatalog::ToggleFloatingMode ()
 {
-    // base class version
+    
     DockingWindow::ToggleFloatingMode();
-    // rearranging the controls (title)
+    
     ArrangeWindows();
 }
 
-// ArrangeWindows() -- arranges the controls to the size of the ObjectCatalog
+
 void ObjectCatalog::ArrangeWindows ()
 {
     Size const aSize = GetOutputSizePixel();
     bool const bFloating = IsFloatingMode();
 
-    // title
-    // (showing only if no title bar)
+    
+    
     if (bFloating)
         aTitle.Hide();
     else
@@ -116,7 +116,7 @@ void ObjectCatalog::ArrangeWindows ()
         aTitle.Show();
     }
 
-    // tree
+    
     Point const aTreePos = LogicToPixel(Point(3, bFloating ? 3 : 16), MAP_APPFONT);
     long const nMargin = aTreePos.X();
     Size const aTreeSize(
@@ -141,6 +141,6 @@ void ObjectCatalog::SetCurrentEntry (BaseWindow* pCurWin)
 }
 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

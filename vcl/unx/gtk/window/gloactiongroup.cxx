@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <unx/gtk/gtksalmenu.hxx>
@@ -28,13 +28,13 @@ struct _GLOAction
 {
     GObject         parent_instance;
 
-    gint            item_id;            // Menu item ID.
-    gboolean        submenu;            // TRUE if action is a submenu action.
-    gboolean        enabled;            // TRUE if action is enabled.
-    GVariantType*   parameter_type;     // A GVariantType with the action parameter type.
-    GVariantType*   state_type;         // A GVariantType with item state type
-    GVariant*       state_hint;         // A GVariant with state hints.
-    GVariant*       state;              // A GVariant with current item state
+    gint            item_id;            
+    gboolean        submenu;            
+    gboolean        enabled;            
+    GVariantType*   parameter_type;     
+    GVariantType*   state_type;         
+    GVariant*       state_hint;         
+    GVariant*       state;              
 };
 
 typedef GObjectClass GLOActionClass;
@@ -149,7 +149,7 @@ g_lo_action_group_query_action (GActionGroup        *group,
                                 GVariant           **state_hint,
                                 GVariant           **state)
 {
-    //SAL_INFO("vcl.unity", "g_lo_action_group_query_action on " << group);
+    
     GLOActionGroup *lo_group = G_LO_ACTION_GROUP (group);
     GLOAction* action;
 
@@ -312,7 +312,7 @@ g_lo_action_group_insert_stateful (GLOActionGroup     *group,
     {
         if (old_action != NULL)
             g_lo_action_group_remove (group, action_name);
-//            g_action_group_action_removed (G_ACTION_GROUP (group), action_name);
+
 
         GLOAction* action = g_lo_action_new();
 

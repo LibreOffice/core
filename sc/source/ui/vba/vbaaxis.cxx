@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbaaxis.hxx"
@@ -86,7 +86,7 @@ ScVbaAxis::getAxisTitle(  ) throw (script::BasicErrorException, uno::RuntimeExce
                 case xlSeriesAxis:
                     xAxisTitle = new ScVbaAxisTitle(this, mxContext, pChart->xAxisZSupplier->getZAxisTitle());
                     break;
-                default: // xlValue:
+                default: 
                     xAxisTitle = new ScVbaAxisTitle(this, mxContext, pChart->xAxisYSupplier->getYAxisTitle());
                     break;
             }
@@ -121,21 +121,21 @@ ScVbaAxis::setCrosses( ::sal_Int32 _nCrosses ) throw (script::BasicErrorExceptio
         double fNum = 0.0;
         switch (_nCrosses)
         {
-            case  xlAxisCrossesAutomatic:       //Microsoft Excel sets the axis crossing point.
+            case  xlAxisCrossesAutomatic:       
                 mxPropertySet->setPropertyValue(AUTOORIGIN, uno::makeAny( sal_True ) );
                 bCrossesAreCustomized = false;
                 return;
-            case xlAxisCrossesMinimum:                     // The axis crosses at the minimum value.
+            case xlAxisCrossesMinimum:                     
                 mxPropertySet->getPropertyValue(VBA_MIN) >>= fNum;
                 setCrossesAt( fNum );
                 bCrossesAreCustomized = false;
                 break;
-            case xlAxisCrossesMaximum:                     // The axis crosses at the maximum value.
+            case xlAxisCrossesMaximum:                     
                 mxPropertySet->getPropertyValue(VBA_MAX) >>= fNum;
                 setCrossesAt(fNum);
                 bCrossesAreCustomized = false;
                 break;
-            default: //xlAxisCrossesCustom
+            default: 
                 bCrossesAreCustomized = true;
                 break;
         }
@@ -237,7 +237,7 @@ ScVbaAxis::setHasTitle( ::sal_Bool _bHasTitle ) throw (script::BasicErrorExcepti
             case xlSeriesAxis:
                 pChart->mxDiagramPropertySet->setPropertyValue("HasZAxisTitle", uno::makeAny(_bHasTitle));
                 break;
-            default: // xlValue:
+            default: 
                 pChart->mxDiagramPropertySet->setPropertyValue("HasYAxisTitle", uno::makeAny(_bHasTitle));
         }
 
@@ -264,7 +264,7 @@ ScVbaAxis::getHasTitle(  ) throw (script::BasicErrorException, uno::RuntimeExcep
             case xlSeriesAxis:
                 pChart->mxDiagramPropertySet->getPropertyValue("HasZAxisTitle") >>= bHasTitle;
                 break;
-            default: // xlValue:
+            default: 
                 pChart->mxDiagramPropertySet->getPropertyValue("HasYAxisTitle") >>= bHasTitle;
         }
     }
@@ -569,7 +569,7 @@ ScVbaAxis::setScaleType( ::sal_Int32 _nScaleType ) throw (script::BasicErrorExce
                     mxPropertySet->setPropertyValue("Logarithmic", uno::makeAny( sal_True ) );
                     break;
                 default:
-                    // According to MS the paramenter is ignored and no Error is thrown
+                    
                     break;
             }
         }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "urltransformer.hxx"
@@ -23,19 +23,19 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::lang;
 
-    //====================================================================
-    //= UrlTransformer
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     UrlTransformer::UrlTransformer( const Reference< XComponentContext >& _rxORB )
         :m_xORB( _rxORB )
         ,m_bTriedToCreateTransformer( false )
@@ -43,10 +43,10 @@ namespace frm
         DBG_ASSERT( _rxORB.is(), "UrlTransformer::UrlTransformer: invalid service factory!" );
     }
 
-    //--------------------------------------------------------------------
+    
     bool UrlTransformer::implEnsureTransformer() const
     {
-        // create the transformer, if not already attempted to do so
+        
         if ( !m_xTransformer.is() && !m_bTriedToCreateTransformer )
         {
             if ( m_xORB.is() )
@@ -59,7 +59,7 @@ namespace frm
         return m_xTransformer.is();
     }
 
-    //--------------------------------------------------------------------
+    
     URL UrlTransformer::getStrictURL( const OUString& _rURL ) const
     {
         URL aReturn;
@@ -69,21 +69,21 @@ namespace frm
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     URL UrlTransformer::getStrictURLFromAscii( const sal_Char* _pAsciiURL ) const
     {
         return getStrictURL( OUString::createFromAscii( _pAsciiURL ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void UrlTransformer::parseSmartWithAsciiProtocol( ::com::sun::star::util::URL& _rURL, const sal_Char* _pAsciiURL ) const
     {
         if ( implEnsureTransformer() )
             m_xTransformer->parseSmart( _rURL, OUString::createFromAscii( _pAsciiURL ) );
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

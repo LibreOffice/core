@@ -55,13 +55,13 @@ namespace drawinglayer
             return false;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(ObjectInfoPrimitive2D, PRIMITIVE2D_ID_OBJECTINFOPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
-// eof
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

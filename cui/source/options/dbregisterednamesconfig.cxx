@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connpooloptions.hxx"
@@ -31,20 +31,20 @@
 #include <unotools/confignode.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
+
 
     using namespace ::utl;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
-    //= DbRegisteredNamesConfig
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     void DbRegisteredNamesConfig::GetOptions( SfxItemSet& _rFillItems )
     {
         DatabaseRegistrations aSettings;
@@ -73,10 +73,10 @@ namespace svx
         _rFillItems.Put( DatabaseMapItem( SID_SB_DB_REGISTER, aSettings ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void DbRegisteredNamesConfig::SetOptions(const SfxItemSet& _rSourceItems)
     {
-        // the settings for the single drivers
+        
         SFX_ITEMSET_GET( _rSourceItems, pRegistrations, DatabaseMapItem, SID_SB_DB_REGISTER, true );
         if ( !pRegistrations )
             return;
@@ -110,7 +110,7 @@ namespace svx
                     xRegistrations->registerDatabaseLocation( sName, sLocation );
             }
 
-            // delete unused entries
+            
             Sequence< OUString > aRegistrationNames = xRegistrations->getRegistrationNames();
             const OUString* pRegistrationName = aRegistrationNames.getConstArray();
             const OUString* pRegistrationNamesEnd = pRegistrationName + aRegistrationNames.getLength();
@@ -122,12 +122,12 @@ namespace svx
         }
         catch( const Exception& )
         {
-                        //DBG_UNHANDLED_EXCEPTION();
+                        
         }
     }
 
-//........................................................................
-}   // namespace svx
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

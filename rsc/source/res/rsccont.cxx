@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -198,7 +198,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
 
     if( !bNoId )
         aTmpI = SearchEle( rInst, rEleName, pCreateClass );
-    // Eintrag gefunden
+    
     if( aTmpI.IsInst() )
     {
         aError = WRN_CONT_DOUBLEID;
@@ -228,7 +228,7 @@ ERRTYPE RscBaseCont::GetElement( const RSCINST & rInst, const RscId & rEleName,
 
         if( rCreateInst.IsInst() )
         {
-            // Instanz mit CreateInst-Daten initialisieren
+            
             pClassData->pEntries[ pClassData->nEntries ].aInst =
                 pCreateClass->Create( NULL, rCreateInst );
         }
@@ -279,16 +279,16 @@ ERRTYPE RscBaseCont::MovePosEle( const RSCINST & rInst, sal_uInt32 nDestPos,
         int nInc = 1;
         sal_uInt32 i = 0;
 
-        // Quelle Merken
+        
         aEntry = pClassData->pEntries[ nSourcePos ];
-        // Richtung der for-Schleife bestimmen
+        
         if( nDestPos < nSourcePos )
             nInc = -1;
 
         for( i = nSourcePos; i != nDestPos; i += nInc )
             pClassData->pEntries[ i ] = pClassData->pEntries[ i + nInc ];
 
-        // Zuweisung Quelle auf Ziel
+        
         pClassData->pEntries[ nDestPos ] = aEntry;
     }
     else
@@ -347,7 +347,7 @@ ERRTYPE RscBaseCont::SetString( const RSCINST & rInst, const char * pStr )
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-    // otherwise infinite recursion is possible
+    
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
     {
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
@@ -383,7 +383,7 @@ ERRTYPE RscBaseCont::SetNumber( const RSCINST & rInst, sal_Int32 lValue )
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-    // otherwise infinite recursion is possible
+    
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
     {
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
@@ -419,7 +419,7 @@ ERRTYPE RscBaseCont::SetBool( const RSCINST & rInst,
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-    // otherwise infinite recursion is possible
+    
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
     {
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
@@ -457,7 +457,7 @@ ERRTYPE RscBaseCont::SetConst( const RSCINST & rInst,
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-    // otherwise infinite recursion is possible
+    
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
     {
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
@@ -493,7 +493,7 @@ ERRTYPE RscBaseCont::SetRef( const RSCINST & rInst, const RscId & rRefId )
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-    // otherwise infinite recursion is possible
+    
     if( RSC_NOTYPE == pTypeClass->GetTypId() )
     {
         aError = GetElement( rInst, RscId(), pTypeClass, RSCINST(), &aTmpI );
@@ -530,8 +530,8 @@ bool RscBaseCont::IsConsistent( const RSCINST & rInst )
 
     pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
-    // auf doppelten Id Testen und Reihenfolge beibehalten
-    // Komplexitaet = n^2 / 2
+    
+    
     for( i = 0; i < pClassData->nEntries; i++ )
     {
         if( !bNoId )
@@ -685,7 +685,7 @@ ERRTYPE RscBaseCont::ContWriteRc( const RSCINST & rInst, RscWriteRc & rMem,
     ERRTYPE       aError;
 
     if( bExtra || bNoId )
-    { // Nur Subresourcen schreiben, wenn bExtra == true
+    { 
         pClassData = (RscBaseContInst *)(rInst.pData + nOffInstData);
 
         for (sal_uInt32 i = 0; i < pClassData->nEntries && aError.IsOk(); i++ )

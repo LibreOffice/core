@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -103,14 +103,14 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
     }
     else
     {
-        //register frame style
+        
         LwpPlacableLayout* pLayout = dynamic_cast<LwpPlacableLayout*>(pObject);
         if (!pLayout)
             return;
         pLayout->SetFoundry(pFoundry);
         pLayout->RegisterStyle();
 
-        //register next frib text style
+        
         sal_uInt8 nType = pLayout->GetRelativeType();
         if(LwpLayoutRelativityGuts::LAY_INLINE_NEWLINE == nType
             && HasNextFrib())
@@ -126,7 +126,7 @@ void LwpFribFrame::RegisterStyle(LwpFoundry* pFoundry)
                 m_StyleName = pXFStyleManager->AddStyle(pParaStyle)->GetStyleName();
             }
         }
-        //remember the current paragraph font size which will be used in parsing frame
+        
         pLayout->SetFont(GetFont());
     }
 }
@@ -159,12 +159,12 @@ void LwpFribFrame::XFConvert(XFContentContainer* pCont)
         LwpVirtualLayout* pContainerLayout = pLayout->GetContainerLayout();
         if(pContainerLayout && pContainerLayout->IsFrame())
         {
-            //same page as text and in frame
+            
             pXFContentContainer = m_pPara->GetXFContainer();
         }
         else if(pContainerLayout && pContainerLayout->IsCell())
         {
-            //same page as text and in cell, get the first xfpara
+            
             XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(pCont->FindFirstContent(enumXFContentPara));
             if(pXFFirtPara)
                 pXFContentContainer = pXFFirtPara;

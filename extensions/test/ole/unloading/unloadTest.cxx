@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include<osl/module.hxx>
@@ -77,7 +77,7 @@ sal_Bool test1()
 
     OUString sFactoryFunc("component_getFactory");
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
-    // true, instance alive
+    
     sal_Bool bTest1= pSymbol ? sal_True : sal_False;
 
     xint1=0;
@@ -110,7 +110,7 @@ sal_Bool test2()
     rtl_unloadUnusedModules( NULL);
     OUString sFactoryFunc("component_getFactory");
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
-    // true, instance alive
+    
     sal_Bool bTest1= pSymbol ? sal_True : sal_False;
 
     xint=0;
@@ -144,7 +144,7 @@ sal_Bool test3()
     rtl_unloadUnusedModules( NULL);
     OUString sFactoryFunc("component_getFactory");
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
-    // true, instance alive
+    
     sal_Bool bTest1= pSymbol ? sal_True : sal_False;
 
     xint=0;
@@ -182,9 +182,9 @@ sal_Bool test4()
 
     rtl_unloadUnusedModules( NULL);
     void* pSymbol= osl_getSymbol( hMod,sFactoryFunc.pData);
-    // true, instance alive
+    
     bTest1= pSymbol ? sal_True : sal_False;
-    // ApplicationRegistration is a one-instance-service, therefore kill service manager first
+    
     Reference<XComponent> xcomp( context, UNO_QUERY);
     xcomp->dispose();
 

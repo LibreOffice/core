@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,7 +27,7 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-// -----------------------------------------------------------------------
+
 #define FILTERCFG_WORD_CODE             0x0001
 #define FILTERCFG_WORD_STORAGE          0x0002
 #define FILTERCFG_EXCEL_CODE            0x0004
@@ -104,7 +104,7 @@ void    SvtAppFilterOptions_Impl::Commit()
 
 void SvtAppFilterOptions_Impl::Notify( const Sequence< OUString >&  )
 {
-    // no listeners supported yet
+    
 }
 
 void    SvtAppFilterOptions_Impl::Load()
@@ -123,7 +123,7 @@ void    SvtAppFilterOptions_Impl::Load()
         bSaveVBA = *(sal_Bool*)pValues[1].getValue();
 }
 
-// -----------------------------------------------------------------------
+
 class SvtWriterFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
     bool                bLoadExecutable;
@@ -169,7 +169,7 @@ void SvtWriterFilterOptions_Impl::Load()
         bLoadExecutable = *(sal_Bool*)pValues[0].getValue();
 }
 
-// -----------------------------------------------------------------------
+
 class SvtCalcFilterOptions_Impl : public SvtAppFilterOptions_Impl
 {
     bool                bLoadExecutable;
@@ -295,7 +295,7 @@ bool SvtFilterOptions_Impl::IsFlag( sal_uLong nFlag ) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtFilterOptions::SvtFilterOptions() :
     ConfigItem( "Office.Common/Filter/Microsoft" ),
@@ -305,7 +305,7 @@ SvtFilterOptions::SvtFilterOptions() :
     Load();
 }
 
-// -----------------------------------------------------------------------
+
 SvtFilterOptions::~SvtFilterOptions()
 {
     delete pImp;
@@ -320,19 +320,19 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
         aNames.realloc(nCount);
         static const char* aPropNames[] =
         {
-            "Import/MathTypeToMath",            //  0
-            "Import/WinWordToWriter",           //  1
-            "Import/PowerPointToImpress",       //  2
-            "Import/ExcelToCalc",               //  3
-            "Export/MathToMathType",            //  4
-            "Export/WriterToWinWord",           //  5
-            "Export/ImpressToPowerPoint",       //  6
-            "Export/CalcToExcel",               //  7
-            "Export/EnablePowerPointPreview",   //  8
-            "Export/EnableExcelPreview",        //  9
-            "Export/EnableWordPreview",         // 10
-            "Import/ImportWWFieldsAsEnhancedFields", // 11
-            "Import/SmartArtToShapes"           // 12
+            "Import/MathTypeToMath",            
+            "Import/WinWordToWriter",           
+            "Import/PowerPointToImpress",       
+            "Import/ExcelToCalc",               
+            "Export/MathToMathType",            
+            "Export/WriterToWinWord",           
+            "Export/ImpressToPowerPoint",       
+            "Export/CalcToExcel",               
+            "Export/EnablePowerPointPreview",   
+            "Export/EnableExcelPreview",        
+            "Export/EnableWordPreview",         
+            "Import/ImportWWFieldsAsEnhancedFields", 
+            "Import/SmartArtToShapes"           
         };
         OUString* pNames = aNames.getArray();
         for(int i = 0; i < nCount; i++)
@@ -340,7 +340,7 @@ const Sequence<OUString>& SvtFilterOptions::GetPropertyNames()
     }
     return aNames;
 }
-//-----------------------------------------------------------------------
+
 static sal_uLong lcl_GetFlag(sal_Int32 nProp)
 {
     sal_uLong nFlag = 0;
@@ -407,7 +407,7 @@ void SvtFilterOptions::Load()
         }
     }
 }
-// -----------------------------------------------------------------------
+
 
 void SvtFilterOptions::SetLoadWordBasicCode( bool bFlag )
 {
@@ -442,7 +442,7 @@ bool SvtFilterOptions::IsLoadWordBasicStorage() const
     return pImp->IsFlag( FILTERCFG_WORD_STORAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFilterOptions::SetLoadExcelBasicCode( bool bFlag )
 {
@@ -477,7 +477,7 @@ bool SvtFilterOptions::IsLoadExcelBasicStorage() const
     return pImp->IsFlag( FILTERCFG_EXCEL_STORAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFilterOptions::SetLoadPPointBasicCode( bool bFlag )
 {
@@ -501,7 +501,7 @@ bool SvtFilterOptions::IsLoadPPointBasicStorage() const
     return pImp->IsFlag( FILTERCFG_PPOINT_STORAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtFilterOptions::IsMathType2Math() const
 {
@@ -526,7 +526,7 @@ void SvtFilterOptions::SetMath2MathType( bool bFlag )
 }
 
 
-// -----------------------------------------------------------------------
+
 bool SvtFilterOptions::IsWinWord2Writer() const
 {
     return pImp->IsFlag( FILTERCFG_WRITER_LOAD );
@@ -554,7 +554,7 @@ bool SvtFilterOptions::IsUseEnhancedFields() const
     return pImp->IsFlag( FILTERCFG_USE_ENHANCED_FIELDS );
 }
 
-// -----------------------------------------------------------------------
+
 bool SvtFilterOptions::IsExcel2Calc() const
 {
     return pImp->IsFlag( FILTERCFG_CALC_LOAD );
@@ -578,7 +578,7 @@ void SvtFilterOptions::SetCalc2Excel( bool bFlag )
 }
 
 
-// -----------------------------------------------------------------------
+
 bool SvtFilterOptions::IsPowerPoint2Impress() const
 {
     return pImp->IsFlag( FILTERCFG_IMPRESS_LOAD );
@@ -602,7 +602,7 @@ void SvtFilterOptions::SetImpress2PowerPoint( bool bFlag )
 }
 
 
-// -----------------------------------------------------------------------
+
 bool SvtFilterOptions::IsSmartArt2Shape() const
 {
     return pImp->IsFlag( FILTERCFG_SMARTART_SHAPE_LOAD );
@@ -627,7 +627,7 @@ SvtFilterOptions& SvtFilterOptions::Get()
     return theFilterOptions::get();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtFilterOptions::IsEnablePPTPreview() const
 {

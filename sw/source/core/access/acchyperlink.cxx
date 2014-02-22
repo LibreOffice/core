@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/accessiblekeybindinghelper.hxx>
@@ -61,7 +61,7 @@ const SwTxtAttr *SwAccessibleHyperlink::GetTxtAttr() const
     return pTxtAttr;
 }
 
-// XAccessibleAction
+
 sal_Int32 SAL_CALL SwAccessibleHyperlink::getAccessibleActionCount()
         throw (uno::RuntimeException)
 {
@@ -144,7 +144,7 @@ uno::Reference< XAccessibleKeyBinding > SAL_CALL
     return xKeyBinding;
 }
 
-// XAccessibleHyperlink
+
 uno::Any SAL_CALL SwAccessibleHyperlink::getAccessibleActionAnchor(
         sal_Int32 nIndex)
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
@@ -206,7 +206,7 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
             sText = OUString( rINetFmt.GetValue() );
             OUString sToken = "#";
             sal_Int32 nPos = sText.indexOf(sToken);
-            if (nPos==0)//document link
+            if (nPos==0)
             {
                 uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
                 if( ! xFactory.is() )
@@ -239,10 +239,10 @@ sal_Bool SAL_CALL SwAccessibleHyperlink::isValid(  )
                         return sal_True;
                 }
             }
-            else//internet
+            else
                 return sal_True;
         }
-    }//xpara valid
+    }
     return sal_False;
 }
 

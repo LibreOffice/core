@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -68,10 +68,10 @@ private:
 
 
 
-} // end of anonymous namespace
+} 
 
 
-//----- EffectRewinder --------------------------------------------------------------
+
 
 EffectRewinder::EffectRewinder (
     EventMultiplexer& rEventMultiplexer,
@@ -96,11 +96,11 @@ EffectRewinder::EffectRewinder (
 
 void EffectRewinder::initialize (void)
 {
-    // Add some event handlers so that we are informed when
-    // a) an animation is started (we then check whether that belongs to a
-    // main sequence effect and if so, increase the respective counter),
-    // b,c) a slide was started or ended (in which case the effect counter
-    // is reset.
+    
+    
+    
+    
+    
 
     mpAnimationStartHandler.reset(
         new RewinderAnimationEventHandler(
@@ -175,14 +175,14 @@ bool EffectRewinder::rewind (
 {
     mpPaintLock = rpPaintLock;
 
-    // Do not allow nested rewinds.
+    
     if (mpAsynchronousRewindEvent)
     {
         OSL_ASSERT( ! mpAsynchronousRewindEvent);
         return false;
     }
 
-    // Abort (and skip over the rest of) any currently active animation.
+    
     mrUserEventQueue.callSkipEffectEventHandler();
     mrEventQueue.forceEmpty();
 
@@ -195,8 +195,8 @@ bool EffectRewinder::rewind (
             return false;
         }
 
-        // No main sequence effects to rewind on the current slide.
-        // Go back to the previous slide.
+        
+        
         mpAsynchronousRewindEvent = makeEvent(
             ::boost::bind(
                 &EffectRewinder::asynchronousRewindToPreviousSlide,
@@ -206,8 +206,8 @@ bool EffectRewinder::rewind (
     }
     else
     {
-        // The actual rewinding is done asynchronously so that we can safely
-        // call other methods.
+        
+        
         mpAsynchronousRewindEvent = makeEvent(
             ::boost::bind(
                 &EffectRewinder::asynchronousRewind,
@@ -229,7 +229,7 @@ bool EffectRewinder::rewind (
 
 void EffectRewinder::skipAllMainSequenceEffects (void)
 {
-    // Do not allow nested rewinds.
+    
     if (mpAsynchronousRewindEvent)
     {
         OSL_ASSERT(!mpAsynchronousRewindEvent);
@@ -253,7 +253,7 @@ void EffectRewinder::skipAllMainSequenceEffects (void)
 
 sal_Int32 EffectRewinder::countMainSequenceEffects (void)
 {
-    // Determine the number of main sequence effects.
+    
     sal_Int32 nMainSequenceNodeCount (0);
 
     ::std::queue<uno::Reference<animations::XAnimationNode> > aNodeQueue;
@@ -263,7 +263,7 @@ sal_Int32 EffectRewinder::countMainSequenceEffects (void)
         const uno::Reference<animations::XAnimationNode> xNode (aNodeQueue.front());
         aNodeQueue.pop();
 
-        // Does the current node belong to the main sequence?
+        
         if (xNode.is())
         {
             animations::Event aEvent;
@@ -272,7 +272,7 @@ sal_Int32 EffectRewinder::countMainSequenceEffects (void)
                     ++nMainSequenceNodeCount;
         }
 
-        // If the current node is a container then prepare its children for investigation.
+        
         uno::Reference<container::XEnumerationAccess> xEnumerationAccess (xNode, uno::UNO_QUERY);
         if (xEnumerationAccess.is())
         {
@@ -296,8 +296,8 @@ sal_Int32 EffectRewinder::countMainSequenceEffects (void)
 
 void EffectRewinder::skipSingleMainSequenceEffects (void)
 {
-    // This basically just starts the next effect and then skips over its
-    // animation.
+    
+    
     mrEventMultiplexer.notifyNextEffect();
     mrEventQueue.forceEmpty();
     mrUserEventQueue.callSkipEffectEventHandler();
@@ -318,8 +318,8 @@ bool EffectRewinder::resetEffectCount (void)
 
 bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
 {
-    // This notification is only relevant for us when the rpNode belongs to
-    // the main sequence.
+    
+    
     BaseNodeSharedPtr pBaseNode (::boost::dynamic_pointer_cast<BaseNode>(rpNode));
     if ( ! pBaseNode)
         return false;
@@ -328,8 +328,8 @@ bool EffectRewinder::notifyAnimationStart (const AnimationNodeSharedPtr& rpNode)
     if ( ! (pParent && pParent->isMainSequenceRootNode()))
         return false;
 
-    // This notification is only relevant for us when the effect is user
-    // triggered.
+    
+    
     bool bIsUserTriggered (false);
 
     Reference<animations::XAnimationNode> xNode (rpNode->getXAnimationNode());
@@ -361,7 +361,7 @@ void EffectRewinder::asynchronousRewind (
     if (bRedisplayCurrentSlide)
     {
         mpPaintLock->Activate();
-        // Re-display the current slide.
+        
         if (rSlideRewindFunctor)
             rSlideRewindFunctor();
         mpAsynchronousRewindEvent = makeEvent(
@@ -376,8 +376,8 @@ void EffectRewinder::asynchronousRewind (
     }
     else
     {
-        // Process initial events and skip any animations that are started
-        // when the slide is shown.
+        
+        
         mbNonUserTriggeredMainSequenceEffectSeen = false;
         mrEventQueue.forceEmpty();
         if (mbNonUserTriggeredMainSequenceEffectSeen)
@@ -409,6 +409,6 @@ void EffectRewinder::asynchronousRewindToPreviousSlide (
 
 
 
-} } // end of namespace ::slideshow::internal
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

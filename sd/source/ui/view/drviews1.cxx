@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -97,7 +97,7 @@ void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
 {
     ViewShell::UIActivating(pCli);
 
-    // Disable own controls
+    
     maTabControl.Disable();
     if (GetLayerTabControl() != NULL)
         GetLayerTabControl()->Disable();
@@ -105,7 +105,7 @@ void DrawViewShell::UIActivating( SfxInPlaceClient* pCli )
 
 void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 {
-    // Enable own controls
+    
     maTabControl.Enable();
     if (GetLayerTabControl() != NULL)
         GetLayerTabControl()->Enable();
@@ -116,8 +116,8 @@ void DrawViewShell::UIDeactivated( SfxInPlaceClient* pCli )
 
 void DrawViewShell::Deactivate(sal_Bool bIsMDIActivate)
 {
-    // Temporarily disable context broadcasting while the Deactivate()
-    // call is forwarded to our base class.
+    
+    
     const bool bIsContextBroadcasterEnabled (SfxShell::SetContextBroadcasterEnabled(false));
 
     ViewShell::Deactivate(bIsMDIActivate);
@@ -154,7 +154,7 @@ void DrawViewShell::SelectionHasChanged (void)
 {
     Invalidate();
 
-    //Update3DWindow(); // 3D-Controller
+    
     SfxBoolItem aItem( SID_3D_STATE, true );
     GetViewFrame()->GetDispatcher()->Execute(
         SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -191,16 +191,16 @@ void DrawViewShell::SelectionHasChanged (void)
         Client* pIPClient = static_cast<Client*>(rBase.GetIPClient());
         if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
         {
-            // as appropriate take ole-objects into account and deactivate
+            
 
-            // this means we recently deselected an inplace active ole object so
-            // we need to deselect it now
+            
+            
             if (!pOleObj)
             {
-                //#i47279# disable frame until after object has completed unload
+                
                 LockUI aUILock(GetViewFrame());
                 pIPClient->DeactivateObject();
-                //HMHmpDrView->ShowMarkHdl();
+                
             }
             else
             {
@@ -254,7 +254,7 @@ void DrawViewShell::SelectionHasChanged (void)
         GetViewShellBase().GetToolBarManager()->SelectionHasChanged(*this,*mpDrawView);
     }
 
-    // Invalidate for every subshell
+    
     GetViewShellBase().GetViewShellManager()->InvalidateAllSubShells(this);
 
     mpDrawView->UpdateSelectionClipboard( sal_False );
@@ -267,8 +267,8 @@ void DrawViewShell::SelectionHasChanged (void)
  */
 void DrawViewShell::SetZoom( long nZoom )
 {
-    // Make sure that the zoom factor will not be recalculated on
-    // following window resizings.
+    
+    
     mbZoomOnPage = sal_False;
     ViewShell::SetZoom( nZoom );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
@@ -337,7 +337,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
         if (mePageKind == PK_HANDOUT)
         {
-            // at handouts only allow MasterPage
+            
             eEMode = EM_MASTERPAGE;
         }
 
@@ -346,14 +346,14 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         meEditMode = eEMode;
         mbIsLayerModeActive = bIsLayerModeActive;
 
-        // Determine whether to show the master view toolbar.  The master
-        // page mode has to be active and the shell must not be a handout
-        // view.
+        
+        
+        
         bool bShowMasterViewToolbar (meEditMode == EM_MASTERPAGE
              && GetShellType() != ViewShell::ST_HANDOUT);
 
-        // If the master view toolbar is not shown we hide it before
-        // switching the edit mode.
+        
+        
         if (::sd::ViewShell::mpImpl->mbIsInitialized
             && IsMainViewShell()
             && ! bShowMasterViewToolbar)
@@ -398,7 +398,7 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
 
             if (!mpActualPage)
             {
-                // as long as there is no mpActualPage, take first
+                
                 mpActualPage = GetDoc()->GetSdPage(0, mePageKind);
             }
 
@@ -426,8 +426,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
             SwitchPage(nActualMasterPageNum);
         }
 
-        // If the master view toolbar is to be shown we turn it on after the
-        // edit mode has been changed.
+        
+        
         if (::sd::ViewShell::mpImpl->mbIsInitialized
             && IsMainViewShell()
             && bShowMasterViewToolbar)
@@ -440,8 +440,8 @@ void DrawViewShell::ChangeEditMode(EditMode eEMode, bool bIsLayerModeActive)
         if ( ! mbIsLayerModeActive)
         {
             maTabControl.Show();
-            // Set the tab control only for draw pages.  For master page
-            // this has been done already above.
+            
+            
             if (meEditMode == EM_PAGE)
                 maTabControl.SetCurPageId (nActualPageNum + 1);
         }
@@ -486,7 +486,7 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, sal_Bool bIsFirst)
         aWBits  = WB_HSCROLL | WB_3DLOOK | WB_BORDER | WB_EXTRAFIELD;
         nFlags |= ( SVXRULER_SUPPORT_SET_NULLOFFSET |
                     SVXRULER_SUPPORT_TABS |
-                    SVXRULER_SUPPORT_PARAGRAPH_MARGINS ); // Neu
+                    SVXRULER_SUPPORT_PARAGRAPH_MARGINS ); 
     }
     else
         aWBits = WB_HSCROLL | WB_3DLOOK | WB_BORDER;
@@ -495,7 +495,7 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, sal_Bool bIsFirst)
         GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
-    // Metric ...
+    
     sal_uInt16 nMetric = (sal_uInt16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
@@ -503,8 +503,8 @@ SvxRuler* DrawViewShell::CreateHRuler (::sd::Window* pWin, sal_Bool bIsFirst)
 
     pRuler->SetUnit( FieldUnit( nMetric ) );
 
-    // ... and also set DefTab at the ruler
-    pRuler->SetDefTabDist( GetDoc()->GetDefaultTabulator() ); // new
+    
+    pRuler->SetDefTabDist( GetDoc()->GetDefaultTabulator() ); 
 
     Fraction aUIScale(pWin->GetMapMode().GetScaleX());
     aUIScale *= GetDoc()->GetUIScale();
@@ -527,7 +527,7 @@ SvxRuler* DrawViewShell::CreateVRuler(::sd::Window* pWin)
         GetViewFrame()->GetBindings(), aWBits);
     pRuler->SetSourceUnit(pWin->GetMapMode().GetMapUnit());
 
-    // Metric same as HRuler, use document setting
+    
     sal_uInt16 nMetric = (sal_uInt16)GetDoc()->GetUIUnit();
 
     if( nMetric == 0xffff )
@@ -604,7 +604,7 @@ IMPL_LINK( DrawViewShell, TabSplitHdl, TabBar *, pTab )
     return 0;
 }
 
-/// inherited from sd::ViewShell
+
 SdPage* DrawViewShell::getCurrentPage() const
 {
     const sal_Int32 nPageCount = (meEditMode == EM_PAGE)?
@@ -614,13 +614,13 @@ SdPage* DrawViewShell::getCurrentPage() const
     sal_Int32 nCurrentPage = maTabControl.GetCurPageId() - 1;
     DBG_ASSERT( (nPageCount>0) && (nCurrentPage<nPageCount), "sd::DrawViewShell::getCurrentPage(), illegal page index!" );
     if( (nPageCount < 0) || (nCurrentPage>=nPageCount) )
-        nCurrentPage = 0; // play safe here
+        nCurrentPage = 0; 
 
     if (meEditMode == EM_PAGE)
     {
         return GetDoc()->GetSdPage((sal_uInt16)nCurrentPage, mePageKind);
     }
-    else // EM_MASTERPAGE
+    else 
     {
         return GetDoc()->GetMasterSdPage((sal_uInt16)nCurrentPage, mePageKind);
     }
@@ -645,7 +645,7 @@ void DrawViewShell::ResetActualPage()
     if (meEditMode == EM_PAGE)
     {
 
-        // Update for TabControl
+        
         maTabControl.Clear();
 
         SdPage* pPage = NULL;
@@ -656,13 +656,13 @@ void DrawViewShell::ResetActualPage()
             OUString aPageName = pPage->GetName();
             maTabControl.InsertPage(i + 1, aPageName);
 
-            // correct selection recognition of the pages
+            
             GetDoc()->SetSelected(pPage, i == nCurrentPage);
         }
 
         maTabControl.SetCurPageId(nCurrentPage + 1);
     }
-    else // EM_MASTERPAGE
+    else 
     {
         SdPage* pActualPage = GetDoc()->GetMasterSdPage(nCurrentPage, mePageKind);
         maTabControl.Clear();
@@ -764,8 +764,8 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
     if (GetActiveWindow()->IsInPaint())
     {
-        // Switching the current page while a Paint is being executed is
-        // dangerous.  So, post it for later execution and return.
+        
+        
         maAsynchronousSwitchPageCall.Post(::boost::bind(
             ::std::mem_fun(&DrawViewShell::SwitchPage),
             this,
@@ -775,22 +775,22 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
     sal_Bool bOK = sal_False;
 
-    // With the current implementation of FuSlideShow there is a problem
-    // when it dsplays the show in a window: When the show is stopped it
-    // returns at one point in time SDRPAGE_NOTFOUND as current page index.
-    // Because FuSlideShow is currently being rewritten this bug is fixed
-    // here.
-    // This is not as bad a hack as it may look because making SwitchPage()
-    // more robust with respect to invalid page numbers is a good thing
-    // anyway.
+    
+    
+    
+    
+    
+    
+    
+    
     if (nSelectedPage == SDRPAGE_NOTFOUND)
     {
         nSelectedPage = 0;
     }
     else
     {
-        // Make sure that the given page index points to an existing page.  Move
-        // the index into the valid range if necessary.
+        
+        
         sal_uInt16 nPageCount = (meEditMode == EM_PAGE)
             ? GetDoc()->GetSdPageCount(mePageKind)
             : GetDoc()->GetMasterSdPageCount(mePageKind);
@@ -824,7 +824,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                         && pNewPage == dynamic_cast< SdPage* >( pPV->GetPage() )
                         && sPageText == maTabControl.GetPageText(nSelectedPage+1))
                     {
-                        // this slide is already visible
+                        
                         return sal_True;
                     }
                 }
@@ -846,7 +846,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                         && pNewPage == pCurrentPage
                         && maTabControl.GetPageText(nSelectedPage+1).equals(pNewPage->GetName()))
                     {
-                        // this slide is already visible
+                        
                         return sal_True;
                     }
                 }
@@ -866,7 +866,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         {
             SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, mePageKind);
 
-            // does the selected page fit to the masterpage?
+            
             sal_uInt16 nPageCount = GetDoc()->GetSdPageCount(mePageKind);
             for (sal_uInt16 i = 0; i < nPageCount; i++)
             {
@@ -880,7 +880,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
             if (!mpActualPage)
             {
-                // take the first page, that fits to the masterpage
+                
                 for (sal_uInt16 i = 0; i < nPageCount; i++)
                 {
                     SdPage* pPage = GetDoc()->GetSdPage(i, mePageKind);
@@ -895,25 +895,25 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
         for (sal_uInt16 i = 0; i < GetDoc()->GetSdPageCount(mePageKind); i++)
         {
-            // deselect all pages
+            
             GetDoc()->SetSelected( GetDoc()->GetSdPage(i, mePageKind), sal_False);
         }
 
         if (!mpActualPage)
         {
-            // as far as there is no mpActualPage, take the first
+            
             mpActualPage = GetDoc()->GetSdPage(0, mePageKind);
         }
 
-        // also select this page (mpActualPage always points at a drawing page,
-        // never at a masterpage)
+        
+        
         GetDoc()->SetSelected(mpActualPage, sal_True);
 
         rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetDoc() ) );
         if( !xSlideshow.is() || !xSlideshow->isRunning() || ( xSlideshow->getAnimationMode() != ANIMATIONMODE_SHOW ) )
         {
-            // tighten VisArea, to possibly deactivate objects
-            // !!! only if we are not in presentation mode (#96279) !!!
+            
+            
             OSL_ASSERT (GetViewShell()!=NULL);
             GetViewShell()->DisconnectAllClients();
             VisAreaChanged(Rectangle(Point(), Size(1, 1)));
@@ -1013,7 +1013,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
             SdPage* pMaster = GetDoc()->GetMasterSdPage(nSelectedPage, mePageKind);
 
-            if( !pMaster )              // if this page should not exist
+            if( !pMaster )              
                 pMaster = GetDoc()->GetMasterSdPage(0, mePageKind);
 
             sal_uInt16 nNum = pMaster->GetPageNum();
@@ -1057,7 +1057,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
 
             if( mePageKind == PK_HANDOUT )
             {
-                // set pages for all available handout presentation objects
+                
                 sd::ShapeList& rShapeList = pMaster->GetPresentationShapeList();
                 SdrObject* pObj = 0;
                 rShapeList.seekShape(0);
@@ -1066,8 +1066,8 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
                 {
                     if( pMaster->GetPresObjKind(pObj) == PRESOBJ_HANDOUT )
                     {
-                        // #i105146# We want no content to be displayed for PK_HANDOUT,
-                        // so just never set a page as content
+                        
+                        
                         static_cast<SdrPageObj*>(pObj)->SetReferencedPage(0);
                     }
                 }
@@ -1079,7 +1079,7 @@ sal_Bool DrawViewShell::SwitchPage(sal_uInt16 nSelectedPage)
         VisAreaChanged(aVisAreaWin);
         mpDrawView->VisAreaChanged(GetActiveWindow());
 
-        // so navigator (and effect window) notice that
+        
         SfxBindings& rBindings = GetViewFrame()->GetBindings();
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME, sal_True, sal_False);
         rBindings.Invalidate(SID_STATUS_PAGE, sal_True, sal_False);
@@ -1120,9 +1120,9 @@ void DrawViewShell::ResetActualLayer()
     LayerTabBar* pLayerBar = GetLayerTabControl();
     if (pLayerBar != NULL)
     {
-        // remember old layer cound and current layer id
-        // this is needed when one layer is renamed to
-        // restore current layer
+        
+        
+        
         sal_uInt16 nOldLayerCnt = pLayerBar->GetPageCount();
         sal_uInt16 nOldLayerId = pLayerBar->GetCurPageId();
 
@@ -1155,7 +1155,7 @@ void DrawViewShell::ResetActualLayer()
             {
                 if (meEditMode == EM_MASTERPAGE)
                 {
-                    // don't show page layer onto the masterpage
+                    
                     if (aName != aLayoutLayer   &&
                         aName != aControlsLayer &&
                         aName != aMeasureLinesLayer)
@@ -1167,7 +1167,7 @@ void DrawViewShell::ResetActualLayer()
 
                         if (pPV && !pPV->IsLayerVisible(aName))
                         {
-                            // invisible layers are displayed differently
+                            
                             nBits = TPB_SPECIAL;
                         }
 
@@ -1176,7 +1176,7 @@ void DrawViewShell::ResetActualLayer()
                 }
                 else
                 {
-                    // don't show masterpage layer onto the page
+                    
                     if ( aName != aBackgroundObjLayer )
                     {
                         pLayerBar->InsertPage(nLayer+1, aName);
@@ -1185,7 +1185,7 @@ void DrawViewShell::ResetActualLayer()
 
                         if (!mpDrawView->GetSdrPageView()->IsLayerVisible(aName))
                         {
-                            // invisible layers are displayed differently
+                            
                             nBits = TPB_SPECIAL;
                         }
 
@@ -1259,6 +1259,6 @@ sal_Int8 DrawViewShell::ExecuteDrop (
     return nResult;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

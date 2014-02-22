@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -75,18 +75,18 @@ LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,LwpObj
         bool bFailure;
 
         sal_uInt32 tag = pFile->QuickReaduInt32(&bFailure);
-        // Keep reading properties until we hit the end tag or
-        // the stream ends
+        
+        
         if (bFailure || tag == TAG_ENDSUBOBJ)
             break;
 
-        // Get the length of this property
+        
         sal_uInt16 Len = pFile->QuickReaduInt16(&bFailure);
 
         if (bFailure)
             break;
 
-        // Create whatever kind of tag we just found
+        
         switch (tag)
         {
             case TAG_PARA_ALIGN:
@@ -131,7 +131,7 @@ LwpParaProperty* LwpParaProperty::ReadPropertyList(LwpObjectStream* pFile,LwpObj
                 NewProp = NULL;
                 break;
         }
-        // Stick it at the beginning of the list
+        
         if (NewProp)
         {
             NewProp->insert(Prop, NULL);
@@ -195,7 +195,7 @@ sal_uInt32 LwpParaSpacingProperty::GetType(void)
     return PP_LOCAL_SPACING;
 }
 
-// 01/25/2004////////////////////////////////////////////////////////
+
 LwpParaBorderProperty::LwpParaBorderProperty(LwpObjectStream* pStrm) :
 m_pParaBorderOverride(NULL)
 {
@@ -248,7 +248,7 @@ LwpParaNumberingProperty::LwpParaNumberingProperty(LwpObjectStream * pStrm)
     LwpNumberingPiece *pNumberingPiece = dynamic_cast<LwpNumberingPiece*>(aNumberingPiece.obj(VO_NUMBERINGPIECE));
     m_pNumberingOverride = pNumberingPiece ? dynamic_cast<LwpNumberingOverride*>(pNumberingPiece->GetOverride()) : NULL;
 }
-//end//////////////////////////////////////////////////////////////////////
+
 
 LwpParaTabRackProperty::LwpParaTabRackProperty(LwpObjectStream* pFile)
 {

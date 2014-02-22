@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VDataSeries.hxx"
@@ -77,7 +77,7 @@ sal_Int32 VDataSequence::detectNumberFormatKey( sal_Int32 index ) const
 {
     sal_Int32 nNumberFormatKey = -1;
 
-    // -1 is allowed and means a key for the whole sequence
+    
     if( -1<=index && index<Doubles.getLength() &&
         Model.is())
     {
@@ -109,15 +109,15 @@ struct lcl_LessXOfPoint
 
 void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Reference<data::XDataSequence>& xDataSequence )
 {
-    //#i71686#, #i101968#, #i102428#
+    
     sal_Int32 nCount = rData.Doubles.getLength();
     for( sal_Int32 i = 0; i < nCount; ++i )
     {
         if( !::rtl::math::isNan( rData.Doubles[i] ) )
             return;
     }
-    //no double value is countained
-    //is there any text?
+    
+    
     uno::Sequence< OUString > aStrings( DataSequenceToStringSequence( xDataSequence ) );
     sal_Int32 nTextCount = aStrings.getLength();
     for( sal_Int32 j = 0; j < nTextCount; ++j )
@@ -128,7 +128,7 @@ void lcl_clearIfNoValuesButTextIsContained( VDataSequence& rData, const uno::Ref
             return;
         }
     }
-    //no content at all
+    
 }
 
 void lcl_maybeReplaceNanWithZero( double& rfValue, sal_Int32 nMissingValueTreatment )
@@ -240,7 +240,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
         }
     }
 
-    //determine the point count
+    
     m_nPointCount = m_aValues_Y.getLength();
     {
         if( m_nPointCount < m_aValues_Bubble_Size.getLength() )
@@ -260,7 +260,7 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     {
         try
         {
-            //get AttributedDataPoints
+            
             xProp->getPropertyValue("AttributedDataPoints") >>= m_aAttributedDataPointIndexList;
 
             xProp->getPropertyValue("StackingDirection") >>= m_eStackingDirection;
@@ -284,8 +284,8 @@ void VDataSeries::doSortByXValues()
 {
     if( m_aValues_X.is() && m_aValues_X.Doubles.getLength() )
     {
-        //prepare a vector for sorting
-        std::vector< ::std::vector< double > > aTmp;//outer vector are points, inner vector are the different values of athe point
+        
+        std::vector< ::std::vector< double > > aTmp;
         double fNan;
         ::rtl::math::setNan( & fNan );
         sal_Int32 nPointIndex = 0;
@@ -297,10 +297,10 @@ void VDataSeries::doSortByXValues()
             aTmp.push_back( aSinglePoint );
         }
 
-        //do sort
+        
         std::stable_sort( aTmp.begin(), aTmp.end(), lcl_LessXOfPoint() );
 
-        //fill the sorted points back to the members
+        
         m_aValues_X.Doubles.realloc( m_nPointCount );
         m_aValues_Y.Doubles.realloc( m_nPointCount );
 
@@ -363,7 +363,7 @@ void VDataSeries::setParticle( const OUString& rSeriesParticle )
 {
     m_aSeriesParticle = rSeriesParticle;
 
-    //get CID
+    
     m_aCID = ObjectIdentifier::createClassifiedIdentifierForParticle( m_aSeriesParticle );
     m_aPointCID_Stub = ObjectIdentifier::createSeriesSubObjectStub( OBJECTTYPE_DATA_POINT, m_aSeriesParticle );
 
@@ -486,9 +486,9 @@ double VDataSeries::getXValue( sal_Int32 index ) const
     }
     else
     {
-        // #i70133# always return correct X position - needed for short data series
+        
         if( 0<=index /*&& index < m_nPointCount*/ )
-            fRet = index+1;//first category (index 0) matches with real number 1.0
+            fRet = index+1;
         else
             ::rtl::math::setNan( &fRet );
     }
@@ -515,9 +515,9 @@ double VDataSeries::getYValue( sal_Int32 index ) const
     }
     else
     {
-        // #i70133# always return correct X position - needed for short data series
+        
         if( 0<=index /*&& index < m_nPointCount*/ )
-            fRet = index+1;//first category (index 0) matches with real number 1.0
+            fRet = index+1;
         else
             ::rtl::math::setNan( &fRet );
     }
@@ -641,16 +641,16 @@ sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Refe
         if( xPointProps.is() )
             xPointProps->getPropertyValue("LabelPlacement") >>= nLabelPlacement;
 
-        //ensure that the set label placement is supported by this charttype
+        
 
         uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
                 xChartType, nDimensionCount, bSwapXAndY, m_xDataSeries ) );
 
         for( sal_Int32 nN = 0; nN < aAvailablePlacements.getLength(); nN++ )
             if( aAvailablePlacements[nN] == nLabelPlacement )
-                return nLabelPlacement; //ok
+                return nLabelPlacement; 
 
-        //otherwise use the first supported one
+        
         if( aAvailablePlacements.getLength() )
         {
             nLabelPlacement = aAvailablePlacements[0];
@@ -742,8 +742,8 @@ uno::Sequence< double > VDataSeries::getAllX() const
 {
     if(!m_aValues_X.is() && !m_aValues_X.getLength() && m_nPointCount)
     {
-        //init x values from category indexes
-        //first category (index 0) matches with real number 1.0
+        
+        
         m_aValues_X.Doubles.realloc( m_nPointCount );
         for(sal_Int32 nN=m_aValues_X.getLength();nN--;)
             m_aValues_X.Doubles[nN] = nN+1;
@@ -755,8 +755,8 @@ uno::Sequence< double > VDataSeries::getAllY() const
 {
     if(!m_aValues_Y.is() && !m_aValues_Y.getLength() && m_nPointCount)
     {
-        //init y values from indexes
-        //first y-value (index 0) matches with real number 1.0
+        
+        
         m_aValues_Y.Doubles.realloc( m_nPointCount );
         for(sal_Int32 nN=m_aValues_Y.getLength();nN--;)
             m_aValues_Y.Doubles[nN] = nN+1;
@@ -800,9 +800,9 @@ Symbol* getSymbolPropertiesFromPropertySet( const uno::Reference< beans::XProper
     {
         if( xProp->getPropertyValue("Symbol") >>= *apSymbolProps )
         {
-            //use main color to fill symbols
+            
             xProp->getPropertyValue("Color") >>= apSymbolProps->FillColor;
-            // border of symbols always same as fill color
+            
             apSymbolProps->BorderColor = apSymbolProps->FillColor;
         }
         else
@@ -825,8 +825,8 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
             m_apSymbolProperties_AttributedPoint.reset(
                 getSymbolPropertiesFromPropertySet(this->getPropertiesOfPoint(index)));
         pRet = m_apSymbolProperties_AttributedPoint.get();
-        //if a single data point does not have symbols but the dataseries itself has symbols
-        //we create an invisible symbol shape to enable selection of that point
+        
+        
         if( !pRet || pRet->Style == SymbolStyle_NONE )
         {
             if (!m_apSymbolProperties_Series)
@@ -838,10 +838,10 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
                 {
                     m_apSymbolProperties_InvisibleSymbolForSelection.reset(new Symbol);
                     m_apSymbolProperties_InvisibleSymbolForSelection->Style = SymbolStyle_STANDARD;
-                    m_apSymbolProperties_InvisibleSymbolForSelection->StandardSymbol = 0;//square
+                    m_apSymbolProperties_InvisibleSymbolForSelection->StandardSymbol = 0;
                     m_apSymbolProperties_InvisibleSymbolForSelection->Size = m_apSymbolProperties_Series->Size;
-                    m_apSymbolProperties_InvisibleSymbolForSelection->BorderColor = 0xff000000;//invisible
-                    m_apSymbolProperties_InvisibleSymbolForSelection->FillColor = 0xff000000;//invisible
+                    m_apSymbolProperties_InvisibleSymbolForSelection->BorderColor = 0xff000000;
+                    m_apSymbolProperties_InvisibleSymbolForSelection->FillColor = 0xff000000;
                 }
                 pRet = m_apSymbolProperties_InvisibleSymbolForSelection.get();
             }
@@ -907,7 +907,7 @@ bool VDataSeries::hasPointOwnColor( sal_Int32 index ) const
 
 bool VDataSeries::isAttributedDataPoint( sal_Int32 index ) const
 {
-    //returns true if the data point assigned by the given index has set it's own properties
+    
     if( index>=m_nPointCount || m_nPointCount==0)
         return false;
     for(sal_Int32 nN=m_aAttributedDataPointIndexList.getLength();nN--;)
@@ -1126,7 +1126,7 @@ double VDataSeries::getValueByProperty( sal_Int32 nIndex, const OUString& rPropN
         double fOldValue = mpOldSeries->getValueByProperty( nIndex, rPropName );
         if(rPropName.endsWith("Color"))
         {
-            //optimized interpolation for color values
+            
             Color aColor(static_cast<sal_uInt32>(fValue));
             Color aOldColor(static_cast<sal_uInt32>(fOldValue));
             sal_uInt8 r = aOldColor.GetRed() + (aColor.GetRed() - aOldColor.GetRed()) * mnPercent;
@@ -1146,6 +1146,6 @@ bool VDataSeries::hasPropertyMapping(const OUString& rPropName ) const
     return maPropertyMap.find(rPropName) != maPropertyMap.end();
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

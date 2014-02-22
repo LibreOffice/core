@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -156,7 +156,7 @@ static sal_uLong ImplWinQueueStatusToSal( DWORD nWinStatus )
     return nStatus;
 }
 
-// - WinSalInstance -
+
 
 void WinSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
@@ -201,12 +201,12 @@ void WinSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* pInfo )
                 OUString aPortName;
                 if ( pWinInfo2->pPortName )
                     aPortName = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pPortName) );
-                // pLocation can be 0 (the Windows docu doesn't describe this)
+                
                 if ( pWinInfo2->pLocation && *pWinInfo2->pLocation )
                     pInfo->maLocation = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pLocation) );
                 else
                     pInfo->maLocation = aPortName;
-                // pComment can be 0 (the Windows docu doesn't describe this)
+                
                 if ( pWinInfo2->pComment )
                     pInfo->maComment = OUString( reinterpret_cast< const sal_Unicode* >(pWinInfo2->pComment) );
                 pInfo->mnStatus      = ImplWinQueueStatusToSal( pWinInfo2->Status );
@@ -243,12 +243,12 @@ OUString WinSalInstance::GetDefaultPrinter()
             return aDefPrt;
     }
 
-    // get default printer from win.ini
+    
     char szBuffer[256];
     GetProfileStringA( aImplWindows, aImplDevice, "", szBuffer, sizeof( szBuffer ) );
     if ( szBuffer[0] )
     {
-        // search for printer name
+        
         char* pBuf = szBuffer;
         char* pTmp = pBuf;
         while ( *pTmp && (*pTmp != ',') )
@@ -278,11 +278,11 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
 {
     if ( pSetupData && pSetupData->mpDriverData )
     {
-        // signature and size must fit to avoid using
-        // JobSetups from a wrong system
+        
+        
 
-        // initialize versions from jobsetup
-        // those will be overwritten with driver's version
+        
+        
         DEVMODEW* pDevModeW = NULL;
         LONG dmSpecVersion = -1;
         LONG dmDriverVersion = -1;
@@ -293,16 +293,16 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
         long nSysJobSize = -1;
         if( pPrinter && pDevModeW )
         {
-            // just too many driver crashes in that area -> check the dmSpecVersion and dmDriverVersion fields always !!!
-            // this prevents using the jobsetup between different Windows versions (eg from XP to 9x) but we
-            // can avoid potential driver crashes as their jobsetups are often not compatible
-            // #110800#, #111151#, #112381#, #i16580#, #i14173# and perhaps #112375#
+            
+            
+            
+            
             HANDLE hPrn;
             LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.getStr()));
             if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
                 return FALSE;
 
-            // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
+            
             if( hPrn == HGDI_ERROR )
                 return FALSE;
 
@@ -325,9 +325,9 @@ static sal_Bool ImplTestSalJobSetup( WinSalInfoPrinter* pPrinter,
                 return FALSE;
             }
 
-            // the spec version differs between the windows platforms, ie 98,NT,2000/XP
-            // this allows us to throw away printer settings from other platforms that might crash a buggy driver
-            // we check the driver version as well
+            
+            
+            
             dmSpecVersion = ((DEVMODEW*)pBuffer)->dmSpecVersion;
             dmDriverVersion = ((DEVMODEW*)pBuffer)->dmDriverVersion;
 
@@ -363,7 +363,7 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
     LPWSTR pPrinterNameW = reinterpret_cast<LPWSTR>(const_cast<sal_Unicode*>(pPrinter->maDeviceName.getStr()));
     if ( !OpenPrinterW( pPrinterNameW, &hPrn, NULL ) )
         return FALSE;
-    // #131642# hPrn==HGDI_ERROR even though OpenPrinter() succeeded!
+    
     if( hPrn == HGDI_ERROR )
         return FALSE;
 
@@ -383,30 +383,30 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
         return FALSE;
     }
 
-    // make Outputbuffer
+    
     nDriverDataLen              = sizeof(SalDriverData) + nSysJobSize-1;
     pOutBuffer                  = (SalDriverData*)rtl_allocateZeroMemory( nDriverDataLen );
     pOutBuffer->mnSysSignature  = SAL_DRIVERDATA_SYSSIGN;
-    // calculate driver data offset including structure padding
+    
     pOutBuffer->mnDriverOffset  = sal::static_int_cast<sal_uInt16>(
                                     (char*)pOutBuffer->maDriverData -
                                     (char*)pOutBuffer );
 
-    // check if we have a suitable input buffer
+    
     if ( bIn && ImplTestSalJobSetup( pPrinter, pSetupData, FALSE ) )
     {
         pInBuffer = (BYTE*)pSetupData->mpDriverData + ((SalDriverData*)pSetupData->mpDriverData)->mnDriverOffset;
         nMode |= DM_IN_BUFFER;
     }
 
-    // check if the dialog should be shown
+    
     if ( pVisibleDlgParent )
     {
         hWnd = pVisibleDlgParent->mhWnd;
         nMode |= DM_IN_PROMPT;
     }
 
-    // Release mutex, in the other case we don't get paints and so on
+    
     sal_uLong nMutexCount=0;
     if ( pVisibleDlgParent )
         nMutexCount = ImplSalReleaseYieldMutex();
@@ -425,7 +425,7 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
         return FALSE;
     }
 
-    // fill up string buffers with 0 so they do not influence a JobSetup's memcmp
+    
     if( ((LPDEVMODEW)pOutDevMode)->dmSize >= 64 )
     {
         sal_Int32 nLen = rtl_ustr_getLength( (const sal_Unicode*)((LPDEVMODEW)pOutDevMode)->dmDeviceName );
@@ -439,7 +439,7 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
             memset( ((LPDEVMODEW)pOutDevMode)->dmFormName+nLen, 0, sizeof( ((LPDEVMODEW)pOutDevMode)->dmFormName )-(nLen*sizeof(sal_Unicode)) );
     }
 
-    // update data
+    
     if ( pSetupData->mpDriverData )
         rtl_freeMemory( pSetupData->mpDriverData );
     pSetupData->mnDriverDataLen = nDriverDataLen;
@@ -464,7 +464,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
 
     DECLARE_DEVMODE( pSetupData );
 
-    // Orientation
+    
     if ( nFlags & SAL_JOBSET_ORIENTATION )
     {
         if ( CHOOSE_DEVMODE(dmOrientation) == DMORIENT_PORTRAIT )
@@ -473,7 +473,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             pSetupData->meOrientation = ORIENTATION_LANDSCAPE;
     }
 
-    // PaperBin
+    
     if ( nFlags & SAL_JOBSET_PAPERBIN )
     {
         sal_uLong nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
@@ -484,7 +484,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             ImplDeviceCaps( pPrinter, DC_BINS, (BYTE*)pBins, pSetupData );
             pSetupData->mnPaperBin = 0;
 
-            // search the right bin and assign index to mnPaperBin
+            
             for( sal_uLong i = 0; i < nCount; i++ )
             {
                 if( CHOOSE_DEVMODE(dmDefaultSource) == pBins[ i ] )
@@ -498,7 +498,7 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
         }
     }
 
-    // PaperSize
+    
     if ( nFlags & SAL_JOBSET_PAPERSIZE )
     {
         if( (CHOOSE_DEVMODE(dmFields) & (DM_PAPERWIDTH|DM_PAPERLENGTH)) == (DM_PAPERWIDTH|DM_PAPERLENGTH) )
@@ -568,19 +568,19 @@ static void ImplDevModeToJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             case( DMPAPER_A5 ):
                 pSetupData->mePaperFormat = PAPER_A5;
                 break;
-            //See http://wiki.openoffice.org/wiki/DefaultPaperSize
-            //i.e.
-            //http://msdn.microsoft.com/en-us/library/dd319099(VS.85).aspx
-            //DMPAPER_B4    12  B4 (JIS) 257 x 364 mm
-            //http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
-            //also says that the MS DMPAPER_B4 is JIS, which makes most sense. And
-            //matches our Excel filter's belief about the matching XlPaperSize
-            //enumeration.
+            
+            
+            
+            
+            
+            
+            
+            
             //
-            //http://msdn.microsoft.com/en-us/library/ms776398(VS.85).aspx said
-            ////"DMPAPER_B4     12  B4 (JIS) 250 x 354"
-            //which is bogus as it's either JIS 257 x 364 or ISO 250 x 353
-            //(cmc)
+            
+            
+            
+            
             case( DMPAPER_B4 ):
                 pSetupData->mePaperFormat = PAPER_B4_JIS;
                 break;
@@ -730,7 +730,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
 
     DECLARE_DEVMODE( pSetupData );
 
-    // Orientation
+    
     if ( nFlags & SAL_JOBSET_ORIENTATION )
     {
         CHOOSE_DEVMODE(dmFields) |= DM_ORIENTATION;
@@ -740,7 +740,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             CHOOSE_DEVMODE(dmOrientation) = DMORIENT_LANDSCAPE;
     }
 
-    // PaperBin
+    
     if ( nFlags & SAL_JOBSET_PAPERBIN )
     {
         sal_uLong nCount = ImplDeviceCaps( pPrinter, DC_BINS, NULL, pSetupData );
@@ -755,7 +755,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
         }
     }
 
-    // PaperSize
+    
     if ( nFlags & SAL_JOBSET_PAPERSIZE )
     {
         CHOOSE_DEVMODE(dmFields)        |= DM_PAPERSIZE;
@@ -789,13 +789,13 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_TABLOID;
                 break;
 #if 0
-            //http://msdn.microsoft.com/en-us/library/ms776398(VS.85).aspx
-            //DMPAPER_ENV_B6 is documented as:
-            //"DMPAPER_ENV_B6   35  Envelope B6 176 x 125 mm"
-            //which is the wrong way around, it is surely 125 x 176, i.e.
-            //compare DMPAPER_ENV_B4 and DMPAPER_ENV_B4 as
-            //DMPAPER_ENV_B4    33  Envelope B4 250 x 353 mm
-            //DMPAPER_ENV_B5    34  Envelope B5 176 x 250 mm
+            
+            
+            
+            
+            
+            
+            
             case( PAPER_B6_ISO ):
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_B6;
                 break;
@@ -848,7 +848,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
             case( PAPER_ENV_12 ):
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_ENV_12;
                 break;
-            //See the comments on DMPAPER_B4 above
+            
             case( PAPER_B4_JIS ):
                 CHOOSE_DEVMODE(dmPaperSize) = DMPAPER_B4;
                 break;
@@ -939,7 +939,7 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                 if ( (nPaperSizeCount == nPaperCount) && pPapers && pPaperSizes )
                 {
                     PaperInfo aInfo(pSetupData->mnPaperWidth, pSetupData->mnPaperHeight);
-                    // compare paper formats and select a good match
+                    
                     for ( sal_uLong i = 0; i < nPaperCount; i++ )
                     {
                         if ( aInfo.sloppyEqual(PaperInfo(pPaperSizes[i].x*10, pPaperSizes[i].y*10)))
@@ -949,9 +949,9 @@ static void ImplJobSetupToDevMode( WinSalInfoPrinter* pPrinter, ImplJobSetup* pS
                         }
                     }
 
-                    // If the printer supports landscape orientation, check paper sizes again
-                    // with landscape orientation. This is necessary as a printer driver provides
-                    // all paper sizes with portrait orientation only!!
+                    
+                    
+                    
                     if ( !nPaper && nLandscapeAngle != 0 )
                     {
                         PaperInfo aRotatedInfo(pSetupData->mnPaperHeight, pSetupData->mnPaperWidth);
@@ -1027,8 +1027,8 @@ static HDC ImplCreateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* pSetup
         pDevMode = SAL_DEVMODE_W( pSetupData );
     else
         pDevMode = NULL;
-    // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateIC, although declared const - so provide some space
-    // pl: does this hold true for Unicode functions ?
+    
+    
     if( pPrinter->maDriverName.getLength() > 2048 || pPrinter->maDeviceName.getLength() > 2048 )
         return 0;
     sal_Unicode pDriverName[ 4096 ];
@@ -1076,7 +1076,7 @@ static sal_Bool ImplUpdateSalPrnIC( WinSalInfoPrinter* pPrinter, ImplJobSetup* p
     return TRUE;
 }
 
-// - WinSalInstance -
+
 
 SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                    ImplJobSetup* pSetupData )
@@ -1090,7 +1090,7 @@ SalInfoPrinter* WinSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
                                 *pQueueInfo->mpSysData
                               : OUString();
 
-    // check if the provided setup data match the actual printer
+    
     ImplTestSalJobSetup( pPrinter, pSetupData, TRUE );
 
     HDC hDC = ImplCreateSalPrnIC( pPrinter, pSetupData );
@@ -1115,7 +1115,7 @@ void WinSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
     delete pPrinter;
 }
 
-// - WinSalInfoPrinter -
+
 
 WinSalInfoPrinter::WinSalInfoPrinter() :
     mpGraphics( NULL ),
@@ -1169,7 +1169,7 @@ int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
     if( nRet != sal::static_int_cast<int>( GDI_ERROR ) )
         return nRet * 10;
     else
-        return 900; // guess
+        return 900; 
 }
 
 SalGraphics* WinSalInfoPrinter::GetGraphics()
@@ -1306,7 +1306,7 @@ void WinSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
     rPageHeight = GetDeviceCaps( hDC, PHYSICALHEIGHT );
 }
 
-// - WinSalInstance -
+
 
 SalPrinter* WinSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
@@ -1329,7 +1329,7 @@ BOOL CALLBACK SalPrintAbortProc( HDC hPrnDC, int /* nError */ )
 
     do
     {
-        // process messages
+        
         MSG aMsg;
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
@@ -1383,7 +1383,7 @@ static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, sal_uLong nCopies, sal_
     return pNewDevMode;
 }
 
-// - WinSalPrinter -
+
 
 WinSalPrinter::WinSalPrinter() :
     mpGraphics( NULL ),
@@ -1397,7 +1397,7 @@ WinSalPrinter::WinSalPrinter() :
     mbValid( true )
 {
     SalData* pSalData = GetSalData();
-    // insert printer in printerlist
+    
     mpNextPrinter = pSalData->mpFirstPrinter;
     pSalData->mpFirstPrinter = this;
 }
@@ -1406,7 +1406,7 @@ WinSalPrinter::~WinSalPrinter()
 {
     SalData* pSalData = GetSalData();
 
-    // release DC if there is one still around because of AbortJob
+    
     HDC hDC = mhDC;
     if ( hDC )
     {
@@ -1419,7 +1419,7 @@ WinSalPrinter::~WinSalPrinter()
         DeleteDC( hDC );
     }
 
-    // remove printer from printerlist
+    
     if ( this == pSalData->mpFirstPrinter )
         pSalData->mpFirstPrinter = mpNextPrinter;
     else
@@ -1439,8 +1439,8 @@ void WinSalPrinter::markInvalid()
     mbValid = false;
 }
 
-// need wrappers for StarTocW/A to use structured exception handling
-// since SEH does not mix with standard exception handling's cleanup
+
+
 static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
 {
     (void) pPrt;
@@ -1473,7 +1473,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
         pDevModeW = ImplSalSetCopies( pOrgDevModeW, nCopies, bCollate );
     }
 
-    // #95347 some buggy drivers (eg, OKI) write to those buffers in CreateDC, although declared const - so provide some space
+    
     sal_Unicode aDrvBuf[4096];
     sal_Unicode aDevBuf[4096];
     memcpy( aDrvBuf, mpInfoPrinter->maDriverName.getStr(), (mpInfoPrinter->maDriverName.getLength()+1)*sizeof(sal_Unicode));
@@ -1492,7 +1492,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
         return FALSE;
     }
 
-    // make sure mhDC is set before the printer driver may call our abortproc
+    
     mhDC = hDC;
     if ( SetAbortProc( hDC, SalPrintAbortProc ) <= 0 )
     {
@@ -1503,13 +1503,13 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     mnError = 0;
     mbAbort = FALSE;
 
-    // As the Telocom Balloon Fax driver tends to send messages repeatedly
-    // we try to process first all, and then insert a dummy message
+    
+    
     sal_Bool bWhile = TRUE;
     int  i = 0;
     do
     {
-        // process messages
+        
         MSG aMsg;
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
@@ -1526,7 +1526,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     while ( bWhile );
     ImplPostMessage( GetSalData()->mpFirstInstance->mhComWnd, SAL_MSG_DUMMY, 0, 0 );
 
-    // bring up a file choser if printing to file port but no file name given
+    
     OUString aOutFileName;
     if( mpInfoPrinter->maPortName.equalsIgnoreAsciiCase( "FILE:" ) && !(pFileName && !pFileName->isEmpty()) )
     {
@@ -1538,7 +1538,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
         {
             Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
             INetURLObject aObj( aPathSeq[0] );
-            // we're using ansi calls (StartDocA) so convert the string
+            
             aOutFileName = aObj.PathToFileName();
         }
         else
@@ -1564,7 +1564,7 @@ bool WinSalPrinter::StartJob( const OUString* pFileName,
     else
         aInfo.lpszOutput = NULL;
 
-    // start Job
+    
     int nRet = lcl_StartDocW( hDC, &aInfo, this );
 
     if ( nRet <= 0 )
@@ -1592,12 +1592,12 @@ bool WinSalPrinter::EndJob()
             mpGraphics = NULL;
         }
 
-        // #i54419# Windows fax printer brings up a dialog in EndDoc
-        // which text previously copied in soffice process can be
-        // pasted to -> deadlock due to mutex not released.
-        // it should be safe to release the yield mutex over the EndDoc
-        // call, however the real solution is supposed to be the threading
-        // framework yet to come.
+        
+        
+        
+        
+        
+        
         volatile sal_uLong nAcquire = GetSalData()->mpFirstInstance->ReleaseYieldMutex();
         CATCH_DRIVER_EX_BEGIN;
         if( ::EndDoc( hDC ) <= 0 )
@@ -1616,7 +1616,7 @@ bool WinSalPrinter::AbortJob()
 {
     mbAbort = TRUE;
 
-    // trigger Abort asynchronously
+    
     HDC hDC = mhDC;
     if ( hDC )
     {
@@ -1633,7 +1633,7 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
     SalData*    pSalData = GetSalData();
     WinSalPrinter* pPrinter = pSalData->mpFirstPrinter;
 
-    // check if printer still exists
+    
     while ( pPrinter )
     {
         if ( pPrinter->mhDC == hPrnDC )
@@ -1642,7 +1642,7 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
         pPrinter = pPrinter->mpNextPrinter;
     }
 
-    // if printer still exists, cancel the job
+    
     if ( pPrinter )
     {
         HDC hDC = pPrinter->mhDC;
@@ -1693,8 +1693,8 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJo
         return NULL;
     }
 
-    // Hack to work around old PostScript printer drivers optimizing away empty pages
-    // TODO: move into ImplCreateSalPrnGraphics()?
+    
+    
     HPEN    hTempPen = SelectPen( hDC, GetStockPen( NULL_PEN ) );
     HBRUSH  hTempBrush = SelectBrush( hDC, GetStockBrush( NULL_BRUSH ) );
     WIN_Rectangle( hDC, -8000, -8000, -7999, -7999 );

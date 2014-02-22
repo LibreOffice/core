@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -33,10 +33,10 @@
 namespace /* private */
 {
 
-    //-----------------------------------------------
-    // This class prevents changing of the working
-    // directory.
-    //-----------------------------------------------
+    
+    
+    
+    
     class CurDirGuard
     {
         sal_Bool m_bValid;
@@ -92,7 +92,7 @@ namespace /* private */
 
             if ( !bDirSet )
             {
-                // the fallback solution
+                
                 wchar_t pPath[MAX_PATH+1];
                 if ( GetWindowsDirectoryW( pPath, MAX_PATH+1 ) <= MAX_PATH )
                 {
@@ -100,15 +100,15 @@ namespace /* private */
                 }
                 else
                 {
-                    // the system path is also too long?!!
+                    
                 }
             }
         }
     };
 
-    //-----------------------------------------------
+    
     //
-    //-----------------------------------------------
+    
 
     struct GetFileNameParam
     {
@@ -125,9 +125,9 @@ namespace /* private */
         int             m_ExtErr;
     };
 
-    //-----------------------------------------------
+    
     //
-    //-----------------------------------------------
+    
 
     unsigned __stdcall ThreadProc(void* pParam)
     {
@@ -151,10 +151,10 @@ namespace /* private */
         return 0;
     }
 
-    //-----------------------------------------------
-    // exceutes GetOpenFileName/GetSaveFileName in
-    // a separat thread
-    //-----------------------------------------------
+    
+    
+    
+    
 
     bool ThreadExecGetFileName(LPOPENFILENAME lpofn, bool bOpen, /*out*/ int& ExtErr)
     {
@@ -174,11 +174,11 @@ namespace /* private */
         return gfnp.m_bRet;
     }
 
-    //-----------------------------------------------
-    // This function returns true if the calling
-    // thread belongs to a Multithreaded Appartment
-    // (MTA)
-    //-----------------------------------------------
+    
+    
+    
+    
+    
 
     bool IsMTA()
     {
@@ -193,21 +193,21 @@ namespace /* private */
         return false;
     }
 
-} // namespace private
+} 
 
 
-//-----------------------------------------------
+
 //
-//-----------------------------------------------
+
 
 CGetFileNameWrapper::CGetFileNameWrapper() :
     m_ExtendedDialogError(0)
 {
 }
 
-//-----------------------------------------------
+
 //
-//-----------------------------------------------
+
 
 bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
 {
@@ -236,9 +236,9 @@ bool CGetFileNameWrapper::getOpenFileName(LPOPENFILENAME lpofn)
     return bRet;
 }
 
-//-----------------------------------------------
+
 //
-//-----------------------------------------------
+
 
 bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
 {
@@ -262,9 +262,9 @@ bool CGetFileNameWrapper::getSaveFileName(LPOPENFILENAME lpofn)
     return bRet;
 }
 
-//-----------------------------------------------
+
 //
-//-----------------------------------------------
+
 
 int CGetFileNameWrapper::commDlgExtendedError( )
 {

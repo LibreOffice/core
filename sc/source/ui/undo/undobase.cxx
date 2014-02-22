@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/virdev.hxx>
@@ -33,7 +33,7 @@
 #include "globstr.hrc"
 #include <rowheightcontext.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+
 
 TYPEINIT1(ScSimpleUndo,     SfxUndoAction);
 TYPEINIT1(ScBlockUndo,      ScSimpleUndo);
@@ -68,17 +68,17 @@ bool ScSimpleUndo::SetViewMarkData( const ScMarkData& rMarkData )
 
 bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
 {
-    // A SdrUndoGroup for updating detective arrows can belong
-    // to each Undo-Action.
-    // DetectiveRefresh is always called next,
-    // the SdrUndoGroup is encapsulated in a ScUndoDraw action.
-    // AddUndoAction is only called with bTryMerg=sal_True
-    // for automatic update.
+    
+    
+    
+    
+    
+    
 
     if ( !pDetectiveUndo && pNextAction->ISA(ScUndoDraw) )
     {
-        // Take SdrUndoAction from ScUndoDraw Action,
-        // ScUndoDraw is later deleted by the UndoManager
+        
+        
 
         ScUndoDraw* pCalcUndo = (ScUndoDraw*)pNextAction;
         pDetectiveUndo = pCalcUndo->GetDrawUndo();
@@ -95,9 +95,9 @@ void ScSimpleUndo::BeginUndo()
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->HideAllCursors();       // for example due to merged cells
+        pViewShell->HideAllCursors();       
 
-    //  detective updates happened last, must be undone first
+    
     if (pDetectiveUndo)
         pDetectiveUndo->Undo();
 }
@@ -119,11 +119,11 @@ void ScSimpleUndo::EndUndo()
 
 void ScSimpleUndo::BeginRedo()
 {
-    pDocShell->SetInUndo( true );   //! own Flag for Redo?
+    pDocShell->SetInUndo( true );   
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
-        pViewShell->HideAllCursors();       // for example due to merged cells
+        pViewShell->HideAllCursors();       
 }
 
 void ScSimpleUndo::EndRedo()
@@ -165,8 +165,8 @@ void ScSimpleUndo::ShowTable( const ScRange& rRange )
         SCTAB nStart = rRange.aStart.Tab();
         SCTAB nEnd   = rRange.aEnd.Tab();
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
-        if ( nTab < nStart || nTab > nEnd )                     // if not in range:
-            pViewShell->SetTabNo( nStart );                     // at beginning of the range
+        if ( nTab < nStart || nTab > nEnd )                     
+            pViewShell->SetTabNo( nStart );                     
     }
 }
 
@@ -230,7 +230,7 @@ bool ScBlockUndo::AdjustHeight()
     }
     else
     {
-        // Leave zoom at 100
+        
         nPPTX = ScGlobal::nScreenPPTX;
         nPPTY = ScGlobal::nScreenPPTY;
     }
@@ -255,7 +255,7 @@ void ScBlockUndo::ShowBlock()
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
     {
-        ShowTable( aBlockRange );       // with multiple sheets in range each of them is good
+        ShowTable( aBlockRange );       
         pViewShell->MoveCursorAbs( aBlockRange.aStart.Col(), aBlockRange.aStart.Row(),
                                    SC_FOLLOW_JUMP, false, false );
         SCTAB nTab = pViewShell->GetViewData()->GetTabNo();
@@ -264,7 +264,7 @@ void ScBlockUndo::ShowBlock()
         aRange.aEnd.SetTab( nTab );
         pViewShell->MarkRange( aRange );
 
-        // not through SetMarkArea to MarkData, due to possibly lacking paint
+        
     }
 }
 
@@ -328,7 +328,7 @@ void ScMultiBlockUndo::AdjustHeight()
     }
     else
     {
-        // Leave zoom at 100
+        
         nPPTX = ScGlobal::nScreenPPTX;
         nPPTY = ScGlobal::nScreenPPTY;
     }
@@ -358,7 +358,7 @@ void ScMultiBlockUndo::ShowBlock()
     if (maBlockRanges.empty())
         return;
 
-    // Move to the sheet of the first range.
+    
     ScRange aRange = *maBlockRanges.front();
     ShowTable(aRange);
     pViewShell->MoveCursorAbs(
@@ -404,9 +404,9 @@ void ScMoveUndo::UndoRef()
     pRefUndoDoc->CopyToDocument( aRange, IDF_FORMULA, false, pDoc, NULL, false );
     if (pRefUndoData)
         pRefUndoData->DoUndo( pDoc, (eMode == SC_UNDO_REFFIRST) );
-        // HACK: ScDragDropUndo is the only one with REFFIRST.
-        // If not, results possibly in a too frequent adjustment
-        // of ChartRefs. Not that pretty, but not too bad either..
+        
+        
+        
 }
 
 void ScMoveUndo::BeginUndo()
@@ -421,7 +421,7 @@ void ScMoveUndo::BeginUndo()
 
 void ScMoveUndo::EndUndo()
 {
-    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );     // must also be called when pointer is null
+    DoSdrUndoAction( pDrawUndo, pDocShell->GetDocument() );     
 
     if (pRefUndoDoc && eMode == SC_UNDO_REFLAST)
         UndoRef();
@@ -480,7 +480,7 @@ void ScDBFuncUndo::EndUndo()
 
             if ( pAutoDBRange->HasAutoFilter() )
             {
-                // restore AutoFilter buttons
+                
                 pAutoDBRange->GetArea( nRangeTab, nRangeX1, nRangeY1, nRangeX2, nRangeY2 );
                 pDoc->ApplyFlagsTab( nRangeX1, nRangeY1, nRangeX2, nRangeY1, nRangeTab, SC_MF_AUTO );
                 pDocShell->PostPaint( nRangeX1, nRangeY1, nRangeTab, nRangeX2, nRangeY1, nRangeTab, PAINT_GRID );
@@ -494,7 +494,7 @@ void ScDBFuncUndo::BeginRedo()
     RedoSdrUndoAction( mpDrawUndo );
     if ( pAutoDBRange )
     {
-        // move the database range to this function's position again (see ScDocShell::GetDBData)
+        
 
         ScDocument* pDoc = pDocShell->GetDocument();
         ScDBData* pNoNameData = pDoc->GetAnonymousDBData(aOriginalRange.aStart.Tab());
@@ -519,7 +519,7 @@ void ScDBFuncUndo::BeginRedo()
 
             pNoNameData->SetByRow( true );
             pNoNameData->SetAutoFilter( false );
-            // header is always set with the operation in redo
+            
         }
     }
 
@@ -543,7 +543,7 @@ ScUndoWrapper::~ScUndoWrapper()
 
 void ScUndoWrapper::ForgetWrappedUndo()
 {
-    pWrappedUndo = NULL;    // don't delete in dtor - pointer must be stored outside
+    pWrappedUndo = NULL;    
 }
 
 OUString ScUndoWrapper::GetComment() const

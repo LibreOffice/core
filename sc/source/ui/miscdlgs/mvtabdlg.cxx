@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include <vcl/msgbox.hxx>
 
@@ -34,7 +34,7 @@
 #include "scresid.hxx"
 #include "globstr.hrc"
 
-//==================================================================
+
 
 ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
 
@@ -70,13 +70,13 @@ ScMoveTableDlg::ScMoveTableDlg(Window* pParent, const OUString& rDefault)
     Init();
 }
 
-//------------------------------------------------------------------------
+
 
 ScMoveTableDlg::~ScMoveTableDlg()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScMoveTableDlg::GetSelectedDocument () const { return nDocument;  }
 
@@ -117,9 +117,9 @@ void ScMoveTableDlg::ResetRenameInput()
 {
     if (mbEverEdited)
     {
-        // Don't reset the name when the sheet name has ever been edited.
-        // But check the name, as this is also called for change of copy/move
-        // buttons and document listbox selection.
+        
+        
+        
         CheckNewTabName();
         return;
     }
@@ -133,7 +133,7 @@ void ScMoveTableDlg::ResetRenameInput()
     bool bVal = pBtnCopy->IsChecked();
     if (bVal)
     {
-        // copy
+        
         ScDocument* pDoc = GetSelectedDoc();
         if (pDoc)
         {
@@ -145,7 +145,7 @@ void ScMoveTableDlg::ResetRenameInput()
             pEdTabName->SetText(maDefaultName);
     }
     else
-        // move
+        
         pEdTabName->SetText(maDefaultName);
 
     CheckNewTabName();
@@ -156,7 +156,7 @@ void ScMoveTableDlg::CheckNewTabName()
     const OUString aNewName = pEdTabName->GetText();
     if (aNewName.isEmpty())
     {
-        // New sheet name is empty.  This is not good.
+        
         pFtWarn->Show(true);
         pFtWarn->SetControlBackground(Color(COL_YELLOW));
         pFtWarn->SetText(msStrTabNameEmpty);
@@ -166,7 +166,7 @@ void ScMoveTableDlg::CheckNewTabName()
 
     if (!ScDocument::ValidTabName(aNewName))
     {
-        // New sheet name contains invalid characters.
+        
         pFtWarn->Show(true);
         pFtWarn->SetControlBackground(Color(COL_YELLOW));
         pFtWarn->SetText(msStrTabNameInvalid);
@@ -181,7 +181,7 @@ void ScMoveTableDlg::CheckNewTabName()
     {
         if ( aNewName.equals(pLbTable->GetEntry(i)) )
         {
-            // Only for move within same document the same name is allowed.
+            
             if (!bMoveInCurrentDoc || !maDefaultName.equals( pEdTabName->GetText()))
                 bFound = true;
         }
@@ -214,7 +214,7 @@ bool ScMoveTableDlg::IsCurrentDocSelected() const
     return pLbDoc->GetSelectEntryPos() == mnCurrentDocPos;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScMoveTableDlg::Init()
 {
@@ -230,7 +230,7 @@ void ScMoveTableDlg::Init()
     SelHdl( pLbDoc );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScMoveTableDlg::InitDocListBox()
 {
@@ -271,8 +271,8 @@ void ScMoveTableDlg::InitDocListBox()
     pLbDoc->SelectEntryPos( nSelPos );
 }
 
-//------------------------------------------------------------------------
-// Handler:
+
+
 
 IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, void *, pBtn )
 {
@@ -295,8 +295,8 @@ IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl)
 
     if (bCopyTable)
     {
-        // Return an empty string when the new name is the same as the
-        // automatic name assigned by the document.
+        
+        
         OUString aCopyName = maDefaultName;
         ScDocument* pDoc = GetSelectedDoc();
         if (pDoc)
@@ -306,8 +306,8 @@ IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl)
     }
     else
     {
-        // Return an empty string, when the new name is the same as the
-        // original name.
+        
+        
         if (maDefaultName.equals(pEdTabName->GetText()))
             pEdTabName->SetText(OUString());
     }

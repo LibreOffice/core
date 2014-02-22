@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "TextCharacterSpacingControl.hxx"
 #include "TextPropertyPanel.hrc"
@@ -37,7 +37,7 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
 ,   mpBindings(pBindings)
 ,   maVSSpacing     (ValueSetWithTextControl::IMAGE_TEXT,this, SVX_RES(VS_SPACING))
 ,   maLastCus       (this, SVX_RES(FT_LASTCUSTOM))
-//, maBorder        (this, SVX_RES(CT_BORDER))
+
 ,   maFTSpacing     (this, SVX_RES(FT_SPACING))
 ,   maLBKerning     (this, SVX_RES(LB_KERNING))
 ,   maFTBy          (this, SVX_RES(FT_BY))
@@ -51,10 +51,10 @@ TextCharacterSpacingControl::TextCharacterSpacingControl (
 ,   maImgCus        (SVX_RES(IMG_CUSTOM))
 ,   maImgCusGrey    (SVX_RES(IMG_CUSTOM_GRAY))
 ,   maStrCus        (SVX_RESSTR(STR_CUSTOM))
-,   maStrCusE       (SVX_RESSTR(STR_CUSTOM_E_TIP)) //add
-,   maStrCusC       (SVX_RESSTR(STR_CUSTOM_C_TIP)) //add
-,   maStrCusN       (SVX_RESSTR(STR_NORMAL_TIP))   //add
-,   maStrUnit       (SVX_RESSTR(STR_PT))           //add
+,   maStrCusE       (SVX_RESSTR(STR_CUSTOM_E_TIP)) 
+,   maStrCusC       (SVX_RESSTR(STR_CUSTOM_C_TIP)) 
+,   maStrCusN       (SVX_RESSTR(STR_NORMAL_TIP))   
+,   maStrUnit       (SVX_RESSTR(STR_PT))           
 
 ,   mnCustomKern(0)
 ,   mnLastCus ( SPACING_NOCUSTOM )
@@ -167,25 +167,25 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
     }
     else
     {
-        //set custom tips
+        
         maVSSpacing.ReplaceItemImages(6, maImgCus,0);
         if(mnCustomKern > 0)
         {
-            OUString aStrTip( maStrCusE);   //LAST CUSTOM no tip defect //add
+            OUString aStrTip( maStrCusE);   
             aStrTip += OUString::number( (double)mnCustomKern / 10);
-            aStrTip += " " + maStrUnit;      // modify
+            aStrTip += " " + maStrUnit;      
             maVSSpacing.SetItemText(6,aStrTip);
         }
         else if(mnCustomKern < 0)
         {
-            OUString aStrTip(maStrCusC) ;     //LAST CUSTOM no tip defect //add
+            OUString aStrTip(maStrCusC) ;     
             aStrTip += OUString::number( (double)-mnCustomKern / 10);
-            aStrTip += " " + maStrUnit;      // modify
+            aStrTip += " " + maStrUnit;      
             maVSSpacing.SetItemText( 6, aStrTip );
         }
         else
         {
-            OUString aStrTip(maStrCusN) ;     //LAST CUSTOM no tip defect //add
+            OUString aStrTip(maStrCusN) ;     
             maVSSpacing.SetItemText( 6, aStrTip );
         }
 
@@ -262,7 +262,7 @@ void TextCharacterSpacingControl::Rearrange(bool bLBAvailable,bool bAvailable, l
     }
     else if(bLBAvailable && !bAvailable)
     {
-        //modified
+        
         maVSSpacing.SetNoSelection();
         maVSSpacing.SelectItem(0);
         mbVS = false;
@@ -339,7 +339,7 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
         }
         else if(iPos == 6)
         {
-            //modified
+            
             if(mbCusEnable)
             {
                 nVal = LogicToLogic(mnCustomKern, MAP_POINT, (MapUnit)eUnit);
@@ -350,15 +350,15 @@ IMPL_LINK(TextCharacterSpacingControl, VSSelHdl, void *, pControl)
             }
             else
             {
-                maVSSpacing.SetNoSelection();       //add , set no selection and keep the last select item
+                maVSSpacing.SetNoSelection();       
                 maVSSpacing.Format();
                 Invalidate();
                 maVSSpacing.StartSelection();
             }
-            //modify end
+            
         }
 
-        if(iPos < 6 || (iPos == 6 && mbCusEnable)) //add
+        if(iPos < 6 || (iPos == 6 && mbCusEnable)) 
             mrTextPropertyPanel.EndSpacingPopupMode();
     }
 
@@ -449,4 +449,4 @@ long  TextCharacterSpacingControl::GetLastCustomValue()
     return mnCustomKern;
 }
 
-}} // end of namespace sidebar
+}} 

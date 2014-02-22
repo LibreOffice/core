@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "precompile.h"
@@ -23,7 +23,7 @@
 #include "hinfo.h"
 #include "hwpfile.h"
 
-// Info Block
+
 
 
 static bool HWPReadInfoBlock(void *ptr, int len, HWPFile & hwpf)
@@ -36,7 +36,7 @@ static bool HWPReadInfoBlock(void *ptr, int len, HWPFile & hwpf)
 }
 
 
-// Document Information
+
 
 HWPInfo::HWPInfo(void)
 {
@@ -65,7 +65,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
     hwpf.Read1b(&paper.paper_kind, 1);            /* 용지 종류 */
     hwpf.Read1b(&paper.paper_direction, 1);       /* 용지 방향 */
 
-// paper geometry information
+
     paper.paper_height = (short) hwpf.Read2b();   /* 용지 길이 */
     paper.paper_width = (short) hwpf.Read2b();    /* 용지 너비 */
     paper.top_margin = (short) hwpf.Read2b();     /* 위쪽 여백 */
@@ -87,7 +87,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
 //hwpf.Read1b(reserved2, 6);                      /* 아래 3개의값으로 바뀌었다. */
     hwpf.Read2b(&beginpagenum,1);                 /* 페이지시작번호 */
 
-// footnote
+
     hwpf.Read2b(&beginfnnum,1);                   /* 각주 시작번호 */
     hwpf.Read2b(&countfn,1);                      /* 각주 갯수 */
     splinetext = (short) hwpf.Read2b();
@@ -95,7 +95,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
     spfnfn = (short) hwpf.Read2b();
     hwpf.Read1b(&fnchar, 1);
     hwpf.Read1b(&fnlinetype, 1);
-// border layout
+
     for (int ii = 0; ii < 4; ++ii)
         bordermargin[ii] = (short) hwpf.Read2b();
     hwpf.Read2b(&borderline, 1);
@@ -132,7 +132,7 @@ bool HWPInfo::Read(HWPFile & hwpf)
 }
 
 
-// Document Summary
+
 
 bool HWPSummary::Read(HWPFile & hwpf)
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "indexcollection.hxx"
@@ -36,7 +36,7 @@ namespace dbaui
     using namespace ::com::sun::star::sdbcx;
     using namespace ::com::sun::star::sdbc;
 
-    // OIndexCollection
+    
     OIndexCollection::OIndexCollection()
     {
     }
@@ -69,7 +69,7 @@ namespace dbaui
     {
         OUString sNameCompare(_rName);
 
-        // loop'n'compare
+        
         Indexes::const_iterator aSearch = m_aIndexes.begin();
         Indexes::const_iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
@@ -83,7 +83,7 @@ namespace dbaui
     {
         OUString sNameCompare(_rName);
 
-        // loop'n'compare
+        
         Indexes::iterator aSearch = m_aIndexes.begin();
         Indexes::iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
@@ -97,7 +97,7 @@ namespace dbaui
     {
         OUString sNameCompare(_rName);
 
-        // loop'n'compare
+        
         Indexes::const_iterator aSearch = m_aIndexes.begin();
         Indexes::const_iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
@@ -111,7 +111,7 @@ namespace dbaui
     {
         OUString sNameCompare(_rName);
 
-        // loop'n'compare
+        
         Indexes::iterator aSearch = m_aIndexes.begin();
         Indexes::iterator aEnd = m_aIndexes.end();
         for (; aSearch != aEnd; ++aSearch)
@@ -149,15 +149,15 @@ namespace dbaui
                 return;
             }
 
-            // set the properties
+            
             static const OUString s_sUniquePropertyName = "IsUnique";
             static const OUString s_sSortPropertyName = "IsAscending";
             static const OUString s_sNamePropertyName = "Name";
-            // the index' own props
+            
             xIndexDescriptor->setPropertyValue(s_sUniquePropertyName, ::cppu::bool2any(_rPos->bUnique));
             xIndexDescriptor->setPropertyValue(s_sNamePropertyName, makeAny(_rPos->sName));
 
-            // the fields
+            
             for (   IndexFields::const_iterator aFieldLoop = _rPos->aFields.begin();
                     aFieldLoop != _rPos->aFields.end();
                     ++aFieldLoop
@@ -181,7 +181,7 @@ namespace dbaui
             _rPos->clearModified();
         }
         catch(SQLException&)
-        {   // allowed to pass
+        {   
             throw;
         }
         catch( const Exception& )
@@ -206,7 +206,7 @@ namespace dbaui
             xDropIndex->dropByName(_rPos->getOriginalName());
         }
         catch(SQLException&)
-        {   // allowed to pass
+        {   
             throw;
         }
         catch( const Exception& )
@@ -215,7 +215,7 @@ namespace dbaui
             return sal_False;
         }
 
-        // adjust the OIndex structure
+        
         Indexes::iterator aDropped = findOriginal(_rPos->getOriginalName());
         OSL_ENSURE(aDropped != m_aIndexes.end(), "OIndexCollection::drop: invalid original name, but successful commit?!");
         aDropped->flagAsNew(GrantIndexAccess());
@@ -232,14 +232,14 @@ namespace dbaui
             if (!dropNoRemove(_rPos))
                 return sal_False;
 
-        // adjust the index array
+        
         m_aIndexes.erase(_rPos);
         return sal_True;
     }
 
     void OIndexCollection::implFillIndexInfo(OIndex& _rIndex) SAL_THROW((Exception))
     {
-        // get the UNO descriptor for the index
+        
         Reference< XPropertySet > xIndex;
         m_xIndexes->getByName(_rIndex.getOriginalName()) >>= xIndex;
         if (!xIndex.is())
@@ -261,7 +261,7 @@ namespace dbaui
         _rIndex.bUnique = ::cppu::any2bool(_rxDescriptor->getPropertyValue(s_sUniquePropertyName));
         _rxDescriptor->getPropertyValue(s_sCatalogPropertyName) >>= _rIndex.sDescription;
 
-        // the columns
+        
         Reference< XColumnsSupplier > xSuppCols(_rxDescriptor, UNO_QUERY);
         Reference< XNameAccess > xCols;
         if (xSuppCols.is())
@@ -279,7 +279,7 @@ namespace dbaui
             Reference< XPropertySet > xIndexColumn;
             for (;pFieldNames < pFieldNamesEnd; ++pFieldNames, ++aCopyTo)
             {
-                // extract the column
+                
                 xIndexColumn.clear();
                 xCols->getByName(*pFieldNames) >>= xIndexColumn;
                 if (!xIndexColumn.is())
@@ -289,13 +289,13 @@ namespace dbaui
                     continue;
                 }
 
-                // get the relevant properties
+                
                 aCopyTo->sFieldName = *pFieldNames;
                 aCopyTo->bSortAscending = ::cppu::any2bool(xIndexColumn->getPropertyValue(s_sSortPropertyName));
             }
 
             _rIndex.aFields.resize(aCopyTo - _rIndex.aFields.begin());
-                // (just in case some fields were invalid ...)
+                
         }
     }
 
@@ -313,7 +313,7 @@ namespace dbaui
             _rPos->flagAsCommitted(GrantIndexAccess());
         }
         catch(SQLException&)
-        {   // allowed to pass
+        {   
             throw;
         }
         catch( const Exception& )
@@ -326,10 +326,10 @@ namespace dbaui
     {
         OSL_ENSURE(end() == find(_rName), "OIndexCollection::insert: invalid new name!");
         OUString tmpName;
-        OIndex aNewIndex(tmpName);  // the empty string indicates the index is a new one
+        OIndex aNewIndex(tmpName);  
         aNewIndex.sName = _rName;
         m_aIndexes.push_back(aNewIndex);
-        return m_aIndexes.end() - 1;    // the last element is the new one ...
+        return m_aIndexes.end() - 1;    
     }
 
     void OIndexCollection::implConstructFrom(const Reference< XNameAccess >& _rxIndexes)
@@ -339,13 +339,13 @@ namespace dbaui
         m_xIndexes = _rxIndexes;
         if (m_xIndexes.is())
         {
-            // loop through all the indexes
+            
             Sequence< OUString > aNames = m_xIndexes->getElementNames();
             const OUString* pNames = aNames.getConstArray();
             const OUString* pEnd = pNames + aNames.getLength();
             for (; pNames < pEnd; ++pNames)
             {
-                // extract the index object
+                
                 Reference< XPropertySet > xIndex;
                 m_xIndexes->getByName(*pNames) >>= xIndex;
                 if (!xIndex.is())
@@ -354,7 +354,7 @@ namespace dbaui
                     continue;
                 }
 
-                // fill the OIndex structure
+                
                 OIndex aCurrentIndex(*pNames);
                 implFillIndexInfo(aCurrentIndex);
                 m_aIndexes.push_back(aCurrentIndex);
@@ -362,6 +362,6 @@ namespace dbaui
         }
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

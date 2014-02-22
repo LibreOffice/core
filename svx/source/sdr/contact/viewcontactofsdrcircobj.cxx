@@ -50,18 +50,18 @@ namespace sdr
                     GetCircObj().getText(0),
                     false));
 
-            // take unrotated snap rect (direct model data) for position and size
+            
             Rectangle aRectangle = GetCircObj().GetGeoRect();
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
+            
+            
+            
             aRectangle += GetRectObj().GetGridOffset();
             const basegfx::B2DRange aObjectRange(
                 aRectangle.Left(), aRectangle.Top(),
                 aRectangle.Right(), aRectangle.Bottom() );
             const GeoStat& rGeoStat(GetCircObj().GetGeoStat());
 
-            // fill object matrix
+            
             const basegfx::B2DHomMatrix aObjectMatrix(
                 basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                     aObjectRange.getWidth(), aObjectRange.getHeight(),
@@ -69,12 +69,12 @@ namespace sdr
                     rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
                     aObjectRange.getMinX(), aObjectRange.getMinY()));
 
-            // create primitive data
+            
             const sal_uInt16 nIdentifier(GetCircObj().GetObjIdentifier());
 
-            // always create primitives to allow the decomposition of SdrEllipsePrimitive2D
-            // or SdrEllipseSegmentPrimitive2D to create needed invisible elements for HitTest
-            // and/or BoundRect
+            
+            
+            
             if(OBJ_CIRC == nIdentifier)
             {
                 const drawinglayer::primitive2d::Primitive2DReference xReference(
@@ -105,7 +105,7 @@ namespace sdr
                 return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
             }
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

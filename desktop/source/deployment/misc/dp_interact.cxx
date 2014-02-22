@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@ using namespace ::com::sun::star::ucb;
 namespace dp_misc {
 namespace {
 
-//==============================================================================
+
 class InteractionContinuationImpl : public ::cppu::OWeakObject,
                                     public task::XInteractionContinuation
 {
@@ -47,30 +47,30 @@ public:
                 static_cast< Reference<task::XInteractionContinuation>
                 const *>(0) ).isAssignableFrom(m_type) ); }
 
-    // XInterface
+    
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
     virtual Any SAL_CALL queryInterface( Type const & type )
         throw (RuntimeException);
 
-    // XInteractionContinuation
+    
     virtual void SAL_CALL select() throw (RuntimeException);
 };
 
-// XInterface
-//______________________________________________________________________________
+
+
 void InteractionContinuationImpl::acquire() throw ()
 {
     OWeakObject::acquire();
 }
 
-//______________________________________________________________________________
+
 void InteractionContinuationImpl::release() throw ()
 {
     OWeakObject::release();
 }
 
-//______________________________________________________________________________
+
 Any InteractionContinuationImpl::queryInterface( Type const & type )
     throw (RuntimeException)
 {
@@ -82,14 +82,14 @@ Any InteractionContinuationImpl::queryInterface( Type const & type )
         return OWeakObject::queryInterface(type);
 }
 
-// XInteractionContinuation
-//______________________________________________________________________________
+
+
 void InteractionContinuationImpl::select() throw (RuntimeException)
 {
     *m_pselect = true;
 }
 
-//==============================================================================
+
 class InteractionRequest :
     public ::cppu::WeakImplHelper1<task::XInteractionRequest>
 {
@@ -104,30 +104,30 @@ public:
           m_conts( conts )
         {}
 
-    // XInteractionRequest
+    
     virtual Any SAL_CALL getRequest()
         throw (RuntimeException);
     virtual Sequence< Reference<task::XInteractionContinuation> >
     SAL_CALL getContinuations() throw (RuntimeException);
 };
 
-// XInteractionRequest
-//______________________________________________________________________________
+
+
 Any InteractionRequest::getRequest() throw (RuntimeException)
 {
     return m_request;
 }
 
-//______________________________________________________________________________
+
 Sequence< Reference< task::XInteractionContinuation > >
 InteractionRequest::getContinuations() throw (RuntimeException)
 {
     return m_conts;
 }
 
-} // anon namespace
+} 
 
-//==============================================================================
+
 bool interactContinuation( Any const & request,
                            Type const & continuation,
                            Reference<XCommandEnvironment> const & xCmdEnv,
@@ -161,8 +161,8 @@ bool interactContinuation( Any const & request,
     return false;
 }
 
-// XAbortChannel
-//______________________________________________________________________________
+
+
 void AbortChannel::sendAbort() throw (RuntimeException)
 {
     m_aborted = true;
@@ -170,6 +170,6 @@ void AbortChannel::sendAbort() throw (RuntimeException)
         m_xNext->sendAbort();
 }
 
-} // dp_misc
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

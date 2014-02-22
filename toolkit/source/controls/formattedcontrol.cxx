@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/controls/formattedcontrol.hxx>
@@ -29,10 +29,10 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace toolkit
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -40,31 +40,31 @@ namespace toolkit
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::util;
 
-    // -------------------------------------------------------------------
+    
     namespace
     {
-        // ...............................................................
+        
         ::osl::Mutex& getDefaultFormatsMutex()
         {
             static ::osl::Mutex s_aDefaultFormatsMutex;
             return s_aDefaultFormatsMutex;
         }
 
-        // ...............................................................
+        
         Reference< XNumberFormatsSupplier >& lcl_getDefaultFormatsAccess_nothrow()
         {
             static Reference< XNumberFormatsSupplier > s_xDefaultFormats;
             return s_xDefaultFormats;
         }
 
-        // ...............................................................
+        
         bool& lcl_getTriedCreation()
         {
             static bool s_bTriedCreation = false;
             return s_bTriedCreation;
         }
 
-        // ...............................................................
+        
         const Reference< XNumberFormatsSupplier >& lcl_getDefaultFormats_throw()
         {
             ::osl::MutexGuard aGuard( getDefaultFormatsMutex() );
@@ -82,16 +82,16 @@ namespace toolkit
             return rDefaultFormats;
         }
 
-        // ...............................................................
+        
         static oslInterlockedCount  s_refCount(0);
 
-        // ...............................................................
+        
         void    lcl_registerDefaultFormatsClient()
         {
             osl_atomic_increment( &s_refCount );
         }
 
-        // ...............................................................
+        
         void    lcl_revokeDefaultFormatsClient()
         {
             ::osl::ClearableMutexGuard aGuard( getDefaultFormatsMutex() );
@@ -108,10 +108,10 @@ namespace toolkit
         }
     }
 
-    // ===================================================================
-    // = UnoControlFormattedFieldModel
-    // ===================================================================
-    // -------------------------------------------------------------------
+    
+    
+    
+    
     UnoControlFormattedFieldModel::UnoControlFormattedFieldModel( const Reference< XComponentContext >& rxContext )
         :UnoControlModel( rxContext )
         ,m_bRevokedAsClient( false )
@@ -157,18 +157,18 @@ namespace toolkit
         lcl_registerDefaultFormatsClient();
     }
 
-    // -------------------------------------------------------------------
+    
     UnoControlFormattedFieldModel::~UnoControlFormattedFieldModel()
     {
     }
 
-    // -------------------------------------------------------------------
+    
     OUString UnoControlFormattedFieldModel::getServiceName() throw(RuntimeException)
     {
         return OUString::createFromAscii( szServiceName_UnoControlFormattedFieldModel );
     }
 
-    // -------------------------------------------------------------------
+    
     void SAL_CALL UnoControlFormattedFieldModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
     {
         UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
@@ -190,7 +190,7 @@ namespace toolkit
         }
     }
 
-    // -------------------------------------------------------------------
+    
     void UnoControlFormattedFieldModel::impl_updateTextFromValue_nothrow()
     {
         if ( !m_xCachedFormatter.is() )
@@ -225,7 +225,7 @@ namespace toolkit
         }
     }
 
-    // -------------------------------------------------------------------
+    
     void UnoControlFormattedFieldModel::impl_updateCachedFormatter_nothrow()
     {
         Any aFormatsSupplier;
@@ -251,7 +251,7 @@ namespace toolkit
         }
     }
 
-    // -------------------------------------------------------------------
+    
     void UnoControlFormattedFieldModel::impl_updateCachedFormatKey_nothrow()
     {
         Any aFormatKey;
@@ -259,7 +259,7 @@ namespace toolkit
         m_aCachedFormat = aFormatKey;
     }
 
-    // -------------------------------------------------------------------
+    
     void UnoControlFormattedFieldModel::dispose(  ) throw(RuntimeException)
     {
         UnoControlModel::dispose();
@@ -272,7 +272,7 @@ namespace toolkit
         }
     }
 
-    // -------------------------------------------------------------------
+    
     void UnoControlFormattedFieldModel::ImplNormalizePropertySequence( const sal_Int32 _nCount, sal_Int32* _pHandles,
         Any* _pValues, sal_Int32* _pValidHandles ) const SAL_THROW(())
     {
@@ -281,7 +281,7 @@ namespace toolkit
         UnoControlModel::ImplNormalizePropertySequence( _nCount, _pHandles, _pValues, _pValidHandles );
     }
 
-    // -------------------------------------------------------------------
+    
     namespace
     {
         class ResetFlagOnExit
@@ -301,7 +301,7 @@ namespace toolkit
         };
     }
 
-    // -------------------------------------------------------------------
+    
     void SAL_CALL UnoControlFormattedFieldModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
         bool bSettingValue = false;
@@ -323,7 +323,7 @@ namespace toolkit
         UnoControlModel::setPropertyValues( _rPropertyNames, _rValues );
     }
 
-    // -------------------------------------------------------------------
+    
     sal_Bool UnoControlFormattedFieldModel::convertFastPropertyValue(
                 Any& rConvertedValue, Any& rOldValue, sal_Int32 nPropId,
                 const Any& rValue ) throw (IllegalArgumentException)
@@ -372,7 +372,7 @@ namespace toolkit
         return UnoControlModel::convertFastPropertyValue( rConvertedValue, rOldValue, nPropId, rValue );
     }
 
-    // -------------------------------------------------------------------
+    
     Any UnoControlFormattedFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     {
         Any aReturn;
@@ -388,7 +388,7 @@ namespace toolkit
             case BASEPROPERTY_EFFECTIVE_MIN:
             case BASEPROPERTY_FORMATKEY:
             case BASEPROPERTY_FORMATSSUPPLIER:
-                // (void)
+                
                 break;
 
             default : aReturn = UnoControlModel::ImplGetDefaultValue( nPropId ); break;
@@ -397,7 +397,7 @@ namespace toolkit
         return aReturn;
     }
 
-    // -------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& UnoControlFormattedFieldModel::getInfoHelper()
     {
         static UnoPropertyArrayHelper* pHelper = NULL;
@@ -409,30 +409,30 @@ namespace toolkit
         return *pHelper;
     }
 
-    // beans::XMultiPropertySet
-    // -------------------------------------------------------------------
+    
+    
     Reference< XPropertySetInfo > UnoControlFormattedFieldModel::getPropertySetInfo(  ) throw(RuntimeException)
     {
         static Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    // ===================================================================
-    // = UnoFormattedFieldControl
-    // ===================================================================
-    // -------------------------------------------------------------------
+    
+    
+    
+    
     UnoFormattedFieldControl::UnoFormattedFieldControl()
         :UnoSpinFieldControl()
     {
     }
 
-    // -------------------------------------------------------------------
+    
     OUString UnoFormattedFieldControl::GetComponentServiceName()
     {
         return OUString("FormattedField");
     }
 
-    // -------------------------------------------------------------------
+    
     void UnoFormattedFieldControl::textChanged(const TextEvent& e) throw(RuntimeException)
     {
         Reference< XVclWindowPeer >  xPeer(getPeer(), UNO_QUERY);
@@ -452,9 +452,9 @@ namespace toolkit
             GetTextListeners().textChanged( e );
     }
 
-//........................................................................
-}   // namespace toolkit
-//........................................................................
+
+}   
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 stardiv_Toolkit_UnoControlFormattedFieldModel_get_implementation(

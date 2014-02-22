@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -74,11 +74,11 @@ throw (::com::sun::star::uno::RuntimeException)
     case AccessibleEventId::SELECTION_CHANGED:
         HandleSelectionChangedEventNoArgs();
         break;
-        //to add TEXT_SELECTION_CHANGED event
+        
     case AccessibleEventId::TEXT_SELECTION_CHANGED:
         HandleTextSelectionChangedEvent();
         break;
-        //End
+        
     default:
         AccEventListener::notifyEvent(aEvent);
         break;
@@ -137,7 +137,7 @@ void AccComponentEventListener::HandleCaretChangedEvent(Any oldValue, Any newVal
  */
 void AccComponentEventListener::SetComponentState(short state, bool enable)
 {
-    // only the following state can be fired state event.
+    
     switch (state)
     {
     case AccessibleStateType::CHECKED:
@@ -175,7 +175,7 @@ void AccComponentEventListener::SetComponentState(short state, bool enable)
         {
             pAgent->UpdateState(m_xAccessible.get());
             pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
-            // 8. label should have no FOCUSABLE state state, Firefox has READONLY state, we can also have.
+            
             if (    GetRole() != AccessibleRole::LABEL
                 &&  GetRole() != AccessibleRole::SCROLL_BAR)
             {
@@ -190,8 +190,8 @@ void AccComponentEventListener::SetComponentState(short state, bool enable)
         }
         break;
     case AccessibleStateType::ACTIVE:
-        // Only frames should be active
-        // no msaa state mapping
+        
+        
         break;
     default:
         break;
@@ -208,7 +208,7 @@ void AccComponentEventListener::FireStatePropertyChange(short state, bool set)
 {
     if( set)
         {
-            // new value
+            
             switch(state)
             {
             case AccessibleStateType::CHECKED:
@@ -234,11 +234,11 @@ void AccComponentEventListener::FireStatePropertyChange(short state, bool set)
                 break;
             case AccessibleStateType::SHOWING:
                 pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
-                // UNO !SHOWING == MSAA OFFSCREEN
+                
                 pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING );
                 break;
             case AccessibleStateType::VISIBLE:
-                // UNO !VISIBLE == MSAA INVISIBLE
+                
                 pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE );
                 break;
             default:
@@ -247,7 +247,7 @@ void AccComponentEventListener::FireStatePropertyChange(short state, bool set)
         }
     else
     {
-        // old value
+        
         switch(state)
         {
         case AccessibleStateType::CHECKED:
@@ -266,23 +266,23 @@ void AccComponentEventListener::FireStatePropertyChange(short state, bool set)
             break;
         case AccessibleStateType::SELECTED:
             pAgent->DecreaseState(m_xAccessible.get(), state);
-            //if the state is unset, no need to send MSAA SELECTION event
-            //pAgent->NotifyAccEvent(UM_EVENT_STATE_SELECTED, m_xAccessible.get());
+            
+            
             break;
         case AccessibleStateType::ARMED:
             {
                 pAgent->DecreaseState(m_xAccessible.get(), state);
-                //if the state is unset, no need to send MSAA MENU event
-                //pAgent->NotifyAccEvent(UM_EVENT_STATE_ARMED, m_xAccessible.get());
+                
+                
             }
             break;
         case AccessibleStateType::SHOWING:
             pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::DEFUNC);
-            // UNO !SHOWING == MSAA OFFSCREEN
+            
             pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
             break;
         case AccessibleStateType::VISIBLE:
-            // UNO !VISIBLE == MSAA INVISIBLE
+            
             pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
             break;
 
@@ -306,7 +306,7 @@ void AccComponentEventListener::FireStateFocusedChange(bool enable)
     }
     else
     {
-        //if lose focus, no need to send MSAA FOCUS event
+        
         pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
     }
 }
@@ -316,7 +316,7 @@ void AccComponentEventListener::HandleSelectionChangedEventNoArgs()
     pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, m_xAccessible.get());
 }
 
-//add TEXT_SELECTION_CHANGED event
+
 void AccComponentEventListener::HandleTextSelectionChangedEvent()
 {
     pAgent->NotifyAccEvent(UM_EVENT_TEXT_SELECTION_CHANGED, m_xAccessible.get());

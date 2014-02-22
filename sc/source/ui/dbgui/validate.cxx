@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,13 +43,13 @@
 #include "compiler.hxx"
 #include "formula/opcode.hxx"
 
-// cell range picker
+
 #include "tabvwsh.hxx"
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
 #include "reffact.hxx"
 
-// ============================================================================
+
 
 static sal_uInt16 pValueRanges[] =
 {
@@ -59,7 +59,7 @@ static sal_uInt16 pValueRanges[] =
 };
 
 
-// ============================================================================
+
 
 ScValidationDlg::ScValidationDlg(Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh, SfxBindings *pB /*= NULL*/)
@@ -131,7 +131,7 @@ void            ScTPValidationValue::RefInputDonePostHdl()
         m_pRefEdit->SetParent( this );
         m_pRefEdit->SetPosSizePixel( maRefEditPos, maRefEditSize );
 
-        m_btnRef.SetParent( m_pRefEdit ); //if Edit SetParent but button not, the tab order will be incorrect, need button to setparent to anthor window and restore parent later in order to restore the tab order
+        m_btnRef.SetParent( m_pRefEdit ); 
     }
 
     if( m_btnRef.GetParent()!=this )
@@ -166,7 +166,7 @@ ScValidationDlg::~ScValidationDlg()
         RemoveRefDlg( false );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -183,7 +183,7 @@ sal_uInt16 lclGetPosFromValMode( ScValidationMode eValMode )
         case SC_VALID_TIME:     nLbPos = SC_VALIDDLG_ALLOW_TIME;    break;
         case SC_VALID_TEXTLEN:  nLbPos = SC_VALIDDLG_ALLOW_TEXTLEN; break;
         case SC_VALID_LIST:     nLbPos = SC_VALIDDLG_ALLOW_RANGE;   break;
-        case SC_VALID_CUSTOM:   nLbPos = SC_VALIDDLG_ALLOW_ANY;     break;  // not supported
+        case SC_VALID_CUSTOM:   nLbPos = SC_VALIDDLG_ALLOW_ANY;     break;  
         default:    OSL_FAIL( "lclGetPosFromValMode - unknown validity mode" );
     }
     return nLbPos;
@@ -214,7 +214,7 @@ sal_uInt16 lclGetPosFromCondMode( ScConditionMode eCondMode )
     sal_uInt16 nLbPos = SC_VALIDDLG_DATA_EQUAL;
     switch( eCondMode )
     {
-        case SC_COND_NONE:          // may occur in old XML files after Excel import
+        case SC_COND_NONE:          
         case SC_COND_EQUAL:         nLbPos = SC_VALIDDLG_DATA_EQUAL;        break;
         case SC_COND_LESS:          nLbPos = SC_VALIDDLG_DATA_LESS;         break;
         case SC_COND_GREATER:       nLbPos = SC_VALIDDLG_DATA_GREATER;      break;
@@ -284,7 +284,7 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
     {
         OUString aToken( ScStringUtil::GetQuotedToken(rFmlaStr, 0, aQuotes, cFmlaSep, nStringIx ) );
         aToken = comphelper::string::strip(aToken, ' ');
-        if( !aToken.isEmpty() )      // ignore empty tokens, i.e. "a";;"b"
+        if( !aToken.isEmpty() )      
         {
             bIsStringList = ScGlobal::IsQuoted( aToken, '"' );
             if( bIsStringList )
@@ -299,9 +299,9 @@ bool lclGetStringListFromFormula( OUString& rStringList, const OUString& rFmlaSt
     return bIsStringList;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rArgSet ) :
     SfxTabPage( pParent, ScResId( TP_VALIDATION_VALUES ), rArgSet ),
@@ -328,11 +328,11 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
     Init();
     FreeResource();
 
-    // list separator in formulas
+    
     OUString aListSep = ::ScCompiler::GetNativeSymbol( ocSep );
     OSL_ENSURE( aListSep.getLength() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
     mcFmlaSep = aListSep.getLength() ? aListSep[0] : ';';
-    m_btnRef.Hide(); // cell range picker
+    m_btnRef.Hide(); 
 }
 
 ScTPValidationValue::~ScTPValidationValue()
@@ -345,7 +345,7 @@ void ScTPValidationValue::Init()
     maLbValue.SetSelectHdl( LINK( this, ScTPValidationValue, SelectHdl ) );
     maCbShow.SetClickHdl( LINK( this, ScTPValidationValue, CheckHdl ) );
 
-    // cell range picker
+    
     maEdMin.SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
     maEdMin.SetLoseFocusHdl( LINK( this, ScTPValidationValue, KillFocusHdl ) );
     maEdMax.SetGetFocusHdl( LINK( this, ScTPValidationValue, EditSetFocusHdl ) );
@@ -385,7 +385,7 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
             static_cast< const SfxAllEnumItem* >( pItem )->GetValue() ) );
     maLbValue.SelectEntryPos( nLbPos );
 
-    // *** check boxes ***
+    
     sal_Bool bCheck = sal_True;
     if( rArgSet.GetItemState( FID_VALID_BLANK, true, &pItem ) == SFX_ITEM_SET )
         bCheck = static_cast< const SfxBoolItem* >( pItem )->GetValue();
@@ -397,7 +397,7 @@ void ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
     maCbShow.Check( nListType != ValidListType::INVISIBLE );
     maCbSort.Check( nListType == ValidListType::SORTEDASCENDING );
 
-    // *** formulas ***
+    
     OUString aFmlaStr;
     if ( rArgSet.GetItemState( FID_VALID_VALUE1, true, &pItem ) == SFX_ITEM_SET )
         aFmlaStr = static_cast< const SfxStringItem* >( pItem )->GetValue();
@@ -446,14 +446,14 @@ OUString ScTPValidationValue::GetSecondFormula() const
 
 void ScTPValidationValue::SetFirstFormula( const OUString& rFmlaStr )
 {
-    // try if formula is a string list, validation mode must already be set
+    
     OUString aStringList;
     if( (maLbAllow.GetSelectEntryPos() == SC_VALIDDLG_ALLOW_RANGE) &&
         lclGetStringListFromFormula( aStringList, rFmlaStr, mcFmlaSep ) )
     {
         maEdList.SetText( aStringList );
         maEdMin.SetText( EMPTY_OUSTRING );
-        // change validation mode to string list
+        
         maLbAllow.SelectEntryPos( SC_VALIDDLG_ALLOW_LIST );
     }
     else
@@ -611,7 +611,7 @@ IMPL_LINK( ScTPValidationValue, KillFocusHdl, Window *, pWnd )
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
 {
@@ -620,7 +620,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
     bool bRange = (nLbPos == SC_VALIDDLG_ALLOW_RANGE);
     bool bList = (nLbPos == SC_VALIDDLG_ALLOW_LIST);
 
-    maCbAllow.Enable( bEnable );   // Empty cell
+    maCbAllow.Enable( bEnable );   
     maFtValue.Enable( bEnable );
     maLbValue.Enable( bEnable );
     maFtMin.Enable( bEnable );
@@ -645,7 +645,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
             case SC_VALIDDLG_DATA_EQLESS:       maFtMin.SetText( maStrMax );    break;
 
             case SC_VALIDDLG_DATA_VALIDRANGE:
-            case SC_VALIDDLG_DATA_INVALIDRANGE:   bShowMax = true;    // fall through
+            case SC_VALIDDLG_DATA_INVALIDRANGE:   bShowMax = true;    
             case SC_VALIDDLG_DATA_GREATER:
             case SC_VALIDDLG_DATA_EQGREATER:    maFtMin.SetText( maStrMin );    break;
 
@@ -663,7 +663,7 @@ IMPL_LINK_NOARG(ScTPValidationValue, SelectHdl)
     maFtMax.Show( bShowMax );
     maEdMax.Show( bShowMax );
     maFtHint.Show( bRange );
-    m_btnRef.Show( bRange );  // cell range picker
+    m_btnRef.Show( bRange );  
     return 0;
 }
 
@@ -674,9 +674,9 @@ IMPL_LINK_NOARG(ScTPValidationValue, CheckHdl)
 }
 
 
-//========================================================================
-//========================================================================
-// Input Help Page
+
+
+
 
 ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
                                           const SfxItemSet& rArgSet )
@@ -693,27 +693,27 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
     Init();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTPValidationHelp::~ScTPValidationHelp()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTPValidationHelp::Init()
 {
     pTsbHelp->EnableTriState( false );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* ScTPValidationHelp::GetRanges()
 {
     return pValueRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
                                          const SfxItemSet&  rArgSet )
@@ -721,7 +721,7 @@ SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
     return ( new ScTPValidationHelp( pParent, rArgSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 {
@@ -743,7 +743,7 @@ void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
         pEdInputHelp->SetText( EMPTY_OUSTRING );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -754,9 +754,9 @@ sal_Bool ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
     return sal_True;
 }
 
-//========================================================================
-//========================================================================
-// Error Alert Page
+
+
+
 
 ScTPValidationError::ScTPValidationError( Window*           pParent,
                                           const SfxItemSet& rArgSet )
@@ -776,13 +776,13 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
     Init();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTPValidationError::~ScTPValidationError()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTPValidationError::Init()
 {
@@ -795,14 +795,14 @@ void ScTPValidationError::Init()
     SelectActionHdl( NULL );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* ScTPValidationError::GetRanges()
 {
     return pValueRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTPValidationError::Create( Window*    pParent,
                                          const SfxItemSet&  rArgSet )
@@ -810,7 +810,7 @@ SfxTabPage* ScTPValidationError::Create( Window*    pParent,
     return ( new ScTPValidationError( pParent, rArgSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 {
@@ -819,7 +819,7 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     if ( rArgSet.GetItemState( FID_VALID_SHOWERR, true, &pItem ) == SFX_ITEM_SET )
         m_pTsbShow->SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
-        m_pTsbShow->SetState( STATE_CHECK );   // check by default
+        m_pTsbShow->SetState( STATE_CHECK );   
 
     if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, true, &pItem ) == SFX_ITEM_SET )
         m_pLbAction->SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
@@ -839,7 +839,7 @@ void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
     SelectActionHdl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -851,7 +851,7 @@ sal_Bool ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
 {
@@ -865,15 +865,15 @@ IMPL_LINK_NOARG(ScTPValidationError, SelectActionHdl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScTPValidationError, ClickSearchHdl)
 {
     Window* pOld = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
-    // Use static SfxApplication method to bring up selector dialog for
-    // choosing a script
+    
+    
     OUString aScriptURL = SfxApplication::ChooseScript();
 
     Application::SetDefDialogParent( pOld );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -80,7 +80,7 @@ namespace
     return theOptionsDlgOptions_ImplMutex::get();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
     : ConfigItem( OUString( CFG_FILENAME ) ),
@@ -100,18 +100,18 @@ SvtOptionsDlgOptions_Impl::SvtOptionsDlgOptions_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtOptionsDlgOptions_Impl::Commit()
 {
-    // nothing to commit
+    
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtOptionsDlgOptions_Impl::Notify( const Sequence< OUString >& )
 {
-    // nothing to notify
+    
 }
 
 void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eType )
@@ -168,7 +168,7 @@ void SvtOptionsDlgOptions_Impl::ReadNode( const OUString& _rNode, NodeType _eTyp
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString getGroupPath( const OUString& _rGroup )
 {
@@ -183,7 +183,7 @@ OUString getOptionPath( const OUString& _rOption )
     return OUString( OPTIONS_NODE + OUString('/') + _rOption + OUString('/') );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
 {
@@ -194,21 +194,21 @@ bool SvtOptionsDlgOptions_Impl::IsHidden( const OUString& _rPath ) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtOptionsDlgOptions_Impl::IsGroupHidden( const OUString& _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtOptionsDlgOptions_Impl::IsPageHidden( const OUString& _rPage, const OUString& _rGroup ) const
 {
     return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvtOptionsDlgOptions_Impl::IsOptionHidden(
     const OUString& _rOption, const OUString& _rPage, const OUString& _rGroup ) const
@@ -216,11 +216,11 @@ bool SvtOptionsDlgOptions_Impl::IsOptionHidden(
     return IsHidden( getGroupPath( _rGroup  ) + getPagePath( _rPage ) + getOptionPath( _rOption ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtOptionsDialogOptions::SvtOptionsDialogOptions()
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( SvtOptionsDlgOptions_Impl::getInitMutex() );
     ++nRefCount;
     if ( !pOptions )
@@ -232,11 +232,11 @@ SvtOptionsDialogOptions::SvtOptionsDialogOptions()
     m_pImp = pOptions;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtOptionsDialogOptions::~SvtOptionsDialogOptions()
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( SvtOptionsDlgOptions_Impl::getInitMutex() );
     if ( !--nRefCount )
     {

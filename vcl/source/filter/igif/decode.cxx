@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "decode.hxx"
 
-// ------------------------------------------------------------------------
+
 
 struct GIFLZWTableEntry
 {
@@ -29,7 +29,7 @@ struct GIFLZWTableEntry
     sal_uInt8               nData;
 };
 
-// ------------------------------------------------------------------------
+
 
 GIFLZWDecompressor::GIFLZWDecompressor( sal_uInt8 cDataSize ) :
             nInputBitsBuf       ( 0 ),
@@ -57,7 +57,7 @@ GIFLZWDecompressor::GIFLZWDecompressor( sal_uInt8 cDataSize ) :
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 GIFLZWDecompressor::~GIFLZWDecompressor()
 {
@@ -65,7 +65,7 @@ GIFLZWDecompressor::~GIFLZWDecompressor()
     delete[] pTable;
 }
 
-// ------------------------------------------------------------------------
+
 
 HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
                                             sal_uLong& rCount, bool& rEOI )
@@ -111,7 +111,7 @@ HPBYTE GIFLZWDecompressor::DecompressBlock( HPBYTE pSrc, sal_uInt8 cBufSize,
     return pTarget;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirstData )
 {
@@ -130,7 +130,7 @@ void GIFLZWDecompressor::AddToTable( sal_uInt16 nPrevCode, sal_uInt16 nCodeFirst
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 bool GIFLZWDecompressor::ProcessOneCode()
 {
@@ -153,7 +153,7 @@ bool GIFLZWDecompressor::ProcessOneCode()
 
     if ( !bEndOfBlock )
     {
-        // fetch code from input buffer
+        
         nCode = sal::static_int_cast< sal_uInt16 >(
             ( (sal_uInt16) nInputBitsBuf ) & ( ~( 0xffff << nCodeSize ) ));
         nInputBitsBuf >>= nCodeSize;
@@ -188,7 +188,7 @@ bool GIFLZWDecompressor::ProcessOneCode()
 
         nOldCode = nCode;
 
-        // write character(/-sequence) of code nCode in the output buffer:
+        
         pE = pTable + nCode;
         do
         {

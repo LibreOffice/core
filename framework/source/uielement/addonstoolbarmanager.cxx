@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/addonstoolbarmanager.hxx>
@@ -58,9 +58,9 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/settings.hxx>
 
-//_________________________________________________________________________________________________________________
-//  namespaces
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -138,13 +138,13 @@ static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
     return aImage;
 }
 
-// XComponent
+
 void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException )
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
     {
-        // Remove addon specific data from toolbar items.
+        
         ResetableGuard aGuard( m_aLock );
         for ( sal_uInt16 n = 0; n < m_pToolBar->GetItemCount(); n++ )
         {
@@ -160,7 +160,7 @@ void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException )
         }
     }
 
-    // Base class will destroy our m_pToolBar member
+    
     ToolBarManager::dispose();
 }
 
@@ -256,16 +256,16 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                 sal_uInt16 nCount = m_pToolBar->GetItemCount();
                 if ( bAppendSeparator && nCount > 0 && ( m_pToolBar->GetItemType( nCount-1 ) != TOOLBOXITEM_SEPARATOR ))
                 {
-                    // We have to append a separator first if the last item is not a separator
+                    
                     m_pToolBar->InsertSeparator();
                 }
                 bAppendSeparator = sal_False;
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
-                // don't setup images yet, AddonsToolbarWrapper::populateImages does that.
+                
 
-                // Create TbRuntimeItemData to hold additional information we will need in the future
+                
                 AddonsParams* pRuntimeItemData = new AddonsParams;
                 pRuntimeItemData->aImageId  = aImageId;
                 pRuntimeItemData->aTarget   = aTarget;
@@ -276,7 +276,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 sal_Bool bMustBeInit( sal_True );
 
-                // Support external toolbar controller for add-ons!
+                
                 if ( m_xToolbarControllerFactory.is() &&
                      m_xToolbarControllerFactory->hasController( aURL, m_aModuleIdentifier ))
                 {
@@ -308,7 +308,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     catch ( uno::Exception& )
                     {
                     }
-                    bMustBeInit = sal_False; // factory called init already!
+                    bMustBeInit = sal_False; 
                 }
                 else
                 {
@@ -318,7 +318,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     xController = Reference< XStatusListener >( pController, UNO_QUERY );
                 }
 
-                // insert controller to the map
+                
                 m_aControllerMap[nId] = xController;
 
                 Reference< XInitialization > xInit( xController, UNO_QUERY );
@@ -344,7 +344,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     }
                 }
 
-                // Request a item window from the toolbar controller and set it at the VCL toolbar
+                
                 Reference< XToolbarController > xTbxController( xController, UNO_QUERY );
                 if ( xTbxController.is() && xToolbarWindow.is() )
                 {
@@ -362,7 +362,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
                     }
                 }
 
-                // Notify controller implementation to its listeners. Controller is now useable from outside.
+                
                 Reference< XUpdatable > xUpdatable( xController, UNO_QUERY );
                 if ( xUpdatable.is() )
                 {

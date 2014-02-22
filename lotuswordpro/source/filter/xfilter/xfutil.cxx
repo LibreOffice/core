@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -155,7 +155,7 @@ OUString   GetTableColName(sal_Int32 col)
     return A2OUSTR(strOut.c_str());
 }
 
-//tool functions:
+
 OUString   GetUnderlineName(enumXFUnderline type)
 {
     switch(type)
@@ -482,7 +482,7 @@ OUString   GetDrawKind(enumXFDrawKind kind)
         return A2OUSTR("section");
     else if( kind == enumXFDrawKindCut )
         return A2OUSTR("cut");
-    else    //( kind == enumXFDrawKindArc )
+    else    
         return A2OUSTR("arc");
 }
 

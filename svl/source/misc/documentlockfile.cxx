@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,18 +52,18 @@ namespace svt {
 
 bool DocumentLockFile::m_bAllowInteraction = true;
 
-// ----------------------------------------------------------------------
+
 DocumentLockFile::DocumentLockFile( const OUString& aOrigURL )
 : LockFileCommon( aOrigURL, OUString( ".~lock."  ) )
 {
 }
 
-// ----------------------------------------------------------------------
+
 DocumentLockFile::~DocumentLockFile()
 {
 }
 
-// ----------------------------------------------------------------------
+
 void DocumentLockFile::WriteEntryToStream( uno::Sequence< OUString > aEntry, uno::Reference< io::XOutputStream > xOutput )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -84,7 +84,7 @@ void DocumentLockFile::WriteEntryToStream( uno::Sequence< OUString > aEntry, uno
     xOutput->writeBytes( aData );
 }
 
-// ----------------------------------------------------------------------
+
 bool DocumentLockFile::CreateOwnLockFile()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -118,7 +118,7 @@ bool DocumentLockFile::CreateOwnLockFile()
         aCmdArg <<= aInsertArg;
         aTargetContent.executeCommand( OUString( "insert"  ), aCmdArg );
 
-        // try to let the file be hidden if possible
+        
         try {
             aTargetContent.setPropertyValue("IsHidden", uno::makeAny( sal_True ) );
         } catch( uno::Exception& ) {}
@@ -131,7 +131,7 @@ bool DocumentLockFile::CreateOwnLockFile()
     return true;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< OUString > DocumentLockFile::GetLockData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -155,7 +155,7 @@ uno::Sequence< OUString > DocumentLockFile::GetLockData()
     return ParseEntry( aBuffer, nCurPos );
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -163,14 +163,14 @@ uno::Reference< io::XInputStream > DocumentLockFile::OpenStream()
     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aSourceContent( m_aURL, xEnv, comphelper::getProcessComponentContext() );
 
-    // the file can be opened readonly, no locking will be done
+    
     return aSourceContent.openStream();
 }
 
-// ----------------------------------------------------------------------
+
 bool DocumentLockFile::OverwriteOwnLockFile()
 {
-    // allows to overwrite the lock file with the current data
+    
     try
     {
         uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
@@ -194,12 +194,12 @@ bool DocumentLockFile::OverwriteOwnLockFile()
     return true;
 }
 
-// ----------------------------------------------------------------------
+
 void DocumentLockFile::RemoveFile()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // TODO/LATER: the removing is not atomic, is it possible in general to make it atomic?
+    
     uno::Sequence< OUString > aNewEntry = GenerateOwnEntry();
     uno::Sequence< OUString > aFileData = GetLockData();
 
@@ -209,7 +209,7 @@ void DocumentLockFile::RemoveFile()
     if ( !aFileData[LOCKFILE_SYSUSERNAME_ID].equals( aNewEntry[LOCKFILE_SYSUSERNAME_ID] )
       || !aFileData[LOCKFILE_LOCALHOST_ID].equals( aNewEntry[LOCKFILE_LOCALHOST_ID] )
       || !aFileData[LOCKFILE_USERURL_ID].equals( aNewEntry[LOCKFILE_USERURL_ID] ) )
-        throw io::IOException(); // not the owner, access denied
+        throw io::IOException(); 
 
     uno::Reference < ::com::sun::star::ucb::XCommandEnvironment > xEnv;
     ::ucbhelper::Content aCnt(m_aURL, xEnv, comphelper::getProcessComponentContext());
@@ -217,6 +217,6 @@ void DocumentLockFile::RemoveFile()
         uno::makeAny(true));
 }
 
-} // namespace svt
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

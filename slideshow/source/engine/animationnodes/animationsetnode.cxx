@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,19 +47,19 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     OUString const attrName( xAnimateNode->getAttributeName() );
     AttributableShapeSharedPtr const pShape( getShape() );
 
-    // make deactivation a two-step procedure. Normally, we
-    // could solely rely on
-    // BaseNode::scheduleDeactivationEvent() to deactivate()
-    // us. Unfortunately, that method on the one hand ignores
-    // indefinite timing, on the other hand generates
-    // zero-timeout delays, which might get fired _before_ our
-    // set activity has taken place. Therefore, we enforce
-    // sequentiality by letting only the set activity schedule
-    // the deactivation event (and AnimationBaseNode
-    // takes care for the fact when mpActivity should be zero).
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    // AnimationBaseNode::fillCommonParameters() has set up
-    // immediate deactivation as default when activity ends, but
+    
+    
     if (! isIndefiniteTiming( xAnimateNode->getDuration() )) {
         boost::shared_ptr<AnimationSetNode> const pSelf(
             boost::dynamic_pointer_cast<AnimationSetNode>(getSelf()) );
@@ -198,7 +198,7 @@ AnimationActivitySharedPtr AnimationSetNode::createActivity() const
     return AnimationActivitySharedPtr();
 }
 
-} // namespace internal
-} // namespace slideshow
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

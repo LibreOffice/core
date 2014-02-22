@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svdobj.hxx>
-// header for class OGuard
+
 #include <osl/mutex.hxx>
-// header for class Application
+
 #include <vcl/svapp.hxx>
 
 #include "unomlstr.hxx"
@@ -36,7 +36,7 @@ SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw()
 {
 }
 
-// ::com::sun::star::util::XModifyListener
+
 void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -47,13 +47,13 @@ void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) thr
     }
 }
 
-// ::com::sun::star::lang::XEventListener
+
 void SvxUnoShapeModifyListener::disposing(const lang::EventObject& ) throw( uno::RuntimeException )
 {
     invalidate();
 }
 
-// internal
+
 void SvxUnoShapeModifyListener::invalidate() throw()
 {
     mpObj = NULL;

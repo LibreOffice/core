@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unoport.hxx>
@@ -56,7 +56,7 @@ using namespace ::com::sun::star;
 class SwXTextPortion::Impl
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
 
 public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
@@ -201,7 +201,7 @@ throw( uno::RuntimeException )
     if (!pUnoCrsr)
         throw uno::RuntimeException();
 
-    // TextPortions are always within a paragraph
+    
     SwTxtNode* pTxtNd = pUnoCrsr->GetNode()->GetTxtNode();
     if ( pTxtNd )
     {
@@ -226,11 +226,11 @@ uno::Reference< beans::XPropertySetInfo >  SwXTextPortion::getPropertySetInfo()
 throw( uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    //! PropertySetInfo for text portion extensions
+    
     static uno::Reference< beans::XPropertySetInfo >
             xTxtPorExtRef = aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_TEXTPORTION_EXTENSIONS)->getPropertySetInfo();
-    //! PropertySetInfo for redline portions
+    
     static uno::Reference< beans::XPropertySetInfo >
             xRedlPorRef = aSwMapProvider.GetPropertySet(
                     PROPERTY_MAP_REDLINE_PORTION)->getPropertySetInfo();
@@ -306,7 +306,7 @@ void SwXTextPortion::GetPropertyValue(
                 rVal <<= sRet;
             }
             break;
-            case FN_UNO_CONTROL_CHARACTER: // obsolete!
+            case FN_UNO_CONTROL_CHARACTER: 
             break;
             case FN_UNO_DOCUMENT_INDEX_MARK:
                 rVal <<= m_xTOXMark;
@@ -426,8 +426,8 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
 
     {
         SfxItemSet *pSet = 0;
-        // get startting pount fo the look-up, either the provided one or else
-        // from the beginning of the map
+        
+        
         const SfxItemPropertyMap& rMap = m_pPropSet->getPropertyMap();
         for(sal_Int32 nProp = 0; nProp < nLength; nProp++)
         {
@@ -492,15 +492,15 @@ void SwXTextPortion::setPropertyValues(
 {
     SolarMutexGuard aGuard;
 
-    // workaround for bad designed API
+    
     try
     {
         SetPropertyValues_Impl( rPropertyNames, rValues );
     }
     catch (const beans::UnknownPropertyException &rException)
     {
-        // wrap the original (here not allowed) exception in
-        // a lang::WrappedTargetException that gets thrown instead.
+        
+        
         lang::WrappedTargetException aWExc;
         aWExc.TargetException <<= rException;
         throw aWExc;
@@ -514,7 +514,7 @@ uno::Sequence< uno::Any > SwXTextPortion::getPropertyValues(
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
 
-    // workaround for bad designed API
+    
     try
     {
         aValues = GetPropertyValues_Impl( rPropertyNames );
@@ -548,7 +548,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
     sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
 
-    //sal_Int32 nVals = rValues.getLength();
+    
     const uno::Any *pValue = rValues.getConstArray();
 
     sal_Int32 nFailed = 0;
@@ -568,8 +568,8 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
                 pFailed[ nFailed++ ].Result  = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
             else
             {
-                // set property value
-                // (compare to SwXTextPortion::setPropertyValues)
+                
+                
                 if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
                     pFailed[ nFailed++ ].Result  = beans::TolerantPropertySetResultType::PROPERTY_VETO;
                 else
@@ -581,7 +581,7 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
         }
         catch (beans::UnknownPropertyException &)
         {
-            // should not occur because property was searched for before
+            
             OSL_FAIL( "unexpected exception caught" );
             pFailed[ nFailed++ ].Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
@@ -613,7 +613,7 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPr
             GetPropertyValuesTolerant_Impl( rPropertyNames, sal_False ) );
     const beans::GetDirectPropertyTolerantResult *pTmpRes = aTmpRes.getConstArray();
 
-    // copy temporary result to final result type
+    
     sal_Int32 nLen = aTmpRes.getLength();
     uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
     beans::GetPropertyTolerantResult *pRes = aRes.getArray();
@@ -662,7 +662,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         try
         {
             aResult.Name = pProp[i];
-            if(pPropertyStates[i] == beans::PropertyState_MAKE_FIXED_SIZE)     // property unknown?
+            if(pPropertyStates[i] == beans::PropertyState_MAKE_FIXED_SIZE)     
             {
                 if( bDirectValuesOnly )
                     continue;
@@ -675,7 +675,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
                 aResult.State  = pPropertyStates[i];
 
                 aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
-                //#i104499# ruby portion attributes need special handling:
+                
                 if( pEntry->nWID == RES_TXTATR_CJK_RUBY &&
                     m_ePortionType == PORTION_RUBY_START )
                 {
@@ -683,8 +683,8 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
                 }
                 if (!bDirectValuesOnly  ||  beans::PropertyState_DIRECT_VALUE == aResult.State)
                 {
-                    // get property value
-                    // (compare to SwXTextPortion::getPropertyValue(s))
+                    
+                    
                     GetPropertyValue( aResult.Value, *pEntry, pUnoCrsr, pSet );
                     aResult.Result = beans::TolerantPropertySetResultType::SUCCESS;
                     aResultVector.push_back( aResult );
@@ -693,7 +693,7 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
         }
         catch (beans::UnknownPropertyException &)
         {
-            // should not occur because property was searched for before
+            
             OSL_FAIL( "unexpected exception caught" );
             aResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
@@ -842,8 +842,8 @@ void SwXTextPortion::attach(const uno::Reference< text::XTextRange > & /*xTextRa
     throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    // SwXTextPortion cannot be created at the factory therefore
-    // they cannot be attached
+    
+    
     throw uno::RuntimeException();
 }
 
@@ -876,7 +876,7 @@ void SAL_CALL SwXTextPortion::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -884,7 +884,7 @@ void SAL_CALL SwXTextPortion::removeEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 

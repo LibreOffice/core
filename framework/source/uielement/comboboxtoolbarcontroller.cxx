@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,11 +47,11 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
 
-// Wrapper class to notify controller about events from combobox.
-// Unfortunaltly the events are notifed through virtual methods instead
-// of Listeners.
+
+
+
+
 
 class ComboBoxControl : public ComboBox
 {
@@ -135,7 +135,7 @@ bool ComboBoxControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// ------------------------------------------------------------------
+
 
 ComboboxToolbarController::ComboboxToolbarController(
     const Reference< XComponentContext >& rxContext,
@@ -151,7 +151,7 @@ ComboboxToolbarController::ComboboxToolbarController(
     if ( nWidth == 0 )
         nWidth = 100;
 
-    // default dropdown size
+    
     ::Size aLogicalSize( 8, 160 );
     ::Size aPixelSize = m_pComboBox->LogicToPixel( aLogicalSize, MAP_APPFONT );
 
@@ -159,13 +159,13 @@ ComboboxToolbarController::ComboboxToolbarController(
     m_pToolbar->SetItemWindow( m_nID, m_pComboBox );
 }
 
-// ------------------------------------------------------------------
+
 
 ComboboxToolbarController::~ComboboxToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL ComboboxToolbarController::dispose()
 throw ( RuntimeException )
@@ -180,13 +180,13 @@ throw ( RuntimeException )
     m_pComboBox = 0;
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
     OUString aSelectedText = m_pComboBox->GetText();
 
-    // Add key modifier to argument list
+    
     aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
     aArgs[1].Name = "Text";
@@ -194,7 +194,7 @@ Sequence<PropertyValue> ComboboxToolbarController::getExecuteArgs(sal_Int16 KeyM
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 void ComboboxToolbarController::Select()
 {
@@ -240,7 +240,7 @@ bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
                 const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
                 if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
                 {
-                    // Call execute only with non-empty text
+                    
                     if ( !m_pComboBox->GetText().isEmpty() )
                         execute( rKeyCode.GetModifier() );
                     return true;
@@ -259,7 +259,7 @@ bool ComboboxToolbarController::PreNotify( NotifyEvent& rNEvt )
     return false;
 }
 
-// --------------------------------------------------------
+
 
 void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
@@ -273,7 +273,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                 rControlCommand.Arguments[i].Value >>= aText;
                 m_pComboBox->SetText( aText );
 
-                // send notification
+                
                 notifyTextChanged( aText );
                 break;
             }
@@ -292,7 +292,7 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
                 for ( sal_Int32 j = 0; j < aList.getLength(); j++ )
                     m_pComboBox->InsertEntry( aList[j] );
 
-                // send notification
+                
                 uno::Sequence< beans::NamedValue > aInfo( 1 );
                 aInfo[0].Name  = "List";
                 aInfo[0].Value <<= aList;
@@ -416,6 +416,6 @@ void ComboboxToolbarController::executeControlCommand( const ::com::sun::star::f
     }
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

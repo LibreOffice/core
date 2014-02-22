@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "previewbase.hxx"
@@ -25,9 +25,9 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 PreviewBase::PreviewBase() :
     m_ImageFormat(::com::sun::star::ui::dialogs::FilePreviewImageFormats::BITMAP),
@@ -35,44 +35,44 @@ PreviewBase::PreviewBase() :
 {
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 PreviewBase::~PreviewBase()
 {
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Int32 SAL_CALL PreviewBase::getTargetColorDepth() throw (RuntimeException)
 {
     return 0;
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Int32 SAL_CALL PreviewBase::getAvailableWidth() throw (RuntimeException)
 {
     return 0;
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Int32 SAL_CALL PreviewBase::getAvailableHeight() throw (RuntimeException)
 {
     return 0;
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const ::com::sun::star::uno::Any& aImage )
     throw (IllegalArgumentException, RuntimeException)
@@ -85,14 +85,14 @@ void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const ::com::sun::s
         throw IllegalArgumentException(
             OUString("invalid image data"), 0, 2);
 
-     // save the new image data and force a redraw
+     
     m_ImageData   = aImage;
     m_ImageFormat = aImageFormat;
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 void SAL_CALL PreviewBase::getImage(sal_Int16& aImageFormat,com::sun::star::uno::Any& aImage)
 {
@@ -100,9 +100,9 @@ void SAL_CALL PreviewBase::getImage(sal_Int16& aImageFormat,com::sun::star::uno:
     aImage       = m_ImageData;
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Bool SAL_CALL PreviewBase::setShowState( sal_Bool bShowState ) throw (RuntimeException)
 {
@@ -110,27 +110,27 @@ sal_Bool SAL_CALL PreviewBase::setShowState( sal_Bool bShowState ) throw (Runtim
     return sal_True;
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Bool SAL_CALL PreviewBase::getShowState() throw (RuntimeException)
 {
     return sal_False;
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 sal_Bool SAL_CALL PreviewBase::getImaginaryShowState() const
 {
     return m_bShowState;
 }
 
-//-------------------------------
+
 //
-//-------------------------------
+
 
 HWND SAL_CALL PreviewBase::getWindowHandle() const
 {

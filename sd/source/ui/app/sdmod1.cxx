@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,7 +91,7 @@ private:
 };
 
 
-} //end of anonymous namespace
+} 
 
 
 void SdModule::Execute(SfxRequest& rReq)
@@ -109,13 +109,13 @@ void SdModule::Execute(SfxRequest& rReq)
 
         case SID_AUTOSPELL_CHECK:
         {
-            // automatic spell checker
+            
             const SfxPoolItem* pItem;
             if( pSet && SFX_ITEM_SET == pSet->GetItemState(
                         SID_AUTOSPELL_CHECK, false, &pItem ) )
             {
                 sal_Bool bOnlineSpelling = ( (const SfxBoolItem*) pItem )->GetValue();
-                // save at document:
+                
                 ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if( pDocSh )
                 {
@@ -134,7 +134,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 FieldUnit eUnit = (FieldUnit)((const SfxUInt16Item*)pItem)->GetValue();
                 switch( eUnit )
                 {
-                    case FUNIT_MM:      // only the units which are also in the dialog
+                    case FUNIT_MM:      
                     case FUNIT_CM:
                     case FUNIT_INCH:
                     case FUNIT_PICA:
@@ -174,7 +174,7 @@ void SdModule::Execute(SfxRequest& rReq)
                 )
               )
             {
-                // save at the document:
+                
                 ::sd::DrawDocShell* pDocSh = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
                 if ( pDocSh )
                 {
@@ -202,7 +202,7 @@ void SdModule::Execute(SfxRequest& rReq)
         case SID_NEWSD:
             {
                 SfxFrame* pFrame = ExecuteNewDocument( rReq );
-                // if a frame was created, set it as return value
+                
                 if(pFrame)
                     rReq.SetReturnValue(SfxFrameItem(0, pFrame));
             }
@@ -221,9 +221,9 @@ void SdModule::Execute(SfxRequest& rReq)
                 {
                     if( sd::SlideShow::IsRunning( pViewShell->GetViewShellBase() ) )
                     {
-                        // Prevent documents from opening while the slide
-                        // show is running, except when this request comes
-                        // from a shape interaction.
+                        
+                        
+                        
                         if (rReq.GetArgs() == NULL)
                         {
                             bIntercept = sal_True;
@@ -288,14 +288,14 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
 
                 if (pViewSh)
                 {
-                    // AutoLayouts have to be finished
+                    
                     pDoc->StopWorkStartupDelay();
 
                     SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
 
-                    // When the view frame has not been just created we have
-                    // to switch synchronously to the outline view.
-                    // (Otherwise the request will be ignored anyway.)
+                    
+                    
+                    
                     ::sd::ViewShellBase* pBase
                         = dynamic_cast< ::sd::ViewShellBase*>(pViewFrame->GetViewShell());
                     if (pBase != NULL)
@@ -325,7 +325,7 @@ static bool bOnce = false;
 
 void SdModule::GetState(SfxItemSet& rItemSet)
 {
-    // disable Autopilot during presentation
+    
     if (rItemSet.GetItemState(SID_SD_AUTOPILOT) != SFX_ITEM_UNKNOWN)
     {
         if (!SvtModuleOptions().IsImpress())
@@ -361,7 +361,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
         }
     }
 
-    // state of SID_OPENDOC is determined by the base class
+    
     if (rItemSet.GetItemState(SID_OPENDOC) != SFX_ITEM_UNKNOWN)
     {
         const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENDOC, SFX_APP()->GetInterface());
@@ -369,7 +369,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
             rItemSet.Put(*pItem);
     }
 
-    // state of SID_OPENHYPERLINK is determined by the base class
+    
     if (rItemSet.GetItemState(SID_OPENHYPERLINK) != SFX_ITEM_UNKNOWN)
     {
         const SfxPoolItem* pItem = SFX_APP()->GetSlotState(SID_OPENHYPERLINK, SFX_APP()->GetInterface());
@@ -412,13 +412,13 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     if ( !bOnce )
     {
         ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
-        if( pDocShell ) // Impress or Draw ?
+        if( pDocShell ) 
         {
             ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
             if( pViewShell && (pDocShell->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) )
             {
-                // add our event listener as soon as possible
+                
                 Application::AddEventListener( LINK( this, SdModule, EventListenerHdl ) );
                 bOnce = true;
             }
@@ -439,11 +439,11 @@ IMPL_LINK( SdModule, EventListenerHdl, VclSimpleEvent*, pEvent )
                 case MEDIA_COMMAND_PLAY:
                 {
                     ::sd::DrawDocShell* pDocShell = PTR_CAST(::sd::DrawDocShell, SfxObjectShell::Current());
-                    if( pDocShell )  // Impress or Draw ?
+                    if( pDocShell )  
                     {
                         ::sd::ViewShell* pViewShell = pDocShell->GetViewShell();
 
-                        // #i97925# start the presentation if and only if an Impress document is focused
+                        
                         if( pViewShell && (pDocShell->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) )
                             pViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_PRESENTATION );
                     }
@@ -471,21 +471,21 @@ void SdModule::AddSummaryPage (SfxViewFrame* pViewFrame, SdDrawDocument* pDocume
 
     sal_Int32 nPageCount = pDocument->GetSdPageCount (PK_STANDARD);
 
-    // We need at least two pages: the summary page and one to use as
-    // template to take the transition parameters from.
+    
+    
     if (nPageCount >= 2)
     {
-        // Get a page from which to retrieve the transition parameters.
+        
         SdPage* pTemplatePage = pDocument->GetSdPage (0, PK_STANDARD);
         OSL_ASSERT (pTemplatePage!=NULL);
 
-        // The summary page, if it exists, is the last page.
+        
         SdPage* pSummaryPage = pDocument->GetSdPage (
             (sal_uInt16)nPageCount-1, PK_STANDARD);
         OSL_ASSERT (pSummaryPage!=NULL);
 
-        // Take the change mode of the template page as indication of the
-        // document's kiosk mode.
+        
+        
         pSummaryPage->setTransitionDuration(pTemplatePage->getTransitionDuration());
         pSummaryPage->SetPresChange(pTemplatePage->GetPresChange());
         pSummaryPage->SetTime(pTemplatePage->GetTime());
@@ -545,20 +545,20 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
         bool bNewDocDirect = rReq.GetSlot() == SID_NEWSD;
         if( bNewDocDirect && !bStartWithTemplate )
         {
-            //we start without wizard
+            
 
-            //check whether we should load a template document
+            
             const OUString aServiceName( "com.sun.star.presentation.PresentationDocument" );
             OUString aStandardTemplate( SfxObjectFactory::GetStandardTemplate( aServiceName ) );
 
             if( !aStandardTemplate.isEmpty() )
             {
-                //load a template document
+                
                 pFrame = CreateFromTemplate( aStandardTemplate, xTargetFrame );
             }
             else
             {
-                //create an empty document
+                
                 pFrame = CreateEmptyDocument( DOCUMENT_TYPE_IMPRESS, xTargetFrame );
             }
         }
@@ -567,13 +567,13 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
             boost::scoped_ptr< AbstractAssistentDlg > pPilotDlg( pFact ? pFact->CreateAssistentDlg( NULL, !bNewDocDirect ) : 0 );
 
-            // Open the Pilot
+            
             if( pPilotDlg.get() && pPilotDlg->Execute()==RET_OK )
             {
                 const OUString aDocPath( pPilotDlg->GetDocPath());
                 const sal_Bool bIsDocEmpty = pPilotDlg->IsDocEmpty();
 
-                // So that you can open the document without AutoLayout-Dialog
+                
                 pOpt->SetStartWithTemplate(sal_False);
                 if(bNewDocDirect && !pPilotDlg->GetStartWithFlag())
                     bStartWithTemplate = false;
@@ -596,8 +596,8 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             SfxAllItemSet aSet( *rReq.GetArgs()->GetPool() );
                             aSet.Put( aFile );
                             aSet.Put( aReferer );
-                            // Put the password into the request
-                            // only if it is not empty.
+                            
+                            
                             if (aPasswrd.getLength() > 0)
                                 aSet.Put( aPassword );
 
@@ -611,8 +611,8 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             SfxRequest aRequest (SID_OPENDOC, SFX_CALLMODE_SYNCHRON, SFX_APP()->GetPool());
                             aRequest.AppendItem (aFile);
                             aRequest.AppendItem (aReferer);
-                            // Put the password into the request
-                            // only if it is not empty.
+                            
+                            
                             if (aPasswrd.getLength() > 0)
                                 aRequest.AppendItem (aPassword);
                             aRequest.AppendItem (SfxStringItem (
@@ -673,7 +673,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                             if (pOptions && pViewSh.get())
                             {
-                                // The AutoPilot-document shall be open without its own options
+                                
                                 ::sd::FrameView* pFrameView = pViewSh->GetFrameView();
                                 pFrameView->Update(pOptions);
                                 pViewSh->ReadFrameViewData(pFrameView);
@@ -684,7 +684,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                             if(pPilotDlg->IsSummary())
                                 AddSummaryPage(pViewFrame, pDoc);
 
-                            // empty document
+                            
                             if (aDocPath.isEmpty() && pViewFrame && pViewFrame->GetDispatcher())
                             {
                                 SfxBoolItem aIsChangedItem(SID_MODIFYPAGE, !bIsDocEmpty);
@@ -693,7 +693,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aIsChangedItem, &eAutoLayout, 0L);
                             }
 
-                            // clear document info
+                            
                             using namespace ::com::sun::star;
                             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                                 pDocShell->GetModel(), uno::UNO_QUERY_THROW);
@@ -709,7 +709,7 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                             pDocShell->SetUseUserData(sal_True);
 
-                            // clear UNDO stack after autopilot
+                            
                             pDocShell->ClearUndoBuffer();
                         }
                     }
@@ -756,7 +756,7 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
     if( !pDoc )
         return;
 
-    // settings for the Outputmedium
+    
     Size aNewSize;
     sal_uInt32 nLeft = 0;
     sal_uInt32 nRight = 0;
@@ -771,20 +771,20 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
 
             if( pPrinter && pPrinter->IsValid())
             {
-                // Unfortunately, the printer does not provide an exact format
-                // like A4
+                
+                
                 Size aSize(pPrinter->GetPaperSize());
                 Paper ePaper = SvxPaperInfo::GetSvxPaper( aSize, MAP_100TH_MM, true);
 
                 if (ePaper != PAPER_USER)
                 {
-                    // get correct size
+                    
                     aSize = SvxPaperInfo::GetPaperSize(ePaper, MAP_100TH_MM);
                 }
 
                 if (aSize.Height() > aSize.Width())
                 {
-                     // always landscape
+                     
                      aNewSize.Width()  = aSize.Height();
                      aNewSize.Height() = aSize.Width();
                 }
@@ -851,7 +851,7 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
     sal_uInt16 i;
     SdPage* pPage;
 
-    // master pages first
+    
     for (i = 0; i < nPageCnt; i++)
     {
         pPage = pDoc->GetMasterSdPage(i, PK_STANDARD);
@@ -874,7 +874,7 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
 
     nPageCnt = pDoc->GetSdPageCount(PK_STANDARD);
 
-    // then slides
+    
     for (i = 0; i < nPageCnt; i++)
     {
         pPage = pDoc->GetSdPage(i, PK_STANDARD);
@@ -907,7 +907,7 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
 
 
 
-//===== OutlineToImpressFinalize ==============================================
+
 
 namespace {
 
@@ -919,14 +919,14 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
       mrDocument(rDocument),
       mpStream()
 {
-    // The given stream has a lifetime shorter than this new
-    // OutlineToImpressFinalizer object.  Therefore a local copy of the
-    // stream is created.
+    
+    
+    
     const SvStream* pStream (rBytes.GetStream());
     if (pStream != NULL)
     {
-        // Create a memory stream and prepare to fill it with the content of
-        // the original stream.
+        
+        
         mpStream.reset(new SvMemoryStream());
         static const sal_Size nBufferSize = 4096;
         ::boost::scoped_array<sal_Int8> pBuffer (new sal_Int8[nBufferSize]);
@@ -935,7 +935,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
         bool bLoop (true);
         while (bLoop)
         {
-            // Read the next part of the original stream.
+            
             sal_Size nReadByteCount (0);
             const ErrCode nErrorCode (
                 rBytes.ReadAt(
@@ -944,8 +944,8 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
                     nBufferSize,
                     &nReadByteCount));
 
-            // Check the error code and stop copying the stream data when an
-            // error has occurred.
+            
+            
             switch (nErrorCode)
             {
                 case ERRCODE_NONE:
@@ -961,7 +961,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
                     break;
             }
 
-            // Append the read bytes to the end of the memory stream.
+            
             if (nReadByteCount > 0)
             {
                 mpStream->Write(reinterpret_cast<void*>(pBuffer.get()), nReadByteCount);
@@ -969,8 +969,8 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
             }
         }
 
-        // Rewind the memory stream so that in the operator() method its
-        // content is properly read.
+        
+        
         mpStream->Seek(STREAM_SEEK_TO_BEGIN);
     }
 }
@@ -980,46 +980,46 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
 
 void OutlineToImpressFinalizer::operator() (bool)
 {
-    // Fetch the new outline view shell.
+    
     ::sd::OutlineViewShell* pOutlineShell
         = dynamic_cast<sd::OutlineViewShell*>(FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
 
     if (pOutlineShell != NULL && mpStream.get() != NULL)
     {
         sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
-        // mba: the stream can't contain any relative URLs, because we don't
-        // have any information about a BaseURL!
+        
+        
         if ( pOutlineShell->Read(*mpStream, OUString(), EE_FORMAT_RTF) == 0 )
         {
         }
 
-        // Call UpdatePreview once for every slide to resync the
-        // document with the outliner of the OutlineViewShell.
+        
+        
         sal_uInt16 nPageCount (mrDocument.GetSdPageCount(PK_STANDARD));
         for (sal_uInt16 nIndex=0; nIndex<nPageCount; nIndex++)
         {
             SdPage* pPage = mrDocument.GetSdPage(nIndex, PK_STANDARD);
-            // Make the page the actual page so that the
-            // following UpdatePreview() call accesses the
-            // correct paragraphs.
+            
+            
+            
             pView->SetActualPage(pPage);
             pOutlineShell->UpdatePreview(pPage, true);
         }
-        // Select the first slide.
+        
         SdPage* pPage = mrDocument.GetSdPage(0, PK_STANDARD);
         pView->SetActualPage(pPage);
         pOutlineShell->UpdatePreview(pPage, true);
     }
 
 
-    // Undo-Stack needs to be cleared, else the user may remove the
-    // only drawpage and this is a state we cannot handle ATM.
+    
+    
     ::sd::DrawDocShell* pDocShell = mrDocument.GetDocSh();
     if( pDocShell )
         pDocShell->ClearUndoBuffer();
 }
 
 
-} // end of anonymous namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

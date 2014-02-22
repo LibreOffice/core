@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,7 +37,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 SvxOutlinerForwarder::SvxOutlinerForwarder( Outliner& rOutl, sal_Bool bOutlText /* = sal_False */ ) :
     rOutliner( rOutl ),
@@ -65,8 +65,8 @@ sal_Int32 SvxOutlinerForwarder::GetTextLen( sal_Int32 nParagraph ) const
 
 OUString SvxOutlinerForwarder::GetText( const ESelection& rSel ) const
 {
-    //! GetText (ESelection) should probably also be in the Outliner
-    // in the time beeing use as the hack for the EditEngine:
+    
+    
     EditEngine* pEditEngine = (EditEngine*)&rOutliner.GetEditEngine();
     return pEditEngine->GetText( rSel, LINEEND_LF );
 }
@@ -103,22 +103,22 @@ SfxItemSet SvxOutlinerForwarder::GetAttribs( const ESelection& rSel, sal_Bool bO
 {
     if( mpAttribsCache && ( 0 == bOnlyHardAttrib ) )
     {
-        // have we the correct set in cache?
+        
         if( ((SvxOutlinerForwarder*)this)->maAttribCacheSelection.IsEqual(rSel) )
         {
-            // yes! just return the cache
+            
             return *mpAttribsCache;
         }
         else
         {
-            // no, we need delete the old cache
+            
             delete mpAttribsCache;
             mpAttribsCache = NULL;
         }
     }
 
-    //! Does it not exist on the Outliner?
-    //! and why is the GetAttribs on the EditEngine not a const?
+    
+    
     EditEngine& rEditEngine = (EditEngine&)rOutliner.GetEditEngine();
 
     SfxItemSet aSet( ImplOutlinerForwarderGetAttribs( rSel, bOnlyHardAttrib, rEditEngine ) );
@@ -140,15 +140,15 @@ SfxItemSet SvxOutlinerForwarder::GetParaAttribs( sal_Int32 nPara ) const
 {
     if( mpParaAttribsCache )
     {
-        // have we the correct set in cache?
+        
         if( nPara == mnParaAttribsCache )
         {
-            // yes! just return the cache
+            
             return *mpParaAttribsCache;
         }
         else
         {
-            // no, we need delete the old cache
+            
             delete mpParaAttribsCache;
             mpParaAttribsCache = NULL;
         }
@@ -238,8 +238,8 @@ void SvxOutlinerForwarder::FieldClicked( const SvxFieldItem& rField, sal_Int32 n
 
 sal_Bool SvxOutlinerForwarder::IsValid() const
 {
-    // cannot reliably query outliner state
-    // while in the middle of an update
+    
+    
     return rOutliner.GetUpdateMode();
 }
 
@@ -294,36 +294,36 @@ EBulletInfo SvxOutlinerForwarder::GetBulletInfo( sal_Int32 nPara ) const
 
 Rectangle SvxOutlinerForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
-    // EditEngine's 'internal' methods like GetCharacterBounds()
-    // don't rotate for vertical text.
+    
+    
     Size aSize( rOutliner.CalcTextSize() );
     ::std::swap( aSize.Width(), aSize.Height() );
     bool bIsVertical( rOutliner.IsVertical() );
 
-    // #108900# Handle virtual position one-past-the end of the string
+    
     if( nIndex >= GetTextLen(nPara) )
     {
         Rectangle aLast;
 
         if( nIndex )
         {
-            // use last character, if possible
+            
             aLast = rOutliner.GetEditEngine().GetCharacterBounds( EPosition(nPara, nIndex-1) );
 
-            // move at end of this last character, make one pixel wide
+            
             aLast.Move( aLast.Right() - aLast.Left(), 0 );
             aLast.SetSize( Size(1, aLast.GetHeight()) );
 
-            // take care for CTL
+            
             aLast = SvxEditSourceHelper::EEToUserSpace( aLast, aSize, bIsVertical );
         }
         else
         {
-            // #109864# Bounds must lie within the paragraph
+            
             aLast = GetParaBounds( nPara );
 
-            // #109151# Don't use paragraph height, but line height
-            // instead. aLast is already CTL-correct
+            
+            
             if( bIsVertical)
                 aLast.SetSize( Size( rOutliner.GetLineHeight(nPara,0), 1 ) );
             else
@@ -346,9 +346,9 @@ Rectangle SvxOutlinerForwarder::GetParaBounds( sal_Int32 nPara ) const
 
     if( rOutliner.IsVertical() )
     {
-        // Hargl. Outliner's 'external' methods return the rotated
-        // dimensions, 'internal' methods like GetTextHeight( n )
-        // don't rotate.
+        
+        
+        
         sal_uLong nWidth = rOutliner.GetTextHeight( nPara );
 
         return Rectangle( aSize.Width() - aPnt.Y() - nWidth, 0, aSize.Width() - aPnt.Y(), aSize.Height() );
@@ -478,7 +478,7 @@ sal_Bool SvxOutlinerForwarder::SetDepth( sal_Int32 nPara, sal_Int16 nNewDepth )
         {
             rOutliner.SetDepth( pPara, nNewDepth );
 
-//          const bool bOutlinerText = pSdrObject && (pSdrObject->GetObjInventor() == SdrInventor) && (pSdrObject->GetObjIdentifier() == OBJ_OUTLINETEXT);
+
             if( bOutlinerText )
                 rOutliner.SetLevelDependendStyleSheet( nPara );
 
@@ -577,7 +577,7 @@ void  SvxOutlinerForwarder::CopyText(const SvxTextForwarder& rSource)
     delete pNewOutlinerParaObject;
 }
 
-//------------------------------------------------------------------------
+
 
 
 sal_Int32 SvxTextForwarder::GetNumberingStartValue( sal_Int32 )
@@ -598,6 +598,6 @@ void SvxTextForwarder::SetParaIsNumberingRestart( sal_Int32, sal_Bool )
 {
 }
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,9 +25,9 @@
 #include "porlin.hxx"
 #include "porlay.hxx"
 
-// Sichtbare Zeit:
+
 #define BLINK_ON_TIME       2400L
-// Nihct sichtbare Zeit:
+
 #define BLINK_OFF_TIME      800L
 
 /*************************************************************************
@@ -42,7 +42,7 @@ SwBlink *pBlink = NULL;
 SwBlink::SwBlink()
 {
     bVisible = sal_True;
-    // Prepare the timer
+    
     aTimer.SetTimeout( BLINK_ON_TIME );
     aTimer.SetTimeoutHdl( LINK(this, SwBlink, Blinker) );
 }
@@ -110,11 +110,11 @@ IMPL_LINK_NOARG(SwBlink, Blinker)
                 ((SwRootFrm*)pTmp->GetRootFrm())
                     ->GetCurrShell()->InvalidateWindows( aRefresh );
             }
-            else // Portions without a shell can be removed from the list
+            else 
                 aList.erase( it );
         }
     }
-    else // If the list is empty, the timer can be stopped
+    else 
         aTimer.Stop();
     return sal_True;
 }
@@ -146,8 +146,8 @@ void SwBlink::Insert( const Point& rPoint, const SwLinePortion* pPor,
 
 void SwBlink::Replace( const SwLinePortion* pOld, const SwLinePortion* pNew )
 {
-    // setting direction to 0 because direction does not matter
-    // for this operation
+    
+    
     SwBlinkPortion aBlink( pOld, 0 );
     SwBlinkList::iterator it = aList.find( aBlink );
     if( it != aList.end()  )
@@ -160,8 +160,8 @@ void SwBlink::Replace( const SwLinePortion* pOld, const SwLinePortion* pNew )
 
 void SwBlink::Delete( const SwLinePortion* pPor )
 {
-    // setting direction to 0 because direction does not matter
-    // for this operation
+    
+    
     SwBlinkPortion aBlink( pPor, 0 );
     aList.erase( aBlink );
 }

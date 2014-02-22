@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/converterbase.hxx"
@@ -40,7 +40,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 namespace cssc = ::com::sun::star::chart;
 
@@ -53,7 +53,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 namespace {
 
@@ -63,7 +63,7 @@ struct TitleKey : public ::std::pair< ObjectType, ::std::pair< sal_Int32, sal_In
                             { first = eObjType; second.first = nMainIdx; second.second = nSubIdx; }
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** A helper structure to store all data related to title objects. Needed for
     the conversion of manual title positions that needs the old Chart1 API.
@@ -72,9 +72,9 @@ struct TitleLayoutInfo
 {
     typedef Reference< XShape > (*GetShapeFunc)( const Reference< cssc::XChartDocument >& );
 
-    Reference< XTitle > mxTitle;        /// The API title object.
-    ModelRef< LayoutModel > mxLayout;   /// The layout model, if existing.
-    GetShapeFunc        mpGetShape;     /// Helper function to receive the title shape.
+    Reference< XTitle > mxTitle;        
+    ModelRef< LayoutModel > mxLayout;   
+    GetShapeFunc        mpGetShape;     
 
     inline explicit     TitleLayoutInfo() : mpGetShape( 0 ) {}
 
@@ -87,13 +87,13 @@ void TitleLayoutInfo::convertTitlePos( ConverterRoot& rRoot, const Reference< cs
 {
     if( mxTitle.is() && mpGetShape ) try
     {
-        // try to get the title shape
+        
         Reference< XShape > xTitleShape = mpGetShape( rxChart1Doc );
-        // get title rotation angle, needed for correction of position of top-left edge
+        
         double fAngle = 0.0;
         PropertySet aTitleProp( mxTitle );
         aTitleProp.getProperty( fAngle, PROP_TextRotation );
-        // convert the position
+        
         LayoutModel& rLayout = mxLayout.getOrCreate();
         LayoutConverter aLayoutConv( rRoot, rLayout );
         aLayoutConv.convertFromModel( xTitleShape, fAngle );
@@ -103,7 +103,7 @@ void TitleLayoutInfo::convertTitlePos( ConverterRoot& rRoot, const Reference< cs
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 /*  The following local functions implement getting the XShape interface of all
     supported title objects (chart and axes). This needs some effort due to the
@@ -141,9 +141,9 @@ OOX_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 #undef OOX_DEFINEFUNC_GETAXISTITLESHAPE
 #undef OOX_IMPLEMENT_GETTITLESHAPE
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 struct ConverterData
 {
@@ -165,7 +165,7 @@ struct ConverterData
                         ~ConverterData();
 };
 
-// ----------------------------------------------------------------------------
+
 
 ConverterData::ConverterData(
         XmlFilterBase& rFilter,
@@ -180,7 +180,7 @@ ConverterData::ConverterData(
     maSize( rChartSize )
 {
     OSL_ENSURE( mxDoc.is(), "ConverterData::ConverterData - missing chart document" );
-    // lock the model to suppress internal updates during conversion
+    
     try
     {
         mxDoc->lockControllers();
@@ -189,7 +189,7 @@ ConverterData::ConverterData(
     {
     }
 
-    // prepare conversion of title positions
+    
     maTitles[ TitleKey( OBJECTTYPE_CHARTTITLE ) ].mpGetShape = lclGetMainTitleShape;
     maTitles[ TitleKey( OBJECTTYPE_AXISTITLE, API_PRIM_AXESSET, API_X_AXIS ) ].mpGetShape = lclGetXAxisTitleShape;
     maTitles[ TitleKey( OBJECTTYPE_AXISTITLE, API_PRIM_AXESSET, API_Y_AXIS ) ].mpGetShape = lclGetYAxisTitleShape;
@@ -200,7 +200,7 @@ ConverterData::ConverterData(
 
 ConverterData::~ConverterData()
 {
-    // unlock the model
+    
     try
     {
         mxDoc->unlockControllers();
@@ -210,7 +210,7 @@ ConverterData::~ConverterData()
     }
 }
 
-// ============================================================================
+
 
 ConverterRoot::ConverterRoot(
         XmlFilterBase& rFilter,
@@ -295,7 +295,7 @@ void ConverterRoot::convertTitlePositions()
     }
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -304,9 +304,9 @@ sal_Int32 lclCalcPosition( sal_Int32 nChartSize, double fPos, sal_Int32 nPosMode
 {
     switch( nPosMode )
     {
-        case XML_edge:      // absolute start position as factor of chart size
+        case XML_edge:      
             return getLimitedValue< sal_Int32, double >( nChartSize * fPos + 0.5, 0, nChartSize );
-        case XML_factor:    // position relative to object default position
+        case XML_factor:    
             OSL_FAIL( "lclCalcPosition - relative positioning not supported" );
             return -1;
     };
@@ -321,9 +321,9 @@ sal_Int32 lclCalcSize( sal_Int32 nPos, sal_Int32 nChartSize, double fSize, sal_I
     sal_Int32 nValue = getLimitedValue< sal_Int32, double >( nChartSize * fSize + 0.5, 0, nChartSize );
     switch( nSizeMode )
     {
-        case XML_factor:    // passed value is width/height
+        case XML_factor:    
             return nValue;
-        case XML_edge:      // passed value is right/bottom position
+        case XML_edge:      
             return nValue - nPos + 1;
     };
 
@@ -336,9 +336,9 @@ double lclCalcRelSize( double fPos, double fSize, sal_Int32 nSizeMode )
 {
     switch( nSizeMode )
     {
-        case XML_factor:    // passed value is width/height
+        case XML_factor:    
         break;
-        case XML_edge:      // passed value is right/bottom position
+        case XML_edge:      
             fSize -= fPos;
         break;
         default:
@@ -348,9 +348,9 @@ double lclCalcRelSize( double fPos, double fSize, sal_Int32 nSizeMode )
     return getLimitedValue< double, double >( fSize, 0.0, 1.0 - fPos );
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 LayoutConverter::LayoutConverter( const ConverterRoot& rParent, LayoutModel& rModel ) :
     ConverterBase< LayoutModel >( rParent, rModel )
@@ -412,17 +412,17 @@ bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
             lclCalcPosition( rChartSize.Height, mrModel.mfY, mrModel.mnYMode ) );
         if( (aShapePos.X >= 0) && (aShapePos.Y >= 0) )
         {
-            // the call to XShape.getSize() may recalc the chart view
+            
             awt::Size aShapeSize = rxShape->getSize();
-            // rotated shapes need special handling...
+            
             double fSin = fabs( sin( fRotationAngle * F_PI180 ) );
-            // add part of height to X direction, if title is rotated down
+            
             if( fRotationAngle > 180.0 )
                 aShapePos.X += static_cast< sal_Int32 >( fSin * aShapeSize.Height + 0.5 );
-            // add part of width to Y direction, if title is rotated up
+            
             else if( fRotationAngle > 0.0 )
                 aShapePos.Y += static_cast< sal_Int32 >( fSin * aShapeSize.Width + 0.5 );
-            // set the resulting position at the shape
+            
             rxShape->setPosition( aShapePos );
             return true;
         }
@@ -430,10 +430,10 @@ bool LayoutConverter::convertFromModel( const Reference< XShape >& rxShape, doub
     return false;
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

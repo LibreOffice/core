@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <loadenv/targethelper.hxx>
@@ -59,8 +59,8 @@ sal_Bool TargetHelper::matchSpecialTarget(const OUString& sCheckTarget  ,
 
 sal_Bool TargetHelper::isValidNameForFrame(const OUString& sName)
 {
-    // some special targets are really special ones :-)
-    // E.g. the are really used to locate one frame inside the frame tree.
+    
+    
     if (
         (sName.isEmpty()                                    ) ||
         (TargetHelper::matchSpecialTarget(sName, E_HELPTASK)) ||
@@ -68,11 +68,11 @@ sal_Bool TargetHelper::isValidNameForFrame(const OUString& sName)
        )
         return sal_True;
 
-    // all other names must be checked more general
-    // special targets starts with a "_".
+    
+    
     return (sName.indexOf('_') != 0);
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

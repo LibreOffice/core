@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "workbookhelper.hxx"
@@ -90,7 +90,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
@@ -106,16 +106,16 @@ using ::oox::core::FragmentHandler;
 using ::oox::core::XmlFilterBase;
 using ::oox::drawingml::Theme;
 
-// ============================================================================
+
 
 bool IgnoreCaseCompare::operator()( const OUString& rName1, const OUString& rName2 ) const
 {
-    // there is no wrapper in OUString, TODO: compare with collator
+    
     return ::rtl_ustr_compareIgnoreAsciiCase_WithLength(
         rName1.getStr(), rName1.getLength(), rName2.getStr(), rName2.getLength() ) < 0;
 }
 
-// ============================================================================
+
 
 class WorkbookGlobals : boost::noncopyable
 {
@@ -126,7 +126,7 @@ public:
     /** Returns true, if this helper refers to a valid document. */
     inline bool         isValid() const { return mxDoc.is(); }
 
-    // filter -----------------------------------------------------------------
+    
 
     /** Returns the base filter object (base class of all filters). */
     inline FilterBase&  getBaseFilter() const { return mrBaseFilter; }
@@ -146,7 +146,7 @@ public:
     /** Sets the index of the current Calc sheet, if filter currently processes a sheet. */
     inline void         setCurrentSheetIndex( sal_Int16 nSheet ) { mnCurrSheet = nSheet; }
 
-    // document model ---------------------------------------------------------
+    
 
     inline ScEditEngineDefaulter& getEditEngine() const
     {
@@ -178,7 +178,7 @@ public:
     /** Helper to switch chart data table - specifically for xlsx imports */
     void useInternalChartDataTable( bool bInternal );
 
-    // buffers ----------------------------------------------------------------
+    
 
     inline FormulaBuffer& getFormulaBuffer() const { return *mxFormulaBuffer; }
     /** Returns the global workbook settings object. */
@@ -208,7 +208,7 @@ public:
     /** Returns the collection of pivot tables. */
     inline PivotTableBuffer& getPivotTables() { return *mxPivotTables; }
 
-    // converters -------------------------------------------------------------
+    
 
     /** Returns the import formula parser. */
     inline FormulaParser& getFormulaParser() const { return *mxFmlaParser; }
@@ -221,12 +221,12 @@ public:
     /** Returns the page/print settings converter. */
     inline PageSettingsConverter& getPageSettingsConverter() const { return *mxPageSettConverter; }
 
-    // OOXML/BIFF12 specific --------------------------------------------------
+    
 
     /** Returns the base OOXML/BIFF12 filter object. */
     inline XmlFilterBase& getOoxFilter() const { return *mpOoxFilter; }
 
-    // BIFF2-BIFF8 specific ---------------------------------------------------
+    
 
     /** Returns the BIFF type in binary filter. */
     inline BiffType     getBiff() const { return meBiff; }
@@ -267,58 +267,58 @@ private:
     typedef ::std::auto_ptr< PageSettingsConverter >    PageSettConvPtr;
     typedef ::std::auto_ptr< BiffCodecHelper >          BiffCodecHelperPtr;
 
-    OUString            maCellStyles;           /// Style family name for cell styles.
-    OUString            maPageStyles;           /// Style family name for page styles.
-    OUString            maCellStyleServ;        /// Service name for a cell style.
-    OUString            maPageStyleServ;        /// Service name for a page style.
-    Reference< XSpreadsheetDocument > mxDoc;    /// Document model.
-    FilterBase&         mrBaseFilter;           /// Base filter object.
-    ExcelFilter&        mrExcelFilter;          /// Base object for registration of this structure.
-    FilterType          meFilterType;           /// File type of the filter.
-    ProgressBarPtr      mxProgressBar;          /// The progress bar.
-    StorageRef          mxVbaPrjStrg;           /// Storage containing the VBA project.
-    sal_Int16           mnCurrSheet;            /// Current sheet index in Calc document.
-    bool                mbWorkbook;             /// True = multi-sheet file.
+    OUString            maCellStyles;           
+    OUString            maPageStyles;           
+    OUString            maCellStyleServ;        
+    OUString            maPageStyleServ;        
+    Reference< XSpreadsheetDocument > mxDoc;    
+    FilterBase&         mrBaseFilter;           
+    ExcelFilter&        mrExcelFilter;          
+    FilterType          meFilterType;           
+    ProgressBarPtr      mxProgressBar;          
+    StorageRef          mxVbaPrjStrg;           
+    sal_Int16           mnCurrSheet;            
+    bool                mbWorkbook;             
 
-    // buffers
+    
     FormulaBufferPtr    mxFormulaBuffer;
-    WorkbookSettPtr     mxWorkbookSettings;     /// Global workbook settings.
-    ViewSettingsPtr     mxViewSettings;         /// Workbook and sheet view settings.
-    WorksheetBfrPtr     mxWorksheets;           /// Sheet info buffer.
-    ThemeBfrRef         mxTheme;                /// Formatting theme from theme substream.
-    StylesBfrPtr        mxStyles;               /// All cell style objects from styles substream.
-    SharedStrBfrPtr     mxSharedStrings;        /// All strings from shared strings substream.
-    ExtLinkBfrPtr       mxExtLinks;             /// All external links.
-    DefNamesBfrPtr      mxDefNames;             /// All defined names.
-    TableBfrPtr         mxTables;               /// All tables (database ranges).
-    ScenarioBfrPtr      mxScenarios;            /// All scenarios.
-    ConnectionsBfrPtr   mxConnections;          /// All external data connections.
-    PivotCacheBfrPtr    mxPivotCaches;          /// All pivot caches in the document.
-    PivotTableBfrPtr    mxPivotTables;          /// All pivot tables in the document.
+    WorkbookSettPtr     mxWorkbookSettings;     
+    ViewSettingsPtr     mxViewSettings;         
+    WorksheetBfrPtr     mxWorksheets;           
+    ThemeBfrRef         mxTheme;                
+    StylesBfrPtr        mxStyles;               
+    SharedStrBfrPtr     mxSharedStrings;        
+    ExtLinkBfrPtr       mxExtLinks;             
+    DefNamesBfrPtr      mxDefNames;             
+    TableBfrPtr         mxTables;               
+    ScenarioBfrPtr      mxScenarios;            
+    ConnectionsBfrPtr   mxConnections;          
+    PivotCacheBfrPtr    mxPivotCaches;          
+    PivotTableBfrPtr    mxPivotTables;          
 
-    // converters
-    FormulaParserPtr    mxFmlaParser;           /// Import formula parser.
-    UnitConvPtr         mxUnitConverter;        /// General unit converter.
-    AddressConvPtr      mxAddrConverter;        /// Cell address and cell range address converter.
-    ExcelChartConvPtr   mxChartConverter;       /// Chart object converter.
-    PageSettConvPtr     mxPageSettConverter;    /// Page/print settings converter.
+    
+    FormulaParserPtr    mxFmlaParser;           
+    UnitConvPtr         mxUnitConverter;        
+    AddressConvPtr      mxAddrConverter;        
+    ExcelChartConvPtr   mxChartConverter;       
+    PageSettConvPtr     mxPageSettConverter;    
 
     EditEngineDefaulterPtr mxEditEngine;
 
-    // OOXML/BIFF12 specific
-    XmlFilterBase*      mpOoxFilter;            /// Base OOXML/BIFF12 filter object.
+    
+    XmlFilterBase*      mpOoxFilter;            
 
-    // BIFF2-BIFF8 specific
-    BiffCodecHelperPtr  mxCodecHelper;          /// Encoder/decoder helper.
-    BiffType            meBiff;                 /// BIFF version for BIFF import/export.
-    rtl_TextEncoding    meTextEnc;              /// BIFF byte string text encoding.
-    bool                mbHasCodePage;          /// True = CODEPAGE record exists in imported stream.
+    
+    BiffCodecHelperPtr  mxCodecHelper;          
+    BiffType            meBiff;                 
+    rtl_TextEncoding    meTextEnc;              
+    bool                mbHasCodePage;          
     ScDocument* mpDoc;
     ScDocShell* mpDocShell;
     boost::scoped_ptr<ScDocumentImport> mxDocImport;
 };
 
-// ----------------------------------------------------------------------------
+
 
 WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     mrBaseFilter( rFilter ),
@@ -329,7 +329,7 @@ WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     mpDoc(NULL),
     mpDocShell(NULL)
 {
-    // register at the filter, needed for virtual callbacks (even during construction)
+    
     mrExcelFilter.registerWorkbookGlobals( *this );
     initialize( true );
 }
@@ -419,15 +419,15 @@ OUString findUnusedName( const ScRangeName* pRangeName, const OUString& rSuggest
 ScRangeData* WorkbookGlobals::createNamedRangeObject(
     OUString& orName, const Sequence< FormulaToken>& rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags )
 {
-    // create the name and insert it into the Calc document
+    
     ScRangeData* pScRangeData = NULL;
     if( !orName.isEmpty() )
     {
         ScDocument& rDoc =  getScDocument();
         ScRangeName* pNames = rDoc.GetRangeName();
-        // find an unused name
+        
         orName = findUnusedName( pNames, orName );
-        // create the named range
+        
         pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
     }
     return pScRangeData;
@@ -436,15 +436,15 @@ ScRangeData* WorkbookGlobals::createNamedRangeObject(
 ScRangeData* WorkbookGlobals::createLocalNamedRangeObject(
     OUString& orName, const Sequence< FormulaToken >&  rTokens, sal_Int32 nIndex, sal_Int32 nNameFlags, sal_Int32 nTab )
 {
-    // create the name and insert it into the Calc document
+    
     ScRangeData* pScRangeData = NULL;
     if( !orName.isEmpty() )
     {
         ScDocument& rDoc =  getScDocument();
         ScRangeName* pNames = rDoc.GetRangeName( nTab );
-        // find an unused name
+        
         orName = findUnusedName( pNames, orName );
-        // create the named range
+        
         pScRangeData = lcl_addNewByNameAndTokens( rDoc, pNames, orName, rTokens, nIndex, nNameFlags );
     }
     return pScRangeData;
@@ -452,19 +452,19 @@ ScRangeData* WorkbookGlobals::createLocalNamedRangeObject(
 
 Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString& orName, const CellRangeAddress& rRangeAddr )
 {
-    // validate cell range
+    
     CellRangeAddress aDestRange = rRangeAddr;
     bool bValidRange = getAddressConverter().validateCellRange( aDestRange, true, true );
 
-    // create database range and insert it into the Calc document
+    
     Reference< XDatabaseRange > xDatabaseRange;
     if( bValidRange && !orName.isEmpty() ) try
     {
-        // find an unused name
+        
         PropertySet aDocProps( mxDoc );
         Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
         orName = ContainerHelper::getUnusedName( xDatabaseRanges, orName, '_' );
-        // create the database range
+        
         xDatabaseRanges->addNewByName( orName, aDestRange );
         xDatabaseRange.set( xDatabaseRanges->getByName( orName ), UNO_QUERY );
     }
@@ -477,11 +477,11 @@ Reference< XDatabaseRange > WorkbookGlobals::createDatabaseRangeObject( OUString
 
 Reference< XDatabaseRange > WorkbookGlobals::createUnnamedDatabaseRangeObject( const CellRangeAddress& rRangeAddr )
 {
-    // validate cell range
+    
     CellRangeAddress aDestRange = rRangeAddr;
     bool bValidRange = getAddressConverter().validateCellRange( aDestRange, true, true );
 
-    // create database range and insert it into the Calc document
+    
     Reference< XDatabaseRange > xDatabaseRange;
     if( bValidRange ) try
     {
@@ -528,9 +528,9 @@ void WorkbookGlobals::useInternalChartDataTable( bool bInternal )
         mxChartConverter.reset( new ExcelChartConverter( *this ) );
 }
 
-// BIFF specific --------------------------------------------------------------
 
-// private --------------------------------------------------------------------
+
+
 
 void WorkbookGlobals::initialize( bool bWorkbookFile )
 {
@@ -543,7 +543,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     meTextEnc = osl_getThreadTextEncoding();
     mbHasCodePage = false;
 
-    // the spreadsheet document
+    
     mxDoc.set( mrBaseFilter.getModel(), UNO_QUERY );
     OSL_ENSURE( mxDoc.is(), "WorkbookGlobals::initialize - no spreadsheet document" );
 
@@ -581,7 +581,7 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     mxChartConverter.reset( new ExcelChartConverter( *this ) );
     mxPageSettConverter.reset( new PageSettingsConverter( *this ) );
 
-    // initialise edit engine
+    
     ScDocument& rDoc = getScDocument();
     mxEditEngine.reset( new ScEditEngineDefaulter( rDoc.GetEnginePool() ) );
     mxEditEngine->SetRefMapMode( MAP_100TH_MM );
@@ -590,32 +590,32 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
     mxEditEngine->EnableUndo( false );
     mxEditEngine->SetControlWord( mxEditEngine->GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
 
-    // set some document properties needed during import
+    
     if( mrBaseFilter.isImportFilter() )
     {
-        // enable editing read-only documents (e.g. from read-only files)
+        
         mpDoc->EnableChangeReadOnly(true);
-        // #i76026# disable Undo while loading the document
+        
         mpDoc->EnableUndo(false);
-        // #i79826# disable calculating automatic row height while loading the document
+        
         mpDoc->EnableAdjustHeight(true);
-        // disable automatic update of linked sheets and DDE links
+        
         mpDoc->EnableExecuteLink(false);
-        // #i79890# disable automatic update of defined names
+        
         mpDoc->CompileNameFormula(true);
 
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_LOAD_DOC) ) );
         mxFmlaParser.reset( new FormulaParser( *this ) );
 
-        //prevent unnecessary broadcasts and "half way listeners" as
-        //is done in ScDocShell::BeforeXMLLoading() for ods
+        
+        
         mpDoc->SetInsertingFromOtherDoc(true);
     }
     else if( mrBaseFilter.isExportFilter() )
     {
         mxProgressBar.reset( new SegmentProgressBar( mrBaseFilter.getStatusIndicator(), ScGlobal::GetRscString(STR_SAVE_DOC) ) );
     }
-    // filter specific
+    
     switch( getFilterType() )
     {
         case FILTER_BIFF:
@@ -632,30 +632,30 @@ void WorkbookGlobals::initialize( bool bWorkbookFile )
 
 void WorkbookGlobals::finalize()
 {
-    // set some document properties needed after import
+    
     if( mrBaseFilter.isImportFilter() )
     {
-        // #i74668# do not insert default sheets
+        
         mpDocShell->SetEmpty(false);
-        // #i79890# Compile named ranges before re-enabling row height adjustment. (no idea why).
+        
         mpDoc->CompileNameFormula(false);
-        // enable automatic update of linked sheets and DDE links
+        
         mpDoc->EnableExecuteLink(true);
-        // #i79826# enable updating automatic row height after loading the document
+        
         mpDoc->EnableAdjustHeight(true);
 
-        // #i76026# enable Undo after loading the document
+        
         mpDoc->EnableUndo(true);
 
-        // disable editing read-only documents (e.g. from read-only files)
+        
         mpDoc->EnableChangeReadOnly(false);
-        // #111099# open forms in alive mode (has no effect, if no controls in document)
+        
         ScDrawLayer* pModel = mpDoc->GetDrawLayer();
         if (pModel)
             pModel->SetOpenInDesignMode(false);
 
-        //stop preventing establishment of listeners as is done in
-        //ScDocShell::AfterXMLLoading() for ods
+        
+        
         mpDoc->SetInsertingFromOtherDoc(false);
         getDocImport().finalize();
 
@@ -665,7 +665,7 @@ void WorkbookGlobals::finalize()
 
 void WorkbookGlobals::recalcFormulaCells()
 {
-    // Recalculate formula cells.
+    
     ScDocument& rDoc = getScDocument();
     ScDocShell& rDocSh = getDocShell();
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
@@ -676,7 +676,7 @@ void WorkbookGlobals::recalcFormulaCells()
     {
         if (rDoc.IsUserInteractionEnabled())
         {
-            // Ask the user if full re-calculation is desired.
+            
             QueryBox aBox(
                 rDocSh.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 ScGlobal::GetRscString(STR_QUERY_FORMULA_RECALC_ONLOAD_XLS));
@@ -687,7 +687,7 @@ void WorkbookGlobals::recalcFormulaCells()
 
             if (aBox.GetCheckBoxState())
             {
-                // Always perform selected action in the future.
+                
                 boost::shared_ptr< comphelper::ConfigurationChanges > batch( comphelper::ConfigurationChanges::create() );
                 officecfg::Office::Calc::Formula::Load::OOXMLRecalcMode::set(sal_Int32(0), batch);
                 ScFormulaOptions aOpt = SC_MOD()->GetFormulaOptions();
@@ -707,7 +707,7 @@ void WorkbookGlobals::recalcFormulaCells()
         rDoc.CalcFormulaTree(false, true, false);
 }
 
-// ============================================================================
+
 
 WorkbookHelper::~WorkbookHelper()
 {
@@ -721,7 +721,7 @@ WorkbookHelper::~WorkbookHelper()
     return xBookGlob;
 }
 
-// filter ---------------------------------------------------------------------
+
 
 FilterBase& WorkbookHelper::getBaseFilter() const
 {
@@ -760,16 +760,16 @@ void WorkbookHelper::setCurrentSheetIndex( sal_Int16 nSheet )
 
 void WorkbookHelper::finalizeWorkbookImport()
 {
-    // workbook settings, document and sheet view settings
+    
     mrBookGlob.getWorkbookSettings().finalizeImport();
     mrBookGlob.getViewSettings().finalizeImport();
 
-    // need to import formulas before scenarios
+    
     mrBookGlob.getFormulaBuffer().finalizeImport();
 
-    // Insert all pivot tables. Must be done after loading all sheets and
-    // formulas, because data pilots expect existing source data on
-    // creation.
+    
+    
+    
     getPivotTables().finalizeImport();
 
     /*  Insert scenarios after all sheet processing is done, because new hidden
@@ -791,7 +791,7 @@ void WorkbookHelper::finalizeWorkbookImport()
         getBaseFilter().getVbaProject().importModulesAndForms( *xVbaPrjStrg, getBaseFilter().getGraphicHelper() );
 }
 
-// document model -------------------------------------------------------------
+
 
 ScDocument& WorkbookHelper::getScDocument()
 {
@@ -900,7 +900,7 @@ Reference< XStyle > WorkbookHelper::createStyleObject( OUString& orStyleName, bo
     return mrBookGlob.createStyleObject( orStyleName, bPageStyle );
 }
 
-// buffers --------------------------------------------------------------------
+
 
 FormulaBuffer& WorkbookHelper::getFormulaBuffer() const
 {
@@ -972,7 +972,7 @@ PivotTableBuffer& WorkbookHelper::getPivotTables() const
     return mrBookGlob.getPivotTables();
 }
 
-// converters -----------------------------------------------------------------
+
 
 FormulaParser& WorkbookHelper::getFormulaParser() const
 {
@@ -1004,7 +1004,7 @@ PageSettingsConverter& WorkbookHelper::getPageSettingsConverter() const
     return mrBookGlob.getPageSettingsConverter();
 }
 
-// OOXML/BIFF12 specific ------------------------------------------------------
+
 
 XmlFilterBase& WorkbookHelper::getOoxFilter() const
 {
@@ -1022,7 +1022,7 @@ bool WorkbookHelper::importOoxFragment( const rtl::Reference<FragmentHandler>& r
     return getOoxFilter().importFragment(rxHandler, rParser);
 }
 
-// BIFF specific --------------------------------------------------------------
+
 
 BiffType WorkbookHelper::getBiff() const
 {
@@ -1039,9 +1039,9 @@ BiffCodecHelper& WorkbookHelper::getCodecHelper() const
     return mrBookGlob.getCodecHelper();
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

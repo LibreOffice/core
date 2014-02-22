@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "StockBar.hxx"
@@ -99,8 +99,8 @@ private:
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
-        // override other defaults
-        ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); // white
+        
+        ::chart::PropertyHelper::setPropertyValue< sal_Int32 >( rOutMap, ::chart::FillProperties::PROP_FILL_COLOR, 0xffffff ); 
     }
 };
 
@@ -108,7 +108,7 @@ struct StaticStockBarDefaults : public rtl::StaticAggregate< ::chart::tPropertyV
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -122,10 +122,10 @@ StockBar::StockBar( bool bRisingCourse ) :
     {
         setFastPropertyValue_NoBroadcast(
             ::chart::FillProperties::PROP_FILL_COLOR,
-            uno::makeAny( sal_Int32( 0x000000 ))); // black
+            uno::makeAny( sal_Int32( 0x000000 ))); 
         setFastPropertyValue_NoBroadcast(
             ::chart::LinePropertiesHelper::PROP_LINE_COLOR,
-            uno::makeAny( sal_Int32( 0xb3b3b3 ))); // gray30
+            uno::makeAny( sal_Int32( 0xb3b3b3 ))); 
     }
 }
 
@@ -140,14 +140,14 @@ StockBar::StockBar( const StockBar & rOther ) :
 StockBar::~StockBar()
 {}
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL StockBar::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new StockBar( *this ));
 }
 
-// ____ OPropertySet ____
+
 uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -163,14 +163,14 @@ uno::Any StockBar::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticStockBarInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL StockBar::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticStockBarInfo::get();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL StockBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -199,21 +199,21 @@ void SAL_CALL StockBar::removeModifyListener( const uno::Reference< util::XModif
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL StockBar::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL StockBar::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void StockBar::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -232,13 +232,13 @@ uno::Sequence< OUString > StockBar::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( StockBar, lcl_aServiceName );
 
 using impl::StockBar_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( StockBar, StockBar_Base, ::property::OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,7 +54,7 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
+
 
 ToggleButtonToolbarController::ToggleButtonToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -72,13 +72,13 @@ ToggleButtonToolbarController::ToggleButtonToolbarController(
         m_pToolbar->SetItemBits( m_nID, TIB_DROPDOWN | m_pToolbar->GetItemBits( m_nID ) );
 }
 
-// ------------------------------------------------------------------
+
 
 ToggleButtonToolbarController::~ToggleButtonToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL ToggleButtonToolbarController::dispose()
 throw ( RuntimeException )
@@ -87,12 +87,12 @@ throw ( RuntimeException )
     ComplexToolbarController::dispose();
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
 
-    // Add key modifier to argument list
+    
     aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
     aArgs[1].Name = "Text";
@@ -100,7 +100,7 @@ Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 uno::Reference< awt::XWindow > SAL_CALL ToggleButtonToolbarController::createPopupWindow()
 throw (::com::sun::star::uno::RuntimeException)
@@ -111,7 +111,7 @@ throw (::com::sun::star::uno::RuntimeException)
     if (( m_eStyle == STYLE_DROPDOWNBUTTON ) ||
         ( m_eStyle == STYLE_TOGGLE_DROPDOWNBUTTON ))
     {
-        // create popup menu
+        
         ::PopupMenu aPopup;
         const sal_uInt32 nCount = m_aDropdownMenuList.size();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
@@ -133,7 +133,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return xWindow;
 }
 
-// ------------------------------------------------------------------
+
 
 void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
@@ -155,7 +155,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                     for ( sal_Int32 j = 0; j < aList.getLength(); j++ )
                         m_aDropdownMenuList.push_back( aList[j] );
 
-                    // send notification
+                    
                     uno::Sequence< beans::NamedValue > aInfo( 1 );
                     aInfo[0].Name  = "List";
                     aInfo[0].Value <<= aList;
@@ -182,7 +182,7 @@ void ToggleButtonToolbarController::executeControlCommand( const ::com::sun::sta
                     {
                         m_aCurrentSelection = m_aDropdownMenuList[nPos];
 
-                        // send notification
+                        
                         uno::Sequence< beans::NamedValue > aInfo( 1 );
                         aInfo[0].Name  = "ItemChecked";
                         aInfo[0].Value <<= nPos;
@@ -289,6 +289,6 @@ IMPL_LINK( ToggleButtonToolbarController, MenuSelectHdl, Menu *, pMenu )
     return 0;
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

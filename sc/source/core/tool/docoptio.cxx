@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -44,12 +44,12 @@ using sc::TwipsToEvenHMM;
 static sal_uInt16 lcl_GetDefaultTabDist()
 {
     if ( ScOptionsUtil::IsMetricSystem() )
-        return 709;                 // 1,25 cm
+        return 709;                 
     else
-        return 720;                 // 1/2"
+        return 720;                 
 }
 
-//      ScDocOptions - Dokument-Optionen
+
 
 ScDocOptions::ScDocOptions()
 {
@@ -98,7 +98,7 @@ void ScDocOptions::ResetDocOptions()
     bFormulaRegexEnabled= true;
 }
 
-//      ScTpCalcItem - Daten fuer die CalcOptions-TabPage
+
 
 ScTpCalcItem::ScTpCalcItem( sal_uInt16 nWhichP, const ScDocOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
@@ -135,7 +135,7 @@ SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
     return new ScTpCalcItem( *this );
 }
 
-//  Config Item containing document options
+
 
 #define CFGPATH_CALC        "Office.Calc/Calculate"
 
@@ -162,18 +162,18 @@ Sequence<OUString> ScDocCfg::GetCalcPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "IterativeReference/Iteration",     // SCCALCOPT_ITER_ITER
-        "IterativeReference/Steps",         // SCCALCOPT_ITER_STEPS
-        "IterativeReference/MinimumChange", // SCCALCOPT_ITER_MINCHG
-        "Other/Date/DD",                    // SCCALCOPT_DATE_DAY
-        "Other/Date/MM",                    // SCCALCOPT_DATE_MONTH
-        "Other/Date/YY",                    // SCCALCOPT_DATE_YEAR
-        "Other/DecimalPlaces",              // SCCALCOPT_DECIMALS
-        "Other/CaseSensitive",              // SCCALCOPT_CASESENSITIVE
-        "Other/Precision",                  // SCCALCOPT_PRECISION
-        "Other/SearchCriteria",             // SCCALCOPT_SEARCHCRIT
-        "Other/FindLabel",                  // SCCALCOPT_FINDLABEL
-        "Other/RegularExpressions",         // SCCALCOPT_REGEX
+        "IterativeReference/Iteration",     
+        "IterativeReference/Steps",         
+        "IterativeReference/MinimumChange", 
+        "Other/Date/DD",                    
+        "Other/Date/MM",                    
+        "Other/Date/YY",                    
+        "Other/DecimalPlaces",              
+        "Other/CaseSensitive",              
+        "Other/Precision",                  
+        "Other/SearchCriteria",             
+        "Other/FindLabel",                  
+        "Other/RegularExpressions",         
     };
     Sequence<OUString> aNames(SCCALCOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -187,14 +187,14 @@ Sequence<OUString> ScDocCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "TabStop/NonMetric"         // SCDOCLAYOUTOPT_TABSTOP
+        "TabStop/NonMetric"         
     };
     Sequence<OUString> aNames(SCDOCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < SCDOCLAYOUTOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
 
-    //  adjust for metric system
+    
     if (ScOptionsUtil::IsMetricSystem())
         pNames[SCDOCLAYOUTOPT_TABSTOP] = "TabStop/Metric";
 
@@ -251,7 +251,7 @@ ScDocCfg::ScDocCfg() :
                         if (pValues[nProp] >>= nIntVal) SetStdPrecision( (sal_uInt16) nIntVal );
                         break;
                     case SCCALCOPT_CASESENSITIVE:
-                        // content is reversed
+                        
                         SetIgnoreCase( !ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                     case SCCALCOPT_PRECISION:
@@ -289,7 +289,7 @@ ScDocCfg::ScDocCfg() :
                 switch(nProp)
                 {
                     case SCDOCLAYOUTOPT_TABSTOP:
-                        // TabDistance in ScDocOptions is in twips
+                        
                         if (pValues[nProp] >>= nIntVal)
                             SetTabDistance( (sal_uInt16) HMMToTwips( nIntVal ) );
                         break;
@@ -335,7 +335,7 @@ IMPL_LINK_NOARG(ScDocCfg, CalcCommitHdl)
                 pValues[nProp] <<= (sal_Int32) GetStdPrecision();
                 break;
             case SCCALCOPT_CASESENSITIVE:
-                // content is reversed
+                
                 ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], !IsIgnoreCase() );
                 break;
             case SCCALCOPT_PRECISION:
@@ -367,9 +367,9 @@ IMPL_LINK_NOARG(ScDocCfg, LayoutCommitHdl)
         switch(nProp)
         {
             case SCDOCLAYOUTOPT_TABSTOP:
-                //  TabDistance in ScDocOptions is in twips
-                //  use only even numbers, so defaults don't get changed
-                //  by modifying other settings in the same config item
+                
+                
+                
                 pValues[nProp] <<= (sal_Int32) TwipsToEvenHMM( GetTabDistance() );
                 break;
         }

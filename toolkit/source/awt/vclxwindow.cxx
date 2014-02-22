@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -81,9 +81,9 @@ using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
-//====================================================================
-//= VCLXWindowImpl
-//====================================================================
+
+
+
 class VCLXWindowImpl
 {
 private:
@@ -93,7 +93,7 @@ private:
     VCLXWindow&                         mrAntiImpl;
     ::toolkit::AccessibilityClient      maAccFactory;
     bool                                mbDisposed;
-    bool                                mbDrawingOntoParent;    // no bit mask, is passed around  by reference
+    bool                                mbDrawingOntoParent;    
     sal_Bool                            mbEnableVisible;
     sal_Bool                            mbDirectVisible;
 
@@ -193,12 +193,12 @@ private:
     DECL_LINK( OnProcessCallbacks, void* );
 
 private:
-    VCLXWindowImpl();                                   // never implemented
-    VCLXWindowImpl( const VCLXWindowImpl& );            // never implemented
-    VCLXWindowImpl& operator=( const VCLXWindowImpl& ); // never implemented
+    VCLXWindowImpl();                                   
+    VCLXWindowImpl( const VCLXWindowImpl& );            
+    VCLXWindowImpl& operator=( const VCLXWindowImpl& ); 
 };
 
-//--------------------------------------------------------------------
+
 VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps )
     :mrAntiImpl( _rAntiImpl )
     ,mbDisposed( false )
@@ -234,7 +234,7 @@ VCLXWindowImpl::~VCLXWindowImpl()
     delete mpPropHelper;
 }
 
-//--------------------------------------------------------------------
+
 void VCLXWindowImpl::disposing()
 {
     SolarMutexGuard aGuard;
@@ -264,36 +264,36 @@ void VCLXWindowImpl::disposing()
     mxWindowStyleSettings.clear();
 }
 
-//--------------------------------------------------------------------
+
 void VCLXWindowImpl::callBackAsync( const VCLXWindow::Callback& i_callback )
 {
     DBG_TESTSOLARMUTEX();
     maCallbackEvents.push_back( i_callback );
     if ( !mnCallbackEventId )
     {
-        // ensure our VCLXWindow is not destroyed while the event is underway
+        
         mrAntiImpl.acquire();
         mnCallbackEventId = Application::PostUserEvent( LINK( this, VCLXWindowImpl, OnProcessCallbacks ) );
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks)
 {
     const Reference< uno::XInterface > xKeepAlive( mrAntiImpl );
 
-    // work on a copy of the callback array
+    
     CallbackArray aCallbacksCopy;
     {
         SolarMutexGuard aGuard;
         aCallbacksCopy = maCallbackEvents;
         maCallbackEvents.clear();
 
-        // we acquired our VCLXWindow once before posting the event, release this one ref now
+        
         mrAntiImpl.release();
 
         if ( !mnCallbackEventId )
-            // we were disposed while waiting for the mutex to lock
+            
             return 1L;
 
         mnCallbackEventId = 0;
@@ -313,19 +313,19 @@ IMPL_LINK_NOARG(VCLXWindowImpl, OnProcessCallbacks)
     return 0L;
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXWindowImpl::acquire()
 {
     mrAntiImpl.acquire();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL VCLXWindowImpl::release()
 {
     mrAntiImpl.release();
 }
 
-//--------------------------------------------------------------------
+
 Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
 {
     SolarMutexGuard aGuard;
@@ -336,10 +336,10 @@ Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
     return mxWindowStyleSettings;
 }
 
-//====================================================================
-//====================================================================
 
-// Uses an out-parameter instead of return value, due to the object reference
+
+
+
 
 void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pWindow )
 {
@@ -355,9 +355,9 @@ void ImplInitWindowEvent( ::com::sun::star::awt::WindowEvent& rEvent, Window* pW
     pWindow->GetBorder( rEvent.LeftInset, rEvent.TopInset, rEvent.RightInset, rEvent.BottomInset );
 }
 
-//  ----------------------------------------------------
-//  class VCLXWindow
-//  ----------------------------------------------------
+
+
+
 
 DBG_NAME(VCLXWindow);
 
@@ -383,13 +383,13 @@ VCLXWindow::~VCLXWindow()
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void VCLXWindow::ImplExecuteAsyncWithoutSolarLock( const Callback& i_callback )
 {
     mpImpl->callBackAsync( i_callback );
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 ::toolkit::IAccessibleFactory& VCLXWindow::getAccessibleFactory()
 {
     return mpImpl->getAccessibleFactory().getFactory();
@@ -400,7 +400,7 @@ void VCLXWindow::SetWindow( Window* pWindow )
     if ( GetWindow() )
     {
         GetWindow()->RemoveEventListener( LINK( this, VCLXWindow, WindowEventListener ) );
-//        GetWindow()->DbgAssertNoEventListeners();
+
     }
 
     SetOutputDevice( pWindow );
@@ -533,7 +533,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 mpImpl->getWindowListeners().windowShown( aEvent );
             }
 
-            // For TopWindows this means opened...
+            
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
@@ -552,7 +552,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                 mpImpl->getWindowListeners().windowHidden( aEvent );
             }
 
-            // For TopWindows this means closed...
+            
             if ( mpImpl->getTopWindowListeners().getLength() )
             {
                 ::com::sun::star::lang::EventObject aEvent;
@@ -640,7 +640,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
                     Window* pNext = Application::GetFocusWindow();
                     if ( pNext )
                     {
-                        // Don't care about internals if this control is compound
+                        
                         Window* pNextC = pNext;
                         while ( pNextC && !pNextC->IsCompoundControl() )
                             pNextC = pNextC->GetParent();
@@ -702,13 +702,13 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             CommandEvent* pCmdEvt = (CommandEvent*)rVclWindowEvent.GetData();
             if ( mpImpl->getMouseListeners().getLength() && ( pCmdEvt->GetCommand() == COMMAND_CONTEXTMENU ) )
             {
-                // COMMAND_CONTEXTMENU als mousePressed mit PopupTrigger = sal_True versenden...
+                
                 Point aWhere = static_cast< CommandEvent* >( rVclWindowEvent.GetData() )->GetMousePosPixel();
                 if ( !pCmdEvt->IsMouseEvent() )
-                {   // for keyboard events, we set the coordinates to -1,-1. This is a slight HACK, but the current API
-                    // handles a context menu command as special case of a mouse event, which is simply wrong.
-                    // Without extending the API, we would not have another chance to notify listeners of a
-                    // keyboard-triggered context menu request
+                {   
+                    
+                    
+                    
                     aWhere = Point( -1, -1 );
                 }
 
@@ -743,7 +743,7 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
             if ( mpImpl->getMouseMotionListeners().getLength() && !pMouseEvt->IsEnterWindow() && !pMouseEvt->IsLeaveWindow() )
             {
                 awt::MouseEvent aEvent( VCLUnoHelper::createMouseEvent( *pMouseEvt, *this ) );
-                aEvent.ClickCount = 0;  // #92138#
+                aEvent.ClickCount = 0;  
                 if ( pMouseEvt->GetMode() & MOUSE_SIMPLEMOVE )
                     mpImpl->getMouseMotionListeners().mouseMoved( aEvent );
                 else
@@ -933,10 +933,10 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 }
 
 
-// ::com::sun::star::lang::XUnoTunnel
+
 IMPL_XUNOTUNNEL2( VCLXWindow, VCLXDevice )
 
-// ::com::sun::star::lang::Component
+
 void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -952,14 +952,14 @@ void VCLXWindow::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
         if ( GetWindow() )
         {
             OutputDevice* pOutDev = GetOutputDevice();
-            SetWindow( NULL );  // so that handlers are logged off, if necessary (virtual)
+            SetWindow( NULL );  
             SetOutputDevice( pOutDev );
             DestroyOutputDevice();
         }
 
-        // #i14103# dispose the accessible context after the window has been destroyed,
-        // otherwise the old value in the child event fired in VCLXAccessibleComponent::ProcessWindowEvent()
-        // for VCLEVENT_WINDOW_CHILDDESTROYED contains a reference to an already disposed accessible object
+        
+        
+        
         try
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > xComponent( mpImpl->mxAccessibleContext, ::com::sun::star::uno::UNO_QUERY );
@@ -991,7 +991,7 @@ void VCLXWindow::removeEventListener( const ::com::sun::star::uno::Reference< ::
 }
 
 
-// ::com::sun::star::awt::XWindow
+
 void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1040,7 +1040,7 @@ void VCLXWindow::setEnable( sal_Bool bEnable ) throw(::com::sun::star::uno::Runt
     Window* pWindow = GetWindow();
     if ( pWindow )
     {
-        pWindow->Enable( bEnable, false ); // #95824# without children!
+        pWindow->Enable( bEnable, false ); 
         pWindow->EnableInput( bEnable );
     }
 }
@@ -1063,7 +1063,7 @@ void VCLXWindow::addWindowListener( const ::com::sun::star::uno::Reference< ::co
     if ( xListener2.is() )
         mpImpl->getWindow2Listeners().addInterface( xListener2 );
 
-    // #100119# Get all resize events, even if height or width 0, or invisible
+    
     if ( GetWindow() )
         GetWindow()->EnableAllResize( true );
 }
@@ -1139,11 +1139,11 @@ void VCLXWindow::removePaintListener( const ::com::sun::star::uno::Reference< ::
     mpImpl->getPaintListeners().removeInterface( rxListener );
 }
 
-// ::com::sun::star::awt::XWindowPeer
+
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit > VCLXWindow::getToolkit(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    // no guard. nothing to guard here.
-    // 82463 - 12/21/00 - fs
+    
+    
     return Application::GetVCLToolkit();
 }
 
@@ -1197,7 +1197,7 @@ void VCLXWindow::invalidateRect( const ::com::sun::star::awt::Rectangle& rRect, 
 }
 
 
-// ::com::sun::star::awt::XVclWindowPeer
+
 sal_Bool VCLXWindow::isChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& rxPeer ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -1302,7 +1302,7 @@ namespace toolkit
     }
 }
 
-// Terminated by BASEPROPERTY_NOTFOUND (or 0)
+
 void VCLXWindow::PushPropertyIds( std::list< sal_uInt16 > &rIds,
                                   int nFirstId, ...)
 {
@@ -1318,7 +1318,7 @@ void VCLXWindow::PushPropertyIds( std::list< sal_uInt16 > &rIds,
 
 void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDefaults )
 {
-    // These are common across ~all VCLXWindow derived classes
+    
     if( bWithDefaults )
         PushPropertyIds( rIds,
                          BASEPROPERTY_ALIGN,
@@ -1332,19 +1332,19 @@ void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDe
                          BASEPROPERTY_HELPURL,
                          BASEPROPERTY_TEXT,
                          BASEPROPERTY_PRINTABLE,
-                         BASEPROPERTY_ENABLEVISIBLE, // for visibility
+                         BASEPROPERTY_ENABLEVISIBLE, 
                          BASEPROPERTY_TABSTOP,
                          0);
 
-    // lovely hack from:
-    // void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
+    
+    
     std::list< sal_uInt16 >::const_iterator iter;
     for( iter = rIds.begin(); iter != rIds.end(); ++iter) {
         if( *iter == BASEPROPERTY_FONTDESCRIPTOR )
         {
-            // some properties are not included in the FontDescriptor, but everytime
-            // when we have a FontDescriptor we want to have these properties too.
-            // => Easier to register the here, istead everywhere where I register the FontDescriptor...
+            
+            
+            
 
             rIds.push_back( BASEPROPERTY_TEXTCOLOR );
             rIds.push_back( BASEPROPERTY_TEXTLINECOLOR );
@@ -1381,9 +1381,9 @@ namespace
         case WritingMode2::RL_TB:   bEnableRTL = sal_True; break;
         case WritingMode2::CONTEXT:
         {
-            // consult our ContextWritingMode. If it has an explicit RTL/LTR value, then use
-            // it. If it doesn't (but is CONTEXT itself), then just ask the parent window of our
-            // own window for its RTL mode
+            
+            
+            
             switch ( _nContextWritingMode )
             {
                 case WritingMode2::LR_TB:   bEnableRTL = sal_False; break;
@@ -1401,7 +1401,7 @@ namespace
         break;
         default:
             OSL_FAIL( "lcl_updateWritingMode: unsupported WritingMode!" );
-        }   // switch ( nWritingMode )
+        }   
 
         _rWindow.EnableRTL( bEnableRTL );
     }
@@ -1486,7 +1486,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 
         case BASEPROPERTY_PLUGINPARENT:
         {
-            // set parent handle
+            
             SetSystemParent_Impl( Value );
         }
         break;
@@ -1523,7 +1523,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                     case WINDOW_OKBUTTON:
                     case WINDOW_CANCELBUTTON:
                     case WINDOW_HELPBUTTON:
-                        // Standard Button: overwrite only if not empty.
+                        
                         if (!aText.isEmpty())
                             pWindow->SetText( aText );
                         break;
@@ -1603,7 +1603,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             {
                 switch ( eWinType )
                 {
-                    // set dialog color for default
+                    
                     case WINDOW_DIALOG:
                     case WINDOW_MESSBOX:
                     case WINDOW_INFOBOX:
@@ -1624,7 +1624,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                     case WINDOW_GROUPBOX:
                     case WINDOW_FIXEDLINE:
                     {
-                        // support transparency only for special controls
+                        
                         pWindow->SetBackground();
                         pWindow->SetControlBackground();
                         pWindow->SetPaintTransparent( true );
@@ -1633,10 +1633,10 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 
                     default:
                     {
-                        // default code which enables transparency for
-                        // compound controls. It's not real transparency
-                        // as most of these controls repaint their client
-                        // area completely new.
+                        
+                        
+                        
+                        
                         if ( pWindow->IsCompoundControl() )
                             pWindow->SetBackground();
                         pWindow->SetControlBackground();
@@ -1654,7 +1654,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                     pWindow->SetBackground( aColor );
                     switch ( eWinType )
                     {
-                        // reset paint transparent mode
+                        
                         case WINDOW_FIXEDTEXT:
                         case WINDOW_CHECKBOX:
                         case WINDOW_RADIOBUTTON:
@@ -1663,7 +1663,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                             pWindow->SetPaintTransparent( false );
                         default: ;
                     }
-                    pWindow->Invalidate();  // Invalidate if control does not respond to it
+                    pWindow->Invalidate();  
                 }
             }
         break;
@@ -1773,7 +1773,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             case VerticalAlignment_BOTTOM:
                 nStyle |= WB_BOTTOM;
                 break;
-            default: ; // for warning free code, MAKE_FIXED_SIZE
+            default: ; 
             }
             pWindow->SetStyle( nStyle );
         }
@@ -1790,7 +1790,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
                 case WINDOW_CANCELBUTTON:
                 case WINDOW_HELPBUTTON:
                     nAlign = PROPERTY_ALIGN_CENTER;
-                    // no break here!
+                    
                 case WINDOW_FIXEDTEXT:
                 case WINDOW_EDIT:
                 case WINDOW_MULTILINEEDIT:
@@ -1886,7 +1886,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
             sal_Bool bPaintTransparent = false;
             Value >>= bPaintTransparent;
             pWindow->SetPaintTransparent( bPaintTransparent );
-//                pWindow->SetBackground();
+
         }
         break;
 
@@ -2164,13 +2164,13 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 }
 
 
-// ::com::sun::star::awt::XLayoutConstrains
+
 ::com::sun::star::awt::Size VCLXWindow::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    // Use this method only for those components which can be created through
-    // ::com::sun::star::awt::Toolkit , but do not have an interface
+    
+    
 
     Size aSz;
     if ( GetWindow() )
@@ -2224,7 +2224,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const ::com::sun::st
 }
 
 
-// ::com::sun::star::awt::XView
+
 sal_Bool VCLXWindow::setGraphics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& rxDevice ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2286,11 +2286,11 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
         if ( pWindow->GetParent() && !pWindow->IsSystemWindow() && ( pWindow->GetParent() == pDev ) )
         {
-            // #i40647# don't draw here if this is a recursive call
-            // sometimes this is called recursively, because the Update call on the parent
-            // (strangely) triggers another paint. Prevent a stack overflow here
-            // Yes, this is only fixing symptoms for the moment ....
-            // #i40647# / 2005-01-18 / frank.schoenheit@sun.com
+            
+            
+            
+            
+            
             if ( !mpImpl->getDrawingOntoParent_ref() )
             {
                 ::comphelper::FlagGuard aDrawingflagGuard( mpImpl->getDrawingOntoParent_ref() );
@@ -2306,9 +2306,9 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno:
 
                 pWindow->SetPosPixel( aPos );
 
-                // Update parent first to avoid painting the parent upon the update
-                // of this window, as it may otherwise cause the parent
-                // to hide this window again
+                
+                
+                
                 if( pWindow->GetParent() )
                     pWindow->GetParent()->Update();
 
@@ -2356,38 +2356,38 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(::com::sun::sta
 
     if ( GetWindow() )
     {
-        // Fraction::Fraction takes a double, but we have a float only.
-        // The implicit conversion from float to double can result in a precision loss, i.e. 1.2 is converted to
-        // 1.200000000047something. To prevent this, we convert explicitly to double, and round it.
+        
+        
+        
         double nZoom( fZoomX );
         nZoom = ::rtl::math::round( nZoom, 4 );
         GetWindow()->SetZoom( Fraction( nZoom ) );
     }
 }
 
-// ::com::sun::star::lang::XEventListener
+
 void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& _rSource ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    // check if it comes from our AccessibleContext
+    
     uno::Reference< uno::XInterface > aAC( mpImpl->mxAccessibleContext, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xSource( _rSource.Source, uno::UNO_QUERY );
 
     if ( aAC.get() == xSource.get() )
-    {   // yep, it does
+    {   
         mpImpl->mxAccessibleContext = uno::Reference< accessibility::XAccessibleContext >();
     }
 }
 
-// ::com::sun::star::accessibility::XAccessible
+
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     using namespace ::com::sun::star;
 
     SolarMutexGuard aGuard;
 
-    // already disposed
+    
     if( ! mpImpl )
         return uno::Reference< accessibility::XAccessibleContext >();
 
@@ -2395,9 +2395,9 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     {
         mpImpl->mxAccessibleContext = CreateAccessibleContext();
 
-        // add as event listener to this component
-        // in case somebody disposes it, we do not want to have a (though weak) reference to a dead
-        // object
+        
+        
+        
         uno::Reference< lang::XComponent > xComp( mpImpl->mxAccessibleContext, uno::UNO_QUERY );
         if ( xComp.is() )
             xComp->addEventListener( this );
@@ -2406,7 +2406,7 @@ void SAL_CALL VCLXWindow::disposing( const ::com::sun::star::lang::EventObject& 
     return mpImpl->mxAccessibleContext;
 }
 
-// ::com::sun::star::awt::XDockable
+
 void SAL_CALL VCLXWindow::addDockableWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -2482,20 +2482,20 @@ void SAL_CALL VCLXWindow::unlock(  ) throw (::com::sun::star::uno::RuntimeExcept
 }
 void SAL_CALL VCLXWindow::startPopupMode( const ::com::sun::star::awt::Rectangle& ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // TODO: remove interface in the next incompatible build
+    
     SolarMutexGuard aGuard;
 
 }
 
 sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // TODO: remove interface in the next incompatible build
+    
     SolarMutexGuard aGuard;
     return sal_False;
 }
 
 
-// ::com::sun::star::awt::XWindow2
+
 
 void SAL_CALL VCLXWindow::setOutputSize( const ::com::sun::star::awt::Size& aSize ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -2564,7 +2564,7 @@ sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (::com::sun::star::uno::Runtime
         return sal_False;
 }
 
-// ::com::sun::star::beans::XPropertySetInfo
+
 
 UnoPropertyArrayHelper *
 VCLXWindow::GetPropHelper()

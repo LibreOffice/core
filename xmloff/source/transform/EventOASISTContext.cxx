@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "EventOASISTContext.hxx"
@@ -26,7 +26,7 @@
 #include "TransformerActions.hxx"
 #include "TransformerBase.hxx"
 
-// Used to parse Scripting Framework URLs
+
 #include <com/sun/star/uri/UriReferenceFactory.hpp>
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <comphelper/processfactory.hxx>
@@ -289,9 +289,9 @@ void XMLEventOASISTransformerContext::StartElement(
                 break;
             case XML_ATACTION_EVENT_NAME:
                 {
-                    // Check if the event belongs to a form or control by
-                    // cehcking the 2nd ancestor element, f.i.:
-                    // <form:button><form:event-listeners><form:event-listener>
+                    
+                    
+                    
                     const XMLTransformerContext *pObjContext =
                         GetTransformer().GetAncestorContext( 1 );
                     sal_Bool bForm = pObjContext &&
@@ -367,7 +367,7 @@ void XMLEventOASISTransformerContext::StartElement(
                         GetQNameByKey( XML_NAMESPACE_SCRIPT,
                         ::xmloff::token::GetXMLToken( XML_LOCATION ) ) );
                         pMutableAttrList->AddAttribute( aAttrQName, aLocation );
-                        // draw bug
+                        
                         aAttrQName = GetTransformer().GetNamespaceMap().
                         GetQNameByKey( XML_NAMESPACE_SCRIPT,
                         ::xmloff::token::GetXMLToken( XML_LIBRARY ) );

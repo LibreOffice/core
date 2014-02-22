@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -61,7 +61,7 @@ void ImpSdrObjTextLink::Closed()
 {
     if (pSdrObj )
     {
-        // set pLink of the object to NULL, because we are destroying the link instance now
+        
         ImpSdrObjTextLinkUserData* pData=pSdrObj->GetLinkUserData();
         if (pData!=NULL) pData->pLink=NULL;
         pSdrObj->ReleaseTextLink();
@@ -267,7 +267,7 @@ void SdrTextObj::ImpLinkAnmeldung()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
-    if (pLinkManager!=NULL && pData!=NULL && pData->pLink==NULL) { // don't register twice
+    if (pLinkManager!=NULL && pData!=NULL && pData->pLink==NULL) { 
         pData->pLink = new ImpSdrObjTextLink(this);
         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
                                      !pData->aFilterName.isEmpty() ?
@@ -280,8 +280,8 @@ void SdrTextObj::ImpLinkAbmeldung()
 {
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     sfx2::LinkManager* pLinkManager=pModel!=NULL ? pModel->GetLinkManager() : NULL;
-    if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { // don't register twice
-        // when doing Remove, *pLink is deleted implicitly
+    if (pLinkManager!=NULL && pData!=NULL && pData->pLink!=NULL) { 
+        
         pLinkManager->Remove( pData->pLink );
         pData->pLink=NULL;
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -114,7 +114,7 @@ CommandLineArgs::Supplier::Exception::operator =(Exception const &)
 
 CommandLineArgs::Supplier::~Supplier() {}
 
-// intialize class with command line parameters from process environment
+
 CommandLineArgs::CommandLineArgs()
 {
     InitParamValues();
@@ -128,13 +128,13 @@ CommandLineArgs::CommandLineArgs( Supplier& supplier )
     ParseCommandLine_Impl( supplier );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 {
     m_cwdUrl = supplier.getCwdUrl();
 
-    // parse command line arguments
+    
     bool bOpenEvent(true);
     bool bPrintEvent(false);
     bool bViewEvent(false);
@@ -165,7 +165,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             OUString oArg;
             bool bDeprecated = !aArg.startsWith("--", &oArg)
                 && aArg.startsWith("-", &oArg) && aArg.getLength() > 2;
-                // -h, -?, -n, -o, -p are still valid
+                
 
             OUString rest;
             if ( oArg == "minimized" )
@@ -186,7 +186,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "headless" )
             {
-                // Headless means also invisibile, so set this parameter to true!
+                
                 m_headless = true;
                 m_invisible = true;
             }
@@ -349,7 +349,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( aArg == "-n" )
             {
-                // force new documents based on the following documents
+                
                 bForceNewEvent  = true;
                 bOpenEvent      = false;
                 bForceOpenEvent = false;
@@ -361,7 +361,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( aArg == "-o" )
             {
-                // force open documents regardless if they are templates or not
+                
                 bForceOpenEvent = true;
                 bOpenEvent      = false;
                 bForceNewEvent  = false;
@@ -373,7 +373,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "pt" )
             {
-                // Print to special printer
+                
                 bPrintToEvent   = true;
                 bPrinterName    = true;
                 bPrintEvent     = false;
@@ -386,7 +386,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( aArg == "-p" )
             {
-                // Print to default printer
+                
                 bPrintEvent     = true;
                 bPrintToEvent   = false;
                 bOpenEvent      = false;
@@ -398,7 +398,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "view")
             {
-                // open in viewmode
+                
                 bOpenEvent      = false;
                 bPrintEvent     = false;
                 bPrintToEvent   = false;
@@ -410,7 +410,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "show" )
             {
-                // open in viewmode
+                
                 bOpenEvent      = false;
                 bViewEvent      = false;
                 bStartEvent     = true;
@@ -422,7 +422,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( oArg == "display" )
             {
-                // set display
+                
                 bOpenEvent      = false;
                 bPrintEvent     = false;
                 bForceOpenEvent = false;
@@ -465,19 +465,19 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             }
             else if ( aArg.startsWith("-") )
             {
-                // because it's impossible to filter these options that
-                // are handled in the soffice shell script with the
-                // primitive tools that /bin/sh offers, ignore them here
+                
+                
+                
                 if (
 #if defined UNX
                     oArg != "backtrace" &&
                     oArg != "strace" &&
                     oArg != "valgrind" &&
-                    // for X Session Management, handled in
-                    // vcl/unx/generic/app/sm.cxx:
+                    
+                    
                     oArg != "session=" &&
 #endif
-                    //ignore additional legacy options that don't do anything anymore
+                    
                     oArg != "nocrashreport" &&
                     m_unknown.isEmpty())
                 {
@@ -489,19 +489,19 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             {
                 if ( bPrinterName && bPrintToEvent )
                 {
-                    // first argument after "-pt" this must be the printer name
+                    
                     m_printername = aArg;
                     bPrinterName = false;
                 }
                 else if ( bConversionParamsEvent && bConversionEvent )
                 {
-                    // first argument must be the params
+                    
                     m_conversionparams = aArg;
                     bConversionParamsEvent = false;
                 }
                 else if ( bBatchPrinterNameEvent && bBatchPrintEvent )
                 {
-                    // first argument is the printer name
+                    
                     m_printername = aArg;
                     bBatchPrinterNameEvent = false;
                 }
@@ -512,7 +512,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                 }
                 else
                 {
-                    // handle this argument as a filename
+                    
                     if ( bOpenEvent )
                     {
                         m_openlist.push_back(aArg);
@@ -550,8 +550,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     }
                     else if ( bDisplaySpec )
                     {
-                        bDisplaySpec = false; // only one display, not a lsit
-                        bOpenEvent = true;    // set back to standard
+                        bDisplaySpec = false; 
+                        bOpenEvent = true;    
                     }
                     else if ( bConversionEvent || bBatchPrintEvent )
                         m_conversionlist.push_back(aArg);
@@ -847,6 +847,6 @@ OUString CommandLineArgs::GetPidfileName() const
     return m_pidfile;
 }
 
-} // namespace desktop
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

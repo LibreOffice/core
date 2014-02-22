@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -195,8 +195,8 @@ void EMFWriter::ImplEndPlusRecord()
         sal_Int32 nActPos = m_rStm.Tell();
         sal_Int32 nSize = nActPos - mnRecordPlusPos;
         m_rStm.Seek( mnRecordPlusPos + 4 );
-        m_rStm.WriteUInt32( (sal_uInt32)( nSize ) )         // Size
-              .WriteUInt32( (sal_uInt32) ( nSize - 0xc ) ); // Data Size
+        m_rStm.WriteUInt32( (sal_uInt32)( nSize ) )         
+              .WriteUInt32( (sal_uInt32) ( nSize - 0xc ) ); 
         m_rStm.Seek( nActPos );
         mbRecordPlusOpen = false;
     }
@@ -215,30 +215,30 @@ void EMFWriter::WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSiz
     sal_Int32 nDPIX = rMtfSizePix.Width()*25;
     sal_Int32 nDivX = rMtfSizeLog.Width()/100;
     if (nDivX)
-        nDPIX /= nDivX;    // DPI X
+        nDPIX /= nDivX;    
 
     sal_Int32 nDPIY = rMtfSizePix.Height()*25;
     sal_Int32 nDivY = rMtfSizeLog.Height()/100;
     if (nDivY)
-        nDPIY /= nDivY; // DPI Y
+        nDPIY /= nDivY; 
 
     m_rStm.WriteInt16( (sal_Int16) EmfPlusHeader );
-    m_rStm.WriteInt16( (sal_Int16) 0x01 )  // Flags - Dual Mode // TODO: Check this
-          .WriteInt32( (sal_Int32) 0x1C )  // Size
-          .WriteInt32( (sal_Int32) 0x10 )  // Data Size
-          .WriteInt32( (sal_Int32) 0xdbc01002 ) // (lower 12bits) 1-> v1 2-> v1.1 // TODO: Check this
-          .WriteInt32( (sal_Int32) 0x01 ) // Video display
+    m_rStm.WriteInt16( (sal_Int16) 0x01 )  
+          .WriteInt32( (sal_Int32) 0x1C )  
+          .WriteInt32( (sal_Int32) 0x10 )  
+          .WriteInt32( (sal_Int32) 0xdbc01002 ) 
+          .WriteInt32( (sal_Int32) 0x01 ) 
           .WriteInt32( nDPIX )
           .WriteInt32( nDPIY );
     ImplEndCommentRecord();
 
-    // Write more properties
+    
     ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
     ImplPlusRecord( EmfPlusSetPixelOffsetMode, 0x0 );
-    ImplPlusRecord( EmfPlusSetAntiAliasMode, 0x09 );      // TODO: Check actual values for AntiAlias
-    ImplPlusRecord( EmfPlusSetCompositingQuality, 0x0100 ); // Default Quality
+    ImplPlusRecord( EmfPlusSetAntiAliasMode, 0x09 );      
+    ImplPlusRecord( EmfPlusSetCompositingQuality, 0x0100 ); 
     ImplPlusRecord( EmfPlusSetPageTransform, 1 );
-    ImplPlusRecord( EmfPlusSetInterpolationMode, 0x00 );  // Default
+    ImplPlusRecord( EmfPlusSetInterpolationMode, 0x00 );  
     ImplPlusRecord( EmfPlusGetDC, 0x00 );
     ImplEndCommentRecord();
 }
@@ -263,7 +263,7 @@ void EMFWriter::ImplWritePlusColor( const Color& rColor, const sal_uInt32& nTran
 
 void EMFWriter::ImplWritePlusPoint( const Point& rPoint )
 {
-    // Convert to pixels
+    
     const Point aPoint(maVDev.LogicToPixel( rPoint, maDestMapMode ));
     m_rStm.WriteUInt16( (sal_uInt16) aPoint.X() ).WriteUInt16( (sal_uInt16) aPoint.Y() );
 }
@@ -273,7 +273,7 @@ void EMFWriter::ImplWritePlusFillPolygonRecord( const Polygon& rPoly, const sal_
     ImplBeginCommentRecord( WIN_EMR_COMMENT_EMFPLUS );
     if( rPoly.GetSize() )
     {
-        ImplBeginPlusRecord( EmfPlusFillPolygon, 0xC000 ); // Sets the color as well
+        ImplBeginPlusRecord( EmfPlusFillPolygon, 0xC000 ); 
         ImplWritePlusColor( maVDev.GetFillColor(), nTrans );
         m_rStm.WriteUInt32( (sal_uInt32) rPoly.GetSize() );
         for( sal_uInt16 i = 0; i < rPoly.GetSize(); i++ )
@@ -289,7 +289,7 @@ bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConf
 
     maVDev.EnableOutput( false );
     maVDev.SetMapMode( rMtf.GetPrefMapMode() );
-    // don't work with pixel as destination map mode -> higher resolution preferrable
+    
     maDestMapMode.SetMapUnit( MAP_100TH_MM );
     mpFilterConfigItem = pFilterConfigItem;
     mpHandlesUsed = new sal_Bool[ MAXHANDLES ];
@@ -303,16 +303,16 @@ bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConf
     const Size aMtfSizePix( maVDev.LogicToPixel( rMtf.GetPrefSize(), rMtf.GetPrefMapMode() ) );
     const Size aMtfSizeLog( maVDev.LogicToLogic( rMtf.GetPrefSize(), rMtf.GetPrefMapMode(), MAP_100TH_MM ) );
 
-    // seek over header
-    // use [MS-EMF 2.2.11] HeaderExtension2 Object, otherwise resulting EMF cannot be converted with GetWinMetaFileBits()
+    
+    
     m_rStm.SeekRel( 108 );
 
-    // Write EMF+ Header
+    
     WriteEMFPlusHeader( aMtfSizePix, aMtfSizeLog );
 
-    // write initial values
+    
 
-    // set 100th mm map mode in EMF
+    
     ImplBeginRecord( WIN_EMR_SETMAPMODE );
     m_rStm.WriteInt32( (sal_Int32) MM_ANISOTROPIC );
     ImplEndRecord();
@@ -336,25 +336,25 @@ bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConf
     ImplWriteRasterOp( ROP_OVERPAINT );
 
     ImplBeginRecord( WIN_EMR_SETBKMODE );
-    m_rStm.WriteUInt32( (sal_uInt32) 1 ); // TRANSPARENT
+    m_rStm.WriteUInt32( (sal_uInt32) 1 ); 
     ImplEndRecord();
 
-    // write emf data
+    
     ImplWrite( rMtf );
 
     ImplWritePlusEOF();
 
     ImplBeginRecord( WIN_EMR_EOF );
-    m_rStm.WriteUInt32( (sal_uInt32)0 )      // nPalEntries
-          .WriteUInt32( (sal_uInt32)0x10 )     // offPalEntries
-          .WriteUInt32( (sal_uInt32)0x14 );    // nSizeLast
+    m_rStm.WriteUInt32( (sal_uInt32)0 )      
+          .WriteUInt32( (sal_uInt32)0x10 )     
+          .WriteUInt32( (sal_uInt32)0x14 );    
     ImplEndRecord();
 
 
-    // write header
+    
     const sal_uLong nEndPos = m_rStm.Tell(); m_rStm.Seek( nHeaderPos );
 
-    m_rStm.WriteUInt32( (sal_uInt32) 0x00000001 ).WriteUInt32( (sal_uInt32) 108 )   //use [MS-EMF 2.2.11] HeaderExtension2 Object
+    m_rStm.WriteUInt32( (sal_uInt32) 0x00000001 ).WriteUInt32( (sal_uInt32) 108 )   
             .WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) ( aMtfSizePix.Width() - 1 ) ).WriteInt32( (sal_Int32) ( aMtfSizePix.Height() - 1 ) )
             .WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) ( aMtfSizeLog.Width() - 1 ) ).WriteInt32( (sal_Int32) ( aMtfSizeLog.Height() - 1 ) )
             .WriteUInt32( (sal_uInt32) 0x464d4520 ).WriteUInt32( (sal_uInt32) 0x10000 ).WriteUInt32( (sal_uInt32) ( nEndPos - nHeaderPos ) )
@@ -362,7 +362,7 @@ bool EMFWriter::WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pFilterConf
             .WriteInt32( (sal_Int32) aMtfSizePix.Width() ).WriteInt32( (sal_Int32) aMtfSizePix.Height() )
             .WriteInt32( (sal_Int32) ( aMtfSizeLog.Width() / 100 ) ).WriteInt32( (sal_Int32) ( aMtfSizeLog.Height() / 100 ) )
             .WriteUInt32( (sal_uInt32) 0 ).WriteUInt32( (sal_uInt32) 0 ).WriteUInt32( (sal_uInt32) 0 )
-            .WriteInt32( (sal_Int32) (  aMtfSizeLog.Width() * 10 ) ).WriteInt32( (sal_Int32) ( aMtfSizeLog.Height() * 10 ) ); //use [MS-EMF 2.2.11] HeaderExtension2 Object
+            .WriteInt32( (sal_Int32) (  aMtfSizeLog.Width() * 10 ) ).WriteInt32( (sal_Int32) ( aMtfSizeLog.Height() * 10 ) ); 
 
     m_rStm.Seek( nEndPos );
     delete[] mpHandlesUsed;
@@ -418,7 +418,7 @@ void EMFWriter::ImplEndRecord()
         sal_Int32 nFillBytes, nActPos = m_rStm.Tell();
         m_rStm.Seek( mnRecordPos + 4 );
         nFillBytes = nActPos - mnRecordPos;
-        nFillBytes += 3;    // each record has to be dword aligned
+        nFillBytes += 3;    
         nFillBytes ^= 3;
         nFillBytes &= 3;
         m_rStm.WriteUInt32( (sal_uInt32)( ( nActPos - mnRecordPos ) + nFillBytes ) );
@@ -443,17 +443,17 @@ bool EMFWriter::ImplPrepareHandleSelect( sal_uInt32& rHandle, sal_uLong nSelectT
         else if( TEXT_SELECT == nSelectType )
             nStockObject |= 0x0000000a;
 
-        // select stock object first
+        
         ImplBeginRecord( WIN_EMR_SELECTOBJECT );
         m_rStm.WriteUInt32( nStockObject );
         ImplEndRecord();
 
-        // destroy handle of created object
+        
         ImplBeginRecord( WIN_EMR_DELETEOBJECT );
         m_rStm.WriteUInt32( rHandle );
         ImplEndRecord();
 
-        // mark handle as free
+        
         ImplReleaseHandle( rHandle );
     }
 
@@ -559,32 +559,32 @@ void EMFWriter::ImplCheckTextAttr()
         for( i = 0; i < 32; i++ )
             m_rStm.WriteUInt16( (sal_Unicode) ( ( i < aFontName.getLength() ) ? aFontName[ i ] : 0 ) );
 
-        // dummy elfFullName
+        
         for( i = 0; i < 64; i++ )
             m_rStm.WriteUInt16( (sal_Unicode) 0 );
 
-        // dummy elfStyle
+        
         for( i = 0; i < 32; i++ )
             m_rStm.WriteUInt16( (sal_Unicode) 0 );
 
-        // dummy elfVersion, elfStyleSize, elfMatch, elfReserved
+        
         m_rStm.WriteUInt32( (sal_uInt32) 0 ).WriteUInt32( (sal_uInt32) 0 ).WriteUInt32( (sal_uInt32) 0 ).WriteUInt32( (sal_uInt32) 0 ) ;
 
-        // dummy elfVendorId
+        
         m_rStm.WriteUInt32( (sal_uInt32) 0 );
 
-        // dummy elfCulture
+        
         m_rStm.WriteUInt32( (sal_uInt32) 0 );
 
-        // dummy elfPanose
+        
         m_rStm.WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 ).WriteUChar( (sal_uInt8) 0 );
 
-        // fill record to get a record size divideable by 4
+        
         m_rStm.WriteUInt16( (sal_uInt16) 0 );
 
         ImplEndRecord();
 
-        // TextAlign
+        
         sal_uInt32 nTextAlign;
 
         switch( rFont.GetAlign() )
@@ -599,7 +599,7 @@ void EMFWriter::ImplCheckTextAttr()
         m_rStm.WriteUInt32( nTextAlign );
         ImplEndRecord();
 
-        // Text color
+        
         ImplBeginRecord( WIN_EMR_SETTEXTCOLOR );
         ImplWriteColor( maVDev.GetTextColor() );
         ImplEndRecord();
@@ -836,7 +836,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         ImplWritePoint( rPt );
         m_rStm.WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) aBmpSizePixel.Width() ).WriteInt32( (sal_Int32) aBmpSizePixel.Height() );
 
-        // write offset positions and sizes later
+        
         const sal_uLong nOffPos = m_rStm.Tell();
         m_rStm.SeekRel( 16 );
 
@@ -848,7 +848,7 @@ void EMFWriter::ImplWriteBmpRecord( const Bitmap& rBmp, const Point& rPt,
         sal_uInt32  nDIBSize = aMemStm.Tell(), nHeaderSize, nCompression, nColsUsed, nPalCount, nImageSize;
         sal_uInt16  nBitCount;
 
-        // get DIB parameters
+        
         aMemStm.Seek( 0 );
         aMemStm.ReadUInt32( nHeaderSize );
         aMemStm.SeekRel( 10 );
@@ -881,7 +881,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString rText, co
         sal_Int32*  pOwnArray;
         sal_Int32*  pDX;
 
-        // get text sizes
+        
         if( pDXArray )
         {
             pOwnArray = NULL;
@@ -908,7 +908,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString rText, co
             }
         }
 
-        // write text record
+        
         ImplBeginRecord( WIN_EMR_EXTTEXTOUTW );
 
         ImplWriteRect( Rectangle( rPos, Size( nNormWidth, maVDev.GetTextHeight() ) ) );
@@ -919,15 +919,15 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const OUString rText, co
         m_rStm.WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) 0 ).WriteInt32( (sal_Int32) 0 );
         m_rStm.WriteUInt32( (sal_uInt32) ( 76 + ( nLen << 1 ) + ( (nLen & 1 ) ? 2 : 0 ) ) );
 
-        // write text
+        
         for( i = 0; i < nLen; i++ )
             m_rStm.WriteUInt16( (sal_Unicode)rText[ i ] );
 
-        // padding word
+        
         if( nLen & 1 )
             m_rStm.WriteUInt16( (sal_uInt16) 0 );
 
-        // write DX array
+        
         ImplWriteExtent( pDX[ 0 ] );
 
         if( nLen > 1 )
@@ -1042,7 +1042,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                     }
                     else
                     {
-                        // LineInfo used; handle Dash/Dot and fat lines
+                        
                         basegfx::B2DPolygon aPolygon;
                         aPolygon.append(basegfx::B2DPoint(pA->GetStartPoint().X(), pA->GetStartPoint().Y()));
                         aPolygon.append(basegfx::B2DPoint(pA->GetEndPoint().X(), pA->GetEndPoint().Y()));
@@ -1158,7 +1158,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
                         }
                         else
                         {
-                            // LineInfo used; handle Dash/Dot and fat lines
+                            
                             Impl_handleLineInfoPolyPolygons(pA->GetLineInfo(), rPoly.getB2DPolygon());
                         }
                     }
@@ -1504,7 +1504,7 @@ void EMFWriter::ImplWrite( const GDIMetaFile& rMtf )
             case( META_TEXTLINE_ACTION ):
             case( META_GRADIENTEX_ACTION ):
             {
-                // !!! >>> we don't want to support these actions
+                
             }
             break;
 

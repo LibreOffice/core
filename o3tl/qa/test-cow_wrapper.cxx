@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -96,7 +96,7 @@ public:
 
     void testCowWrapper()
     {
-        // setup
+        
         cow_wrapper_client1 aTestObj1;
         cow_wrapper_client1 aTestObj2;
         cow_wrapper_client1 aTestObj3;
@@ -131,9 +131,9 @@ public:
             aTestObj9.modify( 9 );
             CPPUNIT_ASSERT_EQUAL(aTestObj9.queryUnmodified(), 9);
         }
-        // all three temporaries are dead now
+        
 
-        // test
+        
         test( aTestObj1, aTestObj2, aTestObj3 );
         test( aTestObj4, aTestObj5, aTestObj6 );
         test( aTestObj7, aTestObj8, aTestObj9 );
@@ -161,9 +161,9 @@ public:
                                !aTestObj1.is_default() );
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(cow_wrapper_test);
     CPPUNIT_TEST(testCowWrapper);
@@ -171,7 +171,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(cow_wrapper_test);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,7 +70,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
 {
     Reference<XTextSection> xNextSection;
 
-    // first: get current XTextSection
+    
     Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
     if (xPropSet.is())
     {
@@ -78,7 +78,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         {
             xPropSet->getPropertyValue(sTextSection) >>= xNextSection;
         }
-        // else: no current section
+        
     }
 
     exportListAndSectionChange(rPrevSection, xNextSection,
@@ -96,7 +96,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
 {
     Reference<XTextSection> xNextSection;
 
-    // first: get current XTextSection
+    
     Reference<XPropertySet> xPropSet(rNextSectionContent, UNO_QUERY);
     if (xPropSet.is())
     {
@@ -107,7 +107,7 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             xNextSection.set(rPropSetHelper.getValue( nTextSectionId , xPropSet,
                 true ), uno::UNO_QUERY);
         }
-        // else: no current section
+        
     }
 
     exportListAndSectionChange(rPrevSection, xNextSection,
@@ -121,24 +121,24 @@ void XMLTextParagraphExport::exportListAndSectionChange(
     const XMLTextNumRuleInfo& rNextRule,
     sal_Bool bAutoStyles)
 {
-    // old != new? -> maybe we have to start or end a new section
+    
     if (rPrevSection != rNextSection)
     {
-        // a new section started, or an old one gets closed!
+        
 
-        // close old list
+        
         XMLTextNumRuleInfo aEmptyNumRuleInfo;
         if ( !bAutoStyles )
             exportListChange(rPrevRule, aEmptyNumRuleInfo);
 
-        // Build stacks of old and new sections
-        // Sections on top of mute sections should not be on the stack
+        
+        
         vector< Reference<XTextSection> > aOldStack;
         Reference<XTextSection> aCurrent(rPrevSection);
         while(aCurrent.is())
         {
-            // if we have a mute section, ignore all its children
-            // (all previous ones)
+            
+            
             if (pSectionExport->IsMuteSection(aCurrent))
                 aOldStack.clear();
 
@@ -151,8 +151,8 @@ void XMLTextParagraphExport::exportListAndSectionChange(
         sal_Bool bMute = sal_False;
         while(aCurrent.is())
         {
-            // if we have a mute section, ignore all its children
-            // (all previous ones)
+            
+            
             if (pSectionExport->IsMuteSection(aCurrent))
             {
                 aNewStack.clear();
@@ -163,12 +163,12 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             aCurrent.set(aCurrent->getParentSection());
         }
 
-        // compare the two stacks
+        
         vector<Reference<XTextSection> > ::reverse_iterator aOld =
             aOldStack.rbegin();
         vector<Reference<XTextSection> > ::reverse_iterator aNew =
             aNewStack.rbegin();
-        // compare bottom sections and skip equal section
+        
         while ( (aOld != aOldStack.rend()) &&
                 (aNew != aNewStack.rend()) &&
                 (*aOld) == (*aNew) )
@@ -177,8 +177,8 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             ++aNew;
         }
 
-        // close all elements of aOld ...
-        // (order: newest to oldest)
+        
+        
         if (aOld != aOldStack.rend())
         {
             vector<Reference<XTextSection> > ::iterator aOldForward(
@@ -201,8 +201,8 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             }
         }
 
-        // ...then open all of aNew
-        // (order: oldest to newest)
+        
+        
         while (aNew != aNewStack.rend())
         {
             if ( !bAutoStyles && (NULL != pRedlineExport) )
@@ -211,18 +211,18 @@ void XMLTextParagraphExport::exportListAndSectionChange(
             ++aNew;
         }
 
-        // start new list
+        
         if ( !bAutoStyles && !bMute )
             exportListChange(aEmptyNumRuleInfo, rNextRule);
     }
     else
     {
-        // list change, if sections have not changed
+        
         if ( !bAutoStyles )
             exportListChange(rPrevRule, rNextRule);
     }
 
-    // save old section (old numRule gets saved in calling method)
+    
     rPrevSection.set(rNextSection);
 }
 

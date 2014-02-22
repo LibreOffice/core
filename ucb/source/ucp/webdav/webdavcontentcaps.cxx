@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <set>
@@ -40,11 +40,11 @@
 using namespace com::sun::star;
 using namespace http_dav_ucp;
 
-//=========================================================================
+
 //
-// ContentProvider implementation.
+
 //
-//=========================================================================
+
 
 bool ContentProvider::getProperty(
         const OUString & rPropName, beans::Property & rProp, bool bStrict )
@@ -56,11 +56,11 @@ bool ContentProvider::getProperty(
         {
             m_pProps = new PropertyMap;
 
-            //////////////////////////////////////////////////////////////
-            // Fill map of known properties...
-            //////////////////////////////////////////////////////////////
+            
+            
+            
 
-            // Mandatory UCB properties.
+            
             m_pProps->insert(
                 beans::Property(
                     OUString( "ContentType" ),
@@ -92,7 +92,7 @@ bool ContentProvider::getProperty(
                     getCppuType( static_cast< const OUString * >( 0 ) ),
                     beans::PropertyAttribute::BOUND ) );
 
-            // Optional UCB properties.
+            
 
             m_pProps->insert(
                 beans::Property(
@@ -144,7 +144,7 @@ bool ContentProvider::getProperty(
                     beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ) );
 
-            // Standard DAV properties.
+            
 
             m_pProps->insert(
                 beans::Property(
@@ -237,9 +237,9 @@ bool ContentProvider::getProperty(
         }
     }
 
-    //////////////////////////////////////////////////////////////
-    // Lookup property.
-    //////////////////////////////////////////////////////////////
+    
+    
+    
 
     beans::Property aProp;
     aProp.Name = rPropName;
@@ -253,7 +253,7 @@ bool ContentProvider::getProperty(
         if ( bStrict )
             return false;
 
-        // All unknown props are treated as:
+        
         rProp = beans::Property(
                     rPropName,
                     - 1,
@@ -264,13 +264,13 @@ bool ContentProvider::getProperty(
     return true;
 }
 
-//=========================================================================
-//
-// Content implementation.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Sequence< beans::Property > Content::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
@@ -293,18 +293,18 @@ uno::Sequence< beans::Property > Content::getProperties(
     typedef std::set< OUString > StringSet;
     StringSet aPropSet;
 
-    // No server access for just created (not yet committed) objects.
-    // Only a minimal set of properties supported at this stage.
+    
+    
     if ( !bTransient )
     {
-        // Obtain all properties supported for this resource from server.
+        
         try
         {
             std::vector< DAVResourceInfo > props;
             xResAccess->PROPFIND( DAVZERO, props, xEnv );
 
-            // Note: vector always contains exactly one resource info, because
-            //       we used a depth of DAVZERO for PROPFIND.
+            
+            
             aPropSet.insert( (*props.begin()).properties.begin(),
                              (*props.begin()).properties.end() );
         }
@@ -313,11 +313,11 @@ uno::Sequence< beans::Property > Content::getProperties(
         }
     }
 
-    // Add DAV properties, map DAV properties to UCB properties.
-    sal_Bool bHasCreationDate     = sal_False; // creationdate     <-> DateCreated
-    sal_Bool bHasGetLastModified  = sal_False; // getlastmodified  <-> DateModified
-    sal_Bool bHasGetContentType   = sal_False; // getcontenttype   <-> MediaType
-    sal_Bool bHasGetContentLength = sal_False; // getcontentlength <-> Size
+    
+    sal_Bool bHasCreationDate     = sal_False; 
+    sal_Bool bHasGetLastModified  = sal_False; 
+    sal_Bool bHasGetContentType   = sal_False; 
+    sal_Bool bHasGetContentLength = sal_False; 
 
     sal_Bool bHasContentType      = sal_False;
     sal_Bool bHasIsDocument       = sal_False;
@@ -399,7 +399,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         }
     }
 
-    // Add mandatory properties.
+    
     if ( !bHasContentType )
         aPropSet.insert(
             OUString( "ContentType" ) );
@@ -414,16 +414,16 @@ uno::Sequence< beans::Property > Content::getProperties(
 
     if ( !bHasTitle )
     {
-        // Always present since it can be calculated from content's URI.
+        
         aPropSet.insert(
             OUString( "Title" ) );
     }
 
-    // Add optional properties.
+    
 
     if ( !bHasBaseURI )
     {
-        // Always present since it can be calculated from content's URI.
+        
         aPropSet.insert(
             OUString( "BaseURI" ) );
     }
@@ -449,7 +449,7 @@ uno::Sequence< beans::Property > Content::getProperties(
             OUString(
                 "CreatableContentsInfo" ) );
 
-    // Add cached properties, if present and still missing.
+    
     if ( xCachedProps.get() )
     {
         const std::set< OUString >::const_iterator set_end
@@ -470,7 +470,7 @@ uno::Sequence< beans::Property > Content::getProperties(
         }
     }
 
-    // std::set -> uno::Sequence
+    
     sal_Int32 nCount = aPropSet.size();
     uno::Sequence< beans::Property > aProperties( nCount );
 
@@ -486,8 +486,8 @@ uno::Sequence< beans::Property > Content::getProperties(
     return aProperties;
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< ucb::CommandInfo > Content::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {
@@ -495,9 +495,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     uno::Sequence< ucb::CommandInfo > aCmdInfo( 10 );
 
-    ///////////////////////////////////////////////////////////////
-    // Mandatory commands
-    ///////////////////////////////////////////////////////////////
+    
+    
+    
 
     aCmdInfo[ 0 ] =
             ucb::CommandInfo(
@@ -522,9 +522,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 getCppuType( static_cast<
                     uno::Sequence< beans::PropertyValue > * >( 0 ) ) );
 
-    ///////////////////////////////////////////////////////////////
-    // Optional standard commands
-    ///////////////////////////////////////////////////////////////
+    
+    
+    
 
     aCmdInfo[ 4 ] =
             ucb::CommandInfo(
@@ -544,9 +544,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
                 getCppuType( static_cast<
                     ucb::OpenCommandArgument2 * >( 0 ) ) );
 
-    ///////////////////////////////////////////////////////////////
-    // New commands
-    ///////////////////////////////////////////////////////////////
+    
+    
+    
 
     aCmdInfo[ 7 ] =
             ucb::CommandInfo(
@@ -589,9 +589,9 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     if ( bFolder )
     {
-        ///////////////////////////////////////////////////////////////
-        // Optional standard commands
-        ///////////////////////////////////////////////////////////////
+        
+        
+        
 
         aCmdInfo[ nPos ] =
             ucb::CommandInfo(
@@ -609,7 +609,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
     }
     else
     {
-        // no document-only commands at the moment.
+        
     }
 
     if ( bSupportsLocking )

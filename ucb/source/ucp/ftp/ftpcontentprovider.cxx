@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,13 +41,13 @@ using namespace com::sun::star::beans;
 
 
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// ContentProvider Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 FTPContentProvider::FTPContentProvider(
     const Reference< XComponentContext >& rxContext)
@@ -57,63 +57,63 @@ FTPContentProvider::FTPContentProvider(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 FTPContentProvider::~FTPContentProvider()
 {
     delete m_ftpLoaderThread;
     delete m_pProxyDecider;
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_3(FTPContentProvider,
                   XTypeProvider,
                   XServiceInfo,
                   XContentProvider)
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_3(FTPContentProvider,
                      XTypeProvider,
                      XServiceInfo,
                      XContentProvider)
 
-//=========================================================================
+
 //
-// XServiceInfo methods.
+
 //
-//=========================================================================
+
 
 XSERVICEINFO_IMPL_1_CTX(
     FTPContentProvider,
     OUString("com.sun.star.comp.FTPContentProvider"),
     OUString(FTP_CONTENT_PROVIDER_SERVICE_NAME));
 
-//=========================================================================
+
 //
-// Service factory implementation.
+
 //
-//=========================================================================
+
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL(FTPContentProvider);
 
 
-//=========================================================================
-//
-// XContentProvider methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 Reference<XContent> SAL_CALL
 FTPContentProvider::queryContent(
     const Reference< XContentIdentifier >& xCanonicId
@@ -123,14 +123,14 @@ FTPContentProvider::queryContent(
         RuntimeException
     )
 {
-    // Check, if a content with given id already exists...
+    
     Reference<XContent> xContent = queryExistingContent(xCanonicId).get();
     if(xContent.is())
         return xContent;
 
-    // A new content has to be returned:
+    
     {
-        // Initialize
+        
         osl::MutexGuard aGuard( m_aMutex );
         if(!m_ftpLoaderThread || !m_pProxyDecider)
         {
@@ -169,7 +169,7 @@ FTPContentProvider::queryContent(
         throw IllegalIdentifierException();
     }
 
-    // may throw IllegalIdentifierException
+    
     return xContent;
 }
 
@@ -184,7 +184,7 @@ void FTPContentProvider::init() {
 
 
 CURL* FTPContentProvider::handle() {
-    // Cannot be zero if called from here;
+    
     return m_ftpLoaderThread->handle();
 }
 
@@ -249,7 +249,7 @@ Reference<XContentProvider>
 FTPContentProvider::getHttpProvider()
     throw(RuntimeException)
 {
-    // used for access to ftp-proxy
+    
     return UniversalContentBroker::create( m_xContext )->queryContentProvider("http:");
 }
 

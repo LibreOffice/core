@@ -41,7 +41,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL basctl_component_getFactory( const sal_Char*
 {
     (void)pRegistryKey;
 
-    // Set default return value for this operation - if it failed.
+    
     void* pReturn = NULL ;
 
     if  (
@@ -49,7 +49,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL basctl_component_getFactory( const sal_Char*
             ( pServiceManager       !=  NULL )
         )
     {
-        // Define variables which are used in following macros.
+        
         Reference< XSingleServiceFactory >   xFactory                                                                                                ;
         Reference< XMultiServiceFactory >    xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
 
@@ -61,7 +61,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL basctl_component_getFactory( const sal_Char*
             SIDEModel::getSupportedServiceNames_Static() );
         }
 
-        // Factory is valid - service was found.
+        
         if ( xFactory.is() )
         {
             xFactory->acquire();
@@ -69,12 +69,12 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL basctl_component_getFactory( const sal_Char*
         }
     }
 
-    // Return with result of this operation.
+    
     return pReturn ;
 }
 
-} // extern "C"
+} 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

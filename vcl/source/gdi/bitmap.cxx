@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -102,7 +102,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                     aPal[ 14 ] = Color( COL_YELLOW );
                     aPal[ 15 ] = Color( COL_WHITE );
 
-                    // Create dither palette
+                    
                     if( 8 == nBitCount )
                     {
                         sal_uInt16 nActCol = 16;
@@ -112,7 +112,7 @@ Bitmap::Bitmap( const Size& rSizePixel, sal_uInt16 nBitCount, const BitmapPalett
                                 for( sal_uInt16 nR = 0; nR < 256; nR += 51 )
                                     aPal[ nActCol++ ] = BitmapColor( (sal_uInt8) nR, (sal_uInt8) nG, (sal_uInt8) nB );
 
-                        // Set standard Office colors
+                        
                         aPal[ nActCol++ ] = BitmapColor( 0, 184, 255 );
                     }
                 }
@@ -140,7 +140,7 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
     static BitmapPalette aGreyPalette16;
     static BitmapPalette aGreyPalette256;
 
-    // Create greyscale palette with 2, 4, 16 or 256 entries
+    
     if( 2 == nEntries || 4 == nEntries || 16 == nEntries || 256 == nEntries )
     {
         if( 2 == nEntries )
@@ -204,9 +204,9 @@ const BitmapPalette& Bitmap::GetGreyPalette( int nEntries )
 bool BitmapPalette::IsGreyPalette() const
 {
     const int nEntryCount = GetEntryCount();
-    if( !nEntryCount ) // NOTE: an empty palette means 1:1 mapping
+    if( !nEntryCount ) 
         return true;
-    // See above: only certain entry values will result in a valid call to GetGreyPalette
+    
     if( nEntryCount == 2 || nEntryCount == 4 || nEntryCount == 16 || nEntryCount == 256 )
     {
         const BitmapPalette& rGreyPalette = Bitmap::GetGreyPalette( nEntryCount );
@@ -215,7 +215,7 @@ bool BitmapPalette::IsGreyPalette() const
     }
 
     bool bRet = false;
-    // TODO: is it worth to compare the entries for the general case?
+    
     if (nEntryCount == 2)
     {
        const BitmapColor& rCol0(mpBitmapColor[0]);
@@ -623,7 +623,7 @@ bool Bitmap::Mirror( sal_uLong nMirrorFlags )
                 }
             }
 
-            // ggf. noch mittlere Zeile horizontal spiegeln
+            
             if( nHeight & 1 )
             {
                 for( long nX = 0L, nOtherX = nWidth1, nWidth_2 = nWidth >> 1; nX < nWidth_2; nX++, nOtherX-- )
@@ -927,8 +927,8 @@ bool Bitmap::CopyPixel( const Rectangle& rRectDst,
                             const sal_uInt16    nCount = pReadAcc->GetPaletteEntryCount();
                             sal_uInt8*          pMap = new sal_uInt8[ nCount ];
 
-                            // Create index map for the color table, as the bitmap should be copied
-                            // retaining it's color information relatively well
+                            
+                            
                             for( sal_uInt16 i = 0; i < nCount; i++ )
                                 pMap[ i ] = (sal_uInt8) pWriteAcc->GetBestPaletteIndex( pReadAcc->GetPaletteColor( i ) );
 
@@ -1099,14 +1099,14 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                 if( pReadAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_MSN_PAL ||
                     pReadAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_LSN_PAL )
                 {
-                    // optimized for 4Bit-MSN/LSN source palette
+                    
                     const sal_uInt8 cTest = aTest.GetIndex();
                     const long nShiftInit = ( ( pReadAcc->GetScanlineFormat() == BMP_FORMAT_4BIT_MSN_PAL ) ? 4 : 0 );
 
                     if( pWriteAcc->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
                         aWhite.GetIndex() == 1 )
                     {
-                        // optimized for 1Bit-MSB destination palette
+                        
                         for( nY = 0L; nY < nHeight; nY++ )
                         {
                             Scanline pSrc = pReadAcc->GetScanline( nY );
@@ -1139,13 +1139,13 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                 }
                 else if( pReadAcc->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
                 {
-                    // optimized for 8Bit source palette
+                    
                     const sal_uInt8 cTest = aTest.GetIndex();
 
                     if( pWriteAcc->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
                         aWhite.GetIndex() == 1 )
                     {
-                        // optimized for 1Bit-MSB destination palette
+                        
                         for( nY = 0L; nY < nHeight; nY++ )
                         {
                             Scanline pSrc = pReadAcc->GetScanline( nY );
@@ -1176,7 +1176,7 @@ Bitmap Bitmap::CreateMask( const Color& rTransColor, sal_uLong nTol ) const
                 }
                 else
                 {
-                    // not optimized
+                    
                     for( nY = 0L; nY < nHeight; nY++ )
                     {
                         for( nX = 0L; nX < nWidth; nX++ )
@@ -1275,22 +1275,22 @@ Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
 
     if( pReadAcc )
     {
-        //Rectangle         aSubRect;
+        
         const long          nLeft = aRect.Left();
         const long          nTop = aRect.Top();
         const long          nRight = aRect.Right();
         const long          nBottom = aRect.Bottom();
         const BitmapColor   aMatch( pReadAcc->GetBestMatchingColor( rColor ) );
 
-        //RectangleVector aRectangles;
-        //aRegion.ImplBeginAddRect();
+        
+        
         std::vector< long > aLine;
         long nYStart(nTop);
         long nY(nTop);
 
         for( ; nY <= nBottom; nY++ )
         {
-            //aSubRect.Top() = aSubRect.Bottom() = nY;
+            
             std::vector< long > aNewLine;
             long nX(nLeft);
 
@@ -1302,28 +1302,28 @@ Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
                 if( nX <= nRight )
                 {
                     aNewLine.push_back(nX);
-                    //aSubRect.Left() = nX;
+                    
 
                     while( ( nX <= nRight ) && ( aMatch == pReadAcc->GetPixel( nY, nX ) ) )
                         nX++;
 
-                    //aSubRect.Right() = nX - 1L;
+                    
                     aNewLine.push_back(nX - 1);
 
-                    //aRegion.ImplAddRect( aSubRect );
-                    //aRectangles.push_back(aSubRect);
-                    //aRegion.Union(aSubRect);
+                    
+                    
+                    
                 }
             }
 
             if(aNewLine != aLine)
             {
-                // need to write aLine, it's different from the next line
+                
                 if(aLine.size())
                 {
                     Rectangle aSubRect;
 
-                    // enter y values and proceed ystart
+                    
                     aSubRect.Top() = nYStart;
                     aSubRect.Bottom() = nY ? nY - 1 : 0;
 
@@ -1335,18 +1335,18 @@ Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
                     }
                 }
 
-                // copy line as new line
+                
                 aLine = aNewLine;
                 nYStart = nY;
             }
         }
 
-        // write last line if used
+        
         if(aLine.size())
         {
             Rectangle aSubRect;
 
-            // enter y values
+            
             aSubRect.Top() = nYStart;
             aSubRect.Bottom() = nY ? nY - 1 : 0;
 
@@ -1358,8 +1358,8 @@ Region Bitmap::CreateRegion( const Color& rColor, const Rectangle& rRect ) const
             }
         }
 
-        //aRegion.ImplEndAddRect();
-        //aRegion.SetRegionRectangles(aRectangles);
+        
+        
 
         ( (Bitmap*) this )->ReleaseAccess( pReadAcc );
     }
@@ -1387,14 +1387,14 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
             const sal_uInt16 nActColors = pAcc->GetPaletteEntryCount();
             const sal_uInt16 nMaxColors = 1 << pAcc->GetBitCount();
 
-            // default to the nearest color
+            
             aReplace = pAcc->GetBestMatchingColor( rReplaceColor );
 
-            // for paletted images without a matching palette entry
-            // look for an unused palette entry (NOTE: expensive!)
+            
+            
             if( pAcc->GetPaletteColor( aReplace.GetIndex() ) != BitmapColor( rReplaceColor ) )
             {
-                // if the palette has empty entries use the last one
+                
                 if( nActColors < nMaxColors )
                 {
                     pAcc->SetPaletteEntryCount( nActColors + 1 );
@@ -1405,7 +1405,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
                 {
                     bool* pFlags = new bool[ nMaxColors ];
 
-                    // Set all entries to false
+                    
                     std::fill( pFlags, pFlags+nMaxColors, false );
 
                     for( long nY = 0L; nY < nHeight; nY++ )
@@ -1414,7 +1414,7 @@ bool Bitmap::Replace( const Bitmap& rMask, const Color& rReplaceColor )
 
                     for( sal_uInt16 i = 0UL; i < nMaxColors; i++ )
                     {
-                        // Hurray, we do have an unsused entry
+                        
                         if( !pFlags[ i ] )
                         {
                             pAcc->SetPaletteColor( (sal_uInt16) i, rReplaceColor );
@@ -1489,8 +1489,8 @@ bool Bitmap::Replace( const AlphaMask& rAlpha, const Color& rMergeColor )
 
 bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal_uLong nTol )
 {
-    // Bitmaps with 1 bit color depth can cause problems
-    // if they have other entries than black/white in their palette
+    
+    
     if( 1 == GetBitCount() )
         Convert( BMP_CONVERSION_4BIT_COLORS );
 
@@ -1551,8 +1551,8 @@ bool Bitmap::Replace( const Color& rSearchColor, const Color& rReplaceColor, sal
 bool Bitmap::Replace( const Color* pSearchColors, const Color* pReplaceColors,
                       sal_uLong nColorCount, sal_uLong* _pTols )
 {
-    // Bitmaps with 1 bit color depth can cause problems
-    // if they have other entries than black/white in their palette
+    
+    
     if( 1 == GetBitCount() )
         Convert( BMP_CONVERSION_4BIT_COLORS );
 
@@ -1809,12 +1809,12 @@ bool Bitmap::CombineSimple( const Bitmap& rMask, BmpCombine eCombine )
     return bRet;
 }
 
-// TODO: Have a look at OutputDevice::ImplDrawAlpha() for some
-// optimizations. Might even consolidate the code here and there.
+
+
 bool Bitmap::Blend( const AlphaMask& rAlpha, const Color& rBackgroundColor )
 {
-    // Convert to a truecolor bitmap, if we're a paletted one. There's
-    // room for tradeoff decision here, maybe later for an overload (or a flag)
+    
+    
     if( GetBitCount() <= 8 )
         Convert( BMP_CONVERSION_24BIT );
 

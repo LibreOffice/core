@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -82,8 +82,8 @@ void bindXFormsValueBinding(
         }
         catch( const Exception& )
         {
-            // ignore problems during binding
-            // TODO: call XML error handling
+            
+            
         }
     }
 }
@@ -107,8 +107,8 @@ void bindXFormsListBinding(
         }
         catch( const Exception& )
         {
-            // ignore problems during binding
-            // TODO: call XML error handling
+            
+            
         }
     }
 }
@@ -130,8 +130,8 @@ void bindXFormsSubmission(
         }
         catch( const Exception& )
         {
-            // ignore problems during binding
-            // TODO: call XML error handling
+            
+            
         }
     }
 }
@@ -158,18 +158,18 @@ void applyXFormsSettings( const Reference< XNameAccess >& _rXForms, const Sequen
                 ++pModelName
             )
         {
-            // the settings for this particular model
+            
             Sequence< PropertyValue > aModelSettings;
             OSL_VERIFY( xModelSettings->getByName( *pModelName ) >>= aModelSettings );
 
-            // the model itself
+            
             if ( !_rXForms->hasByName( *pModelName ) )
             {
                 OSL_FAIL( "applyXFormsSettings: have settings for a non-existent XForms model!" );
                 continue;
             }
 
-            // propagate the settings, being tolerant by omitting properties which are not supported
+            
             Reference< XPropertySet > xModelProps( _rXForms->getByName( *pModelName ), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xModelPSI( xModelProps->getPropertySetInfo(), UNO_SET_THROW );
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef DBG_UTIL
@@ -812,13 +812,13 @@ SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes)
     return dbg_out(lcl_dbg_out(rNodes));
 }
 
-//FIXME: this method seems to do nothing at all
+
 static OUString lcl_dbg_out(const SwRewriter & rRewriter)
 {
     (void) rRewriter;
     OUString aResult;
 
-    //aResult = rRewriter.ToString();
+    
 
     return aResult;
 }
@@ -1002,6 +1002,6 @@ SW_DLLPUBLIC const char * dbg_out(const SwNodeRange & rRange)
     return dbg_out(lcl_dbg_out(rRange));
 }
 
-#endif // DEBUG
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

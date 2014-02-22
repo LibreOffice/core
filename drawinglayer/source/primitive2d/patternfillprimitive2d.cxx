@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive2d/patternfillprimitive2d.hxx>
@@ -26,11 +26,11 @@
 #include <drawinglayer/texture/texture.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -48,13 +48,13 @@ namespace drawinglayer
 
                     if(!aMaskRange.isEmpty() && aMaskRange.getWidth() > 0.0 && aMaskRange.getHeight() > 0.0)
                     {
-                        // create tiling matrices
+                        
                         ::std::vector< basegfx::B2DHomMatrix > aMatrices;
                         texture::GeoTexSvxTiled aTiling(getReferenceRange());
 
                         aTiling.appendTransformations(aMatrices);
 
-                        // check if content needs to be clipped
+                        
                         const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
                         const basegfx::B2DRange aContentRange(getB2DRangeFromPrimitive2DSequence(getChildren(), rViewInformation));
                         Primitive2DSequence aContent(getChildren());
@@ -69,10 +69,10 @@ namespace drawinglayer
                             aContent = Primitive2DSequence(&xRef, 1);
                         }
 
-                        // resize result
+                        
                         aRetval.realloc(aMatrices.size());
 
-                        // create one primitive for each matrix
+                        
                         for(sal_uInt32 a(0); a < aMatrices.size(); a++)
                         {
                             aRetval[a] = new TransformPrimitive2D(
@@ -80,7 +80,7 @@ namespace drawinglayer
                                 aContent);
                         }
 
-                        // transform result which is in unit coordinates to mask's object coordiantes
+                        
                         {
                             const basegfx::B2DHomMatrix aMaskTransform(
                                 basegfx::tools::createScaleTranslateB2DHomMatrix(
@@ -95,7 +95,7 @@ namespace drawinglayer
                             aRetval = Primitive2DSequence(&xRef, 1);
                         }
 
-                        // embed result in mask
+                        
                         {
                             const Primitive2DReference xRef(
                                 new MaskPrimitive2D(
@@ -142,10 +142,10 @@ namespace drawinglayer
             return getMask().getB2DRange();
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(PatternFillPrimitive2D, PRIMITIVE2D_ID_PATTERNFILLPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

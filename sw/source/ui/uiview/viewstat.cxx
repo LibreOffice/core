@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,7 +91,7 @@ void SwView::GetState(SfxItemSet &rSet)
 
             case FN_INSERT_CAPTION:
                 {
-                    // There are captions for graphics, OLE objects, frames and tables
+                    
                     if( !bGetFrmType )
                         eFrmType = m_pWrtShell->GetFrmType(0,sal_True), bGetFrmType = sal_True;
                     if (! ( ((eFrmType & FRMTYPE_FLY_ANY) && m_nSelectionType != nsSelectionType::SEL_DRW_TXT)||
@@ -164,7 +164,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_UNDO:
             {
-                // which must not be present, so let them create:
+                
                 if( !m_pShell )
                     SelectShell();
 
@@ -286,8 +286,8 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_REDLINE_ACCEPT_DIRECT:
             case FN_REDLINE_REJECT_DIRECT:
             {
-                // If the selection/cursor start position isn't on a redline, disable
-                // accepting/rejecting changes.
+                
+                
                 SwDoc *pDoc = m_pWrtShell->GetDoc();
                 SwPaM *pCursor = m_pWrtShell->GetCrsr();
                 if (0 == pDoc->GetRedline(*pCursor->Start(), 0))
@@ -300,9 +300,9 @@ void SwView::GetState(SfxItemSet &rSet)
             case FN_REDLINE_NEXT_CHANGE:
             case FN_REDLINE_PREV_CHANGE:
             {
-                // Enable change navigation if we have any redlines. Ideally we should disable
-                // "Next Change" if we're at or past the last change, and similarly for
-                // "Previous Change"
+                
+                
+                
                 if (0 == m_pWrtShell->GetRedlineCount())
                     rSet.DisableItem(nWhich);
             }
@@ -311,14 +311,14 @@ void SwView::GetState(SfxItemSet &rSet)
             case SID_THESAURUS:
             {
                 SwWrtShell  &rSh = GetWrtShell();
-                if (2 <= rSh.GetCrsrCnt())  // multi selection?
+                if (2 <= rSh.GetCrsrCnt())  
                     rSet.DisableItem(nWhich);
                 else
                 {
                     LanguageType nLang = rSh.GetCurLang();
 
-                    // disable "Thesaurus" (menu entry and key shortcut) if the
-                    // language is not supported (by default it is enabled)
+                    
+                    
                     uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                     if (!xThes.is() || nLang == LANGUAGE_NONE ||
                         !xThes->hasLocale( LanguageTag::convertToLocale( nLang ) ))
@@ -413,7 +413,7 @@ void SwView::GetState(SfxItemSet &rSet)
                 }
                 else if(m_nSelectionType & (nsSelectionType::SEL_DRW))
                 {
-                    //the draw shell cannot provide a status per item - only one for SID_OBJECT_ALIGN
+                    
                     if(nWhich != SID_ALIGN_ANY_JUSTIFIED)
                     {
                         const SfxPoolItem* pItem = 0;
@@ -434,7 +434,7 @@ void SwView::GetState(SfxItemSet &rSet)
                         case SID_ALIGN_ANY_BOTTOM   :   nAlias = SID_OBJECT_ALIGN_DOWN    ; break;
                     }
                 }
-                //these slots are either re-mapped to text or object alignment
+                
                 const SfxPoolItem* pState = 0;
                 if(nAlias)
                     GetViewFrame()->GetDispatcher()->QueryState( nAlias, pState );

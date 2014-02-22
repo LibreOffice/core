@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vcl/svapp.hxx"
 #include "vcl/settings.hxx"
@@ -111,7 +111,7 @@ namespace {
         LineDescriptorList maLeft;
         LineDescriptorList maRight;
     };
-} // end of anonymous namespace
+} 
 
 class PresenterHelpView::TextContainer : public vector<boost::shared_ptr<Block> >
 {
@@ -137,7 +137,7 @@ PresenterHelpView::PresenterHelpView (
 {
     try
     {
-        // Get the content window via the pane anchor.
+        
         Reference<XControllerManager> xCM (rxController, UNO_QUERY_THROW);
         Reference<XConfigurationController> xCC (
             xCM->getConfigurationController(), UNO_QUERY_THROW);
@@ -162,7 +162,7 @@ PresenterHelpView::PresenterHelpView (
             }
         }
 
-        // Create the close button.
+        
         mpCloseButton = PresenterButton::Create(
             mxComponentContext,
             mpPresenterController,
@@ -206,7 +206,7 @@ void SAL_CALL PresenterHelpView::disposing (void)
     }
 }
 
-//----- lang::XEventListener --------------------------------------------------
+
 
 void SAL_CALL PresenterHelpView::disposing (const lang::EventObject& rEventObject)
     throw (RuntimeException)
@@ -222,7 +222,7 @@ void SAL_CALL PresenterHelpView::disposing (const lang::EventObject& rEventObjec
     }
 }
 
-//----- XWindowListener -------------------------------------------------------
+
 
 void SAL_CALL PresenterHelpView::windowResized (const awt::WindowEvent& rEvent)
     throw (uno::RuntimeException)
@@ -254,7 +254,7 @@ void SAL_CALL PresenterHelpView::windowHidden (const lang::EventObject& rEvent)
     ThrowIfDisposed();
 }
 
-//----- XPaintListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterHelpView::windowPaint (const css::awt::PaintEvent& rEvent)
     throw (RuntimeException)
@@ -268,7 +268,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
     if ( ! mxCanvas.is())
         return;
 
-    // Clear background.
+    
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     mpPresenterController->GetCanvasHelper()->Paint(
         mpPresenterController->GetViewBackground(mxViewId->getResourceURL()),
@@ -277,7 +277,7 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
         awt::Rectangle(0,0,aWindowBox.Width,aWindowBox.Height),
         awt::Rectangle());
 
-    // Paint vertical divider.
+    
 
     rendering::ViewState aViewState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
@@ -296,14 +296,14 @@ void PresenterHelpView::Paint (const awt::Rectangle& rUpdateBox)
         aViewState,
         aRenderState);
 
-    // Paint the horizontal separator.
+    
     mxCanvas->drawLine(
         geometry::RealPoint2D(0, mnSeparatorY),
         geometry::RealPoint2D(aWindowBox.Width, mnSeparatorY),
         aViewState,
         aRenderState);
 
-    // Paint text.
+    
     double nY (gnVerticalBorder);
     TextContainer::const_iterator iBlock (mpTextContainer->begin());
     TextContainer::const_iterator iBlockEnd (mpTextContainer->end());
@@ -390,9 +390,9 @@ void PresenterHelpView::CheckFontSize (void)
 
     sal_Int32 nBestSize (6);
 
-    // Scaling down and then reformatting can cause the text to be too large
-    // still.  So do this again and again until the text size is
-    // small enough.  Restrict the number of loops.
+    
+    
+    
     for (int nLoopCount=0; nLoopCount<5; ++nLoopCount)
     {
         double nY (0.0);
@@ -406,13 +406,13 @@ void PresenterHelpView::CheckFontSize (void)
         const double nHeightDifference (nY - (mnSeparatorY-gnVerticalBorder));
         if (nHeightDifference <= 0 && nHeightDifference > -50)
         {
-            // We have found a good font size that is large and leaves not
-            // too much space below the help text.
+            
+            
             return;
         }
 
-        // Use a simple linear transformation to calculate initial guess of
-        // a size that lets all help text be shown inside the window.
+        
+        
         const double nScale (double(mnSeparatorY-gnVerticalBorder) / nY);
         if (nScale > 1.0 && nScale < 1.05)
             break;
@@ -424,7 +424,7 @@ void PresenterHelpView::CheckFontSize (void)
         mpFont->mxFont = NULL;
         mpFont->PrepareFont(mxCanvas);
 
-        // Reformat blocks.
+        
         for (iBlock=mpTextContainer->begin(); iBlock!=iBlockEnd; ++iBlock)
             (*iBlock)->Update(mpFont->mxFont, mnMaximalWidth);
     }
@@ -435,7 +435,7 @@ void PresenterHelpView::CheckFontSize (void)
         mpFont->mxFont = NULL;
         mpFont->PrepareFont(mxCanvas);
 
-        // Reformat blocks.
+        
         for (TextContainer::iterator
                  iBlock (mpTextContainer->begin()),
                  iEnd (mpTextContainer->end());
@@ -447,7 +447,7 @@ void PresenterHelpView::CheckFontSize (void)
     }
 }
 
-//----- XResourceId -----------------------------------------------------------
+
 
 Reference<XResourceId> SAL_CALL PresenterHelpView::getResourceId (void)
     throw (RuntimeException)
@@ -462,7 +462,7 @@ sal_Bool SAL_CALL PresenterHelpView::isAnchorOnly (void)
     return false;
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterHelpView::ProvideCanvas (void)
 {
@@ -487,7 +487,7 @@ void PresenterHelpView::Resize (void)
         const awt::Rectangle aWindowBox (mxWindow->getPosSize());
         mnMaximalWidth = (mxWindow->getPosSize().Width - 4*gnHorizontalGap) / 2;
 
-        // Place vertical separator.
+        
         mnSeparatorY = aWindowBox.Height
             - mpCloseButton->GetSize().Height - gnVerticalButtonPadding;
 
@@ -510,7 +510,7 @@ void PresenterHelpView::ThrowIfDisposed (void)
     }
 }
 
-//===== LineDescritor =========================================================
+
 
 namespace {
 
@@ -548,9 +548,9 @@ void LineDescriptor::CalculateSize (
     mnVerticalOffset = aTextBBox.Y2;
 }
 
-} // end of anonymous namespace
+} 
 
-//===== LineDescriptorList ====================================================
+
 
 namespace {
 
@@ -580,7 +580,7 @@ double LineDescriptorList::Paint(
     for ( ; iLine!=iEnd; ++iLine)
     {
         double nX;
-        /// check whether RTL interface or not
+        
         if(!Application::GetSettings().GetLayoutRTL())
         {
             nX = rBBox.X1;
@@ -683,7 +683,7 @@ void LineDescriptorList::FormatText (
     {
         if (aLineDescriptor.IsEmpty())
         {
-            // Avoid empty lines.
+            
             if (PresenterCanvasHelper::GetTextSize(
                 rxFont, *iPart).Width > nMaximalWidth)
             {
@@ -747,9 +747,9 @@ void LineDescriptorList::FormatText (
     }
 }
 
-} // end of anonymous namespace
+} 
 
-//===== Block =================================================================
+
 
 namespace {
 
@@ -771,8 +771,8 @@ void Block::Update (
     maRight.Update(rxFont, nMaximalWidth);
 }
 
-} // end of anonymous namespace
+} 
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,37 +25,37 @@
 #include "rtlproto.hxx"
 #include "sbintern.hxx"
 #include <boost/unordered_map.hpp>
-// The nArgs-field of a table entry is encrypted as follows:
-// At the moment it is assumed that properties don't need any
-// parameters!
 
-// previously _ARGSMASK was 0x007F ( e.g. up to 127 args ) however 63 should be
-// enough, if not we need to increase the size of nArgs member in the Methods
-// struct below.
-// note: the limitation of 63 args is only for RTL functions defined here and
-// does NOT impose a limit on User defined procedures ). This changes is to
-// allow us space for a flag to blacklist some functions in vba mode
 
-#define _ARGSMASK   0x003F  // 63 Arguments
-#define _COMPTMASK  0x00C0  // COMPATABILITY mask
-#define _COMPATONLY 0x0080  // procedure is visible in vba mode only
-#define _NORMONLY   0x0040  // procedure is visible in normal mode only
 
-#define _RWMASK     0x0F00  // mask for R/W-bits
-#define _TYPEMASK   0xF000  // mask for the entry's type
 
-#define _OPT        0x0400  // parameter is optional
-#define _CONST      0x0800  // property is const
+
+
+
+
+
+
+
+#define _ARGSMASK   0x003F  
+#define _COMPTMASK  0x00C0  
+#define _COMPATONLY 0x0080  
+#define _NORMONLY   0x0040  
+
+#define _RWMASK     0x0F00  
+#define _TYPEMASK   0xF000  
+
+#define _OPT        0x0400  
+#define _CONST      0x0800  
 #define _METHOD     0x3000
 #define _PROPERTY   0x4000
 #define _OBJECT     0x8000
-                            // combination of bits above:
+                            
 #define _FUNCTION   0x1100
-#define _LFUNCTION  0x1300  // mask for function which also works as Lvalue
+#define _LFUNCTION  0x1300  
 #define _SUB        0x2100
-#define _ROPROP     0x4100  // mask Read Only-Property
-#define _RWPROP     0x4300  // mask Read/Write-Property
-#define _CPROP      0x4900  // mask for constant
+#define _ROPROP     0x4100  
+#define _RWPROP     0x4300  
+#define _CPROP      0x4900  
 
 struct Methods {
     const char* pName;
@@ -697,7 +697,7 @@ static Methods aMethods[] = {
 { "Wait",           SbxNULL,      1 | _FUNCTION, RTLNAME(Wait),0            },
   { "Milliseconds", SbxLONG, 0,NULL,0 },
 { "FuncCaller",          SbxVARIANT,      _FUNCTION, RTLNAME(FuncCaller),0      },
-//#i64882#
+
 { "WaitUntil",          SbxNULL,      1 | _FUNCTION, RTLNAME(WaitUntil),0      },
   { "Date", SbxDOUBLE, 0,NULL,0 },
 { "Weekday",        SbxINTEGER,   2 | _FUNCTION, RTLNAME(Weekday),0         },
@@ -710,11 +710,11 @@ static Methods aMethods[] = {
 { "Year",           SbxINTEGER,   1 | _FUNCTION, RTLNAME(Year),0            },
   { "Date",         SbxDATE, 0,NULL,0 },
 
-{ NULL,             SbxNULL,     -1,NULL,0 }};  // end of the table
+{ NULL,             SbxNULL,     -1,NULL,0 }};  
 
 SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
 {
-    // do we have to initialize the hashcodes?
+    
     Methods* p = aMethods;
     if( !p->nHash )
       while( p->nArgs != -1 )
@@ -724,7 +724,7 @@ SbiStdObject::SbiStdObject( const OUString& r, StarBASIC* pb ) : SbxObject( r )
         p += ( p->nArgs & _ARGSMASK ) + 1;
     }
 
-    // #i92642: Remove default properties
+    
     Remove( OUString("Name"), SbxCLASS_DONTCARE );
     Remove( OUString("Parent"), SbxCLASS_DONTCARE );
 
@@ -742,21 +742,21 @@ SbiStdObject::~SbiStdObject()
     delete pStdFactory;
 }
 
-// Finding an element:
-// It runs linearly through the method table here until an
-// adequate method is has been found. Because of the bits in
-// the nArgs-field the adequate instance of an SbxObjElement
-// is created then. If the method/property hasn't been found,
-// return NULL without error code, so that a whole chain of
-// objects can be asked for the method/property.
+
+
+
+
+
+
+
 
 SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
 {
-    // entered already?
+    
     SbxVariable* pVar = SbxObject::Find( rName, t );
     if( !pVar )
     {
-        // else search one
+        
         sal_uInt16 nHash_ = SbxVariable::MakeHashCode( rName );
         Methods* p = aMethods;
         bool bFound = false;
@@ -790,7 +790,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
 
         if( bFound )
         {
-            // isolate Args-fields:
+            
             short nAccess = ( p->nArgs & _RWMASK ) >> 8;
             short nType   = ( p->nArgs & _TYPEMASK );
             if( p->nArgs & _CONST )
@@ -813,7 +813,7 @@ SbxVariable* SbiStdObject::Find( const OUString& rName, SbxClassType t )
     return pVar;
 }
 
-// SetModified must be pinched off at the RTL
+
 void SbiStdObject::SetModified( sal_Bool )
 {
 }
@@ -857,8 +857,8 @@ void SbiStdObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
     }
 }
 
-// building the info-structure for single elements
-// if nIdx = 0, don't create anything (Std-Props!)
+
+
 
 SbxInfo* SbiStdObject::GetInfo( short nIdx )
 {

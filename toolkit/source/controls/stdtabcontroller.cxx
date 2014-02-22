@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -38,9 +38,9 @@ using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-//  ----------------------------------------------------
-//  class StdTabController
-//  ----------------------------------------------------
+
+
+
 StdTabController::StdTabController()
 {
 }
@@ -58,7 +58,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
 {
     sal_Bool bOK = sal_True;
 
-    // Get only the requested controls
+    
     sal_Int32 nModels = rModels.getLength();
     if (nModels != rControls.getLength())
     {
@@ -78,7 +78,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
     }
 #ifdef DBG_UTIL
     DBG_ASSERT( rControls.getLength() <= rModels.getLength(), "StdTabController:ImplCreateComponentSequence: inconsistence!" );
-        // there may be less controls than models, but never more controls than models
+        
 #endif
 
 
@@ -97,7 +97,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
 
     for ( sal_uInt32 n = 0; bOK && ( n < nCtrls ); n++ )
     {
-        // Get the matching control for this model
+        
         Reference< XControl >  xCtrl(pControls[n]);
         if ( xCtrl.is() )
         {
@@ -106,10 +106,10 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
             else
                 pComps[n] = Reference< XWindow > (xCtrl, UNO_QUERY);
 
-            // TabStop-Property
+            
             if ( pTabs )
             {
-                // opt: Constant String for TabStop name
+                
                 static const OUString aTabStopName( "Tabstop" );
 
                 Reference< XPropertySet >  xPSet( xCtrl->getModel(), UNO_QUERY );
@@ -131,7 +131,7 @@ sal_Bool StdTabController::ImplCreateComponentSequence(
 
 void StdTabController::ImplActivateControl( sal_Bool bFirst ) const
 {
-    // HACK due to bug #53688#, map controls onto an interface if remote controls may occur
+    
     Reference< XTabController >  xTabController(const_cast< ::cppu::OWeakObject* >(static_cast< const ::cppu::OWeakObject* >(this)), UNO_QUERY);
     Sequence< Reference< XControl > > aCtrls = xTabController->getControls();
     const Reference< XControl > * pControls = aCtrls.getConstArray();
@@ -157,7 +157,7 @@ void StdTabController::ImplActivateControl( sal_Bool bFirst ) const
     }
 }
 
-// XInterface
+
 Any StdTabController::queryAggregation( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ::cppu::queryInterface( rType,
@@ -167,7 +167,7 @@ Any StdTabController::queryAggregation( const Type & rType ) throw(RuntimeExcept
     return (aRet.hasValue() ? aRet : OWeakAggObject::queryAggregation( rType ));
 }
 
-// XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( StdTabController )
     getCppuType( ( Reference< XTabController>* ) NULL ),
     getCppuType( ( Reference< XServiceInfo>* ) NULL )
@@ -219,7 +219,7 @@ Sequence< Reference< XControl > > StdTabController::getControls(  ) throw(Runtim
         for ( sal_uInt32 n = 0; n < nCtrls; n++ )
         {
             Reference< XControlModel >  xCtrlModel = pModels[n];
-            // Search matching Control for this Model
+            
             Reference< XControl >  xCtrl = FindControl( xCtrls, xCtrlModel );
             aSeq.getArray()[n] = xCtrl;
         }
@@ -238,19 +238,19 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException)
     Sequence< Reference< XControlModel > > aSeq = mxModel->getControlModels();
     Sequence< Reference< XWindow > > aCompSeq;
 
-    // This may return a TabController, which returns desired list of controls faster
+    
     Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
     Sequence< Reference< XControl > > aControls = xTabController->getControls();
 
-    // #58317# Some Models may be missing from the Container. Plus there is a
-    // autoTabOrder call later on.
+    
+    
     if( !ImplCreateComponentSequence( aControls, aSeq, aCompSeq, NULL, sal_False ) )
         return;
 
     sal_uInt32 nCtrls = aCompSeq.getLength();
     Reference< XWindow > * pComponents = aCompSeq.getArray();
 
-    // insert sort algorithm
+    
     ComponentEntryList aCtrls;
     size_t n;
     for ( n = 0; n < nCtrls; n++ )
@@ -296,7 +296,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
-    // Activate tab order for the control container
+    
 
     Reference< XControl >  xC( mxControlContainer, UNO_QUERY );
     Reference< XVclContainerPeer >  xVclContainerPeer;
@@ -305,21 +305,21 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
      if ( !xC.is() || !xVclContainerPeer.is() )
         return;
 
-    // This may return a TabController, which returns desired list of controls faster
+    
     Reference< XTabController >  xTabController(static_cast< ::cppu::OWeakObject* >(this), UNO_QUERY);
 
-    // Get a flattened list of controls sequences
+    
     Sequence< Reference< XControlModel > > aModels = mxModel->getControlModels();
     Sequence< Reference< XWindow > > aCompSeq;
     Sequence< Any> aTabSeq;
 
-    // DG: For the sake of optimization, retrieve Controls from getControls(),
-    // this may sound counterproductive, but leads to performance improvements
-    // in practical scenarios (Forms)
+    
+    
+    
     Sequence< Reference< XControl > > aControls = xTabController->getControls();
 
-    // #58317# Some Models may be missing from the Container. Plus there is a
-    // autoTabOrder call later on.
+    
+    
     if( !ImplCreateComponentSequence( aControls, aModels, aCompSeq, &aTabSeq, sal_True ) )
         return;
 
@@ -335,10 +335,10 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
         mxModel->getGroup( nG, aThisGroupModels, aName );
 
         aControls = xTabController->getControls();
-            // ImplCreateComponentSequence has a really strange semantics regarding it's first parameter:
-            // upon method entry, it expects a super set of the controls which it returns
-            // this means we need to completely fill this sequence with all available controls before
-            // calling into ImplCreateComponentSequence
+            
+            
+            
+            
 
         aControlComponents.realloc( 0 );
 
@@ -350,7 +350,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException)
 void StdTabController::activateFirst(  ) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); //TODO: necessary?
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); 
 
     ImplActivateControl( sal_True );
 }
@@ -358,7 +358,7 @@ void StdTabController::activateFirst(  ) throw(RuntimeException)
 void StdTabController::activateLast(  ) throw(RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); //TODO: necessary?
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); 
 
     ImplActivateControl( sal_False );
 }

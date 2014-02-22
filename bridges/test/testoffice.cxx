@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/time.h>
@@ -93,7 +93,7 @@ void testPipe( const Reference < XMultiServiceFactory > & rSmgr )
         if( ! ( 42 == seq.getArray()[0] ) )
             printf( "wrong element in sequence\n" );
 
-//          OSL_ASSERT( 0 );
+
     }
 }
 #include<stdio.h>
@@ -121,7 +121,7 @@ void testWriter(  const Reference < XComponent > & rCmp )
         }
 
         if ( strlen( pcText ) < sizeof(pcText)-1 )
-            strcat( pcText , " " ); // #100211# - checked
+            strcat( pcText , " " ); 
 
         rText->insertString( rRange , OUString::createFromAscii( pcText ) , sal_False );
     }
@@ -135,8 +135,8 @@ void testDocument( const Reference < XMultiServiceFactory > & rSmgr )
         "private:factory/swriter",
         "private:factory/scalc",
         "private:factory/sdraw",
-        "http://www.heise.de",
-        "file://h|/remote_interfaces.sdw"
+        "http:
+        "file:
     };
 
     sal_Char *docu[]= {
@@ -205,7 +205,7 @@ int main( int argc, char *argv[] )
         Reference< XMultiServiceFactory > rSMgr = createRegistryServiceFactory(
             OUString( "client.rdb" ) );
 
-        // just ensure that it is registered
+        
 
         Reference < XConnector > rConnector(
             createComponent( OUString("com.sun.star.connection.Connector"),
@@ -255,7 +255,7 @@ int main( int argc, char *argv[] )
         Reference < XComponent > rComp( rSMgr , UNO_QUERY );
         rComp->dispose();
     }
-    //_getch();
+    
     return 0;
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ctype.h>
@@ -67,7 +67,7 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
     , nFlags( nFlagsP )
 {
     nUniqueId = 256;
-    nPMId = RSC_VERSIONCONTROL +1; //mindestens einen groesser
+    nPMId = RSC_VERSIONCONTROL +1; 
     pEH = pErrHdl;
     Init();
 }
@@ -80,7 +80,7 @@ OString RscTypCont::ChangeLanguage(const OString& rNewLang)
     ::std::vector< OUString > aFallbacks;
 
     if (rNewLang.isEmpty())
-        aFallbacks.push_back( "" );     // do not resolve to SYSTEM (en-US)
+        aFallbacks.push_back( "" );     
     else
         aFallbacks = LanguageTag( OStringToOUString( rNewLang, RTL_TEXTENCODING_ASCII_US)).getFallbackStrings( true);
 
@@ -174,13 +174,13 @@ void Pre_dtorTree( RscTop * pRscTop )
 
 RscTypCont :: ~RscTypCont()
 {
-    // Alle Unterbaeume loeschen
+    
     aVersion.pClass->Destroy( aVersion );
     rtl_freeMemory( aVersion.pData );
     DestroySubTrees( pRoot );
 
-    // Alle Klassen noch gueltig, jeweilige Instanzen freigeben
-    // BasisTypen
+    
+    
     for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
         aBaseLst[ i ]->Pre_dtor();
 
@@ -194,10 +194,10 @@ RscTypCont :: ~RscTypCont()
     aString.Pre_dtor();
     aWinBits.Pre_dtor();
     aVersion.pClass->Pre_dtor();
-    // Zusammengesetzte Typen
+    
     Pre_dtorTree( pRoot );
 
-    // Klassen zerstoeren
+    
     delete aVersion.pClass;
     DestroyTree( pRoot );
 
@@ -254,7 +254,7 @@ RscTop * RscTypCont::SearchType( Atom nId )
     ELSE_IF( aLangType )
     ELSE_IF( aLangString )
     ELSE_IF( aLangShort )
-// al least to not pollute
+
 #undef ELSE_IF
 
     for ( size_t i = 0, n = aBaseLst.size(); i < n; ++i )
@@ -358,10 +358,10 @@ class RscEnumerateObj
 {
 friend class RscEnumerateRef;
 private:
-    ERRTYPE     aError;     // Enthaelt den ersten Fehler
+    ERRTYPE     aError;     
     RscTypCont* pTypCont;
-    FILE *      fOutput;    // AusgabeDatei
-    sal_uLong   lFileKey;   // Welche src-Datei
+    FILE *      fOutput;    
+    sal_uLong   lFileKey;   
     RscTop *    pClass;
 
     DECL_LINK( CallBackWriteRc, ObjNode * );
@@ -413,45 +413,45 @@ IMPL_LINK_INLINE_END( RscEnumerateObj, CallBackWriteSrc, ObjNode *, pObjNode )
 
 void RscEnumerateObj :: WriteRcFile( RscWriteRc & rMem, FILE * fOut )
 {
-    // Definition der Struktur, aus denen die Resource aufgebaut ist
+    
     /*
     struct RSHEADER_TYPE{
-        sal_uInt32          nId;        // Identifier der Resource
-        sal_uInt32          nRT;        // Resource Typ
-        sal_uInt32          nGlobOff;   // Globaler Offset
-        sal_uInt32          nLocalOff;  // Lokaler Offset
+        sal_uInt32          nId;        
+        sal_uInt32          nRT;        
+        sal_uInt32          nGlobOff;   
+        sal_uInt32          nLocalOff;  
     } aHeader;
     */
 
     sal_uInt32 nId = rMem.GetLong( 0 );
     sal_uInt32 nRT = rMem.GetLong( 4 );
 
-    // Tabelle wird entsprechend gefuellt
+    
     pTypCont->PutTranslatorKey( (sal_uInt64(nRT) << 32) + sal_uInt64(nId) );
 
     if( nRT == RSC_VERSIONCONTROL )
-    { // kommt immmer als letztes
+    { 
         sal_Int32 nCount = pTypCont->aIdTranslator.size();
-        // groesse der Tabelle
+        
         sal_uInt32 nSize = (nCount * (sizeof(sal_uInt64)+sizeof(sal_Int32))) + sizeof(sal_Int32);
 
-        rMem.Put( nCount ); //Anzahl speichern
+        rMem.Put( nCount ); 
         for( std::map< sal_uInt64, sal_uLong >::const_iterator it =
              pTypCont->aIdTranslator.begin(); it != pTypCont->aIdTranslator.end(); ++it )
         {
-            // Schluessel schreiben
+            
             rMem.Put( it->first );
-            // Objekt Id oder Position schreiben
+            
             rMem.Put( (sal_Int32)it->second );
         }
-        rMem.Put( nSize ); // Groesse hinten Speichern
+        rMem.Put( nSize ); 
     }
 
-    //Dateioffset neu setzen
+    
     pTypCont->IncFilePos( rMem.Size() );
 
 
-    //Position wurde vorher in Tabelle geschrieben
+    
     bool bSuccess = (1 == fwrite( rMem.GetBuffer(), rMem.Size(), 1, fOut ));
     SAL_WARN_IF(!bSuccess, "rsc", "short write");
 };
@@ -510,11 +510,11 @@ ERRTYPE RscTypCont::WriteRc( WriteRcContext& rContext )
 
     aIdTranslator.clear();
     nFilePos = 0;
-    nPMId = RSCVERSION_ID +1; //mindestens einen groesser
+    nPMId = RSCVERSION_ID +1; 
 
     aError = aEnumRef.WriteRc();
 
-    // version control
+    
     RscWriteRc aMem( nByteOrder );
     aVersion.pClass->WriteRcHeader( aVersion, aMem, this, RscId( RSCVERSION_ID ), 0, true );
     aEnumRef.aEnumObj.WriteRcFile( aMem, rContext.fOutput );
@@ -601,9 +601,9 @@ IMPL_LINK_INLINE_END( RscDel, Delete, RscTop *, pNode )
 
 void RscTypCont :: Delete( sal_uLong lFileKey )
 {
-    // Resourceinstanzen loeschen
+    
     RscDel aDel( pRoot, lFileKey );
-    // Defines loeschen
+    
     aFileTab.DeleteFileContext( lFileKey );
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "internal/config.hxx"
@@ -49,7 +49,7 @@
     INFO - INFO - INFO - INFO - INFO - INFO
 ----------------------------------------------*/
 
-//-----------------------------
+
 
 CPropertySheet::CPropertySheet(long RefCnt) :
     m_RefCnt(RefCnt)
@@ -58,7 +58,7 @@ CPropertySheet::CPropertySheet(long RefCnt) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 
 CPropertySheet::~CPropertySheet()
 {
@@ -66,9 +66,9 @@ CPropertySheet::~CPropertySheet()
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-//-----------------------------
-// IUnknown methods
-//-----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
     REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
@@ -94,7 +94,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::QueryInterface(
     return E_NOINTERFACE;
 }
 
-//-----------------------------
+
 
 ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
 {
@@ -102,7 +102,7 @@ ULONG STDMETHODCALLTYPE CPropertySheet::AddRef(void)
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//-----------------------------
+
 
 ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
 {
@@ -115,9 +115,9 @@ ULONG STDMETHODCALLTYPE CPropertySheet::Release(void)
     return refcnt;
 }
 
-//-----------------------------
-// IShellExtInit
-//-----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
     LPCITEMIDLIST /*pidlFolder*/, LPDATAOBJECT lpdobj, HKEY /*hkeyProgID*/)
@@ -129,7 +129,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
 
     HRESULT hr = lpdobj->GetData(&fe, &medium);
 
-    // save the file name
+    
     if (SUCCEEDED(hr) &&
         (1 == DragQueryFileA(
             reinterpret_cast<HDROP>(medium.hGlobal),
@@ -166,13 +166,13 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::Initialize(
     return hr;
 }
 
-//-----------------------------
-// IShellPropSheetExt
-//-----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam)
 {
-    // Get OS version (we don't need the summary page on Windows Vista or later)
+    
     OSVERSIONINFO sInfoOS;
 
     ZeroMemory( &sInfoOS, sizeof(OSVERSIONINFO) );
@@ -185,7 +185,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
     PROPSHEETPAGE psp;
     ZeroMemory(&psp, sizeof(PROPSHEETPAGEA));
 
-    // add the summary property page
+    
     psp.dwSize      = sizeof(PROPSHEETPAGE);
     psp.dwFlags     = PSP_DEFAULT | PSP_USETITLE | PSP_USECALLBACK;
     psp.hInstance   = GetModuleHandle(MODULE_NAME);
@@ -204,8 +204,8 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
 
         hPage = CreatePropertySheetPage(&psp);
 
-        // keep this instance alive, will be released when the
-        // the page is about to be destroyed in the callback function
+        
+        
 
         if (hPage)
         {
@@ -216,7 +216,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
         }
     }
 
-    // add the statistics property page
+    
     proppage_header = GetResString(IDS_PROPPAGE_STATISTICS_TITLE);
 
     psp.pszTemplate = MAKEINTRESOURCE(IDD_PROPPAGE_STATISTICS);
@@ -233,13 +233,13 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::AddPages(LPFNADDPROPSHEETPAGE lpfnAddP
             DestroyPropertySheetPage(hPage);
     }
 
-    // always return success else
-    // no property sheet will be
-    // displayed at all
+    
+    
+    
     return NOERROR;
 }
 
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
     UINT /*uPageID*/, LPFNADDPROPSHEETPAGE /*lpfnReplaceWith*/, LPARAM /*lParam*/)
@@ -247,7 +247,7 @@ HRESULT STDMETHODCALLTYPE CPropertySheet::ReplacePage(
     return E_NOTIMPL;
 }
 
-//-----------------------------
+
 
 UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
     HWND /*hwnd*/, UINT uMsg, LPPROPSHEETPAGE ppsp)
@@ -255,8 +255,8 @@ UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
     CPropertySheet* pImpl =
         reinterpret_cast<CPropertySheet*>(ppsp->lParam);
 
-    // release this instance, acquired
-    // in the AddPages method
+    
+    
     if (PSPCB_RELEASE == uMsg)
     {
         pImpl->Release();
@@ -266,7 +266,7 @@ UINT CALLBACK CPropertySheet::PropPageSummaryCallback(
 }
 
 
-//-----------------------------
+
 
 BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
@@ -284,7 +284,7 @@ BOOL CALLBACK CPropertySheet::PropPageSummaryProc(HWND hwnd, UINT uiMsg, WPARAM 
     return FALSE;
 }
 
-//-----------------------------
+
 
 BOOL CALLBACK CPropertySheet::PropPageStatisticsProc(HWND hwnd, UINT uiMsg, WPARAM /*wParam*/, LPARAM lParam)
 {
@@ -313,8 +313,8 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
         SetWindowText(GetDlgItem(hwnd,IDC_SUBJECT),  metaInfo.getTagData( META_INFO_SUBJECT ).c_str() );
         SetWindowText(GetDlgItem(hwnd,IDC_KEYWORDS), metaInfo.getTagData( META_INFO_KEYWORDS ).c_str() );
 
-        // comments read from meta.xml use "\n" for return, but this will not displayable in Edit control, add
-        // "\r" before "\n" to form "\r\n" in order to display return in Edit control.
+        
+        
         std::wstring tempStr = metaInfo.getTagData( META_INFO_DESCRIPTION ).c_str();
         std::wstring::size_type itor = tempStr.find ( L"\n" , 0 );
         while (itor != std::wstring::npos)
@@ -329,7 +329,7 @@ void CPropertySheet::InitPropPageSummary(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)
     }
 }
 
-//---------------------------------
+
 /**
 */
 void CPropertySheet::InitPropPageStatistics(HWND hwnd, LPPROPSHEETPAGE /*lppsp*/)

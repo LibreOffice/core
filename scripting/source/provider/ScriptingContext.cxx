@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -38,11 +38,11 @@ using namespace com::sun::star::uno;
 namespace func_provider
 {
 
-//*************************************************************************
-// XScriptingContext implementation
+
+
 //
-//*************************************************************************
-ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xContext ) : //ScriptingContextImpl_BASE( GetMutex()),
+
+ScriptingContext::ScriptingContext( const Reference< XComponentContext > & xContext ) : 
     OPropertyContainer( GetBroadcastHelper() ),
         m_xContext( xContext, UNO_SET_THROW )
 {
@@ -63,18 +63,18 @@ ScriptingContext::~ScriptingContext()
 {
     OSL_TRACE( "< ScriptingContext dtor called >" );
 }
-// -----------------------------------------------------------------------------
-// OPropertySetHelper
-// -----------------------------------------------------------------------------
+
+
+
 
 ::cppu::IPropertyArrayHelper& ScriptingContext::getInfoHelper(  )
 {
     return *getArrayHelper();
 }
 
-// -----------------------------------------------------------------------------
-// OPropertyArrayUsageHelper
-// -----------------------------------------------------------------------------
+
+
+
 
 ::cppu::IPropertyArrayHelper* ScriptingContext::createArrayHelper(  ) const
 {
@@ -82,23 +82,23 @@ ScriptingContext::~ScriptingContext()
     describeProperties( aProps );
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
-// -----------------------------------------------------------------------------
-// XPropertySet
-// -----------------------------------------------------------------------------
+
+
+
 
 Reference< beans::XPropertySetInfo > ScriptingContext::getPropertySetInfo(  ) throw (RuntimeException)
 {
     Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
-// -----------------------------------------------------------------------------// XTypeProvider
-// -----------------------------------------------------------------------------
+
+
 IMPLEMENT_GET_IMPLEMENTATION_ID( ScriptingContext )
 
 css::uno::Sequence< css::uno::Type > SAL_CALL ScriptingContext::getTypes(  ) throw (css::uno::RuntimeException)
 {
     return OPropertyContainer::getTypes();
 }
-} // namespace func_provider
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

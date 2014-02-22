@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "genericpropertyhandler.hxx"
@@ -70,13 +70,13 @@ namespace pcr
     public:
         EnumRepresentation( const Reference< XComponentContext >& _rxContext, const Type& _rEnumType );
 
-        // IPropertyEnumRepresentation implementqation
+        
         virtual ::std::vector< OUString >
                                     SAL_CALL getDescriptions() const;
         virtual void                SAL_CALL getValueFromDescription( const OUString& _rDescription, ::com::sun::star::uno::Any& _out_rValue ) const;
         virtual OUString     SAL_CALL getDescriptionForValue( const ::com::sun::star::uno::Any& _rEnumValue ) const;
 
-        // IReference implementqation
+        
         virtual oslInterlockedCount SAL_CALL acquire();
         virtual oslInterlockedCount SAL_CALL release();
 
@@ -84,9 +84,9 @@ namespace pcr
         void            impl_getValues( Sequence< sal_Int32 >& _out_rValues ) const;
 
     private:
-        EnumRepresentation();                                       // never implemented
-        EnumRepresentation( const EnumRepresentation& );            // never implemented
-        EnumRepresentation& operator=( const EnumRepresentation& ); // never implemented
+        EnumRepresentation();                                       
+        EnumRepresentation( const EnumRepresentation& );            
+        EnumRepresentation& operator=( const EnumRepresentation& ); 
     };
 
     EnumRepresentation::EnumRepresentation( const Reference< XComponentContext >& _rxContext, const Type& _rEnumType )
@@ -208,10 +208,10 @@ namespace pcr
     protected:
         ~UrlClickHandler();
 
-        // XActionListener
+        
         virtual void SAL_CALL actionPerformed( const ActionEvent& rEvent ) throw (RuntimeException);
 
-        // XEventListener
+        
         virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
 
     protected:
@@ -258,7 +258,7 @@ namespace pcr
 
     void SAL_CALL UrlClickHandler::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
     void UrlClickHandler::impl_dispatch_throw( const OUString& _rURL )
@@ -334,9 +334,9 @@ namespace pcr
         if ( !_rxIntrospectee.is() )
             throw NullPointerException();
 
-        // revoke old property change listeners
+        
         ::cppu::OInterfaceIteratorHelper iterRemove( m_aPropertyListeners );
-        ::cppu::OInterfaceIteratorHelper iterReAdd( m_aPropertyListeners ); // this holds a copy of the container ...
+        ::cppu::OInterfaceIteratorHelper iterReAdd( m_aPropertyListeners ); 
         while ( iterRemove.hasMoreElements() )
             m_xComponent->removePropertyChangeListener( OUString(), static_cast< XPropertyChangeListener* >( iterRemove.next() ) );
 
@@ -344,7 +344,7 @@ namespace pcr
         m_xComponent.clear();
         m_xPropertyState.clear();
 
-        // create an introspection adapter for the component
+        
         Reference< XIntrospection > xIntrospection = Introspection::create( m_xContext );
 
         Reference< XIntrospectionAccess > xIntrospectionAccess( xIntrospection->inspect( makeAny( _rxIntrospectee ) ) );
@@ -352,14 +352,14 @@ namespace pcr
             throw RuntimeException("The introspection service could not handle the given component.", *this );
 
         m_xComponent = Reference< XPropertySet >( xIntrospectionAccess->queryAdapter( cppu::UnoType<XPropertySet>::get() ), UNO_QUERY_THROW );
-        // now that we survived so far, remember m_xComponentIntrospectionAccess
+        
         m_xComponentIntrospectionAccess = xIntrospectionAccess;
         m_xPropertyState = m_xPropertyState.query( m_xComponent );
 
         m_bPropertyMapInitialized = false;
         m_aProperties.clear();
 
-        // re-add the property change listeners
+        
         while ( iterReAdd.hasMoreElements() )
             m_xComponent->addPropertyChangeListener( OUString(), static_cast< XPropertyChangeListener* >( iterReAdd.next() ) );
     }
@@ -401,7 +401,7 @@ namespace pcr
 
         Any aPropertyValue;
         if ( !_rControlValue.hasValue() )
-            // NULL is converted to NULL
+            
             return aPropertyValue;
 
         if ( pos->second.Type.getTypeClass() == TypeClass_ENUM )
@@ -427,7 +427,7 @@ namespace pcr
 
         Any aControlValue;
         if ( !_rPropertyValue.hasValue() )
-            // NULL is converted to NULL
+            
             return aControlValue;
 
         if ( pos->second.Type.getTypeClass() == TypeClass_ENUM )
@@ -519,7 +519,7 @@ namespace pcr
                     case TypeClass_DOUBLE:
                     case TypeClass_ENUM:
                     case TypeClass_STRING:
-                        // allowed, we can handle this type
+                        
                         break;
 
                     case TypeClass_SEQUENCE:
@@ -532,13 +532,13 @@ namespace pcr
                             &&  ( eElementTypeClass != TypeClass_LONG )
                             &&  ( eElementTypeClass != TypeClass_UNSIGNED_LONG )
                             )
-                            // can only handle the above
+                            
                             continue;
                     }
                     break;
 
                     default:
-                        // next property, we don't support this type
+                        
                         continue;
                     }
 
@@ -565,16 +565,16 @@ namespace pcr
 
     Sequence< OUString > SAL_CALL GenericPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
-        // no superseded properties at all. This handler offers the very basic PropertyHandler
-        // functionality, so it's much more likely that other handlers want to supersede
-        // *our* properties ....
+        
+        
+        
         return Sequence< OUString >( );
     }
 
     Sequence< OUString > SAL_CALL GenericPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
-        // This basic PropertyHandler implementation is too dumb^Wgeneric to know
-        // anything about property dependencies
+        
+        
         return Sequence< OUString >( );
     }
 
@@ -604,7 +604,7 @@ namespace pcr
             break;
         case TypeClass_STRING:
         {
-            // some special handling for URL properties
+            
             bool bIsURLProperty = ( _rPropertyName.getLength() >= 3 ) && _rPropertyName.matchAsciiL( "URL", 3, _rPropertyName.getLength() - 3 );
             if ( bIsURLProperty )
             {
@@ -619,7 +619,7 @@ namespace pcr
         default:
             break;
         }
-        // fallback
+        
         if ( !aDescriptor.Control.is() )
             PropertyHandlerHelper::describePropertyLine( pos->second, aDescriptor, _rxControlFactory );
 
@@ -651,12 +651,12 @@ namespace pcr
     void SAL_CALL GenericPropertyHandler::disposing()
     {
         m_aPropertyListeners.clear();
-            // not disposeAndClear: the listeners are (virtually) listeners at our introspectee, not
-            // at this handler instance
+            
+            
     }
 
     IMPLEMENT_FORWARD_XCOMPONENT( GenericPropertyHandler, GenericPropertyHandler_Base );
 
-}   // namespace pcr
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

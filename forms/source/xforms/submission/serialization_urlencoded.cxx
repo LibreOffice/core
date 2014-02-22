@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -97,7 +97,7 @@ void  CSerializationURLEncoded::encode_and_append(const OUString& aString, OStri
             snprintf(tmpChar, 3, "%%%X", *pString % 0x100);
             aBuffer.append(tmpChar);
             while (*pString >= 0x80) {
-                // continuation...
+                
                 pString++;
                 snprintf(tmpChar, 3, "%%%X", *pString % 0x100);
                 aBuffer.append(tmpChar);
@@ -109,18 +109,18 @@ void  CSerializationURLEncoded::encode_and_append(const OUString& aString, OStri
 
 void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
 {
-    // serialize recursive
-    // every element node E that has a text child T will be serialized in document order
-    // <E1>T1<E2>T2</E2></E1><E3>T3</E3> -> E1=T2&E2=T2&E3=T3 (En := local name)
+    
+    
+    
 
-    // this node
+    
     Reference< XNodeList > aChildList = aNode->getChildNodes();
     Reference< XNode > aChild;
-    // is this an element node?
+    
     if (aNode->getNodeType() == NodeType_ELEMENT_NODE)
     {
         OUString  aName = aNode->getNodeName();
-        // find any text children
+        
         OUStringBuffer aValue;
         Reference< XText > aText;
         for(sal_Int32 i=0; i < aChildList->getLength(); i++)
@@ -133,7 +133,7 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
             }
         }
 
-        // found anything?
+        
         if (!aValue.isEmpty())
         {
             OUString aUnencValue = aValue.makeStringAndClear();
@@ -148,11 +148,11 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
         }
     }
 
-    // element children...
+    
     for(sal_Int32 i=0; i < aChildList->getLength(); i++)
     {
         aChild = aChildList->item(i);
-        // if this is an element node, it might be a candidate for serialization
+        
         if (aChild.is() && aChild->getNodeType() == NodeType_ELEMENT_NODE)
             serialize_node(aChild);
     }
@@ -161,7 +161,7 @@ void CSerializationURLEncoded::serialize_node(const Reference< XNode >& aNode)
 void CSerializationURLEncoded::serialize()
 {
 
-    // output stream to the pipe buffer
+    
     Reference< XOutputStream > out(m_aPipe, UNO_QUERY);
 
     CSS::uno::Reference< CSS::xml::dom::XNode > cur = m_aFragment->getFirstChild();

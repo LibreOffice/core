@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -116,15 +116,15 @@ void Indexes::refresh()
         Int2StringMap column2NameMap;
         fillAttnum2attnameMap( column2NameMap, m_origin, m_schemaName, m_tableName );
 
-        // see XDatabaseMetaData::getIndexInfo()
+        
         Reference< XPreparedStatement > stmt = m_origin->prepareStatement(
-                "SELECT nspname, "      // 1
-                   "pg_class.relname, " // 2
-                   "class2.relname, "   // 3
-                   "indisclustered, "   // 4
-                   "indisunique, "      // 5
-                   "indisprimary, "     // 6
-                   "indkey "            // 7
+                "SELECT nspname, "      
+                   "pg_class.relname, " 
+                   "class2.relname, "   
+                   "indisclustered, "   
+                   "indisunique, "      
+                   "indisprimary, "     
+                   "indkey "            
                 "FROM pg_index INNER JOIN pg_class ON indrelid = pg_class.oid "
                     "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                     "INNER JOIN pg_class as class2 ON pg_index.indexrelid = class2.oid "
@@ -301,7 +301,7 @@ Reference< com::sun::star::container::XNameAccess > Indexes::create(
 }
 
 
-//_________________________________________________________________________________________
+
 IndexDescriptors::IndexDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,

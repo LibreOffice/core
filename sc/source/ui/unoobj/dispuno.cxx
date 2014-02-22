@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/viewfrm.hxx>
@@ -34,12 +34,12 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
 
-static const char* cURLInsertColumns = ".uno:DataSourceBrowser/InsertColumns"; //data into text
+
+static const char* cURLInsertColumns = ".uno:DataSourceBrowser/InsertColumns"; 
 static const char* cURLDocDataSource = ".uno:DataSourceBrowser/DocumentDataSource";
 
-//------------------------------------------------------------------------
+
 
 static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxViewShell* pViewShell )
 {
@@ -54,7 +54,7 @@ static uno::Reference<view::XSelectionSupplier> lcl_GetSelectionSupplier( SfxVie
     return uno::Reference<view::XSelectionSupplier>();
 }
 
-//------------------------------------------------------------------------
+
 
 
 ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pViewSh) :
@@ -69,8 +69,8 @@ ScDispatchProviderInterceptor::ScDispatchProviderInterceptor(ScTabViewShell* pVi
 
             m_xIntercepted->registerDispatchProviderInterceptor(
                         static_cast<frame::XDispatchProviderInterceptor*>(this));
-            // this should make us the top-level dispatch-provider for the component, via a call to our
-            // setDispatchProvider we should have got an fallback for requests we (i.e. our master) cannot fullfill
+            
+            
             uno::Reference<lang::XComponent> xInterceptedComponent(m_xIntercepted, uno::UNO_QUERY);
             if (xInterceptedComponent.is())
                 xInterceptedComponent->addEventListener(static_cast<lang::XEventListener*>(this));
@@ -95,7 +95,7 @@ void ScDispatchProviderInterceptor::Notify( SfxBroadcaster&, const SfxHint& rHin
         pViewShell = NULL;
 }
 
-// XDispatchProvider
+
 
 uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDispatch(
                         const util::URL& aURL, const OUString& aTargetFrameName,
@@ -105,7 +105,7 @@ uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDi
     SolarMutexGuard aGuard;
 
     uno::Reference<frame::XDispatch> xResult;
-    // create some dispatch ...
+    
     if ( pViewShell && (
         aURL.Complete.equalsAscii(cURLInsertColumns) ||
         aURL.Complete.equalsAscii(cURLDocDataSource) ) )
@@ -115,7 +115,7 @@ uno::Reference<frame::XDispatch> SAL_CALL ScDispatchProviderInterceptor::queryDi
         xResult = m_xMyDispatch;
     }
 
-    // ask our slave provider
+    
     if (!xResult.is() && m_xSlaveDispatcher.is())
         xResult = m_xSlaveDispatcher->queryDispatch(aURL, aTargetFrameName, nSearchFlags);
 
@@ -140,7 +140,7 @@ uno::Sequence< uno::Reference<frame::XDispatch> > SAL_CALL
     return aReturn;
 }
 
-// XDispatchProviderInterceptor
+
 
 uno::Reference<frame::XDispatchProvider> SAL_CALL
                         ScDispatchProviderInterceptor::getSlaveDispatchProvider()
@@ -174,7 +174,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setMasterDispatchProvider(
     m_xMasterDispatcher.set(xNewSupplier);
 }
 
-// XEventListener
+
 
 void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject& /* Source */ )
                                 throw(::com::sun::star::uno::RuntimeException)
@@ -194,7 +194,7 @@ void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject&
     m_xIntercepted = NULL;
 }
 
-//------------------------------------------------------------------------
+
 
 ScDispatch::ScDispatch(ScTabViewShell* pViewSh) :
     pViewShell( pViewSh ),
@@ -224,7 +224,7 @@ void ScDispatch::Notify( SfxBroadcaster&, const SfxHint& rHint )
         pViewShell = NULL;
 }
 
-// XDispatch
+
 
 void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
                                 const uno::Sequence<beans::PropertyValue>& aArgs )
@@ -241,7 +241,7 @@ void SAL_CALL ScDispatch::dispatch( const util::URL& aURL,
         ScDBDocFunc aFunc( *pViewData->GetDocShell() );
         bDone = aFunc.DoImportUno( aPos, aArgs );
     }
-    // cURLDocDataSource is never dispatched
+    
 
     if (!bDone)
         throw uno::RuntimeException();
@@ -264,7 +264,7 @@ static void lcl_FillDataSource( frame::FeatureStateEvent& rEvent, const ScImport
     }
     else
     {
-        //  descriptor has to be complete anyway
+        
 
         OUString aEmpty;
         aDescriptor[svx::daDataSource]  <<= aEmpty;
@@ -284,7 +284,7 @@ void SAL_CALL ScDispatch::addStatusListener(
     if (!pViewShell)
         throw uno::RuntimeException();
 
-    //  initial state
+    
     frame::FeatureStateEvent aEvent;
     aEvent.IsEnabled = sal_True;
     aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
@@ -307,9 +307,9 @@ void SAL_CALL ScDispatch::addStatusListener(
         ScDBData* pDBData = pViewShell->GetDBData(false,SC_DB_OLD);
         if ( pDBData )
             pDBData->GetImportParam( aLastImport );
-        lcl_FillDataSource( aEvent, aLastImport );          // modifies State, IsEnabled
+        lcl_FillDataSource( aEvent, aLastImport );          
     }
-    //! else add to listener for "enabled" changes?
+    
 
     xListener->statusChanged( aEvent );
 }
@@ -344,12 +344,12 @@ void SAL_CALL ScDispatch::removeStatusListener(
     }
 }
 
-// XSelectionChangeListener
+
 
 void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventObject& /* aEvent */ )
     throw (::com::sun::star::uno::RuntimeException, std::exception)
 {
-    //  currently only called for URL cURLDocDataSource
+    
 
     if ( pViewShell )
     {
@@ -358,7 +358,7 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
         if ( pDBData )
             pDBData->GetImportParam( aNewImport );
 
-        //  notify listeners only if data source has changed
+        
         if ( aNewImport.bImport    != aLastImport.bImport ||
              aNewImport.aDBName    != aLastImport.aDBName ||
              aNewImport.aStatement != aLastImport.aStatement ||
@@ -369,7 +369,7 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
             aEvent.Source.set(static_cast<cppu::OWeakObject*>(this));
             aEvent.FeatureURL.Complete = OUString::createFromAscii( cURLDocDataSource );
 
-            lcl_FillDataSource( aEvent, aNewImport );       // modifies State, IsEnabled
+            lcl_FillDataSource( aEvent, aNewImport );       
 
             for ( sal_uInt16 n=0; n<aDataSourceListeners.size(); n++ )
                 aDataSourceListeners[n]->statusChanged( aEvent );
@@ -379,7 +379,7 @@ void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventO
     }
 }
 
-// XEventListener
+
 
 void SAL_CALL ScDispatch::disposing( const ::com::sun::star::lang::EventObject& rSource )
                                 throw (::com::sun::star::uno::RuntimeException)

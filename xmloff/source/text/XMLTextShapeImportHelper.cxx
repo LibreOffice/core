@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/XTextContent.hpp>
@@ -70,7 +70,7 @@ void XMLTextShapeImportHelper::addShape(
 {
     if( rShapes.is() )
     {
-        // It's a group shape or 3DScene , so we have to call the base class method.
+        
         XMLShapeImportHelper::addShape( rShape, xAttrList, rShapes );
         return;
     }
@@ -99,7 +99,7 @@ void XMLTextShapeImportHelper::addShape(
         case XML_TOK_TEXT_FRAME_ANCHOR_TYPE:
             {
                 TextContentAnchorType eNew;
-                // OD 2004-06-01 #i26791# - allow all anchor types
+                
                 if ( XMLAnchorTypePropHdl::convert( rValue, eNew ) )
                 {
                     eAnchorType = eNew;
@@ -122,19 +122,19 @@ void XMLTextShapeImportHelper::addShape(
     Reference < XPropertySet > xPropSet( rShape, UNO_QUERY );
     Any aAny;
 
-    // anchor type
+    
     aAny <<= eAnchorType;
     xPropSet->setPropertyValue( sAnchorType, aAny );
 
     Reference < XTextContent > xTxtCntnt( rShape, UNO_QUERY );
     xTxtImport->InsertTextContent( xTxtCntnt );
 
-    // page number (must be set after the frame is inserted, because it
-    // will be overwritten then inserting the frame.
+    
+    
     switch( eAnchorType )
     {
     case TextContentAnchorType_AT_PAGE:
-        // only set positive page numbers
+        
         if ( nPage > 0 )
         {
             aAny <<= nPage;

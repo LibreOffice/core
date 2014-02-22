@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/tree/XMutableTreeDataModel.hpp>
@@ -58,21 +58,21 @@ public:
 
     void broadcast( broadcast_type eType, const Reference< XTreeNode >& xParentNode, const Reference< XTreeNode >* pNodes, sal_Int32 nNodes );
 
-    // XMutableTreeDataModel
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode > SAL_CALL createNode( const ::com::sun::star::uno::Any& DisplayValue, ::sal_Bool ChildrenOnDemand ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setRoot( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& RootNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
-    // XTreeDataModel
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getRoot(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addTreeDataModelListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModelListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeTreeDataModelListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModelListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XComponent
+    
     virtual void SAL_CALL dispose(  ) throw (RuntimeException);
     virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
@@ -94,7 +94,7 @@ public:
     void broadcast_changes();
     void broadcast_changes(const Reference< XTreeNode >& xNode, bool bNew);
 
-    // XMutableTreeNode
+    
     virtual ::com::sun::star::uno::Any SAL_CALL getDataValue() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDataValue( const ::com::sun::star::uno::Any& _datavalue ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL appendChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& ChildNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
@@ -106,7 +106,7 @@ public:
     virtual void SAL_CALL setExpandedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setCollapsedGraphicURL( const OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XTreeNode
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getChildAt( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -117,7 +117,7 @@ public:
     virtual OUString SAL_CALL getExpandedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getCollapsedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);

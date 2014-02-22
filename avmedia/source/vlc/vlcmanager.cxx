@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <boost/algorithm/string.hpp>
@@ -50,7 +50,7 @@ Manager::Manager( const uno::Reference< lang::XMultiServiceFactory >& rxMgr )
     if (m_is_vlc_found)
     {
         mInstance.reset(new Instance( sizeof( VLC_ARGS ) / sizeof( VLC_ARGS[0] ), VLC_ARGS ));
-        //Check VLC version
+        
         std::vector<std::string> verComponents;
         const std::string str(Common::Version());
 
@@ -126,7 +126,7 @@ uno::Sequence< rtl::OUString > SAL_CALL Manager::getSupportedServiceNames()
     return aRet;
 }
 
-} // end namespace vlc
-} // end namespace avmedia
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

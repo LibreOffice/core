@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unoparagraph.hxx>
@@ -65,12 +65,12 @@ SwParaSelection::SwParaSelection(SwCursor & rCursor)
     {
         m_rCursor.DeleteMark();
     }
-    // is it at the start?
+    
     if (m_rCursor.GetPoint()->nContent != 0)
     {
         m_rCursor.MovePara(fnParaCurr, fnParaStart);
     }
-    // or at the end already?
+    
     if (m_rCursor.GetPoint()->nContent != m_rCursor.GetCntntNode()->Len())
     {
         m_rCursor.SetMark();
@@ -104,7 +104,7 @@ class SwXParagraph::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
 
 public:
     SwXParagraph &              m_rThis;
@@ -124,7 +124,7 @@ public:
         , m_rThis(rThis)
         , m_EventListeners(m_Mutex)
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_PARAGRAPH))
-        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
+        
         , m_bIsDescriptor((0 == pTxtNode) ? true : false)
         , m_nSelectionStartPos(nSelStart)
         , m_nSelectionEndPos(nSelEnd)
@@ -169,7 +169,7 @@ public:
             bool bDirectValuesOnly)
         throw (uno::RuntimeException);
 protected:
-    // SwClient
+    
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
@@ -217,10 +217,10 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTxtNode& rTxtNode,
         uno::Reference< text::XText> const& i_xParent,
         const sal_Int32 nSelStart, const sal_Int32 nSelEnd)
 {
-    // re-use existing SwXParagraph
-    // #i105557#: do not iterate over the registered clients: race condition
+    
+    
     uno::Reference<text::XTextContent> xParagraph;
-    if ((-1 == nSelStart) && (-1 == nSelEnd)) // only use cache if no selection!
+    if ((-1 == nSelStart) && (-1 == nSelEnd)) 
     {
         xParagraph.set(rTxtNode.GetXParagraph());
     }
@@ -229,7 +229,7 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTxtNode& rTxtNode,
         return xParagraph;
     }
 
-    // create new SwXParagraph
+    
     uno::Reference<text::XText> xParentText(i_xParent);
     if (!xParentText.is())
     {
@@ -238,9 +238,9 @@ SwXParagraph::CreateXParagraph(SwDoc & rDoc, SwTxtNode& rTxtNode,
     }
     SwXParagraph *const pXPara(
             new SwXParagraph(xParentText, rTxtNode, nSelStart, nSelEnd) );
-    // this is why the constructor is private: need to acquire pXPara here
+    
     xParagraph.set(pXPara);
-    // in order to initialize the weak pointer cache in the core object
+    
     if ((-1 == nSelStart) && (-1 == nSelEnd))
     {
         rTxtNode.SetXParagraph(xParagraph);
@@ -258,7 +258,7 @@ bool SwXParagraph::SelectPaM(SwPaM & rPaM)
     }
 
     *rPaM.GetPoint() = SwPosition( *pTxtNode );
-    // set selection to the whole paragraph
+    
     rPaM.SetMark();
     rPaM.GetMark()->nContent = pTxtNode->GetTxt().getLength();
     return true;
@@ -423,15 +423,15 @@ throw (beans::PropertyVetoException, lang::IllegalArgumentException,
 {
     SolarMutexGuard aGuard;
 
-    // workaround for bad designed API
+    
     try
     {
         m_pImpl->SetPropertyValues_Impl( rPropertyNames, rValues );
     }
     catch (const beans::UnknownPropertyException &rException)
     {
-        // wrap the original (here not allowed) exception in
-        // a lang::WrappedTargetException that gets thrown instead.
+        
+        
         lang::WrappedTargetException aWExc;
         aWExc.TargetException <<= rException;
         throw aWExc;
@@ -486,7 +486,7 @@ throw (uno::RuntimeException)
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
 
-    // workaround for bad designed API
+    
     try
     {
         aValues = m_pImpl->GetPropertyValues_Impl( rPropertyNames );
@@ -547,21 +547,21 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     SwTxtNode & rTxtNode(m_pImpl->GetTxtNodeOrThrow());
 
-    //SwNode& rTxtNode = pUnoCrsr->GetPoint()->nNode.GetNode();
-    //const SwAttrSet& rAttrSet = ((SwTxtNode&)rTxtNode).GetSwAttrSet();
-    //sal_uInt16 nAttrCount = rAttrSet.Count();
+    
+    
+    
 
     const sal_Int32 nProps = rPropertyNames.getLength();
     const OUString *pProp = rPropertyNames.getConstArray();
 
-    //sal_Int32 nVals = rValues.getLength();
+    
     const uno::Any *pValue = rValues.getConstArray();
 
     sal_Int32 nFailed = 0;
     uno::Sequence< beans::SetPropertyTolerantFailed > aFailed( nProps );
     beans::SetPropertyTolerantFailed *pFailed = aFailed.getArray();
 
-    // get entry to start with
+    
     const SfxItemPropertyMap &rPropMap =
         m_pImpl->m_rPropSet.getPropertyMap();
 
@@ -583,8 +583,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             }
             else
             {
-                // set property value
-                // (compare to SwXParagraph::setPropertyValues)
+                
+                
                 if (pEntry->nFlags & beans::PropertyAttribute::READONLY)
                 {
                     pFailed[ nFailed++ ].Result  =
@@ -599,7 +599,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         }
         catch (beans::UnknownPropertyException &)
         {
-            // should not occur because property was searched for before
+            
             OSL_FAIL( "unexpected exception caught" );
             pFailed[ nFailed++ ].Result =
                 beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
@@ -637,7 +637,7 @@ throw (uno::RuntimeException)
     const beans::GetDirectPropertyTolerantResult *pTmpRes =
         aTmpRes.getConstArray();
 
-    // copy temporary result to final result type
+    
     const sal_Int32 nLen = aTmpRes.getLength();
     uno::Sequence< beans::GetPropertyTolerantResult > aRes( nLen );
     beans::GetPropertyTolerantResult *pRes = aRes.getArray();
@@ -668,9 +668,9 @@ throw (uno::RuntimeException)
 
     SwTxtNode & rTxtNode(GetTxtNodeOrThrow());
 
-    // #i46786# Use SwAttrSet pointer for determining the state.
-    //          Use the value SwAttrSet (from the paragraph OR the style)
-    //          for determining the actual value(s).
+    
+    
+    
     const SwAttrSet* pAttrSet = rTxtNode.GetpSwAttrSet();
     const SwAttrSet& rValueAttrSet = rTxtNode.GetSwAttrSet();
 
@@ -681,7 +681,7 @@ throw (uno::RuntimeException)
     beans::GetDirectPropertyTolerantResult *pResult = aResult.getArray();
     sal_Int32 nIdx = 0;
 
-    // get entry to start with
+    
     const SfxItemPropertyMap &rPropMap = m_rPropSet.getPropertyMap();
 
     for (sal_Int32 i = 0;  i < nProps;  ++i)
@@ -695,43 +695,43 @@ throw (uno::RuntimeException)
 
             SfxItemPropertySimpleEntry const*const pEntry =
                 rPropMap.getByName( pProp[i] );
-            if (!pEntry)  // property available?
+            if (!pEntry)  
             {
                 rResult.Result =
                     beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
             }
             else
             {
-                // get property state
-                // (compare to SwXParagraph::getPropertyState)
+                
+                
                 sal_Bool bAttrSetFetched = sal_True;
                 beans::PropertyState eState = lcl_SwXParagraph_getPropertyState(
                             rTxtNode, &pAttrSet, *pEntry, bAttrSetFetched );
                 rResult.State  = eState;
 
-//                if (bDirectValuesOnly  &&  PropertyState_DIRECT_VALUE != eState)
-//                    rResult.Result = beans::TolerantPropertySetResultType::NO_DIRECT_VALUE;
-//                else
+
+
+
                 rResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_FAILURE;
                 if (!bDirectValuesOnly ||
                     (beans::PropertyState_DIRECT_VALUE == eState))
                 {
-                    // get property value
-                    // (compare to SwXParagraph::getPropertyValue(s))
+                    
+                    
                     uno::Any aValue;
                     if (! ::sw::GetDefaultTextContentValue(
                                 aValue, pProp[i], pEntry->nWID ) )
                     {
                         SwPosition aPos( rTxtNode );
                         SwPaM aPam( aPos );
-                        // handle properties that are not part of the attribute
-                        // and thus only pretendend to be paragraph attributes
+                        
+                        
                         beans::PropertyState eTemp;
                         const bool bDone =
                             SwUnoCursorHelper::getCrsrPropertyValue(
                                     *pEntry, aPam, &aValue, eTemp, &rTxtNode );
 
-                        // if not found try the real paragraph attributes...
+                        
                         if (!bDone)
                         {
                             m_rPropSet.getPropertyValue(
@@ -744,7 +744,7 @@ throw (uno::RuntimeException)
 
                     nIdx++;
                 }
-                // this assertion should never occur!
+                
                 OSL_ENSURE( nIdx < 1  ||  pResult[nIdx - 1].Result != beans::TolerantPropertySetResultType::UNKNOWN_FAILURE,
                         "unknown failure while retrieving property" );
 
@@ -752,7 +752,7 @@ throw (uno::RuntimeException)
         }
         catch (beans::UnknownPropertyException &)
         {
-            // should not occur because property was searched for before
+            
             OSL_FAIL( "unexpected exception caught" );
             rResult.Result = beans::TolerantPropertySetResultType::UNKNOWN_PROPERTY;
         }
@@ -770,7 +770,7 @@ throw (uno::RuntimeException)
         }
     }
 
-    // resize to actually used size
+    
     aResult.realloc( nIdx );
 
     return aResult;
@@ -849,7 +849,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 }
 
 static beans::PropertyState lcl_SwXParagraph_getPropertyState(
-//                          SwUnoCrsr& rUnoCrsr,
+
                             const SwTxtNode& rTxtNode,
                             const SwAttrSet** ppSet,
                             const SfxItemPropertySimpleEntry& rEntry,
@@ -868,7 +868,7 @@ throw (beans::UnknownPropertyException)
     switch( rEntry.nWID )
     {
     case FN_UNO_NUM_RULES:
-        // if numbering is set, return it; else do nothing
+        
         SwUnoCursorHelper::getNumberingProperty( aPam, eRet, NULL );
         break;
     case FN_UNO_ANCHOR_TYPES:
@@ -991,7 +991,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         return;
     }
 
-    // select paragraph
+    
     SwParaSelection aParaSel( aCursor );
     SfxItemPropertySimpleEntry const*const pEntry =
         m_pImpl->m_rPropSet.getPropertyMap().getByName( rPropertyName );
@@ -1021,8 +1021,8 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
         }
         else
         {
-            // for paragraph attributes the selection must be extended
-            // to paragraph boundaries
+            
+            
             SwPosition aStart( *aCursor.Start() );
             SwPosition aEnd  ( *aCursor.End()   );
             ::std::auto_ptr<SwUnoCrsr> pTemp(
@@ -1033,7 +1033,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
             }
             pTemp->SetMark();
             *pTemp->GetPoint() = aEnd;
-            //pTemp->Exchange();
+            
             SwUnoCursorHelper::SelectPam(*pTemp, true);
             if (!SwUnoCursorHelper::IsEndOfPara(*pTemp))
             {
@@ -1088,9 +1088,9 @@ SwXParagraph::attach(const uno::Reference< text::XTextRange > & /*xTextRange*/)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    // SwXParagraph will only created in order to be inserted by
-    // 'insertTextContentBefore' or 'insertTextContentAfter' therefore
-    // they cannot be attached
+    
+    
+    
     throw uno::RuntimeException();
 }
 
@@ -1103,7 +1103,7 @@ SwXParagraph::getAnchor() throw (uno::RuntimeException)
 
     SwPosition aPos( rTxtNode );
     SwCursor aCursor( aPos, 0, false );
-    // select paragraph
+    
     SwParaSelection aParaSel( aCursor );
     const uno::Reference< text::XTextRange >  xRet =
         new SwXTextRange(aCursor, m_pImpl->m_xParentText);
@@ -1118,7 +1118,7 @@ void SAL_CALL SwXParagraph::dispose() throw (uno::RuntimeException)
     if (pTxtNode)
     {
         SwCursor aCursor( SwPosition( *pTxtNode ), 0, false );
-        // select paragraph
+        
         {
             SwParaSelection aParaSel( aCursor );
             pTxtNode->GetDoc()->DelFullPara(aCursor);
@@ -1132,7 +1132,7 @@ void SAL_CALL SwXParagraph::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -1140,7 +1140,7 @@ void SAL_CALL SwXParagraph::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -1294,7 +1294,7 @@ SwXParagraph::getAvailableServiceNames() throw (uno::RuntimeException)
     return aRet;
 }
 
-// MetadatableMixin
+
 ::sfx2::Metadatable* SwXParagraph::GetCoreObject()
 {
     SwTxtNode *const pTxtNode( m_pImpl->GetTxtNode() );

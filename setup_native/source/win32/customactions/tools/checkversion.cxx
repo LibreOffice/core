@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define UNICODE
 
 #ifdef _MSC_VER
-#pragma warning(push,1) // disable warnings within system headers
+#pragma warning(push,1) 
 #endif
 #include <windows.h>
 #include <msiquery.h>
@@ -35,7 +35,7 @@
 
 #include <seterror.hxx>
 
-//----------------------------------------------------------
+
 BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
@@ -54,7 +54,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
     return FALSE;
 }
 
-//----------------------------------------------------------
+
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCTSTR pFormat, ... )
 {
@@ -71,10 +71,10 @@ static inline void OutputDebugStringFormat( LPCTSTR, ... )
 }
 #endif
 
-//----------------------------------------------------------
+
 extern "C" UINT __stdcall CheckVersions( MSIHANDLE hMSI )
 {
-    // MessageBox(NULL, L"CheckVersions", L"Information", MB_OK | MB_ICONINFORMATION);
+    
 
     wchar_t* pVal = NULL;
 

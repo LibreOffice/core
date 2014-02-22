@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,7 +25,7 @@
 #include <svx/sdr/primitive3d/sdrattributecreator3d.hxx>
 #include <basegfx/range/b3drange.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -47,7 +47,7 @@ namespace sdr
             const drawinglayer::attribute::SdrLineFillShadowAttribute3D aAttribute(
                 drawinglayer::primitive2d::createNewSdrLineFillShadowAttribute(rItemSet, false));
 
-            // get cube geometry and use as traslation and scaling for unit cube
+            
             basegfx::B3DRange aCubeRange;
             const basegfx::B3DVector aCubeSize(GetE3dCubeObj().GetCubeSize());
             const basegfx::B3DPoint aCubePosition(GetE3dCubeObj().GetCubePos());
@@ -65,30 +65,30 @@ namespace sdr
                 aCubeRange.expand(aCubePosition + aCubeSize);
             }
 
-            // add scale and translate to world transformation
+            
             const basegfx::B3DVector abjectRange(aCubeRange.getRange());
             aWorldTransform.scale(abjectRange.getX(), abjectRange.getY(), abjectRange.getZ());
             aWorldTransform.translate(aCubeRange.getMinX(), aCubeRange.getMinY(), aCubeRange.getMinZ());
 
-            // get 3D Object Attributes
+            
             drawinglayer::attribute::Sdr3DObjectAttribute* pSdr3DObjectAttribute = drawinglayer::primitive2d::createNewSdr3DObjectAttribute(rItemSet);
 
-            // calculate texture size to get a perfect mapping for
-            // the front/back sides
+            
+            
             const basegfx::B2DVector aTextureSize(aCubeSize.getX(), aCubeSize.getY());
 
-            // create primitive and add
+            
             const drawinglayer::primitive3d::Primitive3DReference xReference(
                 new drawinglayer::primitive3d::SdrCubePrimitive3D(
                     aWorldTransform, aTextureSize, aAttribute, *pSdr3DObjectAttribute));
             xRetval = drawinglayer::primitive3d::Primitive3DSequence(&xReference, 1);
 
-            // delete 3D Object Attributes
+            
             delete pSdr3DObjectAttribute;
 
             return xRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cuires.hrc"
@@ -117,7 +117,7 @@ using namespace ::com::sun::star::util;
 
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = NULL;
 
-// some stuff for easier changes for SvtViewOptions
+
 static const sal_Char*      pViewOptDataName = "page data";
 #define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
 
@@ -247,7 +247,7 @@ static sal_uInt16 getGroupNodeId( const OUString& rModule )
 class MailMergeCfg_Impl : public utl::ConfigItem
 {
     friend class SvxEMailTabPage;
-    // variables
+    
     sal_Bool bIsEmailSupported;
 
 public:
@@ -285,7 +285,7 @@ void MailMergeCfg_Impl::Notify( const com::sun::star::uno::Sequence< OUString >&
 {
 }
 
-//typedef SfxTabPage* (*FNCreateTabPage)( Window *pParent, const SfxItemSet &rAttrSet );
+
 SfxTabPage* CreateGeneralTabPage( sal_uInt16 nId, Window* pParent, const SfxItemSet& rSet )
 {
     CreateTabPage fnCreate = 0;
@@ -338,7 +338,7 @@ struct OptionsMapping_Impl
 
 static OptionsMapping_Impl const OptionsMap_Impl[] =
 {
-//    GROUP                 PAGE                    PAGE-ID
+
     { "ProductName",        NULL,                   SID_GENERAL_OPTIONS },
     { "ProductName",        "UserData",             RID_SFXPAGE_GENERAL },
     { "ProductName",        "General",              OFA_TP_MISC },
@@ -472,10 +472,10 @@ struct OptionsGroupInfo
 {
     SfxItemSet*         m_pInItemSet;
     SfxItemSet*         m_pOutItemSet;
-    SfxShell*           m_pShell;       // used to create the page
-    SfxModule*          m_pModule;      // used to create the ItemSet
-    sal_uInt16          m_nDialogId;    // Id of the former dialog
-    sal_Bool            m_bLoadError;   // load fails?
+    SfxShell*           m_pShell;       
+    SfxModule*          m_pModule;      
+    sal_uInt16          m_nDialogId;    
+    sal_Bool            m_bLoadError;   
     OUString       m_sPageURL;
     ExtensionsTabPage*  m_pExtPage;
 
@@ -486,7 +486,7 @@ struct OptionsGroupInfo
     ~OptionsGroupInfo() { delete m_pInItemSet; delete m_pOutItemSet; }
 };
 
-// -----------------------------------------------------------------------
+
 
 #define INI_LIST() \
     pCurrentPageEntry   ( NULL ),\
@@ -504,7 +504,7 @@ struct OptionsGroupInfo
     bIsFromExtensionManager( false ), \
     bIsForSetDocumentLanguage( false )
 
-// Ctor() with Frame -----------------------------------------------------
+
 using namespace ::com::sun::star;
 OfaTreeOptionsDialog::OfaTreeOptionsDialog(
     Window* pParent,
@@ -526,7 +526,7 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog(
     aTreeLB.SetAccessibleName(GetDisplayText());
 }
 
-// Ctor() with ExtensionId -----------------------------------------------
+
 
 OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const OUString& rExtensionId ) :
 
@@ -547,10 +547,10 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
     maTreeLayoutTimer.Stop();
     pCurrentPageEntry = NULL;
     SvTreeListEntry* pEntry = aTreeLB.First();
-    // first children
+    
     while(pEntry)
     {
-        // if Child (has parent), then OptionsPageInfo
+        
         if(aTreeLB.GetParent(pEntry))
         {
             OptionsPageInfo *pPageInfo = (OptionsPageInfo *)pEntry->GetUserData();
@@ -568,7 +568,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 
             if (pPageInfo->m_nPageId == RID_SFXPAGE_LINGU)
             {
-                // write personal dictionaries
+                
                 Reference< XSearchableDictionaryList >  xDicList( SvxGetDictionaryList() );
                 if (xDicList.is())
                 {
@@ -584,7 +584,7 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
         pEntry = aTreeLB.Next(pEntry);
     }
 
-    // and parents
+    
     pEntry = aTreeLB.First();
     while(pEntry)
     {
@@ -612,7 +612,7 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     return pPageInfo;
 }
 
-// the ItemSet* is passed on to the dialog's ownership
+
 sal_uInt16  OfaTreeOptionsDialog::AddGroup(const OUString& rGroupName,
                                         SfxShell* pCreateShell,
                                         SfxModule* pCreateModule,
@@ -675,7 +675,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
                 int nLeave = pPageInfo->m_pPage->DeactivatePage(pGroupInfo->m_pOutItemSet);
                 if ( nLeave == SfxTabPage::KEEP_PAGE )
                 {
-                    // the page mustn't be left
+                    
                     aTreeLB.Select(pCurrentPageEntry);
                     return 0;
                 }
@@ -709,7 +709,7 @@ IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
     return 0;
 }
 
-// an opened group shall be completely visible
+
 IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
 {
     pBox->Update();
@@ -828,7 +828,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                                                 : pLastPageSaver->m_sLastPageURL_Tools;
         }
 
-        // MacroExpander to convert "expand"-URL to "file"-URL
+        
         Reference< XMacroExpander > xMacroExpander;
         bool bMustExpand = ( INetURLObject( sLastURL ).GetProtocol() == INET_PROT_FILE );
 
@@ -842,7 +842,7 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
         SvTreeListEntry* pTemp = aTreeLB.First();
         while( !pEntry && pTemp )
         {
-            // restore only selection of a leaf
+            
             if ( aTreeLB.GetParent( pTemp ) && pTemp->GetUserData() )
             {
                 OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pTemp->GetUserData();
@@ -851,12 +851,12 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
                     && !sPageURL.isEmpty()
                     && sPageURL.startsWith( sExpand ) )
                 {
-                    // cut protocol
+                    
                     OUString sTemp( sPageURL.copy( sExpand.getLength() ) );
-                    // decode uri class chars
+                    
                     sTemp = ::rtl::Uri::decode(
                         sTemp, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-                    // expand string
+                    
                     sPageURL = xMacroExpander->expandMacros( sTemp );
                 }
 
@@ -949,14 +949,14 @@ IMPL_LINK( OfaTreeOptionsDialog, ImplHandleTreeLayoutTimerHdl, void*, EMPTYARG )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 void OfaTreeOptionsDialog::SetPaneSize(Window *pPane)
 {
-    //The OfaTreeOptionsDialog is not fully widget layout enabled
-    //yet so it's a classic fixed dimension dialog, but to make
-    //it possible to incrementally convert it over each pane
-    //can be converted to .ui layout format and the fixed area
-    //size reserved for panes is allocated to them here
+    
+    
+    
+    
+    
     Point aPos(aSeparatorFL.GetPosPixel().X(), aTreeLB.GetPosPixel().Y());
     Size aSize(aSeparatorFL.GetSizePixel().Width(),
                aSeparatorFL.GetPosPixel().Y() - aTreeLB.GetPosPixel().Y());
@@ -976,8 +976,8 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     SvTreeListEntry* pEntry = pBox->GetCurEntry();
     SvTreeListEntry* pParent = pBox->GetParent(pEntry);
 
-    // If the user has selected a category, automatically switch to a suitable
-    // default sub-page instead.
+    
+    
     if (!pParent)
     {
         pBox->EndSelection();
@@ -1001,7 +1001,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
 
         if ( nLeave == SfxTabPage::KEEP_PAGE )
         {
-            // we cannot leave this page
+            
             pBox->Select( pCurrentPageEntry );
             return;
         }
@@ -1033,7 +1033,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
         {
             if(!pColorPageItemSet)
             {
-                // Move usage of a static XOutdevItemPool instance here
+                
                 if(!mpStaticXOutdevItemPool)
                     mpStaticXOutdevItemPool = new XOutdevItemPool();
 
@@ -1049,7 +1049,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 sal_Bool bIdentical = pGroupInfo->m_pModule == pGroupInfo->m_pShell;
 
                 WaitObject aWait(this);
-                //pGroupInfo->pModule = pGroupInfo->pModule->Load();
+                
                 if(!pGroupInfo->m_pModule)
                 {
                     pGroupInfo->m_bLoadError = sal_True;
@@ -1058,7 +1058,7 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
                 }
                 if(bIdentical)
                     pGroupInfo->m_pShell = pGroupInfo->m_pModule;
-                // now test whether there was the same module in other groups, too (e. g. Text+HTML)
+                
                 SvTreeListEntry* pTemp = aTreeLB.First();
                 while(pTemp)
                 {
@@ -1177,11 +1177,11 @@ void OfaTreeOptionsDialog::SelectHdl_Impl()
     }
     pNewPage = pPageInfo->m_pPage;
 
-    // restore lost focus, if necessary
+    
     Window* pFocusWin = Application::GetFocusWindow();
-    // if the focused window is not the options treebox and the old page has the focus
+    
     if ( pFocusWin && pFocusWin != pBox && pOldPage && pOldPage->HasChildPathFocus() )
-        // then set the focus to the new page or if we are on a group set the focus to the options treebox
+        
         pNewPage ? pNewPage->GrabFocus() : pBox->GrabFocus();
 
     return;
@@ -1233,7 +1233,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
             {
                 SfxDispatcher* pDispatch = pViewFrame->GetDispatcher();
 
-                // miscellaneous - Year2000
+                
                 if( SFX_ITEM_AVAILABLE <= pDispatch->QueryState( SID_ATTR_YEAR2000, pItem ) )
                     pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, ((const SfxUInt16Item*)pItem)->GetValue() ) );
                 else
@@ -1243,7 +1243,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                 pRet->Put( SfxUInt16Item( SID_ATTR_YEAR2000, (sal_uInt16)aMisc.GetYear2000() ) );
 
 
-            // miscellaneous - Tabulator
+            
             pRet->Put(SfxBoolItem(SID_PRINTER_NOTFOUND_WARN, aMisc.IsNotFoundWarning()));
 
             sal_uInt16 nFlag = aMisc.IsPaperSizeWarning() ? SFX_PRINTER_CHG_SIZE : 0;
@@ -1261,7 +1261,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                     SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
                     0 );
 
-            // for linguistic
+            
 
             Reference< XSpellChecker1 >  xSpell = SvxGetSpellChecker();
             pRet->Put(SfxSpellCheckItem( xSpell, SID_ATTR_SPELL ));
@@ -1314,7 +1314,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
         case SID_INET_DLG :
                 pRet = new SfxItemSet( SFX_APP()->GetPool(),
                                 SID_BASIC_ENABLED, SID_BASIC_ENABLED,
-                //SID_OPTIONS_START - ..END
+                
                                 SID_INET_PROXY_TYPE, SID_INET_PROXY_PORT,
                                 SID_SAVEREL_INET, SID_SAVEREL_FSYS,
                                 SID_INET_SMTPSERVER, SID_INET_SMTPSERVER,
@@ -1365,11 +1365,11 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             aOptSet.Put(rSet);
             if(aOptSet.Count())
                 SFX_APP()->SetOptions( aOptSet );
-            // get dispatcher anew, because SetOptions() might have destroyed the dispatcher
+            
             SfxViewFrame *pViewFrame = SfxViewFrame::Current();
-// -------------------------------------------------------------------------
-//          evaluate Year2000
-// -------------------------------------------------------------------------
+
+
+
             sal_uInt16 nY2K = USHRT_MAX;
             if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_YEAR2000, false, &pItem ) )
                 nY2K = ((const SfxUInt16Item*)pItem)->GetValue();
@@ -1383,9 +1383,9 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 aMisc.SetYear2000(nY2K);
             }
 
-// -------------------------------------------------------------------------
-//          evaluate print
-// -------------------------------------------------------------------------
+
+
+
             if(SFX_ITEM_SET == rSet.GetItemState(SID_PRINTER_NOTFOUND_WARN, false, &pItem))
                 aMisc.SetNotFoundWarning(((const SfxBoolItem*)pItem)->GetValue());
 
@@ -1395,9 +1395,9 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
                 aMisc.SetPaperSizeWarning(0 != (pFlag->GetValue() &  SFX_PRINTER_CHG_SIZE ));
                 aMisc.SetPaperOrientationWarning(0 !=  (pFlag->GetValue() & SFX_PRINTER_CHG_ORIENTATION ));
             }
-// -------------------------------------------------------------------------
-//          evaluate help options
-// -------------------------------------------------------------------------
+
+
+
             if ( SvtHelpOptions().IsHelpTips() != Help::IsQuickHelpEnabled() )
                 SvtHelpOptions().IsHelpTips() ? Help::EnableQuickHelp() : Help::DisableQuickHelp();
             if ( SvtHelpOptions().IsExtendedHelp() != Help::IsBalloonHelpEnabled() )
@@ -1420,7 +1420,7 @@ void OfaTreeOptionsDialog::ApplyItemSet( sal_uInt16 nId, const SfxItemSet& rSet 
             break;
 
         case SID_SCH_EDITOPTIONS:
-            // nothing to do. Chart options only apply to newly created charts
+            
             break;
 
         default:
@@ -1483,8 +1483,8 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
 
         if( bSaveSpellCheck )
         {
-            //! the config item has changed since we modified the
-            //! property set it uses
+            
+            
             pDispatch->Execute(SID_SPELLCHECKER_CHANGED, SFX_CALLMODE_ASYNCHRON);
         }
     }
@@ -1538,7 +1538,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     SvtOptionsDialogOptions aOptionsDlgOpt;
     sal_uInt16 i, nPageId;
 
-    // %PRODUCTNAME options
+    
     if ( !lcl_isOptionHidden( SID_GENERAL_OPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
@@ -1553,7 +1553,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
 
-            // Disable Online Update page if service not installed
+            
             if( RID_SVXPAGE_ONLINEUPDATE == nPageId )
             {
                 try
@@ -1571,7 +1571,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    // Load and Save options
+    
     if ( !lcl_isOptionHidden( SID_FILTER_DLG, aOptionsDlgOpt ) )
     {
         ResStringArray& rFilterArray = aDlgResource.GetFilterArray();
@@ -1585,7 +1585,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    // Language options
+    
     SvtLanguageOptions aLanguageOptions;
     if ( !lcl_isOptionHidden( SID_LANGUAGE_OPTIONS, aOptionsDlgOpt ) )
     {
@@ -1608,11 +1608,11 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     OUString aFactory = getCurrentFactory_Impl( _xFrame );
     DBG_ASSERT( GetModuleIdentifier( _xFrame ) == aFactory, "S H I T!!!" );
 
-    // Writer and Writer/Web options
+    
     SvtModuleOptions aModuleOpt;
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
     {
-        // text document
+        
         ResStringArray& rTextArray = aDlgResource.GetTextArray();
         if (   aFactory == "com.sun.star.text.TextDocument"
             || aFactory == "com.sun.star.text.WebDocument"
@@ -1641,7 +1641,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
 #endif
             }
 
-            // HTML documents
+            
             if ( !lcl_isOptionHidden( SID_SW_ONLINEOPTIONS, aOptionsDlgOpt ) )
             {
                 ResStringArray& rHTMLArray = aDlgResource.GetHTMLArray();
@@ -1659,7 +1659,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    // Calc options
+    
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
     {
         if ( aFactory == "com.sun.star.sheet.SpreadsheetDocument" )
@@ -1683,7 +1683,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    // Impress options
+    
     SfxModule* pSdMod = ( *( SfxModule** ) GetAppData( SHL_DRAW ) );
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
     {
@@ -1707,7 +1707,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    // Draw options
+    
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
     {
         if ( aFactory == "com.sun.star.drawing.DrawingDocument" )
@@ -1730,7 +1730,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    // Math options
+    
     if ( aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
     {
         if ( aFactory == "com.sun.star.formula.FormulaProperties" )
@@ -1751,7 +1751,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    // Database - needed only if there is an application which integrates with databases
+    
     if ( !lcl_isOptionHidden( SID_SB_STARBASEOPTIONS, aOptionsDlgOpt ) &&
         (   aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SDATABASE )
         ||  aModuleOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER )
@@ -1769,7 +1769,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    // Chart options (always installed and active)
+    
     if ( !lcl_isOptionHidden( SID_SCH_EDITOPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rChartArray = aDlgResource.GetChartArray();
@@ -1783,7 +1783,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
         }
     }
 
-    // Internet options
+    
     if ( !lcl_isOptionHidden( SID_INET_DLG, aOptionsDlgOpt ) )
     {
         ResStringArray& rInetArray = aDlgResource.GetInetArray();
@@ -1796,18 +1796,18 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
             if ( lcl_isOptionHidden( nPageId, aOptionsDlgOpt ) )
                 continue;
 #if defined WNT
-            // Disable E-mail tab-page on Windows
+            
             if ( nPageId == RID_SVXPAGE_INET_MAIL )
                 continue;
 #endif
 #if defined MACOSX
-            // Disable Mozilla Plug-in tab-page on Mac
+            
             if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN )
                 continue;
 #endif
 #ifdef LINUX
-            // Disable Mozilla Plug-in tab-page on Linux if we find a
-            // globally installed plugin
+            
+            
             if ( nPageId == RID_SVXPAGE_INET_MOZPLUGIN ) {
                 struct stat sb;
                 char *p;
@@ -1850,8 +1850,8 @@ namespace
 void OfaTreeOptionsDialog::ResizeTreeLB( void )
 {
     const long  nMax = aSeparatorFL.GetSizePixel().Width() * 42 / 100;
-                                            // don't ask where 42 comes from... but it looks / feels ok ;-)
-    long        nDelta = 50;                // min.
+                                            
+    long        nDelta = 50;                
     sal_uInt16      nDepth = 0;
     const long  nIndent0 = PixelToLogic( Size( 28, 0 ) ).Width();
     const long  nIndent1 = PixelToLogic( Size( 52, 0 ) ).Width();
@@ -1871,23 +1871,23 @@ void OfaTreeOptionsDialog::ResizeTreeLB( void )
         pEntry = pTreeList->Next( pEntry, &nDepth );
     }
 
-    nDelta = LogicToPixel( Size( nDelta + 3, 0 ) ).Width();         // + extra space [logic]
-    nDelta += GetSettings().GetStyleSettings().GetScrollBarSize();  // + scroll bar, in case it's needed
+    nDelta = LogicToPixel( Size( nDelta + 3, 0 ) ).Width();         
+    nDelta += GetSettings().GetStyleSettings().GetScrollBarSize();  
 
     if( nDelta > nMax )
         nDelta = nMax;
 
-    // starting resizing with this
+    
     Size            aSize( GetSizePixel() );
     aSize.Width() += nDelta;
     SetSizePixel( aSize );
 
-    // resize treelistbox
+    
     aSize = aTreeLB.GetSizePixel();
     aSize.Width() += nDelta;
     aTreeLB.SetSizePixel( aSize );
 
-    // ... and move depending controls
+    
     MoveControl( aOkPB, nDelta );
     MoveControl( aCancelPB, nDelta );
     MoveControl( aHelpPB, nDelta );
@@ -1899,19 +1899,19 @@ bool isNodeActive( OptionsNode* pNode, Module* pModule )
 {
     if ( pNode )
     {
-        // Node for all modules actine?
+        
         if ( pNode->m_bAllModules )
             return true;
 
-        // OOo-Nodes (Writer, Calc, Impress...) are active if node is already inserted
+        
         if ( !getGroupName( pNode->m_sId, false ).isEmpty() )
             return true;
 
-        // no module -> not active
+        
         if ( !pModule )
             return false;
 
-        // search node in active module
+        
         if ( pModule->m_bActive )
         {
             for ( sal_uInt32 j = 0; j < pModule->m_aNodeList.size(); ++j )
@@ -1926,7 +1926,7 @@ void OfaTreeOptionsDialog::LoadExtensionOptions( const OUString& rExtensionId )
 {
     Module* pModule = NULL;
 
-    // when called by Tools - Options then load nodes of active module
+    
     if ( rExtensionId.isEmpty() )
     {
         pModule = LoadModule( GetModuleIdentifier( Reference< XFrame >() ) );
@@ -1982,7 +1982,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
         OUString sModule( seqNames[i] );
         if ( rModuleIdentifier == sModule )
         {
-            // current active module found
+            
             pModule = new Module( sModule );
             pModule->m_bActive = true;
 
@@ -1990,7 +1990,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
             xSet->getByName( seqNames[i] ) >>= xModAccess;
             if ( xModAccess.is() )
             {
-                // load the nodes of this module
+                
                 Reference< XNameAccess > xNodeAccess;
                 xModAccess->getByName( "Nodes" ) >>= xNodeAccess;
                 if ( xNodeAccess.is() )
@@ -2005,12 +2005,12 @@ Module* OfaTreeOptionsDialog::LoadModule(
                         {
                             xAccess->getByName( "Index" ) >>= nIndex;
                             if ( nIndex < 0 )
-                                // append nodes with index < 0
+                                
                                 pModule->m_aNodeList.push_back(
                                     new OrderedEntry( nIndex, xTemp[x] ) );
                             else
                             {
-                                // search position of the node
+                                
                                 sal_uInt32 y = 0;
                                 for ( ; y < pModule->m_aNodeList.size(); ++y )
                                 {
@@ -2018,7 +2018,7 @@ Module* OfaTreeOptionsDialog::LoadModule(
                                     if ( nNodeIdx < 0 || nNodeIdx > nIndex )
                                         break;
                                 }
-                                // and insert the node on this position
+                                
                                 pModule->m_aNodeList.insert(
                                     pModule->m_aNodeList.begin() + y,
                                     new OrderedEntry( nIndex, xTemp[x] ) );
@@ -2143,7 +2143,7 @@ VectorOfNodes OfaTreeOptionsDialog::LoadNodes(
                 }
             }
 
-            // do not insert nodes without leaves
+            
             if ( pNode->m_aLeaves.size() > 0 || pNode->m_aGroupedLeaves.size() > 0 )
             {
                 pModule ? aNodeList.push_back( pNode ) : aOutNodeList.push_back( pNode );
@@ -2254,7 +2254,7 @@ short OfaTreeOptionsDialog::Execute()
     ::std::auto_ptr< SvxDicListChgClamp > pClamp;
     if ( !bIsFromExtensionManager )
     {
-        // collect all DictionaryList Events while the dialog is executed
+        
         Reference<com::sun::star::linguistic2::XSearchableDictionaryList> xDictionaryList(SvxGetDictionaryList());
         pClamp.reset( new SvxDicListChgClamp( xDictionaryList ) );
     }
@@ -2271,7 +2271,7 @@ short OfaTreeOptionsDialog::Execute()
     return nRet;
 }
 
-// class ExtensionsTabPage -----------------------------------------------
+
 
 ExtensionsTabPage::ExtensionsTabPage(
     Window* pParent, WinBits nStyle, const OUString& rPageURL,
@@ -2287,7 +2287,7 @@ ExtensionsTabPage::ExtensionsTabPage(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ExtensionsTabPage::~ExtensionsTabPage()
 {
@@ -2295,7 +2295,7 @@ ExtensionsTabPage::~ExtensionsTabPage()
     DeactivatePage();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::CreateDialogWithHandler()
 {
@@ -2340,7 +2340,7 @@ void ExtensionsTabPage::CreateDialogWithHandler()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
 {
@@ -2359,7 +2359,7 @@ sal_Bool ExtensionsTabPage::DispatchAction( const OUString& rAction )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::ActivatePage()
 {
@@ -2387,7 +2387,7 @@ void ExtensionsTabPage::ActivatePage()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::DeactivatePage()
 {
@@ -2397,7 +2397,7 @@ void ExtensionsTabPage::DeactivatePage()
         m_xPage->setVisible( sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::ResetPage()
 {
@@ -2405,7 +2405,7 @@ void ExtensionsTabPage::ResetPage()
     ActivatePage();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtensionsTabPage::SavePage()
 {

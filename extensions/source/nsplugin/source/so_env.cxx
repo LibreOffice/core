@@ -39,7 +39,7 @@
 #include <dlfcn.h>
 #endif
 #include <stdarg.h>
-#endif // End UNIX
+#endif 
 
 #ifdef WNT
 
@@ -58,7 +58,7 @@
 #ifdef _MSC_VER
 #pragma warning (pop)
 #endif
-#endif // End WNT
+#endif 
 
 #include <sys/stat.h>
 #include <errno.h>
@@ -66,18 +66,18 @@
 #include "ns_debug.hxx"
 #include <sal/config.h>
 
-// Tranform all strings like %20 in pPath to one char like space
+
 /*int retoreUTF8(char* pPath)
 {
-    // Prepare buf
+    
     int len = strlen(pPath) + 1;
     char* pBuf = (char*)malloc(len);
     memset(pBuf, 0, len);
 
-    // Store the original pBuf and pPath
+    
     char* pBufCur = pBuf;
     char* pPathCur = pPath;
-    // ie, for %20, UTF8Numbers[0][0] = 2, UTF8Numbers[1][0] = 0
+    
     char UTF8Numbers[2][2] = {{0, 0}, {0,0}};
     int temp;
 
@@ -234,16 +234,16 @@ int nspluginOOoModuleHook (void** aResult)
 }
 #endif
 
-// *aResult points the static string holding "/opt/staroffice8"
+
 int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const char* /*entry*/)
 {
 #ifdef UNIX
-    // The real space to hold "/opt/staroffice8"
+    
     static char realFileName[NPP_PATH_MAX] = {0};
     memset(realFileName, 0, NPP_PATH_MAX);
     *aResult = realFileName;
 
-    // Filename of lnk file, eg. "soffice"
+    
     char lnkFileName[NPP_PATH_MAX] = {0};
     char* pTempZero = NULL;
 
@@ -253,7 +253,7 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
       return 0;
 
     /* .. now in $HOME */
-#endif // LINUX
+#endif 
     snprintf(lnkFileName, NPP_PATH_MAX - 1, "%s/.mozilla/plugins/libnpsoplugin%s", getenv("HOME"), SAL_DLLEXTENSION);
 #ifdef LINUX
     ssize_t len = readlink(lnkFileName, realFileName, NPP_PATH_MAX-1);
@@ -265,17 +265,17 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
     realFileName[len] = '\0';
 
     if (NULL == (pTempZero = strstr(realFileName, "/" LIBO_LIB_FOLDER "/libnpsoplugin" SAL_DLLEXTENSION)))
-#else  // LINUX
+#else  
     if ((0 > readlink(lnkFileName, realFileName, NPP_PATH_MAX)) ||
         (NULL == (pTempZero = strstr(realFileName, "/" LIBO_LIB_FOLDER "/libnpsoplugin" SAL_DLLEXTENSION))))
-#endif // LINUX
+#endif 
     {
         *realFileName = 0;
         return -1;
     }
     *pTempZero = 0;
     return 0;
-#elif defined WNT // UNIX
+#elif defined WNT 
     static char realFileName[NPP_PATH_MAX] = {0};
     *aResult = realFileName;
     HKEY hKey;
@@ -313,10 +313,10 @@ int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const ch
     *pTempZero = 0;
     debug_fprintf(NSP_LOG_APPEND, "realFileName is %s\n", realFileName);
     return 0;
-#endif // UNIX
+#endif 
 }
 
-// Return the install dir path of staroffice, return value like "/home/build/staroffice"
+
 const char* findInstallDir()
 {
     static char* pInstall = NULL;
@@ -330,7 +330,7 @@ const char* findInstallDir()
     return pInstall;
 }
 
-// Return the program dir path of staroffice, return value like "/home/build/staroffice/program"
+
 const char* findProgramDir()
 {
     static char sProgram[NPP_BUFFER_SIZE] = {0};
@@ -345,7 +345,7 @@ const char* findProgramDir()
 }
 
 #ifdef WNT
-// Return SO executable absolute path, like "/home/build/staroffice/program/soffice"
+
 const char* findSofficeExecutable()
 {
     static char pSofficeExeccutable[NPP_PATH_MAX] = {0};
@@ -360,7 +360,7 @@ const char* findSofficeExecutable()
     return pSofficeExeccutable;
 }
 
-// Change Dos path such as c:\program\soffice to c:/program/soffice
+
 int DosToUnixPath(char* sPath)
 {
     if (!sPath)
@@ -376,7 +376,7 @@ int DosToUnixPath(char* sPath)
 
 }
 #endif
-// Change Unix path such as program/soffice to program\soffice
+
 int UnixToDosPath(char* sPath)
 {
     if (!sPath)
@@ -483,7 +483,7 @@ void NSP_WriteLog(int level,  const char* pFormat, ...)
 #ifdef UNIX
         const char* homeDir = getenv("HOME");
         sprintf(logName,"%s/%s",homeDir,"nsplugin.log");
-#endif // End UNIX
+#endif 
 #ifdef WNT
         char szPath[MAX_PATH];
         if (!SHGetSpecialFolderPath(NULL, szPath, CSIDL_APPDATA, 0))
@@ -492,7 +492,7 @@ void NSP_WriteLog(int level,  const char* pFormat, ...)
         }
         char* homeDir = szPath;
         sprintf(logName,"%s\\%s", szPath, "nsplugin.log");
-#endif // End WNT
+#endif 
     }
     else
         fp = fopen(logName, "a+");

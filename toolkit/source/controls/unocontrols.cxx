@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/XTextArea.hpp>
@@ -40,7 +40,7 @@
 #include <toolkit/helper/macros.hxx>
 #include <toolkit/helper/imagealign.hxx>
 
-// for introspection
+
 #include <toolkit/awt/vclxwindows.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/processfactory.hxx>
@@ -85,12 +85,12 @@ ImageHelper::getGraphicAndGraphicObjectFromURL_nothrow( uno::Reference< graphic:
 {
     if ( _rURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
     {
-        // graphic manager uniqueid
+        
         OUString sID = _rURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 );
         xOutGraphicObj = graphic::GraphicObject::createWithId( ::comphelper::getProcessComponentContext(), sID );
     }
-    else // linked
-        xOutGraphicObj = NULL; // release the GraphicObject
+    else 
+        xOutGraphicObj = NULL; 
 
     return ImageHelper::getGraphicFromURL_nothrow( _rURL );
 }
@@ -118,9 +118,9 @@ ImageHelper::getGraphicFromURL_nothrow( const OUString& _rURL )
 
     return xGraphic;
 }
-//  ----------------------------------------------------
-//  class UnoControlEditModel
-//  ----------------------------------------------------
+
+
+
 UnoControlEditModel::UnoControlEditModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -139,7 +139,7 @@ uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     switch ( nPropId )
     {
     case BASEPROPERTY_LINE_END_FORMAT:
-        aReturn <<= (sal_Int16)awt::LineEndFormat::LINE_FEED;   // LF
+        aReturn <<= (sal_Int16)awt::LineEndFormat::LINE_FEED;   
         break;
     case BASEPROPERTY_DEFAULTCONTROL:
         aReturn <<= OUString::createFromAscii( szServiceName_UnoControlEdit );
@@ -162,7 +162,7 @@ uno::Any UnoControlEditModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlEditModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -177,9 +177,9 @@ stardiv_Toolkit_UnoControlEditModel_get_implementation(
     return cppu::acquire(new UnoControlEditModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoEditControl
-//  ----------------------------------------------------
+
+
+
 UnoEditControl::UnoEditControl()
     :UnoControlBase()
     ,maTextListeners( *this )
@@ -221,10 +221,10 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoEditControl, UnoControlBase, UnoEditControl
 
 OUString UnoEditControl::GetComponentServiceName()
 {
-    // by default, we want a simple edit field
+    
     OUString sName( "Edit" );
 
-    // but maybe we are to display multi-line text?
+    
     uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_MULTILINE ) );
     sal_Bool b = sal_Bool();
     if ( ( aVal >>= b ) && b )
@@ -245,7 +245,7 @@ void UnoEditControl::ImplSetPeerProperty( const OUString& rPropName, const uno::
     sal_Bool bDone = sal_False;
     if ( GetPropertyId( rPropName ) == BASEPROPERTY_TEXT )
     {
-        // #96986# use setText(), or text listener will not be called.
+        
         uno::Reference < awt::XTextComponent > xTextComponent( getPeer(), uno::UNO_QUERY );
         if ( xTextComponent.is() )
         {
@@ -330,7 +330,7 @@ void UnoEditControl::setText( const OUString& aText ) throw(uno::RuntimeExceptio
             xText->setText( maText );
         }
 
-    // Setting the property to the VCLXWindow doesn't call textChanged
+    
     if ( maTextListeners.getLength() )
     {
         awt::TextEvent aEvent;
@@ -350,14 +350,14 @@ namespace
 
 void UnoEditControl::insertText( const awt::Selection& rSel, const OUString& rNewText ) throw(uno::RuntimeException)
 {
-    // normalize the selection - OUString::replaceAt has a strange behaviour if the min is greater than the max
+    
     awt::Selection aSelection( rSel );
     lcl_normalize( aSelection );
 
-    // preserve the selection resp. cursor position
+    
     awt::Selection aNewSelection( getSelection() );
 #ifdef ALSO_PRESERVE_COMPLETE_SELECTION
-        // (not sure - looks uglier ...)
+        
     sal_Int32 nDeletedCharacters = ( aSelection.Max - aSelection.Min ) - rNewText.getLength();
     if ( aNewSelection.Min > aSelection.Min )
         aNewSelection.Min -= nDeletedCharacters;
@@ -503,9 +503,9 @@ stardiv_Toolkit_UnoEditControl_get_implementation(
     return cppu::acquire(new UnoEditControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlFileControlModel
-//  ----------------------------------------------------
+
+
+
 UnoControlFileControlModel::UnoControlFileControlModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -556,7 +556,7 @@ uno::Any UnoControlFileControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlFileControlModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -571,9 +571,9 @@ stardiv_Toolkit_UnoControlFileControlModel_get_implementation(
     return cppu::acquire(new UnoControlFileControlModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoFileControl
-//  ----------------------------------------------------
+
+
+
 UnoFileControl::UnoFileControl()
     :UnoEditControl()
 {
@@ -592,9 +592,9 @@ stardiv_Toolkit_UnoFileControl_get_implementation(
     return cppu::acquire(new UnoFileControl());
 }
 
-//  ----------------------------------------------------
-//  class GraphicControlModel
-//  ----------------------------------------------------
+
+
+
 uno::Any GraphicControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_GRAPHIC )
@@ -607,8 +607,8 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
-    // - ImageAlign and ImagePosition need to correspond to each other
-    // - Graphic and ImageURL need to correspond to each other
+    
+    
     try
     {
         switch ( nHandle )
@@ -663,9 +663,9 @@ void SAL_CALL GraphicControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 n
     }
 }
 
-//  ----------------------------------------------------
-//  class UnoControlButtonModel
-//  ----------------------------------------------------
+
+
+
 UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
 {
@@ -674,8 +674,8 @@ UnoControlButtonModel::UnoControlButtonModel( const Reference< XComponentContext
     osl_atomic_increment( &m_refCount );
     {
         setFastPropertyValue_NoBroadcast( BASEPROPERTY_IMAGEPOSITION, ImplGetDefaultValue( BASEPROPERTY_IMAGEPOSITION ) );
-        // this ensures that our ImagePosition is consistent with our ImageAlign property (since both
-        // defaults are not per se consistent), since both are coupled in setFastPropertyValue_NoBroadcast
+        
+        
     }
     osl_atomic_decrement( &m_refCount );
 }
@@ -713,7 +713,7 @@ uno::Any UnoControlButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlButtonModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -728,9 +728,9 @@ stardiv_Toolkit_UnoControlButtonModel_get_implementation(
     return cppu::acquire(new UnoControlButtonModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoButtonControl
-//  ----------------------------------------------------
+
+
+
 UnoButtonControl::UnoButtonControl()
     :UnoButtonControl_Base()
     ,maActionListeners( *this )
@@ -747,7 +747,7 @@ OUString UnoButtonControl::GetComponentServiceName()
     sal_Int16 n = sal_Int16();
     if ( ( aVal >>= n ) && n )
     {
-        // Use PushButtonType later when available...
+        
         switch ( n )
         {
             case 1 /*PushButtonType::OK*/:      aName = "okbutton";
@@ -825,12 +825,12 @@ void SAL_CALL UnoButtonControl::disposing( const lang::EventObject& Source ) thr
 
 void SAL_CALL UnoButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw (uno::RuntimeException)
 {
-    // forward to model
+    
     uno::Any aAny;
     aAny <<= (sal_Int16)rEvent.Selected;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, sal_False );
 
-    // multiplex
+    
     ItemEvent aEvent( rEvent );
     aEvent.Source = *this;
     maItemListeners.itemStateChanged( aEvent );
@@ -876,9 +876,9 @@ stardiv_Toolkit_UnoButtonControl_get_implementation(
     return cppu::acquire(new UnoButtonControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlImageControlModel
-//  ----------------------------------------------------
+
+
+
 UnoControlImageControlModel::UnoControlImageControlModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
     ,mbAdjustingImageScaleMode( false )
@@ -913,7 +913,7 @@ uno::Any UnoControlImageControlModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlImageControlModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -924,7 +924,7 @@ void SAL_CALL UnoControlImageControlModel::setFastPropertyValue_NoBroadcast( sal
 {
     GraphicControlModel::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 
-    // ScaleImage is an older (and less powerful) version of ScaleMode, but keep both in sync as far as possible
+    
     try
     {
         switch ( _nHandle )
@@ -966,14 +966,14 @@ stardiv_Toolkit_UnoControlImageControlModel_get_implementation(
     return cppu::acquire(new UnoControlImageControlModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoImageControlControl
-//  ----------------------------------------------------
+
+
+
 UnoImageControlControl::UnoImageControlControl()
     :UnoImageControlControl_Base()
     ,maActionListeners( *this )
 {
-    // TODO: Where should I look for defaults?
+    
     maComponentInfos.nWidth = 100;
     maComponentInfos.nHeight = 100;
 }
@@ -1019,9 +1019,9 @@ stardiv_Toolkit_UnoImageControlControl_get_implementation(
     return cppu::acquire(new UnoImageControlControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlRadioButtonModel
-//  ----------------------------------------------------
+
+
+
 UnoControlRadioButtonModel::UnoControlRadioButtonModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
 {
@@ -1058,7 +1058,7 @@ uno::Any UnoControlRadioButtonModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlRadioButtonModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -1073,9 +1073,9 @@ stardiv_Toolkit_UnoControlRadioButtonModel_get_implementation(
     return cppu::acquire(new UnoControlRadioButtonModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoRadioButtonControl
-//  ----------------------------------------------------
+
+
+
 UnoRadioButtonControl::UnoRadioButtonControl()
     :UnoRadioButtonControl_Base()
     ,maItemListeners( *this )
@@ -1116,9 +1116,9 @@ void UnoRadioButtonControl::createPeer( const uno::Reference< awt::XToolkit > & 
     if ( maActionListeners.getLength() )
         xButton->addActionListener( &maActionListeners );
 
-    // as default, set the "AutoToggle" to true
-    // (it is set to false in VCLXToolkit::ImplCreateWindow because of #87254#, but we want to
-    // have it enabled by default because of 85071)
+    
+    
+    
     uno::Reference< awt::XVclWindowPeer >  xVclWindowPeer( getPeer(), uno::UNO_QUERY );
     if ( xVclWindowPeer.is() )
         xVclWindowPeer->setProperty( GetPropertyName( BASEPROPERTY_AUTOTOGGLE ), ::cppu::bool2any( true ) );
@@ -1193,31 +1193,31 @@ void UnoRadioButtonControl::itemStateChanged( const awt::ItemEvent& rEvent ) thr
     aAny <<= (sal_Int16)rEvent.Selected;
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_STATE ), aAny, sal_False );
 
-    // compatibility:
-    // in OOo 1.0.x, when the user clicked a radio button in a group of buttons, this resulted
-    // in _one_ itemStateChanged call for exactly the radio button which's state changed from
-    // "0" to "1".
-    // Nowadays, since the listener handling changed a lot towards 1.1 (the VCLXWindow reacts on more
-    // basic events from the VCL-windows, not anymore on the Link-based events like in 1.0.x), this
-    // isn't the case anymore: For instance, this method here gets called for the radio button
-    // which is being implicitily _de_selected, too. This is pretty bad for compatibility.
-    // Thus, we suppress all events with a new state other than "1". This is unlogical, and weird, when looking
-    // from a pure API perspective, but it's _compatible_ with older product versions, and this is
-    // all which matters here.
-    // #i14703#
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if ( 1 == rEvent.Selected )
     {
         if ( maItemListeners.getLength() )
             maItemListeners.itemStateChanged( rEvent );
     }
-        // note that speaking stricly, this is wrong: When in 1.0.x, the user would have de-selected
-        // a radio button _without_ selecing another one, this would have caused a notification.
-        // With the change done here, this today won't cause a notification anymore.
+        
+        
+        
         //
-        // Fortunately, it's not possible for the user to de-select a radio button without selecting another on,
-        // at least not via the regular UI. It _would_ be possible via the Accessibility API, which
-        // counts as "user input", too. But in 1.0.x, there was no Accessibility API, so there is nothing
-        // to be inconsistent with.
+        
+        
+        
+        
 }
 
 awt::Size UnoRadioButtonControl::getMinimumSize(  ) throw(uno::RuntimeException)
@@ -1243,9 +1243,9 @@ stardiv_Toolkit_UnoRadioButtonControl_get_implementation(
     return cppu::acquire(new UnoRadioButtonControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlCheckBoxModel
-//  ----------------------------------------------------
+
+
+
 UnoControlCheckBoxModel::UnoControlCheckBoxModel( const Reference< XComponentContext >& rxContext )
     :GraphicControlModel( rxContext )
 {
@@ -1282,7 +1282,7 @@ uno::Any UnoControlCheckBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlCheckBoxModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -1297,9 +1297,9 @@ stardiv_Toolkit_UnoControlCheckBoxModel_get_implementation(
     return cppu::acquire(new UnoControlCheckBoxModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoCheckBoxControl
-//  ----------------------------------------------------
+
+
+
 UnoCheckBoxControl::UnoCheckBoxControl()
     :UnoCheckBoxControl_Base()
     ,maItemListeners( *this ), maActionListeners( *this )
@@ -1442,9 +1442,9 @@ stardiv_Toolkit_UnoCheckBoxControl_get_implementation(
     return cppu::acquire(new UnoCheckBoxControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlFixedHyperlinkModel
-//  ----------------------------------------------------
+
+
+
 UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -1491,7 +1491,7 @@ uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId 
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlFixedHyperlinkModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -1506,9 +1506,9 @@ stardiv_Toolkit_UnoControlFixedHyperlinkModel_get_implementation(
     return cppu::acquire(new UnoControlFixedHyperlinkModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoFixedHyperlinkControl
-//  ----------------------------------------------------
+
+
+
 UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
     :UnoControlBase()
     ,maActionListeners( *this )
@@ -1522,7 +1522,7 @@ OUString UnoFixedHyperlinkControl::GetComponentServiceName()
     return OUString("fixedhyperlink");
 }
 
-// uno::XInterface
+
 uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -1531,7 +1531,7 @@ uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType ) t
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoFixedHyperlinkControl )
     getCppuType( ( uno::Reference< awt::XFixedHyperlink>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
@@ -1645,9 +1645,9 @@ stardiv_Toolkit_UnoFixedHyperlinkControl_get_implementation(
     return cppu::acquire(new UnoFixedHyperlinkControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlFixedTextModel
-//  ----------------------------------------------------
+
+
+
 UnoControlFixedTextModel::UnoControlFixedTextModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -1688,7 +1688,7 @@ uno::Any UnoControlFixedTextModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlFixedTextModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -1703,9 +1703,9 @@ stardiv_Toolkit_UnoControlFixedTextModel_get_implementation(
     return cppu::acquire(new UnoControlFixedTextModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoFixedTextControl
-//  ----------------------------------------------------
+
+
+
 UnoFixedTextControl::UnoFixedTextControl()
     :UnoControlBase()
 {
@@ -1718,7 +1718,7 @@ OUString UnoFixedTextControl::GetComponentServiceName()
     return OUString("fixedtext");
 }
 
-// uno::XInterface
+
 uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -1727,7 +1727,7 @@ uno::Any UnoFixedTextControl::queryAggregation( const uno::Type & rType ) throw(
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoFixedTextControl )
     getCppuType( ( uno::Reference< awt::XFixedText>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
@@ -1792,9 +1792,9 @@ stardiv_Toolkit_UnoFixedTextControl_get_implementation(
     return cppu::acquire(new UnoFixedTextControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlGroupBoxModel
-//  ----------------------------------------------------
+
+
+
 UnoControlGroupBoxModel::UnoControlGroupBoxModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -1837,7 +1837,7 @@ uno::Any UnoControlGroupBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) cons
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlGroupBoxModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -1852,9 +1852,9 @@ stardiv_Toolkit_UnoControlGroupBoxModel_get_implementation(
     return cppu::acquire(new UnoControlGroupBoxModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoGroupBoxControl
-//  ----------------------------------------------------
+
+
+
 UnoGroupBoxControl::UnoGroupBoxControl()
     :UnoControlBase()
 {
@@ -1880,9 +1880,9 @@ stardiv_Toolkit_UnoGroupBoxControl_get_implementation(
     return cppu::acquire(new UnoGroupBoxControl());
 }
 
-// =====================================================================================================================
-// = UnoControlListBoxModel_Data
-// =====================================================================================================================
+
+
+
 struct ListItem
 {
     OUString ItemText;
@@ -1982,10 +1982,10 @@ private:
     ::std::vector< ListItem >   m_aListItems;
 };
 
-// =====================================================================================================================
-// = UnoControlListBoxModel
-// =====================================================================================================================
-// ---------------------------------------------------------------------------------------------------------------------
+
+
+
+
 UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XComponentContext >& rxContext, ConstructorMode const i_mode )
     :UnoControlListBoxModel_Base( rxContext )
     ,m_pData( new UnoControlListBoxModel_Data( *this ) )
@@ -1996,7 +1996,7 @@ UnoControlListBoxModel::UnoControlListBoxModel( const Reference< XComponentConte
         UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXListBox );
     }
 }
-// ---------------------------------------------------------------------------------------------------------------------
+
 UnoControlListBoxModel::UnoControlListBoxModel( const UnoControlListBoxModel& i_rSource )
     :UnoControlListBoxModel_Base( i_rSource )
     ,m_pData( new UnoControlListBoxModel_Data( *this ) )
@@ -2008,13 +2008,13 @@ UnoControlListBoxModel::~UnoControlListBoxModel()
 {
 }
 IMPL_SERVICEINFO_DERIVED( UnoControlListBoxModel, UnoControlModel, szServiceName2_UnoControlListBoxModel )
-// ---------------------------------------------------------------------------------------------------------------------
+
 OUString UnoControlListBoxModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
 {
     return OUString::createFromAscii( szServiceName_UnoControlListBoxModel );
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
 {
     if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
@@ -2026,7 +2026,7 @@ uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return UnoControlModel::ImplGetDefaultValue( nPropId );
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& UnoControlListBoxModel::getInfoHelper()
 {
     static UnoPropertyArrayHelper* pHelper = NULL;
@@ -2038,15 +2038,15 @@ uno::Any UnoControlListBoxModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
     return *pHelper;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-// beans::XMultiPropertySet
+
+
 uno::Reference< beans::XPropertySetInfo > UnoControlListBoxModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 namespace
 {
     struct CreateListItem : public ::std::unary_function< OUString, ListItem >
@@ -2058,14 +2058,14 @@ namespace
     };
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& rValue ) throw (uno::Exception)
 {
     UnoControlModel::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
     if ( nHandle == BASEPROPERTY_STRINGITEMLIST )
     {
-        // reset selection
+        
         uno::Sequence<sal_Int16> aSeq;
         uno::Any aAny;
         aAny <<= aSeq;
@@ -2073,7 +2073,7 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
 
         if ( !m_pData->m_bSettingLegacyProperty )
         {
-            // synchronize the legacy StringItemList property with our list items
+            
             Sequence< OUString > aStringItemList;
             Any aPropValue;
             getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
@@ -2088,133 +2088,133 @@ void SAL_CALL UnoControlListBoxModel::setFastPropertyValue_NoBroadcast( sal_Int3
             );
             m_pData->setAllItems( aItems );
 
-            // since an XItemListListener does not have a "all items modified" or some such method,
-            // we simulate this by notifying removal of all items, followed by insertion of all new
-            // items
+            
+            
+            
             lang::EventObject aEvent;
             aEvent.Source = *this;
             m_aItemListListeners.notifyEach( &XItemListListener::itemListChanged, aEvent );
-            // TODO: OPropertySetHelper calls into this method with the mutex locked ...
-            // which is wrong for the above notifications ...
+            
+            
         }
     }
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void UnoControlListBoxModel::ImplNormalizePropertySequence( const sal_Int32 _nCount, sal_Int32* _pHandles,
     uno::Any* _pValues, sal_Int32* _pValidHandles ) const SAL_THROW(())
 {
-    // dependencies we know:
-    // BASEPROPERTY_STRINGITEMLIST->BASEPROPERTY_SELECTEDITEMS
+    
+    
     ImplEnsureHandleOrder( _nCount, _pHandles, _pValues, BASEPROPERTY_STRINGITEMLIST, BASEPROPERTY_SELECTEDITEMS );
 
     UnoControlModel::ImplNormalizePropertySequence( _nCount, _pHandles, _pValues, _pValidHandles );
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL UnoControlListBoxModel::getItemCount() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     return m_pData->getItemCount();
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::insertItem( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // SYNCHRONIZED ----->
+    
     ListItem& rItem( m_pData->insertItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
     rItem.ItemImageURL = i_rItemImageURL;
 
     impl_handleInsert( i_nPosition, i_rItemText, i_rItemImageURL, aGuard );
-    // <----- SYNCHRONIZED
+    
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::insertItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // SYNCHRONIZED ----->
+    
     ListItem& rItem( m_pData->insertItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
 
     impl_handleInsert( i_nPosition, i_rItemText, ::boost::optional< OUString >(), aGuard );
-    // <----- SYNCHRONIZED
+    
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::insertItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // SYNCHRONIZED ----->
+    
     ListItem& rItem( m_pData->insertItem( i_nPosition ) );
     rItem.ItemImageURL = i_rItemImageURL;
 
     impl_handleInsert( i_nPosition, ::boost::optional< OUString >(), i_rItemImageURL, aGuard );
-    // <----- SYNCHRONIZED
+    
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::removeItem( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // SYNCHRONIZED ----->
+    
     m_pData->removeItem( i_nPosition );
 
     impl_handleRemove( i_nPosition, aGuard );
-    // <----- SYNCHRONIZED
+    
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::removeAllItems(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // SYNCHRONIZED ----->
+    
     m_pData->removeAllItems();
 
     impl_handleRemove( -1, aGuard );
-    // <----- SYNCHRONIZED
+    
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::setItemText( ::sal_Int32 i_nPosition, const OUString& i_rItemText ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // SYNCHRONIZED ----->
+    
     ListItem& rItem( m_pData->getItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
 
     impl_handleModify( i_nPosition, i_rItemText, ::boost::optional< OUString >(), aGuard );
-    // <----- SYNCHRONIZED
+    
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::setItemImage( ::sal_Int32 i_nPosition, const OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // SYNCHRONIZED ----->
+    
     ListItem& rItem( m_pData->getItem( i_nPosition ) );
     rItem.ItemImageURL = i_rItemImageURL;
 
     impl_handleModify( i_nPosition, ::boost::optional< OUString >(), i_rItemImageURL, aGuard );
-    // <----- SYNCHRONIZED
+    
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::setItemTextAndImage( ::sal_Int32 i_nPosition, const OUString& i_rItemText, const OUString& i_rItemImageURL ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-    // SYNCHRONIZED ----->
+    
     ListItem& rItem( m_pData->getItem( i_nPosition ) );
     rItem.ItemText = i_rItemText;
     rItem.ItemImageURL = i_rItemImageURL;
 
     impl_handleModify( i_nPosition, i_rItemText, i_rItemImageURL, aGuard );
-    // <----- SYNCHRONIZED
+    
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, const Any& i_rDataValue ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
@@ -2222,7 +2222,7 @@ void SAL_CALL UnoControlListBoxModel::setItemData( ::sal_Int32 i_nPosition, cons
     rItem.ItemData = i_rDataValue;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 OUString SAL_CALL UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
@@ -2230,7 +2230,7 @@ OUString SAL_CALL UnoControlListBoxModel::getItemText( ::sal_Int32 i_nPosition )
     return rItem.ItemText;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 OUString SAL_CALL UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
@@ -2238,7 +2238,7 @@ OUString SAL_CALL UnoControlListBoxModel::getItemImage( ::sal_Int32 i_nPosition 
     return rItem.ItemImageURL;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 beans::Pair< OUString, OUString > SAL_CALL UnoControlListBoxModel::getItemTextAndImage( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
@@ -2246,7 +2246,7 @@ beans::Pair< OUString, OUString > SAL_CALL UnoControlListBoxModel::getItemTextAn
     return beans::Pair< OUString, OUString >( rItem.ItemText, rItem.ItemImageURL );
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 Any SAL_CALL UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition ) throw (IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
@@ -2254,28 +2254,28 @@ Any SAL_CALL UnoControlListBoxModel::getItemData( ::sal_Int32 i_nPosition ) thro
     return rItem.ItemData;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 Sequence< beans::Pair< OUString, OUString > > SAL_CALL UnoControlListBoxModel::getAllItems(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     return m_pData->getAllItems();
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::addItemListListener( const uno::Reference< awt::XItemListListener >& i_Listener ) throw (uno::RuntimeException)
 {
     if ( i_Listener.is() )
         m_aItemListListeners.addInterface( i_Listener );
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void SAL_CALL UnoControlListBoxModel::removeItemListListener( const uno::Reference< awt::XItemListListener >& i_Listener ) throw (uno::RuntimeException)
 {
     if ( i_Listener.is() )
         m_aItemListListeners.removeInterface( i_Listener );
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& o_rStringItems ) const
 {
     Sequence< OUString > aStringItemList;
@@ -2291,7 +2291,7 @@ void UnoControlListBoxModel::impl_getStringItemList( ::std::vector< OUString >& 
     );
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< OUString >& i_rStringItems )
 {
     Sequence< OUString > aStringItems( i_rStringItems.size() );
@@ -2313,12 +2313,12 @@ void UnoControlListBoxModel::impl_setStringItemList_nolck( const ::std::vector< 
     m_pData->m_bSettingLegacyProperty = false;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition, const ::boost::optional< OUString >& i_rItemText,
         const ::boost::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
 {
-    // SYNCHRONIZED ----->
-    // sync with legacy StringItemList property
+    
+    
     ::std::vector< OUString > aStringItems;
     impl_getStringItemList( aStringItems );
     OSL_ENSURE( size_t( i_nItemPosition ) <= aStringItems.size(), "UnoControlListBoxModel::impl_handleInsert" );
@@ -2329,19 +2329,19 @@ void UnoControlListBoxModel::impl_handleInsert( const sal_Int32 i_nItemPosition,
     }
 
     i_rClearBeforeNotify.clear();
-    // <----- SYNCHRONIZED
+    
     impl_setStringItemList_nolck( aStringItems );
 
-    // notify ItemListListeners
+    
     impl_notifyItemListEvent_nolck( i_nItemPosition, i_rItemText, i_rItemImageURL, &XItemListListener::listItemInserted );
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
 {
-    // SYNCHRONIZED ----->
+    
     const bool bAllItems = ( i_nItemPosition < 0 );
-    // sync with legacy StringItemList property
+    
     ::std::vector< OUString > aStringItems;
     impl_getStringItemList( aStringItems );
     if ( !bAllItems )
@@ -2358,10 +2358,10 @@ void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition,
     }
 
     i_rClearBeforeNotify.clear();
-    // <----- SYNCHRONIZED
+    
     impl_setStringItemList_nolck( aStringItems );
 
-    // notify ItemListListeners
+    
     if ( bAllItems )
     {
         EventObject aEvent( *this );
@@ -2374,14 +2374,14 @@ void UnoControlListBoxModel::impl_handleRemove( const sal_Int32 i_nItemPosition,
     }
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition, const ::boost::optional< OUString >& i_rItemText,
         const ::boost::optional< OUString >& i_rItemImageURL, ::osl::ClearableMutexGuard& i_rClearBeforeNotify )
 {
-    // SYNCHRONIZED ----->
+    
     if ( !!i_rItemText )
     {
-        // sync with legacy StringItemList property
+        
         ::std::vector< OUString > aStringItems;
         impl_getStringItemList( aStringItems );
         OSL_ENSURE( size_t( i_nItemPosition ) < aStringItems.size(), "UnoControlListBoxModel::impl_handleModify" );
@@ -2391,20 +2391,20 @@ void UnoControlListBoxModel::impl_handleModify( const sal_Int32 i_nItemPosition,
         }
 
         i_rClearBeforeNotify.clear();
-        // <----- SYNCHRONIZED
+        
         impl_setStringItemList_nolck( aStringItems );
     }
     else
     {
         i_rClearBeforeNotify.clear();
-        // <----- SYNCHRONIZED
+        
     }
 
-    // notify ItemListListeners
+    
     impl_notifyItemListEvent_nolck( i_nItemPosition, i_rItemText, i_rItemImageURL, &XItemListListener::listItemModified );
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 void UnoControlListBoxModel::impl_notifyItemListEvent_nolck( const sal_Int32 i_nItemPosition, const ::boost::optional< OUString >& i_rItemText,
     const ::boost::optional< OUString >& i_rItemImageURL,
     void ( SAL_CALL XItemListListener::*NotificationMethod )( const ItemListEvent& ) )
@@ -2434,9 +2434,9 @@ stardiv_Toolkit_UnoControlListBoxModel_get_implementation(
     return cppu::acquire(new UnoControlListBoxModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoListBoxControl
-//  ----------------------------------------------------
+
+
+
 UnoListBoxControl::UnoListBoxControl()
     :UnoListBoxControl_Base()
     ,maActionListeners( *this )
@@ -2485,9 +2485,9 @@ void UnoListBoxControl::updateFromModel()
     EventObject aEvent( getModel() );
     xItemListListener->itemListChanged( aEvent );
 
-    // notify the change of the SelectedItems property, again. While our base class, in updateFromModel,
-    // already did this, our peer(s) can only legitimately set the selection after they have the string
-    // item list, which we just notified with the itemListChanged call.
+    
+    
+    
     const OUString sSelectedItemsPropName( GetPropertyName( BASEPROPERTY_SELECTEDITEMS ) );
     ImplSetPeerProperty( sSelectedItemsPropName, ImplGetPropertyValue( sSelectedItemsPropName ) );
 }
@@ -2495,9 +2495,9 @@ void UnoListBoxControl::updateFromModel()
 void UnoListBoxControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
 {
     if ( rPropName == GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) )
-        // do not forward this to our peer. We are a XItemListListener at our model, and changes in the string item
-        // list (which is a legacy property) will, later, arrive as changes in the ItemList. Those latter changes
-        // will be forwarded to the peer, which will update itself accordingly.
+        
+        
+        
         return;
 
     UnoControl::ImplSetPeerProperty( rPropName, rVal );
@@ -2568,15 +2568,15 @@ void UnoListBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_In
         nPos = (sal_uInt16) nOldLen;
 
     sal_uInt16 n;
-    // Items vor der Einfuege-Position
+    
     for ( n = 0; n < nPos; n++ )
         pNewData[n] = pOldData[n];
 
-    // Neue Items
+    
     for ( n = 0; n < nNewItems; n++ )
         pNewData[nPos+n] = aItems.getConstArray()[n];
 
-    // Rest der alten Items
+    
     for ( n = nPos; n < nOldLen; n++ )
         pNewData[nNewItems+n] = pOldData[n];
 
@@ -2603,11 +2603,11 @@ void UnoListBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(un
         OUString* pOldData = aSeq.getArray();
 
         sal_uInt16 n;
-        // Items vor der Entfern-Position
+        
         for ( n = 0; n < nPos; n++ )
             pNewData[n] = pOldData[n];
 
-        // Rest der Items
+        
         for ( n = nPos; n < (nOldLen-nCount); n++ )
             pNewData[n] = pOldData[n+nCount];
 
@@ -2763,7 +2763,7 @@ void UnoListBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(u
         catch( const Exception& e )
         {
 #if OSL_DEBUG_LEVEL == 0
-            (void) e; // suppress warning
+            (void) e; 
 #else
             OString sMessage( "UnoListBoxControl::itemStateChanged: caught an exception:\n" );
             sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
@@ -2866,9 +2866,9 @@ stardiv_Toolkit_UnoListBoxControl_get_implementation(
     return cppu::acquire(new UnoListBoxControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlComboBoxModel
-//  ----------------------------------------------------
+
+
+
 UnoControlComboBoxModel::UnoControlComboBoxModel( const Reference< XComponentContext >& rxContext )
     :UnoControlListBoxModel( rxContext, ConstructWithoutProperties )
 {
@@ -2882,7 +2882,7 @@ uno::Reference< beans::XPropertySetInfo > UnoControlComboBoxModel::getPropertySe
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
-// ---------------------------------------------------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& UnoControlComboBoxModel::getInfoHelper()
 {
     static UnoPropertyArrayHelper* pHelper = NULL;
@@ -2905,7 +2905,7 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
 
     if ( nHandle == BASEPROPERTY_STRINGITEMLIST && !m_pData->m_bSettingLegacyProperty)
     {
-        // synchronize the legacy StringItemList property with our list items
+        
         Sequence< OUString > aStringItemList;
         Any aPropValue;
         getFastPropertyValue( aPropValue, BASEPROPERTY_STRINGITEMLIST );
@@ -2920,14 +2920,14 @@ void SAL_CALL UnoControlComboBoxModel::setFastPropertyValue_NoBroadcast( sal_Int
         );
         m_pData->setAllItems( aItems );
 
-        // since an XItemListListener does not have a "all items modified" or some such method,
-        // we simulate this by notifying removal of all items, followed by insertion of all new
-        // items
+        
+        
+        
         lang::EventObject aEvent;
         aEvent.Source = *this;
         m_aItemListListeners.notifyEach( &XItemListListener::itemListChanged, aEvent );
-        // TODO: OPropertySetHelper calls into this method with the mutex locked ...
-        // which is wrong for the above notifications ...
+        
+        
     }
 }
 
@@ -2950,9 +2950,9 @@ stardiv_Toolkit_UnoControlComboBoxModel_get_implementation(
     return cppu::acquire(new UnoControlComboBoxModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoComboBoxControl
-//  ----------------------------------------------------
+
+
+
 UnoComboBoxControl::UnoComboBoxControl()
     :UnoEditControl()
     ,maActionListeners( *this )
@@ -2992,7 +2992,7 @@ uno::Any UnoComboBoxControl::queryAggregation( const uno::Type & rType ) throw(u
     }
     return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
 }
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoComboBoxControl )
     getCppuType( ( uno::Reference< awt::XComboBox>* ) NULL ),
     getCppuType( ( uno::Reference< awt::XItemListener>* ) NULL ),
@@ -3013,9 +3013,9 @@ void UnoComboBoxControl::updateFromModel()
 void UnoComboBoxControl::ImplSetPeerProperty( const OUString& rPropName, const uno::Any& rVal )
 {
     if ( rPropName == GetPropertyName( BASEPROPERTY_STRINGITEMLIST ) )
-        // do not forward this to our peer. We are a XItemListListener at our model, and changes in the string item
-        // list (which is a legacy property) will, later, arrive as changes in the ItemList. Those latter changes
-        // will be forwarded to the peer, which will update itself accordingly.
+        
+        
+        
         return;
 
     UnoEditControl::ImplSetPeerProperty( rPropName, rVal );
@@ -3065,7 +3065,7 @@ void UnoComboBoxControl::removeItemListener(const uno::Reference < awt::XItemLis
 {
     if( getPeer().is() && maItemListeners.getLength() == 1 )
     {
-        // This call is prettier than creating a Ref and calling query
+        
         uno::Reference < awt::XComboBox >  xComboBox( getPeer(), uno::UNO_QUERY );
         xComboBox->removeItemListener( &maItemListeners );
     }
@@ -3082,7 +3082,7 @@ void UnoComboBoxControl::itemStateChanged( const awt::ItemEvent& rEvent ) throw(
         catch( const Exception& e )
         {
 #if OSL_DEBUG_LEVEL == 0
-            (void) e; // suppress warning
+            (void) e; 
 #else
             OString sMessage( "UnoComboBoxControl::itemStateChanged: caught an exception:\n" );
             sMessage += OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
@@ -3175,15 +3175,15 @@ void UnoComboBoxControl::addItems( const uno::Sequence< OUString>& aItems, sal_I
         nPos = (sal_uInt16) nOldLen;
 
     sal_uInt16 n;
-    // items before the insert position
+    
     for ( n = 0; n < nPos; n++ )
         pNewData[n] = pOldData[n];
 
-    // New items
+    
     for ( n = 0; n < nNewItems; n++ )
         pNewData[nPos+n] = aItems.getConstArray()[n];
 
-    // remainder of old items
+    
     for ( n = nPos; n < nOldLen; n++ )
         pNewData[nNewItems+n] = pOldData[n];
 
@@ -3210,11 +3210,11 @@ void UnoComboBoxControl::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(u
         OUString* pOldData = aSeq.getArray();
 
         sal_uInt16 n;
-        // items before the deletion position
+        
         for ( n = 0; n < nPos; n++ )
             pNewData[n] = pOldData[n];
 
-        // remainder of old items
+        
         for ( n = nPos; n < (nOldLen-nCount); n++ )
             pNewData[n] = pOldData[n+nCount];
 
@@ -3271,9 +3271,9 @@ stardiv_Toolkit_UnoComboBoxControl_get_implementation(
     return cppu::acquire(new UnoComboBoxControl());
 }
 
-//  ----------------------------------------------------
-//  UnoSpinFieldControl
-//  ----------------------------------------------------
+
+
+
 UnoSpinFieldControl::UnoSpinFieldControl()
     :UnoEditControl()
     ,maSpinListeners( *this )
@@ -3281,7 +3281,7 @@ UnoSpinFieldControl::UnoSpinFieldControl()
     mbRepeat = sal_False;
 }
 
-// uno::XInterface
+
 uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -3289,7 +3289,7 @@ uno::Any UnoSpinFieldControl::queryAggregation( const uno::Type & rType ) throw(
     return (aRet.hasValue() ? aRet : UnoEditControl::queryAggregation( rType ));
 }
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoSpinFieldControl )
     getCppuType( ( uno::Reference< awt::XSpinField>* ) NULL ),
     UnoEditControl::getTypes()
@@ -3305,7 +3305,7 @@ void UnoSpinFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
         xField->addSpinListener( &maSpinListeners );
 }
 
-    // ::com::sun::star::awt::XSpinField
+    
 void UnoSpinFieldControl::addSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener >& l ) throw(::com::sun::star::uno::RuntimeException)
 {
     maSpinListeners.addInterface( l );
@@ -3363,9 +3363,9 @@ void UnoSpinFieldControl::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::sta
         xField->enableRepeat( bRepeat );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlDateFieldModel
-//  ----------------------------------------------------
+
+
+
 UnoControlDateFieldModel::UnoControlDateFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -3400,7 +3400,7 @@ uno::Any UnoControlDateFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlDateFieldModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -3415,9 +3415,9 @@ stardiv_Toolkit_UnoControlDateFieldModel_get_implementation(
     return cppu::acquire(new UnoControlDateFieldModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoDateFieldControl
-//  ----------------------------------------------------
+
+
+
 UnoDateFieldControl::UnoDateFieldControl()
     :UnoSpinFieldControl()
 {
@@ -3431,7 +3431,7 @@ OUString UnoDateFieldControl::GetComponentServiceName()
     return OUString("datefield");
 }
 
-// uno::XInterface
+
 uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -3439,7 +3439,7 @@ uno::Any UnoDateFieldControl::queryAggregation( const uno::Type & rType ) throw(
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoDateFieldControl )
     getCppuType( ( uno::Reference< awt::XDateField>* ) NULL ),
     UnoSpinFieldControl::getTypes()
@@ -3452,7 +3452,7 @@ void UnoDateFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
     uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
     xField->setFirst( mnFirst );
     xField->setLast( mnLast );
-    if ( mbLongFormat != 2 )    // not set
+    if ( mbLongFormat != 2 )    
         xField->setLongFormat( mbLongFormat );
 }
 
@@ -3461,30 +3461,30 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
 {
     uno::Reference< awt::XVclWindowPeer > xPeer( getPeer(), uno::UNO_QUERY );
 
-    // also change the text property (#i25106#)
+    
     if ( xPeer.is() )
     {
         OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
         ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
     }
 
-    // re-calc the Date property
+    
     uno::Reference < awt::XDateField > xField( getPeer(), uno::UNO_QUERY );
     uno::Any aValue;
     if ( xField->isEmpty() )
     {
-        // the field says it's empty
+        
         sal_Bool bEnforceFormat = sal_True;
         if ( xPeer.is() )
             xPeer->getProperty( GetPropertyName( BASEPROPERTY_ENFORCE_FORMAT ) ) >>= bEnforceFormat;
         if ( !bEnforceFormat )
         {
-            // and it also says that it is currently accepting invalid inputs, without
-            // forcing it to a valid date
+            
+            
             uno::Reference< awt::XTextComponent > xText( xPeer, uno::UNO_QUERY );
             if ( xText.is() && xText->getText().getLength() )
-                // and in real, the text of the peer is *not* empty
-                // -> simulate an invalid date, which is different from "no date"
+                
+                
                 aValue <<= util::Date();
         }
     }
@@ -3493,7 +3493,7 @@ void UnoDateFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
 
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_DATE ), aValue, sal_False );
 
-    // multiplex the event
+    
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );
 }
@@ -3619,9 +3619,9 @@ stardiv_Toolkit_UnoDateFieldControl_get_implementation(
     return cppu::acquire(new UnoDateFieldControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlTimeFieldModel
-//  ----------------------------------------------------
+
+
+
 UnoControlTimeFieldModel::UnoControlTimeFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -3656,7 +3656,7 @@ uno::Any UnoControlTimeFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlTimeFieldModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -3671,9 +3671,9 @@ stardiv_Toolkit_UnoControlTimeFieldModel_get_implementation(
     return cppu::acquire(new UnoControlTimeFieldModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoTimeFieldControl
-//  ----------------------------------------------------
+
+
+
 UnoTimeFieldControl::UnoTimeFieldControl()
     :UnoSpinFieldControl()
 {
@@ -3686,7 +3686,7 @@ OUString UnoTimeFieldControl::GetComponentServiceName()
     return OUString("timefield");
 }
 
-// uno::XInterface
+
 uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -3694,7 +3694,7 @@ uno::Any UnoTimeFieldControl::queryAggregation( const uno::Type & rType ) throw(
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoTimeFieldControl )
     getCppuType( ( uno::Reference< awt::XTimeField>* ) NULL ),
     UnoSpinFieldControl::getTypes()
@@ -3711,19 +3711,19 @@ void UnoTimeFieldControl::createPeer( const uno::Reference< awt::XToolkit > & rx
 
 void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::RuntimeException)
 {
-    // also change the text property (#i25106#)
+    
     uno::Reference< awt::XVclWindowPeer > xPeer( getPeer(), uno::UNO_QUERY );
     OUString sTextPropertyName = GetPropertyName( BASEPROPERTY_TEXT );
     ImplSetPropertyValue( sTextPropertyName, xPeer->getProperty( sTextPropertyName ), sal_False );
 
-    // re-calc the Time property
+    
     uno::Reference < awt::XTimeField >  xField( getPeer(), uno::UNO_QUERY );
     uno::Any aValue;
     if ( !xField->isEmpty() )
         aValue <<= xField->getTime();
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aValue, sal_False );
 
-    // multiplex the event
+    
     if ( GetTextListeners().getLength() )
         GetTextListeners().textChanged( e );
 }
@@ -3834,9 +3834,9 @@ stardiv_Toolkit_UnoTimeFieldControl_get_implementation(
     return cppu::acquire(new UnoTimeFieldControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlNumericFieldModel
-//  ----------------------------------------------------
+
+
+
 UnoControlNumericFieldModel::UnoControlNumericFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -3871,7 +3871,7 @@ uno::Any UnoControlNumericFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlNumericFieldModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -3886,9 +3886,9 @@ stardiv_Toolkit_UnoControlNumericFieldModel_get_implementation(
     return cppu::acquire(new UnoControlNumericFieldModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoNumericFieldControl
-//  ----------------------------------------------------
+
+
+
 UnoNumericFieldControl::UnoNumericFieldControl()
     :UnoSpinFieldControl()
 {
@@ -3901,7 +3901,7 @@ OUString UnoNumericFieldControl::GetComponentServiceName()
     return OUString("numericfield");
 }
 
-// uno::XInterface
+
 uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -3909,7 +3909,7 @@ uno::Any UnoNumericFieldControl::queryAggregation( const uno::Type & rType ) thr
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoNumericFieldControl )
     getCppuType( ( uno::Reference< awt::XNumericField>* ) NULL ),
     UnoSpinFieldControl::getTypes()
@@ -4046,9 +4046,9 @@ stardiv_Toolkit_UnoNumericFieldControl_get_implementation(
     return cppu::acquire(new UnoNumericFieldControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlCurrencyFieldModel
-//  ----------------------------------------------------
+
+
+
 UnoControlCurrencyFieldModel::UnoControlCurrencyFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -4089,7 +4089,7 @@ uno::Any UnoControlCurrencyFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId )
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlCurrencyFieldModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -4104,9 +4104,9 @@ stardiv_Toolkit_UnoControlCurrencyFieldModel_get_implementation(
     return cppu::acquire(new UnoControlCurrencyFieldModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoCurrencyFieldControl
-//  ----------------------------------------------------
+
+
+
 UnoCurrencyFieldControl::UnoCurrencyFieldControl()
     :UnoSpinFieldControl()
 {
@@ -4119,7 +4119,7 @@ OUString UnoCurrencyFieldControl::GetComponentServiceName()
     return OUString("longcurrencyfield");
 }
 
-// uno::XInterface
+
 uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -4127,7 +4127,7 @@ uno::Any UnoCurrencyFieldControl::queryAggregation( const uno::Type & rType ) th
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoCurrencyFieldControl )
     getCppuType( ( uno::Reference< awt::XCurrencyField>* ) NULL ),
     UnoSpinFieldControl::getTypes()
@@ -4263,9 +4263,9 @@ stardiv_Toolkit_UnoCurrencyFieldControl_get_implementation(
     return cppu::acquire(new UnoCurrencyFieldControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlPatternFieldModel
-//  ----------------------------------------------------
+
+
+
 UnoControlPatternFieldModel::UnoControlPatternFieldModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -4299,7 +4299,7 @@ uno::Any UnoControlPatternFieldModel::ImplGetDefaultValue( sal_uInt16 nPropId ) 
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlPatternFieldModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -4314,9 +4314,9 @@ stardiv_Toolkit_UnoControlPatternFieldModel_get_implementation(
     return cppu::acquire(new UnoControlPatternFieldModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoPatternFieldControl
-//  ----------------------------------------------------
+
+
+
 UnoPatternFieldControl::UnoPatternFieldControl()
     :UnoSpinFieldControl()
 {
@@ -4332,7 +4332,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, con
     sal_uInt16 nType = GetPropertyId( rPropName );
     if ( ( nType == BASEPROPERTY_TEXT ) || ( nType == BASEPROPERTY_EDITMASK ) || ( nType == BASEPROPERTY_LITERALMASK ) )
     {
-        // These masks cannot be set consecutively
+        
         OUString Text = ImplGetPropertyValue_UString( BASEPROPERTY_TEXT );
         OUString EditMask = ImplGetPropertyValue_UString( BASEPROPERTY_EDITMASK );
         OUString LiteralMask = ImplGetPropertyValue_UString( BASEPROPERTY_LITERALMASK );
@@ -4340,7 +4340,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, con
         uno::Reference < awt::XPatternField >  xPF( getPeer(), uno::UNO_QUERY );
         if (xPF.is())
         {
-            // same comment as in UnoControl::ImplSetPeerProperty - see there
+            
             OUString sText( Text );
             ImplCheckLocalize( sText );
             xPF->setString( sText );
@@ -4352,7 +4352,7 @@ void UnoPatternFieldControl::ImplSetPeerProperty( const OUString& rPropName, con
 }
 
 
-// uno::XInterface
+
 uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -4360,7 +4360,7 @@ uno::Any UnoPatternFieldControl::queryAggregation( const uno::Type & rType ) thr
     return (aRet.hasValue() ? aRet : UnoSpinFieldControl::queryAggregation( rType ));
 }
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoPatternFieldControl )
     getCppuType( ( uno::Reference< awt::XPatternField>* ) NULL ),
     UnoSpinFieldControl::getTypes()
@@ -4411,9 +4411,9 @@ stardiv_Toolkit_UnoPatternFieldControl_get_implementation(
     return cppu::acquire(new UnoPatternFieldControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlProgressBarModel
-//  ----------------------------------------------------
+
+
+
 UnoControlProgressBarModel::UnoControlProgressBarModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -4460,7 +4460,7 @@ uno::Any UnoControlProgressBarModel::ImplGetDefaultValue( sal_uInt16 nPropId ) c
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlProgressBarModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -4475,9 +4475,9 @@ stardiv_Toolkit_UnoControlProgressBarModel_get_implementation(
     return cppu::acquire(new UnoControlProgressBarModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoProgressBarControl
-//  ----------------------------------------------------
+
+
+
 UnoProgressBarControl::UnoProgressBarControl()
     :UnoControlBase()
 {
@@ -4488,7 +4488,7 @@ OUString UnoProgressBarControl::GetComponentServiceName()
     return OUString("ProgressBar");
 }
 
-// uno::XInterface
+
 uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -4496,13 +4496,13 @@ uno::Any UnoProgressBarControl::queryAggregation( const uno::Type & rType ) thro
     return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
 }
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( UnoProgressBarControl )
     getCppuType( ( uno::Reference< awt::XProgressBar>* ) NULL ),
     UnoControlBase::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-// ::com::sun::star::awt::XProgressBar
+
 void UnoProgressBarControl::setForegroundColor( sal_Int32 nColor ) throw(::com::sun::star::uno::RuntimeException)
 {
     uno::Any aAny;
@@ -4531,13 +4531,13 @@ void UnoProgressBarControl::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(::c
 
     if ( nMin < nMax )
     {
-        // take correct min and max
+        
         aMin <<= nMin;
         aMax <<= nMax;
     }
     else
     {
-        // change min and max
+        
         aMin <<= nMax;
         aMax <<= nMin;
     }
@@ -4559,9 +4559,9 @@ stardiv_Toolkit_UnoProgressBarControl_get_implementation(
     return cppu::acquire(new UnoProgressBarControl());
 }
 
-//  ----------------------------------------------------
-//  class UnoControlFixedLineModel
-//  ----------------------------------------------------
+
+
+
 UnoControlFixedLineModel::UnoControlFixedLineModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel( rxContext )
 {
@@ -4604,7 +4604,7 @@ uno::Any UnoControlFixedLineModel::ImplGetDefaultValue( sal_uInt16 nPropId ) con
     return *pHelper;
 }
 
-// beans::XMultiPropertySet
+
 uno::Reference< beans::XPropertySetInfo > UnoControlFixedLineModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
@@ -4619,14 +4619,14 @@ stardiv_Toolkit_UnoControlFixedLineModel_get_implementation(
     return cppu::acquire(new UnoControlFixedLineModel(context));
 }
 
-//  ----------------------------------------------------
-//  class UnoFixedLineControl
-//  ----------------------------------------------------
+
+
+
 UnoFixedLineControl::UnoFixedLineControl()
     :UnoControlBase()
 {
-    maComponentInfos.nWidth = 100;      // ??
-    maComponentInfos.nHeight = 100;     // ??
+    maComponentInfos.nWidth = 100;      
+    maComponentInfos.nHeight = 100;     
 }
 
 OUString UnoFixedLineControl::GetComponentServiceName()

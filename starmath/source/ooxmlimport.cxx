@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
@@ -26,7 +26,7 @@ The primary internal data structure for the formula is the text representation
 #define OPENING( token ) XML_STREAM_OPENING( token )
 #define CLOSING( token ) XML_STREAM_CLOSING( token )
 
-// TODO create IS_OPENING(), IS_CLOSING() instead of doing 'next == OPENING( next )' ?
+
 
 SmOoxmlImport::SmOoxmlImport( oox::formulaimport::XmlStream& s )
 : stream( s )
@@ -38,18 +38,18 @@ OUString SmOoxmlImport::ConvertToStarMath()
     return handleStream();
 }
 
-// "toplevel" of reading, there will be oMath (if there was oMathPara, that was
-// up to the parent component to handle)
 
-// NOT complete
+
+
+
 OUString SmOoxmlImport::handleStream()
 {
     stream.ensureOpeningTag( M_TOKEN( oMath ));
     OUString ret;
     while( !stream.atEnd() && stream.currentToken() != CLOSING( M_TOKEN( oMath )))
     {
-        // strictly speaking, it is not OMathArg here, but currently supported
-        // functionality is the same like OMathArg, in the future this may need improving
+        
+        
         OUString item = readOMathArg( M_TOKEN( oMath ));
         if( item.isEmpty())
             continue;
@@ -58,11 +58,11 @@ OUString SmOoxmlImport::handleStream()
         ret += item;
     }
     stream.ensureClosingTag( M_TOKEN( oMath ));
-    // Placeholders are written out as nothing (i.e. nothing inside e.g. the <e> element),
-    // which will result in "{}" in the formula text. Fix this up.
+    
+    
     ret = ret.replaceAll( "{}", "<?>" );
-    // And as a result, empty parts of the formula that are not placeholders are written out
-    // as a single space, so fix that up too.
+    
+    
     ret = ret.replaceAll( "{ }", "{}" );
     SAL_INFO( "starmath.ooxml", "Formula: " << ret );
     return ret;
@@ -163,7 +163,7 @@ OUString SmOoxmlImport::handleAcc()
         }
         stream.ensureClosingTag( M_TOKEN( accPr ));
     }
-    // see aTokenTable in parse.cxx
+    
     OUString acc;
     switch( accChr )
     {
@@ -193,9 +193,9 @@ OUString SmOoxmlImport::handleAcc()
             break;
         case MS_RIGHTARROW:
         case MS_VEC:
-            // prefer wide variants for these 3, .docx can't seem to differentiate
-            // between e.g. 'vec' and 'widevec', if whatever the accent is above is short, this
-            // shouldn't matter, but short above a longer expression doesn't look right
+            
+            
+            
             acc = "widevec";
             break;
         case MS_TILDE:
@@ -251,8 +251,8 @@ OUString SmOoxmlImport::handleBar()
 
 OUString SmOoxmlImport::handleBox()
 {
-    // there does not seem to be functionality in LO to actually implement this
-    // (or is there), but at least read in the contents instead of ignoring them
+    
+    
     stream.ensureOpeningTag( M_TOKEN( box ));
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( box ));
@@ -278,7 +278,7 @@ OUString SmOoxmlImport::handleBorderBox()
     stream.ensureClosingTag( M_TOKEN( borderBox ));
     if( isStrikeH )
         return "overstrike {" + e + "}";
-    // LO does not seem to implement anything for handling the other cases
+    
     return e;
 }
 
@@ -327,12 +327,12 @@ OUString SmOoxmlImport::handleD()
         opening = "left langle ";
     if (closing == OUString(MS_RANGLE) || closing == OUString(MS_RMATHANGLE))
         closing = " right rangle";
-    // use scalable brackets (the explicit "left" or "right")
+    
     if( opening == "(" || opening == "[" )
         opening = "left " + opening;
     if( closing == ")" || closing == "]" )
         closing = " right " + closing;
-    if( separator == "|" ) // plain "|" would be actually "V" (logical or)
+    if( separator == "|" ) 
         separator = " mline ";
     if( opening.isEmpty())
         opening = "left none ";
@@ -358,7 +358,7 @@ OUString SmOoxmlImport::handleEqArr()
     stream.ensureOpeningTag( M_TOKEN( eqArr ));
     OUString ret;
     do
-    { // there must be at least one m:e
+    { 
         if( !ret.isEmpty())
             ret += "#";
         ret += " ";
@@ -394,7 +394,7 @@ OUString SmOoxmlImport::handleF()
         return "{" + num + "} over {" + den + "}";
     else if( operation == lin )
         return "{" + num + "} / {" + den + "}";
-    else // noBar
+    else 
     {
         return "binom {" + num + "} {" + den + "}";
     }
@@ -402,10 +402,10 @@ OUString SmOoxmlImport::handleF()
 
 OUString SmOoxmlImport::handleFunc()
 {
-//lim from{x rightarrow 1} x
+
     stream.ensureOpeningTag( M_TOKEN( func ));
     OUString fname = readOMathArgInElement( M_TOKEN( fName ));
-    // fix the various functions
+    
     if( fname.startsWith( "lim csub {" ))
         fname = "lim from {" + fname.copy( 10 );
     OUString ret = fname + " {" + readOMathArgInElement( M_TOKEN( e )) + "}";
@@ -420,7 +420,7 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     OUString lim = readOMathArgInElement( M_TOKEN( lim ));
     stream.ensureClosingTag( token );
-    // fix up overbrace/underbrace  (use { }, as {} will be converted to a placeholder)
+    
     if( limlowupp == LimUpp && e.endsWith( " overbrace { }" ))
         return e.copy( 0, e.getLength() - 2 ) + lim + "}";
     if( limlowupp == LimLow && e.endsWith( " underbrace { }" ))
@@ -466,11 +466,11 @@ OUString SmOoxmlImport::handleM()
 {
     stream.ensureOpeningTag( M_TOKEN( m ));
     OUString allrows;
-    do // there must be at least one m:mr
+    do 
     {
         stream.ensureOpeningTag( M_TOKEN( mr ));
         OUString row;
-        do // there must be at least one m:e
+        do 
         {
             if( !row.isEmpty())
                 row += " # ";
@@ -556,7 +556,7 @@ OUString SmOoxmlImport::handleNary()
     return ret;
 }
 
-// NOT complete
+
 OUString SmOoxmlImport::handleR()
 {
     stream.ensureOpeningTag( M_TOKEN( r ));

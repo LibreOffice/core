@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dlg_CreationWizard_UNO.hxx"
@@ -24,12 +24,12 @@
 #include "ContainerHelper.hxx"
 #include "TimerTriggeredControllerLock.hxx"
 #include <osl/mutex.hxx>
-// header for class Application
+
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-// header for define RET_CANCEL
+
 #include <vcl/msgbox.hxx>
-// header for class OImplementationId
+
 #include <cppuhelper/typeprovider.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <com/sun/star/awt/Point.hpp>
@@ -62,7 +62,7 @@ CreationWizardUnoDlg::~CreationWizardUnoDlg()
         m_pDialog = 0;
     }
 }
-// lang::XServiceInfo
+
 APPHELPER_XSERVICEINFO_IMPL(CreationWizardUnoDlg,CHART_WIZARD_DIALOG_SERVICE_IMPLEMENTATION_NAME)
 
     uno::Sequence< OUString > CreationWizardUnoDlg
@@ -73,7 +73,7 @@ APPHELPER_XSERVICEINFO_IMPL(CreationWizardUnoDlg,CHART_WIZARD_DIALOG_SERVICE_IMP
     return aSNS;
 }
 
-// XInterface
+
 uno::Any SAL_CALL CreationWizardUnoDlg::queryInterface( const uno::Type& aType ) throw (uno::RuntimeException)
 {
     return OComponentHelper::queryInterface( aType );
@@ -151,12 +151,12 @@ uno::Sequence< sal_Int8 > SAL_CALL CreationWizardUnoDlg::getImplementationId( vo
     return theCreationWizardUnoDlgImplementationId::get().getSeq();
 }
 
-// XTerminateListener
+
 void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& /*Event*/ ) throw( frame::TerminationVetoException, uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
 
-    // we will never give a veto here
+    
     if( m_pDialog && !m_pDialog->isClosable() )
     {
         m_pDialog->ToTop();
@@ -166,13 +166,13 @@ void SAL_CALL CreationWizardUnoDlg::queryTermination( const lang::EventObject& /
 
 void SAL_CALL CreationWizardUnoDlg::notifyTermination( const lang::EventObject& /*Event*/ ) throw (uno::RuntimeException)
 {
-    // we are going down, so dispose us!
+    
     dispose();
 }
 
 void SAL_CALL CreationWizardUnoDlg::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
-    //Listener should deregister himself and relaese all references to the closing object.
+    
 }
 
 void SAL_CALL CreationWizardUnoDlg::setTitle( const OUString& /*rTitle*/ ) throw(uno::RuntimeException)
@@ -213,7 +213,7 @@ void CreationWizardUnoDlg::createDialogOnDemand()
 IMPL_LINK( CreationWizardUnoDlg, DialogEventHdl, VclWindowEvent*, pEvent )
 {
     if(pEvent && (pEvent->GetId() == VCLEVENT_OBJECT_DYING) )
-        m_pDialog = 0;//avoid duplicate destruction of m_pDialog
+        m_pDialog = 0;
     return 0;
 }
 
@@ -253,8 +253,8 @@ void SAL_CALL CreationWizardUnoDlg::initialize( const uno::Sequence< uno::Any >&
     }
 }
 
-// ____ OComponentHelper ____
-/// Called in dispose method after the listeners were notified.
+
+
 void SAL_CALL CreationWizardUnoDlg::disposing()
 {
     m_xChartModel.clear();
@@ -279,7 +279,7 @@ void SAL_CALL CreationWizardUnoDlg::disposing()
     }
 }
 
-//XPropertySet
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL CreationWizardUnoDlg::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -298,8 +298,8 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const OUString& rPropertyN
         if( ! (rValue >>= aPos) )
             throw lang::IllegalArgumentException( "Property 'Position' requires value of type awt::Point", 0, 0 );
 
-        //set left upper outer corner relative to screen
-        //pixels, screen position
+        
+        
         SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( m_pDialog )
@@ -313,7 +313,7 @@ void SAL_CALL CreationWizardUnoDlg::setPropertyValue( const OUString& rPropertyN
     }
     else if( rPropertyName == "Size")
     {
-        //read only property, do nothing
+        
     }
     else if( rPropertyName == "UnlockControllersOnExecute" )
     {
@@ -330,8 +330,8 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
     uno::Any aRet;
     if( rPropertyName == "Position" )
     {
-        //get left upper outer corner relative to screen
-        //pixels, screen position
+        
+        
         SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( m_pDialog )
@@ -343,8 +343,8 @@ uno::Any SAL_CALL CreationWizardUnoDlg::getPropertyValue( const OUString& rPrope
     }
     else if( rPropertyName == "Size" )
     {
-        //get outer size inclusive decoration
-        //pixels, screen position
+        
+        
         SolarMutexGuard aSolarGuard;
         createDialogOnDemand();
         if( m_pDialog )
@@ -388,6 +388,6 @@ void SAL_CALL CreationWizardUnoDlg::removeVetoableChangeListener( const OUString
     OSL_FAIL("not implemented");
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

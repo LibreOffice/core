@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "rtl/ustring.hxx"
@@ -76,14 +76,14 @@ OUString getParam(OUString const & name)
 
 OUString getParamFirstUrl(OUString const & name)
 {
-    // Some parameters can consist of multiple URLs (separated by space
-    // characters, although trim() harmlessly also removes other white-space),
-    // of which only the first is used:
+    
+    
+    
     sal_Int32 i = 0;
     return getParam(name).trim().getToken(0, ' ', i);
 }
 
-}//blind namespace
+}
 
 
 VendorSettings::VendorSettings():
@@ -91,7 +91,7 @@ VendorSettings::VendorSettings():
 {
     OString sMsgExc("[Java framework] Error in constructor "
                          "VendorSettings::VendorSettings() (fwkbase.cxx)");
-    //Prepare the xml document and context
+    
     OString sSettingsPath = getVendorSettingsPath(m_xmlDocVendorSettingsFileUrl);
     if (sSettingsPath.isEmpty())
     {
@@ -129,12 +129,12 @@ std::vector<PluginLibrary> VendorSettings::getPluginData()
     if (xmlXPathNodeSetIsEmpty(result->nodesetval))
         throw FrameworkException(JFW_E_ERROR, sExcMsg);
 
-    //get the values of the library elements + vendor attribute
+    
     xmlNode* cur = result->nodesetval->nodeTab[0];
 
     while (cur != NULL)
     {
-        //between library elements are also text elements
+        
         if (cur->type == XML_ELEMENT_NODE)
         {
             CXmlCharPtr sAttrVendor(xmlGetProp(cur, (xmlChar*) "vendor"));
@@ -145,7 +145,7 @@ std::vector<PluginLibrary> VendorSettings::getPluginData()
             OString osVendor((sal_Char*)(xmlChar*) sAttrVendor);
             plugin.sVendor = OStringToOUString(osVendor, RTL_TEXTENCODING_UTF8);
 
-            //create the file URL to the library
+            
             OUString sUrl = findPlugin(
                 m_xmlDocVendorSettingsFileUrl, sTextLibrary);
             if (sUrl.isEmpty())
@@ -170,7 +170,7 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
     OSL_ASSERT(!sVendor.isEmpty());
     VersionInfo aVersionInfo;
     OString osVendor = OUStringToOString(sVendor, RTL_TEXTENCODING_UTF8);
-    //Get minVersion
+    
     OString sExpresion = OString(
         "/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         osVendor + OString("\"]/jf:minVersion");
@@ -194,7 +194,7 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
             osVersion, RTL_TEXTENCODING_UTF8);
     }
 
-    //Get maxVersion
+    
     sExpresion = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         osVendor + OString("\"]/jf:maxVersion");
     CXPathObjectPtr xPathObjectMax;
@@ -216,7 +216,7 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
             osVersion, RTL_TEXTENCODING_UTF8);
     }
 
-    //Get excludeVersions
+    
     sExpresion = OString("/jf:javaSelection/jf:vendorInfos/jf:vendor[@name=\"") +
         osVendor + OString("\"]/jf:excludeVersions/jf:version");
     CXPathObjectPtr xPathObjectVersions;
@@ -250,7 +250,7 @@ VersionInfo VendorSettings::getVersionInformation(const OUString & sVendor)
 std::vector<OUString> VendorSettings::getSupportedVendors()
 {
     std::vector<OUString> vecVendors;
-    //get the nodeset for the library elements
+    
     jfw::CXPathObjectPtr result;
     result = xmlXPathEvalExpression(
         (xmlChar*)"/jf:javaSelection/jf:plugins/jf:library",
@@ -260,11 +260,11 @@ std::vector<OUString> VendorSettings::getSupportedVendors()
             JFW_E_ERROR,
             OString("[Java framework] Error in function getSupportedVendors (fwkbase.cxx)."));
 
-    //get the values of the library elements + vendor attribute
+    
     xmlNode* cur = result->nodesetval->nodeTab[0];
     while (cur != NULL)
     {
-        //between library elements are also text elements
+        
         if (cur->type == XML_ELEMENT_NODE)
         {
             jfw::CXmlCharPtr sAttrVendor(xmlGetProp(cur, (xmlChar*) "vendor"));
@@ -298,7 +298,7 @@ OUString VendorSettings::getPluginLibrary(const OUString& sVendor)
         xmlNodeListGetString(
             m_xmlDocVendorSettings,pathObjVendor->nodesetval->nodeTab[0], 1);
 
-    //make an absolute file url from the relative plugin URL
+    
     OUString sUrl = findPlugin(m_xmlDocVendorSettingsFileUrl, xmlCharPlugin);
     if (sUrl.isEmpty())
     {
@@ -388,11 +388,11 @@ OUString BootParams::getVendorSettings()
         UNO_JAVA_JFW_VENDOR_SETTINGS);
     if (Bootstrap::get()->getFrom(sName ,sVendor))
     {
-        //check the value of the bootstrap variable
+        
         jfw::FileStatus s = checkFileURL(sVendor);
         if (s != FILE_OK)
         {
-            //This bootstrap parameter can contain a relative URL
+            
             OUString sAbsoluteUrl;
             OUString sBaseDir = getLibraryLocation();
             if (File::getAbsoluteFileURL(sBaseDir, sVendor, sAbsoluteUrl)
@@ -505,7 +505,7 @@ JFW_MODE getMode()
 
     if (g_bMode == false)
     {
-        //check if either of the "direct mode" bootstrap variables is set
+        
         bool bDirectMode = true;
         OUString sValue;
         const rtl::Bootstrap * aBoot = Bootstrap::get();
@@ -577,15 +577,15 @@ OUString getApplicationClassPath()
 
 OString makeClassPathOption(OUString const & sUserClassPath)
 {
-    //Compose the class path
+    
     OString sPaths;
     OUStringBuffer sBufCP(4096);
 
-    // append all user selected jars to the class path
+    
     if (!sUserClassPath.isEmpty())
         sBufCP.append(sUserClassPath);
 
-    //append all jar libraries and components to the class path
+    
     OUString sAppCP = getApplicationClassPath();
     if (!sAppCP.isEmpty())
     {
@@ -640,7 +640,7 @@ void setJavaSelected()
 
 bool wasJavaSelectedInSameProcess()
 {
-    //g_setJavaProcId not set means no Java selected
+    
     if (g_bJavaSet == true)
         return true;
     return false;

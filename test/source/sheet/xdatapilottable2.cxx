@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/sheet/xdatapilottable2.hxx>
@@ -100,7 +100,7 @@ void XDataPilotTable2::testGetOutputRangeByType()
     uno::Reference< sheet::XDataPilotTable2 > xDPTable(initDP2(), UNO_QUERY_THROW);
     getOutputRanges(xDPTable);
 
-    // check for wrong arguments
+    
     bool bCaught = false;
     try
     {
@@ -123,17 +123,17 @@ void XDataPilotTable2::testGetOutputRangeByType()
     }
     CPPUNIT_ASSERT(bCaught);
 
-    // make sure the whole range is not empty
+    
     CPPUNIT_ASSERT( maRangeWhole.EndColumn - maRangeWhole.StartColumn > 0);
     CPPUNIT_ASSERT( maRangeWhole.EndRow - maRangeWhole.StartRow > 0);
 
-    //table range must be of equal width with the whole range, and the same bottom
+    
     CPPUNIT_ASSERT( maRangeTable.Sheet == maRangeWhole.Sheet );
     CPPUNIT_ASSERT( maRangeTable.EndRow == maRangeWhole.EndRow );
     CPPUNIT_ASSERT( maRangeTable.StartColumn == maRangeWhole.StartColumn );
     CPPUNIT_ASSERT( maRangeTable.EndColumn == maRangeWhole.EndColumn );
 
-    //result range must be smaller than the table range, and must share the same lower-right corner
+    
     CPPUNIT_ASSERT( maRangeResult.Sheet == maRangeTable.Sheet );
     CPPUNIT_ASSERT( maRangeResult.StartColumn >= maRangeTable.StartColumn );
     CPPUNIT_ASSERT( maRangeResult.StartRow >= maRangeTable.StartRow );

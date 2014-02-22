@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ftools.hxx"
@@ -42,12 +42,12 @@
 
 #include <stdio.h>
 
-// ============================================================================
-// ScFilterTools::ReadLongDouble()
+
+
 
 double ScfTools::ReadLongDouble( SvStream& rStrm )
 
-#ifdef __SIMPLE_FUNC                // for <=VC 1.5
+#ifdef __SIMPLE_FUNC                
 {
     long double fRet;
     rStrm.Read( &fRet, 10 );
@@ -55,7 +55,7 @@ double ScfTools::ReadLongDouble( SvStream& rStrm )
 }
 #undef __SIMPLE_FUNC
 
-#else                               // detailed for all others
+#else                               
 {
 
 /*
@@ -74,28 +74,28 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
     long double lfFakt = 256.0;
     sal_uInt8 pDouble10[ 10 ];
 
-    rStrm.Read( pDouble10, 10 );            // Intel-10 in pDouble10
+    rStrm.Read( pDouble10, 10 );            
 
-    lfDouble  = static_cast< long double >( pDouble10[ 7 ] );   // Byte 7
+    lfDouble  = static_cast< long double >( pDouble10[ 7 ] );   
     lfDouble *= lfFakt;
-    lfDouble += static_cast< long double >( pDouble10[ 6 ] );   // Byte 6
+    lfDouble += static_cast< long double >( pDouble10[ 6 ] );   
     lfDouble *= lfFakt;
-    lfDouble += static_cast< long double >( pDouble10[ 5 ] );   // Byte 5
+    lfDouble += static_cast< long double >( pDouble10[ 5 ] );   
     lfDouble *= lfFakt;
-    lfDouble += static_cast< long double >( pDouble10[ 4 ] );   // Byte 4
+    lfDouble += static_cast< long double >( pDouble10[ 4 ] );   
     lfDouble *= lfFakt;
-    lfDouble += static_cast< long double >( pDouble10[ 3 ] );   // Byte 3
+    lfDouble += static_cast< long double >( pDouble10[ 3 ] );   
     lfDouble *= lfFakt;
-    lfDouble += static_cast< long double >( pDouble10[ 2 ] );   // Byte 2
+    lfDouble += static_cast< long double >( pDouble10[ 2 ] );   
     lfDouble *= lfFakt;
-    lfDouble += static_cast< long double >( pDouble10[ 1 ] );   // Byte 1
+    lfDouble += static_cast< long double >( pDouble10[ 1 ] );   
     lfDouble *= lfFakt;
-    lfDouble += static_cast< long double >( pDouble10[ 0 ] );   // Byte 0
+    lfDouble += static_cast< long double >( pDouble10[ 0 ] );   
 
-    //  For value 0.0 all bits are zero; pow(2.0,-16446) does not work with CSet compilers
+    
     if( lfDouble != 0.0 )
     {
-        // exponent
+        
         sal_Int32 nExp;
         nExp = pDouble10[ 9 ] & 0x7F;
         nExp <<= 8;
@@ -105,7 +105,7 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
         lfDouble *= pow( 2.0, static_cast< double >( nExp ) );
     }
 
-    // sign
+    
     if( pDouble10[ 9 ] & 0x80 )
         lfDouble *= static_cast< long double >( -1.0 );
 
@@ -113,7 +113,7 @@ SEEEEEEE EEEEEEEE IMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
 }
 #endif
 
-// *** common methods *** -----------------------------------------------------
+
 
 rtl_TextEncoding ScfTools::GetSystemTextEncoding()
 {
@@ -146,13 +146,13 @@ Color ScfTools::GetMixedColor( const Color& rFore, const Color& rBack, sal_uInt8
         GetMixedColorComp( rFore.GetBlue(), rBack.GetBlue(), nTrans ) );
 }
 
-// *** conversion of names *** ------------------------------------------------
+
 
 /* XXX As in sc/source/core/tool/rangenam.cxx ScRangeData::IsValidName() */
 
 OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
 {
-    //fdo#37872: we don't allow points in range names any more
+    
     OUString sName = rName.replace(static_cast<sal_Unicode>('.'),
         static_cast<sal_Unicode>('_'));
     sal_Int32 nLen = sName.getLength();
@@ -164,7 +164,7 @@ OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
     return sName;
 }
 
-// *** streams and storages *** -----------------------------------------------
+
 
 SotStorageRef ScfTools::OpenStorageRead( SotStorageRef xStrg, const OUString& rStrgName )
 {
@@ -199,7 +199,7 @@ SotStorageStreamRef ScfTools::OpenStorageStreamWrite( SotStorageRef xStrg, const
     return xStrm;
 }
 
-// *** item handling *** ------------------------------------------------------
+
 
 bool ScfTools::CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep )
 {
@@ -226,13 +226,13 @@ void ScfTools::PutItem( SfxItemSet& rItemSet, const SfxPoolItem& rItem, bool bSk
     PutItem( rItemSet, rItem, rItem.Which(), bSkipPoolDef );
 }
 
-// *** style sheet handling *** -----------------------------------------------
+
 
 namespace {
 
 ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName, SfxStyleFamily eFamily, bool bForceName )
 {
-    // find an unused name
+    
     OUString aNewName( rStyleName );
     sal_Int32 nIndex = 0;
     SfxStyleSheetBase* pOldStyleSheet = 0;
@@ -243,18 +243,18 @@ ScStyleSheet& lclMakeStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyle
         aNewName = rStyleName + " " + OUString::number( ++nIndex );
     }
 
-    // rename existing style
+    
     if( pOldStyleSheet && bForceName )
     {
         pOldStyleSheet->SetName( aNewName );
         aNewName = rStyleName;
     }
 
-    // create new style sheet
+    
     return static_cast< ScStyleSheet& >( rPool.Make( aNewName, eFamily, SFXSTYLEBIT_USERDEF ) );
 }
 
-} // namespace
+} 
 
 ScStyleSheet& ScfTools::MakeCellStyleSheet( ScStyleSheetPool& rPool, const OUString& rStyleName, bool bForceName )
 {
@@ -266,13 +266,13 @@ ScStyleSheet& ScfTools::MakePageStyleSheet( ScStyleSheetPool& rPool, const OUStr
     return lclMakeStyleSheet( rPool, rStyleName, SFX_STYLE_FAMILY_PAGE, bForceName );
 }
 
-// *** byte string import operations *** --------------------------------------
+
 
 OString ScfTools::read_zeroTerminated_uInt8s_ToOString(SvStream& rStrm, sal_Int32& rnBytesLeft)
 {
     OString aRet(::read_zeroTerminated_uInt8s_ToOString(rStrm));
-    rnBytesLeft -= aRet.getLength(); //we read this number of bytes anyway
-    if (rStrm.good()) //if the stream is happy we read the null terminator as well
+    rnBytesLeft -= aRet.getLength(); 
+    if (rStrm.good()) 
         --rnBytesLeft;
     return aRet;
 }
@@ -282,7 +282,7 @@ void ScfTools::AppendCString( SvStream& rStrm, OUString& rString, rtl_TextEncodi
     rString += ::read_zeroTerminated_uInt8s_ToOUString(rStrm, eTextEnc);
 }
 
-// *** HTML table names <-> named range names *** -----------------------------
+
 
 const OUString& ScfTools::GetHTMLDocName()
 {
@@ -368,6 +368,6 @@ SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
     return new ScFormatFilterPluginImpl();
 }
 
-// implementation class inside the filters
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

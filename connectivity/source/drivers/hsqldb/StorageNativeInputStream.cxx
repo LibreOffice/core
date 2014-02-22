@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -67,7 +67,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
 #endif
     StorageContainer::registerStream(env,name,key,mode);
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -86,7 +86,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
     return read_from_storage_stream( env, obj_this, name, key );
 #endif
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -105,7 +105,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
     return read_from_storage_stream_into_buffer(env,obj_this,name,key,buffer,off,len);
 #endif
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -125,7 +125,7 @@ SAL_JNI_EXPORT void JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
 #endif
     StorageContainer::revokeStream(env,name,key);
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -161,7 +161,7 @@ SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeIn
                     do {
                         if (tmpLongVal >= ::std::numeric_limits<sal_Int64>::max() )
                             tmpIntVal = ::std::numeric_limits<sal_Int32>::max();
-                        else // Casting is safe here.
+                        else 
                             tmpIntVal = static_cast<sal_Int32>(tmpLongVal);
 
                         tmpLongVal -= tmpIntVal;
@@ -191,7 +191,7 @@ SAL_JNI_EXPORT jlong JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeIn
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -233,7 +233,7 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
     }
     return 0;
 }
-// -----------------------------------------------------------------------------
+
 
 /*
  * Class:     com_sun_star_sdbcx_comp_hsqldb_StorageNativeInputStream
@@ -269,9 +269,9 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
             StorageContainer::throwJavaException(e,env);
         }
 
-        // Casting bytesRead to an int is okay, since the user can
-        // only pass in an integer length to read, so the bytesRead
-        // must <= len.
+        
+        
+        
         //
         if (nBytesRead <= 0) {
 #ifdef HSQLDB_DBG
@@ -291,6 +291,6 @@ SAL_JNI_EXPORT jint JNICALL Java_com_sun_star_sdbcx_comp_hsqldb_StorageNativeInp
 #endif
     return nBytesRead;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VAxisBase.hxx"
@@ -71,7 +71,7 @@ void VAxisBase::initAxisLabelProperties( const ::com::sun::star::awt::Size& rFon
         m_bUseTextLabels = true;
         if( m_aTextLabels.getLength() == 1 )
         {
-            //don't show a single series name
+            
             m_aAxisProperties.m_bDisplayLabels = false;
             return;
         }
@@ -164,13 +164,13 @@ void VAxisBase::createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& 
 
 bool VAxisBase::prepareShapeCreation()
 {
-    //returns true if all is ready for further shape creation and any shapes need to be created
+    
     if( !isAnythingToDraw() )
         return false;
 
     if( m_bReCreateAllTickInfos )
     {
-        //create all scaled tickmark values
+        
         removeTextShapesFromTicks();
 
         createAllTickInfos(m_aAllTickInfos);
@@ -180,7 +180,7 @@ bool VAxisBase::prepareShapeCreation()
     if( m_xGroupShape_Shapes.is() )
         return true;
 
-    //create named group shape
+    
     m_xGroupShape_Shapes = this->createGroupShape( m_xLogicTarget, m_nDimension==2 ? m_aCID : "");
 
     if( m_aAxisProperties.m_bDisplayLabels )
@@ -196,7 +196,7 @@ sal_Int32 VAxisBase::getIndexOfLongestLabel( const uno::Sequence< OUString >& rL
     sal_Int32 nN = 0;
     for( nN=0; nN<rLabels.getLength(); nN++ )
     {
-        //todo: get real text width (without creating shape) instead of character count
+        
         if( rLabels[nN].getLength() > nLength )
         {
             nLength = rLabels[nN].getLength();
@@ -238,10 +238,10 @@ void VAxisBase::updateUnscaledValuesAtTicks( TickIter& rIter )
     for( TickInfo* pTickInfo = rIter.firstInfo()
         ; pTickInfo; pTickInfo = rIter.nextInfo() )
     {
-        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
+        
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

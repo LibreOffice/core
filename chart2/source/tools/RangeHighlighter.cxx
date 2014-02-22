@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RangeHighlighter.hxx"
@@ -56,7 +56,7 @@ void lcl_fillRanges(
     }
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -73,7 +73,7 @@ RangeHighlighter::RangeHighlighter(
 RangeHighlighter::~RangeHighlighter()
 {}
 
-// ____ XRangeHighlighter ____
+
 Sequence< chart2::data::HighlightedRange > SAL_CALL RangeHighlighter::getSelectedRanges()
     throw (uno::RuntimeException)
 {
@@ -99,7 +99,7 @@ void RangeHighlighter::determineRanges()
 
             if ( rType == ::getCppuType( static_cast< const OUString* >( 0 ) ) )
             {
-                // @todo??: maybe getSelection() should return a model object rather than a CID
+                
 
                 OUString aCID;
                 aSelection >>= aCID;
@@ -119,7 +119,7 @@ void RangeHighlighter::determineRanges()
 
                     if( OBJECTTYPE_DATA_POINT == eObjectType || OBJECTTYPE_DATA_LABEL == eObjectType )
                     {
-                        // Data Point
+                        
                         fillRangesForDataPoint( xDataSeries, nIndex );
                         return;
                     }
@@ -127,20 +127,20 @@ void RangeHighlighter::determineRanges()
                              OBJECTTYPE_DATA_ERRORS_Y == eObjectType ||
                              OBJECTTYPE_DATA_ERRORS_Z == eObjectType )
                     {
-                        // select error bar ranges, or data series, if the style is
-                        // not set to FROM_DATA
+                        
+                        
                         fillRangesForErrorBars( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), xDataSeries );
                         return;
                     }
                     else if( xDataSeries.is() )
                     {
-                        // Data Series
+                        
                         fillRangesForDataSeries( xDataSeries );
                         return;
                     }
                     else if( OBJECTTYPE_AXIS == eObjectType )
                     {
-                        // Axis (Categories)
+                        
                         Reference< chart2::XAxis > xAxis( ObjectIdentifier::getObjectPropertySet( aCID, xChartModel ), uno::UNO_QUERY );
                         if( xAxis.is())
                         {
@@ -154,7 +154,7 @@ void RangeHighlighter::determineRanges()
                              || OBJECTTYPE_DIAGRAM_FLOOR == eObjectType
                         )
                     {
-                        // Diagram
+                        
                         Reference< chart2::XDiagram > xDia( ObjectIdentifier::getDiagramForCID( aCID, xChartModel ) );
                         if( xDia.is())
                         {
@@ -166,7 +166,7 @@ void RangeHighlighter::determineRanges()
             }
             else if ( rType == ::getCppuType( static_cast< const Reference< drawing::XShape >* >( 0 ) ) )
             {
-                // #i12587# support for shapes in chart
+                
                 Reference< drawing::XShape > xShape;
                 aSelection >>= xShape;
                 if ( xShape.is() )
@@ -176,7 +176,7 @@ void RangeHighlighter::determineRanges()
             }
             else
             {
-                //if nothing is selected select all ranges
+                
                 Reference< chart2::XChartDocument > xChartDoc( xChartModel, uno::UNO_QUERY_THROW );
                 fillRangesForDiagram( xChartDoc->getFirstDiagram() );
                 return;
@@ -193,7 +193,7 @@ void RangeHighlighter::fillRangesForDiagram( const Reference< chart2::XDiagram >
 {
     Sequence< OUString > aSelectedRanges( DataSourceHelper::getUsedDataRanges( xDiagram ));
     m_aSelectedRanges.realloc( aSelectedRanges.getLength());
-    // @todo: merge ranges
+    
     for( sal_Int32 i=0; i<aSelectedRanges.getLength(); ++i )
     {
         m_aSelectedRanges[i].RangeRepresentation = aSelectedRanges[i];
@@ -219,7 +219,7 @@ void RangeHighlighter::fillRangesForErrorBars(
     const uno::Reference< beans::XPropertySet > & xErrorBar,
     const uno::Reference< chart2::XDataSeries > & xSeries )
 {
-    // only show error bar ranges, if the style is set to FROM_DATA
+    
     bool bUsesRangesAsErrorBars = false;
     try
     {
@@ -308,7 +308,7 @@ void SAL_CALL RangeHighlighter::addSelectionChangeListener( const Reference< vie
     rBHelper.addListener( ::getCppuType( & xListener ), xListener);
     ++m_nAddedListenerCount;
 
-    //bring the new listener up to the current state
+    
     lang::EventObject aEvent( static_cast< lang::XComponent* >( this ) );
     xListener->selectionChanged( aEvent );
 }
@@ -322,14 +322,14 @@ void SAL_CALL RangeHighlighter::removeSelectionChangeListener( const Reference< 
         stopListening();
 }
 
-// ____ XSelectionChangeListener ____
+
 void SAL_CALL RangeHighlighter::selectionChanged( const lang::EventObject& /*aEvent*/ )
     throw (uno::RuntimeException)
 {
     determineRanges();
 
-    // determine ranges of selected view objects
-    // if changed, fire an event
+    
+    
     fireSelectionEvent();
 }
 
@@ -383,19 +383,19 @@ void RangeHighlighter::stopListening()
     }
 }
 
-// ____ WeakComponentImplHelperBase ____
-// is called when dispose() is called at this component
+
+
 void SAL_CALL RangeHighlighter::disposing()
 {
-    // @todo: remove listener. Currently the controller shows an assertion
-    // because it is already disposed
-//     stopListening();
+    
+    
+
     m_xListener.clear();
     m_xSelectionSupplier.clear();
     m_nAddedListenerCount =  0;
     m_aSelectedRanges.realloc( 0 );
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

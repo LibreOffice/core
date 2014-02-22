@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,11 +47,11 @@ using namespace com::sun::star::util;
 namespace ucbhelper_impl
 {
 
-//=========================================================================
+
 //
-// PropertyValue.
+
 //
-//=========================================================================
+
 
 const sal_uInt32 NO_VALUE_SET               = 0x00000000;
 const sal_uInt32 STRING_VALUE_SET           = 0x00000001;
@@ -82,26 +82,26 @@ struct PropertyValue
     sal_uInt32  nPropsSet;
     sal_uInt32  nOrigValue;
 
-    OUString    aString;    // getString
-    bool    bBoolean;   // getBoolean
-    sal_Int8    nByte;      // getByte
-    sal_Int16   nShort;     // getShort
-    sal_Int32   nInt;       // getInt
-    sal_Int64   nLong;      // getLong
-    float       nFloat;     // getFloat
-    double      nDouble;    // getDouble
+    OUString    aString;    
+    bool    bBoolean;   
+    sal_Int8    nByte;      
+    sal_Int16   nShort;     
+    sal_Int32   nInt;       
+    sal_Int64   nLong;      
+    float       nFloat;     
+    double      nDouble;    
 
-    Sequence< sal_Int8 >        aBytes;             // getBytes
-    Date                        aDate;              // getDate
-    Time                        aTime;              // getTime
-    DateTime                    aTimestamp;         // getTimestamp
-    Reference< XInputStream >   xBinaryStream;      // getBinaryStream
-    Reference< XInputStream >   xCharacterStream;   // getCharacterStream
-    Reference< XRef >           xRef;               // getRef
-    Reference< XBlob >          xBlob;              // getBlob
-    Reference< XClob >          xClob;              // getClob
-    Reference< XArray >         xArray;             // getArray
-    Any                         aObject;            // getObject
+    Sequence< sal_Int8 >        aBytes;             
+    Date                        aDate;              
+    Time                        aTime;              
+    DateTime                    aTimestamp;         
+    Reference< XInputStream >   xBinaryStream;      
+    Reference< XInputStream >   xCharacterStream;   
+    Reference< XRef >           xRef;               
+    Reference< XBlob >          xBlob;              
+    Reference< XClob >          xClob;              
+    Reference< XArray >         xArray;             
+    Any                         aObject;            
 
     inline PropertyValue()
         : nPropsSet( NO_VALUE_SET ), nOrigValue( NO_VALUE_SET ),
@@ -114,30 +114,30 @@ struct PropertyValue
           nDouble(0.0)
         {}
 };
-} // namespace ucbhelper_impl
+} 
 
 using namespace ucbhelper_impl;
 
 namespace ucbhelper
 {
 
-//=========================================================================
+
 //
-// class PropertyValues.
+
 //
-//=========================================================================
+
 
 typedef std::vector< ucbhelper_impl::PropertyValue > PropertyValuesVector;
 
 class PropertyValues : public PropertyValuesVector {};
 
-} // namespace ucbhelper
+} 
 
-//=========================================================================
+
 //
-// Welcome to the macro hell...
+
 //
-//=========================================================================
+
 
 #define GETVALUE_IMPL_TYPE( _type_, _type_name_, _member_name_, _cppu_type_ ) \
                                                                               \
@@ -242,15 +242,15 @@ class PropertyValues : public PropertyValuesVector {};
 
 namespace ucbhelper {
 
-//=========================================================================
-//=========================================================================
-//
-// PropertyValueSet Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
+
+//
+
+//
+
+
+
+
 PropertyValueSet::PropertyValueSet(
                     const Reference< XComponentContext >& rxContext )
 :  m_xContext( rxContext ),
@@ -261,61 +261,61 @@ PropertyValueSet::PropertyValueSet(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 PropertyValueSet::~PropertyValueSet()
 {
     delete m_pValues;
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_3( PropertyValueSet,
                    XTypeProvider,
                    XRow,
                    XColumnLocate );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_3( PropertyValueSet,
                       XTypeProvider,
                          XRow,
                       XColumnLocate );
 
-//=========================================================================
-//
-// XRow methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 sal_Bool SAL_CALL PropertyValueSet::wasNull()
     throw( SQLException, RuntimeException )
 {
-    // This method can not be implemented correctly!!! Imagine different
-    // threads doing a getXYZ - wasNull calling sequence on the same
-    // implementation object...
+    
+    
+    
     return m_bWasNull;
 }
 
-//=========================================================================
-// virtual
+
+
 OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( OUString, STRING_VALUE_SET, aString );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
@@ -323,56 +323,56 @@ sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
             bool, BOOLEAN_VALUE_SET, bBoolean, getCppuBooleanType() );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int8 SAL_CALL PropertyValueSet::getByte( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( sal_Int8, BYTE_VALUE_SET, nByte );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int16 SAL_CALL PropertyValueSet::getShort( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( sal_Int16, SHORT_VALUE_SET, nShort );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int32 SAL_CALL PropertyValueSet::getInt( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( sal_Int32, INT_VALUE_SET, nInt );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int64 SAL_CALL PropertyValueSet::getLong( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( sal_Int64, LONG_VALUE_SET, nLong );
 }
 
-//=========================================================================
-// virtual
+
+
 float SAL_CALL PropertyValueSet::getFloat( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( float, FLOAT_VALUE_SET, nFloat );
 }
 
-//=========================================================================
-// virtual
+
+
 double SAL_CALL PropertyValueSet::getDouble( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( double, DOUBLE_VALUE_SET, nDouble );
 }
 
-//=========================================================================
-// virtual
+
+
 Sequence< sal_Int8 > SAL_CALL
 PropertyValueSet::getBytes( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -380,32 +380,32 @@ PropertyValueSet::getBytes( sal_Int32 columnIndex )
     GETVALUE_IMPL( Sequence< sal_Int8 >, BYTES_VALUE_SET, aBytes );
 }
 
-//=========================================================================
-// virtual
+
+
 Date SAL_CALL PropertyValueSet::getDate( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( Date, DATE_VALUE_SET, aDate );
 }
 
-//=========================================================================
-// virtual
+
+
 Time SAL_CALL PropertyValueSet::getTime( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( Time, TIME_VALUE_SET, aTime );
 }
 
-//=========================================================================
-// virtual
+
+
 DateTime SAL_CALL PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( DateTime, TIMESTAMP_VALUE_SET, aTimestamp );
 }
 
-//=========================================================================
-// virtual
+
+
 Reference< XInputStream > SAL_CALL
 PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -414,8 +414,8 @@ PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
         Reference< XInputStream >, BINARYSTREAM_VALUE_SET, xBinaryStream );
 }
 
-//=========================================================================
-// virtual
+
+
 Reference< XInputStream > SAL_CALL
 PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
@@ -424,8 +424,8 @@ PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
         Reference< XInputStream >, CHARACTERSTREAM_VALUE_SET, xCharacterStream );
 }
 
-//=========================================================================
-// virtual
+
+
 Any SAL_CALL PropertyValueSet::getObject(
                                     sal_Int32 columnIndex,
                                          const Reference< XNameAccess >& )
@@ -449,13 +449,13 @@ Any SAL_CALL PropertyValueSet::getObject(
 
         if ( rValue.nPropsSet & OBJECT_VALUE_SET )
         {
-            // Values is present natively...
+            
             aValue = rValue.aObject;
             m_bWasNull = false;
         }
         else
         {
-            // Make Any from original value.
+            
 
             switch ( rValue.nOrigValue )
             {
@@ -535,7 +535,7 @@ Any SAL_CALL PropertyValueSet::getObject(
                     break;
 
                 case OBJECT_VALUE_SET:
-                    // Fall-through is intended!
+                    
                 default:
                     OSL_FAIL( "PropertyValueSet::getObject - "
                                 "Wrong original type" );
@@ -554,45 +554,45 @@ Any SAL_CALL PropertyValueSet::getObject(
     return aValue;
 }
 
-//=========================================================================
-// virtual
+
+
 Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( Reference< XRef >, REF_VALUE_SET, xRef );
 }
 
-//=========================================================================
-// virtual
+
+
 Reference< XBlob > SAL_CALL PropertyValueSet::getBlob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( Reference< XBlob >, BLOB_VALUE_SET, xBlob );
 }
 
-//=========================================================================
-// virtual
+
+
 Reference< XClob > SAL_CALL PropertyValueSet::getClob( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( Reference< XClob >, CLOB_VALUE_SET, xClob );
 }
 
-//=========================================================================
-// virtual
+
+
 Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
     throw( SQLException, RuntimeException )
 {
     GETVALUE_IMPL( Reference< XArray >, ARRAY_VALUE_SET, xArray );
 }
 
-//=========================================================================
-//
-// XColumnLocate methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
     throw( SQLException, RuntimeException )
 {
@@ -604,17 +604,17 @@ sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
         for ( sal_Int32 n = 0; n < nCount; ++n )
         {
             if ( (*m_pValues)[ n ].sPropertyName.equals( columnName ) )
-                return sal_Int32( n + 1 ); // Index is 1-based.
+                return sal_Int32( n + 1 ); 
         }
     }
     return 0;
 }
 
-//=========================================================================
+
 //
-// Non-interface methods.
+
 //
-//=========================================================================
+
 
 const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
 {
@@ -632,48 +632,48 @@ const Reference< XTypeConverter >& PropertyValueSet::getTypeConverter()
     return m_xTypeConverter;
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendString( const OUString& rPropName,
                                      const OUString& rValue )
 {
     SETVALUE_IMPL( rPropName, STRING_VALUE_SET, aString, rValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendBoolean( const OUString& rPropName,
                                       bool bValue )
 {
     SETVALUE_IMPL( rPropName, BOOLEAN_VALUE_SET, bBoolean, bValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendLong( const OUString& rPropName,
                                    sal_Int64 nValue )
 {
     SETVALUE_IMPL( rPropName, LONG_VALUE_SET, nLong, nValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendTimestamp( const OUString& rPropName,
                                         const DateTime& rValue )
 {
     SETVALUE_IMPL( rPropName, TIMESTAMP_VALUE_SET, aTimestamp, rValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendObject( const OUString& rPropName,
                                      const Any& rValue )
 {
     SETVALUE_IMPL( rPropName, OBJECT_VALUE_SET, aObject, rValue );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendVoid( const OUString& rPropName )
 {
     SETVALUE_IMPL( rPropName, NO_VALUE_SET, aObject, Any() );
 }
 
-//=========================================================================
+
 void PropertyValueSet::appendPropertySet(
                                 const Reference< XPropertySet >& rxSet )
 {
@@ -689,7 +689,7 @@ void PropertyValueSet::appendPropertySet(
             Reference< XPropertyAccess > xPropertyAccess( rxSet, UNO_QUERY );
             if ( xPropertyAccess.is() )
             {
-                // Efficient: Get all prop values with one ( remote) call.
+                
 
                 Sequence< ::com::sun::star::beans::PropertyValue > aPropValues
                     = xPropertyAccess->getPropertyValues();
@@ -703,13 +703,13 @@ void PropertyValueSet::appendPropertySet(
                     const ::com::sun::star::beans::PropertyValue& rPropValue
                         = pPropValues[ n ];
 
-                    // Find info for current property value.
+                    
                     for ( sal_Int32 m = 0; m < nPropsCount; ++m )
                     {
                         const Property& rProp = pProps[ m ];
                         if ( rProp.Name == rPropValue.Name )
                         {
-                            // Found!
+                            
                             appendObject( rProp, rPropValue.Value );
                             break;
                         }
@@ -718,7 +718,7 @@ void PropertyValueSet::appendPropertySet(
             }
             else
             {
-                // Get every single prop value with one ( remote) call.
+                
 
                 for ( sal_Int32 n = 0; n < nPropsCount; ++n )
                 {
@@ -743,7 +743,7 @@ void PropertyValueSet::appendPropertySet(
     }
 }
 
-//=========================================================================
+
 bool PropertyValueSet::appendPropertySetValue(
                                 const Reference< XPropertySet >& rxSet,
                                 const Property& rProperty )
@@ -767,10 +767,10 @@ bool PropertyValueSet::appendPropertySetValue(
         }
     }
 
-    // Error.
+    
     return false;
 }
 
-} // namespace ucbhelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

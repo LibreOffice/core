@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -70,7 +70,7 @@ const sal_uInt16 COLORCOMP_YELLOW  = 0x41;
 const sal_uInt16 COLORCOMP_MAGENTA = 0x42;
 const sal_uInt16 COLORCOMP_KEY     = 0x43;
 
-// color space conversion helpers
+
 
 static void RGBtoHSV( double dR, double dG, double dB, double& dH, double& dS, double& dV )
 {
@@ -90,7 +90,7 @@ static void HSVtoRGB(double dH, double dS, double dV, double& dR, double& dG, do
     dB = result.getBlue();
 }
 
-// CMYK values from 0 to 1
+
 static void CMYKtoRGB( double fCyan, double fMagenta, double fYellow, double fKey, double& dR, double& dG, double& dB )
 {
     fCyan = (fCyan * ( 1.0 - fKey )) + fKey;
@@ -102,14 +102,14 @@ static void CMYKtoRGB( double fCyan, double fMagenta, double fYellow, double fKe
     dB = std::max( std::min( ( 1.0 - fYellow ), 1.0), 0.0 );
 }
 
-// CMY results from 0 to 1
+
 static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& fMagenta, double& fYellow, double& fKey )
 {
     fCyan = 1 - dR;
     fMagenta = 1 - dG;
     fYellow = 1 - dB;
 
-    //CMYK and CMY values from 0 to 1
+    
     fKey = 1.0;
     if( fCyan < fKey ) fKey = fCyan;
     if( fMagenta < fKey ) fKey = fMagenta;
@@ -117,7 +117,7 @@ static void RGBtoCMYK( double dR, double dG, double dB, double& fCyan, double& f
 
     if( fKey >= 1.0 )
     {
-        //Black
+        
        fCyan = 0.0;
        fMagenta = 0.0;
        fYellow = 0.0;
@@ -404,7 +404,7 @@ void ColorFieldControl::UpdateBitmap()
         sal_uInt16 nHue, nSat, nBri;
         maColor.RGBtoHSB( nHue, nSat, nBri );
 
-        // this has been unlooped for performance reason, please do not merge back!
+        
 
         sal_uInt16 y = nHeight,x;
 
@@ -524,7 +524,7 @@ void ColorFieldControl::ShowPosition( const Point& rPos, bool bUpdate )
         BitmapReadAccess* pReadAccess = mpBitmap->AcquireReadAccess();
         if( pReadAccess != NULL )
         {
-            // mpBitmap always has a bit count of 24 => use of GetPixel(...) is safe
+            
             maColor = pReadAccess->GetPixel( nY, nX );
             mpBitmap->ReleaseAccess( pReadAccess );
             pReadAccess = NULL;
@@ -608,7 +608,7 @@ void ColorFieldControl::Paint( const Rectangle& rRect )
 
     DrawBitmap( rRect.TopLeft(), rRect.GetSize(), rRect.TopLeft(), rRect.GetSize(), aOutputBitmap );
 
-    // draw circle around current color
+    
     if( maColor.IsDark() )
         SetLineColor( COL_WHITE );
     else
@@ -735,7 +735,7 @@ void ColorSliderControl::UpdateBitmap()
         sal_uInt16 nHue, nSat, nBri;
         maColor.RGBtoHSB( nHue, nSat, nBri );
 
-        // this has been unlooped for performance reason, please do not merge back!
+        
 
         switch( meMode )
         {
@@ -1092,7 +1092,7 @@ ColorPickerDialog::ColorPickerDialog( Window* pParent, sal_Int32 nColor, sal_Int
 
     Color aColor( nColor );
 
-    // modify
+    
     if( mnDialogMode == 2 )
     {
         maColorPreview.SetSizePixel( maColorPrevious.GetSizePixel() );
@@ -1128,14 +1128,14 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
 
     Color aColor( nRed, nGreen, nBlue );
 
-    if( n & UPDATE_RGB ) // update RGB
+    if( n & UPDATE_RGB ) 
     {
         maMFRed.SetValue( nRed );
         maMFGreen.SetValue( nGreen );
         maMFBlue.SetValue( nBlue );
     }
 
-    if( n & UPDATE_CMYK ) // update CMYK
+    if( n & UPDATE_CMYK ) 
     {
         maMFCyan.SetValue( toInt( mdCyan, 100.0 ) );
         maMFMagenta.SetValue( toInt( mdMagenta, 100.0 ) );
@@ -1143,14 +1143,14 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
         maMFKey.SetValue( toInt( mdKey, 100.0 ) );
     }
 
-    if( n & UPDATE_HSB ) // update HSB
+    if( n & UPDATE_HSB ) 
     {
         maMFHue.SetValue( toInt( mdHue, 1.0 ) );
         maMFSaturation.SetValue( toInt( mdSat, 100.0 ) );
         maMFBrightness.SetValue( toInt( mdBri, 100.0 ) );
     }
 
-    if( n & UPDATE_COLORCHOOSER ) // update Color Chooser 1
+    if( n & UPDATE_COLORCHOOSER ) 
     {
         switch( meMode )
         {
@@ -1163,7 +1163,7 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
         }
     }
 
-    if( n & UPDATE_COLORSLIDER ) // update Color Chooser 2
+    if( n & UPDATE_COLORSLIDER ) 
     {
         switch( meMode )
         {
@@ -1176,7 +1176,7 @@ void ColorPickerDialog::update_color( sal_uInt16 n )
         }
     }
 
-    if( n & UPDATE_HEX ) // update hex
+    if( n & UPDATE_HEX ) 
     {
         maEDHex.SetColor( aColor.GetColor()  );
     }
@@ -1379,25 +1379,25 @@ void ColorPickerDialog::setColorComponent( sal_uInt16 nComp, double dValue )
 
 typedef ::cppu::WeakComponentImplHelper4< XServiceInfo, XExecutableDialog, XInitialization, XPropertyAccess > ColorPickerBase;
 
-class ColorPicker : protected ::comphelper::OBaseMutex,    // Struct for right initalization of mutex member! Must be first of baseclasses.
+class ColorPicker : protected ::comphelper::OBaseMutex,    
                     public ColorPickerBase
 {
 public:
     ColorPicker( Reference< XComponentContext > const & xContext );
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
 
-    // XInitialization
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
-    // XPropertyAccess
+    
     virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException);
     virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException);
 
-    // XExecutableDialog
+    
     virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (RuntimeException);
     virtual sal_Int16 SAL_CALL execute(  ) throw (RuntimeException);
 
@@ -1438,7 +1438,7 @@ ColorPicker::ColorPicker( Reference< XComponentContext > const & xContext )
 {
 }
 
-// XInitialization
+
 void SAL_CALL ColorPicker::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
 {
     if( aArguments.getLength() == 1 )
@@ -1447,7 +1447,7 @@ void SAL_CALL ColorPicker::initialize( const Sequence< Any >& aArguments ) throw
     }
 }
 
-// XInitialization
+
 OUString SAL_CALL ColorPicker::getImplementationName(  ) throw (RuntimeException)
 {
     return ColorPicker_getImplementationName();
@@ -1463,7 +1463,7 @@ Sequence< OUString > SAL_CALL ColorPicker::getSupportedServiceNames(  ) throw (R
     return ColorPicker_getSupportedServiceNames();
 }
 
-// XPropertyAccess
+
 Sequence< PropertyValue > SAL_CALL ColorPicker::getPropertyValues(  ) throw (RuntimeException)
 {
     Sequence< PropertyValue > props(1);
@@ -1487,7 +1487,7 @@ void SAL_CALL ColorPicker::setPropertyValues( const Sequence< PropertyValue >& a
     }
 }
 
-// XExecutableDialog
+
 void SAL_CALL ColorPicker::setTitle( const OUString& sTitle ) throw (RuntimeException)
 {
     msTitle = sTitle;

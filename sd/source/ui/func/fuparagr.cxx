@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fuparagr.hxx"
@@ -76,9 +76,9 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 
         aNewAttr.Put( aEditAttr );
 
-        // left border is offset
+        
         const long nOff = ( (SvxLRSpaceItem&)aNewAttr.Get( EE_PARA_LRSPACE ) ).GetTxtLeft();
-        // conversion since TabulatorTabPage always uses Twips!
+        
         SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
         aNewAttr.Put( aOff );
 
@@ -109,7 +109,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
                 {
                     delete pDlg;
                 }
-                return; // Cancel
+                return; 
             }
             delete( pDlg );
         }
@@ -134,7 +134,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
         }
     }
 
-    // invalidate slots
+    
     static sal_uInt16 SidArray[] = {
         SID_ATTR_TABSTOP,
     SID_ATTR_PARA_LINESPACE,
@@ -165,6 +165,6 @@ void FuParagraph::Deactivate()
 {
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

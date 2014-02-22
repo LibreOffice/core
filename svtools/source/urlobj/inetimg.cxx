@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/thread.h>
@@ -82,32 +82,32 @@ sal_Bool INetImage::Read( SvStream& rIStm, sal_uLong nFormat )
         {
 /*
     --> structure size  MUST - alignment of 4!
-    int     iSize;              // size of all data, including variable length strings
-    sal_Bool    bIsMap;             // For server side maps
-    sal_Int32   iWidth;             // Fixed size data correspond to fields in LO_ImageDataStruct
-    sal_Int32   iHeight;            //   and EDT_ImageData
+    int     iSize;              
+    sal_Bool    bIsMap;             
+    sal_Int32   iWidth;             
+    sal_Int32   iHeight;            
     sal_Int32   iHSpace;
     sal_Int32   iVSpace;
     sal_Int32   iBorder;
-    int     iLowResOffset;      // Offsets into string_data. If 0, string is NULL (not used)
-    int     iAltOffset;         // (alternate text?)
-    int     iAnchorOffset;      // HREF in image
-    int     iExtraHTML_Offset;  // Extra HTML (stored in CImageElement)
-    sal_Char pImageURL[1];      // Append all variable-length strings starting here
+    int     iLowResOffset;      
+    int     iAltOffset;         
+    int     iAnchorOffset;      
+    int     iExtraHTML_Offset;  
+    sal_Char pImageURL[1];      
 */
             rtl_TextEncoding eSysCSet = osl_getThreadTextEncoding();
             sal_Int32 nVal, nAnchorOffset, nAltOffset, nFilePos;
 
             nFilePos = rIStm.Tell();
-            // skip over iSize (int), bIsMao ( sal_Bool ) alignment of 4 !!!!
+            
             rIStm.SeekRel( 8 );
             rIStm.ReadInt32( nVal );  aSizePixel.Width() = nVal;
             rIStm.ReadInt32( nVal );  aSizePixel.Height() = nVal;
-            // skip over iHSpace, iVSpace, iBorder, iLowResOffset
+            
             rIStm.SeekRel( 3 * sizeof( sal_Int32 ) + sizeof( int ) );
             rIStm.ReadInt32( nAltOffset );
             rIStm.ReadInt32( nAnchorOffset );
-            // skip over iExtraHTML_Offset
+            
             rIStm.SeekRel( sizeof( int ) );
 
             aImageURL = read_zeroTerminated_uInt8s_ToOUString(rIStm, eSysCSet);

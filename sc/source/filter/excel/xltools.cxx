@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,7 +39,7 @@
 #include "xltools.hxx"
 
 
-// GUID import/export =========================================================
+
 
 XclGuid::XclGuid()
 {
@@ -51,7 +51,7 @@ XclGuid::XclGuid(
         sal_uInt8 nData41, sal_uInt8 nData42, sal_uInt8 nData43, sal_uInt8 nData44,
         sal_uInt8 nData45, sal_uInt8 nData46, sal_uInt8 nData47, sal_uInt8 nData48 )
 {
-    // convert to little endian -> makes streaming easy
+    
     UInt32ToSVBT32( nData1, mpnData );
     ShortToSVBT16( nData2, mpnData + 4 );
     ShortToSVBT16( nData3, mpnData + 6 );
@@ -79,19 +79,19 @@ bool operator<( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid )
 {
-    rStrm.Read( rGuid.mpnData, 16 );     // mpnData always in little endian
+    rStrm.Read( rGuid.mpnData, 16 );     
     return rStrm;
 }
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclGuid& rGuid )
 {
-    rStrm.Write( rGuid.mpnData, 16 );    // mpnData already in little endian
+    rStrm.Write( rGuid.mpnData, 16 );    
     return rStrm;
 }
 
-// Excel Tools ================================================================
 
-// GUID's ---------------------------------------------------------------------
+
+
 
 const XclGuid XclTools::maGuidStdLink(
     0x79EAC9D0, 0xBAF9, 0x11CE, 0x8C, 0x82, 0x00, 0xAA, 0x00, 0x4B, 0xA9, 0x0B );
@@ -102,7 +102,7 @@ const XclGuid XclTools::maGuidUrlMoniker(
 const XclGuid XclTools::maGuidFileMoniker(
     0x00000303, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 );
 
-// numeric conversion ---------------------------------------------------------
+
 
 double XclTools::GetDoubleFromRK( sal_Int32 nRKValue )
 {
@@ -134,9 +134,9 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
 {
     double fFrac, fInt;
 
-    // integer
+    
     fFrac = modf( fValue, &fInt );
-    if( (fFrac == 0.0) && (fInt >= -536870912.0) && (fInt <= 536870911.0) ) // 2^29
+    if( (fFrac == 0.0) && (fInt >= -536870912.0) && (fInt <= 536870911.0) ) 
     {
         rnRKValue = static_cast< sal_Int32 >( fInt );
         rnRKValue <<= 2;
@@ -144,7 +144,7 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
         return true;
     }
 
-    // integer/100
+    
     fFrac = modf( fValue * 100.0, &fInt );
     if( (fFrac == 0.0) && (fInt >= -536870912.0) && (fInt <= 536870911.0) )
     {
@@ -154,7 +154,7 @@ bool XclTools::GetRKFromDouble( sal_Int32& rnRKValue, double fValue )
         return true;
     }
 
-    // double
+    
     return false;
 }
 
@@ -211,7 +211,7 @@ sal_uInt8 XclTools::GetXclErrorCode( sal_uInt16 nScError )
     switch( nScError )
     {
         case errIllegalArgument:        return EXC_ERR_VALUE;
-        case errIllegalFPOperation:     return EXC_ERR_NUM;     // maybe DIV/0 or NUM...
+        case errIllegalFPOperation:     return EXC_ERR_NUM;     
         case errDivisionByZero:         return EXC_ERR_DIV0;
         case errIllegalParameter:       return EXC_ERR_VALUE;
         case errPairExpected:           return EXC_ERR_VALUE;
@@ -264,7 +264,7 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sa
     XclBoolError eType;
     if( bErrOrBool )
     {
-        // error value
+        
         switch( nValue )
         {
             case EXC_ERR_NULL:  eType = xlErrNull;      break;
@@ -280,7 +280,7 @@ XclBoolError XclTools::ErrorToEnum( double& rfDblValue, sal_uInt8 bErrOrBool, sa
     }
     else
     {
-        // Boolean value
+        
         eType = nValue ? xlErrTrue : xlErrFalse;
         rfDblValue = nValue ? 1.0 : 0.0;
     }
@@ -335,23 +335,23 @@ double XclTools::GetXclDefColWidthCorrection( long nXclDefFontHeight )
     return 40960.0 / ::std::max( nXclDefFontHeight - 15L, 60L ) + 50.0;
 }
 
-// formatting -----------------------------------------------------------------
+
 
 Color XclTools::GetPatternColor( const Color& rPattColor, const Color& rBackColor, sal_uInt16 nXclPattern )
 {
-    // 0x00 == 0% transparence (full rPattColor)
-    // 0x80 == 100% transparence (full rBackColor)
+    
+    
     static const sal_uInt8 pnRatioTable[] =
     {
-        0x80, 0x00, 0x40, 0x20, 0x60, 0x40, 0x40, 0x40,     // 00 - 07
-        0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
-        0x50, 0x70, 0x78                                    // 16 - 18
+        0x80, 0x00, 0x40, 0x20, 0x60, 0x40, 0x40, 0x40,     
+        0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     
+        0x50, 0x70, 0x78                                    
     };
     return (nXclPattern < SAL_N_ELEMENTS( pnRatioTable )) ?
         ScfTools::GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 
-// text encoding --------------------------------------------------------------
+
 
 namespace {
 
@@ -362,42 +362,42 @@ const struct XclCodePageEntry
 }
 pCodePageTable[] =
 {
-    {     437,  RTL_TEXTENCODING_IBM_437        },  // OEM US
-//  {     720,  RTL_TEXTENCODING_IBM_720        },  // OEM Arabic
-    {     737,  RTL_TEXTENCODING_IBM_737        },  // OEM Greek
-    {     775,  RTL_TEXTENCODING_IBM_775        },  // OEM Baltic
-    {     850,  RTL_TEXTENCODING_IBM_850        },  // OEM Latin I
-    {     852,  RTL_TEXTENCODING_IBM_852        },  // OEM Latin II (Central European)
-    {     855,  RTL_TEXTENCODING_IBM_855        },  // OEM Cyrillic
-    {     857,  RTL_TEXTENCODING_IBM_857        },  // OEM Turkish
-//  {     858,  RTL_TEXTENCODING_IBM_858        },  // OEM Multilingual Latin I with Euro
-    {     860,  RTL_TEXTENCODING_IBM_860        },  // OEM Portugese
-    {     861,  RTL_TEXTENCODING_IBM_861        },  // OEM Icelandic
-    {     862,  RTL_TEXTENCODING_IBM_862        },  // OEM Hebrew
-    {     863,  RTL_TEXTENCODING_IBM_863        },  // OEM Canadian (French)
-    {     864,  RTL_TEXTENCODING_IBM_864        },  // OEM Arabic
-    {     865,  RTL_TEXTENCODING_IBM_865        },  // OEM Nordic
-    {     866,  RTL_TEXTENCODING_IBM_866        },  // OEM Cyrillic (Russian)
-    {     869,  RTL_TEXTENCODING_IBM_869        },  // OEM Greek (Modern)
-    {     874,  RTL_TEXTENCODING_MS_874         },  // MS Windows Thai
-    {     932,  RTL_TEXTENCODING_MS_932         },  // MS Windows Japanese Shift-JIS
-    {     936,  RTL_TEXTENCODING_MS_936         },  // MS Windows Chinese Simplified GBK
-    {     949,  RTL_TEXTENCODING_MS_949         },  // MS Windows Korean (Wansung)
-    {     950,  RTL_TEXTENCODING_MS_950         },  // MS Windows Chinese Traditional BIG5
-    {    1200,  RTL_TEXTENCODING_DONTKNOW       },  // Unicode (BIFF8) - return *_DONTKNOW to preserve old code page
-    {    1250,  RTL_TEXTENCODING_MS_1250        },  // MS Windows Latin II (Central European)
-    {    1251,  RTL_TEXTENCODING_MS_1251        },  // MS Windows Cyrillic
-    {    1252,  RTL_TEXTENCODING_MS_1252        },  // MS Windows Latin I (BIFF4-BIFF8)
-    {    1253,  RTL_TEXTENCODING_MS_1253        },  // MS Windows Greek
-    {    1254,  RTL_TEXTENCODING_MS_1254        },  // MS Windows Turkish
-    {    1255,  RTL_TEXTENCODING_MS_1255        },  // MS Windows Hebrew
-    {    1256,  RTL_TEXTENCODING_MS_1256        },  // MS Windows Arabic
-    {    1257,  RTL_TEXTENCODING_MS_1257        },  // MS Windows Baltic
-    {    1258,  RTL_TEXTENCODING_MS_1258        },  // MS Windows Vietnamese
-    {    1361,  RTL_TEXTENCODING_MS_1361        },  // MS Windows Korean (Johab)
-    {   10000,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
-    {   32768,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
-    {   32769,  RTL_TEXTENCODING_MS_1252        }   // MS Windows Latin I (BIFF2-BIFF3)
+    {     437,  RTL_TEXTENCODING_IBM_437        },  
+
+    {     737,  RTL_TEXTENCODING_IBM_737        },  
+    {     775,  RTL_TEXTENCODING_IBM_775        },  
+    {     850,  RTL_TEXTENCODING_IBM_850        },  
+    {     852,  RTL_TEXTENCODING_IBM_852        },  
+    {     855,  RTL_TEXTENCODING_IBM_855        },  
+    {     857,  RTL_TEXTENCODING_IBM_857        },  
+
+    {     860,  RTL_TEXTENCODING_IBM_860        },  
+    {     861,  RTL_TEXTENCODING_IBM_861        },  
+    {     862,  RTL_TEXTENCODING_IBM_862        },  
+    {     863,  RTL_TEXTENCODING_IBM_863        },  
+    {     864,  RTL_TEXTENCODING_IBM_864        },  
+    {     865,  RTL_TEXTENCODING_IBM_865        },  
+    {     866,  RTL_TEXTENCODING_IBM_866        },  
+    {     869,  RTL_TEXTENCODING_IBM_869        },  
+    {     874,  RTL_TEXTENCODING_MS_874         },  
+    {     932,  RTL_TEXTENCODING_MS_932         },  
+    {     936,  RTL_TEXTENCODING_MS_936         },  
+    {     949,  RTL_TEXTENCODING_MS_949         },  
+    {     950,  RTL_TEXTENCODING_MS_950         },  
+    {    1200,  RTL_TEXTENCODING_DONTKNOW       },  
+    {    1250,  RTL_TEXTENCODING_MS_1250        },  
+    {    1251,  RTL_TEXTENCODING_MS_1251        },  
+    {    1252,  RTL_TEXTENCODING_MS_1252        },  
+    {    1253,  RTL_TEXTENCODING_MS_1253        },  
+    {    1254,  RTL_TEXTENCODING_MS_1254        },  
+    {    1255,  RTL_TEXTENCODING_MS_1255        },  
+    {    1256,  RTL_TEXTENCODING_MS_1256        },  
+    {    1257,  RTL_TEXTENCODING_MS_1257        },  
+    {    1258,  RTL_TEXTENCODING_MS_1258        },  
+    {    1361,  RTL_TEXTENCODING_MS_1361        },  
+    {   10000,  RTL_TEXTENCODING_APPLE_ROMAN    },  
+    {   32768,  RTL_TEXTENCODING_APPLE_ROMAN    },  
+    {   32769,  RTL_TEXTENCODING_MS_1252        }   
 };
 const XclCodePageEntry* const pCodePageTableEnd = STATIC_ARRAY_END( pCodePageTable );
 
@@ -415,7 +415,7 @@ struct XclCodePageEntry_TEPred
     rtl_TextEncoding    meTextEnc;
 };
 
-} // namespace
+} 
 
 rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
 {
@@ -431,7 +431,7 @@ rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
 sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
 {
     if( eTextEnc == RTL_TEXTENCODING_UNICODE )
-        return 1200;    // for BIFF8
+        return 1200;    
 
     const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
     if( pEntry == pCodePageTableEnd )
@@ -442,16 +442,16 @@ sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
     return pEntry->mnCodePage;
 }
 
-// font names -----------------------------------------------------------------
+
 
 OUString XclTools::GetXclFontName( const OUString& rFontName )
 {
-    // substitute with MS fonts
+    
     OUString aNewName = GetSubsFontName(rFontName, SUBSFONT_ONLYONE | SUBSFONT_MS);
     return aNewName.isEmpty() ? rFontName : aNewName;
 }
 
-// built-in defined names -----------------------------------------------------
+
 
 const OUString XclTools::maDefNamePrefix( "Excel_BuiltIn_" );
 
@@ -511,7 +511,7 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
             sal_Int32 nBuiltInLen = aBuiltInName.getLength();
             if( rDefName.matchIgnoreAsciiCase( aBuiltInName, nPrefixLen ) )
             {
-                // name can be followed by underline or space character
+                
                 sal_Int32 nNextCharPos = nPrefixLen + nBuiltInLen;
                 sal_Unicode cNextChar = (rDefName.getLength() > nNextCharPos) ? rDefName[nNextCharPos] : '\0';
                 if( (cNextChar == '\0') || (cNextChar == ' ') || (cNextChar == '_') )
@@ -522,16 +522,16 @@ sal_Unicode XclTools::GetBuiltInDefNameIndex( const OUString& rDefName )
     return EXC_BUILTIN_UNKNOWN;
 }
 
-// built-in style names -------------------------------------------------------
+
 
 const OUString XclTools::maStyleNamePrefix1( "Excel_BuiltIn_" );
 const OUString XclTools::maStyleNamePrefix2( "Excel Built-in " );
 
 static const sal_Char* const ppcStyleNames[] =
 {
-    "",                 // "Normal" not used directly, but localized "Default"
-    "RowLevel_",        // outline level will be appended
-    "ColumnLevel_",     // outline level will be appended
+    "",                 
+    "RowLevel_",        
+    "ColumnLevel_",     
     "Comma",
     "Currency",
     "Percent",
@@ -545,7 +545,7 @@ OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rNam
 {
     OUString aStyleName;
 
-    if( nStyleId == EXC_STYLE_NORMAL )  // "Normal" becomes "Default" style
+    if( nStyleId == EXC_STYLE_NORMAL )  
     {
         aStyleName = ScGlobal::GetRscString( STR_STYLENAME_STANDARD );
     }
@@ -570,7 +570,7 @@ OUString XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const OUString& rNam
 
 bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyleId, sal_Int32* pnNextChar )
 {
-    // "Default" becomes "Normal"
+    
     if (rStyleName.equals(ScGlobal::GetRscString(STR_STYLENAME_STANDARD)))
     {
         if( pnStyleId ) *pnStyleId = EXC_STYLE_NORMAL;
@@ -578,7 +578,7 @@ bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyl
         return true;
     }
 
-    // try the other built-in styles
+    
     sal_uInt8 nFoundId = 0;
     sal_Int32 nNextChar = 0;
 
@@ -613,7 +613,7 @@ bool XclTools::IsBuiltInStyleName( const OUString& rStyleName, sal_uInt8* pnStyl
 
     if( pnStyleId ) *pnStyleId = EXC_STYLE_USERDEF;
     if( pnNextChar ) *pnNextChar = 0;
-    return nPrefixLen > 0;  // also return true for unknown built-in styles
+    return nPrefixLen > 0;  
 }
 
 bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, const OUString& rStyleName )
@@ -645,7 +645,7 @@ bool XclTools::GetBuiltInStyleId( sal_uInt8& rnStyleId, sal_uInt8& rnLevel, cons
     return false;
 }
 
-// conditional formatting style names -----------------------------------------
+
 
 const OUString XclTools::maCFStyleNamePrefix1( "Excel_CondFormat_" );
 const OUString XclTools::maCFStyleNamePrefix2( "ConditionalStyle_" );
@@ -672,7 +672,7 @@ bool XclTools::IsCondFormatStyleName( const OUString& rStyleName )
     return false;
 }
 
-// stream handling ------------------------------------------------------------
+
 
 void XclTools::SkipSubStream( XclImpStream& rStrm )
 {
@@ -686,7 +686,7 @@ void XclTools::SkipSubStream( XclImpStream& rStrm )
     }
 }
 
-// Basic macro names ----------------------------------------------------------
+
 
 const OUString XclTools::maSbMacroPrefix( "vnd.sun.star.script:" );
 const OUString XclTools::maSbMacroSuffix( "?language=Basic&location=document" );
@@ -713,7 +713,7 @@ OUString XclTools::GetXclMacroName( const OUString& rSbMacroUrl )
     return OUString();
 }
 
-// read/write colors ----------------------------------------------------------
+
 
 XclImpStream& operator>>( XclImpStream& rStrm, Color& rColor )
 {
@@ -728,6 +728,6 @@ XclExpStream& operator<<( XclExpStream& rStrm, const Color& rColor )
     return rStrm << rColor.GetRed() << rColor.GetGreen() << rColor.GetBlue() << sal_uInt8( 0 );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

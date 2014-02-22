@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "addressconverter.hxx"
@@ -31,7 +31,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -39,11 +39,11 @@ using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 namespace {
 
-//! TODO: this limit may change, is there a way to obtain it via API?
+
 const sal_Int16 API_MAXTAB          = MAXTAB;
 
 const sal_Int32 OOX_MAXCOL          = static_cast< sal_Int32 >( (1 << 14) - 1 );
@@ -70,10 +70,10 @@ const sal_Int32 BIFF8_MAXCOL        = BIFF5_MAXCOL;
 const sal_Int32 BIFF8_MAXROW        = 65535;
 const sal_Int16 BIFF8_MAXTAB        = BIFF5_MAXTAB;
 
-} // namespace
+} 
 
-// ============================================================================
-// ============================================================================
+
+
 
 CellAddress ApiCellRangeList::getBaseAddress() const
 {
@@ -82,7 +82,7 @@ CellAddress ApiCellRangeList::getBaseAddress() const
     return CellAddress( front().Sheet, front().StartColumn, front().StartRow );
 }
 
-// ============================================================================
+
 
 void BinAddress::read( SequenceInputStream& rStrm )
 {
@@ -95,7 +95,7 @@ void BinAddress::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
     mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
 
-// ============================================================================
+
 
 void BinRange::read( SequenceInputStream& rStrm )
 {
@@ -110,7 +110,7 @@ void BinRange::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
     maLast.mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
 
-// ============================================================================
+
 
 void BinRangeList::read( SequenceInputStream& rStrm )
 {
@@ -120,7 +120,7 @@ void BinRangeList::read( SequenceInputStream& rStrm )
         aIt->read( rStrm );
 }
 
-// ============================================================================
+
 
 AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -163,7 +163,7 @@ AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool AddressConverter::parseOoxAddress2d(
         sal_Int32& ornColumn, sal_Int32& ornRow,
@@ -208,7 +208,7 @@ bool AddressConverter::parseOoxAddress2d(
             {
                 if( ('0' <= cChar) && (cChar <= '9') )
                 {
-                    // return, if 1-based row is already 9 digits long
+                    
                     if( ornRow >= 100000000 )
                         return false;
                     (ornRow *= 10) += (cChar - '0');
@@ -263,7 +263,7 @@ bool AddressConverter::parseOoxAddress2d( sal_Int32& ornColumn, sal_Int32& ornRo
             {
                 if( ('0' <= cChar) && (cChar <= '9') )
                 {
-                    // return, if 1-based row is already 9 digits long
+                    
                     if( ornRow >= 100000000 )
                         return false;
                     (ornRow *= 10) += (cChar - '0');
@@ -309,7 +309,7 @@ bool AddressConverter::parseOoxRange2d(
     return false;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool AddressConverter::checkCol( sal_Int32 nCol, bool bTrackOverflow )
 {
@@ -331,11 +331,11 @@ bool AddressConverter::checkTab( sal_Int16 nSheet, bool bTrackOverflow )
 {
     bool bValid = (0 <= nSheet) && (nSheet <= maMaxPos.Sheet);
     if( !bValid && bTrackOverflow )
-        mbTabOverflow |= (nSheet > maMaxPos.Sheet);  // do not warn for deleted refs (-1)
+        mbTabOverflow |= (nSheet > maMaxPos.Sheet);  
     return bValid;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool AddressConverter::checkCellAddress( const CellAddress& rAddress, bool bTrackOverflow )
 {
@@ -418,13 +418,13 @@ CellAddress AddressConverter::createValidCellAddress(
     return aAddress;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool AddressConverter::checkCellRange( const CellRangeAddress& rRange, bool bAllowOverflow, bool bTrackOverflow )
 {
     return
-        (checkCol( rRange.EndColumn, bTrackOverflow ) || bAllowOverflow) &&     // bAllowOverflow after checkCol to track overflow!
-        (checkRow( rRange.EndRow, bTrackOverflow ) || bAllowOverflow) &&        // bAllowOverflow after checkRow to track overflow!
+        (checkCol( rRange.EndColumn, bTrackOverflow ) || bAllowOverflow) &&     
+        (checkRow( rRange.EndRow, bTrackOverflow ) || bAllowOverflow) &&        
         checkTab( rRange.Sheet, bTrackOverflow ) &&
         checkCol( rRange.StartColumn, bTrackOverflow ) &&
         checkRow( rRange.StartRow, bTrackOverflow );
@@ -477,7 +477,7 @@ bool AddressConverter::convertToCellRange( CellRangeAddress& orRange,
     return validateCellRange( orRange, bAllowOverflow, bTrackOverflow );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void AddressConverter::validateCellRangeList( ApiCellRangeList& orRanges, bool bTrackOverflow )
 {
@@ -509,7 +509,7 @@ void AddressConverter::convertToCellRangeList( ApiCellRangeList& orRanges,
             orRanges.push_back( aRange );
 }
 
-// private --------------------------------------------------------------------
+
 
 void AddressConverter::ControlCharacters::set(
         sal_Unicode cThisWorkbook, sal_Unicode cExternal,
@@ -529,7 +529,7 @@ void AddressConverter::initializeMaxPos(
     maMaxXlsPos.Column = nMaxXlsCol;
     maMaxXlsPos.Row    = nMaxXlsRow;
 
-    // maximum cell position in Calc
+    
     try
     {
         Reference< XIndexAccess > xSheetsIA( getDocument()->getSheets(), UNO_QUERY_THROW );
@@ -544,9 +544,9 @@ void AddressConverter::initializeMaxPos(
     }
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

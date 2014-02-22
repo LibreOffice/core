@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -59,7 +59,7 @@
 #include <iterator>
 
 
-//.........................................................................
+
 namespace frm
 {
     using namespace ::com::sun::star::uno;
@@ -78,12 +78,12 @@ namespace frm
 
     using ::connectivity::ORowSetValue;
 
-    //==============================================================================
-    //= helper
-    //==============================================================================
+    
+    
+    
     namespace
     {
-        //--------------------------------------------------------------------------
+        
         struct RowSetValueToString : public ::std::unary_function< ORowSetValue, OUString >
         {
             OUString operator()( const ORowSetValue& _value ) const
@@ -92,7 +92,7 @@ namespace frm
             }
         };
 
-        //--------------------------------------------------------------------------
+        
         struct AppendRowSetValueString : public ::std::unary_function< OUString, void >
         {
             AppendRowSetValueString( OUString& _string )
@@ -109,7 +109,7 @@ namespace frm
             OUString&    m_string;
         };
 
-        //--------------------------------------------------------------------------
+        
         Sequence< OUString > lcl_convertToStringSequence( const ValueList& _values )
         {
             Sequence< OUString > aStrings( _values.size() );
@@ -123,21 +123,21 @@ namespace frm
         }
     }
 
-    //==============================================================================
-    //= ItemEventDescription
-    //==============================================================================
+    
+    
+    
     typedef ::comphelper::EventHolder< ItemEvent >    ItemEventDescription;
 
-    //==============================================================================
-    //= OListBoxModel
-    //==============================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     InterfaceRef SAL_CALL OListBoxModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
     {
         return *(new OListBoxModel( comphelper::getComponentContext(_rxFactory) ));
     }
 
-    //------------------------------------------------------------------------------
+    
     Sequence< Type> OListBoxModel::_getTypes()
     {
         return TypeBag(
@@ -147,16 +147,16 @@ namespace frm
         ).getTypes();
     }
 
-    // stuff common to all constructors
+    
     void OListBoxModel::init()
     {
         startAggregatePropertyListening( PROPERTY_STRINGITEMLIST );
     }
 
-    //------------------------------------------------------------------
+    
     OListBoxModel::OListBoxModel(const Reference<XComponentContext>& _rxFactory)
         :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_LISTBOX, FRM_SUN_CONTROL_LISTBOX, sal_True, sal_True, sal_True )
-        // use the old control name for compatibility reasons
+        
         ,OEntryListHelper( (OControlModel&)*this )
         ,OErrorBroadcaster( OComponentHelper::rBHelper )
         ,m_aListRowSet()
@@ -173,7 +173,7 @@ namespace frm
         init();
     }
 
-    //------------------------------------------------------------------
+    
     OListBoxModel::OListBoxModel( const OListBoxModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
         :OBoundControlModel( _pOriginal, _rxFactory )
         ,OEntryListHelper( *_pOriginal, (OControlModel&)*this )
@@ -192,7 +192,7 @@ namespace frm
         init();
     }
 
-    //------------------------------------------------------------------
+    
     OListBoxModel::~OListBoxModel()
     {
         if (!OComponentHelper::rBHelper.bDisposed)
@@ -203,12 +203,12 @@ namespace frm
 
     }
 
-    // XCloneable
-    //------------------------------------------------------------------------------
+    
+    
     IMPLEMENT_DEFAULT_CLONING( OListBoxModel )
 
-    // XServiceInfo
-    //------------------------------------------------------------------------------
+    
+    
     StringSequence SAL_CALL OListBoxModel::getSupportedServiceNames() throw(RuntimeException)
     {
         StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -231,7 +231,7 @@ namespace frm
         return aSupported;
     }
 
-    //------------------------------------------------------------------------------
+    
     Any SAL_CALL OListBoxModel::queryAggregation(const Type& _rType) throw (RuntimeException)
     {
         Any aReturn = OBoundControlModel::queryAggregation( _rType );
@@ -242,8 +242,8 @@ namespace frm
         return aReturn;
     }
 
-    // OComponentHelper
-    //------------------------------------------------------------------------------
+    
+    
     void OListBoxModel::disposing()
     {
         OBoundControlModel::disposing();
@@ -251,7 +251,7 @@ namespace frm
         OErrorBroadcaster::disposing();
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
     {
         switch (_nHandle)
@@ -293,7 +293,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception)
     {
         switch (_nHandle)
@@ -312,11 +312,11 @@ namespace frm
 
         case PROPERTY_ID_LISTSOURCE:
         {
-            // extract
+            
             Sequence< OUString > aListSource;
             OSL_VERIFY( _rValue >>= aListSource );
 
-            // copy to member
+            
             ValueList().swap(m_aListSourceValues);
             ::std::copy(
                 aListSource.getConstArray(),
@@ -324,7 +324,7 @@ namespace frm
                 ::std::insert_iterator< ValueList >( m_aListSourceValues, m_aListSourceValues.end() )
             );
 
-            // propagate
+            
             if ( m_eListSourceType == ListSourceType_VALUELIST )
             {
                 setBoundValues(m_aListSourceValues);
@@ -332,8 +332,8 @@ namespace frm
             else
             {
                 if ( m_xCursor.is() && !hasField() && !hasExternalListSource() )
-                    // listbox is already connected to a database, and no external list source
-                    // data source changed -> refresh
+                    
+                    
                     loadData( false );
             }
         }
@@ -375,10 +375,10 @@ namespace frm
         {
             ControlModelLock aLock( *this );
             setNewStringItemList( _rValue, aLock );
-                // TODO: this is bogus. setNewStringItemList expects a guard which has the *only*
-                // lock to the mutex, but setFastPropertyValue_NoBroadcast is already called with
-                // a lock - so we effectively has two locks here, of which setNewStringItemList can
-                // only control one.
+                
+                
+                
+                
         }
         resetNoBroadcast();
         break;
@@ -388,7 +388,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     sal_Bool OListBoxModel::convertFastPropertyValue(
         Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
         throw (IllegalArgumentException)
@@ -434,11 +434,11 @@ namespace frm
         return bModified;
     }
 
-    //------------------------------------------------------------------------------
+    
     void SAL_CALL OListBoxModel::setPropertyValues( const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues ) throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
     {
-        // if both SelectedItems and StringItemList are set, care for this
-        // #i27024#
+        
+        
         const Any* pSelectSequenceValue = NULL;
 
         const OUString* pStartPos = _rPropertyNames.getConstArray();
@@ -453,8 +453,8 @@ namespace frm
         );
         if ( ( pSelectedItemsPos != pEndPos ) && ( pStringItemListPos != pEndPos ) )
         {
-            // both properties are present
-            // -> remember the value for the select sequence
+            
+            
             pSelectSequenceValue = _rValues.getConstArray() + ( pSelectedItemsPos - pStartPos );
         }
 
@@ -463,14 +463,14 @@ namespace frm
         if ( pSelectSequenceValue )
         {
             setPropertyValue( PROPERTY_SELECT_SEQ, *pSelectSequenceValue );
-            // Note that this is the only reliable way, since one of the properties is implemented
-            // by ourself, and one is implemented by the aggregate, we cannot rely on any particular
-            // results when setting them both - too many undocumented behavior in all the involved
+            
+            
+            
 
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 9, OBoundControlModel )
@@ -486,51 +486,51 @@ namespace frm
         END_DESCRIBE_PROPERTIES();
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::_propertyChanged( const PropertyChangeEvent& i_rEvent ) throw ( RuntimeException )
     {
         if ( i_rEvent.PropertyName == PROPERTY_STRINGITEMLIST )
         {
             ControlModelLock aLock( *this );
-            // SYNCHRONIZED ----->
-            // our aggregate internally changed its StringItemList property - reflect this in our "overridden"
-            // version of the property
+            
+            
+            
             setNewStringItemList( i_rEvent.NewValue, aLock );
-            // <----- SYNCHRONIZED
+            
             return;
         }
         OBoundControlModel::_propertyChanged( i_rEvent );
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
     {
         OBoundControlModel::describeAggregateProperties( _rAggregateProps );
 
-        // superseded properties:
+        
         RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
     }
 
-    //------------------------------------------------------------------------------
+    
     OUString SAL_CALL OListBoxModel::getServiceName() throw(RuntimeException)
     {
-        return OUString(FRM_COMPONENT_LISTBOX);   // old (non-sun) name for compatibility !
+        return OUString(FRM_COMPONENT_LISTBOX);   
     }
 
-    //------------------------------------------------------------------------------
+    
     void SAL_CALL OListBoxModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
         throw(IOException, RuntimeException)
     {
         OBoundControlModel::write(_rxOutStream);
 
-        // Dummy sequence, to stay compatible if SelectSeq is not saved anymore
+        
         Sequence<sal_Int16> aDummySeq;
 
-        // Version
-        // Version 0x0002: ListSource becomes StringSeq
+        
+        
         _rxOutStream->writeShort(0x0004);
 
-        // Masking for any
+        
         sal_uInt16 nAnyMask = 0;
         if (m_aBoundColumn.getValueType().getTypeClass() != TypeClass_VOID)
             nAnyMask |= BOUNDCOLUMN;
@@ -550,22 +550,22 @@ namespace frm
         }
         writeHelpTextCompatibly(_rxOutStream);
 
-        // from version 0x0004 : common properties
+        
         writeCommonProperties(_rxOutStream);
     }
 
-    //------------------------------------------------------------------------------
+    
     void SAL_CALL OListBoxModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
     {
-        // We need to respect dependencies for certain variables.
-        // Therefore, we need to set them explicitly via setPropertyValue().
+        
+        
 
         OBoundControlModel::read(_rxInStream);
         ControlModelLock aLock( *this );
 
-        // since we are "overwriting" the StringItemList of our aggregate (means we have
-        // an own place to store the value, instead of relying on our aggregate storing it),
-        // we need to respect what the aggregate just read for the StringItemList property.
+        
+        
+        
         try
         {
             if ( m_xAggregateSet.is() )
@@ -576,7 +576,7 @@ namespace frm
             SAL_WARN( "forms.component", "OComboBoxModel::read: caught an exception while examining the aggregate's string item list!" );
         }
 
-        // Version
+        
         sal_uInt16 nVersion = _rxInStream->readShort();
         DBG_ASSERT(nVersion > 0, "OListBoxModel::read : version 0 ? this should never have been written !");
 
@@ -592,15 +592,15 @@ namespace frm
             return;
         }
 
-        // Masking for any
+        
         sal_uInt16 nAnyMask;
         _rxInStream >> nAnyMask;
 
-        // ListSourceSeq
+        
         StringSequence aListSourceSeq;
         if (nVersion == 0x0001)
         {
-            // Create ListSourceSeq from String
+            
             OUString sListSource;
             _rxInStream >> sListSource;
 
@@ -630,26 +630,26 @@ namespace frm
 
         setFastPropertyValue(PROPERTY_ID_LISTSOURCE, aListSourceSeqAny );
 
-        // Dummy sequence, to stay compatible if SelectSeq is not saved anymore
+        
         Sequence<sal_Int16> aDummySeq;
         _rxInStream >> aDummySeq;
 
-        // DefaultSelectSeq
+        
         Sequence<sal_Int16> aDefaultSelectSeq;
         _rxInStream >> aDefaultSelectSeq;
         Any aDefaultSelectSeqAny;
         aDefaultSelectSeqAny <<= aDefaultSelectSeq;
         setFastPropertyValue(PROPERTY_ID_DEFAULT_SELECT_SEQ, aDefaultSelectSeqAny);
 
-        // BoundColumn
+        
         if ((nAnyMask & BOUNDCOLUMN) == BOUNDCOLUMN)
         {
             sal_Int16 nValue;
             _rxInStream >> nValue;
             m_aBoundColumn <<= nValue;
         }
-        else // the constructor initialises to 1, so if it is empty,
-             // we must explicitly set to empty
+        else 
+             
         {
             m_aBoundColumn = Any();
         }
@@ -657,8 +657,8 @@ namespace frm
         if (nVersion > 2)
             readHelpTextCompatibly(_rxInStream);
 
-        // if our string list is not filled from the value list, we must empty it
-        // this can be the case when somebody saves in alive mode
+        
+        
         if  (   ( m_eListSourceType != ListSourceType_VALUELIST )
             &&  !hasExternalListSource()
             )
@@ -669,13 +669,13 @@ namespace frm
         if (nVersion > 3)
             readCommonProperties(_rxInStream);
 
-        // Display the default values after reading
+        
         if ( !getControlSource().isEmpty() )
-            // (not if we don't have a control source - the "State" property acts like it is persistent, then
+            
             resetNoBroadcast();
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::loadData( bool _bForce )
     {
         SAL_INFO( "forms.component", "OListBoxModel::loadData" );
@@ -687,25 +687,25 @@ namespace frm
         m_nNULLPos = -1;
         m_nBoundColumnType = DataType::SQLNULL;
 
-        // pre-requisites:
-        // PRE1: connection
+        
+        
         Reference< XConnection > xConnection;
-        // is the active connection of our form
+        
         Reference< XPropertySet > xFormProps( m_xCursor, UNO_QUERY );
         if ( xFormProps.is() )
             xFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
 
-        // PRE2: list source
+        
         OUString sListSource;
-        // if our list source type is no value list, we need to concatenate
-        // the single list source elements
+        
+        
         ::std::for_each(
             m_aListSourceValues.begin(),
             m_aListSourceValues.end(),
             AppendRowSetValueString( sListSource )
         );
 
-        // outta here if we don't have all pre-requisites
+        
         if ( !xConnection.is() || sListSource.isEmpty() )
         {
             clearBoundValues();
@@ -729,7 +729,7 @@ namespace frm
             switch (m_eListSourceType)
             {
             case ListSourceType_TABLEFIELDS:
-                // don't work with a statement here, the fields will be collected below
+                
                 break;
 
             case ListSourceType_TABLE:
@@ -737,8 +737,8 @@ namespace frm
                     Reference<XNameAccess> xFieldsByName = getTableFields(xConnection, sListSource);
                     Reference<XIndexAccess> xFieldsByIndex(xFieldsByName, UNO_QUERY);
 
-                    // do we have a bound column if yes we have to select it
-                    // and the displayed column is the first column othwhise we act as a combobox
+                    
+                    
                     OUString aFieldName;
                     OUString aBoundFieldName;
 
@@ -761,11 +761,11 @@ namespace frm
                             aFieldName = getControlSource();
                         else
                         {
-                            // otherwise look for the alias
+                            
                             Reference< XColumnsSupplier > xSupplyFields;
                             xFormProps->getPropertyValue("SingleSelectQueryComposer") >>= xSupplyFields;
 
-                            // search the field
+                            
                             DBG_ASSERT(xSupplyFields.is(), "OListBoxModel::loadData : invalid query composer !");
 
                             Reference<XNameAccess> xFieldNames = xSupplyFields->getColumns();
@@ -784,7 +784,7 @@ namespace frm
                     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
                     OUString aQuote = xMeta->getIdentifierQuoteString();
                     OUString aStatement("SELECT ");
-                    if (aBoundFieldName.isEmpty())   // act like a combobox
+                    if (aBoundFieldName.isEmpty())   
                         aStatement += "DISTINCT ";
 
                     aStatement += quoteName(aQuote,aFieldName);
@@ -821,9 +821,9 @@ namespace frm
             {
                 if ( !_bForce && !m_aListRowSet.isDirty() )
                 {
-                    // if none of the settings of the row set changed, compared to the last
-                    // invocation of loadData, then don't re-fill the list. Instead, assume
-                    // the list entries are the same.
+                    
+                    
+                    
                     m_nNULLPos = nNULLPosBackup;
                     m_nBoundColumnType = nBoundColumnTypeBackup;
                     return;
@@ -842,11 +842,11 @@ namespace frm
             return;
         }
 
-        // Fill display and value lists
+        
         ValueList aDisplayList, aValueList;
         sal_Bool bUseNULL = hasField() && !isRequired();
 
-        // empty BoundColumn is treated as BoundColumn==0,
+        
         if(!aBoundColumn)
             aBoundColumn = 0;
 
@@ -864,7 +864,7 @@ namespace frm
             case ListSourceType_TABLE:
             case ListSourceType_QUERY:
                 {
-                    // Get field of the ResultSet's 1st column
+                    
                     Reference<XColumnsSupplier> xSupplyCols(xListCursor, UNO_QUERY);
                     DBG_ASSERT(xSupplyCols.is(), "OListBoxModel::loadData : cursor supports the row set service but is no column supplier?!");
                     Reference<XIndexAccess> xColumns;
@@ -882,7 +882,7 @@ namespace frm
 
                     ::dbtools::FormattedColumnValue aValueFormatter( getContext(), m_xCursor, xDataField );
 
-                    // Get the field of BoundColumn of the ResultSet
+                    
                     m_nBoundColumnType = DataType::SQLNULL;
                     if ( *aBoundColumn >= 0 )
                     {
@@ -899,14 +899,14 @@ namespace frm
                     else if ( *aBoundColumn == -1)
                         m_nBoundColumnType = DataType::SMALLINT;
 
-                    //  If the LB is bound to a field and empty entries are valid, we remember the position
-                    //  for an empty entry
+                    
+                    
                     SAL_INFO( "forms.component", "OListBoxModel::loadData: string collection" );
                     OUString aStr;
                     sal_Int16 entryPos = 0;
                     ORowSetValue aBoundValue;
                     Reference< XRow > xCursorRow( xListCursor, UNO_QUERY_THROW );
-                    while ( xListCursor->next() && ( entryPos++ < SHRT_MAX ) ) // SHRT_MAX is the maximum number of entries
+                    while ( xListCursor->next() && ( entryPos++ < SHRT_MAX ) ) 
                     {
                         aStr = aValueFormatter.getFormattedValue();
                         aDisplayList.push_back( aStr );
@@ -914,16 +914,16 @@ namespace frm
                         if(*aBoundColumn >= 0)
                             aBoundValue.fill( *aBoundColumn + 1, m_nBoundColumnType, xCursorRow );
                         else
-                            // -1 because getRow() is 1-indexed, but ListBox positions are 0-indexed
+                            
                             aBoundValue = static_cast<sal_Int16>(xListCursor->getRow()-1);
                         aValueList.push_back( aBoundValue );
 
                         if ( m_nNULLPos == -1 && aBoundValue.isNull() )
                             m_nNULLPos = sal_Int16( aDisplayList.size() - 1 );
                         if ( bUseNULL && ( m_nNULLPos == -1 ) && aStr.isEmpty() )
-                            // There is already a non-NULL entry with empty display string;
-                            // adding another one for NULL would make things confusing,
-                            // so back off.
+                            
+                            
+                            
                             bUseNULL = false;
                     }
                 }
@@ -942,7 +942,7 @@ namespace frm
                         );
                         if(*aBoundColumn == -1)
                         {
-                            // the type of i matters! It will be the type of the ORowSetValue pushed to aValueList!
+                            
                             for(sal_Int16 i=0; static_cast<ValueList::size_type>(i) < aDisplayList.size(); ++i)
                             {
                                 aValueList.push_back(i);
@@ -972,8 +972,8 @@ namespace frm
         }
 
 
-        // Create Values sequence
-        // Add NULL entry
+        
+        
         if (bUseNULL && m_nNULLPos == -1)
         {
             aValueList.insert( aValueList.begin(), ORowSetValue() );
@@ -987,11 +987,11 @@ namespace frm
         setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( lcl_convertToStringSequence( aDisplayList ) ) );
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::onConnectedDbColumn( const Reference< XInterface >& /*_rxForm*/ )
     {
-        // list boxes which are bound to a db column don't have multi selection
-        // - this would be unable to reflect in the db column
+        
+        
         if ( hasField() )
         {
             setFastPropertyValue( PROPERTY_ID_MULTISELECTION, ::cppu::bool2any( false ) );
@@ -1001,7 +1001,7 @@ namespace frm
             impl_refreshDbEntryList( false );
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::onDisconnectedDbColumn()
     {
         if ( m_eListSourceType != ListSourceType_VALUELIST )
@@ -1017,21 +1017,21 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::setBoundValues(const ValueList &l)
     {
         m_aConvertedBoundValues.clear();
         m_aBoundValues = l;
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::clearBoundValues()
     {
         ValueList().swap(m_aConvertedBoundValues);
         ValueList().swap(m_aBoundValues);
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxModel::convertBoundValues(const sal_Int32 nFieldType) const
     {
         m_aConvertedBoundValues.resize(m_aBoundValues.size());
@@ -1047,12 +1047,12 @@ namespace frm
         OSL_ENSURE(dst == m_aConvertedBoundValues.end(), "OListBoxModel::convertBoundValues expected to have overwritten all of m_aConvertedBoundValues, but did not.");
         assert(dst == m_aConvertedBoundValues.end());
     }
-    //------------------------------------------------------------------------------
+    
     sal_Int32 OListBoxModel::getValueType() const
     {
         return impl_hasBoundComponent() ? m_nBoundColumnType : getFieldType();
     }
-    //------------------------------------------------------------------------------
+    
     ValueList OListBoxModel::impl_getValues() const
     {
         const sal_Int32 nFieldType = getValueType();
@@ -1081,7 +1081,7 @@ namespace frm
         assert(dst == aValues.end());
         return aValues;
     }
-    //------------------------------------------------------------------------------
+    
     ORowSetValue OListBoxModel::getFirstSelectedValue() const
     {
         static const ORowSetValue s_aEmptyVaue;
@@ -1093,11 +1093,11 @@ namespace frm
         Sequence< sal_Int16 > aSelectedIndices;
         OSL_VERIFY( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) >>= aSelectedIndices );
         if ( !aSelectedIndices.getLength() )
-            // nothing selected at all
+            
             return s_aEmptyVaue;
 
         if ( ( m_nNULLPos != -1 ) && ( aSelectedIndices[0] == m_nNULLPos ) )
-            // the dedicated "NULL" entry is selected
+            
             return s_aEmptyVaue;
 
         ValueList aValues( impl_getValues() );
@@ -1112,10 +1112,10 @@ namespace frm
         return aValues[ selectedValue ];
     }
 
-    //------------------------------------------------------------------------------
+    
     sal_Bool OListBoxModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     {
-        // current selection list
+        
         const ORowSetValue aCurrentValue( getFirstSelectedValue() );
         if ( aCurrentValue != m_aSaveValue )
         {
@@ -1137,12 +1137,12 @@ namespace frm
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------
+    
     Sequence< sal_Int16 > OListBoxModel::translateDbValueToControlValue(const ORowSetValue &i_aValue) const
     {
         Sequence< sal_Int16 > aSelectionIndicies;
 
-        // reset selection for NULL values
+        
         if ( i_aValue.isNull() )
         {
             if ( m_nNULLPos != -1 )
@@ -1167,7 +1167,7 @@ namespace frm
 
         return aSelectionIndicies;
     }
-    //------------------------------------------------------------------------------
+    
     Sequence< sal_Int16 > OListBoxModel::translateBindingValuesToControlValue(const Sequence< const Any > &i_aValues) const
     {
         const ValueList aValues( impl_getValues() );
@@ -1207,7 +1207,7 @@ namespace frm
         aSelectionIndicies.realloc(nCount);
         return aSelectionIndicies;
     }
-    //------------------------------------------------------------------------------
+    
     Any OListBoxModel::translateDbColumnToControlValue()
     {
         Reference< XPropertySet > xBoundField( getField() );
@@ -1225,14 +1225,14 @@ namespace frm
         return makeAny( translateDbValueToControlValue(aCurrentValue) );
     }
 
-    // XReset
-    //------------------------------------------------------------------------------
+    
+    
     Any OListBoxModel::getDefaultForReset() const
     {
         Any aValue;
         if (m_aDefaultSelectSeq.getLength())
             aValue <<= m_aDefaultSelectSeq;
-        else if (m_nNULLPos != -1)  // bound Listbox
+        else if (m_nNULLPos != -1)  
         {
             Sequence<sal_Int16> aSeq(1);
             aSeq.getArray()[0] = m_nNULLPos;
@@ -1247,35 +1247,35 @@ namespace frm
         return aValue;
     }
 
-    //--------------------------------------------------------------------
+    
     void OListBoxModel::resetNoBroadcast()
     {
         OBoundControlModel::resetNoBroadcast();
         m_aSaveValue.setNull();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxModel::disposing( const EventObject& _rSource ) throw ( RuntimeException )
     {
         if ( !OEntryListHelper::handleDisposing( _rSource ) )
             OBoundControlModel::disposing( _rSource );
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
-        // The type of how we should transfer our selection to external value bindings
+        
         enum ExchangeType
         {
-            eIndexList,     /// as list of indexes of selected entries
-            eIndex,         /// as index of the selected entry
-            eEntryList,     /// as list of string representations of selected *display* entries
-            eEntry,         /// as string representation of the selected *display* entry
-            eValueList,     /// as list of string representations of selected values
-            eValue          /// as string representation of the selected value
+            eIndexList,     
+            eIndex,         
+            eEntryList,     
+            eEntry,         
+            eValueList,     
+            eValue          
         };
 
-        //--------------------------------------------------------------------
+        
         ExchangeType lcl_getCurrentExchangeType( const Type& _rExchangeType )
         {
             switch ( _rExchangeType.getTypeClass() )
@@ -1309,7 +1309,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Any OListBoxModel::translateExternalValueToControlValue( const Any& _rExternalValue ) const
     {
         Sequence< sal_Int16 > aSelectIndexes;
@@ -1334,8 +1334,8 @@ namespace frm
 
         case eIndexList:
         {
-            // unfortunately, our select sequence is a sequence<short>, while the external binding
-            // supplies sequence<int> only -> transform this
+            
+            
             Sequence< sal_Int32 > aSelectIndexesPure;
             OSL_VERIFY( _rExternalValue >>= aSelectIndexesPure );
             aSelectIndexes.realloc( aSelectIndexesPure.getLength() );
@@ -1361,22 +1361,22 @@ namespace frm
 
         case eEntryList:
         {
-            // we can retrieve a string list from the binding for multiple selection
+            
             Sequence< OUString > aSelectEntries;
             OSL_VERIFY( _rExternalValue >>= aSelectEntries );
 
             ::std::set< sal_Int16 > aSelectionSet;
 
-            // find the selection entries in our item list
+            
             const OUString* pSelectEntries = aSelectEntries.getArray();
             const OUString* pSelectEntriesEnd = pSelectEntries + aSelectEntries.getLength();
             while ( pSelectEntries != pSelectEntriesEnd )
             {
-                // the indexes where the current string appears in our string items
+                
                 Sequence< sal_Int16 > aThisEntryIndexes;
                 aThisEntryIndexes = findValue( getStringItemList(), *pSelectEntries++, false );
 
-                // insert all the indexes of this entry into our set
+                
                 ::std::copy(
                     aThisEntryIndexes.getConstArray(),
                     aThisEntryIndexes.getConstArray() + aThisEntryIndexes.getLength(),
@@ -1384,7 +1384,7 @@ namespace frm
                 );
             }
 
-            // copy the indexes to the sequence
+            
             aSelectIndexes.realloc( aSelectionSet.size() );
             ::std::copy(
                 aSelectionSet.begin(),
@@ -1407,10 +1407,10 @@ namespace frm
         return makeAny( aSelectIndexes );
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
-        //................................................................
+        
         struct ExtractStringFromSequence_Safe : public ::std::unary_function< sal_Int16, OUString >
         {
         protected:
@@ -1428,13 +1428,13 @@ namespace frm
             }
         };
 
-        //................................................................
+        
         Any lcl_getSingleSelectedEntry( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< OUString >& _rStringList )
         {
             Any aReturn;
 
-            // by definition, multiple selected entries are transferred as NULL if the
-            // binding does not support string lists
+            
+            
             if ( _rSelectSequence.getLength() <= 1 )
             {
                 OUString sSelectedEntry;
@@ -1448,7 +1448,7 @@ namespace frm
             return aReturn;
         }
 
-        //................................................................
+        
         Any lcl_getMultiSelectedEntries( const Sequence< sal_Int16 >& _rSelectSequence, const Sequence< OUString >& _rStringList )
         {
             Sequence< OUString > aSelectedEntriesTexts( _rSelectSequence.getLength() );
@@ -1461,7 +1461,7 @@ namespace frm
             return makeAny( aSelectedEntriesTexts );
         }
 
-        //................................................................
+        
         struct ExtractAnyFromValueList_Safe : public ::std::unary_function< sal_Int16, Any >
         {
         protected:
@@ -1479,13 +1479,13 @@ namespace frm
             }
         };
 
-        //................................................................
+        
         Any lcl_getSingleSelectedEntryAny( const Sequence< sal_Int16 >& _rSelectSequence, const ValueList& _rStringList )
         {
             Any aReturn;
 
-            // by definition, multiple selected entries are transfered as NULL if the
-            // binding does not support string lists
+            
+            
             if ( _rSelectSequence.getLength() <= 1 )
             {
                 if ( _rSelectSequence.getLength() == 1 )
@@ -1495,7 +1495,7 @@ namespace frm
             return aReturn;
         }
 
-        //................................................................
+        
         Any lcl_getMultiSelectedEntriesAny( const Sequence< sal_Int16 >& _rSelectSequence, const ValueList& _rStringList )
         {
             Sequence< Any > aSelectedEntriesValues( _rSelectSequence.getLength() );
@@ -1509,7 +1509,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Any OListBoxModel::translateControlValueToExternalValue( ) const
     {
         OSL_PRECOND( hasExternalValueBinding(), "OListBoxModel::translateControlValueToExternalValue: no binding!" );
@@ -1530,8 +1530,8 @@ namespace frm
 
         case eIndexList:
         {
-            // unfortunately, the select sequence is a sequence<short>, but our binding
-            // expects int's
+            
+            
             Sequence< sal_Int32 > aTransformed( aSelectSequence.getLength() );
             ::std::copy(
                 aSelectSequence.getConstArray(),
@@ -1566,14 +1566,14 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------
+    
     Any OListBoxModel::translateControlValueToValidatableValue( ) const
     {
         OSL_PRECOND( hasValidator(), "OListBoxModel::translateControlValueToValidatableValue: no validator, so why should I?" );
         return getCurrentFormComponentValue();
     }
 
-    //--------------------------------------------------------------------
+    
     Any OListBoxModel::getCurrentSingleValue() const
     {
         Any aCurrentValue;
@@ -1591,7 +1591,7 @@ namespace frm
 
         return aCurrentValue;
     }
-    //--------------------------------------------------------------------
+    
     Any OListBoxModel::getCurrentMultiValue() const
     {
         Any aCurrentValue;
@@ -1609,7 +1609,7 @@ namespace frm
 
         return aCurrentValue;
     }
-    //--------------------------------------------------------------------
+    
     Any OListBoxModel::getCurrentFormComponentValue() const
     {
         {
@@ -1639,7 +1639,7 @@ namespace frm
         return aCurrentValue;
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< Type > OListBoxModel::getSupportedBindingTypes()
     {
         Sequence< Type > aTypes(6);
@@ -1652,7 +1652,7 @@ namespace frm
         return aTypes;
     }
 
-    //--------------------------------------------------------------------
+    
     void OListBoxModel::stringItemListChanged( ControlModelLock& _rInstanceLock )
     {
         if ( !m_xAggregateSet.is() )
@@ -1669,14 +1669,14 @@ namespace frm
         }
         resumeValueListening();
 
-        // update the selection here
+        
         if ( hasExternalValueBinding( ) )
             transferExternalValueToControl( _rInstanceLock );
         else
         {
             if ( hasField() )
             {
-                // TODO: update the selection in case we're bound to a database column
+                
             }
             else
             {
@@ -1686,21 +1686,21 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void OListBoxModel::connectedExternalListSource( )
     {
-        // TODO?
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void OListBoxModel::disconnectedExternalListSource( )
     {
-        // TODO: in case we're part of an already loaded form, we should probably simulate
-        // an onConnectedDbColumn, so our list get's filled with the data as indicated
-        // by our SQL-binding related properties
+        
+        
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void OListBoxModel::impl_refreshDbEntryList( bool _bForce )
     {
         DBG_ASSERT( !hasExternalListSource(), "OListBoxModel::impl_refreshDbEntryList: invalid call!" );
@@ -1714,7 +1714,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void OListBoxModel::refreshInternalEntryList()
     {
         impl_refreshDbEntryList( true );
@@ -1722,17 +1722,17 @@ namespace frm
             initFromField( m_xCursor );
     }
 
-    //==================================================================
-    // OListBoxControl
-    //==================================================================
+    
+    
+    
 
-    //------------------------------------------------------------------
+    
     InterfaceRef SAL_CALL OListBoxControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
     {
         return *(new OListBoxControl( comphelper::getComponentContext(_rxFactory) ));
     }
 
-    //------------------------------------------------------------------------------
+    
     Sequence< Type> OListBoxControl::_getTypes()
     {
         return TypeBag(
@@ -1741,7 +1741,7 @@ namespace frm
         ).getTypes();
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL OListBoxControl::queryAggregation(const Type& _rType) throw (RuntimeException)
     {
         Any aReturn = OListBoxControl_BASE::queryInterface( _rType );
@@ -1754,7 +1754,7 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------
+    
     OListBoxControl::OListBoxControl(const Reference<XComponentContext>& _rxFactory)
         :OBoundControl( _rxFactory, VCL_CONTROL_LISTBOX, sal_False )
         ,m_aChangeListeners( m_aMutex )
@@ -1763,16 +1763,16 @@ namespace frm
 
         increment(m_refCount);
         {
-            // Register as FocusListener
+            
             Reference<XWindow> xComp;
             if (query_aggregation(m_xAggregate, xComp))
                 xComp->addFocusListener(this);
 
-            // Register as ItemListener
+            
             if ( query_aggregation( m_xAggregate, m_xAggregateListBox ) )
                 m_xAggregateListBox->addItemListener(this);
         }
-        // Refcount at 2 for registered Listener
+        
         decrement(m_refCount);
 
         doSetDelegator();
@@ -1781,7 +1781,7 @@ namespace frm
         m_aChangeTimer.SetTimeoutHdl(LINK(this,OListBoxControl,OnTimeout));
     }
 
-    //------------------------------------------------------------------------------
+    
     OListBoxControl::~OListBoxControl()
     {
         if (!OComponentHelper::rBHelper.bDisposed)
@@ -1795,7 +1795,7 @@ namespace frm
 
     }
 
-    //------------------------------------------------------------------------------
+    
     StringSequence SAL_CALL OListBoxControl::getSupportedServiceNames() throw(RuntimeException)
     {
         StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -1807,33 +1807,33 @@ namespace frm
     }
 
 
-    // XFocusListener
-    //------------------------------------------------------------------------------
+    
+    
     void SAL_CALL OListBoxControl::focusGained(const FocusEvent& /*_rEvent*/) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        if ( m_aChangeListeners.getLength() ) // only if there are listeners
+        if ( m_aChangeListeners.getLength() ) 
         {
             Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
             if (xSet.is())
             {
-                // memorize the current selection for posting the change event
+                
                 m_aCurrentSelection = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
             }
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::focusLost(const FocusEvent& /*_rEvent*/) throw(RuntimeException)
     {
         m_aCurrentSelection.clear();
     }
 
-    // XItemListener
-    //------------------------------------------------------------------------------
+    
+    
     void SAL_CALL OListBoxControl::itemStateChanged(const ItemEvent& _rEvent) throw(RuntimeException)
     {
-        // forward this to our listeners
+        
         Reference< XChild > xChild( getModel(), UNO_QUERY );
         if ( xChild.is() && xChild->getParent().is() )
         {
@@ -1852,7 +1852,7 @@ namespace frm
         else
             m_aItemListeners.notifyEach( &XItemListener::itemStateChanged, _rEvent );
 
-        // and do the handling for the ChangeListeners
+        
         ::osl::ClearableMutexGuard aGuard(m_aMutex);
         if ( m_aChangeTimer.IsActive() )
         {
@@ -1869,7 +1869,7 @@ namespace frm
                 Reference<XPropertySet> xSet(getModel(), UNO_QUERY);
                 if (xSet.is())
                 {
-                    // Has the selection been changed?
+                    
                     sal_Bool bModified(sal_False);
                     Any aValue = xSet->getPropertyValue(PROPERTY_SELECT_SEQ);
 
@@ -1899,28 +1899,28 @@ namespace frm
         }
     }
 
-    // XEventListener
-    //------------------------------------------------------------------------------
+    
+    
     void SAL_CALL OListBoxControl::disposing(const EventObject& _rSource) throw (RuntimeException)
     {
         OBoundControl::disposing(_rSource);
     }
 
-    // XChangeBroadcaster
-    //------------------------------------------------------------------------------
+    
+    
     void SAL_CALL OListBoxControl::addChangeListener(const Reference<XChangeListener>& _rxListener) throw(RuntimeException)
     {
         m_aChangeListeners.addInterface( _rxListener );
     }
 
-    //------------------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::removeChangeListener(const Reference<XChangeListener>& _rxListener) throw(RuntimeException)
     {
         m_aChangeListeners.removeInterface( _rxListener );
     }
 
-    // OComponentHelper
-    //------------------------------------------------------------------------------
+    
+    
     void OListBoxControl::disposing()
     {
         if (m_aChangeTimer.IsActive())
@@ -1948,7 +1948,7 @@ namespace frm
         OBoundControl::disposing();
     }
 
-    //------------------------------------------------------------------------------
+    
     void OListBoxControl::processEvent( const AnyEvent& _rEvent )
     {
         Reference< XListBox > xKeepAlive( this );
@@ -1961,61 +1961,61 @@ namespace frm
         m_aItemListeners.notifyEach( &XItemListener::itemStateChanged, rItemEvent.getEventObject() );
     }
 
-    //------------------------------------------------------------------------------
+    
     IMPL_LINK(OListBoxControl, OnTimeout, void*, /*EMPTYTAG*/)
     {
         m_aChangeListeners.notifyEach( &XChangeListener::changed, EventObject( *this ) );
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::addItemListener( const Reference< XItemListener >& l ) throw (RuntimeException)
     {
         m_aItemListeners.addInterface( l );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::removeItemListener( const Reference< XItemListener >& l ) throw (RuntimeException)
     {
         m_aItemListeners.removeInterface( l );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::addActionListener( const Reference< XActionListener >& l ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->addActionListener( l );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::removeActionListener( const Reference< XActionListener >& l ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->removeActionListener( l );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::addItem( const OUString& aItem, ::sal_Int16 nPos ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->addItem( aItem, nPos );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::addItems( const Sequence< OUString >& aItems, ::sal_Int16 nPos ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->addItems( aItems, nPos );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::removeItems( ::sal_Int16 nPos, ::sal_Int16 nCount ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->removeItems( nPos, nCount );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int16 SAL_CALL OListBoxControl::getItemCount(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
@@ -2023,7 +2023,7 @@ namespace frm
         return 0;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL OListBoxControl::getItem( ::sal_Int16 nPos ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
@@ -2031,7 +2031,7 @@ namespace frm
         return OUString( );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL OListBoxControl::getItems(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
@@ -2039,7 +2039,7 @@ namespace frm
         return Sequence< OUString >( );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int16 SAL_CALL OListBoxControl::getSelectedItemPos(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
@@ -2047,7 +2047,7 @@ namespace frm
         return 0;
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< ::sal_Int16 > SAL_CALL OListBoxControl::getSelectedItemsPos(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
@@ -2055,7 +2055,7 @@ namespace frm
         return Sequence< ::sal_Int16 >( );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL OListBoxControl::getSelectedItem(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
@@ -2063,7 +2063,7 @@ namespace frm
         return OUString( );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL OListBoxControl::getSelectedItems(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
@@ -2071,28 +2071,28 @@ namespace frm
         return Sequence< OUString >( );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::selectItemPos( ::sal_Int16 nPos, ::sal_Bool bSelect ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItemPos( nPos, bSelect );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::selectItemsPos( const Sequence< ::sal_Int16 >& aPositions, ::sal_Bool bSelect ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItemsPos( aPositions, bSelect );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::selectItem( const OUString& aItem, ::sal_Bool bSelect ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->selectItem( aItem, bSelect );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL OListBoxControl::isMutipleMode(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
@@ -2100,14 +2100,14 @@ namespace frm
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::setMultipleMode( ::sal_Bool bMulti ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->setMultipleMode( bMulti );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int16 SAL_CALL OListBoxControl::getDropDownLineCount(  ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
@@ -2115,22 +2115,22 @@ namespace frm
         return 0;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::setDropDownLineCount( ::sal_Int16 nLines ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->setDropDownLineCount( nLines );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OListBoxControl::makeVisible( ::sal_Int16 nEntry ) throw (RuntimeException)
     {
         if ( m_xAggregateListBox.is() )
             m_xAggregateListBox->makeVisible( nEntry );
     }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

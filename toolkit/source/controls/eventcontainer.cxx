@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -40,7 +40,7 @@ using namespace std;
 namespace toolkit
 {
 
-// Methods XElementAccess
+
 Type NameContainer_Impl::getElementType()
     throw(RuntimeException)
 {
@@ -54,7 +54,7 @@ sal_Bool NameContainer_Impl::hasElements()
     return bRet;
 }
 
-// Methods XNameAccess
+
 Any NameContainer_Impl::getByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
@@ -83,7 +83,7 @@ sal_Bool NameContainer_Impl::hasByName( const OUString& aName )
 }
 
 
-// Methods XNameReplace
+
 void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
@@ -100,7 +100,7 @@ void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aEleme
     Any aOldElement = mValues.getConstArray()[ iHashResult ];
     mValues.getArray()[ iHashResult ] = aElement;
 
-    // Fire event
+    
     ContainerEvent aEvent;
     aEvent.Source = *this;
     aEvent.Element <<= aElement;
@@ -110,7 +110,7 @@ void NameContainer_Impl::replaceByName( const OUString& aName, const Any& aEleme
 }
 
 
-// Methods XNameContainer
+
 void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElement )
     throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
@@ -131,7 +131,7 @@ void NameContainer_Impl::insertByName( const OUString& aName, const Any& aElemen
     mValues.getArray()[ nCount ] = aElement;
     mHashMap[ aName ] = nCount;
 
-    // Fire event
+    
     ContainerEvent aEvent;
     aEvent.Source = *this;
     aEvent.Element <<= aElement;
@@ -151,7 +151,7 @@ void NameContainer_Impl::removeByName( const OUString& Name )
     sal_Int32 iHashResult = (*aIt).second;
     Any aOldElement = mValues.getConstArray()[ iHashResult ];
 
-    // Fire event
+    
     ContainerEvent aEvent;
     aEvent.Source = *this;
     aEvent.Element = aOldElement;
@@ -173,7 +173,7 @@ void NameContainer_Impl::removeByName( const OUString& Name )
 
 }
 
-// Methods XContainer
+
 void NameContainer_Impl::addContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener >& l ) throw(::com::sun::star::uno::RuntimeException)
 {
     maContainerListeners.addInterface( l );
@@ -186,7 +186,7 @@ void NameContainer_Impl::removeContainerListener( const ::com::sun::star::uno::R
 
 
 
-// Ctor
+
 ScriptEventContainer::ScriptEventContainer( void )
     : NameContainer_Impl( getCppuType( (ScriptEventDescriptor*) NULL ) )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaview.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -66,8 +66,8 @@ SwVbaView::~SwVbaView()
 ::sal_Int32 SAL_CALL
 SwVbaView::getSeekView() throw (css::uno::RuntimeException)
 {
-    // FIXME: if the view cursor is in table, field, section and frame
-    // handle if the cursor is in table
+    
+    
     uno::Reference< text::XText > xCurrentText = mxViewCursor->getText();
     uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextContent > xTextContent;
@@ -117,9 +117,9 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException)
 void SAL_CALL
 SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException)
 {
-    // FIXME: save the current cursor position, if the cursor is in the main
-    // document, so we can jump back to this position, if the macro sets
-    // the ViewMode back to wdSeekMainDocument
+    
+    
+    
 
     word::gotoSelectedObjectAnchor( mxModel );
     switch( _seekview )
@@ -133,7 +133,7 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
         case word::WdSeekView::wdSeekEvenPagesFooter:
         case word::WdSeekView::wdSeekEvenPagesHeader:
         {
-            // need to test
+            
             mxViewCursor->gotoRange( getHFTextRange( _seekview ), sal_False );
             break;
         }
@@ -186,7 +186,7 @@ SwVbaView::getSplitSpecial() throw (css::uno::RuntimeException)
 void SAL_CALL
 SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */) throw (css::uno::RuntimeException)
 {
-    // not support in Writer
+    
 }
 
 ::sal_Bool SAL_CALL
@@ -206,7 +206,7 @@ SwVbaView::setTableGridLines( ::sal_Bool _tablegridlines ) throw (css::uno::Runt
 ::sal_Int32 SAL_CALL
 SwVbaView::getType() throw (css::uno::RuntimeException)
 {
-    // FIXME: handle wdPrintPreview type
+    
     sal_Bool bOnlineLayout = sal_False;
     mxViewSettings->getPropertyValue("ShowOnlineLayout") >>= bOnlineLayout;
     return bOnlineLayout ? word::WdViewType::wdWebView : word::WdViewType::wdPrintView;
@@ -215,7 +215,7 @@ SwVbaView::getType() throw (css::uno::RuntimeException)
 void SAL_CALL
 SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException)
 {
-    // FIXME: handle wdPrintPreview type
+    
     switch( _type )
     {
         case word::WdViewType::wdPrintView:
@@ -292,21 +292,21 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
         case word::WdSeekView::wdSeekEvenPagesFooter:
         case word::WdSeekView::wdSeekEvenPagesHeader:
         {
-            // The primary header is the first header of the section.
-            // If the header is not shared between odd and even pages
-            // the odd page's header is the primary header. If the
-            // first page's header is different from the rest of the
-            // document, it is NOT the primary header ( the next primary
-            // header would be on page 3 )
-            // The even pages' header is only available if the header is
-            // not shared and the current style is applied to a page with
-            // an even page number
+            
+            
+            
+            
+            
+            
+            
+            
+            
             uno::Reference< beans::XPropertySet > xCursorProps( mxViewCursor, uno::UNO_QUERY_THROW );
             OUString aPageStyleName;
             xCursorProps->getPropertyValue("PageStyleName") >>= aPageStyleName;
             if ( aPageStyleName == "First Page" )
             {
-                // go to the beginning of where the next style is used
+                
                 sal_Bool hasNextPage = sal_False;
                 xStyle = word::getCurrentPageStyle( mxModel );
                 do

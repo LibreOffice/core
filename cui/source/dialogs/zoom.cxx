@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -32,11 +32,11 @@
 #include <dialmgr.hxx>
 #include <svx/zoom_def.hxx>
 
-// static ----------------------------------------------------------------
+
 
 #define SPECIAL_FACTOR  ((sal_uInt16)0xFFFF)
 
-// class SvxZoomDialog ---------------------------------------------------
+
 
 sal_uInt16 SvxZoomDialog::GetFactor() const
 {
@@ -48,7 +48,7 @@ sal_uInt16 SvxZoomDialog::GetFactor() const
         return SPECIAL_FACTOR;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
 {
@@ -91,7 +91,7 @@ void SvxZoomDialog::SetFactor( sal_uInt16 nNewFactor, sal_uInt16 nBtnId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
 {
@@ -114,7 +114,7 @@ void SvxZoomDialog::HideButton( sal_uInt16 nBtnId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
 {
@@ -125,7 +125,7 @@ void SvxZoomDialog::SetLimits( sal_uInt16 nMin, sal_uInt16 nMax )
     m_pUserEdit->SetLast( nMax );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
     : SfxModalDialog(pParent, "ZoomDialog", "cui/ui/zoomdialog.ui")
@@ -168,12 +168,12 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
     m_pOKBtn->SetClickHdl( LINK( this, SvxZoomDialog, OKHdl ) );
     m_pUserEdit->SetModifyHdl( LINK( this, SvxZoomDialog, SpinHdl ) );
 
-    // default values
+    
     sal_uInt16 nValue = 100;
     sal_uInt16 nMin = 10;
     sal_uInt16 nMax = 1000;
 
-    // maybe get the old value first
+    
     const SfxUInt16Item* pOldUserItem = 0;
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
@@ -183,7 +183,7 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
     if ( pOldUserItem )
         nValue = pOldUserItem->GetValue();
 
-    // initialize UserEdit
+    
     if ( nMin > nValue )
         nMin = nValue;
     if ( nMax < nValue )
@@ -280,12 +280,12 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet )
     }
     else
     {
-        // hide view layout related controls:
+        
         m_pViewFrame->Disable();
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxZoomDialog::~SvxZoomDialog()
 {
@@ -293,7 +293,7 @@ SvxZoomDialog::~SvxZoomDialog()
     pOutSet = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 {
@@ -309,7 +309,7 @@ IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
 {
@@ -319,7 +319,7 @@ IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
 {
@@ -351,7 +351,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutUserHdl, RadioButton *, pBtn )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, NumericField *, pEdt )
 {
@@ -371,7 +371,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutSpinHdl, NumericField *, pEdt )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
 {
@@ -383,7 +383,7 @@ IMPL_LINK( SvxZoomDialog, ViewLayoutCheckHdl, CheckBox *, pChk )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
 {
@@ -432,11 +432,11 @@ IMPL_LINK( SvxZoomDialog, OKHdl, Button *, pBtn )
         pOutSet = new SfxItemSet( rSet );
         pOutSet->Put( aZoomItem );
 
-        // don't set attribute in case the whole viewlayout stuff is disabled:
+        
         if (m_pViewFrame->IsEnabled())
             pOutSet->Put(aViewLayoutItem);
 
-        // memorize value from the UserEdit beyond the dialog
+        
         SfxObjectShell* pSh = SfxObjectShell::Current();
 
         if ( pSh )

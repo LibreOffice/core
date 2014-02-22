@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/processor3d/zbufferprocessor3d.hxx>
@@ -33,11 +33,11 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -124,16 +124,16 @@ namespace
 
             aRetval = BitmapEx(aContent, aAlpha);
 
-            // #i101811# set PrefMapMode and PrefSize at newly created Bitmap
+            
             aRetval.SetPrefMapMode(MAP_PIXEL);
             aRetval.SetPrefSize(Size(nWidth, nHeight));
         }
 
         return aRetval;
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ZBufferRasterConverter3D : public basegfx::RasterConverter3D
 {
@@ -141,18 +141,18 @@ private:
     const drawinglayer::processor3d::DefaultProcessor3D&    mrProcessor;
     basegfx::BZPixelRaster&                                 mrBuffer;
 
-    // interpolators for a single line span
+    
     basegfx::ip_single                                      maIntZ;
     basegfx::ip_triple                                      maIntColor;
     basegfx::ip_triple                                      maIntNormal;
     basegfx::ip_double                                      maIntTexture;
     basegfx::ip_triple                                      maIntInvTexture;
 
-    // current material to use for ratsreconversion
+    
     const drawinglayer::attribute::MaterialAttribute3D*     mpCurrentMaterial;
 
-    // bitfield
-    // some boolean flags for line span interpolator usages
+    
+    
     bool                                                    mbModifyColor : 1;
     bool                                                    mbUseTex : 1;
     bool                                                    mbHasTexCoor : 1;
@@ -205,7 +205,7 @@ private:
 
     double decideColorAndOpacity(basegfx::BColor& rColor)
     {
-        // init values with full opacity and material color
+        
         OSL_ENSURE(0 != mpCurrentMaterial, "CurrentMaterial not set (!)");
         double fOpacity(1.0);
         rColor = mpCurrentMaterial->getColor();
@@ -217,14 +217,14 @@ private:
 
             if(mrProcessor.getGeoTexSvx().get())
             {
-                // calc color in spot. This may also set to invisible already when
-                // e.g. bitmap textures have transparent parts
+                
+                
                 mrProcessor.getGeoTexSvx()->modifyBColor(aTexCoor, rColor, fOpacity);
             }
 
             if(basegfx::fTools::more(fOpacity, 0.0) && mrProcessor.getTransparenceGeoTexSvx().get())
             {
-                // calc opacity. Object has a 2nd texture, a transparence texture
+                
                 mrProcessor.getTransparenceGeoTexSvx()->modifyOpacity(aTexCoor, fOpacity);
             }
         }
@@ -235,7 +235,7 @@ private:
             {
                 if(mbUseNrm)
                 {
-                    // blend texture with phong
+                    
                     rColor = mrProcessor.getSdrLightingAttribute().solveColorModel(
                         basegfx::B3DVector(maIntNormal.getX().getVal(), maIntNormal.getY().getVal(), maIntNormal.getZ().getVal()),
                         rColor,
@@ -245,13 +245,13 @@ private:
                 }
                 else if(mbUseCol)
                 {
-                    // blend texture with gouraud
+                    
                     basegfx::BColor aBlendColor(maIntColor.getX().getVal(), maIntColor.getY().getVal(), maIntColor.getZ().getVal());
                     rColor *= aBlendColor;
                 }
                 else if(mrProcessor.getModulate())
                 {
-                    // blend texture with single material color
+                    
                     rColor *= mpCurrentMaterial->getColor();
                 }
             }
@@ -259,7 +259,7 @@ private:
             {
                 if(mbUseNrm)
                 {
-                    // modify color with phong
+                    
                     rColor = mrProcessor.getSdrLightingAttribute().solveColorModel(
                         basegfx::B3DVector(maIntNormal.getX().getVal(), maIntNormal.getY().getVal(), maIntNormal.getZ().getVal()),
                         rColor,
@@ -269,7 +269,7 @@ private:
                 }
                 else if(mbUseCol)
                 {
-                    // modify color with gouraud
+                    
                     rColor.setRed(maIntColor.getX().getVal());
                     rColor.setGreen(maIntColor.getY().getVal());
                     rColor.setBlue(maIntColor.getZ().getVal());
@@ -287,15 +287,15 @@ private:
 
     void setupLineSpanInterpolators(const basegfx::RasterConversionLineEntry3D& rA, const basegfx::RasterConversionLineEntry3D& rB)
     {
-        // get inverse XDelta
+        
         const double xInvDelta(1.0 / (rB.getX().getVal() - rA.getX().getVal()));
 
-        // prepare Z-interpolator
+        
         const double fZA(rA.getZ().getVal());
         const double fZB(rB.getZ().getVal());
         maIntZ = basegfx::ip_single(fZA, (fZB - fZA) * xInvDelta);
 
-        // get bools and init other interpolators on demand accordingly
+        
         mbModifyColor = mrProcessor.getBColorModifierStack().count();
         mbHasTexCoor = SCANLINE_EMPTY_INDEX != rA.getTextureIndex() && SCANLINE_EMPTY_INDEX != rB.getTextureIndex();
         mbHasInvTexCoor = SCANLINE_EMPTY_INDEX != rA.getInverseTextureIndex() && SCANLINE_EMPTY_INDEX != rB.getInverseTextureIndex();
@@ -386,38 +386,38 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 
             if(nXA < nXB)
             {
-                // prepare the span interpolators
+                
                 setupLineSpanInterpolators(rA, rB);
 
-                // bring span interpolators to start condition by incrementing with the possible difference of
-                // clamped and non-clamped XStart. Interpolators are setup relying on double precision
-                // X-values, so that difference is the correct value to compensate for possible clampings
+                
+                
+                
                 incrementLineSpanInterpolators(static_cast<double>(nXA) - rA.getX().getVal());
 
-                // prepare scanline index
+                
                 sal_uInt32 nScanlineIndex(mrBuffer.getIndexFromXY(nXA, static_cast<sal_uInt32>(nLine)));
                 basegfx::BColor aNewColor;
 
                 while(nXA < nXB)
                 {
-                    // early-test Z values if we need to do anything at all
+                    
                     const double fNewZ(::std::max(0.0, ::std::min((double)0xffff, maIntZ.getVal())));
                     const sal_uInt16 nNewZ(static_cast< sal_uInt16 >(fNewZ));
                     sal_uInt16& rOldZ(mrBuffer.getZ(nScanlineIndex));
 
                     if(nNewZ > rOldZ)
                     {
-                        // detect color and opacity for this pixel
+                        
                         const sal_uInt16 nOpacity(::std::max((sal_Int16)0, static_cast< sal_Int16 >(decideColorAndOpacity(aNewColor) * 255.0)));
 
                         if(nOpacity > 0)
                         {
-                            // avoid color overrun
+                            
                             aNewColor.clamp();
 
                             if(nOpacity >= 0x00ff)
                             {
-                                // full opacity (not transparent), set z and color
+                                
                                 rOldZ = nNewZ;
                                 mrBuffer.getBPixel(nScanlineIndex) = basegfx::BPixel(aNewColor, 0xff);
                             }
@@ -427,8 +427,8 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 
                                 if(rDest.getOpacity())
                                 {
-                                    // mix new color by using
-                                    // color' = color * (1 - opacity) + newcolor * opacity
+                                    
+                                    
                                     const sal_uInt16 nTransparence(0x0100 - nOpacity);
                                     rDest.setRed((sal_uInt8)(((rDest.getRed() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getRed()) * nOpacity)) >> 8));
                                     rDest.setGreen((sal_uInt8)(((rDest.getGreen() * nTransparence) + ((sal_uInt16)(255.0 * aNewColor.getGreen()) * nOpacity)) >> 8));
@@ -436,21 +436,21 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
 
                                     if(0xff != rDest.getOpacity())
                                     {
-                                        // both are transparent, mix new opacity by using
-                                        // opacity = newopacity * (1 - oldopacity) + oldopacity
+                                        
+                                        
                                         rDest.setOpacity(((sal_uInt8)((nOpacity * (0x0100 - rDest.getOpacity())) >> 8)) + rDest.getOpacity());
                                     }
                                 }
                                 else
                                 {
-                                    // dest is unused, set color
+                                    
                                     rDest = basegfx::BPixel(aNewColor, (sal_uInt8)nOpacity);
                                 }
                             }
                         }
                     }
 
-                    // increments
+                    
                     nScanlineIndex++;
                     nXA++;
                     incrementLineSpanInterpolators(1.0);
@@ -460,15 +460,15 @@ void ZBufferRasterConverter3D::processLineSpan(const basegfx::RasterConversionLi
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// helper class to buffer output for transparent rasterprimitives (filled areas
-// and lines) until the end of processing. To ensure correct transparent
-// visualisation, ZBuffers require to not set Z and to mix with the transparent
-// color. If transparent rasterprimitives overlap, it gets necessary to
-// paint transparent rasterprimitives from back to front to ensure that the
-// mixing happens from back to front. For that purpose, transparent
-// rasterprimitives are held in this class during the processing run, remember
-// all data and will be rendered
+
+
+
+
+
+
+
+
+
 
 class RasterPrimitive3D
 {
@@ -479,7 +479,7 @@ private:
     basegfx::B3DPolyPolygon                                   maPolyPolygon;
     double                                                    mfCenterZ;
 
-    // bitfield
+    
     bool                                                      mbModulate : 1;
     bool                                                      mbFilter : 1;
     bool                                                      mbSimpleTextureActive : 1;
@@ -537,7 +537,7 @@ public:
     bool getIsLine() const { return mbIsLine; }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -549,8 +549,8 @@ namespace drawinglayer
             {
                 if(getTransparenceCounter())
                 {
-                    // transparent output; record for later sorting and painting from
-                    // back to front
+                    
+                    
                     if(!mpRasterPrimitive3Ds)
                     {
                         const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
@@ -568,7 +568,7 @@ namespace drawinglayer
                 }
                 else
                 {
-                    // do rasterconversion
+                    
                     mpZBufferRasterConverter3D->setCurrentMaterial(rMaterial);
 
                     if(mnAntiAlialize > 1)
@@ -582,14 +582,14 @@ namespace drawinglayer
                             const double fScaleDown(1.0 / mnAntiAlialize);
                             const double fScaleUp(mnAntiAlialize);
 
-                            // take oversampling out
+                            
                             aTransform.scale(fScaleDown, fScaleDown, 1.0);
                             aSnappedHairline.transform(aTransform);
 
-                            // snap to integer
+                            
                             aSnappedHairline = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aSnappedHairline);
 
-                            // add oversampling again
+                            
                             aTransform.identity();
                             aTransform.scale(fScaleUp, fScaleUp, 1.0);
 
@@ -616,8 +616,8 @@ namespace drawinglayer
             {
                 if(getTransparenceCounter())
                 {
-                    // transparent output; record for later sorting and painting from
-                    // back to front
+                    
+                    
                     if(!mpRasterPrimitive3Ds)
                     {
                         const_cast< ZBufferProcessor3D* >(this)->mpRasterPrimitive3Ds = new std::vector< RasterPrimitive3D >;
@@ -657,56 +657,56 @@ namespace drawinglayer
             mnAntiAlialize(nAntiAlialize),
             mpRasterPrimitive3Ds(0)
         {
-            // generate ViewSizes
+            
             const double fFullViewSizeX((rViewInformation2D.getObjectToViewTransformation() * basegfx::B2DVector(fSizeX, 0.0)).getLength());
             const double fFullViewSizeY((rViewInformation2D.getObjectToViewTransformation() * basegfx::B2DVector(0.0, fSizeY)).getLength());
             const double fViewSizeX(fFullViewSizeX * rVisiblePart.getWidth());
             const double fViewSizeY(fFullViewSizeY * rVisiblePart.getHeight());
 
-            // generate RasterWidth and RasterHeight
+            
             const sal_uInt32 nRasterWidth((sal_uInt32)basegfx::fround(fViewSizeX) + 1);
             const sal_uInt32 nRasterHeight((sal_uInt32)basegfx::fround(fViewSizeY) + 1);
 
             if(nRasterWidth && nRasterHeight)
             {
-                // create view unit buffer
+                
                 mpBZPixelRaster = new basegfx::BZPixelRaster(
                     mnAntiAlialize ? nRasterWidth * mnAntiAlialize : nRasterWidth,
                     mnAntiAlialize ? nRasterHeight * mnAntiAlialize : nRasterHeight);
                 OSL_ENSURE(mpBZPixelRaster, "ZBufferProcessor3D: Could not allocate basegfx::BZPixelRaster (!)");
 
-                // create DeviceToView for Z-Buffer renderer since Z is handled
-                // different from standard 3D transformations (Z is mirrored). Also
-                // the transformation includes the step from unit device coordinates
-                // to discrete units ([-1.0 .. 1.0] -> [minDiscrete .. maxDiscrete]
+                
+                
+                
+                
 
                 basegfx::B3DHomMatrix aDeviceToView;
 
                 {
-                    // step one:
+                    
                     //
-                    // bring from [-1.0 .. 1.0] in X,Y and Z to [0.0 .. 1.0]. Also
-                    // necessary to
-                    // - flip Y due to screen orientation
-                    // - flip Z due to Z-Buffer orientation from back to front
+                    
+                    
+                    
+                    
 
                     aDeviceToView.scale(0.5, -0.5, -0.5);
                     aDeviceToView.translate(0.5, 0.5, 0.5);
                 }
 
                 {
-                    // step two:
+                    
                     //
-                    // bring from [0.0 .. 1.0] in X,Y and Z to view cordinates
+                    
                     //
-                    // #i102611#
-                    // also: scale Z to [1.5 .. 65534.5]. Normally, a range of [0.0 .. 65535.0]
-                    // could be used, but a 'unused' value is needed, so '0' is used what reduces
-                    // the range to [1.0 .. 65535.0]. It has also shown that small numerical errors
-                    // (smaller as basegfx::fTools::mfSmallValue, which is 0.000000001) happen.
-                    // Instead of checking those by basegfx::fTools methods which would cost
-                    // runtime, just add another 0.5 tolerance to the start and end of the Z-Buffer
-                    // range, thus resulting in [1.5 .. 65534.5]
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     const double fMaxZDepth(65533.0);
                     aDeviceToView.translate(-rVisiblePart.getMinX(), -rVisiblePart.getMinY(), 0.0);
 
@@ -718,7 +718,7 @@ namespace drawinglayer
                     aDeviceToView.translate(0.0, 0.0, 1.5);
                 }
 
-                // update local ViewInformation3D with own DeviceToView
+                
                 const geometry::ViewInformation3D aNewViewInformation3D(
                     getViewInformation3D().getObjectTransformation(),
                     getViewInformation3D().getOrientation(),
@@ -728,18 +728,18 @@ namespace drawinglayer
                     getViewInformation3D().getExtendedInformationSequence());
                 updateViewInformation(aNewViewInformation3D);
 
-                // prepare inverse EyeToView transformation. This can be done in constructor
-                // since changes in object transformations when processing TransformPrimitive3Ds
-                // do not influence this prepared partial transformation
+                
+                
+                
                 maInvEyeToView = getViewInformation3D().getDeviceToView() * getViewInformation3D().getProjection();
                 maInvEyeToView.invert();
 
-                // prepare maRasterRange
+                
                 maRasterRange.reset();
                 maRasterRange.expand(basegfx::B2DPoint(0.0, 0.0));
                 maRasterRange.expand(basegfx::B2DPoint(mpBZPixelRaster->getWidth(), mpBZPixelRaster->getHeight()));
 
-                // create the raster converter
+                
                 mpZBufferRasterConverter3D = new ZBufferRasterConverter3D(*mpBZPixelRaster, *this);
             }
         }
@@ -763,19 +763,19 @@ namespace drawinglayer
         {
             if(mpRasterPrimitive3Ds)
             {
-                // there are transparent rasterprimitives
+                
                 const sal_uInt32 nSize(mpRasterPrimitive3Ds->size());
 
                 if(nSize > 1)
                 {
-                    // sort them from back to front
+                    
                     std::sort(mpRasterPrimitive3Ds->begin(), mpRasterPrimitive3Ds->end());
                 }
 
                 for(sal_uInt32 a(0); a < nSize; a++)
                 {
-                    // paint each one by setting the remembered data and calling
-                    // the render method
+                    
+                    
                     const RasterPrimitive3D& rCandidate = (*mpRasterPrimitive3Ds)[a];
 
                     mpGeoTexSvx = rCandidate.getGeoTexSvx();
@@ -798,8 +798,8 @@ namespace drawinglayer
                     }
                 }
 
-                // delete them to signal the destructor that all is done and
-                // to allow asserting there
+                
+                
                 delete mpRasterPrimitive3Ds;
                 mpRasterPrimitive3Ds = 0;
             }
@@ -814,7 +814,7 @@ namespace drawinglayer
 
             return BitmapEx();
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -40,10 +40,10 @@
 
 using namespace sw::access;
 
-// Regarding visibility (or in terms of accessibility: regarding the showing
-// state): A frame is visible and therfor contained in the tree if its frame
-// size overlaps with the visible area. The bounding box however is the
-// frame's paint area.
+
+
+
+
 sal_Int32 SwAccessibleFrame::GetChildCount( SwAccessibleMap& rAccMap,
                                             const SwRect& rVisArea,
                                             const SwFrm *pFrm,
@@ -63,7 +63,7 @@ sal_Int32 SwAccessibleFrame::GetChildCount( SwAccessibleMap& rAccMap,
         }
         else if( rLower.GetSwFrm() )
         {
-            // There are no unaccessible SdrObjects that count
+            
             nCount += GetChildCount( rAccMap,
                                      rVisArea, rLower.GetSwFrm(),
                                      bInPagePreview );
@@ -87,7 +87,7 @@ SwAccessibleChild SwAccessibleFrame::GetChild(
     {
         if( SwAccessibleChildMap::IsSortingRequired( rFrm ) )
         {
-            // We need a sorted list here
+            
             const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
             SwAccessibleChildMap::const_iterator aIter( aVisMap.begin() );
             while( aIter != aVisMap.end() && !aRet.IsValid() )
@@ -102,7 +102,7 @@ SwAccessibleChild SwAccessibleFrame::GetChild(
                 }
                 else if( rLower.GetSwFrm() )
                 {
-                    // There are no unaccessible SdrObjects that count
+                    
                     aRet = GetChild( rAccMap,
                                      rVisArea, *(rLower.GetSwFrm()), rPos,
                                      bInPagePreview );
@@ -112,8 +112,8 @@ SwAccessibleChild SwAccessibleFrame::GetChild(
         }
         else
         {
-            // The unsorted list is sorted enough, because it returns lower
-            // frames in the correct order.
+            
+            
             const SwAccessibleChildSList aVisList( rVisArea, rFrm, rAccMap );
             SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
             while( aIter != aVisList.end() && !aRet.IsValid() )
@@ -128,7 +128,7 @@ SwAccessibleChild SwAccessibleFrame::GetChild(
                 }
                 else if( rLower.GetSwFrm() )
                 {
-                    // There are no unaccessible SdrObjects that count
+                    
                     aRet = GetChild( rAccMap,
                                      rVisArea, *(rLower.GetSwFrm()), rPos,
                                      bInPagePreview );
@@ -153,7 +153,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex(
 
     if( SwAccessibleChildMap::IsSortingRequired( rFrm ) )
     {
-        // We need a sorted list here
+        
         const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
         SwAccessibleChildMap::const_iterator aIter( aVisMap.begin() );
         while( aIter != aVisMap.end() && !bFound )
@@ -168,7 +168,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex(
             }
             else if( rLower.GetSwFrm() )
             {
-                // There are no unaccessible SdrObjects that count
+                
                 bFound = GetChildIndex( rAccMap,
                                         rVisArea, *(rLower.GetSwFrm()), rChild,
                                         rPos, bInPagePreview );
@@ -178,8 +178,8 @@ sal_Bool SwAccessibleFrame::GetChildIndex(
     }
     else
     {
-        // The unsorted list is sorted enough, because it returns lower
-        // frames in the correct order.
+        
+        
 
         const SwAccessibleChildSList aVisList( rVisArea, rFrm, rAccMap );
         SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
@@ -195,7 +195,7 @@ sal_Bool SwAccessibleFrame::GetChildIndex(
             }
             else if( rLower.GetSwFrm() )
             {
-                // There are no unaccessible SdrObjects that count
+                
                 bFound = GetChildIndex( rAccMap,
                                         rVisArea, *(rLower.GetSwFrm()), rChild,
                                         rPos, bInPagePreview );
@@ -217,15 +217,15 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
 
     if( SwAccessibleChildMap::IsSortingRequired( rFrm ) )
     {
-        // We need a sorted list here, and we have to reverse iterate,
-        // because objects in front should be returned.
+        
+        
         const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
         SwAccessibleChildMap::const_reverse_iterator aRIter( aVisMap.rbegin() );
         while( aRIter != aVisMap.rend() && !aRet.IsValid() )
         {
             const SwAccessibleChild& rLower = (*aRIter).second;
-            // A frame is returned if it's frame size is inside the visarea
-            // and the positiion is inside the frame's paint area.
+            
+            
             if( rLower.IsAccessible( bInPagePreview ) )
             {
                 SwRect aLogBounds( rLower.GetBounds( rAccMap ) );
@@ -238,7 +238,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
             }
             else if( rLower.GetSwFrm() )
             {
-                // There are no unaccessible SdrObjects that count
+                
                 aRet = GetChildAtPixel( rVisArea, *(rLower.GetSwFrm()), rPixPos,
                                         bInPagePreview, rAccMap );
             }
@@ -247,16 +247,16 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
     }
     else
     {
-        // The unsorted list is sorted enough, because it returns lower
-        // frames in the correct order. Morover, we can iterate forward,
-        // because the lowers don't overlap!
+        
+        
+        
         const SwAccessibleChildSList aVisList( rVisArea, rFrm, rAccMap );
         SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
         while( aIter != aVisList.end() && !aRet.IsValid() )
         {
             const SwAccessibleChild& rLower = *aIter;
-            // A frame is returned if it's frame size is inside the visarea
-            // and the positiion is inside the frame's paint area.
+            
+            
             if( rLower.IsAccessible( bInPagePreview ) )
             {
                 SwRect aLogBounds( rLower.GetBounds( rAccMap ) );
@@ -269,7 +269,7 @@ SwAccessibleChild SwAccessibleFrame::GetChildAtPixel( const SwRect& rVisArea,
             }
             else if( rLower.GetSwFrm() )
             {
-                // There are no unaccessible SdrObjects that count
+                
                 aRet = GetChildAtPixel( rVisArea, *(rLower.GetSwFrm()), rPixPos,
                                    bInPagePreview, rAccMap );
             }
@@ -288,7 +288,7 @@ void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
 {
     if( SwAccessibleChildMap::IsSortingRequired( rFrm ) )
     {
-        // We need a sorted list here
+        
         const SwAccessibleChildMap aVisMap( rVisArea, rFrm, rAccMap );
         SwAccessibleChildMap::const_iterator aIter( aVisMap.begin() );
         while( aIter != aVisMap.end() )
@@ -300,7 +300,7 @@ void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
             }
             else if( rLower.GetSwFrm() )
             {
-                // There are no unaccessible SdrObjects that count
+                
                 GetChildren( rAccMap, rVisArea, *(rLower.GetSwFrm()),
                              rChildren, bInPagePreview );
             }
@@ -309,8 +309,8 @@ void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
     }
     else
     {
-        // The unsorted list is sorted enough, because it returns lower
-        // frames in the correct order.
+        
+        
         const SwAccessibleChildSList aVisList( rVisArea, rFrm, rAccMap );
         SwAccessibleChildSList::const_iterator aIter( aVisList.begin() );
         while( aIter != aVisList.end() )
@@ -322,7 +322,7 @@ void SwAccessibleFrame::GetChildren( SwAccessibleMap& rAccMap,
             }
             else if( rLower.GetSwFrm() )
             {
-                // There are no unaccessible SdrObjects that count
+                
                 GetChildren( rAccMap, rVisArea, *(rLower.GetSwFrm()),
                              rChildren, bInPagePreview );
             }
@@ -384,8 +384,8 @@ sal_Bool SwAccessibleFrame::IsOpaque( SwViewShell *pVSh ) const
              rBack.GetGraphicPos() != GPOS_NONE )
             return sal_True;
 
-        // If a fly frame has a transparent background color, we have to consider the background.
-        // But a background color "no fill"/"auto fill" should *not* be considered.
+        
+        
         if( pFrm->IsFlyFrm() &&
             (rBack.GetColor().GetTransparency() != 0) &&
             (rBack.GetColor() != COL_TRANSPARENT)

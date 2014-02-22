@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/thread.h>
@@ -65,7 +65,7 @@ public:
             rValue >>= aSeq;
             OUString sStr( (sal_Char*)aSeq.getConstArray(), aSeq.getLength(), DDE_TXT_ENCODING );
 
-            // remove not needed CR-LF at the end
+            
             sal_Int32 n = sStr.getLength();
             while( n && 0 == sStr[ n-1 ] )
                 --n;
@@ -79,34 +79,34 @@ public:
                 sStr = sStr.copy( 0, n );
 
             rFldType.SetExpansion( sStr );
-            // set Expansion first! (otherwise this flag will be deleted)
+            
             rFldType.SetCRLFDelFlag( bDel );
         }
         break;
 
-    // other formats
+    
     default:
         return SUCCESS;
     }
 
     OSL_ENSURE( rFldType.GetDoc(), "no pDoc" );
 
-    // no dependencies left?
+    
     if( rFldType.GetDepends() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
     {
         SwViewShell* pSh;
         SwEditShell* pESh = rFldType.GetDoc()->GetEditShell( &pSh );
 
-        // Search for fields. If no valid found, disconnect.
+        
         SwMsgPoolItem aUpdateDDE( RES_UPDATEDDETBL );
         int bCallModify = sal_False;
         rFldType.LockModify();
 
-        SwClientIter aIter( rFldType );     // TODO
+        SwClientIter aIter( rFldType );     
         SwClient * pLast = aIter.GoStart();
-        if( pLast )     // Could we jump to beginning?
+        if( pLast )     
             do {
-                // a DDE table or a DDE field attribute in the text
+                
                 if( !pLast->IsA( TYPE( SwFmtFld ) ) ||
                     ((SwFmtFld*)pLast)->GetTxtFld() )
                 {
@@ -143,7 +143,7 @@ void SwIntrnlRefLink::Closed()
 {
     if( rFldType.GetDoc() && !rFldType.GetDoc()->IsInDtor() )
     {
-        // advise goes, convert all fields into text?
+        
         SwViewShell* pSh;
         SwEditShell* pESh = rFldType.GetDoc()->GetEditShell( &pSh );
         if( pESh )
@@ -155,7 +155,7 @@ void SwIntrnlRefLink::Closed()
         else
         {
             pSh->StartAction();
-            // am Doc aufrufen ??
+            
             pSh->EndAction();
         }
     }
@@ -164,13 +164,13 @@ void SwIntrnlRefLink::Closed()
 
 const SwNode* SwIntrnlRefLink::GetAnchor() const
 {
-    // here, any anchor of the normal NodesArray should be sufficient
+    
     const SwNode* pNd = 0;
-    SwClientIter aIter( rFldType );     // TODO
+    SwClientIter aIter( rFldType );     
     SwClient * pLast = aIter.GoStart();
-    if( pLast )     // Could we jump to beginning?
+    if( pLast )     
         do {
-            // a DDE table or a DDE field attribute in the text
+            
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
             {
                 SwDepend* pDep = (SwDepend*)pLast;
@@ -191,13 +191,13 @@ const SwNode* SwIntrnlRefLink::GetAnchor() const
 sal_Bool SwIntrnlRefLink::IsInRange( sal_uLong nSttNd, sal_uLong nEndNd,
                                 sal_Int32 nStt, sal_Int32 nEnd ) const
 {
-    // here, any anchor of the normal NodesArray should be sufficient
+    
     SwNodes* pNds = &rFldType.GetDoc()->GetNodes();
-    SwClientIter aIter( rFldType );         // TODO
+    SwClientIter aIter( rFldType );         
     SwClient * pLast = aIter.GoStart();
-    if( pLast )     // Could we jump to beginning?
+    if( pLast )     
         do {
-            // a DDE table or a DDE field attribute in the text
+            
             if( !pLast->IsA( TYPE( SwFmtFld ) ))
             {
                 SwDepend* pDep = (SwDepend*)pLast;
@@ -402,19 +402,19 @@ SwField* SwDDEField::Copy() const
     return new SwDDEField((SwDDEFieldType*)GetTyp());
 }
 
-/// get field type name
+
 OUString SwDDEField::GetPar1() const
 {
     return ((const SwDDEFieldType*)GetTyp())->GetName();
 }
 
-/// get field type command
+
 OUString SwDDEField::GetPar2() const
 {
     return ((const SwDDEFieldType*)GetTyp())->GetCmd();
 }
 
-/// set field type command
+
 void SwDDEField::SetPar2(const OUString& rStr)
 {
     ((SwDDEFieldType*)GetTyp())->SetCmd(rStr);

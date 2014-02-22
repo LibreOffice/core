@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbase/DTables.hxx"
@@ -52,18 +52,18 @@ sdbcx::ObjectType ODbaseTables::createObject(const OUString& _rName)
     pRet->construct();
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void ODbaseTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<ODbaseCatalog*>(&m_rParent)->refreshTables();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > ODbaseTables::createDescriptor()
 {
     return new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection());
 }
-// -------------------------------------------------------------------------
-// XAppend
+
+
 sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
@@ -90,8 +90,8 @@ sdbcx::ObjectType ODbaseTables::appendObject( const OUString& _rForName, const R
     }
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
-// XDrop
+
+
 void ODbaseTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     Reference< XUnoTunnel> xTunnel;
@@ -120,13 +120,13 @@ void ODbaseTables::dropObject(sal_Int32 _nPos,const OUString _sElementName)
         ::dbtools::throwGenericSQLException( sError, NULL );
     }
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     typedef sdbcx::OCollection OTables_BASE;
     return OTables_BASE::queryInterface(rType);
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ole/axbinaryreader.hxx"
@@ -24,16 +24,16 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 namespace {
 
 const sal_uInt32 AX_STRING_SIZEMASK         = 0x7FFFFFFF;
 const sal_uInt32 AX_STRING_COMPRESSED       = 0x80000000;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 AxAlignedInputStream::AxAlignedInputStream( BinaryInputStream& rInStrm ) :
     BinaryStreamBase( false ),
@@ -106,7 +106,7 @@ void AxAlignedInputStream::align( size_t nSize )
     skip( static_cast< sal_Int32 >( (nSize - (mnStrmPos % nSize)) % nSize ) );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -114,7 +114,7 @@ bool lclReadString( AxAlignedInputStream& rInStrm, OUString& rValue, sal_uInt32 
 {
     bool bCompressed = getFlag( nSize, AX_STRING_COMPRESSED );
     sal_uInt32 nBufSize = nSize & AX_STRING_SIZEMASK;
-    // Unicode: simple strings store byte count, array strings store char count
+    
     sal_Int32 nChars = static_cast< sal_Int32 >( nBufSize / ((bCompressed || bArrayString) ? 1 : 2) );
     bool bValidChars = nChars <= 65536;
     OSL_ENSURE( bValidChars, "lclReadString - string too long" );
@@ -125,9 +125,9 @@ bool lclReadString( AxAlignedInputStream& rInStrm, OUString& rValue, sal_uInt32 
     return bValidChars;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 AxBinaryPropertyReader::ComplexProperty::~ComplexProperty()
 {
@@ -153,7 +153,7 @@ bool AxBinaryPropertyReader::ArrayStringProperty::readProperty( AxAlignedInputSt
         if( !lclReadString( rInStrm, aString, rInStrm.readuInt32(), true ) )
             return false;
         mrArray.push_back( aString );
-        // every array string is aligned on 4 byte boundries
+        
         rInStrm.align( 4 );
     }
     return true;
@@ -175,17 +175,17 @@ bool AxBinaryPropertyReader::PictureProperty::readProperty( AxAlignedInputStream
     return OleHelper::importStdPic( mrPicData, rInStrm, true );
 }
 
-// ----------------------------------------------------------------------------
+
 
 AxBinaryPropertyReader::AxBinaryPropertyReader( BinaryInputStream& rInStrm, bool b64BitPropFlags ) :
     maInStrm( rInStrm ),
     mbValid( true )
 {
-    // version and size of property block
+    
     maInStrm.skip( 2 );
     sal_uInt16 nBlockSize = maInStrm.readValue< sal_uInt16 >();
     mnPropsEnd = maInStrm.tell() + nBlockSize;
-    // flagfield containing existing properties
+    
     if( b64BitPropFlags )
         maInStrm >> mnPropFlags;
     else
@@ -195,7 +195,7 @@ AxBinaryPropertyReader::AxBinaryPropertyReader( BinaryInputStream& rInStrm, bool
 
 void AxBinaryPropertyReader::readBoolProperty( bool& orbValue, bool bReverse )
 {
-    // there is no data, the boolean value is equivalent to the property flag itself
+    
     orbValue = startNextProperty() != bReverse;
 }
 
@@ -251,7 +251,7 @@ void AxBinaryPropertyReader::readPictureProperty( StreamDataSequence& orPicData 
 
 bool AxBinaryPropertyReader::finalizeImport()
 {
-    // read large properties
+    
     maInStrm.align( 4 );
     if( ensureValid( mnPropFlags == 0 ) && !maLargeProps.empty() )
     {
@@ -263,7 +263,7 @@ bool AxBinaryPropertyReader::finalizeImport()
     }
     maInStrm.seek( mnPropsEnd );
 
-    // read stream properties (no stream alignment between properties!)
+    
     if( ensureValid() && !maStreamProps.empty() )
         for( ComplexPropVector::iterator aIt = maStreamProps.begin(), aEnd = maStreamProps.end(); ensureValid() && (aIt != aEnd); ++aIt )
             ensureValid( (*aIt)->readProperty( maInStrm ) );
@@ -285,9 +285,9 @@ bool AxBinaryPropertyReader::startNextProperty()
     return ensureValid() && bHasProp;
 }
 
-// ============================================================================
 
-} // namespace ole
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "brwctrlr.hxx"
@@ -62,7 +62,7 @@ namespace
     }
 }
 
-// UnoDataBrowserView
+
 
 UnoDataBrowserView::UnoDataBrowserView( Window* pParent,
                                         IController& _rController,
@@ -82,26 +82,26 @@ void UnoDataBrowserView::Construct(const Reference< ::com::sun::star::awt::XCont
     {
         ODataView::Construct();
 
-        // our UNO representation
+        
         m_xMe = VCLUnoHelper::CreateControlContainer(this);
 
-        // create the (UNO-) control
+        
         m_xGrid = new SbaXGridControl( getORB() );
         OSL_ENSURE(m_xGrid.is(), "UnoDataBrowserView::Construct : could not create a grid control !");
-        // in design mode (for the moment)
+        
         m_xGrid->setDesignMode(sal_True);
 
         Reference< ::com::sun::star::awt::XWindow >  xGridWindow(m_xGrid, UNO_QUERY);
         xGridWindow->setVisible(sal_True);
         xGridWindow->setEnable(sal_True);
 
-        // introduce the model to the grid
+        
         m_xGrid->setModel(xModel);
-        // introduce the container (me) to the grid
+        
         Reference< ::com::sun::star::beans::XPropertySet >  xModelSet(xModel, UNO_QUERY);
         getContainer()->addControl(::comphelper::getString(xModelSet->getPropertyValue(PROPERTY_NAME)), m_xGrid);
 
-        // get the VCL-control
+        
         m_pVclControl = NULL;
         getVclControl();
 
@@ -185,7 +185,7 @@ void UnoDataBrowserView::showStatus( const OUString& _rStatus )
 void UnoDataBrowserView::hideStatus()
 {
     if (!m_pStatus || !m_pStatus->IsVisible())
-        // nothing to do
+        
         return;
     m_pStatus->Hide();
     Resize();
@@ -201,7 +201,7 @@ void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
 
     if (m_pTreeView && m_pTreeView->IsVisible() && m_pSplitter)
     {
-        // calculate the splitter pos and size
+        
         aSplitPos   = m_pSplitter->GetPosPixel();
         aSplitPos.Y() = aPlaygroundPos.Y();
         aSplitSize  = m_pSplitter->GetOutputSizePixel();
@@ -213,11 +213,11 @@ void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
         if( aSplitPos.X() <= aPlaygroundPos.X() )
             aSplitPos.X() = aPlaygroundPos.X() + sal_Int32(aPlaygroundSize.Width() * 0.2);
 
-        // the tree pos and size
+        
         Point   aTreeViewPos( aPlaygroundPos );
         Size    aTreeViewSize( aSplitPos.X(), aPlaygroundSize.Height() );
 
-        // the status pos and size
+        
         if (m_pStatus && m_pStatus->IsVisible())
         {
             Size aStatusSize(aPlaygroundPos.X(), GetTextHeight() + 2);
@@ -229,21 +229,21 @@ void UnoDataBrowserView::resizeDocumentView(Rectangle& _rPlayground)
             aTreeViewSize.Height() -= aStatusSize.Height();
         }
 
-        // set the size of treelistbox
+        
         m_pTreeView->SetPosSizePixel( aTreeViewPos, aTreeViewSize );
 
-        //set the size of the splitter
+        
         m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSplitSize.Width(), aPlaygroundSize.Height() ) );
         m_pSplitter->SetDragRectPixel( _rPlayground );
     }
 
-    // set the size of grid control
+    
     Reference< ::com::sun::star::awt::XWindow >  xGridAsWindow(m_xGrid, UNO_QUERY);
     if (xGridAsWindow.is())
         xGridAsWindow->setPosSize( aSplitPos.X() + aSplitSize.Width(), aPlaygroundPos.Y(),
                                    aPlaygroundSize.Width() - aSplitSize.Width() - aSplitPos.X(), aPlaygroundSize.Height(), ::com::sun::star::awt::PosSize::POSSIZE);
 
-    // just for completeness: there is no space left, we occupied it all ...
+    
     _rPlayground.SetPos( _rPlayground.BottomRight() );
     _rPlayground.SetSize( Size( 0, 0 ) );
 }

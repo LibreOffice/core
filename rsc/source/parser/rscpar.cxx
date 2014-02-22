@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -42,7 +42,7 @@ RscFileInst::RscFileInst( RscTypCont * pTC, sal_uLong lIndexSrc,
     lSrcIndex = lIndexSrc;
     fInputFile = fFile;
 
-    //Status: Zeiger am Ende des Lesepuffers
+    
     nInputPos = nInputEndPos = nInputBufLen = READBUFFER_MAX;
     pInput    = (char *)rtl_allocateMemory( nInputBufLen );
 }
@@ -61,7 +61,7 @@ int RscFileInst::GetChar()
         return pLine[ nScanPos++ ];
     else if( nInputPos >= nInputEndPos && nInputEndPos != nInputBufLen )
     {
-        // Dateiende
+        
         bEof = true;
         return 0;
     }
@@ -77,7 +77,7 @@ void RscFileInst::GetNewLine()
     nLineNo++;
     nScanPos = 0;
 
-    //laeuft bis Dateiende
+    
     sal_uInt32 nLen = 0;
     while( (nInputPos < nInputEndPos) || (nInputEndPos == nInputBufLen) )
     {
@@ -89,15 +89,15 @@ void RscFileInst::GetNewLine()
 
         while( nInputPos < nInputEndPos )
         {
-            //immer eine Zeile lesen
+            
             if( nLen >= nLineBufLen )
             {
                 nLineBufLen += 256;
-                // einen dazu fuer '\0'
+                
                 pLine = (char*)rtl_reallocateMemory( pLine, nLineBufLen +1 );
             }
 
-            // cr lf, lf cr, lf oder cr wird '\0'
+            
             if( pInput[ nInputPos ] == '\n' )
             {
                 nInputPos++;
@@ -134,7 +134,7 @@ void RscFileInst::GetNewLine()
         };
     };
 
-    // Abbruch ueber EOF
+    
     pLine[ nLen ] = '\0';
 
 END:

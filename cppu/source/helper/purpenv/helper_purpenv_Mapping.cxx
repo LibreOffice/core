@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -154,18 +154,18 @@ void Mapping::mapInterface(
     if (!pUnoI)
         return;
 
-    // get object id of uno interface to be wrapped
-    // need to enter environment because of potential "queryInterface" call
+    
+    
     rtl_uString * pOId = 0;
     uno_Environment_invoke(m_from.get(), s_getIdentifier_v, m_from.get(), &pOId, pUnoI);
     OSL_ASSERT(pOId);
 
-     // try to get any known interface from target environment
+     
     m_to.get()->pExtEnv->getRegisteredInterface(m_to.get()->pExtEnv, (void **)ppOut, pOId, pTypeDescr);
 
-    if (!*ppOut) // not yet there, register new proxy interface
+    if (!*ppOut) 
     {
-        // try to publish a new proxy (ref count initially 1)
+        
         uno_Interface * pProxy = new Proxy(this,
                                            m_from.get(),
                                            m_to.get(),
@@ -175,7 +175,7 @@ void Mapping::mapInterface(
                                            m_probeFun,
                                            m_pContext);
 
-        // proxy may be exchanged during registration
+        
         m_to.get()->pExtEnv->registerProxyInterface(m_to.get()->pExtEnv,
                                                     (void **)&pProxy,
                                                     Proxy_free,

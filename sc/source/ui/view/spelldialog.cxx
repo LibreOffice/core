@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "spelldialog.hxx"
@@ -35,7 +35,7 @@
 #include "editable.hxx"
 #include "undoblk.hxx"
 
-// ============================================================================
+
 
 SFX_IMPL_CHILDWINDOW_WITHID( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
 
@@ -67,7 +67,7 @@ void ScSpellDialogChildWindow::InvalidateSpellDialog()
     ::svx::SpellDialogChildWindow::InvalidateSpellDialog();
 }
 
-// protected ------------------------------------------------------------------
+
 
 ::svx::SpellPortions ScSpellDialogChildWindow::GetNextWrongSentence( bool /*bRecheck*/ )
 {
@@ -76,7 +76,7 @@ void ScSpellDialogChildWindow::InvalidateSpellDialog()
     {
         if( EditView* pEditView = mpViewData->GetSpellingView() )
         {
-            // edit engine handles cell iteration internally
+            
             do
             {
                 if( mbNeedNextObj )
@@ -86,7 +86,7 @@ void ScSpellDialogChildWindow::InvalidateSpellDialog()
             while( mbNeedNextObj );
         }
 
-        // finished? - close the spelling dialog
+        
         if( mxEngine->IsFinished() )
             GetBindings().GetDispatcher()->Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON );
     }
@@ -114,7 +114,7 @@ void ScSpellDialogChildWindow::LoseFocus()
 {
 }
 
-// private --------------------------------------------------------------------
+
 
 void ScSpellDialogChildWindow::Reset()
 {
@@ -165,7 +165,7 @@ void ScSpellDialogChildWindow::Init()
 
     mpViewData = mpViewShell->GetViewData();
 
-    // exit edit mode - TODO support spelling in edit mode
+    
     if( mpViewData->HasEditView( mpViewData->GetActivePart() ) )
         SC_MOD()->InputEnterHandler();
 
@@ -191,33 +191,33 @@ void ScSpellDialogChildWindow::Init()
         case SC_SELECTTYPE_NONE:
         case SC_SELECTTYPE_SHEET:
         {
-            // test if there is something editable
+            
             ScEditableTester aTester( mpDoc, rMarkData );
             if( !aTester.IsEditable() )
             {
-                // #i85751# Don't show a ErrorMessage here, because the vcl
-                // parent of the InfoBox is not fully initialized yet.
-                // This leads to problems in the modality behaviour of the
-                // ScSpellDialogChildWindow.
+                
+                
+                
+                
 
-                //mpViewShell->ErrorMessage( aTester.GetMessageId() );
+                
                 return;
             }
         }
         break;
 
-        // edit mode exited, see TODO above
-//        case SC_SELECTTYPE_EDITCELL:
-//        break;
+        
+
+
 
         default:
             OSL_FAIL( "ScSpellDialogChildWindow::Init - unknown selection type" );
     }
 
     mbOldIdleEnabled = mpDoc->IsIdleEnabled();
-    mpDoc->EnableIdle(false);   // stop online spelling
+    mpDoc->EnableIdle(false);   
 
-    // *** create Undo/Redo documents *** -------------------------------------
+    
 
     mxUndoDoc.reset( new ScDocument( SCDOCMODE_UNDO ) );
     mxUndoDoc->InitUndo( mpDoc, nTab, nTab );
@@ -237,7 +237,7 @@ void ScSpellDialogChildWindow::Init()
         }
     }
 
-    // *** create and init the edit engine *** --------------------------------
+    
 
     mxEngine.reset( new ScSpellingEngine(
         mpDoc->GetEnginePool(), *mpViewData, mxUndoDoc.get(), mxRedoDoc.get(), LinguMgr::GetSpellChecker() ) );
@@ -272,6 +272,6 @@ bool ScSpellDialogChildWindow::IsSelectionChanged()
     return (*mxOldRangeList != aCurrentRangeList);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

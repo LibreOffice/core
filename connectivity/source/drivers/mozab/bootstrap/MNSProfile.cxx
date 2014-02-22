@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,15 +32,15 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::mozilla;
 
 
-// Interfaces Needed
+
 
 static Reference<XMozillaBootstrap> xMozillaBootstrap;
 
 
 static PRInt32          gInstanceCount = 0;
 
-// Profile database to remember which profile has been
-// created with UILocale and contentLocale on profileManager
+
+
 static nsProfileDirServiceProvider *gDirServiceProvider = nsnull;
 
 
@@ -166,11 +166,11 @@ NS_IMETHODIMP nsProfile::ProfileExists(const PRUnichar *profileName, PRBool *exi
     NS_ENSURE_ARG_POINTER(profileName);
     NS_ENSURE_ARG_POINTER(exists);
 
-    // PRUnichar != sal_Unicode in mingw
+    
     *exists = xMozillaBootstrap->getProfileExists(xMozillaBootstrap->getCurrentProduct(),reinterpret_cast_mingw_only<const sal_Unicode *>(profileName));
     return NS_OK;
 }
-// Returns the name of the current profile i.e., the last used profile
+
 NS_IMETHODIMP
 nsProfile::GetCurrentProfile(PRUnichar **profileName)
 {
@@ -198,7 +198,7 @@ nsProfile::SetCurrentProfile(const PRUnichar * aCurrentProfile)
     nsCOMPtr<nsIFile> profileDir;
     PRBool exists;
 
-    // Ensure that the profile exists and its directory too.
+    
     rv = GetProfileDir(aCurrentProfile, getter_AddRefs(profileDir));
     if (NS_FAILED(rv)) return rv;
     rv = profileDir->Exists(&exists);
@@ -235,29 +235,29 @@ nsProfile::SetCurrentProfile(const PRUnichar * aCurrentProfile)
         rv = ShutDownCurrentProfile(nsIProfile::SHUTDOWN_PERSIST);
         if (NS_FAILED(rv)) return NS_ERROR_ABORT;
 
-        // Phase 1: See if anybody objects to the profile being changed.
+        
         mProfileChangeVetoed = PR_FALSE;
         observerService->NotifyObservers(subject, "profile-approve-change", context.get());
         if (mProfileChangeVetoed)
             return NS_OK;
 
-        // Phase 2a: Send the network teardown notification
+        
         observerService->NotifyObservers(subject, "profile-change-net-teardown", context.get());
         mShutdownProfileToreDownNetwork = PR_TRUE;
 
-        // Phase 2b: Send the "teardown" notification
+        
         observerService->NotifyObservers(subject, "profile-change-teardown", context.get());
         if (mProfileChangeVetoed)
         {
-            // Notify we will not proceed with changing the profile
+            
             observerService->NotifyObservers(subject, "profile-change-teardown-veto", context.get());
 
-            // Bring network back online and return
+            
             observerService->NotifyObservers(subject, "profile-change-net-restore", context.get());
             return NS_OK;
         }
 
-        // Phase 3: Notify observers of a profile change
+        
         observerService->NotifyObservers(subject, "profile-before-change", context.get());
         if (mProfileChangeFailed)
           return NS_ERROR_ABORT;
@@ -265,42 +265,42 @@ nsProfile::SetCurrentProfile(const PRUnichar * aCurrentProfile)
     }
 
 //
-//  // Do the profile switch
+
     gDirServiceProvider->SetProfileDir(profileDir);
     mCurrentProfileName.Assign(aCurrentProfile);
-//    gProfileDataAccess->SetCurrentProfile(aCurrentProfile);
+
 
     if (NS_FAILED(rv)) return rv;
     mCurrentProfileAvailable = PR_TRUE;
 
     if (!isSwitch)
     {
-        // Ensure that the prefs service exists so it can respond to
-        // the notifications we're about to send around. It needs to.
+        
+        
         nsCOMPtr<nsIPrefService> prefs = do_GetService(NS_PREFSERVICE_CONTRACTID, &rv);
         NS_ASSERTION(NS_SUCCEEDED(rv), "Could not get prefs service");
     }
 
     if (mShutdownProfileToreDownNetwork)
     {
-        // Bring network back online
+        
         observerService->NotifyObservers(subject, "profile-change-net-restore", context.get());
         mShutdownProfileToreDownNetwork = PR_FALSE;
         if (mProfileChangeFailed)
           return NS_ERROR_ABORT;
     }
 
-    // Phase 4: Notify observers that the profile has changed - Here they respond to new profile
+    
     observerService->NotifyObservers(subject, "profile-do-change", context.get());
     if (mProfileChangeFailed)
       return NS_ERROR_ABORT;
 
-    // Phase 5: Now observers can respond to something another observer did in phase 4
+    
     observerService->NotifyObservers(subject, "profile-after-change", context.get());
     if (mProfileChangeFailed)
       return NS_ERROR_ABORT;
 
-    // Phase 6: One last notification after the new profile is established
+    
     observerService->NotifyObservers(subject, "profile-initial-state", context.get());
     if (mProfileChangeFailed)
       return NS_ERROR_ABORT;
@@ -312,8 +312,8 @@ NS_IMETHODIMP nsProfile::ShutDownCurrentProfile(PRUint32 shutDownType)
 {
     nsresult rv;
 
-    // if shutDownType is not a well know value, skip the notifications
-    // see DoOnShutdown() in nsAppRunner.cpp for where we use this behaviour to our benefit
+    
+    
     if (shutDownType == (PRUint32)SHUTDOWN_PERSIST || shutDownType == (PRUint32)SHUTDOWN_CLEANSE ) {
       nsCOMPtr<nsIObserverService> observerService =
         do_GetService("@mozilla.org/observer-service;1", &rv);
@@ -325,21 +325,21 @@ NS_IMETHODIMP nsProfile::ShutDownCurrentProfile(PRUint32 shutDownType)
       NS_NAMED_LITERAL_STRING(persistString, "shutdown-persist");
       const nsAFlatString& context = (shutDownType == (PRUint32)SHUTDOWN_CLEANSE) ? cleanseString : persistString;
 
-      // Phase 1: See if anybody objects to the profile being changed.
+      
       mProfileChangeVetoed = PR_FALSE;
       observerService->NotifyObservers(subject, "profile-approve-change", context.get());
       if (mProfileChangeVetoed)
         return NS_OK;
 
-      // Phase 2a: Send the network teardown notification
+      
       observerService->NotifyObservers(subject, "profile-change-net-teardown", context.get());
       mShutdownProfileToreDownNetwork = PR_TRUE;
 
-      // Phase 2b: Send the "teardown" notification
+      
       observerService->NotifyObservers(subject, "profile-change-teardown", context.get());
 
 
-      // Phase 3: Notify observers of a profile change
+      
       observerService->NotifyObservers(subject, "profile-before-change", context.get());
     }
 
@@ -373,7 +373,7 @@ NS_IMETHODIMP nsProfile::CloneProfile(const PRUnichar* /*profileName*/)
 {
     return NS_ERROR_NOT_IMPLEMENTED;
 }
-//nsIProfileInternal Implementation
+
 
 /* [noscript] void startupWithArgs (in nsICmdLineService cmdLine, in boolean canInteract); */
 class nsICmdLineService;
@@ -441,19 +441,19 @@ NS_IMETHODIMP nsProfile::CreateDefaultProfile()
 }
 
 /* nsIFile getProfileDir (in wstring profileName); */
-// Gets the profiles directory for a given profile
-// Sets the given profile to be a current profile
+
+
 NS_IMETHODIMP nsProfile::GetProfileDir(const PRUnichar *profileName, nsIFile **profileDir)
 {
     NS_ENSURE_ARG(profileName);
     NS_ENSURE_ARG_POINTER(profileDir);
     *profileDir = nsnull;
 
-    // PRUnichar != sal_Unicode in mingw
+    
     OUString path = xMozillaBootstrap->getProfilePath(xMozillaBootstrap->getCurrentProduct(),reinterpret_cast_mingw_only<const sal_Unicode *>(profileName));
 
     nsCOMPtr<nsILocalFile>  localFile;
-    // PRUnichar != sal_Unicode in mingw
+    
     nsAutoString filePath(reinterpret_cast_mingw_only<const PRUnichar *>(path.getStr()));
 
     nsresult rv = NS_NewLocalFile(filePath, PR_TRUE,
@@ -555,7 +555,7 @@ NS_IMETHODIMP nsProfile::IsCurrentProfileAvailable(PRBool *available)
 }
 
 /* [noscript] void getCurrentProfileDir (out nsIFile profileDir); */
-// Returns the name of the current profile directory
+
 NS_IMETHODIMP nsProfile::GetCurrentProfileDir(nsIFile **profileDir)
 {
     NS_ENSURE_ARG_POINTER(profileDir);
@@ -571,7 +571,7 @@ NS_IMETHODIMP nsProfile::GetCurrentProfileDir(nsIFile **profileDir)
     return NS_OK;
 }
 
-//Implementation nsIFactory
+
 NS_IMETHODIMP
 nsProfile::LockFactory(PRBool /*aVal*/)
 {
@@ -584,11 +584,11 @@ nsProfile::CreateInstance(nsISupports* aOuter, const nsID& aIID,
 {
     if (aOuter)
         return NS_ERROR_NO_AGGREGATION;
-    // return this object
+    
     return QueryInterface(aIID, aResult);
 }
 
-//Register profile manager
+
 #include "pre_include_mozilla.h"
 #include "nsIComponentManager.h"
 #include "nsIComponentRegistrar.h"

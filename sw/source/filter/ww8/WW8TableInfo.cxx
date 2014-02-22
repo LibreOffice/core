@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@
 namespace ww8
 {
 
-// WW8TableNodeInfoInner
+
 
 WW8TableNodeInfoInner::WW8TableNodeInfoInner(WW8TableNodeInfo * pParent)
 : mpParent(pParent)
@@ -195,36 +195,36 @@ GridColsPtr WW8TableNodeInfoInner::getGridColsOfRow(AttributeOutputBase & rBase,
     GridColsPtr pResult(new GridCols);
     WidthsPtr pWidths;
 
-    // Check which columns should be checked - only the current row,
-    // or all the rows together
+    
+    
     if (calculateColumnsFromAllRows)
     {
-        // Calculate the width of all the columns based on ALL the rows.
-        // The difference is that this kind of draws vertical lines,
-        // so that if the rows look like this:
+        
+        
+        
         //
-        //  ------------------------
-        //  |                   |  |
-        //  ------------------------
-        //  |   |                  |
-        //  ------------------------
-        //  |       |              |
-        //  ------------------------
+        
+        
+        
+        
+        
+        
+        
         //
-        // then the actual column widths will be broken down like this:
+        
         //
-        //  ------------------------
-        //  |   |   |           |  |
-        //  ------------------------
+        
+        
+        
         //
-        // See the example at
-        // http://officeopenxml.com/WPtableGrid.php
-        // Under "Word 2007 Example"
+        
+        
+        
         pWidths = getColumnWidthsBasedOnAllRows();
     }
     else
     {
-        // Calculate the width of all the columns based on the current row
+        
         pWidths = getWidthsOfRow();
     }
 
@@ -272,8 +272,8 @@ WidthsPtr WW8TableNodeInfoInner::getColumnWidthsBasedOnAllRows()
         const SwTableLines& rTableLines = pTable->GetTabLines();
         sal_uInt16 nNumOfLines = rTableLines.size();
 
-        // Go over all the rows - and for each row - calculate where
-        // there is a separator between columns
+        
+        
         WidthsPtr pSeparators(new Widths);
         for ( sal_uInt32 nLineIndex = 0; nLineIndex < nNumOfLines; nLineIndex++)
         {
@@ -293,13 +293,13 @@ WidthsPtr WW8TableNodeInfoInner::getColumnWidthsBasedOnAllRows()
             }
         }
 
-        // Sort the separator positions and remove any duplicates
+        
         std::sort(pSeparators->begin(), pSeparators->end());
         std::vector<sal_uInt32>::iterator it = std::unique(pSeparators->begin(), pSeparators->end());
         pSeparators->erase(it, pSeparators->end());
 
-        // Calculate the widths based on the position of the unique & sorted
-        // column separators
+        
+        
         pWidths = WidthsPtr(new Widths);
         sal_uInt32 nPreviousWidth = 0;
         Widths::const_iterator aItEnd2 = pSeparators->end();
@@ -332,7 +332,7 @@ WidthsPtr WW8TableNodeInfoInner::getWidthsOfRow()
         const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
 
         pWidths = WidthsPtr(new Widths);
-        // number of cell written
+        
         sal_uInt32 nBoxes = rTabBoxes.size();
         if ( nBoxes > MAXTABLECELLS )
             nBoxes = MAXTABLECELLS;
@@ -633,7 +633,7 @@ const WW8TableNodeInfoInner::Pointer_t WW8TableNodeInfo::getInnerForDepth(sal_uI
     return pResult;
 }
 
-// WW8TableInfo
+
 
 WW8TableInfo::WW8TableInfo()
 {

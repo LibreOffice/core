@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// Header files
+
 //
 
-// Platform
+
 #include <i18nlangtag/languagetag.hxx>
 #include <sallayout.hxx>
-// Module
+
 #include "gcach_ftyp.hxx"
 #include "generic/glyphcache.hxx"
 #include <graphite_features.hxx>
@@ -42,7 +42,7 @@ float freetypeServerFontAdvance(const void* appFontHandle, gr_uint16 glyphId)
 }
 
 //
-// An implementation of the GraphiteLayout interface to enable Graphite enabled fonts to be used.
+
 //
 
 GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) throw()
@@ -55,7 +55,7 @@ GraphiteServerFontLayout::GraphiteServerFontLayout(ServerFont& rServerFont) thro
     if (!pFont)
     {
         pFont = gr_make_font_with_advance_fn(
-               // need to use mnHeight here, mfExactHeight can give wrong values
+               
                static_cast<float>(rServerFont.GetFontSelData().mnHeight),
                &rServerFont,
                freetypeServerFontAdvance,

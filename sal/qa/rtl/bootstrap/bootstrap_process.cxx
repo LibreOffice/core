@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -26,12 +26,12 @@
 
 using namespace ::rtl;
 
-// ----------------------------------- Main -----------------------------------
+
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     (void)argc;
     Bootstrap aBootstrap;
-    //custom .ini/rc file
+    
     Bootstrap aBs_custom( OUString::createFromAscii(argv[3]) );
     OUString suValue;
     OUString suDefault( "mydefault" );
@@ -39,7 +39,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
     switch( flag ) {
     case 1:
-        // parameters may be passed by command line arguments
+        
         aBootstrap.getFrom(
             OUString("UNO_SERVICES"),
             suValue );
@@ -50,7 +50,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
             return 11;
     case 2:
-        // parameters may be passed by ini file
+        
         aBootstrap.getFrom(
             OUString("EXECUTABLE_RC"),
             suValue );
@@ -61,7 +61,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
             return 21;
     case 3:
-        // parameters may be passed by command line arguments
+        
         aBootstrap.getFrom(
             OUString("QADEV_BOOTSTRAP"),
             suValue );
@@ -72,7 +72,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
             return 31;
     case 4:
-        // parameters may be passed by custom .ini/rc file
+        
         aBs_custom.getFrom(
             OUString("RTLVALUE"),
             suValue );
@@ -83,7 +83,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
             return 41;
     case 5:
-        // parameters may be passed by inheritance
+        
         aBs_custom.getFrom(
             OUString("EXECUTABLE_RC"),
             suValue );
@@ -94,7 +94,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         else
             return 51;
     default:
-        // parameters may be passed by inheritance
+        
         aBs_custom.getFrom(
             OUString("ABCDE"),
             suValue, suDefault );

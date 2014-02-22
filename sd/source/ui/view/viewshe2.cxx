@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
@@ -100,7 +100,7 @@ void ViewShell::UpdateScrollBars()
         long nH = (long)(mpContentWindow->GetVisibleHeight() * 32000);
         long nY = (long)(mpContentWindow->GetVisibleY() * 32000);
 
-        if(IsPageFlipMode()) // ie in zoom mode where no panning
+        if(IsPageFlipMode()) 
         {
             SdPage* pPage = static_cast<DrawViewShell*>(this)->GetActualPage();
             sal_uInt16 nCurPage = (pPage->GetPageNum() - 1) / 2;
@@ -151,7 +151,7 @@ long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     {
         double fX = (double) pHScroll->GetThumbPos() / pHScroll->GetRange().Len();
 
-        // scroll all windows of the column
+        
         ::sd::View* pView = GetView();
         OutlinerView* pOLV = NULL;
 
@@ -210,7 +210,7 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
         if( nCurPage != nNewPage )
             static_cast<DrawViewShell*>(this)->SwitchPage(nNewPage);
     }
-    else //panning mode
+    else 
     {
         double fY = (double) pVScroll->GetThumbPos() / pVScroll->GetRange().Len();
 
@@ -345,10 +345,10 @@ void ViewShell::SetZoom(long nZoom)
     {
         mpContentWindow->SetZoomIntegral(nZoom);
 
-        // #i74769# Here is a 2nd way (besides Window::Scroll) to set the visible prt
-        // of the window. It needs - like Scroll(SCROLL_CHILDREN) does - also to move
-        // the child windows. I am trying INVALIDATE_CHILDREN here which makes things better,
-        // but does not solve the problem completely. Neet to ask PL.
+        
+        
+        
+        
         mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
     }
 
@@ -392,7 +392,7 @@ void ViewShell::SetZoomRect(const Rectangle& rZoomRect)
         mpContentWindow->SetWinViewPos(aNewPos);
         mpContentWindow->UpdateMapOrigin();
 
-        // #i74769# see above
+        
         mpContentWindow->Invalidate(INVALIDATE_CHILDREN);
     }
 
@@ -480,7 +480,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     for (i = 0; i < nPageCnt; i++)
     {
-        // first, handle all master pages
+        
         pPage = GetDoc()->GetMasterSdPage(i, ePageKind);
 
         SdUndoAction* pUndo = new SdPageFormatUndoAction(GetDoc(), pPage,
@@ -528,7 +528,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     for (i = 0; i < nPageCnt; i++)
     {
-        // then, handle all pages
+        
         pPage = GetDoc()->GetSdPage(i, ePageKind);
 
         SdUndoAction* pUndo = new SdPageFormatUndoAction(GetDoc(), pPage,
@@ -575,11 +575,11 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
         pPage->SetAutoLayout( pPage->GetAutoLayout() );
     }
 
-    // adjust handout page to new format of the standard page
+    
     if( (ePageKind == PK_STANDARD) || (ePageKind == PK_HANDOUT) )
         GetDoc()->GetSdPage(0, PK_HANDOUT)->CreateTitleAndLayout(sal_True);
 
-    // handed over undo group to undo manager
+    
     pViewShell->GetViewFrame()->GetObjectShell()
         ->GetUndoManager()->AddUndoAction(pUndoGroup);
 
@@ -615,7 +615,7 @@ void ViewShell::SetPageSizeAndBorder(PageKind ePageKind, const Size& rNewSize,
 
     pViewShell->GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
 
-    // zoom onto (new) page size
+    
     pViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE,
             SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 
@@ -640,9 +640,9 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
 
     if (pViewShell->GetWindow() != pWin)
     {
-        // #i31551# was wrong, it may have been a problem with the repaint at that time.
-        // For transparent form controls, it is necessary to have that flag set, all apps
-        // do set it. Enabling again.
+        
+        
+        
         if (pWin)
         {
             pWin->EnableChildTransparentMode();
@@ -652,10 +652,10 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
     if (mpActiveWindow != pWin)
         mpActiveWindow = pWin;
 
-    // The rest of this function is not guarded anymore against calling this
-    // method with an already active window because the functions may still
-    // point to the old window when the new one has already been assigned to
-    // pWindow elsewhere.
+    
+    
+    
+    
     ::sd::View* pView = GetView();
     if (pView)
     {
@@ -745,7 +745,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
     uno::Reference < embed::XEmbeddedObject > xObj = pObj->GetObjRef();
     if ( !xObj.is() )
     {
-        // provide OLE object to empty OLE object
+        
         aName = pObj->GetProgName();
         OUString aObjName;
         SvGlobalName aClass;
@@ -776,7 +776,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         {
             aName = "";
 
-            // call dialog "insert OLE object"
+            
             GetDocSh()->SetWaitCursor( sal_False );
             pViewShell->GetViewFrame()->GetDispatcher()->Execute(
                 SID_INSERT_OBJECT,
@@ -792,12 +792,12 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         if ( xObj.is() )
         {
-            // OLE object is no longer empty
+            
             pObj->SetEmptyPresObj(false);
             pObj->SetOutlinerParaObject(NULL);
             pObj->SetGraphic(NULL);
 
-            // the empty OLE object gets a new IPObj
+            
             if (!aName.isEmpty())
             {
                 pObj->SetObjRef(xObj);
@@ -806,7 +806,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             }
             else
             {
-                // insertion was done by the dialog
+                
                 pObj->SetObjRef(xObj);
             }
 
@@ -851,8 +851,8 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
         Rectangle aRect = pObj->GetLogicRect();
 
         {
-            // #i118485# center on BoundRect for activation,
-            // OLE may be sheared/rotated now
+            
+            
             const Rectangle& rBoundRect = pObj->GetCurrentBoundRect();
             const Point aDelta(rBoundRect.Center() - aRect.Center());
             aRect.Move(aDelta.X(), aDelta.Y());
@@ -862,18 +862,18 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         MapMode aMapMode( GetDoc()->GetScaleUnit() );
         Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
-        if( pObj->IsChart() ) //charts never should be stretched see #i84323# for example
+        if( pObj->IsChart() ) 
             aObjAreaSize = aDrawSize;
 
         Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-        aScaleWidth.ReduceInaccurate(10);       // kompatibel zum SdrOle2Obj
+        aScaleWidth.ReduceInaccurate(10);       
         aScaleHeight.ReduceInaccurate(10);
         pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
-        // visible section is only changed in-place!
+        
         aRect.SetSize(aObjAreaSize);
-        // the object area size must be set after scaling, since it triggers the resizing
+        
         pSdClient->SetObjArea(aRect);
 
         if( bChangeDefaultsForChart && xObj.is())
@@ -881,7 +881,7 @@ sal_Bool ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
             ChartHelper::AdaptDefaultsForChart( xObj );
         }
 
-        pSdClient->DoVerb(nVerb);   // if necessary, ErrCode is outputted by Sfx
+        pSdClient->DoVerb(nVerb);   
         pViewShell->GetViewFrame()->GetBindings().Invalidate(
             SID_NAVIGATOR_STATE, sal_True, sal_False);
     }
@@ -908,7 +908,7 @@ const Rectangle& ViewShell::GetAllWindowRect()
 
 void ViewShell::ReadUserData(const OUString&)
 {
-    // zoom onto VisArea from FrameView
+    
     GetViewShell()->GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_VISAREA,
         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
@@ -916,7 +916,7 @@ void ViewShell::ReadUserData(const OUString&)
 
 void ViewShell::WriteUserData(OUString&)
 {
-    // writing of our data is always done in WriteFrameViewData()
+    
     WriteFrameViewData();
 }
 
@@ -926,7 +926,7 @@ void ViewShell::WriteUserData(OUString&)
  */
 void ViewShell::SetRuler(sal_Bool bRuler)
 {
-    mbHasRulers = ( bRuler && !GetDocSh()->IsPreview() ); // no rulers on preview mode
+    mbHasRulers = ( bRuler && !GetDocSh()->IsPreview() ); 
 
     if (mpHorizontalRuler.get() != NULL)
     {
@@ -988,9 +988,9 @@ void ViewShell::WriteUserDataSequence ( ::com::sun::star::uno::Sequence <
     rSequence.realloc( nIndex + 1 );
 
     OSL_ASSERT (GetViewShell()!=NULL);
-    // Get the view id from the view shell in the center pane.  This will
-    // usually be the called view shell, but to be on the safe side we call
-    // the main view shell explicitly.
+    
+    
+    
     sal_uInt16 nViewID (IMPRESS_FACTORY_ID);
     if (GetViewShellBase().GetMainViewShell().get() != NULL)
         nViewID = GetViewShellBase().GetMainViewShell()->mpImpl->GetViewId();
@@ -1056,6 +1056,6 @@ Point ViewShell::GetViewOrigin() const
     return mpContentWindow->GetViewOrigin();
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

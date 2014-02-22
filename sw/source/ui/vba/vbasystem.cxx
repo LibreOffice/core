@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbasystem.hxx"
 
@@ -83,18 +83,18 @@ void lcl_getRegKeyInfo( const OString& sKeyInfo, HKEY& hBaseKey, OString& sSubKe
 
 uno::Any PrivateProfileStringListener::getValueEvent()
 {
-    // get the private profile string
+    
     OUString sValue;
     if(!maFileName.isEmpty())
     {
-        // get key/value from a file
+        
         Config aCfg( maFileName );
         aCfg.SetGroup( maGroupName );
         sValue = OStringToOUString(aCfg.ReadKey(maKey), RTL_TEXTENCODING_DONTKNOW);
     }
     else
     {
-        // get key/value from windows register
+        
 #ifdef WNT
         HKEY hBaseKey = NULL;
         OString sSubKey;
@@ -127,19 +127,19 @@ uno::Any PrivateProfileStringListener::getValueEvent()
 
 void PrivateProfileStringListener::setValueEvent( const css::uno::Any& value )
 {
-    // set the private profile string
+    
     OUString aValue;
     value >>= aValue;
     if(!maFileName.isEmpty())
     {
-        // set value into a file
+        
         Config aCfg( maFileName );
         aCfg.SetGroup( maGroupName );
         aCfg.WriteKey( maKey, OUStringToOString(aValue, RTL_TEXTENCODING_DONTKNOW) );
     }
     else
     {
-        //set value into windows register
+        
 #ifdef WNT
         HKEY hBaseKey = NULL;
         OString sSubKey;
@@ -211,14 +211,14 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
             case word::WdCursorType::wdCursorWait:
             {
                 const Pointer& rPointer( static_cast< PointerStyle >( POINTER_WAIT ) );
-                //It will set the edit window, toobar and statusbar's mouse pointer.
+                
                 setCursorHelper( getCurrentWordDoc(mxContext), rPointer, sal_True );
                 break;
             }
             case word::WdCursorType::wdCursorIBeam:
             {
                 const Pointer& rPointer( static_cast< PointerStyle >( POINTER_TEXT ) );
-                //It will set the edit window, toobar and statusbar's mouse pointer.
+                
                 setCursorHelper( getCurrentWordDoc( mxContext ), rPointer, sal_True );
                 break;
             }
@@ -230,8 +230,8 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
             }
             default:
                 throw uno::RuntimeException("Unknown value for Cursor pointer", uno::Reference< uno::XInterface >() );
-                // TODO: isn't this a flaw in the API? It should be allowed to throw an
-                // IllegalArgumentException, or so
+                
+                
         }
     }
     catch( const uno::Exception& )
@@ -242,8 +242,8 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException)
 uno::Any SAL_CALL
 SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) throw ( uno::RuntimeException )
 {
-    // FIXME: need to detect whether it is a relative file path
-    // we need to detect if this is a URL, if not then assume it's a file path
+    
+    
     OUString sFileUrl;
     if( !rFilename.isEmpty() )
     {

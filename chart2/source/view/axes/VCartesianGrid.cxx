@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VCartesianGrid.hxx"
@@ -81,7 +81,7 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
         MinY = MaxY;
         MaxY = fHelp;
     }
-    if(pPosHelper->isMathematicalOrientationZ())//z axis in draw is reverse to mathematical
+    if(pPosHelper->isMathematicalOrientationZ())
     {
         double fHelp = MinZ;
         MinZ = MaxZ;
@@ -93,9 +93,9 @@ GridLinePoints::GridLinePoints( const PlottingPositionHelper* pPosHelper, sal_In
     P1.realloc(3);
     P2.realloc(3);
 
-    //P0: point on 'back' wall, not on 'left' wall
-    //P1: point on both walls
-    //P2: point on 'left' wall not on 'back' wall
+    
+    
+    
 
     P0[0]=P1[0]=P2[0]= (CuboidPlanePosition_Left == eLeftWallPos || bSwapXY) ? MinX : MaxX;
     P0[1]=P1[1]=P2[1]= (CuboidPlanePosition_Left == eLeftWallPos || !bSwapXY) ? MinY : MaxY;
@@ -197,9 +197,9 @@ void VCartesianGrid::createShapes()
 {
     if(!m_aGridPropertiesList.getLength())
         return;
-    //somehow equal to axis tickmarks
+    
 
-    //create named group shape
+    
     Reference< drawing::XShapes > xGroupShape_Shapes(
         this->createGroupShape( m_xLogicTarget, m_aCID ) );
 
@@ -209,17 +209,17 @@ void VCartesianGrid::createShapes()
     ::std::vector<VLineProperties> aLinePropertiesList;
     fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
-    //create all scaled tickmark values
+    
     boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
     TickFactory& aTickFactory = *apTickFactory.get();
     ::std::vector< ::std::vector< TickInfo > > aAllTickInfos;
     aTickFactory.getAllTicks( aAllTickInfos );
 
-    //create tick mark line shapes
+    
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = aAllTickInfos.begin();
     const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = aAllTickInfos.end();
 
-    if(aDepthIter == aDepthEnd)//no tickmarks at all
+    if(aDepthIter == aDepthEnd)
         return;
 
     sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
@@ -262,21 +262,21 @@ void VCartesianGrid::createShapes()
             aPoints.realloc(nRealPointCount);
             m_pShapeFactory->createLine2D( xTarget, aPoints, &aLinePropertiesList[nDepth] );
 
-            //prepare polygon for handle shape:
+            
             drawing::PointSequenceSequence aHandlesPoints(1);
             sal_Int32 nOldHandleCount = aHandlesPoints[0].getLength();
             aHandlesPoints[0].realloc(nOldHandleCount+nRealPointCount);
             for( sal_Int32 nN = 0; nN<nRealPointCount; nN++)
                 aHandlesPoints[0][nOldHandleCount+nN] = aPoints[nN][1];
 
-            //create handle shape:
+            
             VLineProperties aHandleLineProperties;
             aHandleLineProperties.LineStyle    = uno::makeAny( drawing::LineStyle_NONE );
             Reference< drawing::XShape > xHandleShape =
                 m_pShapeFactory->createLine2D( xTarget, aHandlesPoints, &aHandleLineProperties );
             m_pShapeFactory->setShapeName( xHandleShape, "HandlesOnly" );
         }
-        else //if(2!=m_nDimension)
+        else 
         {
             GridLinePoints aGridLinePoints( m_pPosHelper, m_nDimensionIndex, m_eLeftWallPos, m_eBackWallPos, m_eBottomPos );
 
@@ -307,6 +307,6 @@ void VCartesianGrid::createShapes()
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

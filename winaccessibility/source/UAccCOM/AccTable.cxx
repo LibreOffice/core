@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**
@@ -50,10 +50,10 @@ STDMETHODIMP CAccTable::get_accessibleAt(long row, long column, IUnknown * * acc
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(accessible == NULL)
         return E_INVALIDARG;
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -115,18 +115,18 @@ STDMETHODIMP CAccTable::get_columnDescription(long column, BSTR * description)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(description == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
     const ::rtl::OUString& ouStr = GetXInterface()->getAccessibleColumnDescription(column);
-    // #CHECK#
+    
 
-    SAFE_SYSFREESTRING(*description);//??
+    SAFE_SYSFREESTRING(*description);
     *description = SysAllocString((OLECHAR*)ouStr.getStr());
     if(description==NULL)
         return E_FAIL;
@@ -150,16 +150,16 @@ STDMETHODIMP CAccTable::get_columnExtentAt(long row, long column, long * nColumn
 
     XAccessibleTable    *pXAccTable = GetXInterface();
 
-    // Check pointer.
+    
     if(nColumnsSpanned == NULL)
         return E_INVALIDARG;
 
-    // Get Extent.
+    
     if(pXAccTable)
     {
         long lExt = pXAccTable->getAccessibleColumnExtentAt(row,column);
 
-        // Fill Extent struct.
+        
         *nColumnsSpanned = lExt;
         return S_OK;
     }
@@ -181,11 +181,11 @@ STDMETHODIMP CAccTable::get_columnHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(accessibleTable == NULL || startingRowIndex == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -231,11 +231,11 @@ STDMETHODIMP CAccTable::get_nColumns(long * columnCount)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(columnCount == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -256,11 +256,11 @@ STDMETHODIMP CAccTable::get_nRows(long * rowCount)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(rowCount == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -281,11 +281,11 @@ STDMETHODIMP CAccTable::get_nSelectedColumns(long * columnCount)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(columnCount == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -307,11 +307,11 @@ STDMETHODIMP CAccTable::get_nSelectedRows(long * rowCount)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(rowCount == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -334,16 +334,16 @@ STDMETHODIMP CAccTable::get_rowDescription(long row, BSTR * description)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(description == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
     const ::rtl::OUString& ouStr = GetXInterface()->getAccessibleRowDescription(row);
-    // #CHECK#
+    
 
     SAFE_SYSFREESTRING(*description);
     *description = SysAllocString((OLECHAR*)ouStr.getStr());
@@ -370,16 +370,16 @@ STDMETHODIMP CAccTable::get_rowExtentAt(long row, long column, long * nRowsSpann
 
     XAccessibleTable    *pXAccTable = GetXInterface();
 
-    // Check pointer.
+    
     if(nRowsSpanned == NULL)
         return E_INVALIDARG;
 
-    // Get Extent.
+    
     if(pXAccTable)
     {
         long lExt = GetXInterface()->getAccessibleRowExtentAt(row,column);
 
-        // Fill Extent struct.
+        
         *nRowsSpanned= lExt;
 
         return S_OK;
@@ -402,11 +402,11 @@ STDMETHODIMP CAccTable::get_rowHeader(IAccessibleTable __RPC_FAR *__RPC_FAR *acc
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(accessibleTable == NULL || startingColumnIndex == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -454,11 +454,11 @@ STDMETHODIMP CAccTable::get_selectedRows(long, long ** rows, long * nRows)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(rows == NULL || nRows == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -467,7 +467,7 @@ STDMETHODIMP CAccTable::get_selectedRows(long, long ** rows, long * nRows)
     *nRows = count;
 
     *rows = reinterpret_cast<long*>(CoTaskMemAlloc((count) * sizeof(long)));
-    // #CHECK Memory Allocation#
+    
     if(*rows == NULL)
     {
         return E_FAIL;
@@ -493,11 +493,11 @@ STDMETHODIMP CAccTable::get_selectedColumns(long, long ** columns, long * numCol
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(columns == NULL || numColumns == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -506,7 +506,7 @@ STDMETHODIMP CAccTable::get_selectedColumns(long, long ** columns, long * numCol
     *numColumns = count;
 
     *columns = reinterpret_cast<long*>(CoTaskMemAlloc((count) * sizeof(long)));
-    // #CHECK Memory Allocation#
+    
     if(*columns == NULL)
     {
         return E_FAIL;
@@ -530,11 +530,11 @@ STDMETHODIMP CAccTable::get_summary(IUnknown * * accessible)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(accessible == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
     {
         return E_FAIL;
@@ -568,11 +568,11 @@ STDMETHODIMP CAccTable::get_isColumnSelected(long column, unsigned char * isSele
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(isSelected == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -594,11 +594,11 @@ STDMETHODIMP CAccTable::get_isRowSelected(long row, unsigned char * isSelected)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(isSelected == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
     {
         return E_FAIL;
@@ -622,11 +622,11 @@ STDMETHODIMP CAccTable::get_isSelected(long row, long column, unsigned char * is
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(isSelected == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -648,7 +648,7 @@ STDMETHODIMP CAccTable::selectRow(long row)
 
     ENTER_PROTECTED_BLOCK
 
-    // Check XAccessibleTable reference.
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -660,12 +660,12 @@ STDMETHODIMP CAccTable::selectRow(long row)
     }
     else
     {
-        // Get XAccessibleSelection.
+        
         Reference<XAccessibleSelection>     pRSelection(GetXInterface(), UNO_QUERY);
         if(!pRSelection.is())
             return E_FAIL;
 
-        // Select row.
+        
         long            lCol, lColumnCount, lChildIndex;
         lColumnCount = GetXInterface()->getAccessibleColumnCount();
         for(lCol = 0; lCol < lColumnCount; lCol ++)
@@ -692,7 +692,7 @@ STDMETHODIMP CAccTable::selectColumn(long column)
 
     ENTER_PROTECTED_BLOCK
 
-    // Check XAccessibleTable reference.
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -704,12 +704,12 @@ STDMETHODIMP CAccTable::selectColumn(long column)
     }
     else
     {
-        // Get XAccessibleSelection.
+        
         Reference<XAccessibleSelection>     pRSelection(pRXTable, UNO_QUERY);
         if(!pRSelection.is())
             return E_FAIL;
 
-        // Select column.
+        
         long            lRow, lRowCount, lChildIndex;
         lRowCount = GetXInterface()->getAccessibleRowCount();
         for(lRow = 0; lRow < lRowCount; lRow ++)
@@ -720,7 +720,7 @@ STDMETHODIMP CAccTable::selectColumn(long column)
 
         return S_OK;
     }
-    // End of added.
+    
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -737,7 +737,7 @@ STDMETHODIMP CAccTable::unselectRow(long row)
 
     ENTER_PROTECTED_BLOCK
 
-    // Check XAccessibleTable reference.
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -751,12 +751,12 @@ STDMETHODIMP CAccTable::unselectRow(long row)
     }
     else
     {
-        // Get XAccessibleSelection.
+        
         Reference<XAccessibleSelection>     pRSelection(pRXTable, UNO_QUERY);
         if(!pRSelection.is())
             return E_FAIL;
 
-        // Select column.
+        
         long            lColumn, lColumnCount, lChildIndex;
         lColumnCount = GetXInterface()->getAccessibleColumnCount();
         for(lColumn = 0; lColumn < lColumnCount; lColumn ++)
@@ -767,7 +767,7 @@ STDMETHODIMP CAccTable::unselectRow(long row)
 
         return S_OK;
     }
-    // End of added.
+    
 
     LEAVE_PROTECTED_BLOCK
 }
@@ -784,7 +784,7 @@ STDMETHODIMP CAccTable::unselectColumn(long column)
 
     ENTER_PROTECTED_BLOCK
 
-    // Check XAccessibleTable reference.
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -798,12 +798,12 @@ STDMETHODIMP CAccTable::unselectColumn(long column)
     }
     else
     {
-        // Get XAccessibleSelection.
+        
         Reference<XAccessibleSelection>     pRSelection(pRXTable, UNO_QUERY);
         if(!pRSelection.is())
             return E_FAIL;
 
-        // Unselect columns.
+        
         long            lRow, lRowCount, lChildIndex;
         lRowCount = GetXInterface()->getAccessibleRowCount();
 
@@ -825,12 +825,12 @@ STDMETHODIMP CAccTable::unselectColumn(long column)
  */
 STDMETHODIMP CAccTable::put_XInterface(hyper pXInterface)
 {
-    // internal IUNOXWrapper - no mutex meeded
+    
 
     ENTER_PROTECTED_BLOCK
 
     CUNOXWrapper::put_XInterface(pXInterface);
-    //special query.
+    
     if(pUNOInterface == NULL)
         return E_INVALIDARG;
 
@@ -859,11 +859,11 @@ STDMETHODIMP CAccTable::get_columnIndex(long childIndex, long * columnIndex)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(columnIndex == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -883,11 +883,11 @@ STDMETHODIMP CAccTable::get_rowIndex(long childIndex, long * rowIndex)
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(rowIndex == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -907,11 +907,11 @@ STDMETHODIMP CAccTable::get_childIndex(long RowIndex , long columnIndex, long * 
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(childIndex == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -936,20 +936,20 @@ STDMETHODIMP CAccTable::get_modelChange(IA2TableModelChange  *)
     return E_NOTIMPL;
 }
 
-// @brief Returns the total number of selected children
-//   @param [out] childCount
-//    Number of children currently selected
+
+
+
 STDMETHODIMP CAccTable::get_nSelectedChildren(long *childCount)
 {
     SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(childCount == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 
@@ -963,24 +963,24 @@ STDMETHODIMP CAccTable::get_nSelectedChildren(long *childCount)
     LEAVE_PROTECTED_BLOCK
 }
 
-// @brief Returns a list of child indexes currently selected (0-based).
-//   @param [in] maxChildren
-//    Max children requested (possibly from IAccessibleTable::nSelectedChildren)
-//   @param [out] children
-//    array of indexes of selected children (each index is 0-based)
-//   @param [out] nChildren
-//    Length of array (not more than maxChildren)
+
+
+
+
+
+
+
 STDMETHODIMP CAccTable::get_selectedChildren(long, long **children, long *nChildren)
 {
     SolarMutexGuard g;
 
     ENTER_PROTECTED_BLOCK
 
-    // #CHECK#
+    
     if(children == NULL || nChildren == NULL)
         return E_INVALIDARG;
 
-    // #CHECK XInterface#
+    
     if(!pRXTable.is())
         return E_FAIL;
 

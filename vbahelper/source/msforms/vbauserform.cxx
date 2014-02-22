@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <vbahelper/helperdecl.hxx>
 #include "vbauserform.hxx"
@@ -33,15 +33,15 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// some little notes
-// XDialog implementation has the following interesting bits
-// a Controls property ( which is an array of the container controls )
-//   each item in the controls array is a XControl, where the model is
-//   basically a property bag
-// additionally the XDialog instance has itself a model
-//     this model has a ControlModels ( array of models ) property
-//     the models in ControlModels can be accessed by name
-// also the XDialog is a XControl ( to access the model above
+
+
+
+
+
+
+
+
+
 
 ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext ) throw ( lang::IllegalArgumentException ) :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), static_cast< ooo::vba::AbstractGeometryAttributes* >(0) ),  mbDispose( true )
 {
@@ -66,13 +66,13 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException)
 
     if ( m_xDialog.is() )
     {
-        // try to center dialog on model window
+        
         if( m_xModel.is() ) try
         {
             uno::Reference< frame::XController > xController( m_xModel->getCurrentController(), uno::UNO_SET_THROW );
             uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );
             uno::Reference< awt::XWindow > xWindow( xFrame->getContainerWindow(), uno::UNO_SET_THROW );
-            awt::Rectangle aPosSize = xWindow->getPosSize();    // already in pixel
+            awt::Rectangle aPosSize = xWindow->getPosSize();    
 
             uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
             uno::Reference< awt::XWindow > xControlWindow( xControl->getPeer(), uno::UNO_QUERY_THROW );
@@ -153,7 +153,7 @@ void SAL_CALL ScVbaUserForm::setInnerHeight( double fInnerHeight ) throw (uno::R
 void SAL_CALL
 ScVbaUserForm::Hide(  ) throw (uno::RuntimeException)
 {
-    mbDispose = false;  // hide not dispose
+    mbDispose = false;  
     if ( m_xDialog.is() )
         m_xDialog->endExecute();
 }
@@ -161,8 +161,8 @@ ScVbaUserForm::Hide(  ) throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaUserForm::RePaint(  ) throw (uno::RuntimeException)
 {
-    // #STUB
-    // do nothing
+    
+    
 }
 
 void SAL_CALL
@@ -200,7 +200,7 @@ ScVbaUserForm::getIntrospection(  ) throw (uno::RuntimeException)
 uno::Any SAL_CALL
 ScVbaUserForm::invoke( const OUString& /*aFunctionName*/, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ ) throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
-    throw uno::RuntimeException(); // unsupported operation
+    throw uno::RuntimeException(); 
 }
 
 void SAL_CALL
@@ -208,13 +208,13 @@ ScVbaUserForm::setValue( const OUString& aPropertyName, const uno::Any& aValue )
 {
     uno::Any aObject = getValue( aPropertyName );
 
-    // in case the dialog is already closed the VBA implementation should not throw exceptions
+    
     if ( aObject.hasValue() )
     {
-        // The Object *must* support XDefaultProperty here because getValue will
-        // only return properties that are Objects ( e.g. controls )
-        // e.g. Userform1.aControl = something
-        // 'aControl' has to support XDefaultProperty to make sense here
+        
+        
+        
+        
         uno::Reference< script::XDefaultProperty > xDfltProp( aObject, uno::UNO_QUERY_THROW );
         OUString aDfltPropName = xDfltProp->getDefaultPropertyName();
         uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObject ) );
@@ -252,7 +252,7 @@ ScVbaUserForm::getValue( const OUString& aPropertyName ) throw (beans::UnknownPr
 {
     uno::Any aResult;
 
-    // in case the dialog is already closed the VBA implementation should not throw exceptions
+    
     if ( m_xDialog.is() )
     {
         uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY_THROW );
@@ -280,8 +280,8 @@ ScVbaUserForm::hasMethod( const OUString& /*aName*/ ) throw (uno::RuntimeExcepti
 uno::Any SAL_CALL
 ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException)
 {
-    // if the dialog already closed we should do nothing, but the VBA will call methods of the Controls objects
-    // thus we have to provide a dummy object in this case
+    
+    
     uno::Reference< awt::XControl > xDialogControl( m_xDialog, uno::UNO_QUERY );
     uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, xDialogControl, m_xModel, mpGeometryHelper->getOffsetX(), mpGeometryHelper->getOffsetY() ) );
     if ( index.hasValue() )

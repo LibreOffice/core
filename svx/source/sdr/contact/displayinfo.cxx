@@ -26,7 +26,7 @@ namespace sdr
     namespace contact
     {
         DisplayInfo::DisplayInfo()
-        :   maProcessLayers(true), // init layer info with all bits set to draw everything on default
+        :   maProcessLayers(true), 
             maRedrawArea(),
             mbControlLayerProcessingActive(false),
             mbPageProcessingActive(true),
@@ -39,13 +39,13 @@ namespace sdr
         {
         }
 
-        // Access to LayerInfos (which layers to proccess)
+        
         void DisplayInfo::SetProcessLayers(const SetOfByte& rSet)
         {
             maProcessLayers = rSet;
         }
 
-        // access to RedrawArea
+        
         void DisplayInfo::SetRedrawArea(const Region& rRegion)
         {
             maRedrawArea = rRegion;
@@ -85,7 +85,7 @@ namespace sdr
             }
         }
 
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

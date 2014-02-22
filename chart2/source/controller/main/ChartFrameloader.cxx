@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartFrameloader.hxx"
@@ -54,7 +54,7 @@ ChartFrameLoader::~ChartFrameLoader()
     return sal_False;
 }
 
-// lang::XServiceInfo
+
 
 APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME)
 
@@ -66,14 +66,14 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
     return aSNS;
 }
 
-// frame::XFrameLoader
+
 
     sal_Bool SAL_CALL ChartFrameLoader
 ::load( const uno::Sequence< beans::PropertyValue >& rMediaDescriptor
         , const uno::Reference<frame::XFrame >& xFrame )
         throw (uno::RuntimeException)
 {
-    //@todo ? need to add as terminate listener to desktop?
+    
 
     uno::Reference< frame::XModel >         xModel;
     bool bHaveLoadedModel = false;
@@ -88,10 +88,10 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
         }
     }
 
-    //create and initialize the model
+    
     if( ! xModel.is())
     {
-        //@todo?? load mechanism to cancel during loading of document
+        
         xModel.set(
                 m_xCC->getServiceManager()->createInstanceWithContext(
                 CHART_MODEL_SERVICE_IMPLEMENTATION_NAME, m_xCC )
@@ -101,7 +101,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
             return sal_False;
     }
 
-    //create the controller(+XWindow)
+    
     uno::Reference< frame::XController >    xController = NULL;
     uno::Reference< awt::XWindow >          xComponentWindow = NULL;
     {
@@ -110,8 +110,8 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
             CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME,m_xCC )
             , uno::UNO_QUERY );
 
-        //!!!it is a special characteristic of the example application
-        //that the controller simultaniously provides the XWindow controller functionality
+        
+        
         xComponentWindow =
                       uno::Reference< awt::XWindow >( xController, uno::UNO_QUERY );
 
@@ -119,7 +119,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
             return sal_False;
     }
 
-    //connect frame, controller and model one to each other:
+    
     if(xController.is()&&xModel.is())
     {
         xModel->connectController(xController);
@@ -127,12 +127,12 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
         xController->attachModel(xModel);
         if(xFrame.is())
             xFrame->setComponent(xComponentWindow,xController);
-        //creates the view and menu
-        //for correct menu creation the initialized component must be already set into the frame
+        
+        
         xController->attachFrame(xFrame);
     }
 
-    // call initNew() or load() at XLoadable
+    
     if(!bHaveLoadedModel)
         try
         {
@@ -142,7 +142,7 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
                 OUString aURL( (*aIt).second.get< OUString >());
                 if( aURL.startsWith( "private:factory/schart" ) )
                 {
-                    // create new file
+                    
                     uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
                     xLoadable->initNew();
                 }
@@ -153,12 +153,12 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
                     aMediaDescriptor >> aCompleteMediaDescriptor;
                     apphelper::MediaDescriptorHelper aMDHelper( aCompleteMediaDescriptor );
 
-                    // load file
-                    // @todo: replace: aMediaDescriptorHelper.getReducedForModel()
+                    
+                    
                     uno::Reference< frame::XLoadable > xLoadable( xModel, uno::UNO_QUERY_THROW );
                     xLoadable->load( aCompleteMediaDescriptor );
 
-                    //resize standalone files to get correct size:
+                    
                     if( xComponentWindow.is() && aMDHelper.ISSET_FilterName && aMDHelper.FilterName.equals( "StarChart 5.0") )
                     {
                         awt::Rectangle aRect( xComponentWindow->getPosSize() );
@@ -185,6 +185,6 @@ APPHELPER_XSERVICEINFO_IMPL(ChartFrameLoader,CHART_FRAMELOADER_SERVICE_IMPLEMENT
     m_bCancelRequired = sal_False;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

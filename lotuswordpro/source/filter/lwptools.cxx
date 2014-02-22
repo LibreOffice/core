@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -88,7 +88,7 @@ using namespace ::osl;
 */
 sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
         OUString& str, sal_uInt16 strlen, rtl_TextEncoding aEncoding)
-        //strlen: length of bytes
+        
 {
 
     sal_uInt16 readLen = 0;
@@ -119,12 +119,12 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
         sal_uInt8 readbyte;
         sal_uInt16 readword;
 
-        sal_Bool flag = sal_False;  //switch if unicode part reached
+        sal_Bool flag = sal_False;  
         sal_uInt16 sublen = 0;
 
         while(readLen<strlen)
         {
-            if(!flag)   //Not unicode string
+            if(!flag)   
             {
                 bool bFailure;
                 readbyte = pObjStrm->QuickReaduInt8(&bFailure);
@@ -134,9 +134,9 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                 if(readbyte == 0x00)
                 {
                     flag = sal_True;
-                    if(sublen>0)    //add it to the strBuf
+                    if(sublen>0)    
                     {
-                        strBuf.append( OUString(buf, sublen, aEncoding) ); //try the aEncoding
+                        strBuf.append( OUString(buf, sublen, aEncoding) ); 
                         sublen = 0;
                     }
                 }
@@ -144,13 +144,13 @@ sal_uInt16 LwpTools::QuickReadUnicode(LwpObjectStream* pObjStrm,
                 {
                     buf[sublen++] = readbyte;
                 }
-                if(sublen>=1023 || readLen==strlen) //add it to the strBuf
+                if(sublen>=1023 || readLen==strlen) 
                 {
-                    strBuf.append( OUString(buf, sublen, aEncoding) ); //try the aEncoding
+                    strBuf.append( OUString(buf, sublen, aEncoding) ); 
                     sublen = 0;
                 }
             }
-            else        //unicode string
+            else        
             {
                 bool bFailure;
                 readword = pObjStrm->QuickReaduInt16(&bFailure);
@@ -207,7 +207,7 @@ sal_Bool LwpTools::IsUnicodePacked(LwpObjectStream* pObjStrm, sal_uInt16 len)
 
 sal_Bool LwpTools::isFileUrl(const OString &fileName)
 {
-    if (fileName.startsWith("file://") )
+    if (fileName.startsWith("file:
         return sal_True;
     return sal_False;
 }
@@ -259,13 +259,13 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
 {
     icu::DateFormat::EStyle style;
     if (bLongFormat)
-        style = icu::DateFormat::FULL;//system full date format
+        style = icu::DateFormat::FULL;
     else
-        style = icu::DateFormat::SHORT;//system short date format
+        style = icu::DateFormat::SHORT;
 
-    //1 get locale for system
+    
     icu::Locale aLocale( LanguageTagIcu::getIcuLocale( Application::GetSettings().GetLanguageTag()));
-    //2 get icu format pattern by locale
+    
     icu::DateFormat* fmt = icu::DateFormat::createDateInstance(style,aLocale);
 
     int32_t nLength = 0;
@@ -283,11 +283,11 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
     }
     if (pattern == NULL)
         return NULL;
-    // 3 parse pattern string,per icu date/time format syntax, there are 20 letters reserved
-    // as patter letter,each represent a element in date/time and its repeat numbers represent
-    // different format: for exampel: M produces '1',MM produces '01', MMM produces 'Jan', MMMM produces 'Januaray'
-    // letter other than these letters is regard as text in the format, for example ','in 'Jan,2005'
-    // we parse pattern string letter by letter and get the time format.
+    
+    
+    
+    
+    
     UChar cSymbol;
     UChar cTmp;
     XFDateStyle* pDateStyle = new XFDateStyle;
@@ -594,7 +594,7 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                 }
                 break;
             }
-            case '\''://'
+            case '\'':
             {
                 for (j=1;;j++)
                 {
@@ -616,9 +616,9 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
             {
                 if ((cSymbol>='A' && cSymbol<='Z') || (cSymbol>='a' && cSymbol<='z') )
                     return NULL;
-                else//TEXT
+                else
                 {
-                    //UChar buffer[1024];
+                    
                     sal_Unicode buffer[1024];
                     buffer[0] = cSymbol;
                     for (j=1;;j++)
@@ -635,13 +635,13 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
                             buffer[j] = cTmp;
                     }
 
-                    pDateStyle->AddText(OUString(buffer));//keep for all parsed
+                    pDateStyle->AddText(OUString(buffer));
                 }
                 break;
             }
         }
     }
-//  udat_close(fmt);
+
     return pDateStyle;
 }
 /**
@@ -649,9 +649,9 @@ XFDateStyle* LwpTools::GetSystemDateStyle(sal_Bool bLongFormat)
 */
 XFTimeStyle* LwpTools::GetSystemTimeStyle()
 {
-    //1 get locale for system
+    
     icu::Locale aLocale( LanguageTagIcu::getIcuLocale( Application::GetSettings().GetLanguageTag()));
-    //2 get icu format pattern by locale
+    
     icu::DateFormat* fmt = icu::DateFormat::createTimeInstance(icu::DateFormat::DEFAULT,aLocale);
 
     int32_t nLength = 0;
@@ -669,12 +669,12 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
 
     if (pattern == NULL)
         return NULL;
-    // 3 parse pattern string,per icu date/time format syntax, there are 20 letters reserved
-    // as patter letter,each represent a element in date/time and its repeat numbers represent
-    // different format: for exampel: M produces '1',MM produces '01', MMM produces 'Jan', MMMM produces 'Januaray'
-    // letter other than these letters is regard as text in the format, for example ','in 'Jan,2005'
-    // we parse pattern string letter by letter and get the time format.
-    // for time format ,for there is not date info,we can only parse the letter representing time.
+    
+    
+    
+    
+    
+    
     UChar cSymbol;
     UChar cTmp;
     XFTimeStyle* pTimeStyle = new XFTimeStyle;
@@ -814,7 +814,7 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                     pTimeStyle->AddHour();
                 break;
             }
-            case '\''://'
+            case '\'':
             {
                 for (j=1;;j++)
                 {
@@ -836,11 +836,11 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
             {
                 if ((cSymbol>='A' && cSymbol<='Z') || (cSymbol>='a' && cSymbol<='z') )
                     return NULL;
-                else//TEXT
+                else
                 {
                     sal_Unicode buffer[1024];
                     buffer[0] = cSymbol;
-                    //strBuffer.append(cSymbol);
+                    
                     for (j=1;;j++)
                     {
                         cTmp = pattern[i+j];
@@ -854,13 +854,13 @@ XFTimeStyle* LwpTools::GetSystemTimeStyle()
                         else
                             buffer[j] = cTmp;
                     }
-                    pTimeStyle->AddText(OUString(buffer));//keep for all parsed
+                    pTimeStyle->AddText(OUString(buffer));
                 }
                 break;
             }
         }
     }
-//  udat_close(fmt);
+
     return pTimeStyle;
 }
 

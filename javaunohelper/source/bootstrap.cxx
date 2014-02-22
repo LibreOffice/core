@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -63,7 +63,7 @@ inline OUString jstring_to_oustring( jstring jstr, JNIEnv * jni_env )
 
 }
 
-//==================================================================================================
+
 jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
     JNIEnv * jni_env, SAL_UNUSED_PARAMETER jclass, jstring juno_rc, jobjectArray jpairs,
     jobject loader )
@@ -75,7 +75,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             jsize nPos = 0, len = jni_env->GetArrayLength( jpairs );
             while (nPos < len)
             {
-                // name
+                
                 jstring jstr = (jstring)jni_env->GetObjectArrayElement( jpairs, nPos );
                 if (JNI_FALSE != jni_env->ExceptionCheck())
                 {
@@ -86,7 +86,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                 if (0 != jstr)
                 {
                     OUString name( ::javaunohelper::jstring_to_oustring( jstr, jni_env ) );
-                    // value
+                    
                     jstr = (jstring)jni_env->GetObjectArrayElement( jpairs, nPos +1 );
                     if (JNI_FALSE != jni_env->ExceptionCheck())
                     {
@@ -98,7 +98,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
                     {
                         OUString value( ::javaunohelper::jstring_to_oustring( jstr, jni_env ) );
 
-                        // set bootstrap parameter
+                        
                         ::rtl::Bootstrap::set( name, value );
                     }
                 }
@@ -106,7 +106,7 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             }
         }
 
-        // bootstrap uno
+        
         Reference< XComponentContext > xContext;
         if (0 == juno_rc)
         {
@@ -118,20 +118,20 @@ jobject Java_com_sun_star_comp_helper_Bootstrap_cppuhelper_1bootstrap(
             xContext = ::cppu::defaultBootstrap_InitialComponentContext( uno_rc );
         }
 
-        // create vm access
+        
         ::rtl::Reference< ::jvmaccess::UnoVirtualMachine > vm_access(
             ::javaunohelper::create_vm_access( jni_env, loader ) );
-        // wrap vm singleton entry
+        
         xContext = ::javaunohelper::install_vm_singleton( xContext, vm_access );
 
-        // get uno envs
+        
         OUString cpp_env_name = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
         OUString java_env_name = UNO_LB_JAVA;
         Environment java_env, cpp_env;
         uno_getEnvironment((uno_Environment **)&cpp_env, cpp_env_name.pData, NULL);
         uno_getEnvironment( (uno_Environment **)&java_env, java_env_name.pData, vm_access.get() );
 
-        // map to java
+        
         Mapping mapping( cpp_env.get(), java_env.get() );
         if (! mapping.is())
         {

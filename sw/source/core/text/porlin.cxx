@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/outdev.hxx>
@@ -39,7 +39,7 @@ bool ChkChain( SwLinePortion *pStart )
                 "ChkChain(): lost in chains" );
         if( nCount >= 200 || pPor == pStart )
         {
-            // der Lebensretter
+            
             pPor = pStart->GetPortion();
             pStart->SetPortion(0);
             pPor->Truncate();
@@ -207,7 +207,7 @@ SwLinePortion *SwLinePortion::Insert( SwLinePortion *pIns )
 SwLinePortion *SwLinePortion::FindLastPortion()
 {
     SwLinePortion *pPos = this;
-    // An das Ende wandern und pLinPortion an den letzten haengen ...
+    
     while( pPos->GetPortion() )
     {
         pPos = pPos->GetPortion();
@@ -300,8 +300,8 @@ bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
     Height( pLast->Height() );
     SetAscent( pLast->GetAscent() );
     const KSHORT nNewWidth = static_cast<sal_uInt16>(rInf.X() + PrtWidth());
-    // Nur Portions mit echter Breite koennen ein sal_True zurueckliefern
-    // Notizen beispielsweise setzen niemals bFull==sal_True
+    
+    
     if( rInf.Width() <= nNewWidth && PrtWidth() && ! IsKernPortion() )
     {
         Truncate();
@@ -317,7 +317,7 @@ bool SwLinePortion::Format( SwTxtFormatInfo &rInf )
  *                 virtual SwLinePortion::FormatEOL()
  *************************************************************************/
 
-// Format end of line
+
 
 void SwLinePortion::FormatEOL( SwTxtFormatInfo & )
 { }

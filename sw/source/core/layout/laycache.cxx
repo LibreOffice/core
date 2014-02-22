@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -46,7 +46,7 @@
 #include "viewopt.hxx"
 #include "viewsh.hxx"
 #include <flyfrm.hxx>
-// OD 2004-05-24 #i28701#
+
 #include <sortedobjs.hxx>
 //
 #include <pam.hxx>
@@ -81,7 +81,7 @@ void SwLayoutCache::Read( SvStream &rStream )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void SwLayCacheImpl::Insert( sal_uInt16 nType, sal_uLong nIndex, sal_Int32 nOffset )
 {
@@ -96,10 +96,10 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
     if( aIo.GetMajorVersion() > SW_LAYCACHE_IO_VERSION_MAJOR )
         return false;
 
-    // Due to an evil bug in the layout cache (#102759#), we cannot trust the
-    // sizes of fly frames which have been written using the "old" layout cache.
-    // This flag should indicate that we do not want to trust the width and
-    // height of fly frames
+    
+    
+    
+    
     bUseFlyCache = aIo.GetMinorVersion() >= 1;
 
     aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
@@ -169,14 +169,14 @@ bool SwLayCacheImpl::Read( SvStream& rStream )
  */
 void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
 {
-    if( rDoc.GetCurrentLayout() ) // the layout itself ..
+    if( rDoc.GetCurrentLayout() ) 
     {
         SwLayCacheIoImpl aIo( rStream, true );
-        // We want to save the relative index, so we need the index
-        // of the first content
+        
+        
         sal_uLong nStartOfContent = rDoc.GetNodes().GetEndOfContent().
                                 StartOfSectionNode()->GetIndex();
-        // The first page..
+        
         SwPageFrm* pPage = (SwPageFrm*)rDoc.GetCurrentLayout()->Lower();
 
         aIo.OpenRec( SW_LAYCACHE_IO_REC_PAGES );
@@ -188,12 +188,12 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
             {
                 SwLayoutFrm* pLay = pPage->FindBodyCont();
                 SwFrm* pTmp = pLay ? pLay->ContainsAny() : NULL;
-                // We are only interested in paragraph or table frames,
-                // a section frames contains paragraphs/tables.
+                
+                
                 if( pTmp && pTmp->IsSctFrm() )
                     pTmp = ((SwSectionFrm*)pTmp)->ContainsAny();
 
-                if( pTmp ) // any content
+                if( pTmp ) 
                 {
                     if( pTmp->IsTxtFrm() )
                     {
@@ -220,8 +220,8 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                         sal_uLong nOfst = COMPLETE_STRING;
                         if( pTab->IsFollow() )
                         {
-                            // If the table is a follow, we have to look for the
-                            // master and to count all rows to get the row number
+                            
+                            
                             nOfst = 0;
                             if( pTab->IsFollow() )
                                 pTab = pTab->FindMaster( true );
@@ -253,9 +253,9 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                                 /* Close Table Record  */
                                 aIo.CloseRec( SW_LAYCACHE_IO_REC_TABLE );
                             }
-                            // If the table has a follow on the next page,
-                            // we know already the row number and store this
-                            // immediately.
+                            
+                            
+                            
                             if( pTab->GetFollow() )
                             {
                                 if( nOfst == (sal_uLong) COMPLETE_STRING )
@@ -456,7 +456,7 @@ SwLayoutCache::~SwLayoutCache()
     delete pImpl;
 }
 
-/// helper class to create not nested section frames for nested sections.
+
 SwActualSection::SwActualSection( SwActualSection *pUp,
                                   SwSectionFrm    *pSect,
                                   SwSectionNode   *pNd ) :
@@ -543,23 +543,23 @@ sal_uLong SwLayHelper::CalcPageCount()
     else
     {
         nPgCount = pDoc->GetDocStat().nPage;
-        if ( nPgCount <= 10 ) // no page insertion for less than 10 pages
+        if ( nPgCount <= 10 ) 
             nPgCount = 0;
         sal_uLong nNdCount = pDoc->GetDocStat().nPara;
         if ( nNdCount <= 1 )
         {
-            //Estimates the number of paragraphs.
+            
             sal_uLong nTmp = pDoc->GetNodes().GetEndOfContent().GetIndex() -
                         pDoc->GetNodes().GetEndOfExtras().GetIndex();
-            //Tables have a little overhead..
+            
             nTmp -= pDoc->GetTblFrmFmts()->size() * 25;
-            //Fly frames, too ..
+            
             nTmp -= (pDoc->GetNodes().GetEndOfAutotext().GetIndex() -
                        pDoc->GetNodes().GetEndOfInserts().GetIndex()) / 3 * 5;
             if ( nTmp > 0 )
                 nNdCount = nTmp;
         }
-        if ( nNdCount > 100 ) // no estimation below this value
+        if ( nNdCount > 100 ) 
         {
             if ( nPgCount > 0 )
                 nMaxParaPerPage = nNdCount / nPgCount;
@@ -572,7 +572,7 @@ sal_uLong SwLayHelper::CalcPageCount()
                 nPgCount = nNdCount / nMaxParaPerPage;
             }
             if ( nNdCount < 1000 )
-                nPgCount = 0;// no progress bar for small documents
+                nPgCount = 0;
             SwViewShell *pSh = 0;
             if( rpLay && rpLay->getRootFrm() )
                 pSh = rpLay->getRootFrm()->GetCurrShell();
@@ -598,8 +598,8 @@ bool SwLayHelper::CheckInsertPage()
     const SwAttrSet* pAttr = rpFrm->GetAttrSet();
     const SvxFmtBreakItem& rBrk = pAttr->GetBreak();
     const SwFmtPageDesc& rDesc = pAttr->GetPageDesc();
-    // #118195# Do not evaluate page description if frame
-    // is a follow frame!
+    
+    
     const SwPageDesc* pDesc = rpFrm->IsFlowFrm() &&
                               SwFlowFrm::CastFlowFrm( rpFrm )->IsFollow() ?
                               0 :
@@ -637,7 +637,7 @@ bool SwLayHelper::CheckInsertPage()
             bNextPageOdd = !bNextPageOdd;
             bInsertEmpty = true;
         }
-        // If the page style is changing, we'll have a first page.
+        
         bool bNextPageFirst = pDesc != rpPage->GetPageDesc();
         ::InsertNewPage( (SwPageDesc&)*pDesc, rpPage->GetUpper(),
                          bNextPageOdd, bNextPageFirst, bInsertEmpty, sal_False, rpPage->GetNext() );
@@ -682,7 +682,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
     sal_uInt16 nRows( 0 );
     if( rpFrm->IsTabFrm() )
     {
-        //Inside a table counts every row as a paragraph
+        
         SwFrm *pLow = ((SwTabFrm*)rpFrm)->Lower();
         nRows = 0;
         do
@@ -693,11 +693,11 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
         nParagraphCnt += nRows;
         if( !pImpl && nParagraphCnt > nMaxParaPerPage + 10 )
         {
-            // OD 09.04.2003 #108698# - improve heuristics:
-            // Assume that a table, which has more than three times the quantity
-            // of maximal paragraphs per page rows, consists of rows, which have
-            // the height of a normal paragraph. Thus, allow as much rows per page
-            // as much paragraphs are allowed.
+            
+            
+            
+            
+            
             if ( nRows > ( 3*nMaxParaPerPage ) )
             {
                 nMaxRowPerPage = nMaxParaPerPage;
@@ -732,7 +732,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         pImpl->GetBreakIndex(nIndex) : 0xffff;
     (void)nBreakIndex;
 #endif
-    // OD 09.04.2003 #108698# - always split a big tables.
+    
     if ( !bFirst ||
          ( rpFrm->IsTabFrm() && bLongTab )
        )
@@ -793,7 +793,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                         if( rpFrm->IsTabFrm() )
                         {
                             SwTabFrm* pTab = (SwTabFrm*)rpFrm;
-                            // #i33629#, #i29955#
+                            
                             ::RegistFlys( pTab->FindPageFrm(), pTab );
                             SwFrm *pRow = pTab->Lower();
                             SwTabFrm *pFoll = new SwTabFrm( *pTab );
@@ -801,9 +801,9 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                             SwFrm *pPrv;
                             if( nRepeat > 0 )
                             {
-                                bDontCreateObjects = true; //frmtool
+                                bDontCreateObjects = true; 
 
-                                // Insert new headlines:
+                                
                                 sal_uInt16 nRowIdx = 0;
                                 SwRowFrm* pHeadline = 0;
                                 while( nRowIdx < nRepeat )
@@ -866,8 +866,8 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
 
                 if ( rpActualSection )
                 {
-                    //Did the SectionFrm even have a content? If not, we can
-                    //directly put it somewhere else
+                    
+                    
                     SwSectionFrm *pSct;
                     bool bInit = false;
                     if ( !rpActualSection->GetSectionFrm()->ContainsCntnt())
@@ -887,7 +887,7 @@ bool SwLayHelper::CheckInsert( sal_uLong nNodeIndex )
                     if( bInit )
                         pSct->Init();
                     pSct->Frm().Pos() = rpLay->Frm().Pos();
-                    pSct->Frm().Pos().Y() += 1; //because of the notifications
+                    pSct->Frm().Pos().Y() += 1; 
 
                     rpLay = pSct;
                     if ( rpLay->Lower() && rpLay->Lower()->IsLayoutFrm() )
@@ -927,21 +927,21 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
     if( !pImpl || !pPage )
         return;
     sal_uInt16 nFlyCount = pImpl->GetFlyCount();
-    // Any text frames at the page, fly cache avaiable?
+    
     if( pPage->GetSortedObjs() && nFlyIdx < nFlyCount )
     {
         SwSortedObjs &rObjs = *pPage->GetSortedObjs();
         sal_uInt16 nPgNum = pPage->GetPhyPageNum();
 
-        // NOTE: Here we do not use the absolute ordnums but
-        // relative ordnums for the objects on this page.
+        
+        
 
-        // skip fly frames from pages before the current page
+        
         while( nFlyIdx < nFlyCount &&
                pImpl->GetFlyCache(nFlyIdx)->nPageNum < nPgNum )
             ++nFlyIdx;
 
-        // sort cached objects on this page by ordnum
+        
         std::set< const SwFlyCache*, FlyCacheCompare > aFlyCacheSet;
         sal_uInt16 nIdx = nFlyIdx;
 
@@ -953,12 +953,12 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
             ++nIdx;
         }
 
-        // sort objects on this page by ordnum
+        
         std::set< const SdrObject*, SdrObjectCompare > aFlySet;
         for ( sal_uInt16 i = 0; i < rObjs.Count(); ++i )
         {
             SwAnchoredObject* pAnchoredObj = rObjs[i];
-            if ( pAnchoredObj->ISA(SwFlyFrm) )  // a text frame?
+            if ( pAnchoredObj->ISA(SwFlyFrm) )  
             {
                 SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                 if( pFly->GetAnchorFrm() &&
@@ -987,7 +987,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
 
                 if ( pFly->Frm().Left() == FAR_AWAY )
                 {
-                    // we get the stored information
+                    
                     pFly->Frm().Pos().X() = pFlyCache->Left() +
                                             pPage->Frm().Left();
                     pFly->Frm().Pos().Y() = pFlyCache->Top() +
@@ -1030,7 +1030,7 @@ bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
         sal_uLong nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
         SwFlyCache* pFlyC = 0;
 
-        // skip fly frames from pages before the current page
+        
         while( nIdx < nCnt &&
                nPgNum > (pFlyC = pCache->GetFlyCache( nIdx ))->nPageNum )
             ++nIdx;
@@ -1043,8 +1043,8 @@ bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
             SwPageFrm *pPage = rpPage;
             while( pPage && pPage->GetPhyPageNum() < pFlyC->nPageNum )
                 pPage = (SwPageFrm*)pPage->GetNext();
-            // #i43266# - if the found page is an empty page,
-            // take the previous one (take next one, if previous one doesn't exists)
+            
+            
             if ( pPage && pPage->IsEmptyPage() )
             {
                 pPage = static_cast<SwPageFrm*>( pPage->GetPrev()
@@ -1069,7 +1069,7 @@ bool SwLayHelper::CheckPageFlyCache( SwPageFrm* &rpPage, SwFlyFrm* pFly )
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 SwLayCacheIoImpl::SwLayCacheIoImpl( SvStream& rStrm, bool bWrtMd ) :
     pStream( &rStrm ),
@@ -1120,7 +1120,7 @@ bool SwLayCacheIoImpl::OpenRec( sal_uInt8 cType )
     return bRes;
 }
 
-// Close record
+
 bool SwLayCacheIoImpl::CloseRec( sal_uInt8 )
 {
     bool bRes = true;

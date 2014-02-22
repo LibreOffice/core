@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <main.hxx>
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass1()
 {
@@ -60,8 +60,8 @@ void CGM::ImplDoClass1()
         case 0x05 : /*Real Precision*/
         {
             nUInteger = ImplGetUI16( 4 );
-            nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
-            nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantisse
+            nI0 = ImplGetI( pElement->nIntegerPrecision );  
+            nI1 = ImplGetI( pElement->nIntegerPrecision );  
             switch( nUInteger )
             {
                 case 0 :
@@ -152,7 +152,7 @@ void CGM::ImplDoClass1()
             else
             {
                 nI1 = 8;
-                mbStatus = sal_False;                               // CMYK is not supported
+                mbStatus = sal_False;                               
             }
             for ( nI0 = 0; nI0 < nI1; nI0++ )
             {
@@ -203,14 +203,14 @@ void CGM::ImplDoClass1()
         case 0x0f : /*Character Coding Announcer*/
             pElement->eCharacterCodingA = (CharacterCodingA)ImplGetUI16();
         break;
-        case 0x10 : /*Name Precision */break;                   // NS
-        case 0x11 : /*Maximum VDC Extent */break;               // NS
-        case 0x12 : /*Segment Priority Extent */break;          // NS
-        case 0x13 : /*Color Model */break;                      // NS
-        case 0x14 : /*Color Calibration */break;                // NS
-        case 0x15 : /*Font Properties */break;                  // NS
-        case 0x16 : /*Glyph Mapping */break;                    // NS
-        case 0x17 : /*Symbol Library List */break;              // NS
+        case 0x10 : /*Name Precision */break;                   
+        case 0x11 : /*Maximum VDC Extent */break;               
+        case 0x12 : /*Segment Priority Extent */break;          
+        case 0x13 : /*Color Model */break;                      
+        case 0x14 : /*Color Calibration */break;                
+        case 0x15 : /*Font Properties */break;                  
+        case 0x16 : /*Glyph Mapping */break;                    
+        case 0x17 : /*Symbol Library List */break;              
         case 0xfc : /*Inquire Function Support */break;
         case 0xfa : /*End Metafile Defaults Replacement */break;
         case 0xf8 : /*Set Color Value Desc Extent */break;

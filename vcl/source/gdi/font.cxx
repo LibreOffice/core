@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -101,7 +101,7 @@ Impl_Font::Impl_Font( const Impl_Font& rImplFont )
 
 bool Impl_Font::operator==( const Impl_Font& rOther ) const
 {
-    // equality tests split up for easier debugging
+    
     if( (meWeight   != rOther.meWeight)
     ||  (meItalic   != rOther.meItalic)
     ||  (meFamily   != rOther.meFamily)
@@ -149,7 +149,7 @@ void Impl_Font::AskConfig()
 
     mbConfigLookup = true;
 
-    // prepare the FontSubst configuration lookup
+    
     const utl::FontSubstConfiguration& rFontSubst = utl::FontSubstConfiguration::get();
 
     OUString      aShortName;
@@ -162,16 +162,16 @@ void Impl_Font::AskConfig()
     utl::FontSubstConfiguration::getMapName( aMapName,
         aShortName, aFamilyName, eWeight, eWidthType, nType );
 
-    // lookup the font name in the configuration
+    
     const utl::FontNameAttr* pFontAttr = rFontSubst.getSubstInfo( aMapName );
 
-    // if the direct lookup failed try again with an alias name
+    
     if ( !pFontAttr && (aShortName != aMapName) )
         pFontAttr = rFontSubst.getSubstInfo( aShortName );
 
     if( pFontAttr )
     {
-        // the font was found in the configuration
+        
         if( meFamily == FAMILY_DONTKNOW )
         {
             if ( pFontAttr->Type & IMPL_FONT_ATTR_SERIF )
@@ -193,7 +193,7 @@ void Impl_Font::AskConfig()
         }
     }
 
-    // if some attributes are still unknown then use the FontSubst magic
+    
     if( meFamily == FAMILY_DONTKNOW )
     {
         if( nType & IMPL_FONT_ATTR_SERIF )
@@ -216,7 +216,7 @@ void Impl_Font::AskConfig()
 
 void Font::MakeUnique()
 {
-    // create a copy if others still reference it
+    
     if ( mpImplFont->mnRefCount != 1 )
     {
         if ( mpImplFont->mnRefCount )
@@ -229,7 +229,7 @@ Font::Font()
 {
 
     static Impl_Font aStaticImplFont;
-    // RefCount is zero for static objects
+    
     aStaticImplFont.mnRefCount = 0;
     mpImplFont = &aStaticImplFont;
 }
@@ -240,7 +240,7 @@ Font::Font( const Font& rFont )
     DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
 
     mpImplFont = rFont.mpImplFont;
-    // do not count static objects (where RefCount is zero)
+    
     if ( mpImplFont->mnRefCount && bRefIncrementable )
         mpImplFont->mnRefCount++;
 }
@@ -273,8 +273,8 @@ Font::Font( FontFamily eFamily, const Size& rSize )
 Font::~Font()
 {
 
-    // decrement reference counter and delete if last reference
-    // if the object is not static (Refcounter==0)
+    
+    
     if ( mpImplFont->mnRefCount )
     {
         if ( mpImplFont->mnRefCount == 1 )
@@ -567,13 +567,13 @@ Font& Font::operator=( const Font& rFont )
     bool bRefIncrementable = rFont.mpImplFont->mnRefCount < ::std::numeric_limits<FontRefCount>::max();
     DBG_ASSERT( bRefIncrementable, "Font: RefCount overflow" );
 
-    // Increment RefCount first, so that we can reference ourselves
-    // RefCount == 0 for static objects
+    
+    
     if ( rFont.mpImplFont->mnRefCount && bRefIncrementable )
         rFont.mpImplFont->mnRefCount++;
 
-    // If it's not static ImplData and if it's the last reference, delete it
-    // else decrement RefCount
+    
+    
     if ( mpImplFont->mnRefCount )
     {
         if ( mpImplFont->mnRefCount == 1 )
@@ -601,12 +601,12 @@ void Font::Merge( const Font& rFont )
         SetCharSet( GetCharSet() );
         SetLanguageTag( rFont.GetLanguageTag() );
         SetCJKContextLanguageTag( rFont.GetCJKContextLanguageTag() );
-        // don't use access methods here, might lead to AskConfig(), if DONTKNOW
+        
         SetFamily( rFont.mpImplFont->meFamily );
         SetPitch( rFont.mpImplFont->mePitch );
     }
 
-    // don't use access methods here, might lead to AskConfig(), if DONTKNOW
+    
     if ( rFont.mpImplFont->meWeight != WEIGHT_DONTKNOW )
         SetWeight( rFont.GetWeight() );
     if ( rFont.mpImplFont->meItalic != ITALIC_DONTKNOW )
@@ -633,7 +633,7 @@ void Font::Merge( const Font& rFont )
         SetWordLineMode( rFont.IsWordLineMode() );
     }
 
-    // Defaults?
+    
     SetOrientation( rFont.GetOrientation() );
     SetVertical( rFont.IsVertical() );
     SetEmphasisMark( rFont.GetEmphasisMark() );
@@ -694,8 +694,8 @@ SvStream& ReadImpl_Font( SvStream& rIStm, Impl_Font& rImpl_Font )
     {
         rIStm.ReadUInt16( nTmp16 ); rImpl_Font.meOverline = (FontUnderline) nTmp16;
     }
-    // Relief
-    // CJKContextLanguage
+    
+    
 
     return rIStm;
 }
@@ -724,13 +724,13 @@ SvStream& WriteImpl_Font( SvStream& rOStm, const Impl_Font& rImpl_Font )
     rOStm.WriteUChar( rImpl_Font.mbShadow );
     rOStm.WriteUChar( (sal_uInt8) rImpl_Font.mnKerning );
 
-    // new in version 2
+    
     rOStm.WriteUChar( (sal_uInt8)        rImpl_Font.meRelief );
     rOStm.WriteUInt16( (sal_uInt16)   rImpl_Font.maCJKLanguageTag.getLanguageType( false) );
     rOStm.WriteUChar( rImpl_Font.mbVertical );
     rOStm.WriteUInt16( (sal_uInt16)   rImpl_Font.meEmphasisMark );
 
-    // new in version 3
+    
     rOStm.WriteUInt16( (sal_uInt16) rImpl_Font.meOverline );
 
     return rOStm;
@@ -757,12 +757,12 @@ namespace
         {
             TTGlobalFontInfo aInfo;
             GetTTGlobalFontInfo( pTTF, &aInfo );
-            // most importantly: the family name
+            
             if( aInfo.ufamily )
                 o_rResult.SetName( aInfo.ufamily );
             else if( aInfo.family )
                 o_rResult.SetName( OStringToOUString( aInfo.family, RTL_TEXTENCODING_ASCII_US ) );
-            // set weight
+            
             if( aInfo.weight )
             {
                 if( aInfo.weight < FW_EXTRALIGHT )
@@ -786,7 +786,7 @@ namespace
             }
             else
                 o_rResult.SetWeight( (aInfo.macStyle & 1) ? WEIGHT_BOLD : WEIGHT_NORMAL );
-            // set width
+            
             if( aInfo.width )
             {
                 if( aInfo.width == FWIDTH_ULTRA_CONDENSED )
@@ -808,21 +808,21 @@ namespace
                 else if( aInfo.width >= FWIDTH_ULTRA_EXPANDED )
                     o_rResult.SetWidth( WIDTH_ULTRA_EXPANDED );
             }
-            // set italic
+            
             o_rResult.SetItalic( (aInfo.italicAngle != 0) ? ITALIC_NORMAL : ITALIC_NONE );
 
-            // set pitch
+            
             o_rResult.SetPitch( (aInfo.pitch == 0) ? PITCH_VARIABLE : PITCH_FIXED );
 
-            // set style name
+            
             if( aInfo.usubfamily )
                 o_rResult.SetStyleName( OUString( aInfo.usubfamily ) );
             else if( aInfo.subfamily )
                 o_rResult.SetStyleName( OUString::createFromAscii( aInfo.subfamily ) );
 
-            // cleanup
+            
             CloseTTFont( pTTF );
-            // success
+            
             bResult = true;
         }
         return bResult;
@@ -856,18 +856,18 @@ namespace
     bool identifyType1Font( const char* i_pBuffer, sal_uInt32 i_nSize, Font& o_rResult )
     {
         bool bResult = false;
-        // might be a type1, find eexec
+        
         const char* pStream = i_pBuffer;
         const char* pExec = "eexec";
         const char* pExecPos = std::search( pStream, pStream+i_nSize, pExec, pExec+5 );
         if( pExecPos != pStream+i_nSize)
         {
-            // find /FamilyName entry
+            
             static const char* pFam = "/FamilyName";
             const char* pFamPos = std::search( pStream, pExecPos, pFam, pFam+11 );
             if( pFamPos != pExecPos )
             {
-                // extract the string value behind /FamilyName
+                
                 const char* pOpen = pFamPos+11;
                 while( pOpen < pExecPos && *pOpen != '(' )
                     pOpen++;
@@ -880,7 +880,7 @@ namespace
                 }
             }
 
-            // parse /ItalicAngle
+            
             static const char* pItalic = "/ItalicAngle";
             const char* pItalicPos = std::search( pStream, pExecPos, pItalic, pItalic+12 );
             if( pItalicPos != pExecPos )
@@ -889,12 +889,12 @@ namespace
                 o_rResult.SetItalic( (nItalic != 0) ? ITALIC_NORMAL : ITALIC_NONE );
             }
 
-            // parse /Weight
+            
             static const char* pWeight = "/Weight";
             const char* pWeightPos = std::search( pStream, pExecPos, pWeight, pWeight+7 );
             if( pWeightPos != pExecPos )
             {
-                // extract the string value behind /Weight
+                
                 const char* pOpen = pWeightPos+7;
                 while( pOpen < pExecPos && *pOpen != '(' )
                     pOpen++;
@@ -914,12 +914,12 @@ namespace
                 }
             }
 
-            // parse isFixedPitch
+            
             static const char* pFixed = "/isFixedPitch";
             const char* pFixedPos = std::search( pStream, pExecPos, pFixed, pFixed+13 );
             if( pFixedPos != pExecPos )
             {
-                // skip whitespace
+                
                 while( pFixedPos < pExecPos-4 &&
                        ( *pFixedPos == ' '  ||
                          *pFixedPos == '\t' ||
@@ -928,7 +928,7 @@ namespace
                 {
                     pFixedPos++;
                 }
-                // find "true" value
+                
                 if( rtl_str_compareIgnoreAsciiCase_WithLength( pFixedPos, 4, "true", 4 ) == 0 )
                     o_rResult.SetPitch( PITCH_FIXED );
                 else
@@ -955,7 +955,7 @@ Font Font::identifyFont( const void* i_pBuffer, sal_uInt32 i_nSize )
     return aResult;
 }
 
-// The inlines from the font.hxx header are now instantiated for pImpl-ification
+
 const Color& Font::GetColor() const { return mpImplFont->maColor; }
 
 const Color& Font::GetFillColor() const { return mpImplFont->maFillColor; }

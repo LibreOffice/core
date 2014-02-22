@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -116,7 +116,7 @@ public:
                             SvXMLImportEventListener(SvXMLImport* pImport);
     virtual                 ~SvXMLImportEventListener();
 
-                            // XEventListener
+                            
     virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(::com::sun::star::uno::RuntimeException);
 };
 
@@ -129,7 +129,7 @@ SvXMLImportEventListener::~SvXMLImportEventListener()
 {
 }
 
-// XEventListener
+
 void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
     throw(uno::RuntimeException)
 {
@@ -196,7 +196,7 @@ getBuildIdsProperty(uno::Reference<beans::XPropertySet> const& xImportInfo)
                                 SAL_INFO_IF('4' != loVersion[0], "xmloff.core", "unknown LO version: " << loVersion);
                                 mnGeneratorVersion = SvXMLImport::LO_4x;
                             }
-                            return; // ignore buildIds
+                            return; 
                         }
                     }
                 }
@@ -255,16 +255,16 @@ public:
     INetURLObject aBaseURL;
     INetURLObject aDocBase;
 
-    /// name of stream in package, e.g., "content.xml"
+    
     OUString mStreamName;
 
     OUString aODFVersion;
 
     bool mbIsOOoXML;
 
-    // Boolean, indicating that position attributes
-    // of shapes are given in horizontal left-to-right layout. This is the case
-    // for the OpenOffice.org file format. (#i28749#)
+    
+    
+    
     sal_Bool mbShapePositionInHoriL2R;
     sal_Bool mbTextDocInOOoFileFormat;
 
@@ -284,13 +284,13 @@ public:
         , mbOwnGraphicResolver( false )
         , mbOwnEmbeddedResolver( false )
         , mbIsOOoXML(false)
-        // Convert drawing object positions from OOo file format to OASIS (#i28749#)
+        
         , mbShapePositionInHoriL2R( sal_False )
         , mbTextDocInOOoFileFormat( sal_False )
         , mxComponentContext( rxContext )
         , implementationName(theImplementationName)
-        , mpRDFaHelper() // lazy
-        , mpDocumentInfo() // lazy
+        , mpRDFaHelper() 
+        , mpDocumentInfo() 
     {
         SAL_WARN_IF(!mxComponentContext.is(), "xmloff.core", "SvXMLImport: no ComponentContext");
         if (!mxComponentContext.is()) throw uno::RuntimeException();
@@ -330,7 +330,7 @@ void SvXMLImport::_InitCtor()
 {
     if( mnImportFlags != 0 )
     {
-        // implicit "xml" namespace prefix
+        
         mpNamespaceMap->Add( GetXMLToken(XML_XML), GetXMLToken(XML_N_XML), XML_NAMESPACE_XML );
         mpNamespaceMap->Add( OUString( sXML_np__office ), GetXMLToken(XML_N_OFFICE), XML_NAMESPACE_OFFICE );
         mpNamespaceMap->Add( OUString( sXML_np__office_ext ), GetXMLToken(XML_N_OFFICE_EXT), XML_NAMESPACE_OFFICE_EXT );
@@ -428,11 +428,11 @@ SvXMLImport::~SvXMLImport() throw ()
         delete mpContexts;
     }
 
-    //  #i9518# the import component might not be deleted until after the document has been closed,
-    //  so the stuff that accesses the document has been moved to endDocument.
+    
+    
 
-    //  pNumImport is allocated in the ctor, so it must also be deleted here in case the component
-    //  is created and deleted without actually importing.
+    
+    
     delete mpNumImport;
     delete mpProgressBarHelper;
 
@@ -448,13 +448,13 @@ namespace
     class theSvXMLImportUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvXMLImportUnoTunnelId> {};
 }
 
-// XUnoTunnel & co
+
 const uno::Sequence< sal_Int8 > & SvXMLImport::getUnoTunnelId() throw()
 {
     return theSvXMLImportUnoTunnelId::get().getSeq();
 }
 
-// XUnoTunnel
+
 sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException )
 {
@@ -481,7 +481,7 @@ void SAL_CALL SvXMLImport::startDocument( void )
                 {
                     mxGraphicResolver = Reference< XGraphicObjectResolver >::query(
                         xFactory->createInstance(
-                                // #99870# Import... instead of Export...
+                                
                                 "com.sun.star.document.ImportGraphicObjectResolver"));
                     mpImpl->mbOwnGraphicResolver = mxGraphicResolver.is();
                 }
@@ -490,7 +490,7 @@ void SAL_CALL SvXMLImport::startDocument( void )
                 {
                     mxEmbeddedResolver = Reference< XEmbeddedObjectResolver >::query(
                         xFactory->createInstance(
-                                // #99870# Import... instead of Export...
+                                
                                 "com.sun.star.document.ImportEmbeddedObjectResolver"));
                     mpImpl->mbOwnEmbeddedResolver = mxEmbeddedResolver.is();
                 }
@@ -508,8 +508,8 @@ void SAL_CALL SvXMLImport::endDocument()
           std::exception)
 {
     SAL_INFO( "xmloff.core", "} SvXMLImport::startDocument" );
-    //  #i9518# All the stuff that accesses the document has to be done here, not in the dtor,
-    //  because the SvXMLImport dtor might not be called until after the document has been closed.
+    
+    
 
     if (mpImpl->mpRDFaHelper.get())
     {
@@ -549,7 +549,7 @@ void SAL_CALL SvXMLImport::endDocument()
                 }
                 if (xPropertySetInfo->hasPropertyByName(sRepeat))
                     mxImportInfo->setPropertyValue(sRepeat, cppu::bool2any(mpProgressBarHelper->GetRepeat()));
-                // pProgressBarHelper is deleted in dtor
+                
             }
             OUString sNumberStyles(XML_NUMBERSTYLES);
             if (mxNumberStyles.is() && xPropertySetInfo->hasPropertyByName(sNumberStyles))
@@ -570,13 +570,13 @@ void SAL_CALL SvXMLImport::endDocument()
     if( mxMasterStyles.Is() )
         ((SvXMLStylesContext *)&mxMasterStyles)->Clear();
 
-    // possible form-layer related knittings which can only be done when
-    // the whole document exists
+    
+    
     if ( mxFormImport.is() )
         mxFormImport->documentDone();
 
-    //  The shape import helper does the z-order sorting in the dtor,
-    //  so it must be deleted here, too.
+    
+    
     mxShapeImport = NULL;
 
     if( mpImpl->mbOwnGraphicResolver )
@@ -607,9 +607,9 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     throw(xml::sax::SAXException, uno::RuntimeException)
 {
     SvXMLNamespaceMap *pRewindMap = 0;
-    //    SAL_INFO("svg", "startElement " << rName);
-    // Process namespace attributes. This must happen before creating the
-    // context, because namespace decaration apply to the element name itself.
+    
+    
+    
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -618,7 +618,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         {
             mpImpl->aODFVersion = xAttrList->getValueByIndex( i );
 
-            // the ODF version in content.xml and manifest.xml must be the same starting from ODF1.2
+            
             if ( mpImpl->mStreamName == "content.xml" && !IsODFVersionConsistent( mpImpl->aODFVersion ) )
             {
                 throw xml::sax::SAXException("Inconsistent ODF versions in content.xml and manifest.xml!",
@@ -642,30 +642,30 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
             OUString aPrefix( ( rAttrName.getLength() == 5 )
                                  ? OUString()
                                  : rAttrName.copy( 6 ) );
-            // Add namespace, but only if it is known.
+            
             sal_uInt16 nKey = mpNamespaceMap->AddIfKnown( aPrefix, rAttrValue );
-            // If namespace is unknown, try to match a name with similar
-            // TC Id an version
+            
+            
             if( XML_NAMESPACE_UNKNOWN == nKey  )
             {
                 OUString aTestName( rAttrValue );
                 if( SvXMLNamespaceMap::NormalizeURI( aTestName ) )
                     nKey = mpNamespaceMap->AddIfKnown( aPrefix, aTestName );
             }
-            // If that namespace is not known, too, add it as unknown
+            
             if( XML_NAMESPACE_UNKNOWN == nKey  )
                 mpNamespaceMap->Add( aPrefix, rAttrValue );
 
         }
     }
 
-    // Get element's namespace and local name.
+    
     OUString aLocalName;
     sal_uInt16 nPrefix =
         mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
 
-    // If there are contexts already, call a CreateChildContext at the topmost
-    // context. Otherwise, create a default context.
+    
+    
     SvXMLImportContext *pContext;
     sal_uInt16 nCount = mpContexts->size();
     if( nCount > 0 )
@@ -698,14 +698,14 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
 
     pContext->AddRef();
 
-    // Remember old namespace map.
+    
     if( pRewindMap )
         pContext->SetRewindMap( pRewindMap );
 
-    // Call a startElement at the new context.
+    
     pContext->StartElement( xAttrList );
 
-    // Push context on stack.
+    
     mpContexts->push_back( pContext );
 }
 
@@ -720,12 +720,12 @@ rName
     SAL_WARN_IF( nCount == 0, "xmloff.core", "SvXMLImport::endElement: no context left" );
     if( nCount > 0 )
     {
-        // Get topmost context and remove it from the stack.
+        
         SvXMLImportContext *pContext = mpContexts->back();
         mpContexts->pop_back();
 
 #ifdef DBG_UTIL
-        // Non product only: check if endElement call matches startELement call.
+        
         OUString aLocalName;
         sal_uInt16 nPrefix =
             mpNamespaceMap->GetKeyByAttrName( rName, &aLocalName );
@@ -733,17 +733,17 @@ rName
         SAL_WARN_IF( pContext->GetLocalName() != aLocalName, "xmloff.core", "SvXMLImport::endElement: popped context has wrong lname" );
 #endif
 
-        // Call a EndElement at the current context.
+        
         pContext->EndElement();
 
-        // Get a namespace map to rewind.
+        
         SvXMLNamespaceMap *pRewindMap = pContext->GetRewindMap();
 
-        // Delete the current context.
+        
         pContext->ReleaseRef();
         pContext = 0;
 
-        // Rewind a namespace map.
+        
         if( pRewindMap )
         {
             delete mpNamespaceMap;
@@ -778,7 +778,7 @@ void SAL_CALL SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::X
     mxLocator = rLocator;
 }
 
-// XExtendedDocumentHandler
+
 void SAL_CALL SvXMLImport::startCDATA( void ) throw(xml::sax::SAXException, uno::RuntimeException)
 {
 }
@@ -808,7 +808,7 @@ void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
     GetProgressBarHelper()->SetReference(0);
 }
 
-// XImporter
+
 void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -848,7 +848,7 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     }
 }
 
-// XFilter
+
 sal_Bool SAL_CALL SvXMLImport::filter( const uno::Sequence< beans::PropertyValue >& )
     throw (uno::RuntimeException)
 {
@@ -860,7 +860,7 @@ void SAL_CALL SvXMLImport::cancel(  )
 {
 }
 
-// XInitialize
+
 void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
@@ -944,8 +944,8 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                         mpImpl->aBaseURL.insertName( sRelPath );
                     mpImpl->aBaseURL.insertName( sName );
                 }
-                mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
-                // Retrieve property <ShapePositionInHoriL2R> (#i28749#)
+                mpImpl->mStreamName = sName; 
+                
                 sPropName = "ShapePositionInHoriL2R";
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
@@ -967,7 +967,7 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
     }
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SvXMLImport::getImplementationName()
     throw(uno::RuntimeException)
 {
@@ -1010,7 +1010,7 @@ SchXMLImportHelper* SvXMLImport::CreateChartImport()
 }
 
 //
-// Get or create fill/line/lineend-style-helper
+
 //
 
 const Reference< container::XNameContainer > & SvXMLImport::GetGradientHelper()
@@ -1154,42 +1154,42 @@ const Reference< container::XNameContainer > & SvXMLImport::GetDashHelper()
 sal_Bool SvXMLImport::IsPackageURL( const OUString& rURL ) const
 {
 
-    // if, and only if, only parts are imported, then we're in a package
+    
     const sal_uInt32 nTest = IMPORT_META|IMPORT_STYLES|IMPORT_CONTENT|IMPORT_SETTINGS;
     if( (mnImportFlags & nTest) == nTest )
         return sal_False;
 
-    // Some quick tests: Some may rely on the package structure!
+    
     sal_Int32 nLen = rURL.getLength();
     if( (nLen > 0 && '/' == rURL[0]) )
-        // RFC2396 net_path or abs_path
+        
         return sal_False;
     else if( nLen > 1 && '.' == rURL[0] )
     {
         if( '.' == rURL[1] )
-            // ../: We are never going up one level, so we know
-            // it's not an external URI
+            
+            
             return sal_False;
         else if( '/' == rURL[1] )
-            // we are remaining on a level, so it's an package URI
+            
             return sal_True;
     }
 
-    // Now check for a RFC2396 schema
+    
     sal_Int32 nPos = 1;
     while( nPos < nLen )
     {
         switch( rURL[nPos] )
         {
         case '/':
-            // a relative path segement
+            
             return sal_True;
         case ':':
-            // a schema
+            
             return sal_False;
         default:
             break;
-            // we don't care about any other characters
+            
         }
         ++nPos;
     }
@@ -1445,8 +1445,8 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
 {
     if (!mpEventImportHelper)
     {
-        // construct event helper and register StarBasic handler and standard
-        // event tables
+        
+        
         mpEventImportHelper = new XMLEventImportHelper();
         OUString sStarBasic(GetXMLToken(XML_STARBASIC));
         mpEventImportHelper->RegisterFactory(sStarBasic,
@@ -1456,7 +1456,7 @@ XMLEventImportHelper& SvXMLImport::GetEventImport()
                                             new XMLScriptContextFactory());
         mpEventImportHelper->AddTranslationTable(aStandardEventTable);
 
-        // register StarBasic event handler with capitalized spelling
+        
         OUString sStarBasicCap( "StarBasic" );
         mpEventImportHelper->RegisterFactory(sStarBasicCap,
                                             new XMLStarBasicContextFactory());
@@ -1559,20 +1559,20 @@ OUString SvXMLImport::GetAbsoluteReference(const OUString& rValue) const
 
 sal_Bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
 {
-    // the check returns sal_False only if the storage version could be retrieved
+    
     sal_Bool bResult = sal_True;
 
     if ( !aODFVersion.isEmpty() && aODFVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
     {
-        // check the consistency only for the ODF1.2 and later ( according to content.xml )
-        // manifest.xml might have no version, it should be checked here and the correct version should be set
+        
+        
         try
         {
             uno::Reference< document::XStorageBasedDocument > xDoc( mxModel, uno::UNO_QUERY_THROW );
             uno::Reference< embed::XStorage > xStor = xDoc->getDocumentStorage();
             uno::Reference< beans::XPropertySet > xStorProps( xStor, uno::UNO_QUERY_THROW );
 
-            // the check should be done only for OASIS format
+            
             if (!IsOOoXML())
             {
                 sal_Bool bRepairPackage = sal_False;
@@ -1583,17 +1583,17 @@ sal_Bool SvXMLImport::IsODFVersionConsistent( const OUString& aODFVersion )
                 } catch ( uno::Exception& )
                 {}
 
-                // check only if not in Repair mode
+                
                 if ( !bRepairPackage )
                 {
                     OUString aStorVersion;
                     xStorProps->getPropertyValue( "Version" )
                         >>= aStorVersion;
 
-                    // if the storage version is set in manifest.xml, it must be the same as in content.xml
-                    // if not, set it explicitly to be used further ( it will work even for readonly storage )
-                    // This workaround is not nice, but I see no other way to handle it, since there are
-                    // ODF1.2 documents without version in manifest.xml
+                    
+                    
+                    
+                    
                     if ( !aStorVersion.isEmpty() )
                         bResult = aODFVersion.equals( aStorVersion );
                     else
@@ -1676,7 +1676,7 @@ void SvXMLImport::SetError(
     const OUString& rExceptionMessage,
     const Reference<xml::sax::XLocator>& rLocator )
 {
-    // maintain error flags
+    
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
         mnErrorFlags |= ERROR_ERROR_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
@@ -1684,12 +1684,12 @@ void SvXMLImport::SetError(
     if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
         mnErrorFlags |= ERROR_DO_NOTHING;
 
-    // create error list on demand
+    
     if ( mpXMLErrors == NULL )
         mpXMLErrors = new XMLErrors();
 
-    // save error information
-    // use document locator (if none supplied)
+    
+    
     mpXMLErrors->AddRecord( nId, rMsgParams, rExceptionMessage,
                            rLocator.is() ? rLocator : mxLocator );
 }
@@ -1772,7 +1772,7 @@ OUString SvXMLImport::GetStreamName() const
     return mpImpl->mStreamName;
 }
 
-// Convert drawing object positions from OOo file format to OASIS (#i28749#)
+
 sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
 {
     return mpImpl->mbShapePositionInHoriL2R;
@@ -1785,7 +1785,7 @@ sal_Bool SvXMLImport::IsTextDocInOOoFileFormat() const
 
 void SvXMLImport::initXForms()
 {
-    // dummy method; to be implemented by derived classes supporting XForms
+    
 }
 
 bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
@@ -1810,9 +1810,9 @@ bool SvXMLImport::getBuildIds( sal_Int32& rUPD, sal_Int32& rBuild ) const
 
 sal_uInt16 SvXMLImport::getGeneratorVersion() const
 {
-    // --> ORW
+    
     return mpImpl->getGeneratorVersion( *this );
-    // <--
+    
 }
 
 bool SvXMLImport::isGeneratorVersionOlderThan(
@@ -1841,7 +1841,7 @@ bool SvXMLImport::IsOOoXML() const
     return mpImpl->mbIsOOoXML;
 }
 
-// xml:id for RDF metadata
+
 void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
     OUString const & i_rXmlId)
 {
@@ -1849,13 +1849,13 @@ void SvXMLImport::SetXmlId(uno::Reference<uno::XInterface> const & i_xIfc,
         try {
             const uno::Reference<rdf::XMetadatable> xMeta(i_xIfc,
                 uno::UNO_QUERY);
-//FIXME: not yet
+
             if (xMeta.is()) {
                 const beans::StringPair mdref( GetStreamName(), i_rXmlId );
                 try {
                     xMeta->setMetadataReference(mdref);
                 } catch (lang::IllegalArgumentException &) {
-                    // probably duplicate; ignore
+                    
                     SAL_INFO("xmloff.core", "SvXMLImport::SetXmlId: cannot set xml:id");
                 }
             }
@@ -1882,8 +1882,8 @@ SvXMLImport::AddRDFa(uno::Reference<rdf::XMetadatable> i_xObject,
     OUString const & i_rContent,
     OUString const & i_rDatatype)
 {
-    // N.B.: we only get called if i_xObject had xhtml:about attribute
-    // (an empty attribute value is valid)
+    
+    
     ::xmloff::RDFaImportHelper & rRDFaHelper( GetRDFaImportHelper() );
     rRDFaHelper.ParseAndAddRDFa(i_xObject,
         i_rAbout, i_rProperty, i_rContent, i_rDatatype);

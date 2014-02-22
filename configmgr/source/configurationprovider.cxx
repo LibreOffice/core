@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -209,8 +209,8 @@ Service::createInstanceWithArguments(
             name = v2.Name;
             value = v2.Value;
         } else if (Arguments.getLength() == 1 && (Arguments[i] >>= nodepath)) {
-            // For backwards compatibility, allow a single string argument that
-            // denotes nodepath.
+            
+            
             if (nodepath.isEmpty()) {
                 badNodePath();
             }
@@ -221,8 +221,8 @@ Service::createInstanceWithArguments(
                  " NamedValue or PropertyValue arguments"),
                 0);
         }
-        // For backwards compatibility, allow "nodepath" and "Locale" in any
-        // case:
+        
+        
         if (name.equalsIgnoreAsciiCase("nodepath")) {
             if (!nodepath.isEmpty() || !(value >>= nodepath) ||
                 nodepath.isEmpty())
@@ -243,13 +243,13 @@ Service::createInstanceWithArguments(
     if (nodepath.isEmpty()) {
         badNodePath();
     }
-    // For backwards compatibility, allow a nodepath that misses the leading
-    // slash:
+    
+    
     if (nodepath[0] != '/') {
         nodepath = "/" + nodepath;
     }
     if (locale.isEmpty()) {
-        //TODO: should the Access use the dynamically changing locale_ instead?
+        
         locale = locale_;
         if (locale.isEmpty()) {
             locale = "en-US";
@@ -290,7 +290,7 @@ css::uno::Sequence< OUString > Service::getAvailableServiceNames()
 }
 
 void Service::refresh() throw (css::uno::RuntimeException) {
-    //TODO
+    
     cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
         cppu::UnoType< css::util::XRefreshListener >::get());
     if (cont != 0) {
@@ -435,8 +435,8 @@ Factory::createInstanceWithArgumentsAndContext(
                      " expects NamedValue or PropertyValue arguments"),
                     0);
             }
-            // For backwards compatibility, allow "Locale" and (ignored)
-            // "EnableAsync" in any case:
+            
+            
             if (name.equalsIgnoreAsciiCase("locale")) {
                 if (!locale.isEmpty() || !(value >>= locale) ||
                     locale.isEmpty())

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <config_features.h>
@@ -72,12 +72,12 @@ FormulaGroupContext::ColArray* FormulaGroupContext::getCachedColArray( SCTAB nTa
 {
     ColArraysType::iterator itColArray = maColArrays.find(ColKey(nTab, nCol));
     if (itColArray == maColArrays.end())
-        // Not cached for this column.
+        
         return NULL;
 
     ColArray& rCached = itColArray->second;
     if (nSize > rCached.mnSize)
-        // Cached data array is not long enough for the requested range.
+        
         return NULL;
 
     return &rCached;
@@ -94,13 +94,13 @@ FormulaGroupContext::ColArray* FormulaGroupContext::setCachedColArray(
                 ColArraysType::value_type(ColKey(nTab, nCol), ColArray(pNumArray, pStrArray)));
 
         if (!r.second)
-            // Somehow the insertion failed.
+            
             return NULL;
 
         return &r.first->second;
     }
 
-    // Prior array exists for this column. Overwrite it.
+    
     ColArray& rArray = it->second;
     rArray = ColArray(pNumArray, pStrArray);
     return &rArray;
@@ -145,7 +145,7 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, size_t nLen )
         if (!rtl::math::isNan(*pNum))
         {
             if (!pNumHead)
-                // Store the first non-NaN position.
+                
                 pNumHead = pNum;
 
             continue;
@@ -153,7 +153,7 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, size_t nLen )
 
         if (pNumHead)
         {
-            // Flush this non-NaN segment to the matrix.
+            
             rMat.PutDouble(pNumHead, pNum - pNumHead, nCol, pNumHead - pNums);
             pNumHead = NULL;
         }
@@ -161,7 +161,7 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, size_t nLen )
 
     if (pNumHead)
     {
-        // Flush last non-NaN segment to the matrix.
+        
         rMat.PutDouble(pNumHead, pNum - pNumHead, nCol, pNumHead - pNums);
     }
 }
@@ -188,7 +188,7 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
         if (*p)
         {
             if (!pHead)
-                // Store the first non-empty string position.
+                
                 pHead = p;
 
             continue;
@@ -196,7 +196,7 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
 
         if (pHead)
         {
-            // Flush this non-empty segment to the matrix.
+            
             flushStrSegment(rMat, nCol, pHead, p, pStrs);
             pHead = NULL;
         }
@@ -204,7 +204,7 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, rtl_uString** pStrs, size_t nLen )
 
     if (pHead)
     {
-        // Flush last non-empty segment to the matrix.
+        
         flushStrSegment(rMat, nCol, pHead, p, pStrs);
     }
 }
@@ -227,52 +227,52 @@ void fillMatrix( ScMatrix& rMat, size_t nCol, const double* pNums, rtl_uString**
     {
         if (*pStr)
         {
-            // String cell exists.
+            
 
             if (pNumHead)
             {
-                // Flush this numeric segment to the matrix.
+                
                 rMat.PutDouble(pNumHead, pNum - pNumHead, nCol, pNumHead - pNums);
                 pNumHead = NULL;
             }
 
             if (!pStrHead)
-                // Store the first non-empty string position.
+                
                 pStrHead = pStr;
 
             continue;
         }
 
-        // No string cell. Check the numeric cell value.
+        
 
         if (pStrHead)
         {
-            // Flush this non-empty string segment to the matrix.
+            
             flushStrSegment(rMat, nCol, pStrHead, pStr, pStrs);
             pStrHead = NULL;
         }
 
         if (!rtl::math::isNan(*pNum))
         {
-            // Numeric cell exists.
+            
             if (!pNumHead)
-                // Store the first non-NaN position.
+                
                 pNumHead = pNum;
 
             continue;
         }
 
-        // Empty cell. No action required.
+        
     }
 
     if (pStrHead)
     {
-        // Flush the last non-empty segment to the matrix.
+        
         flushStrSegment(rMat, nCol, pStrHead, pStr, pStrs);
     }
     else if (pNumHead)
     {
-        // Flush the last numeric segment to the matrix.
+        
         rMat.PutDouble(pNumHead, pNum - pNumHead, nCol, pNumHead - pNums);
     }
 }
@@ -302,10 +302,10 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 {
     typedef boost::unordered_map<const formula::FormulaToken*, formula::FormulaTokenRef> CachedTokensType;
 
-    // Decompose the group into individual cells and calculate them individually.
+    
 
-    // The caller must ensure that the top position is the start position of
-    // the group.
+    
+    
 
     ScAddress aTmpPos = rTopPos;
     std::vector<formula::FormulaTokenRef> aResults;
@@ -323,7 +323,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
             CachedTokensType::iterator it = aCachedTokens.find(p);
             if (it != aCachedTokens.end())
             {
-                // This token is cached. Use the cached one.
+                
                 aCode2.AddToken(*it->second);
                 continue;
             }
@@ -340,7 +340,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                     if (static_cast<size_t>(i) < p2->GetArrayLength())
                     {
                         if (rArray.mpStringArray)
-                            // See if the cell is of string type.
+                            
                             pStr = rArray.mpStringArray[i];
 
                         if (!pStr && rArray.mpNumericArray)
@@ -348,13 +348,13 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                     }
 
                     if (pStr)
-                        // This is a string cell.
+                        
                         aCode2.AddString(OUString(pStr));
                     else if (rtl::math::isNan(fVal))
-                        // Value of NaN represents an empty cell.
+                        
                         aCode2.AddToken(ScEmptyCellToken(false, false));
                     else
-                        // Numeric cell.
+                        
                         aCode2.AddDouble(fVal);
                 }
                 break;
@@ -372,10 +372,10 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 
                     size_t nDataRowEnd = p2->GetArrayLength() - 1;
                     if (nRowStart > nDataRowEnd)
-                        // Referenced rows are all empty.
+                        
                         nRowSize = 0;
                     else if (nRowEnd > nDataRowEnd)
-                        // Data array is shorter than the row size of the reference. Truncate it to the data.
+                        
                         nRowSize -= nRowEnd - nDataRowEnd;
 
                     for (size_t nCol = 0; nCol < nColSize; ++nCol)
@@ -385,7 +385,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         {
                             if (rArray.mpNumericArray)
                             {
-                                // Mixture of string and numeric values.
+                                
                                 const double* pNums = rArray.mpNumericArray;
                                 pNums += nRowStart;
                                 rtl_uString** pStrs = rArray.mpStringArray;
@@ -394,7 +394,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                             }
                             else
                             {
-                                // String cells only.
+                                
                                 rtl_uString** pStrs = rArray.mpStringArray;
                                 pStrs += nRowStart;
                                 fillMatrix(*pMat, nCol, pStrs, nRowSize);
@@ -402,7 +402,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
                         }
                         else if (rArray.mpNumericArray)
                         {
-                            // Numeric cells only.
+                            
                             const double* pNums = rArray.mpNumericArray;
                             pNums += nRowStart;
                             fillMatrix(*pMat, nCol, pNums, nRowSize);
@@ -411,7 +411,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
 
                     if (p2->IsStartFixed() && p2->IsEndFixed())
                     {
-                        // Cached the converted token for absolute range referene.
+                        
                         ScComplexRefData aRef;
                         ScRange aRefRange = rTopPos;
                         aRefRange.aEnd.SetRow(rTopPos.Row() + nRowEnd);
@@ -441,7 +441,7 @@ bool FormulaGroupInterpreterSoftware::interpret(ScDocument& rDoc, const ScAddres
         ScInterpreter aInterpreter(pDest, &rDoc, aTmpPos, aCode2);
         aInterpreter.Interpret();
         aResults.push_back(aInterpreter.GetResultToken());
-    } // for loop end (xGroup->mnLength)
+    } 
 
     if (!aResults.empty())
         rDoc.SetFormulaResults(rTopPos, &aResults[0], aResults.size());
@@ -475,7 +475,7 @@ public:
     {
         (void)rCode;
 
-        // Write simple data back into the sheet
+        
         if (meMode == WRITE_OUTPUT)
         {
             double *pDoubles = new double[xGroup->mnLength];
@@ -520,7 +520,7 @@ osl::Module* getOpenCLModule()
 {
     static osl::Module aModule;
     if (aModule.is())
-        // Already loaded.
+        
         return &aModule;
 
     OUString aLibName(SVLIBRARY("scopencl"));
@@ -533,7 +533,7 @@ osl::Module* getOpenCLModule()
 
 #endif
 
-/// load and/or configure the correct formula group interpreter
+
 FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
 {
 #if USE_DUMMY_INTERPRETER
@@ -550,7 +550,7 @@ FormulaGroupInterpreter *FormulaGroupInterpreter::getStatic()
         if (rConfig.mbOpenCLEnabled)
             switchOpenCLDevice(rConfig.maOpenCLDevice, rConfig.mbOpenCLAutoSelect, false);
 
-        if ( !msInstance ) // software fallback
+        if ( !msInstance ) 
         {
             fprintf(stderr, "Create S/W interp\n");
             msInstance = new sc::FormulaGroupInterpreterSoftware();
@@ -604,7 +604,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
     {
         if(msInstance)
         {
-            // if we already have a software interpreter don't delete it
+            
             if(dynamic_cast<sc::FormulaGroupInterpreterSoftware*>(msInstance))
                 return true;
 
@@ -646,7 +646,7 @@ bool FormulaGroupInterpreter::switchOpenCLDevice(const OUString& rDeviceId, bool
         msInstance = createFormulaGroupOpenCLInterpreter();
         return msInstance != NULL;
 #else
-        // Dynamically load scopencl shared object, and instantiate the opencl interpreter.
+        
         bSuccess = false;
         fn = pModule->getFunctionSymbol("createFormulaGroupOpenCLInterpreter");
         if (fn)
@@ -705,6 +705,6 @@ void FormulaGroupInterpreter::enableOpenCL(bool bEnable)
     ScInterpreter::SetGlobalConfig(aConfig);
 }
 
-} // namespace sc
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

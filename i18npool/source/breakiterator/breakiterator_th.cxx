@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <breakiterator_th.hxx>
@@ -28,9 +28,9 @@ using namespace ::rtl;
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-//  ----------------------------------------------------
-//  class Breakiterator_th
-//  ----------------------------------------------------;
+
+
+
 BreakIterator_th::BreakIterator_th()
 {
     cBreakIterator = "com.sun.star.i18n.BreakIterator_th";
@@ -47,33 +47,33 @@ BreakIterator_th::~BreakIterator_th()
  * cell composition states
  */
 
-#define ST_COM  1   // Compose the following character with leading char and display in the same cell
-#define ST_NXT  2   // display the following character in the next cell
-#define ST_NDP  3   // non-display
+#define ST_COM  1   
+#define ST_NXT  2   
+#define ST_NDP  3   
 
 static const sal_Int16 thaiCompRel[MAX_CT][MAX_CT] = {
-    //  C  N  C  L  F  F  F  B  B  B  T  A  A  A  A  A  A
-    //  T  O  O  V  V  V  V  V  V  D  O  D  D  D  V  V  V
-    //  R  N  N     1  2  3  1  2     N  1  2  3  1  2  3
-    //  L     S                       E
-    //  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // CTRL 0
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // NON  1
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM   }, // CONS 2
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // LV   3
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // FV1  4
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // FV2  5
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // FV3  6
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // BV1  7
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // BV2  8
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // BD   9
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // TONE 10
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AD1  11
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AD2  12
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AD3  13
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AV1  14
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, // AV2  15
-    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_NXT, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT   } // AV3  16
+    
+    
+    
+    
+    
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM, ST_COM   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT   }, 
+    {   ST_NDP, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_NXT, ST_COM, ST_NXT, ST_COM, ST_NXT, ST_NXT, ST_NXT, ST_NXT   } 
 
 };
 
@@ -102,7 +102,7 @@ static sal_Int32 SAL_CALL getACell(const sal_Unicode *text, sal_Int32 pos, sal_I
     return curr;
 }
 
-#define is_Thai(c)  (0x0e00 <= c && c <= 0x0e7f) // Unicode definition for Thai
+#define is_Thai(c)  (0x0e00 <= c && c <= 0x0e7f) 
 
 void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStartPos)
     throw(RuntimeException)
@@ -116,7 +116,7 @@ void SAL_CALL BreakIterator_th::makeIndex(const OUString& Text, sal_Int32 nStart
             nextCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
             previousCellIndex = (sal_Int32*) calloc(cellIndexSize, sizeof(sal_Int32));
         }
-        // reset nextCell for new Text
+        
         memset(nextCellIndex, 0, cellIndexSize * sizeof(sal_Int32));
     }
     else if (nStartPos >= Text.getLength() || nextCellIndex[nStartPos] > 0

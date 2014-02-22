@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DataSourceHelper.hxx"
@@ -112,7 +112,7 @@ void lcl_addErrorBarRanges(
     }
 }
 
-} // anonymous namespace
+} 
 
 Reference< chart2::data::XDataSource > DataSourceHelper::createDataSource(
         const Sequence< Reference< chart2::data::XLabeledDataSequence > >& rSequences )
@@ -230,7 +230,7 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
 {
     ::std::vector< Reference< chart2::data::XLabeledDataSequence > > aResultVector;
 
-    //categories are always the first sequence
+    
     Reference< chart2::XDiagram > xDiagram( xChartDoc->getFirstDiagram());
 
     if( bWithCategories )
@@ -245,13 +245,13 @@ uno::Reference< chart2::data::XDataSource > DataSourceHelper::pressUsedDataIntoR
         DataSeriesHelper::getDataSource( ContainerHelper::ContainerToSequence(xSeriesVector) ) );
     Sequence< Reference< chart2::data::XLabeledDataSequence > > aDataSeqences( xSeriesSource->getDataSequences() );
 
-    //the first x-values is always the next sequence //todo ... other x-values get lost for old format
+    
     Reference< chart2::data::XLabeledDataSequence > xXValues(
         DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-x" ) );
     if( xXValues.is() )
         aResultVector.push_back( xXValues );
 
-    //add all other sequences now without x-values
+    
     for( sal_Int32 nN=0; nN<aDataSeqences.getLength(); nN++ )
     {
         OUString aRole( DataSeriesHelper::GetRole( aDataSeqences[nN] ) );
@@ -540,6 +540,6 @@ Sequence< OUString > DataSourceHelper::getRangesFromDataSource( const Reference<
     return ContainerHelper::ContainerToSequence( aResult );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -98,7 +98,7 @@ void Imp_E3dView_InorderRun3DObjects(const SdrObject* pObj, sal_uInt32& rMask)
 
 SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/) const
 {
-    // Creating itemset with corresponding field
+    
     SfxItemSet aSet(
         pMod->GetItemPool(),
         SDRATTR_START,      SDRATTR_END,
@@ -109,15 +109,15 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/
 
     if(pInScene)
     {
-        // special scene
+        
         aSet.Put(pInScene->GetMergedItemSet());
     }
     else
     {
-        // get attributes from all selected objects
+        
         MergeAttrFromMarked(aSet, sal_False);
 
-        // calc flags for SID_ATTR_3D_INTERN
+        
         const SdrMarkList& rMarkList = GetMarkedObjectList();
         sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
 
@@ -128,26 +128,26 @@ SfxItemSet E3dView::Get3DAttributes(E3dScene* pInScene, sal_Bool /*bOnly3DAttr*/
         }
     }
 
-    // Set SID_ATTR_3D_INTERN on the status of the selected objects
+    
     aSet.Put(SfxUInt32Item(SID_ATTR_3D_INTERN, nSelectedItems));
 
-    // maintain default values
+    
     if(!nSelectedItems  && !pInScene)
     {
-        // Get defaults and apply
+        
         SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
         GetAttributes(aDefaultSet);
         aSet.Put(aDefaultSet);
 
-        // ... but no lines for 3D
+        
         aSet.Put(XLineStyleItem (XLINE_NONE));
 
-        // new defaults for distance and focal length
+        
         aSet.Put(Svx3DDistanceItem(100));
         aSet.Put(Svx3DFocalLengthItem(10000));
     }
 
-    // return ItemSet
+    
     return(aSet);
 }
 
@@ -161,13 +161,13 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_
     }
     else
     {
-        // #i94832# removed usage of E3DModifySceneSnapRectUpdater here.
-        // They are not needed here, they are already handled in SetAttrToMarked
+        
+        
 
-        // set at selected objects
+        
         SetAttrToMarked(rAttr, bReplaceAll);
 
-        // old run
+        
         const SdrMarkList& rMarkList = GetMarkedObjectList();
         const sal_uInt32 nMarkCnt(rMarkList.GetMarkCount());
 
@@ -178,10 +178,10 @@ void E3dView::Set3DAttributes( const SfxItemSet& rAttr, E3dScene* pInScene, sal_
         }
     }
 
-    // Maintain default values
+    
     if(!nSelectedItems && !pInScene)
     {
-        // Set defaults
+        
         SfxItemSet aDefaultSet(pMod->GetItemPool(), SDRATTR_3D_FIRST, SDRATTR_3D_LAST);
         aDefaultSet.Put(rAttr);
         SetAttributes(aDefaultSet);

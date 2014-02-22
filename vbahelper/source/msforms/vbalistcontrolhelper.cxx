@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vbalistcontrolhelper.hxx>
@@ -66,9 +66,9 @@ uno::Any ListPropListener::getValueEvent()
             throw uno::RuntimeException( "Bad row Index" , uno::Reference< uno::XInterface >() );
         aRet <<= sList[ nIndex ];
     }
-    else if ( m_pvarColumn.hasValue() ) // pvarColumn on its own would be bad
+    else if ( m_pvarColumn.hasValue() ) 
             throw uno::RuntimeException( "Bad column Index" , uno::Reference< uno::XInterface >() );
-    else // List() ( e.g. no args )
+    else 
     {
         uno::Sequence< uno::Sequence< OUString > > sReturnArray( nLength );
         for ( sal_Int32 i = 0; i < nLength; ++i )
@@ -96,8 +96,8 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
 
         OUString sString = getAnyAsString( pvargItem );
 
-        // if no index specified or item is to be appended to end of
-        // list just realloc the array and set the last item
+        
+        
         if ( nIndex  == sList.getLength() )
         {
             sal_Int32 nOldSize = sList.getLength();
@@ -106,23 +106,23 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
         }
         else
         {
-            // just copy those elements above the one to be inserted
+            
             std::vector< OUString > sVec;
-            // reserve just the amount we need to copy
+            
             sVec.reserve( sList.getLength() - nIndex );
 
-            // point at first element to copy
+            
             OUString* pString = sList.getArray() + nIndex;
             const OUString* pEndString = sList.getArray() + sList.getLength();
-            // insert the new element
+            
             sVec.push_back( sString );
-            // copy elements
+            
             for ( ; pString != pEndString; ++pString )
                 sVec.push_back( *pString );
 
             sList.realloc(  sList.getLength() + 1 );
 
-            // point at first element to be overwritten
+            
             pString = sList.getArray() + nIndex;
             pEndString = sList.getArray() + sList.getLength();
             std::vector< OUString >::iterator it = sVec.begin();
@@ -140,7 +140,7 @@ void SAL_CALL
 ListControlHelper::removeItem( const uno::Any& index ) throw (uno::RuntimeException)
 {
     sal_Int32 nIndex = 0;
-    // for int index
+    
     if ( index >>= nIndex  )
     {
         uno::Sequence< OUString > sList;
@@ -168,8 +168,8 @@ ListControlHelper::removeItem( const uno::Any& index ) throw (uno::RuntimeExcept
 void SAL_CALL
 ListControlHelper::Clear(  ) throw (uno::RuntimeException)
 {
-    // urk, setValue doesn't seem to work !!
-    //setValue( uno::makeAny( sal_Int16() ) );
+    
+    
     m_xProps->setPropertyValue( ITEMS, uno::makeAny( uno::Sequence< OUString >() ) );
 }
 

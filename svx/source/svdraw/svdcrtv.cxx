@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,14 +41,14 @@
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 class ImplConnectMarkerOverlay
 {
-    // The OverlayObjects
+    
     ::sdr::overlay::OverlayObjectList               maObjects;
 
-    // The remembered target object
+    
     const SdrObject&                                mrObject;
 
 public:
@@ -72,13 +72,13 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
         {
             Size aHalfLogicSize(xTargetOverlay->getOutputDevice().PixelToLogic(Size(4, 4)));
 
-            // object
+            
             ::sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new ::sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                 aB2DPolyPolygon);
             xTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
 
-            // glue points
+            
             if(rView.IsAutoVertexConnectors())
             {
                 for(sal_uInt16 i(0); i < 4; i++)
@@ -111,16 +111,16 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
 
 ImplConnectMarkerOverlay::~ImplConnectMarkerOverlay()
 {
-    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
-    // That destructor calls clear() at the list which removes all objects from the
-    // OverlayManager and deletes them.
+    
+    
+    
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 class ImpSdrCreateViewExtraData
 {
-    // The OverlayObjects for XOR replacement
+    
     ::sdr::overlay::OverlayObjectList               maObjects;
 
 public:
@@ -172,16 +172,16 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
 
 void ImpSdrCreateViewExtraData::HideOverlay()
 {
-    // the clear() call of the list removes all objects from the
-    // OverlayManager and deletes them.
+    
+    
     maObjects.clear();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// CreateView
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 void SdrCreateView::ImpClearConnectMarker()
 {
@@ -275,7 +275,7 @@ sal_Bool SdrCreateView::CheckEdgeMode()
 {
     if (pAktCreate!=NULL)
     {
-        // is managed by EdgeObj
+        
         if (nAktInvent==SdrInventor && nAktIdent==OBJ_EDGE) return sal_False;
     }
 
@@ -286,7 +286,7 @@ sal_Bool SdrCreateView::CheckEdgeMode()
     }
     else
     {
-        // sal_True, if MouseMove should check Connect
+        
         return !IsAction();
     }
 }
@@ -297,7 +297,7 @@ void SdrCreateView::SetConnectMarker(const SdrObjConnection& rCon, const SdrPage
 
     if(pTargetObject)
     {
-        // if target object changes, throw away overlay object to make room for changes
+        
         if(mpCoMaOverlay && pTargetObject != &mpCoMaOverlay->GetTargetObject())
         {
             ImpClearConnectMarker();
@@ -327,7 +327,7 @@ sal_Bool SdrCreateView::MouseMove(const MouseEvent& rMEvt, Window* pWin)
 
         if(pPV)
         {
-            // TODO: Change default hit tolerance at IsMarkedHit() some time!
+            
             Point aPos(pWin->PixelToLogic(rMEvt.GetPosPixel()));
             bool bMarkHit=PickHandle(aPos)!=NULL || IsMarkedObjHit(aPos);
             SdrObjConnection aCon;
@@ -363,12 +363,12 @@ void SdrCreateView::SetCurrentObj(sal_uInt16 nIdent, sal_uInt32 nInvent)
 
         if(pObj)
         {
-            // Using text tool, mouse cursor is usually I-Beam,
-            // crosshairs with tiny I-Beam appears only on MouseButtonDown.
+            
+            
             if(IsTextTool())
             {
-                // Here the correct pointer needs to be used
-                // if the default is set to vertical writing
+                
+                
                 aAktCreatePointer = POINTER_TEXT;
             }
             else
@@ -404,7 +404,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
         pCreatePV = GetSdrPageView();
     }
     if (pCreatePV!=NULL)
-    { // otherwise no side registered!
+    { 
         OUString aLay(aAktLayer);
 
         if(nInvent == SdrInventor && nIdent == OBJ_MEASURE && !aMeasureLayer.isEmpty())
@@ -437,17 +437,17 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
             Point aPnt(rPnt);
             if (nAktInvent!=SdrInventor || (nAktIdent!=sal_uInt16(OBJ_EDGE) &&
                                             nAktIdent!=sal_uInt16(OBJ_FREELINE) &&
-                                            nAktIdent!=sal_uInt16(OBJ_FREEFILL) )) { // no snapping for Edge and Freehand
+                                            nAktIdent!=sal_uInt16(OBJ_FREEFILL) )) { 
                 aPnt=GetSnapPos(aPnt,pCreatePV);
             }
             if (pAktCreate!=NULL)
             {
                 if (pDefaultStyleSheet!=NULL) pAktCreate->NbcSetStyleSheet(pDefaultStyleSheet, sal_False);
 
-                // SW uses a naked SdrObject for frame construction. Normally, such an
-                // object should not be created. Since it is possible to use it as a helper
-                // object (e.g. in letting the user define an area with the interactive
-                // construction) at least no items should be set at that object.
+                
+                
+                
+                
                 if(nInvent != SdrInventor || nIdent != OBJ_NONE)
                 {
                     pAktCreate->SetMergedItemSet(aDefaultAttr);
@@ -456,7 +456,7 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
                 if (HAS_BASE(SdrCaptionObj,pAktCreate))
                 {
                     SfxItemSet aSet(pMod->GetItemPool());
-                    aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); // in case someone turns on Solid
+                    aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); 
                     aSet.Put(XFillStyleItem(XFILL_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
@@ -464,18 +464,18 @@ sal_Bool SdrCreateView::ImpBegCreateObj(sal_uInt32 nInvent, sal_uInt16 nIdent, c
                 if (nInvent==SdrInventor && (nIdent==OBJ_TEXT || nIdent==OBJ_TEXTEXT ||
                     nIdent==OBJ_TITLETEXT || nIdent==OBJ_OUTLINETEXT))
                 {
-                    // default for all text frames: no background, no border
+                    
                     SfxItemSet aSet(pMod->GetItemPool());
-                    aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); // in case someone turns on Solid
+                    aSet.Put(XFillColorItem(OUString(),Color(COL_WHITE))); 
                     aSet.Put(XFillStyleItem(XFILL_NONE));
-                    aSet.Put(XLineColorItem(OUString(),Color(COL_BLACK))); // in case someone turns on Solid
+                    aSet.Put(XLineColorItem(OUString(),Color(COL_BLACK))); 
                     aSet.Put(XLineStyleItem(XLINE_NONE));
 
                     pAktCreate->SetMergedItemSet(aSet);
                 }
                 if (!rLogRect.IsEmpty()) pAktCreate->NbcSetLogicRect(rLogRect);
 
-                // make sure drag start point is inside WorkArea
+                
                 const Rectangle& rWorkArea = ((SdrDragView*)this)->GetWorkArea();
 
                 if(!rWorkArea.IsEmpty())
@@ -563,8 +563,8 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
             else if (aDragStat.IsOrtho4Possible()) OrthoDistance4(aDragStat.GetPrev(),aPnt,IsBigOrtho());
         }
 
-        // If the drag point was limited and Ortho is active, do
-        // the small ortho correction (reduction) -> last parameter to FALSE.
+        
+        
         sal_Bool bDidLimit(ImpLimitToWorkArea(aPnt));
         if(bDidLimit && IsOrtho())
         {
@@ -582,10 +582,10 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
             aDragStat.NextMove(aPnt);
             pAktCreate->MovCreate(aDragStat);
 
-            // MovCreate changes the object, so use ActionChanged() on it
+            
             pAktCreate->ActionChanged();
 
-            // replace for DrawCreateObjDiff
+            
             HideCreateObj();
             ShowCreateObj();
         }
@@ -604,8 +604,8 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
         if (nAnz<=1 && eCmd==SDRCREATE_FORCEEND)
         {
-            BrkCreateObj(); // objects with only a single point don't exist (at least today)
-            return sal_False; // sal_False = event not interpreted
+            BrkCreateObj(); 
+            return sal_False; 
         }
 
         bool bPntsEq=nAnz>1;
@@ -619,17 +619,17 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
             if (!bPntsEq)
             {
-                // otherwise Brk, because all points are equal
+                
                 SdrObject* pObj=pAktCreate;
                 pAktCreate=NULL;
 
                 const SdrLayerAdmin& rAd = pCreatePV->GetPage()->GetLayerAdmin();
                 SdrLayerID nLayer(0);
 
-                // #i72535#
+                
                 if(pObj->ISA(FmFormObj))
                 {
-                    // for FormControls, force to form layer
+                    
                     nLayer = rAd.GetLayerID(rAd.GetControlLayerName(), true);
                 }
                 else
@@ -644,7 +644,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
                 pObj->SetLayer(nLayer);
 
-                // recognize creation of a new 3D object inside a 3D scene
+                
                 bool bSceneIntoScene(false);
 
                 if(pObjMerk
@@ -658,7 +658,7 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
                     if(bDidInsert)
                     {
-                        // delete object, its content is cloned and inserted
+                        
                         SdrObject::Free( pObjMerk );
                         pObjMerk = 0L;
                         bRet = sal_False;
@@ -668,12 +668,12 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
 
                 if(!bSceneIntoScene)
                 {
-                    // do the same as before
+                    
                     InsertObjectAtView(pObj, *pCreatePV);
                 }
 
                 pCreatePV=NULL;
-                bRet=sal_True; // sal_True = event interpreted
+                bRet=sal_True; 
             }
             else
             {
@@ -681,18 +681,18 @@ sal_Bool SdrCreateView::EndCreateObj(SdrCreateCmd eCmd)
             }
         }
         else
-        { // more points
-            if (eCmd==SDRCREATE_FORCEEND || // nothing there -- force ending
-                nAnz==0 ||                             // no existing points (should never happen)
-                (nAnz<=1 && !aDragStat.IsMinMoved())) { // MinMove not met
+        { 
+            if (eCmd==SDRCREATE_FORCEEND || 
+                nAnz==0 ||                             
+                (nAnz<=1 && !aDragStat.IsMinMoved())) { 
                 BrkCreateObj();
             }
             else
             {
-                // replace for DrawCreateObjDiff
+                
                 HideCreateObj();
                 ShowCreateObj();
-                aDragStat.ResetMinMoved(); // NextPoint is at MovCreateObj()
+                aDragStat.ResetMinMoved(); 
                 bRet=sal_True;
             }
         }
@@ -750,20 +750,20 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
     {
         if(pAktCreate)
         {
-            // for migration from XOR, replace DrawDragObj here to create
-            // overlay objects instead.
+            
+            
             sal_Bool bUseSolidDragging(IsSolidDragging());
 
-            // #i101648# check if dragged object is a naked SdrObject (not
-            // a derivation). This is e.g. used in SW Frame construction
-            // as placeholder. Do not use SolidDragging for naked SDrObjects,
-            // they cannot have a valid optical representation
+            
+            
+            
+            
             if(bUseSolidDragging && OBJ_NONE == pAktCreate->GetObjIdentifier())
             {
                 bUseSolidDragging = false;
             }
 
-            // check for objects with no fill and no line
+            
             if(bUseSolidDragging)
             {
                 const SfxItemSet& rSet = pAktCreate->GetMergedItemSet();
@@ -776,7 +776,7 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                 }
             }
 
-            // check for form controls
+            
             if(bUseSolidDragging)
             {
                 if(pAktCreate->ISA(SdrUnoObj))
@@ -785,14 +785,14 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                 }
             }
 
-              // #i101781# force to non-solid dragging when not creating a full circle
+              
             if(bUseSolidDragging)
             {
                 SdrCircObj* pCircObj = dynamic_cast< SdrCircObj* >(pAktCreate);
 
                 if(pCircObj && OBJ_CIRC != pCircObj->GetObjIdentifier())
                 {
-                    // #i103058# Allow SolidDragging with four points
+                    
                     if(aDragStat.GetPointAnz() < 4)
                     {
                         bUseSolidDragging = false;
@@ -806,8 +806,8 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
 
                 if(pAktCreate->ISA(SdrRectObj))
                 {
-                    // ensure object has some size, necessary for SdrTextObj because
-                    // there are still untested divisions by that sizes
+                    
+                    
                     Rectangle aCurrentSnapRect(pAktCreate->GetSnapRect());
 
                     if(!(aCurrentSnapRect.GetWidth() > 1 && aCurrentSnapRect.GetHeight() > 1))
@@ -819,8 +819,8 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
 
                 if(pAktCreate->ISA(SdrPathObj))
                 {
-                    // The up-to-now created path needs to be set at the object to have something
-                    // that can be visualized
+                    
+                    
                     SdrPathObj& rPathObj((SdrPathObj&)(*pAktCreate));
                     const basegfx::B2DPolyPolygon aCurrentPolyPolygon(rPathObj.getObjectPolyPolygon(aDragStat));
 
@@ -832,21 +832,21 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
                     aDragPolyPolygon = rPathObj.getDragPolyPolygon(aDragStat);
                 }
 
-                // use the SdrObject directly for overlay
+                
                 mpCreateViewExtraData->CreateAndShowOverlay(*this, pAktCreate, aDragPolyPolygon);
             }
             else
             {
                 ::basegfx::B2DPolyPolygon aPoly = pAktCreate->TakeCreatePoly(aDragStat);
                 Point aGridOff = pAktCreate->GetGridOffset();
-                // Hack for calc, transform position of create placeholder
-                // object according to current zoom so as objects relative
-                // position to grid appears stable
+                
+                
+                
                 aPoly.transform( basegfx::tools::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
                 mpCreateViewExtraData->CreateAndShowOverlay(*this, 0, aPoly);
             }
 
-            // #i101679# Force changed overlay to be shown
+            
             for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
             {
                 SdrPaintWindow* pCandidate = GetPaintWindow(a);
@@ -867,16 +867,16 @@ void SdrCreateView::HideCreateObj()
 {
     if(IsCreateObj() && aDragStat.IsShown())
     {
-        // for migration from XOR, replace DrawDragObj here to create
-        // overlay objects instead.
+        
+        
         mpCreateViewExtraData->HideOverlay();
 
-        //DrawCreateObj(pOut,bFull);
+        
         aDragStat.SetShown(false);
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrCreateView::GetAttributes(SfxItemSet& rTargetSet, sal_Bool bOnlyHardAttr) const
 {

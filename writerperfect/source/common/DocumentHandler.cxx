@@ -2,9 +2,9 @@
 /*
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http:
  */
 #include "DocumentHandler.hxx"
 
@@ -38,7 +38,7 @@ void DocumentHandler::startElement(const char *psName, const WPXPropertyList &xP
     WPXPropertyList::Iter i(xPropList);
     for (i.rewind(); i.next(); )
     {
-        // filter out libwpd elements
+        
         if (strncmp(i.key(), "libwpd", 6) != 0)
         {
             OUString sName(i.key(), strlen(i.key()),  RTL_TEXTENCODING_UTF8);

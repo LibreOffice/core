@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -44,12 +44,12 @@ namespace
         const XMLPropertyState& _rProperty )
     {
         DBG_ASSERT( _rxMapper.is(), "xmloff::lcl_exportDataStyle: invalid property mapper!" );
-        // obtain the data style name
+        
         OUString sDataStyleName;
         _rProperty.maValue >>= sDataStyleName;
         DBG_ASSERT( !sDataStyleName.isEmpty(), "xmloff::lcl_exportDataStyle: invalid property value for the data style name!" );
 
-        // add the attribute
+        
         _rExport.AddAttribute(
             _rxMapper->GetEntryNameSpace( _rProperty.mnIndex ),
             _rxMapper->GetEntryXMLName( _rProperty.mnIndex ),
@@ -67,7 +67,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
         ) const
 {
     if ( XML_STYLE_FAMILY_CONTROL_ID == nFamily )
-    {   // it's a control-related style
+    {   
         UniReference< XMLPropertySetMapper > aPropertyMapper = rPropExp.getPropertySetMapper();
 
         for (   vector< XMLPropertyState >::const_iterator pProp = rProperties.begin();
@@ -78,14 +78,14 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
             if  (   ( pProp->mnIndex > -1 )
                 &&  ( CTF_FORMS_DATA_STYLE == aPropertyMapper->GetEntryContextId( pProp->mnIndex ) )
                 )
-            {   // it's the data-style for a grid column
+            {   
                 lcl_exportDataStyle( GetExport(), aPropertyMapper, *pProp );
             }
         }
     }
 
     if( (XML_STYLE_FAMILY_SD_GRAPHICS_ID == nFamily) || (XML_STYLE_FAMILY_SD_PRESENTATION_ID == nFamily) )
-    {   // it's a graphics style
+    {   
         UniReference< XMLPropertySetMapper > aPropertyMapper = rPropExp.getPropertySetMapper();
         DBG_ASSERT(aPropertyMapper.is(), "SvXMLAutoStylePoolP::exportStyleAttributes: invalid property set mapper!");
 
@@ -98,22 +98,22 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
             )
         {
             if (pProp->mnIndex > -1)
-            {   // it's a valid property
+            {   
                 switch( aPropertyMapper->GetEntryContextId(pProp->mnIndex) )
                 {
                 case CTF_SD_CONTROL_SHAPE_DATA_STYLE:
-                    {   // it's the control shape data style property
+                    {   
 
                         if (bFoundControlShapeDataStyle)
                         {
                             OSL_FAIL("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the ControlShapeDataStyle context id!");
-                            // already added the attribute for the first occurrence
+                            
                             break;
                         }
 
                         lcl_exportDataStyle( GetExport(), aPropertyMapper, *pProp );
 
-                        // check if there is another property with the special context id we're handling here
+                        
                         bFoundControlShapeDataStyle = sal_True;
                         break;
                     }
@@ -122,7 +122,7 @@ void SvXMLAutoStylePoolP::exportStyleAttributes(
                         if (bFoundNumberingRulesName)
                         {
                             OSL_FAIL("SvXMLAutoStylePoolP::exportStyleAttributes: found two properties with the numbering rules name context id!");
-                            // already added the attribute for the first occurrence
+                            
                             break;
                         }
 
@@ -236,7 +236,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
         if (!bFooterEndIndex)
             nFooterEndIndex = nIndex;
 
-        // export header style element
+        
         {
             SvXMLElementExport aElem(
                 GetExport(), XML_NAMESPACE_STYLE, XML_HEADER_STYLE,
@@ -247,7 +247,7 @@ void SvXMLAutoStylePoolP::exportStyleContent(
                 nHeaderStartIndex, nHeaderEndIndex, XML_EXPORT_FLAG_IGN_WS);
         }
 
-        // export footer style
+        
         {
             SvXMLElementExport aElem(
                 GetExport(), XML_NAMESPACE_STYLE, XML_FOOTER_STYLE,
@@ -275,7 +275,7 @@ SvXMLExport& SvXMLAutoStylePoolP::GetExport() const
     return pImpl->GetExport();
 }
 
-// TODO: romove this
+
 void SvXMLAutoStylePoolP::AddFamily(
         sal_Int32 nFamily,
         const OUString& rStrName,
@@ -324,7 +324,7 @@ void SvXMLAutoStylePoolP::RegisterNames(
     DBG_ASSERT( aFamilies.getLength() == aNames.getLength(),
                 "aFamilies != aNames" );
 
-    // iterate over sequence(s) and call RegisterName(..) for each pair
+    
     const sal_Int32* pFamilies = aFamilies.getConstArray();
     const OUString* pNames = aNames.getConstArray();
     sal_Int32 nCount = min( aFamilies.getLength(), aNames.getLength() );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -208,7 +208,7 @@ void DataSource_Impl::setBuffer (const Sequence<sal_Int8> &rBuffer)
     m_buffer = rBuffer;
     if (!m_buffer.getLength())
     {
-        // Fill buffer from file descriptor.
+        
         char buffer[1024];
         memset (buffer, 0, sizeof(buffer));
 
@@ -395,7 +395,7 @@ void SAL_CALL DataSink_Impl::flush (void)
 {
     if (m_buffer.getLength())
     {
-        // Write data to stdout.
+        
         const sal_Int8 *pData = m_buffer.getConstArray();
         sal_Int32       nData = m_buffer.getLength();
 
@@ -660,7 +660,7 @@ int SAL_CALL main (int argc, char **argv)
                 rtl::OWString aRecipients[] =
                 {
                     S2U("er@stardiv.de"),
-                    // L"mhu@stardivision.de",
+                    
                     S2U("mhu@rabbit")
                 };
 
@@ -686,7 +686,7 @@ int SAL_CALL main (int argc, char **argv)
 
             if (nOptions & OPTION_SIGN)
             {
-                sal_Bool bDataIsAscii = (fd == 0); // stdin.
+                sal_Bool bDataIsAscii = (fd == 0); 
 
                 xEncoder->sign (
                     bDataIsAscii,

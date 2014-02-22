@@ -98,12 +98,12 @@ class DBTypeDetection : public ::cppu::WeakImplHelper2< XExtendedFilterDetection
 public:
     DBTypeDetection(const Reference< XComponentContext >&);
 
-    // XServiceInfo
+    
     OUString                        SAL_CALL getImplementationName() throw(  );
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
     Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(  );
 
-    // static methods
+    
     static OUString                 getImplementationName_Static() throw(  )
     {
         return OUString("org.openoffice.comp.dbflt.DBTypeDetection");
@@ -156,8 +156,8 @@ OUString SAL_CALL DBTypeDetection::detect( ::com::sun::star::uno::Sequence< ::co
             {
                 if ( bStreamFromDescr && !sURL.startsWith( "private:stream" ) )
                 {
-                    // After fixing of the i88522 issue ( use the new file locking for database files ) the stream from the type detection can be used further
-                    // for now the file should be reopened to have read/write access
+                    
+                    
                     aMedia.remove( OUString(  "InputStream" ) );
                     aMedia.remove( OUString(  "Stream" ) );
                     aMedia >>= Descriptor;
@@ -186,25 +186,25 @@ Reference< XInterface > SAL_CALL DBTypeDetection::Create( const Reference< XMult
     return *(new DBTypeDetection( comphelper::getComponentContext(rSMgr) ));
 }
 
-// XServiceInfo
+
 OUString SAL_CALL DBTypeDetection::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
 
-// XServiceInfo
+
 sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName) throw(  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-// ORegistryServiceManager_Static
+
 Sequence< OUString > DBTypeDetection::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< OUString > aSNS( 1 );
@@ -230,12 +230,12 @@ public:
     DBContentLoader(const Reference< XComponentContext >&);
     ~DBContentLoader();
 
-    // XServiceInfo
+    
     OUString                        SAL_CALL getImplementationName() throw(  );
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
     Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(  );
 
-    // static methods
+    
     static OUString                 getImplementationName_Static() throw(  )
     {
         return OUString("org.openoffice.comp.dbflt.DBContentLoader2");
@@ -244,7 +244,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-    // XLoader
+    
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
@@ -272,25 +272,25 @@ Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMult
     return *(new DBContentLoader( comphelper::getComponentContext(rSMgr) ));
 }
 
-// XServiceInfo
+
 OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
 
-// XServiceInfo
+
 sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-// ORegistryServiceManager_Static
+
 Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< OUString > aSNS( 1 );
@@ -321,7 +321,7 @@ namespace
     Reference< XWindow > lcl_getTopMostWindow( const Reference<XComponentContext> & _rxContext )
     {
         Reference< XWindow > xWindow;
-        // get the top most window
+        
         Reference < XDesktop2 > xDesktop = Desktop::create(_rxContext);
         Reference < XFrame > xActiveFrame = xDesktop->getActiveFrame();
         if ( xActiveFrame.is() )
@@ -353,10 +353,10 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
                     makeAny( _rxModel ),
                     PropertyState_DIRECT_VALUE);
 
-    // create the dialog
+    
     Reference< XExecutableDialog > xAdminDialog( m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext("com.sun.star.sdb.DatabaseWizardDialog", aWizardArgs, m_aContext), UNO_QUERY_THROW);
 
-    // execute it
+    
     if ( RET_OK != xAdminDialog->execute() )
         return sal_False;
 
@@ -371,7 +371,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         const Sequence< PropertyValue >& rArgs,
         const Reference< XLoadEventListener > & rListener) throw(::com::sun::star::uno::RuntimeException)
 {
-    // first check if preview is true, if so return with out creating a controller. Preview is not supported
+    
     ::comphelper::NamedValueCollection aMediaDesc( rArgs );
     sal_Bool bPreview = aMediaDesc.getOrDefault( "Preview", sal_False );
     if ( bPreview )
@@ -384,29 +384,29 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     Reference< XModel > xModel       = aMediaDesc.getOrDefault( "Model", Reference< XModel >() );
     OUString            sSalvagedURL = aMediaDesc.getOrDefault( "SalvagedFile", _rURL );
 
-    sal_Bool bCreateNew = sal_False;        // does the URL denote the private:factory URL?
-    sal_Bool bStartTableWizard = sal_False; // start the table wizard after everything was loaded successfully?
+    sal_Bool bCreateNew = sal_False;        
+    sal_Bool bStartTableWizard = sal_False; 
 
     sal_Bool bSuccess = sal_True;
 
-    // If there's no interaction handler in the media descriptor, put one.
-    // By definition, loading via loadComponentFromURL (and thus via the content loader here)
-    // is allowed to raise UI. To not burden every place inside the document with creating
-    // a default handler, we simply ensure there is one.
-    // If a handler is present in the media descriptor, even if it is NULL, we will
-    // not touch it.
+    
+    
+    
+    
+    
+    
     if ( !aMediaDesc.has( "InteractionHandler" ) )
     {
         Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(m_aContext, 0) );
        aMediaDesc.put( "InteractionHandler", xHandler );
     }
 
-    // it's allowed to pass an existing document
+    
     Reference< XOfficeDatabaseDocument > xExistentDBDoc;
     xModel.set( aMediaDesc.getOrDefault( "Model", xExistentDBDoc ), UNO_QUERY );
     aMediaDesc.remove( "Model" );
 
-    // also, it's allowed to specify the type of view which should be created
+    
     OUString sViewName = aMediaDesc.getOrDefault( "ViewName", OUString( "Default" ) );
     aMediaDesc.remove( "ViewName" );
 
@@ -454,7 +454,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
                 }
             }
 
-            // initially select the "Tables" category (will be done below)
+            
             nInitialSelection = ::com::sun::star::sdb::application::DatabaseObjectContainer::TABLES;
         }
     }
@@ -468,10 +468,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
     if ( !bCreateNew )
     {
-        // We need to XLoadable::load the document if it does not yet have an URL.
-        // If it already *does* have an URL, then it was either passed in the arguments, or a previous incarnation
-        // of that model existed before (which can happen if a model is closed, but an associated DataSource is kept
-        // alive 'til loading the document again).
+        
+        
+        
+        
         bool bNeedLoad = ( xModel->getURL().isEmpty() );
         try
         {
@@ -484,7 +484,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
                 xLoad->load( aResource );
             }
 
-            // always attach the resource, even if the document has not been freshly loaded
+            
             xModel->attachResource( _rURL, aResource );
         }
         catch(const Exception&)
@@ -534,7 +534,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
 
         if ( bStartTableWizard )
         {
-            // reset the data of the previous async drop (if any)
+            
             if ( m_nStartWizard )
                 Application::RemoveUserEvent(m_nStartWizard);
             m_sCurrentURL = xModel->getURL();

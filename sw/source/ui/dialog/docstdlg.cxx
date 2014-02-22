@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -30,7 +30,7 @@
 #include <docstdlg.hxx>
 #include <modcfg.hxx>
 
-// for statistics fields
+
 #include <fldmgr.hxx>
 #include <fldbas.hxx>
 
@@ -59,7 +59,7 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet)
 
     Update();
     m_pUpdatePB->SetClickHdl(LINK(this, SwDocStatPage, UpdateHdl));
-    //#111684# is the current view a page preview no SwFEShell can be found -> hide the update button
+    
     SwDocShell* pDocShell = (SwDocShell*) SfxObjectShell::Current();
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(!pFEShell)
@@ -76,7 +76,7 @@ SwDocStatPage::SwDocStatPage(Window *pParent, const SfxItemSet &rSet)
 {
 }
 
-// Description: fill ItemSet when changed
+
 sal_Bool  SwDocStatPage::FillItemSet(SfxItemSet & /*rSet*/)
 {
     return sal_False;
@@ -86,7 +86,7 @@ void  SwDocStatPage::Reset(const SfxItemSet &/*rSet*/)
 {
 }
 
-// Description: update / set data
+
 void SwDocStatPage::SetData(const SwDocStat &rStat)
 {
     m_pTableNo->SetText(OUString::number( rStat.nTbl ));
@@ -99,7 +99,7 @@ void SwDocStatPage::SetData(const SwDocStat &rStat)
     m_pCharExclSpacesNo->SetText(OUString::number( rStat.nCharExcludingSpaces ));
 }
 
-// Description: update statistics
+
 void SwDocStatPage::Update()
 {
     SfxViewShell *pVSh = SfxViewShell::Current();
@@ -126,7 +126,7 @@ IMPL_LINK_NOARG(SwDocStatPage, UpdateHdl)
     SwFEShell* pFEShell = pDocShell->GetFEShell();
     if(pFEShell)
         m_pLineNo->SetText( OUString::number( pFEShell->GetLineCount(sal_False)));
-    //pButton->Disable();
+    
     return 0;
 }
 

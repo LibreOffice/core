@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterPaneContainer.hxx"
@@ -69,7 +69,7 @@ void PresenterPaneContainer::PreparePane (
     SharedPaneDescriptor pPane (FindPaneURL(rxPaneId->getResourceURL()));
     if (pPane.get() == NULL)
     {
-        // No entry found for the given pane id.  Create a new one.
+        
         SharedPaneDescriptor pDescriptor (new PaneDescriptor());
         pDescriptor->mxPaneId = rxPaneId;
         pDescriptor->msViewURL = rsViewURL;
@@ -135,8 +135,8 @@ PresenterPaneContainer::SharedPaneDescriptor
             pDescriptor->mxPane = rxPane;
             pDescriptor->mxPane->SetTitle(pDescriptor->msTitle);
 
-            // When there is a call out anchor location set then tell the
-            // window about it.
+            
+            
             if (pDescriptor->mbHasCalloutAnchor)
                 pDescriptor->mxPane->SetCalloutAnchor(pDescriptor->maCalloutAnchorLocation);
 
@@ -153,8 +153,8 @@ PresenterPaneContainer::SharedPaneDescriptor
         const Reference<XResourceId>& rxPaneId,
         const Reference<awt::XWindow>& rxBorderWindow)
 {
-    // The content window may not be present.  Use the resource URL of the
-    // pane id as key.
+    
+    
     OUString sPaneURL;
     if (rxPaneId.is())
         sPaneURL = rxPaneId->getResourceURL();
@@ -199,7 +199,7 @@ PresenterPaneContainer::SharedPaneDescriptor
                 if ( ! pDescriptor->maViewInitialization.empty())
                     pDescriptor->maViewInitialization(rxView);
 
-                // Activate or deactivate the pane/view.
+                
                 if ( ! pDescriptor->maActivator.empty())
                     pDescriptor->maActivator(pDescriptor->mbIsActive);
             }
@@ -339,7 +339,7 @@ void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
 {
     if (rpDescriptor.get() != NULL)
     {
-        // Find iterator for pDescriptor.
+        
         PaneList::iterator iPane;
         PaneList::iterator iEnd (maPanes.end());
         for (iPane=maPanes.begin(); iPane!=iEnd; ++iPane)
@@ -357,7 +357,7 @@ void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
     }
 }
 
-//----- XEventListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterPaneContainer::disposing (
     const com::sun::star::lang::EventObject& rEvent)
@@ -371,7 +371,7 @@ void SAL_CALL PresenterPaneContainer::disposing (
     }
 }
 
-//===== PresenterPaneContainer::PaneDescriptor ================================
+
 
 void PresenterPaneContainer::PaneDescriptor::SetActivationState (const bool bIsActive)
 {
@@ -380,6 +380,6 @@ void PresenterPaneContainer::PaneDescriptor::SetActivationState (const bool bIsA
         maActivator(mbIsActive);
 }
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

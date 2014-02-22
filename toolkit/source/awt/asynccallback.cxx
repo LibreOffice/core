@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,7 +28,7 @@
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/awt/XRequestCallback.hpp"
 
-/// anonymous implementation namespace
+/
 namespace {
 
 class AsyncCallback:
@@ -39,12 +39,12 @@ class AsyncCallback:
 public:
     AsyncCallback() {}
 
-    // ::com::sun::star::lang::XServiceInfo:
+    
     virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException);
 
-    // ::com::sun::star::awt::XRequestCallback:
+    
     virtual void SAL_CALL addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const ::com::sun::star::uno::Any & aData) throw (css::uno::RuntimeException);
 
 private:
@@ -60,13 +60,13 @@ private:
 
     DECL_STATIC_LINK( AsyncCallback, Notify_Impl, CallbackData* );
 
-    AsyncCallback(AsyncCallback &); // not defined
-    void operator =(AsyncCallback &); // not defined
+    AsyncCallback(AsyncCallback &); 
+    void operator =(AsyncCallback &); 
 
     virtual ~AsyncCallback() {}
 };
 
-// com.sun.star.uno.XServiceInfo:
+
 OUString SAL_CALL AsyncCallback::getImplementationName() throw (css::uno::RuntimeException)
 {
     return OUString("com.sun.star.awt.comp.AsyncCallback");
@@ -84,7 +84,7 @@ css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames(
     return s;
 }
 
-// ::com::sun::star::awt::XRequestCallback:
+
 void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const ::com::sun::star::uno::Any & aData) throw (css::uno::RuntimeException)
 {
     if ( Application::IsInMain() )
@@ -96,13 +96,13 @@ void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XC
     }
 }
 
-// private asynchronous link to call reference to the callback object
+
 IMPL_STATIC_LINK_NOINSTANCE( AsyncCallback, Notify_Impl, CallbackData*, pCallbackData )
 {
     try
     {
-        // Asynchronous execution
-        // Check pointer and reference before!
+        
+        
         if ( pCallbackData && pCallbackData->xCallback.is() )
             pCallbackData->xCallback->notify( pCallbackData->aData );
     }
@@ -114,7 +114,7 @@ IMPL_STATIC_LINK_NOINSTANCE( AsyncCallback, Notify_Impl, CallbackData*, pCallbac
     return 0;
 }
 
-} // closing anonymous implementation namespace
+} 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_awt_comp_AsyncCallback_get_implementation(

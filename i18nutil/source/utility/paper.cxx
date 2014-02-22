@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -57,10 +57,10 @@ struct PageDesc
 #define MM2MM100( v ) \
     ((long)((v) * 100))
 
-//PostScript Printer Description File Format Specification
-//http://partners.adobe.com/public/developer/en/ps/5003.PPD_Spec_v4.3.pdf
-//http://www.y-adagio.com/public/committees/docsii/doc_00-49/symp_ulaan/china_ppr.pdf (Kai)
-//http://www.sls.psi.ch/controls/help/howto/Howto_Print_a_A0_Poster_at_WSLA_012_2.pdf (Dia)
+
+
+
+
 static const PageDesc aDinTab[] =
 {
     { MM2MM100( 841 ),   MM2MM100( 1189 ),   "A0",  NULL },
@@ -74,23 +74,23 @@ static const PageDesc aDinTab[] =
     { IN2MM100( 8.5 ),   IN2MM100( 11 ),     "Letter",  "Note" },
     { IN2MM100( 8.5 ),   IN2MM100( 14 ),     "Legal",  NULL },
     { IN2MM100( 11 ),    IN2MM100( 17 ),     "Tabloid",  "11x17" },
-    { 0,                 0,                  NULL, NULL }, //User
+    { 0,                 0,                  NULL, NULL }, 
     { MM2MM100( 125 ),   MM2MM100( 176 ),    "ISOB6",  NULL },
     { MM2MM100( 229 ),   MM2MM100( 324 ),    "EnvC4",  "C4" },
     { MM2MM100( 162 ),   MM2MM100( 229 ),    "EnvC5",  "C5" },
     { MM2MM100( 114 ),   MM2MM100( 162 ),    "EnvC6",  "C6" },
     { MM2MM100( 114 ),   MM2MM100( 229 ),    "EnvC65", NULL },
     { MM2MM100( 110 ),   MM2MM100( 220 ),    "EnvDL",  "DL" },
-    { MM2MM100( 180),    MM2MM100( 270 ),    NULL,  NULL }, //Dia
-    { MM2MM100( 210),    MM2MM100( 280 ),    NULL,  NULL }, //Screen 4:3
+    { MM2MM100( 180),    MM2MM100( 270 ),    NULL,  NULL }, 
+    { MM2MM100( 210),    MM2MM100( 280 ),    NULL,  NULL }, 
     { IN2MM100( 17 ),    IN2MM100( 22 ),     "AnsiC",  "CSheet" },
     { IN2MM100( 22 ),    IN2MM100( 34 ),     "AnsiD",  "DSheet" },
     { IN2MM100( 34 ),    IN2MM100( 44 ),     "AnsiE",  "ESheet" },
     { IN2MM100( 7.25 ),  IN2MM100( 10.5 ),   "Executive",  NULL },
-    //"Folio" is a different size in the PPD documentation than 8.5x11
-    //This "FanFoldGermanLegal" is known in the Philippines as
-    //"Legal" paper or "Long Bond Paper".  The "Legal" name causing untold
-    //misery, given the differently sized US "Legal" paper
+    
+    
+    
+    
     { IN2MM100( 8.5 ),   IN2MM100( 13 ),     "FanFoldGermanLegal",  NULL },
     { IN2MM100( 3.875 ), IN2MM100( 7.5 ),    "EnvMonarch", "Monarch" },
     { IN2MM100( 3.625 ), IN2MM100( 6.5 ),    "EnvPersonal",  "Personal" },
@@ -98,12 +98,12 @@ static const PageDesc aDinTab[] =
     { IN2MM100( 4.125 ), IN2MM100( 9.5 ),    "Env10",  "Comm10" },
     { IN2MM100( 4.5 ),   IN2MM100( 10.375 ), "Env11",  NULL },
     { IN2MM100( 4.75 ),  IN2MM100( 11 ),     "Env12",  NULL },
-    { MM2MM100( 184 ),   MM2MM100( 260 ),    NULL,  NULL }, //Kai16
-    { MM2MM100( 130 ),   MM2MM100( 184 ),    NULL,  NULL }, //Kai32
-    { MM2MM100( 140 ),   MM2MM100( 203 ),    NULL,  NULL }, //BigKai32
-    { MM2MM100( 257 ),   MM2MM100( 364 ),    "B4",  NULL }, //JIS
-    { MM2MM100( 182 ),   MM2MM100( 257 ),    "B5",  NULL }, //JIS
-    { MM2MM100( 128 ),   MM2MM100( 182 ),    "B6",  NULL }, //JIS
+    { MM2MM100( 184 ),   MM2MM100( 260 ),    NULL,  NULL }, 
+    { MM2MM100( 130 ),   MM2MM100( 184 ),    NULL,  NULL }, 
+    { MM2MM100( 140 ),   MM2MM100( 203 ),    NULL,  NULL }, 
+    { MM2MM100( 257 ),   MM2MM100( 364 ),    "B4",  NULL }, 
+    { MM2MM100( 182 ),   MM2MM100( 257 ),    "B5",  NULL }, 
+    { MM2MM100( 128 ),   MM2MM100( 182 ),    "B6",  NULL }, 
     { IN2MM100( 17 ),    IN2MM100( 11 ),     "Ledger",  NULL },
     { IN2MM100( 5.5 ),   IN2MM100( 8.5 ),    "Statement",  NULL },
     { PT2MM100( 610 ),   PT2MM100( 780 ),    "Quarto",  NULL },
@@ -145,8 +145,8 @@ static const PageDesc aDinTab[] =
     { IN2MM100( 18 ),    IN2MM100( 24 ),     "ARCHC",  NULL },
     { IN2MM100( 24 ),    IN2MM100( 36 ),     "ARCHD",  NULL },
     { IN2MM100( 36 ),    IN2MM100( 48 ),     "ARCHE",  NULL },
-    { MM2MM100( 157.5),  MM2MM100( 280 ),    NULL,  NULL }, //Screen 16:9
-    { MM2MM100( 175 ),   MM2MM100( 280 ),    NULL,  NULL }  //Screen 16:10
+    { MM2MM100( 157.5),  MM2MM100( 280 ),    NULL,  NULL }, 
+    { MM2MM100( 175 ),   MM2MM100( 280 ),    NULL,  NULL }  
 
 };
 
@@ -210,7 +210,7 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     OUString aLocaleStr = officecfg::Setup::L10N::ooSetupSystemLocale::get();
 
 #ifdef UNX
-    // if set to "use system", get papersize from system
+    
     if (aLocaleStr.isEmpty())
     {
         static bool bInitialized = false;
@@ -219,8 +219,8 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         if (bInitialized)
             return aInstance;
 
-        // try libpaper
-        // #i78617# workaround missing paperconf command
+        
+        
         FILE* pPipe = popen( "paperconf 2>/dev/null", "r" );
         if( pPipe )
         {
@@ -289,12 +289,12 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
 
         union paperword { char *string; int word; };
 
-        // try LC_PAPER
+        
         paperword w, h;
         w.string = nl_langinfo(_NL_PAPER_WIDTH);
         h.string = nl_langinfo(_NL_PAPER_HEIGHT);
 
-        //glibc stores sizes as integer mm units
+        
         w.word *= 100;
         h.word *= 100;
 
@@ -302,9 +302,9 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
         {
             if (i == PAPER_USER) continue;
 
-            //glibc stores sizes as integer mm units, and so is inaccurate. To
-            //find a standard paper size we calculate the standard paper sizes
-            //into equally inaccurate mm and compare
+            
+            
+            
             long width = (aDinTab[i].m_nWidth + 50) / 100;
             long height = (aDinTab[i].m_nHeight + 50) / 100;
 
@@ -323,14 +323,14 @@ PaperInfo PaperInfo::getSystemDefaultPaper()
     }
 #endif
 
-    // if set to "use system", try to get locale from system
+    
     if (aLocaleStr.isEmpty())
         aLocaleStr = officecfg::System::L10N::Locale::get();
 
     if (aLocaleStr.isEmpty())
         aLocaleStr = OUString::intern(RTL_CONSTASCII_USTRINGPARAM("en-US"));
 
-    // convert locale string to locale struct
+    
     ::com::sun::star::lang::Locale aSysLocale;
     sal_Int32 nDashPos = aLocaleStr.indexOf( '-' );
     if( nDashPos < 0 ) nDashPos = aLocaleStr.getLength();
@@ -396,69 +396,69 @@ Paper PaperInfo::fromPSName(const OString &rName)
     return PAPER_USER;
 }
 
-//http://wiki.openoffice.org/wiki/DefaultPaperSize
-//http://www.unicode.org/cldr/data/charts/supplemental/territory_language_information.html
-//http://sourceware.org/git/?p=glibc.git;a=tree;f=localedata/locales
-//http://en.wikipedia.org/wiki/Paper_size
-//http://msdn.microsoft.com/en-us/library/cc195164.aspx
+
+
+
+
+
 PaperInfo PaperInfo::getDefaultPaperForLocale(
     const ::com::sun::star::lang::Locale & rLocale)
 {
     Paper eType = PAPER_A4;
 
     if (
-        //United States, Letter
+        
         rLocale.Country.equalsAscii("US") ||
-        //Puerto Rico:
-        //    http://unicode.org/cldr/trac/ticket/1710
-        //    http://sources.redhat.com/ml/libc-hacker/2001-07/msg00046.html
+        
+        
+        
         rLocale.Country.equalsAscii("PR") ||
-        //Canada:
-        //    http://sources.redhat.com/ml/libc-hacker/2001-07/msg00053.html
+        
+        
         rLocale.Country.equalsAscii("CA") ||
-        //Venuzuela:
-        //    http://unicode.org/cldr/trac/ticket/1710
-        //    https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00019.html
+        
+        
+        
         rLocale.Country.equalsAscii("VE") ||
-        //Chile:
-        //    http://unicode.org/cldr/trac/ticket/1710
-        //    https://www.redhat.com/archives/fedora-devel-list/2008-August/msg00240.html
+        
+        
+        
         rLocale.Country.equalsAscii("CL") ||
-        //Mexico:
-        //    http://unicode.org/cldr/trac/ticket/1710
-        //    http://qa.openoffice.org/issues/show_bug.cgi?id=49739
+        
+        
+        
         rLocale.Country.equalsAscii("MX") ||
-        //Colombia:
-        //    http://unicode.org/cldr/trac/ticket/1710
-        //    http://qa.openoffice.org/issues/show_bug.cgi?id=69703
+        
+        
+        
         rLocale.Country.equalsAscii("CO") ||
-        //Philippines:
-        //    http://unicode.org/cldr/trac/ticket/1710
-        //    http://ubuntuliving.blogspot.com/2008/07/default-paper-size-in-evince.html
-        //    http://www.gov.ph/faqs/driverslicense.asp
+        
+        
+        
+        
         rLocale.Country.equalsAscii("PH") ||
-        //Belize:
-        //    http://unicode.org/cldr/trac/ticket/2585
-        //    http://www.belize.gov.bz/ct.asp?xItem=1666&ctNode=486&mp=27
+        
+        
+        
         rLocale.Country.equalsAscii("BZ") ||
-        //Costa Rica:
-        //    http://unicode.org/cldr/trac/ticket/2585
-        //    http://sources.redhat.com/bugzilla/show_bug.cgi?id=11258
+        
+        
+        
         rLocale.Country.equalsAscii("CR") ||
-        //Guatemala:
-        //    http://unicode.org/cldr/trac/ticket/2585
-        //    http://sources.redhat.com/bugzilla/show_bug.cgi?id=10936
+        
+        
+        
         rLocale.Country.equalsAscii("GT") ||
-        //Nicaragua:
-        //    http://unicode.org/cldr/trac/ticket/2585
+        
+        
         rLocale.Country.equalsAscii("NI") ||
-        //Panama:
-        //    http://unicode.org/cldr/trac/ticket/2585
-        //    http://www.minsa.gob.pa/minsa/tl_files/documents/baner_informativo/INSTRUMENTO%20DE%20INVESTIGACION%20DE%20RAAV%202009.pdf
+        
+        
+        
         rLocale.Country.equalsAscii("PA") ||
-        //El Salvador:
-        //    http://unicode.org/cldr/trac/ticket/2585
-        //    http://www.tse.gob.sv
+        
+        
+        
         rLocale.Country.equalsAscii("SV")
        )
     {

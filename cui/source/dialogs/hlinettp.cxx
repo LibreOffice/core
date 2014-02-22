@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/pathoptions.hxx>
@@ -52,13 +52,13 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbAnonymous           ( this, CUI_RES (CBX_ANONYMOUS) ),
     mbMarkWndOpen           ( sal_False )
 {
-    // Disable display of bitmap names.
+    
     maBtBrowse.EnableTextDisplay (false);
 
     InitStdControls();
     FreeResource();
 
-    // Init URL-Box (pos&size, Open-Handler)
+    
     maCbbTarget.SetPosSizePixel ( LogicToPixel( Point( COL_2, 25 ), MAP_APPFONT ),
                                   LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbTarget.Show();
@@ -66,8 +66,8 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
 
     SetExchangeSupport ();
 
-    ///////////////////////////////////////
-    // set defaults
+    
+    
     maRbtLinktypInternet.Check ();
     maFtLogin.Show( false );
     maFtPassword.Show( false );
@@ -76,8 +76,8 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
     maCbAnonymous.Show( false );
     maBtBrowse.Enable( true );
 
-    ///////////////////////////////////////
-    // overload handlers
+    
+    
     Link aLink( LINK ( this, SvxHyperlinkInternetTp, Click_SmartProtocol_Impl ) );
     maRbtLinktypInternet.SetClickHdl( aLink );
     maRbtLinktypFTP.SetClickHdl     ( aLink );
@@ -109,7 +109,7 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
     INetURLObject aURL(rStrURL);
     OUString aStrScheme(GetSchemeFromURL(rStrURL));
 
-    // set additional controls for FTP: Username / Password
+    
     if (aStrScheme.startsWith(sFTPScheme))
     {
         if ( aURL.GetUser().toAsciiLowerCase().startsWith( sAnonymous ) )
@@ -117,17 +117,17 @@ void SvxHyperlinkInternetTp::FillDlgFields(const OUString& rStrURL)
         else
             setFTPUser(aURL.GetUser(), aURL.GetPass());
 
-        //do not show password and user in url
+        
         if(!aURL.GetUser().isEmpty() || !aURL.GetPass().isEmpty() )
             aURL.SetUserAndPass(aEmptyStr,aEmptyStr);
     }
 
-    // set URL-field
-    // Show the scheme, #72740
+    
+    
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         maCbbTarget.SetText( aURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
     else
-        maCbbTarget.SetText(rStrURL); // #77696#
+        maCbbTarget.SetText(rStrURL); 
 
     SetScheme(aStrScheme);
 }
@@ -173,7 +173,7 @@ void SvxHyperlinkInternetTp::GetCurentItemData ( OUString& rStrURL, OUString& aS
 
 OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
 {
-    // erase leading and trailing whitespaces
+    
     OUString aStrURL( maCbbTarget.GetText().trim() );
 
     INetURLObject aURL(aStrURL);
@@ -184,13 +184,13 @@ OUString SvxHyperlinkInternetTp::CreateAbsoluteURL() const
         aURL.SetSmartURL(aStrURL);
     }
 
-    // username and password for ftp-url
+    
     if( aURL.GetProtocol() == INET_PROT_FTP && !maEdLogin.GetText().isEmpty() )
         aURL.SetUserAndPass ( maEdLogin.GetText(), maEdPassword.GetText() );
 
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
-    else //#105788# always create a URL even if it is not valid
+    else 
         return aStrURL;
 }
 
@@ -228,7 +228,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl)
     if( !aScheme.isEmpty() )
         SetScheme( aScheme );
 
-    // start timer
+    
     maTimer.SetTimeout( 2500 );
     maTimer.Start();
 
@@ -270,26 +270,26 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
 
 void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
 {
-    //if rScheme is empty or unknown the default beaviour is like it where HTTP
+    
     sal_Bool bFTP = rScheme.startsWith(sFTPScheme);
     sal_Bool bInternet = !(bFTP);
 
-    //update protocol button selection:
+    
     maRbtLinktypFTP.Check(bFTP);
     maRbtLinktypInternet.Check(bInternet);
 
-    //update target:
+    
     RemoveImproperProtocol(rScheme);
     maCbbTarget.SetSmartProtocol( GetSmartProtocolFromButtons() );
 
-    //show/hide  special fields for FTP:
+    
     maFtLogin.Show( bFTP );
     maFtPassword.Show( bFTP );
     maEdLogin.Show( bFTP );
     maEdPassword.Show( bFTP );
     maCbAnonymous.Show( bFTP );
 
-    //update 'link target in document'-window and opening-button
+    
     if (rScheme.startsWith(sHTTPScheme) || rScheme.isEmpty())
     {
         if ( mbMarkWndOpen )
@@ -297,7 +297,7 @@ void SvxHyperlinkInternetTp::SetScheme(const OUString& rScheme)
     }
     else
     {
-        //disable for https and ftp
+        
         if ( mbMarkWndOpen )
             HideMarkWnd ();
     }
@@ -360,7 +360,7 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl)
 
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl)
 {
-    // disable login-editfields if checked
+    
     if ( maCbAnonymous.IsChecked() )
     {
         if ( maEdLogin.GetText().toAsciiLowerCase().startsWith( sAnonymous ) )
@@ -402,10 +402,10 @@ IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl)
 
 IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
 {
-    /////////////////////////////////////////////////
-    // Open URL if available
+    
+    
 
-    SfxStringItem aName( SID_FILE_NAME, OUString("http://") );
+    SfxStringItem aName( SID_FILE_NAME, OUString("http:
     SfxStringItem aRefererItem( SID_REFERER, OUString("private:user") );
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, true );
     SfxBoolItem aSilent( SID_SILENT, true );

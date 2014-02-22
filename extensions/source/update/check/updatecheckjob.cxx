@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -77,15 +77,15 @@ public:
     static uno::Sequence< OUString > getServiceNames();
     static OUString getImplName();
 
-    // Allows runtime exceptions to be thrown by const methods
+    
     inline SAL_CALL operator uno::Reference< uno::XInterface > () const
         { return const_cast< cppu::OWeakObject * > (static_cast< cppu::OWeakObject const * > (this)); };
 
-    // XJob
+    
     virtual uno::Any SAL_CALL execute(const uno::Sequence<beans::NamedValue>&)
         throw (lang::IllegalArgumentException, uno::Exception);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
@@ -93,11 +93,11 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XTerminateListener
+    
     virtual void SAL_CALL queryTermination( lang::EventObject const & evt )
         throw ( frame::TerminationVetoException, uno::RuntimeException );
     virtual void SAL_CALL notifyTermination( lang::EventObject const & evt )
@@ -111,9 +111,9 @@ private:
     void handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp );
 };
 
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
+
+
+
 InitUpdateCheckJobThread::InitUpdateCheckJobThread(
             const uno::Reference< uno::XComponentContext > &xContext,
             const uno::Sequence< beans::NamedValue > &xParameters,
@@ -126,7 +126,7 @@ InitUpdateCheckJobThread::InitUpdateCheckJobThread(
     create();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL InitUpdateCheckJobThread::run()
 {
     if (!m_bShowDialog) {
@@ -143,7 +143,7 @@ void SAL_CALL InitUpdateCheckJobThread::run()
         if ( m_bShowDialog )
             aController->showDialog( true );
     } catch (const uno::Exception &e) {
-        // fdo#64962 - don't bring the app down on some unexpected exception.
+        
         OSL_TRACE( "Caught init update exception: %s\n thread terminated.\n",
             OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr() );
     }
@@ -158,7 +158,7 @@ UpdateCheckJob::~UpdateCheckJob()
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString >
 UpdateCheckJob::getServiceNames()
@@ -168,7 +168,7 @@ UpdateCheckJob::getServiceNames()
     return aServiceList;
 };
 
-//------------------------------------------------------------------------------
+
 
 OUString
 UpdateCheckJob::getImplName()
@@ -177,7 +177,7 @@ UpdateCheckJob::getImplName()
 }
 
 
-//------------------------------------------------------------------------------
+
 
 uno::Any
 UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
@@ -222,7 +222,7 @@ UpdateCheckJob::execute(const uno::Sequence<beans::NamedValue>& namedValues)
     return uno::Any();
 }
 
-//------------------------------------------------------------------------------
+
 void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedValue > &rListProp )
 {
     try {
@@ -230,8 +230,8 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
             getValue< uno::Sequence< uno::Sequence< OUString > > > ( rListProp, "updateList" );
         bool bPrepareOnly = getValue< bool > ( rListProp, "prepareOnly" );
 
-        // we will first store any new found updates and then check, if there are any
-        // pending updates.
+        
+        
         storeExtensionUpdateInfos( m_xContext, aList );
 
         if ( bPrepareOnly )
@@ -260,7 +260,7 @@ void UpdateCheckJob::handleExtensionUpdates( const uno::Sequence< beans::NamedVa
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 OUString SAL_CALL
 UpdateCheckJob::getImplementationName() throw (uno::RuntimeException)
@@ -268,7 +268,7 @@ UpdateCheckJob::getImplementationName() throw (uno::RuntimeException)
     return getImplName();
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > SAL_CALL
 UpdateCheckJob::getSupportedServiceNames() throw (uno::RuntimeException)
@@ -282,8 +282,8 @@ UpdateCheckJob::supportsService( OUString const & serviceName ) throw (uno::Runt
     return cppu::supportsService(this, serviceName);
 }
 
-//------------------------------------------------------------------------------
-// XEventListener
+
+
 void SAL_CALL UpdateCheckJob::disposing( lang::EventObject const & rEvt )
     throw ( uno::RuntimeException )
 {
@@ -296,14 +296,14 @@ void SAL_CALL UpdateCheckJob::disposing( lang::EventObject const & rEvt )
     }
 }
 
-//------------------------------------------------------------------------------
-// XTerminateListener
+
+
 void SAL_CALL UpdateCheckJob::queryTermination( lang::EventObject const & )
     throw ( frame::TerminationVetoException, uno::RuntimeException )
 {
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
     throw ( uno::RuntimeException )
 {
@@ -314,9 +314,9 @@ void SAL_CALL UpdateCheckJob::notifyTermination( lang::EventObject const & )
     }
 }
 
-} // anonymous namespace
+} 
 
-//------------------------------------------------------------------------------
+
 
 static uno::Reference<uno::XInterface> SAL_CALL
 createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
@@ -328,7 +328,7 @@ createJobInstance(const uno::Reference<uno::XComponentContext>& xContext)
     return static_cast<cppu::OWeakObject *>(job.get());
 }
 
-//------------------------------------------------------------------------------
+
 
 static uno::Reference<uno::XInterface> SAL_CALL
 createConfigInstance(const uno::Reference<uno::XComponentContext>& xContext)
@@ -336,7 +336,7 @@ createConfigInstance(const uno::Reference<uno::XComponentContext>& xContext)
     return *UpdateCheckConfig::get(xContext, *UpdateCheck::get());
 }
 
-//------------------------------------------------------------------------------
+
 
 static const cppu::ImplementationEntry kImplementations_entries[] =
 {
@@ -359,7 +359,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
     { NULL, NULL, NULL, NULL, NULL, 0 }
 } ;
 
-//------------------------------------------------------------------------------
+
 
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL updchk_component_getFactory(const sal_Char *pszImplementationName, void *pServiceManager, void *pRegistryKey)
 {

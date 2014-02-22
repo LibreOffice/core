@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/uicommanddescription.hxx>
@@ -69,7 +69,7 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAcces
                                   ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& xGenericUICommands, const Reference< XComponentContext >& rxContext );
         virtual                   ~ConfigurationAccess_UICategory();
 
-        // XNameAccess
+        
         virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
             throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
@@ -79,19 +79,19 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAcces
         virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
             throw (::com::sun::star::uno::RuntimeException);
 
-        // XElementAccess
+        
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
             throw (::com::sun::star::uno::RuntimeException);
 
         virtual sal_Bool SAL_CALL hasElements()
             throw (::com::sun::star::uno::RuntimeException);
 
-        // container.XContainerListener
+        
         virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException);
         virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException);
         virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException);
 
-        // lang.XEventListener
+        
         virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException);
 
     protected:
@@ -119,9 +119,9 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper2<XNameAcces
         IdToInfoCache                     m_aIdCache;
 };
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
+
+
 
 ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& aModuleName, const Reference< XNameAccess >& rGenericUICategories, const Reference< XComponentContext >& rxContext ) :
     m_aConfigCategoryAccess( CONFIGURATION_ROOT_ACCESS ),
@@ -130,7 +130,7 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& 
     m_bConfigAccessInitialized( sal_False ),
     m_bCacheFilled( sal_False )
 {
-    // Create configuration hierachical access name
+    
     m_aConfigCategoryAccess += aModuleName;
     m_aConfigCategoryAccess += CONFIGURATION_CATEGORY_ELEMENT_ACCESS;
 
@@ -139,14 +139,14 @@ ConfigurationAccess_UICategory::ConfigurationAccess_UICategory( const OUString& 
 
 ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 {
-    // SAFE
+    
     osl::MutexGuard g(aMutex);
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
     if ( xContainer.is() )
         xContainer->removeContainerListener(m_xConfigListener);
 }
 
-// XNameAccess
+
 Any SAL_CALL ConfigurationAccess_UICategory::getByName( const OUString& rId )
 throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
 {
@@ -158,7 +158,7 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException)
         fillCache();
     }
 
-    // SAFE
+    
     Any a = getUINameFromID( rId );
 
     if ( !a.hasValue() )
@@ -179,7 +179,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return getByName( rId ).hasValue();
 }
 
-// XElementAccess
+
 Type SAL_CALL ConfigurationAccess_UICategory::getElementType()
 throw ( RuntimeException )
 {
@@ -189,7 +189,7 @@ throw ( RuntimeException )
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasElements()
 throw ( RuntimeException )
 {
-    // There must be global categories!
+    
     return sal_True;
 }
 
@@ -238,7 +238,7 @@ Any ConfigurationAccess_UICategory::getUINameFromID( const OUString& rId )
         a = getUINameFromCache( rId );
         if ( !a.hasValue() )
         {
-            // Try to ask our global commands configuration access
+            
             if ( m_xGenericUICategories.is() )
             {
                 try
@@ -277,7 +277,7 @@ Any ConfigurationAccess_UICategory::getUINameFromCache( const OUString& rId )
 
 Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 {
-    // SAFE
+    
     osl::MutexGuard g(aMutex);
 
     if ( !m_bConfigAccessInitialized )
@@ -297,7 +297,7 @@ Sequence< OUString > ConfigurationAccess_UICategory::getAllIds()
 
             if ( m_xGenericUICategories.is() )
             {
-                // Create concat list of supported user interface commands of the module
+                
                 Sequence< OUString > aGenericNameSeq = m_xGenericUICategories->getElementNames();
                 sal_uInt32 nCount1 = aNameSeq.getLength();
                 sal_uInt32 nCount2 = aGenericNameSeq.getLength();
@@ -337,7 +337,7 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
                     "com.sun.star.configuration.ConfigurationAccess", aArgs ),UNO_QUERY );
         if ( m_xConfigAccess.is() )
         {
-            // Add as container listener
+            
             Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
             if ( xContainer.is() )
             {
@@ -358,7 +358,7 @@ sal_Bool ConfigurationAccess_UICategory::initializeConfigAccess()
     return sal_False;
 }
 
-// container.XContainerListener
+
 void SAL_CALL ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& ) throw(RuntimeException)
 {
 }
@@ -371,11 +371,11 @@ void SAL_CALL ConfigurationAccess_UICategory::elementReplaced( const ContainerEv
 {
 }
 
-// lang.XEventListener
+
 void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEvent ) throw(RuntimeException)
 {
-    // SAFE
-    // remove our reference to the config access
+    
+    
     osl::MutexGuard g(aMutex);
 
     Reference< XInterface > xIfac1( aEvent.Source, UNO_QUERY );
@@ -421,7 +421,7 @@ UICategoryDescription::UICategoryDescription( const Reference< XComponentContext
     OUString aGenericCategories( "GenericCategories" );
     m_xGenericUICommands = new ConfigurationAccess_UICategory( aGenericCategories, xEmpty, rxContext );
 
-    // insert generic categories mappings
+    
     m_aModuleToCommandFileMap.insert( ModuleToCommandFileMap::value_type(
         OUString(GENERIC_MODULE_NAME ), aGenericCategories ));
 

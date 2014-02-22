@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,7 +52,7 @@ using namespace ::cppu;
 #define DISPATCH_CLOSEWIN   3
 #define DISPATCH_CLOSEFRAME 4
 #define DISPATCH_RELOAD     5
-// the OSL_ENSURE in CTOR has to be changed too, when adding new defines
+
 
 void SAL_CALL OInterceptor::dispose()
     throw( RuntimeException )
@@ -109,7 +109,7 @@ struct DispatchHelper
     Sequence<PropertyValue > aArguments;
 };
 
-//XDispatch
+
 void SAL_CALL OInterceptor::dispatch( const URL& _URL,const Sequence<PropertyValue >& Arguments ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -219,7 +219,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         return;
 
     if ( m_pContentHolder && _URL.Complete == m_aInterceptedURL[DISPATCH_SAVEAS] )
-    {   // SaveAs
+    {   
 
         if ( !m_pContentHolder->isNewReport() )
         {
@@ -241,7 +241,7 @@ void SAL_CALL OInterceptor::addStatusListener(
         m_pStatCL->addInterface(_URL.Complete,Control);
     }
     else if ( m_pContentHolder && _URL.Complete == m_aInterceptedURL[DISPATCH_SAVE] )
-    {   // Save
+    {   
         FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVE];
         aStateEvent.FeatureDescriptor = "Update";
@@ -267,7 +267,7 @@ void SAL_CALL OInterceptor::addStatusListener(
             _URL.Complete == m_aInterceptedURL[++i] ||
             _URL.Complete == m_aInterceptedURL[++i] ||
             _URL.Complete == m_aInterceptedURL[i = DISPATCH_RELOAD] )
-        {   // Close and return
+        {   
             FeatureStateEvent aStateEvent;
             aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
             aStateEvent.FeatureDescriptor = "Close and Return";
@@ -307,15 +307,15 @@ void SAL_CALL OInterceptor::removeStatusListener(
 }
 
 
-//XInterceptorInfo
+
 Sequence< OUString > SAL_CALL OInterceptor::getInterceptedURLs(  )   throw ( RuntimeException    )
 {
-    // now implemented as update
+    
     return m_aInterceptedURL;
 }
 
 
-// XDispatchProvider
+
 
 Reference< XDispatch > SAL_CALL OInterceptor::queryDispatch( const URL& _URL,const OUString& TargetFrameName,sal_Int32 SearchFlags )
     throw (RuntimeException)
@@ -363,7 +363,7 @@ Sequence< Reference< XDispatch > > SAL_CALL OInterceptor::queryDispatches(  cons
 
 
 
-//XDispatchProviderInterceptor
+
 
 Reference< XDispatchProvider > SAL_CALL OInterceptor::getSlaveDispatchProvider(  )  throw ( RuntimeException    )
 {
@@ -424,6 +424,6 @@ void SAL_CALL OInterceptor::disposing( const ::com::sun::star::lang::EventObject
 {
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

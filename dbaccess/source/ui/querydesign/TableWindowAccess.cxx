@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableWindowAccess.hxx"
@@ -76,7 +76,7 @@ namespace dbaui
     {
         return getSupportedServiceNames_Static();
     }
-    // XServiceInfo - static methods
+    
     Sequence< OUString > OTableWindowAccess::getSupportedServiceNames_Static(void) throw( RuntimeException )
     {
         Sequence< OUString > aSupported(2);
@@ -88,7 +88,7 @@ namespace dbaui
     {
         return OUString("org.openoffice.comp.dbu.TableWindowAccessibility");
     }
-    // XAccessibleContext
+    
     sal_Int32 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -115,7 +115,7 @@ namespace dbaui
                     {
                         aRet = m_pTable->GetTitleCtrl()->GetAccessible();
                         break;
-                    } // fall through if title control does not exist
+                    } 
                 case 1:
                     if(m_pTable->GetListBox())
                         aRet = m_pTable->GetListBox()->GetAccessible();
@@ -132,7 +132,7 @@ namespace dbaui
         sal_Int32 nIndex = -1;
         if( m_pTable )
         {
-            // search the postion of our table window in the table window map
+            
             OJoinTableView::OTableWindowMap* pMap = m_pTable->getTableView()->GetTabWinMap();
             OJoinTableView::OTableWindowMap::iterator aIter = pMap->begin();
             OJoinTableView::OTableWindowMap::iterator aEnd = pMap->end();
@@ -144,14 +144,14 @@ namespace dbaui
     }
     sal_Int16 SAL_CALL OTableWindowAccess::getAccessibleRole(  ) throw (RuntimeException)
     {
-        return AccessibleRole::PANEL; // ? or may be an AccessibleRole::WINDOW
+        return AccessibleRole::PANEL; 
     }
     Reference< XAccessibleRelationSet > SAL_CALL OTableWindowAccess::getAccessibleRelationSet(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         return this;
     }
-    // XAccessibleComponent
+    
     Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleAtPoint( const awt::Point& _aPoint ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
@@ -221,7 +221,7 @@ namespace dbaui
             ::std::vector<OTableConnection*>::const_iterator aIter = pView->getTableConnections(m_pTable);
             ::std::vector<OTableConnection*>::const_iterator aEnd = pConnectionList->end();
             ::std::vector< Reference<XInterface> > aRelations;
-            aRelations.reserve(5); // just guessing
+            aRelations.reserve(5); 
             for (; aIter != aEnd ; ++aIter )
             {
                 uno::Reference<uno::XInterface> xInterface(

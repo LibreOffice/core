@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -52,11 +52,11 @@
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
 
-// =======================================================================
+
 
 #define IMPL_MIN_NEEDSYSWIN         49
 
-// =======================================================================
+
 
 bool ImplCallPreNotify( NotifyEvent& rEvt )
 {
@@ -105,10 +105,10 @@ static bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
                         pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
                         nPopupFlags = pLastLevelFloat->GetPopupModeFlags();
                         pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-// Erstmal ausgebaut als Hack fuer Bug 53378
-//                        if ( nPopupFlags & FLOATWIN_POPUPMODE_PATHMOUSECANCELCLICK )
-//                            return sal_False;
-//                        else
+
+
+
+
                             return true;
                     }
                     else if ( nHitTest & IMPL_FLOATWIN_HITTEST_RECT )
@@ -168,7 +168,7 @@ static bool ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
 {
@@ -191,7 +191,7 @@ static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
                 pChild->RequestHelp( aHelpEvent );
                 pSVData->maHelpData.mbRequestingHelp = false;
             }
-            // #104172# do not kill keyboard activated tooltips
+            
             else if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp)
             {
                 ImplDestroyHelpWindow( true );
@@ -200,7 +200,7 @@ static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplSetMousePointer( Window* pChild )
 {
@@ -211,7 +211,7 @@ static void ImplSetMousePointer( Window* pChild )
         pChild->ImplGetFrame()->SetPointer( pChild->ImplGetMousePointer() );
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplCallCommand( Window* pChild, sal_uInt16 nEvt, void* pData = NULL,
                              bool bMouse = false, Point* pPos = NULL )
@@ -225,7 +225,7 @@ static bool ImplCallCommand( Window* pChild, sal_uInt16 nEvt, void* pData = NULL
             aPos = pChild->GetPointerPosPixel();
         else
         {
-            // simulate mouseposition at center of window
+            
             Size aSize( pChild->GetOutputSizePixel() );
             aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
         }
@@ -254,7 +254,7 @@ static bool ImplCallCommand( Window* pChild, sal_uInt16 nEvt, void* pData = NULL
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 /*  #i34277# delayed context menu activation;
 *   necessary if there already was a popup menu running.
@@ -293,8 +293,8 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     ImplFrameData* pWinFrameData = pWindow->ImplGetFrameData();
     sal_uInt16      nOldCode = pWinFrameData->mnMouseCode;
 
-    // we need a mousemove event, befor we get a mousebuttondown or a
-    // mousebuttonup event
+    
+    
     if ( (nSVEvent == EVENT_MOUSEBUTTONDOWN) ||
          (nSVEvent == EVENT_MOUSEBUTTONUP) )
     {
@@ -305,7 +305,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             if( pWindow->ImplGetWindow() == pSVData->maHelpData.mpHelpWin )
             {
                 ImplDestroyHelpWindow( false );
-                return true; // pWindow is dead now - avoid crash!
+                return true; 
             }
             else
                 ImplDestroyHelpWindow( true );
@@ -318,7 +318,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
         }
     }
 
-    // update frame data
+    
     pWinFrameData->mnBeforeLastMouseX = pWinFrameData->mnLastMouseX;
     pWinFrameData->mnBeforeLastMouseY = pWinFrameData->mnLastMouseY;
     pWinFrameData->mnLastMouseX = nX;
@@ -335,7 +335,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             ImplDestroyHelpWindow( true );
 
             if ( aDelData.IsDead() )
-                return true; // pWindow is dead now - avoid crash! (#122045#)
+                return true; 
         }
     }
     else
@@ -345,14 +345,14 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                 (pSVData->maWinData.mpTrackWin == pSVData->maWinData.mpCaptureWin),
                 "ImplHandleMouseEvent: TrackWin != CaptureWin" );
 
-    // AutoScrollMode
+    
     if ( pSVData->maWinData.mpAutoScrollWin && (nSVEvent == EVENT_MOUSEBUTTONDOWN) )
     {
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
         return true;
     }
 
-    // find mouse window
+    
     if ( pSVData->maWinData.mpCaptureWin )
     {
         pChild = pSVData->maWinData.mpCaptureWin;
@@ -360,7 +360,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
         DBG_ASSERT( pWindow == pChild->ImplGetFrameWindow(),
                     "ImplHandleMouseEvent: mouse event is not sent to capture window" );
 
-        // java client cannot capture mouse correctly
+        
         if ( pWindow != pChild->ImplGetFrameWindow() )
             return false;
 
@@ -375,27 +375,27 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             pChild = pWindow->ImplFindWindow( aMousePos );
     }
 
-    // test this because mouse events are buffered in the remote version
-    // and size may not be in sync
+    
+    
     if ( !pChild && !bMouseLeave )
         return false;
 
-    // execute a few tests and catch the message or implement the status
+    
     if ( pChild )
     {
         if( pChild->ImplIsAntiparallel() )
         {
-            // - RTL - re-mirror frame pos at pChild
+            
             const OutputDevice *pChildWinOutDev = pChild->GetOutDev();
             pChildWinOutDev->ReMirror( aMousePos );
         }
-        // no mouse messages to system object windows ?
-        // !!!KA: Is it OK to comment this out? !!!
-//        if ( pChild->ImplGetWindowImpl()->mpSysObj )
-//            return false;
+        
+        
 
-        // no mouse messages to disabled windows
-        // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
+
+
+        
+        
         if ( pSVData->maWinData.mpCaptureWin != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalNonRefMode() ) )
         {
             ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave );
@@ -406,7 +406,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                     nMode |= MOUSE_ENTERWINDOW;
             }
 
-            // Call the hook also, if Window is disabled
+            
             Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
             MouseEvent aMEvt( aChildPos, pWinFrameData->mnClickCount, nMode, nCode, nCode );
             NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
@@ -422,7 +422,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                 return true;
             else
             {
-                // Set normal MousePointer for disabled windows
+                
                 if ( nSVEvent == EVENT_MOUSEMOVE )
                     ImplSetMousePointer( pChild );
 
@@ -430,18 +430,18 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             }
         }
 
-        // End ExtTextInput-Mode, if the user click in the same TopLevel Window
+        
         if ( pSVData->maWinData.mpExtTextInputWin &&
              ((nSVEvent == EVENT_MOUSEBUTTONDOWN) ||
               (nSVEvent == EVENT_MOUSEBUTTONUP)) )
             pSVData->maWinData.mpExtTextInputWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
     }
 
-    // determine mouse event data
+    
     if ( nSVEvent == EVENT_MOUSEMOVE )
     {
-        // check if MouseMove belongs to same window and if the
-        // status did not change
+        
+        
         if ( pChild )
         {
             Point aChildMousePos = pChild->ImplFrameToOutput( aMousePos );
@@ -451,8 +451,8 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                  (aChildMousePos.Y() == pWinFrameData->mnLastMouseWinY) &&
                  (nOldCode == pWinFrameData->mnMouseCode) )
             {
-                // set mouse pointer anew, as it could have changed
-                // due to the mode switch
+                
+                
                 ImplSetMousePointer( pChild );
                 return false;
             }
@@ -461,18 +461,18 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             pWinFrameData->mnLastMouseWinY = aChildMousePos.Y();
         }
 
-        // mouse click
+        
         nClicks = pWinFrameData->mnClickCount;
 
-        // call Start-Drag handler if required
-        // Warning: should be called before Move, as otherwise during
-        // fast mouse movements the applications move to the selection state
+        
+        
+        
         Window* pMouseDownWin = pWinFrameData->mpMouseDownWin;
         if ( pMouseDownWin )
         {
-            // check for matching StartDrag mode. We only compare
-            // the status of the mouse buttons, such that e. g. Mod1 can
-            // change immediately to the copy mode
+            
+            
+            
             const MouseSettings& rMSettings = pMouseDownWin->GetSettings().GetMouseSettings();
             if ( (nCode & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) ==
                  (rMSettings.GetStartDragCode() & (MOUSE_LEFT | MOUSE_RIGHT | MOUSE_MIDDLE)) )
@@ -481,9 +481,9 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                 {
                     long nDragW  = rMSettings.GetStartDragWidth();
                     long nDragH  = rMSettings.GetStartDragWidth();
-                    //long nMouseX = nX;
-                    //long nMouseY = nY;
-                    long nMouseX = aMousePos.X(); // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
+                    
+                    
+                    long nMouseX = aMousePos.X(); 
                     long nMouseY = aMousePos.Y();
                     if ( !(((nMouseX-nDragW) <= pMouseDownWin->ImplGetFrameData()->mnFirstMouseX) &&
                            ((nMouseX+nDragW) >= pMouseDownWin->ImplGetFrameData()->mnFirstMouseX)) ||
@@ -492,22 +492,22 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                     {
                         pMouseDownWin->ImplGetFrameData()->mbStartDragCalled  = true;
 
-                        // Check if drag source provides it's own recognizer
+                        
                         if( pMouseDownWin->ImplGetFrameData()->mbInternalDragGestureRecognizer )
                         {
-                            // query DropTarget from child window
+                            
                             ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > xDragGestureRecognizer =
                                 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragGestureRecognizer > ( pMouseDownWin->ImplGetWindowImpl()->mxDNDListenerContainer,
                                     ::com::sun::star::uno::UNO_QUERY );
 
                             if( xDragGestureRecognizer.is() )
                             {
-                                // retrieve mouse position relative to mouse down window
+                                
                                 Point relLoc = pMouseDownWin->ImplFrameToOutput( Point(
                                     pMouseDownWin->ImplGetFrameData()->mnFirstMouseX,
                                     pMouseDownWin->ImplGetFrameData()->mnFirstMouseY ) );
 
-                                // create a uno mouse event out of the available data
+                                
                                 ::com::sun::star::awt::MouseEvent aMouseEvent(
                                     static_cast < ::com::sun::star::uno::XInterface * > ( 0 ),
 #ifdef MACOSX
@@ -523,7 +523,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
 
                                 sal_uLong nCount = Application::ReleaseSolarMutex();
 
-                                // FIXME: where do I get Action from ?
+                                
                                 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSource > xDragSource = pMouseDownWin->GetDragSource();
 
                                 if( xDragSource.is() )
@@ -542,7 +542,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                 pMouseDownWin->ImplGetFrameData()->mbStartDragCalled  = true;
         }
 
-        // test for mouseleave and mouseenter
+        
         Window* pMouseMoveWin = pWinFrameData->mpMouseMoveWin;
         if ( pChild != pMouseMoveWin )
         {
@@ -557,13 +557,13 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                 pMouseMoveWin->ImplGetWinData()->mbMouseOver = false;
                 pMouseMoveWin->ImplAddDel( &aDelData );
 
-                // A MouseLeave can destroy this window
+                
                 if ( pChild )
                     pChild->ImplAddDel( &aDelData2 );
                 if ( !ImplCallPreNotify( aNLeaveEvt ) )
                 {
                     pMouseMoveWin->MouseMove( aMLeaveEvt );
-                    // #82968#
+                    
                     if( !aDelData.IsDead() )
                         aNLeaveEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNLeaveEvt );
                 }
@@ -589,22 +589,22 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
         if( pChild )
             pChild->ImplGetWinData()->mbMouseOver = true;
 
-        // MouseLeave
+        
         if ( !pChild )
             return false;
     }
     else
     {
-        // mouse click
+        
         if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
         {
             const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
             sal_uLong   nDblClkTime = rMSettings.GetDoubleClickTime();
             long    nDblClkW    = rMSettings.GetDoubleClickWidth();
             long    nDblClkH    = rMSettings.GetDoubleClickHeight();
-            //long    nMouseX     = nX;
-            //long    nMouseY     = nY;
-            long nMouseX = aMousePos.X();   // #106074# use the possibly re-mirrored coordinates (RTL) ! nX,nY are unmodified !
+            
+            
+            long nMouseX = aMousePos.X();   
             long nMouseY = aMousePos.Y();
 
             if ( (pChild == pChild->ImplGetFrameData()->mpMouseDownWin) &&
@@ -637,15 +637,15 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
 
     DBG_ASSERT( pChild, "ImplHandleMouseEvent: pChild == NULL" );
 
-    // create mouse event
+    
     Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
     MouseEvent aMEvt( aChildPos, nClicks, nMode, nCode, nCode );
 
-    // tracking window gets the mouse events
+    
     if ( pSVData->maWinData.mpTrackWin )
         pChild = pSVData->maWinData.mpTrackWin;
 
-    // handle FloatingMode
+    
     if ( !pSVData->maWinData.mpTrackWin && pSVData->maWinData.mpFirstFloat )
     {
         ImplDelData aDelData;
@@ -663,7 +663,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             pChild->ImplRemoveDel( &aDelData );
     }
 
-    // call handler
+    
     bool bDrag = false;
     bool bCallHelpRequest = true;
     DBG_ASSERT( pChild, "ImplHandleMouseEvent: pChild is NULL" );
@@ -674,11 +674,11 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     if ( nSVEvent == EVENT_MOUSEMOVE )
         pChild->ImplGetFrameData()->mbInMouseMove = true;
 
-    // bring window into foreground on mouseclick
+    
     if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
     {
-        if( !pSVData->maWinData.mpFirstFloat && // totop for floating windows in popup would change the focus and would close them immediately
-            !(pChild->ImplGetFrameWindow()->GetStyle() & WB_OWNERDRAWDECORATION) )    // ownerdrawdecorated windows must never grab focus
+        if( !pSVData->maWinData.mpFirstFloat && 
+            !(pChild->ImplGetFrameWindow()->GetStyle() & WB_OWNERDRAWDECORATION) )    
             pChild->ToTop();
         if ( aDelData.IsDead() )
             return true;
@@ -697,7 +697,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                 pChild->Tracking( aTEvt );
                 if ( !aDelData.IsDead() )
                 {
-                    // When ScrollRepeat, we restart the timer
+                    
                     if ( pSVData->maWinData.mpTrackTimer &&
                          (pSVData->maWinData.mnTrackFlags & STARTTRACK_SCROLLREPEAT) )
                         pSVData->maWinData.mpTrackTimer->Start();
@@ -707,7 +707,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             }
             else
             {
-                // Auto-ToTop
+                
                 if ( !pSVData->maWinData.mpCaptureWin &&
                      (pChild->GetSettings().GetMouseSettings().GetOptions() & MOUSE_OPTION_AUTOFOCUS) )
                     pChild->ToTop( TOTOP_NOGRABFOCUS );
@@ -716,8 +716,8 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
                     bCallHelpRequest = false;
                 else
                 {
-                    // if the MouseMove handler changes the help window's visibility
-                    // the HelpRequest handler should not be called anymore
+                    
+                    
                     Window* pOldHelpTextWin = pSVData->maHelpData.mpHelpWin;
                     pChild->ImplGetWindowImpl()->mbMouseMove = false;
                     pChild->MouseMove( aMEvt );
@@ -751,7 +751,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             }
         }
 
-        // #82968#
+        
         if ( !aDelData.IsDead() )
             aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
     }
@@ -787,7 +787,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
 
     if ( nSVEvent == EVENT_MOUSEMOVE )
     {
-        // set new mouse pointer
+        
         if ( !bMouseLeave )
             ImplSetMousePointer( pChild );
     }
@@ -795,7 +795,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     {
         if ( !bDrag )
         {
-            // Command-Events
+            
             if ( /*!nRet &&*/ (nClicks == 1) && (nSVEvent == EVENT_MOUSEBUTTONDOWN) &&
                  (nCode == MOUSE_MIDDLE) )
             {
@@ -807,7 +807,7 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
             }
             else
             {
-                // ContextMenu
+                
                 const MouseSettings& rMSettings = pChild->GetSettings().GetMouseSettings();
                 if ( (nCode == rMSettings.GetContextMenuCode()) &&
                      (nClicks == rMSettings.GetContextMenuClicks()) )
@@ -846,50 +846,50 @@ bool ImplHandleMouseEvent( Window* pWindow, sal_uInt16 nSVEvent, bool bMouseLeav
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static Window* ImplGetKeyInputWindow( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // determine last input time
+    
     pSVData->maAppData.mnLastInputTime = Time::GetSystemTicks();
 
-    // #127104# workaround for destroyed windows
+    
     if( pWindow->ImplGetWindowImpl() == NULL )
         return 0;
 
-    // find window - is every time the window which has currently the
-    // focus or the last time the focus.
-    // the first floating window always has the focus
+    
+    
+    
     Window* pChild = pSVData->maWinData.mpFirstFloat;
     if( !pChild || ( pChild->ImplGetWindowImpl()->mbFloatWin && !((FloatingWindow *)pChild)->GrabsFocus() ) )
         pChild = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
     else
     {
-        // allow floaters to forward keyinput to some member
+        
         pChild = pChild->GetPreferredKeyInputWindow();
     }
 
-    // no child - than no input
+    
     if ( !pChild )
         return 0;
 
-    // We call also KeyInput if we haven't the focus, because on Unix
-    // system this is often the case when a Lookup Choise Window has
-    // the focus - because this windows send the KeyInput directly to
-    // the window without resetting the focus
+    
+    
+    
+    
     DBG_ASSERTWARNING( pChild == pSVData->maWinData.mpFocusWin,
                        "ImplHandleKey: Keyboard-Input is sent to a frame without focus" );
 
-    // no keyinput to disabled windows
+    
     if ( !pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalMode() )
         return 0;
 
     return pChild;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                            sal_uInt16 nKeyCode, sal_uInt16 nCharCode, sal_uInt16 nRepeat, bool bForward )
@@ -898,9 +898,9 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     KeyCode     aKeyCode( nKeyCode, nKeyCode );
     sal_uInt16      nEvCode = aKeyCode.GetCode();
 
-    // allow application key listeners to remove the key event
-    // but make sure we're not forwarding external KeyEvents, (ie where bForward is sal_False)
-    // because those are coming back from the listener itself and MUST be processed
+    
+    
+    
     KeyEvent aKeyEvent( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
     if( bForward )
     {
@@ -921,7 +921,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
             return true;
     }
 
-    // #i1820# use locale specific decimal separator
+    
     if( nEvCode == KEY_DECIMAL )
     {
         if( Application::GetSettings().GetMiscSettings().GetEnableLocalizedDecimalSep() )
@@ -933,14 +933,14 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
 
     bool bCtrlF6 = (aKeyCode.GetCode() == KEY_F6) && aKeyCode.IsMod1();
 
-    // determine last input time
+    
     pSVData->maAppData.mnLastInputTime = Time::GetSystemTicks();
 
-    // handle tracking window
+    
     if ( nSVEvent == EVENT_KEYINPUT )
     {
 #ifdef DBG_UTIL
-        // #105224# use Ctrl-Alt-Shift-D, Ctrl-Shift-D must be useable by app
+        
         if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && (aKeyCode.IsMod2() || aKeyCode.IsMod3()) && (aKeyCode.GetCode() == KEY_D) )
         {
             DBGGUI_START();
@@ -957,7 +957,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         if ( pSVData->maHelpData.mpHelpWin )
             ImplDestroyHelpWindow( false );
 
-        // AutoScrollMode
+        
         if ( pSVData->maWinData.mpAutoScrollWin )
         {
             pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
@@ -994,7 +994,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                 return true;
         }
 
-        // handle FloatingMode
+        
         if ( pSVData->maWinData.mpFirstFloat )
         {
             FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
@@ -1011,7 +1011,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
             }
         }
 
-        // test for accel
+        
         if ( pSVData->maAppData.mpAccelMgr )
         {
             if ( pSVData->maAppData.mpAccelMgr->IsAccelKey( aKeyCode, nRepeat ) )
@@ -1019,18 +1019,18 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         }
     }
 
-    // find window
+    
     Window* pChild = ImplGetKeyInputWindow( pWindow );
     if ( !pChild )
         return false;
 
-    // --- RTL --- mirror cursor keys
+    
     const OutputDevice *pChildOutDev = pChild->GetOutDev();
     if( (aKeyCode.GetCode() == KEY_LEFT || aKeyCode.GetCode() == KEY_RIGHT) &&
       pChildOutDev->HasMirroredGraphics() && pChild->IsRTLEnabled() )
         aKeyCode = KeyCode( aKeyCode.GetCode() == KEY_LEFT ? KEY_RIGHT : KEY_LEFT, aKeyCode.GetModifier() );
 
-    // call handler
+    
     ImplDelData aDelData;
     pChild->ImplAddDel( &aDelData );
 
@@ -1051,7 +1051,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
             pChild->ImplGetWindowImpl()->mbKeyUp = false;
             pChild->KeyUp( aKeyEvt );
         }
-        // #82968#
+        
         if( !aDelData.IsDead() )
             aNotifyEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNotifyEvt );
     }
@@ -1067,7 +1067,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
         {
             sal_uInt16 nCode = aKeyCode.GetCode();
 
-            // #101999# is focus in or below toolbox
+            
             bool bToolboxFocus=false;
             if( (nCode == KEY_F1) && aKeyCode.IsShift() )
             {
@@ -1084,15 +1084,15 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                 }
             }
 
-            // ContextMenu
+            
             if ( (nCode == KEY_CONTEXTMENU) || ((nCode == KEY_F10) && aKeyCode.IsShift() && !aKeyCode.IsMod1() && !aKeyCode.IsMod2() ) )
                 nRet = !ImplCallCommand( pChild, COMMAND_CONTEXTMENU, NULL, false );
             else if ( ( (nCode == KEY_F2) && aKeyCode.IsShift() ) || ( (nCode == KEY_F1) && aKeyCode.IsMod1() ) ||
-                // #101999# no active help when focus in toolbox, simulate BallonHelp instead
+                
                 ( (nCode == KEY_F1) && aKeyCode.IsShift() && bToolboxFocus ) )
             {
-                // TipHelp via Keyboard (Shift-F2 or Ctrl-F1)
-                // simulate mouseposition at center of window
+                
+                
 
                 Size aSize = pChild->GetOutputSize();
                 Point aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
@@ -1140,12 +1140,12 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
             nRet = false;
     }
 
-    // #105591# send keyinput to parent if we are a floating window and the key was not pocessed yet
+    
     if( !nRet && pWindow->ImplGetWindowImpl()->mbFloatWin && pWindow->GetParent() && (pWindow->ImplGetWindowImpl()->mpFrame != pWindow->GetParent()->ImplGetWindowImpl()->mpFrame) )
     {
         pChild = pWindow->GetParent();
 
-        // call handler
+        
         ImplDelData aChildDelData( pChild );
         KeyEvent    aKEvt( (sal_Unicode)nCharCode, aKeyCode, nRepeat );
         NotifyEvent aNEvt( nSVEvent, pChild, &aKEvt );
@@ -1165,7 +1165,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
                 pChild->ImplGetWindowImpl()->mbKeyUp = false;
                 pChild->KeyUp( aKEvt );
             }
-            // #82968#
+            
             if( !aChildDelData.IsDead() )
                 aNEvt.GetWindow()->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
             if ( aChildDelData.IsDead() )
@@ -1179,7 +1179,7 @@ static bool ImplHandleKey( Window* pWindow, sal_uInt16 nSVEvent,
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleExtTextInput( Window* pWindow,
                                     const OUString& rText,
@@ -1204,8 +1204,8 @@ static bool ImplHandleExtTextInput( Window* pWindow,
         Application::Yield();
     }
 
-    // If it is the first ExtTextInput call, we inform the information
-    // and allocate the data, which we must store in this mode
+    
+    
     ImplWinData* pWinData = pChild->ImplGetWinData();
     if ( !pChild->ImplGetWindowImpl()->mbExtTextInput )
     {
@@ -1220,11 +1220,11 @@ static bool ImplHandleExtTextInput( Window* pWindow,
         ImplCallCommand( pChild, COMMAND_STARTEXTTEXTINPUT );
     }
 
-    // be aware of being recursively called in StartExtTextInput
+    
     if ( !pChild->ImplGetWindowImpl()->mbExtTextInput )
         return false;
 
-    // Test for changes
+    
     bool bOnlyCursor = false;
     sal_Int32 nMinLen = std::min( pWinData->mpExtOldText->getLength(), rText.getLength() );
     sal_Int32 nDeltaStart = 0;
@@ -1256,7 +1256,7 @@ static bool ImplHandleExtTextInput( Window* pWindow,
          (pWinData->mpExtOldText->getLength() == rText.getLength()) )
         bOnlyCursor = true;
 
-    // Call Event and store the information
+    
     CommandExtTextInputData aData( rText, pTextAttr,
                                    nCursorPos, nCursorFlags,
                                    bOnlyCursor );
@@ -1274,7 +1274,7 @@ static bool ImplHandleExtTextInput( Window* pWindow,
     return !ImplCallCommand( pChild, COMMAND_EXTTEXTINPUT, &aData );
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleEndExtTextInput( Window* /* pWindow */ )
 {
@@ -1303,7 +1303,7 @@ static bool ImplHandleEndExtTextInput( Window* /* pWindow */ )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleExtTextInputPos( Window* pWindow,
                                        Rectangle& rRect, long& rInputWidth,
@@ -1316,7 +1316,7 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
         pChild = ImplGetKeyInputWindow( pWindow );
     else
     {
-        // Test, if the Window is related to the frame
+        
         if ( !pWindow->ImplIsWindowOrChild( pChild ) )
             pChild = ImplGetKeyInputWindow( pWindow );
     }
@@ -1351,7 +1351,7 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
             = pChild != 0 && pChild->GetInputContext().GetFont().IsVertical();
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleInputContextChange( Window* pWindow, LanguageType eNewLang )
 {
@@ -1360,7 +1360,7 @@ static bool ImplHandleInputContextChange( Window* pWindow, LanguageType eNewLang
     return !ImplCallCommand( pChild, COMMAND_INPUTCONTEXTCHANGE, &aData );
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
                                   const CommandWheelData* pWheelData )
@@ -1384,7 +1384,7 @@ static bool ImplCallWheelCommand( Window* pWindow, const Point& rPos,
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEvt, bool scaleDirectly = false )
 {
@@ -1411,7 +1411,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     else
     {
         nMode = COMMAND_WHEEL_SCROLL;
-        // #i85450# interpret shift-wheel as horizontal wheel action
+        
         if( (nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)) == KEY_SHIFT )
             bHorz = true;
     }
@@ -1420,7 +1420,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     Point               aMousePos( rEvt.mnX, rEvt.mnY );
     bool                bRet = true;
 
-    // first check any floating window ( eg. drop down listboxes)
+    
     bool bIsFloat = false;
     Window *pMouseWindow = NULL;
     if ( pSVData->maWinData.mpFirstFloat && !pSVData->maWinData.mpCaptureWin &&
@@ -1429,12 +1429,12 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
         sal_uInt16 nHitTest = IMPL_FLOATWIN_HITTEST_OUTSIDE;
         pMouseWindow = pSVData->maWinData.mpFirstFloat->ImplFloatHitTest( pWindow, aMousePos, nHitTest );
     }
-    // then try the window directly beneath the mouse
+    
     if( !pMouseWindow )
         pMouseWindow = pWindow->ImplFindWindow( aMousePos );
     else
     {
-        // transform coordinates to float window frame coordinates
+        
         pMouseWindow = pMouseWindow->ImplFindWindow(
                  pMouseWindow->OutputToScreenPixel(
                   pMouseWindow->AbsoluteScreenToOutputPixel(
@@ -1446,7 +1446,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     if ( pMouseWindow &&
          pMouseWindow->IsEnabled() && pMouseWindow->IsInputEnabled() && ! pMouseWindow->IsInModalMode() )
     {
-        // transform coordinates to float window frame coordinates
+        
         Point aRelMousePos( pMouseWindow->OutputToScreenPixel(
                              pMouseWindow->AbsoluteScreenToOutputPixel(
                               pWindow->OutputToAbsoluteScreenPixel(
@@ -1454,17 +1454,17 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
         bRet = ImplCallWheelCommand( pMouseWindow, aRelMousePos, &aWheelData );
     }
 
-    // if the command was not handled try the focus window
+    
     if ( bRet )
     {
         Window* pFocusWindow = pWindow->ImplGetWindowImpl()->mpFrameData->mpFocusWin;
         if ( pFocusWindow && (pFocusWindow != pMouseWindow) &&
              (pFocusWindow == pSVData->maWinData.mpFocusWin) )
         {
-            // no wheel-messages to disabled windows
+            
             if ( pFocusWindow->IsEnabled() && pFocusWindow->IsInputEnabled() && ! pFocusWindow->IsInModalMode() )
             {
-                // transform coordinates to focus window frame coordinates
+                
                 Point aRelMousePos( pFocusWindow->OutputToScreenPixel(
                                      pFocusWindow->AbsoluteScreenToOutputPixel(
                                       pWindow->OutputToAbsoluteScreenPixel(
@@ -1474,7 +1474,7 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
         }
     }
 
-    // close floaters
+    
     if( ! bIsFloat && pSVData->maWinData.mpFirstFloat )
     {
         FloatingWindow* pLastLevelFloat = pSVData->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
@@ -1491,12 +1491,12 @@ static bool ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     return !bRet;
 }
 
-// -----------------------------------------------------------------------
+
 #define IMPL_PAINT_CHECKRTL         ((sal_uInt16)0x0020)
 
 static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool bImmediateUpdate )
 {
-    // give up background save when sytem paints arrive
+    
     Window* pSaveBackWin = pWindow->ImplGetWindowImpl()->mpFrameData->mpFirstBackWin;
     while ( pSaveBackWin )
     {
@@ -1508,23 +1508,23 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect, bool 
         pSaveBackWin = pNext;
     }
 
-    // system paint events must be checked for re-mirroring
+    
     pWindow->ImplGetWindowImpl()->mnPaintFlags |= IMPL_PAINT_CHECKRTL;
 
-    // trigger paint for all windows that live in the new paint region
+    
     Region aRegion( rBoundRect );
     pWindow->ImplInvalidateOverlapFrameRegion( aRegion );
     if( bImmediateUpdate )
     {
-        // #i87663# trigger possible pending resize notifications
-        // (GetSizePixel does that for us)
+        
+        
         pWindow->GetSizePixel();
-        // force drawing inmmediately
+        
         pWindow->Update();
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void KillOwnPopups( Window* pWindow )
 {
@@ -1538,7 +1538,7 @@ static void KillOwnPopups( Window* pWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
@@ -1562,19 +1562,19 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
             if ( pWindow->IsReallyVisible() )
                 pWindow->ImplSetClipFlag();
             if ( pWindow->IsVisible() || pWindow->ImplGetWindow()->ImplGetWindowImpl()->mbAllResize ||
-                ( pWindow->ImplGetWindowImpl()->mbFrame && pWindow->ImplGetWindowImpl()->mpClientWindow ) )   // propagate resize for system border windows
+                ( pWindow->ImplGetWindowImpl()->mbFrame && pWindow->ImplGetWindowImpl()->mpClientWindow ) )   
             {
                 bool bStartTimer = true;
-                // use resize buffering for user resizes
-                // ownerdraw decorated windows and floating windows can be resized immediately (i.e. synchronously)
+                
+                
                 if( pWindow->ImplGetWindowImpl()->mbFrame && (pWindow->GetStyle() & WB_SIZEABLE)
-                    && !(pWindow->GetStyle() & WB_OWNERDRAWDECORATION)  // synchronous resize for ownerdraw decorated windows (toolbars)
-                    && !pWindow->ImplGetWindowImpl()->mbFloatWin )             // synchronous resize for floating windows, #i43799#
+                    && !(pWindow->GetStyle() & WB_OWNERDRAWDECORATION)  
+                    && !pWindow->ImplGetWindowImpl()->mbFloatWin )             
                 {
                     if( pWindow->ImplGetWindowImpl()->mpClientWindow )
                     {
-                        // #i42750# presentation wants to be informed about resize
-                        // as early as possible
+                        
+                        
                         WorkWindow* pWorkWindow = dynamic_cast<WorkWindow*>(pWindow->ImplGetWindowImpl()->mpClientWindow);
                         if( ! pWorkWindow || pWorkWindow->IsPresentationMode() )
                             bStartTimer = false;
@@ -1592,7 +1592,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
                 if( bStartTimer )
                     pWindow->ImplGetWindowImpl()->mpFrameData->maResizeTimer.Start();
                 else
-                    pWindow->ImplCallResize(); // otherwise menus cannot be positioned
+                    pWindow->ImplCallResize(); 
             }
             else
                 pWindow->ImplGetWindowImpl()->mbCallResize = true;
@@ -1607,7 +1607,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
     pWindow->ImplGetWindowImpl()->mpFrameData->mbMinimized = bMinimized;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleMove( Window* pWindow )
 {
@@ -1627,14 +1627,14 @@ static void ImplHandleMove( Window* pWindow )
     if ( pWindow->IsVisible() )
         pWindow->ImplCallMove();
     else
-        pWindow->ImplGetWindowImpl()->mbCallMove = true; // make sure the framepos will be updated on the next Show()
+        pWindow->ImplGetWindowImpl()->mbCallMove = true; 
 
     if ( pWindow->ImplGetWindowImpl()->mbFrame && pWindow->ImplGetWindowImpl()->mpClientWindow )
-        pWindow->ImplGetWindowImpl()->mpClientWindow->ImplCallMove();   // notify client to update geometry
+        pWindow->ImplGetWindowImpl()->mpClientWindow->ImplCallMove();   
 
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleMoveResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
@@ -1642,11 +1642,11 @@ static void ImplHandleMoveResize( Window* pWindow, long nNewWidth, long nNewHeig
     ImplHandleResize( pWindow, nNewWidth, nNewHeight );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplActivateFloatingWindows( Window* pWindow, bool bActive )
 {
-    // First check all overlapping windows
+    
     Window* pTempWindow = pWindow->ImplGetWindowImpl()->mpFirstOverlap;
     while ( pTempWindow )
     {
@@ -1663,20 +1663,20 @@ static void ImplActivateFloatingWindows( Window* pWindow, bool bActive )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
 {
     ImplGetWindowImpl()->mpFrameData->mnFocusId = 0;
 
-    // If the status has been preserved, because we got back the focus
-    // in the meantime, we do nothing
+    
+    
     bool bHasFocus = ImplGetWindowImpl()->mpFrameData->mbHasFocus || ImplGetWindowImpl()->mpFrameData->mbSysObjFocus;
 
-    // next execute the delayed functions
+    
     if ( bHasFocus )
     {
-        // redraw all floating windows inactive
+        
         if ( ImplGetWindowImpl()->mpFrameData->mbStartFocusState != bHasFocus )
             ImplActivateFloatingWindows( this, bHasFocus );
 
@@ -1693,8 +1693,8 @@ IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
                 }
                 else if( ImplGetWindowImpl()->mpFrameData->mpFocusWin->ImplHasDlgCtrl() )
                 {
-                // #109094# if the focus is restored to a disabled dialog control (was disabled meanwhile)
-                // try to move it to the next control
+                
+                
                     ImplGetWindowImpl()->mpFrameData->mpFocusWin->ImplDlgCtrlNextWindow();
                     bHandled = true;
                 }
@@ -1722,7 +1722,7 @@ IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
 
             if ( pSVData->maWinData.mpFocusWin == pFocusWin )
             {
-                // FocusWindow umsetzen
+                
                 Window* pOverlapWindow = pFocusWin->ImplGetFirstOverlapWindow();
                 pOverlapWindow->ImplGetWindowImpl()->mpLastFocusWindow = pFocusWin;
                 pSVData->maWinData.mpFocusWin = NULL;
@@ -1730,7 +1730,7 @@ IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
                 if ( pFocusWin->ImplGetWindowImpl()->mpCursor )
                     pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
 
-                // Deaktivate rufen
+                
                 Window* pOldFocusWindow = pFocusWin;
                 if ( pOldFocusWindow )
                 {
@@ -1746,12 +1746,12 @@ IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
                     }
                 }
 
-                // TrackingMode is ended in ImplHandleLoseFocus
-                // To avoid problems with the Unix IME
-                // pFocusWin->EndExtTextInput( EXTTEXTINPUT_END_COMPLETE );
+                
+                
+                
 
-                // XXX #102010# hack for accessibility: do not close the menu,
-                // even after focus lost
+                
+                
                 static const char* pEnv = getenv("SAL_FLOATWIN_NOAPPFOCUSCLOSE");
                 if( !(pEnv && *pEnv) )
                 {
@@ -1761,11 +1761,11 @@ IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
                     pFocusWin->ImplCallDeactivateListeners( NULL );
                     GetpApp()->FocusChanged();
                 }
-                // XXX
+                
             }
         }
 
-        // Redraw all floating window inactive
+        
         if ( ImplGetWindowImpl()->mpFrameData->mbStartFocusState != bHasFocus )
             ImplActivateFloatingWindows( this, bHasFocus );
     }
@@ -1773,15 +1773,15 @@ IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleGetFocus( Window* pWindow )
 {
     pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus = true;
 
 
-    // execute Focus-Events after a delay, such that SystemChildWindows
-    // do not blink when they receive focus
+    
+    
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
         pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
@@ -1792,25 +1792,25 @@ static void ImplHandleGetFocus( Window* pWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleLoseFocus( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // Abort the autoscroll if the frame loses focus
+    
     if ( pSVData->maWinData.mpAutoScrollWin )
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
 
-    // Abort tracking if the frame loses focus
+    
     if ( pSVData->maWinData.mpTrackWin )
     {
         if ( pSVData->maWinData.mpTrackWin->ImplGetWindowImpl()->mpFrameWindow == pWindow )
             pSVData->maWinData.mpTrackWin->EndTracking( ENDTRACK_CANCEL );
     }
 
-    // here we always terminate the popupmode, also when NOFOCUSCLOSE
-    // is set, such that we do not show windows during the switch
+    
+    
     if ( pSVData->maWinData.mpFirstFloat )
     {
         if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
@@ -1819,8 +1819,8 @@ static void ImplHandleLoseFocus( Window* pWindow )
 
     pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus = false;
 
-    // execute Focus-Events after a delay, such that SystemChildWindows
-    // do not flicker when they receive focus
+    
+    
     if ( !pWindow->ImplGetWindowImpl()->mpFrameData->mnFocusId )
     {
         pWindow->ImplGetWindowImpl()->mpFrameData->mbStartFocusState = !pWindow->ImplGetWindowImpl()->mpFrameData->mbHasFocus;
@@ -1832,7 +1832,7 @@ static void ImplHandleLoseFocus( Window* pWindow )
         pFocusWin->ImplGetWindowImpl()->mpCursor->ImplHide( true );
 }
 
-// -----------------------------------------------------------------------
+
 struct DelayedCloseEvent
 {
     Window*         pWindow;
@@ -1846,7 +1846,7 @@ static long DelayedCloseEventLink( void* pCEvent, void* )
     if( ! pEv->aDelData.IsDead() )
     {
         pEv->pWindow->ImplRemoveDel( &pEv->aDelData );
-        // dispatch to correct window type
+        
         if( pEv->pWindow->IsSystemWindow() )
             ((SystemWindow*)pEv->pWindow)->Close();
         else if( pEv->pWindow->ImplIsDockingWindow() )
@@ -1868,7 +1868,7 @@ void ImplHandleClose( Window* pWindow )
         bWasPopup = true;
     }
 
-    // on Close stop all floating modes and end popups
+    
     if ( pSVData->maWinData.mpFirstFloat )
     {
         FloatingWindow* pLastLevelFloat;
@@ -1879,7 +1879,7 @@ void ImplHandleClose( Window* pWindow )
         Help::EndExtHelp();
     if ( pSVData->maHelpData.mpHelpWin )
         ImplDestroyHelpWindow( false );
-    // AutoScrollMode
+    
     if ( pSVData->maWinData.mpAutoScrollWin )
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
 
@@ -1893,7 +1893,7 @@ void ImplHandleClose( Window* pWindow )
     SystemWindow* pSysWin = dynamic_cast<SystemWindow*>(pWin);
     if (pSysWin)
     {
-        // See if the custom close handler is set.
+        
         const Link& rLink = pSysWin->GetCloseHdl();
         if (rLink.IsSet())
         {
@@ -1902,7 +1902,7 @@ void ImplHandleClose( Window* pWindow )
         }
     }
 
-    // check whether close is allowed
+    
     if ( pWin->IsEnabled() && pWin->IsInputEnabled() && !pWin->IsInModalMode() )
     {
         DelayedCloseEvent* pEv = new DelayedCloseEvent;
@@ -1912,7 +1912,7 @@ void ImplHandleClose( Window* pWindow )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
 {
@@ -1942,7 +1942,7 @@ static void ImplHandleUserEvent( ImplSVEvent* pSVEvent )
     }
 }
 
-// =======================================================================
+
 
 static sal_uInt16 ImplGetMouseMoveMode( SalMouseEvent* pEvent )
 {
@@ -1956,7 +1956,7 @@ static sal_uInt16 ImplGetMouseMoveMode( SalMouseEvent* pEvent )
     return nMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 static sal_uInt16 ImplGetMouseButtonMode( SalMouseEvent* pEvent )
 {
@@ -1974,7 +1974,7 @@ static sal_uInt16 ImplGetMouseButtonMode( SalMouseEvent* pEvent )
     return nMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplHandleSalMouseLeave( Window* pWindow, SalMouseEvent* pEvent )
 {
@@ -1984,7 +1984,7 @@ inline bool ImplHandleSalMouseLeave( Window* pWindow, SalMouseEvent* pEvent )
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplHandleSalMouseMove( Window* pWindow, SalMouseEvent* pEvent )
 {
@@ -1994,7 +1994,7 @@ inline bool ImplHandleSalMouseMove( Window* pWindow, SalMouseEvent* pEvent )
                                  ImplGetMouseMoveMode( pEvent ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplHandleSalMouseButtonDown( Window* pWindow, SalMouseEvent* pEvent )
 {
@@ -2009,7 +2009,7 @@ inline bool ImplHandleSalMouseButtonDown( Window* pWindow, SalMouseEvent* pEvent
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
 {
@@ -2024,18 +2024,18 @@ inline bool ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
                                  ImplGetMouseButtonMode( pEvent ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleSalMouseActivate( Window* /*pWindow*/, SalMouseActivateEvent* /*pEvent*/ )
 {
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleMenuEvent( Window* pWindow, SalMenuEvent* pEvent, sal_uInt16 nEvent )
 {
-    // Find SystemWindow and its Menubar and let it dispatch the command
+    
     bool nRet = false;
     Window *pWin = pWindow->ImplGetWindowImpl()->mpFirstChild;
     while ( pWin )
@@ -2074,7 +2074,7 @@ static bool ImplHandleMenuEvent( Window* pWindow, SalMenuEvent* pEvent, sal_uInt
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
 {
@@ -2098,14 +2098,14 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
         pWindow->ImplGetWindowImpl()->mpFrameWindow->ImplCallMouseMove( nNewCode, true );
     }
 
-    // #105224# send commandevent to allow special treatment of Ctrl-LeftShift/Ctrl-RightShift etc.
+    
 
-    // find window
+    
     Window* pChild = ImplGetKeyInputWindow( pWindow );
     if ( !pChild )
         return;
 
-    // send modkey events only if useful data is available
+    
     if( pEvent->mnModKeyCode != 0 )
     {
         CommandModKeyData data( pEvent->mnModKeyCode );
@@ -2113,11 +2113,11 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleInputLanguageChange( Window* pWindow )
 {
-    // find window
+    
     Window* pChild = ImplGetKeyInputWindow( pWindow );
     if ( !pChild )
         return;
@@ -2125,7 +2125,7 @@ static void ImplHandleInputLanguageChange( Window* pWindow )
     ImplCallCommand( pChild, COMMAND_INPUTLANGUAGECHANGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalSettings( sal_uInt16 nEvent )
 {
@@ -2179,7 +2179,7 @@ static void ImplHandleSalSettings( sal_uInt16 nEvent )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalExtTextInputPos( Window* pWindow, SalExtTextInputPosEvent* pEvt )
 {
@@ -2201,7 +2201,7 @@ static void ImplHandleSalExtTextInputPos( Window* pWindow, SalExtTextInputPosEve
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static bool ImplHandleShowDialog( Window* pWindow, int nDialogId )
 {
@@ -2218,7 +2218,7 @@ static bool ImplHandleShowDialog( Window* pWindow, int nDialogId )
     return ImplCallCommand( pWindow, COMMAND_SHOWDIALOG, &aCmdData );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSurroundingTextRequest( Window *pWindow,
                           OUString& rText,
@@ -2241,7 +2241,7 @@ static void ImplHandleSurroundingTextRequest( Window *pWindow,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalSurroundingTextRequest( Window *pWindow,
                          SalSurroundingTextRequestEvent *pEvt )
@@ -2266,7 +2266,7 @@ static void ImplHandleSalSurroundingTextRequest( Window *pWindow,
         pEvt->mnEnd = aSelRange.Max();
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSurroundingTextSelectionChange( Window *pWindow,
                               sal_uLong nStart,
@@ -2280,7 +2280,7 @@ static void ImplHandleSurroundingTextSelectionChange( Window *pWindow,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleStartReconversion( Window *pWindow )
 {
@@ -2289,7 +2289,7 @@ static void ImplHandleStartReconversion( Window *pWindow )
     ImplCallCommand( pChild, COMMAND_PREPARERECONVERSION );
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplHandleSalQueryCharPosition( Window *pWindow,
                                             SalQueryCharPositionEvent *pEvt )
@@ -2308,7 +2308,7 @@ static void ImplHandleSalQueryCharPosition( Window *pWindow,
         pChild = ImplGetKeyInputWindow( pWindow );
     else
     {
-        // Test, if the Window is related to the frame
+        
         if ( !pWindow->ImplIsWindowOrChild( pChild ) )
             pChild = ImplGetKeyInputWindow( pWindow );
     }
@@ -2334,7 +2334,7 @@ static void ImplHandleSalQueryCharPosition( Window *pWindow,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                           sal_uInt16 nEvent, const void* pEvent )
@@ -2343,9 +2343,9 @@ bool ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
 
     bool nRet = false;
 
-    // #119709# for some unknown reason it is possible to receive events (in this case key events)
-    // although the corresponding VCL window must have been destroyed already
-    // at least ImplGetWindowImpl() was NULL in these cases, so check this here
+    
+    
+    
     if( pWindow->ImplGetWindowImpl() == NULL )
         return false;
 
@@ -2462,7 +2462,7 @@ bool ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
 
             if( Application::GetSettings().GetLayoutRTL() )
             {
-                // --- RTL --- (mirror paint rect)
+                
                 SalFrame* pSalFrame = pWindow->ImplGetWindowImpl()->mpFrame;
                 pPaintEvt->mnBoundX = pSalFrame->maGeometry.nWidth-pPaintEvt->mnBoundWidth-pPaintEvt->mnBoundX;
             }
@@ -2518,7 +2518,7 @@ bool ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
                     bInQueryExit = true;
                     if ( GetpApp()->QueryExit() )
                     {
-                        // Message-Schleife beenden
+                        
                         Application::Quit();
                         return false;
                     }
@@ -2578,7 +2578,7 @@ bool ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             ImplHandleSurroundingTextSelectionChange( pWindow,
                               pEvt->mnStart,
                               pEvt->mnEnd );
-            // Fallthrough really intended?
+            
         }
         case SALEVENT_STARTRECONVERSION:
             ImplHandleStartReconversion( pWindow );
@@ -2590,12 +2590,12 @@ bool ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             aSalWheelMouseEvent.mnTime = Time::GetSystemTicks();
             aSalWheelMouseEvent.mnX = pZoomEvent->GetCenter().getX();
             aSalWheelMouseEvent.mnY = pZoomEvent->GetCenter().getY();
-            // Pass on the scale as a percentage * 100 of current zoom factor
-            // so to assure zoom granularity
+            
+            
             aSalWheelMouseEvent.mnDelta = long(double(pZoomEvent->GetScale()) * double(MOBILE_ZOOM_SCALE_MULTIPLIER));
-            // Other SalWheelMouseEvent fields ignored when the
-            // scaleDirectly parameter to ImplHandleWheelEvent() is
-            // true.
+            
+            
+            
             nRet = ImplHandleWheelEvent( pWindow, aSalWheelMouseEvent, true );
             }
             break;
@@ -2605,7 +2605,7 @@ bool ImplWindowFrameProc( Window* pWindow, SalFrame* /*pFrame*/,
             SalWheelMouseEvent aSalWheelMouseEvent;
             aSalWheelMouseEvent.mnTime = Time::GetSystemTicks();
             aSalWheelMouseEvent.mbDeltaIsPixel = true;
-            // event location holds delta values instead
+            
             aSalWheelMouseEvent.mnX = long(pScrollEvent->GetXOffset());
             aSalWheelMouseEvent.mnY = long(pScrollEvent->GetYOffset());
             aSalWheelMouseEvent.mnScrollLines = 0;

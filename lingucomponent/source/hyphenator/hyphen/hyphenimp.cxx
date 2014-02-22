@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Reference.h>
@@ -58,10 +58,10 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-// min, max
+
 #define Max(a,b) (a > b ? a : b)
 
-///////////////////////////////////////////////////////////////////////////
+
 
 
 Hyphenator::Hyphenator() :
@@ -100,7 +100,7 @@ PropertyHelper_Hyphenation& Hyphenator::GetPropHelper_Impl()
         Reference< XLinguProperties >   xPropSet( GetLinguProperties(), UNO_QUERY );
 
         pPropHelper = new PropertyHelper_Hyphenation ((XHyphenator *) this, xPropSet );
-        pPropHelper->AddAsPropListener();   //! after a reference is established
+        pPropHelper->AddAsPropListener();   
     }
     return *pPropHelper;
 }
@@ -111,16 +111,16 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    // this routine should return the locales supported by the installed
-    // dictionaries.
+    
+    
 
     if (!numdict)
     {
         SvtLinguConfig aLinguCfg;
 
-        // get list of dictionaries-to-use
-        // (or better speaking: the list of dictionaries using the
-        // new configuration entries).
+        
+        
+        
         std::list< SvtLinguConfigDictionaryEntry > aDics;
         uno::Sequence< OUString > aFormatList;
         aLinguCfg.GetSupportedDictionaryFormatsFor( "Hyphenators",
@@ -133,21 +133,21 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
             aDics.insert( aDics.end(), aTmpDic.begin(), aTmpDic.end() );
         }
 
-        //!! for compatibility with old dictionaries (the ones not using extensions
-        //!! or new configuration entries, but still using the dictionary.lst file)
-        //!! Get the list of old style spell checking dictionaries to use...
+        
+        
+        
         std::vector< SvtLinguConfigDictionaryEntry > aOldStyleDics(
                 GetOldStyleDics( "HYPH" ) );
 
-        // to prefer dictionaries with configuration entries we will only
-        // use those old style dictionaries that add a language that
-        // is not yet supported by the list od new style dictionaries
+        
+        
+        
         MergeNewStyleDicsAndOldStyleDics( aDics, aOldStyleDics );
 
         numdict = aDics.size();
         if (numdict)
         {
-            // get supported locales from the dictionaries-to-use...
+            
             sal_Int32 k = 0;
             std::set< OUString, lt_rtl_OUString > aLocaleNamesSet;
             std::list< SvtLinguConfigDictionaryEntry >::const_iterator aDictIt;
@@ -160,7 +160,7 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                     aLocaleNamesSet.insert( aLocaleNames[k] );
                 }
             }
-            // ... and add them to the resulting sequence
+            
             aSuppLocales.realloc( aLocaleNamesSet.size() );
             std::set< OUString, lt_rtl_OUString >::const_iterator aItB;
             k = 0;
@@ -170,16 +170,16 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                 aSuppLocales[k++] = aTmp;
             }
 
-            //! For each dictionary and each locale we need a separate entry.
-            //! If this results in more than one dictionary per locale than (for now)
-            //! it is undefined which dictionary gets used.
-            //! In the future the implementation should support using several dictionaries
-            //! for one locale.
+            
+            
+            
+            
+            
             numdict = 0;
             for (aDictIt = aDics.begin();  aDictIt != aDics.end();  ++aDictIt)
                 numdict = numdict + aDictIt->aLocaleNames.getLength();
 
-            // add dictionary information
+            
             aDicts = new HDInfo[numdict];
 
             k = 0;
@@ -191,9 +191,9 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                     uno::Sequence< OUString > aLocaleNames( aDictIt->aLocaleNames );
                     sal_Int32 nLocales = aLocaleNames.getLength();
 
-                    // currently only one language per dictionary is supported in the actual implementation...
-                    // Thus here we work-around this by adding the same dictionary several times.
-                    // Once for each of it's supported locales.
+                    
+                    
+                    
                     for (sal_Int32 i = 0;  i < nLocales;  ++i)
                     {
                         LanguageTag aLanguageTag( aDictIt->aLocaleNames[i] );
@@ -201,9 +201,9 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
                         aDicts[k].eEnc = RTL_TEXTENCODING_DONTKNOW;
                         aDicts[k].aLoc = aLanguageTag.getLocale();
                         aDicts[k].apCC = new CharClass( aLanguageTag );
-                        // also both files have to be in the same directory and the
-                        // file names must only differ in the extension (.aff/.dic).
-                        // Thus we use the first location only and strip the extension part.
+                        
+                        
+                        
                         OUString aLocation = aDictIt->aLocations[0];
                         sal_Int32 nPos = aLocation.lastIndexOf( '.' );
                         aLocation = aLocation.copy( 0, nPos );
@@ -285,10 +285,10 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             k = j;
     }
 
-    // if we have a hyphenation dictionary matching this locale
+    
     if (k != -1)
     {
-        // if this dictinary has not been loaded yet do that
+        
         if (!aDicts[k].aPtr)
         {
             OUString DictFN = aDicts[k].aName + ".dic";
@@ -298,10 +298,10 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
 #if defined(WNT)
-            // workaround for Windows specific problem that the
-            // path length in calls to 'fopen' is limted to somewhat
-            // about 120+ characters which will usually be exceed when
-            // using dictionaries as extensions.
+            
+            
+            
+            
             sTmp = Win_GetShortPathName( dictpath );
 #endif
 
@@ -314,22 +314,22 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             aDicts[k].eEnc = getTextEncodingFromCharset(dict->cset);
         }
 
-        // other wise hyphenate the word with that dictionary
+        
         dict = aDicts[k].aPtr;
         eEnc = aDicts[k].eEnc;
         pCC =  aDicts[k].apCC;
 
-        // we don't want to work with a default text encoding since following incorrect
-        // results may occur only for specific text and thus may be hard to notice.
-        // Thus better always make a clean exit here if the text encoding is in question.
-        // Hopefully something not working at all will raise proper attention quickly. ;-)
+        
+        
+        
+        
         DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
         if (eEnc == RTL_TEXTENCODING_DONTKNOW)
             return NULL;
 
         sal_uInt16 ct = capitalType(aWord, pCC);
 
-        // first convert any smart quotes or apostrophes to normal ones
+        
         OUStringBuffer rBuf(aWord);
         sal_Int32 nc = rBuf.getLength();
         sal_Unicode ch;
@@ -343,24 +343,24 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         }
         OUString nWord(rBuf.makeStringAndClear());
 
-        // now convert word to all lowercase for pattern recognition
+        
         OUString nTerm(makeLowerCase(nWord, pCC));
 
-        // now convert word to needed encoding
+        
         OString encWord(OU2ENC(nTerm,eEnc));
 
         wordlen = encWord.getLength();
         lcword = new char[wordlen + 1];
         hyphens = new char[wordlen + 5];
 
-        char ** rep = NULL; // replacements of discretionary hyphenation
-        int * pos = NULL; // array of [hyphenation point] minus [deletion position]
-        int * cut = NULL; // length of deletions in original word
+        char ** rep = NULL; 
+        int * pos = NULL; 
+        int * cut = NULL; 
 
-        // copy converted word into simple char buffer
+        
         strcpy(lcword,encWord.getStr());
 
-        // now strip off any ending periods
+        
         int n = wordlen-1;
         while((n >=0) && (lcword[n] == '.'))
             n--;
@@ -373,7 +373,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                     Max(dict->crhmin, Max(dict->crhmin, 2) + Max(0, minTrail - Max(dict->rhmin, 2))) );
             if (bFailed)
             {
-                //whoops something did not work
+                
                 delete[] hyphens;
                 delete[] lcword;
                 if (rep)
@@ -390,7 +390,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             }
         }
 
-        // now backfill hyphens[] for any removed trailing periods
+        
         for (int c = n; c < wordlen; c++) hyphens[c] = '0';
         hyphens[wordlen] = '\0';
 
@@ -408,7 +408,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
             }
             else
             {
-                // calculate change character length before hyphenation point signed with '='
+                
                 for (char * c = rep[i]; *c && (*c != '='); c++)
                 {
                     if (eEnc == RTL_TEXTENCODING_UTF8)
@@ -442,7 +442,7 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
         {
             if (rep && rep[nHyphenationPos])
             {
-                // remove equal sign
+                
                 char * s = rep[nHyphenationPos];
                 int eq = 0;
                 for (; *s; s++)
@@ -474,10 +474,10 @@ Reference< XHyphenatedWord > SAL_CALL Hyphenator::hyphenate( const OUString& aWo
                     }
                 }
 
-                // handle shortening
+                
                 sal_Int16 nPos = (sal_Int16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
                 nHyphenationPosAltHyph : nHyphenationPos);
-                // dicretionary hyphenation
+                
                 xRes = HyphenatedWord::CreateHyphenatedWord( aWord, LinguLocaleToLanguage( aLocale ), nPos,
                     aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
                     (sal_Int16) nHyphenationPosAltHyph);
@@ -514,7 +514,7 @@ Reference < XHyphenatedWord > SAL_CALL Hyphenator::queryAlternativeSpelling(
         const ::com::sun::star::beans::PropertyValues& aProperties )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    // Firstly we allow only one plus character before the hyphen to avoid to miss the right break point:
+    
     for (int extrachar = 1; extrachar <= 2; extrachar++)
     {
         Reference< XHyphenatedWord > xRes = hyphenate(aWord, aLocale, nIndex + 1 + extrachar, aProperties);
@@ -535,8 +535,8 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
     sal_Int16 minLead = rHelper.GetMinLeading();
     sal_Int16 minLen = rHelper.GetMinWordLength();
 
-    //Resolves: fdo#41083 honour MinWordLength in "createPossibleHyphens" as
-    //well as "hyphenate"
+    
+    
     if (aWord.getLength() < minLen)
     {
         return PossibleHyphens::CreatePossibleHyphens( aWord, LinguLocaleToLanguage( aLocale ),
@@ -549,11 +549,11 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         if (aLocale == aDicts[j].aLoc) k = j;
     }
 
-    // if we have a hyphenation dictionary matching this locale
+    
     if (k != -1)
     {
         HyphenDict *dict = NULL;
-        // if this dictioanry has not been loaded yet do that
+        
         if (!aDicts[k].aPtr)
         {
             OUString DictFN = aDicts[k].aName + ".dic";
@@ -563,10 +563,10 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             OString sTmp( OU2ENC( dictpath, osl_getThreadTextEncoding() ) );
 
 #if defined(WNT)
-            // workaround for Windows specific problem that the
-            // path length in calls to 'fopen' is limted to somewhat
-            // about 120+ characters which will usually be exceed when
-            // using dictionaries as extensions.
+            
+            
+            
+            
             sTmp = Win_GetShortPathName( dictpath );
 #endif
 
@@ -579,20 +579,20 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
             aDicts[k].eEnc = getTextEncodingFromCharset(dict->cset);
         }
 
-        // other wise hyphenate the word with that dictionary
+        
         dict = aDicts[k].aPtr;
         rtl_TextEncoding eEnc = aDicts[k].eEnc;
         CharClass* pCC = aDicts[k].apCC;
 
-        // we don't want to work with a default text encoding since following incorrect
-        // results may occur only for specific text and thus may be hard to notice.
-        // Thus better always make a clean exit here if the text encoding is in question.
-        // Hopefully something not working at all will raise proper attention quickly. ;-)
+        
+        
+        
+        
         DBG_ASSERT( eEnc != RTL_TEXTENCODING_DONTKNOW, "failed to get text encoding! (maybe incorrect encoding string in file)" );
         if (eEnc == RTL_TEXTENCODING_DONTKNOW)
             return NULL;
 
-        // first handle smart quotes both single and double
+        
         OUStringBuffer rBuf(aWord);
         sal_Int32 nc = rBuf.getLength();
         sal_Unicode ch;
@@ -606,23 +606,23 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         }
         OUString nWord(rBuf.makeStringAndClear());
 
-        // now convert word to all lowercase for pattern recognition
+        
         OUString nTerm(makeLowerCase(nWord, pCC));
 
-        // now convert word to needed encoding
+        
         OString encWord(OU2ENC(nTerm,eEnc));
 
         int wordlen = encWord.getLength();
         char *lcword = new char[wordlen+1];
         char *hyphens = new char[wordlen+5];
-        char ** rep = NULL; // replacements of discretionary hyphenation
-        int * pos = NULL; // array of [hyphenation point] minus [deletion position]
-        int * cut = NULL; // length of deletions in original word
+        char ** rep = NULL; 
+        int * pos = NULL; 
+        int * cut = NULL; 
 
-        // copy converted word into simple char buffer
+        
         strcpy(lcword,encWord.getStr());
 
-        // first remove any trailing periods
+        
         int n = wordlen-1;
         while((n >=0) && (lcword[n] == '.'))
             n--;
@@ -652,7 +652,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
                 return NULL;
             }
         }
-        // now backfill hyphens[] for any removed periods
+        
         for (int c = n; c < wordlen; c++)
             hyphens[c] = '0';
         hyphens[wordlen] = '\0';
@@ -674,7 +674,7 @@ Reference< XPossibleHyphens > SAL_CALL Hyphenator::createPossibleHyphens( const 
         for (i = 0; i < nWord.getLength(); i++)
         {
             hyphenatedWordBuffer.append(aWord[i]);
-            // hyphenation position
+            
             if (hyphens[i]&1)
             {
                 pPos[nHyphCount] = i;
@@ -797,14 +797,14 @@ void SAL_CALL Hyphenator::initialize( const Sequence< Any >& rArguments )
         {
             Reference< XLinguProperties >   xPropSet;
             rArguments.getConstArray()[0] >>= xPropSet;
-            //rArguments.getConstArray()[1] >>= xDicList;
+            
 
-            //! Pointer allows for access of the non-UNO functions.
-            //! And the reference to the UNO-functions while increasing
-            //! the ref-count and will implicitly free the memory
-            //! when the object is not longer used.
+            
+            
+            
+            
             pPropHelper = new PropertyHelper_Hyphenation( (XHyphenator *) this, xPropSet );
-            pPropHelper->AddAsPropListener();   //! after a reference is established
+            pPropHelper->AddAsPropListener();   
         }
         else {
             OSL_FAIL( "wrong number of arguments in sequence" );
@@ -852,7 +852,7 @@ void SAL_CALL Hyphenator::removeEventListener( const Reference< XEventListener >
         aEvtListeners.removeInterface( rxListener );
 }
 
-// Service specific part
+
 OUString SAL_CALL Hyphenator::getImplementationName()
         throw(RuntimeException)
 {
@@ -880,7 +880,7 @@ Sequence< OUString > Hyphenator::getSupportedServiceNames_Static()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    Sequence< OUString > aSNS( 1 ); // auch mehr als 1 Service moeglich
+    Sequence< OUString > aSNS( 1 ); 
     aSNS.getArray()[0] = SN_HYPHENATOR;
     return aSNS;
 }
@@ -897,7 +897,7 @@ void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
                 Hyphenator::getImplementationName_Static(),
                 Hyphenator_CreateInstance,
                 Hyphenator::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
+        
         xFactory->acquire();
         pRet = xFactory.get();
     }
@@ -905,6 +905,6 @@ void * SAL_CALL Hyphenator_getFactory( const sal_Char * pImplName,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

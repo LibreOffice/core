@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//_________________________________________________________________________________________________________________
-//  switches
-//  use it to enable test scenarios
-//_________________________________________________________________________________________________________________
+
+
+
+
 
 #define TEST_DYNAMICMENUOPTIONS
 
@@ -58,40 +58,40 @@ using namespace ::com::sun::star::registry  ;
 
 class TestApplication : public Application
 {
-    //*************************************************************************************************************
-    // interface
-    //*************************************************************************************************************
+    
+    
+    
     public:
         void Main();
 
-    //*************************************************************************************************************
-    // test methods
-    //*************************************************************************************************************
+    
+    
+    
     private:
         void impl_testDynamicMenuOptions();
 
-    //*************************************************************************************************************
-    // helper methods
-    //*************************************************************************************************************
+    
+    
+    
     private:
         static Reference< XMultiServiceFactory > getUNOServiceManager();
 
-    //*************************************************************************************************************
-    // member
-    //*************************************************************************************************************
+    
+    
+    
     private:
 
-};  //  class TestApplication
+};  
 
-//_________________________________________________________________________________________________________________
-//  global variables
-//_________________________________________________________________________________________________________________
+
+
+
 
 TestApplication aTestApplication ;
 
-//_________________________________________________________________________________________________________________
-//  main
-//_________________________________________________________________________________________________________________
+
+
+
 
 void TestApplication::Main()
 {
@@ -99,9 +99,9 @@ void TestApplication::Main()
         initialize program
     **************************************************************************************************************/
 
-    // Init global servicemanager and set it for external services.
+    
     ::comphelper::setProcessServiceFactory( TestApplication::getUNOServiceManager() );
-    // Control success of operation.
+    
     OSL_ENSURE( !(::comphelper::getProcessServiceFactory()!=TestApplication::getUNOServiceManager()), "TestApplication::Main()\nGlobal servicemanager not right initialized.\n" );
 
     /**-***********************************************************************************************************
@@ -112,25 +112,25 @@ void TestApplication::Main()
         impl_testDynamicMenuOptions();
     #endif
 
-//  Execute();
+
     OSL_FAIL( "Test was successful!\n" );
 }
 
-//*****************************************************************************************************************
-// test configuration of dynamic menus "New" and "Wizard"
-//*****************************************************************************************************************
+
+
+
 void TestApplication::impl_testDynamicMenuOptions()
 {
     SvtDynamicMenuOptions aCFG;
 
-    // Test:
-    //      read menus
-    //      if( menus == empty )
-    //      {
-    //          fill it with samples
-    //          read it again
-    //      }
-    //      output content
+    
+    
+    
+    
+    
+    
+    
+    
 
     Sequence< Sequence< PropertyValue > > lNewMenu    = aCFG.GetMenu( E_NEWMENU    );
     Sequence< Sequence< PropertyValue > > lWizardMenu = aCFG.GetMenu( E_WIZARDMENU );
@@ -146,9 +146,9 @@ void TestApplication::impl_testDynamicMenuOptions()
 
     if( lWizardMenu.getLength() < 1 )
     {
-        aCFG.AppendItem( E_WIZARDMENU, "file://a", "system file", "icon_file", "_self");
-        aCFG.AppendItem( E_WIZARDMENU, "ftp://b",  "ftp host",    "icon_ftp",  "_self");
-        aCFG.AppendItem( E_WIZARDMENU, "http://c", "www",         "icon_www",  "_self");
+        aCFG.AppendItem( E_WIZARDMENU, "file:
+        aCFG.AppendItem( E_WIZARDMENU, "ftp:
+        aCFG.AppendItem( E_WIZARDMENU, "http:
 
         lWizardMenu = aCFG.GetMenu( E_WIZARDMENU );
     }
@@ -201,10 +201,10 @@ void TestApplication::impl_testDynamicMenuOptions()
     OSL_FAIL( OUStringToOString( sOut.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ).getStr() );
 }
 
-//*****************************************************************************************************************
-// create new uno servicemanager by using normall applicat.rdb and user.rdb of an office installation!
-// Don't use this application at same time like the office!
-//*****************************************************************************************************************
+
+
+
+
 Reference< XMultiServiceFactory > TestApplication::getUNOServiceManager()
 {
     static Reference< XMultiServiceFactory > smgr;

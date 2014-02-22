@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -34,10 +34,10 @@
 #define GW_STATE_DATASOURCE_SELECTION   0
 #define GW_STATE_FIELDSELECTION         1
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -48,10 +48,10 @@ namespace dbp
     using namespace ::com::sun::star::awt;
     using namespace ::svt;
 
-    //=====================================================================
-    //= OGridWizard
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OGridWizard::OGridWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, ModuleRes(RID_DLG_GRIDWIZARD), _rxObjectModel, _rxContext)
@@ -64,15 +64,15 @@ namespace dbp
         m_pCancel->SetHelpId(HID_GRIDWIZARD_CANCEL);
         m_pFinish->SetHelpId(HID_GRIDWIZARD_FINISH);
 
-        // if we do not need the data source selection page ...
+        
         if (!needDatasourceSelection())
-        {   // ... skip it!
+        {   
             skip(1);
             m_bHadDataSelection = sal_False;
         }
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OGridWizard::approveControl(sal_Int16 _nClassId)
     {
         if (FormComponentType::GRIDCONTROL != _nClassId)
@@ -85,17 +85,17 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+    
     void OGridWizard::implApplySettings()
     {
         const OControlWizardContext& rContext = getContext();
 
-        // the factory for the columns
+        
         Reference< XGridColumnFactory > xColumnFactory(rContext.xObjectModel, UNO_QUERY);
         DBG_ASSERT(xColumnFactory.is(), "OGridWizard::implApplySettings: should never have made it 'til here!");
-            // (if we're here, what the hell happened in approveControl??)
+            
 
-        // the container for the columns
+        
         Reference< XNameContainer > xColumnContainer(rContext.xObjectModel, UNO_QUERY);
         DBG_ASSERT(xColumnContainer.is(), "OGridWizard::implApplySettings: no container!");
 
@@ -108,21 +108,21 @@ namespace dbp
         static const OUString s_sMouseWheelBehavior ("MouseWheelBehavior");
         static const OUString s_sEmptyString;
 
-        // collect "descriptors" for the to-be-created (grid)columns
-        std::vector< OUString > aColumnServiceNames;  // service names to be used with the XGridColumnFactory
-        std::vector< OUString > aColumnLabelPostfixes;    // postfixes to append to the column labels
-        std::vector< OUString > aFormFieldNames;      // data field names
+        
+        std::vector< OUString > aColumnServiceNames;  
+        std::vector< OUString > aColumnLabelPostfixes;    
+        std::vector< OUString > aFormFieldNames;      
 
         aColumnServiceNames.reserve(getSettings().aSelectedFields.getLength());
         aColumnLabelPostfixes.reserve(getSettings().aSelectedFields.getLength());
         aFormFieldNames.reserve(getSettings().aSelectedFields.getLength());
 
-        // loop through the selected field names
+        
         const OUString* pSelectedFields = getSettings().aSelectedFields.getConstArray();
         const OUString* pEnd = pSelectedFields + getSettings().aSelectedFields.getLength();
         for (;pSelectedFields < pEnd; ++pSelectedFields)
         {
-            // get the information for the selected column
+            
             sal_Int32 nFieldType = DataType::OTHER;
             OControlWizardContext::TNameTypeMap::const_iterator aFind = rContext.aTypes.find(*pSelectedFields);
             if ( aFind != rContext.aTypes.end() )
@@ -182,7 +182,7 @@ namespace dbp
                 &&  aColumnServiceNames.size() == aColumnLabelPostfixes.size(),
                 "OGridWizard::implApplySettings: inconsistent descriptor sequences!");
 
-        // now loop through the descriptions and create the (grid)columns out of th descriptors
+        
         {
             Reference< XNameAccess > xExistenceChecker(xColumnContainer.get());
 
@@ -193,7 +193,7 @@ namespace dbp
 
             for (;pColumnServiceName < pColumnServiceNameEnd; ++pColumnServiceName, ++pColumnLabelPostfix, ++pFormFieldName)
             {
-                // create a (grid)column for the (resultset)column
+                
                 try
                 {
                     Reference< XPropertySet > xColumn( xColumnFactory->createColumn(*pColumnServiceName), UNO_SET_THROW );
@@ -202,17 +202,17 @@ namespace dbp
                     OUString sColumnName(*pColumnServiceName);
                     disambiguateName(xExistenceChecker, sColumnName);
 
-                    // the data field the column should be bound to
+                    
                     xColumn->setPropertyValue(s_sDataFieldProperty, makeAny(*pFormFieldName));
-                    // the label
+                    
                     xColumn->setPropertyValue(s_sLabelProperty, makeAny(OUString(*pFormFieldName) += *pColumnLabelPostfix));
-                    // the width (<void/> => column will be auto-sized)
+                    
                     xColumn->setPropertyValue(s_sWidthProperty, Any());
 
                     if ( xColumnPSI->hasPropertyByName( s_sMouseWheelBehavior ) )
                         xColumn->setPropertyValue( s_sMouseWheelBehavior, makeAny( MouseWheelBehavior::SCROLL_DISABLED ) );
 
-                    // insert the column
+                    
                     xColumnContainer->insertByName(sColumnName, makeAny(xColumn));
                 }
                 catch(const Exception&)
@@ -225,7 +225,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+    
     OWizardPage* OGridWizard::createPage(WizardState _nState)
     {
         switch (_nState)
@@ -239,7 +239,7 @@ namespace dbp
         return NULL;
     }
 
-    //---------------------------------------------------------------------
+    
     WizardTypes::WizardState OGridWizard::determineNextState( WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
@@ -253,7 +253,7 @@ namespace dbp
         return WZS_INVALID_STATE;
     }
 
-    //---------------------------------------------------------------------
+    
     void OGridWizard::enterState(WizardState _nState)
     {
         OControlWizard::enterState(_nState);
@@ -267,7 +267,7 @@ namespace dbp
             defaultButton(WZB_FINISH);
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OGridWizard::leaveState(WizardState _nState)
     {
         if (!OControlWizard::leaveState(_nState))
@@ -279,7 +279,7 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OGridWizard::onFinish()
     {
         if ( !OControlWizard::onFinish() )
@@ -290,10 +290,10 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
-    //= OGridFieldsSelection
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OGridFieldsSelection::OGridFieldsSelection( OGridWizard* _pParent )
         :OGridPage(_pParent, ModuleRes(RID_PAGE_GW_FIELDSELECTION))
         ,m_aFrame               (this, ModuleRes(FL_FRAME))
@@ -321,21 +321,21 @@ namespace dbp
         m_aSelFields.SetDoubleClickHdl(LINK(this, OGridFieldsSelection, OnEntryDoubleClicked));
     }
 
-    //---------------------------------------------------------------------
+    
     void OGridFieldsSelection::ActivatePage()
     {
         OGridPage::ActivatePage();
         m_aExistFields.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+    
     bool OGridFieldsSelection::canAdvance() const
     {
         return false;
-            // we're the last page in our wizard
+            
     }
 
-    //---------------------------------------------------------------------
+    
     void OGridFieldsSelection::initializePage()
     {
         OGridPage::initializePage();
@@ -356,7 +356,7 @@ namespace dbp
         implCheckButtons();
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OGridFieldsSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OGridPage::commitPage(_eReason))
@@ -374,7 +374,7 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+    
     void OGridFieldsSelection::implCheckButtons()
     {
         m_aSelectOne.Enable(m_aExistFields.GetSelectEntryCount() != 0);
@@ -386,7 +386,7 @@ namespace dbp
         getDialog()->enableButtons(WZB_FINISH, 0 != m_aSelFields.GetEntryCount());
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK(OGridFieldsSelection, OnEntryDoubleClicked, ListBox*, _pList)
     {
         PushButton* pSimulateButton = &m_aExistFields == _pList ? &m_aSelectOne : &m_aDeselectOne;
@@ -396,27 +396,27 @@ namespace dbp
             return 1L;
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK(OGridFieldsSelection, OnEntrySelected, ListBox*, /*NOTINTERESTEDIN*/)
     {
         implCheckButtons();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK(OGridFieldsSelection, OnMoveOneEntry, PushButton*, _pButton)
     {
         sal_Bool bMoveRight = (&m_aSelectOne == _pButton);
         ListBox& rMoveTo = bMoveRight ? m_aSelFields : m_aExistFields;
 
-        // the index of the selected entry
+        
         sal_uInt16 nSelected = bMoveRight ? m_aExistFields.GetSelectEntryPos() : m_aSelFields.GetSelectEntryPos();
-        // the (original) relative position of the entry
+        
         sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_aExistFields.GetEntryData(nSelected) : m_aSelFields.GetEntryData(nSelected));
 
         sal_uInt16 nInsertPos = LISTBOX_APPEND;
         if (!bMoveRight)
-        {   // need to determine an insert pos which reflects the original
+        {   
             nInsertPos = 0;
             while (nInsertPos < rMoveTo.GetEntryCount())
             {
@@ -426,15 +426,15 @@ namespace dbp
             }
         }
 
-        // the text of the entry to move
+        
         OUString sMovingEntry = bMoveRight ? m_aExistFields.GetEntry(nSelected) : m_aSelFields.GetEntry(nSelected);
 
-        // insert the entry
+        
         nInsertPos = rMoveTo.InsertEntry(sMovingEntry, nInsertPos);
-        // preserve it's "relative position" entry data
+        
         rMoveTo.SetEntryData(nInsertPos, reinterpret_cast<void*>(nRelativeIndex));
 
-        // remove the entry from it's old list
+        
         if (bMoveRight)
         {
             sal_uInt16 nSelectPos = m_aExistFields.GetSelectEntryPos();
@@ -458,7 +458,7 @@ namespace dbp
         return 0;
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK(OGridFieldsSelection, OnMoveAllEntries, PushButton*, _pButton)
     {
         sal_Bool bMoveRight = (&m_aSelectAll == _pButton);
@@ -470,8 +470,8 @@ namespace dbp
         return 0;
     }
 
-//.........................................................................
-}   // namespace dbp
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

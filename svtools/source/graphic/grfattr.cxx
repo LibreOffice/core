@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <tools/vcompat.hxx>
 #include <svtools/grfmgr.hxx>
 
-// ---------------
-// - GraphicAttr -
-// ---------------
+
+
+
 
 GraphicAttr::GraphicAttr() :
     mfGamma         ( 1.0 ),
@@ -44,13 +44,13 @@ GraphicAttr::GraphicAttr() :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 GraphicAttr::~GraphicAttr()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
 {
@@ -71,7 +71,7 @@ sal_Bool GraphicAttr::operator==( const GraphicAttr& rAttr ) const
             ( meDrawMode == rAttr.meDrawMode ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
 {
@@ -86,7 +86,7 @@ SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
 
     if( aCompat.GetVersion() >= 2 )
     {
-        //#fdo39428 SvStream no longer supports operator>>(long&)
+        
         sal_Int32 nTmpL(0), nTmpT(0), nTmpR(0), nTmpB(0);
         rIStm.ReadInt32( nTmpL ).ReadInt32( nTmpT ).ReadInt32( nTmpR ).ReadInt32( nTmpB );
         rAttr.mnLeftCrop = nTmpL;
@@ -98,7 +98,7 @@ SvStream& ReadGraphicAttr( SvStream& rIStm, GraphicAttr& rAttr )
     return rIStm;
 }
 
-// ------------------------------------------------------------------------
+
 
 SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr )
 {
@@ -110,7 +110,7 @@ SvStream& WriteGraphicAttr( SvStream& rOStm, const GraphicAttr& rAttr )
     rOStm.WriteUInt32( rAttr.mnMirrFlags ).WriteUInt16( rAttr.mnRotate10 );
     rOStm.WriteInt16( rAttr.mnContPercent ).WriteInt16( rAttr.mnLumPercent ).WriteInt16( rAttr.mnRPercent ).WriteInt16( rAttr.mnGPercent ).WriteInt16( rAttr.mnBPercent );
     rOStm.WriteUChar( rAttr.mbInvert ).WriteUChar( rAttr.mcTransparency ).WriteUInt16( (sal_uInt16) rAttr.meDrawMode );
-    //#fdo39428 SvStream no longer supports operator<<(long)
+    
     rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnLeftCrop) )
          .WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnTopCrop) )
          .WriteInt32( sal::static_int_cast<sal_Int32>(rAttr.mnRightCrop) )

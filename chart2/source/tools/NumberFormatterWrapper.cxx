@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,15 +14,15 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "NumberFormatterWrapper.hxx"
 #include "macros.hxx"
 #include <comphelper/processfactory.hxx>
-// header for class SvNumberFormatsSupplierObj
+
 #include <svl/numuno.hxx>
-// header for class SvNumberformat
+
 #include <svl/zformat.hxx>
 #include <tools/color.hxx>
 #include <i18nlangtag/mslangid.hxx>
@@ -103,7 +103,7 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
         OSL_FAIL("Need a NumberFormatter");
         return aText;
     }
-    // i99104 handle null date correctly
+    
     sal_uInt16 nYear = 1899,nDay = 30,nMonth = 12;
     if ( m_aNullDate.hasValue() )
     {
@@ -113,7 +113,7 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
             nYear = pDate->GetYear();
             nMonth = pDate->GetMonth();
             nDay = pDate->GetDay();
-        } // if ( pDate )
+        } 
         util::DateTime aNewNullDate;
         m_aNullDate >>= aNewNullDate;
         m_pNumberFormatter->ChangeNullDate(aNewNullDate.Day,aNewNullDate.Month,aNewNullDate.Year);
@@ -135,6 +135,6 @@ OUString NumberFormatterWrapper::getFormattedString( sal_Int32 nNumberFormatKey,
     return aText;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

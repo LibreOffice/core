@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
@@ -53,8 +53,8 @@ namespace slideshow
 
 
         private:
-            // ViewEventHandler
-            // -------------------------------------------------
+            
+            
 
             virtual void viewAdded( const UnoViewSharedPtr& ) {}
             virtual void viewRemoved( const UnoViewSharedPtr& ) {}
@@ -68,8 +68,8 @@ namespace slideshow
             }
 
 
-            // IntrinsicAnimationEventHandler
-            // -------------------------------------------------
+            
+            
 
             virtual bool enableAnimations()
             {
@@ -92,7 +92,7 @@ namespace slideshow
             mpListener( new ExternalShapeBaseListener(*this) ),
             mpShapeManager( rContext.mpSubsettableShapeManager ),
             mrEventMultiplexer( rContext.mrEventMultiplexer ),
-            mnPriority( nPrio ), // TODO(F1): When ZOrder someday becomes usable: make this ( getAPIShapePrio( xShape ) ),
+            mnPriority( nPrio ), 
             maBounds( getAPIShapeBounds( xShape ) )
         {
             ENSURE_OR_THROW( mxShape.is(), "ExternalShapeBase::ExternalShapeBase(): Invalid XShape" );
@@ -101,7 +101,7 @@ namespace slideshow
             mrEventMultiplexer.addViewHandler( mpListener );
         }
 
-        // ---------------------------------------------------------------------
+        
 
         ExternalShapeBase::~ExternalShapeBase()
         {
@@ -119,116 +119,116 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         uno::Reference< drawing::XShape > ExternalShapeBase::getXShape() const
         {
             return mxShape;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ExternalShapeBase::play()
         {
             implStartIntrinsicAnimation();
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ExternalShapeBase::stop()
         {
             implEndIntrinsicAnimation();
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ExternalShapeBase::pause()
         {
             implPauseIntrinsicAnimation();
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ExternalShapeBase::isPlaying() const
         {
             return implIsIntrinsicAnimationPlaying();
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ExternalShapeBase::setMediaTime(double fTime)
         {
             implSetIntrinsicAnimationTime(fTime);
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ExternalShapeBase::update() const
         {
             return render();
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ExternalShapeBase::render() const
         {
             if( maBounds.getRange().equalZero() )
             {
-                // zero-sized shapes are effectively invisible,
-                // thus, we save us the rendering...
+                
+                
                 return true;
             }
 
             return implRender( maBounds );
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ExternalShapeBase::isContentChanged() const
         {
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         ::basegfx::B2DRectangle ExternalShapeBase::getBounds() const
         {
             return maBounds;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         ::basegfx::B2DRectangle ExternalShapeBase::getDomBounds() const
         {
             return maBounds;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         ::basegfx::B2DRectangle ExternalShapeBase::getUpdateArea() const
         {
             return maBounds;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ExternalShapeBase::isVisible() const
         {
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         double ExternalShapeBase::getPriority() const
         {
             return mnPriority;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ExternalShapeBase::isBackgroundDetached() const
         {
-            // external shapes always have their own window/surface
+            
             return true;
         }
 

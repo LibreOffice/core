@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -171,7 +171,7 @@ void LwpFribDocVar::RegisterStyle(LwpFoundry* pFoundry)
     case DATECREATED:
     case DATELASTREVISION:
     {
-//      m_TimeStyle = LwpTools::RegisterDefaultTimeStyle();
+
         RegisterDefaultTimeStyle();
     }
         break;
@@ -190,7 +190,7 @@ void LwpFribDocVar::RegisterStyle(LwpFoundry* pFoundry)
  */
 void LwpFribDocVar::RegisterDefaultTimeStyle()
 {
-    XFDateStyle* pDateStyle = new XFDateStyle;//use the default format
+    XFDateStyle* pDateStyle = new XFDateStyle;
 
     pDateStyle->AddMonth();
     pDateStyle->AddText(A2OUSTR("/"));
@@ -209,7 +209,7 @@ void LwpFribDocVar::RegisterDefaultTimeStyle()
 }
 void LwpFribDocVar::RegisterTotalTimeStyle()
 {
-    XFTimeStyle* pTimeStyle = new XFTimeStyle;//use the default format
+    XFTimeStyle* pTimeStyle = new XFTimeStyle;
     pTimeStyle->SetTruncate(sal_False);
     pTimeStyle->AddMinute();
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
@@ -387,7 +387,7 @@ void LwpFribDocVar::XFConvert(XFContentContainer* pXFPara)
     default:
         return;
     }
-    if (m_ModFlag)//(m_pModifiers)
+    if (m_ModFlag)
     {
         XFTextSpan *pSpan = new XFTextSpan;
         pSpan->SetStyleName(GetStyleName());
@@ -453,7 +453,7 @@ void LwpFribPageNumber::XFConvert(XFContentContainer* pXFPara)
     if (m_nNumStyle == 0x0)
         return;
     XFPageNumber* pNum = new XFPageNumber;
-//  pNum->SetSelect(A2OUSTR("current"));
+
     switch(m_nNumStyle)
     {
     case 0x01:
@@ -479,7 +479,7 @@ void LwpFribPageNumber::XFConvert(XFContentContainer* pXFPara)
         XFTextSpan *pBef = new XFTextSpan(textStr,styleName);
         pXFPara->Add(pBef);
     }
-    if (m_ModFlag)//(m_pModifiers)
+    if (m_ModFlag)
     {
         XFTextSpan *pSpan = new XFTextSpan;
         pSpan->SetStyleName(styleName);

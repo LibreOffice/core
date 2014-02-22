@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ScrollHelper.hxx"
@@ -33,18 +33,18 @@ namespace dbaui
     }
     void OScrollHelper::scroll(const Point& _rPoint, const Size& _rOutputSize)
     {
-        // Scrolling Areas
+        
         Rectangle aScrollArea( Point(0, _rOutputSize.Height() - LISTBOX_SCROLLING_AREA),
                                      Size(_rOutputSize.Width(), LISTBOX_SCROLLING_AREA) );
 
         Link aToCall;
-        // if pointer in bottom area begin scroll
+        
         if( aScrollArea.IsInside(_rPoint) )
             aToCall = m_aUpScroll;
         else
         {
             aScrollArea.SetPos(Point(0,0));
-            // if pointer in top area begin scroll
+            
             if( aScrollArea.IsInside(_rPoint) )
                 aToCall = m_aDownScroll;
         }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "FieldDescriptions.hxx"
@@ -39,7 +39,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-// class OFieldDescription
+
 OFieldDescription::OFieldDescription()
     :m_pType()
     ,m_nType(DataType::VARCHAR)
@@ -172,7 +172,7 @@ void OFieldDescription::FillFromTypeInfo(const TOTypeInfoSP& _pType,sal_Bool _bF
     TOTypeInfoSP pOldType = getTypeInfo();
     if ( _pType != pOldType )
     {
-        // reset type depending information
+        
         if ( _bReset )
         {
             SetFormatKey(0);
@@ -588,7 +588,7 @@ TOTypeInfoSP                OFieldDescription::getSpecialTypeInfo() const
     *pSpecialType = *m_pType;
     pSpecialType->nPrecision = GetPrecision();
     pSpecialType->nMaximumScale = static_cast<sal_Int16>(GetScale());
-    pSpecialType->bAutoIncrement = IsAutoIncrement(); // http://dba.openoffice.org/issues/show_bug.cgi?id=115398 fixed by ludob
+    pSpecialType->bAutoIncrement = IsAutoIncrement(); 
     return pSpecialType;
 }
 

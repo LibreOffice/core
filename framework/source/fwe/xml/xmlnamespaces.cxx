@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
     OUString aNamespaceName( aName );
     sal_Int32 nXMLNamespaceLength = m_aXMLAttributeNamespace.getLength();
 
-    // delete preceding "xmlns"
+    
     if ( aNamespaceName.compareTo( m_aXMLAttributeNamespace, nXMLNamespaceLength ) == 0 )
     {
         if ( aNamespaceName.getLength() == nXMLNamespaceLength )
@@ -60,7 +60,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
         }
         else
         {
-            // a xml namespace without name is not allowed (e.g. "xmlns:" )
+            
             OUString aErrorMessage( "A xml namespace without name is not allowed!" );
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
@@ -68,8 +68,8 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
 
     if ( aValue.isEmpty() && !aNamespaceName.isEmpty() )
     {
-        // namespace should be reseted - as xml draft states this is only allowed
-        // for the default namespace - check and throw exception if check fails
+        
+        
         OUString aErrorMessage( "Clearing xml namespace only allowed for default namespace!" );
         throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
     }
@@ -82,7 +82,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
             p = m_aNamespaceMap.find( aNamespaceName );
             if ( p != m_aNamespaceMap.end() )
             {
-                // replace current namespace definition
+                
                 m_aNamespaceMap.erase( p );
                 m_aNamespaceMap.insert( NamespaceMap::value_type( aNamespaceName, aValue ));
             }
@@ -96,7 +96,7 @@ void XMLNamespaces::addNamespace( const OUString& aName, const OUString& aValue 
 
 OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const throw( SAXException )
 {
-    // xml draft: there is no default namespace for attributes!
+    
 
     int index;
     if (( index = aName.indexOf( ':' )) > 0 )
@@ -110,7 +110,7 @@ OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const th
         }
         else
         {
-            // attribute with namespace but without name "namespace:" is not allowed!!
+            
             OUString aErrorMessage( "Attribute has no name only preceding namespace!" );
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
@@ -121,7 +121,7 @@ OUString XMLNamespaces::applyNSToAttributeName( const OUString& aName ) const th
 
 OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const   throw( SAXException )
 {
-    // xml draft: element names can have a default namespace
+    
 
     int         index = aName.indexOf( ':' );
     OUString aNamespace;
@@ -146,7 +146,7 @@ OUString XMLNamespaces::applyNSToElementName( const OUString& aName ) const   th
             aElementName += aName.copy( index+1 );
         else
         {
-            // attribute with namespace but without a name is not allowed (e.g. "cfg:" )
+            
             OUString aErrorMessage( "Attribute has no name only preceding namespace!" );
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }
@@ -169,7 +169,7 @@ OUString XMLNamespaces::getNamespaceValue( const OUString& aNamespace ) const th
             return p->second;
         else
         {
-            // namespace not defined => throw exception!
+            
             OUString aErrorMessage( "XML namespace used but not defined!" );
             throw SAXException( aErrorMessage, Reference< XInterface >(), Any() );
         }

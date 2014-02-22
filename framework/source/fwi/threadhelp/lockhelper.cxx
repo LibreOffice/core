@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <threadhelp/lockhelper.hxx>
@@ -27,7 +27,7 @@
 
 namespace framework{
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      use ctor to initialize instance
 
     @seealso    class ReadGuard
@@ -38,7 +38,7 @@ namespace framework{
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 LockHelper::LockHelper( comphelper::SolarMutex* pSolarMutex )
     :   m_pSolarMutex       ( NULL )
     ,   m_pShareableOslMutex( NULL )
@@ -55,7 +55,7 @@ LockHelper::LockHelper( comphelper::SolarMutex* pSolarMutex )
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      default dtor to release safed pointer
     @descr      We have created dynamical mutex- or lock-member ... or we hold a pointer to external objects.
                 We must release it!
@@ -66,7 +66,7 @@ LockHelper::LockHelper( comphelper::SolarMutex* pSolarMutex )
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 LockHelper::~LockHelper()
 {
     if( m_pShareableOslMutex != NULL )
@@ -85,7 +85,7 @@ LockHelper::~LockHelper()
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  IMutex
     @short      set an exclusiv lock
     @descr      We must match this lock call with current set lock type and used lock member.
@@ -101,13 +101,13 @@ LockHelper::~LockHelper()
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 void LockHelper::acquire()
 {
     m_pSolarMutex->acquire();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  IMutex
     @short      release exclusiv lock
     @descr      We must match this unlock call with current set lock type and used lock member.
@@ -123,13 +123,13 @@ void LockHelper::acquire()
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 void LockHelper::release()
 {
     m_pSolarMutex->release();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  IRWLock
     @short      set lock for reading
     @descr      A guard should call this method to acquire read access on your member.
@@ -144,13 +144,13 @@ void LockHelper::release()
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 void LockHelper::acquireReadAccess()
 {
     m_pSolarMutex->acquire();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  IRWLock
     @short      reset lock for reading
     @descr      A guard should call this method to release read access on your member.
@@ -164,13 +164,13 @@ void LockHelper::acquireReadAccess()
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 void LockHelper::releaseReadAccess()
 {
     m_pSolarMutex->release();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  IRWLock
     @short      set lock for writing
     @descr      A guard should call this method to acquire write access on your member.
@@ -186,13 +186,13 @@ void LockHelper::releaseReadAccess()
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 void LockHelper::acquireWriteAccess()
 {
     m_pSolarMutex->acquire();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  IRWLock
     @short      reset lock for writing
     @descr      A guard should call this method to release write access on your member.
@@ -206,13 +206,13 @@ void LockHelper::acquireWriteAccess()
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 void LockHelper::releaseWriteAccess()
 {
     m_pSolarMutex->release();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  IRWLock
     @short      downgrade a write access to a read access
     @descr      A guard should call this method to change a write to a read access.
@@ -234,13 +234,13 @@ void LockHelper::releaseWriteAccess()
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 void LockHelper::downgradeWriteAccess()
 {
-    // Not supported for mutex!
+    
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      return a reference to a static lock helper
     @descr      Sometimes we need the global mutex or rw-lock! (e.g. in our own static methods)
                 But it's not a good idea to use these global one very often ...
@@ -255,18 +255,18 @@ void LockHelper::downgradeWriteAccess()
     @return     A reference to a static mutex/lock member.
 
     @onerror    No error should occur.
-*//*-*************************************************************************************************************/
+*
 LockHelper& LockHelper::getGlobalLock()
 {
-    // Initialize static "member" only for one time!
-    // Algorithm:
-    // a) Start with an invalid lock (NULL pointer)
-    // b) If these method first called (lock not already exist!) ...
-    // c) ... we must create a new one. Protect follow code with the global mutex -
-    //    (It must be - we create a static variable!)
-    // d) Check pointer again - because ... another instance of our class could be faster then these one!
-    // e) Create the new lock and set it for return on static variable.
-    // f) Return new created or already existing lock object.
+    
+    
+    
+    
+    
+    
+    
+    
+    
     static LockHelper* pLock = NULL;
     if( pLock == NULL )
     {
@@ -280,7 +280,7 @@ LockHelper& LockHelper::getGlobalLock()
     return *pLock;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      return a reference to shared mutex member
     @descr      Sometimes we need a osl-mutex for sharing with our uno helper ...
                 What can we do?
@@ -293,7 +293,7 @@ LockHelper& LockHelper::getGlobalLock()
     @return     A reference to a shared mutex.
 
     @onerror    No error should occur.
-*//*-*************************************************************************************************************/
+*
 ::osl::Mutex& LockHelper::getShareableOslMutex()
 {
     if( m_pShareableOslMutex == NULL )
@@ -307,6 +307,6 @@ LockHelper& LockHelper::getGlobalLock()
     return *m_pShareableOslMutex;
 }
 
-} //  namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

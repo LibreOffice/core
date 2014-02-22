@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <connectivity/paramwrapper.hxx>
 
@@ -29,12 +29,12 @@
 
 #define PROPERTY_ID_VALUE   1000
 
-//........................................................................
+
 namespace dbtools
 {
 namespace param
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XParameters;
@@ -62,10 +62,10 @@ namespace param
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
     namespace DataType = ::com::sun::star::sdbc::DataType;
 
-    //====================================================================
-    //= ParameterWrapper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ParameterWrapper::ParameterWrapper( const Reference< XPropertySet >& _rxColumn )
         :PropertyBase( m_aBHelper )
         ,m_xDelegator( _rxColumn )
@@ -76,7 +76,7 @@ namespace param
             throw RuntimeException();
     }
 
-    //--------------------------------------------------------------------
+    
     ParameterWrapper::ParameterWrapper( const Reference< XPropertySet >& _rxColumn,
             const Reference< XParameters >& _rxAllParameters, const ::std::vector< sal_Int32 >& _rIndexes )
         :PropertyBase( m_aBHelper )
@@ -92,15 +92,15 @@ namespace param
         OSL_ENSURE( !m_aIndexes.empty(), "ParameterWrapper::ParameterWrapper: sure about the indexes?" );
     }
 
-    //--------------------------------------------------------------------
+    
     ParameterWrapper::~ParameterWrapper()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XINTERFACE2( ParameterWrapper, UnoBase, PropertyBase )
 
-    //--------------------------------------------------------------------
+    
     Sequence< Type > SAL_CALL ParameterWrapper::getTypes(   ) throw(RuntimeException)
     {
         Sequence< Type > aTypes( 4 );
@@ -111,10 +111,10 @@ namespace param
         return aTypes;
     }
 
-    //--------------------------------------------------------------------
+    
     IMPLEMENT_GET_IMPLEMENTATION_ID( ParameterWrapper )
 
-    //--------------------------------------------------------------------
+    
     OUString ParameterWrapper::impl_getPseudoAggregatePropertyName( sal_Int32 _nHandle ) const
     {
         Reference< XPropertySetInfo >  xInfo = const_cast<ParameterWrapper*>( this )->getPropertySetInfo();
@@ -130,13 +130,13 @@ namespace param
         return OUString();
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertySetInfo > ParameterWrapper::getPropertySetInfo() throw( RuntimeException )
     {
         return createPropertySetInfo( getInfoHelper() );
     }
 
-    //--------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& ParameterWrapper::getInfoHelper()
     {
         if ( !m_pInfoHelper.get() )
@@ -164,26 +164,26 @@ namespace param
         return *m_pInfoHelper;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool ParameterWrapper::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw( IllegalArgumentException )
     {
         OSL_ENSURE( PROPERTY_ID_VALUE == nHandle, "ParameterWrapper::convertFastPropertyValue: the only non-readonly prop should be our PROPERTY_VALUE!" );
         (void)nHandle;
 
-        // we're lazy here ...
+        
         rOldValue = m_aValue.makeAny();
         rConvertedValue = rValue;
-        return sal_True;    // assume "modified" ...
+        return sal_True;    
     }
 
-    //--------------------------------------------------------------------
+    
     void ParameterWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw( Exception )
     {
         if ( nHandle == PROPERTY_ID_VALUE )
         {
             try
             {
-                // TODO : aParamType & nScale can be obtained within the constructor ....
+                
                 sal_Int32 nParamType = DataType::VARCHAR;
                 OSL_VERIFY( m_xDelegator->getPropertyValue("Type") >>= nParamType );
 
@@ -196,7 +196,7 @@ namespace param
                     for ( ::std::vector< sal_Int32 >::iterator aIter = m_aIndexes.begin(); aIter != m_aIndexes.end(); ++aIter )
                     {
                         m_xValueDestination->setObjectWithInfo( *aIter + 1, rValue, nParamType, nScale );
-                            // (the index of the parameters is one-based)
+                            
                     }
                 }
 
@@ -218,7 +218,7 @@ namespace param
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ParameterWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
     {
         if ( nHandle == PROPERTY_ID_VALUE )
@@ -232,7 +232,7 @@ namespace param
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ParameterWrapper::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -246,16 +246,16 @@ namespace param
         m_aBHelper.bDisposed = sal_True;
     }
 
-    //====================================================================
-    //= ParameterWrapperContainer
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ParameterWrapperContainer::ParameterWrapperContainer()
         :ParameterWrapperContainer_Base( m_aMutex )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ParameterWrapperContainer::ParameterWrapperContainer( const Reference< XSingleSelectQueryAnalyzer >& _rxComposer )
         :ParameterWrapperContainer_Base( m_aMutex )
     {
@@ -269,12 +269,12 @@ namespace param
         }
     }
 
-    //--------------------------------------------------------------------
+    
     ParameterWrapperContainer::~ParameterWrapperContainer()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     Type SAL_CALL ParameterWrapperContainer::getElementType() throw( RuntimeException )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -282,7 +282,7 @@ namespace param
         return ::getCppuType( static_cast< Reference< XPropertySet >* >( NULL ) );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool SAL_CALL ParameterWrapperContainer::hasElements() throw( RuntimeException )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -290,7 +290,7 @@ namespace param
         return !m_aParameters.empty();
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL ParameterWrapperContainer::getCount() throw( RuntimeException )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -298,7 +298,7 @@ namespace param
         return m_aParameters.size();
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL ParameterWrapperContainer::getByIndex( sal_Int32 _nIndex ) throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -310,7 +310,7 @@ namespace param
         return makeAny( Reference< XPropertySet >( m_aParameters[ _nIndex ].get() ) );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XEnumeration > ParameterWrapperContainer::createEnumeration() throw( RuntimeException )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -319,14 +319,14 @@ namespace param
         return new ::comphelper::OEnumerationByIndex( static_cast< XIndexAccess* >( this ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void ParameterWrapperContainer::impl_checkDisposed_throw()
     {
         if ( rBHelper.bDisposed )
             throw DisposedException( OUString(), *this );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ParameterWrapperContainer::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -344,8 +344,8 @@ namespace param
         m_aParameters.swap( aEmpty );
     }
 
-//........................................................................
-} } // namespace dbtools::param
-//........................................................................
+
+} } 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

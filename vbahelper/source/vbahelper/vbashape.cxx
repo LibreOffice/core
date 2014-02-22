@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include<ooo/vba/office/MsoZOrderCmd.hpp>
 #include<ooo/vba/office/MsoScaleFrom.hpp>
@@ -117,17 +117,17 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
     uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor( xShape, uno::UNO_QUERY_THROW );
     sShapeType = xShapeDescriptor->getShapeType();
     SAL_INFO("vbahelper", "ScVbaShape::getType: " << sShapeType);
-    // office::MsoShapeType::msoDiagram to "com.sun.star.drawing.GroupShape"
+    
     if( sShapeType == "com.sun.star.drawing.GroupShape" )
         return office::MsoShapeType::msoGroup;
     else if( sShapeType == "com.sun.star.drawing.GraphicObjectShape" )
         return office::MsoShapeType::msoPicture;
     else if( sShapeType == "com.sun.star.drawing.ControlShape" || sShapeType == "FrameShape" )
         return office::MsoShapeType::msoOLEControlObject;
-    // OOo don't support office::MsoShapeType::msoComment as a Shape.
+    
     else if( sShapeType == "com.sun.star.drawing.OLE2Shape" )
         return office::MsoShapeType::msoChart;
-    // Art characters office::MsoShapeType::msoTextEffect, in OOo corresponding to "com.sun.star.drawing.CustomShape"
+    
     else if( sShapeType == "com.sun.star.drawing.ConnectorShape" )
     {
         enum drawing::ConnectorType connectorType;
@@ -150,7 +150,7 @@ ScVbaShape::getType( const css::uno::Reference< drawing::XShape > xShape ) throw
         throw uno::RuntimeException("the shape type do not be supported: " + sShapeType, uno::Reference< uno::XInterface >() );
 }
 
-// Attributes
+
 OUString SAL_CALL
 ScVbaShape::getName() throw (uno::RuntimeException)
 {
@@ -217,7 +217,7 @@ ScVbaShape::getLeft() throw (uno::RuntimeException)
     }
     catch( uno::Exception& )
     {
-        // fail to get position by using XShape::getPosition()
+        
         sal_Int32 nLeft = 0;
         m_xPropertySet->getPropertyValue( "HoriOrientPosition" ) >>= nLeft;
         left = Millimeter::getInPoints( nLeft );
@@ -275,16 +275,16 @@ ScVbaShape::setTop( double _top ) throw (uno::RuntimeException)
 sal_Bool SAL_CALL
 ScVbaShape::getVisible() throw (uno::RuntimeException)
 {
-    // #STUB
-    //UNO Shapes are always visible
+    
+    
     return sal_True;
 }
 
 void SAL_CALL
 ScVbaShape::setVisible( sal_Bool /*_visible*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
-    //UNO Shapes are always visible
+    
+    
 }
 
 sal_Int32 SAL_CALL
@@ -322,7 +322,7 @@ ScVbaShape::setRotation( double _rotation ) throw (uno::RuntimeException)
 uno::Reference< msforms::XLineFormat > SAL_CALL
 ScVbaShape::getLine() throw (uno::RuntimeException)
 {
-    // TODO should ongly return line
+    
     return uno::Reference< msforms::XLineFormat >( new ScVbaLineFormat( this, mxContext, m_xShape ) );
 }
 
@@ -338,7 +338,7 @@ ScVbaShape::getPictureFormat() throw (uno::RuntimeException)
     return uno::Reference< msforms::XPictureFormat >( new ScVbaPictureFormat( this, mxContext, m_xShape ) );
 }
 
-// Methods
+
 uno::Any SAL_CALL
 ScVbaShape::TextFrame() throw (uno::RuntimeException)
 {
@@ -388,7 +388,7 @@ ScVbaShape::ZOrder( sal_Int32 ZOrderCmd ) throw (uno::RuntimeException)
             m_xPropertySet->setPropertyValue( "ZOrder" , uno::makeAny( nOrderPositon ) );
         }
         break;
-    // below two commands use with Writer for text and image object.
+    
     case office::MsoZOrderCmd::msoBringInFrontOfText:
     case office::MsoZOrderCmd::msoSendBehindText:
         throw uno::RuntimeException( "This ZOrderCmd is not implemented, it is use with writer." , uno::Reference< uno::XInterface >() );
@@ -486,22 +486,22 @@ ScVbaShape::Select( const uno::Any& /*Replace*/ ) throw ( uno::RuntimeException 
     xSelectSupp->select( uno::makeAny( m_xShape ) );
 }
 
-// This method should not be part of Shape, what we reall need to do is...
-// dynamically create the appropriate objects e.g. TextBox, Oval, Picture etc.
-// ( e.g. the ones that really do have ShapeRange as an attribute )
+
+
+
 uno::Any SAL_CALL
 ScVbaShape::ShapeRange( const uno::Any& index ) throw ( uno::RuntimeException )
 {
-    // perhaps we should store a reference to the Shapes Collection
-    // in this class
-    // but anyway this method should not even be in this class
-    // #TODO not sure what the parent of the Shapes collection should be
+    
+    
+    
+    
 
     XNamedObjectCollectionHelper< drawing::XShape >::XNamedVec aVec;
     aVec.push_back( m_xShape );
     uno::Reference< container::XIndexAccess > xIndexAccess( new XNamedObjectCollectionHelper< drawing::XShape >( aVec ) );
     uno::Reference< container::XChild > xChild( m_xShape, uno::UNO_QUERY_THROW );
-    // #FIXME for want of a better parent, setting this
+    
     uno::Reference< msforms::XShapeRange > xShapeRange( new ScVbaShapeRange( mxParent, mxContext, xIndexAccess,  uno::Reference< drawing::XDrawPage >( xChild->getParent(), uno::UNO_QUERY_THROW ), m_xModel ) );
     if ( index.hasValue() )
         return xShapeRange->Item( index, uno::Any() );
@@ -511,27 +511,27 @@ ScVbaShape::ShapeRange( const uno::Any& index ) throw ( uno::RuntimeException )
 sal_Bool SAL_CALL
 ScVbaShape::getLockAspectRatio() throw (uno::RuntimeException)
 {
-    // #STUB
+    
     return sal_False;
 }
 
 void SAL_CALL
 ScVbaShape::setLockAspectRatio( sal_Bool /*_lockaspectratio*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 sal_Bool SAL_CALL
 ScVbaShape::getLockAnchor() throw (uno::RuntimeException)
 {
-    // #STUB
+    
     return sal_True;
 }
 
 void SAL_CALL
 ScVbaShape::setLockAnchor( sal_Bool /*_lockanchor*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 sal_Int32 SAL_CALL

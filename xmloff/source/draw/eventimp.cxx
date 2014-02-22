@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -172,7 +172,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
         return;
     }
 
-    // read attributes
+    
     OUString sEventName;
     const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; (i < nAttrCount) && mbValid; i++)
@@ -231,7 +231,7 @@ SdXMLEventContext::SdXMLEventContext( SvXMLImport& rImp,  sal_uInt16 nPrfx, cons
             }
             else if( IsXMLToken( aAttrLocalName, XML_LANGUAGE ) )
             {
-                // language is not evaluated!
+                
                 OUString aScriptLanguage;
                 msLanguage = sValue;
                 sal_uInt16 nScriptPrefix = rImp.GetNamespaceMap().
@@ -400,8 +400,8 @@ void SdXMLEventContext::EndElement()
                 pProperties->State = beans::PropertyState_DIRECT_VALUE;
                 pProperties++;
 
-                // ClickAction_BOOKMARK and ClickAction_DOCUMENT share the same xml event
-                // so check here if its really a bookmark or maybe a document
+                
+                
                 if( meClickAction == ClickAction_BOOKMARK )
                 {
                     if( !msBookmark.startsWith( "#" ) )
@@ -428,7 +428,7 @@ void SdXMLEventContext::EndElement()
                 case ClickAction_BOOKMARK:
                     msBookmark = msBookmark.copy(1);
 
-                    // Note: no break here!!!
+                    
 
                 case ClickAction_DOCUMENT:
                 case ClickAction_PROGRAM:
@@ -451,7 +451,7 @@ void SdXMLEventContext::EndElement()
                     pProperties->State = beans::PropertyState_DIRECT_VALUE;
                     pProperties++;
 
-                    // NOTE: no break here!!!
+                    
 
                 case ClickAction_SOUND:
                     pProperties->Name = "SoundURL";

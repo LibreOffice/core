@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VCoordinateSystem.hxx"
@@ -56,7 +56,7 @@ VCoordinateSystem* VCoordinateSystem::createCoordinateSystem(
 
     OUString aViewServiceName = xCooSysModel->getViewServiceName();
 
-    //@todo: in future the coordinatesystems should be instanciated via service factory
+    
     VCoordinateSystem* pRet=NULL;
     if( aViewServiceName.equals( CHART2_COOSYSTEM_CARTESIAN_VIEW_SERVICE_NAME ) )
         pRet = new VCartesianCoordinateSystem(xCooSysModel);
@@ -100,21 +100,21 @@ void VCoordinateSystem::initPlottingTargets(  const Reference< drawing::XShapes 
             throw (uno::RuntimeException)
 {
     OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
-    //is only allowed to be called once
+    
 
     sal_Int32 nDimensionCount = m_xCooSysModel->getDimension();
-    //create group shape for grids first thus axes are always painted above grids
+    
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
     if(nDimensionCount==2)
     {
-        //create and add to target
+        
         m_xLogicTargetForGrids = pShapeFactory->createGroup2D( xLogicTarget );
         xLogicTargetForSeriesBehindAxis = pShapeFactory->createGroup2D( xLogicTarget );
         m_xLogicTargetForAxes = pShapeFactory->createGroup2D( xLogicTarget );
     }
     else
     {
-        //create and added to target
+        
         m_xLogicTargetForGrids = pShapeFactory->createGroup3D( xLogicTarget );
         xLogicTargetForSeriesBehindAxis = pShapeFactory->createGroup3D( xLogicTarget );
         m_xLogicTargetForAxes = pShapeFactory->createGroup3D( xLogicTarget );
@@ -133,7 +133,7 @@ void VCoordinateSystem::setTransformationSceneToScreen(
 {
     m_aMatrixSceneToScreen = rMatrix;
 
-    //correct transformation for axis
+    
     tVAxisMap::iterator aIt( m_aAxisMap.begin() );
     tVAxisMap::const_iterator aEnd( m_aAxisMap.end() );
     for( ; aIt != aEnd; ++aIt )
@@ -152,7 +152,7 @@ drawing::HomogenMatrix VCoordinateSystem::getTransformationSceneToScreen()
     return m_aMatrixSceneToScreen;
 }
 
-//better performance for big data
+
 uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
             const awt::Size& rPageSize, const awt::Size& rPageResolution )
 {
@@ -175,7 +175,7 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
     double fPageWidth = rPageSize.Width;
     double fPageHeight = rPageSize.Height;
 
-    //factor 2 to avoid rounding problems
+    
     sal_Int32 nXResolution = static_cast<sal_Int32>(2.0*static_cast<double>(rPageResolution.Width)*fCoosysWidth/fPageWidth);
     sal_Int32 nYResolution = static_cast<sal_Int32>(2.0*static_cast<double>(rPageResolution.Height)*fCoosysHeight/fPageHeight);
 
@@ -187,7 +187,7 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
     if( this->getPropertySwapXAndYAxis() )
         std::swap(nXResolution,nYResolution);
 
-    //2D
+    
     if( 2 == aResolution.getLength() )
     {
         aResolution[0]=nXResolution;
@@ -195,7 +195,7 @@ uno::Sequence< sal_Int32 > VCoordinateSystem::getCoordinateSystemResolution(
     }
     else
     {
-        //this maybe can be optimized further ...
+        
         sal_Int32 nMaxResolution = std::max( nXResolution, nYResolution );
         nMaxResolution*=2;
         for( nN = 0 ;nN<aResolution.getLength(); nN++ )
@@ -400,7 +400,7 @@ void VCoordinateSystem::prepareScaleAutomatismForDimensionAndIndex( ScaleAutomat
         fMax = m_aMergedMinimumAndMaximumSupplier.getMaximumZ();
     }
 
-    //merge our values with those already contained in rScaleAutomatism
+    
     rScaleAutomatism.expandValueRange( fMin, fMax );
 
     rScaleAutomatism.setAutoScalingOptions(
@@ -585,6 +585,6 @@ sal_Int32 VCoordinateSystem::getNumberFormatKeyForAxis(
                 xAxis, m_xCooSysModel, xNumberFormatsSupplier );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaparagraph.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -89,10 +89,10 @@ public:
     ParagraphCollectionHelper( const uno::Reference< text::XTextDocument >& xDocument ) throw (uno::RuntimeException): mxTextDocument( xDocument )
     {
     }
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<text::XTextRange>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return sal_True; }
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         sal_Int32 nCount = 0;
@@ -126,7 +126,7 @@ public:
         }
         throw lang::IndexOutOfBoundsException();
     }
-    // XEnumerationAccess
+    
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
         return getEnumeration();
@@ -137,7 +137,7 @@ SwVbaParagraphs::SwVbaParagraphs( const uno::Reference< XHelperInterface >& xPar
 {
 }
 
-// XEnumerationAccess
+
 uno::Type
 SwVbaParagraphs::getElementType() throw (uno::RuntimeException)
 {

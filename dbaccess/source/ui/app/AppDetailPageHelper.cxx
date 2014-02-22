@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AppDetailPageHelper.hxx"
@@ -119,10 +119,10 @@ namespace
     SvTreeListEntry* lcl_findEntry(DBTreeListBox& rTree,const OUString& _rName,SvTreeListEntry* _pFirst)
     {
         sal_Int32 nIndex = 0;
-        OUString sErase = _rName.getToken(0,'/',nIndex); // we don't want to have the "private:forms" part
+        OUString sErase = _rName.getToken(0,'/',nIndex); 
         return (nIndex != -1 ? lcl_findEntry_impl(rTree,_rName.copy(sErase.getLength() + 1),_pFirst) : NULL);
     }
-    // class OPreviewWindow
+    
     class OTablePreviewWindow : public Window
     {
         DECL_LINK(OnDisableInput, void*);
@@ -183,7 +183,7 @@ namespace
 
 }
 
-// class OAppDetailPageHelper
+
 OAppDetailPageHelper::OAppDetailPageHelper(Window* _pParent,OAppBorderWindow& _rBorderWin,PreviewMode _ePreviewMode) : Window(_pParent,WB_DIALOGCONTROL)
     ,m_rBorderWin(_rBorderWin)
     ,m_aFL(this,WB_VERT)
@@ -245,7 +245,7 @@ OAppDetailPageHelper::~OAppDetailPageHelper()
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
             ::std::auto_ptr<DBTreeListBox> aTemp(m_pLists[i]);
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            m_pLists[i]->clearCurrentSelection();   // why a second time?
+            m_pLists[i]->clearCurrentSelection();   
             m_pLists[i] = NULL;
         }
 
@@ -766,7 +766,7 @@ DBTreeListBox* OAppDetailPageHelper::createTree( DBTreeListBox* _pTreeView, cons
 
     _pTreeView->SetStyle(_pTreeView->GetStyle() | WB_HASLINES | WB_SORT | WB_HASBUTTONS | WB_HSCROLL |WB_HASBUTTONSATROOT | WB_TABSTOP);
     _pTreeView->GetModel()->SetSortMode(SortAscending);
-    _pTreeView->EnableCheckButton( NULL ); // do not show any buttons
+    _pTreeView->EnableCheckButton( NULL ); 
     _pTreeView->SetSelectionMode(MULTIPLE_SELECTION);
 
     _pTreeView->SetDefaultCollapsedEntryBmp( _rImage );
@@ -891,7 +891,7 @@ void OAppDetailPageHelper::elementRemoved( ElementType _eType,const OUString& _r
         switch( _eType )
         {
             case E_TABLE:
-                // we don't need to clear the table here, it is already done by the dispose listener
+                
                 static_cast< OTableTreeListBox* >( pTreeView )->removedTable( _rName );
                 break;
             case E_QUERY:
@@ -960,7 +960,7 @@ IMPL_LINK( OAppDetailPageHelper, OnDeleteEntry, void*, /*NOINTERESTEDIN*/ )
 
 void OAppDetailPageHelper::Resize()
 {
-    // parent window dimension
+    
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth  = aOutputSize.Width();
     long nOutputHeight = aOutputSize.Height();
@@ -1027,7 +1027,7 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,sal_Bool _bForce)
         m_aTBPreview.SetItemText(SID_DB_APP_DISABLE_PREVIEW, m_aMenu->GetItemText(nSelectedAction));
         Resize();
 
-        // simulate a selectionChanged event at the controller, to force the preview to be updated
+        
         if ( isPreviewEnabled() )
         {
             if ( getCurrentView() && getCurrentView()->FirstSelected() )
@@ -1122,9 +1122,9 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
                 m_xFrame = Frame::create( getBorderWin().getView()->getORB() );
                 m_xFrame->initialize( m_xWindow );
 
-                // no layout manager (and thus no toolbars) in the preview
-                // Must be called after initialize ... but before any other call to this frame.
-                // Otherwise frame throws "life time exceptions" as e.g. NON_INITIALIZED
+                
+                
+                
                 m_xFrame->setLayoutManager( Reference< XLayoutManager >() );
 
                 Reference<XFramesSupplier> xSup(getBorderWin().getView()->getAppController().getXController()->getFrame(),UNO_QUERY);
@@ -1157,7 +1157,7 @@ void OAppDetailPageHelper::showPreview( const OUString& _sDataSourceName,
         Reference< XController > xPreview( pDispatcher->openExisting( makeAny( _sDataSourceName ), _sName, aArgs ), UNO_QUERY );
         sal_Bool bClearPreview = !xPreview.is();
 
-        // clear the preview when the query or table could not be loaded
+        
         if ( !bClearPreview )
         {
             Reference< XTabController > xTabController( xPreview, UNO_QUERY );
@@ -1177,17 +1177,17 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
 {
     m_aTBPreview.EndSelection();
 
-    // tell the toolbox that the item is pressed down
+    
     m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, true );
 
-    // simulate a mouse move (so the "down" state is really painted)
+    
     Point aPoint = m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ).TopLeft();
     MouseEvent aMove( aPoint, 0, MOUSE_SIMPLEMOVE | MOUSE_SYNTHETIC );
     m_aTBPreview.MouseMove( aMove );
 
     m_aTBPreview.Update();
 
-    // execute the menu
+    
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<PopupMenu> aMenu(new PopupMenu( ModuleRes( RID_MENU_APP_PREVIEW ) ));
     SAL_WNODEPRECATED_DECLARATIONS_POP
@@ -1203,11 +1203,11 @@ IMPL_LINK(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, /*pToolBox*/)
     }
     aMenu->EnableItem( SID_DB_APP_VIEW_DOCINFO_PREVIEW, getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) );
 
-    // no disabled entries
+    
     aMenu->RemoveDisabledEntries();
 
     sal_uInt16 nSelectedAction = aMenu->Execute(&m_aTBPreview, m_aTBPreview.GetItemRect( SID_DB_APP_DISABLE_PREVIEW ));
-    // "cleanup" the toolbox state
+    
     MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
     m_aTBPreview.MouseMove( aLeave );
     m_aTBPreview.SetItemDown( SID_DB_APP_DISABLE_PREVIEW, false);
@@ -1296,7 +1296,7 @@ sal_Bool OPreviewWindow::ImplGetGraphicCenterRect( const Graphic& rGraphic, Rect
 
     if( aNewSize.Width() && aNewSize.Height() )
     {
-        // scale to fit window
+        
         const double fGrfWH = (double) aNewSize.Width() / aNewSize.Height();
         const double fWinWH = (double) aWinSize.Width() / aWinSize.Height();
 

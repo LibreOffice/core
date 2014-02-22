@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textbodypropertiescontext.hxx"
@@ -36,17 +36,17 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace drawingml {
 
-// CT_TextBodyProperties
+
 TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rParent,
     const AttributeList& rAttribs, TextBodyProperties& rTextBodyProp )
 : ContextHandler2( rParent )
 , mrTextBodyProp( rTextBodyProp )
 {
-    // ST_TextWrappingType
+    
     sal_Int32 nWrappingType = rAttribs.getToken( XML_wrap, XML_square );
     mrTextBodyProp.maPropertyMap[ PROP_TextWordWrap ] <<= static_cast< sal_Bool >( nWrappingType == XML_square );
 
-    // ST_Coordinate
+    
     OUString sValue;
     sal_Int32 aIns[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
     for( sal_Int32 i = 0; i < ( sal_Int32 )( sizeof( aIns ) / sizeof( sal_Int32 ) ); i++)
@@ -62,28 +62,28 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rPa
             mrTextBodyProp.maPropertyMap[ PROP_TextHorizontalAdjust ] <<=
                 TextHorizontalAdjust_CENTER;
     }
-//   bool bCompatLineSpacing = rAttribs.getBool( XML_compatLnSpc, false );
-//   bool bForceAA = rAttribs.getBool( XML_forceAA, false );
-//   bool bFromWordArt = rAttribs.getBool( XML_fromWordArt, false );
 
-  // ST_TextHorzOverflowType
-//   sal_Int32 nHorzOverflow = rAttribs.getToken( XML_horzOverflow, XML_overflow );
-    // ST_TextVertOverflowType
-//   sal_Int32 nVertOverflow =  rAttribs.getToken( XML_vertOverflow, XML_overflow );
 
-    // ST_TextColumnCount
-//   sal_Int32 nNumCol = rAttribs.getInteger( XML_numCol, 1 );
 
-    // ST_Angle
+
+  
+
+    
+
+
+    
+
+
+    
     mrTextBodyProp.moRotation = rAttribs.getInteger( XML_rot );
 
-//   bool bRtlCol = rAttribs.getBool( XML_rtlCol, false );
-    // ST_PositiveCoordinate
-//   sal_Int32 nSpcCol = rAttribs.getInteger( XML_spcCol, 0 );
-//   bool bSpcFirstLastPara = rAttribs.getBool( XML_spcFirstLastPara, 0 );
-//   bool bUpRight = rAttribs.getBool( XML_upright, 0 );
 
-    // ST_TextVerticalType
+    
+
+
+
+
+    
     if( rAttribs.hasAttribute( XML_vert ) ) {
         mrTextBodyProp.moVert = rAttribs.getToken( XML_vert );
         bool bRtl = rAttribs.getBool( XML_rtl, false );
@@ -95,14 +95,14 @@ TextBodyPropertiesContext::TextBodyPropertiesContext( ContextHandler2Helper& rPa
                 <<= ( bRtl ? WritingMode_RL_TB : WritingMode_LR_TB );
     }
 
-    // ST_TextAnchoringType
+    
     if( rAttribs.hasAttribute( XML_anchor ) )
     {
         mrTextBodyProp.meVA = GetTextVerticalAdjust( rAttribs.getToken( XML_anchor, XML_t ) );
         mrTextBodyProp.maPropertyMap[ PROP_TextVerticalAdjust ] <<= mrTextBodyProp.meVA;
     }
 
-    // Push defaults
+    
     mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
     mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= drawing::TextFitToSizeType_NONE;
 }
@@ -111,16 +111,16 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
 {
     switch( aElementToken )
     {
-            // Sequence
-            case A_TOKEN( prstTxWarp ):     // CT_PresetTextShape
-            case A_TOKEN( prot ):           // CT_TextProtectionProperty
+            
+            case A_TOKEN( prstTxWarp ):     
+            case A_TOKEN( prot ):           
                 break;
 
-            // EG_TextAutofit
+            
             case A_TOKEN( noAutofit ):
-                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   // CT_TextNoAutofit
+                mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;   
                 break;
-            case A_TOKEN( normAutofit ):    // CT_TextNormalAutofit
+            case A_TOKEN( normAutofit ):    
                 mrTextBodyProp.maPropertyMap[ PROP_TextFitToSize ] <<= TextFitToSizeType_AUTOFIT;
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= false;
                 break;
@@ -128,11 +128,11 @@ ContextHandlerRef TextBodyPropertiesContext::onCreateContext( sal_Int32 aElement
                 mrTextBodyProp.maPropertyMap[ PROP_TextAutoGrowHeight ] <<= true;
                 break;
 
-            case A_TOKEN( scene3d ):        // CT_Scene3D
+            case A_TOKEN( scene3d ):        
 
-            // EG_Text3D
-            case A_TOKEN( sp3d ):           // CT_Shape3D
-            case A_TOKEN( flatTx ):         // CT_FlatText
+            
+            case A_TOKEN( sp3d ):           
+            case A_TOKEN( flatTx ):         
 
                 break;
     }

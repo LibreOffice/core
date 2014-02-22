@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -63,7 +63,7 @@ using namespace com::sun::star::uno;
 
 namespace
 {
-//For use with XExtensionManager.synchronize
+
 class SilentCommandEnv
     : public ::cppu::WeakImplHelper3< ucb::XCommandEnvironment,
                                       task::XInteractionHandler,
@@ -80,18 +80,18 @@ public:
         Desktop* pDesktop );
     virtual ~SilentCommandEnv();
 
-    // XCommandEnvironment
+    
     virtual uno::Reference<task::XInteractionHandler > SAL_CALL
     getInteractionHandler() throw (uno::RuntimeException);
     virtual uno::Reference<ucb::XProgressHandler >
     SAL_CALL getProgressHandler() throw (uno::RuntimeException);
 
-    // XInteractionHandler
+    
     virtual void SAL_CALL handle(
         uno::Reference<task::XInteractionRequest > const & xRequest )
         throw (uno::RuntimeException);
 
-    // XProgressHandler
+    
     virtual void SAL_CALL push( uno::Any const & Status )
         throw (uno::RuntimeException);
     virtual void SAL_CALL update( uno::Any const & Status )
@@ -99,7 +99,7 @@ public:
     virtual void SAL_CALL pop() throw (uno::RuntimeException);
 };
 
-//-----------------------------------------------------------------------------
+
 SilentCommandEnv::SilentCommandEnv(
     uno::Reference<uno::XComponentContext> const & xContext,
     Desktop* pDesktop ):
@@ -109,28 +109,28 @@ SilentCommandEnv::SilentCommandEnv(
     mnProgress( 25 )
 {}
 
-//-----------------------------------------------------------------------------
+
 SilentCommandEnv::~SilentCommandEnv()
 {
     mpDesktop->SetSplashScreenText( OUString() );
 }
 
-//-----------------------------------------------------------------------------
+
 Reference<task::XInteractionHandler> SilentCommandEnv::getInteractionHandler()
     throw (uno::RuntimeException)
 {
     return this;
 }
 
-//-----------------------------------------------------------------------------
+
 Reference<ucb::XProgressHandler> SilentCommandEnv::getProgressHandler()
     throw (uno::RuntimeException)
 {
     return this;
 }
 
-//-----------------------------------------------------------------------------
-// XInteractionHandler
+
+
 void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRequest )
     throw (uno::RuntimeException)
 {
@@ -156,7 +156,7 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
         }
     }
 
-    // We approve everything here
+    
     uno::Sequence< Reference< task::XInteractionContinuation > > conts( xRequest->getContinuations() );
     Reference< task::XInteractionContinuation > const * pConts = conts.getConstArray();
     sal_Int32 len = conts.getLength();
@@ -178,8 +178,8 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
     }
 }
 
-//-----------------------------------------------------------------------------
-// XProgressHandler
+
+
 void SilentCommandEnv::push( uno::Any const & rStatus )
     throw (uno::RuntimeException)
 {
@@ -195,7 +195,7 @@ void SilentCommandEnv::push( uno::Any const & rStatus )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SilentCommandEnv::update( uno::Any const & rStatus )
     throw (uno::RuntimeException)
 {
@@ -206,13 +206,13 @@ void SilentCommandEnv::update( uno::Any const & rStatus )
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SilentCommandEnv::pop() throw (uno::RuntimeException)
 {
     mnLevel -= 1;
 }
 
-} // end namespace
+} 
 
 
 static const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
@@ -236,9 +236,9 @@ static sal_Int16 impl_showExtensionDialog( uno::Reference< uno::XComponentContex
     return nRet;
 }
 
-//------------------------------------------------------------------------------
-// Check dependencies of all packages
-//------------------------------------------------------------------------------
+
+
+
 static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext > &xContext )
 {
     uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
@@ -314,9 +314,9 @@ static bool impl_checkDependencies( const uno::Reference< uno::XComponentContext
     return true;
 }
 
-//------------------------------------------------------------------------------
-// resets the 'check needed' flag (needed, if aborted)
-//------------------------------------------------------------------------------
+
+
+
 static void impl_setNeedsCompatCheck()
 {
     try {
@@ -339,10 +339,10 @@ static void impl_setNeedsCompatCheck()
     catch (const Exception&) {}
 }
 
-//------------------------------------------------------------------------------
-// to check if we need checking the dependencies of the extensions again, we compare
-// the build id of the office with the one of the last check
-//------------------------------------------------------------------------------
+
+
+
+
 static bool impl_needsCompatCheck()
 {
     bool bNeedsCheck = false;
@@ -381,9 +381,9 @@ static bool impl_needsCompatCheck()
     return bNeedsCheck;
 }
 
-//------------------------------------------------------------------------------
-// Do we need to check the dependencies of the extensions?
-// When there are unresolved issues, we can't continue with startup
+
+
+
 sal_Bool Desktop::CheckExtensionDependencies()
 {
     if (!impl_needsCompatCheck())
@@ -423,8 +423,8 @@ void Desktop::SynchronizeExtensionRepositories()
         task::OfficeRestartManager::get(context)->requestRestart(
             silent->getInteractionHandler());
     } else {
-        // reinstallDeployedExtensions above already calls syncRepositories
-        // internally:
+        
+        
         dp_misc::syncRepositories(false, silent);
     }
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ const sal_Char sHTML_MIME_text[] = "text/";
 const sal_Char sHTML_MIME_application[] = "application/";
 const sal_Char sHTML_MIME_experimental[] = "x-";
 
-// <INPUT TYPE=xxx>
+
 static HTMLOptionEnum const aAreaShapeOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_SH_rect,      IMAP_OBJ_RECTANGLE  },
@@ -73,7 +73,7 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, sal_Bool bIsNewDoc,
     DBG_ASSERT( !IsSwitchToUCS2(),
                 "SfxHTMLParser::SfxHTMLParser: Switch to UCS2?" );
 
-    // If the file starts with a BOM, switch to UCS2.
+    
     SetSwitchToUCS2( sal_True );
 }
 
@@ -151,14 +151,14 @@ bool SfxHTMLParser::ParseAreaOptions(ImageMap * pImageMap, const OUString& rBase
 
         case HTML_O_ONMOUSEOVER:
             eScrpType = JAVASCRIPT;
-            //fallthrough
+            
         case HTML_O_SDONMOUSEOVER:
             nEvent = nEventMouseOver;
             goto IMAPOBJ_SETEVENT;
 
         case HTML_O_ONMOUSEOUT:
             eScrpType = JAVASCRIPT;
-            //fallthrough
+            
         case HTML_O_SDONMOUSEOUT:
             nEvent = nEventMouseOut;
             goto IMAPOBJ_SETEVENT;

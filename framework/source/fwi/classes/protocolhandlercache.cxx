@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /*TODO
@@ -159,7 +159,7 @@ sal_Bool HandlerCache::search( const css::util::URL& aURL, ProtocolHandler* pRet
 
 void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
 {
-    // SAFE ->
+    
     WriteGuard aWriteLock( LockHelper::getGlobalLock() );
 
     HandlerHash* pOldHandler = m_pHandler;
@@ -174,7 +174,7 @@ void HandlerCache::takeOver(HandlerHash* pHandler, PatternHash* pPattern)
     delete pOldPattern;
 
     aWriteLock.unlock();
-    // <- SAFE
+    
 }
 
 /**
@@ -207,14 +207,14 @@ HandlerCFGAccess::HandlerCFGAccess( const OUString& sPackage )
 void HandlerCFGAccess::read( HandlerHash** ppHandler ,
                              PatternHash** ppPattern )
 {
-    // list of all uno implementation names without encoding
+    
     css::uno::Sequence< OUString > lNames = GetNodeNames( SETNAME_HANDLER, ::utl::CONFIG_NAME_LOCAL_PATH );
     sal_Int32 nSourceCount = lNames.getLength();
     sal_Int32 nTargetCount = nSourceCount;
-    // list of all full qualified path names of configuration entries
+    
     css::uno::Sequence< OUString > lFullNames ( nTargetCount );
 
-    // expand names to full path names
+    
     sal_Int32 nSource=0;
     sal_Int32 nTarget=0;
     for( nSource=0; nSource<nSourceCount; ++nSource )
@@ -229,24 +229,24 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
         ++nTarget;
     }
 
-    // get values at all
+    
     css::uno::Sequence< css::uno::Any > lValues = GetProperties( lFullNames );
     SAL_WARN_IF( lFullNames.getLength()!=lValues.getLength(), "fwk", "HandlerCFGAccess::read(): Miss some configuration values of handler set!" );
 
-    // fill structures
+    
     nSource = 0;
     for( nTarget=0; nTarget<nTargetCount; ++nTarget )
     {
-        // create it new for every loop to guarantee a real empty object!
+        
         ProtocolHandler aHandler;
         aHandler.m_sUNOName = ::utl::extractFirstFromConfigurationPath(lNames[nSource]);
 
-        // unpack all values of this handler
+        
         css::uno::Sequence< OUString > lTemp;
         lValues[nTarget] >>= lTemp;
         aHandler.m_lProtocols = Converter::convert_seqOUString2OUStringList(lTemp);
 
-        // register his pattern into the performance search hash
+        
         for (OUStringList::iterator pItem =aHandler.m_lProtocols.begin();
                                     pItem!=aHandler.m_lProtocols.end()  ;
                                     ++pItem                             )
@@ -254,7 +254,7 @@ void HandlerCFGAccess::read( HandlerHash** ppHandler ,
             (**ppPattern)[*pItem] = lNames[nSource];
         }
 
-        // insert the handler info into the normal handler cache
+        
         (**ppHandler)[lNames[nSource]] = aHandler;
         ++nSource;
     }
@@ -279,6 +279,6 @@ void HandlerCFGAccess::Commit()
 {
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

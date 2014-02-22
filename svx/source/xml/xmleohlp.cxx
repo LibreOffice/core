@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -59,7 +59,7 @@ using namespace ::com::sun::star::lang;
 #define XML_EMBEDDEDOBJECT_URL_BASE     "vnd.sun.star.EmbeddedObject:"
 #define XML_EMBEDDEDOBJECTGRAPHIC_URL_BASE      "vnd.sun.star.GraphicObject:"
 
-// -----------------------------------------------------------------------------
+
 
 class OutputStorageWrapper_Impl : public ::cppu::WeakImplHelper1<XOutputStream>
 {
@@ -73,7 +73,7 @@ public:
     OutputStorageWrapper_Impl();
     virtual ~OutputStorageWrapper_Impl();
 
-// stario::XOutputStream
+
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
     virtual void SAL_CALL flush() throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
     virtual void SAL_CALL closeOutput() throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
@@ -195,10 +195,10 @@ void SvXMLEmbeddedObjectHelper::splitObjectURL(OUString aURLNoPar,
     }
     else
     {
-        //eliminate 'superfluous' slashes at start and end
-        //#i103076# load objects with all allowed xlink:href syntaxes
+        
+        
         {
-            //eliminate './' at start
+            
             sal_Int32 nStart = 0;
             sal_Int32 nCount = aURLNoPar.getLength();
             if( aURLNoPar.startsWith( "./" ) )
@@ -207,7 +207,7 @@ void SvXMLEmbeddedObjectHelper::splitObjectURL(OUString aURLNoPar,
                 nCount -= 2;
             }
 
-            //eliminate '/' at end
+            
             sal_Int32 nEnd = aURLNoPar.lastIndexOf( '/' );
             if( nEnd == aURLNoPar.getLength()-1 && nEnd != (nStart-1) )
                 nCount--;
@@ -230,27 +230,27 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
         sal_Bool *pGraphicRepl,
         sal_Bool *pOasisFormat ) const
 {
-    // internal URL: vnd.sun.star.EmbeddedObject:<object-name>
-    //           or: vnd.sun.star.EmbeddedObject:<path>/<object-name>
-    // internal replacement images:
-    //               vnd.sun.star.EmbeddedObjectGraphic:<object-name>
-    //           or: vnd.sun.star.EmbeddedObjectGraphic:<path>/<object-name>
-    // external URL: ./<path>/<object-name>
-    //           or: <path>/<object-name>
-    //           or: <object-name>
-    // currently, path may only consist of a single directory name
-    // it is also possible to have additional arguments at the end of URL: <main URL>[?<name>=<value>[,<name>=<value>]*]
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     if( pGraphicRepl )
         *pGraphicRepl = sal_False;
 
     if( pOasisFormat )
-        *pOasisFormat = sal_True; // the default value
+        *pOasisFormat = sal_True; 
 
     if( rURLStr.isEmpty() )
         return sal_False;
 
-    // get rid of arguments
+    
     sal_Int32 nPos = rURLStr.indexOf( '?' );
     OUString aURLNoPar;
     if ( nPos == -1 )
@@ -259,7 +259,7 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
     {
         aURLNoPar = rURLStr.copy( 0, nPos );
 
-        // check the arguments
+        
         nPos++;
         while( nPos >= 0 && nPos < rURLStr.getLength() )
         {
@@ -384,17 +384,17 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
     OUString aSrcObjName( rObjName );
     comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->getEmbeddedObjectContainer();
 
-    // Is the object name unique?
-    // if the object is already instantiated by GetEmbeddedObject
-    // that means that the duplication is being loaded
+    
+    
+    
     sal_Bool bDuplicate = rContainer.HasInstantiatedEmbeddedObject( rObjName );
     DBG_ASSERT( !bDuplicate, "An object in the document is referenced twice!" );
 
     if( xDocStor != xCntnrStor || pTemp || bDuplicate )
     {
-        // TODO/LATER: make this alltogether a method in the EmbeddedObjectContainer
+        
 
-        // create a unique name for the duplicate object
+        
         if( bDuplicate )
             rObjName = rContainer.CreateUniqueObjectName();
 
@@ -409,8 +409,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
                 pTemp->ReadStream( *pStream );
                 delete pStream;
 
-                // TODO/LATER: what to do when other types of objects are based on substream persistence?
-                // This is an ole object
+                
+                
                 uno::Reference< beans::XPropertySet > xProps( xStm, uno::UNO_QUERY_THROW );
                 xProps->setPropertyValue(
                     OUString( "MediaType" ),
@@ -436,15 +436,15 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
         }
     }
 
-    // make object known to the container
-    // TODO/LATER: could be done a little bit more efficient!
+    
+    
     OUString aName( rObjName );
 
-    // TODO/LATER: The provided pClassId is ignored for now.
-    //             The stream contains OLE storage internally and this storage already has a class id specifying the
-    //             server that was used to create the object. pClassId could be used to specify the server that should
-    //             be used for the next opening, but this information seems to be out of the file format responsibility
-    //             area.
+    
+    
+    
+    
+    
     rContainer.GetEmbeddedObject( aName );
 
     return sal_True;
@@ -493,7 +493,7 @@ OUString SvXMLEmbeddedObjectHelper::ImplInsertEmbeddedObjectURL(
     }
     else
     {
-        // Objects are written using ::comphelper::IEmbeddedHelper::SaveAs
+        
         sRetURL = "./";
         if( !aContainerStorageName.isEmpty() )
         {
@@ -519,16 +519,16 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
             sal_Int32 nCurState = xObj->getCurrentState();
             if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
             {
-                // means that the object is not active
-                // copy replacement image from old to new container
+                
+                
                 OUString aMediaType;
                 xStream = mpDocPersist->getEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
             }
 
             if ( !xStream.is() )
             {
-                // the image must be regenerated
-                // TODO/LATER: another aspect could be used
+                
+                
                 if ( nCurState == embed::EmbedStates::LOADED )
                     bSwitchBackToLoaded = true;
 
@@ -540,7 +540,7 @@ uno::Reference< io::XInputStream > SvXMLEmbeddedObjectHelper::ImplGetReplacement
             }
 
             if ( bSwitchBackToLoaded )
-                // switch back to loaded state; that way we have a minimum cache confusion
+                
                 xObj->changeState( embed::EmbedStates::LOADED );
         }
         catch( uno::Exception& )
@@ -607,7 +607,7 @@ void SvXMLEmbeddedObjectHelper::Flush()
     }
 }
 
-// XGraphicObjectResolver: alien objects!
+
 OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL( const OUString& aURL )
     throw(RuntimeException)
 {
@@ -616,7 +616,7 @@ OUString SAL_CALL SvXMLEmbeddedObjectHelper::resolveEmbeddedObjectURL( const OUS
     return ImplInsertEmbeddedObjectURL( aURL );
 }
 
-// XNameAccess: alien objects!
+
 Any SAL_CALL SvXMLEmbeddedObjectHelper::getByName(
         const OUString& rURLStr )
     throw (NoSuchElementException, WrappedTargetException, RuntimeException)
@@ -745,7 +745,7 @@ sal_Bool SAL_CALL SvXMLEmbeddedObjectHelper::hasByName( const OUString& rURLStr 
     }
 }
 
-// XNameAccess
+
 Type SAL_CALL SvXMLEmbeddedObjectHelper::getElementType()
     throw (RuntimeException)
 {

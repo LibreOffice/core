@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,15 +14,15 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//------------------------------------------------------------------------
+
 //
-// Global header
+
 //
-//------------------------------------------------------------------------
+
 
 #include <limits.h>
 #include <vector>
@@ -33,11 +33,11 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-//------------------------------------------------------------------------
+
 //
-// Project-local header
+
 //
-//------------------------------------------------------------------------
+
 #include "editeng/unoedprx.hxx"
 #include <editeng/unotext.hxx>
 #include <editeng/unoedhlp.hxx>
@@ -65,7 +65,7 @@ public:
         mbInBullet(sal_False) {};
     ~SvxAccessibleTextIndex() {};
 
-    // Get/Set current paragraph
+    
     void SetParagraph( sal_Int32 nPara )
     {
         mnPara = nPara;
@@ -111,7 +111,7 @@ public:
     void AreInBullet( sal_Bool bInBullet = sal_True ) { mbInBullet = bInBullet; }
     sal_Bool InBullet() const { return mbInBullet; }
 
-    /// returns false if the given range is non-editable (e.g. contains bullets or _parts_ of fields)
+    
     sal_Bool IsEditableRange( const SvxAccessibleTextIndex& rEnd ) const;
 
 private:
@@ -128,16 +128,16 @@ private:
 
 ESelection MakeEESelection( const SvxAccessibleTextIndex& rStart, const SvxAccessibleTextIndex& rEnd )
 {
-    // deal with field special case: to really get a field contained
-    // within a selection, the start index must be before or on the
-    // field, the end index after it.
+    
+    
+    
 
-    // The SvxAccessibleTextIndex.GetEEIndex method gives the index on
-    // the field, as long the input index is on the field. Thus,
-    // correction necessary for the end index
+    
+    
+    
 
-    // Therefore, for _ranges_, if part of the field is touched, all
-    // of the field must be selected
+    
+    
     if( rStart.GetParagraph() <= rEnd.GetParagraph() ||
         (rStart.GetParagraph() == rEnd.GetParagraph() &&
          rStart.GetEEIndex() <= rEnd.GetEEIndex()) )
@@ -175,7 +175,7 @@ sal_uInt16 SvxAccessibleTextIndex::GetEEIndex() const
 
 void SvxAccessibleTextIndex::SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwarder& rTF )
 {
-    // reset
+    
     mnFieldOffset = 0;
     mbInField = sal_False;
     mnFieldLen = 0;
@@ -183,17 +183,17 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwa
     mbInBullet = sal_False;
     mnBulletLen = 0;
 
-    // set known values
+    
     mnEEIndex = nEEIndex;
 
-    // calculate unknowns
+    
     sal_Int32 nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
 
     mnIndex = nEEIndex;
 
     EBulletInfo aBulletInfo = rTF.GetBulletInfo( GetParagraph() );
 
-    // any text bullets?
+    
     if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
@@ -214,14 +214,14 @@ void SvxAccessibleTextIndex::SetEEIndex( sal_uInt16 nEEIndex, const SvxTextForwa
             break;
         }
 
-        // #106010#
+        
         mnIndex += ::std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0);
     }
 }
 
 void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder& rTF )
 {
-    // reset
+    
     mnFieldOffset = 0;
     mbInField = sal_False;
     mnFieldLen = 0;
@@ -229,10 +229,10 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
     mbInBullet = sal_False;
     mnBulletLen = 0;
 
-    // set known values
+    
     mnIndex = nIndex;
 
-    // calculate unknowns
+    
     sal_Int32 nCurrField, nFieldCount = rTF.GetFieldCount( GetParagraph() );
 
     DBG_ASSERT(nIndex >= 0 && nIndex <= USHRT_MAX,
@@ -242,7 +242,7 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
 
     EBulletInfo aBulletInfo = rTF.GetBulletInfo( GetParagraph() );
 
-    // any text bullets?
+    
     if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
@@ -264,14 +264,14 @@ void SvxAccessibleTextIndex::SetIndex( sal_Int32 nIndex, const SvxTextForwarder&
     {
         EFieldInfo aFieldInfo( rTF.GetFieldInfo( GetParagraph(), nCurrField ) );
 
-        // we're before a field
+        
         if( aFieldInfo.aPosition.nIndex > mnEEIndex )
             break;
 
-        // #106010#
+        
         mnEEIndex -= ::std::max(aFieldInfo.aCurrentText.getLength()-1, (sal_Int32)0);
 
-        // we're within a field
+        
         if( aFieldInfo.aPosition.nIndex >= mnEEIndex )
         {
             AreInField();
@@ -292,15 +292,15 @@ sal_Bool SvxAccessibleTextIndex::IsEditableRange( const SvxAccessibleTextIndex& 
         return sal_False;
 
     if( InField() && GetFieldOffset() )
-        return sal_False; // within field
+        return sal_False; 
 
     if( rEnd.InField() && rEnd.GetFieldOffset() >= rEnd.GetFieldLen() - 1 )
-        return sal_False; // within field
+        return sal_False; 
 
     return sal_True;
 }
 
-//---------------------------------------------------------------------------------
+
 
 SvxEditSourceAdapter::SvxEditSourceAdapter() : mbEditSourceValid( sal_False )
 {
@@ -414,9 +414,9 @@ void SvxEditSourceAdapter::SetEditSource( ::std::auto_ptr< SvxEditSource > pAdap
     }
     else
     {
-        // do a lazy delete (prevents us from deleting the broadcaster
-        // from within a broadcast in
-        // AccessibleTextHelper_Impl::Notify)
+        
+        
+        
         mbEditSourceValid = sal_False;
     }
 }
@@ -428,7 +428,7 @@ sal_Bool SvxEditSourceAdapter::IsValid() const
 }
 
 
-//--------------------------------------------------------------------------------------
+
 
 SvxAccessibleTextAdapter::SvxAccessibleTextAdapter() : mpTextForwarder( NULL )
 {
@@ -465,7 +465,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    // normalize selection
+    
     if( rSel.nStartPara > rSel.nEndPara ||
         (rSel.nStartPara == rSel.nEndPara && rSel.nStartPos > rSel.nEndPos) )
     {
@@ -474,7 +474,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
 
     OUString sStr = mpTextForwarder->GetText( MakeEESelection(aStartIndex, aEndIndex) );
 
-    // trim field text, if necessary
+    
     if( aStartIndex.InField() )
     {
         DBG_ASSERT(aStartIndex.GetFieldOffset() >= 0 &&
@@ -497,7 +497,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
 
     if( aEndIndex.InBullet() )
     {
-        // append trailing bullet
+        
         sStr += aBulletInfo2.aText;
 
         DBG_ASSERT(sStr.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) >= 0 &&
@@ -517,7 +517,7 @@ OUString SvxAccessibleTextAdapter::GetText( const ESelection& rSel ) const
 
         sBullet = sBullet.copy(0, sBullet.getLength() - (aEndIndex.GetBulletLen() - aEndIndex.GetBulletOffset()) );
 
-        // insert bullet
+        
         sStr = sStr.replaceAt( GetTextLen(aStartIndex.GetParagraph()) - aStartIndex.GetIndex(), 0, sBullet );
     }
 
@@ -731,8 +731,8 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
     SvxAccessibleTextIndex aIndex;
     aIndex.SetIndex( nPara, nIndex, *this );
 
-    // preset if anything goes wrong below
-    // n-th char in GetParagraphIndex's paragraph
+    
+    
     Rectangle aRect = mpTextForwarder->GetCharBounds( nPara, aIndex.GetEEIndex() );
 
     if( aIndex.InBullet() )
@@ -743,8 +743,8 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
 
         DBG_ASSERT(pOutDev!=NULL, "SvxAccessibleTextAdapter::GetCharBounds: No ref device");
 
-        // preset if anything goes wrong below
-        aRect = aBulletInfo.aBounds; // better than nothing
+        
+        aRect = aBulletInfo.aBounds; 
         if( pOutDev )
         {
             AccessibleStringWrap aStringWrap( *pOutDev, aBulletInfo.aFont, aBulletInfo.aText );
@@ -755,7 +755,7 @@ Rectangle SvxAccessibleTextAdapter::GetCharBounds( sal_Int32 nPara, sal_Int32 nI
     }
     else
     {
-        // handle field content manually
+        
         if( aIndex.InField() )
         {
             OutputDevice* pOutDev = GetRefDevice();
@@ -792,7 +792,7 @@ Rectangle SvxAccessibleTextAdapter::GetParaBounds( sal_Int32 nPara ) const
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
     {
-        // include bullet in para bounding box
+        
         Rectangle aRect( mpTextForwarder->GetParaBounds( nPara ) );
 
         aRect.Union( aBulletInfo.aBounds );
@@ -834,7 +834,7 @@ sal_Bool SvxAccessibleTextAdapter::GetIndexAtPoint( const Point& rPoint, sal_Int
 
     EBulletInfo aBulletInfo = GetBulletInfo( nPara );
 
-    // any text bullets?
+    
     if( aBulletInfo.nParagraph != EE_PARA_NOT_FOUND &&
         aBulletInfo.bVisible &&
         aBulletInfo.nType != SVX_NUM_BITMAP )
@@ -906,7 +906,7 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nI
                    aIndex.GetBulletLen() <= USHRT_MAX,
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
-        // always treat bullet as separate word
+        
         nStart = 0;
         nEnd = aIndex.GetBulletLen();
 
@@ -921,8 +921,8 @@ sal_Bool SvxAccessibleTextAdapter::GetWordIndices( sal_Int32 nPara, sal_Int32 nI
                    nStart + aIndex.GetFieldLen() <= USHRT_MAX,
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
-        // always treat field as separate word
-        // TODO: to circumvent this, _we_ would have to do the break iterator stuff!
+        
+        
         nStart = aIndex.GetIndex() - aIndex.GetFieldOffset();
         nEnd = nStart + aIndex.GetFieldLen();
 
@@ -961,7 +961,7 @@ sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_
                    aIndex.GetBulletLen() <= USHRT_MAX,
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
-        // always treat bullet as distinct attribute
+        
         nStartIndex = 0;
         nEndIndex = aIndex.GetBulletLen();
 
@@ -974,7 +974,7 @@ sal_Bool SvxAccessibleTextAdapter::GetAttributeRun( sal_Int32& nStartIndex, sal_
                    aIndex.GetIndex() - aIndex.GetFieldOffset() <= USHRT_MAX,
                    "SvxAccessibleTextIndex::SetIndex: index value overflow");
 
-        // always treat field as distinct attribute
+        
         nStartIndex = aIndex.GetIndex() - aIndex.GetFieldOffset();
         nEndIndex = nStartIndex + aIndex.GetFieldLen();
 
@@ -1140,7 +1140,7 @@ sal_Bool SvxAccessibleTextAdapter::IsEditable( const ESelection& rSel )
     aStartIndex.SetIndex( rSel.nStartPara, rSel.nStartPos, *this );
     aEndIndex.SetIndex( rSel.nEndPara, rSel.nEndPos, *this );
 
-    // normalize selection
+    
     if( rSel.nStartPara > rSel.nEndPara ||
         (rSel.nStartPara == rSel.nEndPara && rSel.nStartPos > rSel.nEndPos) )
     {
@@ -1173,7 +1173,7 @@ void        SvxAccessibleTextAdapter::CopyText(const SvxTextForwarder&)
 
 
 
-//---------------------------------------------------------------------------------------
+
 
 SvxAccessibleTextEditViewAdapter::SvxAccessibleTextEditViewAdapter()
     : mpViewForwarder(NULL)

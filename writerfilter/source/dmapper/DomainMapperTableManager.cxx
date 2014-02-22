@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <boost/optional.hpp>
 #include <DomainMapperTableManager.hxx>
@@ -99,15 +99,15 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
         sal_Int32 nIntValue = ((pValue.get() != NULL) ? pValue->getInt() : 0);
         switch ( nSprmId )
         {
-            case 0xf661: //sprmTTRLeft left table indent
-            case 0xf614: // sprmTTPreferredWidth - preferred table width
-            case NS_ooxml::LN_CT_TblPrBase_tblW:  //90722;
-            case NS_ooxml::LN_CT_TblPrBase_tblInd: //90725
+            case 0xf661: 
+            case 0xf614: 
+            case NS_ooxml::LN_CT_TblPrBase_tblW:  
+            case NS_ooxml::LN_CT_TblPrBase_tblInd: 
             {
-                //contains unit and value
+                
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
-                {   //contains attributes x2902 (LN_unit) and x17e2 (LN_trleft)
+                {   
                     MeasureHandlerPtr pMeasureHandler( new MeasureHandler );
                     pProperties->resolve(*pMeasureHandler);
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
@@ -143,7 +143,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             bool bFixed = true;
                             sal_Int32 nRowFixedWidth = 0;
                             IntVectorPtr pCellWidths = getCurrentCellWidths();
-                            // Step 1. Check whether all cells have fixed widths in the given row of table.
+                            
                             for (std::vector<sal_Int32>::const_iterator aValIter = pCellWidths->begin(); aValIter != pCellWidths->end(); ++aValIter)
                             {
                                 if (*aValIter == -1)
@@ -151,14 +151,14 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                                     bFixed = false;
                                     break;
                                 }
-                                // Sum the width of cells to find the total width of given row
+                                
                                 nRowFixedWidth += (*aValIter);
                             }
 
-                            // Check whether the total width of given row is compared with the maximum value of rows (m_nMaxFixedWidth).
+                            
                             if (bFixed )
                             {
-                                // Check if total width
+                                
                                 if (m_nMaxFixedWidth < nRowFixedWidth)
                                     m_nMaxFixedWidth = nRowFixedWidth;
 
@@ -167,7 +167,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             }
                             else
                             {
-                                // Set the width type of table with 'Auto' and set the width value to 100(%)
+                                
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH_TYPE, text::SizeType::VARIABLE );
                                 pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, 0 );
                             }
@@ -181,10 +181,10 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
             }
             break;
-            case 0x3404:// sprmTTableHeader
-            case NS_ooxml::LN_CT_TrPrBase_tblHeader: //90704
-                // if nIntValue == 1 then the row is a repeated header line
-                // to prevent later rows from increasing the repeating m_nHeaderRepeat is set to NULL when repeating stops
+            case 0x3404:
+            case NS_ooxml::LN_CT_TrPrBase_tblHeader: 
+                
+                
                 if( nIntValue > 0 && m_nHeaderRepeat >= 0 )
                 {
                     ++m_nHeaderRepeat;
@@ -196,13 +196,13 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     m_nHeaderRepeat = -1;
                 if (nIntValue)
                 {
-                    // Store the info that this is a header, we'll need that when we apply table styles.
+                    
                     TablePropertyMapPtr pPropMap( new TablePropertyMap );
                     pPropMap->Insert( PROP_TBL_HEADER, uno::makeAny(nIntValue));
                     insertRowProps(pPropMap);
                 }
             break;
-            case 0xd608: // TDefTable
+            case 0xd608: 
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
@@ -232,7 +232,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
             }
             break;
-            case 0xD605: // sprmTTableBorders
+            case 0xD605: 
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                 if( pProperties.get())
@@ -246,12 +246,12 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
             }
             break;
-            case 0xd632 : //sprmTNewSpacing
-            case 0xd634 : //sprmTNewSpacing
-                //TODO: sprms contain default (TNew) and actual border spacing of cells - not resolvable yet
+            case 0xd632 : 
+            case 0xd634 : 
+                
             break;
-            case 0xd613: //sprmTGridLineProps
-                // TODO: needs a handler
+            case 0xd613: 
+                
                 /*contains:
                  GridLineProps">
                     rtf:LINEPROPSTOP
@@ -266,19 +266,19 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
 
                 */
             break;
-            case 0x740a : //sprmTTlp
-                //TODO: Table look specifier
+            case 0x740a : 
+                
             break;
-            case 0x6816 : //unknown
-            case 0x3466 : //unknown
-            case 0x3615 : //unknown
-            case 0x646b : //unknown - expandable sprm - see ww8scan.cxx
-            case 0x7479 : //unknown
-            case 0xf617 : //unknown
-            case 0xf618 : //unknown
+            case 0x6816 : 
+            case 0x3466 : 
+            case 0x3615 : 
+            case 0x646b : 
+            case 0x7479 : 
+            case 0xf617 : 
+            case 0xf618 : 
                 bRet = false;
             break;
-            case NS_ooxml::LN_CT_TblPrBase_tblStyle: //table style name
+            case NS_ooxml::LN_CT_TblPrBase_tblStyle: 
             {
                 m_sTableStyleName = pValue->getString();
                 TablePropertyMapPtr pPropMap( new TablePropertyMap );
@@ -294,9 +294,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                     getCurrentGrid()->push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
             }
             break;
-            case NS_ooxml::LN_CT_TcPrBase_vMerge : //vertical merge
+            case NS_ooxml::LN_CT_TcPrBase_vMerge : 
             {
-                // values can be: LN_Value_ST_Merge_restart, LN_Value_ST_Merge_continue, in reality the second one is a 0
+                
                 TablePropertyMapPtr pMergeProps( new TablePropertyMap );
                 pMergeProps->Insert( PROP_VERTICAL_MERGE, uno::makeAny( bool( sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart )) );
                 cellProps( pMergeProps);
@@ -304,13 +304,13 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             break;
             case NS_ooxml::LN_CT_TcPrBase_hMerge:
             {
-                // values can be: LN_Value_ST_Merge_restart, LN_Value_ST_Merge_continue, in reality the second one is a 0
+                
                 TablePropertyMapPtr pMergeProps(new TablePropertyMap());
                 pMergeProps->Insert(PROP_HORIZONTAL_MERGE, uno::makeAny(bool(sal::static_int_cast<Id>(nIntValue) == NS_ooxml::LN_Value_ST_Merge_restart)));
                 cellProps(pMergeProps);
             }
             break;
-            case NS_ooxml::LN_CT_TcPrBase_gridSpan: //number of grid positions spanned by this cell
+            case NS_ooxml::LN_CT_TcPrBase_gridSpan: 
             {
 #ifdef DEBUG_DOMAINMAPPER
                 dmapper_logger->startElement("tablemanager.GridSpan");
@@ -333,36 +333,36 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 bool bInsertCellProps = true;
                 switch ( nIntValue )
                 {
-                    case 1:  // tbRl
-                    // Binary filter takes BiDirection into account ( but I have no idea about that here )
-                    // or even what it is. But... here's where to handle it if it becomes an issue
+                    case 1:  
+                    
+                    
                         pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::TB_RL ));
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
                         break;
-                    case 3:  // btLr
+                    case 3:  
                         {
-                        // We have to fake this text direction
+                        
                          pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::LR_TB ));
                          pPropMap->Insert( PROP_CHAR_ROTATION, uno::makeAny( sal_Int16( 900 ) ));
                         SAL_INFO( "writerfilter", "Have inserted textDirection " << nIntValue );
 
-                        // We're faking a text direction, so don't allow multiple lines.
+                        
                         TablePropertyMapPtr pRowPropMap( new TablePropertyMap );
                         pRowPropMap->Insert(PROP_SIZE_TYPE, uno::makeAny(text::SizeType::FIX));
                         m_bRowSizeTypeInserted = true;
                         insertRowProps(pRowPropMap);
                         }
                         break;
-                    case 4: // lrTbV
+                    case 4: 
                         pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::LR_TB ));
                         break;
-                    case 5: // tbRlV
+                    case 5: 
                         pPropMap->Insert( PROP_FRM_DIRECTION, uno::makeAny( text::WritingMode2::TB_RL ));
                         break;
-                    case 0: // lrTb
+                    case 0: 
                     case NS_ooxml::LN_Value_ST_TextDirection_tbLrV:
                     default:
-                       // Ignore - we can't handle these
+                       
                        bInsertCellProps = false;
                        break;
                 }
@@ -372,9 +372,9 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
             }
             case NS_ooxml::LN_CT_TcPrBase_tcW:
                 {
-                    // Contains unit and value, but unit is not interesting for
-                    // us, later we'll just distribute these values in a
-                    // 0..10000 scale.
+                    
+                    
+                    
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
                     if( pProperties.get())
                     {
@@ -390,12 +390,12 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                 }
                 break;
             case NS_ooxml::LN_CT_TrPrBase_cnfStyle:
-                break;  // the cnfStyle doesn't matter, instead the tblLook property is used to specify conditional styles that are to be used
+                break;  
             case NS_ooxml::LN_CT_PPrBase_cnfStyle:
-                // TODO cnfStyle on a paragraph
+                
                 break;
             case NS_ooxml::LN_CT_TcPrBase_cnfStyle:
-                break;  // the cnfStyle doesn't matter, instead the tblLook property is used to specify conditional styles that are to be used
+                break;  
             case NS_ooxml::LN_CT_TblPrBase_tblpPr:
                 {
                     writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -456,7 +456,7 @@ void DomainMapperTableManager::startLevel( )
 {
     DomainMapperTableManager_Base_t::startLevel( );
 
-    // If requested, pop the value that was pushed too early.
+    
     boost::optional<sal_Int32> oCurrentWidth;
     if (m_bPushCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())
     {
@@ -482,7 +482,7 @@ void DomainMapperTableManager::startLevel( )
     m_nLayoutType = 0;
     m_nMaxFixedWidth = 0;
 
-    // And push it back to the right level.
+    
     if (oCurrentWidth)
         m_aCellWidths.back()->push_back(*oCurrentWidth);
 }
@@ -492,12 +492,12 @@ void DomainMapperTableManager::endLevel( )
     m_aTableGrid.pop_back( );
     m_aGridSpans.pop_back( );
 
-    // Do the same trick as in startLevel(): pop the value that was pushed too early.
+    
     boost::optional<sal_Int32> oCurrentWidth;
     if (m_bPushCurrentWidth && !m_aCellWidths.empty() && !m_aCellWidths.back()->empty())
         oCurrentWidth.reset(m_aCellWidths.back()->back());
     m_aCellWidths.pop_back( );
-    // And push it back to the right level.
+    
     if (oCurrentWidth)
         m_aCellWidths.back()->push_back(*oCurrentWidth);
 
@@ -519,8 +519,8 @@ void DomainMapperTableManager::endLevel( )
     dmapper_logger->endElement();
 #endif
 
-    // Pop back the table position after endLevel as it's used
-    // in the endTable method called in endLevel.
+    
+    
     m_aTablePositions.pop_back();
 }
 
@@ -544,9 +544,9 @@ void DomainMapperTableManager::endOfRowAction()
     dmapper_logger->startElement("endOfRowAction");
 #endif
 
-    // Compare the table position with the previous ones. We may need to split
-    // into two tables if those are different. We surely don't want to do anything
-    // if we don't have any row yet.
+    
+    
+    
     TablePositionHandlerPtr pTmpPosition = m_aTmpPosition.back();
     TablePropertyMapPtr pTmpTableProperties = m_aTmpTableProperties.back( );
     TablePositionHandlerPtr pCurrentPosition = m_aTablePositions.back();
@@ -554,13 +554,13 @@ void DomainMapperTableManager::endOfRowAction()
                          ( pTmpPosition && pCurrentPosition && *pTmpPosition == *pCurrentPosition );
     if ( !bSamePosition && m_nRow > 0 )
     {
-        // Save the grid infos to have them survive the end/start level
+        
         IntVectorPtr pTmpTableGrid = m_aTableGrid.back();
         IntVectorPtr pTmpGridSpans = m_aGridSpans.back();
         IntVectorPtr pTmpCellWidths = m_aCellWidths.back();
 
-        // endLevel and startLevel are taking care of the non finished row
-        // to carry it over to the next table
+        
+        
         setKeepUnfinishedRow( true );
         endLevel();
         setKeepUnfinishedRow( false );
@@ -574,7 +574,7 @@ void DomainMapperTableManager::endOfRowAction()
         m_aCellWidths.push_back(pTmpCellWidths);
     }
 
-    // Push the tmp position now that we compared it
+    
     m_aTablePositions.pop_back();
     m_aTablePositions.push_back( pTmpPosition );
     m_aTmpPosition.back().reset( );
@@ -616,7 +616,7 @@ void DomainMapperTableManager::endOfRowAction()
     IntVectorPtr pCurrentSpans = getCurrentSpans( );
     if( pCurrentSpans->size() < m_nCell.back( ) )
     {
-        //fill missing elements with '1'
+        
         pCurrentSpans->insert( pCurrentSpans->end( ), m_nCell.back( ) - pCurrentSpans->size(), 1 );
     }
 
@@ -638,16 +638,16 @@ void DomainMapperTableManager::endOfRowAction()
     dmapper_logger->endElement();
 #endif
 
-    //calculate number of used grids - it has to match the size of m_aTableGrid
+    
     size_t nGrids = 0;
     ::std::vector<sal_Int32>::const_iterator aGridSpanIter = pCurrentSpans->begin();
     for( ; aGridSpanIter != pCurrentSpans->end(); ++aGridSpanIter)
         nGrids += *aGridSpanIter;
 
-    // sj: the grid is having no units... they is containing only relative values.
-    // a table with a grid of "1:2:1" looks identical as if the table is having
-    // a grid of "20:40:20" and it doesn't have to do something with the tableWidth
-    // -> so we have get the sum of each grid entry for the fullWidthRelative:
+    
+    
+    
+    
     int nFullWidthRelative = 0;
     for (unsigned int i = 0 ; i < (*pTableGrid.get()).size(); i++ )
         nFullWidthRelative += (*pTableGrid.get())[ i ];
@@ -707,16 +707,16 @@ void DomainMapperTableManager::endOfRowAction()
     }
     else if (pCellWidths->size() > 0 && m_nLayoutType == NS_ooxml::LN_Value_wordprocessingml_ST_TblLayout_fixed)
     {
-        // If we're here, then the number of cells does not equal to the amount
-        // defined by the grid, even after taking care of
-        // gridSpan/gridBefore/gridAfter. Handle this by ignoring the grid and
-        // providing the separators based on the provided cell widths, as long
-        // as we have a fixed layout.
+        
+        
+        
+        
+        
         uno::Sequence< text::TableColumnSeparator > aSeparators(pCellWidths->size() - 1);
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
         sal_Int16 nSum = 0;
         sal_uInt32 nPos = 0;
-        // Avoid divide by zero (if there's no grid, position using cell widths).
+        
         if( nFullWidthRelative == 0 )
             for (sal_uInt32 i = 0; i < pCellWidths->size(); ++i)
                 nFullWidthRelative += (*pCellWidths.get())[i];
@@ -724,7 +724,7 @@ void DomainMapperTableManager::endOfRowAction()
         for (sal_uInt32 i = 0; i < pCellWidths->size() - 1; ++i)
         {
             nSum += (*pCellWidths.get())[i];
-            pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; // Relative position
+            pSeparators[nPos].Position = (nSum * 10000) / nFullWidthRelative; 
             pSeparators[nPos].IsVisible = sal_True;
             nPos++;
         }
@@ -739,7 +739,7 @@ void DomainMapperTableManager::endOfRowAction()
         insertRowProps(pPropMap);
     }
 
-    // Now that potentially opened table is closed, save the table properties
+    
     DomainMapperTableManager_Base_t::insertTableProps( pTmpTableProperties );
 
     m_aTmpTableProperties.pop_back();

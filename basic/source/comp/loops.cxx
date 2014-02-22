@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,32 +14,32 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "sbcomp.hxx"
 
-// Single-line IF and Multiline IF
+
 
 void SbiParser::If()
 {
     sal_uInt32 nEndLbl;
     SbiToken eTok = NIL;
-    // ignore end-tokens
+    
     SbiExpression aCond( this );
     aCond.Gen();
     TestToken( THEN );
     if( IsEoln( Next() ) )
     {
-        // At the end of each block a jump to ENDIF must be inserted,
-        // so that the condition is not evaluated again at ELSEIF.
-        // The table collects all jump points.
+        
+        
+        
 #define JMP_TABLE_SIZE 100
-        sal_uInt32 pnJmpToEndLbl[JMP_TABLE_SIZE];   // 100 ELSEIFs allowed
-        sal_uInt16 iJmp = 0;                        // current table index
+        sal_uInt32 pnJmpToEndLbl[JMP_TABLE_SIZE];   
+        sal_uInt16 iJmp = 0;                        
 
-        // multiline IF
+        
         nEndLbl = aGen.Gen( _JUMPF, 0 );
         eTok = Peek();
         while( !( eTok == ELSEIF || eTok == ELSE || eTok == ENDIF ) &&
@@ -53,7 +53,7 @@ void SbiParser::If()
         }
         while( eTok == ELSEIF )
         {
-            // jump to ENDIF in case of a successful IF/ELSEIF
+            
             if( iJmp >= JMP_TABLE_SIZE )
             {
                 Error( SbERR_PROG_TOO_LARGE );  bAbort = true;  return;
@@ -102,7 +102,7 @@ void SbiParser::If()
     }
     else
     {
-        // single line IF
+        
         bSingleLineIf = true;
         nEndLbl = aGen.Gen( _JUMPF, 0 );
         Push( eCurTok );
@@ -132,7 +132,7 @@ void SbiParser::If()
     aGen.BackChain( nEndLbl );
 }
 
-// ELSE/ELSEIF/ENDIF without IF
+
 
 void SbiParser::NoIf()
 {
@@ -140,8 +140,8 @@ void SbiParser::NoIf()
     StmntBlock( ENDIF );
 }
 
-// DO WHILE...LOOP
-// DO ... LOOP WHILE
+
+
 
 void SbiParser::DoLoop()
 {
@@ -150,7 +150,7 @@ void SbiParser::DoLoop()
     SbiToken eTok = Next();
     if( IsEoln( eTok ) )
     {
-        // DO ... LOOP [WHILE|UNTIL expr]
+        
         StmntBlock( LOOP );
         eTok = Next();
         if( eTok == UNTIL || eTok == WHILE )
@@ -166,7 +166,7 @@ void SbiParser::DoLoop()
     }
     else
     {
-        // DO [WHILE|UNTIL expr] ... LOOP
+        
         if( eTok == UNTIL || eTok == WHILE )
         {
             SbiExpression aCond( this );
@@ -181,7 +181,7 @@ void SbiParser::DoLoop()
     CloseBlock();
 }
 
-// WHILE ... WEND
+
 
 void SbiParser::While()
 {
@@ -194,7 +194,7 @@ void SbiParser::While()
     aGen.BackChain( nEndLbl );
 }
 
-// FOR var = expr TO expr STEP
+
 
 void SbiParser::For()
 {
@@ -202,13 +202,13 @@ void SbiParser::For()
     if( bForEach )
         Next();
     SbiExpression aLvalue( this, SbOPERAND );
-    aLvalue.Gen();      // variable on the Stack
+    aLvalue.Gen();      
 
     if( bForEach )
     {
         TestToken( _IN_ );
         SbiExpression aCollExpr( this, SbOPERAND );
-        aCollExpr.Gen();    // Colletion var to for stack
+        aCollExpr.Gen();    
         TestEoln();
         aGen.Gen( _INITFOREACH );
     }
@@ -232,19 +232,19 @@ void SbiParser::For()
             aOne.Gen();
         }
         TestEoln();
-        // The stack has all 4 elements now: variable, start, end, increment
-        // bind start value
+        
+        
         aGen.Gen( _INITFOR );
     }
 
     sal_uInt32 nLoop = aGen.GetPC();
-    // do tests, maybe free the stack
+    
     sal_uInt32 nEndTarget = aGen.Gen( _TESTFOR, 0 );
     OpenBlock( FOR );
     StmntBlock( NEXT );
     aGen.Gen( _NEXT );
     aGen.Gen( _JUMP, nLoop );
-    // are there variables after NEXT?
+    
     if( Peek() == SYMBOL )
     {
         SbiExpression aVar( this, SbOPERAND );
@@ -255,7 +255,7 @@ void SbiParser::For()
     CloseBlock();
 }
 
-// WITH .. END WITH
+
 
 void SbiParser::With()
 {
@@ -263,7 +263,7 @@ void SbiParser::With()
 
     SbiExprNode *pNode = aVar.GetExprNode()->GetRealNode();
     SbiSymDef* pDef = pNode->GetVar();
-    // Variant, from 27.6.1997, #41090: empty -> must be Object
+    
     if( pDef->GetType() == SbxVARIANT || pDef->GetType() == SbxEMPTY )
         pDef->SetType( SbxOBJECT );
     else if( pDef->GetType() != SbxOBJECT )
@@ -277,7 +277,7 @@ void SbiParser::With()
     CloseBlock();
 }
 
-// LOOP/NEXT/WEND without construct
+
 
 void SbiParser::BadBlock()
 {
@@ -287,7 +287,7 @@ void SbiParser::BadBlock()
         Error( SbERR_BAD_BLOCK, "Loop/Next/Wend" );
 }
 
-// On expr Goto/Gosub n,n,n...
+
 
 void SbiParser::OnGoto()
 {
@@ -304,7 +304,7 @@ void SbiParser::OnGoto()
     sal_uInt32 nLbl = 0;
     do
     {
-        Next(); // get label
+        Next(); 
         if( MayBeLabel() )
         {
             sal_uInt32 nOff = pProc->GetLabels().Reference( aSym );
@@ -319,7 +319,7 @@ void SbiParser::OnGoto()
     aGen.Patch( nLabelsTarget, nLbl );
 }
 
-// GOTO/GOSUB
+
 
 void SbiParser::Goto()
 {
@@ -333,7 +333,7 @@ void SbiParser::Goto()
     else Error( SbERR_LABEL_EXPECTED );
 }
 
-// RETURN [label]
+
 
 void SbiParser::Return()
 {
@@ -346,7 +346,7 @@ void SbiParser::Return()
     else aGen.Gen( _RETURN, 0 );
 }
 
-// SELECT CASE
+
 
 void SbiParser::Select()
 {
@@ -373,7 +373,7 @@ void SbiParser::Select()
             sal_uInt32 nTrueTarget = 0;
             if( Peek() == ELSE )
             {
-                // CASE ELSE
+                
                 Next();
                 bElse = true;
             }
@@ -383,7 +383,7 @@ void SbiParser::Select()
                     Error( SbERR_SYNTAX );
                 SbiToken eTok2 = Peek();
                 if( eTok2 == IS || ( eTok2 >= EQ && eTok2 <= GE ) )
-                {   // CASE [IS] operator expr
+                {   
                     if( eTok2 == IS )
                         Next();
                     eTok2 = Peek();
@@ -398,19 +398,19 @@ void SbiParser::Select()
                             SbxEQ + ( eTok2 - EQ ) ) );
                 }
                 else
-                {   // CASE expr | expr TO expr
+                {   
                     SbiExpression aCase1( this );
                     aCase1.Gen();
                     if( Peek() == TO )
                     {
-                        // CASE a TO b
+                        
                         Next();
                         SbiExpression aCase2( this );
                         aCase2.Gen();
                         nTrueTarget = aGen.Gen( _CASETO, nTrueTarget );
                     }
                     else
-                        // CASE a
+                        
                         nTrueTarget = aGen.Gen( _CASEIS, nTrueTarget, SbxEQ );
 
                 }
@@ -423,7 +423,7 @@ void SbiParser::Select()
                 nNextTarget = aGen.Gen( _JUMP, nNextTarget );
                 aGen.BackChain( nTrueTarget );
             }
-            // build the statement body
+            
             while( !bAbort )
             {
                 eTok = Peek();
@@ -449,7 +449,7 @@ done:
     aGen.Gen( _ENDCASE );
 }
 
-// ON Error/Variable
+
 
 void SbiParser::On()
 {
@@ -457,7 +457,7 @@ void SbiParser::On()
     OUString aString = SbiTokenizer::Symbol(eTok);
     if (aString.equalsIgnoreAsciiCase("ERROR"))
     {
-        eTok = _ERROR_; // Error comes as SYMBOL
+        eTok = _ERROR_; 
     }
     if( eTok != _ERROR_ && eTok != LOCAL )
     {
@@ -469,12 +469,12 @@ void SbiParser::On()
         {
             Next();
         }
-        Next (); // no more TestToken, as there'd be an error otherwise
+        Next (); 
 
-        Next(); // get token after error
+        Next(); 
         if( eCurTok == GOTO )
         {
-            // ON ERROR GOTO label|0
+            
             Next();
             bool bError_ = false;
             if( MayBeLabel() )
@@ -515,7 +515,7 @@ void SbiParser::On()
     }
 }
 
-// RESUME [0]|NEXT|label
+
 
 void SbiParser::Resume()
 {
@@ -536,7 +536,7 @@ void SbiParser::Resume()
             {
                 aGen.Gen( _RESUME, 0 );
                 break;
-            } // fall thru
+            } 
         case SYMBOL:
             if( MayBeLabel() )
             {
@@ -544,7 +544,7 @@ void SbiParser::Resume()
                 aGen.Gen( _RESUME, nLbl );
                 Next();
                 break;
-            } // fall thru
+            } 
         default:
             Error( SbERR_LABEL_EXPECTED );
     }

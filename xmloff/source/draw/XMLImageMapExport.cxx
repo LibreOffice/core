@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLImageMapExport.hxx"
@@ -91,7 +91,7 @@ void XMLImageMapExport::Export(
 
         Export(aContainer);
     }
-    // else: no ImageMap property -> nothing to do
+    
 }
 
 void XMLImageMapExport::Export(
@@ -101,13 +101,13 @@ void XMLImageMapExport::Export(
     {
         if (rContainer->hasElements())
         {
-            // image map container element
+            
             SvXMLElementExport aImageMapElement(
                 mrExport, XML_NAMESPACE_DRAW, XML_IMAGE_MAP,
                 mbWhiteSpace, mbWhiteSpace);
 
-            // iterate over image map elements and call ExportMapEntry(...)
-            // for each
+            
+            
             sal_Int32 nLength = rContainer->getCount();
             for(sal_Int32 i = 0; i < nLength; i++)
             {
@@ -122,9 +122,9 @@ void XMLImageMapExport::Export(
                 }
             }
         }
-        // else: container is empty -> nothing to do
+        
     }
-    // else: no container -> nothing to do
+    
 }
 
 
@@ -136,7 +136,7 @@ void XMLImageMapExport::ExportMapEntry(
     {
         enum XMLTokenEnum eType = XML_TOKEN_INVALID;
 
-        // distinguish map entries by their service name
+        
         Sequence<OUString> sServiceNames =
             xServiceInfo->getSupportedServiceNames();
         sal_Int32 nLength = sServiceNames.getLength();
@@ -164,15 +164,15 @@ void XMLImageMapExport::ExportMapEntry(
             }
         }
 
-        // return from method if no proper service is found!
+        
         DBG_ASSERT(XML_TOKEN_INVALID != eType,
                    "Image map element doesn't support appropriate service!");
         if (XML_TOKEN_INVALID == eType)
             return;
 
-        // now: handle ImageMapObject properties (those for all types)
+        
 
-        // XLINK (URL property)
+        
         Any aAny = rPropertySet->getPropertyValue(msURL);
         OUString sHref;
         aAny >>= sHref;
@@ -182,7 +182,7 @@ void XMLImageMapExport::ExportMapEntry(
         }
         mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
 
-        // Target property (and xlink:show)
+        
         aAny = rPropertySet->getPropertyValue(msTarget);
         OUString sTargt;
         aAny >>= sTargt;
@@ -196,7 +196,7 @@ void XMLImageMapExport::ExportMapEntry(
                 sTargt == "_blank" ? XML_NEW : XML_REPLACE );
         }
 
-        // name
+        
         aAny = rPropertySet->getPropertyValue(msName);
         OUString sItemName;
         aAny >>= sItemName;
@@ -205,15 +205,15 @@ void XMLImageMapExport::ExportMapEntry(
             mrExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_NAME, sItemName);
         }
 
-        // is-active
+        
         aAny = rPropertySet->getPropertyValue(msIsActive);
         if (! *(sal_Bool*)aAny.getValue())
         {
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NOHREF, XML_NOHREF);
         }
 
-        // call specific rectangle/circle/... method
-        // also prepare element name
+        
+        
         switch (eType)
         {
             case XML_AREA_RECTANGLE:
@@ -229,13 +229,13 @@ void XMLImageMapExport::ExportMapEntry(
                 break;
         }
 
-        // write element
+        
         DBG_ASSERT(XML_TOKEN_INVALID != eType,
                    "No name?! How did this happen?");
         SvXMLElementExport aAreaElement(mrExport, XML_NAMESPACE_DRAW, eType,
                                         mbWhiteSpace, mbWhiteSpace);
 
-        // title property (as <svg:title> element)
+        
         OUString sTitle;
         rPropertySet->getPropertyValue(msTitle) >>= sTitle;
         if(!sTitle.isEmpty())
@@ -244,7 +244,7 @@ void XMLImageMapExport::ExportMapEntry(
             mrExport.Characters(sTitle);
         }
 
-        // description property (as <svg:desc> element)
+        
         OUString sDescription;
         rPropertySet->getPropertyValue(msDescription) >>= sDescription;
         if (!sDescription.isEmpty())
@@ -253,22 +253,22 @@ void XMLImageMapExport::ExportMapEntry(
             mrExport.Characters(sDescription);
         }
 
-        // export events attached to this
+        
         Reference<XEventsSupplier> xSupplier(rPropertySet, UNO_QUERY);
         mrExport.GetEventExport().Export(xSupplier, mbWhiteSpace);
     }
-    // else: no service info -> can't determine type -> ignore entry
+    
 }
 
 void XMLImageMapExport::ExportRectangle(
     const Reference<XPropertySet> & rPropertySet)
 {
-    // get boundary rectangle
+    
     Any aAny = rPropertySet->getPropertyValue(msBoundary);
     awt::Rectangle aRectangle;
     aAny >>= aRectangle;
 
-    // parameters svg:x, svg:y, svg:width, svg:height
+    
     OUStringBuffer aBuffer;
     mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, aRectangle.X);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X,
@@ -289,12 +289,12 @@ void XMLImageMapExport::ExportRectangle(
 void XMLImageMapExport::ExportCircle(
     const Reference<XPropertySet> & rPropertySet)
 {
-    // get boundary rectangle
+    
     Any aAny = rPropertySet->getPropertyValue(msCenter);
     awt::Point aCenter;
     aAny >>= aCenter;
 
-    // parameters svg:cx, svg:cy
+    
     OUStringBuffer aBuffer;
     mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, aCenter.X);
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CX,
@@ -303,7 +303,7 @@ void XMLImageMapExport::ExportCircle(
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_CY,
                           aBuffer.makeStringAndClear() );
 
-    // radius
+    
     aAny = rPropertySet->getPropertyValue(msRadius);
     sal_Int32 nRadius = 0;
     aAny >>= nRadius;
@@ -314,10 +314,10 @@ void XMLImageMapExport::ExportCircle(
 
 void XMLImageMapExport::ExportPolygon(const Reference<XPropertySet> & rPropertySet)
 {
-    // polygons get exported as bounding box, viewbox, and coordinate
-    // pair sequence. The bounding box is always the entire image.
+    
+    
 
-    // get polygon point sequence
+    
     Any aAny = rPropertySet->getPropertyValue(msPolygon);
     PointSequence aPoly;
     aAny >>= aPoly;
@@ -327,7 +327,7 @@ void XMLImageMapExport::ExportPolygon(const Reference<XPropertySet> & rPropertyS
             aPoly));
     const basegfx::B2DRange aPolygonRange(aPolygon.getB2DRange());
 
-    // parameters svg:x, svg:y, svg:width, svg:height
+    
     OUStringBuffer aBuffer;
 
     mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, 0);
@@ -339,11 +339,11 @@ void XMLImageMapExport::ExportPolygon(const Reference<XPropertySet> & rPropertyS
     mrExport.GetMM100UnitConverter().convertMeasureToXML(aBuffer, basegfx::fround(aPolygonRange.getHeight()));
     mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, aBuffer.makeStringAndClear() );
 
-    // svg:viewbox
+    
     SdXMLImExViewBox aViewBox(0.0, 0.0, aPolygonRange.getWidth(), aPolygonRange.getHeight());
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
 
-    // export point sequence
+    
     const OUString aPointString(
         basegfx::tools::exportToSvgPoints(
             aPolygon));

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <memory>
@@ -60,8 +60,8 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             if (!xLoader.is())
                 xLoader = Reference< XComponentLoader >( Desktop::create(xContext), UNO_QUERY_THROW);
 
-            // open the stream from the result...
-            // build media descriptor
+            
+            
             Sequence< PropertyValue > descriptor(2);
             descriptor[0] = PropertyValue(OUString("InputStream"),
                 -1, makeAny(m_aResultStream), PropertyState_DIRECT_VALUE);
@@ -76,12 +76,12 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
 
         } else if (aReplace.equalsIgnoreAsciiCase("instance")) {
             if (aDocument.is()) {
-                // parse the result stream into a new document
+                
                 Reference< XDocumentBuilder > xBuilder(DocumentBuilder::create(xContext));
                 Reference< XDocument > aNewDocument = xBuilder->parse(m_aResultStream);
 
                 if (aNewDocument.is()) {
-                    // and replace the content of the current instance
+                    
                     Reference< XElement > oldRoot = aDocument->getDocumentElement();
                     Reference< XElement > newRoot = aNewDocument->getDocumentElement();
 
@@ -92,11 +92,11 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
                     return CSubmission::UNKNOWN_ERROR;
                 }
             } else {
-                // nothing to replace
+                
                 return CSubmission::UNKNOWN_ERROR;
             }
         } else if (aReplace.equalsIgnoreAsciiCase("none")) {
-            // do nothing \o/
+            
             return CSubmission::SUCCESS;
         }
     } catch (const Exception& e) {
@@ -110,12 +110,12 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr< CSerialization > CSubmission::createSerialization(const Reference< XInteractionHandler >& _xHandler,Reference<XCommandEnvironment>& _rOutEnv)
 {
-    // PUT always uses application/xml
+    
     ::std::auto_ptr< CSerialization > apSerialization(new CSerializationAppXML());
     apSerialization->setSource(m_aFragment);
     apSerialization->serialize();
 
-    // create a commandEnvironment and use the default interaction handler
+    
     CCommandEnvironmentHelper *pHelper = new CCommandEnvironmentHelper;
     if( _xHandler.is() )
         pHelper->m_aInteractionHandler = _xHandler;
@@ -126,7 +126,7 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     CProgressHandlerHelper *pProgressHelper = new CProgressHandlerHelper;
     pHelper->m_aProgressHandler = Reference< XProgressHandler >(pProgressHelper);
 
-    // UCB has ownership of environment...
+    
     _rOutEnv = pHelper;
     return apSerialization;
 }

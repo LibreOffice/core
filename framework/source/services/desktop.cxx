@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <services/desktop.hxx>
@@ -92,25 +92,25 @@ css::uno::Sequence<OUString> SAL_CALL Desktop::getSupportedServiceNames()
 
 void Desktop::constructorInit()
 {
-    // Initialize a new XFrames-helper-object to handle XIndexAccess and XElementAccess.
-    // We hold member as reference ... not as pointer too!
-    // Attention: We share our frame container with this helper. Container is threadsafe himself ... So I think we can do that.
-    // But look on dispose() for right order of deinitialization.
+    
+    
+    
+    
     OFrames* pFramesHelper = new OFrames( this, &m_aChildTaskContainer );
     m_xFramesHelper = css::uno::Reference< css::frame::XFrames >( static_cast< ::cppu::OWeakObject* >(pFramesHelper), css::uno::UNO_QUERY );
 
-    //-------------------------------------------------------------------------------------------------------------
-    // Initialize a new dispatchhelper-object to handle dispatches.
-    // We use these helper as slave for our interceptor helper ... not directly!
-    // But he is event listener on THIS instance!
+    
+    
+    
+    
     DispatchProvider* pDispatchHelper = new DispatchProvider( m_xContext, this );
     css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider( static_cast< ::cppu::OWeakObject* >(pDispatchHelper), css::uno::UNO_QUERY );
 
-    //-------------------------------------------------------------------------------------------------------------
-    // Initialize a new interception helper object to handle dispatches and implement an interceptor mechanism.
-    // Set created dispatch provider as slowest slave of it.
-    // Hold interception helper by reference only - not by pointer!
-    // So it's easiear to destroy it.
+    
+    
+    
+    
+    
     InterceptionHelper* pInterceptionHelper = new InterceptionHelper( this, xDispatchProvider );
     m_xDispatchHelper = css::uno::Reference< css::frame::XDispatchProvider >( static_cast< ::cppu::OWeakObject* >(pInterceptionHelper), css::uno::UNO_QUERY );
 
@@ -123,17 +123,17 @@ void Desktop::constructorInit()
     pNumbers->setOwner          ( static_cast< ::cppu::OWeakObject* >(this) );
     pNumbers->setUntitledPrefix ( sUntitledPrefix.makeStringAndClear ()     );
 
-    // Safe impossible cases
-    // We can't work without this helper!
+    
+    
     SAL_WARN_IF( !m_xFramesHelper.is(), "fwk", "Desktop::Desktop(): Frames helper is not valid. XFrames, XIndexAccess and XElementAcces are not supported!");
     SAL_WARN_IF( !m_xDispatchHelper.is(), "fwk", "Desktop::Desktop(): Dispatch helper is not valid. XDispatch will not work correctly!" );
 
-    // Enable object for real working!
-    // Otherwise all calls will be rejected ...
+    
+    
     m_aTransactionManager.setWorkingMode( E_WORK );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard constructor to create instance by factory
     @descr      This constructor initialize a new instance of this class by valid factory,
                 and will be set valid values on his member and baseclasses.
@@ -153,14 +153,14 @@ void Desktop::constructorInit()
     @return     -
 
     @onerror    We throw an ASSERT in debug version or do nothing in relaese version.
-*//*-*************************************************************************************************************/
+*
 Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xContext )
         :   ThreadHelpBase          ( &Application::GetSolarMutex()                 )
         ,   TransactionBase         (                                               )
         ,   Desktop_BASE            ( *static_cast<osl::Mutex *>(this)              )
         ,   cppu::OPropertySetHelper( cppu::WeakComponentImplHelperBase::rBHelper   )
-        // Init member
-        ,   m_bIsTerminated         ( sal_False                                     )   // see dispose() for further information!
+        
+        ,   m_bIsTerminated         ( sal_False                                     )   
         ,   m_xContext              ( xContext                                      )
         ,   m_aChildTaskContainer   (                                               )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex()                )
@@ -182,7 +182,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
 {
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      standard destructor
     @descr      This one do NOTHING! Use dispose() instaed of this.
 
@@ -192,7 +192,7 @@ Desktop::Desktop( const css::uno::Reference< css::uno::XComponentContext >& xCon
     @return     -
 
     @onerror    -
-*//*-*************************************************************************************************************/
+*
 Desktop::~Desktop()
 {
     SAL_WARN_IF( !m_bIsTerminated, "fwk", "Desktop not terminated before being destructed" );
@@ -215,13 +215,13 @@ css::uno::Sequence< css::uno::Type > SAL_CALL Desktop::getTypes(  ) throw(css::u
     );
 }
 
-//=============================================================================
+
 sal_Bool SAL_CALL Desktop::terminate()
     throw( css::uno::RuntimeException )
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    ReadGuard aReadLock( m_aLock ); // start synchronize
+    ReadGuard aReadLock( m_aLock ); 
 
     css::uno::Reference< css::frame::XTerminateListener > xPipeTerminator    = m_xPipeTerminator;
     css::uno::Reference< css::frame::XTerminateListener > xQuickLauncher     = m_xQuickLauncher;
@@ -231,10 +231,10 @@ sal_Bool SAL_CALL Desktop::terminate()
     css::lang::EventObject                                aEvent             ( static_cast< ::cppu::OWeakObject* >(this) );
     ::sal_Bool                                            bAskQuickStart     = !m_bSuspendQuickstartVeto                  ;
 
-    aReadLock.unlock(); // end synchronize
+    aReadLock.unlock(); 
 
-    //-------------------------------------------------------------------------------------------------------------
-    // Ask normal terminate listener. They could stop terminate without closing any open document.
+    
+    
     Desktop::TTerminateListenerList lCalledTerminationListener;
     ::sal_Bool                      bVeto = sal_False;
     impl_sendQueryTerminationEvent(lCalledTerminationListener, bVeto);
@@ -244,9 +244,9 @@ sal_Bool SAL_CALL Desktop::terminate()
         return sal_False;
     }
 
-    //-------------------------------------------------------------------------------------------------------------
-    // try to close all open frames.
-    // Allow using of any UI ... because Desktop.terminate() was designed as UI functionality in the past.
+    
+    
+    
     ::sal_Bool bAllowUI      = sal_True;
     ::sal_Bool bFramesClosed = impl_closeFrames(bAllowUI);
     if ( ! bFramesClosed )
@@ -255,22 +255,22 @@ sal_Bool SAL_CALL Desktop::terminate()
         return sal_False;
     }
 
-    //-------------------------------------------------------------------------------------------------------------
-    // Normal listener had no problem ...
-    // all frames was closed ...
-    // now it's time to ask our specialized listener.
-    // They are handled these way because they wish to hinder the office on termination
-    // but they wish also closing of all frames.
+    
+    
+    
+    
+    
+    
 
-    // Note further:
-    //    We shouldn't ask quicklauncher in case it was allowed from outside only.
-    //    This is special trick to "ignore existing quick starter" for debug purposes.
+    
+    
+    
 
-    // Attention:
-    // Order of alled listener is important !
-    // some of them are harmless .-)
-    // But some of them can be dangerous. E.g. it would be dangerous if we close our pipe
-    // and dont terminate in real because another listener throws a veto exception .-)
+    
+    
+    
+    
+    
 
     ::sal_Bool bTerminate = sal_False;
     try
@@ -313,8 +313,8 @@ sal_Bool SAL_CALL Desktop::terminate()
         impl_sendCancelTerminationEvent(lCalledTerminationListener);
     else
     {
-            // "Protect" us against dispose before terminate calls!
-            // see dispose() for further information.
+            
+            
             /* SAFE AREA --------------------------------------------------------------------------------------- */
             WriteGuard aWriteLock( m_aLock );
             m_bIsTerminated = sal_True;
@@ -337,8 +337,8 @@ sal_Bool SAL_CALL Desktop::terminate()
         if ( xPipeTerminator.is() )
             xPipeTerminator->notifyTermination( aEvent );
 
-        // Must be really the last listener to be called.
-        // Because it shutdown the whole process asynchronous !
+        
+        
         if ( xSfxTerminator.is() )
             xSfxTerminator->notifyTermination( aEvent );
     }
@@ -377,7 +377,7 @@ bool SAL_CALL Desktop::terminateQuickstarterToo()
     return terminate();
 }
 
-//=============================================================================
+
 void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
     throw( css::uno::RuntimeException )
 {
@@ -388,7 +388,7 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
     {
         OUString sImplementationName = xInfo->getImplementationName();
 
-        // SYCNHRONIZED ->
+        
         WriteGuard aWriteLock( m_aLock );
 
         if( sImplementationName == "com.sun.star.comp.sfx2.SfxTerminateListener" )
@@ -413,14 +413,14 @@ void SAL_CALL Desktop::addTerminateListener( const css::uno::Reference< css::fra
         }
 
         aWriteLock.unlock();
-        // <- SYCNHRONIZED
+        
     }
 
-    // No lock required ... container is threadsafe by itself.
+    
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
 }
 
-//=============================================================================
+
 void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::frame::XTerminateListener >& xListener )
     throw( css::uno::RuntimeException )
 {
@@ -431,7 +431,7 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
     {
         OUString sImplementationName = xInfo->getImplementationName();
 
-        // SYCNHRONIZED ->
+        
         WriteGuard aWriteLock( m_aLock );
 
         if( sImplementationName == "com.sun.star.comp.sfx2.SfxTerminateListener" )
@@ -459,14 +459,14 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
         }
 
         aWriteLock.unlock();
-        // <- SYCNHRONIZED
+        
     }
 
-    // No lock required ... container is threadsafe by itself.
+    
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::frame::XTerminateListener >*) NULL ), xListener );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XDesktop
     @short      get access to create enumerations of all current components
     @descr      You will be the owner of the returned object and must delete it if you don't use it again.
@@ -479,21 +479,21 @@ void SAL_CALL Desktop::removeTerminateListener( const css::uno::Reference< css::
 
     @onerror    We return a null-reference.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getComponents() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // We use a helper class OComponentAccess to have access on all child components.
-    // Create it on demand and return it as a reference.
+    
+    
     OComponentAccess* pAccess = new OComponentAccess( this );
     css::uno::Reference< css::container::XEnumerationAccess > xAccess( static_cast< ::cppu::OWeakObject* >(pAccess), css::uno::UNO_QUERY );
     return xAccess;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XDesktop
     @short      return the current active component
     @descr      The most current component is the window, model or the controller of the current active frame.
@@ -506,19 +506,19 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getC
 
     @onerror    We return a null-reference.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::getCurrentComponent() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Set return value if method failed.
+    
     css::uno::Reference< css::lang::XComponent > xComponent;
 
-    // Get reference to current frame ...
-    // ... get component of this frame ... (It can be the window, the model or the controller.)
-    // ... and return the result.
+    
+    
+    
     css::uno::Reference< css::frame::XFrame > xCurrentFrame = getCurrentFrame();
     if( xCurrentFrame.is() )
     {
@@ -527,7 +527,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::getCurrentCompone
     return xComponent;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XDesktop
     @short      return the current active frame in hierarchy
     @descr      There can be more then one different active paths in our frame hierarchy. But only one of them
@@ -543,16 +543,16 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::getCurrentCompone
 
     @onerror    We return a null reference.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Start search with ouer direct active frame (if it exist!).
-    // Search on his children for other active frames too.
-    // Stop if no one could be found and return last of found ones.
+    
+    
+    
     css::uno::Reference< css::frame::XFramesSupplier > xLast = css::uno::Reference< css::frame::XFramesSupplier >( getActiveFrame(), css::uno::UNO_QUERY );
     if( xLast.is() )
     {
@@ -566,7 +566,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() th
     return css::uno::Reference< css::frame::XFrame >( xLast, css::uno::UNO_QUERY );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XComponentLoader
     @short      try to load given URL into a task
     @descr      You can give us some information about the content, which you will load into a frame.
@@ -584,7 +584,7 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getCurrentFrame() th
 
     @onerror    We return a null reference.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFromURL( const OUString&                                 sURL            ,
                                                                                      const OUString&                                 sTargetFrameName,
                                                                                            sal_Int32                                        nSearchFlags    ,
@@ -593,7 +593,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
                                                                                                                                                                         css::uno::RuntimeException          )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
     SAL_INFO( "fwk.desktop", "framework (as96863) ::Desktop::loadComponentFromURL" );
 
@@ -603,7 +603,7 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Desktop::loadComponentFrom
     return LoadEnv::loadComponentFromURL(xThis, m_xContext, sURL, sTargetFrameName, nSearchFlags, lArguments);
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XTasksSupplier
     @short      get access to create enumerations of ouer taskchildren
     @descr      Direct children of desktop are tasks everytime.
@@ -623,14 +623,14 @@ But; Don't forget - you will be the owner of returned object and must release it
 
     @onerror    A null reference is returned.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getTasks() throw( css::uno::RuntimeException )
 {
     SAL_INFO("fwk", "Desktop::getTasks(): Use of obsolete interface XTaskSupplier");
     return NULL;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XTasksSupplier
     @short      return current active task of ouer direct children
     @descr      Desktop children are tasks only ! If we have an active path from desktop
@@ -647,14 +647,14 @@ css::uno::Reference< css::container::XEnumerationAccess > SAL_CALL Desktop::getT
 
     @onerror    A null reference is returned.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::frame::XTask > SAL_CALL Desktop::getActiveTask() throw( css::uno::RuntimeException )
 {
     SAL_INFO("fwk", "Desktop::getActiveTask(): Use of obsolete interface XTaskSupplier");
     return NULL;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XDispatchProvider
     @short      search a dispatcher for given URL
     @descr      We use a helper implementation (class DispatchProvider) to do so.
@@ -672,7 +672,7 @@ css::uno::Reference< css::frame::XTask > SAL_CALL Desktop::getActiveTask() throw
 
     @onerror    A null reference is returned.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( const css::util::URL&  aURL             ,
                                                                               const OUString& sTargetFrameName ,
                                                                                     sal_Int32        nSearchFlags     ) throw( css::uno::RuntimeException )
@@ -680,37 +680,37 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL Desktop::queryDispatch( co
     const char UNO_PROTOCOL[] = ".uno:";
 
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Remove uno and cmd protocol part as we want to support both of them. We store only the command part
-    // in our hash map. All other protocols are stored with the protocol part.
+    
+    
     OUString aCommand( aURL.Main );
     if ( aURL.Protocol.equalsIgnoreAsciiCaseAsciiL( UNO_PROTOCOL, sizeof( UNO_PROTOCOL )-1 ))
         aCommand = aURL.Path;
 
-    // Make boost::unordered_map lookup if the current URL is in the disabled list
+    
     if ( m_aCommandOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, aCommand ) )
         return css::uno::Reference< css::frame::XDispatch >();
     else
     {
-        // We use a helper to support these interface and an interceptor mechanism.
-        // Our helper is threadsafe by himself!
+        
+        
         return m_xDispatchHelper->queryDispatch( aURL, sTargetFrameName, nSearchFlags );
     }
 }
 
-//*****************************************************************************************************************
+
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desktop::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lQueries ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     return m_xDispatchHelper->queryDispatches( lQueries );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XDipsatchProviderInterception
     @short      supports registration/deregistration of interception objects, which
                 are interested on special dispatches.
@@ -720,7 +720,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Desk
                 the interceptor object, which wish to be (de)registered.
 
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Desktop::registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
     throw( css::uno::RuntimeException)
 {
@@ -730,7 +730,7 @@ void SAL_CALL Desktop::registerDispatchProviderInterceptor( const css::uno::Refe
     xInterceptionHelper->registerDispatchProviderInterceptor( xInterceptor );
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& xInterceptor)
     throw( css::uno::RuntimeException)
 {
@@ -740,7 +740,7 @@ void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Refe
     xInterceptionHelper->releaseDispatchProviderInterceptor( xInterceptor );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XFramesSupplier
     @short      return access to append or remove children on desktop
     @descr      We don't implement these interface directly. We use a helper class to do this.
@@ -756,17 +756,17 @@ void SAL_CALL Desktop::releaseDispatchProviderInterceptor ( const css::uno::Refe
 
     @onerror    A null reference is returned.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::frame::XFrames > SAL_CALL Desktop::getFrames() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     return m_xFramesHelper;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XFramesSupplier
     @short      set/get the current active child frame
     @descr      It must be a task. Direct children of desktop are tasks only! No frames are accepted.
@@ -782,18 +782,18 @@ css::uno::Reference< css::frame::XFrames > SAL_CALL Desktop::getFrames() throw( 
 
     @onerror    A null reference is returned.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Desktop::setActiveFrame( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Get old active frame first.
-    // If nothing will change - do nothing!
-    // Otherwise set new active frame ...
-    // and deactivate last frame.
-    // It's necessary for our FrameActionEvent listener on a frame!
+    
+    
+    
+    
+    
     css::uno::Reference< css::frame::XFrame > xLastActiveChild = m_aChildTaskContainer.getActive();
     if( xLastActiveChild != xFrame )
     {
@@ -805,17 +805,17 @@ void SAL_CALL Desktop::setActiveFrame( const css::uno::Reference< css::frame::XF
     }
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getActiveFrame() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     return m_aChildTaskContainer.getActive();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XFrame
     @short      non implemented methods!
     @descr      Some method make no sense for our desktop! He has no window or parent or ...
@@ -828,29 +828,29 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::getActiveFrame() thr
 
     @onerror    -
     @threadsafe -
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Desktop::initialize( const css::uno::Reference< css::awt::XWindow >& ) throw( css::uno::RuntimeException )
 {
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::awt::XWindow > SAL_CALL Desktop::getContainerWindow() throw( css::uno::RuntimeException )
 {
     return css::uno::Reference< css::awt::XWindow >();
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::setCreator( const css::uno::Reference< css::frame::XFramesSupplier >& /*xCreator*/ ) throw( css::uno::RuntimeException )
 {
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::frame::XFramesSupplier > SAL_CALL Desktop::getCreator() throw( css::uno::RuntimeException )
 {
     return css::uno::Reference< css::frame::XFramesSupplier >();
 }
 
-//*****************************************************************************************************************
+
 OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException )
 {
     /* SAFE { */
@@ -859,7 +859,7 @@ OUString SAL_CALL Desktop::getName() throw( css::uno::RuntimeException )
     /* } SAFE */
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::setName( const OUString& sName ) throw( css::uno::RuntimeException )
 {
     /* SAFE { */
@@ -869,71 +869,71 @@ void SAL_CALL Desktop::setName( const OUString& sName ) throw( css::uno::Runtime
     /* } SAFE */
 }
 
-//*****************************************************************************************************************
+
 sal_Bool SAL_CALL Desktop::isTop() throw( css::uno::RuntimeException )
 {
     return sal_True;
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::activate() throw( css::uno::RuntimeException )
 {
-    // Desktop is activae always ... but sometimes our frames try to activate
-    // the complete path from bottom to top ... And our desktop is the topest frame :-(
-    // So - please don't show any assertions here. Do nothing!
+    
+    
+    
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::deactivate() throw( css::uno::RuntimeException )
 {
-    // Desktop is activae always ... but sometimes our frames try to deactivate
-    // the complete path from bottom to top ... And our desktop is the topest frame :-(
-    // So - please don't show any assertions here. Do nothing!
+    
+    
+    
 }
 
-//*****************************************************************************************************************
+
 sal_Bool SAL_CALL Desktop::isActive() throw( css::uno::RuntimeException )
 {
     return sal_True;
 }
 
-//*****************************************************************************************************************
+
 sal_Bool SAL_CALL Desktop::setComponent( const css::uno::Reference< css::awt::XWindow >&       /*xComponentWindow*/ ,
                                          const css::uno::Reference< css::frame::XController >& /*xController*/      ) throw( css::uno::RuntimeException )
 {
     return sal_False;
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::awt::XWindow > SAL_CALL Desktop::getComponentWindow() throw( css::uno::RuntimeException )
 {
     return css::uno::Reference< css::awt::XWindow >();
 }
 
-//*****************************************************************************************************************
+
 css::uno::Reference< css::frame::XController > SAL_CALL Desktop::getController() throw( css::uno::RuntimeException )
 {
     return css::uno::Reference< css::frame::XController >();
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::contextChanged() throw( css::uno::RuntimeException )
 {
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::addFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& ) throw( css::uno::RuntimeException )
 {
 }
 
-//*****************************************************************************************************************
-//   css::frame::XFrame
-//*****************************************************************************************************************
+
+
+
 void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css::frame::XFrameActionListener >& ) throw( css::uno::RuntimeException )
 {
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XFrame
     @short      try to find a frame with special parameters
     @descr      This method searches for a frame with the specified name.
@@ -959,59 +959,59 @@ void SAL_CALL Desktop::removeFrameActionListener( const css::uno::Reference< css
 
     @onerror    A null reference is returned.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUString& sTargetFrameName ,
                                                                              sal_Int32        nSearchFlags     ) throw( css::uno::RuntimeException )
 {
     css::uno::Reference< css::frame::XFrame > xTarget;
 
-    //-----------------------------------------------------------------------------------------------------
-    // 0) Ignore wrong parameter!
-    //    We don't support search for following special targets.
-    //    If we reject this requests - we mustnt check for such names
-    //    in following code again and again. If we do not so -wrong
-    //    search results can occur!
-    //-----------------------------------------------------------------------------------------------------
+    
+    
+    
+    
+    
+    
+    
     if (
-        (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    // valid for dispatches - not for findFrame()!
-        (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    // valid for dispatches - not for findFrame()!
-        (sTargetFrameName==SPECIALTARGET_PARENT   )   ||    // we have no parent by definition
-        (sTargetFrameName==SPECIALTARGET_BEAMER   )         // beamer frames are allowed as child of tasks only -
-                                                            // and they exist more then ones. We have no idea which our sub tasks is the right one
+        (sTargetFrameName==SPECIALTARGET_DEFAULT  )   ||    
+        (sTargetFrameName==SPECIALTARGET_MENUBAR  )   ||    
+        (sTargetFrameName==SPECIALTARGET_PARENT   )   ||    
+        (sTargetFrameName==SPECIALTARGET_BEAMER   )         
+                                                            
        )
     {
         return NULL;
     }
 
-    //-----------------------------------------------------------------------------------------------------
-    // I) check for special defined targets first which must be handled exclusive.
-    //    force using of "if() else if() ..."
-    //-----------------------------------------------------------------------------------------------------
+    
+    
+    
+    
 
-    //-----------------------------------------------------------------------------------------------------
-    // I.I) "_blank"
-    //  create a new task as child of this desktop instance
-    //  Note: Used helper TaskCreator use us automaticly ...
-    //-----------------------------------------------------------------------------------------------------
+    
+    
+    
+    
+    
     if ( sTargetFrameName==SPECIALTARGET_BLANK )
     {
         TaskCreator aCreator( m_xContext );
         xTarget = aCreator.createTask(sTargetFrameName,sal_False);
     }
 
-    //-----------------------------------------------------------------------------------------------------
-    // I.II) "_top"
-    //  We are top by definition
-    //-----------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     else if ( sTargetFrameName==SPECIALTARGET_TOP )
     {
         xTarget = this;
     }
 
-    //-----------------------------------------------------------------------------------------------------
-    // I.III) "_self", ""
-    //  This mean this "frame" in every case.
-    //-----------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     else if (
              ( sTargetFrameName==SPECIALTARGET_SELF ) ||
              ( sTargetFrameName.isEmpty()           )
@@ -1022,20 +1022,20 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 
     else
     {
-        //-------------------------------------------------------------------------------------------------
-        // II) otherwise use optional given search flags
-        //  force using of combinations of such flags. means no "else" part of use if() statements.
-        //  But we ust break further searches if target was already found.
-        //  Order of using flags is fix: SELF - CHILDREN - SIBLINGS - PARENT
-        //  TASK and CREATE are handled special.
-        //  But note: Such flags are not valid for the desktop - especialy SIBLINGS or PARENT.
-        //-------------------------------------------------------------------------------------------------
+        
+        
+        
+        
+        
+        
+        
+        
 
-        //-------------------------------------------------------------------------------------------------
-        // II.I) SELF
-        //  Check for right name. If it's the searched one return ourself - otherwise
-        //  ignore this flag.
-        //-------------------------------------------------------------------------------------------------
+        
+        
+        
+        
+        
         if (
             (nSearchFlags &  css::frame::FrameSearchFlag::SELF)  &&
             (m_sName == sTargetFrameName)
@@ -1044,15 +1044,15 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             xTarget = this;
         }
 
-        //-------------------------------------------------------------------------------------------------
-        // II.II) TASKS
-        //  This is a special flag. Normaly it regulate search inside tasks and forbid access to parent trees.
-        //  But the desktop exists outside such task trees. They are our sub trees. So the desktop implement
-        //  a special feature: We use it to start search on our direct children only. That means we supress
-        //  search on ALL child frames. May that can be useful to get access on opened document tasks
-        //  only without filter out all non really required sub frames ...
-        //  Used helper method on our container doesn't create any frame - it's a search only.
-        //-------------------------------------------------------------------------------------------------
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if (
             ( ! xTarget.is()                                  ) &&
             (nSearchFlags & css::frame::FrameSearchFlag::TASKS)
@@ -1061,13 +1061,13 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             xTarget = m_aChildTaskContainer.searchOnDirectChildrens(sTargetFrameName);
         }
 
-        //-------------------------------------------------------------------------------------------------
-        // II.III) CHILDREN
-        //  Search on all children for the given target name.
-        //  An empty name value can't occur here - because it must be already handled as "_self"
-        //  before. Used helper function of container doesn't create any frame.
-        //  It makes a deep search only.
-        //-------------------------------------------------------------------------------------------------
+        
+        
+        
+        
+        
+        
+        
         if (
             ( ! xTarget.is()                                     ) &&
             (nSearchFlags & css::frame::FrameSearchFlag::CHILDREN)
@@ -1076,11 +1076,11 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
             xTarget = m_aChildTaskContainer.searchOnAllChildrens(sTargetFrameName);
         }
 
-        //-------------------------------------------------------------------------------------------------
-        // II.IV) CREATE
-        //  If we haven't found any valid target frame by using normal flags - but user allowed us to create
-        //  a new one ... we should do that. Used TaskCreator use us automaticly as parent!
-        //-------------------------------------------------------------------------------------------------
+        
+        
+        
+        
+        
         if (
             ( ! xTarget.is()                                   )    &&
             (nSearchFlags & css::frame::FrameSearchFlag::CREATE)
@@ -1097,58 +1097,58 @@ css::uno::Reference< css::frame::XFrame > SAL_CALL Desktop::findFrame( const OUS
 void SAL_CALL Desktop::disposing()
     throw( css::uno::RuntimeException )
 {
-    // Safe impossible cases
-    // It's an programming error if dispose is called before terminate!
+    
+    
 
-    // But if you just ignore the assertion (which happens in unit
-    // tests for instance in sc/qa/unit) nothing bad happens.
+    
+    
     SAL_WARN_IF( !m_bIsTerminated, "fwk", "Desktop disposed before terminating it" );
 
-    WriteGuard aWriteLock( m_aLock ); // start synchronize
+    WriteGuard aWriteLock( m_aLock ); 
 
-    // Look for multiple calls of this method!
-    // If somewhere call dispose() twice - he will be stopped here really!!!
+    
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Now - we are alone and its the first call of this method ...
-    // otherwise call before had thrown a DisposedException / hopefully .-)
-    // But we dont use the transaction object created before ... we reset it immediately ...
-    // two lines of code ... for what ?
-    // The answer: We wished to synchronize concurrent dispose() calls -> OK
-    // But next line will wait for all currently running transaction (even if they
-    // are running within the same thread!) So we would block ourself there if aTransaction
-    // will stay registered .-)
+    
+    
+    
+    
+    
+    
+    
+    
     aTransaction.stop();
 
-    // Disable this instance for further work.
-    // This will wait for all current running transactions ...
-    // and reject all new incoming requests!
+    
+    
+    
     m_aTransactionManager.setWorkingMode( E_BEFORECLOSE );
 
-    aWriteLock.unlock(); // end synchronize
+    aWriteLock.unlock(); 
 
-    // Following lines of code can be called outside a synchronized block ...
-    // Because our transaction manager will block all new requests to this object.
-    // So nobody can use us any longer.
-    // Exception: Only removing of listener will work ... and this code cant be dangerous.
+    
+    
+    
+    
 
-    // First we has to kill all listener connections.
-    // They might rely on our member and can hinder us on releasing them.
+    
+    
     css::uno::Reference< css::uno::XInterface > xThis ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::lang::EventObject                      aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    // Clear our child task container and forget all task references hardly.
-    // Normaly all open document was already closed by our terminate() function before ...
-    // New opened frames will have a problem now .-)
+    
+    
+    
     m_aChildTaskContainer.clear();
 
-    // Dispose our helper too.
+    
     css::uno::Reference< css::lang::XEventListener > xFramesHelper( m_xFramesHelper, css::uno::UNO_QUERY );
     if( xFramesHelper.is() )
         xFramesHelper->disposing( aEvent );
 
-    // At least clean up other member references.
+    
     m_xDispatchHelper.clear();
     m_xFramesHelper.clear();
     m_xLastFrame.clear();
@@ -1159,12 +1159,12 @@ void SAL_CALL Desktop::disposing()
     m_xSWThreadManager.clear();
     m_xSfxTerminator.clear();
 
-    // From this point nothing will work further on this object ...
-    // excepting our dtor() .-)
+    
+    
     m_aTransactionManager.setWorkingMode( E_CLOSE );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XComponent
     @short      add/remove listener for dispose events
     @descr      Add an event listener to this object, if you wish to get information
@@ -1180,33 +1180,33 @@ void SAL_CALL Desktop::disposing()
 
     @onerror    -
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Desktop::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
+    
+    
     SAL_WARN_IF( implcp_addEventListener( xListener ), "fwk", "Desktop::addEventListener(): Invalid parameter detected!" );
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     m_aListenerContainer.addInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >*) NULL ), xListener );
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Safe impossible cases
-    // Method not defined for all incoming parameter.
+    
+    
     SAL_WARN_IF( implcp_removeEventListener( xListener ), "fwk", "Desktop::removeEventListener(): Invalid parameter detected!" );
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_SOFTEXCEPTIONS );
 
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >*) NULL ), xListener );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XDispatchResultListener
     @short      callback for dispatches
     @descr      To support our method "loadComponentFromURL()" we are listener on temp. created dispatcher.
@@ -1221,11 +1221,11 @@ void SAL_CALL Desktop::removeEventListener( const css::uno::Reference< css::lang
 
     @onerror    -
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     /* SAFE AREA ------------------------------------------------------------------------------------------- */
@@ -1244,7 +1244,7 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XEventListener
     @short      not implemented!
     @descr      We are a status listener ... and so we must be an event listener too ... But we don't need it really!
@@ -1257,13 +1257,13 @@ void SAL_CALL Desktop::dispatchFinished( const css::frame::DispatchResultEvent& 
 
     @onerror    -
     @threadsafe -
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException )
 {
     SAL_WARN( "fwk", "Desktop::disposing(): Algorithm error! Normaly desktop is temp. listener ... not all the time. So this method shouldn't be called." );
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @interface  XInteractionHandler
     @short      callback for loadComponentFromURL for detected exceptions during load proccess
     @descr      In this case we must cancel loading and throw these detected exception again as result
@@ -1285,24 +1285,24 @@ void SAL_CALL Desktop::disposing( const css::lang::EventObject& ) throw( css::un
 
     @onerror    -
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest ) throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Don't check incoming request!
-    // If somewhere starts interaction without right parameter - he maked something wrong.
-    // loadComponentFromURL() waits for thjese event - otherwise it yield for ever!
+    
+    
+    
 
-    // get packed request and work on it first
-    // Attention: Don't set it on internal member BEFORE interaction is finished - because
-    // "loadComponentFromURL()" yield tills this member is changed. If we do it before
-    // interaction finish we can't guarantee right functionality. May be we cancel load process to erliear ...
+    
+    
+    
+    
     css::uno::Any aRequest = xRequest->getRequest();
 
-    // extract continuations from request
+    
     css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > lContinuations = xRequest->getContinuations();
     css::uno::Reference< css::task::XInteractionAbort >                              xAbort         ;
     css::uno::Reference< css::task::XInteractionApprove >                            xApprove       ;
@@ -1322,15 +1322,15 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
             xFilterSelect = css::uno::Reference< css::document::XInteractionFilterSelect >( lContinuations[nStep], css::uno::UNO_QUERY );
     }
 
-    // differ between abortable interactions (error, unknown filter ...)
-    // and other ones (ambigous but not unknown filter ...)
+    
+    
     css::task::ErrorCodeRequest          aErrorCodeRequest     ;
     css::document::AmbigousFilterRequest aAmbigousFilterRequest;
     if( aRequest >>= aAmbigousFilterRequest )
     {
         if( xFilterSelect.is() )
         {
-            xFilterSelect->setFilter( aAmbigousFilterRequest.SelectedFilter ); // user selected filter wins!
+            xFilterSelect->setFilter( aAmbigousFilterRequest.SelectedFilter ); 
             xFilterSelect->select();
         }
     }
@@ -1353,9 +1353,9 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     }
 
     /* SAFE AREA ------------------------------------------------------------------------------------------- */
-    // Ok now it's time to break yield loop of loadComponentFromURL().
-    // But only for really aborted requests!
-    // For example warnings will be approved and we wait for any success story ...
+    
+    
+    
     if (bAbort)
     {
         WriteGuard aWriteLock( m_aLock );
@@ -1366,7 +1366,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 }
 
-//-----------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL Desktop::leaseNumber( const css::uno::Reference< css::uno::XInterface >& xComponent )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -1375,7 +1375,7 @@ void SAL_CALL Desktop::handle( const css::uno::Reference< css::task::XInteractio
     return m_xTitleNumberGenerator->leaseNumber (xComponent);
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL Desktop::releaseNumber( ::sal_Int32 nNumber )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -1384,7 +1384,7 @@ void SAL_CALL Desktop::releaseNumber( ::sal_Int32 nNumber )
     m_xTitleNumberGenerator->releaseNumber (nNumber);
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL Desktop::releaseNumberForComponent( const css::uno::Reference< css::uno::XInterface >& xComponent )
     throw (css::lang::IllegalArgumentException,
            css::uno::RuntimeException         )
@@ -1393,7 +1393,7 @@ void SAL_CALL Desktop::releaseNumberForComponent( const css::uno::Reference< css
     m_xTitleNumberGenerator->releaseNumberForComponent (xComponent);
 }
 
-//-----------------------------------------------------------------------------
+
 OUString SAL_CALL Desktop::getUntitledPrefix()
     throw (css::uno::RuntimeException)
 {
@@ -1401,7 +1401,7 @@ OUString SAL_CALL Desktop::getUntitledPrefix()
     return m_xTitleNumberGenerator->getUntitledPrefix ();
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      try to convert a property value
     @descr      This method is called from helperclass "OPropertySetHelper".
                 Don't use this directly!
@@ -1424,18 +1424,18 @@ OUString SAL_CALL Desktop::getUntitledPrefix()
 
     @onerror    IllegalArgumentException, if you call this with an invalid argument
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aConvertedValue ,
                                                            css::uno::Any&   aOldValue       ,
                                                            sal_Int32        nHandle         ,
                                                      const css::uno::Any&   aValue          ) throw( css::lang::IllegalArgumentException )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    //  Initialize state with sal_False !!!
-    //  (Handle can be invalid)
+    
+    
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )
@@ -1463,11 +1463,11 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
                 break;
     }
 
-    // Return state of operation.
+    
     return bReturn ;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      set value of a transient property
     @descr      This method is calling from helperclass "OPropertySetHelper".
                 Don't use this directly!
@@ -1482,12 +1482,12 @@ sal_Bool SAL_CALL Desktop::convertFastPropertyValue(       css::uno::Any&   aCon
 
     @onerror    An exception is thrown.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        nHandle ,
                                                          const css::uno::Any&   aValue  ) throw( css::uno::Exception )
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     switch( nHandle )
@@ -1501,7 +1501,7 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      get value of a transient property
     @descr      This method is calling from helperclass "OPropertySetHelper".
                 Don't use this directly!
@@ -1516,12 +1516,12 @@ void SAL_CALL Desktop::setFastPropertyValue_NoBroadcast(       sal_Int32        
 
     @onerror    -
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
                                              sal_Int32      nHandle ) const
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
     switch( nHandle )
@@ -1539,7 +1539,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     }
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      return structure and information about transient properties
     @descr      This method is calling from helperclass "OPropertySetHelper".
                 Don't use this directly!
@@ -1555,28 +1555,28 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
 
     @onerror    -
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 ::cppu::IPropertyArrayHelper& SAL_CALL Desktop::getInfoHelper()
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
+    
+    
+    
     static ::cppu::OPropertyArrayHelper* pInfoHelper = NULL;
 
     if( pInfoHelper == NULL )
     {
-        // Ready for multithreading
+        
         ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
-        // Control this pointer again, another instance can be faster then these!
+        
         if( pInfoHelper == NULL )
         {
-            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static funtion, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
+            
+            
+            
             static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
             pInfoHelper = &aInfoHelper;
         }
@@ -1585,7 +1585,7 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
     return(*pInfoHelper);
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      return propertysetinfo
     @descr      You can call this method to get information about transient properties
                 of this object.
@@ -1603,27 +1603,27 @@ void SAL_CALL Desktop::getFastPropertyValue( css::uno::Any& aValue  ,
 
     @onerror    -
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException)
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
+    
+    
+    
     static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = NULL;
 
     if( pInfo == NULL )
     {
-        // Ready for multithreading
+        
         ::osl::MutexGuard aGuard( LockHelper::getGlobalLock().getShareableOslMutex() );
-        // Control this pointer again, another instance can be faster then these!
+        
         if( pInfo == NULL )
         {
-            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
-            // (Use method "getInfoHelper()".)
+            
+            
             static css::uno::Reference< css::beans::XPropertySetInfo > xInfo(
                     cppu::OPropertySetHelper::createPropertySetInfo( getInfoHelper() ) );
             pInfo = &xInfo;
@@ -1633,7 +1633,7 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropert
     return (*pInfo);
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      return current component of current frame
     @descr      The desktop himself has no component. But every frame in subtree.
                 If somewhere call getCurrentComponent() at this class, we try to find the right frame and
@@ -1650,34 +1650,34 @@ css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL Desktop::getPropert
 
     @onerror    A null reference is returned.
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( const css::uno::Reference< css::frame::XFrame >& xFrame ) const
 {
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
-    // Register transaction and reject wrong calls.
+    
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
 
-    // Set default return value, if method failed.
+    
     css::uno::Reference< css::lang::XComponent > xComponent;
-    // Does no controller exists?
+    
     css::uno::Reference< css::frame::XController > xController = xFrame->getController();
     if( !xController.is() )
     {
-        // Controller not exist - use the VCL-component.
+        
         xComponent = css::uno::Reference< css::lang::XComponent >( xFrame->getComponentWindow(), css::uno::UNO_QUERY );
     }
     else
     {
-        // Does no model exists?
+        
         css::uno::Reference< css::frame::XModel > xModel( xController->getModel(), css::uno::UNO_QUERY );
         if( xModel.is() )
         {
-            // Model exist - use the model as component.
+            
             xComponent = css::uno::Reference< css::lang::XComponent >( xModel, css::uno::UNO_QUERY );
         }
         else
         {
-            // Model not exist - use the controller as component.
+            
             xComponent = css::uno::Reference< css::lang::XComponent >( xController, css::uno::UNO_QUERY );
         }
     }
@@ -1685,7 +1685,7 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
     return xComponent;
 }
 
-/*-************************************************************************************************************//**
+/*-************************************************************************************************************
     @short      create table with information about properties
     @descr      We use a helper class to support properties. These class need some information about this.
                 These method create a new static description table with name, type, r/w-flags and so on ...
@@ -1698,15 +1698,15 @@ css::uno::Reference< css::lang::XComponent > Desktop::impl_getFrameComponent( co
 
     @onerror    -
     @threadsafe yes
-*//*-*************************************************************************************************************/
+*
 const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticPropertyDescriptor()
 {
-    // Create a property array to initialize sequence!
-    // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
-    // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
-    // It's necessary for methods of OPropertySetHelper.
-    // ATTENTION:
-    //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
+    
+    
+    
+    
+    
+    
 
     const css::beans::Property pProperties[] =
     {
@@ -1716,13 +1716,13 @@ const css::uno::Sequence< css::beans::Property > Desktop::impl_getStaticProperty
         css::beans::Property( DESKTOP_PROPNAME_SUSPENDQUICKSTARTVETO    , DESKTOP_PROPHANDLE_SUSPENDQUICKSTARTVETO   , ::getBooleanCppuType()                                                                  , css::beans::PropertyAttribute::TRANSIENT ),
         css::beans::Property( DESKTOP_PROPNAME_TITLE                    , DESKTOP_PROPHANDLE_TITLE                   , ::getCppuType((const OUString*)NULL)                                             , css::beans::PropertyAttribute::TRANSIENT ),
     };
-    // Use it to initialize sequence!
+    
     const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, DESKTOP_PROPCOUNT );
-    // Return "PropertyDescriptor"
+    
     return lPropertyDescriptor;
 }
 
-//=============================================================================
+
 void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lCalledListener,
                                              ::sal_Bool&                      bVeto          )
 {
@@ -1749,21 +1749,21 @@ void Desktop::impl_sendQueryTerminationEvent(Desktop::TTerminateListenerList& lC
         }
         catch( const css::frame::TerminationVetoException& )
         {
-            // first veto will stop notification loop.
+            
             bVeto = sal_True;
             return;
         }
         catch( const css::uno::Exception& )
         {
-            // clean up container.
-            // E.g. dead remote listener objects can make trouble otherwise.
-            // Iterator implementation allows removing objects during it's used !
+            
+            
+            
             aIterator.remove();
         }
     }
 }
 
-//=============================================================================
+
 void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerList& lCalledListener)
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1776,7 +1776,7 @@ void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerL
     {
         try
         {
-            // Note: cancelTermination() is a new and optional interface method !
+            
             css::uno::Reference< css::frame::XTerminateListener  > xListener           = *pIt;
             css::uno::Reference< css::frame::XTerminateListener2 > xListenerGeneration2(xListener, css::uno::UNO_QUERY);
             if ( ! xListenerGeneration2.is() )
@@ -1788,7 +1788,7 @@ void Desktop::impl_sendCancelTerminationEvent(const Desktop::TTerminateListenerL
     }
 }
 
-//=============================================================================
+
 void Desktop::impl_sendNotifyTerminationEvent()
 {
     TransactionGuard aTransaction( m_aTransactionManager, E_HARDEXCEPTIONS );
@@ -1811,20 +1811,20 @@ void Desktop::impl_sendNotifyTerminationEvent()
         }
         catch( const css::uno::Exception& )
         {
-            // clean up container.
-            // E.g. dead remote listener objects can make trouble otherwise.
-            // Iterator implementation allows removing objects during it's used !
+            
+            
+            
             aIterator.remove();
         }
     }
 }
 
-//=============================================================================
+
 ::sal_Bool Desktop::impl_closeFrames(::sal_Bool bAllowUI)
 {
-    ReadGuard aReadLock( m_aLock ); // start synchronize
+    ReadGuard aReadLock( m_aLock ); 
     css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > lFrames = m_aChildTaskContainer.getAllElements();
-    aReadLock.unlock(); // end synchronize
+    aReadLock.unlock(); 
 
     ::sal_Int32 c                = lFrames.getLength();
     ::sal_Int32 i                = 0;
@@ -1836,8 +1836,8 @@ void Desktop::impl_sendNotifyTerminationEvent()
         {
             css::uno::Reference< css::frame::XFrame > xFrame = lFrames[i];
 
-            // XController.suspend() will show an UI ...
-            // Use it in case it was allowed from outside only.
+            
+            
             sal_Bool                                       bSuspended = sal_False;
             css::uno::Reference< css::frame::XController > xController( xFrame->getController(), css::uno::UNO_QUERY );
             if (
@@ -1853,9 +1853,9 @@ void Desktop::impl_sendNotifyTerminationEvent()
                 }
             }
 
-            // Try to close frame (in case no UI was allowed without calling XController->suspend() before!)
-            // But don't deliver ownership to any other one!
-            // This method can be called again.
+            
+            
+            
             css::uno::Reference< css::util::XCloseable > xClose( xFrame, css::uno::UNO_QUERY );
             if ( xClose.is() )
             {
@@ -1865,14 +1865,14 @@ void Desktop::impl_sendNotifyTerminationEvent()
                 }
                 catch(const css::util::CloseVetoException&)
                 {
-                    // Any internal process of this frame disagree with our request.
-                    // Safe this state but dont break these loop. Other frames has to be closed!
+                    
+                    
                     ++nNonClosedFrames;
 
-                    // Reactivate controller.
-                    // It can happen that XController.suspend() returned true ... but a registered close listener
-                    // throwed these veto exception. Then the controller has to be reactivated. Otherwise
-                    // these document doesn't work any more.
+                    
+                    
+                    
+                    
                     if (
                         (bSuspended      ) &&
                         (xController.is())
@@ -1880,43 +1880,43 @@ void Desktop::impl_sendNotifyTerminationEvent()
                         xController->suspend(sal_False);
                 }
 
-                // If interface XClosable interface exists and was used ...
-                // it's not allowed to use XComponent->dispose() also !
+                
+                
                 continue;
             }
 
-            // XClosable not supported ?
-            // Then we have to dispose these frame hardly.
+            
+            
             css::uno::Reference< css::lang::XComponent > xDispose( xFrame, css::uno::UNO_QUERY );
             if ( xDispose.is() )
                 xDispose->dispose();
 
-            // Don't remove these frame from our child container!
-            // A frame do it by itself inside close()/dispose() method.
+            
+            
         }
         catch(const css::lang::DisposedException&)
         {
-            // Dispose frames are closed frames.
-            // So we can count it here .-)
+            
+            
         }
     }
 
     return (nNonClosedFrames < 1);
 }
 
-//  We work with valid listener only.
+
 sal_Bool Desktop::implcp_addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return !xListener.is();
 }
 
-//  We work with valid listener only.
+
 sal_Bool Desktop::implcp_removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     return !xListener.is();
 }
 
-}   // namespace framework
+}   
 
 namespace {
 

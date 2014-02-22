@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::script;
 TYPEINIT1(StarBASIC,SbxObject)
 
 #define RTLNAME "@SBRTL"
-//  i#i68894#
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using com::sun::star::uno::Reference;
@@ -64,7 +64,7 @@ using com::sun::star::uno::Any;
 using com::sun::star::uno::UNO_QUERY;
 using com::sun::star::lang::XMultiServiceFactory;
 
-// ============================================================================
+
 
 class DocBasicItem : public ::cppu::WeakImplHelper1< util::XCloseListener >
 {
@@ -91,7 +91,7 @@ private:
     bool            mbDisposed;
 };
 
-// ----------------------------------------------------------------------------
+
 
 DocBasicItem::DocBasicItem( StarBASIC& rDocBasic ) :
     mrDocBasic( rDocBasic ),
@@ -151,7 +151,7 @@ void SAL_CALL DocBasicItem::disposing( const lang::EventObject& /*rEvent*/ ) thr
     stopListening();
 }
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -206,9 +206,9 @@ StarBASIC* lclGetDocBasicForModule( SbModule* pModule )
     return pRetBasic;
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 SbxObject* StarBASIC::getVBAGlobals( )
 {
@@ -226,7 +226,7 @@ SbxObject* StarBASIC::getVBAGlobals( )
                 }
                 catch(const Exception& )
                 {
-                    // Ignore
+                    
                 }
             }
         }
@@ -236,14 +236,14 @@ SbxObject* StarBASIC::getVBAGlobals( )
     return pVBAGlobals;
 }
 
-//  i#i68894#
+
 SbxVariable* StarBASIC::VBAFind( const OUString& rName, SbxClassType t )
 {
     if( rName == "ThisComponent" )
     {
         return NULL;
     }
-    // rename to init globals
+    
     if ( getVBAGlobals( ) )
     {
         return pVBAGlobals->Find( rName, t );
@@ -251,7 +251,7 @@ SbxVariable* StarBASIC::VBAFind( const OUString& rName, SbxClassType t )
     return NULL;
 }
 
-// Create array for conversion SFX <-> VB error code
+
 struct SFX_VB_ErrorItem
 {
     sal_uInt16  nErrorVB;
@@ -260,7 +260,7 @@ struct SFX_VB_ErrorItem
 
 const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
 {
-    { 1, SbERR_BASIC_EXCEPTION },  // #87844 Map exception to error code 1
+    { 1, SbERR_BASIC_EXCEPTION },  
     { 2, SbERR_SYNTAX },
     { 3, SbERR_NO_GOSUB },
     { 4, SbERR_REDO_FROM_START },
@@ -382,13 +382,13 @@ const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
     { 1005, SbERR_SETPROP_FAILED },
     { 1006, SbERR_GETPROP_FAILED },
     { 1007, SbERR_BASIC_COMPAT },
-    { 0xFFFF, 0xFFFFFFFFL }     // End mark
+    { 0xFFFF, 0xFFFFFFFFL }     
 };
 
-// The StarBASIC factory is a hack. When a SbModule is created, its pointer
-// is saved and given to the following SbProperties/SbMethods. This restores
-// the Modul-relationshop. But it works only when a modul is loaded.
-// Can cause troubles with separately loaded properties!
+
+
+
+
 
 SbxBase* SbiFactory::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
 {
@@ -445,7 +445,7 @@ SbxObject* SbiFactory::CreateObject( const OUString& rClass )
 }
 
 
-// Factory class to create OLE objects
+
 class SbOLEFactory : public SbxFactory
 {
 public:
@@ -455,11 +455,11 @@ public:
 
 SbxBase* SbOLEFactory::Create( sal_uInt16, sal_uInt32 )
 {
-    // Not supported
+    
     return NULL;
 }
 
-SbUnoObject* createOLEObject_Impl( const OUString& aType );  // sbunoobj.cxx
+SbUnoObject* createOLEObject_Impl( const OUString& aType );  
 
 SbxObject* SbOLEFactory::CreateObject( const OUString& rClassName )
 {
@@ -468,8 +468,8 @@ SbxObject* SbOLEFactory::CreateObject( const OUString& rClassName )
 }
 
 
-//========================================================================
-// SbFormFactory, show user forms by: dim as new <user form name>
+
+
 
 class SbFormFactory : public SbxFactory
 {
@@ -480,7 +480,7 @@ public:
 
 SbxBase* SbFormFactory::Create( sal_uInt16, sal_uInt32 )
 {
-    // Not supported
+    
     return NULL;
 }
 
@@ -495,7 +495,7 @@ SbxObject* SbFormFactory::CreateObject( const OUString& rClassName )
                 bool bInitState = pFormModule->getInitState();
                 if( bInitState )
                 {
-                    // Not the first instantiate, reset
+                    
                     bool bTriggerTerminateEvent = false;
                     pFormModule->ResetApiObj( bTriggerTerminateEvent );
                     pFormModule->setInitState( false );
@@ -512,15 +512,15 @@ SbxObject* SbFormFactory::CreateObject( const OUString& rClassName )
 }
 
 
-//========================================================================
-// SbTypeFactory
+
+
 
 SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
 {
     SbxObject* pRet = new SbxObject( rTypeObj );
     pRet->PutObject( pRet );
 
-    // Copy the properties, not only the reference to them
+    
     SbxArray* pProps = pRet->GetProperties();
     sal_uInt32 nCount = pProps->Count32();
     for( sal_uInt32 i = 0 ; i < nCount ; i++ )
@@ -550,12 +550,12 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
                 }
                 else
                 {
-                    pDest->unoAddDim( 0, -1 ); // variant array
+                    pDest->unoAddDim( 0, -1 ); 
                 }
                 sal_uInt16 nSavFlags = pVar->GetFlags();
                 pNewProp->ResetFlag( SBX_FIXED );
-                // need to reset the FIXED flag
-                // when calling PutObject ( because the type will not match Object )
+                
+                
                 pNewProp->PutObject( pDest );
                 pNewProp->SetFlags( nSavFlags );
             }
@@ -574,7 +574,7 @@ SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj )
     return pRet;
 }
 
-// Factory class to create user defined objects (type command)
+
 class SbTypeFactory : public SbxFactory
 {
 public:
@@ -584,7 +584,7 @@ public:
 
 SbxBase* SbTypeFactory::Create( sal_uInt16, sal_uInt32 )
 {
-    // Not supported
+    
     return NULL;
 }
 
@@ -624,10 +624,10 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 
     SetClassName( pClassModule->GetName() );
 
-    // Allow search only internally
+    
     ResetFlag( SBX_GBLSEARCH );
 
-    // Copy the methods from original class module
+    
     SbxArray* pClassMethods = pClassModule->GetMethods();
     sal_uInt32 nMethodCount = pClassMethods->Count32();
     sal_uInt32 i;
@@ -635,7 +635,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
     {
         SbxVariable* pVar = pClassMethods->Get32( i );
 
-        // Exclude SbIfaceMapperMethod to copy them in a second step
+        
         SbIfaceMapperMethod* pIfaceMethod = PTR_CAST( SbIfaceMapperMethod, pVar );
         if( !pIfaceMethod )
         {
@@ -655,8 +655,8 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         }
     }
 
-    // Copy SbIfaceMapperMethod in a second step to ensure that
-    // the corresponding base methods have already been copied
+    
+    
     for( i = 0 ; i < nMethodCount ; i++ )
     {
         SbxVariable* pVar = pClassMethods->Get32( i );
@@ -671,7 +671,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                 continue;
             }
 
-            // Search for own copy of ImplMethod
+            
             SbxVariable* p = pMethods->Find( pImplMethod->GetName(), SbxCLASS_METHOD );
             SbMethod* pImplMethodCopy = p ? PTR_CAST(SbMethod,p) : NULL;
             if( !pImplMethodCopy )
@@ -685,7 +685,7 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         }
     }
 
-    // Copy the properties from original class module
+    
     SbxArray* pClassProps = pClassModule->GetProperties();
     sal_uInt32 nPropertyCount = pClassProps->Count32();
     for( i = 0 ; i < nPropertyCount ; i++ )
@@ -698,8 +698,8 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
             pProcedureProp->SetFlag( SBX_NO_BROADCAST );
             SbProcedureProperty* pNewProp = new SbProcedureProperty
                 ( pProcedureProp->GetName(), pProcedureProp->GetType() );
-            pNewProp->SetFlags( nFlags_ ); // Copy flags
-            pNewProp->ResetFlag( SBX_NO_BROADCAST ); // except the Broadcast if it was set
+            pNewProp->SetFlags( nFlags_ ); 
+            pNewProp->ResetFlag( SBX_NO_BROADCAST ); 
             pProcedureProp->SetFlags( nFlags_ );
             pProps->PutDirect( pNewProp, i );
             StartListening( pNewProp->GetBroadcaster(), true );
@@ -713,8 +713,8 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                 pProp->SetFlag( SBX_NO_BROADCAST );
                 SbxProperty* pNewProp = new SbxProperty( *pProp );
 
-                // Special handling for modules instances and collections, they need
-                // to be instantiated, otherwise all refer to the same base object
+                
+                
                 SbxDataType eVarType = pProp->GetType();
                 if( eVarType == SbxOBJECT )
                 {
@@ -757,15 +757,15 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
 
 SbClassModuleObject::~SbClassModuleObject()
 {
-    // do not trigger termination event when document is already closed
+    
     if( StarBASIC::IsRunning() )
         if( StarBASIC* pDocBasic = lclGetDocBasicForModule( this ) )
             if( const DocBasicItem* pDocBasicItem = lclFindDocBasicItem( pDocBasic ) )
                 if( !pDocBasicItem->isDocClosed() )
                     triggerTerminateEvent();
 
-    // Must be deleted by base class dtor because this data
-    // is not owned by the SbClassModuleObject object
+    
+    
     pImage = NULL;
     pBreaks = NULL;
 }
@@ -802,7 +802,7 @@ void SbClassModuleObject::triggerInitializeEvent( void )
 
     mbInitializeEventDone = true;
 
-    // Search method
+    
     SbxVariable* pMeth = SbxObject::Find(OUString("Class_Initialize"), SbxCLASS_METHOD);
     if( pMeth )
     {
@@ -817,7 +817,7 @@ void SbClassModuleObject::triggerTerminateEvent( void )
     {
         return;
     }
-    // Search method
+    
     SbxVariable* pMeth = SbxObject::Find(OUString("Class_Terminate"), SbxCLASS_METHOD );
     if( pMeth )
     {
@@ -867,7 +867,7 @@ void SbClassFactory::RemoveClassModule( SbModule* pClassModule )
 
 SbxBase* SbClassFactory::Create( sal_uInt16, sal_uInt32 )
 {
-    // Not supported
+    
     return NULL;
 }
 
@@ -927,7 +927,7 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
         AddFactory( GetSbData()->pUnoFac );
     }
     pRtl = new SbiStdObject(OUString(RTLNAME), this );
-    // Search via StarBasic is always global
+    
     SetFlag( SBX_GBLSEARCH );
     pVBAGlobals = NULL;
     bQuit = false;
@@ -938,8 +938,8 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
     }
 }
 
-// #51727 Override SetModified so that the modified state
-// is not given to the parent
+
+
 void StarBASIC::SetModified( sal_Bool b )
 {
     SbxBase::SetModified( b );
@@ -947,7 +947,7 @@ void StarBASIC::SetModified( sal_Bool b )
 
 StarBASIC::~StarBASIC()
 {
-    // Needs to be first action as it can trigger events
+    
     disposeComVariablesForBasic( this );
 
     if( !--GetSbData()->nInst )
@@ -984,7 +984,7 @@ StarBASIC::~StarBASIC()
         }
     }
 
-    // #100326 Set Parent NULL in registered listeners
+    
     if( xUnoListeners.Is() )
     {
         sal_uInt16 uCount = xUnoListeners->Count();
@@ -999,7 +999,7 @@ StarBASIC::~StarBASIC()
     clearUnoMethodsForBasic( this );
 }
 
-// Override new() operator, so that everyone can create a new instance
+
 void* StarBASIC::operator new( size_t n )
 {
     if( n < sizeof( StarBASIC ) )
@@ -1062,9 +1062,9 @@ SbModule* StarBASIC::MakeModule32( const OUString& rName, const ModuleInfo& mInf
     switch ( mInfo.ModuleType )
     {
     case ModuleType::DOCUMENT:
-        // In theory we should be able to create Object modules
-        // in ordinary basic ( in vba mode thought these are create
-        // by the application/basic and not by the user )
+        
+        
+        
         p = new SbObjModule( rName, mInfo, isVBAEnabled() );
         break;
     case ModuleType::CLASS:
@@ -1108,7 +1108,7 @@ void StarBASIC::Remove( SbxVariable* pVar )
 {
     if( pVar->IsA( TYPE(SbModule) ) )
     {
-        // #87540 Can be last reference!
+        
         SbxVariableRef xVar = pVar;
         pModules->Remove( pVar );
         pVar->SetParent( 0 );
@@ -1165,8 +1165,8 @@ struct ClassModuleRunInitItem
     {}
 };
 
-// Derive from unordered_map type instead of typedef
-// to allow forward declaration in sbmod.hxx
+
+
 class ModuleInitDependencyMap : public
     boost::unordered_map< OUString, ClassModuleRunInitItem,
                           OUStringHash, ::std::equal_to< OUString > >
@@ -1186,14 +1186,14 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
             {
                 OUString& rStr = *it;
 
-                // Is required type a class module?
+                
                 ModuleInitDependencyMap::iterator itFind = rMap.find( rStr );
                 if( itFind != rMap.end() )
                 {
                     ClassModuleRunInitItem& rParentItem = itFind->second;
                     if( rParentItem.m_bProcessing )
                     {
-                        // TODO: raise error?
+                        
                         OSL_FAIL( "Cyclic module dependency detected" );
                         continue;
                     }
@@ -1212,12 +1212,12 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
     rItem.m_bProcessing = false;
 }
 
-// Run Init-Code of all modules (including inserted libraries)
+
 void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 {
     SolarMutexGuard guard;
 
-    // Init own modules
+    
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
@@ -1226,12 +1226,12 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
             pModule->Compile();
         }
     }
-    // compile modules first then RunInit ( otherwise there is
-    // can be order dependency, e.g. classmodule A has a member
-    // of of type classmodule B and classmodule B hasn't been compiled yet )
+    
+    
+    
 
-    // Consider required types to init in right order. Class modules
-    // that are required by other modules have to be initialized first.
+    
+    
     ModuleInitDependencyMap aMIDMap;
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
@@ -1250,7 +1250,7 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
         SbModule::implProcessModuleRunInit( aMIDMap, rItem );
     }
 
-    // Call RunInit on standard modules
+    
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
@@ -1260,8 +1260,8 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
         }
     }
 
-    // Check all objects if they are BASIC,
-    // if yes initialize
+    
+    
     for ( sal_uInt16 nObj = 0; nObj < pObjs->Count(); nObj++ )
     {
         SbxVariable* pVar = pObjs->Get( nObj );
@@ -1273,11 +1273,11 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     }
 }
 
-// #88329 Put modules back to not initialised state to
-// force reinitialisation at next start
+
+
 void StarBASIC::DeInitAllModules( void )
 {
-    // Deinit own modules
+    
     for ( sal_uInt16 nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
@@ -1298,18 +1298,18 @@ void StarBASIC::DeInitAllModules( void )
     }
 }
 
-// This implementation at first searches within the runtime library,
-// then it looks for an element within one module. This moudle can be
-// a public var or an entrypoint. If it is not found and we look for a
-// method and a module with the given name is found the search continues
-// for entrypoint "Main".
-// If this fails again a conventional search over objects is performend.
+
+
+
+
+
+
 SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
 {
     SbxVariable* pRes = NULL;
     SbModule* pNamed = NULL;
-    // "Extended" search in Runtime Lib
-    // but only if SbiRuntime has not set the flag
+    
+    
     if( !bNoRtl )
     {
         if( t == SbxCLASS_DONTCARE || t == SbxCLASS_OBJECT )
@@ -1328,7 +1328,7 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
             pRes->SetFlag( SBX_EXTFOUND );
         }
     }
-    // Search module
+    
     if( !pRes )
     {
         for( sal_uInt16 i = 0; i < pModules->Count(); i++ )
@@ -1336,8 +1336,8 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
             SbModule* p = (SbModule*) pModules->Get( i );
             if( p->IsVisible() )
             {
-                // Remember modul fpr Main() call
-                // or is the name equal?!?
+                
+                
                 if( p->GetName().equalsIgnoreAsciiCase( rName ) )
                 {
                     if( t == SbxCLASS_OBJECT || t == SbxCLASS_DONTCARE )
@@ -1346,15 +1346,15 @@ SbxVariable* StarBASIC::Find( const OUString& rName, SbxClassType t )
                     }
                     pNamed = p;
                 }
-                // Only variables qualified by the Module Name e.g. Sheet1.foo
-                // should work for Documant && Class type Modules
+                
+                
                 sal_Int32 nType = p->GetModuleType();
                 if ( nType == ModuleType::DOCUMENT || nType == ModuleType::FORM )
                 {
                     continue;
                 }
-                // otherwise check if the element is available
-                // unset GBLSEARCH-Flag (due to Rekursion)
+                
+                
                 sal_uInt16 nGblFlag = p->GetFlags() & SBX_GBLSEARCH;
                 p->ResetFlag( SBX_GBLSEARCH );
                 pRes = p->Find( rName, t );
@@ -1394,7 +1394,7 @@ sal_Bool StarBASIC::Call( const OUString& rName, SbxArray* pParam )
     return bRes;
 }
 
-// Find method via name (e.g. query via BASIC IDE)
+
 SbxBase* StarBASIC::FindSBXInCurrentScope( const OUString& rName )
 {
     if( !GetSbData()->pInst )
@@ -1492,24 +1492,24 @@ sal_uInt16 StarBASIC::BreakHdl()
     return (sal_uInt16) ( aBreakHdl.IsSet() ? aBreakHdl.Call( this ) : SbDEBUG_CONTINUE );
 }
 
-// Calls for error handler and break handler
+
 sal_uInt16 StarBASIC::GetLine()     { return GetSbData()->nLine; }
 sal_uInt16 StarBASIC::GetCol1()     { return GetSbData()->nCol1; }
 sal_uInt16 StarBASIC::GetCol2()     { return GetSbData()->nCol2; }
 
-// Specific to error handler
+
 SbError StarBASIC::GetErrorCode()       { return GetSbData()->nCode; }
 const OUString& StarBASIC::GetErrorText() { return GetSbData()->aErrMsg; }
 bool StarBASIC::IsCompilerError()       { return GetSbData()->bCompiler; }
 
-// From 1996-03-29:
-// The mapping between the old and the new error codes take place by searching
-// through the table SFX_VB_ErrorTab[]. This is indeed not with good performance,
-// but it consumes much less memory than corresponding switch blocs.
-// Because the conversion of error codes has not to be fast. there is no
-// binary search by VB Error -> Error SFX.
 
-// Map back new error codes to old, Sbx-compatible
+
+
+
+
+
+
+
 sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
 {
     sal_uInt16 nRet = 0;
@@ -1535,7 +1535,7 @@ sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
         }
     }
 
-    // search loop
+    
     const SFX_VB_ErrorItem* pErrItem;
     sal_uInt16 nIndex = 0;
     do
@@ -1548,7 +1548,7 @@ sal_uInt16 StarBASIC::GetVBErrorCode( SbError nError )
         }
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );      // up to end mark
+    while( pErrItem->nErrorVB != 0xFFFF );      
     return nRet;
 }
 
@@ -1595,15 +1595,15 @@ SbError StarBASIC::GetSfxFromVBError( sal_uInt16 nError )
         }
         else if( pErrItem->nErrorVB > nError )
         {
-            break;              // couldn't found anymore
+            break;              
         }
         nIndex++;
     }
-    while( pErrItem->nErrorVB != 0xFFFF );      // up to end mark
+    while( pErrItem->nErrorVB != 0xFFFF );      
     return nRet;
 }
 
-// set Error- / Break-data
+
 void StarBASIC::SetErrorData( SbError nCode, sal_uInt16 nLine,
                               sal_uInt16 nCol1, sal_uInt16 nCol2 )
 {
@@ -1614,9 +1614,9 @@ void StarBASIC::SetErrorData( SbError nCode, sal_uInt16 nLine,
     aGlobals.nCol2 = nCol2;
 }
 
-//----------------------------------------------------------------
-// help class for access to string SubResource of a Resource.
-// Source: sfx2\source\doc\docfile.cxx (TLX)
+
+
+
 struct BasicStringList_Impl : private Resource
 {
     ResId aResId;
@@ -1629,22 +1629,22 @@ struct BasicStringList_Impl : private Resource
     sal_Bool IsErrorTextAvailable( void )
         { return IsAvailableRes(aResId.SetRT(RSC_STRING)); }
 };
-//----------------------------------------------------------------
+
 
 void StarBASIC::MakeErrorText( SbError nId, const OUString& aMsg )
 {
     SolarMutexGuard aSolarGuard;
     sal_uInt16 nOldID = GetVBErrorCode( nId );
 
-    // intantiate the help class
+    
     BasResId aId( RID_BASIC_START );
     BasicStringList_Impl aMyStringList( aId, sal_uInt16(nId & ERRCODE_RES_MASK) );
 
     if( aMyStringList.IsErrorTextAvailable() )
     {
-        // merge message with additional text
+        
         OUStringBuffer aMsg1(aMyStringList.GetString());
-        // replace argument placeholder with %s
+        
         OUString aSrgStr( "$(ARG1)" );
         sal_Int32 nResult = aMyStringList.GetString().indexOf( aSrgStr );
 
@@ -1672,10 +1672,10 @@ sal_Bool StarBASIC::CError( SbError code, const OUString& rMsg,
 {
     SolarMutexGuard aSolarGuard;
 
-    // compiler error during runtime -> stop programm
+    
     if( IsRunning() )
     {
-        // #109018 Check if running Basic is affected
+        
         StarBASIC* pStartedBasic = GetSbData()->pInst->GetBasic();
         if( pStartedBasic != this )
         {
@@ -1684,13 +1684,13 @@ sal_Bool StarBASIC::CError( SbError code, const OUString& rMsg,
         Stop();
     }
 
-    // set flag, so that GlobalRunInit notice the error
+    
     GetSbData()->bGlobalInitErr = true;
 
-    // tinker the error message
+    
     MakeErrorText( code, rMsg );
 
-    // Implementation of the code for the string transport to SFX-Error
+    
     if( !rMsg.isEmpty() )
     {
         code = (sal_uIntPtr)*new StringErrorInfo( code, rMsg );
@@ -1706,7 +1706,7 @@ sal_Bool StarBASIC::CError( SbError code, const OUString& rMsg,
     {
         bRet = ErrorHdl();
     }
-    GetSbData()->bCompiler = false;     // only true for error handler
+    GetSbData()->bCompiler = false;     
     return bRet;
 }
 
@@ -1726,13 +1726,13 @@ sal_Bool StarBASIC::RTError( SbError code, const OUString& rMsg, sal_Int32 l, sa
     }
     MakeErrorText( c, rMsg );
 
-    // Implementation of the code for the string transport to SFX-Error
+    
     if( !rMsg.isEmpty() )
     {
-        // very confusing, even though MakeErrorText sets up the error text
-        // seems that this is not used ( if rMsg already has content )
-        // In the case of VBA MakeErrorText also formats the error to be alittle more
-        // like vba ( adds an error number etc )
+        
+        
+        
+        
         if ( SbiRuntime::isVBAEnabled() && ( code == SbERR_BASIC_COMPAT ) )
         {
             OUString aTmp = "\'" + OUString::number(SbxErrObject::getUnoErrObject()->getNumber()) +
@@ -1797,7 +1797,7 @@ SbError StarBASIC::GetErrBasic()
     }
 }
 
-// make the additional message for the RTL function error accessible
+
 OUString StarBASIC::GetErrorMsg()
 {
     if( GetSbData()->pInst )
@@ -1865,8 +1865,8 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     {
         return sal_False;
     }
-    // #95459 Delete dialogs, otherwise endless recursion
-    // in SbxVarable::GetType() if dialogs are accessed
+    
+    
     sal_uInt16 nObjCount = pObjs->Count();
     SbxVariable** ppDeleteTab = new SbxVariable*[ nObjCount ];
     sal_uInt16 nObj;
@@ -1900,7 +1900,7 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
         }
         else if( pMod->ISA(SbJScriptModule) )
         {
-            // assign Ref, so that pMod will be deleted
+            
             SbModuleRef xRef = pMod;
         }
         else
@@ -1909,7 +1909,7 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
             pModules->Put( pMod, i );
         }
     }
-    // HACK for SFX-Bullshit!
+    
     SbxVariable* p = Find( OUString("FALSE"), SbxCLASS_PROPERTY );
     if( p )
     {
@@ -1920,8 +1920,8 @@ sal_Bool StarBASIC::LoadData( SvStream& r, sal_uInt16 nVer )
     {
         Remove( p );
     }
-    // End of the hacks!
-    // Search via StarBASIC is at all times global
+    
+    
     DBG_ASSERT( IsSet( SBX_GBLSEARCH ), "Basic loaded without GBLSEARCH" );
     SetFlag( SBX_GBLSEARCH );
     return sal_True;
@@ -1965,9 +1965,9 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
     {
         return NULL;
     }
-    // look for the ThisComponent variable, first in the parent (which
-    // might be the document's Basic), then in the parent's parent (which might be
-    // the application Basic)
+    
+    
+    
     const OUString sThisComponent( "ThisComponent");
     SbxVariable* pThisComponent = NULL;
 
@@ -1980,7 +1980,7 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
     if ( !pThisComponent )
     {
         OSL_TRACE("Failed to get ThisComponent");
-            // the application Basic, at the latest, should have this variable
+            
         return NULL;
     }
 
@@ -1988,7 +1988,7 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
     Reference< frame::XModel > xModel( aThisComponentAny, UNO_QUERY );
     if ( !xModel.is() )
     {
-        // it's no XModel. Okay, ThisComponent nowadays is allowed to be a controller.
+        
         Reference< frame::XController > xController( aThisComponentAny, UNO_QUERY );
         if ( xController.is() )
         {
@@ -2009,8 +2009,8 @@ Reference< frame::XModel > StarBASIC::GetModelFromBasic( SbxObject* pBasic )
 }
 
 
-//========================================================================
-// #118116 Implementation Collection object
+
+
 
 TYPEINIT1(BasicCollection,SbxObject)
 
@@ -2209,7 +2209,7 @@ void BasicCollection::CollAdd( SbxArray* pPar_ )
                 }
                 nNextIndex = nAfterIndex + 1;
             }
-            else // if( nCount == 4 )
+            else 
             {
                 sal_Int32 nBeforeIndex = implGetIndex( pBefore );
                 if( nBeforeIndex == -1 )
@@ -2289,7 +2289,7 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
     {
         xItemArray->Remove32( nIndex );
 
-        // Correct for stack if necessary
+        
         SbiInstance* pInst = GetSbData()->pInst;
         SbiRuntime* pRT = pInst ? pInst->pRun : NULL;
         if( pRT )

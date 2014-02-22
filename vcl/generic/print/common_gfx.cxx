@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -148,7 +148,7 @@ PrinterGfx::ResetClipRegion()
 {
     maClipRegion.clear();
     PSGRestore ();
-    PSGSave (); // get "clean" clippath
+    PSGSave (); 
 }
 
 void
@@ -186,11 +186,11 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
         if( nextit->Top() == aLastRect.Bottom()+1 )
         {
             if(
-               ( nextit->Left() >= aLastRect.Left() && nextit->Left() <= aLastRect.Right() ) // left endpoint touches last rectangle
+               ( nextit->Left() >= aLastRect.Left() && nextit->Left() <= aLastRect.Right() ) 
                ||
-               ( nextit->Right() >= aLastRect.Left() && nextit->Right() <= aLastRect.Right() ) // right endpoint touches last rectangle
+               ( nextit->Right() >= aLastRect.Left() && nextit->Right() <= aLastRect.Right() ) 
                ||
-               ( nextit->Left() <= aLastRect.Left() && nextit->Right() >= aLastRect.Right() ) // whole line touches last rectangle
+               ( nextit->Left() <= aLastRect.Left() && nextit->Right() >= aLastRect.Right() ) 
                )
             {
                 if( aLastRect.GetHeight() > 1                           ||
@@ -211,11 +211,11 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
     }
     if( leftside.size() > 1 )
     {
-        // push the last coordinates
+        
         leftside.push_back( Point( aLastRect.Left(), aLastRect.Bottom()+1 ) );
         rightside.push_back( Point( aLastRect.Right()+1, aLastRect.Bottom()+1 ) );
 
-        // cool, we can concatenate rectangles
+        
         int nDX = -65536, nDY = 65536;
         int nNewDX = 0, nNewDY = 0;
 
@@ -226,7 +226,7 @@ PrinterGfx::JoinVerticalClipRectangles( std::list< Rectangle >::iterator& it,
         {
             Point aPoint (leftside.front());
             leftside.pop_front();
-            // may have been the last one
+            
             if( leftside.begin() != leftside.end() )
             {
                 nNewDX = aPoint.X() - aLastPoint.X();
@@ -276,7 +276,7 @@ void
 PrinterGfx::EndSetClipRegion()
 {
     PSGRestore ();
-    PSGSave (); // get "clean" clippath
+    PSGSave (); 
 
     PSBinStartPath ();
     Point aOldPoint (0, 0);
@@ -285,11 +285,11 @@ PrinterGfx::EndSetClipRegion()
     std::list< Rectangle >::iterator it = maClipRegion.begin();
     while( it != maClipRegion.end() )
     {
-        // try to concatenate adjacent rectangles
-        // first try in y direction, then in x direction
+        
+        
         if( ! JoinVerticalClipRectangles( it, aOldPoint, nColumn ) )
         {
-            // failed, so it is a single rectangle
+            
             PSBinMoveTo (it->TopLeft(),                          aOldPoint, nColumn );
             PSBinLineTo (Point( it->Left(), it->Bottom()+1 ),    aOldPoint, nColumn );
             PSBinLineTo (Point( it->Right()+1, it->Bottom()+1 ), aOldPoint, nColumn );
@@ -389,11 +389,11 @@ PrinterGfx::DrawPolyLine (sal_uInt32 nPoints, const Point* pPath)
 void
 PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
 {
-    // premature end of operation
+    
     if (!(nPoints > 1) || (pPath == NULL) || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
-    // setup closed path
+    
     Point aPoint( 0, 0 );
     sal_Int32 nColumn( 0 );
 
@@ -405,10 +405,10 @@ PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
         PSBinLineTo( pPath[0], aPoint, nColumn );
     PSBinEndPath();
 
-    // fill the polygon first, then draw the border, note that fill and
-    // stroke reset the currentpath
+    
+    
 
-    // if fill and stroke, save the current path
+    
     if( maFillColor.Is() && maLineColor.Is())
         PSGSave();
 
@@ -419,7 +419,7 @@ PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
         WritePS (mpPageBody, "eofill\n");
     }
 
-    // restore the current path
+    
     if( maFillColor.Is() && maLineColor.Is())
         PSGRestore();
 
@@ -435,12 +435,12 @@ PrinterGfx::DrawPolygon (sal_uInt32 nPoints, const Point* pPath)
 void
 PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const Point** pPaths )
 {
-    // sanity check
+    
     if ( !nPoly || !pPaths || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
 
-    // setup closed path
+    
     for( unsigned int i = 0; i < nPoly; i++ )
     {
         Point aPoint( 0, 0 );
@@ -455,11 +455,11 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
         PSBinEndPath();
     }
 
-    // if eofill and stroke, save the current path
+    
     if( maFillColor.Is() && maLineColor.Is())
         PSGSave();
 
-    // first draw area
+    
     if( maFillColor.Is() )
     {
         PSSetColor (maFillColor);
@@ -467,11 +467,11 @@ PrinterGfx::DrawPolyPolygon (sal_uInt32 nPoly, const sal_uInt32* pSizes, const P
         WritePS (mpPageBody, "eofill\n");
     }
 
-    // restore the current path
+    
     if( maFillColor.Is() && maLineColor.Is())
         PSGRestore();
 
-    // now draw outlines
+    
     if( maLineColor.Is() )
     {
         PSSetColor (maLineColor);
@@ -500,20 +500,20 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sa
         snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
         WritePS(mpPageBody, pString);
 
-        // Handle the drawing of mixed lines mixed with curves
-        // - a normal point followed by a normal point is a line
-        // - a normal point followed by 2 control points and a normal point is a curve
+        
+        
+        
         for (unsigned int i=1; i<nPoints;)
         {
-            if (pFlgAry[i] != POLY_CONTROL) //If the next point is a POLY_NORMAL, we're drawing a line
+            if (pFlgAry[i] != POLY_CONTROL) 
             {
                 snprintf(pString, nBezString, "%li %li lineto\n", pPath[i].X(), pPath[i].Y());
                 i++;
             }
-            else //Otherwise we're drawing a spline
+            else 
             {
                 if (i+2 >= nPoints)
-                    return; //Error: wrong sequence of contol/normal points somehow
+                    return; 
                 if ((pFlgAry[i] == POLY_CONTROL) && (pFlgAry[i+1] == POLY_CONTROL) &&
                     (pFlgAry[i+2] != POLY_CONTROL))
                 {
@@ -531,7 +531,7 @@ PrinterGfx::DrawPolyLineBezier (sal_uInt32 nPoints, const Point* pPath, const sa
             WritePS(mpPageBody, pString);
         }
 
-        // now draw outlines
+        
         WritePS (mpPageBody, "stroke\n");
     }
 }
@@ -541,12 +541,12 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal
 {
     const sal_uInt32 nBezString = 1024;
     sal_Char pString[nBezString];
-    // premature end of operation
+    
     if (!(nPoints > 1) || (pPath == NULL) || !(maFillColor.Is() || maLineColor.Is()))
         return;
 
     snprintf(pString, nBezString, "%li %li moveto\n", pPath[0].X(), pPath[0].Y());
-    WritePS(mpPageBody, pString); //Move to the starting point for the PolyPoygon
+    WritePS(mpPageBody, pString); 
     for (unsigned int i=1; i < nPoints;)
     {
         if (pFlgAry[i] != POLY_CONTROL)
@@ -558,7 +558,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal
         else
         {
             if (i+2 >= nPoints)
-                return; //Error: wrong sequence of contol/normal points somehow
+                return; 
             if ((pFlgAry[i] == POLY_CONTROL) && (pFlgAry[i+1] == POLY_CONTROL) &&
                     (pFlgAry[i+2] != POLY_CONTROL))
             {
@@ -576,7 +576,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal
         }
     }
 
-    // if fill and stroke, save the current path
+    
     if( maFillColor.Is() && maLineColor.Is())
         PSGSave();
 
@@ -587,7 +587,7 @@ PrinterGfx::DrawPolygonBezier (sal_uInt32 nPoints, const Point* pPath, const sal
         WritePS (mpPageBody, "eofill\n");
     }
 
-    // restore the current path
+    
     if( maFillColor.Is() && maLineColor.Is())
         PSGRestore();
 }
@@ -604,16 +604,16 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
     for (unsigned int i=0; i<nPoly;i++)
     {
         sal_uInt32 nPoints = pPoints[i];
-        // sanity check
+        
         if( nPoints == 0 || pPtAry[i] == NULL )
             continue;
 
-        snprintf(pString, nBezString, "%li %li moveto\n", pPtAry[i][0].X(), pPtAry[i][0].Y()); //Move to the starting point
+        snprintf(pString, nBezString, "%li %li moveto\n", pPtAry[i][0].X(), pPtAry[i][0].Y()); 
         WritePS(mpPageBody, pString);
         for (unsigned int j=1; j < nPoints;)
         {
-            // if no flag array exists for this polygon, then it must be a regular
-            // polygon without beziers
+            
+            
             if ( ! pFlgAry[i] || pFlgAry[i][j] != POLY_CONTROL)
             {
                 snprintf(pString, nBezString, "%li %li lineto\n", pPtAry[i][j].X(), pPtAry[i][j].Y());
@@ -623,7 +623,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
             else
             {
                 if (j+2 >= nPoints)
-                    break; //Error: wrong sequence of contol/normal points somehow
+                    break; 
                 if ((pFlgAry[i][j] == POLY_CONTROL) && (pFlgAry[i][j+1] == POLY_CONTROL) && (pFlgAry[i][j+2] != POLY_CONTROL))
                 {
                     snprintf(pString, nBezString, "%li %li %li %li %li %li curveto\n",
@@ -641,7 +641,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
         }
     }
 
-    // if fill and stroke, save the current path
+    
     if( maFillColor.Is() && maLineColor.Is())
         PSGSave();
 
@@ -652,7 +652,7 @@ PrinterGfx::DrawPolyPolygonBezier (sal_uInt32 nPoly, const sal_uInt32 * pPoints,
         WritePS (mpPageBody, "eofill\n");
     }
 
-    // restore the current path
+    
     if( maFillColor.Is() && maLineColor.Is())
         PSGRestore();
 }
@@ -758,7 +758,7 @@ PrinterGfx::PSSetFont ()
         sal_Char  pSetFont [256];
         sal_Int32 nChar = 0;
 
-        // postscript based fonts need reencoding
+        
         if (   (   rCurrent.maEncoding == RTL_TEXTENCODING_MS_1252)
             || (   rCurrent.maEncoding == RTL_TEXTENCODING_ISO_8859_1)
             || (   rCurrent.maEncoding >= RTL_TEXTENCODING_USER_START
@@ -776,8 +776,8 @@ PrinterGfx::PSSetFont ()
                                                     pSetFont + nChar);
         }
         else
-        // tt based fonts mustn't reencode, the encoding is implied by the fontname
-        // same for symbol type1 fonts, dont try to touch them
+        
+        
         {
             nChar += psp::appendStr  ("(",          pSetFont + nChar);
             nChar += psp::appendStr  (rCurrent.maFont.getStr(),
@@ -793,7 +793,7 @@ PrinterGfx::PSSetFont ()
             nChar += psp::getValueOf (-nTextHeight, pSetFont + nChar);
             nChar += psp::appendStr  (" matrix scale makefont setfont\n", pSetFont + nChar);
         }
-        else // skew 15 degrees to right
+        else 
         {
             nChar += psp::appendStr  ( " [",        pSetFont + nChar);
             nChar += psp::getValueOf (nTextWidth,   pSetFont + nChar);
@@ -916,7 +916,7 @@ PrinterGfx::PSBinEndPath ()
 void
 PrinterGfx::PSBinCurrentPath (sal_uInt32 nPoints, const Point* pPath)
 {
-    // create the path
+    
     Point     aPoint (0, 0);
     sal_Int32 nColumn = 0;
 
@@ -934,15 +934,15 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
     sal_Char  pPath[48];
     sal_Int32 nChar;
 
-    // create the hex representation of the dx and dy path shift, store the field
-    // width as it is needed for the building the command
+    
+    
     sal_Int32 nXPrec = getAlignedHexValueOf (rCurrent.X() - rOld.X(), pPath + 1);
     sal_Int32 nYPrec = getAlignedHexValueOf (rCurrent.Y() - rOld.Y(), pPath + 1 + nXPrec);
     pPath [ 1 + nXPrec + nYPrec ] = 0;
 
-    // build the command, it is a char with bit represention 000cxxyy
-    // c represents the char, xx and yy repr. the field width of the dx and dy shift,
-    // dx and dy represent the number of bytes to read after the opcode
+    
+    
+    
     sal_Char cCmd = (eType == lineto ? (sal_Char)0x00 : (sal_Char)0x10);
     switch (nYPrec)
     {
@@ -963,8 +963,8 @@ PrinterGfx::PSBinPath (const Point& rCurrent, Point& rOld,
     cCmd += 'A';
     pPath[0] = cCmd;
 
-    // write the command to file,
-    // line breaking at column nMaxTextColumn (80)
+    
+    
     nChar = 1 + nXPrec + nYPrec;
     if ((nColumn + nChar) > nMaxTextColumn)
     {
@@ -1060,7 +1060,7 @@ PrinterGfx::PSShowText (const unsigned char* pStr, sal_Int16 nGlyphs, sal_Int16 
     PSSetColor (maTextColor);
     PSSetColor ();
     PSSetFont  ();
-    // rotate the user coordinate system
+    
     if (mnTextAngle != 0)
     {
         PSGSave ();
@@ -1077,7 +1077,7 @@ PrinterGfx::PSShowText (const unsigned char* pStr, sal_Int16 nGlyphs, sal_Int16 
             nLW = nLW < maVirtualStatus.mnTextHeight ? nLW : maVirtualStatus.mnTextHeight;
         psp::getValueOfDouble( pBuffer, (double)nLW / 30.0 );
     }
-    // dispatch to the drawing method
+    
     if (pDeltaArray == NULL)
     {
         PSHexString (pStr, nBytes);
@@ -1103,7 +1103,7 @@ PrinterGfx::PSShowText (const unsigned char* pStr, sal_Int16 nGlyphs, sal_Int16 
             WritePS (mpPageBody, "xshow\n");
     }
 
-    // restore the user coordinate system
+    
     if (mnTextAngle != 0)
         PSGRestore ();
 }
@@ -1137,7 +1137,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
 
     bool bSuccess = false;
 
-    // first search the BoundingBox of the EPS data
+    
     SvMemoryStream aStream( pPtr, nSize, STREAM_READ );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
     OString aLine;
@@ -1189,7 +1189,7 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
         double fScaleY = -(double)rBoundingBox.GetHeight()/(fTop-fBottom);
         Point aTranslatePoint( (int)(rBoundingBox.Left()-fLeft*fScaleX),
                                (int)(rBoundingBox.Bottom()+1-fBottom*fScaleY) );
-        // prepare EPS
+        
         WritePS( mpPageBody,
                  "/b4_Inc_state save def\n"
                  "/dict_count countdictstack def\n"
@@ -1204,29 +1204,29 @@ PrinterGfx::DrawEPS( const Rectangle& rBoundingBox, void* pPtr, sal_uInt32 nSize
                  "  {false setstrokeadjust false setoverprint\n"
                  "  } if\n"
                  "}if\n" );
-        // set up clip path and scale
+        
         BeginSetClipRegion( 1 );
         UnionClipRegion( rBoundingBox.Left(), rBoundingBox.Top(), rBoundingBox.GetWidth(), rBoundingBox.GetHeight() );
         EndSetClipRegion();
         PSTranslate( aTranslatePoint );
         PSScale( fScaleX, fScaleY );
 
-        // DSC requires BeginDocument
+        
         WritePS( mpPageBody, "%%BeginDocument: " );
         WritePS( mpPageBody, aDocTitle );
         WritePS( mpPageBody, "\n" );
 
-        // write the EPS data
+        
         sal_uInt64 nOutLength;
         mpPageBody->write( pPtr, nSize, nOutLength );
         bSuccess = nOutLength == nSize;
 
-        // corresponding EndDocument
+        
         if( ((char*)pPtr)[ nSize-1 ] != '\n' )
             WritePS( mpPageBody, "\n" );
         WritePS( mpPageBody, "%%EndDocument\n" );
 
-        // clean up EPS
+        
         WritePS( mpPageBody,
                  "count op_count sub {pop} repeat\n"
                  "countdictstack dict_count sub {end} repeat\n"

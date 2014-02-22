@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/htmlout.hxx>
@@ -37,7 +37,7 @@ struct SwHTMLFootEndNote_Impl
     std::vector<OUString> aNames;
 
     OUString sName;
-    OUString sContent;            // Infos fuer die letzte Fussnote
+    OUString sContent;            
     sal_Bool bEndNote;
     sal_Bool bFixed;
 };
@@ -209,7 +209,7 @@ void SwHTMLParser::FinishFootEndNote()
     SwTxtFtn * const pTxtFtn = static_cast<SwTxtFtn *>(
         pPam->GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
             pPam->GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_FTN ) );
-    // In Kopf- und Fusszeilen duerfen keine Fussnoten eingefuegt werden.
+    
     if( pTxtFtn )
     {
         pFootEndNoteImpl->aTxtFtns.push_back( pTxtFtn );
@@ -360,7 +360,7 @@ void SwHTMLWriter::OutFootEndNotes()
         Strm().WriteCharPtr( "\">" );
 
         bLFPossible = sal_True;
-        IncIndentLevel();   // Inhalt von <DIV> einruecken
+        IncIndentLevel();   
 
         OSL_ENSURE( pTxtFtn, "SwHTMLWriter::OutFootEndNotes: SwTxtFtn fehlt" );
         SwNodeIndex *pSttNdIdx = pTxtFtn->GetStartNode();
@@ -373,7 +373,7 @@ void SwHTMLWriter::OutFootEndNotes()
             Out_SwDoc( pCurPam );
         }
 
-        DecIndentLevel();   // Inhalt von <DIV> einruecken
+        DecIndentLevel();   
         if( bLFPossible )
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_division, sal_False );
@@ -541,14 +541,14 @@ static void lcl_html_outFootEndNoteInfo( Writer& rWrt, OUString *pParts,
 
 void SwHTMLWriter::OutFootEndNoteInfo()
 {
-    // Nummerntyp (1 bzw. i)
-    // Offset (0)
-    // Davor
-    // Dahinter
-    // Dok/Seite/Kap (D)
-    // Position (S)
-    // Folgeseite
-    // Beginn
+    
+    
+    
+    
+    
+    
+    
+    
 
     {
         const SwFtnInfo& rInfo = pDoc->GetFtnInfo();

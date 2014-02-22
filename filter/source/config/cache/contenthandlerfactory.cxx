@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 {
     css::uno::Reference< css::uno::XInterface > xHandler;
 
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     OUString sRealHandler = sHandler;
@@ -97,30 +97,30 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
                     continue;
             }
 
-            // prevent outside code against NoSuchElementException!
-            // But dont implement such defensive strategy for our new create handling :-)
+            
+            
             if (!m_rCache->hasItem(FilterCache::E_CONTENTHANDLER, sRealHandler))
                 return css::uno::Reference< css::uno::XInterface>();
         }
 
         /* <- HACK */
 
-    #endif // _FILTER_CONFIG_MIGRATION_Q_
+    #endif 
 
-    // search handler on cache
+    
     CacheItem aHandler = m_rCache->getItem(FilterCache::E_CONTENTHANDLER, sRealHandler);
 
-    // create service instance
+    
     xHandler = m_xContext->getServiceManager()->createInstanceWithContext(sRealHandler, m_xContext);
 
-    // initialize filter
+    
     css::uno::Reference< css::lang::XInitialization > xInit(xHandler, css::uno::UNO_QUERY);
     if (xInit.is())
     {
-        // format: lInitData[0] = seq<PropertyValue>, which contains all configuration properties of this handler
-        //         lInitData[1] = lArguments[0]
-        //         ...
-        //         lInitData[n] = lArguments[n-1]
+        
+        
+        
+        
         css::uno::Sequence< css::beans::PropertyValue > lConfig;
         aHandler >> lConfig;
 
@@ -134,7 +134,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
     }
 
     return xHandler;
-    // <- SAFE
+    
 }
 
 
@@ -142,7 +142,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::crea
 css::uno::Sequence< OUString > SAL_CALL ContentHandlerFactory::getAvailableServiceNames()
     throw(css::uno::RuntimeException)
 {
-    // must be the same list as ((XNameAccess*)this)->getElementNames() return!
+    
     return BaseContainer::getElementNames();
 }
 
@@ -170,7 +170,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL ContentHandlerFactory::impl
     return css::uno::Reference< css::uno::XInterface >(static_cast< css::lang::XMultiServiceFactory* >(pNew), css::uno::UNO_QUERY);
 }
 
-    } // namespace config
-} // namespace filter
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

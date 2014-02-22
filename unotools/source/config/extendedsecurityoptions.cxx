@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/extendedsecurityoptions.hxx>
@@ -65,7 +65,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
          SvtExtendedSecurityOptions_Impl();
         ~SvtExtendedSecurityOptions_Impl();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      called for notify of configmanager
             @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
@@ -77,11 +77,11 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
             @return     -
 
             @onerror    -
-        *//*-*****************************************************************************************************/
+        *
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      write changes to configuration
             @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
@@ -92,14 +92,14 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
             @return     -
 
             @onerror    -
-        *//*-*****************************************************************************************************/
+        *
 
         virtual void Commit();
 
         SvtExtendedSecurityOptions::OpenHyperlinkMode   GetOpenHyperlinkMode();
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return list of key names of ouer configuration management which represent oue module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
@@ -110,11 +110,11 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
             @return     A list of needed configuration keys is returned.
 
             @onerror    -
-        *//*-*****************************************************************************************************/
+        *
 
         static Sequence< OUString > GetPropertyNames();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      Fills the hash map with all extensions known to be secure
             @descr      These methods fills the given hash map object with all extensions known to be secure.
 
@@ -125,7 +125,7 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
             @return     -
 
             @onerror    -
-        *//*-*****************************************************************************************************/
+        *
         void FillExtensionHashMap( ExtensionHashMap& aHashMap );
 
         OUString                                        m_aSecureExtensionsSetName;
@@ -136,19 +136,19 @@ class SvtExtendedSecurityOptions_Impl : public ConfigItem
         ExtensionHashMap                                m_aExtensionHashMap;
 };
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
-    // Init baseclasses first
+    
     :   ConfigItem          ( ROOTNODE_SECURITY         )
     , m_aSecureExtensionsSetName( SECURE_EXTENSIONS_SET )
     , m_aExtensionPropName( EXTENSION_PROPNAME )
     , m_eOpenHyperlinkMode(SvtExtendedSecurityOptions::OPEN_NEVER)
     , m_bROOpenHyperlinkMode(false)
-    // Init member then.
+    
 {
-    // Fill the extension hash map with all secure extension strings
+    
     FillExtensionHashMap( m_aExtensionHashMap );
 
     Sequence< OUString >    seqNames    = GetPropertyNames();
@@ -158,8 +158,8 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // Safe impossible cases.
-        // Check any for valid value.
+        
+        
         DBG_ASSERT( seqValues[nProperty].hasValue(), "SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()\nInvalid property value detected!\n" );
         switch( nProperty )
         {
@@ -179,39 +179,39 @@ SvtExtendedSecurityOptions_Impl::SvtExtendedSecurityOptions_Impl()
         }
     }
 
-    // Enable notification mechanism of our baseclass.
-    // We need it to get information about changes outside these class on ouer used configuration keys!
+    
+    
     Sequence< OUString > seqNotifyNames( 1 );
     seqNotifyNames[0] = m_aSecureExtensionsSetName;
     EnableNotification( seqNotifyNames );
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 SvtExtendedSecurityOptions_Impl::~SvtExtendedSecurityOptions_Impl()
 {
-    // We must save our current values .. if user forget it!
+    
     if( IsModified() )
     {
         Commit();
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 void SvtExtendedSecurityOptions_Impl::Notify( const Sequence< OUString >& )
 {
-    // Not implemented
+    
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 void SvtExtendedSecurityOptions_Impl::Commit()
 {
-    // Get names of supported properties, create a list for values and copy current values to it.
+    
     Sequence< OUString >    seqNames    = GetPropertyNames  ();
     sal_Int32               nCount      = seqNames.getLength();
     Sequence< Any >         seqValues   ( nCount );
@@ -226,24 +226,24 @@ void SvtExtendedSecurityOptions_Impl::Commit()
         }
     }
 
-    // Set properties in configuration.
+    
     PutProperties( seqNames, seqValues );
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions_Impl::GetOpenHyperlinkMode()
 {
     return m_eOpenHyperlinkMode;
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aHashMap )
 {
-    // Get sequence with secure extensions from configuration
+    
     Sequence< OUString >    seqNodes = GetNodeNames( m_aSecureExtensionsSetName );
 
     OUString                aValue;
@@ -251,7 +251,7 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
     Sequence< OUString >    aPropSeq( 1 );
     for ( int i = 0; i < seqNodes.getLength(); i++ )
     {
-        // Create access name for property
+        
         OUStringBuffer aExtEntryProp( m_aSecureExtensionsSetName );
         aExtEntryProp.appendAscii( "/" );
         aExtEntryProp.append( seqNodes[i] );
@@ -261,9 +261,9 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
         aValues = GetProperties( aPropSeq );
         if ( aValues.getLength() == 1 )
         {
-            // Don't use value if sequence has not the correct length
+            
             if ( aValues[0] >>= aValue )
-                // Add extension into secure extensions hash map
+                
                 aHashMap.insert( ExtensionHashMap::value_type( aValue.toAsciiLowerCase(), 1 ) );
             else
             {
@@ -273,40 +273,40 @@ void SvtExtendedSecurityOptions_Impl::FillExtensionHashMap( ExtensionHashMap& aH
     }
 }
 
-//*****************************************************************************************************************
-//  private method (currently not used)
-//*****************************************************************************************************************
+
+
+
 Sequence< OUString > SvtExtendedSecurityOptions_Impl::GetPropertyNames()
 {
-    // Build list of configuration key names.
+    
     const OUString pProperties[] =
     {
         PROPERTYNAME_HYPERLINKS_OPEN
     };
-    // Initialize return sequence with these list ...
+    
     const Sequence< OUString > seqPropertyNames( pProperties, PROPERTYCOUNT );
-    // ... and return it.
+    
     return seqPropertyNames;
 }
 
-//*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-//*****************************************************************************************************************
+
+
+
+
+
 SvtExtendedSecurityOptions_Impl*    SvtExtendedSecurityOptions::m_pDataContainer    = NULL  ;
 sal_Int32                           SvtExtendedSecurityOptions::m_nRefCount         = 0     ;
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
 {
-    // Global access, must be guarded (multithreading!).
+    
     MutexGuard aGuard( GetInitMutex() );
-    // Increase ouer refcount ...
+    
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already exist!
+    
     if( m_pDataContainer == NULL )
     {
        m_pDataContainer = new SvtExtendedSecurityOptions_Impl;
@@ -315,17 +315,17 @@ SvtExtendedSecurityOptions::SvtExtendedSecurityOptions()
     }
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
 {
-    // Global access, must be guarded (multithreading!)
+    
     MutexGuard aGuard( GetInitMutex() );
-    // Decrease ouer refcount.
+    
     --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy ouer static data container!
+    
+    
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
@@ -333,9 +333,9 @@ SvtExtendedSecurityOptions::~SvtExtendedSecurityOptions()
     }
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpenHyperlinkMode()
 {
     MutexGuard aGuard( GetInitMutex() );
@@ -347,9 +347,9 @@ namespace
     class theExtendedSecurityOptionsMutex : public rtl::Static<osl::Mutex, theExtendedSecurityOptionsMutex>{};
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 Mutex& SvtExtendedSecurityOptions::GetInitMutex()
 {
     return theExtendedSecurityOptionsMutex::get();

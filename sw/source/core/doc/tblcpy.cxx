@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -46,9 +46,9 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                     SwTable& rDstTbl, SwTableBox* pDstBox,
                     bool bDelCntnt, SwUndoTblCpyTbl* pUndo );
 
-// The following type will be used by table copy functions to describe
-// the structure of tables (or parts of tables).
-// It's for new table model only.
+
+
+
 
 namespace
 {
@@ -514,8 +514,8 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     SwDoc* pCpyDoc = rCpyTbl.GetFrmFmt()->GetDoc();
     SwDoc* pDoc = rDstTbl.GetFrmFmt()->GetDoc();
 
-    // First copy the new content and then delete the old one.
-    // Do not create empty Sections, otherwise they will be deleted!
+    
+    
     std::auto_ptr< SwNodeRange > pRg( pCpyBox ?
         new SwNodeRange ( *pCpyBox->GetSttNd(), 1,
         *pCpyBox->GetSttNd()->EndOfSectionNode() ) : 0 );
@@ -544,10 +544,10 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     bool bReplaceColl = true;
     if( bDelCntnt && !bUndoRedline )
     {
-        // Delete the Fly first, then the corresponding Nodes
+        
         SwNodeIndex aEndNdIdx( *aInsIdx.GetNode().EndOfSectionNode() );
 
-        // Move Bookmarks
+        
         {
             SwPosition aMvPos( aInsIdx );
             SwCntntNode* pCNd = pDoc->GetNodes().GoPrevious( &aMvPos.nNode );
@@ -555,7 +555,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             pDoc->CorrAbs( aInsIdx, aEndNdIdx, aMvPos, /*sal_True*/sal_False );
         }
 
-        // If we still have FlyFrames hanging around, delete them too
+        
         for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
         {
             SwFrmFmt *const pFly = (*pDoc->GetSpzFrmFmts())[n];
@@ -570,8 +570,8 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             }
         }
 
-        // If DestBox is a Headline Box and has Table style set, then
-        // DO NOT automatically set the TableHeadline style!
+        
+        
         if( 1 < rDstTbl.GetTabLines().size() &&
             pLine == rDstTbl.GetTabLines().front() )
         {
@@ -591,11 +591,11 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         pDoc->GetNodes().Delete( aInsIdx, aEndNdIdx.GetIndex() - aInsIdx.GetIndex() );
     }
 
-    //b6341295: Table copy redlining will be managed by AddBoxAfter()
+    
     if( pUndo )
         pUndo->AddBoxAfter( *pDstBox, aInsIdx, bDelCntnt );
 
-    // heading
+    
     SwTxtNode *const pTxtNd = aSavePos.GetNode().GetTxtNode();
     if( pTxtNd )
     {
@@ -603,7 +603,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
         if( bReplaceColl &&
             (( 1 < rDstTbl.GetTabLines().size() &&
                 pLine == rDstTbl.GetTabLines().front() )
-                // Is the Table's content sill valid?
+                
                 ? RES_POOLCOLL_TABLE == nPoolId
                 : RES_POOLCOLL_TABLE_HDLN == nPoolId ) )
         {
@@ -612,7 +612,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                                     RES_POOLCOLL_TABLE == nPoolId
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE ) );
-            if( pColl )         // Apply style
+            if( pColl )         
             {
                 SwPaM aPam( aSavePos );
                 aPam.SetMark();
@@ -621,7 +621,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
             }
         }
 
-        // Delete the current Formula/Format/Value values
+        
         if( SFX_ITEM_SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_FORMAT ) ||
             SFX_ITEM_SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_FORMULA ) ||
             SFX_ITEM_SET == pDstBox->GetFrmFmt()->GetItemState( RES_BOXATR_VALUE ) )
@@ -630,7 +630,7 @@ static void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
                                                  RES_BOXATR_VALUE );
         }
 
-        // Copy the TableBoxAttributes - Formula/Format/Value
+        
         if( pCpyBox )
         {
             SfxItemSet aBoxAttrSet( pCpyDoc->GetAttrPool(), RES_BOXATR_FORMAT,
@@ -662,12 +662,12 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
 
     SwTblNumFmtMerge aTNFM( *pCpyDoc, *pDoc );
 
-    // Analyze source structure
+    
     TableStructure aCopyStruct( rCpyTbl );
 
-    // Analyze target structure (from start box) and selected substructure
+    
     _FndBox aFndBox( 0, 0 );
-    {   // get all boxes/lines
+    {   
         _FndPara aPara( rSelBoxes, &aFndBox );
         ForEach_FndLineCopyCol( GetTabLines(), &aPara );
     }
@@ -687,28 +687,28 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
         bClear = true;
     }
 
-    // Find mapping, if needed extend target table and/or selection
+    
     aTarget.assignBoxes( aCopyStruct );
 
     {
-        // Change table formulas into relative representation
+        
         SwTableFmlUpdate aMsgHnt( &rCpyTbl );
         aMsgHnt.eFlags = TBL_RELBOXNAME;
         pCpyDoc->UpdateTblFlds( &aMsgHnt );
     }
 
-    // delete frames
+    
     aFndBox.SetTableLines( *this );
     if( bClear )
         aFndBox.ClearLineBehind();
     aFndBox.DelFrms( *this );
 
-    // copy boxes
+    
     aTarget.copyBoxes( rCpyTbl, *this, pUndo );
 
-    // adjust row span attributes accordingly
+    
 
-    // make frames
+    
     aFndBox.MakeFrms( *this );
 
     return sal_True;
@@ -722,26 +722,26 @@ sal_Bool SwTable::InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBox
 sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
                         SwUndoTblCpyTbl* pUndo )
 {
-    SetHTMLTableLayout( 0 );    // Delete HTML Layout
+    SetHTMLTableLayout( 0 );    
 
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
 
     SwTableNode* pTblNd = pDoc->IsIdxInTbl( rSttBox );
 
-    // Find the Box, to which should be copied:
+    
     SwTableBox* pMyBox = (SwTableBox*)GetTblBox(
             rSttBox.GetNode().FindTableBoxStartNode()->GetIndex() );
 
     OSL_ENSURE( pMyBox, "Index is not in a Box in this Table" );
 
-    // First delete the Table's Frames
+    
     _FndBox aFndBox( 0, 0 );
     aFndBox.DelFrms( pTblNd->GetTable() );
 
     SwDoc* pCpyDoc = rCpyTbl.GetFrmFmt()->GetDoc();
 
     {
-        // Convert Table formulas to their relative representation
+        
         SwTableFmlUpdate aMsgHnt( &rCpyTbl );
         aMsgHnt.eFlags = TBL_RELBOXNAME;
         pCpyDoc->UpdateTblFlds( &aMsgHnt );
@@ -754,39 +754,39 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
 
     for( sal_uInt16 nLines = 0; nLines < rCpyTbl.GetTabLines().size(); ++nLines )
     {
-        // Get the first from the CopyLine
+        
         const SwTableBox* pCpyBox = rCpyTbl.GetTabLines()[nLines]
                                     ->GetTabBoxes().front();
         while( !pCpyBox->GetTabLines().empty() )
             pCpyBox = pCpyBox->GetTabLines().front()->GetTabBoxes().front();
 
         do {
-            // First copy the new content and then delete the old one.
-            // Do not create empty Sections, otherwise they will be deleted!
+            
+            
             lcl_CpyBox( rCpyTbl, pCpyBox, *this, pMyBox, bDelCntnt, pUndo );
 
             if( 0 == (pTmp = pCpyBox->FindNextBox( rCpyTbl, pCpyBox, false )))
-                break;      // no more Boxes
+                break;      
             pCpyBox = pTmp;
 
             if( 0 == ( pTmp = pMyBox->FindNextBox( *this, pMyBox, false )))
-                bDelCntnt = false;  // No space left?
+                bDelCntnt = false;  
             else
                 pMyBox = (SwTableBox*)pTmp;
 
         } while( true );
 
-        // Find the topmost Line
+        
         SwTableLine* pNxtLine = pMyBox->GetUpper();
         while( pNxtLine->GetUpper() )
             pNxtLine = pNxtLine->GetUpper()->GetUpper();
         sal_uInt16 nPos = GetTabLines().GetPos( pNxtLine );
-        // Is there a next?
+        
         if( nPos + 1 >= (sal_uInt16)GetTabLines().size() )
-            bDelCntnt = false;      // there is none, all goes into the last Box
+            bDelCntnt = false;      
         else
         {
-            // Find the next Box with content
+            
             pNxtLine = GetTabLines()[ nPos+1 ];
             pMyBox = pNxtLine->GetTabBoxes().front();
             while( !pMyBox->GetTabLines().empty() )
@@ -795,7 +795,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwNodeIndex& rSttBox,
         }
     }
 
-    aFndBox.MakeFrms( pTblNd->GetTable() );     // Create the Frames anew
+    aFndBox.MakeFrms( pTblNd->GetTable() );     
     return sal_True;
 }
 
@@ -804,7 +804,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
 {
     OSL_ENSURE( !rSelBoxes.empty(), "Missing selection" );
 
-    SetHTMLTableLayout( 0 );    // Delete HTML Layout
+    SetHTMLTableLayout( 0 );    
 
     if( IsNewModel() || rCpyTbl.IsNewModel() )
         return InsNewTable( rCpyTbl, rSelBoxes, pUndo );
@@ -821,14 +821,14 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     sal_uInt16 nLn, nBx;
     _FndLine *pFLine, *pInsFLine = 0;
     _FndBox aFndBox( 0, 0 );
-    // Find all Boxes/Lines
+    
     {
         _FndPara aPara( rSelBoxes, &aFndBox );
         ForEach_FndLineCopyCol( GetTabLines(), &aPara );
     }
 
-    // Special case: If a Box is located in a Table, copy it to all selected
-    // Boxes!
+    
+    
     if( 1 != rCpyTbl.GetTabSortBoxes().size() )
     {
         SwTableLine* pSttLine = pSttBox->GetUpper();
@@ -839,28 +839,28 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
         if( !nFndCnt )
             return sal_False;
 
-        // Check if we have enough space for all Lines and Boxes
+        
         sal_uInt16 nTstLns = 0;
         pFLine = &aFndBox.GetLines().front();
         pSttLine = pFLine->GetLine();
         nSttLine = GetTabLines().GetPos( pSttLine );
-        // Do we have as many rows, actually?
+        
         if( 1 == nFndCnt )
         {
-            // Is there still enough space in the Table?
+            
             if( (GetTabLines().size() - nSttLine ) <
                 rCpyTbl.GetTabLines().size() )
             {
-                // If we don't have enough Lines, then see if we can insert
-                // new ones to reach our goal. But only if the SSelection
-                // contains a Box!
+                
+                
+                
                 if( 1 < rSelBoxes.size() )
                     return sal_False;
 
                 sal_uInt16 nNewLns = rCpyTbl.GetTabLines().size() -
                                 (GetTabLines().size() - nSttLine );
 
-                // See if the Box count is high enough for the Lines
+                
                 SwTableLine* pLastLn = GetTabLines().back();
 
                 pSttBox = pFLine->GetBoxes()[0].GetBox();
@@ -875,14 +875,14 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                             pCpyLn->GetTabBoxes().size() )
                         return sal_False;
 
-                    // Test for nesting
+                    
                     for( nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
                         if( !( pTmpBox = pLastLn->GetTabBoxes()[ nSttBox + nBx ])
                                     ->GetSttNd() )
                             return sal_False;
                 }
-                // We have enough space for the to-be-copied, so insert new
-                // rows accordingly.
+                
+                
                 SwTableBox* pInsBox = pLastLn->GetTabBoxes()[ nSttBox ];
                 OSL_ENSURE( pInsBox && pInsBox->GetSttNd(),
                     "no CntntBox or it's not in this Table" );
@@ -896,23 +896,23 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     return sal_False;
             }
 
-            nTstLns = rCpyTbl.GetTabLines().size();        // copy this many
+            nTstLns = rCpyTbl.GetTabLines().size();        
         }
         else if( 0 == (nFndCnt % rCpyTbl.GetTabLines().size()) )
             nTstLns = nFndCnt;
         else
-            return sal_False;       // not enough space for the rows
+            return sal_False;       
 
         for( nLn = 0; nLn < nTstLns; ++nLn )
         {
-            // We have enough rows, so check the Boxes per row
+            
             pFLine = &aFndBox.GetLines()[ nLn % nFndCnt ];
             SwTableLine* pLine = pFLine->GetLine();
             pSttBox = pFLine->GetBoxes()[0].GetBox();
             sal_uInt16 nSttBox = pLine->GetTabBoxes().GetPos( pSttBox );
             if( nLn >= nFndCnt )
             {
-                // We have more rows in the ClipBoard than we have selected
+                
                 pInsFLine = new _FndLine( GetTabLines()[ nSttLine + nLn ],
                                         &aFndBox );
                 pLine = pInsFLine->GetLine();
@@ -920,10 +920,10 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
             SwTableLine* pCpyLn = rCpyTbl.GetTabLines()[ nLn %
                                         rCpyTbl.GetTabLines().size() ];
 
-            // Selected too few rows?
+            
             if( pInsFLine )
             {
-                // We insert a new row into the FndBox
+                
                 if( pLine->GetTabBoxes().size() < nSttBox ||
                     sal::static_int_cast< sal_uInt16 >(
                         pLine->GetTabBoxes().size() - nSttBox ) <
@@ -933,7 +933,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     return sal_False;
                 }
 
-                // Test for nesting
+                
                 for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
                 {
                     if( !( pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ])
@@ -942,7 +942,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                         delete pInsFLine;
                         return sal_False;
                     }
-                    // if Ok, insert the Box into the FndLine
+                    
                     pFndBox = new _FndBox( pTmpBox, pInsFLine );
                     pInsFLine->GetBoxes().insert( pInsFLine->GetBoxes().begin() + nBx, pFndBox );
                 }
@@ -955,13 +955,13 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                     pCpyLn->GetTabBoxes().size() )
                     return sal_False;
 
-                // Test for nesting
+                
                 for( nBx = 0; nBx < pCpyLn->GetTabBoxes().size(); ++nBx )
                 {
                     if( !( pTmpBox = pLine->GetTabBoxes()[ nSttBox + nBx ])
                         ->GetSttNd() )
                         return sal_False;
-                    // if Ok, insert the Box into the FndLine
+                    
                     if( nBx == pFLine->GetBoxes().size() )
                     {
                         pFndBox = new _FndBox( pTmpBox, pFLine );
@@ -971,13 +971,13 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
             }
             else
             {
-                // Match the selected Boxes with the ones in the Clipboard
-                // (n times)
+                
+                
                 if( 0 != ( pFLine->GetBoxes().size() %
                             pCpyLn->GetTabBoxes().size() ))
                     return sal_False;
 
-                // Test for nesting
+                
                 for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
                     if (!pFLine->GetBoxes()[nBx].GetBox()->GetSttNd())
                         return sal_False;
@@ -989,15 +989,15 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
     }
 
     {
-        // Convert Table formulas to their relative representation
+        
         SwTableFmlUpdate aMsgHnt( &rCpyTbl );
         aMsgHnt.eFlags = TBL_RELBOXNAME;
         pCpyDoc->UpdateTblFlds( &aMsgHnt );
     }
 
-    // Delete the Frames
+    
     aFndBox.SetTableLines( *this );
-    //Not dispose accessible table
+    
     aFndBox.DelFrms( *this,sal_False );
 
     if( 1 == rCpyTbl.GetTabSortBoxes().size() )
@@ -1017,7 +1017,7 @@ sal_Bool SwTable::InsTable( const SwTable& rCpyTbl, const SwSelBoxes& rSelBoxes,
                                 nLn % rCpyTbl.GetTabLines().size() ];
             for( nBx = 0; nBx < pFLine->GetBoxes().size(); ++nBx )
             {
-                // Copy the pCpyBox into pMyBox
+                
                 lcl_CpyBox( rCpyTbl, pCpyLn->GetTabBoxes()[
                             nBx % pCpyLn->GetTabBoxes().size() ],
                     *this, pFLine->GetBoxes()[nBx].GetBox(), true, pUndo );
@@ -1047,7 +1047,7 @@ static void _FndCntntLine( const SwTableLine* pLine, SwSelBoxes* pPara )
         _FndCntntBox(pBox, pPara );
 }
 
-// Find all Boxes with content in this Box
+
 SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
                                     SwSelBoxes& rBoxes, bool bToTop ) const
 {
@@ -1056,7 +1056,7 @@ SwSelBoxes& SwTable::SelLineFromBox( const SwTableBox* pBox,
         while( pLine->GetUpper() )
             pLine = pLine->GetUpper()->GetUpper();
 
-    // Delete all old ones
+    
     rBoxes.clear();
     for( SwTableBoxes::iterator it = pLine->GetTabBoxes().begin();
              it != pLine->GetTabBoxes().end(); ++it)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,8 +30,8 @@
 #include "externalrefmgr.hxx"
 #include "document.hxx"
 
-//___________________________________________________________________
-// class XclImpChangeTrack
+
+
 
 XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStream& rBookStrm ) :
     XclImpRoot( rRoot ),
@@ -43,9 +43,9 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     bGlobExit( false ),
     eNestedMode( nmBase )
 {
-    // Verify that the User Names stream exists before going any further. Excel adds both
-    // "Revision Log" and "User Names" streams when Change Tracking is active but the Revision log
-    // remains if Change Tracking is turned off.
+    
+    
+    
     SotStorageStreamRef xUserStrm = OpenStream( EXC_STREAM_USERNAMES );
     if( !xUserStrm.Is() )
         return;
@@ -147,7 +147,7 @@ bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, Exc
     if( LookAtuInt8() == 0x01 )
     {
         rExtInfo.mbExternal = false;
-        // internal ref - read tab num and return sc tab num (position in TABID list)
+        
         pStrm->Ignore( 3 );
         rFirstTab = static_cast< SCTAB >( GetTabInfo().GetCurrentIndex( pStrm->ReaduInt16(), nTabIdCount ) );
         sal_uInt8 nFillByte = pStrm->ReaduInt8();
@@ -156,14 +156,14 @@ bool XclImpChangeTrack::Read3DTabRefInfo( SCTAB& rFirstTab, SCTAB& rLastTab, Exc
     }
     else
     {
-        // external ref - read doc and tab name and find sc tab num
-        // - URL
+        
+        
         OUString aEncUrl( pStrm->ReadUniString() );
         OUString aUrl;
         bool bSelf;
         XclImpUrlHelper::DecodeUrl( aUrl, bSelf, GetRoot(), aEncUrl );
         pStrm->Ignore( 1 );
-        // - sheet name, always separated from URL
+        
         OUString aTabName( pStrm->ReadUniString() );
         pStrm->Ignore( 1 );
 
@@ -182,19 +182,19 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     sal_uInt16 nFmlSize;
     *pStrm >> nFmlSize;
 
-    // create a memory stream and copy the formula to be able to read simultaneously
-    // the formula and the additional 3D tab ref data following the formula
-    // here we have to simulate an Excel record to be able to use an XclImpStream...
-    // 2do: remove the stream member from formula converter and add it as a parameter
-    // to the Convert() routine (to prevent the construction/destruction of the
-    // converter in each formula)
+    
+    
+    
+    
+    
+    
     SvMemoryStream aMemStrm;
     aMemStrm.WriteUInt16( (sal_uInt16) 0x0001 ).WriteUInt16( nFmlSize );
     size_t nRead = pStrm->CopyToStream( aMemStrm, nFmlSize );
 
-    // survive reading invalid streams!
-    // if we can't read as many bytes as required just don't use them and
-    // assume that this part is broken
+    
+    
+    
     if(nRead != nFmlSize)
     {
         rpTokenArray = NULL;
@@ -206,10 +206,10 @@ void XclImpChangeTrack::ReadFormula( ScTokenArray*& rpTokenArray, const ScAddres
     aFmlaStrm.StartNextRecord();
     XclImpChTrFmlConverter aFmlConv( GetRoot(), *this );
 
-    // read the formula, 3D tab refs from extended data
+    
     const ScTokenArray* pArray = NULL;
     aFmlConv.Reset( rPosition );
-    sal_Bool bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);   // JEG : Check This
+    sal_Bool bOK = (aFmlConv.Convert( pArray, aFmlaStrm, nFmlSize, false, FT_CellFormula) == ConvOK);   
     rpTokenArray = (bOK && pArray) ? new ScTokenArray( *pArray ) : NULL;
     pStrm->Ignore( 1 );
 }
@@ -389,7 +389,7 @@ void XclImpChangeTrack::ReadChTrCellContent()
 
 void XclImpChangeTrack::ReadChTrTabId()
 {
-    if( nTabIdCount == 0 )  // read only 1st time, otherwise calculated by <ReadChTrInsertTab()>
+    if( nTabIdCount == 0 )  
         nTabIdCount = static_cast< sal_uInt16 >( pStrm->GetRecLeft() >> 1 );
 }
 
@@ -497,14 +497,14 @@ void XclImpChangeTrack::Apply()
     }
 }
 
-//___________________________________________________________________
-// class XclImpChTrFmlConverter
+
+
 
 XclImpChTrFmlConverter::~XclImpChTrFmlConverter()
 {
 }
 
-// virtual, called from ExcToSc8::Convert()
+
 bool XclImpChTrFmlConverter::Read3DTabReference( sal_uInt16 /*nIxti*/, SCTAB& rFirstTab, SCTAB& rLastTab,
                                                  ExternalTabInfo& rExtInfo )
 {

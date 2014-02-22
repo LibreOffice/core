@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,36 +46,36 @@ Sequence<OUString> SwStdFontConfig::GetPropertyNames()
     {
         static const char* aPropNames[] =
         {
-            "DefaultFont/Standard",    // 0
-            "DefaultFont/Heading",     // 1
-            "DefaultFont/List",        // 2
-            "DefaultFont/Caption",     // 3
-            "DefaultFont/Index",       // 4
-            "DefaultFontCJK/Standard", // 5
-            "DefaultFontCJK/Heading",  // 6
-            "DefaultFontCJK/List",     // 7
-            "DefaultFontCJK/Caption",  // 8
-            "DefaultFontCJK/Index",    // 9
-            "DefaultFontCTL/Standard", // 10
-            "DefaultFontCTL/Heading",  // 11
-            "DefaultFontCTL/List",     // 12
-            "DefaultFontCTL/Caption",  // 13
-            "DefaultFontCTL/Index",    // 14
-            "DefaultFont/StandardHeight",    // 15
-            "DefaultFont/HeadingHeight",     // 16
-            "DefaultFont/ListHeight",        // 17
-            "DefaultFont/CaptionHeight",     // 18
-            "DefaultFont/IndexHeight",       // 19
-            "DefaultFontCJK/StandardHeight", // 20
-            "DefaultFontCJK/HeadingHeight",  // 21
-            "DefaultFontCJK/ListHeight",     // 22
-            "DefaultFontCJK/CaptionHeight",  // 23
-            "DefaultFontCJK/IndexHeight",    // 24
-            "DefaultFontCTL/StandardHeight", // 25
-            "DefaultFontCTL/HeadingHeight",  // 26
-            "DefaultFontCTL/ListHeight",     // 27
-            "DefaultFontCTL/CaptionHeight",  // 28
-            "DefaultFontCTL/IndexHeight"     // 29
+            "DefaultFont/Standard",    
+            "DefaultFont/Heading",     
+            "DefaultFont/List",        
+            "DefaultFont/Caption",     
+            "DefaultFont/Index",       
+            "DefaultFontCJK/Standard", 
+            "DefaultFontCJK/Heading",  
+            "DefaultFontCJK/List",     
+            "DefaultFontCJK/Caption",  
+            "DefaultFontCJK/Index",    
+            "DefaultFontCTL/Standard", 
+            "DefaultFontCTL/Heading",  
+            "DefaultFontCTL/List",     
+            "DefaultFontCTL/Caption",  
+            "DefaultFontCTL/Index",    
+            "DefaultFont/StandardHeight",    
+            "DefaultFont/HeadingHeight",     
+            "DefaultFont/ListHeight",        
+            "DefaultFont/CaptionHeight",     
+            "DefaultFont/IndexHeight",       
+            "DefaultFontCJK/StandardHeight", 
+            "DefaultFontCJK/HeadingHeight",  
+            "DefaultFontCJK/ListHeight",     
+            "DefaultFontCJK/CaptionHeight",  
+            "DefaultFontCJK/IndexHeight",    
+            "DefaultFontCTL/StandardHeight", 
+            "DefaultFontCTL/HeadingHeight",  
+            "DefaultFontCTL/ListHeight",     
+            "DefaultFontCTL/CaptionHeight",  
+            "DefaultFontCTL/IndexHeight"     
         };
         const int nCount = sizeof(aPropNames)/sizeof(const char*);
         aNames.realloc(nCount);
@@ -291,7 +291,7 @@ void SwStdFontConfig::ChangeInt( sal_uInt16 nFontType, sal_Int32 nHeight )
                   eCJK = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CJK, ::com::sun::star::i18n::ScriptType::ASIAN),
                   eCTL = MsLangId::resolveSystemLanguageByScriptType(aLinguOpt.nDefaultLanguage_CTL, ::com::sun::star::i18n::ScriptType::COMPLEX);
 
-        // #i92090# default height value sets back to -1
+        
         const sal_Int32 nDefaultHeight = GetDefaultHeightFor(nFontType, lcl_LanguageOfType(nFontType, eWestern, eCJK, eCTL));
         const bool bIsDefaultHeight = nHeight == nDefaultHeight;
         if( bIsDefaultHeight && nDefaultFontHeight[nFontType] > 0 )

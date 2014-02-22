@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -68,8 +68,8 @@
 
 LwpObjectHeader::LwpObjectHeader()
     : m_nTag(0), m_ID(), m_nSize(0), m_bCompressed(sal_False)
-    // m_nHeaderSize(0), m_nVersionID(0), m_nRefCount(0), m_nFlagBits(0),
-    //m_nNextVersionOffset(0), m_nNextVersionID(0),
+    
+    
 {}
 /**
  * @descr  read header from stream
@@ -136,10 +136,10 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
                 rStrm >> nVersionID;
                 nHeaderSize += 4;
                 break;
-            case DEFAULT_VERSION:   //fall through
+            case DEFAULT_VERSION:   
             default:
                 nVersionID = 2;
-                break;      // nothing
+                break;      
         }
 
         switch (nFlagBits & REFCOUNT_BITS)
@@ -156,7 +156,7 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
                 nHeaderSize += 2;
                 break;
 
-            case FOUR_BYTE_REFCOUNT:    //through
+            case FOUR_BYTE_REFCOUNT:    
             default:
                 rStrm >> nRefCount;
                 nHeaderSize += 4;
@@ -185,7 +185,7 @@ bool LwpObjectHeader::Read(LwpSvStream &rStrm)
                 nHeaderSize += 2;
                 break;
 
-            case FOUR_BYTE_SIZE:    //go through
+            case FOUR_BYTE_SIZE:    
             default:
                 rStrm >> m_nSize;
                 nHeaderSize += 4;

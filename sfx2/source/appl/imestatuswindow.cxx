@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,7 +42,7 @@
 #include <sal/types.h>
 #include <vcl/svapp.hxx>
 
-//TO-Do, merge into framework/inc/helpers/mischelpers.hxx and deliver
+
 class WeakPropertyChangeListener : public ::cppu::WeakImplHelper1<com::sun::star::beans::XPropertyChangeListener>
 {
     private:
@@ -68,7 +68,7 @@ class WeakPropertyChangeListener : public ::cppu::WeakImplHelper1<com::sun::star
 
         }
 
-        // lang.XEventListener
+        
         virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject& rEvent)
             throw(com::sun::star::uno::RuntimeException)
         {
@@ -103,8 +103,8 @@ void ImeStatusWindow::init()
         catch (css::uno::Exception &)
         {
             OSL_FAIL("com.sun.star.uno.Exception");
-            // Degrade gracefully and use the VCL-supplied default if no
-            // configuration is available.
+            
+            
         }
 }
 
@@ -121,8 +121,8 @@ bool ImeStatusWindow::isShowing()
     catch (css::uno::Exception &)
     {
         OSL_FAIL("com.sun.star.uno.Exception");
-        // Degrade gracefully and use the VCL-supplied default if no
-        // configuration is available.
+        
+        
     }
     return Application::GetShowImeStatusWindowDefault();
 }
@@ -137,11 +137,11 @@ void ImeStatusWindow::show(bool bShow)
             css::uno::makeAny(static_cast< sal_Bool >(bShow)));
         css::uno::Reference< css::util::XChangesBatch > xCommit(
             xConfig, css::uno::UNO_QUERY);
-        // Degrade gracefully by not saving the settings permanently:
+        
         if (xCommit.is())
             xCommit->commitChanges();
-        // Alternatively, setting the VCL status could be done even if updating
-        // the configuration failed:
+        
+        
         Application::ShowImeStatusWindow(bShow);
     }
     catch (css::uno::Exception &)
@@ -158,7 +158,7 @@ bool ImeStatusWindow::canToggle() const
 ImeStatusWindow::~ImeStatusWindow()
 {
     if (m_xConfig.is() && m_xConfigListener.is())
-        // We should never get here, but just in case...
+        
         try
         {
             m_xConfig->removePropertyChangeListener(
@@ -233,9 +233,9 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
     }
     if (bAdd)
     {
-        // Exceptions here could be handled individually, to support graceful
-        // degradation (no update notification mechanism in this case---but also
-        // no dispose notifications):
+        
+        
+        
         m_xConfigListener = new WeakPropertyChangeListener(this);
         xConfig->addPropertyChangeListener(
             OUString("ShowStatusWindow"),

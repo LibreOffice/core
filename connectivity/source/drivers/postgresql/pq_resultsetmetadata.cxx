@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -74,22 +74,22 @@ using com::sun::star::container::XNameAccess;
 namespace pq_sdbc_driver
 {
 
-// struct ColumnMetaData
-// {
-//     OUString tableName;
-//     OUString schemaTableName;
-//     OUString typeName;
-//     com::sun::star::sdbc::DataType type;
-//     sal_Int32 precision;
-//     sal_Int32 scale;
-//     sal_Bool isCurrency;
-//     sal_Bool isNullable;
-//     sal_Bool isAutoIncrement;
-//     sal_Bool isReadOnly;
-//     sal_Bool isSigned;
-// };
 
-// is not exported by the postgres header
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const static int PQ_VARHDRSZ = sizeof( sal_Int32 );
 
 static void extractPrecisionAndScale( sal_Int32 atttypmod, sal_Int32 *precision, sal_Int32 *scale )
@@ -134,8 +134,8 @@ ResultSetMetaData::ResultSetMetaData(
     m_colCount( PQnfields( pResult ) )
 {
 
-    // extract all needed information from the result object, so that we don't
-    // need it anymore after this call !
+    
+    
     for( int col = 0; col < m_colCount ; col ++ )
     {
         sal_Int32 size = PQfsize( pResult, col );
@@ -224,7 +224,7 @@ void ResultSetMetaData::checkTable()
 
 sal_Int32 ResultSetMetaData::getIntColumnProperty( const OUString & name, int index, int def )
 {
-    sal_Int32 ret = def; // give defensive answers, when data is not available
+    sal_Int32 ret = def; 
     try
     {
         MutexGuard guard( m_refMutex->mutex );
@@ -282,7 +282,7 @@ Reference< com::sun::star::beans::XPropertySet > ResultSetMetaData::getColumnByI
     return ret;
 }
 
-// Methods
+
 sal_Int32 ResultSetMetaData::getColumnCount(  )
     throw (SQLException, RuntimeException)
 {
@@ -301,13 +301,13 @@ sal_Bool ResultSetMetaData::isCaseSensitive( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     (void) column;
-    return sal_True; // ??? hmm, numeric types or
+    return sal_True; 
 }
 
 sal_Bool ResultSetMetaData::isSearchable( sal_Int32 column ) throw (SQLException, RuntimeException)
 {
     (void) column;
-    return sal_True; // mmm, what types are not searchable ?
+    return sal_True; 
 }
 
 sal_Bool ResultSetMetaData::isCurrency( sal_Int32 column ) throw (SQLException, RuntimeException)
@@ -381,7 +381,7 @@ OUString ResultSetMetaData::getTableName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     (void) column;
-// LEM TODO This is very fishy.. Should probably return the table to which that column belongs!
+
     return m_tableName;
 }
 
@@ -389,7 +389,7 @@ OUString ResultSetMetaData::getCatalogName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
     (void) column;
-    // can do this through XConnection.getCatalog() !
+    
     return OUString();
 }
 sal_Int32 ResultSetMetaData::getColumnType( sal_Int32 column )
@@ -409,7 +409,7 @@ sal_Int32 ResultSetMetaData::getColumnType( sal_Int32 column )
 OUString ResultSetMetaData::getColumnTypeName( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
-    OUString ret; // give defensive answers, when data is not available
+    OUString ret; 
     try
     {
         MutexGuard guard( m_refMutex->mutex );
@@ -443,13 +443,13 @@ sal_Bool ResultSetMetaData::isReadOnly( sal_Int32 column )
 sal_Bool ResultSetMetaData::isWritable( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
-    return ! isReadOnly( column ); // what's the sense if this method ?
+    return ! isReadOnly( column ); 
 }
 
 sal_Bool ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
-    return isWritable(column); // uhh, now it becomes really esoteric ....
+    return isWritable(column); 
 }
 OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
     throw (SQLException, RuntimeException)
@@ -461,7 +461,7 @@ OUString ResultSetMetaData::getColumnServiceName( sal_Int32 column )
 void ResultSetMetaData::checkClosed()
     throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    // we never close
+    
 }
 
 void ResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/containerhelper.hxx"
@@ -28,13 +28,13 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -46,41 +46,41 @@ struct ValueRangeComp
     }
 };
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 void ValueRangeSet::insert( const ValueRange& rRange )
 {
-    // find the first range that contains or follows the starting point of the passed range
+    
     ValueRangeVector::iterator aBeg = maRanges.begin();
     ValueRangeVector::iterator aEnd = maRanges.end();
     ValueRangeVector::iterator aIt = ::std::lower_bound( aBeg, aEnd, rRange, ValueRangeComp() );
-    // nothing to do if found range contains passed range
+    
     if( (aIt != aEnd) && aIt->contains( rRange ) ) return;
-    // check if previous range can be used to merge with the passed range
+    
     if( (aIt != aBeg) && ((aIt - 1)->mnLast + 1 == rRange.mnFirst) ) --aIt;
-    // check if current range (aIt) can be used to merge with passed range
+    
     if( (aIt != aEnd) && aIt->intersects( rRange ) )
     {
-        // set new start value to existing range
+        
         aIt->mnFirst = ::std::min( aIt->mnFirst, rRange.mnFirst );
-        // search first range that cannot be merged anymore (aNext)
+        
         ValueRangeVector::iterator aNext = aIt + 1;
         while( (aNext != aEnd) && aNext->intersects( rRange ) ) ++aNext;
-        // set new end value to existing range
+        
         aIt->mnLast = ::std::max( (aNext - 1)->mnLast, rRange.mnLast );
-        // remove ranges covered by new existing range (aIt)
+        
         maRanges.erase( aIt + 1, aNext );
     }
     else
     {
-        // merging not possible: insert new range
+        
         maRanges.insert( aIt, rRange );
     }
 }
 
-// ============================================================================
+
 
 OUString ContainerHelper::getUnusedName(
         const Reference< XNameAccess >& rxNameAccess, const OUString& rSuggestedName,
@@ -123,10 +123,10 @@ OUString ContainerHelper::insertByUnusedName(
 {
     OSL_ENSURE( rxNameContainer.is(), "ContainerHelper::insertByUnusedName - missing XNameContainer interface" );
 
-    // find an unused name
+    
     OUString aNewName = getUnusedName( rxNameContainer, rSuggestedName, cSeparator );
 
-    // rename existing object
+    
     if( bRenameOldExisting && rxNameContainer->hasByName( rSuggestedName ) )
     {
         try
@@ -142,13 +142,13 @@ OUString ContainerHelper::insertByUnusedName(
         }
     }
 
-    // insert the new object and return its resulting name
+    
     insertByName( rxNameContainer, aNewName, rObject );
     return aNewName;
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

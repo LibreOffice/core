@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "mysqlc_resultsetmetadata.hxx"
@@ -28,7 +28,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-// -------------------------------------------------------------------------
+
 OResultSetMetaData::~OResultSetMetaData()
 {
 }
@@ -48,7 +48,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -67,7 +67,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -88,7 +88,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount()
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -107,7 +107,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_False; 
 }
 /* }}} */
 
@@ -126,7 +126,7 @@ OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return OUString(); 
 }
 /* }}} */
 
@@ -145,7 +145,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return OUString(); 
 }
 /* }}} */
 
@@ -164,7 +164,7 @@ OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return OUString(); 
 }
 /* }}} */
 
@@ -183,7 +183,7 @@ OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return OUString(); 
 }
 /* }}} */
 
@@ -202,7 +202,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return OUString(); 
 }
 /* }}} */
 
@@ -221,7 +221,7 @@ OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return OUString(); // fool compiler
+    return OUString(); 
 }
 /* }}} */
 
@@ -253,7 +253,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_False; 
 }
 /* }}} */
 
@@ -272,7 +272,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_False; 
 }
 /* }}} */
 
@@ -291,7 +291,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_False; 
 }
 /* }}} */
 
@@ -310,7 +310,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -328,7 +328,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return 0; // fool compiler
+    return 0; 
 }
 /* }}} */
 
@@ -347,7 +347,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_False; 
 }
 /* }}} */
 
@@ -366,7 +366,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_False; 
 }
 /* }}} */
 
@@ -385,7 +385,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_False; 
 }
 /* }}} */
 
@@ -404,7 +404,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_False; 
 }
 /* }}} */
 
@@ -423,7 +423,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
     } catch (const sql::SQLException &e) {
         mysqlc_sdbc_driver::translateAndThrow(e, *this, m_encoding);
     }
-    return sal_False; // fool compiler
+    return sal_False; 
 }
 /* }}} */
 

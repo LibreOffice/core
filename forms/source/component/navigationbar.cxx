@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "navigationbar.hxx"
@@ -26,16 +26,16 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ONavigationBarModel()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ONavigationBarModel > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -53,10 +53,10 @@ namespace frm
     registerMayBeVoidProperty( PROPERTY_##prop, PROPERTY_ID_##prop, PropertyAttribute::BOUND | PropertyAttribute::MAYBEDEFAULT | PropertyAttribute::MAYBEVOID, \
         &memberAny, ::getCppuType( static_cast< type* >( NULL ) ) );
 
-    //==================================================================
-    // ONavigationBarModel
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ONavigationBarModel::ONavigationBarModel( const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _rxFactory, OUString() )
         ,FontControlModel( true )
@@ -79,7 +79,7 @@ namespace frm
         getPropertyDefaultByHandle( PROPERTY_ID_CONTEXT_WRITING_MODE    ) >>= m_nContextWritingMode;
     }
 
-    //------------------------------------------------------------------
+    
     ONavigationBarModel::ONavigationBarModel( const ONavigationBarModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
         :OControlModel( _pOriginal, _rxFactory )
         ,FontControlModel( _pOriginal )
@@ -105,7 +105,7 @@ namespace frm
         m_nContextWritingMode   = _pOriginal->m_nContextWritingMode;
     }
 
-    //------------------------------------------------------------------
+    
     void ONavigationBarModel::implInitPropertyContainer()
     {
         REGISTER_PROP_2( DEFAULTCONTROL,      m_sDefaultControl,        BOUND, MAYBEDEFAULT );
@@ -127,7 +127,7 @@ namespace frm
         REGISTER_VOID_PROP( BACKGROUNDCOLOR, m_aBackgroundColor, sal_Int32 );
     }
 
-    //------------------------------------------------------------------
+    
     ONavigationBarModel::~ONavigationBarModel()
     {
         if ( !OComponentHelper::rBHelper.bDisposed )
@@ -138,7 +138,7 @@ namespace frm
 
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL ONavigationBarModel::queryAggregation( const Type& _rType ) throw ( RuntimeException )
     {
         Any aReturn = ONavigationBarModel_BASE::queryInterface( _rType );
@@ -149,31 +149,31 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarModel, OControlModel, ONavigationBarModel_BASE )
 
-    //------------------------------------------------------------------------------
+    
     IMPLEMENT_DEFAULT_CLONING( ONavigationBarModel )
 
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ONavigationBarModel::getImplementationName()  throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
 
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames()  throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
 
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ONavigationBarModel::getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.form.ONavigationBarModel" );
     }
 
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames_Static();
@@ -185,25 +185,25 @@ namespace frm
         return aSupported;
     }
 
-    //------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL ONavigationBarModel::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return *( new ONavigationBarModel( comphelper::getComponentContext(_rxFactory) ) );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarModel::disposing()
     {
         OControlModel::disposing( );
     }
 
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ONavigationBarModel::getServiceName() throw ( RuntimeException )
     {
         return OUString(FRM_SUN_COMPONENT_NAVTOOLBAR);
     }
 
-    //------------------------------------------------------------------
+    
     #define PERSIST_TABSTOP         0x0001
     #define PERSIST_BACKGROUND      0x0002
     #define PERSIST_TEXTCOLOR       0x0004
@@ -211,25 +211,25 @@ namespace frm
 
     #define PERSIST_ENABLED         0x0001
     #define PERSIST_LARGEICONS      0x0002
-        // leaf a leap here - this will allow for two more icon size values to be stored compatibly
+        
     #define PERSIST_SHOW_POSITION   0x0008
     #define PERSIST_SHOW_NAVIGATION 0x0010
     #define PERSIST_SHOW_ACTIONS    0x0020
     #define PERSIST_SHOW_FILTERSORT 0x0040
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarModel::write( const Reference< XObjectOutputStream >& _rxOutStream ) throw ( IOException, RuntimeException )
     {
-        // open a section for compatibility - if we later on write additional members,
-        // then older versions can skip them
+        
+        
         OStreamSection aEnsureBlockCompat( _rxOutStream );
 
-        // base class
+        
         OControlModel::write( _rxOutStream );
 
         {
             OStreamSection aEnsureCompat( _rxOutStream );
-            // determine which properties are not void and need to be written
+            
             sal_Int32 nNonVoids = 0;
             if ( m_aTabStop.hasValue() )
                 nNonVoids |= PERSIST_TABSTOP;
@@ -242,7 +242,7 @@ namespace frm
 
             _rxOutStream->writeLong( nNonVoids );
 
-            // the maybeboid anys
+            
             if ( nNonVoids & PERSIST_TABSTOP )
             {
                 sal_Bool bTabStop( sal_False );
@@ -270,40 +270,40 @@ namespace frm
             ::comphelper::operator<<( _rxOutStream, getFont() );
         }
 
-        // our boolean flags
+        
         sal_Int32 nFlags = 0;
         if ( m_bEnabled        ) nFlags |= PERSIST_ENABLED;
-        if ( m_nIconSize       ) nFlags |= PERSIST_LARGEICONS;   // at the moment, this is quasi boolean
+        if ( m_nIconSize       ) nFlags |= PERSIST_LARGEICONS;   
         if ( m_bShowPosition   ) nFlags |= PERSIST_SHOW_POSITION;
         if ( m_bShowNavigation ) nFlags |= PERSIST_SHOW_NAVIGATION;
         if ( m_bShowActions    ) nFlags |= PERSIST_SHOW_ACTIONS;
         if ( m_bShowFilterSort ) nFlags |= PERSIST_SHOW_FILTERSORT;
         _rxOutStream->writeLong( nFlags );
 
-        // our strings
+        
         _rxOutStream->writeUTF( m_sHelpText       );
         _rxOutStream->writeUTF( m_sHelpURL        );
         _rxOutStream->writeUTF( m_sDefaultControl );
 
-        // misc
+        
         _rxOutStream->writeShort( m_nBorder );
         _rxOutStream->writeLong ( m_nDelay  );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarModel::read( const Reference< XObjectInputStream >& _rxInStream ) throw ( IOException, RuntimeException )
     {
         OStreamSection aEnsureBlockCompat( _rxInStream );
 
-        // base class
+        
         OControlModel::read( _rxInStream );
 
         {
             OStreamSection aEnsureCompat( _rxInStream );
-            // determine which properties were non-void
+            
             sal_Int32 nNonVoids = _rxInStream->readLong( );
 
-            // the maybeboid anys
+            
             if ( nNonVoids & PERSIST_TABSTOP )
                 m_aTabStop = makeAny( _rxInStream->readBoolean() );
             else
@@ -332,7 +332,7 @@ namespace frm
             setFont( aFont );
         }
 
-        // our boolean flags
+        
         sal_Int32 nFlags = _rxInStream->readLong( );
         m_bEnabled        = ( nFlags & PERSIST_ENABLED         ) ? sal_True : sal_False;
         m_nIconSize       = ( nFlags & PERSIST_LARGEICONS      ) ?        1 :         0;
@@ -341,17 +341,17 @@ namespace frm
         m_bShowActions    = ( nFlags & PERSIST_SHOW_ACTIONS    ) ? sal_True : sal_False;
         m_bShowFilterSort = ( nFlags & PERSIST_SHOW_FILTERSORT ) ? sal_True : sal_False;
 
-        // our strings
+        
         m_sHelpText       = _rxInStream->readUTF( );
         m_sHelpURL        = _rxInStream->readUTF( );
         m_sDefaultControl = _rxInStream->readUTF( );
 
-        // misc
+        
         m_nBorder = _rxInStream->readShort();
         m_nDelay  = _rxInStream->readLong();
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( isRegisteredProperty( _nHandle ) )
@@ -368,7 +368,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     sal_Bool SAL_CALL ONavigationBarModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
         sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException )
     {
@@ -390,7 +390,7 @@ namespace frm
         return bModified;
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
     {
         if ( isRegisteredProperty( _nHandle ) )
@@ -409,7 +409,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     Any ONavigationBarModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
     {
         Any aDefault;
@@ -464,18 +464,18 @@ namespace frm
         return aDefault;
     }
 
-    //------------------------------------------------------------------
+    
     void ONavigationBarModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 1, OControlModel )
             DECL_PROP2( TABINDEX,           sal_Int16,          BOUND, MAYBEDEFAULT );
         END_DESCRIBE_PROPERTIES();
 
-        // properties which the OPropertyContainerHelper is responsible for
+        
         Sequence< Property > aContainedProperties;
         describeProperties( aContainedProperties );
 
-        // properties which the FontControlModel is responsible for
+        
         Sequence< Property > aFontProperties;
         describeFontRelatedProperties( aFontProperties );
 
@@ -486,8 +486,8 @@ namespace frm
         );
     }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

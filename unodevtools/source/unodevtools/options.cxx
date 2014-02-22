@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -27,7 +27,7 @@ using namespace ::rtl;
 
 namespace unodevtools {
 
-//-------------------------------------------------------------------------------
+
 #if OSL_DEBUG_LEVEL > 1
 static void out( const sal_Char * pText )
 {
@@ -35,7 +35,7 @@ static void out( const sal_Char * pText )
 }
 #endif
 
-//-------------------------------------------------------------------------------
+
 bool readOption( OUString * pValue, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
@@ -49,7 +49,7 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
         return false;
 
     if (aOpt.equalsIgnoreAsciiCase( aArg.copy(1) )) {
-        // take next argument
+        
         ++(*pnIndex);
 
         rtl_getAppCommandArg(*pnIndex, &pValue->pData);
@@ -85,7 +85,7 @@ bool readOption( OUString * pValue, const sal_Char * pOpt,
     return false;
 }
 
-//-------------------------------------------------------------------------------
+
 bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
                      sal_uInt32 * pnIndex, const OUString & aArg)
 {
@@ -107,6 +107,6 @@ bool readOption( sal_Bool * pbOpt, const sal_Char * pOpt,
     return false;
 }
 
-} // end of namespace unodevtools
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

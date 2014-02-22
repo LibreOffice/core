@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -57,14 +57,14 @@ using namespace com::sun::star::accessibility;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-////////////////////////////////////////
+
 
 
 void SmGetLeftSelectionPart(const ESelection &rSel,
                             sal_Int32 &nPara, sal_uInt16 &nPos)
-    // returns paragraph number and position of the selections left part
+    
 {
-    // compare start and end of selection and use the one that comes first
+    
     if (    rSel.nStartPara <  rSel.nEndPara
         ||  (rSel.nStartPara == rSel.nEndPara  &&  rSel.nStartPos < rSel.nEndPos) )
     {   nPara = rSel.nStartPara;
@@ -82,7 +82,7 @@ bool SmEditWindow::IsInlineEditEnabled()
     return pView ? pView->IsInlineEditEnabled() : false;
 }
 
-////////////////////////////////////////
+
 
 SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     Window              (&rMyCmdBoxWin),
@@ -97,12 +97,12 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     SetHelpId(HID_SMA_COMMAND_WIN_EDIT);
     SetMapMode(MAP_PIXEL);
 
-    // Even RTL languages don't use RTL for math
+    
     rCmdBox.GetEditWindow()->EnableRTL( false );
 
     ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
-    // compare DataChanged
+    
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
     aModifyTimer.SetTimeoutHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
@@ -114,8 +114,8 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
         aCursorMoveTimer.SetTimeout(500);
     }
 
-    // if not called explicitly the this edit window within the
-    // command window will just show an empty gray panel.
+    
+    
     Show();
 }
 
@@ -126,13 +126,13 @@ SmEditWindow::~SmEditWindow()
 
     StartCursorMove();
 
-    // clean up of classes used for accessibility
-    // must be done before EditView (and thus EditEngine) is no longer
-    // available for those classes.
+    
+    
+    
     if (pAccessible)
-        pAccessible->ClearWin();    // make Accessible defunctional
-    // Note: memory for pAccessible will be freed when the reference
-    // xAccessible is released.
+        pAccessible->ClearWin();    
+    
+    
 
     if (pEditView)
     {
@@ -199,9 +199,9 @@ SfxItemPool * SmEditWindow::GetEditEngineItemPool()
 
 void SmEditWindow::ApplyColorConfigValues( const svtools::ColorConfig &rColorCfg )
 {
-    // Note: SetBackground still done in SmEditWindow::DataChanged
+    
 #if OSL_DEBUG_LEVEL > 1
-//   ColorData nVal = rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor;
+
 #endif
     SetTextColor( rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor );
     Invalidate();
@@ -214,8 +214,8 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
     ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
     SetBackground( aSettings.GetWindowColor() );
 
-    // edit fields in other Applications use this font instead of
-    // the application font thus we use this one too
+    
+    
     SetPointFont( aSettings.GetFieldFont() /*aSettings.GetAppFont()*/ );
 
     EditEngine  *pEditEngine = GetEditEngine();
@@ -223,19 +223,19 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
 
     if (pEditEngine && pEditEngineItemPool)
     {
-        //!
-        //! see also SmDocShell::GetEditEngine() !
-        //!
+        
+        
+        
 
         pEditEngine->SetDefTab(sal_uInt16(GetTextWidth(OUString("XXXX"))));
 
         SetEditEngineDefaultFonts(*pEditEngineItemPool);
 
-        // forces new settings to be used
-        // unfortunately this resets the whole edit engine
-        // thus we need to save at least the text
+        
+        
+        
         OUString aTxt( pEditEngine->GetText( LINEEND_LF ) );
-        pEditEngine->Clear();   //incorrect font size
+        pEditEngine->Clear();   
         pEditEngine->SetText( aTxt );
     }
 
@@ -251,9 +251,9 @@ IMPL_LINK( SmEditWindow, ModifyTimerHdl, Timer *, EMPTYARG /*pTimer*/ )
 }
 
 IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
-    // every once in a while check cursor position (selection) of edit
-    // window and if it has changed (try to) set the formula-cursor
-    // according to that.
+    
+    
+    
 {
     if (IsInlineEditEnabled())
         return 0;
@@ -265,7 +265,7 @@ IMPL_LINK(SmEditWindow, CursorMoveTimerHdl, Timer *, EMPTYARG /*pTimer*/)
         SmViewShell *pView = rCmdBox.GetView();
         if (pView)
         {
-            // get row and column to look for
+            
             sal_Int32  nRow;
             sal_uInt16 nCol;
             SmGetLeftSelectionPart(aNewSelection, nRow, nCol);
@@ -338,7 +338,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
         Point aPoint = rCEvt.GetMousePosPixel();
         PopupMenu* pPopupMenu = new PopupMenu(SmResId(RID_COMMANDMENU));
 
-        // added for replaceability of context menus
+        
         Menu* pMenu = NULL;
         ::com::sun::star::ui::ContextMenuExecuteEvent aEvent;
         aEvent.SourceWindow = VCLUnoHelper::GetInterface( this );
@@ -375,15 +375,15 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
 
 bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
 {
-    bool bCommandHandled = false;    // true if the CommandEvent needs not
-                                    // to be passed on (because it has fully
-                                    // been taken care of).
+    bool bCommandHandled = false;    
+                                    
+                                    
 
     const CommandWheelData* pWData = rCEvt.GetWheelData();
     if (pWData)
     {
         if (COMMAND_WHEEL_ZOOM == pWData->GetMode())
-            bCommandHandled = true;     // no zooming in Command window
+            bCommandHandled = true;     
         else
             bCommandHandled = HandleScrollCommand( rCEvt, pHScrollBar, pVScrollBar);
     }
@@ -411,7 +411,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         SfxViewShell* pViewShell = GetView();
         if ( pViewShell && pViewShell->ISA(SmViewShell) )
         {
-            // Terminate possible InPlace mode
+            
             bCallBase = !pViewShell->Escape();
         }
         if ( bCallBase )
@@ -423,8 +423,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 
         bool autoClose = false;
         ESelection aSelection = pEditView->GetSelection();
-        // as we don't support RTL in Math, we need to swap values from selection when they were done
-        // in RTL form
+        
+        
         aSelection.Adjust();
         OUString selected = pEditView->GetEditEngine()->GetText(aSelection);
 
@@ -466,7 +466,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             SmViewShell *pView = GetView();
             if ( pView && !pView->KeyInput(rKEvt) )
             {
-                // F1 (help) leads to the destruction of this
+                
                 Flush();
                 if ( aModifyTimer.IsActive() )
                     aModifyTimer.Stop();
@@ -474,8 +474,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             }
             else
             {
-                // SFX has maybe called a slot of the view and thus (because of a hack in SFX)
-                // set the focus to the view
+                
+                
                 SfxViewShell* pVShell = GetView();
                 if ( pVShell && pVShell->ISA(SmViewShell) &&
                      ((SmViewShell*)pVShell)->GetGraphicWindow().HasFocus() )
@@ -486,8 +486,8 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         }
         else
         {
-            // have doc-shell modified only for formula input/change and not
-            // cursor travelling and such things...
+            
+            
             SmDocShell *pDocShell = GetDoc();
             if (pDocShell)
                 pDocShell->SetModified( GetEditEngine()->IsModified() );
@@ -495,7 +495,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
             aModifyTimer.Start();
         }
 
-        // get the current char of the key event
+        
         sal_Unicode charCode = rKEvt.GetCharCode();
         OUString close;
 
@@ -506,11 +506,11 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
         else if (charCode == '(')
             close = "  )";
 
-        // auto close the current character only when needed
+        
         if (!close.isEmpty() && autoClose)
         {
             pEditView->InsertText(close);
-            // position it at center of brackets
+            
             aSelection.nStartPos += 2;
             aSelection.nEndPos = aSelection.nStartPos;
             pEditView->SetSelection(aSelection);
@@ -531,8 +531,8 @@ void SmEditWindow::CreateEditView()
 {
     EditEngine *pEditEngine = GetEditEngine();
 
-    //! pEditEngine and pEditView may be 0.
-    //! For example when the program is used by the document-converter
+    
+    
     if (!pEditView && pEditEngine)
     {
         pEditView = new EditView( pEditEngine, this );
@@ -617,7 +617,7 @@ Rectangle SmEditWindow::AdjustScrollBars()
 
 void SmEditWindow::SetScrollBarRanges()
 {
-    // Extra method, not InitScrollBars, since it's also being used for EditEngine events
+    
     EditEngine *pEditEngine = GetEditEngine();
     if (pVScrollBar && pHScrollBar && pEditEngine && pEditView)
     {
@@ -678,8 +678,8 @@ void SmEditWindow::SetText(const OUString& rText)
         pEditEngine->SetText(rText);
         pEditEngine->ClearModifyFlag();
 
-        // Restarting the timer here, prevents calling the handlers for other (currently inactive)
-        // math tasks
+        
+        
         aModifyTimer.Start();
 
         pEditView->SetSelection(eSelection);
@@ -693,7 +693,7 @@ void SmEditWindow::GetFocus()
 
     if (xAccessible.is())
     {
-        // Note: will implicitly send the AccessibleStateType::FOCUSED event
+        
         ::accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
         if (pHelper)
             pHelper->SetFocus(true);
@@ -705,7 +705,7 @@ void SmEditWindow::GetFocus()
     if (pEditEngine)
         pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
 
-    //Let SmViewShell know we got focus
+    
     if(GetView() && IsInlineEditEnabled())
         GetView()->SetInsertIntoEditWindow(true);
 }
@@ -721,7 +721,7 @@ void SmEditWindow::LoseFocus()
 
     if (xAccessible.is())
     {
-        // Note: will implicitly send the AccessibleStateType::FOCUSED event
+        
         ::accessibility::AccessibleTextHelper *pHelper = pAccessible->GetTextHelper();
         if (pHelper)
             pHelper->SetFocus(false);
@@ -757,7 +757,7 @@ void SmEditWindow::SelectAll()
     OSL_ENSURE( pEditView, "NULL pointer" );
     if (pEditView)
     {
-        // ALL as last two parameters refers to the end of the text
+        
         pEditView->SetSelection( ESelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL ) );
     }
 }
@@ -776,30 +776,30 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
         sal_Int32 nStartIndex = 0;
         sal_Int32 nEndIndex = 0;
 
-        // get the start position (when we get a multi line formula)
+        
         for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nStartPara; nParaPos++)
              nStartIndex = aCurrentFormula.indexOf("\n", nStartIndex) + 1;
 
         nStartIndex += aSelection.nStartPos;
 
-        // get the end position (when we get a multi line formula)
+        
         for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nEndPara; nParaPos++)
              nEndIndex = aCurrentFormula.indexOf("\n", nEndIndex) + 1;
 
         nEndIndex += aSelection.nEndPos;
 
-        // remove right space of current symbol if there already is one
+        
         if (nEndIndex < aCurrentFormula.getLength() &&
             aCurrentFormula[nEndIndex] == ' ')
             aText = aText.trim();
 
-        // put a space before a new command if not in the beginning of a line
+        
         if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
             aText = " " + aText;
 
         pEditView->InsertText(aText);
 
-        // Remember start of the selection and move the cursor there afterwards.
+        
         aSelection.nEndPara = aSelection.nStartPara;
         if (HasMark(aText))
         {
@@ -808,7 +808,7 @@ void SmEditWindow::InsertCommand(sal_uInt16 nCommand)
             SelNextMark();
         }
         else
-        {   // set selection after inserted text
+        {   
             aSelection.nEndPos = aSelection.nStartPos + aText.getLength();
             aSelection.nStartPos = aSelection.nEndPos;
             pEditView->SetSelection(aSelection);
@@ -833,7 +833,7 @@ void SmEditWindow::MarkError(const Point &rPos)
     }
 }
 
-// Makes selection to next <?> symbol
+
 void SmEditWindow::SelNextMark()
 {
     EditEngine *pEditEngine = GetEditEngine();
@@ -904,7 +904,7 @@ void SmEditWindow::SelPrevMark()
 }
 
 bool SmEditWindow::HasMark(const OUString& rText) const
-    // returns true iff 'rText' contains a mark
+    
 {
     return rText.indexOf("<?>") != -1;
 }
@@ -927,9 +927,9 @@ sal_Int8 SmEditWindow::ExecuteDrop( const ExecuteDropEvent& /*rEvt*/ )
 
 ESelection SmEditWindow::GetSelection() const
 {
-    // pointer may be 0 when reloading a document and the old view
-    // was already destroyed
-    //(OSL_ENSURE( pEditView, "NULL pointer" );
+    
+    
+    
     ESelection eSel;
     if (pEditView)
         eSel = pEditView->GetSelection();
@@ -1008,30 +1008,30 @@ void SmEditWindow::InsertText(const OUString& rText)
     OSL_ENSURE( pEditView, "EditView missing" );
     if (pEditView)
     {
-        // Note: Insertion of a space in front of commands is done here and
-        // in SmEditWindow::InsertCommand.
+        
+        
         ESelection aSelection = pEditView->GetSelection();
         OUString aCurrentFormula = pEditView->GetEditEngine()->GetText();
         sal_Int32 nStartIndex = 0;
         sal_Int32 nEndIndex = 0;
 
-        // get the start position (when we get a multi line formula)
+        
         for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nStartPara; nParaPos++)
              nStartIndex = aCurrentFormula.indexOf("\n", nStartIndex) + 1;
 
         nStartIndex += aSelection.nStartPos;
 
-        // get the end position (when we get a multi line formula)
+        
         for (sal_Int32 nParaPos = 0; nParaPos < aSelection.nEndPara; nParaPos++)
              nEndIndex = aCurrentFormula.indexOf("\n", nEndIndex) + 1;
 
         nEndIndex += aSelection.nEndPos;
 
-        // TODO: unify this function with the InsertCommand: The do the same thing for different
-        // callers
+        
+        
         OUString string(rText);
 
-        // put a space before a new command if not in the beginning of a line
+        
         if (aSelection.nStartPos > 0 && aCurrentFormula[nStartIndex - 1] != ' ')
             string = " " + string;
 
@@ -1047,7 +1047,7 @@ void SmEditWindow::InsertText(const OUString& rText)
         pVScrollBar->Show();
         pHScrollBar->Show();
 
-        // Remember start of the selection and move the cursor there afterwards.
+        
         aSelection.nEndPara = aSelection.nStartPara;
         if (HasMark(string))
         {
@@ -1056,7 +1056,7 @@ void SmEditWindow::InsertText(const OUString& rText)
             SelNextMark();
         }
         else
-        {   // set selection after inserted text
+        {   
             aSelection.nEndPos = aSelection.nStartPos + string.getLength();
             aSelection.nStartPos = aSelection.nEndPos;
             pEditView->SetSelection(aSelection);

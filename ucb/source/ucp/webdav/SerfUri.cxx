@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -29,9 +29,9 @@
 
 using namespace http_dav_ucp;
 
-// -------------------------------------------------------------------
-// Constructor
-// -------------------------------------------------------------------
+
+
+
 
 namespace {
 
@@ -83,7 +83,7 @@ SerfUri::SerfUri( const OUString & inUri )
     if ( inUri.getLength() <= 0 )
         throw DAVException( DAVException::DAV_INVALID_ARG );
 
-    // #i77023#
+    
     OUString aEscapedUri( ucb_impl::urihelper::encodeURI( inUri ) );
 
     OString theInputUri(
@@ -136,13 +136,13 @@ SerfUri::~SerfUri( )
 void SerfUri::calculateURI ()
 {
     OUStringBuffer aBuf( mScheme );
-    aBuf.append( "://" );
+    aBuf.append( ":
     if ( mUserInfo.getLength() > 0 )
     {
         aBuf.append( mUserInfo );
         aBuf.append( "@" );
     }
-    // Is host a numeric IPv6 address?
+    
     if ( ( mHostName.indexOf( ':' ) != -1 ) &&
          ( mHostName[ 0 ] != '[' ) )
     {
@@ -155,7 +155,7 @@ void SerfUri::calculateURI ()
         aBuf.append( mHostName );
     }
 
-    // append port, but only, if not default port.
+    
     bool bAppendPort = true;
     switch ( mPort )
     {
@@ -183,7 +183,7 @@ OUString SerfUri::GetPathBaseName () const
     sal_Int32 nTrail = 0;
     if (nPos == mPath.getLength () - 1)
     {
-        // Trailing slash found. Skip.
+        
         nTrail = 1;
         nPos = mPath.lastIndexOf ('/', nPos);
     }
@@ -192,7 +192,7 @@ OUString SerfUri::GetPathBaseName () const
         OUString aTemp(
             mPath.copy (nPos + 1, mPath.getLength () - nPos - 1 - nTrail) );
 
-        // query, fragment present?
+        
         nPos = aTemp.indexOf( '?' );
         if ( nPos == -1 )
             nPos = aTemp.indexOf( '#' );
@@ -225,7 +225,7 @@ void SerfUri::AppendPath (const OUString& rPath)
     calculateURI ();
 };
 
-// static
+
 OUString SerfUri::escapeSegment( const OUString& segment )
 {
     return rtl::Uri::encode( segment,
@@ -234,7 +234,7 @@ OUString SerfUri::escapeSegment( const OUString& segment )
                              RTL_TEXTENCODING_UTF8 );
 }
 
-// static
+
 OUString SerfUri::unescape( const OUString& segment )
 {
     return rtl::Uri::decode( segment,
@@ -242,13 +242,13 @@ OUString SerfUri::unescape( const OUString& segment )
                              RTL_TEXTENCODING_UTF8 );
 }
 
-// static
+
 OUString SerfUri::makeConnectionEndPointString(
                                 const OUString & rHostName, int nPort )
 {
     OUStringBuffer aBuf;
 
-    // Is host a numeric IPv6 address?
+    
     if ( ( rHostName.indexOf( ':' ) != -1 ) &&
          ( rHostName[ 0 ] != '[' ) )
     {

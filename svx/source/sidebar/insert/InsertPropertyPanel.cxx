@@ -56,15 +56,15 @@ InsertPropertyPanel::InsertPropertyPanel (
     mpStandardShapesToolBox->Show();
     mpCustomShapesToolBox->Show();
 
-    // Listen to all tool box selection events.
-    // FIXME: This is an incredibly ugly hack that we should kill at some
-    // stage.  It is needed because the mpCustomShapesToolBox somehow does not
-    // get the right controller, and so the images there are not updated when
-    // the user selects eg. a callout.  But using the help id's to get/update
-    // it (that is what functionSelected() does) is not the way to go in
-    // general ;-)
-    // In other words, we should find the underlying problem, and remove the
-    // WindowEventListener for good.
+    
+    
+    
+    
+    
+    
+    
+    
+    
     Window* pTopWindow = pParent;
     while (pTopWindow->GetParent() != NULL)
         pTopWindow = pTopWindow->GetParent();
@@ -76,7 +76,7 @@ InsertPropertyPanel::InsertPropertyPanel (
 
 InsertPropertyPanel::~InsertPropertyPanel (void)
 {
-    // Remove window child listener.
+    
     Window* pTopWindow = this;
     while (pTopWindow->GetParent() != NULL)
         pTopWindow = pTopWindow->GetParent();
@@ -88,9 +88,9 @@ InsertPropertyPanel::~InsertPropertyPanel (void)
 
 IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
 {
-    // We will be getting a lot of window events (well, basically all
-    // of them), so reject early everything that is not connected to
-    // toolbox selection.
+    
+    
+    
     if (pEvent == NULL)
         return 1;
     if ( ! pEvent->ISA(VclWindowEvent))
@@ -103,7 +103,7 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
     if (pToolBox == NULL)
         return 1;
 
-    // Extract name of (sub)toolbar from help id.
+    
     OUString sToolbarName (rtl::OStringToOUString(pToolBox->GetHelpId(), RTL_TEXTENCODING_UTF8));
     if (sToolbarName.getLength() == 0)
         return 1;
@@ -111,7 +111,7 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
     if (aURL.Path.getLength() == 0)
         return 1;
 
-    // Get item id.
+    
     sal_uInt16 nId = pToolBox->GetCurItemId();
     if (nId == 0)
         return 1;
@@ -141,4 +141,4 @@ IMPL_LINK(InsertPropertyPanel, WindowEventListener, VclSimpleEvent*, pEvent)
 }
 
 
-} } // end of namespace svx::sidebar
+} } 

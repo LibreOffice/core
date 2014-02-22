@@ -27,12 +27,12 @@ namespace sdr
 {
     namespace contact
     {
-        // basic constructor.
+        
         ViewObjectContactRedirector::ViewObjectContactRedirector()
         {
         }
 
-        // The destructor.
+        
         ViewObjectContactRedirector::~ViewObjectContactRedirector()
         {
         }
@@ -43,7 +43,7 @@ namespace sdr
         {
             return rOriginal.createPrimitive2DSequence(rDisplayInfo);
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

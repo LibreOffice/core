@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -32,7 +32,7 @@
 
 using namespace ::com::sun::star;
 
-/// Test loading of files to assure they do not crash on load.
+
 class SdFiltersTest
     : public test::FiltersTest
     , public test::BootstrapFixture
@@ -48,7 +48,7 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    // Ensure CVEs remain unbroken
+    
     void testCVEs();
 
     CPPUNIT_TEST_SUITE(SdFiltersTest);
@@ -102,8 +102,8 @@ void SdFiltersTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    // This is a bit of a fudge, we do this to ensure that ScGlobals::ensure,
-    // which is a private symbol to us, gets called
+    
+    
     m_xDrawComponent =
         getMultiServiceFactory()->createInstance("com.sun.star.comp.Draw.PresentationDocument");
     CPPUNIT_ASSERT_MESSAGE("no impress component!", m_xDrawComponent.is());

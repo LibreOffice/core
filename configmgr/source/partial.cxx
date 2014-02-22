@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -64,12 +64,12 @@ Partial::Partial(
     std::set< OUString > const & includedPaths,
     std::set< OUString > const & excludedPaths)
 {
-    // The Partial::Node tree built up here encodes the following information:
-    // * Inner node, startInclude: an include starts here that contains excluded
-    //   sub-trees
-    // * Inner node, !startInclude: contains in-/excluded sub-trees
-    // * Leaf node, startInclude: an include starts here
-    // * Leaf node, !startInclude: an exclude starts here
+    
+    
+    
+    
+    
+    
     for (std::set< OUString >::const_iterator i(includedPaths.begin());
          i != includedPaths.end(); ++i)
     {
@@ -111,15 +111,15 @@ Partial::Partial(
 Partial::~Partial() {}
 
 Partial::Containment Partial::contains(Path const & path) const {
-    //TODO: For set elements, the segment names recorded in the node tree need
-    // not match the corresponding path segments, so this function can fail.
+    
+    
 
-    // * If path ends at a leaf node or goes past a leaf node:
-    // ** If that leaf node is startInclude: => CONTAINS_NODE
-    // ** If that leaf node is !startInclude: => CONTAINS_NOT
-    // * If path ends at inner node:
-    // ** If there is some startInclude along its trace: => CONTAINS_NODE
-    // ** If there is no startInclude along its trace: => CONTAINS_SUBNODES
+    
+    
+    
+    
+    
+    
     Node const * p = &root_;
     bool includes = false;
     for (Path::const_iterator i(path.begin()); i != path.end(); ++i) {

@@ -4,16 +4,16 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <string>
 
 #include "plugin.hxx"
 
-// Find those calls of rtl::OUString::equalsIgnoreAsciiCaseAscii and
-// rtl::OUString::equalsIgnoreAsciiCaseAsciiL that could be simplified to call
-// rtl::OUString::equalsIgnoreAsciiCase instead:
+
+
+
 
 namespace {
 
@@ -40,7 +40,7 @@ bool LiteralAlternative::VisitCallExpr(const CallExpr * expr) {
     if (qname == "rtl::OUString::equalsIgnoreAsciiCaseAscii"
         && fdecl->getNumParams() == 1 && expr->getNumArgs() == 1)
     {
-        // equalsIgnoreAsciiCaseAscii("foo") -> equalsIngoreAsciiCase("foo"):
+        
         StringLiteral const * lit
             = dyn_cast<StringLiteral>(expr->getArg(0)->IgnoreParenImpCasts());
         if (lit != nullptr) {
@@ -50,20 +50,20 @@ bool LiteralAlternative::VisitCallExpr(const CallExpr * expr) {
                  " with string literal argument as call of"
                  " rtl::OUString::equalsIgnoreAsciiCase"),
                 expr->getExprLoc());
-                //TODO: a better loc (the "equalsIgnoreAsciiCaseAscii" part)?
+                
         }
         return true;
     }
     if (qname == "rtl::OUString::equalsIgnoreAsciiCaseAsciiL"
         && fdecl->getNumParams() == 2 && expr->getNumArgs() == 2)
     {
-        // equalsIgnoreAsciiCaseAsciiL("foo", 3) -> equalsIngoreAsciiCase("foo")
-        // especially also for
-        // equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("foo")), where
-        // RTL_CONSTASCII_STRINGPARAM expands to complicated expressions
-        // involving (&(X)[0] sub-expressions (and it might or might not be
-        // better to handle that at the level of non-expanded macros instead,
-        // but I have not found out how to do that yet anyway):
+        
+        
+        
+        
+        
+        
+        
         APSInt res;
         if (expr->getArg(1)->isIntegerConstantExpr(res, compiler.getASTContext())) {
             Expr const * arg0 = expr->getArg(0)->IgnoreParenImpCasts();
@@ -95,8 +95,8 @@ bool LiteralAlternative::VisitCallExpr(const CallExpr * expr) {
                      " literal and matching length arguments as call of"
                      " rtl::OUString::equalsIgnoreAsciiCase"),
                     expr->getExprLoc());
-                    //TODO: a better loc (the "equalsIgnoreAsciiCaseAsciiL"
-                    // part)?
+                    
+                    
             }
         }
         return true;

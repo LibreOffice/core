@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -169,121 +169,121 @@ void KeyColumns::refresh()
 }
 
 
-// void alterColumnByDescriptor(
-//     const OUString & schemaName,
-//     const OUString & tableName,
-//     rtl_TextEncoding encoding,
-//     const Reference< XStatement > &stmt,
-//     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & past,
-//     const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet > & future)
-// {
-//     Statics & st  = getStatics();
 
-// //     if( past->getPropertyValue( st.TABLE_NAME ) != future->getPropertyValue( st.TABLE_NAME ) ||
-// //         past->getPropertyValue( st.SCHEMA_NAME ) != future->getPropertyValue( st.SCHEMA_NAME ))
-// //     {
-// //         OUStringBuffer buf(128);
-// //         buf.append( "Can't move column " );
-// //         buf.append( extractStringProperty( past, st.COLUMN_NAME ) );
-// //         buf.append( " from table " );
-// //         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
-// //         buf.append( " to table " );
-// //         buf.append( extractStringProperty( past, st.TABLE_NAME ) );
-// //         throw SQLException( buf.makeStringAndClear(), Reference< XInterface > () );
-// //     }
 
-// //     OUString tableName = extractStringProperty( past, st.TABLE_NAME );
-// //     OUString schemaName = extractStringProperty( past, st.SCHEMA_NAME );
-//     OUString pastColumnName = extractStringProperty( past, st.NAME );
-//     OUString futureColumnName = extractStringProperty( future, st.NAME );
-//     OUString pastTypeName = sqltype2string( past );
-//     OUString futureTypeName = sqltype2string( future );
 
-//     TransactionGuard transaction( stmt );
 
-//     OUStringBuffer buf( 128 );
-//     if( ! pastColumnName.getLength())
-//     {
-//         // create a new column
-//         buf.append( "ALTER TABLE" );
-//         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
-//         buf.append( "ADD COLUMN" );
-//         bufferQuoteIdentifier( buf, futureColumnName );
-//         buf.append( futureTypeName );
-//         transaction.executeUpdate( buf.makeStringAndClear() );
-//     }
-//     else
-//     {
-//         if( pastTypeName != futureTypeName )
-//         {
-//             throw RuntimeException(
-//                 "Can't modify column types, drop the column and create a new one",
-//                 Reference< XInterface > () );
-//         }
 
-//         if( pastColumnName != futureColumnName )
-//         {
-//             buf.append( "ALTER TABLE" );
-//             bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
-//             buf.append( "RENAME COLUMN" );
-//             bufferQuoteIdentifier( buf, pastColumnName );
-//             buf.append( "TO" );
-//             bufferQuoteIdentifier( buf, futureColumnName );
-//             transaction.executeUpdate( buf.makeStringAndClear() );
-//         }
-//     }
 
-//     OUString futureDefaultValue = extractStringProperty( future, st.DEFAULT_VALUE );
-//     OUString pastDefaultValue = extractStringProperty( past, st.DEFAULT_VALUE );
-//     if( futureDefaultValue != pastDefaultValue )
-//     {
-//         buf = OUStringBuffer( 128 );
-//         buf.append( "ALTER TABLE" );
-//         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
-//         buf.append( "ALTER COLUMN" );
-//         bufferQuoteIdentifier( buf, futureColumnName );
-//         buf.append( "SET DEFAULT " );
-//         // default value is not quoted, caller needs to quote himself (otherwise
-//         // how to pass e.g. nextval('something' ) ????
-//         buf.append( futureDefaultValue );
-// //        bufferQuoteConstant( buf, defaultValue, encoding );
-//         transaction.executeUpdate( buf.makeStringAndClear() );
-//     }
 
-//     sal_Int32 futureNullable = extractIntProperty( future, st.IS_NULLABLE );
-//     sal_Int32 pastNullable = extractIntProperty( past, st.IS_NULLABLE );
-//     if( futureNullable != pastNullable )
-//     {
-//         buf = OUStringBuffer( 128 );
-//         buf.append( "ALTER TABLE" );
-//         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName );
-//         buf.append( "ALTER COLUMN" );
-//         bufferQuoteIdentifier( buf, futureColumnName );
-//         if( futureNullable == com::sun::star::sdbc::ColumnValue::NO_NULLS )
-//         {
-//             buf.append( "SET" );
-//         }
-//         else
-//         {
-//             buf.append( "DROP" );
-//         }
-//         buf.append( " NOT NULL" );
-//         transaction.executeUpdate( buf.makeStringAndClear() );
-//     }
 
-//     OUString futureComment = extractStringProperty( future, st.DESCRIPTION );
-//     OUString pastComment = extractStringProperty( past, st.DESCRIPTION );
-//     if( futureComment != pastComment )
-//     {
-//         buf = OUStringBuffer( 128 );
-//         buf.append( "COMMENT ON COLUMN" );
-//         bufferQuoteQualifiedIdentifier( buf, schemaName, tableName , futureColumnName );
-//         buf.append( "IS " );
-//         bufferQuoteConstant( buf, futureComment,encoding);
-//         transaction.executeUpdate( buf.makeStringAndClear() );
-//     }
-//     transaction.commit();
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void KeyColumns::appendByDescriptor(
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& future )
@@ -296,12 +296,12 @@ void KeyColumns::appendByDescriptor(
         "KeyColumns::appendByDescriptor not implemented yet",
         *this, OUString(), 1, Any() );
 
-//     osl::MutexGuard guard( m_refMutex->mutex );
-//     Statics & st = getStatics();
-//     Reference< XPropertySet > past = createDataDescriptor();
-//     past->setPropertyValue( st.IS_NULLABLE, makeAny( com::sun::star::sdbc::ColumnValue::NULLABLE ) );
-//     alterColumnByDescriptor(
-//         m_schemaName, m_tableName, m_pSettings->encoding, m_origin->createStatement() , past, future  );
+
+
+
+
+
+
 
 }
 
@@ -315,33 +315,33 @@ void KeyColumns::dropByIndex( sal_Int32 index )
     throw com::sun::star::sdbc::SQLException(
         "KeyColumns::dropByIndex not implemented yet",
         *this, OUString(), 1, Any() );
-//     osl::MutexGuard guard( m_refMutex->mutex );
-//     if( index < 0 ||  index >= m_values.getLength() )
-//     {
-//         OUStringBuffer buf( 128 );
-//         buf.appendAscii( "COLUMNS: Index out of range (allowed 0 to " );
-//         buf.append((sal_Int32)(m_values.getLength() -1) );
-//         buf.appendAscii( ", got " );
-//         buf.append( index );
-//         buf.appendAscii( ")" );
-//         throw com::sun::star::lang::IndexOutOfBoundsException(
-//             buf.makeStringAndClear(), *this );
-//     }
 
-//     Reference< XPropertySet > set;
-//     m_values[index] >>= set;
-//     Statics &st = getStatics();
-//     OUString name;
-//     set->getPropertyValue( st.NAME ) >>= name;
 
-//     OUStringBuffer update( 128 );
-//     update.appendAscii( "ALTER TABLE ONLY");
-//     bufferQuoteQualifiedIdentifier( update, m_schemaName, m_tableName );
-//     update.appendAscii( "DROP COLUMN" );
-//     bufferQuoteIdentifier( update, name );
-//     Reference< XStatement > stmt = m_origin->createStatement( );
-//     DisposeGuard disposeIt( stmt );
-//     stmt->executeUpdate( update.makeStringAndClear() );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
 
@@ -369,7 +369,7 @@ Reference< com::sun::star::container::XNameAccess > KeyColumns::create(
     return ret;
 }
 
-//_______________________________________________________________________________________
+
 KeyColumnDescriptors::KeyColumnDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,

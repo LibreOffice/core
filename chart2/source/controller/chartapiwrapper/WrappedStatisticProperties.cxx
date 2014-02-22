@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrappedStatisticProperties.hxx"
@@ -100,7 +100,7 @@ RegressionCurveHelper::tRegressionType lcl_getRegressionType( ::com::sun::star::
             eRet = RegressionCurveHelper::REGRESSION_TYPE_EXP;
             break;
         case ::com::sun::star::chart::ChartRegressionCurveType_POLYNOMIAL:
-        //case ::com::sun::star::chart::ChartRegressionCurveType_MOVING_AVERAGE:
+        
         case ::com::sun::star::chart::ChartRegressionCurveType_POWER:
             eRet = RegressionCurveHelper::REGRESSION_TYPE_POWER;
             break;
@@ -165,7 +165,7 @@ void lcl_ConvertRangeToXML(
     }
 }
 
-}//anonymous namespace
+}
 
 template< typename PROPERTYTYPE >
 class WrappedStatisticProperty : public WrappedSeriesOrDiagramProperty< PROPERTYTYPE >
@@ -187,9 +187,9 @@ protected:
         xSeriesPropertySet->getPropertyValue( "ErrorBarY" ) >>= xErrorBarProperties;
         if( !xErrorBarProperties.is() )
         {
-            // todo: use a valid context
+            
             xErrorBarProperties = ::chart::createErrorBar( uno::Reference< uno::XComponentContext >() );
-            //default in new and old api are different
+            
             xErrorBarProperties->setPropertyValue( "ShowPositiveError" , uno::makeAny(sal_Bool(sal_False)) );
             xErrorBarProperties->setPropertyValue( "ShowNegativeError" , uno::makeAny(sal_Bool(sal_False)) );
             xErrorBarProperties->setPropertyValue( "ErrorBarStyle" , uno::makeAny(::com::sun::star::chart::ErrorBarStyle::NONE) );
@@ -200,7 +200,7 @@ protected:
 
 };
 
-//PROP_CHART_STATISTIC_CONST_ERROR_LOW
+
 class WrappedConstantErrorLowProperty : public WrappedStatisticProperty< double >
 {
 public:
@@ -254,7 +254,7 @@ void WrappedConstantErrorLowProperty::setValueToSeries( const Reference< beans::
     }
 }
 
-//PROP_CHART_STATISTIC_CONST_ERROR_HIGH
+
 class WrappedConstantErrorHighProperty : public WrappedStatisticProperty< double >
 {
 public:
@@ -308,7 +308,7 @@ void WrappedConstantErrorHighProperty::setValueToSeries( const Reference< beans:
     }
 }
 
-//PROP_CHART_STATISTIC_MEAN_VALUE
+
 class WrappedMeanValueProperty : public WrappedStatisticProperty< sal_Bool >
 {
 public:
@@ -351,8 +351,8 @@ void WrappedMeanValueProperty::setValueToSeries( const Reference< beans::XProper
     }
 }
 
-//PROP_CHART_STATISTIC_ERROR_CATEGORY
-// deprecated, replaced by ErrorBarStyle
+
+
 class WrappedErrorCategoryProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorCategory >
 {
 public:
@@ -450,7 +450,7 @@ void WrappedErrorCategoryProperty::setValueToSeries( const Reference< beans::XPr
     }
 }
 
-//PROP_CHART_STATISTIC_PERCENT_ERROR
+
 class WrappedPercentageErrorProperty : public WrappedStatisticProperty< double >
 {
 public:
@@ -504,7 +504,7 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
     }
 }
 
-//PROP_CHART_STATISTIC_ERROR_MARGIN
+
 class WrappedErrorMarginProperty : public WrappedStatisticProperty< double >
 {
 public:
@@ -558,7 +558,7 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
     }
 }
 
-//PROP_CHART_STATISTIC_ERROR_INDICATOR
+
 class WrappedErrorIndicatorProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartErrorIndicatorType >
 {
 public:
@@ -630,8 +630,8 @@ void WrappedErrorIndicatorProperty::setValueToSeries( const Reference< beans::XP
     }
 }
 
-//PROP_CHART_STATISTIC_ERROR_BAR_STYLE
-// this is the new constant group that replaces the deprecated enum ChartErrorCategory
+
+
 class WrappedErrorBarStyleProperty : public WrappedStatisticProperty< sal_Int32 >
 {
 public:
@@ -677,7 +677,7 @@ void WrappedErrorBarStyleProperty::setValueToSeries( const Reference< beans::XPr
     }
 }
 
-//PROP_CHART_STATISTIC_ERROR_RANGE_POSITIVE
+
 class WrappedErrorBarRangePositiveProperty : public WrappedStatisticProperty< OUString >
 {
 public:
@@ -743,7 +743,7 @@ void WrappedErrorBarRangePositiveProperty::setValueToSeries( const Reference< be
     }
 }
 
-//PROP_CHART_STATISTIC_ERROR_RANGE_NEGATIVE
+
 class WrappedErrorBarRangeNegativeProperty : public WrappedStatisticProperty< OUString >
 {
 public:
@@ -809,7 +809,7 @@ void WrappedErrorBarRangeNegativeProperty::setValueToSeries( const Reference< be
     }
 }
 
-//PROP_CHART_STATISTIC_REGRESSION_CURVES
+
 class WrappedRegressionCurvesProperty : public WrappedStatisticProperty< ::com::sun::star::chart::ChartRegressionCurveType >
 {
 public:
@@ -861,14 +861,14 @@ void WrappedRegressionCurvesProperty::setValueToSeries( const Reference< beans::
     }
 }
 
-//PROP_CHART_STATISTIC_REGRESSION_PROPERTIES
-//PROP_CHART_STATISTIC_ERROR_PROPERTIES
-//PROP_CHART_STATISTIC_MEAN_VALUE_PROPERTIES
+
+
+
 class WrappedStatisticPropertySetProperty : public WrappedStatisticProperty< Reference< beans::XPropertySet > >
 {
 public:
     virtual Reference< beans::XPropertySet > getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const;
-    // properties are read-only, so this method should never be called
+    
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, Reference< beans::XPropertySet > xNewValue ) const;
 
     enum PropertySetType
@@ -939,7 +939,7 @@ namespace
 {
 enum
 {
-    //statistic properties
+    
     PROP_CHART_STATISTIC_CONST_ERROR_LOW = FAST_PROPERTY_ID_START_CHART_STATISTIC_PROP,
     PROP_CHART_STATISTIC_CONST_ERROR_HIGH,
     PROP_CHART_STATISTIC_MEAN_VALUE,
@@ -983,7 +983,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
                          WrappedStatisticPropertySetProperty::PROPERTY_SET_TYPE_MEAN_VALUE, spChart2ModelContact, ePropertyType ) );
 }
 
-}//anonymous namespace
+}
 
 void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -1089,7 +1089,7 @@ void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< Wr
     lcl_addWrappedProperties( rList, spChart2ModelContact, DIAGRAM  );
 }
 
-} //namespace wrapper
-} //namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

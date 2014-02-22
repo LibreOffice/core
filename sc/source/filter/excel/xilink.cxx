@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xilink.hxx"
@@ -37,11 +37,11 @@
 using ::std::vector;
 
 
-// ============================================================================
-// *** Helper classes ***
-// ============================================================================
 
-// Cached external cells ======================================================
+
+
+
+
 
 /**
  * Contains the address and value of an external referenced cell.
@@ -56,10 +56,10 @@ public:
     const XclAddress&   GetAddress() const;
 
 private:
-    XclAddress          maXclPos;       /// Excel position of the cached cell.
+    XclAddress          maXclPos;       
 };
 
-// Sheet in an external document ==============================================
+
 
 /** Contains the name and sheet index of one sheet in an external document. */
 class XclImpSupbookTab
@@ -81,11 +81,11 @@ private:
     typedef boost::shared_ptr< XclImpCrn > XclImpCrnRef;
     typedef std::vector< XclImpCrnRef > XclImpCrnList;
 
-    XclImpCrnList       maCrnList;      /// List of CRN records (cached cell values).
-    OUString            maTabName;      /// Name of the external sheet.
+    XclImpCrnList       maCrnList;      
+    OUString            maTabName;      
 };
 
-// External document (SUPBOOK) ================================================
+
 
 /** This class represents an external linked document (record SUPBOOK).
     @descr  Contains a list of all referenced sheets in the document. */
@@ -130,25 +130,25 @@ private:
     typedef boost::ptr_vector< XclImpSupbookTab >  XclImpSupbookTabList;
     typedef boost::ptr_vector< XclImpExtName >     XclImpExtNameList;
 
-    XclImpSupbookTabList maSupbTabList;     /// All sheet names of the document.
-    XclImpExtNameList   maExtNameList;      /// All external names of the document.
-    OUString            maXclUrl;           /// URL of the external document (Excel mode).
-    OUString            maFilterName;       /// Detected filer name.
-    OUString            maFilterOpt;        /// Detected filer options.
-    XclSupbookType      meType;             /// Type of the supbook record.
-    sal_uInt16          mnSBTab;            /// Current Excel sheet index from SUPBOOK for XCT/CRN records.
+    XclImpSupbookTabList maSupbTabList;     
+    XclImpExtNameList   maExtNameList;      
+    OUString            maXclUrl;           
+    OUString            maFilterName;       
+    OUString            maFilterOpt;        
+    XclSupbookType      meType;             
+    sal_uInt16          mnSBTab;            
 };
 
-// Import link manager ========================================================
+
 
 /** Contains the SUPBOOK index and sheet indexes of an external link.
     @descr  It is possible to enter a formula like =SUM(Sheet1:Sheet3!A1),
     therefore here occurs a sheet range. */
 struct XclImpXti
 {
-    sal_uInt16          mnSupbook;      /// Index to SUPBOOK record.
-    sal_uInt16          mnSBTabFirst;   /// Index to the first sheet of the range in the SUPBOOK.
-    sal_uInt16          mnSBTabLast;    /// Index to the last sheet of the range in the SUPBOOK.
+    sal_uInt16          mnSupbook;      
+    sal_uInt16          mnSBTabFirst;   
+    sal_uInt16          mnSBTabLast;    
     inline explicit     XclImpXti() : mnSupbook( SAL_MAX_UINT16 ), mnSBTabFirst( SAL_MAX_UINT16 ), mnSBTabLast( SAL_MAX_UINT16 ) {}
 };
 
@@ -157,7 +157,7 @@ inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpXti& rXti )
     return rStrm >> rXti.mnSupbook >> rXti.mnSBTabFirst >> rXti.mnSBTabLast;
 }
 
-// ----------------------------------------------------------------------------
+
 
 /** Implementation of the link manager. */
 class XclImpLinkManagerImpl : protected XclImpRoot
@@ -212,17 +212,17 @@ private:
     typedef ::std::vector< XclImpXti >  XclImpXtiVector;
     typedef boost::ptr_vector< XclImpSupbook > XclImpSupbookList;
 
-    XclImpXtiVector     maXtiList;          /// List of all XTI structures.
-    XclImpSupbookList   maSupbookList;      /// List of external documents.
+    XclImpXtiVector     maXtiList;          
+    XclImpSupbookList   maSupbookList;      
 };
 
-// ============================================================================
-// *** Implementation ***
-// ============================================================================
 
-// Excel sheet indexes ========================================================
 
-// original Excel sheet names -------------------------------------------------
+
+
+
+
+
 
 void XclImpTabInfo::AppendXclTabName( const OUString& rXclTabName, SCTAB nScTab )
 {
@@ -242,7 +242,7 @@ SCTAB XclImpTabInfo::GetScTabFromXclName( const OUString& rXclTabName ) const
     return (aIt != maTabNames.end()) ? aIt->second : SCTAB_INVALID;
 }
 
-// record creation order - TABID record ---------------------------------------
+
 
 void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
 {
@@ -255,7 +255,7 @@ void XclImpTabInfo::ReadTabid( XclImpStream& rStrm )
         maTabIdVec.clear();
         maTabIdVec.reserve( nReadCount );
         for( sal_Size nIndex = 0; rStrm.IsValid() && (nIndex < nReadCount); ++nIndex )
-            // zero index is not allowed in BIFF8, but it seems that it occurs in real life
+            
             maTabIdVec.push_back( rStrm.ReaduInt16() );
     }
 }
@@ -274,7 +274,7 @@ sal_uInt16 XclImpTabInfo::GetCurrentIndex( sal_uInt16 nCreatedId, sal_uInt16 nMa
     return 0;
 }
 
-// External names =============================================================
+
 
 XclImpExtName::MOper::MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm) :
     mxCached(new ScMatrix(0,0))
@@ -312,7 +312,7 @@ XclImpExtName::MOper::MOper(svl::SharedStringPool& rPool, XclImpStream& rStrm) :
                 case 0x10:
                 {
                     sal_uInt8 nErr = rStrm.ReaduInt8();
-                    // TODO: Map the error code from xls to calc.
+                    
                     mxCached->PutError(nErr, nCol, nRow);
                     rStrm.Ignore(7);
                 }
@@ -365,8 +365,8 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
                 mxDdeMatrix.reset(new XclImpCachedMatrix(rStrm));
         break;
         case xlExtName:
-            // TODO: For now, only global external names are supported.  In future
-            // we should extend this to supporting per-sheet external names.
+            
+            
             if (mnStorageId == 0)
             {
                 if (pFormulaConv)
@@ -433,7 +433,7 @@ bool extractSheetAndRange(const OUString& rName, OUString& rSheet, OUString& rRa
     {
         if (i == 0)
         {
-            // first character must be '!'.
+            
             if (*p != '!')
                 return false;
             continue;
@@ -441,7 +441,7 @@ bool extractSheetAndRange(const OUString& rName, OUString& rSheet, OUString& rRa
 
         if (*p == '!')
         {
-            // sheet name to range separator.
+            
             if (!bInSheet)
                 return false;
             rSheet = aBuf.makeStringAndClear();
@@ -474,21 +474,21 @@ bool XclImpExtName::CreateOleData(ScDocument& rDoc, const OUString& rUrl,
         return false;
 
     if (aRange.aStart.Tab() != aRange.aEnd.Tab())
-        // We don't support multi-sheet range for this.
+        
         return false;
 
     const ScMatrix& rCache = mpMOper->GetCache();
     SCSIZE nC, nR;
     rCache.GetDimensions(nC, nR);
     if (!nC || !nR)
-        // cache matrix is empty.
+        
         return false;
 
     ScExternalRefManager* pRefMgr = rDoc.GetExternalRefManager();
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(rUrl);
     ScExternalRefCache::TableTypeRef xTab = pRefMgr->getCacheTable(nFileId, aSheet, true, NULL);
     if (!xTab)
-        // cache table creation failed.
+        
         return false;
 
     xTab->setWholeTableCached();
@@ -539,7 +539,7 @@ bool XclImpExtName::HasFormulaTokens() const
     return (mxArray.get() != NULL);
 }
 
-// Cached external cells ======================================================
+
 
 XclImpCrn::XclImpCrn( XclImpStream& rStrm, const XclAddress& rXclPos ) :
     XclImpCachedValue( rStrm ),
@@ -552,7 +552,7 @@ const XclAddress& XclImpCrn::GetAddress() const
     return maXclPos;
 }
 
-// Sheet in an external document ==============================================
+
 
 XclImpSupbookTab::XclImpSupbookTab( const OUString& rTabName ) :
     maTabName( rTabName )
@@ -614,7 +614,7 @@ void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheT
     }
 }
 
-// External document (SUPBOOK) ================================================
+
 
 XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     XclImpRoot( rStrm.GetRoot() ),
@@ -656,7 +656,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     else
     {
         meType = EXC_SBTYPE_SPECIAL;
-        // create dummy list entry
+        
         maSupbTabList.push_back( new XclImpSupbookTab( maXclUrl ) );
     }
 }
@@ -741,7 +741,7 @@ svl::SharedStringPool& XclImpSupbook::GetSharedStringPool()
     return GetDoc().GetSharedStringPool();
 }
 
-// Import link manager ========================================================
+
 
 XclImpLinkManagerImpl::XclImpLinkManagerImpl( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -860,13 +860,13 @@ const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( sal_uInt16 nXtiIndex ) c
 
 void XclImpLinkManagerImpl::LoadCachedValues()
 {
-    // Read all CRN records which can be accessed via XclImpSupbook, and store
-    // the cached values to the external reference manager.
+    
+    
     for (XclImpSupbookList::iterator itSupbook = maSupbookList.begin(); itSupbook != maSupbookList.end(); ++itSupbook)
         itSupbook->LoadCachedValues();
 }
 
-// ============================================================================
+
 
 XclImpLinkManager::XclImpLinkManager( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -939,6 +939,6 @@ const OUString& XclImpLinkManager::GetMacroName( sal_uInt16 nExtSheet, sal_uInt1
     return mxImpl->GetMacroName( nExtSheet, nExtName );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

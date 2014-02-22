@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/accimplaccess.hxx>
@@ -25,10 +25,10 @@
 #include <set>
 #include <string.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::Sequence;
@@ -39,9 +39,9 @@ namespace comphelper
     using ::com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::accessibility::XAccessibleContext;
 
-    //=====================================================================
-    //= OAccImpl_Impl
-    //=====================================================================
+    
+    
+    
     struct OAccImpl_Impl
     {
         Reference< XAccessible >    m_xAccParent;
@@ -49,41 +49,41 @@ namespace comphelper
     };
 
 
-    //=====================================================================
-    //= OAccessibleImplementationAccess
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OAccessibleImplementationAccess::OAccessibleImplementationAccess( )
         :m_pImpl( new OAccImpl_Impl )
     {
     }
 
-    //---------------------------------------------------------------------
+    
     OAccessibleImplementationAccess::~OAccessibleImplementationAccess( )
     {
         delete m_pImpl;
         m_pImpl = NULL;
     }
 
-    //---------------------------------------------------------------------
+    
     Reference< XAccessible > OAccessibleImplementationAccess::implGetForeignControlledParent( ) const
     {
         return m_pImpl->m_xAccParent;
     }
 
-    //---------------------------------------------------------------------
+    
     void OAccessibleImplementationAccess::setAccessibleParent( const Reference< XAccessible >& _rxAccParent )
     {
         m_pImpl->m_xAccParent = _rxAccParent;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Int64 OAccessibleImplementationAccess::implGetForeignControlledStates( ) const
     {
         return m_pImpl->m_nForeignControlledStates;
     }
 
-    //---------------------------------------------------------------------
+    
     void OAccessibleImplementationAccess::setStateBit( const sal_Int16 _nState, const sal_Bool _bSet )
     {
         OSL_ENSURE( _nState >= 0 && static_cast< sal_uInt16 >(_nState) < sizeof( sal_Int64 ) * 8, "OAccessibleImplementationAccess::setStateBit: no more bits (shutting down the universe now)!" );
@@ -98,14 +98,14 @@ namespace comphelper
 
     namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
 
-    //---------------------------------------------------------------------
+    
     const Sequence< sal_Int8 > OAccessibleImplementationAccess::getUnoTunnelImplementationId()
     {
         ::cppu::OImplementationId &rID = lcl_ImplId::get();
         return rID.getImplementationId();
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Int64 SAL_CALL OAccessibleImplementationAccess::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw (RuntimeException)
     {
         sal_Int64 nReturn( 0 );
@@ -118,7 +118,7 @@ namespace comphelper
         return nReturn;
     }
 
-    //---------------------------------------------------------------------
+    
     OAccessibleImplementationAccess* OAccessibleImplementationAccess::getImplementation( const Reference< XAccessibleContext >& _rxComponent )
     {
         OAccessibleImplementationAccess* pImplementation = NULL;
@@ -138,7 +138,7 @@ namespace comphelper
         return pImplementation;
     }
 
-    //---------------------------------------------------------------------
+    
     bool OAccessibleImplementationAccess::setAccessibleParent(
             const Reference< XAccessibleContext >& _rxComponent, const Reference< XAccessible >& _rxNewParent )
     {
@@ -150,9 +150,9 @@ namespace comphelper
         return ( NULL != pImplementation );
     }
 
-//.........................................................................
-}   // namespace comphelper
-//.........................................................................
+
+}   
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

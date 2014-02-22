@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <bordrhdl.hxx>
@@ -60,7 +60,7 @@ SvXMLEnumMapEntry pXML_NamedBorderWidths[] =
     { XML_THICK,            SVX_XML_BORDER_WIDTH_THICK  },
     { XML_TOKEN_INVALID,    0 }
 };
-// mapping tables to map external xml input to internal box line widths
+
 
 static sal_uInt16 const aBorderWidths[] =
 {
@@ -71,7 +71,7 @@ static sal_uInt16 const aBorderWidths[] =
 
 static void lcl_frmitems_setXMLBorderStyle( table::BorderLine2 & rBorderLine, sal_uInt16 nStyle )
 {
-    sal_Int16 eStyle = -1; // None
+    sal_Int16 eStyle = -1; 
     if (nStyle != table::BorderLineStyle::NONE)
         eStyle = sal_Int16( nStyle );
 
@@ -79,12 +79,12 @@ static void lcl_frmitems_setXMLBorderStyle( table::BorderLine2 & rBorderLine, sa
 }
 
 //
-// class XMLEscapementPropHdl
+
 //
 
 XMLBorderWidthHdl::~XMLBorderWidthHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLBorderWidthHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
@@ -162,12 +162,12 @@ bool XMLBorderWidthHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValu
 }
 
 //
-// class XMLEscapementHeightPropHdl
+
 //
 
 XMLBorderHdl::~XMLBorderHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
@@ -212,13 +212,13 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
         }
         else
         {
-            // missformed
+            
             return false;
         }
     }
 
-    // if there is no style or a different style than none but no width,
-       // then the declaration is not valid.
+    
+       
     if (!bHasStyle || (table::BorderLineStyle::NONE != nStyle && !bHasWidth))
         return false;
 
@@ -232,7 +232,7 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
         aBorderLine.LineWidth      = 0;
     }
 
-    // first of all, delete an empty line
+    
     if ((bHasStyle && table::BorderLineStyle::NONE == nStyle) ||
         (bHasWidth && USHRT_MAX == nNamedWidth && 0 == nWidth) )
     {
@@ -259,7 +259,7 @@ bool XMLBorderHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, co
         lcl_frmitems_setXMLBorderStyle( aBorderLine, nStyle );
     }
 
-    // set color
+    
     if( bHasColor )
     {
         aBorderLine.Color = nColor;

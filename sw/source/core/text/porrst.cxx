@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -150,13 +150,13 @@ void SwKernPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if( Width() )
     {
-        // bBackground is set for Kerning Portions between two fields
+        
         if ( bBackground )
             rInf.DrawViewOpt( *this, POR_FLD );
 
         rInf.DrawBackBrush( *this );
 
-        // do we have to repaint a post it portion?
+        
         if( rInf.OnWin() && pPortion && !pPortion->Width() )
             pPortion->PrePaint( rInf, this );
 
@@ -222,7 +222,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
             SwCrsrShell *pCrSh=(SwCrsrShell*)pSh;
             SwCntntFrm *pCurrFrm=pCrSh->GetCurrFrm();
             if (pCurrFrm==(SwCntntFrm*)this) {
-                // do nothing
+                
             } else {
                 return 1;
             }
@@ -355,9 +355,9 @@ bool SwTxtFrm::FormatEmpty()
                  aTxtFly.IsOn() && aTxtFly.IsAnyObj( aRect ) )
                 return false;
 
-            // #i35635# - call method <HideAndShowObjects()>
-            // to assure that objects anchored at the empty paragraph are
-            // correctly visible resp. invisible.
+            
+            
+            
             HideAndShowObjects();
             return true;
         }
@@ -513,7 +513,7 @@ bool SwHiddenTextPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    if ( Width() )  // is only set during prepaint mode
+    if ( Width() )  
     {
         rInf.DrawViewOpt( *this, POR_CONTROLCHAR );
 
@@ -525,7 +525,7 @@ void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
             SwFont aTmpFont( *rInf.GetFont() );
             aTmpFont.SetEscapement( CHAR_ZWSP == mcChar ? DFLT_ESC_AUTO_SUB : -25 );
             const sal_uInt16 nProp = 40;
-            aTmpFont.SetProportion( nProp );  // a smaller font
+            aTmpFont.SetProportion( nProp );  
             SwFontSave aFontSave( rInf, &aTmpFont );
 
             OUString aOutString;
@@ -534,10 +534,10 @@ void SwControlCharPortion::Paint( const SwTxtPaintInfo &rInf ) const
             {
                 case CHAR_ZWSP :
                     aOutString = "/"; break;
-//                case CHAR_LRM :
-//                    rTxt = sal_Unicode(0x2514); break;
-//                case CHAR_RLM :
-//                    rTxt = sal_Unicode(0x2518); break;
+
+
+
+
             }
 
             if ( !mnHalfCharWidth )

@@ -77,7 +77,7 @@ PluginHandler::~PluginHandler()
          ++i )
         if( plugins[ i ].object != NULL )
             {
-            // PPCallbacks is owned by preprocessor object, don't delete those
+            
             if( !plugins[ i ].isPPCallback )
                 delete plugins[ i ].object;
             }
@@ -89,7 +89,7 @@ void PluginHandler::handleOption( const string& option )
         {
         scope = option.substr( 6 );
         if( scope == "mainfile" || scope == "all" )
-            ; // ok
+            ; 
         else
             {
             struct stat st;
@@ -136,7 +136,7 @@ DiagnosticBuilder PluginHandler::report( DiagnosticsEngine::Level level, const c
     SourceLocation loc )
     {
     DiagnosticsEngine& diag = compiler.getDiagnostics();
-    // Do some mappings (e.g. for -Werror) that clang does not do for custom messages for some reason.
+    
     if( level == DiagnosticsEngine::Warning && diag.getWarningsAsErrors() && (plugin == nullptr || plugin != warningsOnly))
         level = DiagnosticsEngine::Error;
     if( level == DiagnosticsEngine::Error && diag.getErrorsAsFatal())
@@ -181,7 +181,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         {
         const FileEntry* e = context.getSourceManager().getFileEntryForID( it->first );
         if( e == NULL )
-            continue; // Failed modification because of a macro expansion?
+            continue; 
         /* Check where the file actually is, and warn about cases where modification
            most probably doesn't matter (generated files in workdir).
            The order here is important, as INSTDIR and WORKDIR are often in SRCDIR/BUILDDIR,
@@ -194,7 +194,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         else if( strcmp( SRCDIR, BUILDDIR ) != 0 && strncmp( e->getName(), BUILDDIR "/", strlen( BUILDDIR "/" )) == 0 )
             pathWarning = "modified source in build dir : %0";
         else if( strncmp( e->getName(), SRCDIR "/", strlen( SRCDIR "/" )) == 0 )
-            ; // ok
+            ; 
         else
             {
             pathWarning = "modified source in unknown location, not modifying : %0";
@@ -202,20 +202,20 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             }
         if( modifyFile.empty())
             modifyFile = e->getName();
-        // Check whether the modified file is in the wanted scope
+        
         if( scope == "mainfile" )
             {
             if( it->first != context.getSourceManager().getMainFileID())
                 continue;
             }
         else if( scope == "all" )
-            ; // ok
-        else // scope is module
+            ; 
+        else 
             {
             if( !( isPrefix( SRCDIR "/" + scope + "/", modifyFile ) || isPrefix( SRCDIR "/include/" + scope + "/", modifyFile ) ) )
                 continue;
             }
-        // Warn only now, so that files not in scope do not cause warnings.
+        
         if( pathWarning != NULL )
             report( DiagnosticsEngine::Warning, pathWarning ) << e->getName();
         if( skip )
@@ -254,6 +254,6 @@ bool LibreOfficeAction::ParseArgs( const CompilerInstance&, const vector< string
 
 static FrontendPluginRegistry::Add< loplugin::LibreOfficeAction > X( "loplugin", "LibreOffice compile check plugin" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

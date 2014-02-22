@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,15 +33,15 @@
 #endif
 
 using namespace ::com::sun::star;
-// global ----------------------------------------------------------------------
+
 
 namespace { struct ALMutex : public rtl::Static< ::osl::Mutex, ALMutex > {}; }
 
-// class SvtLanguageOptions ----------------------------------------------------
+
 
 SvtLanguageOptions::SvtLanguageOptions( bool _bDontLoad )
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( ALMutex::get() );
 
     m_pCJKOptions = new SvtCJKOptions( _bDontLoad );
@@ -51,7 +51,7 @@ SvtLanguageOptions::SvtLanguageOptions( bool _bDontLoad )
 }
 SvtLanguageOptions::~SvtLanguageOptions()
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( ALMutex::get() );
 
     m_pCTLOptions->RemoveListener(this);
@@ -60,7 +60,7 @@ SvtLanguageOptions::~SvtLanguageOptions()
     delete m_pCJKOptions;
     delete m_pCTLOptions;
 }
-// CJK options -----------------------------------------------------------------
+
 bool SvtLanguageOptions::IsCJKFontEnabled() const
 {
     return m_pCJKOptions->IsCJKFontEnabled();
@@ -85,7 +85,7 @@ bool SvtLanguageOptions::IsAnyEnabled() const
 {
     return m_pCJKOptions->IsAnyEnabled();
 }
-// CTL options -----------------------------------------------------------------
+
 void SvtLanguageOptions::SetCTLFontEnabled( bool _bEnabled )
 {
     m_pCTLOptions->SetCTLFontEnabled( _bEnabled );
@@ -114,7 +114,7 @@ bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
     bool bReadOnly = false;
     switch(eOption)
     {
-        // cjk options
+        
         case SvtLanguageOptions::E_CJKFONT          : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_CJKFONT        ); break;
         case SvtLanguageOptions::E_VERTICALTEXT     : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_VERTICALTEXT   ); break;
         case SvtLanguageOptions::E_ASIANTYPOGRAPHY  : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_ASIANTYPOGRAPHY); break;
@@ -125,7 +125,7 @@ bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
         case SvtLanguageOptions::E_EMPHASISMARKS    : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_EMPHASISMARKS  ); break;
         case SvtLanguageOptions::E_VERTICALCALLOUT  : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_VERTICALCALLOUT); break;
         case SvtLanguageOptions::E_ALLCJK           : bReadOnly = m_pCJKOptions->IsReadOnly(SvtCJKOptions::E_ALL            ); break;
-        // ctl options
+        
         case SvtLanguageOptions::E_CTLFONT              : bReadOnly = m_pCTLOptions->IsReadOnly(SvtCTLOptions::E_CTLFONT            ); break;
         case SvtLanguageOptions::E_CTLSEQUENCECHECKING  : bReadOnly = m_pCTLOptions->IsReadOnly(SvtCTLOptions::E_CTLSEQUENCECHECKING); break;
         case SvtLanguageOptions::E_CTLCURSORMOVEMENT    : bReadOnly = m_pCTLOptions->IsReadOnly(SvtCTLOptions::E_CTLCURSORMOVEMENT  ); break;
@@ -134,7 +134,7 @@ bool SvtLanguageOptions::IsReadOnly(SvtLanguageOptions::EOption eOption) const
     return bReadOnly;
 }
 
-// returns for a language the scripttype
+
 sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
 {
     if( LANGUAGE_DONTKNOW == nLang )
@@ -157,7 +157,7 @@ sal_uInt16 SvtLanguageOptions::GetScriptTypeOfLanguage( sal_uInt16 nLang )
     }
     return nScript;
 }
-// -----------------------------------------------------------------------------
+
 
 SvtSystemLanguageOptions::SvtSystemLanguageOptions() :
     utl::ConfigItem( "System/L10N")
@@ -179,12 +179,12 @@ SvtSystemLanguageOptions::~SvtSystemLanguageOptions()
 
 void    SvtSystemLanguageOptions::Commit()
 {
-    //does nothing
+    
 }
 
 void    SvtSystemLanguageOptions::Notify( const com::sun::star::uno::Sequence< OUString >& )
 {
-    // no listeners supported yet
+    
 }
 
 LanguageType SvtSystemLanguageOptions::GetWin16SystemLanguage() const

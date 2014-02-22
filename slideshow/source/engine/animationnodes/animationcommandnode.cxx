@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <com/sun/star/presentation/EffectCommands.hpp>
@@ -62,11 +62,11 @@ void AnimationCommandNode::dispose()
 void AnimationCommandNode::activate_st()
 {
     switch( mxCommandNode->getCommand() ) {
-        // the command is user defined
+        
     case EffectCommands::CUSTOM: break;
-        // the command is an ole verb.
+        
     case EffectCommands::VERB: break;
-        // the command starts playing on a media object
+        
     case EffectCommands::PLAY:
     {
         double fMediaTime=0.0;
@@ -82,7 +82,7 @@ void AnimationCommandNode::activate_st()
         }
         break;
     }
-        // the command toggles the pause status on a media object
+        
     case EffectCommands::TOGGLEPAUSE:
     {
         if( mpShape )
@@ -94,20 +94,20 @@ void AnimationCommandNode::activate_st()
         }
         break;
     }
-        // the command stops the animation on a media object
+        
     case EffectCommands::STOP:
     {
         if( mpShape )
             mpShape->stop();
         break;
     }
-        // the command stops all currently running sound effects
+        
     case EffectCommands::STOPAUDIO:
         getContext().mrEventMultiplexer.notifyCommandStopAudio( getSelf() );
         break;
     }
 
-    // deactivate ASAP:
+    
     scheduleDeactivationEvent(
         makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
                    "AnimationCommandNode::deactivate" ) );
@@ -118,7 +118,7 @@ bool AnimationCommandNode::hasPendingAnimation() const
     return mxCommandNode->getCommand() == EffectCommands::STOPAUDIO || mpShape;
 }
 
-} // namespace internal
-} // namespace slideshow
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

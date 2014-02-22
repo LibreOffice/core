@@ -50,9 +50,9 @@ namespace sdr
                     false));
             basegfx::B2DPolyPolygon aUnitPolyPolygon(GetPathObj().GetPathPoly());
             Point aGridOff = GetPathObj().GetGridOffset();
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
+            
+            
+            
             aUnitPolyPolygon.transform( basegfx::tools::createTranslateB2DHomMatrix( aGridOff.X(), aGridOff.Y() ) );
             sal_uInt32 nPolyCount(aUnitPolyPolygon.count());
             sal_uInt32 nPointCount(0);
@@ -73,7 +73,7 @@ namespace sdr
                 nPolyCount = 1;
             }
 
-            // prepare object transformation and unit polygon (direct model data)
+            
             basegfx::B2DHomMatrix aObjectMatrix;
             const bool bIsLine(
                 !aUnitPolyPolygon.areControlPointsUsed()
@@ -82,19 +82,19 @@ namespace sdr
 
             if(bIsLine)
             {
-                // special handling for single line mode (2 points)
+                
                 const basegfx::B2DPolygon aSubPolygon(aUnitPolyPolygon.getB2DPolygon(0));
                 const basegfx::B2DPoint aStart(aSubPolygon.getB2DPoint(0));
                 const basegfx::B2DPoint aEnd(aSubPolygon.getB2DPoint(1));
                 const basegfx::B2DVector aLine(aEnd - aStart);
 
-                // #i102548# create new unit polygon for line (horizontal)
+                
                 basegfx::B2DPolygon aNewPolygon;
                 aNewPolygon.append(basegfx::B2DPoint(0.0, 0.0));
                 aNewPolygon.append(basegfx::B2DPoint(1.0, 0.0));
                 aUnitPolyPolygon.setB2DPolygon(0, aNewPolygon);
 
-                // #i102548# fill objectMatrix with rotation and offset (no shear for lines)
+                
                 aObjectMatrix = basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                     aLine.getLength(), 1.0,
                     0.0,
@@ -103,8 +103,8 @@ namespace sdr
             }
             else
             {
-                // #i102548# create unscaled, unsheared, unrotated and untranslated polygon
-                // (unit polygon) by creating the object matrix and back-transforming the polygon
+                
+                
                 const basegfx::B2DRange aObjectRange(basegfx::tools::getRange(aUnitPolyPolygon));
                 const GeoStat& rGeoStat(GetPathObj().GetGeoStat());
                 const double fWidth(aObjectRange.getWidth());
@@ -118,14 +118,14 @@ namespace sdr
                     rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
                     aObjectRange.getMinX(), aObjectRange.getMinY());
 
-                // ceate unit polygon from object's absolute path
+                
                 basegfx::B2DHomMatrix aInverse(aObjectMatrix);
                 aInverse.invert();
                 aUnitPolyPolygon.transform(aInverse);
             }
 
-            // create primitive. Always create primitives to allow the decomposition of
-            // SdrPathPrimitive2D to create needed invisible elements for HitTest and/or BoundRect
+            
+            
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrPathPrimitive2D(
                     aObjectMatrix,
@@ -134,7 +134,7 @@ namespace sdr
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

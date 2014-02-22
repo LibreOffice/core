@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,17 +14,17 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/event/eventhandler.hxx>
 
-// for SOLARIS compiler include of algorithm part of _STL is necessary to
-// get access to basic algos like ::std::find
+
+
 #include <algorithm>
 #include <tools/debug.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -40,10 +40,10 @@ namespace sdr
         {
             mrEventHandler.RemoveEvent(*this);
         }
-    } // end of namespace mixer
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -58,7 +58,7 @@ namespace sdr
         {
             if(maVector.back() == &rBaseEvent)
             {
-                // the one to remove is the last, pop
+                
                 maVector.pop_back();
             }
             else
@@ -75,7 +75,7 @@ namespace sdr
         {
             if(!maVector.empty())
             {
-                // get the last event, that one is fastest to be removed
+                
                 return maVector.back();
             }
             else
@@ -96,7 +96,7 @@ namespace sdr
             }
         }
 
-        // Trigger and consume the events
+        
         void EventHandler::ExecuteEvents()
         {
             for(;;)
@@ -109,15 +109,15 @@ namespace sdr
             }
         }
 
-        // for control
+        
         bool EventHandler::IsEmpty() const
         {
             return (0L == maVector.size());
         }
-    } // end of namespace mixer
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -134,18 +134,18 @@ namespace sdr
             Stop();
         }
 
-        // The timer when it is triggered; from class Timer
+        
         void TimerEventHandler::Timeout()
         {
             ExecuteEvents();
         }
 
-        // reset the timer
+        
         void TimerEventHandler::Restart()
         {
             Start();
         }
-    } // end of namespace mixer
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

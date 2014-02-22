@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <connectivity/statementcomposer.hxx>
@@ -31,10 +31,10 @@
 #include <tools/diagnose_ex.h>
 #include <comphelper/property.hxx>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
@@ -52,9 +52,9 @@ namespace dbtools
 
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-    //====================================================================
-    //= StatementComposer_Data
-    //====================================================================
+    
+    
+    
     struct StatementComposer_Data
     {
         const Reference< XConnection >          xConnection;
@@ -82,10 +82,10 @@ namespace dbtools
         }
     };
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
-        //----------------------------------------------------------------
+        
         void    lcl_resetComposer( StatementComposer_Data& _rData )
         {
             if ( _rData.bDisposeComposer && _rData.xComposer.is() )
@@ -103,7 +103,7 @@ namespace dbtools
             _rData.xComposer.clear();
         }
 
-        //----------------------------------------------------------------
+        
         bool    lcl_ensureUpToDateComposer_nothrow( StatementComposer_Data& _rData )
         {
             if ( !_rData.bComposerDirty )
@@ -118,7 +118,7 @@ namespace dbtools
                     case CommandType::COMMAND:
                         if ( _rData.bEscapeProcessing )
                             sStatement = _rData.sCommand;
-                        // (in case of no escape processing  we assume a not parseable statement)
+                        
                         break;
 
                     case CommandType::TABLE:
@@ -137,7 +137,7 @@ namespace dbtools
 
                     case CommandType::QUERY:
                     {
-                        // ask the connection for the query
+                        
                         Reference< XQueriesSupplier > xSupplyQueries( _rData.xConnection, UNO_QUERY_THROW );
                         Reference< XNameAccess >      xQueries( xSupplyQueries->getQueries(), UNO_QUERY_THROW );
 
@@ -146,18 +146,18 @@ namespace dbtools
 
                         Reference< XPropertySet > xQuery( xQueries->getByName( _rData.sCommand ), UNO_QUERY_THROW );
 
-                        //  a native query ?
+                        
                         sal_Bool bQueryEscapeProcessing = sal_False;
                         xQuery->getPropertyValue("EscapeProcessing") >>= bQueryEscapeProcessing;
                         if ( !bQueryEscapeProcessing )
                             break;
 
-                        // the command used by the query
+                        
                         xQuery->getPropertyValue("Command") >>= sStatement;
                         if ( sStatement.isEmpty() )
                             break;
 
-                        // use a composer to build a statement from the query filter/order props
+                        
                         Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
                         ::utl::SharedUNOComponent< XSingleSelectQueryComposer > xComposer;
                         xComposer.set(
@@ -165,10 +165,10 @@ namespace dbtools
                             UNO_QUERY_THROW
                         );
 
-                        // the "basic" statement
+                        
                         xComposer->setElementaryQuery( sStatement );
 
-                        // the sort order
+                        
                         const OUString sPropOrder( "Order" );
                         if ( ::comphelper::hasProperty( sPropOrder, xQuery ) )
                         {
@@ -177,7 +177,7 @@ namespace dbtools
                             xComposer->setOrder( sOrder );
                         }
 
-                        // the filter
+                        
                         sal_Bool bApplyFilter = sal_True;
                         const OUString sPropApply( "ApplyFilter" );
                         if ( ::comphelper::hasProperty( sPropApply, xQuery ) )
@@ -192,7 +192,7 @@ namespace dbtools
                             xComposer->setFilter( sFilter );
                         }
 
-                        // the composed statement
+                        
                         sStatement = xComposer->getQuery();
                     }
                     break;
@@ -204,13 +204,13 @@ namespace dbtools
 
                 if ( !sStatement.isEmpty() )
                 {
-                    // create an composer
+                    
                     Reference< XMultiServiceFactory > xFactory( _rData.xConnection, UNO_QUERY_THROW );
                     Reference< XSingleSelectQueryComposer > xComposer( xFactory->createInstance("com.sun.star.sdb.SingleSelectQueryComposer"),
                         UNO_QUERY_THROW );
                     xComposer->setElementaryQuery( sStatement );
 
-                    // append sort/filter
+                    
                     xComposer->setOrder( _rData.sOrder );
                     xComposer->setFilter( _rData.sFilter );
 
@@ -222,7 +222,7 @@ namespace dbtools
             }
             catch( const SQLException& )
             {
-                // allowed to leave here
+                
             }
             catch( const Exception& )
             {
@@ -233,10 +233,10 @@ namespace dbtools
         }
     }
 
-    //====================================================================
-    //= StatementComposer
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     StatementComposer::StatementComposer( const Reference< XConnection >& _rxConnection,
         const OUString&  _rCommand, const sal_Int32 _nCommandType, const sal_Bool _bEscapeProcessing )
         :m_pData( new StatementComposer_Data( _rxConnection ) )
@@ -247,40 +247,40 @@ namespace dbtools
         m_pData->bEscapeProcessing = _bEscapeProcessing;
     }
 
-    //--------------------------------------------------------------------
+    
     StatementComposer::~StatementComposer()
     {
         lcl_resetComposer( *m_pData );
     }
 
-    //--------------------------------------------------------------------
+    
     void StatementComposer::setDisposeComposer( bool _bDoDispose )
     {
         m_pData->bDisposeComposer = _bDoDispose;
     }
 
-    //--------------------------------------------------------------------
+    
     void StatementComposer::setFilter( const OUString& _rFilter )
     {
         m_pData->sFilter = _rFilter;
         m_pData->bComposerDirty = true;
     }
 
-    //--------------------------------------------------------------------
+    
     void StatementComposer::setOrder( const OUString& _rOrder )
     {
         m_pData->sOrder = _rOrder;
         m_pData->bComposerDirty = true;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XSingleSelectQueryComposer > StatementComposer::getComposer()
     {
         lcl_ensureUpToDateComposer_nothrow( *m_pData );
         return m_pData->xComposer;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString StatementComposer::getQuery()
     {
         if ( lcl_ensureUpToDateComposer_nothrow( *m_pData ) )
@@ -291,8 +291,8 @@ namespace dbtools
         return OUString();
     }
 
-//........................................................................
-} // namespace dbtools
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

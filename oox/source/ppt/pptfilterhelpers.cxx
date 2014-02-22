@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/animations/TransitionType.hpp>
@@ -24,7 +24,7 @@
 
 namespace oox { namespace ppt {
 
-    // BEGIN CUT&PASTE from sd pptanimations.hxx
+    
 
 
     static const transition gTransitions[] =
@@ -67,7 +67,7 @@ namespace oox { namespace ppt {
         { "slide(fromLeft)", ::com::sun::star::animations::TransitionType::SLIDEWIPE, ::com::sun::star::animations::TransitionSubType::FROMLEFT, sal_True },
         { "slide(fromBottom)", ::com::sun::star::animations::TransitionType::SLIDEWIPE, ::com::sun::star::animations::TransitionSubType::FROMBOTTOM, sal_True },
         { "dissolve", ::com::sun::star::animations::TransitionType::DISSOLVE, ::com::sun::star::animations::TransitionSubType::DEFAULT, sal_True },
-        { "image", ::com::sun::star::animations::TransitionType::DISSOLVE, ::com::sun::star::animations::TransitionSubType::DEFAULT, sal_True }, // TODO
+        { "image", ::com::sun::star::animations::TransitionType::DISSOLVE, ::com::sun::star::animations::TransitionSubType::DEFAULT, sal_True }, 
         { NULL, 0, 0, sal_False }
     };
 
@@ -99,26 +99,26 @@ namespace oox { namespace ppt {
         sal_Int32 nLastIndex = 0;
 
         nIndex = rString.indexOf("ppt_");
-        // bail out early if there is no substitution to be made
+        
         if(nIndex >= 0)
         {
             OUStringBuffer sRes(rString.getLength());
 
             do
             {
-                // copy the non matching inverval verbatim
+                
                 if(nIndex > nLastIndex)
                 {
                     sRes.append(rString.getStr() + nLastIndex, (nIndex - nLastIndex));
                 }
-                // we are searching for ppt_[xywh] so we need and extra char behind the match
+                
                 if(nIndex + 4 < rString.getLength())
                 {
                     switch(rString[nIndex + 4])
                     {
-                    case (sal_Unicode)'h': // we found ppt_h
-                        // if it was #ppt_h we already copied the #
-                        // which we do not want in the target, so remove it
+                    case (sal_Unicode)'h': 
+                        
+                        
                         if(nIndex && (rString[nIndex - 1] == (sal_Unicode)'#'))
                         {
                             sRes.remove(sRes.getLength() - 1, 1);
@@ -157,12 +157,12 @@ namespace oox { namespace ppt {
                         bRet = true;
                         break;
                     default:
-                        // this was ppt_ without an interesting thing after that
-                        // just copy it verbatim
+                        
+                        
                         sRes.append("ppt_");
-                        // we are going to adjust for ppt_@ after the swtich
-                        // so compensate for the fact we did not really process
-                        // an extra character after ppt_
+                        
+                        
+                        
                         nIndex -= 1;
                         break;
                     }
@@ -178,7 +178,7 @@ namespace oox { namespace ppt {
                 nLastIndex = nIndex;
             }
             while((nIndex = rString.indexOf("ppt_", nIndex)) > 0);
-            // copy the non matching tail if any
+            
             if(nLastIndex < rString.getLength())
             {
                 sRes.append(rString.getStr() + nLastIndex, rString.getLength() - nLastIndex );

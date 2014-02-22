@@ -113,8 +113,8 @@ class FileInputStream
     }
     unsigned int tell() const { return m_nPos; }
     void seek( unsigned int nPos )
-    // NOTE: do not check input data since only results of tell()
-    // get seek()ed in this file
+    
+    
     { m_nPos = nPos; }
 };
 
@@ -160,9 +160,9 @@ FileInputStream::~FileInputStream()
  * "recognize" procedure to calculate how many possible keys there are.
  */
 
-// some metrics have Ascent, Descent instead Ascender, Descender or Em
-// which is not allowed per afm spcification, but let us handle
-// this gently
+
+
+
 enum parseKey {
     ASCENDER, ASCENT, CHARBBOX, CODE, COMPCHAR, CODEHEX, CAPHEIGHT, CHARWIDTH, CHARACTERSET, CHARACTERS, COMMENT,
     DESCENDER, DESCENT, EM, ENCODINGSCHEME, ENDCHARMETRICS, ENDCOMPOSITES, ENDDIRECTION,
@@ -186,81 +186,81 @@ enum parseKey {
  *  reads all tokens until the next end-of-line.
  */
 
-// token white space is ' ', '\n', '\r', ',', '\t', ';'
+
 static const bool is_white_Array[ 256 ] =
-{   false, false, false, false, false, false, false, false, // 0-7
-    false,  true,  true, false, false,  true, false, false, // 8-15
-    false, false, false, false, false, false, false, false, // 16-23
-    false, false, false, false, false, false, false, false, // 24-31
-     true, false, false, false, false, false, false, false, // 32-39
-    false, false, false, false,  true, false, false, false, // 40-47
-    false, false, false, false, false, false, false, false, // 48-55
-    false, false, false,  true, false, false, false, false, // 56-63
+{   false, false, false, false, false, false, false, false, 
+    false,  true,  true, false, false,  true, false, false, 
+    false, false, false, false, false, false, false, false, 
+    false, false, false, false, false, false, false, false, 
+     true, false, false, false, false, false, false, false, 
+    false, false, false, false,  true, false, false, false, 
+    false, false, false, false, false, false, false, false, 
+    false, false, false,  true, false, false, false, false, 
 
-    false, false, false, false, false, false, false, false, // 64 -
+    false, false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
-    false, false, false, false, false, false, false, false, // 127
+    false, false, false, false, false, false, false, false, 
 
-    false, false, false, false, false, false, false, false, // 128 -
+    false, false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
-    false, false, false, false, false, false, false, false, // 191
+    false, false, false, false, false, false, false, false, 
 
-    false, false, false, false, false, false, false, false, // 192 -
+    false, false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
-    false, false, false, false, false, false, false, false, // 255
+    false, false, false, false, false, false, false, false, 
 };
-// token delimiters are ' ', '\n', '\r', '\t', ':', ';'
+
 static const bool is_delimiter_Array[ 256 ] =
-{   false, false, false, false, false, false, false, false, // 0-7
-    false,  true,  true, false, false,  true, false, false, // 8-15
-    false, false, false, false, false, false, false, false, // 16-23
-    false, false, false, false, false, false, false, false, // 24-31
-     true, false, false, false, false, false, false, false, // 32-39
-    false, false, false, false, false, false, false, false, // 40-47
-    false, false, false, false, false, false, false, false, // 48-55
-    false, false,  true,  true, false, false, false, false, // 56-63
+{   false, false, false, false, false, false, false, false, 
+    false,  true,  true, false, false,  true, false, false, 
+    false, false, false, false, false, false, false, false, 
+    false, false, false, false, false, false, false, false, 
+     true, false, false, false, false, false, false, false, 
+    false, false, false, false, false, false, false, false, 
+    false, false, false, false, false, false, false, false, 
+    false, false,  true,  true, false, false, false, false, 
 
-    false, false, false, false, false, false, false, false, // 64 -
+    false, false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
-    false, false, false, false, false, false, false, false, // 127
+    false, false, false, false, false, false, false, false, 
 
-    false, false, false, false, false, false, false, false, // 128 -
+    false, false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
-    false, false, false, false, false, false, false, false, // 191
+    false, false, false, false, false, false, false, false, 
 
-    false, false, false, false, false, false, false, false, // 192 -
+    false, false, false, false, false, false, false, false, 
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
     false, false, false, false, false, false, false, false,
-    false, false, false, false, false, false, false, false, // 255
+    false, false, false, false, false, false, false, false, 
 };
 static char *token( FileInputStream* stream, int& rLen )
 {
@@ -269,7 +269,7 @@ static char *token( FileInputStream* stream, int& rLen )
     int ch, idx;
 
     /* skip over white space */
-    // relies on EOF = -1
+    
     while( is_white_Array[ (ch = stream->getChar()) & 255 ] )
         ;
 
@@ -505,7 +505,7 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                     error = normalEOF;
                     break;
                 case EM:
-                    // skip one token
+                    
                     keyword = token(fp,tokenlen);
                     break;
                 case STARTDIRECTION:
@@ -524,13 +524,13 @@ static int parseGlobals( FileInputStream* fp, GlobalFontInfo* gfi )
                     keyword = token(fp,tokenlen);
                     break; /* ignore this for now */
                 case CHARACTERSET:
-                    keyword=token(fp,tokenlen); //ignore
+                    keyword=token(fp,tokenlen); 
                     break;
                 case STDHW:
-                    keyword=token(fp,tokenlen); //ignore
+                    keyword=token(fp,tokenlen); 
                     break;
                 case STDVW:
-                    keyword=token(fp,tokenlen); //ignore
+                    keyword=token(fp,tokenlen); 
                     break;
                 case CHARWIDTH:
                     if ((keyword = token(fp,tokenlen)) != NULL)
@@ -1494,6 +1494,6 @@ freeFontInfo (FontInfo *fi)
     free (fi);
 }
 
-} // namspace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

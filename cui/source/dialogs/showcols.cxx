@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "showcols.hxx"
@@ -30,11 +30,11 @@
 #define CUIFM_PROP_HIDDEN "Hidden"
 #define CUIFM_PROP_LABEL  "Label"
 
-//==========================================================================
-//  FmShowColsDialog
-//==========================================================================
+
+
+
 DBG_NAME(FmShowColsDialog)
-//--------------------------------------------------------------------------
+
 FmShowColsDialog::FmShowColsDialog(Window* pParent)
     : ModalDialog(pParent, "ShowColDialog", "cui/ui/showcoldialog.ui")
 {
@@ -46,7 +46,7 @@ FmShowColsDialog::FmShowColsDialog(Window* pParent)
     m_pOK->SetClickHdl( LINK( this, FmShowColsDialog, OnClickedOk ) );
 }
 
-//--------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
 {
     DBG_ASSERT(m_xColumns.is(), "FmShowColsDialog::OnClickedOk : you should call SetColumns before executing the dialog !");
@@ -74,7 +74,7 @@ IMPL_LINK_NOARG(FmShowColsDialog, OnClickedOk)
     return 0L;
 }
 
-//--------------------------------------------------------------------------
+
 void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols)
 {
     DBG_ASSERT(xCols.is(), "FmShowColsDialog::SetColumns : invalid columns !");
@@ -105,7 +105,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
             OSL_FAIL("FmShowColsDialog::SetColumns Exception occurred!");
         }
 
-        // if the col is hidden, put it into the list
+        
         if (bIsHidden)
             m_pList->SetEntryData( m_pList->InsertEntry(sCurName), reinterpret_cast<void*>((sal_Int64)i) );
     }

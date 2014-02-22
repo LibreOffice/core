@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,7 +32,7 @@
 using namespace com::sun::star;
 using namespace ftp;
 
-// virtual
+
 uno::Sequence< beans::Property > FTPContent::getProperties(
     const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/)
 {
@@ -66,7 +66,7 @@ uno::Sequence< beans::Property > FTPContent::getProperties(
             -1,
             getCppuType( static_cast< const OUString * >( 0 ) ),
             beans::PropertyAttribute::BOUND
-            //  | beans::PropertyAttribute::READONLY
+            
         ),
         beans::Property(
             OUString( "Size" ),
@@ -103,26 +103,26 @@ uno::Sequence< beans::Property > FTPContent::getProperties(
     return uno::Sequence< beans::Property >( aPropsInfoTable, PROPS_COUNT );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
     const uno::Reference< ucb::XCommandEnvironment > & /*xEnv*/ )
 {
-// osl::MutexGuard aGuard( m_aMutex );
 
-    //=================================================================
+
+    
     //
-    // Supported commands
+    
     //
-    //=================================================================
+    
 
     #define COMMAND_COUNT 8
 
     static const ucb::CommandInfo aCommandInfoTable[] =
     {
-        ///////////////////////////////////////////////////////////////
-        // Required commands
-        ///////////////////////////////////////////////////////////////
+        
+        
+        
         ucb::CommandInfo(
             OUString( "getCommandInfo" ),
             -1,

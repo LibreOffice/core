@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/FontDescriptor.hpp>
@@ -52,23 +52,23 @@ class FontHeightToolBoxControl : public svt::ToolboxController,
             const com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >& rServiceManager );
         ~FontHeightToolBoxControl();
 
-        // XInterface
+        
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
         virtual void SAL_CALL release() throw ();
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( ::com::sun::star::uno::RuntimeException );
         virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
 
-        // XComponent
+        
         virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
 
-        // XStatusListener
+        
         virtual void SAL_CALL statusChanged( const ::com::sun::star::frame::FeatureStateEvent& Event ) throw ( ::com::sun::star::uno::RuntimeException );
 
-        // XToolbarController
+        
         virtual void SAL_CALL execute( sal_Int16 KeyModifier ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL click() throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL doubleClick() throw (::com::sun::star::uno::RuntimeException);
@@ -113,9 +113,9 @@ private:
     void                ReleaseFocus_Impl();
 };
 
-//========================================================================
-// class SvxFontSizeBox_Impl --------------------------------------------------
-//========================================================================
+
+
+
 
 SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     Window*                                           _pParent,
@@ -135,7 +135,7 @@ SvxFontSizeBox_Impl::SvxFontSizeBox_Impl(
     SetText( "" );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
 {
@@ -149,7 +149,7 @@ void SvxFontSizeBox_Impl::ReleaseFocus_Impl()
         m_xFrame->getContainerWindow()->setFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::Select()
 {
@@ -173,34 +173,34 @@ void SvxFontSizeBox_Impl::Select()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::statusChanged_Impl( long nPoint, bool bErase )
 {
     if ( !bErase )
     {
-        // Metric Umrechnen
+        
         long nVal = nPoint;
 
-        // ge"andert => neuen Wert setzen
+        
         if ( GetValue() != nVal )
             SetValue( nVal );
     }
     else
     {
-        // Wert in der Anzeige l"oschen
+        
         SetValue( -1L );
         SetText( "" );
     }
     SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescriptor& rCurrentFont )
 {
-    // Sizes-Liste auff"ullen
-    sal_Int64 nOldVal = GetValue(); // alten Wert merken
+    
+    sal_Int64 nOldVal = GetValue(); 
     const FontList* _pFontList = NULL;
     ::std::auto_ptr<FontList> aHold( new FontList( this ));
     _pFontList = aHold.get();
@@ -217,11 +217,11 @@ void SvxFontSizeBox_Impl::UpdateFont( const ::com::sun::star::awt::FontDescripto
     {
         Fill( NULL, _pFontList );
     }
-    SetValue( nOldVal ); // alten Wert wiederherstellen
-    m_aCurText = GetText(); // zum R"ucksetzen bei ESC merken
+    SetValue( nOldVal ); 
+    m_aCurText = GetText(); 
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFontSizeBox_Impl::Notify( NotifyEvent& rNEvt )
 {
@@ -271,7 +271,7 @@ void SvxFontSizeBox_Impl::SetOptimalSize()
     SetDropDownSizePixel(aDropSize);
 }
 
-// ---------------------------------------------------------------------------
+
 
 void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -284,9 +284,9 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
     FontSizeBox::DataChanged( rDCEvt );
 }
 
-//========================================================================
-// class FontHeightToolBoxControl
-//========================================================================
+
+
+
 
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
  : svt::ToolboxController( rxContext,
@@ -301,7 +301,7 @@ FontHeightToolBoxControl::~FontHeightToolBoxControl()
 {
 }
 
-// XInterface
+
 ::com::sun::star::uno::Any SAL_CALL FontHeightToolBoxControl::queryInterface( const ::com::sun::star::uno::Type& aType )
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -322,7 +322,7 @@ void SAL_CALL FontHeightToolBoxControl::release() throw ()
     ToolboxController::release();
 }
 
-// XServiceInfo
+
 sal_Bool SAL_CALL FontHeightToolBoxControl::supportsService( const OUString& ServiceName )
 throw(uno::RuntimeException)
 {
@@ -343,7 +343,7 @@ throw( uno::RuntimeException )
     return aSNS;
 }
 
-// XComponent
+
 void SAL_CALL FontHeightToolBoxControl::dispose()
 throw (uno::RuntimeException)
 {
@@ -354,7 +354,7 @@ throw (uno::RuntimeException)
     m_pBox = 0;
 }
 
-// XStatusListener
+
 void SAL_CALL FontHeightToolBoxControl::statusChanged(
     const frame::FeatureStateEvent& rEvent )
 throw ( uno::RuntimeException )
@@ -384,7 +384,7 @@ throw ( uno::RuntimeException )
     }
 }
 
-// XToolbarController
+
 void SAL_CALL FontHeightToolBoxControl::execute( sal_Int16 /*KeyModifier*/ )
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -422,9 +422,9 @@ uno::Reference< awt::XWindow > SAL_CALL FontHeightToolBoxControl::createItemWind
                         uno::Reference< frame::XDispatchProvider >( m_xFrame, uno::UNO_QUERY ),
                         m_xFrame,
                         *this );
-        //Get the box to fill itself with all its sizes
+        
         m_pBox->UpdateFont(m_aCurrentFont);
-        //Make it size itself to its optimal size re above sizes
+        
         m_pBox->SetOptimalSize();
         xItemWindow = VCLUnoHelper::GetInterface( m_pBox );
     }

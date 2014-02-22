@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef _MSC_VER
@@ -97,9 +97,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     return pRet;
 }
 
-}   // extern C
+}   
 
-//------------------------------------------------------------------------
+
 
 ScTestAddIn::ScTestAddIn()
 {
@@ -131,19 +131,19 @@ uno::Reference<uno::XInterface> ScTestAddIn_CreateInstance(
 }
 
 
-// XAddIn
+
 
 UString ScTestAddIn::getProgrammaticFuntionName(const UString& aDisplayName)
                                 THROWS( (UsrSystemException) )
 {
-    //!...
+    
     return UString();
 }
 
 UString ScTestAddIn::getDisplayFunctionName(const UString& aProgrammaticName)
                                 THROWS( (UsrSystemException) )
 {
-    //  return translated strings
+    
 
     UString aRet;
     if ( aProgrammaticName == L"countParams" )        aRet = L"ParamAnzahl";
@@ -162,7 +162,7 @@ UString ScTestAddIn::getDisplayFunctionName(const UString& aProgrammaticName)
 UString ScTestAddIn::getFunctionDescription(const UString& aProgrammaticName)
                                 THROWS( (UsrSystemException) )
 {
-    //  return translated strings
+    
 
     UString aRet;
     if ( aProgrammaticName == L"countParams" )        aRet = L"Gibt die Anzahl der Parameter zurueck.";
@@ -181,7 +181,7 @@ UString ScTestAddIn::getFunctionDescription(const UString& aProgrammaticName)
 UString ScTestAddIn::getDisplayArgumentName(const UString& aProgrammaticFunctionName,
                                 INT32 nArgument) THROWS( (UsrSystemException) )
 {
-    //  return translated strings
+    
 
     UString aRet;
     if ( aProgrammaticFunctionName == L"countParams" )
@@ -234,7 +234,7 @@ UString ScTestAddIn::getDisplayArgumentName(const UString& aProgrammaticFunction
 UString ScTestAddIn::getArgumentDescription(const UString& aProgrammaticFunctionName,
                                 INT32 nArgument) THROWS( (UsrSystemException) )
 {
-    //  return translated strings
+    
 
     UString aRet;
     if ( aProgrammaticFunctionName == L"countParams" )
@@ -287,7 +287,7 @@ UString ScTestAddIn::getArgumentDescription(const UString& aProgrammaticFunction
 UString ScTestAddIn::getProgrammaticCategoryName(const UString& aProgrammaticFunctionName)
                                 THROWS( (UsrSystemException) )
 {
-    //  return non-translated strings
+    
 
     UString aRet;
     if ( aProgrammaticFunctionName == L"countParams" )        aRet = L"Information";
@@ -299,19 +299,19 @@ UString ScTestAddIn::getProgrammaticCategoryName(const UString& aProgrammaticFun
     else if ( aProgrammaticFunctionName == L"transposeInt" )  aRet = L"Matrix";
     else if ( aProgrammaticFunctionName == L"repeatMultiple" )aRet = L"Text";
     else if ( aProgrammaticFunctionName == L"getStrOrVal" )   aRet = L"Add-In";
-    else if ( aProgrammaticFunctionName == L"callAsync" )     aRet = L"Realtime";       // new group
+    else if ( aProgrammaticFunctionName == L"callAsync" )     aRet = L"Realtime";       
     return aRet;
 }
 
 UString ScTestAddIn::getDisplayCategoryName(const UString& aProgrammaticFunctionName)
                                 THROWS( (UsrSystemException) )
 {
-    //  return translated strings
+    
 
-    return L"irgendwas";    // not used for predefined categories
+    return L"irgendwas";    
 }
 
-// XLocalizable
+
 
 void ScTestAddIn::setLocale(const lang::Locale& eLocale) THROWS( (UsrSystemException) )
 {
@@ -323,7 +323,7 @@ void ScTestAddIn::setLocale(const lang::Locale& eLocale) THROWS( (UsrSystemExcep
     return aFuncLoc;
 }
 
-// XTestAddIn
+
 
 sal_Int32 SAL_CALL ScTestAddIn::countParams( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArgs ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -377,7 +377,7 @@ sal_Int32 SAL_CALL ScTestAddIn::getColorValue( const ::com::sun::star::uno::Refe
         long nRet = -1;
         uno::Any aTrans = xProp->getPropertyValue( L"IsCellBackgroundTransparent" );
         sal_Bool bIsTrans;
-        aTrans >>= bIsTrans;        //! dont use >>= for BOOL
+        aTrans >>= bIsTrans;        
         if (!bIsTrans)
         {
             uno::Any aCol = xProp->getPropertyValue( L"CellBackColor" );
@@ -396,7 +396,7 @@ double lcl_GetDoubleElement( const uno::Sequence< uno::Sequence<double> >& aMatr
         if ( nCol < rRowSeq.getLength() )
             return rRowSeq.getConstArray()[nCol];
     }
-    return 0.0;     // error
+    return 0.0;     
 }
 
 INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, long nCol, long nRow )
@@ -407,7 +407,7 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
         if ( nCol < rRowSeq.getLength() )
             return rRowSeq.getConstArray()[nCol];
     }
-    return 0.0;     // error
+    return 0.0;     
 }
 
 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > > SAL_CALL ScTestAddIn::transpose( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< double > >& aMatrix ) throw(::com::sun::star::uno::RuntimeException)
@@ -453,7 +453,7 @@ INT32 lcl_GetLongElement( const uno::Sequence< uno::Sequence<INT32> >& aMatrix, 
 OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::sun::star::uno::Any& aFirst, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aFollow ) throw(::com::sun::star::uno::RuntimeException)
 {
     String aSeparator;
-    if ( !aFirst.hasValue() )   // not specified
+    if ( !aFirst.hasValue() )   
         aSeparator = ';';
     else
     {
@@ -490,7 +490,7 @@ OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::su
 {
     uno::Any aRet;
 
-    //! Test
+    
     if ( nFlag == 42 )
     {
         uno::Sequence<OUString> aInner(3);
@@ -502,7 +502,7 @@ OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::su
         aRet <<= aOuter;
         return aRet;
     }
-    //! Test
+    
 
     if ( nFlag )
         aRet <<= UString(L"This is a string.");
@@ -530,13 +530,13 @@ OUString SAL_CALL ScTestAddIn::repeatMultiple( sal_Int32 nCount, const ::com::su
     }
 }
 
-// XServiceName
+
 OUString SAL_CALL ScTestAddIn::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    return SCTESTADDIN_SERVICE;     // name of specific AddIn service
+    return SCTESTADDIN_SERVICE;     
 }
 
-// XServiceInfo
+
 OUString SAL_CALL ScTestAddIn::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return getImplementationName_Static();

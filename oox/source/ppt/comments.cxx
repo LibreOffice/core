@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "oox/ppt/comments.hxx"
@@ -29,7 +29,7 @@ void CommentAuthorList::setValues(const CommentAuthorList& list)
     }
 }
 
-//DateTime is saved as : 2013-01-10T15:53:26.000
+
 void Comment::setDateTime (OUString datetime)
 {
     aDateTime.Year = datetime.getToken(0,'-').toInt32();
@@ -43,7 +43,7 @@ void Comment::setDateTime (OUString datetime)
     seconds -= aDateTime.Seconds;
     aDateTime.NanoSeconds = ::rtl::math::round(seconds * 1000000000);
     const int secondsOverFlow = (aDateTime.Seconds == 60) ? 61 : 60;
-    // normalise time part of aDateTime
+    
     if (aDateTime.NanoSeconds == 1000000000)
     {
         aDateTime.NanoSeconds = 0;
@@ -59,7 +59,7 @@ void Comment::setDateTime (OUString datetime)
         aDateTime.Minutes = 0;
         ++aDateTime.Hours;
     }
-    // if overflow goes into date, I give up
+    
 }
 
 OUString Comment::getAuthor ( const CommentAuthorList& list )

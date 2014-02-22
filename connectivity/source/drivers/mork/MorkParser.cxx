@@ -44,8 +44,8 @@
 
 std::string g_Empty = "";
 
-// Mork header of supported format version
-const char *MorkMagicHeader = "// <!-- <mdb:mork:z v=\"1.4\"/> -->";
+
+const char *MorkMagicHeader = "
 
 const char *MorkDictColumnMeta = "<(a=c)>";
 
@@ -83,7 +83,7 @@ bool MorkParser::open( const std::string &path )
         morkData_.append("\n");
     }
 
-    // Parse mork
+    
     return parse();
 }
 
@@ -105,7 +105,7 @@ bool MorkParser::parse()
 {
     bool Result = true;
 
-    // Run over mork chars and parse each term
+    
     char cur = nextChar();
 
     int i = 0;
@@ -115,28 +115,28 @@ bool MorkParser::parse()
         if ( !isWhiteSpace( cur ) )
         {
             i++;
-            // Figure out what a term
+            
             switch ( cur )
             {
             case '<':
-                // Dict
+                
                 Result = parseDict();
                 break;
             case '/':
-                // Comment
+                
                 Result = parseComment();
                 break;
             case '{':
                 Result = parseTable();
-                // Table
+                
                 break;
             case '[':
                 Result = parseRow( 0, 0 );
-                // Row
+                
                 break;
             case '@':
                 Result = parseGroup();
-                // Group
+                
                 break;
             default:
                 error_ = DefectedFormat;
@@ -145,7 +145,7 @@ bool MorkParser::parse()
             }
         }
 
-        // Get next char
+        
         cur = nextChar();
     }
 
@@ -246,7 +246,7 @@ bool MorkParser::parseCell()
     bool bColumn = true;
     int Corners = 0;
 
-    // Column = Value
+    
     std::string Column;
     std::string Text;
     Column.reserve( 4 );
@@ -254,13 +254,13 @@ bool MorkParser::parseCell()
 
     char cur = nextChar();
 
-    // Process cell start with column (bColumn == true)
+    
     while ( Result && cur != ')' && cur )
     {
         switch ( cur )
         {
         case '^':
-            // Oids
+            
             Corners++;
             if ( 1 == Corners )
             {
@@ -277,7 +277,7 @@ bool MorkParser::parseCell()
 
             break;
         case '=':
-            // From column to value
+            
             if ( bColumn )
             {
                 bColumn = false;
@@ -289,7 +289,7 @@ bool MorkParser::parseCell()
             break;
         case '\\':
         {
-            // Get next two chars
+            
             char NextChar= nextChar();
             if ( '\r' != NextChar && '\n' != NextChar )
             {
@@ -300,7 +300,7 @@ bool MorkParser::parseCell()
         break;
         case '$':
         {
-            // Get next two chars
+            
             std::string HexChar;
             HexChar += nextChar();
             HexChar += nextChar();
@@ -308,7 +308,7 @@ bool MorkParser::parseCell()
         }
         break;
         default:
-            // Just a char
+            
             if ( bColumn )
             {
                 Column += cur;
@@ -323,12 +323,12 @@ bool MorkParser::parseCell()
         cur = nextChar();
     }
 
-    // Apply column and text
+    
     int ColumnId = strtoul(Column.c_str(), 0, 16);
 
     if ( NPRows != nowParsing_ )
     {
-        // Dicts
+        
         if ( "" != Text )
         {
             if ( nowParsing_ == NPColumns )
@@ -345,8 +345,8 @@ bool MorkParser::parseCell()
     {
         if ( "" != Text )
         {
-            // Rows
-            //int ValueId = string( Text.c_str() ).toInt( 0, 16 );
+            
+            
             int ValueId = strtoul(Text.c_str(), 0, 16);
 
             if ( bValueOid  )
@@ -373,7 +373,7 @@ bool MorkParser::parseTable()
 
     char cur = nextChar();
 
-    // Get id
+    
     while ( cur != '{' && cur != '[' && cur != '}' && cur )
     {
         if ( !isWhiteSpace( cur ) )
@@ -386,7 +386,7 @@ bool MorkParser::parseTable()
 
     parseScopeId( TextId, &Id, &Scope );
 
-    // Parse the table
+    
     while ( Result && cur != '}' && cur )
     {
         if ( !isWhiteSpace( cur ) )
@@ -442,7 +442,7 @@ void MorkParser::parseScopeId( const std::string &TextId, int *Id, int *Scope )
 
         if ( tSc.length() > 1 && '^' == tSc[ 0 ] )
         {
-            // Delete '^'
+            
             tSc.erase( 0, 1 );
         }
 
@@ -468,10 +468,10 @@ inline void MorkParser::setCurrentRow( int TableScope, int TableId, int RowScope
         TableScope = defaultScope_;
     }
 
-    // 01.08.2012 davido
-    // TableId 0 is wrong here.
-    // Straying rows (rows that defined outside the table) belong to the default scope and table is the last was seen: 1:^80
-    // (at least i read so the specification)
+    
+    
+    
+    
     if (TableId)
     {
         defaultTableId_ = TableId;
@@ -494,7 +494,7 @@ bool MorkParser::parseRow( int TableId, int TableScope )
 
     char cur = nextChar();
 
-    // Get id
+    
     while ( cur != '(' && cur != ']' && cur != '[' && cur )
     {
         if ( !isWhiteSpace( cur ) )
@@ -508,7 +508,7 @@ bool MorkParser::parseRow( int TableId, int TableScope )
     parseScopeId( TextId, &Id, &Scope );
     setCurrentRow( TableScope, TableId, Scope, Id );
 
-    // Parse the row
+    
     while ( Result && cur != ']' && cur )
     {
         if ( !isWhiteSpace( cur ) )
@@ -628,7 +628,7 @@ void MorkParser::retrieveLists(std::set<std::string>& lists)
                 << RowIter->first << std::endl;
                 std::cout << "\t\t\t\t Cells:\r\n";
 #endif
-            // Get cells
+            
             for ( MorkCells::iterator cellsIter = RowIter->second.begin();
                  cellsIter != RowIter->second.end(); ++cellsIter )
             {
@@ -670,7 +670,7 @@ void MorkParser::getRecordKeysForListTable(std::string& listName, std::set<int>&
             << RowIter->first << std::endl;
             std::cout << "\t\t\t\t Cells:\r\n";
 #endif
-            // Get cells
+            
             bool listFound = false;
             for ( MorkCells::iterator cellsIter = RowIter->second.begin();
                  cellsIter != RowIter->second.end(); ++cellsIter )
@@ -703,7 +703,7 @@ void MorkParser::dump()
     std::cout << "Column Dict:\r\n";
     std::cout << "=============================================\r\n\r\n";
 
-    //// columns dict
+    
     for ( MorkDict::iterator iter = columns_.begin();
           iter != columns_.end(); ++iter )
     {
@@ -713,7 +713,7 @@ void MorkParser::dump()
                    << std::endl;
     }
 
-    //// values dict
+    
     std::cout << "\r\nValues Dict:\r\n";
     std::cout << "=============================================\r\n\r\n";
 
@@ -734,7 +734,7 @@ void MorkParser::dump()
     std::cout << "============================================="
               << std::endl << std::endl;
 
-    //// Mork data
+    
     for ( TableScopeMap::iterator iter = mork_.begin();
           iter != mork_.end(); ++iter )
     {
@@ -764,7 +764,7 @@ void MorkParser::dump()
                     for (MorkCells::iterator CellsIter = RowIter->second.begin();
                          CellsIter != RowIter->second.end(); ++CellsIter )
                     {
-                        // Write ids
+                        
                         std::cout << "\t\t\t\t\t"
                                   << CellsIter->first
                                   << " : "
@@ -774,7 +774,7 @@ void MorkParser::dump()
                         MorkDict::iterator FoundIter = values_.find( CellsIter->second );
                         if ( FoundIter != values_.end() )
                         {
-                            // Write string values
+                            
                             std::cout << columns_[ CellsIter->first ].c_str()
                                       << " : "
                                       << FoundIter->second.c_str()

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,14 +65,14 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
             {
                 switch(nProp)
                 {
-                    case  0: *pValues >>= nScaleFactor; break; //"FontScaling",
-                    case  1: *pValues >>= nDragMode; break;   //"Window/Drag",
-                    case  2: bMenuMouseFollow = *(sal_Bool*)pValues->getValue(); break; //"Menu/FollowMouse",
-                    case  3: *pValues >>= nSnapMode; break; //"Dialog/MousePositioning",
-                    case  4: *pValues >>= nMiddleMouse; break; //"Dialog/MiddleMouseButton",
+                    case  0: *pValues >>= nScaleFactor; break; 
+                    case  1: *pValues >>= nDragMode; break;   
+                    case  2: bMenuMouseFollow = *(sal_Bool*)pValues->getValue(); break; 
+                    case  3: *pValues >>= nSnapMode; break; 
+                    case  4: *pValues >>= nMiddleMouse; break; 
 #if defined( UNX )
-                    case  5: bFontAntialiasing = *(sal_Bool*)pValues->getValue(); break;    // "FontAntialising/Enabled",
-                    case  6: *pValues >>= nAAMinPixelHeight; break;                         // "FontAntialising/MinPixelHeight",
+                    case  5: bFontAntialiasing = *(sal_Bool*)pValues->getValue(); break;    
+                    case  6: *pValues >>= nAAMinPixelHeight; break;                         
 #endif
                 }
             }
@@ -91,14 +91,14 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
     {
         static const sal_Char* aPropNames[] =
         {
-             "FontScaling"                       //  0
-            ,"Window/Drag"                       //  1
-            ,"Menu/FollowMouse"                  //  2
-            ,"Dialog/MousePositioning"           //  3
-            ,"Dialog/MiddleMouseButton"          //  4
+             "FontScaling"                       
+            ,"Window/Drag"                       
+            ,"Menu/FollowMouse"                  
+            ,"Dialog/MousePositioning"           
+            ,"Dialog/MiddleMouseButton"          
 #if defined( UNX )
-            ,"FontAntiAliasing/Enabled"         //  5
-            ,"FontAntiAliasing/MinPixelHeight"  //  6
+            ,"FontAntiAliasing/Enabled"         
+            ,"FontAntiAliasing/MinPixelHeight"  
 #endif
         };
         const int nCount = SAL_N_ELEMENTS( aPropNames );
@@ -123,14 +123,14 @@ void  SvtTabAppearanceCfg::Commit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp] <<= nScaleFactor; break;            // "FontScaling",
-            case  1: pValues[nProp] <<= nDragMode; break;               //"Window/Drag",
-            case  2: pValues[nProp].setValue(&bMenuMouseFollow, rType); break; //"Menu/FollowMouse",
-            case  3: pValues[nProp] <<= nSnapMode; break;               //"Dialog/MousePositioning",
-            case  4: pValues[nProp] <<= nMiddleMouse; break;               //"Dialog/MiddleMouseButton",
+            case  0: pValues[nProp] <<= nScaleFactor; break;            
+            case  1: pValues[nProp] <<= nDragMode; break;               
+            case  2: pValues[nProp].setValue(&bMenuMouseFollow, rType); break; 
+            case  3: pValues[nProp] <<= nSnapMode; break;               
+            case  4: pValues[nProp] <<= nMiddleMouse; break;               
 #if defined( UNX )
-            case  5: pValues[nProp].setValue(&bFontAntialiasing, rType); break; // "FontAntialising/Enabled",
-            case  6: pValues[nProp] <<= nAAMinPixelHeight; break;               // "FontAntialising/MinPixelHeight",
+            case  5: pValues[nProp].setValue(&bFontAntialiasing, rType); break; 
+            case  6: pValues[nProp] <<= nAAMinPixelHeight; break;               
 #endif
         }
     }
@@ -164,27 +164,27 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     AllSettings   hAppSettings = pApp->GetSettings();
     StyleSettings hAppStyle    = hAppSettings.GetStyleSettings();
 
-    // Look & Feel
+    
 
-    // SetStandard...Styles() resets the UseSystemUIFonts flag,
-    // but we don't want to change it now, so save the flag before ...
+    
+    
     sal_Bool bUseSystemUIFonts = hAppStyle.GetUseSystemUIFonts();
     hAppStyle.SetStandardStyles();
-    // and set it here
+    
     hAppStyle.SetUseSystemUIFonts( bUseSystemUIFonts );
 
-    // Screen and ScreenFont Scaling
+    
 
     hAppStyle.SetScreenZoom( nScaleFactor );
     hAppStyle.SetScreenFontZoom( nScaleFactor );
 
 #if defined( UNX )
-    // font anti aliasing
+    
     hAppStyle.SetAntialiasingMinPixelHeight( nAAMinPixelHeight );
     hAppStyle.SetDisplayOptions( bFontAntialiasing ? 0 : DISPLAY_OPTION_AA_DISABLE );
 #endif
 
-    // Mouse Snap
+    
 
     MouseSettings hMouseSettings = hAppSettings.GetMouseSettings();
     sal_uLong         nMouseOptions  = hMouseSettings.GetOptions();
@@ -206,7 +206,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     hMouseSettings.SetOptions(nMouseOptions);
     hMouseSettings.SetMiddleButtonAction(nMiddleMouse);
 
-    // Merge and Publish Settings
+    
 
     sal_uLong nFollow = hMouseSettings.GetFollow();
     if(bMenuMouseFollow)
@@ -218,7 +218,7 @@ void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
     hAppSettings.SetMouseSettings( hMouseSettings );
 
     hAppSettings.SetStyleSettings( hAppStyle );
-    pApp->MergeSystemSettings    ( hAppSettings );      // Allow system-settings to apply
+    pApp->MergeSystemSettings    ( hAppSettings );      
     pApp->OverrideSystemSettings ( hAppSettings );
 
     pApp->SetSettings ( hAppSettings );

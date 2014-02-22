@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,14 +49,14 @@ static HTMLOptionEnum const aScollingTable[] =
 void SfxFrameHTMLParser::ParseFrameOptions(
     SfxFrameDescriptor *pFrame, const HTMLOptions& rOptions, const OUString& rBaseURL )
 {
-    // Get and set the options
+    
     Size aMargin( pFrame->GetMargin() );
 
-    // Netscape seems to set marginwidth to 0 as soon as
-    // marginheight is set, and vice versa.
-    // Netscape does however not allow for a direct
-    // seting to 0, while IE4.0 does
-    // We will not mimic that bug !
+    
+    
+    
+    
+    
     sal_Bool bMarginWidth = sal_False, bMarginHeight = sal_False;
 
     for (size_t i = 0, n = rOptions.size(); i < n; ++i)

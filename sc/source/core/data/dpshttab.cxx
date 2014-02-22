@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/zforlist.hxx>
@@ -39,7 +39,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 using ::std::vector;
 
-// -----------------------------------------------------------------------
+
 
 ScSheetDPData::ScSheetDPData(ScDocument* pD, const ScSheetSourceDesc& rDesc, const ScDPCache& rCache) :
     ScDPTableData(pD),
@@ -86,8 +86,8 @@ OUString ScSheetDPData::getDimensionName(long nColumn)
     CreateCacheTable();
     if (getIsDataLayoutDimension(nColumn))
     {
-        //! different internal and display names?
-        //return "Data";
+        
+        
         return ScGlobal::GetRscString(STR_PIVOT_DATA);
     }
     else if (nColumn >= aCacheTable.getColSize())
@@ -167,9 +167,9 @@ bool ScSheetDPData::IsRepeatIfEmpty()
 
 void ScSheetDPData::CreateCacheTable()
 {
-    // Scan and store the data from the source range.
+    
     if (!aCacheTable.empty())
-        // already cached.
+        
         return;
 
     aCacheTable.fillTable(aQuery, bIgnoreEmptyRows, bRepeatIfEmpty);
@@ -216,14 +216,14 @@ ScSheetSourceDesc::ScSheetSourceDesc(ScDocument* pDoc) :
 void ScSheetSourceDesc::SetSourceRange(const ScRange& rRange)
 {
     maSourceRange = rRange;
-    maRangeName = OUString(); // overwrite existing range name if any.
+    maRangeName = OUString(); 
 }
 
 const ScRange& ScSheetSourceDesc::GetSourceRange() const
 {
     if (!maRangeName.isEmpty())
     {
-        // Obtain the source range from the range name first.
+        
         maSourceRange = ScRange();
         ScRangeName* pRangeName = mpDoc->GetRangeName();
         do
@@ -236,8 +236,8 @@ const ScRange& ScSheetSourceDesc::GetSourceRange() const
             if (!pData)
                 break;
 
-            // range name found.  Fow now, we only use the first token and
-            // ignore the rest.
+            
+            
             ScRange aRange;
             if (!pData->IsReference(aRange))
                 break;
@@ -293,11 +293,11 @@ const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDi
         return NULL;
     }
 
-    // All cache instances are managed centrally by ScDPCollection.
+    
     ScDPCollection* pDPs = mpDoc->GetDPCollection();
     if (HasRangeName())
     {
-        // Name-based data source.
+        
         ScDPCollection::NameCaches& rCaches = pDPs->GetNameCaches();
         return rCaches.getCache(GetRangeName(), GetSourceRange(), pDimData);
     }
@@ -311,7 +311,7 @@ sal_uLong ScSheetSourceDesc::CheckSourceRange() const
     if (!mpDoc)
         return STR_ERR_DATAPILOTSOURCE;
 
-    // Make sure the range is valid and sane.
+    
     const ScRange& rSrcRange = GetSourceRange();
     if (!rSrcRange.IsValid())
         return STR_ERR_DATAPILOTSOURCE;

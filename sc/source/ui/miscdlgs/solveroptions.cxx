@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "solveroptions.hxx"
@@ -39,9 +39,9 @@
 
 using namespace com::sun::star;
 
-//==================================================================
 
-/// Helper for sorting properties
+
+
 struct ScSolverOptionsEntry
 {
     sal_Int32       nPosition;
@@ -55,7 +55,7 @@ struct ScSolverOptionsEntry
     }
 };
 
-//------------------------------------------------------------------
+
 
 class ScSolverOptionsString : public SvLBoxString
 {
@@ -82,7 +82,7 @@ public:
 
 void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const SvViewDataEntry* /*pView*/, const SvTreeListEntry* /*pEntry*/)
 {
-    //! move position? (SvxLinguTabPage: aPos.X() += 20)
+    
     OUString aNormalStr( GetText() );
     aNormalStr += ":";
     rDev.DrawText( rPos, aNormalStr );
@@ -106,7 +106,7 @@ void ScSolverOptionsString::Paint( const Point& rPos, SvTreeListBox& rDev, const
     rDev.SetFont( aOldFont );
 }
 
-//------------------------------------------------------------------
+
 
 ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
                         const uno::Sequence<OUString>& rImplNames,
@@ -140,28 +140,28 @@ ScSolverOptionsDialog::ScSolverOptionsDialog( Window* pParent,
     for (sal_Int32 nImpl=0; nImpl<nImplCount; ++nImpl)
     {
         OUString aImplName( maImplNames[nImpl] );
-        OUString aDescription( maDescriptions[nImpl] );   // user-visible descriptions in list box
+        OUString aDescription( maDescriptions[nImpl] );   
         m_pLbEngine->InsertEntry( aDescription );
         if ( aImplName == maEngine )
             nSelect = nImpl;
     }
-    if ( nSelect < 0 )                  // no (valid) engine given
+    if ( nSelect < 0 )                  
     {
         if ( nImplCount > 0 )
         {
-            maEngine = maImplNames[0];  // use first implementation
+            maEngine = maImplNames[0];  
             nSelect = 0;
         }
         else
             maEngine = "";
-        maProperties.realloc(0);        // don't use options from different engine
+        maProperties.realloc(0);        
     }
-    if ( nSelect >= 0 )                 // select in list box
+    if ( nSelect >= 0 )                 
         m_pLbEngine->SelectEntryPos( static_cast<sal_uInt16>(nSelect) );
 
     if ( !maProperties.getLength() )
-        ReadFromComponent();            // fill maProperties from component (using maEngine)
-    FillListBox();                      // using maProperties
+        ReadFromComponent();            
+    FillListBox();                      
 }
 
 ScSolverOptionsDialog::~ScSolverOptionsDialog()
@@ -171,13 +171,13 @@ ScSolverOptionsDialog::~ScSolverOptionsDialog()
 
 const OUString& ScSolverOptionsDialog::GetEngine() const
 {
-    return maEngine;    // already updated in selection handler
+    return maEngine;    
 }
 
 const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties()
 {
-    // update maProperties from list box content
-    // order of entries in list box and maProperties is the same
+    
+    
     sal_Int32 nEntryCount = maProperties.getLength();
     SvTreeList* pModel = m_pLbSettings->GetModel();
     if ( nEntryCount == (sal_Int32)pModel->GetEntryCount() )
@@ -217,7 +217,7 @@ const uno::Sequence<beans::PropertyValue>& ScSolverOptionsDialog::GetProperties(
 
 void ScSolverOptionsDialog::FillListBox()
 {
-    // get property descriptions, sort by them
+    
 
     uno::Reference<sheet::XSolverDescription> xDesc( ScSolverUtil::GetSolver( maEngine ), uno::UNO_QUERY );
     sal_Int32 nCount = maProperties.getLength();
@@ -235,7 +235,7 @@ void ScSolverOptionsDialog::FillListBox()
     }
     std::sort( aDescriptions.begin(), aDescriptions.end() );
 
-    // also update maProperties to the order of descriptions
+    
 
     uno::Sequence<beans::PropertyValue> aNewSeq;
     aNewSeq.realloc( nCount );
@@ -243,7 +243,7 @@ void ScSolverOptionsDialog::FillListBox()
         aNewSeq[nPos] = maProperties[ aDescriptions[nPos].nPosition ];
     maProperties = aNewSeq;
 
-    // fill the list box
+    
 
     m_pLbSettings->SetUpdateMode(false);
     m_pLbSettings->Clear();
@@ -263,7 +263,7 @@ void ScSolverOptionsDialog::FillListBox()
         uno::TypeClass eClass = aValue.getValueTypeClass();
         if ( eClass == uno::TypeClass_BOOLEAN )
         {
-            // check box entry
+            
             pEntry = new SvTreeListEntry;
             SvLBoxButton* pButton = new SvLBoxButton( pEntry, SvLBoxButtonKind_enabledCheckbox, 0, mpCheckButtonData );
             if ( ScUnoHelpFunctions::GetBoolFromAny( aValue ) )
@@ -276,9 +276,9 @@ void ScSolverOptionsDialog::FillListBox()
         }
         else
         {
-            // value entry
+            
             pEntry = new SvTreeListEntry;
-            pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty ) );                   // empty column
+            pEntry->AddItem( new SvLBoxString( pEntry, 0, sEmpty ) );                   
             pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false ) );
             ScSolverOptionsString* pItem = new ScSolverOptionsString( pEntry, 0, aVisName );
             if ( eClass == uno::TypeClass_DOUBLE )
@@ -368,8 +368,8 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl)
         if ( aNewEngine != maEngine )
         {
             maEngine = aNewEngine;
-            ReadFromComponent();            // fill maProperties from component (using maEngine)
-            FillListBox();                  // using maProperties
+            ReadFromComponent();            
+            FillListBox();                  
         }
     }
     return 0;
@@ -392,7 +392,7 @@ IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
     return 0;
 }
 
-//------------------------------------------------------------------
+
 
 ScSolverIntegerDialog::ScSolverIntegerDialog(Window * pParent)
     : ModalDialog( pParent, "IntegerDialog",
@@ -422,7 +422,7 @@ sal_Int32 ScSolverIntegerDialog::GetValue() const
     return (sal_Int32) nValue;
 }
 
-//------------------------------------------------------------------
+
 
 ScSolverValueDialog::ScSolverValueDialog( Window * pParent )
     : ModalDialog( pParent, "DoubleDialog",

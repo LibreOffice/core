@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -40,15 +40,15 @@
 #include <statstr.hrc>
 #include <swerror.h>
 
-//////////////////////////////////////////////////////////////////////////
 
-// Hash-Code errechnen (muss nicht eindeutig sein)
+
+
 
 
 sal_uInt16 SwImpBlocks::Hash( const OUString& r )
 {
     sal_uInt16 n = 0;
-    // std::min requires an explicit cast to sal_Int32 on 32bit platforms
+    
     const sal_Int32 nLen = std::min(r.getLength(), static_cast<sal_Int32>(8));
     for (sal_Int32 i=0; i<nLen; ++i)
     {
@@ -75,7 +75,7 @@ SwBlockName::SwBlockName( const OUString& rShort, const OUString& rLong, const O
 }
 
 
-// Ist die angegebene Datei ein Storage oder gibt es sie nicht?
+
 
 short SwImpBlocks::GetFileType( const OUString& rFile )
 {
@@ -85,7 +85,7 @@ short SwImpBlocks::GetFileType( const OUString& rFile )
         return SWBLK_XML;
     if( SvStorage::IsStorageFile( rFile ) )
         return SWBLK_SW3;
-    //otherwise return NONE
+    
     return SWBLK_NONE;
 }
 
@@ -111,13 +111,13 @@ SwImpBlocks::~SwImpBlocks()
     aNames.DeleteAndDestroyAll();
 }
 
-// Loeschen des Inhaltes des Dokuments
+
 void SwImpBlocks::ClearDoc()
 {
     pDoc->ClearDoc();
 }
 
-// Erzeugen eines PaMs, der das ganze Dokument umfasst
+
 SwPaM* SwImpBlocks::MakePaM()
 {
     SwPaM* pPam = new SwPaM( pDoc->GetNodes().GetEndOfContent() );
@@ -134,7 +134,7 @@ sal_uInt16 SwImpBlocks::GetCount() const
     return aNames.size();
 }
 
-// Case Insensitive
+
 sal_uInt16 SwImpBlocks::GetIndex( const OUString& rShort ) const
 {
     const OUString s( GetAppCharClass().uppercase( rShort ) );
@@ -241,7 +241,7 @@ sal_Bool SwImpBlocks::PutMuchEntries( sal_Bool )
     return sal_False;
 }
 
-////////////////////////////////////////////////////////////////////////////
+
 
 
 SwTextBlocks::SwTextBlocks( const OUString& rFile )
@@ -372,7 +372,7 @@ sal_uInt16 SwTextBlocks::Rename( sal_uInt16 n, const OUString* s, const OUString
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;
         else if( 0 == ( nErr = pImp->OpenFile( sal_False )))
         {
-            // Vorher den neuen Eintrag in die Liste setzen!
+            
             aNew = GetAppCharClass().uppercase( aNew );
              nErr = pImp->Rename( n, aNew, aLong );
             if( !nErr )
@@ -402,7 +402,7 @@ sal_uLong SwTextBlocks::CopyBlock( SwTextBlocks& rSource, OUString& rSrcShort,
         if (SWBLK_SW2 == nType || SWBLK_SW3 == nType )
             bIsOld = true;
     }
-    if( bIsOld ) //rSource.IsOld() )
+    if( bIsOld ) 
         nErr = ERR_SWG_OLD_GLOSSARY;
     else if( pImp->bInPutMuchBlocks )
         nErr = ERR_SWG_INTERNAL_ERROR;
@@ -415,10 +415,10 @@ sal_Bool SwTextBlocks::BeginGetDoc( sal_uInt16 n )
 {
     if( pImp && !pImp->bInPutMuchBlocks )
     {
-// diese Optimierierung darf es nicht mehr geben. OLE-Objecte muessen auf
-// ihre SubStorages zugreifem koennen!
-//      if( n == pImp->nCur )
-//          return sal_True;
+
+
+
+
 
         if( pImp->IsFileChanged() )
             nErr = ERR_TXTBLOCK_NEWFILE_ERROR;

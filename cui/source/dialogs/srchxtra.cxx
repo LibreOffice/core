@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "srchxtra.hxx"
@@ -54,7 +54,7 @@ SvxSearchFormatDialog::SvxSearchFormatDialog(Window* pParent, const SfxItemSet& 
     AddTabPage("labelTP_PARA_ASIAN", SvxAsianTabPage::Create, 0 );
     m_nBackPageId = AddTabPage("background", SvxBackgroundTabPage::Create, 0);
 
-    // remove asian tabpages if necessary
+    
     SvtCJKOptions aCJKOptions;
     if ( !aCJKOptions.IsDoubleLinesEnabled() )
         RemoveTabPage("asianlayout");
@@ -150,7 +150,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(Window* pParent,
                 }
             }
 
-            // item resources are in svx
+            
             sal_uInt32 nId  = aAttrNames.FindIndex( nSlot );
             SvTreeListEntry* pEntry = NULL;
             if ( RESARRAY_INDEX_NOTFOUND != nId )
@@ -171,7 +171,7 @@ SvxSearchAttributeDialog::SvxSearchAttributeDialog(Window* pParent,
     m_pAttrLB->SelectEntryPos( 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
 {
@@ -209,7 +209,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
         }
     }
 
-    // remove invalid items (pItem == NULL)
+    
     for ( sal_uInt16 n = rList.Count(); n; )
         if ( !rList[ --n ].pItem )
             rList.Remove( n );
@@ -218,7 +218,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl)
     return 0;
 }
 
-// class SvxSearchSimilarityDialog ---------------------------------------
+
 
 SvxSearchSimilarityDialog::SvxSearchSimilarityDialog
 (

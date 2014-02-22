@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/PropertyState.hpp>
@@ -63,9 +63,9 @@ using ::com::sun::star::awt::FontDescriptor;
 
 static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, const Any& rValue )
 {
-    // some props are defined with other types than the matching FontDescriptor members have
-    // (e.g. FontWidth, FontSlant)
-    // 78474 - 09/19/2000 - FS
+    
+    
+    
     float       nExtractFloat = 0;
     sal_Int16   nExtractShort = 0;
 
@@ -110,9 +110,9 @@ static void lcl_ImplMergeFontProperty( FontDescriptor& rFD, sal_uInt16 nPropId, 
     }
 }
 
-//  ----------------------------------------------------
-//  class UnoControlModel
-//  ----------------------------------------------------
+
+
+
 UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContext )
     :UnoControlModel_Base()
     ,MutexAndBroadcastHelper()
@@ -120,8 +120,8 @@ UnoControlModel::UnoControlModel( const Reference< XComponentContext >& rxContex
     ,maDisposeListeners( *this )
     ,m_xContext( rxContext )
 {
-    // Insert properties from Model into table,
-    // only existing properties are valid, even if they're VOID
+    
+    
 }
 
 UnoControlModel::UnoControlModel( const UnoControlModel& rModel )
@@ -215,7 +215,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_SCROLLVALUE:
             case BASEPROPERTY_VISIBLESIZE:
             case BASEPROPERTY_BACKGROUNDCOLOR:
-            case BASEPROPERTY_FILLCOLOR:            break;  // Void
+            case BASEPROPERTY_FILLCOLOR:            break;  
 
             case BASEPROPERTY_FONTRELIEF:
             case BASEPROPERTY_FONTEMPHASISMARK:
@@ -251,7 +251,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
             case BASEPROPERTY_SPININCREMENT:        aDefault <<= (sal_Int32)   1;   break;
             case BASEPROPERTY_SPINVALUE_MIN:        aDefault <<= (sal_Int32)   0;   break;
             case BASEPROPERTY_SPINVALUE_MAX:        aDefault <<= (sal_Int32) 100;   break;
-            case BASEPROPERTY_REPEAT_DELAY:         aDefault <<= (sal_Int32)  50;   break;    // 50 milliseconds
+            case BASEPROPERTY_REPEAT_DELAY:         aDefault <<= (sal_Int32)  50;   break;    
             case BASEPROPERTY_DEFAULTCONTROL:       aDefault <<= ((UnoControlModel*)this)->getServiceName();    break;
 
             case BASEPROPERTY_AUTOHSCROLL:
@@ -320,7 +320,7 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                 OUString sDefaultCurrency(
                     utl::ConfigManager::getDefaultCurrency() );
 
-                // extract the bank symbol
+                
                 sal_Int32 nSepPos = sDefaultCurrency.indexOf( '-' );
                 OUString sBankSymbol;
                 if ( nSepPos >= 0 )
@@ -329,13 +329,13 @@ sal_Bool UnoControlModel::ImplHasProperty( sal_uInt16 nPropId ) const
                     sDefaultCurrency = sDefaultCurrency.copy( nSepPos + 1 );
                 }
 
-                // the remaining is the locale
+                
                 LanguageTag aLanguageTag( sDefaultCurrency);
                 LocaleDataWrapper aLocaleInfo( m_xContext, aLanguageTag );
                 if ( sBankSymbol.isEmpty() )
                     sBankSymbol = aLocaleInfo.getCurrBankSymbol();
 
-                // look for the currency entry (for this language) which has the given bank symbol
+                
                 Sequence< Currency2 > aAllCurrencies = aLocaleInfo.getAllCurrencies();
                 const Currency2* pAllCurrencies     =                       aAllCurrencies.getConstArray();
                 const Currency2* pAllCurrenciesEnd  =   pAllCurrencies  +   aAllCurrencies.getLength();
@@ -389,9 +389,9 @@ void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
 
     if ( nPropId == BASEPROPERTY_FONTDESCRIPTOR )
     {
-        // some properties are not included in the FontDescriptor, but everytime
-        // when we have a FontDescriptor we want to have these properties too.
-        // => Easier to register the here, istead everywhere where I register the FontDescriptor...
+        
+        
+        
 
         ImplRegisterProperty( BASEPROPERTY_TEXTCOLOR );
         ImplRegisterProperty( BASEPROPERTY_TEXTLINECOLOR );
@@ -410,7 +410,7 @@ void UnoControlModel::ImplRegisterProperties( const std::list< sal_uInt16 > &rId
     }
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any UnoControlModel::queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     Any aRet = UnoControlModel_Base::queryAggregation( rType );
@@ -419,13 +419,13 @@ void UnoControlModel::ImplRegisterProperties( const std::list< sal_uInt16 > &rId
     return aRet;
 }
 
-// ::com::sun::star::lang::XUnoTunnel
+
 IMPL_XUNOTUNNEL_MINIMAL( UnoControlModel )
 
-// XInterface
+
 IMPLEMENT_FORWARD_REFCOUNT( UnoControlModel, UnoControlModel_Base )
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlModel, UnoControlModel_Base, ::cppu::OPropertySetHelper )
 
 
@@ -436,7 +436,7 @@ uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(::com::s
     return xClone;
 }
 
-// ::com::sun::star::lang::XComponent
+
 void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -447,7 +447,7 @@ void UnoControlModel::dispose(  ) throw(::com::sun::star::uno::RuntimeException)
 
     BrdcstHelper.aLC.disposeAndClear( aEvt );
 
-    // let the property set helper notify our property listeners
+    
     OPropertySetHelper::disposing();
 }
 
@@ -466,7 +466,7 @@ void UnoControlModel::removeEventListener( const ::com::sun::star::uno::Referenc
 }
 
 
-// ::com::sun::star::beans::XPropertyState
+
 ::com::sun::star::beans::PropertyState UnoControlModel::getPropertyState( const OUString& PropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -513,7 +513,7 @@ void UnoControlModel::setPropertyToDefault( const OUString& PropertyName ) throw
 }
 
 
-// ::com::sun::star::io::XPersistObjec
+
 OUString UnoControlModel::getServiceName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -544,13 +544,13 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
 
     sal_uInt32 nProps = aProps.size();
 
-    // Save FontProperty always in the old format (due to missing distinction
-    // between 5.0 and 5.1)
+    
+    
     OutStream->writeLong( ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) != aProps.end() ) ? ( nProps + 3 ) : nProps );
     for ( std::set<sal_uInt16>::const_iterator it = aProps.begin(); it != aProps.end(); ++it )
     {
         sal_Int32 nPropDataBeginMark = xMark->createMark();
-        OutStream->writeLong( 0L ); // DataLen
+        OutStream->writeLong( 0L ); 
 
         const ::com::sun::star::uno::Any* pProp = &(maData[*it]);
         OutStream->writeShort( *it );
@@ -633,7 +633,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 css::util::Date d;
                 rValue >>= d;
                 OutStream->writeLong(d.Day + 100 * d.Month + 10000 * d.Year);
-                    // YYYYMMDD
+                    
             }
             else if ( rType == cppu::UnoType<css::util::Time>::get() )
             {
@@ -641,7 +641,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 rValue >>= t;
                 OutStream->writeLong(
                     t.NanoSeconds / 1000000 + 100 * t.Seconds
-                    + 10000 * t.Minutes + 1000000 * t.Hours); // HHMMSShh
+                    + 10000 * t.Minutes + 1000000 * t.Hours); 
             }
             else if ( rType == ::getCppuType((const ::com::sun::star::uno::Sequence< OUString>*)0 ) )
             {
@@ -701,16 +701,16 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
     if ( aProps.find( BASEPROPERTY_FONTDESCRIPTOR ) != aProps.end() )
     {
         const ::com::sun::star::uno::Any* pProp = &maData[ BASEPROPERTY_FONTDESCRIPTOR ];
-        // Until 5.0 export arrives, write old format..
+        
         ::com::sun::star::awt::FontDescriptor aFD;
         (*pProp) >>= aFD;
 
         for ( sal_uInt16 n = BASEPROPERTY_FONT_TYPE; n <= BASEPROPERTY_FONT_ATTRIBS; n++ )
         {
             sal_Int32 nPropDataBeginMark = xMark->createMark();
-            OutStream->writeLong( 0L ); // DataLen
-            OutStream->writeShort( n ); // PropId
-            OutStream->writeBoolean( sal_False );   // Void
+            OutStream->writeLong( 0L ); 
+            OutStream->writeShort( n ); 
+            OutStream->writeBoolean( sal_False );   
 
             if ( n == BASEPROPERTY_FONT_TYPE )
             {
@@ -768,10 +768,10 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> aValues( nProps );
     sal_Bool bInvalidEntries = sal_False;
 
-    // Unfortunately, there's no mark for the whole block, thus only properties may be changed.
-    // No data for the model may be added following the properties
+    
+    
 
-    // Used for import of old parts in ::com::sun::star::awt::FontDescriptor
+    
     ::com::sun::star::awt::FontDescriptor* pFD = NULL;
 
     sal_uInt32 i;
@@ -847,13 +847,13 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                 }
                 else if ( *pType == cppu::UnoType<css::util::Date>::get() )
                 {
-                    sal_Int32 n = InStream->readLong(); // YYYYMMDD
+                    sal_Int32 n = InStream->readLong(); 
                     aValue <<= css::util::Date(
                         n % 100, (n / 100) % 100, n / 10000);
                 }
                 else if ( *pType == cppu::UnoType<css::util::Time>::get() )
                 {
-                    sal_Int32 n = InStream->readLong(); // HHMMSShh
+                    sal_Int32 n = InStream->readLong(); 
                     aValue <<= css::util::Time(
                         (n % 100) * 1000000, (n / 100) % 100, (n / 10000) % 100,
                         n / 1000000, false);
@@ -903,17 +903,17 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
             }
             else
             {
-                // Old trash from 5.0
+                
                 if ( nPropId == BASEPROPERTY_FONT_TYPE )
                 {
-                    // Redundant information for older versions
-                    // is skipped by MarkableStream
+                    
+                    
                     if ( nVersion < 2 )
                     {
                         if ( !pFD )
                         {
                             pFD = new ::com::sun::star::awt::FontDescriptor;
-                            if ( maData.find( BASEPROPERTY_FONTDESCRIPTOR ) != maData.end() ) // wegen den Defaults...
+                            if ( maData.find( BASEPROPERTY_FONTDESCRIPTOR ) != maData.end() ) 
                                 maData[ BASEPROPERTY_FONTDESCRIPTOR ] >>= *pFD;
                         }
                         pFD->Name = InStream->readUTF();
@@ -930,13 +930,13 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                         if ( !pFD )
                         {
                             pFD = new ::com::sun::star::awt::FontDescriptor;
-                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
+                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) 
                                 maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
                         }
                         pFD->Width = (sal_Int16)InStream->readLong();
                         pFD->Height = (sal_Int16)InStream->readLong();
-                        InStream->readShort(); // ignore ::com::sun::star::awt::FontWidth - it was
-                                               // misspelled and is no longer needed
+                        InStream->readShort(); 
+                                               
                         pFD->CharacterWidth = ::com::sun::star::awt::FontWidth::DONTKNOW;
                     }
                 }
@@ -947,7 +947,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                          if ( !pFD )
                         {
                             pFD = new ::com::sun::star::awt::FontDescriptor;
-                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) // due to defaults...
+                            if ( maData.find(BASEPROPERTY_FONTDESCRIPTOR) != maData.end() ) 
                                 maData[BASEPROPERTY_FONTDESCRIPTOR] >>= *pFD;
                         }
                         pFD->Weight = VCLUnoHelper::ConvertFontWeight( (FontWeight) InStream->readShort() );
@@ -965,7 +965,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                 }
             }
         }
-        else // bVoid
+        else 
         {
             if ( nPropId == BASEPROPERTY_FONTDESCRIPTOR )
             {
@@ -984,7 +984,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
             bInvalidEntries = sal_True;
         }
 
-        // Skip rest of input if there is more data in stream than this version can handle
+        
         xMark->jumpToMark( nPropDataBeginMark );
         InStream->skipBytes( nPropDataLen );
         xMark->deleteMark(nPropDataBeginMark);
@@ -1021,7 +1021,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
 }
 
 
-// ::com::sun::star::lang::XServiceInfo
+
 OUString UnoControlModel::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "This method should be overloaded!" );
@@ -1040,7 +1040,7 @@ sal_Bool UnoControlModel::supportsService( const OUString& rServiceName ) throw(
     return Sequence< OUString >( &sName, 1 );
 }
 
-// ------------------------------------------------------------------
+
 template <class TYPE>
 sal_Bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYPE* /* _pTypeDisambiguation */)
 {
@@ -1052,7 +1052,7 @@ sal_Bool convertType(Any& _rConvertedValue, const Any& _rNewValueTest, const TYP
     }
 }
 
-// ..................................................................
+
 sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue ) throw (IllegalArgumentException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -1078,19 +1078,19 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
             else
             {
                 sal_Bool bConverted = sal_False;
-                // 13.03.2001 - 84923 - frank.schoenheit@germany.sun.com
+                
 
                 switch (pDestType->getTypeClass())
                 {
                     case TypeClass_DOUBLE:
                     {
-                        // try as double
+                        
                         double nAsDouble = 0;
                         bConverted = ( rValue >>= nAsDouble );
                         if ( bConverted )
                             rConvertedValue <<= nAsDouble;
                         else
-                        {   // try as integer
+                        {   
                             sal_Int32 nAsInteger = 0;
                             bConverted = ( rValue >>= nAsInteger );
                             if ( bConverted )
@@ -1151,7 +1151,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
                             rConvertedValue = ::cppu::int2enum( nValue, *pDestType );
                     }
                     break;
-                    default: ; // avoid compiler warning
+                    default: ; 
                 }
 
                 if (!bConverted)
@@ -1174,14 +1174,14 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
         }
     }
 
-    // the current value
+    
     getFastPropertyValue( rOldValue, nPropId );
     return !CompareProperties( rConvertedValue, rOldValue );
 }
 
 void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw (::com::sun::star::uno::Exception)
 {
-    // Missing: the fake solo properties of the FontDescriptor
+    
 
     ImplPropertyTable::const_iterator it = maData.find( nPropId );
     const ::com::sun::star::uno::Any* pProp = it == maData.end() ? NULL : &(it->second);
@@ -1248,7 +1248,7 @@ void UnoControlModel::getFastPropertyValue( ::com::sun::star::uno::Any& rValue, 
     }
 }
 
-// ::com::sun::star::beans::XPropertySet
+
 void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nPropId = 0;
@@ -1263,7 +1263,7 @@ void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const ::c
         throw ::com::sun::star::beans::UnknownPropertyException();
 }
 
-// ::com::sun::star::beans::XFastPropertySet
+
 void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun::star::uno::Any& rValue ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
@@ -1285,8 +1285,8 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
         sal_Int32 nDescriptorId( BASEPROPERTY_FONTDESCRIPTOR );
         nDescriptorId = BASEPROPERTY_FONTDESCRIPTOR;
 
-        // also, we need  fire a propertyChange event for the single property, since with
-        // the above line, only an event for the FontDescriptor property will be fired
+        
+        
         Any aNewSingleValue;
         getFastPropertyValue( aNewSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
 
@@ -1298,7 +1298,7 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
         setFastPropertyValues( 1, &nPropId, &rValue, 1 );
 }
 
-// ::com::sun::star::beans::XMultiPropertySet
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > UnoControlModel::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "UnoControlModel::getPropertySetInfo() not possible!" );
@@ -1311,12 +1311,12 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
 
     sal_Int32 nProps = rPropertyNames.getLength();
 
-//  sal_Int32* pHandles = new sal_Int32[nProps];
-        // don't do this - it leaks in case of an exception
+
+        
     Sequence< sal_Int32 > aHandles( nProps );
     sal_Int32* pHandles = aHandles.getArray();
 
-    // may need to change the order in the sequence, for this we need a non-const value sequence
+    
     uno::Sequence< uno::Any > aValues( Values );
     uno::Any* pValues = aValues.getArray();
 
@@ -1324,8 +1324,8 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
 
     if ( nValidHandles )
     {
-        // if somebody sets properties which are single aspects of a font descriptor,
-        // remove them, and build a font descriptor instead
+        
+        
         ::std::auto_ptr< awt::FontDescriptor > pFD;
         for ( sal_uInt16 n = 0; n < nProps; ++n )
         {
@@ -1347,17 +1347,17 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
         {
             ImplNormalizePropertySequence( nProps, pHandles, pValues, &nValidHandles );
             aGuard.clear();
-                // clear our guard before calling into setFastPropertyValues - this method
-                // will implicitly call property listeners, and this should not happen with
-                // our mutex locked
-                // #i23451#
+                
+                
+                
+                
              setFastPropertyValues( nProps, pHandles, pValues, nValidHandles );
         }
         else
             aGuard.clear();
-            // same as a few lines above
+            
 
-        // Don't merge FD property into array, as it is sorted
+        
         if ( pFD.get() )
         {
             ::com::sun::star::uno::Any aValue;
@@ -1373,7 +1373,7 @@ void UnoControlModel::setPropertyValues( const ::com::sun::star::uno::Sequence< 
 void UnoControlModel::ImplNormalizePropertySequence( const sal_Int32, sal_Int32*,
     uno::Any*, sal_Int32* ) const SAL_THROW(())
 {
-    // nothing to do here
+    
 }
 
 void UnoControlModel::ImplEnsureHandleOrder( const sal_Int32 _nCount, sal_Int32* _pHandles,
@@ -1389,7 +1389,7 @@ void UnoControlModel::ImplEnsureHandleOrder( const sal_Int32 _nCount, sal_Int32*
             {
                 if ( _nFirstHandle == *pLaterHandles )
                 {
-                    // indeed it is -> exchange the both places in the sequences
+                    
                     sal_Int32 nHandle( *_pHandles );
                     *_pHandles = *pLaterHandles;
                     *pLaterHandles = nHandle;
@@ -1399,9 +1399,9 @@ void UnoControlModel::ImplEnsureHandleOrder( const sal_Int32 _nCount, sal_Int32*
                     *pLaterValues = aValue;
 
                     break;
-                    // this will leave the inner loop, and continue with the outer loop.
-                    // Note that this means we will encounter the _nSecondHandle handle, again, once we reached
-                    // (in the outer loop) the place where we just put it.
+                    
+                    
+                    
                 }
             }
         }

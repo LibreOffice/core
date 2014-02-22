@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -50,11 +50,11 @@ using namespace webdav_ucp;
 namespace webdav_ucp
 {
 
-//=========================================================================
+
 //
-// struct ResultListEntry.
+
 //
-//=========================================================================
+
 
 struct ResultListEntry
 {
@@ -69,19 +69,19 @@ struct ResultListEntry
     {}
 };
 
-//=========================================================================
+
 //
-// ResultList.
+
 //
-//=========================================================================
+
 
 typedef boost::ptr_vector<ResultListEntry> ResultList;
 
-//=========================================================================
+
 //
-// struct DataSupplier_Impl.
+
 //
-//=========================================================================
+
 
 struct DataSupplier_Impl
 {
@@ -103,13 +103,13 @@ struct DataSupplier_Impl
 
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// DataSupplier Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 DataSupplier::DataSupplier(
             const uno::Reference< uno::XComponentContext >& rxContext,
@@ -119,14 +119,14 @@ DataSupplier::DataSupplier(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 DataSupplier::~DataSupplier()
 {
 }
 
-//=========================================================================
-// virtual
+
+
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -136,7 +136,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
         OUString aId = m_pImpl->m_aResults[ nIndex ].aId;
         if ( !aId.isEmpty() )
         {
-            // Already cached.
+            
             return aId;
         }
     }
@@ -162,8 +162,8 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     return OUString();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< ucb::XContentIdentifier >
 DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
@@ -175,7 +175,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
             = m_pImpl->m_aResults[ nIndex ].xId;
         if ( xId.is() )
         {
-            // Already cached.
+            
             return xId;
         }
     }
@@ -191,8 +191,8 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContentIdentifier >();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< ucb::XContent >
 DataSupplier::queryContent( sal_uInt32 nIndex )
 {
@@ -204,7 +204,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
             = m_pImpl->m_aResults[ nIndex ].xContent;
         if ( xContent.is() )
         {
-            // Already cached.
+            
             return xContent;
         }
     }
@@ -228,24 +228,24 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContent >();
 }
 
-//=========================================================================
-// virtual
+
+
 bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_aResults.size() > nIndex )
     {
-        // Result already present.
+        
         return true;
     }
 
-    // Obtain values...
+    
     if ( getData() )
     {
         if ( m_pImpl->m_aResults.size() > nIndex )
         {
-            // Result already present.
+            
             return true;
         }
     }
@@ -253,32 +253,32 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     return false;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_uInt32 DataSupplier::totalCount()
 {
-  // Obtain values...
+  
   getData();
 
   return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
-// virtual
+
+
 sal_uInt32 DataSupplier::currentCount()
 {
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
-// virtual
+
+
 bool DataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
                                                     sal_uInt32 nIndex  )
 {
@@ -289,7 +289,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
         uno::Reference< sdbc::XRow > xRow = m_pImpl->m_aResults[ nIndex ].xRow;
         if ( xRow.is() )
         {
-            // Already cached.
+            
             return xRow;
         }
     }
@@ -311,8 +311,8 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues(
     return uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
-// virtual
+
+
 void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -321,14 +321,14 @@ void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
         m_pImpl->m_aResults[ nIndex ].xRow = uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
-// virtual
+
+
 void DataSupplier::close()
 {
 }
 
-//=========================================================================
-// virtual
+
+
 void DataSupplier::validate()
     throw( ucb::ResultSetException )
 {
@@ -336,7 +336,7 @@ void DataSupplier::validate()
         throw ucb::ResultSetException();
 }
 
-//=========================================================================
+
 sal_Bool DataSupplier::getData()
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -347,9 +347,9 @@ sal_Bool DataSupplier::getData()
         ContentProperties::UCBNamesToDAVNames(
                         getResultSet()->getProperties(), propertyNames );
 
-        // Append "resourcetype", if not already present. It's value is
-        // needed to get a valid ContentProperties::pIsFolder value, which
-        // is needed for OpenMode handling.
+        
+        
+        
 
         std::vector< OUString >::const_iterator it
             = propertyNames.begin();
@@ -370,8 +370,8 @@ sal_Bool DataSupplier::getData()
         std::vector< DAVResource > resources;
         try
         {
-            // propfind depth 1, get property values for parent AND for each
-            // child
+            
+            
             m_pImpl->m_xContent->getResourceAccess()
                 .PROPFIND( DAVONE,
                            propertyNames,
@@ -380,7 +380,7 @@ sal_Bool DataSupplier::getData()
           }
           catch ( DAVException & )
         {
-//          OSL_FAIL( "PROPFIND : DAVException" );
+
             m_pImpl->m_bThrowException = sal_True;
           }
 
@@ -402,8 +402,8 @@ sal_Bool DataSupplier::getData()
                 {
                     const DAVResource & rRes = resources[ n ];
 
-                    // Filter parent, which is contained somewhere(!) in
-                    // the vector.
+                    
+                    
                     if ( !bFoundParent )
                     {
                         try
@@ -425,14 +425,14 @@ sal_Bool DataSupplier::getData()
                         }
                         catch ( DAVException const & )
                         {
-                            // do nothing, ignore error. continue.
+                            
                         }
                     }
 
                     boost::shared_ptr<ContentProperties> const
                         pContentProperties(new ContentProperties(rRes));
 
-                    // Check resource against open mode.
+                    
                     switch ( m_pImpl->m_nOpenMode )
                     {
                     case ucb::OpenMode::FOLDERS:
@@ -481,7 +481,7 @@ sal_Bool DataSupplier::getData()
 
           m_pImpl->m_bCountFinal = sal_True;
 
-        // Callback possible, because listeners may be informed!
+        
         aGuard.clear();
         getResultSet()->rowCountFinal();
     }

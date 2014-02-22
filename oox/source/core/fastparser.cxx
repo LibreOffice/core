@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -33,7 +33,7 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -66,22 +66,22 @@ InputStreamCloseGuard::~InputStreamCloseGuard()
     if( mxInStream.is() && mbCloseStream ) try { mxInStream->closeInput(); } catch( Exception& ) {}
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 FastParser::FastParser( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     mrNamespaceMap( StaticNamespaceMap::get() ),
     mpParser(NULL)
 {
-    // create a fast parser instance
+    
     mxParser = css::xml::sax::FastParser::create(rxContext);
     mpParser = dynamic_cast<sax_fastparser::FastSaxParser*>(mxParser.get());
 
-    // create the fast tokenhandler
+    
     mxTokenHandler.set( new FastTokenHandler );
 
-    // create the fast token handler based on the OOXML token list
+    
     mxParser->setTokenHandler( mxTokenHandler );
 }
 
@@ -110,7 +110,7 @@ void FastParser::setDocumentHandler( const Reference< XFastDocumentHandler >& rx
 
 void FastParser::parseStream( const InputSource& rInputSource, bool bCloseStream ) throw( SAXException, IOException, RuntimeException )
 {
-    // guard closing the input stream also when exceptions are thrown
+    
     InputStreamCloseGuard aGuard( rInputSource.aInputStream, bCloseStream );
     if( !mxParser.is() )
         throw RuntimeException();
@@ -156,9 +156,9 @@ sal_Int32 FastParser::getNamespaceId( const OUString& rUrl )
     return 0;
 }
 
-// ============================================================================
 
-} // namespace core
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

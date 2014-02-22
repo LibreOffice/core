@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/awt/Gradient.hpp>
@@ -43,11 +43,11 @@ ScVbaFillFormat::setFillStyle( drawing::FillStyle nFillStyle ) throw (uno::Runti
     {
         m_xPropertySet->setPropertyValue( "FillStyle" , uno::makeAny( drawing::FillStyle_GRADIENT ) );
         awt::Gradient aGradient;
-        // AXIAL
-        // RADIAL
-        // ELLIPTICAL
-        // SQUARE
-        // RECT
+        
+        
+        
+        
+        
         aGradient.Style = awt::GradientStyle_LINEAR;
         aGradient.StartColor = ForeColor()->getRGB();
         aGradient.EndColor = BackColor()->getRGB();
@@ -73,7 +73,7 @@ ScVbaFillFormat::setForeColorAndInternalStyle( sal_Int32 nForeColor ) throw (css
     setFillStyle( m_nFillStyle );
 }
 
-// Attributes
+
 sal_Bool SAL_CALL
 ScVbaFillFormat::getVisible() throw (uno::RuntimeException)
 {
@@ -121,7 +121,7 @@ ScVbaFillFormat::setTransparency( double _transparency ) throw (uno::RuntimeExce
 }
 
 
-// Methods
+
 void SAL_CALL
 ScVbaFillFormat::Solid() throw (uno::RuntimeException)
 {

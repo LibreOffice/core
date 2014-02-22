@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/plotareaconverter.hxx"
@@ -35,13 +35,13 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -52,14 +52,14 @@ struct AxesSetModel
     typedef ModelVector< TypeGroupModel >       TypeGroupVector;
     typedef ModelMap< sal_Int32, AxisModel >    AxisMap;
 
-    TypeGroupVector     maTypeGroups;       /// All type groups containing data series.
-    AxisMap             maAxes;             /// All axes mapped by API axis type.
+    TypeGroupVector     maTypeGroups;       
+    AxisMap             maAxes;             
 
     inline explicit     AxesSetModel() {}
     inline              ~AxesSetModel() {}
 };
 
-// ============================================================================
+
 
 /** Axes set converter. This is a helper class for the plot area converter. */
 class AxesSetConverter : public ConverterBase< AxesSetModel >
@@ -92,7 +92,7 @@ private:
     bool                mbPieChart;
 };
 
-// ----------------------------------------------------------------------------
+
 
 AxesSetConverter::AxesSetConverter( const ConverterRoot& rParent, AxesSetModel& rModel ) :
     ConverterBase< AxesSetModel >( rParent, rModel ),
@@ -110,14 +110,14 @@ ModelRef< AxisModel > lclGetOrCreateAxis( const AxesSetModel::AxisMap& rFromAxes
 {
     ModelRef< AxisModel > xAxis = rFromAxes.get( nAxisIdx );
     if( !xAxis )
-        xAxis.create( nDefTypeId ).mbDeleted = true;  // missing axis is invisible
+        xAxis.create( nDefTypeId ).mbDeleted = true;  
     return xAxis;
 }
 
 void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
         View3DModel& rView3DModel, sal_Int32 nAxesSetIdx, bool bSupportsVaryColorsByPoint )
 {
-    // create type group converter objects for all type groups
+    
     typedef RefVector< TypeGroupConverter > TypeGroupConvVector;
     TypeGroupConvVector aTypeGroups;
     for( AxesSetModel::TypeGroupVector::iterator aIt = mrModel.maTypeGroups.begin(), aEnd = mrModel.maTypeGroups.end(); aIt != aEnd; ++aIt )
@@ -126,10 +126,10 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
     OSL_ENSURE( !aTypeGroups.empty(), "AxesSetConverter::convertFromModel - no type groups in axes set" );
     if( !aTypeGroups.empty() ) try
     {
-        // first type group needed for coordinate system and axis conversion
+        
         TypeGroupConverter& rFirstTypeGroup = *aTypeGroups.front();
 
-        // get automatic chart title, if there is only one type group
+        
         if( aTypeGroups.size() == 1 )
             maAutoTitle = rFirstTypeGroup.getSingleSeriesTitle();
 
@@ -152,7 +152,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
                 xCoordSystemCont->addCoordinateSystem( xCoordSystem );
         }
 
-        // 3D view settings
+        
         mb3dChart = rFirstTypeGroup.is3dChart();
         mbWall3dChart = rFirstTypeGroup.isWall3dChart();
         mbPieChart = rFirstTypeGroup.getTypeInfo().meTypeCategory == TYPECATEGORY_PIE;
@@ -166,7 +166,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
             to the data provider attached to the chart document. */
         if( xCoordSystem.is() )
         {
-            // convert all axes (create missing axis models)
+            
             ModelRef< AxisModel > xXAxis = lclGetOrCreateAxis( mrModel.maAxes, API_X_AXIS, rFirstTypeGroup.getTypeInfo().mbCategoryAxis ? C_TOKEN( catAx ) : C_TOKEN( valAx ) );
             ModelRef< AxisModel > xYAxis = lclGetOrCreateAxis( mrModel.maAxes, API_Y_AXIS, C_TOKEN( valAx ) );
 
@@ -182,7 +182,7 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
                 aZAxisConv.convertFromModel( xCoordSystem, rFirstTypeGroup, 0, nAxesSetIdx, API_Z_AXIS );
             }
 
-            // convert all chart type groups, this converts all series data and formatting
+            
             for( TypeGroupConvVector::iterator aTIt = aTypeGroups.begin(), aTEnd = aTypeGroups.end(); aTIt != aTEnd; ++aTIt )
                 (*aTIt)->convertFromModel( rxDiagram, xCoordSystem, nAxesSetIdx, bSupportsVaryColorsByPoint );
         }
@@ -192,9 +192,9 @@ void AxesSetConverter::convertFromModel( const Reference< XDiagram >& rxDiagram,
     }
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 View3DConverter::View3DConverter( const ConverterRoot& rParent, View3DModel& rModel ) :
     ConverterBase< View3DModel >( rParent, rModel )
@@ -218,50 +218,50 @@ void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
 
     if( rTypeGroup.getTypeInfo().meTypeCategory == TYPECATEGORY_PIE )
     {
-        // Y rotation used as 'first pie slice angle' in 3D pie charts
+        
         rTypeGroup.convertPieRotation( aPropSet, mrModel.monRotationY.get( 0 ) );
-        // X rotation a.k.a. elevation (map OOXML [0..90] to Chart2 [-90,0])
+        
         nRotationX = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.monRotationX.get( 15 ), 0, 90 ) - 90;
-        // no right-angled axes in pie charts
+        
         bRightAngled = false;
-        // ambient color (Gray 30%)
+        
         nAmbientColor = 0xB3B3B3;
-        // light color (Gray 70%)
+        
         nLightColor = 0x4C4C4C;
     }
-    else // 3D bar/area/line charts
+    else 
     {
-        // Y rotation (OOXML [0..359], Chart2 [-179,180])
+        
         nRotationY = mrModel.monRotationY.get( 20 );
-        // X rotation a.k.a. elevation (OOXML [-90..90], Chart2 [-179,180])
+        
         nRotationX = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.monRotationX.get( 15 ), -90, 90 );
-        // right-angled axes
+        
         bRightAngled = mrModel.mbRightAngled;
-        // ambient color (Gray 20%)
+        
         nAmbientColor = 0xCCCCCC;
-        // light color (Gray 60%)
+        
         nLightColor = 0x666666;
     }
 
-    // Y rotation (map OOXML [0..359] to Chart2 [-179,180])
+    
     nRotationY %= 360;
     if( nRotationY > 180 ) nRotationY -= 360;
     /*  Perspective (map OOXML [0..200] to Chart2 [0,100]). Seems that MSO 2007 is
         buggy here, the XML plugin of MSO 2003 writes the correct perspective in
         the range from 0 to 100. We will emulate the wrong behaviour of MSO 2007. */
     sal_Int32 nPerspective = getLimitedValue< sal_Int32, sal_Int32 >( mrModel.mnPerspective / 2, 0, 100 );
-    // projection mode (parallel axes, if right-angled, #i90360# or if perspective is at 0%)
+    
     bool bParallel = bRightAngled || (nPerspective == 0);
     cssd::ProjectionMode eProjMode = bParallel ? cssd::ProjectionMode_PARALLEL : cssd::ProjectionMode_PERSPECTIVE;
 
-    // set rotation properties
+    
     aPropSet.setProperty( PROP_RightAngledAxes, bRightAngled );
     aPropSet.setProperty( PROP_RotationVertical, nRotationY );
     aPropSet.setProperty( PROP_RotationHorizontal, nRotationX );
     aPropSet.setProperty( PROP_Perspective, nPerspective );
     aPropSet.setProperty( PROP_D3DScenePerspective, eProjMode );
 
-    // set light settings
+    
     aPropSet.setProperty( PROP_D3DSceneShadeMode, cssd::ShadeMode_FLAT );
     aPropSet.setProperty( PROP_D3DSceneAmbientColor, nAmbientColor );
     aPropSet.setProperty( PROP_D3DSceneLightOn1, false );
@@ -270,7 +270,7 @@ void View3DConverter::convertFromModel( const Reference< XDiagram >& rxDiagram, 
     aPropSet.setProperty( PROP_D3DSceneLightDirection2, cssd::Direction3D( 0.2, 0.4, 1.0 ) );
 }
 
-// ============================================================================
+
 
 WallFloorConverter::WallFloorConverter( const ConverterRoot& rParent, WallFloorModel& rModel ) :
     ConverterBase< WallFloorModel >( rParent, rModel )
@@ -297,7 +297,7 @@ void WallFloorConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
     }
 }
 
-// ============================================================================
+
 
 DataTableConverter::DataTableConverter( const ConverterRoot& rParent, DataTableModel& rModel ) :
         ConverterBase< DataTableModel >( rParent, rModel )
@@ -319,7 +319,7 @@ void DataTableConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
         aPropSet.setProperty( PROP_DataTableOutline, mrModel.mbShowOutline );
 }
 
-// ============================================================================
+
 
 PlotAreaConverter::PlotAreaConverter( const ConverterRoot& rParent, PlotAreaModel& rModel ) :
     ConverterBase< PlotAreaModel >( rParent, rModel ),
@@ -347,7 +347,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
     {
     }
 
-    // store all axis models in a map, keyed by axis identifier
+    
     typedef ModelMap< sal_Int32, AxisModel > AxisMap;
     AxisMap aAxisMap;
     for( PlotAreaModel::AxisVector::iterator aAIt = mrModel.maAxes.begin(), aAEnd = mrModel.maAxes.end(); aAIt != aAEnd; ++aAIt )
@@ -359,7 +359,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
             aAxisMap[ xAxis->mnAxisId ] = xAxis;
     }
 
-    // group the type group models into different axes sets
+    
     typedef ModelVector< AxesSetModel > AxesSetVector;
     AxesSetVector aAxesSets;
     sal_Int32 nMaxSeriesIdx = -1;
@@ -368,17 +368,17 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
         PlotAreaModel::TypeGroupVector::value_type xTypeGroup = *aTIt;
         if( !xTypeGroup->maSeries.empty() )
         {
-            // try to find a compatible axes set for the type group
+            
             AxesSetModel* pAxesSet = 0;
             for( AxesSetVector::iterator aASIt = aAxesSets.begin(), aASEnd = aAxesSets.end(); !pAxesSet && (aASIt != aASEnd); ++aASIt )
                 if( (*aASIt)->maTypeGroups.front()->maAxisIds == xTypeGroup->maAxisIds )
                     pAxesSet = aASIt->get();
 
-            // not possible to insert into an existing axes set -> start a new axes set
+            
             if( !pAxesSet )
             {
                 pAxesSet = &aAxesSets.create();
-                // find axis models used by the type group
+                
                 const TypeGroupModel::AxisIdVector& rAxisIds = xTypeGroup->maAxisIds;
                 if( rAxisIds.size() >= 1 )
                     pAxesSet->maAxes[ API_X_AXIS ] = aAxisMap.get( rAxisIds[ 0 ] );
@@ -388,20 +388,20 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
                     pAxesSet->maAxes[ API_Z_AXIS ] = aAxisMap.get( rAxisIds[ 2 ] );
             }
 
-            // insert the type group model
+            
             pAxesSet->maTypeGroups.push_back( xTypeGroup );
 
-            // collect the maximum series index for automatic series formatting
+            
             for( TypeGroupModel::SeriesVector::iterator aSIt = xTypeGroup->maSeries.begin(), aSEnd = xTypeGroup->maSeries.end(); aSIt != aSEnd; ++aSIt )
                 nMaxSeriesIdx = ::std::max( nMaxSeriesIdx, (*aSIt)->mnIndex );
         }
     }
     getFormatter().setMaxSeriesIndex( nMaxSeriesIdx );
 
-    // varying point colors only for single series in single chart type
+    
     bool bSupportsVaryColorsByPoint = mrModel.maTypeGroups.size() == 1;
 
-    // convert all axes sets
+    
     for( AxesSetVector::iterator aASBeg = aAxesSets.begin(), aASIt = aASBeg, aASEnd = aAxesSets.end(); aASIt != aASEnd; ++aASIt )
     {
         AxesSetConverter aAxesSetConv( *this, **aASIt );
@@ -422,7 +422,7 @@ void PlotAreaConverter::convertFromModel( View3DModel& rView3DModel )
 
     DataTableConverter dataTableConverter (*this, mrModel.mxDataTable.getOrCreate());
     dataTableConverter.convertFromModel(xDiagram);
-    // plot area formatting
+    
     if( xDiagram.is() && !mb3dChart )
     {
         PropertySet aPropSet( xDiagram->getWall() );
@@ -440,7 +440,7 @@ void PlotAreaConverter::convertPositionFromModel()
         namespace cssc = ::com::sun::star::chart;
         Reference< cssc::XChartDocument > xChart1Doc( getChartDocument(), UNO_QUERY_THROW );
         Reference< cssc::XDiagramPositioning > xPositioning( xChart1Doc->getDiagram(), UNO_QUERY_THROW );
-        // for pie charts, always set inner plot area size to exclude the data labels as Excel does
+        
         sal_Int32 nTarget = (mbPieChart && (rLayout.mnTarget == XML_outer)) ? XML_inner : rLayout.mnTarget;
         switch( nTarget )
         {
@@ -459,10 +459,10 @@ void PlotAreaConverter::convertPositionFromModel()
     }
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

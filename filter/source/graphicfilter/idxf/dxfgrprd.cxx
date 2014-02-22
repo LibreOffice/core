@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,11 +24,11 @@
 #include <tools/stream.hxx>
 #include "dxfgrprd.hxx"
 
-// ----------------------------------------------------------------------------
 
-// we use an own ReadLine function, because Stream::ReadLine stops if
-// a 0-sign occurs; this functions converts 0-signs to blanks and reads
-// a complete line until a cr/lf is found
+
+
+
+
 
 OString DXFReadLine(SvStream& rIStm)
 {
@@ -39,8 +39,8 @@ OString DXFReadLine(SvStream& rIStm)
 
     OStringBuffer aBuf;
 
-    while( !bEnd && !rIStm.GetError() )   // !!! do not check for EOF
-                                          // !!! because we read blockwise
+    while( !bEnd && !rIStm.GetError() )   
+                                          
     {
         sal_uInt16 nLen = (sal_uInt16)rIStm.Read( buf, sizeof(buf)-1 );
         if( !nLen )
@@ -74,9 +74,9 @@ OString DXFReadLine(SvStream& rIStm)
     nOldFilePos += aBuf.getLength();
     if( rIStm.Tell() > nOldFilePos )
         nOldFilePos++;
-    rIStm.Seek( nOldFilePos );  // seek because of BlockRead above!
+    rIStm.Seek( nOldFilePos );  
 
-    if( bEnd && (c=='\r' || c=='\n'))  // special treatment of DOS files
+    if( bEnd && (c=='\r' || c=='\n'))  
     {
         char cTemp(0);
         rIStm.Read(&cTemp, 1);
@@ -87,7 +87,7 @@ OString DXFReadLine(SvStream& rIStm)
     return aBuf.makeStringAndClear();
 }
 
-// ------------------
+
 
 DXFGroupReader::DXFGroupReader(SvStream & rIStream, sal_uInt16 nminpercent, sal_uInt16 nmaxpercent ) :
     rIS(rIStream)
@@ -165,7 +165,7 @@ sal_uInt16 DXFGroupReader::Read()
         SetS();
         if ( nGCount != 0xffffffff )
         {
-            // InfoBox(NULL,String("Fehler ab Gruppe Nr ")+String(nGCount)).Execute();
+            
             nGCount=0xffffffff;
         }
     }

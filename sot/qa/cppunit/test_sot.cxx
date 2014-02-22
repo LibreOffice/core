@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <unotest/filters-test.hxx>
@@ -51,7 +51,7 @@ namespace
         if( !pData )
             return true;
 
-        {   // Read the data in one block
+        {   
             SotStorageStreamRef xStream( xObjStor->OpenSotStream( rStreamName ) );
             xStream->Seek(0);
             sal_uLong nRemaining = xStream->GetSize() - xStream->Tell();
@@ -59,11 +59,11 @@ namespace
             CPPUNIT_ASSERT_MESSAGE( "check size", nRemaining == nSize );
             CPPUNIT_ASSERT_MESSAGE( "check size #2", xStream->remainingSize() == nSize );
 
-            // Read as much as we can, a corrupted FAT chain can cause real grief here
+            
             nReadableSize = xStream->Read( (void *)pData, nSize );
-//            fprintf(stderr, "readable size %d vs size %d remaining %d\n", nReadableSize, nSize, nReadableSize);
+
         }
-        {   // Read the data backwards as well
+        {   
             SotStorageStreamRef xStream( xObjStor->OpenSotStream( rStreamName ) );
             for( sal_uLong i = nReadableSize; i > 0; i-- )
             {

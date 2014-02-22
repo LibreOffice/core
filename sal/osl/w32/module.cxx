@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "system.h"
@@ -62,11 +62,11 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldM
         h = LoadLibraryExW(reinterpret_cast<LPCWSTR>(Module->buffer), NULL,
                                   LOAD_WITH_ALTERED_SEARCH_PATH);
 
-    //In case of long path names (\\?\c:\...) try to shorten the filename.
-    //LoadLibrary cannot handle file names which exceed 260 letters.
-    //In case the path is to long, the function will fail. However, the error
-    //code can be different. For example, it returned  ERROR_FILENAME_EXCED_RANGE
-    //on Windows XP and ERROR_INSUFFICIENT_BUFFER on Windows 7 (64bit)
+    
+    
+    
+    
+    
     if (h == NULL && Module->length > 260)
     {
         std::vector<WCHAR, rtl::Allocator<WCHAR> > vec(Module->length + 1);
@@ -121,7 +121,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 oslModule osl_loadModuleRelativeAscii(
     oslGenericFunction, char const * relativePath, sal_Int32 mode)
 {
-    return osl_loadModuleAscii(relativePath, mode); //TODO: FIXME
+    return osl_loadModuleAscii(relativePath, mode); 
 }
 
 /*****************************************************************************/
@@ -352,17 +352,17 @@ typedef struct _MODULEINFO {
 } MODULEINFO, *LPMODULEINFO;
 
 typedef BOOL (WINAPI *EnumProcessModules_PROC)(
-  HANDLE hProcess,      // handle to the process
-  HMODULE * lphModule,  // array to receive the module handles
-  DWORD cb,             // size of the array
-  LPDWORD lpcbNeeded    // receives the number of bytes returned
+  HANDLE hProcess,      
+  HMODULE * lphModule,  
+  DWORD cb,             
+  LPDWORD lpcbNeeded    
 );
 
 typedef BOOL (WINAPI *GetModuleInformation_PROC)(
-  HANDLE hProcess,         // handle to the process
-  HMODULE hModule,         // handle to the module
-  LPMODULEINFO lpmodinfo,  // structure that receives information
-  DWORD cb                 // size of the structure
+  HANDLE hProcess,         
+  HMODULE hModule,         
+  LPMODULEINFO lpmodinfo,  
+  DWORD cb                 
 );
 
 /* This version can fail because PSAPI.DLL is not always part of NT 4 despite MSDN Library 6.0a say so */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <basegfx/tools/zoomtools.hxx>
@@ -30,7 +30,7 @@ const double ZOOM_FACTOR = 1.12246205;
 */
 static long roundMultiple(long nCurrent, int nMultiple)
 {
-    // round zoom to a multiple of nMultiple
+    
     return (( nCurrent + nMultiple / 2 ) - ( nCurrent + nMultiple / 2 ) % nMultiple);
 }
 
@@ -43,10 +43,10 @@ static long roundMultiple(long nCurrent, int nMultiple)
 */
 static long roundZoom(double nCurrent)
 {
-    // convert nCurrent properly to int
+    
     long nNew = nCurrent + 0.5;
 
-    // round to more common numbers above 50
+    
     if (nNew > 1000) {
         nNew = roundMultiple(nNew, 100);
     } else if ( nNew > 500 ) {
@@ -85,7 +85,7 @@ static long enforceStep(long nCurrent, long nPrevious, int nStep)
 long zoomIn(long nCurrent)
 {
     long nNew = roundZoom( nCurrent * ZOOM_FACTOR );
-    // make sure some values are not skipped
+    
     nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);
     nNew = enforceStep(nNew, nCurrent, 75);
@@ -102,7 +102,7 @@ long zoomIn(long nCurrent)
 long zoomOut(long nCurrent)
 {
     long nNew = roundZoom( nCurrent / ZOOM_FACTOR );
-    // make sure some values are not skipped
+    
     nNew = enforceStep(nNew, nCurrent, 200);
     nNew = enforceStep(nNew, nCurrent, 100);
     nNew = enforceStep(nNew, nCurrent, 75);
@@ -110,7 +110,7 @@ long zoomOut(long nCurrent)
     nNew = enforceStep(nNew, nCurrent, 25);
     return nNew;
 }
-} // namespace zoomtools
-} // namespace basegfx
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

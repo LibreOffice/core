@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "borderconn.hxx"
@@ -35,7 +35,7 @@ used, no additional code is needed in the Reset() and FillItemSet() functions
 of the tab page.
 ============================================================================ */
 
-// 1st: item wrappers ---------------------------------------------------------
+
 
 class LineItemWrapper : public sfx::SingleItemWrapper< SvxLineItem, const editeng::SvxBorderLine* >
 {
@@ -50,7 +50,7 @@ public:
                             { rItem.SetLine( pLine ); }
 };
 
-// 2nd: control wrappers ------------------------------------------------------
+
 
 class FrameSelectorWrapper : public sfx::SingleControlWrapper< FrameSelector, const editeng::SvxBorderLine* >
 {
@@ -65,7 +65,7 @@ public:
     virtual void        SetControlValue( const editeng::SvxBorderLine* pLine );
 
 private:
-    FrameBorderType       meBorder;         /// The line this wrapper works with.
+    FrameBorderType       meBorder;         
 };
 
 bool FrameSelectorWrapper::IsControlDontKnow() const
@@ -89,7 +89,7 @@ void FrameSelectorWrapper::SetControlValue( const editeng::SvxBorderLine* pLine 
     GetControl().ShowBorder( meBorder, pLine );
 }
 
-// 3rd: connection ------------------------------------------------------------
+
 
 typedef sfx::ItemControlConnection< LineItemWrapper, FrameSelectorWrapper > FrameLineConnection;
 
@@ -102,11 +102,11 @@ used, no additional code is needed in the Reset() and FillItemSet() functions
 of the tab page.
 ============================================================================ */
 
-// 1st: item wrappers ---------------------------------------------------------
+
 
 typedef sfx::IdentItemWrapper< SvxMarginItem > MarginItemWrapper;
 
-// 2nd: control wrappers ------------------------------------------------------
+
 
 class MarginControlsWrapper : public sfx::MultiControlWrapper< SvxMarginItem >
 {
@@ -160,7 +160,7 @@ void MarginControlsWrapper::SetControlValue( SvxMarginItem aItem )
     maBottomWrp.SetControlValue( aItem.GetBottomMargin() );
 }
 
-// 3rd: connection ------------------------------------------------------------
+
 
 class MarginConnection : public sfx::ItemControlConnection< MarginItemWrapper, MarginControlsWrapper >
 {
@@ -187,11 +187,11 @@ the controls of the SvxBorderTabPage. If this connection is used, no additional
 code is needed in the Reset() and FillItemSet() functions of the tab page.
 ============================================================================ */
 
-// 1st: item wrappers ---------------------------------------------------------
+
 
 typedef sfx::IdentItemWrapper< SvxShadowItem > ShadowItemWrapper;
 
-// 2nd: control wrappers ------------------------------------------------------
+
 
 typedef sfx::ValueSetWrapper< SvxShadowLocation > ShadowPosWrapper;
 static const ShadowPosWrapper::MapEntryType s_pShadowPosMap[] =
@@ -248,7 +248,7 @@ void ShadowControlsWrapper::SetControlValue( SvxShadowItem aItem )
     maColorWrp.SetControlValue( aItem.GetColor() );
 }
 
-// 3rd: connection ------------------------------------------------------------
+
 
 class ShadowConnection : public sfx::ItemControlConnection< ShadowItemWrapper, ShadowControlsWrapper >
 {
@@ -265,8 +265,8 @@ ShadowConnection::ShadowConnection( const SfxItemSet& rItemSet,
     mxCtrlWrp->SetDefaultValue( maItemWrp.GetDefaultItem( rItemSet ) );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 sfx::ItemConnectionBase* CreateFrameLineConnection( sal_uInt16 nSlot,
         FrameSelector& rFrameSel, FrameBorderType eBorder, sfx::ItemConnFlags nFlags )
@@ -289,8 +289,8 @@ sfx::ItemConnectionBase* CreateShadowConnection( const SfxItemSet& rItemSet,
     return new ShadowConnection( rItemSet, rVsPos, rMfSize, rLbColor, nFlags );
 }
 
-// ============================================================================
 
-} // namespace svx
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

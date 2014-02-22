@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,7 +44,7 @@
 #include "chart2uno.hxx"
 #include "tokenuno.hxx"
 
-// Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+
 #include <svx/xmleohlp.hxx>
 #include <svx/xmlgrhlp.hxx>
 #include <sfx2/docfile.hxx>
@@ -88,7 +88,7 @@ public:
             throw uno::RuntimeException("", uno::Reference< uno::XInterface >() );
 
         uno::Sequence< uno::Any > aArgs(2);
-        // access the application object ( parent for workbook )
+        
         aArgs[0] = uno::Any( ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.Application", uno::Sequence< uno::Any >() ) );
         aArgs[1] = uno::Any( mpDocShell->GetModel() );
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
@@ -97,13 +97,13 @@ public:
     virtual ::sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (::com::sun::star::uno::RuntimeException )
     {
         SolarMutexGuard aGuard;
-        maCachedObject = uno::Any(); // clear cached object
+        maCachedObject = uno::Any(); 
 
         ScDocument* pDoc = mpDocShell->GetDocument();
         if ( !pDoc )
             throw uno::RuntimeException();
-        // aName is generated from the stream name which can be different ( case-wise )
-        // from the code name
+        
+        
         if( aName.equalsIgnoreAsciiCase( pDoc->GetCodeName() ) )
             maCachedObject = maWorkbook;
         else
@@ -113,8 +113,8 @@ public:
             for( SCTAB i = 0; i < nCount; i++ )
             {
                 pDoc->GetCodeName( i, sCodeName );
-                // aName is generated from the stream name which can be different ( case-wise )
-                // from the code name
+                
+                
                 if( sCodeName.equalsIgnoreAsciiCase( aName ) )
                 {
                     OUString sSheetName;
@@ -129,7 +129,7 @@ public:
                         aArgs[0] = maWorkbook;
                         aArgs[1] = uno::Any( xModel );
                         aArgs[2] = uno::Any( OUString( sSheetName ) );
-                        // use the convience function
+                        
                         maCachedObject <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Worksheet", aArgs );
                         break;
                     }
@@ -166,7 +166,7 @@ public:
         aNames[ index ] = pDoc->GetCodeName();
         return aNames;
     }
-    // XElemenAccess
+    
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException){ return uno::Type(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException ) { return sal_True; }
 
@@ -177,13 +177,13 @@ class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper1< document::XCodeNam
     ScDocShell& mrDocShell;
 public:
     ScVbaCodeNameProvider( ScDocShell& rDocShell ) : mrDocShell(rDocShell) {}
-    // XCodeNameQuery
+    
     OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException )
     {
         SolarMutexGuard aGuard;
         OUString sCodeName;
 
-        // need to find the page ( and index )  for this control
+        
         uno::Reference< drawing::XDrawPagesSupplier > xSupplier( mrDocShell.GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPages(), uno::UNO_QUERY_THROW );
         sal_Int32 nLen = xIndex->getCount();
@@ -194,7 +194,7 @@ public:
             {
                 uno::Reference< form::XFormsSupplier >  xFormSupplier( xIndex->getByIndex( index ), uno::UNO_QUERY_THROW );
                 uno::Reference< container::XIndexAccess > xFormIndex( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
-                // get the www-standard container
+                
                 uno::Reference< container::XIndexAccess > xFormControls( xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW );
                 sal_Int32 nCntrls = xFormControls->getCount();
                 for( sal_Int32 cIndex = 0; cIndex < nCntrls; ++cIndex )
@@ -213,7 +213,7 @@ public:
             if ( bMatched )
                 break;
         }
-        // Probably should throw here ( if !bMatched )
+        
          return sCodeName;
     }
 
@@ -230,7 +230,7 @@ public:
             {
                 uno::Reference<form::XFormsSupplier>  xFormSupplier(xIndex->getByIndex(i), uno::UNO_QUERY_THROW);
                 uno::Reference<container::XIndexAccess> xFormIndex(xFormSupplier->getForms(), uno::UNO_QUERY_THROW);
-                // get the www-standard container
+                
                 uno::Reference<container::XIndexAccess> xFormControls(xFormIndex->getByIndex(0), uno::UNO_QUERY_THROW);
                 if (xFormControls == xContainer)
                 {
@@ -245,7 +245,7 @@ public:
     }
 };
 
-//------------------------------------------------------------------------
+
 //
 struct ProvNamesId_Type
 {
@@ -284,7 +284,7 @@ static const ProvNamesId_Type aProvNamesId[] =
     { "com.sun.star.image.ImageMapCircleObject",        SC_SERVICE_IMAP_CIRC },
     { "com.sun.star.image.ImageMapPolygonObject",       SC_SERVICE_IMAP_POLY },
 
-        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        
     { "com.sun.star.document.ExportGraphicObjectResolver",  SC_SERVICE_EXPORT_GOR },
     { "com.sun.star.document.ImportGraphicObjectResolver",  SC_SERVICE_IMPORT_GOR },
     { "com.sun.star.document.ExportEmbeddedObjectResolver", SC_SERVICE_EXPORT_EOR },
@@ -305,7 +305,7 @@ static const ProvNamesId_Type aProvNamesId[] =
     { "ooo.vba.VBACodeNameProvider",        SC_SERVICE_VBACODENAMEPROVIDER },
     { "ooo.vba.VBAGlobals",                 SC_SERVICE_VBAGLOBALS },
 
-    // case-correct versions of the service names (#i102468#)
+    
     { "com.sun.star.text.textfield.URL",                SC_SERVICE_URLFIELD },
     { "com.sun.star.text.textfield.PageNumber",         SC_SERVICE_PAGEFIELD },
     { "com.sun.star.text.textfield.PageCount",          SC_SERVICE_PAGESFIELD },
@@ -319,67 +319,67 @@ static const ProvNamesId_Type aProvNamesId[] =
 };
 
 //
-//  old service names that were in 567 still work in createInstance,
-//  in case some macro is still using them
+
+
 //
 
 static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
     {
-        "",                                         // SC_SERVICE_SHEET
-        "stardiv.one.text.TextField.URL",           // SC_SERVICE_URLFIELD
-        "stardiv.one.text.TextField.PageNumber",    // SC_SERVICE_PAGEFIELD
-        "stardiv.one.text.TextField.PageCount",     // SC_SERVICE_PAGESFIELD
-        "stardiv.one.text.TextField.Date",          // SC_SERVICE_DATEFIELD
-        "stardiv.one.text.TextField.Time",          // SC_SERVICE_TIMEFIELD
-        "stardiv.one.text.TextField.DocumentTitle", // SC_SERVICE_TITLEFIELD
-        "stardiv.one.text.TextField.FileName",      // SC_SERVICE_FILEFIELD
-        "stardiv.one.text.TextField.SheetName",     // SC_SERVICE_SHEETFIELD
-        "stardiv.one.style.CellStyle",              // SC_SERVICE_CELLSTYLE
-        "stardiv.one.style.PageStyle",              // SC_SERVICE_PAGESTYLE
-        "",                                         // SC_SERVICE_AUTOFORMAT
-        "",                                         // SC_SERVICE_CELLRANGES
-        "",                                         // SC_SERVICE_GRADTAB
-        "",                                         // SC_SERVICE_HATCHTAB
-        "",                                         // SC_SERVICE_BITMAPTAB
-        "",                                         // SC_SERVICE_TRGRADTAB
-        "",                                         // SC_SERVICE_MARKERTAB
-        "",                                         // SC_SERVICE_DASHTAB
-        "",                                         // SC_SERVICE_NUMRULES
-        "",                                         // SC_SERVICE_DOCDEFLTS
-        "",                                         // SC_SERVICE_DRAWDEFLTS
-        "",                                         // SC_SERVICE_DOCSPRSETT
-        "",                                         // SC_SERVICE_DOCCONF
-        "",                                         // SC_SERVICE_IMAP_RECT
-        "",                                         // SC_SERVICE_IMAP_CIRC
-        "",                                         // SC_SERVICE_IMAP_POLY
+        "",                                         
+        "stardiv.one.text.TextField.URL",           
+        "stardiv.one.text.TextField.PageNumber",    
+        "stardiv.one.text.TextField.PageCount",     
+        "stardiv.one.text.TextField.Date",          
+        "stardiv.one.text.TextField.Time",          
+        "stardiv.one.text.TextField.DocumentTitle", 
+        "stardiv.one.text.TextField.FileName",      
+        "stardiv.one.text.TextField.SheetName",     
+        "stardiv.one.style.CellStyle",              
+        "stardiv.one.style.PageStyle",              
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
 
-        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
-        "",                                         // SC_SERVICE_EXPORT_GOR
-        "",                                         // SC_SERVICE_IMPORT_GOR
-        "",                                         // SC_SERVICE_EXPORT_EOR
-        "",                                         // SC_SERVICE_IMPORT_EOR
+        
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
 
-        "",                                         // SC_SERVICE_VALBIND
-        "",                                         // SC_SERVICE_LISTCELLBIND
-        "",                                         // SC_SERVICE_LISTSOURCE
-        "",                                         // SC_SERVICE_CELLADDRESS
-        "",                                         // SC_SERVICE_RANGEADDRESS
-        "",                                         // SC_SERVICE_SHEETDOCSET
-        "",                                         // SC_SERVICE_CHDATAPROV
-        "",                                         // SC_SERVICE_FORMULAPARS
-        "",                                         // SC_SERVICE_OPCODEMAPPER
-        "",                                         // SC_SERVICE_VBAOBJECTPROVIDER
-        "",                                         // SC_SERVICE_VBACODENAMEPROVIDER
-        "",                                         // SC_SERVICE_VBAGLOBALS
-        "",                                         // SC_SERVICE_EXT_TIMEFIELD
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
+        "",                                         
     };
 
 
 
 
-//------------------------------------------------------------------------
 
-//  alles static
+
+
 
 
 sal_uInt16 ScServiceProvider::GetProviderType(const OUString& rServiceName)
@@ -438,7 +438,7 @@ sal_Int32 getFieldType(sal_uInt16 nOldType)
             ;
     }
 
-    return text::textfield::Type::URL; // default to URL for no reason whatsoever.
+    return text::textfield::Type::URL; 
 }
 
 }
@@ -450,7 +450,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
     switch (nType)
     {
         case SC_SERVICE_SHEET:
-            //  noch nicht eingefuegt - DocShell=Null
+            
             xRet.set((sheet::XSpreadsheet*)new ScTableSheetObj(NULL,0));
             break;
         case SC_SERVICE_URLFIELD:
@@ -478,8 +478,8 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set((container::XIndexAccess*)new ScAutoFormatObj( SC_AFMTOBJ_INVALID ));
             break;
         case SC_SERVICE_CELLRANGES:
-            //  wird nicht eingefuegt, sondern gefuellt
-            //  -> DocShell muss gesetzt sein, aber leere Ranges
+            
+            
             if (pDocShell)
                 xRet.set((sheet::XSheetCellRanges*)new ScCellRangesObj( pDocShell, ScRangeList() ));
             break;
@@ -493,9 +493,9 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 xRet.set((beans::XPropertySet*)new ScDrawDefaultsObj( pDocShell ));
             break;
 
-        //  Drawing layer tables are not in SvxUnoDrawMSFactory,
-        //  because SvxUnoDrawMSFactory doesn't have a SdrModel pointer.
-        //  Drawing layer is always allocated if not there (MakeDrawLayer).
+        
+        
+        
 
         case SC_SERVICE_GRADTAB:
             if (pDocShell)
@@ -542,7 +542,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
             xRet.set(SvUnoImageMapPolygonObject_createInstance( ScShapeObj::GetSupportedMacroItems() ));
             break;
 
-        // Support creation of GraphicObjectResolver and EmbeddedObjectResolver
+        
         case SC_SERVICE_EXPORT_GOR:
             xRet.set((::cppu::OWeakObject * )new SvXMLGraphicHelper( GRAPHICHELPER_MODE_WRITE ));
             break;
@@ -637,7 +637,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                     if ( pAppMgr )
                         pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
 
-                    // create the VBA document event processor
+                    
                     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents(
                         ::ooo::vba::createVBAUnoAPIServiceWithArgs( pDocShell, "com.sun.star.script.vba.VBASpreadsheetEventProcessor", aArgs ), uno::UNO_QUERY );
                     pDocShell->GetDocument()->SetVbaEventProcessor( xVbaEvents );

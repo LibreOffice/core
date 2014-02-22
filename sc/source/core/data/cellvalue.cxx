@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "cellvalue.hxx"
@@ -222,7 +222,7 @@ void ScCellValue::clear()
             ;
     }
 
-    // Reset to empty value.
+    
     meType = CELLTYPE_NONE;
     mfValue = 0.0;
 }
@@ -310,7 +310,7 @@ void ScCellValue::assign( const ScDocument& rDoc, const ScAddress& rPos )
             mpFormula = aRefVal.mpFormula->Clone();
         break;
         default:
-            meType = CELLTYPE_NONE; // reset to empty.
+            meType = CELLTYPE_NONE; 
     }
 }
 
@@ -326,7 +326,7 @@ void ScCellValue::assign( const ScCellValue& rOther, ScDocument& rDestDoc, int n
         break;
         case CELLTYPE_EDIT:
         {
-            // Switch to the pool of the destination document.
+            
             ScFieldEditEngine& rEngine = rDestDoc.GetEditEngine();
             if (rOther.mpEditText->HasOnlineSpellErrors())
             {
@@ -351,11 +351,11 @@ void ScCellValue::assign( const ScCellValue& rOther, ScDocument& rDestDoc, int n
             mfValue = rOther.mfValue;
         break;
         case CELLTYPE_FORMULA:
-            // Switch to the destination document.
+            
             mpFormula = new ScFormulaCell(*rOther.mpFormula, rDestDoc, rOther.mpFormula->aPos, nCloneFlags);
         break;
         default:
-            meType = CELLTYPE_NONE; // reset to empty.
+            meType = CELLTYPE_NONE; 
     }
 }
 
@@ -395,7 +395,7 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
     {
         case CELLTYPE_STRING:
         {
-            // Currently, string cannot be placed without copying.
+            
             ScSetStringParam aParam;
             aParam.setTextInput();
             rDoc.SetString(rPos, mpString->getString(), &aParam);
@@ -403,14 +403,14 @@ void ScCellValue::release( ScDocument& rDoc, const ScAddress& rPos )
         }
         break;
         case CELLTYPE_EDIT:
-            // Cell takes the ownership of the text object.
+            
             rDoc.SetEditText(rPos, mpEditText);
         break;
         case CELLTYPE_VALUE:
             rDoc.SetValue(rPos, mfValue);
         break;
         case CELLTYPE_FORMULA:
-            // This formula cell instance is directly placed in the document without copying.
+            
             rDoc.SetFormulaCell(rPos, mpFormula);
         break;
         default:
@@ -427,20 +427,20 @@ void ScCellValue::release( ScColumn& rColumn, SCROW nRow )
     {
         case CELLTYPE_STRING:
         {
-            // Currently, string cannot be placed without copying.
+            
             rColumn.SetRawString(nRow, *mpString);
             delete mpString;
         }
         break;
         case CELLTYPE_EDIT:
-            // Cell takes the ownership of the text object.
+            
             rColumn.SetEditText(nRow, mpEditText);
         break;
         case CELLTYPE_VALUE:
             rColumn.SetValue(nRow, mfValue);
         break;
         case CELLTYPE_FORMULA:
-            // This formula cell instance is directly placed in the document without copying.
+            
             rColumn.SetFormulaCell(nRow, mpFormula);
         break;
         default:
@@ -489,8 +489,8 @@ void ScCellValue::swap( ScCellValue& r )
 {
     std::swap(meType, r.meType);
 
-    // double is 8 bytes, whereas a pointer may be 4 or 8 bytes depending on
-    // the platform. Swap by double values.
+    
+    
     std::swap(mfValue, r.mfValue);
 }
 
@@ -500,8 +500,8 @@ ScRefCellValue::ScRefCellValue( const svl::SharedString* pString ) : meType(CELL
 ScRefCellValue::ScRefCellValue( const EditTextObject* pEditText ) : meType(CELLTYPE_EDIT), mpEditText(pEditText) {}
 ScRefCellValue::ScRefCellValue( ScFormulaCell* pFormula ) : meType(CELLTYPE_FORMULA), mpFormula(pFormula) {}
 
-// It should be enough to copy the double value, which is at least as large
-// as the pointer values.
+
+
 ScRefCellValue::ScRefCellValue( const ScRefCellValue& r ) : meType(r.meType), mfValue(r.mfValue) {}
 
 ScRefCellValue::~ScRefCellValue()
@@ -511,7 +511,7 @@ ScRefCellValue::~ScRefCellValue()
 
 void ScRefCellValue::clear()
 {
-    // Reset to empty value.
+    
     meType = CELLTYPE_NONE;
     mfValue = 0.0;
 }
@@ -627,8 +627,8 @@ void ScRefCellValue::swap( ScRefCellValue& r )
 {
     std::swap(meType, r.meType);
 
-    // double is 8 bytes, whereas a pointer may be 4 or 8 bytes depending on
-    // the platform. Swap by double values.
+    
+    
     std::swap(mfValue, r.mfValue);
 }
 

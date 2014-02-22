@@ -5,7 +5,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -15,7 +15,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TokenWriter.hxx"
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
 
-// export data
+
 ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
                                             const Reference< XResultSetUpdate >& _xResultSetUpdate,
                                             const ::svx::ODataAccessDescriptor& _aDataDescriptor,
@@ -58,7 +58,7 @@ void ORowSetImportExport::initialize()
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::initialize" );
     ODatabaseImportExport::initialize();
-    // do namemapping
+    
     Reference<XColumnLocate> xColumnLocate(m_xResultSet,UNO_QUERY);
     OSL_ENSURE(xColumnLocate.is(),"The rowset normally should support this");
 
@@ -71,7 +71,7 @@ void ORowSetImportExport::initialize()
     m_aColumnTypes.reserve(nCount);
     for (sal_Int32 i = 1;i <= nCount; ++i)
     {
-        sal_Int32 nPos = -1; // -1 means column is autoincrement or doesn't exist
+        sal_Int32 nPos = -1; 
         if(!m_xTargetResultSetMetaData->isAutoIncrement(i))
         {
             try
@@ -82,7 +82,7 @@ void ORowSetImportExport::initialize()
             catch(const SQLException&)
             {
                 if(m_xTargetResultSetMetaData->isNullable(i))
-                    nPos = 0; // column doesn't exist but we could set it to null
+                    nPos = 0; 
             }
         }
 
@@ -103,7 +103,7 @@ sal_Bool ORowSetImportExport::Write()
 sal_Bool ORowSetImportExport::Read()
 {
     SAL_INFO("dbaccess.ui", "ORowSetImportExport::Read" );
-    // check if there is any column to copy
+    
     if(::std::find_if(m_aColumnMapping.begin(),m_aColumnMapping.end(),
                         ::std::bind2nd(::std::greater<sal_Int32>(),0)) == m_aColumnMapping.end())
         return sal_False;
@@ -236,7 +236,7 @@ sal_Bool ORowSetImportExport::insertNewRow()
                 else
                     m_xTargetRowUpdate->updateObject(i,aValue);
             }
-            else if(*aIter == 0)//now we have know that we to set this column to null
+            else if(*aIter == 0)
                 m_xTargetRowUpdate->updateNull(i);
         }
         m_xTargetResultSetUpdate->insertRow();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/XParser.hpp>
@@ -32,7 +32,7 @@
 
 #include <iostream>
 
-// this extern variable is declared in OOXMLStreamImpl.hxx
+
 OUString customTarget;
 OUString embeddingsTarget;
 using ::com::sun::star::xml::sax::SAXException;
@@ -189,7 +189,7 @@ void OOXMLDocumentImpl::importSubStreamRelations(OOXMLStream::Pointer_t pStream,
 
     if (xcpInputStream.is())
     {
-        // imporing itemprops files for item.xml from customXml.
+        
         if(OOXMLStream::CUSTOMXMLPROPS == nType)
         {
             try
@@ -212,12 +212,12 @@ void OOXMLDocumentImpl::importSubStreamRelations(OOXMLStream::Pointer_t pStream,
         }
         else if(OOXMLStream::ACTIVEXBIN == nType)
         {
-            // imporing activex.bin files for activex.xml from activeX folder.
+            
             mxActiveXBin = xcpInputStream;
         }
         else if(OOXMLStream::EMBEDDINGS == nType)
         {
-            // imporing activex.bin files for activex.xml from activeX folder.
+            
             mxEmbeddings = xcpInputStream;
         }
     }
@@ -392,7 +392,7 @@ void OOXMLDocumentImpl::resolveHeader(Stream & rStream,
      case NS_ooxml::LN_Value_ST_HdrFtr_even:
          resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_headerl);
         break;
-     case NS_ooxml::LN_Value_ST_HdrFtr_default: // here we assume that default is right, but not necessarily true :-(
+     case NS_ooxml::LN_Value_ST_HdrFtr_default: 
          resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_headerr);
          break;
      case NS_ooxml::LN_Value_ST_HdrFtr_first:
@@ -415,7 +415,7 @@ void OOXMLDocumentImpl::resolveFooter(Stream & rStream,
      case NS_ooxml::LN_Value_ST_HdrFtr_even:
          resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_footerl);
          break;
-     case NS_ooxml::LN_Value_ST_HdrFtr_default: // here we assume that default is right, but not necessarily true :-(
+     case NS_ooxml::LN_Value_ST_HdrFtr_default: 
          resolveFastSubStreamWithId(rStream, pStream, NS_ooxml::LN_footerr);
          break;
      case NS_ooxml::LN_Value_ST_HdrFtr_first:
@@ -457,7 +457,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
         resolveEmbeddingsStream(rStream);
 
-        // Custom xml's are handled as part of grab bag.
+        
         resolveCustomXmlStream(rStream);
 
         resolveActiveXStream(rStream);
@@ -489,12 +489,12 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
 
 void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
 {
-    // Resolving all item[n].xml files from CustomXml folder.
+    
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
     mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
-        OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/customXml");
+        OUString sCustomType("http:
         OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
@@ -508,22 +508,22 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
             for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
             {
                 beans::StringPair aPair = aSeq[i];
-                // Need to resolve only customxml files from document relationships.
-                // Skipping other files.
+                
+                
                 if (aPair.Second.compareTo(sCustomType) == 0)
                     bFound = true;
                 else if(aPair.First.compareTo(sTarget) == 0 && bFound)
                 {
-                    // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
-                    // to ensure customxml target is visited in lcl_getTarget.
+                    
+                    
                     customTarget = aPair.Second;
                 }
             }
             if(bFound)
             {
                 uno::Reference<xml::dom::XDocument> customXmlTemp = importSubStream(OOXMLStream::CUSTOMXML);
-                // This will add all item[n].xml with it's relationship file i.e itemprops.xml to
-                // grabbag list.
+                
+                
                 if(mxCustomXmlProsDom.is() && customXmlTemp.is())
                 {
                     mxCustomXmlDomListTemp[counter] = customXmlTemp;
@@ -544,10 +544,10 @@ void OOXMLDocumentImpl::resolveCustomXmlStream(Stream & rStream)
 
 void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
 {
-    static OUString sSettingsType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings");
-    static OUString sStylesType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles");
-    static OUString sFonttableType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable");
-    static OUString sWebSettings("http://schemas.openxmlformats.org/officeDocument/2006/relationships/webSettings");
+    static OUString sSettingsType("http:
+    static OUString sStylesType("http:
+    static OUString sFonttableType("http:
+    static OUString sWebSettings("http:
 
     OOXMLStream::Pointer_t pStream;
     try
@@ -573,7 +573,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
          {
               OOXMLStream::Pointer_t gStream;
               uno::Sequence< beans::StringPair > aSeq = aSeqs[j];
-              //Follows following aSeq[0] is Id, aSeq[1] is Type, aSeq[2] is Target
+              
               OUString gId(aSeq[0].Second);
               OUString gType(aSeq[1].Second);
               OUString gTarget(aSeq[2].Second);
@@ -604,7 +604,7 @@ void OOXMLDocumentImpl::resolveGlossaryStream(Stream & /*rStream*/)
               else
               {
                   bFound = false;
-                  //"Unhandled content-type while grab bagging Glossary Folder");
+                  
               }
 
               if (bFound)
@@ -649,7 +649,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(Stream & /*rStream*/)
     mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
-        OUString sChartType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
+        OUString sChartType("http:
         OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
@@ -666,8 +666,8 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(Stream & /*rStream*/)
                     bFound = true;
                 else if(aPair.First.compareTo(sTarget) == 0 && bFound)
                 {
-                    // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
-                    // to ensure chart.xml target is visited in lcl_getTarget.
+                    
+                    
                     customTarget = aPair.Second;
                 }
             }
@@ -675,7 +675,7 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(Stream & /*rStream*/)
             {
                 uno::Reference<xml::dom::XDocument> chartTemp = importSubStream(OOXMLStream::CHARTS);
                 beans::PropertyValue embeddingsTemp;
-                // This will add all ActiveX[n].xml to grabbag list.
+                
                 if(chartTemp.is())
                 {
                     if(mxEmbeddings.is())
@@ -696,12 +696,12 @@ void OOXMLDocumentImpl::resolveEmbeddingsStream(Stream & /*rStream*/)
 
 void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
 {
-    // Resolving all ActiveX[n].xml files from ActiveX folder.
+    
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
     mxRelationshipAccess.set((*dynamic_cast<OOXMLStreamImpl *>(mpStream.get())).accessDocumentStream(), uno::UNO_QUERY_THROW);
     if (mxRelationshipAccess.is())
     {
-        OUString sCustomType("http://schemas.openxmlformats.org/officeDocument/2006/relationships/control");
+        OUString sCustomType("http:
         OUString sTarget("Target");
         bool bFound = false;
         sal_Int32 counter = 0;
@@ -715,21 +715,21 @@ void OOXMLDocumentImpl::resolveActiveXStream(Stream & rStream)
             for (sal_Int32 i = 0; i < aSeq.getLength(); i++)
             {
                 beans::StringPair aPair = aSeq[i];
-                // Need to resolve only ActiveX files from document relationships.
-                // Skipping other files.
+                
+                
                 if (aPair.Second.compareTo(sCustomType) == 0)
                     bFound = true;
                 else if(aPair.First.compareTo(sTarget) == 0 && bFound)
                 {
-                    // Adding value to extern variable customTarget. It will be used in ooxmlstreamimpl
-                    // to ensure ActiveX.xml target is visited in lcl_getTarget.
+                    
+                    
                     customTarget = aPair.Second;
                 }
             }
             if(bFound)
             {
                 uno::Reference<xml::dom::XDocument> activeXTemp = importSubStream(OOXMLStream::ACTIVEX);
-                // This will add all ActiveX[n].xml to grabbag list.
+                
                 if(activeXTemp.is())
                 {
                     mxActiveXDomListTemp[counter] = activeXTemp;

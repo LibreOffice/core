@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <UndoSort.hxx>
@@ -36,8 +36,8 @@
 
 SwSortUndoElement::~SwSortUndoElement()
 {
-    // are there string pointers saved?
-    if( 0xffffffff != SORT_TXT_TBL.TXT.nKenn ) // Kenn(ung) = identifier
+    
+    if( 0xffffffff != SORT_TXT_TBL.TXT.nKenn ) 
     {
         delete SORT_TXT_TBL.TBL.pSource;
         delete SORT_TXT_TBL.TBL.pTarget;
@@ -76,7 +76,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
     SwDoc & rDoc = rContext.GetDoc();
     if(pSortOpt->bTable)
     {
-        // Undo for Table
+        
         RemoveIdxFromSection( rDoc, nSttNode, &nEndNode );
 
         if( pUndoTblAttr )
@@ -86,8 +86,8 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
 
-        // #i37739# A simple 'MakeFrms' after the node sorting
-        // does not work if the table is inside a frame and has no prev/next.
+        
+        
         SwNode2Layout aNode2Layout( *pTblNd );
 
         pTblNd->DelFrms();
@@ -101,28 +101,28 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
             const SwTableBox* pTarget = rTbl.GetTblBox(
                     *aSortList[i].SORT_TXT_TBL.TBL.pTarget );
 
-            // move back
+            
             MoveCell(&rDoc, pTarget, pSource,
                      USHRT_MAX != aMovedList.GetPos(pSource) );
 
-            // store moved entry in list
+            
             aMovedList.push_back(pTarget);
         }
 
-        // Restore table frames:
-        // #i37739# A simple 'MakeFrms' after the node sorting
-        // does not work if the table is inside a frame and has no prev/next.
+        
+        
+        
         const sal_uLong nIdx = pTblNd->GetIndex();
         aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
     }
     else
     {
-        // Undo for Text
+        
         SwPaM & rPam( AddUndoRedoPaM(rContext) );
         RemoveIdxFromRange(rPam, true);
 
-        // create index for (sorted) positions
-        // The IndexList must be created based on (asc.) sorted SourcePosition.
+        
+        
         SwUndoSortList aIdxList;
         sal_uInt16 i;
 
@@ -143,7 +143,7 @@ void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
             rDoc.MoveNodeRange(aRg, aIdx,
                 IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
-        // delete indices
+        
         for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)
             delete *it;
         aIdxList.clear();
@@ -157,13 +157,13 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if(pSortOpt->bTable)
     {
-        // Redo for Table
+        
         RemoveIdxFromSection( rDoc, nSttNode, &nEndNode );
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
 
-        // #i37739# A simple 'MakeFrms' after the node sorting
-        // does not work if the table is inside a frame and has no prev/next.
+        
+        
         SwNode2Layout aNode2Layout( *pTblNd );
 
         pTblNd->DelFrms();
@@ -177,10 +177,10 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
             const SwTableBox* pTarget = rTbl.GetTblBox(
                     *aSortList[i].SORT_TXT_TBL.TBL.pTarget );
 
-            // move back
+            
             MoveCell(&rDoc, pSource, pTarget,
                      USHRT_MAX != aMovedList.GetPos( pTarget ) );
-            // store moved entry in list
+            
             aMovedList.push_back( pSource );
         }
 
@@ -189,15 +189,15 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
             pUndoTblAttr->RedoImpl(rContext);
         }
 
-        // Restore table frames:
-        // #i37739# A simple 'MakeFrms' after the node sorting
-        // does not work if the table is inside a frame and has no prev/next.
+        
+        
+        
         const sal_uLong nIdx = pTblNd->GetIndex();
         aNode2Layout.RestoreUpperFrms( rDoc.GetNodes(), nIdx, nIdx + 1 );
     }
     else
     {
-        // Redo for Text
+        
         SwPaM & rPam( AddUndoRedoPaM(rContext) );
         SetPaM(rPam);
         RemoveIdxFromRange(rPam, true);
@@ -206,7 +206,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
         sal_uInt16 i;
 
         for( i = 0; i < aSortList.size(); ++i)
-        {   // current position is starting point
+        {   
             SwNodeIndex* pIdx = new SwNodeIndex( rDoc.GetNodes(),
                     aSortList[i].SORT_TXT_TBL.TXT.nSource);
             aIdxList.insert( aIdxList.begin() + i, pIdx );
@@ -219,7 +219,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
             rDoc.MoveNodeRange(aRg, aIdx,
                 IDocumentContentOperations::DOC_MOVEDEFAULT);
         }
-        // delete indices
+        
         for(SwUndoSortList::const_iterator it = aIdxList.begin(); it != aIdxList.end(); ++it)
             delete *it;
         aIdxList.clear();
@@ -234,7 +234,7 @@ void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 
 void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    // table not repeat capable
+    
     if(!pSortOpt->bTable)
     {
         SwPaM *const pPam = & rContext.GetRepeatPaM();

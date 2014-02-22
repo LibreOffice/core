@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accelerators/storageholder.hxx>
@@ -48,23 +48,23 @@
 namespace framework
 {
 
-//-----------------------------------------------
+
 StorageHolder::StorageHolder()
     : ThreadHelpBase(                                        )
 {
 }
 
-//-----------------------------------------------
+
 StorageHolder::~StorageHolder()
 {
-    // TODO implement me
-    // dispose/clear etcpp.
+    
+    
 }
 
-//-----------------------------------------------
+
 void StorageHolder::forgetCachedStorages()
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     TPath2StorageInfo::iterator pIt;
@@ -73,46 +73,46 @@ void StorageHolder::forgetCachedStorages()
          ++pIt                       )
     {
         TStorageInfo& rInfo = pIt->second;
-        // TODO think about listener !
+        
         rInfo.Storage.clear();
     }
     m_lStorages.clear();
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 void StorageHolder::setRootStorage(const css::uno::Reference< css::embed::XStorage >& xRoot)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
     m_xRoot = xRoot;
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > StorageHolder::getRootStorage() const
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     return m_xRoot;
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUString& sPath    ,
                                                                           sal_Int32        nOpenMode)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
     OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::embed::XStorage > xParent = m_xRoot;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     css::uno::Reference< css::embed::XStorage > xChild  ;
     OUString                             sRelPath;
@@ -127,11 +127,11 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
                                sCheckPath += sChild;
                                sCheckPath += PATH_SEPARATOR;
 
-        // SAFE -> ------------------------------
+        
         aReadLock.lock();
 
-        // If we found an already open storage ... we must increase
-        // its use count. Otherwhise it will may be closed to early :-)
+        
+        
         TPath2StorageInfo::iterator pCheck = m_lStorages.find(sCheckPath);
         TStorageInfo*               pInfo  = 0;
         if (pCheck != m_lStorages.end())
@@ -143,11 +143,11 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
         else
         {
             aReadLock.unlock();
-            // <- SAFE ------------------------------
+            
 
             try
             {
-                xChild = StorageHolder::openSubStorageWithFallback(xParent, sChild, nOpenMode, sal_True); // TODO think about delegating fallback decision to our own calli!
+                xChild = StorageHolder::openSubStorageWithFallback(xParent, sChild, nOpenMode, sal_True); 
             }
             catch(const css::uno::RuntimeException&)
                 { throw; }
@@ -166,13 +166,13 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
                     throw;
                 }
 
-            // SAFE -> ------------------------------
+            
             WriteGuard aWriteLock(m_aLock);
             pInfo = &(m_lStorages[sCheckPath]);
             pInfo->Storage  = xChild;
             pInfo->UseCount = 1;
             aWriteLock.unlock();
-            // <- SAFE ------------------------------
+            
         }
 
         xParent   = xChild;
@@ -180,13 +180,13 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openPath(const OUStri
         sRelPath += PATH_SEPARATOR;
     }
 
-    // TODO think about return last storage as working storage ... but dont caching it inside this holder!
-    // => otherwise the same storage is may be commit more then once.
+    
+    
 
     return xChild;
 }
 
-//-----------------------------------------------
+
 StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sPath)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
@@ -196,7 +196,7 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
     OUString              sRelPath       ;
     OUStringList::const_iterator pIt            ;
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     for (  pIt  = lFolders.begin();
@@ -211,8 +211,8 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
         TPath2StorageInfo::iterator pCheck = m_lStorages.find(sCheckPath);
         if (pCheck == m_lStorages.end())
         {
-            // at least one path element was not found
-            // Seems that this path isnt open ...
+            
+            
             lStoragesOfPath.clear();
             return lStoragesOfPath;
         }
@@ -225,19 +225,19 @@ StorageHolder::TStorageList StorageHolder::getAllPathStorages(const OUString& sP
     }
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     return lStoragesOfPath;
 }
 
-//-----------------------------------------------
+
 void StorageHolder::commitPath(const OUString& sPath)
 {
     StorageHolder::TStorageList lStorages = getAllPathStorages(sPath);
 
     css::uno::Reference< css::embed::XTransactedObject > xCommit;
     StorageHolder::TStorageList::reverse_iterator pIt;
-    for (  pIt  = lStorages.rbegin(); // order of commit is important ... otherwise changes are not recognized!
+    for (  pIt  = lStorages.rbegin(); 
            pIt != lStorages.rend()  ;
          ++pIt                      )
     {
@@ -247,17 +247,17 @@ void StorageHolder::commitPath(const OUString& sPath)
         xCommit->commit();
     }
 
-    // SAFE -> ------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     xCommit = css::uno::Reference< css::embed::XTransactedObject >(m_xRoot, css::uno::UNO_QUERY);
     aReadLock.unlock();
-    // <- SAFE ------------------------------
+    
 
     if (xCommit.is())
         xCommit->commit();
 }
 
-//-----------------------------------------------
+
 void StorageHolder::closePath(const OUString& rPath)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(rPath);
@@ -281,7 +281,7 @@ void StorageHolder::closePath(const OUString& rPath)
         sParentPath = sCurrentRelPath;
     }
 
-    // SAFE -> ------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     OUStringList::reverse_iterator pIt2;
@@ -292,7 +292,7 @@ void StorageHolder::closePath(const OUString& rPath)
         OUString             sPath = *pIt2;
         TPath2StorageInfo::iterator pPath = m_lStorages.find(sPath);
         if (pPath == m_lStorages.end())
-            continue; // ???
+            continue; 
 
         TStorageInfo& rInfo = pPath->second;
         --rInfo.UseCount;
@@ -304,15 +304,15 @@ void StorageHolder::closePath(const OUString& rPath)
     }
 
     aReadLock.unlock();
-    // <- SAFE ------------------------------
+    
 }
 
-//-----------------------------------------------
+
 void StorageHolder::notifyPath(const OUString& sPath)
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
 
-    // SAFE -> ------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     TPath2StorageInfo::iterator pIt1 = m_lStorages.find(sNormedPath);
@@ -331,16 +331,16 @@ void StorageHolder::notifyPath(const OUString& sPath)
     }
 
     aReadLock.unlock();
-    // <- SAFE ------------------------------
+    
 }
 
-//-----------------------------------------------
+
 void StorageHolder::addStorageListener(      IStorageListener* pListener,
                                        const OUString&  sPath    )
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
 
-    // SAFE -> ------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     TPath2StorageInfo::iterator pIt1 = m_lStorages.find(sNormedPath);
@@ -353,16 +353,16 @@ void StorageHolder::addStorageListener(      IStorageListener* pListener,
         rInfo.Listener.push_back(pListener);
 
     aReadLock.unlock();
-    // <- SAFE ------------------------------
+    
 }
 
-//-----------------------------------------------
+
 void StorageHolder::removeStorageListener(      IStorageListener* pListener,
                                           const OUString&  sPath    )
 {
     OUString sNormedPath = StorageHolder::impl_st_normPath(sPath);
 
-    // SAFE -> ------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     TPath2StorageInfo::iterator pIt1 = m_lStorages.find(sNormedPath);
@@ -375,13 +375,13 @@ void StorageHolder::removeStorageListener(      IStorageListener* pListener,
         rInfo.Listener.erase(pIt2);
 
     aReadLock.unlock();
-    // <- SAFE ------------------------------
+    
 }
 
-//-----------------------------------------------
+
 OUString StorageHolder::getPathOfStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
 {
-    // SAFE -> ------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     TPath2StorageInfo::const_iterator pIt;
@@ -399,40 +399,40 @@ OUString StorageHolder::getPathOfStorage(const css::uno::Reference< css::embed::
 
     return pIt->first;
 
-    // <- SAFE ------------------------------
+    
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(const css::uno::Reference< css::embed::XStorage >& xChild)
 {
     OUString sChildPath = getPathOfStorage(xChild);
     return getParentStorage(sChildPath);
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(const OUString& sChildPath)
 {
-    // normed path = "a/b/c/" ... we search for "a/b/"
+    
     OUString sNormedPath = StorageHolder::impl_st_normPath(sChildPath);
     OUStringList    lFolders    = StorageHolder::impl_st_parsePath(sNormedPath);
     sal_Int32       c           = lFolders.size();
 
-    // a) ""       => -       => no parent
-    // b) "a/b/c/" => "a/b/"  => return storage "a/b/"
-    // c) "a/"     => ""      => return root !
+    
+    
+    
 
-    // a)
+    
     if (c < 1)
         return css::uno::Reference< css::embed::XStorage >();
 
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
-    // b)
+    
     if (c < 2)
         return m_xRoot;
 
-    // c)
+    
     OUString sParentPath;
     sal_Int32       i = 0;
     for (i=0; i<c-1; ++i)
@@ -446,34 +446,34 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::getParentStorage(cons
         return pParent->second.Storage;
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // ?
+    
     SAL_INFO("fwk", "StorageHolder::getParentStorage(): Unexpected situation. Cached storage item seems to be wrong.");
     return css::uno::Reference< css::embed::XStorage >();
 }
 
-//-----------------------------------------------
+
 void StorageHolder::operator=(const StorageHolder& rCopy)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     m_xRoot     = rCopy.m_xRoot;
     m_lStorages = rCopy.m_lStorages;
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                       const OUString&                             sSubStorage   ,
                                                                                             sal_Int32                                    eOpenMode     ,
                                                                                             sal_Bool                                     bAllowFallback)
 {
-    // a) try it first with user specified open mode
-    //    ignore errors ... but save it for later use!
+    
+    
     css::uno::Exception exResult;
     try
     {
@@ -486,34 +486,34 @@ css::uno::Reference< css::embed::XStorage > StorageHolder::openSubStorageWithFal
     catch(const css::uno::Exception& ex)
         { exResult = ex; }
 
-    // b) readonly already tried? => forward last error!
+    
     if (
-        (!bAllowFallback                                                                 ) ||   // fallback allowed  ?
-        ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE)      // fallback possible ?
+        (!bAllowFallback                                                                 ) ||   
+        ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE)      
        )
         throw exResult;
 
-    // c) try it readonly
-    //    dont catch exception here! Outside code wish to know, if operation failed or not.
-    //    Otherwhise they work on NULL references ...
+    
+    
+    
     sal_Int32 eNewMode = (eOpenMode & ~css::embed::ElementModes::WRITE);
     css::uno::Reference< css::embed::XStorage > xSubStorage = xBaseStorage->openStorageElement(sSubStorage, eNewMode);
     if (xSubStorage.is())
         return xSubStorage;
 
-    // d) no chance!
+    
     SAL_INFO("fwk", "openSubStorageWithFallback(): Unexpected situation! Got no exception for missing storage ...");
     return css::uno::Reference< css::embed::XStorage >();
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::io::XStream > StorageHolder::openSubStreamWithFallback(const css::uno::Reference< css::embed::XStorage >& xBaseStorage  ,
                                                                                  const OUString&                             sSubStream    ,
                                                                                        sal_Int32                                    eOpenMode     ,
                                                                                        sal_Bool                                     bAllowFallback)
 {
-    // a) try it first with user specified open mode
-    //    ignore errors ... but save it for later use!
+    
+    
     css::uno::Exception exResult;
     try
     {
@@ -526,49 +526,49 @@ css::uno::Reference< css::io::XStream > StorageHolder::openSubStreamWithFallback
     catch(const css::uno::Exception& ex)
         { exResult = ex; }
 
-    // b) readonly already tried? => forward last error!
+    
     if (
-        (!bAllowFallback                                                                 ) ||   // fallback allowed  ?
-        ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE)      // fallback possible ?
+        (!bAllowFallback                                                                 ) ||   
+        ((eOpenMode & css::embed::ElementModes::WRITE) != css::embed::ElementModes::WRITE)      
        )
         throw exResult;
 
-    // c) try it readonly
-    //    dont catch exception here! Outside code wish to know, if operation failed or not.
-    //    Otherwhise they work on NULL references ...
+    
+    
+    
     sal_Int32 eNewMode = (eOpenMode & ~css::embed::ElementModes::WRITE);
     css::uno::Reference< css::io::XStream > xSubStream = xBaseStorage->openStreamElement(sSubStream, eNewMode);
     if (xSubStream.is())
         return xSubStream;
 
-    // d) no chance!
+    
     SAL_INFO("fwk", "openSubStreamWithFallbacks(): Unexpected situation! Got no exception for missing stream ...");
     return css::uno::Reference< css::io::XStream >();
 }
 
-//-----------------------------------------------
+
 OUString StorageHolder::impl_st_normPath(const OUString& sPath)
 {
-    // path must start without "/" but end with "/"!
+    
 
     OUString sNormedPath = sPath;
 
-    // "/bla" => "bla" && "/" => "" (!)
+    
     if (sNormedPath.startsWith(PATH_SEPARATOR))
         sNormedPath += sNormedPath.copy(1);
 
-    // "/" => "" || "" => "" ?
+    
     if (sNormedPath.isEmpty())
         return OUString();
 
-    // "bla" => "bla/"
+    
     if (sNormedPath.lastIndexOf(PATH_SEPARATOR) != (sNormedPath.getLength()-1))
         sNormedPath += PATH_SEPARATOR;
 
     return sNormedPath;
 }
 
-//-----------------------------------------------
+
 OUStringList StorageHolder::impl_st_parsePath(const OUString& sPath)
 {
     OUStringList lToken;
@@ -583,7 +583,7 @@ OUStringList StorageHolder::impl_st_parsePath(const OUString& sPath)
     return lToken;
 }
 
-//===============================================
-} // namespace framework
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

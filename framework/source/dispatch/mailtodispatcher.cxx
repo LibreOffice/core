@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dispatch/mailtodispatcher.hxx>
@@ -30,8 +30,8 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
-// XInterface, XTypeProvider, XServiceInfo
+
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(MailToDispatcher                   ,
                                  ::cppu::OWeakObject                ,
@@ -48,7 +48,7 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
                     }
                    )
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      standard ctor
@@ -58,14 +58,14 @@ DEFINE_INIT_SERVICE(MailToDispatcher,
                     reference to uno servicemanager for creation of new services
 */
 MailToDispatcher::MailToDispatcher( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-        //  Init baseclasses first
+        
         : ThreadHelpBase( &Application::GetSolarMutex() )
-        // Init member
+        
         , m_xContext    ( rxContext                     )
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      standard dtor
@@ -76,7 +76,7 @@ MailToDispatcher::~MailToDispatcher()
     m_xContext = NULL;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      decide if this dispatch implementation can be used for requested URL or not
@@ -97,7 +97,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL MailToDispatcher::queryDis
     return xDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      do the same like dispatch() but for multiple requests at the same time
@@ -117,7 +117,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Mail
     return lDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      dispatch URL with arguments
@@ -133,14 +133,14 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Mail
 void SAL_CALL MailToDispatcher::dispatch( const css::util::URL&                                  aURL       ,
                                           const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
 {
-    // dispatch() is an [oneway] call ... and may our user release his reference to us immediately.
-    // So we should hold us self alive till this call ends.
+    
+    
     css::uno::Reference< css::frame::XNotifyingDispatch > xSelfHold(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     implts_dispatch(aURL,lArguments);
-    // No notification for status listener!
+    
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      dispatch with guaranteed notifications about success
@@ -158,9 +158,9 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
                                                           const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                           const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException )
 {
-    // This class was designed to die by reference. And if user release his reference to us immediately after calling this method
-    // we can run into some problems. So we hold us self alive till this method ends.
-    // Another reason: We can use this reference as source of sending event at the end too.
+    
+    
+    
     css::uno::Reference< css::frame::XNotifyingDispatch > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
     sal_Bool bState = implts_dispatch(aURL,lArguments);
@@ -177,7 +177,7 @@ void SAL_CALL MailToDispatcher::dispatchWithNotification( const css::util::URL& 
     }
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      threadsafe helper for dispatch calls
@@ -210,9 +210,9 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
 
     try
     {
-        // start mail client
-        // Because there is no notofocation about success - we use case of
-        // no detected exception as SUCCESS - FAILED otherwise.
+        
+        
+        
         xSystemShellExecute->execute( aURL.Complete, OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY );
         bSuccess = sal_True;
     }
@@ -226,7 +226,7 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
     return bSuccess;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 /**
     @short      add/remove listener for state events
@@ -242,17 +242,17 @@ sal_Bool MailToDispatcher::implts_dispatch( const css::util::URL&               
 void SAL_CALL MailToDispatcher::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                    const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
 {
-    // not suported yet
+    
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL MailToDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/ ,
                                                       const css::util::URL&                                     /*aURL*/      ) throw( css::uno::RuntimeException )
 {
-    // not suported yet
+    
 }
 
-} //  namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

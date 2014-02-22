@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if defined( WNT )
@@ -43,7 +43,7 @@ inline bool ImpIsLeapYear( sal_uInt16 nYear )
              ( (nYear % 400) == 0 ) );
 }
 
-// All callers must have sanitized or normalized month and year values!
+
 inline sal_uInt16 ImplDaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     if ( nMonth != 2 )
@@ -57,7 +57,7 @@ inline sal_uInt16 ImplDaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
     }
 }
 
-// static
+
 sal_uInt16 Date::GetDaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     SAL_WARN_IF( nMonth < 1 || 12 < nMonth, "tools", "Date::GetDaysInMonth - nMonth out of bounds " << nMonth);
@@ -130,7 +130,7 @@ Date::Date( DateInitSystem )
     SYSTEMTIME aDateTime;
     GetLocalTime( &aDateTime );
 
-    // Combine to date
+    
     nDate = ((sal_uIntPtr)aDateTime.wDay) +
             (((sal_uIntPtr)aDateTime.wMonth)*100) +
             (((sal_uIntPtr)aDateTime.wYear)*10000);
@@ -138,10 +138,10 @@ Date::Date( DateInitSystem )
     time_t     nTmpTime;
     struct tm aTime;
 
-    // get current time
+    
     nTmpTime = time( 0 );
 
-    // compute date
+    
     if ( localtime_r( &nTmpTime, &aTime ) )
     {
         nDate = ((sal_uIntPtr)aTime.tm_mday) +
@@ -190,7 +190,7 @@ sal_uInt16 Date::GetDayOfYear() const
     Normalize( nDay, nMonth, nYear);
 
     for( sal_uInt16 i = 1; i < nMonth; i++ )
-         nDay = nDay + ::ImplDaysInMonth( i, nYear );   // += yields a warning on MSVC, so don't use it
+         nDay = nDay + ::ImplDaysInMonth( i, nYear );   
     return nDay;
 }
 
@@ -201,9 +201,9 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
     short n1WDay = (short)Date( 1, 1, GetYear() ).GetDayOfWeek();
     short nDayOfYear = (short)GetDayOfYear();
 
-    // weekdays start at 0, thus decrement one
+    
     nDayOfYear--;
-    // account for StartDay
+    
     n1WDay = (n1WDay+(7-(short)eStartDay)) % 7;
 
     if (nMinimumNumberOfDaysInWeek < 1 || 7 < nMinimumNumberOfDaysInWeek)
@@ -215,8 +215,8 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
     if ( nMinimumNumberOfDaysInWeek == 1 )
     {
         nWeek = ((n1WDay+nDayOfYear)/7) + 1;
-        // Set to 53rd week only if we're not in the
-        // first week of the new year
+        
+        
         if ( nWeek == 54 )
             nWeek = 1;
         else if ( nWeek == 53 )
@@ -231,31 +231,31 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
     else if ( nMinimumNumberOfDaysInWeek == 7 )
     {
         nWeek = ((n1WDay+nDayOfYear)/7);
-        // First week of a year is equal to the last week of the previous year
+        
         if ( nWeek == 0 )
         {
             Date aLastDatePrevYear( 31, 12, GetYear()-1 );
             nWeek = aLastDatePrevYear.GetWeekOfYear( eStartDay, nMinimumNumberOfDaysInWeek );
         }
     }
-    else // ( nMinimumNumberOfDaysInWeek == somehing_else, commentary examples for 4 )
+    else 
     {
-        // x_monday - thursday
+        
         if ( n1WDay < nMinimumNumberOfDaysInWeek )
             nWeek = 1;
-        // Friday
+        
         else if ( n1WDay == nMinimumNumberOfDaysInWeek )
             nWeek = 53;
-        // Saturday
+        
         else if ( n1WDay == nMinimumNumberOfDaysInWeek + 1 )
         {
-            // Year after leapyear
+            
             if ( Date( 1, 1, GetYear()-1 ).IsLeapYear() )
                 nWeek = 53;
             else
                 nWeek = 52;
         }
-        // Sunday
+        
         else
             nWeek = 52;
 
@@ -267,8 +267,8 @@ sal_uInt16 Date::GetWeekOfYear( DayOfWeek eStartDay,
                 nWeek = (nDayOfYear + n1WDay) / 7;
             if ( nWeek == 53 )
             {
-                // next x_Sunday == first x_Sunday in the new year
-                // == still the same week!
+                
+                
                 long nTempDays = DateToDays( GetDay(), GetMonth(), GetYear() );
                 nTempDays +=  6 - (GetDayOfWeek()+(7-(short)eStartDay)) % 7;
                 sal_uInt16  nDay;
@@ -327,7 +327,7 @@ bool Date::IsValidDate() const
     return IsValidDate( GetDay(), GetMonth(), GetYear());
 }
 
-//static
+
 bool Date::IsValidDate( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
 {
     if ( !nMonth || (nMonth > 12) )
@@ -353,7 +353,7 @@ bool Date::Normalize()
     return true;
 }
 
-//static
+
 bool Date::Normalize( sal_uInt16 & rDay, sal_uInt16 & rMonth, sal_uInt16 & rYear )
 {
     if (IsValidDate( rDay, rMonth, rYear))

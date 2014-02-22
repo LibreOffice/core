@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rangelst.hxx>
@@ -107,9 +107,9 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     Init( rArgSet );
 
-    // Hack: RefInput control
+    
     pTimer = new Timer;
-    pTimer->SetTimeout( 50 ); // Wait 50ms
+    pTimer->SetTimeout( 50 ); 
     pTimer->SetTimeoutHdl( LINK( this, ScFilterDlg, TimeOutHdl ) );
 
     OUStringBuffer aBuf;
@@ -161,20 +161,20 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 }
 
 
-//----------------------------------------------------------------------------
+
 
 ScFilterDlg::~ScFilterDlg()
 {
     delete pOptionsMgr;
     delete pOutItem;
 
-    // Hack: RefInput control
+    
     pTimer->Stop();
     delete pTimer;
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -206,7 +206,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
 
 
-    // for easier access:
+    
     maFieldLbArr.reserve(QUERY_ENTRY_COUNT);
     maFieldLbArr.push_back(pLbField1);
     maFieldLbArr.push_back(pLbField2);
@@ -228,7 +228,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     maConnLbArr.push_back(pLbConnect3);
     maConnLbArr.push_back(pLbConnect4);
 
-    // Option initialization:
+    
     pOptionsMgr  = new ScFilterOptionsMgr(
                             pViewData,
                             theQueryData,
@@ -244,7 +244,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                             pFtDbAreaLabel,
                             pFtDbArea,
                             aStrUndefined );
-    // Read in field lists and select entries
+    
 
     FillFieldLists();
 
@@ -291,9 +291,9 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                 }
                 else
                 {
-                    // XXX NOTE: if not ByString we just assume this has been
-                    // set to a proper string corresponding to the numeric
-                    // value earlier!
+                    
+                    
+                    
                     aValStr = aQueryStr;
                 }
             }
@@ -323,7 +323,7 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
     pScrollBar->SetRange( Range( 0, 4 ) );
     pScrollBar->SetLineSize( 1 );
     pLbConnect1->Hide();
-    // Disable/Enable Logic:
+    
 
        (pLbField1->GetSelectEntryPos() != 0)
     && (pLbField2->GetSelectEntryPos() != 0)
@@ -382,14 +382,14 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
     if(pDoc!=NULL &&
         pDoc->GetChangeTrack()!=NULL) pBtnCopyResult->Disable();
-    // Switch on modal mode
-//  SetDispatcherLock( true );
-    //@BugID 54702 Enable/disable only in Basic class
-//  SFX_APPWINDOW->Disable(false);      //! general method in ScAnyRefDlg
+    
+
+    
+
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFilterDlg::Close()
 {
@@ -400,13 +400,13 @@ bool ScFilterDlg::Close()
 }
 
 
-//----------------------------------------------------------------------------
-// Mouse-selected cell area becomes the new selection and is shown in the
-// reference text box
+
+
+
 
 void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
-    if ( bRefInputMode )    // Only possible if in reference edit mode
+    if ( bRefInputMode )    
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( pEdCopyArea );
@@ -416,7 +416,7 @@ void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterDlg::SetActive()
 {
@@ -432,7 +432,7 @@ void ScFilterDlg::SetActive()
     RefInputDone();
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterDlg::FillFieldLists()
 {
@@ -489,7 +489,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
         if ( nFieldSelPos )
         {
-            WaitObject aWaiter( this );     // even if only the list box has content
+            WaitObject aWaiter( this );     
 
             SCCOL nColumn = theQueryData.nCol1 + static_cast<SCCOL>(nFieldSelPos) - 1;
             EntryList* pList = NULL;
@@ -503,11 +503,11 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                     maHasDates.resize(nOffset+nList, false);
                 maHasDates[nOffset+nList-1] = false;
 
-                // first without the first line
+                
                 std::pair<EntryListsMap::iterator, bool> r =
                     maEntryLists.insert(nColumn, new EntryList);
                 if (!r.second)
-                    // insertion failed.
+                    
                     return;
 
                 pList = r.first->second;
@@ -515,8 +515,8 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                     nColumn, nFirstRow+1, nLastRow,
                     nTab, bCaseSens, pList->maList, maHasDates[nOffset+nList-1] );
 
-                // Entry for the first line
-                //! Entry (pHdrEntry) doesn't generate collection?
+                
+                
 
                 pList->mnHeaderPos = INVALID_HEADER_POS;
                 std::vector<ScTypedStrData> aHdrColl;
@@ -525,20 +525,20 @@ void ScFilterDlg::UpdateValueList( size_t nList )
                     nColumn, nFirstRow, nFirstRow, nTab, true, aHdrColl, bDummy );
                 if (!aHdrColl.empty())
                 {
-                    // See if the header value is already in the list.
+                    
                     std::vector<ScTypedStrData>::iterator itBeg = pList->maList.begin(), itEnd = pList->maList.end();
                     std::vector<ScTypedStrData>::iterator it = std::find_if(
                         itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
                     if (it == itEnd)
                     {
-                        // Not in the list. Insert it.
+                        
                         pList->maList.push_back(aHdrColl.front());
                         if (bCaseSens)
                             std::sort(pList->maList.begin(), pList->maList.end(), ScTypedStrData::LessCaseSensitive());
                         else
                             std::sort(pList->maList.begin(), pList->maList.end(), ScTypedStrData::LessCaseInsensitive());
 
-                        // Record its position.
+                        
                         itBeg = pList->maList.begin();
                         itEnd = pList->maList.end();
                         it = std::find_if(itBeg, itEnd, FindTypedStrData(aHdrColl.front(), bCaseSens));
@@ -567,7 +567,7 @@ void ScFilterDlg::UpdateValueList( size_t nList )
 
 void ScFilterDlg::UpdateHdrInValueList( size_t nList )
 {
-    //! GetText / SetText ??
+    
 
     if (!pDoc)
         return;
@@ -591,7 +591,7 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
         return;
 
     ComboBox* pValList = maValueEdArr[nList-1];
-    size_t nListPos = nPos + 2;                 // for "empty" and "non-empty"
+    size_t nListPos = nPos + 2;                 
 
     const ScTypedStrData& rHdrEntry = maEntryLists[nColumn].maList[nPos];
 
@@ -599,19 +599,19 @@ void ScFilterDlg::UpdateHdrInValueList( size_t nList )
     bool bWasThere = aHdrStr.equals(pValList->GetEntry(nListPos));
     bool bInclude = !pBtnHeader->IsChecked();
 
-    if (bInclude)           // Include entry
+    if (bInclude)           
     {
         if (!bWasThere)
             pValList->InsertEntry(aHdrStr, nListPos);
     }
-    else                    // Omit entry
+    else                    
     {
         if (bWasThere)
             pValList->RemoveEntryAt(nListPos);
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 void ScFilterDlg::ClearValueList( size_t nList )
 {
@@ -626,7 +626,7 @@ void ScFilterDlg::ClearValueList( size_t nList )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
 {
@@ -636,7 +636,7 @@ size_t ScFilterDlg::GetFieldSelPos( SCCOL nField )
         return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 ScQueryItem* ScFilterDlg::GetOutputItem()
 {
@@ -673,7 +673,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     theParam.bRegExp        = pBtnRegExp->IsChecked();
     theParam.bDestPers      = pBtnDestPers->IsChecked();
 
-    // only set the three - reset everything else
+    
 
     DELETEZ( pOutItem );
     pOutItem = new ScQueryItem( nWhichQuery, &theParam );
@@ -682,7 +682,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
 }
 
 
-//----------------------------------------------------------------------------
+
 
 bool ScFilterDlg::IsRefInputMode() const
 {
@@ -690,9 +690,9 @@ bool ScFilterDlg::IsRefInputMode() const
 }
 
 
-//----------------------------------------------------------------------------
-// Handler:
-// ========
+
+
+
 
 IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 {
@@ -731,7 +731,7 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
 {
@@ -741,17 +741,17 @@ IMPL_LINK_NOARG(ScFilterDlg, MoreExpandedHdl)
     {
         pTimer->Stop();
         bRefInputMode = false;
-        //@BugID 54702 Enable/disable only in Basic class
-        //SFX_APPWINDOW->Disable(FALSE);        //! general method in ScAnyRefDlg
+        
+        
     }
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 {
-    // Check if RefInputMode is still true every 50ms
+    
 
     if( _pTimer == pTimer && IsActive() )
         bRefInputMode = (pEdCopyArea->HasFocus() || pRbCopyArea->HasFocus());
@@ -763,7 +763,7 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
@@ -1020,17 +1020,17 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
-    //  Column headers:
-    //      Field list: Columnxx <-> column header string
-    //      Value list: Column header value not applicable.
-    //  Upper/lower case:
-    //      Value list: completely new
+    
+    
+    
+    
+    
 
-    if ( pBox == pBtnHeader )              // Field list and value list
+    if ( pBox == pBtnHeader )              
     {
         sal_uInt16 nCurSel1 = pLbField1->GetSelectEntryPos();
         sal_uInt16 nCurSel2 = pLbField2->GetSelectEntryPos();
@@ -1048,10 +1048,10 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
         UpdateHdrInValueList( 4 );
     }
 
-    if ( pBox == pBtnCase )            // Complete value list
+    if ( pBox == pBtnCase )            
     {
         maEntryLists.clear();
-        UpdateValueList( 1 );       // current text is recorded
+        UpdateValueList( 1 );       
         UpdateValueList( 2 );
         UpdateValueList( 3 );
         UpdateValueList( 4 );
@@ -1061,7 +1061,7 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 }
 
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {
@@ -1147,7 +1147,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ScFilterDlg, ScrollHdl)
 {
     SliderMoved();

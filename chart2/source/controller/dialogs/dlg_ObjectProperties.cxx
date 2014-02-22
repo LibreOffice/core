@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/zforlist.hxx>
@@ -150,7 +150,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
 
     if( OBJECTTYPE_AXIS == m_eObjectType )
     {
-        //show scale properties only for a single axis not for multiselection
+        
         m_bHasScaleProperties = !m_bAffectsMultipleObjects;
 
         if( m_bHasScaleProperties )
@@ -158,7 +158,7 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
             uno::Reference< XAxis > xAxis( ObjectIdentifier::getAxisForCID( m_aObjectCID, xChartModel ) );
             if( xAxis.is() )
             {
-                //no scale page for series axis
+                
                 ScaleData aData( xAxis->getScaleData() );
                 if( chart2::AxisType::SERIES == aData.AxisType )
                     m_bHasScaleProperties = false;
@@ -171,15 +171,15 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                 if( AxisHelper::getIndicesForAxis( xAxis, xDiagram, nCooSysIndex, nDimensionIndex, nAxisIndex ) )
                 {
                     xChartType = AxisHelper::getFirstChartTypeWithSeriesAttachedToAxisIndex( xDiagram, nAxisIndex );
-                    //show positioning controls only if they make sense
+                    
                     m_bSupportingAxisPositioning = ChartTypeHelper::isSupportingAxisPositioning( xChartType, nDimensionCount, nDimensionIndex );
 
-                    //show axis origin only for secondary y axis
+                    
                     if( 1==nDimensionIndex && 1==nAxisIndex && ChartTypeHelper::isSupportingBaseValue( xChartType ) )
                         m_bShowAxisOrigin = true;
                 }
 
-                //is the crossin main axis a category axes?:
+                
                 uno::Reference< XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis( xAxis, xDiagram ) );
                 uno::Reference< XAxis > xCrossingMainAxis( AxisHelper::getCrossingMainAxis( xAxis, xCooSys ) );
                 if( xCrossingMainAxis.is() )
@@ -207,11 +207,11 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
             }
         }
 
-        //no staggering of labels for 3D axis
+        
         m_bCanAxisLabelsBeStaggered = nDimensionCount==2;
     }
 
-    //create gui name for this object
+    
     {
         if( !m_bAffectsMultipleObjects && OBJECTTYPE_AXIS == m_eObjectType )
         {
@@ -420,7 +420,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             if( m_pParameter->HasScaleProperties() )
                 AddTabPage(TP_SCALE, SCH_RESSTR(STR_PAGE_SCALE), ScaleTabPage::Create, NULL);
 
-            if( m_pParameter->HasScaleProperties() )//no positioning page for z axes so far as the tickmarks are not shown so far
+            if( m_pParameter->HasScaleProperties() )
                 AddTabPage(TP_AXIS_POSITIONS, SCH_RESSTR(STR_PAGE_POSITIONING), AxisPositionsTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_LINE, SCH_RESSTR(STR_PAGE_LINE));
             AddTabPage(TP_AXIS_LABEL, SCH_RESSTR(STR_OBJECT_LABEL), SchAxisLabelTabPage::Create, NULL);
@@ -472,7 +472,7 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         case OBJECTTYPE_LEGEND_ENTRY:
         case OBJECTTYPE_AXIS_UNITLABEL:
         case OBJECTTYPE_UNKNOWN:
-            // nothing
+            
             break;
         case OBJECTTYPE_DATA_CURVE_EQUATION:
             AddTabPage(RID_SVXPAGE_LINE, SCH_RESSTR(STR_PAGE_BORDER));
@@ -491,9 +491,9 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             break;
     }
 
-    // used to find out if user left the dialog with OK. When OK is pressed but
-    // no changes were done, Cancel is returned by the SfxTabDialog. See method
-    // DialogWasClosedWithOK.
+    
+    
+    
     m_aOriginalOKClickHdl = GetOKButton().GetClickHdl();
     GetOKButton().SetClickHdl( LINK( this, SchAttribTabDlg, OKPressed ));
 }
@@ -661,6 +661,6 @@ bool SchAttribTabDlg::DialogWasClosedWithOK() const
     return m_bOKPressed;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

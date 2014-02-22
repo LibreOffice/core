@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -153,7 +153,7 @@ CustomAnimationEffect::CustomAnimationEffect( const ::com::sun::star::uno::Refer
     setNode( xNode );
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
@@ -194,14 +194,14 @@ void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::c
         p++;
     }
 
-    // get effect start time
+    
     mxNode->getBegin() >>= mfBegin;
 
     mfAcceleration = mxNode->getAcceleration();
     mfDecelerate = mxNode->getDecelerate();
     mbAutoReverse = mxNode->getAutoReverse();
 
-    // get iteration data
+    
     Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
     if( xIter.is() )
     {
@@ -216,7 +216,7 @@ void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::c
         mnIterateType = 0;
     }
 
-    // calculate effect duration and get target shape
+    
     Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
     if( xEnumerationAccess.is() )
     {
@@ -254,10 +254,10 @@ void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::c
                     if( fDuration > mfDuration )
                         mfDuration = fDuration;
 
-                    // no target shape yet?
+                    
                     if( !maTarget.hasValue() )
                     {
-                        // go get it boys!
+                        
                         Reference< XAnimate > xAnimate( xChildNode, UNO_QUERY );
                         if( xAnimate.is() )
                         {
@@ -278,7 +278,7 @@ void CustomAnimationEffect::setNode( const ::com::sun::star::uno::Reference< ::c
     checkForText();
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_Int16 nIterateType )
 {
@@ -286,7 +286,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
 
     try
     {
-        // first get target text
+        
         sal_Int32 nOnlyPara = -1;
 
         Reference< XText > xShape;
@@ -301,12 +301,12 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
             }
         }
 
-        // now use the break iterator to iterate over the given text
-        // and count the sub items
+        
+        
 
         if( xShape.is() )
         {
-            // TODO/LATER: Optimize this, don't create a break iterator each time
+            
             Reference< uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             Reference < i18n::XBreakIterator > xBI = i18n::BreakIterator::create(xContext);
 
@@ -321,7 +321,7 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
             {
                 xEnumeration->nextElement() >>= xParagraph;
 
-                // skip this if its not the only paragraph we want to count
+                
                 if( (nOnlyPara != -1) && (nOnlyPara != nPara ) )
                     continue;
 
@@ -374,13 +374,13 @@ sal_Int32 CustomAnimationEffect::getNumberOfSubitems( const Any& aTarget, sal_In
     return nSubItems;
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationEffect::~CustomAnimationEffect()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationEffectPtr CustomAnimationEffect::clone() const
 {
@@ -391,7 +391,7 @@ CustomAnimationEffectPtr CustomAnimationEffect::clone() const
     return pEffect;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode >& xNode )
 {
@@ -419,7 +419,7 @@ sal_Int32 CustomAnimationEffect::get_node_type( const Reference< XAnimationNode 
     return nNodeType;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
 {
@@ -428,8 +428,8 @@ void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
         mnPresetClass = nPresetClass;
         if( mxNode.is() )
         {
-            // first try to find a "preset-class" entry in the user data
-            // and change it
+            
+            
             Sequence< NamedValue > aUserData( mxNode->getUserData() );
             sal_Int32 nLength = aUserData.getLength();
             bool bFound = false;
@@ -448,7 +448,7 @@ void CustomAnimationEffect::setPresetClass( sal_Int16 nPresetClass )
                 }
             }
 
-            // no "node-type" entry inside user data, so add it
+            
             if( !bFound )
             {
                 nLength = aUserData.getLength();
@@ -469,8 +469,8 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
         mnNodeType = nNodeType;
         if( mxNode.is() )
         {
-            // first try to find a "node-type" entry in the user data
-            // and change it
+            
+            
             Sequence< NamedValue > aUserData( mxNode->getUserData() );
             sal_Int32 nLength = aUserData.getLength();
             bool bFound = false;
@@ -489,7 +489,7 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
                 }
             }
 
-            // no "node-type" entry inside user data, so add it
+            
             if( !bFound )
             {
                 nLength = aUserData.getLength();
@@ -503,15 +503,15 @@ void CustomAnimationEffect::setNodeType( sal_Int16 nNodeType )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
 {
     mnGroupId = nGroupId;
     if( mxNode.is() )
     {
-        // first try to find a "group-id" entry in the user data
-        // and change it
+        
+        
         Sequence< NamedValue > aUserData( mxNode->getUserData() );
         sal_Int32 nLength = aUserData.getLength();
         bool bFound = false;
@@ -530,7 +530,7 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
             }
         }
 
-        // no "node-type" entry inside user data, so add it
+        
         if( !bFound )
         {
             nLength = aUserData.getLength();
@@ -543,7 +543,7 @@ void CustomAnimationEffect::setGroupId( sal_Int32 nGroupId )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 /** checks if the text for this effect has changed and updates internal flags.
     returns true if something changed.
@@ -556,13 +556,13 @@ bool CustomAnimationEffect::checkForText()
 
     if( maTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
     {
-        // calc para depth
+        
         ParagraphTarget aParaTarget;
         maTarget >>= aParaTarget;
 
         xText = Reference< XText >::query( aParaTarget.Shape );
 
-        // get paragraph
+        
         if( xText.is() )
         {
             Reference< XEnumerationAccess > xEA( xText, UNO_QUERY );
@@ -613,17 +613,17 @@ bool CustomAnimationEffect::calculateIterateDuration()
 {
     bool bChange = false;
 
-    // if we have an iteration, we must also calculate the
-    // 'true' container duration, that is
-    // ( ( is form animated ) ? [contained effects duration] : 0 ) +
-    // ( [number of animated children] - 1 ) * [interval-delay] + [contained effects duration]
+    
+    
+    
+    
     Reference< XIterateContainer > xIter( mxNode, UNO_QUERY );
     if( xIter.is() )
     {
         double fDuration = mfDuration;
         const double fSubEffectDuration = mfDuration;
 
-        if( mnTargetSubItem != ShapeAnimationSubType::ONLY_BACKGROUND ) // does not make sense for iterate container but better check
+        if( mnTargetSubItem != ShapeAnimationSubType::ONLY_BACKGROUND ) 
         {
             const sal_Int32 nSubItems = getNumberOfSubitems( maTarget, mnIterateType );
             if( nSubItems )
@@ -633,8 +633,8 @@ bool CustomAnimationEffect::calculateIterateDuration()
             }
         }
 
-        // if we also animate the form first, we have to add the
-        // sub effect duration to the whole effect duration
+        
+        
         if( mnTargetSubItem == ShapeAnimationSubType::AS_WHOLE )
             fDuration += fSubEffectDuration;
 
@@ -645,7 +645,7 @@ bool CustomAnimationEffect::calculateIterateDuration()
     return bChange;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setTarget( const ::com::sun::star::uno::Any& rTarget )
 {
@@ -653,7 +653,7 @@ void CustomAnimationEffect::setTarget( const ::com::sun::star::uno::Any& rTarget
     {
         maTarget = rTarget;
 
-        // first, check special case for random node
+        
         Reference< XInitialization > xInit( mxNode, UNO_QUERY );
         if( xInit.is() )
         {
@@ -700,7 +700,7 @@ void CustomAnimationEffect::setTarget( const ::com::sun::star::uno::Any& rTarget
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
 {
@@ -737,7 +737,7 @@ void CustomAnimationEffect::setTargetSubItem( sal_Int16 nSubItem )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setDuration( double fDuration )
 {
@@ -749,7 +749,7 @@ void CustomAnimationEffect::setDuration( double fDuration )
         getRepeatCount() >>= fRepeatCount;
         mfAbsoluteDuration = mfDuration * fRepeatCount;
 
-        // calculate effect duration and get target shape
+        
         Reference< XEnumerationAccess > xEnumerationAccess( mxNode, UNO_QUERY );
         if( xEnumerationAccess.is() )
         {
@@ -789,7 +789,7 @@ void CustomAnimationEffect::setDuration( double fDuration )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setBegin( double fBegin )
 {
@@ -804,7 +804,7 @@ void CustomAnimationEffect::setBegin( double fBegin )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setAcceleration( double fAcceleration )
 {
@@ -818,7 +818,7 @@ void CustomAnimationEffect::setAcceleration( double fAcceleration )
         OSL_FAIL( "sd::CustomAnimationEffect::setAcceleration(), exception caught!" );
     }
 }
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setDecelerate( double fDecelerate )
 {
@@ -833,7 +833,7 @@ void CustomAnimationEffect::setDecelerate( double fDecelerate )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setAutoReverse( sal_Bool bAutoReverse )
 {
@@ -848,7 +848,7 @@ void CustomAnimationEffect::setAutoReverse( sal_Bool bAutoReverse )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::replaceNode( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
@@ -885,7 +885,7 @@ void CustomAnimationEffect::replaceNode( const ::com::sun::star::uno::Reference<
         setIterateInterval( fIterateInterval );
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XShape > CustomAnimationEffect::getTargetShape() const
 {
@@ -901,7 +901,7 @@ Reference< XShape > CustomAnimationEffect::getTargetShape() const
     return xShape;
 }
 
-// --------------------------------------------------------------------
+
 
 Any CustomAnimationEffect::getRepeatCount() const
 {
@@ -916,7 +916,7 @@ Any CustomAnimationEffect::getRepeatCount() const
     }
 }
 
-// --------------------------------------------------------------------
+
 
 Any CustomAnimationEffect::getEnd() const
 {
@@ -931,7 +931,7 @@ Any CustomAnimationEffect::getEnd() const
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int16 CustomAnimationEffect::getFill() const
 {
@@ -941,7 +941,7 @@ sal_Int16 CustomAnimationEffect::getFill() const
         return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setRepeatCount( const Any& rRepeatCount )
 {
@@ -954,7 +954,7 @@ void CustomAnimationEffect::setRepeatCount( const Any& rRepeatCount )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setEnd( const Any& rEnd )
 {
@@ -962,7 +962,7 @@ void CustomAnimationEffect::setEnd( const Any& rEnd )
         mxNode->setEnd( rEnd );
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setFill( sal_Int16 nFill )
 {
@@ -970,7 +970,7 @@ void CustomAnimationEffect::setFill( sal_Int16 nFill )
         mxNode->setFill( nFill );
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const throw (Exception)
 {
@@ -999,7 +999,7 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     }
 
     Any aBegin;
-    if( !mbAfterEffectOnNextEffect ) // sameClick
+    if( !mbAfterEffectOnNextEffect ) 
     {
         Event aEvent;
 
@@ -1025,13 +1025,13 @@ Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
     return xAnimate;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
 {
     if( mnIterateType != nIterateType ) try
     {
-        // do we need to exchange the container node?
+        
         if( (mnIterateType == 0) || (nIterateType == 0) )
         {
             sal_Int16 nTargetSubItem = mnTargetSubItem;
@@ -1101,7 +1101,7 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
 
         mnIterateType = nIterateType;
 
-        // if we have an iteration container, we must set its type
+        
         if( mnIterateType )
         {
             Reference< XIterateContainer > xIter( mxNode, UNO_QUERY_THROW );
@@ -1116,7 +1116,7 @@ void CustomAnimationEffect::setIterateType( sal_Int16 nIterateType )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
 {
@@ -1135,7 +1135,7 @@ void CustomAnimationEffect::setIterateInterval( double fIterateInterval )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 OUString CustomAnimationEffect::getPath() const
 {
@@ -1163,7 +1163,7 @@ OUString CustomAnimationEffect::getPath() const
     return aPath;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setPath( const OUString& rPath )
 {
@@ -1189,7 +1189,7 @@ void CustomAnimationEffect::setPath( const OUString& rPath )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue )
 {
@@ -1240,7 +1240,7 @@ Any CustomAnimationEffect::getProperty( sal_Int32 nNodeType, const OUString& rAt
     return aProperty;
 }
 
-// --------------------------------------------------------------------
+
 
 bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rAttributeName, EValue eValue, const Any& rValue )
 {
@@ -1317,14 +1317,14 @@ bool CustomAnimationEffect::setProperty( sal_Int32 nNodeType, const OUString& rA
     return bChanged;
 }
 
-// --------------------------------------------------------------------
+
 
 static bool implIsColorAttribute( const OUString& rAttributeName )
 {
     return rAttributeName == "FillColor" || rAttributeName == "LineColor" || rAttributeName == "CharColor";
 }
 
-// --------------------------------------------------------------------
+
 
 Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
 {
@@ -1373,7 +1373,7 @@ Any CustomAnimationEffect::getColor( sal_Int32 nIndex )
     return aColor;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
 {
@@ -1426,7 +1426,7 @@ void CustomAnimationEffect::setColor( sal_Int32 nIndex, const Any& rColor )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, EValue eValue )
 {
@@ -1474,7 +1474,7 @@ Any CustomAnimationEffect::getTransformationProperty( sal_Int32 nTransformType, 
     return aProperty;
 }
 
-// --------------------------------------------------------------------
+
 
 bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType, EValue eValue, const Any& rValue )
 {
@@ -1547,7 +1547,7 @@ bool CustomAnimationEffect::setTransformationProperty( sal_Int32 nTransformType,
     return bChanged;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSource, double fVolume /* = 1.0 */ )
 {
@@ -1567,7 +1567,7 @@ void CustomAnimationEffect::createAudio( const ::com::sun::star::uno::Any& rSour
     }
 }
 
-// --------------------------------------------------------------------
+
 
 static Reference< XCommand > findCommandNode( const Reference< XAnimationNode >& xRootNode )
 {
@@ -1623,7 +1623,7 @@ void CustomAnimationEffect::removeAudio()
 
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setAudio( const Reference< ::com::sun::star::animations::XAudio >& xAudio )
 {
@@ -1642,7 +1642,7 @@ void CustomAnimationEffect::setAudio( const Reference< ::com::sun::star::animati
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::setStopAudio()
 {
@@ -1667,14 +1667,14 @@ void CustomAnimationEffect::setStopAudio()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool CustomAnimationEffect::getStopAudio() const
 {
     return mnCommand == EffectCommands::STOPAUDIO;
 }
 
-// --------------------------------------------------------------------
+
 
 SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
 {
@@ -1683,7 +1683,7 @@ SdrPathObj* CustomAnimationEffect::createSdrPathObjFromPath()
     return pPathObj;
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
 {
@@ -1709,7 +1709,7 @@ void CustomAnimationEffect::updateSdrPathObjFromPath( SdrPathObj& rPathObj )
     rPathObj.SetPathPoly( xPolyPoly );
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj )
 {
@@ -1747,14 +1747,14 @@ void CustomAnimationEffect::updatePathFromSdrPathObj( const SdrPathObj& rPathObj
     setPath( ::basegfx::tools::exportToSvgD( xPolyPoly, true, true, true) );
 }
 
-// ====================================================================
+
 
 EffectSequenceHelper::EffectSequenceHelper()
 : mnSequenceType( EffectNodeType::DEFAULT )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 EffectSequenceHelper::EffectSequenceHelper( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XTimeContainer >& xSequenceRoot )
 : mxSequenceRoot( xSequenceRoot ), mnSequenceType( EffectNodeType::DEFAULT )
@@ -1763,14 +1763,14 @@ EffectSequenceHelper::EffectSequenceHelper( const ::com::sun::star::uno::Referen
     create( xNode );
 }
 
-// --------------------------------------------------------------------
+
 
 EffectSequenceHelper::~EffectSequenceHelper()
 {
     reset();
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::reset()
 {
@@ -1790,7 +1790,7 @@ Reference< XAnimationNode > EffectSequenceHelper::getRootNode()
     return xRoot;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::append( const CustomAnimationEffectPtr& pEffect )
 {
@@ -1799,7 +1799,7 @@ void EffectSequenceHelper::append( const CustomAnimationEffectPtr& pEffect )
     rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPresetPtr& pPreset, const Any& rTarget, double fDuration /* = -1.0 */ )
 {
@@ -1811,7 +1811,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
         Reference< XAnimationNode > xNode( pPreset->create( strEmpty ) );
         if( xNode.is() )
         {
-            // first, filter all only ui relevant user data
+            
             std::vector< NamedValue > aNewUserData;
             Sequence< NamedValue > aUserData( xNode->getUserData() );
             sal_Int32 nLength = aUserData.getLength();
@@ -1834,7 +1834,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
                 xNode->setUserData( aUserData );
             }
 
-            // check target, maybe we need to force it to text
+            
             Any aTarget( rTarget );
             sal_Int16 nSubItem = ShapeAnimationSubType::AS_WHOLE;
 
@@ -1848,13 +1848,13 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
                 aTarget >>= xShape;
                 if( xShape.is() )
                 {
-                    // thats bad, we target a shape here but the effect is only for text
-                    // so change subitem
+                    
+                    
                     nSubItem = ShapeAnimationSubType::ONLY_TEXT;
                 }
             }
 
-            // now create effect from preset
+            
             pEffect.reset( new CustomAnimationEffect( xNode ) );
             pEffect->setEffectSequence( this );
             pEffect->setTarget( aTarget );
@@ -1872,7 +1872,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const CustomAnimationPres
     return pEffect;
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathObj, const Any& rTarget, double fDuration /* = -1.0 */ )
 {
@@ -1921,7 +1921,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::append( const SdrPathObj& rPathOb
     return pEffect;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pPreset, const OUString& rPresetSubType, double fDuration /* = -1.0 */ )
 {
@@ -1943,7 +1943,7 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, const CustomAnimationPresetPtr& pPreset, double fDuration /* = -1.0 */ )
 {
@@ -1951,7 +1951,7 @@ void EffectSequenceHelper::replace( const CustomAnimationEffectPtr& pEffect, con
     replace( pEffect, pPreset, strEmpty, fDuration );
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
 {
@@ -1964,20 +1964,20 @@ void EffectSequenceHelper::remove( const CustomAnimationEffectPtr& pEffect )
     rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::rebuild()
 {
     implRebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::implRebuild()
 {
     try
     {
-        // first we delete all time containers on the first two levels
+        
         Reference< XEnumerationAccess > xEnumerationAccess( mxSequenceRoot, UNO_QUERY_THROW );
         Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
         while( xEnumeration->hasMoreElements() )
@@ -1996,7 +1996,7 @@ void EffectSequenceHelper::implRebuild()
             mxSequenceRoot->removeChild( xChildNode );
         }
 
-        // second, rebuild main sequence
+        
         EffectSequence::iterator aIter( maEffects.begin() );
         EffectSequence::iterator aEnd( maEffects.end() );
         if( aIter != aEnd )
@@ -2008,7 +2008,7 @@ void EffectSequenceHelper::implRebuild()
             bool bFirst = true;
             do
             {
-                // create a par container for the next click node and all following with and after effects
+                
                 Reference< XTimeContainer > xOnClickContainer( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
 
                 Event aEvent;
@@ -2026,8 +2026,8 @@ void EffectSequenceHelper::implRebuild()
                 Any aBegin( makeAny( aEvent ) );
                 if( bFirst )
                 {
-                    // if the first node is not a click action, this click container
-                    // must not have INDEFINITE begin but start at 0s
+                    
+                    
                     bFirst = false;
                     if( pEffect->getNodeType() != EffectNodeType::ON_CLICK )
                         aBegin <<= (double)0.0;
@@ -2041,7 +2041,7 @@ void EffectSequenceHelper::implRebuild()
 
                 do
                 {
-                    // create a par container for the current click or after effect node and all following with effects
+                    
                     Reference< XTimeContainer > xWithContainer( ParallelTimeContainer::create( ::comphelper::getProcessComponentContext() ), UNO_QUERY_THROW );
                     xWithContainer->setBegin( makeAny( fBegin ) );
                     xOnClickContainer->appendChild( xWithContainer );
@@ -2076,18 +2076,18 @@ void EffectSequenceHelper::implRebuild()
             }
             while( pEffect.get() );
 
-            // process after effect nodes
+            
             std::for_each( aAfterEffects.begin(), aAfterEffects.end(), stl_process_after_effect_node_func );
 
             updateTextGroups();
 
-            // reset duration, might have been altered (see below)
+            
             mxSequenceRoot->setDuration( Any() );
         }
         else
         {
-            // empty sequence, set duration to 0.0 explicitly
-            // (otherwise, this sequence will never end)
+            
+            
             mxSequenceRoot->setDuration( makeAny((double)0.0) );
         }
     }
@@ -2097,21 +2097,21 @@ void EffectSequenceHelper::implRebuild()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 stl_CustomAnimationEffect_search_node_predict::stl_CustomAnimationEffect_search_node_predict( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xSearchNode )
 : mxSearchNode( xSearchNode )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 bool stl_CustomAnimationEffect_search_node_predict::operator()( CustomAnimationEffectPtr pEffect ) const
 {
     return pEffect->getNode() == mxSearchNode;
 }
 
-// --------------------------------------------------------------------
+
 
 static bool implFindNextContainer( Reference< XTimeContainer >& xParent, Reference< XTimeContainer >& xCurrent, Reference< XTimeContainer >& xNext )
  throw(Exception)
@@ -2133,7 +2133,7 @@ static bool implFindNextContainer( Reference< XTimeContainer >& xParent, Referen
     return xNext.is();
 }
 
-// --------------------------------------------------------------------
+
 
 void stl_process_after_effect_node_func(AfterEffectNode& rNode)
 {
@@ -2141,7 +2141,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
     {
         if( rNode.mxNode.is() && rNode.mxMaster.is() )
         {
-            // set master node
+            
             Reference< XAnimationNode > xMasterNode( rNode.mxMaster, UNO_QUERY_THROW );
             Sequence< NamedValue > aUserData( rNode.mxNode->getUserData() );
             sal_Int32 nSize = aUserData.getLength();
@@ -2150,41 +2150,41 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
             aUserData[nSize].Value <<= xMasterNode;
             rNode.mxNode->setUserData( aUserData );
 
-            // insert after effect node into timeline
+            
             Reference< XTimeContainer > xContainer( rNode.mxMaster->getParent(), UNO_QUERY_THROW );
 
-            if( !rNode.mbOnNextEffect ) // sameClick
+            if( !rNode.mbOnNextEffect ) 
             {
-                // insert the aftereffect after its effect is animated
+                
                 xContainer->insertAfter( rNode.mxNode, rNode.mxMaster );
             }
-            else // nextClick
+            else 
             {
                 Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
-                // insert the aftereffect in the next group
+                
 
                 Reference< XTimeContainer > xClickContainer( xContainer->getParent(), UNO_QUERY_THROW );
                 Reference< XTimeContainer > xSequenceContainer( xClickContainer->getParent(), UNO_QUERY_THROW );
 
                 Reference< XTimeContainer > xNextContainer;
 
-                // first try if we have an after effect container
+                
                 if( !implFindNextContainer( xClickContainer, xContainer, xNextContainer ) )
                 {
                     Reference< XTimeContainer > xNextClickContainer;
-                    // if not, try to find the next click effect container
+                    
                     if( implFindNextContainer( xSequenceContainer, xClickContainer, xNextClickContainer ) )
                     {
                         Reference< XEnumerationAccess > xEnumerationAccess( xNextClickContainer, UNO_QUERY_THROW );
                         Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
                         if( xEnumeration->hasMoreElements() )
                         {
-                            // the next container is the first child container
+                            
                             xEnumeration->nextElement() >>= xNextContainer;
                         }
                         else
                         {
-                            // this does not yet have a child container, create one
+                            
                             xNextContainer.set( ParallelTimeContainer::create(xContext), UNO_QUERY_THROW );
 
                             xNextContainer->setBegin( makeAny( (double)0.0 ) );
@@ -2194,7 +2194,7 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                     }
                 }
 
-                // if we don't have a next container, we add one to the sequence container
+                
                 if( !xNextContainer.is() )
                 {
                     Reference< XTimeContainer > xNewClickContainer( ParallelTimeContainer::create( xContext ), UNO_QUERY_THROW );
@@ -2218,13 +2218,13 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
 
                 if( xNextContainer.is() )
                 {
-                    // find begin time of first element
+                    
                     Reference< XEnumerationAccess > xEnumerationAccess( xNextContainer, UNO_QUERY_THROW );
                     Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
                     if( xEnumeration->hasMoreElements() )
                     {
                         Reference< XAnimationNode > xChild;
-                        // the next container is the first child container
+                        
                         xEnumeration->nextElement() >>= xChild;
                         if( xChild.is() )
                         {
@@ -2246,14 +2246,14 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 EffectSequence::iterator EffectSequenceHelper::find( const CustomAnimationEffectPtr& pEffect )
 {
     return std::find( maEffects.begin(), maEffects.end(), pEffect );
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const
 {
@@ -2272,7 +2272,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::findEffect( const ::com::sun::sta
     return pEffect;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 EffectSequenceHelper::getOffsetFromEffect( const CustomAnimationEffectPtr& xEffect ) const
 {
@@ -2288,7 +2288,7 @@ sal_Int32 EffectSequenceHelper::getOffsetFromEffect( const CustomAnimationEffect
     return -1;
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationEffectPtr EffectSequenceHelper::getEffectFromOffset( sal_Int32 nOffset ) const
 {
@@ -2303,7 +2303,7 @@ CustomAnimationEffectPtr EffectSequenceHelper::getEffectFromOffset( sal_Int32 nO
     return pEffect;
 }
 
-// --------------------------------------------------------------------
+
 
 bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
 {
@@ -2327,7 +2327,7 @@ bool EffectSequenceHelper::disposeShape( const Reference< XShape >& xShape )
     return bChanges;
 }
 
-// --------------------------------------------------------------------
+
 
 bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape )
 {
@@ -2342,7 +2342,7 @@ bool EffectSequenceHelper::hasEffect( const com::sun::star::uno::Reference< com:
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTarget )
 {
@@ -2364,7 +2364,7 @@ void EffectSequenceHelper::insertTextRange( const com::sun::star::uno::Any& aTar
         rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTarget )
 {
@@ -2386,7 +2386,7 @@ void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTa
             {
                 if( aIterParaTarget.Paragraph == aParaTarget.Paragraph )
                 {
-                    // delete this effect if it targets the disposed paragraph directly
+                    
                     (*aIter)->setEffectSequence( 0 );
                     aIter = maEffects.erase( aIter );
                     bChanges = true;
@@ -2396,7 +2396,7 @@ void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTa
                 {
                     if( aIterParaTarget.Paragraph > aParaTarget.Paragraph )
                     {
-                        // shift all paragraphs after disposed paragraph
+                        
                         aIterParaTarget.Paragraph--;
                         (*aIter)->setTarget( makeAny( aIterParaTarget ) );
                     }
@@ -2418,7 +2418,7 @@ void EffectSequenceHelper::disposeTextRange( const com::sun::star::uno::Any& aTa
         rebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationTextGroup::CustomAnimationTextGroup( const Reference< XShape >& rTarget, sal_Int32 nGroupId )
 :   maTarget( rTarget ),
@@ -2427,7 +2427,7 @@ CustomAnimationTextGroup::CustomAnimationTextGroup( const Reference< XShape >& r
     reset();
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationTextGroup::reset()
 {
@@ -2435,7 +2435,7 @@ void CustomAnimationTextGroup::reset()
     mbAnimateForm = false;
     mbTextReverse = false;
     mfGroupingAuto = -1.0;
-    mnLastPara = -1; // used to check for TextReverse
+    mnLastPara = -1; 
 
     for (int i = 0; i < PARA_LEVELS; ++i)
     {
@@ -2445,7 +2445,7 @@ void CustomAnimationTextGroup::reset()
     maEffects.clear();
 }
 
-// --------------------------------------------------------------------
+
 
 void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
 {
@@ -2454,7 +2454,7 @@ void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
     Any aTarget( pEffect->getTarget() );
     if( aTarget.getValueType() == ::getCppuType((const ParagraphTarget*)0) )
     {
-        // now look at the paragraph
+        
         ParagraphTarget aParaTarget;
         aTarget >>= aParaTarget;
 
@@ -2465,13 +2465,13 @@ void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
 
         const sal_Int32 nParaDepth = pEffect->getParaDepth();
 
-        // only look at the first PARA_LEVELS levels
+        
         if( nParaDepth < PARA_LEVELS )
         {
-            // our first paragraph with this level?
+            
             if( mnDepthFlags[nParaDepth] == 0 )
             {
-                // so set it to the first found
+                
                 mnDepthFlags[nParaDepth] = (sal_Int8)pEffect->getNodeType();
             }
             else if( mnDepthFlags[nParaDepth] != pEffect->getNodeType() )
@@ -2490,12 +2490,12 @@ void CustomAnimationTextGroup::addEffect( CustomAnimationEffectPtr& pEffect )
     }
     else
     {
-        // if we have an effect with the shape as a target, we animate the background
+        
         mbAnimateForm = pEffect->getTargetSubItem() != ShapeAnimationSubType::ONLY_TEXT;
     }
 }
 
-// --------------------------------------------------------------------
+
 
 class TextGroupMapImpl : public std::map< sal_Int32, CustomAnimationTextGroup* >
 {
@@ -2503,7 +2503,7 @@ public:
     CustomAnimationTextGroup* findGroup( sal_Int32 nGroupId );
 };
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationTextGroupPtr EffectSequenceHelper::findGroup( sal_Int32 nGroupId )
 {
@@ -2516,13 +2516,13 @@ CustomAnimationTextGroupPtr EffectSequenceHelper::findGroup( sal_Int32 nGroupId 
     return aPtr;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::updateTextGroups()
 {
     maGroupMap.clear();
 
-    // first create all the groups
+    
     EffectSequence::iterator aIter( maEffects.begin() );
     const EffectSequence::iterator aEnd( maEffects.end() );
     while( aIter != aEnd )
@@ -2532,7 +2532,7 @@ void EffectSequenceHelper::updateTextGroups()
         const sal_Int32 nGroupId = pEffect->getGroupId();
 
         if( nGroupId == -1 )
-            continue; // trivial case, no group
+            continue; 
 
         CustomAnimationTextGroupPtr pGroup = findGroup( nGroupId );
         if( !pGroup.get() )
@@ -2545,11 +2545,11 @@ void EffectSequenceHelper::updateTextGroups()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimationEffectPtr pEffect, sal_Int32 nTextGrouping, double fTextGroupingAuto, sal_Bool bAnimateForm, sal_Bool bTextReverse )
 {
-    // first finde a free group-id
+    
     sal_Int32 nGroupId = 0;
 
     CustomAnimationTextGroupMap::iterator aIter( maGroupMap.begin() );
@@ -2574,7 +2574,7 @@ CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimati
 
     bool bUsed = false;
 
-    // do we need to target the shape?
+    
     if( (nTextGrouping == 0) || bAnimateForm )
     {
         sal_Int16 nSubItem;
@@ -2596,7 +2596,7 @@ CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimati
     pTextGroup->mfGroupingAuto = fTextGroupingAuto;
     pTextGroup->mbTextReverse = bTextReverse;
 
-    // now add an effect for each paragraph
+    
     createTextGroupParagraphEffects( pTextGroup, pEffect, bUsed );
 
     notify_listeners();
@@ -2604,7 +2604,7 @@ CustomAnimationTextGroupPtr EffectSequenceHelper::createTextGroup( CustomAnimati
     return pTextGroup;
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextGroupPtr pTextGroup, CustomAnimationEffectPtr pEffect, bool bUsed )
 {
@@ -2614,7 +2614,7 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
     double fTextGroupingAuto = pTextGroup->mfGroupingAuto;
     sal_Bool bTextReverse = pTextGroup->mbTextReverse;
 
-    // now add an effect for each paragraph
+    
     if( nTextGrouping >= 0 ) try
     {
         EffectSequence::iterator aInsertIter( find( pEffect ) );
@@ -2625,13 +2625,13 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
         std::list< sal_Int16 > aParaList;
         sal_Int16 nPara;
 
-        // fill the list with all valid paragraphs
+        
         for( nPara = 0; xEnumeration->hasMoreElements(); nPara++ )
         {
             Reference< XTextRange > xRange( xEnumeration->nextElement(), UNO_QUERY );
             if( xRange.is() && !xRange->getString().isEmpty() )
             {
-                if( bTextReverse ) // sort them
+                if( bTextReverse ) 
                     aParaList.push_front( nPara );
                 else
                     aParaList.push_back( nPara );
@@ -2650,26 +2650,26 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
             CustomAnimationEffectPtr pNewEffect;
             if( bUsed )
             {
-                // clone a new effect from first effect
+                
                 pNewEffect = pEffect->clone();
                 ++aInsertIter;
                 aInsertIter = maEffects.insert( aInsertIter, pNewEffect );
             }
             else
             {
-                // reuse first effect if its not yet used
+                
                 pNewEffect = pEffect;
                 bUsed = true;
                 aInsertIter = find( pNewEffect );
             }
 
-            // set target and group-id
+            
             pNewEffect->setTarget( makeAny( aTarget ) );
             pNewEffect->setTargetSubItem( ShapeAnimationSubType::ONLY_TEXT );
             pNewEffect->setGroupId( pTextGroup->mnGroupId );
             pNewEffect->setEffectSequence( this );
 
-            // set correct node type
+            
             if( pNewEffect->getParaDepth() < nTextGrouping )
             {
                 if( fTextGroupingAuto == -1.0 )
@@ -2699,17 +2699,17 @@ void EffectSequenceHelper::createTextGroupParagraphEffects( CustomAnimationTextG
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGroup, sal_Int32 nTextGrouping )
 {
     if( pTextGroup->mnTextGrouping == nTextGrouping )
     {
-        // first case, trivial case, do nothing
+        
     }
     else if( (pTextGroup->mnTextGrouping == -1) && (nTextGrouping >= 0) )
     {
-        // second case, we need to add new effects for each paragraph
+        
 
         CustomAnimationEffectPtr pEffect( pTextGroup->maEffects.front() );
 
@@ -2719,7 +2719,7 @@ void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGro
     }
     else if( (pTextGroup->mnTextGrouping >= 0) && (nTextGrouping == -1 ) )
     {
-        // third case, we need to remove effects for each paragraph
+        
 
         EffectSequence aEffects( pTextGroup->maEffects );
         pTextGroup->reset();
@@ -2739,7 +2739,7 @@ void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGro
     }
     else
     {
-        // fourth case, we need to change the node types for the text nodes
+        
         double fTextGroupingAuto = pTextGroup->mfGroupingAuto;
 
         EffectSequence aEffects( pTextGroup->maEffects );
@@ -2753,7 +2753,7 @@ void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGro
 
             if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
             {
-                // set correct node type
+                
                 if( pEffect->getParaDepth() < nTextGrouping )
                 {
                     if( fTextGroupingAuto == -1.0 )
@@ -2781,13 +2781,13 @@ void EffectSequenceHelper::setTextGrouping( CustomAnimationTextGroupPtr pTextGro
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bAnimateForm )
 {
     if( pTextGroup->mbAnimateForm == bAnimateForm )
     {
-        // trivial case, do nothing
+        
     }
     else
     {
@@ -2802,7 +2802,7 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
         EffectSequence::iterator aIter( aEffects.begin() );
         const EffectSequence::iterator aEnd( aEffects.end() );
 
-        // first insert if we have to
+        
         if( bAnimateForm )
         {
             EffectSequence::iterator aInsertIter( find( (*aIter) ) );
@@ -2810,8 +2810,8 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
             CustomAnimationEffectPtr pEffect;
             if( (aEffects.size() == 1) && ((*aIter)->getTarget().getValueType() != ::getCppuType((const ParagraphTarget*)0) ) )
             {
-                // special case, only one effect and that targets whole text,
-                // convert this to target whole shape
+                
+                
                 pEffect = (*aIter++);
                 pEffect->setTargetSubItem( ShapeAnimationSubType::AS_WHOLE );
             }
@@ -2835,7 +2835,7 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
         }
         else
         {
-            // readd the rest to the group again
+            
             while( aIter != aEnd )
             {
                 CustomAnimationEffectPtr pEffect( (*aIter++) );
@@ -2855,7 +2855,7 @@ void EffectSequenceHelper::setAnimateForm( CustomAnimationTextGroupPtr pTextGrou
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::setTextGroupingAuto( CustomAnimationTextGroupPtr pTextGroup, double fTextGroupingAuto )
 {
@@ -2872,7 +2872,7 @@ void EffectSequenceHelper::setTextGroupingAuto( CustomAnimationTextGroupPtr pTex
 
         if( pEffect->getTarget().getValueType() == ::getCppuType((const ParagraphTarget*)0) )
         {
-            // set correct node type
+            
             if( pEffect->getParaDepth() < nTextGrouping )
             {
                 if( fTextGroupingAuto == -1.0 )
@@ -2899,7 +2899,7 @@ void EffectSequenceHelper::setTextGroupingAuto( CustomAnimationTextGroupPtr pTex
     notify_listeners();
 }
 
-// --------------------------------------------------------------------
+
 
 struct ImplStlTextGroupSortHelper
 {
@@ -2909,7 +2909,7 @@ struct ImplStlTextGroupSortHelper
     sal_Int32 getTargetParagraph( const CustomAnimationEffectPtr& p1 );
 };
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 ImplStlTextGroupSortHelper::getTargetParagraph( const CustomAnimationEffectPtr& p1 )
 {
@@ -2926,7 +2926,7 @@ sal_Int32 ImplStlTextGroupSortHelper::getTargetParagraph( const CustomAnimationE
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool ImplStlTextGroupSortHelper::operator()( const CustomAnimationEffectPtr& p1, const CustomAnimationEffectPtr& p2 )
 {
@@ -2940,13 +2940,13 @@ bool ImplStlTextGroupSortHelper::operator()( const CustomAnimationEffectPtr& p1,
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::setTextReverse( CustomAnimationTextGroupPtr pTextGroup, sal_Bool bTextReverse )
 {
     if( pTextGroup->mbTextReverse == bTextReverse )
     {
-        // do nothing
+        
     }
     else
     {
@@ -2976,7 +2976,7 @@ void EffectSequenceHelper::setTextReverse( CustomAnimationTextGroupPtr pTextGrou
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::addListener( ISequenceListener* pListener )
 {
@@ -2984,14 +2984,14 @@ void EffectSequenceHelper::addListener( ISequenceListener* pListener )
         maListeners.push_back( pListener );
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::removeListener( ISequenceListener* pListener )
 {
     maListeners.remove( pListener );
 }
 
-// --------------------------------------------------------------------
+
 
 struct stl_notify_listeners_func : public std::unary_function<ISequenceListener*, void>
 {
@@ -2999,7 +2999,7 @@ struct stl_notify_listeners_func : public std::unary_function<ISequenceListener*
     void operator()(ISequenceListener* pListener) { pListener->notify_change(); }
 };
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::notify_listeners()
 {
@@ -3007,7 +3007,7 @@ void EffectSequenceHelper::notify_listeners()
     std::for_each( maListeners.begin(), maListeners.end(), aFunc );
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::create( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
@@ -3029,7 +3029,7 @@ void EffectSequenceHelper::create( const ::com::sun::star::uno::Reference< ::com
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::createEffectsequence( const Reference< XAnimationNode >& xNode )
 {
@@ -3052,7 +3052,7 @@ void EffectSequenceHelper::createEffectsequence( const Reference< XAnimationNode
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNode )
 {
@@ -3068,7 +3068,7 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
 
             switch( xChildNode->getType() )
             {
-            // found an effect
+            
             case AnimationNodeType::PAR:
             case AnimationNodeType::ITERATE:
                 {
@@ -3082,7 +3082,7 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
                 }
                 break;
 
-            // found an after effect
+            
             case AnimationNodeType::SET:
             case AnimationNodeType::ANIMATECOLOR:
                 {
@@ -3098,7 +3098,7 @@ void EffectSequenceHelper::createEffects( const Reference< XAnimationNode >& xNo
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >& xNode )
 {
@@ -3120,12 +3120,12 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
             p++;
         }
 
-        // only process if this is a valid after effect
+        
         if( xMaster.is() )
         {
             CustomAnimationEffectPtr pMasterEffect;
 
-            // find the master effect
+            
             stl_CustomAnimationEffect_search_node_predict aSearchPredict( xMaster );
             EffectSequence::iterator aIter( std::find_if( maEffects.begin(), maEffects.end(), aSearchPredict ) );
             if( aIter != maEffects.end() )
@@ -3135,17 +3135,17 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
             {
                 pMasterEffect->setHasAfterEffect( true );
 
-                // find out what kind of after effect this is
+                
                 if( xNode->getType() == AnimationNodeType::ANIMATECOLOR )
                 {
-                    // it's a dim
+                    
                     Reference< XAnimate > xAnimate( xNode, UNO_QUERY_THROW );
                     pMasterEffect->setDimColor( xAnimate->getTo() );
                     pMasterEffect->setAfterEffectOnNext( true );
                 }
                 else
                 {
-                    // it's a hide
+                    
                     pMasterEffect->setAfterEffectOnNext( xNode->getParent() != xMaster->getParent() );
                 }
             }
@@ -3157,7 +3157,7 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     }
 }
 
-// ====================================================================
+
 
 class AnimationChangeListener : public cppu::WeakImplHelper1< XChangesListener >
 {
@@ -3180,7 +3180,7 @@ void SAL_CALL AnimationChangeListener::disposing( const ::com::sun::star::lang::
 {
 }
 
-// ====================================================================
+
 
 MainSequence::MainSequence()
 : mxTimingRootNode( SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() ) )
@@ -3198,7 +3198,7 @@ MainSequence::MainSequence()
     init();
 }
 
-// --------------------------------------------------------------------
+
 
 MainSequence::MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 : mxTimingRootNode( xNode, UNO_QUERY )
@@ -3210,14 +3210,14 @@ MainSequence::MainSequence( const ::com::sun::star::uno::Reference< ::com::sun::
     init();
 }
 
-// --------------------------------------------------------------------
+
 
 MainSequence::~MainSequence()
 {
     reset();
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::init()
 {
@@ -3231,7 +3231,7 @@ void MainSequence::init()
     createMainSequence();
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::reset( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xTimingRootNode )
 {
@@ -3242,7 +3242,7 @@ void MainSequence::reset( const ::com::sun::star::uno::Reference< ::com::sun::st
     createMainSequence();
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< ::com::sun::star::animations::XAnimationNode > MainSequence::getRootNode()
 {
@@ -3250,7 +3250,7 @@ Reference< ::com::sun::star::animations::XAnimationNode > MainSequence::getRootN
 
     if( maTimer.IsActive() && mbTimerMode )
     {
-        // force a rebuild NOW if one is pending
+        
         maTimer.Stop();
         implRebuild();
     }
@@ -3258,7 +3258,7 @@ Reference< ::com::sun::star::animations::XAnimationNode > MainSequence::getRootN
     return EffectSequenceHelper::getRootNode();
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::createMainSequence()
 {
@@ -3284,7 +3284,7 @@ void MainSequence::createMainSequence()
             }
         }
 
-        // see if we have a mainsequence at all. if not, create one...
+        
         if( !mxSequenceRoot.is() )
         {
             mxSequenceRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
@@ -3294,9 +3294,9 @@ void MainSequence::createMainSequence()
             aUserData[0].Value <<= ::com::sun::star::presentation::EffectNodeType::MAIN_SEQUENCE;
             mxSequenceRoot->setUserData( aUserData );
 
-            // empty sequence until now, set duration to 0.0
-            // explicitly (otherwise, this sequence will never
-            // end)
+            
+            
+            
             mxSequenceRoot->setDuration( makeAny((double)0.0) );
 
             Reference< XAnimationNode > xMainSequenceNode( mxSequenceRoot, UNO_QUERY_THROW );
@@ -3320,7 +3320,7 @@ void MainSequence::createMainSequence()
     DBG_ASSERT( mxSequenceRoot.is(), "sd::MainSequence::create(), found no main sequence!" );
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::reset()
 {
@@ -3339,17 +3339,17 @@ void MainSequence::reset()
     }
     catch( Exception& )
     {
-        // ...
+        
     }
 }
 
-// --------------------------------------------------------------------
+
 
 InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xShape )
 {
     InteractiveSequencePtr pIS;
 
-    // create a new interactive sequence container
+    
     Reference< XTimeContainer > xISRoot = SequenceTimeContainer::create( ::comphelper::getProcessComponentContext() );
 
     uno::Sequence< ::com::sun::star::beans::NamedValue > aUserData( 1 );
@@ -3368,7 +3368,7 @@ InteractiveSequencePtr MainSequence::createInteractiveSequence( const ::com::sun
     return pIS;
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationEffectPtr MainSequence::findEffect( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode ) const
 {
@@ -3385,7 +3385,7 @@ CustomAnimationEffectPtr MainSequence::findEffect( const ::com::sun::star::uno::
     return pEffect;
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 MainSequence::getOffsetFromEffect( const CustomAnimationEffectPtr& pEffect ) const
 {
@@ -3409,7 +3409,7 @@ sal_Int32 MainSequence::getOffsetFromEffect( const CustomAnimationEffectPtr& pEf
     return -1;
 }
 
-// --------------------------------------------------------------------
+
 
 CustomAnimationEffectPtr MainSequence::getEffectFromOffset( sal_Int32 nOffset ) const
 {
@@ -3433,7 +3433,7 @@ CustomAnimationEffectPtr MainSequence::getEffectFromOffset( sal_Int32 nOffset ) 
     return pEffect;
 }
 
-// --------------------------------------------------------------------
+
 
 bool MainSequence::disposeShape( const Reference< XShape >& xShape )
 {
@@ -3451,7 +3451,7 @@ bool MainSequence::disposeShape( const Reference< XShape >& xShape )
     return bChanges;
 }
 
-// --------------------------------------------------------------------
+
 
 bool MainSequence::hasEffect( const com::sun::star::uno::Reference< com::sun::star::drawing::XShape >& xShape )
 {
@@ -3471,7 +3471,7 @@ bool MainSequence::hasEffect( const com::sun::star::uno::Reference< com::sun::st
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::insertTextRange( const com::sun::star::uno::Any& aTarget )
 {
@@ -3483,7 +3483,7 @@ void MainSequence::insertTextRange( const com::sun::star::uno::Any& aTarget )
         (*aIter)->insertTextRange( aTarget );
     }
 }
-// --------------------------------------------------------------------
+
 
 void MainSequence::disposeTextRange( const com::sun::star::uno::Any& aTarget )
 {
@@ -3496,7 +3496,7 @@ void MainSequence::disposeTextRange( const com::sun::star::uno::Any& aTarget )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 /** callback from the sd::View when an object just left text edit mode */
 void MainSequence::onTextChanged( const Reference< XShape >& xShape )
@@ -3510,7 +3510,7 @@ void MainSequence::onTextChanged( const Reference< XShape >& xShape )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
 {
@@ -3527,21 +3527,21 @@ void EffectSequenceHelper::onTextChanged( const Reference< XShape >& xShape )
         EffectSequenceHelper::implRebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::rebuild()
 {
     startRebuildTimer();
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::lockRebuilds()
 {
     mnRebuildLockGuard++;
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::unlockRebuilds()
 {
@@ -3556,7 +3556,7 @@ void MainSequence::unlockRebuilds()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::implRebuild()
 {
@@ -3577,7 +3577,7 @@ void MainSequence::implRebuild()
         InteractiveSequencePtr pIS( (*aIter) );
         if( pIS->maEffects.empty() )
         {
-            // remove empty interactive sequences
+            
             aIter = maInteractiveSequenceList.erase( aIter );
 
             Reference< XChild > xChild( mxSequenceRoot, UNO_QUERY_THROW );
@@ -3596,14 +3596,14 @@ void MainSequence::implRebuild()
     mbRebuilding = false;
 }
 
-// --------------------------------------------------------------------
+
 
 void MainSequence::notify_change()
 {
     notify_listeners();
 }
 
-// --------------------------------------------------------------------
+
 
 bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& xTriggerShape )
 {
@@ -3648,7 +3648,7 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::
 
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(MainSequence, onTimerHdl)
 {
@@ -3665,7 +3665,7 @@ IMPL_LINK_NOARG(MainSequence, onTimerHdl)
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 /** starts a timer that recreates the internal structure from the API core after 1 second */
 void MainSequence::startRecreateTimer()
@@ -3677,7 +3677,7 @@ void MainSequence::startRecreateTimer()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 /** starts a timer that rebuilds the API core from the internal structure after 1 second */
 void MainSequence::startRebuildTimer()
@@ -3686,7 +3686,7 @@ void MainSequence::startRebuildTimer()
     maTimer.Start();
 }
 
-// ====================================================================
+
 
 InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSequenceRoot, MainSequence* pMainSequence )
 : EffectSequenceHelper( xSequenceRoot ), mpMainSequence( pMainSequence )
@@ -3716,7 +3716,7 @@ InteractiveSequence::InteractiveSequence( const Reference< XTimeContainer >& xSe
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void InteractiveSequence::rebuild()
 {
@@ -3728,7 +3728,7 @@ void InteractiveSequence::implRebuild()
     EffectSequenceHelper::implRebuild();
 }
 
-// --------------------------------------------------------------------
+
 
 MainSequenceRebuildGuard::MainSequenceRebuildGuard( const MainSequencePtr& pMainSequence )
 : mpMainSequence( pMainSequence )

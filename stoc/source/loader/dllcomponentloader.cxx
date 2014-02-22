@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -61,15 +61,15 @@ public:
     DllComponentLoader( const Reference<XComponentContext> & xCtx );
     ~DllComponentLoader();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-    // XImplementationLoader
+    
     virtual Reference<XInterface> SAL_CALL activate( const OUString& implementationName, const OUString& implementationLoaderUrl, const OUString& locationUrl, const Reference<XRegistryKey>& xKey ) throw(CannotActivateFactoryException, RuntimeException);
     virtual sal_Bool SAL_CALL writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) throw(CannotRegisterImplementationException, RuntimeException);
 
@@ -77,16 +77,16 @@ private:
     Reference<XMultiServiceFactory> m_xSMgr;
 };
 
-//*************************************************************************
+
 DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCtx )
 {
     m_xSMgr.set( xCtx->getServiceManager(), UNO_QUERY );
 }
 
-//*************************************************************************
+
 DllComponentLoader::~DllComponentLoader() {}
 
-//*************************************************************************
+
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -107,32 +107,32 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
     return seqNames;
 }
 
-//*************************************************************************
+
 void DllComponentLoader::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& )
     throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     OSL_FAIL( "dllcomponentloader::initialize should not be called !" );
-//      if( aArgs.getLength() != 1 )
-//      {
-//          throw IllegalArgumentException();
-//      }
 
-//      Reference< XMultiServiceFactory > rServiceManager;
 
-//      if( aArgs.getConstArray()[0].getValueType().getTypeClass() == TypeClass_INTERFACE )
-//      {
-//          aArgs.getConstArray()[0] >>= rServiceManager;
-//      }
 
-//      if( !rServiceManager.is() )
-//      {
-//          throw IllegalArgumentException();
-//      }
 
-//      m_xSMgr = rServiceManager;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
-//*************************************************************************
+
 Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     const OUString & rImplName, const OUString &, const OUString & rLibName,
     const Reference< XRegistryKey > & )
@@ -145,7 +145,7 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 }
 
 
-//*************************************************************************
+
 sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
     const Reference< XRegistryKey > & xKey, const OUString &, const OUString & rLibName )
 

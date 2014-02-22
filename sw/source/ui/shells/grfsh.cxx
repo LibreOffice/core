@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cmdid.h>
@@ -174,8 +174,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
         case SID_EXTERNAL_EDIT:
         {
-            // When the graphic is selected to be opened via some external tool
-            // for advanced editing
+            
+            
             GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
             if(0 != pGraphicObject)
             {
@@ -187,8 +187,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 
         case SID_INSERT_GRAPHIC:
         {
-            // #i123922# implement slot independent from the two below to
-            // bring up the insert graphic dialog and associated actions
+            
+            
             SwView& rLclView = GetView();
             rReq.SetReturnValue(SfxBoolItem(nSlot, rLclView.InsertGraphicDlg( rReq )));
             break;
@@ -232,7 +232,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
             if ( nSlot == FN_FORMAT_GRAFIC_DLG )
             {
-                // #i73249#
+                
                 aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
             }
 
@@ -245,13 +245,13 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put( aMgr.GetAttrSet() );
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
-            // At percentage values initialize size
+            
             SwFmtFrmSize aSizeCopy = (const SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE);
             if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != 0xff)
                 aSizeCopy.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
             if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != 0xff)
                 aSizeCopy.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
-            // and now set the size for "external" tabpages
+            
             {
                 SvxSizeItem aSzItm( SID_ATTR_GRAF_FRMSIZE, aSizeCopy.GetSize() );
                 aSet.Put( aSzItm );
@@ -279,7 +279,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                // #119353# - robust
+                
                 const GraphicObject* pGrfObj = rSh.GetGraphicObj();
                 if ( pGrfObj )
                 {
@@ -289,7 +289,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
             aSet.Put( SfxBoolItem( FN_PARAM_GRF_CONNECT, !sGrfNm.isEmpty() ) );
 
-            // get Mirror and Crop
+            
             {
                 SfxItemSet aTmpSet( rSh.GetAttrPool(),
                                 RES_GRFATR_MIRRORGRF, RES_GRFATR_CROPGRF );
@@ -328,7 +328,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 const SfxPoolItem* pItem;
                 SfxItemSet* pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                 rReq.Done(*pSet);
-                // change the 2 frmsize SizeItems to the correct SwFrmSizeItem
+                
                 if( SFX_ITEM_SET == pSet->GetItemState(
                                 SID_ATTR_GRAF_FRMSIZE, false, &pItem ))
                 {
@@ -347,7 +347,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                     pSet->Put( aSize );
                 }
 
-                // Templates AutoUpdate
+                
                 SwFrmFmt* pFmt = rSh.GetCurFrmFmt();
                 if(pFmt && pFmt->IsAutoUpdateFmt())
                 {
@@ -385,7 +385,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if( bApplyUsrPref )
                     SW_MOD()->ApplyUsrPref(aUsrPref, &GetView());
 
-                // and now set all the graphic attributes and other stuff
+                
                 if( SFX_ITEM_SET == pSet->GetItemState(
                                         SID_ATTR_GRAF_GRAPHIC, true, &pItem ))
                 {
@@ -416,7 +416,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if ( SFX_ITEM_SET == pSet->GetItemState(
                                         FN_SET_FRM_ALT_NAME, true, &pItem ))
                 {
-                    // #i73249#
+                    
                     rSh.SetObjTitle( ((const SfxStringItem*)pItem)->GetValue() );
                 }
 
@@ -579,7 +579,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
         case SID_GRFFILTER_SOLARIZE:
             if( GRAPHIC_BITMAP == nGrfType )
             {
-                // #119353# - robust
+                
                 const GraphicObject* pFilterObj( GetShell().GetGraphicObj() );
                 if ( pFilterObj )
                 {
@@ -710,7 +710,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
         case SID_ATTR_GRAF_TRANSPARENCE:
             if( !bParentCntProt )
             {
-                // #119353# - robust
+                
                 const GraphicObject* pGrafObj = rSh.GetGraphicObj();
                 if ( pGrafObj )
                 {
@@ -751,7 +751,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             {
                 if( bParentCntProt || !bIsGrfCntnt )
                     bDisable = true;
-                // #i59688# load graphic only if type is unknown
+                
                 else
                 {
                     const sal_uInt16 eGraphicType( rSh.GetGraphicType() );
@@ -761,7 +761,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                     {
                         rSet.DisableItem( nWhich );
                         if( AddGrfUpdateSlot( nWhich ))
-                            rSh.GetGraphic(sal_False);  // start the loading
+                            rSh.GetGraphic(sal_False);  
                     }
                     else
                     {

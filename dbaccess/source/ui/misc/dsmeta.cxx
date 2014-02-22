@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dsmeta.hxx"
@@ -33,7 +33,7 @@ namespace dbaui
 
     struct FeatureSupport
     {
-        // authentication mode of the data source
+        
         AuthenticationMode      eAuthentication;
 
         FeatureSupport()
@@ -49,12 +49,12 @@ namespace dbaui
 
     struct FeatureMapping
     {
-        /// one of the items from dsitems.hxx
+        
         ItemID          nItemID;
         const sal_Char* pAsciiFeatureName;
     };
 
-    // global tables
+    
     static const FeatureMapping* lcl_getFeatureMappings()
     {
         static const FeatureMapping s_aMappings[] = {
@@ -145,7 +145,7 @@ namespace dbaui
         return s_aSupport[ _sURL ].eAuthentication;
     }
 
-    // DataSourceMetaData_Impl
+    
     class DataSourceMetaData_Impl
     {
     public:
@@ -162,7 +162,7 @@ namespace dbaui
     {
     }
 
-    // DataSourceMetaData
+    
     DataSourceMetaData::DataSourceMetaData( const OUString& _sURL )
         :m_pImpl( new DataSourceMetaData_Impl( _sURL ) )
     {
@@ -182,6 +182,6 @@ namespace dbaui
         return getAuthenticationMode( _sURL );
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

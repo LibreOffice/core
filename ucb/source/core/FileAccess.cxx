@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -73,7 +73,7 @@ using ::std::vector;
 namespace
 {
 
-// Implementation XSimpleFileAccess
+
 typedef cppu::WeakImplHelper1< XSimpleFileAccess3 > FileAccessHelper;
 class OCommandEnvironment;
 
@@ -93,7 +93,7 @@ class OFileAccess : public FileAccessHelper
 public:
     OFileAccess( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext), mpEnvironment( NULL ) {}
-    // Methods
+    
     virtual void SAL_CALL copy( const OUString& SourceURL, const OUString& DestURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL move( const OUString& SourceURL, const OUString& DestURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL kill( const OUString& FileURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
@@ -115,7 +115,7 @@ public:
     virtual void SAL_CALL setHidden( const OUString& FileURL, sal_Bool bHidden ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 };
 
-// Implementation XActiveDataSink
+
 typedef cppu::WeakImplHelper1< XActiveDataSink > ActiveDataSinkHelper;
 
 class OActiveDataSink : public ActiveDataSinkHelper
@@ -124,14 +124,14 @@ class OActiveDataSink : public ActiveDataSinkHelper
 
 public:
 
-    // Methods
+    
     virtual void SAL_CALL setInputStream( const Reference< XInputStream >& aStream )
         throw(RuntimeException);
     virtual Reference< XInputStream > SAL_CALL getInputStream(  )
         throw(RuntimeException);
 };
 
-// Implementation XActiveDataStreamer
+
 typedef cppu::WeakImplHelper1< XActiveDataStreamer > ActiveDataStreamerHelper;
 
 class OActiveDataStreamer : public ActiveDataStreamerHelper
@@ -140,14 +140,14 @@ class OActiveDataStreamer : public ActiveDataStreamerHelper
 
 public:
 
-    // Methods
+    
     virtual void SAL_CALL setStream( const Reference< XStream >& aStream )
         throw(RuntimeException);
     virtual Reference< XStream > SAL_CALL getStream()
         throw(RuntimeException);
 };
 
-// Implementation XCommandEnvironment
+
 typedef cppu::WeakImplHelper1< XCommandEnvironment > CommandEnvironmentHelper;
 
 class OCommandEnvironment : public CommandEnvironmentHelper
@@ -160,7 +160,7 @@ public:
         mxInteraction = xInteraction_;
     }
 
-    // Methods
+    
     virtual Reference< XInteractionHandler > SAL_CALL getInteractionHandler()
         throw(RuntimeException);
     virtual Reference< XProgressHandler > SAL_CALL getProgressHandler()
@@ -209,7 +209,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
                                 sal_Bool bMoveData )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
-    // SfxContentHelper::Transfer_Impl
+    
     INetURLObject aSourceObj( rSource, INET_PROT_FILE );
     INetURLObject aDestObj( rDest, INET_PROT_FILE );
     OUString aName = aDestObj.getName(
@@ -218,22 +218,22 @@ void OFileAccess::transferImpl( const OUString& rSource,
     OUString aSourceURL = aSourceObj.GetMainURL( INetURLObject::NO_DECODE );
     if ( aDestObj.removeSegment() )
     {
-        // hierarchical URL.
+        
 
         aDestObj.setFinalSlash();
         aDestURL = aDestObj.GetMainURL( INetURLObject::NO_DECODE );
     }
     else
     {
-        // non-hierachical URL
+        
 
-        // #i29648#
+        
         //
 
         if ( aDestObj.GetProtocol() == INET_PROT_VND_SUN_STAR_EXPAND )
         {
-            // Hack: Expand destination URL using Macro Expander and try again
-            //       with the hopefully hierarchical expanded URL...
+            
+            
 
             try
             {
@@ -275,7 +275,7 @@ void OFileAccess::transferImpl( const OUString& rSource,
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occurred...
+        
     }
 }
 
@@ -294,7 +294,7 @@ void OFileAccess::move( const OUString& SourceURL, const OUString& DestURL )
 void OFileAccess::kill( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
-    // SfxContentHelper::Kill
+    
     INetURLObject aDeleteObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
     try
@@ -303,7 +303,7 @@ void OFileAccess::kill( const OUString& FileURL )
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occurred...
+        
     }
 }
 
@@ -345,18 +345,18 @@ void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
 void OFileAccess::createFolder( const OUString& NewFolderURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
-    // Does the folder already exist?
+    
     if( NewFolderURL.isEmpty() || isFolder( NewFolderURL ) )
         return;
 
-    // SfxContentHelper::MakeFolder
+    
     INetURLObject aURL( NewFolderURL, INET_PROT_FILE );
     OUString aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     if ( !aTitle.isEmpty() )
     {
         aURL.removeSegment();
 
-        // Does the base folder exist? Otherwise create it first
+        
         OUString aBaseFolderURLStr = aURL.GetMainURL( INetURLObject::NO_DECODE );
         if( !isFolder( aBaseFolderURLStr ) )
         {
@@ -373,11 +373,11 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
 
     for ( sal_Int32 i = 0; i < nCount; ++i )
     {
-        // Simply look for the first KIND_FOLDER...
+        
         const ContentInfo & rCurr = aInfo[i];
         if ( rCurr.Attributes & ContentInfoAttribute::KIND_FOLDER )
         {
-            // Make sure the only required bootstrap property is "Title",
+            
             const Sequence< Property > & rProps = rCurr.Properties;
             if ( rProps.getLength() != 1 )
                 continue;
@@ -398,12 +398,12 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
                 if ( !aCnt.insertNewContent( rCurr.Type, aNames, aValues, aNew ) )
                     continue;
 
-                // Success. We're done.
+                
                 return;
             }
             catch ( ::com::sun::star::ucb::CommandFailedException const & )
             {
-                // Interaction Handler already handled the error that has occurred...
+                
                 continue;
             }
         }
@@ -413,7 +413,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
 sal_Int32 OFileAccess::getSize( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
-    // SfxContentHelper::GetSize
+    
     sal_Int32 nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INET_PROT_FILE );
@@ -451,7 +451,7 @@ typedef vector< OUString* > StringList_Impl;
 Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, sal_Bool bIncludeFolders )
     throw(CommandAbortedException, Exception, RuntimeException)
 {
-    // SfxContentHelper::GetFolderContents
+    
 
     StringList_Impl* pFiles = NULL;
     INetURLObject aFolderObj( FolderURL, INET_PROT_FILE );
@@ -468,7 +468,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occurred...
+        
     }
 
     if ( xResultSet.is() )
@@ -540,7 +540,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
     }
     catch ( ::com::sun::star::ucb::CommandFailedException const & )
     {
-        // Interaction Handler already handled the error that has occurred...
+        
     }
 
     return xRet;
@@ -564,9 +564,9 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;
-    aArg.Priority   = 0; // unused
+    aArg.Priority   = 0; 
     aArg.Sink       = xSink;
-    aArg.Properties = Sequence< Property >( 0 ); // unused
+    aArg.Properties = Sequence< Property >( 0 ); 
 
     Any aCmdArg;
     aCmdArg <<= aArg;
@@ -574,7 +574,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     INetURLObject aFileObj( FileURL, INET_PROT_FILE );
     ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment, comphelper::getProcessComponentContext() );
 
-    // Be silent...
+    
     Reference< XInteractionHandler > xIH;
     if ( mpEnvironment )
     {
@@ -593,7 +593,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 
         if ( e.Code == IOErrorCode_NOT_EXISTING )
         {
-            // Create file...
+            
             SvMemoryStream aStream(0,0);
             ::utl::OInputStreamWrapper* pInput = new ::utl::OInputStreamWrapper( aStream );
             Reference< XInputStream > xInput( pInput );
@@ -604,7 +604,7 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
             aCmdArg <<= aInsertArg;
             aCnt.executeCommand( OUString("insert" ), aCmdArg );
 
-            // Retry...
+            
             return openFileReadWrite( FileURL );
         }
 
@@ -649,8 +649,8 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
              ( rCurr.Attributes
                & ContentInfoAttribute::INSERT_WITH_INPUTSTREAM ) )
         {
-            // Make sure the only required bootstrap property is
-            // "Title",
+            
+            
             const Sequence< Property > & rProps = rCurr.Properties;
             if ( rProps.getLength() != 1 )
                 continue;
@@ -670,14 +670,14 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
                 ucbhelper::Content aNew;
                 if ( aParentCnt.insertNewContent(
                          rCurr.Type, aNames, aValues, data, aNew ) )
-                    return true; // success.
+                    return true; 
                 else
                     continue;
             }
             catch ( CommandFailedException const & )
             {
-                // Interaction Handler already handled the
-                // error that has occurred...
+                
+                
                 continue;
             }
         }
@@ -703,12 +703,12 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
         }
         catch ( CommandFailedException const & )
         {
-            // Interaction Handler already handled the error that has occurred...
+            
         }
     }
     catch ( ContentCreationException const & e )
     {
-        // Most probably file does not exist. Try to create.
+        
         if ( e.eError == ContentCreationError_CONTENT_CREATION_FAILED )
         {
             INetURLObject aParentURLObj( aURL );
@@ -717,17 +717,17 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
                 OUString aParentURL
                     = aParentURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
-                // ensure all parent folders exist.
+                
                 createFolder( aParentURL );
 
-                // create the new file...
+                
                 OUString aTitle
                     = aURL.getName( INetURLObject::LAST_SEGMENT,
                                     true,
                                     INetURLObject::DECODE_WITH_CHARSET );
                 if ( createNewFile( aParentURL, aTitle, data ) )
                 {
-                    // success
+                    
                     return;
                 }
             }
@@ -758,7 +758,7 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
     aCnt.setPropertyValue("IsHidden", aAny );
 }
 
-}; // namespace end
+}; 
 
 Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > & xSMgr )
 {

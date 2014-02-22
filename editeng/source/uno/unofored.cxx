@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 SvxEditEngineForwarder::SvxEditEngineForwarder( EditEngine& rEngine ) :
     rEditEngine( rEngine )
@@ -43,7 +43,7 @@ SvxEditEngineForwarder::SvxEditEngineForwarder( EditEngine& rEngine ) :
 
 SvxEditEngineForwarder::~SvxEditEngineForwarder()
 {
-    // the EditEngine may need to be deleted from the outside
+    
 }
 
 sal_Int32 SvxEditEngineForwarder::GetParagraphCount() const
@@ -149,8 +149,8 @@ void SvxEditEngineForwarder::QuickSetAttribs( const SfxItemSet& rSet, const ESel
 
 sal_Bool SvxEditEngineForwarder::IsValid() const
 {
-    // cannot reliably query EditEngine state
-    // while in the middle of an update
+    
+    
     return rEditEngine.GetUpdateMode();
 }
 
@@ -172,12 +172,12 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
 
     SfxItemState eState = SFX_ITEM_DEFAULT;
 
-    // check all paragraphs inside the selection
+    
     for( sal_Int32 nPara = rSel.nStartPara; nPara <= rSel.nEndPara; nPara++ )
     {
         SfxItemState eParaState = SFX_ITEM_DEFAULT;
 
-        // calculate start and endpos for this paragraph
+        
         sal_Int32 nPos = 0;
         if( rSel.nStartPara == nPara )
             nPos = rSel.nStartPos;
@@ -187,11 +187,11 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
             nEndPos = rEditEngine.GetTextLen( nPara );
 
 
-        // get list of char attribs
+        
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
-        sal_Bool bEmpty = sal_True;     // we found no item inside the selektion of this paragraph
-        sal_Bool bGaps  = sal_False;    // we found items but theire gaps between them
+        sal_Bool bEmpty = sal_True;     
+        sal_Bool bGaps  = sal_False;    
         sal_Int32 nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = NULL;
@@ -203,19 +203,19 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
             const sal_Bool bEmptyPortion = i->nStart == i->nEnd;
             if((!bEmptyPortion && i->nStart >= nEndPos) ||
                (bEmptyPortion && i->nStart > nEndPos))
-                break;  // break if we are already behind our selektion
+                break;  
 
             if((!bEmptyPortion && i->nEnd <= nPos) ||
                (bEmptyPortion && i->nEnd < nPos))
-                continue;   // or if the attribute ends before our selektion
+                continue;   
 
             if(i->pAttr->Which() != nWhich)
-                continue; // skip if is not the searched item
+                continue; 
 
-            // if we already found an item
+            
             if( pParaItem )
             {
-                // ... and its different to this one than the state is dont care
+                
                 if(*pParaItem != *(i->pAttr))
                     return SFX_ITEM_DONTCARE;
             }
@@ -241,7 +241,7 @@ sal_uInt16 GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection&
         else
             eParaState = SFX_ITEM_SET;
 
-        // if we already found an item check if we found the same
+        
         if( pLastItem )
         {
             if( (pParaItem == NULL) || (*pLastItem != *pParaItem) )
@@ -290,37 +290,37 @@ EBulletInfo SvxEditEngineForwarder::GetBulletInfo( sal_Int32 ) const
 
 Rectangle SvxEditEngineForwarder::GetCharBounds( sal_Int32 nPara, sal_Int32 nIndex ) const
 {
-    // #101701#
-    // EditEngine's 'internal' methods like GetCharacterBounds()
-    // don't rotate for vertical text.
+    
+    
+    
     Size aSize( rEditEngine.CalcTextWidth(), rEditEngine.GetTextHeight() );
     ::std::swap( aSize.Width(), aSize.Height() );
     bool bIsVertical( rEditEngine.IsVertical() );
 
-    // #108900# Handle virtual position one-past-the end of the string
+    
     if( nIndex >= rEditEngine.GetTextLen(nPara) )
     {
         Rectangle aLast;
 
         if( nIndex )
         {
-            // use last character, if possible
+            
             aLast = rEditEngine.GetCharacterBounds( EPosition(nPara, nIndex-1) );
 
-            // move at end of this last character, make one pixel wide
+            
             aLast.Move( aLast.Right() - aLast.Left(), 0 );
             aLast.SetSize( Size(1, aLast.GetHeight()) );
 
-            // take care for CTL
+            
             aLast = SvxEditSourceHelper::EEToUserSpace( aLast, aSize, bIsVertical );
         }
         else
         {
-            // #109864# Bounds must lie within the paragraph
+            
             aLast = GetParaBounds( nPara );
 
-            // #109151# Don't use paragraph height, but line height
-            // instead. aLast is already CTL-correct
+            
+            
             if( bIsVertical)
                 aLast.SetSize( Size( rEditEngine.GetLineHeight(nPara,0), 1 ) );
             else
@@ -345,10 +345,10 @@ Rectangle SvxEditEngineForwarder::GetParaBounds( sal_Int32 nPara ) const
 
     if( rEditEngine.IsVertical() )
     {
-        // #101701#
-        // Hargl. EditEngine's 'external' methods return the rotated
-        // dimensions, 'internal' methods like GetTextHeight( n )
-        // don't rotate.
+        
+        
+        
+        
         nWidth = rEditEngine.GetTextHeight( nPara );
         nHeight = rEditEngine.GetTextHeight();
         nTextWidth = rEditEngine.GetTextHeight();
@@ -457,13 +457,13 @@ sal_Bool SvxEditEngineForwarder::InsertText( const OUString& rStr, const ESelect
 
 sal_Int16 SvxEditEngineForwarder::GetDepth( sal_Int32 ) const
 {
-    // EditEngine does not support outline depth
+    
     return -1;
 }
 
 sal_Bool SvxEditEngineForwarder::SetDepth( sal_Int32, sal_Int16 nNewDepth )
 {
-    // EditEngine does not support outline depth
+    
     return nNewDepth == -1 ? sal_True : sal_False;
 }
 
@@ -502,6 +502,6 @@ void SvxEditEngineForwarder::CopyText(const SvxTextForwarder& rSource)
     delete pNewTextObject;
 }
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

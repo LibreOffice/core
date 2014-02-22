@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <osl/diagnose.h>
@@ -68,18 +68,18 @@ throw (RuntimeException)
         return sal_False;
     }
 
-    // An XML import service: what we push sax messages to..
+    
     Reference < XDocumentHandler > xInternalHandler(
         mxContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.comp.Draw.XMLOasisImporter", mxContext),
         css::uno::UNO_QUERY_THROW);
 
-    // The XImporter sets up an empty target document for XDocumentHandler to write to..
+    
     Reference < XImporter > xImporter(xInternalHandler, UNO_QUERY);
     xImporter->setTargetDocument( mxDoc );
 
-    // OO Graphics Handler: abstract class to handle document SAX messages, concrete implementation here
-    // writes to in-memory target doc
+    
+    
     DocumentHandler xHandler(xInternalHandler);
 
     WPXSvInputStream input( xInputStream );
@@ -95,7 +95,7 @@ throw (RuntimeException)
     SAL_INFO("writerperfect", "VisioImportFilter::cancel");
 }
 
-// XImporter
+
 void SAL_CALL VisioImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
@@ -103,7 +103,7 @@ throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
     mxDoc = xDoc;
 }
 
-// XExtendedFilterDetection
+
 OUString SAL_CALL VisioImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
 throw( com::sun::star::uno::RuntimeException )
 {
@@ -143,7 +143,7 @@ throw( com::sun::star::uno::RuntimeException )
 }
 
 
-// XInitialization
+
 void SAL_CALL VisioImportFilter::initialize( const Sequence< Any >& aArguments )
 throw (Exception, RuntimeException)
 {
@@ -189,7 +189,7 @@ throw( Exception )
     return (cppu::OWeakObject *) new VisioImportFilter( rContext );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL VisioImportFilter::getImplementationName(  )
 throw (RuntimeException)
 {

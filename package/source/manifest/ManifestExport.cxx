@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
@@ -95,7 +95,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
     const uno::Sequence < beans::PropertyValue > *pSequence = rManList.getConstArray();
     const sal_uInt32 nManLength = rManList.getLength();
 
-    // find the mediatype of the document if any
+    
     OUString aDocMediaType;
     OUString aDocVersion;
     for (sal_uInt32 nInd = 0; nInd < nManLength ; nInd++ )
@@ -154,22 +154,22 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
           || aDocMediaType == MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII )
 
         {
-            // oasis format
+            
             pRootAttrList->AddAttribute ( ATTRIBUTE_XMLNS,
                                         sCdataAttribute,
                                         MANIFEST_OASIS_NAMESPACE );
             bAcceptNonemptyVersion = sal_True;
             if ( aDocVersion.compareTo( ODFVER_012_TEXT ) >= 0 )
             {
-                // this is ODF12 generation, let encrypted streams contain start-key-generation entry
+                
                 bStoreStartKeyGeneration = sal_True;
                 pRootAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aDocVersion );
             }
         }
         else
         {
-            // even if it is no SO6 format the namespace must be specified
-            // thus SO6 format is used as default one
+            
+            
             pRootAttrList->AddAttribute ( ATTRIBUTE_XMLNS,
                                         sCdataAttribute,
                                         MANIFEST_NAMESPACE );
@@ -206,7 +206,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             else if (pValue->Name.equals (sVersionProperty) )
             {
                 pValue->Value >>= aString;
-                // the version is stored only if it is not empty
+                
                 if ( bAcceptNonemptyVersion && !aString.isEmpty() )
                     pAttrList->AddAttribute ( sVersionAttribute, sCdataAttribute, aString );
             }
@@ -246,7 +246,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
         xHandler->startElement( sFileEntryElement , xAttrList);
         if ( pVector && pSalt && pIterationCount && pDigest && pDigestAlg && pEncryptAlg && pStartKeyAlg && pDerivedKeySize )
         {
-            // ==== Encryption Data
+            
             ::comphelper::AttributeList * pNewAttrList = new ::comphelper::AttributeList;
             uno::Reference < xml::sax::XAttributeList > xNewAttrList (pNewAttrList);
             OUStringBuffer aBuffer;
@@ -254,7 +254,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
 
             xHandler->ignorableWhitespace ( sWhiteSpace );
 
-            // ==== Digest
+            
             OUString sChecksumType;
             sal_Int32 nDigestAlgID = 0;
             *pDigestAlg >>= nDigestAlgID;
@@ -272,7 +272,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
 
             xHandler->startElement( sEncryptionDataElement , xNewAttrList);
 
-            // ==== Algorithm
+            
             pNewAttrList = new ::comphelper::AttributeList;
             xNewAttrList = pNewAttrList;
 
@@ -308,7 +308,7 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sAlgorithmElement );
 
-            // ==== Key Derivation
+            
             pNewAttrList = new ::comphelper::AttributeList;
             xNewAttrList = pNewAttrList;
 
@@ -334,11 +334,11 @@ ManifestExport::ManifestExport( uno::Reference< xml::sax::XDocumentHandler > xHa
             xHandler->ignorableWhitespace ( sWhiteSpace );
             xHandler->endElement( sKeyDerivationElement );
 
-            // we have to store start-key-generation element as the last one to workaround the parsing problem
-            // in OOo3.1 and older versions
+            
+            
             if ( bStoreStartKeyGeneration )
             {
-                // ==== Start Key Generation
+                
                 pNewAttrList = new ::comphelper::AttributeList;
                 xNewAttrList = pNewAttrList;
 

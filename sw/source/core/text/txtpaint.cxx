@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,7 +28,7 @@
 
 void SwSaveClip::Reset()
 {
-    // We recover the old state
+    
     if( pOut && bChg )
     {
         if ( pOut->GetConnectMetaFile() )
@@ -80,14 +80,14 @@ void SwSaveClip::_ChgClip( const SwRect &rRect, const SwTxtFrm* pFrm,
     {
         Rectangle aRect( rRect.SVRect() );
 
-        // Having underscores in our line, we enlarged the repaint area
-        // (see frmform.cxx) because for some fonts it could be too small.
-        // Consequently, we have to enlarge the clipping rectangle as well.
+        
+        
+        
         if ( bEnlargeRect && ! bVertical )
             aRect.Bottom() += 40;
 
-        // If the ClipRect is identical, nothing will happen
-        if( pOut->IsClipRegion() ) // no && because of Mac
+        
+        if( pOut->IsClipRegion() ) 
         {
             if ( aRect == pOut->GetClipRegion().GetBoundRect() )
             {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -54,12 +54,12 @@ ScAnnontationsObj::ScAnnontationsObj()
 
 uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations(long nIndex)
 {
-    // get the sheet
+    
     uno::Reference< sheet::XSpreadsheetDocument > xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(nIndex), UNO_QUERY_THROW);
 
-    // get the annotations collection
+    
     uno::Reference< sheet::XSheetAnnotationsSupplier > xAnnotationSupplier(xSheet, UNO_QUERY_THROW);
     uno::Reference< sheet::XSheetAnnotations > xSheetAnnotations( xAnnotationSupplier->getAnnotations(), UNO_QUERY_THROW);
 
@@ -70,7 +70,7 @@ uno::Reference< sheet::XSheetAnnotations> ScAnnontationsObj::getAnnotations(long
 
 uno::Reference< uno::XInterface > ScAnnontationsObj::init()
 {
-    // get the test file
+    
     OUString aFileURL;
     createFileURL(OUString("ScAnnotationObj.ods"), aFileURL);
     if(!mxComponent.is())

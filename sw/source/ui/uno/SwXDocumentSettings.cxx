@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -84,7 +84,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_IS_LABEL_DOC,
     HANDLE_IS_ADD_FLY_OFFSET,
     HANDLE_IS_ADD_EXTERNAL_LEADING,
-    HANDLE_OLD_NUMBERING, // #111955#
+    HANDLE_OLD_NUMBERING, 
     HANDLE_OUTLINELEVEL_YIELDS_NUMBERING,
     /* Stampit It disable the print cancel button of the shown progress dialog. */
     HANDLE_ALLOW_PRINTJOB_CANCEL,
@@ -108,7 +108,7 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_TABS_RELATIVE_TO_INDENT,
     HANDLE_RSID,
     HANDLE_RSID_ROOT,
-    // #i89181#
+    
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
     HANDLE_MODIFYPASSWORDINFO,
     HANDLE_MATH_BASELINE_ALIGNMENT,
@@ -154,7 +154,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("IsLabelDocument"),            HANDLE_IS_LABEL_DOC,                    cppu::UnoType<bool>::get(),           0,   0},
         { OUString("AddFrameOffsets"),            HANDLE_IS_ADD_FLY_OFFSET,               cppu::UnoType<bool>::get(),           0,   0},
         { OUString("AddExternalLeading"),         HANDLE_IS_ADD_EXTERNAL_LEADING,         cppu::UnoType<bool>::get(),           0,   0},
-        { OUString("UseOldNumbering"),            HANDLE_OLD_NUMBERING,                   cppu::UnoType<bool>::get(),           0,   0}, // #111955#
+        { OUString("UseOldNumbering"),            HANDLE_OLD_NUMBERING,                   cppu::UnoType<bool>::get(),           0,   0}, 
         { OUString("OutlineLevelYieldsNumbering"), HANDLE_OUTLINELEVEL_YIELDS_NUMBERING, cppu::UnoType<bool>::get(),           0,   0},
         /* Stampit It disable the print cancel button of the shown progress dialog. */
         { OUString("AllowPrintJobCancel"),        HANDLE_ALLOW_PRINTJOB_CANCEL,           cppu::UnoType<bool>::get(),           0,   0},
@@ -178,7 +178,7 @@ static MasterPropertySetInfo * lcl_createSettingsInfo()
         { OUString("Rsid"), HANDLE_RSID, cppu::UnoType<sal_Int32>::get(), 0, 0},
         { OUString("RsidRoot"), HANDLE_RSID_ROOT, cppu::UnoType<sal_Int32>::get(), 0, 0},
         { OUString("ProtectForm"), HANDLE_PROTECT_FORM, cppu::UnoType<bool>::get(), 0, 0},
-        // #i89181#
+        
         { OUString("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, cppu::UnoType<bool>::get(), 0, 0},
         { OUString("ModifyPasswordInfo"), HANDLE_MODIFYPASSWORDINFO, cppu::UnoType< cppu::UnoSequenceType<css::beans::PropertyValue> >::get(), 0,   0},
         { OUString("MathBaselineAlignment"), HANDLE_MATH_BASELINE_ALIGNMENT, cppu::UnoType<bool>::get(), 0, 0},
@@ -245,10 +245,10 @@ Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
     throw(RuntimeException)
 {
         return ::cppu::queryInterface ( rType,
-                                        // OWeakObject interfaces
+                                        
                                         dynamic_cast< XInterface* > ( dynamic_cast< OWeakObject*  >(this) ),
                                         dynamic_cast< XWeak* > ( this ),
-                                        // my own interfaces
+                                        
                                         dynamic_cast< XPropertySet*  > ( this ),
                                         dynamic_cast< XPropertyState* > ( this ),
                                         dynamic_cast< XMultiPropertySet* > ( this ),
@@ -274,7 +274,7 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
     uno::Sequence< uno::Type > aBaseTypes( 5 );
     uno::Type* pBaseTypes = aBaseTypes.getArray();
 
-    // from MasterPropertySet
+    
     pBaseTypes[0] = ::getCppuType((Reference< XPropertySet >*)0);
     pBaseTypes[1] = ::getCppuType((Reference< XPropertyState >*)0);
     pBaseTypes[2] = ::getCppuType((Reference< XMultiPropertySet >*)0);
@@ -378,7 +378,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PRINTER_NAME:
         {
-            //the printer must be created
+            
             OUString sPrinterName;
             if( rValue >>= sPrinterName  )
             {
@@ -390,7 +390,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                         SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
                         if( pNewPrinter->IsKnown() )
                         {
-                            // set printer only once; in _postSetValues
+                            
                             mpPrinter = pNewPrinter;
                         }
                         else
@@ -426,7 +426,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     SfxItemSet *pItemSet = new SfxItemSet( mpDoc->GetAttrPool(), nRange );
                     SfxPrinter *pPrinter = SfxPrinter::Create ( aStream, pItemSet );
 
-                    // set printer only once; in _postSetValues
+                    
                     delete mpPrinter;
                     mpPrinter = pPrinter;
                 }
@@ -547,7 +547,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::ADD_EXT_LEADING, bTmp);
         }
         break;
-        case HANDLE_OLD_NUMBERING: // #111955#
+        case HANDLE_OLD_NUMBERING: 
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
             mpDoc->set(IDocumentSettingAccess::OLD_NUMBERING, bTmp);
@@ -666,7 +666,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         }
         break;
         case HANDLE_USE_OLD_PRINTER_METRICS:
-            // ignore - this is a dead property
+            
         break;
         case HANDLE_TABS_RELATIVE_TO_INDENT:
         {
@@ -694,7 +694,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::PROTECT_FORM, bTmp);
         }
         break;
-        // #i89181#
+        
         case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
         {
             sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
@@ -807,11 +807,11 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
 void SwXDocumentSettings::_postSetValues ()
         throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
-    // set printer only once, namely here!
+    
     if( mpPrinter != NULL )
     {
-        // #i86352# the printer is also used as container for options by sfx
-        // when setting a printer it should have decent default options
+        
+        
         SfxItemSet aOptions( mpPrinter->GetOptions() );
         SwPrintData aPrtData( mpDoc->getPrintData() );
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
@@ -962,7 +962,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_PRINTER_INDEPENDENT_LAYOUT:
         {
-            // returns short (see css.document.PrinterIndependentLayout)
+            
             sal_Int16 nVirDevType = mpDoc->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE) ?
                                     ( mpDoc->get(IDocumentSettingAccess::USE_HIRES_VIRTUAL_DEVICE) ?
                                       document::PrinterIndependentLayout::HIGH_RESOLUTION :
@@ -989,13 +989,13 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        case HANDLE_OLD_NUMBERING: // #111955#
+        case HANDLE_OLD_NUMBERING: 
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::OLD_NUMBERING);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        case HANDLE_OUTLINELEVEL_YIELDS_NUMBERING: // #111955#
+        case HANDLE_OUTLINELEVEL_YIELDS_NUMBERING: 
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
@@ -1123,7 +1123,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
-        // #i89181#
+        
         case HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST);
@@ -1231,7 +1231,7 @@ void SwXDocumentSettings::_postGetValues ()
     mpDoc = 0;
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SwXDocumentSettings::getImplementationName(  )
     throw(RuntimeException)
 {

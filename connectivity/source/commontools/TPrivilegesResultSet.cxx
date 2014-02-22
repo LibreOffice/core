@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,20 +14,20 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TPrivilegesResultSet.hxx"
 
 using namespace connectivity;
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-//------------------------------------------------------------------------------
+
 OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>& _rxMeta
                                            , const Any& catalog
                                            , const OUString& schemaPattern
@@ -39,10 +39,10 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
     {
         OUString sUserWorkingFor;
         Sequence< OUString > sTableTypes(3);
-        // we want all catalogues, all schemas, all tables
+        
         sTableTypes[0] = "VIEW";
         sTableTypes[1] = "TABLE";
-        sTableTypes[2] = "%"; // just to be sure to include anything else ....
+        sTableTypes[2] = "%"; 
         try
         {
             m_xTables = _rxMeta->getTables(catalog,schemaPattern,tableNamePattern,sTableTypes);
@@ -81,7 +81,7 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
     }
     osl_atomic_decrement( &m_refCount );
 }
-//------------------------------------------------------------------------------
+
 const ORowSetValue& OResultSetPrivileges::getValue(sal_Int32 columnIndex)
 {
     switch(columnIndex)
@@ -106,14 +106,14 @@ const ORowSetValue& OResultSetPrivileges::getValue(sal_Int32 columnIndex)
     }
     return ODatabaseMetaDataResultSet::getValue(columnIndex);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OResultSetPrivileges::disposing(void)
 {
     ODatabaseMetaDataResultSet::disposing();
 m_xTables.clear();
 m_xRow.clear();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -138,6 +138,6 @@ sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeExce
     }
     return bReturn;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

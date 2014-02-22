@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WinImplHelper.hxx"
@@ -24,9 +24,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-//------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------
+
+
+
 
 using ::com::sun::star::lang::IllegalArgumentException;
 using ::com::sun::star::uno::Reference;
@@ -34,32 +34,32 @@ using ::com::sun::star::uno::XInterface;
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Sequence;
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 const OUString TILDE( "~" );
 const sal_Unicode   TILDE_SIGN = L'~';
 const OUString AMPERSAND( "&" );
 const sal_Unicode   AMPERSAND_SIGN = L'&';
 
-//------------------------------------------------------------
-// OS NAME          Platform                    Major   Minor
-//
-// Windows NT 3.51  VER_PLATFORM_WIN32_NT       3       51
-// Windows NT 4.0   VER_PLATFORM_WIN32_NT       4       0
-// Windows 2000     VER_PLATFORM_WIN32_NT       5       0
-// Windows XP       VER_PLATFORM_WIN32_NT       5       1
-// Windows Vista    VER_PLATFORM_WIN32_NT       6       0
-// Windows 7        VER_PLATFORM_WIN32_NT       6       1
-// Windows 95       VER_PLATFORM_WIN32_WINDOWS  4       0
-// Windows 98       VER_PLATFORM_WIN32_WINDOWS  4       10
-// Windows ME       VER_PLATFORM_WIN32_WINDOWS  4       90
-//------------------------------------------------------------
 
-//------------------------------------------------------------
-// determine if we are running under Vista or newer OS
-//------------------------------------------------------------
+
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 bool SAL_CALL IsWindowsVistaOrNewer()
 {
@@ -79,21 +79,21 @@ bool SAL_CALL IsWindowsVistaOrNewer()
     return bRet;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 void SAL_CALL ListboxAddString( HWND hwnd, const OUString& aString )
 {
     LRESULT rc = SendMessageW(
         hwnd, CB_ADDSTRING, 0, reinterpret_cast< LPARAM >(aString.getStr( )) );
-    (void) rc; // avoid warning
+    (void) rc; 
     OSL_ASSERT( (CB_ERR != rc) && (CB_ERRSPACE != rc) );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 OUString SAL_CALL ListboxGetString( HWND hwnd, sal_Int32 aPosition )
 {
@@ -106,8 +106,8 @@ OUString SAL_CALL ListboxGetString( HWND hwnd, sal_Int32 aPosition )
 
     if ( (CB_ERR != lItem) && (lItem > 0) )
     {
-        // message returns the len of a combobox item
-        // without trailing '\0' that's why += 1
+        
+        
         lItem++;
 
         std::vector<sal_Unicode> vec(lItem);
@@ -126,9 +126,9 @@ OUString SAL_CALL ListboxGetString( HWND hwnd, sal_Int32 aPosition )
     return aString;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( IllegalArgumentException )
@@ -148,9 +148,9 @@ void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInt
     ListboxAddString( hwnd, cbItem );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( IllegalArgumentException )
@@ -174,9 +174,9 @@ void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference<
     }
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( IllegalArgumentException )
@@ -197,8 +197,8 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
 
     LRESULT lRet = SendMessage( hwnd, CB_DELETESTRING, nPos, 0 );
 
-    // if the return value is CB_ERR the given
-    // index was not correct
+    
+    
     if ( CB_ERR == lRet )
         throw IllegalArgumentException(
             OUString( "invalid item position" ),
@@ -206,9 +206,9 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
             aArgPos );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 void SAL_CALL ListboxDeleteItems( HWND hwnd, const Any&, const Reference< XInterface >&, sal_Int16 )
     throw( IllegalArgumentException )
@@ -219,16 +219,16 @@ void SAL_CALL ListboxDeleteItems( HWND hwnd, const Any&, const Reference< XInter
 
     do
     {
-        // the return value on success is the number
-        // of remaining elements in the listbox
+        
+        
         lRet = SendMessageW( hwnd, CB_DELETESTRING, 0, 0 );
     }
     while ( (lRet != CB_ERR) && (lRet > 0) );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
     throw( IllegalArgumentException )
@@ -262,9 +262,9 @@ void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Ref
             aArgPos );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 Any SAL_CALL ListboxGetItems( HWND hwnd )
 {
@@ -290,9 +290,9 @@ Any SAL_CALL ListboxGetItems( HWND hwnd )
     return aAny;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 Any SAL_CALL ListboxGetSelectedItem( HWND hwnd )
 {
@@ -306,9 +306,9 @@ Any SAL_CALL ListboxGetSelectedItem( HWND hwnd )
     return aAny;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 Any SAL_CALL ListboxGetSelectedItemIndex( HWND hwnd )
 {
@@ -322,9 +322,9 @@ Any SAL_CALL ListboxGetSelectedItemIndex( HWND hwnd )
     return aAny;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 Any SAL_CALL CheckboxGetState( HWND hwnd )
 {
@@ -337,9 +337,9 @@ Any SAL_CALL CheckboxGetState( HWND hwnd )
     return aAny;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 void SAL_CALL CheckboxSetState(
     HWND hwnd, const ::com::sun::star::uno::Any& aState, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
@@ -359,9 +359,9 @@ void SAL_CALL CheckboxSetState(
     SendMessageW( hwnd, BM_SETCHECK, wParam, 0 );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 sal_uInt32 SAL_CALL _wcslenex( const sal_Unicode* pStr )
 {
@@ -379,9 +379,9 @@ sal_uInt32 SAL_CALL _wcslenex( const sal_Unicode* pStr )
     return strLen;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, OUStringBuffer& aBuffer )
 {
@@ -402,27 +402,27 @@ void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, 
         {
             if ( OldChar == *pNext )
             {
-                // two OldChars in line will
-                // be replaced by one
-                // e.g. ~~ -> ~
+                
+                
+                
                 aBuffer.insert( i, *pCurrent );
 
-                // skip the next one
+                
                 pCurrent++;
                 pNext++;
             }
             else
             {
-                // one OldChar will be replace
-                // by NexChar
+                
+                
                 aBuffer.insert( i, NewChar );
             }
          }
          else if ( *pCurrent == NewChar )
          {
-            // a NewChar will be replaced by
-             // two NewChars
-             // e.g. & -> &&
+            
+             
+             
             aBuffer.insert( i++, *pCurrent );
             aBuffer.insert( i, *pCurrent );
          }
@@ -437,14 +437,14 @@ void Replace( const OUString& aLabel, sal_Unicode OldChar, sal_Unicode NewChar, 
     }
 }
 
-//------------------------------------------------------------
-// converts a soffice label to a windows label
-// the following rules for character replacements
-// will be done:
-// '~'  -> '&'
-// '~~' -> '~'
-// '&'  -> '&&'
-//------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 OUString SOfficeToWindowsLabel( const OUString& aSOLabel )
 {
@@ -454,10 +454,10 @@ OUString SOfficeToWindowsLabel( const OUString& aSOLabel )
     {
         sal_Int32 nStrLen = aWinLabel.getLength( );
 
-        // in the worst case the new string is
-        // doubled in length, maybe some waste
-        // of memory but how long is a label
-        // normaly(?)
+        
+        
+        
+        
         OUStringBuffer aBuffer( nStrLen * 2 );
 
         Replace( aWinLabel, TILDE_SIGN, AMPERSAND_SIGN, aBuffer );
@@ -468,14 +468,14 @@ OUString SOfficeToWindowsLabel( const OUString& aSOLabel )
     return aWinLabel;
 }
 
-//------------------------------------------------------------
-// converts a windows label to a soffice label
-// the following rules for character replacements
-// will be done:
-// '&'  -> '~'
-// '&&' -> '&'
-// '~'  -> '~~'
-//------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 OUString WindowsToSOfficeLabel( const OUString& aWinLabel )
 {
@@ -485,10 +485,10 @@ OUString WindowsToSOfficeLabel( const OUString& aWinLabel )
     {
         sal_Int32 nStrLen = aSOLabel.getLength( );
 
-        // in the worst case the new string is
-        // doubled in length, maybe some waste
-        // of memory but how long is a label
-        // normaly(?)
+        
+        
+        
+        
         OUStringBuffer aBuffer( nStrLen * 2 );
 
         Replace( aSOLabel, AMPERSAND_SIGN, TILDE_SIGN, aBuffer );

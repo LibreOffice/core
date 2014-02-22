@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -38,7 +38,7 @@
 #include "labdlg.hxx"
 #include "transfrm.hxx"
 
-// define ----------------------------------------------------------------
+
 
 #define AZ_OPTIMAL      0
 #define AZ_VON_OBEN     1
@@ -54,7 +54,7 @@
 #define BMP_CAPTTYPE_2  2
 #define BMP_CAPTTYPE_3  3
 
-// static ----------------------------------------------------------------
+
 
 static sal_uInt16 pCaptionRanges[] =
 {
@@ -71,7 +71,7 @@ static sal_uInt16 pCaptionRanges[] =
     0
 };
 
-// -----------------------------------------------------------------------
+
 
 SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs)
     : SfxTabPage(pParent, "CalloutPage", "cui/ui/calloutpage.ui", rInAttrs)
@@ -112,9 +112,9 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
         m_aBmpCapTypes[nBitmap] = pImage->GetImage();
     }
 
-    //------------install ValueSet--------------------------
+    
     m_pCT_CAPTTYPE->SetStyle( m_pCT_CAPTTYPE->GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER | WB_NAMEFIELD );
-    m_pCT_CAPTTYPE->SetColCount(5);//XXX
+    m_pCT_CAPTTYPE->SetColCount(5);
     m_pCT_CAPTTYPE->SetLineCount(1);
     m_pCT_CAPTTYPE->SetSelectHdl(LINK( this, SvxCaptionTabPage, SelectCaptTypeHdl_Impl));
 
@@ -130,15 +130,15 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     m_pCB_LAENGE->SetClickHdl(LINK(this,SvxCaptionTabPage,LineOptHdl_Impl));
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::Construct()
 {
-    // set rectangle and working area
+    
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
 {
@@ -157,7 +157,7 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
         _rOutAttrs.Put( SdrCaptionGapItem( GetCoreValue(*m_pMF_ABSTAND, eUnit ) ) );
     }
 
-    // special treatment!!! XXX
+    
     if( nCaptionType==SDRCAPT_TYPE1 )
     {
         switch( nEscDir )
@@ -205,17 +205,17 @@ sal_Bool SvxCaptionTabPage::FillItemSet( SfxItemSet&  _rOutAttrs)
         }
     }
 
-//NYI-------------the angles have to be added here!!! XXX----------------------
+
 
     return( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::Reset( const SfxItemSet&  )
 {
 
-    //------------set metric-----------------------------
+    
 
     FieldUnit eFUnit = GetModuleFieldUnit( rOutAttrs );
 
@@ -226,7 +226,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
         case FUNIT_KM:
             eFUnit = FUNIT_MM;
             break;
-        default: ;//prevent warning
+        default: ;
     }
     SetFieldUnit( *m_pMF_ABSTAND, eFUnit );
     SetFieldUnit( *m_pMF_ANSATZ, eFUnit );
@@ -247,14 +247,14 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     nWhich = GetWhich( SDRATTR_CAPTIONESCREL );
     nEscRel = (long)( ( const SdrCaptionEscRelItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
 
-    //------- line length ----------
+    
     nWhich = GetWhich( SDRATTR_CAPTIONLINELEN );
     eUnit = pPool->GetMetric( nWhich );
     nLineLen = ( ( const SdrCaptionLineLenItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
     SetMetricValue( *m_pMF_LAENGE, nLineLen, eUnit );
     nLineLen = static_cast<long>(m_pMF_LAENGE->GetValue());
 
-    //------- distance to box ----------
+    
     nWhich = GetWhich( SDRATTR_CAPTIONGAP );
     eUnit = pPool->GetMetric( nWhich );
     nGap = ( ( const SdrCaptionGapItem& ) rOutAttrs.Get( nWhich ) ).GetValue();
@@ -266,7 +266,7 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     nEscDir = (short)( ( const SdrCaptionEscDirItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCDIR ) ) ).GetValue();
     bEscRel = ( ( const SfxBoolItem& ) rOutAttrs.Get( GetWhich( SDRATTR_CAPTIONESCISREL ) ) ).GetValue();
 
-    // special treatment!!! XXX
+    
     if( nCaptionType==SDRCAPT_TYPE1 )
     {
         switch( nEscDir )
@@ -324,11 +324,11 @@ void SvxCaptionTabPage::Reset( const SfxItemSet&  )
     m_pLB_ANSATZ->SelectEntryPos( nAnsatzTypePos );
 
     SetupAnsatz_Impl( nAnsatzTypePos );
-    m_pCT_CAPTTYPE->SelectItem( nCaptionType+1 ); // Enum starts at 0!
+    m_pCT_CAPTTYPE->SelectItem( nCaptionType+1 ); 
     SetupType_Impl( nCaptionType+1 );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxCaptionTabPage::Create( Window* pWindow,
                 const SfxItemSet& rOutAttrs )
@@ -336,14 +336,14 @@ SfxTabPage* SvxCaptionTabPage::Create( Window* pWindow,
     return( new SvxCaptionTabPage( pWindow, rOutAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxCaptionTabPage::GetRanges()
 {
     return( pCaptionRanges );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
 {
@@ -401,7 +401,7 @@ void SvxCaptionTabPage::SetupAnsatz_Impl( sal_uInt16 nType )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
 {
@@ -413,7 +413,7 @@ IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pLis
 }
 IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzSelectHdl_Impl, ListBox *, pListBox )
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
 {
@@ -425,7 +425,7 @@ IMPL_LINK_INLINE_START( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, p
 }
 IMPL_LINK_INLINE_END( SvxCaptionTabPage, AnsatzRelSelectHdl_Impl, ListBox *, pListBox )
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
 {
@@ -445,7 +445,7 @@ IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 {
@@ -454,7 +454,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 
-//------------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
 {
@@ -486,7 +486,7 @@ void SvxCaptionTabPage::SetupType_Impl( sal_uInt16 nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -496,7 +496,7 @@ void SvxCaptionTabPage::DataChanged( const DataChangedEvent& rDCEvt )
             FillValueSet();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxCaptionTabPage::FillValueSet()
 {
@@ -505,7 +505,7 @@ void SvxCaptionTabPage::FillValueSet()
     m_pCT_CAPTTYPE->SetItemImage(BMP_CAPTTYPE_3, m_aBmpCapTypes[2] );
 }
 
-//========================================================================
+
 
 
 SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrView,
@@ -517,9 +517,9 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrVie
     , m_nPositionSizePageId(0)
     , m_nCaptionPageId(0)
 {
-    assert(pView); //Keine gueltige View Uebergeben!
+    assert(pView); 
 
-    //different positioning page in Writer
+    
     if (nAnchorCtrls & 0x00ff)
     {
         m_nSwPosSizePageId = AddTabPage("RID_SVXPAGE_SWPOSSIZE", SvxSwPosSizeTabPage::Create,

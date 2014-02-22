@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef MI_DEBUG
@@ -59,7 +59,7 @@ static void Print( const MultiSelection* pSel )
 
 void MultiSelection::ImplClear()
 {
-    // no selected indexes
+    
     nSelCount = 0;
 
     for ( size_t i = 0, n = aSels.size(); i < n; ++i ) {
@@ -70,7 +70,7 @@ void MultiSelection::ImplClear()
 
 size_t MultiSelection::ImplFindSubSelection( long nIndex ) const
 {
-    // iterate through the sub selections
+    
     size_t n = 0;
     for ( ;
           n < aSels.size() && nIndex > aSels[ n ]->Max();
@@ -80,14 +80,14 @@ size_t MultiSelection::ImplFindSubSelection( long nIndex ) const
 
 bool MultiSelection::ImplMergeSubSelections( size_t nPos1, size_t nPos2 )
 {
-    // didn't a sub selection at nPos2 exist?
+    
     if ( nPos2 >= aSels.size() )
         return false;
 
-    // did the sub selections touch each other?
+    
     if ( (aSels[ nPos1 ]->Max() + 1) == aSels[ nPos2 ]->Min() )
     {
-        // merge them
+        
         aSels[ nPos1 ]->Max() = aSels[ nPos2 ]->Max();
         ImpSelList::iterator it = aSels.begin();
         ::std::advance( it, nPos2 );
@@ -120,7 +120,7 @@ MultiSelection::MultiSelection( const MultiSelection& rOrig ) :
         nCurIndex = rOrig.nCurIndex;
     }
 
-    // copy the sub selections
+    
     for ( size_t n = 0; n < rOrig.aSels.size(); ++n )
         aSels.push_back( new Range( *rOrig.aSels[ n ] ) );
 }
@@ -151,7 +151,7 @@ MultiSelection& MultiSelection::operator= ( const MultiSelection& rOrig )
         nCurIndex = rOrig.nCurIndex;
     }
 
-    // clear the old and copy the sub selections
+    
     ImplClear();
     for ( size_t n = 0; n < rOrig.aSels.size(); ++n )
         aSels.push_back( new Range( *rOrig.aSels[ n ] ) );
@@ -166,7 +166,7 @@ bool MultiSelection::operator== ( MultiSelection& rWith )
          aSels.size() != rWith.aSels.size() )
         return false;
 
-    // compare the sub seletions
+    
     for ( size_t n = 0; n < aSels.size(); ++n )
         if ( *aSels[ n ] != *rWith.aSels[ n ] )
             return false;
@@ -191,42 +191,42 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
 {
     DBG_ASSERT( aTotRange.IsInside(nIndex), "selected index out of range" );
 
-    // out of range?
+    
     if ( !aTotRange.IsInside(nIndex) )
         return false;
 
-    // find the virtual target position
+    
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
     if ( bSelect )
     {
-        // is it included in the found sub selection?
+        
         if ( nSubSelPos < aSels.size() && aSels[ nSubSelPos ]->IsInside( nIndex ) )
-            // already selected, nothing to do
+            
             return false;
 
-        // it will become selected
+        
         ++nSelCount;
 
-        // is it at the end of the previous sub selection
+        
         if ( nSubSelPos > 0 &&
              aSels[ nSubSelPos-1 ]->Max() == (nIndex-1) )
         {
-            // expand the previous sub selection
+            
             aSels[ nSubSelPos-1 ]->Max() = nIndex;
 
-            // try to merge the previous sub selection
+            
             ImplMergeSubSelections( nSubSelPos-1, nSubSelPos );
         }
-        // is is at the beginning of the found sub selection
+        
         else if (  nSubSelPos < aSels.size()
                 && aSels[ nSubSelPos ]->Min() == (nIndex+1)
         )
-            // expand the found sub selection
+            
             aSels[ nSubSelPos ]->Min() = nIndex;
         else
         {
-            // create a new sub selection
+            
             if ( nSubSelPos < aSels.size() ) {
                 ImpSelList::iterator it = aSels.begin();
                 ::std::advance( it, nSubSelPos );
@@ -240,22 +240,22 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
     }
     else
     {
-        // is it excluded from the found sub selection?
+        
         if (  nSubSelPos >= aSels.size()
            || !aSels[ nSubSelPos ]->IsInside( nIndex )
         ) {
-            // not selected, nothing to do
+            
             DBG(Print( this ));
             return false;
         }
 
-        // it will become deselected
+        
         --nSelCount;
 
-        // is it the only index in the found sub selection?
+        
         if ( aSels[ nSubSelPos ]->Len() == 1 )
         {
-            // remove the complete sub selection
+            
             ImpSelList::iterator it = aSels.begin();
             ::std::advance( it, nSubSelPos );
             delete *it;
@@ -264,16 +264,16 @@ bool MultiSelection::Select( long nIndex, bool bSelect )
             return true;
         }
 
-        // is it at the beginning of the found sub selection?
+        
         if ( aSels[ nSubSelPos ]->Min() == nIndex )
             ++aSels[ nSubSelPos ]->Min();
-        // is it at the end of the found sub selection?
+        
         else if ( aSels[ nSubSelPos ]->Max() == nIndex )
             --aSels[ nSubSelPos ]->Max();
-        // it is in the middle of the found sub selection?
+        
         else
         {
-            // split the sub selection
+            
             if ( nSubSelPos < aSels.size() ) {
                 ImpSelList::iterator it = aSels.begin();
                 ::std::advance( it, nSubSelPos );
@@ -302,7 +302,7 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
     DBG_ASSERT(aTotRange.IsInside(nTmpMax), "selected index out of range" );
     DBG_ASSERT(aTotRange.IsInside(nTmpMin), "selected index out of range" );
 
-    // replace whole selection?
+    
     if( nTmpMin <= nCurMin && nTmpMax >= nCurMax )
     {
         ImplClear();
@@ -313,12 +313,12 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
         }
         return;
     }
-    // expand on left side?
+    
     if( nTmpMax < nCurMin )
     {
         if( bSelect )
         {
-            // extend first range?
+            
             if( nCurMin > (nTmpMax+1)  )
             {
                 pRange = new Range( rIndexRange );
@@ -336,12 +336,12 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
         }
         return;
     }
-    // expand on right side?
+    
     else if( nTmpMin > nCurMax )
     {
         if( bSelect )
         {
-            // extend last range?
+            
             if( nTmpMin > (nCurMax+1) )
             {
                 pRange = new Range( rIndexRange );
@@ -360,7 +360,7 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
         return;
     }
 
-    // TODO here is potential for optimization
+    
     while( nTmpMin <= nTmpMax )
     {
         Select( nTmpMin, bSelect );
@@ -370,7 +370,7 @@ void MultiSelection::Select( const Range& rIndexRange, bool bSelect )
 
 bool MultiSelection::IsSelected( long nIndex ) const
 {
-    // find the virtual target position
+    
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
     return nSubSelPos < aSels.size() && aSels[ nSubSelPos ]->IsInside(nIndex);
@@ -380,16 +380,16 @@ void MultiSelection::Insert( long nIndex, long nCount )
 {
     DBG(DbgOutf( "::Insert(%ld, %ld)\n", nIndex, nCount ));
 
-    // find the virtual target position
+    
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
-    // did we need to shift the sub selections?
+    
     if ( nSubSelPos < aSels.size() )
-    {   // did we insert an unselected into an existing sub selection?
+    {   
         if (  !bSelectNew
            && aSels[ nSubSelPos ]->Min() != nIndex
            && aSels[ nSubSelPos ]->IsInside(nIndex)
-        ) { // split the sub selection
+        ) { 
             if ( nSubSelPos < aSels.size() ) {
                 ImpSelList::iterator it = aSels.begin();
                 ::std::advance( it, nSubSelPos );
@@ -401,22 +401,22 @@ void MultiSelection::Insert( long nIndex, long nCount )
             aSels[ nSubSelPos ]->Min() = nIndex;
         }
 
-        // did we append an selected to an existing sub selection?
+        
         else if (  bSelectNew
                 && nSubSelPos > 0
                 && aSels[ nSubSelPos ]->Max() == nIndex-1
-        )   // expand the previous sub selection
+        )   
             aSels[ nSubSelPos-1 ]->Max() += nCount;
 
-        // did we insert an selected into an existing sub selection?
+        
         else if (  bSelectNew
                 && aSels[ nSubSelPos ]->Min() == nIndex
-        ) { // expand the sub selection
+        ) { 
             aSels[ nSubSelPos ]->Max() += nCount;
             ++nSubSelPos;
         }
 
-        // shift the sub selections behind the inserting position
+        
         for ( size_t nPos = nSubSelPos; nPos < aSels.size(); ++nPos )
         {
             aSels[ nPos ]->Min() += nCount;
@@ -436,30 +436,30 @@ void MultiSelection::Remove( long nIndex )
 {
     DBG(DbgOutf( "::Remove(%ld)\n", nIndex ));
 
-    // find the virtual target position
+    
     size_t nSubSelPos = ImplFindSubSelection( nIndex );
 
-    // did we remove from an existing sub selection?
+    
     if (  nSubSelPos < aSels.size()
        && aSels[ nSubSelPos ]->IsInside(nIndex)
     ) {
-        // does this sub selection only contain the index to be deleted
+        
         if ( aSels[ nSubSelPos ]->Len() == 1 ) {
-            // completely remove the sub selection
+            
             ImpSelList::iterator it = aSels.begin();
             ::std::advance( it, nSubSelPos );
             delete *it;
             aSels.erase( it );
         } else {
-            // shorten this sub selection
+            
             --( aSels[ nSubSelPos++ ]->Max() );
         }
 
-        // adjust the selected counter
+        
         --nSelCount;
     }
 
-    // shift the sub selections behind the removed index
+    
     for ( size_t nPos = nSubSelPos; nPos < aSels.size(); ++nPos )
     {
         --( aSels[ nPos ]->Min() );
@@ -535,15 +535,15 @@ long MultiSelection::NextSelected()
     }
     else
     {
-        // is the next index in the current sub selection too?
+        
         if ( nCurIndex < aSels[ nCurSubSel ]->Max() )
             return ++nCurIndex;
 
-        // are there further sub selections?
+        
         if ( ++nCurSubSel < aSels.size() )
             return nCurIndex = aSels[ nCurSubSel ]->Min();
 
-        // we are at the end!
+        
         return SFX_ENDOFSELECTION;
     }
 }
@@ -552,7 +552,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
 {
     aTotRange = rTotRange;
 
-    // adjust lower boundary
+    
     Range* pRange = aSels.empty() ? NULL : aSels.front();
     while( pRange )
     {
@@ -572,7 +572,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
         pRange = aSels.empty() ? NULL : aSels.front();
     }
 
-    // adjust upper boundary
+    
     size_t nCount = aSels.size();
     while( nCount )
     {
@@ -593,7 +593,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
         nCount = aSels.size();
     }
 
-    // re-calculate selection count
+    
     nSelCount = 0;
     for ( size_t i = 0, n = aSels.size(); i < n; ++ i )
         nSelCount += aSels[i]->Len();
@@ -602,7 +602,7 @@ void MultiSelection::SetTotalRange( const Range& rTotRange )
     nCurIndex = 0;
 }
 
-// StringRangeEnumerator
+
 
 StringRangeEnumerator::StringRangeEnumerator( const OUString& i_rInput,
                                               sal_Int32 i_nMinNumber,
@@ -615,7 +615,7 @@ StringRangeEnumerator::StringRangeEnumerator( const OUString& i_rInput,
     , mnOffset( i_nLogicalOffset )
     , mbValidInput( false )
 {
-    // Parse string only if boundaries are valid.
+    
     if( mnMin >= 0 && mnMax >= 0 && mnMin <= mnMax )
         mbValidInput = setRange( i_rInput );
 }
@@ -738,12 +738,12 @@ bool StringRangeEnumerator::setRange( const OUString& i_rNewRange, bool i_bStric
             bSequence = false;
         }
         else if( *pInput && *pInput != ' ' )
-            return false; // parse error
+            return false; 
 
         if( *pInput )
             pInput++;
     }
-    // insert last entries
+    
     if( bSequence && !aNumbers.empty() )
         aNumbers.push_back( mnMax );
     if( ! insertJoinedRanges( aNumbers, i_bStrict ) && i_bStrict )
@@ -782,7 +782,7 @@ StringRangeEnumerator::Iterator& StringRangeEnumerator::Iterator::operator++()
         bool bRangeChange = false;
         if( rRange.nLast < rRange.nFirst )
         {
-            // backward range
+            
             if( nCurrent > rRange.nLast )
                 nCurrent--;
             else
@@ -790,7 +790,7 @@ StringRangeEnumerator::Iterator& StringRangeEnumerator::Iterator::operator++()
         }
         else
         {
-            // forward range
+            
             if( nCurrent < rRange.nLast )
                 nCurrent++;
             else
@@ -801,7 +801,7 @@ StringRangeEnumerator::Iterator& StringRangeEnumerator::Iterator::operator++()
             nRangeIndex++;
             if( size_t(nRangeIndex) == pEnumerator->maSequence.size() )
             {
-                // reached the end
+                
                 nRangeIndex = nCurrent = -1;
             }
             else
@@ -854,8 +854,8 @@ bool StringRangeEnumerator::getRangesFromString( const OUString& i_rPageRange,
 
     StringRangeEnumerator aEnum( i_rPageRange, i_nMinNumber, i_nMaxNumber, i_nLogicalOffset ) ;
 
-    //Even if the input range wasn't completely valid, return what ranges could
-    //be extracted from the input.
+    
+    
     o_rPageVector.reserve( static_cast< size_t >( aEnum.size() ) );
     for( StringRangeEnumerator::Iterator it = aEnum.begin( i_pPossibleValues );
          it != aEnum.end( i_pPossibleValues ); ++it )

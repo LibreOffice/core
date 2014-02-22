@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -66,7 +66,7 @@ OUString toString( OptionInfo const * info )
     return buf.makeStringAndClear();
 }
 
-//==============================================================================
+
 OptionInfo const * getOptionInfo(
     OptionInfo const * list,
     OUString const & opt, sal_Unicode copt )
@@ -97,7 +97,7 @@ OptionInfo const * getOptionInfo(
     return 0;
 }
 
-//==============================================================================
+
 bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
     OSL_ASSERT( option_info != 0 );
@@ -128,7 +128,7 @@ bool isOption( OptionInfo const * option_info, sal_uInt32 * pIndex )
     }
     return false;
 }
-//==============================================================================
+
 
 bool isBootstrapVariable(sal_uInt32 * pIndex)
 {
@@ -144,7 +144,7 @@ bool isBootstrapVariable(sal_uInt32 * pIndex)
     return false;
 }
 
-//==============================================================================
+
 bool readArgument(
     OUString * pValue, OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
@@ -184,25 +184,25 @@ struct ProcessWorkingDir : public rtl::StaticWithInit<
         return workingDir;
     }
 };
-} // anon namespace
+} 
 
-//==============================================================================
+
 OUString const & getExecutableDir()
 {
     return ExecutableDir::get();
 }
 
-//==============================================================================
+
 OUString const & getProcessWorkingDir()
 {
     return ProcessWorkingDir::get();
 }
 
-//==============================================================================
+
 OUString makeAbsoluteFileUrl(
     OUString const & sys_path, OUString const & base_url, bool throw_exc )
 {
-    // system path to file url
+    
     OUString file_url;
     oslFileError rc = osl_getFileURLFromSystemPath( sys_path.pData, &file_url.pData );
     if ( rc != osl_File_E_None) {
@@ -241,14 +241,14 @@ OUString makeAbsoluteFileUrl(
 
 namespace {
 
-//------------------------------------------------------------------------------
+
 inline void printf_space( sal_Int32 space )
 {
     while (space--)
         dp_misc::writeConsole("  ");
 }
 
-//------------------------------------------------------------------------------
+
 void printf_line(
     OUString const & name, OUString const & value, sal_Int32 level )
 {
@@ -256,7 +256,7 @@ void printf_line(
     dp_misc::writeConsole(name + ": " + value + "\n");
 }
 
-//------------------------------------------------------------------------------
+
 void printf_package(
     Reference<deployment::XPackage> const & xPackage,
     Reference<XCommandEnvironment> const & xCmdEnv, sal_Int32 level )
@@ -308,7 +308,7 @@ void printf_package(
     }
 }
 
-} // anon namespace
+} 
 
 void printf_unaccepted_licenses(
     Reference<deployment::XPackage> const & ext)
@@ -320,7 +320,7 @@ void printf_unaccepted_licenses(
         dp_misc::writeConsole("License not accepted\n\n");
 }
 
-//==============================================================================
+
 void printf_packages(
     ::std::vector< Reference<deployment::XPackage> > const & allExtensions,
     ::std::vector<bool> const & vecUnaccepted,
@@ -352,7 +352,7 @@ void printf_packages(
 
 namespace {
 
-//------------------------------------------------------------------------------
+
 Reference<XComponentContext> bootstrapStandAlone()
 {
     Reference<XComponentContext> xContext =
@@ -360,17 +360,17 @@ Reference<XComponentContext> bootstrapStandAlone()
 
     Reference<lang::XMultiServiceFactory> xServiceManager(
         xContext->getServiceManager(), UNO_QUERY_THROW );
-    // set global process service factory used by unotools config helpers
+    
     ::comphelper::setProcessServiceFactory( xServiceManager );
 
-    // Initialize the UCB (for backwards compatibility, in case some code still
-    // uses plain createInstance w/o args directly to obtain an instance):
+    
+    
     UniversalContentBroker::create( xContext );
 
     return xContext;
 }
 
-//------------------------------------------------------------------------------
+
 Reference<XComponentContext> connectToOffice(
     Reference<XComponentContext> const & xLocalComponentContext,
     bool verbose )
@@ -414,7 +414,7 @@ Reference<XComponentContext> connectToOffice(
     return xRet;
 }
 
-} // anon namespace
+} 
 
 /** returns the path to the lock file used by unopkg.
     @return the path. An empty string signifies an error.
@@ -437,19 +437,19 @@ OUString getLockFilePath()
 
     return ret;
 }
-//==============================================================================
+
 Reference<XComponentContext> getUNO(
     bool verbose, bool shared, bool bGui,
     Reference<XComponentContext> & out_localContext)
 {
-    // do not create any user data (for the root user) in --shared mode:
+    
     if (shared) {
         rtl::Bootstrap::set(
             OUString("CFG_CacheUrl"),
             OUString());
     }
 
-    // hold lock during process runtime:
+    
     static ::desktop::Lockfile s_lockfile( false /* no IPC server */ );
     Reference<XComponentContext> xComponentContext( bootstrapStandAlone() );
     out_localContext = xComponentContext;
@@ -462,16 +462,16 @@ Reference<XComponentContext> getUNO(
         if (! s_lockfile.check( 0 ))
         {
             OUString sMsg(ResId(RID_STR_CONCURRENTINSTANCE, *DeploymentResMgr::get()));
-            //Create this string before we call DeInitVCL, because this will kill
-            //the ResMgr
+            
+            
             OUString sError(ResId(RID_STR_UNOPKG_ERROR, *DeploymentResMgr::get()));
 
             sMsg += "\n" + getLockFilePath();
 
             if (bGui)
             {
-                //We show a message box or print to the console that there
-                //is another instance already running
+                
+                
                 if ( ! InitVCL() )
                     throw RuntimeException( "Cannot initialize VCL!",
                                             NULL );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -143,7 +143,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
 {
     const SfxItemPool* pPool = rAttrs.GetPool();
 
-    // animation type
+    
     const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIKIND );
 
     if( !pItem )
@@ -157,7 +157,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         m_pLbEffect->SetNoSelection();
     m_pLbEffect->SaveValue();
 
-    // animation direction
+    
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIDIRECTION );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDIRECTION );
@@ -178,7 +178,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     m_pBtnRight->SaveValue();
     m_pBtnDown->SaveValue();
 
-    // Start inside
+    
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANISTARTINSIDE );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTARTINSIDE );
@@ -195,7 +195,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbStartInside->SetState( STATE_DONTKNOW );
     m_pTsbStartInside->SaveValue();
 
-    // Stop inside
+    
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANISTOPINSIDE );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANISTOPINSIDE );
@@ -212,7 +212,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
         m_pTsbStopInside->SetState( STATE_DONTKNOW );
     m_pTsbStopInside->SaveValue();
 
-    // quantity
+    
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANICOUNT );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANICOUNT );
@@ -245,7 +245,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     m_pTsbEndless->SaveValue();
     m_pNumFldCount->SaveValue();
 
-    // delay
+    
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIDELAY );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIDELAY );
@@ -270,7 +270,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     m_pTsbAuto->SaveValue();
     m_pMtrFldDelay->SaveValue();
 
-    // step size
+    
     pItem = GetItem( rAttrs, SDRATTR_TEXT_ANIAMOUNT );
     if( !pItem )
         pItem = &pPool->GetDefaultItem( SDRATTR_TEXT_ANIAMOUNT );
@@ -323,7 +323,7 @@ void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
     SelectEffectHdl_Impl( NULL );
     ClickEndlessHdl_Impl( NULL );
     ClickAutoHdl_Impl( NULL );
-    //ClickPixelHdl_Impl( NULL );
+    
 }
 
 /*************************************************************************
@@ -338,7 +338,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
     sal_uInt16 nPos;
     TriState eState;
 
-    // animation type
+    
     nPos = m_pLbEffect->GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND &&
         nPos != m_pLbEffect->GetSavedValue() )
@@ -347,7 +347,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         bModified = sal_True;
     }
 
-    // animation direction
+    
     if( m_pBtnUp->GetSavedValue() != TriState(m_pBtnUp->IsChecked()) ||
         m_pBtnLeft->GetSavedValue() != TriState(m_pBtnLeft->IsChecked()) ||
         m_pBtnRight->GetSavedValue() != TriState(m_pBtnRight->IsChecked()) ||
@@ -358,7 +358,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         bModified = sal_True;
     }
 
-    // Start inside
+    
     eState = m_pTsbStartInside->GetState();
     if( eState != m_pTsbStartInside->GetSavedValue() )
     {
@@ -366,7 +366,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         bModified = sal_True;
     }
 
-    // Stop inside
+    
     eState = m_pTsbStopInside->GetState();
     if( eState != m_pTsbStopInside->GetSavedValue() )
     {
@@ -374,7 +374,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
         bModified = sal_True;
     }
 
-    // quantity
+    
     eState = m_pTsbEndless->GetState();
     OUString aStr = m_pNumFldCount->GetText();
     if( eState != m_pTsbEndless->GetSavedValue() ||
@@ -395,7 +395,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
             rAttrs.Put( SdrTextAniCountItem( (sal_uInt16) nValue ) );
     }
 
-    // delay
+    
     eState = m_pTsbAuto->GetState();
     aStr = m_pMtrFldDelay->GetText();
     if( eState != m_pTsbAuto->GetSavedValue() ||
@@ -416,7 +416,7 @@ sal_Bool SvxTextAnimationPage::FillItemSet( SfxItemSet& rAttrs)
             rAttrs.Put( SdrTextAniDelayItem( (sal_uInt16) nValue ) );
     }
 
-    // step size
+    
     eState = m_pTsbPixel->GetState();
     aStr = m_pMtrFldAmount->GetText();
     if( eState != m_pTsbPixel->GetSavedValue() ||
@@ -560,7 +560,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
         sal_Int64 nValue = m_pMtrFldAmount->GetValue() / 10;
         m_pMtrFldAmount->Enable();
         m_pMtrFldAmount->SetUnit( FUNIT_CUSTOM );
-        //SetFieldUnit( aMtrFldAmount, FUNIT_CUSTOM );
+        
         m_pMtrFldAmount->SetDecimalDigits( 0 );
 
         m_pMtrFldAmount->SetSpinSize( 1 );
@@ -576,7 +576,7 @@ IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
         sal_Int64 nValue = m_pMtrFldAmount->GetValue() * 10;
         m_pMtrFldAmount->Enable();
         m_pMtrFldAmount->SetUnit( eFUnit );
-        //SetFieldUnit( aMtrFldAmount, eFUnit );
+        
         m_pMtrFldAmount->SetDecimalDigits( 2 );
 
         m_pMtrFldAmount->SetSpinSize( 10 );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive2d/texteffectprimitive2d.hxx>
@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -36,8 +36,8 @@ namespace drawinglayer
         {
             Primitive2DSequence aRetval;
 
-            // get the distance of one discrete units from target display. Use between 1.0 and sqrt(2) to
-            // have good results on rotated objects, too
+            
+            
             const basegfx::B2DVector aDistance(rViewInformation.getInverseObjectToViewTransformation() *
                 basegfx::B2DVector(fDiscreteSize, fDiscreteSize));
             const basegfx::B2DVector aDiagonalDistance(aDistance * (1.0 / 1.44));
@@ -49,16 +49,16 @@ namespace drawinglayer
                 case TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT:
                 case TEXTEFFECTSTYLE2D_RELIEF_ENGRAVED_DEFAULT:
                 {
-                    // prepare transform of sub-group back to (0,0) and align to X-Axis
+                    
                     basegfx::B2DHomMatrix aBackTransform(basegfx::tools::createTranslateB2DHomMatrix(
                         -getRotationCenter().getX(), -getRotationCenter().getY()));
                     aBackTransform.rotate(-getDirection());
 
-                    // prepare transform of sub-group back to it's position and rotation
+                    
                     basegfx::B2DHomMatrix aForwardTransform(basegfx::tools::createRotateB2DHomMatrix(getDirection()));
                     aForwardTransform.translate(getRotationCenter().getX(), getRotationCenter().getY());
 
-                    // create transformation for one discrete unit
+                    
                     const bool bEmbossed(
                         TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED  == getTextEffectStyle2D()
                         || TEXTEFFECTSTYLE2D_RELIEF_EMBOSSED_DEFAULT == getTextEffectStyle2D());
@@ -70,12 +70,12 @@ namespace drawinglayer
 
                     if(bEmbossed)
                     {
-                        // to bottom-right
+                        
                         aTransform.translate(aDiagonalDistance.getX(), aDiagonalDistance.getY());
                     }
                     else
                     {
-                        // to top-left
+                        
                         aTransform.translate(-aDiagonalDistance.getX(), -aDiagonalDistance.getY());
                     }
 
@@ -83,7 +83,7 @@ namespace drawinglayer
 
                     if(bDefaultTextColor)
                     {
-                        // emboss/engrave in black, original forced to white
+                        
                         const basegfx::BColorModifierSharedPtr aBColorModifierToGray(
                             new basegfx::BColorModifier_replace(
                                 basegfx::BColor(0.0)));
@@ -97,7 +97,7 @@ namespace drawinglayer
                                 aTransform,
                                 Primitive2DSequence(&xModifiedColor, 1)));
 
-                        // add original, too
+                        
                         const basegfx::BColorModifierSharedPtr aBColorModifierToWhite(
                             new basegfx::BColorModifier_replace(
                                 basegfx::BColor(1.0)));
@@ -109,10 +109,10 @@ namespace drawinglayer
                     }
                     else
                     {
-                        // emboss/engrave in gray, keep original's color
+                        
                         const basegfx::BColorModifierSharedPtr aBColorModifierToGray(
                             new basegfx::BColorModifier_replace(
-                                basegfx::BColor(0.75))); // 192
+                                basegfx::BColor(0.75))); 
                         const Primitive2DReference xModifiedColor(
                             new ModifiedColorPrimitive2D(
                                 getTextContent(),
@@ -123,7 +123,7 @@ namespace drawinglayer
                                 aTransform,
                                 Primitive2DSequence(&xModifiedColor, 1)));
 
-                        // add original, too
+                        
                         aRetval[1] = Primitive2DReference(new GroupPrimitive2D(getTextContent()));
                     }
 
@@ -131,7 +131,7 @@ namespace drawinglayer
                 }
                 case TEXTEFFECTSTYLE2D_OUTLINE:
                 {
-                    // create transform primitives in all directions
+                    
                     basegfx::B2DHomMatrix aTransform;
                     aRetval.realloc(9);
 
@@ -167,7 +167,7 @@ namespace drawinglayer
                     aTransform.set(1, 2, -aDiagonalDistance.getY());
                     aRetval[7] = Primitive2DReference(new TransformPrimitive2D(aTransform, getTextContent()));
 
-                    // at last, place original over it, but force to white
+                    
                     const basegfx::BColorModifierSharedPtr aBColorModifierToWhite(
                         new basegfx::BColorModifier_replace(
                             basegfx::BColor(1.0, 1.0, 1.0)));
@@ -213,11 +213,11 @@ namespace drawinglayer
 
         basegfx::B2DRange TextEffectPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
         {
-            // get range of content and grow by used fDiscreteSize. That way it is not necessary to ask
-            // the whole decomposition for it's ranges (which may be expensive with outline mode which
-            // then will ask 9 times at nearly the same content. This may even be refined here using the
-            // TextEffectStyle information, e.g. for TEXTEFFECTSTYLE2D_RELIEF the grow needs only to
-            // be in two directions
+            
+            
+            
+            
+            
             basegfx::B2DRange aRetval(getB2DRangeFromPrimitive2DSequence(getTextContent(), rViewInformation));
             aRetval.grow(fDiscreteSize);
 
@@ -232,25 +232,25 @@ namespace drawinglayer
             {
                 if(maLastObjectToViewTransformation != rViewInformation.getObjectToViewTransformation())
                 {
-                    // conditions of last local decomposition have changed, delete
+                    
                     const_cast< TextEffectPrimitive2D* >(this)->setBuffered2DDecomposition(Primitive2DSequence());
                 }
             }
 
             if(!getBuffered2DDecomposition().hasElements())
             {
-                // remember ViewRange and ViewTransformation
+                
                 const_cast< TextEffectPrimitive2D* >(this)->maLastObjectToViewTransformation = rViewInformation.getObjectToViewTransformation();
             }
 
-            // use parent implementation
+            
             return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(TextEffectPrimitive2D, PRIMITIVE2D_ID_TEXTEFFECTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

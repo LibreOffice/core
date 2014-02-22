@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -105,7 +105,7 @@ long ButtonDialog::ImplGetButtonSize()
     if ( !mbFormat )
         return mnButtonSize;
 
-    // Calculate ButtonSize
+    
     long nLastSepSize = 0;
     long nSepSize = 0;
     maCtrlSize = Size( IMPL_MINSIZE_BUTTON_WIDTH, IMPL_MINSIZE_BUTTON_HEIGHT );
@@ -149,10 +149,10 @@ void ButtonDialog::ImplPosControls()
     if ( !mbFormat )
         return;
 
-    // Create PushButtons and determine Sizes
+    
     ImplGetButtonSize();
 
-    // determine dialog size
+    
     Size            aDlgSize = maPageSize;
     long            nX;
     long            nY;
@@ -185,7 +185,7 @@ void ButtonDialog::ImplPosControls()
         nX = aDlgSize.Width()-maCtrlSize.Width()-IMPL_DIALOG_OFFSET;
     }
 
-    // Arrange PushButtons
+    
     for ( btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
     {
         if ( GetStyle() & WB_HORZ )
@@ -237,7 +237,7 @@ void ButtonDialog::StateChanged( StateChangedType nType )
                 it->mpPushButton->SetZOrder(0, WINDOW_ZORDER_LAST);
         }
 
-        // Set focus on default button.
+        
         if ( mnFocusButtonId != BUTTONDIALOG_BUTTON_NOTFOUND )
         {
             for (btn_iterator it = maItemList.begin(); it != maItemList.end(); ++it)
@@ -270,7 +270,7 @@ void ButtonDialog::Click()
 void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
                               sal_uInt16 nBtnFlags, long nSepPixel )
 {
-    // PageItem anlegen
+    
     ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
     pItem->mnId             = nId;
     pItem->mbOwnButton      = true;
@@ -291,7 +291,7 @@ void ButtonDialog::AddButton( const OUString& rText, sal_uInt16 nId,
 void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
                               sal_uInt16 nBtnFlags, long nSepPixel )
 {
-    // PageItem anlegen
+    
     ImplBtnDlgItem* pItem   = new ImplBtnDlgItem;
     pItem->mnId             = nId;
     pItem->mbOwnButton      = true;
@@ -305,7 +305,7 @@ void ButtonDialog::AddButton( StandardButtonType eType, sal_uInt16 nId,
         nBtnFlags |= BUTTONDIALOG_CANCELBUTTON;
     pItem->mpPushButton = ImplCreatePushButton( nBtnFlags );
 
-    // Standard-Buttons have the right text already
+    
     if ( !((eType == BUTTON_OK)     && (pItem->mpPushButton->GetType() == WINDOW_OKBUTTON)) ||
          !((eType == BUTTON_CANCEL) && (pItem->mpPushButton->GetType() == WINDOW_CANCELBUTTON)) ||
          !((eType == BUTTON_HELP)   && (pItem->mpPushButton->GetType() == WINDOW_HELPBUTTON)) )

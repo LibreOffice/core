@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/xmlerror.hxx>
@@ -39,7 +39,7 @@ using ::com::sun::star::xml::sax::SAXParseException;
 
 
 //
-/// ErrorRecord: contains all information for one error
+
 //
 
 class ErrorRecord
@@ -55,17 +55,17 @@ public:
                  const OUString& rSystemId);
     ~ErrorRecord();
 
-    sal_Int32 nId;  /// error ID
+    sal_Int32 nId;  
 
-    OUString sExceptionMessage;/// message of original exception (if available)
+    OUString sExceptionMessage;
 
-    // XLocator information:
-    sal_Int32 nRow;     /// row number where error occurred (or -1 for unknown)
-    sal_Int32 nColumn;  /// column number where error occurred (or -1)
-    OUString sPublicId; /// public identifier
-    OUString sSystemId; /// public identifier
+    
+    sal_Int32 nRow;     
+    sal_Int32 nColumn;  
+    OUString sPublicId; 
+    OUString sSystemId; 
 
-    /// message Parameters
+    
     Sequence<OUString> aParams;
 };
 
@@ -112,13 +112,13 @@ void XMLErrors::AddRecord(
 
 #ifdef DBG_UTIL
 
-    // give detailed assertion on this message
+    
 
     OUStringBuffer sMessage;
 
     sMessage.appendAscii( "An error or a warning has occurred during XML import/export!\n" );
 
-    // ID & flags
+    
     sMessage.appendAscii( "Error-Id: 0x");
     sMessage.append( nId, 16 );
     sMessage.appendAscii( "\n    Flags: " );
@@ -146,7 +146,7 @@ void XMLErrors::AddRecord(
     sMessage.append( nNumber, 16 );
     sMessage.appendAscii( "\n");
 
-    // the parameters
+    
     sMessage.appendAscii( "Parameters:\n" );
     sal_Int32 nLength = rParams.getLength();
     const OUString* pParams = rParams.getConstArray();
@@ -159,12 +159,12 @@ void XMLErrors::AddRecord(
         sMessage.appendAscii( "\n" );
     }
 
-    // the exception message
+    
     sMessage.appendAscii( "Exception-Message: " );
     sMessage.append( rExceptionMessage );
     sMessage.appendAscii( "\n" );
 
-    // position (if given)
+    
     if( (nRow != -1) || (nColumn != -1) )
     {
         sMessage.appendAscii( "Position:\n    Public Identifier: " );
@@ -178,7 +178,7 @@ void XMLErrors::AddRecord(
         sMessage.appendAscii( "\n" );
     }
 
-    // convert to byte string and signal the error
+    
     OString aError(OUStringToOString(sMessage.makeStringAndClear(),
         RTL_TEXTENCODING_ASCII_US));
     OSL_FAIL( aError.getStr() );
@@ -208,14 +208,14 @@ void XMLErrors::AddRecord(
 void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
     throw( SAXParseException )
 {
-    // search first error/warning that matches the nIdMask
+    
     for( ErrorList::iterator aIter = aErrors.begin();
          aIter != aErrors.end();
          ++aIter )
     {
         if ( (aIter->nId & nIdMask) != 0 )
         {
-            // we throw the error
+            
             ErrorRecord& rErr = aErrors[0];
             Any aAny;
             aAny <<= rErr.aParams;

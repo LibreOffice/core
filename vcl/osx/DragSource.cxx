@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -53,8 +53,8 @@ using namespace comphelper;
 using namespace std;
 
 
-// For OOo internal D&D we provide the Transferable without NSDragPboard
-// interference as a shortcut
+
+
 uno::Reference<XTransferable> DragSource::g_XTransferable;
 NSView* DragSource::g_DragSourceView = nil;
 bool DragSource::g_DropSuccessSet = false;
@@ -117,8 +117,8 @@ Sequence<OUString> dragSource_getSupportedServiceNames()
 {
     (void)anImage;
     (void)aPoint;
-    // an internal drop can accept the drop but fail with dropComplete( false )
-    // this is different than the Cocoa API
+    
+    
     bool bDropSuccess = operation != NSDragOperationNone;
     if( DragSource::g_DropSuccessSet )
         bDropSuccess = DragSource::g_DropSuccess;
@@ -266,7 +266,7 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   p.x = p.x - sz.width/2;
   p.y = p.y - sz.height/2;
 
-  // reset drop success flags
+  
   g_DropSuccessSet = false;
   g_DropSuccess = false;
 
@@ -283,15 +283,15 @@ void SAL_CALL DragSource::startDrag(const DragGestureEvent& trigger,
   g_XTransferable = uno::Reference<XTransferable>();
   g_DragSourceView = nil;
 
-  // reset drop success flags
+  
   g_DropSuccessSet = false;
   g_DropSuccess = false;
 }
 
-// In order to initiate a D&D operation we need to
-// provide the triggering mouse event which we get
-// from the SalFrameView that is associated with
-// this DragSource
+
+
+
+
 void DragSource::saveMouseEvent(NSEvent* theEvent)
 {
   if (mLastMouseEventBeforeStartDrag != nil)
@@ -311,16 +311,16 @@ unsigned int DragSource::getSupportedDragOperations(bool isLocal) const
 
   if (isLocal)
     {
-      // Support NSDragOperation generic which means we can
-      // decide which D&D operation to choose. We map
-      // NSDragOperationGenric to DNDConstants::ACTION_DEFAULT
-      // in SystemToOfficeDragActions to signal this and
-      // use it in DropTarget::determineDropAction
+      
+      
+      
+      
+      
       srcActions |= NSDragOperationGeneric;
     }
   else
     {
-      // Mask out link and move operations on external DnD
+      
       srcActions &= ~(NSDragOperationMove | NSDragOperationLink);
     }
 

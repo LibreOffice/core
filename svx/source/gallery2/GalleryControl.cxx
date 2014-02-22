@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "GalleryControl.hxx"
@@ -97,10 +97,10 @@ void GalleryControl::InitSettings (void)
 
 void GalleryControl::Resize (void)
 {
-    // call parent
+    
     Window::Resize();
 
-    // update hor/ver
+    
     const Size aNewSize( GetOutputSizePixel() );
     if (aNewSize.Width()<=0 || aNewSize.Height()<=0)
         return;
@@ -233,4 +233,4 @@ IMPL_LINK( GalleryControl, SplitHdl, void*, EMPTYARG )
 }
 
 
-} } // end of namespace svx::sidebar
+} } 

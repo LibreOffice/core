@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "attriblistmerge.hxx"
@@ -25,7 +25,7 @@ namespace xmloff
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star;
 
-    //= OAttribListMerger
+    
     void OAttribListMerger::addList(const Reference< xml::sax::XAttributeList >& _rxList)
     {
         OSL_ENSURE(_rxList.is(), "OAttribListMerger::addList: invalid list!");
@@ -112,8 +112,8 @@ namespace xmloff
         if (!seekToName(_rName, xSubList, nLocalIndex))
             return OUString();
 
-        // though we're in getTypeByName here, we reroute this to the getTypeByIndex of the sub list,
-        // assuming that this is faster
+        
+        
         return xSubList->getTypeByIndex(nLocalIndex);
     }
 
@@ -136,11 +136,11 @@ namespace xmloff
         if (!seekToName(_rName, xSubList, nLocalIndex))
             return OUString();
 
-        // though we're in getValueByName here, we reroute this to the getValueByIndex of the sub list,
-        // assuming that this is faster
+        
+        
         return xSubList->getValueByIndex(nLocalIndex);
     }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

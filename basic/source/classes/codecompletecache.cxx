@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basic/codecompletecache.hxx>
@@ -147,7 +147,7 @@ void CodeCompleteDataCache::InsertGlobalVar( const OUString& sVarName, const OUS
 void CodeCompleteDataCache::InsertLocalVar( const OUString& sProcName, const OUString& sVarName, const OUString& sVarType )
 {
     CodeCompleteVarScopes::const_iterator aIt = aVarScopes.find( sProcName );
-    if( aIt == aVarScopes.end() ) //new procedure
+    if( aIt == aVarScopes.end() ) 
     {
         CodeCompleteVarTypes aTypes;
         aTypes.insert( CodeCompleteVarTypes::value_type(sVarName, sVarType) );
@@ -174,13 +174,13 @@ OUString CodeCompleteDataCache::GetVarType( const OUString& sVarName ) const
             }
         }
     }
-    //not a local, search global scope
+    
     for( CodeCompleteVarTypes::const_iterator aIt = aGlobalVars.begin(); aIt != aGlobalVars.end(); ++aIt )
     {
         if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
             return aIt->second;
     }
-    return OUString(""); //not found
+    return OUString(""); 
 }
 
 OUString CodeCompleteDataCache::GetCorrectCaseVarName( const OUString& sVarName, const OUString& sActProcName ) const
@@ -196,13 +196,13 @@ OUString CodeCompleteDataCache::GetCorrectCaseVarName( const OUString& sVarName,
             }
         }
     }
-    // search global scope
+    
     for( CodeCompleteVarTypes::const_iterator aIt = aGlobalVars.begin(); aIt != aGlobalVars.end(); ++aIt )
     {
         if( aIt->first.equalsIgnoreAsciiCase( sVarName ) )
             return aIt->first;
     }
-    return OUString(""); //not found
+    return OUString(""); 
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

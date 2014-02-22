@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -110,7 +110,7 @@ void LwpRowLayout::SetRowMap(void)
  */
 void LwpRowLayout::RegisterStyle()
 {
-    // register row style
+    
     XFRowStyle *pRowStyle = new XFRowStyle();
 
     if (m_nDirection & 0x0030)
@@ -129,7 +129,7 @@ void LwpRowLayout::RegisterStyle()
     {
         pTableLayout->GetTable();
     }
-    // register cells' style
+    
     LwpObjectID *pCellID= GetChildHead();
     LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
 
@@ -151,22 +151,22 @@ void LwpRowLayout::RegisterStyle()
  */
 void LwpRowLayout::Read()
 {
-    #define MAXUNIT (0x7fffffffL)               // Highest positive UNIT value
+    #define MAXUNIT (0x7fffffffL)               
     LwpObjectStream* pStrm = m_pObjStrm;
 
     LwpVirtualLayout::Read();
 
-    //skip CLiteLayout data;
+    
     LwpAtomHolder ContentClass;
     ContentClass.Read(pStrm);
     pStrm->SkipExtra();
 
-    // Row layout content
+    
     crowid = pStrm->QuickReaduInt16();
     cheight = pStrm->QuickReadInt32();
-    cLeaderDotCount = (sal_uInt8)pStrm->QuickReaduInt16();  // was written as lushort.
-    cLeaderDotY = MAXUNIT;  // Sentinel meaning "not calculated yet"
-    cRowFlags = (sal_uInt8)pStrm->QuickReaduInt16();    // was written as lushort.
+    cLeaderDotCount = (sal_uInt8)pStrm->QuickReaduInt16();  
+    cLeaderDotY = MAXUNIT;  
+    cRowFlags = (sal_uInt8)pStrm->QuickReaduInt16();    
 
     pStrm->SkipExtra();
 }
@@ -180,22 +180,22 @@ void LwpRowLayout::ConvertRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nE
     LwpTableLayout* pTableLayout = GetParentTableLayout();
     LwpTable* pTable = pTableLayout->GetTable();
 
-    //calculate the connected cell position
+    
     sal_Int32 nMarkConnCell = FindMarkConnCell(nStartCol,nEndCol);
 
-    //if there is no connected cell
+    
     if (nMarkConnCell == -1)
     {
         ConvertCommonRow(pXFTable,nStartCol,nEndCol);
         return;
     }
 
-    //register connect row style
+    
     sal_uInt16 nRowMark = crowid + GetCurMaxSpannedRows(nStartCol,nEndCol);
     XFRow* pXFRow = new XFRow;
     RegisterCurRowStyle(pXFRow,nRowMark);
 
-    //if there is connected cell
+    
     for (sal_uInt8 i=nStartCol; i<nEndCol; )
     {
         XFCell* pXFCell;
@@ -206,7 +206,7 @@ void LwpRowLayout::ConvertRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nE
         else
             nColMark = m_ConnCellList[nMarkConnCell]->GetColID();
 
-        if (nColMark > i)//create subtable
+        if (nColMark > i)
         {
             pXFCell = new XFCell;
             pXFCell->SetColumnSpaned(nColMark-i);
@@ -224,7 +224,7 @@ void LwpRowLayout::ConvertRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uInt8 nE
                 crowid+m_ConnCellList[nMarkConnCell]->GetNumrows()-1,
                 m_ConnCellList[nMarkConnCell]->GetColID());
 
-            //set all cell in this merge cell to cellsmap
+            
             for (sal_uInt16 nRowLoop = crowid;nRowLoop<nRowMark ;nRowLoop++)
                 for (sal_uInt8 nColLoop = i;nColLoop<nColID+1;nColLoop++)
                     pTableLayout->SetCellsMap(nRowLoop,nColLoop,pXFCell);
@@ -371,11 +371,11 @@ void LwpRowLayout::ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uI
 
     for (sal_uInt8 i = nStartCol; i < nEndCol ; i++)
     {
-        // add row to table
+        
         LwpObjectID *pCellID= GetChildHead();
         LwpCellLayout * pCellLayout = dynamic_cast<LwpCellLayout *>(pCellID->obj());
-        nCellStartCol = i;//mark the begin position of cell
-        nCellEndCol = i;//mark the end position of cell
+        nCellStartCol = i;
+        nCellEndCol = i;
         while(pCellLayout)
         {
             if (pCellLayout->GetColID() == i)
@@ -394,8 +394,8 @@ void LwpRowLayout::ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uI
         }
         if (!pCellLayout)
         {
-            // if table has default cell layout, use it to ConvertCell
-            // otherwise use blank cell
+            
+            
             LwpCellLayout * pDefaultCell = pTableLayout->GetDefaultCellLayout();
             if (pDefaultCell)
             {
@@ -410,7 +410,7 @@ void LwpRowLayout::ConvertCommonRow(XFTable* pXFTable,sal_uInt8 nStartCol,sal_uI
         pRow->AddCell(pCell);
 
         for (sal_uInt8 j=nCellStartCol;j<=nCellEndCol;j++)
-            pTableLayout->SetCellsMap(crowid,j,pCell);//set to cellsmap
+            pTableLayout->SetCellsMap(crowid,j,pCell);
     }
 
     pXFTable->AddRow(pRow);

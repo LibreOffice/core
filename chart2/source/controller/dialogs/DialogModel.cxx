@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DialogModel.hxx"
@@ -180,10 +180,10 @@ struct lcl_DataSeriesContainerAppend : public
         return *this;
     }
 
-    // Implement output operator requirements as required by std::copy (and
-    // implement prefix increment in terms of postfix increment to avoid unused
-    // member function warnings for the latter in the common case where
-    // std::copy would not actually need it):
+    
+    
+    
+    
     lcl_DataSeriesContainerAppend & operator* ()     { return *this; }
     lcl_DataSeriesContainerAppend & operator++ ()    { return operator++(0); }
     lcl_DataSeriesContainerAppend & operator++ (int) { return *this; }
@@ -210,7 +210,7 @@ struct lcl_RolesWithRangeAppend : public
         {
             if( xVal.is())
             {
-                // data sequence
+                
                 Reference< data::XDataSequence > xSeq( xVal->getValues());
                 if( xSeq.is())
                 {
@@ -221,7 +221,7 @@ struct lcl_RolesWithRangeAppend : public
                         m_rDestCnt.insert(
                             tContainerType::value_type(
                                 aRole, xSeq->getSourceRangeRepresentation()));
-                        // label
+                        
                         if( aRole.equals( m_aRoleForLabelSeq ))
                         {
                             Reference< data::XDataSequence > xLabelSeq( xVal->getLabel());
@@ -243,10 +243,10 @@ struct lcl_RolesWithRangeAppend : public
         return *this;
     }
 
-    // Implement output operator requirements as required by std::copy (and
-    // implement prefix increment in terms of postfix increment to avoid unused
-    // member function warnings for the latter in the common case where
-    // std::copy would not actually need it):
+    
+    
+    
+    
     lcl_RolesWithRangeAppend & operator* ()     { return *this; }
     lcl_RolesWithRangeAppend & operator++ ()    { return operator++(0); }
     lcl_RolesWithRangeAppend & operator++ (int) { return *this; }
@@ -275,7 +275,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
     const Reference< XChartTypeTemplate > & xTemplate,
     bool bCreateDataCachedSequences )
 {
-    // create plain series
+    
     Reference< XDataSeries > xResult(
         xContext->getServiceManager()->createInstanceWithContext(
             "com.sun.star.chart2.DataSeries" ,
@@ -285,8 +285,8 @@ Reference< XDataSeries > lcl_CreateNewSeries(
         Reference< beans::XPropertySet > xResultProp( xResult, uno::UNO_QUERY );
         if( xResultProp.is())
         {
-            // @deprecated: correct default color should be found by view
-            // without setting it as hard attribute
+            
+            
             Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
             if( xColorScheme.is())
                 xResultProp->setPropertyValue( "Color" , uno::makeAny( xColorScheme->getColorByIndex( nNewSeriesIndex )));
@@ -307,7 +307,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
 
     if( bCreateDataCachedSequences )
     {
-        // set chart type specific roles
+        
         Reference< data::XDataSink > xSink( xResult, uno::UNO_QUERY );
         if( xChartType.is() && xSink.is())
         {
@@ -324,7 +324,7 @@ Reference< XDataSeries > lcl_CreateNewSeries(
                     continue;
                 Reference< data::XDataSequence > xSeq( ::chart::DataSourceHelper::createCachedDataSequence() );
                 lcl_SetSequenceRole( xSeq, aRoles[nI] );
-                // assert that aRoleOfSeqForSeriesLabel is part of the mandatory roles
+                
                 if( aRoles[nI].equals( aRoleOfSeqForSeriesLabel ))
                 {
                     Reference< data::XDataSequence > xLabel( ::chart::DataSourceHelper::createCachedDataSequence( aLabel ));
@@ -362,7 +362,7 @@ struct lcl_addSeriesNumber : public ::std::binary_function<
     }
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -482,7 +482,7 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
                      lcl_RolesWithRangeAppend( aResult, aRoleOfSequenceForLabel ));
         if( xChartType.is())
         {
-            // add missing mandatory roles
+            
             Sequence< OUString > aRoles( xChartType->getSupportedMandatoryRoles());
             OUString aEmptyString;
             sal_Int32 nI = 0;
@@ -492,7 +492,7 @@ DialogModel::tRolesWithRanges DialogModel::getRolesWithRanges(
                     aResult.insert( DialogModel::tRolesWithRanges::value_type( aRoles[nI], aEmptyString ));
             }
 
-            // add missing optional roles
+            
             aRoles = xChartType->getSupportedOptionalRoles();
             for( nI=0; nI < aRoles.getLength(); ++nI )
             {
@@ -541,18 +541,18 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
             nSeriesInChartType = xCnt->getDataSeries().getLength();
         }
 
-        // create new series
+        
         xNewSeries.set(
             lcl_CreateNewSeries(
                 m_xContext,
                 xChartType,
-                nTotalSeries, // new series' index
+                nTotalSeries, 
                 nSeriesInChartType,
                 xDiagram,
                 m_xTemplate,
                 bCreateDataCachedSequences ));
 
-        // add new series to container
+        
         if( xNewSeries.is())
         {
             Reference< XDataSeriesContainer > xSeriesCnt( xChartType, uno::UNO_QUERY_THROW );
@@ -561,10 +561,10 @@ Reference< chart2::XDataSeries > DialogModel::insertSeriesAfter(
             ::std::vector< Reference< XDataSeries > >::iterator aIt =
                   ::std::find( aSeries.begin(), aSeries.end(), xSeries );
             if( aIt == aSeries.end())
-                // if we have no series we insert at the first position.
+                
                 aIt = aSeries.begin();
             else
-                // vector::insert inserts before, so we have to advance
+                
                 ++aIt;
             aSeries.insert( aIt, xNewSeries );
             xSeriesCnt->setDataSeries( ContainerToSequence( aSeries ));
@@ -614,13 +614,13 @@ void DialogModel::setCategories( const Reference< chart2::data::XLabeledDataSequ
         Reference< chart2::XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
         if( xDiagram.is())
         {
-            // categories
+            
             bool bSupportsCategories = true;
 
             Reference< XChartType > xFirstChartType( DiagramHelper::getChartTypeByIndex( xDiagram, 0 ) );
             if( xFirstChartType.is() )
             {
-                sal_Int32 nAxisType = ChartTypeHelper::getAxisType( xFirstChartType, 0 ); // x-axis
+                sal_Int32 nAxisType = ChartTypeHelper::getAxisType( xFirstChartType, 0 ); 
                 bSupportsCategories = (nAxisType == AxisType::CATEGORY);
             }
             DiagramHelper::setCategoriesToDiagram( xCategories, xDiagram, true, bSupportsCategories );
@@ -657,9 +657,9 @@ void DialogModel::detectArguments(
 {
     try
     {
-        uno::Sequence< sal_Int32 > aSequenceMapping;//todo YYYX
+        uno::Sequence< sal_Int32 > aSequenceMapping;
 
-        // Note: unused data is currently not supported in being passed to detectRangeSegmentation
+        
         if( m_xChartDocument.is())
             DataSourceHelper::detectRangeSegmentation(
                 Reference< frame::XModel >( m_xChartDocument, uno::UNO_QUERY_THROW ),
@@ -759,7 +759,7 @@ sal_Int32 DialogModel::GetRoleIndexForSorting( const OUString & rInternalRoleStr
     return 0;
 }
 
-// private methods
+
 
 void DialogModel::applyInterpretedData(
     const InterpretedData & rNewData,
@@ -773,7 +773,7 @@ void DialogModel::applyInterpretedData(
     Reference< XDiagram > xDiagram( m_xChartDocument->getFirstDiagram());
     if( xDiagram.is())
     {
-        // styles
+        
         if( bSetStyles && m_xTemplate.is() )
         {
             sal_Int32 nGroup = 0;
@@ -793,8 +793,8 @@ void DialogModel::applyInterpretedData(
                         Reference< beans::XPropertySet > xSeriesProp( aSeries[nSeries], uno::UNO_QUERY );
                         if( xSeriesProp.is())
                         {
-                            // @deprecated: correct default color should be found by view
-                            // without setting it as hard attribute
+                            
+                            
                             Reference< XColorScheme > xColorScheme( xDiagram->getDefaultColorScheme());
                             if( xColorScheme.is())
                                 xSeriesProp->setPropertyValue( "Color" ,
@@ -806,7 +806,7 @@ void DialogModel::applyInterpretedData(
             }
         }
 
-        // data series
+        
         ::std::vector< Reference< XDataSeriesContainer > > aSeriesCnt( getAllDataSeriesContainers());
         ::std::vector< Sequence< Reference< XDataSeries > > > aNewSeries(
             SequenceToVector( rNewData.Series ));
@@ -846,6 +846,6 @@ ChartModel& DialogModel::getModel() const
     return *pModel;
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

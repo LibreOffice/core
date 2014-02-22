@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbinteraction.hxx"
@@ -56,7 +56,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::dbtools;
 
-    // BasicInteractionHandler
+    
     BasicInteractionHandler::BasicInteractionHandler( const Reference< XComponentContext >& rxContext, const bool i_bFallbackToGeneric )
         :m_xContext( rxContext )
         ,m_bFallbackToGeneric( i_bFallbackToGeneric )
@@ -80,12 +80,12 @@ namespace dbaui
         Any aRequest( i_Request->getRequest() );
         OSL_ENSURE(aRequest.hasValue(), "BasicInteractionHandler::handle: invalid request!");
         if ( !aRequest.hasValue() )
-            // no request -> no handling
+            
             return sal_False;
 
         Sequence< Reference< XInteractionContinuation > > aContinuations( i_Request->getContinuations() );
 
-        // try to extract an SQLException (or one of it's derived members
+        
         SQLExceptionInfo aInfo( aRequest );
         if ( aInfo.isValid() )
         {
@@ -116,7 +116,7 @@ namespace dbaui
     void BasicInteractionHandler::implHandle(const ParametersRequest& _rParamRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
-            // want to open a dialog ....
+        
 
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
         sal_Int32 nParamPos = getContinuation(SUPPLY_PARAMETERS, _rContinuations);
@@ -154,35 +154,35 @@ namespace dbaui
     void BasicInteractionHandler::implHandle(const SQLExceptionInfo& _rSqlInfo, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
-            // want to open a dialog ....
+        
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
         sal_Int32 nDisapprovePos = getContinuation(DISAPPROVE, _rContinuations);
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
         sal_Int32 nRetryPos = getContinuation(RETRY, _rContinuations);
 
-        // determine the style of the dialog, dependent on the present continuation types
+        
         WinBits nDialogStyle = 0;
         bool bHaveCancel = nAbortPos != -1;
-        // "approve" means "Yes", "disapprove" means "No"
-        // VCL only supports having both (which makes sense ...)
+        
+        
         if ( ( nApprovePos != -1 ) || ( nDisapprovePos != -1 ) )
             nDialogStyle = ( bHaveCancel ? WB_YES_NO_CANCEL : WB_YES_NO ) | WB_DEF_YES;
         else
         {
-            // if there's no yes/no, then use a default OK button
+            
             nDialogStyle = ( bHaveCancel ? WB_OK_CANCEL : WB_OK ) | WB_DEF_OK;
         }
 
-        // If there's a "Retry" continuation, have a "Retry" button
+        
         if ( nRetryPos != -1 )
         {
             nDialogStyle = WB_RETRY_CANCEL | WB_DEF_RETRY;
         }
 
-        // execute the dialog
+        
         OSQLMessageBox aDialog(NULL, _rSqlInfo, nDialogStyle);
-            // TODO: need a way to specify the parent window
+        
         sal_Int16 nResult = aDialog.Execute();
         try
         {
@@ -227,7 +227,7 @@ namespace dbaui
     void BasicInteractionHandler::implHandle(const DocumentSaveRequest& _rDocuRequest, const Sequence< Reference< XInteractionContinuation > >& _rContinuations)
     {
         SolarMutexGuard aGuard;
-            // want to open a dialog ....
+        
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
         sal_Int32 nDisApprovePos = getContinuation(DISAPPROVE, _rContinuations);
@@ -236,7 +236,7 @@ namespace dbaui
         short nRet = RET_YES;
         if ( -1 != nApprovePos )
         {
-            // fragen, ob gespeichert werden soll
+            
             nRet = ExecuteQuerySaveDocument(NULL,_rDocuRequest.Name);
         }
 
@@ -335,7 +335,7 @@ namespace dbaui
         return -1;
     }
 
-    // SQLExceptionInteractionHandler
+    
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(SQLExceptionInteractionHandler, "com.sun.star.comp.dbaccess.DatabaseInteractionHandler")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(SQLExceptionInteractionHandler)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(SQLExceptionInteractionHandler, "com.sun.star.sdb.DatabaseInteractionHandler")
@@ -346,7 +346,7 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new SQLExceptionInteractionHandler(comphelper::getComponentContext(_rxORB)));
     }
 
-    // LegacyInteractionHandler
+    
     IMPLEMENT_SERVICE_INFO_IMPLNAME_STATIC(LegacyInteractionHandler, "com.sun.star.comp.dbaccess.LegacyInteractionHandler")
     IMPLEMENT_SERVICE_INFO_SUPPORTS(LegacyInteractionHandler)
     IMPLEMENT_SERVICE_INFO_GETSUPPORTED1_STATIC(LegacyInteractionHandler, "com.sun.star.sdb.LegacyInteractionHandler")
@@ -357,6 +357,6 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new LegacyInteractionHandler(comphelper::getComponentContext(_rxORB)));
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

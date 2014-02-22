@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 
 struct TokenTable { SbiToken t; const char *s; };
 
-static short nToken;                    // number of tokens
+static short nToken;                    
 
 static const TokenTable* pTokTable;
 
@@ -107,7 +107,7 @@ static const TokenTable aTokTable_Basic [] = {
     { IMP,      "Imp" },
     { IMPLEMENTS, "Implements" },
     { _IN_,     "In" },
-    { INPUT,    "Input" },              // also INPUT #
+    { INPUT,    "Input" },              
     { TINTEGER, "Integer" },
     { IS,       "Is" },
     { LET,      "Let" },
@@ -120,7 +120,7 @@ static const TokenTable aTokTable_Basic [] = {
     { TLONG,    "Long" },
     { LOOP,     "Loop" },
     { LPRINT,   "LPrint" },
-    { LSET,     "LSet" }, // JSM
+    { LSET,     "LSet" }, 
     { MOD,      "Mod" },
     { NAME,     "Name" },
     { NEW,      "New" },
@@ -145,7 +145,7 @@ static const TokenTable aTokTable_Basic [] = {
     { REM,      "Rem" },
     { RESUME,   "Resume" },
     { RETURN,   "Return" },
-    { RSET,     "RSet" }, // JSM
+    { RSET,     "RSet" }, 
     { SELECT,   "Select" },
     { SET,      "Set" },
 #ifdef SHARED
@@ -176,13 +176,13 @@ static const TokenTable aTokTable_Basic [] = {
     { WHILE,    "While" },
     { WITH,     "With" },
     { WITHEVENTS,   "WithEvents" },
-    { WRITE,    "Write" },              // also WRITE #
+    { WRITE,    "Write" },              
     { XOR,      "Xor" },
     { NIL,      "" }
 };
 
 
-// #i109076
+
 TokenLabelInfo::TokenLabelInfo( void )
 {
     m_pTokenCanBeLabelTab = new bool[VBASUPPORT+1];
@@ -190,7 +190,7 @@ TokenLabelInfo::TokenLabelInfo( void )
     {
         m_pTokenCanBeLabelTab[i] = false;
     }
-    // Token accepted as label by VBA
+    
     SbiToken eLabelToken[] = { ACCESS, ALIAS, APPEND, BASE, BINARY, CLASSMODULE,
                                COMPARE, COMPATIBLE, DEFERR, _ERROR_, BASIC_EXPLICIT, LIB, LINE, LPRINT, NAME,
                                TOBJECT, OUTPUT, PROPERTY, RANDOM, READ, STEP, STOP, TEXT, VBASUPPORT, NIL };
@@ -208,7 +208,7 @@ TokenLabelInfo::~TokenLabelInfo()
 }
 
 
-// the constructor detects the length of the token table
+
 
 SbiTokenizer::SbiTokenizer( const OUString& rSrc, StarBASIC* pb )
     : SbiScanner(rSrc, pb)
@@ -262,7 +262,7 @@ void SbiTokenizer::Error( SbError code, SbiToken tok )
     Error( code );
 }
 
-// reading in the next token without absorbing it
+
 
 SbiToken SbiTokenizer::Peek()
 {
@@ -279,11 +279,11 @@ SbiToken SbiTokenizer::Peek()
     return eCurTok = ePush;
 }
 
-// For decompilation. Numbers and symbols return an empty string.
+
 
 const OUString& SbiTokenizer::Symbol( SbiToken t )
 {
-    // character token?
+    
     if( t < FIRSTKWD )
     {
         aSym = OUString(sal::static_int_cast<sal_Unicode>(t));
@@ -320,10 +320,10 @@ const OUString& SbiTokenizer::Symbol( SbiToken t )
     return aSym;
 }
 
-// Reading in the next token and put it down.
-// Tokens that don't appear in the token table
-// are directly returned as a character.
-// Some words are treated in a special way.
+
+
+
+
 
 SbiToken SbiTokenizer::Next()
 {
@@ -331,7 +331,7 @@ SbiToken SbiTokenizer::Next()
     {
         return EOLN;
     }
-    // have read in one already?
+    
     if( ePush != NIL )
     {
         eCurTok = ePush;
@@ -367,12 +367,12 @@ SbiToken SbiTokenizer::Next()
     }
     else if( aSym.isEmpty() )
     {
-        //something went wrong
+        
         bEof = bEos = true;
         return eCurTok = EOLN;
     }
-    // Special cases of characters that are between "Z" and "a". ICompare()
-    // evaluates the position of these characters in different ways.
+    
+    
     else if( aSym[0] == '^' )
     {
         return eCurTok = EXPON;
@@ -386,7 +386,7 @@ SbiToken SbiTokenizer::Next()
         if( eScanType != SbxVARIANT
          || ( !bKeywords && bSymbol ) )
             return eCurTok = SYMBOL;
-        // valid token?
+        
         short lb = 0;
         short ub = nToken-1;
         short delta;
@@ -424,7 +424,7 @@ SbiToken SbiTokenizer::Next()
             }
         }
         while( delta );
-        // Symbol? if not >= token
+        
         sal_Unicode ch = aSym[0];
         if( !theBasicCharClass::get().isAlpha( ch, bCompatible ) && !bSymbol )
         {
@@ -433,7 +433,7 @@ SbiToken SbiTokenizer::Next()
         return eCurTok = SYMBOL;
     }
 special:
-    // #i92642
+    
     bool bStartOfLine = (eCurTok == NIL || eCurTok == REM || eCurTok == EOLN);
     if( !bStartOfLine && (tp->t == NAME || tp->t == LINE) )
     {
@@ -443,30 +443,30 @@ special:
     {
         return eCurTok = SYMBOL;
     }
-    // maybe we can expand this for other statements that have parameters
-    // that are keywords ( and those keywords are only used within such
-    // statements )
-    // what's happening here is that if we come across 'append' ( and we are
-    // not in the middle of parsing a special statement ( like 'Open')
-    // we just treat keyword 'append' as a normal 'SYMBOL'.
-    // Also we accept Dim APPEND
+    
+    
+    
+    
+    
+    
+    
     else if ( ( !bInStatement || eCurTok == DIM ) && tp->t == APPEND )
     {
         return eCurTok = SYMBOL;
     }
-    // #i92642: Special LINE token handling -> SbiParser::Line()
+    
 
-    // END IF, CASE, SUB, DEF, FUNCTION, TYPE, CLASS, WITH
+    
     if( tp->t == END )
     {
-        // from 15.3.96, special treatment for END, at Peek() the current
-        // time is lost, so memorize everything and restore after
+        
+        
         sal_uInt16 nOldLine = nLine;
         sal_uInt16 nOldCol  = nCol;
         sal_uInt16 nOldCol1 = nCol1;
         sal_uInt16 nOldCol2 = nCol2;
         OUString aOldSym = aSym;
-        SaveLine();             // save pLine in the scanner
+        SaveLine();             
 
         eCurTok = Peek();
         switch( eCurTok )
@@ -484,7 +484,7 @@ special:
         nCol1 = nOldCol1;
         if( eCurTok == END )
         {
-            // reset everything so that token is read completely newly after END
+            
             ePush = NIL;
             nLine = nOldLine;
             nCol  = nOldCol;
@@ -494,10 +494,10 @@ special:
         }
         return eCurTok;
     }
-    // are data types keywords?
-    // there is ERROR(), DATA(), STRING() etc.
+    
+    
     eCurTok = tp->t;
-    // AS: data types are keywords
+    
     if( tp->t == AS )
     {
         bAs = true;
@@ -514,11 +514,11 @@ special:
         }
     }
 
-    // CLASSMODULE, PROPERTY, GET, ENUM token only visible in compatible mode
+    
     SbiToken eTok = tp->t;
     if( bCompatible )
     {
-        // #129904 Suppress system
+        
         if( eTok == STOP && aSym.equalsIgnoreAsciiCase("system") )
         {
             eCurTok = SYMBOL;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <cerrno>
@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
                 cout << "Usage: idxdict -o outputfile < input\n";
                 ::exit(99);
         }
-        // This call improves performance by approx 5x
+        
         cin.sync_with_stdio(false);
 
         const char * outputFile(argv[2]);
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
         size_t currentOffset(encoding.size()+1);
         while (true)
         {
-                // Extract the next word, but not the entry count
+                
                 cin.getline(inputBuffer, MAXLINE, '|');
 
                 if (cin.eof()) break;
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
                 string word(inputBuffer);
                 ret = entries.insert(ret, pair<string, size_t>(word, currentOffset));
                 currentOffset += word.size() + 1;
-                // Next is the entry count
+                
                 cin.getline(inputBuffer, MAXLINE);
                 if (!cin.good())
                 {
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
                 }
         }
 
-        // Use binary mode to prevent any translation of LF to CRLF on Windows
+        
         ofstream outputStream(outputFile, ios_base::binary| ios_base::trunc|ios_base::out);
         if (!outputStream.is_open())
         {

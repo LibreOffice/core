@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Clipping.hxx"
@@ -45,24 +45,24 @@ bool lcl_CLIPt(double fDenom,double fNum, double & fTE, double & fTL)
 {
     double  fT;
 
-    if (fDenom > 0)             //  Intersection enters: PE
+    if (fDenom > 0)             
     {
-        fT = fNum / fDenom;     //  Parametric value at the intersection.
-        if (fT > fTL)           //  fTE and fTL crossover
-            return false;       //    therefore reject the line.
-        else if (fT > fTE)      //  A new fTE has been found.
+        fT = fNum / fDenom;     
+        if (fT > fTL)           
+            return false;       
+        else if (fT > fTE)      
             fTE = fT;
     }
-    else if (fDenom < 0)        //  Intersection leaves: PL
+    else if (fDenom < 0)        
     {
-        fT = fNum / fDenom;     //  Parametric Value at the intersection.
-        if (fT < fTE)           //  fTE and fTL crossover
-            return false;       //    therefore reject the line.
-        else if (fT < fTL)      //  A new fTL has been found.
+        fT = fNum / fDenom;     
+        if (fT < fTE)           
+            return false;       
+        else if (fT < fTL)      
             fTL = fT;
     }
     else if (fNum > 0)
-        return false;           //  Line lies on the outside of the edge.
+        return false;           
 
     return true;
 }
@@ -82,44 +82,44 @@ bool lcl_CLIPt(double fDenom,double fNum, double & fTE, double & fTL)
 */
 bool lcl_clip2d(B2DTuple& rPoint0, B2DTuple& rPoint1, const B2DRectangle& rRectangle)
 {
-    //Direction vector of the line.
+    
     B2DTuple aDirection = rPoint1 - rPoint0;
 
     if( aDirection.getX()==0 && aDirection.getY()==0 && rRectangle.isInside(rPoint0) )
     {
-        //  Degenerate case of a zero length line.
+        
         return true;
     }
     else
     {
-        //  Values of the line parameter where the line enters resp. leaves the rectangle.
+        
         double fTE = 0,
                fTL = 1;
 
-        //  Test whether at least a part lies in the four half-planes with respect to
-        //  the rectangles four edges.
+        
+        
         if( lcl_CLIPt(aDirection.getX(), rRectangle.getMinX() - rPoint0.getX(), fTE, fTL) )
             if( lcl_CLIPt(-aDirection.getX(), rPoint0.getX() - rRectangle.getMaxX(), fTE, fTL) )
                 if( lcl_CLIPt(aDirection.getY(), rRectangle.getMinY() - rPoint0.getY(), fTE, fTL) )
                     if( lcl_CLIPt(-aDirection.getY(), rPoint0.getY() - rRectangle.getMaxY(), fTE, fTL) )
                     {
-                        //  At least a part is visible.
+                        
                         if (fTL < 1)
                         {
-                            //  Compute the new end point.
+                            
                             rPoint1.setX( rPoint0.getX() + fTL * aDirection.getX() );
                             rPoint1.setY( rPoint0.getY() + fTL * aDirection.getY() );
                         }
                         if (fTE > 0)
                         {
-                            //  Compute the new starting point.
+                            
                             rPoint0.setX( rPoint0.getX() + fTE * aDirection.getX() );
                             rPoint0.setY( rPoint0.getY() + fTE * aDirection.getY() );
                         }
                         return true;
                     }
 
-        //  Line is not visible.
+        
         return false;
     }
 }
@@ -150,7 +150,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
         nPolygonIndex=0;
     }
 
-    //make sure that we have enough polygons
+    
     if(nPolygonIndex >= rPoly.SequenceX.getLength() )
     {
         rPoly.SequenceX.realloc(nPolygonIndex+1);
@@ -189,7 +189,7 @@ void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
     rResultPointCount[nPolygonIndex]=nNewResultPointCount;
 }
 
-}//end anonymous namespace
+}
 
 void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolygon
                                       , const B2DRectangle& rRectangle
@@ -203,7 +203,7 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
     if(!rPolygon.SequenceX.getLength())
         return;
 
-    //need clipping?:
+    
     {
         ::basegfx::B3DRange a3DRange( BaseGFXHelper::getBoundVolume( rPolygon ) );
         ::basegfx::B2DRange a2DRange( a3DRange.getMinX(), a3DRange.getMinY(), a3DRange.getMaxX(), a3DRange.getMaxY() );
@@ -221,9 +221,9 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
     }
 
     //
-    std::vector< sal_Int32 > aResultPointCount;//per polygon index
+    std::vector< sal_Int32 > aResultPointCount;
 
-    //apply clipping:
+    
     drawing::Position3D aFrom;
     drawing::Position3D aTo;
 
@@ -233,8 +233,8 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
     {
         sal_Int32 nOldPointCount = rPolygon.SequenceX[nOldPolyIndex].getLength();
 
-        // set last point to a position outside the rectangle, such that the first
-        // time lcl_clip2d returns true, the comparison to last will always yield false
+        
+        
         drawing::Position3D aLast(rRectangle.getMinX()-1.0,rRectangle.getMinY()-1.0, 0.0 );
 
         for(sal_Int32 nOldPoint=1; nOldPoint<nOldPointCount; nOldPoint++)
@@ -243,7 +243,7 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
             aTo = getPointFromPoly(rPolygon,nOldPoint,nOldPolyIndex);
             if( lcl_clip2d_(aFrom, aTo, rRectangle) )
             {
-                // compose an Polygon of as many consecutive points as possible
+                
                 if(aFrom == aLast)
                 {
                     if( !(aTo==aFrom) )
@@ -267,7 +267,7 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
             }
         }
     }
-    //free unused space
+    
     for( sal_Int32 nPolygonIndex = aResultPointCount.size(); nPolygonIndex--; )
     {
         drawing::DoubleSequence* pOuterSequenceX = &aResult.SequenceX.getArray()[nPolygonIndex];
@@ -281,6 +281,6 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

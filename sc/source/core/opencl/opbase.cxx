@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "opbase.hxx"
@@ -17,7 +17,7 @@ DynamicKernelArgument::DynamicKernelArgument(const std::string &s,
    FormulaTreeNodeRef ft):
     mSymName(s), mFormulaTree(ft) {}
 
-/// Generate use/references to the argument
+
 void DynamicKernelArgument::GenDeclRef(std::stringstream &ss) const
 {
     ss << mSymName;
@@ -48,19 +48,19 @@ VectorRef::~VectorRef()
     }
 }
 
-/// Generate declaration
+
 void VectorRef::GenDecl(std::stringstream &ss) const
 {
     ss << "__global double *"<<mSymName;
 }
 
-/// When declared as input to a sliding window function
+
 void VectorRef::GenSlidingWindowDecl(std::stringstream &ss) const
 {
     VectorRef::GenDecl(ss);
 }
 
-/// When referenced in a sliding window function
+
 std::string VectorRef::GenSlidingWindowDeclRef(bool) const
 {
     std::stringstream ss;
@@ -85,7 +85,7 @@ size_t VectorRef::GetWindowSize(void) const
     }
     else if (dynamic_cast<const formula::SingleVectorRefToken *>(pCur))
     {
-        // Prepare intermediate results (on CPU for now)
+        
         return 1;
     }
     else

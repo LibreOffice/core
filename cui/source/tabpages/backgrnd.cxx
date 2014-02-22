@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/pathoptions.hxx>
@@ -35,7 +35,7 @@
 #include <editeng/editrids.hrc>
 #include <editeng/eerdll.hxx>
 
-// table background
+
 #define TBL_DEST_CELL   0
 #define TBL_DEST_ROW    1
 #define TBL_DEST_TBL    2
@@ -58,7 +58,7 @@
 #include <svtools/grfmgr.hxx>
 
 using namespace ::com::sun::star;
-// static ----------------------------------------------------------------
+
 
 static sal_uInt16 pRanges[] =
 {
@@ -117,7 +117,7 @@ struct SvxBackgroundPage_Impl
 
 static inline sal_uInt8 lcl_PercentToTransparency(long nPercent)
 {
-    //0xff must not be returned!
+    
     return sal_uInt8(nPercent ? (50 + 0xfe * nPercent) / 100 : 0);
 }
 static inline sal_uInt8 lcl_TransparencyToPercent(sal_uInt8 nTrans)
@@ -131,13 +131,13 @@ static void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
     rBrush.PutValue(aTransparency, MID_GRAPHIC_TRANSPARENCY);
 }
 
-/// Returns the fill style of the currently selected entry.
+
 static XFillStyle lcl_getFillStyle(ListBox* pLbSelect)
 {
     return (XFillStyle)(sal_uLong)pLbSelect->GetEntryData(pLbSelect->GetSelectEntryPos());
 }
 
-// Selects the entry matching the specified fill style.
+
 static void lcl_setFillStyle(ListBox* pLbSelect, XFillStyle eStyle)
 {
     for (int i = 0; i < pLbSelect->GetEntryCount(); ++i)
@@ -147,7 +147,7 @@ static void lcl_setFillStyle(ListBox* pLbSelect, XFillStyle eStyle)
             return;
         }
 }
-//-------------------------------------------------------------------------
+
 
 sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 {
@@ -169,7 +169,7 @@ sal_uInt16 GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
     return bFound ? n : 0;
 }
 
-// class BackgroundPreview -----------------------------------------------
+
 
 /*  [Description]
 
@@ -225,14 +225,14 @@ void BackgroundPreviewImpl::setBmp(bool bBmp)
     Invalidate();
 }
 
-//-----------------------------------------------------------------------
+
 
 BackgroundPreviewImpl::~BackgroundPreviewImpl()
 {
     delete pBitmap;
 }
 
-//-----------------------------------------------------------------------
+
 void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
 {
     if ( !bIsBmp )
@@ -246,7 +246,7 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
     }
 }
 
-//-----------------------------------------------------------------------
+
 
 void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
 {
@@ -271,13 +271,13 @@ void BackgroundPreviewImpl::recalcDrawPos()
     if ( pBitmap )
     {
         Size aSize = GetOutputSizePixel();
-        // InnerSize == Size without one pixel border
+        
         Size aInnerSize = aSize;
         aInnerSize.Width() -= 2;
         aInnerSize.Height() -= 2;
         aDrawSize = pBitmap->GetSizePixel();
 
-        // bitmap bigger than preview window?
+        
         if ( aDrawSize.Width() > aInnerSize.Width() )
         {
             aDrawSize.Height() = aDrawSize.Height() * aInnerSize.Width() / aDrawSize.Width();
@@ -313,7 +313,7 @@ void BackgroundPreviewImpl::Resize()
     recalcDrawPos();
 }
 
-//-----------------------------------------------------------------------
+
 
 void BackgroundPreviewImpl::Paint( const Rectangle& )
 {
@@ -346,7 +346,7 @@ void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 }
 
-// class SvxBackgroundTabPage --------------------------------------------
+
 
 #define HDL(hdl) LINK(this,SvxBackgroundTabPage,hdl)
 
@@ -381,7 +381,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     get(m_pColTransMF, "transparencymf");
     get(m_pBtnPreview, "showpreview");
 
-    // Initialize gradient controls
+    
     get(m_pBackGroundGradientFrame, "backgroundgradientframe");
     get(m_pLbGradients, "gradientslb");
     Size aSize = getDrawListBoxOptimalSize(this);
@@ -411,7 +411,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     get(m_pPreviewWin2, "preview2");
     m_pPreviewWin2->setBmp(true);
 
-    // this page needs ExchangeSupport
+    
     SetExchangeSupport();
 
     const SfxPoolItem* pItem;
@@ -431,7 +431,7 @@ SvxBackgroundTabPage::SvxBackgroundTabPage(Window* pParent, const SfxItemSet& rC
     m_pBackgroundColorSet->SetText(SVX_RESSTR(RID_SVXSTR_TRANSPARENT));
 }
 
-//------------------------------------------------------------------------
+
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
 {
@@ -455,7 +455,7 @@ SvxBackgroundTabPage::~SvxBackgroundTabPage()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16* SvxBackgroundTabPage::GetRanges()
 
@@ -468,7 +468,7 @@ sal_uInt16* SvxBackgroundTabPage::GetRanges()
     return pRanges;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
                                           const SfxItemSet& rAttrSet )
@@ -482,29 +482,29 @@ SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
     return ( new SvxBackgroundTabPage( pParent, rAttrSet ) );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
 {
-// os: Such a nonsense! One will always find such an item somewhere,
-//     but it must be existing in the rSet!
-//  const SfxPoolItem* pX = GetOldItem( rSet, SID_VIEW_FLD_PIC );
-//  if( pX && pX->ISA(SfxWallpaperItem))
+
+
+
+
     if(SFX_ITEM_AVAILABLE <= rSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
     {
         ResetFromWallpaperItem( rSet );
         return;
     }
 
-    // condition of the preview button is persistent due to UserData
+    
     OUString aUserData = GetUserData();
     m_pBtnPreview->Check( !aUserData.isEmpty() && '1' == aUserData[0] );
 
-    // don't be allowed to call ShowSelector() after reset anymore
+    
     bAllowShowSelector = sal_False;
 
 
-    // get and evaluate Input-BrushItem
+    
     const SvxBrushItem* pBgdAttr = NULL;
     sal_uInt16 nSlot = SID_ATTR_BRUSH;
     const SfxPoolItem* pItem;
@@ -533,11 +533,11 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
                 SID_PARA_BACKGRND_DESTINATION, false, &pItem ) )
     {
         nDestValue = ((const SfxUInt16Item*)pItem)->GetValue();
-        // character activated?
+        
         sal_uInt16 nParaSel  = m_pParaLBox->GetSelectEntryPos();
         if(1 == nParaSel)
         {
-            // then it was a "standard"-call
+            
             nDestValue = nParaSel;
         }
         m_pParaLBox->SelectEntryPos(nDestValue);
@@ -552,7 +552,7 @@ void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
             break;
         }
     }
-    //#111173# the destination item is missing when the parent style has been changed
+    
     if(USHRT_MAX == nDestValue && (m_pParaLBox->IsVisible()||m_pTblLBox->IsVisible()))
         nDestValue = 0;
     sal_uInt16 nWhich = GetWhich( nSlot );
@@ -664,11 +664,11 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 {
     ShowSelector();
 
-    // condition of the preview button is persistent due to UserData
+    
     OUString aUserData = GetUserData();
     m_pBtnPreview->Check( !aUserData.isEmpty() && '1' == aUserData[0] );
 
-    // get and evaluate Input-BrushItem
+    
     const SvxBrushItem* pBgdAttr = NULL;
     sal_uInt16 nSlot = SID_VIEW_FLD_PIC;
     sal_uInt16 nWhich = GetWhich( nSlot );
@@ -686,7 +686,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     if ( pBgdAttr )
     {
         FillControls_Impl(*pBgdAttr, aUserData);
-        // brush shall be kept when showing the graphic, too
+        
         if( aBgdColor != pBgdAttr->GetColor() )
         {
             aBgdColor = pBgdAttr->GetColor();
@@ -705,7 +705,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
             aBgdColor = Color( ((CntWallpaperItem*)pOld)->GetColor() );
     }
 
-    // We now have always a link to the background
+    
     bLinkOnly = sal_True;
     m_pBtnLink->Check( true );
     m_pBtnLink->Show( false );
@@ -715,7 +715,7 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
 
 
 
-//------------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::FillUserData()
 
@@ -731,7 +731,7 @@ void SvxBackgroundTabPage::FillUserData()
     SetUserData( m_pBtnPreview->IsChecked() ? OUString('1') : OUString('0') );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -740,11 +740,11 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         pPageImpl->pLoadTimer->Stop();
         LoadTimerHdl_Impl( pPageImpl->pLoadTimer );
     }
-// os: Such a nonsense! One will always find such an item somewhere,
-//     but it must be existing in the rSet!
 
-//  const SfxPoolItem* pX = GetOldItem( rCoreSet, SID_VIEW_FLD_PIC );
-//  if( pX && pX->ISA(SfxWallpaperItem))
+
+
+
+
     if(SFX_ITEM_AVAILABLE <= rCoreSet.GetItemState(GetWhich(SID_VIEW_FLD_PIC), false))
         return FillItemSetWithWallpaperItem( rCoreSet, SID_VIEW_FLD_PIC );
 
@@ -792,22 +792,22 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
         const sal_Bool          bIsBrush    = ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) );
         const bool bIsGradient = ( XFILL_GRADIENT == lcl_getFillStyle(m_pLbSelect) );
 
-        // transparency has to be set if enabled, the color not already set to "No fill" and
+        
         if( bColTransparency &&
             aBgdColor.GetTransparency() < 0xff)
         {
             aBgdColor.SetTransparency(lcl_PercentToTransparency(static_cast<long>(m_pColTransMF->GetValue())));
         }
         if (   ( (GPOS_NONE == eOldPos) && (bIsBrush || bIsGradient)  )
-            || ( (GPOS_NONE != eOldPos) && !(bIsBrush || bIsGradient) ) ) // Brush <-> Bitmap changed?
+            || ( (GPOS_NONE != eOldPos) && !(bIsBrush || bIsGradient) ) ) 
         {
-            // background art hasn't been changed:
+            
 
             if ( (GPOS_NONE == eOldPos) || !m_pLbSelect->IsVisible() )
             {
                 if (bIsBrush)
                 {
-                    // Brush-treatment:
+                    
                     if ( rOldItem.GetColor() != aBgdColor ||
                             (SFX_ITEM_AVAILABLE >= eOldItemState && !m_pBackgroundColorSet->IsNoSelection()))
                     {
@@ -816,7 +816,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                     }
                     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, false ) )
                         rCoreSet.ClearItem( nWhich );
-                    // Handle XFILL_GRADIENT -> XFILL_SOLID
+                    
                     XFillStyleItem aFillStyleItem(XFILL_SOLID, GetWhich(SID_SW_ATTR_FILL_STYLE));
                     rCoreSet.Put(aFillStyleItem);
                 }
@@ -832,7 +832,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
             }
             else
             {
-                // Bitmap-treatment:
+                
 
                 SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
                 const sal_Bool          bIsLink  = m_pBtnLink->IsChecked();
@@ -873,14 +873,14 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                     rCoreSet.ClearItem( nWhich );
             }
         }
-        else // Brush <-> Bitmap changed!
+        else 
         {
             if (bIsBrush || bIsGradient)
             {
                 rCoreSet.Put( SvxBrushItem( aBgdColor, nWhich ) );
                 if (bIsGradient)
                 {
-                    // Handle XFILL_BITMAP -> XFILL_GRADIENT
+                    
                     XFillStyleItem aFillStyleItem(((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue(), GetWhich(SID_SW_ATTR_FILL_STYLE));
                     rCoreSet.Put(aFillStyleItem);
 
@@ -927,7 +927,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
 
     if( m_pTblLBox->IsVisible() )
     {
-        // the current condition has already been put
+        
         if( nSlot != SID_ATTR_BRUSH && pTableBck_Impl->pCellBrush)
         {
             const SfxPoolItem* pOldCell =
@@ -973,8 +973,8 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
     }
     else if (m_pParaLBox->GetData() == m_pParaLBox)
     {
-        // the current condition has already been put
-        if( nSlot != SID_ATTR_BRUSH && m_pParaLBox->IsVisible()) // not in search format dialog
+        
+        if( nSlot != SID_ATTR_BRUSH && m_pParaLBox->IsVisible()) 
         {
             const SfxPoolItem* pOldPara =
                 GetOldItem( rCoreSet, SID_ATTR_BRUSH );
@@ -992,7 +992,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
                 GetOldItem( rCoreSet, SID_ATTR_BRUSH_CHAR );
             DBG_ASSERT(pParaBck_Impl, "pParaBck_Impl == NULL ?");
             if ( pOldChar &&
-                    //#111173#  crash report shows that pParaBck_Impl can be NULL, the cause is unknown
+                    
                     pParaBck_Impl &&
                         (*pParaBck_Impl->pCharBrush != *pOldChar ||
                 *pParaBck_Impl->pCharBrush != SvxBrushItem(SID_ATTR_BRUSH_CHAR)))
@@ -1025,13 +1025,13 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
     sal_Bool                bModified = sal_False;
 
     if (   ( (GPOS_NONE == eOldPos) && bIsBrush  )
-        || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) // Brush <-> Bitmap changed?
+        || ( (GPOS_NONE != eOldPos) && !bIsBrush ) ) 
     {
-        // background art hasn't been changed
+        
 
         if ( (GPOS_NONE == eOldPos) || !m_pLbSelect->IsVisible() )
         {
-            // Brush-treatment:
+            
             if ( rOldItem.GetColor() != aBgdColor )
             {
                 bModified = sal_True;
@@ -1044,7 +1044,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
         }
         else
         {
-            // Bitmap-treatment:
+            
             SvxGraphicPosition  eNewPos  = GetGraphicPosition_Impl();
 
             bool bBitmapChanged = ( ( eNewPos != eOldPos ) ||
@@ -1065,7 +1065,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
                 rCoreSet.ClearItem( nWhich );
         }
     }
-    else // Brush <-> Bitmap changed!
+    else 
     {
         CntWallpaperItem aItem( nWhich );
         if ( bIsBrush )
@@ -1088,7 +1088,7 @@ sal_Bool SvxBackgroundTabPage::FillItemSetWithWallpaperItem( SfxItemSet& rCoreSe
     return bModified;
 }
 
-//-----------------------------------------------------------------------
+
 
 int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 
@@ -1107,14 +1107,14 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
 {
-    // has to be implemented so that position control can work
+    
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::ShowSelector()
 {
@@ -1132,7 +1132,7 @@ void SvxBackgroundTabPage::ShowSelector()
         m_pBtnPosition->SetClickHdl( HDL(RadioClickHdl_Impl) );
         m_pLbGradients->SetSelectHdl(HDL(ModifyGradientHdl_Impl));
 
-        // delayed loading via timer (because of UI-Update)
+        
         pPageImpl->pLoadTimer = new Timer;
         pPageImpl->pLoadTimer->SetTimeout( 500 );
         pPageImpl->pLoadTimer->SetTimeoutHdl(
@@ -1147,7 +1147,7 @@ void SvxBackgroundTabPage::ShowSelector()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 
 void SvxBackgroundTabPage::RaiseLoadError_Impl()
@@ -1163,7 +1163,7 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
                               aBgdGraphicPath ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
 {
@@ -1174,7 +1174,7 @@ sal_Bool SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
     return bResult;
 }
 
-//------------------------------------------------------------------------
+
 
 
 void SvxBackgroundTabPage::FillColorValueSets_Impl()
@@ -1201,11 +1201,11 @@ void SvxBackgroundTabPage::FillColorValueSets_Impl()
     m_pBackgroundColorSet->SetColCount(m_pBackgroundColorSet->getColumnCount());
 }
 
-//------------------------------------------------------------------------
 
 
 
-//------------------------------------------------------------------------
+
+
 
 void SvxBackgroundTabPage::ShowColorUI_Impl()
 
@@ -1235,7 +1235,7 @@ void SvxBackgroundTabPage::HideColorUI_Impl()
         m_pBackGroundColorFrame->Hide();
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::ShowBitmapUI_Impl()
 
@@ -1289,13 +1289,13 @@ void SvxBackgroundTabPage::ShowGradientUI_Impl()
         m_pBackGroundGradientFrame->Show();
         if (!m_rXFillSet.HasItem(XATTR_FILLSTYLE) || ((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue() != XFILL_GRADIENT)
         {
-            // Frame has no gradient? Then select the first one, just to be able to show something in the preview control.
+            
             m_pLbGradients->SelectEntryPos(0);
             ModifyGradientHdl_Impl(this);
         }
         else
         {
-            // It has one, try to select the matching entry in the gradient list box.
+            
             const XFillGradientItem& rFillGradientItem = (const XFillGradientItem&)m_rXFillSet.Get(XATTR_FILLGRADIENT);
             m_pLbGradients->SelectEntryByList(m_pGradientList, rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue());
         }
@@ -1307,7 +1307,7 @@ void SvxBackgroundTabPage::HideGradientUI_Impl()
     m_pBackGroundGradientFrame->Hide();
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
 {
@@ -1344,7 +1344,7 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
                 case GPOS_LB:   eNewPos = RP_LB; break;
                 case GPOS_MB:   eNewPos = RP_MB; break;
                 case GPOS_RB:   eNewPos = RP_RB; break;
-                default: ;//prevent warning
+                default: ;
             }
             m_pWndPosition->SetActualRP( eNewPos );
         }
@@ -1353,7 +1353,7 @@ void SvxBackgroundTabPage::SetGraphicPosition_Impl( SvxGraphicPosition ePos )
     m_pWndPosition->Invalidate();
 }
 
-//------------------------------------------------------------------------
+
 
 SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
 {
@@ -1379,9 +1379,9 @@ SvxGraphicPosition SvxBackgroundTabPage::GetGraphicPosition_Impl()
     return GPOS_MM;
 }
 
-//-----------------------------------------------------------------------
-// Handler
-//-----------------------------------------------------------------------
+
+
+
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
 /*
@@ -1398,19 +1398,19 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BackgroundColorHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
 {
     if ( XFILL_SOLID == lcl_getFillStyle(m_pLbSelect) )
     {
         ShowColorUI_Impl();
-        m_pParaLBox->Enable(); // drawing background can't be a bitmap
+        m_pParaLBox->Enable(); 
     }
     else if ( XFILL_BITMAP == lcl_getFillStyle(m_pLbSelect) )
     {
         ShowBitmapUI_Impl();
-        m_pParaLBox->Enable(false); // drawing background can't be a bitmap
+        m_pParaLBox->Enable(false); 
     }
     else
     {
@@ -1419,7 +1419,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, SelectHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
 {
@@ -1457,7 +1457,7 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
             }
             else
             {
-                if ( !aBgdGraphicPath.isEmpty() ) // only for linked bitmap
+                if ( !aBgdGraphicPath.isEmpty() ) 
                     RaiseLoadError_Impl();
                 m_pPreviewWin2->NotifyChange( NULL );
             }
@@ -1468,7 +1468,7 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
 {
@@ -1503,7 +1503,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, ModifyGradientHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
 
@@ -1532,12 +1532,12 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
     {
         if ( bHtml )
             m_pBtnLink->Check();
-        // if link isn't checked and preview isn't, either,
-        // activate preview, so that the user sees which
-        // graphic he has chosen
+        
+        
+        
         if ( !m_pBtnLink->IsChecked() && !m_pBtnPreview->IsChecked() )
             m_pBtnPreview->Check( true );
-        // timer-delayed loading of the graphic
+        
         pPageImpl->pLoadTimer->Start();
     }
     else
@@ -1545,7 +1545,7 @@ IMPL_LINK_NOARG(SvxBackgroundTabPage, BrowseHdl_Impl)
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 
@@ -1567,7 +1567,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
             INetURLObject aNew( pImportDlg->GetPath() );
             if ( aBgdGraphicPath.isEmpty() || aNew != aOld )
             {
-                // new file chosen
+                
                 aBgdGraphicPath   = pImportDlg->GetPath();
                 aBgdGraphicFilter = pImportDlg->GetCurrentFilter();
                 sal_Bool bLink = ( nHtmlMode & HTMLMODE_ON ) || bLinkOnly ? sal_True : pImportDlg->IsAsLink();
@@ -1588,7 +1588,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
                     }
                 }
                 else
-                    bIsGraphicValid = sal_False; // load graphic not until preview click
+                    bIsGraphicValid = sal_False; 
 
                 if ( m_pBtnPreview->IsChecked() && bIsGraphicValid )
                 {
@@ -1606,7 +1606,7 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::ShowTblControl()
 {
@@ -1617,7 +1617,7 @@ void SvxBackgroundTabPage::ShowTblControl()
     m_pAsGrid->Show();
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
 {
@@ -1629,9 +1629,9 @@ void SvxBackgroundTabPage::ShowParaControl(sal_Bool bCharOnly)
         m_pParaLBox->Show();
         m_pAsGrid->Show();
     }
-    m_pParaLBox->SetData(m_pParaLBox); // here it can be recognized that this mode is turned on
+    m_pParaLBox->SetData(m_pParaLBox); 
 }
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
 {
@@ -1665,7 +1665,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
             xItemHolder.reset(new SvxBrushItem(nWhich));
             pActItem = xItemHolder.get();
         }
-        if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
+        if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  
         {
             *pActItem = SvxBrushItem( aBgdColor, nWhich );
         }
@@ -1706,8 +1706,8 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
             nWhich = pTableBck_Impl->nTableWhich;
             break;
         default:
-            // The item will be new'ed again below, but that will be the
-            // default item then, not an existing modified one.
+            
+            
             xItemHolder.reset();
             pActItem = NULL;
             break;
@@ -1723,7 +1723,7 @@ IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
 {
@@ -1745,7 +1745,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
             return 0;
         }
         pParaBck_Impl->nActPos = nSelPos;
-        if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  // brush selected
+        if(XFILL_SOLID == lcl_getFillStyle(m_pLbSelect))  
         {
             sal_uInt16 nWhich = pActItem->Which();
             *pActItem = SvxBrushItem( aBgdColor, nWhich );
@@ -1787,7 +1787,7 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
                                               const OUString& rUserData )
@@ -1801,14 +1801,14 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         sal_Bool bEnableTransp = rColor.GetTransparency() < 0xff;
         m_pColTransFT->Enable(bEnableTransp);
         m_pColTransMF->Enable(bEnableTransp);
-        //the default setting should be "no transparency"
+        
         if(!bEnableTransp)
             m_pColTransMF->SetValue(0);
     }
 
     if ( GPOS_NONE == ePos || !m_pLbSelect->IsVisible() )
     {
-        // We don't have a graphic, do we have gradient fill style?
+        
         if (!m_rXFillSet.HasItem(XATTR_FILLSTYLE) || ((const XFillStyleItem&)m_rXFillSet.Get(XATTR_FILLSTYLE)).GetValue() != XFILL_GRADIENT)
         {
             lcl_setFillStyle(m_pLbSelect, XFILL_SOLID);
@@ -1832,13 +1832,13 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         }
         else
         {
-            // Gradient fill style, then initialize preview with data from Writer.
+            
             lcl_setFillStyle(m_pLbSelect, XFILL_GRADIENT);
             ShowGradientUI_Impl();
             m_pCtlPreview->SetAttributes( m_aXFillAttr.GetItemSet() );
             m_pCtlPreview->Invalidate();
         }
-        if ( m_pLbSelect->IsVisible() ) // initialize graphic part
+        if ( m_pLbSelect->IsVisible() ) 
         {
             aBgdGraphicFilter = "";
             aBgdGraphicPath = "";
@@ -1848,7 +1848,7 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
             m_pBtnLink->Check( false );
             m_pBtnLink->Disable();
             m_pPreviewWin2->NotifyChange( NULL );
-            SetGraphicPosition_Impl( GPOS_TILED );  // tiles as default
+            SetGraphicPosition_Impl( GPOS_TILED );  
         }
     }
     else
@@ -1892,8 +1892,8 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
 
         if ( aStrLink.isEmpty() || m_pBtnPreview->IsChecked() )
         {
-            // Graphic exists in the item and doesn't have
-            // to be loaded:
+            
+            
 
             const Graphic* pGraphic = rBgdAttr.GetGraphic();
 
@@ -1957,7 +1957,7 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
 
     if (pGradientListItem)
     {
-        // If we get a gradient list, also read fill and gradient style.
+        
         m_pGradientList = pGradientListItem->GetGradientList();
         m_pLbGradients->Fill(m_pGradientList);
         const XFillStyleItem& rFillStyleItem = (const XFillStyleItem&)aSet.Get(SID_SW_ATTR_FILL_STYLE);
@@ -1966,7 +1966,7 @@ void SvxBackgroundTabPage::PageCreated (SfxAllItemSet aSet)
         m_rXFillSet.Put(XFillGradientItem(rFillGradientItem.GetName(), rFillGradientItem.GetGradientValue()));
     }
     else
-        // Otherwise hide the gradient UI.
+        
         for (int i = 0; i < m_pLbSelect->GetEntryCount(); ++i)
             if ((XFillStyle)(sal_uLong)m_pLbSelect->GetEntryData(i) == XFILL_GRADIENT)
             {

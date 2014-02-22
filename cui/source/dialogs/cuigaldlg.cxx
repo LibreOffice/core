@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -52,9 +52,9 @@
 #include <svx/dialmgr.hxx>
 
 
-// --------------
-// - Namespaces -
-// --------------
+
+
+
 
 using namespace ::ucbhelper;
 using namespace ::rtl;
@@ -65,9 +65,9 @@ using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// ----------------
-// - SearchThread -
-// ----------------
+
+
+
 
 SearchThread::SearchThread( SearchProgress* pProgess,
                             TPGalleryThemeProperties* pBrowser,
@@ -79,13 +79,13 @@ SearchThread::SearchThread( SearchProgress* pProgess,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 SearchThread::~SearchThread()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void SearchThread::execute()
 {
@@ -114,7 +114,7 @@ void SearchThread::execute()
     Application::PostUserEvent( LINK( mpProgress, SearchProgress, CleanUpHdl ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                                const ::std::vector< OUString >& rFormats,
@@ -148,7 +148,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                 INetURLObject   aFoundURL( xContentAccess->queryContentIdentifierString() );
                 DBG_ASSERT( aFoundURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-                sal_Bool bFolder = xRow->getBoolean( 1 ); // property "IsFolder"
+                sal_Bool bFolder = xRow->getBoolean( 1 ); 
                 if ( xRow->wasNull() )
                     bFolder = sal_False;
 
@@ -156,7 +156,7 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
                     ImplSearch( aFoundURL, rFormats, sal_True );
                 else
                 {
-                    sal_Bool bDocument = xRow->getBoolean( 2 ); // property "IsDocument"
+                    sal_Bool bDocument = xRow->getBoolean( 2 ); 
                     if ( xRow->wasNull() )
                         bDocument = sal_False;
 
@@ -200,9 +200,9 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
     }
 }
 
-// ------------------
-// - SearchProgress -
-// ------------------
+
+
+
 
 SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL )
     : ModalDialog(pParent, "GallerySearchProgress", "cui/ui/gallerysearchprogress.ui")
@@ -216,7 +216,7 @@ SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL 
     m_pBtnCancel->SetClickHdl( LINK( this, SearchProgress, ClickCancelBtn ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 void SearchProgress::Terminate()
 {
@@ -224,7 +224,7 @@ void SearchProgress::Terminate()
         maSearchThread->terminate();
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SearchProgress, ClickCancelBtn)
 {
@@ -232,7 +232,7 @@ IMPL_LINK_NOARG(SearchProgress, ClickCancelBtn)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SearchProgress, CleanUpHdl)
 {
@@ -245,7 +245,7 @@ IMPL_LINK_NOARG(SearchProgress, CleanUpHdl)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 short SearchProgress::Execute()
 {
@@ -255,7 +255,7 @@ short SearchProgress::Execute()
     return RET_CANCEL;
 }
 
-// ------------------------------------------------------------------------
+
 
 void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
 {
@@ -266,9 +266,9 @@ void SearchProgress::StartExecuteModal( const Link& rEndDialogHdl )
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
-// --------------
-// - TakeThread -
-// --------------
+
+
+
 
 TakeThread::TakeThread(
     TakeProgress* pProgess,
@@ -282,13 +282,13 @@ TakeThread::TakeThread(
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 TakeThread::~TakeThread()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void TakeThread::execute()
 {
@@ -334,9 +334,9 @@ void TakeThread::execute()
     Application::PostUserEvent( LINK( mpProgress, TakeProgress, CleanUpHdl ) );
 }
 
-// ----------------
-// - TakeProgress -
-// ----------------
+
+
+
 
 TakeProgress::TakeProgress( Window* pWindow ) :
     ModalDialog     ( pWindow, CUI_RES( RID_SVXDLG_GALLERY_TAKE_PROGRESS ) ),
@@ -349,7 +349,7 @@ TakeProgress::TakeProgress( Window* pWindow ) :
     aBtnCancel.SetClickHdl( LINK( this, TakeProgress, ClickCancelBtn ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 
 void TakeProgress::Terminate()
@@ -358,7 +358,7 @@ void TakeProgress::Terminate()
         maTakeThread->terminate();
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TakeProgress, ClickCancelBtn)
 {
@@ -366,7 +366,7 @@ IMPL_LINK_NOARG(TakeProgress, ClickCancelBtn)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
 {
@@ -382,12 +382,12 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
     mpBrowser->aLbxFound.SetUpdateMode( false );
     mpBrowser->aLbxFound.SetNoSelection();
 
-    // mark all taken positions in aRemoveEntries
+    
     for( i = 0, nCount = maTakenList.size(); i < nCount; ++i )
         aRemoveEntries[ maTakenList[ i ] ] = true;
     maTakenList.clear();
 
-    // refill found list
+    
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
         if( !aRemoveEntries[ i ] )
             aRemainingVector.push_back( mpBrowser->aFoundList[i] );
@@ -399,7 +399,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
 
     aRemainingVector.clear();
 
-    // refill list box
+    
     for( i = 0, nCount = aRemoveEntries.size(); i < nCount; ++i )
         if( !aRemoveEntries[ i ] )
             aRemainingVector.push_back( mpBrowser->aLbxFound.GetEntry( (sal_uInt16) i ) );
@@ -420,7 +420,7 @@ IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 short TakeProgress::Execute()
 {
@@ -430,7 +430,7 @@ short TakeProgress::Execute()
     return RET_CANCEL;
 }
 
-// ------------------------------------------------------------------------
+
 
 void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 {
@@ -441,9 +441,9 @@ void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
     ModalDialog::StartExecuteModal( rEndDialogHdl );
 }
 
-// ---------------------
-// - ActualizeProgress -
-// ---------------------
+
+
+
 
 ActualizeProgress::ActualizeProgress( Window* pWindow, GalleryTheme* pThm ) :
     ModalDialog             ( pWindow, CUI_RES( RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS ) ),
@@ -457,7 +457,7 @@ ActualizeProgress::ActualizeProgress( Window* pWindow, GalleryTheme* pThm ) :
     aBtnCancel.SetClickHdl( LINK( this, ActualizeProgress, ClickCancelBtn ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 short ActualizeProgress::Execute()
 {
@@ -477,7 +477,7 @@ short ActualizeProgress::Execute()
     return nRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ActualizeProgress, ClickCancelBtn)
 {
@@ -487,7 +487,7 @@ IMPL_LINK_NOARG(ActualizeProgress, ClickCancelBtn)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK( ActualizeProgress, TimeoutHdl, Timer*, _pTimer )
 {
@@ -503,7 +503,7 @@ IMPL_LINK( ActualizeProgress, TimeoutHdl, Timer*, _pTimer )
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK( ActualizeProgress, ActualizeHdl, INetURLObject*, pURL )
 {
@@ -531,9 +531,9 @@ TitleDialog::TitleDialog(Window* pParent, const OUString& rOldTitle)
     m_pEdit->GrabFocus();
 }
 
-// -------------------
-// - GalleryIdDialog -
-// -------------------
+
+
+
 
 GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm )
     : ModalDialog(pParent, "GalleryThemeIDDialog", "cui/ui/gallerythemeiddialog.ui")
@@ -552,7 +552,7 @@ GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm )
     m_pBtnOk->SetClickHdl( LINK( this, GalleryIdDialog, ClickOkHdl ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 {
@@ -586,9 +586,9 @@ IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 }
 
 
-// --------------------------
-// - GalleryThemeProperties -
-// --------------------------
+
+
+
 
 GalleryThemeProperties::GalleryThemeProperties(Window* pParent,
     ExchangeData* _pData, SfxItemSet* pItemSet)
@@ -614,7 +614,7 @@ GalleryThemeProperties::GalleryThemeProperties(Window* pParent,
     SetText( aText );
 }
 
-// ------------------------------------------------------------------------
+
 
 void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -624,9 +624,9 @@ void GalleryThemeProperties::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         ( (TPGalleryThemeProperties&) rPage ).SetXChgData( pData );
 }
 
-// -------------------------
-// - TPGalleryThemeGeneral -
-// -------------------------
+
+
+
 
 TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet& rSet ) :
             SfxTabPage              ( pParent, CUI_RES( RID_SVXTABPAGE_GALLERY_GENERAL ), rSet ),
@@ -652,7 +652,7 @@ TPGalleryThemeGeneral::TPGalleryThemeGeneral( Window* pParent, const SfxItemSet&
     aEdtMSName.SetAccessibleRelationLabeledBy( &aFiMSImage );
 }
 
-// ------------------------------------------------------------------------
+
 
 void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 {
@@ -680,7 +680,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     aFtMSShowType.SetText( aType );
     aFtMSShowPath.SetText( pThm->GetSdgURL().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS ) );
 
-    // singular or plural?
+    
     if ( 1 == pThm->GetObjectCount() )
         aObjStr = aObjStr.getToken( 0, ';' );
     else
@@ -690,15 +690,15 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
 
     aFtMSShowContent.SetText( aOutStr );
 
-    // get locale wrapper (singleton)
+    
     const SvtSysLocale aSysLocale;
     const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
-    // ChangeDate/Time
+    
     aAccess = aLocaleData.getDate( pData->aThemeChangeDate ) + ", " + aLocaleData.getTime( pData->aThemeChangeTime );
     aFtMSShowChangeDate.SetText( aAccess );
 
-    // set image
+    
     sal_uInt16 nId;
 
     if( pThm->IsReadOnly() )
@@ -711,7 +711,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     aFiMSImage.SetImage( Image( Bitmap( CUI_RES( nId ) ), COL_LIGHTMAGENTA ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet& /*rSet*/ )
 {
@@ -719,16 +719,16 @@ sal_Bool TPGalleryThemeGeneral::FillItemSet( SfxItemSet& /*rSet*/ )
     return sal_True;
 }
 
-// ------------------------------------------------------------------------
+
 
 SfxTabPage* TPGalleryThemeGeneral::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new TPGalleryThemeGeneral( pParent, rSet );
 }
 
-// ----------------------------
-// - TPGalleryThemeProperties -
-// ----------------------------
+
+
+
 
 TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxItemSet& rSet ) :
         SfxTabPage          ( pWindow, CUI_RES( RID_SVXTABPAGE_GALLERYTHEME_FILES ), rSet ),
@@ -755,7 +755,7 @@ TPGalleryThemeProperties::TPGalleryThemeProperties( Window* pWindow, const SfxIt
     aLbxFound.SetAccessibleRelationLabeledBy(&aLbxFound);
 }
 
-// ------------------------------------------------------------------------
+
 
 void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 {
@@ -781,21 +781,21 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
     aCbxPreview.Disable();
 }
 
-// ------------------------------------------------------------------------
+
 
 void TPGalleryThemeProperties::StartSearchFiles( const OUString& _rFolderURL, short _nDlgResult )
 {
     if ( RET_OK == _nDlgResult )
     {
         aURL = INetURLObject( _rFolderURL );
-        bSearchRecursive = sal_True;    // UI choice no longer possible, windows file picker allows no user controls
+        bSearchRecursive = sal_True;    
         SearchFiles();
     }
 
     nCurFilterPos = aCbbFileType.GetEntryPos( aCbbFileType.GetText() );
 }
 
-// ------------------------------------------------------------------------
+
 
 TPGalleryThemeProperties::~TPGalleryThemeProperties()
 {
@@ -807,14 +807,14 @@ TPGalleryThemeProperties::~TPGalleryThemeProperties()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 SfxTabPage* TPGalleryThemeProperties::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new TPGalleryThemeProperties( pParent, rSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, const OUString& _rExtension )
 {
@@ -833,7 +833,7 @@ OUString TPGalleryThemeProperties::addExtension( const OUString& _rDisplayText, 
     return sRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 void TPGalleryThemeProperties::FillFilterList()
 {
@@ -845,7 +845,7 @@ void TPGalleryThemeProperties::FillFilterList()
     sal_uInt16          i, nKeyCount;
     sal_Bool                bInList;
 
-    // graphic filters
+    
     for( i = 0, nKeyCount = rFilter.GetImportFormatCount(); i < nKeyCount; i++ )
     {
         aExt = rFilter.GetImportFormatShortName( i );
@@ -894,7 +894,7 @@ void TPGalleryThemeProperties::FillFilterList()
         }
     }
 
-    // media filters
+    
     static const OUString aWildcard( "*." );
     ::avmedia::FilterNameVector     aFilters;
     ::avmedia::MediaWindow::getMediaFilters( aFilters );
@@ -924,10 +924,10 @@ void TPGalleryThemeProperties::FillFilterList()
         }
     }
 
-    // 'All' filters
+    
     OUString aExtensions;
 
-    // graphic filters
+    
     for ( i = 0; i < nKeyCount; ++i )
     {
         int j = 0;
@@ -947,7 +947,7 @@ void TPGalleryThemeProperties::FillFilterList()
         }
     }
 
-    // media filters
+    
     for( unsigned long k = 0; k < aFilters.size(); ++k )
     {
         for( sal_Int32 nIndex = 0; nIndex >= 0; )
@@ -975,7 +975,7 @@ void TPGalleryThemeProperties::FillFilterList()
     aCbbFileType.SetText( pFilterEntry->aFilterName );
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
 {
@@ -992,7 +992,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 void TPGalleryThemeProperties::SearchFiles()
 {
@@ -1008,7 +1008,7 @@ void TPGalleryThemeProperties::SearchFiles()
     pProgress->StartExecuteModal( LINK( this, TPGalleryThemeProperties, EndSearchProgressHdl ) );
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
 {
@@ -1016,7 +1016,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
     {
         try
         {
-            // setup folder picker
+            
             com::sun::star::uno::Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
             xFolderPicker = FolderPicker::create(xContext);
 
@@ -1033,7 +1033,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
                 if( xFolderPicker->execute() == RET_OK )
                 {
                     aURL = INetURLObject( xFolderPicker->getDirectory() );
-                    bSearchRecursive = sal_True;    // UI choice no longer possible, windows file picker allows no user controls
+                    bSearchRecursive = sal_True;    
                     SearchFiles();
                 }
 
@@ -1049,7 +1049,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 void TPGalleryThemeProperties::TakeFiles()
 {
@@ -1064,7 +1064,7 @@ void TPGalleryThemeProperties::TakeFiles()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
 {
@@ -1086,7 +1086,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 void TPGalleryThemeProperties::DoPreview()
 {
@@ -1115,7 +1115,7 @@ void TPGalleryThemeProperties::DoPreview()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl)
 {
@@ -1142,7 +1142,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl)
 {
@@ -1156,7 +1156,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
 {
@@ -1189,7 +1189,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl)
 {
@@ -1204,7 +1204,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl)
         return 0;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, PreviewTimerHdl)
 {
@@ -1213,7 +1213,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, PreviewTimerHdl)
     return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
 {
@@ -1234,7 +1234,7 @@ IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
   return 0L;
 }
 
-// ------------------------------------------------------------------------
+
 
 IMPL_LINK( TPGalleryThemeProperties, DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent*, pEvt )
 {

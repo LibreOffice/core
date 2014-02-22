@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "units.hxx"
@@ -18,9 +18,9 @@ namespace svgi
 
 double convLength( double value, SvgUnit unit, const State& rState, char dir )
 {
-    // convert svg unit to internal coordinates ("pixel"). Since the
-    // OOo drawing layer is still largely integer-based, the initial
-    // viewport transformation includes a certain scale factor
+    
+    
+    
     double fRet(value);
     switch ( unit )
     {
@@ -29,8 +29,8 @@ double convLength( double value, SvgUnit unit, const State& rState, char dir )
         case SVG_LENGTH_UNIT_MM: fRet *= 72.0/25.4; break;
         case SVG_LENGTH_UNIT_PC: fRet *= 72.0/6.0; break;
         case SVG_LENGTH_UNIT_USER:
-        case SVG_LENGTH_UNIT_PX: // no unit defaults to PX in svg,
-                                 // assume display to have 72DPI
+        case SVG_LENGTH_UNIT_PX: 
+                                 
         case SVG_LENGTH_UNIT_PT: break;
         case SVG_LENGTH_UNIT_EM: fRet *= rState.mnFontSize; break;
         case SVG_LENGTH_UNIT_EX: fRet *= rState.mnFontSize / 2.0; break;
@@ -64,7 +64,7 @@ double convLength( double value, SvgUnit unit, const State& rState, char dir )
 
 double convLength( const OUString& sValue, const State& rState, char dir )
 {
-    //FIXME: convert deprecated spirit::classic to use spirit::qi
+    
     using namespace ::boost::spirit::classic;
 
     OString aUTF8 = OUStringToOString( sValue,
@@ -73,7 +73,7 @@ double convLength( const OUString& sValue, const State& rState, char dir )
     double  nVal=0.0;
     SvgUnit eUnit=SVG_LENGTH_UNIT_PX;
     const bool bRes = parse(aUTF8.getStr(),
-        //  Begin grammar
+        
         (
             real_p[assign_a(nVal)]
             >> (  str_p("cm") [assign_a(eUnit,SVG_LENGTH_UNIT_CM)]
@@ -88,7 +88,7 @@ double convLength( const OUString& sValue, const State& rState, char dir )
                 | str_p("") [assign_a(eUnit,SVG_LENGTH_UNIT_USER)]
                 | end_p)
         ),
-        //  End grammar
+        
         space_p).full;
 
     if( !bRes )
@@ -97,6 +97,6 @@ double convLength( const OUString& sValue, const State& rState, char dir )
     return convLength(nVal,eUnit,rState,dir);
 }
 
-} // namespace svgi
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

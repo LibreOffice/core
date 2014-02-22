@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "docxexportfilter.hxx"
@@ -38,9 +38,9 @@ DocxExportFilter::DocxExportFilter( const uno::Reference< uno::XComponentContext
 
 bool DocxExportFilter::exportDocument()
 {
-    OSL_TRACE( "DocxExportFilter::exportDocument()\n" ); // DEBUG remove me
+    OSL_TRACE( "DocxExportFilter::exportDocument()\n" ); 
 
-    // get SwDoc*
+    
     uno::Reference< uno::XInterface > xIfc( getModel(), uno::UNO_QUERY );
     SwXTextDocument *pTxtDoc = dynamic_cast< SwXTextDocument * >( xIfc.get() );
     if ( !pTxtDoc )
@@ -50,32 +50,32 @@ bool DocxExportFilter::exportDocument()
     if ( !pDoc )
         return false;
 
-    // update layout (if present), for SwWriteTable
+    
     SwViewShell* pViewShell = NULL;
     pDoc->GetEditShell(&pViewShell);
     if (pViewShell != NULL)
         pViewShell->CalcLayout();
 
-    // get SwPaM*
-    // FIXME so far we get SwPaM for the entire document; probably we should
-    // be able to output just the selection as well - though no idea how to
-    // get the correct SwPaM* then...
+    
+    
+    
+    
     SwPaM aPam( pDoc->GetNodes().GetEndOfContent() );
     aPam.SetMark();
     aPam.Move( fnMoveBackward, fnGoDoc );
 
     SwPaM *pCurPam = new SwPaM( *aPam.End(), *aPam.Start() );
 
-    // export the document
-    // (in a separate block so that it's destructed before the commit)
+    
+    
     {
         DocxExport aExport( this, pDoc, pCurPam, &aPam );
-        aExport.ExportDocument( true ); // FIXME support exporting selection only
+        aExport.ExportDocument( true ); 
     }
 
     commitStorage();
 
-    // delete the pCurPam
+    
     if ( pCurPam )
     {
         while ( pCurPam->GetNext() != pCurPam )
@@ -87,7 +87,7 @@ bool DocxExportFilter::exportDocument()
 }
 
 
-// UNO stuff so that the filter is registered
+
 #define IMPL_NAME "com.sun.star.comp.Writer.DocxExport"
 
 OUString DocxExport_getImplementationName()
@@ -135,6 +135,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL msword_component_getFactory( const sal_Char*
     return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, entries );
 }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

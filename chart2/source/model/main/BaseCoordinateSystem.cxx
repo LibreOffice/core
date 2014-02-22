@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "BaseCoordinateSystem.hxx"
@@ -117,7 +117,7 @@ struct StaticCooSysInfo : public rtl::StaticAggregate< uno::Reference< beans::XP
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -162,7 +162,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     setFastPropertyValue_NoBroadcast( PROP_COORDINATESYSTEM_SWAPXANDYAXIS, uno::makeAny( sal_Bool( bSwapXAndYAxis )));
 }
 
-// explicit
+
 BaseCoordinateSystem::BaseCoordinateSystem(
     const BaseCoordinateSystem & rSource ) :
         impl::BaseCoordinateSystem_Base(),
@@ -198,7 +198,7 @@ BaseCoordinateSystem::~BaseCoordinateSystem()
     }
 }
 
-// ____ XCoordinateSystem ____
+
 sal_Int32 SAL_CALL BaseCoordinateSystem::getDimension()
     throw (uno::RuntimeException)
 {
@@ -265,7 +265,7 @@ sal_Int32 SAL_CALL BaseCoordinateSystem::getMaximumAxisIndexByDimension( sal_Int
     return nRet;
 }
 
-// ____ XChartTypeContainer ____
+
 void SAL_CALL BaseCoordinateSystem::addChartType( const Reference< chart2::XChartType >& aChartType )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
@@ -311,7 +311,7 @@ void SAL_CALL BaseCoordinateSystem::setChartTypes( const Sequence< Reference< ch
     fireModifyEvent();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL BaseCoordinateSystem::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -340,21 +340,21 @@ void SAL_CALL BaseCoordinateSystem::removeModifyListener( const Reference< util:
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL BaseCoordinateSystem::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL BaseCoordinateSystem::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void BaseCoordinateSystem::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -365,7 +365,7 @@ void BaseCoordinateSystem::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// ____ OPropertySet ____
+
 uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -376,13 +376,13 @@ uno::Any BaseCoordinateSystem::GetDefaultValue( sal_Int32 nHandle ) const
     return (*aFound).second;
 }
 
-// ____ OPropertySet ____
+
 ::cppu::IPropertyArrayHelper & SAL_CALL BaseCoordinateSystem::getInfoHelper()
 {
     return *StaticCooSysInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL BaseCoordinateSystem::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -394,6 +394,6 @@ using impl::BaseCoordinateSystem_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( BaseCoordinateSystem, BaseCoordinateSystem_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( BaseCoordinateSystem, BaseCoordinateSystem_Base, ::property::OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ref.hxx>
@@ -147,8 +147,8 @@ void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const uno::Referen
 void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
         const SfxHint& rHint )
 {
-    // do not broadcast notifications for writer fly frames, because there
-    // are no shapes that need to know about them.
+    
+    
     const SdrHint *pSdrHint = PTR_CAST( SdrHint, &rHint );
     if ( !pSdrHint ||
          ( pSdrHint->GetObject() &&
@@ -266,7 +266,7 @@ SwAccessibleObjShape_Impl
             uno::Reference < XAccessible > xAcc( (*aIter).second );
             if( nSelShapes && pFESh &&pFESh->IsObjSelected( *pObj ) )
             {
-                // selected objects are inserted from the back
+                
                 --pSelShape;
                 pSelShape->first = pObj;
                 pSelShape->second =
@@ -305,19 +305,19 @@ public:
                      INVALID_ATTR };
 
 private:
-    SwRect      maOldBox;                       // the old bounds for CHILD_POS_CHANGED
-                                                // and POS_CHANGED
-    uno::WeakReference < XAccessible > mxAcc;   // The object that fires the event
-    SwAccessibleChild   maFrmOrObj;             // the child for CHILD_POS_CHANGED and
-                                                // the same as xAcc for any other
-                                                // event type
-    EventType   meType;                         // The event type
-    tAccessibleStates mnStates;                 // check states or update caret pos
+    SwRect      maOldBox;                       
+                                                
+    uno::WeakReference < XAccessible > mxAcc;   
+    SwAccessibleChild   maFrmOrObj;             
+                                                
+                                                
+    EventType   meType;                         
+    tAccessibleStates mnStates;                 
 
     SwAccessibleEvent_Impl& operator==( const SwAccessibleEvent_Impl& );
 
 public:
-    const SwFrm* mpParentFrm;   // The object that fires the event
+    const SwFrm* mpParentFrm;   
     sal_Bool IsNoXaccParentFrm() const
     {
         return CHILD_POS_CHANGED == meType && mpParentFrm != 0;
@@ -398,7 +398,7 @@ public:
             "wrong event constructor, CHILD_POS_CHANGED only" );
     }
 
-    // <SetType(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
+    
     inline void SetType( EventType eT )
     {
         meType = eT;
@@ -421,7 +421,7 @@ public:
     {
         return maOldBox;
     }
-    // <SetOldBox(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
+    
     inline void SetOldBox( const SwRect& rOldBox )
     {
         maOldBox = rOldBox;
@@ -432,7 +432,7 @@ public:
         return maFrmOrObj;
     }
 
-    // <SetStates(..)> only used in method <SwAccessibleMap::AppendEvent(..)>
+    
     inline void SetStates( tAccessibleStates _nStates )
     {
         mnStates |= _nStates;
@@ -528,16 +528,16 @@ void SwAccessibleEventList_Impl::MoveInvalidXAccToEnd()
     OSL_ENSURE(size() == nSize ,"");
 }
 
-// The shape list is filled if an accessible shape is destroyed. It
-// simply keeps a reference to the accessible shape's XShape. These
-// references are destroyed within the EndAction when firing events.
-// There are two reason for this. First of all, a new accessible shape
-// for the XShape might be created soon. It's then cheaper if the XShape
-// still exists. The other reason are situations where an accessible shape
-// is destroyed within an SwFrmFmt::Modify. In this case, destroying
-// the XShape at the same time (indirectly by destroying the accessible
-// shape) leads to an assert, because a client of the Modify is destroyed
-// within a Modify call.
+
+
+
+
+
+
+
+
+
+
 
 typedef ::std::list < uno::Reference < drawing::XShape > > _SwShapeList_Impl;
 
@@ -601,7 +601,7 @@ typedef ::std::map< uno::WeakReference < XAccessible >,
 class SwAccessibleSelectedParas_Impl: public _SwAccessibleSelectedParas_Impl
 {};
 
-// helper class that stores preview data
+
 class SwAccPreviewData
 {
     typedef std::vector<Rectangle> Rectangles;
@@ -674,33 +674,33 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
                                const SwPageFrm* _pSelectedPageFrm,
                                const Size&      _rPreviewWinSize )
 {
-    // store preview scaling, maximal preview page size and selected page
+    
     maScale = _rScale;
     mpSelPage = _pSelectedPageFrm;
 
-    // prepare loop on preview pages
+    
     maPreviewRects.clear();
     maLogicRects.clear();
     SwAccessibleChild aPage;
     maVisArea.Clear();
 
-    // loop on preview pages to calculate <maPreviewRects>, <maLogicRects> and
-    // <maVisArea>
+    
+    
     for ( std::vector<PreviewPage*>::const_iterator aPageIter = _rPreviewPages.begin();
           aPageIter != _rPreviewPages.end();
           ++aPageIter )
     {
         aPage = (*aPageIter)->pPage;
 
-        // add preview page rectangle to <maPreviewRects>
+        
         Rectangle aPreviewPgRect( (*aPageIter)->aPreviewWinPos, (*aPageIter)->aPageSize );
         maPreviewRects.push_back( aPreviewPgRect );
 
-        // add logic page rectangle to <maLogicRects>
+        
         SwRect aLogicPgSwRect( aPage.GetBox( rAccMap ) );
         Rectangle aLogicPgRect( aLogicPgSwRect.SVRect() );
         maLogicRects.push_back( aLogicPgRect );
-        // union visible area with visible part of logic page rectangle
+        
         if ( (*aPageIter)->bVisible )
         {
             if ( !(*aPageIter)->pPage->IsEmptyPage() )
@@ -741,11 +741,11 @@ const SwRect& SwAccPreviewData::GetVisArea() const
 void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
                                       const Point& rPoint ) const
 {
-    // adjust scale
+    
     rMapMode.SetScaleX( maScale );
     rMapMode.SetScaleY( maScale );
 
-    // find proper rectangle
+    
     Rectangles::const_iterator aBegin = maLogicRects.begin();
     Rectangles::const_iterator aEnd = maLogicRects.end();
     Rectangles::const_iterator aFound = ::std::find_if( aBegin, aEnd,
@@ -753,12 +753,12 @@ void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
 
     if( aFound != aEnd )
     {
-        // found! set new origin
+        
         Point aPoint = (maPreviewRects.begin() + (aFound - aBegin))->TopLeft();
         aPoint -= (maLogicRects.begin() + (aFound-aBegin))->TopLeft();
         rMapMode.SetOrigin( aPoint );
     }
-    // else: don't adjust MapMode
+    
 }
 
 void SwAccPreviewData::DisposePage(const SwPageFrm *pPageFrm )
@@ -767,32 +767,32 @@ void SwAccPreviewData::DisposePage(const SwPageFrm *pPageFrm )
         mpSelPage = 0;
 }
 
-// adjust logic page retangle to its visible part
+
 void SwAccPreviewData::AdjustLogicPgRectToVisibleArea(
                             SwRect&         _iorLogicPgSwRect,
                             const SwRect&   _rPreviewPgSwRect,
                             const Size&     _rPreviewWinSize )
 {
-    // determine preview window rectangle
+    
     const SwRect aPreviewWinSwRect( Point( 0, 0 ), _rPreviewWinSize );
-    // calculate visible preview page rectangle
+    
     SwRect aVisPreviewPgSwRect( _rPreviewPgSwRect );
     aVisPreviewPgSwRect.Intersection( aPreviewWinSwRect );
-    // adjust logic page rectangle
+    
     SwTwips nTmpDiff;
-    // left
+    
     nTmpDiff = aVisPreviewPgSwRect.Left() - _rPreviewPgSwRect.Left();
     if ( nTmpDiff > 0 )
         _iorLogicPgSwRect.Left( _iorLogicPgSwRect.Left() + nTmpDiff );
-    // top
+    
     nTmpDiff = aVisPreviewPgSwRect.Top() - _rPreviewPgSwRect.Top();
     if ( nTmpDiff > 0 )
         _iorLogicPgSwRect.Top( _iorLogicPgSwRect.Top() + nTmpDiff );
-    // right
+    
     nTmpDiff = _rPreviewPgSwRect.Right() - aVisPreviewPgSwRect.Right();
     if ( nTmpDiff > 0 )
         _iorLogicPgSwRect.Right( _iorLogicPgSwRect.Right() - nTmpDiff );
-    // bottom
+    
     nTmpDiff = _rPreviewPgSwRect.Bottom() - aVisPreviewPgSwRect.Bottom();
     if ( nTmpDiff > 0 )
         _iorLogicPgSwRect.Bottom( _iorLogicPgSwRect.Bottom() - nTmpDiff );
@@ -805,10 +805,10 @@ static bool AreInSameTable( const uno::Reference< XAccessible >& rAcc,
 
     if( pFrm && pFrm->IsCellFrm() && rAcc.is() )
     {
-        // Is it in the same table? We check that
-        // by comparing the last table frame in the
-        // follow chain, because that's cheaper than
-        // searching the first one.
+        
+        
+        
+        
         SwAccessibleContext *pAccImpl =
             static_cast< SwAccessibleContext *>( rAcc.get() );
         if( pAccImpl->GetFrm()->IsCellFrm() )
@@ -882,7 +882,7 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
                     "dispose event has been stored" );
             break;
         case SwAccessibleEvent_Impl::INVALID_ATTR:
-            // nothing to do here - handled above
+            
             break;
         default:
             break;
@@ -895,8 +895,8 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
                 xAccImpl->InvalidateStates( rEvent.GetStates() );
             if( rEvent.IsInvalidateRelation() )
             {
-                // both events CONTENT_FLOWS_FROM_RELATION_CHANGED and
-                // CONTENT_FLOWS_TO_RELATION_CHANGED are possible
+                
+                
                 if ( rEvent.GetAllStates() & ACC_STATE_RELATION_FROM )
                 {
                     xAccImpl->InvalidateRelation(
@@ -928,8 +928,8 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
 
     if( mpEvents->IsFiring() )
     {
-        // While events are fired new ones are generated. They have to be fired
-        // now. This does not work for DISPOSE events!
+        
+        
         OSL_ENSURE( rEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
                 "dispose event while firing events" );
         FireEvent( rEvent );
@@ -948,22 +948,22 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
             switch( rEvent.GetType() )
             {
             case SwAccessibleEvent_Impl::CARET_OR_STATES:
-                // A CARET_OR_STATES event is added to any other
-                // event only. It is broadcasted after any other event, so the
-                // event should be put to the back.
+                
+                
+                
                 OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 aEvent.SetStates( rEvent.GetAllStates() );
                 break;
             case SwAccessibleEvent_Impl::INVALID_CONTENT:
-                // An INVALID_CONTENT event overwrites a CARET_OR_STATES
-                // event (but keeps its flags) and it is contained in a
-                // POS_CHANGED event.
-                // Therefore, the event's type has to be adapted and the event
-                // has to be put at the end.
+                
+                
+                
+                
+                
                 //
-                // fdo#56031 An INVALID_CONTENT event overwrites a INVALID_ATTR
-                // event and overwrites its flags
+                
+                
                 OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 if( aEvent.GetType() == SwAccessibleEvent_Impl::CARET_OR_STATES )
@@ -976,10 +976,10 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
 
                 break;
             case SwAccessibleEvent_Impl::POS_CHANGED:
-                // A pos changed event overwrites CARET_STATES (keeping its
-                // flags) as well as INVALID_CONTENT. The old box position
-                // has to be stored however if the old event is not a
-                // POS_CHANGED itself.
+                
+                
+                
+                
                 OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 if( aEvent.GetType() != SwAccessibleEvent_Impl::POS_CHANGED )
@@ -987,10 +987,10 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 aEvent.SetType( SwAccessibleEvent_Impl::POS_CHANGED );
                 break;
             case SwAccessibleEvent_Impl::CHILD_POS_CHANGED:
-                // CHILD_POS_CHANGED events can only follow CHILD_POS_CHANGED
-                // events. The only action that needs to be done again is
-                // to put the old event to the back. The new one cannot be used,
-                // because we are interested in the old frame bounds.
+                
+                
+                
+                
                 OSL_ENSURE( aEvent.GetType() == SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 break;
@@ -999,10 +999,10 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                         "invalid event combination" );
                 break;
             case SwAccessibleEvent_Impl::DISPOSE:
-                // DISPOSE events overwrite all others. They are not stored
-                // but executed immediately to avoid broadcasting of
-                // defunctional objects. So what needs to be done here is to
-                // remove all events for the frame in question.
+                
+                
+                
+                
                 bAppendEvent = false;
                 break;
             case SwAccessibleEvent_Impl::INVALID_ATTR:
@@ -1048,10 +1048,10 @@ void SwAccessibleMap::InvalidateCursorPosition(
     else
     {
         FireEvents();
-        // While firing events the current frame might have
-        // been disposed because it moved out of the vis area.
-        // Setting the cursor for such frames is useless and even
-        // causes asserts.
+        
+        
+        
+        
         if( pAccImpl->GetFrm() )
             pAccImpl->InvalidateCursorPos();
     }
@@ -1072,10 +1072,10 @@ void SwAccessibleMap::InvalidateShapeSelection()
     }
 }
 
-//This method should implement the following functions:
-//1.find the shape objects and set the selected state.
-//2.find the Swframe objects and set the selected state.
-//3.find the paragraph objects and set the selected state.
+
+
+
+
 void SwAccessibleMap::InvalidateShapeInParaSelection()
 {
     SwAccessibleObjShape_Impl *pShapes = 0;
@@ -1087,7 +1087,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                             static_cast< const SwFEShell * >( pVSh ) : 0;
     SwPaM* pCrsr = pFESh ? pFESh->GetCrsr( sal_False /* ??? */ ) : NULL;
 
-    //sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
+    
 
     {
         osl::MutexGuard aGuard( maMutex );
@@ -1099,7 +1099,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 
     if( mpShapeMap )
     {
-        //Checked for shapes.
+        
         _SwAccessibleShapeMap_Impl::const_iterator aIter = mpShapeMap->begin();
         _SwAccessibleShapeMap_Impl::const_iterator aEndIter = mpShapeMap->end();
         ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
@@ -1148,11 +1148,11 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
 
                         do
                         {
-                            // ignore, if no mark
+                            
                             if( pTmpCrsr->HasMark() )
                             {
                                 bMarked = sal_True;
-                                // check whether nHere is 'inside' pCrsr
+                                
                                 SwPosition* pStart = pTmpCrsr->Start();
                                 sal_uLong nStartIndex = pStart->nNode.GetIndex();
                                 SwPosition* pEnd = pTmpCrsr->End();
@@ -1193,7 +1193,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                                     }
                                 }
                             }
-                            // next PaM in ring
+                            
                             pTmpCrsr = static_cast<SwPaM*>( pTmpCrsr->GetNext() );
                         }
                         while( pTmpCrsr != pCrsr );
@@ -1217,11 +1217,11 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
                 }
 
                 ++aIter;
-            }//while( aIter != aEndIter )
-        }//else
+            }
+        }
     }
 
-    //Checked for FlyFrm
+    
     if (mpFrmMap)
     {
         SwAccessibleContextMap_Impl::iterator aIter = mpFrmMap->begin();
@@ -1275,7 +1275,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     typedef std::vector< SwAccessibleContext* > VEC_PARA;
     VEC_PARA vecAdd;
     VEC_PARA vecRemove;
-    //Checked for Paras.
+    
     SwPaM* pTmpCrsr = pCrsr;
     sal_Bool bMarkChanged = sal_False;
     SwAccessibleContextMap_Impl mapTemp;
@@ -1391,7 +1391,7 @@ void SwAccessibleMap::InvalidateShapeInParaSelection()
     }
 }
 
-//Marge with DoInvalidateShapeFocus
+
 void SwAccessibleMap::DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode /*=sal_False*/)
 {
     SwAccessibleObjShape_Impl *pShapes = 0;
@@ -1404,8 +1404,8 @@ void SwAccessibleMap::DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode /
     sal_uInt16 nSelShapes = pFESh ? pFESh->IsObjSelected() : 0;
 
 
-    //when InvalidateFocus Call this function ,and the current selected shape count is not 1 ,
-    //return
+    
+    
     if (bInvalidateFocusMode && nSelShapes != 1)
     {
         return;
@@ -1462,7 +1462,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode /
             {
                 if( pShape >= pSelShape )
                 {
-                    //first fire focus event
+                    
                     if( bFocused && 1 == nSelShapes )
                         pShape->second->SetState( AccessibleStateType::FOCUSED );
                     else
@@ -1563,7 +1563,7 @@ void SwAccessibleMap::DoInvalidateShapeSelection(sal_Bool bInvalidateFocusMode /
     }
 }
 
-//Marge with DoInvalidateShapeSelection
+
 /*
 void SwAccessibleMap::DoInvalidateShapeFocus()
 {
@@ -1771,7 +1771,7 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
             xAcc = (*aIter).second;
         if( xAcc.is() )
         {
-            bSetVisArea = true; // Set VisArea when map mutex is not locked
+            bSetVisArea = true; 
         }
         else
         {
@@ -1817,7 +1817,7 @@ uno::Reference<XAccessible> SwAccessibleMap::GetDocumentPreview(
                                     const SwPageFrm* _pSelectedPageFrm,
                                     const Size&      _rPreviewWinSize )
 {
-    // create & update preview data object
+    
     if( mpPreview == NULL )
         mpPreview = new SwAccPreviewData();
     mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrm, _rPreviewWinSize );
@@ -1923,19 +1923,19 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                     if( pAcc->HasCursor() &&
                         !AreInSameTable( mxCursorContext, pFrm ) )
                     {
-                        // If the new context has the focus, and if we know
-                        // another context that had the focus, then the focus
-                        // just moves from the old context to the new one. We
-                        // then have to send a focus event and a caret event for
-                        // the old context. We have to to that now,
-                        // because after we have left this method, anyone might
-                        // call getStates for the new context and will get a
-                        // focused state then. Sending the focus changes event
-                        // after that seems to be strange. However, we cannot
-                        // send a focus event for the new context now, because
-                        // noone except us knows it. In any case, we remember
-                        // the new context as the one that has the focus
-                        // currently.
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
 
                         xOldCursorAcc = mxCursorContext;
                         mxCursorContext = xAcc;
@@ -1948,7 +1948,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
         }
     }
 
-    // Invalidate focus for old object when map is not locked
+    
     if( xOldCursorAcc.is() )
         InvalidateCursorPosition( xOldCursorAcc );
     if( bOldShapeSelected )
@@ -2022,7 +2022,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
                                                                       xAcc );
                         mpShapeMap->insert( aEntry );
                     }
-                    // TODO: focus!!!
+                    
                 }
                 if (xAcc.is())
                     AddGroupContext(pObj, xAcc);
@@ -2030,7 +2030,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
         }
     }
 
-    // Invalidate focus for old object when map is not locked
+    
     if( xOldCursorAcc.is() )
         InvalidateCursorPosition( xOldCursorAcc );
 
@@ -2056,7 +2056,7 @@ void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, uno::Reference < XA
 
 }
 
-//Added by yanjun for sym2_6407
+
 void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj, ::com::sun::star::uno::Reference < ::com::sun::star::accessibility::XAccessible > xAccParent)
 {
     osl::MutexGuard aGuard( maMutex );
@@ -2090,7 +2090,7 @@ void SwAccessibleMap::RemoveGroupContext(const SdrObject *pParentObj, ::com::sun
         }
     }
 }
-//End
+
 
 
 void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Reference < XAccessible > xAccParent)
@@ -2098,7 +2098,7 @@ void SwAccessibleMap::AddGroupContext(const SdrObject *pParentObj, uno::Referenc
     osl::MutexGuard aGuard( maMutex );
     if( mpShapeMap )
     {
-        //here get all the sub list.
+        
         if (pParentObj->IsGroupObject())
         {
             if (xAccParent.is())
@@ -2161,9 +2161,9 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
         {
             mpFrmMap->erase( aIter );
 
-            // Remove reference to old caret object. Though mxCursorContext
-            // is a weak reference and cleared automatically, clearing it
-            // directly makes sure to not keep a non-functional object.
+            
+            
+            
             uno::Reference < XAccessible > xOldAcc( mxCursorContext );
             if( xOldAcc.is() )
             {
@@ -2172,7 +2172,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
                 OSL_ENSURE( pOldAccImpl->GetFrm(), "old caret context is disposed" );
                 if( pOldAccImpl->GetFrm() == pFrm )
                 {
-                    xOldAcc.clear();    // get an empty ref
+                    xOldAcc.clear();    
                     mxCursorContext = xOldAcc;
                 }
             }
@@ -2199,9 +2199,9 @@ void SwAccessibleMap::RemoveContext( const SdrObject *pObj )
             uno::Reference < XAccessible > xAcc( (*aIter).second );
             mpShapeMap->erase( aIter );
             RemoveGroupContext(pObj, xAcc);
-            // The shape selection flag is not cleared, but one might do
-            // so but has to make sure that the removed context is the one
-            // that is selected.
+            
+            
+            
 
             if( mpShapeMap && mpShapeMap->empty() )
             {
@@ -2219,10 +2219,10 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
 {
     SwAccessibleChild aFrmOrObj( pFrm, pObj, pWindow );
 
-    // Indeed, the following assert checks the frame's accessible flag,
-    // because that's the one that is evaluated in the layout. The frame
-    // might not be accessible anyway. That's the case for cell frames that
-    // contain further cells.
+    
+    
+    
+    
     OSL_ENSURE( !aFrmOrObj.GetSwFrm() || aFrmOrObj.GetSwFrm()->IsAccessibleFrm(),
             "non accessible frame should be disposed" );
 
@@ -2231,11 +2231,11 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
         ::rtl::Reference< SwAccessibleContext > xAccImpl;
         ::rtl::Reference< SwAccessibleContext > xParentAccImpl;
         ::rtl::Reference< ::accessibility::AccessibleShape > xShapeAccImpl;
-        // get accessible context for frame
+        
         {
             osl::MutexGuard aGuard( maMutex );
 
-            // First of all look for an accessible context for a frame
+            
             if( aFrmOrObj.GetSwFrm() && mpFrmMap )
             {
                 SwAccessibleContextMap_Impl::iterator aIter =
@@ -2249,7 +2249,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
             }
             if( !xAccImpl.is() && mpFrmMap )
             {
-                // If there is none, look if the parent is accessible.
+                
                 const SwFrm *pParent =
                         SwAccessibleFrame::GetParent( aFrmOrObj,
                                                       GetShell()->IsPreview());
@@ -2281,8 +2281,8 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
             if( pObj && GetShell()->ActionPend() &&
                 (xParentAccImpl.is() || xShapeAccImpl.is()) )
             {
-                // Keep a reference to the XShape to avoid that it
-                // is deleted with a SwFrmFmt::Modify.
+                
+                
                 uno::Reference < drawing::XShape > xShape(
                     const_cast< SdrObject * >( pObj )->getUnoShape(),
                     uno::UNO_QUERY );
@@ -2295,7 +2295,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
             }
         }
 
-        // remove events stored for the frame
+        
         {
             osl::MutexGuard aGuard( maEventMutex );
             if( mpEvents )
@@ -2311,20 +2311,20 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
             }
         }
 
-        // If the frame is accessible and there is a context for it, dispose
-        // the frame. If the frame is no context for it but disposing should
-        // take place recursive, the frame's children have to be disposed
-        // anyway, so we have to create the context then.
+        
+        
+        
+        
         if( xAccImpl.is() )
         {
             xAccImpl->Dispose( bRecursive );
         }
         else if( xParentAccImpl.is() )
         {
-            // If the frame is a cell frame, the table must be notified.
-            // If we are in an action, a table model change event will
-            // be broadcasted at the end of the action to give the table
-            // a chance to generate a single table change event.
+            
+            
+            
+            
 
             xParentAccImpl->DisposeChild( aFrmOrObj, bRecursive );
         }
@@ -2361,8 +2361,8 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                         mpFrmMap->find( aFrmOrObj.GetSwFrm() );
                     if( aIter != mpFrmMap->end() )
                     {
-                        // If there is an accesible object already it is
-                        // notified directly.
+                        
+                        
                         uno::Reference < XAccessible > xAcc( (*aIter).second );
                         xAccImpl =
                             static_cast< SwAccessibleContext *>( xAcc.get() );
@@ -2370,8 +2370,8 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
                 }
                 if( !xAccImpl.is() )
                 {
-                    // Otherwise we look if the parent is accessible.
-                    // If not, there is nothing to do.
+                    
+                    
                     pParent =
                         SwAccessibleFrame::GetParent( aFrmOrObj,
                                                       GetShell()->IsPreview());
@@ -2450,8 +2450,8 @@ so run here: save the parent's SwFrm not the accessible object parent,
                     bIsTxtParent =sal_True;
                 }
             }
-//          sal_Bool bIsVisibleChildrenOnly =aFrmOrObj.IsVisibleChildrenOnly() ;
-//          sal_Bool bIsBoundAsChar =aFrmOrObj.IsBoundAsChar() ;//bIsVisibleChildrenOnly && bIsBoundAsChar &&
+
+
             if((bIsValidFrm || bIsTxtParent) )
             {
                 if( GetShell()->ActionPend() )
@@ -2588,7 +2588,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         osl::MutexGuard aGuard( maMutex );
 
         xOldAcc = mxCursorContext;
-        mxCursorContext = xAcc; // clear reference
+        mxCursorContext = xAcc; 
 
         bOldShapeSelected = mbShapeSelected;
         mbShapeSelected = bShapeSelected;
@@ -2621,28 +2621,28 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                 }
             }
 
-            // For cells, some extra thoughts are necessary,
-            // because invalidating the cursor for one cell
-            // invalidates the cursor for all cells of the same
-            // table. For this reason, we don't want to
-            // invalidate the cursor for the old cursor object
-            // and the new one if they are within the same table,
-            // because this would result in doing the work twice.
-            // Moreover, we have to make sure to invalidate the
-            // cursor even if the current cell has no accessible object.
-            // If the old cursor objects exists and is in the same
-            // table, its the best choice, because using it avoids
-            // an unnessarary cursor invalidation cycle when creating
-            // a new object for the current cell.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             if( aFrmOrObj.GetSwFrm()->IsCellFrm() )
             {
                 if( xOldAcc.is() &&
                     AreInSameTable( xOldAcc, aFrmOrObj.GetSwFrm() ) )
                 {
                     if( xAcc.is() )
-                        xOldAcc = xAcc; // avoid extra invalidation
+                        xOldAcc = xAcc; 
                     else
-                        xAcc = xOldAcc; // make sure ate least one
+                        xAcc = xOldAcc; 
                 }
                 if( !xAcc.is() )
                     xAcc = GetContext( aFrmOrObj.GetSwFrm(), sal_True );
@@ -2673,8 +2673,8 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                                 const SwTabFrm* pTabFrm = pParent->FindTabFrm();
                                 if (pTabFrm)
                                 {
-                                    //The Table should not add in acc.because the "pParent" is not add to acc .
-                                    uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrm,sal_True);//Should Create.
+                                    
+                                    uno::Reference< XAccessible>  xAccParentTab = GetContext(pTabFrm,sal_True);
 
                                     const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pTabFrm), GetShell()->IsPreview() );
                                     if (pParentRoot)
@@ -2689,13 +2689,13 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
                                         }
                                     }
 
-                                    //Get "pParent" acc again.
+                                    
                                     xParentAccImpl = GetContextImpl(pParent,sal_False);
                                 }
                                 else
                                 {
-                                    //directly create this acc para .
-                                    xParentAccImpl = GetContextImpl(pParent,sal_True);//Should Create.
+                                    
+                                    xParentAccImpl = GetContextImpl(pParent,sal_True);
 
                                     const SwFrm *pParentRoot = SwAccessibleFrame::GetParent( SwAccessibleChild(pParent), GetShell()->IsPreview() );
 
@@ -2764,7 +2764,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
     }
 }
 
-//Notify the page change event to bridge.
+
 void SwAccessibleMap::FirePageChangeEvent(sal_uInt16 nOldPage, sal_uInt16 nNewPage)
 {
     uno::Reference<XAccessible> xAcc = GetDocumentView( );
@@ -2865,7 +2865,7 @@ void SwAccessibleMap::SetCursorContext(
 void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
                                         const SwFrm* _pFrm )
 {
-    // Start with the frame or the first upper that is accessible
+    
     SwAccessibleChild aFrmOrObj( _pFrm );
     while( aFrmOrObj.GetSwFrm() &&
             !aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
@@ -2894,7 +2894,7 @@ void SwAccessibleMap::InvalidateStates( tAccessibleStates _nStates,
 void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
                                               bool bFrom )
 {
-    // first, see if this frame is accessible, and if so, get the respective
+    
     SwAccessibleChild aFrmOrObj( pFrm );
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
@@ -2913,7 +2913,7 @@ void SwAccessibleMap::_InvalidateRelationSet( const SwFrm* pFrm,
             }
         }
 
-        // deliver event directly, or queue event
+        
         if( xAcc.is() )
         {
             SwAccessibleContext *pAccImpl =
@@ -2945,17 +2945,17 @@ void SwAccessibleMap::InvalidateRelationSet( const SwFrm* pMaster,
     _InvalidateRelationSet( pFollow, true );
 }
 
-// invalidation of CONTENT_FLOW_FROM/_TO relation of a paragraph
+
 void SwAccessibleMap::InvalidateParaFlowRelation( const SwTxtFrm& _rTxtFrm,
                                                   const bool _bFrom )
 {
     _InvalidateRelationSet( &_rTxtFrm, _bFrom );
 }
 
-// invalidation of text selection of a paragraph
+
 void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
 {
-    // first, see if this frame is accessible, and if so, get the respective
+    
     SwAccessibleChild aFrmOrObj( &_rTxtFrm );
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreview() ) )
     {
@@ -2974,7 +2974,7 @@ void SwAccessibleMap::InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm )
             }
         }
 
-        // deliver event directly, or queue event
+        
         if( xAcc.is() )
         {
             SwAccessibleContext *pAccImpl =
@@ -3043,9 +3043,9 @@ void SwAccessibleMap::UpdatePreview( const std::vector<PreviewPage*>& _rPreviewP
 
     mpPreview->Update( *this, _rPreviewPages, _rScale, _pSelectedPageFrm, _rPreviewWinSize );
 
-    // propagate change of VisArea through the document's
-    // accessibility tree; this will also send appropriate scroll
-    // events
+    
+    
+    
     SwAccessibleContext* pDoc =
         GetContextImpl( GetShell()->GetLayout() ).get();
     static_cast<SwAccessibleDocumentBase*>( pDoc )->SetVisArea();
@@ -3149,8 +3149,8 @@ Rectangle SwAccessibleMap::GetVisibleArea() const
     return OutputDevice::LogicToLogic( GetVisArea().SVRect(), aSrc, aDest );
 }
 
-// Convert a MM100 value relative to the document root into a pixel value
-// relative to the screen!
+
+
 Point SwAccessibleMap::LogicToPixel( const Point& rPoint ) const
 {
     MapMode aSrc( MAP_100TH_MM );
@@ -3250,12 +3250,12 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     if( !pObj )
         return sal_False;
 
-    uno::Reference < drawing::XShape > xShape( _rxShape );  // keep reference to shape, because
-                                                            // we might be the only one that
-                                                            // holds it.
-    // Also get keep parent.
+    uno::Reference < drawing::XShape > xShape( _rxShape );  
+                                                            
+                                                            
+    
     uno::Reference < XAccessible > xParent( pCurrentChild->getAccessibleParent() );
-    pCurrentChild = 0;  // will be released by dispose
+    pCurrentChild = 0;  
     Dispose( 0, pObj, 0 );
 
     {
@@ -3264,7 +3264,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
         if( !mpShapeMap )
             mpShapeMap = new SwAccessibleShapeMap_Impl( this );
 
-        // create the new child
+        
         ::accessibility::ShapeTypeHandler& rShapeTypeHandler =
                         ::accessibility::ShapeTypeHandler::Instance();
         ::accessibility::AccessibleShapeInfo aShapeInfo(
@@ -3298,7 +3298,7 @@ sal_Bool SwAccessibleMap::ReplaceChild (
     return sal_True;
 }
 
-//Get the accessible control shape from the model object, here model object is with XPropertySet type
+
 ::accessibility::AccessibleControlShape * SwAccessibleMap::GetAccControlShapeFromModel(::com::sun::star::beans::XPropertySet* pSet) throw (::com::sun::star::uno::RuntimeException)
 {
     if( mpShapeMap )
@@ -3432,13 +3432,13 @@ Size SwAccessibleMap::GetPreviewPageSize( sal_uInt16 _nPreviewPageNum ) const
 */
 SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
 {
-    // no accessible contexts, no selection
+    
     if ( !mpFrmMap )
     {
         return 0L;
     }
 
-    // get cursor as an instance of its base class <SwPaM>
+    
     SwPaM* pCrsr( 0L );
     {
         SwCrsrShell* pCrsrShell = dynamic_cast<SwCrsrShell*>(GetShell());
@@ -3449,12 +3449,12 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                  ( !pFEShell->IsFrmSelected() &&
                    pFEShell->IsObjSelected() == 0 ) )
             {
-                // get cursor without updating an existing table cursor.
+                
                 pCrsr = pCrsrShell->GetCrsr( sal_False );
             }
         }
     }
-    // no cursor, no selection
+    
     if ( !pCrsr )
     {
         return 0L;
@@ -3462,26 +3462,26 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
 
     SwAccessibleSelectedParas_Impl* pRetSelectedParas( 0L );
 
-    // loop on all cursors
+    
     SwPaM* pRingStart = pCrsr;
     do {
 
-        // for a selection the cursor has to have a mark.
-        // for safety reasons assure that point and mark are in text nodes
+        
+        
         if ( pCrsr->HasMark() &&
              pCrsr->GetPoint()->nNode.GetNode().IsTxtNode() &&
              pCrsr->GetMark()->nNode.GetNode().IsTxtNode() )
         {
             SwPosition* pStartPos = pCrsr->Start();
             SwPosition* pEndPos = pCrsr->End();
-            // loop on all text nodes inside the selection
+            
             SwNodeIndex aIdx( pStartPos->nNode );
             for ( ; aIdx.GetIndex() <= pEndPos->nNode.GetIndex(); ++aIdx )
             {
                 SwTxtNode* pTxtNode( aIdx.GetNode().GetTxtNode() );
                 if ( pTxtNode )
                 {
-                    // loop on all text frames registered at the text node.
+                    
                     SwIterator<SwTxtFrm,SwTxtNode> aIter( *pTxtNode );
                     for( SwTxtFrm* pTxtFrm = aIter.First(); pTxtFrm; pTxtFrm = aIter.Next() )
                         {
@@ -3512,7 +3512,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                 }
             }
 
-        // prepare next turn: get next cursor in ring
+        
         pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
     } while ( pCrsr != pRingStart );
 
@@ -3523,17 +3523,17 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
 {
     osl::MutexGuard aGuard( maMutex );
 
-    // keep previously known selected paragraphs
+    
     SwAccessibleSelectedParas_Impl* pPrevSelectedParas( mpSelectedParas );
 
-    // determine currently selected paragraphs
+    
     mpSelectedParas = _BuildSelectedParas();
 
-    // compare currently selected paragraphs with the previously selected
-    // paragraphs and submit corresponding TEXT_SELECTION_CHANGED events.
-    // first, search for new and changed selections.
-    // on the run remove selections from previously known ones, if they are
-    // also in the current ones.
+    
+    
+    
+    
+    
     if ( mpSelectedParas )
     {
         SwAccessibleSelectedParas_Impl::iterator aIter = mpSelectedParas->begin();
@@ -3542,7 +3542,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
             bool bSubmitEvent( false );
             if ( !pPrevSelectedParas )
             {
-                // new selection
+                
                 bSubmitEvent = true;
             }
             else
@@ -3551,20 +3551,20 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                                         pPrevSelectedParas->find( (*aIter).first );
                 if ( aPrevSelected != pPrevSelectedParas->end() )
                 {
-                    // check, if selection has changed
+                    
                     if ( (*aIter).second.nStartOfSelection !=
                                     (*aPrevSelected).second.nStartOfSelection ||
                          (*aIter).second.nEndOfSelection !=
                                     (*aPrevSelected).second.nEndOfSelection )
                     {
-                        // changed selection
+                        
                         bSubmitEvent = true;
                     }
                     pPrevSelectedParas->erase( aPrevSelected );
                 }
                 else
                 {
-                    // new selection
+                    
                     bSubmitEvent = true;
                 }
             }
@@ -3592,8 +3592,8 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
         }
     }
 
-    // second, handle previous selections - after the first step the data
-    // structure of the previously known only contains the 'old' selections
+    
+    
     if ( pPrevSelectedParas )
     {
         SwAccessibleSelectedParas_Impl::iterator aIter = pPrevSelectedParas->begin();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/scoped_ptr.hpp>
@@ -113,13 +113,13 @@ class WW8TabDesc
 
     SwPosition* pTmpPos;
 
-    SwTableNode* pTblNd;            // table node
-    const SwTableLines* pTabLines;  // row array of node
-    SwTableLine* pTabLine;          // current row
-    SwTableBoxes* pTabBoxes;        // boxes array in current row
-    SwTableBox* pTabBox;            // current cell
+    SwTableNode* pTblNd;            
+    const SwTableLines* pTabLines;  
+    SwTableLine* pTabLine;          
+    SwTableBoxes* pTabBoxes;        
+    SwTableBox* pTabBox;            
 
-    WW8MergeGroups aMergeGroups;   // list of all cells to be merged
+    WW8MergeGroups aMergeGroups;   
 
     WW8_TCell* pAktWWCell;
 
@@ -137,15 +137,15 @@ class WW8TabDesc
     bool bClaimLineFmt;
     sal_Int16 eOri;
     bool bIsBiDi;
-                                // 2. common admin info
+                                
     short nAktRow;
-    short nAktBandRow;          // SW: row of current band
-                                // 3. admin info for writer
+    short nAktBandRow;          
+                                
     short nAktCol;
 
     sal_uInt16 nRowsToRepeat;
 
-    // 4. methods
+    
 
     sal_uInt16 GetLogicalWWCol() const;
     void SetTabBorders( SwTableBox* pBox, short nIdx );
@@ -159,17 +159,17 @@ class WW8TabDesc
 
     WW8SelBoxInfo* FindMergeGroup(short nX1, short nWidth, bool bExact);
 
-    // single box - maybe used in a merge group
-    // (the merge groups are processed later at once)
+    
+    
     SwTableBox* UpdateTableMergeGroup(WW8_TCell& rCell,
         WW8SelBoxInfo* pActGroup, SwTableBox* pActBox, sal_uInt16 nCol  );
     void StartMiserableHackForUnsupportedDirection(short nWwCol);
     void EndMiserableHackForUnsupportedDirection(short nWwCol);
-    //No copying
+    
     WW8TabDesc(const WW8TabDesc&);
     WW8TabDesc &operator=(const WW8TabDesc&);
 public:
-    const SwTable* pTable;          // table
+    const SwTable* pTable;          
     SwPosition* pParentPos;
     SwFlyFrmFmt* pFlyFmt;
     SfxItemSet aItemSet;
@@ -192,7 +192,7 @@ public:
 
     const WW8_TCell* GetAktWWCell() const { return pAktWWCell; }
     short GetAktCol() const { return nAktCol; }
-    // find name of numrule valid for current WW-COL
+    
     OUString GetNumRuleName() const;
     void SetNumRuleName( const OUString& rName );
 
@@ -202,8 +202,8 @@ public:
 void sw::util::RedlineStack::close( const SwPosition& rPos,
     RedlineType_t eType, WW8TabDesc* pTabDesc )
 {
-    // If the redline type is not found in the redline stack, we have to check if there has been
-    // a tabledesc and to check its saved redline stack, too. (#136939, #i68139)
+    
+    
     if( !close( rPos, eType ) )
     {
         if( pTabDesc && pTabDesc->getOldRedlineStack() )
@@ -211,7 +211,7 @@ void sw::util::RedlineStack::close( const SwPosition& rPos,
             bool const bResult =
                 pTabDesc->getOldRedlineStack()->close(rPos, eType);
             OSL_ENSURE( bResult, "close without open!");
-            (void) bResult; // unused in non-debug
+            (void) bResult; 
         }
     }
 }
@@ -286,14 +286,14 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
     bool bFtEdOk = false;
     const FtnDescriptor &rDesc = maFtnStack.back();
 
-    //Get the footnote character and remove it from the txtnode. We'll
-    //replace it with the footnote
+    
+    
     SwTxtNode* pTxt = pPaM->GetNode()->GetTxtNode();
     sal_Int32 nPos = pPaM->GetPoint()->nContent.GetIndex();
 
     OUString sChar;
     SwTxtAttr* pFN = 0;
-    //There should have been a footnote char, we will replace this.
+    
     if (pTxt && nPos)
     {
         sChar += OUString(pTxt->GetTxt()[--nPos]);
@@ -308,7 +308,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
     if (pFN)
     {
 
-        SwPosition aTmpPos( *pPaM->GetPoint() );    // remember old cursor position
+        SwPosition aTmpPos( *pPaM->GetPoint() );    
         WW8PLCFxSaveAll aSave;
         pPlcxMan->SaveAllPLCFx( aSave );
         WW8PLCFMan* pOldPlcxMan = pPlcxMan;
@@ -321,7 +321,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         bool bOld = bFtnEdn;
         bFtnEdn = true;
 
-        // read content of Ft-/End-Note
+        
         Read_HdFtFtnText( pSttIdx, rDesc.mnStartCp, rDesc.mnLen, rDesc.meType);
         bFtEdOk = true;
         bFtnEdn = bOld;
@@ -329,8 +329,8 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
         OSL_ENSURE(sChar.getLength()==1 && ((rDesc.mbAutoNum == (sChar[0] == 2))),
          "footnote autonumbering must be 0x02, and everthing else must not be");
 
-        // If no automatic numbering use the following char from the main text
-        // as the footnote number
+        
+        
         if (!rDesc.mbAutoNum)
             ((SwTxtFtn*)pFN)->SetNumber(0, sChar);
 
@@ -349,7 +349,7 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
             {
                 pPaM->GetPoint()->nContent.Assign( pTNd, 0 );
                 pPaM->SetMark();
-                // Strip out tabs we may have inserted on export #i24762#
+                
                 if (rTxt.getLength() > 1 && rTxt[1] == 0x09)
                     pPaM->GetMark()->nContent++;
                 pPaM->GetMark()->nContent++;
@@ -359,9 +359,9 @@ sal_uInt16 SwWW8ImplReader::End_Ftn()
             }
         }
 
-        *pPaM->GetPoint() = aTmpPos;        // restore Cursor
+        *pPaM->GetPoint() = aTmpPos;        
 
-        pPlcxMan = pOldPlcxMan;             // Restore attributes
+        pPlcxMan = pOldPlcxMan;             
         pPlcxMan->RestoreAllPLCFx( aSave );
     }
 
@@ -430,14 +430,14 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
                 else
                 {
                     OSL_ENSURE(!nLevel || pLevel, "sublevel without level sprm");
-                    return true;    // RowEnd found
+                    return true;    
                 }
             }
         }
 
         aRes.nStartPos = aRes.nEndPos;
         aRes.pMemPos = 0;
-        //Seek to our next block of properties
+        
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
             aRes.nEndPos = WW8_CP_MAX;
@@ -445,7 +445,7 @@ bool SwWW8ImplReader::SearchRowEnd(WW8PLCFx_Cp_FKP* pPap, WW8_CP &rStartCp,
         }
         pPap->GetSprms(&aRes);
         pPap->SetDirty(false);
-        //Update our aRes to get the new starting point of the next properties
+        
         rStartCp = aRes.nEndPos;
     }
 
@@ -457,8 +457,8 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
 {
     const WW8_TablePos *pTopLevelTable = nCellLevel <= 1 ? pTabPos : 0;
     ApoTestResults aRet;
-    // Frame in Style Definition (word appears to ignore them if inside an
-    // text autoshape)
+    
+    
     if (!bTxbxFlySection && nAktColl < vColl.size())
         aRet.mpStyleApo = StyleExists(nAktColl) ? vColl[nAktColl].pWWFly : 0;
 
@@ -487,7 +487,7 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     aRet.m_bHasSprm29 = pSrpm29 != NULL;
     aRet.m_nSprm29 = pSrpm29 ? *pSrpm29 : 0;
 
-    // Is there some frame data here
+    
     bool bNowApo = aRet.HasFrame() || pTopLevelTable;
     if (bNowApo)
     {
@@ -500,12 +500,12 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     bool bTestAllowed = !bTxbxFlySection && !bTableRowEnd;
     if (bTestAllowed)
     {
-        //Test is allowed if there is no table.
-        //Otherwise only allowed if we are in the
-        //first paragraph of the first cell of a row.
-        //(And only if the row we are inside is at the
-        //same level as the previous row, think tables
-        //in tables)
+        
+        
+        
+        
+        
+        
         if (nCellLevel == nInTable)
         {
 
@@ -520,10 +520,10 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
                 }
                 else
                 {
-                    // #i39468#
-                    // If current cell isn't valid, the test is allowed.
-                    // The cell isn't valid, if e.g. there is a new row
-                    // <pTableDesc->nAktRow> >= <pTableDesc->pTabLines->Count()>
+                    
+                    
+                    
+                    
                     bTestAllowed =
                         pTableDesc->GetAktCol() == 0 &&
                         ( !pTableDesc->IsValidCell( pTableDesc->GetAktCol() ) ||
@@ -536,18 +536,18 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     if (!bTestAllowed)
         return aRet;
 
-    aRet.mbStartApo = bNowApo && !InAnyApo(); // APO-start
-    aRet.mbStopApo = InEqualOrHigherApo(nCellLevel) && !bNowApo;  // APO-end
+    aRet.mbStartApo = bNowApo && !InAnyApo(); 
+    aRet.mbStopApo = InEqualOrHigherApo(nCellLevel) && !bNowApo;  
 
-    //If it happens that we are in a table, then if its not the first cell
-    //then any attributes that might otherwise cause the contents to jump
-    //into another frame don't matter, a table row sticks together as one
-    //unit no matter what else happens. So if we are not in a table at
-    //all, or if we are in the first cell then test that the last frame
-    //data is the same as the current one
+    
+    
+    
+    
+    
+    
     if (bNowApo && InEqualApo(nCellLevel))
     {
-        // two bordering eachother
+        
         if (!TestSameApo(aRet, pTabPos))
             aRet.mbStopApo = aRet.mbStartApo = true;
     }
@@ -555,9 +555,9 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
     return aRet;
 }
 
-//---------------------------------------------------------------------
-// helper methods for outline, numbering and bullets
-//---------------------------------------------------------------------
+
+
+
 
 static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
 {
@@ -567,8 +567,8 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
 
     static const SvxAdjust eAdjA[4] = { SVX_ADJUST_LEFT,
         SVX_ADJUST_RIGHT, SVX_ADJUST_LEFT, SVX_ADJUST_LEFT };
-//      in fact the following 2, but writer UI does not provide
-//      SVX_ADJUST_CENTER, SVX_ADJUST_BLOCKLINE };
+
+
 
     rNum.SetNumberingType( static_cast< sal_Int16 >(( rAV.nfc < 8 ) ?
                     eNumA[ rAV.nfc ] : SVX_NUM_NUMBER_NONE) );
@@ -579,30 +579,30 @@ static void SetBaseAnlv(SwNumFmt &rNum, WW8_ANLV &rAV, sal_uInt8 nSwLevel )
 
     rNum.SetCharTextDistance( SVBT16ToShort( rAV.dxaSpace ) );
     sal_Int16 nIndent = std::abs((sal_Int16)SVBT16ToShort( rAV.dxaIndent ));
-    if( rAV.aBits1 & 0x08 )      //fHang
+    if( rAV.aBits1 & 0x08 )      
     {
         rNum.SetFirstLineOffset( -nIndent );
         rNum.SetLSpace( nIndent );
         rNum.SetAbsLSpace( nIndent );
     }
     else
-        rNum.SetCharTextDistance( nIndent );        // width of number is missing
+        rNum.SetCharTextDistance( nIndent );        
 
     if( rAV.nfc == 5 || rAV.nfc == 7 )
     {
         OUString sP = "." + rNum.GetSuffix();
-        rNum.SetSuffix( sP );   // ordinal number
+        rNum.SetSuffix( sP );   
     }
 }
 
 void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     const sal_uInt8* pTxt, bool bOutline)
 {
-    bool bInsert = false;                       // Default
+    bool bInsert = false;                       
     rtl_TextEncoding eCharSet = eStructCharSet;
 
-    const WW8_FFN* pF = pFonts->GetFont(SVBT16ToShort(rAV.ftc)); // FontInfo
-    bool bListSymbol = pF && ( pF->chs == 2 );      // Symbol/WingDings/...
+    const WW8_FFN* pF = pFonts->GetFont(SVBT16ToShort(rAV.ftc)); 
+    bool bListSymbol = pF && ( pF->chs == 2 );      
 
     OUString sTxt;
     if (bVer67)
@@ -618,17 +618,17 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
     }
 
     if( bOutline )
-    {                             // outline
-        if( !rNum.GetIncludeUpperLevels()                          // there are  <= 1 number to show
-            || rNum.GetNumberingType() == SVX_NUM_NUMBER_NONE )    // or this level has none
+    {                             
+        if( !rNum.GetIncludeUpperLevels()                          
+            || rNum.GetNumberingType() == SVX_NUM_NUMBER_NONE )    
         {
-                                                // if self defined digits
-            bInsert = true;                     // then apply character
+                                                
+            bInsert = true;                     
 
-            // replace by simple Bullet ?
+            
             if( bListSymbol )
             {
-                // use cBulletChar for correct mapping on MAC
+                
                 OUStringBuffer aBuf;
                 comphelper::string::padToLength(aBuf, rAV.cbTextBefore
                     + rAV.cbTextAfter, cBulletChar);
@@ -637,7 +637,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
         }
     }
     else
-    {                                       // numbering / bullets
+    {                                       
         bInsert = true;
         if( bListSymbol )
         {
@@ -657,7 +657,7 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
 
                 rNum.SetBulletFont( &aFont );
 
-                // take only the very first character
+                
                 if (rAV.cbTextBefore || rAV.cbTextAfter)
                     rNum.SetBulletChar( sTxt[ 0 ] );
                 else
@@ -678,113 +678,113 @@ void SwWW8ImplReader::SetAnlvStrings(SwNumFmt &rNum, WW8_ANLV &rAV,
             sP += sTxt.copy( rAV.cbTextBefore, rAV.cbTextAfter);
             rNum.SetSuffix( sP );
         }
-// The characters before and after multipe digits do not apply because
-// those are handled different by the writer and the result is in most
-// cases worse than without.
+
+
+
     }
 }
 
-// SetAnld gets a WW-ANLD-Descriptor and a Level and modifies the NumRules
-// which are provided by pNumR. This is used for everything beside
-// outline inside the text.
+
+
+
 void SwWW8ImplReader::SetAnld(SwNumRule* pNumR, WW8_ANLD* pAD, sal_uInt8 nSwLevel,
     bool bOutLine)
 {
     SwNumFmt aNF;
     if (pAD)
-    {                                                       // there is a Anld-Sprm
+    {                                                       
         bAktAND_fNumberAcross = 0 != pAD->fNumberAcross;
         WW8_ANLV &rAV = pAD->eAnlv;
-        SetBaseAnlv(aNF, rAV, nSwLevel);                    // set the base format
-        SetAnlvStrings(aNF, rAV, pAD->rgchAnld, bOutLine ); // set the rest
+        SetBaseAnlv(aNF, rAV, nSwLevel);                    
+        SetAnlvStrings(aNF, rAV, pAD->rgchAnld, bOutLine ); 
     }
     pNumR->Set(nSwLevel, aNF);
 }
 
-//-------------------------------------------------------
-// chapter numbering and bullets
-//-------------------------------------------------------
-// Chapter numbering happens in the style definition.
-// Sprm 13 provides the level, Sprm 12 the content.
+
+
+
+
+
 
 SwNumRule* SwWW8ImplReader::GetStyRule()
 {
-    if( pStyles->pStyRule )         // Bullet-Style already present
+    if( pStyles->pStyRule )         
         return pStyles->pStyRule;
 
     const OUString aBaseName("WW8StyleNum");
     const OUString aName( rDoc.GetUniqueNumRuleName( &aBaseName, false) );
 
-    // #i86652#
+    
     sal_uInt16 nRul = rDoc.MakeNumRule( aName, 0, false,
                                     SvxNumberFormat::LABEL_ALIGNMENT );
     pStyles->pStyRule = rDoc.GetNumRuleTbl()[nRul];
-    // Auto == false-> Nummerierungsvorlage
+    
     pStyles->pStyRule->SetAutoRule(false);
 
     return pStyles->pStyRule;
 }
 
-// Sprm 13
+
 void SwWW8ImplReader::Read_ANLevelNo( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
-    nSwNumLevel = 0xff; // Default: invalid
+    nSwNumLevel = 0xff; 
 
     if( nLen <= 0 )
         return;
 
-    // StyleDef ?
+    
     if( pAktColl )
     {
-        // only for SwTxtFmtColl, not CharFmt
-        // WW: 0 = no Numbering
+        
+        
         SwWW8StyInf * pColl = GetStyle(nAktColl);
         if (pColl != NULL && pColl->bColl && *pData)
         {
-            // Range WW:1..9 -> SW:0..8 no bullets / numbering
+            
 
             if (*pData <= MAXLEVEL && *pData <= 9)
             {
                 nSwNumLevel = *pData - 1;
                 if (!bNoAttrImport)
                     ((SwTxtFmtColl*)pAktColl)->AssignToListLevelOfOutlineStyle( nSwNumLevel );
-                    // For WW-NoNumbering also NO_NUMBERING could be used.
-                    // ( For normal numberierung NO_NUM has to be used:
-                    //   NO_NUM : pauses numbering,
-                    //   NO_NUMBERING : no numbering at all )
+                    
+                    
+                    
+                    
 
             }
             else if( *pData == 10 || *pData == 11 )
             {
-                // remember type, the rest happens at Sprm 12
+                
                 pStyles->nWwNumLevel = *pData;
             }
         }
     }
     else
     {
-        //Not StyleDef
+        
         if (!bAnl)
-            StartAnl(pData);        // begin of outline / bullets
+            StartAnl(pData);        
         NextAnlLine(pData);
     }
 }
 
-void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, short nLen ) // Sprm 12
+void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, short nLen ) 
 {
     SwWW8StyInf * pStyInf = GetStyle(nAktColl);
-    if( !pAktColl || nLen <= 0                       // only for Styledef
-        || (pStyInf && !pStyInf->bColl)              // ignore  CharFmt ->
+    if( !pAktColl || nLen <= 0                       
+        || (pStyInf && !pStyInf->bColl)              
         || ( nIniFlags & WW8FL_NO_OUTLINE ) )
     {
         nSwNumLevel = 0xff;
         return;
     }
 
-    if( nSwNumLevel <= MAXLEVEL         // Value range mapping WW:1..9 -> SW:0..8
-        && nSwNumLevel <= 9 ){          // No Bullets or Numbering
+    if( nSwNumLevel <= MAXLEVEL         
+        && nSwNumLevel <= 9 ){          
 
-        // If NumRuleItems were set, either directly or through inheritance, disable them now
+        
         pAktColl->SetFmtAttr( SwNumRuleItem() );
 
         const OUString aName("Outline");
@@ -795,7 +795,7 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
 
         SetAnld(&aNR, (WW8_ANLD*)pData, nSwNumLevel, true);
 
-        // Missing Levels need not be replenished
+        
         rDoc.SetOutlineNumRule( aNR );
     }else if( pStyles->nWwNumLevel == 10 || pStyles->nWwNumLevel == 11 ){
         SwNumRule* pNR = GetStyRule();
@@ -808,35 +808,35 @@ void SwWW8ImplReader::Read_ANLevelDesc( sal_uInt16, const sal_uInt8* pData, shor
     }
 }
 
-//-----------------------------------------
-// Numbering / Bullets
-//-----------------------------------------
 
-// SetNumOlst() carries the Numrules for this cell to SwNumFmt.
-// For this the info is fetched from OLST and not from ANLD ( see later )
-// ( only for outline inside text; Bullets / numbering use ANLDs )
+
+
+
+
+
+
 void SwWW8ImplReader::SetNumOlst(SwNumRule* pNumR, WW8_OLST* pO, sal_uInt8 nSwLevel)
 {
     SwNumFmt aNF;
     WW8_ANLV &rAV = pO->rganlv[nSwLevel];
     SetBaseAnlv(aNF, rAV, nSwLevel);
-                                            // ... and then the Strings
+                                            
     int nTxtOfs = 0;
     sal_uInt8 i;
-    WW8_ANLV* pAV1;                 // search String-Positions
+    WW8_ANLV* pAV1;                 
     for (i = 0, pAV1 = pO->rganlv; i < nSwLevel; ++i, ++pAV1)
         nTxtOfs += pAV1->cbTextBefore + pAV1->cbTextAfter;
 
     if (!bVer67)
         nTxtOfs *= 2;
-    SetAnlvStrings(aNF, rAV, pO->rgch + nTxtOfs, true); // and apply
+    SetAnlvStrings(aNF, rAV, pO->rgch + nTxtOfs, true); 
     pNumR->Set(nSwLevel, aNF);
 }
 
-// The OLST is at the beginning of each section that contains outlines.
-// The ANLDs that are connected to each outline-line contain only nonsense,
-// so the OLSTs are remembered for the section to have usable information
-// when outline-paragraphs occur.
+
+
+
+
 void SwWW8ImplReader::Read_OLST( sal_uInt16, const sal_uInt8* pData, short nLen )
 {
     delete pNumOlst;
@@ -846,7 +846,7 @@ void SwWW8ImplReader::Read_OLST( sal_uInt16, const sal_uInt8* pData, short nLen 
         return;
     }
     pNumOlst = new WW8_OLST;
-    if( nLen < sal::static_int_cast< sal_Int32 >(sizeof( WW8_OLST )) )   // fill if to short
+    if( nLen < sal::static_int_cast< sal_Int32 >(sizeof( WW8_OLST )) )   
         memset( pNumOlst, 0, sizeof( *pNumOlst ) );
     *pNumOlst = *(WW8_OLST*)pData;
 }
@@ -878,8 +878,8 @@ void ANLDRuleMap::SetNumRule(SwNumRule *pRule, sal_uInt8 nNumType)
         mpOutlineNumRule = pRule;
 }
 
-// StartAnl is called at the beginning of a row area that contains
-// outline / numbering / bullets
+
+
 void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
 {
     bAktAND_fNumberAcross = false;
@@ -891,8 +891,8 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     nWwNumType = nT;
     SwNumRule *pNumRule = maANLDRules.GetNumRule(nWwNumType);
 
-    // check for COL numbering:
-    const sal_uInt8* pS12 = 0;// sprmAnld
+    
+    const sal_uInt8* pS12 = 0;
     OUString sNumRule;
 
     if (pTableDesc)
@@ -905,8 +905,8 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
                 sNumRule = "";
             else
             {
-                // this is ROW numbering ?
-                pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
+                
+                pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); 
                 if (pS12 && 0 != ((WW8_ANLD*)pS12)->fNumberAcross)
                     sNumRule = "";
             }
@@ -926,7 +926,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
     {
         if (!pNumRule)
         {
-            // #i86652#
+            
             pNumRule = rDoc.GetNumRuleTbl()[
                             rDoc.MakeNumRule( sNumRule, 0, false,
                                               SvxNumberFormat::LABEL_ALIGNMENT ) ];
@@ -934,7 +934,7 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
         if (pTableDesc)
         {
             if (!pS12)
-                pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
+                pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); 
             if (!pS12 || !((WW8_ANLD*)pS12)->fNumberAcross)
                 pTableDesc->SetNumRuleName(pNumRule->GetName());
         }
@@ -942,15 +942,15 @@ void SwWW8ImplReader::StartAnl(const sal_uInt8* pSprm13)
 
     bAnl = true;
 
-    // set NumRules via stack
+    
     pCtrlStck->NewAttr(*pPaM->GetPoint(),
         SfxStringItem(RES_FLTR_NUMRULE, pNumRule->GetName()));
 
     maANLDRules.SetNumRule(pNumRule, nWwNumType);
 }
 
-// NextAnlLine() is called once for every row of a
-// outline / numbering / bullet
+
+
 void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
 {
     if (!bAnl)
@@ -958,30 +958,30 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
 
     SwNumRule *pNumRule = maANLDRules.GetNumRule(nWwNumType);
 
-    // pNd->UpdateNum ohne Regelwerk gibt GPF spaetestens beim Speichern als
-    // sdw3
+    
+    
 
-    // WW:10 = numberierung -> SW:0 & WW:11 = bullets -> SW:0
+    
     if (*pSprm13 == 10 || *pSprm13 == 11)
     {
         nSwNumLevel = 0;
         if (!pNumRule->GetNumFmt(nSwNumLevel))
         {
-            // not defined yet
-            // sprmAnld o. 0
+            
+            
             const sal_uInt8* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
             SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
         }
     }
-    else if( *pSprm13 > 0 && *pSprm13 <= MAXLEVEL )          // range WW:1..9 -> SW:0..8
+    else if( *pSprm13 > 0 && *pSprm13 <= MAXLEVEL )          
     {
-        nSwNumLevel = *pSprm13 - 1;             // outline
-        // undefined
+        nSwNumLevel = *pSprm13 - 1;             
+        
         if (!pNumRule->GetNumFmt(nSwNumLevel))
         {
-            if (pNumOlst)                       // there was a OLST
+            if (pNumOlst)                       
             {
-                //Assure upper levels are set, #i9556#
+                
                 for (sal_uInt8 nI = 0; nI < nSwNumLevel; ++nI)
                 {
                     if (!pNumRule->GetNumFmt(nI))
@@ -990,16 +990,16 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
 
                 SetNumOlst(pNumRule, pNumOlst , nSwNumLevel);
             }
-            else                                // no Olst -> use Anld
+            else                                
             {
-                // sprmAnld
+                
                 const sal_uInt8* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
                 SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
             }
         }
     }
     else
-        nSwNumLevel = 0xff;                 // no number
+        nSwNumLevel = 0xff;                 
 
     SwTxtNode* pNd = pPaM->GetNode()->GetTxtNode();
     if (nSwNumLevel < MAXLEVEL)
@@ -1013,8 +1013,8 @@ void SwWW8ImplReader::NextAnlLine(const sal_uInt8* pSprm13)
 
 void SwWW8ImplReader::StopAllAnl(bool bGoBack)
 {
-    //Of course we're not restarting, but we'll make use of our knowledge
-    //of the implementation to do it.
+    
+    
     StopAnlToRestart(WW8_None, bGoBack);
 }
 
@@ -1068,15 +1068,15 @@ WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
     memcpy(aDefBrcs, rBand.aDefBrcs, sizeof(aDefBrcs));
 }
 
-// ReadDef reads the cell position and the borders of a band
+
 void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
 {
     if (!bVer67)
         pS++;
 
-    short nLen = (sal_Int16)SVBT16ToShort( pS - 2 ); // not beautiful
+    short nLen = (sal_Int16)SVBT16ToShort( pS - 2 ); 
 
-    sal_uInt8 nCols = *pS;                       // number of cells
+    sal_uInt8 nCols = *pS;                       
     short nOldCols = nWwCols;
 
     if( nCols > MAX_COL )
@@ -1088,20 +1088,20 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
     nLen --;
     int i;
     for(i=0; i<=nCols; i++, pT+=2 )
-        nCenter[i] = (sal_Int16)SVBT16ToShort( pT );    // X-borders
+        nCenter[i] = (sal_Int16)SVBT16ToShort( pT );    
     nLen -= 2 * ( nCols + 1 );
-    if( nCols != nOldCols ) // different column count
+    if( nCols != nOldCols ) 
     {
         delete[] pTCs, pTCs = 0;
         delete[] pSHDs, pSHDs = 0;
         delete[] pNewSHDs, pNewSHDs = 0;
     }
 
-    short nFileCols = nLen / ( bVer67 ? 10 : 20 );  // really saved
+    short nFileCols = nLen / ( bVer67 ? 10 : 20 );  
 
     if (!pTCs && nCols)
     {
-        // create empty TCs
+        
         pTCs = new WW8_TCell[nCols];
         setcelldefaults(pTCs,nCols);
     }
@@ -1112,7 +1112,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
 
     if( nColsToRead )
     {
-        // read TCs
+        
 
         /*
             Attention: Beginning with Ver8 there is an extra ushort per TC
@@ -1129,7 +1129,7 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
             for(i=0; i<nColsToRead; i++, ++pAktTC,++pTc)
             {
                 if( i < nColsToRead )
-                {               // TC from file ?
+                {               
                     sal_uInt8 aBits1 = pTc->aBits1Ver6;
                     pAktTC->bFirstMerged    = ( ( aBits1 & 0x01 ) != 0 );
                     pAktTC->bMerged     = ( ( aBits1 & 0x02 ) != 0 );
@@ -1144,13 +1144,13 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
                     if(    ( pAktTC->bMerged )
                             && ( i > 0             ) )
                     {
-                        // Cell merged -> remember
-                        //bWWMergedVer6[i] = true;
+                        
+                        
                         memcpy( pTCs[i-1].rgbrc[ WW8_RIGHT ].aBits1,
                                 pTc->rgbrcVer6[  WW8_RIGHT ].aBits1, sizeof( SVBT16 ) );
-                            // apply right border to previous cell
-                            // bExist must not be set to false, because WW
-                            // does not count this cells in text boxes....
+                            
+                            
+                            
                     }
                 }
             }
@@ -1169,17 +1169,17 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
                 pAktTC->bVertMerge      = ( ( aBits1 & 0x0020 ) != 0 );
                 pAktTC->bVertRestart    = ( ( aBits1 & 0x0040 ) != 0 );
                 pAktTC->nVertAlign      = ( ( aBits1 & 0x0180 ) >> 7 );
-                // note: in aBits1 there are 7 bits unused,
-                //       followed by another 16 unused bits
+                
+                
 
-                // In Version 8 koennen we can copy all border codes at once!
+                
                 memcpy( pAktTC->rgbrc, pTc->rgbrcVer8, 4 * sizeof( WW8_BRC ) );
             }
         }
 
-        // #i25071 In '97 text direction appears to be only set using TC properties
-        // not with sprmTTextFlow so we need to cycle through the maDirections and
-        // double check any non-default directions
+        
+        
+        
         for (int k = 0; k < nCols; ++k)
         {
             if(maDirections[k] == 4)
@@ -1198,10 +1198,10 @@ void WW8TabBandDesc::ReadDef(bool bVer67, const sal_uInt8* pS)
 
 void WW8TabBandDesc::ProcessSprmTSetBRC(bool bVer67, const sal_uInt8* pParamsTSetBRC)
 {
-    if( pParamsTSetBRC && pTCs ) // set one or more cell border(s)
+    if( pParamsTSetBRC && pTCs ) 
     {
-        sal_uInt8 nitcFirst= pParamsTSetBRC[0];// first col to be changed
-        sal_uInt8 nitcLim  = pParamsTSetBRC[1];// (last col to be changed)+1
+        sal_uInt8 nitcFirst= pParamsTSetBRC[0];
+        sal_uInt8 nitcLim  = pParamsTSetBRC[1];
         sal_uInt8 nFlag    = *(pParamsTSetBRC+2);
 
         if (nitcFirst >= nWwCols)
@@ -1297,7 +1297,7 @@ void WW8TabBandDesc::ProcessSprmTSetBRC(bool bVer67, const sal_uInt8* pParamsTSe
 
 void WW8TabBandDesc::ProcessSprmTTableBorders(bool bVer67, const sal_uInt8* pParams)
 {
-    // sprmTTableBorders
+    
     if( bVer67 )
     {
         for( int i = 0; i < 6; ++i )
@@ -1306,19 +1306,19 @@ void WW8TabBandDesc::ProcessSprmTTableBorders(bool bVer67, const sal_uInt8* pPar
             aDefBrcs[i].aBits1[1] = pParams[ 1+2*i ];
         }
     }
-    else // aDefBrcs = *(BRC(*)[6])pS;
+    else 
         memcpy( aDefBrcs, pParams, 24 );
 }
 
 void WW8TabBandDesc::ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol)
 {
-    // sprmTDxaCol (opcode 0x7623) changes the width of cells
-    // whose index is within a certain range to be a certain value.
+    
+    
 
-    if( nWwCols && pParamsTDxaCol ) // set one or more cell length(s)
+    if( nWwCols && pParamsTDxaCol ) 
     {
-        sal_uInt8 nitcFirst= pParamsTDxaCol[0]; // first col to be changed
-        sal_uInt8 nitcLim  = pParamsTDxaCol[1]; // (last col to be changed)+1
+        sal_uInt8 nitcFirst= pParamsTDxaCol[0]; 
+        sal_uInt8 nitcLim  = pParamsTDxaCol[1]; 
         short nDxaCol = (sal_Int16)SVBT16ToShort( pParamsTDxaCol + 2 );
         short nOrgWidth;
         short nDelta;
@@ -1337,20 +1337,20 @@ void WW8TabBandDesc::ProcessSprmTDxaCol(const sal_uInt8* pParamsTDxaCol)
 
 void WW8TabBandDesc::ProcessSprmTInsert(const sal_uInt8* pParamsTInsert)
 {
-    if( nWwCols && pParamsTInsert )        // set one or more cell length(s)
+    if( nWwCols && pParamsTInsert )        
     {
-        sal_uInt8 nitcInsert = pParamsTInsert[0]; // position at which to insert
-        if (nitcInsert >= MAX_COL)  // cannot insert into cell outside max possible index
+        sal_uInt8 nitcInsert = pParamsTInsert[0]; 
+        if (nitcInsert >= MAX_COL)  
             return;
-        sal_uInt8 nctc  = pParamsTInsert[1];      // number of cells
+        sal_uInt8 nctc  = pParamsTInsert[1];      
         sal_uInt16 ndxaCol = SVBT16ToShort( pParamsTInsert+2 );
 
         short nNewWwCols;
         if (nitcInsert > nWwCols)
         {
             nNewWwCols = nitcInsert+nctc;
-            //if new count would be outside max possible count, clip it, and calc a new replacement
-            //legal nctc
+            
+            
             if (nNewWwCols > MAX_COL)
             {
                 nNewWwCols = MAX_COL;
@@ -1360,8 +1360,8 @@ void WW8TabBandDesc::ProcessSprmTInsert(const sal_uInt8* pParamsTInsert)
         else
         {
             nNewWwCols = nWwCols+nctc;
-            //if new count would be outside max possible count, clip it, and calc a new replacement
-            //legal nctc
+            
+            
             if (nNewWwCols > MAX_COL)
             {
                 nNewWwCols = MAX_COL;
@@ -1379,26 +1379,26 @@ void WW8TabBandDesc::ProcessSprmTInsert(const sal_uInt8* pParamsTInsert)
         }
         pTCs = pTC2s;
 
-        //If we have to move some cells
+        
         if (nitcInsert <= nWwCols)
         {
-            // adjust the left x-position of the dummy at the very end
+            
             nCenter[nWwCols + nctc] = nCenter[nWwCols]+nctc*ndxaCol;
             for( int i = nWwCols-1; i >= nitcInsert; i--)
             {
-                // adjust the left x-position
+                
                 nCenter[i + nctc] = nCenter[i]+nctc*ndxaCol;
 
-                // adjust the cell's borders
+                
                 pTCs[i + nctc] = pTCs[i];
             }
         }
 
-        //if itcMac is larger than full size, fill in missing ones first
+        
         for( int i = nWwCols; i > nitcInsert+nWwCols; i--)
             nCenter[i] = i ? (nCenter[i - 1]+ndxaCol) : 0;
 
-        //now add in our new cells
+        
         for( int j = 0;j < nctc; j++)
             nCenter[j + nitcInsert] = (j + nitcInsert) ? (nCenter[j + nitcInsert -1]+ndxaCol) : 0;
 
@@ -1434,12 +1434,12 @@ void WW8TabBandDesc::ProcessSpacing(const sal_uInt8* pParams)
     sal_uInt8 nWhichCell = *pParams;
     OSL_ENSURE(nWhichCell == 0, "Expected cell to be 0!");
 #endif
-    ++pParams; //Skip which cell
-    ++pParams; //unknown byte
+    ++pParams; 
+    ++pParams; 
 
     sal_uInt8 nSideBits = *pParams++;
     OSL_ENSURE(nSideBits < 0x10, "Unexpected value for nSideBits");
-    ++pParams; //unknown byte
+    ++pParams; 
     sal_uInt16 nValue =  SVBT16ToShort( pParams );
     for (int i = wwTOP; i <= wwRIGHT; i++)
     {
@@ -1477,7 +1477,7 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const sal_uInt8* pParams)
     if (nWhichCell >= MAX_COL + 1)
         return;
 
-    ++pParams; //unknown byte
+    ++pParams; 
     sal_uInt8 nSideBits = *pParams++;
     OSL_ENSURE(nSideBits < 0x10, "Unexpected value for nSideBits");
     nOverrideSpacing[nWhichCell] |= nSideBits;
@@ -1500,50 +1500,50 @@ void WW8TabBandDesc::ProcessSpecificSpacing(const sal_uInt8* pParams)
 
 void WW8TabBandDesc::ProcessSprmTDelete(const sal_uInt8* pParamsTDelete)
 {
-    if( nWwCols && pParamsTDelete )        // set one or more cell length(s)
+    if( nWwCols && pParamsTDelete )        
     {
-        sal_uInt8 nitcFirst= pParamsTDelete[0]; // first col to be deleted
-        if (nitcFirst >= nWwCols) // first index to delete from doesn't exist
+        sal_uInt8 nitcFirst= pParamsTDelete[0]; 
+        if (nitcFirst >= nWwCols) 
             return;
-        sal_uInt8 nitcLim  = pParamsTDelete[1]; // (last col to be deleted)+1
-        if (nitcLim <= nitcFirst) // second index to delete to is not greater than first index
+        sal_uInt8 nitcLim  = pParamsTDelete[1]; 
+        if (nitcLim <= nitcFirst) 
             return;
 
         /*
          * sprmTDelete causes any rgdxaCenter and rgtc entries whose index is
          * greater than or equal to itcLim to be moved
          */
-        int nShlCnt  = nWwCols - nitcLim; // count of cells to be shifted
+        int nShlCnt  = nWwCols - nitcLim; 
 
-        if (nShlCnt >= 0) //There exist entries whose index is greater than or equal to itcLim
+        if (nShlCnt >= 0) 
         {
             WW8_TCell* pAktTC  = pTCs + nitcFirst;
             int i = 0;
             while( i < nShlCnt )
             {
-                // adjust the left x-position
+                
                 nCenter[nitcFirst + i] = nCenter[nitcLim + i];
 
-                // adjust the cell's borders
+                
                 *pAktTC = pTCs[ nitcLim + i];
 
                 ++i;
                 ++pAktTC;
             }
-            // adjust the left x-position of the dummy at the very end
+            
             nCenter[nitcFirst + i] = nCenter[nitcLim + i];
         }
 
         short nCellsDeleted = nitcLim - nitcFirst;
-        //clip delete request to available number of cells
+        
         if (nCellsDeleted > nWwCols)
             nCellsDeleted = nWwCols;
         nWwCols -= nCellsDeleted;
     }
 }
 
-// ReadShd reads the background color of a cell
-// ReadDef must be called before
+
+
 void WW8TabBandDesc::ReadShd(const sal_uInt8* pS )
 {
     sal_uInt8 nLen = pS ? *(pS - 1) : 0;
@@ -1575,7 +1575,7 @@ void WW8TabBandDesc::ReadNewShd(const sal_uInt8* pS, bool bVer67)
     if (!pNewSHDs)
         pNewSHDs = new sal_uInt32[nWwCols];
 
-    short nAnz = nLen / 10; //10 bytes each
+    short nAnz = nLen / 10; 
     if (nAnz > nWwCols)
         nAnz = nWwCols;
 
@@ -1780,7 +1780,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
 
     wwSprmParser aSprmParser(pIo->GetFib().GetFIBVersion());
 
-    // process pPap until end of table found
+    
     do
     {
         short nTabeDxaNew      = SHRT_MAX;
@@ -1789,15 +1789,15 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         const sal_uInt8* pNewShadeSprm = 0;
         WW8_TablePos *pTabPos  = 0;
 
-        // search end of a tab row
+        
         if(!(pIo->SearchRowEnd(pPap, nStartCp, pIo->nInTable)))
         {
             bOk = false;
             break;
         }
 
-        // Get the SPRM chains:
-        // first from PAP and then from PCD (of the Piece Table)
+        
+        
         WW8PLCFxDesc aDesc;
         pPap->GetSprms( &aDesc );
         WW8SprmIter aSprmIter(aDesc.pMemPos, aDesc.nSprmsLen, aSprmParser);
@@ -1817,7 +1817,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         const sal_uInt8 b0 = pParams[0];
                         const sal_uInt8 b1 = pParams[1];
                         const sal_uInt8 b2 = pParams[2];
-                        if (b0 == 3) // Twips
+                        if (b0 == 3) 
                             nPreferredWidth = b2 * 0x100 + b1;
                         }
                         break;
@@ -1843,7 +1843,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         }
                         break;
                     case sprmTJc:
-                        // sprmTJc  -  Justification Code
+                        
                         if (nRows == 0)
                             eOri = aOriArr[*pParams & 0x3];
                         break;
@@ -1868,10 +1868,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                         pNewShadeSprm = pParams;
                         break;
                     case sprmTDxaLeft:
-                        // our Writer cannot shift single table lines
-                        // horizontally so we have to find the smallest
-                        // parameter (meaning the left-most position) and then
-                        // shift the whole table to that margin (see below)
+                        
+                        
+                        
+                        
                         {
                             short nDxaNew = (sal_Int16)SVBT16ToShort( pParams );
                             nOrgDxaLeft = nDxaNew;
@@ -1910,10 +1910,10 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             }
         }
 
-        // WW-Tables can contain Fly-changes. For this abort tables here
-        // and start again. *pPap is still before TabRowEnd, so TestApo()
-        // can be called with the last parameter set to false and therefore
-        // take effect.
+        
+        
+        
+        
 
         if (bTabRowJustRead)
         {
@@ -1929,8 +1929,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             short firstDxaCenter = *pCenter;
             for( int i = 0; i < pNewBand->nWwCols; i++, ++pCenter )
             {
-                // #i30298# Use sprmTDxaLeft to adjust the left indent
-                // #i40461# Use dxaGapHalf during calculation
+                
+                
                 *pCenter +=
                     (nTabeDxaNew - (firstDxaCenter + pNewBand->nGapHalf));
             }
@@ -1950,7 +1950,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         nRows++;
         pActBand->nRows++;
 
-        //Seek our pap to its next block of properties
+        
         WW8PLCFxDesc aRes;
         aRes.pMemPos = 0;
         aRes.nStartPos = nStartCp;
@@ -1963,7 +1963,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         pPap->GetSprms(&aRes);
         pPap->SetDirty(false);
 
-        //Are we at the end of available properties
+        
         if (
              !pPap->HasFkp() || pPap->Where() == WW8_CP_MAX ||
              aRes.nStartPos == WW8_CP_MAX
@@ -1973,28 +1973,28 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             break;
         }
 
-        //Are we still in a table cell
+        
         const sal_uInt8* pParams = HasTabCellSprm(pPap, bOldVer);
         const sal_uInt8 *pLevel = pPap->HasSprm(0x6649);
-        // InTable
+        
         if (!pParams || (1 != *pParams) ||
             (pLevel && (*pLevel <= pIo->nInTable)))
         {
             break;
         }
 
-        //Get the end of row new table positioning data
+        
         WW8_CP nMyStartCp=nStartCp;
         if (pIo->SearchRowEnd(pPap, nMyStartCp, pIo->nInTable))
             if (pIo->ParseTabPos(&aTabPos, pPap))
                 pTabPos = &aTabPos;
 
-        //Move back to this cell
+        
         aRes.pMemPos = 0;
         aRes.nStartPos = nStartCp;
 
-        // PlcxMan currently points too far ahead so we need to bring
-        // it back to where we are trying to make a table
+        
+        
         pIo->pPlcxMan->GetPap()->nOrigStartPos = aRes.nStartPos;
         if (!(pPap->SeekPos(aRes.nStartPos)))
         {
@@ -2004,8 +2004,8 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
         pPap->GetSprms(&aRes);
         pPap->SetDirty(false);
 
-        //Does this row match up with the last row closely enough to be
-        //considered part of the same table
+        
+        
         ApoTestResults aApo = pIo->TestApo(pIo->nInTable + 1, false, pTabPos);
 
         /*
@@ -2018,7 +2018,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
             break;
         if (aApo.mbStartApo)
         {
-            //if there really is a fly here, and not a "null" fly then break.
+            
             WW8FlyPara *pNewFly = pIo->ConstructApo(aApo, pTabPos);
             if (pNewFly)
                 delete pNewFly;
@@ -2034,14 +2034,14 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
     {
         if( pActBand->nRows > 1 )
         {
-            // last band has more than 1 cell
+            
             delete pNewBand;
-            pNewBand = new WW8TabBandDesc( *pActBand ); // create new
-            pActBand->nRows--;      // wegen Sonderbehandlung Raender-Defaults
+            pNewBand = new WW8TabBandDesc( *pActBand ); 
+            pActBand->nRows--;      
             pNewBand->nRows = 1;
-            pActBand->pNextBand = pNewBand; // am Ende einschleifen
+            pActBand->pNextBand = pNewBand; 
             nBands++;
-            pNewBand = 0;                   // do not delete
+            pNewBand = 0;                   
         }
         CalcDefaults();
     }
@@ -2088,7 +2088,7 @@ void WW8TabDesc::CalcDefaults()
                 pR->nCenter[i] = pR->nCenter[i] -  pR->nCenter[0];
     }
 
-    // 1. Durchlauf: aeusserste L- und R-Grenzen finden
+    
     for( pR = pFirstBand; pR; pR = pR->pNextBand )
     {
         if( pR->nCenter[0] < nMinLeft )
@@ -2117,8 +2117,8 @@ void WW8TabDesc::CalcDefaults()
     }
     nSwWidth = nMaxRight - nMinLeft;
 
-    // If the table is right aligned we need to align all rows to the
-    // row that has the furthest right point
+    
+    
 
     if(eOri == text::HoriOrientation::RIGHT)
     {
@@ -2133,12 +2133,12 @@ void WW8TabDesc::CalcDefaults()
         }
     }
 
-    // 2. pass: Detect number of writer columns. This can exceed the count
-    // of columns in WW by 2, because SW in constrast to WW does not provide
-    // fringed left and right borders and has to fill with empty boxes.
-    // Non exisitent cells can reduce the number of columns.
+    
+    
+    
+    
 
-    // 3. pass: Replace border with defaults if needed
+    
     nConvertedLeft = nMinLeft;
 
     short nLeftMaxThickness = 0, nRightMaxThickness=0;
@@ -2157,28 +2157,28 @@ void WW8TabDesc::CalcDefaults()
             {
                 if (pT->rgbrc[i].IsZeroed(pIo->bVer67))
                 {
-                    // if shadow is set, its invalid
+                    
                     j = i;
                     switch( i )
                     {
                     case 0:
-                        // outer top / horizontally inside
+                        
                         j = (pR == pFirstBand) ? 0 : 4;
                         break;
                     case 1:
-                        // outer left / vertically inside
+                        
                         j = k ? 5 : 1;
                         break;
                     case 2:
-                        // outer bottom  / horizontally inside
+                        
                         j = pR->pNextBand ? 4 : 2;
                         break;
                     case 3:
-                        // outer right / vertically inside
+                        
                         j = (k == pR->nWwCols - 1) ? 3 : 5;
                         break;
                     }
-                    // mangel mit Defaults ueber
+                    
                     pT->rgbrc[i] = pR->aDefBrcs[j];
                 }
             }
@@ -2267,8 +2267,8 @@ void WW8TabDesc::CalcDefaults()
                 pR->nTransCell[n] = pR->nTransCell[k];
         }
 
-        pR->nTransCell[i++] = (sal_Int8)(j++);  // Can exceed by 2 among other
-        pR->nTransCell[i] = (sal_Int8)j;        // things because of bREmptyCol
+        pR->nTransCell[i++] = (sal_Int8)(j++);  
+        pR->nTransCell[i] = (sal_Int8)j;        
 
         pR->nSwCols = pR->nSwCols + nAddCols;
         if( pR->nSwCols < nMinCols )
@@ -2283,10 +2283,10 @@ void WW8TabDesc::CalcDefaults()
     */
 
     if ((nMinLeft && !bIsBiDi && text::HoriOrientation::LEFT == eOri) ||
-        (nMinLeft != -108 && bIsBiDi && text::HoriOrientation::RIGHT == eOri)) // Word sets the first nCenter value to -108 when no indent is used
-        eOri = text::HoriOrientation::LEFT_AND_WIDTH; //  absolutely positioned
+        (nMinLeft != -108 && bIsBiDi && text::HoriOrientation::RIGHT == eOri)) 
+        eOri = text::HoriOrientation::LEFT_AND_WIDTH; 
 
-    nDefaultSwCols = nMinCols;  // because inserting cells is cheaper than merging
+    nDefaultSwCols = nMinCols;  
     if( nDefaultSwCols == 0 )
         bOk = false;
     pActBand = pFirstBand;
@@ -2322,10 +2322,10 @@ void wwSectionManager::PrependedInlineNode(const SwPosition &rPos,
 
 void WW8TabDesc::CreateSwTable()
 {
-    ::SetProgressState(pIo->nProgress, pIo->mpDocShell);   // Update
+    ::SetProgressState(pIo->nProgress, pIo->mpDocShell);   
 
-    // if there is already some content on the Node append new node to ensure
-    // that this content remains ABOVE the table
+    
+    
     SwPosition* pPoint = pIo->pPaM->GetPoint();
     bool bInsNode = pPoint->nContent.GetIndex() ? true : false;
     bool bSetMinHeight = false;
@@ -2352,8 +2352,8 @@ void WW8TabDesc::CreateSwTable()
 
     if (bSetMinHeight == true)
     {
-        // minimize Fontsize to minimize height growth of the header/footer
-        // set font size to 1 point to minimize y-growth of Hd/Ft
+        
+        
         SvxFontHeightItem aSz(20, 100, RES_CHRATR_FONTSIZE);
         pIo->NewAttr( aSz );
         pIo->pCtrlStck->SetAttr(*pPoint, RES_CHRATR_FONTSIZE);
@@ -2364,10 +2364,10 @@ void WW8TabDesc::CreateSwTable()
 
     pTmpPos = new SwPosition( *pIo->pPaM->GetPoint() );
 
-    // The table is small: The number of columns is the lowest count of
-    // columns of the origin, because inserting is faster than deleting.
-    // The number of rows is the count of bands because (identically)
-    // rows of a band can be duplicated easy.
+    
+    
+    
+    
     pTable = pIo->rDoc.InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
             *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, sal_False, sal_True );
@@ -2384,10 +2384,10 @@ void WW8TabDesc::CreateSwTable()
             *pTableNode);
     }
 
-    // Check if the node into which the table should be inserted already
-    // contains a Pagedesc. If so that Pagedesc would be moved to the
-    // row after the table, whats wrong. So delete and
-    // set later to the table format.
+    
+    
+    
+    
     if (SwTxtNode *const pNd = pTmpPos->nNode.GetNode().GetTxtNode())
     {
         if (const SfxItemSet* pSet = pNd->GetpSwAttrSet())
@@ -2400,7 +2400,7 @@ void WW8TabDesc::CreateSwTable()
                 pNd->ResetAttr( RES_BREAK );
             }
 
-            // eventually set the PageDesc/Break now to the table
+            
             if (pSetAttr)
             {
                 aItemSet.Put(*pSetAttr);
@@ -2409,7 +2409,7 @@ void WW8TabDesc::CreateSwTable()
         }
     }
 
-    // total width of table
+    
     if( nMaxRight - nMinLeft > MINLAY * nDefaultSwCols )
     {
         pTable->GetFrmFmt()->SetFmtAttr(SwFmtFrmSize(ATT_FIX_SIZE, nSwWidth));
@@ -2425,16 +2425,16 @@ void WW8TabDesc::CreateSwTable()
         if (!pIo->nInTable && pIo->InLocalApo() && pIo->pSFlyPara->pFlyFmt &&
             GetMinLeft())
         {
-            //If we are inside a frame and we have a border, the frames
-            //placement does not consider the tables border, which word
-            //displays outside the frame, so adjust here.
+            
+            
+            
             SwFmtHoriOrient aHori(pIo->pSFlyPara->pFlyFmt->GetHoriOrient());
             sal_Int16 eHori = aHori.GetHoriOrient();
             if ((eHori == text::HoriOrientation::NONE) || (eHori == text::HoriOrientation::LEFT) ||
                 (eHori == text::HoriOrientation::LEFT_AND_WIDTH))
             {
-                //With multiple table, use last table settings. Perhaps
-                //the maximum is what word does ?
+                
+                
                 aHori.SetPos(pIo->pSFlyPara->nXPos + GetMinLeft());
                 aHori.SetHoriOrient(text::HoriOrientation::NONE);
                 pIo->pSFlyPara->pFlyFmt->SetFmtAttr(aHori);
@@ -2442,13 +2442,13 @@ void WW8TabDesc::CreateSwTable()
         }
         else
         {
-            //If bApo is set, then this table is being placed in a floating
-            //frame, and the frame matches the left and right *lines* of the
-            //table, so the space to the left of the table isn't to be used
-            //inside the frame, in word the dialog involved greys out the
-            //ability to set the margin.
+            
+            
+            
+            
+            
             SvxLRSpaceItem aL( RES_LR_SPACE );
-            // set right to original DxaLeft (i28656)
+            
 
             long nLeft = 0;
             if (!bIsBiDi)
@@ -2476,7 +2476,7 @@ void WW8TabDesc::CreateSwTable()
 
 void WW8TabDesc::UseSwTable()
 {
-    // init global Vars
+    
     pTabLines = &pTable->GetTabLines();
     nAktRow = nAktCol = nAktBandRow = 0;
 
@@ -2484,18 +2484,18 @@ void WW8TabDesc::UseSwTable()
         GetSttNd()->FindTableNode();
     OSL_ENSURE( pTblNd, "wo ist mein TabellenNode" );
 
-    // #i69519# - Restrict rows to repeat to a decent value
+    
     if ( nRowsToRepeat == static_cast<sal_uInt16>(nRows) )
         nRowsToRepeat = 1;
 
     pTblNd->GetTable().SetRowsToRepeat( nRowsToRepeat );
-    // insert extra cells if needed and something like this
+    
     AdjustNewBand();
 
     WW8DupProperties aDup(pIo->rDoc,pIo->pCtrlStck);
     pIo->pCtrlStck->SetAttr(*pIo->pPaM->GetPoint(), 0, false);
 
-    // now set the correct PaM and prepare first merger group if any
+    
     SetPamInCell(nAktCol, true);
     aDup.Insert(*pIo->pPaM->GetPoint());
 
@@ -2509,7 +2509,7 @@ void WW8TabDesc::MergeCells()
 
     for (pActBand=pFirstBand, nRow=0; pActBand; pActBand=pActBand->pNextBand)
     {
-        // insert current box into merge group if appropriate
+        
         if( pActBand->pTCs )
         {
             for( short j = 0; j < pActBand->nRows; j++, nRow++ )
@@ -2517,7 +2517,7 @@ void WW8TabDesc::MergeCells()
                 {
                     WW8SelBoxInfo* pActMGroup = 0;
                     //
-                    // start a new merge group if appropriate
+                    
                     //
                     OSL_ENSURE(nRow < (sal_uInt16)pTabLines->size(),
                         "Too few lines, table ended early");
@@ -2535,25 +2535,25 @@ void WW8TabDesc::MergeCells()
                         return;
                     pTabBox = (*pTabBoxes)[nCol];
                     WW8_TCell& rCell = pActBand->pTCs[ i ];
-                    // is this the left upper cell of a merge group ?
+                    
 
                     bool bMerge = false;
                     if ( rCell.bVertRestart && !rCell.bMerged )
                         bMerge = true;
                     else if (rCell.bFirstMerged && pActBand->bExist[i])
                     {
-                        // Some tests to avoid merging cells which previously were
-                        // declared invalid because of sharing the exact same dimensions
-                        // as their previous cell
+                        
+                        
+                        
 
-                        //If theres anything underneath/above we're ok.
+                        
                         if (rCell.bVertMerge || rCell.bVertRestart)
                             bMerge = true;
                         else
                         {
-                            //If it's a hori merge only, and the only things in
-                            //it are invalid cells then it's already taken care
-                            //of, so don't merge.
+                            
+                            
+                            
                             for (sal_uInt16 i2 = i+1; i2 < pActBand->nWwCols; i2++ )
                                 if (pActBand->pTCs[ i2 ].bMerged &&
                                     !pActBand->pTCs[ i2 ].bFirstMerged  )
@@ -2575,13 +2575,13 @@ void WW8TabDesc::MergeCells()
                         short nX1    = pActBand->nCenter[ i ];
                         short nWidth = pActBand->nWidth[ i ];
 
-                        // 2. create current merge group
+                        
                         pActMGroup = new WW8SelBoxInfo( nX1, nWidth );
 
-                        // determine size of new merge group
-                        // before inserted the new merge group.
-                        // Needed to correctly locked previously created merge groups.
-                        // Calculate total width and set
+                        
+                        
+                        
+                        
                         short nSizCell = pActBand->nWidth[ i ];
                         for (sal_uInt16 i2 = i+1; i2 < pActBand->nWwCols; i2++ )
                             if (pActBand->pTCs[ i2 ].bMerged &&
@@ -2593,10 +2593,10 @@ void WW8TabDesc::MergeCells()
                                 break;
                         pActMGroup->nGroupWidth = nSizCell;
 
-                        // locked previously created merge groups,
-                        // after determining the size for the new merge group.
-                        // 1. If necessary close old merge group(s) that overlap
-                        // the X-area of the new group
+                        
+                        
+                        
+                        
                         for (;;)
                         {
                             WW8SelBoxInfo* p = FindMergeGroup(
@@ -2608,22 +2608,22 @@ void WW8TabDesc::MergeCells()
                             p->bGroupLocked = true;
                         }
 
-                        // 3. push to group array
+                        
                         aMergeGroups.push_back(pActMGroup);
                     }
 
-                    // if necessary add the current box to a merge group
-                    // (that can be a newly created or another group)
+                    
+                    
                     UpdateTableMergeGroup( rCell, pActMGroup, pTabBox, i );
                 }
             }
     }
 }
 
-//There is a limbo area in word at the end of the row marker
-//where properties can live in word, there is no location in
-//writer equivalent, so try and park the cursor in the best
-//match, see #i23022#/#i18644#
+
+
+
+
 void WW8TabDesc::ParkPaM()
 {
     SwTableBox *pTabBox2 = 0;
@@ -2680,10 +2680,10 @@ void WW8TabDesc::FinishSwTable()
 
     MergeCells();
 
-    // if needed group cells together that should be merged
+    
     if( !aMergeGroups.empty() )
     {
-        // process all merge groups one by one
+        
         for (
                 WW8MergeGroups::iterator groupIt = aMergeGroups.begin();
                 groupIt != aMergeGroups.end();
@@ -2710,54 +2710,54 @@ void WW8TabDesc::FinishSwTable()
 }
 
 
-// browse aMergeGroups, detect the index of the first fitting group or -1 otherwise
+
 //
-// Parameter: nXcenter  = center position of asking box
-//            nWidth    = width of asking box
-//            bExact    = flag, if box has to fit into group
-//                              or only has to touch
+
+
+
+
 //
 WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
 {
     if( !aMergeGroups.empty() )
     {
-        // still valid area near the boundery
+        
         const short nToleranz = 4;
-        // box boundery
+        
         short nX2 = nX1 + nWidth;
-        // approximate group boundery
+        
         short nGrX1;
         short nGrX2;
 
-        // improvement: search backwards
+        
         for ( short iGr = aMergeGroups.size() - 1; iGr >= 0; --iGr )
         {
-            // the currently inspected group
+            
             WW8SelBoxInfo& rActGroup = aMergeGroups[ iGr ];
             if (!rActGroup.bGroupLocked)
             {
-                // approximate group boundery with room (tolerance) to the *outside*
+                
                 nGrX1 = rActGroup.nGroupXStart - nToleranz;
                 nGrX2 = rActGroup.nGroupXStart
                              +rActGroup.nGroupWidth  + nToleranz;
                 //
-                // If box fits report success
+                
                 //
                 if( ( nX1 > nGrX1 ) && ( nX2 < nGrX2 ) )
                 {
                     return &rActGroup;
                 }
                 //
-                // does the box share areas with the group?
+                
                 //
                 if( !bExact )
                 {
-                    // successful if nX1 *or* nX2 are inside the group
+                    
                     if(    (     ( nX1 > nGrX1 )
                                         && ( nX1 < nGrX2 - 2*nToleranz ) )
                             || (     ( nX2 > nGrX1 + 2*nToleranz )
                                         && ( nX2 < nGrX2 ) )
-                            // or nX1 and nX2 surround the group
+                            
                             || (     ( nX1 <=nGrX1 )
                                         && ( nX2 >=nGrX2 ) ) )
                     {
@@ -2779,7 +2779,7 @@ bool WW8TabDesc::IsValidCell(short nCol) const
 
 bool WW8TabDesc::InFirstParaInCell() const
 {
-    //e.g. #i19718#
+    
     if (!pTabBox || !pTabBox->GetSttNd())
     {
         OSL_FAIL("Problem with table");
@@ -2833,8 +2833,8 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     {
         if (bPam)
         {
-            // The first paragraph in a cell with upper autospacing has upper
-            // spacing set to 0
+            
+            
             if (
                  pIo->bParaAutoBefore && pIo->bFirstPara &&
                  !pIo->pWDop->fDontUseHTMLAutoSpacing
@@ -2843,8 +2843,8 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
                 pIo->SetUpperSpacing(*pIo->pPaM, 0);
             }
 
-            // The last paragraph in a cell with lower autospacing has lower
-            // spacing set to 0
+            
+            
             if (pIo->bParaAutoAfter && !pIo->pWDop->fDontUseHTMLAutoSpacing)
                 pIo->SetLowerSpacing(*pIo->pPaM, 0);
 
@@ -2864,30 +2864,30 @@ bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
     {
         pAktWWCell = &pActBand->pTCs[ nWwCol ];
 
-       // The first paragraph in a cell with upper autospacing has upper spacing set to 0
+       
         if(pIo->bParaAutoBefore && pIo->bFirstPara && !pIo->pWDop->fDontUseHTMLAutoSpacing)
             pIo->SetUpperSpacing(*pIo->pPaM, 0);
 
-        // The last paragraph in a cell with lower autospacing has lower spacing set to 0
+        
         if(pIo->bParaAutoAfter && !pIo->pWDop->fDontUseHTMLAutoSpacing)
             pIo->SetLowerSpacing(*pIo->pPaM, 0);
 
-        //We need to set the pPaM on the first cell, invalid
-        //or not so that we can collect paragraph proproties over
-        //all the cells, but in that case on the valid cell we do not
-        //want to reset the fmt properties
+        
+        
+        
+        
         if (pIo->pPaM->GetPoint()->nNode != pTabBox->GetSttIdx() + 1)
         {
             pIo->pPaM->GetPoint()->nNode = pTabBox->GetSttIdx() + 1;
             pIo->pPaM->GetPoint()->nContent.Assign(pIo->pPaM->GetCntntNode(), 0);
-            // Precautionally set now, otherwise the style is not set for cells
-            // that are inserted for margin balancing.
+            
+            
             pIo->rDoc.SetTxtFmtColl(*pIo->pPaM, (SwTxtFmtColl*)pIo->pDfltTxtFmtColl);
-            // because this cells are invisible helper constructions only to simulate
-            // the frayed view of WW-tables we do NOT need SetTxtFmtCollAndListLevel()
+            
+            
         }
 
-        // Better to turn Snap to Grid off for all paragraphs in tables
+        
         if(SwTxtNode *pNd = pIo->pPaM->GetNode()->GetTxtNode())
         {
             const SfxPoolItem &rItm = pNd->SwCntntNode::GetAttr(RES_PARATR_SNAPTOGRID);
@@ -2921,18 +2921,18 @@ void WW8TabDesc::InsertCells( short nIns )
 
     pIo->rDoc.GetNodes().InsBoxen( pTblNd, pTabLine, (SwTableBoxFmt*)pTabBox->GetFrmFmt(),
                             (SwTxtFmtColl*)pIo->pDfltTxtFmtColl, 0, pTabBoxes->size(), nIns );
-    // The third parameter contains the FrmFmt of the boxes.
-    // Here it is possible to optimize to save (reduce) FrmFmts.
+    
+    
 }
 
 void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
 {
     if( nWwIdx < 0 || nWwIdx >= pActBand->nWwCols )
-        return;                 // faked cells -> no border
+        return;                 
 
 
     SvxBoxItem aFmtBox( RES_BOX );
-    if (pActBand->pTCs)     // neither Cell Border nor Default Border defined ?
+    if (pActBand->pTCs)     
     {
         WW8_TCell* pT = &pActBand->pTCs[nWwIdx];
         if (pIo->IsBorder(pT->rgbrc))
@@ -2956,7 +2956,7 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
     else
         aFmtBox.SetDistance(pActBand->mnDefaultBottom,BOX_LINE_BOTTOM);
 
-    // nGapHalf for WW is a *horizontal* gap between table cell and content.
+    
     short nLeftDist =
         pActBand->mbHasSpacing ? pActBand->mnDefaultLeft : pActBand->nGapHalf;
     short nRightDist =
@@ -2984,7 +2984,7 @@ void WW8TabDesc::SetTabBorders(SwTableBox* pBox, short nWwIdx)
 void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
 {
     if( nWwIdx < 0 || nWwIdx >= pActBand->nWwCols )
-        return;                 // faked cells -> no color
+        return;                 
 
     bool bFound=false;
     if (pActBand->pNewSHDs && pActBand->pNewSHDs[nWwIdx] != COL_AUTO)
@@ -2994,11 +2994,11 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
         bFound = true;
     }
 
-    //If there was no new shades, or no new shade setting
+    
     if (pActBand->pSHDs && !bFound)
     {
         WW8_SHD& rSHD = pActBand->pSHDs[nWwIdx];
-        if (!rSHD.GetValue())       // auto
+        if (!rSHD.GetValue())       
             return;
 
         SwWW8Shade aSh( pIo->bVer67, rSHD );
@@ -3009,16 +3009,16 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
 SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
 {
     SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
-    // 1: Asian layout with rotated CJK characters
-    // 5: Asian layout
-    // 3: Western layout rotated by 90 degrees
-    // 4: Western layout
+    
+    
+    
+    
     switch (nCode)
     {
         default:
             OSL_ENSURE(eDir == 4, "unknown direction code, maybe it's a bitfield");
         case 3:
-            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP; // #i38158# - Consider RTL tables
+            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP; 
             break;
         case 5:
             eDir = FRMDIR_VERT_TOP_RIGHT;
@@ -3027,7 +3027,7 @@ SvxFrameDirection MakeDirection(sal_uInt16 nCode, bool bIsBiDi)
             eDir = FRMDIR_VERT_TOP_RIGHT;
             break;
         case 4:
-            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP; // #i38158# - Consider RTL tables
+            eDir = bIsBiDi ? FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP; 
             break;
     }
     return eDir;
@@ -3071,7 +3071,7 @@ void WW8TabDesc::SetTabVertAlign( SwTableBox* pBox, short nWwIdx )
 
 void WW8TabDesc::AdjustNewBand()
 {
-    if( pActBand->nSwCols > nDefaultSwCols )        // split cells
+    if( pActBand->nSwCols > nDefaultSwCols )        
         InsertCells( pActBand->nSwCols - nDefaultSwCols );
 
     SetPamInCell( 0, false);
@@ -3080,51 +3080,51 @@ void WW8TabDesc::AdjustNewBand()
 
     if( bClaimLineFmt )
     {
-        pTabLine->ClaimFrmFmt();            // necessary because of cell height
-        SwFmtFrmSize aF( ATT_MIN_SIZE, 0, 0 );  // default
+        pTabLine->ClaimFrmFmt();            
+        SwFmtFrmSize aF( ATT_MIN_SIZE, 0, 0 );  
 
-        if (pActBand->nLineHeight == 0)    // 0 = Auto
+        if (pActBand->nLineHeight == 0)    
             aF.SetHeightSizeType( ATT_VAR_SIZE );
         else
         {
-            if (pActBand->nLineHeight < 0) // positive = min, negative = exact
+            if (pActBand->nLineHeight < 0) 
             {
                 aF.SetHeightSizeType(ATT_FIX_SIZE);
                 pActBand->nLineHeight = -pActBand->nLineHeight;
             }
-            if (pActBand->nLineHeight < MINLAY) // invalid cell height
+            if (pActBand->nLineHeight < MINLAY) 
                 pActBand->nLineHeight = MINLAY;
 
-            aF.SetHeight(pActBand->nLineHeight);// set min/exact height
+            aF.SetHeight(pActBand->nLineHeight);
         }
         pTabLine->GetFrmFmt()->SetFmtAttr(aF);
     }
 
-    //Word stores 1 for bCantSplit if the row cannot be split, we set true if
-    //we can split the row
-    // bCantSplit: Always true for rows containing merged cells (Word <= 2000 crashes otherwise)
-    // So in case bCantSplit is true, we check for bCantSplit90, which has been introduced for
-    // Word versions >= 2002.
+    
+    
+    
+    
+    
     bool bSetCantSplit = pActBand->bCantSplit;
     if(bSetCantSplit)
         bSetCantSplit = pActBand->bCantSplit90;
 
     pTabLine->GetFrmFmt()->SetFmtAttr(SwFmtRowSplit(!bSetCantSplit));
 
-    short i;    // SW-Index
-    short j;    // WW-Index
-    short nW;   // Width
+    short i;    
+    short j;    
+    short nW;   
     SwFmtFrmSize aFS( ATT_FIX_SIZE );
     j = pActBand->bLEmptyCol ? -1 : 0;
 
     for( i = 0; i < pActBand->nSwCols; i++ )
     {
-        // set cell width
+        
         if( j < 0 )
             nW = pActBand->nCenter[0] - nMinLeft;
         else
         {
-            //Set j to first non invalid cell
+            
             while ((j < pActBand->nWwCols) && (!pActBand->bExist[j]))
                 j++;
 
@@ -3136,14 +3136,14 @@ void WW8TabDesc::AdjustNewBand()
         }
 
         SwTableBox* pBox = (*pTabBoxes)[i];
-        // could be reduced further by intelligent moving of FrmFmts
+        
         pBox->ClaimFrmFmt();
 
         SetTabBorders(pBox, j);
 
-        // #i18128# word has only one line between adjoining vertical cells
-        // we have to mimick this in the filter by picking the larger of the
-        // sides and using that one on one side of the line (right)
+        
+        
+        
         SvxBoxItem aCurrentBox(sw::util::ItemGet<SvxBoxItem>(*(pBox->GetFrmFmt()), RES_BOX));
         const ::editeng::SvxBorderLine *pLeftLine = aCurrentBox.GetLine(BOX_LINE_LEFT);
         int nCurrentRightLineWidth = 0;
@@ -3177,7 +3177,7 @@ void WW8TabDesc::AdjustNewBand()
         aFS.SetWidth( nW );
         pBox->GetFrmFmt()->SetFmtAttr( aFS );
 
-        // skip non existing cells
+        
         while( ( j < pActBand->nWwCols ) && !pActBand->bExist[j] )
         {
             pActBand->nWidth[j] = pActBand->nCenter[j+1] - pActBand->nCenter[j];
@@ -3188,15 +3188,15 @@ void WW8TabDesc::AdjustNewBand()
 
 void WW8TabDesc::TableCellEnd()
 {
-    ::SetProgressState(pIo->nProgress, pIo->mpDocShell);   // Update
+    ::SetProgressState(pIo->nProgress, pIo->mpDocShell);   
 
     EndMiserableHackForUnsupportedDirection(nAktCol);
 
-    // new line/row
+    
     if( pIo->bWasTabRowEnd )
     {
-        // bWasTabRowEnd will be deactivated in
-        // SwWW8ImplReader::ProcessSpecial()
+        
+        
 
         sal_uInt16 iCol = GetLogicalWWCol();
         if (iCol < aNumRuleNames.size())
@@ -3211,12 +3211,12 @@ void WW8TabDesc::TableCellEnd()
         OSL_ENSURE( pActBand , "pActBand ist 0" );
         if( pActBand )
         {
-            if( nAktRow >= nRows )  // nothing to at end of table
+            if( nAktRow >= nRows )  
                 return;
 
             bool bNewBand = nAktBandRow >= pActBand->nRows;
             if( bNewBand )
-            {                       // new band needed ?
+            {                       
                 pActBand = pActBand->pNextBand;
                 nAktBandRow = 0;
                 OSL_ENSURE( pActBand, "pActBand ist 0" );
@@ -3231,59 +3231,59 @@ void WW8TabDesc::TableCellEnd()
         }
     }
     else
-    {                       // new column ( cell )
+    {                       
         nAktCol++;
     }
     SetPamInCell(nAktCol, true);
 
-    // finish Annotated Level Numbering ?
+    
     if (pIo->bAnl && !pIo->bAktAND_fNumberAcross)
         pIo->StopAllAnl(IsValidCell(nAktCol));
 }
 
-// if necessary register the box for the merge group for this column
+
 SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
                                                 WW8SelBoxInfo* pActGroup,
                                                 SwTableBox*    pActBox,
                                                 sal_uInt16         nCol )
 {
-    // set default for return
+    
     SwTableBox* pResult = 0;
 
-    // check if the box has to be merged
-    // If cell is the first one to be merged, a new merge group has to be provided.
-    // E.g., it could be that a cell is the first one to be merged, but no
-    // new merge group is provided, because the potential other cell to be merged
-    // doesn't exist - see method <WW8TabDesc::MergeCells>.
+    
+    
+    
+    
+    
     if ( pActBand->bExist[ nCol ] &&
          ( ( rCell.bFirstMerged && pActGroup ) ||
            rCell.bMerged ||
            rCell.bVertMerge ||
            rCell.bVertRestart ) )
     {
-        // detect appropriate merge group
+        
         WW8SelBoxInfo* pTheMergeGroup = 0;
         if( pActGroup )
-            // assign group
+            
             pTheMergeGroup = pActGroup;
         else
         {
-            // find group
+            
             pTheMergeGroup = FindMergeGroup(
                 pActBand->nCenter[ nCol ], pActBand->nWidth[  nCol ], true );
         }
         if( pTheMergeGroup )
         {
-            // add current box to merge group
+            
             pTheMergeGroup->push_back(pActBox);
-            // return target box
+            
             pResult = (*pTheMergeGroup)[ 0 ];
         }
     }
     return pResult;
 }
 
-sal_uInt16 WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDICATED within WW6 UI status line -1
+sal_uInt16 WW8TabDesc::GetLogicalWWCol() const 
 {
     sal_uInt16 nCol = 0;
     if( pActBand && pActBand->pTCs)
@@ -3297,7 +3297,7 @@ sal_uInt16 WW8TabDesc::GetLogicalWWCol() const // returns number of col as INDIC
     return nCol;
 }
 
-// find name of numrule valid for current WW-COL
+
 OUString WW8TabDesc::GetNumRuleName() const
 {
     sal_uInt16 nCol = GetLogicalWWCol();
@@ -3316,23 +3316,23 @@ void WW8TabDesc::SetNumRuleName( const OUString& rName )
 
 bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 {
-    // Entering a table so make sure the FirstPara flag gets set
+    
     bFirstPara = true;
-    // keine rekursiven Tabellen Nicht bei EinfuegenDatei in Tabelle oder
-    // Fussnote
+    
+    
     if (bReadNoTbl)
         return false;
 
     if (pTableDesc)
         maTableStack.push(pTableDesc);
 
-    // #i33818# - determine absolute position object attributes,
-    // if possible. It's needed for nested tables.
+    
+    
     WW8FlyPara* pTableWFlyPara( 0L );
     WW8SwFlyPara* pTableSFlyPara( 0L );
-    // #i45301# - anchor nested table inside Writer fly frame
-    // only at-character, if absolute position object attributes are available.
-    // Thus, default anchor type is as-character anchored.
+    
+    
+    
     RndStdIds eAnchor( FLY_AS_CHAR );
     if ( nInTable )
     {
@@ -3354,14 +3354,14 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             pTableWFlyPara = ConstructApo( aApo, pNestedTabPos );
             if ( pTableWFlyPara )
             {
-                // <WW8SwFlyPara> constructor has changed - new 4th parameter
-                // containing WW8 page top margin.
+                
+                
                 pTableSFlyPara = new WW8SwFlyPara(*pPaM, *this, *pTableWFlyPara,
                     maSectionManager.GetWWPageTopMargin(),
                     maSectionManager.GetPageLeft(), maSectionManager.GetTextAreaWidth(),
                     nIniFlyDx, nIniFlyDy);
 
-                // #i45301# - anchor nested table Writer fly frame at-character
+                
                 eAnchor = FLY_AT_CHAR;
             }
         }
@@ -3379,8 +3379,8 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             pTableDesc->pParentPos = new SwPosition(*pPaM->GetPoint());
             SfxItemSet aItemSet(rDoc.GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1);
-            // #i33818# - anchor the Writer fly frame for the nested table at-character.
-            // #i45301#
+            
+            
             SwFmtAnchor aAnchor( eAnchor );
             aAnchor.SetAnchor( pTableDesc->pParentPos );
             aItemSet.Put( aAnchor );
@@ -3394,8 +3394,8 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
         if (pTableDesc->pFlyFmt)
         {
             pTableDesc->SetSizePosition(pTableDesc->pFlyFmt);
-            // #i33818# - Use absolute position object attributes,
-            // if existing, and apply them to the created Writer fly frame.
+            
+            
             if ( pTableWFlyPara && pTableSFlyPara )
             {
                 WW8FlySet aFlySet( *this, pTableWFlyPara, pTableSFlyPara, false );
@@ -3411,8 +3411,8 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
                 pTableDesc->pFlyFmt->SetFmtAttr(aHori);
                 pTableDesc->pFlyFmt->SetFmtAttr( SwFmtSurround( SURROUND_NONE ) );
             }
-            // #i33818# - The nested table doesn't have to leave
-            // the table cell. Thus, the Writer fly frame has to follow the text flow.
+            
+            
             pTableDesc->pFlyFmt->SetFmtAttr( SwFmtFollowTextFlow( sal_True ) );
         }
         else
@@ -3422,7 +3422,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
     else
         PopTableDesc();
 
-    // #i33818#
+    
     delete pTableWFlyPara;
     delete pTableSFlyPara;
 
@@ -3434,7 +3434,7 @@ void SwWW8ImplReader::TabCellEnd()
     if (nInTable && pTableDesc)
         pTableDesc->TableCellEnd();
 
-    bFirstPara = true;    // We have come to the end of a cell so FirstPara flag
+    bFirstPara = true;    
     bReadTable = false;
     mpTableEndPaM.reset();
 }
@@ -3445,7 +3445,7 @@ void SwWW8ImplReader::Read_TabCellEnd( sal_uInt16, const sal_uInt8* pData, short
         bWasTabCellEnd = true;
 }
 
-void SwWW8ImplReader::Read_TabRowEnd( sal_uInt16, const sal_uInt8* pData, short nLen )   // Sprm25
+void SwWW8ImplReader::Read_TabRowEnd( sal_uInt16, const sal_uInt8* pData, short nLen )   
 {
     if( ( nLen > 0 ) && ( *pData == 1 ) )
         bWasTabRowEnd = true;
@@ -3474,24 +3474,24 @@ void SwWW8ImplReader::StopTable()
     if (!pTableDesc)
         return;
 
-    // We are leaving a table so make sure the next paragraph doesn't think
-    // it's the first paragraph
+    
+    
     bFirstPara = false;
 
     pTableDesc->FinishSwTable();
     PopTableDesc();
 
     bReadTable = true;
-    // #i101116# - Keep PaM on table end only for nested tables
+    
     if ( nInTable > 1 )
     {
         mpTableEndPaM.reset(new SwPaM(*pPaM));
     }
 }
 
-// GetTableLeft() is needed for graphic objects bound to paragraphs in tables.
-// For indented tables the base for WW is the margin that would be used without
-// the table; SW uses the left table margin.
+
+
+
 short SwWW8ImplReader::GetTableLeft()
 {
     return (pTableDesc) ? pTableDesc->GetMinLeft() : 0;
@@ -3545,9 +3545,9 @@ const SwFmt* SwWW8ImplReader::GetStyleWithOrgWWName( OUString& rName ) const
     return pRet;
 }
 
-//-----------------------------------------
-//          class WW8RStyle
-//-----------------------------------------
+
+
+
 
 const sal_uInt8* WW8RStyle::HasParaSprm( sal_uInt16 nId ) const
 {
@@ -3564,7 +3564,7 @@ void WW8RStyle::ImportSprms(sal_uInt8 *pSprms, short nLen, bool bPap)
 
     if( bPap )
     {
-        pParaSprms = pSprms;   // for HasParaSprms()
+        pParaSprms = pSprms;   
         nSprmsLen = nLen;
     }
 
@@ -3615,7 +3615,7 @@ static inline short WW8SkipEven(SvStream* pSt )
 
 short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
 {
-    if( 0 < nLen ) // Empty ?
+    if( 0 < nLen ) 
     {
         if (bOdd)
             nLen = nLen - WW8SkipEven( pStStrm );
@@ -3628,7 +3628,7 @@ short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
         nLen-=2;
 
         if ( cbUPX > nLen )
-            cbUPX = nLen;       // shrink cbUPX to nLen
+            cbUPX = nLen;       
 
         if( (1 < cbUPX) || ( (0 < cbUPX) && !bPAP ) )
         {
@@ -3643,8 +3643,8 @@ short WW8RStyle::ImportUPX(short nLen, bool bPAP, bool bOdd)
 
             if( 0 < cbUPX )
             {
-                sal_Size nPos = pStStrm->Tell(); // if something is interpreted wrong,
-                                                 // this should make it work again
+                sal_Size nPos = pStStrm->Tell(); 
+                                                 
                 ImportSprms( nPos, cbUPX, bPAP );
 
                 if ( pStStrm->Tell() != nPos + cbUPX )
@@ -3666,9 +3666,9 @@ void WW8RStyle::ImportGrupx(short nLen, bool bPara, bool bOdd)
     else
         nLen = nLen - WW8SkipOdd( pStStrm );
 
-    if( bPara ) // Grupx.Papx
+    if( bPara ) 
         nLen = ImportUPX(nLen, true, bOdd);
-    ImportUPX(nLen, false, bOdd);                   // Grupx.Chpx
+    ImportUPX(nLen, false, bOdd);                   
 }
 
 WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
@@ -3680,24 +3680,24 @@ WW8RStyle::WW8RStyle(WW8Fib& _rFib, SwWW8ImplReader* pI)
 
 void WW8RStyle::Set1StyleDefaults()
 {
-    // see #i25247#, #i25561#, #i48064#, #i92341# for default font
-    if (!bCJKFontChanged)   // Style no CJK Font? set the default
+    
+    if (!bCJKFontChanged)   
         pIo->SetNewFontAttr(ftcFE, true, RES_CHRATR_CJK_FONT);
 
-    if (!bCTLFontChanged)   // Style no CTL Font? set the default
+    if (!bCTLFontChanged)   
         pIo->SetNewFontAttr(ftcBi, true, RES_CHRATR_CTL_FONT);
 
-    // western 2nd to make western charset conversion the default
-    if (!bFontChanged)      // Style has no Font? set the default,
+    
+    if (!bFontChanged)      
         pIo->SetNewFontAttr(ftcAsci, true, RES_CHRATR_FONT);
 
     if( !pIo->bNoAttrImport )
     {
-        // Style has no text color set, winword default is auto
+        
         if ( !bTxtColChanged )
             pIo->pAktColl->SetFmtAttr(SvxColorItem(Color(COL_AUTO), RES_CHRATR_COLOR));
 
-        // Style has no FontSize ? WinWord Default is 10pt for western and asian
+        
         if( !bFSizeChanged )
         {
             SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
@@ -3706,7 +3706,7 @@ void WW8RStyle::Set1StyleDefaults()
             pIo->pAktColl->SetFmtAttr(aAttr);
         }
 
-        // Style has no FontSize ? WinWord Default is 10pt for western and asian
+        
         if( !bFCTLSizeChanged )
         {
             SvxFontHeightItem aAttr(200, 100, RES_CHRATR_FONTSIZE);
@@ -3714,7 +3714,7 @@ void WW8RStyle::Set1StyleDefaults()
             pIo->pAktColl->SetFmtAttr(aAttr);
         }
 
-        if( !bWidowsChanged )  // Widows ?
+        if( !bWidowsChanged )  
         {
             pIo->pAktColl->SetFmtAttr( SvxWidowsItem( 2, RES_PARATR_WIDOWS ) );
             pIo->pAktColl->SetFmtAttr( SvxOrphansItem( 2, RES_PARATR_ORPHANS ) );
@@ -3729,7 +3729,7 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
 
     if (rSI.bColl)
     {
-        // Para-Style
+        
         sw::util::ParaStyleMapper::StyleResult aResult =
             pIo->maParaStyleMapper.GetStyle(rSI.GetOrgWWName(), eSti);
         pColl = aResult.first;
@@ -3737,14 +3737,14 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     }
     else
     {
-        // Char-Style
+        
         sw::util::CharStyleMapper::StyleResult aResult =
             pIo->maCharStyleMapper.GetStyle(rSI.GetOrgWWName(), eSti);
         pColl = aResult.first;
         bStyExist = aResult.second;
     }
 
-    bool bImport = !bStyExist || pIo->mbNewDoc; // import content ?
+    bool bImport = !bStyExist || pIo->mbNewDoc; 
     bool bOldNoImp = pIo->bNoAttrImport;
     rSI.bImportSkipped = !bImport;
 
@@ -3754,22 +3754,22 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     {
         if (bStyExist)
         {
-            pColl->ResetAllFmtAttr(); // #i73790# - method renamed
+            pColl->ResetAllFmtAttr(); 
         }
-        pColl->SetAuto(false);          // suggested by JP
-    }                                   // but changes the UI
+        pColl->SetAuto(false);          
+    }                                   
     pIo->pAktColl = pColl;
-    rSI.pFmt = pColl;                  // remember translation WW->SW
+    rSI.pFmt = pColl;                  
     rSI.bImportSkipped = !bImport;
 
-    // Set Based on style
+    
     sal_uInt16 j = rSI.nBase;
     if (j != nThisStyle && j < cstd )
     {
         SwWW8StyInf* pj = &pIo->vColl[j];
         if (rSI.pFmt && pj->pFmt && rSI.bColl == pj->bColl)
         {
-            rSI.pFmt->SetDerivedFrom( pj->pFmt );  // ok, set Based on
+            rSI.pFmt->SetDerivedFrom( pj->pFmt );  
             rSI.eLTRFontSrcCharSet = pj->eLTRFontSrcCharSet;
             rSI.eRTLFontSrcCharSet = pj->eRTLFontSrcCharSet;
             rSI.eCJKFontSrcCharSet = pj->eCJKFontSrcCharSet;
@@ -3786,9 +3786,9 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
     else if( pIo->mbNewDoc && bStyExist )
         rSI.pFmt->SetDerivedFrom(0);
 
-    rSI.nFollow = nNextStyle;       // remember Follow
+    rSI.nFollow = nNextStyle;       
 
-    pStyRule = 0;                   // recreate if necessary
+    pStyRule = 0;                   
     bTxtColChanged = bFontChanged = bCJKFontChanged = bCTLFontChanged =
         bFSizeChanged = bFCTLSizeChanged = bWidowsChanged = false;
     pIo->SetNAktColl( nThisStyle );
@@ -3798,25 +3798,25 @@ bool WW8RStyle::PrepareStyle(SwWW8StyInf &rSI, ww::sti eSti, sal_uInt16 nThisSty
 
 void WW8RStyle::PostStyle(SwWW8StyInf &rSI, bool bOldNoImp)
 {
-    // Reset attribute flags, because there are no style-ends.
+    
 
     pIo->bHasBorder = pIo->bShdTxtCol = pIo->bCharShdTxtCol
         = pIo->bSpec = pIo->bObj = pIo->bSymbol = false;
     pIo->nCharFmt = -1;
 
-    // If Style basiert auf Nichts oder Basis ignoriert
+    
     if ((rSI.nBase >= cstd || pIo->vColl[rSI.nBase].bImportSkipped) && rSI.bColl)
     {
-        // If Char-Styles does not work
-        // -> set hard WW-Defaults
+        
+        
         Set1StyleDefaults();
     }
 
-    pStyRule = 0;                   // to be on the safe side
+    pStyRule = 0;                   
     pIo->bStyNormal = false;
     pIo->SetNAktColl( 0 );
     pIo->bNoAttrImport = bOldNoImp;
-    // reset the list-remember-fields, if used when reading styles
+    
     pIo->nLFOPosition = USHRT_MAX;
     pIo->nListLevel = WW8ListManager::nMaxLevel;
 }
@@ -3831,9 +3831,9 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     if( rSI.bImported || !rSI.bValid )
         return;
 
-    rSI.bImported = true;                      // set flag now to avoid endless loops
+    rSI.bImported = true;                      
                                                 //
-    // valid and not NUL and not yet imported
+    
 
     if( rSI.nBase < cstd && !pIo->vColl[rSI.nBase].bImported )
         Import1Style( rSI.nBase );
@@ -3843,12 +3843,12 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
     short nSkip, cbStd;
     OUString sName;
 
-    boost::scoped_ptr<WW8_STD> xStd(Read1Style(nSkip, &sName, &cbStd));// read Style
+    boost::scoped_ptr<WW8_STD> xStd(Read1Style(nSkip, &sName, &cbStd));
 
     if (xStd)
         rSI.SetOrgWWIdent( sName, xStd->sti );
 
-    // either no Name or unused Slot or unknown Style
+    
 
     if ( !xStd || sName.isEmpty() || ((1 != xStd->sgc) && (2 != xStd->sgc)) )
     {
@@ -3858,16 +3858,16 @@ void WW8RStyle::Import1Style( sal_uInt16 nNr )
 
     bool bOldNoImp = PrepareStyle(rSI, static_cast<ww::sti>(xStd->sti), nNr, xStd->istdNext);
 
-    // if something is interpreted wrong, this should make it work again
+    
     long nPos = pStStrm->Tell();
 
-    //Variable parts of the STD start at even byte offsets, but "inside
-    //the STD", which I take to meaning even in relation to the starting
-    //position of the STD, which matches findings in #89439#, generally it
-    //doesn't matter as the STSHI starts off nearly always on an even
-    //offset
+    
+    
+    
+    
+    
 
-    //Import of the Style Contents
+    
     ImportGrupx(nSkip, xStd->sgc == 1, rSI.nFilePos & 1);
 
     PostStyle(rSI, bOldNoImp);
@@ -3928,26 +3928,26 @@ void WW8RStyle::PostProcessStyles()
     }
 }
 
-void WW8RStyle::ScanStyles()        // investigate style dependencies
-{                                   // and detect Filepos for each Style
+void WW8RStyle::ScanStyles()        
+{                                   
     for (sal_uInt16 i = 0; i < cstd; ++i)
     {
         short nSkip;
         SwWW8StyInf &rSI = pIo->vColl[i];
 
-        rSI.nFilePos = pStStrm->Tell();        // remember FilePos
-        WW8_STD* pStd = Read1Style( nSkip, 0, 0 );  // read STD
+        rSI.nFilePos = pStStrm->Tell();        
+        WW8_STD* pStd = Read1Style( nSkip, 0, 0 );  
         rSI.bValid = (0 != pStd);
         if (rSI.bValid)
         {
-            rSI.nBase = pStd->istdBase;        // remember Basis
-            rSI.bColl = ( pStd->sgc == 1 );    // Para-Style
+            rSI.nBase = pStd->istdBase;        
+            rSI.bColl = ( pStd->sgc == 1 );    
         }
         else
             rSI = SwWW8StyInf();
 
         delete pStd;
-        pStStrm->SeekRel( nSkip );              // skip Names and Sprms
+        pStStrm->SeekRel( nSkip );              
     }
 }
 
@@ -4191,7 +4191,7 @@ void WW8RStyle::ImportOldFormatStyles()
     for (sal_uInt16 i=0; i < cstd; ++i)
     {
         pIo->vColl[i].bColl = true;
-        //every chain must end eventually at the null style (style code 222)
+        
         pIo->vColl[i].nBase = 222;
     }
 
@@ -4216,10 +4216,10 @@ void WW8RStyle::ImportOldFormatStyles()
             continue;
 
         SwWW8StyInf &rSI = pIo->vColl[stc];
-        if (nCount != 0xFF)    // undefined style
+        if (nCount != 0xFF)    
         {
             OUString sName;
-            if (nCount == 0)   // inbuilt style
+            if (nCount == 0)   
             {
                 ww::sti eSti = ww::GetCanonicalStiFromStc(stc);
                 if (const sal_Char *pStr = GetEnglishNameFromSti(eSti))
@@ -4227,7 +4227,7 @@ void WW8RStyle::ImportOldFormatStyles()
                 else
                     sName = "Unknown";
             }
-            else               // user style
+            else               
             {
                 OString aTmp = read_uInt8s_ToOString(rSt, nCount);
                 nByteCount += aTmp.getLength();
@@ -4374,9 +4374,9 @@ void WW8RStyle::ImportOldFormatStyles()
 
 void WW8RStyle::ImportNewFormatStyles()
 {
-    ScanStyles();                       // Scan Based On
+    ScanStyles();                       
 
-    for (sal_uInt16 i = 0; i < cstd; ++i) // import Styles
+    for (sal_uInt16 i = 0; i < cstd; ++i) 
         if (pIo->vColl[i].bValid)
             Import1Style( i );
 }
@@ -4402,31 +4402,31 @@ void WW8RStyle::Import()
 
     for (sal_uInt16 i = 0; i < cstd; ++i)
     {
-        // Follow chain
+        
         SwWW8StyInf* pi = &pIo->vColl[i];
         sal_uInt16 j = pi->nFollow;
         if( j < cstd )
         {
             SwWW8StyInf* pj = &pIo->vColl[j];
-            if ( j != i                             // rational Index ?
-                 && pi->pFmt                        // Format ok ?
-                 && pj->pFmt                        // Derived-Format ok ?
-                 && pi->bColl                       // only possible for paragraph templates (WW)
-                 && pj->bColl ){                    // identical Typ ?
+            if ( j != i                             
+                 && pi->pFmt                        
+                 && pj->pFmt                        
+                 && pi->bColl                       
+                 && pj->bColl ){                    
                     ( (SwTxtFmtColl*)pi->pFmt )->SetNextTxtFmtColl(
-                     *(SwTxtFmtColl*)pj->pFmt );    // ok, register
+                     *(SwTxtFmtColl*)pj->pFmt );    
             }
         }
     }
 
-    // Missing special handling for default character template
-    // "Absatz-Standardschriftart" ( Style-ID 65 ).
-    // That is empty by default ( WW6 dt and US ) and not changeable
-    // via WW-UI so this does not matter.
-    // This could be done by:
-    //  if( bNew ) rDoc.SetDefault( pDefCharFmt->GetAttrSet() );
+    
+    
+    
+    
+    
+    
     //
-    // for e.g. tables an always valid Std-Style is necessary
+    
 
     if( pIo->StyleExists(0) && !pIo->vColl.empty() &&
         pIo->vColl[0].pFmt && pIo->vColl[0].bColl && pIo->vColl[0].bValid )
@@ -4434,7 +4434,7 @@ void WW8RStyle::Import()
     else
         pIo->pDfltTxtFmtColl = pIo->rDoc.GetDfltTxtFmtColl();
 
-    // set Hyphenation flag on BASIC para-style
+    
     if (pIo->mbNewDoc && pIo->pStandardFmtColl)
     {
         if (pIo->pWDop->fAutoHyphen
@@ -4462,7 +4462,7 @@ void WW8RStyle::Import()
         }
     }
 
-    // we do not read styles anymore:
+    
     pIo->pAktColl = 0;
 }
 

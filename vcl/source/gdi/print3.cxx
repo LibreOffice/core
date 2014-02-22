@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vcl/layout.hxx"
@@ -84,21 +84,21 @@ public:
             maCacheRanking[i] = nCacheSize - i - 1;
     }
 
-    // caution: does not ensure uniqueness
+    
     void insert( sal_Int32 i_nPageNo, const GDIMetaFile& i_rPage, const PrinterController::PageSize& i_rSize )
     {
         sal_Int32 nReplacePage = maCacheRanking.back();
         maPages[ nReplacePage ].aPage = i_rPage;
         maPages[ nReplacePage ].aSize = i_rSize;
         maPageNumbers[ nReplacePage ] = i_nPageNo;
-        // cache insertion means in our case, the page was just queried
-        // so update the ranking
+        
+        
         updateRanking( nReplacePage );
     }
 
-    // caution: bad algorithm; should there ever be reason to increase the cache size beyond 6
-    // this needs to be urgently rewritten. However do NOT increase the cache size lightly,
-    // whole pages can be rather memory intensive
+    
+    
+    
     bool get( sal_Int32 i_nPageNo, GDIMetaFile& o_rPageFile, PrinterController::PageSize& o_rSize )
     {
         for( sal_Int32 i = 0; i < nCacheSize; ++i )
@@ -160,26 +160,26 @@ public:
 
     ImplPageCache                                               maPageCache;
 
-    // set by user through printer properties subdialog of printer settings dialog
+    
     Size                                                        maDefaultPageSize;
-    // set by user through printer properties subdialog of printer settings dialog
+    
     sal_Int32                                                   mnDefaultPaperBin;
-    // Set by user through printer properties subdialog of print dialog.
-    // Overrides application-set tray for a page.
+    
+    
     sal_Int32                                                   mnFixedPaperBin;
 
-    // N.B. Apparently we have three levels of paper tray settings
-    // (latter overrides former):
-    // 1. default tray
-    // 2. tray set for a concrete page by an application, e.g., writer
-    //    allows setting a printer tray (for the default printer) for a
-    //    page style. This setting can be overridden by user by selecting
-    //    "Use only paper tray from printer preferences" on the Options
-    //    page in the print dialog, in which case the default tray is
-    //    used for all pages.
-    // 3. tray set in printer properties the printer dialog
-    // I'm not quite sure why 1. and 3. are distinct, but the commit
-    // history suggests this is intentional...
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     ImplPrinterControllerData() :
         mbFirstPage( true ),
@@ -223,7 +223,7 @@ static OUString queryFile( Printer* pPrinter )
     try
     {
 #ifdef UNX
-        // add PostScript and PDF
+        
         bool bPS = true, bPDF = true;
         if( pPrinter )
         {
@@ -240,7 +240,7 @@ static OUString queryFile( Printer* pPrinter )
         (void)pPrinter;
         xFilePicker->appendFilter( OUString( "*.PRN" ), OUString( "*.prn" ) );
 #endif
-        // add arbitrary files
+        
         xFilePicker->appendFilter(VclResId(SV_STDTEXT_ALLFILETYPES), "*.*");
     }
     catch (const lang::IllegalArgumentException&)
@@ -275,7 +275,7 @@ IMPL_LINK_NOARG(PrintJobAsync, ExecJob)
 {
     Printer::ImplPrintJob( mpController, maInitSetup );
 
-    // clean up, do not access members after this
+    
     delete this;
 
     return 0;
@@ -305,11 +305,11 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
 {
     boost::shared_ptr<PrinterController> pController( i_pController );
 
-    // check if there is a default printer; if not, show an error box (if appropriate)
+    
     if( GetDefaultPrinterName().isEmpty() )
     {
         if(  pController->isShowDialogs()
-             // && ! pController->isDirectPrint()
+             
            )
         {
             MessageDialog aBox(NULL, "ErrorNoPrinterDialog",
@@ -320,10 +320,10 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
                                makeAny( sal_False ) );
     }
 
-    // setup printer
+    
 
-    // #i114306# changed behavior back from persistence
-    // if no specific printer is already set, create the default printer
+    
+    
     if( ! pController->getPrinter() )
     {
         OUString aPrinterName( i_rInitSetup.GetPrinterName() );
@@ -332,24 +332,24 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         pController->setPrinter( pPrinter );
     }
 
-    // reset last page property
+    
     i_pController->setLastPage( false );
 
-    // update "PageRange" property inferring from other properties:
-    // case 1: "Pages" set from UNO API ->
-    //         setup "Print Selection" and insert "PageRange" attribute
-    // case 2: "All pages" is selected
-    //         update "Page range" attribute to have a sensible default,
-    //         but leave "All" as selected
+    
+    
+    
+    
+    
+    
 
-    // "Pages" attribute from API is now equivalent to "PageRange"
-    // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
-    // Argh ! That sure needs cleaning up
+    
+    
+    
     PropertyValue* pContentVal = i_pController->getValue( OUString( "PrintRange" ) );
     if( ! pContentVal )
         pContentVal = i_pController->getValue( OUString( "PrintContent" ) );
 
-    // case 1: UNO API has set "Pages"
+    
     PropertyValue* pPagesVal = i_pController->getValue( OUString( "Pages" ) );
     if( pPagesVal )
     {
@@ -357,9 +357,9 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         pPagesVal->Value >>= aPagesVal;
         if( !aPagesVal.isEmpty() )
         {
-            // "Pages" attribute from API is now equivalent to "PageRange"
-            // AND "PrintContent" = 1 except calc where it is "PrintRange" = 1
-            // Argh ! That sure needs cleaning up
+            
+            
+            
             if( pContentVal )
             {
                 pContentVal->Value = makeAny( sal_Int32( 1 ) );
@@ -367,7 +367,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
             }
         }
     }
-    // case 2: is "All" selected ?
+    
     else if( pContentVal )
     {
         sal_Int32 nContent = -1;
@@ -375,7 +375,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         {
             if( nContent == 0 )
             {
-                // do not overwrite PageRange if it is already set
+                
                 PropertyValue* pRangeVal = i_pController->getValue( OUString( "PageRange" ) );
                 OUString aRange;
                 if( pRangeVal )
@@ -415,7 +415,7 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         pController->setPapersizeFromSetup( bPapersizeFromSetup );
     }
 
-    // setup NUp printing from properties
+    
     sal_Int32 nRows = i_pController->getIntProperty( OUString( "NUpRows" ), 1 );
     sal_Int32 nCols = i_pController->getIntProperty( OUString( "NUpColumns" ), 1 );
     if( nRows > 1 || nCols > 1 )
@@ -455,8 +455,8 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         i_pController->setMultipage( aMPS );
     }
 
-    // in direct print case check whether there is anything to print.
-    // if not, show an errorbox (if appropriate)
+    
+    
     if( pController->isShowDialogs() && pController->isDirectPrint() )
     {
         if( pController->getFilteredPageCount() == 0 )
@@ -468,8 +468,8 @@ void Printer::ImplPrintJob( const boost::shared_ptr<PrinterController>& i_pContr
         }
     }
 
-    // check if the printer brings up its own dialog
-    // in that case leave the work to that dialog
+    
+    
     if( ! pController->getPrinter()->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) &&
         ! pController->isDirectPrint() &&
         pController->isShowDialogs()
@@ -542,7 +542,7 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
         else
             nDevCopy = GetCapabilities( PRINTER_CAPABILITIES_COPIES );
 
-        // need to do copies by hand ?
+        
         if ( nCopies > nDevCopy )
         {
             bUserCopy = true;
@@ -592,10 +592,10 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
     if( GetCapabilities( PRINTER_CAPABILITIES_USEPULLMODEL ) )
     {
         mbJobActive             = true;
-        // sallayer does all necessary page printing
-        // and also handles showing a dialog
-        // that also means it must call jobStarted when the dialog is finished
-        // it also must set the JobState of the Controller
+        
+        
+        
+        
         if( mpPrinter->StartJob( pPrintFile,
                                  i_rJobName,
                                  Application::GetDisplayName(),
@@ -625,8 +625,8 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
     }
     else
     {
-        // possibly a dialog has been shown
-        // now the real job starts
+        
+        
         i_pController->setJobState( view::PrintableState_JOB_STARTED );
         i_pController->jobStarted();
 
@@ -661,7 +661,7 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
                 mbJobActive             = true;
                 i_pController->createProgressDialog();
                 const int nPages = i_pController->getFilteredPageCount();
-                // abort job, if no pages will be printed.
+                
                 if ( nPages == 0 )
                 {
                     i_pController->abortJob();
@@ -692,7 +692,7 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
                             }
                         }
                     }
-                    // FIXME: duplex ?
+                    
                 }
                 EndJob();
 
@@ -737,7 +737,7 @@ bool Printer::StartJob( const OUString& i_rJobName, boost::shared_ptr<vcl::Print
             i_pController->setJobState( view::PrintableState_JOB_SPOOLED );
     }
 
-    // make last used printer persistent for UI jobs
+    
     if( i_pController->isShowDialogs() && ! i_pController->isDirectPrint() )
     {
         SettingsConfigItem* pItem = SettingsConfigItem::get();
@@ -798,30 +798,30 @@ bool PrinterController::setupPrinter( Window* i_pParent )
         mpImplData->mpPrinter->Push();
         mpImplData->mpPrinter->SetMapMode(MapMode(MAP_100TH_MM));
 
-        // get current data
+        
         Size aPaperSize(mpImplData->mpPrinter->GetPaperSize());
         sal_uInt16 nPaperBin = mpImplData->mpPrinter->GetPaperBin();
 
-        // reset paper size back to last configured size, not
-        // whatever happens to be the current page
+        
+        
         resetPaperToLastConfigured();
 
-        // call driver setup
+        
         bRet = mpImplData->mpPrinter->Setup( i_pParent );
         Size aNewPaperSize(mpImplData->mpPrinter->GetPaperSize());
         if (bRet)
         {
             bool bInvalidateCache = false;
 
-            // was papersize overridden ? if so we need to take action if we're
-            // configured to use the driver papersize
+            
+            
             if (aNewPaperSize != mpImplData->maDefaultPageSize)
             {
                 mpImplData->maDefaultPageSize = aNewPaperSize;
                 bInvalidateCache = getPapersizeFromSetup();
             }
 
-            // was bin overridden ? if so we need to take action
+            
             sal_uInt16 nNewPaperBin = mpImplData->mpPrinter->GetPaperBin();
             if (nNewPaperBin != nPaperBin)
             {
@@ -836,7 +836,7 @@ bool PrinterController::setupPrinter( Window* i_pParent )
         }
         else
         {
-            //restore to whatever it was before we entered this method
+            
             if (aPaperSize != aNewPaperSize)
                 mpImplData->mpPrinter->SetPaperSizeUser(aPaperSize, !mpImplData->isFixedPageSize());
         }
@@ -895,8 +895,8 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
             mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
     }
 
-    // paper bin set from properties in print dialog overrides
-    // application default for a page
+    
+    
     if ( mnFixedPaperBin != -1 )
         nPaperBin = mnFixedPaperBin;
 
@@ -906,15 +906,15 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     return aPageSize;
 }
 
-//fdo#61886
+
 //
-//when printing is finished, set the paper size of the printer to either what
-//the user explicitly set as the desired paper size, or fallback to whatever
-//the printer had before printing started. That way it doesn't contain the last
-//paper size of a multiple paper size using document when we are in our normal
-//auto accept document paper size mode and end up overwriting the original
-//paper size setting for file->printer_settings just by pressing "ok" in the
-//print dialog
+
+
+
+
+
+
+
 void vcl::ImplPrinterControllerData::resetPaperToLastConfigured()
 {
     mpPrinter->Push();
@@ -949,10 +949,10 @@ Sequence< PropertyValue > PrinterController::getPageParametersProtected( int i_n
 
 PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache )
 {
-    // update progress if necessary
+    
     if( mpImplData->mpProgress )
     {
-        // do nothing if printing is canceled
+        
         if( mpImplData->mpProgress->isCanceled() )
             return PrinterController::PageSize();
         mpImplData->mpProgress->tick();
@@ -972,14 +972,14 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
 
     o_rMtf.Clear();
 
-    // get page parameters
+    
     Sequence< PropertyValue > aPageParm( getPageParametersProtected( i_nUnfilteredPage ) );
     const MapMode aMapMode( MAP_100TH_MM );
 
     mpImplData->mpPrinter->Push();
     mpImplData->mpPrinter->SetMapMode( aMapMode );
 
-    // modify job setup if necessary
+    
     PrinterController::PageSize aPageSize = mpImplData->modifyJobSetup( aPageParm, true );
 
     o_rMtf.SetPrefSize( aPageSize.aSize );
@@ -998,7 +998,7 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
     if( i_bMayUseCache )
         mpImplData->maPageCache.insert( i_nUnfilteredPage, o_rMtf, aPageSize );
 
-    // reset "FirstPage" property to false now we've gotten at least our first one
+    
     mpImplData->mbFirstPage = false;
 
     return aPageSize;
@@ -1006,27 +1006,27 @@ PrinterController::PageSize PrinterController::getPageFile( int i_nUnfilteredPag
 
 static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GDIMetaFile& io_rSubPage, bool i_bDrawBorder )
 {
-    // intersect all clipregion actions with our clip rect
+    
     io_rSubPage.WindStart();
     io_rSubPage.Clip( i_rClipRect );
 
-    // save gstate
+    
     o_rMtf.AddAction( new MetaPushAction( PUSH_ALL ) );
 
-    // clip to page rect
+    
     o_rMtf.AddAction( new MetaClipRegionAction( Region( i_rClipRect ), true ) );
 
-    // append the subpage
+    
     io_rSubPage.WindStart();
     io_rSubPage.Play( o_rMtf );
 
-    // restore gstate
+    
     o_rMtf.AddAction( new MetaPopAction() );
 
-    // draw a border
+    
     if( i_bDrawBorder )
     {
-        // save gstate
+        
         o_rMtf.AddAction( new MetaPushAction( PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_CLIPREGION | PUSH_MAPMODE ) );
         o_rMtf.AddAction( new MetaMapModeAction( MapMode( MAP_100TH_MM ) ) );
 
@@ -1035,7 +1035,7 @@ static void appendSubPage( GDIMetaFile& o_rMtf, const Rectangle& i_rClipRect, GD
         o_rMtf.AddAction( new MetaFillColorAction( Color( COL_TRANSPARENT ), false ) );
         o_rMtf.AddAction( new MetaRectAction( aBorderRect ) );
 
-        // restore gstate
+        
         o_rMtf.AddAction( new MetaPopAction() );
     }
 }
@@ -1047,23 +1047,23 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
     if( nSubPages < 1 )
         nSubPages = 1;
 
-    // reverse sheet order
+    
     if( mpImplData->mbReversePageOrder )
     {
         int nDocPages = getFilteredPageCount();
         i_nFilteredPage = nDocPages - 1 - i_nFilteredPage;
     }
 
-    // there is no filtering to be done (and possibly the page size of the
-    // original page is to be set), when N-Up is "neutral" that is there is
-    // only one subpage and the margins are 0
+    
+    
+    
     if( nSubPages == 1 &&
         rMPS.nLeftMargin == 0 && rMPS.nRightMargin == 0 &&
         rMPS.nTopMargin == 0 && rMPS.nBottomMargin == 0 )
     {
         PrinterController::PageSize aPageSize = getPageFile( i_nFilteredPage, o_rMtf, i_bMayUseCache );
         if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
-        {   // rhbz#657394: check that we are still printing...
+        {   
             return PrinterController::PageSize();
         }
         Size aPaperSize = mpImplData->getRealPaperSize( aPageSize.aSize, true );
@@ -1071,7 +1071,7 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
         if( aPaperSize != aPageSize.aSize )
         {
-            // user overridden page size, center Metafile
+            
             o_rMtf.WindStart();
             long nDX = (aPaperSize.Width() - aPageSize.aSize.Width()) / 2;
             long nDY = (aPaperSize.Height() - aPageSize.aSize.Height()) / 2;
@@ -1083,26 +1083,26 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
         return aPageSize;
     }
 
-    // set last page property really only on the very last page to be rendered
-    // that is on the last subpage of a NUp run
+    
+    
     bool bIsLastPage = mpImplData->mbLastPage;
     mpImplData->mbLastPage = false;
 
     Size aPaperSize( mpImplData->getRealPaperSize( mpImplData->maMultiPage.aPaperSize, false ) );
 
-    // multi page area: page size minus margins + one time spacing right and down
-    // the added spacing is so each subpage can be calculated including its spacing
+    
+    
     Size aMPArea( aPaperSize );
     aMPArea.Width()  -= rMPS.nLeftMargin + rMPS.nRightMargin;
     aMPArea.Width()  += rMPS.nHorizontalSpacing;
     aMPArea.Height() -= rMPS.nTopMargin + rMPS.nBottomMargin;
     aMPArea.Height() += rMPS.nVerticalSpacing;
 
-    // determine offsets
+    
     long nAdvX = aMPArea.Width() / rMPS.nColumns;
     long nAdvY = aMPArea.Height() / rMPS.nRows;
 
-    // determine size of a "cell" subpage, leave a little space around pages
+    
     Size aSubPageSize( nAdvX - rMPS.nHorizontalSpacing, nAdvY - rMPS.nVerticalSpacing );
 
     o_rMtf.Clear();
@@ -1112,12 +1112,12 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
 
     int nDocPages = getPageCountProtected();
     if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
-    {   // rhbz#657394: check that we are still printing...
+    {   
         return PrinterController::PageSize();
     }
     for( int nSubPage = 0; nSubPage < nSubPages; nSubPage++ )
     {
-        // map current sub page to real page
+        
         int nPage = (i_nFilteredPage * nSubPages + nSubPage) / rMPS.nRepeat;
         if( nSubPage == nSubPages-1 ||
             nPage == nDocPages-1 )
@@ -1150,33 +1150,33 @@ PrinterController::PageSize PrinterController::getFilteredPageFile( int i_nFilte
                     nCellY = (nSubPage % rMPS.nRows);
                     break;
                 }
-                // scale the metafile down to a sub page size
+                
                 double fScaleX = double(aSubPageSize.Width())/double(aPageSize.aSize.Width());
                 double fScaleY = double(aSubPageSize.Height())/double(aPageSize.aSize.Height());
                 double fScale  = std::min( fScaleX, fScaleY );
                 aPageFile.Scale( fScale, fScale );
                 aPageFile.WindStart();
 
-                // move the subpage so it is centered in its "cell"
+                
                 long nOffX = (aSubPageSize.Width() - long(double(aPageSize.aSize.Width()) * fScale)) / 2;
                 long nOffY = (aSubPageSize.Height() - long(double(aPageSize.aSize.Height()) * fScale)) / 2;
                 long nX = rMPS.nLeftMargin + nOffX + nAdvX * nCellX;
                 long nY = rMPS.nTopMargin + nOffY + nAdvY * nCellY;
                 aPageFile.Move( nX, nY, mpImplData->mpPrinter->ImplGetDPIX(), mpImplData->mpPrinter->ImplGetDPIY() );
                 aPageFile.WindStart();
-                // calculate border rectangle
+                
                 Rectangle aSubPageRect( Point( nX, nY ),
                                         Size( long(double(aPageSize.aSize.Width())*fScale),
                                               long(double(aPageSize.aSize.Height())*fScale) ) );
 
-                // append subpage to page
+                
                 appendSubPage( o_rMtf, aSubPageRect, aPageFile, rMPS.bDrawBorder );
             }
         }
     }
     o_rMtf.WindStart();
 
-    // subsequent getPageFile calls have changed the paper, reset it to current value
+    
     mpImplData->mpPrinter->SetMapMode( MapMode( MAP_100TH_MM ) );
     mpImplData->mpPrinter->SetPaperSizeUser( aPaperSize, ! mpImplData->isFixedPageSize() );
 
@@ -1205,7 +1205,7 @@ sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFi
 
     if( rPrinterOptions.IsReduceBitmaps() )
     {
-        // calculate maximum resolution for bitmap graphics
+        
         if( PRINTER_BITMAP_OPTIMAL == rPrinterOptions.GetReducedBitmapMode() )
         {
             nMaxBmpDPIX = std::min( sal_Int32(OPTIMAL_BMP_RESOLUTION), nMaxBmpDPIX );
@@ -1223,7 +1223,7 @@ sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFi
         }
     }
 
-    // convert to greysacles
+    
     if( rPrinterOptions.IsConvertToGreyscales() )
     {
         mpImplData->mpPrinter->SetDrawMode( mpImplData->mpPrinter->GetDrawMode() |
@@ -1231,18 +1231,18 @@ sal_uLong PrinterController::removeTransparencies( GDIMetaFile& i_rIn, GDIMetaFi
                                               DRAWMODE_GRAYBITMAP | DRAWMODE_GRAYGRADIENT ) );
     }
 
-    // disable transparency output
+    
     if( rPrinterOptions.IsReduceTransparency() && ( PRINTER_TRANSPARENCY_NONE == rPrinterOptions.GetReducedTransparencyMode() ) )
     {
         mpImplData->mpPrinter->SetDrawMode( mpImplData->mpPrinter->GetDrawMode() | DRAWMODE_NOTRANSPARENCY );
     }
 
-    Color aBg( COL_TRANSPARENT ); // default: let RemoveTransparenciesFromMetaFile do its own background logic
+    Color aBg( COL_TRANSPARENT ); 
     if( mpImplData->maMultiPage.nRows * mpImplData->maMultiPage.nColumns > 1 )
     {
-        // in N-Up printing we have no "page" background operation
-        // we also have no way to determine the paper color
-        // so let's go for white, which will kill 99.9% of the real cases
+        
+        
+        
         aBg = Color( COL_WHITE );
     }
     mpImplData->mpPrinter->RemoveTransparenciesFromMetaFile( i_rIn, o_rOut, nMaxBmpDPIX, nMaxBmpDPIY,
@@ -1263,13 +1263,13 @@ void PrinterController::printFilteredPage( int i_nPage )
     PrinterController::PageSize aPageSize = getFilteredPageFile( i_nPage, aPageFile );
 
     if (mpImplData->meJobState != view::PrintableState_JOB_STARTED)
-    {   // rhbz#657394: check that we are still printing...
+    {   
         return;
     }
 
     if( mpImplData->mpProgress )
     {
-        // do nothing if printing is canceled
+        
         if( mpImplData->mpProgress->isCanceled() )
         {
             setJobState( view::PrintableState_JOB_ABORTED );
@@ -1277,9 +1277,9 @@ void PrinterController::printFilteredPage( int i_nPage )
         }
     }
 
-    // in N-Up printing set the correct page size
+    
     mpImplData->mpPrinter->SetMapMode( MAP_100TH_MM );
-    // aPageSize was filtered through mpImplData->getRealPaperSize already by getFilteredPageFile()
+    
     mpImplData->mpPrinter->SetPaperSizeUser( aPageSize.aSize, ! mpImplData->isFixedPageSize() );
     if( mpImplData->mnFixedPaperBin != -1 &&
         mpImplData->mpPrinter->GetPaperBin() != mpImplData->mnFixedPaperBin )
@@ -1287,7 +1287,7 @@ void PrinterController::printFilteredPage( int i_nPage )
         mpImplData->mpPrinter->SetPaperBin( mpImplData->mnFixedPaperBin );
     }
 
-    // if full paper is meant to be used, move the output to accommodate for pageoffset
+    
     if( aPageSize.bFullPaper )
     {
         Point aPageOffset( mpImplData->mpPrinter->GetPageOffset() );
@@ -1300,7 +1300,7 @@ void PrinterController::printFilteredPage( int i_nPage )
 
     mpImplData->mpPrinter->EnableOutput( true );
 
-    // actually print the page
+    
     mpImplData->mpPrinter->ImplStartPage();
 
     mpImplData->mpPrinter->Push();
@@ -1324,8 +1324,8 @@ void PrinterController::jobFinished( view::PrintableState )
 void PrinterController::abortJob()
 {
     setJobState( view::PrintableState_JOB_ABORTED );
-    // applications (well, sw) depend on a page request with "IsLastPage" = true
-    // to free resources, else they (well, sw) will crash eventually
+    
+    
     setLastPage( true );
     delete mpImplData->mpProgress;
     mpImplData->mpProgress = NULL;
@@ -1374,7 +1374,7 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
         if( aMergeSet.find( mpImplData->maUIProperties[i].Name ) == aMergeSet.end() )
             aResult[nCur++] = mpImplData->maUIProperties[i];
     }
-    // append IsFirstPage
+    
     if( aMergeSet.find( OUString( "IsFirstPage" ) ) == aMergeSet.end() )
     {
         PropertyValue aVal;
@@ -1382,7 +1382,7 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
         aVal.Value <<= mpImplData->mbFirstPage;
         aResult[nCur++] = aVal;
     }
-    // append IsLastPage
+    
     if( aMergeSet.find( OUString( "IsLastPage" ) ) == aMergeSet.end() )
     {
         PropertyValue aVal;
@@ -1390,7 +1390,7 @@ Sequence< PropertyValue > PrinterController::getJobProperties( const Sequence< P
         aVal.Value <<= mpImplData->mbLastPage;
         aResult[nCur++] = aVal;
     }
-    // append IsPrinter
+    
     if( aMergeSet.find( OUString( "IsPrinter" ) ) == aMergeSet.end() )
     {
         PropertyValue aVal;
@@ -1438,7 +1438,7 @@ void PrinterController::setValue( const PropertyValue& i_rValue )
         mpImplData->maUIProperties[ it->second ] = i_rValue;
     else
     {
-        // insert correct index into property map
+        
         mpImplData->maPropertyToIndex[ i_rValue.Name ] = mpImplData->maUIProperties.size();
         mpImplData->maUIProperties.push_back( i_rValue );
         mpImplData->maUIPropertyEnabled.push_back( true );
@@ -1496,7 +1496,7 @@ void PrinterController::setUIOptions( const Sequence< PropertyValue >& i_rOption
         {
             vcl::ImplPrinterControllerData::PropertyToIndexMap::const_iterator it =
                 mpImplData->maPropertyToIndex.find( aPropName );
-            // sanity check
+            
             if( it != mpImplData->maPropertyToIndex.end() )
             {
                 mpImplData->maUIPropertyEnabled[ it->second ] = bIsEnabled;
@@ -1520,18 +1520,18 @@ bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
 
         if( bEnabled )
         {
-            // check control dependencies
+            
             vcl::ImplPrinterControllerData::ControlDependencyMap::const_iterator it =
                 mpImplData->maControlDependencies.find( i_rProperty );
             if( it != mpImplData->maControlDependencies.end() )
             {
-                // check if the dependency is enabled
-                // if the dependency is disabled, we are too
+                
+                
                 bEnabled = isUIOptionEnabled( it->second.maDependsOnName );
 
                 if( bEnabled )
                 {
-                    // does the dependency have the correct value ?
+                    
                     const css::beans::PropertyValue* pVal = getValue( it->second.maDependsOnName );
                     OSL_ENSURE( pVal, "unknown property in dependency" );
                     if( pVal )
@@ -1544,14 +1544,14 @@ bool PrinterController::isUIOptionEnabled( const OUString& i_rProperty ) const
                         }
                         else if( pVal->Value >>= bDepVal )
                         {
-                            // could be a dependency on a checked boolean
-                            // in this case the dependency is on a non zero for checked value
+                            
+                            
                             bEnabled = (   bDepVal && it->second.mnDependsOnEntry != 0) ||
                                        ( ! bDepVal && it->second.mnDependsOnEntry == 0);
                         }
                         else
                         {
-                            // if the type does not match something is awry
+                            
                             OSL_FAIL( "strange type in control dependency" );
                             bEnabled = false;
                         }
@@ -1619,7 +1619,7 @@ OUString PrinterController::makeEnabled( const OUString& i_rProperty )
                }
                else
                {
-                   // if the type does not match something is awry
+                   
                    OSL_FAIL( "strange type in control dependency" );
                }
            }
@@ -1686,7 +1686,7 @@ void PrinterController::resetPaperToLastConfigured()
 void PrinterController::pushPropertiesToPrinter()
 {
     sal_Int32 nCopyCount = 1;
-    // set copycount and collate
+    
     const css::beans::PropertyValue* pVal = getValue( OUString( "CopyCount" ) );
     if( pVal )
         pVal->Value >>= nCopyCount;
@@ -1696,7 +1696,7 @@ void PrinterController::pushPropertiesToPrinter()
         pVal->Value >>= bCollate;
     mpImplData->mpPrinter->SetCopyCount( static_cast<sal_uInt16>(nCopyCount), bCollate );
 
-    // duplex mode
+    
     pVal = getValue( OUString( "DuplexMode" ) );
     if( pVal )
     {
@@ -1780,7 +1780,7 @@ bool PrinterOptionsHelper::processProperties( const Sequence< PropertyValue >& i
 {
     bool bChanged = false;
 
-    // clear the changed set
+    
     if( o_pChangeProp )
         o_pChangeProp->clear();
 
@@ -1831,14 +1831,14 @@ Any PrinterOptionsHelper::setUIControlOpt(const css::uno::Sequence< OUString >& 
                                           const PrinterOptionsHelper::UIControlOptions& i_rControlOptions)
 {
     sal_Int32 nElements =
-        2                                                             // ControlType + ID
-        + (i_rTitle.isEmpty() ? 0 : 1)                                // Text
-        + (i_rHelpIds.getLength() ? 1 : 0)                            // HelpId
-        + (i_pVal ? 1 : 0)                                            // Property
-        + i_rControlOptions.maAddProps.getLength()                    // additional props
-        + (i_rControlOptions.maGroupHint.isEmpty() ? 0 : 1)           // grouping
-        + (i_rControlOptions.mbInternalOnly ? 1 : 0)                  // internal hint
-        + (i_rControlOptions.mbEnabled ? 0 : 1)                       // enabled
+        2                                                             
+        + (i_rTitle.isEmpty() ? 0 : 1)                                
+        + (i_rHelpIds.getLength() ? 1 : 0)                            
+        + (i_pVal ? 1 : 0)                                            
+        + i_rControlOptions.maAddProps.getLength()                    
+        + (i_rControlOptions.maGroupHint.isEmpty() ? 0 : 1)           
+        + (i_rControlOptions.mbInternalOnly ? 1 : 0)                  
+        + (i_rControlOptions.mbEnabled ? 0 : 1)                       
         ;
     if( !i_rControlOptions.maDependsOnName.isEmpty() )
     {

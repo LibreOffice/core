@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -66,15 +66,15 @@ using namespace ::com::sun::star::beans;
 using namespace ::svxform;
 
 
-//========================================================================
-// = FmSearchThread
-//------------------------------------------------------------------------
+
+
+
 void FmSearchThread::run()
 {
     m_pEngine->SearchNextImpl();
 };
 
-//------------------------------------------------------------------------
+
 void FmSearchThread::onTerminated()
 {
     if (m_aTerminationHdl.IsSet())
@@ -82,13 +82,13 @@ void FmSearchThread::onTerminated()
     delete this;
 }
 
-//========================================================================
-// = FmRecordCountListener
 
-//  SMART_UNO_IMPLEMENTATION(FmRecordCountListener, UsrObject);
+
+
+
 
 DBG_NAME(FmRecordCountListener);
-//------------------------------------------------------------------------
+
 FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::sdbc::XResultSet > & dbcCursor)
 {
     DBG_CTOR(FmRecordCountListener,NULL);
@@ -100,14 +100,14 @@ FmRecordCountListener::FmRecordCountListener(const Reference< ::com::sun::star::
     if (::comphelper::getBOOL(m_xListening->getPropertyValue(FM_PROP_ROWCOUNTFINAL)))
     {
         m_xListening = NULL;
-        // there's nothing to do as the record count is already known
+        
         return;
     }
 
     m_xListening->addPropertyChangeListener(FM_PROP_ROWCOUNT, (::com::sun::star::beans::XPropertyChangeListener*)this);
 }
 
-//------------------------------------------------------------------------
+
 Link FmRecordCountListener::SetPropChangeHandler(const Link& lnk)
 {
     Link lnkReturn = m_lnkWhoWantsToKnow;
@@ -119,14 +119,14 @@ Link FmRecordCountListener::SetPropChangeHandler(const Link& lnk)
     return lnkReturn;
 }
 
-//------------------------------------------------------------------------
+
 FmRecordCountListener::~FmRecordCountListener()
 {
 
     DBG_DTOR(FmRecordCountListener,NULL);
 }
 
-//------------------------------------------------------------------------
+
 void FmRecordCountListener::DisConnect()
 {
     if(m_xListening.is())
@@ -134,14 +134,14 @@ void FmRecordCountListener::DisConnect()
     m_xListening = NULL;
 }
 
-//------------------------------------------------------------------------
+
 void SAL_CALL FmRecordCountListener::disposing(const ::com::sun::star::lang::EventObject& /*Source*/) throw( RuntimeException )
 {
     DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::disposing should never have been called without a propset !");
     DisConnect();
 }
 
-//------------------------------------------------------------------------
+
 void FmRecordCountListener::NotifyCurrentCount()
 {
     if (m_lnkWhoWantsToKnow.IsSet())
@@ -152,15 +152,15 @@ void FmRecordCountListener::NotifyCurrentCount()
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmRecordCountListener::propertyChange(const  ::com::sun::star::beans::PropertyChangeEvent& /*evt*/) throw(::com::sun::star::uno::RuntimeException)
 {
     NotifyCurrentCount();
 }
 
-//========================================================================
-// FmSearchEngine - local classes
-//------------------------------------------------------------------------
+
+
+
 SimpleTextWrapper::SimpleTextWrapper(const Reference< ::com::sun::star::awt::XTextComponent > & _xText)
     :ControlTextWrapper(_xText.get())
     ,m_xText(_xText)
@@ -168,13 +168,13 @@ SimpleTextWrapper::SimpleTextWrapper(const Reference< ::com::sun::star::awt::XTe
     DBG_ASSERT(m_xText.is(), "FmSearchEngine::SimpleTextWrapper::SimpleTextWrapper : invalid argument !");
 }
 
-//------------------------------------------------------------------------
+
 OUString SimpleTextWrapper::getCurrentText() const
 {
     return m_xText->getText();
 }
 
-//------------------------------------------------------------------------
+
 ListBoxWrapper::ListBoxWrapper(const Reference< ::com::sun::star::awt::XListBox > & _xBox)
     :ControlTextWrapper(_xBox.get())
     ,m_xBox(_xBox)
@@ -182,13 +182,13 @@ ListBoxWrapper::ListBoxWrapper(const Reference< ::com::sun::star::awt::XListBox 
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::ListBoxWrapper::ListBoxWrapper : invalid argument !");
 }
 
-//------------------------------------------------------------------------
+
 OUString ListBoxWrapper::getCurrentText() const
 {
     return m_xBox->getSelectedItem();
 }
 
-//------------------------------------------------------------------------
+
 CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckBox > & _xBox)
     :ControlTextWrapper(_xBox.get())
     ,m_xBox(_xBox)
@@ -196,7 +196,7 @@ CheckBoxWrapper::CheckBoxWrapper(const Reference< ::com::sun::star::awt::XCheckB
     DBG_ASSERT(m_xBox.is(), "FmSearchEngine::CheckBoxWrapper::CheckBoxWrapper : invalid argument !");
 }
 
-//------------------------------------------------------------------------
+
 OUString CheckBoxWrapper::getCurrentText() const
 {
     switch ((TriState)m_xBox->getState())
@@ -208,9 +208,9 @@ OUString CheckBoxWrapper::getCurrentText() const
     return OUString();
 }
 
-//========================================================================
-// = FmSearchEngine
-//------------------------------------------------------------------------
+
+
+
 sal_Bool FmSearchEngine::MoveCursor()
 {
     sal_Bool bSuccess = sal_True;
@@ -269,7 +269,7 @@ sal_Bool FmSearchEngine::MoveCursor()
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollection::iterator& iter, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
     sal_Bool bSuccess(sal_True);
@@ -297,21 +297,21 @@ sal_Bool FmSearchEngine::MoveField(sal_Int32& nPos, FieldCollection::iterator& i
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::container::XIndexAccess > & xAllFields, sal_Int32 nField)
 {
     DBG_ASSERT( xAllFields.is() && ( nField >= 0 ) && ( nField < xAllFields->getCount() ),
         "FmSearchEngine::BuildAndInsertFieldInfo: invalid field descriptor!" );
 
-    // das Feld selber
+    
     Reference< XInterface > xCurrentField;
     xAllFields->getByIndex(nField) >>= xCurrentField;
 
-    // von dem weiss ich jetzt, dass es den DatabaseRecord-Service unterstuetzt (hoffe ich)
-    // fuer den FormatKey und den Typ brauche ich das PropertySet
+    
+    
     Reference< ::com::sun::star::beans::XPropertySet >  xProperties(xCurrentField, UNO_QUERY);
 
-    // die FieldInfo dazu aufbauen
+    
     FieldInfo fiCurrent;
     fiCurrent.xContents = Reference< ::com::sun::star::sdb::XColumn > (xCurrentField, UNO_QUERY);
     fiCurrent.nFormatKey = ::comphelper::getINT32(xProperties->getPropertyValue(FM_PROP_FORMATKEY));
@@ -324,18 +324,18 @@ void FmSearchEngine::BuildAndInsertFieldInfo(const Reference< ::com::sun::star::
         fiCurrent.bDoubleHandling = (nFormatType != ::com::sun::star::util::NumberFormat::TEXT);
     }
 
-    // und merken
+    
     m_arrUsedFields.insert(m_arrUsedFields.end(), fiCurrent);
 
 }
-//------------------------------------------------------------------------
+
 OUString FmSearchEngine::FormatField(const FieldInfo& rField)
 {
     DBG_ASSERT(!m_bUsingTextComponents, "FmSearchEngine::FormatField : im UsingTextComponents-Mode bitte FormatField(sal_Int32) benutzen !");
 
     if (!m_xFormatter.is())
         return OUString();
-    // sonst werden Datumsflder zum Beispiel zu irgendeinem Default-Wert formatiert
+    
 
     OUString sReturn;
     try
@@ -361,7 +361,7 @@ OUString FmSearchEngine::FormatField(const FieldInfo& rField)
     return sReturn;
 }
 
-//------------------------------------------------------------------------
+
 OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
 {
     if (m_bUsingTextComponents)
@@ -373,7 +373,7 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
         if (m_nCurrentFieldIndex != -1)
         {
             DBG_ASSERT((nWhich == 0) || (nWhich == m_nCurrentFieldIndex), "FmSearchEngine::FormatField : Parameter nWhich ist ungueltig");
-            // analoge Situation wie unten
+            
             nWhich = m_nCurrentFieldIndex;
         }
 
@@ -386,8 +386,8 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
         if (m_nCurrentFieldIndex != -1)
         {
             DBG_ASSERT((nWhich == 0) || (nWhich == m_nCurrentFieldIndex), "FmSearchEngine::FormatField : Parameter nWhich ist ungueltig");
-            // ich bin im single-field-modus, da ist auch die richtige Feld-Nummer erlaubt, obwohl dann der richtige ::com::sun::star::sdbcx::Index
-            // fuer meinen Array-Zugriff natuerlich 0 ist
+            
+            
             nWhich = 0;
         }
 
@@ -397,17 +397,17 @@ OUString FmSearchEngine::FormatField(sal_Int32 nWhich)
     }
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchForNull, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
-    // die Startposition merken
+    
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
     FieldCollection::iterator iterInitialField = iterFieldLoop;
 
-    // --------------------------------------------------------------
+    
     sal_Bool bFound(sal_False);
     sal_Bool bMovedAround(sal_False);
     do
@@ -416,28 +416,28 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
         {
             Application::Reschedule();
             Application::Reschedule();
-            // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
-            // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
-            // or anything like that. So within each loop we create one user event and handle one user event (and no
-            // paintings and these), so the office seems to be frozen while searching.
-            // FS - 70226 - 02.12.99
+            
+            
+            
+            
+            
         }
 
-        // der aktuell zu vergleichende Inhalt
-        iterFieldLoop->xContents->getString();  // needed for wasNull
+        
+        iterFieldLoop->xContents->getString();  
         bFound = _bSearchForNull == iterFieldLoop->xContents->wasNull();
         if (bFound)
             break;
 
-        // naechstes Feld (implizit naechster Datensatz, wenn noetig)
+        
         if (!MoveField(nFieldPos, iterFieldLoop, iterBegin, iterEnd))
-        {   // beim Bewegen auf das naechste Feld ging was schief ... weitermachen ist nicht drin, da das naechste Mal genau
-            // das selbe bestimmt wieder schief geht, also Abbruch
-            // vorher aber noch, damit das Weitersuchen an der aktuellen Position weitermacht :
+        {   
+            
+            
             try { m_aPreviousLocBookmark = m_xSearchCursor.getBookmark(); }
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
             m_iterPreviousLocField = iterFieldLoop;
-            // und wech
+            
             return SR_ERROR;
         }
 
@@ -448,12 +448,12 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
         bMovedAround = EQUAL_BOOKMARKS(aStartMark, aCurrentBookmark) && (iterFieldLoop == iterInitialField);
 
         if (nFieldPos == 0)
-            // das heisst, ich habe mich auf einen neuen Datensatz bewegt
+            
             PropagateProgress(bMovedAround);
-                // if we moved to the starting position we don't have to propagate an 'overflow' message
-                // FS - 07.12.99 - 68530
+                
+                
 
-        // abbrechen gefordert ?
+        
         if (CancelRequested())
             return SR_CANCELED;
 
@@ -462,11 +462,11 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchSpecial(sal_Bool _bSearchFor
     return bFound ? SR_FOUND : SR_NOTFOUND;
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& strExpression, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
-    // die Startposition merken
+    
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
@@ -474,7 +474,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
 
     WildCard aSearchExpression(strExpression);
 
-    // --------------------------------------------------------------
+    
     sal_Bool bFound(sal_False);
     sal_Bool bMovedAround(sal_False);
     do
@@ -483,14 +483,14 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
         {
             Application::Reschedule();
             Application::Reschedule();
-            // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
-            // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
-            // or anything like that. So within each loop we create one user event and hanel one user event (and no
-            // paintings and these), so the office seems to be frozen while searching.
-            // FS - 70226 - 02.12.99
+            
+            
+            
+            
+            
         }
 
-        // der aktuell zu vergleichende Inhalt
+        
         OUString sCurrentCheck;
         if (m_bFormatter)
             sCurrentCheck = FormatField(nFieldPos);
@@ -498,24 +498,24 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
             sCurrentCheck = iterFieldLoop->xContents->getString();
 
         if (!GetCaseSensitive())
-            // norm the string
+            
             sCurrentCheck = m_aCharacterClassficator.lowercase(sCurrentCheck);
 
-        // jetzt ist der Test einfach ...
+        
         bFound = aSearchExpression.Matches(sCurrentCheck);
 
         if (bFound)
             break;
 
-        // naechstes Feld (implizit naechster Datensatz, wenn noetig)
+        
         if (!MoveField(nFieldPos, iterFieldLoop, iterBegin, iterEnd))
-        {   // beim Bewegen auf das naechste Feld ging was schief ... weitermachen ist nicht drin, da das naechste Mal genau
-            // das selbe bestimmt wieder schief geht, also Abbruch
-            // vorher aber noch, damit das Weitersuchen an der aktuellen Position weitermacht :
+        {   
+            
+            
             try { m_aPreviousLocBookmark = m_xSearchCursor.getBookmark(); }
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
             m_iterPreviousLocField = iterFieldLoop;
-            // und wech
+            
             return SR_ERROR;
         }
 
@@ -526,12 +526,12 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
         bMovedAround = EQUAL_BOOKMARKS(aStartMark, aCurrentBookmark) && (iterFieldLoop == iterInitialField);
 
         if (nFieldPos == 0)
-            // das heisst, ich habe mich auf einen neuen Datensatz bewegt
+            
             PropagateProgress(bMovedAround);
-                // if we moved to the starting position we don't have to propagate an 'overflow' message
-                // FS - 07.12.99 - 68530
+                
+                
 
-        // abbrechen gefordert ?
+        
         if (CancelRequested())
             return SR_CANCELED;
 
@@ -540,7 +540,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchWildcard(const OUString& str
     return bFound ? SR_FOUND : SR_NOTFOUND;
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString& strExpression, sal_Int32& nFieldPos,
     FieldCollection::iterator& iterFieldLoop, const FieldCollection::iterator& iterBegin, const FieldCollection::iterator& iterEnd)
 {
@@ -549,19 +549,19 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     DBG_ASSERT(!m_bLevenshtein || !m_bRegular,
         "FmSearchEngine::SearchRegularApprox : kann nicht nach regulaeren Ausdruecken und nach Aehnlichkeiten gleichzeitig suchen !");
 
-    // Startposition merken
+    
     Any aStartMark;
     try { aStartMark = m_xSearchCursor.getBookmark(); }
     catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); return SR_ERROR; }
     FieldCollection::iterator iterInitialField = iterFieldLoop;
 
-    // Parameter sammeln
+    
     SearchOptions aParam;
     aParam.algorithmType = m_bRegular ? SearchAlgorithms_REGEXP : SearchAlgorithms_APPROXIMATE;
     aParam.searchFlag = 0;
     aParam.transliterateFlags = GetTransliterationFlags();
     if ( !GetTransliteration() )
-    {   // if transliteration is not enabled, the only flags which matter are IGNORE_CASE and IGNORE_WIDTH
+    {   
         aParam.transliterateFlags &= TransliterationModules_IGNORE_CASE | TransliterationModules_IGNORE_WIDTH;
     }
     if (m_bLevenshtein)
@@ -576,7 +576,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
     aParam.Locale = SvtSysLocale().GetLanguageTag().getLocale();
     ::utl::TextSearch aLocalEngine(aParam);
 
-    // --------------------------------------------------------------
+    
     bool bFound = false;
     sal_Bool bMovedAround(sal_False);
     do
@@ -585,28 +585,28 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
         {
             Application::Reschedule();
             Application::Reschedule();
-            // do 2 reschedules because of #70226# : some things done within this loop's body may cause an user event
-            // to be posted (deep within vcl), and these user events will be handled before any keyinput or paintings
-            // or anything like that. So within each loop we create one user event and handle one user event (and no
-            // paintings and these), so the office seems to be frozen while searching.
-            // FS - 70226 - 02.12.99
+            
+            
+            
+            
+            
         }
 
-        // der aktuell zu vergleichende Inhalt
+        
         OUString sCurrentCheck;
         if (m_bFormatter)
             sCurrentCheck = FormatField(nFieldPos);
         else
             sCurrentCheck = iterFieldLoop->xContents->getString();
 
-        // (don't care about case here, this is done by the TextSearch object, 'cause we passed our case parameter to it)
+        
 
         sal_Int32 nStart = 0, nEnd = sCurrentCheck.getLength();
         bFound = aLocalEngine.SearchForward(sCurrentCheck, &nStart, &nEnd);
-            // das heisst hier 'forward' aber das bezieht sich nur auf die Suche innerhalb von sCurrentCheck, hat also mit
-            // der Richtung meines Datensatz-Durchwanderns nix zu tun (darum kuemmert sich MoveField)
+            
+            
 
-        // checken, ob die Position stimmt
+        
         if (bFound)
         {
             switch (m_nPosition)
@@ -617,7 +617,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
                         bFound = false;
                         break;
                     }
-                    // laeuft in den naechsten Case rein !
+                    
                 case MATCHING_BEGINNING :
                     if (nStart != 0)
                         bFound = false;
@@ -629,19 +629,19 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
             }
         }
 
-        if (bFound) // immer noch ?
+        if (bFound) 
             break;
 
-        // naechstes Feld (implizit naechster Datensatz, wenn noetig)
+        
         if (!MoveField(nFieldPos, iterFieldLoop, iterBegin, iterEnd))
-        {   // beim Bewegen auf das naechste Feld ging was schief ... weitermachen ist nicht drin, da das naechste Mal genau
-            // das selbe bestimmt wieder schief geht, also Abbruch (ohne Fehlermeldung, von der erwarte ich, dass sie im Move
-            // angezeigt wurde)
-            // vorher aber noch, damit das Weitersuchen an der aktuellen Position weitermacht :
+        {   
+            
+            
+            
             try { m_aPreviousLocBookmark = m_xSearchCursor.getBookmark(); }
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
             m_iterPreviousLocField = iterFieldLoop;
-            // und wech
+            
             return SR_ERROR;
         }
 
@@ -651,12 +651,12 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
         bMovedAround = EQUAL_BOOKMARKS(aStartMark, aCurrentBookmark) && (iterFieldLoop == iterInitialField);
 
         if (nFieldPos == 0)
-            // das heisst, ich habe mich auf einen neuen Datensatz bewegt
+            
             PropagateProgress(bMovedAround);
-                // if we moved to the starting position we don't have to propagate an 'overflow' message
-                // FS - 07.12.99 - 68530
+                
+                
 
-        // abbrechen gefordert ?
+        
         if (CancelRequested())
             return SR_CANCELED;
 
@@ -667,7 +667,7 @@ FmSearchEngine::SEARCH_RESULT FmSearchEngine::SearchRegularApprox(const OUString
 
 
 DBG_NAME(FmSearchEngine);
-//------------------------------------------------------------------------
+
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
             const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
             const Reference< XNumberFormatsSupplier > & xFormatSupplier, FMSEARCH_MODE eMode)
@@ -676,7 +676,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_xFormatSupplier(xFormatSupplier)
     ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
     ,m_aStringCompare( _rxContext )
-    ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
+    ,m_nCurrentFieldIndex(-2)   
     ,m_bUsingTextComponents(sal_False)
     ,m_eSearchForType(SEARCHFOR_STRING)
     ,m_srResult(SR_FOUND)
@@ -706,14 +706,14 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     Init(sVisibleFields);
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
         const Reference< XResultSet > & xCursor, const OUString& sVisibleFields,
         const InterfaceArray& arrFields, FMSEARCH_MODE eMode)
     :m_xSearchCursor(xCursor)
     ,m_aCharacterClassficator( _rxContext, SvtSysLocale().GetLanguageTag() )
     ,m_aStringCompare( _rxContext )
-    ,m_nCurrentFieldIndex(-2)   // -1 hat schon eine Bedeutung, also nehme ich -2 fuer 'ungueltig'
+    ,m_nCurrentFieldIndex(-2)   
     ,m_bUsingTextComponents(sal_True)
     ,m_xOriginalIterator(xCursor)
     ,m_xClonedIterator(m_xOriginalIterator, sal_True)
@@ -722,7 +722,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     ,m_bSearchingCurrently(sal_False)
     ,m_bCancelAsynchRequest(sal_False)
     ,m_eMode(eMode)
-    ,m_bFormatter(sal_True)     // das muss konsistent sein mit m_xSearchCursor, der i.A. == m_xOriginalIterator ist
+    ,m_bFormatter(sal_True)     
     ,m_bForward(sal_False)
     ,m_bWildcard(sal_False)
     ,m_bRegular(sal_False)
@@ -741,7 +741,7 @@ FmSearchEngine::FmSearchEngine(const Reference< XComponentContext >& _rxContext,
     Init(sVisibleFields);
 }
 
-//------------------------------------------------------------------------
+
 FmSearchEngine::~FmSearchEngine()
 {
     clearControlTexts();
@@ -749,7 +749,7 @@ FmSearchEngine::~FmSearchEngine()
     DBG_DTOR(FmSearchEngine,NULL);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SetIgnoreWidthCJK(sal_Bool bSet)
 {
     if (bSet)
@@ -758,13 +758,13 @@ void FmSearchEngine::SetIgnoreWidthCJK(sal_Bool bSet)
         m_nTransliterationFlags &= ~TransliterationModules_IGNORE_WIDTH;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::GetIgnoreWidthCJK() const
 {
     return 0 != (m_nTransliterationFlags & TransliterationModules_IGNORE_WIDTH);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SetCaseSensitive(sal_Bool bSet)
 {
     if (bSet)
@@ -773,13 +773,13 @@ void FmSearchEngine::SetCaseSensitive(sal_Bool bSet)
         m_nTransliterationFlags |= TransliterationModules_IGNORE_CASE;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::GetCaseSensitive() const
 {
     return 0 == (m_nTransliterationFlags & TransliterationModules_IGNORE_CASE);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::clearControlTexts()
 {
     for (   ControlTextSuppliers::iterator aIter = m_aControlTexts.begin();
@@ -792,7 +792,7 @@ void FmSearchEngine::clearControlTexts()
     m_aControlTexts.clear();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 {
     clearControlTexts();
@@ -801,7 +801,7 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
     {
         xCurrent = arrFields.at(i);
         DBG_ASSERT(xCurrent.is(), "FmSearchEngine::fillControlTexts : invalid field interface !");
-        // check which type of control this is
+        
         Reference< ::com::sun::star::awt::XTextComponent >  xAsText(xCurrent, UNO_QUERY);
         if (xAsText.is())
         {
@@ -818,28 +818,28 @@ void FmSearchEngine::fillControlTexts(const InterfaceArray& arrFields)
 
         Reference< ::com::sun::star::awt::XCheckBox >  xAsCheckBox(xCurrent, UNO_QUERY);
         DBG_ASSERT(xAsCheckBox.is(), "FmSearchEngine::fillControlTexts : invalid field interface (no supported type) !");
-            // we don't have any more options ...
+            
         m_aControlTexts.insert(m_aControlTexts.end(), new CheckBoxWrapper(xAsCheckBox));
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::Init(const OUString& sVisibleFields)
 {
-    // analyze the fields
-    // additionally, create the mapping: because the list of used columns can be shorter than the list
-    // of columns of the cursor, we need a mapping: "used column numer n" -> "cursor column m"
+    
+    
+    
     m_arrFieldMapping.clear();
 
-    // important: The case of the columns does not need to be exact - for instance:
-    // - a user created a form which works on a table, for which the driver returns a column name "COLUMN"
-    // - the driver itself works case-insensitve with column names
-    // - a control in the form is bound to "column" - not the different case
-    // In such a scenario, the form and the field would work okay, but we here need to case for the different case
-    // explicitly
-    // #i8755#
+    
+    
+    
+    
+    
+    
+    
 
-    // so first of all, check if the database handles identifiers case sensitive
+    
     Reference< XConnection > xConn;
     Reference< XDatabaseMetaData > xMeta;
     Reference< XPropertySet > xCursorProps( IFACECAST( m_xSearchCursor ), UNO_QUERY );
@@ -855,17 +855,17 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
         xMeta = xConn->getMetaData();
     OSL_ENSURE( xMeta.is(), "FmSearchEngine::Init: very strange cursor (could not derive connection meta data from it)!" );
 
-    sal_Bool bCaseSensitiveIdentifiers = sal_True;  // assume case sensivity
+    sal_Bool bCaseSensitiveIdentifiers = sal_True;  
     if ( xMeta.is() )
         bCaseSensitiveIdentifiers = xMeta->supportsMixedCaseQuotedIdentifiers();
 
-    // now that we have this information, we need a collator which is able to case (in)sentively compare strings
+    
     m_aStringCompare.loadDefaultCollator( SvtSysLocale().GetLanguageTag().getLocale(),
         bCaseSensitiveIdentifiers ? 0 : ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE );
 
     try
     {
-        // der Cursor kann mir einen Record (als PropertySet) liefern, dieser unterstuetzt den DatabaseRecord-Service
+        
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSupplyCols(IFACECAST(m_xSearchCursor), UNO_QUERY);
         DBG_ASSERT(xSupplyCols.is(), "FmSearchEngine::Init : invalid cursor (no columns supplier) !");
         Reference< ::com::sun::star::container::XNameAccess >       xAllFieldNames = xSupplyCols->getColumns();
@@ -880,7 +880,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
         {
             sCurrentField = sVis.getToken(0, ';' , nIndex);
 
-            // in der Feld-Sammlung suchen
+            
             sal_Int32 nFoundIndex = -1;
             for (sal_Int32 j=0; j<seqFieldNames.getLength(); ++j, ++pFieldNames)
             {
@@ -890,7 +890,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
                     break;
                 }
             }
-            // set the field selection back to the first
+            
             pFieldNames = seqFieldNames.getArray();
             DBG_ASSERT(nFoundIndex != -1, "FmSearchEngine::Init : Invalid field name were given !");
             m_arrFieldMapping.push_back(nFoundIndex);
@@ -904,7 +904,7 @@ void FmSearchEngine::Init(const OUString& sVisibleFields)
 
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SetFormatterUsing(sal_Bool bSet)
 {
     if (m_bFormatter == bSet)
@@ -913,7 +913,7 @@ void FmSearchEngine::SetFormatterUsing(sal_Bool bSet)
 
     if (m_bUsingTextComponents)
     {
-        // ich benutzte keinen Formatter, sondern TextComponents -> der SearchIterator muss angepasst werden
+        
         try
         {
             if (m_bFormatter)
@@ -921,7 +921,7 @@ void FmSearchEngine::SetFormatterUsing(sal_Bool bSet)
                 DBG_ASSERT(m_xSearchCursor == m_xClonedIterator, "FmSearchEngine::SetFormatterUsing : inkonsistenter Zustand !");
                 m_xSearchCursor = m_xOriginalIterator;
                 m_xSearchCursor.moveToBookmark(m_xClonedIterator.getBookmark());
-                    // damit ich mit dem neuen Iterator wirklich dort weitermache, wo ich vorher aufgehoert habe
+                    
             }
             else
             {
@@ -935,15 +935,15 @@ void FmSearchEngine::SetFormatterUsing(sal_Bool bSet)
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        // ich muss die Fields neu binden, da der Textaustausch eventuell ueber diese Fields erfolgt und sich der unterliegende Cursor
-        // geaendert hat
+        
+        
         RebuildUsedFields(m_nCurrentFieldIndex, sal_True);
     }
     else
         InvalidatePreviousLoc();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::PropagateProgress(sal_Bool _bDontPropagateOverflow)
 {
     if (m_aProgressHandler.IsSet())
@@ -967,7 +967,7 @@ void FmSearchEngine::PropagateProgress(sal_Bool _bDontPropagateOverflow)
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SearchNextImpl()
 {
     DBG_ASSERT(!(m_bWildcard && m_bRegular) && !(m_bRegular && m_bLevenshtein) && !(m_bLevenshtein && m_bWildcard),
@@ -975,18 +975,18 @@ void FmSearchEngine::SearchNextImpl()
 
     DBG_ASSERT(m_xSearchCursor.is(), "FmSearchEngine::SearchNextImpl : habe ungueltigen Iterator !");
 
-    // die Parameter der Suche
-    OUString strSearchExpression(m_strSearchExpression); // brauche ich non-const
+    
+    OUString strSearchExpression(m_strSearchExpression); 
     if (!GetCaseSensitive())
-        // norm the string
+        
         strSearchExpression = m_aCharacterClassficator.lowercase(strSearchExpression);
 
     if (!m_bRegular && !m_bLevenshtein)
-    {   // 'normale' Suche fuehre ich auf jeden Fall ueber WildCards durch, muss aber vorher je nach Modus den OUString anpassen
+    {   
 
         if (!m_bWildcard)
-        {   // da natuerlich in allen anderen Faellen auch * und ? im Suchstring erlaubt sind, aber nicht als WildCards zaehlen
-            // sollen, muss ich normieren
+        {   
+            
             OUString aTmp(strSearchExpression);
             const OUString s_sStar("\\*");
             const OUString s_sQuotation("\\?");
@@ -1013,7 +1013,7 @@ void FmSearchEngine::SearchNextImpl()
         }
     }
 
-    // fuer Arbeit auf Feldliste
+    
     FieldCollection::iterator iterBegin = m_arrUsedFields.begin();
     FieldCollection::iterator iterEnd = m_arrUsedFields.end();
     FieldCollection::iterator iterFieldCheck;
@@ -1025,7 +1025,7 @@ void FmSearchEngine::SearchNextImpl()
         DBG_ASSERT(EQUAL_BOOKMARKS(m_aPreviousLocBookmark, m_xSearchCursor.getBookmark()),
             "FmSearchEngine::SearchNextImpl : ungueltige Position !");
         iterFieldCheck = m_iterPreviousLocField;
-        // im Feld nach (oder vor) der letzten Fundstelle weitermachen
+        
         nFieldPos = iterFieldCheck - iterBegin;
         MoveField(nFieldPos, iterFieldCheck, iterBegin, iterEnd);
     }
@@ -1055,20 +1055,20 @@ void FmSearchEngine::SearchNextImpl()
     if (SR_ERROR == m_srResult)
         return;
 
-    // gefunden ?
+    
     if (SR_FOUND == m_srResult)
     {
-        // die Pos merken
+        
         try { m_aPreviousLocBookmark = m_xSearchCursor.getBookmark(); }
         catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
         m_iterPreviousLocField = iterFieldCheck;
     }
     else
-        // die "letzte Fundstelle" invalidieren
+        
         InvalidatePreviousLoc();
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK(FmSearchEngine, OnSearchTerminated, FmSearchThread*, /*pThread*/)
 {
     if (!m_aProgressHandler.IsSet())
@@ -1103,14 +1103,14 @@ IMPL_LINK(FmSearchEngine, OnSearchTerminated, FmSearchThread*, /*pThread*/)
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    // per definitionem muss der Link Thread-sicher sein (das verlange ich einfach), so dass ich mich um so etwas hier nicht kuemmern muss
+    
     m_aProgressHandler.Call(&aProgress);
 
     m_bSearchingCurrently = sal_False;
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK(FmSearchEngine, OnNewRecordCount, void*, pCounterAsVoid)
 {
     if (!m_aProgressHandler.IsSet())
@@ -1124,7 +1124,7 @@ IMPL_LINK(FmSearchEngine, OnNewRecordCount, void*, pCounterAsVoid)
     return 0L;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::CancelRequested()
 {
     m_aCancelAsynchAccess.acquire();
@@ -1133,7 +1133,7 @@ sal_Bool FmSearchEngine::CancelRequested()
     return bReturn;
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::CancelSearch()
 {
     m_aCancelAsynchAccess.acquire();
@@ -1141,7 +1141,7 @@ void FmSearchEngine::CancelSearch()
     m_aCancelAsynchAccess.release();
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmSearchEngine::SwitchToContext(const Reference< ::com::sun::star::sdbc::XResultSet > & xCursor, const OUString& sVisibleFields, const InterfaceArray& arrFields,
     sal_Int32 nFieldIndex)
 {
@@ -1162,7 +1162,7 @@ sal_Bool FmSearchEngine::SwitchToContext(const Reference< ::com::sun::star::sdbc
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::ImplStartNextSearch()
 {
     m_bCancelAsynchRequest = sal_False;
@@ -1171,7 +1171,7 @@ void FmSearchEngine::ImplStartNextSearch()
     if (m_eMode == SM_USETHREAD)
     {
         FmSearchThread* pSearcher = new FmSearchThread(this);
-            // der loescht sich nach Beendigung selber ...
+            
         pSearcher->setTerminationHandler(LINK(this, FmSearchEngine, OnSearchTerminated));
 
         pSearcher->createSuspended();
@@ -1185,7 +1185,7 @@ void FmSearchEngine::ImplStartNextSearch()
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SearchNext(const OUString& strExpression)
 {
     m_strSearchExpression = strExpression;
@@ -1193,14 +1193,14 @@ void FmSearchEngine::SearchNext(const OUString& strExpression)
     ImplStartNextSearch();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::SearchNextSpecial(sal_Bool _bSearchForNull)
 {
     m_eSearchForType = _bSearchForNull ? SEARCHFOR_NULL : SEARCHFOR_NOTNULL;
     ImplStartNextSearch();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::StartOver(const OUString& strExpression)
 {
     try
@@ -1220,7 +1220,7 @@ void FmSearchEngine::StartOver(const OUString& strExpression)
     SearchNext(strExpression);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::StartOverSpecial(sal_Bool _bSearchForNull)
 {
     try
@@ -1240,25 +1240,25 @@ void FmSearchEngine::StartOverSpecial(sal_Bool _bSearchForNull)
     SearchNextSpecial(_bSearchForNull);
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::InvalidatePreviousLoc()
 {
     m_aPreviousLocBookmark.setValue(0,getVoidCppuType());
     m_iterPreviousLocField = m_arrUsedFields.end();
 }
 
-//------------------------------------------------------------------------
+
 void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
 {
     if (!bForce && (nFieldIndex == m_nCurrentFieldIndex))
         return;
-    // (da ich keinen Wechsel des Iterators von aussen zulasse, heisst selber ::com::sun::star::sdbcx::Index auch immer selbe Spalte, also habe ich nix zu tun)
+    
 
     DBG_ASSERT((nFieldIndex == -1) ||
                ((nFieldIndex >= 0) &&
                 (static_cast<size_t>(nFieldIndex) < m_arrFieldMapping.size())),
             "FmSearchEngine::RebuildUsedFields : nFieldIndex is invalid!");
-    // alle Felder, die ich durchsuchen muss, einsammeln
+    
     m_arrUsedFields.clear();
     if (nFieldIndex == -1)
     {
@@ -1281,7 +1281,7 @@ void FmSearchEngine::RebuildUsedFields(sal_Int32 nFieldIndex, sal_Bool bForce)
     }
 
     m_nCurrentFieldIndex = nFieldIndex;
-    // und natuerlich beginne ich die naechste Suche wieder jungfraeulich
+    
     InvalidatePreviousLoc();
 }
 

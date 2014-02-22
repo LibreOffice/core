@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -550,7 +550,7 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
     mpSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport );
     if( mpSdPropHdlFactory )
     {
-        // set lock to avoid deletion
+        
         mpSdPropHdlFactory->acquire();
     }
 
@@ -558,7 +558,7 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
 
 AnimationsExporterImpl::~AnimationsExporterImpl()
 {
-    // cleanup factory, decrease refcount. Should lead to destruction.
+    
     if(mpSdPropHdlFactory)
     {
         mpSdPropHdlFactory->release();
@@ -698,7 +698,7 @@ void AnimationsExporterImpl::prepareNode( const Reference< XAnimationNode >& xNo
             Reference< XIterateContainer > xIter( xNode, UNO_QUERY_THROW );
             prepareValue( xIter->getTarget() );
         }
-        // its intended that here is no break!
+        
         case AnimationNodeType::PAR:
         case AnimationNodeType::SEQ:
         {
@@ -1009,7 +1009,7 @@ void AnimationsExporterImpl::exportNode( const Reference< XAnimationNode >& xNod
         OSL_FAIL( "xmloff::AnimationsExporterImpl::exportNode(), RuntimeException caught!" );
     }
 
-    // if something goes wrong, its always a good idea to clear the attribute list
+    
     mrExport.ClearAttrList();
 }
 
@@ -1050,7 +1050,7 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             {
                 if( 0 == ( mrExport.getExportFlags() & EXPORT_SAVEBACKWARDCOMPATIBLE ) )
                 {
-                    // issue 146582
+                    
                     OUStringBuffer buf;
                     ::sax::Converter::convertDuration(buf, fTemp / (24*60*60));
                     mrExport.AddAttribute( XML_NAMESPACE_ANIMATION,
@@ -1215,7 +1215,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
             if( (nNodeType != AnimationNodeType::TRANSITIONFILTER) &&
                 (nNodeType != AnimationNodeType::AUDIO ) )
             {
-                // calcMode  = "discrete | linear | paced | spline"
+                
                 nTemp = xAnimate->getCalcMode();
                 if( ((nNodeType == AnimationNodeType::ANIMATEMOTION ) && (nTemp != AnimationCalcMode::PACED)) ||
                     ((nNodeType != AnimationNodeType::ANIMATEMOTION ) && (nTemp != AnimationCalcMode::LINEAR)) )
@@ -1281,7 +1281,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                 mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_PATH, sTmp.makeStringAndClear() );
             }
 
-            // TODO: origin = ( parent | layout )
+            
             aTemp = xAnimateMotion->getOrigin();
         }
         break;
@@ -1404,7 +1404,7 @@ void AnimationsExporterImpl::exportCommand( const Reference< XCommand >& xComman
         SvXMLUnitConverter::convertEnum( sTmp, (sal_uInt16)nCommand, getAnimationsEnumMap(Animations_EnumMap_Command) );
         mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_COMMAND, sTmp.makeStringAndClear() );
 
-// todo virtual ::com::sun::star::uno::Any SAL_CALL getParameter() throw (::com::sun::star::uno::RuntimeException) = 0;
+
 
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_ANIMATION, XML_COMMAND, sal_True, sal_True );
 
@@ -1529,7 +1529,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
             nType = XML_TYPE_STRING;
         }
 
-        //const XMLPropertyHandler* pHandler = static_cast<SdXMLExport*>(&mrExport)->GetSdPropHdlFactory()->GetPropertyHandler( nType );
+        
         const XMLPropertyHandler* pHandler = mpSdPropHdlFactory->GetPropertyHandler( nType );
         if( pHandler )
         {
@@ -1712,18 +1712,18 @@ void AnimationsExporter::exportAnimations( Reference< XAnimationNode > xRootNode
 
             if( !bHasEffects )
             {
-                // first check if there are no animations
+                
                 Reference< XEnumerationAccess > xEnumerationAccess( xRootNode, UNO_QUERY_THROW );
                 Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
                 if( xEnumeration->hasMoreElements() )
                 {
-                    // first child node may be an empty main sequence, check this
+                    
                     Reference< XAnimationNode > xMainNode( xEnumeration->nextElement(), UNO_QUERY_THROW );
                     Reference< XEnumerationAccess > xMainEnumerationAccess( xMainNode, UNO_QUERY_THROW );
                     Reference< XEnumeration > xMainEnumeration( xMainEnumerationAccess->createEnumeration(), UNO_QUERY_THROW );
 
-                    // only export if the main sequence is not empty or if there are additional
-                    // trigger sequences
+                    
+                    
                     bHasEffects = xMainEnumeration->hasMoreElements() || xEnumeration->hasMoreElements();
                 }
             }

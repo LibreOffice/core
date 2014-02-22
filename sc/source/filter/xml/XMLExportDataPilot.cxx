@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLExportDataPilot.hxx"
@@ -434,7 +434,7 @@ void ScXMLExportDataPilot::WriteSubTotals(ScDPSaveDimension* pDim)
     sal_Int32 nSubTotalCount = pDim->GetSubTotalsCount();
     const OUString* pLayoutName = NULL;
     if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
-        // Export display names only for 1.2 extended or later.
+        
         pLayoutName = pDim->GetSubtotalName();
 
     if (nSubTotalCount > 0)
@@ -467,7 +467,7 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
 
             if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
             {
-                // Export display names only for ODF 1.2 extended or later.
+                
                 const OUString* pLayoutName = (*i)->GetLayoutName();
                 if (pLayoutName)
                     rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
@@ -486,7 +486,7 @@ void ScXMLExportDataPilot::WriteMembers(ScDPSaveDimension* pDim)
 
 void ScXMLExportDataPilot::WriteLevels(ScDPSaveDimension* pDim)
 {
-    // #i114202# GetShowEmpty is only valid if HasShowEmpty is true.
+    
     if (pDim->HasShowEmpty())
     {
         OUStringBuffer sBuffer;
@@ -677,7 +677,7 @@ void ScXMLExportDataPilot::WriteDimension(ScDPSaveDimension* pDim, const ScDPDim
     rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_FIELD_NAME, aSrcDimName);
     if (rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
     {
-        // Export display names only for ODF 1.2 extended or later.
+        
         const OUString* pLayoutName = pDim->GetLayoutName();
         if (pLayoutName)
             rExport.AddAttribute(XML_NAMESPACE_TABLE_EXT, XML_DISPLAY_NAME, *pLayoutName);
@@ -801,12 +801,12 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
 
         SvXMLElementExport aElemDP(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_TABLE, true, true);
 
-        // grand total elements.
+        
 
         const OUString* pGrandTotalName = pDPSave->GetGrandTotalName();
         if (pGrandTotalName && rExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012)
         {
-            // Use the new data-pilot-grand-total element.
+            
             if (bRowGrand && bColumnGrand)
             {
                 WriteGrandTotal(XML_BOTH, true, pGrandTotalName);
@@ -881,8 +881,8 @@ void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreads
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SOURCE_NAME, pServSource->aParSource);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_OBJECT_NAME, pServSource->aParName);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_USER_NAME, pServSource->aParUser);
-            // #i111754# leave out password attribute as long as DataPilotSource doesn't specify the content
-            // rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PASSWORD, OUString(pServSource->aParPass));
+            
+            
             SvXMLElementExport aElemSD(rExport, XML_NAMESPACE_TABLE, XML_SOURCE_SERVICE, true, true);
             rExport.CheckAttrList();
         }

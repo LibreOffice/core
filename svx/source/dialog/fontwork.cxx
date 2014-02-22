@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/module.hxx>
@@ -40,7 +40,7 @@
 
 SFX_IMPL_DOCKINGWINDOW_WITHID( SvxFontWorkChildWindow, SID_FONTWORK );
 
-// ControllerItem for Fontwork
+
 
 SvxFontWorkControllerItem::SvxFontWorkControllerItem
 (
@@ -55,7 +55,7 @@ SvxFontWorkControllerItem::SvxFontWorkControllerItem
 {
 }
 
-// StateChanged method for FontWork items
+
 
 void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState /*eState*/,
                                               const SfxPoolItem* pItem )
@@ -153,7 +153,7 @@ void SvxFontWorkControllerItem::StateChanged( sal_uInt16 /*nSID*/, SfxItemState 
     }
 }
 
-// Derivation from SfxChildWindow as "containers" for Fontwork dialog
+
 
 SvxFontWorkChildWindow::SvxFontWorkChildWindow
 (
@@ -175,7 +175,7 @@ SvxFontWorkChildWindow::SvxFontWorkChildWindow
     pDlg->Initialize( pInfo );
 }
 
-// Floating Window to the attribution of text effects
+
 
 SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
                                       SfxChildWindow *pCW,
@@ -243,7 +243,7 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aMtrFldShadowX.SetModifyHdl( aLink );
     aMtrFldShadowY.SetModifyHdl( aLink );
 
-    // Set System metric
+    
     const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     SetFieldUnit( aMtrFldDistance, eDlgUnit, sal_True );
     SetFieldUnit( aMtrFldTextStart, eDlgUnit, sal_True );
@@ -320,7 +320,7 @@ SfxChildAlignment SvxFontWorkDialog::CheckAlignment( SfxChildAlignment eActAlign
     return eAlignment;
 }
 
-// Set style buttons
+
 
 void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
 {
@@ -334,11 +334,11 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
             case XFT_UPRIGHT: nId = TBI_STYLE_UPRIGHT;  break;
             case XFT_SLANTX : nId = TBI_STYLE_SLANTX;   break;
             case XFT_SLANTY : nId = TBI_STYLE_SLANTY;   break;
-            default: ;//prevent warning
+            default: ;
         }
         aTbxStyle.Enable();
 
-        // Make sure that there is always exactly one checked toolbox item.
+        
         if ( pItem->GetValue() == XFT_NONE )
         {
             aTbxStyle.CheckItem(TBI_STYLE_ROTATE, false);
@@ -360,7 +360,7 @@ void SvxFontWorkDialog::SetStyle_Impl(const XFormTextStyleItem* pItem)
         aTbxStyle.Disable();
 }
 
-// Set adjust buttons
+
 
 void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
 {
@@ -398,29 +398,29 @@ void SvxFontWorkDialog::SetAdjust_Impl(const XFormTextAdjustItem* pItem)
     }
 }
 
-// Enter Distance value in the edit field
+
 
 void SvxFontWorkDialog::SetDistance_Impl(const XFormTextDistanceItem* pItem)
 {
-    // Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    
     if ( pItem && !aMtrFldDistance.HasChildPathFocus() )
     {
         SetMetricValue( aMtrFldDistance, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
     }
 }
 
-// Enter indent value in the edit field
+
 
 void SvxFontWorkDialog::SetStart_Impl(const XFormTextStartItem* pItem)
 {
-    // Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    
     if ( pItem && !aMtrFldTextStart.HasChildPathFocus() )
     {
         SetMetricValue( aMtrFldTextStart, pItem->GetValue(), SFX_MAPUNIT_100TH_MM );
     }
 }
 
-// Set button for reversing the direction of text
+
 
 void SvxFontWorkDialog::SetMirror_Impl(const XFormTextMirrorItem* pItem)
 {
@@ -428,7 +428,7 @@ void SvxFontWorkDialog::SetMirror_Impl(const XFormTextMirrorItem* pItem)
         aTbxAdjust.CheckItem(TBI_ADJUST_MIRROR, pItem->GetValue());
 }
 
-// Set button for contour display
+
 
 void SvxFontWorkDialog::SetShowForm_Impl(const XFormTextHideFormItem* pItem)
 {
@@ -436,7 +436,7 @@ void SvxFontWorkDialog::SetShowForm_Impl(const XFormTextHideFormItem* pItem)
         aTbxShadow.CheckItem(TBI_SHOWFORM, !pItem->GetValue());
 }
 
-// Set button for text border
+
 
 void SvxFontWorkDialog::SetOutline_Impl(const XFormTextOutlineItem* pItem)
 {
@@ -444,7 +444,7 @@ void SvxFontWorkDialog::SetOutline_Impl(const XFormTextOutlineItem* pItem)
         aTbxShadow.CheckItem(TBI_OUTLINE, pItem->GetValue());
 }
 
-// Set shadow buttons
+
 
 void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
                                         bool bRestoreValues)
@@ -552,7 +552,7 @@ void SvxFontWorkDialog::SetShadow_Impl(const XFormTextShadowItem* pItem,
     }
 }
 
-// Insert shadow color in listbox
+
 
 void SvxFontWorkDialog::SetShadowColor_Impl(const XFormTextShadowColorItem* pItem)
 {
@@ -560,28 +560,28 @@ void SvxFontWorkDialog::SetShadowColor_Impl(const XFormTextShadowColorItem* pIte
         aShadowColorLB.SelectEntry(pItem->GetColorValue());
 }
 
-// Enter X-value for shadow in edit field
+
 
 void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
 {
-    // Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    
     if ( pItem && !aMtrFldShadowX.HasChildPathFocus() )
     {
-        // #i19251#
-        // sal_Int32 nValue = pItem->GetValue();
+        
+        
 
-        // #i19251#
-        // The two involved fields/items are used double and contain/give different
-        // values regarding to the access method. Thus, here we need to separate the access
-        // methos regarding to the kind of value accessed.
+        
+        
+        
+        
         if(aTbxShadow.IsItemChecked(TBI_SHADOW_SLANT))
         {
-            // #i19251#
-            // There is no value correction necessary at all, i think this
-            // was only tried to be done without understanding that the two
-            // involved fields/items are used double and contain/give different
-            // values regarding to the access method.
-            // nValue = nValue - ( int( float( nValue ) / 360.0 ) * 360 );
+            
+            
+            
+            
+            
+            
             aMtrFldShadowX.SetValue(pItem->GetValue());
         }
         else
@@ -591,17 +591,17 @@ void SvxFontWorkDialog::SetShadowXVal_Impl(const XFormTextShadowXValItem* pItem)
     }
 }
 
-// Enter Y-value for shadow in edit field
+
 
 void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
 {
-    // Use HasChildPathFocus() instead of HasFocus() at SpinFields
+    
     if ( pItem && !aMtrFldShadowY.HasChildPathFocus() )
     {
-        // #i19251#
-        // The two involved fields/items are used double and contain/give different
-        // values regarding to the access method. Thus, here we need to separate the access
-        // methos regarding to the kind of value accessed.
+        
+        
+        
+        
         if(aTbxShadow.IsItemChecked(TBI_SHADOW_SLANT))
         {
             aMtrFldShadowY.SetValue(pItem->GetValue());
@@ -617,11 +617,11 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, SelectStyleHdl_Impl)
 {
     sal_uInt16 nId = aTbxStyle.GetCurItemId();
 
-    // Execute this block when a different toolbox item has been clicked or
-    // when the off item has been clicked.  The later is necessary to
-    // override the toolbox behaviour of unchecking the item after second
-    // click on it: One of the items has to be checked at all times (when
-    // enabled that is.)
+    
+    
+    
+    
+    
     if (nId == TBI_STYLE_OFF || nId != nLastStyleTbxId )
     {
         XFormTextStyle eStyle = XFT_NONE;
@@ -717,9 +717,9 @@ IMPL_LINK_NOARG_INLINE_END(SvxFontWorkDialog, ModifyInputHdl_Impl)
 
 IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
 {
-    // Possibly set the Metric system again. This should be done with a
-    // listen, this is however not possible at the moment due to compabillity
-    // issues.
+    
+    
+    
     const FieldUnit eDlgUnit = rBindings.GetDispatcher()->GetModule()->GetFieldUnit();
     if( eDlgUnit != aMtrFldDistance.GetUnit() )
     {
@@ -745,10 +745,10 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
     sal_Int32 nValueX(0L);
     sal_Int32 nValueY(0L);
 
-    // #i19251#
-    // The two involved fields/items are used double and contain/give different
-    // values regarding to the access method. Thus, here we need to separate the access
-    // methos regarding to the kind of value accessed.
+    
+    
+    
+    
     if(nLastShadowTbxId == TBI_SHADOW_NORMAL)
     {
         nValueX = GetCoreValue( aMtrFldShadowX, SFX_MAPUNIT_100TH_MM );
@@ -763,7 +763,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
     XFormTextShadowXValItem aShadowXItem( nValueX );
     XFormTextShadowYValItem aShadowYItem( nValueY );
 
-    // Slot-ID does not matter, the Exec method evaluates the entire item set
+    
     GetBindings().GetDispatcher()->Execute( SID_FORMTEXT_DISTANCE, SFX_CALLMODE_RECORD, &aDistItem,
                                             &aStartItem, &aShadowXItem, &aShadowYItem, 0L );
     return 0;

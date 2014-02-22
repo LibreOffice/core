@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <cstdio>
@@ -68,9 +68,9 @@ namespace
         unoTime.Minutes = boostTime.time_of_day().minutes();
         unoTime.Seconds = boostTime.time_of_day().seconds();
 
-        // TODO FIXME maybe we should compile with BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG
-        //            to actually get nanosecond precision in boostTime?
-        // use this way rather than total_nanos to avoid overflows with 32-bit long
+        
+        
+        
         const long ticks = boostTime.time_of_day().fractional_seconds();
         long nanoSeconds = ticks * ( 1000000000 / boost::posix_time::time_duration::ticks_per_second());
 
@@ -193,7 +193,7 @@ namespace
 
         std::vector< std::string > values;
 
-        // convert UNO value to string vector
+        
         uno::Sequence< OUString > aStrings;
         value >>= aStrings;
         sal_Int32 len = aStrings.getLength( );
@@ -255,7 +255,7 @@ namespace cmis
 
     libcmis::Session* Content::getSession( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        // Set the proxy if needed. We are doing that all times as the proxy data shouldn't be cached.
+        
         ucbhelper::InternetProxyDecider aProxyDecider( m_xContext );
         INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
         const ucbhelper::InternetProxyServer& rProxy = aProxyDecider.getProxy(
@@ -265,26 +265,26 @@ namespace cmis
             sProxy += ":" + OUString::number( rProxy.nPort );
         libcmis::SessionFactory::setProxySettings( OUSTR_TO_STDSTR( sProxy ), string(), string(), string() );
 
-        // Look for a cached session, key is binding url + repo id
+        
         OUString sSessionId = m_aURL.getBindingUrl( ) + m_aURL.getRepositoryId( );
         if ( NULL == m_pSession )
             m_pSession = m_pProvider->getSession( sSessionId );
 
         if ( NULL == m_pSession )
         {
-            // Set the SSL Validation handler
+            
             libcmis::CertValidationHandlerPtr certHandler(
                     new CertValidationHandler( xEnv, m_xContext, aBindingUrl.GetHost( ) ) );
             libcmis::SessionFactory::setCertificateValidationHandler( certHandler );
 
-            // Get the auth credentials
+            
             AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
 
             string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
             string rPassword = OUSTR_TO_STDSTR( m_aURL.getPassword( ) );
             if ( authProvider.authenticationQuery( rUsername, rPassword ) )
             {
-                // Initiate a CMIS session and register it as we found nothing
+                
                 libcmis::OAuth2DataPtr oauth2Data;
                 if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
                     oauth2Data.reset( new libcmis::OAuth2Data(
@@ -310,7 +310,7 @@ namespace cmis
             }
             else
             {
-                // Silently fail as the user cancelled the authentication
+                
                 throw uno::RuntimeException( );
             }
         }
@@ -322,10 +322,10 @@ namespace cmis
         if ( NULL == m_pObjectType.get( ) && m_bTransient )
         {
             string typeId = m_bIsFolder ? "cmis:folder" : "cmis:document";
-            // The type to create needs to be fetched from the possible children types
-            // defined in the parent folder. Then, we'll pick up the first one we find matching
-            // cmis:folder or cmis:document (depending what we need to create).
-            // The easy case will work in most cases, but not on some servers (like Lotus Live)
+            
+            
+            
+            
             libcmis::Folder* pParent = NULL;
             bool bTypeRestricted = false;
             try
@@ -352,7 +352,7 @@ namespace cmis
                             bTypeRestricted = true;
                             libcmis::ObjectTypePtr type = getSession( xEnv )->getType( *typeIt );
 
-                            // FIXME Improve performances by adding getBaseTypeId( ) method to libcmis
+                            
                             if ( type->getBaseType( )->getId( ) == typeId )
                                 m_pObjectType = type;
                         }
@@ -369,8 +369,8 @@ namespace cmis
 
     libcmis::ObjectPtr Content::getObject( const uno::Reference< ucb::XCommandEnvironment >& xEnv ) throw ( libcmis::Exception )
     {
-        // can't get the session for some reason
-        // the recent file openning at start up is an example.
+        
+        
         try
         {
             if ( !getSession( xEnv ) )
@@ -401,10 +401,10 @@ namespace cmis
                 }
                 catch ( const libcmis::Exception& )
                 {
-                    // In some cases, getting the object from the path doesn't work,
-                    // but getting the parent from its path and the get the child in the list is OK.
-                    // It's weird, but needed to handle case where the path isn't the folders/files
-                    // names separated by '/' (as in Lotus Live)
+                    
+                    
+                    
+                    
                     INetURLObject aParentUrl( m_sURL );
                     string sName = OUSTR_TO_STDSTR( aParentUrl.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ) );
                     aParentUrl.removeSegment( );
@@ -470,7 +470,7 @@ namespace cmis
          const uno::Any& iCmisProps,
          const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
-        // Convert iCmisProps to Cmis Properties;
+        
         uno::Sequence< document::CmisProperty > aPropsSeq;
         iCmisProps >>= aPropsSeq;
         map< string, libcmis::PropertyPtr > aProperties;
@@ -568,16 +568,16 @@ namespace cmis
                         }
                     }
 
-                    // Nothing worked... get it from the path
+                    
                     if ( sTitle.isEmpty( ) )
                     {
                         OUString sPath = m_sObjectPath;
 
-                        // Get rid of the trailing slash problem
+                        
                         if ( sPath.endsWith("/") )
                             sPath = sPath.copy( 0, sPath.getLength() - 1 );
 
-                        // Get the last segment
+                        
                         sal_Int32 nPos = sPath.lastIndexOf( '/' );
                         if ( nPos >= 0 )
                             sTitle = sPath.copy( nPos + 1 );
@@ -843,7 +843,7 @@ namespace cmis
     {
         bool bIsFolder = isFolder( xEnv );
 
-        // Handle the case of the non-existing file
+        
         if ( !getObject( xEnv ) )
         {
             uno::Sequence< uno::Any > aArgs( 1 );
@@ -887,9 +887,9 @@ namespace cmis
 
             if ( !feedSink( rOpenCommand.Sink, xEnv ) )
             {
-                // Note: rOpenCommand.Sink may contain an XStream
-                //       implementation. Support for this type of
-                //       sink is optional...
+                
+                
+                
                 SAL_INFO( "ucb.ucp.cmis", "Failed to copy data to sink" );
 
                 ucbhelper::cancelCommandExecution(
@@ -939,7 +939,7 @@ namespace cmis
         libcmis::DocumentPtr pDoc = pPwc->checkIn( rArg.MajorVersion, OUSTR_TO_STDSTR( rArg.VersionComment ), newProperties,
                            pOut, OUSTR_TO_STDSTR( rArg.MimeType ), OUSTR_TO_STDSTR( rArg.NewTitle ) );
 
-        // Get the URL and send it back as a result
+        
         URL aCmisUrl( m_sURL );
         vector< string > aPaths = pDoc->getPaths( );
         if ( !aPaths.empty() )
@@ -949,8 +949,8 @@ namespace cmis
         }
         else
         {
-            // We may have unfiled document depending on the server, those
-            // won't have any path, use their ID instead
+            
+            
             string sId = pDoc->getId( );
             aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
         }
@@ -963,7 +963,7 @@ namespace cmis
         OUString aRet;
         try
         {
-            // Checkout the document if possible
+            
             libcmis::DocumentPtr pDoc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
             if ( pDoc.get( ) == NULL )
             {
@@ -975,7 +975,7 @@ namespace cmis
             }
             libcmis::DocumentPtr pPwc = pDoc->checkOut( );
 
-            // Compute the URL of the Private Working Copy (PWC)
+            
             URL aCmisUrl( m_sURL );
             vector< string > aPaths = pPwc->getPaths( );
             if ( !aPaths.empty() )
@@ -985,8 +985,8 @@ namespace cmis
             }
             else
             {
-                // We may have unfiled PWC depending on the server, those
-                // won't have any path, use their ID instead
+                
+                
                 string sId = pPwc->getId( );
                 aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
             }
@@ -1021,7 +1021,7 @@ namespace cmis
             }
             pPwc->cancelCheckout( );
 
-            // Get the Original document (latest version)
+            
             vector< libcmis::DocumentPtr > aVersions = pPwc->getAllVersions( );
             bool bFound = false;
             for ( vector< libcmis::DocumentPtr >::iterator it = aVersions.begin();
@@ -1039,7 +1039,7 @@ namespace cmis
                 if ( bIsLatestVersion )
                 {
                     bFound = true;
-                    // Compute the URL of the Document
+                    
                     URL aCmisUrl( m_sURL );
                     vector< string > aPaths = pVersion->getPaths( );
                     if ( !aPaths.empty() )
@@ -1049,8 +1049,8 @@ namespace cmis
                     }
                     else
                     {
-                        // We may have unfiled doc depending on the server, those
-                        // won't have any path, use their ID instead
+                        
+                        
                         string sId = pVersion->getId( );
                         aCmisUrl.setObjectId( STD_TO_OUSTR( sId ) );
                     }
@@ -1075,7 +1075,7 @@ namespace cmis
     {
         try
         {
-            // get the document
+            
             libcmis::DocumentPtr pDoc = boost::dynamic_pointer_cast< libcmis::Document >( getObject( xEnv ) );
             if ( pDoc.get( ) == NULL )
             {
@@ -1115,7 +1115,7 @@ namespace cmis
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
             throw( uno::Exception )
     {
-        // If the source isn't on the same CMIS repository, then simply copy
+        
         INetURLObject aSourceUrl( rTransferInfo.SourceURL );
         if ( aSourceUrl.GetProtocol() != INET_PROT_CMIS )
         {
@@ -1147,12 +1147,12 @@ namespace cmis
                 xEnv );
         }
 
-        // For transient content, the URL is the one of the parent
+        
         if ( m_bTransient )
         {
             OUString sNewPath;
 
-            // Try to get the object from the server if there is any
+            
             libcmis::FolderPtr pFolder;
             try
             {
@@ -1188,12 +1188,12 @@ namespace cmis
                 }
                 catch ( const libcmis::Exception& )
                 {
-                    // Nothing matched the path
+                    
                 }
 
                 if ( NULL != object.get( ) )
                 {
-                    // Are the base type matching?
+                    
                     if ( object->getBaseType( ) != m_pObjectType->getBaseType( )->getId() )
                     {
                         ucbhelper::cancelCommandExecution( uno::makeAny
@@ -1202,7 +1202,7 @@ namespace cmis
                             xEnv );
                     }
 
-                    // Update the existing object if it's a document
+                    
                     libcmis::Document* document = dynamic_cast< libcmis::Document* >( object.get( ) );
                     if ( NULL != document )
                     {
@@ -1224,7 +1224,7 @@ namespace cmis
                 }
                 else
                 {
-                    // We need to create a brand new object... either folder or document
+                    
                     bool bIsFolder = getObjectType( xEnv )->getBaseType( )->getId( ) == "cmis:folder";
                     setCmisProperty( "cmis:objectTypeId", getObjectType( xEnv )->getId( ), xEnv );
 
@@ -1265,7 +1265,7 @@ namespace cmis
 
                 if ( !sNewPath.isEmpty( ) || !m_sObjectId.isEmpty( ) )
                 {
-                    // Update the current content: it's no longer transient
+                    
                     m_sObjectPath = sNewPath;
                     URL aUrl( m_sURL );
                     aUrl.setObjectPath( m_sObjectPath );
@@ -1301,7 +1301,7 @@ namespace cmis
     {
         try
         {
-            // Get the already set properties if possible
+            
             if ( !m_bTransient && getObject( xEnv ).get( ) )
             {
                 m_pObjectProps.clear( );
@@ -1496,7 +1496,7 @@ namespace cmis
     {
         static const ucb::CommandInfo aCommandInfoTable[] =
         {
-            // Required commands
+            
             ucb::CommandInfo
             ( OUString( "getCommandInfo" ),
               -1, getCppuVoidType() ),
@@ -1510,7 +1510,7 @@ namespace cmis
             ( OUString( "setPropertyValues" ),
               -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
-            // Optional standard commands
+            
             ucb::CommandInfo
             ( OUString( "delete" ),
               -1, getCppuBooleanType() ),
@@ -1521,7 +1521,7 @@ namespace cmis
             ( OUString( "open" ),
               -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
-            // Mandatory CMIS-only commands
+            
             ucb::CommandInfo ( OUString( "checkout" ), -1, getCppuVoidType() ),
             ucb::CommandInfo ( OUString( "cancelCheckout" ), -1, getCppuVoidType() ),
             ucb::CommandInfo ( OUString( "checkIn" ), -1,
@@ -1532,7 +1532,7 @@ namespace cmis
               -1, getCppuType( static_cast<uno::Sequence< document::CmisVersion > * >( 0 ) ) ),
 
 
-            // Folder Only, omitted if not a folder
+            
             ucb::CommandInfo
             ( OUString( "transfer" ),
               -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),
@@ -1664,7 +1664,7 @@ namespace cmis
                 arg.Data = insertArg.Data;
                 arg.ReplaceExisting = insertArg.ReplaceExisting;
             }
-            // store the document id
+            
             m_sObjectId = arg.DocumentId;
             insert( arg.Data, arg.ReplaceExisting, arg.MimeType, xEnv );
         }
@@ -1735,7 +1735,7 @@ namespace cmis
     void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ ) throw( uno::RuntimeException )
     {
         SAL_INFO( "ucb.ucp.cmis", "TODO - Content::abort()" );
-        // TODO Implement me
+        
     }
 
     uno::Sequence< ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
@@ -1762,7 +1762,7 @@ namespace cmis
         OUString sParentURL = m_xIdentifier->getContentIdentifier();
         URL aParentURL( sParentURL );
 
-        // Set the parent URL for the transient objects
+        
         uno::Reference< ucb::XContentIdentifier > xId(new ::ucbhelper::ContentIdentifier(sParentURL));
 
         try
@@ -1820,7 +1820,7 @@ namespace cmis
         {
             uno::Sequence< ucb::ContentInfo > seq(2);
 
-            // Minimum set of props we really need
+            
             uno::Sequence< beans::Property > props( 1 );
             props[0] = beans::Property(
                 OUString("Title"),
@@ -1828,13 +1828,13 @@ namespace cmis
                 getCppuType( static_cast< OUString* >( 0 ) ),
                 beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
-            // file
+            
             seq[0].Type       =  CMIS_FILE_TYPE;
             seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                                   ucb::ContentInfoAttribute::KIND_DOCUMENT );
             seq[0].Properties = props;
 
-            // folder
+            
             seq[1].Type       = CMIS_FOLDER_TYPE;
             seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
             seq[1].Properties = props;
@@ -1855,16 +1855,16 @@ namespace cmis
         libcmis::FolderPtr pFolder = boost::dynamic_pointer_cast< libcmis::Folder >( getObject( uno::Reference< ucb::XCommandEnvironment >() ) );
         if ( 0 != pFolder )
         {
-            // Get the children from pObject
+            
             try
             {
                 vector< libcmis::ObjectPtr > children = pFolder->getChildren( );
 
-                // Loop over the results
+                
                 for ( vector< libcmis::ObjectPtr >::iterator it = children.begin();
                         it != children.end(); ++it )
                 {
-                    // TODO Cache the objects
+                    
 
                     URL aUrl( m_sURL );
                     OUString sPath( m_sObjectPath );

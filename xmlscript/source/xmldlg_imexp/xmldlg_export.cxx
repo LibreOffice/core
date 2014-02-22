@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "exp_share.hxx"
@@ -74,34 +74,34 @@ Reference< xml::sax::XAttributeList > Style::createElement()
 {
     ElementDescriptor * pStyle = new ElementDescriptor( XMLNS_DIALOGS_PREFIX ":style" );
 
-    // style-id
+    
     pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":style-id", _id );
 
-    // background-color
+    
     if (_set & 0x1)
     {
         pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":background-color", "0x" + OUString::number(_backgroundColor,16));
     }
 
-    // text-color
+    
     if (_set & 0x2)
     {
         pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":text-color", "0x" + OUString::number(_textColor,16));
     }
 
-    // textline-color
+    
     if (_set & 0x20)
     {
         pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":textline-color", "0x" + OUString::number(_textLineColor,16));
     }
 
-    // fill-color
+    
     if (_set & 0x10)
     {
         pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":fill-color", "0x" + OUString::number(_fillColor,16));
     }
 
-    // border
+    
     if (_set & 0x4)
     {
         switch (_border)
@@ -125,7 +125,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         }
     }
 
-    // visual effect (look)
+    
     if (_set & 0x40)
     {
         switch (_visualEffect)
@@ -145,32 +145,32 @@ Reference< xml::sax::XAttributeList > Style::createElement()
         }
     }
 
-    // font-
+    
     if (_set & 0x8)
     {
         awt::FontDescriptor def_descr;
 
-        // dialog:font-name CDATA #IMPLIED
+        
         if (def_descr.Name != _descr.Name)
         {
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-name", _descr.Name );
         }
-        // dialog:font-height %numeric; #IMPLIED
+        
         if (def_descr.Height != _descr.Height)
         {
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-height", OUString::number( _descr.Height ) );
         }
-        // dialog:font-width %numeric; #IMPLIED
+        
         if (def_descr.Width != _descr.Width)
         {
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-width", OUString::number( _descr.Width ) );
         }
-        // dialog:font-stylename CDATA #IMPLIED
+        
         if (def_descr.StyleName != _descr.StyleName)
         {
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-stylename", _descr.StyleName );
         }
-        // dialog:font-family "(decorative|modern|roman|script|swiss|system)" #IMPLIED
+        
         if (def_descr.Family != _descr.Family)
         {
             switch (_descr.Family)
@@ -198,7 +198,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 break;
             }
         }
-        // dialog:font-charset "(ansi|mac|ibmpc_437|ibmpc_850|ibmpc_860|ibmpc_861|ibmpc_863|ibmpc_865|system|symbol)" #IMPLIED
+        
         if (def_descr.CharSet != _descr.CharSet)
         {
             switch (_descr.CharSet)
@@ -238,7 +238,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 break;
             }
         }
-        // dialog:font-pitch "(fixed|variable)" #IMPLIED
+        
         if (def_descr.Pitch != _descr.Pitch)
         {
             switch (_descr.Pitch)
@@ -254,17 +254,17 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 break;
             }
         }
-        // dialog:font-charwidth CDATA #IMPLIED
+        
         if (def_descr.CharacterWidth != _descr.CharacterWidth)
         {
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-charwidth", OUString::number( (float)_descr.CharacterWidth ) );
         }
-        // dialog:font-weight CDATA #IMPLIED
+        
         if (def_descr.Weight != _descr.Weight)
         {
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-weight", OUString::number( (float)_descr.Weight ) );
         }
-        // dialog:font-slant "(oblique|italic|reverse_oblique|reverse_italic)" #IMPLIED
+        
         if (def_descr.Slant != _descr.Slant)
         {
             switch (_descr.Slant)
@@ -286,7 +286,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 break;
             }
         }
-        // dialog:font-underline "(single|double|dotted|dash|longdash|dashdot|dashdotdot|smallwave|wave|doublewave|bold|bolddotted|bolddash|boldlongdash|bolddashdot|bolddashdotdot|boldwave)" #IMPLIED
+        
         if (def_descr.Underline != _descr.Underline)
         {
             switch (_descr.Underline)
@@ -347,7 +347,7 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 break;
             }
         }
-        // dialog:font-strikeout "(single|double|bold|slash|x)" #IMPLIED
+        
         if (def_descr.Strikeout != _descr.Strikeout)
         {
             switch (_descr.Strikeout)
@@ -372,22 +372,22 @@ Reference< xml::sax::XAttributeList > Style::createElement()
                 break;
             }
         }
-        // dialog:font-orientation CDATA #IMPLIED
+        
         if (def_descr.Orientation != _descr.Orientation)
         {
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-orientation", OUString::number( (float)_descr.Orientation ) );
         }
-        // dialog:font-kerning %boolean; #IMPLIED
+        
         if ((def_descr.Kerning != sal_False) != (_descr.Kerning != sal_False))
         {
             pStyle->addBoolAttr( XMLNS_DIALOGS_PREFIX ":font-kerning", _descr.Kerning );
         }
-        // dialog:font-wordlinemode %boolean; #IMPLIED
+        
         if ((def_descr.WordLineMode != sal_False) != (_descr.WordLineMode != sal_False))
         {
             pStyle->addBoolAttr( XMLNS_DIALOGS_PREFIX ":font-wordlinemode", _descr.WordLineMode );
         }
-        // dialog:font-type "(raster|device|scalable)" #IMPLIED
+        
         if (def_descr.Type != _descr.Type)
         {
             switch (_descr.Type)
@@ -407,11 +407,11 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             }
         }
 
-        // additional attributes not in FontDescriptor struct
-        // dialog:font-relief (none|embossed|engraved) #IMPLIED
+        
+        
         switch (_fontRelief)
         {
-        case awt::FontRelief::NONE: // dont export default
+        case awt::FontRelief::NONE: 
             break;
         case awt::FontRelief::EMBOSSED:
             pStyle->addAttribute( XMLNS_DIALOGS_PREFIX ":font-relief", "embossed" );
@@ -423,10 +423,10 @@ Reference< xml::sax::XAttributeList > Style::createElement()
             SAL_WARN( "xmlscript.xmldlg", "### unexpected font-relief!" );
             break;
         }
-        // dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
+        
         switch (_fontEmphasisMark)
         {
-        case awt::FontEmphasisMark::NONE: // dont export default
+        case awt::FontEmphasisMark::NONE: 
             break;
         case awt::FontEmphasisMark::DOT:
             pStyle->addAttribute(XMLNS_DIALOGS_PREFIX ":font-emphasismark", "dot" );
@@ -466,13 +466,13 @@ void ElementDescriptor::addNumberFormatAttr(
 
     addAttribute(XMLNS_DIALOGS_PREFIX ":format-code", sFormat );
 
-    // format-locale
+    
     LanguageTag aLanguageTag( locale);
     OUString aStr;
     if (aLanguageTag.isIsoLocale())
     {
-        // Old style "lll;CC" for compatibility, I really don't know what may
-        // consume this.
+        
+        
         if (aLanguageTag.getCountry().isEmpty())
             aStr = aLanguageTag.getLanguage();
         else
@@ -1013,16 +1013,16 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
 {
     Any a( _xProps->getPropertyValue( "Name" ) );
 
-    // The following is a hack to allow 'form' controls to override the default
-    // control supported by dialogs. This should work well for both vba support and
-    // normal openoffice ( when normal 'Dialogs' decide to support form control models )
-    // In the future VBA support might require custom models ( and not the just the form
-    // variant of a control that we currently use ) In this case the door is still open,
-    // we just need to define a new way for the 'ServiceName' to be extracted from the
-    // incomming model. E.g. the use of supporting service
-    // "com.sun.star.form.FormComponent", 'ServiceName' and XPersistObject
-    // is only an implementation detail here, in the future some other
-    // method ( perhaps a custom prop ) could be used instead.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     Reference< lang::XServiceInfo > xSrvInfo( _xProps, UNO_QUERY );
     if ( xSrvInfo.is() && xSrvInfo->supportsService( "com.sun.star.form.FormComponent" ) )
     {
@@ -1056,7 +1056,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
         if (_xProps->getPropertyValue("EnableVisible" ) >>= bVisible)
         {
 
-            // only write out the non default case
+            
             if (! bVisible)
             {
                 addAttribute( XMLNS_DIALOGS_PREFIX ":visible", "false" );
@@ -1067,7 +1067,7 @@ void ElementDescriptor::readDefaults( bool supportPrintable, bool supportVisible
     {
         DBG_UNHANDLED_EXCEPTION();
     }
-    // force writing of pos/size
+    
     a = _xProps->getPropertyValue( "PositionX" );
     if (a.getValueTypeClass() == TypeClass_LONG)
     {
@@ -1132,7 +1132,7 @@ void ElementDescriptor::readEvents()
 
                     if (descr.AddListenerParam.isEmpty())
                     {
-                        // detection of event-name
+                        
                         OString listenerType( OUStringToOString( descr.ListenerType, RTL_TEXTENCODING_ASCII_US ) );
                         OString eventMethod( OUStringToOString( descr.EventMethod, RTL_TEXTENCODING_ASCII_US ) );
                         StringTriple const * p = g_pEventTranslations;
@@ -1151,14 +1151,14 @@ void ElementDescriptor::readEvents()
                     ElementDescriptor * pElem;
                     Reference< xml::sax::XAttributeList > xElem;
 
-                    if (!aEventName.isEmpty()) // script:event
+                    if (!aEventName.isEmpty()) 
                     {
                         pElem = new ElementDescriptor( XMLNS_SCRIPT_PREFIX ":event" );
                         xElem = pElem;
 
                         pElem->addAttribute( XMLNS_SCRIPT_PREFIX ":event-name", aEventName );
                     }
-                    else // script:listener-event
+                    else 
                     {
                         pElem = new ElementDescriptor( XMLNS_SCRIPT_PREFIX ":listener-event" );
                         xElem = pElem;
@@ -1173,7 +1173,7 @@ void ElementDescriptor::readEvents()
                     }
                     if ( descr.ScriptType == "StarBasic" )
                     {
-                        // separate optional location
+                        
                         sal_Int32 nIndex = descr.ScriptCode.indexOf( (sal_Unicode)':' );
                         if (nIndex >= 0)
                         {
@@ -1190,7 +1190,7 @@ void ElementDescriptor::readEvents()
                         pElem->addAttribute(XMLNS_SCRIPT_PREFIX ":macro-name", descr.ScriptCode );
                     }
 
-                    // language
+                    
                     pElem->addAttribute( XMLNS_SCRIPT_PREFIX ":language", descr.ScriptType );
 
                     addSubElement( xElem );
@@ -1232,18 +1232,18 @@ inline bool equalFont( Style const & style1, Style const & style2 )
 OUString StyleBag::getStyleId( Style const & rStyle )
     SAL_THROW(())
 {
-    if (! rStyle._set) // nothin set
+    if (! rStyle._set) 
     {
-        return OUString(); // everything default: no need to export a specific style
+        return OUString(); 
     }
 
-    // lookup existing style
+    
     for ( size_t nStylesPos = 0; nStylesPos < _styles.size(); ++nStylesPos )
     {
         Style * pStyle = _styles[ nStylesPos ];
 
         short demanded_defaults = ~rStyle._set & rStyle._all;
-        // test, if defaults are not set
+        
         if ((~pStyle->_set & demanded_defaults) == demanded_defaults &&
             (rStyle._set & (pStyle->_all & ~pStyle->_set)) == 0)
         {
@@ -1272,7 +1272,7 @@ OUString StyleBag::getStyleId( Style const & rStyle )
                 rStyle._visualEffect != pStyle->_visualEffect)
                 continue;
 
-            // merge in
+            
             short bnset = rStyle._set & ~pStyle->_set;
             if (bnset & 0x1)
                 pStyle->_backgroundColor = rStyle._backgroundColor;
@@ -1301,7 +1301,7 @@ OUString StyleBag::getStyleId( Style const & rStyle )
         }
     }
 
-    // no appr style found, append new
+    
     Style * pStyle = new Style( rStyle );
     pStyle->_id = OUString::number( _styles.size() );
     _styles.push_back( pStyle );
@@ -1321,7 +1321,7 @@ void StyleBag::dump( Reference< xml::sax::XExtendedDocumentHandler > const & xOu
         OUString aStylesName( XMLNS_DIALOGS_PREFIX ":styles" );
         xOut->ignorableWhitespace( OUString() );
         xOut->startElement( aStylesName, Reference< xml::sax::XAttributeList >() );
-        // export styles
+        
         for ( size_t nPos = 0; nPos < _styles.size(); ++nPos )
         {
             Reference< xml::sax::XAttributeList > xAttr( _styles[ nPos ]->createElement() );
@@ -1339,7 +1339,7 @@ void SAL_CALL exportDialogModel(
     SAL_THROW( (Exception) )
 {
     StyleBag all_styles;
-    // window
+    
     Reference< beans::XPropertySet > xProps( xDialogModel, UNO_QUERY );
     OSL_ASSERT( xProps.is() );
     Reference< beans::XPropertyState > xPropState( xProps, UNO_QUERY );
@@ -1352,7 +1352,7 @@ void SAL_CALL exportDialogModel(
     xOut->startDocument();
 
     OUString aDocTypeStr(
-        "<!DOCTYPE dlg:window PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\""
+        "<!DOCTYPE dlg:window PUBLIC \"-
         " \"dialog.dtd\">" );
     xOut->unknown( aDocTypeStr );
     xOut->ignorableWhitespace( OUString() );
@@ -1363,25 +1363,25 @@ void SAL_CALL exportDialogModel(
     pWindow->readDialogModel( &all_styles );
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aWindowName, xWindow );
-     // dump out events
+     
     pWindow->dumpSubElements( xOut.get() );
-    // dump out stylebag
+    
     all_styles.dump( xOut );
 
     if ( xDialogModel->getElementNames().getLength() )
     {
-        // open up bulletinboard
+        
         OUString aBBoardName( XMLNS_DIALOGS_PREFIX ":bulletinboard" );
         xOut->ignorableWhitespace( OUString() );
         xOut->startElement( aBBoardName, xElem );
 
         pElem->dumpSubElements( xOut.get() );
-        // end bulletinboard
+        
         xOut->ignorableWhitespace( OUString() );
         xOut->endElement( aBBoardName );
     }
 
-    // end window
+    
     xOut->ignorableWhitespace( OUString() );
     xOut->endElement( aWindowName );
 

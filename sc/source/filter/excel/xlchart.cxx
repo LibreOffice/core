@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -61,7 +61,7 @@ using ::com::sun::star::drawing::XShape;
 
 namespace cssc = ::com::sun::star::chart;
 
-// Common =====================================================================
+
 
 XclChRectangle::XclChRectangle() :
     mnX( 0 ),
@@ -71,7 +71,7 @@ XclChRectangle::XclChRectangle() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChDataPointPos::XclChDataPointPos( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx ) :
     mnSeriesIdx( nSeriesIdx ),
@@ -85,7 +85,7 @@ bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR )
         ((rL.mnSeriesIdx == rR.mnSeriesIdx) && (rL.mnPointIdx < rR.mnPointIdx));
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChFrBlock::XclChFrBlock( sal_uInt16 nType ) :
     mnType( nType ),
@@ -95,7 +95,7 @@ XclChFrBlock::XclChFrBlock( sal_uInt16 nType ) :
 {
 }
 
-// Frame formatting ===========================================================
+
 
 XclChFramePos::XclChFramePos() :
     mnTLMode( EXC_CHFRAMEPOS_PARENT ),
@@ -103,7 +103,7 @@ XclChFramePos::XclChFramePos() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChLineFormat::XclChLineFormat() :
     maColor( COL_BLACK ),
@@ -113,7 +113,7 @@ XclChLineFormat::XclChLineFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChAreaFormat::XclChAreaFormat() :
     maPattColor( COL_WHITE ),
@@ -123,7 +123,7 @@ XclChAreaFormat::XclChAreaFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChEscherFormat::XclChEscherFormat()
 {
@@ -133,7 +133,7 @@ XclChEscherFormat::~XclChEscherFormat()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChPicFormat::XclChPicFormat() :
     mnBmpMode( EXC_CHPICFORMAT_NONE ),
@@ -142,7 +142,7 @@ XclChPicFormat::XclChPicFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChFrame::XclChFrame() :
     mnFormat( EXC_CHFRAME_STANDARD ),
@@ -150,7 +150,7 @@ XclChFrame::XclChFrame() :
 {
 }
 
-// Source links ===============================================================
+
 
 XclChSourceLink::XclChSourceLink() :
     mnDestType( EXC_CHSRCLINK_TITLE ),
@@ -160,21 +160,21 @@ XclChSourceLink::XclChSourceLink() :
 {
 }
 
-// Text =======================================================================
+
 
 XclChObjectLink::XclChObjectLink() :
     mnTarget( EXC_CHOBJLINK_NONE )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChFrLabelProps::XclChFrLabelProps() :
     mnFlags( 0 )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChText::XclChText() :
     maTextColor( COL_BLACK ),
@@ -187,7 +187,7 @@ XclChText::XclChText() :
 {
 }
 
-// Data series ================================================================
+
 
 XclChMarkerFormat::XclChMarkerFormat() :
     maLineColor( COL_BLACK ),
@@ -198,7 +198,7 @@ XclChMarkerFormat::XclChMarkerFormat() :
 {
 };
 
-// ----------------------------------------------------------------------------
+
 
 XclCh3dDataFormat::XclCh3dDataFormat() :
     mnBase( EXC_CH3DDATAFORMAT_RECT ),
@@ -206,7 +206,7 @@ XclCh3dDataFormat::XclCh3dDataFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChDataFormat::XclChDataFormat() :
     mnFormatIdx( EXC_CHDATAFORMAT_DEFAULT ),
@@ -214,7 +214,7 @@ XclChDataFormat::XclChDataFormat() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChSerTrendLine::XclChSerTrendLine() :
     mfForecastFor( 0.0 ),
@@ -231,7 +231,7 @@ XclChSerTrendLine::XclChSerTrendLine() :
     pDouble->w32_parts.msw = pDouble->w32_parts.lsw = 0xFFFFFFFF;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChSerErrorBar::XclChSerErrorBar() :
     mfValue( 0.0 ),
@@ -242,7 +242,7 @@ XclChSerErrorBar::XclChSerErrorBar() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChSeries::XclChSeries() :
     mnCategType( EXC_CHSERIES_NUMERIC ),
@@ -254,7 +254,7 @@ XclChSeries::XclChSeries() :
 {
 }
 
-// Chart type groups ==========================================================
+
 
 XclChType::XclChType() :
     mnOverlap( 0 ),
@@ -267,7 +267,7 @@ XclChType::XclChType() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChChart3d::XclChChart3d() :
     mnRotation( 20 ),
@@ -280,7 +280,7 @@ XclChChart3d::XclChChart3d() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChLegend::XclChLegend() :
     mnDockMode( EXC_CHLEGEND_RIGHT ),
@@ -290,7 +290,7 @@ XclChLegend::XclChLegend() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChTypeGroup::XclChTypeGroup() :
     mnFlags( 0 ),
@@ -298,7 +298,7 @@ XclChTypeGroup::XclChTypeGroup() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChProperties::XclChProperties() :
     mnFlags( 0 ),
@@ -306,7 +306,7 @@ XclChProperties::XclChProperties() :
 {
 }
 
-// Axes =======================================================================
+
 
 XclChLabelRange::XclChLabelRange() :
     mnCross( 1 ),
@@ -316,7 +316,7 @@ XclChLabelRange::XclChLabelRange() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChDateRange::XclChDateRange() :
     mnMinDate( 0 ),
@@ -334,7 +334,7 @@ XclChDateRange::XclChDateRange() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChValueRange::XclChValueRange() :
     mfMin( 0.0 ),
@@ -348,7 +348,7 @@ XclChValueRange::XclChValueRange() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChTick::XclChTick() :
     maTextColor( COL_BLACK ),
@@ -361,7 +361,7 @@ XclChTick::XclChTick() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChAxis::XclChAxis() :
     mnType( EXC_CHAXIS_NONE )
@@ -380,7 +380,7 @@ sal_Int32 XclChAxis::GetApiAxisDimension() const
     return nApiAxisDim;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChAxesSet::XclChAxesSet() :
     mnAxesSetId( EXC_CHAXESSET_PRIMARY )
@@ -398,7 +398,7 @@ sal_Int32 XclChAxesSet::GetApiAxesSetIndex() const
     return nApiAxesSetIdx;
 }
 
-// Static helper functions ====================================================
+
 
 sal_uInt16 XclChartHelper::GetSeriesLineAutoColorIdx( sal_uInt16 nFormatIdx )
 {
@@ -465,13 +465,13 @@ OUString XclChartHelper::GetErrorBarValuesRole( sal_uInt8 nBarType )
     return OUString();
 }
 
-// Chart formatting info provider =============================================
+
 
 namespace {
 
 static const XclChFormatInfo spFmtInfos[] =
 {
-    // object type                  property mode                auto line color         auto line weight         auto pattern color      missing frame type         create delete isframe
+    
     { EXC_CHOBJTYPE_BACKGROUND,     EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, true,  true,  true  },
     { EXC_CHOBJTYPE_PLOTFRAME,      EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_INVISIBLE, true,  true,  true  },
     { EXC_CHOBJTYPE_WALL3D,         EXC_CHPROPMODE_COMMON,       EXC_COLOR_CHWINDOWTEXT, EXC_CHLINEFORMAT_HAIR,   EXC_COLOR_CHWINDOWBACK, EXC_CHFRAMETYPE_AUTO,      true,  false, true  },
@@ -492,7 +492,7 @@ static const XclChFormatInfo spFmtInfos[] =
 
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChFormatInfoProvider::XclChFormatInfoProvider()
 {
@@ -508,11 +508,11 @@ const XclChFormatInfo& XclChFormatInfoProvider::GetFormatInfo( XclChObjectType e
     return (aIt == maInfoMap.end()) ? *spFmtInfos : *aIt->second;
 }
 
-// Chart type info provider ===================================================
+
 
 namespace {
 
-// chart type service names
+
 const sal_Char SERVICE_CHART2_AREA[]      = "com.sun.star.chart2.AreaChartType";
 const sal_Char SERVICE_CHART2_CANDLE[]    = "com.sun.star.chart2.CandleStickChartType";
 const sal_Char SERVICE_CHART2_COLUMN[]    = "com.sun.star.chart2.ColumnChartType";
@@ -522,13 +522,13 @@ const sal_Char SERVICE_CHART2_FILLEDNET[] = "com.sun.star.chart2.FilledNetChartT
 const sal_Char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
 const sal_Char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
 const sal_Char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
-const sal_Char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
+const sal_Char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    
 
 namespace csscd = cssc::DataLabelPlacement;
 
 static const XclChTypeInfo spTypeInfos[] =
 {
-    // chart type             chart type category      record id           service                   varied point color     def label pos         comb2d 3d     polar  area2d area3d 1stvis xcateg swap   stack  revers betw
+    
     { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,    EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
     { EXC_CHTYPEID_HORBAR,    EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,    EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  true,  false, true,  true,  true,  false, true  },
     { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,      EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  true,  false, false, true,  false, true,  false, true,  false, false },
@@ -545,7 +545,7 @@ static const XclChTypeInfo spTypeInfos[] =
     { EXC_CHTYPEID_UNKNOWN,   EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,    EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  true,  false, true,  false, true,  false, true  }
 };
 
-} // namespace
+} 
 
 XclChExtTypeInfo::XclChExtTypeInfo( const XclChTypeInfo& rTypeInfo ) :
     XclChTypeInfo( rTypeInfo ),
@@ -561,7 +561,7 @@ void XclChExtTypeInfo::Set( const XclChTypeInfo& rTypeInfo, bool b3dChart, bool 
     mbSpline = bSpline;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclChTypeInfoProvider::XclChTypeInfoProvider()
 {
@@ -597,7 +597,7 @@ const XclChTypeInfo& XclChTypeInfoProvider::GetTypeInfoFromService( const OUStri
     return GetTypeInfo( EXC_CHTYPEID_UNKNOWN );
 }
 
-// Property helpers ===========================================================
+
 
 XclChObjectTable::XclChObjectTable( Reference< XMultiServiceFactory > xFactory,
         const OUString& rServiceName, const OUString& rObjNameBase ) :
@@ -610,7 +610,7 @@ XclChObjectTable::XclChObjectTable( Reference< XMultiServiceFactory > xFactory,
 
 Any XclChObjectTable::GetObject( const OUString& rObjName )
 {
-    // get object table
+    
     if( !mxContainer.is() )
         mxContainer.set( ScfApiHelper::CreateInstance( mxFactory, maServiceName ), UNO_QUERY );
     OSL_ENSURE( mxContainer.is(), "XclChObjectTable::GetObject - container not found" );
@@ -618,7 +618,7 @@ Any XclChObjectTable::GetObject( const OUString& rObjName )
     Any aObj;
     if( mxContainer.is() )
     {
-        // get object from container
+        
         try
         {
             aObj = mxContainer->getByName( rObjName );
@@ -634,7 +634,7 @@ Any XclChObjectTable::GetObject( const OUString& rObjName )
 OUString XclChObjectTable::InsertObject( const Any& rObj )
 {
 
-    // create object table
+    
     if( !mxContainer.is() )
         mxContainer.set( ScfApiHelper::CreateInstance( mxFactory, maServiceName ), UNO_QUERY );
     OSL_ENSURE( mxContainer.is(), "XclChObjectTable::InsertObject - container not found" );
@@ -642,14 +642,14 @@ OUString XclChObjectTable::InsertObject( const Any& rObj )
     OUString aObjName;
     if( mxContainer.is() )
     {
-        // create new unused identifier
+        
         do
         {
             aObjName = maObjNameBase + OUString::number( ++mnIndex );
         }
         while( mxContainer->hasByName( aObjName ) );
 
-        // insert object
+        
         try
         {
             mxContainer->insertByName( aObjName, rObj );
@@ -663,7 +663,7 @@ OUString XclChObjectTable::InsertObject( const Any& rObj )
     return aObjName;
 }
 
-// Property names -------------------------------------------------------------
+
 
 namespace {
 
@@ -692,9 +692,9 @@ const sal_Char* const sppcHatchNamesFilled[] = { "FillStyle", "HatchName", "Colo
 /** Property names for bitmap area style. */
 const sal_Char* const sppcBitmapNames[] = { "FillStyle", "FillBitmapName", "FillBitmapMode", 0 };
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclChPropSetHelper::XclChPropSetHelper() :
     maLineHlpCommon( sppcLineNamesCommon ),
@@ -710,7 +710,7 @@ XclChPropSetHelper::XclChPropSetHelper() :
 {
 }
 
-// read properties ------------------------------------------------------------
+
 
 void XclChPropSetHelper::ReadLineProperties(
         XclChLineFormat& rLineFmt, XclChObjectTable& rDashTable,
@@ -718,7 +718,7 @@ void XclChPropSetHelper::ReadLineProperties(
 {
     namespace cssd = ::com::sun::star::drawing;
 
-    // read properties from property set
+    
     cssd::LineStyle eApiStyle = cssd::LineStyle_NONE;
     sal_Int32 nApiWidth = 0;
     sal_Int16 nApiTrans = 0;
@@ -728,16 +728,16 @@ void XclChPropSetHelper::ReadLineProperties(
     rLineHlp.ReadFromPropertySet( rPropSet );
     rLineHlp >> eApiStyle >> nApiWidth >> rLineFmt.maColor >> nApiTrans >> aDashNameAny;
 
-    // clear automatic flag
+    
     ::set_flag( rLineFmt.mnFlags, EXC_CHLINEFORMAT_AUTO, false );
 
-    // line width
+    
     if( nApiWidth <= 0 )        rLineFmt.mnWeight = EXC_CHLINEFORMAT_HAIR;
     else if( nApiWidth <= 35 )  rLineFmt.mnWeight = EXC_CHLINEFORMAT_SINGLE;
     else if( nApiWidth <= 70 )  rLineFmt.mnWeight = EXC_CHLINEFORMAT_DOUBLE;
     else                        rLineFmt.mnWeight = EXC_CHLINEFORMAT_TRIPLE;
 
-    // line style
+    
     switch( eApiStyle )
     {
         case cssd::LineStyle_NONE:
@@ -759,23 +759,23 @@ void XclChPropSetHelper::ReadLineProperties(
             cssd::LineDash aApiDash;
             if( (aDashNameAny >>= aDashName) && (rDashTable.GetObject( aDashName ) >>= aApiDash) )
             {
-                // reorder dashes that are shorter than dots
+                
                 if( (aApiDash.Dashes == 0) || (aApiDash.DashLen < aApiDash.DotLen) )
                 {
                     ::std::swap( aApiDash.Dashes, aApiDash.Dots );
                     ::std::swap( aApiDash.DashLen, aApiDash.DotLen );
                 }
-                // ignore dots that are nearly equal to dashes
+                
                 if( aApiDash.DotLen * 3 > aApiDash.DashLen * 2 )
                     aApiDash.Dots = 0;
 
-                // convert line dash to predefined Excel dash types
+                
                 if( (aApiDash.Dashes == 1) && (aApiDash.Dots >= 1) )
-                    // one dash and one or more dots
+                    
                     rLineFmt.mnPattern = (aApiDash.Dots == 1) ?
                         EXC_CHLINEFORMAT_DASHDOT : EXC_CHLINEFORMAT_DASHDOTDOT;
                 else if( aApiDash.Dashes >= 1 )
-                    // one or more dashes and no dots (also: dash-dash-dot)
+                    
                     rLineFmt.mnPattern = (aApiDash.DashLen < 250) ?
                         EXC_CHLINEFORMAT_DOT : EXC_CHLINEFORMAT_DASH;
             }
@@ -792,7 +792,7 @@ bool XclChPropSetHelper::ReadAreaProperties( XclChAreaFormat& rAreaFmt,
 {
     namespace cssd = ::com::sun::star::drawing;
 
-    // read properties from property set
+    
     cssd::FillStyle eApiStyle = cssd::FillStyle_NONE;
     sal_Int16 nTransparency = 0;
 
@@ -800,13 +800,13 @@ bool XclChPropSetHelper::ReadAreaProperties( XclChAreaFormat& rAreaFmt,
     rAreaHlp.ReadFromPropertySet( rPropSet );
     rAreaHlp >> eApiStyle >> rAreaFmt.maPattColor >> nTransparency;
 
-    // clear automatic flag
+    
     ::set_flag( rAreaFmt.mnFlags, EXC_CHAREAFORMAT_AUTO, false );
 
-    // set fill style transparent or solid (set solid for anything but transparent)
+    
     rAreaFmt.mnPattern = (eApiStyle == cssd::FillStyle_NONE) ? EXC_PATT_NONE : EXC_PATT_SOLID;
 
-    // return true to indicate complex fill (gradient, bitmap, solid transparency)
+    
     return (eApiStyle != cssd::FillStyle_NONE) && ((eApiStyle != cssd::FillStyle_SOLID) || (nTransparency > 0));
 }
 
@@ -818,7 +818,7 @@ void XclChPropSetHelper::ReadEscherProperties(
     namespace cssd = ::com::sun::star::drawing;
     namespace cssa = ::com::sun::star::awt;
 
-    // read style and transparency properties from property set
+    
     cssd::FillStyle eApiStyle = cssd::FillStyle_NONE;
     Color aColor;
     sal_Int16 nTransparency = 0;
@@ -834,7 +834,7 @@ void XclChPropSetHelper::ReadEscherProperties(
             OSL_ENSURE( nTransparency > 0, "XclChPropSetHelper::ReadEscherProperties - unexpected solid area without transparency" );
             if( (0 < nTransparency) && (nTransparency <= 100) )
             {
-                // convert to Escher properties
+                
                 sal_uInt32 nEscherColor = 0x02000000;
                 ::insert_value( nEscherColor, aColor.GetBlue(), 16, 8 );
                 ::insert_value( nEscherColor, aColor.GetGreen(), 8, 8 );
@@ -852,7 +852,7 @@ void XclChPropSetHelper::ReadEscherProperties(
         break;
         case cssd::FillStyle_GRADIENT:
         {
-            // extract gradient from global gradient table
+            
             OUString aGradientName;
             ScfPropSetHelper& rGradHlp = GetGradientHelper( ePropMode );
             rGradHlp.ReadFromPropertySet( rPropSet );
@@ -860,7 +860,7 @@ void XclChPropSetHelper::ReadEscherProperties(
             cssa::Gradient aGradient;
             if( rGradientTable.GetObject( aGradientName ) >>= aGradient )
             {
-                // convert to Escher properties
+                
                 rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
                 rEscherFmt.mxEscherSet->CreateGradientProperties( aGradient );
             }
@@ -868,7 +868,7 @@ void XclChPropSetHelper::ReadEscherProperties(
         break;
         case cssd::FillStyle_HATCH:
         {
-            // extract hatch from global hatch table
+            
             OUString aHatchName;
             bool bFillBackground;
             ScfPropSetHelper& rHatchHlp = GetHatchHelper( ePropMode );
@@ -877,7 +877,7 @@ void XclChPropSetHelper::ReadEscherProperties(
             cssd::Hatch aHatch;
             if( rHatchTable.GetObject( aHatchName ) >>= aHatch )
             {
-                // convert to Escher properties
+                
                 rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
                 rEscherFmt.mxEscherSet->CreateEmbeddedHatchProperties( aHatch, aColor, bFillBackground );
                 rPicFmt.mnBmpMode = EXC_CHPICFORMAT_STACK;
@@ -886,7 +886,7 @@ void XclChPropSetHelper::ReadEscherProperties(
         break;
         case cssd::FillStyle_BITMAP:
         {
-            // extract bitmap URL from global bitmap table
+            
             OUString aBitmapName;
             cssd::BitmapMode eApiBmpMode;
             maBitmapHlp.ReadFromPropertySet( rPropSet );
@@ -894,7 +894,7 @@ void XclChPropSetHelper::ReadEscherProperties(
             OUString aBitmapUrl;
             if( rBitmapTable.GetObject( aBitmapName ) >>= aBitmapUrl )
             {
-                // convert to Escher properties
+                
                 rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
                 rEscherFmt.mxEscherSet->CreateEmbeddedBitmapProperties( aBitmapUrl, eApiBmpMode );
                 rPicFmt.mnBmpMode = (eApiBmpMode == cssd::BitmapMode_REPEAT) ?
@@ -915,10 +915,10 @@ void XclChPropSetHelper::ReadMarkerProperties(
     cssc::Symbol aApiSymbol;
     if( rPropSet.GetProperty( aApiSymbol, EXC_CHPROP_SYMBOL ) )
     {
-        // clear automatic flag
+        
         ::set_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_AUTO, false );
 
-        // symbol style
+        
         switch( aApiSymbol.Style )
         {
             case cssc::SymbolStyle_NONE:
@@ -927,21 +927,21 @@ void XclChPropSetHelper::ReadMarkerProperties(
             case cssc::SymbolStyle_STANDARD:
                 switch( aApiSymbol.StandardSymbol )
                 {
-                    case 0:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_SQUARE;    break;  // square
-                    case 1:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  // diamond
-                    case 2:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  // arrow down
-                    case 3:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_TRIANGLE;  break;  // arrow up
-                    case 4:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DOWJ;      break;  // arrow right, same as import
-                    case 5:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  // arrow left
-                    case 6:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  // bow tie
-                    case 7:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // sand glass
-                    case 8:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CIRCLE;    break;  // circle new in LibO3.5
-                    case 9:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  // star new in LibO3.5
-                    case 10:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  // X new in LibO3.5
-                    case 11:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  // plus new in LibO3.5
-                    case 12:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // asterisk new in LibO3.5
-                    case 13:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  // horizontal bar new in LibO3.5
-                    case 14:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  // vertical bar new in LibO3.5
+                    case 0:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_SQUARE;    break;  
+                    case 1:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  
+                    case 2:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  
+                    case 3:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_TRIANGLE;  break;  
+                    case 4:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DOWJ;      break;  
+                    case 5:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  
+                    case 6:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  
+                    case 7:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  
+                    case 8:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CIRCLE;    break;  
+                    case 9:     rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_DIAMOND;   break;  
+                    case 10:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_CROSS;     break;  
+                    case 11:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_PLUS;      break;  
+                    case 12:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  
+                    case 13:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STDDEV;    break;  
+                    case 14:    rMarkerFmt.mnMarkerType = EXC_CHMARKERFORMAT_STAR;      break;  
                     default:    rMarkerFmt.mnMarkerType = XclChartHelper::GetAutoMarkerType( nFormatIdx );
                 }
             break;
@@ -951,11 +951,11 @@ void XclChPropSetHelper::ReadMarkerProperties(
         bool bHasFillColor = XclChartHelper::HasMarkerFillColor( rMarkerFmt.mnMarkerType );
         ::set_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_NOFILL, !bHasFillColor );
 
-        // symbol size
+        
         sal_Int32 nApiSize = (aApiSymbol.Size.Width + aApiSymbol.Size.Height + 1) / 2;
         rMarkerFmt.mnMarkerSize = XclTools::GetTwipsFromHmm( nApiSize );
 
-        // symbol colors
+        
         rMarkerFmt.maLineColor = ScfApiHelper::ConvertFromApiColor( aApiSymbol.BorderColor );
         rMarkerFmt.maFillColor = ScfApiHelper::ConvertFromApiColor( aApiSymbol.FillColor );
     }
@@ -963,7 +963,7 @@ void XclChPropSetHelper::ReadMarkerProperties(
 
 sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPropSet, bool bSupportsStacked )
 {
-    // chart2 handles rotation as double in the range [0,360)
+    
     double fAngle = 0.0;
     rPropSet.GetProperty( fAngle, EXC_CHPROP_TEXTROTATION );
     bool bStacked = bSupportsStacked && rPropSet.GetBoolProperty( EXC_CHPROP_STACKCHARACTERS );
@@ -971,7 +971,7 @@ sal_uInt16 XclChPropSetHelper::ReadRotationProperties( const ScfPropertySet& rPr
         XclTools::GetXclRotation( static_cast< sal_Int32 >( fAngle * 100.0 + 0.5 ) );
 }
 
-// write properties -----------------------------------------------------------
+
 
 void XclChPropSetHelper::WriteLineProperties(
         ScfPropertySet& rPropSet, XclChObjectTable& rDashTable,
@@ -979,8 +979,8 @@ void XclChPropSetHelper::WriteLineProperties(
 {
     namespace cssd = ::com::sun::star::drawing;
 
-    // line width
-    sal_Int32 nApiWidth = 0;    // 0 is the width of a hair line
+    
+    sal_Int32 nApiWidth = 0;    
     switch( rLineFmt.mnWeight )
     {
         case EXC_CHLINEFORMAT_SINGLE:   nApiWidth = 35;     break;
@@ -988,7 +988,7 @@ void XclChPropSetHelper::WriteLineProperties(
         case EXC_CHLINEFORMAT_TRIPLE:   nApiWidth = 105;    break;
     }
 
-    // line style
+    
     cssd::LineStyle eApiStyle = cssd::LineStyle_NONE;
     sal_Int16 nApiTrans = 0;
     sal_Int32 nDotLen = ::std::min< sal_Int32 >( rLineFmt.mnWeight + 105, 210 );
@@ -1022,10 +1022,10 @@ void XclChPropSetHelper::WriteLineProperties(
         break;
     }
 
-    // line color
+    
     sal_Int32 nApiColor = ScfApiHelper::ConvertToApiColor( rLineFmt.maColor );
 
-    // try to insert the dash style and receive its name
+    
     Any aDashNameAny;
     if( eApiStyle == cssd::LineStyle_DASH )
     {
@@ -1034,7 +1034,7 @@ void XclChPropSetHelper::WriteLineProperties(
             aDashNameAny <<= aDashName;
     }
 
-    // write the properties
+    
     ScfPropSetHelper& rLineHlp = GetLineHelper( ePropMode );
     rLineHlp.InitializeWrite();
     rLineHlp << eApiStyle << nApiWidth << nApiColor << nApiTrans << aDashNameAny;
@@ -1049,14 +1049,14 @@ void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
     Color aColor;
     sal_Int16 nTransparency = 0;
 
-    // fill color
+    
     if( rAreaFmt.mnPattern != EXC_PATT_NONE )
     {
         eFillStyle = cssd::FillStyle_SOLID;
         aColor = XclTools::GetPatternColor( rAreaFmt.maPattColor, rAreaFmt.maBackColor, rAreaFmt.mnPattern );
     }
 
-    // write the properties
+    
     ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
     rAreaHlp.InitializeWrite();
     rAreaHlp << eFillStyle << aColor << nTransparency;
@@ -1075,11 +1075,11 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
             switch( pStyleItem->GetValue() )
             {
                 case XFILL_SOLID:
-                    // #i84812# Excel 2007 writes Escher properties for solid fill
+                    
                     if( const XFillColorItem* pColorItem = static_cast< const XFillColorItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, false ) ) )
                     {
                         namespace cssd = ::com::sun::star::drawing;
-                        // get solid transparence too
+                        
                         const XFillTransparenceItem* pTranspItem = static_cast< const XFillTransparenceItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLTRANSPARENCE, false ) );
                         sal_uInt16 nTransp = pTranspItem ? pTranspItem->GetValue() : 0;
                         ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
@@ -1140,34 +1140,34 @@ void XclChPropSetHelper::WriteMarkerProperties(
     namespace cssc = ::com::sun::star::chart2;
     namespace cssa = ::com::sun::star::awt;
 
-    // symbol style
+    
     cssc::Symbol aApiSymbol;
     aApiSymbol.Style = cssc::SymbolStyle_STANDARD;
     switch( rMarkerFmt.mnMarkerType )
     {
         case EXC_CHMARKERFORMAT_NOSYMBOL:   aApiSymbol.Style = cssc::SymbolStyle_NONE;  break;
-        case EXC_CHMARKERFORMAT_SQUARE:     aApiSymbol.StandardSymbol = 0;              break;  // square
-        case EXC_CHMARKERFORMAT_DIAMOND:    aApiSymbol.StandardSymbol = 1;              break;  // diamond
-        case EXC_CHMARKERFORMAT_TRIANGLE:   aApiSymbol.StandardSymbol = 3;              break;  // arrow up
-        case EXC_CHMARKERFORMAT_CROSS:      aApiSymbol.StandardSymbol = 10;             break;  // X, legacy bow tie
-        case EXC_CHMARKERFORMAT_STAR:       aApiSymbol.StandardSymbol = 12;             break;  // asterisk, legacy sand glass
-        case EXC_CHMARKERFORMAT_DOWJ:       aApiSymbol.StandardSymbol = 4;              break;  // arrow right, same as export
-        case EXC_CHMARKERFORMAT_STDDEV:     aApiSymbol.StandardSymbol = 13;             break;  // horizontal bar, legacy arrow down
-        case EXC_CHMARKERFORMAT_CIRCLE:     aApiSymbol.StandardSymbol = 8;              break;  // circle, legacy arrow right
-        case EXC_CHMARKERFORMAT_PLUS:       aApiSymbol.StandardSymbol = 11;             break;  // plus, legacy arrow left
+        case EXC_CHMARKERFORMAT_SQUARE:     aApiSymbol.StandardSymbol = 0;              break;  
+        case EXC_CHMARKERFORMAT_DIAMOND:    aApiSymbol.StandardSymbol = 1;              break;  
+        case EXC_CHMARKERFORMAT_TRIANGLE:   aApiSymbol.StandardSymbol = 3;              break;  
+        case EXC_CHMARKERFORMAT_CROSS:      aApiSymbol.StandardSymbol = 10;             break;  
+        case EXC_CHMARKERFORMAT_STAR:       aApiSymbol.StandardSymbol = 12;             break;  
+        case EXC_CHMARKERFORMAT_DOWJ:       aApiSymbol.StandardSymbol = 4;              break;  
+        case EXC_CHMARKERFORMAT_STDDEV:     aApiSymbol.StandardSymbol = 13;             break;  
+        case EXC_CHMARKERFORMAT_CIRCLE:     aApiSymbol.StandardSymbol = 8;              break;  
+        case EXC_CHMARKERFORMAT_PLUS:       aApiSymbol.StandardSymbol = 11;             break;  
         default: break;
     }
 
-    // symbol size
+    
     sal_Int32 nApiSize = XclTools::GetHmmFromTwips( rMarkerFmt.mnMarkerSize );
     aApiSymbol.Size = cssa::Size( nApiSize, nApiSize );
 
-    // symbol colors
+    
     aApiSymbol.FillColor = ScfApiHelper::ConvertToApiColor( rMarkerFmt.maFillColor );
     aApiSymbol.BorderColor = ::get_flag( rMarkerFmt.mnFlags, EXC_CHMARKERFORMAT_NOLINE ) ?
         aApiSymbol.FillColor : ScfApiHelper::ConvertToApiColor( rMarkerFmt.maLineColor );
 
-    // set the property
+    
     rPropSet.SetProperty( EXC_CHPROP_SYMBOL, aApiSymbol );
 }
 
@@ -1176,7 +1176,7 @@ void XclChPropSetHelper::WriteRotationProperties(
 {
     if( nRotation != EXC_CHART_AUTOROTATION )
     {
-        // chart2 handles rotation as double in the range [0,360)
+        
         double fAngle = XclTools::GetScRotation( nRotation, 0 ) / 100.0;
         rPropSet.SetProperty( EXC_CHPROP_TEXTROTATION, fAngle );
         if( bSupportsStacked )
@@ -1184,7 +1184,7 @@ void XclChPropSetHelper::WriteRotationProperties(
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 ScfPropSetHelper& XclChPropSetHelper::GetLineHelper( XclChPropertyMode ePropMode )
 {
@@ -1231,7 +1231,7 @@ ScfPropSetHelper& XclChPropSetHelper::GetHatchHelper( XclChPropertyMode ePropMod
     return maHatchHlpCommon;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1271,9 +1271,9 @@ EXC_DEFINEFUNC_GETAXISTITLESHAPE( lclGetSecYAxisTitleShape, XSecondAxisTitleSupp
 #undef EXC_DEFINEFUNC_GETAXISTITLESHAPE
 #undef EXC_IMPLEMENT_GETTITLESHAPE
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclChRootData::XclChRootData() :
     mxTypeInfoProv( new XclChTypeInfoProvider ),
@@ -1281,7 +1281,7 @@ XclChRootData::XclChRootData() :
     mnBorderGapX( 0 ),
     mnBorderGapY( 0 )
 {
-    // remember some title shape getter functions
+    
     maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_TITLE ) ] = lclGetMainTitleShape;
     maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_PRIMARY, EXC_CHAXIS_X ) ] = lclGetXAxisTitleShape;
     maGetShapeFuncs[ XclChTextKey( EXC_CHTEXTTYPE_AXISTITLE, EXC_CHAXESSET_PRIMARY, EXC_CHAXIS_Y ) ] = lclGetYAxisTitleShape;
@@ -1296,20 +1296,20 @@ XclChRootData::~XclChRootData()
 
 void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChartDocument >& rxChartDoc, const Rectangle& rChartRect )
 {
-    // remember chart document reference and chart shape position/size
+    
     OSL_ENSURE( rxChartDoc.is(), "XclChRootData::InitConversion - missing chart document" );
     mxChartDoc = rxChartDoc;
     maChartRect = rChartRect;
 
-    // Excel excludes a border of 5 pixels in each direction from chart area
+    
     mnBorderGapX = rRoot.GetHmmFromPixelX( 5.0 );
     mnBorderGapY = rRoot.GetHmmFromPixelY( 5.0 );
 
-    // size of a chart unit in 1/100 mm
+    
     mfUnitSizeX = ::std::max< double >( maChartRect.GetWidth() - 2 * mnBorderGapX, mnBorderGapX ) / EXC_CHART_TOTALUNITS;
     mfUnitSizeY = ::std::max< double >( maChartRect.GetHeight() - 2 * mnBorderGapY, mnBorderGapY ) / EXC_CHART_TOTALUNITS;
 
-    // create object tables
+    
     Reference< XMultiServiceFactory > xFactory( mxChartDoc, UNO_QUERY );
     mxLineDashTable.reset( new XclChObjectTable(
         xFactory, SERVICE_DRAWING_DASHTABLE, "Excel line dash " ) );
@@ -1323,12 +1323,12 @@ void XclChRootData::InitConversion( const XclRoot& rRoot, const Reference< XChar
 
 void XclChRootData::FinishConversion()
 {
-    // forget formatting object tables
+    
     mxBitmapTable.reset();
     mxHatchTable.reset();
     mxGradientTable.reset();
     mxLineDashTable.reset();
-    // forget chart document reference
+    
     mxChartDoc.clear();
 }
 
@@ -1343,6 +1343,6 @@ Reference< XShape > XclChRootData::GetTitleShape( const XclChTextKey& rTitleKey 
     return xTitleShape;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

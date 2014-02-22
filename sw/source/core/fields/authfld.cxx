@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -99,7 +99,7 @@ void    SwAuthorityFieldType::RemoveField(sal_IntPtr nHandle)
             if(!pTemp->GetRefCount())
             {
                 m_DataArr.erase(m_DataArr.begin() + j);
-                //re-generate positions of the fields
+                
                 DelSequenceArray();
             }
             break;
@@ -128,13 +128,13 @@ sal_IntPtr SwAuthorityFieldType::AddField(const OUString& rFieldContents)
             pTemp->AddRef();
         }
     }
-    //if it is a new Entry - insert
+    
     if(pEntry)
     {
         nRet = (sal_IntPtr)(void*)pEntry;
         pEntry->AddRef();
         m_DataArr.push_back(pEntry);
-        //re-generate positions of the fields
+        
         DelSequenceArray();
     }
     return nRet;
@@ -151,7 +151,7 @@ sal_Bool SwAuthorityFieldType::AddField(sal_IntPtr nHandle)
         {
             bRet = sal_True;
             pTemp->AddRef();
-            //re-generate positions of the fields
+            
             DelSequenceArray();
             break;
         }
@@ -222,7 +222,7 @@ bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
     return bChanged;
 }
 
-/// appends a new entry (if new) and returns the array position
+
 sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
 {
     sal_uInt16 nRet = 0;
@@ -232,11 +232,11 @@ sal_uInt16  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
         if( *pTemp == rInsert )
         {
             break;
-            //ref count unchanged
+            
         }
     }
 
-    //if it is a new Entry - insert
+    
     if( nRet == m_DataArr.size() )
         m_DataArr.push_back( new SwAuthEntry( rInsert ) );
 
@@ -256,7 +256,7 @@ sal_IntPtr SwAuthorityFieldType::GetHandle(sal_uInt16 nPos)
 
 sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
 {
-    //find the field in a sorted array of handles,
+    
 #if OSL_DEBUG_LEVEL > 0
     bool bCurrentFieldWithoutTextNode = false;
 #endif
@@ -287,8 +287,8 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
             const SwTxtNode* pTxtNode = 0;
             if(pFrm && !pFrm->IsInDocBody())
                 pTxtNode = GetBodyTxtNode( rDoc, aFldPos, *pFrm );
-            //if no text node could be found or the field is in the document
-            //body the directly available text node will be used
+            
+            
             if(!pTxtNode)
                 pTxtNode = &rFldTxtNode;
             if (!pTxtNode->GetTxt().isEmpty() &&
@@ -303,11 +303,11 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
                     SwTOXSortTabBase* pOld = aSortArr[i];
                     if(*pOld == *pNew)
                     {
-                        //only the first occurrence in the document
-                        //has to be in the array
+                        
+                        
                         if(*pOld < *pNew)
                             DELETEZ(pNew);
-                        else // remove the old content
+                        else 
                         {
                             aSortArr.erase(aSortArr.begin() + i);
                             delete pOld;
@@ -315,7 +315,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
                         break;
                     }
                 }
-                //if it still exists - insert at the correct position
+                
                 if(pNew)
                 {
                     short j;
@@ -342,7 +342,7 @@ sal_uInt16  SwAuthorityFieldType::GetSequencePos(sal_IntPtr nHandle)
             delete *it;
         aSortArr.clear();
     }
-    //find nHandle
+    
     sal_uInt16 nRet = 0;
     for(sal_uInt16 i = 0; i < m_SequArr.size(); ++i)
     {
@@ -489,7 +489,7 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, sal_uInt16 nWhichId )
 
 void SwAuthorityFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    //re-generate positions of the fields
+    
     DelSequenceArray();
     NotifyClients( pOld, pNew );
 }
@@ -555,7 +555,7 @@ OUString SwAuthorityField::Expand() const
     else
     {
         const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle(m_nHandle);
-        //TODO: Expand to: identifier, number sequence, ...
+        
         if(pEntry)
             sRet += pEntry->GetAuthorField(AUTH_FIELD_IDENTIFIER);
     }

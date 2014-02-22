@@ -61,7 +61,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxShapePropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
@@ -85,7 +85,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxTextShapePropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
@@ -110,7 +110,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxConnectorPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
@@ -134,7 +134,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxDimensioningPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         { OUString("ParaUserDefinedAttributes"), EE_PARA_XMLATTRIBS, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
@@ -158,7 +158,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxCirclePropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
@@ -184,7 +184,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
@@ -210,7 +210,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPolyPolygonBezierPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         CUSTOMSHAPE_PROPERTIES
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
@@ -227,20 +227,20 @@ SfxItemPropertyMapEntry const * ImplGetSvxGraphicObjectPropertyMap()
     {
         SPECIAL_GRAPHOBJ_PROPERTIES
 
-        // #i25616#
+        
         FILL_PROPERTIES
 
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END
         SHAPE_DESCRIPTOR_PROPERTIES
 
-        // #i118485# Full properties now, shear included
+        
         MISC_OBJ_PROPERTIES
 
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         { OUString("IsMirrored"), OWN_ATTR_MIRRORED, ::getCppuBooleanType(), 0, 0},
         { OUString("UserDefinedAttributes"), SDRATTR_XMLATTRIBUTES, ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
@@ -317,7 +317,7 @@ SfxItemPropertyMapEntry const * ImplGetSvx3DLatheObjectPropertyMap()
     {
         SPECIAL_3DLATHEOBJECT_PROPERTIES
 
-        // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+        
         SPECIAL_3DLATHEANDEXTRUDEOBJ_PROPERTIES
 
         SPECIAL_3DBACKSCALE_PROPERTIES
@@ -343,7 +343,7 @@ SfxItemPropertyMapEntry const * ImplGetSvx3DExtrudeObjectPropertyMap()
     {
         SPECIAL_3DEXTRUDEOBJECT_PROPERTIES
 
-        // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+        
         SPECIAL_3DLATHEANDEXTRUDEOBJ_PROPERTIES
 
         SPECIAL_3DBACKSCALE_PROPERTIES
@@ -394,7 +394,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxAllPropertyMap()
         FILL_PROPERTIES
         EDGERADIUS_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         SHAPE_DESCRIPTOR_PROPERTIES
         MISC_OBJ_PROPERTIES
@@ -413,7 +413,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxAllPropertyMap()
         SPECIAL_3DLATHEOBJECT_PROPERTIES
         SPECIAL_3DEXTRUDEOBJECT_PROPERTIES
 
-        // #107245# New 3D properties which are possible for lathe and extrude 3d objects
+        
         SPECIAL_3DLATHEANDEXTRUDEOBJ_PROPERTIES
 
         SPECIAL_3DBACKSCALE_PROPERTIES
@@ -444,7 +444,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxOle2PropertyMap()
 {
     static SfxItemPropertyMapEntry const aOle2PropertyMap_Impl[] =
     {
-        // #i118485# Adding properties for line, fill, text, shadow, fontwork, rotate, shear
+        
         FILL_PROPERTIES
         LINE_PROPERTIES
         LINE_PROPERTIES_START_END
@@ -494,7 +494,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPluginPropertyMap()
         { OUString("LinkURL"),                  OWN_ATTR_OLE_LINKURL        , ::getCppuType(( const OUString*)0), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("VisibleArea"),              OWN_ATTR_OLE_VISAREA        , ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), 0, 0},
-        // #i68101#
+        
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -528,7 +528,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxFramePropertyMap()
         { OUString("LinkURL"),                  OWN_ATTR_OLE_LINKURL        , ::getCppuType(( const OUString*)0), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("VisibleArea"),              OWN_ATTR_OLE_VISAREA        , ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), 0, 0},
-        // #i68101#
+        
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -561,7 +561,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxAppletPropertyMap()
         { OUString("LinkURL"),                  OWN_ATTR_OLE_LINKURL        , ::getCppuType(( const OUString*)0), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
         { OUString("VisibleArea"),              OWN_ATTR_OLE_VISAREA        , ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), 0, 0},
-        // #i68101#
+        
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -574,7 +574,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
 {
     static SfxItemPropertyMapEntry const aControlPropertyMap_Impl[] =
     {
-        // the following properties are mapped to the XControl Model of this shape
+        
         { OUString(UNO_NAME_EDIT_CHAR_FONTNAME),        0,  ::getCppuType((const OUString*)0),  0, 0 },
         { OUString(UNO_NAME_EDIT_CHAR_FONTSTYLENAME),   0,  ::getCppuType((const OUString*)0),  0, 0 },
         { OUString(UNO_NAME_EDIT_CHAR_FONTFAMILY),      0,  ::getCppuType((const sal_Int16*)0),        0, 0 },
@@ -602,7 +602,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
         { OUString("ControlTextEmphasis"),              0,  ::getCppuType((const sal_Int16*)0),        0, 0 },
         { OUString("ControlWritingMode"),               0,  ::cppu::UnoType< sal_Int16 >::get(), 0, 0},
-        // the following properties are handled by SvxShape
+        
         { OUString("Transformation"),           OWN_ATTR_TRANSFORMATION     , ::getCppuType((const struct com::sun::star::drawing::HomogenMatrix3*)0), 0, 0 },
         { OUString(UNO_NAME_MISC_OBJ_ZORDER),   OWN_ATTR_ZORDER             , ::getCppuType((const sal_Int32*)0),      0,      0},
         { OUString(UNO_NAME_MISC_OBJ_LAYERID),  SDRATTR_LAYERID             , ::getCppuType((const sal_Int16*)0),      0,  0},
@@ -612,10 +612,10 @@ SfxItemPropertyMapEntry const * ImplGetSvxControlShapePropertyMap()
         { OUString("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {OUString("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        // #i68101#
+        
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::getCppuType((const OUString*)0),    0,  0},
-        // #i112587#
+        
         { OUString(UNO_NAME_MISC_OBJ_PRINTABLE),    SDRATTR_OBJPRINTABLE            , ::getBooleanCppuType(),                      0,  0},
         { OUString("Visible"),                      SDRATTR_OBJVISIBLE              , ::getBooleanCppuType(),                      0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -638,7 +638,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxPageShapePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT),      SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT),      SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT,            ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        // #i68101#
+        
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(), 0, css::uno::Type(), 0, 0 }
@@ -671,7 +671,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxCaptionPropertyMap()
         LINKTARGET_PROPERTIES
         SHADOW_PROPERTIES
         TEXT_PROPERTIES
-        // #FontWork#
+        
         FONTWORK_PROPERTIES
         { OUString("UserDefinedAttributes"),        SDRATTR_XMLATTRIBUTES,      ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
         {OUString("ParaUserDefinedAttributes"),         EE_PARA_XMLATTRIBS,     ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >*)0)  ,        0,     0},
@@ -724,7 +724,7 @@ SfxItemPropertyMapEntry const * ImplGetSvxMediaShapePropertyMap()
         { OUString(UNO_NAME_MISC_OBJ_MOVEPROTECT), SDRATTR_OBJMOVEPROTECT, ::getBooleanCppuType(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_SIZEPROTECT), SDRATTR_OBJSIZEPROTECT, ::getBooleanCppuType(),0, 0},
         { OUString(UNO_NAME_MISC_OBJ_BOUNDRECT), OWN_ATTR_BOUNDRECT, ::getCppuType((const ::com::sun::star::awt::Rectangle*)0), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
-        // #i68101#
+        
         { OUString(UNO_NAME_MISC_OBJ_TITLE),        OWN_ATTR_MISC_OBJ_TITLE         , ::getCppuType((const OUString*)0),    0,  0},
         { OUString(UNO_NAME_MISC_OBJ_DESCRIPTION),  OWN_ATTR_MISC_OBJ_DESCRIPTION   , ::getCppuType((const OUString*)0),    0,  0},
         {OUString("PrivateStream"), OWN_ATTR_MEDIA_STREAM, cppu::UnoType<css::io::XInputStream>::get(), ::com::sun::star::beans::PropertyAttribute::READONLY, 0},
@@ -851,7 +851,7 @@ namespace {
   }
 }
 
-//----------------------------------------------------------------------
+
 OUString UHashMap::getNameFromId(sal_uInt32 nId)
 {
     const UHashMapImpl &rMap = GetUHashImpl();
@@ -903,7 +903,7 @@ SvxUnoPropertyMapProvider& getSvxMapProvider()
     return theSvxMapProvider::get();
 }
 
-// ---------------------------------------------------------------------
+
 
 SvxUnoPropertyMapProvider::SvxUnoPropertyMapProvider()
 {
@@ -920,7 +920,7 @@ SvxUnoPropertyMapProvider::~SvxUnoPropertyMapProvider()
         delete aSetArr[i];
 }
 
-// ---------------------------------------------------------------------
+
 
 const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPropertyId)
 {
@@ -957,7 +957,7 @@ const SfxItemPropertyMapEntry* SvxUnoPropertyMapProvider::GetMap(sal_uInt16 nPro
             default:
                 OSL_FAIL( "Unknown property map for SvxUnoPropertyMapProvider!" );
         }
-//      Sort(nPropertyId);
+
     }
     return aMapArr[nPropertyId];
 }
@@ -968,7 +968,7 @@ const SvxItemPropertySet* SvxUnoPropertyMapProvider::GetPropertySet(sal_uInt16 n
     return aSetArr[nPropertyId];
 }
 
-// #####################################################################
+
 
 /** maps the API constant MeasureUnit to a vcl MapUnit enum.
     Returns false if conversion is not supported.
@@ -1126,7 +1126,7 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
 
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, OUString& rString ) throw()
 {
-    // first, calculate the search string length without an optional number behind the name
+    
     sal_Int32 nLength = rString.getLength();
     while( nLength > 0 )
     {
@@ -1137,7 +1137,7 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
         nLength--;
     }
 
-    // if we cut off a number, also cut of some spaces
+    
     if( nLength != rString.getLength() )
     {
         while( nLength > 0 )
@@ -1178,16 +1178,16 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// #i122649# Some comments on the below arrays:
-// - They need to have the same order and count of items
-// - They are used to translate between translated and non-translated color names
-// - To make longer names be found which start with the same basic string,
-//   these have to be in front of others
+
+
+
+
+
 //
-// It would be nice to:
-// - evtl. organize these in a single array with 2-dimensional inner to elliminate
-//   the possibility to define it wrong
-// - change the compare to also work when a shorter name is in front of a longer one
+
+
+
+
 
 static const sal_uInt16 SvxUnoColorNameDefResId[] =
 {
@@ -1336,7 +1336,7 @@ OUString SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rIntern
         }
     }
 
-    // just use previous name, if nothing else was found.
+    
     return rInternalName;
 }
 
@@ -1369,7 +1369,7 @@ OUString SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rA
         }
     }
 
-    // just use previous name, if nothing else was found.
+    
     return rApiName;
 }
 
@@ -1398,7 +1398,7 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
         case SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER:
             mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
             mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->remove( OUString( UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION ) );
-            // OD 13.10.2003 #i18732# - add property map for writer item 'IsFollowingTextFlow'
+            
             mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetAdditionalWriterDrawingDefaultsPropertyMap() );
             break;
 

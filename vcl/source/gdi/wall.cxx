@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -28,7 +28,7 @@
 #include <vcl/dibtools.hxx>
 #include <vcl/settings.hxx>
 
-// -----------------------------------------------------------------------
+
 
 ImplWallpaper::ImplWallpaper() :
     maColor( COL_TRANSPARENT )
@@ -41,7 +41,7 @@ ImplWallpaper::ImplWallpaper() :
     meStyle         = WALLPAPER_NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplWallpaper::ImplWallpaper( const ImplWallpaper& rImplWallpaper ) :
     maColor( rImplWallpaper.maColor )
@@ -67,7 +67,7 @@ ImplWallpaper::ImplWallpaper( const ImplWallpaper& rImplWallpaper ) :
         mpRect = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplWallpaper::~ImplWallpaper()
 {
@@ -77,7 +77,7 @@ ImplWallpaper::~ImplWallpaper()
     delete mpRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWallpaper::ImplSetCachedBitmap( BitmapEx& rBmp )
 {
@@ -87,7 +87,7 @@ void ImplWallpaper::ImplSetCachedBitmap( BitmapEx& rBmp )
         *mpCache = rBmp;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWallpaper::ImplReleaseCachedBitmap()
 {
@@ -95,7 +95,7 @@ void ImplWallpaper::ImplReleaseCachedBitmap()
     mpCache = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
 {
@@ -111,11 +111,11 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
     delete rImplWallpaper.mpBitmap;
     rImplWallpaper.mpBitmap = NULL;
 
-    // version 1
+    
     ReadColor( rIStm, rImplWallpaper.maColor );
     rIStm.ReadUInt16( nTmp16 ); rImplWallpaper.meStyle = (WallpaperStyle) nTmp16;
 
-    // version 2
+    
     if( aCompat.GetVersion() >= 2 )
     {
         bool bRect, bGrad, bBmp, bDummy;
@@ -140,7 +140,7 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
             ReadDIBBitmapEx(*rImplWallpaper.mpBitmap, rIStm);
         }
 
-        // version 3 (new color format)
+        
         if( aCompat.GetVersion() >= 3 )
         {
             rImplWallpaper.maColor.Read( rIStm, true );
@@ -150,7 +150,7 @@ SvStream& ReadImplWallpaper( SvStream& rIStm, ImplWallpaper& rImplWallpaper )
     return rIStm;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpaper )
 {
@@ -160,11 +160,11 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
     bool            bBmp = ( rImplWallpaper.mpBitmap != NULL );
     bool            bDummy = false;
 
-    // version 1
+    
     WriteColor( rOStm, rImplWallpaper.maColor );
     rOStm.WriteUInt16( (sal_uInt16) rImplWallpaper.meStyle );
 
-    // version 2
+    
     rOStm.WriteUChar( bRect ).WriteUChar( bGrad ).WriteUChar( bBmp ).WriteUChar( bDummy ).WriteUChar( bDummy ).WriteUChar( bDummy );
 
     if( bRect )
@@ -176,17 +176,17 @@ SvStream& WriteImplWallpaper( SvStream& rOStm, const ImplWallpaper& rImplWallpap
     if( bBmp )
         WriteDIBBitmapEx(*rImplWallpaper.mpBitmap, rOStm);
 
-    // version 3 (new color format)
+    
     ( (Color&) rImplWallpaper.maColor ).Write( rOStm, true );
 
     return rOStm;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline void Wallpaper::ImplMakeUnique( bool bReleaseCache )
 {
-    // copy them if other references exist
+    
     if ( mpImplWallpaper->mnRefCount != 1 )
     {
         if ( mpImplWallpaper->mnRefCount )
@@ -198,7 +198,7 @@ inline void Wallpaper::ImplMakeUnique( bool bReleaseCache )
         mpImplWallpaper->ImplReleaseCachedBitmap();
 }
 
-// -----------------------------------------------------------------------
+
 
 Wallpaper::Wallpaper()
 {
@@ -209,20 +209,20 @@ Wallpaper::Wallpaper()
     mpImplWallpaper = &aStaticImplWallpaper;
 }
 
-// -----------------------------------------------------------------------
+
 
 Wallpaper::Wallpaper( const Wallpaper& rWallpaper )
 {
     DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFFFFFE, "Wallpaper: RefCount overflow" );
 
-    // use Instance data and increment reference counter
+    
     mpImplWallpaper = rWallpaper.mpImplWallpaper;
-    // RefCount == 0 for static objekts
+    
     if ( mpImplWallpaper->mnRefCount )
         mpImplWallpaper->mnRefCount++;
 }
 
-// -----------------------------------------------------------------------
+
 
 Wallpaper::Wallpaper( const Color& rColor )
 {
@@ -232,7 +232,7 @@ Wallpaper::Wallpaper( const Color& rColor )
     mpImplWallpaper->meStyle    = WALLPAPER_TILE;
 }
 
-// -----------------------------------------------------------------------
+
 
 Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
 {
@@ -242,7 +242,7 @@ Wallpaper::Wallpaper( const BitmapEx& rBmpEx )
     mpImplWallpaper->meStyle    = WALLPAPER_TILE;
 }
 
-// -----------------------------------------------------------------------
+
 
 Wallpaper::Wallpaper( const Gradient& rGradient )
 {
@@ -252,12 +252,12 @@ Wallpaper::Wallpaper( const Gradient& rGradient )
     mpImplWallpaper->meStyle    = WALLPAPER_TILE;
 }
 
-// -----------------------------------------------------------------------
+
 
 Wallpaper::~Wallpaper()
 {
-    // if ImpData are not static then delete them if it is the last reference,
-    // otherwise decrement reference counter
+    
+    
     if ( mpImplWallpaper->mnRefCount )
     {
         if ( mpImplWallpaper->mnRefCount == 1 )
@@ -267,7 +267,7 @@ Wallpaper::~Wallpaper()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void Wallpaper::SetColor( const Color& rColor )
 {
@@ -279,7 +279,7 @@ void Wallpaper::SetColor( const Color& rColor )
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
 }
 
-// -----------------------------------------------------------------------
+
 
 const Color& Wallpaper::GetColor() const
 {
@@ -287,7 +287,7 @@ const Color& Wallpaper::GetColor() const
     return mpImplWallpaper->maColor;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Wallpaper::SetStyle( WallpaperStyle eStyle )
 {
@@ -295,14 +295,14 @@ void Wallpaper::SetStyle( WallpaperStyle eStyle )
     ImplMakeUnique( false );
 
     if( eStyle == WALLPAPER_APPLICATIONGRADIENT )
-        // set a dummy gradient, the correct gradient
-        // will be created dynamically in GetGradient()
+        
+        
         SetGradient( ImplGetApplicationGradient() );
 
     mpImplWallpaper->meStyle = eStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 WallpaperStyle Wallpaper::GetStyle() const
 {
@@ -310,7 +310,7 @@ WallpaperStyle Wallpaper::GetStyle() const
     return mpImplWallpaper->meStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
 {
@@ -337,7 +337,7 @@ void Wallpaper::SetBitmap( const BitmapEx& rBitmap )
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
 }
 
-// -----------------------------------------------------------------------
+
 
 BitmapEx Wallpaper::GetBitmap() const
 {
@@ -351,7 +351,7 @@ BitmapEx Wallpaper::GetBitmap() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Wallpaper::IsBitmap() const
 {
@@ -360,7 +360,7 @@ bool Wallpaper::IsBitmap() const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void Wallpaper::SetGradient( const Gradient& rGradient )
 {
@@ -376,7 +376,7 @@ void Wallpaper::SetGradient( const Gradient& rGradient )
         mpImplWallpaper->meStyle = WALLPAPER_TILE;
 }
 
-// -----------------------------------------------------------------------
+
 
 Gradient Wallpaper::GetGradient() const
 {
@@ -392,7 +392,7 @@ Gradient Wallpaper::GetGradient() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Wallpaper::IsGradient() const
 {
@@ -401,7 +401,7 @@ bool Wallpaper::IsGradient() const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 Gradient Wallpaper::ImplGetApplicationGradient() const
 {
@@ -409,7 +409,7 @@ Gradient Wallpaper::ImplGetApplicationGradient() const
     g.SetAngle( 900 );
     g.SetStyle( GradientStyle_LINEAR );
     g.SetStartColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
-    // no 'extreme' gradient when high contrast
+    
     if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
         g.SetEndColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     else
@@ -417,7 +417,7 @@ Gradient Wallpaper::ImplGetApplicationGradient() const
     return g;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Wallpaper::SetRect( const Rectangle& rRect )
 {
@@ -441,7 +441,7 @@ void Wallpaper::SetRect( const Rectangle& rRect )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle Wallpaper::GetRect() const
 {
@@ -455,7 +455,7 @@ Rectangle Wallpaper::GetRect() const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Wallpaper::IsRect() const
 {
@@ -464,7 +464,7 @@ bool Wallpaper::IsRect() const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 bool Wallpaper::IsFixed() const
 {
@@ -474,7 +474,7 @@ bool Wallpaper::IsFixed() const
         return (!mpImplWallpaper->mpBitmap && !mpImplWallpaper->mpGradient);
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Wallpaper::IsScrollable() const
 {
@@ -488,18 +488,18 @@ bool Wallpaper::IsScrollable() const
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
 {
     DBG_ASSERT( rWallpaper.mpImplWallpaper->mnRefCount < 0xFFFFFFFE, "Wallpaper: RefCount overflow" );
 
-    // first increment reference counter, in order to self assign
+    
     if ( rWallpaper.mpImplWallpaper->mnRefCount )
         rWallpaper.mpImplWallpaper->mnRefCount++;
 
-    // if ImpData are not static then delete them if it is the last reference,
-    // otherwise decrement reference counter
+    
+    
     if ( mpImplWallpaper->mnRefCount )
     {
         if ( mpImplWallpaper->mnRefCount == 1 )
@@ -513,7 +513,7 @@ Wallpaper& Wallpaper::operator=( const Wallpaper& rWallpaper )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
 {
@@ -546,7 +546,7 @@ bool Wallpaper::operator==( const Wallpaper& rWallpaper ) const
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper )
 {
@@ -554,7 +554,7 @@ SvStream& ReadWallpaper( SvStream& rIStm, Wallpaper& rWallpaper )
     return ReadImplWallpaper( rIStm, *rWallpaper.mpImplWallpaper );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& WriteWallpaper( SvStream& rOStm, const Wallpaper& rWallpaper )
 {

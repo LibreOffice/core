@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -74,7 +74,7 @@ sal_Int32 sw_CalcCaseMap( const SwFont& rFnt,
     const sal_Int32 nEnd = nOfst + nLen;
     OSL_ENSURE( nEnd <= rOrigString.getLength(), "sw_CalcCaseMap: Wrong parameters" );
 
-    // special case for title case:
+    
     const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
                         g_pBreakIt->GetBreakIter().is();
     for ( sal_Int32 i = nOfst; i < nEnd; ++i )
@@ -105,8 +105,8 @@ class SwDoCapitals
 {
 protected:
     SwDrawTextInfo &rInf;
-    SwCapitalInfo* pCapInf; // referes to additional information
-                           // required by the ::Do function
+    SwCapitalInfo* pCapInf; 
+                           
     SwDoCapitals ( SwDrawTextInfo &rInfo ) : rInf( rInfo ), pCapInf( 0 ) { }
     ~SwDoCapitals() {}
 public:
@@ -153,7 +153,7 @@ void SwDoGetCapitalSize::Do()
 
 Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
 {
-    // Start:
+    
     const long nOldKern = rInf.GetKern();
     rInf.SetKern( CheckKerning() );
     Point aPos;
@@ -164,7 +164,7 @@ Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
     DoOnCapitals( aDo );
     Size aTxtSize( aDo.GetSize() );
 
-    // End:
+    
     if( !aTxtSize.Height() )
     {
         SV_STAT( nGetTextSize );
@@ -214,8 +214,8 @@ void SwDoGetCapitalBreak::Do()
             if (m_nBreak > nEnd || m_nBreak < 0)
                 m_nBreak = nEnd;
 
-            // m_nBreak may be relative to the display string. It has to be
-            // calculated relative to the original string:
+            
+            
             if ( GetCapInf()  )
             {
                 if ( GetCapInf()->nLen != rInf.GetLen() )
@@ -240,7 +240,7 @@ sal_Int32 SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
     const SwScriptInfo* pScript, const OUString& rTxt, long const nTextWidth,
     const sal_Int32 nIdx, const sal_Int32 nLen )
 {
-    // Start:
+    
     Point aPos( 0, 0 );
     SwDrawTextInfo aInfo(pSh, *(OutputDevice*)pOut, pScript, rTxt, nIdx, nLen,
         0, sal_False);
@@ -248,7 +248,7 @@ sal_Int32 SwFont::GetCapitalBreak( SwViewShell* pSh, const OutputDevice* pOut,
     aInfo.SetSpace( 0 );
     aInfo.SetWrong( NULL );
     aInfo.SetGrammarCheck( NULL );
-    aInfo.SetSmartTags( NULL ); // SMARTTAGS
+    aInfo.SetSmartTags( NULL ); 
     aInfo.SetDrawSpace( sal_False );
     aInfo.SetKern( CheckKerning() );
     aInfo.SetKanaComp( pScript ? 0 : 100 );
@@ -345,8 +345,8 @@ void SwDoDrawCapital::DrawSpace( Point &rPos )
 
 void SwSubFont::DrawCapital( SwDrawTextInfo &rInf )
 {
-    // Es wird vorausgesetzt, dass rPos bereits kalkuliert ist!
-    // hochgezogen in SwFont: const Point aPos( CalcPos(rPos) );
+    
+    
     rInf.SetDrawSpace( GetUnderline() != UNDERLINE_NONE ||
                        GetOverline()  != UNDERLINE_NONE ||
                        GetStrikeout() != STRIKEOUT_NONE );
@@ -470,7 +470,7 @@ void SwDoDrawStretchCapital::Do()
 
     if( rInf.GetLen() )
     {
-        // 4023: Kapitaelchen und Kerning.
+        
         long nDiff = long(nOrgWidth) - long(nCapWidth);
         if( nDiff )
         {
@@ -493,7 +493,7 @@ void SwDoDrawStretchCapital::Do()
         if ( rInf.GetFrm()->IsVertical() )
             rInf.GetFrm()->SwitchHorizontalToVertical( aPos );
 
-        // Optimierung:
+        
         if( 1 >= rInf.GetLen() )
             GetOut().DrawText( aPos, rInf.GetText(), rInf.GetIdx(),
                 rInf.GetLen() );
@@ -510,8 +510,8 @@ void SwDoDrawStretchCapital::Do()
 
 void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
 {
-    // Es wird vorausgesetzt, dass rPos bereits kalkuliert ist!
-    // hochgezogen in SwFont: const Point aPos( CalcPos(rPos) );
+    
+    
 
     if( rInf.GetLen() == COMPLETE_STRING )
         rInf.SetLen( rInf.GetText().getLength() );
@@ -547,9 +547,9 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     sal_Int32 nOldPos = nPos;
     nMaxPos = nMaxPos + nPos;
 
-    // #107816#
-    // Look if the length of the original text and the ToUpper-converted
-    // text is different. If yes, do special handling.
+    
+    
+    
     OUString aNewText;
     SwCapitalInfo aCapInf(oldText);
     sal_Bool bCaseMapLengthDiffers(aTxt.getLength() != oldText.getLength());
@@ -586,7 +586,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         else
             pSpaceFont = pLastFont;
 
-        // Wir basteln uns einen Font fuer die Grossbuchstaben:
+        
         aFont.SetUnderline( UNDERLINE_NONE );
         aFont.SetOverline( UNDERLINE_NONE );
         aFont.SetStrikeout( STRIKEOUT_NONE );
@@ -599,11 +599,11 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     else
         pBigFont = pLastFont;
 
-    // Older LO versions had 66 as the small caps percentage size, later changed to 80,
-    // therefore a backwards compatibility option is kept (otherwise layout is changed).
-    // NOTE: There are more uses of SMALL_CAPS_PERCENTAGE in editeng, but it seems they
-    // do not matter for Writer (and if they did it'd be pretty ugly to propagate
-    // the option there).
+    
+    
+    
+    
+    
     int smallCapsPercentage = smallCapsPercentage66 ? 66 : SMALL_CAPS_PERCENTAGE;
     aFont.SetProportion( (aFont.GetPropr() * smallCapsPercentage ) / 100L );
     pMagic2 = NULL;
@@ -635,19 +635,19 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     while( nOldPos < nMaxPos )
     {
 
-        //  The lower ones...
+        
         if( nOldPos != nPos )
         {
             SV_STAT( nGetTextSize );
             pLastFont = pSmallFont;
             pLastFont->SetDevFont( rDo.GetInf().GetShell(), rDo.GetOut() );
 
-            // #107816#, #i14820#
+            
             if( bCaseMapLengthDiffers )
             {
-                // Build an own 'changed' string for the given part of the
-                // source string and use it. That new string may differ in length
-                // from the source string.
+                
+                
+                
                 const OUString aSnippet(oldText.copy(nOldPos, nPos - nOldPos));
                 aNewText = CalcCaseMap( aSnippet );
                 aCapInf.nIdx = nOldPos;
@@ -683,7 +683,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
         if( !nPos )
             nPos = nMaxPos;
 #endif
-        // The upper ones...
+        
         if( nOldPos != nPos )
         {
             const long nSpaceAdd = rDo.GetInf().GetSpace() / SPACING_PRECISION_FACTOR;
@@ -709,12 +709,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                         pLastFont->SetDevFont( rDo.GetInf().GetShell(),
                                                rDo.GetOut() );
 
-                        // #107816#, #i14820#
+                        
                         if( bCaseMapLengthDiffers )
                         {
-                            // Build an own 'changed' string for the given part of the
-                            // source string and use it. That new string may differ in length
-                            // from the source string.
+                            
+                            
+                            
                             const OUString aSnippet(oldText.copy(nOldPos, nTmp - nOldPos));
                             aNewText = CalcCaseMap( aSnippet );
                             aCapInf.nIdx = nOldPos;
@@ -750,12 +750,12 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                     nTmp = nPos;
                 if( nTmp > nOldPos )
                 {
-                      // #107816#, #i14820#
+                      
                     if( bCaseMapLengthDiffers )
                     {
-                        // Build an own 'changed' string for the given part of the
-                        // source string and use it. That new string may differ in length
-                        // from the source string.
+                        
+                        
+                        
                         const OUString aSnippet(oldText.copy(nOldPos, nTmp - nOldPos));
                         aNewText = CalcCaseMap( aSnippet );
                         aCapInf.nIdx = nOldPos;
@@ -802,7 +802,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 #endif
     }
 
-    // Aufraeumen:
+    
     if( pBigFont != pOldLast )
         delete pBigFontAccess;
 

@@ -40,7 +40,7 @@ using namespace ::cppu;
 
 namespace dbaccess
 {
-// ODataSettings
+
 void ODataSettings::registerPropertiesFor(ODataSettings_Base* _pItem)
 {
     if ( m_bQuery )
@@ -204,6 +204,6 @@ void ODataSettings::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefau
     }
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

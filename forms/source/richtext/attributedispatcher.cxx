@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,17 +14,17 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "attributedispatcher.hxx"
 
 #include <editeng/editview.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
@@ -32,10 +32,10 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
-    //= OAttributeDispatcher
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OAttributeDispatcher::OAttributeDispatcher( EditView& _rView, AttributeId _nAttributeId, const URL& _rURL,
             IMultiAttributeDispatcher* _pMasterDispatcher )
         :ORichTextFeatureDispatcher( _rView, _rURL )
@@ -45,21 +45,21 @@ namespace frm
         OSL_ENSURE( m_pMasterDispatcher, "OAttributeDispatcher::OAttributeDispatcher: invalid master dispatcher!" );
     }
 
-    //--------------------------------------------------------------------
+    
     OAttributeDispatcher::~OAttributeDispatcher( )
     {
         acquire();
         dispose();
     }
 
-    //--------------------------------------------------------------------
+    
     void OAttributeDispatcher::disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
     {
         m_pMasterDispatcher = NULL;
         ORichTextFeatureDispatcher::disposing( _rClearBeforeNotify );
     }
 
-    //--------------------------------------------------------------------
+    
     void OAttributeDispatcher::fillFeatureEventFromAttributeState( FeatureStateEvent& _rEvent, const AttributeState& _rState ) const
     {
         if ( _rState.eSimpleState == eChecked )
@@ -68,7 +68,7 @@ namespace frm
             _rEvent.State <<= (sal_Bool)sal_False;
     }
 
-    //--------------------------------------------------------------------
+    
     FeatureStateEvent OAttributeDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent( ORichTextFeatureDispatcher::buildStatusEvent() );
@@ -83,7 +83,7 @@ namespace frm
         return aEvent;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OAttributeDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -109,7 +109,7 @@ namespace frm
             m_pMasterDispatcher->executeAttribute( m_nAttributeId, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     void OAttributeDispatcher::onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& /*_rState*/ )
     {
         OSL_ENSURE( _nAttributeId == m_nAttributeId, "OAttributeDispatcher::onAttributeStateChanged: wrong attribute!" );
@@ -121,8 +121,8 @@ namespace frm
             doNotify( static_cast< XStatusListener* >( aIter.next() ), aEvent );
     }
 
-//........................................................................
-}   // namespace frm
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

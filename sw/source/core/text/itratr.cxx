@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -70,7 +70,7 @@ void SwAttrIter::Chg( SwTxtAttr *pHt )
 void SwAttrIter::Rst( SwTxtAttr *pHt )
 {
     OSL_ENSURE( pHt && pFnt, "No attribute of font available for reset");
-    // get top from stack after removing pHt
+    
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, false );
     else
@@ -115,7 +115,7 @@ bool SwAttrIter::SeekAndChgAttrIter( const sal_Int32 nNewPos, OutputDevice* pOut
     }
     if( bChg )
     {
-        // if the change counter is zero, we know the MagicNo of the wanted font
+        
         if ( !nChgCnt && !nPropFont )
             pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
                 aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
@@ -139,7 +139,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     if ( pRedln && pRedln->ExtOn() )
         pRedln->LeaveExtend( *pFnt, 0 );
 
-    // reset font to its original state
+    
     aAttrHandler.Reset();
     aAttrHandler.ResetFont( *pFnt );
 
@@ -158,11 +158,11 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     if ( pHints && !bParaFont )
     {
         SwTxtAttr *pTxtAttr;
-        // While we've not reached the end of the StartArray && the TextAttribute starts at position 0...
+        
         while ( ( nStartIndex < pHints->GetStartCount() ) &&
                 !(*(pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()) )
         {
-            // open the TextAttributes
+            
             Chg( pTxtAttr );
             nStartIndex++;
         }
@@ -177,7 +177,7 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     }
     if( bChg )
     {
-        // if the application counter is zero, we know the MagicNo of the wanted font
+        
         if ( !nChgCnt && !nPropFont )
             pFnt->SetMagic( aMagicNo[ pFnt->GetActual() ],
                 aFntIdx[ pFnt->GetActual() ], pFnt->GetActual() );
@@ -186,27 +186,27 @@ bool SwAttrIter::SeekStartAndChgAttrIter( OutputDevice* pOut, const bool bParaFo
     return bChg;
 }
 
-// AMA: New AttrIter Nov 94
+
 void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
 {
     SwTxtAttr *pTxtAttr;
 
-    if ( nStartIndex ) // wenn ueberhaupt schon Attribute geoeffnet wurden...
+    if ( nStartIndex ) 
     {
-        // Schliesse Attr, die z. Z. geoeffnet sind, vor nNewPos+1 aber enden.
+        
 
-        // Solange wir noch nicht am Ende des EndArrays angekommen sind &&
-        // das TextAttribut vor oder an der neuen Position endet ...
+        
+        
         while ( ( nEndIndex < pHints->GetEndCount() ) &&
                 (*(pTxtAttr=pHints->GetEnd(nEndIndex))->GetAnyEnd()<=nNewPos))
         {
-            // schliesse die TextAttribute, deren StartPos vor
-            // oder an der alten nPos lag, die z.Z. geoeffnet sind.
+            
+            
             if (*pTxtAttr->GetStart() <= nPos)  Rst( pTxtAttr );
             nEndIndex++;
         }
     }
-    else // skip the not opended ends
+    else 
     {
         while ( (nEndIndex < pHints->GetEndCount()) &&
                 (*pHints->GetEnd(nEndIndex)->GetAnyEnd() <= nNewPos) )
@@ -214,13 +214,13 @@ void SwAttrIter::SeekFwd( const sal_Int32 nNewPos )
             nEndIndex++;
         }
     }
-    // Solange wir noch nicht am Ende des StartArrays angekommen sind &&
-    // das TextAttribut vor oder an der neuen Position beginnt ...
+    
+    
     while ( ( nStartIndex < pHints->GetStartCount() ) &&
            (*(pTxtAttr=pHints->GetStart(nStartIndex))->GetStart()<=nNewPos))
     {
 
-        // open the TextAttributes, whose ends lie behind the new position
+        
         if ( *pTxtAttr->GetAnyEnd() > nNewPos )  Chg( pTxtAttr );
         nStartIndex++;
     }
@@ -239,7 +239,7 @@ bool SwAttrIter::Seek( const sal_Int32 nNewPos )
             if( pRedln )
                 pRedln->Clear( NULL );
 
-            // reset font to its original state
+            
             aAttrHandler.Reset();
             aAttrHandler.ResetFont( *pFnt );
 
@@ -248,9 +248,9 @@ bool SwAttrIter::Seek( const sal_Int32 nNewPos )
             nStartIndex = nEndIndex = nPos = 0;
             nChgCnt = 0;
 
-            // Attention!
-            // resetting the font here makes it necessary to apply any
-            // changes for extended input directly to the font
+            
+            
+            
             if ( pRedln && pRedln->ExtOn() )
             {
                 pRedln->UpdateExtFont( *pFnt );
@@ -277,7 +277,7 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
     sal_Int32 nNext = COMPLETE_STRING;
     if( pHints )
     {
-        // are there attribute starts left?
+        
         for (sal_uInt16 i = nStartIndex; i < pHints->GetStartCount(); ++i)
         {
             SwTxtAttr *const pAttr(pHints->GetStart(i));
@@ -287,20 +287,20 @@ sal_Int32 SwAttrIter::GetNextAttr( ) const
                 break;
             }
         }
-        // are there attribute ends left?
+        
         for (sal_uInt16 i = nEndIndex; i < pHints->GetEndCount(); ++i)
         {
             SwTxtAttr *const pAttr(pHints->GetEnd(i));
             if (!pAttr->IsFormatIgnoreEnd())
             {
                 sal_Int32 const nNextEnd = *pAttr->GetAnyEnd();
-                nNext = std::min(nNext, nNextEnd); // pick nearest one
+                nNext = std::min(nNext, nNextEnd); 
                 break;
             }
         }
     }
     if (m_pTxtNode!=NULL) {
-        // TODO maybe use hints like FieldHints for this instead of looking at the text...
+        
         const sal_Int32 l = nNext<m_pTxtNode->Len() ? nNext : m_pTxtNode->Len();
         sal_Int32 p=nPos;
         while (p<l && m_pTxtNode->GetTxt()[p] != CH_TXT_ATR_FIELDSTART
@@ -404,13 +404,13 @@ bool SwTxtNode::IsSymbol( const sal_Int32 nBegin ) const
 class SwMinMaxNodeArgs
 {
 public:
-    sal_uLong nMaxWidth;    // sum of all frame widths
-    long nMinWidth;         // biggest frame
-    long nLeftRest;         // space not already covered by frames in the left margin
-    long nRightRest;        // space not already covered by frames in the right margin
-    long nLeftDiff;         // Min/Max-difference of the frame in the left margin
-    long nRightDiff;        // Min/Max-difference of the frame in the right margin
-    sal_uLong nIndx;        // index of the node
+    sal_uLong nMaxWidth;    
+    long nMinWidth;         
+    long nLeftRest;         
+    long nRightRest;        
+    long nLeftDiff;         
+    long nRightDiff;        
+    sal_uLong nIndx;        
     void Minimum( long nNew ) { if( nNew > nMinWidth ) nMinWidth = nNew; }
 };
 
@@ -440,7 +440,7 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
         MSHORT nWhich = pNd->Which();
         if( RES_DRAWFRMFMT != nWhich )
         {
-            // Does the frame contain a table at the start or the end?
+            
             const SwNodes& rNodes = pNd->GetDoc()->GetNodes();
             const SwFmtCntnt& rFlyCntnt = pNd->GetCntnt();
             sal_uLong nStt = rFlyCntnt.GetCntntIdx()->GetIndex();
@@ -499,9 +499,9 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
             return;
         }
 
-        // Frames, which are left- or right-aligned are only party considered
-        // when calculating the maximum, since the border is already being considered.
-        // Only if the frame extends into the text body, this part is being added
+        
+        
+        
         switch( eHoriOri )
         {
             case text::HoriOrientation::RIGHT:
@@ -543,8 +543,8 @@ static void lcl_MinMaxNode( SwFrmFmt* pNd, SwMinMaxNodeArgs* pIn )
 
 #define FLYINCNT_MIN_WIDTH 284
 
-// changing this method very likely requires changing of
-// "GetScalingOfSelectedText"
+
+
 void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMax,
                                sal_uLong& rAbsMin, OutputDevice* pOut ) const
 {
@@ -568,7 +568,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     const SvxLRSpaceItem &rSpace = GetSwAttrSet().GetLRSpace();
     long nLROffset = rSpace.GetTxtLeft() + GetLeftMarginWithNum( true );
     short nFLOffs;
-    // For enumerations a negative first line indentation is probably filled already
+    
     if( !GetFirstLineOfsWithNum( nFLOffs ) || nFLOffs > nLROffset )
         nLROffset = nFLOffs;
 
@@ -705,7 +705,7 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
  * It were cleaner and maybe neccessary later on to iterate over the content
  * of the text frame and call GetMinMaxSize recursively
  * --------------------------------------------------------------------------*/
-                                nAktWidth = FLYINCNT_MIN_WIDTH; // 0.5 cm
+                                nAktWidth = FLYINCNT_MIN_WIDTH; 
                                 if( (long)rMax < KSHRT_MAX )
                                     rMax = KSHRT_MAX;
                             }
@@ -766,8 +766,8 @@ void SwTxtNode::GetMinMaxSize( sal_uLong nIndex, sal_uLong& rMin, sal_uLong &rMa
     rMax += aNodeArgs.nMaxWidth;
     rMax += nLROffset;
     rMax += nAdd;
-    if( rMax < rMin ) // z.B. Rahmen mit Durchlauf gehen zunaechst nur
-        rMax = rMin;  // in das Minimum ein
+    if( rMax < rMin ) 
+        rMax = rMin;  
     pOut->SetMapMode( aOldMap );
 }
 
@@ -794,7 +794,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
         pOut = &pSh->GetRefDev();
     else
     {
-        // Access via StarONE, there's no need for an existing or active shell
+        
         if ( getIDocumentSettingAccess()->get(IDocumentSettingAccess::HTML_MODE) )
             pOut = GetpApp()->GetDefaultDevice();
         else
@@ -822,7 +822,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
 
         if ( nStt == aBound.startPos )
         {
-            // cursor is at left or right border of word
+            
             pOut->SetMapMode( aOldMap );
             return 100;
         }
@@ -840,9 +840,9 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
 
-    // We do not want scaling attributes to be considered during this
-    // calculation. For this, we push a temporary scaling attribute with
-    // scaling value 100 and priority flag on top of the scaling stack
+    
+    
+    
     SwAttrHandler& rAH = aIter.GetAttrHandler();
     SvxCharScaleWidthItem aItem(100, RES_CHRATR_SCALEW);
     SwTxtAttrEnd aAttr( aItem, nStt, nEnd );
@@ -858,14 +858,14 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
     {
         aIter.SeekAndChgAttrIter( nIdx, pOut );
 
-        // scan for end of portion
+        
         const sal_Int32 nNextChg = std::max(aIter.GetNextAttr(), aScriptInfo.NextScriptChg( nIdx ));
 
         sal_Int32 nStop = nIdx;
         sal_Unicode cChar = CH_BLANK;
         SwTxtAttr* pHint = NULL;
 
-        // stop at special characters in [ nIdx, nNextChg ]
+        
         while( nStop < nEnd && nStop < nNextChg )
         {
             cChar = m_Text[nStop];
@@ -887,7 +887,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
                 ++nStop;
         }
 
-        // calculate text widths up to cChar
+        
         if ( nStop > nIdx )
         {
             SwDrawTextInfo aDrawInf( pSh, *pOut, 0, GetTxt(), nIdx, nStop - nIdx );
@@ -905,7 +905,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
         }
         else if ( cChar == CH_TAB )
         {
-            // tab receives width of one space
+            
             OUString sTmp( CH_BLANK );
             SwDrawTextInfo aDrawInf( pSh, *pOut, 0, sTmp, 0, 1 );
             nProWidth += aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();
@@ -946,16 +946,16 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
 
             default:
                 {
-                    // any suggestions for a default action?
+                    
                 }
-            } // end of switch
+            } 
             nIdx++;
-        } // end of while
+        } 
     }
 
     nWidth = std::max( nWidth, nProWidth );
 
-    // search for a text frame this node belongs to
+    
     SwIterator<SwTxtFrm,SwTxtNode> aFrmIter( *this );
     SwTxtFrm* pFrm = 0;
     for( SwTxtFrm* pTmpFrm = aFrmIter.First(); pTmpFrm; pTmpFrm = aFrmIter.Next() )
@@ -969,7 +969,7 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
             }
         }
 
-    // search for the line containing nStt
+    
     if ( pFrm && pFrm->HasPara() )
     {
         SwTxtInfo aInf( pFrm );
@@ -979,8 +979,8 @@ sal_uInt16 SwTxtNode::GetScalingOfSelectedText( sal_Int32 nStt, sal_Int32 nEnd )
         return (sal_uInt16)( nWidth ?
             ( ( 100 * aLine.GetCurr()->Height() ) / nWidth ) : 0 );
     }
-    // no frame or no paragraph, we take the height of the character
-    // at nStt as line height
+    
+    
 
     aIter.SeekAndChgAttrIter( nStt, pOut );
     pOut->SetMapMode( aOldMap );
@@ -1011,11 +1011,11 @@ sal_uInt16 SwTxtNode::GetWidthOfLeadingTabs() const
         SwPosition aPos( *this );
         aPos.nContent += nIdx;
 
-        // Find the non-follow text frame:
+        
         SwIterator<SwTxtFrm,SwTxtNode> aIter( *this );
         for( SwTxtFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
-            // Only consider master frames:
+            
             if ( !pFrm->IsFollow() )
             {
                 SWRECTFN( pFrm )

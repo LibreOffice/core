@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@ namespace {
 
 namespace sd { namespace framework {
 
-//===== ToolBarModule =========================================================
+
 
 ToolBarModule::ToolBarModule (
     const Reference<frame::XController>& rxController)
@@ -50,7 +50,7 @@ ToolBarModule::ToolBarModule (
       mpToolBarManagerLock(),
       mbMainViewSwitchUpdatePending(false)
 {
-    // Tunnel through the controller to obtain a ViewShellBase.
+    
     Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
     if (xTunnel.is())
     {
@@ -127,10 +127,10 @@ void SAL_CALL ToolBarModule::notifyConfigurationChange (
 
             case gnResourceActivationRequestEvent:
             case gnResourceDeactivationRequestEvent:
-                // Remember the request for the activation or deactivation
-                // of the center pane view.  When that happens then on end
-                // of the next configuration update the set of visible tool
-                // bars will be updated.
+                
+                
+                
+                
                 if ( ! mbMainViewSwitchUpdatePending)
                     if (rEvent.ResourceId->getResourceURL().match(
                         FrameworkHelper::msViewURLPrefix)
@@ -147,15 +147,15 @@ void SAL_CALL ToolBarModule::notifyConfigurationChange (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 
 void ToolBarModule::HandleUpdateStart (void)
 {
-    // Lock the ToolBarManager and tell it to lock the ViewShellManager as
-    // well.  This way the ToolBarManager can optimize the releasing of
-    // locks and arranging of updates of both tool bars and the view shell
-    // stack.
+    
+    
+    
+    
     if (mpBase != NULL)
     {
         ::boost::shared_ptr<ToolBarManager> pToolBarManager (mpBase->GetToolBarManager());
@@ -172,10 +172,10 @@ void ToolBarModule::HandleUpdateEnd (void)
     if (mbMainViewSwitchUpdatePending)
     {
         mbMainViewSwitchUpdatePending = false;
-        // Update the set of visible tool bars and deactivate those that are
-        // no longer visible.  This is done before the old view shell is
-        // destroyed in order to avoid unnecessary updates of those tool
-        // bars.
+        
+        
+        
+        
         ::boost::shared_ptr<ToolBarManager> pToolBarManager (mpBase->GetToolBarManager());
         ::boost::shared_ptr<FrameworkHelper> pFrameworkHelper (
             FrameworkHelper::Instance(*mpBase));
@@ -196,10 +196,10 @@ void ToolBarModule::HandleUpdateEnd (void)
         }
     }
 
-    // Releasing the update lock of the ToolBarManager  will let the
-    // ToolBarManager with the help of the ViewShellManager take care of
-    // updating tool bars and view shell with the minimal amount of
-    // shell stack modifications and tool bar updates.
+    
+    
+    
+    
     mpToolBarManagerLock.reset();
 }
 
@@ -212,7 +212,7 @@ void SAL_CALL ToolBarModule::disposing (const lang::EventObject& rEvent)
     if (mxConfigurationController.is()
         && rEvent.Source == mxConfigurationController)
     {
-        // Without the configuration controller this class can do nothing.
+        
         mxConfigurationController = NULL;
         dispose();
     }
@@ -221,6 +221,6 @@ void SAL_CALL ToolBarModule::disposing (const lang::EventObject& rEvent)
 
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

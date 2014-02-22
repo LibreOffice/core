@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -79,27 +79,27 @@ namespace io_stm {
         Pump();
         virtual ~Pump();
 
-        // XActiveDataSource
+        
         virtual void SAL_CALL setOutputStream( const Reference< ::com::sun::star::io::XOutputStream >& xOutput ) throw();
         virtual Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream() throw();
 
-        // XActiveDataSink
+        
         virtual void SAL_CALL setInputStream( const Reference< ::com::sun::star::io::XInputStream >& xStream ) throw();
         virtual Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream() throw();
 
-        // XActiveDataControl
+        
         virtual void SAL_CALL addListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw();
         virtual void SAL_CALL removeListener( const Reference< ::com::sun::star::io::XStreamListener >& xListener ) throw();
         virtual void SAL_CALL start() throw( RuntimeException );
         virtual void SAL_CALL terminate() throw();
 
-        // XConnectable
+        
         virtual void SAL_CALL setPredecessor( const Reference< ::com::sun::star::io::XConnectable >& xPred ) throw();
         virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getPredecessor() throw();
         virtual void SAL_CALL setSuccessor( const Reference< ::com::sun::star::io::XConnectable >& xSucc ) throw();
         virtual Reference< ::com::sun::star::io::XConnectable > SAL_CALL getSuccessor() throw();
 
-    public: // XServiceInfo
+    public: 
         virtual OUString    SAL_CALL getImplementationName() throw(  );
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(void) throw(  );
         virtual sal_Bool     SAL_CALL supportsService(const OUString& ServiceName) throw(  );
@@ -113,7 +113,7 @@ Pump::Pump() : m_aThread( 0 ),
 
 Pump::~Pump()
 {
-    // exit gracefully
+    
     if( m_aThread )
     {
         osl_joinWithThread( m_aThread );
@@ -202,7 +202,7 @@ void Pump::fireTerminated()
 
 void Pump::close()
 {
-    // close streams and release references
+    
     Reference< XInputStream > rInput;
     Reference< XOutputStream > rOutput;
     {
@@ -223,7 +223,7 @@ void Pump::close()
         }
         catch( Exception & )
         {
-            // go down calm
+            
         }
     }
     if( rOutput.is() )
@@ -234,7 +234,7 @@ void Pump::close()
         }
         catch( Exception & )
         {
-            // go down calm
+            
         }
     }
 }
@@ -297,13 +297,13 @@ void Pump::run()
     }
     catch ( const com::sun::star::uno::Exception &e )
     {
-        // we are the last on the stack.
-        // this is to avoid crashing the program, when e.g. a bridge crashes
+        
+        
         SAL_WARN("io.streams","com.sun.star.comp.stoc.Pump: unexpected exception during calling listeners" << e.Message);
     }
 }
 
-// ------------------------------------------------------------
+
 
 /*
  * XConnectable
@@ -315,7 +315,7 @@ void Pump::setPredecessor( const Reference< XConnectable >& xPred ) throw()
     m_xPred = xPred;
 }
 
-// ------------------------------------------------------------
+
 
 Reference< XConnectable > Pump::getPredecessor() throw()
 {
@@ -323,7 +323,7 @@ Reference< XConnectable > Pump::getPredecessor() throw()
     return m_xPred;
 }
 
-// ------------------------------------------------------------
+
 
 void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw()
 {
@@ -331,7 +331,7 @@ void Pump::setSuccessor( const Reference< XConnectable >& xSucc ) throw()
     m_xSucc = xSucc;
 }
 
-// ------------------------------------------------------------
+
 
 Reference< XConnectable > Pump::getSuccessor() throw()
 {
@@ -339,7 +339,7 @@ Reference< XConnectable > Pump::getSuccessor() throw()
     return m_xSucc;
 }
 
-// -----------------------------------------------------------------
+
 
 /*
  * XActiveDataControl
@@ -350,14 +350,14 @@ void Pump::addListener( const Reference< XStreamListener >& xListener ) throw()
     m_cnt.addInterface( xListener );
 }
 
-// ------------------------------------------------------------
+
 
 void Pump::removeListener( const Reference< XStreamListener >& xListener ) throw()
 {
     m_cnt.removeInterface( xListener );
 }
 
-// ------------------------------------------------------------
+
 
 void Pump::start() throw( RuntimeException )
 {
@@ -365,7 +365,7 @@ void Pump::start() throw( RuntimeException )
     m_aThread = osl_createSuspendedThread((oslWorkerFunction)Pump::static_run,this);
     if( m_aThread )
     {
-        // will be released by OPump::static_run
+        
         acquire();
         osl_resumeThread( m_aThread );
     }
@@ -377,13 +377,13 @@ void Pump::start() throw( RuntimeException )
     }
 }
 
-// ------------------------------------------------------------
+
 
 void Pump::terminate() throw()
 {
     close();
 
-    // wait for the worker to die
+    
     if( m_aThread )
         osl_joinWithThread( m_aThread );
 
@@ -391,7 +391,7 @@ void Pump::terminate() throw()
     fireClose();
 }
 
-// ------------------------------------------------------------
+
 
 /*
  * XActiveDataSink
@@ -404,10 +404,10 @@ void Pump::setInputStream( const Reference< XInputStream >& xStream ) throw()
     Reference< XConnectable > xConnect( xStream, UNO_QUERY );
     if( xConnect.is() )
         xConnect->setSuccessor( this );
-    // data transfer starts in XActiveDataControl::start
+    
 }
 
-// ------------------------------------------------------------
+
 
 Reference< XInputStream > Pump::getInputStream() throw()
 {
@@ -415,7 +415,7 @@ Reference< XInputStream > Pump::getInputStream() throw()
     return m_xInput;
 }
 
-// ------------------------------------------------------------
+
 
 /*
  * XActiveDataSource
@@ -428,7 +428,7 @@ void Pump::setOutputStream( const Reference< XOutputStream >& xOut ) throw()
     Reference< XConnectable > xConnect( xOut, UNO_QUERY );
     if( xConnect.is() )
         xConnect->setPredecessor( this );
-    // data transfer starts in XActiveDataControl::start
+    
 }
 
 Reference< XOutputStream > Pump::getOutputStream() throw()
@@ -437,19 +437,19 @@ Reference< XOutputStream > Pump::getOutputStream() throw()
     return m_xOutput;
 }
 
-// XServiceInfo
+
 OUString Pump::getImplementationName() throw(  )
 {
     return OPumpImpl_getImplementationName();
 }
 
-// XServiceInfo
+
 sal_Bool Pump::supportsService(const OUString& ServiceName) throw(  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > Pump::getSupportedServiceNames(void) throw(  )
 {
     return OPumpImpl_getSupportedServiceNames();

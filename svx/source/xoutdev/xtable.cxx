@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/XPropertyTable.hxx>
@@ -28,7 +28,7 @@
 
 using namespace com::sun::star;
 
-// Helper for other sub-classes to have easy-to-read constructors
+
 Color RGB_Color( ColorData nColorName )
 {
     Color aColor( nColorName );
@@ -36,7 +36,7 @@ Color RGB_Color( ColorData nColorName )
     return aRGBColor;
 }
 
-// class XColorEntry
+
 
 XColorEntry::XColorEntry(const Color& rColor, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -50,7 +50,7 @@ aColor(rOther.aColor)
 {
 }
 
-// class XLineEndEntry
+
 
 XLineEndEntry::XLineEndEntry(const basegfx::B2DPolyPolygon& rB2DPolyPolygon, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -64,7 +64,7 @@ XLineEndEntry::XLineEndEntry(const XLineEndEntry& rOther)
 {
 }
 
-// class XDashEntry
+
 
 XDashEntry::XDashEntry(const XDash& rDash, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -78,7 +78,7 @@ aDash(rOther.aDash)
 {
 }
 
-// class XHatchEntry
+
 
 XHatchEntry::XHatchEntry(const XHatch& rHatch, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -92,7 +92,7 @@ XHatchEntry::XHatchEntry(const XHatchEntry& rOther)
 {
 }
 
-// class XGradientEntry
+
 
 XGradientEntry::XGradientEntry(const XGradient& rGradient, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -106,7 +106,7 @@ XGradientEntry::XGradientEntry(const XGradientEntry& rOther)
 {
 }
 
-// class XBitmapEntry
+
 
 XBitmapEntry::XBitmapEntry(const GraphicObject& rGraphicObject, const OUString& rName)
 :   XPropertyEntry(rName),
@@ -130,12 +130,12 @@ XPropertyList::XPropertyList(
     mbListDirty      ( true ),
     mbEmbedInDocument( false )
 {
-//    fprintf (stderr, "Create type %d count %d\n", (int)meType, count++);
+
 }
 
 XPropertyList::~XPropertyList()
 {
-//    fprintf (stderr, "Destroy type %d count %d\n", (int)meType, --count);
+
     for( size_t i = 0, n = maList.size(); i < n; ++i )
         delete maList[ i ];
 
@@ -334,7 +334,7 @@ XPropertyList::CreatePropertyListFromURL( XPropertyListType t,
     return pList;
 }
 
-// catch people being silly with ref counting ...
+
 
 void* XPropertyList::operator new (size_t nCount)
 {

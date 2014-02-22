@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -88,8 +88,8 @@ public:
     {}
 
 private:
-    Empty1(Empty1 &); // not defined
-    void operator =(Empty1 &); // not defined
+    Empty1(Empty1 &); 
+    void operator =(Empty1 &); 
 
     virtual ~Empty1() {}
 };
@@ -146,8 +146,8 @@ public:
     {}
 
 private:
-    Empty2(Empty2 &); // not defined
-    void operator =(Empty2 &); // not defined
+    Empty2(Empty2 &); 
+    void operator =(Empty2 &); 
 
     virtual ~Empty2() {}
 };
@@ -239,8 +239,8 @@ public:
             css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
 private:
-    Full(Full &); // not defined
-    void operator =(Full &); // not defined
+    Full(Full &); 
+    void operator =(Full &); 
 
     virtual ~Full() {}
 
@@ -366,8 +366,8 @@ public:
     { return new Full(m_context); }
 
 private:
-    Supplier(Supplier &); // not defined
-    void operator =(Supplier &); // not defined
+    Supplier(Supplier &); 
+    void operator =(Supplier &); 
 
     virtual ~Supplier() {}
 

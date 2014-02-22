@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ColumnLineChartTypeTemplate.hxx"
@@ -122,7 +122,7 @@ struct StaticColumnLineChartTypeTemplateInfo : public rtl::StaticAggregate< uno:
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -143,7 +143,7 @@ ColumnLineChartTypeTemplate::ColumnLineChartTypeTemplate(
 ColumnLineChartTypeTemplate::~ColumnLineChartTypeTemplate()
 {}
 
-// ____ OPropertySet ____
+
 uno::Any ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -159,7 +159,7 @@ uno::Any ColumnLineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticColumnLineChartTypeTemplateInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnLineChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -202,8 +202,8 @@ void ColumnLineChartTypeTemplate::createChartTypes(
         else
             nNumberOfColumns = nNumberOfSeries - nNumberOfLines;
 
-        // Columns
-        // -------
+        
+        
         Reference< XChartType > xCT(
             xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
 
@@ -222,8 +222,8 @@ void ColumnLineChartTypeTemplate::createChartTypes(
             xDSCnt->setDataSeries( aColumnSeq );
         }
 
-        // Lines
-        // -----
+        
+        
         xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
         xCTCnt.set( rCoordSys[ 0 ], uno::UNO_QUERY_THROW );
         xCTCnt->addChartType( xCT );
@@ -253,11 +253,11 @@ void SAL_CALL ColumnLineChartTypeTemplate::applyStyle(
 {
     ChartTypeTemplate::applyStyle( xSeries, nChartTypeIndex, nSeriesIndex, nSeriesCount );
 
-    if( nChartTypeIndex==0 ) // columns
+    if( nChartTypeIndex==0 ) 
     {
         DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "BorderStyle", uno::makeAny( drawing::LineStyle_NONE ) );
     }
-    else if( nChartTypeIndex==1 ) // lines
+    else if( nChartTypeIndex==1 ) 
     {
         Reference< beans::XPropertySet > xProp( xSeries, uno::UNO_QUERY );
         if( xProp.is() )
@@ -276,7 +276,7 @@ StackMode ColumnLineChartTypeTemplate::getStackMode( sal_Int32 nChartTypeIndex )
     return StackMode_NONE;
 }
 
-// ____ XChartTypeTemplate ____
+
 sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
     const uno::Reference< XDiagram >& xDiagram,
     sal_Bool bAdaptProperties )
@@ -329,7 +329,7 @@ sal_Bool SAL_CALL ColumnLineChartTypeTemplate::matchesTemplate(
         {
             OSL_ASSERT( xColumnChartCooSys.is());
 
-            // check stackmode of bars
+            
             bResult = (xColumnChartCooSys->getDimension() == getDimension());
             if( bResult )
             {
@@ -408,7 +408,7 @@ Reference< XDataInterpreter > SAL_CALL ColumnLineChartTypeTemplate::getDataInter
     }
     else
     {
-        //todo...
+        
         OSL_FAIL( "number of lines may not be valid anymore in the datainterpreter" );
 
     }
@@ -424,12 +424,12 @@ uno::Sequence< OUString > ColumnLineChartTypeTemplate::getSupportedServiceNames_
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ColumnLineChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( ColumnLineChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ColumnLineChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

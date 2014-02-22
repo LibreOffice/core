@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,7 +49,7 @@ typedef WeakImplHelper3< lang::XServiceInfo,
                          XCurrentContext,
                          reflection::XProxyFactory > t_impl;
 
-//==============================================================================
+
 class TargetObject : public t_impl
 {
 public:
@@ -65,7 +65,7 @@ public:
     Any SAL_CALL queryInterface( Type const & type )
         throw (RuntimeException);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
         { return OUString("target"); }
     virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
@@ -74,17 +74,17 @@ public:
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (RuntimeException)
         { return Sequence< OUString >(); }
-    // XProxyFactory
+    
     virtual Reference< XAggregation > SAL_CALL createProxy(
         const Reference< XInterface > & xTarget ) throw (RuntimeException)
         { return Reference< XAggregation >( xTarget, UNO_QUERY ); }
-    // XCurrentContext
+    
     virtual Any SAL_CALL getValueByName( OUString const & name )
         throw (RuntimeException)
         { return makeAny( name ); }
 };
 
-//______________________________________________________________________________
+
 Any TargetObject::queryInterface( Type const & type )
     throw (RuntimeException)
 {
@@ -99,7 +99,7 @@ Any TargetObject::queryInterface( Type const & type )
 int TargetObject::s_obj = 0;
 
 
-//==============================================================================
+
 class TestMaster : public WeakImplHelper1< lang::XServiceInfo >
 {
     Reference< XAggregation > m_xProxyTarget;
@@ -129,7 +129,7 @@ public:
         return m_xProxyTarget->queryAggregation( rType );
     }
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
         { return OUString("master"); }
     virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
@@ -151,7 +151,7 @@ Reference< XInterface > TestMaster::create(
     Reference< XInterface > xRet( static_cast< OWeakObject * >( that ) );
     {
         Reference< XAggregation > xAgg( xProxyFac->createProxy( xTarget ) );
-        // ownership take over
+        
         that->m_xProxyTarget.set( xAgg, UNO_QUERY_THROW );
         that->m_xOtherProxyTargetBeforeSetDelegator.set(
             that->m_xProxyTarget, UNO_QUERY );
@@ -229,7 +229,7 @@ static void test_proxyfac(
     Reference< reflection::XProxyFactory > const & xProxyFac )
 {
     test_proxyfac_( xMaster, test, xProxyFac );
-    // proxy the proxy...
+    
     Reference< XInterface > xNew( TestMaster::create( xMaster, xProxyFac ) );
     test_proxyfac_(
         xNew, OUString( "master" ), xProxyFac );
@@ -275,7 +275,7 @@ SAL_IMPLEMENT_MAIN()
             Reference< XAggregation > x(
                 xProxyFac->createProxy(
                     static_cast< OWeakObject * >( new TargetObject ) ) );
-            // no call
+            
 
             {
             Reference< XInterface > xMaster( TestMaster::create( xProxyFac ) );
@@ -286,7 +286,7 @@ SAL_IMPLEMENT_MAIN()
             }
             {
             Reference< XInterface > xMaster( TestMaster::create( xProxyFac ) );
-            // no call
+            
             }
 
             {
@@ -304,7 +304,7 @@ SAL_IMPLEMENT_MAIN()
             Reference< XInterface > xMaster( TestMaster::create( xProxyFac ) );
             Reference< reflection::XProxyFactory > xSlave_lives_alone(
                 xMaster, UNO_QUERY_THROW );
-            // no call
+            
             }
 
             test_proxyfac(

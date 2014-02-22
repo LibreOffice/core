@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <oleembobj.hxx>
@@ -57,7 +57,7 @@
 using namespace ::com::sun::star;
 
 #ifdef WNT
-//----------------------------------------------
+
 void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
 {
     if ( m_pOleComponent )
@@ -83,7 +83,7 @@ void OleEmbeddedObject::SwitchComponentToRunningState_Impl()
     }
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
                                                         const uno::Sequence< embed::VerbDescriptor >& aVerbList )
 {
@@ -100,12 +100,12 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetReachableStatesList_Impl(
     return aStates;
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl( sal_Int32 nNewState )
 {
     SAL_WARN_IF( m_nObjectState == embed::EmbedStates::LOADED, "embeddedobj.ole", "Loaded object is switched to running state without verbs using!" );
 
-    // actually there will be only one verb
+    
     if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
     {
         uno::Sequence< sal_Int32 > aVerbs( 1 );
@@ -115,12 +115,12 @@ uno::Sequence< sal_Int32 > OleEmbeddedObject::GetIntermediateVerbsSequence_Impl(
     return uno::Sequence< sal_Int32 >();
 }
 #endif
-//----------------------------------------------
+
 void OleEmbeddedObject::MoveListeners()
 {
     if ( m_pInterfaceContainer )
     {
-        // move state change listeners
+        
         {
             ::cppu::OInterfaceContainerHelper* pStateChangeContainer =
                 m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< embed::XStateChangeListener >*) NULL ) );
@@ -145,7 +145,7 @@ void OleEmbeddedObject::MoveListeners()
             }
         }
 
-        // move event listeners
+        
         {
             ::cppu::OInterfaceContainerHelper* pEventContainer =
                 m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< document::XEventListener >*) NULL ) );
@@ -170,7 +170,7 @@ void OleEmbeddedObject::MoveListeners()
             }
         }
 
-        // move close listeners
+        
         {
             ::cppu::OInterfaceContainerHelper* pCloseContainer =
                 m_pInterfaceContainer->getContainer( ::getCppuType( ( const uno::Reference< util::XCloseListener >*) NULL ) );
@@ -200,7 +200,7 @@ void OleEmbeddedObject::MoveListeners()
     }
 }
 
-//----------------------------------------------
+
 uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( OUString& o_aStorageName )
 {
     uno::Reference< embed::XStorage > xResult;
@@ -224,7 +224,7 @@ uno::Reference< embed::XStorage > OleEmbeddedObject::CreateTemporarySubstorage( 
     return xResult;
 }
 
-//----------------------------------------------
+
 OUString OleEmbeddedObject::MoveToTemporarySubstream()
 {
     OUString aResult;
@@ -244,7 +244,7 @@ OUString OleEmbeddedObject::MoveToTemporarySubstream()
     return aResult;
 }
 
-//----------------------------------------------
+
 sal_Bool OleEmbeddedObject::TryToConvertToOOo()
 {
     sal_Bool bResult = sal_False;
@@ -260,12 +260,12 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
     {
         changeState( embed::EmbedStates::LOADED );
 
-        // the stream must be seekable
+        
         uno::Reference< io::XSeekable > xSeekable( m_xObjectStream, uno::UNO_QUERY_THROW );
         xSeekable->seek( 0 );
         OUString aFilterName = OwnView_Impl::GetFilterNameFromExtentionAndInStream( m_xFactory, OUString(), m_xObjectStream->getInputStream() );
 
-        // use the solution only for OOXML format currently
+        
         if ( !aFilterName.isEmpty()
           && ( aFilterName == "Calc MS Excel 2007 XML" || aFilterName == "Impress MS PowerPoint 2007 XML" || aFilterName == "MS Word 2007 XML" ) )
         {
@@ -285,7 +285,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
 
             if ( !aDocServiceName.isEmpty() )
             {
-                // create the model
+                
                 uno::Sequence< uno::Any > aArguments(1);
                 aArguments[0] <<= beans::NamedValue( OUString( "EmbeddedObject" ), uno::makeAny( (sal_Bool)sal_True ));
 
@@ -293,14 +293,14 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 uno::Reference< frame::XLoadable > xLoadable( xDocument, uno::UNO_QUERY_THROW );
                 uno::Reference< document::XStorageBasedDocument > xStorDoc( xDocument, uno::UNO_QUERY_THROW );
 
-                // let the model behave as embedded one
+                
                 uno::Reference< frame::XModel > xModel( xDocument, uno::UNO_QUERY_THROW );
                 uno::Sequence< beans::PropertyValue > aSeq( 1 );
                 aSeq[0].Name = "SetEmbedded";
                 aSeq[0].Value <<= sal_True;
                 xModel->attachResource( OUString(), aSeq );
 
-                // load the model from the stream
+                
                 uno::Sequence< beans::PropertyValue > aArgs( 5 );
                 aArgs[0].Name = "HierarchicalDocumentName";
                 aArgs[0].Value <<= m_aEntryName;
@@ -316,7 +316,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 xSeekable->seek( 0 );
                 xLoadable->load( aArgs );
 
-                // the model is successfully loaded, create a new storage and store the model to the storage
+                
                 uno::Reference< embed::XStorage > xTmpStorage = CreateTemporarySubstorage( aStorageName );
                 xStorDoc->storeToStorage( xTmpStorage, uno::Sequence< beans::PropertyValue >() );
                 xDocument->close( sal_True );
@@ -325,7 +325,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 xStorProps->getPropertyValue("MediaType") >>= aMediaType;
                 xTmpStorage->dispose();
 
-                // look for the related embedded object factory
+                
                 ::comphelper::MimeConfigurationHelper aConfigHelper( comphelper::getComponentContext(m_xFactory) );
                 OUString aEmbedFactory;
                 if ( !aMediaType.isEmpty() )
@@ -338,7 +338,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
 
                 uno::Reference< embed::XEmbedObjectCreator > xEmbCreator( xFact, uno::UNO_QUERY_THROW );
 
-                // now the object should be adjusted to become the wrapper
+                
                 nStep = 1;
                 uno::Reference< lang::XComponent > xComp( m_xObjectStream, uno::UNO_QUERY_THROW );
                 xComp->dispose();
@@ -354,21 +354,21 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                 nStep = 4;
                 m_xWrappedObject.set( xEmbCreator->createInstanceInitFromEntry( m_xParentStorage, m_aEntryName, uno::Sequence< beans::PropertyValue >(), uno::Sequence< beans::PropertyValue >() ), uno::UNO_QUERY_THROW );
 
-                bResult = sal_True; // the change is no more revertable
+                bResult = sal_True; 
                 try
                 {
                     m_xParentStorage->removeElement( aTmpStreamName );
                 }
                 catch( const uno::Exception& )
                 {
-                    // the success of the removing is not so important
+                    
                 }
             }
         }
     }
     catch( const uno::Exception& )
     {
-        // repair the object if necessary
+        
         switch( nStep )
         {
             case 4:
@@ -386,8 +386,8 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                         close( sal_True );
                     } catch( const uno::Exception& ) {}
 
-                    m_xParentStorage->dispose(); // ??? the storage has information loss, it should be closed without commiting!
-                    throw uno::RuntimeException(); // the repairing is not possible
+                    m_xParentStorage->dispose(); 
+                    throw uno::RuntimeException(); 
                 }
             case 2:
                 try
@@ -401,9 +401,9 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
                         close( sal_True );
                     } catch( const uno::Exception& ) {}
 
-                    throw uno::RuntimeException(); // the repairing is not possible
+                    throw uno::RuntimeException(); 
                 }
-                // no break as designed!
+                
 
             case 1:
             case 0:
@@ -417,7 +417,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
 
     if ( bResult )
     {
-        // the conversion was done successfully, now the additional initializations should happen
+        
 
         MoveListeners();
         m_xWrappedObject->setClientSite( m_xClientSite );
@@ -433,7 +433,7 @@ sal_Bool OleEmbeddedObject::TryToConvertToOOo()
     return bResult;
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         throw ( embed::UnreachableStateException,
                 embed::WrongStateException,
@@ -442,26 +442,26 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::changeState" );
 
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         xWrappedObject->changeState( nNewState );
         return;
     }
-    // end wrapping related part ====================
+    
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    // in case the object is already in requested state
+    
     if ( m_nObjectState == nNewState )
         return;
 
@@ -470,7 +470,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
     {
         if ( m_nTargetState != -1 )
         {
-            // means that the object is currently trying to reach the target state
+            
             throw embed::StateChangeInProgressException( OUString(),
                                                         uno::Reference< uno::XInterface >(),
                                                         m_nTargetState );
@@ -478,8 +478,8 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 
         TargetStateControl_Impl aControl( m_nTargetState, nNewState );
 
-        // TODO: additional verbs can be a problem, since nobody knows how the object
-        //       will behave after activation
+        
+        
 
         sal_Int32 nOldState = m_nObjectState;
         aGuard.clear();
@@ -490,13 +490,13 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
         {
             if ( nNewState == embed::EmbedStates::LOADED )
             {
-                // This means just closing of the current object
-                // If component can not be closed the object stays in loaded state
-                // and it holds reference to "incomplete" component
-                // If the object is switched to running state later
-                // the component will become "complete"
+                
+                
+                
+                
+                
 
-                // the loaded state must be set before, because of notifications!
+                
                 m_nObjectState = nNewState;
 
                 {
@@ -512,11 +512,11 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
             {
                 if ( m_nObjectState == embed::EmbedStates::LOADED )
                 {
-                    // if the target object is in loaded state and a different state is specified
-                    // as a new one the object first must be switched to running state.
+                    
+                    
 
-                    // the component can exist already in nonrunning state
-                    // it can be created during loading to detect type of object
+                    
+                    
                     CreateOleComponentAndLoad_Impl( m_pOleComponent );
 
                     SwitchComponentToRunningState_Impl();
@@ -540,16 +540,16 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                         return;
                 }
 
-                // so now the object is either switched from Active to Running state or vise versa
-                // the notification about object state change will be done asynchronously
+                
+                
                 if ( m_nObjectState == embed::EmbedStates::RUNNING && nNewState == embed::EmbedStates::ACTIVE )
                 {
-                    // execute OPEN verb, if object does not reach active state it is an object's problem
+                    
                     aGuard.clear();
                     m_pOleComponent->ExecuteVerb( embed::EmbedVerbs::MS_OLEVERB_OPEN );
                     aGuard.reset();
 
-                    // some objects do not allow to set the size even in running state
+                    
                     if ( m_pOleComponent && m_bHasSizeToSet )
                     {
                         aGuard.clear();
@@ -567,7 +567,7 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
                 {
                     aGuard.clear();
                     m_pOleComponent->CloseObject();
-                    m_pOleComponent->RunObject(); // Should not fail, the object already was active
+                    m_pOleComponent->RunObject(); 
                     aGuard.reset();
                     m_nObjectState = nNewState;
                 }
@@ -593,25 +593,25 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
     }
 }
 
-//----------------------------------------------
+
 uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getReachableStates" );
 
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         return xWrappedObject->getReachableStates();
     }
-    // end wrapping related part ====================
+    
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The object has no persistence!\n" ),
@@ -622,12 +622,12 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
     {
         if ( m_nObjectState == embed::EmbedStates::LOADED )
         {
-            // the list of supported verbs can be retrieved only when object is in running state
-            throw embed::NeedsRunningStateException(); // TODO:
+            
+            throw embed::NeedsRunningStateException(); 
         }
 
-        // the list of states can only be guessed based on standard verbs,
-        // since there is no way to detect what additional verbs do
+        
+        
         return GetReachableStatesList_Impl( m_pOleComponent->GetVerbList() );
     }
     else
@@ -637,29 +637,29 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
     }
 }
 
-//----------------------------------------------
+
 sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         return xWrappedObject->getCurrentState();
     }
-    // end wrapping related part ====================
+    
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The object has no persistence!\n" ),
                                         uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ) );
 
-    // TODO: Shouldn't we ask object? ( I guess no )
+    
     return m_nObjectState;
 }
 
@@ -680,15 +680,15 @@ namespace
         return nTotalRead != 0;
     }
 
-    //Dump the objects content to a tempfile, just the "CONTENTS" stream if
-    //there is one for non-compound documents, otherwise the whole content.
-    //On success a file is returned which must be removed by the caller
+    
+    
+    
     OUString lcl_ExtractObject(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory,
         ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > xObjectStream)
     {
         OUString sUrl;
 
-        // the solution is only active for Unix systems
+        
 #ifndef WNT
         uno::Reference <beans::XPropertySet> xNativeTempFile(
             io::TempFile::create(comphelper::getComponentContext(xFactory)),
@@ -697,7 +697,7 @@ namespace
 
         uno::Sequence< uno::Any > aArgs( 2 );
         aArgs[0] <<= xObjectStream;
-        aArgs[1] <<= (sal_Bool)sal_True; // do not create copy
+        aArgs[1] <<= (sal_Bool)sal_True; 
         uno::Reference< container::XNameContainer > xNameContainer(
             xFactory->createInstanceWithArguments(
                 OUString("com.sun.star.embed.OLESimpleStorage"),
@@ -710,7 +710,7 @@ namespace
         }
         catch (container::NoSuchElementException const&)
         {
-            // ignore
+            
         }
 
         sal_Bool bCopied = xCONTENTS.is() && lcl_CopyStream(xCONTENTS->getInputStream(), xStream->getOutputStream());
@@ -749,7 +749,7 @@ namespace
     }
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
@@ -759,19 +759,19 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::doVerb" );
 
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         xWrappedObject->doVerb( nVerbID );
         return;
     }
-    // end wrapping related part ====================
+    
 
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The object has no persistence!\n" ),
@@ -782,12 +782,12 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
     {
         sal_Int32 nOldState = m_nObjectState;
 
-        // TODO/LATER detect target state here and do a notification
-        // StateChangeNotification_Impl( sal_True, nOldState, nNewState );
+        
+        
         if ( m_nObjectState == embed::EmbedStates::LOADED )
         {
-            // if the target object is in loaded state
-            // it must be switched to running state to execute verb
+            
+            
             aGuard.clear();
             changeState( embed::EmbedStates::RUNNING );
             aGuard.reset();
@@ -797,26 +797,26 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
             if ( !m_pOleComponent )
                 throw uno::RuntimeException();
 
-            // ==== the STAMPIT related solution =============================
+            
             m_aVerbExecutionController.StartControlExecution();
-            // ===============================================================
+            
 
             m_pOleComponent->ExecuteVerb( nVerbID );
 
-            // ==== the STAMPIT related solution =============================
+            
             sal_Bool bModifiedOnExecution = m_aVerbExecutionController.EndControlExecution_WasModified();
 
-            // this workaround is implemented for STAMPIT object
-            // if object was modified during verb execution it is saved here
+            
+            
             if ( bModifiedOnExecution && m_pOleComponent->IsDirty() )
                 SaveObject_Impl();
-            // ===============================================================
+            
         }
         catch( uno::Exception& )
         {
-            // ==== the STAMPIT related solution =============================
+            
             m_aVerbExecutionController.EndControlExecution_WasModified();
-            // ===============================================================
+            
 
             aGuard.clear();
             StateChangeNotification_Impl( sal_False, nOldState, m_nObjectState );
@@ -829,9 +829,9 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
     {
         if ( nVerbID == -9 )
         {
-            // the workaround verb to show the object in case no server is available
+            
 
-            // if it is possible, the object will be converted to OOo format
+            
             if ( !m_bTriedConversion )
             {
                 m_bTriedConversion = sal_True;
@@ -865,8 +865,8 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
             if ( !m_pOwnView || !m_pOwnView->Open() )
             {
-                //Make a RO copy and see if the OS can find something to at
-                //least display the content for us
+                
+                
                 if (m_aTempDumpURL.isEmpty())
                     m_aTempDumpURL = lcl_ExtractObject(m_xFactory, m_xObjectStream);
 
@@ -888,25 +888,25 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
     }
 }
 
-//----------------------------------------------
+
 uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedVerbs()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObject::getSupportedVerb" );
 
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         return xWrappedObject->getSupportedVerbs();
     }
-    // end wrapping related part ====================
+    
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The object has no persistence!\n" ),
@@ -914,12 +914,12 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
 #ifdef WNT
     if ( m_pOleComponent )
     {
-        // registry could be used in this case
-        // if ( m_nObjectState == embed::EmbedStates::LOADED )
-        // {
-        //  // the list of supported verbs can be retrieved only when object is in running state
-        //  throw embed::NeedsRunningStateException(); // TODO:
-        // }
+        
+        
+        
+        
+        
+        
 
         return m_pOleComponent->GetVerbList();
     }
@@ -930,25 +930,25 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
     }
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setClientSite(
                 const uno::Reference< embed::XEmbeddedClient >& xClient )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         xWrappedObject->setClientSite( xClient );
         return;
     }
-    // end wrapping related part ====================
+    
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_xClientSite != xClient)
     {
@@ -961,23 +961,23 @@ void SAL_CALL OleEmbeddedObject::setClientSite(
     }
 }
 
-//----------------------------------------------
+
 uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSite()
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         return xWrappedObject->getClientSite();
     }
-    // end wrapping related part ====================
+    
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The object has no persistence!\n" ),
@@ -986,25 +986,25 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSi
     return m_xClientSite;
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::update()
         throw ( embed::WrongStateException,
                 uno::Exception,
                 uno::RuntimeException )
 {
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         xWrappedObject->update();
         return;
     }
-    // end wrapping related part ====================
+    
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The object has no persistence!\n" ),
@@ -1012,33 +1012,33 @@ void SAL_CALL OleEmbeddedObject::update()
 
     if ( m_nUpdateMode == embed::EmbedUpdateModes::EXPLICIT_UPDATE )
     {
-        // TODO: update view representation
+        
     }
     else
     {
-        // the object must be up to date
+        
         SAL_WARN_IF( m_nUpdateMode != embed::EmbedUpdateModes::ALWAYS_UPDATE, "embeddedobj.ole", "Unknown update mode!" );
     }
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         xWrappedObject->setUpdateMode( nMode );
         return;
     }
-    // end wrapping related part ====================
+    
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The object has no persistence!\n" ),
@@ -1050,25 +1050,25 @@ void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
     m_nUpdateMode = nMode;
 }
 
-//----------------------------------------------
+
 sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
     nAspect
 )
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         return xWrappedObject->getStatus( nAspect );
     }
-    // end wrapping related part ====================
+    
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState == -1 )
         throw embed::WrongStateException( OUString( "The object must be in running state!\n" ),
@@ -1089,27 +1089,27 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
     }
 #endif
 
-    // this implementation needs size to be provided after object loading/creating to work in optimal way
+    
     return ( nResult | embed::EmbedMisc::EMBED_NEEDSSIZEONLOAD );
 }
 
-//----------------------------------------------
+
 void SAL_CALL OleEmbeddedObject::setContainerName( const OUString& sName )
         throw ( uno::RuntimeException )
 {
-    // begin wrapping related part ====================
+    
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
     if ( xWrappedObject.is() )
     {
-        // the object was converted to OOo embedded object, the current implementation is now only a wrapper
+        
         xWrappedObject->setContainerName( sName );
         return;
     }
-    // end wrapping related part ====================
+    
 
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     m_aContainerName = sName;
 }

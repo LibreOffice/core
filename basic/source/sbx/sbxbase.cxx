@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -28,7 +28,7 @@
 #include <rtl/ustring.hxx>
 #include <boost/foreach.hpp>
 
-// AppData-Structure for SBX:
+
 
 TYPEINIT0(SbxBase)
 
@@ -48,7 +48,7 @@ SbxAppData::~SbxAppData()
 }
 
 
-//////////////////////////////// SbxBase /////////////////////////////////
+
 
 DBG_NAME(SbxBase);
 
@@ -137,11 +137,11 @@ void SbxBase::AddFactory( SbxFactory* pFac )
 {
     SbxAppData& r = GetSbxData_Impl();
 
-    // From 1996-03-06: take the HandleLast-Flag into account
-    sal_uInt16 nPos = r.aFacs.size(); // Insert position
-    if( !pFac->IsHandleLast() )         // Only if not self HandleLast
+    
+    sal_uInt16 nPos = r.aFacs.size(); 
+    if( !pFac->IsHandleLast() )         
     {
-        // Rank new factory in front of factories with HandleLast
+        
         while( nPos > 0 &&
                 r.aFacs[ nPos-1 ].IsHandleLast() )
             nPos--;
@@ -164,10 +164,10 @@ void SbxBase::RemoveFactory( SbxFactory* pFac )
 
 SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
 {
-    // #91626: Hack to skip old Basic dialogs
-    // Problem: There does not exist a factory any more,
-    // so we have to create a dummy SbxVariable instead
-    if( nSbxId == 0x65 )    // Dialog Id
+    
+    
+    
+    if( nSbxId == 0x65 )    
         return new SbxVariable;
 
     OUString aEmptyStr;
@@ -185,7 +185,7 @@ SbxBase* SbxBase::Create( sal_uInt16 nSbxId, sal_uInt32 nCreator )
         case SBXID_METHOD:      return new SbxMethod( aEmptyStr, SbxEMPTY );
         case SBXID_PROPERTY:    return new SbxProperty( aEmptyStr, SbxEMPTY );
     }
-    // Unknown type: go over the factories!
+    
     SbxAppData& r = GetSbxData_Impl();
     SbxBase* pNew = NULL;
     BOOST_FOREACH(SbxFactory& rFac, r.aFacs)
@@ -218,7 +218,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
     sal_uInt32 nCreator, nSize;
     rStrm.ReadUInt32( nCreator ).ReadUInt16( nSbxId ).ReadUInt16( nFlags ).ReadUInt16( nVer );
 
-    // Correcting a foolishness of mine:
+    
     if( nFlags & SBX_RESERVED )
         nFlags = ( nFlags & ~SBX_RESERVED ) | SBX_GBLSEARCH;
 
@@ -237,7 +237,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
                 rStrm.Seek( nOldPos );
             if( !p->LoadCompleted() )
             {
-                // Deleting of the object
+                
                 SbxBaseRef aRef( p );
                 p = NULL;
             }
@@ -245,7 +245,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
         else
         {
             rStrm.SetError( SVSTREAM_FILEFORMAT_ERROR );
-            // Deleting of the object
+            
             SbxBaseRef aRef( p );
             p = NULL;
         }
@@ -255,7 +255,7 @@ SbxBase* SbxBase::Load( SvStream& rStrm )
     return p;
 }
 
-// Skip the Sbx-Object inside the stream
+
 void SbxBase::Skip( SvStream& rStrm )
 {
     sal_uInt16 nSbxId, nFlags, nVer;
@@ -330,7 +330,7 @@ sal_Bool SbxBase::StoreCompleted()
     return sal_True;
 }
 
-//////////////////////////////// SbxFactory ////////////////////////////////
+
 
 SbxFactory::~SbxFactory()
 {
@@ -346,7 +346,7 @@ SbxObject* SbxFactory::CreateObject( const OUString& )
     return NULL;
 }
 
-///////////////////////////////// SbxInfo //////////////////////////////////
+
 
 SbxInfo::~SbxInfo()
 {}

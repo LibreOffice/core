@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,7 +28,7 @@
 #include <functional>
 #include <algorithm>
 
-// can't have static linkage because SUNPRO 5.2 complains
+
 Point ImplTaskPaneListGetPos( const Window *w )
 {
     Point pos;
@@ -47,7 +47,7 @@ Point ImplTaskPaneListGetPos( const Window *w )
     return pos;
 }
 
-// compares window pos left-to-right
+
 struct LTRSort : public ::std::binary_function< const Window*, const Window*, bool >
 {
     bool operator()( const Window* w1, const Window* w2 ) const
@@ -75,18 +75,18 @@ struct LTRSortBackward : public ::std::binary_function< const Window*, const Win
     }
 };
 
-// --------------------------------------------------
+
 
 static void ImplTaskPaneListGrabFocus( Window *pWindow, bool bForward )
 {
-    // put focus in child of floating windows which is typically a toolbar
-    // that can deal with the focus
+    
+    
     if( pWindow->ImplIsFloatingWindow() && pWindow->GetWindow( WINDOW_FIRSTCHILD ) )
         pWindow = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     pWindow->ImplGrabFocus( GETFOCUS_F6 | (bForward ? GETFOCUS_FORWARD : GETFOCUS_BACKWARD));
 }
 
-// --------------------------------------------------
+
 
 TaskPaneList::TaskPaneList()
 {
@@ -96,7 +96,7 @@ TaskPaneList::~TaskPaneList()
 {
 }
 
-// --------------------------------------------------
+
 
 void TaskPaneList::AddWindow( Window *pWindow )
 {
@@ -109,16 +109,16 @@ void TaskPaneList::AddWindow( Window *pWindow )
             )
         {
             if ( *p == pWindow )
-                // avoid duplicates
+                
                 return;
 
-            // If the new window is the child of an existing pane window, or vice versa,
-            // ensure that in our pane list, *first* the child window appears, *then*
-            // the ancestor window.
-            // This is necessary for HandleKeyEvent: There, the list is traveled from the
-            // beginning, until the first window is found which has the ChildPathFocus. Now
-            // if this would be the ancestor window of another pane window, this would fudge
-            // the result
+            
+            
+            
+            
+            
+            
+            
             if ( pWindow->IsWindowOrChild( *p ) )
             {
                 insertionPos = p + 1;
@@ -136,7 +136,7 @@ void TaskPaneList::AddWindow( Window *pWindow )
     }
 }
 
-// --------------------------------------------------
+
 
 void TaskPaneList::RemoveWindow( Window *pWindow )
 {
@@ -149,7 +149,7 @@ void TaskPaneList::RemoveWindow( Window *pWindow )
     }
 }
 
-// --------------------------------------------------
+
 
 bool TaskPaneList::IsInList( Window *pWindow )
 {
@@ -161,29 +161,29 @@ bool TaskPaneList::IsInList( Window *pWindow )
         return false;
 }
 
-// --------------------------------------------------
+
 
 bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
 {
 
-    // F6 cycles through everything and works always
+    
 
-    // MAV, #i104204#
-    // The old design was the following one:
-    // < Ctrl-TAB cycles through Menubar, Toolbars and Floatingwindows only and is
-    // < only active if one of those items has the focus
+    
+    
+    
+    
     //
-    // Since the design of Ctrl-Tab looks to be inconsistent ( non-modal dialogs are not reachable
-    // and the shortcut conflicts with tab-control shortcut ), it is no more supported
+    
+    
     bool bSplitterOnly = false;
     bool bFocusInList = false;
     KeyCode aKeyCode = aKeyEvent.GetKeyCode();
     bool bForward = !aKeyCode.IsShift();
-    if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) // F6
+    if( aKeyCode.GetCode() == KEY_F6 && ! aKeyCode.IsMod2() ) 
     {
         bSplitterOnly = aKeyCode.IsMod1() && aKeyCode.IsShift();
 
-        // is the focus in the list ?
+        
         ::std::vector< Window* >::iterator p = mTaskPanes.begin();
         while( p != mTaskPanes.end() )
         {
@@ -192,14 +192,14 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
             {
                 bFocusInList = true;
 
-                // Ctrl-F6 goes directly to the document
+                
                 if( !pWin->IsDialog() && aKeyCode.IsMod1() && !aKeyCode.IsShift() )
                 {
                     pWin->ImplGrabFocusToDocument( GETFOCUS_F6 );
                     return true;
                 }
 
-                // activate next task pane
+                
                 Window *pNextWin = NULL;
 
                 if( bSplitterOnly )
@@ -215,12 +215,12 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 }
                 else
                 {
-                    // forward key if no splitter found
+                    
                     if( bSplitterOnly )
                         return false;
 
-                    // we did not find another taskpane, so
-                    // put focus back into document
+                    
+                    
                     pWin->ImplGrabFocusToDocument( GETFOCUS_F6 | (bForward ? GETFOCUS_FORWARD : GETFOCUS_BACKWARD));
                 }
 
@@ -230,7 +230,7 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
                 ++p;
         }
 
-        // the focus is not in the list: activate first float if F6 was pressed
+        
         if( !bFocusInList )
         {
             Window *pWin;
@@ -249,9 +249,9 @@ bool TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
     return false;
 }
 
-// --------------------------------------------------
 
-// returns next splitter
+
+
 Window* TaskPaneList::FindNextSplitter( Window *pWindow, bool bForward )
 {
     if( bForward )
@@ -267,7 +267,7 @@ Window* TaskPaneList::FindNextSplitter( Window *pWindow, bool bForward )
             unsigned n = mTaskPanes.size();
             while( --n )
             {
-                if( pWindow )   // increment before test
+                if( pWindow )   
                     ++p;
                 if( p == mTaskPanes.end() )
                     p = mTaskPanes.begin();
@@ -276,7 +276,7 @@ Window* TaskPaneList::FindNextSplitter( Window *pWindow, bool bForward )
                     pWindow = *p;
                     break;
                 }
-                if( !pWindow )  // increment after test, otherwise first element is skipped
+                if( !pWindow )  
                     ++p;
             }
             break;
@@ -288,9 +288,9 @@ Window* TaskPaneList::FindNextSplitter( Window *pWindow, bool bForward )
     return pWindow;
 }
 
-// --------------------------------------------------
 
-// returns first valid item (regardless of type) if pWindow==0, otherwise returns next valid float
+
+
 Window* TaskPaneList::FindNextFloat( Window *pWindow, bool bForward )
 {
     if( bForward )
@@ -305,10 +305,10 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, bool bForward )
         {
             while( p != mTaskPanes.end() )
             {
-                if( pWindow )   // increment before test
+                if( pWindow )   
                     ++p;
                 if( p == mTaskPanes.end() )
-                    break; // do not wrap, send focus back to document at end of list
+                    break; 
                 /* #i83908# do not use the menubar if it is native and invisible
                    this relies on MenuBar::ImplCreate setting the height of the menubar
                    to 0 in this case
@@ -320,7 +320,7 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, bool bForward )
                     pWindow = *p;
                     break;
                 }
-                if( !pWindow )  // increment after test, otherwise first element is skipped
+                if( !pWindow )  
                     ++p;
             }
             break;
@@ -332,6 +332,6 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, bool bForward )
     return pWindow;
 }
 
-// --------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

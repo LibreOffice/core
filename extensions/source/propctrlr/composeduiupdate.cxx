@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "composeduiupdate.hxx"
@@ -27,10 +27,10 @@
 
 #include <algorithm>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::lang::DisposedException;
@@ -45,9 +45,9 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-    //====================================================================
-    //= helper
-    //====================================================================
+    
+    
+    
     namespace
     {
         struct HandlerLess : public ::std::binary_function  <   Reference< XPropertyHandler >
@@ -61,19 +61,19 @@ namespace pcr
             }
         };
 
-        //================================================================
+        
         typedef ::std::set< OUString >       StringBag;
         typedef ::std::map< sal_Int16, StringBag >  MapIntToStringBag;
     }
 
-    //====================================================================
-    //= callbacks for CachedInspectorUI
-    //====================================================================
+    
+    
+    
     typedef void (ComposedPropertyUIUpdate::*FNotifySingleUIChange)();
 
-    //====================================================================
-    //= CachedInspectorUI
-    //====================================================================
+    
+    
+    
     typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::inspection::XObjectInspectorUI
                                     >   CachedInspectorUI_Base;
     struct CachedInspectorUI : public CachedInspectorUI_Base
@@ -86,44 +86,44 @@ namespace pcr
                                 m_rMaster;
         FNotifySingleUIChange   m_pUIChangeNotification;
 
-        // enablePropertyUI cache
+        
         StringBag               aEnabledProperties;
         StringBag               aDisabledProperties;
 
-        // show/hidePropertyUI cache
+        
         StringBag               aShownProperties;
         StringBag               aHiddenProperties;
 
-        // rebuildPropertyUI cache
+        
         StringBag               aRebuiltProperties;
 
-        // showCategory cache
+        
         StringBag               aShownCategories;
         StringBag               aHiddenCategories;
 
-        // enablePropertyUIElements cache
+        
         MapIntToStringBag       aEnabledElements;
         MapIntToStringBag       aDisabledElements;
 
     public:
         typedef StringBag& (CachedInspectorUI::*FGetStringBag)();
 
-        // enablePropertyUI cache
+        
         StringBag&  getEnabledProperties()          { return aEnabledProperties; }
         StringBag&  getDisabledProperties()         { return aDisabledProperties; }
 
-        // show/hidePropertyUI cache
+        
         StringBag&  getShownProperties()            { return aShownProperties; }
         StringBag&  getHiddenProperties()           { return aHiddenProperties; }
 
-        // rebuildPropertyUI cache
+        
         StringBag&  getRebuiltProperties()          { return aRebuiltProperties; }
 
-        // showCategory cache
+        
         StringBag&  getShownCategories()            { return aShownCategories; }
         StringBag&  getHiddenCategories()           { return aHiddenCategories; }
 
-        // enablePropertyUIElements
+        
         StringBag&  getEnabledInputControls()       { return aEnabledElements[ PropertyLineElement::InputControl ]; }
         StringBag&  getDisabledInputControls()      { return aDisabledElements[ PropertyLineElement::InputControl ]; }
         StringBag&  getEnabledPrimaryButtons()      { return aEnabledElements[ PropertyLineElement::PrimaryButton ]; }
@@ -134,10 +134,10 @@ namespace pcr
     public:
         CachedInspectorUI( ComposedPropertyUIUpdate& _rMaster, FNotifySingleUIChange _pUIChangeNotification );
 
-        /// disposes the instance
+        /
         void dispose();
 
-        // XObjectInspectorUI overridables
+        
         virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, ::sal_Bool _bEnable ) throw (RuntimeException);
         virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, ::sal_Bool _bEnable ) throw (RuntimeException);
         virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException);
@@ -149,17 +149,17 @@ namespace pcr
         virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException);
         virtual void SAL_CALL setHelpSectionText( const OUString& _HelpText ) throw (NoSupportException, RuntimeException);
 
-        // UNOCompatibleNonUNOReference overridables
+        
         virtual void SAL_CALL acquire() throw();
         virtual void SAL_CALL release() throw();
 
     protected:
         ~CachedInspectorUI();
 
-        /// determines whether the instance is already disposed
+        /
         inline bool isDisposed() const { return m_bDisposed; }
 
-        /// throws an exception if the component is already disposed
+        /
         void checkDisposed() const;
 
     private:
@@ -170,8 +170,8 @@ namespace pcr
         void    impl_notifySingleUIChange() const;
 
     private:
-        CachedInspectorUI( const CachedInspectorUI& );              // never implemented
-        CachedInspectorUI& operator=( const CachedInspectorUI& );   // never implemented
+        CachedInspectorUI( const CachedInspectorUI& );              
+        CachedInspectorUI& operator=( const CachedInspectorUI& );   
 
     private:
         class MethodGuard;
@@ -187,7 +187,7 @@ namespace pcr
         };
     };
 
-    //----------------------------------------------------------------
+    
     CachedInspectorUI::CachedInspectorUI( ComposedPropertyUIUpdate& _rMaster, FNotifySingleUIChange _pUIChangeNotification )
         :m_refCount( 0 )
         ,m_bDisposed( false )
@@ -196,12 +196,12 @@ namespace pcr
     {
     }
 
-    //----------------------------------------------------------------
+    
     CachedInspectorUI::~CachedInspectorUI()
     {
     }
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -218,13 +218,13 @@ namespace pcr
         clearContainer( aDisabledElements );
     }
 
-    //----------------------------------------------------------------
+    
     void SAL_CALL CachedInspectorUI::acquire() throw()
     {
         osl_atomic_increment( &m_refCount );
     }
 
-    //----------------------------------------------------------------
+    
     void SAL_CALL CachedInspectorUI::release() throw()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -232,14 +232,14 @@ namespace pcr
     }
 
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::checkDisposed() const
     {
         if ( isDisposed() )
             throw DisposedException();
     }
 
-    //----------------------------------------------------------------
+    
     namespace
     {
         void lcl_markStringKeyPositiveOrNegative( const OUString& _rKeyName, StringBag& _rPositives, StringBag& _rNegatives, sal_Bool _bMarkPositive )
@@ -247,7 +247,7 @@ namespace pcr
             if ( _bMarkPositive )
             {
                 _rPositives.insert( _rKeyName );
-                // if the same key has been remember as in the "negative" list before, clear this information, since it's overruled
+                
                 _rNegatives.erase( _rKeyName );
             }
             else
@@ -255,7 +255,7 @@ namespace pcr
         }
     }
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -266,7 +266,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::impl_markElementEnabledOrDisabled( const OUString& _rPropertyName, sal_Int16 _nElementIdOrZero, sal_Bool _bEnable )
     {
         if ( _nElementIdOrZero == 0 )
@@ -280,13 +280,13 @@ namespace pcr
         );
     }
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::impl_notifySingleUIChange() const
     {
         (m_rMaster.*m_pUIChangeNotification)();
     }
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -300,7 +300,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -312,7 +312,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -320,13 +320,13 @@ namespace pcr
             return;
 
         aShownProperties.insert( _rPropertyName );
-        // if the same category has been hidden before, clear this information, since it's overruled
+        
         aHiddenProperties.erase( _rPropertyName );
 
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -337,7 +337,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+    
     void CachedInspectorUI::showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -346,7 +346,7 @@ namespace pcr
         impl_notifySingleUIChange();
     }
 
-    //----------------------------------------------------------------
+    
     Reference< XPropertyControl > SAL_CALL CachedInspectorUI::getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -356,33 +356,33 @@ namespace pcr
         return m_rMaster.getDelegatorUI()->getPropertyControl( _rPropertyName );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL CachedInspectorUI::registerControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {
         OSL_FAIL( "CachedInspectorUI::registerControlObserver: not expected to be called!" );
-            // CachedInspectorUI is used as context for the controls, and we don't expect them to
-            // register listeners themself
+            
+            
         m_rMaster.getDelegatorUI()->registerControlObserver( _Observer );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL CachedInspectorUI::revokeControlObserver( const Reference< XPropertyControlObserver >& _Observer ) throw (RuntimeException)
     {
         OSL_FAIL( "CachedInspectorUI::revokeControlObserver: not expected to be called!" );
-            // CachedInspectorUI is used as context for the controls, and we don't expect them to
-            // register listeners themself
+            
+            
         m_rMaster.getDelegatorUI()->revokeControlObserver( _Observer );
     }
 
-    //----------------------------------------------------------------
+    
     void SAL_CALL CachedInspectorUI::setHelpSectionText( const OUString& _HelpText ) throw (NoSupportException, RuntimeException)
     {
         m_rMaster.getDelegatorUI()->setHelpSectionText( _HelpText );
     }
 
-    //====================================================================
-    //= HandlerMap
-    //====================================================================
+    
+    
+    
     typedef ::std::map  <   Reference< XPropertyHandler >
                         ,   ::rtl::Reference< CachedInspectorUI >
                         ,   HandlerLess
@@ -392,10 +392,10 @@ namespace pcr
         ImplMapHandlerToUI aHandlers;
     };
 
-    //====================================================================
-    //= ComposedPropertyUIUpdate
-    //====================================================================
-    //----------------------------------------------------------------
+    
+    
+    
+    
     ComposedPropertyUIUpdate::ComposedPropertyUIUpdate( const Reference< XObjectInspectorUI >& _rxDelegatorUI,
         IPropertyExistenceCheck* _pPropertyCheck )
         :m_pCollectedUIs( new MapHandlerToUI )
@@ -407,12 +407,12 @@ namespace pcr
             throw NullPointerException();
     }
 
-    //----------------------------------------------------------------
+    
     ComposedPropertyUIUpdate::~ComposedPropertyUIUpdate( )
     {
     }
 
-    //----------------------------------------------------------------
+    
     Reference< XObjectInspectorUI > ComposedPropertyUIUpdate::getUIForPropertyHandler( const Reference< XPropertyHandler >& _rxHandler )
     {
         impl_checkDisposed();
@@ -423,12 +423,12 @@ namespace pcr
         return rUI.get();
     }
 
-    //----------------------------------------------------------------
+    
     namespace
     {
-        //============================================================
-        //= StringBagCollector
-        //============================================================
+        
+        
+        
         /** an STL-compatible structure which collects strings from a CachedInspectorUI instances
         */
         struct StringBagCollector : public ::std::unary_function< ImplMapHandlerToUI::value_type, void >
@@ -452,9 +452,9 @@ namespace pcr
             }
         };
 
-        //============================================================
-        //= StringBagClearer
-        //============================================================
+        
+        
+        
         /** an STL-compatible structure which cleans a certain string bag in a CachedInspectorUI instances
         */
         struct StringBagClearer : public ::std::unary_function< ImplMapHandlerToUI::value_type, void >
@@ -476,16 +476,16 @@ namespace pcr
             }
         };
 
-        //============================================================
-        //= FPropertyUISetter
-        //============================================================
+        
+        
+        
         /** a typedef for a ->XObjectInspectorUI member function taking a string
         */
         typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUISetter )( const OUString& );
 
-        //============================================================
-        //= PropertyUIOperator
-        //============================================================
+        
+        
+        
         /** an STL-compatible struct which calls a certain member method (taking a string) at a
             given ->XObjectInspectorUI instance
         */
@@ -513,9 +513,9 @@ namespace pcr
             }
         };
 
-        //============================================================
-        //= IStringKeyBooleanUIUpdate
-        //============================================================
+        
+        
+        
         /** an interface which encapsulates access to a single aspect of the ->XObjectInspectorUI,
             where this aspect is given by a string key, and has a boolean value.
         */
@@ -527,9 +527,9 @@ namespace pcr
             virtual ~IStringKeyBooleanUIUpdate() { }
         };
 
-        //============================================================
-        //= FPropertyUIFlagSetter
-        //============================================================
+        
+        
+        
         /** an implementation of the ->IStringKeyBooleanUIUpdate interface which,
             for a fixed ->XObjectInspectorUI instance and a fixed UI element (->PropertyLineElement),
             updates this element for a given property with a given boolean flag
@@ -547,26 +547,26 @@ namespace pcr
                 ,m_nElement( _nElement )
             {
             }
-            // IStringKeyBooleanUIUpdate
+            
             virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const;
         };
 
-        //............................................................
+        
         void EnablePropertyUIElement::updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const
         {
             m_xUIUpdate->enablePropertyUIElements( _rKey, m_nElement, _bFlag );
         }
 
-        //============================================================
-        //= FPropertyUIFlagSetter
-        //============================================================
+        
+        
+        
         /** a ->XObjectInspectorUI method taking a string and a boolean
         */
         typedef void ( SAL_CALL XObjectInspectorUI::*FPropertyUIFlagSetter )( const OUString&, sal_Bool );
 
-        //============================================================
-        //= DefaultStringKeyBooleanUIUpdate
-        //============================================================
+        
+        
+        
         /** an implementaiton of the ->IStringKeyBooleanUIUpdate interface which calls
             am arbitrary ->XObjectInspectorUI method taking a string and a boolean flag
         */
@@ -578,26 +578,26 @@ namespace pcr
 
         public:
             DefaultStringKeyBooleanUIUpdate( const Reference< XObjectInspectorUI >& _rxUIUpdate, FPropertyUIFlagSetter _pSetter );
-            // IStringKeyBooleanUIUpdate
+            
             virtual void updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const;
         };
 
-        //............................................................
+        
         DefaultStringKeyBooleanUIUpdate::DefaultStringKeyBooleanUIUpdate( const Reference< XObjectInspectorUI >& _rxUIUpdate, FPropertyUIFlagSetter _pSetter )
             :m_xUIUpdate( _rxUIUpdate )
             ,m_pSetter( _pSetter )
         {
         }
 
-        //............................................................
+        
         void DefaultStringKeyBooleanUIUpdate::updateUIForKey( const OUString& _rKey, sal_Bool _bFlag ) const
         {
             ((m_xUIUpdate.get())->*m_pSetter)( _rKey, _bFlag );
         }
 
-        //============================================================
-        //= BooleanUIAspectUpdate
-        //============================================================
+        
+        
+        
         /** an STL-compatible structure which applies a ->IStringKeyBooleanUIUpdate::updateUIForKey
             operation with a fixed boolean value, for a given string value
         */
@@ -625,9 +625,9 @@ namespace pcr
             }
         };
 
-        //============================================================
-        //= BooleanUIAspectUpdate
-        //============================================================
+        
+        
+        
         /** an STL-compatible structure subtracting a given string from a fixed ->StringBag
         */
         struct StringBagComplement : public ::std::unary_function< OUString, void >
@@ -649,9 +649,9 @@ namespace pcr
             }
         };
 
-        //============================================================
-        //= BooleanUIAspectUpdate
-        //============================================================
+        
+        
+        
         void lcl_fireUIStateFlag(
                 const IStringKeyBooleanUIUpdate& _rUIUpdate,
                 const ImplMapHandlerToUI& _rHandlerUIs,
@@ -659,29 +659,29 @@ namespace pcr
                 CachedInspectorUI::FGetStringBag _pGetNegatives
             )
         {
-            // all strings which are in the "positive" list of one handler
+            
             StringBag aAllPositives;
             StringBagCollector::collectAll( aAllPositives, _rHandlerUIs, _pGetPositives );
 
-            // all strings which are in the "negative" list of one handler
+            
             StringBag aAllNegatives;
             StringBagCollector::collectAll( aAllNegatives, _rHandlerUIs, _pGetNegatives );
 
-            // propagate the "negative" flags to the delegator UI
+            
             BooleanUIAspectUpdate::forEach( aAllNegatives, _rUIUpdate, sal_False );
 
-            // propagate the "positive" flags to the delegator UI, for all elements where _no_
-            // "negative" flag exists
+            
+            
             StringBagComplement::subtract( aAllPositives, aAllNegatives );
             BooleanUIAspectUpdate::forEach( aAllPositives, _rUIUpdate, sal_True );
 
-            // the "positive" request can be cleared no, only negative requests
-            // (such as "disable a property" or "hide a category") need to be preserved for the next round
+            
+            
             StringBagClearer::clearAll( _rHandlerUIs, _pGetPositives );
         }
     }
 
-    //----------------------------------------------------------------
+    
     void ComposedPropertyUIUpdate::impl_fireEnablePropertyUI_throw()
     {
         lcl_fireUIStateFlag(
@@ -692,41 +692,41 @@ namespace pcr
         );
     }
 
-    //----------------------------------------------------------------
+    
     void ComposedPropertyUIUpdate::impl_fireRebuildPropertyUI_throw()
     {
-        // collect all properties for which a rebuild request has been made
+        
         StringBag aAllRebuilt;
         StringBagCollector::collectAll( aAllRebuilt, m_pCollectedUIs->aHandlers, &CachedInspectorUI::getRebuiltProperties );
 
-        // rebuild all those properties
+        
         PropertyUIOperator::forEach( aAllRebuilt, m_xDelegatorUI, &XObjectInspectorUI::rebuildPropertyUI );
 
-        // clear the "properties to rebuild" at all handlers, since the request has been fulfilled now.
+        
         StringBagClearer::clearAll( m_pCollectedUIs->aHandlers, &CachedInspectorUI::getRebuiltProperties );
     }
 
-    //----------------------------------------------------------------
+    
     void ComposedPropertyUIUpdate::impl_fireShowHidePropertyUI_throw()
     {
-        // all properties which have been shown by at least one handler
+        
         StringBag aAllShown;
         StringBagCollector::collectAll( aAllShown, m_pCollectedUIs->aHandlers, &CachedInspectorUI::getShownProperties );
-        // all properties which have been hidden by at least one handler
+        
         StringBag aAllHidden;
         StringBagCollector::collectAll( aAllHidden, m_pCollectedUIs->aHandlers, &CachedInspectorUI::getHiddenProperties );
 
-        // hide properties as necessary
+        
         PropertyUIOperator::forEach( aAllHidden, m_xDelegatorUI, &XObjectInspectorUI::hidePropertyUI );
 
-        // for those properties which are hidden, ignore all "show" requests which other handlers might have had
+        
         StringBagComplement::subtract( aAllShown, aAllHidden );
 
-        // show properties
+        
         PropertyUIOperator::forEach( aAllShown, m_xDelegatorUI, &XObjectInspectorUI::showPropertyUI );
     }
 
-    //----------------------------------------------------------------
+    
     void ComposedPropertyUIUpdate::impl_fireShowCategory_throw()
     {
         lcl_fireUIStateFlag(
@@ -737,7 +737,7 @@ namespace pcr
         );
     }
 
-    //----------------------------------------------------------------
+    
     void ComposedPropertyUIUpdate::impl_fireEnablePropertyUIElements_throw()
     {
         lcl_fireUIStateFlag(
@@ -762,7 +762,7 @@ namespace pcr
         );
     }
 
-    //--------------------------------------------------------------------
+    
     void ComposedPropertyUIUpdate::impl_fireAll_throw()
     {
         OSL_PRECOND( !impl_isDisposed(), "ComposedPropertyUIUpdate::impl_fireAll_throw: already disposed, this will crash!" );
@@ -774,14 +774,14 @@ namespace pcr
         impl_fireEnablePropertyUIElements_throw();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ComposedPropertyUIUpdate::suspendAutoFire()
     {
         impl_checkDisposed();
         osl_atomic_increment( &m_nSuspendCounter );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ComposedPropertyUIUpdate::resumeAutoFire()
     {
         impl_checkDisposed();
@@ -789,28 +789,28 @@ namespace pcr
             impl_fireAll_throw();
     }
 
-    //----------------------------------------------------------------
+    
     void ComposedPropertyUIUpdate::impl_checkDisposed() const
     {
         if ( impl_isDisposed() )
             throw DisposedException();
     }
 
-    //----------------------------------------------------------------
+    
     void ComposedPropertyUIUpdate::callback_inspectorUIChanged_throw()
     {
         if ( 0 == m_nSuspendCounter )
             impl_fireAll_throw();
     }
 
-    //----------------------------------------------------------------
+    
     Reference< XObjectInspectorUI > ComposedPropertyUIUpdate::getDelegatorUI() const
     {
         impl_checkDisposed();
         return m_xDelegatorUI;
     }
 
-    //----------------------------------------------------------------
+    
     void SAL_CALL ComposedPropertyUIUpdate::dispose()
     {
         if ( impl_isDisposed() )
@@ -829,7 +829,7 @@ namespace pcr
         m_xDelegatorUI.set( NULL );
     }
 
-    //----------------------------------------------------------------
+    
     bool ComposedPropertyUIUpdate::shouldContinuePropertyHandling( const OUString& _rName ) const
     {
         if ( !m_pPropertyCheck )
@@ -839,8 +839,8 @@ namespace pcr
         return false;
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

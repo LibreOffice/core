@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/XMLEmbeddedObjectExportFilter.hxx>
@@ -38,13 +38,13 @@ XMLEmbeddedObjectExportFilter::~XMLEmbeddedObjectExportFilter () throw()
 void SAL_CALL XMLEmbeddedObjectExportFilter::startDocument( void )
     throw( SAXException, RuntimeException )
 {
-    // do nothing, filter this
+    
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::endDocument( void )
     throw( SAXException, RuntimeException)
 {
-    // do nothing, filter this
+    
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::startElement(
@@ -89,7 +89,7 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::setDocumentLocator(
     xHandler->setDocumentLocator( rLocator );
 }
 
-// XExtendedDocumentHandler
+
 void SAL_CALL XMLEmbeddedObjectExportFilter::startCDATA( void )
     throw(SAXException, RuntimeException)
 {
@@ -125,7 +125,7 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::unknown( const OUString& rString )
         xExtHandler->unknown( rString );
 }
 
-// XInitialize
+
 void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
         const Sequence< Any >& aArguments )
     throw(Exception, RuntimeException)
@@ -144,7 +144,7 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
     }
 }
 
-// XServiceInfo
+
 OUString SAL_CALL XMLEmbeddedObjectExportFilter::getImplementationName()
     throw(RuntimeException)
 {

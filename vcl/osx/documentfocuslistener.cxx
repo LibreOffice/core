@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "documentfocuslistener.hxx"
@@ -30,26 +30,26 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 
-//------------------------------------------------------------------------------
+
 
 DocumentFocusListener::DocumentFocusListener(AquaA11yFocusTracker& rTracker) :
     m_aFocusTracker(rTracker)
 {
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 DocumentFocusListener::disposing( const EventObject& aEvent )
     throw (RuntimeException)
 {
-    // Unref the object here, but do not remove as listener since the object
-    // might no longer be in a state that safely allows this.
+    
+    
     if( aEvent.Source.is() )
         m_aRefList.erase(aEvent.Source);
 }
 
-//------------------------------------------------------------------------------
+
 
 void SAL_CALL
 DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
@@ -97,7 +97,7 @@ DocumentFocusListener::notifyEvent( const AccessibleEventObject& aEvent )
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 Reference< XAccessible > DocumentFocusListener::getAccessible(const EventObject& aEvent )
     throw (IndexOutOfBoundsException, RuntimeException)
@@ -125,7 +125,7 @@ Reference< XAccessible > DocumentFocusListener::getAccessible(const EventObject&
     return Reference< XAccessible >();
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::attachRecursive(const Reference< XAccessible >& xAccessible)
     throw (IndexOutOfBoundsException, RuntimeException)
@@ -136,7 +136,7 @@ void DocumentFocusListener::attachRecursive(const Reference< XAccessible >& xAcc
         attachRecursive(xAccessible, xContext);
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::attachRecursive(
     const Reference< XAccessible >& xAccessible,
@@ -152,7 +152,7 @@ void DocumentFocusListener::attachRecursive(
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::attachRecursive(
     const Reference< XAccessible >& xAccessible,
@@ -166,7 +166,7 @@ void DocumentFocusListener::attachRecursive(
     Reference< XAccessibleEventBroadcaster > xBroadcaster =
         Reference< XAccessibleEventBroadcaster >(xContext, UNO_QUERY);
 
-    // If not already done, add the broadcaster to the list and attach as listener.
+    
     if( xBroadcaster.is() && m_aRefList.insert(xBroadcaster).second )
     {
         xBroadcaster->addAccessibleEventListener(static_cast< XAccessibleEventListener *>(this));
@@ -185,7 +185,7 @@ void DocumentFocusListener::attachRecursive(
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::detachRecursive(const Reference< XAccessible >& xAccessible)
     throw (IndexOutOfBoundsException, RuntimeException)
@@ -196,7 +196,7 @@ void DocumentFocusListener::detachRecursive(const Reference< XAccessible >& xAcc
         detachRecursive(xAccessible, xContext);
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::detachRecursive(
     const Reference< XAccessible >& xAccessible,
@@ -209,7 +209,7 @@ void DocumentFocusListener::detachRecursive(
         detachRecursive(xAccessible, xContext, xStateSet);
 }
 
-//------------------------------------------------------------------------------
+
 
 void DocumentFocusListener::detachRecursive(
     const Reference< XAccessible >&,

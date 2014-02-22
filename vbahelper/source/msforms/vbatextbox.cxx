@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbatextbox.hxx"
@@ -30,7 +30,7 @@ ScVbaTextBox::ScVbaTextBox( const uno::Reference< ov::XHelperInterface >& xParen
 {
 }
 
-// Attributes
+
 uno::Any SAL_CALL
 ScVbaTextBox::getValue() throw (css::uno::RuntimeException)
 {
@@ -40,12 +40,12 @@ ScVbaTextBox::getValue() throw (css::uno::RuntimeException)
 void SAL_CALL
 ScVbaTextBox::setValue( const uno::Any& _value ) throw (css::uno::RuntimeException)
 {
-    // booleans are converted to uppercase strings
+    
     OUString sVal = extractStringFromAny( _value, true );
     setText( sVal );
 }
 
-//getString() will cause some imfo lose.
+
 OUString SAL_CALL
 ScVbaTextBox::getText() throw (css::uno::RuntimeException)
 {
@@ -113,7 +113,7 @@ sal_Int32 SAL_CALL ScVbaTextBox::getSpecialEffect() throw (uno::RuntimeException
 
 void SAL_CALL ScVbaTextBox::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 sal_Int32 SAL_CALL ScVbaTextBox::getBorderStyle() throw (uno::RuntimeException)
@@ -123,7 +123,7 @@ sal_Int32 SAL_CALL ScVbaTextBox::getBorderStyle() throw (uno::RuntimeException)
 
 void SAL_CALL ScVbaTextBox::setBorderStyle( sal_Int32 /*nBorderStyle*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 sal_Int32 SAL_CALL ScVbaTextBox::getTextLength() throw (uno::RuntimeException)

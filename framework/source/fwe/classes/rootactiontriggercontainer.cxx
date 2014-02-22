@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,7 +60,7 @@ RootActionTriggerContainer::~RootActionTriggerContainer()
 {
 }
 
-// XInterface
+
 Any SAL_CALL RootActionTriggerContainer::queryInterface( const Type& aType )
 throw ( RuntimeException )
 {
@@ -90,7 +90,7 @@ void SAL_CALL RootActionTriggerContainer::release() throw ()
     PropertySetContainer::release();
 }
 
-// XMultiServiceFactory
+
 Reference< XInterface > SAL_CALL RootActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
 throw ( Exception,  RuntimeException )
 {
@@ -122,7 +122,7 @@ throw ( RuntimeException )
     return aSeq;
 }
 
-// XIndexContainer
+
 void SAL_CALL RootActionTriggerContainer::insertByIndex( sal_Int32 Index, const Any& Element )
 throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
@@ -149,7 +149,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     PropertySetContainer::removeByIndex( Index );
 }
 
-// XIndexReplace
+
 void SAL_CALL RootActionTriggerContainer::replaceByIndex( sal_Int32 Index, const Any& Element )
 throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
@@ -163,7 +163,7 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
     PropertySetContainer::replaceByIndex( Index, Element );
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL RootActionTriggerContainer::getCount()
 throw ( RuntimeException )
 {
@@ -196,7 +196,7 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
     return PropertySetContainer::getByIndex( Index );
 }
 
-// XElementAccess
+
 Type SAL_CALL RootActionTriggerContainer::getElementType()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -215,7 +215,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return sal_False;
 }
 
-// XServiceInfo
+
 OUString SAL_CALL RootActionTriggerContainer::getImplementationName()
 throw ( RuntimeException )
 {
@@ -237,7 +237,7 @@ throw ( RuntimeException )
     return seqServiceNames;
 }
 
-// XUnoTunnel
+
 sal_Int64 SAL_CALL RootActionTriggerContainer::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw ( RuntimeException )
 {
     if ( aIdentifier == impl_getStaticIdentifier() )
@@ -246,23 +246,23 @@ sal_Int64 SAL_CALL RootActionTriggerContainer::getSomething( const Sequence< sal
         return 0;
 }
 
-// XTypeProvider
+
 Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( RuntimeException )
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pTypeCollection is NULL - for the second call pTypeCollection is different from NULL!
+    
+    
+    
     static ::cppu::OTypeCollection* pTypeCollection = NULL ;
 
     if ( pTypeCollection == NULL )
     {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        // Control these pointer again ... it can be, that another instance will be faster then these!
+        
         if ( pTypeCollection == NULL )
         {
-            // Create a static typecollection ...
+            
             static ::cppu::OTypeCollection aTypeCollection(
                         ::getCppuType(( const Reference< XMultiServiceFactory   >*)NULL ) ,
                         ::getCppuType(( const Reference< XIndexContainer        >*)NULL ) ,
@@ -271,7 +271,7 @@ Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( Runtime
                         ::getCppuType(( const Reference< XUnoTunnel             >*)NULL ) ,
                         ::getCppuType(( const Reference< XNamed                 >*)NULL )) ;
 
-            // ... and set his address to static pointer!
+            
             pTypeCollection = &aTypeCollection ;
         }
     }
@@ -281,25 +281,25 @@ Sequence< Type > SAL_CALL RootActionTriggerContainer::getTypes() throw ( Runtime
 
 Sequence< sal_Int8 > SAL_CALL RootActionTriggerContainer::getImplementationId() throw ( RuntimeException )
 {
-    // Create one Id for all instances of this class.
-    // Use ethernet address to do this! (sal_True)
+    
+    
 
-    // Optimize this method
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pID is NULL - for the second call pID is different from NULL!
+    
+    
+    
     static ::cppu::OImplementationId* pID = NULL ;
 
     if ( pID == NULL )
     {
-        // Ready for multithreading; get global mutex for first call of this method only! see before
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        // Control these pointer again ... it can be, that another instance will be faster then these!
+        
         if ( pID == NULL )
         {
-            // Create a new static ID ...
+            
             static ::cppu::OImplementationId aID( false ) ;
-            // ... and set his address to static pointer!
+            
             pID = &aID ;
         }
     }
@@ -307,7 +307,7 @@ Sequence< sal_Int8 > SAL_CALL RootActionTriggerContainer::getImplementationId() 
     return pID->getImplementationId() ;
 }
 
-// private implementation helper
+
 void RootActionTriggerContainer::FillContainer()
 {
     m_bContainerCreated = sal_True;

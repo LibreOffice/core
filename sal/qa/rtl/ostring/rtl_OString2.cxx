@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -47,13 +47,13 @@ class valueOf : public CppUnit::TestFixture
         {
             valueOf_float_test_impl(_nValue);
 
-            // test also the negative part.
+            
             float nNegativeValue = -_nValue;
             valueOf_float_test_impl(nNegativeValue);
         }
 
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -62,11 +62,11 @@ public:
     {
     }
 
-    // insert your test code here.
+    
     void valueOf_float_test_001()
     {
-        // this is demonstration code
-        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+        
+        
         float nValue = 3.0f;
         valueOf_float_test(nValue);
     }
@@ -125,13 +125,13 @@ private:
         {
             valueOf_double_test_impl(_nValue);
 
-            // test also the negative part.
+            
             double nNegativeValue = -_nValue;
             valueOf_double_test_impl(nNegativeValue);
         }
 public:
 
-    // valueOf double
+    
     void valueOf_double_test_001()
         {
             double nValue = 3.0;
@@ -174,9 +174,9 @@ public:
         }
 
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(valueOf);
     CPPUNIT_TEST(valueOf_float_test_001);
@@ -196,11 +196,11 @@ public:
     CPPUNIT_TEST(valueOf_double_test_007);
     CPPUNIT_TEST(valueOf_double_test_008);
     CPPUNIT_TEST_SUITE_END();
-}; // class valueOf
+}; 
 
-// -----------------------------------------------------------------------------
-// - toDouble (tests)
-// -----------------------------------------------------------------------------
+
+
+
 class toDouble : public CppUnit::TestFixture
 {
 
@@ -208,12 +208,12 @@ public:
 
     toDouble()
         {
-            // testPrecision a;
+            
         }
 
 
 
-    // initialise your test code values here.
+    
     void setUp()
         {
         }
@@ -226,7 +226,7 @@ public:
         {
             double nValueATOF = atof( _sValue.getStr() );
 
-            // rtl::OUString suValue = rtl::OUString::createFromAscii( _sValue.getStr() );
+            
             double nValueToDouble = _sValue.toDouble();
 
             bool bEqualResult = is_double_equal(nValueToDouble, nValueATOF);
@@ -237,13 +237,13 @@ public:
         {
             toDouble_test_impl(_sValue);
 
-            // test also the negativ part.
+            
             rtl::OString sNegativValue("-");
             sNegativValue += _sValue;
             toDouble_test_impl(sNegativValue);
         }
 
-    // insert your test code here.
+    
     void toDouble_selftest()
         {
             printf("Start selftest:\n");
@@ -259,7 +259,7 @@ public:
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000001) == false);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000001) == false);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000001) == false);
-            // we check til 14 values after comma
+            
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000000000001) == true);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000000000001) == true);
             CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000000000000001) == true);
@@ -283,7 +283,7 @@ public:
         }
     void toDouble_test_pi()
         {
-            // value from http://www.angio.net/pi/digits/50.txt
+            
             rtl::OString sValue("3.141592653589793238462643383279502884197169399375");
             toDouble_test(sValue);
         }
@@ -329,9 +329,9 @@ public:
             toDouble_test(sValue);
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(toDouble);
     CPPUNIT_TEST(toDouble_selftest);
@@ -349,17 +349,17 @@ public:
     CPPUNIT_TEST(toDouble_test_1e_n99);
     CPPUNIT_TEST(toDouble_test_1e308);
     CPPUNIT_TEST_SUITE_END();
-}; // class toDouble
+}; 
 
-// -----------------------------------------------------------------------------
-// - getToken (tests)
-// -----------------------------------------------------------------------------
+
+
+
 class getToken : public CppUnit::TestFixture
 {
 
 public:
 
-    // initialise your test code values here.
+    
     void setUp()
         {
         }
@@ -368,7 +368,7 @@ public:
         {
         }
 
-    // -----------------------------------------------------------------------------
+    
 
     void getToken_000()
         {
@@ -380,8 +380,8 @@ public:
                 rtl::OString sToken = sTokenStr.getToken( 0, ';', nIndex );
             }
             while ( nIndex >= 0 );
-            // printf("Index %d\n", nIndex);
-            // should not GPF
+            
+            
         }
 
     void getToken_001()
@@ -461,21 +461,21 @@ public:
     CPPUNIT_TEST(getToken_003);
     CPPUNIT_TEST(getToken_004);
     CPPUNIT_TEST_SUITE_END();
-}; // class getToken
+}; 
 
-// -----------------------------------------------------------------------------
-// testing the method replaceAt( sal_Int32 index, sal_Int32 count,
-// const OString& newStr )
-// -----------------------------------------------------------------------------
 
-// Developer note: Mindy Liu, 2004-04-23
-// stollen from sal/qa/rtl_strings/rtl_OString.cxx
+
+
+
+
+
+
 
 class replaceAt : public CppUnit::TestFixture
 {
 
 public:
-    // initialise your test code values here.
+    
     void setUp()
         {
         }
@@ -494,7 +494,7 @@ public:
         sal_Bool bRes = ( expVal->compareTo(aStr1) == 0 );
         return bRes;
     }
-    // -----------------------------------------------------------------------------
+    
 
    void replaceAt_001()
         {
@@ -540,22 +540,22 @@ public:
     CPPUNIT_TEST(replaceAt_004);
     CPPUNIT_TEST(replaceAt_005);
     CPPUNIT_TEST_SUITE_END();
-}; // class replaceAt
+}; 
 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::valueOf);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::toDouble);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::getToken);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OString::replaceAt);
 
-} // namespace rtl_OString
+} 
 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

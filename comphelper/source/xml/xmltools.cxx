@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <comphelper/xmltools.hxx>
@@ -16,9 +16,9 @@ using namespace com::sun::star;
 
 namespace
 {
-    //Will be inside an xml comment, so can't use '-' in case '--' appears in
-    //output, etc. Despite what *is* legal in an xml comment, just using the
-    //base-64 subset to avoid pain with simplistic third-party parsers
+    
+    
+    
     static const sal_uInt8 aChaffEncoder[] =
     {
         'A', 'Q', 'g', 'w', 'B', 'R', 'h', 'x',
@@ -81,7 +81,7 @@ namespace comphelper
             sal_Int8 n;
             rtl_random_getBytes(pool, &n, 1);
 
-            //1024 minus max -127/plus max 128
+            
             sal_Int32 nLength = 1024+n;
             std::vector<sal_uInt8> aChaff(nLength);
             rtl_random_getBytes(pool, &aChaff[0], nLength);

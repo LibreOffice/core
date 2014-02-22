@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -31,12 +31,12 @@
 #include "sc.hrc"
 #include "document.hxx"
 
-//------------------------------------------------------------------------
+
 
 #define ScAuditingShell
 #include "scslots.hxx"
 
-//------------------------------------------------------------------------
+
 
 TYPEINIT1( ScAuditingShell, SfxShell );
 
@@ -46,7 +46,7 @@ SFX_IMPL_INTERFACE(ScAuditingShell, SfxShell, ScResId(SCSTR_AUDITSHELL))
 }
 
 
-//------------------------------------------------------------------------
+
 
 ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     SfxShell(pData->GetViewShell()),
@@ -65,13 +65,13 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     SfxShell::SetContextName(sfx2::sidebar::EnumContext::GetContextName(sfx2::sidebar::EnumContext::Context_Auditing));
 }
 
-//------------------------------------------------------------------------
+
 
 ScAuditingShell::~ScAuditingShell()
 {
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAuditingShell::Execute( SfxRequest& rReq )
 {
@@ -89,7 +89,7 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
             rBindings.Invalidate( SID_FILL_ADD_SUCC );
             rBindings.Invalidate( SID_FILL_DEL_SUCC );
             break;
-        case SID_CANCEL:        // Escape
+        case SID_CANCEL:        
         case SID_FILL_NONE:
             pViewData->GetViewShell()->SetAuditShell( false );
             break;
@@ -132,11 +132,11 @@ void ScAuditingShell::Execute( SfxRequest& rReq )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScAuditingShell::GetState( SfxItemSet& rSet )
 {
-    rSet.Put( SfxBoolItem( nFunction, true ) );         // aktive Funktion markieren
+    rSet.Put( SfxBoolItem( nFunction, true ) );         
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

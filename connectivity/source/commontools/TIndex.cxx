@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/TIndex.hxx"
@@ -31,7 +31,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+
 OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex(sal_True)
                  , m_pTable(_pTable)
 {
@@ -39,7 +39,7 @@ OIndexHelper::OIndexHelper( OTableHelper* _pTable) : connectivity::sdbcx::OIndex
     ::std::vector< OUString> aVector;
     m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 OIndexHelper::OIndexHelper( OTableHelper* _pTable,
                 const OUString& _Name,
                 const OUString& _Catalog,
@@ -56,7 +56,7 @@ OIndexHelper::OIndexHelper( OTableHelper* _pTable,
     construct();
     refreshColumns();
 }
-// -------------------------------------------------------------------------
+
 
 void OIndexHelper::refreshColumns()
 {
@@ -95,6 +95,6 @@ void OIndexHelper::refreshColumns()
     else
         m_pColumns  = new OIndexColumns(this,m_aMutex,aVector);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

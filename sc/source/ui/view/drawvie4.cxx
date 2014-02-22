@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svditer.hxx>
@@ -50,11 +50,11 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
+
 
 Point aDragStartDiff;
 
-// -----------------------------------------------------------------------
+
 
 void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rOneOle )
 {
@@ -80,7 +80,7 @@ void ScDrawView::CheckOle( const SdrMarkList& rMarkList, bool& rAnyOle, bool& rO
                 if ( pSubObj->GetObjIdentifier() == OBJ_OLE2 )
                 {
                     rAnyOle = true;
-                    // rOneOle remains sal_False - a group isn't treated like a single OLE object
+                    
                     return;
                 }
                 pSubObj = aIter.Next();
@@ -109,33 +109,33 @@ bool ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
         ScDocShellRef aDragShellRef;
         if (bAnyOle)
         {
-            aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
+            aDragShellRef = new ScDocShell;     
             aDragShellRef->DoInitNew(NULL);
         }
         ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
         SdrModel* pModel = GetMarkedObjModel();
         ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-        //  Charts now always copy their data in addition to the source reference, so
-        //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
-        //  Update with the data (including NumberFormatter) from the live document would
-        //  also store the NumberFormatter in the clipboard chart (#88749#)
-        // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
+        
+        
+        
+        
+        
 
         ScDocShell* pDocSh = pViewData->GetDocShell();
 
         TransferableObjectDescriptor aObjDesc;
         pDocSh->FillTransferableObjectDescriptor( aObjDesc );
         aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-        // maSize is set in ScDrawTransferObj ctor
+        
 
         ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
         uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-        pTransferObj->SetDrawPersist( &aDragShellRef );    // keep persist for ole objects alive
-        pTransferObj->SetDragSource( this );            // copies selection
+        pTransferObj->SetDrawPersist( &aDragShellRef );    
+        pTransferObj->SetDragSource( this );            
 
-        SC_MOD()->SetDragObject( NULL, pTransferObj );      // for internal D&D
+        SC_MOD()->SetDragObject( NULL, pTransferObj );      
         pTransferObj->StartDrag( pWindow, DND_ACTION_COPYMOVE | DND_ACTION_LINK );
     }
 
@@ -211,7 +211,7 @@ void getRangeFromErrorBar(const uno::Reference< chart2::XChartDocument > xChartD
 void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRangeRep)
 {
     if (!rObj.IsChart())
-        // not a chart object.
+        
         return;
 
     uno::Reference<embed::XEmbeddedObject> xObj = rObj.GetObjRef();
@@ -235,7 +235,7 @@ void getRangeFromOle2Object(const SdrOle2Obj& rObj, std::vector<OUString>& rRang
     if (!xDataSource.is())
         return;
 
-    // Get all data sources used in this chart.
+    
     getRangeFromDataSource(xDataSource, rRangeRep);
 }
 
@@ -278,7 +278,7 @@ void getChartSourceRanges(ScDocument* pDoc, const SdrMarkList& rObjs, std::vecto
         }
     }
 
-    // Compile all range representation strings into ranges.
+    
     std::vector<OUString>::const_iterator it = aRangeReps.begin(), itEnd = aRangeReps.end();
     for (; it != itEnd; ++it)
     {
@@ -319,7 +319,7 @@ public:
 
         SCTAB nTab;
         if (!mpDest->GetTable(aTabName, nTab))
-            // Sheet by this name doesn't exist.
+            
             return;
 
         mpSrc->CopyStaticToDocument(rRange, nTab, mpDest);
@@ -328,23 +328,23 @@ public:
 
 void copyChartRefDataToClipDoc(ScDocument* pSrcDoc, ScDocument* pClipDoc, const std::vector<ScRange>& rRanges)
 {
-    // Get a list of referenced table indices.
+    
     std::vector<SCTAB> aTabs;
     std::for_each(rRanges.begin(), rRanges.end(), InsertTabIndex(aTabs));
     std::sort(aTabs.begin(), aTabs.end());
     aTabs.erase(std::unique(aTabs.begin(), aTabs.end()), aTabs.end());
 
-    // Get table names.
+    
     if (aTabs.empty())
         return;
 
-    // Create sheets only for referenced source sheets.
+    
     OUString aName;
     std::vector<SCTAB>::const_iterator it = aTabs.begin(), itEnd = aTabs.end();
     if (!pSrcDoc->GetName(*it, aName))
         return;
 
-    pClipDoc->SetTabNameOnLoad(0, aName); // document initially has one sheet.
+    pClipDoc->SetTabNameOnLoad(0, aName); 
 
     for (++it; it != itEnd; ++it)
     {
@@ -365,12 +365,12 @@ void ScDrawView::DoCopy()
     std::vector<ScRange> aRanges;
     getChartSourceRanges(pDoc, rMarkList, aRanges);
 
-    // update ScGlobal::pDrawClipDocShellRef
+    
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc(!aRanges.empty()) );
     if (ScGlobal::pDrawClipDocShellRef)
     {
-        // Copy data referenced by the chart objects to the draw clip
-        // document. We need to do this before GetMarkedObjModel() below.
+        
+        
         ScDocShellRef xDocSh = *ScGlobal::pDrawClipDocShellRef;
         ScDocument* pClipDoc = xDocSh->GetDocument();
         copyChartRefDataToClipDoc(pDoc, pClipDoc, aRanges);
@@ -378,28 +378,28 @@ void ScDrawView::DoCopy()
     SdrModel* pModel = GetMarkedObjModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-    //  Charts now always copy their data in addition to the source reference, so
-    //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
-    //  Update with the data (including NumberFormatter) from the live document would
-    //  also store the NumberFormatter in the clipboard chart (#88749#)
+    
+    
+    
+    
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
 
     TransferableObjectDescriptor aObjDesc;
     pDocSh->FillTransferableObjectDescriptor( aObjDesc );
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-    // maSize is set in ScDrawTransferObj ctor
+    
 
     ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
     uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
     if ( ScGlobal::pDrawClipDocShellRef )
     {
-        pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    // keep persist for ole objects alive
+        pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    
     }
 
-    pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     // system clipboard
-    SC_MOD()->SetClipObject( NULL, pTransferObj );                  // internal clipboard
+    pTransferObj->CopyToClipboard( pViewData->GetActiveWin() );     
+    SC_MOD()->SetClipObject( NULL, pTransferObj );                  
 }
 
 uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
@@ -408,36 +408,36 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     const SdrMarkList& rMarkList = GetMarkedObjectList();
     CheckOle( rMarkList, bAnyOle, bOneOle );
 
-    // update ScGlobal::pDrawClipDocShellRef
+    
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc( bAnyOle ) );
     SdrModel* pModel = GetMarkedObjModel();
     ScDrawLayer::SetGlobalDrawPersist(NULL);
 
-    //  Charts now always copy their data in addition to the source reference, so
-    //  there's no need to call SchDLL::Update for the charts in the clipboard doc.
-    //  Update with the data (including NumberFormatter) from the live document would
-    //  also store the NumberFormatter in the clipboard chart (#88749#)
-    // lcl_RefreshChartData( pModel, pViewData->GetDocument() );
+    
+    
+    
+    
+    
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
 
     TransferableObjectDescriptor aObjDesc;
     pDocSh->FillTransferableObjectDescriptor( aObjDesc );
     aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-    // maSize is set in ScDrawTransferObj ctor
+    
 
     ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
     uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
     if ( ScGlobal::pDrawClipDocShellRef )
     {
-        pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    // keep persist for ole objects alive
+        pTransferObj->SetDrawPersist( &(*ScGlobal::pDrawClipDocShellRef) );    
     }
 
     return xTransferable;
 }
 
-//  Korrektur fuer 100% berechnen, unabhaengig von momentanen Einstellungen
+
 
 void ScDrawView::CalcNormScale( Fraction& rFractX, Fraction& rFractY ) const
 {
@@ -475,9 +475,9 @@ void ScDrawView::SetMarkedOriginalSize()
         Size aOriginalSize;
         if (nIdent == OBJ_OLE2)
         {
-            // TODO/LEAN: working with visual area can switch object to running state
+            
             uno::Reference < embed::XEmbeddedObject > xObj( ((SdrOle2Obj*)pObj)->GetObjRef(), uno::UNO_QUERY );
-            if ( xObj.is() )    // NULL for an invalid object that couldn't be loaded
+            if ( xObj.is() )    
             {
                 sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
 
@@ -513,7 +513,7 @@ void ScDrawView::SetMarkedOriginalSize()
             MapMode aDestMap( MAP_100TH_MM );
             if (aSourceMap.GetMapUnit() == MAP_PIXEL)
             {
-                //  Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
+                
 
                 Fraction aNormScaleX, aNormScaleY;
                 CalcNormScale( aNormScaleX, aNormScaleY );

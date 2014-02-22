@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -35,39 +35,39 @@
 namespace configmgr {
 
 namespace {
-// This is not a generic registry reader. We assume the following structure:
-// Last element of Key becomes prop, first part is the path and optionally nodes,
-// when the node has oor:op attribute.
-// Values can be the following: Value (string) and Final (dword, optional)
+
+
+
+
 //
-// For example the following registry setting:
-// [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.UserProfile\Data\o]
-// "Value"="Example Corp."
-// "Final"=dword:00000001
-// becomes the following in configuration:
-// <!-- set the Company name -->
-// <item oor:path="/org.openoffice.UserProfile/Data">
-//     <prop oor:name="o" oor:finalized="true">
-//         <value>Example Corp.</value>
-//     </prop>
-// </item>
+
+
+
+
+
+
+
+
+
+
+
 //
-// Another example:
-// [HKEY_LOCAL_MACHINE\SOFTWARE\Policies\LibreOffice\org.openoffice.Office.OptionsDialog\OptionsDialogGroups\ProductName/#fuse\Pages\Java/#fuse\Hide]
-// "Value"="true"
-// becomes the following in configuration:
-// <!-- Hide Tools - Options - LibreOffice - Advanced panel -->
-// <item oor:path="/org.openoffice.Office.OptionsDialog/OptionsDialogGroups">
-//     <node oor:name="ProductName" oor:op="fuse">
-//         <node oor:name="Pages">
-//             <node oor:name="Java" oor:op="fuse">
-//                 <prop oor:name="Hide">
-//                     <value>true</value>
-//                 </prop>
-//             </node>
-//         </node>
-//     </node>
-// </item>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, oslFileHandle aFileHandle)
 {
@@ -78,33 +78,33 @@ void dumpWindowsRegistryKey(HKEY hKey, OUString aKeyName, oslFileHandle aFileHan
         DWORD nSubKeys = 0;
         DWORD nValues = 0;
         DWORD nLongestValueNameLen, nLongestValueLen;
-        // Query the number of subkeys
+        
         RegQueryInfoKeyW(hCurKey, NULL, NULL, NULL, &nSubKeys, NULL, NULL, &nValues, &nLongestValueNameLen, &nLongestValueLen, NULL, NULL);
         if(nSubKeys)
         {
-            //Look for subkeys in this key
+            
             for(DWORD i = 0; i < nSubKeys; i++)
             {
                 wchar_t buffKeyName[MAX_KEY_LENGTH];
                 buffKeyName[0] = '\0';
                 DWORD buffSize=MAX_KEY_LENGTH;
                 OUString aSubkeyName;
-                //Get subkey name
+                
                 RegEnumKeyExW(hCurKey, i, buffKeyName, &buffSize, NULL, NULL, NULL, NULL);
 
-                //Make up full key name
+                
                 if(aKeyName.isEmpty())
                     aSubkeyName = aKeyName + OUString(buffKeyName);
                 else
                     aSubkeyName = aKeyName + "\\" + OUString(buffKeyName);
 
-                //Recursion, until no more subkeys are found
+                
                 dumpWindowsRegistryKey(hKey, aSubkeyName, aFileHandle);
             }
         }
         else if(nValues)
         {
-            // No more subkeys, we are at a leaf
+            
             wchar_t* pValueName = new wchar_t[nLongestValueNameLen + 1];
             wchar_t* pValue = new wchar_t[nLongestValueLen + 1];
 
@@ -218,9 +218,9 @@ bool dumpWindowsRegistry(OUString* pFileURL)
     writeData(
         aFileHandle,
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<oor:items"
-            " xmlns:oor=\"http://openoffice.org/2001/registry\""
-            " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
-            " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n");
+            " xmlns:oor=\"http:
+            " xmlns:xs=\"http:
+            " xmlns:xsi=\"http:
     dumpWindowsRegistryKey(hKey, "", aFileHandle);
     writeData(aFileHandle, "</oor:items>");
     oslFileError e = osl_closeFile(aFileHandle);

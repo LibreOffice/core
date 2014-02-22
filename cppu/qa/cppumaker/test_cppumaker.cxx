@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -29,30 +29,30 @@
 #include "test/codemaker/cppumaker/services/auto.hpp"
 #include "test/codemaker/cppumaker/services/bool.hpp"
 #include "test/codemaker/cppumaker/services/break.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/case.hpp"
+
 #include "test/codemaker/cppumaker/services/catch.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/char.hpp"
+
 #include "test/codemaker/cppumaker/services/class.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/const.hpp"
+
 #include "test/codemaker/cppumaker/services/continue.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/default.hpp"
+
 #include "test/codemaker/cppumaker/services/delete.hpp"
 #include "test/codemaker/cppumaker/services/do.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/double.hpp"
+
 #include "test/codemaker/cppumaker/services/else.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/enum.hpp"
+
 #include "test/codemaker/cppumaker/services/explicit.hpp"
 #include "test/codemaker/cppumaker/services/export.hpp"
 #include "test/codemaker/cppumaker/services/extern.hpp"
 #include "test/codemaker/cppumaker/services/false.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/float.hpp"
+
 #include "test/codemaker/cppumaker/services/for.hpp"
 #include "test/codemaker/cppumaker/services/friend.hpp"
 #include "test/codemaker/cppumaker/services/goto.hpp"
 #include "test/codemaker/cppumaker/services/if.hpp"
 #include "test/codemaker/cppumaker/services/inline.hpp"
 #include "test/codemaker/cppumaker/services/int.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/long.hpp"
+
 #include "test/codemaker/cppumaker/services/mutable.hpp"
 #include "test/codemaker/cppumaker/services/namespace.hpp"
 #include "test/codemaker/cppumaker/services/new.hpp"
@@ -62,25 +62,25 @@
 #include "test/codemaker/cppumaker/services/public.hpp"
 #include "test/codemaker/cppumaker/services/register.hpp"
 #include "test/codemaker/cppumaker/services/return.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/short.hpp"
+
 #include "test/codemaker/cppumaker/services/signed.hpp"
 #include "test/codemaker/cppumaker/services/sizeof.hpp"
 #include "test/codemaker/cppumaker/services/static.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/struct.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/switch.hpp"
+
+
 #include "test/codemaker/cppumaker/services/template.hpp"
 #include "test/codemaker/cppumaker/services/this.hpp"
 #include "test/codemaker/cppumaker/services/throw.hpp"
 #include "test/codemaker/cppumaker/services/true.hpp"
 #include "test/codemaker/cppumaker/services/try.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/typedef.hpp"
+
 #include "test/codemaker/cppumaker/services/typeid.hpp"
 #include "test/codemaker/cppumaker/services/typename.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/union.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/unsigned.hpp"
+
+
 #include "test/codemaker/cppumaker/services/using.hpp"
 #include "test/codemaker/cppumaker/services/virtual.hpp"
-//TODO: #include "test/codemaker/cppumaker/services/void.hpp"
+
 #include "test/codemaker/cppumaker/services/volatile.hpp"
 #include "test/codemaker/cppumaker/services/while.hpp"
 #include "test/codemaker/cppumaker/services/and.hpp"
@@ -188,30 +188,30 @@
 #include "test/codemaker/cppumaker/singletons/auto.hpp"
 #include "test/codemaker/cppumaker/singletons/bool.hpp"
 #include "test/codemaker/cppumaker/singletons/break.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/case.hpp"
+
 #include "test/codemaker/cppumaker/singletons/catch.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/char.hpp"
+
 #include "test/codemaker/cppumaker/singletons/class.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/const.hpp"
+
 #include "test/codemaker/cppumaker/singletons/continue.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/default.hpp"
+
 #include "test/codemaker/cppumaker/singletons/delete.hpp"
 #include "test/codemaker/cppumaker/singletons/do.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/double.hpp"
+
 #include "test/codemaker/cppumaker/singletons/else.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/enum.hpp"
+
 #include "test/codemaker/cppumaker/singletons/explicit.hpp"
 #include "test/codemaker/cppumaker/singletons/export.hpp"
 #include "test/codemaker/cppumaker/singletons/extern.hpp"
 #include "test/codemaker/cppumaker/singletons/false.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/float.hpp"
+
 #include "test/codemaker/cppumaker/singletons/for.hpp"
 #include "test/codemaker/cppumaker/singletons/friend.hpp"
 #include "test/codemaker/cppumaker/singletons/goto.hpp"
 #include "test/codemaker/cppumaker/singletons/if.hpp"
 #include "test/codemaker/cppumaker/singletons/inline.hpp"
 #include "test/codemaker/cppumaker/singletons/int.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/long.hpp"
+
 #include "test/codemaker/cppumaker/singletons/mutable.hpp"
 #include "test/codemaker/cppumaker/singletons/namespace.hpp"
 #include "test/codemaker/cppumaker/singletons/new.hpp"
@@ -221,25 +221,25 @@
 #include "test/codemaker/cppumaker/singletons/public.hpp"
 #include "test/codemaker/cppumaker/singletons/register.hpp"
 #include "test/codemaker/cppumaker/singletons/return.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/short.hpp"
+
 #include "test/codemaker/cppumaker/singletons/signed.hpp"
 #include "test/codemaker/cppumaker/singletons/sizeof.hpp"
 #include "test/codemaker/cppumaker/singletons/static.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/struct.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/switch.hpp"
+
+
 #include "test/codemaker/cppumaker/singletons/template.hpp"
 #include "test/codemaker/cppumaker/singletons/this.hpp"
 #include "test/codemaker/cppumaker/singletons/throw.hpp"
 #include "test/codemaker/cppumaker/singletons/true.hpp"
 #include "test/codemaker/cppumaker/singletons/try.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/typedef.hpp"
+
 #include "test/codemaker/cppumaker/singletons/typeid.hpp"
 #include "test/codemaker/cppumaker/singletons/typename.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/union.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/unsigned.hpp"
+
+
 #include "test/codemaker/cppumaker/singletons/using.hpp"
 #include "test/codemaker/cppumaker/singletons/virtual.hpp"
-//TODO: #include "test/codemaker/cppumaker/singletons/void.hpp"
+
 #include "test/codemaker/cppumaker/singletons/volatile.hpp"
 #include "test/codemaker/cppumaker/singletons/while.hpp"
 #include "test/codemaker/cppumaker/singletons/and.hpp"
@@ -419,8 +419,8 @@ struct Guard {
 };
 
 void Test::testBigStruct() {
-    // Default-initialize a BigStruct instance on top of a memory buffer filled
-    // with random data, and make sure that all members are default-initialized:
+    
+    
     boost::scoped_array< char > buffer(
         new char[sizeof (test::codemaker::cppumaker::BigStruct)]);
     for (std::size_t i = 0; i < sizeof (test::codemaker::cppumaker::BigStruct);
@@ -457,8 +457,8 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(guard.p->m22.getLength(), static_cast< sal_Int32 >(0));
     CPPUNIT_ASSERT_EQUAL(guard.p->m23.getLength(), static_cast< sal_Int32 >(0));
 
-//This is a very platform specific test.
-#if defined __GNUC__ && __GNUC__ >= 3 // see CPPU_GCC3_ALIGN
+
+#if defined __GNUC__ && __GNUC__ >= 3 
 #if defined(LINUX) && (defined (X86_64) || defined(X86) || defined(PPC))
     CPPUNIT_ASSERT_EQUAL(
 #if defined X86_64 || defined PPC
@@ -480,8 +480,8 @@ void Test::testBigStruct() {
     CPPUNIT_ASSERT_EQUAL(+typelib_TypeClass_STRUCT, +td->eTypeClass);
     typelib_StructTypeDescription * std =
         reinterpret_cast< typelib_StructTypeDescription * >(td);
-    CPPUNIT_ASSERT_EQUAL(+typelib_TypeClass_UNSIGNED_SHORT, +std->aBase.ppTypeRefs[3]->eTypeClass); // unsigned short m4;
-    CPPUNIT_ASSERT_EQUAL(+typelib_TypeClass_CHAR, +std->aBase.ppTypeRefs[10]->eTypeClass); // char m11;
+    CPPUNIT_ASSERT_EQUAL(+typelib_TypeClass_UNSIGNED_SHORT, +std->aBase.ppTypeRefs[3]->eTypeClass); 
+    CPPUNIT_ASSERT_EQUAL(+typelib_TypeClass_CHAR, +std->aBase.ppTypeRefs[10]->eTypeClass); 
 }
 
 void Test::testPolyStruct() {

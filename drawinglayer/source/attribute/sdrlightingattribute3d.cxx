@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
@@ -23,7 +23,7 @@
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -32,7 +32,7 @@ namespace drawinglayer
         class ImpSdrLightingAttribute
         {
         public:
-            // 3D light attribute definitions
+            
             basegfx::BColor                         maAmbientLight;
             ::std::vector< Sdr3DLightAttribute >    maLightVector;
 
@@ -50,7 +50,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             const basegfx::BColor& getAmbientLight() const { return maAmbientLight; }
             const ::std::vector< Sdr3DLightAttribute >& getLightVector() const { return maLightVector; }
 
@@ -110,24 +110,24 @@ namespace drawinglayer
             return mpSdrLightingAttribute->getLightVector();
         }
 
-        // color model solver
+        
         basegfx::BColor SdrLightingAttribute::solveColorModel(
             const basegfx::B3DVector& rNormalInEyeCoordinates,
             const basegfx::BColor& rColor, const basegfx::BColor& rSpecular,
             const basegfx::BColor& rEmission, sal_uInt16 nSpecularIntensity) const
         {
-            // initialize with emissive color
+            
             basegfx::BColor aRetval(rEmission);
 
-            // take care of global ambient light
+            
             aRetval += mpSdrLightingAttribute->getAmbientLight() * rColor;
 
-            // prepare light access. Is there a light?
+            
             const sal_uInt32 nLightCount(mpSdrLightingAttribute->getLightVector().size());
 
             if(nLightCount && !rNormalInEyeCoordinates.equalZero())
             {
-                // prepare normal
+                
                 basegfx::B3DVector aEyeNormal(rNormalInEyeCoordinates);
                 aEyeNormal.normalize();
 
@@ -142,7 +142,7 @@ namespace drawinglayer
 
                         if(rLight.getSpecular())
                         {
-                            // expand by (0.0, 0.0, 1.0) in Z
+                            
                             basegfx::B3DVector aSpecularNormal(rLight.getDirection().getX(), rLight.getDirection().getY(), rLight.getDirection().getZ() + 1.0);
                             aSpecularNormal.normalize();
                             double fCosFac2(aSpecularNormal.scalar(aEyeNormal));
@@ -157,12 +157,12 @@ namespace drawinglayer
                 }
             }
 
-            // clamp to color space before usage
+            
             aRetval.clamp();
 
             return aRetval;
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

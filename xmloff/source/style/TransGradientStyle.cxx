@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TransGradientStyle.hxx"
@@ -64,7 +64,7 @@ SvXMLEnumMapEntry const pXML_GradientStyle_Enum[] =
     { XML_TOKEN_INVALID,                0 }
 };
 
-// Import
+
 
 XMLTransGradientStyleImport::XMLTransGradientStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
@@ -210,7 +210,7 @@ sal_Bool XMLTransGradientStyleImport::importXML(
     return bRet;
 }
 
-// Export
+
 
 XMLTransGradientStyleExport::XMLTransGradientStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
@@ -235,14 +235,14 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
             OUString aStrValue;
             OUStringBuffer aOut;
 
-            // Style
+            
             if( !SvXMLUnitConverter::convertEnum( aOut, aGradient.Style, pXML_GradientStyle_Enum ) )
             {
                 bRet = sal_False;
             }
             else
             {
-                // Name
+                
                 sal_Bool bEncoded = sal_False;
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
                                       rExport.EncodeStyleName( rStrName,
@@ -254,7 +254,7 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
-                // Center x/y
+                
                 if( aGradient.Style != awt::GradientStyle_LINEAR &&
                     aGradient.Style != awt::GradientStyle_AXIAL   )
                 {
@@ -269,21 +269,21 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
 
                 Color aColor;
 
-                // Transparency start
+                
                 aColor.SetColor( aGradient.StartColor );
                 sal_Int32 aStartValue = 100 - (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
                 ::sax::Converter::convertPercent( aOut, aStartValue );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_START, aStrValue );
 
-                // Transparency end
+                
                 aColor.SetColor( aGradient.EndColor );
                 sal_Int32 aEndValue = 100 - (sal_Int32)(((aColor.GetRed() + 1) * 100) / 255);
                 ::sax::Converter::convertPercent( aOut, aEndValue );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_END, aStrValue );
 
-                // Angle
+                
                 if( aGradient.Style != awt::GradientStyle_RADIAL )
                 {
                     ::sax::Converter::convertNumber(
@@ -292,12 +292,12 @@ sal_Bool XMLTransGradientStyleExport::exportXML(
                     rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_ANGLE, aStrValue );
                 }
 
-                // Border
+                
                 ::sax::Converter::convertPercent( aOut, aGradient.Border );
                 aStrValue = aOut.makeStringAndClear();
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_GRADIENT_BORDER, aStrValue );
 
-                // Do Write
+                
                 SvXMLElementExport rElem( rExport,
                                           XML_NAMESPACE_DRAW, XML_OPACITY,
                                           sal_True, sal_False );

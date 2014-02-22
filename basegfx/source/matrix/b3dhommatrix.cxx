@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/instance.hxx>
@@ -32,7 +32,7 @@ namespace basegfx
                                                             IdentityMatrix > {}; }
 
     B3DHomMatrix::B3DHomMatrix() :
-        mpImpl( IdentityMatrix::get() ) // use common identity matrix
+        mpImpl( IdentityMatrix::get() ) 
     {
     }
 
@@ -235,7 +235,7 @@ namespace basegfx
 
     void B3DHomMatrix::shearXY(double fSx, double fSy)
     {
-        // #i76239# do not test against 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
+        
         if(!fTools::equalZero(fSx) || !fTools::equalZero(fSy))
         {
             Impl3DHomMatrix aShearXYMat;
@@ -249,7 +249,7 @@ namespace basegfx
 
     void B3DHomMatrix::shearXZ(double fSx, double fSz)
     {
-        // #i76239# do not test against 1.0, but against 0.0. We are talking about a value not on the diagonal (!)
+        
         if(!fTools::equalZero(fSx) || !fTools::equalZero(fSz))
         {
             Impl3DHomMatrix aShearXZMat;
@@ -341,25 +341,25 @@ namespace basegfx
     {
         Impl3DHomMatrix aOrientationMat;
 
-        // translate -VRP
+        
         aOrientationMat.set(0, 3, -aVRP.getX());
         aOrientationMat.set(1, 3, -aVRP.getY());
         aOrientationMat.set(2, 3, -aVRP.getZ());
 
-        // build rotation
+        
         aVUV.normalize();
         aVPN.normalize();
 
-        // build x-axis as peroendicular fron aVUV and aVPN
+        
         B3DVector aRx(aVUV.getPerpendicular(aVPN));
         aRx.normalize();
 
-        // y-axis perpendicular to that
+        
         B3DVector aRy(aVPN.getPerpendicular(aRx));
         aRy.normalize();
 
-        // the calculated normals are the line vectors of the rotation matrix,
-        // set them to create rotation
+        
+        
         aOrientationMat.set(0, 0, aRx.getX());
         aOrientationMat.set(0, 1, aRx.getY());
         aOrientationMat.set(0, 2, aRx.getZ());
@@ -375,33 +375,33 @@ namespace basegfx
 
     bool B3DHomMatrix::decompose(B3DTuple& rScale, B3DTuple& rTranslate, B3DTuple& rRotate, B3DTuple& rShear) const
     {
-        // when perspective is used, decompose is not made here
+        
         if(!mpImpl->isLastLineDefault())
             return false;
 
-        // If determinant is zero, decomposition is not possible
+        
         if(0.0 == determinant())
             return false;
 
-        // isolate translation
+        
         rTranslate.setX(mpImpl->get(0, 3));
         rTranslate.setY(mpImpl->get(1, 3));
         rTranslate.setZ(mpImpl->get(2, 3));
 
-        // correct translate values
+        
         rTranslate.correctValues();
 
-        // get scale and shear
+        
         B3DVector aCol0(mpImpl->get(0, 0), mpImpl->get(1, 0), mpImpl->get(2, 0));
         B3DVector aCol1(mpImpl->get(0, 1), mpImpl->get(1, 1), mpImpl->get(2, 1));
         B3DVector aCol2(mpImpl->get(0, 2), mpImpl->get(1, 2), mpImpl->get(2, 2));
         B3DVector aTemp;
 
-        // get ScaleX
+        
         rScale.setX(aCol0.getLength());
         aCol0.normalize();
 
-        // get ShearXY
+        
         rShear.setX(aCol0.scalar(aCol1));
 
         if(fTools::equalZero(rShear.getX()))
@@ -416,7 +416,7 @@ namespace basegfx
             aCol1 = aTemp;
         }
 
-        // get ScaleY
+        
         rScale.setY(aCol1.getLength());
         aCol1.normalize();
 
@@ -427,7 +427,7 @@ namespace basegfx
             rShear.setX(rShear.getX() / rScale.getY());
         }
 
-        // get ShearXZ
+        
         rShear.setY(aCol0.scalar(aCol2));
 
         if(fTools::equalZero(rShear.getY()))
@@ -442,7 +442,7 @@ namespace basegfx
             aCol2 = aTemp;
         }
 
-        // get ShearYZ
+        
         rShear.setZ(aCol1.scalar(aCol2));
 
         if(fTools::equalZero(rShear.getZ()))
@@ -457,7 +457,7 @@ namespace basegfx
             aCol2 = aTemp;
         }
 
-        // get ScaleZ
+        
         rScale.setZ(aCol2.getLength());
         aCol2.normalize();
 
@@ -475,10 +475,10 @@ namespace basegfx
             rShear.setZ(rShear.getZ() / rScale.getZ());
         }
 
-        // correct shear values
+        
         rShear.correctValues();
 
-        // Coordinate system flip?
+        
         if(0.0 > aCol0.scalar(aCol1.getPerpendicular(aCol2)))
         {
             rScale = -rScale;
@@ -487,10 +487,10 @@ namespace basegfx
             aCol2 = -aCol2;
         }
 
-        // correct scale values
+        
         rScale.correctValues(1.0);
 
-        // Get rotations
+        
         {
             double fy=0;
             double cy=0;
@@ -528,12 +528,12 @@ namespace basegfx
                 rRotate.setZ(atan2(aCol0.getY(), aCol0.getX()));
             }
 
-            // correct rotate values
+            
             rRotate.correctValues();
         }
 
         return true;
     }
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

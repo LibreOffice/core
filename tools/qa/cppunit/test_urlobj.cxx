@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <string>
@@ -42,7 +42,7 @@ namespace tools_urlobj
     {
 
       public:
-        // initialise your test code values here.
+        
         void setUp(  )
         {
         }
@@ -51,21 +51,21 @@ namespace tools_urlobj
         {
         }
 
-        // insert your test code here.
-        // this is only demonstration code
+        
+        
         void urlobjTest_001(  )
         {
-            INetURLObject aUrl( OUString( "file://10.10.1.1/sampledir/sample.file" ) );
+            INetURLObject aUrl( OUString( "file:
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             equalsAscii
-                            ( "smb://10.10.1.1/sampledir/sample.file" ) );
+                            ( "smb:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
                             equalsAscii
-                            ( "file://10.10.1.1/sampledir/sample.file" ) );
+                            ( "file:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
@@ -86,12 +86,12 @@ namespace tools_urlobj
                              INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://137.65.170.24/c$/Img0001.jpg" ) );
+                            equalsAscii( "smb:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) ;
+                            equalsAscii( "file:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
@@ -113,12 +113,12 @@ namespace tools_urlobj
                              INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://hive-winxp-x86/pmladek/test2.odt" ) );
+                            equalsAscii( "smb:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "file://hive-winxp-x86/pmladek/test2.odt" ) );
+                            equalsAscii( "file:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
@@ -129,15 +129,15 @@ namespace tools_urlobj
 
         void urlobjTest_004(  )
         {
-            INetURLObject aUrl( OUString( "smb://10.10.1.1/sampledir/sample.file" ) );
+            INetURLObject aUrl( OUString( "smb:
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://10.10.1.1/sampledir/sample.file" ) );
+                            equalsAscii( "smb:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "file://10.10.1.1/sampledir/sample.file" ) );
+                            equalsAscii( "file:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
@@ -153,16 +153,16 @@ namespace tools_urlobj
         void urlobjTest_005(  )
         {
             INetURLObject aUrl;
-            aUrl.setFSysPath( OUString( "//137.65.170.24/c$/Img0001.jpg" ),
+            aUrl.setFSysPath( OUString( "
                               INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://137.65.170.24/c$/Img0001.jpg" ) );
+                            equalsAscii( "smb:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "file://137.65.170.24/c$/Img0001.jpg" ) );
+                            equalsAscii( "file:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
@@ -178,16 +178,16 @@ namespace tools_urlobj
         void urlobjTest_006(  )
         {
             INetURLObject aUrl;
-            aUrl.setFSysPath( OUString( "//hive-winxp-x86/pmladek/test2.odt" ),
+            aUrl.setFSysPath( OUString( "
                               INetURLObject::FSYS_DETECT );
 #ifdef LINUX
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "smb://hive-winxp-x86/pmladek/test2.odt" ) );
+                            equalsAscii( "smb:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_SMB );
 #endif
 #ifdef WIN
             CPPUNIT_ASSERT( aUrl.GetMainURL( INetURLObject::NO_DECODE ).
-                            equalsAscii( "file://hive-winxp-x86/pmladek/test2.odt" ) );
+                            equalsAscii( "file:
             CPPUNIT_ASSERT( aUrl.GetProtocol(  ) == INET_PROT_FILE );
 #endif
             CPPUNIT_ASSERT( aUrl.GetHost( INetURLObject::NO_DECODE ).
@@ -198,10 +198,10 @@ namespace tools_urlobj
 
         void urlobjCmisTest(  )
         {
-            // Test with a username part
+            
             {
-                INetURLObject aUrl( OUString( "vnd.libreoffice.cmis://username@http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" ) );
-                CPPUNIT_ASSERT_EQUAL( std::string( "http://foo.bar.com:8080/my/cmis/atom#repo-id-encoded" ),
+                INetURLObject aUrl( OUString( "vnd.libreoffice.cmis:
+                CPPUNIT_ASSERT_EQUAL( std::string( "http:
                         OUSTR_TO_STDSTR( aUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET ) ) );
                 CPPUNIT_ASSERT_EQUAL( std::string( "username" ), OUSTR_TO_STDSTR( aUrl.GetUser( ) ) );
                 CPPUNIT_ASSERT_EQUAL( std::string( "/path/to/content" ),
@@ -209,11 +209,11 @@ namespace tools_urlobj
                 CPPUNIT_ASSERT_EQUAL_MESSAGE( "Wrong protocol found", INET_PROT_CMIS, aUrl.GetProtocol(  ) );
             }
 
-            // Test without a username part
+            
             {
                 INetURLObject aUrl( OUString(
-                                "vnd.libreoffice.cmis://http:%2F%2Ffoo.bar.com:8080%2Fmy%2Fcmis%2Fatom%23repo-id-encoded/path/to/content" ) );
-                CPPUNIT_ASSERT_EQUAL( std::string( "http://foo.bar.com:8080/my/cmis/atom#repo-id-encoded" ),
+                                "vnd.libreoffice.cmis:
+                CPPUNIT_ASSERT_EQUAL( std::string( "http:
                         OUSTR_TO_STDSTR( aUrl.GetHost( INetURLObject::DECODE_WITH_CHARSET ) ) );
                 CPPUNIT_ASSERT( !aUrl.HasUserData() );
                 CPPUNIT_ASSERT_EQUAL( std::string( "/path/to/content" ),
@@ -224,18 +224,18 @@ namespace tools_urlobj
 
         void urlobjTest_emptyPath() {
             {
-                INetURLObject url(OUString("http://example.com"));
+                INetURLObject url(OUString("http:
                 CPPUNIT_ASSERT_EQUAL(INET_PROT_HTTP, url.GetProtocol());
                 CPPUNIT_ASSERT_EQUAL(OUString("example.com"), url.GetHost());
                 CPPUNIT_ASSERT_EQUAL(OUString("/"), url.GetURLPath());
             }
             {
-                // This is an invalid http URL per RFC 2616:
-                INetURLObject url(OUString("http://example.com?query"));
+                
+                INetURLObject url(OUString("http:
                 CPPUNIT_ASSERT(url.HasError());
             }
             {
-                INetURLObject url(OUString("http://example.com#fragment"));
+                INetURLObject url(OUString("http:
                 CPPUNIT_ASSERT_EQUAL(INET_PROT_HTTP, url.GetProtocol());
                 CPPUNIT_ASSERT_EQUAL(OUString("example.com"), url.GetHost());
                 CPPUNIT_ASSERT_EQUAL(OUString("/"), url.GetURLPath());
@@ -243,9 +243,9 @@ namespace tools_urlobj
             }
         }
 
-        // Change the following lines only, if you add, remove or rename
-        // member functions of the current class,
-        // because these macros are need by auto register mechanism.
+        
+        
+        
 
         CPPUNIT_TEST_SUITE( urlobjTest );
         CPPUNIT_TEST( urlobjTest_001 );
@@ -257,13 +257,13 @@ namespace tools_urlobj
         CPPUNIT_TEST( urlobjCmisTest );
         CPPUNIT_TEST( urlobjTest_emptyPath );
         CPPUNIT_TEST_SUITE_END(  );
-    };                          // class createPool
+    };                          
 
 
     CPPUNIT_TEST_SUITE_REGISTRATION( urlobjTest );
-}                               // namespace rtl_random
+}                               
 
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,7 +51,7 @@ using namespace com::sun::star::registry;
 
 
 
-// static member intialization
+
 SvtLinguOptions *   LinguOptions::pData = NULL;
 oslInterlockedCount LinguOptions::nRefCount;
 
@@ -92,8 +92,8 @@ struct WID_Name
     const char  *pPropertyName;
 };
 
-//! order of entries is import (see LinguOptions::GetName)
-//! since the WID is used as index in this table!
+
+
 WID_Name aWID_Name[] =
 {
     { 0,                                  0 },
@@ -140,7 +140,7 @@ OUString LinguOptions::GetName( sal_Int32 nWID )
 
 
 
-//! map must be sorted by first entry in alphabetical increasing order.
+
 static const SfxItemPropertyMapEntry* lcl_GetLinguProps()
 {
     static const SfxItemPropertyMapEntry aLinguProps[] =
@@ -388,9 +388,9 @@ void SAL_CALL
     {
         bDisposing = sal_True;
 
-        //! its too late to save the options here!
-        // (see AppExitListener for saving)
-        //aOpt.Save();  // save (possible) changes before exiting
+        
+        
+        
 
         EventObject aEvtObj( (XPropertySet *) this );
         aEvtListeners.disposeAndClear( aEvtObj );
@@ -419,9 +419,9 @@ void SAL_CALL
 }
 
 
-// Service specific part
 
-// XServiceInfo
+
+
 OUString SAL_CALL LinguProps::getImplementationName()
         throw(RuntimeException)
 {
@@ -429,14 +429,14 @@ OUString SAL_CALL LinguProps::getImplementationName()
     return getImplementationName_Static();
 }
 
-// XServiceInfo
+
 sal_Bool SAL_CALL LinguProps::supportsService( const OUString& ServiceName )
         throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
         throw(RuntimeException)
 {
@@ -444,13 +444,13 @@ uno::Sequence< OUString > SAL_CALL LinguProps::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
-// ORegistryServiceManager_Static
+
 uno::Sequence< OUString > LinguProps::getSupportedServiceNames_Static()
         throw()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    uno::Sequence< OUString > aSNS( 1 );    // more than 1 service possible
+    uno::Sequence< OUString > aSNS( 1 );    
     aSNS.getArray()[0] = "com.sun.star.linguistic2.LinguProperties";
     return aSNS;
 }
@@ -491,7 +491,7 @@ void * SAL_CALL LinguProps_getFactory( const sal_Char * pImplName,
                 LinguProps::getImplementationName_Static(),
                 LinguProps_CreateInstance,
                 LinguProps::getSupportedServiceNames_Static());
-        // acquire, because we return an interface pointer instead of a reference
+        
         xFactory->acquire();
         pRet = xFactory.get();
     }

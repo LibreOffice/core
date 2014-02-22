@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sfx2/templateviewitem.hxx>
@@ -56,7 +56,7 @@ void TemplateViewItem::calculateItemsPosition(const long nThumbnailHeight, const
 
         long nSpace = (nDisplayHeight + nPadding - 2*aTextDev.getTextHeight()) / 3;
 
-        // Set subtitle position
+        
         maSubTitlePos.setY(maTextPos.getY() + nSpace + aTextDev.getTextHeight());
         maSubTitlePos.setX(maDrawArea.Left() +
                            (aRectSize.Width() - aTextDev.getTextWidth(maSubTitle,0,nMaxTextLength)*SUBTITLE_SCALE_FACTOR)/2);
@@ -71,7 +71,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
     int nCount = maSubTitle.isEmpty() ? 5 : 6;
     drawinglayer::primitive2d::Primitive2DSequence aSeq(nCount);
 
-    // Draw background
+    
     if ( mbSelected || mbHover )
         aFillColor = pAttrs->aHighlightColor;
 
@@ -79,7 +79,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                                                B2DPolyPolygon(Polygon(maDrawArea,5,5).getB2DPolygon()),
                                                aFillColor));
 
-    // Draw thumbnail
+    
     Size aImageSize = maPreview1.GetSizePixel();
 
     float fWidth = aImageSize.Width();
@@ -106,7 +106,7 @@ void TemplateViewItem::Paint(drawinglayer::processor2d::BaseProcessor2D *pProces
                                                             false)
                                         ));
 
-    // draw thumbnail borders
+    
     aSeq[3] = drawinglayer::primitive2d::Primitive2DReference(createBorderLine(aBounds));
 
     addTextPrimitives(maTitle, pAttrs, maTextPos, aSeq);

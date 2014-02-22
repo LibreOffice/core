@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <TblStylePrHandler.hxx>
@@ -77,8 +77,8 @@ void TblStylePrHandler::lcl_attribute(Id rName, Value & rVal)
     {
         case NS_ooxml::LN_CT_TblStyleOverrideType:
             {
-                // The tokenid should be the same in the model.xml than
-                // in the TblStyleType enum
+                
+                
                 m_nType = TblStyleType( rVal.getInt( ) );
             }
             break;
@@ -127,16 +127,16 @@ void TblStylePrHandler::lcl_sprm(Sprm & rSprm)
         }
             break;
         default:
-            // Tables specific properties have to handled here
+            
             m_pTablePropsHandler->SetProperties( m_pProperties );
             m_pTablePropsHandler->SetInteropGrabBag(m_aInteropGrabBag);
             bool bRet = m_pTablePropsHandler->sprm( rSprm );
 
             if ( !bRet )
             {
-                // The DomainMapper can handle some of the properties
+                
                 m_rDMapper.PushStyleSheetProperties( m_pProperties, true );
-                // Just pass a non-empty string, the array will have a single element anyway.
+                
                 m_rDMapper.enableInteropGrabBag("TblStylePrHandler");
                 m_rDMapper.sprm( rSprm );
                 uno::Sequence<beans::PropertyValue> aGrabBag = m_rDMapper.getInteropGrabBag().Value.get< uno::Sequence<beans::PropertyValue> >();

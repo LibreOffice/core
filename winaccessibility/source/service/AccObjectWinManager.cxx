@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cassert>
@@ -105,7 +105,7 @@ AccObjectWinManager::Get_ToATInterface(HWND hWnd, long lParam, WPARAM wParam)
         {
             pRetIMAcc = topWindowAccObj->GetIMAccessible();
             if(pRetIMAcc)
-                pRetIMAcc->AddRef();//increase COM reference count
+                pRetIMAcc->AddRef();
         }
     }
 
@@ -200,10 +200,10 @@ sal_Bool AccObjectWinManager::NotifyAccEvent(XAccessible* pXAcc,short state)
         NotifyWinEvent( EVENT_OBJECT_STATECHANGE,hAcc, OBJID_CLIENT,dChildID  );
         break;
 
-    //Removed fire out selected event
-    //case UM_EVENT_STATE_SELECTED:
-    //  NotifyWinEvent( EVENT_OBJECT_STATECHANGE,hAcc, OBJID_CLIENT,dChildID  );
-    //  break;
+    
+    
+    
+    
     case UM_EVENT_STATE_ARMED:
         UpdateAccFocus(pXAcc);
         NotifyWinEvent( EVENT_OBJECT_FOCUS,hAcc, OBJID_CLIENT,dChildID  );
@@ -372,7 +372,7 @@ void AccObjectWinManager::UpdateAccFocus(XAccessible* newFocus)
         AccObject* pAccObjOld = GetAccObjByXAcc(oldFocus);
         oldFocus = newFocus;
         pAccObjNew->setFocus();
-        //if old == new, the pAccObjNew will be without focused state
+        
         if (pAccObjOld && pAccObjOld != pAccObjNew)
             pAccObjOld->unsetFocus();
     }
@@ -409,7 +409,7 @@ int AccObjectWinManager::UpdateAccSelection(XAccessible* pXAcc)
 
     IAccSelectionList oldSelection = pAccObj->GetSelection();
 
-    if(selectNum > 4)//for selected.
+    if(selectNum > 4)
         return selectNum;
     if(selectNum == 1 && oldSelection.size() == 0)
         return 1;
@@ -552,7 +552,7 @@ void AccObjectWinManager::DeleteAccObj( XAccessible* pXAcc )
     {
         XHWNDDocList.erase(accObj.GetParentHWND());
     }
-    XIdAccList.erase(pXAcc); // note: this invalidates accObj so do it last!
+    XIdAccList.erase(pXAcc); 
 }
 
 /**
@@ -709,7 +709,7 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
     pObj.SetResID( this->ImpleGenerateResID());
     pObj.SetParentHWND( pWnd );
 
-    //for file name support
+    
     if ( pObj.GetRole() == DOCUMENT )
     {
         XHWNDToDocumentHash::iterator aIter = XHWNDDocList.find(pWnd);
@@ -719,7 +719,7 @@ sal_Bool AccObjectWinManager::InsertAccObj( XAccessible* pXAcc,XAccessible* pPar
         }
         XHWNDDocList.insert( XHWNDToDocumentHash::value_type(pWnd, pXAcc) );
     }
-    //end of file name
+    
 
     ::rtl::Reference<AccEventListener> const pListener =
         CreateAccEventListener(pXAcc);
@@ -789,7 +789,7 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case /*AccessibleRole::*/ROOT_PANE:
             pRet = new AccFrameEventListener(pXAcc,pAgent);
             break;
-            //Container
+            
         case /*AccessibleRole::*/CANVAS:
         case /*AccessibleRole::*/COMBO_BOX:
         case /*AccessibleRole::*/DOCUMENT:
@@ -817,7 +817,7 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case /*AccessibleRole::*/HEADING:
             pRet = new AccParagraphEventListener(pXAcc,pAgent);
             break;
-            //Component
+            
         case /*AccessibleRole::*/CHECK_BOX:
         case /*AccessibleRole::*/ICON:
         case /*AccessibleRole::*/LABEL:
@@ -835,15 +835,15 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case DATE_EDITOR:
             pRet = new AccComponentEventListener(pXAcc,pAgent);
             break;
-            //text component
+            
         case /*AccessibleRole::*/TEXT:
             pRet = new AccTextComponentEventListener(pXAcc,pAgent);
             break;
-            //menu
+            
         case /*AccessibleRole::*/MENU:
             pRet = new AccMenuEventListener(pXAcc,pAgent);
             break;
-            //object container
+            
         case /*AccessibleRole::*/SHAPE:
 
         case /*AccessibleRole::*/EMBEDDED_OBJECT:
@@ -851,14 +851,14 @@ AccObjectWinManager::CreateAccEventListener(XAccessible* pXAcc)
         case /*AccessibleRole::*/TEXT_FRAME:
             pRet = new AccObjectContainerEventListener(pXAcc,pAgent);
             break;
-            //descendmanager
+            
         case /*AccessibleRole::*/LIST:
             pRet = new AccListEventListener(pXAcc,pAgent);
             break;
         case /*AccessibleRole::*/TREE:
             pRet = new AccTreeEventListener(pXAcc,pAgent);
             break;
-            //special
+            
         case /*AccessibleRole::*/COLUMN_HEADER:
         case /*AccessibleRole::*/TABLE:
             pRet = new AccTableEventListener(pXAcc,pAgent);
@@ -944,7 +944,7 @@ void AccObjectWinManager::UpdateDescription( XAccessible* pXAcc )
 void  AccObjectWinManager::SetLocation( XAccessible* pXAcc, long /*top*/, long /*left*/, long /*width*/, long /*height*/ )
 {
     AccObject* pObj = GetAccObjByXAcc( pXAcc );
-    //get the location from XComponent.
+    
     Reference< XAccessibleContext > pRContext = pXAcc->getAccessibleContext();
     if( pObj )
         pObj->UpdateLocation();

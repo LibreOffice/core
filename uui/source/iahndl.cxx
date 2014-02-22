@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <memory>
@@ -173,7 +173,7 @@ UUIInteractionHelper::handleRequest(
 {
     Application* pApp = 0;
     if(
-        // be aware,it is the same type
+        
         static_cast< oslThreadIdentifier >(
             Application::GetMainThreadIdentifier())
         != osl::Thread::getCurrentIdentifier()
@@ -181,7 +181,7 @@ UUIInteractionHelper::handleRequest(
         (pApp = GetpApp())
         != 0
     ) {
-        // we are not in the main thread, let it handle that stuff
+        
         HandleData aHD(rRequest);
         Link aLink(&aHD,handlerequest);
         pApp->PostUserEvent(aLink,this);
@@ -234,7 +234,7 @@ UUIInteractionHelper::getStringFromRequest(
 {
     Application* pApp = 0;
     if(
-        // be aware,it is the same type
+        
         static_cast< oslThreadIdentifier >(
             Application::GetMainThreadIdentifier())
         != osl::Thread::getCurrentIdentifier()
@@ -242,7 +242,7 @@ UUIInteractionHelper::getStringFromRequest(
         (pApp = GetpApp())
         != 0
     ) {
-        // we are not in the main thread, let it handle that stuff
+        
         HandleData aHD(rRequest);
         Link aLink(&aHD,getstringfromrequest);
         pApp->PostUserEvent(aLink,this);
@@ -296,13 +296,13 @@ UUIInteractionHelper::isInformationalErrorMessageRequest(
     uno::Sequence< uno::Reference< task::XInteractionContinuation > > const &
         rContinuations)
 {
-    // Only requests with a single continuation (user has no choice, request
-    // is just informational)
+    
+    
     if (rContinuations.getLength() != 1 )
         return false;
 
-    // user can only abort or approve, all other continuations are not
-    // considered to be informational.
+    
+    
     uno::Reference< task::XInteractionApprove > xApprove(
         rContinuations[0], uno::UNO_QUERY);
     if (xApprove.is())
@@ -337,7 +337,7 @@ UUIInteractionHelper::tryOtherInteractionHandler(
 
 namespace
 {
-    // .................................................................................................................
+    
     static bool lcl_matchesRequest( const Any& i_rRequest, const OUString& i_rTypeName, const OUString& i_rPropagation )
     {
         const ::com::sun::star::uno::TypeDescription aTypeDesc( i_rTypeName );
@@ -363,7 +363,7 @@ namespace
     }
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 bool UUIInteractionHelper::handleCustomRequest( const Reference< XInteractionRequest >& i_rRequest, const OUString& i_rServiceName ) const
 {
     try
@@ -388,17 +388,17 @@ bool UUIInteractionHelper::handleCustomRequest( const Reference< XInteractionReq
     return false;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
+
 bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XInteractionRequest > const & rRequest )
 {
-    // the request
+    
     const Any aRequest( rRequest->getRequest() );
 
     const StringHashMap::const_iterator aCacheHitTest = m_aTypedCustomHandlers.find( aRequest.getValueTypeName() );
     if ( aCacheHitTest != m_aTypedCustomHandlers.end() )
         return handleCustomRequest( rRequest, aCacheHitTest->second );
 
-    // the base registration node for "typed" interaction handlers
+    
     const ::utl::OConfigurationTreeRoot aConfigRoot( ::utl::OConfigurationTreeRoot::createWithComponentContext(
         m_xContext,
         OUString( "/org.openoffice.Interaction/InteractionHandlers" ),
@@ -406,7 +406,7 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
         ::utl::OConfigurationTreeRoot::CM_READONLY
     ) );
 
-    // loop through all registered implementations
+    
     const Sequence< OUString > aRegisteredHandlers( aConfigRoot.getNodeNames() );
     const OUString* pHandlerName = aRegisteredHandlers.getConstArray();
     const OUString* pHandlersEnd = aRegisteredHandlers.getConstArray() + aRegisteredHandlers.getLength();
@@ -415,25 +415,25 @@ bool UUIInteractionHelper::handleTypedHandlerImplementations( Reference< XIntera
         const ::utl::OConfigurationNode aHandlerNode( aConfigRoot.openNode( *pHandlerName ) );
         const ::utl::OConfigurationNode aTypesNode( aHandlerNode.openNode( "HandledRequestTypes" ) );
 
-        // loop through all the types which the current handler is registered for
+        
         const Sequence< OUString > aHandledTypes( aTypesNode.getNodeNames() );
         const OUString* pType = aHandledTypes.getConstArray();
         const OUString* pTypesEnd = aHandledTypes.getConstArray() + aHandledTypes.getLength();
         for ( ; pType != pTypesEnd; ++pType )
         {
-            // the UNO type is the node name
+            
             ::utl::OConfigurationNode aType( aTypesNode.openNode( *pType ) );
-            // and there's a child denoting how the responsibility propagates
+            
             OUString sPropagation;
             OSL_VERIFY( aType.getNodeValue( "Propagation" ) >>= sPropagation );
             if ( lcl_matchesRequest( aRequest, *pType, sPropagation ) )
             {
-                // retrieve the service/implementation name of the handler
+                
                 OUString sServiceName;
                 OSL_VERIFY( aHandlerNode.getNodeValue( "ServiceName" ) >>= sServiceName );
-                // cache the information who feels responsible for requests of this type
+                
                 m_aTypedCustomHandlers[ aRequest.getValueTypeName() ] = sServiceName;
-                // actually handle the request
+                
                 return handleCustomRequest( rRequest, sServiceName );
             }
         }
@@ -472,7 +472,7 @@ UUIInteractionHelper::handleRequest_impl(
                     if ( index )
                         aName = aName + OUString( ',' ) + sModules[index];
                     else
-                        aName = sModules[index]; // 1st name
+                        aName = sModules[index]; 
                 }
                 aArguments.push_back( aName );
             }
@@ -782,7 +782,7 @@ UUIInteractionHelper::handleRequest_impl(
         task::ErrorCodeRequest aErrorCodeRequest;
         if (aAnyRequest >>= aErrorCodeRequest)
         {
-            // Sucky special handling for xlsx macro filter warning
+            
             if ( (sal_uInt32)ERRCODE_SFX_VBASIC_CANTSAVE_STORAGE == (sal_uInt32)aErrorCodeRequest.ErrCode)
             {
                 std::vector< OUString > aArguments;
@@ -834,9 +834,9 @@ UUIInteractionHelper::handleRequest_impl(
         }
 
 
-        ///////////////////////////////////////////////////////////////////
-        // Handle requests which do not have a plain string representation.
-        ///////////////////////////////////////////////////////////////////
+        
+        
+        
         if (!bObtainErrorStringOnly)
         {
             if ( handleAuthenticationRequest( rRequest ) )
@@ -899,20 +899,20 @@ UUIInteractionHelper::handleRequest_impl(
                 return true;
             }
 
-            ///////////////////////////////////////////////////////////////
-            // Last chance: interaction handlers registered in the configuration
-            ///////////////////////////////////////////////////////////////
+            
+            
+            
 
-            // typed InteractionHandlers (ooo.Interactions)
+            
             if ( handleTypedHandlerImplementations( rRequest ) )
                 return true;
 
-            // legacy configuration (ooo.ucb.InteractionHandlers)
+            
             if (tryOtherInteractionHandler( rRequest ))
                 return true;
         }
 
-        // Not handled.
+        
         return false;
     }
     catch (std::bad_alloc const &)
@@ -922,7 +922,7 @@ UUIInteractionHelper::handleRequest_impl(
     }
     catch( const uno::RuntimeException& )
     {
-        throw;  // allowed to leave here
+        throw;  
     }
     catch( const uno::Exception& )
     {
@@ -980,7 +980,7 @@ UUIInteractionHelper::getInteractionHandlerList(
                     "config access does not implement XHierarchicalNameAccess"),
                     uno::Reference< uno::XInterface >());
 
-            // Iterate over children.
+            
             for ( sal_Int32 n = 0; n < nCount; ++n )
             {
                 OUStringBuffer aElemBuffer;
@@ -991,7 +991,7 @@ UUIInteractionHelper::getInteractionHandlerList(
                 {
                     InteractionHandlerData aInfo;
 
-                    // Obtain service name.
+                    
                     OUStringBuffer aKeyBuffer = aElemBuffer;
                     aKeyBuffer.appendAscii( "']/ServiceName" );
 
@@ -1006,12 +1006,12 @@ UUIInteractionHelper::getInteractionHandlerList(
 
                     aInfo.ServiceName = aValue;
 
-                    // Append info to list.
+                    
                     rdataList.push_back( aInfo );
                 }
                 catch ( container::NoSuchElementException& )
                 {
-                    // getByHierarchicalName
+                    
 
                     OSL_FAIL( "GetInteractionHandlerList - "
                                 "caught NoSuchElementException!" );
@@ -1118,7 +1118,7 @@ NameClashResolveDialogResult executeSimpleNameClashResolveDialog( Window *pParen
     return eResult;
 }
 
-} // namespace
+} 
 
 void
 UUIInteractionHelper::handleNameClashResolveRequest(
@@ -1201,16 +1201,16 @@ UUIInteractionHelper::handleGenericErrorRequest(
         uno::Reference< task::XInteractionApprove > xApprove;
         getContinuations(rContinuations, &xApprove, &xAbort);
 
-        // Note: It's important to convert the transported long to the
-        // required  unsigned long value. Otherwhise using as flag field
-        // can fail ...
+        
+        
+        
         ErrCode  nError   = static_cast< ErrCode >(nErrorCode);
         sal_Bool bWarning = !ERRCODE_TOERROR(nError);
 
         if ( nError == ERRCODE_SFX_BROKENSIGNATURE
              || nError == ERRCODE_SFX_INCOMPLETE_ENCRYPTION )
         {
-            // the security warning box needs a special title
+            
             OUString aErrorString;
             ErrorHandler::GetErrorString( nErrorCode, aErrorString );
 
@@ -1298,25 +1298,25 @@ UUIInteractionHelper::handleFutureDocumentVersionUpdateRequest(
     short nResult = RET_CANCEL;
 
     static bool s_bDeferredToNextSession = false;
-    // TODO: this static variable is somewhat hacky. Formerly (before the dialog was moved from SFX2 to the
-    // interaction handler implementation), this was stored in SFX_APP()'s impl structure, in member
-    // bODFVersionWarningLater. Of course, we do not have access to it here.
+    
+    
+    
     //
-    // A proper solution which I would envision would be:
-    // - There's a central implementation (this one here) of css.task.InteractionHandler
-    // - There's a configuration which maps UNO names to service names
-    // - If the handler is confronted with a request, it tries to find the name of the UNO structure describing
-    //   the request in the said configuration.
-    //   - If an entry is found, then
-    //     - the respective service is instantiated
-    //     - the component is queried for css.task.XInteractionHandler, and the request is delegated
-    //   - if no entry is found, then the request is silenced (with calling the AbortContinuation, if possible)
-    // This way, the FutureDocumentVersionProductUpdateRequest could be handled in SFX (or any other
-    // suitable place), again, and we would only have one place where we remember the s_bDeferredToNextSession
-    // flag.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    // Note: The above pattern has been implemented in CWS autorecovery. Now the remaining task is to move the
-    // handling of this interaction to SFX, again.
+    
+    
 
     if ( !s_bDeferredToNextSession )
     {
@@ -1447,9 +1447,9 @@ UUIInteractionHelper::handleBrokenPackageRequest(
     }
 }
 
-//=========================================================================
-// ErrorResource Implementation
-//=========================================================================
+
+
+
 
 bool
 ErrorResource::getString(ErrCode nErrorCode, OUString &rString)

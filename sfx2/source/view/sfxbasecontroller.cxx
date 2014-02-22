@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <time.h>
@@ -173,7 +173,7 @@ sal_uInt32 Get10ThSec()
     return n10Ticks / CLOCKS_PER_SEC;
 }
 
-sal_Int32 m_nInReschedule = 0;  /// static counter for rescheduling
+sal_Int32 m_nInReschedule = 0;  
 
 void reschedule()
 {
@@ -306,9 +306,9 @@ void SAL_CALL SfxStatusIndicator::disposing( const lang::EventObject& /*Source*/
     xProgress.clear();
 }
 
-//________________________________________________________________________________________________________
-//  declaration IMPL_SfxBaseController_ListenerHelper
-//________________________________________________________________________________________________________
+
+
+
 
 class IMPL_SfxBaseController_ListenerHelper : public ::cppu::WeakImplHelper1< frame::XFrameActionListener >
 {
@@ -322,7 +322,7 @@ private:
 
     SfxBaseController*      m_pController   ;
 
-} ; // class IMPL_SfxBaseController_ListenerContainer
+} ; 
 
 class IMPL_SfxBaseController_CloseListenerHelper : public ::cppu::WeakImplHelper1< util::XCloseListener >
 {
@@ -338,7 +338,7 @@ private:
 
     SfxBaseController*      m_pController;
 
-} ; // class IMPL_SfxBaseController_ListenerContainer
+} ; 
 
 IMPL_SfxBaseController_CloseListenerHelper::IMPL_SfxBaseController_CloseListenerHelper( SfxBaseController*  pController )
         : m_pController ( pController   )
@@ -365,7 +365,7 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::queryClosing( const la
         {
             if ( bDeliverOwnership && ( !pShell->GetWindow() || !pShell->GetWindow()->IsReallyVisible() ) )
             {
-                // ignore Ownership in case of visible frame (will be closed by user)
+                
                 Reference < frame::XModel > xModel( aEvent.Source, uno::UNO_QUERY );
                 if ( xModel.is() )
                     pShell->TakeOwnership_Impl();
@@ -382,9 +382,9 @@ void SAL_CALL IMPL_SfxBaseController_CloseListenerHelper::notifyClosing( const l
 {
 }
 
-//________________________________________________________________________________________________________
-//  declaration IMPL_SfxBaseController_DataContainer
-//________________________________________________________________________________________________________
+
+
+
 
 struct IMPL_SfxBaseController_DataContainer
 {
@@ -417,20 +417,20 @@ struct IMPL_SfxBaseController_DataContainer
     {
     }
 
-} ; // struct IMPL_SfxBaseController_DataContainer
+} ; 
 
-//________________________________________________________________________________________________________
-//  IMPL_SfxBaseController_ListenerHelper constructor
-//________________________________________________________________________________________________________
+
+
+
 
 IMPL_SfxBaseController_ListenerHelper::IMPL_SfxBaseController_ListenerHelper(   SfxBaseController*  pController )
         : m_pController ( pController   )
 {
 }
 
-//________________________________________________________________________________________________________
-//  IMPL_SfxBaseController_ListenerHelper destructor
-//________________________________________________________________________________________________________
+
+
+
 
 IMPL_SfxBaseController_ListenerHelper::~IMPL_SfxBaseController_ListenerHelper()
 {
@@ -457,9 +457,9 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::frameAction( const frame::F
     }
 }
 
-//________________________________________________________________________________________________________
-//  IMPL_SfxBaseController_ListenerHelper -> XEventListener
-//________________________________________________________________________________________________________
+
+
+
 
 void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const lang::EventObject& /*aEvent*/ ) throw( RuntimeException )
 {
@@ -468,9 +468,9 @@ void SAL_CALL IMPL_SfxBaseController_ListenerHelper::disposing( const lang::Even
         m_pController->getFrame()->removeFrameActionListener( this ) ;
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> constructor
-//________________________________________________________________________________________________________
+
+
+
 DBG_NAME(sfx2_SfxBaseController)
 SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
     :   m_pData ( new IMPL_SfxBaseController_DataContainer( m_aMutex, pViewShell, this ))
@@ -479,9 +479,9 @@ SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
     m_pData->m_pViewShell->SetController( this );
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> destructor
-//________________________________________________________________________________________________________
+
+
+
 
 SfxBaseController::~SfxBaseController()
 {
@@ -489,9 +489,9 @@ SfxBaseController::~SfxBaseController()
     delete m_pData;
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XController2
-//________________________________________________________________________________________________________
+
+
+
 
 Reference< XWindow > SAL_CALL SfxBaseController::getComponentWindow() throw (RuntimeException)
 {
@@ -542,9 +542,9 @@ SfxViewFrame& SfxBaseController::GetViewFrame_Impl() const
     return *pActFrame;
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XController2 -> XController
-//________________________________________________________________________________________________________
+
+
+
 
 void SAL_CALL SfxBaseController::attachFrame( const Reference< frame::XFrame >& xFrame ) throw( RuntimeException )
 {
@@ -573,22 +573,22 @@ void SAL_CALL SfxBaseController::attachFrame( const Reference< frame::XFrame >& 
             ConnectSfxFrame_Impl( E_CONNECT );
             ShowInfoBars( );
 
-            // attaching the frame to the controller is the last step in the creation of a new view, so notify this
+            
             SfxViewEventHint aHint( SFX_EVENT_VIEWCREATED, GlobalEventConfig::GetEventName( STR_EVENT_VIEWCREATED ), m_pData->m_pViewShell->GetObjectShell(), Reference< frame::XController2 >( this ) );
             SFX_APP()->NotifyEvent( aHint );
         }
     }
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
+
+
 
 sal_Bool SAL_CALL SfxBaseController::attachModel( const Reference< frame::XModel >& xModel ) throw( RuntimeException )
 {
     if ( m_pData->m_pViewShell && xModel.is() && xModel != m_pData->m_pViewShell->GetObjectShell()->GetModel() )
     {
-        // don't allow to reattach a model!
+        
         OSL_FAIL("Can't reattach model!");
         return sal_False;
     }
@@ -599,15 +599,15 @@ sal_Bool SAL_CALL SfxBaseController::attachModel( const Reference< frame::XModel
     return sal_True;
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
+
+
 
 sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
 
-    // ignore dublicate calls, which doesn't change anything real
+    
     if (bSuspend == m_pData->m_bSuspendState)
        return sal_True;
 
@@ -626,7 +626,7 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
             getFrame()->removeFrameActionListener( m_pData->m_xListener ) ;
         SfxViewFrame* pActFrame = m_pData->m_pViewShell->GetFrame() ;
 
-        // More Views on the same document?
+        
         SfxObjectShell* pDocShell   =   m_pData->m_pViewShell->GetObjectShell() ;
         bool            bOther      =   false                                   ;
 
@@ -657,9 +657,9 @@ sal_Bool SAL_CALL SfxBaseController::suspend( sal_Bool bSuspend ) throw( Runtime
     }
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
+
+
 
 uno::Any SfxBaseController::getViewData() throw( RuntimeException )
 {
@@ -675,9 +675,9 @@ uno::Any SfxBaseController::getViewData() throw( RuntimeException )
     return aAny ;
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
+
+
 
 void SAL_CALL SfxBaseController::restoreViewData( const uno::Any& aValue ) throw( RuntimeException )
 {
@@ -690,9 +690,9 @@ void SAL_CALL SfxBaseController::restoreViewData( const uno::Any& aValue ) throw
     }
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
+
+
 
 Reference< frame::XFrame > SAL_CALL SfxBaseController::getFrame() throw( RuntimeException )
 {
@@ -700,9 +700,9 @@ Reference< frame::XFrame > SAL_CALL SfxBaseController::getFrame() throw( Runtime
     return m_pData->m_xFrame;
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XController
-//________________________________________________________________________________________________________
+
+
+
 
 Reference< frame::XModel > SAL_CALL SfxBaseController::getModel() throw( RuntimeException )
 {
@@ -710,9 +710,9 @@ Reference< frame::XModel > SAL_CALL SfxBaseController::getModel() throw( Runtime
     return m_pData->m_pViewShell ? m_pData->m_pViewShell->GetObjectShell()->GetModel() : Reference < frame::XModel > () ;
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XDispatchProvider
-//________________________________________________________________________________________________________
+
+
+
 
 Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const   util::URL&             aURL            ,
                                                                     const   OUString&            sTargetFrameName,
@@ -759,7 +759,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                     return pAct->GetBindings().GetDispatch( pSlot, aURL, bMasterCommand );
                 else
                 {
-                    // try to find parent SfxViewFrame
+                    
                     Reference< frame::XFrame > xParentFrame;
                     Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
                     if ( xOwnFrame.is() )
@@ -767,10 +767,10 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
 
                     if ( xParentFrame.is() )
                     {
-                        // TODO/LATER: in future probably SfxViewFrame hirarchy should be the same as XFrame hirarchy
-                        // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
+                        
+                        
 
-                        // search the related SfxViewFrame
+                        
                         SfxViewFrame* pParentFrame = NULL;
                         for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
                                 pFrame;
@@ -816,7 +816,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
                     return pAct->GetBindings().GetDispatch( pSlot, aURL, sal_False );
                 else
                 {
-                    // try to find parent SfxViewFrame
+                    
                     Reference< frame::XFrame > xParentFrame;
                     Reference< frame::XFrame > xOwnFrame = pAct->GetFrame().GetFrameInterface();
                     if ( xOwnFrame.is() )
@@ -824,10 +824,10 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
 
                     if ( xParentFrame.is() )
                     {
-                        // TODO/LATER: in future probably SfxViewFrame hirarchy should be the same as XFrame hirarchy
-                        // SfxViewFrame* pParentFrame = pAct->GetParentViewFrame();
+                        
+                        
 
-                        // search the related SfxViewFrame
+                        
                         SfxViewFrame* pParentFrame = NULL;
                         for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst();
                                 pFrame;
@@ -852,7 +852,7 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
             }
             else if( sTargetFrameName == "_self" || sTargetFrameName.isEmpty() )
             {
-                // check for already loaded URL ... but with additional jumpmark!
+                
                 Reference< frame::XModel > xModel = getModel();
                 if( xModel.is() && !aURL.Mark.isEmpty() )
                 {
@@ -868,14 +868,14 @@ Reference< frame::XDispatch > SAL_CALL SfxBaseController::queryDispatch(   const
     return xDisp;
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XDispatchProvider
-//________________________________________________________________________________________________________
+
+
+
 
 uno::Sequence< Reference< frame::XDispatch > > SAL_CALL SfxBaseController::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& seqDescripts ) throw( RuntimeException )
 {
-    // Create return list - which must have same size then the given descriptor
-    // It's not allowed to pack it!
+    
+    
     sal_Int32 nCount = seqDescripts.getLength();
     uno::Sequence< Reference< frame::XDispatch > > lDispatcher( nCount );
 
@@ -889,9 +889,9 @@ uno::Sequence< Reference< frame::XDispatch > > SAL_CALL SfxBaseController::query
     return lDispatcher;
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XControllerBorder
-//________________________________________________________________________________________________________
+
+
+
 
 frame::BorderWidths SAL_CALL SfxBaseController::getBorder()
     throw ( RuntimeException )
@@ -963,9 +963,9 @@ void SfxBaseController::BorderWidthsChanged_Impl()
     }
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XComponent
-//________________________________________________________________________________________________________
+
+
+
 
 void SAL_CALL SfxBaseController::dispose() throw( RuntimeException )
 {
@@ -997,7 +997,7 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException )
             SfxViewFrame *pView = SfxViewFrame::GetFirst(pDoc);
             while( pView )
             {
-                // if there is another ViewFrame or currently the ViewShell in my ViewFrame is switched (PagePreview)
+                
                 if ( pView != pFrame || pView->GetViewShell() != m_pData->m_pViewShell )
                     break;
                 pView = SfxViewFrame::GetNext( *pView, pDoc );
@@ -1024,7 +1024,7 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException )
             m_pData->m_pViewShell = NULL;
             if ( pFrame->GetViewShell() == pShell )
             {
-                // Enter registrations only allowed if we are the owner!
+                
                 if ( pFrame->GetFrame().OwnsBindings_Impl() )
                     pFrame->GetBindings().ENTERREGISTRATIONS();
                 pFrame->GetFrame().SetFrameInterface_Impl(  aXFrame );
@@ -1034,18 +1034,18 @@ void SAL_CALL SfxBaseController::dispose() throw( RuntimeException )
     }
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XComponent
-//________________________________________________________________________________________________________
+
+
+
 
 void SAL_CALL SfxBaseController::addEventListener( const Reference< lang::XEventListener >& aListener ) throw( RuntimeException )
 {
     m_pData->m_aListenerContainer.addInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
 }
 
-//________________________________________________________________________________________________________
-//  SfxBaseController -> XComponent
-//________________________________________________________________________________________________________
+
+
+
 
 void SAL_CALL SfxBaseController::removeEventListener( const Reference< lang::XEventListener >& aListener ) throw( RuntimeException )
 {
@@ -1142,7 +1142,7 @@ throw (RuntimeException)
     SfxSlotPool* pSlotPool = pPool ? pPool : &SFX_SLOTPOOL();
     const sal_uIntPtr nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
 
-    // Select Group ( Group 0 is internal )
+    
     for ( sal_uInt16 i=0; i<pSlotPool->GetGroupCount(); i++ )
     {
         pSlotPool->SeekGroup( i );
@@ -1235,7 +1235,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
 
     const bool bConnect = ( i_eConnect != E_DISCONNECT );
 
-    // disable window and dispatcher
+    
     pViewFrame->Enable( bConnect );
     pViewFrame->GetDispatcher()->Lock( !bConnect );
 
@@ -1250,8 +1250,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 SfxViewFrame* pViewFrm = m_pData->m_pViewShell->GetViewFrame();
                 if ( !pViewFrm->GetFrame().IsInPlace() )
                 {
-                    // for outplace embedded objects, we want the layout manager to keep the content window
-                    // size constant, if possible
+                    
+                    
                     try
                     {
                         Reference< beans::XPropertySet > xFrameProps( m_pData->m_xFrame, uno::UNO_QUERY_THROW );
@@ -1267,8 +1267,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
             }
         }
 
-        // upon DISCONNECT, we did *not* pop the shells from the stack (this is done elsewhere), so upon
-        // RECONNECT, we're not allowed to push them
+        
+        
         if ( i_eConnect != E_RECONNECT )
         {
             pViewFrame->GetDispatcher()->Push( *m_pData->m_pViewShell );
@@ -1321,8 +1321,8 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 if ( rFrame.IsInPlace() )
                 {
                     pViewFrame->UnlockAdjustPosSizePixel();
-                    // force resize for OLE server to fix layout problems of writer and math
-                    // see i53651
+                    
+                    
                     if ( nPluginMode == 3 )
                         pViewFrame->Resize( sal_True );
                 }
@@ -1333,48 +1333,48 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
                 rFrame.GetWindow().Show();
             }
 
-            // UpdateTitle now, hidden TopFrames have otherwise no Name!
+            
             pViewFrame->UpdateTitle();
 
             if ( !rFrame.IsInPlace() )
                 pViewFrame->Resize( sal_True );
 
-            // if there's a JumpMark given, then, well, jump to it
+            
             ::comphelper::NamedValueCollection aViewArgs( getCreationArguments() );
             const OUString sJumpMark = aViewArgs.getOrDefault( "JumpMark", OUString() );
             const bool bHasJumpMark = !sJumpMark.isEmpty();
             OSL_ENSURE( ( !m_pData->m_pViewShell->GetObjectShell()->IsLoading() )
                     ||  ( sJumpMark.isEmpty() ),
                 "SfxBaseController::ConnectSfxFrame_Impl: so this code wasn't dead?" );
-                // Before CWS autorecovery, there was code which postponed jumping to the Mark to a later time
-                // (SfxObjectShell::PositionView_Impl), but it seems this branch was never used, since this method
-                // here is never called before the load process finished. At least not with a non-empty jump mark
+                
+                
+                
             if ( !sJumpMark.isEmpty() )
                 m_pData->m_pViewShell->JumpToMark( sJumpMark );
 
-            // if no plugin mode and no jump mark was supplied, check whether the document itself can provide view data, and
-            // if so, forward it to the view/shell.
+            
+            
             if ( !bHasPluginMode && !bHasJumpMark )
             {
-                // Note that this might not be the ideal place here. Restoring view data should, IMO, be the
-                // responsibility of the loader, not an implementation detail burried here deep within the controller's
-                // implementation.
-                // What I think should be done to replace the below code:
-                // - change SfxBaseController::restoreViewData to also accept a PropertyValue[] (it currently accepts
-                //   a string only), and forward it to its ViewShell's ReadUserDataSequence
-                // - change the frame loader so that when a new document is loaded (as opposed to an existing
-                //   document being loaded into a new frame), the model's view data is examine the very same
-                //   way as below, and the proper view data is set via XController::restoreViewData
-                // - extend SfxViewFrame::SwitchToViewShell_Impl. Currently, it cares for the case where a non-PrintPreview
-                //   view is exchanged, and sets the old view's data at the model. It should also care for the other
-                //   way, were the PrintPreview view is left: in this case, the new view should also be initialized
-                //   with the model's view data
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 try
                 {
                     Reference< XViewDataSupplier > xViewDataSupplier( getModel(), UNO_QUERY_THROW );
                     Reference< XIndexAccess > xViewData( xViewDataSupplier->getViewData() );
 
-                    // find the view data item whose ViewId matches the ID of the view we're just connecting to
+                    
                     const SfxObjectFactory& rDocFactory( rDoc.GetFactory() );
                     const sal_Int32 nCount = xViewData.is() ? xViewData->getCount() : 0;
                     sal_Int32 nViewDataIndex = 0;
@@ -1411,7 +1411,7 @@ void SfxBaseController::ConnectSfxFrame_Impl( const ConnectSfxFrame i_eConnect )
         }
     }
 
-    // invalidate slot corresponding to the view shell
+    
     const sal_uInt16 nViewNo = m_pData->m_pViewShell->GetObjectShell()->GetFactory().GetViewNo_Impl( pViewFrame->GetCurViewId(), USHRT_MAX );
     DBG_ASSERT( nViewNo != USHRT_MAX, "view shell id not found" );
     if ( nViewNo != USHRT_MAX )
@@ -1422,7 +1422,7 @@ void SfxBaseController::ShowInfoBars( )
 {
     if ( m_pData->m_pViewShell )
     {
-        // CMIS verifications
+        
         Reference< document::XCmisDocument > xCmisDoc( m_pData->m_pViewShell->GetObjectShell()->GetModel(), uno::UNO_QUERY );
         if ( xCmisDoc.is( ) && xCmisDoc->canCheckOut( ) )
         {
@@ -1430,8 +1430,8 @@ void SfxBaseController::ShowInfoBars( )
 
             if ( xCmisDoc->isVersionable( ) && aCmisProperties.hasElements( ) )
             {
-                // Loop over the CMIS Properties to find cmis:isVersionSeriesCheckedOut
-                // and find if it is a Google Drive file.
+                
+                
                 bool bIsGoogleFile = false;
                 sal_Bool bCheckedOut = sal_False;
                 for ( sal_Int32 i = 0; i < aCmisProperties.getLength(); ++i )
@@ -1441,15 +1441,15 @@ void SfxBaseController::ShowInfoBars( )
                         aCmisProperties[i].Value >>= bTmp;
                         bCheckedOut = bTmp[0];
                     }
-                    // if it is a Google Drive file, we don't need the checkout bar,
-                    // still need the checkout feature for the version dialog.
+                    
+                    
                     if ( aCmisProperties[i].Name == "title" )
                         bIsGoogleFile = true;
                 }
 
                 if ( !bCheckedOut && !bIsGoogleFile )
                 {
-                    // Get the Frame and show the InfoBar if not checked out
+                    
                     SfxViewFrame* pViewFrame = m_pData->m_pViewShell->GetFrame();
                     std::vector< PushButton* > aButtons;
                     PushButton* pBtn = new PushButton( &pViewFrame->GetWindow(), SfxResId( BT_CHECKOUT ) );
@@ -1470,7 +1470,7 @@ IMPL_LINK_NOARG ( SfxBaseController, CheckOutHandler )
 }
 
 
-//=============================================================================
+
 Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
 {
     SolarMutexGuard aGuard;
@@ -1491,24 +1491,24 @@ Reference< frame::XTitle > SfxBaseController::impl_getTitleHelper ()
     return m_pData->m_xTitleHelper;
 }
 
-//=============================================================================
-// frame::XTitle
+
+
 OUString SAL_CALL SfxBaseController::getTitle()
     throw (RuntimeException)
 {
     return impl_getTitleHelper()->getTitle ();
 }
 
-//=============================================================================
-// frame::XTitle
+
+
 void SAL_CALL SfxBaseController::setTitle(const OUString& sTitle)
     throw (RuntimeException)
 {
     impl_getTitleHelper()->setTitle (sTitle);
 }
 
-//=============================================================================
-// frame::XTitleChangeBroadcaster
+
+
 void SAL_CALL SfxBaseController::addTitleChangeListener(const Reference< frame::XTitleChangeListener >& xListener)
     throw (RuntimeException)
 {
@@ -1517,8 +1517,8 @@ void SAL_CALL SfxBaseController::addTitleChangeListener(const Reference< frame::
         xBroadcaster->addTitleChangeListener (xListener);
 }
 
-//=============================================================================
-// frame::XTitleChangeBroadcaster
+
+
 void SAL_CALL SfxBaseController::removeTitleChangeListener(const Reference< frame::XTitleChangeListener >& xListener)
     throw (RuntimeException)
 {

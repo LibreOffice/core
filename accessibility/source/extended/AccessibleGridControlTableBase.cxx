@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "accessibility/extended/AccessibleGridControlTableBase.hxx"
@@ -23,7 +23,7 @@
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -34,11 +34,11 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 using namespace ::svt::table;
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 AccessibleGridControlTableBase::AccessibleGridControlTableBase(
         const Reference< XAccessible >& rxParent,
@@ -52,7 +52,7 @@ AccessibleGridControlTableBase::~AccessibleGridControlTableBase()
 {
 }
 
-// XAccessibleContext ---------------------------------------------------------
+
 
 sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleChildCount()
     throw ( uno::RuntimeException )
@@ -79,7 +79,7 @@ sal_Int16 SAL_CALL AccessibleGridControlTableBase::getAccessibleRole()
     return AccessibleRole::TABLE;
 }
 
-// XAccessibleTable -----------------------------------------------------------
+
 
 sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRowCount()
     throw ( uno::RuntimeException )
@@ -107,7 +107,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleRowExtentAt(
 
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    return 1;   // merged cells not supported
+    return 1;   
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnExtentAt(
@@ -118,7 +118,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumnExtentAt(
 
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
-    return 1;   // merged cells not supported
+    return 1;   
 }
 
 Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleCaption()
@@ -127,7 +127,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleC
     SolarMutexGuard g;
 
     ensureIsAlive();
-    return NULL;    // not supported
+    return NULL;    
 }
 
 Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleSummary()
@@ -136,7 +136,7 @@ Reference< XAccessible > SAL_CALL AccessibleGridControlTableBase::getAccessibleS
     SolarMutexGuard g;
 
     ensureIsAlive();
-    return NULL;    // not supported
+    return NULL;    
 }
 
 sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleIndex(
@@ -170,7 +170,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTableBase::getAccessibleColumn( sal_Int3
     return implGetColumn( nChildIndex );
 }
 
-// XInterface -----------------------------------------------------------------
+
 
 Any SAL_CALL AccessibleGridControlTableBase::queryInterface( const uno::Type& rType )
     throw ( uno::RuntimeException )
@@ -190,7 +190,7 @@ void SAL_CALL AccessibleGridControlTableBase::release() throw ()
     GridControlAccessibleElement::release();
 }
 
-// XTypeProvider --------------------------------------------------------------
+
 
 Sequence< uno::Type > SAL_CALL AccessibleGridControlTableBase::getTypes()
     throw ( uno::RuntimeException )
@@ -211,7 +211,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlTableBase::getImplementationI
     return theAccessibleGridControlTableBaseImplementationId::get().getSeq();
 }
 
-// internal helper methods ----------------------------------------------------
+
 
 sal_Int32 AccessibleGridControlTableBase::implGetChildCount() const
 {
@@ -276,10 +276,10 @@ void AccessibleGridControlTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
             OUString( "child index is invalid" ), *this );
 }
 
-// ============================================================================
 
-} // namespace accessibility
 
-// ============================================================================
+} 
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

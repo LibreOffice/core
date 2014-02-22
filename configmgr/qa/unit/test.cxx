@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -442,7 +442,7 @@ void Test::testReadCommands()
         css::uno::UNO_QUERY_THROW);
     css::uno::Sequence< OUString > names(access->getElementNames());
     CPPUNIT_ASSERT(names.getLength() == 695);
-        // testSetSetMemberName() already removed ".uno:FontworkGalleryFloater"
+        
     sal_uInt32 n = osl_getGlobalTimer();
     for (int i = 0; i < 8; ++i) {
         for (sal_Int32 j = 0; j < names.getLength(); ++j) {
@@ -570,7 +570,7 @@ void Test::setKey(
 bool Test::resetKey(OUString const & path, OUString const & name)
     const
 {
-    //TODO: support setPropertyToDefault
+    
     css::uno::Reference< css::util::XChangesBatch > access(
         createUpdateAccess(path), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::beans::XPropertyState > state(

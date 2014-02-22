@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ColumnPeer.hxx"
@@ -76,7 +76,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
 
             try
             {
-                // get the properties from the column
+                
                 _xColumn->getPropertyValue(PROPERTY_TYPENAME)       >>= sTypeName;
                 _xColumn->getPropertyValue(PROPERTY_TYPE)           >>= nType;
                 _xColumn->getPropertyValue(PROPERTY_SCALE)          >>= nScale;
@@ -88,7 +88,7 @@ void OColumnPeer::setColumn(const Reference< XPropertySet>& _xColumn)
             }
 
             m_pActFieldDescr = new OFieldDescription(_xColumn,sal_True);
-            // search for type
+            
             OUString sCreateParam("x");
             sal_Bool bForce;
             TOTypeInfoSP pTypeInfo = ::dbaui::getTypeInfoFromType(*pFieldControl->getTypeInfo(),nType,sTypeName,sCreateParam,nPrecision,nScale,bAutoIncrement,bForce);
@@ -145,6 +145,6 @@ Any OColumnPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeExc
     return aProp;
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

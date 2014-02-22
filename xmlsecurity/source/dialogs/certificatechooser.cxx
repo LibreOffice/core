@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -75,7 +75,7 @@ CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< uno::X
     mxSecurityEnvironment = _rxSecurityEnvironment;
     mbInitialized = false;
 
-    // disable buttons
+    
     CertificateHighlightHdl( NULL );
 }
 
@@ -86,18 +86,18 @@ CertificateChooser::~CertificateChooser()
 
 short CertificateChooser::Execute()
 {
-    // #i48432#
-    // We can't check for personal certificates before raising this dialog,
-    // because the mozilla implementation throws a NoPassword exception,
-    // if the user pressed cancel, and also if the database does not exist!
-    // But in the later case, the is no password query, and the user is confused
-    // that nothing happens when pressing "Add..." in the SignatureDialog.
+    
+    
+    
+    
+    
+    
 
-    // PostUserEvent( LINK( this, CertificateChooser, Initialize ) );
+    
 
-    // PostUserLink behavior is to slow, so do it directly before Execute().
-    // Problem: This Dialog should be visible right now, and the parent should not be accessible.
-    // Show, Update, DIsableInput...
+    
+    
+    
 
     Window* pMe = this;
     Window* pParent = GetParent();
@@ -111,7 +111,7 @@ short CertificateChooser::Execute()
     return ModalDialog::Execute();
 }
 
-// IMPL_LINK_NOARG(CertificateChooser, Initialize)
+
 void CertificateChooser::ImplInitialize()
 {
     if ( !mbInitialized )
@@ -134,7 +134,7 @@ void CertificateChooser::ImplInitialize()
             uno::Reference< security::XCertificate > xCert = maCerts[ --nCert ];
             sal_Bool bIgnoreThis = false;
 
-            // Do we already use that?
+            
             if( nCertificatesToIgnore )
             {
                 OUString aIssuerName = xCert->getIssuerName();
@@ -152,7 +152,7 @@ void CertificateChooser::ImplInitialize()
 
             if ( !bIgnoreThis )
             {
-                // Check if we have a private key for this...
+                
                 long nCertificateCharacters = mxSecurityEnvironment->getCertificateCharacters( xCert );
 
                 if ( !( nCertificateCharacters & security::CertificateCharacters::HAS_PRIVATE_KEY ) )
@@ -167,16 +167,16 @@ void CertificateChooser::ImplInitialize()
             }
         }
 
-        // fill list of certificates; the first entry will be selected
+        
         for ( sal_Int32 nC = 0; nC < nCertificates; ++nC )
         {
             SvTreeListEntry* pEntry = m_pCertLB->InsertEntry( XmlSec::GetContentPart( maCerts[ nC ]->getSubjectName() )
                 + "\t" + XmlSec::GetContentPart( maCerts[ nC ]->getIssuerName() )
                 + "\t" + XmlSec::GetDateString( maCerts[ nC ]->getNotValidAfter() ) );
-            pEntry->SetUserData( ( void* )(sal_IntPtr)nC ); // missuse user data as index
+            pEntry->SetUserData( ( void* )(sal_IntPtr)nC ); 
         }
 
-        // enable/disable buttons
+        
         CertificateHighlightHdl( NULL );
         mbInitialized = true;
     }

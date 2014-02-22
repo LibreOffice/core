@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -113,7 +113,7 @@ Reference< XPropertySet > Key::createDataDescriptor(  ) throw (RuntimeException)
 
 Reference< XNameAccess > Key::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // TODO: cash columns object !
+    
     if( !m_keyColumns.is() )
     {
         Sequence< OUString > columnNames, foreignColumnNames;
@@ -162,7 +162,7 @@ Any Key::queryInterface( const Type & reqType ) throw (RuntimeException)
 }
 
 
-//_____________________________________________________________________________
+
 KeyDescriptor::KeyDescriptor( const ::rtl::Reference< RefCountedMutex > & refMutex,
           const Reference< com::sun::star::sdbc::XConnection > & connection,
           ConnectionSettings *pSettings )
@@ -187,7 +187,7 @@ Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  ) throw (Runtime
 
 Reference< XNameAccess > KeyDescriptor::getColumns(  ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // TODO: cash columns object !
+    
     if( !m_keyColumns.is() )
     {
         m_keyColumns = new KeyColumnDescriptors( m_refMutex, m_conn, m_pSettings );

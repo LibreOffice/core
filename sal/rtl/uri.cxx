@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "surrogates.hxx"
@@ -38,7 +38,7 @@ namespace {
 
 std::size_t const nCharClassSize = 128;
 
-sal_Unicode const cEscapePrefix = 0x25; // '%'
+sal_Unicode const cEscapePrefix = 0x25; 
 
 inline bool isHighSurrogate(sal_uInt32 nUtf16)
 {
@@ -57,13 +57,13 @@ inline sal_uInt32 combineSurrogates(sal_uInt32 high, sal_uInt32 low)
 
 inline int getHexWeight(sal_uInt32 nUtf32)
 {
-    return nUtf32 >= 0x30 && nUtf32 <= 0x39 ? // '0'--'9'
+    return nUtf32 >= 0x30 && nUtf32 <= 0x39 ? 
                static_cast< int >(nUtf32 - 0x30) :
-           nUtf32 >= 0x41 && nUtf32 <= 0x46 ? // 'A'--'F'
+           nUtf32 >= 0x41 && nUtf32 <= 0x46 ? 
                static_cast< int >(nUtf32 - 0x41 + 10) :
-           nUtf32 >= 0x61 && nUtf32 <= 0x66 ? // 'a'--'f'
+           nUtf32 >= 0x61 && nUtf32 <= 0x66 ? 
                static_cast< int >(nUtf32 - 0x61 + 10) :
-               -1; // not a hex digit
+               -1; 
 }
 
 inline bool isValid(sal_Bool const * pCharClass, sal_uInt32 nUtf32)
@@ -228,7 +228,7 @@ sal_uInt32 readUcs4(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
 
 void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
 {
-    assert(nUtf32 <= 0x10FFFF); // bad UTF-32 char
+    assert(nUtf32 <= 0x10FFFF); 
     if (nUtf32 <= 0xFFFF) {
         writeUnicode(
             pBuffer, pCapacity, static_cast< sal_Unicode >(nUtf32));
@@ -246,7 +246,7 @@ void writeUcs4(rtl_uString ** pBuffer, sal_Int32 * pCapacity, sal_uInt32 nUtf32)
 void writeEscapeOctet(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
                       sal_uInt32 nOctet)
 {
-    assert(nOctet <= 0xFF); // bad octet
+    assert(nOctet <= 0xFF); 
 
     static sal_Unicode const aHex[16]
         = { 0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39,
@@ -260,7 +260,7 @@ void writeEscapeOctet(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
 bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
                      sal_uInt32 nUtf32, rtl_TextEncoding eCharset, bool bStrict)
 {
-    assert(nUtf32 <= 0x10FFFF); // bad UTF-32 char
+    assert(nUtf32 <= 0x10FFFF); 
     if (eCharset == RTL_TEXTENCODING_UTF8) {
         if (nUtf32 < 0x80)
             writeEscapeOctet(pBuffer, pCapacity, nUtf32);
@@ -300,7 +300,7 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
                 ((nUtf32 - 0x10000) & 0x3FF) | 0xDC00);
             nSrcSize = 2;
         }
-        sal_Char aDst[32]; // FIXME  random value
+        sal_Char aDst[32]; 
         sal_uInt32 nInfo;
         sal_Size nConverted;
         sal_Size nDstSize = rtl_convertUnicodeToText(
@@ -312,11 +312,11 @@ bool writeEscapeChar(rtl_uString ** pBuffer, sal_Int32 * pCapacity,
         assert((nInfo & RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) == 0);
         rtl_destroyUnicodeToTextConverter(aConverter);
         if (nInfo == 0) {
-            assert(nConverted == nSrcSize); // bad rtl_convertUnicodeToText
+            assert(nConverted == nSrcSize); 
             for (sal_Size i = 0; i < nDstSize; ++i)
                 writeEscapeOctet(pBuffer, pCapacity,
                                  static_cast< unsigned char >(aDst[i]));
-                    // FIXME  all octets are escaped, even if there is no need
+                    
         } else {
             if (bStrict) {
                 return false;
@@ -342,7 +342,7 @@ struct Component
 
 inline sal_Int32 Component::getLength() const
 {
-    assert(isPresent()); // taking length of non-present component
+    assert(isPresent()); 
     return static_cast< sal_Int32 >(pEnd - pBegin);
 }
 
@@ -357,7 +357,7 @@ struct Components
 
 void parseUriRef(rtl_uString const * pUriRef, Components * pComponents)
 {
-    // This algorithm is liberal and accepts various forms of illegal input.
+    
 
     sal_Unicode const * pBegin = pUriRef->buffer;
     sal_Unicode const * pEnd = pBegin + pUriRef->length;
@@ -417,15 +417,15 @@ rtl::OUString joinPaths(Component const & rBasePath, Component const & rRelPath)
     assert(rBasePath.isPresent() && *rBasePath.pBegin == '/');
     assert(rRelPath.isPresent());
 
-    // The invariant of aBuffer is that it always starts and ends with a slash
-    // (until probably right at the end of the algorithm, when the last segment
-    // of rRelPath is added, which does not necessarily end in a slash):
+    
+    
+    
     rtl::OUStringBuffer aBuffer(rBasePath.getLength() + rRelPath.getLength());
-        // XXX  numeric overflow
+        
 
-    // Segments "." and ".." within rBasePath are not conisdered special (but
-    // are also not removed by ".." segments within rRelPath), RFC 2396 seems a
-    // bit unclear about this point:
+    
+    
+    
     sal_Int32 nFixed = 1;
     sal_Unicode const * p = rBasePath.pBegin + 1;
     for (sal_Unicode const * q = p; q != rBasePath.pEnd; ++q)
@@ -464,8 +464,8 @@ rtl::OUString joinPaths(Component const & rBasePath, Component const & rRelPath)
             }
             if (q - p == 2 && p[0] == '.' && p[1] == '.')
             {
-                // Erroneous excess segments ".." within rRelPath are left
-                // intact, as the examples in RFC 2396, section C.2, suggest:
+                
+                
                 sal_Int32 i = aBuffer.getLength() - 1;
                 if (i < nFixed)
                 {
@@ -570,7 +570,7 @@ sal_Bool const * SAL_CALL rtl_getUriCharClass(rtl_UriCharClass eCharClass)
     assert(
         (eCharClass >= 0
          && (sal::static_int_cast< std::size_t >(eCharClass)
-             < SAL_N_ELEMENTS(aCharClass)))); // bad eCharClass
+             < SAL_N_ELEMENTS(aCharClass)))); 
     return aCharClass[eCharClass];
 }
 
@@ -579,7 +579,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
                             rtl_TextEncoding eCharset, rtl_uString ** pResult)
     SAL_THROW_EXTERN_C()
 {
-    assert(!pCharClass[0x25]); // make sure the percent sign is encoded...
+    assert(!pCharClass[0x25]); 
 
     sal_Unicode const * p = pText->buffer;
     sal_Unicode const * pEnd = p + pText->length;
@@ -597,7 +597,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
         switch (eType)
         {
         case EscapeNo:
-            if (isValid(pCharClass, nUtf32)) // implies nUtf32 <= 0x7F
+            if (isValid(pCharClass, nUtf32)) 
                 writeUnicode(pResult, &nCapacity,
                              static_cast< sal_Unicode >(nUtf32));
             else if (!writeEscapeChar(
@@ -612,7 +612,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
 
         case EscapeChar:
             if (eMechanism == rtl_UriEncodeCheckEscapes
-                && isValid(pCharClass, nUtf32)) // implies nUtf32 <= 0x7F
+                && isValid(pCharClass, nUtf32)) 
                 writeUnicode(pResult, &nCapacity,
                              static_cast< sal_Unicode >(nUtf32));
             else if (!writeEscapeChar(
@@ -646,7 +646,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
 
     case rtl_UriDecodeToIuri:
         eCharset = RTL_TEXTENCODING_UTF8;
-    default: // rtl_UriDecodeWithCharset, rtl_UriDecodeStrict
+    default: 
         {
             sal_Unicode const * p = pText->buffer;
             sal_Unicode const * pEnd = p + pText->length;
@@ -689,10 +689,10 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
                                          rtl_uString ** pException)
     SAL_THROW_EXTERN_C()
 {
-    // If pRelUriRef starts with a scheme component it is an absolute URI
-    // reference, and we are done (i.e., this algorithm does not support
-    // backwards-compatible relative URIs starting with a scheme component, see
-    // RFC 2396, section 5.2, step 3):
+    
+    
+    
+    
     Components aRelComponents;
     parseUriRef(pRelUriRef, &aRelComponents);
     if (aRelComponents.aScheme.isPresent())
@@ -701,9 +701,9 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
         return true;
     }
 
-    // Parse pBaseUriRef; if the scheme component is not present or not valid,
-    // or the path component is not empty and starts with anything but a slash,
-    // an exception is raised:
+    
+    
+    
     Components aBaseComponents;
     parseUriRef(pBaseUriRef, &aBaseComponents);
     if (!aBaseComponents.aScheme.isPresent())
@@ -725,9 +725,9 @@ sal_Bool SAL_CALL rtl_uriConvertRelToAbs(rtl_uString * pBaseUriRef,
         return false;
     }
 
-    // Use the algorithm from RFC 2396, section 5.2, to turn the relative URI
-    // into an absolute one (if the relative URI is a reference to the "current
-    // document," the "current document" is here taken to be the base URI):
+    
+    
+    
     rtl::OUStringBuffer aBuffer;
     aBuffer.append(aBaseComponents.aScheme.pBegin,
                    aBaseComponents.aScheme.getLength());

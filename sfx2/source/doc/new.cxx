@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -39,11 +39,11 @@
 #include <sfx2/printer.hxx>
 #include <vcl/waitobj.hxx>
 
-//========================================================================
+
 
 #define MORE_BTN(x) pMoreBt->x
 
-//========================================================================
+
 
 void SfxPreviewBase_Impl::SetObjectShell( SfxObjectShell* pObj )
 {
@@ -176,9 +176,9 @@ public:
     SfxNewFileDialog_Impl( SfxNewFileDialog* pAntiImplP, sal_uInt16 nFlags );
     ~SfxNewFileDialog_Impl();
 
-        // Returns sal_False if '- No -' is set as a template
-        // Template name can only be obtained if IsTemplate() is TRUE
-        // erfragt werden
+        
+        
+        
     sal_Bool IsTemplate() const;
     OUString GetTemplateFileName() const;
 
@@ -187,7 +187,7 @@ public:
 };
 
 
-//-------------------------------------------------------------------------
+
 
 void SfxNewFileDialog_Impl::ClearInfo()
 {
@@ -198,7 +198,7 @@ void SfxNewFileDialog_Impl::ClearInfo()
     aDescEd.SetText(aNo);
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
 {
@@ -225,8 +225,8 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
         INetURLObject aTestObj( aFileName );
         if( aTestObj.GetProtocol() == INET_PROT_NOT_VALID )
         {
-            // temp. fix until Templates are managed by UCB compatible service
-            // does NOT work with locally cached components !
+            
+            
             OUString aTemp;
             utl::LocalFileHelper::ConvertPhysicalNameToURL( aFileName, aTemp );
             aFileName = aTemp;
@@ -237,9 +237,9 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
               pTmp;
               pTmp = SfxObjectShell::GetNext(*pTmp) )
         {
-            //! fsys bug op==
+            
             if ( pTmp->GetMedium())
-                // ??? HasName() MM
+                
                 if( INetURLObject( pTmp->GetMedium()->GetName() ) == aObj )
                 {
                     xDocShell = pTmp;
@@ -273,7 +273,7 @@ IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
     return sal_True;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
 {
@@ -300,7 +300,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, Expand)
 {
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, Expand)
 }
 IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, Expand)
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
 {
@@ -331,35 +331,35 @@ IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
 {
-    // Still loading
+    
     if ( xDocShell && xDocShell->GetProgress() )
         return 0;
 
     if ( !MORE_BTN(GetState()) )
-        // Dialog is not opened
+        
         return 0;
 
     aPrevTimer.Start();
     return 0;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 {
     (void)pListBox;
-    // Still loadning
+    
     if ( !xDocShell.Is() || !xDocShell->GetProgress() )
         pAntiImpl->EndDialog(RET_OK);
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, LoadFile)
 {
@@ -367,7 +367,7 @@ IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, LoadFile)
     return 0;
 }
 IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, LoadFile)
-//-------------------------------------------------------------------------
+
 
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
 {
@@ -383,7 +383,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const
     return nEntry;
 }
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxNewFileDialog_Impl::IsTemplate() const
 {
@@ -391,7 +391,7 @@ sal_Bool SfxNewFileDialog_Impl::IsTemplate() const
 
 }
 
-//-------------------------------------------------------------------------
+
 
 OUString SfxNewFileDialog_Impl::GetTemplateFileName() const
 {
@@ -401,7 +401,7 @@ OUString SfxNewFileDialog_Impl::GetTemplateFileName() const
                               GetSelectedTemplatePos()-1);
 }
 
-//-------------------------------------------------------------------------
+
 
 void AdjustPosSize_Impl(Window *pWin, short nMoveOffset, short nSizeOffset)
 {
@@ -411,7 +411,7 @@ void AdjustPosSize_Impl(Window *pWin, short nMoveOffset, short nSizeOffset)
     aSize.Width() += nSizeOffset;
     pWin->SetPosSizePixel(aPos, aSize);
 }
-//-------------------------------------------------------------------------
+
 sal_uInt16  SfxNewFileDialog_Impl::GetTemplateFlags()const
 {
     sal_uInt16 nRet = aTextStyleCB.IsChecked() ? SFX_LOAD_TEXT_STYLES : 0;
@@ -425,7 +425,7 @@ sal_uInt16  SfxNewFileDialog_Impl::GetTemplateFlags()const
         nRet |= SFX_MERGE_STYLES;
     return nRet;
 }
-//-------------------------------------------------------------------------
+
 void    SfxNewFileDialog_Impl::SetTemplateFlags(sal_uInt16 nSet)
 {
     aTextStyleCB.Check(  0 != (nSet&SFX_LOAD_TEXT_STYLES ));
@@ -435,7 +435,7 @@ void    SfxNewFileDialog_Impl::SetTemplateFlags(sal_uInt16 nSet)
     aMergeStyleCB.Check( 0 != (nSet&SFX_MERGE_STYLES     ));
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     SfxNewFileDialog* pAntiImplP, sal_uInt16 nFl)
@@ -533,12 +533,12 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     aTemplateLb.SetSelectHdl(LINK(this, SfxNewFileDialog_Impl, TemplateSelect));
     aTemplateLb.SetDoubleClickHdl(LINK(this, SfxNewFileDialog_Impl, DoubleClick));
 
-    // update the template configuration if necessary
+    
     {
         WaitObject aWaitCursor( pAntiImplP->GetParent() );
         aTemplates.Update( sal_True /* be smart */ );
     }
-    // fill the list boxes
+    
     const sal_uInt16 nCount = aTemplates.GetRegionCount();
     if (nCount)
     {
@@ -554,7 +554,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     RegionSelect(&aRegionLb);
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
 {
@@ -565,34 +565,34 @@ SfxNewFileDialog_Impl::~SfxNewFileDialog_Impl()
 
     delete pMoreBt;
 }
-//-------------------------------------------------------------------------
+
 SfxNewFileDialog::SfxNewFileDialog(Window *pParent, sal_uInt16 nFlags)
     : SfxModalDialog( pParent, SfxResId( DLG_NEW_FILE ) )
 {
     pImpl = new SfxNewFileDialog_Impl( this, nFlags );
 }
-//-------------------------------------------------------------------------
+
 SfxNewFileDialog::~SfxNewFileDialog()
 {
     delete pImpl;
 }
-//-------------------------------------------------------------------------
+
 sal_Bool SfxNewFileDialog::IsTemplate() const
 {
     return pImpl->IsTemplate();
 }
-//-------------------------------------------------------------------------
+
 OUString SfxNewFileDialog::GetTemplateFileName() const
 {
     return pImpl->GetTemplateFileName();
 }
-//-------------------------------------------------------------------------
+
 sal_uInt16 SfxNewFileDialog::GetTemplateFlags()const
 {
     return pImpl->GetTemplateFlags();
 
 }
-//-------------------------------------------------------------------------
+
 void    SfxNewFileDialog::SetTemplateFlags(sal_uInt16 nSet)
 {
     pImpl->SetTemplateFlags(nSet);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/pathoptions.hxx>
@@ -98,7 +98,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     INetURLObject aPath;
     aPath.SetSmartURL( sGraphicsPath );
 
-    // fish out the graphic's name
+    
     OUString aName = rGraphicName;
 
     aDialogHelper.SetTitle( SVX_RESSTR(RID_SVXSTR_EXPORT_GRAPHIC_TITLE));
@@ -132,7 +132,7 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
     }
     if ( USHRT_MAX == nDefaultFilter )
     {
-        // "wrong" extension?
+        
         GetPreferredExtension( aExtension, rGraphic );
         for ( sal_uInt16 i = 0; i < nCount; ++i )
             if ( aExtension == rGraphicFilter.GetExportFormatShortName( i ).toAsciiLowerCase() )
@@ -149,14 +149,14 @@ OUString GraphicHelper::ExportGraphic( const Graphic& rGraphic, const OUString& 
         if( aDialogHelper.Execute() == ERRCODE_NONE )
         {
             OUString sPath( xFilePicker->getFiles().getConstArray()[0] );
-            // remember used path - please don't optimize away!
+            
             aPath.SetSmartURL( sPath);
             sGraphicsPath = aPath.GetPath();
 
             if( !rGraphicName.isEmpty() &&
                 nDefaultFilter == rGraphicFilter.GetExportFormatNumber( xFilterManager->getCurrentFilter()))
             {
-                // try to save the original graphic
+                
                 SfxMedium aIn( rGraphicName, STREAM_READ | STREAM_NOCREATE );
                 if( aIn.GetInStream() && !aIn.GetInStream()->GetError() )
                 {
@@ -217,7 +217,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
         aPath.SetSmartURL( sGraphicPath );
         xFilePicker->setDisplayDirectory( aPath.GetMainURL(INetURLObject::DECODE_TO_IURI) );
 
-        // populate filter dialog filter list and select default filter to match graphic mime type
+        
 
         GraphicFilter& rGraphicFilter = GraphicFilter::GetGraphicFilter();
         Reference<XFilterManager> xFilterManager( xFilePicker, UNO_QUERY );
@@ -257,7 +257,7 @@ void GraphicHelper::SaveShapeAsGraphic( const Reference< drawing::XShape >& xSha
 
         xFilterManager->setCurrentFilter( aDefaultFormatName );
 
-        // execute dialog
+        
 
         if( aDialogHelper.Execute() == ERRCODE_NONE )
         {

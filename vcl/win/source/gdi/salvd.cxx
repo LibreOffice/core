@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,7 +28,7 @@
 #include <win/salgdi.h>
 #include <win/salvd.h>
 
-// =======================================================================
+
 
 static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
                                        sal_uInt16 nBitCount )
@@ -41,9 +41,9 @@ static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
      }
      else
      {
-        // #146839# Don't use CreateCompatibleBitmap() - there seem to
-        // be build-in limits for those HBITMAPs, at least this fails
-        // rather often on large displays/multi-monitor setups.
+        
+        
+        
          BITMAPINFO aBitmapInfo;
          aBitmapInfo.bmiHeader.biSize = sizeof( BITMAPINFOHEADER );
          aBitmapInfo.bmiHeader.biWidth = nDX;
@@ -67,7 +67,7 @@ static HBITMAP ImplCreateVirDevBitmap( HDC hDC, long nDX, long nDY,
     return hBitmap;
 }
 
-// =======================================================================
+
 
 SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                                        long nDX, long nDY,
@@ -96,9 +96,9 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
                                         nDX, nDY, nBitCount );
         if( !hBmp )
             ImplWriteLastError( GetLastError(), "ImplCreateVirDevBitmap in CreateVirtualDevice" );
-        // #124826# continue even if hBmp could not be created
-        // if we would return a failure in this case, the process
-        // would terminate which is not required
+        
+        
+        
 
         DBG_ASSERT( hBmp, "WinSalInstance::CreateVirtualDevice(), could not create Bitmap!" );
 
@@ -110,7 +110,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         WinSalVirtualDevice*    pVDev = new WinSalVirtualDevice;
         SalData*                pSalData = GetSalData();
         WinSalGraphics*         pVirGraphics = new WinSalGraphics;
-        pVirGraphics->SetLayout( 0 );   // by default no! mirroring for VirtualDevices, can be enabled with EnableRTL()
+        pVirGraphics->SetLayout( 0 );   
         pVirGraphics->setHDC(hDC);
         pVirGraphics->mhWnd    = 0;
         pVirGraphics->mbPrinter = FALSE;
@@ -135,7 +135,7 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
         pVDev->mbGraphics   = FALSE;
         pVDev->mbForeignDC  = (pData != NULL);
 
-        // insert VirDev in VirDevList
+        
         pVDev->mpNext = pSalData->mpFirstVD;
         pSalData->mpFirstVD = pVDev;
 
@@ -151,39 +151,39 @@ SalVirtualDevice* WinSalInstance::CreateVirtualDevice( SalGraphics* pSGraphics,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 {
     delete pDevice;
 }
 
-// =======================================================================
+
 
 WinSalVirtualDevice::WinSalVirtualDevice()
 {
-    setHDC((HDC)NULL);          // HDC or 0 for Cache Device
-    mhBmp = (HBITMAP) NULL;     // Memory Bitmap
-    mhDefBmp = (HBITMAP) NULL;  // Default Bitmap
-    mpGraphics = NULL;          // current VirDev graphics
-    mpNext = NULL;              // next VirDev
-    mnBitCount = 0;             // BitCount (0 or 1)
-    mbGraphics = FALSE;         // is Graphics used
-    mbForeignDC = FALSE;        // uses a foreign DC instead of a bitmap
+    setHDC((HDC)NULL);          
+    mhBmp = (HBITMAP) NULL;     
+    mhDefBmp = (HBITMAP) NULL;  
+    mpGraphics = NULL;          
+    mpNext = NULL;              
+    mnBitCount = 0;             
+    mbGraphics = FALSE;         
+    mbForeignDC = FALSE;        
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalVirtualDevice::~WinSalVirtualDevice()
 {
-    // remove VirDev from list of virtual devices
+    
     SalData* pSalData = GetSalData();
     WinSalVirtualDevice** ppVirDev = &pSalData->mpFirstVD;
     for(; (*ppVirDev != this) && *ppVirDev; ppVirDev = &(*ppVirDev)->mpNext );
     if( *ppVirDev )
         *ppVirDev = mpNext;
 
-    // destroy saved DC
+    
     if( mpGraphics->mhDefPal )
         SelectPalette( mpGraphics->getHDC(), mpGraphics->mhDefPal, TRUE );
     ImplSalDeInitGraphics( mpGraphics );
@@ -197,7 +197,7 @@ WinSalVirtualDevice::~WinSalVirtualDevice()
     mpGraphics = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* WinSalVirtualDevice::GetGraphics()
 {
@@ -210,19 +210,19 @@ SalGraphics* WinSalVirtualDevice::GetGraphics()
     return mpGraphics;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
     mbGraphics = FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( mbForeignDC || !mhBmp )
-        return TRUE;    // ???
+        return TRUE;    
     else
     {
         HBITMAP hNewBmp = ImplCreateVirDevBitmap( getHDC(), nDX, nDY,

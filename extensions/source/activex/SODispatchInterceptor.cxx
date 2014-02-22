@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,10 +14,10 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// SODispatchInterceptor.cpp : Implementation of CHelpApp and DLL registration.
+
 
 #include "stdio.h"
 #include "stdafx2.h"
@@ -27,7 +27,7 @@
 #include "com_uno_helper.h"
 #include <sal/macros.h>
 
-/////////////////////////////////////////////////////////////////////////////
+
 //
 
 STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorInfo(REFIID riid)
@@ -150,7 +150,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
 
 STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR* aArgs)
 {
-    // get url from aURL
+    
     OLECHAR* pUrlName = L"Complete";
     CComVariant pValue;
     HRESULT hr = GetPropertiesFromIDisp( aURL, &pUrlName, &pValue, 1 );
@@ -162,7 +162,7 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
     if( !strncmp( OLE2T( pValue.bstrVal ), ".uno:OpenHyperlink", 18 ) )
     {
         long nLB = 0, nUB = 0;
-        // long nDim = SafeArrayGetDim( aArgs );
+        
 
         hr = SafeArrayGetLBound( aArgs, 1, &nLB );
         if( !SUCCEEDED( hr ) ) return hr;
@@ -190,7 +190,7 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
                         EnterCriticalSection( &mMutex );
                         if( m_xParentControl )
                         {
-                            // call GetUrl to the browser instance
+                            
                             m_xParentControl->GetURL( pValues[1].bstrVal, L"_self" );
                         }
                         LeaveCriticalSection( &mMutex );
@@ -207,13 +207,13 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
 
 STDMETHODIMP SODispatchInterceptor::addStatusListener( IDispatch FAR* /*xControl*/, IDispatch FAR* /*aURL*/)
 {
-    // not implemented
+    
     return S_OK;
 }
 
 STDMETHODIMP SODispatchInterceptor::removeStatusListener( IDispatch FAR* /*xControl*/, IDispatch FAR* /*aURL*/)
 {
-    // not implemented
+    
     return S_OK;
 }
 
@@ -225,15 +225,15 @@ STDMETHODIMP SODispatchInterceptor::getInterceptedURLs( SAFEARRAY FAR* FAR* pVal
         return E_FAIL;
 
     long ix = 0;
-    CComBSTR aPattern( OLESTR( "ftp://*" ) );
+    CComBSTR aPattern( OLESTR( "ftp:
     SafeArrayPutElement( *pVal, &ix, aPattern );
 
     ix = 1;
-    aPattern = CComBSTR( OLESTR( "http://*" ) );
+    aPattern = CComBSTR( OLESTR( "http:
     SafeArrayPutElement( *pVal, &ix, aPattern );
 
     ix = 2;
-    aPattern = CComBSTR( OLESTR( "file://*" ) );
+    aPattern = CComBSTR( OLESTR( "file:
     SafeArrayPutElement( *pVal, &ix, aPattern );
 
     return S_OK;

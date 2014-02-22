@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ FullScreenPane::FullScreenPane (
     ::Window* pParent = NULL;
     mpWorkWindow.reset(new WorkWindow(
         pParent,
-        0));  // For debugging (non-fullscreen) use WB_BORDER | WB_MOVEABLE | WB_SIZEABLE));
+        0));  
 
     if ( ! rxPaneId.is())
         throw lang::IllegalArgumentException();
@@ -61,23 +61,23 @@ FullScreenPane::FullScreenPane (
     if (mpWorkWindow.get() == NULL)
         return;
 
-    // Create a new top-leve window that is displayed full screen.
+    
     mpWorkWindow->ShowFullScreenMode(true, nScreenNumber);
-    // For debugging (non-fullscreen) use mpWorkWindow->SetScreenNumber(nScreenNumber);
+    
     mpWorkWindow->SetMenuBarMode(MENUBAR_MODE_HIDE);
     mpWorkWindow->SetBorderStyle(WINDOW_BORDER_REMOVEBORDER);
     mpWorkWindow->SetBackground(Wallpaper());
-    // Don't show the window right now in order to allow the setting of an
-    // accessibility object: accessibility objects are typically
-    // requested by AT-tools when the window is shown.  Chaning it
-    // afterwards may or may not work.
+    
+    
+    
+    
 
-    // Add resize listener at the work window.
+    
     Link aWindowEventHandler (LINK(this, FullScreenPane, WindowEventHandler));
     mpWorkWindow->AddEventListener(aWindowEventHandler);
 
-    // Set title and icon of the new window to those of the current window
-    // of the view shell.
+    
+    
     if (pViewShellWindow != NULL)
     {
         const SystemWindow* pSystemWindow = pViewShellWindow->GetSystemWindow();
@@ -85,15 +85,15 @@ FullScreenPane::FullScreenPane (
         mpWorkWindow->SetIcon(pSystemWindow->GetIcon());
     }
 
-    // For some reason the VCL canvas can not paint into a WorkWindow.
-    // Therefore a child window is created that covers the WorkWindow
-    // completely.
+    
+    
+    
     mpWindow = new ::Window(mpWorkWindow.get());
     mpWindow->SetPosSizePixel(Point(0,0), mpWorkWindow->GetSizePixel());
     mpWindow->SetBackground(Wallpaper());
     mxWindow = VCLUnoHelper::GetInterface(mpWindow);
 
-    // Create the canvas.
+    
     mxCanvas = CreateCanvas();
 
     mpWindow->GrabFocus();
@@ -111,7 +111,7 @@ FullScreenPane::~FullScreenPane (void) throw()
 
 void SAL_CALL FullScreenPane::disposing (void)
 {
-    // We have created the window pointed to by mpWindow, we delete it.
+    
     if (mpWindow != NULL)
     {
         delete mpWindow;
@@ -131,7 +131,7 @@ void SAL_CALL FullScreenPane::disposing (void)
 
 
 
-//----- XPane -----------------------------------------------------------------
+
 
 sal_Bool SAL_CALL FullScreenPane::isVisible (void)
     throw (RuntimeException)
@@ -201,7 +201,7 @@ void SAL_CALL FullScreenPane::setAccessible (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent*, pEvent)
 {
@@ -232,7 +232,7 @@ Reference<rendering::XCanvas> FullScreenPane::CreateCanvas (void)
     {
         Sequence<Any> aArg (5);
 
-        // common: first any is VCL pointer to window (for VCL canvas)
+        
         aArg[0] = makeAny(reinterpret_cast<sal_Int64>(pWindow));
         aArg[1] = Any();
         aArg[2] = makeAny(::com::sun::star::awt::Rectangle());
@@ -257,7 +257,7 @@ void FullScreenPane::ExtractArguments (
     const Reference<XResourceId>& rxPaneId,
     sal_Int32& rnScreenNumberReturnValue)
 {
-    // Extract arguments from the resource URL.
+    
     const util::URL aURL = rxPaneId->getFullResourceURL();
     sal_Int32 nIndex = 0;
     while (nIndex >= 0)
@@ -265,7 +265,7 @@ void FullScreenPane::ExtractArguments (
         const OUString aToken = aURL.Arguments.getToken(0, '&', nIndex);
         if (!aToken.isEmpty())
         {
-            // Split at the first '='.
+            
             const sal_Int32 nAssign = aToken.indexOf('=');
             const OUString sKey = aToken.copy(0, nAssign);
             const OUString sValue = aToken.copy(nAssign+1);
@@ -279,6 +279,6 @@ void FullScreenPane::ExtractArguments (
 }
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

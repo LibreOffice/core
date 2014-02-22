@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_ChartType.hxx"
@@ -29,7 +29,7 @@
 
 #include <svtools/controldims.hrc>
 
-// header for define RET_OK
+
 #include <vcl/msgbox.hxx>
 
 namespace chart
@@ -359,7 +359,7 @@ void StackingResourceGroup::setPosition( const Point& rPoint )
 void StackingResourceGroup::fillControls( const ChartTypeParameter& rParameter )
 {
     m_aCB_Stacked.Check( rParameter.eStackMode!=GlobalStackMode_NONE
-        && rParameter.eStackMode!=GlobalStackMode_STACK_Z ); //todo remove this condition if z stacking radio button is really used
+        && rParameter.eStackMode!=GlobalStackMode_STACK_Z ); 
     switch( rParameter.eStackMode )
     {
         case GlobalStackMode_STACK_Y:
@@ -369,7 +369,7 @@ void StackingResourceGroup::fillControls( const ChartTypeParameter& rParameter )
             m_aRB_Stack_Y_Percent.Check();
             break;
         case GlobalStackMode_STACK_Z:
-            //todo uncomment this condition if z stacking radio button is really used
+            
             /*
             if( rParameter.b3DLook )
                 m_aRB_Stack_Z.Check();
@@ -381,7 +381,7 @@ void StackingResourceGroup::fillControls( const ChartTypeParameter& rParameter )
             m_aRB_Stack_Y.Check();
             break;
     }
-    //dis/enabling
+    
     m_aCB_Stacked.Enable( !rParameter.bXAxisWithValues );
     m_aRB_Stack_Y.Enable( m_aCB_Stacked.IsChecked() && !rParameter.bXAxisWithValues );
     m_aRB_Stack_Y_Percent.Enable( m_aCB_Stacked.IsChecked() && !rParameter.bXAxisWithValues );
@@ -400,9 +400,9 @@ void StackingResourceGroup::fillParameter( ChartTypeParameter& rParameter )
 }
 IMPL_LINK( StackingResourceGroup, StackingChangeHdl, RadioButton*, pRadio )
 {
-    //for each radio click ther are coming two change events
-    //first uncheck of previous button -> ignore that call
-    //the second call gives the check of the new button
+    
+    
+    
     if( m_pChangeListener && pRadio && pRadio->IsChecked() )
         m_pChangeListener->stateChanged(this);
     return 0;
@@ -477,7 +477,7 @@ void SplinePropertiesDialog::fillControls( const ChartTypeParameter& rParameter 
     m_pMF_SplineOrder->SetValue( rParameter.nSplineOrder );
     m_pMF_SplineResolution->SetValue( rParameter.nCurveResolution );
 
-    //dis/enabling
+    
     m_pFT_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
     m_pMF_SplineOrder->Enable(B_SPLINE_POS == m_pLB_Spline_Type->GetSelectEntryPos());
 }
@@ -553,7 +553,7 @@ void SteppedPropertiesDialog::fillControls( const ChartTypeParameter& rParameter
         case CurveStyle_STEP_CENTER_Y:
             m_pRB_CenterY->Check();
             break;
-        default: // includes CurveStyle_STEP_START
+        default: 
             m_pRB_Start->Check();
             break;
     }
@@ -727,7 +727,7 @@ void SplineResourceGroup::fillParameter( ChartTypeParameter& rParameter )
         case POS_LINETYPE_STEPPED:
             getSteppedPropertiesDialog().fillParameter( rParameter, true );
             break;
-        default: // includes POS_LINETYPE_STRAIGHT
+        default: 
             rParameter.eCurveStyle = CurveStyle_LINES;
             break;
     }
@@ -753,7 +753,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SplineDetailsDialogHdl)
     }
     else
     {
-        //restore old state:
+        
         m_aLB_LineType.SelectEntryPos( iOldLineTypePos );
         getSplinePropertiesDialog().fillControls( aOldParameter );
     }
@@ -774,7 +774,7 @@ IMPL_LINK_NOARG(SplineResourceGroup, SteppedDetailsDialogHdl)
     }
     else
     {
-        //restore old state:
+        
         m_aLB_LineType.SelectEntryPos( iOldLineTypePos );
         getSteppedPropertiesDialog().fillControls( aOldParameter );
     }
@@ -954,7 +954,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
 
 ChartTypeTabPage::~ChartTypeTabPage()
 {
-    //delete all dialog controller
+    
     ::std::vector< ChartTypeDialogController* >::const_iterator       aIter = m_aChartTypeDialogControllerList.begin();
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
     for( ; aIter != aEnd; ++aIter )
@@ -963,7 +963,7 @@ ChartTypeTabPage::~ChartTypeTabPage()
     }
     m_aChartTypeDialogControllerList.clear();
 
-    //delete all resource helper
+    
     delete m_pAxisTypeResourceGroup;
     delete m_pDim3DLookResourceGroup;
     delete m_pStackingResourceGroup;
@@ -1007,10 +1007,10 @@ void ChartTypeTabPage::stateChanged( ChangingResource* /*pResource*/ )
     if( m_bDoLiveUpdate )
         commitToModel( aParameter );
 
-    //detect the new ThreeDLookScheme
+    
     aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( ChartModelHelper::findDiagram( m_xChartModel ) );
     aParameter.bSortByXValues = lcl_getSortByXValues( m_xChartModel );
-    //the controls have to be enabled/disabled accordingly
+    
     this->fillAllControls( aParameter );
 
     m_nChangingCalls--;
@@ -1055,7 +1055,7 @@ IMPL_LINK_NOARG(ChartTypeTabPage, SelectMainTypeHdl)
         m_pCurrentMainType->adjustParameterToMainType( aParameter );
         if( m_bDoLiveUpdate )
             commitToModel( aParameter );
-        //detect the new ThreeDLookScheme
+        
         aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( ChartModelHelper::findDiagram( m_xChartModel ) );
         if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
             aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
@@ -1074,7 +1074,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
 
     long nYPos = m_nYTopPos;
 
-    //------
+    
     bool bShow = rTypeController.shouldShow_XAxisTypeControl();
     long nXPos = m_pAxisTypeResourceGroup->getPosition().X();
     m_pAxisTypeResourceGroup->showControls( bShow );
@@ -1083,7 +1083,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pAxisTypeResourceGroup->setPosition( Point( nXPos, nYPos ) );
         nYPos += m_pAxisTypeResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+    
     bShow = rTypeController.shouldShow_3DLookControl();
     m_pDim3DLookResourceGroup->showControls( bShow );
     if(bShow)
@@ -1091,7 +1091,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pDim3DLookResourceGroup->setPosition( Point( nXPos, nYPos ) );
         nYPos += m_pDim3DLookResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+    
     bShow = rTypeController.shouldShow_StackingControl();
     m_pStackingResourceGroup->showControls( bShow, rTypeController.shouldShow_DeepStackingControl() );
     if(bShow)
@@ -1102,7 +1102,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pStackingResourceGroup->setPosition( Point( nStackingXPos, nYPos ) );
         nYPos += m_pStackingResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+    
     bShow = rTypeController.shouldShow_SplineControl();
     m_pSplineResourceGroup->showControls( bShow );
     if(bShow)
@@ -1110,7 +1110,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pSplineResourceGroup->setPosition( Point( nXPos, nYPos ) );
         nYPos += m_pSplineResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+    
     bShow = rTypeController.shouldShow_GeometryControl();
     m_pGeometryResourceGroup->showControls( bShow );
     if(bShow)
@@ -1118,7 +1118,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pGeometryResourceGroup->setPosition( Point( nXPos+17, nYPos ) );
         nYPos += m_pGeometryResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+    
     bShow = rTypeController.shouldShow_SortByXValuesResourceGroup();
     m_pSortByXValuesResourceGroup->showControls( bShow );
     if(bShow)
@@ -1126,7 +1126,7 @@ void ChartTypeTabPage::showAllControls( ChartTypeDialogController& rTypeControll
         m_pSortByXValuesResourceGroup->setPosition( Point( nXPos, nYPos ) );
         nYPos += m_pSortByXValuesResourceGroup->getHeight() + lcl_getDistance();
     }
-    //------
+    
     Size aPageSize( this->GetSizePixel() );
     Size aRemainingSize = Size( aPageSize.Width()-nXPos, aPageSize.Height()-nYPos );
     rTypeController.showExtraControls( this, Point( nXPos, nYPos ), aRemainingSize );
@@ -1176,7 +1176,7 @@ void ChartTypeTabPage::initializePage()
             ChartTypeParameter aParameter = (*aIter)->getChartTypeParameterForService( aServiceName, xTemplateProps );
             m_pCurrentMainType = this->getSelectedMainType();
 
-            //set ThreeDLookScheme
+            
             aParameter.eThreeDLookScheme = ThreeDHelper::detectScheme( xDiagram );
             if(!aParameter.b3DLook && aParameter.eThreeDLookScheme!=ThreeDLookScheme_Realistic )
                 aParameter.eThreeDLookScheme=ThreeDLookScheme_Realistic;
@@ -1204,7 +1204,7 @@ void ChartTypeTabPage::initializePage()
 
 sal_Bool ChartTypeTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eReason*/ )
 {
-    //commit changes to model
+    
     if( !m_bDoLiveUpdate && m_pCurrentMainType )
     {
         ChartTypeParameter aParameter( this->getCurrentParamter() );
@@ -1212,7 +1212,7 @@ sal_Bool ChartTypeTabPage::commitPage( ::svt::WizardTypes::CommitPageReason /*eR
         commitToModel( aParameter );
     }
 
-    return sal_True;//return false if this page should not be left
+    return sal_True;
 }
 
 uno::Reference< XChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() const
@@ -1227,6 +1227,6 @@ uno::Reference< XChartTypeTemplate > ChartTypeTabPage::getCurrentTemplate() cons
     return 0;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

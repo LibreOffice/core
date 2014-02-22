@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -64,7 +64,7 @@ struct ExtensionName
     }
 };
 
-//------------------------------------------------------------------------------
+
 const char s_usingText [] =
 "\n"
 "using: " APP_NAME " add <options> extension-path...\n"
@@ -102,9 +102,9 @@ const char s_usingText [] =
 "     <context>\n"
 "\n"
 "To learn more about the Extension Manager and extensions, see:\n"
-"http://wiki.openoffice.org/wiki/Documentation/DevGuide/Extensions/Extensions\n\n";
+"http:
 
-//------------------------------------------------------------------------------
+
 const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("help"), 'h', false },
     { RTL_CONSTASCII_STRINGPARAM("version"), 'V', false },
@@ -128,24 +128,24 @@ public:
     DialogClosedListenerImpl( osl::Condition & rDialogClosedCondition )
         : m_rDialogClosedCondition( rDialogClosedCondition ) {}
 
-    // XEventListener (base of XDialogClosedListener)
+    
     virtual void SAL_CALL disposing( lang::EventObject const & Source )
         throw (RuntimeException);
 
-    // XDialogClosedListener
+    
     virtual void SAL_CALL dialogClosed(
         ui::dialogs::DialogClosedEvent const & aEvent )
         throw (RuntimeException);
 };
 
-// XEventListener (base of XDialogClosedListener)
+
 void DialogClosedListenerImpl::disposing( lang::EventObject const & )
     throw (RuntimeException)
 {
-    // nothing to do
+    
 }
 
-// XDialogClosedListener
+
 void DialogClosedListenerImpl::dialogClosed(
     ui::dialogs::DialogClosedEvent const & )
     throw (RuntimeException)
@@ -153,10 +153,10 @@ void DialogClosedListenerImpl::dialogClosed(
     m_rDialogClosedCondition.set();
 }
 
-// If a package had been installed with a pre OOo 2.2, it could not normally be
-// found via its identifier; similarly (and for ease of use), a package
-// installed with OOo 2.2 or later could not normally be found via its file
-// name.
+
+
+
+
 Reference<deployment::XPackage> findPackage(
     OUString const & repository,
     Reference<deployment::XExtensionManager> const & manager,
@@ -175,7 +175,7 @@ Reference<deployment::XPackage> findPackage(
     return Reference<deployment::XPackage>();
 }
 
-} // anon namespace
+} 
 
 extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 {
@@ -229,20 +229,20 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             dp_misc::writeConsole("\n" APP_NAME " Version 3.3\n");
             return 0;
         }
-        //consume all bootstrap variables which may occur before the subcommannd
+        
         while(isBootstrapVariable(&nPos))
             ;
 
         if(nPos >= nCount)
             return 0;
-        //get the sub command
+        
         osl_getCommandArg( nPos, &subCommand.pData );
         ++nPos;
         subCommand = subCommand.trim();
         subcmd_add = subCommand == "add";
         subcmd_gui = subCommand == "gui";
 
-        // sun-command options and packages:
+        
         while (nPos < nCount)
         {
             if (readArgument( &cmdArg, info_log, &nPos )) {
@@ -264,7 +264,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                 {
                     if (cmdArg[ 0 ] == '-')
                     {
-                        // is option:
+                        
                         dp_misc::writeConsoleError(
                                  "\nERROR: unexpected option " +
                                  cmdArg +
@@ -276,7 +276,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                     }
                     else
                     {
-                        // is package:
+                        
                         cmdPackages.push_back(
                             subcmd_add || subcmd_gui
                             ? makeAbsoluteFileUrl(
@@ -310,8 +310,8 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 
         if (subCommand == "reinstall")
         {
-            //We must prevent that services and types are loaded by UNO,
-            //otherwise we cannot delete the registry data folder.
+            
+            
             OUString extensionUnorc;
             if (repository == "user")
                 extensionUnorc = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
@@ -338,10 +338,10 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             createCmdEnv( xComponentContext, logFile,
                           option_force, option_verbose, option_suppressLicense) );
 
-        //synchronize bundled/shared extensions
-        //Do not synchronize when command is "reinstall". This could add types and services to UNO and
-        //prevent the deletion of the registry data folder
-        //synching is done in XExtensionManager.reinstall
+        
+        
+        
+        
         if (!subcmd_gui && ! (subCommand == "reinstall")
             && ! dp_misc::office_is_running())
             dp_misc::syncRepositories(false, xCmdEnv);
@@ -396,8 +396,8 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                     xExtensionManager->getExtensionsWithUnacceptedLicenses(
                         repository, xCmdEnv));
 
-            //This vector tells what XPackage  in allExtensions has an
-            //unaccepted license.
+            
+            
             std::vector<bool> vecUnaccepted;
             std::vector<Reference<deployment::XPackage> > allExtensions;
             if (cmdPackages.empty())
@@ -409,18 +409,18 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                 ::std::vector<Reference<deployment::XPackage> > vec_packages;
                 ::comphelper::sequenceToContainer(vec_packages, packages);
 
-                //First copy the extensions with the unaccepted license
-                //to vector allExtensions.
+                
+                
                 allExtensions.resize(vecExtUnaccepted.size() + vec_packages.size());
 
                 ::std::vector<Reference<deployment::XPackage> >::iterator i_all_ext =
                       ::std::copy(vecExtUnaccepted.begin(), vecExtUnaccepted.end(),
                                   allExtensions.begin());
-                //Now copy those we got from getDeployedExtensions
+                
                 ::std::copy(vec_packages.begin(), vec_packages.end(), i_all_ext);
 
-                //Now prepare the vector which tells what extension has an
-                //unaccepted license
+                
+                
                 vecUnaccepted.resize(vecExtUnaccepted.size() + vec_packages.size());
                 ::std::fill_n(vecUnaccepted.begin(), vecExtUnaccepted.size(), true);
                 ::std::fill_n(vecUnaccepted.begin() + vecExtUnaccepted.size(),
@@ -431,8 +431,8 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
             }
             else
             {
-                //The user provided the names (ids or file names) of the extensions
-                //which shall be listed
+                
+                
                 for ( ::std::size_t pos = 0; pos < cmdPackages.size(); ++pos )
                 {
                     Reference<deployment::XPackage> extension;
@@ -447,7 +447,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
                             xExtensionManager, xCmdEnv, cmdPackages[ pos ] );
                     }
 
-                    //Now look if the requested extension has an unaccepted license
+                    
                     bool bUnacceptedLic = false;
                     if (!extension.is())
                     {
@@ -545,7 +545,7 @@ extern "C" DESKTOP_DLLPUBLIC int unopkg_main()
 
         if (option_verbose)
             dp_misc::writeConsole(OUString("\n") + APP_NAME + " done.\n");
-        //Force to release all bridges which connect us to the child processes
+        
         dp_misc::disposeBridges(xLocalComponentContext);
         return 0;
     }

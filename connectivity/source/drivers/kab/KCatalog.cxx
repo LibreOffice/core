@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,14 +31,14 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::cppu;
 
-// -------------------------------------------------------------------------
+
 KabCatalog::KabCatalog(KabConnection* _pCon)
         : connectivity::sdbcx::OCatalog(_pCon),
           m_pConnection(_pCon),
           m_xMetaData(m_pConnection->getMetaData())
 {
 }
-// -------------------------------------------------------------------------
+
 void KabCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -57,8 +57,8 @@ void KabCatalog::refreshTables()
 
         while (xResult->next())
         {
-            // aName = xRow->getString(2);
-            // aName += sDot;
+            
+            
             aName = xRow->getString(3);
             aVector.push_back(aName);
         }
@@ -68,21 +68,21 @@ void KabCatalog::refreshTables()
     else
         m_pTables = new KabTables(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void KabCatalog::refreshViews()
 {
 }
-// -------------------------------------------------------------------------
+
 void KabCatalog::refreshGroups()
 {
 }
-// -------------------------------------------------------------------------
+
 void KabCatalog::refreshUsers()
 {
 }
-// -----------------------------------------------------------------------------
 
-// XTablesSupplier
+
+
 Reference< XNameAccess > SAL_CALL KabCatalog::getTables(  ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -95,12 +95,12 @@ Reference< XNameAccess > SAL_CALL KabCatalog::getTables(  ) throw(RuntimeExcepti
     }
     catch( const RuntimeException& )
     {
-        // allowed to leave this method
+        
         throw;
     }
     catch( const Exception& )
     {
-        // allowed
+        
     }
 
     return m_pTables;

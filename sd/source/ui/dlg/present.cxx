@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -87,7 +87,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     aTmfPause->SetModifyHdl( LINK( this, SdStartPresentationDlg, ChangePauseHdl ) );
     aTmfPause->SetFormat( TIMEF_SEC );
 
-    // fill Listbox with page names
+    
     for (std::vector<OUString>::const_iterator pIter = rPageNames.begin(); pIter != rPageNames.end(); ++pIter)
         aLbDias->InsertEntry(*pIter);
 
@@ -95,7 +95,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     {
         sal_uInt16 nPosToSelect = (sal_uInt16) pCustomShowList->GetCurPos();
         SdCustomShow* pCustomShow;
-        // fill Listbox with CustomShows
+        
         for( pCustomShow = (SdCustomShow*) pCustomShowList->First();
              pCustomShow != NULL;
              pCustomShow = (SdCustomShow*) pCustomShowList->Next() )
@@ -129,7 +129,7 @@ SdStartPresentationDlg::SdStartPresentationDlg( Window* pWindow,
     const long  nPause = ( ( const SfxUInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_PAUSE_TIMEOUT ) ).GetValue();
 
     aTmfPause->SetTime( Time( 0, 0, nPause ) );
-    // set cursor in timefield
+    
     Edit *pEdit = aTmfPause->GetField();
     Selection aSel( pEdit->GetMaxTextLen(), pEdit->GetMaxTextLen() );
     pEdit->SetSelection( aSel );
@@ -174,7 +174,7 @@ OUString SdStartPresentationDlg::GetDisplayName( sal_Int32   nDisplay,
     return aName;
 }
 
-/// Store display index together with name in user data
+
 sal_Int32 SdStartPresentationDlg::InsertDisplayEntry(const rtl::OUString &aName,
                                                      sal_Int32            nDisplay)
 {
@@ -209,16 +209,16 @@ void SdStartPresentationDlg::InitMonitorSettings()
             const sal_Int32 nDefaultSelectedDisplay (
                 ( ( const SfxInt32Item& ) rOutAttrs.Get( ATTR_PRESENT_DISPLAY ) ).GetValue());
 
-            // Un-conditionally add a version for '0' the default external display
+            
             sal_Int32 nInsertedEntry;
 
-            // Initial entry - the auto-detected external monitor
+            
             OUString aName = GetDisplayName( nExternalIndex + 1, EXTERNAL_IS_NUMBER);
             nInsertedEntry = InsertDisplayEntry( aName, 0 );
             if( nDefaultSelectedDisplay == 0)
                 nSelectedIndex = nInsertedEntry;
 
-            // The user data contains the real setting
+            
             for( sal_Int32 nDisplay = 0; nDisplay < mnMonitors; nDisplay++ )
             {
                 aName = GetDisplayName( nDisplay + 1,
@@ -226,11 +226,11 @@ void SdStartPresentationDlg::InitMonitorSettings()
                                         MONITOR_IS_EXTERNAL : MONITOR_NORMAL );
                 nInsertedEntry = InsertDisplayEntry( aName, nDisplay + 1 );
 
-                // Remember the index of the default selection.
+                
                 if( nDisplay + 1 == nDefaultSelectedDisplay )
                     nSelectedIndex = nInsertedEntry;
 
-                // Remember index of the default display.
+                
                 if( nDisplay == nExternalIndex )
                     nDefaultExternalIndex = nInsertedEntry;
             }
@@ -306,7 +306,7 @@ IMPL_LINK_NOARG(SdStartPresentationDlg, ClickWindowPresentationHdl)
     const bool bAuto = aRbtAuto->IsChecked();
     const bool bWindow = aRbtWindow->IsChecked();
 
-    // aFtPause.Enable( bAuto );
+    
     aTmfPause->Enable( bAuto );
     aCbxAutoLogo->Enable( bAuto && ( aTmfPause->GetTime().GetMSFromTime() > 0 ) );
 

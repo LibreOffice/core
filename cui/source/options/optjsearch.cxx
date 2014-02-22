@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -26,7 +26,7 @@
 
 using namespace com::sun::star::i18n;
 
-//////////////////////////////////////////////////////////////////////
+
 
 SvxJSearchOptionsPage::SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, "OptJSearchPage", "cui/ui/optjsearchpage.ui", rSet )
@@ -71,7 +71,7 @@ SfxTabPage*  SvxJSearchOptionsPage::Create( Window* pParent, const SfxItemSet& r
 void SvxJSearchOptionsPage::SetTransliterationFlags( sal_Int32 nSettings )
 {
     sal_Bool  bVal = 0 != (nSettings & TransliterationModules_IGNORE_CASE);
-    m_pMatchCase              ->Check( bVal );    //! treat as equal uppercase/lowercase
+    m_pMatchCase              ->Check( bVal );    
     bVal = 0 != (nSettings & TransliterationModules_IGNORE_WIDTH);
     m_pMatchFullHalfWidth     ->Check( bVal );
     bVal = 0 != (nSettings & TransliterationModules_IGNORE_KANA);
@@ -116,7 +116,7 @@ void SvxJSearchOptionsPage::SetTransliterationFlags( sal_Int32 nSettings )
 sal_Int32 SvxJSearchOptionsPage::GetTransliterationFlags_Impl()
 {
     sal_Int32 nTmp = 0;
-    if (m_pMatchCase->IsChecked()) //! treat as equal uppercase/lowercase
+    if (m_pMatchCase->IsChecked()) 
         nTmp |= TransliterationModules_IGNORE_CASE;
     if (m_pMatchFullHalfWidth->IsChecked())
         nTmp |= TransliterationModules_IGNORE_WIDTH;
@@ -164,8 +164,8 @@ void SvxJSearchOptionsPage::Reset( const SfxItemSet& )
 {
     SvtSearchOptions aOpt;
 
-    // read settings from configuration
-    m_pMatchCase               ->Check(!aOpt.IsMatchCase() );  //! treat as equal uppercase/lowercase
+    
+    m_pMatchCase               ->Check(!aOpt.IsMatchCase() );  
     m_pMatchFullHalfWidth      ->Check( aOpt.IsMatchFullHalfWidthForms() );
     m_pMatchHiraganaKatakana   ->Check( aOpt.IsMatchHiraganaKatakana() );
     m_pMatchContractions       ->Check( aOpt.IsMatchContractions() );
@@ -224,7 +224,7 @@ sal_Bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
     SvtSearchOptions aOpt;
     sal_Bool bNewVal, bChanged;
 
-    bNewVal  = m_pMatchCase->IsChecked();  //! treat as equal uppercase/lowercase
+    bNewVal  = m_pMatchCase->IsChecked();  
     bChanged = bNewVal != m_pMatchCase->GetSavedValue();
     if (bChanged)
     {
@@ -362,6 +362,6 @@ sal_Bool SvxJSearchOptionsPage::FillItemSet( SfxItemSet& )
 }
 
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

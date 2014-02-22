@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,8 +43,8 @@ SchXMLParagraphContext::~SchXMLParagraphContext()
 
 void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    // remember the id. It is used for storing the original cell range string in
-    // a local table (cached data)
+    
+    
     if( mpId )
     {
         sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
@@ -64,7 +64,7 @@ void SchXMLParagraphContext::StartElement( const uno::Reference< xml::sax::XAttr
                     bHaveXmlId = true;
                 }
                 if (nPrefix == XML_NAMESPACE_TEXT)
-                {   // text:id shall be ignored if xml:id exists
+                {   
                     if (!bHaveXmlId)
                     {
                         (*mpId) = xAttrList->getValueByIndex( i );
@@ -89,11 +89,11 @@ SvXMLImportContext* SchXMLParagraphContext::CreateChildContext(
     {
         if( rLocalName.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_TAB_STOP )))
         {
-            maBuffer.append( sal_Unicode( 0x0009 ));  // tabulator
+            maBuffer.append( sal_Unicode( 0x0009 ));  
         }
         else if( rLocalName.equals( ::xmloff::token::GetXMLToken( ::xmloff::token::XML_LINE_BREAK )))
         {
-            maBuffer.append( sal_Unicode( 0x000A ));  // linefeed
+            maBuffer.append( sal_Unicode( 0x000A ));  
         }
     }
 

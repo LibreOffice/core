@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -27,9 +27,9 @@
 #include "dbfunc.hxx"
 
 
-//=============================================================================
-// struct ScConflictsListEntry
-//=============================================================================
+
+
+
 
 bool ScConflictsListEntry::HasSharedAction( sal_uLong nSharedAction ) const
 {
@@ -60,9 +60,9 @@ bool ScConflictsListEntry::HasOwnAction( sal_uLong nOwnAction ) const
 }
 
 
-//=============================================================================
-// class ScConflictsListHelper
-//=============================================================================
+
+
+
 
 bool ScConflictsListHelper::HasOwnAction( ScConflictsList& rConflictsList, sal_uLong nOwnAction )
 {
@@ -148,9 +148,9 @@ void ScConflictsListHelper::TransformConflictsList( ScConflictsList& rConflictsL
 }
 
 
-//=============================================================================
-// class ScConflictsFinder
-//=============================================================================
+
+
+
 
 ScConflictsFinder::ScConflictsFinder( ScChangeTrack* pTrack, sal_uLong nStartShared, sal_uLong nEndShared,
         sal_uLong nStartOwn, sal_uLong nEndOwn, ScConflictsList& rConflictsList )
@@ -205,15 +205,15 @@ ScConflictsListEntry* ScConflictsFinder::GetIntersectingEntry( const ScChangeAct
 
 ScConflictsListEntry* ScConflictsFinder::GetEntry( sal_uLong nSharedAction, const ScChangeActionList& rOwnActions )
 {
-    // try to get a list entry which already contains the shared action
+    
     ScConflictsListEntry* pEntry = ScConflictsListHelper::GetSharedActionEntry( mrConflictsList, nSharedAction );
     if ( pEntry )
     {
         return pEntry;
     }
 
-    // try to get a list entry for which the shared action intersects with any
-    // other action of this entry
+    
+    
     pEntry = GetIntersectingEntry( mpTrack->GetAction( nSharedAction ) );
     if ( pEntry )
     {
@@ -221,8 +221,8 @@ ScConflictsListEntry* ScConflictsFinder::GetEntry( sal_uLong nSharedAction, cons
         return pEntry;
     }
 
-    // try to get a list entry for which any of the own actions intersects with
-    // any other action of this entry
+    
+    
     ScChangeActionList::const_iterator aEnd = rOwnActions.end();
     for ( ScChangeActionList::const_iterator aItr = rOwnActions.begin(); aItr != aEnd; ++aItr )
     {
@@ -234,7 +234,7 @@ ScConflictsListEntry* ScConflictsFinder::GetEntry( sal_uLong nSharedAction, cons
         }
     }
 
-    // if no entry was found, create a new one
+    
     ScConflictsListEntry aEntry;
     aEntry.meConflictAction = SC_CONFLICT_ACTION_NONE;
     aEntry.maSharedActions.push_back( nSharedAction );
@@ -284,9 +284,9 @@ bool ScConflictsFinder::Find()
     return bReturn;
 }
 
-//=============================================================================
-// class ScConflictsResolver
-//=============================================================================
+
+
+
 
 ScConflictsResolver::ScConflictsResolver( ScChangeTrack* pTrack, ScConflictsList& rConflictsList )
     :mpTrack ( pTrack )
@@ -346,16 +346,16 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
                 {
                     if ( bHandleContentAction )
                     {
-                        // do nothing
-                        //mpTrack->SelectContent( pAction );
+                        
+                        
                     }
                 }
                 else
                 {
                     if ( bHandleNonContentAction )
                     {
-                        // do nothing
-                        //mpTrack->Accept( pAction );
+                        
+                        
                     }
                 }
             }
@@ -380,9 +380,9 @@ void ScConflictsResolver::HandleAction( ScChangeAction* pAction, bool bIsSharedA
     }
 }
 
-//=============================================================================
-// class ScConflictsDlg
-//=============================================================================
+
+
+
 
 ScConflictsDlg::ScConflictsDlg( Window* pParent, ScViewData* pViewData, ScDocument* pSharedDoc, ScConflictsList& rConflictsList )
     :ModalDialog( pParent, ScResId( RID_SCDLG_CONFLICTS ) )
@@ -769,7 +769,7 @@ void ScConflictsDlg::UpdateView()
                 ScChangeAction* pAction = mpSharedTrack->GetAction( *aItrShared );
                 if ( pAction )
                 {
-                    // only display shared top content entries
+                    
                     if ( pAction->GetType() == SC_CAT_CONTENT )
                     {
                         ScChangeActionContent* pNextContent = ( dynamic_cast< ScChangeActionContent* >( pAction ) )->GetNextContent();
@@ -790,7 +790,7 @@ void ScConflictsDlg::UpdateView()
                 ScChangeAction* pAction = mpOwnTrack->GetAction( *aItrOwn );
                 if ( pAction )
                 {
-                    // only display own top content entries
+                    
                     if ( pAction->GetType() == SC_CAT_CONTENT )
                     {
                         ScChangeActionContent* pNextContent = ( dynamic_cast< ScChangeActionContent* >( pAction ) )->GetNextContent();

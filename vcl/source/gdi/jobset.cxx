@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/alloc.h>
@@ -173,12 +173,12 @@ JobSetup& JobSetup::operator=( const JobSetup& rJobSetup )
 {
     DBG_ASSERT( !rJobSetup.mpData || (rJobSetup.mpData->mnRefCount) < 0xFFFE, "JobSetup: RefCount overflow" );
 
-    // Increment refcount first, so that we can assign to ourselves
+    
     if ( rJobSetup.mpData )
         rJobSetup.mpData->mnRefCount++;
 
-    // If it's not static ImpData and the last reference, delete it, else
-    // decrement refcount
+    
+    
     if ( mpData )
     {
         if ( mpData->mnRefCount == 1 )
@@ -258,7 +258,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
             pJobData->maPrinterName = OStringToOUString(pData->cPrinterName, aStreamEncoding);
             pJobData->maDriver = OStringToOUString(pData->cDriverName, aStreamEncoding);
 
-            // Are these our new JobSetup files?
+            
             if ( nSystem == JOBSET_FILE364_SYSTEM ||
                  nSystem == JOBSET_FILE605_SYSTEM )
             {
@@ -300,7 +300,7 @@ SvStream& ReadJobSetup( SvStream& rIStream, JobSetup& rJobSetup )
                             pJobData->maValueMap[ aKey ] = aValue;
                     }
                     DBG_ASSERT( rIStream.Tell() == nFirstPos+nLen, "corrupted job setup" );
-                    // ensure correct stream position
+                    
                     rIStream.Seek( nFirstPos + nLen );
                 }
             }
@@ -315,9 +315,9 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
 {
     DBG_ASSERTWARNING( rOStream.GetVersion(), "JobSetup::<< - Solar-Version not set on rOStream" );
 
-    // We do not have a new FileFormat at this point in time
-    // #define JOBSET_FILEFORMAT2      3780
-    // if ( rOStream.GetVersion() < JOBSET_FILEFORMAT2 )
+    
+    
+    
     {
         sal_uInt16 nLen = 0;
         if ( !rJobSetup.mpData )
@@ -344,7 +344,7 @@ SvStream& WriteJobSetup( SvStream& rOStream, const JobSetup& rJobSetup )
             strncpy( aOldData.cPrinterName, aPrnByteName.getStr(), 63 );
             OString aDriverByteName(OUStringToOString(rJobSetup.GetDriverName(), RTL_TEXTENCODING_UTF8));
             strncpy( aOldData.cDriverName, aDriverByteName.getStr(), 31 );
-//          nLen = sizeof( aOldData ) + 4 + nOldJobDataSize + pJobData->mnDriverDataLen;
+
             int nPos = rOStream.Tell();
             rOStream.WriteUInt16( nLen );
             rOStream.WriteUInt16( nSystem );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/propertybag.hxx"
@@ -27,10 +27,10 @@
 
 #include <map>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::Type;
@@ -44,9 +44,9 @@ namespace comphelper
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    //====================================================================
-    //= PropertyBag_Impl
-    //====================================================================
+    
+    
+    
     typedef ::std::map< sal_Int32, Any >    MapInt2Any;
     struct PropertyBag_Impl
     {
@@ -55,10 +55,10 @@ namespace comphelper
         bool m_bAllowEmptyPropertyName;
     };
 
-    //====================================================================
-    //= PropertyBag
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     PropertyBag::PropertyBag()
         :m_pImpl( new PropertyBag_Impl )
     {
@@ -68,13 +68,13 @@ namespace comphelper
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBag::setAllowEmptyPropertyName( bool i_isAllowed )
     {
         m_pImpl->m_bAllowEmptyPropertyName = i_isAllowed;
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         void    lcl_checkForEmptyName( const bool _allowEmpty, const OUString& _name )
@@ -82,7 +82,7 @@ namespace comphelper
             if ( !_allowEmpty && _name.isEmpty() )
                 throw IllegalArgumentException(
                         OUString( "The property name must not be empty." ),
-                        // TODO: resource
+                        
                         NULL,
                         1
                       );
@@ -93,63 +93,63 @@ namespace comphelper
             if ( _container.hasPropertyByName( _name ) || _container.hasPropertyByHandle( _handle ) )
                 throw PropertyExistException(
                     OUString( "Property name or handle already used." ),
-                    // TODO: resource
+                    
                     NULL );
 
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBag::addVoidProperty( const OUString& _rName, const Type& _rType, sal_Int32 _nHandle, sal_Int32 _nAttributes )
     {
         if ( _rType.getTypeClass() == TypeClass_VOID )
             throw IllegalArgumentException(
                     OUString( "Illegal property type: VOID" ),
-                        // TODO: resource
+                        
                     NULL,
                     1
                   );
 
-        // check name/handle sanity
+        
         lcl_checkForEmptyName( m_pImpl->m_bAllowEmptyPropertyName, _rName );
         lcl_checkNameAndHandle( _rName, _nHandle, *this );
 
-        // register the property
+        
         OSL_ENSURE( _nAttributes & PropertyAttribute::MAYBEVOID, "PropertyBag::addVoidProperty: this is for default-void properties only!" );
         registerPropertyNoMember( _rName, _nHandle, _nAttributes | PropertyAttribute::MAYBEVOID, _rType, NULL );
 
-        // remember the default
+        
         m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, Any() ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBag::addProperty( const OUString& _rName, sal_Int32 _nHandle, sal_Int32 _nAttributes, const Any& _rInitialValue )
     {
-        // check type sanity
+        
         Type aPropertyType = _rInitialValue.getValueType();
         if ( aPropertyType.getTypeClass() == TypeClass_VOID )
             throw IllegalTypeException(
                 OUString( "The initial value must be non-NULL to determine the property type." ),
-                // TODO: resource
+                
                 NULL );
 
-        // check name/handle sanity
+        
         lcl_checkForEmptyName( m_pImpl->m_bAllowEmptyPropertyName, _rName );
         lcl_checkNameAndHandle( _rName, _nHandle, *this );
 
-        // register the property
+        
         registerPropertyNoMember( _rName, _nHandle, _nAttributes, aPropertyType,
             _rInitialValue.hasValue() ? _rInitialValue.getValue() : NULL );
 
-        // remember the default
+        
         m_pImpl->aDefaults.insert( MapInt2Any::value_type( _nHandle, _rInitialValue ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBag::removeProperty( const OUString& _rName )
     {
         const Property& rProp = getProperty( _rName );
-            // will throw an UnknownPropertyException if necessary
+            
         if ( ( rProp.Attributes & PropertyAttribute::REMOVABLE ) == 0 )
             throw NotRemoveableException( OUString(), NULL );
         const sal_Int32 nHandle = rProp.Handle;
@@ -159,7 +159,7 @@ namespace comphelper
         m_pImpl->aDefaults.erase( nHandle );
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBag::getFastPropertyValue( sal_Int32 _nHandle, Any& _out_rValue ) const
     {
         if ( !hasPropertyByHandle( _nHandle ) )
@@ -168,7 +168,7 @@ namespace comphelper
         OPropertyContainerHelper::getFastPropertyValue( _out_rValue, _nHandle );
     }
 
-    //--------------------------------------------------------------------
+    
     bool PropertyBag::convertFastPropertyValue( sal_Int32 _nHandle, const Any& _rNewValue, Any& _out_rConvertedValue, Any& _out_rCurrentValue ) const
     {
         if ( !hasPropertyByHandle( _nHandle ) )
@@ -178,7 +178,7 @@ namespace comphelper
             _out_rConvertedValue, _out_rCurrentValue, _nHandle, _rNewValue );
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBag::setFastPropertyValue( sal_Int32 _nHandle, const Any& _rValue )
     {
         if ( !hasPropertyByHandle( _nHandle ) )
@@ -187,7 +187,7 @@ namespace comphelper
         OPropertyContainerHelper::setFastPropertyValue( _nHandle, _rValue );
     }
 
-    //--------------------------------------------------------------------
+    
     void PropertyBag::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _out_rValue ) const
     {
         if ( !hasPropertyByHandle( _nHandle ) )
@@ -202,8 +202,8 @@ namespace comphelper
     }
 
 
-//........................................................................
-} // namespace comphelper
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

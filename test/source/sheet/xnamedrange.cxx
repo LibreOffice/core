@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/sheet/xnamedrange.hxx>
@@ -49,17 +49,17 @@ void XNamedRange::testSetContent()
 
     OUString aExpectedContent;
 
-    // test a cell
+    
     aExpectedContent = "D1";
     xNamedRange->setContent(aExpectedContent);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a cell", xNamedRange->getContent().equals(aExpectedContent));
 
-    // test a cellrange
+    
     aExpectedContent = "D1:D10";
     xNamedRange->setContent(aExpectedContent);
     CPPUNIT_ASSERT_MESSAGE("Wrong expected content for initial1 after SetContent a cellrange", xNamedRange->getContent().equals(aExpectedContent));
 
-    // test a formula
+    
     aExpectedContent = "=D10";
     xNamedRange->setContent(aExpectedContent);
     aExpectedContent = "D10";
@@ -106,7 +106,7 @@ void XNamedRange::testGetReferencePosition()
     uno::Reference< sheet::XNamedRange > xNamedRange = getNamedRange(aTestedNamedRangeString);
 
     table::CellAddress xCellAddress = xNamedRange->getReferencePosition();
-    // the expeted address is on B1, as it was the active cell when intial2 created
+    
     CPPUNIT_ASSERT_MESSAGE("Wrong SHEET reference position", xCellAddress.Sheet == 0);
     CPPUNIT_ASSERT_MESSAGE("Wrong COLUMN reference position", xCellAddress.Column == 1);
     CPPUNIT_ASSERT_MESSAGE("Wrong ROW reference position", xCellAddress.Row == 0);

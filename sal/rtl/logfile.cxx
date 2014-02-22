@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstdarg>
@@ -84,18 +84,18 @@ Logger::Logger(): aFile(0), buffer(0)
     OUString value;
     if( rtl_bootstrap_get( name.pData, &value.pData, 0 ) )
     {
-        //  Obtain process id.
+        
         oslProcessIdentifier aProcessId = 0;
         oslProcessInfo info;
         info.Size = sizeof (oslProcessInfo);
         if (osl_getProcessInfo (0, osl_Process_IDENTIFIER, &info) == osl_Process_E_None)
             aProcessId = info.Ident;
 
-        //  Construct name of log file and open the file.
+        
         OUStringBuffer buf( 128 );
         buf.append( value );
 
-        // if the filename ends with .nopid, the incoming filename is not modified
+        
         if( value.getLength() < 6 /* ".nopid" */ ||
             rtl_ustr_ascii_compare_WithLength(
                 value.getStr() + (value.getLength()-6) , 6 , ".nopid" ) )

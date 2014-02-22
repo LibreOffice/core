@@ -216,9 +216,9 @@ namespace basctl
         /** determines whether the instance refers to a non-closed document
         */
         inline  bool    isAlive()       const   { return m_bValid ? ( m_bIsApplication ? true : !m_bDocumentClosed ) : false; }
-        /// determines whether the "document" refers to the application in real
+        /
         inline  bool    isApplication() const   { return m_bValid && m_bIsApplication; }
-        /// determines whether the document refers to a real document (instead of the application)
+        /
         inline  bool    isDocument()    const   { return m_bValid && !m_bIsApplication; }
 
         /** invalidates the instance
@@ -228,11 +228,11 @@ namespace basctl
         const Reference< XModel >&
                         getDocumentRef() const { return m_xDocument; }
 
-        /// returns a library container belonging to the document
+        /
         Reference< XLibraryContainer >
                     getLibraryContainer( LibraryContainerType _eType ) const;
 
-        /// determines whether a given library is part of the shared installation
+        /
         bool        isLibraryShared( const OUString& _rLibName, LibraryContainerType _eType );
 
         /** returns the current frame of the document
@@ -243,7 +243,7 @@ namespace basctl
         */
         bool        getCurrentFrame( Reference< XFrame >& _out_rxFrame ) const;
 
-        // versions with the same signature/semantics as in ScriptDocument itself
+        
         bool        isReadOnly() const;
         bool        isInVBAMode() const;
         BasicManager*
@@ -278,7 +278,7 @@ namespace basctl
         bool        createDialog( const OUString& _rLibName, const OUString& _rDialogName, Reference< XInputStreamProvider >& _out_rDialogProvider ) const;
 
     protected:
-        // DocumentEventListener
+        
         virtual void onDocumentCreated( const ScriptDocument& _rDocument );
         virtual void onDocumentOpened( const ScriptDocument& _rDocument );
         virtual void onDocumentSave( const ScriptDocument& _rDocument );
@@ -398,7 +398,7 @@ namespace basctl
         {
             try
             {
-                // note that XStorable is required by the OfficeDocument service
+                
                 Reference< XStorable > xDocStorable( m_xDocument, UNO_QUERY_THROW );
                 bIsReadOnly = xDocStorable->isReadonly();
             }
@@ -465,13 +465,13 @@ namespace basctl
             if ( !xContainer.is() )
                 throw NoSuchElementException();
 
-            // load library
+            
             if ( _bLoadLibrary && !xLibContainer->isLibraryLoaded( _rLibName ) )
                 xLibContainer->loadLibrary( _rLibName );
         }
         catch( const NoSuchElementException& )
         {
-            throw;  // allowed to leave
+            throw;  
         }
         catch( const Exception& )
         {
@@ -613,16 +613,16 @@ namespace basctl
         {
             Reference< XNameContainer > xLib( getLibrary( _eType, _rLibName, true ), UNO_QUERY_THROW );
 
-            // get element
+            
             Any aElement( xLib->getByName( _rOldName ) );
 
-            // remove element from container
+            
             xLib->removeByName( _rOldName );
 
-            // if it's a dialog, import and export, to reflect the new name
+            
             if ( _eType == E_DIALOGS )
             {
-                // create dialog model
+                
                 Reference< XComponentContext > aContext(
                     comphelper::getProcessComponentContext() );
                 Reference< XNameContainer > xDialogModel;
@@ -636,7 +636,7 @@ namespace basctl
                               aContext ) ),
                         UNO_QUERY_THROW );
 
-                // import dialog model
+                
                 Reference< XInputStreamProvider > xISP( aElement, UNO_QUERY_THROW );
                 if ( !_rxExistingDialogModel.is() )
                 {
@@ -644,16 +644,16 @@ namespace basctl
                     ::xmlscript::importDialogModel( xInput, xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );
                 }
 
-                // set new name as property
+                
                 Reference< XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY_THROW );
                 xDlgPSet->setPropertyValue( DLGED_PROP_NAME, makeAny( _rNewName ) );
 
-                // export dialog model
+                
                 xISP = ::xmlscript::exportDialogModel( xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );
                 aElement <<= xISP;
             }
 
-            // insert element by new name in container
+            
             if ( _eType == E_SCRIPTS )
             {
                 Reference< XVBAModuleInfo > xVBAModuleInfo( xLib, UNO_QUERY );
@@ -684,12 +684,12 @@ namespace basctl
             if ( !xLib.is() || xLib->hasByName( _rModName ) )
                 return false;
 
-            // create new module
+            
             _out_rNewModuleCode = "REM  *****  BASIC  *****\n\n" ;
             if ( _bCreateMain )
                 _out_rNewModuleCode += "Sub Main\n\nEnd Sub\n" ;
 
-            // insert module into library
+            
             xLib->insertByName( _rModName, makeAny( _out_rNewModuleCode ) );
         }
         catch( const Exception& )
@@ -745,12 +745,12 @@ namespace basctl
         {
             Reference< XNameContainer > xLib( getLibrary( E_DIALOGS, _rLibName, true ), UNO_QUERY_THROW );
 
-            // create dialog
+            
             _out_rDialogProvider.clear();
             if ( xLib->hasByName( _rDialogName ) )
                 return false;
 
-            // create new dialog model
+            
             Reference< XComponentContext > aContext(
                 comphelper::getProcessComponentContext() );
             Reference< XNameContainer > xDialogModel(
@@ -758,14 +758,14 @@ namespace basctl
                     "com.sun.star.awt.UnoControlDialogModel", aContext ),
                 UNO_QUERY_THROW );
 
-            // set name property
+            
             Reference< XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY_THROW );
             xDlgPSet->setPropertyValue( DLGED_PROP_NAME, makeAny( _rDialogName ) );
 
-            // export dialog model
+            
             _out_rDialogProvider = ::xmlscript::exportDialogModel( xDialogModel, aContext, isDocument() ? getDocument() : Reference< XModel >() );
 
-            // insert dialog into library
+            
             xLib->insertByName( _rDialogName, makeAny( _out_rDialogProvider ) );
         }
         catch( const Exception& )
@@ -987,32 +987,32 @@ namespace basctl
 
     void ScriptDocument::Impl::onDocumentCreated( const ScriptDocument& /*_rDocument*/ )
     {
-        // not interested in
+        
     }
 
     void ScriptDocument::Impl::onDocumentOpened( const ScriptDocument& /*_rDocument*/ )
     {
-        // not interested in
+        
     }
 
     void ScriptDocument::Impl::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
     {
-        // not interested in
+        
     }
 
     void ScriptDocument::Impl::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
     {
-        // not interested in
+        
     }
 
     void ScriptDocument::Impl::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
     {
-        // not interested in
+        
     }
 
     void ScriptDocument::Impl::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
     {
-        // not interested in
+        
     }
 
     void ScriptDocument::Impl::onDocumentClosed( const ScriptDocument& _rDocument )
@@ -1031,12 +1031,12 @@ namespace basctl
 
     void ScriptDocument::Impl::onDocumentTitleChanged( const ScriptDocument& /*_rDocument*/ )
     {
-        // not interested in
+        
     }
 
     void ScriptDocument::Impl::onDocumentModeChanged( const ScriptDocument& /*_rDocument*/ )
     {
-        // not interested in
+        
     }
 
     //====================================================================
@@ -1059,8 +1059,8 @@ namespace basctl
         :m_pImpl( new Impl( _rxDocument ) )
     {
         OSL_ENSURE( _rxDocument.is(), "ScriptDocument::ScriptDocument: document must not be NULL!" );
-            // a NULL document results in an uninitialized instance, and for this
-            // purpose, there is a dedicated constructor
+            
+            
     }
 
 
@@ -1160,11 +1160,11 @@ namespace basctl
     {
         ScriptDocuments aScriptDocs;
 
-        // include application?
+        
         if ( _eListType == AllWithApplication )
             aScriptDocs.push_back( getApplicationScriptDocument() );
 
-        // obtain documents
+        
         try
         {
             docs::Documents aDocuments;
@@ -1175,7 +1175,7 @@ namespace basctl
                     ++doc
                 )
             {
-                // exclude documents without script/library containers
+                
                 ScriptDocument aDoc( doc->xModel );
                 if ( !aDoc.isValid() )
                     continue;
@@ -1188,7 +1188,7 @@ namespace basctl
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        // sort document list by doc title?
+        
         if ( _eListType == DocumentsSorted )
         {
             CollatorWrapper aCollator( ::comphelper::getProcessComponentContext() );
@@ -1273,7 +1273,7 @@ namespace basctl
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        // sort
+        
         ::std::sort( aModuleNames.getArray() , aModuleNames.getArray() + aModuleNames.getLength() , StringCompareLessThan );
 
         return aModuleNames;
@@ -1384,8 +1384,8 @@ namespace basctl
         if ( !m_pImpl->createModule( _rLibName, _rModName, _bCreateMain, _out_rNewModuleCode ) )
             return false;
 
-        // doc shell modified
-        MarkDocumentModified( *const_cast< ScriptDocument* >( this ) );    // here?
+        
+        MarkDocumentModified( *const_cast< ScriptDocument* >( this ) );    
         return true;
     }
 
@@ -1435,7 +1435,7 @@ namespace basctl
         if ( !m_pImpl->createDialog( _rLibName, _rDialogName, _out_rDialogProvider ) )
             return false;
 
-        MarkDocumentModified( *const_cast< ScriptDocument* >( this ) );    // here?
+        MarkDocumentModified( *const_cast< ScriptDocument* >( this ) );    
         return true;
     }
 
@@ -1567,6 +1567,6 @@ namespace basctl
         return m_pImpl->allowMacros();
     }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

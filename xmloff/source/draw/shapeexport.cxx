@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <memory>
@@ -123,7 +123,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     maShapesInfos(),
     maCurrentShapesIter(maShapesInfos.end()),
     mbExportLayer( sal_False ),
-    // #88546# init to sal_False
+    
     mbHandleProgressBar( sal_False ),
     msZIndex( "ZOrder" ),
     msPrintable( "Printable" ),
@@ -147,9 +147,9 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     msSpeed( "Speed" ),
     msStarBasic( "StarBasic" )
 {
-    // construct PropertyHandlerFactory
+    
     mxSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), rExp );
-    // construct PropertySetMapper
+    
     mxPropertySetMapper = CreateShapePropMapper( mrExport );
     if( pExtMapper )
     {
@@ -158,7 +158,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
     }
 
 /*
-    // chain text attributes
+    
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(rExp));
 */
 
@@ -175,7 +175,7 @@ XMLShapeExport::XMLShapeExport(SvXMLExport& rExp,
 
     maCurrentInfo = maShapeInfos.end();
 
-    // create table export helper and let him add his families in time
+    
     GetShapeTableExport();
 }
 
@@ -183,7 +183,7 @@ XMLShapeExport::~XMLShapeExport()
 {
 }
 
-// sj: replacing CustomShapes with standard objects that are also supported in OpenOffice.org format
+
 uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement( const uno::Reference< drawing::XShape >& xShape )
 {
     uno::Reference< drawing::XShape > xCustomShapeReplacement;
@@ -230,7 +230,7 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
     return xCustomShapeReplacement;
 }
 
-// This method collects all automatic styles for the given XShape
+
 void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShape >& xShape )
 {
     if( maCurrentShapesIter == maShapesInfos.end() )
@@ -257,11 +257,11 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if ( xCustomShapeReplacement.is() )
         aShapeInfo.xCustomShapeReplacement = xCustomShapeReplacement;
 
-    // first compute the shapes type
+    
     ImpCalcShapeType(xShape, aShapeInfo.meShapeType);
 
-    // #i118485# enabled XmlShapeTypeDrawChartShape and XmlShapeTypeDrawOLE2Shape
-    // to have text
+    
+    
     const bool bObjSupportsText =
         aShapeInfo.meShapeType != XmlShapeTypePresChartShape &&
         aShapeInfo.meShapeType != XmlShapeTypePresOLE2Shape &&
@@ -285,7 +285,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     if ( aShapeInfo.xCustomShapeReplacement.is() )
         xPropSet.clear();
 
-    // prep text styles
+    
     if( xPropSet.is() && bObjSupportsText )
     {
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY);
@@ -306,7 +306,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         }
     }
 
-    // compute the shape parent style
+    
     if( xPropSet.is() )
     {
         uno::Reference< beans::XPropertySetInfo > xPropertySetInfo( xPropSet->getPropertySetInfo() );
@@ -321,7 +321,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
             if(xStyle.is())
             {
-                // get family ID
+                
                 uno::Reference< beans::XPropertySet > xStylePropSet(xStyle, uno::UNO_QUERY);
                 DBG_ASSERT( xStylePropSet.is(), "style without a XPropertySet?" );
                 try
@@ -336,12 +336,12 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 }
                 catch(const beans::UnknownPropertyException&)
                 {
-                    // Ignored.
+                    
                     DBG_ASSERT(false,
                         "XMLShapeExport::collectShapeAutoStyles: style has no 'Family' property");
                 }
 
-                // get parent-style name
+                
                 if(XML_STYLE_FAMILY_SD_PRESENTATION_ID == aShapeInfo.mnFamily)
                 {
                     aParentName = msPresentationStylePrefix;
@@ -351,7 +351,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
             }
         }
 
-        // filter propset
+        
         std::vector< XMLPropertyState > xPropStates;
 
         sal_Int32 nCount = 0;
@@ -361,7 +361,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
             if (XmlShapeTypeDrawControlShape == aShapeInfo.meShapeType)
             {
-                // for control shapes, we additionally need the number format style (if any)
+                
                 uno::Reference< drawing::XControlShape > xControl(xShape, uno::UNO_QUERY);
                 DBG_ASSERT(xControl.is(), "XMLShapeExport::collectShapeAutoStyles: ShapeType control, but no XControlShape!");
                 if (xControl.is())
@@ -373,8 +373,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                     if (!sNumberStyle.isEmpty())
                     {
                         sal_Int32 nIndex = GetPropertySetMapper()->getPropertySetMapper()->FindEntryIndex(CTF_SD_CONTROL_SHAPE_DATA_STYLE);
-                            // TODO : this retrieval of the index could be moved into the ctor, holding the index
-                            //          as member, thus saving time.
+                            
+                            
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for our context id!");
 
                         XMLPropertyState aNewState(nIndex, uno::makeAny(sNumberStyle));
@@ -395,49 +395,49 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
         if(nCount == 0)
         {
-            // no hard attributes, use parent style name for export
+            
             aShapeInfo.msStyleName = aParentName;
         }
         else
         {
-            // there are filtered properties -> hard attributes
-            // try to find this style in AutoStylePool
+            
+            
             aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Find(aShapeInfo.mnFamily, aParentName, xPropStates);
 
             if(aShapeInfo.msStyleName.isEmpty())
             {
-                // Style did not exist, add it to AutoStalePool
+                
                 aShapeInfo.msStyleName = mrExport.GetAutoStylePool()->Add(aShapeInfo.mnFamily, aParentName, xPropStates);
             }
         }
 
-        // optionaly generate auto style for text attributes
+        
         if( (!bIsEmptyPresObj || (aShapeInfo.meShapeType != XmlShapeTypePresPageShape)) && bObjSupportsText )
         {
             xPropStates = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->Filter( xPropSet );
 
-            // yet more additionally, we need to care for the ParaAdjust property
+            
             if ( XmlShapeTypeDrawControlShape == aShapeInfo.meShapeType )
             {
                 uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
                 uno::Reference< beans::XPropertyState > xPropState( xPropSet, uno::UNO_QUERY );
                 if ( xPropSetInfo.is() && xPropState.is() )
                 {
-                    // this is because:
-                    // * if controls shapes have a ParaAdjust property, then this is the Align property of the control model
-                    // * control models are allowed to have an Align of "void"
-                    // * the Default for control model's Align is TextAlign_LEFT
-                    // * defaults for style properties are not written, but we need to write the "left",
-                    //   because we need to distiguish this "left" from the case where not align attribute
-                    //   is present which means "void"
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     static const OUString s_sParaAdjustPropertyName(  "ParaAdjust"  );
                     if  (   xPropSetInfo->hasPropertyByName( s_sParaAdjustPropertyName )
                         &&  ( beans::PropertyState_DEFAULT_VALUE == xPropState->getPropertyState( s_sParaAdjustPropertyName ) )
                         )
                     {
                         sal_Int32 nIndex = GetExport().GetTextParagraphExport()->GetParagraphPropertyMapper()->getPropertySetMapper()->FindEntryIndex( CTF_SD_SHAPE_PARA_ADJUST );
-                            // TODO : this retrieval of the index should be moved into the ctor, holding the index
-                            //          as member, thus saving time.
+                            
+                            
                         DBG_ASSERT(-1 != nIndex, "XMLShapeExport::collectShapeAutoStyles: could not obtain the index for the ParaAdjust context id!");
 
                         uno::Any aParaAdjustValue = xPropSet->getPropertyValue( s_sParaAdjustPropertyName );
@@ -464,18 +464,18 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
                 aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Find( XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates );
                 if(aShapeInfo.msTextStyleName.isEmpty())
                 {
-                    // Style did not exist, add it to AutoStalePool
+                    
                     aShapeInfo.msTextStyleName = mrExport.GetAutoStylePool()->Add(XML_STYLE_FAMILY_TEXT_PARAGRAPH, aEmpty, xPropStates);
                 }
             }
         }
     }
 
-    // prepare animation information if needed
+    
     if( mxAnimationsExporter.is() )
         mxAnimationsExporter->prepare( xShape, mrExport );
 
-    // check for special shapes
+    
 
     switch( aShapeInfo.meShapeType )
     {
@@ -483,7 +483,7 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
         {
             uno::Reference< uno::XInterface > xConnection;
 
-            // create shape ids for export later
+            
             xPropSet->getPropertyValue( msStartShape ) >>= xConnection;
             if( xConnection.is() )
                 mrExport.getInterfaceToIdentifierMapper().registerReference( xConnection );
@@ -514,8 +514,8 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
     maShapeInfos.push_back( aShapeInfo );
     maCurrentInfo = maShapeInfos.begin();
 
-    // check for shape collections (group shape or 3d scene)
-    // and collect contained shapes style infos
+    
+    
     const uno::Reference< drawing::XShape >& xCollection = aShapeInfo.xCustomShapeReplacement.is()
                                                 ? aShapeInfo.xCustomShapeReplacement : xShape;
     {
@@ -547,7 +547,7 @@ namespace
             SvXMLExport& mrExport;
     };
 }
-// This method exports the given XShape
+
 void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape,
                                  sal_Int32 nFeatures /* = SEF_DEFAULT */,
                                  com::sun::star::awt::Point* pRefPoint /* = NULL */,
@@ -564,8 +564,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     ::std::auto_ptr< SvXMLElementExport >  mpHyperlinkElement;
 
-    // export hyperlinks with <a><shape/></a>. Currently only in draw since draw
-    // does not support document events
+    
+    
     if( xSet.is() && (GetExport().GetModelType() == SvtModuleOptions::E_DRAW) ) try
     {
         presentation::ClickAction eAction = presentation::ClickAction_NONE;
@@ -607,7 +607,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     const ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
 
 #ifdef DBG_UTIL
-    // check if this is the correct ShapesInfo
+    
     uno::Reference< container::XChild > xChild( xShape, uno::UNO_QUERY );
     if( xChild.is() )
     {
@@ -615,7 +615,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         DBG_ASSERT( xParent.is() && xParent.get() == (*maCurrentShapesIter).first.get(), "XMLShapeExport::exportShape(): Wrong call to XMLShapeExport::seekShapes()" );
     }
 
-    // first compute the shapes type
+    
     {
         XmlShapeType eShapeType(XmlShapeTypeNotYetSet);
         ImpCalcShapeType(xShape, eShapeType);
@@ -624,7 +624,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     }
 #endif
 
-    // collect animation information if needed
+    
     if( mxAnimationsExporter.is() )
         mxAnimationsExporter->collect( xShape, mrExport );
 
@@ -653,7 +653,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
     }
 
-    // export style name
+    
     if( !aShapeInfo.msStyleName.isEmpty() )
     {
         if(XML_STYLE_FAMILY_SD_GRAPHICS_ID == aShapeInfo.mnFamily)
@@ -662,13 +662,13 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_STYLE_NAME, mrExport.EncodeStyleName( aShapeInfo.msStyleName) );
     }
 
-    // export text style name
+    
     if( !aShapeInfo.msTextStyleName.isEmpty() )
     {
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TEXT_STYLE_NAME, aShapeInfo.msTextStyleName );
     }
 
-    // export shapes id if needed
+    
     {
         uno::Reference< uno::XInterface > xRef( xShape, uno::UNO_QUERY );
         const OUString& rShapeId = mrExport.getInterfaceToIdentifierMapper().getIdentifier( xRef );
@@ -678,10 +678,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
     }
 
-    // export layer information
+    
     if( IsLayerExportEnabled() )
     {
-        // check for group or scene shape and not export layer if this is one
+        
         uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );
         if( !xShapes.is() )
         {
@@ -700,7 +700,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
     }
 
-    // export draw:display (do not export in ODF 1.2 or older)
+    
     if( xSet.is() && ( mrExport.getDefaultVersion() > SvtSaveOptions::ODFVER_012 ) )
     {
         if( aShapeInfo.meShapeType != XmlShapeTypeDrawPageShape && aShapeInfo.meShapeType != XmlShapeTypePresPageShape &&
@@ -721,7 +721,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             case 0: eDisplayToken = XML_NONE; break;
             case 1: eDisplayToken = XML_PRINTER; break;
             case 2: eDisplayToken = XML_SCREEN; break;
-            // case 3: eDisplayToken = XML_ALWAYS break; this is the default
+            
             }
 
             if( eDisplayToken != XML_TOKEN_INVALID )
@@ -733,8 +733,8 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         }
     }
 
-    // #82003# test export count
-    // #91587# ALWAYS increment since now ALL to be exported shapes are counted.
+    
+    
     if(mrExport.GetShapeExport()->IsHandleProgressBarEnabled())
     {
         mrExport.GetProgressBarHelper()->Increment();
@@ -742,7 +742,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     onExport( xShape );
 
-    // export shape element
+    
     switch(aShapeInfo.meShapeType)
     {
         case XmlShapeTypeDrawRectangleShape:
@@ -760,10 +760,10 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             ImpExportLineShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
         }
-        case XmlShapeTypeDrawPolyPolygonShape:  // closed PolyPolygon
-        case XmlShapeTypeDrawPolyLineShape:     // open PolyPolygon
-        case XmlShapeTypeDrawClosedBezierShape: // closed PolyPolygon containing curves
-        case XmlShapeTypeDrawOpenBezierShape:   // open PolyPolygon containing curves
+        case XmlShapeTypeDrawPolyPolygonShape:  
+        case XmlShapeTypeDrawPolyLineShape:     
+        case XmlShapeTypeDrawClosedBezierShape: 
+        case XmlShapeTypeDrawOpenBezierShape:   
         {
             ImpExportPolygonShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
@@ -862,7 +862,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
         case XmlShapeTypeDrawGroupShape:
         {
-            // empty group
+            
             ImpExportGroupShape( xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
         }
@@ -906,7 +906,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         case XmlShapeTypeNotYetSet:
         default:
         {
-            // this should never happen and is an error
+            
             OSL_FAIL("XMLEXP: WriteShape: unknown or unexpected type of shape in export!");
             break;
         }
@@ -914,17 +914,17 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
     mpHyperlinkElement.reset();
 
-    // #97489# #97111#
-    // if there was an error and no element for the shape was exported
-    // we need to clear the attribute list or the attributes will be
-    // set on the next exported element, which can result in corrupt
-    // xml files due to duplicate attributes
+    
+    
+    
+    
+    
 
-    mrExport.CheckAttrList();   // asserts in non pro if we have attributes left
-    mrExport.ClearAttrList();   // clears the attributes
+    mrExport.CheckAttrList();   
+    mrExport.ClearAttrList();   
 }
 
-// This method collects all automatic styles for the shapes inside the given XShapes collection
+
 void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XShapes >& xShapes )
 {
     ShapesInfos::iterator aOldCurrentShapesIter = maCurrentShapesIter;
@@ -945,7 +945,7 @@ void XMLShapeExport::collectShapesAutoStyles( const uno::Reference < drawing::XS
     maCurrentShapesIter = aOldCurrentShapesIter;
 }
 
-// This method exports all XShape inside the given XShapes collection
+
 void XMLShapeExport::exportShapes( const uno::Reference < drawing::XShapes >& xShapes, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */ )
 {
     ShapesInfos::iterator aOldCurrentShapesIter = maCurrentShapesIter;
@@ -993,9 +993,9 @@ void XMLShapeExport::seekShapes( const uno::Reference< drawing::XShapes >& xShap
 
 void XMLShapeExport::exportAutoStyles()
 {
-    // export all autostyle infos
+    
 
-    // ...for graphic
+    
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_GRAPHICS_ID
@@ -1005,7 +1005,7 @@ void XMLShapeExport::exportAutoStyles()
             );
     }
 
-    // ...for presentation
+    
     {
         GetExport().GetAutoStylePool()->exportXML(
             XML_STYLE_FAMILY_SD_PRESENTATION_ID
@@ -1019,23 +1019,23 @@ void XMLShapeExport::exportAutoStyles()
         mxShapeTableExport->exportAutoStyles();
 }
 
-/// returns the export property mapper for external chaining
+
 SvXMLExportPropertyMapper* XMLShapeExport::CreateShapePropMapper(
     SvXMLExport& rExport )
 {
     UniReference< XMLPropertyHandlerFactory > xFactory = new XMLSdPropHdlFactory( rExport.GetModel(), rExport );
     UniReference < XMLPropertySetMapper > xMapper = new XMLShapePropertySetMapper( xFactory, true );
-    rExport.GetTextParagraphExport(); // get or create text paragraph export
+    rExport.GetTextParagraphExport(); 
     SvXMLExportPropertyMapper* pResult =
         new XMLShapeExportPropertyMapper( xMapper, rExport );
-    // chain text attributes
+    
     return pResult;
 }
 
 void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& xShape,
     XmlShapeType& eShapeType)
 {
-    // set in every case, so init here
+    
     eShapeType = XmlShapeTypeUnknown;
 
     uno::Reference< drawing::XShapeDescriptor > xShapeDescriptor(xShape, uno::UNO_QUERY);
@@ -1047,11 +1047,11 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
         {
             if(aType.match("drawing.", 13))
             {
-                // drawing shapes
+                
                 if     (aType.match("Rectangle", 21)) { eShapeType = XmlShapeTypeDrawRectangleShape; }
 
-                // #i72177# Note: Correcting CustomShape, CustomShape->Custom, len from 9 (was wrong anyways) to 6.
-                // As can be seen at the other compares, the appendix "Shape" is left out of the comparison.
+                
+                
                 else if(aType.match("Custom", 21)) { eShapeType = XmlShapeTypeDrawCustomShape; }
 
                 else if(aType.match("Ellipse", 21)) { eShapeType = XmlShapeTypeDrawEllipseShape; }
@@ -1060,17 +1060,17 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 else if(aType.match("Measure", 21)) { eShapeType = XmlShapeTypeDrawMeasureShape; }
                 else if(aType.match("Line", 21)) { eShapeType = XmlShapeTypeDrawLineShape; }
 
-                // #i72177# Note: This covers two types by purpose, PolyPolygonShape and PolyPolygonPathShape
+                
                 else if(aType.match("PolyPolygon", 21)) { eShapeType = XmlShapeTypeDrawPolyPolygonShape; }
 
-                // #i72177# Note: This covers two types by purpose, PolyLineShape and PolyLinePathShape
+                
                 else if(aType.match("PolyLine", 21)) { eShapeType = XmlShapeTypeDrawPolyLineShape; }
 
                 else if(aType.match("OpenBezier", 21)) { eShapeType = XmlShapeTypeDrawOpenBezierShape; }
                 else if(aType.match("ClosedBezier", 21)) { eShapeType = XmlShapeTypeDrawClosedBezierShape; }
 
-                // #i72177# FreeHand (opened and closed) now supports the types OpenFreeHandShape and
-                // ClosedFreeHandShape respectively. Represent them as bezier shapes
+                
+                
                 else if(aType.match("OpenFreeHand", 21)) { eShapeType = XmlShapeTypeDrawOpenBezierShape; }
                 else if(aType.match("ClosedFreeHand", 21)) { eShapeType = XmlShapeTypeDrawClosedBezierShape; }
 
@@ -1081,7 +1081,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 {
                     eShapeType = XmlShapeTypeDrawOLE2Shape;
 
-                    // get info about presentation shape
+                    
                     uno::Reference <beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
                     if(xPropSet.is())
@@ -1100,7 +1100,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                             }
                             else
                             {
-                                // general OLE2 Object
+                                
                             }
                         }
                     }
@@ -1113,7 +1113,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 else if(aType.match("MediaShape", 21)) { eShapeType = XmlShapeTypeDrawMediaShape; }
                 else if(aType.match("TableShape", 21)) { eShapeType = XmlShapeTypeDrawTableShape; }
 
-                // 3D shapes
+                
                 else if(aType.match("Scene", 21 + 7)) { eShapeType = XmlShapeTypeDraw3DSceneObject; }
                 else if(aType.match("Cube", 21 + 7)) { eShapeType = XmlShapeTypeDraw3DCubeObject; }
                 else if(aType.match("Sphere", 21 + 7)) { eShapeType = XmlShapeTypeDraw3DSphereObject; }
@@ -1122,7 +1122,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
             }
             else if(aType.match("presentation.", 13))
             {
-                // presentation shapes
+                
                 if     (aType.match("TitleText", 26)) { eShapeType = XmlShapeTypePresTitleTextShape; }
                 else if(aType.match("Outliner", 26)) { eShapeType = XmlShapeTypePresOutlinerShape;  }
                 else if(aType.match("Subtitle", 26)) { eShapeType = XmlShapeTypePresSubtitleShape;  }
@@ -1132,7 +1132,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 {
                     eShapeType = XmlShapeTypePresOLE2Shape;
 
-                    // get info about presentation shape
+                    
                     uno::Reference <beans::XPropertySet> xPropSet(xShape, uno::UNO_QUERY);
 
                     if(xPropSet.is()) try
@@ -1191,7 +1191,7 @@ void XMLShapeExport::ImpExportGluePoints( const uno::Reference< drawing::XShape 
         const sal_Int32 nIdentifier = aIdSequence[nIndex];
         if( (xGluePoints->getByIdentifier( nIdentifier ) >>= aGluePoint) && aGluePoint.IsUserDefined )
         {
-            // export only user defined glue points
+            
 
             const OUString sId( OUString::number( nIdentifier ) );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_ID, sId );
@@ -1225,17 +1225,17 @@ void XMLShapeExport::ExportGraphicDefaults()
 {
     XMLStyleExport aStEx(mrExport, OUString(), mrExport.GetAutoStylePool().get());
 
-    // construct PropertySetMapper
+    
     UniReference< SvXMLExportPropertyMapper > xPropertySetMapper( CreateShapePropMapper( mrExport ) );
     ((XMLShapeExportPropertyMapper*)xPropertySetMapper.get())->SetAutoStyles( sal_False );
 
-    // chain text attributes
+    
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(mrExport));
 
-    // chain special Writer/text frame default attributes
+    
     xPropertySetMapper->ChainExportMapper(XMLTextParagraphExport::CreateParaDefaultExtPropMapper(mrExport));
 
-    // write graphic family default style
+    
     uno::Reference< lang::XMultiServiceFactory > xFact( mrExport.GetModel(), uno::UNO_QUERY );
     if( xFact.is() )
     {
@@ -1246,7 +1246,7 @@ void XMLShapeExport::ExportGraphicDefaults()
             {
                 aStEx.exportDefaultStyle( xDefaults, OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper );
 
-                // write graphic family styles
+                
                 aStEx.exportStyleFamily("graphics", OUString(XML_STYLE_FAMILY_SD_GRAPHICS_NAME), xPropertySetMapper, sal_False, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
             }
         }
@@ -1266,7 +1266,7 @@ const rtl::Reference< XMLTableExport >& XMLShapeExport::GetShapeTableExport()
     {
         rtl::Reference< XMLPropertyHandlerFactory > xFactory( new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport ) );
         UniReference < XMLPropertySetMapper > xMapper( new XMLShapePropertySetMapper( xFactory.get(), true ) );
-        mrExport.GetTextParagraphExport(); // get or create text paragraph export
+        mrExport.GetTextParagraphExport(); 
         rtl::Reference< SvXMLExportPropertyMapper > xPropertySetMapper( new XMLShapeExportPropertyMapper( xMapper, mrExport ) );
         mxShapeTableExport = new XMLTableExport( mrExport, xPropertySetMapper, xFactory );
     }
@@ -1277,18 +1277,18 @@ const rtl::Reference< XMLTableExport >& XMLShapeExport::GetShapeTableExport()
 void XMLShapeExport::ImpExportNewTrans(const uno::Reference< beans::XPropertySet >& xPropSet,
     sal_Int32 nFeatures, awt::Point* pRefPoint)
 {
-    // get matrix
+    
     ::basegfx::B2DHomMatrix aMatrix;
     ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
 
-    // decompose and correct abour pRefPoint
+    
     ::basegfx::B2DTuple aTRScale;
     double fTRShear(0.0);
     double fTRRotate(0.0);
     ::basegfx::B2DTuple aTRTranslate;
     ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
 
-    // use features and write
+    
     ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
 }
 
@@ -1334,10 +1334,10 @@ void XMLShapeExport::ImpExportNewTrans_GetB2DHomMatrix(::basegfx::B2DHomMatrix& 
 void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2DHomMatrix& rMatrix, ::basegfx::B2DTuple& rTRScale,
     double& fTRShear, double& fTRRotate, ::basegfx::B2DTuple& rTRTranslate, com::sun::star::awt::Point* pRefPoint)
 {
-    // decompose matrix
+    
     rMatrix.decompose(rTRScale, rTRTranslate, fTRRotate, fTRShear);
 
-    // correct translation about pRefPoint
+    
     if(pRefPoint)
     {
         rTRTranslate -= ::basegfx::B2DTuple(pRefPoint->X, pRefPoint->Y);
@@ -1347,13 +1347,13 @@ void XMLShapeExport::ImpExportNewTrans_DecomposeAndRefPoint(const ::basegfx::B2D
 void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTRScale, double fTRShear,
     double fTRRotate, ::basegfx::B2DTuple& rTRTranslate, const sal_Int32 nFeatures)
 {
-    // always write Size (rTRScale) since this statement carries the union
-    // of the object
+    
+    
     OUString aStr;
     OUStringBuffer sStringBuffer;
     ::basegfx::B2DTuple aTRScale(rTRScale);
 
-    // svg: width
+    
     if(!(nFeatures & SEF_EXPORT_WIDTH))
     {
         aTRScale.setX(1.0);
@@ -1371,7 +1371,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_WIDTH, aStr);
 
-    // svg: height
+    
     if(!(nFeatures & SEF_EXPORT_HEIGHT))
     {
         aTRScale.setY(1.0);
@@ -1389,36 +1389,36 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_HEIGHT, aStr);
 
-    // decide if transformation is necessary
+    
     sal_Bool bTransformationIsNecessary(fTRShear != 0.0 || fTRRotate != 0.0);
 
     if(bTransformationIsNecessary)
     {
-        // write transformation, but WITHOUT scale which is exported as size above
+        
         SdXMLImExTransform2D aTransform;
 
         aTransform.AddSkewX(atan(fTRShear));
 
-        // #i78696#
-        // fTRRotate is mathematically correct, but due to the error
-        // we export/import it mirrored. Since the API implementation is fixed and
-        // uses the correctly oriented angle, it is necessary for compatibility to
-        // mirror the angle here to stay at the old behaviour. There is a follow-up
-        // task (#i78698#) to fix this in the next ODF FileFormat version
+        
+        
+        
+        
+        
+        
         aTransform.AddRotate(-fTRRotate);
 
         aTransform.AddTranslate(rTRTranslate);
 
-        // does transformation need to be exported?
+        
         if(aTransform.NeedsAction())
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TRANSFORM, aTransform.GetExportString(mrExport.GetMM100UnitConverter()));
     }
     else
     {
-        // no shear, no rotate; just add object position to export and we are done
+        
         if(nFeatures & SEF_EXPORT_X)
         {
-            // svg: x
+            
             mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                     FRound(rTRTranslate.getX()));
             aStr = sStringBuffer.makeStringAndClear();
@@ -1427,7 +1427,7 @@ void XMLShapeExport::ImpExportNewTrans_FeaturesAndWrite(::basegfx::B2DTuple& rTR
 
         if(nFeatures & SEF_EXPORT_Y)
         {
-            // svg: y
+            
             mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                     FRound(rTRTranslate.getY()));
             aStr = sStringBuffer.makeStringAndClear();
@@ -1440,7 +1440,7 @@ sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< 
 {
     sal_Bool bIsEmpty = sal_False;
 
-    // write presentation class entry
+    
     mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_CLASS, rClass);
 
     if( xPropSet.is() )
@@ -1449,7 +1449,7 @@ sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< 
 
         sal_Bool bTemp = false;
 
-        // is empty pes shape?
+        
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("IsEmptyPresentationObject"))
         {
             xPropSet->getPropertyValue("IsEmptyPresentationObject") >>= bIsEmpty;
@@ -1457,7 +1457,7 @@ sal_Bool XMLShapeExport::ImpExportPresentationAttributes( const uno::Reference< 
                 mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_PLACEHOLDER, XML_TRUE);
         }
 
-        // is user-transformed?
+        
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName("IsPlaceholderDependent"))
         {
             xPropSet->getPropertyValue("IsPlaceholderDependent") >>= bTemp;
@@ -1494,7 +1494,7 @@ const sal_Int32 FOUND_CLICKEVENTTYPE    = 0x00000080;
 const sal_Int32 FOUND_MACRO             = 0x00000100;
 const sal_Int32 FOUND_LIBRARY           = 0x00000200;
 
-} // namespace
+} 
 
 void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& xShape )
 {
@@ -1580,7 +1580,7 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
         }
     }
 
-    // create the XML elements
+    
 
     if( aClickEventType == msPresentation )
     {
@@ -1782,17 +1782,17 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
     uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY);
     if(xShapes.is() && xShapes->getCount())
     {
-        // write group shape
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aPGR(mrExport, XML_NAMESPACE_DRAW, XML_G, bCreateNewline, sal_True);
 
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
 
-        // #89764# if export of position is supressed for group shape,
-        // positions of contained objects should be written relative to
-        // the upper left edge of the group.
+        
+        
+        
         awt::Point aUpperLeft;
 
         if(!(nFeatures & SEF_EXPORT_POSITION))
@@ -1802,7 +1802,7 @@ void XMLShapeExport::ImpExportGroupShape( const uno::Reference< drawing::XShape 
             pRefPoint = &aUpperLeft;
         }
 
-        // write members
+        
         exportShapes( xShapes, nFeatures, pRefPoint );
     }
 }
@@ -1816,7 +1816,7 @@ void XMLShapeExport::ImpExportTextBoxShape(
     {
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-        // presentation attribute (if presentation)
+        
         sal_Bool bIsPresShape(sal_False);
         sal_Bool bIsEmptyPresObj(sal_False);
         OUString aStr;
@@ -1875,17 +1875,17 @@ void XMLShapeExport::ImpExportTextBoxShape(
                 break;
         }
 
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         if(bIsPresShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, aStr );
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
-        // evtl. corner radius?
+        
         sal_Int32 nCornerRadius(0L);
         xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
         if(nCornerRadius)
@@ -1897,13 +1897,13 @@ void XMLShapeExport::ImpExportTextBoxShape(
         }
 
         {
-            // write text-box
+            
             SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_TEXT_BOX, sal_True, sal_True);
             if(!bIsEmptyPresObj)
                 ImpExportText( xShape );
         }
 
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
     }
@@ -1916,10 +1916,10 @@ void XMLShapeExport::ImpExportRectangleShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
-        // evtl. corner radius?
+        
         sal_Int32 nCornerRadius(0L);
         xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
         if(nCornerRadius)
@@ -1930,11 +1930,11 @@ void XMLShapeExport::ImpExportRectangleShape(
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_CORNER_RADIUS, sStringBuffer.makeStringAndClear());
         }
 
-        // write rectangle
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_RECT, bCreateNewline, sal_True);
 
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         ImpExportText( xShape );
@@ -1953,24 +1953,24 @@ void XMLShapeExport::ImpExportLineShape(
         awt::Point aStart(0,0);
         awt::Point aEnd(1,1);
 
-        // #85920# use 'Geometry' to get the points of the line
-        // since this slot take anchor pos into account.
+        
+        
 
-        // get matrix
+        
         ::basegfx::B2DHomMatrix aMatrix;
         ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
 
-        // decompose and correct about pRefPoint
+        
         ::basegfx::B2DTuple aTRScale;
         double fTRShear(0.0);
         double fTRRotate(0.0);
         ::basegfx::B2DTuple aTRTranslate;
         ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
 
-        // create base position
+        
         awt::Point aBasePosition(FRound(aTRTranslate.getX()), FRound(aTRTranslate.getY()));
 
-        // get the two points
+        
         uno::Any aAny(xPropSet->getPropertyValue("Geometry"));
         drawing::PointSequenceSequence* pSourcePolyPolygon = (drawing::PointSequenceSequence*)aAny.getValue();
 
@@ -2006,7 +2006,7 @@ void XMLShapeExport::ImpExportLineShape(
 
         if( nFeatures & SEF_EXPORT_X )
         {
-            // svg: x1
+            
             mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                     aStart.X);
             aStr = sStringBuffer.makeStringAndClear();
@@ -2019,7 +2019,7 @@ void XMLShapeExport::ImpExportLineShape(
 
         if( nFeatures & SEF_EXPORT_Y )
         {
-            // svg: y1
+            
             mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                     aStart.Y);
             aStr = sStringBuffer.makeStringAndClear();
@@ -2030,23 +2030,23 @@ void XMLShapeExport::ImpExportLineShape(
             aEnd.Y -= aStart.Y;
         }
 
-        // svg: x2
+        
         mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                 aEnd.X);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X2, aStr);
 
-        // svg: y2
+        
         mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                 aEnd.Y);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
-        // write line
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_LINE, bCreateNewline, sal_True);
 
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         ImpExportText( xShape );
@@ -2060,13 +2060,13 @@ void XMLShapeExport::ImpExportEllipseShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // get size to decide between Circle and Ellipse
+        
         awt::Size aSize = xShape->getSize();
         sal_Int32 nRx((aSize.Width + 1) / 2);
         sal_Int32 nRy((aSize.Height + 1) / 2);
         sal_Bool bCircle(nRx == nRy);
 
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         drawing::CircleKind eKind = drawing::CircleKind_FULL;
@@ -2082,38 +2082,38 @@ void XMLShapeExport::ImpExportEllipseShape(
             const double dStartAngle = nStartAngle / 100.0;
             const double dEndAngle = nEndAngle / 100.0;
 
-            // export circle kind
+            
             SvXMLUnitConverter::convertEnum( sStringBuffer, (sal_uInt16)eKind, aXML_CircleKind_EnumMap );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_KIND, sStringBuffer.makeStringAndClear() );
 
-            // export start angle
+            
             ::sax::Converter::convertDouble( sStringBuffer, dStartAngle );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_START_ANGLE, sStringBuffer.makeStringAndClear() );
 
-            // export end angle
+            
             ::sax::Converter::convertDouble( sStringBuffer, dEndAngle );
             mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_END_ANGLE, sStringBuffer.makeStringAndClear() );
         }
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
 
-        // prepare name (with most used)
+        
         enum ::xmloff::token::XMLTokenEnum eName(XML_CIRCLE);
 
         if(bCircle)
         {
-            // name already set
+            
         }
         else
         {
-            // set name
+            
             eName = XML_ELLIPSE;
         }
 
-        // write ellipse or circle
+        
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, eName, bCreateNewline, sal_True);
 
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         ImpExportText( xShape );
@@ -2131,89 +2131,89 @@ void XMLShapeExport::ImpExportPolygonShape(
         sal_Bool bBezier(eShapeType == XmlShapeTypeDrawClosedBezierShape
             || eShapeType == XmlShapeTypeDrawOpenBezierShape);
 
-        // get matrix
+        
         ::basegfx::B2DHomMatrix aMatrix;
         ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xPropSet);
 
-        // decompose and correct abour pRefPoint
+        
         ::basegfx::B2DTuple aTRScale;
         double fTRShear(0.0);
         double fTRRotate(0.0);
         ::basegfx::B2DTuple aTRTranslate;
         ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear, fTRRotate, aTRTranslate, pRefPoint);
 
-        // use features and write
+        
         ImpExportNewTrans_FeaturesAndWrite(aTRScale, fTRShear, fTRRotate, aTRTranslate, nFeatures);
 
-        // create and export ViewBox
+        
         awt::Point aPoint(0, 0);
         awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
         SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
         mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
 
-        // prepare name (with most used)
+        
         enum ::xmloff::token::XMLTokenEnum eName(XML_PATH);
 
         if(bBezier)
         {
-            // get PolygonBezier
+            
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
                 basegfx::tools::UnoPolyPolygonBezierCoordsToB2DPolyPolygon(*(drawing::PolyPolygonBezierCoords*)aAny.getValue()));
 
             if(aPolyPolygon.count())
             {
-                // complex polygon shape, write as svg:d
+                
                 const OUString aPolygonString(
                     basegfx::tools::exportToSvgD(
                         aPolyPolygon,
-                        true,       // bUseRelativeCoordinates
-                        false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
-                        true));     // bHandleRelativeNextPointCompatible
+                        true,       
+                        false,      
+                        true));     
 
-                // write point array
+                
                 mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
             }
         }
         else
         {
-            // get non-bezier polygon
+            
             uno::Any aAny( xPropSet->getPropertyValue("Geometry") );
             const basegfx::B2DPolyPolygon aPolyPolygon(
                 basegfx::tools::UnoPointSequenceSequenceToB2DPolyPolygon(*(drawing::PointSequenceSequence*)aAny.getValue()));
 
             if(!aPolyPolygon.areControlPointsUsed() && 1 == aPolyPolygon.count())
             {
-                // simple polygon shape, can be written as svg:points sequence
+                
                 const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(0));
                 const OUString aPointString(basegfx::tools::exportToSvgPoints(aPolygon));
 
-                // write point array
+                
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_POINTS, aPointString);
 
-                // set name
+                
                 eName = aPolygon.isClosed() ? XML_POLYGON : XML_POLYLINE;
             }
             else
             {
-                // complex polygon shape, write as svg:d
+                
                 const OUString aPolygonString(
                     basegfx::tools::exportToSvgD(
                         aPolyPolygon,
-                        true,       // bUseRelativeCoordinates
-                        false,      // bDetectQuadraticBeziers: not used in old, but maybe activated now
-                        true));     // bHandleRelativeNextPointCompatible
+                        true,       
+                        false,      
+                        true));     
 
-                // write point array
+                
                 mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
             }
         }
 
-        // write object, but after attributes are added since this call will
-        // consume all of these added attributes and the destructor will close the
-        // scope. Also before text is added; this may add sub-scopes as needed
+        
+        
+        
         SvXMLElementExport aOBJ(
             mrExport,
             XML_NAMESPACE_DRAW,
@@ -2221,7 +2221,7 @@ void XMLShapeExport::ImpExportPolygonShape(
             bCreateNewline,
             sal_True);
 
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         ImpExportText( xShape );
@@ -2238,7 +2238,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         sal_Bool bIsEmptyPresObj = sal_False;
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         OUString sImageURL;
@@ -2246,7 +2246,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         if(eShapeType == XmlShapeTypePresGraphicObjectShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_GRAPHIC) );
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
@@ -2265,7 +2265,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                 OUString aResolveURL( sImageURL );
                 const OUString sPackageURL( "vnd.sun.star.Package:" );
 
-                    // sj: trying to preserve the filename
+                    
                 if ( aStreamURL.match( sPackageURL, 0 ) )
                 {
                     OUString sRequestedName( aStreamURL.copy( sPackageURL.getLength(), aStreamURL.getLength() - sPackageURL.getLength() ) );
@@ -2293,7 +2293,7 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                         aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
                     }
 
-                    // update stream URL for load on demand
+                    
                     uno::Any aAny;
                     aAny <<= aStreamURL;
                     xPropSet->setPropertyValue("GraphicStreamURL", aAny );
@@ -2317,21 +2317,21 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
                 if( !sImageURL.isEmpty() )
                 {
-                    // optional office:binary-data
+                    
                     mrExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
                 }
                 if( !bIsEmptyPresObj )
                     ImpExportText( xShape );
             }
 
-            //Resolves: fdo#62461 put preferred image first above, followed by
-            //fallback here
+            
+            
             if( !bIsEmptyPresObj )
             {
                 OUString aReplacementUrl;
                 xPropSet->getPropertyValue("ReplacementGraphicURL") >>= aReplacementUrl;
 
-                // If there is no url, then then graphic is empty
+                
                 if(!aReplacementUrl.isEmpty())
                 {
                     const OUString aStr = mrExport.AddEmbeddedGraphicObject(aReplacementUrl);
@@ -2343,10 +2343,10 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
                         mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
                         mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
-                        // xlink:href for replacement, only written for Svg content
+                        
                         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, sal_True, sal_True);
 
-                        // optional office:binary-data
+                        
                         mrExport.AddEmbeddedGraphicObjectAsBase64(aReplacementUrl);
                     }
                 }
@@ -2356,9 +2356,9 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
 
-        // image map
+        
         GetExport().GetImageMapExport().Export( xPropSet );
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
     }
 }
 
@@ -2377,7 +2377,7 @@ void XMLShapeExport::ImpExportControlShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
     }
 
@@ -2393,10 +2393,10 @@ void XMLShapeExport::ImpExportControlShape(
         }
     }
 
-    sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+    sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
     SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_CONTROL, bCreateNewline, sal_True);
 
-    ImpExportDescription( xShape ); // #i68101#
+    ImpExportDescription( xShape ); 
 }
 
 void XMLShapeExport::ImpExportConnectorShape(
@@ -2408,7 +2408,7 @@ void XMLShapeExport::ImpExportConnectorShape(
     OUString aStr;
     OUStringBuffer sStringBuffer;
 
-    // export connection kind
+    
     drawing::ConnectorType eType = drawing::ConnectorType_STANDARD;
     uno::Any aAny = xProps->getPropertyValue("EdgeKind");
     aAny >>= eType;
@@ -2420,7 +2420,7 @@ void XMLShapeExport::ImpExportConnectorShape(
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_TYPE, aStr);
     }
 
-    // export line skew
+    
     sal_Int32 nDelta1 = 0, nDelta2 = 0, nDelta3 = 0;
 
     aAny = xProps->getPropertyValue("EdgeLine1Delta");
@@ -2452,7 +2452,7 @@ void XMLShapeExport::ImpExportConnectorShape(
         mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LINE_SKEW, aStr);
     }
 
-    // export start and end point
+    
     awt::Point aStart(0,0);
     awt::Point aEnd(1,1);
 
@@ -2493,7 +2493,7 @@ void XMLShapeExport::ImpExportConnectorShape(
 
     if( nFeatures & SEF_EXPORT_X )
     {
-        // svg: x1
+        
         mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                 aStart.X);
         aStr = sStringBuffer.makeStringAndClear();
@@ -2506,7 +2506,7 @@ void XMLShapeExport::ImpExportConnectorShape(
 
     if( nFeatures & SEF_EXPORT_Y )
     {
-        // svg: y1
+        
         mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                 aStart.Y);
         aStr = sStringBuffer.makeStringAndClear();
@@ -2517,21 +2517,21 @@ void XMLShapeExport::ImpExportConnectorShape(
         aEnd.Y -= aStart.Y;
     }
 
-    // svg: x2
+    
     mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, aEnd.X);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X2, aStr);
 
-    // svg: y2
+    
     mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, aEnd.Y);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
-    // #i39320#
+    
     uno::Reference< uno::XInterface > xRefS;
     uno::Reference< uno::XInterface > xRefE;
 
-    // export start connection
+    
     xProps->getPropertyValue("StartShape") >>= xRefS;
     if( xRefS.is() )
     {
@@ -2549,7 +2549,7 @@ void XMLShapeExport::ImpExportConnectorShape(
         }
     }
 
-    // export end connection
+    
     xProps->getPropertyValue("EndShape") >>= xRefE;
     if( xRefE.is() )
     {
@@ -2569,7 +2569,7 @@ void XMLShapeExport::ImpExportConnectorShape(
 
     if( xProps->getPropertyValue("PolyPolygonBezier") >>= aAny )
     {
-        // get PolygonBezier
+        
         drawing::PolyPolygonBezierCoords* pSourcePolyPolygon = (drawing::PolyPolygonBezierCoords*)aAny.getValue();
 
         if(pSourcePolyPolygon && pSourcePolyPolygon->Coordinates.getLength())
@@ -2580,20 +2580,20 @@ void XMLShapeExport::ImpExportConnectorShape(
             const OUString aPolygonString(
                 basegfx::tools::exportToSvgD(
                     aPolyPolygon,
-                    true,           // bUseRelativeCoordinates
-                    false,          // bDetectQuadraticBeziers: not used in old, but maybe activated now
-                    true));         // bHandleRelativeNextPointCompatible
+                    true,           
+                    false,          
+                    true));         
 
-            // write point array
+            
             mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
         }
     }
 
-    // get matrix
+    
     ::basegfx::B2DHomMatrix aMatrix;
     ImpExportNewTrans_GetB2DHomMatrix(aMatrix, xProps);
 
-    // decompose and correct about pRefPoint
+    
     ::basegfx::B2DTuple aTRScale;
     double fTRShear(0.0);
     double fTRRotate(0.0);
@@ -2601,17 +2601,17 @@ void XMLShapeExport::ImpExportConnectorShape(
     ImpExportNewTrans_DecomposeAndRefPoint(aMatrix, aTRScale, fTRShear,
             fTRRotate, aTRTranslate, pRefPoint);
 
-    // fdo#49678: create and export ViewBox
+    
     awt::Point aPoint(0, 0);
     awt::Size aSize(FRound(aTRScale.getX()), FRound(aTRScale.getY()));
     SdXMLImExViewBox aViewBox(0, 0, aSize.Width, aSize.Height);
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
 
-    // write connector shape. Add Export later.
-    sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+    
+    sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
     SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_CONNECTOR, bCreateNewline, sal_True);
 
-    ImpExportDescription( xShape ); // #i68101#
+    ImpExportDescription( xShape ); 
     ImpExportEvents( xShape );
     ImpExportGluePoints( xShape );
     ImpExportText( xShape );
@@ -2626,7 +2626,7 @@ void XMLShapeExport::ImpExportMeasureShape(
     OUString aStr;
     OUStringBuffer sStringBuffer;
 
-    // export start and end point
+    
     awt::Point aStart(0,0);
     awt::Point aEnd(1,1);
 
@@ -2667,7 +2667,7 @@ void XMLShapeExport::ImpExportMeasureShape(
 
     if( nFeatures & SEF_EXPORT_X )
     {
-        // svg: x1
+        
         mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                 aStart.X);
         aStr = sStringBuffer.makeStringAndClear();
@@ -2680,7 +2680,7 @@ void XMLShapeExport::ImpExportMeasureShape(
 
     if( nFeatures & SEF_EXPORT_Y )
     {
-        // svg: y1
+        
         mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer,
                 aStart.Y);
         aStr = sStringBuffer.makeStringAndClear();
@@ -2691,21 +2691,21 @@ void XMLShapeExport::ImpExportMeasureShape(
         aEnd.Y -= aStart.Y;
     }
 
-    // svg: x2
+    
     mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, aEnd.X);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_X2, aStr);
 
-    // svg: y2
+    
     mrExport.GetMM100UnitConverter().convertMeasureToXML(sStringBuffer, aEnd.Y);
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_Y2, aStr);
 
-    // write measure shape
-    sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+    
+    sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
     SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_MEASURE, bCreateNewline, sal_True);
 
-    ImpExportDescription( xShape ); // #i68101#
+    ImpExportDescription( xShape ); 
     ImpExportEvents( xShape );
     ImpExportGluePoints( xShape );
 
@@ -2725,12 +2725,12 @@ void XMLShapeExport::ImpExportOLE2Shape(
     DBG_ASSERT( xPropSet.is() && xNamed.is(), "ole shape is not implementing needed interfaces");
     if(xPropSet.is() && xNamed.is())
     {
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         sal_Bool bIsEmptyPresObj = sal_False;
 
-        // presentation settings
+        
         if(eShapeType == XmlShapeTypePresOLE2Shape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
         else if(eShapeType == XmlShapeTypePresChartShape)
@@ -2738,7 +2738,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
         else if(eShapeType == XmlShapeTypePresSheetShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         sal_Bool bExportEmbedded(0 != (mrExport.getExportFlags() & EXPORT_EMBEDDED));
         OUString sPersistName;
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
@@ -2763,8 +2763,8 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
                 if ( bInternal )
                 {
-                    // OOo internal links have no storage persistance, URL is stored in the XML file
-                    // the result LinkURL is empty in case the object is not a link
+                    
+                    
                     xPropSet->getPropertyValue("LinkURL") >>= sURL;
                 }
 
@@ -2785,19 +2785,19 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
                 if(eShapeType != XmlShapeTypePresChartShape && eShapeType != XmlShapeTypeDrawChartShape)
                 {
-                    // #i118485# Add text export, the draw OLE shape allows text now
-                    // fdo#58571 chart objects don't allow text:p
+                    
+                    
                     ImpExportText( xShape );
                 }
 
                 if(!bExportEmbedded)
                 {
-                    // xlink:href
+                    
                     if( !sURL.isEmpty() )
                     {
-                        // #96717# in theorie, if we don't have a url we shouldn't even
-                        // export this ole shape. But practical its to risky right now
-                        // to change this so we better dispose this on load
+                        
+                        
+                        
                         sURL = mrExport.AddEmbeddedObject( sURL );
 
                         mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sURL );
@@ -2809,7 +2809,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
             }
             else
             {
-                // export empty href for empty placeholders to be valid ODF
+                
                 OUString sEmptyURL;
 
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sEmptyURL );
@@ -2823,10 +2823,10 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
             if(bExportEmbedded && !bIsEmptyPresObj)
             {
-                // #100592#
+                
                 if(bInternal)
                 {
-                    // embedded XML
+                    
                     uno::Reference< lang::XComponent > xComp;
                     xPropSet->getPropertyValue("Model") >>= xComp;
                     DBG_ASSERT( xComp.is(), "no xModel for own OLE format" );
@@ -2834,9 +2834,9 @@ void XMLShapeExport::ImpExportOLE2Shape(
                 }
                 else
                 {
-                    // embed as Base64
-                    // this is an alien object ( currently MSOLE is the only supported type of such objects )
-                    // in case it is not an OASIS format the object should be asked to store replacement image if possible
+                    
+                    
+                    
 
                     OUString sURLRequest( sURL );
                     if ( ( mrExport.getExportFlags() & EXPORT_OASIS ) == 0 )
@@ -2867,7 +2867,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
     }
 }
 
@@ -2878,10 +2878,10 @@ void XMLShapeExport::ImpExportPageShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // #86163# Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
-        // export page number used for this page
+        
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
         const OUString aPageNumberStr("PageNumber");
         if( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName(aPageNumberStr))
@@ -2892,17 +2892,17 @@ void XMLShapeExport::ImpExportPageShape(
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_PAGE_NUMBER, OUString::number(nPageNumber));
         }
 
-        // a presentation page shape, normally used on notes pages only. If
-        // it is used not as presentation shape, it may have been created with
-        // copy-paste exchange between draw and impress (this IS possible...)
+        
+        
+        
         if(eShapeType == XmlShapeTypePresPageShape)
         {
             mrExport.AddAttribute(XML_NAMESPACE_PRESENTATION, XML_CLASS,
                                  XML_PRESENTATION_PAGE);
         }
 
-        // write Page shape
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PAGE_THUMBNAIL, bCreateNewline, sal_True);
     }
 }
@@ -2914,10 +2914,10 @@ void XMLShapeExport::ImpExportCaptionShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
-        // evtl. corner radius?
+        
         sal_Int32 nCornerRadius(0L);
         xPropSet->getPropertyValue("CornerRadius") >>= nCornerRadius;
         if(nCornerRadius)
@@ -2938,8 +2938,8 @@ void XMLShapeExport::ImpExportCaptionShape(
                 aCaptionPoint.Y);
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CAPTION_POINT_Y, msBuffer.makeStringAndClear() );
 
-        // write Caption shape. Add export later.
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         sal_Bool bAnnotation( (nFeatures & SEF_EXPORT_ANNOTATION) == SEF_EXPORT_ANNOTATION );
 
         SvXMLElementExport aObj( mrExport,
@@ -2948,7 +2948,7 @@ void XMLShapeExport::ImpExportCaptionShape(
                                  (bAnnotation ? XML_ANNOTATION : XML_CAPTION),
                                  bCreateNewline, sal_True );
 
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         if( bAnnotation )
@@ -2964,14 +2964,14 @@ void XMLShapeExport::ImpExportFrameShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
-        // export frame url
+        
         OUString aStr;
         xPropSet->getPropertyValue("FrameURL") >>= aStr;
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
@@ -2979,12 +2979,12 @@ void XMLShapeExport::ImpExportFrameShape(
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
-        // export name
+        
         xPropSet->getPropertyValue("FrameName") >>= aStr;
         if( !aStr.isEmpty() )
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_FRAME_NAME, aStr );
 
-        // write floating frame
+        
         {
             SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_FLOATING_FRAME, sal_True, sal_True);
         }
@@ -2998,14 +2998,14 @@ void XMLShapeExport::ImpExportAppletShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
-        // export frame url
+        
         OUString aStr;
         xPropSet->getPropertyValue("AppletCodeBase") >>= aStr;
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
@@ -3013,25 +3013,25 @@ void XMLShapeExport::ImpExportAppletShape(
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
-        // export draw:applet-name
+        
         xPropSet->getPropertyValue("AppletName") >>= aStr;
         if( !aStr.isEmpty() )
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_APPLET_NAME, aStr );
 
-        // export draw:code
+        
         xPropSet->getPropertyValue("AppletCode") >>= aStr;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_CODE, aStr );
 
-        // export draw:may-script
+        
         sal_Bool bIsScript = false;
         xPropSet->getPropertyValue("AppletIsScript") >>= bIsScript;
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MAY_SCRIPT, bIsScript ? XML_TRUE : XML_FALSE );
 
         {
-            // write applet
+            
             SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_APPLET, sal_True, sal_True);
 
-            // export parameters
+            
             uno::Sequence< beans::PropertyValue > aCommands;
             xPropSet->getPropertyValue("AppletCommands") >>= aCommands;
             const sal_Int32 nCount = aCommands.getLength();
@@ -3053,14 +3053,14 @@ void XMLShapeExport::ImpExportPluginShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
-        // export plugin url
+        
         OUString aStr;
         xPropSet->getPropertyValue("PluginURL") >>= aStr;
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStr) );
@@ -3068,16 +3068,16 @@ void XMLShapeExport::ImpExportPluginShape(
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
-        // export mime-type
+        
         xPropSet->getPropertyValue("PluginMimeType") >>= aStr;
         if(!aStr.isEmpty())
             mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, aStr );
 
         {
-            // write plugin
+            
             SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, sal_True, sal_True);
 
-            // export parameters
+            
             uno::Sequence< beans::PropertyValue > aCommands;
             xPropSet->getPropertyValue("PluginCommands") >>= aCommands;
             const sal_Int32 nCount = aCommands.getLength();
@@ -3111,14 +3111,14 @@ static void lcl_CopyStream(
     }
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);
-    if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
+    if (xStreamProps.is()) { 
         xStreamProps->setPropertyValue(
             OUString("MediaType"),
             uno::makeAny(OUString(
-            //FIXME how to detect real media type?
-            //but currently xmloff has this one hardcoded anyway...
+            
+            
                     "application/vnd.sun.star.media")));
-        xStreamProps->setPropertyValue( // turn off compression
+        xStreamProps->setPropertyValue( 
             OUString("Compressed"),
             uno::makeAny(sal_False));
     }
@@ -3138,7 +3138,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
                 rURL.getStr(), rURL.getLength(),
                 s_PkgScheme, SAL_N_ELEMENTS(s_PkgScheme) - 1))
     {
-        try // video is embedded
+        try 
         {
             uno::Reference<embed::XStorage> const xTarget(
                     rExport.GetTargetStorage(), uno::UNO_QUERY_THROW);
@@ -3169,7 +3169,7 @@ lcl_StoreMediaAndGetURL(SvXMLExport & rExport,
     }
     else
     {
-        return rExport.GetRelativeReference(rURL); // linked
+        return rExport.GetRelativeReference(rURL); 
     }
 }
 
@@ -3180,17 +3180,17 @@ void XMLShapeExport::ImpExportMediaShape(
     const uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         if(eShapeType == XmlShapeTypePresMediaShape)
             ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_OBJECT) );
 
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
-        // export media url
+        
         OUString aMediaURL;
         xPropSet->getPropertyValue("MediaURL") >>= aMediaURL;
         OUString const persistentURL =
@@ -3200,13 +3200,13 @@ void XMLShapeExport::ImpExportMediaShape(
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
         mrExport.AddAttribute ( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
 
-        // export mime-type
+        
         mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_MIME_TYPE, OUString(  "application/vnd.sun.star.media"  ) );
 
-        // write plugin
+        
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_PLUGIN, !( nFeatures & SEF_EXPORT_NO_WS ), sal_True);
 
-        // export parameters
+        
         const OUString aFalseStr(  "false"  ), aTrueStr(  "true"  );
 
         sal_Bool bLoop = false;
@@ -3267,25 +3267,25 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
         DBG_ASSERT( xPropSet.is(), "XMLShapeExport::ImpExport3DSceneShape can't export a scene without a propertyset" );
         if( xPropSet.is() )
         {
-            // Transformation
+            
             ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
-            // 3d attributes
+            
             export3DSceneAttributes( xPropSet );
 
-            // write 3DScene shape
-            sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+            
+            sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
             SvXMLElementExport aOBJ( mrExport, XML_NAMESPACE_DR3D, XML_SCENE, bCreateNewline, sal_True);
 
-            ImpExportDescription( xShape ); // #i68101#
+            ImpExportDescription( xShape ); 
             ImpExportEvents( xShape );
 
-            // write 3DSceneLights
+            
             export3DLamps( xPropSet );
 
-            // #89764# if export of position is supressed for group shape,
-            // positions of contained objects should be written relative to
-            // the upper left edge of the group.
+            
+            
+            
             awt::Point aUpperLeft;
 
             if(!(nFeatures & SEF_EXPORT_POSITION))
@@ -3295,7 +3295,7 @@ void XMLShapeExport::ImpExport3DSceneShape( const uno::Reference< drawing::XShap
                 pRefPoint = &aUpperLeft;
             }
 
-            // write members
+            
             exportShapes( xShapes, nFeatures, pRefPoint );
         }
     }
@@ -3311,7 +3311,7 @@ void XMLShapeExport::ImpExport3DShape(
         OUString aStr;
         OUStringBuffer sStringBuffer;
 
-        // transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
+        
         uno::Any aAny = xPropSet->getPropertyValue("D3DTransformMatrix");
         drawing::HomogenMatrix xHomMat;
         aAny >>= xHomMat;
@@ -3324,77 +3324,77 @@ void XMLShapeExport::ImpExport3DShape(
         {
             case XmlShapeTypeDraw3DCubeObject:
             {
-                // minEdge
+                
                 aAny = xPropSet->getPropertyValue("D3DPosition");
                 drawing::Position3D aPosition3D;
                 aAny >>= aPosition3D;
                 ::basegfx::B3DVector aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
 
-                // maxEdge
+                
                 aAny = xPropSet->getPropertyValue("D3DSize");
                 drawing::Direction3D aDirection3D;
                 aAny >>= aDirection3D;
                 ::basegfx::B3DVector aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
 
-                // transform maxEdge from distance to pos
+                
                 aDir3D = aPos3D + aDir3D;
 
-                // write minEdge
-                if(aPos3D != ::basegfx::B3DVector(-2500.0, -2500.0, -2500.0)) // write only when not default
+                
+                if(aPos3D != ::basegfx::B3DVector(-2500.0, -2500.0, -2500.0)) 
                 {
                     mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aPos3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MIN_EDGE, aStr);
                 }
 
-                // write maxEdge
-                if(aDir3D != ::basegfx::B3DVector(2500.0, 2500.0, 2500.0)) // write only when not default
+                
+                if(aDir3D != ::basegfx::B3DVector(2500.0, 2500.0, 2500.0)) 
                 {
                     mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aDir3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_MAX_EDGE, aStr);
                 }
 
-                // write 3DCube shape
-                // #i123542# Do this *after* the attributes are added, else these will be lost since opening
-                // the scope will clear the global attribute list at the exporter
+                
+                
+                
                 SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_CUBE, sal_True, sal_True);
 
                 break;
             }
             case XmlShapeTypeDraw3DSphereObject:
             {
-                // Center
+                
                 aAny = xPropSet->getPropertyValue("D3DPosition");
                 drawing::Position3D aPosition3D;
                 aAny >>= aPosition3D;
                 ::basegfx::B3DVector aPos3D(aPosition3D.PositionX, aPosition3D.PositionY, aPosition3D.PositionZ);
 
-                // Size
+                
                 aAny = xPropSet->getPropertyValue("D3DSize");
                 drawing::Direction3D aDirection3D;
                 aAny >>= aDirection3D;
                 ::basegfx::B3DVector aDir3D(aDirection3D.DirectionX, aDirection3D.DirectionY, aDirection3D.DirectionZ);
 
-                // write Center
-                if(aPos3D != ::basegfx::B3DVector(0.0, 0.0, 0.0)) // write only when not default
+                
+                if(aPos3D != ::basegfx::B3DVector(0.0, 0.0, 0.0)) 
                 {
                     mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aPos3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_CENTER, aStr);
                 }
 
-                // write Size
-                if(aDir3D != ::basegfx::B3DVector(5000.0, 5000.0, 5000.0)) // write only when not default
+                
+                if(aDir3D != ::basegfx::B3DVector(5000.0, 5000.0, 5000.0)) 
                 {
                     mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aDir3D);
                     aStr = sStringBuffer.makeStringAndClear();
                     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SIZE, aStr);
                 }
 
-                // write 3DSphere shape
-                // #i123542# Do this *after* the attributes are added, else these will be lost since opening
-                // the scope will clear the global attribute list at the exporter
+                
+                
+                
                 SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_SPHERE, sal_True, sal_True);
 
                 break;
@@ -3402,27 +3402,27 @@ void XMLShapeExport::ImpExport3DShape(
             case XmlShapeTypeDraw3DLatheObject:
             case XmlShapeTypeDraw3DExtrudeObject:
             {
-                // write special 3DLathe/3DExtrude attributes, get 3D PolyPolygon as drawing::PolyPolygonShape3D
+                
                 aAny = xPropSet->getPropertyValue("D3DPolyPolygon3D");
                 drawing::PolyPolygonShape3D xPolyPolygon3D;
                 aAny >>= xPolyPolygon3D;
 
-                // convert to 3D PolyPolygon
+                
                 const basegfx::B3DPolyPolygon aPolyPolygon3D(
                     basegfx::tools::UnoPolyPolygonShape3DToB3DPolyPolygon(
                         xPolyPolygon3D));
 
-                // convert to 2D PolyPolygon using identity 3D transformation (just grep X and Y)
+                
                 const basegfx::B3DHomMatrix aB3DHomMatrixFor2DConversion;
                 const basegfx::B2DPolyPolygon aPolyPolygon(
                     basegfx::tools::createB2DPolyPolygonFromB3DPolyPolygon(
                         aPolyPolygon3D,
                         aB3DHomMatrixFor2DConversion));
 
-                // get 2D range of it
+                
                 const basegfx::B2DRange aPolyPolygonRange(aPolyPolygon.getB2DRange());
 
-                // export ViewBox
+                
                 SdXMLImExViewBox aViewBox(
                     aPolyPolygonRange.getMinX(),
                     aPolyPolygonRange.getMinY(),
@@ -3431,25 +3431,25 @@ void XMLShapeExport::ImpExport3DShape(
 
                 mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_VIEWBOX, aViewBox.GetExportString());
 
-                // prepare svg:d string
+                
                 const OUString aPolygonString(
                     basegfx::tools::exportToSvgD(
                         aPolyPolygon,
-                        true,           // bUseRelativeCoordinates
-                        false,          // bDetectQuadraticBeziers TTTT: not used in old, but maybe activated now
-                        true));         // bHandleRelativeNextPointCompatible
+                        true,           
+                        false,          
+                        true));         
 
-                // write point array
+                
                 mrExport.AddAttribute(XML_NAMESPACE_SVG, XML_D, aPolygonString);
 
                 if(eShapeType == XmlShapeTypeDraw3DLatheObject)
                 {
-                    // write 3DLathe shape
+                    
                     SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_ROTATE, sal_True, sal_True);
                 }
                 else
                 {
-                    // write 3DExtrude shape
+                    
                     SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_EXTRUDE, sal_True, sal_True);
                 }
                 break;
@@ -3466,7 +3466,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     OUString aStr;
     OUStringBuffer sStringBuffer;
 
-    // world transformation (UNO_NAME_3D_TRANSFORM_MATRIX == "D3DTransformMatrix")
+    
     uno::Any aAny = xPropSet->getPropertyValue("D3DTransformMatrix");
     drawing::HomogenMatrix xHomMat;
     aAny >>= xHomMat;
@@ -3475,13 +3475,13 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     if(aTransform.NeedsAction())
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_TRANSFORM, aTransform.GetExportString(mrExport.GetMM100UnitConverter()));
 
-    // VRP, VPN, VUP
+    
     aAny = xPropSet->getPropertyValue("D3DCameraGeometry");
     drawing::CameraGeometry aCamGeo;
     aAny >>= aCamGeo;
 
     ::basegfx::B3DVector aVRP(aCamGeo.vrp.PositionX, aCamGeo.vrp.PositionY, aCamGeo.vrp.PositionZ);
-    if(aVRP != ::basegfx::B3DVector(0.0, 0.0, 1.0)) // write only when not default
+    if(aVRP != ::basegfx::B3DVector(0.0, 0.0, 1.0)) 
     {
         mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aVRP);
         aStr = sStringBuffer.makeStringAndClear();
@@ -3489,7 +3489,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     }
 
     ::basegfx::B3DVector aVPN(aCamGeo.vpn.DirectionX, aCamGeo.vpn.DirectionY, aCamGeo.vpn.DirectionZ);
-    if(aVPN != ::basegfx::B3DVector(0.0, 0.0, 1.0)) // write only when not default
+    if(aVPN != ::basegfx::B3DVector(0.0, 0.0, 1.0)) 
     {
         mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aVPN);
         aStr = sStringBuffer.makeStringAndClear();
@@ -3497,14 +3497,14 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     }
 
     ::basegfx::B3DVector aVUP(aCamGeo.vup.DirectionX, aCamGeo.vup.DirectionY, aCamGeo.vup.DirectionZ);
-    if(aVUP != ::basegfx::B3DVector(0.0, 1.0, 0.0)) // write only when not default
+    if(aVUP != ::basegfx::B3DVector(0.0, 1.0, 0.0)) 
     {
         mrExport.GetMM100UnitConverter().convertB3DVector(sStringBuffer, aVUP);
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_VUP, aStr);
     }
 
-    // projection "D3DScenePerspective" drawing::ProjectionMode
+    
     aAny = xPropSet->getPropertyValue("D3DScenePerspective");
     drawing::ProjectionMode xPrjMode;
     aAny >>= xPrjMode;
@@ -3514,7 +3514,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
         aStr = GetXMLToken(XML_PERSPECTIVE);
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_PROJECTION, aStr);
 
-    // distance
+    
     aAny = xPropSet->getPropertyValue("D3DSceneDistance");
     sal_Int32 nDistance = 0;
     aAny >>= nDistance;
@@ -3523,7 +3523,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DISTANCE, aStr);
 
-    // focalLength
+    
     aAny = xPropSet->getPropertyValue("D3DSceneFocalLength");
     sal_Int32 nFocalLength = 0;
     aAny >>= nFocalLength;
@@ -3532,7 +3532,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_FOCAL_LENGTH, aStr);
 
-    // shadowSlant
+    
     aAny = xPropSet->getPropertyValue("D3DSceneShadowSlant");
     sal_Int16 nShadowSlant = 0;
     aAny >>= nShadowSlant;
@@ -3540,7 +3540,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADOW_SLANT, aStr);
 
-    // shadeMode
+    
     aAny = xPropSet->getPropertyValue("D3DSceneShadeMode");
     drawing::ShadeMode xShadeMode;
     if(aAny >>= xShadeMode)
@@ -3556,12 +3556,12 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     }
     else
     {
-        // ShadeMode enum not there, write default
+        
         aStr = GetXMLToken(XML_GOURAUD);
     }
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SHADE_MODE, aStr);
 
-    // ambientColor
+    
     aAny = xPropSet->getPropertyValue("D3DSceneAmbientColor");
     sal_Int32 nAmbientColor = 0;
     aAny >>= nAmbientColor;
@@ -3569,7 +3569,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
     aStr = sStringBuffer.makeStringAndClear();
     mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_AMBIENT_COLOR, aStr);
 
-    // lightingMode
+    
     aAny = xPropSet->getPropertyValue("D3DSceneTwoSidedLighting");
     sal_Bool bTwoSidedLighting = false;
     aAny >>= bTwoSidedLighting;
@@ -3581,7 +3581,7 @@ void XMLShapeExport::export3DSceneAttributes( const com::sun::star::uno::Referen
 /** helper for chart that exports all lamps from the propertyset */
 void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::sun::star::beans::XPropertySet >& xPropSet )
 {
-    // write lamps 1..8 as content
+    
     OUString aStr;
     OUStringBuffer sStringBuffer;
 
@@ -3598,7 +3598,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
     {
         aIndexStr = OUString::number( nLamp );
 
-        // lightcolor
+        
         aPropName = aColorPropName;
         aPropName += aIndexStr;
         sal_Int32 nLightColor = 0;
@@ -3607,7 +3607,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIFFUSE_COLOR, aStr);
 
-        // lightdirection
+        
         aPropName = aDirectionPropName;
         aPropName += aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= xLightDir;
@@ -3616,7 +3616,7 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_DIRECTION, aStr);
 
-        // lighton
+        
         aPropName = aLightOnPropName;
         aPropName += aIndexStr;
         xPropSet->getPropertyValue(aPropName) >>= bLightOnOff;
@@ -3624,18 +3624,18 @@ void XMLShapeExport::export3DLamps( const com::sun::star::uno::Reference< com::s
         aStr = sStringBuffer.makeStringAndClear();
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_ENABLED, aStr);
 
-        // specular
+        
         mrExport.AddAttribute(XML_NAMESPACE_DR3D, XML_SPECULAR,
             nLamp == 1 ? XML_TRUE : XML_FALSE);
 
-        // write light entry
+        
         SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DR3D, XML_LIGHT, sal_True, sal_True);
     }
 }
 
 
-// using namespace ::com::sun::star::io;
-// using namespace ::xmloff::EnhancedCustomShapeToken;
+
+
 
 
 void ExportParameter( OUStringBuffer& rStrBuffer, const com::sun::star::drawing::EnhancedCustomShapeParameter& rParameter )
@@ -3892,7 +3892,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
         com::sun::star::drawing::EnhancedCustomShapeSegment aSegment;
         if ( bSimpleSegments )
         {
-            // if there are not enough segments we will default them
+            
             switch( j )
             {
                 case 0 :
@@ -3997,7 +3997,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                 else
                     bNeedExtended = true;
                 break;
-            default : // ups, seems to be something wrong
+            default : 
             {
                 aSegment.Count = 1;
                 aSegment.Command = com::sun::star::drawing::EnhancedCustomShapeSegmentCommand::LINETO;
@@ -4018,7 +4018,7 @@ void ImpExportEnhancedPath( SvXMLExport& rExport,
                 }
                 else
                 {
-                    j = nSegments;  // error -> exiting
+                    j = nSegments;  
                     break;
                 }
             }
@@ -4050,7 +4050,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
 
     uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-    // geometry
+    
     const OUString sCustomShapeGeometry( "CustomShapeGeometry" );
     if ( xPropSetInfo.is() && xPropSetInfo->hasPropertyByName( sCustomShapeGeometry ) )
     {
@@ -4281,7 +4281,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                     break;
                                     case EAS_ShadeMode :
                                     {
-                                        // shadeMode
+                                        
                                         drawing::ShadeMode eShadeMode;
                                         if( rProp.Value >>= eShadeMode )
                                         {
@@ -4296,7 +4296,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                                         }
                                         else
                                         {
-                                            // ShadeMode enum not there, write default
+                                            
                                             aStr = GetXMLToken( XML_FLAT);
                                         }
                                         rExport.AddAttribute( XML_NAMESPACE_DR3D, XML_SHADE_MODE, aStr );
@@ -4641,10 +4641,10 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     default:
                         break;
                 }
-            }   // for
+            }   
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_TYPE, aCustomShapeType );
 
-            // adjustments
+            
             sal_Int32 nAdjustmentValues = aAdjustmentValues.getLength();
             if ( nAdjustmentValues )
             {
@@ -4671,7 +4671,7 @@ void ImpExportEnhancedGeometry( SvXMLExport& rExport, const uno::Reference< bean
                     }
                     else
                     {
-                        // this should not be, but better than setting nothing
+                        
                         ::sax::Converter::convertNumber( aStrBuffer, 0 );
                     }
                 }
@@ -4699,7 +4699,7 @@ void XMLShapeExport::ImpExportCustomShape(
         OUString aStr;
         uno::Reference< beans::XPropertySetInfo > xPropSetInfo( xPropSet->getPropertySetInfo() );
 
-        // Transformation
+        
         ImpExportNewTrans( xPropSet, nFeatures, pRefPoint );
 
         if ( xPropSetInfo.is() )
@@ -4719,9 +4719,9 @@ void XMLShapeExport::ImpExportCustomShape(
                     mrExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DATA, aStr );
             }
         }
-        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); // #86116#/#92210#
+        sal_Bool bCreateNewline( (nFeatures & SEF_EXPORT_NO_WS) == 0 ); 
         SvXMLElementExport aOBJ( mrExport, XML_NAMESPACE_DRAW, XML_CUSTOM_SHAPE, bCreateNewline, sal_True );
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
         ImpExportText( xShape );
@@ -4737,12 +4737,12 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
     DBG_ASSERT( xPropSet.is() && xNamed.is(), "xmloff::XMLShapeExport::ImpExportTableShape(), tabe shape is not implementing needed interfaces");
     if(xPropSet.is() && xNamed.is()) try
     {
-        // Transformation
+        
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
 
         sal_Bool bIsEmptyPresObj = sal_False;
 
-        // presentation settings
+        
         if(eShapeType == XmlShapeTypePresTableShape)
             bIsEmptyPresObj = ImpExportPresentationAttributes( xPropSet, GetXMLToken(XML_PRESENTATION_TABLE) );
 
@@ -4751,7 +4751,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
 
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW, XML_FRAME, bCreateNewline, sal_True );
 
-        // do not export in ODF 1.1 or older
+        
         if( mrExport.getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
         {
             if( !bIsEmptyPresObj )
@@ -4868,7 +4868,7 @@ void XMLShapeExport::ImpExportTableShape( const uno::Reference< drawing::XShape 
 
         ImpExportEvents( xShape );
         ImpExportGluePoints( xShape );
-        ImpExportDescription( xShape ); // #i68101#
+        ImpExportDescription( xShape ); 
     }
     catch( uno::Exception& )
     {

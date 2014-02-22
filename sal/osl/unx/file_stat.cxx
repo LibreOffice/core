@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "osl/file.h"
@@ -58,7 +58,7 @@ namespace
 
     inline void set_file_access_mask(const struct stat& file_stat, oslFileStatus* pStat)
     {
-        // user permissions
+        
         if (S_IRUSR & file_stat.st_mode)
             pStat->uAttributes |= osl_File_Attribute_OwnRead;
 
@@ -68,7 +68,7 @@ namespace
         if (S_IXUSR & file_stat.st_mode)
             pStat->uAttributes |= osl_File_Attribute_OwnExe;
 
-        // group permissions
+        
         if (S_IRGRP & file_stat.st_mode)
             pStat->uAttributes |= osl_File_Attribute_GrpRead;
 
@@ -78,7 +78,7 @@ namespace
         if (S_IXGRP & file_stat.st_mode)
             pStat->uAttributes |= osl_File_Attribute_GrpExe;
 
-        // others permissions
+        
         if (S_IROTH & file_stat.st_mode)
             pStat->uAttributes |= osl_File_Attribute_OthRead;
 
@@ -124,8 +124,8 @@ namespace
         set_file_hidden_status(file_path, pStat);
         set_file_access_mask(file_stat, pStat);
 
-        // we set the file access rights only on demand
-        // because it's potentially expensive
+        
+        
         if (uFieldMask & osl_FileStatus_Mask_Attributes)
             set_file_access_rights(file_path, pStat);
     }
@@ -216,14 +216,14 @@ oslFileError SAL_CALL osl_getFileStatus(oslDirectoryItem Item, oslFileStatus* pS
 
     if (bStatNeeded)
     {
-        // we set all these attributes because it's cheap
+        
         set_file_type(file_stat, pStat);
         set_file_access_time(file_stat, pStat);
         set_file_modify_time(file_stat, pStat);
         set_file_size(file_stat, pStat);
         set_file_attributes(file_path, file_stat, uFieldMask, pStat);
 
-        // file exists semantic of osl_FileStatus_Mask_Validate
+        
         if ((uFieldMask & osl_FileStatus_Mask_LinkTargetURL) && S_ISLNK(file_stat.st_mode))
         {
             osl_error = set_link_target_url(file_path, pStat);

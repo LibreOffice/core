@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "address.hxx"
@@ -50,13 +50,13 @@ namespace {
 
 const sal_Unicode* parseQuotedNameWithBuffer( const sal_Unicode* pStart, const sal_Unicode* p, OUString& rName )
 {
-    // The current character must be on the 2nd quote.
+    
 
-    // Push all the characters up to the current, but skip the very first
-    // character which is the opening quote.
+    
+    
     OUStringBuffer aBuf(OUString(pStart+1, p-pStart-1));
 
-    ++p; // Skip the 2nd quote.
+    ++p; 
     sal_Unicode cPrev = 0;
     for (; *p; ++p)
     {
@@ -64,7 +64,7 @@ const sal_Unicode* parseQuotedNameWithBuffer( const sal_Unicode* pStart, const s
         {
             if (cPrev == '\'')
             {
-                // double single-quote equals one single quote.
+                
                 aBuf.append(*p);
                 cPrev = 0;
                 continue;
@@ -72,7 +72,7 @@ const sal_Unicode* parseQuotedNameWithBuffer( const sal_Unicode* pStart, const s
         }
         else if (cPrev == '\'')
         {
-            // We are past the closing quote.  We're done!
+            
             rName = aBuf.makeStringAndClear();
             return p;
         }
@@ -109,14 +109,14 @@ const sal_Unicode* parseQuotedName( const sal_Unicode* p, OUString& rName )
         {
             if (cPrev == '\'')
             {
-                // double single-quote equals one single quote.
+                
                 return parseQuotedNameWithBuffer(pStart, p, rName);
             }
         }
         else if (cPrev == '\'')
         {
-            // We are past the closing quote.  We're done!  Skip the opening
-            // and closing quotes.
+            
+            
             rName = OUString(pStart+1, p - pStart-2);
             return p;
         }
@@ -194,8 +194,8 @@ static bool lcl_ScRange_External_TabSpan(
     ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
     if (pRefMgr->isOwnDocument( rExternDocName))
     {
-        // This is an internal document.  Get the sheet positions from the
-        // ScDocument instance.
+        
+        
         if (!rStartTabName.isEmpty())
         {
             SCTAB nTab;
@@ -242,7 +242,7 @@ static bool lcl_ScRange_External_TabSpan(
         rFlags &= ~SCA_VALID_TAB2;
     else if (nSpan >= 1)
         rRange.aEnd.SetTab( rRange.aStart.Tab() + nSpan - 1);
-    else // (nSpan < -1)
+    else 
     {
         rRange.aEnd.SetTab( rRange.aStart.Tab() - nSpan - 1);
         if (pExtInfo)
@@ -267,7 +267,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
     OUString aTabName;
     const sal_Unicode *p = start;
 
-    // XL only seems to use single quotes for sheet names.
+    
     if (pMsoxlQuoteStop)
     {
         const sal_Unicode* pCurrentStart = p;
@@ -275,7 +275,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
         {
             if (*p == '\'')
             {
-                // We pre-analyzed the quoting, no checks needed here.
+                
                 if (*++p == '\'')
                 {
                     aTabName += OUString( pCurrentStart,
@@ -285,7 +285,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
             }
             else if (*p == ':')
             {
-                break;  // while
+                break;  
             }
             else
                 ++p;
@@ -295,7 +295,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
         if (aTabName.isEmpty())
             return NULL;
         if (p == pMsoxlQuoteStop)
-            ++p;    // position on ! of ...'!...
+            ++p;    
         if( *p != '!' && ( !allow_3d || *p != ':' ) )
             return (!allow_3d && *p == ':') ? p : start;
     }
@@ -344,7 +344,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
             }
             else if( uc == '.' )
             {
-                if( only_digits ) // Valid, except after only digits.
+                if( only_digits ) 
                 {
                     p = start;
                     break;
@@ -353,7 +353,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
             }
             else if (uc > 127)
             {
-                // non ASCII character is allowed.
+                
                 ++p;
             }
             else
@@ -385,15 +385,15 @@ lcl_XL_ParseSheetRef( const sal_Unicode* start,
 static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExternDocName,
         const uno::Sequence< const sheet::ExternalLinkInfo > * pExternalLinks)
 {
-    // 1-based, sequence starts with an empty element.
+    
     if (pExternalLinks && pExternalLinks->hasElements())
     {
-        // A numeric "document name" is an index into the sequence.
+        
         if (CharClass::isAsciiNumeric( rExternDocName))
         {
             sal_Int32 i = rExternDocName.toInt32();
             if (i < 0 || i >= pExternalLinks->getLength())
-                return false;   // with default *ppErrRet
+                return false;   
             const sheet::ExternalLinkInfo & rInfo = (*pExternalLinks)[i];
             switch (rInfo.Type)
             {
@@ -410,9 +410,9 @@ static bool lcl_XL_getExternalDoc( const sal_Unicode** ppErrRet, OUString& rExte
                     }
                     break;
                     case sheet::ExternalLinkType::SELF :
-                        return false;   // ???
+                        return false;   
                     case sheet::ExternalLinkType::SPECIAL :
-                        // silently return nothing (do not assert), caller has to handle this
+                        
                         *ppErrRet = NULL;
                         return false;
                 default:
@@ -439,7 +439,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     const sal_Unicode* startTabs, *start = p;
     sal_uInt16 nSaveFlags = nFlags;
 
-    // Is this an external reference ?
+    
     rStartTabName = "";
     rEndTabName = "";
     rExternDocName = "";
@@ -447,8 +447,8 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     if (*p == '[')
     {
         ++p;
-        // Only single quotes are correct, and a double single quote escapes a
-        // single quote text inside the quoted text.
+        
+        
         if (*p == '\'')
         {
             p = parseQuotedName(p, rExternDocName);
@@ -460,7 +460,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         }
         else
         {
-            // non-quoted file name.
+            
             p = ScGlobal::UnicodeStrChr( start+1, ']' );
             if( p == NULL )
                 return start;
@@ -476,13 +476,13 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     }
     else if (*p == '\'')
     {
-        // Sickness in Excel's ODF msoxl namespace:
-        // 'E:\[EXTDATA8.XLS]Sheet1'!$A$7  or
-        // 'E:\[EXTDATA12B.XLSB]Sheet1:Sheet3'!$A$11
-        // But, 'Sheet1'!B3 would also be a valid!
-        // Excel does not allow [ and ] characters in sheet names though.
-        // But, more sickness comes with MOOXML as there may be
-        // '[1]Sheet 4'!$A$1  where [1] is the external doc's index.
+        
+        
+        
+        
+        
+        
+        
         p = parseQuotedName(p, rExternDocName);
         if (!*p || *p != '!')
         {
@@ -503,16 +503,16 @@ const sal_Unicode* ScRange::Parse_XL_Header(
                 {
                     rExternDocName = rExternDocName.copy(0, nClose);
                     rExternDocName = rExternDocName.replaceAt( nOpen, 1, "");
-                    pMsoxlQuoteStop = p - 1;    // the ' quote char
-                    // There may be embedded escaped quotes, just matching the
-                    // doc name's length may not work.
+                    pMsoxlQuoteStop = p - 1;    
+                    
+                    
                     for (p = start; *p != '['; ++p)
                         ;
                     for ( ; *p != ']'; ++p)
                         ;
                     ++p;
 
-                    // Handle '[1]Sheet 4'!$A$1
+                    
                     if (nOpen == 0)
                     {
                         const sal_Unicode* pErrRet = start;
@@ -529,26 +529,26 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     startTabs = p;
     p = lcl_XL_ParseSheetRef( p, rStartTabName, !bOnlyAcceptSingle, pMsoxlQuoteStop);
     if( NULL == p )
-        return start;       // invalid tab
+        return start;       
     if (bOnlyAcceptSingle && *p == ':')
-        return NULL;        // 3D
+        return NULL;        
     if( p != startTabs )
     {
         nFlags |= SCA_VALID_TAB | SCA_TAB_3D | SCA_TAB_ABSOLUTE;
-        if( *p == ':' ) // 3d ref
+        if( *p == ':' ) 
         {
             p = lcl_XL_ParseSheetRef( p+1, rEndTabName, false, pMsoxlQuoteStop);
             if( p == NULL )
             {
                 nFlags = nSaveFlags;
-                return start; // invalid tab
+                return start; 
             }
             nFlags |= SCA_VALID_TAB2 | SCA_TAB2_3D | SCA_TAB2_ABSOLUTE;
         }
         else
         {
-            // If only one sheet is given, the full reference is still valid,
-            // only the second 3D flag is not set.
+            
+            
             nFlags |= SCA_VALID_TAB2 | SCA_TAB2_ABSOLUTE;
             aEnd.SetTab( aStart.Tab() );
         }
@@ -556,7 +556,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         if( *p++ != '!' )
         {
             nFlags = nSaveFlags;
-            return start;   // syntax error
+            return start;   
         }
         else
             p = lcl_eatWhiteSpace( p );
@@ -564,7 +564,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     else
     {
         nFlags |= SCA_VALID_TAB | SCA_VALID_TAB2;
-        // Use the current tab, it needs to be passed in. : aEnd.SetTab( .. );
+        
     }
 
     if (!rExternDocName.isEmpty())
@@ -574,7 +574,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
     }
     else
     {
-        // Internal reference.
+        
         if (rStartTabName.isEmpty())
         {
             nFlags = nSaveFlags;
@@ -584,7 +584,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         SCTAB nTab;
         if (!pDoc->GetTable(rStartTabName, nTab))
         {
-            // invalid table name.
+            
             nFlags &= ~SCA_VALID_TAB;
             nTab = -1;
         }
@@ -596,7 +596,7 @@ const sal_Unicode* ScRange::Parse_XL_Header(
         {
             if (!pDoc->GetTable(rEndTabName, nTab))
             {
-                // invalid table name.
+                
                 nFlags &= ~SCA_VALID_TAB2;
                 nTab = -1;
             }
@@ -626,7 +626,7 @@ lcl_r1c1_get_col( const sal_Unicode* p,
     if( NULL == pEnd )
         return NULL;
 
-    if( p == pEnd ) // C is a relative ref with offset 0
+    if( p == pEnd ) 
     {
         if( isRelative )
             return NULL;
@@ -671,7 +671,7 @@ lcl_r1c1_get_row( const sal_Unicode* p,
     if( NULL == pEnd )
         return NULL;
 
-    if( p == pEnd ) // R is a relative ref with offset 0
+    if( p == pEnd ) 
     {
         if( isRelative )
             return NULL;
@@ -709,7 +709,7 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
     const sal_Unicode* pTmp = NULL;
     OUString aExternDocName, aStartTabName, aEndTabName;
     sal_uInt16 nFlags = SCA_VALID | SCA_VALID_TAB;
-    // Keep in mind that nFlags2 gets left-shifted by 4 bits before being merged.
+    
     sal_uInt16 nFlags2 = SCA_VALID_TAB;
 
     p = r.Parse_XL_Header( p, pDoc, aExternDocName, aStartTabName,
@@ -727,26 +727,26 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
         if( NULL == (p = lcl_r1c1_get_row( p, rDetails, &r.aStart, &nFlags )) )
             goto failed;
 
-        if( *p != 'C' && *p != 'c' )    // full row R#
+        if( *p != 'C' && *p != 'c' )    
         {
             if( p[0] != ':' || (p[1] != 'R' && p[1] != 'r' ) ||
                 NULL == (pTmp = lcl_r1c1_get_row( p+1, rDetails, &r.aEnd, &nFlags2 )))
             {
-                // Only the initial row number is given, or the second row
-                // number is invalid. Fallback to just the initial R
+                
+                
                 nFlags |= (nFlags << 4);
                 r.aEnd.SetRow( r.aStart.Row() );
             }
             else
             {
-                // Full row range successfully parsed.
+                
                 nFlags |= (nFlags2 << 4);
                 p = pTmp;
             }
 
             if (p && p[0] != 0)
             {
-                // any trailing invalid character must invalidate the whole address.
+                
                 nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
                             SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
                 return nFlags;
@@ -769,11 +769,11 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
             (*pTmp != 'C' && *pTmp != 'c') ||
             NULL == (pTmp = lcl_r1c1_get_col( pTmp, rDetails, &r.aEnd, &nFlags2 )))
         {
-            // single cell reference
+            
 
             if (p && p[0] != 0)
             {
-                // any trailing invalid character must invalidate the whole address.
+                
                 nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
                 return nFlags;
             }
@@ -782,11 +782,11 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
         }
         p = pTmp;
 
-        // double reference
+        
 
         if (p && p[0] != 0)
         {
-            // any trailing invalid character must invalidate the whole range.
+            
             nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
                         SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
             return nFlags;
@@ -795,14 +795,14 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
         nFlags |= (nFlags2 << 4);
         return bOnlyAcceptSingle ? 0 : nFlags;
     }
-    else if( *p == 'C' || *p == 'c' )   // full col C#
+    else if( *p == 'C' || *p == 'c' )   
     {
         if( NULL == (p = lcl_r1c1_get_col( p, rDetails, &r.aStart, &nFlags )))
             goto failed;
 
         if( p[0] != ':' || (p[1] != 'C' && p[1] != 'c') ||
             NULL == (pTmp = lcl_r1c1_get_col( p+1, rDetails, &r.aEnd, &nFlags2 )))
-        {    // Fallback to just the initial C
+        {    
             nFlags |= (nFlags << 4);
             r.aEnd.SetCol( r.aStart.Col() );
         }
@@ -814,7 +814,7 @@ lcl_ScRange_Parse_XL_R1C1( ScRange& r,
 
         if (p && p[0] != 0)
         {
-            // any trailing invalid character must invalidate the whole address.
+            
             nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
                         SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
             return nFlags;
@@ -884,7 +884,7 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
                          const uno::Sequence< const sheet::ExternalLinkInfo > * pExternalLinks )
 {
     const sal_Unicode* tmp1, *tmp2;
-    OUString aExternDocName, aStartTabName, aEndTabName; // for external link table
+    OUString aExternDocName, aStartTabName, aEndTabName; 
     sal_uInt16 nFlags = SCA_VALID | SCA_VALID_TAB, nFlags2 = SCA_VALID_TAB;
 
     p = r.Parse_XL_Header( p, pDoc, aExternDocName, aStartTabName,
@@ -898,15 +898,15 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
         return 0;
 
     tmp1 = lcl_a1_get_col( p, &r.aStart, &nFlags );
-    if( tmp1 == NULL )          // Is it a row only reference 3:5
+    if( tmp1 == NULL )          
     {
-        if( bOnlyAcceptSingle ) // by definition full row refs are ranges
+        if( bOnlyAcceptSingle ) 
             return 0;
 
         tmp1 = lcl_a1_get_row( p, &r.aStart, &nFlags );
 
         tmp1 = lcl_eatWhiteSpace( tmp1 );
-        if( !tmp1 || *tmp1++ != ':' ) // Even a singleton requires ':' (eg 2:2)
+        if( !tmp1 || *tmp1++ != ':' ) 
             return 0;
 
         tmp1 = lcl_eatWhiteSpace( tmp1 );
@@ -923,13 +923,13 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     }
 
     tmp2 = lcl_a1_get_row( tmp1, &r.aStart, &nFlags );
-    if( tmp2 == NULL )          // check for col only reference F:H
+    if( tmp2 == NULL )          
     {
-        if( bOnlyAcceptSingle ) // by definition full col refs are ranges
+        if( bOnlyAcceptSingle ) 
             return 0;
 
         tmp1 = lcl_eatWhiteSpace( tmp1 );
-        if( *tmp1++ != ':' )    // Even a singleton requires ':' (eg F:F)
+        if( *tmp1++ != ':' )    
             return 0;
 
         tmp1 = lcl_eatWhiteSpace( tmp1 );
@@ -945,9 +945,9 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
         return nFlags;
     }
 
-    // prepare as if it's a singleton, in case we want to fall back */
+    
     r.aEnd.SetCol( r.aStart.Col() );
-    r.aEnd.SetRow( r.aStart.Row() );    // don't overwrite sheet number as parsed in Parse_XL_Header()
+    r.aEnd.SetRow( r.aStart.Row() );    
 
     if ( bOnlyAcceptSingle )
     {
@@ -955,7 +955,7 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
             return nFlags;
         else
         {
-            // any trailing invalid character must invalidate the address.
+            
             nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB);
             return nFlags;
         }
@@ -964,8 +964,8 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     tmp2 = lcl_eatWhiteSpace( tmp2 );
     if( *tmp2 != ':' )
     {
-        // Sheet1:Sheet2!C4 is a valid range, without a second sheet it is
-        // not. Any trailing invalid character invalidates the range.
+        
+        
         if (*tmp2 == 0 && (nFlags & SCA_TAB2_3D))
         {
             if (nFlags & SCA_COL_ABSOLUTE)
@@ -983,7 +983,7 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     p = tmp2;
     p = lcl_eatWhiteSpace( p+1 );
     tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2 );
-    if( !tmp1 && aEndTabName.isEmpty() )     // Probably the aEndTabName was specified after the first range
+    if( !tmp1 && aEndTabName.isEmpty() )     
     {
         p = lcl_XL_ParseSheetRef( p, aEndTabName, false, NULL );
         if( p )
@@ -998,16 +998,16 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
             tmp1 = lcl_a1_get_col( p, &r.aEnd, &nFlags2 );
         }
     }
-    if( !tmp1 ) // strange, but valid singleton
+    if( !tmp1 ) 
         return nFlags;
 
     tmp2 = lcl_a1_get_row( tmp1, &r.aEnd, &nFlags2 );
-    if( !tmp2 ) // strange, but valid singleton
+    if( !tmp2 ) 
         return nFlags;
 
     if ( *tmp2 != 0 )
     {
-        // any trailing invalid character must invalidate the range.
+        
         nFlags &= ~(SCA_VALID | SCA_VALID_COL | SCA_VALID_ROW | SCA_VALID_TAB |
                     SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2);
         return nFlags;
@@ -1027,14 +1027,14 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
                          ScAddress::ExternalInfo* pExtInfo = NULL, ScRange* pRange = NULL )
 {
     sal_uInt16  nRes = 0;
-    OUString aDocName;       // der pure Dokumentenname
+    OUString aDocName;       
     OUString aTab;
     bool    bExtDoc = false;
     bool    bExtDocInherited = false;
     const ScAddress aCurPos(rAddr);
 
-    // Lets see if this is a reference to something in an external file.  A
-    // document name is always quoted and has a trailing #.
+    
+    
     if (*p == '\'')
     {
         const sal_Unicode* pStart = p;
@@ -1044,13 +1044,13 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
         if (*p++ == SC_COMPILER_FILE_TAB_SEP)
             bExtDoc = true;
         else
-            // This is not a document name.  Perhaps a quoted relative table
-            // name.
+            
+            
             p = pStart;
     }
     else if (pExtInfo && pExtInfo->mbExternal)
     {
-        // This is an external reference.
+        
         bExtDoc = bExtDocInherited = true;
     }
 
@@ -1069,9 +1069,9 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
 
         if (*p == '\'')
         {
-            // Tokens that start at ' can have anything in them until a final
-            // ' but '' marks an escaped '.  We've earlier guaranteed that a
-            // string containing '' will be surrounded by '.
+            
+            
+            
             p = parseQuotedName(p, aTab);
         }
         else
@@ -1094,24 +1094,24 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
 
         if (!bExtDoc && (!pDoc || !pDoc->GetTable( aTab, nTab )))
         {
-            // Specified table name is not found in this document.  Assume this is an external document.
+            
             aDocName = aTab;
             sal_Int32 n = aDocName.lastIndexOf('.');
             if (n != -1 && n > 0)
             {
-                // Extension found.  Strip it.
+                
                 aTab = aTab.replaceAt(n, 1, "");
                 bExtDoc = true;
             }
             else
-                // No extension found.  This is probably not an external document.
+                
                 nBits = 0;
         }
     }
     else
     {
         if (bExtDoc && !bExtDocInherited)
-            return nRes;        // After a document a sheet must follow.
+            return nRes;        
         nTab = rAddr.Tab();
     }
     nRes |= nBits;
@@ -1175,7 +1175,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
         {
             ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
 
-            // Need document name if inherited.
+            
             if (bExtDocInherited)
             {
                 const OUString* pFileName = pRefMgr->getExternalFileName( pExtInfo->mnFileId);
@@ -1222,8 +1222,8 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
                     }
                     else
                     {
-                        // This is a call for the second part of the reference,
-                        // we must have the range to adapt tab span.
+                        
+                        
                         if (!pRange)
                             nRes = 0;
                         else
@@ -1252,7 +1252,7 @@ lcl_ScAddress_Parse_OOo( const sal_Unicode* p, ScDocument* pDoc, ScAddress& rAdd
 
     if ( !(nRes & SCA_VALID_ROW) && (nRes & SCA_VALID_COL)
             && !( (nRes & SCA_TAB_3D) && (nRes & SCA_VALID_TAB)) )
-    {   // no Row, no Tab, but Col => DM (...), B (...) et al
+    {   
         nRes = 0;
     }
     if( !*p )
@@ -1433,10 +1433,10 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const OUString& r, ScDocument* pDoc, ScA
         const sal_Unicode* p = aTmp.getStr();
         if( (nRes1 = lcl_ScAddress_Parse_OOo( p, pDoc, aRange.aStart, pExtInfo, NULL ) ) != 0 )
         {
-            aRange.aEnd = aRange.aStart;  // sheet must be initialized identical to first sheet
+            aRange.aEnd = aRange.aStart;  
             if ( (nRes2 = lcl_ScAddress_Parse_OOo( p + nPos+ 1, pDoc, aRange.aEnd, pExtInfo, &aRange ) ) != 0 )
             {
-                // PutInOrder / Justify
+                
                 sal_uInt16 nMask, nBits1, nBits2;
                 SCCOL nTempCol;
                 if ( aRange.aEnd.Col() < (nTempCol = aRange.aStart.Col()) )
@@ -1474,7 +1474,7 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const OUString& r, ScDocument* pDoc, ScA
                     nRes2 |= SCA_TAB_ABSOLUTE;
             }
             else
-                nRes1 = 0;      // keine Tokens aus halben Sachen
+                nRes1 = 0;      
         }
     }
     nRes1 = ( ( nRes1 | nRes2 ) & SCA_VALID )
@@ -1507,7 +1507,7 @@ sal_uInt16 ScRange::Parse( const OUString& r, ScDocument* pDoc,
     }
 }
 
-// Accept a full range, or an address
+
 sal_uInt16 ScRange::ParseAny( const OUString& r, ScDocument* pDoc,
                           const ScAddress::Details& rDetails )
 {
@@ -1517,7 +1517,7 @@ sal_uInt16 ScRange::ParseAny( const OUString& r, ScDocument* pDoc,
 
     if ( (nRet & nValid) != nValid )
     {
-        ScAddress aAdr(aStart);//initialize with currentPos as fallback for table number
+        ScAddress aAdr(aStart);
         nRet = aAdr.Parse( r, pDoc, rDetails );
         if ( nRet & SCA_VALID )
             aStart = aEnd = aAdr;
@@ -1525,7 +1525,7 @@ sal_uInt16 ScRange::ParseAny( const OUString& r, ScDocument* pDoc,
     return nRet;
 }
 
-// Parse only full row references
+
 sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
                            const ScAddress::Details& rDetails )
 {
@@ -1535,12 +1535,12 @@ sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
     const sal_Unicode* p = rStr.getStr();
     sal_uInt16 nRes = 0, ignored = 0;
 
-    (void)pDoc; // make compiler shutup we may need this later
+    (void)pDoc; 
 
     switch (rDetails.eConv)
     {
     default :
-    case formula::FormulaGrammar::CONV_OOO: // No full col refs in OOO yet, assume XL notation
+    case formula::FormulaGrammar::CONV_OOO: 
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
         if (NULL != (p = lcl_a1_get_col( p, &aStart, &ignored ) ) )
@@ -1584,7 +1584,7 @@ sal_uInt16 ScRange::ParseCols( const OUString& rStr, ScDocument* pDoc,
     return (p != NULL && *p == '\0') ? nRes : 0;
 }
 
-// Parse only full row references
+
 sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
                            const ScAddress::Details& rDetails )
 {
@@ -1594,12 +1594,12 @@ sal_uInt16 ScRange::ParseRows( const OUString& rStr, ScDocument* pDoc,
     const sal_Unicode* p = rStr.getStr();
     sal_uInt16 nRes = 0, ignored = 0;
 
-    (void)pDoc; // make compiler shutup we may need this later
+    (void)pDoc; 
 
     switch (rDetails.eConv)
     {
     default :
-    case formula::FormulaGrammar::CONV_OOO: // No full row refs in OOO yet, assume XL notation
+    case formula::FormulaGrammar::CONV_OOO: 
     case formula::FormulaGrammar::CONV_XL_A1:
     case formula::FormulaGrammar::CONV_XL_OOX:
         if (NULL != (p = lcl_a1_get_row( p, &aStart, &ignored ) ) )
@@ -1697,8 +1697,8 @@ lcl_r1c1_append_r ( OUString &r, int nRow, bool bIsAbs,
 static OUString
 getFileNameFromDoc( const ScDocument* pDoc )
 {
-    // TODO : er points at ScGlobal::GetAbsDocName()
-    // as a better template.  Look into it
+    
+    
     OUString sFileName;
     SfxObjectShell* pShell;
 
@@ -1737,10 +1737,10 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             OUString aTabName, aDocName;
             OUString aTmp;
             pDoc->GetName(nTab, aTmp);
-            aTabName = aTmp; // TODO: remove use of String here.
-            // External Reference, same as in ScCompiler::MakeTabStr()
+            aTabName = aTmp; 
+            
             if( aTabName[0] == '\'' )
-            {   // "'Doc'#Tab"
+            {   
                 sal_Int32 nPos = ScCompiler::GetDocTabPos( aTabName);
                 if (nPos != -1)
                 {
@@ -1750,11 +1750,11 @@ OUString ScAddress::Format(sal_uInt16 nFlags, const ScDocument* pDoc,
             }
             else if( nFlags & SCA_FORCE_DOC )
             {
-                // VBA has an 'external' flag that forces the addition of the
-                // tab name _and_ the doc name.  The VBA code would be
-                // needlessly complicated if it constructed an actual external
-                // reference so we add this somewhat cheesy kludge to force the
-                // addition of the document name even for non-external references
+                
+                
+                
+                
+                
                 aDocName = getFileNameFromDoc( pDoc );
             }
             ScCompiler::CheckTabQuotes( aTabName, rDetails.eConv);
@@ -1813,9 +1813,9 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
 {
     pDoc->GetName(nTab, rTabName);
     rDocName = "";
-    // External reference, same as in ScCompiler::MakeTabStr()
+    
     if ( rTabName[0] == '\'' )
-    {   // "'Doc'#Tab"
+    {   
         sal_Int32 nPos = ScCompiler::GetDocTabPos( rTabName);
         if (nPos != -1)
         {
@@ -1825,11 +1825,11 @@ lcl_Split_DocTab( const ScDocument* pDoc,  SCTAB nTab,
     }
     else if( nFlags & SCA_FORCE_DOC )
     {
-        // VBA has an 'external' flag that forces the addition of the
-        // tab name _and_ the doc name.  The VBA code would be
-        // needlessly complicated if it constructed an actual external
-        // reference so we add this somewhat cheesy kludge to force the
-        // addition of the document name even for non-external references
+        
+        
+        
+        
+        
         rDocName = getFileNameFromDoc( pDoc );
     }
     ScCompiler::CheckTabQuotes( rTabName, rDetails.eConv);
@@ -1900,14 +1900,14 @@ OUString ScRange::Format( sal_uInt16 nFlags, const ScDocument* pDoc,
         lcl_ScRange_Format_XL_Header( r, *this, nFlags, pDoc, rDetails );
         if( aStart.Col() == 0 && aEnd.Col() >= MAXCOL )
         {
-            // Full col refs always require 2 rows (2:2)
+            
             lcl_a1_append_r( r, aStart.Row(), nFlags & SCA_ROW_ABSOLUTE );
             r += ":";
             lcl_a1_append_r( r, aEnd.Row(), nFlags & SCA_ROW2_ABSOLUTE );
         }
         else if( aStart.Row() == 0 && aEnd.Row() >= MAXROW )
         {
-            // Full row refs always require 2 cols (A:A)
+            
             lcl_a1_append_c( r, aStart.Col(), nFlags & SCA_COL_ABSOLUTE );
             r += ":";
             lcl_a1_append_c( r, aEnd.Col(), nFlags & SCA_COL2_ABSOLUTE );

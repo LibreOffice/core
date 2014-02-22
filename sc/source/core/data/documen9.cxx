@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -58,7 +58,7 @@
 
 using namespace ::com::sun::star;
 #include <stdio.h>
-// -----------------------------------------------------------------------
+
 
 
 SfxBroadcaster* ScDocument::GetDrawBroadcaster()
@@ -97,9 +97,9 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
             SdrObject* pOldObject = aIter.Next();
             while (pOldObject)
             {
-                // #116235#
+                
                 SdrObject* pNewObject = pOldObject->Clone();
-                // SdrObject* pNewObject = pOldObject->Clone( pNewPage, pDrawLayer );
+                
                 pNewObject->SetModel(pDrawLayer);
                 pNewObject->SetPage(pNewPage);
 
@@ -114,8 +114,8 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
         }
     }
 
-    //  make sure the data references of charts are adapted
-    //  (this must be after InsertObject!)
+    
+    
     ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pSrcDoc, this, nSrcPos, nDestPos );
     ScChartHelper::UpdateChartsOnDestinationPage(this, nDestPos);
 }
@@ -128,7 +128,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
     if (!pDrawLayer)
     {
         OUString aName;
-        if ( pShell && !pShell->IsLoading() )       // don't call GetTitle while loading
+        if ( pShell && !pShell->IsLoading() )       
             aName = pShell->GetTitle();
         pDrawLayer = new ScDrawLayer( this, aName );
 
@@ -136,26 +136,26 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
         if (pMgr)
             pDrawLayer->SetLinkManager(pMgr);
 
-        //  Drawing pages are accessed by table number, so they must also be present
-        //  for preceding table numbers, even if the tables aren't allocated
-        //  (important for clipboard documents).
+        
+        
+        
 
         SCTAB nDrawPages = 0;
         SCTAB nTab;
         for (nTab=0; nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
             if (maTabs[nTab])
-                nDrawPages = nTab + 1;          // needed number of pages
+                nDrawPages = nTab + 1;          
 
         for (nTab=0; nTab<nDrawPages && nTab < static_cast<SCTAB>(maTabs.size()); nTab++)
         {
-            pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
+            pDrawLayer->ScAddPage( nTab );      
             if (maTabs[nTab])
             {
                 OUString aTabName;
                 maTabs[nTab]->GetName(aTabName);
                 pDrawLayer->ScRenamePage( nTab, aTabName );
 
-                maTabs[nTab]->SetDrawPageSize(false,false);     // set the right size immediately
+                maTabs[nTab]->SetDrawPageSize(false,false);     
             }
         }
 
@@ -163,7 +163,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
 
         UpdateDrawPrinter();
 
-        // set draw defaults directly
+        
         SfxItemPool& rDrawPool = pDrawLayer->GetItemPool();
         rDrawPool.SetPoolDefaultItem( SvxAutoKernItem( true, EE_CHAR_PAIRKERNING ) );
 
@@ -192,8 +192,8 @@ void ScDocument::UpdateDrawPrinter()
 {
     if (pDrawLayer)
     {
-        // use the printer even if IsValid is false
-        // Application::GetDefaultDevice causes trouble with changing MapModes
+        
+        
         pDrawLayer->SetRefDevice(GetRefDevice());
     }
 }
@@ -208,8 +208,8 @@ void ScDocument::SetDrawPageSize(SCTAB nTab)
 
 bool ScDocument::IsChart( const SdrObject* pObject )
 {
-    // #109985#
-    // IsChart() implementation moved to svx drawinglayer
+    
+    
     if(pObject && OBJ_OLE2 == pObject->GetObjIdentifier())
     {
         return ((SdrOle2Obj*)pObject)->IsChart();
@@ -241,7 +241,7 @@ void ScDocument::DrawMovePage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
 
 void ScDocument::DrawCopyPage( sal_uInt16 nOldPos, sal_uInt16 nNewPos )
 {
-    // angelegt wird die Page schon im ScTable ctor
+    
     pDrawLayer->ScCopyPage( nOldPos, nNewPos );
 }
 
@@ -268,7 +268,7 @@ void ScDocument::DeleteObjectsInSelection( const ScMarkData& rMark )
 
 bool ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* pTabMark )
 {
-    //  pTabMark is used only for selected tables. If pTabMark is 0, all tables of rRange are used.
+    
 
     if (!pDrawLayer)
         return false;
@@ -339,10 +339,10 @@ void ScDocument::StartAnimations( SCTAB nTab, Window* pWin )
 
 bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 {
-    //  Gibt es Objekte auf dem Hintergrund-Layer, die (teilweise) von rMMRect
-    //  betroffen sind?
-    //  (fuer Drawing-Optimierung, vor dem Hintergrund braucht dann nicht geloescht
-    //   zu werden)
+    
+    
+    
+    
 
     if (!pDrawLayer)
         return false;
@@ -367,9 +367,9 @@ bool ScDocument::HasBackgroundDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 
 bool ScDocument::HasAnyDraw( SCTAB nTab, const Rectangle& rMMRect ) const
 {
-    //  Gibt es ueberhaupt Objekte, die (teilweise) von rMMRect
-    //  betroffen sind?
-    //  (um leere Seiten beim Drucken zu erkennen)
+    
+    
+    
 
     if (!pDrawLayer)
         return false;
@@ -400,7 +400,7 @@ void ScDocument::EnsureGraphicNames()
 
 SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
 {
-    //  fuer Drag&Drop auf Zeichenobjekt
+    
 
     SdrObject* pFound = NULL;
     if (pDrawLayer && nTab < static_cast<SCTAB>(maTabs.size()) && maTabs[nTab])
@@ -415,8 +415,8 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
             {
                 if ( pObject->GetCurrentBoundRect().IsInside(rPos) )
                 {
-                    //  Intern interessiert gar nicht
-                    //  Objekt vom Back-Layer nur, wenn kein Objekt von anderem Layer getroffen
+                    
+                    
 
                     SdrLayerID nLayer = pObject->GetLayer();
                     if ( (nLayer != SC_LAYER_INTERN) && (nLayer != SC_LAYER_HIDDEN) )
@@ -428,7 +428,7 @@ SdrObject* ScDocument::GetObjectAtPoint( SCTAB nTab, const Point& rPos )
                         }
                     }
                 }
-                //  weitersuchen -> letztes (oberstes) getroffenes Objekt nehmen
+                
 
                 pObject = aIter.Next();
             }
@@ -445,14 +445,14 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
         return false;
 
     if (HasAttrib(ScRange(nStartCol, nStartRow, nTab, nEndCol, nEndRow, nTab), HASATTR_LINES))
-        // We want to print sheets with borders even if there is no cell content.
+        
         return false;
 
     Rectangle aMMRect;
     if ( pLastRange && pLastMM && nTab == pLastRange->aStart.Tab() &&
             nStartRow == pLastRange->aStart.Row() && nEndRow == pLastRange->aEnd.Row() )
     {
-        //  keep vertical part of aMMRect, only update horizontal position
+        
         aMMRect = *pLastMM;
 
         long nLeft = 0;
@@ -480,21 +480,21 @@ bool ScDocument::IsPrintEmpty( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
 
     if ( nStartCol > 0 && !bLeftIsEmpty )
     {
-        //  aehnlich wie in ScPrintFunc::AdjustPrintArea
-        //! ExtendPrintArea erst ab Start-Spalte des Druckbereichs
+        
+        
 
         SCCOL nExtendCol = nStartCol - 1;
         SCROW nTmpRow = nEndRow;
 
-        // ExtendMerge() is non-const, but called without refresh. GetPrinter()
-        // might create and assign a printer.
+        
+        
         ScDocument* pThis = const_cast<ScDocument*>(this);
 
         pThis->ExtendMerge( 0,nStartRow, nExtendCol,nTmpRow, nTab,
-                            false );      // kein Refresh, incl. Attrs
+                            false );      
 
         OutputDevice* pDev = pThis->GetPrinter();
-        pDev->SetMapMode( MAP_PIXEL );              // wichtig fuer GetNeededSize
+        pDev->SetMapMode( MAP_PIXEL );              
         ExtendPrintArea( pDev, nTab, 0, nStartRow, nExtendCol, nEndRow );
         if ( nExtendCol >= nStartCol )
             return false;
@@ -520,8 +520,8 @@ void ScDocument::Clear( bool bFromDestructor )
 
 bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
 {
-    //  looks for detective objects, annotations don't count
-    //  (used to adjust scale so detective objects hit their cells better)
+    
+    
 
     bool bFound = false;
 
@@ -535,7 +535,7 @@ bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
             SdrObject* pObject = aIter.Next();
             while (pObject && !bFound)
             {
-                // anything on the internal layer except captions (annotations)
+                
                 if ( (pObject->GetLayer() == SC_LAYER_INTERN) && !ScDrawLayer::IsNoteCaption( pObject ) )
                     bFound = true;
 
@@ -549,11 +549,11 @@ bool ScDocument::HasDetectiveObjects(SCTAB nTab) const
 
 void ScDocument::UpdateFontCharSet()
 {
-    //  In alten Versionen (bis incl. 4.0 ohne SP) wurden beim Austausch zwischen
-    //  Systemen die CharSets in den Font-Attributen nicht angepasst.
-    //  Das muss fuer Dokumente bis incl SP2 nun nachgeholt werden:
-    //  Alles, was nicht SYMBOL ist, wird auf den System-CharSet umgesetzt.
-    //  Bei neuen Dokumenten (Version SC_FONTCHARSET) sollte der CharSet stimmen.
+    
+    
+    
+    
+    
 
     bool bUpdateOld = ( nSrcVer < SC_FONTCHARSET );
 
@@ -609,13 +609,13 @@ void ScDocument::SetImportingXML( bool bVal )
 
     if ( !bVal )
     {
-        // #i57869# after loading, do the real RTL mirroring for the sheets that have the LoadingRTL flag set
+        
 
         for ( SCTAB nTab=0; nTab< static_cast<SCTAB>(maTabs.size()) && maTabs[nTab]; nTab++ )
             if ( maTabs[nTab]->IsLoadingRTL() )
             {
                 maTabs[nTab]->SetLoadingRTL( false );
-                SetLayoutRTL( nTab, true );             // includes mirroring; bImportingXML must be cleared first
+                SetLayoutRTL( nTab, true );             
             }
     }
 

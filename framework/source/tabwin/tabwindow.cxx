@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tabwin/tabwindow.hxx>
@@ -36,18 +36,18 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace com::sun::star;
 
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
+
+
 DEFINE_XINTERFACE_11                    (   TabWindow                                                                          ,
                                             ::cppu::OWeakObject                                                                ,
                                             DIRECT_INTERFACE( css::lang::XTypeProvider                                        ),
@@ -103,9 +103,9 @@ TabWindow::~TabWindow()
 {
 }
 
-//---------------------------------------------------------------------------------------------------------
-// Helper
-//---------------------------------------------------------------------------------------------------------
+
+
+
 
 void TabWindow::implts_LayoutWindows() const
 {
@@ -120,7 +120,7 @@ void TabWindow::implts_LayoutWindows() const
     aLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    // Convert relativ size to output size.
+    
     if ( xWindow.is() && xDevice.is() )
     {
         css::awt::Rectangle  aRectangle  = xWindow->getPosSize();
@@ -232,9 +232,9 @@ void TabWindow::implts_SendNotification( Notification eNotify, sal_Int32 ID, con
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
-// Links
-//---------------------------------------------------------------------------------------------------------
+
+
+
 
 IMPL_LINK( TabWindow, Activate, TabControl*, pTabControl )
 {
@@ -266,9 +266,9 @@ IMPL_LINK( TabWindow, Deactivate, TabControl*, pTabControl )
     return 1;
 }
 
-//---------------------------------------------------------------------------------------------------------
-// XInitilization
-//---------------------------------------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL TabWindow::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 throw (css::uno::Exception, css::uno::RuntimeException)
@@ -329,7 +329,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
         {
             if ( !xTopWindow.is() )
             {
-                // describe top window properties.
+                
                 aDescriptor.Type                =   css::awt::WindowClass_TOP;
                 aDescriptor.ParentIndex         =   -1;
                 aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >();
@@ -367,7 +367,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
                 css::uno::Reference< css::awt::XWindow > xContainerWindow;
                 css::uno::Reference< css::awt::XWindow > xTabControl;
 
-                // describe container window properties.
+                
                 aDescriptor.Type                =   css::awt::WindowClass_SIMPLE;
                 aDescriptor.ParentIndex         =   -1;
                 aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >( xTopWindow, css::uno::UNO_QUERY );
@@ -376,7 +376,7 @@ throw (css::uno::Exception, css::uno::RuntimeException)
 
                 xContainerWindow = css::uno::Reference< css::awt::XWindow >( xToolkit->createWindow( aDescriptor ), css::uno::UNO_QUERY );
 
-                // create a tab control window properties
+                
                 aDescriptor.Type                = css::awt::WindowClass_SIMPLE;
                 aDescriptor.WindowServiceName   = "tabcontrol";
                 aDescriptor.ParentIndex         = -1;
@@ -423,12 +423,12 @@ throw (css::uno::Exception, css::uno::RuntimeException)
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
-//  XComponent
-//---------------------------------------------------------------------------------------------------------
+
+
+
 void SAL_CALL TabWindow::dispose() throw (css::uno::RuntimeException)
 {
-    // Send message to all listener and forget her references.
+    
     css::uno::Reference< css::lang::XComponent > xThis(
         static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::lang::EventObject aEvent( xThis );
@@ -491,17 +491,17 @@ throw (css::uno::RuntimeException)
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::lang::XEventListener >* ) NULL ), xListener );
 }
 
-//---------------------------------------------------------------------------------------------------------
-// XEventListener
-//---------------------------------------------------------------------------------------------------------
+
+
+
 void SAL_CALL TabWindow::disposing( const css::lang::EventObject& )
 throw( css::uno::RuntimeException )
 {
 }
 
-//---------------------------------------------------------------------------------------------------------
-// XWindowListener
-//---------------------------------------------------------------------------------------------------------
+
+
+
 void SAL_CALL TabWindow::windowResized( const css::awt::WindowEvent& )
 throw( css::uno::RuntimeException )
 {
@@ -548,9 +548,9 @@ throw( css::uno::RuntimeException )
         pTabControl->Hide();
 }
 
-//---------------------------------------------------------------------------------------------------------
-// XTopWindowListener
-//---------------------------------------------------------------------------------------------------------
+
+
+
 void SAL_CALL TabWindow::windowOpened( const css::lang::EventObject& )
 throw (css::uno::RuntimeException)
 {
@@ -589,9 +589,9 @@ throw (css::uno::RuntimeException)
 {
 }
 
-//---------------------------------------------------------------------------------------------------------
-//  XSimpleTabController
-//---------------------------------------------------------------------------------------------------------
+
+
+
 
 ::sal_Int32 SAL_CALL TabWindow::insertTab()
 throw (css::uno::RuntimeException)
@@ -642,7 +642,7 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException)
 
         implts_SendNotification( NOTIFY_REMOVED, ID );
 
-        // activate new tab if old tab was active!
+        
         nPos = pTabControl->GetPagePos( sal_uInt16( nCurTabId ));
         if ( nPos != TAB_PAGE_NOTFOUND && nCurTabId != ID )
             activateTab( nCurTabId );
@@ -815,19 +815,19 @@ throw (css::uno::RuntimeException)
         ::getCppuType( ( const css::uno::Reference< css::awt::XTabListener >* ) NULL ), xListener );
 }
 
-//---------------------------------------------------------------------------------------------------------
-//  OPropertySetHelper
-//---------------------------------------------------------------------------------------------------------
 
-// XPropertySet helper
+
+
+
+
 sal_Bool SAL_CALL TabWindow::convertFastPropertyValue( css::uno::Any&       aConvertedValue ,
                                                        css::uno::Any&       aOldValue       ,
                                                        sal_Int32            nHandle         ,
                                                        const css::uno::Any& aValue             )
 throw( css::lang::IllegalArgumentException )
 {
-    //  Initialize state with sal_False !!!
-    //  (Handle can be invalid)
+    
+    
     sal_Bool bReturn = sal_False;
 
     switch( nHandle )
@@ -849,7 +849,7 @@ throw( css::lang::IllegalArgumentException )
                 break;
     }
 
-    // Return state of operation.
+    
     return bReturn ;
 }
 
@@ -875,22 +875,22 @@ void SAL_CALL TabWindow::getFastPropertyValue( css::uno::Any& aValue  ,
 
 ::cppu::IPropertyArrayHelper& SAL_CALL TabWindow::getInfoHelper()
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfoHelper is NULL - for the second call pInfoHelper is different from NULL!
+    
+    
+    
     static ::cppu::OPropertyArrayHelper* pInfoHelper = NULL;
 
     if( pInfoHelper == NULL )
     {
-        // Ready for multithreading
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        // Control this pointer again, another instance can be faster then these!
+        
         if( pInfoHelper == NULL )
         {
-            // Define static member to give structure of properties to baseclass "OPropertySetHelper".
-            // "impl_getStaticPropertyDescriptor" is a non exported and static funtion, who will define a static propertytable.
-            // "sal_True" say: Table is sorted by name.
+            
+            
+            
             static ::cppu::OPropertyArrayHelper aInfoHelper( impl_getStaticPropertyDescriptor(), sal_True );
             pInfoHelper = &aInfoHelper;
         }
@@ -902,20 +902,20 @@ void SAL_CALL TabWindow::getFastPropertyValue( css::uno::Any& aValue  ,
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL TabWindow::getPropertySetInfo()
 throw ( css::uno::RuntimeException )
 {
-    // Optimize this method !
-    // We initialize a static variable only one time. And we don't must use a mutex at every call!
-    // For the first call; pInfo is NULL - for the second call pInfo is different from NULL!
+    
+    
+    
     static css::uno::Reference< css::beans::XPropertySetInfo >* pInfo = NULL;
 
     if( pInfo == NULL )
     {
-        // Ready for multithreading
+        
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
-        // Control this pointer again, another instance can be faster then these!
+        
         if( pInfo == NULL )
         {
-            // Create structure of propertysetinfo for baseclass "OPropertySetHelper".
-            // (Use method "getInfoHelper()".)
+            
+            
             static css::uno::Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
             pInfo = &xInfo;
         }
@@ -926,12 +926,12 @@ throw ( css::uno::RuntimeException )
 
 const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticPropertyDescriptor()
 {
-    // Create property array to initialize sequence!
-    // Table of all predefined properties of this class. Its used from OPropertySetHelper-class!
-    // Don't forget to change the defines (see begin of this file), if you add, change or delete a property in this list!!!
-    // It's necessary for methods of OPropertySetHelper.
-    // ATTENTION:
-    //      YOU MUST SORT FOLLOW TABLE BY NAME ALPHABETICAL !!!
+    
+    
+    
+    
+    
+    
 
     const com::sun::star::beans::Property pProperties[] =
     {
@@ -943,10 +943,10 @@ const css::uno::Sequence< css::beans::Property > TabWindow::impl_getStaticProper
                                          TABWINDOW_PROPHANDLE_TOPWINDOW,
                                          ::getCppuType((const css::uno::Reference< css::awt::XWindow >*)NULL),
                                          com::sun::star::beans::PropertyAttribute::READONLY  )
-    };  // Use it to initialize sequence!
+    };  
     const com::sun::star::uno::Sequence< com::sun::star::beans::Property > lPropertyDescriptor( pProperties, TABWINDOW_PROPCOUNT );
 
-    // Return "PropertyDescriptor"
+    
     return lPropertyDescriptor;
 }
 

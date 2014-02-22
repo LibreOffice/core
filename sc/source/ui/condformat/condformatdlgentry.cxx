@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "condformatdlg.hxx"
@@ -84,7 +84,7 @@ void ScCondFrmtEntry::SetHeight()
 {
     long nPad = LogicToPixel(Size(42,2), MapMode(MAP_APPFONT)).getHeight();
 
-    // Calculate maximum height we need from visible widgets
+    
     sal_uInt16 nChildren = GetChildCount();
 
     long nMaxHeight = 0;
@@ -147,7 +147,7 @@ IMPL_LINK(ScCondFrmtEntry, EdModifyHdl, Edit*, pEdit)
 }
 
 //
-//condition
+
 //
 namespace {
 
@@ -234,7 +234,7 @@ ScConditionFrmtEntry::ScConditionFrmtEntry( Window* pParent, ScDocument* pDoc, c
                 break;
             case SC_COND_DIRECT:
                 assert(false);
-                //maLbType.SelectEntryPos(2);
+                
                 break;
             case SC_COND_TOP10:
                 maLbCondType.SelectEntryPos(10);
@@ -401,7 +401,7 @@ ScFormatEntry* ScConditionFrmtEntry::createConditionEntry() const
             eMode = SC_COND_NOT_CONTAINS_TEXT;
             break;
         default:
-            assert(false); // this cannot happen
+            assert(false); 
             return NULL;
     }
 
@@ -482,20 +482,20 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
 {
     if(rLbStyle.GetSelectEntryPos() == 0)
     {
-        // call new style dialog
+        
         SfxUInt16Item aFamilyItem( SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA );
         SfxStringItem aRefItem( SID_STYLE_REFERENCE, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
 
-        // unlock the dispatcher so SID_STYLE_NEW can be executed
-        // (SetDispatcherLock would affect all Calc documents)
+        
+        
         ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
         SfxDispatcher* pDisp = pViewShell->GetDispatcher();
         sal_Bool bLocked = pDisp->IsLocked();
         if (bLocked)
             pDisp->Lock(false);
 
-        // Execute the "new style" slot, complete with undo and all necessary updates.
-        // The return value (SfxUInt16Item) is ignored, look for new styles instead.
+        
+        
         pDisp->Execute( SID_STYLE_NEW, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD | SFX_CALLMODE_MODAL,
                 &aFamilyItem,
                 &aRefItem,
@@ -504,13 +504,13 @@ void StyleSelect( ListBox& rLbStyle, ScDocument* pDoc, SvxFontPrevWindow& rWdPre
         if (bLocked)
             pDisp->Lock(sal_True);
 
-        // Find the new style and add it into the style list boxes
+        
         SfxStyleSheetIterator aStyleIter( pDoc->GetStyleSheetPool(), SFX_STYLE_FAMILY_PARA );
         bool bFound = false;
         for ( SfxStyleSheetBase* pStyle = aStyleIter.First(); pStyle && !bFound; pStyle = aStyleIter.Next() )
         {
             OUString aName = pStyle->GetName();
-            if ( rLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    // all lists contain the same entries
+            if ( rLbStyle.GetEntryPos(aName) == LISTBOX_ENTRY_NOTFOUND )    
             {
                 for( sal_uInt16 i = 1, n = rLbStyle.GetEntryCount(); i <= n && !bFound; ++i)
                 {
@@ -551,7 +551,7 @@ IMPL_LINK_NOARG(ScConditionFrmtEntry, StyleSelectHdl)
     return 0;
 }
 
-// formula
+
 
 ScFormulaFrmtEntry::ScFormulaFrmtEntry( Window* pParent, ScDocument* pDoc, const ScAddress& rPos, const ScCondFormatEntry* pFormat ):
     ScCondFrmtEntry( pParent, pDoc, rPos ),
@@ -636,7 +636,7 @@ void ScFormulaFrmtEntry::SetInactive()
     Deselect();
 }
 
-//color scale
+
 
 namespace {
 
@@ -650,7 +650,7 @@ OUString convertNumberToString(double nVal, ScDocument* pDoc)
 
 void SetColorScaleEntryTypes( const ScColorScaleEntry& rEntry, ListBox& rLbType, Edit& rEdit, ColorListBox& rLbCol, ScDocument* pDoc )
 {
-    // entry Automatic is not available for color scales
+    
     sal_Int32 nIndex = static_cast<sal_Int32>(rEntry.GetType());
     assert(nIndex > 0);
     rLbType.SelectEntryPos(nIndex - 1);
@@ -684,7 +684,7 @@ void SetColorScaleEntry( ScColorScaleEntry* pEntry, const ListBox& rType, const 
     SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
     pNumberFormatter->IsNumberFormat(rValue.GetText(), nIndex, nVal);
 
-    // color scale does not have the automatic entry
+    
     sal_Int32 nPos = rType.GetSelectEntryPos();
     if(!bDataBar)
         ++nPos;
@@ -731,7 +731,7 @@ ScColorScale2FrmtEntry::ScColorScale2FrmtEntry( Window* pParent, ScDocument* pDo
     maLbColMin( this, ScResId( LB_COL_MIN ) ),
     maLbColMax( this, ScResId( LB_COL_MAX ) )
 {
-    // remove the automatic entry from color scales
+    
     maLbEntryTypeMin.RemoveEntry(0);
     maLbEntryTypeMax.RemoveEntry(0);
 
@@ -776,7 +776,7 @@ void ScColorScale2FrmtEntry::Init()
     }
     if ( pColorTable.is() )
     {
-        // filling the line color box
+        
         maLbColMin.SetUpdateMode( false );
         maLbColMax.SetUpdateMode( false );
 
@@ -882,7 +882,7 @@ ScColorScale3FrmtEntry::ScColorScale3FrmtEntry( Window* pParent, ScDocument* pDo
     maLbColMiddle( this, ScResId( LB_COL_MIDDLE ) ),
     maLbColMax( this, ScResId( LB_COL_MAX ) )
 {
-    // remove the automatic entry from color scales
+    
     maLbEntryTypeMin.RemoveEntry(0);
     maLbEntryTypeMiddle.RemoveEntry(0);
     maLbEntryTypeMax.RemoveEntry(0);
@@ -935,7 +935,7 @@ void ScColorScale3FrmtEntry::Init()
     }
     if ( pColorTable.is() )
     {
-        // filling the line color box
+        
         maLbColMin.SetUpdateMode( false );
         maLbColMiddle.SetUpdateMode( false );
         maLbColMax.SetUpdateMode( false );
@@ -1070,7 +1070,7 @@ IMPL_LINK_NOARG( ScConditionFrmtEntry, ConditionTypeSelectHdl )
     return 0;
 }
 
-//databar
+
 
 namespace {
 

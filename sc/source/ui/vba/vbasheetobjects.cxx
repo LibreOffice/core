@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbasheetobjects.hxx"
@@ -35,7 +35,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-// ============================================================================
+
 
 namespace {
 
@@ -58,11 +58,11 @@ inline double lclPointsToHmm( const uno::Any& rPoints ) throw (uno::RuntimeExcep
     return PointsToHmm( ::rtl::math::approxFloor( rPoints.get< double >() / 0.75 ) * 0.75 );
 }
 
-} // namespace
+} 
 
-// ============================================================================
-// Base implementations
-// ============================================================================
+
+
+
 
 /** Container for a specific type of drawing object in a spreadsheet.
 
@@ -100,11 +100,11 @@ public:
     /** Returns the VBA implementation object with the specified name. */
     uno::Any getItemByStringIndex( const OUString& rIndex ) throw (uno::RuntimeException);
 
-    // XIndexAccess
+    
     virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException);
     virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException);
 
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException);
 
@@ -134,7 +134,7 @@ private:
     ShapeVector maShapes;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaObjectContainer::ScVbaObjectContainer(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -200,7 +200,7 @@ uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex ) th
     throw uno::RuntimeException();
 }
 
-// XIndexAccess
+
 
 sal_Int32 SAL_CALL ScVbaObjectContainer::getCount() throw (uno::RuntimeException)
 {
@@ -215,7 +215,7 @@ uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
     throw lang::IndexOutOfBoundsException();
 }
 
-// XElementAccess
+
 
 uno::Type SAL_CALL ScVbaObjectContainer::getElementType() throw (uno::RuntimeException)
 {
@@ -227,7 +227,7 @@ sal_Bool SAL_CALL ScVbaObjectContainer::hasElements() throw (uno::RuntimeExcepti
     return !maShapes.empty();
 }
 
-// private
+
 
 OUString ScVbaObjectContainer::implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException)
 {
@@ -239,7 +239,7 @@ void ScVbaObjectContainer::implOnShapeCreated( const uno::Reference< drawing::XS
 {
 }
 
-// ============================================================================
+
 
 class ScVbaObjectEnumeration : public SimpleEnumerationBase
 {
@@ -251,7 +251,7 @@ private:
     ScVbaObjectContainerRef mxContainer;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaObjectEnumeration::ScVbaObjectEnumeration( const ScVbaObjectContainerRef& rxContainer ) :
     SimpleEnumerationBase( rxContainer->getParent(), rxContainer->getContext(), rxContainer.get() ),
@@ -264,7 +264,7 @@ uno::Any ScVbaObjectEnumeration::createCollectionObject( const uno::Any& rSource
     return mxContainer->createCollectionObject( rSource );
 }
 
-// ============================================================================
+
 
 ScVbaSheetObjectsBase::ScVbaSheetObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (css::uno::RuntimeException) :
     ScVbaSheetObjects_BASE( rxContainer->getParent(), rxContainer->getContext(), rxContainer.get() ),
@@ -282,21 +282,21 @@ void ScVbaSheetObjectsBase::collectShapes() throw (uno::RuntimeException)
     mxContainer->collectShapes();
 }
 
-// XEnumerationAccess
+
 
 uno::Reference< container::XEnumeration > SAL_CALL ScVbaSheetObjectsBase::createEnumeration() throw (uno::RuntimeException)
 {
     return new ScVbaObjectEnumeration( mxContainer );
 }
 
-// XElementAccess
+
 
 uno::Type SAL_CALL ScVbaSheetObjectsBase::getElementType() throw (uno::RuntimeException)
 {
     return mxContainer->getVbaType();
 }
 
-// ScVbaCollectionBase
+
 
 uno::Any ScVbaSheetObjectsBase::createCollectionObject( const uno::Any& rSource )
 {
@@ -308,16 +308,16 @@ uno::Any ScVbaSheetObjectsBase::getItemByStringIndex( const OUString& rIndex ) t
     return mxContainer->getItemByStringIndex( rIndex );
 }
 
-// ============================================================================
-// Graphic object containers supporting ooo.vba.excel.XGraphicObject
-// ============================================================================
+
+
+
 
 ScVbaGraphicObjectsBase::ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (uno::RuntimeException) :
     ScVbaGraphicObjects_BASE( rxContainer )
 {
 }
 
-// XGraphicObjects
+
 
 uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno::Any& rTop, const uno::Any& rWidth, const uno::Any& rHeight ) throw (uno::RuntimeException)
 {
@@ -326,23 +326,23 @@ uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno
         points to 1/100 mm. */
     awt::Point aPos( static_cast<sal_Int32>(lclPointsToHmm( rLeft )),  static_cast<sal_Int32>(lclPointsToHmm( rTop )) );
     awt::Size aSize( static_cast<sal_Int32>(lclPointsToHmm( rWidth )), static_cast<sal_Int32>(lclPointsToHmm( rHeight )) );
-    // TODO: translate coordinates for RTL sheets
+    
     if( (aPos.X < 0) || (aPos.Y < 0) || (aSize.Width <= 0) || (aSize.Height <= 0) )
         throw uno::RuntimeException();
 
-    // create the UNO shape
+    
     uno::Reference< drawing::XShape > xShape( mxContainer->createShape( aPos, aSize ), uno::UNO_SET_THROW );
     sal_Int32 nIndex = mxContainer->insertShape( xShape );
 
-    // create and return the VBA object
+    
     ::rtl::Reference< ScVbaSheetObjectBase > xVbaObject = mxContainer->createVbaObject( xShape );
     xVbaObject->setDefaultProperties( nIndex );
     return uno::Any( uno::Reference< excel::XSheetObject >( xVbaObject.get() ) );
 }
 
-// ============================================================================
-// Drawing controls
-// ============================================================================
+
+
+
 
 class ScVbaControlContainer : public ScVbaObjectContainer
 {
@@ -371,7 +371,7 @@ protected:
     sal_Int16 mnComponentType;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaControlContainer::ScVbaControlContainer(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -442,22 +442,22 @@ OUString ScVbaControlContainer::implGetShapeName( const uno::Reference< drawing:
 
 void ScVbaControlContainer::implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException)
 {
-    // passed shape must be a control shape
+    
     uno::Reference< drawing::XControlShape > xControlShape( rxShape, uno::UNO_QUERY_THROW );
 
-    // create the UNO control model
+    
     uno::Reference< form::XFormComponent > xFormComponent( mxFactory->createInstance( maModelServiceName ), uno::UNO_QUERY_THROW );
     uno::Reference< awt::XControlModel > xControlModel( xFormComponent, uno::UNO_QUERY_THROW );
 
-    // insert the control model into the form and the shape
+    
     createForm();
     mxFormIC->insertByIndex( mxFormIC->getCount(), uno::Any( xFormComponent ) );
     xControlShape->setControl( xControlModel );
 }
 
-// ============================================================================
-// Push button
-// ============================================================================
+
+
+
 
 class ScVbaButtonContainer : public ScVbaControlContainer
 {
@@ -473,7 +473,7 @@ protected:
     virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const;
 };
 
-// ----------------------------------------------------------------------------
+
 
 ScVbaButtonContainer::ScVbaButtonContainer(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -496,12 +496,12 @@ ScVbaSheetObjectBase* ScVbaButtonContainer::implCreateVbaObject( const uno::Refe
 
 bool ScVbaButtonContainer::implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const
 {
-    // do not insert toggle buttons into the 'Buttons' collection
+    
     bool bToggle = false;
     return lclGetProperty( bToggle, rxModelProps, "Toggle" ) && !bToggle;
 }
 
-// ============================================================================
+
 
 ScVbaButtons::ScVbaButtons(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -514,6 +514,6 @@ ScVbaButtons::ScVbaButtons(
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButtons, "ooo.vba.excel.Buttons" )
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "propertyeditor.hxx"
@@ -23,10 +23,10 @@
 
 #include <tools/debug.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     #define LAYOUT_BORDER_LEFT      3
     #define LAYOUT_BORDER_TOP       3
@@ -37,11 +37,11 @@ namespace pcr
     using ::com::sun::star::inspection::XPropertyControl;
     using ::com::sun::star::uno::Reference;
 
-    //==================================================================
-    // class OPropertyEditor
-    //==================================================================
+    
+    
+    
     DBG_NAME(OPropertyEditor)
-    //------------------------------------------------------------------
+    
     OPropertyEditor::OPropertyEditor( Window* pParent, WinBits nWinStyle)
             :Control(pParent, nWinStyle)
             ,m_aTabControl( this )
@@ -59,7 +59,7 @@ namespace pcr
         m_aTabControl.SetPaintTransparent(true);
     }
 
-    //------------------------------------------------------------------
+    
     OPropertyEditor::~OPropertyEditor()
     {
         Hide();
@@ -67,7 +67,7 @@ namespace pcr
         DBG_DTOR(OPropertyEditor,NULL);
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::ClearAll()
     {
         m_nNextId=1;
@@ -97,7 +97,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     sal_Int32 OPropertyEditor::getMinimumHeight()
     {
         sal_Int32 nMinHeight( LAYOUT_BORDER_TOP + LAYOUT_BORDER_BOTTOM );
@@ -106,22 +106,22 @@ namespace pcr
         {
             sal_uInt16 nFirstID = m_aTabControl.GetPageId( 0 );
 
-            // reserve space for the tabs themself
+            
             Rectangle aTabArea( m_aTabControl.GetTabBounds( nFirstID ) );
             nMinHeight += aTabArea.GetHeight();
 
-            // ask the page how much it requires
+            
             OBrowserPage* pPage = static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( nFirstID ) );
             if ( pPage )
                 nMinHeight += pPage->getMinimumHeight();
         }
         else
-            nMinHeight += 250;  // arbitrary ...
+            nMinHeight += 250;  
 
         return nMinHeight;
     }
 
-    //------------------------------------------------------------------
+    
     sal_Int32 OPropertyEditor::getMinimumWidth()
     {
         sal_uInt16 nCount = m_aTabControl.GetPageCount();
@@ -140,10 +140,10 @@ namespace pcr
         return nPageMinWidth+6;
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::CommitModified()
     {
-        // commit all of my pages, if necessary
+        
 
         sal_uInt16 nCount = m_aTabControl.GetPageCount();
         for ( sal_uInt16 i=0; i<nCount; ++i )
@@ -156,13 +156,13 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::GetFocus()
     {
         m_aTabControl.GrabFocus();
     }
 
-    //------------------------------------------------------------------
+    
     OBrowserPage* OPropertyEditor::getPage( const OUString& _rPropertyName )
     {
         OBrowserPage* pPage = NULL;
@@ -172,25 +172,25 @@ namespace pcr
         return pPage;
     }
 
-    //------------------------------------------------------------------
+    
     const OBrowserPage* OPropertyEditor::getPage( const OUString& _rPropertyName ) const
     {
         return const_cast< OPropertyEditor* >( this )->getPage( _rPropertyName );
     }
 
-    //------------------------------------------------------------------
+    
     OBrowserPage* OPropertyEditor::getPage( sal_uInt16& _rPageId )
     {
         return static_cast< OBrowserPage* >( m_aTabControl.GetTabPage( _rPageId ) );
     }
 
-    //------------------------------------------------------------------
+    
     const OBrowserPage* OPropertyEditor::getPage( sal_uInt16& _rPageId ) const
     {
         return const_cast< OPropertyEditor* >( this )->getPage( _rPageId );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::Resize()
     {
         Rectangle aPlayground(
@@ -205,18 +205,18 @@ namespace pcr
         m_aTabControl.SetPosSizePixel( aTabArea.TopLeft(), aTabArea.GetSize() );
     }
 
-    //------------------------------------------------------------------
+    
     sal_uInt16 OPropertyEditor::AppendPage( const OUString & _rText, const OString& _rHelpId )
     {
-        // obtain a new id
+        
         sal_uInt16 nId = m_nNextId++;
-        // insert the id
+        
         m_aTabControl.InsertPage(nId, _rText);
 
-        // create a new page
+        
         OBrowserPage* pPage = new OBrowserPage(&m_aTabControl);
         pPage->SetText( _rText );
-        // some knittings
+        
         pPage->SetSizePixel(m_aTabControl.GetTabPageSizePixel());
         pPage->getListBox().SetListener(m_pListener);
         pPage->getListBox().SetObserver(m_pObserver);
@@ -224,21 +224,21 @@ namespace pcr
         pPage->getListBox().SetHelpLineLimites( m_nMinHelpLines, m_nMaxHelpLines );
         pPage->SetHelpId( _rHelpId );
 
-        // immediately activate the page
+        
         m_aTabControl.SetTabPage(nId, pPage);
         m_aTabControl.SetCurPageId(nId);
 
         return nId;
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::SetHelpId( const OString& rHelpId )
     {
         Control::SetHelpId("");
         m_aTabControl.SetHelpId(rHelpId);
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::RemovePage(sal_uInt16 nID)
     {
         OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(nID));
@@ -250,13 +250,13 @@ namespace pcr
             delete pPage;
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::SetPage(sal_uInt16 nId)
     {
         m_aTabControl.SetCurPageId(nId);
     }
 
-    //------------------------------------------------------------------
+    
     sal_uInt16 OPropertyEditor::GetCurPage()
     {
         if(m_aTabControl.GetPageCount()>0)
@@ -265,10 +265,10 @@ namespace pcr
             return 0;
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::Update(const ::std::mem_fun_t<void,OBrowserListBox>& _aUpdateFunction)
     {
-        // forward this to all our pages
+        
         sal_uInt16 nCount = m_aTabControl.GetPageCount();
         for (sal_uInt16 i=0;i<nCount;++i)
         {
@@ -278,18 +278,18 @@ namespace pcr
                 _aUpdateFunction(&pPage->getListBox());
         }
     }
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::EnableUpdate()
     {
         Update(::std::mem_fun(&OBrowserListBox::EnableUpdate));
     }
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::DisableUpdate()
     {
         Update(::std::mem_fun(&OBrowserListBox::DisableUpdate));
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::forEachPage( PageOperation _pOperation, const void* _pArgument )
     {
         sal_uInt16 nCount = m_aTabControl.GetPageCount();
@@ -303,52 +303,52 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::setPageLineListener( OBrowserPage& _rPage, const void* )
     {
         _rPage.getListBox().SetListener( m_pListener );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::SetLineListener(IPropertyLineListener* _pListener)
     {
         m_pListener = _pListener;
         forEachPage( &OPropertyEditor::setPageLineListener );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::setPageControlObserver( OBrowserPage& _rPage, const void* )
     {
         _rPage.getListBox().SetObserver( m_pObserver );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::SetControlObserver( IPropertyControlObserver* _pObserver )
     {
         m_pObserver = _pObserver;
         forEachPage( &OPropertyEditor::setPageControlObserver );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::EnableHelpSection( bool _bEnable )
     {
         m_bHasHelpSection = _bEnable;
         forEachPage( &OPropertyEditor::enableHelpSection );
     }
 
-    //------------------------------------------------------------------
+    
     bool OPropertyEditor::HasHelpSection() const
     {
         return m_bHasHelpSection;
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::SetHelpText( const OUString& _rHelpText )
     {
         forEachPage( &OPropertyEditor::setHelpSectionText, &_rHelpText );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::SetHelpLineLimites( sal_Int32 _nMinLines, sal_Int32 _nMaxLines )
     {
         m_nMinHelpLines = _nMinLines;
@@ -356,13 +356,13 @@ namespace pcr
         forEachPage( &OPropertyEditor::setHelpLineLimits );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::enableHelpSection( OBrowserPage& _rPage, const void* )
     {
         _rPage.getListBox().EnableHelpSection( m_bHasHelpSection );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::setHelpSectionText( OBrowserPage& _rPage, const void* _pPointerToOUString )
     {
         OSL_ENSURE( _pPointerToOUString, "OPropertyEditor::setHelpSectionText: invalid argument!" );
@@ -373,16 +373,16 @@ namespace pcr
         _rPage.getListBox().SetHelpText( rText );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::setHelpLineLimits( OBrowserPage& _rPage, const void* )
     {
         _rPage.getListBox().SetHelpLineLimites( m_nMinHelpLines, m_nMaxHelpLines );
     }
 
-    //------------------------------------------------------------------
+    
     sal_uInt16 OPropertyEditor::InsertEntry( const OLineDescriptor& rData, sal_uInt16 _nPageId, sal_uInt16 nPos )
     {
-        // let the current page handle this
+        
         OBrowserPage* pPage = getPage( _nPageId );
         DBG_ASSERT( pPage, "OPropertyEditor::InsertEntry: don't have such a page!" );
         if ( !pPage )
@@ -397,7 +397,7 @@ namespace pcr
         return nEntry;
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::RemoveEntry( const OUString& _rName )
     {
         OBrowserPage* pPage = getPage( _rName );
@@ -411,7 +411,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::ChangeEntry( const OLineDescriptor& rData )
     {
         OBrowserPage* pPage = getPage( rData.sName );
@@ -419,7 +419,7 @@ namespace pcr
             pPage->getListBox().ChangeEntry( rData, EDITOR_LIST_REPLACE_EXISTING );
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::SetPropertyValue( const OUString& rEntryName, const Any& _rValue, bool _bUnknownValue )
     {
         OBrowserPage* pPage = getPage( rEntryName );
@@ -427,7 +427,7 @@ namespace pcr
             pPage->getListBox().SetPropertyValue( rEntryName, _rValue, _bUnknownValue );
     }
 
-    //------------------------------------------------------------------
+    
     sal_uInt16 OPropertyEditor::GetPropertyPos( const OUString& rEntryName ) const
     {
         sal_uInt16 nVal=LISTBOX_ENTRY_NOTFOUND;
@@ -437,7 +437,7 @@ namespace pcr
         return nVal;
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::ShowPropertyPage( sal_uInt16 _nPageId, bool _bShow )
     {
         if ( !_bShow )
@@ -464,7 +464,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::EnablePropertyControls( const OUString& _rEntryName, sal_Int16 _nControls, bool _bEnable )
     {
         for ( sal_uInt16 i = 0; i < m_aTabControl.GetPageCount(); ++i )
@@ -475,7 +475,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OPropertyEditor::EnablePropertyLine( const OUString& _rEntryName, bool _bEnable )
     {
         for ( sal_uInt16 i = 0; i < m_aTabControl.GetPageCount(); ++i )
@@ -486,18 +486,18 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     Reference< XPropertyControl > OPropertyEditor::GetPropertyControl(const OUString& rEntryName)
     {
         Reference< XPropertyControl > xControl;
-        // let the current page handle this
+        
         OBrowserPage* pPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage(m_aTabControl.GetCurPageId()));
         if (pPage)
             xControl = pPage->getListBox().GetPropertyControl(rEntryName);
         return xControl;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(OPropertyEditor, OnPageActivate)
     {
         if (m_aPageActivationHandler.IsSet())
@@ -505,11 +505,11 @@ namespace pcr
         return 0L;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(OPropertyEditor, OnPageDeactivate)
     {
-        // commit the data on the current (to-be-decativated) tab page
-        // (79404)
+        
+        
         sal_Int32 nCurrentId = m_aTabControl.GetCurPageId();
         OBrowserPage* pCurrentPage = static_cast<OBrowserPage*>(m_aTabControl.GetTabPage((sal_uInt16)nCurrentId));
         if ( !pCurrentPage )
@@ -521,9 +521,9 @@ namespace pcr
         return 1L;
     }
 
-//............................................................................
-} // namespace pcr
-//............................................................................
+
+} 
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

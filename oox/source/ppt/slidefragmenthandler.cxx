@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/anytostring.hxx"
@@ -62,7 +62,7 @@ SlideFragmentHandler::SlideFragmentHandler( XmlFilterBase& rFilter, const OUStri
 
 SlideFragmentHandler::~SlideFragmentHandler() throw()
 {
-    // convert and insert all VML shapes (mostly form controls)
+    
     mpSlidePersistPtr->getDrawing()->convertAndInsert();
 }
 
@@ -70,9 +70,9 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
 {
     switch( aElementToken )
     {
-    case PPT_TOKEN( sldMaster ):        // CT_SlideMaster
-    case PPT_TOKEN( handoutMaster ):    // CT_HandoutMaster
-    case PPT_TOKEN( sld ):              // CT_CommonSlideData
+    case PPT_TOKEN( sldMaster ):        
+    case PPT_TOKEN( handoutMaster ):    
+    case PPT_TOKEN( sld ):              
     {
         Reference< XDrawPage > xSlide( mpSlidePersistPtr->getPage() );
         PropertyMap aPropMap;
@@ -83,9 +83,9 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
 
         return this;
     }
-    case PPT_TOKEN( notes ):            // CT_NotesSlide
+    case PPT_TOKEN( notes ):            
     {
-        // Import notesMaster
+        
         PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
         OUString aNotesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "notesMaster" ) );
 
@@ -114,15 +114,15 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
         }
         return this;
     }
-    case PPT_TOKEN( notesMaster ):      // CT_NotesMaster
+    case PPT_TOKEN( notesMaster ):      
         return this;
-    case PPT_TOKEN( cSld ):             // CT_CommonSlideData
+    case PPT_TOKEN( cSld ):             
         maSlideName = rAttribs.getString(XML_name, OUString());
         return this;
 
-    case PPT_TOKEN( spTree ):           // CT_GroupShape
+    case PPT_TOKEN( spTree ):           
         {
-            // TODO Convert this to FragmentHandler2
+            
             return new PPTShapeGroupContext(
                 *this, mpSlidePersistPtr, meShapeLocation, mpSlidePersistPtr->getShapes(),
                 oox::drawingml::ShapePtr( new PPTShape( meShapeLocation, "com.sun.star.drawing.GroupShape" ) ) );
@@ -141,17 +141,17 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
         }
         return this;
 
-    case PPT_TOKEN( timing ): // CT_SlideTiming
+    case PPT_TOKEN( timing ): 
         return new SlideTimingContext( *this, mpSlidePersistPtr->getTimeNodeList() );
-    case PPT_TOKEN( transition ): // CT_SlideTransition
+    case PPT_TOKEN( transition ): 
         return new SlideTransitionContext( *this, rAttribs, maSlideProperties );
     case PPT_TOKEN( hf ):
         return new HeaderFooterContext( *this, rAttribs, mpSlidePersistPtr->getHeaderFooter() );
 
-    // BackgroundGroup
+    
     case PPT_TOKEN( bg ):
         return this;
-    case PPT_TOKEN( bgPr ):             // CT_BackgroundProperties
+    case PPT_TOKEN( bgPr ):             
         {
             FillPropertiesPtr pFillPropertiesPtr( new FillProperties );
             mpSlidePersistPtr->setBackgroundProperties( pFillPropertiesPtr );
@@ -159,7 +159,7 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
         }
         break;
 
-    case PPT_TOKEN( bgRef ):            // a:CT_StyleMatrixReference
+    case PPT_TOKEN( bgRef ):            
         {
             const FillProperties *pFillProperties = NULL;
             if( mpSlidePersistPtr->getTheme() )
@@ -172,7 +172,7 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
         break;
 
     case A_TOKEN( overrideClrMapping ):
-    case PPT_TOKEN( clrMap ):           // CT_ColorMapping
+    case PPT_TOKEN( clrMap ):           
         {
             oox::drawingml::ClrMapPtr pClrMapPtr( ( aElementToken == PPT_TOKEN( clrMap ) || !mpSlidePersistPtr.get() || !mpSlidePersistPtr->getClrMap().get() ) ? new oox::drawingml::ClrMap() : new oox::drawingml::ClrMap( *mpSlidePersistPtr->getClrMap() ) );
             ContextHandlerRef ret = new oox::drawingml::clrMapContext( *this, rAttribs, *pClrMapPtr );
@@ -180,25 +180,25 @@ SlideFragmentHandler::~SlideFragmentHandler() throw()
             return ret;
         }
         break;
-    case PPT_TOKEN( clrMapOvr ):        // CT_ColorMappingOverride
-    case PPT_TOKEN( sldLayoutIdLst ):   // CT_SlideLayoutIdList
+    case PPT_TOKEN( clrMapOvr ):        
+    case PPT_TOKEN( sldLayoutIdLst ):   
         return this;
-    case PPT_TOKEN( txStyles ):         // CT_SlideMasterTextStyles
+    case PPT_TOKEN( txStyles ):         
         return new SlideMasterTextStylesContext( *this, mpSlidePersistPtr );
-    case PPT_TOKEN( custDataLst ):      // CT_CustomerDataList
-    case PPT_TOKEN( tagLst ):           // CT_TagList
+    case PPT_TOKEN( custDataLst ):      
+    case PPT_TOKEN( tagLst ):           
         return this;
 
-    //for Comments
+    
     case PPT_TOKEN( cmLst ):
         break;
     case PPT_TOKEN( cm ):
         if(!mpSlidePersistPtr->getCommentsList().cmLst.empty())
         {
-            // set comment text for earlier comment
+            
             mpSlidePersistPtr->getCommentsList().cmLst.back().setText( getCharVector().back() );
         }
-        // insert a new comment in vector commentsList
+        
         mpSlidePersistPtr->getCommentsList().cmLst.push_back(Comment());
         mpSlidePersistPtr->getCommentsList().cmLst.back().setAuthorId(rAttribs.getString(XML_authorId, OUString()));
         mpSlidePersistPtr->getCommentsList().cmLst.back().setdt(rAttribs.getString(XML_dt, OUString()));

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define UNICODE
@@ -54,7 +54,7 @@ BOOL UnicodeEquals( wchar_t* pStr1, wchar_t* pStr2 )
     return ( *pStr1 == 0 && *pStr2 == 0 );
 }
 
-//----------------------------------------------------------
+
 char* UnicodeToAnsiString( wchar_t* pUniString )
 {
     int len = WideCharToMultiByte(
@@ -68,7 +68,7 @@ char* UnicodeToAnsiString( wchar_t* pUniString )
     return buff;
 }
 
-//----------------------------------------------------------
+
 void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
@@ -95,7 +95,7 @@ void RegisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallFor
     }
 }
 
-//----------------------------------------------------------
+
 void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallForAllUser, BOOL InstallFor64Bit )
 {
     HINSTANCE hModule = LoadLibraryExA( pActiveXPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
@@ -109,7 +109,7 @@ void UnregisterActiveXNative( const char* pActiveXPath, int nMode, BOOL InstallF
     }
 }
 
-//----------------------------------------------------------
+
 BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
 {
     DWORD sz = 0;
@@ -128,7 +128,7 @@ BOOL GetMsiProp( MSIHANDLE hMSI, const wchar_t* pPropName, wchar_t** ppValue )
     return FALSE;
 }
 
-//----------------------------------------------------------
+
 BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
 {
     wchar_t* pProgPath = NULL;
@@ -155,10 +155,10 @@ BOOL GetActiveXControlPath( MSIHANDLE hMSI, char** ppActiveXPath )
     return FALSE;
 }
 
-//----------------------------------------------------------
+
 BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDeinstallMode )
 {
-    // for now the chart is always installed
+    
     nOldInstallMode = CHART_COMPONENT;
     nInstallMode = CHART_COMPONENT;
     nDeinstallMode = 0;
@@ -168,7 +168,7 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Wrt_Bin", &current_state, &future_state ) )
     {
-        // analyze writer installation mode
+        
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= WRITER_COMPONENT;
 
@@ -180,12 +180,12 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     }
     else
     {
-        // assert( FALSE );
+        
     }
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Calc_Bin", &current_state, &future_state ) )
     {
-        // analyze calc installation mode
+        
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= CALC_COMPONENT;
 
@@ -197,12 +197,12 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     }
     else
     {
-        // assert( FALSE );
+        
     }
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Draw_Bin", &current_state, &future_state ) )
     {
-        // analyze draw installation mode
+        
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= DRAW_COMPONENT;
 
@@ -214,12 +214,12 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     }
     else
     {
-        // assert( FALSE );
+        
     }
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Impress_Bin", &current_state, &future_state ) )
     {
-        // analyze impress installation mode
+        
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= IMPRESS_COMPONENT;
 
@@ -231,12 +231,12 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     }
     else
     {
-        // assert( FALSE );
+        
     }
 
     if ( ERROR_SUCCESS == MsiGetFeatureState( hMSI, L"gm_p_Math_Bin", &current_state, &future_state ) )
     {
-        // analyze math installation mode
+        
         if ( current_state == INSTALLSTATE_LOCAL )
             nOldInstallMode |= MATH_COMPONENT;
 
@@ -248,13 +248,13 @@ BOOL GetDelta( MSIHANDLE hMSI, int& nOldInstallMode, int& nInstallMode, int& nDe
     }
     else
     {
-        // assert( FALSE );
+        
     }
 
     return TRUE;
 }
 
-//----------------------------------------------------------
+
 BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
@@ -268,7 +268,7 @@ BOOL MakeInstallForAllUsers( MSIHANDLE hMSI )
     return bResult;
 }
 
-//----------------------------------------------------------
+
 BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
 {
     BOOL bResult = FALSE;
@@ -281,7 +281,7 @@ BOOL MakeInstallFor64Bit( MSIHANDLE hMSI )
 
     return bResult;
 }
-//----------------------------------------------------------
+
 extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
 {
     INSTALLSTATE current_state;
@@ -302,7 +302,7 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
             if ( future_state == INSTALLSTATE_LOCAL
               || ( current_state == INSTALLSTATE_LOCAL && future_state == INSTALLSTATE_UNKNOWN ) )
             {
-                // the control is installed in the new selected configuration
+                
 
                 if ( current_state == INSTALLSTATE_LOCAL && nDeinstallMode )
                     UnregisterActiveXNative( pActiveXPath, nDeinstallMode, bInstallForAllUser, bInstallFor64Bit );
@@ -322,13 +322,13 @@ extern "C" UINT __stdcall InstallActiveXControl( MSIHANDLE hMSI )
     }
     else
     {
-        // assert( FALSE );
+        
     }
 
     return ERROR_SUCCESS;
 }
 
-//----------------------------------------------------------
+
 extern "C" UINT __stdcall DeinstallActiveXControl( MSIHANDLE hMSI )
 {
     INSTALLSTATE current_state;

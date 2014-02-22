@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -30,17 +30,17 @@ namespace drawinglayer
         class ImpSdrLineStartEndAttribute
         {
         public:
-            // line arrow definitions
-            basegfx::B2DPolyPolygon                 maStartPolyPolygon;     // start Line PolyPolygon
-            basegfx::B2DPolyPolygon                 maEndPolyPolygon;       // end Line PolyPolygon
-            double                                  mfStartWidth;           // 1/100th mm
-            double                                  mfEndWidth;             // 1/100th mm
+            
+            basegfx::B2DPolyPolygon                 maStartPolyPolygon;     
+            basegfx::B2DPolyPolygon                 maEndPolyPolygon;       
+            double                                  mfStartWidth;           
+            double                                  mfEndWidth;             
 
-            // bitfield
-            bool                                    mbStartActive : 1;     // start of Line is active
-            bool                                    mbEndActive : 1;       // end of Line is active
-            bool                                    mbStartCentered : 1;   // Line is centered on line start point
-            bool                                    mbEndCentered : 1;     // Line is centered on line end point
+            
+            bool                                    mbStartActive : 1;     
+            bool                                    mbEndActive : 1;       
+            bool                                    mbStartCentered : 1;   
+            bool                                    mbEndCentered : 1;     
 
             ImpSdrLineStartEndAttribute(
                 const basegfx::B2DPolyPolygon& rStartPolyPolygon,
@@ -74,7 +74,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             const basegfx::B2DPolyPolygon& getStartPolyPolygon() const { return maStartPolyPolygon; }
             const basegfx::B2DPolyPolygon& getEndPolyPolygon() const { return maEndPolyPolygon; }
             double getStartWidth() const { return mfStartWidth; }
@@ -186,7 +186,7 @@ namespace drawinglayer
         {
             return mpSdrLineStartEndAttribute->isEndCentered();
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

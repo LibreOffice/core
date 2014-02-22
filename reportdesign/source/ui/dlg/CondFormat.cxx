@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CondFormat.hxx"
@@ -45,10 +45,10 @@
 #include <algorithm>
 #include "UndoActions.hxx"
 
-// .............................................................................
+
 namespace rptui
 {
-// .............................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -61,9 +61,9 @@ namespace rptui
 
     using namespace ::com::sun::star::report;
 
-    //========================================================================
-    // UpdateLocker
-    //========================================================================
+    
+    
+    
     class UpdateLocker
     {
         Window& m_rWindow;
@@ -80,9 +80,9 @@ namespace rptui
         }
     };
 
-    //========================================================================
-    // class ConditionalFormattingDialog
-    //========================================================================
+    
+    
+    
     ConditionalFormattingDialog::ConditionalFormattingDialog(
             Window* _pParent, const Reference< XReportControlModel >& _rxFormatConditions, ::rptui::OReportController& _rController )
         :ModalDialog( _pParent, ModuleRes(RID_CONDFORMAT) )
@@ -107,13 +107,13 @@ namespace rptui
         FreeResource();
     }
 
-    //------------------------------------------------------------------------
+    
     ConditionalFormattingDialog::~ConditionalFormattingDialog()
     {
         m_aConditions.clear();
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_updateConditionIndicies()
     {
         sal_Int32 nIndex = 0;
@@ -126,7 +126,7 @@ namespace rptui
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_conditionCountChanged()
     {
         if ( m_aConditions.empty() )
@@ -137,20 +137,20 @@ namespace rptui
         impl_layoutAll();
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::addCondition( size_t _nAddAfterIndex )
     {
         OSL_PRECOND( _nAddAfterIndex < impl_getConditionCount(), "ConditionalFormattingDialog::addCondition: illegal condition index!" );
         impl_addCondition_nothrow( _nAddAfterIndex + 1 );
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::deleteCondition( size_t _nCondIndex )
     {
         impl_deleteCondition_nothrow( _nCondIndex );
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_addCondition_nothrow( size_t _nNewCondIndex )
     {
         UpdateLocker aLockUpdates( *this );
@@ -180,7 +180,7 @@ namespace rptui
         impl_ensureConditionVisible( _nNewCondIndex );
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_focusCondition( size_t _nCondIndex )
     {
         OSL_PRECOND( _nCondIndex < impl_getConditionCount(),
@@ -190,7 +190,7 @@ namespace rptui
         m_aConditions[ _nCondIndex ]->GrabFocus();
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_deleteCondition_nothrow( size_t _nCondIndex )
     {
         UpdateLocker aLockUpdates( *this );
@@ -238,13 +238,13 @@ namespace rptui
             impl_focusCondition( nNewFocusIndex );
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_moveCondition_nothrow( size_t _nCondIndex, bool _bMoveUp )
     {
         size_t nOldConditionIndex( _nCondIndex );
         size_t nNewConditionIndex( _bMoveUp ? _nCondIndex - 1 : _nCondIndex + 1 );
 
-        // do this in two steps, so we don't become inconsistent if any of the UNO actions fails
+        
         Any aMovedCondition;
         ConditionPtr pMovedCondition;
         try
@@ -272,18 +272,18 @@ namespace rptui
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        // at least the two swapped conditions need to know their new index
+        
         impl_updateConditionIndicies();
 
-        // re-layout all conditions
+        
         Point aDummy;
         impl_layoutConditions( aDummy );
 
-        // ensure the moved condition is visible
+        
         impl_ensureConditionVisible( nNewConditionIndex );
     }
 
-    // -----------------------------------------------------------------------------
+    
     long ConditionalFormattingDialog::impl_getConditionWidth() const
     {
         const Size aDialogSize( GetOutputSizePixel() );
@@ -291,7 +291,7 @@ namespace rptui
         return aDialogSize.Width() - aScrollBarWidth.Width();
     }
 
-    // -----------------------------------------------------------------------------
+    
     IMPL_LINK( ConditionalFormattingDialog, OnScroll, ScrollBar*, /*_pNotInterestedIn*/ )
     {
         size_t nFirstCondIndex( impl_getFirstVisibleConditionIndex() );
@@ -308,10 +308,10 @@ namespace rptui
         return 0;
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_layoutConditions( Point& _out_rBelowLastVisible )
     {
-        // position the condition's playground
+        
         long nConditionWidth = impl_getConditionWidth();
         long nConditionHeight = LogicToPixel( Size( 0, CONDITION_HEIGHT ), MAP_APPFONT ).Height();
         size_t nVisibleConditions = ::std::min( impl_getConditionCount(), MAX_CONDITIONS );
@@ -319,7 +319,7 @@ namespace rptui
         m_aConditionPlayground.SetSizePixel( aPlaygroundSize );
         _out_rBelowLastVisible = Point( 0, aPlaygroundSize.Height() );
 
-        // position the single conditions
+        
         Point aConditionPos( 0, -1 * nConditionHeight * impl_getFirstVisibleConditionIndex() );
         for (   Conditions::const_iterator cond = m_aConditions.begin();
                 cond != m_aConditions.end();
@@ -331,20 +331,20 @@ namespace rptui
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_layoutAll()
     {
-        // condition's positions
+        
         Point aPos;
         impl_layoutConditions( aPos );
 
-        // scrollbar size and visibility
+        
         m_aCondScroll.setPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
         if ( !impl_needScrollBar() )
-            // normalize the position, so it can, in all situations, be used as top index
+            
             m_aCondScroll.SetThumbPos( 0 );
 
-        // the separator and the buttons below it
+        
         aPos += LogicToPixel( Point( 0 , RELATED_CONTROLS ), MAP_APPFONT );
         m_aSeparator.setPosSizePixel( 0, aPos.Y(), 0, 0, WINDOW_POSSIZE_Y );
 
@@ -358,7 +358,7 @@ namespace rptui
         aPos += LogicToPixel( Point( 0, BUTTON_HEIGHT + RELATED_CONTROLS ), MAP_APPFONT );
         setPosSizePixel( 0, 0, 0, aPos.Y(), WINDOW_POSSIZE_HEIGHT );
     }
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_initializeConditions()
     {
         try
@@ -381,7 +381,7 @@ namespace rptui
         impl_conditionCountChanged();
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::applyCommand( size_t _nCondIndex, sal_uInt16 _nCommandId, const ::Color _aColor )
     {
         OSL_PRECOND( _nCommandId, "ConditionalFormattingDialog::applyCommand: illegal command id!" );
@@ -400,7 +400,7 @@ namespace rptui
             aArgs[2].Name = PROPERTY_FONTCOLOR;
             aArgs[2].Value <<= (sal_uInt32)_aColor.GetColor();
 
-            // we use this way to create undo actions
+            
             m_rController.executeUnChecked(_nCommandId,aArgs);
             m_aConditions[ _nCondIndex ]->updateToolbar(xReportControlFormat);
         }
@@ -410,7 +410,7 @@ namespace rptui
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::moveConditionUp( size_t _nCondIndex )
     {
         OSL_PRECOND( _nCondIndex > 0, "ConditionalFormattingDialog::moveConditionUp: cannot move up the first condition!" );
@@ -418,7 +418,7 @@ namespace rptui
             impl_moveCondition_nothrow( _nCondIndex, true );
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::moveConditionDown( size_t _nCondIndex )
     {
         OSL_PRECOND( _nCondIndex < impl_getConditionCount(), "ConditionalFormattingDialog::moveConditionDown: cannot move down the last condition!" );
@@ -426,7 +426,7 @@ namespace rptui
             impl_moveCondition_nothrow( _nCondIndex, false );
     }
 
-    // -----------------------------------------------------------------------------
+    
     OUString ConditionalFormattingDialog::getDataField() const
     {
         OUString sDataField;
@@ -441,7 +441,7 @@ namespace rptui
         return sDataField;
     }
 
-    // -----------------------------------------------------------------------------
+    
     short ConditionalFormattingDialog::Execute()
     {
         short nRet = ModalDialog::Execute();
@@ -491,7 +491,7 @@ namespace rptui
         return nRet;
     }
 
-    // -----------------------------------------------------------------------------
+    
     bool ConditionalFormattingDialog::PreNotify( NotifyEvent& _rNEvt )
     {
         switch ( _rNEvt.GetType() )
@@ -502,12 +502,12 @@ namespace rptui
             const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
             if ( rKeyCode.IsMod1() && rKeyCode.IsMod2() )
             {
-                if ( rKeyCode.GetCode() == 0x0508 ) // -
+                if ( rKeyCode.GetCode() == 0x0508 ) 
                 {
                     impl_deleteCondition_nothrow( impl_getFocusedConditionIndex( 0 ) );
                     return true;
                 }
-                if ( rKeyCode.GetCode() == 0x0507 ) // +
+                if ( rKeyCode.GetCode() == 0x0507 ) 
                 {
                     impl_addCondition_nothrow( impl_getFocusedConditionIndex( impl_getConditionCount() - 1 ) + 1 );
                     return true;
@@ -522,7 +522,7 @@ namespace rptui
 
             const Window* pGetFocusWindow( _rNEvt.GetWindow() );
 
-            // determine whether the new focus window is part of an (currently invisible) condition
+            
             const Window* pConditionCandidate = pGetFocusWindow->GetParent();
             const Window* pPlaygroundCandidate = pConditionCandidate ? pConditionCandidate->GetParent() : NULL;
             while   (   ( pPlaygroundCandidate )
@@ -544,19 +544,19 @@ namespace rptui
         return ModalDialog::PreNotify( _rNEvt );
     }
 
-    // -----------------------------------------------------------------------------
+    
     size_t ConditionalFormattingDialog::impl_getFirstVisibleConditionIndex() const
     {
         return (size_t)m_aCondScroll.GetThumbPos();
     }
 
-    // -----------------------------------------------------------------------------
+    
     size_t ConditionalFormattingDialog::impl_getLastVisibleConditionIndex() const
     {
         return ::std::min( impl_getFirstVisibleConditionIndex() + MAX_CONDITIONS, impl_getConditionCount() ) - 1;
     }
 
-    // -----------------------------------------------------------------------------
+    
     size_t ConditionalFormattingDialog::impl_getFocusedConditionIndex( sal_Int32 _nFallBackIfNone ) const
     {
         size_t nIndex( 0 );
@@ -571,7 +571,7 @@ namespace rptui
         return _nFallBackIfNone;
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_updateScrollBarRange()
     {
         long nMax = ( impl_getConditionCount() > MAX_CONDITIONS ) ? impl_getConditionCount() - MAX_CONDITIONS + 1 : 0;
@@ -581,7 +581,7 @@ namespace rptui
         m_aCondScroll.SetVisibleSize( 1 );
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_scrollTo( size_t _nTopCondIndex )
     {
         OSL_PRECOND( _nTopCondIndex + MAX_CONDITIONS <= impl_getConditionCount(),
@@ -590,7 +590,7 @@ namespace rptui
         OnScroll( &m_aCondScroll );
     }
 
-    // -----------------------------------------------------------------------------
+    
     void ConditionalFormattingDialog::impl_ensureConditionVisible( size_t _nCondIndex )
     {
         OSL_PRECOND( _nCondIndex < impl_getConditionCount(),
@@ -602,8 +602,8 @@ namespace rptui
             impl_scrollTo( _nCondIndex - MAX_CONDITIONS + 1 );
     }
 
-// .............................................................................
-} // rptui
-// .............................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

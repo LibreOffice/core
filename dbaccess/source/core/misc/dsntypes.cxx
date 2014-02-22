@@ -49,7 +49,7 @@ namespace dbaccess
             }
         }
     }
-// ODsnTypeCollection
+
 ODsnTypeCollection::ODsnTypeCollection(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _xContext)
 :m_aDriverConfig(_xContext)
 ,m_xContext(_xContext)
@@ -93,9 +93,9 @@ OUString ODsnTypeCollection::cutPrefix(const OUString& _sURL) const
         WildCard aWildCard(*aIter);
         if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(_sURL) )
         {
-            // This relies on the fact that all patterns are of the form
-            //   foo*
-            // that is, the very concept of "prefix" applies.
+            
+            
+            
             OUString prefix(comphelper::string::stripEnd(*aIter, '*'));
             OSL_ENSURE(prefix.getLength() <= sURL.getLength(), "How can A match B when A shorter than B?");
             sRet = sURL.copy(prefix.getLength());
@@ -118,9 +118,9 @@ OUString ODsnTypeCollection::getPrefix(const OUString& _sURL) const
         WildCard aWildCard(*aIter);
         if ( sOldPattern.getLength() < aIter->getLength() && aWildCard.Matches(sURL) )
         {
-            // This relies on the fact that all patterns are of the form
-            //   foo*
-            // that is, the very concept of "prefix" applies.
+            
+            
+            
             sRet = comphelper::string::stripEnd(*aIter, '*');
             OSL_ENSURE(sRet.getLength() <= sURL.getLength(), "How can A match B when A shorter than B?");
             sOldPattern = *aIter;
@@ -335,14 +335,14 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
     {
         if (!sDsn.isEmpty())
         {
-            // there should be at least one such separator
+            
             OSL_FAIL("ODsnTypeCollection::implDetermineType : missing the colon !");
         }
 
         return DST_UNKNOWN;
     }
 
-    // find first :
+    
     if (sDsn.startsWithIgnoreAsciiCase("jdbc:oracle:thin:"))
         return DST_ORACLE_JDBC;
 
@@ -355,11 +355,11 @@ DATASOURCE_TYPE ODsnTypeCollection::determineType(const OUString& _rDsn) const
     if (sDsn.equalsIgnoreAsciiCase("sdbc:embedded:firebird"))
         return DST_EMBEDDED_FIREBIRD;
 
-    // find second :
+    
     nSeparator = sDsn.indexOf(static_cast<sal_Unicode>(':'), nSeparator + 1);
     if (-1 == nSeparator)
     {
-        // at the moment only jdbc is allowed to have just one separator
+        
         OSL_FAIL("ODsnTypeCollection::implDetermineType : missing the second colon !");
         return DST_UNKNOWN;
     }
@@ -527,7 +527,7 @@ sal_Int32 ODsnTypeCollection::size() const
     return m_aDsnPrefixes.size();
 }
 
-// ODsnTypeCollection::TypeIterator
+
 ODsnTypeCollection::TypeIterator::TypeIterator(const ODsnTypeCollection* _pContainer, sal_Int32 _nInitialPos)
     :m_pContainer(_pContainer)
     ,m_nPosition(_nInitialPos)
@@ -587,6 +587,6 @@ bool operator==(const ODsnTypeCollection::TypeIterator& lhs, const ODsnTypeColle
     return (lhs.m_pContainer == rhs.m_pContainer) && (lhs.m_nPosition == rhs.m_nPosition);
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

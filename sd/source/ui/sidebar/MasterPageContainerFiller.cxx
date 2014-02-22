@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MasterPageContainerFiller.hxx"
@@ -36,10 +36,10 @@ MasterPageContainerFiller::MasterPageContainerFiller (ContainerAdapter& rpAdapte
       mpLastAddedEntry(NULL),
       mnIndex(1)
 {
-    // Add one entry for the default master page.  We use temporarily the
-    // DefaultPagePreviewProvider to prevent the rendering (and the
-    // expensive creation) of the default page.  It is replaced later on by
-    // another.
+    
+    
+    
+    
     SharedMasterPageDescriptor pDescriptor (new MasterPageDescriptor(
         MasterPageContainer::DEFAULT,
         0,
@@ -85,9 +85,9 @@ void MasterPageContainerFiller::RunNextStep (void)
             break;
     }
 
-    // When the state has just been set to DONE or ERROR then tell the
-    // container that no more templates will be coming and stop the
-    // scanning.
+    
+    
+    
     switch (meState)
     {
         case DONE:
@@ -166,11 +166,11 @@ MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate (void)
                 new TemplatePageObjectProvider(mpLastAddedEntry->msPath)),
             ::boost::shared_ptr<PreviewProvider>(
                 new TemplatePreviewProvider(mpLastAddedEntry->msPath))));
-        // For user supplied templates we use a different preview provider:
-        // The preview in the document shows not only shapes on the master
-        // page but also shapes on the foreground.  This is misleading and
-        // therefore these previews are discarded and created directly from
-        // the page objects.
+        
+        
+        
+        
+        
         if (pDescriptor->GetURLClassification() == MasterPageDescriptor::URLCLASS_USER)
             pDescriptor->mpPreviewProvider = ::boost::shared_ptr<PreviewProvider>(
                 new PagePreviewProvider());
@@ -184,6 +184,6 @@ MasterPageContainerFiller::State MasterPageContainerFiller::AddTemplate (void)
 
 
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

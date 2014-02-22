@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <swmodeltestbase.hxx>
@@ -37,18 +37,18 @@ class Test : public SwModelTestBase
 
 DECLARE_ODFIMPORT_TEST(testEmptySvgFamilyName, "empty-svg-family-name.odt")
 {
-    // .odt import did crash on the empty font list (which I think is valid according SVG spec)
+    
 }
 
 DECLARE_ODFIMPORT_TEST(testHideAllSections, "fdo53210.odt")
 {
-    // This document has a section that is conditionally hidden, but has no empty paragraph after it.
+    
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XNameAccess> xMasters = xTextFieldsSupplier->getTextFieldMasters();
-    // Set _CS_Allgemein to 0
+    
     uno::Reference<beans::XPropertySet> xMaster(xMasters->getByName("com.sun.star.text.fieldmaster.User._CS_Allgemein"), uno::UNO_QUERY);
     xMaster->setPropertyValue("Content", uno::makeAny(OUString("0")));
-    // This used to crash
+    
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
 }
 
@@ -57,10 +57,10 @@ DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
     AllBordersMap map;
     uno::Sequence< table::BorderLine > tempSequence(4);
 
-    tempSequence[0] = table::BorderLine(0, 2, 2, 35);   // left
-    tempSequence[1] = table::BorderLine(0, 2, 2, 35);   // right
-    tempSequence[2] = table::BorderLine(0, 2, 2, 35);   // top
-    tempSequence[3] = table::BorderLine(0, 2, 2, 35);   // bottom
+    tempSequence[0] = table::BorderLine(0, 2, 2, 35);   
+    tempSequence[1] = table::BorderLine(0, 2, 2, 35);   
+    tempSequence[2] = table::BorderLine(0, 2, 2, 35);   
+    tempSequence[3] = table::BorderLine(0, 2, 2, 35);   
     map.insert(StringSequencePair(OUString("B2"), tempSequence));
     tempSequence[0] = table::BorderLine(0, 0, 2, 0);
     tempSequence[1] = table::BorderLine(0, 0, 2, 0);
@@ -145,7 +145,7 @@ DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
 
     uno::Reference<text::XTextDocument> textDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(textDocument->getText(), uno::UNO_QUERY);
-    // list of paragraphs
+    
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
     do
     {
@@ -163,7 +163,7 @@ DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
 
                 for (sal_Int32 i = 0; i < nLength; ++i)
                 {
-                    if(i%10==6 || (i%10==8 && i<60))    // only B and D cells have borders, every 2 rows
+                    if(i%10==6 || (i%10==8 && i<60))    
                     {
                         uno::Reference<table::XCell> xCell = xTextTable->getCellByName(cells[i]);
                         uno::Reference< beans::XPropertySet > xPropSet(xCell, uno::UNO_QUERY_THROW);
@@ -233,7 +233,7 @@ DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
                             CPPUNIT_ASSERT_EQUAL(perfectDistance, lineDistance);
                         }
                     }
-                }   //end of the 'for' loop
+                }   
             }
         }
     } while(xParaEnum->hasMoreElements());
@@ -242,14 +242,14 @@ DECLARE_ODFIMPORT_TEST(testOdtBorders, "borders_ooo33.odt")
 DECLARE_ODFIMPORT_TEST(testPageStyleLayoutDefault, "hello.odt")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
-    // This was style::PageStyleLayout_MIRRORED.
+    
     CPPUNIT_ASSERT_EQUAL(style::PageStyleLayout_ALL, getProperty<style::PageStyleLayout>(xPropertySet, "PageStyleLayout"));
 }
 
 DECLARE_ODFIMPORT_TEST(testPageStyleLayoutRight, "hello.odt")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("PageStyles")->getByName("Default Style"), uno::UNO_QUERY);
-    // This caused a crash.
+    
     xPropertySet->setPropertyValue("PageStyleLayout", uno::makeAny(style::PageStyleLayout_RIGHT));
 }
 
@@ -267,7 +267,7 @@ DECLARE_ODFIMPORT_TEST(testFdo60842, "fdo60842.odt")
     uno::Reference<text::XTextContent> const xTable(getParagraphOrTable(0));
     getCell(xTable, "A1", "");
     getCell(xTable, "B1", "18/02/2012");
-    getCell(xTable, "C1", "USD"); // this is the cell with office:string-value
+    getCell(xTable, "C1", "USD"); 
     getCell(xTable, "D1", "");
     getCell(xTable, "E1", "01/04/2012");
 }
@@ -275,8 +275,8 @@ DECLARE_ODFIMPORT_TEST(testFdo60842, "fdo60842.odt")
 DECLARE_ODFIMPORT_TEST(testFdo56272, "fdo56272.odt")
 {
     uno::Reference<drawing::XShape> xShape = getShape(1);
-    // Vertical position was incorrect.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); // Was -2371
+    
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(422), xShape->getPosition().Y); 
 }
 
 DECLARE_ODFIMPORT_TEST(testFdo55814, "fdo55814.odt")
@@ -289,7 +289,7 @@ DECLARE_ODFIMPORT_TEST(testFdo55814, "fdo55814.odt")
     uno::Reference<util::XRefreshable>(xTextFieldsSupplier->getTextFields(), uno::UNO_QUERY)->refresh();
     uno::Reference<text::XTextSectionsSupplier> xTextSectionsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xSections(xTextSectionsSupplier->getTextSections(), uno::UNO_QUERY);
-    // This was "0".
+    
     CPPUNIT_ASSERT_EQUAL(OUString("Hide==\"Yes\""), getProperty<OUString>(xSections->getByIndex(0), "Condition"));
 }
 
@@ -303,7 +303,7 @@ void lcl_CheckShape(
 
 DECLARE_ODFIMPORT_TEST(testFdo68839, "fdo68839.odt")
 {
-    // check names
+    
     lcl_CheckShape(getShape(1), "FrameXXX");
     lcl_CheckShape(getShape(2), "ObjectXXX");
     lcl_CheckShape(getShape(3), "FrameY");
@@ -312,7 +312,7 @@ DECLARE_ODFIMPORT_TEST(testFdo68839, "fdo68839.odt")
         uno::Reference<drawing::XShape> xShape = getShape(5);
         CPPUNIT_FAIL("IndexOutOfBoundsException expected");
     } catch (lang::IndexOutOfBoundsException const&) { }
-    // check prev/next chain
+    
     uno::Reference<beans::XPropertySet> xFrame1(getShape(1), uno::UNO_QUERY);
     uno::Reference<beans::XPropertySet> xFrame2(getShape(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString(),
@@ -338,15 +338,15 @@ DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
         CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
 
         SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
-        // This was "A1", i.e. Ctrl-A only selected the A1 cell of the table, not the whole document.
+        
         CPPUNIT_ASSERT_EQUAL(OUString("Hello."), rEnd.GetTxt());
     }
 
     {
-        pWrtShell->SttEndDoc(false); // Go to the end of the doc.
-        pWrtShell->SelAll(); // And now that we're outside of the table, try Ctrl-A again.
+        pWrtShell->SttEndDoc(false); 
+        pWrtShell->SelAll(); 
         SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
-        // This was "Hello", i.e. Ctrl-A did not select the starting table.
+        
         CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
 
         SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
@@ -354,12 +354,12 @@ DECLARE_ODFIMPORT_TEST(testFdo37606, "fdo37606.odt")
     }
 
     {
-        pWrtShell->Delete(); // Delete the selection
-        // And make sure the table got deleted as well.
+        pWrtShell->Delete(); 
+        
         SwNodes& rNodes = pWrtShell->GetDoc()->GetNodes();
         SwNodeIndex nNode(rNodes.GetEndOfExtras());
         SwCntntNode* pCntntNode = rNodes.GoNext(&nNode);
-        // First content node was in a table -> table wasn't deleted.
+        
         CPPUNIT_ASSERT(!pCntntNode->FindTableNode());
     }
 }
@@ -369,21 +369,21 @@ DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
-    // Ctrl-A
+    
     pWrtShell->SelAll();
 
-    // Ctrl-C
+    
     SwTransferable* pTransferable = new SwTransferable(*pWrtShell);
     uno::Reference<datatransfer::XTransferable> xTransferable(pTransferable);
     pTransferable->Copy();
 
-    pWrtShell->SttEndDoc(false); // Go to the end of the doc.
+    pWrtShell->SttEndDoc(false); 
 
-    // Ctrl-V
+    
     TransferableDataHelper aDataHelper(TransferableDataHelper::CreateFromSystemClipboard(&pWrtShell->GetView().GetEditWin()));
     SwTransferable::Paste( *pWrtShell, aDataHelper );
 
-    // Previously copy&paste failed to copy the table in case it was the document-starting one.
+    
     uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
@@ -391,7 +391,7 @@ DECLARE_ODFIMPORT_TEST(testFdo37606Copy, "fdo37606.odt")
 
 DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
 {
-    // The test doc is special in that it starts with a table and it also has a footnote.
+    
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
@@ -399,7 +399,7 @@ DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
 
     pWrtShell->SelAll();
     SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
-    // This was "Footnote.", as Ctrl-A also selected footnotes, but it should not.
+    
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
 
     SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
@@ -408,7 +408,7 @@ DECLARE_ODFIMPORT_TEST(testFdo69862, "fdo69862.odt")
 
 DECLARE_ODFIMPORT_TEST(testFdo69979, "fdo69979.odt")
 {
-    // The test doc is special in that it starts with a table and it also has a header.
+    
     SwXTextDocument* pTxtDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
     CPPUNIT_ASSERT(pTxtDoc);
     SwWrtShell* pWrtShell = pTxtDoc->GetDocShell()->GetWrtShell();
@@ -416,7 +416,7 @@ DECLARE_ODFIMPORT_TEST(testFdo69979, "fdo69979.odt")
 
     pWrtShell->SelAll();
     SwTxtNode& rStart = dynamic_cast<SwTxtNode&>(pShellCrsr->Start()->nNode.GetNode());
-    // This was "", as Ctrl-A also selected headers, but it should not.
+    
     CPPUNIT_ASSERT_EQUAL(OUString("A1"), rStart.GetTxt());
 
     SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
@@ -431,9 +431,9 @@ DECLARE_ODFIMPORT_TEST(testSpellmenuRedline, "spellmenu-redline.odt")
     OUString aParaText;
     uno::Reference<linguistic2::XSpellAlternatives> xAlt;
     SwSpellPopup aPopup(pWrtShell, xAlt, aParaText);
-    // Make sure that if we show the spellcheck popup menu (for the current
-    // document, which contains redlines), then the last two entries will be
-    // always 'go to next/previous change'.
+    
+    
+    
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_NEXT_CHANGE), aPopup.GetItemId(aPopup.GetItemCount() - 2));
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(FN_REDLINE_PREV_CHANGE), aPopup.GetItemId(aPopup.GetItemCount() - 1));
 }
@@ -442,9 +442,9 @@ DECLARE_ODFIMPORT_TEST(testAnnotationFormatting, "annotation-formatting.odt")
 {
     uno::Reference<beans::XPropertySet> xTextField = getProperty< uno::Reference<beans::XPropertySet> >(getRun(getParagraph(1), 1), "TextField");
     uno::Reference<text::XText> xText = getProperty< uno::Reference<text::XText> >(xTextField, "TextRange");
-    // Make sure we test the right annotation.
+    
     uno::Reference<text::XTextRange> xParagraph = getParagraphOfText(1, xText, "Looses: bold");
-    // Formatting was lost: the second text portion was NORMAL, not BOLD.
+    
     CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(getRun(xParagraph, 2), "CharWeight"));
 }
 

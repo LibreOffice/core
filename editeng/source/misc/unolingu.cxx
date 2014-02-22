@@ -75,7 +75,7 @@ static uno::Reference< XLinguServiceManager2 > GetLngSvcMgr_Impl()
 class ThesDummy_Impl :
     public cppu::WeakImplHelper1< XThesaurus >
 {
-    uno::Reference< XThesaurus >     xThes;      // the real one...
+    uno::Reference< XThesaurus >     xThes;      
     Sequence< Locale >         *pLocaleSeq;
 
     void GetCfgLocales();
@@ -86,7 +86,7 @@ public:
     ThesDummy_Impl() : pLocaleSeq(0)  {}
     ~ThesDummy_Impl();
 
-    // XSupportedLocales
+    
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::lang::Locale > SAL_CALL
         getLocales()
@@ -95,7 +95,7 @@ public:
         hasLocale( const ::com::sun::star::lang::Locale& rLocale )
             throw(::com::sun::star::uno::RuntimeException);
 
-    // XThesaurus
+    
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
@@ -141,7 +141,7 @@ void ThesDummy_Impl::GetThes_Impl()
 
         if (xThes.is())
         {
-            // no longer needed...
+            
             delete pLocaleSeq;    pLocaleSeq = 0;
         }
     }
@@ -155,7 +155,7 @@ uno::Sequence< lang::Locale > SAL_CALL
     GetThes_Impl();
     if (xThes.is())
         return xThes->getLocales();
-    else if (!pLocaleSeq)       // if not already loaded save startup time by avoiding loading them now
+    else if (!pLocaleSeq)       
         GetCfgLocales();
     return *pLocaleSeq;
 }
@@ -168,7 +168,7 @@ sal_Bool SAL_CALL
     GetThes_Impl();
     if (xThes.is())
         return xThes->hasLocale( rLocale );
-    else if (!pLocaleSeq)       // if not already loaded save startup time by avoiding loading them now
+    else if (!pLocaleSeq)       
         GetCfgLocales();
     sal_Bool bFound = sal_False;
     sal_Int32 nLen = pLocaleSeq->getLength();
@@ -207,13 +207,13 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
 class SpellDummy_Impl :
     public cppu::WeakImplHelper1< XSpellChecker1 >
 {
-    uno::Reference< XSpellChecker1 >     xSpell;      // the real one...
+    uno::Reference< XSpellChecker1 >     xSpell;      
 
     void    GetSpell_Impl();
 
 public:
 
-    // XSupportedLanguages (for XSpellChecker1)
+    
     virtual ::com::sun::star::uno::Sequence< sal_Int16 > SAL_CALL
         getLanguages()
             throw(::com::sun::star::uno::RuntimeException);
@@ -221,7 +221,7 @@ public:
         hasLanguage( sal_Int16 nLanguage )
             throw(::com::sun::star::uno::RuntimeException);
 
-    // XSpellChecker1 (same as XSpellChecker but sal_Int16 for language)
+    
     virtual sal_Bool SAL_CALL
         isValid( const OUString& rWord, sal_Int16 nLanguage,
                 const ::com::sun::star::beans::PropertyValues& rProperties )
@@ -304,13 +304,13 @@ uno::Reference< linguistic2::XSpellAlternatives > SAL_CALL
 class HyphDummy_Impl :
     public cppu::WeakImplHelper1< XHyphenator >
 {
-    uno::Reference< XHyphenator >     xHyph;      // the real one...
+    uno::Reference< XHyphenator >     xHyph;      
 
     void    GetHyph_Impl();
 
 public:
 
-    // XSupportedLocales
+    
     virtual ::com::sun::star::uno::Sequence<
             ::com::sun::star::lang::Locale > SAL_CALL
         getLocales()
@@ -319,7 +319,7 @@ public:
         hasLocale( const ::com::sun::star::lang::Locale& rLocale )
             throw(::com::sun::star::uno::RuntimeException);
 
-    // XHyphenator
+    
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::linguistic2::XHyphenatedWord > SAL_CALL
         hyphenate( const OUString& rWord,
@@ -445,15 +445,15 @@ public:
     virtual void    AtExit() = 0;
 
 
-    // lang::XEventListener
+    
     virtual void    SAL_CALL disposing(const EventObject& rSource)
             throw( RuntimeException );
 };
 
 LinguMgrAppExitLstnr::LinguMgrAppExitLstnr()
 {
-    // add object to frame::Desktop EventListeners in order to properly call
-    // the AtExit function at appliction exit.
+    
+    
 
     uno::Reference< XComponentContext >  xContext = getProcessComponentContext();
     xDesktop = Desktop::create( xContext );
@@ -490,7 +490,7 @@ public:
 
 void LinguMgrExitLstnr::AtExit()
 {
-    // release references
+    
     LinguMgr::xLngSvcMgr    = 0;
     LinguMgr::xSpell        = 0;
     LinguMgr::xHyph         = 0;
@@ -681,8 +681,8 @@ uno::Reference< XDictionary > LinguMgr::GetChangeAll()
 
 uno::Reference< XDictionary > LinguMgr::GetStandard()
 {
-    // Tries to return a dictionary which may hold positive entries is
-    // persistent and not read-only.
+    
+    
 
     if (bExiting)
         return 0;
@@ -696,7 +696,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
                                       UNO_QUERY );
     if (!xDic.is())
     {
-        // try to create standard dictionary
+        
         uno::Reference< XDictionary >    xTmp;
         try
         {
@@ -709,7 +709,7 @@ uno::Reference< XDictionary > LinguMgr::GetStandard()
         {
         }
 
-        // add new dictionary to list
+        
         if (xTmp.is())
         {
             xTmpDicList->addDictionary( xTmp );
@@ -790,14 +790,14 @@ SvxAlternativeSpelling SvxGetAltSpelling(
         const sal_Unicode *pWord    = aWord.getStr(),
                           *pAltWord = aAltWord.getStr();
 
-        // count number of chars from the left to the
-        // hyphenation pos / hyphen pos that are equal
+        
+        
         sal_Int16 nL = 0;
         while (nL <= nHyphenationPos && nL <= nHyphenPos
                && pWord[ nL ] == pAltWord[ nL ])
             ++nL;
-        // count number of chars from the right to the
-        // hyphenation pos / hyphen pos that are equal
+        
+        
         sal_Int16 nR = 0;
         sal_Int32 nIdx    = nLen - 1;
         sal_Int32 nAltIdx = nAltLen - 1;

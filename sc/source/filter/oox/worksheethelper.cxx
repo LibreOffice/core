@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "worksheethelper.hxx"
@@ -81,7 +81,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -94,7 +94,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -104,10 +104,10 @@ void lclUpdateProgressBar( const ISegmentProgressBarRef& rxProgressBar, double f
         rxProgressBar->setPosition( fPosition );
 }
 
-} // namespace
+} 
 
-// ============================================================================
-// ============================================================================
+
+
 
 ColumnModel::ColumnModel() :
     maRange( -1 ),
@@ -126,13 +126,13 @@ bool ColumnModel::isMergeable( const ColumnModel& rModel ) const
         (maRange.mnFirst        <= rModel.maRange.mnFirst) &&
         (rModel.maRange.mnFirst <= maRange.mnLast + 1) &&
         (mfWidth                == rModel.mfWidth) &&
-        // ignore mnXfId, cell formatting is always set directly
+        
         (mnLevel                == rModel.mnLevel) &&
         (mbHidden               == rModel.mbHidden) &&
         (mbCollapsed            == rModel.mbCollapsed);
 }
 
-// ----------------------------------------------------------------------------
+
 
 RowModel::RowModel() :
     mnRow( -1 ),
@@ -158,16 +158,16 @@ void RowModel::insertColSpan( const ValueRange& rColSpan )
 bool RowModel::isMergeable( const RowModel& rModel ) const
 {
     return
-        // ignore maColSpans - is handled separately in SheetDataBuffer class
+        
         (mfHeight       == rModel.mfHeight) &&
-        // ignore mnXfId, mbCustomFormat, mbShowPhonetic - cell formatting is always set directly
+        
         (mnLevel        == rModel.mnLevel) &&
         (mbCustomHeight == rModel.mbCustomHeight) &&
         (mbHidden       == rModel.mbHidden) &&
         (mbCollapsed    == rModel.mbCollapsed);
 }
 
-// ----------------------------------------------------------------------------
+
 
 PageBreakModel::PageBreakModel() :
     mnColRow( 0 ),
@@ -175,13 +175,13 @@ PageBreakModel::PageBreakModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 HyperlinkModel::HyperlinkModel()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ValidationModel::ValidationModel() :
     mnType( XML_none ),
@@ -215,8 +215,8 @@ void ValidationModel::setBiffErrorStyle( sal_uInt8 nErrorStyle )
     mnErrorStyle = STATIC_ARRAY_SELECT( spnErrorStyles, nErrorStyle, XML_stop );
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 class WorksheetGlobals : public WorkbookHelper, public IWorksheetProgress
 {
@@ -341,7 +341,7 @@ public:
 
     void finalizeDrawingImport();
 
-    /// Allow the threaded importer to override our progress bar impl.
+    
     virtual ISegmentProgressBarRef getRowProgress()
     {
         return mxRowProgress;
@@ -396,41 +396,41 @@ private:
     typedef ::std::auto_ptr< VmlDrawing >       VmlDrawingPtr;
     typedef ::std::auto_ptr< BiffSheetDrawing > BiffSheetDrawingPtr;
 
-    const OUString      maSheetCellRanges;  /// Service name for a SheetCellRanges object.
-    const OUString      maUrlTextField;     /// Service name for a URL text field.
-    const CellAddress&  mrMaxApiPos;        /// Reference to maximum Calc cell address from address converter.
-    CellRangeAddress    maUsedArea;         /// Used area of the sheet, and sheet index of the sheet.
-    ColumnModel         maDefColModel;      /// Default column formatting.
-    ColumnModelRangeMap maColModels;        /// Ranges of columns sorted by first column index.
-    RowModel            maDefRowModel;      /// Default row formatting.
-    RowModelRangeMap    maRowModels;        /// Ranges of rows sorted by first row index.
-    HyperlinkModelList  maHyperlinks;       /// Cell ranges containing hyperlinks.
-    ValidationModelList maValidations;      /// Cell ranges containing data validation settings.
-    SheetDataBuffer     maSheetData;        /// Buffer for cell contents and cell formatting.
-    CondFormatBuffer    maCondFormats;      /// Buffer for conditional formatting.
-    CommentsBuffer      maComments;         /// Buffer for all cell comments in this sheet.
-    AutoFilterBuffer    maAutoFilters;      /// Sheet auto filters (not associated to a table).
-    QueryTableBuffer    maQueryTables;      /// Buffer for all web query tables in this sheet.
-    WorksheetSettings   maSheetSett;        /// Global settings for this sheet.
-    PageSettings        maPageSett;         /// Page/print settings for this sheet.
-    SheetViewSettings   maSheetViewSett;    /// View settings for this sheet.
-    VmlDrawingPtr       mxVmlDrawing;       /// Collection of all VML shapes.
-    ExtLst              maExtLst;           /// List of extended elements
-    BiffSheetDrawingPtr mxBiffDrawing;      /// Collection of all BIFF/DFF shapes.
-    OUString            maDrawingPath;      /// Path to DrawingML fragment.
-    OUString            maVmlDrawingPath;   /// Path to legacy VML drawing fragment.
-    awt::Size                maDrawPageSize;     /// Current size of the drawing page in 1/100 mm.
-    awt::Rectangle           maShapeBoundingBox; /// Bounding box for all shapes from all drawings.
-    ISegmentProgressBarRef mxProgressBar;   /// Sheet progress bar.
-    bool                   mbFastRowProgress; /// Do we have a progress bar thread ?
-    ISegmentProgressBarRef mxRowProgress;   /// Progress bar for row/cell processing.
-    ISegmentProgressBarRef mxFinalProgress; /// Progress bar for finalization.
-    WorksheetType       meSheetType;        /// Type of this sheet.
-    Reference< XSpreadsheet > mxSheet;      /// Reference to the current sheet.
-    bool                mbHasDefWidth;      /// True = default column width is set from defaultColWidth attribute.
+    const OUString      maSheetCellRanges;  
+    const OUString      maUrlTextField;     
+    const CellAddress&  mrMaxApiPos;        
+    CellRangeAddress    maUsedArea;         
+    ColumnModel         maDefColModel;      
+    ColumnModelRangeMap maColModels;        
+    RowModel            maDefRowModel;      
+    RowModelRangeMap    maRowModels;        
+    HyperlinkModelList  maHyperlinks;       
+    ValidationModelList maValidations;      
+    SheetDataBuffer     maSheetData;        
+    CondFormatBuffer    maCondFormats;      
+    CommentsBuffer      maComments;         
+    AutoFilterBuffer    maAutoFilters;      
+    QueryTableBuffer    maQueryTables;      
+    WorksheetSettings   maSheetSett;        
+    PageSettings        maPageSett;         
+    SheetViewSettings   maSheetViewSett;    
+    VmlDrawingPtr       mxVmlDrawing;       
+    ExtLst              maExtLst;           
+    BiffSheetDrawingPtr mxBiffDrawing;      
+    OUString            maDrawingPath;      
+    OUString            maVmlDrawingPath;   
+    awt::Size                maDrawPageSize;     
+    awt::Rectangle           maShapeBoundingBox; 
+    ISegmentProgressBarRef mxProgressBar;   
+    bool                   mbFastRowProgress; 
+    ISegmentProgressBarRef mxRowProgress;   
+    ISegmentProgressBarRef mxFinalProgress; 
+    WorksheetType       meSheetType;        
+    Reference< XSpreadsheet > mxSheet;      
+    bool                mbHasDefWidth;      
 };
 
-// ----------------------------------------------------------------------------
+
 
 WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmentProgressBarRef& rxProgressBar, WorksheetType eSheetType, sal_Int16 nSheet ) :
     WorkbookHelper( rHelper ),
@@ -455,14 +455,14 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
     if( !mxSheet.is() )
         maUsedArea.Sheet = -1;
 
-    // default column settings (width and hidden state may be updated later)
+    
     maDefColModel.mfWidth = 8.5;
     maDefColModel.mnXfId = -1;
     maDefColModel.mnLevel = 0;
     maDefColModel.mbHidden = false;
     maDefColModel.mbCollapsed = false;
 
-    // default row settings (height and hidden state may be updated later)
+    
     maDefRowModel.mfHeight = 0.0;
     maDefRowModel.mnXfId = -1;
     maDefRowModel.mnLevel = 0;
@@ -472,7 +472,7 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
     maDefRowModel.mbHidden = false;
     maDefRowModel.mbCollapsed = false;
 
-    // buffers
+    
     switch( getFilterType() )
     {
         case FILTER_OOXML:
@@ -485,7 +485,7 @@ WorksheetGlobals::WorksheetGlobals( const WorkbookHelper& rHelper, const ISegmen
         break;
     }
 
-    // prepare progress bars
+    
     if( mxProgressBar.get() )
     {
         mxRowProgress = mxProgressBar->createSegment( 0.5 );
@@ -629,21 +629,21 @@ namespace {
 
 inline sal_Int32 lclGetMidAddr( sal_Int32 nBegAddr, sal_Int32 nEndAddr, sal_Int32 nBegPos, sal_Int32 nEndPos, sal_Int32 nSearchPos )
 {
-    // use sal_Int64 to prevent integer overflow
+    
     return nBegAddr + 1 + static_cast< sal_Int32 >( static_cast< sal_Int64 >( nEndAddr - nBegAddr - 2 ) * (nSearchPos - nBegPos) / (nEndPos - nBegPos) );
 }
 
 bool lclPrepareInterval( sal_Int32 nBegAddr, sal_Int32& rnMidAddr, sal_Int32 nEndAddr,
         sal_Int32 nBegPos, sal_Int32 nEndPos, sal_Int32 nSearchPos )
 {
-    // searched position before nBegPos -> use nBegAddr
+    
     if( nSearchPos <= nBegPos )
     {
         rnMidAddr = nBegAddr;
         return false;
     }
 
-    // searched position after nEndPos, or begin next to end -> use nEndAddr
+    
     if( (nSearchPos >= nEndPos) || (nBegAddr + 1 >= nEndAddr) )
     {
         rnMidAddr = nEndAddr;
@@ -659,54 +659,54 @@ bool lclPrepareInterval( sal_Int32 nBegAddr, sal_Int32& rnMidAddr, sal_Int32 nEn
 bool lclUpdateInterval( sal_Int32& rnBegAddr, sal_Int32& rnMidAddr, sal_Int32& rnEndAddr,
         sal_Int32& rnBegPos, sal_Int32 nMidPos, sal_Int32& rnEndPos, sal_Int32 nSearchPos )
 {
-    // nSearchPos < nMidPos: use the interval [begin,mid] in the next iteration
+    
     if( nSearchPos < nMidPos )
     {
-        // if rnBegAddr is next to rnMidAddr, the latter is the column/row in question
+        
         if( rnBegAddr + 1 >= rnMidAddr )
             return false;
-        // otherwise, set interval end to mid
+        
         rnEndPos = nMidPos;
         rnEndAddr = rnMidAddr;
         rnMidAddr = lclGetMidAddr( rnBegAddr, rnEndAddr, rnBegPos, rnEndPos, nSearchPos );
         return true;
     }
 
-    // nSearchPos > nMidPos: use the interval [mid,end] in the next iteration
+    
     if( nSearchPos > nMidPos )
     {
-        // if rnMidAddr is next to rnEndAddr, the latter is the column/row in question
+        
         if( rnMidAddr + 1 >= rnEndAddr )
         {
             rnMidAddr = rnEndAddr;
             return false;
         }
-        // otherwise, set interval start to mid
+        
         rnBegPos = nMidPos;
         rnBegAddr = rnMidAddr;
         rnMidAddr = lclGetMidAddr( rnBegAddr, rnEndAddr, rnBegPos, rnEndPos, nSearchPos );
         return true;
     }
 
-    // nSearchPos == nMidPos: rnMidAddr is the column/row in question, do not loop anymore
+    
     return false;
 }
 
-} // namespace
+} 
 
 CellAddress WorksheetGlobals::getCellAddressFromPosition( const awt::Point& rPosition ) const
 {
-    // starting cell address and its position in drawing layer (top-left edge)
+    
     sal_Int32 nBegCol = 0;
     sal_Int32 nBegRow = 0;
     awt::Point aBegPos( 0, 0 );
 
-    // end cell address and its position in drawing layer (bottom-right edge)
+    
     sal_Int32 nEndCol = mrMaxApiPos.Column + 1;
     sal_Int32 nEndRow = mrMaxApiPos.Row + 1;
     awt::Point aEndPos( maDrawPageSize.Width, maDrawPageSize.Height );
 
-    // starting point for interval search
+    
     sal_Int32 nMidCol, nMidRow;
     bool bLoopCols = lclPrepareInterval( nBegCol, nMidCol, nEndCol, aBegPos.X, aEndPos.X, rPosition.X );
     bool bLoopRows = lclPrepareInterval( nBegRow, nMidRow, nEndRow, aBegPos.Y, aEndPos.Y, rPosition.Y );
@@ -797,7 +797,7 @@ void WorksheetGlobals::extendShapeBoundingBox( const awt::Rectangle& rShapeRect 
 {
     if( (maShapeBoundingBox.Width == 0) && (maShapeBoundingBox.Height == 0) )
     {
-        // width and height of maShapeBoundingBox are assumed to be zero on first cell
+        
         maShapeBoundingBox = rShapeRect;
     }
     else
@@ -813,10 +813,10 @@ void WorksheetGlobals::extendShapeBoundingBox( const awt::Rectangle& rShapeRect 
 
 void WorksheetGlobals::setBaseColumnWidth( sal_Int32 nWidth )
 {
-    // do not modify width, if setDefaultColumnWidth() has been used
+    
     if( !mbHasDefWidth && (nWidth > 0) )
     {
-        // #i3006# add 5 pixels padding to the width
+        
         const UnitConverter& rUnitConv = getUnitConverter();
         maDefColModel.mfWidth = rUnitConv.scaleFromMm100(
             rUnitConv.scaleToMm100( nWidth, UNIT_DIGIT ) + rUnitConv.scaleToMm100( 5, UNIT_SCREENX ), UNIT_DIGIT );
@@ -825,7 +825,7 @@ void WorksheetGlobals::setBaseColumnWidth( sal_Int32 nWidth )
 
 void WorksheetGlobals::setDefaultColumnWidth( double fWidth )
 {
-    // overrides a width set with setBaseColumnWidth()
+    
     if( fWidth > 0.0 )
     {
         maDefColModel.mfWidth = fWidth;
@@ -835,36 +835,36 @@ void WorksheetGlobals::setDefaultColumnWidth( double fWidth )
 
 void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
 {
-    // convert 1-based OOXML column indexes to 0-based API column indexes
+    
     sal_Int32 nFirstCol = rModel.maRange.mnFirst - 1;
     sal_Int32 nLastCol = rModel.maRange.mnLast - 1;
     if( getAddressConverter().checkCol( nFirstCol, true ) && (nFirstCol <= nLastCol) )
     {
-        // validate last column index
+        
         if( !getAddressConverter().checkCol( nLastCol, true ) )
             nLastCol = mrMaxApiPos.Column;
-        // try to find entry in column model map that is able to merge with the passed model
+        
         bool bInsertModel = true;
         if( !maColModels.empty() )
         {
-            // find first column model range following nFirstCol (nFirstCol < aIt->first), or end of map
+            
             ColumnModelRangeMap::iterator aIt = maColModels.upper_bound( nFirstCol );
             OSL_ENSURE( aIt == maColModels.end(), "WorksheetGlobals::setColModel - columns are unsorted" );
-            // if inserting before another column model, get last free column
+            
             OSL_ENSURE( (aIt == maColModels.end()) || (nLastCol < aIt->first), "WorksheetGlobals::setColModel - multiple models of the same column" );
             if( aIt != maColModels.end() )
                 nLastCol = ::std::min( nLastCol, aIt->first - 1 );
             if( aIt != maColModels.begin() )
             {
-                // go to previous map element (which may be able to merge with the passed model)
+                
                 --aIt;
-                // the usage of upper_bound() above ensures that aIt->first is less than or equal to nFirstCol now
+                
                 sal_Int32& rnLastMapCol = aIt->second.second;
                 OSL_ENSURE( rnLastMapCol < nFirstCol, "WorksheetGlobals::setColModel - multiple models of the same column" );
                 nFirstCol = ::std::max( rnLastMapCol + 1, nFirstCol );
                 if( (rnLastMapCol + 1 == nFirstCol) && (nFirstCol <= nLastCol) && aIt->second.first.isMergeable( rModel ) )
                 {
-                    // can merge with existing model, update last column index
+                    
                     rnLastMapCol = nLastCol;
                     bInsertModel = false;
                 }
@@ -872,10 +872,10 @@ void WorksheetGlobals::setColumnModel( const ColumnModel& rModel )
         }
         if( nFirstCol <= nLastCol )
         {
-            // insert the column model, if it has not been merged with another
+            
             if( bInsertModel )
                 maColModels[ nFirstCol ] = ColumnModelRange( rModel, nLastCol );
-            // set column formatting directly
+            
             convertColumnFormat( nFirstCol, nLastCol, rModel.mnXfId );
         }
     }
@@ -902,29 +902,29 @@ void WorksheetGlobals::setDefaultRowSettings( double fHeight, bool bCustomHeight
 
 void WorksheetGlobals::setRowModel( const RowModel& rModel )
 {
-    // convert 1-based OOXML row index to 0-based API row index
+    
     sal_Int32 nRow = rModel.mnRow - 1;
     if( getAddressConverter().checkRow( nRow, true ) )
     {
-        // try to find entry in row model map that is able to merge with the passed model
+        
         bool bInsertModel = true;
         bool bUnusedRow = true;
         if( !maRowModels.empty() )
         {
-            // find first row model range following nRow (nRow < aIt->first), or end of map
+            
             RowModelRangeMap::iterator aIt = maRowModels.upper_bound( nRow );
             OSL_ENSURE( aIt == maRowModels.end(), "WorksheetGlobals::setRowModel - rows are unsorted" );
             if( aIt != maRowModels.begin() )
             {
-                // go to previous map element (which may be able to merge with the passed model)
+                
                 --aIt;
-                // the usage of upper_bound() above ensures that aIt->first is less than or equal to nRow now
+                
                 sal_Int32& rnLastMapRow = aIt->second.second;
                 bUnusedRow = rnLastMapRow < nRow;
                 OSL_ENSURE( bUnusedRow, "WorksheetGlobals::setRowModel - multiple models of the same row" );
                 if( (rnLastMapRow + 1 == nRow) && aIt->second.first.isMergeable( rModel ) )
                 {
-                    // can merge with existing model, update last row index
+                    
                     ++rnLastMapRow;
                     bInsertModel = false;
                 }
@@ -932,12 +932,12 @@ void WorksheetGlobals::setRowModel( const RowModel& rModel )
         }
         if( bUnusedRow )
         {
-            // insert the row model, if it has not been merged with another
+            
             if( bInsertModel )
                 maRowModels[ nRow ] = RowModelRange( rModel, nRow );
-            // set row formatting
+            
             maSheetData.setRowFormat( nRow, rModel.mnXfId, rModel.mbCustomFormat );
-            // set column spans
+            
             maSheetData.setColSpans( nRow, rModel.maColSpans );
         }
     }
@@ -945,7 +945,7 @@ void WorksheetGlobals::setRowModel( const RowModel& rModel )
     UpdateRowProgress( maUsedArea, nRow );
 }
 
-// This is called at a higher frequency inside the (threaded) inner loop.
+
 void WorksheetGlobals::UpdateRowProgress( const CellRangeAddress& rUsedArea, sal_Int32 nRow )
 {
     if (!mxRowProgress || nRow < rUsedArea.StartRow || rUsedArea.EndRow < nRow)
@@ -959,7 +959,7 @@ void WorksheetGlobals::UpdateRowProgress( const CellRangeAddress& rUsedArea, sal
     {
         double fCurPos = mxRowProgress->getPosition();
         if (fCurPos < fNewPos && (fNewPos - fCurPos) > 0.3)
-            // Try not to re-draw progress bar too frequently.
+            
             mxRowProgress->setPosition(fNewPos);
     }
 }
@@ -967,7 +967,7 @@ void WorksheetGlobals::UpdateRowProgress( const CellRangeAddress& rUsedArea, sal
 
 void WorksheetGlobals::initializeWorksheetImport()
 {
-    // set default cell style for unused cells
+    
     ScDocumentImport& rDoc = getDocImport();
 
     ScStyleSheet* pStyleSheet =
@@ -986,8 +986,8 @@ void WorksheetGlobals::finalizeWorksheetImport()
 {
     lclUpdateProgressBar( mxRowProgress, 1.0 );
     maSheetData.finalizeImport();
-    // assumes getTables().finalizeImport ( which creates the DatabaseRanges )
-    // has been called already
+    
+    
     getTables().applyAutoFilters();
 
     getCondFormats().finalizeImport();
@@ -1010,18 +1010,18 @@ void WorksheetGlobals::finalizeDrawingImport()
 {
     finalizeDrawings();
 
-    // forget current sheet index in global data
+    
     setCurrentSheetIndex( -1 );
 }
 
-// private --------------------------------------------------------------------
+
 
 void WorksheetGlobals::finalizeHyperlinkRanges()
 {
     for( HyperlinkModelList::const_iterator aIt = maHyperlinks.begin(), aEnd = maHyperlinks.end(); aIt != aEnd; ++aIt )
     {
         OUString aUrl = getHyperlinkUrl( *aIt );
-        // try to insert URL into each cell of the range
+        
         if( !aUrl.isEmpty() )
             for( CellAddress aAddress( getSheetIndex(), aIt->maRange.StartColumn, aIt->maRange.StartRow ); aAddress.Row <= aIt->maRange.EndRow; ++aAddress.Row )
                 for( aAddress.Column = aIt->maRange.StartColumn; aAddress.Column <= aIt->maRange.EndColumn; ++aAddress.Column )
@@ -1038,15 +1038,15 @@ OUString WorksheetGlobals::getHyperlinkUrl( const HyperlinkModel& rHyperlink ) c
         aUrlBuffer.append( '#' ).append( rHyperlink.maLocation );
     OUString aUrl = aUrlBuffer.makeStringAndClear();
 
-    // convert '#SheetName!A1' to '#SheetName.A1'
+    
     if( aUrl.startsWith("#") )
     {
         sal_Int32 nSepPos = aUrl.lastIndexOf( '!' );
         if( nSepPos > 0 )
         {
-            // replace the exclamation mark with a period
+            
             aUrl = aUrl.replaceAt( nSepPos, 1, OUString( '.' ) );
-            // #i66592# convert sheet names that have been renamed on import
+            
             OUString aSheetName = aUrl.copy( 1, nSepPos - 1 );
             OUString aCalcName = getWorksheets().getCalcSheetName( aSheetName );
             if( !aCalcName.isEmpty() )
@@ -1078,15 +1078,15 @@ void WorksheetGlobals::insertHyperlink( const CellAddress& rAddress, const OUStr
     }
     else
     {
-        // Handle other cell types e.g. formulas ( and ? ) that have associated
-        // hyperlinks.
-        // Ideally all hyperlinks should be treated  as below. For the moment,
-        // given the current absence of ods support lets just handle what we
-        // previously didn't handle the new way.
-        // Unfortunately we won't be able to preserve such hyperlinks when
-        // saving to ods. Note: when we are able to save such hyperlinks to ods
-        // we should handle *all* imported hyperlinks as below ( e.g. as cell
-        // attribute ) for better interoperability.
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         SfxStringItem aItem(ATTR_HYPERLINK, rUrl);
         rDoc.getDoc().ApplyAttr(rAddress.Column, rAddress.Row, rAddress.Sheet, aItem);
@@ -1124,7 +1124,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
             {
             }
 
-            // convert validation type to API enum
+            
             ValidationType eType = ValidationType_ANY;
             switch( aIt->mnType )
             {
@@ -1140,7 +1140,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
             }
             aValProps.setProperty( PROP_Type, eType );
 
-            // convert error alert style to API enum
+            
             ValidationAlertStyle eAlertStyle = ValidationAlertStyle_STOP;
             switch( aIt->mnErrorStyle )
             {
@@ -1151,11 +1151,11 @@ void WorksheetGlobals::finalizeValidationRanges() const
             }
             aValProps.setProperty( PROP_ErrorAlertStyle, eAlertStyle );
 
-            // convert dropdown style to API visibility constants
+            
             sal_Int16 nVisibility = aIt->mbNoDropDown ? TableValidationVisibility::INVISIBLE : TableValidationVisibility::UNSORTED;
             aValProps.setProperty( PROP_ShowList, nVisibility );
 
-            // messages
+            
             aValProps.setProperty( PROP_ShowInputMessage, aIt->mbShowInputMsg );
             aValProps.setProperty( PROP_InputTitle, aIt->maInputTitle );
             aValProps.setProperty( PROP_InputMessage, aIt->maInputMessage );
@@ -1163,16 +1163,16 @@ void WorksheetGlobals::finalizeValidationRanges() const
             aValProps.setProperty( PROP_ErrorTitle, aIt->maErrorTitle );
             aValProps.setProperty( PROP_ErrorMessage, aIt->maErrorMessage );
 
-            // allow blank cells
+            
             aValProps.setProperty( PROP_IgnoreBlankCells, aIt->mbAllowBlank );
 
             try
             {
-                // condition operator
+                
                 Reference< XSheetCondition2 > xSheetCond( xValidation, UNO_QUERY_THROW );
                 xSheetCond->setConditionOperator( CondFormatBuffer::convertToApiOperator( aIt->mnOperator ) );
 
-                // condition formulas
+                
                 Reference< XMultiFormulaTokens > xTokens( xValidation, UNO_QUERY_THROW );
                 xTokens->setTokens( 0, aIt->maTokens1 );
                 xTokens->setTokens( 1, aIt->maTokens2 );
@@ -1181,7 +1181,7 @@ void WorksheetGlobals::finalizeValidationRanges() const
             {
             }
 
-            // write back validation settings to cell range(s)
+            
             aPropSet.setProperty( PROP_Validation, xValidation );
         }
     }
@@ -1191,34 +1191,34 @@ void WorksheetGlobals::convertColumns()
 {
     sal_Int32 nNextCol = 0;
     sal_Int32 nMaxCol = mrMaxApiPos.Column;
-    // stores first grouped column index for each level
+    
     OutlineLevelVec aColLevels;
 
     for( ColumnModelRangeMap::iterator aIt = maColModels.begin(), aEnd = maColModels.end(); aIt != aEnd; ++aIt )
     {
-        // column indexes are stored 0-based in maColModels
+        
         ValueRange aColRange( ::std::max( aIt->first, nNextCol ), ::std::min( aIt->second.second, nMaxCol ) );
-        // process gap between two column models, use default column model
+        
         if( nNextCol < aColRange.mnFirst )
             convertColumns( aColLevels, ValueRange( nNextCol, aColRange.mnFirst - 1 ), maDefColModel );
-        // process the column model
+        
         convertColumns( aColLevels, aColRange, aIt->second.first );
-        // cache next column to be processed
+        
         nNextCol = aColRange.mnLast + 1;
     }
 
-    // remaining default columns to end of sheet
+    
     convertColumns( aColLevels, ValueRange( nNextCol, nMaxCol ), maDefColModel );
-    // close remaining column outlines spanning to end of sheet
+    
     convertOutlines( aColLevels, nMaxCol + 1, 0, false, false );
 }
 
 void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
         const ValueRange& rColRange, const ColumnModel& rModel )
 {
-    // column width: convert 'number of characters' to column width in 1/100 mm
+    
     sal_Int32 nWidth = getUnitConverter().scaleToMm100( rModel.mfWidth, UNIT_DIGIT );
-    // macro sheets have double width
+    
     if( meSheetType == SHEETTYPE_MACROSHEET )
         nWidth *= 2;
 
@@ -1235,13 +1235,13 @@ void WorksheetGlobals::convertColumns( OutlineLevelVec& orColLevels,
         }
     }
 
-    // hidden columns: TODO: #108683# hide columns later?
+    
     if( rModel.mbHidden )
     {
         rDoc.SetColHidden( nStartCol, nEndCol, nTab, true );
     }
 
-    // outline settings for this column range
+    
     convertOutlines( orColLevels, rColRange.mnFirst, rModel.mnLevel, rModel.mbCollapsed, false );
 }
 
@@ -1249,32 +1249,32 @@ void WorksheetGlobals::convertRows()
 {
     sal_Int32 nNextRow = 0;
     sal_Int32 nMaxRow = mrMaxApiPos.Row;
-    // stores first grouped row index for each level
+    
     OutlineLevelVec aRowLevels;
 
     for( RowModelRangeMap::iterator aIt = maRowModels.begin(), aEnd = maRowModels.end(); aIt != aEnd; ++aIt )
     {
-        // row indexes are stored 0-based in maRowModels
+        
         ValueRange aRowRange( ::std::max( aIt->first, nNextRow ), ::std::min( aIt->second.second, nMaxRow ) );
-        // process gap between two row models, use default row model
+        
         if( nNextRow < aRowRange.mnFirst )
             convertRows( aRowLevels, ValueRange( nNextRow, aRowRange.mnFirst - 1 ), maDefRowModel );
-        // process the row model
+        
         convertRows( aRowLevels, aRowRange, aIt->second.first, maDefRowModel.mfHeight );
-        // cache next row to be processed
+        
         nNextRow = aRowRange.mnLast + 1;
     }
 
-    // remaining default rows to end of sheet
+    
     convertRows( aRowLevels, ValueRange( nNextRow, nMaxRow ), maDefRowModel );
-    // close remaining row outlines spanning to end of sheet
+    
     convertOutlines( aRowLevels, nMaxRow + 1, 0, false, true );
 }
 
 void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
         const ValueRange& rRowRange, const RowModel& rModel, double fDefHeight )
 {
-    // row height: convert points to row height in 1/100 mm
+    
     double fHeight = (rModel.mfHeight >= 0.0) ? rModel.mfHeight : fDefHeight;
     sal_Int32 nHeight = getUnitConverter().scaleToMm100( fHeight, UNIT_POINT );
     SCROW nStartRow = rRowRange.mnFirst;
@@ -1289,14 +1289,14 @@ void WorksheetGlobals::convertRows( OutlineLevelVec& orRowLevels,
             rDoc.SetManualHeight( nStartRow, nEndRow, nTab, true );
     }
 
-    // hidden rows: TODO: #108683# hide rows later?
+    
     if( rModel.mbHidden )
     {
         ScDocument& rDoc = getScDocument();
         rDoc.SetRowHidden( nStartRow, nEndRow, nTab, true );
     }
 
-    // outline settings for this row range
+    
     convertOutlines( orRowLevels, rRowRange.mnFirst, rModel.mnLevel, rModel.mbCollapsed, true );
 }
 
@@ -1312,19 +1312,19 @@ void WorksheetGlobals::convertOutlines( OutlineLevelVec& orLevels,
     sal_Int32 nSize = orLevels.size();
     if( nSize < nLevel )
     {
-        // Outline level increased. Push the begin column position.
+        
         for( sal_Int32 nIndex = nSize; nIndex < nLevel; ++nIndex )
             orLevels.push_back( nColRow );
     }
     else if( nLevel < nSize )
     {
-        // Outline level decreased. Pop them all out.
+        
         for( sal_Int32 nIndex = nLevel; nIndex < nSize; ++nIndex )
         {
             sal_Int32 nFirstInLevel = orLevels.back();
             orLevels.pop_back();
             groupColumnsOrRows( nFirstInLevel, nColRow - 1, bCollapsed, bRows );
-            bCollapsed = false; // collapse only once
+            bCollapsed = false; 
         }
     }
 }
@@ -1356,14 +1356,14 @@ void WorksheetGlobals::groupColumnsOrRows( sal_Int32 nFirstColRow, sal_Int32 nLa
 
 void WorksheetGlobals::finalizeDrawings()
 {
-    // calculate the current drawing page size (after rows/columns are imported)
+    
     PropertySet aRangeProp( getCellRange( CellRangeAddress( getSheetIndex(), 0, 0, mrMaxApiPos.Column, mrMaxApiPos.Row ) ) );
     aRangeProp.getProperty( maDrawPageSize, PROP_Size );
 
     switch( getFilterType() )
     {
         case FILTER_OOXML:
-            // import DML and VML
+            
             if( !maDrawingPath.isEmpty() )
                 importOoxFragment( new DrawingFragment( *this, maDrawingPath ) );
             if( !maVmlDrawingPath.isEmpty() )
@@ -1371,7 +1371,7 @@ void WorksheetGlobals::finalizeDrawings()
         break;
 
         case FILTER_BIFF:
-            // convert BIFF3-BIFF5 drawing objects, or import and convert DFF stream
+            
             getBiffDrawing().finalizeImport();
         break;
 
@@ -1379,7 +1379,7 @@ void WorksheetGlobals::finalizeDrawings()
         break;
     }
 
-    // comments (after callout shapes have been imported from VML/DFF)
+    
     maComments.finalizeImport();
 
     /*  Extend used area of the sheet by cells covered with drawing objects.
@@ -1388,7 +1388,7 @@ void WorksheetGlobals::finalizeDrawings()
     if( (maShapeBoundingBox.Width > 0) || (maShapeBoundingBox.Height > 0) )
         extendUsedArea( getCellRangeFromRectangle( maShapeBoundingBox ) );
 
-    // if no used area is set, default to A1
+    
     if( maUsedArea.StartColumn > maUsedArea.EndColumn )
         maUsedArea.StartColumn = maUsedArea.EndColumn = 0;
     if( maUsedArea.StartRow > maUsedArea.EndRow )
@@ -1408,8 +1408,8 @@ void WorksheetGlobals::finalizeDrawings()
     }
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 WorksheetHelper::WorksheetHelper( WorksheetGlobals& rSheetGlob ) :
     WorkbookHelper( rSheetGlob ),
@@ -1616,7 +1616,7 @@ void WorksheetHelper::putRichString( const CellAddress& rAddress, const RichStri
 {
     ScEditEngineDefaulter& rEE = getEditEngine();
 
-    // The cell will own the text object instance returned from convert().
+    
     ScAddress aAddress;
     ScUnoConversion::FillScAddress( aAddress, rAddress );
     getDocImport().setEditCell(aAddress, rString.convert(rEE, pFirstPortionFont));
@@ -1670,10 +1670,10 @@ void WorksheetHelper::createSharedFormulaMapEntry(
     getFormulaBuffer().createSharedFormulaMapEntry(rAddress, rRange, nSharedId, rTokens);
 }
 
-// ============================================================================
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,8 +54,8 @@ public:
     Impl() {}
 
 private:
-    Impl(Impl &); // not defined
-    void operator =(Impl &); // not defined
+    Impl(Impl &); 
+    void operator =(Impl &); 
 
     virtual ~Impl() {}
 
@@ -210,7 +210,7 @@ private:
         css::uno::Sequence< css::uno::Any > const & arguments)
         throw (css::uno::Exception);
 
-    //XMultiBase1
+    
     virtual double SAL_CALL getatt1()
         throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setatt1( double _att1 )
@@ -258,7 +258,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
     ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int16 > > arg22;
     ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int32 > > arg23;
     ttb::TestPolyStruct<css::uno::Sequence< ::sal_Int64 > > arg24;
-//    ttb::TestPolyStruct<css::uno::Sequence<::sal_Unicode> > arg25;
+
     ttb::TestPolyStruct<css::uno::Sequence< OUString > > arg26;
     ttb::TestPolyStruct<css::uno::Sequence<float> > arg27;
     ttb::TestPolyStruct<css::uno::Sequence<double> > arg28;
@@ -399,7 +399,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
         throw ::test::testtools::bridgetest::BadConstructorArguments();
     }
 
-    //check if interfaces work
+    
     arg11.member->acquire();
     arg11.member->release();
     arg12.member->acquire();
@@ -409,7 +409,7 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
 
 }
 
-//XMultiBase1
+
 double Impl2::getatt1()
         throw (::com::sun::star::uno::RuntimeException)
 {

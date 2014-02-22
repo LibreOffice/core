@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,7 +48,7 @@ namespace
 {
     inline uno::Sequence< double > color2Sequence( sal_Int32 const& nColor      )
     {
-        // TODO(F3): Color management
+        
         uno::Sequence< double > aRes( 4 );
 
         aRes[0] = static_cast<sal_uInt8>( (nColor&0xFF000000U) >> 24U ) / 255.0;
@@ -143,13 +143,13 @@ namespace
         {
             uno::Reference<rendering::XCanvas> xRet;
 
-            // can't do much without an XCanvas, can't we?
+            
             if( rArgs.getLength() < 1 )
                 throw lang::IllegalArgumentException();
 
             xRet.set( rArgs[0], uno::UNO_QUERY );
 
-            // can't do much without an XCanvas, can't we?
+            
             if( !xRet.is() )
                 throw lang::IllegalArgumentException();
 
@@ -172,16 +172,16 @@ namespace
             tools::initViewState(maViewState);
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+        
 
     private:
-        // Ifc XServiceName
+        
         virtual OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException)
         {
             return OUString( SERVICE_NAME );
         }
 
-        // Ifc XSimpleCanvas
+        
         virtual void SAL_CALL selectFont( const OUString& sFontName,
                                           double                 size,
                                           ::sal_Bool             bold,
@@ -362,7 +362,7 @@ namespace
                 return createStrokingRenderState();
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////
+        
 
         typedef o3tl::LazyUpdate<
             rendering::FontRequest,
@@ -382,7 +382,7 @@ namespace
         SERVICE_NAME );
 }
 
-// The C shared lib entry points
+
 COMPHELPER_SERVICEDECL_EXPORTS1(simplecanvas, simpleCanvasDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

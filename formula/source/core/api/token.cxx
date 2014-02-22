@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,21 +33,21 @@
 namespace formula
 {
     using namespace com::sun::star;
-// ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
-// SubCode via FormulaTokenIterator Push/Pop moeglich
+
+
 IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator )
 
-// Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
-// Need a lot of FormulaDoubleToken
+
+
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaDoubleToken )
-// Need a lot of FormulaByteToken
+
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaByteToken )
-// Need several FormulaStringToken
+
 IMPL_FIXEDMEMPOOL_NEWDEL_DLL( FormulaStringToken )
 
 
-// --- helpers --------------------------------------------------------------
+
 
 inline bool lcl_IsReference( OpCode eOp, StackVar eType )
 {
@@ -59,7 +59,7 @@ inline bool lcl_IsReference( OpCode eOp, StackVar eType )
         ;
 }
 
-// --- class FormulaToken --------------------------------------------------------
+
 FormulaToken::~FormulaToken()
 {
 }
@@ -73,16 +73,16 @@ bool FormulaToken::IsFunction() const
 {
     return (eOp != ocPush && eOp != ocBad && eOp != ocColRowName &&
             eOp != ocColRowNameAuto && eOp != ocName && eOp != ocDBArea &&
-           (GetByte() != 0                                                  // x parameters
-        || (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)   // no parameter
-        || (ocIf == eOp || ocIfError == eOp || ocIfNA == eOp || ocChose == eOp ) // @ jump commands
-        || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)     // one parameter
-        || (SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)     // x parameters (cByte==0 in
-                                                                            // FuncAutoPilot)
-        || eOp == ocMacro || eOp == ocExternal                  // macros, AddIns
-        || eOp == ocAnd || eOp == ocOr                          // former binary, now x parameters
-        || eOp == ocNot || eOp == ocNeg                         // unary but function
-        || (eOp >= ocInternalBegin && eOp <= ocInternalEnd)     // internal
+           (GetByte() != 0                                                  
+        || (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)   
+        || (ocIf == eOp || ocIfError == eOp || ocIfNA == eOp || ocChose == eOp ) 
+        || (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)     
+        || (SC_OPCODE_START_2_PAR <= eOp && eOp < SC_OPCODE_STOP_2_PAR)     
+                                                                            
+        || eOp == ocMacro || eOp == ocExternal                  
+        || eOp == ocAnd || eOp == ocOr                          
+        || eOp == ocNot || eOp == ocNeg                         
+        || (eOp >= ocInternalBegin && eOp <= ocInternalEnd)     
         ));
 }
 
@@ -92,25 +92,25 @@ sal_uInt8 FormulaToken::GetParamCount() const
     if ( eOp < SC_OPCODE_STOP_DIV && eOp != ocExternal && eOp != ocMacro &&
          eOp != ocIf && eOp != ocIfError && eOp != ocIfNA && eOp != ocChose &&
          eOp != ocPercentSign )
-        return 0;       // parameters and specials
-                        // ocIf, ocIfError, ocIfNA and ocChose not for FAP, have cByte then
-//2do: bool parameter whether FAP or not?
+        return 0;       
+                        
+
     else if ( GetByte() )
-        return GetByte();   // all functions, also ocExternal and ocMacro
+        return GetByte();   
     else if (SC_OPCODE_START_BIN_OP <= eOp && eOp < SC_OPCODE_STOP_BIN_OP)
-        return 2;           // binary
+        return 2;           
     else if ((SC_OPCODE_START_UN_OP <= eOp && eOp < SC_OPCODE_STOP_UN_OP)
             || eOp == ocPercentSign)
-        return 1;           // unary
+        return 1;           
     else if (SC_OPCODE_START_NO_PAR <= eOp && eOp < SC_OPCODE_STOP_NO_PAR)
-        return 0;           // no parameter
+        return 0;           
     else if (SC_OPCODE_START_1_PAR <= eOp && eOp < SC_OPCODE_STOP_1_PAR)
-        return 1;           // one parameter
+        return 1;           
     else if ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose )
-        return 1;           // only the condition counts as parameter
+        return 1;           
     else
-        return 0;           // all the rest, no Parameter, or
-                            // if so then it should be in cByte
+        return 0;           
+                            
 }
 
 bool FormulaToken::IsExternalRef() const
@@ -148,16 +148,16 @@ bool FormulaToken::IsRef() const
 
 bool FormulaToken::operator==( const FormulaToken& rToken ) const
 {
-    // don't compare reference count!
+    
     return  eType == rToken.eType && GetOpCode() == rToken.GetOpCode();
 }
 
 
-// --- virtual dummy methods -------------------------------------------------
+
 
 sal_uInt8 FormulaToken::GetByte() const
 {
-    // ok to be called for any derived class
+    
     return 0;
 }
 
@@ -168,7 +168,7 @@ void FormulaToken::SetByte( sal_uInt8 )
 
 bool FormulaToken::HasForceArray() const
 {
-    // ok to be called for any derived class
+    
     return false;
 }
 
@@ -193,7 +193,7 @@ double & FormulaToken::GetDoubleAsReference()
 svl::SharedString FormulaToken::GetString() const
 {
     SAL_WARN( "formula.core", "FormulaToken::GetString: virtual dummy called" );
-    return svl::SharedString(); // invalid string
+    return svl::SharedString(); 
 }
 
 sal_uInt16 FormulaToken::GetIndex() const
@@ -253,9 +253,9 @@ bool FormulaToken::TextEqual( const FormulaToken& rToken ) const
 {
     return *this == rToken;
 }
-// ==========================================================================
-// real implementations of virtual functions
-// --------------------------------------------------------------------------
+
+
+
 
 
 sal_uInt8 FormulaByteToken::GetByte() const                       { return nByte; }
@@ -289,17 +289,17 @@ FormulaJumpToken::~FormulaJumpToken()
 bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,ExternalReferenceHelper* /*_pRef*/)
 {
     bool bError = false;
-    const OpCode eOpCode = static_cast<OpCode>(_aToken.OpCode);      //! assuming equal values for the moment
+    const OpCode eOpCode = static_cast<OpCode>(_aToken.OpCode);      
 
     const uno::TypeClass eClass = _aToken.Data.getValueTypeClass();
     switch ( eClass )
     {
         case uno::TypeClass_VOID:
-            // empty data -> use AddOpCode (does some special cases)
+            
             AddOpCode( eOpCode );
             break;
         case uno::TypeClass_DOUBLE:
-            // double is only used for "push"
+            
             if ( eOpCode == ocPush )
                 AddDouble( _aToken.Data.get<double>() );
             else
@@ -307,7 +307,7 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
             break;
         case uno::TypeClass_LONG:
             {
-                // long is svIndex, used for name / database area, or "byte" for spaces
+                
                 sal_Int32 nValue = _aToken.Data.get<sal_Int32>();
                 if ( eOpCode == ocDBArea )
                     AddToken( formula::FormulaIndexToken( eOpCode, static_cast<sal_uInt16>(nValue) ) );
@@ -329,12 +329,12 @@ bool FormulaTokenArray::AddFormulaToken(const sheet::FormulaToken& _aToken,Exter
                 else if ( eOpCode == ocExternal || eOpCode == ocMacro )
                     AddToken( formula::FormulaExternalToken( eOpCode, aStrVal ) );
                 else
-                    bError = true;      // unexpected string: don't know what to do with it
+                    bError = true;      
             }
             break;
         default:
             bError = true;
-    } // switch ( eClass )
+    } 
     return bError;
 }
 bool FormulaTokenArray::Fill(const uno::Sequence< sheet::FormulaToken >& _aSequence,ExternalReferenceHelper* _pRef)
@@ -346,7 +346,7 @@ bool FormulaTokenArray::Fill(const uno::Sequence< sheet::FormulaToken >& _aSeque
         bool bOneError = AddFormulaToken( _aSequence[nPos] ,_pRef);
         if (bOneError)
         {
-            AddOpCode( ocErrName);  // add something that indicates an error
+            AddOpCode( ocErrName);  
             bError = true;
         }
     }
@@ -366,7 +366,7 @@ FormulaToken* FormulaTokenArray::GetNextReference()
                 return t;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -398,7 +398,7 @@ FormulaToken* FormulaTokenArray::GetNextReferenceRPN()
                 return t;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -423,7 +423,7 @@ FormulaToken* FormulaTokenArray::GetNextReferenceOrName()
                     return t;
                 default:
                 {
-                    // added to avoid warnings
+                    
                 }
              }
          }
@@ -441,7 +441,7 @@ FormulaToken* FormulaTokenArray::GetNextName()
             if( t->GetType() == svIndex )
                 return t;
         }
-    } // if( pCode )
+    } 
     return NULL;
 }
 
@@ -735,7 +735,7 @@ void FormulaTokenArray::Clear()
 
 void FormulaTokenArray::CheckToken( const FormulaToken& /*r*/ )
 {
-    // Do nothing.
+    
 }
 
 FormulaToken* FormulaTokenArray::AddToken( const FormulaToken& r )
@@ -817,7 +817,7 @@ FormulaToken* FormulaTokenArray::AddStringXML( const OUString& rStr )
 
 void FormulaTokenArray::AddRecalcMode( ScRecalcMode nBits )
 {
-    //! Reihenfolge ist wichtig
+    
     if ( nBits & RECALCMODE_ALWAYS )
         SetExclusiveRecalcModeAlways();
     else if ( !IsRecalcModeAlways() )
@@ -835,8 +835,8 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
 {
     if ( pRPN && nRPN )
     {
-        // RPN-Interpreter Simulation
-        // als Ergebnis jeder Funktion wird einfach ein Double angenommen
+        
+        
         FormulaToken** pStack = new FormulaToken* [nRPN];
         FormulaToken* pResult = new FormulaDoubleToken( 0.0 );
         short sp = 0;
@@ -874,18 +874,18 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
                 break;
                 default:
                 {
-                    // added to avoid warnings
+                    
                 }
             }
             if ( eOp == ocPush || lcl_IsReference( eOp, t->GetType() )  )
                 pStack[sp++] = t;
             else if ( eOp == ocIf || eOp == ocIfError || eOp == ocIfNA || eOp == ocChose )
-            {   // ignore Jumps, pop previous Result (Condition)
+            {   
                 if ( sp )
                     --sp;
             }
             else
-            {   // pop parameters, push result
+            {   
                 sp = sal::static_int_cast<short>( sp - nParams );
                 if ( sp < 0 )
                 {
@@ -904,7 +904,7 @@ bool FormulaTokenArray::HasMatrixDoubleRefOps()
 
 
 
-// --- POF (plain old formula) rewrite of a token array ---------------------
+
 
 inline bool MissingConvention::isRewriteNeeded( OpCode eOp ) const
 {
@@ -918,7 +918,7 @@ inline bool MissingConvention::isRewriteNeeded( OpCode eOp ) const
             return true;
         case ocMissing:
         case ocLog:
-            return !isODFF();   // rewrite only for PODF
+            return !isODFF();   
         default:
             return false;
     }
@@ -948,40 +948,40 @@ void FormulaMissingContext::AddMoreArgs( FormulaTokenArray *pNewArr, const Missi
             if (mnCurArg == 2)
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=true()
+                pNewArr->AddDouble( 1.0 );      
             }
             break;
         case ocPoissonDist:
             if (mnCurArg == 1)
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 3rd, Cumulative=true()
+                pNewArr->AddDouble( 1.0 );      
             }
             break;
         case ocNormDist:
             if ( mnCurArg == 2 )
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 4th, Cumulative=true()
+                pNewArr->AddDouble( 1.0 );      
             }
             break;
         case ocLogNormDist:
             if ( mnCurArg == 0 )
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 0.0 );      // 2nd, mean = 0.0
+                pNewArr->AddDouble( 0.0 );      
             }
             if ( mnCurArg <= 1 )
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 1.0 );      // 3rd, standard deviation = 1.0
+                pNewArr->AddDouble( 1.0 );      
             }
             break;
         case ocLog:
             if ( !rConv.isODFF() && mnCurArg == 0 )
             {
                 pNewArr->AddOpCode( ocSep );
-                pNewArr->AddDouble( 10.0 );     // 2nd, basis 10
+                pNewArr->AddDouble( 10.0 );     
             }
             break;
         default:
@@ -1001,11 +1001,11 @@ inline bool FormulaMissingContext::AddDefaultArg( FormulaTokenArray* pNewArr, in
 
 bool FormulaMissingContext::AddMissingExternal( FormulaTokenArray *pNewArr ) const
 {
-    // Only called for PODF, not ODFF. No need to distinguish.
+    
 
     const OUString &rName = mpFunc->GetExternal();
 
-    // initial (fast) check:
+    
     sal_Unicode nLastChar = rName[ rName.getLength() - 1];
     if ( nLastChar != 't' && nLastChar != 'm' )
         return false;
@@ -1031,51 +1031,51 @@ bool FormulaMissingContext::AddMissing( FormulaTokenArray *pNewArr, const Missin
     bool bRet = false;
     const OpCode eOp = mpFunc->GetOpCode();
 
-    // Add for both, PODF and ODFF
+    
     switch (eOp)
     {
         case ocAddress:
-            return AddDefaultArg( pNewArr, 2, 1.0 );    // abs
+            return AddDefaultArg( pNewArr, 2, 1.0 );    
         default:
             break;
     }
 
     if (rConv.isODFF())
     {
-        // Add for ODFF
+        
     }
     else
     {
-        // Add for PODF
+        
         switch (eOp)
         {
             case ocFixed:
                 return AddDefaultArg( pNewArr, 1, 2.0 );
             case ocBetaDist:
             case ocBetaInv:
-            case ocRMZ:     // PMT
+            case ocRMZ:     
                 return AddDefaultArg( pNewArr, 3, 0.0 );
-            case ocZinsZ:   // IPMT
-            case ocKapz:    // PPMT
+            case ocZinsZ:   
+            case ocKapz:    
                 return AddDefaultArg( pNewArr, 4, 0.0 );
-            case ocBW:      // PV
-            case ocZW:      // FV
-                bRet |= AddDefaultArg( pNewArr, 2, 0.0 );   // pmt
-                bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   // [fp]v
+            case ocBW:      
+            case ocZW:      
+                bRet |= AddDefaultArg( pNewArr, 2, 0.0 );   
+                bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   
                 break;
-            case ocZins:    // RATE
-                bRet |= AddDefaultArg( pNewArr, 1, 0.0 );   // pmt
-                bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   // fv
-                bRet |= AddDefaultArg( pNewArr, 4, 0.0 );   // type
+            case ocZins:    
+                bRet |= AddDefaultArg( pNewArr, 1, 0.0 );   
+                bRet |= AddDefaultArg( pNewArr, 3, 0.0 );   
+                bRet |= AddDefaultArg( pNewArr, 4, 0.0 );   
                 break;
             case ocExternal:
                 return AddMissingExternal( pNewArr );
 
-                // --- more complex cases ---
+                
 
             case ocOffset:
-                // FIXME: rather tough.
-                // if arg 3 (height) omitted, export arg1 (rows)
+                
+                
                 break;
             default:
                 break;
@@ -1100,35 +1100,35 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
 {
     const size_t nAlloc = 256;
     FormulaMissingContext aCtx[ nAlloc ];
-    int aOpCodeAddressStack[ nAlloc ];  // use of ADDRESS() function
-    const int nOmitAddressArg = 3;      // ADDRESS() 4th parameter A1/R1C1
+    int aOpCodeAddressStack[ nAlloc ];  
+    const int nOmitAddressArg = 3;      
     sal_uInt16 nTokens = GetLen() + 1;
     FormulaMissingContext* pCtx = (nAlloc < nTokens ? new FormulaMissingContext[nTokens] : &aCtx[0]);
     int* pOcas = (nAlloc < nTokens ? new int[nTokens] : &aOpCodeAddressStack[0]);
-    // Never go below 0, never use 0, mpFunc always NULL.
+    
     pCtx[0].Clear();
     int nFn = 0;
     int nOcas = 0;
 
     FormulaTokenArray *pNewArr = new FormulaTokenArray;
-    // At least RECALCMODE_ALWAYS needs to be set.
+    
     pNewArr->AddRecalcMode( GetRecalcMode());
 
     for ( FormulaToken *pCur = First(); pCur; pCur = Next() )
     {
         bool bAdd = true;
-        // Don't write the expression of the new inserted ADDRESS() parameter.
-        // Do NOT omit the new second parameter of INDIRECT() though. If that
-        // was done for both, INDIRECT() actually could calculate different and
-        // valid (but wrong) results with the then changed return value of
-        // ADDRESS(). Better let it generate an error instead.
+        
+        
+        
+        
+        
         for (int i = nOcas; i-- > 0 && bAdd; )
         {
             if (pCtx[ pOcas[ i ] ].mnCurArg == nOmitAddressArg)
             {
-                // Omit erverything except a trailing separator, the leading
-                // separator is omitted below. The other way around would leave
-                // an extraneous separator if no parameter followed.
+                
+                
+                
                 if (!(pOcas[ i ] == nFn && pCur->GetOpCode() == ocSep))
                     bAdd = false;
             }
@@ -1136,23 +1136,23 @@ FormulaTokenArray * FormulaTokenArray::RewriteMissingToPof( const MissingConvent
         switch ( pCur->GetOpCode() )
         {
             case ocOpen:
-                ++nFn;      // all following operations on _that_ function
+                ++nFn;      
                 pCtx[ nFn ].mpFunc = PeekPrevNoSpaces();
                 pCtx[ nFn ].mnCurArg = 0;
                 if (pCtx[ nFn ].mpFunc && pCtx[ nFn ].mpFunc->GetOpCode() == ocAddress && !rConv.isODFF())
-                    pOcas[ nOcas++ ] = nFn;     // entering ADDRESS() if PODF
+                    pOcas[ nOcas++ ] = nFn;     
                 break;
             case ocClose:
                 pCtx[ nFn ].AddMoreArgs( pNewArr, rConv );
                 DBG_ASSERT( nFn > 0, "FormulaTokenArray::RewriteMissingToPof: underflow");
                 if (nOcas > 0 && pOcas[ nOcas-1 ] == nFn)
-                    --nOcas;                    // leaving ADDRESS()
+                    --nOcas;                    
                 if (nFn > 0)
                     --nFn;
                 break;
             case ocSep:
                 pCtx[ nFn ].mnCurArg++;
-                // Omit leading separator of ADDRESS() parameter.
+                
                 if (nOcas && pOcas[ nOcas-1 ] == nFn && pCtx[ nFn ].mnCurArg == nOmitAddressArg)
                 {
                     bAdd = false;
@@ -1181,7 +1181,7 @@ bool FormulaTokenArray::MayReferenceFollow()
 {
     if ( pCode && nLen > 0 )
     {
-        // ignore trailing spaces
+        
         sal_uInt16 i = nLen - 1;
         while ( i > 0 && pCode[i]->GetOpCode() == SC_OPCODE_SPACES )
         {
@@ -1296,7 +1296,7 @@ const FormulaToken* FormulaTokenIterator::PeekNextOperator()
     while (!t && ((t = GetNonEndOfPathToken( ++nIdx)) != NULL))
     {
         if (t->GetOpCode() == ocPush)
-            t = NULL;   // ignore operands
+            t = NULL;   
     }
     if (!t && pCur->pNext)
     {
@@ -1308,7 +1308,7 @@ const FormulaToken* FormulaTokenIterator::PeekNextOperator()
     return t;
 }
 
-//! The nPC counts after a Push() are -1
+
 
 void FormulaTokenIterator::Jump( short nStart, short nNext, short nStop )
 {
@@ -1326,7 +1326,7 @@ const FormulaToken* FormulaTokenIterator::GetNonEndOfPathToken( short nIdx ) con
     if (nIdx < pCur->pArr->nRPN && nIdx < pCur->nStop)
     {
         const FormulaToken* t = pCur->pArr->pRPN[ nIdx ];
-        // such an OpCode ends an IF() or CHOOSE() path
+        
         return (t->GetOpCode() == ocSep || t->GetOpCode() == ocClose) ? NULL : t;
     }
     return NULL;
@@ -1337,10 +1337,10 @@ bool FormulaTokenIterator::IsEndOfPath() const
     return GetNonEndOfPathToken( pCur->nPC + 1) == NULL;
 }
 
-// -----------------------------------------------------------------------------
-// ==========================================================================
-// real implementations of virtual functions
-// --------------------------------------------------------------------------
+
+
+
+
 
 double      FormulaDoubleToken::GetDouble() const            { return fDouble; }
 double &    FormulaDoubleToken::GetDoubleAsReference()       { return fDouble; }
@@ -1440,7 +1440,7 @@ FormulaSubroutineToken::~FormulaSubroutineToken()
 }
 bool FormulaSubroutineToken::operator==( const FormulaToken& r ) const
 {
-    // Arrays don't equal..
+    
     return FormulaToken::operator==( r ) &&
         (mpArray == static_cast<const FormulaSubroutineToken&>(r).mpArray);
 }
@@ -1451,8 +1451,8 @@ bool FormulaUnknownToken::operator==( const FormulaToken& r ) const
     return FormulaToken::operator==( r );
 }
 
-// -----------------------------------------------------------------------------
-} // formula
-// -----------------------------------------------------------------------------
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

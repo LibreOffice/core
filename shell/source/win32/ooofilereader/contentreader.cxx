@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef OSL_DEBUG_LEVEL
@@ -97,7 +97,7 @@ ITag* CContentReader::chooseTagReader( const std::wstring& tag_name, const XmlTa
         return new CSimpleTag(XmlAttributes);
     else if ( tag_name == CONTENT_STYLE_STYLE )
     {
-        // if style:style | style:name is exist,, fill the style field, otherwise do nothing;
+        
         if  ( XmlAttributes.find(CONTENT_STYLE_STYLE_NAME) != XmlAttributes.end())
             return new CAutoStyleTag(XmlAttributes);
        else
@@ -107,7 +107,7 @@ ITag* CContentReader::chooseTagReader( const std::wstring& tag_name, const XmlTa
     {
         assert( !m_TagBuilderStack.empty() );
 
-        //here we presume that if CONTENT_STYLE_PROPERTIES tag is present, it just follow CONTENT_STYLE_STYLE;
+        
         ITag* pTagBuilder = m_TagBuilderStack.top();
         pTagBuilder->addAttributes( XmlAttributes );
 
@@ -137,7 +137,7 @@ void CContentReader::addChunk( LocaleSet_t const & Locale, Content_t const & Con
     if ( ( ( m_ChunkBuffer.empty() ) || ( m_ChunkBuffer.back().first != Locale ) ) &&
          ( ( Content != SPACE )  && ( Content != LF ) ) )
     {
-        // if met a new locale, add a blank new chunk;
+        
         Chunk_t Chunk;
         Chunk.first = Locale;
         Chunk.second = EMPTY_STRING;
@@ -167,16 +167,16 @@ LocaleSet_t const & CContentReader::getLocale( const StyleName_t Style )
 
 /***********************   event handler functions  ***********************/
 
-//------------------------------
-// start_element occurs when a tag is start
-//------------------------------
+
+
+
 
 void CContentReader::start_element(
     const std::wstring& /*raw_name*/,
     const std::wstring& local_name,
     const XmlTagAttributes_t& attributes)
 {
-    //get appropriate Xml Tag Builder using MetaInfoBuilderFactory;
+    
     ITag* pTagBuilder = chooseTagReader( local_name,attributes );
     assert( pTagBuilder != NULL );
     pTagBuilder->startTag( );
@@ -184,9 +184,9 @@ void CContentReader::start_element(
 
 }
 
-//------------------------------
-// end_element occurs when a tag is closed
-//------------------------------
+
+
+
 
 void CContentReader::end_element(const std::wstring& /*raw_name*/, const std::wstring& local_name)
 {
@@ -213,9 +213,9 @@ void CContentReader::end_element(const std::wstring& /*raw_name*/, const std::ws
 
 }
 
-//------------------------------
-// characters occurs when receiving characters
-//------------------------------
+
+
+
 
 void CContentReader::characters( const std::wstring& character )
 {

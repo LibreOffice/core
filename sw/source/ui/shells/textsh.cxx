@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -236,7 +236,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
         if ( ERRCODE_NONE == aDlg.Execute() )
         {
-            // Determine URL
+            
             OUString aStrURL( aDlg.GetPath() );
             aStrURL = URIHelper::SmartRel2Abs(
                 INetURLObject(), aStrURL, URIHelper::GetMaybeFileHdl() );
@@ -253,7 +253,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 {
                     svt::EmbeddedObjectRef::TryRunningState( xObj.GetObject() );
 
-                    // set properties from dialog
+                    
                     uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                     if ( xSet.is() )
                     {
@@ -282,7 +282,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
         SFX_REQUEST_ARG( rReq, pClassLocationItem,  SfxStringItem, FN_PARAM_2, false );
         SFX_REQUEST_ARG( rReq, pCommandsItem,       SfxStringItem, FN_PARAM_3, false );
-        //TODO/LATER: recording currently not working, need code for Commandlist
+        
         svt::EmbeddedObjectRef xObj;
         if( nSlot == SID_INSERT_PLUGIN && ( pClassLocationItem || pCommandsItem ) )
         {
@@ -348,7 +348,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         SFX_REQUEST_ARG( rReq, pScrollingItem, SfxByteItem, FN_PARAM_4, false );
         SFX_REQUEST_ARG( rReq, pBorderItem, SfxBoolItem, FN_PARAM_5, false );
 
-        if(pURLItem) // URL is a _must_
+        if(pURLItem) 
         {
             comphelper::EmbeddedObjectContainer aCnt;
             OUString aName;
@@ -429,11 +429,11 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                     aRangeString += OUString( '.' );
                     aRangeString += GetShell().GetBoxNms();
 
-                    // get table data provider
+                    
                     xDataProvider.set( GetView().GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider() );
                 }
                 else
-                    bFillWithData = sal_False;  // will create chart with only it's default image
+                    bFillWithData = sal_False;  
 
                 SwTableFUNC( &rSh, sal_False ).InsertChart( xDataProvider, bFillWithData, aRangeString );
                 rSh.LaunchOLEObj();
@@ -459,8 +459,8 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
 
     case FN_INSERT_SMA:
         {
-            // #i34343# Inserting a math object into an autocompletion crashes
-            // the suggestion has to be removed before
+            
+            
             GetView().GetEditWin().StopQuickHelp();
             SvGlobalName aGlobalName( SO3_SM_CLASSID );
             rSh.InsertObject( svt::EmbeddedObjectRef(), &aGlobalName, sal_True, 0 );
@@ -526,7 +526,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             }
 
         }
-        // Create new border
+        
         SwFlyFrmAttrMgr aMgr( sal_True, GetShellPtr(), FRMMGR_TYPE_TEXT );
         if(pArgs)
         {
@@ -588,7 +588,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             aSet.Put(aMgr.GetAttrSet());
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
-            // Delete minimum size in columns.
+            
             SvxBoxInfoItem aBoxInfo((SvxBoxInfoItem &)aSet.Get(SID_ATTR_BORDER_INNER));
             const SvxBoxItem& rBox = (const SvxBoxItem&)aSet.Get(RES_BOX);
             aBoxInfo.SetMinDist(false);
@@ -606,7 +606,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
             OSL_ENSURE(pDlg, "Dialogdiet fail!");
             if(pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet())
             {
-                //local variable necessary at least after call of .AutoCaption() because this could be deleted at this point
+                
                 SwWrtShell& rShell = GetShell();
                 rShell.LockPaint();
                 rShell.StartAllAction();
@@ -615,7 +615,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                 aMgr.SetAttrSet(*pOutSet);
 
-                // At first delete the selection at the ClickToEditField.
+                
                 if( rShell.IsInClickToEdit() )
                     rShell.DelRight();
 
@@ -625,7 +625,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         GetView().GetViewFrame()->GetBindings().GetRecorder();
                 if ( xRecorder.is() )
                 {
-                    //FN_INSERT_FRAME
+                    
                     sal_uInt16 nAnchor = (sal_uInt16)aMgr.GetAnchor();
                         rReq.AppendItem(SfxUInt16Item(nSlot, nAnchor));
                         rReq.AppendItem(SfxPointItem(FN_PARAM_1, rShell.GetObjAbsPos()));
@@ -783,7 +783,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                         if( pMacro )
                             aHLinkItem.SetMacro(HYPERDLG_EVENT_MOUSEOUT_OBJECT, *pMacro);
 
-                        // Get the text of the Link.
+                        
                         rSh.StartAction();
                         rSh.CreateCrsr();
                         rSh.SwCrsrShell::SelectTxtAttr(RES_TXTATR_INETFMT,sal_True);
@@ -824,7 +824,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
 
             case FN_FORMAT_COLUMN :
             {
-                //#i80458# column dialog cannot work if the selection contains different page styles and different sections
+                
                 bool bDisable = true;
                 if( rSh.GetFlyFrmFmt() || rSh.GetSelectedPageDescs() )
                     bDisable = false;
@@ -998,10 +998,10 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             aFontName = aFont.GetFamilyName();
     }
 
-    Font aNewFont(aFontName, Size(1,1)); // Size only because CTOR.
+    Font aNewFont(aFontName, Size(1,1)); 
     if( aChars.isEmpty() )
     {
-        // Set selected font as default.
+        
         SfxAllItemSet aAllSet( rSh.GetAttrPool() );
         aAllSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
@@ -1042,7 +1042,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
     {
         rSh.StartAllAction();
 
-        // Delete selected content.
+        
         SwRewriter aRewriter;
         aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_SPECIALCHAR));
 
@@ -1064,10 +1064,10 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
                             GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() ) ));
         }
 
-        // Insert character.
+        
         rSh.Insert( aChars );
 
-        // #108876# a font attribute has to be set always due to a guessed script type
+        
         if( !aNewFont.GetName().isEmpty() )
         {
             SvxFontItem aNewFontItem( aFont );
@@ -1105,9 +1105,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
 
             rSh.ClearMark();
 
-            // #i75891#
-            // SETATTR_DONTEXPAND does not work if there are already hard attributes.
-            // Therefore we have to restore the font attributes.
+            
+            
+            
             rSh.SetMark();
             rSh.SetAttrSet( aRestoreSet );
             rSh.ClearMark();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
@@ -74,7 +74,7 @@ static OUString GetLabelFromCommandURL( const OUString& rCommandURL, const uno::
         xTmpModuleMgr = xModuleManager;
     }
 
-    // Retrieve label from UI command description service
+    
     try
     {
         try
@@ -147,7 +147,7 @@ SfxRecordingFloatWrapper_Impl::~SfxRecordingFloatWrapper_Impl()
 
 sal_Bool SfxRecordingFloatWrapper_Impl::QueryClose()
 {
-    // asking for recorded macro should be replaced if index access is available!
+    
     sal_Bool bRet = sal_True;
     com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder = pBindings->GetRecorder();
     if ( xRecorder.is() && !xRecorder->getRecordedMacro().isEmpty() )
@@ -170,17 +170,17 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
                          SfxResId( SID_RECORDING_FLOATWINDOW ) )
     , aTbx( this, SfxResId(SID_RECORDING_FLOATWINDOW) )
 {
-    // Retrieve label from helper function
+    
     uno::Reference< frame::XFrame > xFrame = GetBindings().GetActiveFrame();
     OUString aCommandStr( ".uno:StopRecording" );
     aTbx.SetItemText( SID_STOP_RECORDING, GetLabelFromCommandURL( aCommandStr, xFrame ));
 
-    // Determine size of toolbar
+    
     Size aTbxSize = aTbx.CalcWindowSizePixel();
     aTbx.SetPosSizePixel( Point(), aTbxSize );
     SetOutputSizePixel( aTbxSize );
 
-    // create a generic toolbox controller for our internal toolbox
+    
     svt::GenericToolboxController* pController = new svt::GenericToolboxController(
                                                     ::comphelper::getProcessComponentContext(),
                                                     xFrame,
@@ -196,7 +196,7 @@ SfxRecordingFloat_Impl::SfxRecordingFloat_Impl(
 
     aTbx.SetSelectHdl( LINK( this, SfxRecordingFloat_Impl, Select ) );
 
-    // start recording
+    
     SfxBoolItem aItem( SID_RECORDMACRO, true );
     GetBindings().GetDispatcher()->Execute( SID_RECORDMACRO, SFX_CALLMODE_SYNCHRON, &aItem, 0L );
 }

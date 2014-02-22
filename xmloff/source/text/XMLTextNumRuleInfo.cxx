@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 
-// Complete refactoring of the class and enhancement of the class for lists.
+
 XMLTextNumRuleInfo::XMLTextNumRuleInfo()
     : msNumberingRules("NumberingRules")
     , msNumberingLevel("NumberingLevel")
@@ -58,7 +58,7 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo()
     Reset();
 }
 
-// Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+
 void XMLTextNumRuleInfo::Set(
         const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextContent > & xTextContent,
@@ -67,13 +67,13 @@ void XMLTextNumRuleInfo::Set(
         const sal_Bool bExportTextNumberElement )
 {
     Reset();
-    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+    
     mbOutlineStyleAsNormalListStyle = bOutlineStyleAsNormalListStyle;
 
     Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
-    // check if this paragraph supports a numbering
+    
     if( !xPropSetInfo->hasPropertyByName( msNumberingLevel ) )
         return;
 
@@ -86,12 +86,12 @@ void XMLTextNumRuleInfo::Set(
     }
     else
     {
-        // in applications using the outliner we always have a numbering rule,
-        // so a void property no numbering
+        
+        
         mnListLevel = 0;
     }
 
-    // Assertion saving writer document (#i97312#)
+    
     if ( mxNumRules.is() && mxNumRules->getCount() < 1 )
     {
         DBG_ASSERT( false,
@@ -108,7 +108,7 @@ void XMLTextNumRuleInfo::Set(
         return;
     }
 
-    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+    
     bool bSuppressListStyle( false );
     if ( mxNumRules.is() )
     {
@@ -128,8 +128,8 @@ void XMLTextNumRuleInfo::Set(
 
     if( mxNumRules.is() && !bSuppressListStyle )
     {
-        // First try to find the numbering rules in the list auto style pool.
-        // If not found, the numbering rules instance has to be named.
+        
+        
         msNumRulesName = rListAutoPool.Find( mxNumRules );
         if ( msNumRulesName.isEmpty() )
         {
@@ -207,7 +207,7 @@ void XMLTextNumRuleInfo::Set(
             xPropSet->getPropertyValue( msListLabelStringProp ) >>= msListLabelString;
         }
 
-        // paragraph's list level range is [0..9] representing list levels [1..10]
+        
         ++mnListLevel;
     }
     else
@@ -219,7 +219,7 @@ void XMLTextNumRuleInfo::Set(
 sal_Bool XMLTextNumRuleInfo::BelongsToSameList( const XMLTextNumRuleInfo& rCmp ) const
 {
     sal_Bool bRet( sal_True );
-    // Currently only the text documents support <ListId>.
+    
     if ( !rCmp.msListId.isEmpty() || !msListId.isEmpty() )
     {
         bRet = rCmp.msListId == msListId;

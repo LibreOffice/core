@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,11 +51,11 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
 
-// Wrapper class to notify controller about events from combobox.
-// Unfortunaltly the events are notifed through virtual methods instead
-// of Listeners.
+
+
+
+
 
 class SpinfieldControl : public SpinField
 {
@@ -171,7 +171,7 @@ bool SpinfieldControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// ------------------------------------------------------------------
+
 
 SpinfieldToolbarController::SpinfieldToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -194,20 +194,20 @@ SpinfieldToolbarController::SpinfieldToolbarController(
     if ( nWidth == 0 )
         nWidth = 100;
 
-    // Calculate height of the spin field according to the application font height
+    
     sal_Int32 nHeight = getFontSizePixel( m_pSpinfieldControl ) + 5 + 1;
 
     m_pSpinfieldControl->SetSizePixel( ::Size( nWidth, nHeight ));
     m_pToolbar->SetItemWindow( m_nID, m_pSpinfieldControl );
 }
 
-// ------------------------------------------------------------------
+
 
 SpinfieldToolbarController::~SpinfieldToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL SpinfieldToolbarController::dispose()
 throw ( RuntimeException )
@@ -222,13 +222,13 @@ throw ( RuntimeException )
     m_pSpinfieldControl = 0;
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
     OUString aSpinfieldText = m_pSpinfieldControl->GetText();
 
-    // Add key modifier to argument list
+    
     aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
     aArgs[1].Name = "Value";
@@ -239,7 +239,7 @@ Sequence<PropertyValue> SpinfieldToolbarController::getExecuteArgs(sal_Int16 Key
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 void SpinfieldToolbarController::Up()
 {
@@ -326,7 +326,7 @@ bool SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
         const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
         if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
         {
-            // Call execute only with non-empty text
+            
             if ( !m_pSpinfieldControl->GetText().isEmpty() )
                 execute( rKeyCode.GetModifier() );
             return true;
@@ -336,7 +336,7 @@ bool SpinfieldToolbarController::PreNotify( NotifyEvent& rNEvt )
     return false;
 }
 
-// --------------------------------------------------------
+
 
 void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
@@ -455,7 +455,7 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
         }
     }
 
-    // Check values and set members
+    
     if ( !aValue.isEmpty() )
     {
         m_bFloat = bFloatValue;
@@ -525,8 +525,8 @@ OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
         sal_Int32 nSize = rtl_ustr_getLength( aBuffer );
         return OUString( aBuffer, nSize );
 #else
-        // Currently we have no support for a format string using sal_Unicode. wchar_t
-        // is 32 bit on Unix platform!
+        
+        
         char aBuffer[128];
 
         OString aFormat = OUStringToOString( m_aOutFormat, osl_getThreadTextEncoding() );
@@ -542,6 +542,6 @@ OUString SpinfieldToolbarController::impl_formatOutputString( double fValue )
     }
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

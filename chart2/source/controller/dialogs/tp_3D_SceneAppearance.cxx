@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_3D_SceneAppearance.hxx"
@@ -76,7 +76,7 @@ void lcl_setShadeModeAtModel( uno::Reference< frame::XModel > & xModel, drawing:
     }
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -166,7 +166,7 @@ void ThreeD_SceneAppearance_TabPage::applyRoundedEdgeAndObjectLinesToModel()
             break;
     }
 
-    // locked controllers
+    
     ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
     ThreeDHelper::setRoundedEdgesAndObjectLines(
         ::chart::ChartModelHelper::findDiagram( m_xChartModel ), nCurrentRoundedEdges, nObjectLines );
@@ -188,7 +188,7 @@ void ThreeD_SceneAppearance_TabPage::applyShadeModeToModel()
             aShadeMode = drawing::ShadeMode_SMOOTH;
             break;
         case STATE_DONTKNOW:
-            // nothing
+            
             break;
     }
 
@@ -290,7 +290,7 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl)
         return 0;
 
     {
-        // locked controllers
+        
         ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
 
         uno::Reference< chart2::XDiagram > xDiagram( ::chart::ChartModelHelper::findDiagram( m_xChartModel ) );
@@ -305,7 +305,7 @@ IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl)
         }
     }
 
-    // update other controls
+    
     initControlsFromModel();
     return 0;
 }
@@ -341,6 +341,6 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectRoundedEdgeOrObjectLines, Check
     return 0;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

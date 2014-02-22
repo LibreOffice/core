@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -67,22 +67,22 @@ namespace slideshow
                 rMtf != mpLastMtf ||
                 rCanvasTransform != maLastTransformation )
             {
-                // buffered bitmap is invalid, re-create
+                
 
-                // determine transformed page bounds
+                
                 ::basegfx::B2DRectangle aTmpRect;
                 ::canvas::tools::calcTransformedRectBounds( aTmpRect,
                                                             maBounds,
                                                             rCanvasTransform );
 
-                // determine pixel size of bitmap (choose it one pixel
-                // larger, as polygon rendering takes one pixel more
-                // to the right and to the bottom)
+                
+                
+                
                 const ::basegfx::B2ISize aBmpSizePixel(
                     ::basegfx::fround( aTmpRect.getRange().getX() + 1),
                     ::basegfx::fround( aTmpRect.getRange().getY() + 1) );
 
-                // create a bitmap of appropriate size
+                
                 ::cppcanvas::BitmapSharedPtr pBitmap(
                     ::cppcanvas::BaseGfxFactory::getInstance().createBitmap(
                         rDestinationCanvas,
@@ -96,12 +96,12 @@ namespace slideshow
                 ENSURE_OR_THROW( pBitmapCanvas,
                                   "ViewBackgroundShape::prefetch(): Cannot create background bitmap canvas" );
 
-                // clear bitmap
+                
                 initSlideBackground( pBitmapCanvas,
                                      aBmpSizePixel );
 
-                // apply linear part of destination canvas transformation (linear means in this context:
-                // transformation without any translational components)
+                
+                
                 ::basegfx::B2DHomMatrix aLinearTransform( rCanvasTransform );
                 aLinearTransform.set( 0, 2, 0.0 );
                 aLinearTransform.set( 1, 2, 0.0 );
@@ -163,12 +163,12 @@ namespace slideshow
 
             ::basegfx::B2DHomMatrix aTransform( mpViewLayer->getTransformation() );
 
-            // invert the linear part of the view transformation
-            // (i.e. the view transformation without translational
-            // components), to be able to leave the canvas
-            // transformation intact (would otherwise destroy possible
-            // clippings, as the clip polygon is relative to the view
-            // coordinate system).
+            
+            
+            
+            
+            
+            
             aTransform.set(0,2, 0.0 );
             aTransform.set(1,2, 0.0 );
             aTransform.invert();

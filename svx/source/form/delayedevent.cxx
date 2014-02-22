@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,15 +23,15 @@
 #include <osl/diagnose.h>
 #include <vcl/svapp.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
 
-    //====================================================================
-    //= DelayedEvent
-    //====================================================================
-    //--------------------------------------------------------------------
+
+    
+    
+    
+    
     void DelayedEvent::Call( void* _pArg )
     {
         CancelPendingCall();
@@ -40,7 +40,7 @@ namespace svxform
         m_nEventId = Application::PostUserEvent( LINK( this, DelayedEvent, OnCall ), _pArg );
     }
 
-    //--------------------------------------------------------------------
+    
     void DelayedEvent::CancelPendingCall()
     {
         if ( m_nEventId )
@@ -48,15 +48,15 @@ namespace svxform
         m_nEventId = 0;
     }
 
-    //--------------------------------------------------------------------
+    
     IMPL_LINK( DelayedEvent, OnCall, void*, _pArg )
     {
         m_nEventId = 0;
         return m_aHandler.Call( _pArg );
     }
 
-//........................................................................
-} // namespace svxform
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

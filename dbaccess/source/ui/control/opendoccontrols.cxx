@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "opendoccontrols.hxx"
@@ -72,7 +72,7 @@ namespace dbaui
             {
                 do
                 {
-                    // Retrieve popup menu labels
+                    
                     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     if ( !xContext.is() )
                         break;
@@ -120,7 +120,7 @@ namespace dbaui
             {
                 do
                 {
-                    // Retrieve popup menu labels
+                    
                     Reference< com::sun::star::uno::XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     if ( !xContext.is() )
                         break;
@@ -154,7 +154,7 @@ namespace dbaui
 
     }
 
-    // OpenButton
+    
 
     OpenDocumentButton::OpenDocumentButton( Window* _pParent, const sal_Char* _pAsciiModuleName )
         :PushButton( _pParent )
@@ -172,11 +172,11 @@ namespace dbaui
         OSL_ENSURE( _pAsciiModuleName, "OpenDocumentButton::impl_init: invalid module name!" );
         m_sModule = OUString::createFromAscii( _pAsciiModuleName );
 
-        // our label should equal the UI text of the "Open" command
+        
         OUString sLabel(GetCommandText(".uno:Open", m_sModule));
         SetText(OUString(' ') + sLabel.replaceAll("~", OUString()));
 
-        // Place icon left of text and both centered in the button.
+        
         SetModeImage( GetCommandIcon( ".uno:Open", m_sModule ) );
         EnableImageDisplay( true );
         EnableTextDisplay( true );
@@ -184,7 +184,7 @@ namespace dbaui
         SetStyle( GetStyle() | WB_CENTER );
     }
 
-    // OpenDocumentListBox
+    
 
     OpenDocumentListBox::OpenDocumentListBox( Window* _pParent, const sal_Char* _pAsciiModuleName )
         :ListBox( _pParent, WB_BORDER | WB_DROPDOWN )
@@ -211,15 +211,15 @@ namespace dbaui
         {
             try
             {
-                //  Get the current history item's properties.
+                
                 ::comphelper::SequenceAsHashMap aItemProperties( aHistory[ nItem ] );
                 OUString sURL = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_URL, OUString() );
                 OUString sFilter = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_FILTER, OUString() );
                 OUString sTitle = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_TITLE, OUString() );
                 OUString sPassword = aItemProperties.getUnpackedValueOrDefault( HISTORY_PROPERTYNAME_PASSWORD, OUString() );
 
-                //  If the entry is an impress file then insert it into the
-                //  history list and the list box.
+                
+                
                 Sequence< PropertyValue > aProps;
                 xFilterFactory->getByName( sFilter ) >>= aProps;
 
@@ -228,10 +228,10 @@ namespace dbaui
                     OUString( "DocumentService" ), OUString() );
                 if ( sDocumentService.equalsAscii( _pAsciiModuleName ) )
                 {
-                    // yes, it's a Base document
+                    
                     INetURLObject aURL;
                     aURL.SetSmartURL( sURL );
-                    // The password is set only when it is not empty.
+                    
                     if ( !sPassword.isEmpty() )
                         aURL.SetPass( sPassword );
 
@@ -307,6 +307,6 @@ namespace dbaui
         }
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

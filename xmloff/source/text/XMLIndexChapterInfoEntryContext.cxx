@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -75,8 +75,8 @@ static const SvXMLEnumMapEntry aChapterDisplayMap[] =
     { XML_NAME,                     ChapterFormat::NAME },
     { XML_NUMBER,                   ChapterFormat::NUMBER },
     { XML_NUMBER_AND_NAME,          ChapterFormat::NAME_NUMBER },
-    //---> i89791
-    // enabled for ODF 1.2, full index support in 3.0
+    
+    
     { XML_PLAIN_NUMBER_AND_NAME,    ChapterFormat::NO_PREFIX_SUFFIX },
     { XML_PLAIN_NUMBER,             ChapterFormat::DIGIT },
     { XML_TOKEN_INVALID,            0 }
@@ -85,7 +85,7 @@ static const SvXMLEnumMapEntry aChapterDisplayMap[] =
 void XMLIndexChapterInfoEntryContext::StartElement(
     const Reference<XAttributeList> & xAttrList)
 {
-    // handle both, style name and bibliography info
+    
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 nAttr = 0; nAttr < nLength; nAttr++)
     {
@@ -100,7 +100,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                 sCharStyleName = xAttrList->getValueByIndex(nAttr);
                 bCharStyleNameOK = sal_True;
             }
-            else if ( IsXMLToken( sLocalName, XML_DISPLAY ) )//i53420, always true, in TOC as well
+            else if ( IsXMLToken( sLocalName, XML_DISPLAY ) )
             {
                 sal_uInt16 nTmp;
                 if (SvXMLUnitConverter::convertEnum(
@@ -117,7 +117,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
                 if (::sax::Converter::convertNumber(nTmp,
                         xAttrList->getValueByIndex(nAttr)))
                 {
-//control on range is carried out in the UNO level
+
                     nOutlineLevel = static_cast<sal_uInt16>(nTmp);
                     bOutlineLevelOK = sal_True;
                 }
@@ -125,13 +125,13 @@ void XMLIndexChapterInfoEntryContext::StartElement(
         }
     }
 
-    // if we have a style name, set it!
+    
     if (bCharStyleNameOK)
     {
         nValues++;
     }
 
-    // if we have chaper info, set it!
+    
     if (bChapterInfoOK)
     {
         nValues++;
@@ -173,14 +173,14 @@ void XMLIndexChapterInfoEntryContext::FillPropertyValues(
     ::com::sun::star::uno::Sequence<
         ::com::sun::star::beans::PropertyValue> & rValues)
 {
-    // entry name and (optionally) style name in parent class
+    
     XMLIndexSimpleEntryContext::FillPropertyValues(rValues);
 
     sal_Int32 nIndex = bCharStyleNameOK ? 2 : 1;
 
     if( bChapterInfoOK )
     {
-        // chapter info field
+        
         rValues[nIndex].Name = rTemplateContext.sChapterFormat;
         Any aAny;
         aAny <<= nChapterInfo;

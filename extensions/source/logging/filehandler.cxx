@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,10 +43,10 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::logging::LogRecord;
@@ -67,9 +67,9 @@ namespace logging
     using ::com::sun::star::util::XStringSubstitution;
     using ::com::sun::star::beans::NamedValue;
 
-    //====================================================================
-    //= FileHandler - declaration
-    //====================================================================
+    
+    
+    
     typedef ::cppu::WeakComponentImplHelper3    <   XLogHandler
                                                 ,   XServiceInfo
                                                 ,   XInitialization
@@ -80,11 +80,11 @@ namespace logging
     private:
         enum FileValidity
         {
-            /// never attempted to open the file
+            /
             eUnknown,
-            /// file is valid
+            /
             eValid,
-            /// file is invalid
+            /
             eInvalid
         };
 
@@ -99,7 +99,7 @@ namespace logging
         FileHandler( const Reference< XComponentContext >& _rxContext );
         virtual ~FileHandler();
 
-        // XLogHandler
+        
         virtual OUString SAL_CALL getEncoding() throw (RuntimeException);
         virtual void SAL_CALL setEncoding( const OUString& _encoding ) throw (RuntimeException);
         virtual Reference< XLogFormatter > SAL_CALL getFormatter() throw (RuntimeException);
@@ -109,19 +109,19 @@ namespace logging
         virtual void SAL_CALL flush(  ) throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException);
 
-        // XInitialization
+        
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-        // OComponentHelper
+        
         virtual void SAL_CALL disposing();
 
     public:
-        // XServiceInfo - static version
+        
         static OUString SAL_CALL getImplementationName_static();
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
         static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
@@ -136,7 +136,7 @@ namespace logging
         */
         bool    impl_prepareFile_nothrow();
 
-        /// writes the given string to our file
+        /
         void    impl_writeString_nothrow( const OString& _rEntry );
 
         /** does string substitution on a (usually externally provided) file url
@@ -144,10 +144,10 @@ namespace logging
         void    impl_doStringsubstitution_nothrow( OUString& _inout_rURL );
     };
 
-    //====================================================================
-    //= FileHandler - implementation
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     FileHandler::FileHandler( const Reference< XComponentContext >& _rxContext )
         :FileHandler_Base( m_aMutex )
         ,m_xContext( _rxContext )
@@ -158,7 +158,7 @@ namespace logging
     {
     }
 
-    //--------------------------------------------------------------------
+    
     FileHandler::~FileHandler()
     {
         if ( !rBHelper.bDisposed )
@@ -168,13 +168,13 @@ namespace logging
         }
     }
 
-    //--------------------------------------------------------------------
+    
     bool FileHandler::impl_prepareFile_nothrow()
     {
         if ( m_eFileValidity == eUnknown )
         {
             m_pFile.reset( new ::osl::File( m_sFileURL ) );
-            // check whether the log file already exists
+            
             ::osl::DirectoryItem aFileItem;
             ::osl::DirectoryItem::get( m_sFileURL, aFileItem );
             ::osl::FileStatus aStatus( osl_FileStatus_Mask_Validate );
@@ -208,7 +208,7 @@ namespace logging
         return m_eFileValidity == eValid;
     }
 
-    //--------------------------------------------------------------------
+    
     void FileHandler::impl_writeString_nothrow( const OString& _rEntry )
     {
         OSL_PRECOND( m_pFile.get(), "FileHandler::impl_writeString_nothrow: no file!" );
@@ -223,7 +223,7 @@ namespace logging
             "FileHandler::impl_writeString_nothrow: could not write the log entry!" );
     }
 
-    //--------------------------------------------------------------------
+    
     void FileHandler::impl_doStringsubstitution_nothrow( OUString& _inout_rURL )
     {
         try
@@ -237,7 +237,7 @@ namespace logging
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FileHandler::disposing()
     {
         if ( m_eFileValidity == eValid )
@@ -251,19 +251,19 @@ namespace logging
         m_aHandlerHelper.setFormatter( NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     void FileHandler::enterMethod( MethodGuard::Access )
     {
         m_aHandlerHelper.enterMethod();
     }
 
-    //--------------------------------------------------------------------
+    
     void FileHandler::leaveMethod( MethodGuard::Access )
     {
         m_aMutex.release();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL FileHandler::getEncoding() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -272,42 +272,42 @@ namespace logging
         return sEncoding;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FileHandler::setEncoding( const OUString& _rEncoding ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         OSL_VERIFY( m_aHandlerHelper.setEncoding( _rEncoding ) );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XLogFormatter > SAL_CALL FileHandler::getFormatter() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getFormatter();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FileHandler::setFormatter( const Reference< XLogFormatter >& _rxFormatter ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setFormatter( _rxFormatter );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int32 SAL_CALL FileHandler::getLevel() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getLevel();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FileHandler::setLevel( ::sal_Int32 _nLevel ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setLevel( _nLevel );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FileHandler::flush(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -323,7 +323,7 @@ namespace logging
         OSL_ENSURE(res == ::osl::FileBase::E_None, "FileHandler::flush: Could not sync logfile to filesystem.");
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL FileHandler::publish( const LogRecord& _rRecord ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -339,7 +339,7 @@ namespace logging
         return sal_True;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FileHandler::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -353,12 +353,12 @@ namespace logging
         Sequence< NamedValue > aSettings;
         if ( _rArguments[0] >>= m_sFileURL )
         {
-            // create( [in] string URL );
+            
             impl_doStringsubstitution_nothrow( m_sFileURL );
         }
         else if ( _rArguments[0] >>= aSettings )
         {
-            // createWithSettings( [in] sequence< ::com::sun::star::beans::NamedValue > Settings )
+            
             ::comphelper::NamedValueCollection aTypedSettings( aSettings );
             m_aHandlerHelper.initFromSettings( aTypedSettings );
 
@@ -371,7 +371,7 @@ namespace logging
         m_aHandlerHelper.setIsInitialized();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL FileHandler::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_static();
@@ -382,19 +382,19 @@ namespace logging
         return cppu::supportsService(this, _rServiceName);
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL FileHandler::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL FileHandler::getImplementationName_static()
     {
         return OUString( "com.sun.star.comp.extensions.FileHandler" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL FileHandler::getSupportedServiceNames_static()
     {
         Sequence< OUString > aServiceNames(1);
@@ -402,20 +402,20 @@ namespace logging
         return aServiceNames;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XInterface > FileHandler::Create( const Reference< XComponentContext >& _rxContext )
     {
         return *( new FileHandler( _rxContext ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void createRegistryInfo_FileHandler()
     {
         static OAutoRegistration< FileHandler > aAutoRegistration;
     }
 
-//........................................................................
-} // namespace logging
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,8 +52,8 @@ sal_uInt16 SwFEShell::GetPageDescCnt() const
 void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
 {
 #if OSL_DEBUG_LEVEL > 0
-    // SS does not change PageDesc, but only sets the attibute.
-    // The Pagedesc should be available in the document
+    
+    
     bool bFound = false;
     for ( sal_uInt16 nTst = 0; nTst < GetPageDescCnt(); ++nTst )
         if ( &rDesc == &GetPageDesc( nTst ) )
@@ -80,7 +80,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
             const SwFmtPageDesc& rPgDesc = pFlow->GetAttrSet()->GetPageDesc();
             if( rPgDesc.GetPageDesc() )
             {
-                // wir haben ihn den Schlingel
+                
                 oPageNumOffset = rPgDesc.GetNumOffset();
                 break;
             }
@@ -99,7 +99,7 @@ void SwFEShell::ChgCurPageDesc( const SwPageDesc& rDesc )
         }
     }
 
-    // use pagenumber
+    
     SwFmtPageDesc aNew( &rDesc );
     aNew.SetNumOffset( oPageNumOffset );
 
@@ -123,8 +123,8 @@ void SwFEShell::ChgPageDesc( sal_uInt16 i, const SwPageDesc &rChged )
 {
     StartAllAction();
     SET_CURR_SHELL( this );
-    //Fix i64842: because Undo has a very special way to handle header/footer content
-    // we have to copy the page descriptor before calling ChgPageDesc.
+    
+    
     SwPageDesc aDesc( rChged );
     {
         ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
@@ -156,7 +156,7 @@ SwPageDesc* SwFEShell::FindPageDescByName( const OUString& rName,
         if( USHRT_MAX != nPoolId &&
             0 != (pDesc = GetDoc()->GetPageDescFromPool( nPoolId ))
             && pPos )
-                // appended always
+                
             *pPos = GetDoc()->GetPageDescCnt() - 1 ;
     }
     return pDesc;
@@ -202,8 +202,8 @@ sal_uInt16 SwFEShell::GetCurPageDesc( const sal_Bool bCalcFrm ) const
     return 0;
 }
 
-// if inside all selection only one PageDesc, return this.
-// Otherwise return 0 pointer
+
+
 const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
 {
     const SwCntntNode* pCNd;
@@ -233,14 +233,14 @@ const SwPageDesc* SwFEShell::GetSelectedPageDescs() const
             pFnd = ((SwPageFrm*)pMkFrm)->GetPageDesc();
         else
         {
-            // swap pointer if PtFrm before MkFrm
+            
             if( ((SwPageFrm*)pMkFrm)->GetPhyPageNum() >
                 ((SwPageFrm*)pPtFrm)->GetPhyPageNum() )
             {
                 const SwFrm* pTmp = pMkFrm; pMkFrm = pPtFrm; pPtFrm = pTmp;
             }
 
-            // now check from MkFrm to PtFrm for equal PageDescs
+            
             pFnd = ((SwPageFrm*)pMkFrm)->GetPageDesc();
             while( pFnd && pMkFrm != pPtFrm )
             {

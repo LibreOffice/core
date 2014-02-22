@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CommandDispatch.hxx"
@@ -60,7 +60,7 @@ template< class Map >
                      lcl_DisposeAndClearAndDeleteMapElement< Map >( xEventSource ));
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -78,15 +78,15 @@ CommandDispatch::~CommandDispatch()
 void CommandDispatch::initialize()
 {}
 
-// ____ WeakComponentImplHelperBase ____
-/// is called when this is disposed
+
+
 void SAL_CALL CommandDispatch::disposing()
 {
     lcl_DisposeAndClearAndDeleteAllMapElements( m_aListeners, static_cast< cppu::OWeakObject* >( this ));
     m_aListeners.clear();
 }
 
-// ____ XDispatch ____
+
 void SAL_CALL CommandDispatch::dispatch( const util::URL& /* URL */, const Sequence< beans::PropertyValue >& /* Arguments */ )
     throw (uno::RuntimeException)
 {}
@@ -115,14 +115,14 @@ void SAL_CALL CommandDispatch::removeStatusListener( const Reference< frame::XSt
         (*aIt).second->removeInterface( Control );
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL CommandDispatch::modified( const lang::EventObject& /* aEvent */ )
     throw (uno::RuntimeException)
 {
     fireAllStatusEvents( 0 );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL CommandDispatch::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {}
@@ -140,7 +140,7 @@ void CommandDispatch::fireStatusEventForURL(
     const Reference< frame::XStatusListener > & xSingleListener, /* = 0 */
     const OUString & rFeatureDescriptor /* = OUString() */ )
 {
-    // prepare event to send
+    
     util::URL aURL;
     aURL.Complete = rURL;
     if( !m_xURLTransformer.is())
@@ -150,15 +150,15 @@ void CommandDispatch::fireStatusEventForURL(
     m_xURLTransformer->parseStrict( aURL );
 
     frame::FeatureStateEvent aEventToSend(
-        static_cast< cppu::OWeakObject* >( this ), // Source
-        aURL,                                      // FeatureURL
-        rFeatureDescriptor,                        // FeatureDescriptor
-        bEnabled,                                  // IsEnabled
-        false,                                     // Requery
-        rState                                     // State
+        static_cast< cppu::OWeakObject* >( this ), 
+        aURL,                                      
+        rFeatureDescriptor,                        
+        bEnabled,                                  
+        false,                                     
+        rState                                     
         );
 
-    // send event either to single listener or all registered ones
+    
     if( xSingleListener.is())
         xSingleListener->statusChanged( aEventToSend );
     else
@@ -188,6 +188,6 @@ void CommandDispatch::fireStatusEventForURL(
     }
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

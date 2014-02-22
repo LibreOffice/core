@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/macros.h>
@@ -27,7 +27,7 @@
 
 using namespace ::svxform;
 
-//-----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SvxFmMSFactory::createInstance(const OUString& rServiceSpecifier) throw( ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xRet;
@@ -46,10 +46,10 @@ using namespace ::svxform;
     return xRet;
 }
 
-//-----------------------------------------------------------------------------
 
-// Encapsulation violation: We *know* that
-// SvxUnoDrawMSFactory::createInstanceWithArguments() always throws.
+
+
+
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
@@ -60,7 +60,7 @@ SAL_WNOUNREACHABLE_CODE_PUSH
 
 SAL_WNOUNREACHABLE_CODE_POP
 
-//-----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmMSFactory::getAvailableServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
     static const OUString aSvxComponentServiceNameList[] =

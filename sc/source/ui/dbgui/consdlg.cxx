@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/dispatch.hxx>
@@ -143,14 +143,14 @@ void ScConsolidateDlg::Init()
 
     pLbFunc->SelectEntryPos( FuncToLbPos( theConsData.eFunction ) );
 
-    // Hack: pLbConsAreas used to be MultiLB. We don't have VCL builder equivalent
-    // of it yet. So enable selecting multiple items here
+    
+    
     pLbConsAreas->EnableMultiSelection( true );
 
     pLbConsAreas->set_width_request(pLbConsAreas->approximate_char_width() * 16);
     pLbConsAreas->SetDropDownLineCount(5);
 
-    // read consolidation areas
+    
     pLbConsAreas->Clear();
     const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
     for ( i=0; i<theConsData.nDataAreaCount; i++ )
@@ -175,8 +175,8 @@ void ScConsolidateDlg::Init()
         pEdDestArea->SetText(OUString());
 
 
-    // Use the ScAreaData helper class to save those range names from the
-    // RangeNames and database ranges that appear in the ListBoxes.
+    
+    
 
     ScRangeName*    pRangeNames  = pDoc->GetRangeName();
     ScDBCollection* pDbNames     = pDoc->GetDBCollection();
@@ -207,10 +207,10 @@ void ScConsolidateDlg::Init()
     pEdDataArea->SetText(OUString());
     pEdDataArea->GrabFocus();
 
-    //aFlSep.SetStyle( aFlSep.GetStyle() | WB_VERT );
+    
 
-    //@BugID 54702 enable/disable only in base class
-    //SFX_APPWINDOW->Enable();
+    
+    
 }
 
 void ScConsolidateDlg::FillAreaLists()
@@ -228,15 +228,15 @@ void ScConsolidateDlg::FillAreaLists()
         {
             pLbDataArea->InsertEntry( pAreaData[i].aStrName, i+1 );
 
-//          if ( !pAreaData[i].bIsDbArea )
+
                 pLbDestArea->InsertEntry( pAreaData[i].aStrName, i+1 );
         }
     }
 }
 
 
-// Handover of a range within a table that has been selected by the mouse.
-// This range is then shown in the reference window as new selection.
+
+
 
 void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
@@ -246,7 +246,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
             RefInputStart( pRefInputEdit );
 
         OUString      aStr;
-        sal_uInt16      nFmt = SCR_ABS_3D;       //!!! nCurTab is still missing
+        sal_uInt16      nFmt = SCR_ABS_3D;       
         const formula::FormulaGrammar::AddressConvention eConv = pDocP->GetAddressConvention();
 
         if ( rRef.aStart.Tab() != rRef.aEnd.Tab() )
@@ -326,7 +326,7 @@ bool ScConsolidateDlg::VerifyEdit( formula::RefEdit* pEd )
 }
 
 
-// Handler:
+
 
 IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 {
@@ -402,7 +402,7 @@ IMPL_LINK_NOARG(ScConsolidateDlg, OkHdl)
         }
     }
     else
-        Close(); // no area defined -> Cancel
+        Close(); 
     return 0;
 }
 
@@ -422,9 +422,9 @@ IMPL_LINK( ScConsolidateDlg, ClickHdl, PushButton*, pBtn )
 
             if ( pRangeUtil->IsAbsTabArea( aNewEntry, pDoc, &ppAreas, &nAreaCount, true, eConv ) )
             {
-                // IsAbsTabArea() creates an array of ScArea pointers,
-                // which have been created dynamically as well.
-                // These objects need to be deleted here.
+                
+                
+                
 
                 for ( sal_uInt16 i=0; i<nAreaCount; i++ )
                 {
@@ -536,9 +536,9 @@ IMPL_LINK( ScConsolidateDlg, ModifyHdl, formula::RefEdit*, pEd )
 }
 
 
-// TODO: generalize!
-// Resource of the ListBox and these two conversion methods are also in
-// tpsubt and everywhere, where StarCalc functions are selectable.
+
+
+
 
 ScSubTotalFunc ScConsolidateDlg::LbPosToFunc( sal_uInt16 nPos )
 {

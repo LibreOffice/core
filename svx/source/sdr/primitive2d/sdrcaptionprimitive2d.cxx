@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/primitive2d/sdrcaptionprimitive2d.hxx>
@@ -24,11 +24,11 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -38,16 +38,16 @@ namespace drawinglayer
         {
             Primitive2DSequence aRetval;
 
-            // create unit outline polygon
+            
             const basegfx::B2DPolygon aUnitOutline(basegfx::tools::createPolygonFromRect(
                 basegfx::B2DRange(0.0, 0.0, 1.0, 1.0),
                 getCornerRadiusX(),
                 getCornerRadiusY()));
 
-            // add fill
+            
             if(getSdrLFSTAttribute().getFill().isDefault())
             {
-                // create invisible fill for HitTest
+                
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createHiddenGeometryPrimitives2D(
                         true,
@@ -64,10 +64,10 @@ namespace drawinglayer
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
-            // add line
+            
             if(getSdrLFSTAttribute().getLine().isDefault())
             {
-                // create invisible line for HitTest/BoundRect
+                
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
                     createHiddenGeometryPrimitives2D(
                         false,
@@ -97,7 +97,7 @@ namespace drawinglayer
                         getSdrLFSTAttribute().getLineStartEnd()));
             }
 
-            // add text
+            
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
@@ -111,7 +111,7 @@ namespace drawinglayer
                         false));
             }
 
-            // add shadow
+            
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(aRetval, getSdrLFSTAttribute().getShadow());
@@ -133,7 +133,7 @@ namespace drawinglayer
             mfCornerRadiusX(fCornerRadiusX),
             mfCornerRadiusY(fCornerRadiusY)
         {
-            // transform maTail to unit polygon
+            
             if(getTail().count())
             {
                 basegfx::B2DHomMatrix aInverse(getTransform());
@@ -158,10 +158,10 @@ namespace drawinglayer
             return false;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SdrCaptionPrimitive2D, PRIMITIVE2D_ID_SDRCAPTIONPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

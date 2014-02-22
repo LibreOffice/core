@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
@@ -31,12 +31,12 @@ using namespace css;
 using namespace cssu;
 using ::sfx2::sidebar::Theme;
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace open
+
+
 
 namespace svx { namespace sidebar {
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 GraphicPropertyPanel::GraphicPropertyPanel(
     Window* pParent,
@@ -65,13 +65,13 @@ GraphicPropertyPanel::GraphicPropertyPanel(
     Initialize();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 GraphicPropertyPanel::~GraphicPropertyPanel()
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GraphicPropertyPanel::Initialize()
 {
@@ -103,8 +103,8 @@ void GraphicPropertyPanel::Initialize()
     mpMtrBlue->SetAccessibleRelationLabeledBy(mpMtrBlue);
     mpMtrGamma->SetAccessibleRelationLabeledBy(mpMtrGamma);
 
-    // Fix left position of some controls that may be wrong due to
-    // rounding errors.
+    
+    
     const sal_Int32 nRight0 (mpLBColorMode->GetPosPixel().X() + mpLBColorMode->GetSizePixel().Width());
     const sal_Int32 nRight1 (mpMtrTrans->GetPosPixel().X() + mpMtrTrans->GetSizePixel().Width());
     mpMtrRed->SetPosPixel(Point(
@@ -124,7 +124,7 @@ void GraphicPropertyPanel::Initialize()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, ModifyBrightnessHdl, void *, EMPTYARG )
 {
@@ -134,7 +134,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyBrightnessHdl, void *, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, ModifyContrastHdl, void *, EMPTYARG )
 {
@@ -144,7 +144,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyContrastHdl, void *, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, ModifyTransHdl, void *, EMPTYARG )
 {
@@ -154,7 +154,7 @@ IMPL_LINK( GraphicPropertyPanel, ModifyTransHdl, void *, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl )
 {
@@ -164,7 +164,7 @@ IMPL_LINK_NOARG( GraphicPropertyPanel, ClickColorModeHdl )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, RedHdl, void*, EMPTYARG )
 {
@@ -174,7 +174,7 @@ IMPL_LINK( GraphicPropertyPanel, RedHdl, void*, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK( GraphicPropertyPanel, GreenHdl, void*, EMPTYARG )
 {
@@ -184,7 +184,7 @@ IMPL_LINK( GraphicPropertyPanel, GreenHdl, void*, EMPTYARG )
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(GraphicPropertyPanel, BlueHdl, void *, EMPTYARG)
 {
@@ -194,7 +194,7 @@ IMPL_LINK(GraphicPropertyPanel, BlueHdl, void *, EMPTYARG)
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 IMPL_LINK(GraphicPropertyPanel, GammaHdl, void *, EMPTYARG)
 {
@@ -204,21 +204,21 @@ IMPL_LINK(GraphicPropertyPanel, GammaHdl, void *, EMPTYARG)
     return 0L;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GraphicPropertyPanel::SetupIcons(void)
 {
     if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
     {
-        // todo
+        
     }
     else
     {
-        // todo
+        
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 GraphicPropertyPanel* GraphicPropertyPanel::Create (
     Window* pParent,
@@ -238,7 +238,7 @@ GraphicPropertyPanel* GraphicPropertyPanel::Create (
         pBindings);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GraphicPropertyPanel::DataChanged(
     const DataChangedEvent& rEvent)
@@ -248,7 +248,7 @@ void GraphicPropertyPanel::DataChanged(
     SetupIcons();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void GraphicPropertyPanel::NotifyItemUpdate(
     sal_uInt16 nSID,
@@ -458,17 +458,17 @@ void GraphicPropertyPanel::NotifyItemUpdate(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SfxBindings* GraphicPropertyPanel::GetBindings()
 {
     return mpBindings;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// namespace close
 
-}} // end of namespace ::svx::sidebar
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+}} 
+
+
+

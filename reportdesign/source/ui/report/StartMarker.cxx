@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "StartMarker.hxx"
 #include <vcl/image.hxx>
@@ -36,16 +36,16 @@
 
 #define CORNER_SPACE     5
 
-//=====================================================================
+
 namespace rptui
 {
-//=====================================================================
+
 
 Image*  OStartMarker::s_pDefCollapsed       = NULL;
 Image*  OStartMarker::s_pDefExpanded        = NULL;
 oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
-// -----------------------------------------------------------------------------
+
 OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
 ,m_aVRuler(this,WB_VERT)
@@ -77,7 +77,7 @@ OStartMarker::OStartMarker(OSectionWindow* _pParent,const OUString& _sColorEntry
     SetParentClipMode( PARENTCLIPMODE_NOCLIP );
     SetPaintTransparent( true );
 }
-// -----------------------------------------------------------------------------
+
 OStartMarker::~OStartMarker()
 {
     if ( osl_atomic_decrement(&s_nImageRefCount) == 0 )
@@ -86,14 +86,14 @@ OStartMarker::~OStartMarker()
         DELETEZ(s_pDefExpanded);
     }
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 OStartMarker::getMinHeight() const
 {
     Fraction aExtraWidth(long(2*REPORT_EXTRA_SPACE));
     aExtraWidth *= GetMapMode().GetScaleX();
     return LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() + (long)aExtraWidth;
 }
-// -----------------------------------------------------------------------------
+
 void OStartMarker::Paint( const Rectangle& rRect )
 {
     (void)rRect;
@@ -142,7 +142,7 @@ void OStartMarker::Paint( const Rectangle& rRect )
         DrawPolyLine(Polygon(PixelToLogic(aRect)),LineInfo(LINE_SOLID,2 ));
     }
 }
-// -----------------------------------------------------------------------------
+
 void OStartMarker::setColor()
 {
     const Color aColor(m_nColor);
@@ -152,7 +152,7 @@ void OStartMarker::setColor()
     m_aText.SetTextColor(aTextColor);
     m_aText.SetLineColor(m_nColor);
 }
-// -----------------------------------------------------------------------
+
 void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( !rMEvt.IsLeft() )
@@ -177,13 +177,13 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 
     m_pParent->showProperties();
 }
-// -----------------------------------------------------------------------------
+
 void OStartMarker::changeImage()
 {
     Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
     m_aImage.SetImage(*pImage);
 }
-// -----------------------------------------------------------------------
+
 void OStartMarker::initDefaultNodeImages()
 {
     if ( !s_pDefCollapsed )
@@ -199,14 +199,14 @@ void OStartMarker::initDefaultNodeImages()
     m_aText.SetBackground();
     m_aText.SetMouseTransparent(true);
 }
-// -----------------------------------------------------------------------
+
 void OStartMarker::ImplInitSettings()
 {
     SetBackground( );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     setColor();
 }
-//------------------------------------------------------------------------------
+
 void OStartMarker::Resize()
 {
     const Size aOutputSize( GetOutputSizePixel() );
@@ -233,12 +233,12 @@ void OStartMarker::Resize()
     aPos.Y() += static_cast<sal_Int32>((LogicToPixel(Size(0,m_aText.GetTextHeight())).Height() - aImageSize.Height()) * 0.5) ;
     m_aImage.SetPosSizePixel(aPos,aImageSize);
 }
-// -----------------------------------------------------------------------------
+
 void OStartMarker::setTitle(const OUString& _sTitle)
 {
     m_aText.SetText(_sTitle);
 }
-// -----------------------------------------------------------------------------
+
 void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
 {
     OColorListener::Notify(rBc, rHint);
@@ -250,18 +250,18 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
         Invalidate(INVALIDATE_CHILDREN);
     }
 }
-//----------------------------------------------------------------------------
+
 void OStartMarker::showRuler(sal_Bool _bShow)
 {
     m_bShowRuler = _bShow;
     m_aVRuler.Show(!m_bCollapsed && m_bShowRuler);
 }
-//------------------------------------------------------------------------------
+
 void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
 {
     if( !m_aText.GetText().isEmpty())
     {
-        // Hilfe anzeigen
+        
         Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));
         Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
         aItemRect.Left()   = aPt.X();
@@ -275,14 +275,14 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
             Help::ShowQuickHelp( this, aItemRect, m_aText.GetText() );
     }
 }
-// -----------------------------------------------------------------------------
+
 void OStartMarker::setCollapsed(sal_Bool _bCollapsed)
 {
     OColorListener::setCollapsed(_bCollapsed);
     showRuler(_bCollapsed);
     changeImage();
 }
-// -----------------------------------------------------------------------
+
 void OStartMarker::zoom(const Fraction& _aZoom)
 {
     setZoomFactor(_aZoom,*this);
@@ -291,9 +291,9 @@ void OStartMarker::zoom(const Fraction& _aZoom)
     Resize();
     Invalidate();
 }
-// -----------------------------------------------------------------------
-// =======================================================================
+
+
 }
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

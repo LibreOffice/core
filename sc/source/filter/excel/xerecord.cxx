@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xerecord.hxx"
@@ -22,7 +22,7 @@
 
 using namespace ::oox;
 
-// Base classes to export Excel records =======================================
+
 
 XclExpRecordBase::~XclExpRecordBase()
 {
@@ -36,7 +36,7 @@ void XclExpRecordBase::SaveXml( XclExpXmlStream& /*rStrm*/ )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpDelegatingRecord::XclExpDelegatingRecord( XclExpRecordBase* pRecord ) :
     mpRecord( pRecord )
@@ -45,8 +45,8 @@ XclExpDelegatingRecord::XclExpDelegatingRecord( XclExpRecordBase* pRecord ) :
 
 XclExpDelegatingRecord::~XclExpDelegatingRecord()
 {
-    // Do Nothing; we use Delegating Record for other objects we "know" will
-    // survive...
+    
+    
 }
 
 void XclExpDelegatingRecord::SaveXml( XclExpXmlStream& rStrm )
@@ -55,7 +55,7 @@ void XclExpDelegatingRecord::SaveXml( XclExpXmlStream& rStrm )
         mpRecord->SaveXml( rStrm );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpXmlElementRecord::XclExpXmlElementRecord(sal_Int32 const nElement)
     : mnElement( nElement )
@@ -66,7 +66,7 @@ XclExpXmlElementRecord::~XclExpXmlElementRecord()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpXmlStartElementRecord::XclExpXmlStartElementRecord(sal_Int32 const nElement)
     : XclExpXmlElementRecord(nElement)
@@ -80,12 +80,12 @@ XclExpXmlStartElementRecord::~XclExpXmlStartElementRecord()
 void XclExpXmlStartElementRecord::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
-    // TODO: no generic way to add attributes here, but it appears to
-    // not be needed yet
+    
+    
     rStream->startElement( mnElement, FSEND );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpXmlEndElementRecord::XclExpXmlEndElementRecord( sal_Int32 nElement )
     : XclExpXmlElementRecord( nElement )
@@ -101,7 +101,7 @@ void XclExpXmlEndElementRecord::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->endElement( mnElement );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpXmlStartSingleElementRecord::XclExpXmlStartSingleElementRecord(
             sal_Int32 const nElement)
@@ -119,7 +119,7 @@ void XclExpXmlStartSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
     rStream->write( "<" )->writeId( mnElement );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpXmlEndSingleElementRecord::XclExpXmlEndSingleElementRecord()
 {
@@ -134,7 +134,7 @@ void XclExpXmlEndSingleElementRecord::SaveXml( XclExpXmlStream& rStrm )
     rStrm.GetCurrentStream()->write( "/>" );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpRecord::XclExpRecord( sal_uInt16 nRecId, sal_Size nRecSize ) :
     mnRecSize( nRecSize ),
@@ -164,7 +164,7 @@ void XclExpRecord::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 }
 
-// ----------------------------------------------------------------------------
+
 
 template<>
 void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm )
@@ -176,7 +176,7 @@ void XclExpValueRecord<double>::SaveXml( XclExpXmlStream& rStrm )
         FSEND );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclExpBoolRecord::WriteBody( XclExpStream& rStrm )
 {
@@ -189,12 +189,12 @@ void XclExpBoolRecord::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     rStrm.WriteAttributes(
-            // HACK: HIDEOBJ (excdoc.cxx) should be its own object to handle XML_showObjects
+            
             mnAttribute, mnAttribute == XML_showObjects ? "all" : XclXmlUtils::ToPsz( mbValue ),
             FSEND );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpDummyRecord::XclExpDummyRecord( sal_uInt16 nRecId, const void* pRecData, sal_Size nRecSize ) :
     XclExpRecord( nRecId )
@@ -213,7 +213,7 @@ void XclExpDummyRecord::WriteBody( XclExpStream& rStrm )
     rStrm.Write( mpData, GetRecSize() );
 }
 
-// Future records =============================================================
+
 
 XclExpFutureRecord::XclExpFutureRecord( XclFutureRecType eRecType, sal_uInt16 nRecId, sal_Size nRecSize ) :
     XclExpRecord( nRecId, nRecSize ),
@@ -231,7 +231,7 @@ void XclExpFutureRecord::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 }
 
-// ============================================================================
+
 
 XclExpSubStream::XclExpSubStream( sal_uInt16 nSubStrmType ) :
     mnSubStrmType( nSubStrmType )
@@ -240,7 +240,7 @@ XclExpSubStream::XclExpSubStream( sal_uInt16 nSubStrmType ) :
 
 void XclExpSubStream::Save( XclExpStream& rStrm )
 {
-    // BOF record
+    
     switch( rStrm.GetRoot().GetBiff() )
     {
         case EXC_BIFF2:
@@ -273,14 +273,14 @@ void XclExpSubStream::Save( XclExpStream& rStrm )
             DBG_ERROR_BIFF();
     }
 
-    // substream records
+    
     XclExpRecordList<>::Save( rStrm );
 
-    // EOF record
+    
     rStrm.StartRecord( EXC_ID_EOF, 0 );
     rStrm.EndRecord();
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

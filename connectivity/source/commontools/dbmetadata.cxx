@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,10 +43,10 @@
 
 #include <boost/optional.hpp>
 
-//........................................................................
+
 namespace dbtools
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::sdbc::XConnection;
@@ -72,9 +72,9 @@ namespace dbtools
 
     namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 
-    //====================================================================
-    //= DatabaseMetaData_Impl
-    //====================================================================
+    
+    
+    
     struct DatabaseMetaData_Impl
     {
         Reference< XConnection >        xConnection;
@@ -94,10 +94,10 @@ namespace dbtools
         }
     };
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
-        //................................................................
+        
         static void lcl_construct( DatabaseMetaData_Impl& _metaDataImpl, const Reference< XConnection >& _connection )
         {
             _metaDataImpl.xConnection = _connection;
@@ -109,7 +109,7 @@ namespace dbtools
                 throw IllegalArgumentException();
         }
 
-        //................................................................
+        
         static void lcl_checkConnected( const DatabaseMetaData_Impl& _metaDataImpl )
         {
             if ( !_metaDataImpl.xConnection.is() || !_metaDataImpl.xConnectionMetaData.is() )
@@ -120,7 +120,7 @@ namespace dbtools
             }
         }
 
-        //................................................................
+        
         static bool lcl_getDriverSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             lcl_checkConnected( _metaData );
@@ -131,7 +131,7 @@ namespace dbtools
             return true;
         }
 
-        //................................................................
+        
         static bool lcl_getConnectionSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             try
@@ -162,7 +162,7 @@ namespace dbtools
             return false;
         }
 
-        //................................................................
+        
         static const OUString& lcl_getConnectionStringSetting(
             const DatabaseMetaData_Impl& _metaData, ::boost::optional< OUString >& _cachedSetting,
             OUString (SAL_CALL XDatabaseMetaData::*_getter)() )
@@ -180,29 +180,29 @@ namespace dbtools
         }
     }
 
-    //====================================================================
-    //= DatabaseMetaData
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     DatabaseMetaData::DatabaseMetaData()
         :m_pImpl( new DatabaseMetaData_Impl )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     DatabaseMetaData::DatabaseMetaData( const Reference< XConnection >& _connection )
         :m_pImpl( new DatabaseMetaData_Impl )
     {
         lcl_construct( *m_pImpl, _connection );
     }
 
-    //--------------------------------------------------------------------
+    
     DatabaseMetaData::DatabaseMetaData( const DatabaseMetaData& _copyFrom )
         :m_pImpl( new DatabaseMetaData_Impl( *_copyFrom.m_pImpl ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     DatabaseMetaData& DatabaseMetaData::operator=( const DatabaseMetaData& _copyFrom )
     {
         if ( this == &_copyFrom )
@@ -212,18 +212,18 @@ namespace dbtools
         return *this;
     }
 
-    //--------------------------------------------------------------------
+    
     DatabaseMetaData::~DatabaseMetaData()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::isConnected() const
     {
         return m_pImpl->xConnection.is();
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::supportsSubqueriesInFrom() const
     {
         lcl_checkConnected( *m_pImpl );
@@ -233,8 +233,8 @@ namespace dbtools
         {
             sal_Int32 maxTablesInselect = m_pImpl->xConnectionMetaData->getMaxTablesInSelect();
             supportsSubQueries = ( maxTablesInselect > 1 ) || ( maxTablesInselect == 0 );
-            // TODO: is there a better way to determine this? The above is not really true. More precise,
-            // it's a *very* generous heuristics ...
+            
+            
         }
         catch( const Exception& )
         {
@@ -243,7 +243,7 @@ namespace dbtools
         return supportsSubQueries;
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::supportsPrimaryKeys() const
     {
         lcl_checkConnected( *m_pImpl );
@@ -264,19 +264,19 @@ namespace dbtools
         return doesSupportPrimaryKeys;
     }
 
-    //--------------------------------------------------------------------
+    
     const OUString&  DatabaseMetaData::getIdentifierQuoteString() const
     {
         return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedIdentifierQuoteString, &XDatabaseMetaData::getIdentifierQuoteString );
     }
 
-    //--------------------------------------------------------------------
+    
     const OUString&  DatabaseMetaData::getCatalogSeparator() const
     {
         return lcl_getConnectionStringSetting( *m_pImpl, m_pImpl->sCachedCatalogSeparator, &XDatabaseMetaData::getCatalogSeparator );
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::restrictIdentifiersToSQL92() const
     {
         lcl_checkConnected( *m_pImpl );
@@ -288,7 +288,7 @@ namespace dbtools
         return restrict;
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::generateASBeforeCorrelationName() const
     {
         bool doGenerate( true );
@@ -297,7 +297,7 @@ namespace dbtools
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
     }
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::shouldEscapeDateTime() const
     {
         bool doGenerate( true );
@@ -306,7 +306,7 @@ namespace dbtools
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
     }
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::isAutoIncrementPrimaryKey() const
     {
         bool is( true );
@@ -315,7 +315,7 @@ namespace dbtools
             OSL_VERIFY( setting >>= is );
         return is;
     }
-    //--------------------------------------------------------------------
+    
     sal_Int32 DatabaseMetaData::getBooleanComparisonMode() const
     {
         sal_Int32 mode( BooleanComparisonMode::EQUAL_INTEGER );
@@ -324,7 +324,7 @@ namespace dbtools
             OSL_VERIFY( setting >>= mode );
         return mode;
     }
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::supportsRelations() const
     {
         lcl_checkConnected( *m_pImpl );
@@ -353,7 +353,7 @@ namespace dbtools
         return bSupport;
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::supportsColumnAliasInOrderBy() const
     {
         bool doGenerate( true );
@@ -363,7 +363,7 @@ namespace dbtools
         return doGenerate;
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::supportsUserAdministration( const Reference<XComponentContext>& _rContext ) const
     {
         lcl_checkConnected( *m_pImpl  );
@@ -371,12 +371,12 @@ namespace dbtools
         bool isSupported( false );
         try
         {
-            // find the XUsersSupplier interface
-            // - either directly at the connection
+            
+            
             Reference< XUsersSupplier > xUsersSupp( m_pImpl->xConnection, UNO_QUERY );
             if ( !xUsersSupp.is() )
             {
-                // - or at the driver manager
+                
                 Reference< XDriverManager2 > xDriverManager = DriverManager::create( _rContext );
                 Reference< XDataDefinitionSupplier > xDriver( xDriverManager->getDriverByURL( m_pImpl->xConnectionMetaData->getURL() ), UNO_QUERY );
                 if ( xDriver.is() )
@@ -392,7 +392,7 @@ namespace dbtools
         return isSupported;
     }
 
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::displayEmptyTableFolders() const
     {
         bool doDisplay( true );
@@ -414,7 +414,7 @@ namespace dbtools
 #endif
         return doDisplay;
     }
-    //--------------------------------------------------------------------
+    
     bool DatabaseMetaData::supportsThreads() const
     {
         bool bSupported( true );
@@ -431,8 +431,8 @@ namespace dbtools
         return bSupported;
     }
 
-//........................................................................
-} // namespace dbtools
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

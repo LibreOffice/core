@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,15 +27,15 @@
 #include <svl/eitem.hxx>
 #include <vcl/settings.hxx>
 
-//......................................................................................................................
+
 namespace sfx2
 {
-//......................................................................................................................
 
-    //==================================================================================================================
-    //= TitledDockingWindow
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+
+    
+    
+    
+    
     TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, Window* i_pParent,
             WinBits i_nStyle )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_nStyle )
@@ -49,7 +49,7 @@ namespace sfx2
         impl_construct();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TitledDockingWindow::TitledDockingWindow( SfxBindings* i_pBindings, SfxChildWindow* i_pChildWindow, Window* i_pParent,
             const ResId& i_rResId )
         :SfxDockingWindow( i_pBindings, i_pChildWindow, i_pParent, i_rResId )
@@ -62,7 +62,7 @@ namespace sfx2
         impl_construct();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::impl_construct()
     {
         SetBackground( Wallpaper() );
@@ -76,47 +76,47 @@ namespace sfx2
         m_aContentWindow.Show();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TitledDockingWindow::~TitledDockingWindow()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::SetTitle( const OUString& i_rTitle )
     {
         m_sTitle = i_rTitle;
         Invalidate();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::SetText( const OUString& i_rText )
     {
         SfxDockingWindow::SetText( i_rText );
         if ( m_sTitle.isEmpty() )
-            // our text is used as title, too => repaint
+            
             Invalidate();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::Resize()
     {
         SfxDockingWindow::Resize();
         impl_scheduleLayout();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::onLayoutDone()
     {
-        // not interested in
+        
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::impl_scheduleLayout()
     {
         m_bLayoutPending = true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::impl_layout()
     {
         m_bLayoutPending = false;
@@ -126,7 +126,7 @@ namespace sfx2
         const Size aToolBoxSize( m_aToolbox.CalcWindowSizePixel() );
         Size aWindowSize( GetOutputSizePixel() );
 
-        // position the tool box
+        
         m_nTitleBarHeight = GetSettings().GetStyleSettings().GetTitleHeight();
         if ( aToolBoxSize.Height() > m_nTitleBarHeight )
             m_nTitleBarHeight = aToolBoxSize.Height();
@@ -138,7 +138,7 @@ namespace sfx2
             aToolBoxSize
         );
 
-        // Place the content window.
+        
         if ( m_nTitleBarHeight < aToolBoxSize.Height() )
             m_nTitleBarHeight = aToolBoxSize.Height();
         aWindowSize.Height() -= m_nTitleBarHeight;
@@ -153,7 +153,7 @@ namespace sfx2
         onLayoutDone();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::Paint( const Rectangle& i_rArea )
     {
         if ( m_bLayoutPending )
@@ -166,12 +166,12 @@ namespace sfx2
         SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
         SetLineColor();
 
-        // bold font
+        
         Font aFont( GetFont() );
         aFont.SetWeight( WEIGHT_BOLD );
         SetFont( aFont );
 
-        // Set border values.
+        
         Size aWindowSize( GetOutputSizePixel() );
         int nOuterLeft = 0;
         int nInnerLeft = nOuterLeft + m_aBorder.Left() - 1;
@@ -181,7 +181,7 @@ namespace sfx2
         int nOuterBottom = aWindowSize.Height() - 1;
         int nInnerBottom = nOuterBottom - m_aBorder.Bottom() + 1;
 
-        // Paint title bar background.
+        
         Rectangle aTitleBarBox( Rectangle(
             nOuterLeft,
             0,
@@ -197,7 +197,7 @@ namespace sfx2
         if ( nInnerBottom < nOuterBottom )
             DrawRect( Rectangle( nOuterLeft, nInnerBottom, nOuterRight, nOuterBottom ) );
 
-        // Paint bevel border.
+        
         SetFillColor();
         SetLineColor( GetSettings().GetStyleSettings().GetShadowColor() );
         if ( m_aBorder.Top() > 0 )
@@ -211,36 +211,36 @@ namespace sfx2
         if ( m_aBorder.Right() > 0 )
             DrawLine( Point( nInnerRight, nInnerBottom ), Point( nInnerRight, nInnerTop ) );
 
-        // Paint title bar text.
+        
         SetLineColor( GetSettings().GetStyleSettings().GetActiveTextColor() );
         aTitleBarBox.Left() += 3;
         DrawText( aTitleBarBox, impl_getTitle(), TEXT_DRAW_LEFT | TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
 
-        // Restore original values of the output device.
+        
         Pop();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString TitledDockingWindow::impl_getTitle() const
     {
         return !m_sTitle.isEmpty() ? m_sTitle : GetText();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::impl_resetToolBox()
     {
         m_aToolbox.Clear();
 
-        // Get the closer bitmap and set it as right most button.
+        
         Image aImage( SfxResId( SFX_IMG_CLOSE_DOC ) );
         m_aToolbox.InsertItem( 1, aImage );
         m_aToolbox.ShowItem( 1 );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_uInt16 TitledDockingWindow::impl_addDropDownToolBoxItem( const OUString& i_rItemText, const OString& i_nHelpId, const Link& i_rCallback )
     {
-        // Add the menu before the closer button.
+        
         const sal_uInt16 nItemCount( m_aToolbox.GetItemCount() );
         const sal_uInt16 nItemId( nItemCount + 1 );
         m_aToolbox.InsertItem( nItemId, i_rItemText, TIB_DROPDOWNONLY, nItemCount > 0 ? nItemCount - 1 : TOOLBOX_APPEND );
@@ -248,22 +248,22 @@ namespace sfx2
         m_aToolbox.SetClickHdl( i_rCallback );
         m_aToolbox.SetDropdownClickHdl( i_rCallback );
 
-        // The tool box has likely changed its size. The title bar has to be
-        // resized.
+        
+        
         impl_scheduleLayout();
         Invalidate();
 
         return nItemId;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     IMPL_LINK( TitledDockingWindow, OnToolboxItemSelected, ToolBox*, pToolBox )
     {
         const sal_uInt16 nId = pToolBox->GetCurItemId();
 
         if ( nId == 1 )
         {
-            // the closer
+            
             EndTracking();
             const sal_uInt16 nChildWindowId( GetChildWindow_Impl()->GetType() );
             const SfxBoolItem aVisibility( nChildWindowId, false );
@@ -278,7 +278,7 @@ namespace sfx2
         return 0;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::StateChanged( StateChangedType i_nType )
     {
         switch ( i_nType )
@@ -290,7 +290,7 @@ namespace sfx2
         SfxDockingWindow::StateChanged( i_nType );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::EndDocking( const Rectangle& i_rRect, sal_Bool i_bFloatMode )
     {
         SfxDockingWindow::EndDocking( i_rRect, i_bFloatMode );
@@ -299,7 +299,7 @@ namespace sfx2
             m_aEndDockingHdl.Call( this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TitledDockingWindow::DataChanged( const DataChangedEvent& i_rDataChangedEvent )
     {
         SfxDockingWindow::DataChanged( i_rDataChangedEvent );
@@ -309,19 +309,19 @@ namespace sfx2
             case DATACHANGED_SETTINGS:
                 if ( ( i_rDataChangedEvent.GetFlags() & SETTINGS_STYLE ) == 0)
                     break;
-                // else fall through.
+                
             case DATACHANGED_FONTS:
             case DATACHANGED_FONTSUBSTITUTION:
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
 
-                // Font.
+                
                 Font aFont = rStyleSettings.GetAppFont();
                 if ( IsControlFont() )
                     aFont.Merge( GetControlFont() );
                 SetZoomedPointFont( aFont );
 
-                // Color.
+                
                 Color aColor;
                 if ( IsControlForeground() )
                     aColor = GetControlForeground();
@@ -337,8 +337,8 @@ namespace sfx2
         }
     }
 
-//......................................................................................................................
-} // namespace sfx2
-//......................................................................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

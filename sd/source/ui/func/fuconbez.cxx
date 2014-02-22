@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -107,7 +107,7 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (aVEvt.eEvent == SDREVENT_BEGTEXTEDIT)
     {
-        // here, we do not allow text input
+        
         aVEvt.eEvent = SDREVENT_BEGDRAGOBJ;
         mpView->EnableExtendedMouseEventDispatcher(sal_False);
     }
@@ -118,7 +118,7 @@ sal_Bool FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 
     if (eHit == SDRHIT_MARKEDOBJECT && nEditMode == SID_BEZIER_INSERT)
     {
-        // insert glue point
+        
         mpView->BegInsObjPoint(aMDPos, rMEvt.IsMod1());
     }
     else
@@ -174,7 +174,7 @@ sal_Bool FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt )
             bCreated = sal_True;
         }
 
-        // trick to suppress FuDraw::DoubleClick
+        
         bMBDown = sal_False;
 
     }
@@ -329,14 +329,14 @@ void FuConstructBezierPolygon::SetEditMode(sal_uInt16 nMode)
 
 SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_DRAW_POLYGON:
-    // case SID_DRAW_POLYGON_NOFILL:
-    // case SID_DRAW_XPOLYGON:
-    // case SID_DRAW_XPOLYGON_NOFILL:
-    // case SID_DRAW_FREELINE:
-    // case SID_DRAW_FREELINE_NOFILL:
-    // case SID_DRAW_BEZIER_FILL:          // BASIC
-    // case SID_DRAW_BEZIER_NOFILL:        // BASIC
+    
+    
+    
+    
+    
+    
+    
+    
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),
@@ -476,6 +476,6 @@ SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, c
     return pObj;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -47,35 +47,35 @@
 #include <sfx2/frame.hxx>
 #include <macroloader.hxx>
 
-//--------------------------------------------------------------------------------------------------------
 
-#define MACRO_PRFIX         "macro://"
+
+#define MACRO_PRFIX         "macro:
 #define MACRO_POSTFIX       "()"
 
 using namespace css;
 
-//--------------------------------------------------------------------------------------------------------
-    //  --- XNameReplace ---
-//--------------------------------------------------------------------------------------------------------
+
+    
+
 void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::Any & rElement )
                                 throw( lang::IllegalArgumentException, container::NoSuchElementException,
                                        lang::WrappedTargetException, uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    // find the event in the list and replace the data
+    
     long nCount = maEventNames.getLength();
     for ( long i=0; i<nCount; i++ )
     {
         if ( maEventNames[i] == aName )
         {
-            // check for correct type of the element
+            
             if ( !::comphelper::NamedValueCollection::canExtractFrom( rElement ) )
                 throw lang::IllegalArgumentException();
             ::comphelper::NamedValueCollection const aEventDescriptor( rElement );
 
-            // create Configuration at first, creation might call this method also and that would overwrite everything
-            // we might have stored before!
+            
+            
             if ( mpObjShell && !mpObjShell->IsLoading() )
                 mpObjShell->SetModified( sal_True );
 
@@ -84,15 +84,15 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
 
             OUString sType;
             if  (   ( aNormalizedDescriptor.size() == 1 )
-                &&  !aNormalizedDescriptor.has( PROP_EVENT_TYPE ) //TODO
+                &&  !aNormalizedDescriptor.has( PROP_EVENT_TYPE ) 
                 &&  ( aNormalizedDescriptor.get( PROP_EVENT_TYPE ) >>= sType )
                 &&  ( sType.isEmpty() )
                 )
             {
-                // An empty event type means no binding. Therefore reset data
-                // to reflect that state.
-                // (that's for compatibility only. Nowadays, the Tools/Customize dialog should
-                // set an empty sequence to indicate the request for resetting the assignment.)
+                
+                
+                
+                
                 OSL_ENSURE( false, "legacy event assignment format detected" );
                 aNormalizedDescriptor.clear();
             }
@@ -112,16 +112,16 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUString & aName, const uno::
     throw container::NoSuchElementException();
 }
 
-//--------------------------------------------------------------------------------------------------------
-//  --- XNameAccess ---
-//--------------------------------------------------------------------------------------------------------
+
+
+
 uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
                                 throw( container::NoSuchElementException, lang::WrappedTargetException,
                                        uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    // find the event in the list and return the data
+    
 
     long nCount = maEventNames.getLength();
 
@@ -134,18 +134,18 @@ uno::Any SAL_CALL SfxEvents_Impl::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL SfxEvents_Impl::getElementNames() throw ( uno::RuntimeException )
 {
     return maEventNames;
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    // find the event in the list and return the data
+    
 
     long nCount = maEventNames.getLength();
 
@@ -158,16 +158,16 @@ sal_Bool SAL_CALL SfxEvents_Impl::hasByName( const OUString& aName ) throw ( uno
     return sal_False;
 }
 
-//--------------------------------------------------------------------------------------------------------
-//  --- XElementAccess ( parent of XNameAccess ) ---
-//--------------------------------------------------------------------------------------------------------
+
+
+
 uno::Type SAL_CALL SfxEvents_Impl::getElementType() throw ( uno::RuntimeException )
 {
     uno::Type aElementType = ::getCppuType( (const uno::Sequence < beans::PropertyValue > *)0 );
     return aElementType;
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL SfxEvents_Impl::hasElements() throw ( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -262,7 +262,7 @@ void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEven
         }
         else if ( aType.isEmpty() )
         {
-            // Empty type means no active binding for the event. Just ignore do nothing.
+            
         }
         else
         {
@@ -271,14 +271,14 @@ void SfxEvents_Impl::Execute( uno::Any& aEventData, const document::DocumentEven
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
-// --- ::document::XEventListener ---
-//--------------------------------------------------------------------------------------------------------
+
+
+
 void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
     ::osl::ClearableMutexGuard aGuard( maMutex );
 
-    // get the event name, find the coresponding data, execute the data
+    
 
     OUString aName   = aEvent.EventName;
     long        nCount  = maEventNames.getLength();
@@ -301,9 +301,9 @@ void SAL_CALL SfxEvents_Impl::notifyEvent( const document::EventObject& aEvent )
     Execute( aEventData, document::DocumentEvent(aEvent.Source, aEvent.EventName, NULL, uno::Any()), mpObjShell );
 }
 
-//--------------------------------------------------------------------------------------------------------
-// --- ::lang::XEventListener ---
-//--------------------------------------------------------------------------------------------------------
+
+
+
 void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ ) throw( uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -315,12 +315,12 @@ void SAL_CALL SfxEvents_Impl::disposing( const lang::EventObject& /*Source*/ ) t
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+
+
 SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
                                 uno::Reference< document::XEventBroadcaster > xBroadcaster )
 {
-    // get the list of supported events and store it
+    
     if ( pShell )
         maEventNames = pShell->GetEventNames();
     else
@@ -335,12 +335,12 @@ SfxEvents_Impl::SfxEvents_Impl( SfxObjectShell* pShell,
         mxBroadcaster->addEventListener( this );
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 SfxEvents_Impl::~SfxEvents_Impl()
 {
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShell* pObjShell, sal_Bool bNormalizeMacro )
 {
     SvxMacro* pMacro = NULL;
@@ -380,7 +380,7 @@ SvxMacro* SfxEvents_Impl::ConvertToMacro( const uno::Any& rElement, SfxObjectShe
             nIndex += 1;
         }
 
-        // Get the type
+        
         ScriptType  eType( STARBASIC );
         if ( aType == STAR_BASIC )
             eType = STARBASIC;
@@ -450,7 +450,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
                     else
                         aLibrary = SFX_APP()->GetName();
 
-                    // Get the macro name
+                    
                     aMacroName = aScript.copy( nHashPos+1, nArgsPos - nHashPos - 1 );
                 }
                 else
@@ -470,7 +470,7 @@ void SfxEvents_Impl::NormalizeMacro( const ::comphelper::NamedValueCollection& i
             aScript += OUString( MACRO_POSTFIX  );
         }
         else
-            // wrong properties
+            
             return;
 
         if (aLibrary != "document")

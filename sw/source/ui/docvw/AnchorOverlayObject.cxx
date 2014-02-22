@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <AnchorOverlayObject.hxx>
@@ -34,7 +34,7 @@
 
 namespace sw { namespace sidebarwindows {
 
-// helper class: Primitive for discrete visualisation
+
 class AnchorPrimitive : public drawinglayer::primitive2d::DiscreteMetricDependentPrimitive2D
 {
 private:
@@ -44,10 +44,10 @@ private:
     const AnchorState               maAnchorState;
     basegfx::BColor                 maColor;
 
-    // discrete line width
+    
     double                          mfDiscreteLineWidth;
 
-    // bitfield
+    
     bool                            mbShadow : 1;
     bool                            mbLineSolid : 1;
 
@@ -75,7 +75,7 @@ public:
         mbLineSolid(bLineSolid)
     {}
 
-    // data access
+    
     const basegfx::B2DPolygon& getTriangle() const { return maTriangle; }
     const basegfx::B2DPolygon& getLine() const { return maLine; }
     const basegfx::B2DPolygon& getLineTop() const { return maLineTop; }
@@ -99,7 +99,7 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
          AS_ALL == maAnchorState ||
          AS_START == maAnchorState )
     {
-        // create triangle
+        
         const drawinglayer::primitive2d::Primitive2DReference aTriangle(
             new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                 basegfx::B2DPolyPolygon(getTriangle()),
@@ -108,7 +108,7 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aTriangle);
     }
 
-    // prepare view-independent LineWidth and color
+    
     const drawinglayer::attribute::LineAttribute aLineAttribute(
         getColor(),
         getDiscreteLineWidth() * getDiscreteUnit());
@@ -116,7 +116,7 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
     if ( AS_ALL == maAnchorState ||
          AS_START == maAnchorState )
     {
-        // create line start
+        
         if(getLineSolid())
         {
             const drawinglayer::primitive2d::Primitive2DReference aSolidLine(
@@ -151,8 +151,8 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
 
     if(aRetval.hasElements() && getShadow())
     {
-        // shadow is only for triangle and line start, and in upper left
-        // and lower right direction, in different colors
+        
+        
         const double fColorChange(20.0 / 255.0);
         const basegfx::B3DTuple aColorChange(fColorChange, fColorChange, fColorChange);
         basegfx::BColor aLighterColor(getColor() + aColorChange);
@@ -161,7 +161,7 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
         aLighterColor.clamp();
         aDarkerColor.clamp();
 
-        // create shadow sequence
+        
         drawinglayer::primitive2d::Primitive2DSequence aShadows(2);
         basegfx::B2DHomMatrix aTransform;
 
@@ -183,7 +183,7 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
                 aDarkerColor,
                 aRetval));
 
-        // add shadow before geometry to make it be proccessed first
+        
         const drawinglayer::primitive2d::Primitive2DSequence aTemporary(aRetval);
 
         aRetval = aShadows;
@@ -193,8 +193,8 @@ drawinglayer::primitive2d::Primitive2DSequence AnchorPrimitive::create2DDecompos
     if ( AS_ALL == maAnchorState ||
          AS_END == maAnchorState )
     {
-        // LineTop has to be created, too, but uses no shadow, so add after
-        // the other parts are created
+        
+        
         const drawinglayer::primitive2d::Primitive2DReference aLineTop(
             new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                 getLineTop(),
@@ -270,7 +270,7 @@ ImplPrimitive2DIDBlock(AnchorPrimitive, PRIMITIVE2D_ID_SWSIDEBARANCHORPRIMITIVE)
     {
         if ( pAnchor->getOverlayManager() )
         {
-            // remove this object from the chain
+            
             pAnchor->getOverlayManager()->remove(*pAnchor);
         }
         delete pAnchor;
@@ -444,6 +444,6 @@ void AnchorOverlayObject::SetAnchorState( const AnchorState aState)
   }
 }
 
-} } // end of namespace sw::annotation
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

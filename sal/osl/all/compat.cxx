@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -15,16 +15,16 @@
 #include "osl/time.h"
 #include "sal/types.h"
 
-// Stubs for removed functionality, to be killed when we bump sal SONAME
+
 
 extern "C" {
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_acquireSemaphore(void *) {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL osl_createSemaphore(sal_uInt32) {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL osl_destroySemaphore(void *) {
@@ -32,27 +32,27 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL osl_destroySemaphore(void *) {
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_getEthernetAddress(sal_uInt8 *) {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_releaseSemaphore(void *) {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL osl_tryToAcquireSemaphore(void *) {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_addUnloadingListener(
     void (SAL_CALL *)(void *), void *)
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Int32 SAL_CALL rtl_compareMemory(
     void const *, void const *, sal_Size)
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_copyMemory(
@@ -68,7 +68,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_fillMemory(void *, sal_Size, sal_uInt8) {
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL rtl_findInMemory(
     void const *, sal_uInt8, sal_Size)
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_moveMemory(
@@ -79,7 +79,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_moveMemory(
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL rtl_registerModuleForUnloading(oslModule)
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL rtl_removeUnloadingListener(sal_Int32) {

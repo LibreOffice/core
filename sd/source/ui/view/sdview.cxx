@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
@@ -120,10 +120,10 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
     maSmartTags(*this),
     mpClipboard (new ViewClipboard (*this))
 {
-    // #i73602# Use default from the configuration
+    
     SetBufferedOverlayAllowed(getOptionsDrawinglayer().IsOverlayBuffer_DrawImpress());
 
-    // #i74769#, #i75172# Use default from the configuration
+    
     SetBufferedOutputAllowed(getOptionsDrawinglayer().IsPaintBuffer_DrawImpress());
 
     EnableExtendedKeyInputDispatcher(sal_False);
@@ -138,7 +138,7 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
     SetHitTolerancePixel(2);
     SetMeasureLayer(SD_RESSTR(STR_LAYER_MEASURELINES));
 
-    // Timer for delayed drop (has to be for MAC)
+    
     maDropErrorTimer.SetTimeoutHdl( LINK(this, View, DropErrorHdl) );
     maDropErrorTimer.SetTimeout(50);
     maDropInsertFileTimer.SetTimeoutHdl( LINK(this, View, DropInsertFileHdl) );
@@ -159,7 +159,7 @@ View::~View()
 {
     maSmartTags.Dispose();
 
-    // release content of selection clipboard, if we own the content
+    
     UpdateSelectionClipboard( sal_True );
 
     maDropErrorTimer.Stop();
@@ -169,7 +169,7 @@ View::~View()
 
     while(PaintWindowCount())
     {
-        // remove all registered OutDevs
+        
         DeleteWindowFromPaintView(GetFirstOutputDevice() /*GetWin(0)*/);
     }
 }
@@ -181,8 +181,8 @@ public:
     ViewRedirector();
     virtual ~ViewRedirector();
 
-    // all default implementations just call the same methods at the original. To do something
-    // different, overload the method and at least do what the method does.
+    
+    
     virtual drawinglayer::primitive2d::Primitive2DSequence createRedirectedPrimitive2DSequence(
         const sdr::contact::ViewObjectContact& rOriginal,
         const sdr::contact::DisplayInfo& rDisplayInfo);
@@ -219,8 +219,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
         const SdPage* pObjectsSdPage = dynamic_cast< SdPage* >(pObject->GetPage());
         const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
 
-        // check if we need to draw a placeholder border. Never do it for
-        // objects inside a SdrPageObj and never when printing
+        
+        
         if(!bIsInsidePageObj && !bIsPrinting)
         {
             bool bCreateOutline(false);
@@ -243,7 +243,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                     {
                         if( !bSubContentProcessing )
                         {
-                            // only draw a boundary for header&footer objects on the masterpage itself
+                            
                             bCreateOutline = true;
                         }
                     }
@@ -251,8 +251,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
             }
             else if( ( pObject->GetObjInventor() == SdrInventor ) && ( pObject->GetObjIdentifier() == OBJ_PAGE ) )
             {
-                // only for handout page, else this frame will be created for each
-                // page preview object in SlideSorter and PagePane
+                
+                
                 if(pObjectsSdPage && PK_HANDOUT == pObjectsSdPage->GetPageKind())
                 {
                     bCreateOutline = true;
@@ -261,25 +261,25 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
             if(bCreateOutline)
             {
-                // empty presentation objects get a gray frame
+                
                 const svtools::ColorConfig aColorConfig;
                 const svtools::ColorConfigValue aColor( aColorConfig.GetColorValue( svtools::OBJECTBOUNDARIES ) );
 
                 if( aColor.bIsVisible )
                 {
-                    // get basic object transformation
+                    
                     const basegfx::BColor aRGBColor(Color(aColor.nColor).getBColor());
                     basegfx::B2DHomMatrix aObjectMatrix;
                     basegfx::B2DPolyPolygon aObjectPolyPolygon;
                     pObject->TRGetBaseGeometry(aObjectMatrix, aObjectPolyPolygon);
 
-                    // create dashed border
+                    
                     {
-                        // create object polygon
+                        
                         basegfx::B2DPolygon aPolygon(basegfx::tools::createUnitPolygon());
                         aPolygon.transform(aObjectMatrix);
 
-                        // create line and stroke attribute
+                        
                         ::std::vector< double > aDotDashArray;
 
                         aDotDashArray.push_back(160.0);
@@ -289,7 +289,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                         const drawinglayer::attribute::LineAttribute aLine(aRGBColor);
                         const drawinglayer::attribute::StrokeAttribute aStroke(aDotDashArray, fFullDotDashLen);
 
-                        // create primitive and add
+                        
                         const drawinglayer::primitive2d::Primitive2DReference xRef(new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
                             aPolygon,
                             aLine,
@@ -297,8 +297,8 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, xRef);
                     }
 
-                    // now paint the placeholder description, but only when masterpage
-                    // is displayed as page directly (MasterPage view)
+                    
+                    
                     if(!bSubContentProcessing && bIsMasterPageObject)
                     {
                         OUString aObjectString;
@@ -367,35 +367,35 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
 
                         if( !aObjectString.isEmpty() )
                         {
-                            // decompose object matrix to be able to place text correctly
+                            
                             basegfx::B2DTuple aScale;
                             basegfx::B2DTuple aTranslate;
                             double fRotate, fShearX;
                             aObjectMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
-                            // create font
+                            
                             SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObject );
                             const SdrTextVertAdjust eTVA(pTextObj ? pTextObj->GetTextVerticalAdjust() : SDRTEXTVERTADJUST_CENTER);
                             Font aScaledVclFont;
 
-                            // use a text size factor to get more reliable text sizes from the text layouter
-                            // (and from vcl), tipp from HDU
+                            
+                            
                             static sal_uInt32 nTextSizeFactor(100);
 
-                            // use a factor to get more linear text size calculations
+                            
                             aScaledVclFont.SetHeight( 500 * nTextSizeFactor );
 
-                            // get basic geometry and get text size
+                            
                             drawinglayer::primitive2d::TextLayouterDevice aTextLayouter;
                             aTextLayouter.setFont(aScaledVclFont);
                             const sal_Int32 nTextLength(aObjectString.getLength());
 
-                            // do not forget to use the factor again to get the width for the 500
+                            
                             const double fTextWidth(aTextLayouter.getTextWidth(aObjectString, 0, nTextLength) * (1.0 / nTextSizeFactor));
                             const double fTextHeight(aTextLayouter.getTextHeight() * (1.0 / nTextSizeFactor));
 
-                            // calculate text primitive position. If text is at bottom, use top for
-                            // the extra text and vice versa
+                            
+                            
                             const double fHorDist(125);
                             const double fVerDist(125);
                             const double fPosX((aTranslate.getX() + aScale.getX()) - fTextWidth - fHorDist);
@@ -403,7 +403,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                 ? aTranslate.getY() - fVerDist + fTextHeight
                                 : (aTranslate.getY() + aScale.getY()) - fVerDist);
 
-                            // get font attributes; use normally scaled font
+                            
                             const basegfx::BColor aFontColor(aRGBColor);
                             Font aVclFont;
                             basegfx::B2DVector aTextSizeAttribute;
@@ -417,20 +417,20 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
                                     false,
                                     false));
 
-                            // fill text matrix
+                            
                             const basegfx::B2DHomMatrix aTextMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                                 aTextSizeAttribute.getX(), aTextSizeAttribute.getY(),
                                 fShearX,
                                 fRotate,
                                 fPosX, fPosY));
 
-                            // create DXTextArray (can be empty one)
+                            
                             const ::std::vector< double > aDXArray;
 
-                            // create locale; this may need some more information in the future
+                            
                             const ::com::sun::star::lang::Locale aLocale;
 
-                            // create primitive and add
+                            
                             const drawinglayer::primitive2d::Primitive2DReference xRef(
                                 new drawinglayer::primitive2d::TextSimplePortionPrimitive2D(
                                     aTextMatrix,
@@ -459,7 +459,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
     }
     else
     {
-        // not a SdrObject visualisation (maybe e.g. page) or no page
+        
         xRetval = sdr::contact::ViewObjectContactRedirector::createRedirectedPrimitive2DSequence(rOriginal, rDisplayInfo);
     }
 
@@ -471,7 +471,7 @@ drawinglayer::primitive2d::Primitive2DSequence ViewRedirector::createRedirectedP
  */
 void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contact::ViewObjectContactRedirector* pRedirector /*=0L*/)
 {
-    // execute ??
+    
     if (mnLockRedrawSmph == 0)
     {
         SdrPageView* pPgView = GetSdrPageView();
@@ -486,20 +486,20 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
 
                 if(bScreenDisplay && pOutDev && OUTDEV_PRINTER == pOutDev->GetOutDevType())
                 {
-                    // #i75566# printing; suppress AutoColor BackgroundColor generation
-                    // for visibility reasons by giving GetPageBackgroundColor()
-                    // the needed hint
+                    
+                    
+                    
                     bScreenDisplay = false;
                 }
 
                 if(bScreenDisplay && pOutDev && pOutDev->GetPDFWriter())
                 {
-                    // #i75566# PDF export; suppress AutoColor BackgroundColor generation (see above)
+                    
                     bScreenDisplay = false;
                 }
 
-                // #i75566# Name change GetBackgroundColor -> GetPageBackgroundColor and
-                // hint value if screen display. Only then the AutoColor mechanisms shall be applied
+                
+                
                 rOutl.SetBackgroundColor( pPage->GetPageBackgroundColor(pPgView, bScreenDisplay) );
             }
         }
@@ -507,7 +507,7 @@ void View::CompleteRedraw(OutputDevice* pOutDev, const Region& rReg, sdr::contac
         ViewRedirector aViewRedirector;
         FmFormView::CompleteRedraw(pOutDev, rReg, pRedirector ? pRedirector : &aViewRedirector);
     }
-    // or save?
+    
     else
     {
         SdViewRedrawRec* pRec = new SdViewRedrawRec;
@@ -557,7 +557,7 @@ sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_B
     }
     else
     {
-        // We use the current mark list
+        
         pMarkList = new SdrMarkList(GetMarkedObjectList());
     }
 
@@ -572,7 +572,7 @@ sal_Bool View::IsPresObjSelected(sal_Bool bOnPage, sal_Bool bOnMasterPage, sal_B
 
     for (nMark = nMarkMax; (nMark >= 0) && !bSelected; nMark--)
     {
-        // Backwards through mark list
+        
         pMark = pMarkList->GetMark(nMark);
         pObj = pMark->GetMarkedSdrObj();
 
@@ -628,14 +628,14 @@ void View::SelectAll()
 
 void View::ModelHasChanged()
 {
-    // First, notify SdrView
+    
     FmFormView::ModelHasChanged();
 }
 
 
 sal_Bool View::SetStyleSheet(SfxStyleSheet* pStyleSheet, sal_Bool bDontRemoveHardAttr)
 {
-    // forward to SdrView
+    
     return FmFormView::SetStyleSheet(pStyleSheet, bDontRemoveHardAttr);
 }
 
@@ -665,7 +665,7 @@ sal_Bool View::SdrBeginTextEdit(
     if( pOutl==NULL && pObj )
         pOutl = SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pObj->GetModel() );
 
-    // make draw&impress specific initialisations
+    
     if( pOutl )
     {
         pOutl->SetStyleSheetPool((SfxStyleSheetPool*) mrDoc.GetStyleSheetPool());
@@ -784,7 +784,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(sal_Bool bDontDeleteReally )
     return(eKind);
 }
 
-// --------------------------------------------------------------------
+
 
 /** restores the default text if the given text object is currently in edit mode and
     no text has been entered already. Is only useful just before text edit ends. */
@@ -836,7 +836,7 @@ void View::SetMarkedOriginalSize()
                 uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObj)->GetObjRef();
                 if( xObj.is() )
                 {
-                    // TODO/LEAN: working with VisualArea can switch object to running state
+                    
 
                        sal_Int64 nAspect = ((SdrOle2Obj*)pObj)->GetAspect();
                     Size aOleSize;
@@ -920,7 +920,7 @@ void View::DoConnect(SdrOle2Obj* pObj)
                 pSdClient = new Client(pObj, mpViewSh, pWindow);
                 Rectangle aRect = pObj->GetLogicRect();
                 {
-                    // TODO/LEAN: working with visual area can switch object to running state
+                    
                     Size aDrawSize = aRect.GetSize();
                     awt::Size aSz;
 
@@ -929,12 +929,12 @@ void View::DoConnect(SdrOle2Obj* pObj)
 
                     Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
                     Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
-                    aScaleWidth.ReduceInaccurate(10);       // compatible to SdrOle2Obj
+                    aScaleWidth.ReduceInaccurate(10);       
                     aScaleHeight.ReduceInaccurate(10);
                     pSdClient->SetSizeScale(aScaleWidth, aScaleHeight);
 
-                    // visible area is only changed in-place!
-                    // the object area must be set after the scaling, since it triggers resize
+                    
+                    
                     aRect.SetSize(aObjAreaSize);
                     pSdClient->SetObjArea(aRect);
                 }
@@ -1199,8 +1199,8 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
 
         if( eKind == PRESOBJ_OUTLINE )
         {
-            // for outline shapes, set the correct outline style sheet for each
-            // new paragraph, depending on the paragraph depth
+            
+            
             SfxStyleSheetBasePool* pStylePool = GetDoc().GetStyleSheetPool();
 
             for ( sal_Int32 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
@@ -1226,7 +1226,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfos )
         }
         else
         {
-            // just put the object style on each new paragraph
+            
             for ( sal_Int32 nPara = pInfos->nStartPara; nPara <= pInfos->nEndPara; nPara++ )
             {
                 pOutliner->SetStyleSheet( nPara, pStyleSheet );
@@ -1239,7 +1239,7 @@ bool View::ShouldToggleOn(
     const bool bBulletOnOffMode,
     const bool bNormalBullet)
 {
-    // If setting bullets/numbering by the dialog, always should toggle on.
+    
     if (!bBulletOnOffMode)
         return true;
     SdrModel* pSdrModel = GetModel();
@@ -1374,7 +1374,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                     pOutliner->Clear();
                 }
             }
-            // Broadcast the object change event.
+            
             if (!pTextObj->AdjustTextFrameWidthAndHeight())
             {
                 pTextObj->SetChanged();
@@ -1419,6 +1419,6 @@ void View::ChangeMarkedObjectsBulletsNumbering(
     delete pOutlinerView;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

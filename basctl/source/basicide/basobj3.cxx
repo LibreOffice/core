@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/msgbox.hxx>
@@ -60,17 +60,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
-
-//----------------------------------------------------------------------------
-
 extern "C" {
     SAL_DLLPUBLIC_EXPORT long basicide_handle_basic_error( void* pPtr )
     {
         return HandleBasicError( (StarBASIC*)pPtr );
     }
 }
-
-//----------------------------------------------------------------------------
 
 SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
 {
@@ -97,7 +92,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
             {
                 aMacroName = aStdMacroText;
                 aMacroName += OUString::number( nMacro );
-                // test whether existing...
+                
                 bValid = pModule->GetMethods()->Find( aMacroName, SbxCLASS_METHOD ) ? false : true;
                 nMacro++;
             }
@@ -106,7 +101,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
 
     OUString aOUSource( pModule->GetSource32() );
 
-    // don't produce too many empty lines...
+    
     sal_Int32 nSourceLen = aOUSource.getLength();
     if ( nSourceLen > 2 )
     {
@@ -126,7 +121,7 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
 
     aOUSource += aSubStr;
 
-    // update module in library
+    
     ScriptDocument aDocument( ScriptDocument::NoDocument );
     StarBASIC* pBasic = dynamic_cast<StarBASIC*>(pModule->GetParent());
     DBG_ASSERT(pBasic, "basctl::CreateMacro: No Basic found!");
@@ -160,8 +155,6 @@ SbMethod* CreateMacro( SbModule* pModule, const OUString& rMacroName )
     return pMethod;
 }
 
-//----------------------------------------------------------------------------
-
 bool RenameDialog (
     Window* pErrorParent,
     ScriptDocument const& rDocument,
@@ -184,7 +177,7 @@ bool RenameDialog (
         return false;
     }
 
-    // #i74440
+    
     if ( rNewName.isEmpty() )
     {
         ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, IDE_RESSTR(RID_STR_BADSBXNAME) );
@@ -206,13 +199,13 @@ bool RenameDialog (
 
     if ( pWin )
     {
-        // set new name in window
+        
         pWin->SetName( rNewName );
 
-        // update property browser
+        
         pWin->UpdateBrowser();
 
-        // update tabwriter
+        
         sal_uInt16 nId = pShell->GetWindowId( pWin );
         DBG_ASSERT( nId, "No entry in Tabbar!" );
         if ( nId )
@@ -225,8 +218,6 @@ bool RenameDialog (
     }
     return true;
 }
-
-//----------------------------------------------------------------------------
 
 bool RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName )
 {
@@ -242,8 +233,6 @@ bool RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, co
     return rDocument.removeDialog( rLibName, rDlgName );
 }
 
-//----------------------------------------------------------------------------
-
 StarBASIC* FindBasic( const SbxVariable* pVar )
 {
     SbxVariable const* pSbx = pVar;
@@ -251,8 +240,6 @@ StarBASIC* FindBasic( const SbxVariable* pVar )
         pSbx = pSbx->GetParent();
     return (StarBASIC*)pSbx;
 }
-
-//----------------------------------------------------------------------------
 
 BasicManager* FindBasicManager( StarBASIC* pLib )
 {
@@ -281,11 +268,9 @@ BasicManager* FindBasicManager( StarBASIC* pLib )
     return NULL;
 }
 
-//----------------------------------------------------------------------------
-
 void MarkDocumentModified( const ScriptDocument& rDocument )
 {
-    // does not have to come from a document...
+    
     if ( rDocument.isApplication() )
     {
         if (Shell* pShell = GetShell())
@@ -307,16 +292,12 @@ void MarkDocumentModified( const ScriptDocument& rDocument )
     }
 }
 
-//----------------------------------------------------------------------------
-
 void RunMethod( SbMethod* pMethod )
 {
     SbxValues aRes;
     aRes.eType = SbxVOID;
     pMethod->Get( aRes );
 }
-
-//----------------------------------------------------------------------------
 
 void StopBasic()
 {
@@ -327,15 +308,13 @@ void StopBasic()
         for (Shell::WindowTableIt it = rWindows.begin(); it != rWindows.end(); ++it )
         {
             BaseWindow* pWin = it->second;
-            // call BasicStopped manually because the Stop-Notify
-            // might not get through otherwise
+            
+            
             pWin->BasicStopped();
         }
     }
     BasicStopped();
 }
-
-//----------------------------------------------------------------------------
 
 void BasicStopped(
     bool* pbAppWindowDisabled,
@@ -344,9 +323,8 @@ void BasicStopped(
     SfxUInt16Item** ppSWActionCount, SfxUInt16Item** ppSWLockViewCount
 )
 {
-    // maybe there are some locks to be removed after an error
-    // or an explicit cancelling of the basic...
-
+    
+    
     if ( pbAppWindowDisabled )
         *pbAppWindowDisabled = false;
     if ( pbDispatcherLocked )
@@ -358,7 +336,7 @@ void BasicStopped(
     if ( ppSWLockViewCount )
         *ppSWLockViewCount = 0;
 
-    // AppWait ?
+    
     if (Shell* pShell = GetShell())
     {
         sal_uInt16 nWait = 0;
@@ -380,8 +358,6 @@ void BasicStopped(
     }
 
 }
-
-//----------------------------------------------------------------------------
 
 void InvalidateDebuggerSlots()
 {
@@ -406,14 +382,12 @@ void InvalidateDebuggerSlots()
     }
 }
 
-//----------------------------------------------------------------------------
-
 long HandleBasicError( StarBASIC* pBasic )
 {
     EnsureIde();
     BasicStopped();
 
-    // no error output during macro choosing
+    
     if (GetExtraData()->ChoosingMacro())
         return 1;
     if (GetExtraData()->ShellInCriticalSection())
@@ -465,8 +439,6 @@ long HandleBasicError( StarBASIC* pBasic )
     return nRet;
 }
 
-//----------------------------------------------------------------------------
-
 SfxBindings* GetBindingsPtr()
 {
     SfxBindings* pBindings = NULL;
@@ -495,8 +467,6 @@ SfxBindings* GetBindingsPtr()
     return pBindings;
 }
 
-//----------------------------------------------------------------------------
-
 SfxDispatcher* GetDispatcher ()
 {
     if (Shell* pShell = GetShell())
@@ -505,8 +475,6 @@ SfxDispatcher* GetDispatcher ()
                 return pDispatcher;
     return 0;
 }
-
-//----------------------------------------------------------------------------
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

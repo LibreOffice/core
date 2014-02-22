@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -72,7 +72,7 @@ namespace rtl_Process
 class getAppCommandArg : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -89,10 +89,10 @@ public:
     const rtl::OUString EXECUTABLE_NAME("child_process");
 #endif
         rtl::OUString suCWD = getModulePath();
-        // rtl::OUString suCWD2 = getExecutableDirectory();
+        
 
         printUString(suCWD, "path to the current module");
-        // printUString(suCWD2, "suCWD2");
+        
 
         oslProcess hProcess = NULL;
 
@@ -124,16 +124,16 @@ public:
             "osl_createProcess failed",
             osl_error == osl_Process_E_None
         );
-    //we could get return value only after the process terminated
+    
         osl_joinProcess(hProcess);
-        // CPPUNIT_ASSERT_MESSAGE
-        // (
-        //     "osl_joinProcess returned with failure",
-        //     osl_Process_E_None == osl_error
-        // );
+        
+        
+        
+        
+        
     oslProcessInfo* pInfo = new oslProcessInfo;
-    //please pay attention to initial the Size to sizeof(oslProcessInfo), or else
-    //you will get unknow error when call osl_getProcessInfo
+    
+    
     pInfo->Size = sizeof(oslProcessInfo);
     osl_error = osl_getProcessInfo( hProcess, osl_Process_EXITCODE, pInfo );
     CPPUNIT_ASSERT_MESSAGE
@@ -150,9 +150,9 @@ public:
 
     CPPUNIT_TEST_SUITE(getAppCommandArg);
     CPPUNIT_TEST(getAppCommandArg_001);
-  //  CPPUNIT_TEST(getAppCommandArg_002);
+  
     CPPUNIT_TEST_SUITE_END();
-}; // class getAppCommandArg
+}; 
 
 /************************************************************************
  * For diagnostics( from sal/test/testuuid.cxx )
@@ -200,7 +200,7 @@ void printUuidtoBuffer( sal_uInt8 *pNode, sal_Char * pBuffer )
 class getGlobalProcessId : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -208,7 +208,7 @@ public:
     void tearDown()
     {
     }
-    //gets a 16-byte fixed size identifier which is guaranteed not to change    during the current process.
+    
     void getGlobalProcessId_001()
     {
         sal_uInt8 pTargetUUID1[16];
@@ -217,7 +217,7 @@ public:
         rtl_getGlobalProcessId( pTargetUUID2 );
     CPPUNIT_ASSERT_MESSAGE("getGlobalProcessId: got two same ProcessIds.", !memcmp( pTargetUUID1 , pTargetUUID2 , 16 ) );
     }
-    //different processes different pids
+    
     void getGlobalProcessId_002()
     {
 #if defined(WNT)
@@ -257,7 +257,7 @@ public:
             "osl_createProcess failed",
             osl_error == osl_Process_E_None
         );
-    //we could get return value only after the process terminated
+    
         osl_joinProcess(hProcess);
 
         sal_Char pUUID2[33];
@@ -274,16 +274,16 @@ public:
     CPPUNIT_TEST(getGlobalProcessId_002);
     CPPUNIT_TEST_SUITE_END();
 
-}; // class getGlobalProcessId
+}; 
 
-} // namespace rtl_Process
+} 
 
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getAppCommandArg, "rtl_Process");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getGlobalProcessId, "rtl_Process");
 
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

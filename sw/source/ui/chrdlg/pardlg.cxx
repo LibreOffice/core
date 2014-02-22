@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hintids.hxx"
@@ -70,10 +70,10 @@ SwParaDlg::SwParaDlg(Window *pParent,
     sal_Bool bHtmlMode = static_cast< sal_Bool >(nHtmlMode & HTMLMODE_ON);
     if(pTitle)
     {
-        // Update title
+        
         SetText(GetText() + SW_RESSTR(STR_TEXTCOLL_HEADER) + *pTitle + OUString(')'));
     }
-    // tabs common to paragraph and draw paragraphs (paragraphs inside a text box)
+    
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
 
     OSL_ENSURE(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_STD_PARAGRAPH), "GetTabPageCreatorFunc fail!");
@@ -120,7 +120,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
         AddTabPage( "labelTP_TABULATOR", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_TABULATOR), pFact->GetTabPageRangesFunc(RID_SVXPAGE_TABULATOR) );
     }
 
-    // remove unwanted tabs for draw text box paragraph properties
+    
     if (bDrawParaDlg)
     {
         RemoveTabPage("labelTP_NUMPARA");
@@ -168,7 +168,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     SwWrtShell& rSh = rView.GetWrtShell();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
 
-    // Table borders cannot get any shade in Writer
+    
     if (nId == m_nParaBorder)
     {
         aSet.Put (SfxUInt16Item(SID_SWMODE_TYPE,SW_BORDER_MODE_PARA));
@@ -181,7 +181,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 
         if (!bDrawParaDlg)
         {
-            // See SvxStdParagraphTabPage::PageCreated: enable RegisterMode, AutoFirstLine, NegativeMode, ContextualMode
+            
             aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x0002|0x0004|0x0008|0x0010));
             aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/10));
 
@@ -198,7 +198,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
     }
     else if( m_nParaExt == nId )
     {
-        // pagebreak only when the cursor is in the body-area and not in a table
+        
         const sal_uInt16 eType = rSh.GetFrmType(0,sal_True);
         if( !(FRMTYPE_BODY & eType) ||
             rSh.GetSelectionType() & nsSelectionType::SEL_TBL )

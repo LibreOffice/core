@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/toolpanelopt.hxx>
@@ -88,7 +88,7 @@ class SvtToolPanelOptions_Impl : public ConfigItem
         */
         virtual void Commit();
 
-        //  public interface
+        
         bool m_bVisibleImpressView;
         bool m_bVisibleOutlineView;
         bool m_bVisibleNotesView;
@@ -109,7 +109,7 @@ class SvtToolPanelOptions_Impl : public ConfigItem
 };
 
 SvtToolPanelOptions_Impl::SvtToolPanelOptions_Impl()
-    // Init baseclasses first
+    
     : ConfigItem( ROOTNODE_TOOLPANEL )
 
     , m_bVisibleImpressView( false )
@@ -121,16 +121,16 @@ SvtToolPanelOptions_Impl::SvtToolPanelOptions_Impl()
 {
     m_seqPropertyNames = GetPropertyNames( );
 
-    // Use our static list of configuration keys to get his values.
+    
     Sequence< Any > seqValues = GetProperties( m_seqPropertyNames  );
 
-    // Safe impossible cases.
-    // We need values from ALL configuration keys.
-    // Follow assignment use order of values in relation to our list of key names!
+    
+    
+    
     DBG_ASSERT( !(m_seqPropertyNames.getLength()!=seqValues.getLength()),
                 "SvtToolPanelOptions_Impl::SvtToolPanelOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to our internal member.
+    
     for( sal_Int32 nProperty=0; nProperty<seqValues.getLength(); ++nProperty )
     {
         if (!seqValues[nProperty].hasValue())
@@ -170,8 +170,8 @@ SvtToolPanelOptions_Impl::SvtToolPanelOptions_Impl()
         }
     }
 
-    // Enable notification mechanism of our baseclass.
-    // We need it to get information about changes outside these class on our used configuration keys!
+    
+    
     EnableNotification( m_seqPropertyNames );
 }
 
@@ -196,13 +196,13 @@ void SvtToolPanelOptions_Impl::Load( const Sequence< OUString >& rPropertyNames 
     const uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
     Sequence< Any > seqValues = GetProperties( rPropertyNames  );
 
-    // Safe impossible cases.
-    // We need values from ALL configuration keys.
-    // Follow assignment use order of values in relation to our list of key names!
+    
+    
+    
     DBG_ASSERT( !(rPropertyNames.getLength()!=seqValues.getLength()),
                 "SvtToolPanelOptions_Impl::SvtToolPanelOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to our internal member.
+    
     for( sal_Int32 nProperty=0; nProperty<seqValues.getLength(); ++nProperty )
     {
         if (!seqValues[nProperty].hasValue())
@@ -250,7 +250,7 @@ void SvtToolPanelOptions_Impl::Notify( const Sequence< OUString >& rPropertyName
 
 void SvtToolPanelOptions_Impl::Commit()
 {
-    // Get names of supported properties, create a list for values and copy current values to it.
+    
     sal_Int32               nCount      = m_seqPropertyNames.getLength();
     Sequence< Any >         seqValues   ( nCount );
     for( sal_Int32 nProperty=0; nProperty<nCount; ++nProperty )
@@ -284,13 +284,13 @@ void SvtToolPanelOptions_Impl::Commit()
             }
         }
     }
-    // Set properties in configuration.
+    
     PutProperties( m_seqPropertyNames, seqValues );
 }
 
 Sequence< OUString > SvtToolPanelOptions_Impl::GetPropertyNames()
 {
-    // Build list of configuration key names.
+    
     OUString pProperties[] =
     {
         PROPERTYNAME_VISIBLE_IMPRESSVIEW,
@@ -300,21 +300,21 @@ Sequence< OUString > SvtToolPanelOptions_Impl::GetPropertyNames()
         PROPERTYNAME_VISIBLE_SLIDESORTERVIEW,
     };
 
-    // Initialize return sequence with these list and run
+    
     return Sequence< OUString >( pProperties, SAL_N_ELEMENTS( pProperties ) );
 }
 
-//  initialize static member, see definition for further information
-//  DON'T DO IT IN YOUR HEADER!
+
+
 SvtToolPanelOptions_Impl* SvtToolPanelOptions::m_pDataContainer = NULL;
 sal_Int32               SvtToolPanelOptions::m_nRefCount = 0;
 
 SvtToolPanelOptions::SvtToolPanelOptions()
 {
-    // Global access, must be guarded (multithreading!).
+    
     MutexGuard aGuard( GetInitMutex() );
     ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
+    
     if( m_pDataContainer == NULL )
     {
        m_pDataContainer = new SvtToolPanelOptions_Impl;
@@ -323,10 +323,10 @@ SvtToolPanelOptions::SvtToolPanelOptions()
 
 SvtToolPanelOptions::~SvtToolPanelOptions()
 {
-    // Global access, must be guarded (multithreading!)
+    
     MutexGuard aGuard( GetInitMutex() );
     --m_nRefCount;
-    // If last instance was deleted we must destroy our static data container!
+    
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;

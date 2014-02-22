@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -86,14 +86,14 @@ SvxAreaTabDialog::SvxAreaTabDialog
     rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxAreaTabDialog::~SvxAreaTabDialog()
 {
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxAreaTabDialog::SavePalettes()
 {
@@ -139,7 +139,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpBitmapList = mpDrawModel->GetBitmapList();
     }
 
-    // save the tables when they have been changed
+    
 
     const OUString aPath( SvtPathOptions().GetPalettePath() );
 
@@ -149,7 +149,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpHatchingList->Save();
 
         SvxHatchListItem aItem( mpHatchingList, SID_HATCH_LIST );
-        // ToolBoxControls are informed:
+        
         if ( pShell )
             pShell->PutItem( aItem );
         else
@@ -162,7 +162,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpBitmapList->Save();
 
         SvxBitmapListItem aItem( mpBitmapList, SID_BITMAP_LIST );
-        // ToolBoxControls are informed:
+        
         if ( pShell )
             pShell->PutItem( aItem );
         else
@@ -177,7 +177,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpGradientList->Save();
 
         SvxGradientListItem aItem( mpGradientList, SID_GRADIENT_LIST );
-        // ToolBoxControls are informed:
+        
         if ( pShell )
             pShell->PutItem( aItem );
         else
@@ -192,7 +192,7 @@ void SvxAreaTabDialog::SavePalettes()
         mpColorList->Save();
 
         SvxColorListItem aItem( mpColorList, SID_COLOR_TABLE );
-        // ToolBoxControls are informed:
+        
         if ( pShell )
             pShell->PutItem( aItem );
         else
@@ -201,19 +201,19 @@ void SvxAreaTabDialog::SavePalettes()
         }
     }
 }
-// -----------------------------------------------------------------------
+
 
 short SvxAreaTabDialog::Ok()
 {
     SavePalettes();
 
-    // RET_OK is returned, if at least one
-    // TabPage returns sal_True in FillItemSet().
-    // This happens by default at the moment.
+    
+    
+    
     return( SfxTabDialog::Ok() );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxAreaTabDialog, CancelHdlImpl)
 {
@@ -224,7 +224,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxAreaTabDialog, CancelHdlImpl)
 }
 IMPL_LINK_INLINE_END( SvxAreaTabDialog, CancelHdlImpl, void *, p )
 
-// -----------------------------------------------------------------------
+
 
 void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -243,7 +243,7 @@ void SvxAreaTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
             ( (SvxAreaTabPage&) rPage ).SetBmpChgd( &mnBitmapListState );
             ( (SvxAreaTabPage&) rPage ).SetColorChgd( &mnColorListState );
             ( (SvxAreaTabPage&) rPage ).Construct();
-            // ActivatePage() is not called the first time
+            
             ( (SvxAreaTabPage&) rPage ).ActivatePage( mrOutAttrs );
     }
     else if (nId == m_nShadowTabPage)

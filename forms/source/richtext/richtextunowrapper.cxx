@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "richtextunowrapper.hxx"
@@ -28,22 +28,22 @@
 #include <svx/svdobj.hxx>
 #include <editeng/unoprnms.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
+    
     namespace
     {
         const SvxItemPropertySet* getTextEnginePropertySet()
         {
-            // Propertymap fuer einen Outliner Text
+            
             static const SfxItemPropertyMapEntry aTextEnginePropertyMap[] =
             {
                 SVX_UNOEDIT_CHAR_PROPERTIES,
@@ -58,25 +58,25 @@ namespace frm
         }
     }
 
-    //====================================================================
-    //= ORichTextUnoWrapper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ORichTextUnoWrapper::ORichTextUnoWrapper( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :SvxUnoText( getTextEnginePropertySet() )
     {
         SetEditSource( new RichTextEditSource( _rEngine, _pTextChangeListener ) );
     }
 
-    //--------------------------------------------------------------------
+    
     ORichTextUnoWrapper::~ORichTextUnoWrapper() throw()
     {
     }
 
-    //====================================================================
-    //= RichTextEditSource
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     RichTextEditSource::RichTextEditSource( EditEngine& _rEngine, IEngineTextChangeListener* _pTextChangeListener )
         :m_rEngine              ( _rEngine                               )
         ,m_pTextForwarder       ( new SvxEditEngineForwarder( _rEngine ) )
@@ -84,29 +84,29 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+    
     RichTextEditSource::~RichTextEditSource()
     {
         delete m_pTextForwarder;
     }
 
-    //--------------------------------------------------------------------
+    
     SvxEditSource* RichTextEditSource::Clone() const
     {
         return new RichTextEditSource( m_rEngine, m_pTextChangeListener );
     }
 
-    //--------------------------------------------------------------------
+    
     SvxTextForwarder* RichTextEditSource::GetTextForwarder()
     {
         return m_pTextForwarder;
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextEditSource::UpdateData()
     {
-        // this means that the content of the EditEngine changed via the UNO API
-        // to reflect this in the views, we need to update them
+        
+        
         sal_uInt16 viewCount = m_rEngine.GetViewCount();
         for ( sal_uInt16 view = 0; view < viewCount; ++view )
         {
@@ -119,8 +119,8 @@ namespace frm
             m_pTextChangeListener->potentialTextChange();
     }
 
-//........................................................................
-}  // namespace frm
-//........................................................................
+
+}  
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -32,15 +32,15 @@
 #include "AddField.hxx"
 #include "helpids.hrc"
 
-//============================================================================
+
 namespace rptui
 {
     using namespace formula;
     using namespace ::com::sun::star;
 
-//  --------------------------------------------------------------------------
-//      Initialisierung / gemeinsame Funktionen  fuer Dialog
-//  --------------------------------------------------------------------------
+
+
+
 
 FormulaDialog::FormulaDialog(Window* pParent
                              , const uno::Reference<lang::XMultiServiceFactory>& _xServiceFactory
@@ -73,7 +73,7 @@ FormulaDialog::FormulaDialog(Window* pParent
 void FormulaDialog::notifyChange()
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::fill()
 {
     SetMeText(m_sFormula);
@@ -96,9 +96,9 @@ FormulaDialog::~FormulaDialog()
     StoreFormEditData( m_pFormulaData );
 }
 
-//  --------------------------------------------------------------------------
-//                          Funktionen fuer rechte Seite
-//  --------------------------------------------------------------------------
+
+
+
 bool FormulaDialog::calculateValue( const OUString& rStrExp, OUString& rStrResult )
 {
     rStrResult = rStrExp;
@@ -172,19 +172,19 @@ IFunctionManager* FormulaDialog::getFunctionManager()
 {
     return m_aFunctionManager.get();
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::ShowReference(const OUString& /*_sRef*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::HideReference( bool /*bDoneRefMode*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::ReleaseFocus( RefEdit* /*pEdit*/, RefButton* /*pButton*/)
 {
 }
-// -----------------------------------------------------------------------------
+
 void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
 {
     ::std::pair<RefButton*,RefEdit*> aPair = RefInputStartBefore( _pEdit, _pButton );
@@ -211,11 +211,11 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
     m_pAddField->Show();
 
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
 {
     const uno::Sequence< beans::PropertyValue > aArgs = _pAddFieldDlg->getSelectedFieldDescriptors();
-    // we use this way to create undo actions
+    
     if ( m_pEdit && aArgs.getLength() == 1)
     {
         uno::Sequence< beans::PropertyValue > aValue;
@@ -235,22 +235,22 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
 
     return 0L;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< sheet::XFormulaParser> FormulaDialog::getFormulaParser() const
 {
     return m_xParser.get();
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< sheet::XFormulaOpCodeMapper> FormulaDialog::getFormulaOpCodeMapper() const
 {
     return m_xOpCodeMapper;
 }
-// -----------------------------------------------------------------------------
+
 table::CellAddress FormulaDialog::getReferencePosition() const
 {
     return table::CellAddress();
 }
-// -----------------------------------------------------------------------------
+
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ::std::auto_ptr<formula::FormulaTokenArray> FormulaDialog::convertToTokenArray(const uno::Sequence< sheet::FormulaToken >& _aTokenList)
 {
@@ -259,10 +259,10 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
     return pArray;
 }
 
-} // rptui
+} 
 
-// for mysterious reasons Apple llvm-g++ 4.2.1 needs these explicit
-// template instantiations; otherwise linking fails with unresolved symbols
+
+
 template class ::std::auto_ptr<formula::FormulaTokenArray>;
 template std::auto_ptr<formula::FormulaTokenArray>::operator std::auto_ptr_ref<formula::FormulaTokenArray>();
 SAL_WNODEPRECATED_DECLARATIONS_POP

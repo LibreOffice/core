@@ -118,7 +118,7 @@ using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
 namespace dbaccess
 {
 
-// ViewMonitor
+
 
 bool ViewMonitor::onControllerConnected( const Reference< XController >& _rxController )
 {
@@ -133,19 +133,19 @@ bool ViewMonitor::onControllerConnected( const Reference< XController >& _rxCont
 
 bool ViewMonitor::onSetCurrentController( const Reference< XController >& _rxController )
 {
-    // we interpret this as "loading the document (including UI) is finished",
-    // if and only if this is the controller which was last connected, and it was the
-    // first controller ever connected
+    
+    
+    
     bool bLoadFinished = ( _rxController == m_xLastConnectedController ) && m_bLastIsFirstEverController;
 
-    // notify the respective events
+    
     if ( bLoadFinished )
         m_rEventNotifier.notifyDocumentEventAsync( m_bIsNewDocument ? "OnNew" : "OnLoad" );
 
     return bLoadFinished;
 }
 
-// ODatabaseDocument
+
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument()
 {
@@ -159,7 +159,7 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
             ,m_aCloseListener( getMutex() )
             ,m_aStorageListeners( getMutex() )
             ,m_pEventContainer( new DocumentEvents( *this, getMutex(), _pImpl->getDocumentEvents() ) )
-            ,m_pEventExecutor( NULL )   // initialized below, ref-count-protected
+            ,m_pEventExecutor( NULL )   
             ,m_aEventNotifier( *this, getMutex() )
             ,m_aViewMonitor( m_aEventNotifier )
             ,m_eInitState( NotInitialized )
@@ -180,21 +180,21 @@ ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>&
     }
     osl_atomic_decrement( &m_refCount );
 
-    // if there previously was a document instance for the same Impl which was already initialized,
-    // then consider ourself initialized, too.
-    // #i94840#
+    
+    
+    
     if ( m_pImpl->hadInitializedDocument() )
     {
-        // Note we set our init-state to "Initializing", not "Initialized". We're created from inside the ModelImpl,
-        // which is expected to call attachResource in case there was a previous incarnation of the document,
-        // so we can properly finish our initialization then.
+        
+        
+        
         impl_setInitializing();
 
         if ( !m_pImpl->getURL().isEmpty() )
         {
-            // if the previous incarnation of the DatabaseDocument already had an URL, then creating this incarnation
-            // here is effectively loading the document.
-            // #i105505#
+            
+            
+            
             m_aViewMonitor.onLoadedDocument();
         }
     }
@@ -214,9 +214,9 @@ ODatabaseDocument::~ODatabaseDocument()
 
 Any SAL_CALL ODatabaseDocument::queryInterface( const Type& _rType ) throw (RuntimeException)
 {
-    // strip XEmbeddedScripts and XScriptInvocationContext if we have any form/report
-    // which already contains macros. In this case, the database document itself is not
-    // allowed to contain macros, too.
+    
+    
+    
     if  (   !m_bAllowDocumentScripting
         &&  (   _rType.equals( cppu::UnoType<XEmbeddedScripts>::get() )
             ||  _rType.equals( cppu::UnoType<XScriptInvocationContext>::get() )
@@ -247,15 +247,15 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeExceptio
         ODatabaseDocument_Title::getTypes()
     );
 
-    // strip XEmbeddedScripts and XScriptInvocationContext if we have any form/report
-    // which already contains macros. In this case, the database document itself is not
-    // allowed to contain macros, too.
+    
+    
+    
     if ( !m_bAllowDocumentScripting )
     {
         Sequence< Type > aStrippedTypes( aTypes.getLength() );
         Type* pStripTo( aStrippedTypes.getArray() );
 
-        // strip XEmbeddedScripts, and immediately re-assign to aTypes
+        
         aTypes = Sequence< Type >(
             pStripTo,
             ::std::remove_copy_if(
@@ -266,7 +266,7 @@ Sequence< Type > SAL_CALL ODatabaseDocument::getTypes(  ) throw (RuntimeExceptio
             ) - pStripTo
         );
 
-        // strip XScriptInvocationContext, and immediately re-assign to aTypes
+        
         aTypes = Sequence< Type >(
             pStripTo,
             ::std::remove_copy_if(
@@ -296,7 +296,7 @@ Sequence< sal_Int8 > SAL_CALL ODatabaseDocument::getImplementationId(  ) throw (
     return pId->getImplementationId();
 }
 
-// local functions
+
 namespace
 {
     Reference< XStatusIndicator > lcl_extractStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments )
@@ -324,7 +324,7 @@ namespace
             DBG_UNHANDLED_EXCEPTION();
         }
         _rGuard.reset();
-            // note that |reset| can throw a DisposedException
+            
     }
 
     static void lcl_extractStatusIndicator( const ::comphelper::NamedValueCollection& _rArguments, Sequence< Any >& _rCallArgs )
@@ -373,28 +373,28 @@ namespace
 
 static OUString sPictures( "Pictures" );
 
-// base documents seem to have a different behaviour to other documents, the
-// root storage contents at least seem to be re-used over different saves, thus if there is a
-// top level Picture directory it is never cleared.
-// If we delete the 'Pictures' directory then the dialog library storage which does store
-// any embed images will not work properly. ( this is due to the fact it will
-// try to load the dialog which will try and access the embed images, if those images are not cached in
-//  memory it will try to read them from the Picture directory which is now gone, so... we have to use this
-// inglorious hack below which basically will
+
+
+
+
+
+
+
+
 //
-// a) create a temp storage
+
 //
-// b) introspect any dialogs for any embed graphics and grab the associate URL(s)
+
 //
-// c) populate the temp storage with the associated embed images ( will be stored in a 'Pictures' folder )
+
 //
-// d) delete the 'Picture' element from the root storage
+
 //
-// e) copy the Pictures element of the temp storage to the root storage
+
 //
-// this assumes that we don't use the Pictures folder in the root of the base
-// document for anything, I believe this is a valid assumption ( as much as
-// I could check anyway )
+
+
+
 
 void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibraryContainer >& xDlgCont, const Reference< XStorage >& xStorage, const Reference< XModel >& rxModel, const Reference<XComponentContext >& rxContext ) throw ( RuntimeException )
 {
@@ -424,10 +424,10 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
             }
         }
     }
-    // if we have any image urls, make sure we copy the associated images into tempPictures
+    
     if ( !vEmbedImgUrls.empty() )
     {
-        // Export the images to the storage
+        
         Reference< XGraphicObjectResolver > xGraphicResolver = GraphicObjectResolver::createWithStorage(rxContext, xTmpPic);
         std::vector< OUString >::iterator it = vEmbedImgUrls.begin();
         std::vector< OUString >::iterator it_end = vEmbedImgUrls.end();
@@ -437,13 +437,13 @@ void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibrar
                 xGraphicResolver->resolveGraphicObjectURL( *it );
         }
 
-        // delete old 'Pictures' storage and copy the contents of tempPictures into xStorage
+        
         xStorage->removeElement( sPictures );
         xTmpPic->copyElementTo( sPictures, xStorage, sPictures );
     }
     else
     {
-        // clean up an existing Pictures dir
+        
         if ( xStorage->isStorageElement( sPictures ) )
             xStorage->removeElement( sPictures );
     }
@@ -453,7 +453,7 @@ void ODatabaseDocument::impl_setInitialized()
 {
     m_eInitState = Initialized;
 
-    // start event notifications
+    
     m_aEventNotifier.onDocumentInitialized();
 }
 
@@ -525,23 +525,23 @@ void ODatabaseDocument::impl_import_nolck_throw( const Reference< XComponentCont
 
 void SAL_CALL ODatabaseDocument::initNew(  ) throw (DoubleInitializationException, IOException, Exception, RuntimeException)
 {
-    // SYNCHRONIZED ->
+    
     DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
 
     impl_reset_nothrow();
 
     impl_setInitializing();
 
-    // create a temporary storage
+    
     Reference< XStorage > xTempStor( ::comphelper::OStorageHelper::GetTemporaryStorage( m_pImpl->m_aContext ) );
 
-    // store therein
+    
     impl_storeToStorage_throw( xTempStor, Sequence< PropertyValue >(), aGuard );
 
-    // let the impl know we're now based on this storage
+    
     m_pImpl->switchToStorage( xTempStor );
 
-    // for the newly created document, allow document-wide scripting
+    
     m_bAllowDocumentScripting = true;
 
     impl_setInitialized();
@@ -549,7 +549,7 @@ void SAL_CALL ODatabaseDocument::initNew(  ) throw (DoubleInitializationExceptio
     m_aEventNotifier.notifyDocumentEventAsync( "OnTitleChanged" );
 
     impl_setModified_nothrow( sal_False, aGuard );
-    // <- SYNCHRONIZED
+    
 
     m_aEventNotifier.notifyDocumentEvent( "OnCreate" );
 
@@ -558,23 +558,23 @@ void SAL_CALL ODatabaseDocument::initNew(  ) throw (DoubleInitializationExceptio
 
 void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Arguments ) throw (DoubleInitializationException, IOException, Exception, RuntimeException)
 {
-    // SYNCHRONIZED ->
+    
     DocumentGuard aGuard( *this, DocumentGuard::InitMethod );
 
     impl_reset_nothrow();
 
     ::comphelper::NamedValueCollection aResource( _Arguments );
     if ( aResource.has( "FileName" ) && !aResource.has( "URL" ) )
-        // FileName is the compatibility name for URL, so we might have clients passing
-        // a FileName only. However, some of our code works with the URL only, so ensure
-        // we have one.
+        
+        
+        
         aResource.put( "URL", aResource.get( "FileName" ) );
     if ( aResource.has( "URL" ) && !aResource.has( "FileName" ) )
-        // similar ... just in case there is legacy code which expects a FileName only
+        
         aResource.put( "FileName", aResource.get( "URL" ) );
 
-    // now that somebody (perhaps) told us an macro execution mode, remember it as
-    // ImposedMacroExecMode
+    
+    
     m_pImpl->setImposedMacroExecMode(
         aResource.getOrDefault( "MacroExecutionMode", m_pImpl->getImposedMacroExecMode() ) );
 
@@ -590,15 +590,15 @@ void SAL_CALL ODatabaseDocument::load( const Sequence< PropertyValue >& _Argumen
         impl_reset_nothrow();
         throw;
     }
-    // tell our view monitor that the document has been loaded - this way it will fire the proper
-    // event (OnLoad instead of OnCreate) later on
+    
+    
     m_aViewMonitor.onLoadedDocument();
 
-    // note that we do *not* call impl_setInitialized() here: The initialization is only complete
-    // when the XModel::attachResource has been called, not sooner.
+    
+    
 
     impl_setModified_nothrow( sal_False, aGuard );
-    // <- SYNCHRONIZED
+    
 }
 
 namespace
@@ -621,8 +621,8 @@ namespace
                 continue;
             }
 
-            // TODO: clarify: anything else to care for? Both the sub componbents with and without model
-            // should support the XModifiable interface, so I think nothing more is needed here.
+            
+            
             OSL_FAIL( "lcl_hasAnyModifiedSubComponent_throw: anything left to do here?" );
         }
 
@@ -634,20 +634,20 @@ namespace
 {
     DocumentGuard aGuard( *this );
 
-    // The implementation here is somewhat sloppy, in that it returns whether *any* part of the whole
-    // database document, including opened sub components, is modified. This is more than what is requested:
-    // We need to return <TRUE/> if the doc itself, or any of the opened sub components, has been modified
-    // since the last call to any of the save* methods, or since the document has been loaded/created.
-    // However, the API definition explicitly allows to be that sloppy ...
+    
+    
+    
+    
+    
 
     if ( isModified() )
         return sal_True;
 
-    // auto recovery is an "UI feature", it is to restore the UI the user knows. Thus,
-    // we ask our connected controllers, not simply our existing form/report definitions.
-    // (There is some information which even cannot be obtained without asking the controller.
-    // For instance, newly created, but not yet saved, forms/reports are acessible via the
-    // controller only, but not via the model.)
+    
+    
+    
+    
+    
 
     try
     {
@@ -675,17 +675,17 @@ void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const OUString& i_TargetLo
 
     try
     {
-        // create a storage for the target location
+        
         Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( i_TargetLocation ) );
 
-        // first store the document as a whole into this storage
+        
         impl_storeToStorage_throw( xTargetStorage, i_MediaDescriptor, aGuard );
 
-        // save the sub components which need saving
+        
         DatabaseDocumentRecovery aDocRecovery( m_pImpl->m_aContext);
         aDocRecovery.saveModifiedSubComponents( xTargetStorage, m_aControllers );
 
-        // commit the root storage
+        
         tools::stor::commitStorageIfWriteable( xTargetStorage );
     }
     catch( const Exception& )
@@ -696,7 +696,7 @@ void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const OUString& i_TargetLo
             ||  aError.isExtractableTo( ::cppu::UnoType< WrappedTargetException >::get() )
             )
         {
-            // allowed to leave
+            
             throw;
         }
 
@@ -713,28 +713,28 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
 
     try
     {
-        // load the document itself, by simply delegating to our "load" method
+        
 
-        // our load implementation expects the SalvagedFile and URL to be in the media descriptor
+        
         ::comphelper::NamedValueCollection aMediaDescriptor( i_MediaDescriptor );
         aMediaDescriptor.put( "SalvagedFile", i_SalvagedFile );
         aMediaDescriptor.put( "URL", i_SourceLocation );
 
-        aGuard.clear(); // (load has an own guarding scheme)
+        aGuard.clear(); 
         load( aMediaDescriptor.getPropertyValues() );
 
-        // Without a controller, we are unable to recover the sub components, as they're always tied to a controller.
-        // So, everything else is done when the first controller is connected.
+        
+        
         m_bHasBeenRecovered = true;
 
-        // tell the impl that we've been loaded from the given location
+        
         m_pImpl->setDocFileLocation( i_SourceLocation );
 
-        // by definition (of XDocumentRecovery), we're responsible for delivering a fully-initialized document,
-        // which includes an attachResource call.
+        
+        
         const OUString sLogicalDocumentURL( i_SalvagedFile.isEmpty() ?  i_SourceLocation : i_SalvagedFile  );
         impl_attachResource( sLogicalDocumentURL, aMediaDescriptor.getPropertyValues(), aGuard );
-        // <- SYNCHRONIZED
+        
     }
     catch( const Exception& )
     {
@@ -744,7 +744,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
             ||  aError.isExtractableTo( ::cppu::UnoType< WrappedTargetException >::get() )
             )
         {
-            // allowed to leave
+            
             throw;
         }
 
@@ -752,7 +752,7 @@ void SAL_CALL ODatabaseDocument::recoverFromFile( const OUString& i_SourceLocati
     }
 }
 
-// XModel
+
 sal_Bool SAL_CALL ODatabaseDocument::attachResource( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
@@ -767,14 +767,14 @@ sal_Bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocum
         &&  ( i_rMediaDescriptor[0].Name.equalsAscii( "BreakMacroSignature" ) )
         )
     {
-        // this is a BAD hack of the Basic importer code ... there should be a dedicated API for this,
-        // not this bad mis-using of existing interfaces
+        
+        
         return sal_False;
-            // (we do not support macro signatures, so we can ignore this call)
+            
     }
 
-    // if no URL has been provided, the caller was lazy enough to not call our getURL - which is not allowed anymore,
-    // now since getURL and getLocation both return the same, so calling one of those should be simple.
+    
+    
     OUString sDocumentURL( i_rLogicalDocumentURL );
     OSL_ENSURE( !sDocumentURL.isEmpty(), "ODatabaseDocument::impl_attachResource: invalid URL!" );
     if ( sDocumentURL.isEmpty() )
@@ -783,17 +783,17 @@ sal_Bool ODatabaseDocument::impl_attachResource( const OUString& i_rLogicalDocum
     m_pImpl->setResource( sDocumentURL, i_rMediaDescriptor );
 
     if ( impl_isInitializing() )
-    {   // this means we've just been loaded, and this is the attachResource call which follows
-        // the load call.
+    {   
+        
         impl_setInitialized();
 
-        // determine whether the document as a whole, or sub documents, have macros. Especially the latter
-        // controls the availability of our XEmbeddedScripts and XScriptInvocationContext interfaces, and we
-        // should know this before anybody actually uses the object.
+        
+        
+        
         m_bAllowDocumentScripting = ( m_pImpl->determineEmbeddedMacros() != ODatabaseModelImpl::eSubDocumentMacros );
 
         _rDocGuard.clear();
-        // <- SYNCHRONIZED
+        
         m_aEventNotifier.notifyDocumentEvent( "OnLoadFinished" );
     }
 
@@ -834,7 +834,7 @@ void SAL_CALL ODatabaseDocument::connectController( const Reference< XController
     if ( !bFirstControllerEver )
         return;
 
-    // check/adjust our macro mode.
+    
     m_pImpl->checkMacrosOnLoading();
 }
 
@@ -844,7 +844,7 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
     bool bLastControllerGone = false;
     bool bIsClosing = false;
 
-    // SYNCHRONIZED ->
+    
     {
         DocumentGuard aGuard( *this );
 
@@ -862,22 +862,22 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
         bLastControllerGone = m_aControllers.empty();
         bIsClosing = m_bClosing;
     }
-    // <- SYNCHRONIZED
+    
 
     if ( bNotifyViewClosed )
         m_aEventNotifier.notifyDocumentEvent( "OnViewClosed", Reference< XController2 >( _xController, UNO_QUERY ) );
 
     if ( bLastControllerGone && !bIsClosing )
     {
-        // if this was the last view, close the document as a whole
-        // #i51157#
+        
+        
         try
         {
             close( sal_True );
         }
         catch( const CloseVetoException& )
         {
-            // okay, somebody vetoed and took ownership
+            
         }
     }
 }
@@ -919,10 +919,10 @@ void SAL_CALL ODatabaseDocument::setCurrentController( const Reference< XControl
     if ( !m_aViewMonitor.onSetCurrentController( _xController ) )
         return;
 
-    // check if there are sub components to recover from our document storage
+    
     bool bAttemptRecovery = m_bHasBeenRecovered;
     if ( !bAttemptRecovery && m_pImpl->getMediaDescriptor().has( "ForceRecovery" ) )
-        // do not use getOrDefault, it will throw for invalid types, which is not desired here
+        
         m_pImpl->getMediaDescriptor().get( "ForceRecovery" ) >>= bAttemptRecovery;
 
     if ( !bAttemptRecovery )
@@ -951,7 +951,7 @@ Reference< XInterface > SAL_CALL ODatabaseDocument::getCurrentSelection(  ) thro
     return xRet;
 }
 
-// XStorable
+
 sal_Bool SAL_CALL ODatabaseDocument::hasLocation(  ) throw (RuntimeException)
 {
     return !getLocation().isEmpty();
@@ -961,8 +961,8 @@ OUString SAL_CALL ODatabaseDocument::getLocation(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     return m_pImpl->getURL();
-        // both XStorable::getLocation and XModel::getURL have to return the URL of the document, *not*
-        // the location of the file which the docunment was possibly recovered from (which would be getDocFileLocation)
+        
+        
 }
 
 sal_Bool SAL_CALL ODatabaseDocument::isReadonly(  ) throw (RuntimeException)
@@ -986,8 +986,8 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
         return;
     }
 
-    // if we have no URL, but did survive the DocumentGuard above, then we've been inited via XLoadable::initNew,
-    // i.e. we're based on a temporary storage
+    
+    
     OSL_ENSURE( m_pImpl->getDocFileLocation().isEmpty(), "ODatabaseDocument::store: unexpected URL inconsistency!" );
 
     try
@@ -1001,7 +1001,7 @@ void SAL_CALL ODatabaseDocument::store(  ) throw (IOException, RuntimeException)
             ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
             )
         {
-            // allowed to leave
+            
             throw;
         }
         impl_throwIOExceptionCausedBySave_throw( aError, OUString() );
@@ -1025,9 +1025,9 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     OSL_PRECOND( ( _eType == SAVE ) || ( _eType == SAVE_AS ),
         "ODatabaseDocument::impl_storeAs_throw: you introduced a new type which cannot be handled here!" );
 
-    // if we're in the process of initializing the document (which effectively means it is an implicit
-    // initialization triggered in storeAsURL), the we do not notify events, since to an observer, the SaveAs
-    // should not be noticable
+    
+    
+    
     bool bIsInitializationProcess = impl_isInitializing();
 
     if ( !bIsInitializationProcess )
@@ -1038,36 +1038,36 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     }
 
     Reference< XStorage > xNewRootStorage;
-        // will be non-NULL if our storage changed
+        
 
     try
     {
         ModifyLock aLock( *this );
-            // ignore all changes of our "modified" state during storing
+            
 
         sal_Bool bLocationChanged = ( _rURL != m_pImpl->getDocFileLocation() );
         if ( bLocationChanged )
         {
-            // create storage for target URL
+            
             Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( _rURL ) );
 
             if ( m_pImpl->isEmbeddedDatabase() )
                 m_pImpl->clearConnections();
 
-            // commit everything
+            
             m_pImpl->commitEmbeddedStorage();
             m_pImpl->commitStorages();
 
-            // copy own storage to target storage
+            
             Reference< XStorage > xCurrentStorage( m_pImpl->getRootStorage() );
             if ( xCurrentStorage.is() )
                 xCurrentStorage->copyToStorage( xTargetStorage );
 
             m_pImpl->disposeStorages();
 
-            // each and every document definition obtained via m_xForms and m_xReports depends
-            // on the sub storages which we just disposed. So, dispose the forms/reports collections, too.
-            // This ensures that they're re-created when needed.
+            
+            
+            
             clearObjectContainer( m_xForms );
             clearObjectContainer( m_xReports );
 
@@ -1076,16 +1076,16 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
             m_pImpl->m_bDocumentReadOnly = sal_False;
         }
 
-        // store to current storage
+        
         Reference< XStorage > xCurrentStorage( m_pImpl->getOrCreateRootStorage(), UNO_QUERY_THROW );
         Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
         impl_storeToStorage_throw( xCurrentStorage, aMediaDescriptor, _rGuard );
 
-        // success - tell our impl
+        
         m_pImpl->setDocFileLocation( _rURL );
         m_pImpl->setResource( _rURL, aMediaDescriptor );
 
-        // if we are in an initialization process, then this is finished, now that we stored the document
+        
         if ( bIsInitializationProcess )
             impl_setInitialized();
     }
@@ -1093,7 +1093,7 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
     {
         Any aError = ::cppu::getCaughtException();
 
-        // notify the failure
+        
         if ( !bIsInitializationProcess )
             m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveFailed" : "OnSaveAsFailed", NULL, makeAny( _rURL ) );
 
@@ -1101,22 +1101,22 @@ void ODatabaseDocument::impl_storeAs_throw( const OUString& _rURL, const ::comph
             ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
             )
         {
-            // allowed to leave
+            
             throw;
         }
 
         impl_throwIOExceptionCausedBySave_throw( aError, _rURL );
     }
 
-    // notify the document event
+    
     if ( !bIsInitializationProcess )
         m_aEventNotifier.notifyDocumentEventAsync( _eType == SAVE ? "OnSaveDone" : "OnSaveAsDone", NULL, makeAny( _rURL ) );
 
-    // reset our "modified" flag, and clear the guard
+    
     impl_setModified_nothrow( sal_False, _rGuard );
-    // <- SYNCHRONIZED
+    
 
-    // notify storage listeners
+    
     if ( xNewRootStorage.is() )
         impl_notifyStorageChange_nolck_nothrow( xNewRootStorage );
 }
@@ -1140,14 +1140,14 @@ Reference< XStorage > ODatabaseDocument::impl_createStorageFor_throw( const OUSt
 
 void SAL_CALL ODatabaseDocument::storeAsURL( const OUString& _rURL, const Sequence< PropertyValue >& _rArguments ) throw (IOException, RuntimeException)
 {
-    // SYNCHRONIZED ->
+    
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
 
-    // Normally, a document initialization is done via XLoadable::load or XLoadable::initNew. For convenience
-    // reasons, and to not break existing API clients, it's allowed to call storeAsURL without having initialized
-    // the document, in which case the initialization will be done implicitly.
+    
+    
+    
     bool bImplicitInitialization = !impl_isInitialized();
-    // implicit initialization while another initialization is just running is not possible
+    
     if ( bImplicitInitialization && impl_isInitializing() )
         throw DoubleInitializationException();
 
@@ -1157,17 +1157,17 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const OUString& _rURL, const Sequen
     try
     {
         impl_storeAs_throw( _rURL, _rArguments, SAVE_AS, aGuard );
-        // <- SYNCHRONIZED
+        
 
-        // impl_storeAs_throw cleared the lock on our mutex, but the below lines need this lock
-        // SYNCHRONIZED ->
+        
+        
         aGuard.reset();
 
-        // our title might have changed, potentially at least
-        // Sadly, we cannot check this: Calling getTitle here and now would not deliver
-        // an up-to-date result, as the call is delegated to our TitleHelper instance, which itself
-        // updates its title only if it gets the OnSaveAsDone event (which was sent asynchronously
-        // by impl_storeAs_throw). So, we simply notify always, and also asynchronously
+        
+        
+        
+        
+        
         m_aEventNotifier.notifyDocumentEventAsync( "OnTitleChanged" );
     }
     catch( const Exception& )
@@ -1180,7 +1180,7 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const OUString& _rURL, const Sequen
         m_bAllowDocumentScripting = true;
 
     aGuard.clear();
-    // <- SYNCHRONIZED
+    
 
     if ( bImplicitInitialization )
         m_aEventNotifier.notifyDocumentEvent( "OnCreate" );
@@ -1197,11 +1197,11 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
 
     try
     {
-        // commit everything
+        
         m_pImpl->commitEmbeddedStorage();
         m_pImpl->commitStorages();
 
-        // copy own storage to target storage
+        
         if ( impl_isInitialized() )
         {
             Reference< XStorage > xCurrentStorage( m_pImpl->getOrCreateRootStorage(), UNO_QUERY_THROW );
@@ -1209,13 +1209,13 @@ void ODatabaseDocument::impl_storeToStorage_throw( const Reference< XStorage >& 
                 xCurrentStorage->copyToStorage( _rxTargetStorage );
         }
 
-        // write into target storage
+        
         ::comphelper::NamedValueCollection aWriteArgs( _rMediaDescriptor );
         lcl_triggerStatusIndicator_throw( aWriteArgs, _rDocGuard, true );
         impl_writeStorage_throw( _rxTargetStorage, aWriteArgs );
         lcl_triggerStatusIndicator_throw( aWriteArgs, _rDocGuard, false );
 
-        // commit target storage
+        
         OSL_VERIFY( tools::stor::commitStorageIfWriteable( _rxTargetStorage ) );
     }
     catch( const IOException& ) { throw; }
@@ -1239,13 +1239,13 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
 
     try
     {
-        // create storage for target URL
+        
         Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( _rURL ) );
 
-        // extend media descriptor with URL
+        
         Sequence< PropertyValue > aMediaDescriptor( lcl_appendFileNameToDescriptor( _rArguments, _rURL ) );
 
-        // store to this storage
+        
         impl_storeToStorage_throw( xTargetStorage, aMediaDescriptor, aGuard );
     }
     catch( const Exception& )
@@ -1257,7 +1257,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
             ||  aError.isExtractableTo( ::cppu::UnoType< RuntimeException >::get() )
             )
         {
-            // allowed to leave
+            
             throw;
         }
 
@@ -1267,7 +1267,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
     m_aEventNotifier.notifyDocumentEventAsync( "OnSaveToDone", NULL, makeAny( _rURL ) );
 }
 
-// XModifyBroadcaster
+
 void SAL_CALL ODatabaseDocument::addModifyListener( const Reference< XModifyListener >& _xListener ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this );
@@ -1280,7 +1280,7 @@ void SAL_CALL ODatabaseDocument::removeModifyListener( const Reference< XModifyL
     m_aModifyListeners.removeInterface(_xListener);
 }
 
-// XModifiable
+
 sal_Bool SAL_CALL ODatabaseDocument::isModified(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this );
@@ -1293,14 +1293,14 @@ void SAL_CALL ODatabaseDocument::setModified( sal_Bool _bModified ) throw (Prope
     DocumentGuard aGuard( *this, DocumentGuard::MethodWithoutInit );
     if ( impl_isInitialized() )
         impl_setModified_nothrow( _bModified, aGuard );
-    // it's allowed to call setModified without the document being initialized already. In this case,
-    // we simply ignore the call - when the initialization is finished, the respective code will set
-    // a proper "modified" flag
+    
+    
+    
 }
 
 void ODatabaseDocument::impl_setModified_nothrow( sal_Bool _bModified, DocumentGuard& _rGuard )
 {
-    // SYNCHRONIZED ->
+    
     bool bModifiedChanged = ( m_pImpl->m_bModified != _bModified ) && ( !m_pImpl->isModifyLocked() );
 
     if ( bModifiedChanged )
@@ -1309,7 +1309,7 @@ void ODatabaseDocument::impl_setModified_nothrow( sal_Bool _bModified, DocumentG
         m_aEventNotifier.notifyDocumentEventAsync( "OnModifyChanged" );
     }
     _rGuard.clear();
-    // <- SYNCHRONIZED
+    
 
     if ( bModifiedChanged )
     {
@@ -1318,7 +1318,7 @@ void ODatabaseDocument::impl_setModified_nothrow( sal_Bool _bModified, DocumentG
     }
 }
 
-// ::com::sun::star::document::XEventBroadcaster
+
 void SAL_CALL ODatabaseDocument::addEventListener(const uno::Reference< document::XEventListener >& _Listener ) throw (uno::RuntimeException)
 {
     m_aEventNotifier.addLegacyEventListener( _Listener );
@@ -1344,7 +1344,7 @@ void SAL_CALL ODatabaseDocument::notifyDocumentEvent( const OUString& _EventName
     if ( _EventName.isEmpty() )
         throw IllegalArgumentException( OUString(), *this, 1 );
 
-    // SYNCHRONIZED ->
+    
     DocumentGuard aGuard( *this );
 
     if ( !DocumentEvents::needsSynchronousNotification( _EventName ) )
@@ -1353,7 +1353,7 @@ void SAL_CALL ODatabaseDocument::notifyDocumentEvent( const OUString& _EventName
         return;
     }
     aGuard.clear();
-    // <- SYNCHRONIZED
+    
 
     m_aEventNotifier.notifyDocumentEvent( _EventName, _ViewController, _Supplement );
 }
@@ -1475,29 +1475,29 @@ struct DisposeControllerFrame : public ::std::unary_function< Reference< XContro
 void ODatabaseDocument::impl_disposeControllerFrames_nothrow()
 {
     Controllers aCopy;
-    aCopy.swap( m_aControllers );   // ensure m_aControllers is empty afterwards
+    aCopy.swap( m_aControllers );   
     ::std::for_each( aCopy.begin(), aCopy.end(), DisposeControllerFrame() );
 }
 
 void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (CloseVetoException, RuntimeException)
 {
-    // nearly everything below can/must be done without our mutex locked, the below is just for
-    // the checks for being disposed and the like
-    // SYNCHRONIZED ->
+    
+    
+    
     {
         DocumentGuard aGuard( *this );
         m_bClosing = true;
     }
-    // <- SYNCHRONIZED
+    
 
     try
     {
-        // allow listeners to veto
+        
         lang::EventObject aEvent( *this );
         m_aCloseListener.forEach< XCloseListener >(
             boost::bind( &XCloseListener::queryClosing, _1, boost::cref( aEvent ), boost::cref( _bDeliverOwnership ) ) );
 
-        // notify that we're going to unload
+        
         m_aEventNotifier.notifyDocumentEvent( "OnPrepareUnload" );
 
         impl_closeControllerFrames_nolck_throw( _bDeliverOwnership );
@@ -1513,10 +1513,10 @@ void SAL_CALL ODatabaseDocument::close( sal_Bool _bDeliverOwnership ) throw (Clo
         throw;
     }
 
-    // SYNCHRONIZED ->
+    
     ::osl::MutexGuard aGuard( m_aMutex );
     m_bClosing = false;
-    // <- SYNCHRONIZED
+    
 }
 
 void SAL_CALL ODatabaseDocument::addCloseListener( const Reference< ::com::sun::star::util::XCloseListener >& Listener ) throw (RuntimeException)
@@ -1550,7 +1550,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
     OSL_ENSURE( pStreamName, "Need stream name!" );
     OSL_ENSURE( pServiceName, "Need service name!" );
 
-    // open stream
+    
     OUString sStreamName = OUString::createFromAscii( pStreamName );
     Reference< XStream > xStream = _xStorageToSaveTo->openStreamElement( sStreamName, ElementModes::READWRITE | ElementModes::TRUNCATE );
     if ( !xStream.is() )
@@ -1569,7 +1569,7 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XComponent >& xC
     xStreamProp->setPropertyValue( INFO_MEDIATYPE, makeAny( OUString( "text/xml" ) ) );
     xStreamProp->setPropertyValue( "Compressed", makeAny( (sal_Bool)sal_True ) );
 
-    // write the stuff
+    
     WriteThroughComponent( xOutputStream, xComponent, pServiceName, _rArguments, rMediaDesc );
 }
 
@@ -1581,33 +1581,33 @@ void ODatabaseDocument::WriteThroughComponent( const Reference< XOutputStream >&
     OSL_ENSURE( xComponent.is(), "Need component!" );
     OSL_ENSURE( NULL != pServiceName, "Need component name!" );
 
-    // get component
+    
     Reference< XWriter > xSaxWriter = xml::sax::Writer::create( m_pImpl->m_aContext );
 
-    // connect XML writer to output stream
+    
     xSaxWriter->setOutputStream( xOutputStream );
 
-    // prepare arguments (prepend doc handler to given arguments)
+    
     Reference< XDocumentHandler > xDocHandler( xSaxWriter,UNO_QUERY);
     Sequence<Any> aArgs( 1 + _rArguments.getLength() );
     aArgs[0] <<= xDocHandler;
     for ( sal_Int32 i = 0; i < _rArguments.getLength(); ++i )
         aArgs[ i+1 ] = _rArguments[i];
 
-    // get filter component
+    
     Reference< XExporter > xExporter( m_pImpl->m_aContext->getServiceManager()->createInstanceWithArgumentsAndContext(OUString::createFromAscii(pServiceName), aArgs, m_pImpl->m_aContext), UNO_QUERY_THROW );
 
-    // connect model and filter
+    
     xExporter->setSourceDocument( xComponent );
 
-    // filter
+    
     Reference< XFilter > xFilter( xExporter, UNO_QUERY_THROW );
     xFilter->filter( rMediaDesc );
 }
 
 void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _rxTargetStorage, const ::comphelper::NamedValueCollection& _rMediaDescriptor ) const
 {
-    // extract status indicator
+    
     Sequence< Any > aDelegatorArguments;
     lcl_extractStatusIndicator( _rMediaDescriptor, aDelegatorArguments );
 
@@ -1628,8 +1628,8 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     OUString aVersion;
     SvtSaveOptions::ODFDefaultVersion const nDefVersion =
         aSaveOpt.GetODFDefaultVersion();
-    // older versions can not have this property set,
-    // it exists only starting from ODF1.2
+    
+    
     if (nDefVersion >= SvtSaveOptions::ODFVER_012)
         aVersion = ODFVER_012_TEXT;
 
@@ -1662,8 +1662,8 @@ void ODatabaseDocument::impl_writeStorage_throw( const Reference< XStorage >& _r
     {
         try
         {
-           // Delete any previously existing Pictures folder and regenerate
-           // any needed content if needed
+           
+           
            Reference< XStorageBasedLibraryContainer > xDlgs = m_pImpl->getLibraryContainer( false );
            if ( xDlgs.is() )
            {
@@ -1695,7 +1695,7 @@ Reference< XUIConfigurationManager2 > ODatabaseDocument::getUIConfigurationManag
         OUString aUIConfigFolderName( "Configurations2" );
         Reference< XStorage > xConfigStorage;
 
-        // First try to open with READWRITE and then READ
+        
         xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READWRITE );
         if ( xConfigStorage.is() )
         {
@@ -1712,7 +1712,7 @@ Reference< XUIConfigurationManager2 > ODatabaseDocument::getUIConfigurationManag
         else
             xConfigStorage = getDocumentSubStorage( aUIConfigFolderName, ElementModes::READ );
 
-        // initialize ui configuration manager with document substorage
+        
         m_xUIConfigurationManager->setStorage( xConfigStorage );
     }
 
@@ -1746,7 +1746,7 @@ void ODatabaseDocument::disposing()
     OSL_TRACE( "DD: disp: %p: %p", this, m_pImpl.get() );
     if ( !m_pImpl.is() )
     {
-        // this means that we're already disposed
+        
         OSL_ENSURE( ODatabaseDocument_OfficeDocument::rBHelper.bDisposed, "ODatabaseDocument::disposing: no impl anymore, but not yet disposed!" );
         return;
     }
@@ -1763,19 +1763,19 @@ void ODatabaseDocument::disposing()
     m_aCloseListener.disposeAndClear( aDisposeEvent );
     m_aStorageListeners.disposeAndClear( aDisposeEvent );
 
-    // this is the list of objects which we currently hold as member. Upon resetting
-    // those members, we can (potentially) release the last reference to them, in which
-    // case they will be deleted - if they're C++ implementations, that is :).
-    // Some of those implementations are offending enough to require the SolarMutex, which
-    // means we should not release the last reference while our own mutex is locked ...
+    
+    
+    
+    
+    
     ::std::list< Reference< XInterface > > aKeepAlive;
 
-    // SYNCHRONIZED ->
+    
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
-    // normally, nobody should explicitly dispose, but only XCloseable::close
-    // the document. And upon closing, our controllers are closed, too
+    
+    
 
     {
         uno::Reference<uno::XInterface> xUIInterface( m_xUIConfigurationManager );
@@ -1786,19 +1786,19 @@ void ODatabaseDocument::disposing()
     clearObjectContainer( m_xForms );
     clearObjectContainer( m_xReports );
 
-    // reset the macro mode: in case the our impl struct stays alive (e.g. because our DataSource
-    // object still exists), and somebody subsequently re-opens the document, we want to have
-    // the security warning, again.
+    
+    
+    
     m_pImpl->resetMacroExecutionMode();
 
-    // similar arguing for our ViewMonitor
+    
     m_aViewMonitor.reset();
 
-    // tell our Impl to forget us
+    
     m_pImpl->modelIsDisposing( impl_isInitialized(), ODatabaseModelImpl::ResetModelAccess() );
 
-    // now, at the latest, the controller array should be empty. Controllers are
-    // expected to listen for our disposal, and disconnect then
+    
+    
     OSL_ENSURE( m_aControllers.empty(), "ODatabaseDocument::disposing: there still are controllers!" );
     impl_disposeControllerFrames_nothrow();
 
@@ -1817,12 +1817,12 @@ void ODatabaseDocument::disposing()
     m_pImpl.clear();
 
     aGuard.clear();
-    // <- SYNCHRONIZED
+    
 
     aKeepAlive.clear();
 }
 
-// XComponent
+
 void SAL_CALL ODatabaseDocument::dispose(  ) throw (RuntimeException)
 {
     ::cppu::WeakComponentImplHelperBase::dispose();
@@ -1838,7 +1838,7 @@ void SAL_CALL ODatabaseDocument::removeEventListener( const Reference< lang::XEv
     ::cppu::WeakComponentImplHelperBase::removeEventListener( _xListener );
 }
 
-// XServiceInfo
+
 OUString ODatabaseDocument::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_static();
@@ -1997,7 +1997,7 @@ struct CreateAny : public ::std::unary_function< Reference<XController>, Any>
     }
 };
 
-// XModel2
+
 Reference< XEnumeration > SAL_CALL ODatabaseDocument::getControllers(  ) throw (RuntimeException)
 {
     DocumentGuard aGuard( *this );
@@ -2090,49 +2090,49 @@ uno::Reference< frame::XUntitledNumbers > ODatabaseDocument::impl_getUntitledHel
     return xNumberedControllers;
 }
 
-// css.frame.XTitle
+
 OUString SAL_CALL ODatabaseDocument::getTitle()
     throw (uno::RuntimeException)
 {
-    // SYNCHRONIZED ->
+    
     DocumentGuard aGuard( *this, DocumentGuard::MethodUsedDuringInit );
     return impl_getTitleHelper_throw()->getTitle();
 }
 
-// css.frame.XTitle
+
 void SAL_CALL ODatabaseDocument::setTitle( const OUString& sTitle )
     throw (uno::RuntimeException)
 {
-    // SYNCHRONIZED ->
+    
     DocumentGuard aGuard( *this );
     impl_getTitleHelper_throw()->setTitle( sTitle );
     m_aEventNotifier.notifyDocumentEventAsync( "OnTitleChanged" );
-    // <- SYNCHRONIZED
+    
 }
 
-// css.frame.XTitleChangeBroadcaster
+
 void SAL_CALL ODatabaseDocument::addTitleChangeListener( const uno::Reference< frame::XTitleChangeListener >& xListener )
     throw (uno::RuntimeException)
 {
-    // SYNCHRONIZED ->
+    
     DocumentGuard aGuard( *this );
 
     uno::Reference< frame::XTitleChangeBroadcaster > xBroadcaster( impl_getTitleHelper_throw(), uno::UNO_QUERY_THROW );
     xBroadcaster->addTitleChangeListener( xListener );
 }
 
-// css.frame.XTitleChangeBroadcaster
+
 void SAL_CALL ODatabaseDocument::removeTitleChangeListener( const uno::Reference< frame::XTitleChangeListener >& xListener )
     throw (uno::RuntimeException)
 {
-    // SYNCHRONIZED ->
+    
     DocumentGuard aGuard( *this );
 
     uno::Reference< frame::XTitleChangeBroadcaster > xBroadcaster( impl_getTitleHelper_throw(), uno::UNO_QUERY_THROW );
     xBroadcaster->removeTitleChangeListener( xListener );
 }
 
-// css.frame.XUntitledNumbers
+
 ::sal_Int32 SAL_CALL ODatabaseDocument::leaseNumber( const uno::Reference< uno::XInterface >& xComponent )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException         )
@@ -2141,7 +2141,7 @@ void SAL_CALL ODatabaseDocument::removeTitleChangeListener( const uno::Reference
     return impl_getUntitledHelper_throw(xComponent)->leaseNumber (xComponent);
 }
 
-// css.frame.XUntitledNumbers
+
 void SAL_CALL ODatabaseDocument::releaseNumber( ::sal_Int32 nNumber )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException         )
@@ -2150,7 +2150,7 @@ void SAL_CALL ODatabaseDocument::releaseNumber( ::sal_Int32 nNumber )
     impl_getUntitledHelper_throw()->releaseNumber (nNumber);
 }
 
-// css.frame.XUntitledNumbers
+
 void SAL_CALL ODatabaseDocument::releaseNumberForComponent( const uno::Reference< uno::XInterface >& xComponent )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException         )
@@ -2159,12 +2159,12 @@ void SAL_CALL ODatabaseDocument::releaseNumberForComponent( const uno::Reference
     impl_getUntitledHelper_throw(xComponent)->releaseNumberForComponent (xComponent);
 }
 
-// css.frame.XUntitledNumbers
+
 OUString SAL_CALL ODatabaseDocument::getUntitledPrefix()    throw (uno::RuntimeException)
 {
     return OUString();
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

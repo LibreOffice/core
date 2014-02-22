@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -63,9 +63,9 @@
 #include <numeric>
 
 #ifdef DISABLE_DYNLOADING
-// Linking all needed LO code into one .so/executable, these already
-// exist in the tools library, so put them in the anonymous namespace
-// here to avoid clash...
+
+
+
 namespace {
 #endif
 #ifdef DISABLE_DYNLOADING
@@ -197,7 +197,7 @@ Polygon ImplSubdivideBezier( const Polygon& rPoly )
 {
     Polygon aPoly;
 
-    // #100127# Use adaptive subdivide instead of fixed 25 segments
+    
     rPoly.AdaptiveSubdivide( aPoly );
 
     return aPoly;
@@ -213,10 +213,10 @@ PolyPolygon ImplSubdivideBezier( const PolyPolygon& rPolyPoly )
     return aPolyPoly;
 }
 
-// #100127# Extracted from OutputDevice::DrawPolyPolygon()
+
 void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPolyPoly )
 {
-    // AW: This crashes on empty PolyPolygons, avoid that
+    
     if(!nPoly)
         return;
 
@@ -263,7 +263,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
 
     if ( j == 1 )
     {
-        // #100127# Forward beziers to sal, if any
+        
         if( bHaveBezier )
         {
             if( !mpGraphics->DrawPolygonBezier( *pPointAry, *pPointAryAry, *pFlagAryAry, this ) )
@@ -279,7 +279,7 @@ void OutputDevice::ImplDrawPolyPolygon( sal_uInt16 nPoly, const PolyPolygon& rPo
     }
     else
     {
-        // #100127# Forward beziers to sal, if any
+        
         if( bHaveBezier )
         {
             if( !mpGraphics->DrawPolyPolygonBezier( j, pPointAry, pPointAryAry, pFlagAryAry, this ) )
@@ -341,7 +341,7 @@ OutputDevice::OutputDevice() :
     mnEmphasisDescent   = 0;
     mnDrawMode          = 0;
     mnTextLayoutMode        = TEXT_LAYOUT_DEFAULT;
-    if( Application::GetSettings().GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
+    if( Application::GetSettings().GetLayoutRTL() ) 
         mnTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
     meOutDevType        = OUTDEV_DONTKNOW;
     meOutDevViewType    = OUTDEV_VIEWTYPE_DONTKNOW;
@@ -357,7 +357,7 @@ OutputDevice::OutputDevice() :
     meTextAlign         = maFont.GetAlign();
     meRasterOp          = ROP_OVERPAINT;
     mnAntialiasing      = 0;
-    meTextLanguage      = 0;  // TODO: get default from configuration?
+    meTextLanguage      = 0;  
     mbLineColor         = true;
     mbFillColor         = true;
     mbInitLineColor     = true;
@@ -371,16 +371,16 @@ OutputDevice::OutputDevice() :
     mbTextLines         = false;
     mbTextSpecial       = false;
     mbRefPoint          = false;
-    mbEnableRTL         = false;    // mirroring must be explicitly allowed (typically for windows only)
+    mbEnableRTL         = false;    
 
-    // struct ImplMapRes
+    
     maMapRes.mnMapOfsX          = 0;
     maMapRes.mnMapOfsY          = 0;
     maMapRes.mnMapScNumX        = 1;
     maMapRes.mnMapScNumY        = 1;
     maMapRes.mnMapScDenomX      = 1;
     maMapRes.mnMapScDenomY      = 1;
-    // struct ImplThresholdRes
+    
     maThresRes.mnThresLogToPixX = 0;
     maThresRes.mnThresLogToPixY = 0;
     maThresRes.mnThresPixToLogX = 0;
@@ -414,18 +414,18 @@ OutputDevice::~OutputDevice()
         }
     }
 
-    // release the active font instance
+    
     if( mpFontEntry )
         mpFontCache->Release( mpFontEntry );
-    // remove cached results of GetDevFontList/GetDevSizeList
-    // TODO: use smart pointers for them
+    
+    
     if( mpGetDevFontList )
         delete mpGetDevFontList;
     if( mpGetDevSizeList )
         delete mpGetDevSizeList;
 
-    // release ImplFontCache specific to this OutputDevice
-    // TODO: refcount ImplFontCache
+    
+    
     if( mpFontCache
     && (mpFontCache != ImplGetSVData()->maGDIData.mpScreenFontCache)
     && (ImplGetSVData()->maGDIData.mpScreenFontCache != NULL) )
@@ -434,8 +434,8 @@ OutputDevice::~OutputDevice()
         mpFontCache = NULL;
     }
 
-    // release ImplFontList specific to this OutputDevice
-    // TODO: refcount ImplFontList
+    
+    
     if( mpFontList
     && (mpFontList != ImplGetSVData()->maGDIData.mpScreenFontList)
     && (ImplGetSVData()->maGDIData.mpScreenFontList != NULL) )
@@ -462,15 +462,15 @@ void OutputDevice::EnableRTL( bool bEnable )
     mbEnableRTL = bEnable;
     if( meOutDevType == OUTDEV_VIRDEV )
     {
-        // virdevs default to not mirroring, they will only be set to mirroring
-        // under rare circumstances in the UI, eg the valueset control
-        // because each virdev has its own SalGraphics we can safely switch the SalGraphics here
-        // ...hopefully
+        
+        
+        
+        
         if( ImplGetGraphics() )
             mpGraphics->SetLayout( mbEnableRTL ? SAL_LAYOUT_BIDI_RTL : 0 );
     }
 
-    // convenience: for controls also switch layout mode
+    
     if( dynamic_cast<Control*>(this) != 0 )
         SetLayoutMode( bEnable ? TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT : TEXT_LAYOUT_BIDI_LTR | TEXT_LAYOUT_TEXTORIGIN_LEFT);
 
@@ -487,7 +487,7 @@ bool OutputDevice::HasMirroredGraphics() const
    return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
 }
 
-// note: the coordiantes to be remirrored are in frame coordiantes !
+
 
 void    OutputDevice::ReMirror( Point &rPoint ) const
 {
@@ -497,9 +497,9 @@ void    OutputDevice::ReMirror( Rectangle &rRect ) const
 {
     long nWidth = rRect.Right() - rRect.Left();
 
-    //long lc_x = rRect.nLeft - mnOutOffX;    // normalize
-    //lc_x = mnOutWidth - nWidth - 1 - lc_x;  // mirror
-    //rRect.nLeft = lc_x + mnOutOffX;         // re-normalize
+    
+    
+    
 
     rRect.Left() = mnOutOffX + mnOutWidth - nWidth - 1 - rRect.Left() + mnOutOffX;
     rRect.Right() = rRect.Left() + nWidth;
@@ -539,10 +539,10 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
         Window* pWindow = (Window*)this;
 
         mpGraphics = pWindow->mpWindowImpl->mpFrame->GetGraphics();
-        // try harder if no wingraphics was available directly
+        
         if ( !mpGraphics )
         {
-            // find another output device in the same frame
+            
             OutputDevice* pReleaseOutDev = pSVData->maGDIData.mpLastWinGraphics;
             while ( pReleaseOutDev )
             {
@@ -553,13 +553,13 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
 
             if ( pReleaseOutDev )
             {
-                // steal the wingraphics from the other outdev
+                
                 mpGraphics = pReleaseOutDev->mpGraphics;
                 pReleaseOutDev->ImplReleaseGraphics( false );
             }
             else
             {
-                // if needed retry after releasing least recently used wingraphics
+                
                 while ( !mpGraphics )
                 {
                     if ( !pSVData->maGDIData.mpLastWinGraphics )
@@ -570,7 +570,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
             }
         }
 
-        // update global LRU list of wingraphics
+        
         if ( mpGraphics )
         {
             mpNextGraphics = pSVData->maGDIData.mpFirstWinGraphics;
@@ -588,7 +588,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
         if ( pVirDev->mpVirDev )
         {
             mpGraphics = pVirDev->mpVirDev->GetGraphics();
-            // if needed retry after releasing least recently used virtual device graphics
+            
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
@@ -596,7 +596,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
                 mpGraphics = pVirDev->mpVirDev->GetGraphics();
             }
-            // update global LRU list of virtual device graphics
+            
             if ( mpGraphics )
             {
                 mpNextGraphics = pSVData->maGDIData.mpFirstVirGraphics;
@@ -618,7 +618,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
         {
             const VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
             mpGraphics = pVirDev->mpVirDev->GetGraphics();
-            // if needed retry after releasing least recently used virtual device graphics
+            
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastVirGraphics )
@@ -626,7 +626,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
                 pSVData->maGDIData.mpLastVirGraphics->ImplReleaseGraphics();
                 mpGraphics = pVirDev->mpVirDev->GetGraphics();
             }
-            // update global LRU list of virtual device graphics
+            
             if ( mpGraphics )
             {
                 mpNextGraphics = pSVData->maGDIData.mpFirstVirGraphics;
@@ -640,7 +640,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
         else
         {
             mpGraphics = pPrinter->mpInfoPrinter->GetGraphics();
-            // if needed retry after releasing least recently used printer graphics
+            
             while ( !mpGraphics )
             {
                 if ( !pSVData->maGDIData.mpLastPrnGraphics )
@@ -648,7 +648,7 @@ SalGraphics* OutputDevice::ImplGetGraphics() const
                 pSVData->maGDIData.mpLastPrnGraphics->ImplReleaseGraphics();
                 mpGraphics = pPrinter->mpInfoPrinter->GetGraphics();
             }
-            // update global LRU list of printer graphics
+            
             if ( mpGraphics )
             {
                 mpNextGraphics = pSVData->maGDIData.mpFirstPrnGraphics;
@@ -677,14 +677,14 @@ void OutputDevice::ImplReleaseGraphics( bool bRelease )
     if ( !mpGraphics )
         return;
 
-    // release the fonts of the physically released graphics device
+    
     if( bRelease )
     {
 #ifndef UNX
-        // HACK to fix an urgent P1 printing issue fast
-        // WinSalPrinter does not respect GetGraphics/ReleaseGraphics conventions
-        // so Printer::mpGraphics often points to a dead WinSalGraphics
-        // TODO: fix WinSalPrinter's GetGraphics/ReleaseGraphics handling
+        
+        
+        
+        
         if( meOutDevType != OUTDEV_PRINTER )
 #endif
         mpGraphics->ReleaseFonts();
@@ -718,7 +718,7 @@ void OutputDevice::ImplReleaseGraphics( bool bRelease )
 
         if ( bRelease )
             pWindow->mpWindowImpl->mpFrame->ReleaseGraphics( mpGraphics );
-        // remove from global LRU list of window graphics
+        
         if ( mpPrevGraphics )
             mpPrevGraphics->mpNextGraphics = mpNextGraphics;
         else
@@ -734,7 +734,7 @@ void OutputDevice::ImplReleaseGraphics( bool bRelease )
 
         if ( bRelease )
             pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
-        // remove from global LRU list of virtual device graphics
+        
         if ( mpPrevGraphics )
             mpPrevGraphics->mpNextGraphics = mpNextGraphics;
         else
@@ -755,7 +755,7 @@ void OutputDevice::ImplReleaseGraphics( bool bRelease )
                 VirtualDevice* pVirDev = pPrinter->mpDisplayDev;
                 if ( bRelease )
                     pVirDev->mpVirDev->ReleaseGraphics( mpGraphics );
-                // remove from global LRU list of virtual device graphics
+                
                 if ( mpPrevGraphics )
                     mpPrevGraphics->mpNextGraphics = mpNextGraphics;
                 else
@@ -769,7 +769,7 @@ void OutputDevice::ImplReleaseGraphics( bool bRelease )
             {
                 if ( bRelease )
                     pPrinter->mpInfoPrinter->ReleaseGraphics( mpGraphics );
-                // remove from global LRU list of printer graphics
+                
                 if ( mpPrevGraphics )
                     mpPrevGraphics->mpNextGraphics = mpNextGraphics;
                 else
@@ -795,13 +795,13 @@ void OutputDevice::ImplInitOutDevData()
         mpOutDevData->mpRotateDev = NULL;
         mpOutDevData->mpRecordLayout = NULL;
 
-        // #i75163#
+        
         mpOutDevData->mpViewTransform = NULL;
         mpOutDevData->mpInverseViewTransform = NULL;
     }
 }
 
-// #i75163#
+
 void OutputDevice::ImplInvalidateViewTransform()
 {
     if(mpOutDevData)
@@ -832,7 +832,7 @@ void OutputDevice::ImplDeInitOutDevData()
         if ( mpOutDevData->mpRotateDev )
             delete mpOutDevData->mpRotateDev;
 
-        // #i75163#
+        
         ImplInvalidateViewTransform();
 
         delete mpOutDevData;
@@ -881,8 +881,8 @@ void OutputDevice::ImplInitFillColor()
     mbInitFillColor = false;
 }
 
-// TODO: fdo#74424 - this needs to be moved out of OutputDevice and into the
-// Window, VirtualDevice and Printer classes
+
+
 void OutputDevice::ImplInitClipRegion()
 {
     DBG_TESTSOLARMUTEX();
@@ -892,7 +892,7 @@ void OutputDevice::ImplInitClipRegion()
         Window* pWindow = (Window*)this;
         Region  aRegion;
 
-        // Put back backed up background
+        
         if ( pWindow->mpWindowImpl->mpFrameData->mpFirstBackWin )
             pWindow->ImplInvalidateAllOverlapBackgrounds();
         if ( pWindow->mpWindowImpl->mbInPaint )
@@ -900,8 +900,8 @@ void OutputDevice::ImplInitClipRegion()
         else
         {
             aRegion = *(pWindow->ImplGetWinChildClipRegion());
-            // --- RTL -- only this region is in frame coordinates, so re-mirror it
-            // the mpWindowImpl->mpPaintRegion above is already correct (see ImplCallPaint()) !
+            
+            
             if( ImplIsAntiparallel() )
                 ReMirror ( aRegion );
         }
@@ -926,15 +926,15 @@ void OutputDevice::ImplInitClipRegion()
             {
                 mbOutputClipped = false;
 
-                // #102532# Respect output offset also for clip region
+                
                 Region aRegion( ImplPixelToDevicePixel( maRegion ) );
                 const bool bClipDeviceBounds( ! GetPDFWriter()
                                               && GetOutDevType() != OUTDEV_PRINTER );
                 if( bClipDeviceBounds )
                 {
-                    // Perform actual rect clip against outdev
-                    // dimensions, to generate empty clips whenever one of the
-                    // values is completely off the device.
+                    
+                    
+                    
                     Rectangle aDeviceBounds( mnOutOffX, mnOutOffY,
                                              mnOutOffX+GetOutputWidthPixel()-1,
                                              mnOutOffY+GetOutputHeightPixel()-1 );
@@ -1373,14 +1373,14 @@ void OutputDevice::DrawLine( const Point& rStartPt, const Point& rEndPt )
     if ( mbInitLineColor )
         ImplInitLineColor();
 
-    // #i101598# support AA and snap for lines, too
+    
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor())
     {
-        // at least transform with double precision to device coordinates; this will
-        // avoid pixel snap of single, appended lines
+        
+        
         const basegfx::B2DHomMatrix aTransform(ImplGetDeviceTransformation());
         const basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
         basegfx::B2DPolygon aB2DPolyLine;
@@ -1466,11 +1466,11 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
 
         if(aLinePolyPolygon.areControlPointsUsed())
         {
-            // #i110768# When area geometry has to be created, do not
-            // use the fallback bezier decomposition inside createAreaGeometry,
-            // but one that is at least as good as ImplSubdivideBezier was.
-            // There, Polygon::AdaptiveSubdivide was used with default parameter
-            // 1.0 as quality index.
+            
+            
+            
+            
+            
             aLinePolyPolygon = basegfx::tools::adaptiveSubdivideByDistance(aLinePolyPolygon, 1.0);
         }
 
@@ -1532,7 +1532,7 @@ void OutputDevice::impPaintLineGeometryWithEvtlExpand(
             {
                 Polygon aPolygon(aFillPolyPolygon.getB2DPolygon(a));
 
-                // need to subdivide, mpGraphics->DrawPolygon ignores curves
+                
                 aPolygon.AdaptiveSubdivide(aPolygon);
                 mpGraphics->DrawPolygon(aPolygon.GetSize(), (const SalPoint*)aPolygon.GetConstPointAry(), this);
             }
@@ -1644,7 +1644,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     if ( !IsDeviceOutputNecessary() || !mbLineColor || (nPoints < 2) || ImplIsRecordLayout() )
         return;
 
-    // we need a graphics
+    
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
             return;
@@ -1662,14 +1662,14 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor());
 
-    // use b2dpolygon drawing if possible
+    
     if(bTryAA && ImpTryDrawPolyLineDirect(rPoly.getB2DPolygon()))
     {
         basegfx::B2DPolygon aB2DPolyLine(rPoly.getB2DPolygon());
         const ::basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
         const ::basegfx::B2DVector aB2DLineWidth( 1.0, 1.0 );
 
-        // transform the polygon
+        
         aB2DPolyLine.transform( aTransform );
 
         if(mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
@@ -1686,7 +1686,7 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly )
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
     const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
 
-    // #100127# Forward beziers to sal, if any
+    
     if( aPoly.HasFlags() )
     {
         const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
@@ -1715,8 +1715,8 @@ void OutputDevice::DrawPolyLine( const Polygon& rPoly, const LineInfo& rLineInfo
         return;
     }
 
-    // #i101491#
-    // Try direct Fallback to B2D-Version of DrawPolyLine
+    
+    
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && LINE_SOLID == rLineInfo.GetStyle())
     {
@@ -1739,22 +1739,22 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
 
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
 
-    // #100127# LineInfo is not curve-safe, subdivide always
+    
     //
-    // What shall this mean? It's wrong to subdivide here when the
-    // polygon is a fat line. In that case, the painted geometry
-    // WILL be much different.
-    // I also have no idea how this could be related to the given ID
-    // which reads 'consolidate boost versions' in the task description.
-    // Removing.
+    
+    
+    
+    
+    
+    
     //
-    //if( aPoly.HasFlags() )
-    //{
-    //    aPoly = ImplSubdivideBezier( aPoly );
-    //    nPoints = aPoly.GetSize();
-    //}
+    
+    
+    
+    
+    
 
-    // we need a graphics
+    
     if ( !mpGraphics && !ImplGetGraphics() )
         return;
 
@@ -1777,9 +1777,9 @@ void OutputDevice::ImpDrawPolyLineWithLineInfo(const Polygon& rPoly, const LineI
     }
     else
     {
-        // #100127# the subdivision HAS to be done here since only a pointer
-        // to an array of points is given to the DrawPolyLine method, there is
-        // NO way to find out there that it's a curve.
+        
+        
+        
         if( aPoly.HasFlags() )
         {
             aPoly = ImplSubdivideBezier( aPoly );
@@ -1804,7 +1804,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || (nPoints < 2) || ImplIsRecordLayout() )
         return;
 
-    // we need a graphics
+    
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
             return;
@@ -1819,7 +1819,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     if ( mbInitFillColor )
         ImplInitFillColor();
 
-    // use b2dpolygon drawing if possible
+    
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
@@ -1829,7 +1829,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
         basegfx::B2DPolygon aB2DPolygon(rPoly.getB2DPolygon());
         bool bSuccess(true);
 
-        // transform the polygon and ensure closed
+        
         aB2DPolygon.transform(aTransform);
         aB2DPolygon.setClosed(true);
 
@@ -1865,7 +1865,7 @@ void OutputDevice::DrawPolygon( const Polygon& rPoly )
     Polygon aPoly = ImplLogicToDevicePixel( rPoly );
     const SalPoint* pPtAry = (const SalPoint*)aPoly.GetConstPointAry();
 
-    // #100127# Forward beziers to sal, if any
+    
     if( aPoly.HasFlags() )
     {
         const sal_uInt8* pFlgAry = aPoly.GetConstFlagAry();
@@ -1895,7 +1895,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
     if ( !IsDeviceOutputNecessary() || (!mbLineColor && !mbFillColor) || !nPoly || ImplIsRecordLayout() )
         return;
 
-    // we need a graphics
+    
     if ( !mpGraphics )
         if ( !ImplGetGraphics() )
             return;
@@ -1910,7 +1910,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
     if ( mbInitFillColor )
         ImplInitFillColor();
 
-    // use b2dpolygon drawing if possible
+    
     if((mnAntialiasing & ANTIALIASING_ENABLE_B2DDRAW)
         && mpGraphics->supportsOperation(OutDevSupport_B2DDraw)
         && ROP_OVERPAINT == GetRasterOp()
@@ -1920,7 +1920,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rPolyPoly.getB2DPolyPolygon());
         bool bSuccess(true);
 
-        // transform the polygon and ensure closed
+        
         aB2DPolyPolygon.transform(aTransform);
         aB2DPolyPolygon.setClosed(true);
 
@@ -1958,7 +1958,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
     if ( nPoly == 1 )
     {
-        // #100127# Map to DrawPolygon
+        
         Polygon aPoly = rPolyPoly.GetObject( 0 );
         if( aPoly.GetSize() >= 2 )
         {
@@ -1972,9 +1972,9 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
     }
     else
     {
-        // #100127# moved real PolyPolygon draw to separate method,
-        // have to call recursively, avoiding duplicate
-        // ImplLogicToDevicePixel calls
+        
+        
+        
         ImplDrawPolyPolygon( nPoly, ImplLogicToDevicePixel( rPolyPoly ) );
     }
     if( mpAlphaVDev )
@@ -1983,7 +1983,7 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
 void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
 {
-    // AW: Do NOT paint empty polygons
+    
     if(rB2DPolygon.count())
     {
         basegfx::B2DPolyPolygon aPP( rB2DPolygon );
@@ -1991,9 +1991,9 @@ void OutputDevice::DrawPolygon( const basegfx::B2DPolygon& rB2DPolygon)
     }
 }
 
-// Caution: This method is nearly the same as
-// OutputDevice::DrawTransparent( const basegfx::B2DPolyPolygon& rB2DPolyPoly, double fTransparency),
-// so when changes are made here do not forget to make change sthere, too
+
+
+
 
 void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly )
 {
@@ -2001,17 +2001,17 @@ void OutputDevice::DrawPolyPolygon( const basegfx::B2DPolyPolygon& rB2DPolyPoly 
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaPolyPolygonAction( PolyPolygon( rB2DPolyPoly ) ) );
 
-    // call helper
+    
     ImpDrawPolyPolygonWithB2DPolyPolygon(rB2DPolyPoly);
 }
 
 void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPolygon& rB2DPolyPoly)
 {
-    // Do not paint empty PolyPolygons
+    
     if(!rB2DPolyPoly.count() || !IsDeviceOutputNecessary())
         return;
 
-    // we need a graphics
+    
     if( !mpGraphics )
         if( !ImplGetGraphics() )
             return;
@@ -2035,7 +2035,7 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
         basegfx::B2DPolyPolygon aB2DPolyPolygon(rB2DPolyPoly);
         bool bSuccess(true);
 
-        // transform the polygon and ensure closed
+        
         aB2DPolyPolygon.transform(aTransform);
         aB2DPolyPolygon.setClosed(true);
 
@@ -2071,7 +2071,7 @@ void OutputDevice::ImpDrawPolyPolygonWithB2DPolyPolygon(const basegfx::B2DPolyPo
         }
     }
 
-    // fallback to old polygon drawing if needed
+    
     const PolyPolygon aToolsPolyPolygon( rB2DPolyPoly );
     const PolyPolygon aPixelPolyPolygon = ImplLogicToDevicePixel( aToolsPolyPolygon );
     ImplDrawPolyPolygon( aPixelPolyPolygon.Count(), aPixelPolyPolygon );
@@ -2087,27 +2087,27 @@ bool OutputDevice::ImpTryDrawPolyLineDirect(
     const basegfx::B2DHomMatrix aTransform = ImplGetDeviceTransformation();
     basegfx::B2DVector aB2DLineWidth(1.0, 1.0);
 
-    // transform the line width if used
+    
     if( fLineWidth != 0.0 )
     {
         aB2DLineWidth = aTransform * ::basegfx::B2DVector( fLineWidth, fLineWidth );
     }
 
-    // transform the polygon
+    
     basegfx::B2DPolygon aB2DPolygon(rB2DPolygon);
     aB2DPolygon.transform(aTransform);
 
     if((mnAntialiasing & ANTIALIASING_PIXELSNAPHAIRLINE)
         && aB2DPolygon.count() < 1000)
     {
-        // #i98289#, #i101491#
-        // better to remove doubles on device coordinates. Also assume from a given amount
-        // of points that the single edges are not long enough to smooth
+        
+        
+        
         aB2DPolygon.removeDoublePoints();
         aB2DPolygon = basegfx::tools::snapPointsOfHorizontalOrVerticalEdges(aB2DPolygon);
     }
 
-    // draw the polyline
+    
     return mpGraphics->DrawPolyLine(
         aB2DPolygon,
         fTransparency,
@@ -2124,11 +2124,11 @@ bool OutputDevice::TryDrawPolyLineDirect(
     basegfx::B2DLineJoin eLineJoin,
     css::drawing::LineCap eLineCap)
 {
-    // AW: Do NOT paint empty PolyPolygons
+    
     if(!rB2DPolygon.count())
         return true;
 
-    // we need a graphics
+    
     if( !mpGraphics )
         if( !ImplGetGraphics() )
             return false;
@@ -2151,7 +2151,7 @@ bool OutputDevice::TryDrawPolyLineDirect(
     {
         if(ImpTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, fTransparency, eLineJoin, eLineCap))
         {
-            // worked, add metafile action (if recorded) and return true
+            
             if( mpMetaFile )
             {
                 LineInfo aLineInfo;
@@ -2184,11 +2184,11 @@ void OutputDevice::DrawPolyLine(
         mpMetaFile->AddAction( new MetaPolyLineAction( aToolsPolygon, aLineInfo ) );
     }
 
-    // Do not paint empty PolyPolygons
+    
     if(!rB2DPolygon.count() || !IsDeviceOutputNecessary())
         return;
 
-    // we need a graphics
+    
     if( !mpGraphics )
         if( !ImplGetGraphics() )
             return;
@@ -2206,16 +2206,16 @@ void OutputDevice::DrawPolyLine(
         && ROP_OVERPAINT == GetRasterOp()
         && IsLineColor());
 
-    // use b2dpolygon drawing if possible
+    
     if(bTryAA && ImpTryDrawPolyLineDirect(rB2DPolygon, fLineWidth, 0.0, eLineJoin, eLineCap))
     {
         return;
     }
 
-    // #i101491#
-    // no output yet; fallback to geometry decomposition and use filled polygon paint
-    // when line is fat and not too complex. ImpDrawPolyPolygonWithB2DPolyPolygon
-    // will do internal needed AA checks etc.
+    
+    
+    
+    
     if(fLineWidth >= 2.5
         && rB2DPolygon.count()
         && rB2DPolygon.count() <= 1000)
@@ -2235,7 +2235,7 @@ void OutputDevice::DrawPolyLine(
         SetFillColor(aOldLineColor);
         ImplInitFillColor();
 
-        // draw usig a loop; else the topology will paint a PolyPolygon
+        
         for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
             ImpDrawPolyPolygonWithB2DPolyPolygon(
@@ -2249,8 +2249,8 @@ void OutputDevice::DrawPolyLine(
 
         if(bTryAA)
         {
-            // when AA it is necessary to also paint the filled polygon's outline
-            // to avoid optical gaps
+            
+            
             for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
             {
                 ImpTryDrawPolyLineDirect(aAreaPolyPolygon.getB2DPolygon(a));
@@ -2259,7 +2259,7 @@ void OutputDevice::DrawPolyLine(
     }
     else
     {
-        // fallback to old polygon drawing if needed
+        
         const Polygon aToolsPolygon( rB2DPolygon );
         LineInfo aLineInfo;
         if( fLineWidth != 0.0 )
@@ -2481,7 +2481,7 @@ sal_uInt16 OutputDevice::GetBitCount() const
     if ( meOutDevType == OUTDEV_VIRDEV )
         return ((VirtualDevice*)this)->mnBitCount;
 
-    // we need a graphics
+    
     if ( !mpGraphics )
     {
         if ( !((OutputDevice*)this)->ImplGetGraphics() )
@@ -2552,7 +2552,7 @@ css::uno::Reference< css::rendering::XCanvas > OutputDevice::GetCanvas() const
 
     css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
-    // Create canvas instance with window handle
+    
     static css::uno::Reference<css::lang::XMultiComponentFactory > xCanvasFactory( css::rendering::CanvasFactory::create( xContext ) );
 
     css::uno::Reference<css::rendering::XCanvas> xCanvas;

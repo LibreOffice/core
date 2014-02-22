@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/itemiter.hxx>
@@ -43,10 +43,10 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
                         const SfxItemSet& rSet, sal_Bool bDeep,
                         sal_Bool bTstForDefault )
 {
-    // at first give the own attributes out
+    
     const SfxItemPool& rPool = *rSet.GetPool();
     const SfxItemSet* pSet = &rSet;
-    if( !pSet->Count() )        // Optimizing - empty Sets
+    if( !pSet->Count() )        
     {
         if( !bDeep )
             return rWrt;
@@ -90,7 +90,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
 
 Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
 {
-    // It must be a CntntNode!
+    
     SwCntntNode * pCNd = rNode.GetCntntNode();
     if( !pCNd )
         return rWrt;

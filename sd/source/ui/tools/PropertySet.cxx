@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@ void SAL_CALL PropertySet::disposing (void)
 {
 }
 
-//----- XPropertySet ----------------------------------------------------------
+
 
 Reference<beans::XPropertySetInfo> SAL_CALL PropertySet::getPropertySetInfo (void)
     throw(RuntimeException)
@@ -72,8 +72,8 @@ void SAL_CALL PropertySet::setPropertyValue (
     Any aOldValue (SetPropertyValue(rsPropertyName,rsPropertyValue));
     if (aOldValue != rsPropertyValue)
     {
-        // Inform listeners that are registered specifically for the
-        // property and those registered for any property.
+        
+        
         beans::PropertyChangeEvent aEvent(
             static_cast<XWeak*>(this),
             rsPropertyName,
@@ -162,8 +162,8 @@ void SAL_CALL PropertySet::addVetoableChangeListener (
         css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    // Constraint properties are not supported and thus no vetoable
-    // listeners.
+    
+    
     (void)rsPropertyName;
     (void)rxListener;
 }
@@ -178,8 +178,8 @@ void SAL_CALL PropertySet::removeVetoableChangeListener (
         css::lang::WrappedTargetException,
         css::uno::RuntimeException)
 {
-    // Constraint properties are not supported and thus no vetoable
-    // listeners.
+    
+    
     (void)rsPropertyName;
     (void)rxListener;
 }
@@ -187,7 +187,7 @@ void SAL_CALL PropertySet::removeVetoableChangeListener (
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void PropertySet::CallListeners (
     const OUString& rsPropertyName,
@@ -217,6 +217,6 @@ void PropertySet::ThrowIfDisposed (void)
     }
 }
 
-} } // end of namespace ::sd::tools
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

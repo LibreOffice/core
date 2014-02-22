@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/i18n/TextConversionOption.hpp>
@@ -134,8 +134,8 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
             pSdOutliner->StartConversion(nSourceLanguage, nTargetLanguage, pTargetFont, nOptions, bIsInteractive );
     }
 
-    // Due to changing between edit mode, notes mode, and handout mode the
-    // view has most likely changed.  Get the new one.
+    
+    
     mpViewShell = pBase->GetMainViewShell().get();
     if (mpViewShell != NULL)
     {
@@ -175,7 +175,7 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Fo
         if( pTargetFont &&
             ( !bHasParent || rSet.GetItemState( EE_CHAR_FONTINFO_CJK, false ) == SFX_ITEM_SET ) )
         {
-            // set new font attribute
+            
             SvxFontItem aFontItem( (SvxFontItem&) rSet.Get( EE_CHAR_FONTINFO_CJK ) );
             aFontItem.SetFamilyName(   pTargetFont->GetName());
             aFontItem.SetFamily(       pTargetFont->GetFamily());
@@ -193,9 +193,9 @@ void FuHangulHanjaConversion::ConvertStyles( sal_Int16 nTargetLanguage, const Fo
 
 void FuHangulHanjaConversion::StartChineseConversion()
 {
-    //open ChineseTranslationDialog
+    
     Reference< XComponentContext > xContext(
-        ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+        ::cppu::defaultBootstrap_InitialComponentContext() ); 
     if(xContext.is())
     {
         Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
@@ -207,7 +207,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
             Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
             if( xInit.is() )
             {
-                //  initialize dialog
+                
                 Reference< awt::XWindow > xDialogParentWindow(0);
                 Sequence<Any> aSeq(1);
                 Any* pArray = aSeq.getArray();
@@ -217,11 +217,11 @@ void FuHangulHanjaConversion::StartChineseConversion()
                 pArray[0] <<= makeAny(aParam);
                 xInit->initialize( aSeq );
 
-                //execute dialog
+                
                 sal_Int16 nDialogRet = xDialog->execute();
                 if( RET_OK == nDialogRet )
                 {
-                    //get some parameters from the dialog
+                    
                     sal_Bool bToSimplified = sal_True;
                     sal_Bool bUseVariants = sal_True;
                     sal_Bool bCommonTerms = sal_True;
@@ -239,7 +239,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
                         }
                     }
 
-                    //execute translation
+                    
                     sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
                     sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
                     sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
@@ -260,6 +260,6 @@ void FuHangulHanjaConversion::StartChineseConversion()
         }
     }
 }
-} // end of namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

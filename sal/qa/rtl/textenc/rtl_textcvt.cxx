@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -666,7 +666,7 @@ void Test::testSingleByte() {
                 0x03a6,0x0398,0x03a9,0x03b4,0x221e,0x03c6,0x03b5,0x2229,
                 0x2261,0x00b1,0x2265,0x2264,0x2320,0x2321,0x00f7,0x2248,
                 0x00b0,0x2219,0x00b7,0x221a,0x207f,0x00b2,0x25a0,0x00a0 } },
-            // ...
+            
             { RTL_TEXTENCODING_ASCII_US,
               { 0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
                 0x0008,0x0009,0x000A,0x000B,0x000C,0x000D,0x000E,0x000F,
@@ -684,10 +684,10 @@ void Test::testSingleByte() {
                 0x0068,0x0069,0x006A,0x006B,0x006C,0x006D,0x006E,0x006F,
                 0x0070,0x0071,0x0072,0x0073,0x0074,0x0075,0x0076,0x0077,
                 0x0078,0x0079,0x007A,0x007B,0x007C,0x007D,0x007E,0x007F,
-                0x20AC,0xFFFF,0x201A,0x0192,0x201E,0x2026,0x2020,0x2021, // !
-                0x02C6,0x2030,0x0160,0x2039,0x0152,0xFFFF,0x017D,0xFFFF, // !
-                0xFFFF,0x2018,0x2019,0x201C,0x201D,0x2022,0x2013,0x2014, // !
-                0x02DC,0x2122,0x0161,0x203A,0x0153,0xFFFF,0x017E,0x0178, // !
+                0x20AC,0xFFFF,0x201A,0x0192,0x201E,0x2026,0x2020,0x2021, 
+                0x02C6,0x2030,0x0160,0x2039,0x0152,0xFFFF,0x017D,0xFFFF, 
+                0xFFFF,0x2018,0x2019,0x201C,0x201D,0x2022,0x2013,0x2014, 
+                0x02DC,0x2122,0x0161,0x203A,0x0153,0xFFFF,0x017E,0x0178, 
                   0xA0,  0xA1,  0xA2,  0xA3,  0xA4,  0xA5,  0xA6,  0xA7,
                   0xA8,  0xA9,  0xAA,  0xAB,  0xAC,  0xAD,  0xAE,  0xAF,
                   0xB0,  0xB1,  0xB2,  0xB3,  0xB4,  0xB5,  0xB6,  0xB7,
@@ -799,7 +799,7 @@ void Test::testSingleByte() {
                 0x00E8,0x00E9,0x00EA,0x00EB,0x00EC,0x00ED,0x00EE,0x00EF,
                 0xFFFF,0x00F1,0x00F2,0x00F3,0x00F4,0x0121,0x00F6,0x00F7,
                 0x011D,0x00F9,0x00FA,0x00FB,0x00FC,0x016D,0x015D,0x02D9 } },
-            // ...
+            
             { RTL_TEXTENCODING_ISO_8859_6,
               { 0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
                 0x0008,0x0009,0x000A,0x000B,0x000C,0x000D,0x000E,0x000F,
@@ -833,7 +833,7 @@ void Test::testSingleByte() {
                 0x0648,0x0649,0x064A,0x064B,0x064C,0x064D,0x064E,0x064F,
                 0x0650,0x0651,0x0652,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,
                 0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF } },
-            // ...
+            
             { RTL_TEXTENCODING_ISO_8859_8,
               { 0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
                 0x0008,0x0009,0x000A,0x000B,0x000C,0x000D,0x000E,0x000F,
@@ -867,7 +867,7 @@ void Test::testSingleByte() {
                 0x05D8,0x05D9,0x05DA,0x05DB,0x05DC,0x05DD,0x05DE,0x05DF,
                 0x05E0,0x05E1,0x05E2,0x05E3,0x05E4,0x05E5,0x05E6,0x05E7,
                 0x05E8,0x05E9,0x05EA,0xFFFF,0xFFFF,0x200E,0x200F,0xFFFF } },
-            // ...
+            
             { RTL_TEXTENCODING_TIS_620,
               { 0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
                 0x0008,0x0009,0x000A,0x000B,0x000C,0x000D,0x000E,0x000F,
@@ -889,7 +889,7 @@ void Test::testSingleByte() {
                 0x0088,0x0089,0x008A,0x008B,0x008C,0x008D,0x008E,0x008F,
                 0x0090,0x0091,0x0092,0x0093,0x0094,0x0095,0x0096,0x0097,
                 0x0098,0x0099,0x009A,0x009B,0x009C,0x009D,0x009E,0x009F,
-                0x00A0,0x0E01,0x0E02,0x0E03,0x0E04,0x0E05,0x0E06,0x0E07, // !
+                0x00A0,0x0E01,0x0E02,0x0E03,0x0E04,0x0E05,0x0E06,0x0E07, 
                 0x0E08,0x0E09,0x0E0A,0x0E0B,0x0E0C,0x0E0D,0x0E0E,0x0E0F,
                 0x0E10,0x0E11,0x0E12,0x0E13,0x0E14,0x0E15,0x0E16,0x0E17,
                 0x0E18,0x0E19,0x0E1A,0x0E1B,0x0E1C,0x0E1D,0x0E1E,0x0E1F,
@@ -1066,7 +1066,7 @@ void Test::testSingleByte() {
                 0x00E8,0x00E9,0x00EA,0x00EB,0x0301,0x00ED,0x00EE,0x00EF,
                 0x0111,0x00F1,0x0323,0x00F3,0x00F4,0x01A1,0x00F6,0x00F7,
                 0x00F8,0x00F9,0x00FA,0x00FB,0x00FC,0x01B0,0x20AB,0x00FF } },
-            { RTL_TEXTENCODING_KOI8_U, // RFC 2319
+            { RTL_TEXTENCODING_KOI8_U, 
               { 0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
                 0x0008,0x0009,0x000A,0x000B,0x000C,0x000D,0x000E,0x000F,
                 0x0010,0x0011,0x0012,0x0013,0x0014,0x0015,0x0016,0x0017,
@@ -1170,37 +1170,37 @@ void Test::testSingleByte() {
                 0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,
                 0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,
                 0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,
-// 20
+
                 0x0020,0x2701,0x2702,0x2703,0x2704,0x260E,0x2706,0x2707,
                 0x2708,0x2709,0x261B,0x261E,0x270C,0x270D,0x270E,0x270F,
                 0x2710,0x2711,0x2712,0x2713,0x2714,0x2715,0x2716,0x2717,
                 0x2718,0x2719,0x271A,0x271B,0x271C,0x271D,0x271E,0x271F,
-// 40
+
                 0x2720,0x2721,0x2722,0x2723,0x2724,0x2725,0x2726,0x2727,
                 0x2605,0x2729,0x272A,0x272B,0x272C,0x272D,0x272E,0x272F,
                 0x2730,0x2731,0x2732,0x2733,0x2734,0x2735,0x2736,0x2737,
                 0x2738,0x2739,0x273A,0x273B,0x273C,0x273D,0x273E,0x273F,
-// 60
+
                 0x2740,0x2741,0x2742,0x2743,0x2744,0x2745,0x2746,0x2747,
                 0x2748,0x2749,0x274A,0x274B,0x25CF,0x274D,0x25A0,0x274F,
                 0x2750,0x2751,0x2752,0x25B2,0x25BC,0x25C6,0x2756,0x25D7,
                 0x2758,0x2759,0x275A,0x275B,0x275C,0x275D,0x275E,0xFFFF,
-// 80
+
                 0xF8D7,0xF8D8,0xF8D9,0xF8DA,0xF8DB,0xF8DC,0xF8DD,0xF8DE,
                 0xF8DF,0xF8E0,0xF8E1,0xF8E2,0xF8E3,0xF8E4,0xFFFF,0xFFFF,
                 0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,
                 0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,0xFFFF,
-// A0
+
                 0xFFFF,0x2761,0x2762,0x2763,0x2764,0x2765,0x2766,0x2767,
                 0x2663,0x2666,0x2665,0x2660,0x2460,0x2461,0x2462,0x2463,
                 0x2464,0x2465,0x2466,0x2467,0x2468,0x2469,0x2776,0x2777,
                 0x2778,0x2779,0x277A,0x277B,0x277C,0x277D,0x277E,0x277F,
-// C0
+
                 0x2780,0x2781,0x2782,0x2783,0x2784,0x2785,0x2786,0x2787,
                 0x2788,0x2789,0x278A,0x278B,0x278C,0x278D,0x278E,0x278F,
                 0x2790,0x2791,0x2792,0x2793,0x2794,0x2795,0x2796,0x2797,
                 0x2798,0x2799,0x279A,0x279B,0x279C,0x279D,0x279E,0x279F,
-// E0
+
                 0x27A0,0x27A1,0x27A2,0x27A3,0x27A4,0x27A5,0x27A6,0x27A7,
                 0x27A8,0x27A9,0x27AA,0x27AB,0x27AC,0x27AD,0x27AE,0x27AF,
                 0xFFFF,0x27B1,0x27B2,0x27B3,0x27B4,0x27B5,0x27B6,0x27B7,
@@ -1412,20 +1412,20 @@ void Test::testComplex() {
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
-            // The following does not work as long as Big5-HKSCS maps to
-            // Unicode PUA instead of Plane 2.  Use the next two tests
-            // instead:
-//          { RTL_TEXTENCODING_BIG5_HKSCS,
-//            RTL_CONSTASCII_STRINGPARAM(
-//                "\x01\"3De$~\x88\x56\xF9\xFE\xFA\x5E\xA1\x40\xF9\xD5"),
-//            { 0x0001,0x0022,0x0033,0x0044,0x0065,0x0024,0x007E,0x0100,
-//              0xFFED,0xD849,0xDD13,0x3000,0x9F98 },
-//            13,
-//            true,
-//            true,
-//            true,
-//            false,
-//            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
+            
+            
+            
+
+
+
+
+
+
+
+
+
+
+
             { RTL_TEXTENCODING_BIG5_HKSCS,
               RTL_CONSTASCII_STRINGPARAM(
                   "\x01\"3De$~\x88\x56\xF9\xFE\xFA\x5E\xA1\x40\xF9\xD5"),
@@ -1567,19 +1567,19 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-            // Test Unicode beyond BMP:
+            
 
-            // FIXME The second m_bForward test (requiring a context) does not
-            // work for UTF7:
-//          { RTL_TEXTENCODING_UTF7,
-//            RTL_CONSTASCII_STRINGPARAM("+2EndEw-"),
-//            { 0xD849,0xDD13 },
-//            2,
-//            true,
-//            true,
-//            true,
-//            false,
-//            RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
+            
+            
+
+
+
+
+
+
+
+
+
             { RTL_TEXTENCODING_UTF8,
               RTL_CONSTASCII_STRINGPARAM("\xF0\xA2\x94\x93"),
               { 0xD849,0xDD13 },
@@ -1608,7 +1608,7 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-            // Test GBK (aka CP936):
+            
 
             { RTL_TEXTENCODING_GBK,
               RTL_CONSTASCII_STRINGPARAM("\xFD\x7C\xC1\xFA\xFD\x9B"),
@@ -1667,9 +1667,9 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_QUESTIONMARK },
 
-            // Test of "JIS X 0208 row 13" (taken from CP932; added to
-            // ISO-2022-JP and EUC-JP; 74 of the 83 characters introduce
-            // mappings to new Unicode characters):
+            
+            
+            
             { RTL_TEXTENCODING_MS_932,
               RTL_CONSTASCII_STRINGPARAM(
                   "\x87\x40\x87\x41\x87\x42\x87\x43\x87\x44\x87\x45\x87\x46"
@@ -1858,7 +1858,7 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-            // Test ISO-8859-x/MS-125x range 0x80--9F:
+            
 
             { RTL_TEXTENCODING_ISO_8859_1,
               RTL_CONSTASCII_STRINGPARAM(
@@ -2218,7 +2218,7 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-            // Test UTF-8:
+            
 
             { RTL_TEXTENCODING_UTF8,
               RTL_CONSTASCII_STRINGPARAM("\x00"),
@@ -2304,7 +2304,7 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-            // Test Java UTF-8:
+            
 
             { RTL_TEXTENCODING_JAVA_UTF8,
               RTL_CONSTASCII_STRINGPARAM(
@@ -2318,7 +2318,7 @@ void Test::testComplex() {
               true,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-            // Bug #112949#:
+            
 
             { RTL_TEXTENCODING_SHIFT_JIS,
               RTL_CONSTASCII_STRINGPARAM("\x81\x63"),
@@ -2431,7 +2431,7 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-            // Bug #i62310#:
+            
             { RTL_TEXTENCODING_SHIFT_JIS,
               RTL_CONSTASCII_STRINGPARAM(
                   "\xF0\x40\xF0\x7E\xF0\x80\xF0\xFC\xF1\x40\xF9\xFC"),
@@ -2443,7 +2443,7 @@ void Test::testComplex() {
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
 
-            // Bug #i73103#:
+            
             { RTL_TEXTENCODING_MS_1258,
               RTL_CONSTASCII_STRINGPARAM(
                   "\xC0\x41\xDE\xE3\xD2\xD4\xEC\xFD\xF2"),
@@ -2635,11 +2635,11 @@ void Test::testMime() {
         { "GB18030", RTL_TEXTENCODING_GB_18030, false },
 
         { "TIS-620", RTL_TEXTENCODING_TIS_620, true },
-        { "ISO-8859-11", RTL_TEXTENCODING_TIS_620, false }, // not registered
+        { "ISO-8859-11", RTL_TEXTENCODING_TIS_620, false }, 
 
-        { "CP874", RTL_TEXTENCODING_MS_874, false }, // not registered
-        { "MS874", RTL_TEXTENCODING_MS_874, false }, // not registered
-        { "windows-874", RTL_TEXTENCODING_MS_874, true }, // not registered
+        { "CP874", RTL_TEXTENCODING_MS_874, false }, 
+        { "MS874", RTL_TEXTENCODING_MS_874, false }, 
+        { "windows-874", RTL_TEXTENCODING_MS_874, true }, 
 
         { "ISO_8859-8:1988", RTL_TEXTENCODING_ISO_8859_8, false },
         { "iso-ir-138", RTL_TEXTENCODING_ISO_8859_8, false },
@@ -2811,8 +2811,8 @@ void Test::testWindows() {
         { 51949, RTL_TEXTENCODING_EUC_KR, true },
         { 65000, RTL_TEXTENCODING_UTF7, true },
         { 65001, RTL_TEXTENCODING_UTF8, true },
-        { 1200, RTL_TEXTENCODING_DONTKNOW, false }, // UTF_16LE
-        { 1201, RTL_TEXTENCODING_DONTKNOW, false }, // UTF_16LE
+        { 1200, RTL_TEXTENCODING_DONTKNOW, false }, 
+        { 1201, RTL_TEXTENCODING_DONTKNOW, false }, 
         { 0, RTL_TEXTENCODING_DONTKNOW, true },
         { 0, RTL_TEXTENCODING_UCS4, true },
         { 0, RTL_TEXTENCODING_UCS2, true },

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
@@ -133,13 +133,13 @@ using namespace ::com::sun::star::document;
 
 namespace
 {
-    // lp#527938, debian#602953, fdo#33266, i#105408
+    
     static bool lcl_isBaseAvailable()
     {
         try
         {
-            // if we get com::sun::star::sdbc::DriverManager, libsdbc2 is there
-            // and the bibliography is assumed to work
+            
+            
             return com::sun::star::sdbc::DriverManager::create(comphelper::getProcessComponentContext()).is();
         }
         catch (Exception & e)
@@ -152,8 +152,8 @@ namespace
     }
     static void lcl_tryLoadBibliography()
     {
-        // lp#527938, debian#602953, fdo#33266, i#105408
-        // make sure we actually can instanciate services from base first
+        
+        
         if(!lcl_isBaseAvailable())
         {
             try
@@ -165,7 +165,7 @@ namespace
                 vPackages[0] = "libreoffice-base";
                 OUString sInteraction;
                 xSyncDbusSessionHelper->InstallPackageNames(0, vPackages, sInteraction);
-                // Ill be back (hopefully)!
+                
                 SolarMutexGuard aGuard;
                 executeRestartDialog(comphelper::getProcessComponentContext(), NULL, RESTART_REASON_BIBLIOGRAPHY_INSTALL);
             }
@@ -178,7 +178,7 @@ namespace
             return;
         }
 
-        try // fdo#48775
+        try 
         {
             SfxStringItem aURL(SID_FILE_NAME, OUString(".component:Bibliography/View1"));
             SfxStringItem aRef(SID_REFERER, OUString("private:user"));
@@ -192,8 +192,8 @@ namespace
         }
     }
 }
-/// Find the correct location of the document (LICENSE.fodt, etc.), and return
-/// it in rURL if found.
+
+
 static sal_Bool checkURL( const char *pName, const char *pExt, OUString &rURL )
 {
     using namespace osl;
@@ -209,7 +209,7 @@ static sal_Bool checkURL( const char *pName, const char *pExt, OUString &rURL )
         return sal_False;
 }
 
-/// Displays CREDITS or LICENSE in any of the available version
+
 static void showDocument( const char* pBaseName )
 {
     try {
@@ -270,7 +270,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_EXITANDRETURN:
         case SID_LOGOUT:
         {
-            // protect against reentrant calls
+            
             if ( pAppData_Impl->bInQuit )
                 return;
 
@@ -298,7 +298,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 return;
             }
 
-            // aus verschachtelten Requests nach 100ms nochmal probieren
+            
             if( Application::GetDispatchLevel() > 1 )
             {
                 /* Dont save the request for closing the application and try it later
@@ -311,19 +311,19 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 return;
             }
 
-            // block reentrant calls
+            
             pAppData_Impl->bInQuit = sal_True;
             Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
 
             rReq.ForgetAllArgs();
 
-            // if terminate() failed, pAppData_Impl->bInQuit will now be sal_False, allowing further calls of SID_QUITAPP
+            
             sal_Bool bTerminated = xDesktop->terminate();
             if (!bTerminated)
-                // if terminate() was successful, SfxApplication is now dead!
+                
                 pAppData_Impl->bInQuit = sal_False;
 
-            // Set return value, terminate if possible
+            
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bTerminated ) );
             return;
         }
@@ -435,7 +435,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_SEND_FEEDBACK:
         {
             OUString module = SfxHelp::GetCurrentModuleIdentifier();
-            OUString sURL("http://hub.libreoffice.org/send-feedback/?LOversion=" + utl::ConfigManager::getAboutBoxProductVersion() +
+            OUString sURL("http:
                 "&LOlocale=" + utl::ConfigManager::getLocale() + "&LOmodule=" + module.copy(module.lastIndexOf('.') + 1 )  );
             try
             {
@@ -462,22 +462,22 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
         case SID_HELPINDEX:
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start( OUString(".uno:HelpIndex"), NULL ); // show start page
+                pHelp->Start( OUString(".uno:HelpIndex"), NULL ); 
                 bDone = true;
             }
             break;
         }
 
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
         case SID_HELPTIPS:
         {
-            // Evaluate Parameter
+            
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, false);
             bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
@@ -491,12 +491,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Invalidate(SID_HELPTIPS);
             bDone = true;
 
-            // Record if possible
+            
             if ( !rReq.IsAPI() )
                 rReq.AppendItem( SfxBoolItem( SID_HELPTIPS, bOn) );
             break;
         }
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
         case SID_EXTENDEDHELP:
         {
             Help::StartExtHelp();
@@ -504,7 +504,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         }
         case SID_HELPBALLOONS:
         {
-            // Evaluate Parameter
+            
             SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, false);
             bool bOn = pOnItem
                             ? ((SfxBoolItem*)pOnItem)->GetValue()
@@ -518,13 +518,13 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             Invalidate(SID_HELPBALLOONS);
             bDone = true;
 
-            // Record if possible
+            
             if ( !rReq.IsAPI() )
                 rReq.AppendItem( SfxBoolItem( SID_HELPBALLOONS, bOn) );
             break;
         }
 
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        
         case SID_ABOUT:
         {
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
@@ -566,7 +566,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_CRASH :
         {
-            // Provoke a crash:
+            
             char * crash = 0;
             *crash = 0;
             break;
@@ -602,8 +602,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             if (!pCurrentShell)
                 return;
 
-            // make sure aZoom is initialized with a proper value if SetType
-            // doesn't work
+            
+            
             SvxZoomItem aZoom( SVX_ZOOM_PERCENT, 100 );
 
             switch (rReq.GetSlot())
@@ -672,7 +672,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     OUStringBuffer aBuf( aToolbarResName );
                     aBuf.append( pToolbarName->GetValue() );
 
-                    // Evaluate Parameter
+                    
                     OUString aToolbarName( aBuf.makeStringAndClear() );
                     sal_Bool bShow( !xLayoutManager->isElementVisible( aToolbarName ));
 
@@ -698,7 +698,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         rReq.Done();
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 {
@@ -856,21 +856,21 @@ extern "C" void basicide_macro_organizer( sal_Int16 );
 OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, sal_Bool bChooseOnly, const OUString& rMacroDesc = OUString() )
 {
 #ifndef DISABLE_DYNLOADING
-    // get basctl dllname
+    
     static OUString aLibName( SVLIBRARY( "basctl"  ) );
 
-    // load module
+    
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
-    // get symbol
+    
     OUString aSymbol( "basicide_choose_macro"  );
     basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 #else
 #define pSymbol basicide_choose_macro
 #endif
 
-    // call basicide_choose_macro in basctl
+    
     rtl_uString* pScriptURL = pSymbol( rxLimitToDocument.get(), bChooseOnly, rMacroDesc.pData );
     OUString aScriptURL( pScriptURL );
     rtl_uString_release( pScriptURL );
@@ -884,17 +884,17 @@ OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, sal_Bool bCh
 void MacroOrganizer( sal_Int16 nTabId )
 {
 #ifndef DISABLE_DYNLOADING
-    // get basctl dllname
+    
     static OUString aLibName( SVLIBRARY( "basctl"  ) );
 
-    // load module
+    
     oslModule handleMod = osl_loadModuleRelative(
         &thisModule, aLibName.pData, 0 );
 
-    // get symbol
+    
     OUString aSymbol( "basicide_macro_organizer"  );
     basicide_macro_organizer pSymbol = (basicide_macro_organizer) osl_getFunctionSymbol( handleMod, aSymbol.pData );
-    // call basicide_macro_organizer in basctl
+    
     pSymbol( nTabId );
 #else
     basicide_macro_organizer( nTabId );
@@ -976,11 +976,11 @@ namespace
                 }
                 catch( const UnknownModuleException& )
                 {
-                    // silence
+                    
                 }
                 catch(const Exception&)
                 {
-                    // re-throw, caught below
+                    
                     throw;
                 }
             }
@@ -991,7 +991,7 @@ namespace
         }
         return NULL;
     }
-#endif // !DISABLE_SCRIPTING
+#endif 
 }
 
 void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
@@ -1044,7 +1044,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 uno::Reference< css::system::XSystemShellExecute > xSystemShell(
                     css::system::SystemShellExecute::create(xContext) );
 
-                // read repository URL from configuration
+                
                 OUString sTemplRepoURL(officecfg::Office::Common::Dictionaries::RepositoryURL::get());
 
                 if ( xSystemShell.is() && !sTemplRepoURL.isEmpty() )
@@ -1052,7 +1052,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     OUStringBuffer aURLBuf( sTemplRepoURL );
                     aURLBuf.append("?lang=");
 
-                    // read locale from configuration
+                    
                     OUString sLocale(officecfg::Setup::L10N::ooLocale::get());
                     if (sLocale.isEmpty())
                         sLocale = "en-US";
@@ -1081,12 +1081,12 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 pBasicIDE->SetModified( sal_False );
                 try
                 {
-                    // load the Basic IDE via direct access to the SFX frame loader. A generic loadComponentFromURL
-                    // (which could be done via SfxViewFrame::LoadDocumentIntoFrame) is not feasible here, since the Basic IDE
-                    // does not really play nice with the framework's concept. For instance, it is a "singleton document",
-                    // which conflicts, at the latest, with the framework's concept of loading into _blank frames.
-                    // So, since we know that our frame loader can handle it, we skip the generic framework loader
-                    // mechanism, and the type detection (which doesn't know about the Basic IDE).
+                    
+                    
+                    
+                    
+                    
+                    
                     Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                     Reference< XSynchronousFrameLoader > xLoader(
                         xContext->getServiceManager()->createInstanceWithContext("com.sun.star.comp.office.FrameLoader", xContext),
@@ -1143,7 +1143,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 sal_Bool bRecord = ((SfxBoolItem*)pItem)->GetValue();
                 if ( bRecord )
                 {
-                    // !Hack
+                    
                     bChooseOnly = sal_False;
                     SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
                     OSL_ENSURE( pCurrentShell, "macro recording outside an SFX document?" );
@@ -1191,7 +1191,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                     xFrame = pViewFrame->GetFrame().GetFrameInterface();
             }
 
-            do  // artificial loop for flow control
+            do  
             {
                 AbstractScriptSelectorDialog* pDlg = pFact->CreateScriptSelectorDialog(
                     lcl_getDialogParent( xFrame, GetTopWindow() ), sal_False, xFrame );
@@ -1244,7 +1244,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             OUString aLang( aLanguage );
             OSL_TRACE("SfxApplication::OfaExec_Impl: about to create dialog for: %s", OUStringToOString( aLang , RTL_TEXTENCODING_ASCII_US ).pData->buffer);
-            // not sure about the Window*
+            
             VclAbstractDialog* pDlg = pFact->CreateSvxScriptOrgDialog( GetTopWindow(), aLanguage );
             if( pDlg )
             {
@@ -1258,7 +1258,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             rReq.Done();
         }
         break;
-#endif // !DISABLE_SCRIPTING
+#endif 
 
         case SID_OFFICE_CHECK_PLZ:
         {

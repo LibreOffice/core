@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -100,8 +100,8 @@
 
 using namespace com::sun::star;
 
-// pImpl because including lookupcache.hxx in document.hxx isn't wanted, and
-// dtor plus helpers are convenient.
+
+
 struct ScLookupCacheMapImpl
 {
     ScLookupCacheMap aCacheMap;
@@ -112,7 +112,7 @@ struct ScLookupCacheMapImpl
     void clear()
     {
         freeCaches();
-        // Zap map.
+        
         ScLookupCacheMap aTmp;
         aCacheMap.swap( aTmp);
     }
@@ -124,7 +124,7 @@ private:
     }
 };
 
-// STATIC DATA -----------------------------------------------------------
+
 
 ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
         mpCellStringPool(new svl::SharedStringPool(ScGlobal::pCharClass)),
@@ -247,7 +247,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     xColNameRanges = new ScRangePairList;
     xRowNameRanges = new ScRangePairList;
     ImplCreateOptions();
-    // languages for a visible document are set by docshell later (from options)
+    
     SetLanguage( ScGlobal::eLnge, ScGlobal::eLnge, ScGlobal::eLnge );
 
     aTrackTimer.SetTimeoutHdl( LINK( this, ScDocument, TrackTimeHdl ) );
@@ -285,9 +285,9 @@ void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
 
     eStorageGrammar = eGram;
 
-    // FIXME: the XML import shouldn't strip brackets, the compiler should
-    // digest them instead, which could also speedup reference recognition
-    // during import.
+    
+    
+    
 
     eXmlImportGrammar = formula::FormulaGrammar::mergeToGrammar( eGram,
             formula::FormulaGrammar::CONV_OOO);
@@ -296,8 +296,8 @@ void ScDocument::SetStorageGrammar( formula::FormulaGrammar::Grammar eGram )
 
 void ScDocument::SetDocVisible( bool bSet )
 {
-    //  called from view ctor - only for a visible document,
-    //  each new sheet's RTL flag is initialized from the locale
+    
+    
     bIsVisible = bSet;
 }
 
@@ -306,7 +306,7 @@ sal_uInt32 ScDocument::GetDocumentID() const
 {
     const ScDocument* pThis = this;
     sal_uInt32 nCrc = rtl_crc32( 0, &pThis, sizeof(ScDocument*) );
-    // the this pointer only might not be sufficient
+    
     nCrc = rtl_crc32( nCrc, &pShell, sizeof(SfxObjectShell*) );
     return nCrc;
 }
@@ -336,16 +336,16 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
 
 IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
 {
-    if ( ScDdeLink::IsInUpdate() )      // nicht verschachteln
+    if ( ScDdeLink::IsInUpdate() )      
     {
-        aTrackTimer.Start();            // spaeter nochmal versuchen
+        aTrackTimer.Start();            
     }
-    else if (pShell)                    // ausfuehren
+    else if (pShell)                    
     {
         TrackFormulas();
         pShell->Broadcast( SfxSimpleHint( FID_DATACHANGED ) );
 
-            //  modified...
+            
 
         if (!pShell->IsModified())
         {
@@ -364,7 +364,7 @@ IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
 
 void ScDocument::StartTrackTimer()
 {
-    if (!aTrackTimer.IsActive())        // nicht ewig aufschieben
+    if (!aTrackTimer.IsActive())        
         aTrackTimer.Start();
 }
 
@@ -374,35 +374,35 @@ ScDocument::~ScDocument()
 
     bInDtorClear = true;
 
-    // first of all disable all refresh timers by deleting the control
+    
     if ( pRefreshTimerControl )
-    {   // To be sure there isn't anything running do it with a protector,
-        // this ensures also that nothing needs the control anymore.
+    {   
+        
         ScRefreshTimerProtector aProt( GetRefreshTimerControlAddress() );
         delete pRefreshTimerControl, pRefreshTimerControl = NULL;
     }
 
     mxFormulaParserPool.reset();
-    // Destroy the external ref mgr instance here because it has a timer
-    // which needs to be stopped before the app closes.
+    
+    
     pExternalRefMgr.reset();
 
     ScAddInAsync::RemoveDocument( this );
     ScAddInListener::RemoveDocument( this );
-    DELETEZ( pChartListenerCollection);   // vor pBASM wg. evtl. Listener!
-    DELETEZ( pLookupCacheMapImpl);  // before pBASM because of listeners
-    // BroadcastAreas vor allen Zellen zerstoeren um unnoetige
-    // Einzel-EndListenings der Formelzellen zu vermeiden
-    delete pBASM;       // BroadcastAreaSlotMachine
+    DELETEZ( pChartListenerCollection);   
+    DELETEZ( pLookupCacheMapImpl);  
+    
+    
+    delete pBASM;       
     pBASM = NULL;
 
-    delete pUnoBroadcaster;     // broadcasted nochmal SFX_HINT_DYING
+    delete pUnoBroadcaster;     
     pUnoBroadcaster = NULL;
 
     delete pUnoRefUndoList;
     delete pUnoListenerCalls;
 
-    Clear( true );              // true = from destructor (needed for SdrModel::ClearModel)
+    Clear( true );              
 
     if (pValidationList)
     {
@@ -422,16 +422,16 @@ ScDocument::~ScDocument()
     ImplDeleteOptions();
     delete pConsolidateDlgData;
     delete pClipData;
-    delete pDetOpList;                  // loescht auch die Eintraege
+    delete pDetOpList;                  
     delete pChangeTrack;
     delete pEditEngine;
     delete pNoteEngine;
-    delete pChangeViewSettings;         // und weg damit
+    delete pChangeViewSettings;         
     delete pVirtualDevice_100th_mm;
 
     delete pDPCollection;
 
-    // delete the EditEngine before destroying the xPoolHelper
+    
     delete pCacheFieldEditEngine;
 
     if ( xPoolHelper.is() && !bIsClip )
@@ -464,13 +464,13 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
 
     xPoolHelper = pSourceDoc->xPoolHelper;
 
-    //  bedingte Formate / Gueltigkeiten
-    //! Vorlagen kopieren?
+    
+    
     const ScValidationDataList* pSourceValid = pSourceDoc->pValidationList;
     if ( pSourceValid )
         pValidationList = new ScValidationDataList(this, *pSourceValid);
 
-                        // Links in Stream speichern
+                        
     delete pClipData;
     if (pSourceDoc->GetDocLinkManager().hasDdeLinks())
     {
@@ -480,8 +480,8 @@ void ScDocument::InitClipPtrs( ScDocument* pSourceDoc )
     else
         pClipData = NULL;
 
-    // Options pointers exist (ImplCreateOptions) for any document.
-    // Must be copied for correct results in OLE objects (#i42666#).
+    
+    
     SetDocOptions( pSourceDoc->GetDocOptions() );
     SetViewOptions( pSourceDoc->GetViewOptions() );
 }
@@ -531,7 +531,7 @@ ScNoteEditEngine& ScDocument::GetNoteEngine()
         const SfxItemSet& rItemSet = GetDefPattern()->GetItemSet();
         SfxItemSet* pEEItemSet = new SfxItemSet( pNoteEngine->GetEmptyItemSet() );
         ScPatternAttr::FillToEditItemSet( *pEEItemSet, rItemSet );
-        pNoteEngine->SetDefaults( pEEItemSet );      // edit engine takes ownership
+        pNoteEngine->SetDefaults( pEEItemSet );      
     }
     return *pNoteEngine;
 }
@@ -593,7 +593,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
 
 void ScDocument::EnsureTable( SCTAB nTab )
 {
-    bool bExtras = !bIsUndo;        // Spaltenbreiten, Zeilenhoehen, Flags
+    bool bExtras = !bIsUndo;        
     if (static_cast<size_t>(nTab) >= maTabs.size())
         maTabs.resize(nTab+1, NULL);
 
@@ -604,7 +604,7 @@ void ScDocument::EnsureTable( SCTAB nTab )
 ScRefCellValue ScDocument::GetRefCellValue( const ScAddress& rPos )
 {
     if (!TableExists(rPos.Tab()))
-        return ScRefCellValue(); // empty
+        return ScRefCellValue(); 
 
     return maTabs[rPos.Tab()]->GetRefCellValue(rPos.Col(), rPos.Row());
 }
@@ -730,8 +730,8 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             if (nNewPos == SC_TAB_APPEND || nNewPos >= nTabCount)
                 nNewPos = nTabCount-1;
 
-            //  Referenz-Updaterei
-            //! mit UpdateReference zusammenfassen!
+            
+            
 
             sc::RefUpdateMoveTabContext aCxt(nOldPos, nNewPos);
 
@@ -772,7 +772,7 @@ bool ScDocument::MoveTab( SCTAB nOldPos, SCTAB nNewPos, ScProgress* pProgress )
             for (; it != maTabs.end(); ++it)
                 if (*it)
                     (*it)->StartAllListeners();
-            // sheet names of references may not be valid until sheet is moved
+            
             pChartListenerCollection->UpdateScheduledSeriesRanges();
             SetDirty();
 
@@ -792,8 +792,8 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
     OUString aName;
     GetName(nOldPos, aName);
 
-    //  vorneweg testen, ob der Prefix als gueltig erkannt wird
-    //  wenn nicht, nur doppelte vermeiden
+    
+    
     bool bPrefix = ValidTabName( aName );
     OSL_ENSURE(bPrefix, "invalid table name");
     SCTAB nDummy;
@@ -861,7 +861,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
                 if (pValidationList)
                     pValidationList->UpdateInsertTab(aCxt);
 
-                // sheet names of references may not be valid until sheet is copied
+                
                 pChartListenerCollection->UpdateScheduledSeriesRanges();
             }
             else
@@ -871,7 +871,7 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
 
     if (bValid)
     {
-        SetNoListening( true );     // noch nicht bei CopyToTable/Insert
+        SetNoListening( true );     
         sc::CopyToDocContext aCopyDocCxt(*this);
         maTabs[nOldPos]->CopyToTable(aCopyDocCxt, 0, 0, MAXCOL, MAXROW, IDF_ALL, (pOnlyMarked != NULL),
                                         maTabs[nNewPos], pOnlyMarked );
@@ -885,11 +885,11 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         maTabs[nNewPos]->UpdateReference(aRefCxt, NULL);
 
         sc::RefUpdateInsertTabContext aInsTabCxt(nNewPos, 1);
-        maTabs[nNewPos]->UpdateInsertTabAbs(nNewPos); // alle abs. um eins hoch!!
+        maTabs[nNewPos]->UpdateInsertTabAbs(nNewPos); 
         maTabs[nOldPos]->UpdateInsertTab(aInsTabCxt);
 
         maTabs[nOldPos]->UpdateCompile();
-        maTabs[nNewPos]->UpdateCompile( true ); //  maybe already compiled in Clone, but used names need recompilation
+        maTabs[nNewPos]->UpdateCompile( true ); 
         SetNoListening( false );
         maTabs[nOldPos]->StartAllListeners();
         maTabs[nNewPos]->StartAllListeners();
@@ -909,10 +909,10 @@ bool ScDocument::CopyTab( SCTAB nOldPos, SCTAB nNewPos, const ScMarkData* pOnlyM
         maTabs[nNewPos]->SetPageStyle( maTabs[nOldPos]->GetPageStyle() );
         maTabs[nNewPos]->SetPendingRowHeights( maTabs[nOldPos]->IsPendingRowHeights() );
 
-        // Copy the custom print range if exists.
+        
         maTabs[nNewPos]->CopyPrintRange(*maTabs[nOldPos]);
 
-        // Copy the RTL settings
+        
         maTabs[nNewPos]->SetLayoutRTL(maTabs[nOldPos]->IsLayoutRTL());
         maTabs[nNewPos]->SetLoadingRTL(maTabs[nOldPos]->IsLoadingRTL());
     }
@@ -926,14 +926,14 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                 SCTAB nDestPos, bool bInsertNew,
                                 bool bResultsOnly )
 {
-    sal_uLong nRetVal = 1;                      // 0 => Fehler 1 = ok
-                                            // 3 => NameBox
-                                            // 4 => beides
+    sal_uLong nRetVal = 1;                      
+                                            
+                                            
 
     if (pSrcDoc->pShell->GetMedium())
     {
         pSrcDoc->maFileURL = pSrcDoc->pShell->GetMedium()->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI);
-        // for unsaved files use the title name and adjust during save of file
+        
         if (pSrcDoc->maFileURL.isEmpty())
             pSrcDoc->maFileURL = pSrcDoc->pShell->GetName();
     }
@@ -943,18 +943,18 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     }
 
     bool bValid = true;
-    if (bInsertNew)             // neu einfuegen
+    if (bInsertNew)             
     {
         OUString aName;
         pSrcDoc->GetName(nSrcPos, aName);
         CreateValidTabName(aName);
         bValid = InsertTab(nDestPos, aName);
 
-        // Copy the RTL settings
+        
         maTabs[nDestPos]->SetLayoutRTL(pSrcDoc->maTabs[nSrcPos]->IsLayoutRTL());
         maTabs[nDestPos]->SetLoadingRTL(pSrcDoc->maTabs[nSrcPos]->IsLoadingRTL());
     }
-    else                        // bestehende Tabelle ersetzen
+    else                        
     {
         if (ValidTab(nDestPos) && nDestPos < static_cast<SCTAB>(maTabs.size()) && maTabs[nDestPos])
         {
@@ -968,12 +968,12 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
     {
         bool bOldAutoCalcSrc = false;
         bool bOldAutoCalc = GetAutoCalc();
-        SetAutoCalc( false );   // Mehrfachberechnungen vermeiden
+        SetAutoCalc( false );   
         SetNoListening( true );
         if ( bResultsOnly )
         {
             bOldAutoCalcSrc = pSrcDoc->GetAutoCalc();
-            pSrcDoc->SetAutoCalc( true );   // falls was berechnet werden muss
+            pSrcDoc->SetAutoCalc( true );   
         }
 
         {
@@ -981,7 +981,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
             sc::CopyToDocContext aCxt(*this);
             nDestPos = std::min(nDestPos, (SCTAB)(GetTableCount() - 1));
-            {   // scope for bulk broadcast
+            {   
                 ScBulkBroadcast aBulkBroadcast( pBASM);
                 pSrcDoc->maTabs[nSrcPos]->CopyToTable(aCxt, 0, 0, MAXCOL, MAXROW,
                         ( bResultsOnly ? IDF_ALL & ~IDF_FORMULA : IDF_ALL),
@@ -1001,7 +1001,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             aRefCxt.mnTabDelta = nDestPos - nSrcPos;
             maTabs[nDestPos]->UpdateReference(aRefCxt, NULL);
 
-            // Readjust self-contained absolute references to this sheet
+            
             maTabs[nDestPos]->TestTabRefAbs(nSrcPos);
             sc::CompileFormulaContext aFormulaCxt(this);
             maTabs[nDestPos]->CompileAll(aFormulaCxt);
@@ -1016,7 +1016,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
             pSrcDoc->SetAutoCalc( bOldAutoCalcSrc );
         SetAutoCalc( bOldAutoCalc );
 
-        //  Drawing kopieren
+        
 
         if (bInsertNew)
             TransferDrawPage( pSrcDoc, nSrcPos, nDestPos );
@@ -1119,7 +1119,7 @@ void ScDocument::SetChangeViewSettings(const ScChangeViewSettings& rNew)
     *pChangeViewSettings=rNew;
 }
 
-//  ----------------------------------------------------------------------------
+
 
 ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
 {
@@ -1133,8 +1133,8 @@ ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
     {
         if ( !bImportingXML )
         {
-            // #i66209# previous use might not have restored update mode,
-            // ensure same state as for a new EditEngine (UpdateMode = true)
+            
+            
             if ( !pCacheFieldEditEngine->GetUpdateMode() )
                 pCacheFieldEditEngine->SetUpdateMode(true);
         }
@@ -1157,14 +1157,14 @@ void ScDocument::DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine)
     rpEditEngine = NULL;
 }
 
-//  ----------------------------------------------------------------------------
+
 
 ScRecursionHelper* ScDocument::CreateRecursionHelperInstance()
 {
     return new ScRecursionHelper;
 }
 
-//  ----------------------------------------------------------------------------
+
 
 ScLookupCache & ScDocument::GetLookupCache( const ScRange & rRange )
 {
@@ -1220,10 +1220,10 @@ sal_Bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBo
     ScChangeTrack* pTrack = GetChangeTrack();
     ScChangeViewSettings* pSettings = GetChangeViewSettings();
     if ( !pTrack || !pTrack->GetFirst() || !pSettings || !pSettings->ShowChanges() )
-        return sal_False;           // nix da oder abgeschaltet
+        return sal_False;           
     ScActionColorChanger aColorChanger(*pTrack);
-    //  Clipping passiert von aussen
-    //! ohne Clipping, nur betroffene Zeilen painten ??!??!?
+    
+    
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
     {
@@ -1282,7 +1282,7 @@ sal_Bool ScDocument::IsCellInChangeTrack(const ScAddress &cell,Color *pColCellBo
 void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aTrackText,sal_Bool &bLeftEdge)
 {
     aTrackText = OUString();
-    //  Change-Tracking
+    
     ScChangeTrack* pTrack = GetChangeTrack();
     ScChangeViewSettings* pSettings = GetChangeViewSettings();
     if ( pTrack && pTrack->GetFirst() && pSettings && pSettings->ShowChanges())
@@ -1308,7 +1308,7 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
                         aRange.aEnd.SetCol( aRange.aStart.Col() );
                     if ( aRange.In( aCellPos ) )
                     {
-                        pFound = pAction;       // der letzte gewinnt
+                        pFound = pAction;       
                         switch ( eType )
                         {
                             case SC_CAT_CONTENT :
@@ -1340,12 +1340,12 @@ void ScDocument::GetCellChangeTrackNote( const ScAddress &aCellPos, OUString &aT
         if ( pFound )
         {
             if ( pFoundContent && pFound->GetType() != SC_CAT_CONTENT )
-                pFound = pFoundContent;     // Content gewinnt
+                pFound = pFoundContent;     
             if ( pFoundMove && pFound->GetType() != SC_CAT_MOVE &&
                     pFoundMove->GetActionNumber() >
                     pFound->GetActionNumber() )
-                pFound = pFoundMove;        // Move gewinnt
-            //  bei geloeschten Spalten: Pfeil auf die linke Seite der Zelle
+                pFound = pFoundMove;        
+            
             if ( pFound->GetType() == SC_CAT_DELETE_COLS )
                 bLeftEdge = sal_True;
             DateTime aDT = pFound->GetDateTime();

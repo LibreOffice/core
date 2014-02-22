@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "text.hxx"
@@ -119,7 +119,7 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
             if ( nCharset == ::com::sun::star::awt::CharSet::SYMBOL )
                 bSymbol = sal_True;
         }
-        if ( mpFieldEntry && ( nFieldType & 0x800000 ) )    // placeholder ?
+        if ( mpFieldEntry && ( nFieldType & 0x800000 ) )    
         {
             mnTextSize = 1;
             if ( bLast )
@@ -129,8 +129,8 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
         }
         else
         {
-            // For i39516 - a closing parenthesis that ends an RTL string is displayed backwards by PPT
-            // Solution: add a Unicode Right-to-Left Mark, following the method described in i18024
+            
+            
             if (bLast && !aString.isEmpty()
                 && aString[aString.getLength() - 1] == ')'
                 && rFontCollection.GetScriptDirection(aString) == com::sun::star::i18n::ScriptDirection::RIGHT_TO_LEFT)
@@ -149,47 +149,47 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
                 {
                     switch ( nChar )
                     {
-                        // Currency
+                        
                         case 128:   nChar = 0x20AC; break;
-                        // Punctuation and other
-                        case 130:   nChar = 0x201A; break;// SINGLE LOW-9 QUOTATION MARK
-                        case 131:   nChar = 0x0192; break;// LATIN SMALL LETTER F WITH HOOK
-                        case 132:   nChar = 0x201E; break;// DOUBLE LOW-9 QUOTATION MARK
-                                                              // LOW DOUBLE PRIME QUOTATION MARK
-                        case 133:   nChar = 0x2026; break;// HORIZONTAL ELLIPSES
-                        case 134:   nChar = 0x2020; break;// DAGGER
-                        case 135:   nChar = 0x2021; break;// DOUBLE DAGGER
-                        case 136:   nChar = 0x02C6; break;// MODIFIER LETTER CIRCUMFLEX ACCENT
-                        case 137:   nChar = 0x2030; break;// PER MILLE SIGN
-                        case 138:   nChar = 0x0160; break;// LATIN CAPITAL LETTER S WITH CARON
-                        case 139:   nChar = 0x2039; break;// SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-                        case 140:   nChar = 0x0152; break;// LATIN CAPITAL LIGATURE OE
-                        case 142:   nChar = 0x017D; break;// LATIN CAPITAL LETTER Z WITH CARON
-                        case 145:   nChar = 0x2018; break;// LEFT SINGLE QUOTATION MARK
-                                                              // MODIFIER LETTER TURNED COMMA
-                        case 146:   nChar = 0x2019; break;// RIGHT SINGLE QUOTATION MARK
-                                                              // MODIFIER LETTER APOSTROPHE
-                        case 147:   nChar = 0x201C; break;// LEFT DOUBLE QUOTATION MARK
-                                                              // REVERSED DOUBLE PRIME QUOTATION MARK
-                        case 148:   nChar = 0x201D; break;// RIGHT DOUBLE QUOTATION MARK
-                                                              // REVERSED DOUBLE PRIME QUOTATION MARK
-                        case 149:   nChar = 0x2022; break;// BULLET
-                        case 150:   nChar = 0x2013; break;// EN DASH
-                        case 151:   nChar = 0x2014; break;// EM DASH
-                        case 152:   nChar = 0x02DC; break;// SMALL TILDE
-                        case 153:   nChar = 0x2122; break;// TRADE MARK SIGN
-                        case 154:   nChar = 0x0161; break;// LATIN SMALL LETTER S WITH CARON
-                        case 155:   nChar = 0x203A; break;// SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-                        case 156:   nChar = 0x0153; break;// LATIN SMALL LIGATURE OE
-                        case 158:   nChar = 0x017E; break;// LATIN SMALL LETTER Z WITH CARON
-                        case 159:   nChar = 0x0178; break;// LATIN CAPITAL LETTER Y WITH DIAERESIS
+                        
+                        case 130:   nChar = 0x201A; break;
+                        case 131:   nChar = 0x0192; break;
+                        case 132:   nChar = 0x201E; break;
+                                                              
+                        case 133:   nChar = 0x2026; break;
+                        case 134:   nChar = 0x2020; break;
+                        case 135:   nChar = 0x2021; break;
+                        case 136:   nChar = 0x02C6; break;
+                        case 137:   nChar = 0x2030; break;
+                        case 138:   nChar = 0x0160; break;
+                        case 139:   nChar = 0x2039; break;
+                        case 140:   nChar = 0x0152; break;
+                        case 142:   nChar = 0x017D; break;
+                        case 145:   nChar = 0x2018; break;
+                                                              
+                        case 146:   nChar = 0x2019; break;
+                                                              
+                        case 147:   nChar = 0x201C; break;
+                                                              
+                        case 148:   nChar = 0x201D; break;
+                                                              
+                        case 149:   nChar = 0x2022; break;
+                        case 150:   nChar = 0x2013; break;
+                        case 151:   nChar = 0x2014; break;
+                        case 152:   nChar = 0x02DC; break;
+                        case 153:   nChar = 0x2122; break;
+                        case 154:   nChar = 0x0161; break;
+                        case 155:   nChar = 0x203A; break;
+                        case 156:   nChar = 0x0153; break;
+                        case 158:   nChar = 0x017E; break;
+                        case 159:   nChar = 0x0178; break;
                     }
                 }
                 mpText[ i ] = nChar;
             }
         }
         if ( bRTL_endingParen )
-            mpText[ mnTextSize - 2 ] = 0x200F; // Unicode Right-to-Left mark
+            mpText[ mnTextSize - 2 ] = 0x200F; 
 
         if ( bLast )
             mpText[ mnTextSize - 1 ] = 0xd;
@@ -403,8 +403,8 @@ void PortionObj::ImplGetPortionValues( FontCollection& rFontCollection, sal_Bool
     if ( ImplGetPropertyValue( OUString( "CharColor" ), bGetPropStateValue ) )
     {
         sal_uInt32 nSOColor = *( (sal_uInt32*)mAny.getValue() );
-        mnCharColor = nSOColor & 0xff00ff00;                            // green and hibyte
-        mnCharColor |= (sal_uInt8)( nSOColor ) << 16;                   // red and blue is switched
+        mnCharColor = nSOColor & 0xff00ff00;                            
+        mnCharColor |= (sal_uInt8)( nSOColor ) << 16;                   
         mnCharColor |= (sal_uInt8)( nSOColor >> 16 );
     }
     meCharColor = ePropState;
@@ -462,18 +462,18 @@ sal_uInt32 PortionObj::ImplCalculateTextPositions( sal_uInt32 nCurrentTextPositi
     return mnTextSize;
 }
 
-//  -----------------------------------------------------------------------
-// Return:                              0 = no TextField
-//  bit28->31   text field type :
-//                                      1 = Date
-//                                      2 = Time
-//                                      3 = SlideNumber
-//                                      4 = Url
-//                                      5 = DateTime
-//                                      6 = header
-//                                      7 = footer
-//  bit24->27   text field sub type (optional)
-//     23->     PPT Textfield needs a placeholder
+
+
+
+
+
+
+
+
+
+
+
+
 
 sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > & ,
     const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet, OUString& rURL )
@@ -504,7 +504,7 @@ sal_uInt32 PortionObj::ImplGetTextField( ::com::sun::star::uno::Reference< ::com
                                 {
                                     sal_Bool bBool = sal_False;
                                     aAny >>= bBool;
-                                    if ( !bBool )  // Fixed DateFields does not exist in PPT
+                                    if ( !bBool )  
                                     {
                                         if ( GetPropertyValue( aAny, xFieldPropSet, OUString( "Format" ) ), sal_True )
                                         {
@@ -747,7 +747,7 @@ void ParagraphObj::CalculateGraphicBulletSize( sal_uInt16 nFontHeight )
 {
     if ( ( (SvxExtNumType)nNumberingType == SVX_NUM_BITMAP ) && ( nBulletId != 0xffff ) )
     {
-        // calculate the bulletrealsize for this grafik
+        
         if ( aBuGraSize.Width() && aBuGraSize.Height() )
         {
             double fCharHeight = nFontHeight;
@@ -818,10 +818,10 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         {
                             aFontDesc = *( (::com::sun::star::awt::FontDescriptor*)pValue );
 
-                            // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
-                            // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
-                            // Because there might exist a lot of damaged documemts I added this two lines
-                            // which fixes the bullet problem for the export.
+                            
+                            
+                            
+                            
                             if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
                                 aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
@@ -832,7 +832,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         {
                             if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (::com::sun::star::awt::Size*)0) )
                             {
-                                // don't cast awt::Size to Size as on 64-bits they are not the same.
+                                
                                 ::com::sun::star::awt::Size aSize;
                                 pPropValue[ i ].Value >>= aSize;
                                 aBuGraSize.A() = aSize.Width;
@@ -848,9 +848,9 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         else if ( aPropName == "BulletColor" )
                         {
                             sal_uInt32 nSOColor = *( (sal_uInt32*)pValue );
-                            nBulletColor = nSOColor & 0xff00ff00;                       // green and hibyte
-                            nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              // red
-                            nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; // blue
+                            nBulletColor = nSOColor & 0xff00ff00;                       
+                            nBulletColor |= (sal_uInt8)( nSOColor ) << 16;              
+                            nBulletColor |= (sal_uInt8)( nSOColor >> 16 ) | 0xfe000000; 
                         }
                         else if ( aPropName == "BulletRelSize" )
                         {
@@ -906,7 +906,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                 {
                     case SVX_NUM_NUMBER_NONE : nParaFlags |= 0xf; break;
 
-                    case SVX_NUM_CHAR_SPECIAL :                           // Bullet
+                    case SVX_NUM_CHAR_SPECIAL :                           
                     {
                         if ( IsStarSymbol(aFontDesc.Name) )
                         {
@@ -917,17 +917,17 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                         if ( !aFontDesc.Name.isEmpty() )
                         {
-                            nParaFlags |= 0x90; // we define the font and charset
+                            nParaFlags |= 0x90; 
                         }
                     }
-                    case SVX_NUM_CHARS_UPPER_LETTER :       // count from a-z, aa - az, ba - bz, ...
+                    case SVX_NUM_CHARS_UPPER_LETTER :       
                     case SVX_NUM_CHARS_LOWER_LETTER :
                     case SVX_NUM_ROMAN_UPPER :
                     case SVX_NUM_ROMAN_LOWER :
                     case SVX_NUM_ARABIC :
-                    case SVX_NUM_PAGEDESC :                 // numbering from the page template
+                    case SVX_NUM_PAGEDESC :                 
                     case SVX_NUM_BITMAP :
-                    case SVX_NUM_CHARS_UPPER_LETTER_N :     // count from a-z, aa-zz, aaa-zzz
+                    case SVX_NUM_CHARS_UPPER_LETTER_N :     
                     case SVX_NUM_CHARS_LOWER_LETTER_N :
                     case SVX_NUM_NUMBER_UPPER_ZH:
                     case SVX_NUM_CIRCLE_NUMBER:
@@ -939,7 +939,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                         {
                             bExtendedBulletsUsed = sal_True;
                             if ( nNumberingDepth & 1 )
-                                cBulletId = 0x2013;         // defaulting bullet characters for ppt97
+                                cBulletId = 0x2013;         
                             else if ( nNumberingDepth == 4 )
                                 cBulletId = 0xbb;
                             else
@@ -953,12 +953,12 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                     if ( sSuffix == ")" )
                                     {
                                         if ( sPrefix == "(" )
-                                            nMappedNumType = 0xa0001;   // (A)
+                                            nMappedNumType = 0xa0001;   
                                         else
-                                            nMappedNumType = 0xb0001;   // A)
+                                            nMappedNumType = 0xb0001;   
                                     }
                                     else
-                                        nMappedNumType = 0x10001;       // A.
+                                        nMappedNumType = 0x10001;       
                                 }
                                 break;
                                 case SVX_NUM_CHARS_LOWER_LETTER :
@@ -967,12 +967,12 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                     if ( sSuffix == ")" )
                                     {
                                         if ( sPrefix == "(" )
-                                            nMappedNumType = 0x80001;   // (a)
+                                            nMappedNumType = 0x80001;   
                                         else
-                                            nMappedNumType = 0x90001;   // a)
+                                            nMappedNumType = 0x90001;   
                                     }
                                     else
-                                        nMappedNumType = 0x00001;       // a.
+                                        nMappedNumType = 0x00001;       
                                 }
                                 break;
                                 case SVX_NUM_ROMAN_UPPER :
@@ -980,12 +980,12 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                     if ( sSuffix == ")" )
                                     {
                                         if ( sPrefix == "(" )
-                                            nMappedNumType = 0xe0001;   // (I)
+                                            nMappedNumType = 0xe0001;   
                                         else
-                                            nMappedNumType = 0xf0001;   // I)
+                                            nMappedNumType = 0xf0001;   
                                     }
                                     else
-                                        nMappedNumType = 0x70001;       // I.
+                                        nMappedNumType = 0x70001;       
                                 }
                                 break;
                                 case SVX_NUM_ROMAN_LOWER :
@@ -993,12 +993,12 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                     if ( sSuffix == ")" )
                                     {
                                         if ( sPrefix == "(" )
-                                            nMappedNumType = 0x40001;   // (i)
+                                            nMappedNumType = 0x40001;   
                                         else
-                                            nMappedNumType = 0x50001;   // i)
+                                            nMappedNumType = 0x50001;   
                                     }
                                     else
-                                        nMappedNumType = 0x60001;       // i.
+                                        nMappedNumType = 0x60001;       
                                 }
                                 break;
                                 case SVX_NUM_ARABIC :
@@ -1006,56 +1006,56 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
                                     if ( sSuffix == ")" )
                                     {
                                         if ( sPrefix == "(" )
-                                            nMappedNumType = 0xc0001;   // (1)
+                                            nMappedNumType = 0xc0001;   
                                         else
-                                            nMappedNumType = 0x20001;   // 1)
+                                            nMappedNumType = 0x20001;   
                                     }
                                     else
                                     {
                                         if ( sSuffix.isEmpty() && sPrefix.isEmpty() )
-                                            nMappedNumType = 0xd0001;   // 1
+                                            nMappedNumType = 0xd0001;   
                                         else
-                                            nMappedNumType = 0x30001;   // 1.
+                                            nMappedNumType = 0x30001;   
                                     }
                                 }
                                 break;
                                 case SVX_NUM_NUMBER_UPPER_ZH :
                                 {
                                     if ( !sSuffix.isEmpty() )
-                                        nMappedNumType = 0x110001;   // Simplified Chinese with single-byte period.
+                                        nMappedNumType = 0x110001;   
                                     else
-                                        nMappedNumType = 0x100001;   // Simplified Chinese.
+                                        nMappedNumType = 0x100001;   
                                 }
                                 break;
                                 case SVX_NUM_CIRCLE_NUMBER :
                                 {
-                                    nMappedNumType = 0x120001;   // Double byte circle numbers.
+                                    nMappedNumType = 0x120001;   
                                 }
                                 break;
                                 case SVX_NUM_NUMBER_UPPER_ZH_TW :
                                 {
                                     if ( !sSuffix.isEmpty() )
-                                        nMappedNumType = 0x160001;   // Traditional Chinese with single-byte period.
+                                        nMappedNumType = 0x160001;   
                                     else
-                                        nMappedNumType = 0x150001;   // Traditional Chinese.
+                                        nMappedNumType = 0x150001;   
                                 }
                                 break;
                                 case SVX_NUM_NUMBER_LOWER_ZH :
                                 {
                                     if ( sSuffix == OUString( sal_Unicode(0xff0e)) )
-                                        nMappedNumType = 0x260001;   // Japanese with double-byte period.
+                                        nMappedNumType = 0x260001;   
                                     else if ( !sSuffix.isEmpty() )
-                                        nMappedNumType = 0x1B0001;   // Japanese/Korean with single-byte period.
+                                        nMappedNumType = 0x1B0001;   
                                     else
-                                        nMappedNumType = 0x1A0001;   // Japanese/Korean.
+                                        nMappedNumType = 0x1A0001;   
                                 }
                                 break;
                                 case SVX_NUM_FULL_WIDTH_ARABIC :
                                 {
                                     if ( !sSuffix.isEmpty() )
-                                        nMappedNumType = 0x1D0001;   // Double-byte Arabic numbers with double-byte period.
+                                        nMappedNumType = 0x1D0001;   
                                     else
-                                        nMappedNumType = 0x1C0001;   // Double-byte Arabic numbers.
+                                        nMappedNumType = 0x1C0001;   
                                 }
                                 break;
                                 default:
@@ -1211,17 +1211,17 @@ void ParagraphObj::ImplConstruct( const ParagraphObj& rParagraphObj )
     nBulletFlags = rParagraphObj.nBulletFlags;
     sPrefix = rParagraphObj.sPrefix;
     sSuffix = rParagraphObj.sSuffix;
-    sGraphicUrl = rParagraphObj.sGraphicUrl;            // String to a graphic
+    sGraphicUrl = rParagraphObj.sGraphicUrl;            
     aBuGraSize = rParagraphObj.aBuGraSize;
-    nNumberingType = rParagraphObj.nNumberingType;      // this is actually a SvxEnum
+    nNumberingType = rParagraphObj.nNumberingType;      
     nHorzAdjust = rParagraphObj.nHorzAdjust;
     nBulletColor = rParagraphObj.nBulletColor;
     nBulletOfs = rParagraphObj.nBulletOfs;
-    nStartWith = rParagraphObj.nStartWith;              // start of numbering
+    nStartWith = rParagraphObj.nStartWith;              
     nTextOfs = rParagraphObj.nTextOfs;
-    nBulletRealSize = rParagraphObj.nBulletRealSize;    // scale in percent
-    nDepth = rParagraphObj.nDepth;                      // actual depth
-    cBulletId = rParagraphObj.cBulletId;                // if Numbering Type == CharSpecial
+    nBulletRealSize = rParagraphObj.nBulletRealSize;    
+    nDepth = rParagraphObj.nDepth;                      
+    cBulletId = rParagraphObj.cBulletId;                
     aFontDesc = rParagraphObj.aFontDesc;
 
     bExtendedBulletsUsed = rParagraphObj.bExtendedBulletsUsed;

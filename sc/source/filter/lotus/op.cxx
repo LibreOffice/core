@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/math.hxx>
@@ -53,11 +53,11 @@
 #include <vector>
 #include <map>
 
-extern WKTYP eTyp;           // -> filter.cxx, aktueller Dateityp
-extern sal_Bool bEOF;           // -> filter.cxx, zeigt Dateiende an
-extern sal_uInt8 nDefaultFormat; // -> tool.cxx, Default-Zellenformat
-extern ScDocument* pDoc;            // -> filter.cxx, Aufhaenger zum Dokumentzugriff
-extern rtl_TextEncoding eCharVon;   // -> filter.cxx, character set specified
+extern WKTYP eTyp;           
+extern sal_Bool bEOF;           
+extern sal_uInt8 nDefaultFormat; 
+extern ScDocument* pDoc;            
+extern rtl_TextEncoding eCharVon;   
 
 static sal_uInt16 nDefWidth = ( sal_uInt16 ) ( TWIPS_PER_CHAR * 10 );
 
@@ -70,7 +70,7 @@ void NI( SvStream& r, sal_uInt16 n )
 
 void OP_BOF( SvStream& r, sal_uInt16 /*n*/ )
 {
-    r.SeekRel( 2 );        // Versionsnummer ueberlesen
+    r.SeekRel( 2 );        
 }
 
 void OP_EOF( SvStream& /*r*/, sal_uInt16 /*n*/ )
@@ -92,7 +92,7 @@ void OP_Integer( SvStream& r, sal_uInt16 /*n*/ )
         pDoc->EnsureTable(nTab);
         pDoc->SetValue(ScAddress(nCol,nRow,nTab), static_cast<double>(nValue));
 
-        // 0 Stellen nach'm Komma!
+        
         SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, 0 );
     }
 }
@@ -132,8 +132,8 @@ void OP_Label( SvStream& r, sal_uInt16 n )
 
     if (ValidColRow( static_cast<SCCOL>(nCol), nRow))
     {
-        nFormat &= 0x80;    // Bit 7 belassen
-        nFormat |= 0x75;    // protected egal, special-text gesetzt
+        nFormat &= 0x80;    
+        nFormat |= 0x75;    
 
         PutFormString( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, pText );
 
@@ -150,7 +150,7 @@ void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
     SCTAB                   nTab = 0;
 
     r.ReadUChar( nFormat ).ReadUInt16( nCol ).ReadUInt16( nRow );
-    r.SeekRel( 8 );    // Ergebnis ueberspringen
+    r.SeekRel( 8 );    
     r.ReadUInt16( nFormulaSize );
 
     const ScTokenArray* pErg;
@@ -168,7 +168,7 @@ void OP_Formula( SvStream& r, sal_uInt16 /*n*/ )
         pDoc->EnsureTable(nTab);
         pDoc->SetFormulaCell(ScAddress(nCol,nRow,nTab), pCell);
 
-        // nFormat = Standard -> Nachkommastellen wie Float
+        
         SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), nTab, nFormat, nDezFloat );
     }
 }
@@ -184,7 +184,7 @@ void OP_ColumnWidth( SvStream& r, sal_uInt16 /*n*/ )
     if (ValidCol( static_cast<SCCOL>(nCol)))
     {
         if( nWidthSpaces )
-            // Annahme: 10cpi-Zeichensatz
+            
             nBreite = ( sal_uInt16 ) ( TWIPS_PER_CHAR * nWidthSpaces );
         else
         {
@@ -198,7 +198,7 @@ void OP_ColumnWidth( SvStream& r, sal_uInt16 /*n*/ )
 
 void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
     {
-    // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
+    
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
 
     sal_Char cPuffer[ 16+1 ];
@@ -219,12 +219,12 @@ void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
 
         sal_Char cBuf[sizeof(cPuffer)+1];
         if( isdigit( *cPuffer ) )
-        {  // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
+        {  
             cBuf[0] = 'A';
-            strcpy( cBuf + 1, cPuffer );       // #100211# - checked
+            strcpy( cBuf + 1, cPuffer );       
         }
         else
-            strcpy( cBuf, cPuffer );           // #100211# - checked
+            strcpy( cBuf, cPuffer );           
 
         OUString      aTmp( cBuf, strlen(cBuf), pLotusRoot->eCharsetQ );
 
@@ -236,7 +236,7 @@ void OP_NamedRange( SvStream& r, sal_uInt16 /*n*/ )
 
 void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
 {
-    // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
+    
     sal_uInt16              nColSt, nRowSt, nColEnd, nRowEnd;
     sal_uInt8               nType;
 
@@ -258,12 +258,12 @@ void OP_SymphNamedRange( SvStream& r, sal_uInt16 /*n*/ )
 
         sal_Char cBuf[sizeof(cPuffer)+1];
         if( isdigit( *cPuffer ) )
-        {  // erstes Zeichen im Namen eine Zahl -> 'A' vor Namen setzen
+        {  
             cBuf[0] = 'A';
-            strcpy( cBuf + 1, cPuffer );       // #100211# - checked
+            strcpy( cBuf + 1, cPuffer );       
         }
         else
-            strcpy( cBuf, cPuffer );           // #100211# - checked
+            strcpy( cBuf, cPuffer );           
 
         OUString  aTmp( cBuf, strlen(cBuf), pLotusRoot->eCharsetQ );
         aTmp = ScfTools::ConvertToScDefinedName( aTmp );
@@ -294,36 +294,36 @@ void OP_HiddenCols( SvStream& r, sal_uInt16 /*n*/ )
     sal_uInt8       nAkt;
     nCount = 0;
 
-    for( nByte = 0 ; nByte < 32 ; nByte++ ) // 32 Bytes mit ...
+    for( nByte = 0 ; nByte < 32 ; nByte++ ) 
     {
         r.ReadUChar( nAkt );
-        for( nBit = 0 ; nBit < 8 ; nBit++ ) // ...jeweils 8 Bits = 256 Bits
+        for( nBit = 0 ; nBit < 8 ; nBit++ ) 
         {
-            if( nAkt & 0x01 )   // unterstes Bit gesetzt?
-                // -> Hidden Col
+            if( nAkt & 0x01 )   
+                
                 pDoc->SetColHidden(nCount, nCount, 0, true);
 
             nCount++;
-            nAkt = nAkt / 2;    // der Naechste bitte...
+            nAkt = nAkt / 2;    
         }
     }
 }
 
 void OP_Window1( SvStream& r, sal_uInt16 n )
 {
-    r.SeekRel( 4 );    // Cursor Pos ueberspringen
+    r.SeekRel( 4 );    
 
     r.ReadUChar( nDefaultFormat );
 
-    r.SeekRel( 1 );    // 'unused' ueberspringen
+    r.SeekRel( 1 );    
 
     r.ReadUInt16( nDefWidth );
 
-    r.SeekRel( n - 8 );  // und den Rest ueberspringen
+    r.SeekRel( n - 8 );  
 
     nDefWidth = ( sal_uInt16 ) ( TWIPS_PER_CHAR * nDefWidth );
 
-    // statt Defaulteinstellung in SC alle Cols zu Fuss setzen
+    
     for( SCCOL nCol = 0 ; nCol <= MAXCOL ; nCol++ )
         pDoc->SetColWidth( nCol, 0, nDefWidth );
 }
@@ -385,7 +385,7 @@ void OP_Formula123( SvStream& r, sal_uInt16 n )
     sal_uInt16 nRow;
 
     r.ReadUInt16( nRow ).ReadUChar( nTab ).ReadUChar( nCol );
-    r.SeekRel( 8 );    // Result- jump over
+    r.SeekRel( 8 );    
 
     const ScTokenArray* pErg;
     sal_Int32 nBytesLeft = (n > 12) ? n - 12 : 0;
@@ -439,11 +439,11 @@ void OP_Note123( SvStream& r, sal_uInt16 n)
 
 void OP_HorAlign123( sal_uInt8 nAlignPattern, SfxItemSet& rPatternItemSet )
 {
-//      pre:  Pattern is stored in the last 3 bites of the 21st byte
-//      post: Appropriate Horizontal Alignement is set in rPattern according to the bit pattern.
+
+
 //
-//      LEFT:001, RIGHT:010, CENTER:011, JUSTIFY:110,
-//      LEFT-Text/RIGHT-NUMBER:100, DEFAULT:000
+
+
 
     nAlignPattern = ( nAlignPattern & 0x07);
 
@@ -472,10 +472,10 @@ void OP_HorAlign123( sal_uInt8 nAlignPattern, SfxItemSet& rPatternItemSet )
 
 void OP_VerAlign123( sal_uInt8 nAlignPattern,SfxItemSet& rPatternItemSet  )
 {
-//      pre:  Pattern is stored in the last 3 bites of the 22nd byte
-//      post: Appropriate Verticle Alignement is set in rPattern according to the bit pattern.
+
+
 //
-//      TOP:001, MIDDLE:010, DOWN:100, DEFAULT:000
+
 
     nAlignPattern = ( nAlignPattern & 0x07);
 
@@ -518,7 +518,7 @@ void OP_CreatePattern123( SvStream& r, sal_uInt16 n)
 
         r.SeekRel(12);
 
-        // Read 17th Byte
+        
         r.ReadUChar( temp );
 
         bIsBold = (temp & 0x01);
@@ -534,7 +534,7 @@ void OP_CreatePattern123( SvStream& r, sal_uInt16 n)
 
         r.SeekRel(3);
 
-        // Read 21st Byte
+        
         r.ReadUChar( Hor_Align );
         OP_HorAlign123( Hor_Align, rItemSet );
 
@@ -555,10 +555,10 @@ void OP_SheetName123( SvStream& rStream, sal_uInt16 nLength )
         return;
     }
 
-    // B0 36 [sheet number (2 bytes?)] [sheet name (null terminated char array)]
+    
 
     sal_uInt16 nDummy;
-    rStream.ReadUInt16( nDummy ); // ignore the first 2 bytes (B0 36).
+    rStream.ReadUInt16( nDummy ); 
     rStream.ReadUInt16( nDummy );
     SCTAB nSheetNum = static_cast<SCTAB>(nDummy);
     pDoc->MakeTable(nSheetNum);
@@ -612,14 +612,14 @@ void OP_ApplyPatternArea123( SvStream& rStream )
                     {
                         nCol = nCol + nColCount;
                         nColCount = nData;
-                        if ( nCol > 0xff ) // 256 is the max col size supported by 123
+                        if ( nCol > 0xff ) 
                             nCol = 0;
                     }
                     else if( nLevel == 3 )
                     {
                         nRow = nRow + nRowCount;
                         nRowCount = nData;
-                        if ( nRow > 0x1fff ) // 8192 is the max row size supported by 123
+                        if ( nRow > 0x1fff ) 
                             nRow = 0;
                     }
                 }
@@ -632,7 +632,7 @@ void OP_ApplyPatternArea123( SvStream& rStream )
                     rStream.ReadUInt16( nData );
                     rStream.SeekRel( nLength - 2 );
                     std::map<sal_uInt16, ScPatternAttr>::iterator loc = aLotusPatternPool.find( nData );
-                    // #126338# apparently, files with invalid index occur in the wild -> don't crash then
+                    
                     if ( loc != aLotusPatternPool.end() )
                         for( int i = 0; i < nTabCount; i++)
                         {

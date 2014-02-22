@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
@@ -44,16 +44,16 @@ class OPackageStructureCreator : public ::cppu::WeakImplHelper2< embed::XPackage
 public:
     OPackageStructureCreator() {}
 
-    // XPackageStructureCreator
+    
     virtual void SAL_CALL convertToPackage( const OUString& aFolderUrl, const uno::Reference< io::XOutputStream >& xTargetStream ) throw (io::IOException, uno::RuntimeException);
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (uno::RuntimeException);
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException);
 };
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolderUrl,
                                                           const uno::Reference< io::XOutputStream >& xTargetStream )
         throw ( io::IOException,
@@ -62,7 +62,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
     uno::Reference< ucb::XCommandEnvironment > xComEnv;
 
     if ( !xTargetStream.is() )
-        throw io::IOException(); // TODO/LATER
+        throw io::IOException(); 
 
     sal_Bool bSuccess = sal_False;
     ::ucbhelper::Content aContent;
@@ -147,7 +147,7 @@ void SAL_CALL OPackageStructureCreator::convertToPackage( const OUString& aFolde
     }
 
     if ( !bSuccess )
-        throw io::IOException(); // TODO/LATER: can't proceed with creation
+        throw io::IOException(); 
 }
 
 OUString SAL_CALL OPackageStructureCreator::getImplementationName()

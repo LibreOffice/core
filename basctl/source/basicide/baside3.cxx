@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "basidesh.hrc"
@@ -95,7 +95,7 @@ DialogWindow::DialogWindow (
 
     SetHelpId( HID_BASICIDE_DIALOGWINDOW );
 
-    // set readonly mode for readonly libraries
+    
     Reference< script::XLibraryContainer2 > xDlgLibContainer( GetDocument().getLibraryContainer( E_DIALOGS ), UNO_QUERY );
     if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) )
         SetReadOnly(true);
@@ -192,7 +192,7 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
-    // may be KEY_TAB, KEY_BACKSPACE, KEY_ESCAPE
+    
     if( pBindings )
     {
         pBindings->Invalidate( SID_COPY );
@@ -236,9 +236,9 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
 
 IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
-    // #i120515# pUndoAction needs to be deleted, this hand over is an ownership
-    // change. As long as it does not get added to the undo manager, it needs at
-    // least to be deleted.
+    
+    
+    
     delete pUndoAction;
 
     return 0;
@@ -290,7 +290,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             break;
             case SID_COPY:
             {
-                // any object selected?
+                
                 if ( !pEditor->GetView().AreObjectsMarked() )
                     rSet.DisableItem( nWh );
             }
@@ -299,7 +299,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             case SID_DELETE:
             case SID_BACKSPACE:
             {
-                // any object selected?
+                
                 if ( !pEditor->GetView().AreObjectsMarked() )
                     rSet.DisableItem( nWh );
 
@@ -316,7 +316,7 @@ void DialogWindow::GetState( SfxItemSet& rSet )
 
             case SID_DIALOG_TESTMODE:
             {
-                // is the IDE still active?
+                
                 bool const bBool = GetShell()->GetFrame() &&
                     pEditor->GetMode() == DlgEditor::TEST;
                 rSet.Put(SfxBoolItem(SID_DIALOG_TESTMODE, bBool));
@@ -403,9 +403,9 @@ void DialogWindow::GetState( SfxItemSet& rSet )
             break;
             case SID_SHOWLINES:
             {
-                // if this is not a module window hide the
-                // setting, doesn't make sense for example if the
-                // dialog editor is open
+                
+                
+                
                 rSet.DisableItem(nWh);
                 rSet.Put(SfxVisibilityItem(nWh, false));
                 break;
@@ -733,7 +733,7 @@ bool DialogWindow::SaveDialog()
         Sequence< OUString > aPaths = xFP->getFiles();
         aCurPath = aPaths[0];
 
-        // export dialog model to xml
+        
         Reference< container::XNameContainer > xDialogModel = GetDialog();
         Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext, GetDocument().isDocument() ? GetDocument().getDocument() : Reference< frame::XModel >() );
         Reference< XInputStream > xInput( xISP->createInputStream() );
@@ -765,7 +765,7 @@ bool DialogWindow::SaveDialog()
             }
             bDone = true;
 
-            // With resource?
+            
             Reference< beans::XPropertySet > xDialogModelPropSet( xDialogModel, UNO_QUERY );
             Reference< resource::XStringResourceResolver > xStringResourceResolver;
             if( xDialogModelPropSet.is() )
@@ -801,7 +801,7 @@ bool DialogWindow::SaveDialog()
                 aComment += " strings" ;
                 Reference< task::XInteractionHandler > xDummyHandler;
 
-                // Remove old properties files in case of overwriting Dialog files
+                
                 if( xSFI->isFolder( aURL ) )
                 {
                     Sequence< OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
@@ -843,7 +843,7 @@ bool DialogWindow::SaveDialog()
                     StringResourceWithLocation::create( xContext, aURL, bReadOnly,
                         xStringResourceResolver->getDefaultLocale(), aDialogName, aComment, xDummyHandler );
 
-                // Add locales
+                
                 Sequence< lang::Locale > aLocaleSeq = xStringResourceResolver->getLocales();
                 const lang::Locale* pLocales = aLocaleSeq.getConstArray();
                 sal_Int32 nLocaleCount = aLocaleSeq.getLength();
@@ -989,7 +989,7 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
 
         try
         {
-            // create dialog model
+            
             Reference< container::XNameContainer > xDialogModel(
                 xContext->getServiceManager()->createInstanceWithContext("com.sun.star.awt.UnoControlDialogModel", xContext),
                 UNO_QUERY_THROW );
@@ -1041,14 +1041,14 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
                 sal_uInt16 nRet = aQueryBox.Execute();
                 if( RET_YES == nRet )
                 {
-                    // RET_YES == Rename, see NameClashQueryBox::NameClashQueryBox
+                    
                     eNameClashMode = CLASH_RENAME_DIALOG;
 
                     aNewDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
                 }
                 else if( RET_NO == nRet )
                 {
-                    // RET_NO == Replace, see NameClashQueryBox::NameClashQueryBox
+                    
                     eNameClashMode = CLASH_OVERWRITE_DIALOG;
                 }
                 else if( RET_CANCEL == nRet )
@@ -1064,7 +1064,7 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
                 return bDone;
             }
 
-            // Resource?
+            
             ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILanguageTag().getLocale();
             Reference< task::XInteractionHandler > xDummyHandler;
             bool bReadOnly = true;
@@ -1085,12 +1085,12 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
                 nLibLocaleCount = aLibLocaleSeq.getLength();
             }
 
-            // Check language matches
+            
             std::vector< lang::Locale > aOnlyInImportLanguages =
                 implGetLanguagesOnlyContainedInFirstSeq( aImportLocaleSeq, aLibLocaleSeq );
             int nOnlyInImportLanguageCount = aOnlyInImportLanguages.size();
 
-            // For now: Keep languages from lib
+            
             bool bLibLocalized = (nLibLocaleCount > 0);
             bool bImportLocalized = (nImportLocaleCount > 0);
 
@@ -1103,14 +1103,14 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
                 sal_uInt16 nRet = aQueryBox.Execute();
                 if( RET_YES == nRet )
                 {
-                    // RET_YES == Add, see LanguageMismatchQueryBox::LanguageMismatchQueryBox
+                    
                     bAddDialogLanguagesToLib = true;
                 }
-                // RET_NO == Omit, see LanguageMismatchQueryBox::LanguageMismatchQueryBox
-                // -> nothing to do here
-                //else if( RET_NO == nRet )
-                //{
-                //}
+                
+                
+                
+                
+                
                 else if( RET_CANCEL == nRet )
                 {
                     return bDone;
@@ -1128,7 +1128,7 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
                     aFirstLocale = aOnlyInImportLanguages[0];
                     if( nOnlyInImportLanguageCount > 1 )
                     {
-                        // Check if import default belongs to only import languages and use it then
+                        
                         lang::Locale aImportDefaultLocale = xImportStringResource->getDefaultLocale();
                         lang::Locale aTmpLocale;
                         for( int i = 0 ; i < nOnlyInImportLanguageCount ; ++i )
@@ -1193,7 +1193,7 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
                 }
                 else
                 {
-                    // TODO: Assertion?
+                    
                     return bDone;
                 }
             }
@@ -1221,7 +1221,7 @@ bool implImportDialog( Window* pWin, const OUString& rCurPath, const ScriptDocum
                 }
                 else
                 {
-                    // TODO: Assertion?
+                    
                     return bDone;
                 }
             }
@@ -1408,8 +1408,8 @@ ItemType DialogWindow::GetType () const
 
 
 //
-// DialogWindowLayout
-// ==================
+
+
 //
 
 DialogWindowLayout::DialogWindowLayout (Window* pParent, ObjectCatalog& rObjectCatalog_) :
@@ -1430,36 +1430,36 @@ DialogWindowLayout::~DialogWindowLayout()
     }
 }
 
-// shows the property browser (and creates if necessary)
+
 void DialogWindowLayout::ShowPropertyBrowser ()
 {
-    // not exists?
+    
     if (!pPropertyBrowser)
     {
-        // creating
+        
         pPropertyBrowser = new PropBrw(*this);
         pPropertyBrowser->Show();
-        // after OnFirstSize():
+        
         if (HasSize())
             AddPropertyBrowser();
-        // updating if necessary
+        
         UpdatePropertyBrowser();
     }
     else
         pPropertyBrowser->Show();
-    // refreshing the button state
+    
     if (SfxBindings* pBindings = GetBindingsPtr())
         pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
 }
 
-// disables the property browser
+
 void DialogWindowLayout::DisablePropertyBrowser ()
 {
     if (pPropertyBrowser)
         pPropertyBrowser->Update(0);
 }
 
-// updates the property browser
+
 void DialogWindowLayout::UpdatePropertyBrowser ()
 {
     if (pPropertyBrowser)
@@ -1492,13 +1492,13 @@ void DialogWindowLayout::ExecuteGlobal (SfxRequest& rReq)
     switch (rReq.GetSlot())
     {
         case SID_SHOW_PROPERTYBROWSER:
-            // toggling property browser
+            
             if (pPropertyBrowser && pPropertyBrowser->IsVisible())
                 pPropertyBrowser->Hide();
             else
                 ShowPropertyBrowser();
             ArrangeWindows();
-            // refreshing the button state
+            
             if (SfxBindings* pBindings = GetBindingsPtr())
                 pBindings->Invalidate(SID_SHOW_PROPERTYBROWSER);
             break;
@@ -1532,6 +1532,6 @@ void DialogWindowLayout::AddPropertyBrowser () {
 }
 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

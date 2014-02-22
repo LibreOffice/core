@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLLineNumberingImportContext.hxx"
@@ -99,18 +99,18 @@ void XMLLineNumberingImportContext::StartElement(
         { XML_NAMESPACE_TEXT, XML_NUMBER_POSITION,
               XML_TOK_LINENUMBERING_NUMBER_POSITION },
         { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT },
-    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_CONFIGURATION,
-    //        XML_TOK_LINENUMBERING_LINENUMBERING_CONFIGURATION },
-    //  { XML_NAMESPACE_TEXT, XML_INCREMENT, XML_TOK_LINENUMBERING_INCREMENT },
-    //  { XML_NAMESPACE_TEXT, XML_LINENUMBERING_SEPARATOR,
-    //        XML_TOK_LINENUMBERING_LINENUMBERING_SEPARATOR },
+    
+    
+    
+    
+    
 
         XML_TOKEN_MAP_END
     };
 
     SvXMLTokenMap aTokenMap(aLineNumberingTokenMap);
 
-    // process attributes
+    
     sal_Int16 nLength = xAttrList->getLength();
     for(sal_Int16 i=0; i<nLength; i++)
     {
@@ -212,9 +212,9 @@ void XMLLineNumberingImportContext::ProcessAttribute(
 
 void XMLLineNumberingImportContext::CreateAndInsert(sal_Bool)
 {
-    // insert and block mode is handled in insertStyleFamily
+    
 
-    // we'll try to get the LineNumberingProperties
+    
     Reference<XLineNumberingProperties> xSupplier(GetImport().GetModel(),
                                                   UNO_QUERY);
     if (xSupplier.is())
@@ -226,7 +226,7 @@ void XMLLineNumberingImportContext::CreateAndInsert(sal_Bool)
         {
             Any aAny;
 
-            // set style name (if it exists)
+            
             if ( GetImport().GetStyles()->FindStyleChildContext(
                             XML_STYLE_FAMILY_TEXT_TEXT, sStyleName ) != NULL )
             {
@@ -292,7 +292,7 @@ SvXMLImportContext* XMLLineNumberingImportContext::CreateChildContext(
     }
     else
     {
-        // unknown element: default context
+        
         return SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,
                                                       xAttrList);
     }

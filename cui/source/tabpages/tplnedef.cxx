@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -86,10 +86,10 @@ SvxLineDefTabPage::SvxLineDefTabPage
    get(m_pBtnSave        ,"BTN_SAVE");
    get(m_pCtlPreview     ,"CTL_PREVIEW");
 
-    // this page needs ExchangeSupport
+    
     SetExchangeSupport();
 
-    // adjust metric
+    
     eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
@@ -98,13 +98,13 @@ SvxLineDefTabPage::SvxLineDefTabPage
         case FUNIT_KM:
             eFUnit = FUNIT_MM;
             break;
-        default: ; //prevent warning
+        default: ; 
     }
     SetFieldUnit( *m_pMtrDistance, eFUnit );
     SetFieldUnit( *m_pMtrLength1, eFUnit );
     SetFieldUnit( *m_pMtrLength2, eFUnit );
 
-    // determine PoolUnit
+    
     SfxItemPool* pPool = rOutAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_LINE_WIDTH );
@@ -114,7 +114,7 @@ SvxLineDefTabPage::SvxLineDefTabPage
     rXLSet.Put( aXDash );
     rXLSet.Put( aXColor );
 
-    // #i34740#
+    
     m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 
     m_pBtnAdd->SetClickHdl( LINK( this, SvxLineDefTabPage, ClickAddHdl_Impl ) );
@@ -127,14 +127,14 @@ SvxLineDefTabPage::SvxLineDefTabPage
     m_pNumFldNumber2->SetModifyHdl( LINK( this, SvxLineDefTabPage, ChangeNumber2Hdl_Impl ) );
     m_pLbLineStyles->SetSelectHdl( LINK( this, SvxLineDefTabPage, SelectLinestyleHdl_Impl ) );
 
-    // #i122042# switch off default adding of 'none' and 'solid' entries
-    // for this ListBox; we want to select only editable/dashed styles
+    
+    
     m_pLbLineStyles->setAddStandardFields(false);
 
-    // absolute (in mm) or relative (in %)
+    
     m_pCbxSynchronize->SetClickHdl(  LINK( this, SvxLineDefTabPage, ChangeMetricHdl_Impl ) );
 
-    // preview must be updated when there's something changed
+    
     Link aLink = LINK( this, SvxLineDefTabPage, SelectTypeHdl_Impl );
     m_pLbType1->SetSelectHdl( aLink );
     m_pLbType2->SetSelectHdl( aLink );
@@ -147,21 +147,21 @@ SvxLineDefTabPage::SvxLineDefTabPage
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::Construct()
 {
-    // Line style fill; do *not* add default fields here
+    
     m_pLbLineStyles->Fill( pDashList );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
 {
-    if( nDlgType == 0 ) // area dialog
+    if( nDlgType == 0 ) 
     {
-        // ActivatePage() is called before the dialog receives PageCreated() !!!
+        
         if( pDashList.is() )
         {
             if( *pPageType == 1 &&
@@ -169,25 +169,25 @@ void SvxLineDefTabPage::ActivatePage( const SfxItemSet& )
             {
                 m_pLbLineStyles->SelectEntryPos( *pPosDashLb );
             }
-            // so that a possibly existing line style is discarded
+            
             SelectLinestyleHdl_Impl( this );
 
-            // determining (and possibly cutting) the name
-            // and displaying it in the GroupBox
-//             OUString        aString( CUI_RES( RID_SVXSTR_TABLE ) );
-//             aString         += ": ";
+            
+            
+
+
             INetURLObject   aURL( pDashList->GetPath() );
 
             aURL.Append( pDashList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
 
-            *pPageType = 0; // 2
+            *pPageType = 0; 
             *pPosDashLb = LISTBOX_ENTRY_NOTFOUND;
         }
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -199,12 +199,12 @@ int SvxLineDefTabPage::DeactivatePage( SfxItemSet* _pSet )
     return( LEAVE_PAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::CheckChanges_Impl()
 {
-    // is here used to NOT lose changes
-    //XDashStyle eXDS;
+    
+    
 
     if( m_pNumFldNumber1->GetText()     != m_pNumFldNumber1->GetSavedValue() ||
         m_pMtrLength1->GetText()        != m_pMtrLength1->GetSavedValue() ||
@@ -255,11 +255,11 @@ void SvxLineDefTabPage::CheckChanges_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
 {
-    if( nDlgType == 0 ) // line dialog
+    if( nDlgType == 0 ) 
     {
         if( *pPageType == 2 )
         {
@@ -273,7 +273,7 @@ sal_Bool SvxLineDefTabPage::FillItemSet( SfxItemSet& rAttrs )
     return( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
 {
@@ -304,7 +304,7 @@ void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
     }
     SelectLinestyleHdl_Impl( NULL );
 
-    // determine button state
+    
     if( pDashList->Count() )
     {
         m_pBtnModify->Enable();
@@ -319,14 +319,14 @@ void SvxLineDefTabPage::Reset( const SfxItemSet& rAttrs )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxLineDefTabPage::Create( Window* pWindow, const SfxItemSet& rOutAttrs )
 {
     return( new SvxLineDefTabPage( pWindow, rOutAttrs ) );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
 {
@@ -346,21 +346,21 @@ IMPL_LINK( SvxLineDefTabPage, SelectLinestyleHdl_Impl, void *, p )
 
         rXLSet.Put( XLineDashItem( OUString(), aDash ) );
 
-        // #i34740#
+        
         m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 
         m_pCtlPreview->Invalidate();
 
-        // Is not set before, in order to take the new style
-        // only if there was an entry selected in the ListBox.
-        // If it was called via Reset(), then p is == NULL
+        
+        
+        
         if( p )
             *pPageType = 2;
     }
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 {
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxLineDefTabPage, ChangePreviewHdl_Impl)
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl)
 {
@@ -391,7 +391,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber1Hdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl)
 {
@@ -412,7 +412,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ChangeNumber2Hdl_Impl)
 }
 
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
 {
@@ -420,7 +420,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
     {
         long nTmp1, nTmp2, nTmp3;
 
-        // was changed with Control
+        
         if( p )
         {
             nTmp1 = GetCoreValue( *m_pMtrLength1, ePoolUnit ) * XOUT_WIDTH / 100;
@@ -437,7 +437,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
         m_pMtrLength2->SetDecimalDigits( 2 );
         m_pMtrDistance->SetDecimalDigits( 2 );
 
-        // adjust metric
+        
         m_pMtrLength1->SetUnit( eFUnit );
         m_pMtrLength2->SetUnit( eFUnit );
         m_pMtrDistance->SetUnit( eFUnit );
@@ -450,7 +450,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
     {
         long nTmp1, nTmp2, nTmp3;
 
-        // was changed with Control
+        
         if( p )
         {
             nTmp1 = GetCoreValue( *m_pMtrLength1, ePoolUnit ) * 100 / XOUT_WIDTH;
@@ -482,7 +482,7 @@ IMPL_LINK( SvxLineDefTabPage, ChangeMetricHdl_Impl, void *, p )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
 {
@@ -517,7 +517,7 @@ IMPL_LINK( SvxLineDefTabPage, SelectTypeHdl_Impl, void *, p )
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
 {
@@ -578,7 +578,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
 
             *pPageType = 2;
 
-            // save values for changes recognition (-> method)
+            
             m_pNumFldNumber1->SaveValue();
             m_pMtrLength1->SaveValue();
             m_pLbType1->SaveValue();
@@ -598,7 +598,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
     }
     delete( pDlg );
 
-    // determine button state
+    
     if ( pDashList->Count() )
     {
         m_pBtnModify->Enable();
@@ -608,7 +608,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickAddHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
 {
@@ -658,7 +658,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
 
                 *pPageType = 2;
 
-                // save values for changes recognition (-> method)
+                
                 m_pNumFldNumber1->SaveValue();
                 m_pMtrLength1->SaveValue();
                 m_pLbType1->SaveValue();
@@ -680,7 +680,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickModifyHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
 {
@@ -699,7 +699,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
             m_pLbLineStyles->SelectEntryPos( 0 );
 
             SelectLinestyleHdl_Impl( this );
-            *pPageType = 0; // style should not be taken
+            *pPageType = 0; 
 
             *pnDashListState |= CT_MODIFIED;
 
@@ -707,7 +707,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
         }
     }
 
-    // determine button state
+    
     if ( !pDashList->Count() )
     {
         m_pBtnModify->Disable();
@@ -717,7 +717,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickDeleteHdl_Impl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
 {
@@ -767,14 +767,14 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
                 *pnDashListState &= ~CT_MODIFIED;
             }
             else
-                //aIStream.Close();
+                
                 MessageDialog( GetParentDialog()
                               ,"NoLoadedFileDialog"
                               ,"cui/ui/querynoloadedfiledialog.ui").Execute();
         }
     }
 
-    // determine button state
+    
     if ( pDashList->Count() )
     {
         m_pBtnModify->Enable();
@@ -790,7 +790,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickLoadHdl_Impl)
     return( 0L );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
 {
@@ -837,7 +837,7 @@ IMPL_LINK_NOARG(SvxLineDefTabPage, ClickSaveHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::FillDash_Impl()
 {
@@ -857,15 +857,15 @@ void SvxLineDefTabPage::FillDash_Impl()
 
     rXLSet.Put( XLineDashItem( OUString(), aDash ) );
 
-    // #i34740#
+    
     m_pCtlPreview->SetLineAttributes(aXLineAttr.GetItemSet());
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLineDefTabPage::FillDialog_Impl()
 {
-    XDashStyle eXDS = aDash.GetDashStyle(); // XDASH_RECT, XDASH_ROUND
+    XDashStyle eXDS = aDash.GetDashStyle(); 
     if( eXDS == XDASH_RECTRELATIVE )
         m_pCbxSynchronize->Check();
     else
@@ -881,7 +881,7 @@ void SvxLineDefTabPage::FillDialog_Impl()
 
     ChangeMetricHdl_Impl( NULL );
 
-    // save values for changes recognition (-> method)
+    
     m_pNumFldNumber1->SaveValue();
     m_pMtrLength1->SaveValue();
     m_pLbType1->SaveValue();

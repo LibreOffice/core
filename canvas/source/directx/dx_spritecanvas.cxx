@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -68,7 +68,7 @@ namespace dxcanvas
 
     void SpriteCanvas::initialize()
     {
-        // #i64742# Only call initialize when not in probe mode
+        
         if( maArguments.getLength() == 0 )
             return;
 
@@ -98,7 +98,7 @@ namespace dxcanvas
         sal_Bool bIsFullscreen( sal_False );
         maArguments[3] >>= bIsFullscreen;
 
-        // setup helper
+        
         maDeviceHelper.init( *pParentWindow,
                              *this,
                              aRect,
@@ -118,7 +118,7 @@ namespace dxcanvas
 
         mxComponentContext.clear();
 
-        // forward to parent
+        
         SpriteCanvasBaseT::disposeThis();
     }
 
@@ -126,9 +126,9 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
+        
+        
+        
         return !mbIsVisible ? false : SpriteCanvasBaseT::showBuffer( bUpdateAll );
     }
 
@@ -136,9 +136,9 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
+        
+        
+        
         return !mbIsVisible ? false : SpriteCanvasBaseT::switchBuffer( bUpdateAll );
     }
 
@@ -146,9 +146,9 @@ namespace dxcanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
+        
+        
+        
         return !mbIsVisible ? false : maCanvasHelper.updateScreen(
             ::basegfx::unotools::b2IRectangleFromAwtRectangle(maBounds),
             bUpdateAll,
@@ -194,7 +194,7 @@ namespace dxcanvas
         SPRITECANVAS_SERVICE_NAME );
 }
 
-// The C shared lib entry points
+
 COMPHELPER_SERVICEDECL_EXPORTS1(directx9canvas, dxcanvas::dxSpriteCanvasDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

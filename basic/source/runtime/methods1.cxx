@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -107,7 +107,7 @@ RTLFUNC(CallByName)
     const sal_Int16 vbMethod    = 1;
     const sal_Int16 vbSet       = 8;
 
-    // At least 3 parameter needed plus function itself -> 4
+    
     sal_uInt16 nParCount = rPar.Count();
     if ( nParCount < 4 )
     {
@@ -115,7 +115,7 @@ RTLFUNC(CallByName)
         return;
     }
 
-    // 1. parameter is object
+    
     SbxBase* pObjVar = (SbxObject*)rPar.Get(1)->GetObject();
     SbxObject* pObj = NULL;
     if( pObjVar )
@@ -131,13 +131,13 @@ RTLFUNC(CallByName)
         return;
     }
 
-    // 2. parameter is ProcedureName
+    
     OUString aNameStr = rPar.Get(2)->GetOUString();
 
-    // 3. parameter is CallType
+    
     sal_Int16 nCallType = rPar.Get(3)->GetInteger();
 
-    //SbxObject* pFindObj = NULL;
+    
     SbxVariable* pFindVar = pObj->Find( aNameStr, SbxCLASS_DONTCARE );
     if( pFindVar == NULL )
     {
@@ -194,7 +194,7 @@ RTLFUNC(CallByName)
                 return;
             }
 
-            // Setup parameters
+            
             SbxArrayRef xArray;
             sal_uInt16 nMethParamCount = nParCount - 4;
             if( nMethParamCount > 0 )
@@ -207,7 +207,7 @@ RTLFUNC(CallByName)
                 }
             }
 
-            // Call method
+            
             SbxVariableRef refVar = rPar.Get(0);
             if( xArray.Is() )
                 pMeth->SetParameters( xArray );
@@ -220,7 +220,7 @@ RTLFUNC(CallByName)
     }
 }
 
-RTLFUNC(CBool) // JSM
+RTLFUNC(CBool) 
 {
     (void)pBasic;
     (void)bWrite;
@@ -238,7 +238,7 @@ RTLFUNC(CBool) // JSM
     rPar.Get(0)->PutBool(bVal);
 }
 
-RTLFUNC(CByte) // JSM
+RTLFUNC(CByte) 
 {
     (void)pBasic;
     (void)bWrite;
@@ -297,7 +297,7 @@ RTLFUNC(CDec)
 #endif
 }
 
-RTLFUNC(CDate) // JSM
+RTLFUNC(CDate) 
 {
     (void)pBasic;
     (void)bWrite;
@@ -315,7 +315,7 @@ RTLFUNC(CDate) // JSM
     rPar.Get(0)->PutDate(nVal);
 }
 
-RTLFUNC(CDbl)  // JSM
+RTLFUNC(CDbl)  
 {
     (void)pBasic;
     (void)bWrite;
@@ -326,7 +326,7 @@ RTLFUNC(CDbl)  // JSM
         SbxVariable *pSbxVariable = rPar.Get(1);
         if( pSbxVariable->GetType() == SbxSTRING )
         {
-            // #41690
+            
             OUString aScanStr = pSbxVariable->GetOUString();
             SbError Error = SbxValue::ScanNumIntnl( aScanStr, nVal );
             if( Error != SbxERR_OK )
@@ -347,7 +347,7 @@ RTLFUNC(CDbl)  // JSM
     rPar.Get(0)->PutDouble(nVal);
 }
 
-RTLFUNC(CInt)  // JSM
+RTLFUNC(CInt)  
 {
     (void)pBasic;
     (void)bWrite;
@@ -365,7 +365,7 @@ RTLFUNC(CInt)  // JSM
     rPar.Get(0)->PutInteger(nVal);
 }
 
-RTLFUNC(CLng)  // JSM
+RTLFUNC(CLng)  
 {
     (void)pBasic;
     (void)bWrite;
@@ -383,7 +383,7 @@ RTLFUNC(CLng)  // JSM
     rPar.Get(0)->PutLong(nVal);
 }
 
-RTLFUNC(CSng)  // JSM
+RTLFUNC(CSng)  
 {
     (void)pBasic;
     (void)bWrite;
@@ -394,7 +394,7 @@ RTLFUNC(CSng)  // JSM
         SbxVariable *pSbxVariable = rPar.Get(1);
         if( pSbxVariable->GetType() == SbxSTRING )
         {
-            // #41690
+            
             double dVal = 0.0;
             OUString aScanStr = pSbxVariable->GetOUString();
             SbError Error = SbxValue::ScanNumIntnl( aScanStr, dVal, /*bSingle=*/true );
@@ -416,7 +416,7 @@ RTLFUNC(CSng)  // JSM
     rPar.Get(0)->PutSingle(nVal);
 }
 
-RTLFUNC(CStr)  // JSM
+RTLFUNC(CStr)  
 {
     (void)pBasic;
     (void)bWrite;
@@ -434,7 +434,7 @@ RTLFUNC(CStr)  // JSM
     rPar.Get(0)->PutString(aString);
 }
 
-RTLFUNC(CVar)  // JSM
+RTLFUNC(CVar)  
 {
     (void)pBasic;
     (void)bWrite;
@@ -470,7 +470,7 @@ RTLFUNC(CVErr)
     rPar.Get(0)->PutErr( nErrCode );
 }
 
-RTLFUNC(Iif) // JSM
+RTLFUNC(Iif) 
 {
     (void)pBasic;
     (void)bWrite;
@@ -503,7 +503,7 @@ RTLFUNC(GetSystemType)
     }
     else
     {
-        // Removed for SRC595
+        
         rPar.Get(0)->PutInteger( -1 );
     }
 }
@@ -519,7 +519,7 @@ RTLFUNC(GetGUIType)
     }
     else
     {
-        // 17.7.2000 Make simple solution for testtool / fat office
+        
 #if defined (WNT)
         rPar.Get(0)->PutInteger( 1 );
 #elif defined UNX
@@ -592,7 +592,7 @@ RTLFUNC(Switch)
     sal_uInt16 nCount = rPar.Count();
     if( !(nCount & 0x0001 ))
     {
-        // number of arguments must be odd
+        
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
     }
     sal_uInt16 nCurExpr = 1;
@@ -608,8 +608,8 @@ RTLFUNC(Switch)
     rPar.Get(0)->PutNull();
 }
 
-//i#64882# Common wait impl for existing Wait and new WaitUntil
-// rtl functions
+
+
 void Wait_Impl( bool bDurationBased, SbxArray& rPar )
 {
     if( rPar.Count() != 2 )
@@ -623,7 +623,7 @@ void Wait_Impl( bool bDurationBased, SbxArray& rPar )
         double dWait = rPar.Get(1)->GetDouble();
         double dNow = Now_Impl();
          double dSecs = (double)( ( dWait - dNow ) * (double)( 24.0*3600.0) );
-        nWait = (long)( dSecs * 1000 ); // wait in thousands of sec
+        nWait = (long)( dSecs * 1000 ); 
     }
     else
     {
@@ -644,7 +644,7 @@ void Wait_Impl( bool bDurationBased, SbxArray& rPar )
     }
 }
 
-//i#64882#
+
 RTLFUNC(Wait)
 {
     (void)pBasic;
@@ -652,8 +652,8 @@ RTLFUNC(Wait)
     Wait_Impl( false, rPar );
 }
 
-//i#64882# add new WaitUntil ( for application.wait )
-// share wait_impl with 'normal' oobasic wait
+
+
 RTLFUNC(WaitUntil)
 {
     (void)pBasic;
@@ -666,10 +666,10 @@ RTLFUNC(DoEvents)
     (void)pBasic;
     (void)bWrite;
     (void)rPar;
-// don't undstand what upstream are up to
-// we already process application events etc. in between
-// basic runtime pcode ( on a timed basis )
-    // always return 0
+
+
+
+    
     rPar.Get(0)->PutInteger( 0 );
     Application::Reschedule( true );
 }
@@ -685,7 +685,7 @@ RTLFUNC(GetGUIVersion)
     }
     else
     {
-        // Removed for SRC595
+        
         rPar.Get(0)->PutLong( -1 );
     }
 }
@@ -803,7 +803,7 @@ RTLFUNC(Array)
     SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
     sal_uInt16 nArraySize = rPar.Count() - 1;
 
-    // ignore Option Base so far (unfortunately only known by the compiler)
+    
     bool bIncIndex = (IsBaseIndexOne() && SbiRuntime::isVBAEnabled() );
     if( nArraySize )
     {
@@ -821,10 +821,10 @@ RTLFUNC(Array)
         pArray->unoAddDim( 0, -1 );
     }
 
-    // insert parameters into the array
-    // ATTENTION: Using type sal_uInt16 for loop variable is
-    // mandatory to workaround a problem with the
-    // Solaris Intel compiler optimizer! See i104354
+    
+    
+    
+    
     for( sal_uInt16 i = 0 ; i < nArraySize ; i++ )
     {
         SbxVariable* pVar = rPar.Get(i+1);
@@ -838,7 +838,7 @@ RTLFUNC(Array)
         pArray->Put( pNew, &index );
     }
 
-    // return array
+    
     SbxVariableRef refVar = rPar.Get(0);
     sal_uInt16 nFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
@@ -848,13 +848,13 @@ RTLFUNC(Array)
 }
 
 
-// Featurewish #57868
-// The function returns a variant-array; if there are no parameters passed,
-// an empty array is created (according to dim a(); equal to a sequence of
-// the length 0 in Uno).
-// If there are parameters passed, there's a dimension created for each of
-// them; DimArray( 2, 2, 4 ) is equal to DIM a( 2, 2, 4 )
-// the array is always of the type variant
+
+
+
+
+
+
+
 RTLFUNC(DimArray)
 {
     (void)pBasic;
@@ -910,7 +910,7 @@ RTLFUNC(DimArray)
  */
 
 
-// 1st parameter = the object's name as string
+
 RTLFUNC(FindObject)
 {
     (void)pBasic;
@@ -934,9 +934,9 @@ RTLFUNC(FindObject)
     refVar->PutObject( pFindObj );
 }
 
-// address object-property in an object
-// 1st parameter = object
-// 2nd parameter = the property's name as string
+
+
+
 RTLFUNC(FindPropertyObject)
 {
     (void)pBasic;
@@ -994,7 +994,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxBYTE:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)SbxBYTE ); // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)SbxBYTE ); 
         }
         pStrm->WriteUChar( rVar.GetByte() );
         break;
@@ -1008,7 +1008,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxUINT:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)SbxINTEGER ); // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)SbxINTEGER ); 
         }
         pStrm->WriteInt16( rVar.GetInteger() );
         break;
@@ -1017,7 +1017,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxULONG:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)SbxLONG ); // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)SbxLONG ); 
         }
         pStrm->WriteInt32( rVar.GetLong() );
         break;
@@ -1025,14 +1025,14 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxSALUINT64:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)SbxSALINT64 ); // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)SbxSALINT64 ); 
         }
         pStrm->WriteUInt64( (sal_uInt64)rVar.GetInt64() );
         break;
     case SbxSINGLE:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)eType ); // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)eType ); 
         }
         pStrm->WriteFloat( rVar.GetSingle() );
         break;
@@ -1042,7 +1042,7 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
     case SbxDATE:
         if( bIsVariant )
         {
-            pStrm->WriteUInt16( (sal_uInt16)eType ); // VarType Id
+            pStrm->WriteUInt16( (sal_uInt16)eType ); 
         }
         pStrm->WriteDouble( rVar.GetDouble() );
         break;
@@ -1061,8 +1061,8 @@ static sal_Bool lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
             }
             else
             {
-                // without any length information! without end-identifier!
-                // What does that mean for Unicode?! Choosing conversion to ByteString...
+                
+                
                 OString aByteStr(OUStringToOString(rStr, osl_getThreadTextEncoding()));
                 pStrm->WriteCharPtr( (const char*)aByteStr.getStr() );
             }
@@ -1193,7 +1193,7 @@ static sal_Bool lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 }
 
 
-// nCurDim = 1...n
+
 static sal_Bool lcl_WriteReadSbxArray( SbxDimArray& rArr, SvStream* pStrm,
     sal_Bool bBinary, short nCurDim, short* pOtherDims, sal_Bool bWrite )
 {
@@ -1321,7 +1321,7 @@ RTLFUNC(Environ)
         return;
     }
     OUString aResult;
-    // should be ANSI but that's not possible under Win16 in the DLL
+    
     OString aByteStr(OUStringToOString(rPar.Get(1)->GetOUString(),
                                                  osl_getThreadTextEncoding()));
     const char* pEnvStr = getenv(aByteStr.getStr());
@@ -1522,7 +1522,7 @@ RTLFUNC(TypeLen)
 }
 
 
-// 1st parameter == class name, other parameters for initialisation
+
 RTLFUNC(CreateUnoStruct)
 {
     (void)pBasic;
@@ -1532,7 +1532,7 @@ RTLFUNC(CreateUnoStruct)
 }
 
 
-// 1st parameter == service-name
+
 RTLFUNC(CreateUnoService)
 {
     (void)pBasic;
@@ -1559,7 +1559,7 @@ RTLFUNC(CreateUnoValue)
 }
 
 
-// no parameters
+
 RTLFUNC(GetProcessServiceManager)
 {
     (void)pBasic;
@@ -1569,7 +1569,7 @@ RTLFUNC(GetProcessServiceManager)
 }
 
 
-// 1st parameter == Sequence<PropertyValue>
+
 RTLFUNC(CreatePropertySet)
 {
     (void)pBasic;
@@ -1579,7 +1579,7 @@ RTLFUNC(CreatePropertySet)
 }
 
 
-// multiple interface-names as parameters
+
 RTLFUNC(HasUnoInterfaces)
 {
     (void)pBasic;
@@ -1606,9 +1606,9 @@ RTLFUNC(EqualUnoObjects)
     RTL_Impl_EqualUnoObjects( pBasic, rPar, bWrite );
 }
 
-// Instantiate "com.sun.star.awt.UnoControlDialog" on basis
-// of a DialogLibrary entry: Convert from XML-ByteSequence
-// and attach events. Implemented in classes\eventatt.cxx
+
+
+
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite );
 
 RTLFUNC(CreateUnoDialog)
@@ -1619,7 +1619,7 @@ RTLFUNC(CreateUnoDialog)
     RTL_Impl_CreateUnoDialog( pBasic, rPar, bWrite );
 }
 
-// Return the application standard lib as root scope
+
 RTLFUNC(GlobalScope)
 {
     (void)pBasic;
@@ -1634,7 +1634,7 @@ RTLFUNC(GlobalScope)
     refVar->PutObject( p );
 }
 
-// Helper functions to convert Url from/to system paths
+
 RTLFUNC(ConvertToUrl)
 {
     (void)pBasic;
@@ -1684,7 +1684,7 @@ RTLFUNC(ConvertFromUrl)
 }
 
 
-// Provide DefaultContext
+
 RTLFUNC(GetDefaultContext)
 {
     (void)pBasic;
@@ -1717,7 +1717,7 @@ RTLFUNC(Join)
     {
         if( pArr->GetDims() != 1 )
         {
-            StarBASIC::Error( SbERR_WRONG_DIMS );   // Syntax Error?!
+            StarBASIC::Error( SbERR_WRONG_DIMS );   
         }
         OUString aDelim;
         if( nParCount == 3 )
@@ -1824,7 +1824,7 @@ RTLFUNC(Split)
     SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
     pArray->unoAddDim( 0, nArraySize-1 );
 
-    // insert parameter(s) into the array
+    
     for( short i = 0 ; i < nArraySize ; i++ )
     {
         SbxVariableRef xVar = new SbxVariable( SbxVARIANT );
@@ -1832,7 +1832,7 @@ RTLFUNC(Split)
         pArray->Put( (SbxVariable*)xVar, &i );
     }
 
-    // return array
+    
     SbxVariableRef refVar = rPar.Get(0);
     sal_uInt16 nFlags = refVar->GetFlags();
     refVar->ResetFlag( SBX_FIXED );
@@ -1841,7 +1841,7 @@ RTLFUNC(Split)
     refVar->SetParameters( NULL );
 }
 
-// MonthName(month[, abbreviate])
+
 RTLFUNC(MonthName)
 {
     (void)pBasic;
@@ -1881,7 +1881,7 @@ RTLFUNC(MonthName)
     rPar.Get(0)->PutString(aRetStr);
 }
 
-// WeekdayName(weekday, abbreviate, firstdayofweek)
+
 RTLFUNC(WeekdayName)
 {
     (void)pBasic;
@@ -1995,16 +1995,16 @@ IntervalInfo const * getIntervalInfo( const OUString& rStringCode )
 {
     static IntervalInfo const aIntervalTable[] =
     {
-        { INTERVAL_YYYY, "yyyy", 0.0,           false }, // Year
-        { INTERVAL_Q,    "q",    0.0,           false }, // Quarter
-        { INTERVAL_M,    "m",    0.0,           false }, // Month
-        { INTERVAL_Y,    "y",    1.0,           true  }, // Day of year
-        { INTERVAL_D,    "d",    1.0,           true  }, // Day
-        { INTERVAL_W,    "w",    1.0,           true  }, // Weekday
-        { INTERVAL_WW,   "ww",   7.0,           true  }, // Week
-        { INTERVAL_H,    "h",    1.0 /    24.0, true  }, // Hour
-        { INTERVAL_N,    "n",    1.0 /  1440.0, true  }, // Minute
-        { INTERVAL_S,    "s",    1.0 / 86400.0, true  }  // Second
+        { INTERVAL_YYYY, "yyyy", 0.0,           false }, 
+        { INTERVAL_Q,    "q",    0.0,           false }, 
+        { INTERVAL_M,    "m",    0.0,           false }, 
+        { INTERVAL_Y,    "y",    1.0,           true  }, 
+        { INTERVAL_D,    "d",    1.0,           true  }, 
+        { INTERVAL_W,    "w",    1.0,           true  }, 
+        { INTERVAL_WW,   "ww",   7.0,           true  }, 
+        { INTERVAL_H,    "h",    1.0 /    24.0, true  }, 
+        { INTERVAL_N,    "n",    1.0 /  1440.0, true  }, 
+        { INTERVAL_S,    "s",    1.0 / 86400.0, true  }  
     };
     for( std::size_t i = 0; i != SAL_N_ELEMENTS(aIntervalTable); ++i )
     {
@@ -2067,7 +2067,7 @@ RTLFUNC(DateAdd)
     }
     else
     {
-        // Keep hours, minutes, seconds
+        
         double dHoursMinutesSeconds = dDate - floor( dDate );
 
         bool bOk = true;
@@ -2133,7 +2133,7 @@ RTLFUNC(DateAdd)
 
         if( bOk )
         {
-            // Overflow?
+            
             sal_Int16 nNewYear, nNewMonth, nNewDay;
             implGetDayMonthYear( nNewYear, nNewMonth, nNewDay, dNewDate );
             if( nNewYear > 9999 || nNewYear < 100 )
@@ -2165,7 +2165,7 @@ RTLFUNC(DateDiff)
     (void)pBasic;
     (void)bWrite;
 
-    // DateDiff(interval, date1, date2[, firstdayofweek[, firstweekofyear]])
+    
 
     sal_uInt16 nParCount = rPar.Count();
     if( nParCount < 4 || nParCount > 6 )
@@ -2232,7 +2232,7 @@ RTLFUNC(DateDiff)
             double dDays2 = floor( dDate2 );
             if( pInfo->meInterval == INTERVAL_WW )
             {
-                sal_Int16 nFirstDay = 1;    // Default
+                sal_Int16 nFirstDay = 1;    
                 if( nParCount >= 5 )
                 {
                     nFirstDay = rPar.Get(4)->GetInteger();
@@ -2320,7 +2320,7 @@ double implGetDateOfFirstDayInFirstWeek
     if( nFirstDay == 0 )
         nFirstDay = sal_Int16( xCalendar->getFirstDayOfWeek() + 1 );
 
-    sal_Int16 nFirstWeekMinDays = 0;    // Not used for vbFirstJan1 = default
+    sal_Int16 nFirstWeekMinDays = 0;    
     if( nFirstWeek == 0 )
     {
         nFirstWeekMinDays = xCalendar->getMinimumNumberOfDaysForFirstWeek();
@@ -2335,9 +2335,9 @@ double implGetDateOfFirstDayInFirstWeek
             nFirstWeek = 3;
     }
     else if( nFirstWeek == 2 )
-        nFirstWeekMinDays = 4;      // vbFirstFourDays
+        nFirstWeekMinDays = 4;      
     else if( nFirstWeek == 3 )
-        nFirstWeekMinDays = 7;      // vbFirstFourDays
+        nFirstWeekMinDays = 7;      
 
     double dBaseDate;
     implDateSerial( nYear, 1, 1, dBaseDate );
@@ -2363,7 +2363,7 @@ RTLFUNC(DatePart)
     (void)pBasic;
     (void)bWrite;
 
-    // DatePart(interval, date[,firstdayofweek[, firstweekofyear]])
+    
 
     sal_uInt16 nParCount = rPar.Count();
     if( nParCount < 3 || nParCount > 5 )
@@ -2416,7 +2416,7 @@ RTLFUNC(DatePart)
         case INTERVAL_W:
         {
             bool bFirstDay = false;
-            sal_Int16 nFirstDay = 1;    // Default
+            sal_Int16 nFirstDay = 1;    
             if( nParCount >= 4 )
             {
                 nFirstDay = rPar.Get(3)->GetInteger();
@@ -2427,11 +2427,11 @@ RTLFUNC(DatePart)
         }
         case INTERVAL_WW:
         {
-            sal_Int16 nFirstDay = 1;    // Default
+            sal_Int16 nFirstDay = 1;    
             if( nParCount >= 4 )
                 nFirstDay = rPar.Get(3)->GetInteger();
 
-            sal_Int16 nFirstWeek = 1;   // Default
+            sal_Int16 nFirstWeek = 1;   
             if( nParCount == 5 )
                 nFirstWeek = rPar.Get(4)->GetInteger();
 
@@ -2442,18 +2442,18 @@ RTLFUNC(DatePart)
             {
                 if( dYearFirstDay > dDate )
                 {
-                    // Date belongs to last year's week
+                    
                     dYearFirstDay = implGetDateOfFirstDayInFirstWeek( nYear - 1, nFirstDay, nFirstWeek );
                 }
                 else if( nFirstWeek != 1 )
                 {
-                    // Check if date belongs to next year
+                    
                     double dNextYearFirstDay = implGetDateOfFirstDayInFirstWeek( nYear + 1, nFirstDay, nFirstWeek );
                     if( dDate >= dNextYearFirstDay )
                         dYearFirstDay = dNextYearFirstDay;
                 }
 
-                // Calculate week
+                
                 double dDiff = dDate - dYearFirstDay;
                 nRet = 1 + sal_Int32( dDiff / 7 );
             }
@@ -2478,7 +2478,7 @@ RTLFUNC(DatePart)
     rPar.Get(0)->PutLong( nRet );
 }
 
-// FormatDateTime(Date[,NamedFormat])
+
 RTLFUNC(FormatDateTime)
 {
     (void)pBasic;
@@ -2514,22 +2514,22 @@ RTLFUNC(FormatDateTime)
     SbxVariableRef pSbxVar = new SbxVariable( SbxSTRING );
     switch( nNamedFormat )
     {
-        // GeneralDate:
-        // Display a date and/or time. If there is a date part,
-        // display it as a short date. If there is a time part,
-        // display it as a long time. If present, both parts are displayed.
+        
+        
+        
+        
 
-        // 12/21/2004 11:24:50 AM
-        // 21.12.2004 12:13:51
+        
+        
     case 0:
         pSbxVar->PutDate( dDate );
         aRetStr = pSbxVar->GetOUString();
         break;
 
-        // LongDate: Display a date using the long date format specified
-        // in your computer's regional settings.
-        // Tuesday, December 21, 2004
-        // Dienstag, 21. December 2004
+        
+        
+        
+        
     case 1:
         {
             SvNumberFormatter* pFormatter = NULL;
@@ -2539,7 +2539,7 @@ RTLFUNC(FormatDateTime)
             }
             else
             {
-                sal_uInt32 n;   // Dummy
+                sal_uInt32 n;   
                 SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
             }
 
@@ -2555,21 +2555,21 @@ RTLFUNC(FormatDateTime)
             break;
         }
 
-        // ShortDate: Display a date using the short date format specified
-        // in your computer's regional settings.
-        // 21.12.2004
+        
+        
+        
     case 2:
         pSbxVar->PutDate( floor(dDate) );
         aRetStr = pSbxVar->GetOUString();
         break;
 
-        // LongTime: Display a time using the time format specified
-        // in your computer's regional settings.
-        // 11:24:50 AM
-        // 12:13:51
+        
+        
+        
+        
     case 3:
-        // ShortTime: Display a time using the 24-hour format (hh:mm).
-        // 11:24
+        
+        
     case 4:
         double n;
         double dTime = modf( dDate, &n );
@@ -2698,7 +2698,7 @@ RTLFUNC(SYD)
         return;
     }
 
-    // retrieve non-optional params
+    
 
     Sequence< Any > aParams( 4 );
     aParams[ 0 ] <<= makeAny( rPar.Get(1)->GetDouble() );
@@ -2722,7 +2722,7 @@ RTLFUNC(SLN)
         return;
     }
 
-    // retrieve non-optional params
+    
 
     Sequence< Any > aParams( 3 );
     aParams[ 0 ] <<= makeAny( rPar.Get(1)->GetDouble() );
@@ -2744,23 +2744,23 @@ RTLFUNC(Pmt)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    // retrieve non-optional params
+    
 
     double rate = rPar.Get(1)->GetDouble();
     double nper = rPar.Get(2)->GetDouble();
     double pmt = rPar.Get(3)->GetDouble();
 
-    // set default values for Optional args
+    
     double fv = 0;
     double type = 0;
 
-    // fv
+    
     if ( nArgCount >= 4 )
     {
         if( rPar.Get(4)->GetType() != SbxEMPTY )
             fv = rPar.Get(4)->GetDouble();
     }
-    // type
+    
     if ( nArgCount >= 5 )
     {
         if( rPar.Get(5)->GetType() != SbxEMPTY )
@@ -2789,24 +2789,24 @@ RTLFUNC(PPmt)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    // retrieve non-optional params
+    
 
     double rate = rPar.Get(1)->GetDouble();
     double per = rPar.Get(2)->GetDouble();
     double nper = rPar.Get(3)->GetDouble();
     double pv = rPar.Get(4)->GetDouble();
 
-    // set default values for Optional args
+    
     double fv = 0;
     double type = 0;
 
-    // fv
+    
     if ( nArgCount >= 5 )
     {
         if( rPar.Get(5)->GetType() != SbxEMPTY )
             fv = rPar.Get(5)->GetDouble();
     }
-    // type
+    
     if ( nArgCount >= 6 )
     {
         if( rPar.Get(6)->GetType() != SbxEMPTY )
@@ -2836,23 +2836,23 @@ RTLFUNC(PV)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    // retrieve non-optional params
+    
 
     double rate = rPar.Get(1)->GetDouble();
     double nper = rPar.Get(2)->GetDouble();
     double pmt = rPar.Get(3)->GetDouble();
 
-    // set default values for Optional args
+    
     double fv = 0;
     double type = 0;
 
-    // fv
+    
     if ( nArgCount >= 4 )
     {
         if( rPar.Get(4)->GetType() != SbxEMPTY )
             fv = rPar.Get(4)->GetDouble();
     }
-    // type
+    
     if ( nArgCount >= 5 )
     {
         if( rPar.Get(5)->GetType() != SbxEMPTY )
@@ -2887,7 +2887,7 @@ RTLFUNC(NPV)
     Any aValues = sbxToUnoValue( rPar.Get(2),
                 getCppuType( (Sequence<double>*)0 ) );
 
-    // convert for calc functions
+    
     Sequence< Sequence< double > > sValues(1);
     aValues >>= sValues[ 0 ];
     aValues <<= sValues;
@@ -2909,23 +2909,23 @@ RTLFUNC(NPer)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    // retrieve non-optional params
+    
 
     double rate = rPar.Get(1)->GetDouble();
     double pmt = rPar.Get(2)->GetDouble();
     double pv = rPar.Get(3)->GetDouble();
 
-    // set default values for Optional args
+    
     double fv = 0;
     double type = 0;
 
-    // fv
+    
     if ( nArgCount >= 4 )
     {
         if( rPar.Get(4)->GetType() != SbxEMPTY )
             fv = rPar.Get(4)->GetDouble();
     }
-    // type
+    
     if ( nArgCount >= 5 )
     {
         if( rPar.Get(5)->GetType() != SbxEMPTY )
@@ -2955,13 +2955,13 @@ RTLFUNC(MIRR)
         return;
     }
 
-    // retrieve non-optional params
+    
 
     Sequence< Any > aParams( 3 );
     Any aValues = sbxToUnoValue( rPar.Get(1),
                 getCppuType( (Sequence<double>*)0 ) );
 
-    // convert for calc functions
+    
     Sequence< Sequence< double > > sValues(1);
     aValues >>= sValues[ 0 ];
     aValues <<= sValues;
@@ -2985,18 +2985,18 @@ RTLFUNC(IRR)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    // retrieve non-optional params
+    
     Any aValues = sbxToUnoValue( rPar.Get(1),
                 getCppuType( (Sequence<double>*)0 ) );
 
-    // convert for calc functions
+    
     Sequence< Sequence< double > > sValues(1);
     aValues >>= sValues[ 0 ];
     aValues <<= sValues;
 
-    // set default values for Optional args
+    
     double guess = 0.1;
-    // guess
+    
     if ( nArgCount >= 2 )
     {
         if( rPar.Get(2)->GetType() != SbxEMPTY )
@@ -3022,24 +3022,24 @@ RTLFUNC(IPmt)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    // retrieve non-optional params
+    
 
     double rate = rPar.Get(1)->GetDouble();
     double per = rPar.Get(2)->GetInteger();
     double nper = rPar.Get(3)->GetDouble();
     double pv = rPar.Get(4)->GetDouble();
 
-    // set default values for Optional args
+    
     double fv = 0;
     double type = 0;
 
-    // fv
+    
     if ( nArgCount >= 5 )
     {
         if( rPar.Get(5)->GetType() != SbxEMPTY )
             fv = rPar.Get(5)->GetDouble();
     }
-    // type
+    
     if ( nArgCount >= 6 )
     {
         if( rPar.Get(6)->GetType() != SbxEMPTY )
@@ -3069,23 +3069,23 @@ RTLFUNC(FV)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    // retrieve non-optional params
+    
 
     double rate = rPar.Get(1)->GetDouble();
     double nper = rPar.Get(2)->GetDouble();
     double pmt = rPar.Get(3)->GetDouble();
 
-    // set default values for Optional args
+    
     double pv = 0;
     double type = 0;
 
-    // pv
+    
     if ( nArgCount >= 4 )
     {
         if( rPar.Get(4)->GetType() != SbxEMPTY )
             pv = rPar.Get(4)->GetDouble();
     }
-    // type
+    
     if ( nArgCount >= 5 )
     {
         if( rPar.Get(5)->GetType() != SbxEMPTY )
@@ -3114,17 +3114,17 @@ RTLFUNC(DDB)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    // retrieve non-optional params
+    
 
     double cost = rPar.Get(1)->GetDouble();
     double salvage = rPar.Get(2)->GetDouble();
     double life = rPar.Get(3)->GetDouble();
     double period = rPar.Get(4)->GetDouble();
 
-    // set default values for Optional args
+    
     double factor = 2;
 
-    // factor
+    
     if ( nArgCount >= 5 )
     {
         if( rPar.Get(5)->GetType() != SbxEMPTY )
@@ -3153,7 +3153,7 @@ RTLFUNC(Rate)
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
-    // retrieve non-optional params
+    
 
     double nper = 0;
     double pmt = 0;
@@ -3163,26 +3163,26 @@ RTLFUNC(Rate)
     pmt = rPar.Get(2)->GetDouble();
     pv = rPar.Get(3)->GetDouble();
 
-    // set default values for Optional args
+    
     double fv = 0;
     double type = 0;
     double guess = 0.1;
 
-    // fv
+    
     if ( nArgCount >= 4 )
     {
         if( rPar.Get(4)->GetType() != SbxEMPTY )
             fv = rPar.Get(4)->GetDouble();
     }
 
-    // type
+    
     if ( nArgCount >= 5 )
     {
         if( rPar.Get(5)->GetType() != SbxEMPTY )
             type = rPar.Get(5)->GetDouble();
     }
 
-    // guess
+    
     if ( nArgCount >= 6 )
     {
         if( rPar.Get(6)->GetType() != SbxEMPTY )
@@ -3249,7 +3249,7 @@ RTLFUNC(Input)
     (void)pBasic;
     (void)bWrite;
 
-    // 2 parameters needed
+    
     if ( rPar.Count() < 3 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3306,16 +3306,16 @@ sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay
 {
     Date aRefDate( 1,1,1900 );
     long nDays = (long) aDate;
-    nDays -= 2; // normalize: 1.1.1900 => 0
+    nDays -= 2; 
     aRefDate += nDays;
     DayOfWeek aDay = aRefDate.GetDayOfWeek();
     sal_Int16 nDay;
     if ( aDay != SUNDAY )
         nDay = (sal_Int16)aDay + 2;
     else
-        nDay = 1;   // 1 == Sunday
+        nDay = 1;   
 
-    // #117253 optional 2nd parameter "firstdayofweek"
+    
     if( bFirstDayParam )
     {
         if( nFirstDay < 0 || nFirstDay > 7 )

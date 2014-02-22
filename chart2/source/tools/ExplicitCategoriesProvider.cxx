@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ExplicitCategoriesProvider.hxx"
@@ -94,9 +94,9 @@ ExplicitCategoriesProvider::ExplicitCategoriesProvider( const Reference< chart2:
                     sal_Int32 nRowCount = aRows.getLength();
                     if( nColumnCount>1 && nRowCount>1 )
                     {
-                        //we have complex categories
-                        //->split them in the direction of the first series
-                        //detect whether the first series is a row or a column
+                        
+                        
+                        
                         bool bSeriesUsesColumns = true;
                         ::std::vector< Reference< XDataSeries > > aSeries( ChartModelHelper::getDataSeries( mrModel ) );
                         if( !aSeries.empty() )
@@ -283,9 +283,9 @@ std::vector< ComplexCategory > lcl_DataSequenceToComplexCategoryVector(
         }
         else
         {
-            // Empty value is interpreted as a continuation of the previous
-            // category. Note that having the same value as the previous one
-            // does not equate to a continuation of the category.
+            
+            
+            
 
             if (aCurrent.isEmpty())
                 ++nCurrentCount;
@@ -333,7 +333,7 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
     std::vector< std::vector< ComplexCategory > >::iterator aOuterIt( rComplexCats.begin() );
     std::vector< std::vector< ComplexCategory > >::const_iterator aOuterEnd( rComplexCats.end() );
 
-    //ensure that the category count is the same on each level
+    
     sal_Int32 nMaxCategoryCount = 0;
     {
         for( aOuterIt=rComplexCats.begin(); aOuterIt != aOuterEnd; ++aOuterIt )
@@ -355,7 +355,7 @@ Sequence< OUString > lcl_getExplicitSimpleCategories(
         }
     }
 
-    //create a list with an element for every index
+    
     std::vector< std::vector< ComplexCategory > > aComplexCatsPerIndex;
     for( aOuterIt=rComplexCats.begin() ; aOuterIt != aOuterEnd; ++aOuterIt )
     {
@@ -467,7 +467,7 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
                 OUString aTest;
                 double fTest = 0;
                 bool bContainsNan = false;
-                if( (aAny>>=aTest) && aTest.isEmpty() ) //empty String
+                if( (aAny>>=aTest) && aTest.isEmpty() ) 
                     bContainsEmptyString = true;
                 else if( (aAny>>=fTest) &&  ::rtl::math::isNan(fTest) )
                     bContainsNan = true;
@@ -480,7 +480,7 @@ bool lcl_fillDateCategories( const uno::Reference< data::XDataSequence >& xDataS
                 rDateCategories.push_back( aDatePlusIndex );
             else
             {
-                if( aAny.hasValue() && !bContainsEmptyString )//empty string does not count as non date value!
+                if( aAny.hasValue() && !bContainsEmptyString )
                     bOnlyDatesFound=false;
                 ::rtl::math::setNan( &aDatePlusIndex.fValue );
                 rDateCategories.push_back( aDatePlusIndex );
@@ -496,7 +496,7 @@ void ExplicitCategoriesProvider::init()
 {
     if( m_bDirty )
     {
-        m_aComplexCats.clear();//not one per index
+        m_aComplexCats.clear();
         m_aDateCategories.clear();
 
         if( m_xOriginalCategories.is() )
@@ -585,6 +585,6 @@ const std::vector< DatePlusIndex >&  ExplicitCategoriesProvider::getDateCategori
     return m_aDateCategories;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

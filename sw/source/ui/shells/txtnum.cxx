@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -44,26 +44,26 @@ using namespace svx::sidebar;
 
 void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 {
-    //Because the record before any shell exchange.
+    
     switch(rReq.GetSlot())
     {
     case FN_NUM_NUMBERING_ON:
     {
         GetShell().StartAllAction();
         SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , false );
-        sal_Bool bMode = !GetShell().SelectionHasNumber(); // #i29560#
+        sal_Bool bMode = !GetShell().SelectionHasNumber(); 
         if ( pItem )
             bMode = pItem->GetValue();
         else
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bMode ) );
 
-        if ( bMode != (GetShell().SelectionHasNumber()) ) // #i29560#
+        if ( bMode != (GetShell().SelectionHasNumber()) ) 
         {
             rReq.Done();
             if( bMode )
                 GetShell().NumOn();
             else
-                GetShell().NumOrBulletOff(); // #i29560#
+                GetShell().NumOrBulletOff(); 
         }
         sal_Bool bNewResult = GetShell().SelectionHasNumber();
         if (bNewResult!=bMode) {
@@ -80,19 +80,19 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
     {
         GetShell().StartAllAction();
         SFX_REQUEST_ARG( rReq, pItem, SfxBoolItem, FN_PARAM_1 , false );
-        sal_Bool bMode = !GetShell().SelectionHasBullet(); // #i29560#
+        sal_Bool bMode = !GetShell().SelectionHasBullet(); 
         if ( pItem )
             bMode = pItem->GetValue();
         else
             rReq.AppendItem( SfxBoolItem( FN_PARAM_1, bMode ) );
 
-        if ( bMode != (GetShell().SelectionHasBullet()) ) // #i29560#
+        if ( bMode != (GetShell().SelectionHasBullet()) ) 
         {
             rReq.Done();
             if( bMode )
                 GetShell().BulletOn();
             else
-                GetShell().NumOrBulletOff(); // #i29560#
+                GetShell().NumOrBulletOff(); 
         }
         sal_Bool bNewResult = GetShell().SelectionHasBullet();
         if (bNewResult!=bMode) {
@@ -119,7 +119,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         {
             SvxNumRule aRule = pCurRule->MakeSvxNumRule();
 
-            //convert type of linked bitmaps from SVX_NUM_BITMAP to (SVX_NUM_BITMAP|LINK_TOKEN)
+            
             for(sal_uInt16 i = 0; i < aRule.GetLevelCount(); i++)
             {
                 SvxNumberFormat aFmt(aRule.GetLevel(i));
@@ -147,7 +147,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
         else
         {
             SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
-                             // #i89178#
+                             
                              numfunc::GetDefaultPositionAndSpaceMode() );
             SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
             const bool bRightToLeft = GetShell().IsInRightToLeftText( 0 );
@@ -159,12 +159,12 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                     SvxNumberFormat aFmt( aSvxRule.GetLevel( n ) );
                     if ( n && bHtml )
                     {
-                        // 1/2" for HTML
+                        
                         aFmt.SetLSpace(720);
                         aFmt.SetAbsLSpace(n * 720);
                     }
-                    // #i38904#  Default alignment for
-                    // numbering/bullet should be rtl in rtl paragraph:
+                    
+                    
                     if ( bRightToLeft )
                     {
                         aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
@@ -178,7 +178,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 
         aSet.Put( SfxBoolItem( SID_PARAM_NUM_PRESET,false ));
 
-        // Before the dialogue of the HTML mode will be dropped at the Docshell.
+        
         pDocSh->PutItem(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(pDocSh)));
 
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
@@ -199,28 +199,28 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
                 SwNumRule aSetRule( pCurRule
                                         ? pCurRule->GetName()
                                         : GetShell().GetUniqueNumRuleName(),
-                                    // #i89178#
+                                    
                                     numfunc::GetDefaultPositionAndSpaceMode() );
                 aSetRule.SetSvxRule( *pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( sal_True );
-                // No start of new list, if an existing list style is edited.
-                // Otherwise start a new list.
+                
+                
                 const bool bCreateList = (pCurRule == 0);
                 GetShell().SetCurNumRule( aSetRule, bCreateList );
             }
-            // If the Dialog was leaved with OK but nothing was chosen then the
-            // numbering must be at least activated, if it is not already.
+            
+            
             else if( !pCurRule && SFX_ITEM_SET == aSet.GetItemState( SID_ATTR_NUMBERING_RULE, false, &pItem ))
             {
                 rReq.AppendItem( *pItem );
                 rReq.Done();
                 SvxNumRule* pSetRule = ((SvxNumBulletItem*)pItem)->GetNumRule();
                 SwNumRule aSetRule( GetShell().GetUniqueNumRuleName(),
-                                    // #i89178#
+                                    
                                     numfunc::GetDefaultPositionAndSpaceMode() );
                 aSetRule.SetSvxRule(*pSetRule, GetShell().GetDoc());
                 aSetRule.SetAutoRule( sal_True );
-                // start new list
+                
                 GetShell().SetCurNumRule( aSetRule, true );
             }
         }
@@ -239,7 +239,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 void SwTextShell::ExecSetNumber(SfxRequest &rReq)
 {
     SwNumRule aRule( GetShell().GetUniqueNumRuleName(),
-                         // #i89178#
+                         
                          numfunc::GetDefaultPositionAndSpaceMode() );
 
     SvxNumRule aSvxRule = aRule.MakeSvxNumRule();
@@ -252,12 +252,12 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
             SvxNumberFormat aFmt( aSvxRule.GetLevel( n ) );
            /* if ( n && bHtml )
             {
-                // 1/2" for HTML
+                
                 aFmt.SetLSpace(720);
                 aFmt.SetAbsLSpace(n * 720);
             }*/
-            // #i38904#  Default alignment for
-            // numbering/bullet should be rtl in rtl paragraph:
+            
+            
             if ( bRightToLeft )
             {
                 aFmt.SetNumAdjust( SVX_ADJUST_RIGHT );
@@ -279,7 +279,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
 
         aSvxRule = pCurRule->MakeSvxNumRule();
 
-        //convert type of linked bitmaps from SVX_NUM_BITMAP to (SVX_NUM_BITMAP|LINK_TOKEN)
+        
         for(sal_uInt16 i = 0; i < aSvxRule.GetLevelCount(); i++)
         {
             SvxNumberFormat aFmt(aSvxRule.GetLevel(i));
@@ -315,7 +315,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                          numfunc::GetDefaultPositionAndSpaceMode() );
 
                     SvxNumRule aTempRule = aTmpRule.MakeSvxNumRule();
-                    // set unit attribute to NB Manager
+                    
                     SfxItemSet aSet(GetPool(),
                             SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
                             0 );
@@ -345,7 +345,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                     const bool bCreateList = (pCurRule == 0);
                     GetShell().SetCurNumRule( aSetRule, bCreateList );
                 }
-                //End
+                
             }
             break;
         }
@@ -368,14 +368,14 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                          numfunc::GetDefaultPositionAndSpaceMode() );
 
                     SvxNumRule aTempRule = aTmpRule.MakeSvxNumRule();
-                    // set unit attribute to NB Manager
+                    
                     SfxItemSet aSet(GetPool(),
                             SID_ATTR_NUMBERING_RULE, SID_PARAM_CUR_NUM_LEVEL,
                             0 );
                     aSet.Put(SvxNumBulletItem(aTempRule));
                     pBullets->SetItems(&aSet);
 
-                    //SvxNumRule aTempRule( 0, 10, false );
+                    
                     pBullets->ApplyNumRule(aTempRule,nIdx,nActNumLvl);
                     sal_uInt16 nMask = 1;
                     for(sal_uInt16 i = 0; i < aSvxRule.GetLevelCount(); i++)
@@ -400,7 +400,7 @@ void SwTextShell::ExecSetNumber(SfxRequest &rReq)
                     const bool bCreateList = (pCurRule == 0);
                     GetShell().SetCurNumRule( aSetRule, bCreateList );
                 }
-                //End
+                
             }
 
         }

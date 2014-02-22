@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PageListWatcher.hxx"
@@ -180,43 +180,43 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
     InitLayoutVector();
     InitObjectVector();
-    SetObjectShell(pDrDocSh);       // for VCDrawModel
+    SetObjectShell(pDrDocSh);       
 
     if (mpDocSh)
     {
         SetSwapGraphics(true);
     }
 
-    // Set measuring unit (of the application) and scale (of SdMod)
+    
     sal_Int32 nX, nY;
     SdOptions* pOptions = SD_MOD()->GetSdOptions(meDocType);
     pOptions->GetScale( nX, nY );
 
-    // Allow UI scale only for draw documents.
+    
     if( eType == DOCUMENT_TYPE_DRAW )
-        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  // user-defined
+        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( nX, nY ) );  
     else
-        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( 1, 1 ) );    // default
+        SetUIUnit( (FieldUnit)pOptions->GetMetric(), Fraction( 1, 1 ) );    
 
     SetScaleUnit(MAP_100TH_MM);
     SetScaleFraction(Fraction(1, 1));
-    SetDefaultFontHeight(847);     // 24p
+    SetDefaultFontHeight(847);     
 
     pItemPool->SetDefaultMetric(SFX_MAPUNIT_100TH_MM);
     pItemPool->FreezeIdRanges();
     SetTextDefaults();
 
-    // DrawingEngine has to know where it is...
+    
     FmFormModel::SetStyleSheetPool( new SdStyleSheetPool( GetPool(), this ) );
 
-    // Set StyleSheetPool for DrawOutliner, so text objects can be read correctly.
-    // The link to the StyleRequest handler of the document is set later, in
-    // NewOrLoadCompleted, because only then do all the templates exist.
+    
+    
+    
     SdrOutliner& rOutliner = GetDrawOutliner();
     rOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
     SetCalcFieldValueHdl( &rOutliner );
 
-    // set linguistic options
+    
     {
         const SvtLinguConfig    aLinguConfig;
         SvtLinguOptions         aOptions;
@@ -237,21 +237,21 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     mpLocale = new ::com::sun::star::lang::Locale( aLanguageTag.getLocale());
     mpCharClass = new CharClass( aLanguageTag );
 
-    // If the current application language is a language that uses right-to-left text...
+    
     LanguageType eRealCTLLanguage = Application::GetSettings().GetLanguageTag().getLanguageType();
     if( MsLangId::isRightToLeft( eRealCTLLanguage ) )
     {
-        // ... then we have to set this as a default
+        
         SetDefaultWritingMode( ::com::sun::star::text::WritingMode_RL_TB );
     }
 
-    // for korean and japanese languages we have a different default for apply spacing between asian, latin and ctl text
+    
     if (MsLangId::isKorean(eRealCTLLanguage) || (LANGUAGE_JAPANESE == eRealCTLLanguage))
     {
         GetPool().GetSecondaryPool()->SetPoolDefaultItem( SvxScriptSpaceItem( sal_False, EE_PARA_ASIANCJKSPACING ) );
     }
 
-    // Set DefTab and SpellOptions for the SD module
+    
     sal_uInt16 nDefTab = pOptions->GetDefTab();
     SetDefaultTabulator( nDefTab );
 
@@ -299,12 +299,12 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     }
     rOutliner.SetControlWord(nCntrl);
 
-    // Initialize the printer independent layout mode
+    
     SetPrinterIndependentLayout (pOptions->GetPrinterIndependentLayout());
 
-    // Set the StyleSheetPool for HitTestOutliner.
-    // The link to the StyleRequest handler of the document is set later, in
-    // NewOrLoadCompleted, because only then do all the templates exist.
+    
+    
+    
     SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
     pHitTestOutliner->SetStyleSheetPool( (SfxStyleSheetPool*)GetStyleSheetPool() );
 
@@ -369,7 +369,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
 
 }
 
-// Destructor
+
 SdDrawDocument::~SdDrawDocument()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
@@ -394,7 +394,7 @@ SdDrawDocument::~SdDrawDocument()
 
     if (pLinkManager)
     {
-        // Release BaseLinks
+        
         if ( !pLinkManager->GetLinks().empty() )
         {
             pLinkManager->Remove( 0, pLinkManager->GetLinks().size() );
@@ -412,7 +412,7 @@ SdDrawDocument::~SdDrawDocument()
     {
         for (sal_uLong j = 0; j < mpCustomShowList->size(); j++)
         {
-            // If necessary, delete CustomShows
+            
             SdCustomShow* pCustomShow = (*mpCustomShowList)[j];
             delete pCustomShow;
         }
@@ -434,17 +434,17 @@ SdDrawDocument::~SdDrawDocument()
     mpCharClass = NULL;
 }
 
-// This method creates a new document (SdDrawDocument) and returns a pointer to
-// said document. The drawing engine uses this method to put the document (or
-// parts of it) into the clipboard/DragServer.
+
+
+
 SdrModel* SdDrawDocument::AllocModel() const
 {
     SdDrawDocument* pNewModel = NULL;
 
     if( mpCreatingTransferable )
     {
-        // Document is created for drag & drop/clipboard. To be able to
-        // do this, the document has to know a DocShell (SvPersist).
+        
+        
         SfxObjectShell*   pObj = NULL;
         ::sd::DrawDocShell*     pNewDocSh = NULL;
 
@@ -459,8 +459,8 @@ SdrModel* SdDrawDocument::AllocModel() const
         pNewDocSh->DoInitNew( NULL );
         pNewModel = pNewDocSh->GetDoc();
 
-        // Only necessary for clipboard -
-        // for drag & drop this is handled by DragServer
+        
+        
         SdStyleSheetPool* pOldStylePool = (SdStyleSheetPool*) GetStyleSheetPool();
         SdStyleSheetPool* pNewStylePool = (SdStyleSheetPool*) pNewModel->GetStyleSheetPool();
 
@@ -471,18 +471,18 @@ SdrModel* SdDrawDocument::AllocModel() const
 
         for (sal_uInt16 i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
         {
-            // Move with all of the master page's layouts
+            
             OUString aOldLayoutName(((SdDrawDocument*) this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
             aOldLayoutName = aOldLayoutName.copy( 0, aOldLayoutName.indexOf( SD_LT_SEPARATOR ) );
             SdStyleSheetVector aCreatedSheets;
             pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool, aCreatedSheets );
         }
 
-        pNewModel->NewOrLoadCompleted( DOC_LOADED );  // loaded from source document
+        pNewModel->NewOrLoadCompleted( DOC_LOADED );  
     }
     else if( mbAllocDocSh )
     {
-        // Create a DocShell which is then returned with GetAllocedDocSh()
+        
         SdDrawDocument* pDoc = (SdDrawDocument*) this;
         pDoc->SetAllocDocSh(false);
         pDoc->mxAllocedDocShRef = new ::sd::DrawDocShell(
@@ -498,51 +498,51 @@ SdrModel* SdDrawDocument::AllocModel() const
     return pNewModel;
 }
 
-// This method creates a new page (SdPage) and returns a pointer to said page.
-// The drawing engine uses this method to create pages (whose types it does
-// not know, as they are _derivatives_ of SdrPage) when loading.
+
+
+
 SdrPage* SdDrawDocument::AllocPage(bool bMasterPage)
 {
     return new SdPage(*this, bMasterPage);
 }
 
-// When the model has changed
+
 void SdDrawDocument::SetChanged(bool bFlag)
 {
     if (mpDocSh)
     {
         if (mbNewOrLoadCompleted && mpDocSh->IsEnableSetModified())
         {
-            // Pass on to base class
+            
             FmFormModel::SetChanged(bFlag);
 
-            // Forward to ObjectShell
+            
             mpDocSh->SetModified(bFlag);
         }
     }
     else
     {
-        // Pass on to base class
+        
         FmFormModel::SetChanged(bFlag);
     }
 }
 
-// The model changed, don't call anything else
+
 void SdDrawDocument::NbcSetChanged(sal_Bool bFlag)
 {
-    // forward to baseclass
+    
     FmFormModel::SetChanged(bFlag);
 }
 
-// NewOrLoadCompleted is called when the document is loaded, or when it is clear
-// it won't load any more.
+
+
 void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 {
     if (eMode == NEW_DOC)
     {
-        // New document:
-        // create slideshow and default templates,
-        // create pool for virtual controls
+        
+        
+        
         CreateLayoutTemplates();
         CreateDefaultCellStyles();
 
@@ -550,7 +550,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
     }
     else if (eMode == DOC_LOADED)
     {
-            // Document has finished loading
+            
 
         CheckMasterPages();
 
@@ -559,7 +559,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
         for ( sal_uInt16 i = 0; i < GetPageCount(); i++ )
         {
-            // Check for correct layout names
+            
             SdPage* pPage = (SdPage*) GetPage( i );
 
             if(pPage->TRG_HasMasterPage())
@@ -575,7 +575,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
         for ( sal_uInt16 nPage = 0; nPage < GetMasterPageCount(); nPage++)
         {
-            // LayoutName and PageName must be the same
+            
             SdPage* pPage = (SdPage*) GetMasterPage( nPage );
 
             OUString aName( pPage->GetLayoutName() );
@@ -585,26 +585,26 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
                 pPage->SetName( aName );
         }
 
-        // Create names of the default layers in the user's language
+        
         RestoreLayerNames();
 
-        // Create names of the styles in the user's language
+        
         static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->UpdateStdNames();
 
-        // Create any missing styles - eg. formerly, there was no Subtitle style
+        
         static_cast<SdStyleSheetPool*>(mxStyleSheetPool.get())->CreatePseudosIfNecessary();
     }
 
-    // Set default style of Drawing Engine
+    
     OUString aName( SD_RESSTR(STR_STANDARD_STYLESHEET_NAME));
     SetDefaultStyleSheet(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(aName, SD_STYLE_FAMILY_GRAPHICS)));
 
-    // #i119287# Set default StyleSheet for SdrGrafObj and SdrOle2Obj
+    
     SetDefaultStyleSheetForSdrGrafObjAndSdrOle2Obj(static_cast<SfxStyleSheet*>(mxStyleSheetPool->Find(SD_RESSTR(STR_POOLSHEET_OBJNOLINENOFILL), SD_STYLE_FAMILY_GRAPHICS)));
 
-    // Initialize DrawOutliner and DocumentOutliner, but don't initialize the
-    // global outliner, as it is not document specific like StyleSheetPool and
-    // StyleRequestHandler are.
+    
+    
+    
     ::Outliner& rDrawOutliner = GetDrawOutliner();
     rDrawOutliner.SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
     sal_uLong nCntrl = rDrawOutliner.GetControlWord();
@@ -614,9 +614,9 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
         nCntrl &= ~EE_CNTRL_ONLINESPELLING;
     rDrawOutliner.SetControlWord(nCntrl);
 
-    // Initialize HitTestOutliner and DocumentOutliner, but don't initialize the
-    // global outliner, as it is not document specific like StyleSheetPool and
-    // StyleRequestHandler are.
+    
+    
+    
     pHitTestOutliner->SetStyleSheetPool((SfxStyleSheetPool*)GetStyleSheetPool());
 
     if(mpOutliner)
@@ -630,12 +630,12 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
     if ( eMode == DOC_LOADED )
     {
-        // Make presentation objects listeners of the appropriate styles
+        
         SdStyleSheetPool* pSPool = (SdStyleSheetPool*) GetStyleSheetPool();
         sal_uInt16 nPage, nPageCount;
 
-        // create missing layout style sheets for broken documents
-        //         that where created with the 5.2
+        
+        
         nPageCount = GetMasterSdPageCount( PK_STANDARD );
         for (nPage = 0; nPage < nPageCount; nPage++)
         {
@@ -643,14 +643,14 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
             pSPool->CreateLayoutStyleSheets( pPage->GetName(), sal_True );
         }
 
-        // Default and notes pages:
+        
         for (nPage = 0; nPage < GetPageCount(); nPage++)
         {
             SdPage* pPage = (SdPage*)GetPage(nPage);
             NewOrLoadCompleted( pPage, pSPool );
         }
 
-        // Master pages:
+        
         for (nPage = 0; nPage < GetMasterPageCount(); nPage++)
         {
             SdPage* pPage = (SdPage*)GetMasterPage(nPage);
@@ -661,7 +661,7 @@ void SdDrawDocument::NewOrLoadCompleted(DocCreationMode eMode)
 
     mbNewOrLoadCompleted = true;
 
-    // Update all linked pages
+    
     SdPage* pPage = NULL;
     sal_uInt16 nMaxSdPages = GetSdPageCount(PK_STANDARD);
 
@@ -685,12 +685,12 @@ void SdDrawDocument::UpdateAllLinks()
 {
     if ( !pDocLockedInsertingLinks && pLinkManager && !pLinkManager->GetLinks().empty() )
     {
-        pDocLockedInsertingLinks = this; // lock inserting links. only links in this document should by resolved
+        pDocLockedInsertingLinks = this; 
 
-        pLinkManager->UpdateAllLinks();  // query box: update all links?
+        pLinkManager->UpdateAllLinks();  
 
         if( pDocLockedInsertingLinks == this )
-            pDocLockedInsertingLinks = NULL;  // unlock inserting links
+            pDocLockedInsertingLinks = NULL;  
     }
 }
 
@@ -702,7 +702,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
     sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
     if(!rPresentationShapes.isEmpty())
     {
-        // Create lists of title and outline styles
+        
         OUString aName = pPage->GetLayoutName();
         aName = aName.copy( 0, aName.indexOf( SD_LT_SEPARATOR ) );
 
@@ -714,8 +714,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         SdrObject* pObj = 0;
         rPresentationShapes.seekShape(0);
 
-        // Now look for title and outline text objects, then make those objects
-        // listeners.
+        
+        
         while( (pObj = rPresentationShapes.getNextShape()) )
         {
             if (pObj->GetObjInventor() == SdrInventor)
@@ -728,7 +728,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                     if( pOPO && pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
                         pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
 
-                    // sal_True: don't delete "hard" attributes when doing this.
+                    
                     if (pTitleSheet)
                         pObj->SetStyleSheet(pTitleSheet, true);
                 }
@@ -747,7 +747,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
                             pObj->StartListening(*pSheet);
 
                             if( iter == aOutlineList.begin())
-                                // text frame listens to stylesheet of layer 1
+                                
                                 pObj->NbcSetStyleSheet(pSheet, sal_True);
                         }
                     }
@@ -771,8 +771,8 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
     }
 }
 
-// Local outliner that is used for outline mode. In this outliner, OutlinerViews
-// may be inserted.
+
+
 ::sd::Outliner* SdDrawDocument::GetOutliner(sal_Bool bCreateOutliner)
 {
     if (!mpOutliner && bCreateOutliner)
@@ -789,17 +789,17 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
     return(mpOutliner);
 }
 
-// Internal outliner that is used to create text objects. We don't insert any
-// OutlinerViews into this outliner!
+
+
 ::sd::Outliner* SdDrawDocument::GetInternalOutliner(sal_Bool bCreateOutliner)
 {
     if ( !mpInternalOutliner && bCreateOutliner )
     {
         mpInternalOutliner = new ::sd::Outliner( this, OUTLINERMODE_TEXTOBJECT );
 
-        // This outliner is only used to create special text objects. As no
-        // information about portions is saved in this outliner, the update mode
-        // can/should always remain sal_False.
+        
+        
+        
         mpInternalOutliner->SetUpdateMode( sal_False );
         mpInternalOutliner->EnableUndo( sal_False );
 
@@ -813,16 +813,16 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
     DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->GetUpdateMode() == sal_False ) , "InternalOutliner: UpdateMode = sal_True !" );
     DBG_ASSERT( !mpInternalOutliner || ( mpInternalOutliner->IsUndoEnabled() == sal_False ), "InternalOutliner: Undo = sal_True !" );
 
-    // If you add stuff here, always clear it out.
-    // Advantages:
-    // a) no unnecessary Clear calls
-    // b) no wasted memory
+    
+    
+    
+    
     DBG_ASSERT( !mpInternalOutliner || ( ( mpInternalOutliner->GetParagraphCount() == 1 ) && ( mpInternalOutliner->GetText( mpInternalOutliner->GetParagraph( 0 ) ).isEmpty() ) ), "InternalOutliner: not empty!" );
 
     return mpInternalOutliner;
 }
 
-// OnlineSpelling on/off
+
 void SdDrawDocument::SetOnlineSpell(sal_Bool bIn)
 {
     mbOnlineSpell = bIn;
@@ -873,7 +873,7 @@ void SdDrawDocument::SetOnlineSpell(sal_Bool bIn)
     }
 }
 
-// OnlineSpelling: highlighting on/off
+
 uno::Reference< uno::XInterface > SdDrawDocument::createUnoModel()
 {
     uno::Reference< uno::XInterface > xModel;
@@ -901,12 +901,12 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
     {
         case ::com::sun::star::document::PrinterIndependentLayout::DISABLED:
         case ::com::sun::star::document::PrinterIndependentLayout::ENABLED:
-            // Just store supported modes and inform the doc shell
+            
             mnPrinterIndependentLayout = nMode;
 
-            // Since it is possible that a SdDrawDocument is constructed without a
-            // SdDrawDocShell the pointer member mpDocSh needs to be tested
-            // before the call is executed. This is e. g. used for copy/paste.
+            
+            
+            
             if(mpDocSh)
             {
                 mpDocSh->UpdateRefDevice ();
@@ -915,7 +915,7 @@ void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
             break;
 
         default:
-            // Ignore unknown values
+            
             break;
     }
 }
@@ -962,7 +962,7 @@ void SdDrawDocument::SetCalcFieldValueHdl(::Outliner* pOutliner)
 
 sal_uInt16 SdDrawDocument::GetAnnotationAuthorIndex( const OUString& rAuthor )
 {
-    // force current user to have first color
+    
     if( maAnnotationAuthors.empty() )
     {
         SvtUserOptions aUserOptions;
@@ -993,7 +993,7 @@ void SdDrawDocument::InitLayoutVector()
     const Reference<css::uno::XComponentContext> xContext(
         ::comphelper::getProcessComponentContext() );
 
-    // get file list from configuration
+    
     Sequence< rtl::OUString > aFiles(
         officecfg::Office::Impress::Misc::LayoutListFiles::get(xContext) );
 
@@ -1002,13 +1002,13 @@ void SdDrawDocument::InitLayoutVector()
     {
         sFilename = ::comphelper::getExpandedFilePath(aFiles[i]);
 
-        // load layout file into DOM
+        
         Reference< XMultiServiceFactory > xServiceFactory(
             xContext->getServiceManager() , UNO_QUERY_THROW );
         const Reference<XDocumentBuilder> xDocBuilder(
             DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
 
-        // loop over every layout entry in current file
+        
         const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
         const Reference<XNodeList> layoutlist = xDoc->getElementsByTagName("layout");
         const int nElements = layoutlist->getLength();
@@ -1022,7 +1022,7 @@ void SdDrawDocument::InitObjectVector()
     const Reference<css::uno::XComponentContext> xContext(
         ::comphelper::getProcessComponentContext() );
 
-    // get file list from configuration
+    
     Sequence< rtl::OUString > aFiles(
        officecfg::Office::Impress::Misc::PresObjListFiles::get(xContext) );
 
@@ -1031,13 +1031,13 @@ void SdDrawDocument::InitObjectVector()
     {
         sFilename = ::comphelper::getExpandedFilePath(aFiles[i]);
 
-        // load presentation object file into DOM
+        
         Reference< XMultiServiceFactory > xServiceFactory(
             xContext->getServiceManager() , UNO_QUERY_THROW );
         const Reference<XDocumentBuilder> xDocBuilder(
             DocumentBuilder::create( comphelper::getComponentContext (xServiceFactory) ));
 
-        // loop over every object entry in current file
+        
         const Reference<XDocument> xDoc = xDocBuilder->parseURI( sFilename );
         const Reference<XNodeList> objectlist = xDoc->getElementsByTagName("object");
         const int nElements = objectlist->getLength();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "framework/ConfigurationController.hxx"
@@ -71,7 +71,7 @@ Sequence<OUString> SAL_CALL ConfigurationController_getSupportedServiceNames (vo
 
 
 
-//----- ConfigurationController::Implementation -------------------------------
+
 
 class ConfigurationController::Implementation
 {
@@ -116,7 +116,7 @@ public:
 
 
 
-//===== ConfigurationController::Lock =========================================
+
 
 ConfigurationController::Lock::Lock (const Reference<XConfigurationController>& rxController)
     : mxController(rxController)
@@ -139,7 +139,7 @@ ConfigurationController::Lock::~Lock (void)
 
 
 
-//===== ConfigurationController ===============================================
+
 
 ConfigurationController::ConfigurationController (void) throw()
     : ConfigurationControllerInterfaceBase(MutexOwner::maMutex)
@@ -160,18 +160,18 @@ void SAL_CALL ConfigurationController::disposing (void)
 
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::disposing");
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":     requesting empty configuration");
-    // To destroy all resources an empty configuration is requested and then,
-    // synchronously, all resulting requests are processed.
+    
+    
     mpImplementation->mpQueueProcessor->Clear();
     restoreConfiguration(new Configuration(this,false));
     mpImplementation->mpQueueProcessor->ProcessUntilEmpty();
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":     all requests processed");
 
-    // Now that all resources have been deactivated, mark the controller as
-    // disposed.
+    
+    
     mbIsDisposed = true;
 
-    // Release the listeners.
+    
     lang::EventObject aEvent;
     aEvent.Source = uno::Reference<uno::XInterface>((cppu::OWeakObject*)this);
 
@@ -213,7 +213,7 @@ void ConfigurationController::RequestSynchronousUpdate (void)
 
 
 
-//----- XConfigurationControllerBroadcaster -----------------------------------
+
 
 void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener,
@@ -252,7 +252,7 @@ void SAL_CALL ConfigurationController::notifyEvent (
     mpImplementation->mpBroadcaster->NotifyListeners(rEvent);
 }
 
-//----- XConfigurationController ----------------------------------------------
+
 
 void SAL_CALL ConfigurationController::lock()
     throw (RuntimeException, std::exception)
@@ -278,8 +278,8 @@ void SAL_CALL ConfigurationController::unlock (void)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
-    // Allow unlocking while the ConfigurationController is being disposed
-    // (but not when that is done and the controller is disposed.)
+    
+    
     if (rBHelper.bDisposed)
         ThrowIfDisposed();
 
@@ -300,11 +300,11 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     ::osl::MutexGuard aGuard (maMutex);
        ThrowIfDisposed();
 
-    // Check whether we are being disposed.  This is handled differently
-    // then being completely disposed because the first thing disposing()
-    // does is to deactivate all remaining resources.  This is done via
-    // regular methods which must not throw DisposedExceptions.  Therefore
-    // we just return silently during that stage.
+    
+    
+    
+    
+    
     if (rBHelper.bInDispose)
     {
         SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::requestResourceActivation(): ignoring " <<
@@ -321,8 +321,8 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
     {
         if (eMode == ResourceActivationMode_REPLACE)
         {
-            // Get a list of the matching resources and create deactivation
-            // requests for them.
+            
+            
             Sequence<Reference<XResourceId> > aResourceList (
                 mpImplementation->mxRequestedConfiguration->getResources(
                     rxResourceId->getAnchor(),
@@ -331,14 +331,14 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
 
             for (sal_Int32 nIndex=0; nIndex<aResourceList.getLength(); ++nIndex)
             {
-                // Do not request the deactivation of the resource for which
-                // this method was called.  Doing it would not change the
-                // outcome but would result in unnecessary work.
+                
+                
+                
                 if (rxResourceId->compareTo(aResourceList[nIndex]) == 0)
                     continue;
 
-                // Request the deactivation of a resource and all resources
-                // linked to it.
+                
+                
                 requestResourceDeactivation(aResourceList[nIndex]);
             }
         }
@@ -367,8 +367,8 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
 
     if (rxResourceId.is())
     {
-        // Request deactivation of all resources linked to the specified one
-        // as well.
+        
+        
         const Sequence<Reference<XResourceId> > aLinkedResources (
             mpImplementation->mxRequestedConfiguration->getResources(
                 rxResourceId,
@@ -377,13 +377,13 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
         const sal_Int32 nCount (aLinkedResources.getLength());
         for (sal_Int32 nIndex=0; nIndex<nCount; ++nIndex)
         {
-            // We do not add deactivation requests directly but call this
-            // method recursively, so that when one time there are resources
-            // linked to linked resources, these are handled correctly, too.
+            
+            
+            
             requestResourceDeactivation(aLinkedResources[nIndex]);
         }
 
-        // Add a deactivation request for the specified resource.
+        
         Reference<XConfigurationChangeRequest> xRequest(
             new GenericConfigurationChangeRequest(
                 rxResourceId,
@@ -418,14 +418,14 @@ void SAL_CALL ConfigurationController::update (void)
 
     if (mpImplementation->mpQueueProcessor->IsEmpty())
     {
-        // The queue is empty.  Add another request that does nothing but
-        // asynchronously trigger a request for an update.
+        
+        
         mpImplementation->mpQueueProcessor->AddRequest(new UpdateRequest());
     }
     else
     {
-        // The queue is not empty, so we rely on the queue processor to
-        // request an update automatically when the queue becomes empty.
+        
+        
     }
 }
 
@@ -501,13 +501,13 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
 
-    // We will probably be making a couple of activation and deactivation
-    // requests so lock the configuration controller and let it later update
-    // all changes at once.
+    
+    
+    
     ::boost::shared_ptr<ConfigurationUpdaterLock> pLock (
         mpImplementation->mpConfigurationUpdater->GetLock());
 
-    // Get lists of resources that are to be activated or deactivated.
+    
     Reference<XConfiguration> xCurrentConfiguration (mpImplementation->mxRequestedConfiguration);
 #if OSL_DEBUG_LEVEL >=1
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ConfigurationController::restoreConfiguration(");
@@ -527,8 +527,8 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
 
     ConfigurationClassifier::ResourceIdVector::const_iterator iResource;
 
-    // Request the deactivation of resources that are not requested in the
-    // new configuration.
+    
+    
     const ConfigurationClassifier::ResourceIdVector& rResourcesToDeactivate (
         aClassifier.GetC2minusC1());
     for (iResource=rResourcesToDeactivate.begin();
@@ -538,8 +538,8 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
         requestResourceDeactivation(*iResource);
     }
 
-    // Request the activation of resources that are requested in the
-    // new configuration but are not part of the current configuration.
+    
+    
     const ConfigurationClassifier::ResourceIdVector& rResourcesToActivate (
         aClassifier.GetC1minusC2());
     for (iResource=rResourcesToActivate.begin();
@@ -555,7 +555,7 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
 
 
 
-//----- XResourceFactoryManager -----------------------------------------------
+
 
 void SAL_CALL ConfigurationController::addResourceFactory(
     const OUString& sResourceURL,
@@ -607,7 +607,7 @@ Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory
 
 
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArguments)
     throw (Exception, RuntimeException)
@@ -627,7 +627,7 @@ void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArgumen
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void ConfigurationController::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
@@ -649,7 +649,7 @@ void ConfigurationController::ThrowIfDisposed (void) const
 
 
 
-//===== ConfigurationController::Implementation ===============================
+
 
 ConfigurationController::Implementation::Implementation (
     ConfigurationController& rController,
@@ -680,6 +680,6 @@ ConfigurationController::Implementation::~Implementation (void)
 
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

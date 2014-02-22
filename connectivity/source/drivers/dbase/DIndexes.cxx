@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbase/DIndexes.hxx"
@@ -77,19 +77,19 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
     }
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void ODbaseIndexes::impl_refresh(  ) throw(RuntimeException)
 {
     if(m_pTable)
         m_pTable->refreshIndexes();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > ODbaseIndexes::createDescriptor()
 {
     return new ODbaseIndex(m_pTable);
 }
-// -------------------------------------------------------------------------
-// XAppend
+
+
 sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
@@ -102,8 +102,8 @@ sdbcx::ObjectType ODbaseIndexes::appendObject( const OUString& _rForName, const 
 
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
-// XDrop
+
+
 void ODbaseIndexes::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
 {
     Reference< XUnoTunnel> xTunnel(getObject(_nPos),UNO_QUERY);
@@ -115,7 +115,7 @@ void ODbaseIndexes::dropObject(sal_Int32 _nPos,const OUString /*_sElementName*/)
     }
 
 }
-// -------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

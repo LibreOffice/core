@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaparagraphformat.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -187,7 +187,7 @@ sal_Int32 SAL_CALL SwVbaParagraphFormat::getOutlineLevel() throw (uno::RuntimeEx
     mxParaProps->getPropertyValue("ParaStyleName") >>= aHeading;
     if( aHeading.startsWith( HEADING ) )
     {
-        // get the sub string after "Heading"
+        
         nLevel = aHeading.copy( HEADING.getLength() ).toInt32();
     }
     return nLevel;
@@ -197,7 +197,7 @@ void SAL_CALL SwVbaParagraphFormat::setOutlineLevel( sal_Int32 _outlinelevel ) t
 {
     if( _outlinelevel != getOutlineLevel() )
     {
-        // TODO: in my test in msword, there is no effect for this function.
+        
     }
 }
 
@@ -306,16 +306,16 @@ uno::Any SAL_CALL SwVbaParagraphFormat::getWidowControl() throw (uno::RuntimeExc
     mxParaProps->getPropertyValue("ParaWidows") >>= nWidow;
     sal_Int8 nOrphan = 0;
     mxParaProps->getPropertyValue("ParaOrphans") >>= nOrphan;
-    // if the amount of single lines on one page > 1 and the same of start and end of the paragraph,
-    // true is retured.
+    
+    
     sal_Bool bWidow = ( nWidow > 1 && nOrphan == nWidow );
     return uno::makeAny( bWidow );
 }
 
 void SAL_CALL SwVbaParagraphFormat::setWidowControl( const uno::Any& _widowcontrol ) throw (uno::RuntimeException)
 {
-    // if we get true, the part of the paragraph on one page has to be
-    // at least two lines
+    
+    
     sal_Bool bWidow = sal_False;
     if( _widowcontrol >>= bWidow )
     {
@@ -334,8 +334,8 @@ style::LineSpacing SwVbaParagraphFormat::getOOoLineSpacing( float _lineSpace, sa
     style::LineSpacing aLineSpacing;
     if( mode != style::LineSpacingMode::MINIMUM && mode != style::LineSpacingMode::FIX )
     {
-        // special behaviour of word: if the space is set to these values, the rule and
-        // the height are changed accordingly
+        
+        
         if( _lineSpace == CHARACTER_INDENT_FACTOR )
         {
             aLineSpacing.Mode = style::LineSpacingMode::PROP;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,14 +41,14 @@ public:
     explicit Factory( ServiceDecl const& rServiceDecl )
         : m_rServiceDecl(rServiceDecl) {}
 
-    // XServiceInfo:
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( OUString const& name )
         throw (uno::RuntimeException);
     virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
-    // XSingleComponentFactory:
+    
     virtual uno::Reference<uno::XInterface> SAL_CALL createInstanceWithContext(
         uno::Reference<uno::XComponentContext> const& xContext )
         throw (uno::Exception, std::exception);
@@ -68,7 +68,7 @@ ServiceDecl::Factory::~Factory()
 {
 }
 
-// XServiceInfo:
+
 OUString ServiceDecl::Factory::getImplementationName()
     throw (uno::RuntimeException)
 {
@@ -87,7 +87,7 @@ uno::Sequence<OUString> ServiceDecl::Factory::getSupportedServiceNames()
     return m_rServiceDecl.getSupportedServiceNames();
 }
 
-// XSingleComponentFactory:
+
 uno::Reference<uno::XInterface> ServiceDecl::Factory::createInstanceWithContext(
     uno::Reference<uno::XComponentContext> const& xContext )
     throw (uno::Exception, std::exception)
@@ -150,7 +150,7 @@ OUString ServiceDecl::getImplementationName() const
     return OUString::createFromAscii(m_pImplName);
 }
 
-} // namespace service_decl
-} // namespace comphelper
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

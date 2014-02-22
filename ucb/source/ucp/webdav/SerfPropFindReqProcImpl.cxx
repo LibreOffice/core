@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "SerfPropFindReqProcImpl.hxx"
@@ -89,16 +89,16 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
 {
     serf_bucket_alloc_t* pSerfBucketAlloc = serf_request_get_alloc( inSerfRequest );
 
-    // body bucket - certain properties OR all properties OR only property names
+    
     serf_bucket_t* body_bkt = 0;
     OString aBodyText;
     {
-        // TODO is it really needed a Unicode string buffer?
-        // All properties and property names aren't supposed to be ASCII?
+        
+        
         rtl::OUStringBuffer aBuffer;
         aBuffer.append( PROPFIND_HEADER );
 
-        // create and fill body bucket with requested properties
+        
         const int nPropCount = ( !mbOnlyPropertyNames && mpPropNames )
                                ? mpPropNames->size()
                                : 0;
@@ -108,7 +108,7 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
             SerfPropName thePropName;
             for ( int theIndex = 0; theIndex < nPropCount; theIndex ++ )
             {
-                // split fullname into namespace and name!
+                
                 DAVProperties::createSerfPropName( (*mpPropNames)[ theIndex ],
                                                    thePropName );
 
@@ -141,19 +141,19 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                                    pSerfBucketAlloc );
     }
 
-    // create serf request
+    
     serf_bucket_t *req_bkt = serf_request_bucket_request_create( inSerfRequest,
                                                                  "PROPFIND",
                                                                  getPathStr(),
                                                                  body_bkt,
                                                                  pSerfBucketAlloc );
 
-    // set request header fields
+    
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    // general header fields provided by caller
+    
     setRequestHeaders( hdrs_bkt );
 
-    // request specific header fields
+    
     serf_bucket_headers_set( hdrs_bkt, "Depth", mDepthStr );
     if ( body_bkt != 0 && aBodyText.getLength() > 0 )
     {
@@ -192,6 +192,6 @@ void SerfPropFindReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfR
     }
 }
 
-} // namespace http_dav_ucp
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

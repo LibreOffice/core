@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/viewfrm.hxx>
@@ -62,7 +62,7 @@ using namespace ::com::sun::star::uno;
 
 Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, const Rectangle& rLogicChart )
 {
-    // positioning code according to spepc; similar to Calc fuins2.cxx
+    
     Point aRet;
 
     OSL_ENSURE( pParentWin, "Window not found" );
@@ -80,13 +80,13 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
 
         if ( aDesktop.Bottom() - aObjAbs.Bottom() >= rDialogSize.Height() + aSpace.Height() )
         {
-            // first preference: below the chart
+            
             aRet.Y() = aObjAbs.Bottom() + aSpace.Height();
             bCenterHor = true;
         }
         else if ( aObjAbs.Top() - aDesktop.Top() >= rDialogSize.Height() + aSpace.Height() )
         {
-            // second preference: above the chart
+            
             aRet.Y() = aObjAbs.Top() - rDialogSize.Height() - aSpace.Height();
             bCenterHor = true;
         }
@@ -97,19 +97,19 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
 
             if ( bFitLeft || bFitRight )
             {
-                // if both fit, prefer right in RTL mode, left otherwise
+                
                 bool bPutRight = bFitRight && ( bLayoutRTL || !bFitLeft );
                 if ( bPutRight )
                     aRet.X() = aObjAbs.Right() + aSpace.Width();
                 else
                     aRet.X() = aObjAbs.Left() - rDialogSize.Width() - aSpace.Width();
 
-                // center vertically
+                
                 aRet.Y() = aObjAbs.Top() + ( aObjAbs.GetHeight() - rDialogSize.Height() ) / 2;
             }
             else
             {
-                // doesn't fit on any edge - put at the bottom of the screen
+                
                 aRet.Y() = aDesktop.Bottom() - rDialogSize.Height();
                 bCenterHor = true;
             }
@@ -117,7 +117,7 @@ Point SwGetChartDialogPos( const Window *pParentWin, const Size& rDialogSize, co
         if ( bCenterHor )
             aRet.X() = aObjAbs.Left() + ( aObjAbs.GetWidth() - rDialogSize.Width() ) / 2;
 
-        // limit to screen (centering might lead to invalid positions)
+        
         if ( aRet.X() + rDialogSize.Width() - 1 > aDesktop.Right() )
             aRet.X() = aDesktop.Right() - rDialogSize.Width() + 1;
         if ( aRet.X() < aDesktop.Left() )
@@ -137,7 +137,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
     (void) pBindings;
     SwView *pView = ::GetActiveView();
 
-    // get range string of marked data
+    
     SwWrtShell &rWrtShell = pView->GetWrtShell();
     uno::Reference< chart2::data::XDataProvider > xDataProvider;
     uno::Reference< frame::XModel > xChartModel;
@@ -147,7 +147,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
     {
         if (!rWrtShell.IsTableMode())
         {
-            // select whole table
+            
             rWrtShell.GetView().GetViewFrame()->GetDispatcher()->
                 Execute(FN_TABLE_SELECT_ALL, SFX_CALLMODE_SYNCHRON);
         }
@@ -156,7 +156,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
             SwFrmFmt* pTblFmt = rWrtShell.GetTableFmt();
             aRangeString = pTblFmt->GetName() + "." + rWrtShell.GetBoxNms();
 
-            // get table data provider
+            
             xDataProvider.set( pView->GetDocShell()->getIDocumentChartDataProviderAccess()->GetChartDataProvider( true ) );
         }
     }
@@ -164,8 +164,8 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
     SwFlyFrmFmt *pFlyFrmFmt = 0;
     xChartModel.set( SwTableFUNC( &rWrtShell, sal_False ).InsertChart( xDataProvider, xDataProvider.is(), aRangeString, &pFlyFrmFmt ));
 
-    //open wizard
-    //@todo get context from writer if that has one
+    
+    
     uno::Reference< uno::XComponentContext > xContext(
         ::cppu::defaultBootstrap_InitialComponentContext() );
     if( xContext.is() && xChartModel.is() && xDataProvider.is())
@@ -181,7 +181,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
             if( xInit.is() )
             {
                 uno::Reference< awt::XWindow > xDialogParentWindow(0);
-                //  initialize dialog
+                
                 uno::Sequence<uno::Any> aSeq(2);
                 uno::Any* pArray = aSeq.getArray();
                 beans::PropertyValue aParam1;
@@ -194,13 +194,13 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                 pArray[1] <<= uno::makeAny(aParam2);
                 xInit->initialize( aSeq );
 
-                // try to set the dialog's position so it doesn't hide the chart
+                
                 uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
                 if ( xDialogProps.is() )
                 {
                     try
                     {
-                        //get dialog size:
+                        
                         awt::Size aDialogAWTSize;
                         if( xDialogProps->getPropertyValue("Size")
                             >>= aDialogAWTSize )
@@ -208,7 +208,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
                             Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
                             if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
                             {
-                                //calculate and set new position
+                                
                                 SwRect aSwRect;
                                 if (pFlyFrmFmt)
                                     aSwRect = pFlyFrmFmt->GetAnchoredObj()->GetObjRectWithSpaces();

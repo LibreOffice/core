@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbase/DIndexIter.hxx"
@@ -24,27 +24,27 @@ using namespace ::com::sun::star::sdb;
 using namespace connectivity;
 using namespace connectivity::dbase;
 using namespace connectivity::file;
-//==================================================================
-// OIndexIterator
-//==================================================================
-//------------------------------------------------------------------
+
+
+
+
 OIndexIterator::~OIndexIterator()
 {
     m_pIndex->release();
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::First()
 {
     return Find(sal_True);
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::Next()
 {
     return Find(sal_False);
 }
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
 {
     sal_uIntPtr nRes = NODE_NOTFOUND;
@@ -57,7 +57,7 @@ sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
 
     if (!m_pOperator)
     {
-        // Preparation, position on the smallest element
+        
         if (bFirst)
         {
             ONDXPage* pPage = m_aRoot;
@@ -82,20 +82,20 @@ sal_uIntPtr OIndexIterator::Find(sal_Bool bFirst)
     return nRes;
 }
 
-//------------------------------------------------------------------
+
 ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
 {
-    // searches a given key
-    // Speciality: At the end of the algorithm
-    // the actual page and the position of the node which fulfil the
-    // '<='-condition are saved. this is considered for inserts.
-    //  ONDXIndex* m_pIndex = GetNDXIndex();
+    
+    
+    
+    
+    
     OOp_COMPARE aTempOp(SQLFilterOperator::GREATER);
     sal_uInt16 i = 0;
 
     if (pPage->IsLeaf())
     {
-        // in the leaf the actual operation is run, otherwise temp. (>)
+        
         while (i < pPage->Count() && !m_pOperator->operate(&((*pPage)[i]).GetKey(),&rKey))
                i++;
     }
@@ -107,7 +107,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     ONDXKey* pFoundKey = NULL;
     if (!pPage->IsLeaf())
     {
-        // descend further
+        
         ONDXPagePtr aPage = (i==0) ? pPage->GetChild(m_pIndex)
                                      : ((*pPage)[i-1]).GetChild(m_pIndex, pPage);
         pFoundKey = aPage.Is() ? GetFirstKey(aPage, rKey) : NULL;
@@ -128,7 +128,7 @@ ONDXKey* OIndexIterator::GetFirstKey(ONDXPage* pPage, const OOperand& rKey)
     return pFoundKey;
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
 {
     ONDXKey* pKey = NULL;
@@ -136,7 +136,7 @@ sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
 
     if (bFirst)
     {
-        // Preparation, position on the smallest element
+        
         ONDXPage* pPage = m_aRoot;
         switch (ePredicateType)
         {
@@ -198,7 +198,7 @@ sal_uIntPtr OIndexIterator::GetCompare(sal_Bool bFirst)
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::GetLike(sal_Bool bFirst)
 {
     if (bFirst)
@@ -218,7 +218,7 @@ sal_uIntPtr OIndexIterator::GetLike(sal_Bool bFirst)
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::GetNull(sal_Bool bFirst)
 {
     if (bFirst)
@@ -240,13 +240,13 @@ sal_uIntPtr OIndexIterator::GetNull(sal_Bool bFirst)
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
 
-//------------------------------------------------------------------
+
 sal_uIntPtr OIndexIterator::GetNotNull(sal_Bool bFirst)
 {
     ONDXKey* pKey;
     if (bFirst)
     {
-        // go through all NULL values first
+        
         for (sal_uIntPtr nRec = GetNull(bFirst);
              nRec != NODE_NOTFOUND;
              nRec = GetNull(sal_False))
@@ -259,13 +259,13 @@ sal_uIntPtr OIndexIterator::GetNotNull(sal_Bool bFirst)
     return pKey ? pKey->GetRecord() : NODE_NOTFOUND;
 }
 
-//------------------------------------------------------------------
+
 ONDXKey* OIndexIterator::GetNextKey()
 {
     if (m_aCurLeaf.Is() && ((++m_nCurNode) >= m_aCurLeaf->Count()))
     {
         ONDXPage* pPage = m_aCurLeaf;
-        // search next page
+        
         while (pPage)
         {
             ONDXPage* pParentPage = pPage->GetParent();
@@ -273,7 +273,7 @@ ONDXKey* OIndexIterator::GetNextKey()
             {
                 sal_uInt16 nPos = pParentPage->Search(pPage);
                 if (nPos != pParentPage->Count() - 1)
-                {   // page found
+                {   
                     pPage = (*pParentPage)[nPos+1].GetChild(m_pIndex,pParentPage);
                     break;
                 }
@@ -281,7 +281,7 @@ ONDXKey* OIndexIterator::GetNextKey()
             pPage = pParentPage;
         }
 
-        // now go on with leaf
+        
         while (pPage && !pPage->IsLeaf())
             pPage = pPage->GetChild(m_pIndex);
 

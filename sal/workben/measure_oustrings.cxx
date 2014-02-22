@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/main.h>
@@ -78,7 +78,7 @@ public:
         {
             std::stringstream aGetGrindStats;
             aGetGrindStats << "callgrind_annotate " << aFileName.str() <<
-                " | grep TOTALS | sed 's/ PROGRAM TOTALS//'";
+                " | grep TOTALS | sed 's/ PROGRAM TOTALS
             system(aGetGrindStats.str().c_str());
             myfile.close();
         }
@@ -110,7 +110,7 @@ SAL_IMPLEMENT_MAIN()
 #ifdef HAVE_CALLGRIND
     std::cout << "Execute using: valgrind --tool=callgrind ./measure_oustrings" << std::endl;
 #else
-    //get my cpu fan up to speed :-)
+    
     for (int i = 0; i < 10000000; ++i)
     {
         rtl::OUString sFoo(rtl::OUString::createFromAscii("X"));
@@ -208,7 +208,7 @@ SAL_IMPLEMENT_MAIN()
         sCompare.equalsAscii("apple");
     )
 
-    //(const sal_Char*, sal_Int32) version has different semantics
+    
     TIME
     (
         "rtl::OUString::compareToAscii (const sal_Char*)",
@@ -243,7 +243,7 @@ SAL_IMPLEMENT_MAIN()
         sCompare.equalsAscii("XXXXXXXXXXXXXXX");
     )
 
-    //(const sal_Char*, sal_Int32) version has different semantics
+    
     TIME
     (
         "rtl::OUString::compareToAscii (const sal_Char*)",

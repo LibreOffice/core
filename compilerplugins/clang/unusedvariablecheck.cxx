@@ -11,9 +11,9 @@
 
 #include <config_global.h>
 
-// If there is support for warn_unused attribute even in STL classes, then there's
-// no point in having this check enabled, otherwise keep it at least for STL
-// (LO classes won't get duplicated warnings, as the attribute is different).
+
+
+
 #if !HAVE_GCC_ATTRIBUTE_WARN_UNUSED_STL
 
 #include "unusedvariablecheck.hxx"
@@ -61,8 +61,8 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
         bool warn_unused = false;
         if( type->hasAttrs())
             {
-            // Clang currently has no support for custom attributes, but
-            // the annotate attribute comes close, so check for __attribute__((annotate("lo_warn_unused")))
+            
+            
             for( specific_attr_iterator<AnnotateAttr> i = type->specific_attr_begin<AnnotateAttr>(),
                     e = type->specific_attr_end<AnnotateAttr>();
                  i != e;
@@ -78,7 +78,7 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
         if( !warn_unused )
             {
             string n = type->getQualifiedNameAsString();
-            // Check some common non-LO types.
+            
             if( n == "std::string" || n == "std::basic_string"
                 || n == "std::list" || n == "std::__debug::list"
                 || n == "std::vector" || n == "std::__debug::vector" )
@@ -89,9 +89,9 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
             if( const ParmVarDecl* param = dyn_cast< ParmVarDecl >( var ))
                 {
                 if( !param->getDeclName())
-                    return true; // unnamed parameter -> unused
-                // If this declaration does not have a body, then the parameter is indeed not used,
-                // so ignore.
+                    return true; 
+                
+                
                 if( const FunctionDecl* func = dyn_cast_or_null< FunctionDecl >( param->getParentFunctionOrMethod()))
                     if( !func->doesThisDeclarationHaveABody())
                         return true;
@@ -108,7 +108,7 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
 
 static Plugin::Registration< UnusedVariableCheck > X( "unusedvariablecheck" );
 
-} // namespace
+} 
 
 #endif
 

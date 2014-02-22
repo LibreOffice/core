@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -94,7 +94,7 @@ typedef uno::Reference<
         TRLT_IMPLNAME_PREFIX  #implName, \
         &implName##_CreateInstance }
 
-// -------------------------------------------------------------------------------------
+
 
 using namespace i18n;
 
@@ -470,7 +470,7 @@ static const struct InstancesArray {
     {   TRLT_SERVICELNAME_L10N,
         TRLT_IMPLNAME_PREFIX  "HALFWIDTH_FULLWIDTH_LIKE_JIS",
         &halfwidthToFullwidthLikeJIS_CreateInstance },
-// add here new services !!
+
     { 0, 0, 0 }
 };
 
@@ -510,6 +510,6 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL i18npool_component_getFactory( const sal_Cha
     return pRet;
 }
 
-}   // "C"
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sheetevents.hxx"
 #include <com/sun/star/script/vba/VBAEventId.hpp>
-// -----------------------------------------------------------------------
+
 
 OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
 {
@@ -31,13 +31,13 @@ OUString ScSheetEvents::GetEventName(sal_Int32 nEvent)
 
     static const sal_Char* aEventNames[] =
     {
-        "OnFocus",                  // SC_SHEETEVENT_FOCUS
-        "OnUnfocus",                // SC_SHEETEVENT_UNFOCUS
-        "OnSelect",                 // SC_SHEETEVENT_SELECT
-        "OnDoubleClick",            // SC_SHEETEVENT_DOUBLECLICK
-        "OnRightClick",             // SC_SHEETEVENT_RIGHTCLICK
-        "OnChange",                 // SC_SHEETEVENT_CHANGE
-        "OnCalculate"               // SC_SHEETEVENT_CALCULATE
+        "OnFocus",                  
+        "OnUnfocus",                
+        "OnSelect",                 
+        "OnDoubleClick",            
+        "OnRightClick",             
+        "OnChange",                 
+        "OnCalculate"               
     };
     return OUString::createFromAscii(aEventNames[nEvent]);
 }
@@ -53,13 +53,13 @@ sal_Int32 ScSheetEvents::GetVbaSheetEventId(sal_Int32 nEvent)
 
     static const sal_Int32 nVbaEventIds[] =
     {
-        WORKSHEET_ACTIVATE,             // SC_SHEETEVENT_FOCUS
-        WORKSHEET_DEACTIVATE,           // SC_SHEETEVENT_UNFOCUS
-        WORKSHEET_SELECTIONCHANGE,      // SC_SHEETEVENT_SELECT
-        WORKSHEET_BEFOREDOUBLECLICK,    // SC_SHEETEVENT_DOUBLECLICK
-        WORKSHEET_BEFORERIGHTCLICK,     // SC_SHEETEVENT_RIGHTCLICK
-        WORKSHEET_CHANGE,               // SC_SHEETEVENT_CHANGE
-        WORKSHEET_CALCULATE             // SC_SHEETEVENT_CALCULATE
+        WORKSHEET_ACTIVATE,             
+        WORKSHEET_DEACTIVATE,           
+        WORKSHEET_SELECTIONCHANGE,      
+        WORKSHEET_BEFOREDOUBLECLICK,    
+        WORKSHEET_BEFORERIGHTCLICK,     
+        WORKSHEET_CHANGE,               
+        WORKSHEET_CALCULATE             
     };
     return nVbaEventIds[nEvent];
 }
@@ -71,7 +71,7 @@ sal_Int32 ScSheetEvents::GetVbaDocumentEventId(sal_Int32 nEvent)
     return (nSheetEventId != NO_EVENT) ? (nSheetEventId + USERDEFINED_START) : NO_EVENT;
 }
 
-// -----------------------------------------------------------------------
+
 
 ScSheetEvents::ScSheetEvents() :
     mpScriptNames(NULL)

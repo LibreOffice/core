@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <comphelper/processfactory.hxx>
 
@@ -55,7 +55,7 @@ using namespace ::com::sun::star;
 static uno::Any
 getDocument( uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< text::XTextDocument > &xDoc, const uno::Any& aApplication )
 {
-    // FIXME: fine as long as SwVbaDocument is stateless ...
+    
     uno::Reference< frame::XModel > xModel( xDoc, uno::UNO_QUERY );
     if( !xModel.is() )
         return uno::Any();
@@ -80,7 +80,7 @@ public:
 SwVbaDocuments::SwVbaDocuments( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : SwVbaDocuments_BASE( xParent, xContext, VbaDocumentsBase::WORD_DOCUMENT )
 {
 }
-// XEnumerationAccess
+
 uno::Type
 SwVbaDocuments::getElementType() throw (uno::RuntimeException)
 {
@@ -89,10 +89,10 @@ SwVbaDocuments::getElementType() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration >
 SwVbaDocuments::createEnumeration() throw (uno::RuntimeException)
 {
-    // #FIXME its possible the DocumentEnumImpl here doens't reflect
-    // the state of this object ( although it should ) would be
-    // safer to create an enumeration based on this objects state
-    // rather than one effectively based of the desktop component
+    
+    
+    
+    
     uno::Reference< container::XEnumerationAccess > xEnumerationAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
     return new DocumentEnumImpl( mxParent, mxContext, xEnumerationAccess->createEnumeration(), Application() );
 }
@@ -119,18 +119,18 @@ SwVbaDocuments::Add( const uno::Any& Template, const uno::Any& /*NewTemplate*/, 
     return uno::Any();
 }
 
-// #TODO# #FIXME# can any of the unused params below be used?
+
 void SAL_CALL
 SwVbaDocuments::Close( const uno::Any& /*SaveChanges*/, const uno::Any& /*OriginalFormat*/, const uno::Any& /*RouteDocument*/ ) throw (uno::RuntimeException)
 {
     closeDocuments();
 }
 
-// #TODO# #FIXME# can any of the unused params below be used?
+
 uno::Any SAL_CALL
 SwVbaDocuments::Open( const OUString& Filename, const uno::Any& /*ConfirmConversions*/, const uno::Any& ReadOnly, const uno::Any& /*AddToRecentFiles*/, const uno::Any& /*PasswordDocument*/, const uno::Any& /*PasswordTemplate*/, const uno::Any& /*Revert*/, const uno::Any& /*WritePasswordDocument*/, const uno::Any& /*WritePasswordTemplate*/, const uno::Any& /*Format*/, const uno::Any& /*Encoding*/, const uno::Any& /*Visible*/, const uno::Any& /*OpenAndRepair*/, const uno::Any& /*DocumentDirection*/, const uno::Any& /*NoEncodingDialog*/, const uno::Any& /*XMLTransform*/ ) throw (uno::RuntimeException)
 {
-    // we need to detect if this is a URL, if not then assume it's a file path
+    
     OUString aURL;
     INetURLObject aObj;
     aObj.SetURL( Filename );

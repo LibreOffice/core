@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "condformatdlg.hxx"
@@ -359,8 +359,8 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry*, pEntry )
     if(pEntry->IsSelected())
         return 0;
 
-    //A child has focus, but we will hide that, so regrab to whatever new thing gets
-    //shown instead of leaving it stuck in the inaccessible hidden element
+    
+    
     bool bReGrabFocus = HasChildPathFocus();
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
@@ -380,9 +380,9 @@ IMPL_LINK_NOARG( ScCondFormatList, ScrollHdl )
     return 0;
 }
 
-//---------------------------------------------------
-//ScCondFormatDlg
-//---------------------------------------------------
+
+
+
 
 ScCondFormatDlg::ScCondFormatDlg(Window* pParent, ScDocument* pDoc,
     const ScConditionalFormat* pFormat, const ScRangeList& rRange,
@@ -530,7 +530,7 @@ IMPL_LINK( ScCondFormatDlg, RangeGetFocusHdl, formula::RefEdit*, pEdit )
 
 IMPL_LINK_NOARG( ScCondFormatDlg, RangeLoseFocusHdl )
 {
-    //mpLastEdit = NULL;
+    
     return 0;
 }
 

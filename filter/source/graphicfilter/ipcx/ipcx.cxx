@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,28 +23,28 @@
 
 class FilterConfigItem;
 
-//============================ PCXReader ==================================
+
 
 class PCXReader {
 
 private:
 
-    SvStream& m_rPCX;               // the PCX file to read
+    SvStream& m_rPCX;               
 
     Bitmap              aBmp;
     BitmapWriteAccess*  pAcc;
-    sal_uInt8           nVersion;           // PCX-Version
-    sal_uInt8           nEncoding;          // compression type
-    sal_uLong           nBitsPerPlanePix;   // bits per plane per pixel
-    sal_uLong           nPlanes;            // no of planes
-    sal_uLong           nBytesPerPlaneLin;  // bytes per plane line
+    sal_uInt8           nVersion;           
+    sal_uInt8           nEncoding;          
+    sal_uLong           nBitsPerPlanePix;   
+    sal_uLong           nPlanes;            
+    sal_uLong           nBytesPerPlaneLin;  
     sal_uInt16          nPaletteInfo;
 
-    sal_uLong           nWidth, nHeight;    // dimension in pixel
-    sal_uInt16          nResX, nResY;       // resolution in pixel per inch oder 0,0
-    sal_uInt16          nDestBitsPerPixel;  // bits per pixel in destination bitmap 1,4,8 or 24
+    sal_uLong           nWidth, nHeight;    
+    sal_uInt16          nResX, nResY;       
+    sal_uInt16          nDestBitsPerPixel;  
     sal_uInt8*          pPalette;           //
-    sal_Bool            nStatus;            // from now on do not read status from stream ( SJ )
+    sal_Bool            nStatus;            
 
 
     sal_Bool            Callback( sal_uInt16 nPercent );
@@ -56,10 +56,10 @@ public:
                         PCXReader(SvStream &rStream);
                         ~PCXReader();
     sal_Bool                ReadPCX(Graphic & rGraphic );
-                        // Reads a PCX file from the stream and fills the GDIMetaFile
+                        
 };
 
-//=================== methods of PCXReader ==============================
+
 
 PCXReader::PCXReader(SvStream &rStream)
     : m_rPCX(rStream)
@@ -83,20 +83,20 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
     if ( m_rPCX.GetError() )
         return sal_False;
 
-    sal_uLong*  pDummy = new sal_uLong; delete pDummy; // to achive that under OS/2
-                                               // the right (Tools-) new is used
-                                               // otherwise there are only Vector-news
-                                               // in this DLL
+    sal_uLong*  pDummy = new sal_uLong; delete pDummy; 
+                                               
+                                               
+                                               
 
     m_rPCX.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
 
-    // read header:
+    
 
     nStatus = sal_True;
 
     ImplReadHeader();
 
-    // Write BMP header and conditionally (maybe invalid for now) color palette:
+    
     if ( nStatus )
     {
         aBmp = Bitmap( Size( nWidth, nHeight ), nDestBitsPerPixel );
@@ -113,11 +113,11 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
                 pAcc->SetPaletteColor( i, BitmapColor ( pPal[ 0 ], pPal[ 1 ], pPal[ 2 ] ) );
             }
         }
-        // read bitmap data
+        
         ImplReadBody();
 
-        // If an extended color palette exists at the end of the file, then read it and
-        // and write again in palette:
+        
+        
         if ( nDestBitsPerPixel == 8 && nStatus )
         {
             sal_uInt8* pPal = pPalette;
@@ -130,7 +130,7 @@ sal_Bool PCXReader::ReadPCX(Graphic & rGraphic)
             }
         }
     /*
-        // set resolution:
+        
         if (nResX!=0 && nResY!=0) {
             MapMode aMapMode(MAP_INCH,Point(0,0),Fraction(1,nResX),Fraction(1,nResY));
             rBitmap.SetPrefMapMode(aMapMode);
@@ -195,8 +195,8 @@ void PCXReader::ImplReadHeader()
         return;
     }
 
-    // If the bitmap has only 2 colors, the palatte is most often invalid and it is always(?)
-    // a black and white image:
+    
+    
     if ( nPlanes == 1 && nBitsPerPlanePix == 1 )
     {
         pPalette[ 0 ] = pPalette[ 1 ] = pPalette[ 2 ] = 0x00;
@@ -285,7 +285,7 @@ void PCXReader::ImplReadBody()
         pSource4 = pPlane[ 3 ];
         switch ( nBitsPerPlanePix + ( nPlanes << 8 ) )
         {
-            // 2 colors
+            
             case 0x101 :
                 for ( i = 0; i < nWidth; i++ )
                 {
@@ -296,7 +296,7 @@ void PCXReader::ImplReadBody()
                         pAcc->SetPixelIndex( ny, i, (*pSource1 >> nShift ) & 1 );
                 }
                 break;
-            // 4 colors
+            
             case 0x102 :
                 for ( i = 0; i < nWidth; i++ )
                 {
@@ -318,14 +318,14 @@ void PCXReader::ImplReadBody()
                     pAcc->SetPixelIndex( ny, i, nCol );
                 }
                 break;
-            // 256 colors
+            
             case 0x108 :
                 for ( i = 0; i < nWidth; i++ )
                 {
                     pAcc->SetPixelIndex( ny, i, *pSource1++ );
                 }
                 break;
-            // 8 colors
+            
             case 0x301 :
                 for ( i = 0; i < nWidth; i++ )
                 {
@@ -344,7 +344,7 @@ void PCXReader::ImplReadBody()
                     }
                 }
                 break;
-            // 16 colors
+            
             case 0x401 :
                 for ( i = 0; i < nWidth; i++ )
                 {
@@ -364,7 +364,7 @@ void PCXReader::ImplReadBody()
                     }
                 }
                 break;
-            // 16m colors
+            
             case 0x308 :
                 for ( i = 0; i < nWidth; i++ )
                 {
@@ -394,11 +394,11 @@ void PCXReader::ImplReadPalette( sal_uLong nCol )
     }
 }
 
-//================== GraphicImport - the exported function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicImport ipxGraphicImport
 #endif

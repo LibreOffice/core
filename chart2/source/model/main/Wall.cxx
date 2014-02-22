@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Wall.hxx"
@@ -62,7 +62,7 @@ private:
         ::chart::LinePropertiesHelper::AddDefaultsToMap( rOutMap );
         ::chart::FillProperties::AddDefaultsToMap( rOutMap );
 
-        // override other defaults
+        
         ::chart::PropertyHelper::setPropertyValue( rOutMap, ::chart::LinePropertiesHelper::PROP_LINE_STYLE, drawing::LineStyle_NONE );
     }
 };
@@ -113,7 +113,7 @@ struct StaticWallInfo : public rtl::StaticAggregate< uno::Reference< beans::XPro
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -133,14 +133,14 @@ Wall::Wall( const Wall & rOther ) :
 Wall::~Wall()
 {}
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new Wall( *this ));
 }
 
-// ____ OPropertySet ____
+
 uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -156,14 +156,14 @@ uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticWallInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Wall::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticWallInfo::get();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL Wall::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -192,21 +192,21 @@ void SAL_CALL Wall::removeModifyListener( const uno::Reference< util::XModifyLis
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL Wall::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL Wall::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void Wall::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -225,13 +225,13 @@ uno::Sequence< OUString > Wall::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( Wall, lcl_aServiceName );
 
 using impl::Wall_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( Wall, Wall_Base, ::property::OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

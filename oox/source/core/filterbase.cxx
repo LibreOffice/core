@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -104,7 +104,7 @@ DocumentOpenedGuard::~DocumentOpenedGuard()
         rUrlPool.maUrls.erase( maUrl );
 }
 
-} // namespace
+} 
 
 /** Specifies whether this filter is an import or export filter. */
 enum FilterDirection
@@ -129,10 +129,10 @@ struct FilterBaseImpl
     StorageRef          mxStorage;
     OoxmlVersion        meVersion;
 
-    GraphicHelperRef    mxGraphicHelper;        /// Graphic and graphic object handling.
-    ModelObjHelperRef   mxModelObjHelper;       /// Tables to create new named drawing objects.
-    OleObjHelperRef     mxOleObjHelper;         /// OLE object handling.
-    VbaProjectRef       mxVbaProject;           /// VBA project manager.
+    GraphicHelperRef    mxGraphicHelper;        
+    ModelObjHelperRef   mxModelObjHelper;       
+    OleObjHelperRef     mxOleObjHelper;         
+    VbaProjectRef       mxVbaProject;           
 
     Reference< XComponentContext >      mxComponentContext;
     Reference< XMultiComponentFactory > mxComponentFactory;
@@ -177,7 +177,7 @@ void FilterBaseImpl::initializeFilter()
 {
     try
     {
-        // lock the model controllers
+        
         mxModel->lockControllers();
     }
     catch( Exception& )
@@ -265,16 +265,16 @@ inline bool lclIsDosDrive( const OUString& rUrl, sal_Int32 nPos = 0 )
         (rUrl[ nPos + 2 ] == '/');
 }
 
-} // namespace
+} 
 
 OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
 {
-    // handle some special cases before calling ::rtl::Uri::convertRelToAbs()
+    
 
     const OUString aFileSchema = "file:";
-    const OUString aFilePrefix = "file:///";
+    const OUString aFilePrefix = "file:
     const sal_Int32 nFilePrefixLen = aFilePrefix.getLength();
-    const OUString aUncPrefix = "//";
+    const OUString aUncPrefix = "
 
     /*  (1) convert all backslashes to slashes, and check that passed URL is
         not empty. */
@@ -282,18 +282,18 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
     if( aUrl.isEmpty() )
         return aUrl;
 
-    /*  (2) add 'file:///' to absolute Windows paths, e.g. convert
-        'C:/path/file' to 'file:///c:/path/file'. */
+    /*  (2) add 'file:
+        'C:/path/file' to 'file:
     if( lclIsDosDrive( aUrl ) )
         return aFilePrefix + aUrl;
 
-    /*  (3) add 'file:' to UNC paths, e.g. convert '//server/path/file' to
-        'file://server/path/file'. */
+    /*  (3) add 'file:' to UNC paths, e.g. convert '
+        'file:
     if( aUrl.match( aUncPrefix ) )
         return aFileSchema + aUrl;
 
     /*  (4) remove additional slashes from UNC paths, e.g. convert
-        'file://///server/path/file' to 'file://server/path/file'. */
+        'file:
     if( (aUrl.getLength() >= nFilePrefixLen + 2) &&
         aUrl.match( aFilePrefix ) &&
         aUrl.match( aUncPrefix, nFilePrefixLen ) )
@@ -302,8 +302,8 @@ OUString FilterBase::getAbsoluteUrl( const OUString& rUrl ) const
     }
 
     /*  (5) handle URLs relative to current drive, e.g. the URL '/path1/file1'
-        relative to the base URL 'file:///C:/path2/file2' does not result in
-        the expected 'file:///C:/path1/file1', but in 'file:///path1/file1'. */
+        relative to the base URL 'file:
+        the expected 'file:
     if( aUrl.startsWith("/") &&
         mxImpl->maFileUrl.match( aFilePrefix ) &&
         lclIsDosDrive( mxImpl->maFileUrl, nFilePrefixLen ) )
@@ -341,7 +341,7 @@ void FilterBase::commitStorage() const
     mxImpl->mxStorage->commit();
 }
 
-// helpers
+
 
 GraphicHelper& FilterBase::getGraphicHelper() const
 {
@@ -377,18 +377,18 @@ bool FilterBase::importBinaryData( StreamDataSequence& orDataSeq, const OUString
     if( rStreamName.isEmpty() )
         return false;
 
-    // try to open the stream (this may fail - do not assert)
+    
     BinaryXInputStream aInStrm( openInputStream( rStreamName ), true );
     if( aInStrm.isEof() )
         return false;
 
-    // copy the entire stream to the passed sequence
+    
     SequenceOutputStream aOutStrm( orDataSeq );
     aInStrm.copyToStream( aOutStrm );
     return true;
 }
 
-// com.sun.star.lang.XServiceInfo interface
+
 
 OUString SAL_CALL FilterBase::getImplementationName() throw( RuntimeException )
 {
@@ -408,7 +408,7 @@ Sequence< OUString > SAL_CALL FilterBase::getSupportedServiceNames() throw( Runt
     return aServiceNames;
 }
 
-// com.sun.star.lang.XInitialization interface
+
 
 void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exception, RuntimeException )
 {
@@ -421,7 +421,7 @@ void SAL_CALL FilterBase::initialize( const Sequence< Any >& rArgs ) throw( Exce
     }
 }
 
-// com.sun.star.document.XImporter interface
+
 
 void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException )
 {
@@ -429,7 +429,7 @@ void SAL_CALL FilterBase::setTargetDocument( const Reference< XComponent >& rxDo
     mxImpl->meDirection = FILTERDIRECTION_IMPORT;
 }
 
-// com.sun.star.document.XExporter interface
+
 
 void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDocument ) throw( IllegalArgumentException, RuntimeException )
 {
@@ -437,7 +437,7 @@ void SAL_CALL FilterBase::setSourceDocument( const Reference< XComponent >& rxDo
     mxImpl->meDirection = FILTERDIRECTION_EXPORT;
 }
 
-// com.sun.star.document.XFilter interface
+
 
 sal_Bool SAL_CALL FilterBase::filter( const Sequence< PropertyValue >& rMediaDescSeq ) throw( RuntimeException )
 {
@@ -478,7 +478,7 @@ void SAL_CALL FilterBase::cancel() throw( RuntimeException )
 {
 }
 
-// protected
+
 
 Reference< XInputStream > FilterBase::implGetInputStream( MediaDescriptor& rMediaDesc ) const
 {
@@ -500,7 +500,7 @@ Reference< XStream > FilterBase::getMainDocumentStream( ) const
     return mxImpl->mxOutStream;
 }
 
-// private
+
 
 void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDescSeq )
 {
@@ -529,7 +529,7 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     mxImpl->mxParentShape = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "ParentShape", mxImpl->mxParentShape );
     mxImpl->maFilterData = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "FilterData", Sequence< PropertyValue >() );
 
-    // Check for ISO OOXML
+    
     OUString sFilterName = mxImpl->maMediaDesc.getUnpackedValueOrDefault( "FilterName", OUString() );
     try
     {
@@ -545,17 +545,17 @@ void FilterBase::setMediaDescriptor( const Sequence< PropertyValue >& rMediaDesc
     }
     catch ( const Exception& )
     {
-        // Not ISO OOXML
+        
     }
 }
 
 GraphicHelper* FilterBase::implCreateGraphicHelper() const
 {
-    // default: return base implementation without any special behaviour
+    
     return new GraphicHelper( mxImpl->mxComponentContext, mxImpl->mxTargetFrame, mxImpl->mxStorage );
 }
 
-} // namespace core
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

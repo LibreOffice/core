@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustring.hxx>
@@ -36,9 +36,9 @@
 #include <process.h>
 #include "XTDo.hxx"
 
-//-------------------------------------------------------------
-// my defines
-//-------------------------------------------------------------
+
+
+
 
 #define WRITE_CB
 #define EVT_MANUAL_RESET     TRUE
@@ -47,16 +47,16 @@
 #define WAIT_MSGLOOP
 #define RAW_MARSHALING
 
-//------------------------------------------------------------
-//  namesapces
-//------------------------------------------------------------
+
+
+
 
 using namespace ::rtl;
 using namespace ::std;
 
-//------------------------------------------------------------
-//  globales
-//------------------------------------------------------------
+
+
+
 
 HANDLE  g_hEvtThreadWakeup;
 
@@ -66,12 +66,12 @@ HANDLE  g_hEvtThreadWakeup;
     IStream* g_pStm;
 #endif
 
-//################################################################
-// a thread in another apartment to test apartment transparency
+
+
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
 {
-    // setup another apartment
+    
     HRESULT hr = OleInitialize( NULL );
 
     WaitForSingleObject( g_hEvtThreadWakeup, INFINITE );
@@ -114,11 +114,11 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
     return 0;
 }
 
-//################################################################
 
-//----------------------------------------------------------------
-//  main
-//----------------------------------------------------------------
+
+
+
+
 
 int SAL_CALL main( int nArgc, char* Argv[] )
 {
@@ -132,7 +132,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
     unsigned uThreadId;
     HANDLE   hThread;
 
-    // create a thread in another apartment
+    
     hThread = (void*)_beginthreadex( NULL, 0, ThreadProc, NULL, 0, &uThreadId );
 
     IDataObject* pIDo = new CXTDataObject( );
@@ -142,7 +142,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
 
     hr = OleIsCurrentClipboard( pIDo );
 
-    //hr = OleGetClipboard( &pIDo );
+    
     if ( SUCCEEDED( hr ) )
     {
 #ifdef RAW_MARSHALING
@@ -176,7 +176,7 @@ int SAL_CALL main( int nArgc, char* Argv[] )
 
         if ( SUCCEEDED( hr ) )
         {
-            // wakeup the thread and waiting util it ends
+            
             SetEvent( g_hEvtThreadWakeup );
 
 #ifdef WAIT_MSGLOOP
@@ -209,12 +209,12 @@ int SAL_CALL main( int nArgc, char* Argv[] )
                         DispatchMessage(&msg);
                     }
                 }
-            } // while
+            } 
 
 #endif
 
-        } // if
-    } // if
+        } 
+    } 
 
     OleFlushClipboard( );
 

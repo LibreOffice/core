@@ -36,9 +36,9 @@ namespace rptui
 {
 //.........................................................................
     using namespace ::com::sun::star;
-//=========================================================================
+
 //= OModuleImpl
-//=========================================================================
+
 /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
 */
 class OModuleImpl
@@ -46,67 +46,67 @@ class OModuleImpl
     ResMgr* m_pResources;
 
 public:
-    /// ctor
+    /
     OModuleImpl();
     ~OModuleImpl();
 
-    /// get the manager for the resources of the module
+    /
     ResMgr* getResManager();
 };
 
-//-------------------------------------------------------------------------
+
 OModuleImpl::OModuleImpl()
     :m_pResources(NULL)
 {
 }
 
-//-------------------------------------------------------------------------
+
 OModuleImpl::~OModuleImpl()
 {
     if (m_pResources)
         delete m_pResources;
 }
 
-//-------------------------------------------------------------------------
+
 ResMgr* OModuleImpl::getResManager()
 {
-    // note that this method is not threadsafe, which counts for the whole class !
+    
 
     if (!m_pResources)
     {
-        // create a manager with a fixed prefix
+        
         m_pResources = ResMgr::CreateResMgr("rptui");
     }
     return m_pResources;
 }
 
-//=========================================================================
+
 //= OModule
-//=========================================================================
+
 
 namespace
 {
-    // access safety
+    
     struct theOModuleMutex : public rtl::Static< osl::Mutex, theOModuleMutex > {};
 }
 
 sal_Int32       OModule::s_nClients = 0;
 OModuleImpl*    OModule::s_pImpl = NULL;
-//-------------------------------------------------------------------------
+
 ResMgr* OModule::getResManager()
 {
     ENTER_MOD_METHOD();
     return s_pImpl->getResManager();
 }
 
-//-------------------------------------------------------------------------
+
 void OModule::registerClient()
 {
     ::osl::MutexGuard aGuard(theOModuleMutex::get());
     ++s_nClients;
 }
 
-//-------------------------------------------------------------------------
+
 void OModule::revokeClient()
 {
     ::osl::MutexGuard aGuard(theOModuleMutex::get());
@@ -117,7 +117,7 @@ void OModule::revokeClient()
     }
 }
 
-//-------------------------------------------------------------------------
+
 void OModule::ensureImpl()
 {
     if (s_pImpl)
@@ -126,7 +126,7 @@ void OModule::ensureImpl()
 }
 
 //.........................................................................
-}   // namespace dbaui
+}   
 //.........................................................................
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

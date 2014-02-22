@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,11 +28,11 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
-// -----------------------------------------------------------------------------
+
 
 namespace Stringtest
 {
-    // -----------------------------------------------------------------------------
+    
 
     class Convert : public CppUnit::TestFixture
     {
@@ -91,35 +91,35 @@ namespace Stringtest
 
         void test_FromUTF8_001()
             {
-                // string --> ustring
+                
                 rtl::OString sStrUTF8("h%C3%A4llo");
                 rtl::OUString suStrUTF8 = rtl::OStringToOUString(sStrUTF8, RTL_TEXTENCODING_ASCII_US);
 
-                // UTF8 --> real ustring
+                
                 rtl::OUString suStr_UriDecodeToIuri      = rtl::Uri::decode(suStrUTF8, rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
                 showContent(suStr_UriDecodeToIuri);
 
-                // string --> ustring
+                
                 rtl::OString sStr("h\xE4llo", strlen("h\xE4llo"));
                 rtl::OUString suString = rtl::OStringToOUString(sStr, RTL_TEXTENCODING_ISO_8859_15);
 
                 CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suString.equals(suStr_UriDecodeToIuri));
 
-                // ustring --> ustring (UTF8)
+                
                 rtl::OUString suStr2 = rtl::Uri::encode(suStr_UriDecodeToIuri, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
                 showContent(suStr2);
 
                 CPPUNIT_ASSERT_MESSAGE("Strings must be equal", suStr2.equals(suStrUTF8));
-                // suStr should be equal to suStr2
+                
             }
 
-        // "%C3%84qypten";
-        // testshl2 ../../../unxlngi4.pro/lib/libConvert.so "-onlyerrors"
-        // # Type: 'Directory' file name '%E6%89%8B%E6%9C%BA%E5%8F%B7%E7%A0%81'
-        // # Type: 'Directory' file name '%E6%9C%AA%E5%91%BD%E5%90%8Dzhgb18030'
-        // # Type: 'Regular file' file name '%E5%B7%A5%E4%BD%9C'
-        // # Type: 'Regular file' file name '%E4%BA%8C%E6%89%8B%E6%88%BF%E4%B9%B0%E5%8D%96%E5%90%88%E5%90%8C%E8%8D%89%E7%A8%BF.doc'
-        // ls
+        
+        
+        
+        
+        
+        
+        
         rtl::OString getFileTypeName(osl::FileStatus const& _aStatus)
             {
                 rtl::OString sType;
@@ -174,9 +174,9 @@ namespace Stringtest
         void test_UTF8_files()
             {
 #ifdef UNX
-                rtl::OUString suDirURL(rtl::OUString("file:///tmp/atestdir"));
+                rtl::OUString suDirURL(rtl::OUString("file:
 #else /* Windows */
-                rtl::OUString suDirURL(rtl::OUString("file:///c:/temp/atestdir"));
+                rtl::OUString suDirURL(rtl::OUString("file:
 #endif
                 osl::Directory aDir(suDirURL);
                 aDir.open();
@@ -192,7 +192,7 @@ namespace Stringtest
                             rtl::OString sType = getFileTypeName(aStatus);
 
                             rtl::OUString suFilename = aStatus.getFileName();
-                            // rtl::OUString suFullFileURL;
+                            
 
                             rtl::OUString suStrUTF8 = rtl::Uri::encode(suFilename, rtl_UriCharClassUnoParamValue, rtl_UriEncodeKeepEscapes, RTL_TEXTENCODING_UTF8);
                             rtl::OString sStrUTF8 = convertToOString(suStrUTF8);
@@ -214,10 +214,10 @@ namespace Stringtest
                 rtl::OString sStr("h%C3%A4llo");
                 rtl::OUString suStr = rtl::OStringToOUString(sStr, osl_getThreadTextEncoding());
 
-//    rtl_UriEncodeIgnoreEscapes,
-//    rtl_UriEncodeKeepEscapes,
-//     rtl_UriEncodeCheckEscapes,
-//                rtl::OUString suStr2 = rtl::Uri::encode(suStr, rtl_UriCharClassRegName, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
+
+
+
+
                 rtl::OUString suStr_UriDecodeNone        = rtl::Uri::decode(suStr, rtl_UriDecodeNone, RTL_TEXTENCODING_UTF8);
                 showContent(suStr_UriDecodeNone);
                 toUTF8(suStr_UriDecodeNone);
@@ -233,8 +233,8 @@ namespace Stringtest
 
         CPPUNIT_TEST_SUITE( Convert );
         CPPUNIT_TEST( test_FromUTF8_001 );
-//        CPPUNIT_TEST( test_UTF8_files );
-//      CPPUNIT_TEST( test_FromUTF8 );
+
+
         CPPUNIT_TEST_SUITE_END( );
     };
 
@@ -243,7 +243,7 @@ namespace Stringtest
 
 CPPUNIT_TEST_SUITE_REGISTRATION( Stringtest::Convert );
 
-// LLA: doku anpassen!!!
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

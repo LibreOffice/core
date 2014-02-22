@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ado/AView.hxx"
@@ -26,7 +26,7 @@
 #include <comphelper/types.hxx>
 #include "TConnection.hxx"
 
-// -------------------------------------------------------------------------
+
 using namespace comphelper;
 using namespace connectivity::ado;
 using namespace com::sun::star::uno;
@@ -34,13 +34,13 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-//  IMPLEMENT_SERVICE_INFO(OAdoView,"com.sun.star.sdbcx.AView","com.sun.star.sdbcx.View");
-// -------------------------------------------------------------------------
+
+
 OAdoView::OAdoView(sal_Bool _bCase,ADOView* _pView) : OView_ADO(_bCase,NULL)
 ,m_aView(_pView)
 {
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OAdoView::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -56,8 +56,8 @@ Sequence< sal_Int8 > OAdoView::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
+
 sal_Int64 OAdoView::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -65,7 +65,7 @@ sal_Int64 OAdoView::getSomething( const Sequence< sal_Int8 > & rId ) throw (Runt
                 : OView_ADO::getSomething(rId);
 }
 
-// -------------------------------------------------------------------------
+
 void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     if(m_aView.IsValid())
@@ -78,7 +78,7 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
             case PROPERTY_ID_CATALOGNAME:
                 break;
             case PROPERTY_ID_SCHEMANAME:
-                //  rValue <<= m_aView.get_Type();
+                
                 break;
             case PROPERTY_ID_COMMAND:
                 {
@@ -98,17 +98,17 @@ void OAdoView::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     else
         OView_ADO::getFastPropertyValue(rValue,nHandle);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoView::acquire() throw()
 {
     OView_ADO::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoView::release() throw()
 {
     OView_ADO::release();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

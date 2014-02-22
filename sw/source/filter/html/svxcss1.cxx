@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -57,7 +57,7 @@
 
 using namespace ::com::sun::star;
 
-// die Funktionen zum Parsen einer CSS1-Property sind von folgendem Typ:
+
 typedef void (*FnParseCSS1Prop)( const CSS1Expression *pExpr,
                                  SfxItemSet& rItemSet,
                                  SvxCSS1PropertyInfo& rPropInfo,
@@ -77,14 +77,14 @@ static CSS1PropertyEnum const aFontSizeTable[] =
 
 static CSS1PropertyEnum const aFontWeightTable[] =
 {
-    { "extra-light", WEIGHT_NORMAL       }, // WEIGHT_ULTRALIGHT (OBS)
-    { "light",       WEIGHT_NORMAL       }, // WEIGHT_LIGHT (OBSOLETE)
-    { "demi-light",  WEIGHT_NORMAL       }, // WEIGHT_SEMILIGHT (OBS)
-    { "medium",      WEIGHT_NORMAL       }, // WEIGHT_MEDIUM (OBS)
-    { "normal",      WEIGHT_NORMAL       }, // WEIGHT_MEDIUM
-    { "demi-bold",   WEIGHT_NORMAL       }, // WEIGHT_SEMIBOLD (OBS)
-    { "bold",        WEIGHT_BOLD         }, // WEIGHT_BOLD (OBSOLETE)
-    { "extra-bold",  WEIGHT_BOLD         }, // WEIGHT_ULTRABOLD (OBS)
+    { "extra-light", WEIGHT_NORMAL       }, 
+    { "light",       WEIGHT_NORMAL       }, 
+    { "demi-light",  WEIGHT_NORMAL       }, 
+    { "medium",      WEIGHT_NORMAL       }, 
+    { "normal",      WEIGHT_NORMAL       }, 
+    { "demi-bold",   WEIGHT_NORMAL       }, 
+    { "bold",        WEIGHT_BOLD         }, 
+    { "extra-bold",  WEIGHT_BOLD         }, 
     { "bolder",      WEIGHT_BOLD         },
     { "lighter",     WEIGHT_NORMAL       },
     { 0,                    0                   }
@@ -157,9 +157,9 @@ static CSS1PropertyEnum const aTextAlignTable[] =
 
 static CSS1PropertyEnum const aBorderWidthTable[] =
 {
-    { "thin",        0   },  // DEF_LINE_WIDTH_0 / DEF_DOUBLE_LINE0
-    { "medium",      1   },  // DEF_LINE_WIDTH_1 / DEF_DOUBLE_LINE1
-    { "thick",       2   },  // DEF_LINE_WIDTH_2 / DEF_DOUBLE_LINE2
+    { "thin",        0   },  
+    { "medium",      1   },  
+    { "thick",       2   },  
     { 0,                    0   }
 };
 
@@ -195,7 +195,7 @@ static CSS1PropertyEnum const aPositionTable[] =
     { 0,                    0                       }
 };
 
-// Feature: PrintExt
+
 static CSS1PropertyEnum const aSizeTable[] =
 {
     { "auto",        SVX_CSS1_STYPE_AUTO         },
@@ -214,7 +214,7 @@ static CSS1PropertyEnum const aPageBreakTable[] =
     { 0,                    0                           }
 };
 
-// /Feature: PrintExt
+
 
 static sal_uInt16 const aBorderWidths[] =
 {
@@ -301,7 +301,7 @@ void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) 
 
     ::editeng::SvxBorderLine aBorderLine( &aColor );
 
-    // Linien-Stil doppelt oder einfach?
+    
     switch ( eStyle )
     {
         case CSS1_BS_SINGLE:
@@ -333,7 +333,7 @@ void SvxCSS1BorderInfo::SetBorderLine( sal_uInt16 nLine, SvxBoxItem &rBoxItem ) 
             break;
     }
 
-    // benannte Breite umrechnenen, wenn keine absolute gegeben ist
+    
     if( nAbsWidth==USHRT_MAX )
         aBorderLine.SetWidth( aBorderWidths[ nNamedWidth ] );
     else
@@ -374,11 +374,11 @@ SvxCSS1PropertyInfo::SvxCSS1PropertyInfo( const SvxCSS1PropertyInfo& rProp ) :
     eTopType( rProp.eTopType ),
     eWidthType( rProp.eWidthType ),
     eHeightType( rProp.eHeightType ),
-// Feature: PrintExt
+
     eSizeType( rProp.eSizeType ),
     ePageBreakBefore( rProp.ePageBreakBefore ),
     ePageBreakAfter( rProp.ePageBreakAfter )
-// /Feature: PrintExt
+
 {
     for( sal_uInt16 i=0; i<4; i++ )
         aBorderInfos[i] = rProp.aBorderInfos[i]
@@ -417,7 +417,7 @@ void SvxCSS1PropertyInfo::Clear()
     nLeft = nTop = nWidth = nHeight = 0;
     eLeftType = eTopType = eWidthType = eHeightType = SVX_CSS1_LTYPE_NONE;
 
-// Feature: PrintExt
+
     eSizeType = SVX_CSS1_STYPE_NONE;
     ePageBreakBefore = SVX_CSS1_PBREAK_NONE;
     ePageBreakAfter = SVX_CSS1_PBREAK_NONE;
@@ -473,7 +473,7 @@ void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
     if( rProp.ePosition != SVX_CSS1_POS_NONE )
         ePosition = rProp.ePosition;
 
-// Feature: PrintExt
+
     if( rProp.eSizeType != SVX_CSS1_STYPE_NONE )
     {
         eSizeType = rProp.eSizeType;
@@ -487,7 +487,7 @@ void SvxCSS1PropertyInfo::Merge( const SvxCSS1PropertyInfo& rProp )
     if( rProp.ePageBreakAfter != SVX_CSS1_PBREAK_NONE )
         ePageBreakAfter = rProp.ePageBreakAfter;
 
-// /Feature: PrintExt
+
 
     if( rProp.eLeftType != SVX_CSS1_LTYPE_NONE )
     {
@@ -663,7 +663,7 @@ sal_Bool SvxCSS1Parser::StyleParsed( const CSS1Selector * /*pSelector*/,
                                  SfxItemSet& /*rItemSet*/,
                                  SvxCSS1PropertyInfo& /*rPropInfo*/ )
 {
-    // wie man sieht passiert hier gar nichts
+    
     return sal_True;
 }
 
@@ -680,13 +680,13 @@ bool SvxCSS1Parser::SelectorParsed( CSS1Selector *pSelector, bool bFirst )
         pSheetItemSet->ClearItem();
         pSheetPropInfo->Clear();
 
-        // und die naechste Rule vorbereiten
+        
         aSelectors.clear();
     }
 
     aSelectors.push_back(pSelector);
 
-    return false; // den Selektor haben wir gespeichert. Loeschen toedlich!
+    return false; 
 }
 
 
@@ -700,7 +700,7 @@ sal_Bool SvxCSS1Parser::DeclarationParsed( const OUString& rProperty,
 
     ParseProperty( rProperty, pExpr );
 
-    return sal_True;    // die Deklaration brauchen wir nicht mehr. Loeschen!
+    return sal_True;    
 }
 
 
@@ -717,7 +717,7 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, const OUString& rBaseURL, sal_
     nScriptFlags( CSS1_SCRIPT_ALL ),
     bIgnoreFontFamily( sal_False )
 {
-    // Item-Ids auch initialisieren
+    
     aItemIds.nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, false );
     aItemIds.nFontCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, false );
     aItemIds.nFontCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, false );
@@ -844,7 +844,7 @@ sal_Bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
         StyleParsed( &aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
     }
 
-    // und etwas aufrauemen
+    
     aSelectors.clear();
     pSheetItemSet->ClearItem();
     pSheetPropInfo->Clear();
@@ -1026,7 +1026,7 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
         }
         break;
     case CSS1_PERCENTAGE:
-        // nur fuer Drop-Caps!
+        
         nPropHeight = (sal_uInt16)pExpr->GetNumber();
         break;
     case CSS1_IDENT:
@@ -1089,8 +1089,8 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
 
             if( CSS1_IDENT==eType )
             {
-                // Alle nachfolgenden id's sammeln und mit einem
-                // Space getrennt hintendranhaengen
+                
+                
                 const CSS1Expression *pNext = pExpr->GetNext();
                 while( pNext && !pNext->GetOp() &&
                        CSS1_IDENT==pNext->GetType() )
@@ -1156,7 +1156,7 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
     switch( pExpr->GetType() )
     {
     case CSS1_IDENT:
-    case CSS1_STRING:   // MS-IE, was sonst
+    case CSS1_STRING:   
         {
             sal_uInt16 nWeight;
             if( SvxCSS1Parser::GetEnum( aFontWeightTable, pExpr->GetString(),
@@ -1216,25 +1216,25 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
     FontItalic eItalic = ITALIC_NONE;
     SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
 
-    // normal | italic || small-caps | oblique || small-caps | small-caps
-    // (wobei nor noch normal | italic und oblique zulaessig sind
+    
+    
 
-    // der Wert kann zwei Werte enthalten!
+    
     for( sal_uInt16 i=0; pExpr && i<2; i++ )
     {
-        // Auch hier hinterlaesst MS-IEs Parser seine Spuren
+        
         if( (CSS1_IDENT==pExpr->GetType() || CSS1_STRING==pExpr->GetType()) &&
             !pExpr->GetOp() )
         {
             const OUString& rValue = pExpr->GetString();
-            // erstmal pruefen, ob es ein Italic-Wert oder 'normal' ist
+            
             sal_uInt16 nItalic;
             if( SvxCSS1Parser::GetEnum( aFontStyleTable, rValue, nItalic ) )
             {
                 eItalic = (FontItalic)nItalic;
                 if( !bCaseMap && ITALIC_NONE==eItalic )
                 {
-                    // fuer 'normal' muessen wir auch die case-map aussch.
+                    
                     eCaseMap = SVX_CASEMAP_NOT_MAPPED;
                     bCaseMap = sal_True;
                 }
@@ -1248,7 +1248,7 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
             }
         }
 
-        // den naechsten Ausdruck holen
+        
         pExpr = pExpr->GetNext();
     }
 
@@ -1281,7 +1281,7 @@ static void ParseCSS1_font_variant( const CSS1Expression *pExpr,
 {
     OSL_ENSURE( pExpr, "no expression" );
 
-    // normal | small-caps
+    
 
     switch( pExpr->GetType() )
     {
@@ -1307,7 +1307,7 @@ static void ParseCSS1_text_transform( const CSS1Expression *pExpr,
 {
     OSL_ENSURE( pExpr, "no expression" );
 
-    // none | capitalize | uppercase | lowercase
+    
 
     switch( pExpr->GetType() )
     {
@@ -1339,7 +1339,7 @@ static void ParseCSS1_color( const CSS1Expression *pExpr,
     case CSS1_IDENT:
     case CSS1_RGB:
     case CSS1_HEXCOLOR:
-    case CSS1_STRING:       // Wegen MS-IE
+    case CSS1_STRING:       
         {
             Color aColor;
             if( pExpr->GetColor( aColor ) )
@@ -1486,10 +1486,10 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
         case CSS1_LENGTH:
         case CSS1_PIXLENGTH:
             {
-                // da wir keine absolute Positionierung koennen,
-                // unterscheiden wir nur zwischen  0 und !0. Deshalb
-                // koennen Pixel auch wie alle anderen Einheiten behandelt
-                // werden.
+                
+                
+                
+                
 
                 sal_uLong nLength = (sal_uLong)pExpr->GetNumber();
                 if( !bHori )
@@ -1507,7 +1507,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
 
         case CSS1_PERCENTAGE:
             {
-                // die %-Angabe wird auf den enum abgebildet
+                
 
                 sal_uInt16 nPerc = (sal_uInt16)pExpr->GetNumber();
                 if( !bHori )
@@ -1528,7 +1528,7 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
 
         case CSS1_IDENT:
         case CSS1_HEXCOLOR:
-        case CSS1_STRING:       // Wegen MS-IE
+        case CSS1_STRING:       
             {
                 sal_uInt16 nEnum;
                 const OUString &rValue = pExpr->GetString();
@@ -1542,20 +1542,20 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
                 }
                 else if( SvxCSS1Parser::GetEnum( aBGHoriPosTable, rValue, nEnum ) )
                 {
-                    // <position>, horizontal
+                    
                     MergeHori( ePos, (SvxGraphicPosition)nEnum );
                 }
                 else if( SvxCSS1Parser::GetEnum( aBGVertPosTable, rValue, nEnum ) )
                 {
-                    // <position>, vertikal
+                    
                     MergeVert( ePos, (SvxGraphicPosition)nEnum );
                 }
                 else if( !bColor )
                 {
-                    // <color>
+                    
                     bColor = pExpr->GetColor( aColor );
                 }
-                // <scroll> kennen wir nicht
+                
             }
             break;
 
@@ -1566,14 +1566,14 @@ static void ParseCSS1_background( const CSS1Expression *pExpr,
         pExpr = pExpr->GetNext();
     }
 
-    // transparent schlaegt alles
+    
     if( bTransparent )
     {
         bColor = sal_False;
         aURL = "";
     }
 
-    // repeat hat prio gegenueber einer Position
+    
     if( GPOS_NONE == eRepeat )
         eRepeat = ePos;
 
@@ -1614,14 +1614,14 @@ static void ParseCSS1_background_color( const CSS1Expression *pExpr,
         break;
     case CSS1_IDENT:
     case CSS1_HEXCOLOR:
-    case CSS1_STRING:       // Wegen MS-IE
+    case CSS1_STRING:       
         if( pExpr->GetString().equalsIgnoreAsciiCase( "transparent" ) )
         {
             bTransparent = sal_True;
         }
         else
         {
-            // <color>
+            
             bColor = pExpr->GetColor( aColor );
         }
         break;
@@ -1688,7 +1688,7 @@ static void ParseCSS1_line_height( const CSS1Expression *pExpr,
             nHeight = rParser.GetMinFixLineSpace();
         SvxLineSpacingItem aLSItem( nHeight, aItemIds.nLineSpacing );
         aLSItem.SetLineHeight( nHeight );
-        // interpret <line-height> attribute as minimum line height
+        
         aLSItem.GetLineSpaceRule() = SVX_LINE_SPACE_MIN;
         aLSItem.GetInterLineSpaceRule() = SVX_INTER_LINE_SPACE_OFF;
         rItemSet.Put( aLSItem );
@@ -1718,7 +1718,7 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
     SvxCaseMap eCaseMap = SVX_CASEMAP_NOT_MAPPED;
     FontWeight eWeight = WEIGHT_NORMAL;
 
-    // [ <font-style> || <font-variant> || <font-weight> ] ?
+    
     while( pExpr && !pExpr->GetOp() &&
            (CSS1_IDENT==pExpr->GetType() ||
             CSS1_STRING==pExpr->GetType() ||
@@ -1756,8 +1756,8 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
     if( !pExpr || pExpr->GetOp() )
         return;
 
-    // Da "font" alle Werte zurecksetzt, fuer die nichts angegeben ist,
-    // tun wir das hier.
+    
+    
     SvxPostureItem aPosture( eItalic, aItemIds.nPosture );
     if( rParser.IsSetWesternProps() )
         rItemSet.Put( aPosture );
@@ -1789,7 +1789,7 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
     }
 
 
-    // font-size
+    
     CSS1Expression aExpr( pExpr->GetType(), pExpr->GetString(),
                           pExpr->GetNumber() );
     ParseCSS1_font_size( &aExpr, rItemSet, rPropInfo, rParser );
@@ -1798,10 +1798,10 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
     if( !pExpr )
         return;
 
-    // [ '/' line-height ]?
+    
     if( '/' == pExpr->GetOp() )
     {
-        // '/' line-height
+        
         aExpr.Set( pExpr->GetType(), pExpr->GetString(), pExpr->GetNumber() );
         ParseCSS1_line_height( &aExpr, rItemSet, rPropInfo, rParser );
 
@@ -1811,7 +1811,7 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
     if( !pExpr || pExpr->GetOp() )
         return;
 
-    // font-family
+    
     ParseCSS1_font_family( pExpr, rItemSet, rPropInfo, rParser );
 }
 
@@ -1842,13 +1842,13 @@ static void ParseCSS1_letter_spacing( const CSS1Expression *pExpr,
     case CSS1_NUMBER:
         if( pExpr->GetNumber() == 0 )
         {
-            // eigentlich unnoetig, aber wir sind ja tollerant
+            
             rItemSet.Put( SvxKerningItem( (short)0, aItemIds.nKerning ) );
         }
         break;
 
     case CSS1_IDENT:
-    case CSS1_STRING: // Vorschtshalber auch MS-IE
+    case CSS1_STRING: 
         if( pExpr->GetString().equalsIgnoreAsciiCase( "normal" ) )
         {
             rItemSet.Put( SvxKerningItem( (short)0, aItemIds.nKerning ) );
@@ -1876,7 +1876,7 @@ static void ParseCSS1_text_decoration( const CSS1Expression *pExpr,
     FontUnderline eOverline   = UNDERLINE_NONE;
     FontStrikeout eCrossedOut = STRIKEOUT_NONE;
 
-    // der Wert kann zwei Werte enthalten! Und MS-IE auch Strings
+    
     while( pExpr && (pExpr->GetType() == CSS1_IDENT ||
                      pExpr->GetType() == CSS1_STRING) && !pExpr->GetOp() )
     {
@@ -1976,7 +1976,7 @@ static void ParseCSS1_text_align( const CSS1Expression *pExpr,
     OSL_ENSURE( pExpr, "no expression" );
 
     if( CSS1_IDENT==pExpr->GetType() ||
-        CSS1_STRING==pExpr->GetType() ) // MS-IE, mal wieder
+        CSS1_STRING==pExpr->GetType() ) 
     {
         sal_uInt16 nAdjust;
         if( SvxCSS1Parser::GetEnum( aTextAlignTable, pExpr->GetString(),
@@ -2014,7 +2014,7 @@ static void ParseCSS1_text_indent( const CSS1Expression *pExpr,
         }
         break;
     case CSS1_PERCENTAGE:
-        // koennen wir nicht
+        
         break;
     default:
         ;
@@ -2067,7 +2067,7 @@ static void ParseCSS1_margin_left( const CSS1Expression *pExpr,
         }
         break;
     case CSS1_PERCENTAGE:
-        // koennen wir nicht
+        
         break;
     default:
         ;
@@ -2123,7 +2123,7 @@ static void ParseCSS1_margin_right( const CSS1Expression *pExpr,
         }
         break;
     case CSS1_PERCENTAGE:
-        // koennen wir nicht
+        
         break;
     default:
         ;
@@ -2185,7 +2185,7 @@ static void ParseCSS1_margin_top( const CSS1Expression *pExpr,
         }
         break;
     case CSS1_PERCENTAGE:
-        // koennen wir nicht
+        
         break;
     default:
         ;
@@ -2244,7 +2244,7 @@ static void ParseCSS1_margin_bottom( const CSS1Expression *pExpr,
         }
         break;
     case CSS1_PERCENTAGE:
-        // koennen wir nicht
+        
         break;
     default:
         ;
@@ -2303,7 +2303,7 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
             }
             break;
         case CSS1_PERCENTAGE:
-            // koennen wir nicht
+            
             break;
         default:
             ;
@@ -2311,10 +2311,10 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
 
         if( bSetThis )
         {
-            // 0 = top
-            // 1 = right
-            // 2 = bottom
-            // 3 = left
+            
+            
+            
+            
             switch( i )
             {
             case 0:
@@ -2323,15 +2323,15 @@ static void ParseCSS1_margin( const CSS1Expression *pExpr,
                 bSetMargins[2] = bSetMargins[3] = sal_True;
                 break;
             case 1:
-                nMargins[1] = nMargins[3] = nMargin;    // right + left
+                nMargins[1] = nMargins[3] = nMargin;    
                 bSetMargins[1] = bSetMargins[3] = sal_True;
                 break;
             case 2:
-                nMargins[2] = nMargin;  // bottom
+                nMargins[2] = nMargin;  
                 bSetMargins[2] = sal_True;
                 break;
             case 3:
-                nMargins[3] = nMargin;  // left
+                nMargins[3] = nMargin;  
                 bSetMargins[3] = sal_True;
                 break;
             }
@@ -2450,7 +2450,7 @@ static sal_Bool ParseCSS1_padding_xxx( const CSS1Expression *pExpr,
         }
         break;
     case CSS1_PERCENTAGE:
-        // koennen wir nicht
+        
         break;
     default:
         ;
@@ -2540,9 +2540,9 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
 {
     OSL_ENSURE( pExpr, "no expression" );
 
-    sal_uInt16 nWidth = USHRT_MAX;      // die Linien-Dicke
-    sal_uInt16 nNWidth = 1;             // benannte Linien-Dicke (und default)
-    CSS1BorderStyle eStyle = CSS1_BS_NONE; // Linien-Style
+    sal_uInt16 nWidth = USHRT_MAX;      
+    sal_uInt16 nNWidth = 1;             
+    CSS1BorderStyle eStyle = CSS1_BS_NONE; 
     Color aColor;
     sal_Bool bColor = sal_False;
 
@@ -2583,7 +2583,7 @@ static void ParseCSS1_border_xxx( const CSS1Expression *pExpr,
             {
                 sal_Bool bHori = nWhichLine == BOX_LINE_TOP ||
                              nWhichLine == BOX_LINE_BOTTOM;
-                // Ein Pixel wird zur Haarlinie (ist huebscher)
+                
                 long nWidthL = (long)pExpr->GetNumber();
                 if( nWidthL > 1 )
                 {
@@ -2635,8 +2635,8 @@ static void ParseCSS1_border_xxx_width( const CSS1Expression *pExpr,
 {
     OSL_ENSURE( pExpr, "no expression" );
 
-    sal_uInt16 nWidth = USHRT_MAX;      // die Linien-Dicke
-    sal_uInt16 nNWidth = 1;             // benannte Linien-Dicke (und default)
+    sal_uInt16 nWidth = USHRT_MAX;      
+    sal_uInt16 nNWidth = 1;             
 
     switch( pExpr->GetType() )
     {
@@ -2872,7 +2872,7 @@ static void ParseCSS1_length( const CSS1Expression *pExpr,
         break;
 
     case CSS1_PIXLENGTH:
-    case CSS1_NUMBER:       // wegen Netscape und IE
+    case CSS1_NUMBER:       
         {
             long nWidthL = (long)pExpr->GetNumber();
             long nPWidth = bHori ? 0 : nWidthL;
@@ -2929,7 +2929,7 @@ static void ParseCSS1_top( const CSS1Expression *pExpr,
 }
 
 
-// Feature: PrintExt
+
 static void ParseCSS1_size( const CSS1Expression *pExpr,
                             SfxItemSet & /*rItemSet*/,
                             SvxCSS1PropertyInfo& rPropInfo,
@@ -2979,10 +2979,10 @@ static void ParseCSS1_size( const CSS1Expression *pExpr,
     }
 }
 
-// /Feature: PrintExt
 
 
-// Feature: PrintExt
+
+
 
 static void ParseCSS1_page_break_xxx( const CSS1Expression *pExpr,
                                       SvxCSS1PageBreak& rPBreak )
@@ -3069,7 +3069,7 @@ static void ParseCSS1_orphans( const CSS1Expression *pExpr,
         rItemSet.Put( aOrphansItem );
     }
 }
-// /Feature: PrintExt
+
 
 static void ParseCSS1_so_language( const CSS1Expression *pExpr,
                                SfxItemSet &rItemSet,
@@ -3100,7 +3100,7 @@ static void ParseCSS1_so_language( const CSS1Expression *pExpr,
 }
 
 
-// die Zuordung Property zu parsender Funktion
+
 struct CSS1PropEntry
 {
     union
@@ -3115,7 +3115,7 @@ struct CSS1PropEntry
     {   { sCSS1_P_##p }, ParseCSS1_##p }
 
 
-// die Tabelle mit den Zuordnungen
+
 static CSS1PropEntry aCSS1PropFnTab[] =
 {
     CSS1_PROP_ENTRY(background),
@@ -3163,14 +3163,14 @@ static CSS1PropEntry aCSS1PropFnTab[] =
     CSS1_PROP_ENTRY(top),
     CSS1_PROP_ENTRY(width),
     CSS1_PROP_ENTRY(height),
-// Feature: PrintExt
+
     CSS1_PROP_ENTRY(size),
     CSS1_PROP_ENTRY(page_break_before),
     CSS1_PROP_ENTRY(page_break_after),
     CSS1_PROP_ENTRY(page_break_inside),
     CSS1_PROP_ENTRY(widows),
     CSS1_PROP_ENTRY(orphans),
-// /Feature: PrintExt
+
     CSS1_PROP_ENTRY(so_language)
 };
 

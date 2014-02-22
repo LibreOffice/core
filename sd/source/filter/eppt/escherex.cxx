@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "escherex.hxx"
 
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
-// ---------------------------------------------------------------------------------------------
+
+
+
 
 PptEscherEx::PptEscherEx( SvStream& rOutStrm, const OUString& rBaseURI ) :
     EscherEx( EscherExGlobalRef( new EscherExGlobal ), &rOutStrm )
@@ -30,7 +30,7 @@ PptEscherEx::PptEscherEx( SvStream& rOutStrm, const OUString& rBaseURI ) :
     mnCurrentDg = 0;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PptEscherEx::DrawingGroupContainerSize()
 {
@@ -40,13 +40,13 @@ sal_uInt32 PptEscherEx::DrawingGroupContainerSize()
 void PptEscherEx::WriteDrawingGroupContainer( SvStream& rSt )
 {
     sal_uInt32 nSize = DrawingGroupContainerSize();
-    rSt.WriteUInt32( (sal_uInt32)( 0xf | ( 1035 << 16 ) ) )     // EPP_PPDrawingGroup
+    rSt.WriteUInt32( (sal_uInt32)( 0xf | ( 1035 << 16 ) ) )     
        .WriteUInt32( (sal_uInt32)( nSize - 8 ) );
 
     ImplWriteDggContainer( rSt );
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PptEscherEx::ImplDggContainerSize()
 {
@@ -76,7 +76,7 @@ void PptEscherEx::ImplWriteDggContainer( SvStream& rSt )
     }
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 #define ESCHER_OPT_COUNT 6
 
@@ -104,7 +104,7 @@ void PptEscherEx::ImplWriteOptAtom( SvStream& rSt )
     }
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 #define ESCHER_SPLIT_MENU_COLORS_COUNT  4
 
@@ -131,13 +131,13 @@ void PptEscherEx::ImplWriteSplitMenuColorsAtom( SvStream& rSt )
 
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 PptEscherEx::~PptEscherEx()
 {
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance )
 {
@@ -155,8 +155,8 @@ void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance 
                 mnCurrentDg = mxGlobal->GenerateDrawingId();
                 AddAtom( 8, ESCHER_Dg, 0, mnCurrentDg );
                 PtReplaceOrInsert( ESCHER_Persist_Dg | mnCurrentDg, mpOutStrm->Tell() );
-                mpOutStrm->WriteUInt32( (sal_uInt32)0 )     // The number of shapes in this drawing
-                          .WriteUInt32( (sal_uInt32)0 );    // The last MSOSPID given to an SP in this DG
+                mpOutStrm->WriteUInt32( (sal_uInt32)0 )     
+                          .WriteUInt32( (sal_uInt32)0 );    
             }
         }
         break;
@@ -175,7 +175,7 @@ void PptEscherEx::OpenContainer( sal_uInt16 n_EscherContainer, int nRecInstance 
     }
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void PptEscherEx::CloseContainer()
 {
@@ -222,7 +222,7 @@ void PptEscherEx::CloseContainer()
     }
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClientData )
 {
@@ -241,17 +241,17 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
         OpenContainer( ESCHER_SpContainer );
         AddAtom( 16, ESCHER_Spgr, 1 );
         PtReplaceOrInsert( ESCHER_Persist_Grouping_Snap | mnGroupLevel, mpOutStrm->Tell() );
-        mpOutStrm ->WriteInt32( (sal_Int32)aRect.Left() )  // bounding box for the grouped shapes to which they are attached
+        mpOutStrm ->WriteInt32( (sal_Int32)aRect.Left() )  
                    .WriteInt32( (sal_Int32)aRect.Top() )
                    .WriteInt32( (sal_Int32)aRect.Right() )
                    .WriteInt32( (sal_Int32)aRect.Bottom() );
 
         nShapeId = GenerateShapeId();
         if ( !mnGroupLevel )
-            AddShape( ESCHER_ShpInst_Min, 5, nShapeId );                    // Flags: Group | Patriarch
+            AddShape( ESCHER_ShpInst_Min, 5, nShapeId );                    
         else
         {
-            AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );                // Flags: Group | HaveAnchor
+            AddShape( ESCHER_ShpInst_Min, 0x201, nShapeId );                
             if ( mnGroupLevel == 1 )
             {
                 AddAtom( 8, ESCHER_ClientAnchor );
@@ -279,12 +279,12 @@ sal_uInt32 PptEscherEx::EnterGroup( Rectangle* pBoundRect, SvMemoryStream* pClie
                 mpOutStrm->Write( pClientData->GetData(), nSize );
             }
         }
-        CloseContainer();                                               // ESCHER_SpContainer
+        CloseContainer();                                               
     }
     mnGroupLevel++;
     return nShapeId;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

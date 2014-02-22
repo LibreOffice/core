@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
@@ -52,12 +52,12 @@
 #include "scuitphfedit.hxx"
 #include <memory>
 
-// STATIC DATA -----------------------------------------------------------
+
 
 static ScEditWindow* pActiveEdWnd = NULL;
 
-//========================================================================
-// class ScHFEditPage
+
+
 //
 
 ScHFEditPage::ScHFEditPage( Window*             pParent,
@@ -94,8 +94,8 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     get(m_pFtCustomized,"labelSTR_HF_CUSTOMIZED");
 
 
-    //! use default style from current document?
-    //! if font color is used, header/footer background color must be set
+    
+    
 
     ScPatternAttr   aPatAttr( rCoreAttrs.GetPool() );
 
@@ -117,7 +117,7 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
     m_pFtDefinedHF->Show();
     m_pFtCustomHF->Show();
 
-    //swap left/right areas and their lables in RTL mode
+    
     if( Application::GetSettings().GetLayoutRTL() )
     {
         Window *pLeft = get<Window>("labelFT_LEFT");
@@ -156,7 +156,7 @@ IMPL_LINK( ScHFEditPage, ObjectSelectHdl, ScEditWindow*, pEdit )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 ScHFEditPage::~ScHFEditPage()
 {
@@ -206,7 +206,7 @@ sal_Bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 #define SET_CMD(i,id) \
     aCmd  = aDel;                           \
@@ -214,7 +214,7 @@ sal_Bool ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
     aCmd += aDel;                           \
     aCmdArr[i] = aCmd;
 
-// -----------------------------------------------------------------------
+
 
 void ScHFEditPage::FillCmdArr()
 {
@@ -238,7 +238,7 @@ void ScHFEditPage::InitPreDefinedList()
     Color* pTxtColour = NULL;
     Color* pFldColour = NULL;
 
-    // Get the all field values at the outset.
+    
     OUString aPageFieldValue(m_pWndLeft->GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));
     OUString aSheetFieldValue(m_pWndLeft->GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxTableField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));
     OUString aFileFieldValue(m_pWndLeft->GetEditEngine()->CalcFieldValue(SvxFieldItem(SvxFileField(), EE_FEATURE_FIELD), 0,0, pTxtColour, pFldColour));
@@ -299,12 +299,12 @@ void ScHFEditPage::RemoveFromDefinedList()
         m_pLbDefined->RemoveEntry( nCount-1);
 }
 
-// determine if the header/footer exists in our predefined list and set select to it.
+
 void ScHFEditPage::SetSelectDefinedList()
 {
     SvtUserOptions aUserOpt;
 
-    // default to customized
+    
     ScHFEntryId eSelectEntry = eEntryCount;
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -359,7 +359,7 @@ void ScHFEditPage::SetSelectDefinedList()
             break;
 
 
-            //TODO
+            
             case ePagesEntry:
             {
             }
@@ -402,7 +402,7 @@ void ScHFEditPage::SetSelectDefinedList()
             }
             break;
 
-            //TODO
+            
             case eFileNamePageEntry:
             {
             }
@@ -421,13 +421,13 @@ void ScHFEditPage::SetSelectDefinedList()
             }
             break;
 
-            //TODO
+            
             case ePageSheetEntry:
             {
             }
             break;
 
-            //TODO
+            
             case ePageFileNameEntry:
             {
             }
@@ -477,7 +477,7 @@ void ScHFEditPage::SetSelectDefinedList()
 
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -720,7 +720,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             OUString aUserNameEntry(aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName());
             m_pWndLeft->GetEditEngine()->SetText(aUserNameEntry);
             OUString aPageEntry( m_pFtPage->GetText() + " ");
-            //aPageEntry += " ";
+            
             m_pWndCenter->GetEditEngine()->SetText(aPageEntry);
             m_pWndCenter->InsertField( SvxFieldItem(SvxPageField(), EE_FEATURE_FIELD) );
             m_pWndRight->InsertField( SvxFieldItem(SvxDateField(Date( Date::SYSTEM ),SVXDATETYPE_VAR), EE_FEATURE_FIELD) );
@@ -759,9 +759,9 @@ void ScHFEditPage::ClearTextAreas()
     m_pWndRight->Invalidate();
 }
 
-//-----------------------------------------------------------------------
-// Handler:
-//-----------------------------------------------------------------------
+
+
+
 
 IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
 {
@@ -772,7 +772,7 @@ IMPL_LINK( ScHFEditPage, ListHdl_Impl, ListBox*, pList )
         {
             ProcessDefinedListSel(eSel);
 
-            // check if we need to remove the customized entry.
+            
             if(eSel < eEntryCount)
                 RemoveFromDefinedList();
         }
@@ -846,9 +846,9 @@ IMPL_LINK( ScHFEditPage, MenuHdl, ScExtIButton*, pBtn )
     return 0;
 }
 
-//========================================================================
-// class ScRightHeaderEditPage
-//========================================================================
+
+
+
 
 ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -857,14 +857,14 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet&
                     true )
     {}
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
 
-//========================================================================
-// class ScLeftHeaderEditPage
-//========================================================================
+
+
+
 
 ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -873,14 +873,14 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& r
                     true )
     {}
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
 
-//========================================================================
-// class ScRightFooterEditPage
-//========================================================================
+
+
+
 
 ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -889,14 +889,14 @@ ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet&
                     false )
     {}
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
 
-//========================================================================
-// class ScLeftFooterEditPage
-//========================================================================
+
+
+
 
 ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& rCoreSet )
     : ScHFEditPage( pParent,
@@ -905,7 +905,7 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& r
                     false )
     {}
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,10 +39,10 @@ static sal_Int32 nRefCount = 0;
 
 class SfxMiscCfg : public utl::ConfigItem
 {
-    bool            bPaperSize;     // printer warnings
+    bool            bPaperSize;     
     bool            bPaperOrientation;
     bool            bNotFound;
-    sal_Int32       nYear2000;      // two digit year representation
+    sal_Int32       nYear2000;      
 
     const com::sun::star::uno::Sequence<OUString> GetPropertyNames();
     void                    Load();
@@ -63,7 +63,7 @@ public:
     bool        IsPaperOrientationWarning()     const {return bPaperOrientation;}
     void        SetPaperOrientationWarning( bool bSet);
 
-                // 0 ... 99
+                
     sal_Int32   GetYear2000()           const { return nYear2000; }
     void        SetYear2000( sal_Int32 nSet );
 
@@ -139,10 +139,10 @@ void SfxMiscCfg::Load()
             {
                 switch(nProp)
                 {
-                    case  0: bPaperSize        = *(sal_Bool*)pValues[nProp].getValue(); break;      //"Print/Warning/PaperSize",
-                    case  1: bPaperOrientation = *(sal_Bool*)pValues[nProp].getValue();  break;     //"Print/Warning/PaperOrientation",
-                    case  2: bNotFound         = *(sal_Bool*)pValues[nProp].getValue()  ;  break;   //"Print/Warning/NotFound",
-                    case  3: pValues[nProp] >>= nYear2000;break;                                    //"DateFormat/TwoDigitYear",
+                    case  0: bPaperSize        = *(sal_Bool*)pValues[nProp].getValue(); break;      
+                    case  1: bPaperOrientation = *(sal_Bool*)pValues[nProp].getValue();  break;     
+                    case  2: bNotFound         = *(sal_Bool*)pValues[nProp].getValue()  ;  break;   
+                    case  3: pValues[nProp] >>= nYear2000;break;                                    
                 }
             }
         }
@@ -165,15 +165,15 @@ void SfxMiscCfg::Commit()
     {
         switch(nProp)
         {
-            case  0: pValues[nProp].setValue(&bPaperSize, rType);break;  //"Print/Warning/PaperSize",
-            case  1: pValues[nProp].setValue(&bPaperOrientation, rType);break;     //"Print/Warning/PaperOrientation",
-            case  2: pValues[nProp].setValue(&bNotFound, rType);break;   //"Print/Warning/NotFound",
-            case  3: pValues[nProp] <<= nYear2000;break;                 //"DateFormat/TwoDigitYear",
+            case  0: pValues[nProp].setValue(&bPaperSize, rType);break;  
+            case  1: pValues[nProp].setValue(&bPaperOrientation, rType);break;     
+            case  2: pValues[nProp].setValue(&bNotFound, rType);break;   
+            case  3: pValues[nProp] <<= nYear2000;break;                 
         }
     }
     PutProperties(rNames, aValues);
 }
-// -----------------------------------------------------------------------
+
 namespace
 {
     class LocalSingleton : public rtl::Static< osl::Mutex, LocalSingleton >
@@ -183,7 +183,7 @@ namespace
 
 MiscCfg::MiscCfg( )
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
     if ( !pOptions )
     {
@@ -199,7 +199,7 @@ MiscCfg::MiscCfg( )
 
 MiscCfg::~MiscCfg( )
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( LocalSingleton::get() );
     pImpl->RemoveListener(this);
     if ( !--nRefCount )

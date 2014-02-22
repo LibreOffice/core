@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "querycontainerwindow.hxx"
@@ -40,7 +40,7 @@ namespace dbaui
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
 
-    // OQueryContainerWindow
+    
     OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController& _rController,const Reference< XComponentContext >& _rxContext)
         :ODataView( pParent, _rController, _rxContext )
         ,m_pViewSwitch(NULL)
@@ -67,7 +67,7 @@ namespace dbaui
             Reference< ::com::sun::star::util::XCloseable > xCloseable(m_xBeamer,UNO_QUERY);
             m_xBeamer = NULL;
             if(xCloseable.is())
-                xCloseable->close(sal_False); // false - holds the owner ship of this frame
+                xCloseable->close(sal_False); 
         }
 
         ::std::auto_ptr<Window> aTemp(m_pSplitter);
@@ -90,7 +90,7 @@ namespace dbaui
 
         if ( m_pBeamer && m_pBeamer->IsVisible() )
         {
-            // calc pos and size of the splitter
+            
             Point aSplitPos     = m_pSplitter->GetPosPixel();
             Size aSplitSize     = m_pSplitter->GetOutputSizePixel();
             aSplitSize.Width() = aPlayground.GetWidth();
@@ -101,15 +101,15 @@ namespace dbaui
             if ( aSplitPos.Y() + aSplitSize.Height() > aPlayground.GetHeight() )
                 aSplitPos.Y() = aPlayground.GetHeight() - aSplitSize.Height();
 
-            // set pos and size of the splitter
+            
             m_pSplitter->SetPosSizePixel( aSplitPos, aSplitSize );
             m_pSplitter->SetDragRectPixel(  aPlayground );
 
-            // set pos and size of the beamer
+            
             Size aBeamerSize( aPlayground.GetWidth(), aSplitPos.Y() );
             m_pBeamer->SetPosSizePixel( aPlayground.TopLeft(), aBeamerSize );
 
-            // shrink the playground by the size which is occupied by the beamer
+            
             aPlayground.Top() = aSplitPos.Y() + aSplitSize.Height();
         }
 
@@ -146,7 +146,7 @@ namespace dbaui
     {
         if ( m_pBeamer )
         {
-            // here I know that we will be destroyed from the frame
+            
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
             m_pBeamer = NULL;
             m_xBeamer = NULL;
@@ -181,7 +181,7 @@ namespace dbaui
             m_xBeamer = Frame::create( m_pViewSwitch->getORB() );
             m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
 
-            // notify layout manager to not create internal toolbars
+            
             try
             {
                 Reference < XPropertySet > xLMPropSet(m_xBeamer->getLayoutManager(), UNO_QUERY);
@@ -197,7 +197,7 @@ namespace dbaui
 
             m_xBeamer->setName(FRAME_NAME_QUERY_PREVIEW);
 
-            // append our frame
+            
             Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
             Reference < XFrames > xFrames = xSup->getFrames();
             xFrames->append( Reference<XFrame>(m_xBeamer,UNO_QUERY_THROW) );
@@ -212,7 +212,7 @@ namespace dbaui
             m_pBeamer->Show();
 
             m_pSplitter->SetPosSizePixel( Point(0,aBeamer.Height()), Size(aSize.Width(),nFrameHeight) );
-            // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
+            
             m_pSplitter->SetSplitPosPixel( aBeamer.Height() );
             m_pViewSwitch->SetPosSizePixel(aPos,Size(aBeamer.Width(),aSize.Height() - aBeamer.Height()-nFrameHeight));
 
@@ -222,6 +222,6 @@ namespace dbaui
         }
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

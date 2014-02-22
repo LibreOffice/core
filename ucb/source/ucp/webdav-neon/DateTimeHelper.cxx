@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -45,7 +45,7 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
     int year, month, day, hours, minutes, off_hours, off_minutes, fix;
     double seconds;
 
-    // 2001-01-01T12:30:00Z
+    
     int n = sscanf( aDT.getStr(), "%04d-%02d-%02dT%02d:%02d:%lfZ",
                     &year, &month, &day, &hours, &minutes, &seconds );
     if ( n == 6 )
@@ -54,7 +54,7 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
     }
     else
     {
-        // 2001-01-01T12:30:00+03:30
+        
         n = sscanf( aDT.getStr(), "%04d-%02d-%02dT%02d:%02d:%lf+%02d:%02d",
                     &year, &month, &day, &hours, &minutes, &seconds,
                     &off_hours, &off_minutes );
@@ -64,7 +64,7 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
         }
         else
         {
-            // 2001-01-01T12:30:00-03:30
+            
             n = sscanf( aDT.getStr(), "%04d-%02d-%02dT%02d:%02d:%lf-%02d:%02d",
                         &year, &month, &day, &hours, &minutes, &seconds,
                         &off_hours, &off_minutes );
@@ -79,16 +79,16 @@ bool DateTimeHelper::ISO8601_To_DateTime (const OUString& s,
         }
     }
 
-    // Convert to local time...
+    
 
     oslDateTime aDateTime;
     aDateTime.NanoSeconds = 0;
-    aDateTime.Seconds     = sal::static_int_cast< sal_uInt16 >(seconds); // 0-59
-    aDateTime.Minutes     = sal::static_int_cast< sal_uInt16 >(minutes); // 0-59
-    aDateTime.Hours       = sal::static_int_cast< sal_uInt16 >(hours); // 0-23
-    aDateTime.Day         = sal::static_int_cast< sal_uInt16 >(day); // 1-31
-    aDateTime.DayOfWeek   = 0;          // 0-6, 0 = Sunday
-    aDateTime.Month       = sal::static_int_cast< sal_uInt16 >(month); // 1-12
+    aDateTime.Seconds     = sal::static_int_cast< sal_uInt16 >(seconds); 
+    aDateTime.Minutes     = sal::static_int_cast< sal_uInt16 >(minutes); 
+    aDateTime.Hours       = sal::static_int_cast< sal_uInt16 >(hours); 
+    aDateTime.Day         = sal::static_int_cast< sal_uInt16 >(day); 
+    aDateTime.DayOfWeek   = 0;          
+    aDateTime.Month       = sal::static_int_cast< sal_uInt16 >(month); 
     aDateTime.Year        = sal::static_int_cast< sal_Int16  >(year);
 
     TimeValue aTimeValue;
@@ -161,12 +161,12 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     {
         OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
 
-        // RFC 1123
+        
         found = sscanf (aDT.getStr(), "%3s, %2d %3s %4d %2d:%2d:%2d GMT",
                         string_day, &day, string_month, &year, &hours, &minutes, &seconds);
         if (found != 7)
         {
-            // RFC 1036
+            
             found = sscanf (aDT.getStr(), "%3s, %2d-%3s-%2d %2d:%2d:%2d GMT",
                             string_day, &day, string_month, &year, &hours, &minutes, &seconds);
         }
@@ -176,7 +176,7 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
     {
         OString aDT (s.getStr(), s.getLength(), RTL_TEXTENCODING_ASCII_US);
 
-        // ANSI C's asctime () format
+        
         found = sscanf (aDT.getStr(), "%3s %3s %d %2d:%2d:%2d %4d",
                         string_day, string_month,
                         &day, &hours, &minutes, &seconds, &year);
@@ -191,21 +191,21 @@ bool DateTimeHelper::RFC2068_To_DateTime (const OUString& s,
                             OUString::createFromAscii (string_month));
         if (month)
         {
-            // Convert to local time...
+            
 
             oslDateTime aDateTime;
             aDateTime.NanoSeconds = 0;
             aDateTime.Seconds     = sal::static_int_cast< sal_uInt16 >(seconds);
-                // 0-59
+                
             aDateTime.Minutes     = sal::static_int_cast< sal_uInt16 >(minutes);
-                // 0-59
+                
             aDateTime.Hours       = sal::static_int_cast< sal_uInt16 >(hours);
-                // 0-23
+                
             aDateTime.Day         = sal::static_int_cast< sal_uInt16 >(day);
-                // 1-31
-            aDateTime.DayOfWeek   = 0; //dayofweek;  // 0-6, 0 = Sunday
+                
+            aDateTime.DayOfWeek   = 0; 
             aDateTime.Month       = sal::static_int_cast< sal_uInt16 >(month);
-                // 1-12
+                
             aDateTime.Year        = sal::static_int_cast< sal_Int16  >(year);
 
             TimeValue aTimeValue;

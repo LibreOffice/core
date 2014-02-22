@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,14 +54,14 @@ static bool cpp_call(
 
     if ( nParams > MAXPARAMS )
     {
-        // We have a hard limit on the number of parameters so that we
-        // don't need any assembler code here but can call the
-        // function using normal C++.
+        
+        
+        
 
         return false;
     }
 
-    // Table with this pointer, optional complex return value ptr, and the parameters
+    
     union {
         sal_Int64 i;
         void *p;
@@ -69,12 +69,12 @@ static bool cpp_call(
     } aCppParams[MAXPARAMS+2], uRetVal;
     int nCppParamIndex = 0;
 
-    // Return type
+    
     typelib_TypeDescription * pReturnTD = NULL;
     TYPELIB_DANGER_GET( &pReturnTD, pReturnTypeRef );
     OSL_ENSURE( pReturnTD, "### expected return type description!" );
 
-    // 'this'
+    
     void * pAdjustedThisPtr = (void **)( pThis->getCppI() ) + aVtableSlot.offset;
     aCppParams[nCppParamIndex++].p = pAdjustedThisPtr;
 
@@ -83,7 +83,7 @@ static bool cpp_call(
     {
         if ( !bridges::cpp_uno::shared::isSimpleType( pReturnTD ) )
         {
-            // Complex return via ptr
+            
             bSimpleReturn = false;
             aCppParams[nCppParamIndex++].p =
                 bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTD )?
@@ -91,12 +91,12 @@ static bool cpp_call(
         }
     }
 
-    // Indexes of values this have to be converted (interface conversion C++<=>UNO)
+    
     int pTempCppIndexes[MAXPARAMS];
     int pTempIndexes[MAXPARAMS];
     int nTempIndexes = 0;
 
-    // Type descriptions for reconversions
+    
     typelib_TypeDescription *pTempParamTypeDescr[MAXPARAMS];
 
     for ( int nPos = 0; nPos < nParams; ++nPos, ++nCppParamIndex )
@@ -113,14 +113,14 @@ static bool cpp_call(
                 &aCppParams[nCppParamIndex], pUnoArgs[nPos], pParamTD,
                 pThis->getBridge()->getUno2Cpp() );
 
-            // No longer needed
+            
             TYPELIB_DANGER_RELEASE( pParamTD );
         }
-        else // Ptr to complex value | ref
+        else 
         {
-            if ( !rParam.bIn ) // Is pure out
+            if ( !rParam.bIn ) 
             {
-                // C++ out is constructed mem, UNO out is not!
+                
                 ::uno_constructData(
                     aCppParams[nCppParamIndex].p = alloca( pParamTD->nSize ),
                     pParamTD );
@@ -128,11 +128,11 @@ static bool cpp_call(
                 pTempCppIndexes[nTempIndexes] = nCppParamIndex;
                 pTempIndexes[nTempIndexes] = nPos;
 
-                // Will be released at reconversion
+                
                 pTempParamTypeDescr[nTempIndexes++] = pParamTD;
 
             }
-            // Is in/inout
+            
             else if ( bridges::cpp_uno::shared::relatesToInterfaceType( pParamTD ) )
             {
                 ::uno_copyAndConvertData(
@@ -143,14 +143,14 @@ static bool cpp_call(
                 pTempCppIndexes[nTempIndexes] = nCppParamIndex;
                 pTempIndexes[nTempIndexes] = nPos;
 
-                // Will be released at reconversion
+                
                 pTempParamTypeDescr[nTempIndexes++] = pParamTD;
             }
-            else // direct way
+            else 
             {
                 aCppParams[nCppParamIndex].p = pUnoArgs[nPos];
 
-                // No longer needed
+                
                 TYPELIB_DANGER_RELEASE( pParamTD );
             }
         }
@@ -158,25 +158,25 @@ static bool cpp_call(
 
     __try
     {
-        // The first real parameter is always 'this'.
+        
 
-        // The Windows x64 calling convention is very regular and
-        // elegant (even if perhaps then slightly slower than the
-        // Linux x64 one): The first four parameters, never more, are
-        // passed in registers, as long as they are a qword in size
-        // or less. (If larger, a pointer to a temp copy is passed, so
-        // it's equivalent anyway.) Floating point values are passed
-        // in XMM0..3 registers, others in RCX, RDX, R8, R9.
+        
+        
+        
+        
+        
+        
+        
 
-        // Now, the nice thing for us is that when calling varargs
-        // functions, floating-point parameters among the four first
-        // ones are always passed *both* in an XMM and integer
-        // register. So we don't need to bother here calling the
-        // method different ways depending on what types of parameters
-        // it actually expects. We just pretend parameters 3..4 are
-        // doubles, and they will be passed both in XMM and integer
-        // registers, and the callee will find them where it
-        // expects. (The callee is not actually varargs, of course.)
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         sal_Int64 (*pIMethod)(sal_Int64, ...) =
             (sal_Int64 (*)(sal_Int64, ...))
@@ -186,10 +186,10 @@ static bool cpp_call(
             (double (*)(sal_Int64, ...))
             (*((sal_uInt64 **)pAdjustedThisPtr))[aVtableSlot.index];
 
-        // Pass parameters 2..4 as if it was a floating-point value so
-        // that it gets put in both XMM and integer registers per the
-        // calling convention. It doesn't matter if it actually is a
-        // fp or not.
+        
+        
+        
+        
 
         if ( pReturnTD &&
              (pReturnTD->eTypeClass == typelib_TypeClass_FLOAT ||
@@ -212,29 +212,29 @@ static bool cpp_call(
                   GetExceptionInformation(),
                   *ppUnoExc, pThis->getBridge()->getCpp2Uno() ))
    {
-        // *ppUnoExc was constructed by filter function.
-        // Temporary params
+        
+        
         while ( nTempIndexes-- )
         {
             int nCppIndex = pTempCppIndexes[nTempIndexes];
-            // Destroy temp C++ param => C++: every param was constructed
+            
             ::uno_destructData(
                 aCppParams[nCppIndex].p, pTempParamTypeDescr[nTempIndexes],
                 cpp_release );
             TYPELIB_DANGER_RELEASE( pTempParamTypeDescr[nTempIndexes] );
         }
-        // Return type
+        
         if ( pReturnTD )
             TYPELIB_DANGER_RELEASE( pReturnTD );
 
-        // End here
+        
         return true;
     }
 
-    // No exception occurred
+    
     *ppUnoExc = NULL;
 
-    // Reconvert temporary params
+    
     while ( nTempIndexes-- )
     {
         int nCppIndex = pTempCppIndexes[nTempIndexes];
@@ -244,30 +244,30 @@ static bool cpp_call(
 
         if ( pParams[nIndex].bIn )
         {
-            if ( pParams[nIndex].bOut ) // Inout
+            if ( pParams[nIndex].bOut ) 
             {
                 ::uno_destructData(
-                    pUnoArgs[nIndex], pParamTD, 0 ); // Destroy UNO value
+                    pUnoArgs[nIndex], pParamTD, 0 ); 
                 ::uno_copyAndConvertData(
                     pUnoArgs[nIndex], aCppParams[nCppIndex].p, pParamTD,
                     pThis->getBridge()->getCpp2Uno() );
             }
         }
-        else // Pure out
+        else 
         {
             ::uno_copyAndConvertData(
                 pUnoArgs[nIndex], aCppParams[nCppIndex].p, pParamTD,
                 pThis->getBridge()->getCpp2Uno() );
         }
 
-        // Destroy temp C++ param => C++: every param was constructed
+        
         ::uno_destructData(
             aCppParams[nCppIndex].p, pParamTD, cpp_release );
 
         TYPELIB_DANGER_RELEASE( pParamTD );
     }
 
-    // Return value
+    
     if ( !bSimpleReturn )
     {
         ::uno_copyAndConvertData(
@@ -296,7 +296,7 @@ void unoInterfaceProxyDispatch(
     void * pArgs[],
     uno_Any ** ppException )
 {
-    // is my surrogate
+    
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
         = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy * >(pUnoI);
 #if OSL_DEBUG_LEVEL > 0
@@ -308,7 +308,7 @@ void unoInterfaceProxyDispatch(
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
     {
 #if OSL_DEBUG_LEVEL > 0
-        // determine vtable call index
+        
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberTD)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
 #endif
@@ -319,16 +319,16 @@ void unoInterfaceProxyDispatch(
                         pMemberTD)));
         if ( pReturn )
         {
-            // Is GET
+            
             cpp_call(
                 pThis, aVtableSlot,
                 ((typelib_InterfaceAttributeTypeDescription *)pMemberTD)->pAttributeTypeRef,
-                0, NULL, // no params
+                0, NULL, 
                 pReturn, pArgs, ppException );
         }
         else
         {
-            // Is SET
+            
             typelib_MethodParameter aParam;
             aParam.pTypeRef =
                 ((typelib_InterfaceAttributeTypeDescription *)pMemberTD)->pAttributeTypeRef;
@@ -340,7 +340,7 @@ void unoInterfaceProxyDispatch(
             typelib_typedescriptionreference_new(
                 &pReturnTypeRef, typelib_TypeClass_VOID, aVoidName.pData );
 
-            aVtableSlot.index += 1; // get, then set method
+            aVtableSlot.index += 1; 
             cpp_call(
                 pThis, aVtableSlot,
                 pReturnTypeRef,
@@ -355,7 +355,7 @@ void unoInterfaceProxyDispatch(
     case typelib_TypeClass_INTERFACE_METHOD:
     {
 #if OSL_DEBUG_LEVEL > 0
-        // determine vtable call index
+        
         sal_Int32 nMemberPos = ((typelib_InterfaceMemberTypeDescription *)pMemberTD)->nPosition;
         OSL_ENSURE( nMemberPos < pTypeDescr->nAllMembers, "### member pos out of range!" );
 #endif
@@ -367,16 +367,16 @@ void unoInterfaceProxyDispatch(
 
         switch (aVtableSlot.index)
         {
-        // Standard calls
-        case 1: // Acquire UNO interface
+        
+        case 1: 
             (*pUnoI->acquire)( pUnoI );
             *ppException = 0;
             break;
-        case 2: // Release UNO interface
+        case 2: 
             (*pUnoI->release)( pUnoI );
             *ppException = 0;
             break;
-        case 0: // queryInterface() opt
+        case 0: 
         {
             typelib_TypeDescription * pTD = NULL;
             TYPELIB_DANGER_GET( &pTD, reinterpret_cast< Type * >( pArgs[0] )->getTypeLibType() );
@@ -402,7 +402,7 @@ void unoInterfaceProxyDispatch(
                 }
                 TYPELIB_DANGER_RELEASE( pTD );
             }
-        } // Else perform queryInterface()
+        } 
         default:
             if ( ! cpp_call(
                      pThis, aVtableSlot,
@@ -428,7 +428,7 @@ void unoInterfaceProxyDispatch(
             Reference< XInterface >() );
 
         Type const & rExcType = ::getCppuType( &aExc );
-        // Binary identical null reference (whatever that comment means...)
+        
         ::uno_type_any_construct( *ppException, &aExc, rExcType.getTypeLibType(), 0 );
     }
     }

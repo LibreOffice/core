@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/wrkwin.hxx>
@@ -124,8 +124,8 @@ PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
                 {
                     const AnimationBitmap& rStepBmp = aAnim.Get( i );
 
-                    // Push Polygon output to the right place; this is the
-                    // offset of the sub-image within the total animation
+                    
+                    
                     aTransMap.SetOrigin( Point( rStepBmp.aPosPix.X(), rStepBmp.aPosPix.Y() ) );
                     aVDev.SetMapMode( aTransMap );
                     aVDev.DrawPolyPolygon( CreateAutoContour( rStepBmp.aBmpEx, pRect, nFlags ) );
@@ -177,8 +177,8 @@ PolyPolygon SvxContourDlg::CreateAutoContour( const Graphic& rGraphic,
     return PolyPolygon( XOutBitmap::GetCountour( aBmp, nContourFlags, 128, pRect ) );
 }
 
-// Loop through to super class, no virtual Methods to not become incompatible
-// due to IF changes
+
+
 
 const Graphic& SvxContourDlg::GetGraphic() const
 {
@@ -269,7 +269,7 @@ SvxSuperContourDlg::~SvxSuperContourDlg()
     aMiscOptions.RemoveListenerLink( LINK(this, SvxSuperContourDlg, MiscHdl) );
 }
 
-// Resize methods
+
 
 void SvxSuperContourDlg::Resize()
 {
@@ -283,11 +283,11 @@ void SvxSuperContourDlg::Resize()
         Size    _aSize( aStbStatus.GetSizePixel() );
         Point   aPoint( 0, aNewSize.Height() - _aSize.Height() );
 
-        // Position the StatusBar
+        
         aStbStatus.SetPosSizePixel( aPoint, Size( aNewSize.Width(), _aSize.Height() ) );
         aStbStatus.Show();
 
-        // Position the EditWindow
+        
         _aSize.Width() = aNewSize.Width() - 18;
         _aSize.Height() = aPoint.Y() - aContourWnd.GetPosPixel().Y() - 6;
         aContourWnd.SetSizePixel( _aSize );
@@ -296,7 +296,7 @@ void SvxSuperContourDlg::Resize()
     }
 }
 
-// Close methods
+
 
 bool SvxSuperContourDlg::Close()
 {
@@ -320,7 +320,7 @@ bool SvxSuperContourDlg::Close()
     return( bRet ? SfxFloatingWindow::Close() : sal_False );
 }
 
-// Enabled or disabled all Controls
+
 
 void SvxSuperContourDlg::SetExecState( sal_Bool bEnable )
 {
@@ -419,7 +419,7 @@ bool SvxSuperContourDlg::IsRedoPossible() const
     return aRedoGraphic.GetType() != GRAPHIC_NONE;
 }
 
-// Click handler for ToolBox
+
 
 IMPL_LINK( SvxSuperContourDlg, Tbx1ClickHdl, ToolBox*, pTbx )
 {

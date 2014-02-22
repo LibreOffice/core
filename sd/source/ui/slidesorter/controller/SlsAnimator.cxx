@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "controller/SlsAnimator.hxx"
@@ -119,8 +119,8 @@ Animator::AnimationId Animator::AddAnimation (
     const sal_Int32 nDuration,
     const FinishFunctor& rFinishFunctor)
 {
-    // When the animator is already disposed then ignore this call
-    // silently (well, we show an assertion, but do not throw an exception.)
+    
+    
     OSL_ASSERT( ! mbIsDisposed);
     if (mbIsDisposed)
         return -1;
@@ -160,11 +160,11 @@ void Animator::RemoveAnimation (const Animator::AnimationId nId)
 
     if (maAnimations.empty())
     {
-        // Reset the animation id when we can.
+        
         mnNextAnimationId = 0;
 
-        // No more animations => we do not have to suppress painting
-        // anymore.
+        
+        
         mpDrawLock.reset();
     }
 }
@@ -183,8 +183,8 @@ void Animator::RemoveAllAnimations (void)
     maAnimations.clear();
     mnNextAnimationId = 0;
 
-    // No more animations => we do not have to suppress painting
-    // anymore.
+    
+    
     mpDrawLock.reset();
 }
 
@@ -239,9 +239,9 @@ void Animator::RequestNextFrame (const double nFrameStart)
     (void)nFrameStart;
     if ( ! maTimer.IsActive())
     {
-        // Prevent redraws except for the ones in TimeoutHandler.  While the
-        // Animator is active it will schedule repaints regularly.  Repaints
-        // in between would only lead to visual artifacts.
+        
+        
+        
         mpDrawLock.reset(new view::SlideSorterView::DrawLock(mrSlideSorter));
         maTimer.Start();
     }
@@ -258,7 +258,7 @@ IMPL_LINK_NOARG(Animator, TimeoutHandler)
     if (ProcessAnimations(maElapsedTime.getElapsedTime()))
         CleanUpAnimationList();
 
-    // Unlock the draw lock.  This should lead to a repaint.
+    
     mpDrawLock.reset();
 
     if (!maAnimations.empty())
@@ -270,7 +270,7 @@ IMPL_LINK_NOARG(Animator, TimeoutHandler)
 
 
 
-//===== Animator::Animation ===================================================
+
 
 Animator::Animation::Animation (
     const Animator::AnimationFunctor& rAnimation,
@@ -318,7 +318,7 @@ bool Animator::Animation::Run (const double nGlobalTime)
         }
         else if (mnDuration < 0)
         {
-            // Animations without end have to be expired by their owner.
+            
             maAnimation(nGlobalTime);
         }
     }
@@ -350,6 +350,6 @@ bool Animator::Animation::IsExpired (void)
 
 
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

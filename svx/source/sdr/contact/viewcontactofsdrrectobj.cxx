@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,7 +27,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <svx/svdmodel.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -51,11 +51,11 @@ namespace sdr
                     GetRectObj().getText(0),
                     false));
 
-            // take unrotated snap rect (direct model data) for position and size
+            
             Rectangle rRectangle = GetRectObj().GetGeoRect();
-            // Hack for calc, transform position of object according
-            // to current zoom so as objects relative position to grid
-            // appears stable
+            
+            
+            
             rRectangle += GetRectObj().GetGridOffset();
             const ::basegfx::B2DRange aObjectRange(
                 rRectangle.Left(), rRectangle.Top(),
@@ -63,37 +63,37 @@ namespace sdr
 
             const GeoStat& rGeoStat(GetRectObj().GetGeoStat());
 
-            // fill object matrix
+            
             basegfx::B2DHomMatrix aObjectMatrix(basegfx::tools::createScaleShearXRotateTranslateB2DHomMatrix(
                 aObjectRange.getWidth(), aObjectRange.getHeight(),
                 rGeoStat.nShearWink ? tan((36000 - rGeoStat.nShearWink) * F_PI18000) : 0.0,
                 rGeoStat.nDrehWink ? (36000 - rGeoStat.nDrehWink) * F_PI18000 : 0.0,
                 aObjectRange.getMinX(), aObjectRange.getMinY()));
 
-            // calculate corner radius
+            
             sal_uInt32 nCornerRadius(((SdrEckenradiusItem&)(rItemSet.Get(SDRATTR_ECKENRADIUS))).GetValue());
             double fCornerRadiusX;
             double fCornerRadiusY;
             drawinglayer::primitive2d::calculateRelativeCornerRadius(nCornerRadius, aObjectRange, fCornerRadiusX, fCornerRadiusY);
 
-            // #i105856# use knowledge about pickthrough from the model
+            
             const bool bPickThroughTransparentTextFrames(
                 GetRectObj().GetModel() && GetRectObj().GetModel()->IsPickThroughTransparentTextFrames());
 
-            // create primitive. Always create primitives to allow the decomposition of
-            // SdrRectanglePrimitive2D to create needed invisible elements for HitTest and/or BoundRect
+            
+            
             const drawinglayer::primitive2d::Primitive2DReference xReference(
                 new drawinglayer::primitive2d::SdrRectanglePrimitive2D(
                     aObjectMatrix,
                     aAttribute,
                     fCornerRadiusX,
                     fCornerRadiusY,
-                    // #i105856# use fill for HitTest when TextFrame and not PickThrough
+                    
                     GetRectObj().IsTextFrame() && !bPickThroughTransparentTextFrames));
 
             return drawinglayer::primitive2d::Primitive2DSequence(&xReference, 1);
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

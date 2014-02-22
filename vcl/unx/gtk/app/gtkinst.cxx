@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ extern "C"
             "vcl.gtk",
             "create vcl plugin instance with gtk version " << gtk_major_version
                 << " " << gtk_minor_version << " " << gtk_micro_version);
-        if( gtk_major_version < 2 || // very unlikely sanity check
+        if( gtk_major_version < 2 || 
             ( gtk_major_version == 2 && gtk_minor_version < 4 ) )
         {
             g_warning("require a newer gtk than %d.%d for gdk_threads_set_lock_functions", (int) gtk_major_version, gtk_minor_version);
@@ -95,7 +95,7 @@ extern "C"
 
         GtkYieldMutex *pYieldMutex;
 
-        // init gdk thread protection
+        
         if ( !g_thread_supported() )
             g_thread_init( NULL );
 
@@ -112,7 +112,7 @@ extern "C"
         GtkInstance* pInstance = new GtkInstance( pYieldMutex );
         SAL_INFO("vcl.gtk", "creating GtkSalInstance " << pInstance);
 
-        //Create SalData, this does not leak
+        
         /*GtkData *pSalData =*/ new GtkData( pInstance );
 
         return pInstance;
@@ -160,10 +160,10 @@ GtkInstance::GtkInstance( SalYieldMutex* pMutex )
 {
 }
 
-//We want to defer initializing gtk until we are after uno has been
-//bootstrapped so we can ask the config what the UI language is so that we can
-//force that in as $LANGUAGE to get gtk to render widgets RTL if we have a RTL
-//UI in a LTR locale
+
+
+
+
 void GtkInstance::AfterAppInit()
 {
     OUString aLocaleString(Application::GetSettings().GetUILanguageTag().getGlibcLocaleString(".UTF-8"));
@@ -179,7 +179,7 @@ void GtkInstance::EnsureInit()
 {
     if (!bNeedsInit)
         return;
-    // initialize SalData
+    
     GtkData *pSalData = GetGtkSalData();
     pSalData->Init();
     pSalData->initNWF();
@@ -212,8 +212,8 @@ SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWind
 {
     EnsureInit();
 #if !GTK_CHECK_VERSION(3,0,0)
-    // there is no method to set a visual for a GtkWidget
-    // so we need the X11SalObject in that case
+    
+    
     if( pWindowData )
         return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 #else
@@ -235,16 +235,16 @@ void GtkInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUStri
     EnsureInit();
     OString sGtkURL;
     rtl_TextEncoding aSystemEnc = osl_getThreadTextEncoding();
-    if ((aSystemEnc == RTL_TEXTENCODING_UTF8) || !rFileUrl.startsWith( "file://" ))
+    if ((aSystemEnc == RTL_TEXTENCODING_UTF8) || !rFileUrl.startsWith( "file:
         sGtkURL = OUStringToOString(rFileUrl, RTL_TEXTENCODING_UTF8);
     else
     {
-        //Non-utf8 locales are a bad idea if trying to work with non-ascii filenames
-        //Decode %XX components
+        
+        
         OUString sDecodedUri = rtl::Uri::decode(rFileUrl.copy(7), rtl_UriDecodeToIuri, RTL_TEXTENCODING_UTF8);
-        //Convert back to system locale encoding
+        
         OString sSystemUrl = OUStringToOString(sDecodedUri, aSystemEnc);
-        //Encode to an escaped ASCII-encoded URI
+        
         gchar *g_uri = g_filename_to_uri(sSystemUrl.getStr(), NULL, NULL);
         sGtkURL = OString(g_uri);
         g_free(g_uri);
@@ -273,7 +273,7 @@ SalInfoPrinter* GtkInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
     EnsureInit();
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
     mbPrinterInit = true;
-    // create and initialize SalInfoPrinter
+    
     PspSalInfoPrinter* pPrinter = new GtkSalInfoPrinter;
     configurePspInfoPrinter(pPrinter, pQueueInfo, pSetupData);
     return pPrinter;
@@ -394,7 +394,7 @@ void GtkInstance::DestroyMenuItem( SalMenuItem* pItem )
     delete pItem;
 }
 
-#else // not ENABLE_GMENU_INTEGRATION
+#else 
 
 SalMenu*     GtkInstance::CreateMenu( sal_Bool, Menu* )          { return NULL; }
 void         GtkInstance::DestroyMenu( SalMenu* )                {}

@@ -29,7 +29,7 @@ string getexe(string exename) {
 }
 
 void setupccenv() {
-    // Set-up library path
+    
     string libpath="LIB=";
     char* libbuf;
     size_t liblen;
@@ -41,7 +41,7 @@ void setupccenv() {
         exit(1);
     }
 
-    // Set-up include path
+    
     string includepath="INCLUDE=.;";
     char* incbuf;
     size_t inclen;
@@ -49,7 +49,7 @@ void setupccenv() {
     string inctmp(incbuf);
     free(incbuf);
 
-    // 3 = strlen(" -I")
+    
     for(size_t pos=0; pos != string::npos;) {
         size_t endpos=inctmp.find(" -I",pos+3);
         size_t len=endpos-pos-3;
@@ -68,9 +68,9 @@ void setupccenv() {
 }
 
 string processccargs(vector<string> rawargs) {
-    // suppress the msvc banner
+    
     string args=" -nologo";
-    // TODO: should these options be enabled globally?
+    
     args.append(" -EHsc");
     const char *const pDebugRuntime(getenv("MSVC_USE_DEBUG_RUNTIME"));
     if (pDebugRuntime && !strcmp(pDebugRuntime, "TRUE"))
@@ -81,14 +81,14 @@ string processccargs(vector<string> rawargs) {
     args.append(" -Zc:wchar_t-");
     args.append(" -Ob1 -Oxs -Oy-");
 
-    // apparently these must be at the end
-    // otherwise configure tests may fail
+    
+    
     string linkargs(" -link");
 
     for(vector<string>::iterator i = rawargs.begin(); i != rawargs.end(); ++i) {
         args.append(" ");
         if(*i == "-o") {
-            // TODO: handle more than just exe output
+            
             ++i;
             size_t dot=(*i).find_last_of(".");
             if(!(*i).compare(dot+1,3,"obj") || !(*i).compare(dot+1,1,"o"))
@@ -102,7 +102,7 @@ string processccargs(vector<string> rawargs) {
                 args.append(*i);
             }
             else if(!(*i).compare(dot+1,3,"dll"))
-            {   // apparently cl.exe has no flag for dll?
+            {   
                 linkargs.append(" -dll -out:");
                 linkargs.append(*i);
             }
@@ -116,7 +116,7 @@ string processccargs(vector<string> rawargs) {
         else if(*i == "-g")
             args.append("-Zi");
         else if(!(*i).compare(0,2,"-D")) {
-            // need to re-escape strings for preprocessor
+            
             for(size_t pos=(*i).find("\"",0); pos!=string::npos; pos=(*i).find("\"",pos)) {
                 (*i).replace(pos,0,"\\");
                 pos+=2;
@@ -130,8 +130,8 @@ string processccargs(vector<string> rawargs) {
             linkargs.append(" "+(*i).substr(2)+".lib");
         }
         else if(!(*i).compare(0,5,"-def:") || !(*i).compare(0,5,"/def:")) {
-            // why are we invoked with /def:? cl.exe should handle plain
-            // "foo.def" by itself
+            
+            
             linkargs.append(" " + *i);
         }
         else if(!(*i).compare(0,12,"-fvisibility")) {
@@ -174,7 +174,7 @@ int startprocess(string command, string args) {
     si.hStdOutput=childout_write;
     si.hStdError=childout_write;
 
-    // support ccache
+    
     size_t pos=command.find("ccache ");
     if(pos != string::npos) {
         args.insert(0,"cl.exe");
@@ -183,34 +183,34 @@ int startprocess(string command, string args) {
 
     //cerr << "CMD= " << command << " " << args << endl;
 
-    // Commandline may be modified by CreateProcess
+    
     char* cmdline=_strdup(args.c_str());
 
-    if(!CreateProcess(command.c_str(), // Process Name
-        cmdline, // Command Line
-        NULL, // Process Handle not Inheritable
-        NULL, // Thread Handle not Inheritable
-        TRUE, // Handles are Inherited
-        0, // No creation flags
-        NULL, // Enviroment for process
-        NULL, // Use same starting directory
-        &si, // Startup Info
-        &pi) // Process Information
+    if(!CreateProcess(command.c_str(), 
+        cmdline, 
+        NULL, 
+        NULL, 
+        TRUE, 
+        0, 
+        NULL, 
+        NULL, 
+        &si, 
+        &pi) 
         ) {
             cerr << "Error: could not create process" << endl;
             exit(1);
     }
 
-    // if you don't close this the process will hang
+    
     CloseHandle(childout_write);
 
-    // Get Process output
+    
     char buffer[BUFLEN];
     DWORD readlen, writelen, ret;
     HANDLE stdout_handle=GetStdHandle(STD_OUTPUT_HANDLE);
     while(true) {
         int success=ReadFile(childout_read,buffer,BUFLEN,&readlen,NULL);
-        // check if the child process has exited
+        
         if(GetLastError()==ERROR_BROKEN_PIPE)
             break;
         if(!success) {

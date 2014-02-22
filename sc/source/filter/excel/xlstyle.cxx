@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@
 #include <editeng/svxfont.hxx>
 #include "global.hxx"
 #include "xlroot.hxx"
-// Color data =================================================================
+
 
 /** Standard EGA colors, bright. */
 #define EXC_PALETTE_EGA_COLORS_LIGHT \
@@ -85,7 +85,7 @@ static const ColorData spnDefColorTable8[] =
 #undef EXC_PALETTE_EGA_COLORS_LIGHT
 #undef EXC_PALETTE_EGA_COLORS_DARK
 
-// ----------------------------------------------------------------------------
+
 
 XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     mpnColorTable( 0 ),
@@ -95,24 +95,24 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     mnWindowText = rSett.GetWindowTextColor().GetColor();
     mnWindowBack = rSett.GetWindowColor().GetColor();
     mnFaceColor = rSett.GetFaceColor().GetColor();
-    // Don't use the system HelpBack and HelpText colours as it causes problems
-    // with modern gnome. This is because mnNoteText and mnNoteBack are used
-    // when colour indices ( instead of real colours ) are specified.
-    // Note: That this it is not an unusual scenario that we get the Note
-    // background specified as a real colour and the text specified as a
-    // colour index. That means the text colour would be picked from
-    // the system where the note background would be picked from a real colour.
-    // Previously the the note text colour was picked from the system tooltip
-    // text colour, on modern gnome(e.g. 3) that tends to be 'white' with the
-    // default theme.
-    // Using the the Libreoffice defaults ( instead of system specific colours
-    // ) lessens the chance of the one colour being an unsuitable combination
-    // because by default the note text is black and the note background is
-    // a light yellow colour ( very similar to Excel's normal defaults )
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     mnNoteText =  svtools::ColorConfig::GetDefaultColor( svtools::FONTCOLOR ).GetColor();
     mnNoteBack =  svtools::ColorConfig::GetDefaultColor( svtools::CALCNOTESBACKGROUND ).GetColor();
 
-    // default colors
+    
     switch( rRoot.GetBiff() )
     {
         case EXC_BIFF2:
@@ -151,7 +151,7 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
         case EXC_COLOR_WINDOWBACK:
         case EXC_COLOR_CHWINDOWBACK:    nColor = mnWindowBack;  break;
         case EXC_COLOR_BUTTONBACK:      nColor = mnFaceColor;   break;
-        case EXC_COLOR_CHBORDERAUTO:    nColor = COL_BLACK;     break;  // TODO: really always black?
+        case EXC_COLOR_CHBORDERAUTO:    nColor = COL_BLACK;     break;  
         case EXC_COLOR_NOTEBACK:        nColor = mnNoteBack;    break;
         case EXC_COLOR_NOTETEXT:        nColor = mnNoteText;    break;
         case EXC_COLOR_FONTAUTO:        nColor = COL_AUTO;      break;
@@ -162,14 +162,14 @@ ColorData XclDefaultPalette::GetDefColorData( sal_uInt16 nXclIndex ) const
     return nColor;
 }
 
-// Font Data ==================================================================
+
 
 namespace Awt              = ::com::sun::star::awt;
 namespace AwtFontFamily    = Awt::FontFamily;
 namespace AwtFontUnderline = Awt::FontUnderline;
 namespace AwtFontStrikeout = Awt::FontStrikeout;
 
-// ----------------------------------------------------------------------------
+
 
 XclFontData::XclFontData()
 {
@@ -203,7 +203,7 @@ void XclFontData::Clear()
 
 void XclFontData::FillFromVclFont( const Font& rFont )
 {
-    maName = XclTools::GetXclFontName( rFont.GetName() );   // substitute with MS fonts
+    maName = XclTools::GetXclFontName( rFont.GetName() );   
     maStyle = "";
     maColor = rFont.GetColor();
     SetScUnderline( rFont.GetUnderline() );
@@ -224,12 +224,12 @@ void XclFontData::FillFromSvxFont( const SvxFont& rFont )
     SetScEscapement( rFont.GetEscapement() );
 }
 
-// *** conversion of VCL/SVX constants *** ------------------------------------
+
 
 FontFamily XclFontData::GetScFamily( rtl_TextEncoding eDefTextEnc ) const
 {
     FontFamily eScFamily;
-    // ! format differs from Windows documentation: family is in lower nibble, pitch unknown
+    
     switch( mnFamily & 0x0F )
     {
         case EXC_FONTFAM_ROMAN:         eScFamily = FAMILY_ROMAN;       break;
@@ -248,7 +248,7 @@ FontFamily XclFontData::GetScFamily( rtl_TextEncoding eDefTextEnc ) const
 
 rtl_TextEncoding XclFontData::GetFontEncoding() const
 {
-    // convert Windows character set to text encoding identifier
+    
     return rtl_getTextEncodingFromWindowsCharset( mnCharSet );
 }
 
@@ -329,7 +329,7 @@ void XclFontData::SetScFamily( FontFamily eScFamily )
 
 void XclFontData::SetFontEncoding( rtl_TextEncoding eFontEnc )
 {
-    // convert text encoding identifier to Windows character set
+    
     mnCharSet = rtl_getBestWindowsCharsetFromTextEncoding( eFontEnc );
 }
 
@@ -388,7 +388,7 @@ void XclFontData::SetScStrikeout( FontStrikeout eScStrikeout )
         (eScStrikeout == STRIKEOUT_X);
 }
 
-// *** conversion of API constants *** ----------------------------------------
+
 
 float XclFontData::GetApiHeight() const
 {
@@ -412,7 +412,7 @@ sal_Int16 XclFontData::GetApiFamily() const
 
 sal_Int16 XclFontData::GetApiFontEncoding() const
 {
-    // API constants are equal to rtl_TextEncoding constants
+    
     return static_cast< sal_Int16 >( GetFontEncoding() );
 }
 
@@ -517,7 +517,7 @@ void XclFontData::SetApiStrikeout( sal_Int16 nApiStrikeout )
         (nApiStrikeout != AwtFontStrikeout::DONTKNOW);
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
 {
@@ -536,7 +536,7 @@ bool operator==( const XclFontData& rLeft, const XclFontData& rRight )
         (rLeft.maName      == rRight.maName);
 }
 
-// ----------------------------------------------------------------------------
+
 
 namespace {
 
@@ -565,7 +565,7 @@ const sal_Char *const sppcPropNamesChEscapement[] =
 {
     "CharEscapement", "CharEscapementHeight", 0
 };
-const sal_Int8 EXC_API_ESC_HEIGHT           = 58;   /// Default escapement font height.
+const sal_Int8 EXC_API_ESC_HEIGHT           = 58;   
 
 /** Property names for Western font settings without font name. */
 const sal_Char *const *const sppcPropNamesChWstrnNoName = sppcPropNamesChWstrn + 1;
@@ -599,22 +599,22 @@ void lclWriteChartFont( ScfPropertySet& rPropSet,
         ScfPropSetHelper& rHlpName, ScfPropSetHelper& rHlpNoName,
         const XclFontData& rFontData, bool bHasFontName )
 {
-    // select the font helper
+    
     ScfPropSetHelper& rPropSetHlp = bHasFontName ? rHlpName : rHlpNoName;
-    // initialize the font helper (must be called before writing any properties)
+    
     rPropSetHlp.InitializeWrite();
-    // write font name
+    
     if( bHasFontName )
         rPropSetHlp << rFontData.maName;
-    // write remaining properties
+    
     rPropSetHlp << rFontData.GetApiHeight() << rFontData.GetApiPosture() << rFontData.GetApiWeight();
-    // write properties to property set
+    
     rPropSetHlp.WriteToPropertySet( rPropSet );
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclFontPropSetHelper::XclFontPropSetHelper() :
     maHlpChCommon( sppcPropNamesChCommon ),
@@ -641,11 +641,11 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
             sal_Int16 nApiUnderl = 0, nApiStrikeout = 0;
             Awt::FontSlant eApiPosture;
 
-            // read script type dependent properties
+            
             ScfPropSetHelper& rPropSetHlp = GetChartHelper( nScript );
             rPropSetHlp.ReadFromPropertySet( rPropSet );
             rPropSetHlp >> aApiFontName >> fApiHeight >> eApiPosture >> fApiWeight;
-            // read common properties
+            
             maHlpChCommon.ReadFromPropertySet( rPropSet );
             maHlpChCommon   >> nApiUnderl
                             >> nApiStrikeout
@@ -653,11 +653,11 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
                             >> rFontData.mbOutline
                             >> rFontData.mbShadow;
 
-            // convert API property values to Excel settings
+            
             lclSetApiFontSettings( rFontData, aApiFontName,
                 fApiHeight, fApiWeight, eApiPosture, nApiUnderl, nApiStrikeout );
 
-            // font escapement
+            
             sal_Int16 nApiEscapement = 0;
             sal_Int8 nApiEscHeight = 0;
             maHlpChEscapement.ReadFromPropertySet( rPropSet );
@@ -674,7 +674,7 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
             float fApiHeight, fApiWeight;
             sal_Int16 nApiFamily, nApiCharSet, nApiPosture, nApiUnderl, nApiStrikeout;
 
-            // read font properties
+            
             maHlpControl.ReadFromPropertySet( rPropSet );
             maHlpControl    >> aApiFontName
                             >> nApiFamily
@@ -686,7 +686,7 @@ void XclFontPropSetHelper::ReadFontProperties( XclFontData& rFontData,
                             >> nApiStrikeout
                             >> rFontData.maColor;
 
-            // convert API property values to Excel settings
+            
             Awt::FontSlant eApiPosture = static_cast< Awt::FontSlant >( nApiPosture );
             lclSetApiFontSettings( rFontData, aApiFontName,
                 fApiHeight, fApiWeight, eApiPosture, nApiUnderl, nApiStrikeout );
@@ -706,7 +706,7 @@ void XclFontPropSetHelper::WriteFontProperties(
     {
         case EXC_FONTPROPSET_CHART:
         {
-            // write common properties
+            
             maHlpChCommon.InitializeWrite();
             const Color& rColor = pFontColor ? *pFontColor : rFontData.maColor;
             maHlpChCommon   << rFontData.GetApiUnderline()
@@ -716,12 +716,12 @@ void XclFontPropSetHelper::WriteFontProperties(
                             << rFontData.mbShadow;
             maHlpChCommon.WriteToPropertySet( rPropSet );
 
-            // write script type dependent properties
+            
             lclWriteChartFont( rPropSet, maHlpChWstrn, maHlpChWstrnNoName, rFontData, bHasWstrn );
             lclWriteChartFont( rPropSet, maHlpChAsian, maHlpChAsianNoName, rFontData, bHasAsian );
             lclWriteChartFont( rPropSet, maHlpChCmplx, maHlpChCmplxNoName, rFontData, bHasCmplx );
 
-            // font escapement
+            
             if( rFontData.GetScEscapement() != SVX_ESCAPEMENT_OFF )
             {
                 maHlpChEscapement.InitializeWrite();
@@ -762,11 +762,11 @@ ScfPropSetHelper& XclFontPropSetHelper::GetChartHelper( sal_Int16 nScript )
     return maHlpChWstrn;
 }
 
-// Number formats =============================================================
+
 
 namespace {
 
-// ----------------------------------------------------------------------------
+
 
 /** Special number format index describing a reused format. */
 const NfIndexTableOffset PRV_NF_INDEX_REUSE = NF_INDEX_TABLE_ENTRIES;
@@ -778,18 +778,18 @@ const LanguageType PRV_LANGUAGE_FRENCH_PRIM = LANGUAGE_FRENCH & LANGUAGE_MASK_PR
 /** Parent language identifier for Asian languages. */
 const LanguageType PRV_LANGUAGE_ASIAN_PRIM = LANGUAGE_CHINESE & LANGUAGE_MASK_PRIMARY;
 
-// ----------------------------------------------------------------------------
+
 
 /** Stores the number format used in Calc for an Excel built-in number format. */
 struct XclBuiltInFormat
 {
-    sal_uInt16          mnXclNumFmt;    /// Excel built-in index.
-    const sal_Char*     mpFormat;       /// Format string, may be 0 (meOffset used then).
-    NfIndexTableOffset  meOffset;       /// SvNumberFormatter format index, if mpFormat==0.
-    sal_uInt16          mnXclReuseFmt;  /// Use this Excel format, if meOffset==PRV_NF_INDEX_REUSE.
+    sal_uInt16          mnXclNumFmt;    
+    const sal_Char*     mpFormat;       
+    NfIndexTableOffset  meOffset;       
+    sal_uInt16          mnXclReuseFmt;  
 };
 
-// ----------------------------------------------------------------------------
+
 
 /** Defines a literal Excel built-in number format. */
 #define EXC_NUMFMT_STRING( nXclNumFmt, pcUtf8 ) \
@@ -807,9 +807,9 @@ struct XclBuiltInFormat
 #define EXC_NUMFMT_ENDTABLE() \
     { EXC_FORMAT_NOTFOUND, 0, NF_NUMBER_STANDARD, 0 }
 
-// ----------------------------------------------------------------------------
 
-// Currency unit characters
+
+
 #define UTF8_BAHT       "\340\270\277"
 #define UTF8_EURO       "\342\202\254"
 #define UTF8_POUND_UK   "\302\243"
@@ -818,7 +818,7 @@ struct XclBuiltInFormat
 #define UTF8_YEN_CS     "\357\277\245"
 #define UTF8_YEN_JP     "\302\245"
 
-// Japanese/Chinese date/time characters
+
 #define UTF8_CJ_YEAR    "\345\271\264"
 #define UTF8_CJ_MON     "\346\234\210"
 #define UTF8_CJ_DAY     "\346\227\245"
@@ -826,10 +826,10 @@ struct XclBuiltInFormat
 #define UTF8_CJ_MIN     "\345\210\206"
 #define UTF8_CJ_SEC     "\347\247\222"
 
-// Chinese Simplified date/time characters
+
 #define UTF8_CS_HOUR    "\346\227\266"
 
-// Korean date/time characters
+
 #define UTF8_KO_YEAR    "\353\205\204"
 #define UTF8_KO_MON     "\354\233\224"
 #define UTF8_KO_DAY     "\354\235\274"
@@ -837,24 +837,24 @@ struct XclBuiltInFormat
 #define UTF8_KO_MIN     "\353\266\204"
 #define UTF8_KO_SEC     "\354\264\210"
 
-// ----------------------------------------------------------------------------
+
 
 /** Default number format table. Last parent of all other tables, used for unknown languages. */
 static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
 {
-    EXC_NUMFMT_OFFSET(   0, NF_NUMBER_STANDARD ),       // General
-    EXC_NUMFMT_OFFSET(   1, NF_NUMBER_INT ),            // 0
-    EXC_NUMFMT_OFFSET(   2, NF_NUMBER_DEC2 ),           // 0.00
-    EXC_NUMFMT_OFFSET(   3, NF_NUMBER_1000INT ),        // #,##0
-    EXC_NUMFMT_OFFSET(   4, NF_NUMBER_1000DEC2 ),       // #,##0.00
-    // 5...8 contained in file
-    EXC_NUMFMT_OFFSET(   9, NF_PERCENT_INT ),           // 0%
-    EXC_NUMFMT_OFFSET(  10, NF_PERCENT_DEC2 ),          // 0.00%
-    EXC_NUMFMT_OFFSET(  11, NF_SCIENTIFIC_000E00 ),     // 0.00E+00
-    EXC_NUMFMT_OFFSET(  12, NF_FRACTION_1 ),            // # ?/?
-    EXC_NUMFMT_OFFSET(  13, NF_FRACTION_2 ),            // # ??/??
+    EXC_NUMFMT_OFFSET(   0, NF_NUMBER_STANDARD ),       
+    EXC_NUMFMT_OFFSET(   1, NF_NUMBER_INT ),            
+    EXC_NUMFMT_OFFSET(   2, NF_NUMBER_DEC2 ),           
+    EXC_NUMFMT_OFFSET(   3, NF_NUMBER_1000INT ),        
+    EXC_NUMFMT_OFFSET(   4, NF_NUMBER_1000DEC2 ),       
+    
+    EXC_NUMFMT_OFFSET(   9, NF_PERCENT_INT ),           
+    EXC_NUMFMT_OFFSET(  10, NF_PERCENT_DEC2 ),          
+    EXC_NUMFMT_OFFSET(  11, NF_SCIENTIFIC_000E00 ),     
+    EXC_NUMFMT_OFFSET(  12, NF_FRACTION_1 ),            
+    EXC_NUMFMT_OFFSET(  13, NF_FRACTION_2 ),            
 
-    // 14...22 date and time formats
+    
     EXC_NUMFMT_OFFSET(  14, NF_DATE_SYS_DDMMYYYY ),
     EXC_NUMFMT_OFFSET(  15, NF_DATE_SYS_DMMMYY ),
     EXC_NUMFMT_OFFSET(  16, NF_DATE_SYS_DDMMM ),
@@ -865,7 +865,7 @@ static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
     EXC_NUMFMT_OFFSET(  21, NF_TIME_HHMMSS ),
     EXC_NUMFMT_OFFSET(  22, NF_DATETIME_SYSTEM_SHORT_HHMM ),
 
-    // 23...36 international formats
+    
     EXC_NUMFMT_REUSE(   23, 0 ),
     EXC_NUMFMT_REUSE(   24, 0 ),
     EXC_NUMFMT_REUSE(   25, 0 ),
@@ -881,21 +881,21 @@ static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
     EXC_NUMFMT_REUSE(   35, 21 ),
     EXC_NUMFMT_REUSE(   36, 14 ),
 
-    // 37...44 accounting formats
-    // 41...44 contained in file
+    
+    
     EXC_NUMFMT_STRING(  37, "#,##0;-#,##0" ),
     EXC_NUMFMT_STRING(  38, "#,##0;[RED]-#,##0" ),
     EXC_NUMFMT_STRING(  39, "#,##0.00;-#,##0.00" ),
     EXC_NUMFMT_STRING(  40, "#,##0.00;[RED]-#,##0.00" ),
 
-    // 45...49 more special formats
+    
     EXC_NUMFMT_STRING(  45, "mm:ss" ),
     EXC_NUMFMT_STRING(  46, "[h]:mm:ss" ),
     EXC_NUMFMT_STRING(  47, "mm:ss.0" ),
     EXC_NUMFMT_STRING(  48, "##0.0E+0" ),
     EXC_NUMFMT_OFFSET(  49, NF_TEXT ),
 
-    // 50...81 international formats
+    
     EXC_NUMFMT_REUSE(   50, 14 ),
     EXC_NUMFMT_REUSE(   51, 14 ),
     EXC_NUMFMT_REUSE(   52, 14 ),
@@ -925,12 +925,12 @@ static const XclBuiltInFormat spBuiltInFormats_DONTKNOW[] =
     EXC_NUMFMT_REUSE(   80, 46 ),
     EXC_NUMFMT_REUSE(   81, 47 ),
 
-    // 82...163 not used, must not occur in a file (Excel may crash)
+    
 
     EXC_NUMFMT_ENDTABLE()
 };
 
-// ENGLISH --------------------------------------------------------------------
+
 
 /** Base table for English locales. */
 static const XclBuiltInFormat spBuiltInFormats_ENGLISH[] =
@@ -1021,7 +1021,7 @@ static const XclBuiltInFormat spBuiltInFormats_ENGLISH_SAFRICA[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-// FRENCH ---------------------------------------------------------------------
+
 
 /** Base table for French locales. */
 static const XclBuiltInFormat spBuiltInFormats_FRENCH[] =
@@ -1086,7 +1086,7 @@ static const XclBuiltInFormat spBuiltInFormats_FRENCH_BELGIAN[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-// GERMAN ---------------------------------------------------------------------
+
 
 /** Base table for German locales. */
 static const XclBuiltInFormat spBuiltInFormats_GERMAN[] =
@@ -1159,7 +1159,7 @@ static const XclBuiltInFormat spBuiltInFormats_GERMAN_LIECHTENSTEIN[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-// ITALIAN --------------------------------------------------------------------
+
 
 static const XclBuiltInFormat spBuiltInFormats_ITALIAN_ITALY[] =
 {
@@ -1193,7 +1193,7 @@ static const XclBuiltInFormat spBuiltInFormats_ITALIAN_SWISS[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-// SWEDISH --------------------------------------------------------------------
+
 
 static const XclBuiltInFormat spBuiltInFormats_SWEDISH_SWEDEN[] =
 {
@@ -1235,7 +1235,7 @@ static const XclBuiltInFormat spBuiltInFormats_SWEDISH_FINLAND[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-// ASIAN ----------------------------------------------------------------------
+
 
 /** Base table for Asian locales. */
 static const XclBuiltInFormat spBuiltInFormats_ASIAN[] =
@@ -1359,7 +1359,7 @@ static const XclBuiltInFormat spBuiltInFormats_CHINESE_TRADITIONAL[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-// OTHER ----------------------------------------------------------------------
+
 
 static const XclBuiltInFormat spBuiltInFormats_HEBREW[] =
 {
@@ -1410,25 +1410,25 @@ static const XclBuiltInFormat spBuiltInFormats_THAI[] =
     EXC_NUMFMT_ENDTABLE()
 };
 
-// ----------------------------------------------------------------------------
+
 
 #undef EXC_NUMFMT_ENDTABLE
 #undef EXC_NUMFMT_REUSE
 #undef EXC_NUMFMT_OFFSET
 #undef EXC_NUMFMT_STRING
 
-// ----------------------------------------------------------------------------
+
 
 /** Specifies a number format table for a specific language. */
 struct XclBuiltInFormatTable
 {
-    LanguageType        meLanguage;         /// The language of this table.
-    LanguageType        meParentLang;       /// The language of the parent table.
-    const XclBuiltInFormat* mpFormats;      /// The number format table.
+    LanguageType        meLanguage;         
+    LanguageType        meParentLang;       
+    const XclBuiltInFormat* mpFormats;      
 };
 
 static const XclBuiltInFormatTable spBuiltInFormatTables[] =
-{   //  language                        parent language             format table
+{   
     {   LANGUAGE_DONTKNOW,              LANGUAGE_NONE,              spBuiltInFormats_DONTKNOW               },
 
     {   LANGUAGE_ENGLISH,               LANGUAGE_DONTKNOW,          spBuiltInFormats_ENGLISH                },
@@ -1471,17 +1471,17 @@ static const XclBuiltInFormatTable spBuiltInFormatTables[] =
     {   LANGUAGE_THAI,                  LANGUAGE_DONTKNOW,          spBuiltInFormats_THAI                   }
 };
 
-// ----------------------------------------------------------------------------
 
-} // namespace
 
-// ============================================================================
+} 
+
+
 
 XclNumFmtBuffer::XclNumFmtBuffer( const XclRoot& rRoot ) :
     meSysLang( rRoot.GetSysLanguage() ),
     mnStdScNumFmt( rRoot.GetFormatter().GetStandardFormat( ScGlobal::eLnge ) )
 {
-    // *** insert default formats (BIFF5+ only)***
+    
 
     if( rRoot.GetBiff() >= EXC_BIFF5 )
         InsertBuiltinFormats();
@@ -1496,27 +1496,27 @@ void XclNumFmtBuffer::InsertFormat( sal_uInt16 nXclNumFmt, const OUString& rForm
 {
     XclNumFmt& rNumFmt = maFmtMap[ nXclNumFmt ];
     rNumFmt.maFormat = rFormat;
-    // #i62053# rFormat may be an empty string, meOffset must be initialized
+    
     rNumFmt.meOffset = NF_NUMBER_STANDARD;
     rNumFmt.meLanguage = LANGUAGE_SYSTEM;
 }
 
 void XclNumFmtBuffer::InsertBuiltinFormats()
 {
-    // build a map containing tables for all languages
+    
     typedef ::std::map< LanguageType, const XclBuiltInFormatTable* > XclBuiltInMap;
     XclBuiltInMap aBuiltInMap;
     for( const XclBuiltInFormatTable* pTable = spBuiltInFormatTables;
             pTable != STATIC_ARRAY_END( spBuiltInFormatTables ); ++pTable )
         aBuiltInMap[ pTable->meLanguage ] = pTable;
 
-    // build a list of table pointers for the current language, with all parent tables
+    
     typedef ::std::vector< const XclBuiltInFormatTable* > XclBuiltInVec;
     XclBuiltInVec aBuiltInVec;
     for( XclBuiltInMap::const_iterator aMIt = aBuiltInMap.find( meSysLang ), aMEnd = aBuiltInMap.end();
             aMIt != aMEnd; aMIt = aBuiltInMap.find( aMIt->second->meParentLang ) )
         aBuiltInVec.push_back( aMIt->second );
-    // language not supported
+    
     if( aBuiltInVec.empty() )
     {
         OSL_TRACE( "XclNumFmtBuffer::InsertBuiltinFormats - language 0x%04hX not supported (#i29949#)", meSysLang );
@@ -1526,12 +1526,12 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
             aBuiltInVec.push_back( aMIt->second );
     }
 
-    // insert the default formats in the format map, from root parent to system language
+    
     typedef ::std::map< sal_uInt16, sal_uInt16 > XclReuseMap;
     XclReuseMap aReuseMap;
     for( XclBuiltInVec::reverse_iterator aVIt = aBuiltInVec.rbegin(), aVEnd = aBuiltInVec.rend(); aVIt != aVEnd; ++aVIt )
     {
-        // put LANGUAGE_SYSTEM for all entries in default table
+        
         LanguageType eLang = ((*aVIt)->meLanguage == LANGUAGE_DONTKNOW) ? LANGUAGE_SYSTEM : meSysLang;
         for( const XclBuiltInFormat* pBuiltIn = (*aVIt)->mpFormats; pBuiltIn && (pBuiltIn->mnXclNumFmt != EXC_FORMAT_NOTFOUND); ++pBuiltIn )
         {
@@ -1552,15 +1552,15 @@ void XclNumFmtBuffer::InsertBuiltinFormats()
         }
     }
 
-    // copy reused number formats
+    
     for( XclReuseMap::const_iterator aRIt = aReuseMap.begin(), aREnd = aReuseMap.end(); aRIt != aREnd; ++aRIt )
         maFmtMap[ aRIt->first ] = maFmtMap[ aRIt->second ];
 }
 
-// Cell formatting data (XF) ==================================================
+
 
 XclCellProt::XclCellProt() :
-    mbLocked( true ),       // default in Excel and Calc
+    mbLocked( true ),       
     mbHidden( false )
 {
 }
@@ -1570,7 +1570,7 @@ bool operator==( const XclCellProt& rLeft, const XclCellProt& rRight )
     return (rLeft.mbLocked == rRight.mbLocked) && (rLeft.mbHidden == rRight.mbHidden);
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclCellAlign::XclCellAlign() :
     mnHorAlign( EXC_XF_HOR_GENERAL ),
@@ -1689,7 +1689,7 @@ bool operator==( const XclCellAlign& rLeft, const XclCellAlign& rRight )
         (rLeft.mbLineBreak == rRight.mbLineBreak) && (rLeft.mbShrink   == rRight.mbShrink);
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclCellBorder::XclCellBorder() :
     mnLeftColor( 0 ),
@@ -1718,7 +1718,7 @@ bool operator==( const XclCellBorder& rLeft, const XclCellBorder& rRight )
         (rLeft.mbDiagTLtoBR == rRight.mbDiagTLtoBR) && (rLeft.mbDiagBLtoTR  == rRight.mbDiagBLtoTR);
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclCellArea::XclCellArea() :
     mnForeColor( EXC_COLOR_WINDOWTEXT ),
@@ -1739,7 +1739,7 @@ bool operator==( const XclCellArea& rLeft, const XclCellArea& rRight )
         (rLeft.mnPattern == rRight.mnPattern);
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclXFBase::XclXFBase( bool bCellXF ) :
     mnParent( bCellXF ? EXC_XF_DEFAULTSTYLE : EXC_XF_STYLEPARENT ),
@@ -1771,6 +1771,6 @@ bool XclXFBase::Equals( const XclXFBase& rCmp ) const
         (mbBorderUsed == rCmp.mbBorderUsed) && (mbAreaUsed  == rCmp.mbAreaUsed);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

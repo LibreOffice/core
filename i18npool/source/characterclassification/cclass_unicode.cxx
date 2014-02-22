@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cclass_unicode.hxx>
@@ -30,9 +30,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 namespace com { namespace sun { namespace star { namespace i18n {
-//  ----------------------------------------------------
-//  class cclass_Unicode
-//  ----------------------------------------------------;
+
+
+
 
 cclass_Unicode::cclass_Unicode( const uno::Reference < XComponentContext >& rxContext ) : m_xContext( rxContext ),
         pTable( NULL ),
@@ -118,9 +118,9 @@ cclass_Unicode::getCharacterDirection( const OUString& Text, sal_Int32 nPos ) th
 sal_Int16 SAL_CALL
 cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
-    // ICU Unicode script type UBlockCode starts from 1 for Basci Latin,
-    // while OO.o enum UnicideScript starts from 0.
-    // To map ICU UBlockCode to OO.o UnicodeScript, it needs to shift 1.
+    
+    
+    
     return (sal_Int16) ublock_getCode(Text.iterateCodePoints(&nPos, 0))-1;
 }
 
@@ -131,36 +131,36 @@ cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 in
 
     sal_uInt32 ch = Text.iterateCodePoints(nPos, increment);
     switch ( u_charType(ch) ) {
-    // Upper
+    
     case U_UPPERCASE_LETTER :
         return UPPER|LETTER|PRINTABLE|BASE_FORM;
 
-    // Lower
+    
     case U_LOWERCASE_LETTER :
         return LOWER|LETTER|PRINTABLE|BASE_FORM;
 
-    // Title
+    
     case U_TITLECASE_LETTER :
         return TITLE_CASE|LETTER|PRINTABLE|BASE_FORM;
 
-    // Letter
+    
     case U_MODIFIER_LETTER :
     case U_OTHER_LETTER :
         return LETTER|PRINTABLE|BASE_FORM;
 
-    // Digit
+    
     case U_DECIMAL_DIGIT_NUMBER:
     case U_LETTER_NUMBER:
     case U_OTHER_NUMBER:
         return DIGIT|PRINTABLE|BASE_FORM;
 
-    // Base
+    
     case U_NON_SPACING_MARK:
     case U_ENCLOSING_MARK:
     case U_COMBINING_SPACING_MARK:
         return BASE_FORM|PRINTABLE;
 
-    // Print
+    
     case U_SPACE_SEPARATOR:
 
     case U_DASH_PUNCTUATION:
@@ -175,7 +175,7 @@ cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 in
     case U_OTHER_SYMBOL:
         return PRINTABLE;
 
-    // Control
+    
     case U_CONTROL_CHAR:
     case U_FORMAT_CHAR:
         return CONTROL;
@@ -184,7 +184,7 @@ cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 in
     case U_PARAGRAPH_SEPARATOR:
         return CONTROL|PRINTABLE;
 
-    // for all others
+    
     default:
         return U_GENERAL_OTHER_TYPES;
     }

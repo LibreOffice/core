@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "componentmodule.hxx"
@@ -28,10 +28,10 @@
     ::osl::MutexGuard aGuard(s_aMutex); \
     ensureImpl()
 
-//.........................................................................
+
 namespace COMPMOD_NAMESPACE
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -39,9 +39,9 @@ namespace COMPMOD_NAMESPACE
     using namespace ::comphelper;
     using namespace ::cppu;
 
-    //=========================================================================
-    //= OModuleImpl
-    //=========================================================================
+    
+    
+    
     /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
     */
     class OModuleImpl
@@ -51,37 +51,37 @@ namespace COMPMOD_NAMESPACE
         OString m_sFilePrefix;
 
     public:
-        /// ctor
+        /
         OModuleImpl();
         ~OModuleImpl();
 
-        /// get the manager for the resources of the module
+        /
         ResMgr* getResManager();
         void    setResourceFilePrefix(const OString& _rPrefix) { m_sFilePrefix = _rPrefix; }
     };
 
-    //-------------------------------------------------------------------------
+    
     OModuleImpl::OModuleImpl()
         :m_pResources(NULL)
         ,m_bInitialized(sal_False)
     {
     }
 
-    //-------------------------------------------------------------------------
+    
     OModuleImpl::~OModuleImpl()
     {
         if (m_pResources)
             delete m_pResources;
     }
 
-    //-------------------------------------------------------------------------
+    
     ResMgr* OModuleImpl::getResManager()
     {
-        // note that this method is not threadsafe, which counts for the whole class !
+        
         if (!m_pResources && !m_bInitialized)
         {
             DBG_ASSERT(!m_sFilePrefix.isEmpty(), "OModuleImpl::getResManager: no resource file prefix!");
-            // create a manager with a fixed prefix
+            
             m_pResources = ResMgr::CreateResMgr(m_sFilePrefix.getStr());
             DBG_ASSERT(m_pResources,
                     OStringBuffer("OModuleImpl::getResManager: could not create the resource manager (file name: ")
@@ -93,21 +93,21 @@ namespace COMPMOD_NAMESPACE
         return m_pResources;
     }
 
-    //=========================================================================
-    //= OModule
-    //=========================================================================
+    
+    
+    
     ::osl::Mutex    OModule::s_aMutex;
     sal_Int32       OModule::s_nClients = 0;
     OModuleImpl*    OModule::s_pImpl = NULL;
     OString  OModule::s_sResPrefix;
-    //-------------------------------------------------------------------------
+    
     ResMgr* OModule::getResManager()
     {
         ENTER_MOD_METHOD();
         return s_pImpl->getResManager();
     }
 
-    //-------------------------------------------------------------------------
+    
     void OModule::setResourceFilePrefix(const OString& _rPrefix)
     {
         ::osl::MutexGuard aGuard(s_aMutex);
@@ -116,14 +116,14 @@ namespace COMPMOD_NAMESPACE
             s_pImpl->setResourceFilePrefix(_rPrefix);
     }
 
-    //-------------------------------------------------------------------------
+    
     void OModule::registerClient()
     {
         ::osl::MutexGuard aGuard(s_aMutex);
         ++s_nClients;
     }
 
-    //-------------------------------------------------------------------------
+    
     void OModule::revokeClient()
     {
         ::osl::MutexGuard aGuard(s_aMutex);
@@ -134,7 +134,7 @@ namespace COMPMOD_NAMESPACE
         }
     }
 
-    //-------------------------------------------------------------------------
+    
     void OModule::ensureImpl()
     {
         if (s_pImpl)
@@ -143,16 +143,16 @@ namespace COMPMOD_NAMESPACE
         s_pImpl->setResourceFilePrefix(s_sResPrefix);
     }
 
-    //--------------------------------------------------------------------------
-    //- registration helper
-    //--------------------------------------------------------------------------
+    
+    
+    
 
     Sequence< OUString >*                OModule::s_pImplementationNames = NULL;
     Sequence< Sequence< OUString > >*    OModule::s_pSupportedServices = NULL;
     Sequence< sal_Int64 >*                      OModule::s_pCreationFunctionPointers = NULL;
     Sequence< sal_Int64 >*                      OModule::s_pFactoryFunctionPointers = NULL;
 
-    //--------------------------------------------------------------------------
+    
     void OModule::registerComponent(
         const OUString& _rImplementationName,
         const Sequence< OUString >& _rServiceNames,
@@ -188,7 +188,7 @@ namespace COMPMOD_NAMESPACE
         s_pFactoryFunctionPointers->getArray()[nOldLen] = reinterpret_cast<sal_Int64>(_pFactoryFunction);
     }
 
-    //--------------------------------------------------------------------------
+    
     void OModule::revokeComponent(const OUString& _rImplementationName)
     {
         if (!s_pImplementationNames)
@@ -226,7 +226,7 @@ namespace COMPMOD_NAMESPACE
         }
     }
 
-    //--------------------------------------------------------------------------
+    
     Reference< XInterface > OModule::getComponentFactory(
         const OUString& _rImplementationName,
         const Reference< XMultiServiceFactory >& _rxServiceManager)
@@ -276,8 +276,8 @@ namespace COMPMOD_NAMESPACE
     }
 
 
-//.........................................................................
-}   // namespace COMPMOD_NAMESPACE
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

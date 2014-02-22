@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/primitive2d/sdrgrafprimitive2d.hxx>
@@ -36,10 +36,10 @@ namespace drawinglayer
         {
             Primitive2DSequence  aRetval;
 
-            // create unit outline polygon
+            
             basegfx::B2DPolygon aUnitOutline(basegfx::tools::createUnitPolygon());
 
-            // add fill, but only when graphic ist transparent
+            
             if(!getSdrLFSTAttribute().getFill().isDefault() && isTransparent())
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
@@ -50,10 +50,10 @@ namespace drawinglayer
                         getSdrLFSTAttribute().getFillFloatTransGradient()));
             }
 
-            // add graphic content
+            
             if(255L != getGraphicAttr().GetTransparency())
             {
-                // standard graphic fill
+                
                 const Primitive2DReference xGraphicContentPrimitive(
                     new GraphicPrimitive2D(
                         getTransform(),
@@ -63,19 +63,19 @@ namespace drawinglayer
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, xGraphicContentPrimitive);
             }
 
-            // add line
+            
             if(!getSdrLFSTAttribute().getLine().isDefault())
             {
-                // if line width is given, polygon needs to be grown by half of it to make the
-                // outline to be outside of the bitmap
+                
+                
                 if(0.0 != getSdrLFSTAttribute().getLine().getWidth())
                 {
-                    // decompose to get scale
+                    
                     basegfx::B2DVector aScale, aTranslate;
                     double fRotate, fShearX;
                     getTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
-                    // create expanded range (add relative half line width to unit rectangle)
+                    
                     double fHalfLineWidth(getSdrLFSTAttribute().getLine().getWidth() * 0.5);
                     double fScaleX(0.0 != aScale.getX() ? fHalfLineWidth / fabs(aScale.getX()) : 1.0);
                     double fScaleY(0.0 != aScale.getY() ? fHalfLineWidth / fabs(aScale.getY()) : 1.0);
@@ -99,7 +99,7 @@ namespace drawinglayer
                 }
             }
 
-            // add text
+            
             if(!getSdrLFSTAttribute().getText().isDefault())
             {
                 appendPrimitive2DReferenceToPrimitive2DSequence(aRetval,
@@ -113,7 +113,7 @@ namespace drawinglayer
                         false));
             }
 
-            // add shadow
+            
             if(!getSdrLFSTAttribute().getShadow().isDefault())
             {
                 aRetval = createEmbeddedShadowPrimitive(
@@ -135,7 +135,7 @@ namespace drawinglayer
             maGraphicObject(rGraphicObject),
             maGraphicAttr(rGraphicAttr)
         {
-            // reset some values from GraphicAttr which are part of transformation already
+            
             maGraphicAttr.SetRotation(0L);
         }
 
@@ -160,10 +160,10 @@ namespace drawinglayer
                 || (getGraphicObject().IsTransparent()));
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SdrGrafPrimitive2D, PRIMITIVE2D_ID_SDRGRAFPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

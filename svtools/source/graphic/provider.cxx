@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -102,20 +102,20 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicProvider::getImplementationId()
     return theGraphicProviderUnoTunnelId::get().getSeq();
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadGraphicObject( const OUString& rResourceURL ) const
 {
     uno::Reference< ::graphic::XGraphic >   xRet;
     if( rResourceURL.startsWith( UNO_NAME_GRAPHOBJ_URLPREFIX ) )
     {
-        // graphic manager url
+        
         OUString aTmpStr( rResourceURL.copy( sizeof( UNO_NAME_GRAPHOBJ_URLPREFIX ) - 1 ) );
         OString aUniqueID(OUStringToOString(aTmpStr,
             RTL_TEXTENCODING_UTF8));
         GraphicObject aGrafObj(aUniqueID);
-        // I don't call aGrafObj.GetXGraphic because it will call us back
-        // into implLoadMemory ( with "private:memorygraphic" test )
+        
+        
         ::unographic::Graphic* pUnoGraphic = new ::unographic::Graphic;
         pUnoGraphic->init( aGrafObj.GetGraphic() );
         xRet = pUnoGraphic;
@@ -144,7 +144,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( const OUS
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( const OUString& rResourceURL ) const
 {
@@ -165,7 +165,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
 }
 
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( const OUString& rResourceURL ) const
 {
@@ -195,7 +195,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno::Reference< awt::XBitmap >& xBtm ) const
 {
@@ -229,7 +229,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadBitmap( const uno
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const OUString& rResourceURL ) const
 {
@@ -309,7 +309,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDescriptor( const uno::Sequence< beans::PropertyValue >& rMediaProperties )
     throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
@@ -382,7 +382,7 @@ uno::Reference< beans::XPropertySet > SAL_CALL GraphicProvider::queryGraphicDesc
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( const uno::Sequence< ::beans::PropertyValue >& rMediaProperties )
     throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
@@ -421,7 +421,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         }
     }
 
-    // Check for the goal width and height if they are defined
+    
     sal_uInt16 nExtWidth = 0;
     sal_uInt16 nExtHeight = 0;
     sal_uInt16 nExtMapMode = 0;
@@ -481,7 +481,7 @@ uno::Reference< ::graphic::XGraphic > SAL_CALL GraphicProvider::queryGraphic( co
         {
             ::Graphic aVCLGraphic;
 
-            // Define APM Header if goal height and width are defined
+            
             WMF_EXTERNALHEADER aExtHeader;
             aExtHeader.xExt = nExtWidth;
             aExtHeader.yExt = nExtHeight;
@@ -568,7 +568,7 @@ void ImplApplyBitmapResolution( ::Graphic& rGraphic, sal_Int32 nImageResolution,
         sal_Int32 nDestPixelWidth = nSourcePixelWidth;
         sal_Int32 nDestPixelHeight = nSourcePixelHeight;
 
-        // check, if the bitmap DPI exceeds the maximum DPI
+        
         if( fSourceDPIX > fImageResolution )
         {
             nDestPixelWidth = static_cast<sal_Int32>(( fSourcePixelWidth * fImageResolution ) / fSourceDPIX);
@@ -622,7 +622,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     {
         if(rGraphic.getSvgData().get())
         {
-            // embedded Svg, no need to scale. Also no method to apply crop data currently
+            
         }
         else
         {
@@ -657,7 +657,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
                 MetaAction* pAction = aMtf.GetAction( i );
                 switch( pAction->GetType() )
                 {
-                    // only optimizing common bitmap actions:
+                    
                     case( META_MAPMODE_ACTION ):
                     {
                         const_cast< MetaAction* >( pAction )->Execute( &aDummyVDev );
@@ -727,7 +727,7 @@ void ImplApplyFilterData( ::Graphic& rGraphic, uno::Sequence< beans::PropertyVal
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL GraphicProvider::storeGraphic( const uno::Reference< ::graphic::XGraphic >& rxGraphic, const uno::Sequence< beans::PropertyValue >& rMediaProperties )
     throw ( io::IOException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)

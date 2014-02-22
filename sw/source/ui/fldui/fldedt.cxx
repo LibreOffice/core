@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/msgbox.hxx>
@@ -72,7 +72,7 @@ SwFldEditDlg::SwFldEditDlg(SwView& rVw)
 
     if ( pSh->CrsrInsideInputFld() )
     {
-        // move cursor to start of Input Field
+        
         SwInputField* pInputFld = dynamic_cast<SwInputField*>(pCurFld);
         if ( pInputFld != NULL
              && pInputFld->GetFmtFld() != NULL )
@@ -118,7 +118,7 @@ void SwFldEditDlg::Init()
         if(!pCurFld)
             return;
 
-        // Traveling only when more than one field
+        
         pSh->StartAction();
         pSh->CreateCrsr();
 
@@ -144,7 +144,7 @@ void SwFldEditDlg::Init()
 
 SfxTabPage* SwFldEditDlg::CreatePage(sal_uInt16 nGroup)
 {
-    // create TabPage
+    
     SfxTabPage* pTabPage = 0;
 
     switch (nGroup)
@@ -230,7 +230,7 @@ IMPL_LINK_NOARG(SwFldEditDlg, OKHdl)
 
 short SwFldEditDlg::Execute()
 {
-    // without TabPage no dialog
+    
     return GetTabPage() ? Dialog::Execute() : static_cast<short>(RET_CANCEL);
 }
 
@@ -246,8 +246,8 @@ IMPL_LINK( SwFldEditDlg, NextPrevHdl, Button *, pButton )
     SwFieldType *pOldTyp = 0;
     SwFldPage* pTabPage = (SwFldPage*)GetTabPage();
 
-    //#112462# FillItemSet may delete the current field
-    //that's why it has to be called before accessing the current field
+    
+    
     if( GetOKButton()->IsEnabled() )
         pTabPage->FillItemSet(*(SfxItemSet*)0);
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,42 +26,42 @@
 #include <tools/debug.hxx>
 #include <com/sun/star/form/XForm.hpp>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 InterfaceRef SAL_CALL OFormsCollection_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OFormsCollection( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException)
 {
     return OUString("com.sun.star.form.Forms");
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  ) throw(RuntimeException)
 {
     return OImplementationIds::getImplementationId(getTypes());
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException)
 {
     return concatSequences(OInterfaceContainer::getTypes(), FormsCollectionComponentBase::getTypes(), OFormsCollection_BASE::getTypes());
 }
 
-//------------------------------------------------------------------
+
 OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactory)
     :FormsCollectionComponentBase( m_aMutex )
     ,OInterfaceContainer( _rxFactory, m_aMutex, cppu::UnoType<XForm>::get() )
@@ -69,7 +69,7 @@ OFormsCollection::OFormsCollection(const Reference<XComponentContext>& _rxFactor
 {
 }
 
-//------------------------------------------------------------------------------
+
 OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
     :FormsCollectionComponentBase( m_aMutex )
     ,OInterfaceContainer( m_aMutex, _cloneSource )
@@ -77,7 +77,7 @@ OFormsCollection::OFormsCollection( const OFormsCollection& _cloneSource )
 {
 }
 
-//------------------------------------------------------------------------------
+
 OFormsCollection::~OFormsCollection()
 {
     if (!FormsCollectionComponentBase::rBHelper.bDisposed)
@@ -87,7 +87,7 @@ OFormsCollection::~OFormsCollection()
     }
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(RuntimeException)
 {
     Any aReturn = OFormsCollection_BASE::queryInterface(_rType);
@@ -122,7 +122,7 @@ StringSequence SAL_CALL OFormsCollection::getSupportedServiceNames() throw(Runti
     return aReturn;
 }
 
-// XCloneable
+
 Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (RuntimeException)
 {
     OFormsCollection* pClone = new OFormsCollection( *this );
@@ -132,8 +132,8 @@ Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (Runtim
     return static_cast<OInterfaceContainer*>(pClone);
 }
 
-// OComponentHelper
-//------------------------------------------------------------------------------
+
+
 void OFormsCollection::disposing()
 {
     {
@@ -144,22 +144,22 @@ void OFormsCollection::disposing()
     m_xParent = NULL;
 }
 
-//XChild
-//------------------------------------------------------------------------------
+
+
 void OFormsCollection::setParent(const InterfaceRef& Parent) throw( NoSupportException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
-//------------------------------------------------------------------------------
+
 InterfaceRef  OFormsCollection::getParent() throw( RuntimeException )
 {
     return m_xParent;
 }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

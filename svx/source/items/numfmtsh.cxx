@@ -34,11 +34,11 @@
 
 #include <limits>
 
-// class SvxNumberFormatShell --------------------------------------------
+
 
 const double SvxNumberFormatShell::DEFAULT_NUMVALUE = 1234.56789;
 
-// -----------------------------------------------------------------------
+
 
 
 
@@ -61,7 +61,7 @@ SvxNumberFormatShell* SvxNumberFormatShell::Create( SvNumberFormatter* pNumForma
                                     eNumValType,nNumVal,pNumStr );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32          nFormatKey,
@@ -93,7 +93,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
                                             sal_uInt32          nFormatKey,
@@ -112,8 +112,8 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     , nCurCurrencyEntryPos((sal_uInt16) SELPOS_NONE)
     , bUseStarFormat  (false)
 {
-    //  #50441# When used in Writer, the SvxNumberInfoItem contains the
-    //  original string in addition to the value
+    
+    
 
     if ( pNumStr )
         aValStr = *pNumStr;
@@ -130,7 +130,7 @@ SvxNumberFormatShell::SvxNumberFormatShell( SvNumberFormatter*  pNumFormatter,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxNumberFormatShell::~SvxNumberFormatShell()
 {
@@ -146,22 +146,22 @@ SvxNumberFormatShell::~SvxNumberFormatShell()
 
     if ( bUndoAddList )
     {
-        // Hinzugefuegte Formate sind nicht gueltig:
-        // => wieder entfernen:
+        
+        
 
         for ( std::vector<sal_uInt32>::const_iterator it(aAddList.begin()); it != aAddList.end(); ++it )
             pFormatter->DeleteEntry( *it );
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 size_t SvxNumberFormatShell::GetUpdateDataCount() const
 {
     return aDelList.size();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::GetUpdateData( sal_uInt32* pDelArray, const sal_uInt32 nSize )
 {
@@ -174,7 +174,7 @@ void SvxNumberFormatShell::GetUpdateData( sal_uInt32* pDelArray, const sal_uInt3
             *pDelArray++ = *it;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::CategoryChanged( sal_uInt16 nCatLbPos,
                                             short& rFmtSelPos,
@@ -185,13 +185,13 @@ void SvxNumberFormatShell::CategoryChanged( sal_uInt16 nCatLbPos,
     pCurFmtTable = &( pFormatter->GetEntryTable( nCurCategory,
                                                  nCurFormatKey,
                                                  eCurLanguage ) );
-    // reinitialize currency if category newly entered
+    
     if ( nCurCategory == NUMBERFORMAT_CURRENCY && nOldCategory != nCurCategory )
         pCurCurrencyEntry = NULL;
     rFmtSelPos = FillEntryList_Impl( rFmtEntries );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::LanguageChanged( LanguageType eLangType,
                                             short& rFmtSelPos,
@@ -204,7 +204,7 @@ void SvxNumberFormatShell::LanguageChanged( LanguageType eLangType,
     rFmtSelPos = FillEntryList_Impl( rFmtEntries );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
                                           OUString&   rPreviewStr,
@@ -228,7 +228,7 @@ void SvxNumberFormatShell::FormatChanged( sal_uInt16  nFmtLbPos,
         }
     }
 }
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
                                       sal_uInt16& rCatLbSelPos, short& rFmtSelPos,
@@ -237,7 +237,7 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
     bool        bInserted   = false;
     sal_uInt32  nAddKey     = pFormatter->GetEntryKey( rFormat, eCurLanguage );
 
-    if ( nAddKey != NUMBERFORMAT_ENTRY_NOT_FOUND ) // bereits vorhanden?
+    if ( nAddKey != NUMBERFORMAT_ENTRY_NOT_FOUND ) 
     {
         ::std::vector<sal_uInt32>::iterator nAt = GetRemoved_Impl( nAddKey );
         if ( nAt != aDelList.end() )
@@ -250,7 +250,7 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
             OSL_FAIL( "Doppeltes Format!" );
         }
     }
-    else // neues Format
+    else 
     {
         sal_Int32 nPos;
         bInserted = pFormatter->PutEntry( rFormat, nPos,
@@ -260,27 +260,27 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
 
         if (bInserted)
         {
-            // May be sorted under a different locale if LCID was parsed.
+            
             const SvNumberformat* pEntry = pFormatter->GetEntry( nAddKey);
             if (pEntry)
             {
                 LanguageType nLang = pEntry->GetLanguage();
                 if (eCurLanguage != nLang)
                 {
-                    // Current language's list would not show entry, adapt.
+                    
                     eCurLanguage = nLang;
                 }
             }
         }
     }
 
-    if ( bInserted ) // eingefuegt
+    if ( bInserted ) 
     {
         nCurFormatKey = nAddKey;
         DBG_ASSERT( !IsAdded_Impl( nCurFormatKey ), "Doppeltes Format!" );
         aAddList.push_back( nCurFormatKey );
 
-        // aktuelle Tabelle holen
+        
         pCurFmtTable = &(pFormatter->GetEntryTable( nCurCategory,
                                                     nCurFormatKey,
                                                     eCurLanguage ));
@@ -288,19 +288,19 @@ bool SvxNumberFormatShell::AddFormat( OUString& rFormat, sal_Int32& rErrPos,
         CategoryToPos_Impl( nCurCategory, rCatLbSelPos );
         rFmtSelPos = FillEntryList_Impl( rFmtEntries );
     }
-    else if ( rErrPos != 0 ) // Syntaxfehler
+    else if ( rErrPos != 0 ) 
     {
         ;
     }
-    else // Doppelt einfuegen nicht moeglich
+    else 
     {
-        OSL_FAIL( "Doppeltes Format!" ); // oder doch?
+        OSL_FAIL( "Doppeltes Format!" ); 
     }
 
     return bInserted;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
                                          sal_uInt16& rCatLbSelPos,
@@ -336,7 +336,7 @@ bool SvxNumberFormatShell::RemoveFormat( const OUString& rFormat,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::MakeFormat( OUString& rFormat,
                                        bool bThousand, bool bNegRed,
@@ -375,7 +375,7 @@ void SvxNumberFormatShell::MakeFormat( OUString& rFormat,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
                                        bool&            rThousand,
@@ -417,7 +417,7 @@ void SvxNumberFormatShell::GetOptions( const OUString&  rFormat,
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
                                               OUString&       rPreviewStr,
@@ -428,7 +428,7 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
     sal_uIntPtr nExistingFormat = pFormatter->GetEntryKey( rFormatStr, eCurLanguage );
     if ( nExistingFormat == NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
-        //  real preview - not implemented in NumberFormatter for text formats
+        
         OUString sTempOut(rPreviewStr);
 
         pFormatter->GetPreviewString( rFormatStr, nValNum, sTempOut,
@@ -437,9 +437,9 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
     }
     else
     {
-        //  format exists
+        
 
-        //  #50441# if a string was set in addition to the value, use it for text formats
+        
         bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
                             ( !aValStr.isEmpty() && ( pFormatter->GetType(nExistingFormat) & NUMBERFORMAT_TEXT ) ) );
         if ( bUseText )
@@ -461,7 +461,7 @@ void SvxNumberFormatShell::MakePreviewString( const OUString& rFormatStr,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::IsUserDefined( const OUString& rFmtString )
 {
@@ -487,7 +487,7 @@ bool SvxNumberFormatShell::IsUserDefined( const OUString& rFmtString )
     return bFlag;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::FindEntry( const OUString& rFmtString, sal_uInt32* pAt /* = NULL */ )
 {
@@ -517,7 +517,7 @@ bool SvxNumberFormatShell::FindEntry( const OUString& rFmtString, sal_uInt32* pA
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
                                             LanguageType& rLangType,
@@ -526,19 +526,19 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
                                             OUString& rPrevString,
                                             Color*&   rpPrevColor )
 {
-    // -------------------------------------------------------------------
-    // Vorbedingung: Zahlenformatierer gefunden
+    
+    
     DBG_ASSERT( pFormatter != NULL, "Zahlenformatierer nicht gefunden!" );
 
-//  sal_uInt16                  nCount      = 0;
-    short                   nSelPos     = SELPOS_NONE;
-//  SvNumberFormatTable*    pFmtTable   = NULL;
 
-    // Sonderbehandlung fuer undefiniertes Zahlenformat:
+    short                   nSelPos     = SELPOS_NONE;
+
+
+    
     if ( (eValType == SVX_VALUE_TYPE_UNDEFINED) && (nCurFormatKey == 0) )
-        PosToCategory_Impl( CAT_ALL, nCurCategory );        // Kategorie = Alle
+        PosToCategory_Impl( CAT_ALL, nCurCategory );        
     else
-        nCurCategory = NUMBERFORMAT_UNDEFINED;      // Kategorie = Undefiniert
+        nCurCategory = NUMBERFORMAT_UNDEFINED;      
 
     pCurFmtTable =  &(pFormatter->GetFirstEntryTable( nCurCategory,
                                                       nCurFormatKey,
@@ -557,7 +557,7 @@ void SvxNumberFormatShell::GetInitSettings( sal_uInt16& nCatLbPos,
     GetPreviewString_Impl( rPrevString, rpPrevColor );
 }
 
-// -----------------------------------------------------------------------
+
 
 short SvxNumberFormatShell::FillEntryList_Impl( std::vector<OUString>& rList )
 {
@@ -904,10 +904,10 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
 
     if(pCurCurrencyEntry==NULL)
     {
-        // #110398# If no currency format was previously selected (we're not
-        // about to add another currency), try to select the initial currency
-        // format (nCurFormatKey) that was set in FormatChanged() after
-        // matching the format string entered in the dialog.
+        
+        
+        
+        
         bAdaptSelPos = true;
         pCurCurrencyEntry = (NfCurrencyEntry*)pTmpCurrencyEntry;
         bBankingSymbol = bTmpBanking;
@@ -951,7 +951,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
                 bool bInsFlag = false;
                 if ( pNumEntry->HasNewCurrency() )
                 {
-                    bInsFlag = true;    // merge locale formats into currency selection
+                    bInsFlag = true;    
                 }
                 else if( (!bTmpBanking && aNewFormNInfo.indexOf(rSymbol) >= 0) ||
                          (bTmpBanking && aNewFormNInfo.indexOf(rBankSymbol) >= 0) )
@@ -999,7 +999,7 @@ short SvxNumberFormatShell::FillEListWithUserCurrencys( std::vector<OUString>& r
     else
         nDefault = 0;
     if ( !bTmpBanking && nCurCategory != NUMBERFORMAT_ALL )
-    {   // append formats for all currencies defined in the current I18N locale
+    {   
         const NfCurrencyTable& rCurrencyTable = SvNumberFormatter::GetTheCurrencyTable();
         sal_uInt16 nCurrCount = rCurrencyTable.size();
         LanguageType eLang = MsLangId::getRealLanguage( eCurLanguage );
@@ -1122,13 +1122,13 @@ short SvxNumberFormatShell::FillEListWithUsD_Impl( std::vector<OUString>& rList,
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpColor )
 {
     rpColor = NULL;
 
-    //  #50441# if a string was set in addition to the value, use it for text formats
+    
     bool bUseText = ( eValType == SVX_VALUE_TYPE_STRING ||
                         ( !aValStr.isEmpty() && ( pFormatter->GetType(nCurFormatKey) & NUMBERFORMAT_TEXT ) ) );
 
@@ -1148,41 +1148,41 @@ void SvxNumberFormatShell::GetPreviewString_Impl( OUString& rString, Color*& rpC
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 ::std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetRemoved_Impl( size_t nKey )
 {
     return ::std::find(aDelList.begin(), aDelList.end(), nKey);
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::IsRemoved_Impl( size_t nKey )
 {
     return GetRemoved_Impl( nKey ) != aDelList.end();
 }
 
-// -----------------------------------------------------------------------
+
 
 ::std::vector<sal_uInt32>::iterator SvxNumberFormatShell::GetAdded_Impl( size_t nKey )
 {
     return ::std::find(aAddList.begin(), aAddList.end(), nKey);
 }
 
-//------------------------------------------------------------------------
+
 
 bool SvxNumberFormatShell::IsAdded_Impl( size_t nKey )
 {
     return GetAdded_Impl( nKey ) != aAddList.end();
 }
 
-// -----------------------------------------------------------------------
-// Konvertierungs-Routinen:
-// ------------------------
+
+
+
 
 void SvxNumberFormatShell::PosToCategory_Impl( sal_uInt16 nPos, short& rCategory )
 {
-    // Kategorie ::com::sun::star::form-Positionen abbilden (->Resource)
+    
     switch ( nPos )
     {
         case CAT_USERDEFINED:   rCategory = NUMBERFORMAT_DEFINED;       break;
@@ -1200,11 +1200,11 @@ void SvxNumberFormatShell::PosToCategory_Impl( sal_uInt16 nPos, short& rCategory
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxNumberFormatShell::CategoryToPos_Impl( short nCategory, sal_uInt16& rPos )
 {
-    // Kategorie auf ::com::sun::star::form-Positionen abbilden (->Resource)
+    
     switch ( nCategory )
     {
         case NUMBERFORMAT_DEFINED:      rPos = CAT_USERDEFINED; break;
@@ -1442,7 +1442,7 @@ short SvxNumberFormatShell::GetListPos4Entry(sal_uInt32 nIdx)
 {
     short nSelP=SELPOS_NONE;
 
-    // Check list size against return type limit.
+    
     if( aCurEntryList.size() <= static_cast<size_t>(::std::numeric_limits< short >::max()) )
     {
         for(size_t i=0; i < aCurEntryList.size(); ++i)
@@ -1572,15 +1572,15 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool
         sal_uInt16 j = nStart;
         for(; j < rList.size(); ++j)
             if (aCollator.compareString(aStr, rList[j]) < 0)
-                break;  // insert before first greater than
+                break;  
 
         rList.insert(rList.begin() + j, aStr);
         aCurCurrencyList.insert(aCurCurrencyList.begin() + j, i);
     }
 
-    // Append ISO codes to symbol list.
-    // XXX If this is to be changed, various other places would had to be
-    // adapted that assume this order!
+    
+    
+    
     sal_uInt16 nCont = rList.size();
 
     for(sal_uInt16 i = 1; i < nCount; ++i)
@@ -1594,7 +1594,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(std::vector<OUString>& rList, bool
             if(rList[j] == aStr)
                 bInsert = false;
             else if (aCollator.compareString(aStr, rList[j]) < 0)
-                break;  // insert before first greater than
+                break;  
         }
         if(bInsert)
         {
@@ -1690,7 +1690,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const OUString& rFmtStr
     if ( nFound != NUMBERFORMAT_ENTRY_NOT_FOUND &&
             ((pFormat = pFormatter->GetEntry( nFound )) != 0) &&
             pFormat->GetNewCurrencySymbol( aSymbol, aExtension ) )
-    {   // eventually match with format locale
+    {   
         const NfCurrencyEntry* pTmpCurrencyEntry =
             SvNumberFormatter::GetCurrencyEntry( bTestBanking, aSymbol, aExtension,
             pFormat->GetLanguage() );
@@ -1707,7 +1707,7 @@ sal_uInt16 SvxNumberFormatShell::FindCurrencyTableEntry( const OUString& rFmtStr
         }
     }
     else
-    {   // search symbol string only
+    {   
         for(sal_uInt16 i=0;i<nCount;i++)
         {
             const NfCurrencyEntry* pTmpCurrencyEntry=&rCurrencyTable[i];

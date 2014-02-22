@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLLineNumberingExport.hxx"
@@ -66,7 +66,7 @@ SvXMLEnumMapEntry const aLineNumberPositionMap[] =
 
 void XMLLineNumberingExport::Export()
 {
-    // export element if we have line numbering info
+    
     Reference<XLineNumberingProperties> xSupplier(rExport.GetModel(),
                                                   UNO_QUERY);
     if (xSupplier.is())
@@ -78,7 +78,7 @@ void XMLLineNumberingExport::Export()
         {
             Any aAny;
 
-            // char style
+            
             aAny = xLineNumbering->getPropertyValue(sCharStyleName);
             OUString sTmp;
             aAny >>= sTmp;
@@ -88,7 +88,7 @@ void XMLLineNumberingExport::Export()
                                      rExport.EncodeStyleName( sTmp ));
             }
 
-            // enable
+            
             aAny = xLineNumbering->getPropertyValue(sIsOn);
             if (! *(sal_Bool*)aAny.getValue())
             {
@@ -96,7 +96,7 @@ void XMLLineNumberingExport::Export()
                                      XML_NUMBER_LINES, XML_FALSE);
             }
 
-            // count empty lines
+            
             aAny = xLineNumbering->getPropertyValue(sCountEmptyLines);
             if (! *(sal_Bool*)aAny.getValue())
             {
@@ -104,7 +104,7 @@ void XMLLineNumberingExport::Export()
                                      XML_COUNT_EMPTY_LINES, XML_FALSE);
             }
 
-            // count in frames
+            
             aAny = xLineNumbering->getPropertyValue(sCountLinesInFrames);
             if (*(sal_Bool*)aAny.getValue())
             {
@@ -112,7 +112,7 @@ void XMLLineNumberingExport::Export()
                                      XML_COUNT_IN_TEXT_BOXES, XML_TRUE);
             }
 
-            // restart numbering
+            
             aAny = xLineNumbering->getPropertyValue(sRestartAtEachPage);
             if (*(sal_Bool*)aAny.getValue())
             {
@@ -120,7 +120,7 @@ void XMLLineNumberingExport::Export()
                                      XML_RESTART_ON_PAGE, XML_TRUE);
             }
 
-            // Distance
+            
             aAny = xLineNumbering->getPropertyValue(sDistance);
             sal_Int32 nLength = 0;
             aAny >>= nLength;
@@ -133,7 +133,7 @@ void XMLLineNumberingExport::Export()
                                      sBuf.makeStringAndClear());
             }
 
-            // NumeringType
+            
             OUStringBuffer sNumPosBuf;
             aAny = xLineNumbering->getPropertyValue(sNumberingType);
             sal_Int16 nFormat = 0;
@@ -149,7 +149,7 @@ void XMLLineNumberingExport::Export()
                                      sNumPosBuf.makeStringAndClear() );
             }
 
-            // number position
+            
             aAny = xLineNumbering->getPropertyValue(sNumberPosition);
             sal_Int16 nPosition = 0;
             aAny >>= nPosition;
@@ -160,7 +160,7 @@ void XMLLineNumberingExport::Export()
                                      sNumPosBuf.makeStringAndClear());
             }
 
-            // sInterval
+            
             aAny = xLineNumbering->getPropertyValue(sInterval);
             sal_Int16 nLineInterval = 0;
             aAny >>= nLineInterval;
@@ -174,14 +174,14 @@ void XMLLineNumberingExport::Export()
                                            XML_LINENUMBERING_CONFIGURATION,
                                            sal_True, sal_True);
 
-            // line separator
+            
             aAny = xLineNumbering->getPropertyValue(sSeparatorText);
             OUString sSeparator;
             aAny >>= sSeparator;
             if (!sSeparator.isEmpty())
             {
 
-                // SeparatorInterval
+                
                 aAny = xLineNumbering->getPropertyValue(sSeparatorInterval);
                 sal_Int16 nLineDistance = 0;
                 aAny >>= nLineDistance;
@@ -196,9 +196,9 @@ void XMLLineNumberingExport::Export()
                 rExport.Characters(sSeparator);
             }
         }
-        // else: no configuration: don't save -> default
+        
     }
-    // can't even get supplier: don't save -> default
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -38,7 +38,7 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
 {
     sal_Int32 nRet = -1;
 
-    // construct HashedStyle to find or insert
+    
     HashedStyle aSearchStyle;
     aSearchStyle.Name                   = rStyle.Name;
     aSearchStyle.Properties             = rStyle.Properties;
@@ -54,7 +54,7 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
     {
         nRet = it->second;
         HashedStyle& rFound = m_aIdToStyle[ nRet ];
-        // increase refcount on this style
+        
         rFound.RefCount++;
         if( ! bSubStyle )
             rFound.IsSubStyle = false;
@@ -62,12 +62,12 @@ sal_Int32 StyleContainer::impl_getStyleId( const Style& rStyle, bool bSubStyle )
     else
     {
         nRet = m_nNextId++;
-        // create new style
+        
         HashedStyle& rNew = m_aIdToStyle[ nRet ];
         rNew = aSearchStyle;
         rNew.RefCount           = 1;
         rNew.IsSubStyle         = bSubStyle;
-        // fill the style hash to find the id
+        
         m_aStyleToId[ rNew ] = nRet;
     }
     return nRet;
@@ -100,18 +100,18 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
         if( it->second.RefCount == 1 )
         {
             nRet = it->first;
-            // erase old hash to id mapping
+            
             m_aStyleToId.erase( it->second );
-            // change properties
+            
             it->second.Properties = rNewProps;
-            // fill in new hash to id mapping
+            
             m_aStyleToId[ it->second ] = nRet;
         }
         else
         {
-            // decrease refcound on old instance
+            
             it->second.RefCount--;
-            // acquire new HashedStyle
+            
             HashedStyle aSearchStyle;
             aSearchStyle.Name                   = it->second.Name;
             aSearchStyle.Properties             = rNewProps;
@@ -120,7 +120,7 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
             aSearchStyle.SubStyles              = it->second.SubStyles;
             aSearchStyle.IsSubStyle             = it->second.IsSubStyle;
 
-            // find out whether this new style already exists
+            
             boost::unordered_map< HashedStyle, sal_Int32, StyleHash >::iterator new_it =
                 m_aStyleToId.find( aSearchStyle );
             if( new_it != m_aStyleToId.end() )
@@ -131,11 +131,11 @@ sal_Int32 StyleContainer::setProperties( sal_Int32 nStyleId, const PropertyMap& 
             else
             {
                 nRet = m_nNextId++;
-                // create new style with new id
+                
                 HashedStyle& rNew = m_aIdToStyle[ nRet ];
                 rNew = aSearchStyle;
                 rNew.RefCount = 1;
-                // fill style to id hash
+                
                 m_aStyleToId[ aSearchStyle ] = nRet;
             }
         }

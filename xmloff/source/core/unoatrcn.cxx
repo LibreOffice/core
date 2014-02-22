@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -30,7 +30,7 @@
 
 using namespace ::com::sun::star;
 
-// Interface implementation
+
 
 uno::Reference< uno::XInterface >  SvUnoAttributeContainer_CreateInstance()
 {
@@ -49,7 +49,7 @@ SvUnoAttributeContainer::~SvUnoAttributeContainer()
     delete mpContainer;
 }
 
-// container::XElementAccess
+
 uno::Type SAL_CALL SvUnoAttributeContainer::getElementType(void)
     throw( uno::RuntimeException )
 {
@@ -112,7 +112,7 @@ sal_Int64 SAL_CALL SvUnoAttributeContainer::getSomething( const ::com::sun::star
     return 0;
 }
 
-// container::XNameAccess
+
 uno::Any SAL_CALL SvUnoAttributeContainer::getByName(const OUString& aName)
     throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -155,7 +155,7 @@ sal_Bool SAL_CALL SvUnoAttributeContainer::hasByName(const OUString& aName) thro
     return getIndexByName(aName ) != USHRT_MAX;
 }
 
-// container::XNameReplace
+
 void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, const uno::Any& aElement)
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -197,7 +197,7 @@ void SAL_CALL SvUnoAttributeContainer::replaceByName(const OUString& aName, cons
     throw lang::IllegalArgumentException();
 }
 
-// container::XNameContainer
+
 void SAL_CALL SvUnoAttributeContainer::insertByName(const OUString& aName, const uno::Any& aElement)
 throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -247,7 +247,7 @@ void SAL_CALL SvUnoAttributeContainer::removeByName(const OUString& Name)
     mpContainer->Remove( nAttr );
 }
 
-//XServiceInfo
+
 OUString SAL_CALL SvUnoAttributeContainer::getImplementationName(void) throw( uno::RuntimeException )
 {
     return OUString( "SvUnoAttributeContainer" );

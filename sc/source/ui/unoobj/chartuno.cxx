@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/Aspects.hpp>
@@ -49,12 +49,12 @@ using namespace com::sun::star;
 
 #define PROP_HANDLE_RELATED_CELLRANGES  1
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScChartObj, "ScChartObj", "com.sun.star.table.TableChart" )
 SC_SIMPLE_SERVICE_INFO( ScChartsObj, "ScChartsObj", "com.sun.star.table.TableCharts" )
 
-//------------------------------------------------------------------------
+
 
 static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const OUString& rName )
 {
@@ -90,7 +90,7 @@ static SdrOle2Obj* lcl_FindChartObj( ScDocShell* pDocShell, SCTAB nTab, const OU
     return NULL;
 }
 
-//------------------------------------------------------------------------
+
 
 ScChartsObj::ScChartsObj(ScDocShell* pDocSh, SCTAB nT) :
     pDocShell( pDocSh ),
@@ -107,12 +107,12 @@ ScChartsObj::~ScChartsObj()
 
 void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update
+    
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       
     }
 }
 
@@ -141,7 +141,7 @@ ScChartObj* ScChartsObj::GetObjectByIndex_Impl(long nIndex) const
                             uno::Reference < embed::XEmbeddedObject > xObj = ((SdrOle2Obj*)pObject)->GetObjRef();
                             if ( xObj.is() )
                                 aName = pDocShell->GetEmbeddedObjectContainer().GetEmbeddedObjectName( xObj );
-                            break;  // nicht weitersuchen
+                            break;  
                         }
                         ++nPos;
                     }
@@ -163,7 +163,7 @@ ScChartObj* ScChartsObj::GetObjectByName_Impl(const OUString& aName) const
     return NULL;
 }
 
-// XTableCharts
+
 
 void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                                         const awt::Rectangle& aRect,
@@ -183,14 +183,14 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
     if (!pPage || !pDoc)
         return;
 
-    //  chart can't be inserted if any ole object with that name exists on any table
-    //  (empty string: generate valid name)
+    
+    
 
     OUString aName = rName;
     SCTAB nDummy;
     if ( !aName.isEmpty() && pModel->GetNamedObject( aName, OBJ_OLE2, nDummy ) )
     {
-        //  object exists - only RuntimeException is specified
+        
         throw uno::RuntimeException();
     }
 
@@ -213,8 +213,8 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
         xObj = pDocShell->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_SCH_CLASSID ).GetByteSequence(), aName );
     if ( xObj.is() )
     {
-            //  Rechteck anpassen
-            //! Fehler/Exception, wenn leer/ungueltig ???
+            
+            
             Point aRectPos( aRect.X, aRect.Y );
             bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
             if ( ( aRectPos.X() < 0 && !bLayoutRTL ) || ( aRectPos.X() > 0 && bLayoutRTL ) )
@@ -225,7 +225,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
 
             Size aRectSize( aRect.Width, aRect.Height );
             if (aRectSize.Width() <= 0)
-                aRectSize.Width() = 5000;   // Default-Groesse
+                aRectSize.Width() = 5000;   
 
             if (aRectSize.Height() <= 0)
                 aRectSize.Height() = 5000;
@@ -239,10 +239,10 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
             aSz.Width = aSize.Width();
             aSz.Height = aSize.Height();
 
-            // Calc -> DataProvider
+            
             uno::Reference< chart2::data::XDataProvider > xDataProvider = new
                 ScChart2DataProvider( pDoc );
-            // Chart -> DataReceiver
+            
             uno::Reference< chart2::data::XDataReceiver > xReceiver;
             uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
             if( xCompSupp.is())
@@ -252,7 +252,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                 OUString sRangeStr;
                 xNewRanges->Format(sRangeStr, SCR_ABS_3D, pDoc);
 
-                // connect
+                
                 if( !sRangeStr.isEmpty() )
                     xReceiver->attachDataProvider( xDataProvider );
                 else
@@ -261,7 +261,7 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                 uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
                 xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
-                // set arguments
+                
                 uno::Sequence< beans::PropertyValue > aArgs( 4 );
                 aArgs[0] = beans::PropertyValue(
                     OUString("CellRangeRepresentation"), -1,
@@ -285,13 +285,13 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
 
             SdrOle2Obj* pObj = new SdrOle2Obj( ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), aName, aInsRect );
 
-            // set VisArea
+            
             if( xObj.is())
                 xObj->setVisualAreaSize( nAspect, aSz );
 
-            // #i121334# This call will change the chart's default background fill from white to transparent.
-            // Add here again if this is wanted (see task description for details)
-            // ChartHelper::AdaptDefaultsForChart( xObj );
+            
+            
+            
 
             pPage->InsertObject( pObj );
             pModel->AddUndo( new SdrUndoInsertObj( *pObj ) );
@@ -307,17 +307,17 @@ void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         pDoc->GetChartListenerCollection()->removeByName(aName);
-        ScDrawLayer* pModel = pDoc->GetDrawLayer();     // ist nicht 0
-        SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    // ist nicht 0
+        ScDrawLayer* pModel = pDoc->GetDrawLayer();     
+        SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));    
 
         pModel->AddUndo( new SdrUndoDelObj( *pObj ) );
         pPage->RemoveObject( pObj->GetOrdNum() );
 
-        //! Notify etc.???
+        
     }
 }
 
-// XEnumerationAccess
+
 
 uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration()
                                                     throw(uno::RuntimeException)
@@ -326,7 +326,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration(
     return new ScIndexEnumeration(this, OUString("com.sun.star.table.TableChartsEnumeration"));
 }
 
-// XIndexAccess
+
 
 sal_Int32 SAL_CALL ScChartsObj::getCount() throw(uno::RuntimeException)
 {
@@ -443,7 +443,7 @@ sal_Bool SAL_CALL ScChartsObj::hasByName( const OUString& aName )
     return ( lcl_FindChartObj( pDocShell, nTab, aName ) != NULL );
 }
 
-//------------------------------------------------------------------------
+
 
 ScChartObj::ScChartObj(ScDocShell* pDocSh, SCTAB nT, const OUString& rN)
     :ScChartObj_Base( m_aMutex )
@@ -468,12 +468,12 @@ ScChartObj::~ScChartObj()
 
 void ScChartObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! Referenz-Update
+    
 
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // ungueltig geworden
+        pDocShell = NULL;       
     }
 }
 
@@ -553,7 +553,7 @@ void ScChartObj::Update_Impl( const ScRangeListRef& rRanges, bool bColHeaders, b
     }
 }
 
-// ::comphelper::OPropertySetHelper
+
 
 ::cppu::IPropertyArrayHelper& ScChartObj::getInfoHelper()
 {
@@ -634,7 +634,7 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
     }
 }
 
-// ::comphelper::OPropertyArrayUsageHelper
+
 
 ::cppu::IPropertyArrayHelper* ScChartObj::createArrayHelper() const
 {
@@ -643,22 +643,22 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-// XInterface
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( ScChartObj, ScChartObj_Base, ScChartObj_PBase )
 
-// XTypeProvider
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ScChartObj, ScChartObj_Base, ScChartObj_PBase )
 
-// XComponent
+
 
 void ScChartObj::disposing()
 {
     ScChartObj_Base::disposing();
 }
 
-// XTableChart
+
 
 sal_Bool SAL_CALL ScChartObj::getHasColumnHeaders() throw(uno::RuntimeException)
 {
@@ -759,7 +759,7 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
         Update_Impl( xNewRanges, bColHeaders, bRowHeaders );
 }
 
-// XEmbeddedObjectSupplier
+
 
 uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject() throw(uno::RuntimeException)
 {
@@ -767,14 +767,14 @@ uno::Reference<lang::XComponent> SAL_CALL ScChartObj::getEmbeddedObject() throw(
     SdrOle2Obj* pObject = lcl_FindChartObj( pDocShell, nTab, aChartName );
     if ( pObject && svt::EmbeddedObjectRef::TryRunningState( pObject->GetObjRef() ) )
     {
-        //TODO/LATER: is it OK that something is returned for *all* objects, not only own objects?
+        
         return uno::Reference < lang::XComponent > ( pObject->GetObjRef()->getComponent(), uno::UNO_QUERY );
     }
 
     return NULL;
 }
 
-// XNamed
+
 
 OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException)
 {
@@ -785,17 +785,17 @@ OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException)
 void SAL_CALL ScChartObj::setName( const OUString& /* aName */ ) throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    throw uno::RuntimeException();      // name cannot be changed
+    throw uno::RuntimeException();      
 }
 
-// XPropertySet
+
 
 uno::Reference< beans::XPropertySetInfo > ScChartObj::getPropertySetInfo() throw (uno::RuntimeException)
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-//------------------------------------------------------------------------
+
 
 
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/menubarwrapper.hxx>
@@ -49,9 +49,9 @@ using namespace ::com::sun::star::ui;
 namespace framework
 {
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider
-//*****************************************************************************************************************
+
+
+
 DEFINE_XINTERFACE_11    (   MenuBarWrapper                                                    ,
                             UIConfigElementWrapperBase                                        ,
                             DIRECT_INTERFACE( ::com::sun::star::lang::XTypeProvider          ),
@@ -112,7 +112,7 @@ void SAL_CALL MenuBarWrapper::dispose() throw (::com::sun::star::uno::RuntimeExc
     m_bDisposed = true;
 }
 
-// XInitialization
+
 void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
 
@@ -129,7 +129,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
         Reference< XFrame > xFrame( m_xWeakFrame );
         if ( xFrame.is() && m_xConfigSource.is() )
         {
-            // Create VCL menubar which will be filled with settings data
+            
             MenuBar*        pVCLMenuBar = 0;
             VCLXMenuBar*    pAwtMenuBar = 0;
             {
@@ -154,7 +154,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
                 if ( m_xConfigData.is() )
                 {
-                    // Fill menubar with container contents
+                    
                     sal_uInt16 nId = 1;
                     MenuBarManager::FillMenuWithConfiguration( nId, pVCLMenuBar, aModuleIdentifier, m_xConfigData, xTrans );
                 }
@@ -176,10 +176,10 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 
             if ( !bMenuOnly )
             {
-                // Initialize menubar manager with our vcl menu bar. There are some situations where we only want to get the menu without any
-                // interaction which is done by the menu bar manager. This must be requested by a special property called "MenuOnly". Be careful
-                // a menu bar created with this property is not fully supported. It must be attached to a real menu bar manager to have full
-                // support. This feature is currently used for "Inplace editing"!
+                
+                
+                
+                
                 Reference< XDispatchProvider > xDispatchProvider;
 
                 MenuBarManager* pMenuBarManager = new MenuBarManager( m_xContext,
@@ -194,15 +194,15 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 m_xMenuBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
             }
 
-            // Initialize toolkit menu bar implementation to have awt::XMenuBar for data exchange.
-            // Don't use this toolkit menu bar or one of its functions. It is only used as a data container!
+            
+            
             pAwtMenuBar = new VCLXMenuBar( pVCLMenuBar );
             m_xMenuBar = Reference< XMenuBar >( static_cast< OWeakObject *>( pAwtMenuBar ), UNO_QUERY );
         }
     }
 }
 
-// XUIElementSettings
+
 void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
@@ -228,13 +228,13 @@ void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException )
         }
         else if ( !m_bPersistent )
         {
-            // Transient menubar: do nothing
+            
         }
     }
 }
 void MenuBarWrapper::impl_fillNewData()
 {
-    // Transient menubar => Fill menubar with new data
+    
     MenuBarManager* pMenuBarManager = static_cast< MenuBarManager *>( m_xMenuBarManager.get() );
 
     if ( pMenuBarManager )
@@ -254,7 +254,7 @@ void MenuBarWrapper::fillPopupControllerCache()
     }
 }
 
-// XElementAccess
+
 Type SAL_CALL MenuBarWrapper::getElementType()
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -273,7 +273,7 @@ throw (::com::sun::star::uno::RuntimeException)
     return ( !m_aPopupControllerCache.empty() );
 }
 
-// XNameAccess
+
 Any SAL_CALL MenuBarWrapper::getByName(
     const OUString& aName )
 throw ( container::NoSuchElementException,
@@ -339,7 +339,7 @@ throw (::com::sun::star::uno::RuntimeException)
         return sal_False;
 }
 
-// XUIElement
+
 Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( RuntimeException )
 {
     if ( m_bDisposed )
@@ -348,6 +348,6 @@ Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( Runt
     return Reference< XInterface >( m_xMenuBarManager, UNO_QUERY );
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

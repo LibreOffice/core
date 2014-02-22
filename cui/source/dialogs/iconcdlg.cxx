@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -35,7 +35,7 @@
 
 using ::std::vector;
 
-// some stuff for easier changes for SvtViewOptions
+
 static const sal_Char*      pViewOptDataName = "dialog data";
 #define VIEWOPT_DATANAME    OUString::createFromAscii( pViewOptDataName )
 
@@ -54,11 +54,11 @@ static inline OUString GetViewOptUserItem( const SvtViewOptions& rOpt )
 }
 
 
-//#####################################################################
+
 //
-// Class IconChoicePage
+
 //
-//#####################################################################
+
 
 /**********************************************************************
 |
@@ -76,7 +76,7 @@ IconChoicePage::IconChoicePage( Window *pParent, const ResId &rResId,
     SetStyle ( GetStyle()  | WB_DIALOGCONTROL | WB_HIDE );
 }
 
-// -----------------------------------------------------------------------
+
 
 IconChoicePage::~IconChoicePage()
 {
@@ -92,7 +92,7 @@ void IconChoicePage::ActivatePage( const SfxItemSet& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 int IconChoicePage::DeactivatePage( SfxItemSet* )
 {
@@ -109,14 +109,14 @@ void IconChoicePage::FillUserData()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IconChoicePage::IsReadOnly() const
 {
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IconChoicePage::QueryClose()
 {
@@ -152,7 +152,7 @@ void IconChoicePage::ImplInitSettings()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoicePage::StateChanged( StateChangedType nType )
 {
@@ -165,7 +165,7 @@ void IconChoicePage::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -179,11 +179,11 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-//#####################################################################
+
 //
-// Class IconChoiceDialog
+
 //
-//#####################################################################
+
 
 /**********************************************************************
 |
@@ -226,14 +226,14 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     maIconCtrl.SetSelectionMode( SINGLE_SELECTION );
     maIconCtrl.SetHelpId( HID_ICCDIALOG_CHOICECTRL );
 
-    // ItemSet
+    
     if ( pSet )
     {
         pExampleSet = new SfxItemSet( *pSet );
         pOutSet = new SfxItemSet( *pSet->GetPool(), pSet->GetRanges() );
     }
 
-    // Buttons
+    
     aOKBtn.SetClickHdl   ( LINK( this, IconChoiceDialog, OkHdl ) );
     aOKBtn.SetHelpId( HID_ICCDIALOG_OK_BTN );
     aCancelBtn.SetHelpId( HID_ICCDIALOG_CANCEL_BTN );
@@ -248,12 +248,12 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     SetPosSizeCtrls ( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 IconChoiceDialog ::~IconChoiceDialog ()
 {
-    // save configuration at INI-Manager
-    // and remove pages
+    
+    
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, OUString::number(nResId) );
     aTabDlgOpt.SetWindowState(OStringToOUString(GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)), RTL_TEXTENCODING_ASCII_US));
     aTabDlgOpt.SetPageID( mnCurrentPageId );
@@ -280,7 +280,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
         delete pData;
     }
 
-    // remove Userdata from Icons
+    
     for ( sal_uLong i=0; i < maIconCtrl.GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
@@ -396,7 +396,7 @@ void IconChoiceDialog::ShowPageImpl ( IconChoicePageData* pData )
         pData->pPage->Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
 {
@@ -404,7 +404,7 @@ void IconChoiceDialog::HidePageImpl ( IconChoicePageData* pData )
         pData->pPage->Hide();
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::ShowPage( sal_uInt16 nId )
 {
@@ -414,7 +414,7 @@ void IconChoiceDialog::ShowPage( sal_uInt16 nId )
     if(bInvalidate)
         Invalidate();
 
-    // IA2 CWS. MT: I guess we want the event now, and not in Paint()?
+    
     IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
     if(pData)
         ShowPageImpl ( pData );
@@ -444,17 +444,17 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
     const Point aCtrlOffset ( LogicToPixel( Point( CTRLS_OFFSET, CTRLS_OFFSET ), MAP_APPFONT ) );
     Size aOutSize ( GetOutputSizePixel() );
 
-    ////////////////////////////////////////
-    // Button-Defaults
+    
+    
     //
     Size aDefaultButtonSize = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
 
-    // Reset-Button
+    
     Size aResetButtonSize ( bInit ? aDefaultButtonSize :
                                     aResetBtn.GetSizePixel () );
 
-    ////////////////////////////////////////
-    // IconChoiceCtrl resizen & positionieren
+    
+    
     //
     SvtTabAppearanceCfg aCfg;
     const long nDefaultWidth = (aCfg.GetScaleFactor() * ICONCTRL_WIDTH_PIXEL) / 100;
@@ -492,8 +492,8 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
     maIconCtrl.SetPosSizePixel ( aIconCtrlPos, aNewIconCtrlSize );
     maIconCtrl.ArrangeIcons();
 
-    ////////////////////////////////////////
-    // resize & position the pages
+    
+    
     //
     for ( size_t i = 0; i < maPageList.size(); i++ )
     {
@@ -537,8 +537,8 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
             pData->pPage->SetPosSizePixel ( aNewPagePos, aNewPageSize );
     }
 
-    ////////////////////////////////////////
-    // position the buttons
+    
+    
     //
     sal_uLong nXOffset=0;
     if ( meChoicePos == PosRight )
@@ -549,7 +549,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
                                        aOutSize.Height()-aResetButtonSize.Height()-
                                        aCtrlOffset.X() ),
                                aResetButtonSize );
-    // Help-Button
+    
     Size aHelpButtonSize ( bInit ? aDefaultButtonSize :
                                    aHelpBtn.GetSizePixel () );
     aHelpBtn.SetPosSizePixel ( Point( aOutSize.Width()-aResetButtonSize.Width()-
@@ -558,7 +558,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
                                       aOutSize.Height()-aHelpButtonSize.Height()-
                                       aCtrlOffset.X() ),
                                aHelpButtonSize );
-    // Cancel-Button
+    
     Size aCancelButtonSize ( bInit ? aDefaultButtonSize :
                                      aCancelBtn.GetSizePixel () );
     aCancelBtn.SetPosSizePixel ( Point( aOutSize.Width()-aCancelButtonSize.Width()-
@@ -567,7 +567,7 @@ void IconChoiceDialog::SetPosSizeCtrls ( sal_Bool bInit )
                                         aOutSize.Height()-aCancelButtonSize.Height()-
                                         aCtrlOffset.X() ),
                                 aCancelButtonSize );
-    // OK-Button
+    
     Size aOKButtonSize ( bInit ? aDefaultButtonSize : aOKBtn.GetSizePixel () );
     aOKBtn.SetPosSizePixel ( Point( aOutSize.Width()-aOKButtonSize.Width()-
                                     aCancelButtonSize.Width()-aResetButtonSize.Width()-
@@ -680,7 +680,7 @@ IMPL_LINK_NOARG(IconChoiceDialog, OkHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
 {
@@ -691,7 +691,7 @@ IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
 
     if ( pData->bOnDemand )
     {
-        // CSet on AIS has problems here, therefore separated
+        
         const SfxItemSet* _pSet = &( pData->pPage->GetItemSet() );
         pData->pPage->Reset( *(SfxItemSet*)_pSet );
     }
@@ -702,7 +702,7 @@ IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(IconChoiceDialog, CancelHdl)
 {
@@ -774,7 +774,7 @@ void IconChoiceDialog::ActivatePageImpl ()
 
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IconChoiceDialog::DeActivatePageImpl ()
 {
@@ -805,7 +805,7 @@ sal_Bool IconChoiceDialog::DeActivatePageImpl ()
         }
         else
         {
-            if ( pPage->HasExchangeSupport() ) //!!!
+            if ( pPage->HasExchangeSupport() ) 
             {
                 if ( !pExampleSet )
                 {
@@ -823,7 +823,7 @@ sal_Bool IconChoiceDialog::DeActivatePageImpl ()
         {
             pSet = GetRefreshedSet();
             DBG_ASSERT( pSet, "GetRefreshedSet() liefert NULL" );
-            // flag all pages to be newly initialized
+            
             for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
             {
                 IconChoicePageData* pObj = maPageList[ i ];
@@ -841,7 +841,7 @@ sal_Bool IconChoiceDialog::DeActivatePageImpl ()
         return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::ResetPageImpl ()
 {
@@ -851,7 +851,7 @@ void IconChoiceDialog::ResetPageImpl ()
 
     if ( pData->bOnDemand )
     {
-        // CSet on AIS has problems here, therefore separated
+        
         const SfxItemSet* _pSet = &pData->pPage->GetItemSet();
         pData->pPage->Reset( *(SfxItemSet*)_pSet );
     }
@@ -893,7 +893,7 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
         }
     }
 
-    // remove double Id's
+    
     {
         nCount = aUS.size();
         for ( size_t i = 0; i < nCount; ++i )
@@ -912,7 +912,7 @@ const sal_uInt16* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
     return pRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
 {
@@ -927,14 +927,14 @@ void IconChoiceDialog::SetInputSet( const SfxItemSet* pInSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::PageCreated( sal_uInt16 /*nId*/, IconChoicePage& /*rPage*/ )
 {
-    // not interested in
+    
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxItemSet* IconChoiceDialog::CreateInputItemSet( sal_uInt16 )
 {
@@ -959,7 +959,7 @@ short IconChoiceDialog::Execute()
     return Dialog::Execute();
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::Start( sal_Bool bShow )
 {
@@ -974,7 +974,7 @@ void IconChoiceDialog::Start( sal_Bool bShow )
 
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool IconChoiceDialog::QueryClose()
 {
@@ -991,7 +991,7 @@ sal_Bool IconChoiceDialog::QueryClose()
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::Start_Impl()
 {
@@ -1002,15 +1002,15 @@ void IconChoiceDialog::Start_Impl()
     else
         nActPage = mnCurrentPageId;
 
-    // configuration existing?
+    
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, OUString::number(nResId) );
 
     if ( aTabDlgOpt.Exists() )
     {
-        // possibly position from config
+        
         SetWindowState(OUStringToOString(aTabDlgOpt.GetWindowState().getStr(), RTL_TEXTENCODING_ASCII_US));
 
-        // initial TabPage from program/help/config
+        
         nActPage = (sal_uInt16)aTabDlgOpt.GetPageID();
 
         if ( USHRT_MAX != mnCurrentPageId )
@@ -1029,7 +1029,7 @@ void IconChoiceDialog::Start_Impl()
     ActivatePageImpl();
 }
 
-// -----------------------------------------------------------------------
+
 
 const SfxItemSet* IconChoiceDialog::GetRefreshedSet()
 {
@@ -1097,7 +1097,7 @@ sal_Bool IconChoiceDialog::OK_Impl()
     return bEnd;
 }
 
-// -----------------------------------------------------------------------
+
 
 short IconChoiceDialog::Ok()
 {
@@ -1106,7 +1106,7 @@ short IconChoiceDialog::Ok()
     if ( !pOutSet )
     {
         if ( !pExampleSet && pSet )
-            pOutSet = pSet->Clone( sal_False ); // without items
+            pOutSet = pSet->Clone( sal_False ); 
         else if ( pExampleSet )
             pOutSet = new SfxItemSet( *pExampleSet );
     }
@@ -1146,11 +1146,11 @@ short IconChoiceDialog::Ok()
     return _bModified ? RET_OK : RET_CANCEL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void IconChoiceDialog::FocusOnIcon( sal_uInt16 nId )
 {
-    // set focus to icon for the current visible page
+    
     for ( sal_uInt16 i=0; i<maIconCtrl.GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );

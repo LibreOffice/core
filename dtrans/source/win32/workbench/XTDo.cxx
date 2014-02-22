@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -34,19 +34,19 @@
 #include <memory>
 #include <tchar.h>
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+
+
+
 
 using namespace ::std;
 
-//============================================================================
-// OTWrapperDataObject
-//============================================================================
 
-//------------------------------------------------------------------------
-// ctor
-//------------------------------------------------------------------------
+
+
+
+
+
+
 /*
     in the constructor we enumerate all formats offered by the transferable
     and convert the formats into formatetc structures
@@ -64,9 +64,9 @@ CXTDataObject::CXTDataObject( ) :
 
 }
 
-//------------------------------------------------------------------------
-// IUnknown->QueryInterface
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
@@ -89,24 +89,24 @@ STDMETHODIMP CXTDataObject::QueryInterface( REFIID iid, LPVOID* ppvObject )
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IUnknown->AddRef
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP_(ULONG) CXTDataObject::AddRef( )
 {
     return static_cast< ULONG >( InterlockedIncrement( &m_nRefCnt ) );
 }
 
-//------------------------------------------------------------------------
-// IUnknown->Release
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP_(ULONG) CXTDataObject::Release( )
 {
-    // we need a helper variable because it's
-    // not allowed to access a member variable
-    // after an object is destroyed
+    
+    
+    
     ULONG nRefCnt = static_cast< ULONG >( InterlockedDecrement( &m_nRefCnt ) );
 
     if ( 0 == nRefCnt )
@@ -156,9 +156,9 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->EnumFormatEtc
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CXTDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
 {
@@ -179,72 +179,72 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc( DWORD dwDirection, IEnumFORMATETC** p
     return hr;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->QueryGetData
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CXTDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->GetDataHere
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CXTDataObject::GetDataHere( LPFORMATETC, LPSTGMEDIUM )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->GetCanonicalFormatEtc
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CXTDataObject::GetCanonicalFormatEtc( LPFORMATETC, LPFORMATETC )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->SetData
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CXTDataObject::SetData( LPFORMATETC, LPSTGMEDIUM, BOOL )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->DAdvise
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CXTDataObject::DAdvise( LPFORMATETC, DWORD, LPADVISESINK, DWORD * )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->DUnadvise
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CXTDataObject::DUnadvise( DWORD )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
-// IDataObject->EnumDAdvise
-//------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CXTDataObject::EnumDAdvise( LPENUMSTATDATA * )
 {
     return E_NOTIMPL;
 }
 
-//------------------------------------------------------------------------
-// for our convenience
-//------------------------------------------------------------------------
+
+
+
 
 CXTDataObject::operator IDataObject*( )
 {
@@ -252,13 +252,13 @@ CXTDataObject::operator IDataObject*( )
 }
 
 
-//============================================================================
-// CEnumFormatEtc
-//============================================================================
 
-//----------------------------------------------------------------------------
-// ctor
-//----------------------------------------------------------------------------
+
+
+
+
+
+
 
 CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN pUnkDataObj ) :
     m_nRefCnt( 0 ),
@@ -267,9 +267,9 @@ CEnumFormatEtc::CEnumFormatEtc( LPUNKNOWN pUnkDataObj ) :
 {
 }
 
-//----------------------------------------------------------------------------
-// IUnknown->QueryInterface
-//----------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
 {
@@ -290,29 +290,29 @@ STDMETHODIMP CEnumFormatEtc::QueryInterface( REFIID iid, LPVOID* ppvObject )
     return hr;
 }
 
-//----------------------------------------------------------------------------
-// IUnknown->AddRef
-//----------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::AddRef( )
 {
-    // keep the dataobject alive
+    
     m_pUnkDataObj->AddRef( );
     return InterlockedIncrement( &m_nRefCnt );
 }
 
-//----------------------------------------------------------------------------
-// IUnknown->Release
-//----------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
 {
-    // release the outer dataobject
+    
     m_pUnkDataObj->Release( );
 
-    // we need a helper variable because it's
-    // not allowed to access a member variable
-    // after an object is destroyed
+    
+    
+    
     ULONG nRefCnt = InterlockedDecrement( &m_nRefCnt );
     if ( 0 == nRefCnt )
         delete this;
@@ -320,9 +320,9 @@ STDMETHODIMP_(ULONG) CEnumFormatEtc::Release( )
     return nRefCnt;
 }
 
-//----------------------------------------------------------------------------
-// IEnumFORMATETC->Next
-//----------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFetched )
 {
@@ -358,9 +358,9 @@ STDMETHODIMP CEnumFormatEtc::Next( ULONG celt, LPFORMATETC rgelt, ULONG* pceltFe
     return hr;
 }
 
-//----------------------------------------------------------------------------
-// IEnumFORMATETC->Skip
-//----------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
 {
@@ -377,9 +377,9 @@ STDMETHODIMP CEnumFormatEtc::Skip( ULONG celt )
     return hr;
 }
 
-//----------------------------------------------------------------------------
-// IEnumFORMATETC->Reset
-//----------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CEnumFormatEtc::Reset( )
 {
@@ -387,9 +387,9 @@ STDMETHODIMP CEnumFormatEtc::Reset( )
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-// IEnumFORMATETC->Clone
-//----------------------------------------------------------------------------
+
+
+
 
 STDMETHODIMP CEnumFormatEtc::Clone( IEnumFORMATETC** ppenum )
 {

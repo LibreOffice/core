@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -24,7 +24,7 @@
 
 #include <tools/rc.h>
 
-// declare system types in sysdata.hxx
+
 #include <svsys.h>
 
 #include <vcl/window.hxx>
@@ -52,7 +52,7 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
                        sal_uInt16 nEvent, const void* /* pEvent */ )
@@ -64,9 +64,9 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
     switch ( nEvent )
     {
         case SALOBJ_EVENT_GETFOCUS:
-            // Focus holen und zwar so, das alle Handler gerufen
-            // werden, als ob dieses Fenster den Focus bekommt,
-            // ohne das der Frame den Focus wieder klaut
+            
+            
+            
             pWindow->ImplGetFrameData()->mbSysObjFocus = true;
             pWindow->ImplGetFrameData()->mbInSysObjToTopHdl = true;
             pWindow->ToTop( TOTOP_NOGRABFOCUS );
@@ -81,9 +81,9 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
             break;
 
         case SALOBJ_EVENT_LOSEFOCUS:
-            // Hintenrum einen LoseFocus ausloesen, das der Status
-            // der Fenster dem entsprechenden Activate-Status
-            // entspricht
+            
+            
+            
             pWindow->ImplGetFrameData()->mbSysObjFocus = false;
             if ( !pWindow->ImplGetFrameData()->mnFocusId )
             {
@@ -110,7 +110,7 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
     return nRet;
 }
 
-// =======================================================================
+
 
 void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow )
 {
@@ -118,7 +118,7 @@ void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, Syste
 
     Window::ImplInit( pParent, nStyle, NULL );
 
-    // Wenn es ein richtiges SysChild ist, dann painten wir auch nicht
+    
     if ( GetSystemData() )
     {
         mpWindowImpl->mpSysObj->SetCallback( this, ImplSysChildProc );
@@ -127,7 +127,7 @@ void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, Syste
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
@@ -135,7 +135,7 @@ SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
     ImplInitSysChild( pParent, nStyle, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, bool bShow ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
@@ -143,7 +143,7 @@ SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWin
     ImplInitSysChild( pParent, nStyle, pData, bShow );
 }
 
-// -----------------------------------------------------------------------
+
 
 SystemChildWindow::~SystemChildWindow()
 {
@@ -155,7 +155,7 @@ SystemChildWindow::~SystemChildWindow()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 const SystemEnvData* SystemChildWindow::GetSystemData() const
 {
@@ -165,7 +165,7 @@ const SystemEnvData* SystemChildWindow::GetSystemData() const
         return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemChildWindow::EnableEraseBackground( bool bEnable )
 {
@@ -173,7 +173,7 @@ void SystemChildWindow::EnableEraseBackground( bool bEnable )
         mpWindowImpl->mpSysObj->EnableEraseBackground( bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemChildWindow::ImplTestJavaException( void* pEnv )
 {
@@ -182,10 +182,10 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
     jthrowable  jtThrowable = pJavaEnv->ExceptionOccurred();
 
     if( jtThrowable )
-    { // is it a java exception ?
+    { 
 #if OSL_DEBUG_LEVEL > 1
         pJavaEnv->ExceptionDescribe();
-#endif // OSL_DEBUG_LEVEL > 1
+#endif 
         pJavaEnv->ExceptionClear();
 
         jclass          jcThrowable = pJavaEnv->FindClass("java/lang/Throwable");
@@ -204,7 +204,7 @@ void SystemChildWindow::ImplTestJavaException( void* pEnv )
     }
 #else
     (void)pEnv;
-#endif // HAVE_FEATURE_JAVA
+#endif 
 }
 
 void SystemChildWindow::SetForwardKey( bool bEnable )
@@ -213,7 +213,7 @@ void SystemChildWindow::SetForwardKey( bool bEnable )
         mpWindowImpl->mpSysObj->SetForwardKey( bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
 {
@@ -223,12 +223,12 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
 #if defined WNT
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->hWnd );
 #elif defined MACOSX
-    // FIXME: this is wrong
+    
     nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->mpNSView );
 #elif defined ANDROID
-    // Nothing
+    
 #elif defined IOS
-    // Nothing
+    
 #elif defined UNX
     if( !bUseJava )
     {
@@ -314,7 +314,7 @@ sal_IntPtr SystemChildWindow::GetParentWindowHandle( bool bUseJava )
             }
         }
     }
-#endif // HAVE_FEATURE_JAVA
+#endif 
 #endif
 
     return nRet;

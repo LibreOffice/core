@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,13 +38,13 @@ using namespace com::sun::star::uno;
 namespace ucbhelper
 {
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// struct CommandEnvironment_Impl.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 struct CommandEnvironment_Impl
 {
@@ -58,13 +58,13 @@ struct CommandEnvironment_Impl
       m_xProgressHandler( rxProgressHandler ) {}
 };
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// CommandEnvironment Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 CommandEnvironment::CommandEnvironment(
         const Reference< XInteractionHandler >& rxInteractionHandler,
@@ -74,40 +74,40 @@ CommandEnvironment::CommandEnvironment(
                                            rxProgressHandler );
 }
 
-//=========================================================================
-// virtual
+
+
 CommandEnvironment::~CommandEnvironment()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
+
 //
-// XInterface methods
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_2( CommandEnvironment,
                    XTypeProvider,
                    XCommandEnvironment );
 
-//=========================================================================
+
 //
-// XTypeProvider methods
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_2( CommandEnvironment,
                       XTypeProvider,
                       XCommandEnvironment );
 
-//=========================================================================
-//
-// XCommandEnvironemnt methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 Reference< XInteractionHandler > SAL_CALL
 CommandEnvironment::getInteractionHandler()
     throw ( RuntimeException )
@@ -115,8 +115,8 @@ CommandEnvironment::getInteractionHandler()
     return m_pImpl->m_xInteractionHandler;
 }
 
-//=========================================================================
-// virtual
+
+
 Reference< XProgressHandler > SAL_CALL
 CommandEnvironment::getProgressHandler()
     throw ( RuntimeException )

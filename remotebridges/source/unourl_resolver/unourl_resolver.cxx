@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "rtl/malformeduriexception.hxx"
@@ -70,12 +70,12 @@ public:
     ResolverImpl( const Reference< XComponentContext > & xSMgr );
     virtual ~ResolverImpl();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
-    // XUnoUrlResolver
+    
     virtual Reference< XInterface > SAL_CALL resolve( const OUString & rUnoUrl )
         throw (NoConnectException, ConnectionSetupException, RuntimeException);
 };
@@ -87,7 +87,7 @@ ResolverImpl::ResolverImpl( const Reference< XComponentContext > & xCtx )
 
 ResolverImpl::~ResolverImpl() {}
 
-// XServiceInfo
+
 OUString ResolverImpl::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -106,7 +106,7 @@ Sequence< OUString > ResolverImpl::getSupportedServiceNames()
     return resolver_getSupportedServiceNames();
 }
 
-// XUnoUrlResolver
+
 Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
     throw (NoConnectException, ConnectionSetupException, RuntimeException)
 {
@@ -136,10 +136,10 @@ Reference< XInterface > ResolverImpl::resolve( const OUString & rUnoUrl )
 
     Reference< XConnection > xConnection( xConnector->connect( aConnectDescr ) );
 
-    // As soon as singletons are ready, switch to singleton !
+    
     Reference< XBridgeFactory2 > xBridgeFactory( BridgeFactory::create(_xCtx) );
 
-    // bridge
+    
     Reference< XBridge > xBridge( xBridgeFactory->createBridge(
         OUString(), aProtocolDescr,
         xConnection, Reference< XInstanceProvider >() ) );

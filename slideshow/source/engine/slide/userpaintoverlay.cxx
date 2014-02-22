@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,9 +70,9 @@ namespace slideshow
                 maLastMouseDownPos(),
                 mbIsLastPointValid( false ),
                 mbIsLastMouseDownPosValid( false ),
-                //handle the "remove all ink from slide" mode of erasing
+                
                 mbIsEraseAllModeActivated( false ),
-                //handle the "remove stroke by stroke" mode of erasing
+                
                 mbIsEraseModeActivated( false ),
                 mrSlide(rSlide),
                 mnSize(100),
@@ -91,7 +91,7 @@ namespace slideshow
                 maViews.clear();
             }
 
-            // ViewEventHandler methods
+            
             virtual void viewAdded( const UnoViewSharedPtr& rView )
             {
                 maViews.push_back( rView );
@@ -106,14 +106,14 @@ namespace slideshow
 
             virtual void viewChanged( const UnoViewSharedPtr& /*rView*/ )
             {
-                // TODO(F2): for persistent drawings, need to store
-                // polygon and repaint here.
+                
+                
             }
 
             virtual void viewsChanged()
             {
-                // TODO(F2): for persistent drawings, need to store
-                // polygon and repaint here.
+                
+                
             }
 
             bool colorChanged( RGBColor const& rUserColor )
@@ -134,32 +134,32 @@ namespace slideshow
 
             void repaintWithoutPolygons()
             {
-                    // must get access to the instance to erase all polygon
+                    
                     for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
                         aIter!=aEnd;
                         ++aIter )
                     {
-                        // fully clear view content to background color
-                        //(*aIter)->getCanvas()->clear();
+                        
+                        
 
-                        //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
+                        
                         SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
 
                         const ::basegfx::B2DHomMatrix   aViewTransform( (*aIter)->getTransformation() );
                         const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
 
-                        // setup a canvas with device coordinate space, the slide
-                        // bitmap already has the correct dimension.
+                        
+                        
                         ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
 
                         pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
-                        // render at given output position
+                        
                         pBitmap->move( aOutPosPixel );
 
-                        // clear clip (might have been changed, e.g. from comb
-                        // transition)
+                        
+                        
                         pBitmap->clip( ::basegfx::B2DPolyPolygon() );
                         pBitmap->draw( pDevicePixelCanvas );
 
@@ -170,11 +170,11 @@ namespace slideshow
             bool eraseAllInkChanged( bool const& rEraseAllInk )
             {
                 this->mbIsEraseAllModeActivated= rEraseAllInk;
-                // if the erase all mode is activated it will remove all ink from slide,
-                // therefor destroy all the polygons stored
+                
+                
                 if(mbIsEraseAllModeActivated)
                 {
-                    // The Erase Mode should be desactivated
+                    
                     mbIsEraseModeActivated = false;
                     repaintWithoutPolygons();
                     maPolygons.clear();
@@ -185,9 +185,9 @@ namespace slideshow
 
             bool eraseInkWidthChanged( sal_Int32 rEraseInkSize )
             {
-                // Change the size
+                
                 this->mnSize=rEraseInkSize;
-                // Changed to mode Erase
+                
                 this->mbIsEraseModeActivated = true;
                 return true;
             }
@@ -216,7 +216,7 @@ namespace slideshow
                 return true;
             }
 
-            //Draw all registered polygons.
+            
             void drawPolygons()
             {
                 for( PolyPolygonVector::iterator aIter=maPolygons.begin(), aEnd=maPolygons.end();
@@ -225,17 +225,17 @@ namespace slideshow
                 {
                     (*aIter)->draw();
                 }
-                // screen update necessary to show painting
+                
                 mrScreenUpdater.notifyUpdate();
             }
 
-            //Retrieve all registered polygons.
+            
             PolyPolygonVector getPolygons()
             {
                 return maPolygons;
             }
 
-            // MouseEventHandler methods
+            
             virtual bool handleMousePressed( const awt::MouseEvent& e )
             {
                 if( !mbActive )
@@ -254,8 +254,8 @@ namespace slideshow
                 maLastMouseDownPos.setY( e.Y );
                 mbIsLastMouseDownPosValid = true;
 
-                // eat mouse click (though we don't process it
-                // _directly_, it enables the drag mode
+                
+                
                 return true;
             }
 
@@ -273,12 +273,12 @@ namespace slideshow
                 if (e.Buttons != awt::MouseButton::LEFT)
                     return false;
 
-                // check, whether up- and down press are on exactly
-                // the same pixel. If that's the case, ignore the
-                // click, and pass on the event to low-prio
-                // handlers. This effectively permits effect
-                // advancements via clicks also when user paint is
-                // enabled.
+                
+                
+                
+                
+                
+                
                 if( mbIsLastMouseDownPosValid &&
                     ::basegfx::B2DPoint( e.X,
                                          e.Y ) == maLastMouseDownPos )
@@ -287,12 +287,12 @@ namespace slideshow
                     return false;
                 }
 
-                // invalidate, next downpress will have to start a new
-                // polygon.
+                
+                
                 mbIsLastPointValid = false;
 
-                // eat mouse click (though we don't process it
-                // _directly_, it enables the drag mode
+                
+                
                 return true;
             }
 
@@ -332,8 +332,8 @@ namespace slideshow
 
                 if(mbIsEraseModeActivated)
                 {
-                    //define the last point as an object
-                    //we suppose that there's no way this point could be valid
+                    
+                    
                     ::basegfx::B2DPolygon aPoly;
 
                     maLastPoint.setX( e.X-mnSize );
@@ -358,35 +358,35 @@ namespace slideshow
 
                     aPoly.append( maLastPoint );
 
-                    //now we have defined a Polygon that is closed
+                    
 
-                    //The point is to redraw the LastPoint the way it was originally on the bitmap,
-                    //of the slide
+                    
+                    
             for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
                         aIter!=aEnd;
                         ++aIter )
                     {
 
-                        //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
+                        
                         SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );
                         ::cppcanvas::CanvasSharedPtr pCanvas( (*aIter)->getCanvas() );
 
                         ::basegfx::B2DHomMatrix     aViewTransform( (*aIter)->getTransformation() );
                         const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
 
-                        // setup a canvas with device coordinate space, the slide
-                        // bitmap already has the correct dimension.
+                        
+                        
                         ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
 
                         pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
-                        // render at given output position
+                        
                         pBitmap->move( aOutPosPixel );
 
                         ::basegfx::B2DPolyPolygon aPolyPoly=::basegfx::B2DPolyPolygon(aPoly);
                         aViewTransform.translate(-aOutPosPixel.getX(), -aOutPosPixel.getY());
                         aPolyPoly.transform(aViewTransform);
-                        // set clip so that we just redraw a part of the canvas
+                        
                         pBitmap->clip(aPolyPoly);
                         pBitmap->draw( pDevicePixelCanvas );
 
@@ -412,7 +412,7 @@ namespace slideshow
 
                         aPoly.append( maLastPoint );
 
-                        // paint to all views
+                        
                         for( UnoViewVector::iterator aIter=maViews.begin(), aEnd=maViews.end();
                              aIter!=aEnd;
                              ++aIter )
@@ -430,18 +430,18 @@ namespace slideshow
                             }
                         }
 
-                        // screen update necessary to show painting
+                        
                         mrScreenUpdater.notifyUpdate();
                     }
                 }
-                // mouse events captured
+                
                 return true;
             }
 
             virtual bool handleMouseMoved( const awt::MouseEvent& /*e*/ )
             {
-                // not used here
-                return false; // did not handle the event
+                
+                return false; 
             }
 
 
@@ -464,7 +464,7 @@ namespace slideshow
             basegfx::B2DPoint       maLastMouseDownPos;
             bool                    mbIsLastPointValid;
             bool                    mbIsLastMouseDownPosValid;
-            // added bool for erasing purpose :
+            
             bool                    mbIsEraseAllModeActivated;
             bool                    mbIsEraseModeActivated;
             Slide&                  mrSlide;
@@ -496,7 +496,7 @@ namespace slideshow
                                                 nStrokeWidth,
                                                 rContext.mrScreenUpdater,
                                                 rContext.mrViewContainer,
-                                                //adding a link to Slide
+                                                
                                                 dynamic_cast<Slide&>(rContext.mrCursorManager),
                                                 rPolygons, bActive )),
             mrMultiplexer( rContext.mrEventMultiplexer )

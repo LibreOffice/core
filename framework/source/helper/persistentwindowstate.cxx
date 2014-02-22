@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <pattern/window.hxx>
@@ -44,7 +44,7 @@
 namespace framework{
 
 
-//*****************************************************************************************************************
+
 PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase          (&Application::GetSolarMutex())
     , m_xContext              (xContext                     )
@@ -52,17 +52,17 @@ PersistentWindowState::PersistentWindowState(const css::uno::Reference< css::uno
 {
 }
 
-//*****************************************************************************************************************
+
 PersistentWindowState::~PersistentWindowState()
 {
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
-    // check arguments
+    
     css::uno::Reference< css::frame::XFrame > xFrame;
     if (lArguments.getLength() < 1)
         throw css::lang::IllegalArgumentException(
@@ -77,39 +77,39 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
-    // hold the frame as weak reference(!) so it can die everytimes :-)
+    
     m_xFrame = xFrame;
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // start listening
+    
     xFrame->addFrameActionListener(this);
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEvent)
     throw(css::uno::RuntimeException)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext >     xContext = m_xContext;
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // frame already gone ? We hold it weak only ...
+    
     if (!xFrame.is())
         return;
 
-    // no window -> no position and size available
+    
     css::uno::Reference< css::awt::XWindow > xWindow = xFrame->getContainerWindow();
     if (!xWindow.is())
         return;
 
-    // unknown module -> no configuration available!
+    
     OUString sModuleName = PersistentWindowState::implst_identifyModule(xContext, xFrame);
     if (sModuleName.isEmpty())
         return;
@@ -122,19 +122,19 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
                 {
                     OUString sWindowState = PersistentWindowState::implst_getWindowStateFromConfig(xContext, sModuleName);
                     PersistentWindowState::implst_setWindowStateOnWindow(xWindow,sWindowState);
-                    // SAFE -> ----------------------------------
+                    
                     WriteGuard aWriteLock(m_aLock);
                     m_bWindowStateAlreadySet = sal_True;
                     aWriteLock.unlock();
-                    // <- SAFE ----------------------------------
+                    
                 }
             }
             break;
 
         case css::frame::FrameAction_COMPONENT_REATTACHED :
             {
-                // nothing todo here, because its not allowed to change position and size
-                // of an alredy existing frame!
+                
+                
             }
             break;
 
@@ -149,14 +149,14 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     }
 }
 
-//*****************************************************************************************************************
+
 void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
     throw(css::uno::RuntimeException)
 {
-    // nothing todo here - because we hold the frame as weak reference only
+    
 }
 
-//*****************************************************************************************************************
+
 OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                              const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
@@ -177,7 +177,7 @@ OUString PersistentWindowState::implst_identifyModule(const css::uno::Reference<
     return sModuleName;
 }
 
-//*****************************************************************************************************************
+
 OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                        const OUString&                                    sModuleName)
 {
@@ -208,7 +208,7 @@ OUString PersistentWindowState::implst_getWindowStateFromConfig(const css::uno::
     return sWindowState;
 }
 
-//*****************************************************************************************************************
+
 void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                           const OUString&                                    sModuleName ,
                                                           const OUString&                                    sWindowState)
@@ -237,18 +237,18 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
         {}
 }
 
-//*****************************************************************************************************************
+
 OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::Reference< css::awt::XWindow >& xWindow)
 {
     OUString sWindowState;
 
     if (xWindow.is())
     {
-        // SOLAR SAFE -> ------------------------
+        
         SolarMutexGuard aSolarGuard;
 
         Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
-        // check for system window is necessary to guarantee correct pointer cast!
+        
         if (
             (pWindow                  ) &&
             (pWindow->IsSystemWindow())
@@ -260,14 +260,14 @@ OUString PersistentWindowState::implst_getWindowStateFromWindow(const css::uno::
                             ((SystemWindow*)pWindow)->GetWindowState(nMask),
                             RTL_TEXTENCODING_UTF8);
         }
-        // <- SOLAR SAFE ------------------------
+        
     }
 
     return sWindowState;
 }
 
 
-//*********************************************************************************************************
+
 void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
                                                           const OUString&                          sWindowState)
 {
@@ -277,14 +277,14 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
        )
         return;
 
-    // SOLAR SAFE -> ------------------------
+    
     SolarMutexGuard aSolarGuard;
 
     Window* pWindow = VCLUnoHelper::GetWindow(xWindow);
     if (!pWindow)
         return;
 
-    // check for system and work window - its necessary to guarantee correct pointer cast!
+    
     sal_Bool bSystemWindow = pWindow->IsSystemWindow();
     sal_Bool bWorkWindow   = (pWindow->GetType() == WINDOW_WORKWINDOW);
 
@@ -294,16 +294,16 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
     SystemWindow* pSystemWindow = (SystemWindow*)pWindow;
     WorkWindow*   pWorkWindow   = (WorkWindow*  )pWindow;
 
-    // dont save this special state!
+    
     if (pWorkWindow->IsMinimized())
         return;
 
     OUString sOldWindowState = OStringToOUString( pSystemWindow->GetWindowState(), RTL_TEXTENCODING_ASCII_US );
     if ( sOldWindowState != sWindowState )
         pSystemWindow->SetWindowState(OUStringToOString(sWindowState,RTL_TEXTENCODING_UTF8));
-    // <- SOLAR SAFE ------------------------
+    
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

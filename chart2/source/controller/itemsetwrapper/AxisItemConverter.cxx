@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AxisItemConverter.hxx"
@@ -37,11 +37,11 @@
 #include <com/sun/star/chart2/AxisOrientation.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 
-// for SfxBoolItem
+
 #include <svl/eitem.hxx>
-// for SvxDoubleItem
+
 #include <svx/chrtitem.hxx>
-// for SfxInt32Item
+
 #include <svl/intitem.hxx>
 #include <rtl/math.hxx>
 
@@ -70,7 +70,7 @@ namespace
 
     return aAxisPropertyMap;
 };
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -124,7 +124,7 @@ void AxisItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
                      ::comphelper::FillItemSetFunc( rOutItemSet ));
 
-    // own items
+    
     ItemConverter::FillItemSet( rOutItemSet );
 }
 
@@ -135,13 +135,13 @@ bool AxisItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
                      ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
 
-    // own items
+    
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
 const sal_uInt16 * AxisItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     return nAxisWhichPairs;
 }
 
@@ -226,7 +226,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
                 rOutItemSet.Put( SfxBoolItem( nWhichId, (AxisOrientation_REVERSE == rScale.Orientation) ));
             break;
 
-        // Increment
+        
         case SCHATTR_AXIS_AUTO_STEP_MAIN:
             if( bDateAxis )
                 rOutItemSet.Put( SfxBoolItem( nWhichId, !lcl_hasTimeIntervalValue(rTimeIncrement.MajorTimeInterval) ) );
@@ -263,7 +263,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
             }
             break;
 
-        // SubIncrement
+        
         case SCHATTR_AXIS_AUTO_STEP_HELP:
             if( bDateAxis )
                 rOutItemSet.Put( SfxBoolItem( nWhichId, !lcl_hasTimeIntervalValue(rTimeIncrement.MinorTimeInterval) ) );
@@ -363,8 +363,8 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SCHATTR_AXIS_CROSSING_MAIN_AXIS_NUMBERFORMAT:
         {
-            //read only item
-            //necessary tp display the crossing value with an appropriate format
+            
+            
 
             Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
                 m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
@@ -396,7 +396,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
         case SCHATTR_TEXT_DEGREES:
         {
-            // convert double to int (times 100)
+            
             double fVal = 0;
 
             if( GetPropertySet()->getPropertyValue( "TextRotation" ) >>= fVal )
@@ -453,7 +453,7 @@ void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutI
 
 bool lcl_isDateAxis( const SfxItemSet & rItemSet )
 {
-    sal_Int32 nAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( SCHATTR_AXISTYPE )).GetValue();//::com::sun::star::chart2::AxisType
+    sal_Int32 nAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( SCHATTR_AXISTYPE )).GetValue();
     return (chart2::AxisType::DATE == nAxisType);
 }
 
@@ -491,11 +491,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 aScale.Maximum.clear();
                 bSetScale = true;
             }
-            // else SCHATTR_AXIS_MAX must have some value
+            
             break;
 
         case SCHATTR_AXIS_MAX:
-            // only if auto if false
+            
             if( ! (static_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_MAX )).GetValue() ))
             {
@@ -516,11 +516,11 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 aScale.Minimum.clear();
                 bSetScale = true;
             }
-            // else SCHATTR_AXIS_MIN must have some value
+            
             break;
 
         case SCHATTR_AXIS_MIN:
-            // only if auto if false
+            
             if( ! (static_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_MIN )).GetValue() ))
             {
@@ -541,7 +541,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             if( (static_cast< const SfxBoolItem & >(
                      rItemSet.Get( nWhichId )).GetValue() ))
             {
-                // logarithm is true
+                
                 if( ! bWasLogarithm )
                 {
                     aScale.Scaling = AxisHelper::createLogarithmicScaling( 10.0 );
@@ -550,7 +550,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             }
             else
             {
-                // logarithm is false => linear scaling
+                
                 if( bWasLogarithm )
                 {
                     aScale.Scaling = AxisHelper::createLinearScaling();
@@ -573,7 +573,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
         }
         break;
 
-        // Increment
+        
         case SCHATTR_AXIS_AUTO_STEP_MAIN:
             if( lcl_isAutoMajor(rItemSet) )
             {
@@ -581,7 +581,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 aScale.TimeIncrement.MajorTimeInterval.clear();
                 bSetScale = true;
             }
-            // else SCHATTR_AXIS_STEP_MAIN must have some value
+            
             break;
 
         case SCHATTR_AXIS_MAIN_TIME_UNIT:
@@ -599,7 +599,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             break;
 
         case SCHATTR_AXIS_STEP_MAIN:
-            // only if auto if false
+            
             if( !lcl_isAutoMajor(rItemSet) )
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -623,7 +623,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             }
             break;
 
-        // SubIncrement
+        
         case SCHATTR_AXIS_AUTO_STEP_HELP:
             if( lcl_isAutoMinor(rItemSet) )
             {
@@ -639,7 +639,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                     bSetScale = true;
                 }
             }
-            // else SCHATTR_AXIS_STEP_MAIN must have some value
+            
             break;
 
         case SCHATTR_AXIS_HELP_TIME_UNIT:
@@ -657,7 +657,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             break;
 
         case SCHATTR_AXIS_STEP_HELP:
-            // only if auto is false
+            
             if( !lcl_isAutoMinor(rItemSet) )
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -690,7 +690,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
             }
             break;
         case SCHATTR_AXIS_TIME_RESOLUTION:
-            // only if auto is false
+            
             if( ! (static_cast< const SfxBoolItem & >( rItemSet.Get( SCHATTR_AXIS_AUTO_TIME_RESOLUTION )).GetValue() ))
             {
                 rItemSet.Get( nWhichId ).QueryValue( aValue );
@@ -716,7 +716,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXIS_ORIGIN:
         {
-            // only if auto is false
+            
             if( ! (static_cast< const SfxBoolItem & >(
                        rItemSet.Get( SCHATTR_AXIS_AUTO_ORIGIN )).GetValue() ))
             {
@@ -729,7 +729,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
                     if( !AxisHelper::isAxisPositioningEnabled() )
                     {
-                        //keep old and new settings for axis positioning in sync somehow
+                        
                         Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
                             m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
 
@@ -770,7 +770,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 GetPropertySet()->setPropertyValue( "CrossoverPosition" , uno::makeAny( eAxisPos ));
                 bChangedOtherwise = true;
 
-                //move the parallel axes to the other side if necessary
+                
                 if( eAxisPos==::com::sun::star::chart::ChartAxisPosition_START || eAxisPos==::com::sun::star::chart::ChartAxisPosition_END )
                 {
                     Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
@@ -806,7 +806,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 GetPropertySet()->setPropertyValue( "CrossoverValue" , uno::makeAny( fValue ));
                 bChangedOtherwise = true;
 
-                //keep old and new settings for axis positioning in sync somehow
+                
                 {
                     Reference< chart2::XCoordinateSystem > xCooSys( AxisHelper::getCoordinateSystemOfAxis(
                         m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ) );
@@ -842,7 +842,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                 GetPropertySet()->setPropertyValue( "LabelPosition" , uno::makeAny( ePos ));
                 bChangedOtherwise = true;
 
-                //move the parallel axes to the other side if necessary
+                
                 if( ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_START || ePos==::com::sun::star::chart::ChartAxisLabelPosition_OUTSIDE_END )
                 {
                     Reference< beans::XPropertySet > xParallelAxis( AxisHelper::getParallelAxis( m_xAxis, ChartModelHelper::findDiagram( m_xChartDoc ) ), uno::UNO_QUERY );
@@ -885,7 +885,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_TEXT_DEGREES:
         {
-            // convert int to double (divided by 100)
+            
             double fVal = static_cast< double >(
                 static_cast< const SfxInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue()) / 100.0;
@@ -959,7 +959,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
                         aValue <<= nFormatKey;
                     }
                 }
-                // else set a void Any
+                
                 GetPropertySet()->setPropertyValue( "NumberFormat" , aValue );
             }
         }
@@ -967,7 +967,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
 
         case SCHATTR_AXISTYPE:
         {
-            sal_Int32 nNewAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();//::com::sun::star::chart2::AxisType
+            sal_Int32 nNewAxisType = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
             aScale.AxisType = nNewAxisType;
             bSetScale = true;
         }
@@ -992,7 +992,7 @@ bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet 
     return (bSetScale || bChangedOtherwise);
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

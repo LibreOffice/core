@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <formula/token.hxx>
@@ -32,7 +32,7 @@ bool ScGroupTokenConverter::isSelfReferenceRelative(const ScAddress& rRefPos, SC
     }
     else if (nRelRow > 0)
     {
-        SCROW nTest = mrPos.Row(); // top row.
+        SCROW nTest = mrPos.Row(); 
         nTest += nRelRow;
         if (nTest <= nEndRow)
             return true;
@@ -60,12 +60,12 @@ bool ScGroupTokenConverter::isSelfReferenceAbsolute(const ScAddress& rRefPos)
 
 SCROW ScGroupTokenConverter::trimLength(SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCROW nRow, SCROW nRowLen)
 {
-    SCROW nLastRow = nRow + nRowLen - 1; // current last row.
+    SCROW nLastRow = nRow + nRowLen - 1; 
     nLastRow = mrDoc.GetLastDataRow(nTab, nCol1, nCol2, nLastRow);
     if (nLastRow < (nRow + nRowLen - 1))
         nRowLen = nLastRow - nRow + 1;
     else if (nLastRow == 0)
-        // Column is empty.
+        
         nRowLen = 1;
 
     return nRowLen;
@@ -80,7 +80,7 @@ ScGroupTokenConverter::ScGroupTokenConverter(ScTokenArray& rGroupTokens, ScDocum
 bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
 {
 #if 0
-    { // debug to start with:
+    { 
         ScCompiler aComp( &mrDoc, mrPos, rCode);
         aComp.SetGrammar(formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1);
         OUStringBuffer aAsString;
@@ -91,10 +91,10 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
     rCode.Reset();
     for (const formula::FormulaToken* p = rCode.First(); p; p = rCode.Next())
     {
-        // A reference can be either absolute or relative.  If it's absolute,
-        // convert it to a static value token.  If relative, convert it to a
-        // vector reference token.  Note: we only care about relative vs
-        // absolute reference state for row directions.
+        
+        
+        
+        
 
         const ScToken* pToken = static_cast<const ScToken*>(p);
         SCROW nLen = mrCell.GetCellGroup()->mnLength;
@@ -109,12 +109,12 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                     if (isSelfReferenceRelative(aRefPos, aRef.Row()))
                         return false;
 
-                    // Trim data array length to actual data range.
+                    
                     nLen = trimLength(aRefPos.Tab(), aRefPos.Col(), aRefPos.Col(), aRefPos.Row(), nLen);
 
-                    // Fetch double array guarantees that the length of the
-                    // returned array equals or greater than the requested
-                    // length.
+                    
+                    
+                    
 
                     formula::VectorRefArray aArray;
                     if (nLen)
@@ -125,7 +125,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                 }
                 else
                 {
-                    // Absolute row reference.
+                    
                     if (isSelfReferenceAbsolute(aRefPos))
                         return false;
 
@@ -142,7 +142,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                 ScComplexRefData aRef = pToken->GetDoubleRef();
                 ScRange aAbs = aRef.toAbs(mrPos);
 
-                // Check for self reference.
+                
                 if (aRef.Ref1.IsRowRel())
                 {
                     if (isSelfReferenceRelative(aAbs.aStart, aRef.Ref1.Row()))
@@ -159,7 +159,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                 else if (isSelfReferenceAbsolute(aAbs.aEnd))
                     return false;
 
-                // Row reference is relative.
+                
                 bool bAbsFirst = !aRef.Ref1.IsRowRel();
                 bool bAbsLast = !aRef.Ref2.IsRowRel();
                 ScAddress aRefPos = aAbs.aStart;
@@ -170,7 +170,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                 SCROW nArrayLength = nRefRowSize;
                 if (!bAbsLast)
                 {
-                    // range end position is relative. Extend the array length.
+                    
                     SCROW nLastRefRowOffset = aAbs.aEnd.Row() - mrPos.Row();
                     SCROW nLastRefRow = mrPos.Row() + nLen - 1 + nLastRefRowOffset;
                     SCROW nNewLength = nLastRefRow - aAbs.aStart.Row() + 1;
@@ -178,7 +178,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
                         nArrayLength = nNewLength;
                 }
 
-                // Trim trailing empty rows.
+                
                 nArrayLength = trimLength(aRefPos.Tab(), aAbs.aStart.Col(), aAbs.aEnd.Col(), aRefPos.Row(), nArrayLength);
 
                 for (SCCOL i = aAbs.aStart.Col(); i <= aAbs.aEnd.Col(); ++i)
@@ -197,20 +197,20 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
             break;
             case svIndex:
             {
-                // Named range.
+                
                 ScRangeName* pNames = mrDoc.GetRangeName();
                 if (!pNames)
-                    // This should never fail.
+                    
                     return false;
 
                 ScRangeData* pRange = pNames->findByIndex(p->GetIndex());
                 if (!pRange)
-                    // No named range exists by that index.
+                    
                     return false;
 
                 ScTokenArray* pNamedTokens = pRange->GetCode();
                 if (!pNamedTokens)
-                    // This named range is empty.
+                    
                     return false;
 
                 mrGroupTokens.AddOpCode(ocOpen);
@@ -228,7 +228,7 @@ bool ScGroupTokenConverter::convert(ScTokenArray& rCode)
 
     ScCompiler aComp(&mrDoc, mrPos, mrGroupTokens);
     aComp.SetGrammar(mrDoc.GetGrammar());
-    aComp.CompileTokenArray(); // Regenerate RPN tokens.
+    aComp.CompileTokenArray(); 
 
     return true;
 }

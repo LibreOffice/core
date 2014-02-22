@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,10 +33,10 @@
 #endif
 #include <vcl/sysdata.hxx>
 
-/// helper method to set a window handle into a SystemParentData struct
+/
 void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
 {
-    // does only work for WorkWindows
+    
     Window *pWindow = GetWindow();
     if ( pWindow->GetType() != WINDOW_WORKWINDOW )
     {
@@ -45,8 +45,8 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
         throw aException;
     }
 
-    // use sal_Int64 here to accommodate all int types
-    // uno::Any shift operator whill upcast if necessary
+    
+    
     sal_Int64 nHandle = 0;
     sal_Bool  bXEmbed = sal_False;
     bool bThrow = false;
@@ -74,7 +74,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
         aException.Message = "incorrect window handle type";
         throw aException;
     }
-    // create system parent data
+    
     SystemParentData aSysParentData;
     aSysParentData.nSize = sizeof ( SystemParentData );
 #if defined( WNT )
@@ -82,15 +82,15 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
 #elif defined( MACOSX )
     aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);
 #elif defined( ANDROID )
-    // Nothing
+    
 #elif defined( IOS )
-    // Nothing
+    
 #elif defined( UNX )
     aSysParentData.aWindow = (long)nHandle;
     aSysParentData.bXEmbedSupport = bXEmbed;
 #endif
 
-    // set system parent
+    
     ((WorkWindow*)pWindow)->SetPluginParent( &aSysParentData );
 }
 

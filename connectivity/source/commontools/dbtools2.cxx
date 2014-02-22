@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/dbtools.hxx"
@@ -46,10 +46,10 @@
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
+
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::sdbc;
@@ -81,12 +81,12 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
 
     OUStringBuffer aSql;
 
-    // check if the user enter a specific string to create autoincrement values
+    
     OUString sAutoIncrementValue;
     Reference<XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
     if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
         xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) >>= sAutoIncrementValue;
-    // look if we have to use precisions
+    
     sal_Bool bUseLiteral = sal_False;
     OUString sPreFix,sPostFix,sCreateParams;
     {
@@ -101,7 +101,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
                 sPreFix = xRow->getString (4);
                 sPostFix = xRow->getString (5);
                 sCreateParams = xRow->getString(6);
-                // first identical type will be used if typename is empty
+                
                 if ( sTypeName.isEmpty() && nType == nDataType )
                     sTypeName = sTypeName2Cmp;
 
@@ -151,7 +151,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         }
     }
     else
-        aSql.append(sTypeName); // simply add the type name
+        aSql.append(sTypeName); 
 
     OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
     if ( !aDefault.isEmpty() )
@@ -160,7 +160,7 @@ OUString createStandardTypePart(const Reference< XPropertySet >& xColProp,const 
         aSql.append(sPreFix);
         aSql.append(aDefault);
         aSql.append(sPostFix);
-    } // if ( aDefault.getLength() )
+    } 
 
     return aSql.makeStringAndClear();
 }
@@ -177,7 +177,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
     const OUString sQuoteString = xMetaData->getIdentifierQuoteString();
     OUStringBuffer aSql = ::dbtools::quoteName(sQuoteString,::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))));
 
-    // check if the user enter a specific string to create autoincrement values
+    
     OUString sAutoIncrementValue;
     Reference<XPropertySetInfo> xPropInfo = xColProp->getPropertySetInfo();
     if ( xPropInfo.is() && xPropInfo->hasPropertyByName(rPropMap.getNameByIndex(PROPERTY_ID_AUTOINCREMENTCREATION)) )
@@ -202,7 +202,7 @@ OUString createStandardColumnPart(const Reference< XPropertySet >& xColProp,cons
     return aSql.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString createStandardCreateStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection,ISQLStatementHelper* _pHelper,const OUString& _sCreatePattern)
 {
@@ -223,10 +223,10 @@ OUString createStandardCreateStatement(const Reference< XPropertySet >& descript
     aSql.append(sComposedName);
     aSql.append(" (");
 
-    // columns
+    
     Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
     Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
-    // check if there are columns
+    
     if(!xColumns.is() || !xColumns->getCount())
         ::dbtools::throwFunctionSequenceException(_xConnection);
 
@@ -266,14 +266,14 @@ namespace
         return sSql;
     }
 }
-// -----------------------------------------------------------------------------
+
 OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,const Reference< XConnection>& _xConnection)
 {
     Reference<XDatabaseMetaData> xMetaData = _xConnection->getMetaData();
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
 
     OUStringBuffer aSql;
-    // keys
+    
     Reference<XKeysSupplier> xKeySup(descriptor,UNO_QUERY);
     Reference<XIndexAccess> xKeys = xKeySup->getKeys();
     if ( xKeys.is() )
@@ -372,7 +372,7 @@ OUString createStandardKeyStatement(const Reference< XPropertySet >& descriptor,
     return aSql.makeStringAndClear();
 
 }
-// -----------------------------------------------------------------------------
+
 OUString createSqlCreateTableStatement(  const Reference< XPropertySet >& descriptor,
                                                 const Reference< XConnection>& _xConnection,
                                                 ISQLStatementHelper* _pHelper,
@@ -466,7 +466,7 @@ namespace
                             {
                                 Reference< XResultSet > xPKeys = xMetaData->getPrimaryKeys( _aCatalog, _aSchema, _aTable );
                                 Reference< XRow > xPKeyRow( xPKeys, UNO_QUERY_THROW );
-                                while( xPKeys->next() ) // there can be only one primary key
+                                while( xPKeys->next() ) 
                                 {
                                     OUString sKeyColumn = xPKeyRow->getString(4);
                                     if ( aMixCompare(_rName,sKeyColumn) )
@@ -507,7 +507,7 @@ namespace
 
         return xProp;
     }
-    //------------------------------------------------------------------
+    
     Reference< XModel> lcl_getXModel(const Reference< XInterface>& _xIface)
     {
         Reference< XInterface > xParent = _xIface;
@@ -521,7 +521,7 @@ namespace
         return xModel;
     }
 }
-// -----------------------------------------------------------------------------
+
 Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable,
                                           const Reference<XConnection>& _xConnection,
                                           const OUString& _rName,
@@ -573,7 +573,7 @@ Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable
     return xProp;
 }
 
-// -----------------------------------------------------------------------------
+
 bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection, const sal_Char* _pAsciiSettingName )
 {
     bool bValue( false );
@@ -596,7 +596,7 @@ bool getBooleanDataSourceSetting( const Reference< XConnection >& _rxConnection,
     }
     return bValue;
 }
-// -------------------------------------------------------------------------
+
 bool getDataSourceSetting( const Reference< XInterface >& _xChild, const OUString& _sAsciiSettingsName,
     Any& /* [out] */ _rSettingsValue )
 {
@@ -621,14 +621,14 @@ bool getDataSourceSetting( const Reference< XInterface >& _xChild, const OUStrin
     }
     return bIsPresent;
 }
-// -------------------------------------------------------------------------
+
 bool getDataSourceSetting( const Reference< XInterface >& _rxDataSource, const sal_Char* _pAsciiSettingsName,
     Any& /* [out] */ _rSettingsValue )
 {
     OUString sAsciiSettingsName = OUString::createFromAscii(_pAsciiSettingsName);
     return getDataSourceSetting( _rxDataSource, sAsciiSettingsName,_rSettingsValue );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const OUString& _sProperty,sal_Bool _bDefault)
 {
     sal_Bool bEnabled = _bDefault;
@@ -652,7 +652,7 @@ sal_Bool isDataSourcePropertyEnabled(const Reference<XInterface>& _xProp,const O
     }
     return bEnabled;
 }
-// -----------------------------------------------------------------------------
+
 Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
             const OUString& _rsUrl,
             const Reference< XConnection>& _xConnection,
@@ -677,7 +677,7 @@ Reference< XTablesSupplier> getDataDefinitionByURLAndConnection(
     return xTablesSup;
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
                              const OUString& _sCatalog,
                              const OUString& _sSchema,
@@ -706,7 +706,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
 
         if ( xCurrentRow.is() )
         {
-            // after creation the set is positioned before the first record, per definition
+            
             OUString sPrivilege, sGrantee;
             while ( xPrivileges->next() )
             {
@@ -748,14 +748,14 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
         }
         disposeComponent(xPrivileges);
 
-        // Some drivers put a table privilege as soon as any column has the privilege,
-        // some drivers only if all columns have the privilege.
-        // To unifiy the situation, collect column privileges here, too.
+        
+        
+        
         Reference< XResultSet > xColumnPrivileges = _xMetaData->getColumnPrivileges(aVal, _sSchema, _sTable, OUString("%"));
         Reference< XRow > xColumnCurrentRow(xColumnPrivileges, UNO_QUERY);
         if ( xColumnCurrentRow.is() )
         {
-            // after creation the set is positioned before the first record, per definition
+            
             OUString sPrivilege, sGrantee;
             while ( xColumnPrivileges->next() )
             {
@@ -801,7 +801,7 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
     catch(const SQLException& e)
     {
         static OUString sNotSupportedState( "IM001" );
-        // some drivers don't support any privileges so we assume that we are allowed to do all we want :-)
+        
         if(e.SQLState == sNotSupportedState)
             nPrivileges |=  Privilege::DROP         |
                             Privilege::REFERENCE    |
@@ -817,8 +817,8 @@ sal_Int32 getTablePrivileges(const Reference< XDatabaseMetaData>& _xMetaData,
     }
     return nPrivileges;
 }
-// -----------------------------------------------------------------------------
-// we need some more information about the column
+
+
 void collectColumnInformation(const Reference< XConnection>& _xConnection,
                               const OUString& _sComposedName,
                               const OUString& _rName,
@@ -851,7 +851,7 @@ void collectColumnInformation(const Reference< XConnection>& _xConnection,
     }
 }
 
-// -----------------------------------------------------------------------------
+
 bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Reference< XConnection >& _rxActualConnection )
 {
     bool bIsEmbedded = false;
@@ -889,11 +889,11 @@ bool isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Referenc
     }
     catch(Exception&)
     {
-        // not intereseted in
+        
     }
     return bIsEmbedded;
 }
-// -----------------------------------------------------------------------------
+
 namespace
 {
     OUString lcl_getEncodingName( rtl_TextEncoding _eEncoding )
@@ -910,7 +910,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OString& _rDest, rtl_TextEncoding _eEncoding ) SAL_THROW((com::sun::star::sdbc::SQLException))
 {
     if ( !rtl_convertUStringToString( &_rDest.pData, _rSource.getStr(), _rSource.getLength(),
@@ -939,7 +939,7 @@ sal_Int32 DBTypeConversion::convertUnicodeString( const OUString& _rSource, OStr
     return _rDest.getLength();
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const OUString& _rSource, OString&  _rDest,
    sal_Int32 _nMaxLen, rtl_TextEncoding _eEncoding ) SAL_THROW((SQLException))
 {
@@ -969,19 +969,19 @@ OUString lcl_getReportEngines()
     static OUString s_sNodeName("org.openoffice.Office.DataAccess/ReportEngines");
     return s_sNodeName;
 }
-// -----------------------------------------------------------------------------
+
 OUString lcl_getDefaultReportEngine()
 {
     static OUString s_sNodeName("DefaultReportEngine");
     return s_sNodeName;
 }
-// -----------------------------------------------------------------------------
+
 OUString lcl_getReportEngineNames()
 {
     static OUString s_sNodeName("ReportEngineNames");
     return s_sNodeName;
 }
-// -----------------------------------------------------------------------------
+
 OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >& _rxORB)
 {
     ::utl::OConfigurationTreeRoot aReportEngines = ::utl::OConfigurationTreeRoot::createWithComponentContext(
@@ -1013,9 +1013,9 @@ OUString getDefaultReportEngineServiceName(const Reference< XComponentContext >&
         return OUString("org.libreoffice.report.pentaho.SOReportJobFactory");
     return OUString();
 }
-// -----------------------------------------------------------------------------
-//.........................................................................
-}   // namespace dbtools
-//.........................................................................
+
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

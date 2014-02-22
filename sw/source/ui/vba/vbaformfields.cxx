@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaformfields.hxx"
 #include "vbaformfield.hxx"
@@ -97,10 +97,10 @@ public:
         }
         cachePos = mxFormFields.begin();
     }
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<word::XFormField>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return getCount() > 0 ; }
-    // XNameAcess
+    
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName(aName) )
@@ -127,14 +127,14 @@ public:
         XFormFieldVec::iterator it_end = mxFormFields.end();
         for ( ; cachePos != it_end; ++cachePos )
         {
-            //uno::Reference< container::XNamed > xName( *cachePos, uno::UNO_QUERY_THROW );
+            
             uno::Reference< text::XFormField > xFormField( *cachePos, uno::UNO_QUERY_THROW );
             if ( aName.equalsIgnoreAsciiCase( lcl_getFormFieldName( xFormField )) )
                 break;
         }
         return ( cachePos != it_end );
     }
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         return mxFormFields.size();
@@ -145,7 +145,7 @@ public:
             throw lang::IndexOutOfBoundsException();
         return uno::makeAny( uno::Reference< word::XFormField >( new SwVbaFormField( mxParent, mxContext, mxModel, mxFormFields[ Index ] ) ) );
     }
-    // XEnumerationAccess
+    
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
         return new FormFieldsEnumeration( mxParent, mxContext, mxModel, mxFormFields );
@@ -155,7 +155,7 @@ public:
 SwVbaFormFields::SwVbaFormFields( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< ::com::sun::star::uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel ): SwVbaFormFields_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new FormFieldCollectionHelper( xParent, xContext, xModel ) ) ), mxModel( xModel )
 {
 }
-// XEnumerationAccess
+
 uno::Type
 SwVbaFormFields::getElementType() throw (uno::RuntimeException)
 {

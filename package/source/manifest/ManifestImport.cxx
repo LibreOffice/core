@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,10 +14,10 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// MARKER( update_precomp.py ): autogen include statement, do not remove
+
 #include <ManifestImport.hxx>
 #include <ManifestDefines.hxx>
 #include <sax/tools/converter.hxx>
@@ -136,8 +136,8 @@ void ManifestImport::doFileEntry(StringHashMap &rConvertedAttribs)
 void ManifestImport::doEncryptionData(StringHashMap &rConvertedAttribs)
         throw( uno::RuntimeException )
 {
-    // If this element exists, then this stream is encrypted and we need
-    // to import the initialisation vector, salt and iteration count used
+    
+    
     nDerivedKeySize = 0;
     OUString aString = rConvertedAttribs[sChecksumTypeAttribute];
     if ( !bIgnoreEncryptData )
@@ -282,13 +282,13 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
     {
         case 1:
         {
-            if (!aConvertedName.equalsAscii(ELEMENT_MANIFEST)) //manifest:manifest
+            if (!aConvertedName.equalsAscii(ELEMENT_MANIFEST)) 
                 aStack.back().m_bValid = false;
             break;
         }
         case 2:
         {
-            if (aConvertedName == sFileEntryElement) //manifest:file-entry
+            if (aConvertedName == sFileEntryElement) 
                 doFileEntry(aConvertedAttribs);
             else
                 aStack.back().m_bValid = false;
@@ -301,7 +301,7 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
 
             if (!aIter->m_bValid)
                 aStack.back().m_bValid = false;
-            else if (aConvertedName.equals(sEncryptionDataElement))   //manifest:encryption-data
+            else if (aConvertedName.equals(sEncryptionDataElement))   
                 doEncryptionData(aConvertedAttribs);
             else
                 aStack.back().m_bValid = false;
@@ -314,11 +314,11 @@ void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Re
 
             if (!aIter->m_bValid)
                 aStack.back().m_bValid = false;
-            else if (aConvertedName.equals(sAlgorithmElement))   //manifest:algorithm,
+            else if (aConvertedName.equals(sAlgorithmElement))   
                 doAlgorithm(aConvertedAttribs);
-            else if (aConvertedName.equals(sKeyDerivationElement)) //manifest:key-derivation,
+            else if (aConvertedName.equals(sKeyDerivationElement)) 
                 doKeyDerivation(aConvertedAttribs);
-            else if (aConvertedName.equals(sStartKeyAlgElement))   //manifest:start-key-generation
+            else if (aConvertedName.equals(sStartKeyAlgElement))   
                 doStartKeyAlg(aConvertedAttribs);
             else
                 aStack.back().m_bValid = false;
@@ -398,13 +398,13 @@ OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno
               && aAttrName.startsWith("xmlns")
               && ( aAttrName.getLength() == 5 || aAttrName[5] == ':' ) )
             {
-                // this is a namespace declaration
+                
                 OUString aNsName( ( aAttrName.getLength() == 5 ) ? OUString() : aAttrName.copy( 6 ) );
                 aNamespaces[aNsName] = aAttrValue;
             }
             else
             {
-                // this is no namespace declaration
+                
                 aAttribsStrs.push_back( pair< OUString, OUString >( aAttrName, aAttrValue ) );
             }
         }
@@ -418,7 +418,7 @@ OUString ManifestImport::PushNameAndNamespaces( const OUString& aName, const uno
 
     for ( sal_uInt16 nInd = 0; nInd < aAttribsStrs.size(); nInd++ )
     {
-        // convert the attribute names on filling
+        
         o_aConvertedAttribs[ConvertName( aAttribsStrs[nInd].first )] = aAttribsStrs[nInd].second;
     }
 
@@ -443,7 +443,7 @@ OUString ManifestImport::ConvertNameWithNamespace( const OUString& aName, const 
     if ( aIter != aNamespaces.end()
       && ( aIter->second == MANIFEST_NAMESPACE || aIter->second == MANIFEST_OASIS_NAMESPACE ) )
     {
-        // no check for manifest.xml consistency currently since the old versions have supported inconsistent documents as well
+        
         aResult = MANIFEST_NSPREFIX;
         aResult += aPureName;
     }

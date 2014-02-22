@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -43,9 +43,9 @@
 #include <vcl/graphicfilter.hxx>
 
 
-// --------------------------------------------------------------------
-// -----------      SdFileDialog_Imp        ---------------------------
-// --------------------------------------------------------------------
+
+
+
 class SdFileDialog_Imp : public sfx2::FileDialogHelper
 {
 private:
@@ -72,11 +72,11 @@ public:
 
     ErrCode                     Execute();
 
-    // overwritten from FileDialogHelper, to receive user feedback
+    
     virtual void SAL_CALL       ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent );
 };
 
-// ------------------------------------------------------------------------
+
 void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent )
 {
     SolarMutexGuard aGuard;
@@ -99,7 +99,7 @@ void SAL_CALL SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::Fil
     }
 }
 
-// ------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
 {
     maUpdateTimer.Stop();
@@ -167,7 +167,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl)
     return 0;
 }
 
-// ------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
 {
     SolarMutexGuard aGuard;
@@ -201,7 +201,7 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, IsMusicStoppedHdl)
     return( 0L );
 }
 
-// check whether to disable the "selection" checkbox
+
 void SdFileDialog_Imp::CheckSelectionState()
 {
     if( mbUsableSelection && mxControlAccess.is() )
@@ -224,7 +224,7 @@ void SdFileDialog_Imp::CheckSelectionState()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
                                     sal_Bool        bUsableSelection    ) :
     FileDialogHelper( nDialogType, 0 ),
@@ -236,7 +236,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
 
     css::uno::Reference < ::com::sun::star::ui::dialogs::XFilePicker > xFileDlg = GetFilePicker();
 
-    // get the control access
+    
     mxControlAccess = css::uno::Reference< css::ui::dialogs::XFilePickerControlAccess > ( xFileDlg, css::uno::UNO_QUERY );
 
     if( mxControlAccess.is() )
@@ -273,27 +273,27 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType,
 }
 
 
-// ------------------------------------------------------------------------
+
 SdFileDialog_Imp::~SdFileDialog_Imp()
 {
     if( mnPlaySoundEvent )
         Application::RemoveUserEvent( mnPlaySoundEvent );
 }
 
-// ------------------------------------------------------------------------
+
 ErrCode SdFileDialog_Imp::Execute()
 {
-    // make sure selection checkbox is disabled if
-    // HTML is current filter!
+    
+    
     CheckSelectionState();
     return FileDialogHelper::Execute();
 }
 
-// --------------------------------------------------------------------
-// -----------      SdOpenSoundFileDialog       -----------------------
-// --------------------------------------------------------------------
 
-// these are simple forwarders
+
+
+
+
 SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
     mpImpl(
         new SdFileDialog_Imp(
@@ -303,7 +303,7 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
     aDescr = SD_RESSTR(STR_ALL_FILES);
     mpImpl->AddFilter( aDescr, OUString("*.*"));
 
-    // setup filter
+    
 #if defined UNX
     aDescr = SD_RESSTR(STR_AU_FILE);
     mpImpl->AddFilter( aDescr, OUString("*.au;*.snd" ));
@@ -323,24 +323,24 @@ SdOpenSoundFileDialog::SdOpenSoundFileDialog() :
 #endif
 }
 
-// ------------------------------------------------------------------------
+
 SdOpenSoundFileDialog::~SdOpenSoundFileDialog()
 {
 }
 
-// ------------------------------------------------------------------------
+
 ErrCode SdOpenSoundFileDialog::Execute()
 {
     return mpImpl->Execute();
 }
 
-// ------------------------------------------------------------------------
+
 OUString SdOpenSoundFileDialog::GetPath() const
 {
     return mpImpl->GetPath();
 }
 
-// ------------------------------------------------------------------------
+
 void SdOpenSoundFileDialog::SetPath( const OUString& rPath )
 {
     mpImpl->SetDisplayDirectory( rPath );

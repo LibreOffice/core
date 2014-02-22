@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <stdio.h>
-// #i83479#
+
 #include <IDocumentListItems.hxx>
 #include <doc.hxx>
 
@@ -158,7 +158,7 @@ bool SwNodeNum::IsContinuous() const
 {
     bool aResult = false;
 
-    // #i64311#
+    
     if ( GetNumRule() )
     {
         aResult = mpNumRule->IsContinusNum();
@@ -181,8 +181,8 @@ bool SwNodeNum::IsCounted() const
 
     if ( GetTxtNode() )
     {
-        // #i59559#
-        // <SwTxtNode::IsCounted()> determines, if a text node is counted for numbering
+        
+        
         aResult = GetTxtNode()->IsCountedInList();
     }
     else
@@ -191,7 +191,7 @@ bool SwNodeNum::IsCounted() const
     return aResult;
 }
 
-// #i64010#
+
 bool SwNodeNum::HasCountedChildren() const
 {
     bool bResult = false;
@@ -215,14 +215,14 @@ bool SwNodeNum::HasCountedChildren() const
 
     return bResult;
 }
-// #i64010#
+
 bool SwNodeNum::IsCountedForNumbering() const
 {
     return IsCounted() &&
-           ( IsPhantom() ||                 // phantoms
-             !GetTxtNode() ||               // root node
-             GetTxtNode()->HasNumber() ||   // text node
-             GetTxtNode()->HasBullet() );   // text node
+           ( IsPhantom() ||                 
+             !GetTxtNode() ||               
+             GetTxtNode()->HasNumber() ||   
+             GetTxtNode()->HasBullet() );   
 }
 
 
@@ -245,8 +245,8 @@ bool SwNodeNum::LessThan(const SwNumberTreeNode & rNode) const
         bResult = true;
     else if (mpTxtNode != NULL && rTmpNode.mpTxtNode != NULL)
     {
-        // #i83479# - refactoring
-        // simplify comparison by comparing the indexes of the text nodes
+        
+        
         bResult = ( mpTxtNode->GetIndex() < rTmpNode.mpTxtNode->GetIndex() ) ? true : false;
     }
 
@@ -269,8 +269,8 @@ bool SwNodeNum::IsCountPhantoms() const
 {
     bool bResult = true;
 
-    // #i64311#
-    // phantoms aren't counted in consecutive numbering rules
+    
+    
     if ( mpNumRule )
         bResult = !mpNumRule->IsContinusNum() &&
                   mpNumRule->IsCountPhantoms();
@@ -318,12 +318,12 @@ void SwNodeNum::HandleNumberTreeRootNodeDelete( SwNodeNum& rNodeNum )
                            : &rNodeNum;
     if ( !pRootNode )
     {
-        // no root node -> nothing do.
+        
         return;
     }
 
-    // unregister all number tree node entries, which correspond to a text node,
-    // about the deletion of the number tree root node.
+    
+    
     _UnregisterMeAndChildrenDueToRootDelete( *pRootNode );
 }
 
@@ -343,9 +343,9 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
             continue;
         }
 
-        // Unregistering the last child of a phantom will destroy the phantom.
-        // Thus <rNodeNum> will be destroyed and access on <rNodeNum> has to
-        // be suppressed.
+        
+        
+        
         if ( bIsPhantom && rNodeNum.GetChildCount() == 1 )
         {
             bDone = true;
@@ -360,7 +360,7 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         if ( pTxtNode )
         {
             pTxtNode->RemoveFromList();
-            // --> clear all list attributes and the list style
+            
             std::set<sal_uInt16> aResetAttrsArray;
             aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_ID );
             aResetAttrsArray.insert( aResetAttrsArray.end(), RES_PARATR_LIST_LEVEL );
@@ -376,12 +376,12 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
     }
 }
 
-// #i81002#
+
 const SwNodeNum* SwNodeNum::GetPrecedingNodeNumOf( const SwTxtNode& rTxtNode ) const
 {
     const SwNodeNum* pPrecedingNodeNum( 0 );
 
-    // #i83479#
+    
     SwNodeNum aNodeNumForTxtNode( const_cast<SwTxtNode*>(&rTxtNode) );
 
     pPrecedingNodeNum = dynamic_cast<const SwNodeNum*>(

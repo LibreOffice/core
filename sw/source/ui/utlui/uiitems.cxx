@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/itemtype.hxx>
@@ -85,7 +85,7 @@ SfxItemPresentation  SwPageFtnInfoItem::GetPresentation
             }
             return ePres;
         }
-        default:; //prevent warning
+        default:; 
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
@@ -105,7 +105,7 @@ bool SwPageFtnInfoItem::QueryValue( Any& rVal, sal_uInt8 nMemberId ) const
             rVal <<= (sal_Int8)(long)aTmp;
         }
         break;
-        case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;//text::HorizontalAdjust
+        case MID_LINE_ADJUST       :     rVal <<= (sal_Int16)aFtnInfo.GetAdj();break;
         case MID_LINE_TEXT_DIST    :     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetTopDist());break;
         case MID_LINE_FOOTNOTE_DIST:     rVal <<= (sal_Int32)TWIP_TO_MM100(aFtnInfo.GetBottomDist());break;
         case MID_FTN_LINE_STYLE    :
@@ -177,7 +177,7 @@ bool SwPageFtnInfoItem::PutValue(const Any& rVal, sal_uInt8 nMemberId)
         {
             sal_Int16 nSet = 0;
             rVal >>= nSet;
-            if(nSet >= 0 && nSet < 3) //text::HorizontalAdjust
+            if(nSet >= 0 && nSet < 3) 
                 aFtnInfo.SetAdj((SwFtnAdj)nSet);
             else
                 bRet = false;
@@ -209,14 +209,14 @@ SwPtrItem::SwPtrItem( const sal_uInt16 nId, void* pPtr ) :
 {
 }
 
-// Copy constructor
+
 
 SwPtrItem::SwPtrItem( const SwPtrItem& rItem ) : SfxPoolItem( rItem )
 {
     pMisc = rItem.pMisc;
 }
 
-// Cloning
+
 
 SfxPoolItem* SwPtrItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
@@ -230,7 +230,7 @@ bool SwPtrItem::operator==( const SfxPoolItem& rAttr ) const
     return ( pMisc == rItem.pMisc );
 }
 
-// SwUINumRuleItem for the NumTabPages of the FormatNumRule/Styleists
+
 
 SwUINumRuleItem::SwUINumRuleItem( const SwNumRule& rRul, const sal_uInt16 nId )
     : SfxPoolItem( nId ), pRule( new SwNumRule( rRul ) )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ZPooledConnection.hxx"
@@ -42,8 +42,8 @@ OPooledConnection::OPooledConnection(const Reference< XConnection >& _xConnectio
 {
 
 }
-// -----------------------------------------------------------------------------
-// OComponentHelper
+
+
 void SAL_CALL OPooledConnection::disposing(void)
 {
     MutexGuard aGuard(m_aMutex);
@@ -52,26 +52,26 @@ void SAL_CALL OPooledConnection::disposing(void)
 m_xComponent.clear();
     ::comphelper::disposeComponent(m_xRealConnection);
 }
-// -----------------------------------------------------------------------------
-// XEventListener
+
+
 void SAL_CALL OPooledConnection::disposing( const EventObject& /*Source*/ ) throw (RuntimeException)
 {
 m_xComponent.clear();
 }
-// -----------------------------------------------------------------------------
-//XPooledConnection
+
+
 Reference< XConnection > OPooledConnection::getConnection()  throw(SQLException, RuntimeException)
 {
     if(!m_xComponent.is() && m_xRealConnection.is())
     {
         Reference< XAggregation > xConProxy = m_xProxyFactory->createProxy(m_xRealConnection.get());
         m_xComponent = new OConnectionWeakWrapper(xConProxy);
-        // register as event listener for the new connection
+        
         if (m_xComponent.is())
             m_xComponent->addEventListener(this);
     }
     return Reference< XConnection >(m_xComponent,UNO_QUERY);
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

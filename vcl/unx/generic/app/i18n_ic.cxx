@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -56,12 +56,12 @@ static void sendEmptyCommit( SalFrame* pFrame )
         pFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
 }
 
-// ---------------------------------------------------------------------------
+
 //
-// Constructor / Destructor, the InputContext is bound to the SalFrame, as it
-// needs the shell window as a focus window
+
+
 //
-// ----------------------------------------------------------------------------
+
 
 SalI18N_InputContext::~SalI18N_InputContext()
 {
@@ -80,17 +80,17 @@ SalI18N_InputContext::~SalI18N_InputContext()
         free(maClientData.aText.pCharStyle);
 }
 
-// ----------------------------------------------------------------------------
-// convenience routine to add items to a XVaNestedList
-// ----------------------------------------------------------------------------
+
+
+
 
 static XVaNestedList
 XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
 {
     XVaNestedList a_dstlist;
 
-    // if ( value == NULL )
-    //  return a_srclist;
+    
+    
 
     if ( a_srclist == NULL )
     {
@@ -111,9 +111,9 @@ XVaAddToNestedList( XVaNestedList a_srclist, char* name, XPointer value )
     return a_dstlist != NULL ? a_dstlist : a_srclist ;
 }
 
-// ----------------------------------------------------------------------------
-// convenience routine to create a fontset
-// ----------------------------------------------------------------------------
+
+
+
 
 static XFontSet
 get_font_set( Display *p_display )
@@ -133,11 +133,11 @@ get_font_set( Display *p_display )
     return p_font_set;
 }
 
-// ---------------------------------------------------------------------------
+
 //
-// Constructor for a InputContext (IC)
+
 //
-// ----------------------------------------------------------------------------
+
 
 SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mbUseable( True ),
@@ -184,7 +184,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         XLIB_Window  aClientWindow = pEnv->aShellWindow;
         XLIB_Window  aFocusWindow  = pEnv->aWindow;
 
-        // for status callbacks and commit string callbacks
+        
 #define PREEDIT_BUFSZ 16
         maClientData.eState                 = ePreeditStatusStartPending;
         maClientData.pFrame                 = pFrame;
@@ -197,7 +197,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         maClientData.aText.nLength          = 0;
 
         //
-        // Status attributes
+        
         //
 
         switch ( mnStatusStyle )
@@ -237,7 +237,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         }
 
         //
-        // set preedit attributes
+        
         //
 
         switch ( mnPreeditStyle )
@@ -269,7 +269,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
 
             case XIMPreeditPosition:
             {
-                // spot location
+                
                 SalExtTextInputPosEvent aPosEvent;
                 pFrame->CallCallback(SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent);
 
@@ -277,15 +277,15 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 aSpot.x = aPosEvent.mnX + aPosEvent.mnWidth;
                 aSpot.y = aPosEvent.mnY + aPosEvent.mnHeight;
 
-                // create attributes for preedit position style
+                
                 mpPreeditAttributes = XVaCreateNestedList (
                                                            0,
                                                            XNSpotLocation, &aSpot,
                                                            NULL );
 
-                // XCreateIC() fails on Redflag Linux 2.0 if there is no
-                // fontset though the data itself is not evaluated nor is
-                // it required according to the X specs.
+                
+                
+                
                 Display* pDisplay = GetGenericData()->GetSalDisplay()->GetDisplay();
                 XFontSet pFontSet = get_font_set(pDisplay);
 
@@ -305,9 +305,9 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
                 break;
         }
 
-        // Create the InputContext by giving it exactly the information it
-        // deserves, because inappropriate attributes
-        // let XCreateIC fail on Solaris (eg. for C locale)
+        
+        
+        
 
         mpAttributes = XVaCreateNestedList(
                                            0,
@@ -373,12 +373,12 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
     }
 }
 
-// ---------------------------------------------------------------------------
+
 //
-// In Solaris 8 the status window does not unmap if the frame unmapps, so
-// unmap it the hard way
+
+
 //
-// ---------------------------------------------------------------------------
+
 
 void
 SalI18N_InputContext::Unmap( SalFrame* pFrame )
@@ -419,26 +419,26 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
     }
 }
 
-// --------------------------------------------------------------------------
+
 //
-// Handle DestroyCallbacks
-// in fact this is a callback called from the XNDestroyCallback
+
+
 //
-// --------------------------------------------------------------------------
+
 
 void
 SalI18N_InputContext::HandleDestroyIM()
 {
-    maContext = 0;      // noli me tangere
+    maContext = 0;      
     mbUseable = False;
 }
 
-// ---------------------------------------------------------------------------
+
 //
-//  make sure, the input method gets all the X-Events it needs, this is only
-//  called once on each frame, it relys on a valid maContext
+
+
 //
-// ---------------------------------------------------------------------------
+
 
 void
 SalI18N_InputContext::ExtendEventMask( XLIB_Window aFocusWindow )
@@ -460,11 +460,11 @@ SalI18N_InputContext::ExtendEventMask( XLIB_Window aFocusWindow )
     }
 }
 
-// ---------------------------------------------------------------------------
+
 //
-// tune the styles provided by the input method with the supported one
+
 //
-// ---------------------------------------------------------------------------
+
 
 unsigned int
 SalI18N_InputContext::GetWeightingOfIMStyle( XIMStyle nStyle ) const
@@ -519,9 +519,9 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
         int nBestScore   = 0;
         int nActualScore = 0;
 
-        // check whether the XIM supports one of the desired styles
-        // only a single preedit and a single status style must occur
-        // in a inpuut method style. Hideki said so, so i trust him
+        
+        
+        
         for ( int nStyle = 0; nStyle < pIMStyles->count_styles; nStyle++ )
         {
             XIMStyle nProvidedStyle = pIMStyles->supported_styles[ nStyle ];
@@ -547,11 +547,11 @@ SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
     return (mnPreeditStyle != 0) && (mnStatusStyle != 0) ;
 }
 
-// ---------------------------------------------------------------------------
+
 //
-// handle extended and normal key input
+
 //
-// ---------------------------------------------------------------------------
+
 
 int
 SalI18N_InputContext::CommitKeyEvent(sal_Unicode* pText, sal_Size nLength)
@@ -603,13 +603,13 @@ SalI18N_InputContext::UpdateSpotLocation()
     return 0;
 }
 
-// ---------------------------------------------------------------------------
+
 //
-// set and unset the focus for the Input Context
-// the context may be NULL despite it is useable if the framewindow is
-// in unmapped state
+
+
+
 //
-// ---------------------------------------------------------------------------
+
 
 void
 SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
@@ -631,7 +631,7 @@ SalI18N_InputContext::SetICFocus( SalFrame* pFocusFrame )
         if( maClientData.aInputEv.mpTextAttr )
         {
             sendEmptyCommit(pFocusFrame);
-            // begin preedit again
+            
             GetGenericData()->GetSalDisplay()->SendInternalEvent( pFocusFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
         }
 
@@ -648,23 +648,23 @@ SalI18N_InputContext::UnsetICFocus( SalFrame* pFrame )
 
     if ( mbUseable && (maContext != NULL) )
     {
-        // cancel an eventual event posted to begin preedit again
+        
         GetGenericData()->GetSalDisplay()->CancelInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
         maClientData.pFrame = NULL;
         XUnsetICFocus( maContext );
     }
 }
 
-// ---------------------------------------------------------------------------
+
 //
-// multi byte input method only
+
 //
-// ---------------------------------------------------------------------------
+
 
 void
 SalI18N_InputContext::SetLanguage(LanguageType)
 {
-    // not yet implemented
+    
     return;
 }
 
@@ -674,15 +674,15 @@ SalI18N_InputContext::EndExtTextInput( sal_uInt16 /*nFlags*/ )
     if ( mbUseable && (maContext != NULL) && maClientData.pFrame )
     {
         vcl::DeletionListener aDel( maClientData.pFrame );
-        // delete preedit in sal (commit an empty string)
+        
         sendEmptyCommit( maClientData.pFrame );
         if( ! aDel.isDeleted() )
         {
-            // mark previous preedit state again (will e.g. be sent at focus gain)
+            
             maClientData.aInputEv.mpTextAttr = &maClientData.aInputFlags[0];
             if( static_cast<X11SalFrame*>(maClientData.pFrame)->hasFocus() )
             {
-                // begin preedit again
+                
                 GetGenericData()->GetSalDisplay()->SendInternalEvent( maClientData.pFrame, &maClientData.aInputEv, SALEVENT_EXTTEXTINPUT );
             }
         }

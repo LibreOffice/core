@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <sfx2/sidebar/EnumContext.hxx>
 
@@ -37,7 +37,7 @@ static ContextVector maContextVector;
 }
 
 const sal_Int32 EnumContext::NoMatch = 4;
-const sal_Int32 EnumContext::OptimalMatch = 0;  // Neither application nor context name is "any".
+const sal_Int32 EnumContext::OptimalMatch = 0;  
 
 
 EnumContext::EnumContext (void)
@@ -297,11 +297,11 @@ sal_Int32 EnumContext::EvaluateMatch (
     const bool bApplicationNameIsAny (rOther.meApplication == Application_Any);
     if (rOther.meApplication==meApplication || bApplicationNameIsAny)
     {
-        // Application name matches.
+        
         const bool bContextNameIsAny (rOther.meContext == Context_Any);
         if (rOther.meContext==meContext || bContextNameIsAny)
         {
-            // Context name matches.
+            
             return (bApplicationNameIsAny ? 1 : 0)
                 + (bContextNameIsAny ? 2 : 0);
         }
@@ -327,7 +327,7 @@ sal_Int32 EnumContext::EvaluateMatch (const ::std::vector<EnumContext>& rOthers)
         {
             if (nMatch == OptimalMatch)
             {
-                // We will find no better match so stop searching.
+                
                 return OptimalMatch;
             }
             nBestMatch = nMatch;
@@ -338,6 +338,6 @@ sal_Int32 EnumContext::EvaluateMatch (const ::std::vector<EnumContext>& rOthers)
 
 
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

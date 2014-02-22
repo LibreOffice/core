@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/io/XInputStream.hpp>
@@ -57,21 +57,21 @@ using com::sun::star::xml::sax::XAttributeList;
 using com::sun::star::xml::sax::XDocumentHandler;
 using com::sun::star::xml::sax::XParser;
 
-//                                 W     o     r     d     P     r     o
+
 static const sal_Int8 header[] = { 0x57, 0x6f, 0x72, 0x64, 0x50, 0x72, 0x6f };
 
 const sal_Int32 MAXCHARS = 65534;
 
- // Simple xml importer, currently the importer is very very simple
- // it only extracts pure text from the wordpro file. Absolutely no formatting
- // information is currently imported.
- // To reflect the current state of this importer the sax events sent
- // to the document handler are also the simplest possible. In addition to
- // the basic attributes set up for the 'office:document' element
- // all the imported text is inserted into 'text:p' elements.
- // The parser extracts the pure text and creates simple a simple 'text:p'
- // element to contain that text. In the event of the text exceeding
- // MAXCHARS new 'text:p' elements are created as needed
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 class SimpleXMLImporter
 {
 private:
@@ -114,23 +114,23 @@ private:
         addAttribute( pDocContentPropList, "xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0" );
         addAttribute( pDocContentPropList, "xmlns:draw", "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" );
         addAttribute( pDocContentPropList, "xmlns:fo", "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" );
-        addAttribute( pDocContentPropList, "xmlns:xlink", "http://www.w3.org/1999/xlink" );
-        addAttribute( pDocContentPropList, "xmlns:dc", "http://purl.org/dc/elements/1.1/" );
+        addAttribute( pDocContentPropList, "xmlns:xlink", "http:
+        addAttribute( pDocContentPropList, "xmlns:dc", "http:
         addAttribute( pDocContentPropList, "xmlns:meta", "urn:oasis:names:tc:opendocument:xmlns:meta:1.0" );
         addAttribute( pDocContentPropList, "xmlns:number", "urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" );
         addAttribute( pDocContentPropList, "xmlns:svg", "urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" );
         addAttribute( pDocContentPropList, "xmlns:chart", "urn:oasis:names:tc:opendocument:xmlns:chart:1.0" );
         addAttribute( pDocContentPropList, "xmlns:dr3d", "urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" );
-        addAttribute( pDocContentPropList, "xmlns:math", "http://www.w3.org/1998/Math/MathML" );
+        addAttribute( pDocContentPropList, "xmlns:math", "http:
         addAttribute( pDocContentPropList, "xmlns:form", "urn:oasis:names:tc:opendocument:xmlns:form:1.0" );
         addAttribute( pDocContentPropList, "xmlns:script", "urn:oasis:names:tc:opendocument:xmlns:script:1.0" );
-        addAttribute( pDocContentPropList, "xmlns:ooo", "http://openoffice.org/2004/office" );
-        addAttribute( pDocContentPropList, "xmlns:ooow", "http://openoffice.org/2004/writer" );
-        addAttribute( pDocContentPropList, "xmlns:oooc", "http://openoffice.org/2004/calc" );
-        addAttribute( pDocContentPropList, "xmlns:dom", "http://www.w3.org/2001/xml-events" );
-        addAttribute( pDocContentPropList, "xmlns:xforms", "http://www.w3.org/2002/xforms" );
-        addAttribute( pDocContentPropList, "xmlns:xsd", "http://www.w3.org/2001/XMLSchema");
-        addAttribute( pDocContentPropList, "xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance" );
+        addAttribute( pDocContentPropList, "xmlns:ooo", "http:
+        addAttribute( pDocContentPropList, "xmlns:ooow", "http:
+        addAttribute( pDocContentPropList, "xmlns:oooc", "http:
+        addAttribute( pDocContentPropList, "xmlns:dom", "http:
+        addAttribute( pDocContentPropList, "xmlns:xforms", "http:
+        addAttribute( pDocContentPropList, "xmlns:xsd", "http:
+        addAttribute( pDocContentPropList, "xmlns:xsi", "http:
         addAttribute( pDocContentPropList, "office:version", "1.0");
         m_xDocHandler->startElement("office:document-content" , xDocContentList );
     }
@@ -150,7 +150,7 @@ private:
                 m_InputStream.ReadUChar( nDummy ).ReadUInt16( nOpcode );
                 switch( nOpcode )
                 {
-                    case 0xC00B:  // Dictionary Word
+                    case 0xC00B:  
                         m_InputStream.ReadUChar( nLen ).ReadUChar( nDummy );
                         while( nLen > 0 && !m_InputStream.IsEof() )
                         {
@@ -169,7 +169,7 @@ private:
                         }
                         break;
 
-                    case 0x0242:  // Non Dictionary word
+                    case 0x0242:  
                         m_InputStream.ReadUChar( nData );
                         if( nData == 0x02 )
                         {
@@ -203,12 +203,12 @@ private:
         {
             m_xDocHandler->startDocument();
             SvXMLAttributeList *pAttrList = new SvXMLAttributeList();
-            writeDocContentPreamble(); // writes "office:document-content" elem
+            writeDocContentPreamble(); 
             uno::Reference < XAttributeList > xAttrList(pAttrList);
 
             m_xDocHandler->startElement( "office:body", xAttrList  );
 
-            // process strings imported
+            
             std::vector< OUString >::const_iterator it = m_vStringChunks.begin();
             std::vector< OUString >::const_iterator it_end = m_vStringChunks.end();
             for ( ; it!=it_end; ++it )
@@ -239,7 +239,7 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
     OUString sURL;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
-        //Note, we should attempt to use InputStream here first!
+        
         if ( pValue[i].Name == "URL" )
             pValue[i].Value >>= sURL;
     }
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL LotusWordProImportFilter::importImpl( const Sequence< ::com::s
     if ( inputStream.IsEof() || ( inputStream.GetError() != SVSTREAM_OK ) )
          return sal_False;
 
-    // An XML import service: what we push sax messages to..
+    
     OUString sXMLImportService ( "com.sun.star.comp.Writer.XMLImporter" );
 
     uno::Reference< XDocumentHandler > xInternalHandler( mxContext->getServiceManager()->createInstanceWithContext( sXMLImportService, mxContext ), UNO_QUERY );
@@ -270,7 +270,7 @@ void SAL_CALL LotusWordProImportFilter::cancel(  )
 {
 }
 
-// XImporter
+
 void SAL_CALL LotusWordProImportFilter::setTargetDocument( const uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
@@ -278,7 +278,7 @@ void SAL_CALL LotusWordProImportFilter::setTargetDocument( const uno::Reference<
     mxDoc = xDoc;
 }
 
-// XExtendedFilterDetection
+
 OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequence< PropertyValue >& Descriptor )
     throw( com::sun::star::uno::RuntimeException )
 {
@@ -324,7 +324,7 @@ OUString SAL_CALL LotusWordProImportFilter::detect( com::sun::star::uno::Sequenc
     return sTypeName;
 }
 
-// XInitialization
+
 void SAL_CALL LotusWordProImportFilter::initialize( const Sequence< Any >& aArguments )
     throw (Exception, RuntimeException)
 {
@@ -373,7 +373,7 @@ uno::Reference< XInterface > SAL_CALL LotusWordProImportFilter_createInstance( c
     return (cppu::OWeakObject*) new LotusWordProImportFilter( comphelper::getComponentContext(rSMgr) );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL LotusWordProImportFilter::getImplementationName(  )
     throw (RuntimeException)
 {

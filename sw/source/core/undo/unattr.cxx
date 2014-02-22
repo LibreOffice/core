@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <UndoAttribute.hxx>
@@ -111,7 +111,7 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxItemSet& rOldSet,
                               bool bSaveDrawPt )
     : SwUndo( UNDO_INSFMTATTR )
     , m_pFmt( &rChgFmt )
-      // #i56253#
+      
     , m_pOldSet( new SfxItemSet( rOldSet ) )
     , m_nNodeIndex( 0 )
     , m_nFmtWhich( rChgFmt.Which() )
@@ -135,7 +135,7 @@ SwUndoFmtAttr::SwUndoFmtAttr( const SfxPoolItem& rItem, SwFmt& rChgFmt,
 
 void SwUndoFmtAttr::Init()
 {
-    // treat change of anchor specially
+    
     if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, false ))
     {
         SaveFlyAnchor( m_bSaveDrawPt );
@@ -145,7 +145,7 @@ void SwUndoFmtAttr::Init()
         SwDoc* pDoc = m_pFmt->GetDoc();
         if ( pDoc->GetTblFrmFmts()->Contains(static_cast<const SwFrmFmt*>(m_pFmt)))
         {
-            // Table Format: save table position, table formats are volatile!
+            
             SwTable * pTbl = SwIterator<SwTable,SwFmt>::FirstElement( *m_pFmt );
             if ( pTbl )
             {
@@ -174,29 +174,29 @@ SwUndoFmtAttr::~SwUndoFmtAttr()
 
 void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    // OD 2004-10-26 #i35443#
-    // Important note: <Undo(..)> also called by <ReDo(..)>
+    
+    
 
     if ( !m_pOldSet.get() || !m_pFmt || !IsFmtInDoc( &rContext.GetDoc() ))
         return;
 
-    // #i35443# - If anchor attribute has been successful
-    // restored, all other attributes are also restored.
-    // Thus, keep track of its restoration
+    
+    
+    
     bool bAnchorAttrRestored( false );
     if ( SFX_ITEM_SET == m_pOldSet->GetItemState( RES_ANCHOR, false ))
     {
         bAnchorAttrRestored = RestoreFlyAnchor(rContext);
         if ( bAnchorAttrRestored )
         {
-            // Anchor attribute successful restored.
-            // Thus, keep anchor position for redo
+            
+            
             SaveFlyAnchor();
         }
         else
         {
-            // Anchor attribute not restored due to invalid anchor position.
-            // Thus, delete anchor attribute.
+            
+            
             m_pOldSet->ClearItem( RES_ANCHOR );
         }
     }
@@ -207,7 +207,7 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         m_pFmt->SetFmtAttr( *m_pOldSet );
         if ( aTmp.GetUndo() )
         {
-            // transfer ownership of helper object's old set
+            
             m_pOldSet = aTmp.GetUndo()->m_pOldSet;
         }
         else
@@ -224,8 +224,8 @@ void SwUndoFmtAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 
 bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
 {
-    // search for the Format in the Document; if it does not exist any more,
-    // the attribute is not restored!
+    
+    
     sal_uInt16 nPos = USHRT_MAX;
     switch ( m_nFmtWhich )
     {
@@ -279,7 +279,7 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
                     }
                 }
             }
-            // no break!
+            
         case RES_DRAWFRMFMT:
         case RES_FLYFRMFMT:
             nPos = pDoc->GetSpzFrmFmts()->GetPos(
@@ -294,14 +294,14 @@ bool SwUndoFmtAttr::IsFmtInDoc( SwDoc* pDoc )
 
     if ( USHRT_MAX == nPos )
     {
-        // Format does not exist; reset
+        
         m_pFmt = 0;
     }
 
     return 0 != m_pFmt;
 }
 
-// Check if it is still in Doc
+
 SwFmt* SwUndoFmtAttr::GetFmt( SwDoc& rDoc )
 {
     return m_pFmt && IsFmtInDoc( &rDoc ) ? m_pFmt : 0;
@@ -309,8 +309,8 @@ SwFmt* SwUndoFmtAttr::GetFmt( SwDoc& rDoc )
 
 void SwUndoFmtAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    // #i35443# - Because the undo stores the attributes for
-    // redo, the same code as for <Undo(..)> can be applied for <Redo(..)>
+    
+    
     UndoImpl(rContext);
 }
 
@@ -347,14 +347,14 @@ void SwUndoFmtAttr::RepeatImpl(::sw::RepeatContext & rContext)
 
     case RES_FLYFRMFMT:
         {
-            // Check if the cursor is in a flying frame
-            // Steps: search in all FlyFrmFormats for the FlyCntnt attribute
-            // and validate if the cursor is in the respective section
+            
+            
+            
             SwFrmFmt *const pFly =
                 rContext.GetRepeatPaM().GetNode()->GetFlyFmt();
             if( pFly )
             {
-                // Bug 43672: do not set all attributes!
+                
                 if (SFX_ITEM_SET ==
                         m_pFmt->GetAttrSet().GetItemState( RES_CNTNT ))
                 {
@@ -398,14 +398,14 @@ void SwUndoFmtAttr::PutAttr( const SfxPoolItem& rItem )
 
 void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
 {
-    // Format is valid, otherwise you would not reach this point here
+    
     if( bSvDrwPt )
     {
         if ( RES_DRAWFRMFMT == m_pFmt->Which() )
         {
             Point aPt( static_cast<SwFrmFmt*>(m_pFmt)->FindSdrObject()
                             ->GetRelativePos() );
-            // store old value as attribute, to keep SwUndoFmtAttr small
+            
             m_pOldSet->Put( SwFmtFrmSize( ATT_VAR_SIZE, aPt.X(), aPt.Y() ) );
         }
     }
@@ -421,7 +421,7 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     case FLY_AS_CHAR:
     case FLY_AT_CHAR:
         nCntnt = rAnchor.GetCntntAnchor()->nContent.GetIndex();
-        // fallthrough
+        
     case FLY_AT_PARA:
     case FLY_AT_FLY:
         m_nNodeIndex = rAnchor.GetCntntAnchor()->nNode.GetIndex();
@@ -434,10 +434,10 @@ void SwUndoFmtAttr::SaveFlyAnchor( bool bSvDrwPt )
     m_pOldSet->Put( aAnchor );
 }
 
-// #i35443# - Add return value, type <bool>.
-// Return value indicates, if anchor attribute is restored.
-// Note: If anchor attribute is restored, all other existing attributes
-//       are also restored.
+
+
+
+
 bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 {
     SwDoc *const pDoc = & rContext.GetDoc();
@@ -455,8 +455,8 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
                     static_cast<SwStartNode*>(pNd)->GetStartNodeType()) )
             : !pNd->IsTxtNode() )
         {
-            // #i35443# - invalid position.
-            // Thus, anchor attribute not restored
+            
+            
             return false;
         }
 
@@ -468,8 +468,8 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
             if ( aPos.nContent.GetIndex() >
                     static_cast<SwTxtNode*>(pNd)->GetTxt().getLength())
             {
-                // #i35443# - invalid position.
-                // Thus, anchor attribute not restored
+                
+                
                 return false;
             }
         }
@@ -483,31 +483,31 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     {
         if( RES_DRAWFRMFMT == pFrmFmt->Which() )
         {
-            // get the old cached value
+            
             const SwFmtFrmSize& rOldSize = static_cast<const SwFmtFrmSize&>(
                     m_pOldSet->Get( RES_FRM_SIZE ) );
             aDrawSavePt.X() = rOldSize.GetWidth();
             aDrawSavePt.Y() = rOldSize.GetHeight();
             m_pOldSet->ClearItem( RES_FRM_SIZE );
 
-            // write the current value into cache
+            
             aDrawOldPt = pFrmFmt->FindSdrObject()->GetRelativePos();
         }
         else
         {
-            pFrmFmt->DelFrms();         // delete Frms
+            pFrmFmt->DelFrms();         
         }
     }
 
     const SwFmtAnchor &rOldAnch = pFrmFmt->GetAnchor();
-    // #i54336#
-    // Consider case, that as-character anchored object has moved its anchor position.
+    
+    
     if (FLY_AS_CHAR == rOldAnch.GetAnchorId())
     {
-        // With InCntnts it's tricky: the text attribute needs to be deleted.
-        // Unfortunately, this not only destroys the Frms but also the format.
-        // To prevent that, first detach the connection between attribute and
-        // format.
+        
+        
+        
+        
         const SwPosition *pPos = rOldAnch.GetCntntAnchor();
         SwTxtNode *pTxtNode = (SwTxtNode*)&pPos->nNode.GetNode();
         OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
@@ -520,7 +520,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
                     "Wrong TxtFlyCnt-Hint." );
         const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt();
 
-        // Connection is now detached, therefore the attribute can be deleted
+        
         pTxtNode->DeleteAttributes( RES_TXTATR_FLYCNT, nIdx, nIdx );
     }
 
@@ -531,7 +531,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         if ( aTmp.GetUndo() )
         {
             m_nNodeIndex = aTmp.GetUndo()->m_nNodeIndex;
-            // transfer ownership of helper object's old set
+            
             m_pOldSet = aTmp.GetUndo()->m_pOldSet;
         }
         else
@@ -544,9 +544,9 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
     {
         SwDrawContact *pCont =
             static_cast<SwDrawContact*>(pFrmFmt->FindContactObj());
-        // The Draw model also prepared an Undo object for its right positioning
-        // which unfortunately is relative. Therefore block here a position
-        // change of the Contact object by setting the anchor.
+        
+        
+        
         SdrObject* pObj = pCont->GetMaster();
 
         if( pCont->GetAnchorFrm() && !pObj->IsInserted() )
@@ -556,7 +556,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
         }
         pObj->SetRelativePos( aDrawSavePt );
 
-        // cache the old value again
+        
         m_pOldSet->Put(
             SwFmtFrmSize( ATT_VAR_SIZE, aDrawOldPt.X(), aDrawOldPt.Y() ) );
     }
@@ -576,7 +576,7 @@ bool SwUndoFmtAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
 
     rContext.SetSelections(pFrmFmt, 0);
 
-    // #i35443# - anchor attribute restored.
+    
     return true;
 }
 
@@ -636,7 +636,7 @@ SwUndoResetAttr::~SwUndoResetAttr()
 
 void SwUndoResetAttr::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    // reset old values
+    
     SwDoc & rDoc = rContext.GetDoc();
     m_pHistory->TmpRollback( &rDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
@@ -673,7 +673,7 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
 
         break;
     case RES_TXTATR_TOXMARK:
-        // special treatment for TOXMarks
+        
         {
             SwTOXMarks aArr;
             SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode );
@@ -685,7 +685,7 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
             {
                 if( 1 < nCnt )
                 {
-                    // search for the right one
+                    
                     SwHistoryHint* pHHint = (GetHistory())[ 0 ];
                     if( pHHint && HSTRY_SETTOXMARKHNT == pHHint->Which() )
                     {
@@ -702,7 +702,7 @@ void SwUndoResetAttr::RedoImpl(::sw::UndoRedoContext & rContext)
                     else
                         nCnt = 0;
                 }
-                // found one, thus delete it
+                
                 if( nCnt-- )
                 {
                     rDoc.DeleteTOXMark( aArr[ nCnt ] );
@@ -814,7 +814,7 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         }
         else
         {
-            // remove all format redlines, will be recreated if needed
+            
             SetPaM(aPam);
             pDoc->DeleteRedline(aPam, false, nsRedlineType_t::REDLINE_FORMAT);
             if ( m_pRedlineSaveData.get() )
@@ -828,17 +828,17 @@ void SwUndoAttr::UndoImpl(::sw::UndoRedoContext & rContext)
                        && (RES_TXTATR_FIELD <= *m_AttrSet.GetRanges())
                        && (*m_AttrSet.GetRanges() <= RES_TXTATR_ANNOTATION);
 
-    // restore old values
+    
     m_pHistory->TmpRollback( pDoc, 0, !bToLast );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 
-    // set cursor onto Undo area
+    
     AddUndoRedoPaM(rContext);
 }
 
 void SwUndoAttr::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    // RefMarks are not repeat capable
+    
     if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, false ) )
     {
         rContext.GetDoc().InsertItemSet( rContext.GetRepeatPaM(),
@@ -948,7 +948,7 @@ void SwUndoAttr::RemoveIdx( SwDoc& rDoc )
                     pTxtNd->GetTxtAttrForCharAt(nCntnt, RES_TXTATR_FTN);
                 if( pTxtHt )
                 {
-                    // ok, so get values
+                    
                     SwTxtFtn* pFtn = static_cast<SwTxtFtn*>(pTxtHt);
                     RemoveIdxFromSection( rDoc, pFtn->GetStartNode()->GetIndex() );
                     return ;
@@ -966,9 +966,9 @@ SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet )
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_TABSTOP, false, &pItem ) )
     {
-        // store separately, because it may change!
+        
         m_pTabStop.reset( static_cast<SvxTabStopItem*>(pItem->Clone()) );
-        if ( 1 != rSet.Count() ) // are there more attributes?
+        if ( 1 != rSet.Count() ) 
         {
             m_pOldSet.reset( new SfxItemSet( rSet ) );
         }
@@ -994,7 +994,7 @@ void SwUndoDefaultAttr::UndoImpl(::sw::UndoRedoContext & rContext)
         m_pOldSet.reset( 0 );
         if ( aTmp.GetUndo() )
         {
-            // transfer ownership of helper object's old set
+            
             m_pOldSet = aTmp.GetUndo()->m_pOldSet;
         }
     }
@@ -1029,7 +1029,7 @@ void SwUndoMoveLeftMargin::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    // restore old values
+    
     m_pHistory->TmpRollback( & rDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );
 

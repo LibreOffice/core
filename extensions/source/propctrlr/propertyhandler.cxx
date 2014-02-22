@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "propertyhandler.hxx"
@@ -80,20 +80,20 @@ namespace pcr
         if ( xNewComponent == m_xComponent )
             return;
 
-        // remove all old property change listeners
+        
         SAL_WNODEPRECATED_DECLARATIONS_PUSH
         ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > removeListener = m_aPropertyListeners.createIterator();
-        ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > readdListener = m_aPropertyListeners.createIterator();  // will copy the container as needed
+        ::std::auto_ptr< ::cppu::OInterfaceIteratorHelper > readdListener = m_aPropertyListeners.createIterator();  
         SAL_WNODEPRECATED_DECLARATIONS_POP
         while ( removeListener->hasMoreElements() )
             removePropertyChangeListener( static_cast< XPropertyChangeListener* >( removeListener->next() ) );
         OSL_ENSURE( m_aPropertyListeners.empty(), "PropertyHandler::inspect: derived classes are expected to forward the removePropertyChangeListener call to their base class (me)!" );
 
-        // remember the new component, and give derived classes the chance to react on it
+        
         m_xComponent = xNewComponent;
         onNewComponent();
 
-        // add the listeners, again
+        
         while ( readdListener->hasMoreElements() )
             addPropertyChangeListener( static_cast< XPropertyChangeListener* >( readdListener->next() ) );
     }
@@ -138,7 +138,7 @@ namespace pcr
 
         Any aPropertyValue;
         if ( !_rControlValue.hasValue() )
-            // NULL is converted to NULL
+            
             return aPropertyValue;
 
         if ( ( m_pInfoService->getPropertyUIFlags( nPropId ) & PROP_FLAG_ENUM ) != 0 )
@@ -147,7 +147,7 @@ namespace pcr
             OSL_VERIFY( _rControlValue >>= sControlValue );
             ::rtl::Reference< IPropertyEnumRepresentation > aEnumConversion(
                 new DefaultEnumRepresentation( *m_pInfoService, aProperty.Type, nPropId ) );
-            // TODO/UNOize: cache those converters?
+            
             aEnumConversion->getValueFromDescription( sControlValue, aPropertyValue );
         }
         else
@@ -167,7 +167,7 @@ namespace pcr
 
             ::rtl::Reference< IPropertyEnumRepresentation > aEnumConversion(
                 new DefaultEnumRepresentation( *m_pInfoService, _rPropertyValue.getValueType(), nPropId ) );
-            // TODO/UNOize: cache those converters?
+            
             return makeAny( aEnumConversion->getDescriptionForValue( _rPropertyValue ) );
         }
 
@@ -343,21 +343,21 @@ namespace pcr
         OSL_ENSURE( xDocumentSI.is(), "PropertyHandlerHelper::impl_getDocumentMeasurementUnit_throw: No context document - where do I live?" );
         if ( xDocumentSI.is() )
         {
-            // determine the application type we live in
+            
             OUString sConfigurationLocation;
             OUString sConfigurationProperty;
             if ( xDocumentSI->supportsService( SERVICE_WEB_DOCUMENT ) )
-            {   // writer
+            {   
                 sConfigurationLocation = "/org.openoffice.Office.WriterWeb/Layout/Other";
                 sConfigurationProperty = "MeasureUnit";
             }
             else if ( xDocumentSI->supportsService( SERVICE_TEXT_DOCUMENT ) )
-            {   // writer
+            {   
                 sConfigurationLocation = "/org.openoffice.Office.Writer/Layout/Other";
                 sConfigurationProperty = "MeasureUnit";
             }
             else if ( xDocumentSI->supportsService( SERVICE_SPREADSHEET_DOCUMENT ) )
-            {   // calc
+            {   
                 sConfigurationLocation = "/org.openoffice.Office.Calc/Layout/Other/MeasureUnit";
                 sConfigurationProperty = "Metric";
             }
@@ -372,7 +372,7 @@ namespace pcr
                 sConfigurationProperty = "Metric";
             }
 
-            // read the measurement unit from the configuration
+            
             if ( !(sConfigurationLocation.isEmpty() || sConfigurationProperty.isEmpty()) )
             {
                 ::utl::OConfigurationTreeRoot aConfigTree( ::utl::OConfigurationTreeRoot::createWithComponentContext(
@@ -380,7 +380,7 @@ namespace pcr
                 sal_Int32 nUnitAsInt = (sal_Int32)FUNIT_NONE;
                 aConfigTree.getNodeValue( sConfigurationProperty ) >>= nUnitAsInt;
 
-                // if this denotes a valid (and accepted) unit, then use it
+                
                 if  ( ( nUnitAsInt > FUNIT_NONE ) && ( nUnitAsInt <= FUNIT_100TH_MM ) )
                     eUnit = static_cast< FieldUnit >( nUnitAsInt );
             }
@@ -408,6 +408,6 @@ namespace pcr
         return cppu::supportsService(this, ServiceName);
     }
 
-}   // namespace pcr
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

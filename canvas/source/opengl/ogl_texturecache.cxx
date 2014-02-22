@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #define GL_GLEXT_PROTOTYPES
@@ -34,10 +34,10 @@ namespace oglcanvas
 
     void TextureCache::flush()
     {
-        // un-bind any texture
+        
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        // delete all cached textures
+        
         TextureCacheMapT::const_iterator aCurr=maCache.begin();
         const TextureCacheMapT::const_iterator aEnd=maCache.end();
         while( aCurr != aEnd )
@@ -53,10 +53,10 @@ namespace oglcanvas
 
     void TextureCache::prune()
     {
-        // un-bind any texture
+        
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        // delete already "old" textures, mark "new" entries "old"
+        
         TextureCacheMapT::iterator aNext;
         TextureCacheMapT::iterator aCurr=maCache.begin();
         const TextureCacheMapT::iterator aEnd=maCache.end();
@@ -85,16 +85,16 @@ namespace oglcanvas
     {
         unsigned int nTexture(0);
 
-        // texture already cached?
+        
         TextureCacheMapT::iterator aCacheEntry;
         if( (aCacheEntry=maCache.find(nPixelCrc32)) == maCache.end() )
         {
-            // nope, insert new entry
+            
             glGenTextures(1, &nTexture);
             glBindTexture(GL_TEXTURE_2D, nTexture);
 
-            // TODO(E3): handle limited texture sizes -
-            // glGetIntegerv(GL_MAX_TEXTURE_SIZE)
+            
+            
             glTexImage2D(GL_TEXTURE_2D,
                          0,
                          4,

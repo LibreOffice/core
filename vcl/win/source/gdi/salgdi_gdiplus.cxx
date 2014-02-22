@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -61,7 +61,7 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-// -----------------------------------------------------------------------
+
 
 void impAddB2DPolygonToGDIPlusGraphicsPathReal(Gdiplus::GpPath *pPath, const basegfx::B2DPolygon& rPolygon, bool bNoLineJoin)
 {
@@ -171,7 +171,7 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
         {
             if(0 != a)
             {
-                Gdiplus::DllExports::GdipStartPathFigure(pPath); // #i101491# not needed for first run
+                Gdiplus::DllExports::GdipStartPathFigure(pPath); 
             }
 
             impAddB2DPolygonToGDIPlusGraphicsPathReal(pPath, rPolyPolygon.getB2DPolygon(a), false);
@@ -189,17 +189,17 @@ bool WinSalGraphics::drawPolyPolygon( const ::basegfx::B2DPolyPolygon& rPolyPoly
 
         if(mbPrinter)
         {
-            // #i121591#
-            // Normally GdiPlus should not be used for printing at all since printers cannot
-            // print transparent filled polygon geometry and normally this does not happen
-            // since OutputDevice::RemoveTransparenciesFromMetaFile is used as preparation
-            // and no transparent parts should remain for printing. But this can be overridden
-            // by the user and thus happens. This call can only come (currently) from
-            // OutputDevice::DrawTransparent, see comments there with the same TaskID.
-            // If it is used, the mapping for the printer is wrong and needs to be corrected. I
-            // checked that there is *no* transformation set and estimated that a stable factor
-            // dependent of the printer's DPI is used. Create and set a transformation here to
-            // correct this.
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             Gdiplus::REAL aDpiX;
             Gdiplus::DllExports::GdipGetDpiX(pGraphics, &aDpiX);
             Gdiplus::REAL aDpiY;
@@ -241,7 +241,7 @@ bool WinSalGraphics::drawPolyLine(
 
         switch(eLineJoin)
         {
-            default : // basegfx::B2DLINEJOIN_NONE :
+            default : 
             {
                 if(basegfx::fTools::more(rLineWidths.getX(), 0.0))
                 {
@@ -273,7 +273,7 @@ bool WinSalGraphics::drawPolyLine(
         {
             default: /*com::sun::star::drawing::LineCap_BUTT*/
             {
-                // nothing to do
+                
                 break;
             }
             case com::sun::star::drawing::LineCap_ROUND:
@@ -301,7 +301,7 @@ bool WinSalGraphics::drawPolyLine(
 
         if(rPolygon.isClosed() && !bNoLineJoin)
         {
-            // #i101491# needed to create the correct line joins
+            
             Gdiplus::DllExports::GdipClosePathFigure(pPath);
         }
 
@@ -324,18 +324,18 @@ bool WinSalGraphics::drawPolyLine(
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void paintToGdiPlus(
     Gdiplus::Graphics& rGraphics,
     const SalTwoRect& rTR,
     Gdiplus::Bitmap& rBitmap)
 {
-    // only parts of source are used
+    
     Gdiplus::PointF aDestPoints[3];
     Gdiplus::ImageAttributes aAttributes;
 
-    // define target region as paralellogram
+    
     aDestPoints[0].X = Gdiplus::REAL(rTR.mnDestX);
     aDestPoints[0].Y = Gdiplus::REAL(rTR.mnDestY);
     aDestPoints[1].X = Gdiplus::REAL(rTR.mnDestX + rTR.mnDestWidth);
@@ -359,7 +359,7 @@ void paintToGdiPlus(
         0);
 }
 
-// -----------------------------------------------------------------------
+
 
 void setInterpolationMode(
     Gdiplus::Graphics& rGraphics,
@@ -374,7 +374,7 @@ void setInterpolationMode(
     if(bSameWidth && bSameHeight)
     {
 #ifdef __MINGW32__
-        //Gdiplus::InterpolationModeInvalid is missing on mingw
+        
         rGraphics.SetInterpolationMode(Gdiplus::InterpolationModeDefault);
 #else
         rGraphics.SetInterpolationMode(Gdiplus::InterpolationModeInvalid);
@@ -459,7 +459,7 @@ bool WinSalGraphics::drawAlphaBitmap(
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool WinSalGraphics::drawTransformedBitmap(
     const basegfx::B2DPoint& rNull,
@@ -495,7 +495,7 @@ bool WinSalGraphics::drawTransformedBitmap(
                     nSrcHeight,
                     nDestHeight);
 
-                // this mode is only capable of drawing the whole bitmap to a paralellogram
+                
                 aDestPoints[0].X = Gdiplus::REAL(rNull.getX());
                 aDestPoints[0].Y = Gdiplus::REAL(rNull.getY());
                 aDestPoints[1].X = Gdiplus::REAL(rX.getX());

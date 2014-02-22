@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/scoped_array.hpp>
@@ -68,7 +68,7 @@ public:
 };
 
 
-// Call for the general reader interface
+
 sal_uLong AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OUString & )
 {
     if( !pStrm )
@@ -82,7 +82,7 @@ sal_uLong AsciiReader::Read( SwDoc &rDoc, const OUString&, SwPaM &rPam, const OU
     sal_uLong nRet = pParser->CallParser();
 
     delete pParser;
-    // after Read reset the options
+    
     aOpt.ResetASCIIOpts();
     return nRet;
 }
@@ -101,7 +101,7 @@ SwASCIIParser::SwASCIIParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
                 RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_LANGUAGE,
                 0 );
 
-    // set defaults from the options
+    
     if( rOpt.GetLanguage() )
     {
         SvxLanguageItem aLang( (LanguageType)rOpt.GetLanguage(),
@@ -131,7 +131,7 @@ SwASCIIParser::~SwASCIIParser()
 }
 
 
-// Calling the parser
+
 sal_uLong SwASCIIParser::CallParser()
 {
     rInput.Seek(STREAM_SEEK_TO_END);
@@ -167,7 +167,7 @@ sal_uLong SwASCIIParser::CallParser()
 
     if( pItemSet )
     {
-        // set only the attribute, for scanned scripts.
+        
         if( !( SCRIPTTYPE_LATIN & nScript ))
         {
             pItemSet->ClearItem( RES_CHRATR_FONT );
@@ -189,17 +189,17 @@ sal_uLong SwASCIIParser::CallParser()
             {
                 if (pColl)
                 {
-                    // Using the pool defaults for the font causes significant
-                    // trouble for the HTML filter, because it is not able
-                    // to export the pool defaults (or to be more precise:
-                    // the HTML filter is not able to detect whether a pool
-                    // default has changed or not. Even a comparison with the
-                    // HTMLi template does not work, because the defaults are
-                    // not copied when a new doc is created. The result of
-                    // comparing pool defaults therefor would be that the
-                    // defaults are exported always if the have changed for
-                    // text documents in general. That's not sensible, as well
-                    // as it is not sensible to export them always.
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     sal_uInt16 aWhichIds[4] =
                     {
                         RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
@@ -223,13 +223,13 @@ sal_uLong SwASCIIParser::CallParser()
             }
             else if( pInsPam )
             {
-                // then set over the insert range the defined attributes
+                
                 *pInsPam->GetMark() = *pPam->GetPoint();
                 pInsPam->GetPoint()->nNode++;
                 pInsPam->GetPoint()->nContent.Assign(
                                     pInsPam->GetCntntNode(), nSttCntnt );
 
-                // !!!!!
+                
                 OSL_ENSURE( !this, "Have to change - hard attr. to para. style" );
                 pDoc->InsertItemSet( *pInsPam, *pItemSet, 0 );
             }
@@ -288,7 +288,7 @@ sal_uLong SwASCIIParser::ReadChars()
         bSwapUnicode = false;
         hContext = rtl_createTextToUnicodeContext( hConverter );
     }
-    else if (pUseMe != &aEmpty)  //Already successfully figured out type
+    else if (pUseMe != &aEmpty)  
     {
         rInput.StartReadingUnicodeText( currentCharSet );
         bSwapUnicode = rInput.IsEndianSwap();
@@ -303,12 +303,12 @@ sal_uLong SwASCIIParser::ReadChars()
             if( pLastStt != pStt )
                 InsertText( OUString( pLastStt ));
 
-            // Read a new block
+            
             sal_uLong lGCount;
             if( SVSTREAM_OK != rInput.GetError() || 0 == (lGCount =
                         rInput.Read( pArr + nArrOffset,
                                      ASC_BUFFLEN - nArrOffset )))
-                break;      // break from the while loop
+                break;      
 
             /*
             If there was some unconverted bytes on the last cycle then they
@@ -322,7 +322,7 @@ sal_uLong SwASCIIParser::ReadChars()
             {
                 sal_uInt32 nInfo;
                 sal_Size nNewLen = lGCount, nCntBytes;
-                aWork.reset(new sal_Unicode[nNewLen + 1]); // add 1 for '\0'
+                aWork.reset(new sal_Unicode[nNewLen + 1]); 
                 sal_Unicode* pBuf = aWork.get();
 
                 nNewLen = rtl_convertTextToUnicode( hConverter, hContext,
@@ -369,7 +369,7 @@ sal_uLong SwASCIIParser::ReadChars()
                     pLastStt = ++pStt;
                 cLastCR = 0;
                 nLineLen = 0;
-                // We skip the last one at the end
+                
                 if( !rInput.IsEof() || !(pEnd == pStt ||
                     ( !*pEnd && pEnd == pStt+1 ) ) )
                     pDoc->SplitNode( *pPam->GetPoint(), false );
@@ -386,7 +386,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         *pStt = 0;
                         ++pStt;
 
-                        // We skip the last one at the end
+                        
                         if( !rInput.IsEof() || pEnd != pStt )
                             bSplitNode = true;
                     }
@@ -412,7 +412,7 @@ sal_uLong SwASCIIParser::ReadChars()
                         else
                             bChkSplit = true;
 
-                        // We skip the last one at the end
+                        
                         if( bChkSplit && ( !rInput.IsEof() || pEnd != pStt ))
                             bSplitNode = true;
                     }
@@ -420,7 +420,7 @@ sal_uLong SwASCIIParser::ReadChars()
 
         case 0x0c:
                     {
-                        // Insert a hard page break
+                        
                         *pStt++ = 0;
                         if( nLineLen )
                         {
@@ -439,14 +439,14 @@ sal_uLong SwASCIIParser::ReadChars()
                     if( nReadCnt == nFileSize && pStt+1 == pEnd )
                         *pStt = 0;
                     else
-                        *pStt = '#';        // Replacement visualisation
+                        *pStt = '#';        
                     break;
 
         case '\t':  break;
 
         default:
             if( ' ' > *pStt )
-            // Found control char, replace with '#'
+            
                 *pStt = '#';
             break;
         }
@@ -469,7 +469,7 @@ sal_uLong SwASCIIParser::ReadChars()
         }
         else if( bSplitNode )
         {
-            // We found a CR/LF, thus save the text
+            
             InsertText( OUString( pLastStt ));
             pDoc->SplitNode( *pPam->GetPoint(), false );
             pLastStt = pStt;

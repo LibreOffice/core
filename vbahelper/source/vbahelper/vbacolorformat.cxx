@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/msforms/XLineFormat.hpp>
@@ -54,7 +54,7 @@ ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xP
     }
 }
 
-// Attribute
+
 sal_Int32 SAL_CALL
 ScVbaColorFormat::getRGB() throw (uno::RuntimeException)
 {
@@ -65,8 +65,8 @@ ScVbaColorFormat::getRGB() throw (uno::RuntimeException)
         m_xPropertySet->getPropertyValue( "LineColor" ) >>= nRGB;
         break;
     case ColorFormatType::LINEFORMAT_BACKCOLOR:
-        //TODO BackColor not supported
-        // m_xPropertySet->setPropertyValue("Color", uno::makeAny( nRGB ) );
+        
+        
         break;
     case ColorFormatType::FILLFORMAT_FORECOLOR:
         m_xPropertySet->getPropertyValue( "FillColor" ) >>= nRGB;
@@ -91,7 +91,7 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb ) throw (uno::RuntimeException)
         m_xPropertySet->setPropertyValue( "LineColor" , uno::makeAny( nRGB ) );
         break;
     case ColorFormatType::LINEFORMAT_BACKCOLOR:
-        // TODO BackColor not supported
+        
         break;
     case ColorFormatType::FILLFORMAT_FORECOLOR:
         m_xPropertySet->setPropertyValue( "FillColor" , uno::makeAny( nRGB ) );
@@ -116,10 +116,10 @@ sal_Int32 SAL_CALL
 ScVbaColorFormat::getSchemeColor() throw (uno::RuntimeException)
 {
     sal_Int32 nColor = getRGB();
-    // #TODO I guess the number of elements is determined by the correct scheme
-    // the implementation here seems to be a rehash of color index ( which seems to be a
-    // different thing ) - I would guess we need to know/import etc. the correct color scheme
-    // or at least find out a little more
+    
+    
+    
+    
     sal_Int32 i = 0;
     for( ; i < 56; i++ )
     {
@@ -127,11 +127,11 @@ ScVbaColorFormat::getSchemeColor() throw (uno::RuntimeException)
        break;
     }
 
-    if( i == 56 ) // this is most likely an error condition
+    if( i == 56 ) 
         --i;
     return i;
-    // #TODO figure out what craziness is this,
-    // the 56 colors seems incorrect, as in default XL ( 2003 ) there are 80 colors
+    
+    
 /*
     if( i == 56 )
     {
@@ -145,9 +145,9 @@ ScVbaColorFormat::getSchemeColor() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor ) throw (uno::RuntimeException)
 {
-    // the table is 0 based
+    
     sal_Int32 nColor = MsoColorIndices::getColorIndex( _schemecolor );
-    // nColor is already xl RGB
+    
     setRGB( nColor );
 }
 

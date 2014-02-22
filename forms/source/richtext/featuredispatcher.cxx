@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,25 +14,25 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "featuredispatcher.hxx"
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::util;
 
-    //====================================================================
-    //= ORichTextFeatureDispatcher
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ORichTextFeatureDispatcher::ORichTextFeatureDispatcher( EditView& _rView, const URL&  _rURL )
         :m_aFeatureURL( _rURL )
         ,m_aStatusListeners( m_aMutex )
@@ -41,7 +41,7 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ORichTextFeatureDispatcher::~ORichTextFeatureDispatcher( )
     {
         if ( !m_bDisposed )
@@ -51,7 +51,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ORichTextFeatureDispatcher::dispose()
     {
         EventObject aEvent( *this );
@@ -62,13 +62,13 @@ namespace frm
         disposing( aGuard );
     }
 
-    //--------------------------------------------------------------------
+    
     void ORichTextFeatureDispatcher::disposing( ::osl::ClearableMutexGuard& /*_rClearBeforeNotify*/ )
     {
         m_pEditView = NULL;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextFeatureDispatcher::addStatusListener( const Reference< XStatusListener >& _rxControl, const URL& _rURL ) throw (RuntimeException)
     {
         OSL_ENSURE( !m_bDisposed, "ORichTextFeatureDispatcher::addStatusListener: already disposed!" );
@@ -84,19 +84,19 @@ namespace frm
             }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ORichTextFeatureDispatcher::removeStatusListener( const Reference< XStatusListener >& _rxControl, const URL& /*_rURL*/ ) throw (RuntimeException)
     {
         m_aStatusListeners.removeInterface( _rxControl );
     }
 
-    //--------------------------------------------------------------------
+    
     void ORichTextFeatureDispatcher::invalidate()
     {
         invalidateFeatureState_Broadcast();
     }
 
-    //--------------------------------------------------------------------
+    
     FeatureStateEvent ORichTextFeatureDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent;
@@ -107,7 +107,7 @@ namespace frm
         return aEvent;
     }
 
-    //--------------------------------------------------------------------
+    
     void ORichTextFeatureDispatcher::invalidateFeatureState_Broadcast()
     {
         FeatureStateEvent aEvent( buildStatusEvent() );
@@ -116,13 +116,13 @@ namespace frm
             doNotify( static_cast< XStatusListener* >( aIter.next() ), aEvent );
     }
 
-    //--------------------------------------------------------------------
+    
     void ORichTextFeatureDispatcher::newStatusListener( const Reference< XStatusListener >& _rxListener )
     {
         doNotify( _rxListener, buildStatusEvent() );
     }
 
-    //--------------------------------------------------------------------
+    
     void ORichTextFeatureDispatcher::doNotify( const Reference< XStatusListener >& _rxListener, const FeatureStateEvent& _rEvent ) const SAL_THROW(())
     {
         OSL_PRECOND( _rxListener.is(), "ORichTextFeatureDispatcher::doNotify: invalid listener!" );
@@ -139,8 +139,8 @@ namespace frm
         }
     }
 
-//........................................................................
-}   // namespace frm
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

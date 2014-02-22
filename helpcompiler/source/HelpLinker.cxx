@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <HelpCompiler.hxx>
@@ -88,7 +88,7 @@ void IndexerPreProcessor::processDocument
         if( pResNodeCaption )
         {
             fs::path fsCaptionPureTextFile_docURL = m_fsCaptionFilesDirName / aStdStr_EncodedDocPathURL;
-#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+#ifdef WNT     
             FILE* pFile_docURL = _wfopen(
                 fsCaptionPureTextFile_docURL.native_file_string_w(), L"w" );
 #else
@@ -111,7 +111,7 @@ void IndexerPreProcessor::processDocument
         if( pResNodeContent )
         {
             fs::path fsContentPureTextFile_docURL = m_fsContentFilesDirName / aStdStr_EncodedDocPathURL;
-#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+#ifdef WNT     
             FILE* pFile_docURL = _wfopen(
                 fsContentPureTextFile_docURL.native_file_string_w(), L"w" );
 #else
@@ -187,7 +187,7 @@ public:
 
     void dump_DBHelp( const fs::path& rFileName )
     {
-#ifdef WNT     //We need _wfopen to support long file paths on Windows XP
+#ifdef WNT     
         FILE* pFile = _wfopen( rFileName.native_file_string_w(), L"wb" );
 #else
         FILE* pFile = fopen( rFileName.native_file_string().c_str(), "wb" );
@@ -296,9 +296,9 @@ void HelpLinker::link() throw( HelpProcessingException )
     std::string mod = module;
     std::transform (mod.begin(), mod.end(), mod.begin(), tocharlower);
 
-    // do the work here
-    // continue with introduction of the overall process thing into the
-    // here all hzip files will be worked on
+    
+    
+    
     std::string appl = mod;
     if (appl[0] == 's')
         appl = appl.substr(1);
@@ -309,7 +309,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     fs::path helpTextFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".ht_" : ".ht")));
 #ifdef WNT
-    //We need _wfopen to support long file paths on Windows XP
+    
     FILE* pFileHelpText_DBHelp = _wfopen
         ( helpTextFileName_DBHelp.native_file_string_w(), L"wb" );
 #else
@@ -320,7 +320,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     fs::path dbBaseFileName_DBHelp(indexDirParentName / (mod + (bUse_ ? ".db_" : ".db")));
 #ifdef WNT
-    //We need _wfopen to support long file paths on Windows XP
+    
     FILE* pFileDbBase_DBHelp = _wfopen
         ( dbBaseFileName_DBHelp.native_file_string_w(), L"wb" );
 #else
@@ -332,26 +332,26 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     HelpKeyword helpKeyword;
 
-    // catch HelpProcessingException to avoid locking data bases
+    
     try
     {
 
-    // lastly, initialize the indexBuilder
+    
     if ( (!bExtensionMode || bIndexForExtension) && !helpFiles.empty())
         initIndexerPreProcessor();
 
-    // here we start our loop over the hzip files.
+    
     HashSet::iterator end = helpFiles.end();
     for (HashSet::iterator iter = helpFiles.begin(); iter != end; ++iter)
     {
-        // process one file
-        // streamTable contains the streams in the hzip file
+        
+        
         StreamTable streamTable;
         const std::string &xhpFileName = *iter;
 
         if (!bExtensionMode && xhpFileName.rfind(".xhp") != xhpFileName.length()-4)
         {
-            // only work on .xhp - files
+            
             SAL_WARN("helpcompiler",
                 "ERROR: input list entry '"
                     << xhpFileName
@@ -366,7 +366,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 
         if( bExtensionMode )
         {
-            // langsourceRoot == sourceRoot for extensions
+            
             std::string xhpFileNameComplete( extensionPath );
             xhpFileNameComplete.append( '/' + xhpFileName );
             xhpFile = fs::path( xhpFileNameComplete );
@@ -415,7 +415,7 @@ void HelpLinker::link() throw( HelpProcessingException )
         const std::string& jarfileB = documentJarfile;
         std::string& titleB = documentTitle;
 
-        // add once this as its own id.
+        
         addBookmark( pFileDbBase_DBHelp, documentPath, fileB, std::string(), jarfileB, titleB);
 
         const HashSet *hidlist = streamTable.appl_hidlist;
@@ -423,7 +423,7 @@ void HelpLinker::link() throw( HelpProcessingException )
             hidlist = streamTable.default_hidlist;
         if (hidlist && !hidlist->empty())
         {
-            // now iterate over all elements of the hidlist
+            
             HashSet::const_iterator aEnd = hidlist->end();
             for (HashSet::const_iterator hidListIter = hidlist->begin();
                 hidListIter != aEnd; ++hidListIter)
@@ -441,7 +441,7 @@ void HelpLinker::link() throw( HelpProcessingException )
             }
         }
 
-        // now the keywords
+        
         const Hashtable *anchorToLL = streamTable.appl_keywords;
         if (!anchorToLL)
             anchorToLL = streamTable.default_keywords;
@@ -456,7 +456,7 @@ void HelpLinker::link() throw( HelpProcessingException )
                 addBookmark(pFileDbBase_DBHelp, documentPath, fileB,
                             anchor, jarfileB, titleB);
                 std::string totalId = fakedHid + "#" + anchor;
-                // std::cerr << hzipFileName << std::endl;
+                
                 const LinkedList& ll = enumer->second;
                 LinkedList::const_iterator aOtherEnd = ll.end();
                 for (LinkedList::const_iterator llIter = ll.begin();
@@ -468,7 +468,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 
         }
 
-        // and last the helptexts
+        
         const Stringtable *helpTextHash = streamTable.appl_helptexts;
         if (!helpTextHash)
             helpTextHash = streamTable.default_helptexts;
@@ -488,10 +488,10 @@ void HelpLinker::link() throw( HelpProcessingException )
             }
         }
 
-        //IndexerPreProcessor
+        
         if( !bExtensionMode || bIndexForExtension )
         {
-            // now the indexing
+            
             xmlDocPtr document = streamTable.appl_doc;
             if (!document)
                 document = streamTable.default_doc;
@@ -503,12 +503,12 @@ void HelpLinker::link() throw( HelpProcessingException )
             }
         }
 
-    } // while loop over hzip files ending
+    } 
 
-    } // try
+    } 
     catch( const HelpProcessingException& )
     {
-        // catch HelpProcessingException to avoid locking data bases
+        
         if( pFileHelpText_DBHelp != NULL )
             fclose( pFileHelpText_DBHelp );
         if( pFileDbBase_DBHelp != NULL )
@@ -525,7 +525,7 @@ void HelpLinker::link() throw( HelpProcessingException )
 
     if( !bExtensionMode )
     {
-        // New index
+        
         Stringtable::iterator aEnd = additionalFiles.end();
         for (Stringtable::iterator enumer = additionalFiles.begin(); enumer != aEnd;
             ++enumer)
@@ -590,8 +590,8 @@ void HelpLinker::main( std::vector<std::string> &args,
         }
         else if (args[i].compare("-extlangdest") == 0)
         {
-            //If this argument is not provided then the location provided in -extsource will
-            //also be the destination
+            
+            
             ++i;
             if (i >= args.size())
             {
@@ -746,16 +746,16 @@ void HelpLinker::main( std::vector<std::string> &args,
         ++i;
     }
 
-    //We can be called from the helplinker executable or the extension manager
-    //In the latter case extsource is not used.
+    
+    
     if( (pExtensionPath && pExtensionPath->length() > 0 && pOfficeHelpPath)
         || !extsource.empty())
     {
         bExtensionMode = true;
         if (!extsource.empty())
         {
-            //called from helplinker.exe, pExtensionPath and pOfficeHelpPath
-            //should be NULL
+            
+            
             sourceRoot = fs::path(extsource, fs::native);
             extensionPath = sourceRoot.toUTF8();
 
@@ -767,19 +767,19 @@ void HelpLinker::main( std::vector<std::string> &args,
             }
             else
             {
-                //Convert from system path to file URL!!!
+                
                 fs::path p(extdestination, fs::native);
                 extensionDestination = p.toUTF8();
             }
         }
         else
-        { //called from extension manager
+        { 
             extensionPath = *pExtensionPath;
             sourceRoot = fs::path(extensionPath);
             extensionDestination = *pDestination;
         }
-        //check if -src option was used. This option must not be used
-        //when extension help is compiled.
+        
+        
         if (bSrcOption)
         {
             std::stringstream aStrStream;
@@ -798,17 +798,17 @@ void HelpLinker::main( std::vector<std::string> &args,
     if ( (!bExtensionMode && idxCaptionStylesheet.empty())
         || (!extsource.empty() && idxCaptionStylesheet.empty()) )
     {
-        //No extension mode and extension mode using commandline
-        //!extsource.empty indicates extension mode using commandline
-        // -idxcaption paramter is required
+        
+        
+        
         std::stringstream aStrStream;
         aStrStream << "no index caption stylesheet given" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
     else if ( bExtensionMode &&  extsource.empty())
     {
-        //This part is used when compileExtensionHelp is called from the extensions manager.
-        //If extension help is compiled using helplinker in the build process
+        
+        
         OUString aIdxCaptionPathFileURL( *pOfficeHelpPath );
         aIdxCaptionPathFileURL += "/idxcaption.xsl";
 
@@ -822,18 +822,18 @@ void HelpLinker::main( std::vector<std::string> &args,
     if ( (!bExtensionMode && idxContentStylesheet.empty())
         || (!extsource.empty() && idxContentStylesheet.empty()) )
     {
-        //No extension mode and extension mode using commandline
-        //!extsource.empty indicates extension mode using commandline
-        // -idxcontent paramter is required
+        
+        
+        
         std::stringstream aStrStream;
         aStrStream << "no index content stylesheet given" << std::endl;
         throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
     }
     else if ( bExtensionMode && extsource.empty())
     {
-        //If extension help is compiled using helplinker in the build process
-        //then  -idxcontent must be supplied
-        //This part is used when compileExtensionHelp is called from the extensions manager.
+        
+        
+        
         OUString aIdxContentPathFileURL( *pOfficeHelpPath );
         aIdxContentPathFileURL += "/idxcontent.xsl";
 
@@ -876,7 +876,7 @@ void HelpLinker::main( std::vector<std::string> &args,
     link();
 }
 
-// Variable to set an exception in "C" StructuredXMLErrorFunction
+
 static const HelpProcessingException* GpXMLParsingException = NULL;
 
 extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
@@ -892,7 +892,7 @@ extern "C" void StructuredXMLErrorFunction(void *userData, xmlErrorPtr error)
     HelpProcessingException* pException = new HelpProcessingException( aErrorMsg, aXMLParsingFile, nXMLParsingLine );
     GpXMLParsingException = pException;
 
-    // Reset error handler
+    
     xmlSetStructuredErrorFunc( NULL, NULL );
 }
 
@@ -908,7 +908,7 @@ HelpProcessingErrorInfo& HelpProcessingErrorInfo::operator=( const struct HelpPr
 }
 
 
-// Returns true in case of success, false in case of error
+
 HELPLINKER_DLLPUBLIC bool compileExtensionHelp
 (
     const OUString& aOfficeHelpPath,
@@ -942,7 +942,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
     const char* pDestination = aODestination.getStr();
     std::string aStdStrDestination = pDestination;
 
-    // Set error handler
+    
     xmlSetStructuredErrorFunc( NULL, (xmlStructuredErrorFunc)StructuredXMLErrorFunction );
     try
     {
@@ -964,13 +964,13 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         }
         bSuccess = false;
     }
-    // Reset error handler
+    
     xmlSetStructuredErrorFunc( NULL, NULL );
 
-    // i83624: Tree files
-    // The following basically checks if the help.tree is well formed XML.
-    // Apparently there have been cases when translations contained
-    // non-well-formed XML in the past.
+    
+    
+    
+    
     OUString aTreeFileURL = aExtensionLanguageRoot + "/help.tree";
     osl::DirectoryItem aTreeFileItem;
     osl::FileBase::RC rcGet = osl::DirectoryItem::get( aTreeFileURL, aTreeFileItem );
@@ -980,7 +980,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         aFileStatus.isValid( osl_FileStatus_Mask_FileSize ) )
     {
         sal_uInt64 ret, len = aFileStatus.getFileSize();
-        char* s = new char[ int(len) ];  // the buffer to hold the installed files
+        char* s = new char[ int(len) ];  
         osl::File aFile( aTreeFileURL );
         aFile.open( osl_File_OpenFlag_Read );
         aFile.read( s, len, ret );
@@ -995,7 +995,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
             o_rHelpProcessingErrorInfo.m_eErrorClass = HELPPROCESSING_XMLPARSING_ERROR;
             o_rHelpProcessingErrorInfo.m_aErrorMsg = OUString::createFromAscii( XML_ErrorString( nError ) );;
             o_rHelpProcessingErrorInfo.m_aXMLParsingFile = aTreeFileURL;
-            // CRAHSES!!! o_rHelpProcessingErrorInfo.m_nXMLParsingLine = XML_GetCurrentLineNumber( parser );
+            
             bSuccess = false;
         }
 

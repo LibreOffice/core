@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -254,8 +254,8 @@ void SAL_CALL
     if (GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
         sal_Int16 nLngSvcFlags = 0;
-        sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
+        sal_Bool bSCWA = sal_False, 
+             bSWWA = sal_False; 
 
         sal_Bool *pbVal = NULL;
         switch (rEvt.PropertyHandle)
@@ -280,22 +280,22 @@ void SAL_CALL
             case UPH_IS_SPELL_UPPER_CASE          :
             {
                 pbVal = &bIsSpellUpperCase;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = sal_False == *pbVal;    
+                bSWWA = !bSCWA;             
                 break;
             }
             case UPH_IS_SPELL_WITH_DIGITS         :
             {
                 pbVal = &bIsSpellWithDigits;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = sal_False == *pbVal;    
+                bSWWA = !bSCWA;             
                 break;
             }
             case UPH_IS_SPELL_CAPITALIZATION      :
             {
                 pbVal = &bIsSpellCapitalization;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = sal_False == *pbVal;    
+                bSWWA = !bSCWA;             
                 break;
             }
             default:
@@ -319,8 +319,8 @@ void SAL_CALL
 
 void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
 {
-    // set return value to default value unless there is an
-    // explicitly supplied temporary value
+    
+    
     bResIsGermanPreReform           = bIsGermanPreReform;
     bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters;
     bResIsUseDictionaryList         = bIsUseDictionaryList;

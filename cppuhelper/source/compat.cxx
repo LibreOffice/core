@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -45,7 +45,7 @@ namespace com { namespace sun { namespace star {
 } } }
 namespace rtl { class OUString; }
 
-// Stubs for removed functionality, to be killed when we bump cppuhelper SONAME
+
 
 namespace cppu {
 
@@ -53,7 +53,7 @@ SAL_DLLPUBLIC_EXPORT
 css::uno::Reference< css::lang::XMultiComponentFactory > bootstrapInitialSF(
     rtl::OUString const &) SAL_THROW((com::sun::star::uno::Exception))
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::uno::XComponentContext > SAL_CALL
@@ -61,12 +61,12 @@ bootstrap_InitialComponentContext(
     css::uno::Reference< css::registry::XSimpleRegistry > const &,
     rtl::OUString const &) SAL_THROW((css::uno::Exception))
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::registry::XSimpleRegistry >
 SAL_CALL createNestedRegistry(rtl::OUString const &) SAL_THROW(()) {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::lang::XMultiServiceFactory >
@@ -74,12 +74,12 @@ SAL_CALL createRegistryServiceFactory(
     rtl::OUString const &, rtl::OUString const &, sal_Bool,
     rtl::OUString const &) SAL_THROW((css::uno::Exception))
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference< css::registry::XSimpleRegistry >
 SAL_CALL createSimpleRegistry(rtl::OUString const &) SAL_THROW(()) {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT css::reflection::XIdlClass * SAL_CALL
@@ -89,7 +89,7 @@ createStandardClassWithSequence(
     css::uno::Reference< css::reflection::XIdlClass > const &,
     css::uno::Sequence< rtl::OUString > const &) SAL_THROW(())
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference<css::uno::XInterface> SAL_CALL
@@ -100,7 +100,7 @@ invokeStaticComponentFactory(
     rtl::OUString const &)
     SAL_THROW((css::loader::CannotActivateFactoryException))
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 SAL_DLLPUBLIC_EXPORT css::uno::Reference<css::uno::XInterface> SAL_CALL
@@ -111,7 +111,7 @@ loadSharedLibComponentFactory(
     rtl::OUString const &)
     SAL_THROW((css::loader::CannotActivateFactoryException))
 {
-    for (;;) { std::abort(); } // avoid "must return a value" warnings
+    for (;;) { std::abort(); } 
 }
 
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/property.hxx>
@@ -36,7 +36,7 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 
-//.........................................................................
+
 namespace comphelper
 {
 
@@ -58,7 +58,7 @@ namespace comphelper
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-//------------------------------------------------------------------
+
 void copyProperties(const Reference<XPropertySet>& _rxSource,
                     const Reference<XPropertySet>& _rxDest)
 {
@@ -129,28 +129,28 @@ void copyProperties(const Reference<XPropertySet>& _rxSource,
     }
 }
 
-//------------------------------------------------------------------
+
 bool hasProperty(const OUString& _rName, const Reference<XPropertySet>& _rxSet)
 {
     if (_rxSet.is())
     {
-        //  XPropertySetInfoRef xInfo(rxSet->getPropertySetInfo());
+        
         return _rxSet->getPropertySetInfo()->hasPropertyByName(_rName);
     }
     return false;
 }
 
-//------------------------------------------------------------------
+
 void RemoveProperty(Sequence<Property>& _rProps, const OUString& _rPropName)
 {
     sal_Int32 nLen = _rProps.getLength();
 
-    // binaere Suche
+    
     const Property* pProperties = _rProps.getConstArray();
     Property aNameProp(_rPropName, 0, Type(), 0);
     const Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
 
-    // gefunden ?
+    
     if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == _rPropName) )
     {
         OSL_ENSURE(pResult->Name.equals(_rPropName), "::RemoveProperty Properties nicht sortiert");
@@ -158,17 +158,17 @@ void RemoveProperty(Sequence<Property>& _rProps, const OUString& _rPropName)
     }
 }
 
-//------------------------------------------------------------------
+
 void ModifyPropertyAttributes(Sequence<Property>& seqProps, const OUString& sPropName, sal_Int16 nAddAttrib, sal_Int16 nRemoveAttrib)
 {
     sal_Int32 nLen = seqProps.getLength();
 
-    // binaere Suche
+    
     Property* pProperties = seqProps.getArray();
     Property aNameProp(sPropName, 0, Type(), 0);
     Property* pResult = ::std::lower_bound(pProperties, pProperties + nLen, aNameProp, PropertyCompareByName());
 
-    // gefunden ?
+    
     if ( pResult && (pResult != pProperties + nLen) && (pResult->Name == sPropName) )
     {
         pResult->Attributes |= nAddAttrib;
@@ -176,7 +176,7 @@ void ModifyPropertyAttributes(Sequence<Property>& seqProps, const OUString& sPro
     }
 }
 
-//------------------------------------------------------------------
+
 bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValueToSet, const Any& _rCurrentValue, const Type& _rExpectedType)
 {
     bool bModified(false);
@@ -209,8 +209,8 @@ bool tryPropertyValue(Any& _rConvertedValue, Any& _rOldValue, const Any& _rValue
     return bModified;
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

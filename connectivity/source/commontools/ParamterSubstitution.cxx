@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "ParameterSubstitution.hxx"
 #include "connectivity/sqlparse.hxx"
@@ -39,12 +39,12 @@ namespace connectivity
         xConnection = aArgs.getUnpackedValueOrDefault("ActiveConnection",xConnection);
         m_xConnection = xConnection;
     }
-    //------------------------------------------------------------------------------
+    
     OUString ParameterSubstitution::getImplementationName_Static(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.helper.ParameterSubstitution");
     }
-    //------------------------------------------------------------------------------
+    
     OUString SAL_CALL ParameterSubstitution::getImplementationName(  ) throw(RuntimeException)
     {
         return getImplementationName_Static();
@@ -54,12 +54,12 @@ namespace connectivity
     {
         return cppu::supportsService(this, _rServiceName);
     }
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  ) throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
-    //------------------------------------------------------------------
+    
     Sequence< OUString > ParameterSubstitution::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSNS( 1 );
@@ -67,12 +67,12 @@ namespace connectivity
         return aSNS;
     }
 
-    //------------------------------------------------------------------
+    
     Reference< XInterface >  ParameterSubstitution::create(const Reference< XComponentContext >& _xContext)
     {
         return *(new ParameterSubstitution(_xContext));
     }
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, ::sal_Bool /*bSubstRequired*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
     {
         OUString sRet = _sText;
@@ -86,7 +86,7 @@ namespace connectivity
                 OUString sNewSql;
                 OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,_sText);
                 if(pNode)
-                {   // special handling for parameters
+                {   
                     OSQLParseNode::substituteParameterNames(pNode);
                     pNode->parseNodeToStr( sNewSql, xConnection );
                     delete pNode;
@@ -99,21 +99,21 @@ namespace connectivity
         }
         return sRet;
     }
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ParameterSubstitution::reSubstituteVariables( const OUString& _sText ) throw (::com::sun::star::uno::RuntimeException)
     {
         return _sText;
     }
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ParameterSubstitution::getSubstituteVariableValue( const OUString& /*variable*/ ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException)
     {
         throw container::NoSuchElementException();
     }
-    //------------------------------------------------------------------
+    
 
 
-// ==================================
-} // connectivity
-// ==================================
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

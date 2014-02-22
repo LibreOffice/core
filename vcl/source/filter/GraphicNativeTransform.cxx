@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/GraphicNativeTransform.hxx>
@@ -39,7 +39,7 @@ bool GraphicNativeTransform::canBeRotated()
 {
     GfxLink aLink = mrGraphic.GetLink();
 
-    // Don't allow rotation on animations for now
+    
     if (mrGraphic.IsAnimated())
     {
         return false;
@@ -58,12 +58,12 @@ bool GraphicNativeTransform::canBeRotated()
 
 bool GraphicNativeTransform::rotate(sal_uInt16 aInputRotation)
 {
-    // Rotation can be between 0 and 3600
+    
     sal_uInt16 aRotation = aInputRotation % 3600;
 
     if (aRotation == 0)
     {
-        return true; // No rotation is needed
+        return true; 
     }
     else if (aRotation != 900 && aRotation != 1800 && aRotation != 2700)
     {
@@ -106,7 +106,7 @@ bool GraphicNativeTransform::rotateBitmapOnly(sal_uInt16 aRotation)
 
 bool GraphicNativeTransform::rotateGeneric(sal_uInt16 aRotation, OUString aType)
 {
-    // Can't rotate animations yet
+    
     if (mrGraphic.IsAnimated())
     {
         return false;
@@ -171,7 +171,7 @@ bool GraphicNativeTransform::rotateJPEG(sal_uInt16 aRotation)
 
         aTargetStream.Seek( STREAM_SEEK_TO_BEGIN );
 
-        // Reset orientation in exif if needed
+        
         if ( exif.hasExif() && aOrientation != TOP_LEFT)
         {
             exif.setOrientation(TOP_LEFT);

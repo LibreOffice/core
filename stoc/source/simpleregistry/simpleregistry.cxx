@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -279,8 +279,8 @@ css::registry::RegistryKeyType Key::getKeyType(OUString const & rKeyName)
     }
     switch (type) {
     default:
-        std::abort(); // this cannot happen
-        // pseudo-fall-through to avoid warnings on MSC
+        std::abort(); 
+        
     case RG_KEYTYPE:
         return css::registry::RegistryKeyType_KEY;
     case RG_LINKTYPE:
@@ -310,8 +310,8 @@ css::registry::RegistryValueType Key::getValueType()
     }
     switch (type) {
     default:
-        std::abort(); // this cannot happen
-        // pseudo-fall-through to avoid warnings on MSC
+        std::abort(); 
+        
     case RG_VALUETYPE_NOT_DEFINED:
         return css::registry::RegistryValueType_NOT_DEFINED;
     case RG_VALUETYPE_LONG:
@@ -452,7 +452,7 @@ OUString Key::getAsciiValue() throw (
              OUString::number(type)),
             static_cast< OWeakObject * >(this));
     }
-    // size contains terminating null (error in underlying registry.cxx):
+    
     if (size == 0) {
         throw css::registry::InvalidValueException(
             OUString("com.sun.star.registry.SimpleRegistry key getAsciiValue:"
@@ -516,7 +516,7 @@ void Key::setAsciiValue(OUString const & value)
     RegError err = key_.setValue(
         OUString(), RG_VALUETYPE_STRING,
         const_cast< char * >(utf8.getStr()), utf8.getLength() + 1);
-        // +1 for terminating null (error in underlying registry.cxx)
+        
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString("com.sun.star.registry.SimpleRegistry key setAsciiValue:"
@@ -642,8 +642,8 @@ OUString Key::getStringValue() throw (
              OUString::number(type)),
             static_cast< OWeakObject * >(this));
     }
-    // size contains terminating null and is *2 (error in underlying
-    // registry.cxx):
+    
+    
     if (size == 0 || (size & 1) == 1) {
         throw css::registry::InvalidValueException(
             OUString("com.sun.star.registry.SimpleRegistry key getStringValue:"
@@ -684,7 +684,7 @@ void Key::setStringValue(OUString const & value)
         OUString(), RG_VALUETYPE_UNICODE,
         const_cast< sal_Unicode * >(value.getStr()),
         (value.getLength() + 1) * sizeof (sal_Unicode));
-        // +1 for terminating null (error in underlying registry.cxx)
+        
     if (err != REG_NO_ERROR) {
         throw css::registry::InvalidRegistryException(
             (OUString("com.sun.star.registry.SimpleRegistry key setStringValue:"

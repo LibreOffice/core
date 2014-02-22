@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -83,7 +83,7 @@ static sal_Unicode* ImplAddString( sal_Unicode* pBuf, const OUString& rStr )
 
 static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLen )
 {
-    // fill temp buffer with digits
+    
     sal_Unicode aTempBuf[30];
     sal_Unicode* pTempBuf = aTempBuf;
     do
@@ -96,7 +96,7 @@ static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLe
     }
     while ( nNumber );
 
-    // fill with zeros up to the minimal length
+    
     while ( nMinLen > 0 )
     {
         *pBuf = '0';
@@ -104,7 +104,7 @@ static sal_Unicode* ImplAddNum( sal_Unicode* pBuf, sal_uLong nNumber, int nMinLe
         nMinLen--;
     }
 
-    // copy temp buffer to real buffer
+    
     do
     {
         pTempBuf--;
@@ -247,17 +247,17 @@ static OUString ImplPatternReformat( const OUString& rStr,
         cLiteral = rLiteralMask[i];
         cMask = rEditMask[i];
 
-        // current position is a literal
+        
         if ( cMask == EDITMASK_LITERAL )
         {
-            // if it is a literal copy otherwise ignore because it might be the next valid
-            // character of the string
+            
+            
             if ( ImplCommaPointCharEqual( cChar, cLiteral ) )
                 nStrIndex++;
             else
             {
-                // Otherwise we check if it is a invalid character. This is the case if it does not
-                // fit in the pattern of the next non-literal character.
+                
+                
                 n = i+1;
                 while ( n < rEditMask.getLength() )
                 {
@@ -274,23 +274,23 @@ static OUString ImplPatternReformat( const OUString& rStr,
         }
         else
         {
-            // valid character at this position
+            
             cTempChar = ImplPatternChar( cChar, cMask );
             if ( cTempChar )
             {
-                // use this character
+                
                 aOutStr[i] = cTempChar;
                 nStrIndex++;
             }
             else
             {
-                // copy if it is a literal character
+                
                 if ( cLiteral == cChar )
                     nStrIndex++;
                 else
                 {
-                    // If the invalid character might be the next literal character then we jump
-                    // ahead to it, otherwise we ignore it. Do only if empty literals are allowed.
+                    
+                    
                     if ( nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS )
                     {
                         n = i;
@@ -325,10 +325,10 @@ static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
                                sal_Int32 nCursorPos, sal_Int32& rPos )
 {
 
-    // last position must not be longer than the contained string
+    
     sal_Int32 nMaxPos = rStr.getLength();
 
-    // if non empty literals are allowed ignore blanks at the end as well
+    
     if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) )
     {
         while ( nMaxPos )
@@ -339,7 +339,7 @@ static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
             nMaxPos--;
         }
 
-        // if we are in front of a literal, continue search until first character after the literal
+        
         sal_Int32 nTempPos = nMaxPos;
         while ( nTempPos < rEditMask.getLength() )
         {
@@ -355,7 +355,7 @@ static void ImplPatternMaxPos( const OUString& rStr, const OString& rEditMask,
     if ( rPos > nMaxPos )
         rPos = nMaxPos;
 
-    // character should not move left
+    
     if ( rPos < nCursorPos )
         rPos = nCursorPos;
 }
@@ -367,7 +367,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 {
     OUString aText = pEdit->GetText();
 
-    // remove leading blanks
+    
     if ( bSameMask && !(nFormatFlags & PATTERN_FORMAT_EMPTYLITERALS) )
     {
         sal_Int32 i = 0;
@@ -380,7 +380,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 
             i++;
         }
-        // keep all literal characters
+        
         while ( i && (rEditMask[i] == EDITMASK_LITERAL) )
             i--;
         aText = aText.copy( i );
@@ -389,7 +389,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
     OUString aNewText = ImplPatternReformat( aText, rEditMask, rLiteralMask, nFormatFlags );
     if ( aNewText != aText )
     {
-        // adjust selection such that it remains at the end if it was there before
+        
         Selection aSel = pEdit->GetSelection();
         sal_Int64 nMaxSel = std::max( aSel.Min(), aSel.Max() );
         if ( nMaxSel >= aText.getLength() )
@@ -412,7 +412,7 @@ static void ImplPatternProcessStrictModify( Edit* pEdit,
 
 static sal_Int32 ImplPatternLeftPos(const OString& rEditMask, sal_Int32 nCursorPos)
 {
-    // search non-literal predecessor
+    
     sal_Int32 nNewPos = nCursorPos;
     sal_Int32 nTempPos = nNewPos;
     while ( nTempPos )
@@ -431,7 +431,7 @@ static sal_Int32 ImplPatternRightPos( const OUString& rStr, const OString& rEdit
                                        sal_uInt16 nFormatFlags, bool bSameMask,
                                        sal_Int32 nCursorPos )
 {
-    // search non-literal successor
+    
     sal_Int32 nNewPos = nCursorPos;
     sal_Int32 nTempPos = nNewPos;
     while ( nTempPos < rEditMask.getLength() )
@@ -479,8 +479,8 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( nKeyCode == KEY_RIGHT )
         {
-            // Use the start of selection as minimum; even a small position is allowed in case that
-            // all was selected by the focus
+            
+            
             Selection aSel( aOldSel );
             aSel.Justify();
             nCursorPos = aSel.Min();
@@ -494,13 +494,13 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( nKeyCode == KEY_HOME )
         {
-            // Home is the position of the first non-literal character
+            
             nNewPos = 0;
             while ( (nNewPos < rEditMask.getLength()) &&
                     (rEditMask[nNewPos] == EDITMASK_LITERAL) )
                 nNewPos++;
 
-            // Home should not move to the right
+            
             if ( nCursorPos < nNewPos )
                 nNewPos = nCursorPos;
             Selection aSel( nNewPos );
@@ -511,13 +511,13 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( nKeyCode == KEY_END )
         {
-            // End is position of last non-literal character
+            
             nNewPos = rEditMask.getLength();
             while ( nNewPos &&
                     (rEditMask[nNewPos-1] == EDITMASK_LITERAL) )
                 nNewPos--;
-            // Use the start of selection as minimum; even a small position is allowed in case that
-            // all was selected by the focus
+            
+            
             Selection aSel( aOldSel );
             aSel.Justify();
             nCursorPos = static_cast<sal_Int32>(aSel.Min());
@@ -539,7 +539,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             aSel.Justify();
             nNewPos = static_cast<sal_Int32>(aSel.Min());
 
-             // if selection then delete it
+             
             if ( aSel.Len() )
             {
                 if ( bSameMask )
@@ -592,8 +592,8 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
         else if ( nKeyCode == KEY_INSERT )
         {
-            // you can only set InsertModus for a PatternField if the
-            // mask is equal at all input positions
+            
+            
             if ( !bSameMask )
             {
                 return true;
@@ -615,20 +615,20 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
             cChar = cPattChar;
         else
         {
-            // If no valid character, check if the user wanted to jump to next literal. We do this
-            // only if we're after a character, so that literals that were skipped automatically
-            // do not influence the position anymore.
+            
+            
+            
             if ( nNewPos &&
                  (rEditMask[nNewPos-1] != EDITMASK_LITERAL) &&
                  !aSel.Len() )
             {
-                // search for next character not being a literal
+                
                 nTempPos = nNewPos;
                 while ( nTempPos < rEditMask.getLength() )
                 {
                     if ( rEditMask[nTempPos] == EDITMASK_LITERAL )
                     {
-                        // only valid if no literal present
+                        
                         if ( (rEditMask[nTempPos+1] != EDITMASK_LITERAL ) &&
                              ImplCommaPointCharEqual( cChar, rLiteralMask[nTempPos] ) )
                         {
@@ -657,7 +657,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         bool        bError = false;
         if ( bSameMask && pEdit->IsInsertMode() )
         {
-            // crop spaces and literals at the end until current position
+            
             sal_Int32 n = aStr.getLength();
             while ( n && (n > nNewPos) )
             {
@@ -674,7 +674,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
 
             if ( aStr.getLength() < rEditMask.getLength() )
             {
-                // possibly extend string until cursor position
+                
                 if ( aStr.getLength() < nNewPos )
                     aStr.append( rLiteralMask.copy( aStr.getLength(), nNewPos-aStr.getLength() ));
                 if ( nNewPos < aStr.getLength() )
@@ -690,7 +690,7 @@ static bool ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         {
             if ( aSel.Len() )
             {
-                // delete selection
+                
                 OUString aRep = rLiteralMask.copy( aSel.Min(), aSel.Len() );
                 aStr.remove( aSel.Min(), aRep.getLength() );
                 aStr.insert( aSel.Min(), aRep );
@@ -732,8 +732,8 @@ void PatternFormatter::ImplSetMask(const OString& rEditMask, const OUString& rLi
         maLiteralMask = aBuf.makeStringAndClear();
     }
 
-    // Strict mode allows only the input mode if only equal characters are allowed as mask and if
-    // only spaces are specified which are not allowed by the mask
+    
+    
     sal_Int32   i = 0;
     sal_Char    c = 0;
     while ( i < rEditMask.getLength() )
@@ -963,15 +963,15 @@ static bool ImplCutMonthName( OUString& rStr, const OUString& _rLookupMonthName 
 
 static sal_uInt16 ImplCutMonthFromString( OUString& rStr, const CalendarWrapper& rCalendarWrapper )
 {
-    // search for a month' name
+    
     for ( sal_uInt16 i=1; i <= 12; i++ )
     {
         OUString aMonthName = rCalendarWrapper.getMonths()[i-1].FullName;
-        // long month name?
+        
         if ( ImplCutMonthName( rStr, aMonthName ) )
             return i;
 
-        // short month name?
+        
         OUString aAbbrevMonthName = rCalendarWrapper.getMonths()[i-1].AbbrevName;
         if ( ImplCutMonthName( rStr, aAbbrevMonthName ) )
             return i;
@@ -1038,7 +1038,7 @@ static bool ImplDateGetValue( const OUString& rStr, Date& rDate, ExtDateFieldFor
     }
     else
     {
-        // Check if year is present:
+        
         OUString aDateSep = ImplGetDateSep( rLocaleDataWrapper, eDateFormat );
         sal_Int32 nSepPos = aStr.indexOf( aDateSep );
         if ( nSepPos < 0 )
@@ -1164,11 +1164,11 @@ OUString DateFormatter::ImplGetDateAsText( const Date& rDate,
 
     if ( !bShowCentury )
     {
-        // Check if I have to use force showing the century
+        
         sal_uInt16 nTwoDigitYearStart = utl::MiscCfg().GetYear2000();
         sal_uInt16 nYear = rDate.GetYear();
 
-        // If year is not in double digit range
+        
         if ( (nYear < nTwoDigitYearStart) || (nYear >= nTwoDigitYearStart+100) )
             bShowCentury = true;
     }
@@ -1304,13 +1304,13 @@ static void ImplDateIncrementYear( Date& rDate, bool bUp )
     }
     if (nMonth == 2)
     {
-        // Handle February 29 from leap year to non-leap year.
+        
         sal_uInt16 nDay = rDate.GetDay();
         if (nDay > 28)
         {
-            // The check would not be necessary if it was guaranteed that the
-            // date was valid before and actually was a leap year,
-            // de-/incrementing a leap year with 29 always results in 28.
+            
+            
+            
             sal_uInt16 nDaysInMonth = Date::GetDaysInMonth( nMonth, rDate.GetYear());
             if (nDay > nDaysInMonth)
                 rDate.SetDay( nDaysInMonth);
@@ -1325,7 +1325,7 @@ bool DateFormatter::ImplAllowMalformedInput() const
 
 void DateField::ImplDateSpinArea( bool bUp )
 {
-    // increment days if all is selected
+    
     if ( GetField() )
     {
         Date aDate( GetDate() );
@@ -1346,7 +1346,7 @@ void DateField::ImplDateSpinArea( bool bUp )
             }
             else
             {
-                // search area
+                
                 sal_Int32 nPos = 0;
                 OUString aDateSep = ImplGetDateSep( ImplGetLocaleDataWrapper(), eFormat );
                 for ( sal_Int8 i = 1; i <= 3; i++ )
@@ -1543,7 +1543,7 @@ void DateFormatter::SetLongFormat( bool bLong )
 {
     mbLongFormat = bLong;
 
-    // #91913# Remove LongFormat and DateShowCentury - redundant
+    
     if ( bLong )
     {
         SetExtDateFormat( XTDATEF_SYSTEM_LONG );
@@ -1561,7 +1561,7 @@ void DateFormatter::SetShowDateCentury( bool bShowDateCentury )
 {
     mbShowDateCentury = bShowDateCentury;
 
-    // #91913# Remove LongFormat and DateShowCentury - redundant
+    
     if ( bShowDateCentury )
     {
         switch ( GetExtDateFormat() )
@@ -1637,7 +1637,7 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
         aSelection.Justify();
         OUString aText = GetField()->GetText();
 
-        // If selected until the end then keep it that way
+        
         if ( (sal_Int32)aSelection.Max() == aText.getLength() )
         {
             if ( !aSelection.Len() )
@@ -1649,7 +1649,7 @@ void DateFormatter::ImplNewFieldValue( const Date& rDate )
         ImplSetUserDate( rDate, &aSelection );
         maLastDate = aOldLastDate;
 
-        // Modify at Edit is only set at KeyInput
+        
         if ( GetField()->GetText() != aText )
         {
             GetField()->SetModifyFlag();
@@ -1673,8 +1673,8 @@ Date DateFormatter::GetDate() const
         }
         else
         {
-            // !!! We should find out why dates are treated differently than other fields (see
-            // also bug: 52384)
+            
+            
 
             if ( !ImplAllowMalformedInput() )
             {
@@ -1843,8 +1843,8 @@ bool DateField::Notify( NotifyEvent& rNEvt )
     {
         if ( MustBeReformatted() )
         {
-            // !!! We should find out why dates are treated differently than other fields (see
-            // also bug: 52384)
+            
+            
 
             bool bTextLen = !GetText().isEmpty();
             if ( bTextLen || !IsEmptyFieldValueEnabled() )
@@ -1855,8 +1855,8 @@ bool DateField::Notify( NotifyEvent& rNEvt )
                 {
                     Date aDate( 0, 0, 0 );
                     if ( ImplDateGetValue( GetText(), aDate, GetExtDateFormat(true), ImplGetLocaleDataWrapper(), GetCalendarWrapper(), GetFieldSettings() ) )
-                        // even with strict text analysis, our text is a valid date -> do a complete
-                        // reformat
+                        
+                        
                         Reformat();
                 }
             }
@@ -2011,7 +2011,7 @@ static bool ImplTimeProcessKeyInput( Edit*, const KeyEvent& rKEvt,
              string::equals(rLocaleDataWrapper.getTimeSep(), cChar) ||
              (rLocaleDataWrapper.getTimeAM().indexOf(cChar) != -1) ||
              (rLocaleDataWrapper.getTimePM().indexOf(cChar) != -1) ||
-             // Accept AM/PM:
+             
              (cChar == 'a') || (cChar == 'A') || (cChar == 'm') || (cChar == 'M') || (cChar == 'p') || (cChar == 'P') ||
              ((eFormat == TIMEF_100TH_SEC) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
              ((eFormat == TIMEF_SEC_CS) && string::equals(rLocaleDataWrapper.getTime100SecSep(), cChar)) ||
@@ -2069,14 +2069,14 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     if ( rStr.isEmpty() )
         return false;
 
-    // Search for separators
+    
     if (!rLocaleDataWrapper.getTimeSep().isEmpty())
     {
         OUStringBuffer aSepStr(",.;:/");
         if ( !bDuration )
             aSepStr.append('-');
 
-        // Replace characters above by the separator character
+        
         for (sal_Int32 i = 0; i < aSepStr.getLength(); ++i)
         {
             if (string::equals(rLocaleDataWrapper.getTimeSep(), aSepStr[i]))
@@ -2177,7 +2177,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
     {
         assert(aStr.getLength() >= 1);
 
-        sal_Int32 nLen = 1; // at least one digit, otherwise nNanoSec==0
+        sal_Int32 nLen = 1; 
 
         while ( aStr.getLength() > nLen && aStr[nLen] >= '0' && aStr[nLen] <= '9' )
             nLen++;
@@ -2189,7 +2189,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
         }
         while ( nLen > 9 )
         {
-            // round if negative?
+            
             nNanoSec = (nNanoSec + 5) / 10;
             --nLen;
         }
@@ -2213,8 +2213,8 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
         OUString aUpperCaseStr = aStr.toString().toAsciiUpperCase();
         OUString aAM(rLocaleDataWrapper.getTimeAM().toAsciiUpperCase());
         OUString aPM(rLocaleDataWrapper.getTimePM().toAsciiUpperCase());
-        OUString aAM2("AM");  // aAM is localized
-        OUString aPM2("PM");  // aPM is localized
+        OUString aAM2("AM");  
+        OUString aPM2("PM");  
 
         if ( (nHour < 12) && ( ( aUpperCaseStr.indexOf( aPM ) >= 0 ) || ( aUpperCaseStr.indexOf( aPM2 ) >= 0 ) ) )
             nHour += 12;
@@ -2232,7 +2232,7 @@ static bool ImplTimeGetValue( const OUString& rStr, Time& rTime,
         if ( bNegative || (nHour < 0) || (nMinute < 0) ||
              (nSecond < 0) || (nNanoSec < 0) )
         {
-            // LEM TODO: this looks weird... I think buggy when parsing "05:-02:18"
+            
             bNegative   = true;
             nHour       = nHour < 0 ? -nHour : nHour;
             nMinute     = nMinute < 0 ? -nMinute : nMinute;
@@ -2308,11 +2308,11 @@ bool TimeFormatter::ImplTimeReformat( const OUString& rStr, OUString& rOutStr )
                 aT.SetHour( aT.GetHour() % 12 );
                 rOutStr = ImplGetLocaleDataWrapper().getTime( aT, bSecond, b100Sec );
             }
-            // Don't use LocaleDataWrapper, we want AM/PM
+            
             if ( aTempTime.GetHour() < 12 )
-                rOutStr += "AM"; // ImplGetLocaleDataWrapper().getTimeAM();
+                rOutStr += "AM"; 
             else
-                rOutStr += "PM"; // ImplGetLocaleDataWrapper().getTimePM();
+                rOutStr += "PM"; 
         }
     }
 
@@ -2332,15 +2332,15 @@ void TimeField::ImplTimeSpinArea( bool bUp )
         OUString aText( GetText() );
         Selection aSelection( GetField()->GetSelection() );
 
-        // Area search
+        
         if ( GetFormat() != TIMEF_SEC_CS )
         {
-            //Which area is the cursor in of HH:MM:SS.TT
+            
             for ( sal_Int32 i = 1, nPos = 0; i <= 4; i++ )
             {
                 sal_Int32 nPos1 = aText.indexOf( ImplGetLocaleDataWrapper().getTimeSep(), nPos );
                 sal_Int32 nPos2 = aText.indexOf( ImplGetLocaleDataWrapper().getTime100SecSep(), nPos );
-                //which ever comes first, bearing in mind that one might not be there
+                
                 if (nPos1 >= 0 && nPos2 >= 0)
                     nPos = nPos1 < nPos2 ? nPos1 : nPos2;
                 else if (nPos1 >= 0)
@@ -2400,7 +2400,7 @@ void TimeFormatter::ImplInit()
 {
     meFormat        = TIMEF_NONE;
     mbDuration      = false;
-    mnTimeFormat    = HOUR_24;  // Should become a ExtTimeFieldFormat in next implementation, merge with mbDuration and meFormat
+    mnTimeFormat    = HOUR_24;  
 }
 
 TimeFormatter::TimeFormatter() :
@@ -2516,7 +2516,7 @@ void TimeFormatter::ImplNewFieldValue( const Time& rTime )
         aSelection.Justify();
         OUString aText = GetField()->GetText();
 
-        // If selected until the end then keep it that way
+        
         if ( (sal_Int32)aSelection.Max() == aText.getLength() )
         {
             if ( !aSelection.Len() )
@@ -2528,7 +2528,7 @@ void TimeFormatter::ImplNewFieldValue( const Time& rTime )
         ImplSetUserTime( rTime, &aSelection );
         maLastTime = aOldLastTime;
 
-        // Modify at Edit is only set at KeyInput
+        
         if ( GetField()->GetText() != aText )
         {
             GetField()->SetModifyFlag();
@@ -2583,11 +2583,11 @@ void TimeFormatter::ImplSetUserTime( const Time& rNewTime, Selection* pNewSelect
                     aT.SetHour( aT.GetHour() % 12 );
                     aStr = ImplGetLocaleDataWrapper().getTime( aT, bSec, b100Sec );
                 }
-                // Don't use LocaleDataWrapper, we want AM/PM
+                
                 if ( aNewTime.GetHour() < 12 )
-                    aStr += "AM"; // ImplGetLocaleDataWrapper().getTimeAM();
+                    aStr += "AM"; 
                 else
-                    aStr += "PM"; // ImplGetLocaleDataWrapper().getTimePM();
+                    aStr += "PM"; 
             }
         }
 
@@ -2728,8 +2728,8 @@ bool TimeField::Notify( NotifyEvent& rNEvt )
             {
                 Time aTime( 0, 0, 0 );
                 if ( ImplTimeGetValue( GetText(), aTime, GetFormat(), IsDuration(), ImplGetLocaleDataWrapper(), false ) )
-                    // even with strict text analysis, our text is a valid time -> do a complete
-                    // reformat
+                    
+                    
                     Reformat();
             }
         }

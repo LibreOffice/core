@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VPolarGrid.hxx"
@@ -85,7 +85,7 @@ void VPolarGrid::createLinePointSequence_ForAngleAxis(
         if(nTick>=rPoints[0].getLength())
             rPoints[0].realloc(rPoints[0].getLength()+30);
 
-        //xxxxx pTickInfo->updateUnscaledValue( xInverseScaling );
+        
         double fLogicAngle = pTickInfo->getUnscaledTickValue();
 
         drawing::Position3D aScenePosition3D( pPosHelper->transformAngleRadiusToScene( fLogicAngle, fLogicRadius, fLogicZ ) );
@@ -122,9 +122,9 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rAngleTickInfos.begin();
     if(nLinePropertiesCount)
     {
-        double fLogicZ      = 1.0;//as defined
+        double fLogicZ      = 1.0;
         sal_Int32 nDepth=0;
-        //create axis main lines
+        
         drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
@@ -134,7 +134,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
             if( !rTickInfo.bPaintIt )
                 continue;
 
-            //xxxxx rTickInfo.updateUnscaledValue( xInverseScaling );
+            
             double fLogicAngle = rTickInfo.getUnscaledTickValue();
 
             drawing::PointSequenceSequence aPoints(1);
@@ -150,7 +150,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
 
         Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                 xMainTarget, aAllPoints, &rLinePropertiesList[nDepth] );
-        //because of this name this line will be used for marking
+        
         m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
     }
 }
@@ -191,7 +191,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
                 xTarget.set( xMainTarget );
         }
 
-        //create axis main lines
+        
         drawing::PointSequenceSequence aAllPoints;
         ::std::vector< TickInfo >::iterator             aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();
@@ -201,9 +201,9 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
             if( !rTickInfo.bPaintIt )
                 continue;
 
-            //xxxxx rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
+            
             double fLogicRadius = rTickInfo.getUnscaledTickValue();
-            double fLogicZ      = 1.0;//as defined
+            double fLogicZ      = 1.0;
 
             drawing::PointSequenceSequence aPoints(1);
             VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, rAngleTickInfos
@@ -214,7 +214,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
 
         Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
                 xTarget, aAllPoints, &rLinePropertiesList[nDepth] );
-        //because of this name this line will be used for marking
+        
         m_pShapeFactory->setShapeName( xShape, "MarkHandles" );
     }
 }
@@ -227,7 +227,7 @@ void VPolarGrid::createShapes()
     if(!m_aGridPropertiesList.getLength())
         return;
 
-    //create all scaled tickmark values
+    
     ::std::vector< ::std::vector< TickInfo > > aAngleTickInfos;
     ::std::vector< ::std::vector< TickInfo > > aRadiusTickInfos;
     getAllTickInfos( 0, aAngleTickInfos );
@@ -236,16 +236,16 @@ void VPolarGrid::createShapes()
     ::std::vector<VLineProperties> aLinePropertiesList;
     VCartesianGrid::fillLinePropertiesFromGridModel( aLinePropertiesList, m_aGridPropertiesList );
 
-    //create tick mark line shapes
+    
     if(2==m_nDimension)
     {
         if(m_nDimensionIndex==1)
             this->create2DRadiusGrid( m_xLogicTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
-        //else //no Angle Grid so far as this equals exactly the y axis positions
-        //    this->create2DAngleGrid( m_xLogicTarget, aRadiusTickInfos, aAngleTickInfos, aLinePropertiesList );
+        
+        
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

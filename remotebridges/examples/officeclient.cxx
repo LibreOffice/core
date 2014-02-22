@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <stdio.h>
 #include <osl/mutex.hxx>
@@ -62,14 +62,14 @@ public:
     OfficeClientMain( const Reference< XMultiServiceFactory > &r ) :
         m_xSMgr( r )
         {}
-public:     // Methods
+public:     
 
 
     virtual sal_Int32 SAL_CALL run( const Sequence< OUString >& aArguments )
         throw(RuntimeException);
 
 
-private: // helper methods
+private: 
     void testWriter( const Reference < XComponent > & rComponent );
     void registerServices();
     Reference< XMultiServiceFactory > m_xSMgr;
@@ -92,8 +92,8 @@ void OfficeClientMain::testWriter( const Reference< XComponent > & rComponent )
  *********************/
 void OfficeClientMain::registerServices( )
 {
-    // register services.
-    // Note : this needs to be done only once and is in general done by the setup
+    
+    
     Reference < XImplementationRegistration > rImplementationRegistration(
         ImplementationRegistration::create(m_xSMgr) );
 
@@ -117,12 +117,12 @@ void OfficeClientMain::registerServices( )
     for( i = 0 ; i < 4 ; i ++ )
     {
 
-        // build the system specific library name
+        
         OUString aDllName = aSharedLibrary[i];
 
         try
         {
-            // register the needed services in the servicemanager
+            
             rImplementationRegistration->registerImplementation(
                 OUString("com.sun.star.loader.SharedLibrary"),
                 aDllName,
@@ -260,7 +260,7 @@ using namespace remotebridges_officeclient;
 
 extern "C"
 {
-//==================================================================================================
+
 sal_Bool SAL_CALL component_writeInfo(
     void * pServiceManager, void * pRegistryKey )
 {
@@ -286,7 +286,7 @@ sal_Bool SAL_CALL component_writeInfo(
     }
     return sal_False;
 }
-//==================================================================================================
+
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
 {

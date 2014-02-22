@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "excelchartconverter.hxx"
@@ -32,7 +32,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::drawingml::chart::DataSequenceModel;
 
-// ============================================================================
+
 
 ExcelChartConverter::ExcelChartConverter( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -80,14 +80,14 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
 
     if (!rDataSeq.maFormula.isEmpty())
     {
-        // parse the formula string, create a token sequence
+        
         FormulaParser& rParser = getFormulaParser();
         CellAddress aBaseAddr( getCurrentSheetIndex(), 0, 0 );
         ApiTokenSequence aTokens = rParser.importFormula( aBaseAddr, rDataSeq.maFormula );
 
         try
         {
-            // create the data sequence
+            
             xDataSeq = xSheetProvider->createDataSequenceByFormulaTokens(aTokens);
         }
         catch (Exception&)
@@ -97,10 +97,10 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
     }
     else if (!rDataSeq.maData.empty())
     {
-        // create a single-row array from constant source data
+        
         Matrix< Any > aMatrix( rDataSeq.maData.size(), 1 );
         Matrix< Any >::iterator aMIt = aMatrix.begin();
-        // TODO: how to handle missing values in the map?
+        
         for( DataSequenceModel::AnyMap::const_iterator aDIt = rDataSeq.maData.begin(), aDEnd = rDataSeq.maData.end(); aDIt != aDEnd; ++aDIt, ++aMIt )
             *aMIt = aDIt->second;
         OUString aRangeRep = FormulaProcessorBase::generateApiArray( aMatrix );
@@ -109,7 +109,7 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
         {
             try
             {
-                // create the data sequence
+                
                 xDataSeq = rxDataProvider->createDataSequenceByRangeRepresentation( aRangeRep );
             }
             catch (Exception&)
@@ -121,9 +121,9 @@ Reference< XDataSequence > ExcelChartConverter::createDataSequence(
     return xDataSeq;
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

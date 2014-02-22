@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xml/acceleratorconfigurationreader.hxx>
@@ -33,7 +33,7 @@
 
 namespace framework{
 
-//-----------------------------------------------
+
 /* Throws a SaxException in case a wrong formated XML
    structure was detected.
 
@@ -56,7 +56,7 @@ namespace framework{
                 css::uno::Any());                                       \
     }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache& rContainer)
     : ThreadHelpBase          (&Application::GetSolarMutex())
     , m_rContainer            (rContainer                   )
@@ -65,26 +65,26 @@ AcceleratorConfigurationReader::AcceleratorConfigurationReader(AcceleratorCache&
 {
 }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationReader::~AcceleratorConfigurationReader()
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::startDocument()
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::endDocument()
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
-    // The xml file seems to be corrupted.
-    // Because we found no end-tags ... at least for
-    // one list or item.
+    
+    
+    
     if (
         (m_bInsideAcceleratorList) ||
         (m_bInsideAcceleratorItem)
@@ -94,7 +94,7 @@ void SAL_CALL AcceleratorConfigurationReader::endDocument()
     }
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&                                      sElement      ,
                                                            const css::uno::Reference< css::xml::sax::XAttributeList >& xAttributeList)
     throw(css::xml::sax::SAXException,
@@ -102,8 +102,8 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
 {
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
 
-    // Note: We handle "accel:item" before "accel:acceleratorlist" to perform this operation.
-    // Because an item occurs very often ... a list should occur one times only!
+    
+    
     if (eElement == E_ELEMENT_ITEM)
     {
         if (!m_bInsideAcceleratorList)
@@ -149,7 +149,7 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
             }
         }
 
-        // validate command and key event.
+        
         if (
             sCommand.isEmpty() ||
             (aEvent.KeyCode == 0  )
@@ -158,15 +158,15 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
             THROW_PARSEEXCEPTION("XML element does not describe a valid accelerator nor a valid command.")
         }
 
-        // register key event + command inside cache ...
-        // Check for already existing items there.
+        
+        
         if (!m_rContainer.hasKey(aEvent))
             m_rContainer.setKeyCommandPair(aEvent, sCommand);
         else
         {
-            // Attention: Its not really a reason to throw an exception and kill the office, if the configuration contains
-            // multiple registrations for the same key :-) Show a warning ... and ignore the second item.
-            // THROW_PARSEEXCEPTION("Command is registered for the same key more then once.")
+            
+            
+            
             SAL_INFO("fwk",
                      "AcceleratorConfigurationReader::startElement(): Double registration detected. Command=\"" <<
                      sCommand <<
@@ -186,15 +186,15 @@ void SAL_CALL AcceleratorConfigurationReader::startElement(const OUString&      
     }
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::endElement(const OUString& sElement)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
     EXMLElement eElement = AcceleratorConfigurationReader::implst_classifyElement(sElement);
 
-    // Note: We handle "accel:item" before "accel:acceleratorlist" to perform this operation.
-    // Because an item occurs very often ... a list should occur one times only!
+    
+    
     if (eElement == E_ELEMENT_ITEM)
     {
         if (!m_bInsideAcceleratorItem)
@@ -210,21 +210,21 @@ void SAL_CALL AcceleratorConfigurationReader::endElement(const OUString& sElemen
     }
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::characters(const OUString&)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::ignorableWhitespace(const OUString&)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::processingInstruction(const OUString& /*sTarget*/,
                                                                     const OUString& /*sData*/  )
     throw(css::xml::sax::SAXException,
@@ -232,7 +232,7 @@ void SAL_CALL AcceleratorConfigurationReader::processingInstruction(const OUStri
 {
 }
 
-//-----------------------------------------------
+
 void SAL_CALL AcceleratorConfigurationReader::setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator >& xLocator)
     throw(css::xml::sax::SAXException,
           css::uno::RuntimeException )
@@ -240,7 +240,7 @@ void SAL_CALL AcceleratorConfigurationReader::setDocumentLocator(const css::uno:
     m_xLocator = xLocator;
 }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::implst_classifyElement(const OUString& sElement)
 {
     AcceleratorConfigurationReader::EXMLElement eElement;
@@ -257,7 +257,7 @@ AcceleratorConfigurationReader::EXMLElement AcceleratorConfigurationReader::impl
     return eElement;
 }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::implst_classifyAttribute(const OUString& sAttribute)
 {
     AcceleratorConfigurationReader::EXMLAttribute eAttribute;
@@ -282,7 +282,7 @@ AcceleratorConfigurationReader::EXMLAttribute AcceleratorConfigurationReader::im
     return eAttribute;
 }
 
-//-----------------------------------------------
+
 OUString AcceleratorConfigurationReader::implts_getErrorLineString()
 {
     if (!m_xLocator.is())
@@ -297,6 +297,6 @@ OUString AcceleratorConfigurationReader::implts_getErrorLineString()
     return sMsg.makeStringAndClear();
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

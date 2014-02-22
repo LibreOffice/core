@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -82,7 +82,7 @@ class LangSelectionStatusbarController : public svt::StatusbarController
 public:
     explicit LangSelectionStatusbarController( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     {
@@ -103,13 +103,13 @@ public:
         return aSeq;
     }
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException);
 
-    // XStatusListener
+    
     virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException );
 
-    // XStatusbarController
+    
     virtual void SAL_CALL command( const css::awt::Point& aPos,
                                    ::sal_Int32 nCommand,
                                    ::sal_Bool bMouseEvent,
@@ -118,15 +118,15 @@ public:
 
 private:
     virtual ~LangSelectionStatusbarController() {}
-    LangSelectionStatusbarController(LangSelectionStatusbarController &); // not defined
-    void operator =(LangSelectionStatusbarController &); // not defined
+    LangSelectionStatusbarController(LangSelectionStatusbarController &); 
+    void operator =(LangSelectionStatusbarController &); 
 
 
-    sal_Bool            m_bShowMenu;        // if the menu is to be displayed or not (depending on the selected object/text)
-    sal_Int16           m_nScriptType;      // the flags for the different script types available in the selection, LATIN = 0x0001, ASIAN = 0x0002, COMPLEX = 0x0004
-    OUString     m_aCurLang;         // the language of the current selection, "*" if there are more than one languages
-    OUString     m_aKeyboardLang;    // the keyboard language
-    OUString     m_aGuessedTextLang;     // the 'guessed' language for the selection, "" if none could be guessed
+    sal_Bool            m_bShowMenu;        
+    sal_Int16           m_nScriptType;      
+    OUString     m_aCurLang;         
+    OUString     m_aKeyboardLang;    
+    OUString     m_aGuessedTextLang;     
     LanguageGuessingHelper      m_aLangGuessHelper;
 
     void LangMenu( const css::awt::Point& aPos ) throw (css::uno::RuntimeException);
@@ -160,22 +160,22 @@ throw (css::uno::RuntimeException)
     if (!m_bShowMenu)
         return;
 
-    //add context menu
+    
     Reference< awt::XPopupMenu > xPopupMenu( awt::PopupMenu::create( m_xContext ) );
-    //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
+    
     Reference< awt::XPopupMenu > subPopupMenu( awt::PopupMenu::create( m_xContext ) );
 
     SvtLanguageTable    aLanguageTable;
 
-    // get languages to be displayed in the menu
+    
     std::set< OUString > aLangItems;
     FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper,
             m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
-    // add first few entries to main menu
+    
     sal_Int16 nItemId = static_cast< sal_Int16 >(MID_LANG_SEL_1);
-    const OUString sAsterisk("*");  // multiple languages in current selection
-    const OUString sEmpty;  // 'no language found' from language guessing
+    const OUString sAsterisk("*");  
+    const OUString sEmpty;  
     std::map< sal_Int16, OUString > aLangMap;
     std::set< OUString >::const_iterator it;
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
@@ -190,7 +190,7 @@ throw (css::uno::RuntimeException)
             xPopupMenu->insertItem( nItemId, rStr, 0, nItemId );
             if ( rStr == m_aCurLang )
             {
-                //make a sign for the current language
+                
                 xPopupMenu->checkItem( nItemId, sal_True );
             }
             aLangMap[ nItemId ] = rStr;
@@ -204,7 +204,7 @@ throw (css::uno::RuntimeException)
     xPopupMenu->insertItem( MID_LANG_SEL_RESET, FWK_RESSTR(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_SEL_RESET );
     xPopupMenu->insertItem( MID_LANG_SEL_MORE,  FWK_RESSTR(STR_LANGSTATUS_MORE), 0, MID_LANG_SEL_MORE );
 
-    // add entries to submenu ('set language for paragraph')
+    
     nItemId = static_cast< sal_Int16 >(MID_LANG_PARA_1);
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
@@ -224,22 +224,22 @@ throw (css::uno::RuntimeException)
     subPopupMenu->insertItem( MID_LANG_PARA_RESET, FWK_RESSTR(STR_RESET_TO_DEFAULT_LANGUAGE), 0, MID_LANG_PARA_RESET );
     subPopupMenu->insertItem( MID_LANG_PARA_MORE,  FWK_RESSTR(STR_LANGSTATUS_MORE), 0, MID_LANG_PARA_MORE );
 
-    // add last two entries to main menu
+    
     xPopupMenu->insertSeparator( MID_LANG_PARA_SEPARATOR );
     xPopupMenu->insertItem( MID_LANG_PARA_STRING, FWK_RESSTR(STR_SET_LANGUAGE_FOR_PARAGRAPH), 0, MID_LANG_PARA_STRING );
     xPopupMenu->setPopupMenu( MID_LANG_PARA_STRING, subPopupMenu );
 
 
-    // now display the popup menu and execute every command ...
+    
 
     Reference< awt::XWindowPeer > xParent( m_xParentWindow, UNO_QUERY );
     com::sun::star::awt::Rectangle aRect( aPos.X, aPos.Y, 0, 0 );
     sal_Int16 nId = xPopupMenu->execute( xParent, aRect, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
-    //click "More..."
+    
     if ( nId && m_xFrame.is() )
     {
         OUStringBuffer aBuff;
-        //set selected language as current language for selection
+        
         const OUString aSelectedLang = aLangMap[nId];
 
         if (MID_LANG_SEL_1 <= nId && nId <= MID_LANG_SEL_9)
@@ -249,17 +249,17 @@ throw (css::uno::RuntimeException)
         }
         else if (nId == MID_LANG_SEL_NONE)
         {
-            //set None as current language for selection
+            
             aBuff.append( ".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE" );
         }
         else if (nId == MID_LANG_SEL_RESET)
         {
-            // reset language attributes for selection
+            
             aBuff.append( ".uno:LanguageStatus?Language:string=Current_RESET_LANGUAGES" );
         }
         else if (nId == MID_LANG_SEL_MORE)
         {
-            //open the dialog "format/character" for current selection
+            
             aBuff.append( ".uno:FontDialog?Language:string=*" );
         }
         else if (MID_LANG_PARA_1 <= nId && nId <= MID_LANG_PARA_9)
@@ -269,17 +269,17 @@ throw (css::uno::RuntimeException)
         }
         else if (nId == MID_LANG_PARA_NONE)
         {
-            //set None as language for current paragraph
+            
             aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE" );
         }
         else if (nId == MID_LANG_PARA_RESET)
         {
-            // reset language attributes for paragraph
+            
             aBuff.append( ".uno:LanguageStatus?Language:string=Paragraph_RESET_LANGUAGES" );
         }
         else if (nId == MID_LANG_PARA_MORE)
         {
-            //open the dialog "format/character" for current paragraph
+            
             aBuff.append( ".uno:FontDialogForParagraph" );
         }
 
@@ -308,16 +308,16 @@ throw (css::uno::RuntimeException)
     LangMenu( aPos );
 }
 
-// XStatusListener
+
 void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
-    // This function will be called when observed data changes,
-    // for example the selection or keyboard language.
-    // - It displays the language in use in the status bar
-    // - and it stores the relevant data for creating the menu
-    //   at some later point in the member variables
-    //      m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedText
+    
+    
+    
+    
+    
+    
 
     SolarMutexGuard aSolarMutexGuard;
 
@@ -325,7 +325,7 @@ throw ( RuntimeException )
         return;
 
     m_bShowMenu = sal_True;
-    m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  //set the default value
+    m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  
 
     if ( m_xStatusbarItem.is() )
     {
@@ -345,8 +345,8 @@ throw ( RuntimeException )
                 }
                 m_xStatusbarItem->setText( aStatusText );
 
-                // Retrieve all other values from the sequence and
-                // store it members!
+                
+                
                 m_aCurLang      = aSeq[0];
                 m_nScriptType   = static_cast< sal_Int16 >( aSeq[1].toInt32() );
                 m_aKeyboardLang = aSeq[2];
@@ -356,7 +356,7 @@ throw ( RuntimeException )
         else if ( !Event.State.hasValue() )
         {
             m_xStatusbarItem->setText( OUString() );
-            m_bShowMenu = sal_False;    // no language -> no menu
+            m_bShowMenu = sal_False;    
         }
     }
 }

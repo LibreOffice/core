@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -122,9 +122,9 @@ void View::rename( const OUString& newName )
 
     OUString newTableName;
     OUString newSchemaName;
-    // OOo2.0 passes schema + dot + new-table-name while
-    // OO1.1.x passes new Name without schema
-    // in case name contains a dot, it is interpreted as schema.tablename
+    
+    
+    
     if( newName.indexOf( '.' ) >= 0 )
     {
         splitConcatenatedIdentifier( newName, &newSchemaName, &newTableName );
@@ -171,7 +171,7 @@ void View::rename( const OUString& newName )
         setPropertyValue_NoBroadcast_public( st.NAME, makeAny(newTableName) );
     }
 
-    // inform the container of the name change !
+    
     if( m_pSettings->views.is() )
     {
         m_pSettings->pViewsImpl->rename( fullOldName, fullNewName );
@@ -226,7 +226,7 @@ void View::setName( const OUString& aName ) throw (::com::sun::star::uno::Runtim
     rename( aName );
 }
 
-//____________________________________________________________________________________________
+
 
 ViewDescriptor::ViewDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,

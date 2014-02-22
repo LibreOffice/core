@@ -174,10 +174,10 @@ css::uno::Reference< css::uno::XInterface > createBackend(
             context->getServiceManager(), css::uno::UNO_SET_THROW)->
             createInstanceWithContext(name, context);
     } catch (css::uno::RuntimeException &) {
-        // Assuming these exceptions are real errors:
+        
         throw;
     } catch (const css::uno::Exception & e) {
-        // Assuming these exceptions indicate that the service is not installed:
+        
         OSL_TRACE(
             "createInstance(%s) failed with %s",
             OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr(),
@@ -198,7 +198,7 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
             desktop;
     }
 
-    // Fall back to the default if the specific backend is not available:
+    
     css::uno::Reference< css::uno::XInterface > backend;
     if ( desktop == "GNOME" ) {
         backend = createBackend(

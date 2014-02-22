@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "propeventtranslation.hxx"
@@ -22,10 +22,10 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/NullPointerException.hpp>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::beans::PropertyChangeEvent;
     using ::com::sun::star::uno::RuntimeException;
@@ -36,10 +36,10 @@ namespace pcr
     using ::com::sun::star::lang::DisposedException;
     using ::com::sun::star::lang::NullPointerException;
 
-    //====================================================================
-    //= PropertyEventTranslation
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     PropertyEventTranslation::PropertyEventTranslation( const Reference< XPropertyChangeListener >& _rxDelegator,
         const Reference< XInterface >& _rxTranslatedEventSource )
         :m_xDelegator( _rxDelegator )
@@ -49,7 +49,7 @@ namespace pcr
             throw NullPointerException();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL PropertyEventTranslation::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
     {
         if ( !m_xDelegator.is() )
@@ -65,7 +65,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL PropertyEventTranslation::disposing( const EventObject& Source ) throw (RuntimeException)
     {
         if ( !m_xDelegator.is() )
@@ -84,8 +84,8 @@ namespace pcr
         m_xTranslatedEventSource.clear();
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

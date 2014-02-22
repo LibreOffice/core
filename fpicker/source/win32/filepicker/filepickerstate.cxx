@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/scoped_ptr.hpp>
@@ -34,9 +34,9 @@
 #include "FileOpenDlg.hxx"
 
 #include "../misc/WinImplHelper.hxx"
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 using com::sun::star::uno::Any;
 using com::sun::star::uno::Sequence;
@@ -47,42 +47,42 @@ using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::ListboxControlActions;
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 const sal_Int32 MAX_LABEL = 256;
 const sal_Int16 LISTBOX_LABEL_OFFSET = 100;
 
-//---------------------------------------------
-// declaration
-//---------------------------------------------
+
+
+
 
 CFilePickerState::~CFilePickerState( )
 {
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 CNonExecuteFilePickerState::CNonExecuteFilePickerState( ) :
     m_FirstControlCommand( NULL )
 {
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 CNonExecuteFilePickerState::~CNonExecuteFilePickerState( )
 {
     reset( );
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CNonExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
 {
@@ -92,9 +92,9 @@ void SAL_CALL CNonExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_In
     addControlCommand( value_command );
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
 {
@@ -103,23 +103,23 @@ Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int
 
     if (m_FirstControlCommand)
     {
-        // pass the request along the command-chain
+        
         boost::scoped_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &value_request ) );
 
         OSL_ENSURE( result.get(), "invalid getValue request" );
 
         if ( result.get() )
         {
-            // #101753 must remove assertion else running into deadlock
-            // because getValue may be called asynchronously from main thread
-            // with locked SOLAR_MUTEX but we also need SOLAR_MUTEX in
-            // WinFileOpenDialog::onInitDone ... but we cannot dismiss the
-            // assertion dialog because at this point the FileOpen Dialog
-            // has already the focus but is not yet visible :-(
-            // The real cure is to remove the VCL/SOLAR_MUTEX dependency
-            // cause by the use of our resource manager and not being able to
-            // generate native windows resources
-            //OSL_ENSURE( result->hasResult( ), "invalid getValue request" );
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
 
             if ( result->hasResult( ) )
             {
@@ -135,9 +135,9 @@ Any SAL_CALL CNonExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int
     return aAny;
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CNonExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_Bool bEnable )
 {
@@ -147,9 +147,9 @@ void SAL_CALL CNonExecuteFilePickerState::enableControl( sal_Int16 aControlId, s
     addControlCommand( enable_command );
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CNonExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUString& aLabel )
 {
@@ -159,15 +159,15 @@ void SAL_CALL CNonExecuteFilePickerState::setLabel( sal_Int16 aControlId, const 
     addControlCommand( label_command );
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 OUString SAL_CALL CNonExecuteFilePickerState::getLabel( sal_Int16 aControlId )
 {
     CControlCommandRequest label_request( aControlId );
 
-    // pass the request along the command-chain
+    
     boost::scoped_ptr< CControlCommandResult > result( m_FirstControlCommand->handleRequest( &label_request ) );
 
     OSL_ENSURE( result->hasResult( ), "invalid getValue request" );
@@ -197,15 +197,15 @@ OUString MatchFixBrokenPath(const OUString& path)
 
     if (path[1] == ':' && path[2] == '.' && path[3] == '\\')
     {
-        // skip the '.'
+        
         return OUString(path.getStr(), 2) + path.copy(3, path.getLength() - 3);
     }
     return path;
 }
 
-//-----------------------------------------------------------------------------------------
+
 //
-//-----------------------------------------------------------------------------------------
+
 static OUString trimTrailingSpaces(const OUString& rString)
 {
     OUString aResult(rString);
@@ -236,15 +236,15 @@ Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDia
 
     if ( aFilePath.getLength( ) )
     {
-        // tokenize the returned string and copy the
-        // sub-strings separately into a sequence
+        
+        
         const sal_Unicode* pTemp = aFilePath.getStr();
         const sal_Unicode* pStrEnd = pTemp + aFilePath.getLength();
         sal_uInt32 lSubStr;
 
         while (pTemp < pStrEnd)
         {
-            // detect the length of the next sub string
+            
             lSubStr = rtl_ustr_getLength(pTemp);
 
             aFilePathList.realloc(aFilePathList.getLength() + 1);
@@ -255,7 +255,7 @@ Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDia
             pTemp += (lSubStr + 1);
         }
 
-        // change all entries to file URLs
+        
         sal_Int32 lenFileList = aFilePathList.getLength( );
         OSL_ASSERT( lenFileList >= 1 );
 
@@ -265,9 +265,9 @@ Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDia
             rc = ::osl::FileBase::getFileURLFromSystemPath(
                 aFilePath, aFilePathURL );
 
-            // we do return all or nothing, that means
-            // in case of failures we destroy the sequence
-            // and return an empty sequence
+            
+            
+            
             if ( rc != ::osl::FileBase::E_None )
             {
                 aFilePathList.realloc( 0 );
@@ -281,9 +281,9 @@ Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDia
     return aFilePathList;
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 OUString SAL_CALL CNonExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog* aFileOpenDialog )
 {
@@ -300,9 +300,9 @@ OUString SAL_CALL CNonExecuteFilePickerState::getDisplayDirectory( CFileOpenDial
     return pathURL;
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CNonExecuteFilePickerState::reset( )
 {
@@ -319,20 +319,20 @@ void SAL_CALL CNonExecuteFilePickerState::reset( )
     m_FirstControlCommand = NULL;
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 CControlCommand* SAL_CALL CNonExecuteFilePickerState::getControlCommand( ) const
 {
     return m_FirstControlCommand;
 }
 
-//---------------------------------------------
-// we append new control commands to the end
-// of the list so that we are sure the commands
-// will be executed as the client issued it
-//---------------------------------------------
+
+
+
+
+
 
 void SAL_CALL CNonExecuteFilePickerState::addControlCommand( CControlCommand* aControlCommand )
 {
@@ -353,31 +353,31 @@ void SAL_CALL CNonExecuteFilePickerState::addControlCommand( CControlCommand* aC
     }
 }
 
-//#######################################################################
 
-//---------------------------------------------
+
+
 //
-//---------------------------------------------
+
 
 CExecuteFilePickerState::CExecuteFilePickerState( HWND hwndDlg ) :
     m_hwndDlg( hwndDlg )
 {
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const Any& aValue )
 {
-    // we do not support SET_HELP_URL/GET_HELP_URL
+    
     if ( com::sun::star::ui::dialogs::ControlActions::SET_HELP_URL == aControlAction )
         return;
 
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
-    // the filter listbox can be manipulated via this
-    // method the caller should use XFilterManager
+    
+    
     if ( !hwndCtrl || (aControlId == LISTBOX_FILTER) )
     {
         OSL_FAIL( "invalid control id" );
@@ -400,26 +400,26 @@ void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16
         return;
     }
 
-    // the function that we call should throw an IllegalArgumentException if
-    // the given value is invalid or empty, that's why we provide a Reference
-    // to an XInterface and a argument position
+    
+    
+    
     lpfnSetValue( hwndCtrl, aValue, Reference< XInterface >( ), 3 );
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
 {
-    // we do not support SET_HELP_URL/GET_HELP_URL
+    
     if ( com::sun::star::ui::dialogs::ControlActions::GET_HELP_URL == aControlAction )
         return Any( );
 
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
-    // the filter listbox can be manipulated via this
-    // method the caller should use XFilterManager
+    
+    
     if ( !hwndCtrl || (aControlId == LISTBOX_FILTER) )
     {
         OSL_FAIL( "invalid control id" );
@@ -445,9 +445,9 @@ Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 
     return lpfnGetValue( hwndCtrl );
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_Bool bEnable )
 {
@@ -458,9 +458,9 @@ void SAL_CALL CExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_
     EnableWindow( hwndCtrl, bEnable );
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUString& aLabel )
 {
@@ -473,14 +473,14 @@ void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUS
 
     OUString aWinLabel = SOfficeToWindowsLabel( aLabel );
 
-    // somewhat risky because we don't know if OUString
-    // has a terminating '\0'
+    
+    
     SetWindowText( hwndCtrl, reinterpret_cast<LPCTSTR>(aWinLabel.getStr( )) );
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
 {
@@ -503,9 +503,9 @@ OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
     return ctrlLabel;
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 Sequence< OUString > SAL_CALL CExecuteFilePickerState::getFiles( CFileOpenDialog* aFileOpenDialog )
 {
@@ -516,17 +516,17 @@ Sequence< OUString > SAL_CALL CExecuteFilePickerState::getFiles( CFileOpenDialog
     OUString aFilePath;
     ::osl::FileBase::RC rc;
 
-    // in execution mode getFullFileName doesn't
-    // return anything, so we must use another way
+    
+    
 
-    // returns the currently selected file(s)
-    // including path information
+    
+    
     aFilePath = aFileOpenDialog->getCurrentFilePath( );
 
-    // if multiple files are selected or the user
-    // typed anything that doesn't seem to be a valid
-    // file name getFileURLFromSystemPath fails
-    // and we return an empty file list
+    
+    
+    
+    
     rc = ::osl::FileBase::getFileURLFromSystemPath(
         aFilePath, aFilePathURL );
 
@@ -539,9 +539,9 @@ Sequence< OUString > SAL_CALL CExecuteFilePickerState::getFiles( CFileOpenDialog
     return aFilePathList;
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 OUString SAL_CALL CExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog* aFileOpenDialog )
 {
@@ -558,9 +558,9 @@ OUString SAL_CALL CExecuteFilePickerState::getDisplayDirectory( CFileOpenDialog*
     return pathURL;
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CExecuteFilePickerState::initFilePickerControls( CControlCommand* firstControlCommand )
 {
@@ -573,9 +573,9 @@ void SAL_CALL CExecuteFilePickerState::initFilePickerControls( CControlCommand* 
     }
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFilePickerState* aNonExecFilePickerState )
 {
@@ -607,9 +607,9 @@ void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFil
     }
     else if ( LISTBOX == aCtrlClass )
     {
-        // for listboxes we save only the
-        // last selected item and the last
-        // selected item index
+        
+        
+        
 
         aControlAction = GET_SELECTED_ITEM;
 
@@ -631,18 +631,18 @@ void SAL_CALL CExecuteFilePickerState::cacheControlState( HWND hwndControl, CFil
     }
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 void SAL_CALL CExecuteFilePickerState::setHwnd( HWND hwndDlg )
 {
     m_hwndDlg = hwndDlg;
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 inline sal_Bool SAL_CALL CExecuteFilePickerState::IsListboxControl( HWND hwndControl ) const
 {
@@ -652,22 +652,22 @@ inline sal_Bool SAL_CALL CExecuteFilePickerState::IsListboxControl( HWND hwndCon
     return ( LISTBOX == aCtrlClass );
 }
 
-//---------------------------------------------
-// because listboxes (comboboxes) and their labels
-// are separated we have to translate the listbox
-// id to their corresponding label id
-// the convention is that the label id of a listbox
-// is the id of the listbox + 100
-//---------------------------------------------
+
+
+
+
+
+
+
 
 inline sal_Int16 SAL_CALL CExecuteFilePickerState::ListboxIdToListboxLabelId( sal_Int16 aListboxId ) const
 {
     return ( aListboxId + LISTBOX_LABEL_OFFSET );
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 inline HWND SAL_CALL CExecuteFilePickerState::GetListboxLabelItem( sal_Int16 aControlId ) const
 {
@@ -679,9 +679,9 @@ inline HWND SAL_CALL CExecuteFilePickerState::GetListboxLabelItem( sal_Int16 aCo
     return hwndCtrl;
 }
 
-//---------------------------------------------
+
 //
-//---------------------------------------------
+
 
 HWND SAL_CALL CExecuteFilePickerState::GetHwndDlgItem( sal_Int16 aControlId, sal_Bool bIncludeStdCtrls ) const
 {
@@ -689,8 +689,8 @@ HWND SAL_CALL CExecuteFilePickerState::GetHwndDlgItem( sal_Int16 aControlId, sal
 
     HWND hwndCtrl = GetDlgItem( m_hwndDlg, aControlId );
 
-    // maybe it's a control of the dialog itself for instance
-    // the ok and cancel button
+    
+    
     if ( !hwndCtrl && bIncludeStdCtrls )
     {
         hwndCtrl = GetDlgItem(

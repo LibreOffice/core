@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "GraphicPropertyItemConverter.hxx"
@@ -36,9 +36,9 @@
 #include <svx/xfltrit.hxx>
 #include <svx/xlntrit.hxx>
 #include <editeng/eeitem.hxx>
-// for SfxBoolItem
+
 #include <svl/eitem.hxx>
-// for XFillGradientStepCountItem
+
 #include <svx/xgrscit.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/chart2/FillBitmap.hpp>
@@ -148,7 +148,7 @@ bool lcl_SetContentForNamedProperty(
     return bResult;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -217,11 +217,11 @@ bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tProp
             break;
 
         case LINE_AND_FILL_PROPERTIES:
-            // line
+            
             aEndIt = lcl_GetLinePropertyMap().end();
             aIt = lcl_GetLinePropertyMap().find( nWhichId );
 
-            // not found => try fill
+            
             if( aIt == aEndIt )
             {
                 aEndIt = lcl_GetFillPropertyMap().end();
@@ -243,7 +243,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 {
     switch( nWhichId )
     {
-        // bitmap property
+        
         case XATTR_FILLBMP_TILE:
         case XATTR_FILLBMP_STRETCH:
         {
@@ -276,7 +276,7 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                             m_xNamedPropertyTableFactory, "com.sun.star.drawing.TransparencyGradientTable" ,
                             aItem, MID_FILLGRADIENT );
 
-                        // this is important to enable the item
+                        
                         OUString aName;
                         if( (aValue >>= aName) &&
                             !aName.isEmpty())
@@ -325,8 +325,8 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     m_xNamedPropertyTableFactory, "com.sun.star.drawing.DashTable" ,
                     aItem, MID_LINEDASH );
 
-                // translate model name to UI-name for predefined entries, so
-                // that the correct entry is chosen in the list of UI-names
+                
+                
                 XLineDashItem * pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
                 rOutItemSet.Put( * pItemToPut );
@@ -348,8 +348,8 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     m_xNamedPropertyTableFactory, "com.sun.star.drawing.GradientTable" ,
                     aItem, MID_FILLGRADIENT );
 
-                // translate model name to UI-name for predefined entries, so
-                // that the correct entry is chosen in the list of UI-names
+                
+                
                 XFillGradientItem * pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
                 rOutItemSet.Put( * pItemToPut );
@@ -371,8 +371,8 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     m_xNamedPropertyTableFactory, "com.sun.star.drawing.HatchTable" ,
                     aItem, MID_FILLHATCH );
 
-                // translate model name to UI-name for predefined entries, so
-                // that the correct entry is chosen in the list of UI-names
+                
+                
                 XFillHatchItem * pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
                 rOutItemSet.Put( * pItemToPut );
@@ -389,16 +389,16 @@ void GraphicPropertyItemConverter::FillSpecialItem(
                     m_xNamedPropertyTableFactory, "com.sun.star.drawing.BitmapTable" ,
                     aItem, MID_GRAFURL );
 
-                // translate model name to UI-name for predefined entries, so
-                // that the correct entry is chosen in the list of UI-names
+                
+                
                 XFillBitmapItem * pItemToPut = aItem.checkForUniqueItem( & m_rDrawModel );
 
                 rOutItemSet.Put( * pItemToPut );
             }
         break;
 
-        // hack, because QueryValue of XLineTransparenceItem returns sal_Int32
-        // instead of sal_Int16
+        
+        
         case XATTR_LINETRANSPARENCE:
             if( lcl_supportsLineProperties( m_eGraphicObjectType ))
             {
@@ -416,8 +416,8 @@ void GraphicPropertyItemConverter::FillSpecialItem(
             }
             break;
 
-        // hack, because QueryValue of XFillTransparenceItem returns sal_Int32
-        // instead of sal_Int16
+        
+        
         case XATTR_FILLTRANSPARENCE:
             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
             {
@@ -444,7 +444,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
 
     switch( nWhichId )
     {
-        // bitmap property
+        
         case XATTR_FILLBMP_STRETCH:
             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
             {
@@ -501,7 +501,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                         uno::Any aGradient;
                         rItem.QueryValue( aGradient, MID_FILLGRADIENT );
 
-                        // add TransparencyGradient to list if it does not already exist
+                        
                         OUString aPreferredName;
                         aValue >>= aPreferredName;
                         aValue <<= PropertyHelper::addTransparencyGradientUniqueNameToTable(
@@ -573,7 +573,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 {
                     if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                     {
-                        // add LineDash to list
+                        
                         uno::Any aLineDash;
                         rItem.QueryValue( aLineDash, MID_LINEDASH );
                         OUString aPreferredName;
@@ -606,7 +606,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 {
                     if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                     {
-                        // add Gradient to list
+                        
                         uno::Any aGradient;
                         rItem.QueryValue( aGradient, MID_FILLGRADIENT );
                         OUString aPreferredName;
@@ -639,7 +639,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 {
                     if( aValue != GetPropertySet()->getPropertyValue( aPropName ))
                     {
-                        // add Hatch to list
+                        
                         uno::Any aHatch;
                         rItem.QueryValue( aHatch, MID_FILLHATCH );
                         OUString aPreferredName;
@@ -667,7 +667,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                 {
                     if( aValue != GetPropertySet()->getPropertyValue( "FillBitmapName" ))
                     {
-                        // add Bitmap to list
+                        
                         uno::Any aBitmap;
                         rItem.QueryValue( aBitmap, MID_GRAFURL );
                         OUString aPreferredName;
@@ -683,8 +683,8 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
         }
         break;
 
-        // hack, because QueryValue of XLineTransparenceItem returns sal_Int32
-        // instead of sal_Int16
+        
+        
         case XATTR_LINETRANSPARENCE:
             if( lcl_supportsLineProperties( m_eGraphicObjectType ))
             {
@@ -722,8 +722,8 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
             }
             break;
 
-        // hack, because QueryValue of XFillTransparenceItem returns sal_Int32
-        // instead of sal_Int16
+        
+        
         case XATTR_FILLTRANSPARENCE:
             if( lcl_supportsFillProperties( m_eGraphicObjectType ))
             {
@@ -749,7 +749,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
                         aValue <<= nValueToSet;
 
                         GetPropertySet()->setPropertyValue( aPropName, aValue );
-                        // if linear or no transparence is set, delete the gradient
+                        
                         OUString aTransGradPropName =
                               (m_eGraphicObjectType == FILLED_DATA_POINT)
                               ? OUString( "TransparencyGradientName" )
@@ -771,7 +771,7 @@ bool GraphicPropertyItemConverter::ApplySpecialItem(
     return bChanged;
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

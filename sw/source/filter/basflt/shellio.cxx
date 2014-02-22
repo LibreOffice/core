@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,23 +52,23 @@
 #include <swerror.h>
 #include <paratr.hxx>
 
-// #i73788#
+
 #include <pausethreadstarting.hxx>
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////
+
 
 sal_uLong SwReader::Read( const Reader& rOptions )
 {
-    // Variable uebertragen
+    
     Reader* po = (Reader*) &rOptions;
     po->pStrm = pStrm;
     po->pStg  = pStg;
     po->xStg  = xStg;
     po->bInsertMode = 0 != pCrsr;
 
-    // ist ein Medium angegeben, dann aus diesem die Streams besorgen
+    
     if( 0 != (po->pMedium = pMedium ) &&
         !po->SetStrmStgPtr() )
     {
@@ -83,7 +83,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
     GetDoc();
 
-    // waehrend des einlesens kein OLE-Modified rufen
+    
     Link aOLELink( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
 
@@ -95,21 +95,21 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         pPam = pCrsr;
     else
     {
-        // Wenn der Reader nicht mit einem Shell konstruiert wurde,
-        // selber einen Pam machen.
+        
+        
         SwNodeIndex nNode( pDoc->GetNodes().GetEndOfContent(), -1 );
         pPam = new SwPaM( nNode );
-        // Bei Web-Dokumenten wird die Default-Vorlage schon im InitNew
-        // gesetzt und braucht deshalb nicht nochmal gesetzt zu werden.
-        // Das gilt natuerlich nicht, wenn der Filter nicht der HTML-Filter
-        // ist oder im ConvertFrom zuvor ein SetTemplateName gerufen
-        // wurde.
+        
+        
+        
+        
+        
         if( !pDoc->get(IDocumentSettingAccess::HTML_MODE) || ReadHTML != po || !po->pTemplate  )
             po->SetTemplate( *pDoc );
     }
 
-    // Pams sind ringfoermig verkettet. Aufhoeren, wenn man wieder beim
-    // ersten ist.
+    
+    
     SwPaM *pEnd = pPam;
     SwUndoInsDoc* pUndo = 0;
 
@@ -118,7 +118,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     bool bSaveUndo = bDocUndo && pCrsr;
     if( bSaveUndo )
     {
-        // das Einlesen von Seitenvorlagen ist nicht Undofaehig!
+        
         if( 0 != ( bReadPageDescs = po->aOpt.IsPageDescs() ) )
         {
             bSaveUndo = false;
@@ -137,9 +137,9 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     RedlineMode_t eOld = pDoc->GetRedlineMode();
     RedlineMode_t ePostReadRedlineMode( nsRedlineMode_t::REDLINE_IGNORE );
 
-    // Array von FlyFormaten
+    
     SwFrmFmts aFlyFrmArr;
-    // only read templates? then ignore multi selection!
+    
     sal_Bool bFmtsOnly = po->aOpt.IsFmtsOnly();
 
     while( true )
@@ -152,12 +152,12 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         SwPaM* pUndoPam = 0;
         if( bDocUndo || pCrsr )
         {
-            // Pam auf den Node davor setzen damit er nicht mit verschoben wird
+            
             const SwNodeIndex& rTmp = pPam->GetPoint()->nNode;
             pUndoPam = new SwPaM( rTmp, rTmp, 0, -1 );
         }
 
-        // Speicher mal alle Fly's
+        
         if( pCrsr )
         {
             std::copy(pDoc->GetSpzFrmFmts()->begin(),
@@ -166,8 +166,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         const sal_Int32 nSttCntnt = pPam->GetPoint()->nContent.GetIndex();
 
-        // damit fuer alle Reader die Ende-Position immer stimmt, hier
-        // pflegen.
+        
+        
         SwCntntNode* pCNd = pPam->GetCntntNode();
         sal_Int32 nEndCntnt = pCNd ? pCNd->Len() - nSttCntnt : 0;
         SwNodeIndex aEndPos( pPam->GetPoint()->nNode, 1 );
@@ -176,12 +176,12 @@ sal_uLong SwReader::Read( const Reader& rOptions )
 
         nError = po->Read( *pDoc, GetBaseURL(), *pPam, aFileName );
 
-        // an ODF document may contain redline mode in settings.xml; save it!
+        
         ePostReadRedlineMode = pDoc->GetRedlineMode();
 
         pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
 
-        if( !IsError( nError ))     // dann setzen wir das Ende mal richtig
+        if( !IsError( nError ))     
         {
             aEndPos--;
             pCNd = aEndPos.GetNode().GetCntntNode();
@@ -221,8 +221,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
             bool bChkHeaderFooter = pNd->FindHeaderStartNode() ||
                                    pNd->FindFooterStartNode();
 
-            // Suche alle neuen Fly's und speicher sie als einzelne Undo
-            // Objecte
+            
+            
             for( sal_uInt16 n = 0; n < pDoc->GetSpzFrmFmts()->size(); ++n )
             {
                 SwFrmFmt* pFrmFmt = (*pDoc->GetSpzFrmFmts())[ n ];
@@ -240,7 +240,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                                              pFrameAnchor->nNode)
                                         )
                                     )
-                                // #i97570# also check frames anchored AT char
+                                
                                 ||  (   (FLY_AT_CHAR == rAnchor.GetAnchorId())
                                     &&  !IsDestroyFrameAnchoredAtChar(
                                               *pFrameAnchor,
@@ -255,8 +255,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                             (FLY_AT_PARA == rAnchor.GetAnchorId()) &&
                             RES_DRAWFRMFMT == pFrmFmt->Which() )
                         {
-                            // DrawObjecte in Kopf-/Fusszeilen ist nicht
-                            // erlaubt!
+                            
+                            
                             pFrmFmt->DelFrms();
                             pDoc->DelFrmFmt( pFrmFmt );
                             --n;
@@ -266,7 +266,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                             if( bSaveUndo )
                             {
                                 pDoc->SetRedlineMode_intern( eOld );
-                                // UGLY: temp. enable undo
+                                
                                 pDoc->GetIDocumentUndoRedo().DoUndo(true);
                                 pDoc->GetIDocumentUndoRedo().AppendUndo(
                                     new SwUndoInsLayFmt( pFrmFmt,0,0 ) );
@@ -275,8 +275,8 @@ sal_uLong SwReader::Read( const Reader& rOptions )
                             }
                             if( pFrmFmt->GetDepends() )
                             {
-                                // beim Insert legen Draw-Objecte einen Frame an
-                                // also weg damit.
+                                
+                                
                                 pFrmFmt->DelFrms();
                             }
 
@@ -311,7 +311,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         {
             pDoc->SetRedlineMode_intern( eOld );
             pUndo->SetInsertRange( *pUndoPam, sal_False );
-            // UGLY: temp. enable undo
+            
             pDoc->GetIDocumentUndoRedo().DoUndo(true);
             pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
             pDoc->GetIDocumentUndoRedo().DoUndo(false);
@@ -324,7 +324,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         if( pPam == pEnd )
             break;
 
-        // only read templates? then ignore multi selection! Bug 68593
+        
         if( bFmtsOnly )
             break;
 
@@ -360,17 +360,17 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         }
     }
 
-    // Wenn der Pam nur fuers Lesen konstruiert wurde, jetzt zerstoeren.
+    
     if( !pCrsr )
     {
-        delete pPam;          // ein neues aufgemacht.
+        delete pPam;          
 
-        // #i42634# Moved common code of SwReader::Read() and
-        // SwDocShell::UpdateLinks() to new SwDoc::UpdateLinks():
-    // ATM still with Update
+        
+        
+    
         pDoc->UpdateLinks( true );
 
-        // not insert: set the redline mode read from settings.xml
+        
         eOld = static_cast<RedlineMode_t>(
                 ePostReadRedlineMode & ~nsRedlineMode_t::REDLINE_IGNORE);
 
@@ -380,12 +380,12 @@ sal_uLong SwReader::Read( const Reader& rOptions )
     pDoc->SetRedlineMode_intern( eOld );
     pDoc->SetOle2Link( aOLELink );
 
-    if( pCrsr )                 // das Doc ist jetzt modifiziert
+    if( pCrsr )                 
         pDoc->SetModified();
-    // #i38810# - If links have been updated, the document
-    // have to be modified. During update of links the OLE link at the document
-    // isn't set. Thus, the document's modified state has to be set again after
-    // the OLE link is restored - see above <pDoc->SetOle2Link( aOLELink )>.
+    
+    
+    
+    
     if ( pDoc->LinksUpdated() )
     {
         pDoc->SetModified();
@@ -411,7 +411,7 @@ SwReader::SwReader(SfxMedium& rMedium, const OUString& rFileName, SwDoc *pDocume
     SetBaseURL( rMedium.GetBaseURL() );
 }
 
-// In ein existierendes Dokument einlesen
+
 
 SwReader::SwReader(SvStream& rStrm, const OUString& rFileName, const OUString& rBaseURL, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(&rStrm), pMedium(0), pCrsr(&rPam),
@@ -453,7 +453,7 @@ OUString Reader::GetTemplateName() const
     return OUString();
 }
 
-// Die Filter-Vorlage laden, setzen und wieder freigeben
+
 SwDoc* Reader::GetTemplateDoc()
 {
     if( !bHasAskTemplateName )
@@ -472,8 +472,8 @@ SwDoc* Reader::GetTemplateDoc()
         DateTime aCurrDateTime( DateTime::SYSTEM );
         bool bLoad = false;
 
-        // Wenn das Template schon mal geladen wurde, nur einmal pro
-        // Minute nachschauen, ob es geaendert wurde.
+        
+        
         if( !pTemplate || aCurrDateTime >= aChkDateTime )
         {
             Date aTstDate( Date::EMPTY );
@@ -488,8 +488,8 @@ SwDoc* Reader::GetTemplateDoc()
                 aTStamp = aTstTime;
             }
 
-            // Erst in einer Minute wieder mal nachschauen, ob sich die
-            // Vorlage geaendert hat.
+            
+            
             aChkDateTime = aCurrDateTime;
             aChkDateTime += Time( 0L, 1L );
         }
@@ -499,10 +499,10 @@ SwDoc* Reader::GetTemplateDoc()
             ClearTemplate();
             OSL_ENSURE( !pTemplate, "Who holds the template doc?" );
 
-                // If the writer module is not installed,
-                // we cannot create a SwDocShell. We could create a
-                // SwWebDocShell however, because this exists always
-                // for the help.
+                
+                
+                
+                
                 SvtModuleOptions aModuleOptions;
                 if( aModuleOptions.IsWriter() )
                 {
@@ -513,7 +513,7 @@ SwDoc* Reader::GetTemplateDoc()
                     {
                         pTemplate = pDocSh->GetDoc();
                         pTemplate->SetOle2Link( Link() );
-                        // always FALSE
+                        
                         pTemplate->GetIDocumentUndoRedo().DoUndo( false );
                         pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
                         pTemplate->RemoveAllFmtLanguageDependencies();
@@ -579,12 +579,12 @@ void Reader::MakeHTMLDummyTemplateDoc()
     pTemplate->set(IDocumentSettingAccess::BROWSE_MODE, bTmplBrowseMode );
     pTemplate->getPrinter( true );
     pTemplate->RemoveAllFmtLanguageDependencies();
-    aChkDateTime = Date( 1, 1, 2300 );  // 2300. Jahrtausend sollte reichen
+    aChkDateTime = Date( 1, 1, 2300 );  
     aTemplateNm = "$$Dummy$$";
 }
 
-// alle die die Streams / Storages nicht geoeffnet brauchen,
-// muessen die Methode ueberladen
+
+
 int Reader::SetStrmStgPtr()
 {
     OSL_ENSURE( pMedium, "Wo ist das Medium??" );
@@ -645,7 +645,7 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
         {
             default:
                 OSL_ENSURE(i == 0, "Impossible");
-                //fallthrough
+                
             case 0:
                 nPoolId = RES_POOLFRM_FRAME;
                 break;
@@ -665,23 +665,23 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
     }
 }
 
-    // read the sections of the document, which is equal to the medium.
-    // returns the count of it
+    
+    
 size_t Reader::GetSectionList( SfxMedium&, std::vector<OUString*>& ) const
 {
     return 0;
 }
 
-// ------------------------------------------------
+
 sal_Bool SwReader::HasGlossaries( const Reader& rOptions )
 {
-    // Variable uebertragen
+    
     Reader* po = (Reader*) &rOptions;
     po->pStrm = pStrm;
     po->pStg  = pStg;
     po->bInsertMode = sal_False;
 
-    // ist ein Medium angegeben, dann aus diesem die Streams besorgen
+    
     sal_Bool bRet = sal_False;
     if( !( 0 != (po->pMedium = pMedium ) && !po->SetStrmStgPtr() ))
         bRet = po->HasGlossaries();
@@ -691,13 +691,13 @@ sal_Bool SwReader::HasGlossaries( const Reader& rOptions )
 sal_Bool SwReader::ReadGlossaries( const Reader& rOptions,
                                 SwTextBlocks& rBlocks, sal_Bool bSaveRelFiles )
 {
-    // Variable uebertragen
+    
     Reader* po = (Reader*) &rOptions;
     po->pStrm = pStrm;
     po->pStg  = pStg;
     po->bInsertMode = sal_False;
 
-    // ist ein Medium angegeben, dann aus diesem die Streams besorgen
+    
     sal_Bool bRet = sal_False;
     if( !( 0 != (po->pMedium = pMedium ) && !po->SetStrmStgPtr() ))
         bRet = po->ReadGlossaries( rBlocks, bSaveRelFiles );
@@ -714,7 +714,7 @@ sal_Bool Reader::ReadGlossaries( SwTextBlocks&, sal_Bool ) const
     return sal_False;
 }
 
-// ------------------------------------------------
+
 
 int StgReader::GetReaderType()
 {
@@ -769,7 +769,7 @@ SwWriter::SwWriter(SfxMedium& rMedium, SwDoc &rDocument)
 
 sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
 {
-    // #i73788#
+    
     SwPauseThreadStarting aPauseThreadStarting;
 
     sal_Bool bHasMark = sal_False;
@@ -783,11 +783,11 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         pDoc = new SwDoc;
         pDoc->acquire();
 
-        // kopiere Teile aus einer Tabelle: lege eine Tabelle mit der Breite
-        // von der Originalen an und kopiere die selectierten Boxen.
-        // Die Groessen werden prozentual korrigiert.
+        
+        
+        
 
-        // lasse ueber das Layout die Boxen suchen
+        
         SwSelBoxes aBoxes;
         GetTblSel( *pShell, aBoxes );
         SwTableNode* pTblNd = (SwTableNode*)aBoxes[0]->GetSttNd()->StartOfSectionNode();
@@ -807,7 +807,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
 
         SwPaM *pEnd = pPam;
 
-        // Erste Runde: Nachsehen, ob eine Selektion besteht.
+        
         while(true)
         {
             bHasMark = bHasMark || pPam->HasMark();
@@ -816,7 +816,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
                 break;
         }
 
-        // Wenn keine Selektion besteht, eine ueber das ganze Dokument aufspannen.
+        
         if(!bHasMark)
         {
             if( pShell )
@@ -834,11 +834,11 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
                 pPam->Move( fnMoveForward, fnGoDoc );
             }
         }
-        // pPam ist immer noch der akt. Cursor !!
+        
     }
     else
     {
-        // keine Shell oder alles schreiben -> eigenen Pam erzeugen
+        
         SwDoc* pOutDoc = pDoc ? pDoc : &rDoc;
         pPam = new SwPaM( pOutDoc->GetNodes().GetEndOfContent() );
         if( pOutDoc->IsClipBoard() )
@@ -857,17 +857,17 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     rxWriter->bWriteAll = bWriteAll;
     SwDoc* pOutDoc = pDoc ? pDoc : &rDoc;
 
-    // falls der Standart PageDesc. immer noch auf initalen Werten steht
-    // (wenn z.B. kein Drucker gesetzt wurde) dann setze jetzt auf DIN A4
-    // #i37248# - Modifications are only allowed at a new document.
-    // <pOutDoc> contains a new document, if <pDoc> is set - see above.
+    
+    
+    
+    
     if ( pDoc && !pOutDoc->getPrinter( false ) )
     {
         const SwPageDesc& rPgDsc = pOutDoc->GetPageDesc( 0 );
-        //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
+        
         const SwFmtFrmSize& rSz = rPgDsc.GetMaster().GetFrmSize();
-        // Clipboard-Dokument wird immer ohne Drucker angelegt, so ist
-        // der Std.PageDesc immer aug LONG_MAX !! Mappe dann auf DIN A4
+        
+        
         if( LONG_MAX == rSz.GetHeight() || LONG_MAX == rSz.GetWidth() )
         {
             SwPageDesc aNew( rPgDsc );
@@ -885,7 +885,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     if( pESh )
     {
         bLockedView = pESh->IsViewLocked();
-        pESh->LockView( sal_True );    //lock visible section
+        pESh->LockView( sal_True );    
         pESh->StartAllAction();
     }
 
@@ -910,8 +910,8 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         pESh->LockView( bLockedView );
     }
 
-    // Falls nur zum Schreiben eine Selektion aufgespannt wurde, vor der
-    // Rueckkehr den alten Crsr wieder herstellen.
+    
+    
     if( !bWriteAll && ( pShell || pOutPam ))
     {
         if(!bHasMark)
@@ -924,12 +924,12 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     }
     else
     {
-        delete pPam;            // loesche den hier erzeugten Pam
-        // Alles erfolgreich geschrieben? Sag' das dem Dokument!
+        delete pPam;            
+        
         if ( !IsError( nError ) && !pDoc )
         {
             rDoc.ResetModified();
-            // #i38810# - reset also flag, that indicates updated links
+            
             rDoc.SetLinksUpdated( false );
         }
     }
@@ -946,12 +946,12 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
 
 
 
-// ----------------------------------------------------------------------
+
 
 
 sal_Bool SetHTMLTemplate( SwDoc & rDoc )
 {
-    // Vorlagennamen von den Sfx-HTML-Filter besorgen!!!
+    
     if( !ReadHTML->GetTemplateDoc() )
         ReadHTML->MakeHTMLDummyTemplateDoc();
 

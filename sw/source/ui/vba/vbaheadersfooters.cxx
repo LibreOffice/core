@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaheadersfooters.hxx"
 #include "vbaheaderfooter.hxx"
@@ -23,7 +23,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-// I assume there is only one headersfooters in Writer
+
 typedef ::cppu::WeakImplHelper1<container::XIndexAccess > HeadersFootersIndexAccess_Base;
 class HeadersFootersIndexAccess : public HeadersFootersIndexAccess_Base
 {
@@ -38,10 +38,10 @@ public:
     HeadersFootersIndexAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xPageStyleProps, sal_Bool bHeader ) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel ), mxPageStyleProps( xPageStyleProps ), mbHeader( bHeader ) {}
     ~HeadersFootersIndexAccess(){}
 
-    // XIndexAccess
+    
     virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
-        // first page, evenpages and primary page
+        
         return 3;
     }
     virtual uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
@@ -85,7 +85,7 @@ SwVbaHeadersFooters::SwVbaHeadersFooters( const uno::Reference< XHelperInterface
 
 ::sal_Int32 SAL_CALL SwVbaHeadersFooters::getCount() throw (uno::RuntimeException)
 {
-    // wdHeaderFooterFirstPage, wdHeaderFooterPrimary and wdHeaderFooterEvenPages
+    
     return 3;
 }
 
@@ -100,7 +100,7 @@ uno::Any SAL_CALL SwVbaHeadersFooters::Item( const uno::Any& Index1, const uno::
     return uno::makeAny( uno::Reference< word::XHeaderFooter >( new SwVbaHeaderFooter( this,  mxContext, mxModel, mxPageStyleProps, mbHeader, nIndex ) ) );
 }
 
-// XEnumerationAccess
+
 uno::Type
 SwVbaHeadersFooters::getElementType() throw (uno::RuntimeException)
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/i18n/WordType.hpp>
@@ -162,7 +162,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
 
     ::ConvertAttrCharToGen(aCoreSet, CONV_ATTR_STD);
 
-    // Setting the BoxInfo
+    
     ::PrepareBoxInfo( aCoreSet, rWrtSh );
 
     aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(rWrtSh.GetView().GetDocShell())));
@@ -199,7 +199,7 @@ void sw_CharDialog( SwWrtShell &rWrtSh, bool bUseDialog, sal_uInt16 nSlot,const 
         sal_Bool bInsert = sal_False;
         sal_Int32 nInsert = 0;
 
-        // The old item is for unknown reasons back in the set again.
+        
         if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, false, &pSelectionItem) )
         {
             OUString sInsert = ((const SfxStringItem*)pSelectionItem)->GetValue();
@@ -281,21 +281,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
     {
         case SID_LANGUAGE_STATUS:
         {
-            // get the language
+            
             OUString aNewLangTxt;
             SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_LANGUAGE_STATUS , false );
             if (pItem2)
                 aNewLangTxt = pItem2->GetValue();
 
-            //!! Remember the view frame right now...
-            //!! (call to GetView().GetViewFrame() will break if the
-            //!! SwTextShell got destroyed meanwhile.)
+            
+            
+            
             SfxViewFrame *pViewFrame = GetView().GetViewFrame();
 
             if (aNewLangTxt == "*")
             {
-                // open the dialog "Tools/Options/Language Settings - Language"
-                // to set the documents default language
+                
+                
                 SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                 if (pFact)
                 {
@@ -306,14 +306,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else
             {
-                //!! We have to use StartAction / EndAction bracketing in
-                //!! order to prevent possible destruction of the SwTextShell
-                //!! due to the selection changes coming below.
+                
+                
+                
                 rWrtSh.StartAction();
-                // prevent view from jumping because of (temporary) selection changes
+                
                 rWrtSh.LockView( sal_True );
 
-                // setting the new language...
+                
                 if (!aNewLangTxt.isEmpty())
                 {
                     const OUString aSelectionLangPrefix("Current_");
@@ -333,34 +333,34 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     bool bForParagraph = false;
                     if (-1 != (nPos = aNewLangTxt.indexOf( aSelectionLangPrefix, 0 )))
                     {
-                        // ... for the current selection
+                        
                         aNewLangTxt = aNewLangTxt.replaceAt(nPos, aSelectionLangPrefix.getLength(), "");
                         bForSelection = true;
                     }
                     else if (-1 != (nPos = aNewLangTxt.indexOf(aParagraphLangPrefix, 0)))
                     {
-                        // ... for the current paragraph language
+                        
                         aNewLangTxt = aNewLangTxt.replaceAt(nPos, aParagraphLangPrefix.getLength(), "");
                         bForSelection = true;
                         bForParagraph = true;
                     }
                     else if (-1 != (nPos = aNewLangTxt.indexOf(aDocumentLangPrefix, 0)))
                     {
-                        // ... as default document language
+                        
                         aNewLangTxt = aNewLangTxt.replaceAt(nPos, aDocumentLangPrefix.getLength(), "");
                         bForSelection = false;
                     }
 
                     if (bForParagraph || !bForSelection)
                     {
-                        rWrtSh.Push(); // save selection for later restoration
-                        rWrtSh.ClearMark(); // fdo#67796: invalidate table crsr
+                        rWrtSh.Push(); 
+                        rWrtSh.ClearMark(); 
                     }
 
                     if (bForParagraph)
                         SwLangHelper::SelectCurrentPara( rWrtSh );
 
-                    if (!bForSelection) // document language to be changed...
+                    if (!bForSelection) 
                     {
                         rWrtSh.SelAll();
                         rWrtSh.ExtendedSelectAll();
@@ -377,7 +377,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                     if (bForParagraph || !bForSelection)
                     {
-                        rWrtSh.Pop(false); // restore selection...
+                        rWrtSh.Pop(false); 
                     }
                 }
 
@@ -385,7 +385,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.EndAction();
             }
 
-            // invalidate slot to get the new language displayed
+            
             pViewFrame->GetBindings().Invalidate( nSlot );
 
             rReq.Done();
@@ -394,7 +394,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case SID_THES:
         {
-            // replace word/selection with text from selected sub menu entry
+            
             OUString aReplaceText;
             SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_THES , false );
             if (pItem2)
@@ -483,9 +483,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case FN_FORMAT_RESET:
         {
-            // #i78856, reset all attributes but not the language attributes
-            // (for this build an array of all relevant attributes and
-            // remove the languages from that)
+            
+            
+            
             std::set<sal_uInt16> aAttribs;
 
             sal_uInt16 aResetableSetRange[] = {
@@ -508,7 +508,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     aAttribs.insert( aAttribs.end(), nE++ );
                 pUShorts += 2;
             }
-            // we don't want to change writing direction.
+            
             aAttribs.erase( RES_FRAMEDIR );
             rWrtSh.ResetAttr( aAttribs );
             rReq.Done();
@@ -614,7 +614,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTOFORMAT_REDLINE_APPLY:
         {
             SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
-            // This must always be sal_False for the postprocessing.
+            
             aFlags.bAFmtByInput = false;
             aFlags.bWithRedlining = true;
             rWrtSh.AutoFormat( &aFlags );
@@ -658,7 +658,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         case FN_AUTOFORMAT_APPLY:
         {
             SvxSwAutoFmtFlags aFlags(SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags());
-            // This must always be sal_False for the postprocessing.
+            
             aFlags.bAFmtByInput = false;
             rWrtSh.AutoFormat( &aFlags );
             rReq.Done();
@@ -680,7 +680,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case FN_AUTO_CORRECT:
         {
-            // At first set to blank as default.
+            
             sal_Unicode cChar = ' ';
             rWrtSh.AutoCorrect( *SvxAutoCorrCfg::Get().GetAutoCorrect(), cChar );
             rReq.Done();
@@ -742,7 +742,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SfxViewFrame* pVFrame = GetView().GetViewFrame();
             if(pItem)
             {
-                //if the ChildWindow is active it has to be removed
+                
                 if( pVFrame->HasChildWindow( nId ) )
                 {
                     pVFrame->ToggleChildWindow( nId );
@@ -817,7 +817,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 if(!rWrtSh.SelectTxtAttr( RES_TXTATR_INETFMT ))
                     rWrtSh.SelWrd();
             }
-            //now remove the attribute
+            
             std::set<sal_uInt16> aAttribs;
             aAttribs.insert( RES_TXTATR_INETFMT );
             rWrtSh.ResetAttr( aAttribs );
@@ -837,7 +837,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
                 bUseDialog = false;
-            // intentionally no break
+            
         }
         case SID_CHAR_DLG:
         case SID_CHAR_DLG_EFFECT:
@@ -847,10 +847,10 @@ void SwTextShell::Execute(SfxRequest &rReq)
         break;
         case SID_CHAR_DLG_FOR_PARAGRAPH:
         {
-            rWrtSh.Push();          //save current cursor
+            rWrtSh.Push();          
             SwLangHelper::SelectCurrentPara( rWrtSh );
             sw_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
-            rWrtSh.Pop( sal_False );    //restore old cursor
+            rWrtSh.Pop( sal_False );    
         }
         break;
         case SID_ATTR_LRSPACE :
@@ -870,7 +870,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             sal_uInt16 nWhich = GetPool().GetWhich( nSlot );
             if ( pArgs && pArgs->GetItemState( nWhich ) == SFX_ITEM_SET )
                 bUseDialog = false;
-            // intentionally no break
+            
 
         }
         case SID_PARA_DLG:
@@ -909,12 +909,12 @@ void SwTextShell::Execute(SfxRequest &rReq)
                             FN_NUMBER_NEWSTART,         FN_NUMBER_NEWSTART_AT,
                             FN_DROP_TEXT,               FN_DROP_CHAR_STYLE_NAME,
                             0);
-            // get also the list level indent values merged as LR-SPACE item, if needed.
+            
             rWrtSh.GetPaMAttr( pPaM, aCoreSet, true );
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE,
                             ::GetHtmlMode(GetView().GetDocShell())));
 
-            // Tabulators: Put DefaultTabs into ItemSet
+            
             const SvxTabStopItem& rDefTabs = (const SvxTabStopItem&)
                             GetPool().GetDefaultItem(RES_PARATR_TABSTOP);
 
@@ -922,24 +922,24 @@ void SwTextShell::Execute(SfxRequest &rReq)
             SfxUInt16Item aDefDistItem( SID_ATTR_TABSTOP_DEFAULTS, nDefDist );
             aCoreSet.Put( aDefDistItem );
 
-            // Current tabulator
+            
             SfxUInt16Item aTabPos( SID_ATTR_TABSTOP_POS, 0 );
             aCoreSet.Put( aTabPos );
 
-            // Left border as offset
-            //#i24363# tab stops relative to indent
+            
+            
             const long nOff = rWrtSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
                 ((SvxLRSpaceItem&)aCoreSet.Get( RES_LR_SPACE )).GetTxtLeft() : 0;
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aCoreSet.Put( aOff );
 
-            // Setting the BoxInfo
+            
             ::PrepareBoxInfo( aCoreSet, rWrtSh );
 
-            // Current page format
+            
             ::SwToSfxPageDescAttr( aCoreSet );
 
-            // Properties of numbering
+            
             if( rWrtSh.GetDoc()->GetCurrNumRule( *pPaM->GetPoint() ) )
             {
                 SfxBoolItem aStart( FN_NUMBER_NEWSTART, rWrtSh.IsNumRuleStart( pPaM ) );
@@ -978,7 +978,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             }
             else if ( NULL != pDlg && pDlg->Execute() == RET_OK )
             {
-                // Apply defaults if nessecary.
+                
                 pSet = (SfxItemSet*)pDlg->GetOutputItemSet();
                 sal_uInt16 nNewDist;
                 if( SFX_ITEM_SET == pSet->GetItemState( SID_ATTR_TABSTOP_DEFAULTS, false, &pItem ) &&
@@ -1009,9 +1009,9 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rReq.Done( *pSet );
                 ::SfxToSwPageDescAttr( rWrtSh, *pSet );
-                // #i56253#
-                // enclose all undos.
-                // Thus, check conditions, if actions will be performed.
+                
+                
+                
                 const bool bUndoNeeded( pSet->Count() ||
                         SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) ||
                         SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) );
@@ -1038,16 +1038,16 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
                 if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART) )
                 {
-                    //SetNumRuleStart(sal_True) restarts the numbering at the value
-                    //that is defined at the starting point of the numbering level
-                    //otherwise the SetNodeNumStart() value determines the start
-                    //if it's set to something different than (sal_uInt16)0xFFFF
+                    
+                    
+                    
+                    
 
                     sal_Bool bStart = ((SfxBoolItem&)pSet->Get(FN_NUMBER_NEWSTART)).GetValue();
 
-                    // Default value for restart value has to be (sal_uInt16)0xFFFF
-                    // in order to indicate that the restart value of the list
-                    // style has to be used on restart.
+                    
+                    
+                    
                     sal_uInt16 nNumStart = (sal_uInt16)0xFFFF;
                     if( SFX_ITEM_SET == pSet->GetItemState(FN_NUMBER_NEWSTART_AT) )
                     {
@@ -1062,7 +1062,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                     rWrtSh.SetNodeNumStart(nNumStart);
                     rWrtSh.SetNumRuleStart(sal_False, pPaM);
                 }
-                // #i56253#
+                
                 if ( bUndoNeeded )
                 {
                     rWrtSh.EndUndo( UNDO_INSATTR );
@@ -1077,8 +1077,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             OUString sContinuedListId;
             const SwNumRule* pRule =
                 rWrtSh.SearchNumRule( false, true, false, -1, sContinuedListId );
-            // #i86492#
-            // Search also for bullet list
+            
+            
             if ( !pRule )
             {
                 pRule = rWrtSh.SearchNumRule( false, false, false, -1, sContinuedListId );
@@ -1101,27 +1101,27 @@ void SwTextShell::Execute(SfxRequest &rReq)
 
         case SID_DEC_INDENT:
         case SID_INC_INDENT:
-            //According to the requirement, modified the behavior when user
-            //using the indent button on the toolbar. Now if we increase/decrease indent for a
-            //paragraph which has bullet style it will increase/decrease the bullet level.
+            
+            
+            
             {
-                //If the current paragraph has bullet call the function to
-                //increase or decrease the bullet level.
-                //Why could I know wheter a paragraph has bullet or not by checking the below conditions?
-                //Please refer to the "case KEY_TAB:" section in SwEditWin::KeyInput(..) :
-                //      if( rSh.GetCurNumRule() && rSh.IsSttOfPara() &&
-                //                  !rSh.HasReadonlySel() )
-                //              eKeyState = KS_NumDown;
-                //Above code demonstrates that when the cursor is at the start of a paragraph which has bullet,
-                //press TAB will increase the bullet level.
-                //So I copied from that ^^
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 if ( rWrtSh.GetCurNumRule() && !rWrtSh.HasReadonlySel() )
                 {
                     rWrtSh.NumUpDown( SID_INC_INDENT == nSlot );
                 }
-                else//execute the original processing functions
+                else
                 {
-                    //below is copied of the old codes
+                    
                     rWrtSh.MoveLeftMargin( SID_INC_INDENT == nSlot,
                                     rReq.GetModifier() != KEY_MOD1 );
                 }
@@ -1144,8 +1144,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rEditWin.SetTextColor(aSet);
                 SwApplyTemplate* pApply = rEditWin.GetApplyTemplate();
 
-                // If there is a selection, then set the color on it
-                // otherwise, it'll be the color for the next text to be typed
+                
+                
                 if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_EXT)
                 {
                     rWrtSh.SetAttrItem(SvxColorItem (aSet, RES_CHRATR_COLOR));
@@ -1164,17 +1164,17 @@ void SwTextShell::Execute(SfxRequest &rReq)
             if(pItem)
             {
                 aSet = ((const SvxColorItem*)pItem)->GetValue();
-                rEdtWin.SetTextBackColor(aSet); //select last color
+                rEdtWin.SetTextBackColor(aSet); 
             }
             else
-                rEdtWin.SetTextBackColor(Color(COL_TRANSPARENT)); //if last was "no fill"
+                rEdtWin.SetTextBackColor(Color(COL_TRANSPARENT)); 
             if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
             {
                 SvxBrushItem aBrushItem(RES_CHRATR_BACKGROUND);
                 if(pItem)
-                    aBrushItem.SetColor(aSet); //set the selected color
+                    aBrushItem.SetColor(aSet); 
                 else
-                    aBrushItem.SetColor(Color(COL_TRANSPARENT));//set "no fill" color
+                    aBrushItem.SetColor(Color(COL_TRANSPARENT));
                 rWrtSh.SetAttrItem( aBrushItem );
             }
             else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
@@ -1358,32 +1358,32 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         {
         case SID_LANGUAGE_STATUS:
             {
-                // the value of used script types
+                
                 OUString aScriptTypesInUse( OUString::number( rSh.GetScriptType() ) );
 
                 SvtLanguageTable aLangTable;
 
-                // get keyboard language
+                
                 OUString aKeyboardLang;
                 SwEditWin& rEditWin = GetView().GetEditWin();
                 LanguageType nLang = rEditWin.GetInputLanguage();
                 if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
                     aKeyboardLang = aLangTable.GetString( nLang );
 
-                // get the language that is in use
+                
                 OUString aCurrentLang = "*";
                 nLang = SwLangHelper::GetCurrentLanguage( rSh );
                 if (nLang != LANGUAGE_DONTKNOW)
                     aCurrentLang = aLangTable.GetString( nLang );
 
-                // build sequence for status value
+                
                 uno::Sequence< OUString > aSeq( 4 );
                 aSeq[0] = aCurrentLang;
                 aSeq[1] = aScriptTypesInUse;
                 aSeq[2] = aKeyboardLang;
                 aSeq[3] = SwLangHelper::GetTextForLanguageGuessing( rSh );
 
-                // set sequence as status value
+                
                 SfxStringListItem aItem( SID_LANGUAGE_STATUS );
                 aItem.SetStringList( aSeq );
                 rSet.Put( aItem, SID_LANGUAGE_STATUS );
@@ -1392,12 +1392,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
         case SID_THES:
         {
-            // is there a valid selection to get text from?
+            
             OUString aText;
             bool bValid = !rSh.HasSelection() ||
                     (rSh.IsSelOnePara() && !rSh.IsMultiSelection());
-            // prevent context menu from showing when cursor is not in or at the end of a word
-            // (GetCurWord will return the next word if there is none at the current position...)
+            
+            
             const sal_Int16 nWordType = ::i18n::WordType::DICTIONARY_WORD;
             bool bWord = rSh.IsInWord( nWordType ) || rSh.IsStartWord( nWordType ) || rSh.IsEndWord( nWordType );
             if (bValid && bWord)
@@ -1408,12 +1408,12 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             lang::Locale aLocale( aLanguageTag.getLocale());
             OUString aLangText( aLanguageTag.getBcp47() );
 
-            // set word and locale to look up as status value
+            
             OUString aStatusVal = aText + "#" + aLangText;
 
             rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
-            // disable "Thesaurus" context menu entry if there is nothing to look up
+            
             uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
             if (aText.isEmpty() ||
                 !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( aLocale ))
@@ -1502,9 +1502,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case SID_DEC_INDENT:
         case SID_INC_INDENT:
             {
-                //if the paragrah has bullet we'll do the following things:
-                //1: if the bullet level is the first level, disable the decrease-indent button
-                //2: if the bullet level is the last level, disable the increase-indent button
+                
+                
+                
                 if ( rSh.GetCurNumRule() && !rSh.HasReadonlySel() )
                 {
                     sal_uInt8 nLevel = rSh.GetNumLevel();
@@ -1514,9 +1514,9 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                         rSet.DisableItem( nWhich );
                     }
                 }
-                else//if the paragraph has no bullet, execute the original functions
+                else
                 {
-                    //below is copied of the old codes
+                    
                     sal_uInt16 nHtmlMode = ::GetHtmlMode(GetView().GetDocShell());
                     nHtmlMode &= HTMLMODE_ON|HTMLMODE_SOME_STYLES;
                     if( (nHtmlMode == HTMLMODE_ON) || !rSh.IsMoveLeftMargin(
@@ -1638,7 +1638,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                                 RES_TXTATR_INETFMT);
                 rSh.GetCurAttr(aSet);
 
-                // If a hyperlink is selected, either alone or along with other text...
+                
                 if( ((SFX_ITEM_DONTCARE & aSet.GetItemState( RES_TXTATR_INETFMT, true )) == 0) || rSh.HasReadonlySel())
                 {
                     rSet.DisableItem(nWhich);
@@ -1769,8 +1769,8 @@ void SwTextShell::GetState( SfxItemSet &rSet )
             case FN_NUM_CONTINUE:
             {
                 {
-                    // #i86492#
-                    // Search also for bullet list
+                    
+                    
                     OUString aDummy;
                     const SwNumRule* pRule =
                             rSh.SearchNumRule( false, true, false, -1, aDummy );

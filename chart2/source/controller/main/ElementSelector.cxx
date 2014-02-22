@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ElementSelector.hxx"
@@ -111,7 +111,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
         Reference< lang::XMultiServiceFactory > xFact( xChartController->getModel(), uno::UNO_QUERY );
         if( xFact.is() )
             xChartView = xFact->createInstance( CHART_VIEW_SERVICE_NAME );
-        ExplicitValueProvider* pExplicitValueProvider = 0; //ExplicitValueProvider::getExplicitValueProvider(xChartView); this creates all visible data points, that's too much
+        ExplicitValueProvider* pExplicitValueProvider = 0; 
         ObjectHierarchy aHierarchy( xChartDoc, pExplicitValueProvider, true /*bFlattenDiagram*/, true /*bOrderingForElementSelector*/ );
         lcl_addObjectsToList( aHierarchy, aHierarchy.getRootNodeOID(), m_aEntries, 0, xChartDoc );
 
@@ -168,7 +168,7 @@ void SelectorListBox::UpdateChartElementsListAndSelection()
             nEntryCount = 100;
         SetDropDownLineCount( nEntryCount );
     }
-    SaveValue(); //remind current selection pos
+    SaveValue(); 
 }
 
 void SelectorListBox::ReleaseFocus_Impl()
@@ -225,7 +225,7 @@ bool SelectorListBox::Notify( NotifyEvent& rNEvt )
             }
 
             case KEY_ESCAPE:
-                SelectEntryPos( GetSavedValue() ); //restore saved selection
+                SelectEntryPos( GetSavedValue() ); 
                 ReleaseFocus_Impl();
                 break;
         }
@@ -245,7 +245,7 @@ Reference< ::com::sun::star::accessibility::XAccessible > SelectorListBox::Creat
     return ListBox::CreateAccessible();
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ElementSelectorToolbarController, lcl_aServiceName );
 
 Sequence< OUString > ElementSelectorToolbarController::getSupportedServiceNames_Static()
@@ -261,7 +261,7 @@ ElementSelectorToolbarController::ElementSelectorToolbarController( const uno::R
 ElementSelectorToolbarController::~ElementSelectorToolbarController()
 {
 }
-// XInterface
+
 Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rType ) throw (RuntimeException)
 {
     Any aReturn = ToolboxController::queryInterface(_rType);
@@ -316,6 +316,6 @@ uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::create
     return xItemWindow;
 }
 
-} // chart2
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

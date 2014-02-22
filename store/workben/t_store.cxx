@@ -332,23 +332,23 @@ int SAL_CALL main (int argc, char **argv)
         }
     }
 
-    // Stream Read/Write.
+    
     OUString aPath ("/");
     if ((nOptions & OPTION_READ) || (nOptions & OPTION_WRITE))
     {
-        // Mode.
+        
         storeAccessMode eMode = store_AccessReadOnly;
         if (nOptions & OPTION_WRITE)
             eMode = store_AccessReadWrite;
         if (nOptions & OPTION_CREAT)
             eMode = store_AccessCreate;
 
-        // Buffer.
+        
         char pBuffer[_DEMOSTOR_BUFSIZ] = "Hello World";
         pBuffer[_DEMOSTOR_BUFSIZ - 2] = 'B';
         pBuffer[_DEMOSTOR_BUFSIZ - 1] = '\0';
 
-        // Load/Save.
+        
 #ifndef PROFILE
         OTime aStartTime (OTime::getSystemTime());
 #endif /* PROFILE */
@@ -440,10 +440,10 @@ int SAL_CALL main (int argc, char **argv)
 #endif /* PROFILE */
     }
 
-    // Link/Rename.
+    
     if (nOptions & OPTION_LINK)
     {
-        // Create symlink to (root) directory.
+        
         eErrCode = aFile.symlink (
             aPath,      OUString("000000/"),
             OUString(), aPath);
@@ -452,7 +452,7 @@ int SAL_CALL main (int argc, char **argv)
              (eErrCode == store_E_AlreadyExists)    ),
             "t_store::main(): store_symlink() failed");
 
-        // Create symlink to file.
+        
         OUString aLinkName ("demostor-1.lnk");
 
         eErrCode = aFile.symlink (
@@ -476,7 +476,7 @@ int SAL_CALL main (int argc, char **argv)
                 "t_store::main(): store_rename() failed");
         }
 
-        // Create directory.
+        
         OUString aDirName ("demostor-1.dir");
         store::OStoreDirectory aDir;
 
@@ -490,7 +490,7 @@ int SAL_CALL main (int argc, char **argv)
         }
     }
 
-    // Directory iteration.
+    
     if (nOptions & OPTION_ITER)
     {
 #ifndef PROFILE
@@ -498,18 +498,18 @@ int SAL_CALL main (int argc, char **argv)
 #endif /* PROFILE */
         OUString aEmpty;
 
-        // Root directory.
+        
         store::OStoreDirectory aRootDir;
         if (nOptions & OPTION_LINK)
         {
-            // Open symlink entry.
+            
             eErrCode = aRootDir.create (
                 aFile, aPath, OUString("000000"),
                 store_AccessReadOnly);
         }
         else
         {
-            // Open direct entry.
+            
             if (nOptions & OPTION_CREAT)
                 eErrCode = aRootDir.create (
                     aFile, aEmpty, aEmpty, store_AccessReadCreate);
@@ -523,14 +523,14 @@ int SAL_CALL main (int argc, char **argv)
 
         if (eErrCode == store_E_None)
         {
-            // Traverse directory tree.
+            
             DirectoryTraveller aTraveller (
                 aFile, aEmpty, aEmpty, nOptions, 0);
             aRootDir.travel (aTraveller);
         }
         else
         {
-            // Failure.
+            
             printf ("Error: can't open directory: \"/\"\n");
         }
 
@@ -552,11 +552,11 @@ int SAL_CALL main (int argc, char **argv)
         osl_waitThread (&tv);
     }
 
-    // Size.
+    
     sal_uInt32 nSize = 0;
     aFile.getSize (nSize);
 
-    // Done.
+    
     aFile.close();
 
 #if (defined(WNT) && defined(PROFILE))

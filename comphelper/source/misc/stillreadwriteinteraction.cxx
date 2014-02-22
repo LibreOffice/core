@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/stillreadwriteinteraction.hxx>
@@ -71,10 +71,10 @@ bool StillReadWriteInteraction::wasWriteError()
 ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction::intercepted(const ::ucbhelper::InterceptedInteraction::InterceptedRequest&                         aRequest,
                                                                   const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest >& xRequest)
 {
-    // we are used!
+    
     m_bUsed = true;
 
-    // check if it's a real interception - might some parameters are not the right ones ...
+    
     bool bAbort = false;
     switch(aRequest.Handle)
     {
@@ -87,8 +87,8 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
                 || (exIO.Code == css::ucb::IOErrorCode_LOCKING_VIOLATION )
                 || (exIO.Code == css::ucb::IOErrorCode_NOT_EXISTING )
 #ifdef MACOSX
-                // this is a workaround for MAC, on this platform if the file is locked
-                // the returned error code looks to be wrong
+                
+                
                 || (exIO.Code == css::ucb::IOErrorCode_GENERAL )
 #endif
                 );
@@ -102,7 +102,7 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
         break;
     }
 
-    // handle interaction by ourself
+    
     if (bAbort)
     {
         m_bHandledByMySelf = true;
@@ -115,7 +115,7 @@ ucbhelper::InterceptedInteraction::EInterceptionState StillReadWriteInteraction:
         return ::ucbhelper::InterceptedInteraction::E_INTERCEPTED;
     }
 
-    // Otherwhise use internal handler.
+    
     if (m_xInterceptedHandler.is())
     {
         m_bHandledByInternalHandler = true;

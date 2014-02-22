@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartModelHelper.hxx"
@@ -53,8 +53,8 @@ uno::Reference< chart2::data::XDataProvider > ChartModelHelper::createInternalDa
 {
     bool bDefaultDataInColumns(true);
 
-    // #i120559# Try to access the current state of "DataRowSource" for the
-    // chart data and use it as default for creating a new InternalDataProvider
+    
+    
     if(xChartDoc.is())
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::chart::XChartDocument > xDoc(xChartDoc, uno::UNO_QUERY);
@@ -196,7 +196,7 @@ void ChartModelHelper::triggerRangeHighlighting( const uno::Reference< frame::XM
     if( xDataReceiver.is() )
     {
         uno::Reference< view::XSelectionChangeListener > xSelectionChangeListener( xDataReceiver->getRangeHighlighter(), uno::UNO_QUERY );
-        //trigger selection of cell range
+        
         if( xSelectionChangeListener.is() )
         {
             lang::EventObject aEvent( xSelectionChangeListener );
@@ -207,7 +207,7 @@ void ChartModelHelper::triggerRangeHighlighting( const uno::Reference< frame::XM
 
 bool ChartModelHelper::isIncludeHiddenCells( const uno::Reference< frame::XModel >& xChartModel )
 {
-    bool bIncluded = true;  // hidden cells are included by default.
+    bool bIncluded = true;  
 
     uno::Reference< chart2::XDiagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
     if (!xDiagram.is())
@@ -243,7 +243,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
             if( bOldValue == bIncludeHiddenCells )
                 bChanged = true;
 
-            //set the property on all instances in all cases to get the different objects in sync!
+            
 
             uno::Any aNewValue = uno::makeAny(bIncludeHiddenCells);
 
@@ -255,7 +255,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
             }
             catch( const beans::UnknownPropertyException& )
             {
-                //the property is optional!
+                
             }
 
             try
@@ -278,7 +278,7 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
             }
             catch( const beans::UnknownPropertyException& )
             {
-                //the property is optional!
+                
             }
 
             xDiagramProperties->setPropertyValue( "IncludeHiddenCells", aNewValue);
@@ -291,6 +291,6 @@ bool ChartModelHelper::setIncludeHiddenCells( bool bIncludeHiddenCells, ChartMod
     return bChanged;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

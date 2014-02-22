@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -64,7 +64,7 @@ Mediator::~Mediator()
             bool bSuccess = (nToWrite == write(m_nSocket, aHeader, nToWrite));
             SAL_WARN_IF(!bSuccess, "extensions.plugin", "short write");
         }
-        // kick the thread out of its run method; it deletes itself
+        
         close( m_nSocket );
     }
     else
@@ -87,7 +87,7 @@ sal_uLong Mediator::SendMessage( sal_uLong nBytes, const char* pBytes, sal_uLong
         nMessageID = m_nCurrentID;
 
     m_nCurrentID++;
-    if( m_nCurrentID >= 1 << 24 ) // protection against overflow
+    if( m_nCurrentID >= 1 << 24 ) 
         m_nCurrentID = 1;
 
     if( ! m_bValid )
@@ -159,8 +159,8 @@ MediatorMessage* Mediator::GetNextMessage( sal_Bool bWait )
     while( m_pListener )
     {
         {
-            // guard must be after WaitForMessage, else the listener
-            // cannot insert a new one -> deadlock
+            
+            
             osl::MutexGuard aGuard( m_aQueueMutex );
             for( size_t i = 0; i < m_aMessageQueue.size(); i++ )
             {

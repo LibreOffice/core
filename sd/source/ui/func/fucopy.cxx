@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fucopy.hxx"
@@ -64,7 +64,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 {
     if( mpView->AreObjectsMarked() )
     {
-        // Undo
+        
         OUString aString( mpView->GetDescriptionOfMarkedObjects() );
         aString += " " + SD_RESSTR( STR_UNDO_COPYOBJECTS );
         mpView->BegUndo( aString );
@@ -76,7 +76,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             SfxItemSet aSet( mpViewShell->GetPool(),
                                 ATTR_COPY_START, ATTR_COPY_END, 0 );
 
-            // indicate color attribute
+            
             SfxItemSet aAttr( mpDoc->GetPool() );
             mpView->GetAttributes( aAttr );
             const SfxPoolItem*  pPoolItem = NULL;
@@ -117,7 +117,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                             delete pDlg;
                             mpView->EndUndo();
                         }
-                        return; // Cancel
+                        return; 
                     }
                     delete( pDlg );
                 }
@@ -131,11 +131,11 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         sal_Bool                bColor = sal_False;
         const SfxPoolItem*  pPoolItem = NULL;
 
-        // Count
+        
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_NUMBER, true, &pPoolItem ) )
             nNumber = ( ( const SfxUInt16Item* ) pPoolItem )->GetValue();
 
-        // translation
+        
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_X, true, &pPoolItem ) )
             lSizeX = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_MOVE_Y, true, &pPoolItem ) )
@@ -143,13 +143,13 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_ANGLE, true, &pPoolItem ) )
             lAngle = ( ( const SfxInt32Item* )pPoolItem )->GetValue();
 
-        // scale
+        
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_WIDTH, true, &pPoolItem ) )
             lWidth = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_HEIGHT, true, &pPoolItem ) )
             lHeight = ( ( const SfxInt32Item* ) pPoolItem )->GetValue();
 
-        // start/end color
+        
         if( SFX_ITEM_SET == pArgs->GetItemState( ATTR_COPY_START_COLOR, true, &pPoolItem ) )
         {
             aStartColor = ( ( const XColorItem* ) pPoolItem )->GetColorValue();
@@ -164,8 +164,8 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         else
             bColor = sal_False;
 
-        // remove handles
-        //HMHmpView->HideMarkHdl();
+        
+        
 
         SfxProgress*    pProgress = NULL;
         sal_Bool            bWaiting = sal_False;
@@ -184,7 +184,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         const sal_uLong         nMarkCount = aMarkList.GetMarkCount();
         SdrObject*          pObj = NULL;
 
-        // calculate number of possible copies
+        
         aRect = mpView->GetAllMarkedRect();
 
         if( lWidth < 0L )
@@ -214,14 +214,14 @@ void FuCopy::DoExecute( SfxRequest& rReq )
                 mpView->SetAttributes( aNewSet );
             }
 
-            // make a copy of selected objects
+            
             mpView->CopyMarked();
 
-            // get newly selected objects
+            
             SdrMarkList aCopyMarkList( mpView->GetMarkedObjectList() );
             sal_uLong       j, nCopyMarkCount = aMarkList.GetMarkCount();
 
-            // set protection flags at marked copies to null
+            
             for( j = 0; j < nCopyMarkCount; j++ )
             {
                 pObj = aCopyMarkList.GetMark( j )->GetMarkedSdrObj();
@@ -245,7 +245,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
             if( mpView->IsMoveAllowed() )
                 mpView->MoveAllMarked( Size( lSizeX, lSizeY ) );
 
-            // set protection flags at marked copies to original values
+            
             if( nMarkCount == nCopyMarkCount )
             {
                 for( j = 0; j < nMarkCount; j++ )
@@ -265,7 +265,7 @@ void FuCopy::DoExecute( SfxRequest& rReq )
 
             if( bColor )
             {
-                // probably room for optimizations, but may can lead to rounding errors
+                
                 sal_uInt8 nRed = aStartColor.GetRed() + (sal_uInt8) ( ( (long) aEndColor.GetRed() - (long) aStartColor.GetRed() ) * (long) i / (long) nNumber  );
                 sal_uInt8 nGreen = aStartColor.GetGreen() + (sal_uInt8) ( ( (long) aEndColor.GetGreen() - (long) aStartColor.GetGreen() ) *  (long) i / (long) nNumber );
                 sal_uInt8 nBlue = aStartColor.GetBlue() + (sal_uInt8) ( ( (long) aEndColor.GetBlue() - (long) aStartColor.GetBlue() ) * (long) i / (long) nNumber );
@@ -283,14 +283,14 @@ void FuCopy::DoExecute( SfxRequest& rReq )
         if ( bWaiting )
             mpDocSh->SetWaitCursor( sal_False );
 
-        // show handles
-        mpView->AdjustMarkHdl(); //HMH sal_True );
-        //HMHpView->ShowMarkHdl();
+        
+        mpView->AdjustMarkHdl(); 
+        
 
         mpView->EndUndo();
     }
 }
 
-} // end of namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

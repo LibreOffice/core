@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "columnset.hxx"
@@ -20,7 +20,7 @@ void ColumnSet::set(SCTAB nTab, SCCOL nCol)
             maTabs.insert(TabsType::value_type(nTab, ColsType()));
 
         if (!r.second)
-            // insertion failed.
+            
             return;
 
         itTab = r.first;
@@ -46,14 +46,14 @@ void ColumnSet::getColumns(SCTAB nTab, std::vector<SCCOL>& rCols) const
     TabsType::const_iterator itTab = maTabs.find(nTab);
     if (itTab == maTabs.end())
     {
-        rCols.swap(aCols); // empty it.
+        rCols.swap(aCols); 
         return;
     }
 
     const ColsType& rTabCols = itTab->second;
     aCols.assign(rTabCols.begin(), rTabCols.end());
 
-    // Sort and remove duplicates.
+    
     std::sort(aCols.begin(), aCols.end());
     std::vector<SCCOL>::iterator itCol = std::unique(aCols.begin(), aCols.end());
     aCols.erase(itCol, aCols.end());

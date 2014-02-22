@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -32,7 +32,7 @@ using namespace ::rtl;
 namespace jni_uno
 {
 
-//------------------------------------------------------------------------------
+
 inline rtl_mem * seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
 {
     o3tl::heap_ptr< rtl_mem > seq(
@@ -43,7 +43,7 @@ inline rtl_mem * seq_allocate( sal_Int32 nElements, sal_Int32 nSize )
     return seq.release();
 }
 
-//______________________________________________________________________________
+
 namespace {
 
 void createDefaultUnoValue(
@@ -409,7 +409,7 @@ void Bridge::map_to_uno(
                 + "] null-ref given!" + jni.get_stack_trace() );
         }
 
-        // type name
+        
         JLocalAutoRef jo_type_name(
             jni, jni->GetObjectField(
                 java_data.l, m_jni_info->m_field_Type__typeName ) );
@@ -451,7 +451,7 @@ void Bridge::map_to_uno(
         }
 
         uno_Any * pAny = (uno_Any *)uno_data;
-        if (0 == java_data.l) // null-ref maps to XInterface null-ref
+        if (0 == java_data.l) 
         {
             if (assign)
                 uno_any_destruct( pAny, 0 );
@@ -466,7 +466,7 @@ void Bridge::map_to_uno(
         if (JNI_FALSE != jni->IsInstanceOf(
                 java_data.l, m_jni_info->m_class_Any ))
         {
-            // boxed any
+            
             jo_type.reset( jni->GetObjectField(
                                java_data.l, m_jni_info->m_field_Any__type ) );
             if (! jo_type.is())
@@ -476,7 +476,7 @@ void Bridge::map_to_uno(
                     + "] no type set at com.sun.star.uno.Any!"
                     + jni.get_stack_trace() );
             }
-            // wrapped value
+            
             jo_wrapped_holder.reset(
                 jni->GetObjectField(
                     java_data.l, m_jni_info->m_field_Any__object ) );
@@ -484,12 +484,12 @@ void Bridge::map_to_uno(
         }
         else
         {
-            // create type out of class
+            
             JLocalAutoRef jo_class( jni, jni->GetObjectClass( java_data.l ) );
             jo_type.reset( create_type( jni, (jclass) jo_class.get() ) );
         }
 
-        // get type name
+        
         JLocalAutoRef jo_type_name(
             jni, jni->GetObjectField(
                 jo_type.get(), m_jni_info->m_field_Type__typeName ) );
@@ -610,7 +610,7 @@ void Bridge::map_to_uno(
                 }
                 break;
             case typelib_TypeClass_STRING:
-                // opt: anies often contain strings; copy string directly
+                
                 pAny->pReserved = 0;
                 pAny->pData = &pAny->pReserved;
                 jstring_to_ustring(
@@ -651,7 +651,7 @@ void Bridge::map_to_uno(
         {
             if (assign)
             {
-                // restore to valid any
+                
                 uno_any_construct( pAny, 0, 0, 0 );
             }
             throw;
@@ -888,7 +888,7 @@ void Bridge::map_to_uno(
                     bool checkNull;
                     if (0 == field_id)
                     {
-                        // special for Message: call Throwable.getMessage()
+                        
                         assert(
                             type_equals(
                                 type,
@@ -897,8 +897,8 @@ void Bridge::map_to_uno(
                                 type,
                                 m_jni_info->m_RuntimeException_type.
                                 getTypeLibType() ) );
-                        assert( 0 == nPos ); // first member
-                        // call getMessage()
+                        assert( 0 == nPos ); 
+                        
                         jo_field.reset(
                             jni->CallObjectMethodA(
                                 java_data.l,
@@ -931,7 +931,7 @@ void Bridge::map_to_uno(
         {
             if (! assign)
             {
-                // cleanup
+                
                 for ( sal_Int32 nCleanup = 0; nCleanup < nPos; ++nCleanup )
                 {
                     void * p =
@@ -1080,7 +1080,7 @@ void Bridge::map_to_uno(
                 }
                 catch (...)
                 {
-                    // cleanup
+                    
                     for ( sal_Int32 nCleanPos = 0;
                           nCleanPos < nPos; ++nCleanPos )
                     {
@@ -1120,7 +1120,7 @@ void Bridge::map_to_uno(
             java_data.l = jo_out_holder.get();
         }
 
-        if (0 == java_data.l) // null-ref
+        if (0 == java_data.l) 
         {
             if (assign)
             {
@@ -1156,9 +1156,9 @@ void Bridge::map_to_uno(
     }
 }
 
-//##############################################################################
 
-//______________________________________________________________________________
+
+
 void Bridge::map_to_java(
     JNI_context const & jni,
     jvalue * java_data, void const * uno_data,
@@ -1577,7 +1577,7 @@ void Bridge::map_to_java(
                         m_jni_info->m_class_Short,
                         m_jni_info->m_ctor_Short_with_short, args ) );
                 jni.ensure_no_exception();
-                // box up in com.sun.star.uno.Any
+                
                 args[ 0 ].l = m_jni_info->m_object_Type_UNSIGNED_SHORT;
                 args[ 1 ].l = jo_val.get();
                 jo_any.reset(
@@ -1596,7 +1596,7 @@ void Bridge::map_to_java(
                         m_jni_info->m_class_Integer,
                         m_jni_info->m_ctor_Integer_with_int, args ) );
                 jni.ensure_no_exception();
-                // box up in com.sun.star.uno.Any
+                
                 args[ 0 ].l = m_jni_info->m_object_Type_UNSIGNED_LONG;
                 args[ 1 ].l = jo_val.get();
                 jo_any.reset(
@@ -1615,7 +1615,7 @@ void Bridge::map_to_java(
                         m_jni_info->m_class_Long,
                         m_jni_info->m_ctor_Long_with_long, args ) );
                 jni.ensure_no_exception();
-                // box up in com.sun.star.uno.Any
+                
                 args[ 0 ].l = m_jni_info->m_object_Type_UNSIGNED_HYPER;
                 args[ 1 ].l = jo_val.get();
                 jo_any.reset(
@@ -1625,14 +1625,14 @@ void Bridge::map_to_java(
                 jni.ensure_no_exception();
                 break;
             }
-            case typelib_TypeClass_STRING: // opt strings
+            case typelib_TypeClass_STRING: 
                 jo_any.reset( ustring_to_jstring(
                                   jni, (rtl_uString *) pAny->pReserved ) );
                 break;
             case typelib_TypeClass_SEQUENCE:
             {
                 jvalue java_data2;
-                // prefetch sequence td
+                
                 TypeDescr seq_td( pAny->pType );
                 map_to_java(
                     jni, &java_data2, pAny->pData, seq_td.get()->pWeakRef, 0,
@@ -1640,7 +1640,7 @@ void Bridge::map_to_java(
                     true /* create integral wrappers */ );
                 jo_any.reset( java_data2.l );
 
-                // determine inner element type
+                
                 ::com::sun::star::uno::Type element_type(
                     ((typelib_IndirectTypeDescription *)seq_td.get())->pType );
                 while (typelib_TypeClass_SEQUENCE ==
@@ -1653,7 +1653,7 @@ void Bridge::map_to_java(
                         ((typelib_IndirectTypeDescription *)element_td.get())
                           ->pType );
                 }
-                // box up only if unsigned element type
+                
                 switch (element_type.getTypeLibType()->eTypeClass)
                 {
                 case typelib_TypeClass_UNSIGNED_SHORT:
@@ -1689,7 +1689,7 @@ void Bridge::map_to_java(
                                 jni, pUnoI,
                                 m_jni_info->m_XInterface_type_info ) );
                     }
-                    // else: empty XInterface ref maps to null-ref
+                    
                 }
                 else
                 {
@@ -1700,7 +1700,7 @@ void Bridge::map_to_java(
                     {
                         jo_any.reset( map_to_java( jni, pUnoI, iface_info ) );
                     }
-                    // box up in com.sun.star.uno.Any
+                    
                     jvalue args[ 2 ];
                     args[ 0 ].l = iface_info->m_type;
                     args[ 1 ].l = jo_any.get();
@@ -1714,14 +1714,14 @@ void Bridge::map_to_java(
             }
             case typelib_TypeClass_STRUCT:
             {
-                // Do not lose information about type arguments of instantiated
-                // polymorphic struct types:
+                
+                
                 OUString const & name = OUString::unacquired(
                     &pAny->pType->pTypeName);
                 assert(!name.isEmpty());
                 if (name[name.getLength() - 1] == '>')
                 {
-                    // Box up in com.sun.star.uno.Any:
+                    
                     JLocalAutoRef jo_type(jni, create_type(jni, pAny->pType));
                     jvalue java_data2;
                     map_to_java(
@@ -1738,7 +1738,7 @@ void Bridge::map_to_java(
                     jni.ensure_no_exception();
                     break;
                 }
-                // fall through
+                
             }
             default:
             {
@@ -1785,7 +1785,7 @@ void Bridge::map_to_java(
         JLocalAutoRef jo_enum( jni );
         if (in_param)
         {
-            // call static <enum_class>.fromInt( int )
+            
             OStringBuffer sig_buf( 5 + class_name.getLength() );
             sig_buf.append( "(I)L" );
             sig_buf.append( class_name.replace( '.', '/' ) );
@@ -2036,7 +2036,7 @@ void Bridge::map_to_java(
                                     field_id, *(jdouble const *) p );
                             }
                             break;
-                        case typelib_TypeClass_STRING: // string opt here
+                        case typelib_TypeClass_STRING: 
                         {
                             JLocalAutoRef jo_string(
                                 jni, ustring_to_jstring(
@@ -2084,7 +2084,7 @@ void Bridge::map_to_java(
     }
     case typelib_TypeClass_SEQUENCE:
     {
-        // xxx todo: possible opt for pure out sequences
+        
         JLocalAutoRef jo_ar( jni );
 
         sal_Int32 nElements;
@@ -2274,7 +2274,7 @@ void Bridge::map_to_java(
 
             if (0 < nElements)
             {
-                // call static <enum_class>.fromInt( int )
+                
                 OStringBuffer sig_buf( 5 + class_name.getLength() );
                 sig_buf.append( "(I)L" );
                 sig_buf.append( class_name.replace( '.', '/' ) );

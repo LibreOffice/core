@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/themefragmenthandler.hxx"
@@ -27,7 +27,7 @@ using namespace ::oox::core;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 ThemeFragmentHandler::ThemeFragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath, Theme& rTheme ) :
     FragmentHandler2( rFilter, rFragmentPath ),
@@ -41,7 +41,7 @@ ThemeFragmentHandler::~ThemeFragmentHandler()
 
 ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, const AttributeList& )
 {
-    // CT_OfficeStyleSheet
+    
     switch( getCurrentElement() )
     {
         case XML_ROOT_CONTEXT:
@@ -55,15 +55,15 @@ ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, con
         case A_TOKEN( theme ):
             switch( nElement )
             {
-                case A_TOKEN( themeElements ):              // CT_BaseStyles
+                case A_TOKEN( themeElements ):              
                     return new ThemeElementsContext( *this, mrTheme );
-                case A_TOKEN( objectDefaults ):             // CT_ObjectStyleDefaults
+                case A_TOKEN( objectDefaults ):             
                     return new objectDefaultContext( *this, mrTheme );
-                case A_TOKEN( extraClrSchemeLst ):          // CT_ColorSchemeList
+                case A_TOKEN( extraClrSchemeLst ):          
                     return 0;
-                case A_TOKEN( custClrLst ):                 // CustomColorList
+                case A_TOKEN( custClrLst ):                 
                     return 0;
-                case A_TOKEN( ext ):                        // CT_OfficeArtExtension
+                case A_TOKEN( ext ):                        
                     return 0;
             }
         break;
@@ -71,9 +71,9 @@ ContextHandlerRef ThemeFragmentHandler::onCreateContext( sal_Int32 nElement, con
     return 0;
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

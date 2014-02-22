@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PlotterBase.hxx"
@@ -46,7 +46,7 @@ void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogic
             throw (uno::RuntimeException)
 {
     OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
-    //is only allowed to be called once
+    
     m_xLogicTarget  = xLogicTarget;
     m_xFinalTarget  = xFinalTarget;
     m_xShapeFactory = xShapeFactory;
@@ -81,12 +81,12 @@ uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
 
     if(m_nDimension==2)
     {
-        //create and add to target
+        
         return m_pShapeFactory->createGroup2D( xTarget, rName );
     }
     else
     {
-        //create and added to target
+        
         return m_pShapeFactory->createGroup3D( xTarget, rName );
     }
 }
@@ -108,6 +108,6 @@ bool PlotterBase::isValidPosition( const drawing::Position3D& rPos )
     return true;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

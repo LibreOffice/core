@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Tickmarks_Dates.hxx"
@@ -38,7 +38,7 @@ DateTickFactory::DateTickFactory(
             , m_aIncrement( rIncrement )
             , m_xInverseScaling(NULL)
 {
-    //@todo: make sure that the scale is valid for the scaling
+    
 
     if( m_aScale.Scaling.is() )
     {
@@ -80,7 +80,7 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
         xInverseScaling = xScaling->getInverseScaling();
     }
 
-    //create major date tickinfos
+    
     while( aDate<= aMaxDate )
     {
         if( bShifted && aDate==aMaxDate )
@@ -95,7 +95,7 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
         if(m_aIncrement.MajorTimeInterval.Number<=0)
             break;
 
-        //find next major date
+        
         switch( m_aIncrement.MajorTimeInterval.TimeUnit )
         {
         case DAY:
@@ -111,7 +111,7 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
         }
     }
 
-    //create minor date tickinfos
+    
     aDate = aNull + static_cast<long>(::rtl::math::approxFloor(m_aScale.Minimum));
     while( aDate<= aMaxDate )
     {
@@ -126,7 +126,7 @@ void DateTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo > >& r
         if(m_aIncrement.MinorTimeInterval.Number<=0)
             break;
 
-        //find next minor date
+        
         switch( m_aIncrement.MinorTimeInterval.TimeUnit )
         {
         case DAY:
@@ -153,6 +153,6 @@ void DateTickFactory::getAllTicksShifted( ::std::vector< ::std::vector< TickInfo
     getAllTicks( rAllTickInfos, true );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

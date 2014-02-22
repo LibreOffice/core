@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "op_math.hxx"
@@ -128,7 +128,7 @@ void OpMROUND::GenSlidingWindowFunction(std::stringstream &ss,
     ss<<"    double arg0=0;\n";
     ss<<"    double arg1=0;\n";
     ss <<"\n    ";
-    //while (i-- > 1)
+    
     for (size_t i = 0; i < vSubArguments.size(); i++)
     {
         FormulaToken *pCur = vSubArguments[i]->GetFormulaToken();
@@ -598,7 +598,7 @@ void OpSumIfs::GenSlidingWindowFunction(std::stringstream &ss,
     mNeedReductionKernel = vSubArguments[0]->NeedParallelReduction();
     if (mNeedReductionKernel)
     {
-        // generate reduction functions
+        
 
         ss << "__kernel void ";
         ss << vSubArguments[0]->GetName();
@@ -624,7 +624,7 @@ void OpSumIfs::GenSlidingWindowFunction(std::stringstream &ss,
             ss << "    int offset = get_group_id(1);\n";
         else
             throw Unhandled();
-        // actually unreachable
+        
         ss << "    int lidx = get_local_id(0);\n";
         ss << "    __local double shm_buf[256];\n";
         ss << "    barrier(CLK_LOCAL_MEM_FENCE);\n";
@@ -730,8 +730,8 @@ void OpSumIfs::GenSlidingWindowFunction(std::stringstream &ss,
         ss << "    if (lidx == 0)\n";
         ss << "        result[writePos] = current_result;\n";
         ss << "}\n";
-    }// finish generate reduction code
-    // generate functions as usual
+    }
+    
     ss << "\ndouble " << sSymName;
     ss << "_"<< BinFuncName() <<"(";
     for (unsigned i = 0; i < vSubArguments.size(); i++)
@@ -1966,7 +1966,7 @@ void OpCountIf::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        //TODO       DoubleVector
+        
         if (tmpCur->GetType() == formula::svDoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =
@@ -2097,7 +2097,7 @@ void OpSumIf::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[0]->GetFormulaToken()->GetOpCode())
     {
-        //TODO       DoubleVector
+        
         if (tmpCur->GetType() == formula::svDoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =
@@ -3325,7 +3325,7 @@ void OpSeriesSum::GenSlidingWindowFunction(std::stringstream &ss,
     assert(tmpCur);
     if(ocPush == vSubArguments[3]->GetFormulaToken()->GetOpCode())
     {
-        //TODO       DoubleVector
+        
         if (tmpCur->GetType() == formula::svDoubleVectorRef)
         {
             const formula::DoubleVectorRefToken* pDVR =

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "basictest.hxx"
@@ -36,13 +36,13 @@ public:
 
     void Coverage_Iterator();
 
-    // Adds code needed to register the test suite
+    
     CPPUNIT_TEST_SUITE(Coverage);
 
-    // Declares the method as a test to call
+    
     CPPUNIT_TEST(Coverage_Iterator);
 
-    // End of test suite definition
+    
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -141,7 +141,7 @@ void Coverage::Coverage_Iterator(void)
     OUString sDirName = getURLFromSrc("/basic/qa/basic_coverage/");
 
     CPPUNIT_ASSERT(!sDirName.isEmpty());
-    process_directory(sDirName); // any files in the root test dir are run in test harness default locale ( en-US )
+    process_directory(sDirName); 
     Coverage::StringVec sLangDirs = get_subdirnames( sDirName );
 
     for ( Coverage::StringVec::iterator it = sLangDirs.begin(), it_end = sLangDirs.end(); it != it_end; ++it )
@@ -155,7 +155,7 @@ void Coverage::Coverage_Iterator(void)
             if ( aLocale.isValidBcp47() )
             {
                 SvtSysLocaleOptions aLocalOptions;
-                // set locale for test dir
+                
                 aLocalOptions.SetLocaleConfigString( sLangISO );
                 process_directory(sDir);
             }

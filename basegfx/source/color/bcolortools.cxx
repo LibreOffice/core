@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx { namespace tools
 {
@@ -38,7 +38,7 @@ namespace basegfx { namespace tools
 
         if( ::basegfx::fTools::equalZero(d) )
         {
-            s = h = 0; // hue undefined (achromatic case)
+            s = h = 0; 
         }
         else
         {
@@ -63,10 +63,10 @@ namespace basegfx { namespace tools
 
     static inline double hsl2rgbHelper( double nValue1, double nValue2, double nHue )
     {
-        // clamp hue to [0,360]
+        
         nHue = fmod( nHue, 360.0 );
 
-        // cope with wrap-arounds
+        
         if( nHue < 0.0 )
             nHue += 360.0;
 
@@ -85,7 +85,7 @@ namespace basegfx { namespace tools
         const double h=rHSLColor.getRed(), s=rHSLColor.getGreen(), l=rHSLColor.getBlue();
 
         if( fTools::equalZero(s) )
-            return BColor(l, l, l ); // achromatic case
+            return BColor(l, l, l ); 
 
         const double nVal1( l <= 0.5 ? l*(1.0 + s) : l + s - l*s );
         const double nVal2( 2.0*l - nVal1 );
@@ -148,13 +148,13 @@ namespace basegfx { namespace tools
 
         if( fTools::equalZero(s) )
         {
-            // achromatic case: no hue.
+            
             return BColor(v,v,v);
         }
         else
         {
             if( fTools::equal(h,360) )
-                h = 0; // 360 degrees is equivalent to 0 degrees
+                h = 0; 
 
             h /= 60.0;
             const sal_Int32 intval = static_cast< sal_Int32 >( h );
@@ -185,7 +185,7 @@ namespace basegfx { namespace tools
                     return BColor(v,p,q);
 
                 default:
-                    // hue overflow
+                    
                     return BColor();
             }
         }
@@ -193,8 +193,8 @@ namespace basegfx { namespace tools
 
     BColor rgb2ciexyz( const BColor& rRGBColor )
     {
-        // from Poynton color faq, and SMPTE RP 177-1993, Derivation
-        // of Basic Television Color Equations
+        
+        
         const double r=rRGBColor.getRed(), g=rRGBColor.getGreen(), b=rRGBColor.getBlue();
         return BColor(
             0.412453*r + 0.35758*g  + 0.180423*b,
@@ -202,6 +202,6 @@ namespace basegfx { namespace tools
             0.019334*r + 0.119193*g + 0.950227*b);
     }
 
-} } // end of namespace basegfx
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/chartspaceconverter.hxx"
@@ -50,7 +50,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::chart2;
@@ -59,7 +59,7 @@ using namespace ::com::sun::star::drawing;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 
-// ============================================================================
+
 
 ChartSpaceConverter::ChartSpaceConverter( const ConverterRoot& rParent, ChartSpaceModel& rModel ) :
     ConverterBase< ChartSpaceModel >( rParent, rModel )
@@ -79,7 +79,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         derived converters may create an external data provider) */
     getChartConverter()->createDataProvider( getChartDocument() );
 
-    // attach number formatter of container document to data receiver
+    
     try
     {
         Reference< XDataReceiver > xDataRec( getChartDocument(), UNO_QUERY_THROW );
@@ -90,18 +90,18 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     {
     }
 
-    // formatting of the chart background
+    
     PropertySet aBackPropSet( getChartDocument()->getPageBackground() );
     getFormatter().convertFrameFormatting( aBackPropSet, mrModel.mxShapeProp, OBJECTTYPE_CHARTSPACE );
 
-    // convert plot area (container of all chart type groups)
+    
     PlotAreaConverter aPlotAreaConv( *this, mrModel.mxPlotArea.getOrCreate() );
     aPlotAreaConv.convertFromModel( mrModel.mxView3D.getOrCreate() );
 
-    // plot area converter has created the diagram object
+    
     Reference< XDiagram > xDiagram = getChartDocument()->getFirstDiagram();
 
-    // convert wall and floor formatting in 3D charts
+    
     if( xDiagram.is() && aPlotAreaConv.isWall3dChart() )
     {
         WallFloorConverter aFloorConv( *this, mrModel.mxFloor.getOrCreate() );
@@ -111,7 +111,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         aWallConv.convertFromModel( xDiagram, OBJECTTYPE_WALL );
     }
 
-    // chart title
+    
     if( !mrModel.mbAutoTitleDel ) try
     {
         /*  If the title model is missing, but the chart shows exactly one
@@ -130,14 +130,14 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     {
     }
 
-    // legend
+    
     if( xDiagram.is() && mrModel.mxLegend.is() )
     {
         LegendConverter aLegendConv( *this, *mrModel.mxLegend );
         aLegendConv.convertFromModel( xDiagram );
     }
 
-    // treatment of missing values
+    
     if( xDiagram.is() )
     {
         using namespace ::com::sun::star::chart::MissingValueTreatment;
@@ -164,14 +164,14 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         PropertySet aDiaProp( xChart1Doc->getDiagram() );
         aDiaProp.setProperty( PROP_IncludeHiddenCells, !mrModel.mbPlotVisOnly );
 
-        // plot area position and size
+        
         aPlotAreaConv.convertPositionFromModel();
 
-        // positions of main title and all axis titles
+        
         convertTitlePositions();
     }
 
-    // embedded drawing shapes
+    
     if( !mrModel.maDrawingPath.isEmpty() ) try
     {
         /*  Get the internal draw page of the chart document, if no external
@@ -181,7 +181,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
         if( rxExternalPage.is() )
         {
             xShapes = rxExternalPage;
-            // offset for embedded shapes to move them inside the chart area
+            
             aShapesOffset = rChartPos;
         }
         else
@@ -197,7 +197,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
             drawing page instead, it is not possible to embed OLE objects. */
         bool bOleSupport = rxExternalPage.is();
 
-        // now, xShapes is not null anymore
+        
         getFilter().importFragment( new ChartDrawingFragment(
             getFilter(), mrModel.maDrawingPath, xShapes, getChartSize(), aShapesOffset, bOleSupport ) );
     }
@@ -205,7 +205,7 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     {
     }
 
-    // pivot chart
+    
     if ( mrModel.mbPivotChart )
     {
         PropertySet aProps( getChartDocument() );
@@ -221,10 +221,10 @@ void ChartSpaceConverter::convertFromModel( const Reference< XShapes >& rxExtern
     }
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

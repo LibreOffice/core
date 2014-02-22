@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -472,7 +472,7 @@ void printMethods(std::ostream & o,
         if (!(ent2->getDirectAttributes().empty()
               && ent2->getDirectMethods().empty()))
         {
-            o << indentation << "// ";
+            o << indentation << "
             printType(o, options, manager, name, false);
             o << ":\n";
         }
@@ -506,7 +506,7 @@ void printMethods(std::ostream & o,
             o << ";\n";
         }
 
-        // REMOVE next line
+        
         if (!i->readOnly) {
             o << indentation << "public void set" << i->name << '(';
             printType(o, options, manager, i->type, false);
@@ -544,20 +544,20 @@ void printMethods(std::ostream & o,
             if ( defaultbody ) {
                 o << "\n" << indentation << "{\n";
                 if (i->returnType != "void") {
-                    o << indentation << "    // TODO: Exchange the default return "
+                    o << indentation << "    
                       << "implementation for \"" << i->name << "\" !!!\n";
-                    o << indentation << "    // NOTE: "
+                    o << indentation << "    
                         "Default initialized polymorphic structs can cause problems"
-                        "\n" << indentation << "    // because of missing default "
+                        "\n" << indentation << "    
                         "initialization of primitive types of\n" << indentation
-                      << "    // some C++ compilers or different Any initialization"
+                      << "    
                         " in Java and C++\n" << indentation
-                      << "    // polymorphic structs.\n" << indentation
+                      << "    
                       << "    return ";
                     printType(o, options, manager, i->returnType, false, true);
                     o << ";";
                 } else {
-                    o << indentation << "    // TODO: Insert your implementation for \""
+                    o << indentation << "    
                       << i->name << "\" here.";
                 }
                 o << "\n" << indentation << "}\n\n";
@@ -642,22 +642,22 @@ void printServiceMembers(
              entity->getDirectMandatoryBaseServices().begin());
          i != entity->getDirectMandatoryBaseServices().end(); ++i)
     {
-        o << "\n// exported service " << i->name << "\n";
+        o << "\n
         generateDocumentation(o, options, manager, u2b(i->name), delegate);
     }
     for (std::vector< unoidl::AnnotatedReference >::const_iterator i(
              entity->getDirectMandatoryBaseInterfaces().begin());
          i != entity->getDirectMandatoryBaseInterfaces().end(); ++i)
     {
-        o << "\n// supported interface " << i->name << "\n";
+        o << "\n
         generateDocumentation(o, options, manager, u2b(i->name), delegate);
     }
-    o << "\n// properties of service \""<< name << "\"\n";
+    o << "\n
     for (std::vector< unoidl::AccumulationBasedServiceEntity::Property >::
              const_iterator i(entity->getDirectProperties().begin());
          i != entity->getDirectProperties().end(); ++i)
     {
-        o << "// private ";
+        o << "
         printType(o, options, manager, i->type, false);
         o << " "
           << codemaker::java::translateUnoToJavaIdentifier(
@@ -707,7 +707,7 @@ void generateDocumentation(std::ostream & o,
     }
 
     if (comment) {
-        o << "\n// UNO";
+        o << "\n
         if (rank != 0) {
             o << " sequence type";
         } else if (sort <= codemaker::UnoType::SORT_ANY) {
@@ -869,7 +869,7 @@ void generateDocumentation(std::ostream & o,
 
         case codemaker::UnoType::SORT_ACCUMULATION_BASED_SERVICE:
             o << ("does not map to Java\n"
-                  "// the service members are generated instead\n");
+                  "
             printServiceMembers(
                 o, options, manager, nucleus,
                 dynamic_cast< unoidl::AccumulationBasedServiceEntity * >(

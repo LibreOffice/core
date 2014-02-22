@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "excimp8.hxx"
@@ -107,7 +107,7 @@
 using namespace com::sun::star;
 using namespace ::comphelper;
 
-//OleNameOverrideContainer
+
 
 typedef ::cppu::WeakImplHelper1< container::XNameContainer > OleNameOverrideContainer_BASE;
 
@@ -119,14 +119,14 @@ private:
     NamedIndexToOleName  IdToOleNameHash;
     ::osl::Mutex m_aMutex;
 public:
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  cppu::UnoType<container::XIndexContainer>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( IdToOleNameHash.size() > 0 );
     }
-    // XNameAcess
+    
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -151,13 +151,13 @@ public:
         return ( IdToOleNameHash.find( aName ) != IdToOleNameHash.end() );
     }
 
-    // XElementAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return IdToOleNameHash.size();
     }
-    // XNameContainer
+    
     virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -190,7 +190,7 @@ public:
 ImportExcel8::ImportExcel8( XclImpRootData& rImpData, SvStream& rStrm ) :
     ImportExcel( rImpData, rStrm )
 {
-    // replace BIFF2-BIFF5 formula importer with BIFF8 formula importer
+    
     delete pFormConv;
     pFormConv = pExcRoot->pFmlaConverter = new ExcelToSc8( GetRoot() );
 }
@@ -314,13 +314,13 @@ void ImportExcel8::ReadBasic( void )
     const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
     if( pShell && xRootStrg.Is() ) try
     {
-        // #FIXME need to get rid of this, we can also do this from within oox
-        // via the "ooo.vba.VBAGlobals" service
+        
+        
         if( ( rFilterOpt.IsLoadExcelBasicCode() ||
               rFilterOpt.IsLoadExcelBasicStorage() ) &&
             rFilterOpt.IsLoadExcelBasicExecutable() )
         {
-            // see if we have the XCB stream
+            
             SvStorageStreamRef xXCB = xRootStrg->OpenSotStream( OUString("XCB"), STREAM_STD_READ | STREAM_NOCREATE  );
             if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
             {
@@ -344,7 +344,7 @@ void ImportExcel8::ReadBasic( void )
             if ( vbaStg.get() )
             {
                 oox::ole::VbaProject aVbaPrj( aCtx, pShell->GetModel(), "Calc" );
-                // collect names of embedded form controls, as specified in the VBA project
+                
                 uno::Reference< container::XNameContainer > xOleNameOverrideSink( new OleNameOverrideContainer );
                 aVbaPrj.setOleOverridesSink( xOleNameOverrideSink );
                 aVbaPrj.importVbaProject( *vbaStg );
@@ -372,41 +372,41 @@ void ImportExcel8::EndSheet( void )
 void ImportExcel8::PostDocLoad( void )
 {
 #ifndef DISABLE_SCRIPTING
-    // reading basic has been delayed until sheet objects (codenames etc.) are read
+    
     if( HasBasic() )
         ReadBasic();
 #endif
-    // #i11776# filtered ranges before outlines and hidden rows
+    
     if( pExcRoot->pAutoFilterBuffer )
         pExcRoot->pAutoFilterBuffer->Apply();
 
-    GetWebQueryBuffer().Apply();    //! test if extant
+    GetWebQueryBuffer().Apply();    
     GetSheetProtectBuffer().Apply();
     GetDocProtectBuffer().Apply();
 
     ImportExcel::PostDocLoad();
 
-    // Scenarien bemachen! ACHTUNG: Hier wird Tabellen-Anzahl im Dokument erhoeht!!
+    
     if( !pD->IsClipboard() && maScenList.aEntries.size() )
     {
-        pD->UpdateChartListenerCollection();    // references in charts must be updated
+        pD->UpdateChartListenerCollection();    
 
         maScenList.Apply( GetRoot() );
     }
 
-    // read doc info (no docshell while pasting from clipboard)
+    
     LoadDocumentProperties();
 
-    // #i45843# Pivot tables are now handled outside of PostDocLoad, so they are available
-    // when formula cells are calculated, for the GETPIVOTDATA function.
+    
+    
 }
 
 void ImportExcel8::LoadDocumentProperties()
 {
-    // no docshell while pasting from clipboard
+    
     if( SfxObjectShell* pShell = GetDocShell() )
     {
-        // BIFF5+ without storage is possible
+        
         SotStorageRef xRootStrg = GetRootStorage();
         if( xRootStrg.Is() ) try
         {
@@ -420,15 +420,15 @@ void ImportExcel8::LoadDocumentProperties()
     }
 }
 
-//___________________________________________________________________
-// autofilter
+
+
 
 void ImportExcel8::FilterMode( void )
 {
-    // The FilterMode record exists: if either the AutoFilter
-    // record exists or an Advanced Filter is saved and stored
-    // in the sheet. Thus if the FilterMode records only exists
-    // then the latter is true..
+    
+    
+    
+    
     if( !pExcRoot->pAutoFilterBuffer ) return;
 
     XclImpAutoFilterData* pData = pExcRoot->pAutoFilterBuffer->GetByTab( GetCurrScTab() );
@@ -678,18 +678,18 @@ void XclImpAutoFilterData::ReadAutoFilter(
     else
     {
         OSL_ASSERT(eConn == SC_OR);
-        // Import only when both conditions are for simple equality, else
-        // import only the 1st condition due to conflict with the ordering of
-        // conditions. #i39464#.
+        
+        
+        
         //
-        // Example: Let A1 be a condition of column A, and B1 and B2
-        // conditions of column B, connected with OR. Excel performs 'A1 AND
-        // (B1 OR B2)' in this case, but Calc would do '(A1 AND B1) OR B2'
-        // instead.
+        
+        
+        
+        
 
         if (bSimple1 && bSimple2 && nStrLen[0] && nStrLen[1])
         {
-            // Two simple OR'ed equal conditions.  We can import this correctly.
+            
             ScQueryEntry& rEntry = aParam.AppendEntry();
             rEntry.bDoQuery = true;
             rEntry.eOp = SC_EQUAL;
@@ -707,7 +707,7 @@ void XclImpAutoFilterData::ReadAutoFilter(
         }
         else if (nStrLen[0] && aEntries[0].bDoQuery)
         {
-            // Due to conflict, we can import only the first condition.
+            
             OUString aStr = rStrm.ReadUniString(nStrLen[0]);
             ExcelQueryToOooQuery(aStr, aEntries[0]);
             aEntries[0].GetQueryItem().maString = rPool.intern(aStr);
@@ -744,27 +744,27 @@ void XclImpAutoFilterData::Apply()
     {
         InsertQueryParam();
 
-        // #i38093# rows hidden by filter need extra flag, but CR_FILTERED is not set here yet
-//        SCROW nRow1 = StartRow();
-//        SCROW nRow2 = EndRow();
-//        size_t nRows = nRow2 - nRow1 + 1;
-//        boost::scoped_array<sal_uInt8> pFlags( new sal_uInt8[nRows]);
-//        pExcRoot->pDoc->GetRowFlagsArray( Tab()).FillDataArray( nRow1, nRow2,
-//                pFlags.get());
-//        for (size_t j=0; j<nRows; ++j)
-//        {
-//            if ((pFlags[j] & CR_HIDDEN) && !(pFlags[j] & CR_FILTERED))
-//                pExcRoot->pDoc->SetRowFlags( nRow1 + j, Tab(),
-//                        pFlags[j] | CR_FILTERED );
-//        }
+        
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
 
 void XclImpAutoFilterData::CreateScDBData()
 {
 
-    // Create the ScDBData() object if the AutoFilter is activated
-    // or if we need to create the Advanced Filter.
+    
+    
     if( bActive || bCriteria)
     {
         ScDocument* pDoc = pExcRoot->pIR->GetDocPtr();
@@ -787,16 +787,16 @@ void XclImpAutoFilterData::CreateScDBData()
 
 void XclImpAutoFilterData::EnableRemoveFilter()
 {
-    // only if this is a saved Advanced filter
+    
     if( !bActive && bAutoOrAdvanced )
     {
         ScQueryEntry& aEntry = aParam.AppendEntry();
         aEntry.bDoQuery = true;
     }
 
-    // TBD: force the automatic activation of the
-    // "Remove Filter" by setting a virtual mouse click
-    // inside the advanced range
+    
+    
+    
 }
 
 void XclImpAutoFilterBuffer::Insert( RootData* pRoot, const ScRange& rRange)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -49,13 +49,13 @@ class ModuleManager:
 {
 private:
 
-    //---------------------------------------
+    
     /** the global uno service manager.
         Must be used to create own needed services.
      */
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
-    //---------------------------------------
+    
     /** points to the underlying configuration.
         This ModuleManager does not cache - it calls directly the
         configuration API!
@@ -68,7 +68,7 @@ public:
 
     virtual ~ModuleManager();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException);
 
@@ -79,13 +79,13 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException);
 
-    // XModuleManager
+    
     virtual OUString SAL_CALL identify(const css::uno::Reference< css::uno::XInterface >& xModule)
         throw(css::lang::IllegalArgumentException,
               css::frame::UnknownModuleException,
               css::uno::RuntimeException         );
 
-    // XNameReplace
+    
     virtual void SAL_CALL replaceByName(const OUString& sName ,
                                         const css::uno::Any&   aValue)
         throw (css::lang::IllegalArgumentException   ,
@@ -93,7 +93,7 @@ public:
                css::lang::WrappedTargetException     ,
                css::uno::RuntimeException            );
 
-    // XNameAccess
+    
     virtual css::uno::Any SAL_CALL getByName(const OUString& sName)
         throw(css::container::NoSuchElementException,
               css::lang::WrappedTargetException     ,
@@ -105,14 +105,14 @@ public:
     virtual sal_Bool SAL_CALL hasByName(const OUString& sName)
         throw(css::uno::RuntimeException);
 
-    // XElementAccess
+    
     virtual css::uno::Type SAL_CALL getElementType()
         throw(css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL hasElements()
         throw(css::uno::RuntimeException);
 
-    // XContainerQuery
+    
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)
         throw(css::uno::RuntimeException);
 
@@ -121,7 +121,7 @@ public:
 
 private:
 
-    //---------------------------------------
+    
     /** @short  makes the real identification of the module.
 
         @descr  It checks for the optional but preferred interface
@@ -183,7 +183,7 @@ OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::X
           css::frame::UnknownModuleException,
           css::uno::RuntimeException         )
 {
-    // valid parameter?
+    
     css::uno::Reference< css::frame::XFrame >      xFrame     (xModule, css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >       xWindow    (xModule, css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XController > xController(xModule, css::uno::UNO_QUERY);
@@ -210,10 +210,10 @@ OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::X
     if (xController.is())
         xModel = xController->getModel();
 
-    // modules are implemented by the deepest component in hierarchy ...
-    // Means: model -> controller -> window
-    // No fallbacks to higher components are allowed !
-    // Note : A frame provides access to module components only ... but it's not a module by himself.
+    
+    
+    
+    
 
     OUString sModule;
     if (xModel.is())
@@ -249,11 +249,11 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
                     2);
         }
 
-        // get access to the element
-        // Note: Dont use impl_getConfig() method here. Because it creates a readonly access only, further
-        // it cache it as a member of this module manager instance. If we change some props there ... but dont
-        // flush changes (because an error occurred) we will read them later. If we use a different config access
-        // we can close it without a flush ... and our read data wont be affected .-)
+        
+        
+        
+        
+        
         css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                             m_xContext,
                                                                             "/org.openoffice.Setup/Office/Factories",
@@ -277,8 +277,8 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
             const OUString& sPropName  = pProp->first;
             const css::uno::Any&   aPropValue = pProp->second;
 
-            // let "NoSuchElementException" out ! We support the same API ...
-            // and without a flush() at the end all changed data before will be ignored !
+            
+            
             xModule->replaceByName(sPropName, aPropValue);
         }
 
@@ -298,7 +298,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
           css::lang::WrappedTargetException     ,
           css::uno::RuntimeException            )
 {
-    // get access to the element
+    
     css::uno::Reference< css::container::XNameAccess > xModule;
     m_xCFG->getByName(sName) >>= xModule;
     if (!xModule.is())
@@ -308,7 +308,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
                 static_cast< cppu::OWeakObject * >(this));
     }
 
-    // convert it to seq< PropertyValue >
+    
     const css::uno::Sequence< OUString > lPropNames = xModule->getElementNames();
     comphelper::SequenceAsHashMap lProps;
 
@@ -379,15 +379,15 @@ css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::crea
 
 OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
-    // Search for an optional (!) interface XModule first.
-    // Its used to overrule an existing service name. Used e.g. by our database form designer
-    // which uses a writer module internally.
+    
+    
+    
     css::uno::Reference< css::frame::XModule > xModule(xComponent, css::uno::UNO_QUERY);
     if (xModule.is())
         return xModule->getIdentifier();
 
-    // detect modules in a generic way ...
-    // comparing service names with configured entries ...
+    
+    
     css::uno::Reference< css::lang::XServiceInfo > xInfo(xComponent, css::uno::UNO_QUERY);
     if (!xInfo.is())
         return OUString();

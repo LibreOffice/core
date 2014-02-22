@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -88,7 +88,7 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
     if( !GetParentStyleName().isEmpty() )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
     pAttrList->AddAttribute( A2OUSTR("style:family"), A2OUSTR("graphics") );
-    //parent style name ignore now.
+    
     pStrm->StartElement( A2OUSTR("style:style") );
 
     m_aMargins.ToXml(pStrm);
@@ -116,14 +116,14 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
         else if( m_eWrap == enumXFWrapBest )
             pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("dynamic") );
     }
-    //background
+    
     if( m_aBackColor.IsValid() )
         pAttrList->AddAttribute( A2OUSTR("fo:background-color"), m_aBackColor.ToString() );
-    //pad
+    
     m_aPad.ToXml(pStrm);
-    //margin:
+    
     m_aMargins.ToXml(pStrm);
-    //flip
+    
     if( m_bHoriFlip || m_bVertFlip )
     {
         if( m_bHoriFlip && m_bVertFlip )
@@ -133,7 +133,7 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
         else if( !m_bHoriFlip && m_bVertFlip )
             pAttrList->AddAttribute( A2OUSTR("style:mirror"), A2OUSTR("vertical") );
     }
-    //color adjust
+    
     if( m_nAdjustRed )
         pAttrList->AddAttribute( A2OUSTR("draw:red"), Int32ToOUString(m_nAdjustRed) + A2OUSTR("%") );
     if( m_nAdjustGreen )
@@ -152,16 +152,16 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
         pAttrList->AddAttribute( A2OUSTR("draw:transparency"), Int32ToOUString(m_nTransparent) + A2OUSTR("%") );
 
     pAttrList->AddAttribute(A2OUSTR("draw:color-mode"), GetColorMode(m_eColorMode));
-    //border
+    
     if( m_pBorders )
         m_pBorders->ToXml(pStrm);
-    //shadow
+    
     if( m_pShadow )
         m_pShadow->ToXml(pStrm);
 
     if( m_bPrintable )
         pAttrList->AddAttribute( A2OUSTR("style:print-content"), A2OUSTR("true") );
-    //protect:
+    
     if( m_bProtectContent || m_bProtectSize || m_bProtectPos )
     {
         OUString protect;
@@ -181,13 +181,13 @@ void XFImageStyle::ToXml(IXFStream *pStrm)
         }
         pAttrList->AddAttribute( A2OUSTR("style:protect"), protect );
     }
-    //vertical pos and horizon pos:
+    
     pAttrList->AddAttribute( A2OUSTR("style:vertical-pos"), GetFrameYPos(m_eYPos) );
     pAttrList->AddAttribute( A2OUSTR("style:vertical-rel"), GetFrameYRel(m_eYRel) );
     pAttrList->AddAttribute( A2OUSTR("style:horizontal-pos"), GetFrameXPos(m_eXPos) );
     pAttrList->AddAttribute( A2OUSTR("style:horizontal-rel"), GetFrameXRel(m_eXRel) );
 
-    //clip:
+    
     if( FABS(m_fClipLeft)>FLOAT_MIN || FABS(m_fClipRight)>FLOAT_MIN || FABS(m_fClipTop)>FLOAT_MIN || FABS(m_fClipBottom)>FLOAT_MIN )
     {
         OUString clip = A2OUSTR("rect(");

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -61,16 +61,16 @@
 #include <osl/mutex.hxx>
 #include <sal/macros.h>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_FormOperations()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::FormOperations > aAutoRegistration;
 }
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::dbtools::SQLExceptionInfo;
     using ::com::sun::star::uno::Reference;
@@ -121,10 +121,10 @@ namespace frm
     namespace FormFeature = ::com::sun::star::form::runtime::FormFeature;
     namespace RowChangeAction = ::com::sun::star::sdb::RowChangeAction;
 
-    //====================================================================
-    //= FormOperations
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     FormOperations::FormOperations( const Reference< XComponentContext >& _rxContext )
         :FormOperations_Base( m_aMutex )
         ,m_xContext( _rxContext )
@@ -137,18 +137,18 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+    
     FormOperations::~FormOperations()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     OUString FormOperations::getImplementationName_Static(  ) throw(RuntimeException)
     {
         return OUString( "com.sun.star.comp.forms.FormOperations" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > FormOperations::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< OUString > aNames(1);
@@ -156,13 +156,13 @@ namespace frm
         return aNames;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL FormOperations::Create(const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return *new FormOperations( comphelper::getComponentContext(_rxFactory) );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
     {
         if ( m_bConstructed )
@@ -211,28 +211,28 @@ namespace frm
         return m_xUpdateCursor;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XFormController > SAL_CALL FormOperations::getController() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_xController;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XFeatureInvalidation > SAL_CALL FormOperations::getFeatureInvalidation() throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         return m_xFeatureInvalidation;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::setFeatureInvalidation( const Reference< XFeatureInvalidation > & _rxFeatureInvalidation ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
         m_xFeatureInvalidation = _rxFeatureInvalidation;
     }
 
-    //--------------------------------------------------------------------
+    
     FeatureState SAL_CALL FormOperations::getState( ::sal_Int16 _nFeature ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -242,7 +242,7 @@ namespace frm
 
         try
         {
-            // some checks for basic pre-requisites
+            
             if  (   !m_xLoadableForm.is()
                 ||  !m_xLoadableForm->isLoaded()
                 ||  !m_xCursorProperties.is()
@@ -267,18 +267,18 @@ namespace frm
                 break;
 
             case FormFeature::DeleteRecord:
-                // already deleted ?
+                
                 if ( m_xCursor->rowDeleted() )
                     aState.Enabled = sal_False;
                 else
                 {
-                    // allowed to delete the row ?
+                    
                     aState.Enabled = !impl_isInsertionRow_throw() && ::dbtools::canDelete( m_xCursorProperties );
                 }
                 break;
 
             case FormFeature::MoveToInsertRow:
-                // if we are inserting we can move to the next row if the current record or control is modified
+                
                 aState.Enabled =    impl_isInsertionRow_throw()
                                 ?   impl_isModifiedRow_throw() || m_bActiveControlModified
                                 :   ::dbtools::canInsert( m_xCursorProperties );
@@ -286,11 +286,11 @@ namespace frm
 
             case FormFeature::ReloadForm:
             {
-                // there must be an active connection
+                
                 Reference< XRowSet > xCursorRowSet( m_xCursor, UNO_QUERY );
                 aState.Enabled = ::dbtools::getConnection( xCursorRowSet ).is();
 
-                // and an active command
+                
                 OUString sActiveCommand;
                 m_xCursorProperties->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= sActiveCommand;
                 aState.Enabled = aState.Enabled && !sActiveCommand.isEmpty();
@@ -361,8 +361,8 @@ namespace frm
                 {
                     if ( bFinalCount )
                     {
-                        // special case: there are no records at all, and we
-                        // can't insert records -> disabled
+                        
+                        
                         if ( !nCount && !::dbtools::canInsert( m_xCursorProperties ) )
                         {
                             aState.Enabled = sal_False;
@@ -415,7 +415,7 @@ namespace frm
         return aState;
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL FormOperations::isEnabled( ::sal_Int16 _nFeature ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -424,7 +424,7 @@ namespace frm
         return aState.Enabled;
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         static bool lcl_needConfirmCommit( sal_Int32 _nFeature )
@@ -458,18 +458,18 @@ namespace frm
             return value;
         }
 
-        // returns false if parent should *abort* (user pressed cancel)
+        
         bool checkConfirmation(bool &needConfirmation, bool &shouldCommit)
         {
             if(needConfirmation)
             {
-                // TODO: shouldn't this be done with an interaction handler?
+                
                 QueryBox aQuery( NULL, WB_YES_NO_CANCEL | WB_DEF_YES, FRM_RES_STRING( RID_STR_QUERY_SAVE_MODIFIED_ROW ) );
                 switch ( aQuery.Execute() )
                 {
                 case RET_NO:
                     shouldCommit = false;
-                    // no break on purpose: don't ask again!
+                    
                 case RET_YES:
                     needConfirmation = false;
                     return true;
@@ -527,7 +527,7 @@ namespace frm
         bool commit1Form(Reference< XForm > xFrm, bool &needConfirmation, bool &shouldCommit)
         {
             Reference< XPropertySet > xProps(xFrm, UNO_QUERY_THROW);
-            // nothing to do if the record is not modified
+            
             if(!lcl_safeGetPropertyValue_throw( xProps, PROPERTY_ISMODIFIED, false ))
                 return true;
 
@@ -536,7 +536,7 @@ namespace frm
             if(shouldCommit)
             {
                 Reference< XResultSetUpdate > xUpd(xFrm, UNO_QUERY_THROW);
-                // insert respectively update the row
+                
                 if ( lcl_safeGetPropertyValue_throw( xProps, PROPERTY_ISNEW, false ) )
                     xUpd->insertRow();
                 else
@@ -547,7 +547,7 @@ namespace frm
 
         bool commitFormAndSubforms(Reference< XForm > xFrm, bool needConfirmation)
         {
-            // No control...  do what we can with the models
+            
             bool shouldCommit(true);
             Reference< XIndexAccess > xFormComps(xFrm, UNO_QUERY_THROW);
             assert( xFormComps.is() );
@@ -569,7 +569,7 @@ namespace frm
             return true;
         }
     }
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::execute( ::sal_Int16 _nFeature ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
     {
         SolarMutexGuard aSolarGuard;
@@ -616,14 +616,14 @@ namespace frm
             case FormFeature::MoveToLast:
             {
 /*
-                // TODO: re-implement this .....
-                // run in an own thread if ...
-                // ... the data source is thread safe ...
+                
+                
+                
                 sal_Bool bAllowOwnThread = sal_False;
                 if ( ::comphelper::hasProperty( PROPERTY_THREADSAFE, m_xCursorProperties ) )
                     m_xCursorProperties->getPropertyValue( PROPERTY_THREADSAFE ) >>= bAllowOwnThread;
 
-                // ... the record count is unknown
+                
                 sal_Bool bNeedOwnThread sal_False;
                 if ( ::comphelper::hasProperty( PROPERTY_ROWCOUNTFINAL, m_xCursorProperties ) )
                     m_xCursorProperties->getPropertyValue( PROPERTY_ROWCOUNTFINAL ) >>= bNeedOwnThread;
@@ -642,8 +642,8 @@ namespace frm
                     WaitObject aWO( NULL );
                     m_xLoadableForm->reload();
 
-                    // refresh all controls in the form (and sub forms) which can be refreshed
-                    // #i90914#
+                    
+                    
                     ::comphelper::IndexAccessIterator aIter( m_xLoadableForm );
                     Reference< XInterface > xElement( aIter.Next() );
                     while ( xElement.is() )
@@ -669,13 +669,13 @@ namespace frm
             {
                 sal_uInt32 nCount = impl_getRowCount_throw();
 
-                // next position
+                
                 sal_Bool bLeft = m_xCursor->isLast() && ( nCount > 1 );
                 sal_Bool bRight= !m_xCursor->isLast();
                 sal_Bool bSuccess = sal_False;
                 try
                 {
-                    // ask for confirmation
+                    
                     Reference< XConfirmDeleteListener > xConfirmDelete( m_xController, UNO_QUERY );
 
                     if ( xConfirmDelete.is() )
@@ -687,7 +687,7 @@ namespace frm
                         bSuccess = xConfirmDelete->confirmDelete( aEvent );
                     }
 
-                    // delete it
+                    
                     if ( bSuccess )
                         m_xUpdateCursor->deleteRow();
                 }
@@ -703,11 +703,11 @@ namespace frm
                     else
                     {
                         sal_Bool bCanInsert = ::dbtools::canInsert( m_xCursorProperties );
-                        // is it possible to insert another record?
+                        
                         if ( bCanInsert )
                             m_xUpdateCursor->moveToInsertRow();
                         else
-                            // move record to update status
+                            
                             m_xCursor->first();
                     }
                 }
@@ -724,10 +724,10 @@ namespace frm
                     if ( !bInserting )
                         m_xUpdateCursor->cancelRowUpdates();
 
-                    // reset all controls for this form
+                    
                     impl_resetAllControls_nothrow( );
 
-                    if ( bInserting )   // back to insertion mode for this form
+                    if ( bInserting )   
                         m_xUpdateCursor->moveToInsertRow();
                 }
                 else
@@ -744,14 +744,14 @@ namespace frm
             break;
 
             case FormFeature::MoveToInsertRow:
-                // move to the last row before moving to the insert row
+                
                 m_xCursor->last();
                 m_xUpdateCursor->moveToInsertRow();
                 break;
 
             case FormFeature::RemoveFilterAndSort:
             {
-                // simultaneously reset Filter and Order property
+                
                 Reference< XMultiPropertySet > xProperties( m_xCursorProperties, UNO_QUERY );
                 OSL_ENSURE( xProperties.is(), "FormOperations::execute: no multi property access!" );
                 if ( xProperties.is() )
@@ -776,12 +776,12 @@ namespace frm
             case FormFeature::ToggleApplyFilter:
                 if ( impl_commitCurrentControl_throw() && impl_commitCurrentRecord_throw() )
                 {
-                    // simply toggle the value
+                    
                     sal_Bool bApplied = sal_False;
                     m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER ) >>= bApplied;
                     m_xCursorProperties->setPropertyValue( PROPERTY_APPLYFILTER, makeAny( (sal_Bool)!bApplied ) );
 
-                    // and reload
+                    
                     WaitObject aWO( NULL );
                     m_xLoadableForm->reload();
                 }
@@ -816,7 +816,7 @@ namespace frm
                     nErrorResourceId = RID_STR_FEATURE_NOT_EXECUTABLE;
                 throw IllegalArgumentException( FRM_RES_STRING( nErrorResourceId ), *this, 1 );
             }
-            }   // switch
+            }   
         }
         catch( const RuntimeException& ) { throw; }
         catch( const SQLException& ) { throw; }
@@ -828,7 +828,7 @@ namespace frm
         impl_invalidateAllSupportedFeatures_nothrow( aGuard );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::executeWithArguments( ::sal_Int16 _nFeature, const Sequence< NamedValue >& _rArguments ) throw (RuntimeException, IllegalArgumentException, SQLException, WrappedTargetException)
     {
         if ( !lcl_requiresArguments( _nFeature ) )
@@ -840,7 +840,7 @@ namespace frm
         SolarMutexGuard aSolarGuard;
         MethodGuard aGuard( *this );
 
-        // at the moment we have only one feature which supports execution parameters
+        
         if ( !lcl_isExecutableFeature( _nFeature ) )
             throw IllegalArgumentException( FRM_RES_STRING( RID_STR_FEATURE_NOT_EXECUTABLE ), *this, 1 );
 
@@ -858,7 +858,7 @@ namespace frm
 
             try
             {
-                // commit before doing anything else
+                
                 if ( m_xController.is() && !impl_commitCurrentControl_throw() )
                     return;
                 if ( !impl_commitCurrentRecord_throw() )
@@ -882,10 +882,10 @@ namespace frm
         break;
         default:
             throw IllegalArgumentException( FRM_RES_STRING( RID_STR_FEATURE_UNKNOWN ), *this, 1 );
-        }   // switch
+        }   
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL FormOperations::commitCurrentRecord( ::sal_Bool& _out_rRecordInserted ) throw (RuntimeException, SQLException)
     {
         MethodGuard aGuard( *this );
@@ -894,7 +894,7 @@ namespace frm
         return impl_commitCurrentRecord_throw( &_out_rRecordInserted );
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_commitCurrentRecord_throw( ::sal_Bool* _pRecordInserted ) const
     {
         DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentRecord_throw: to be called within a MethodGuard'ed section only!" );
@@ -902,11 +902,11 @@ namespace frm
         if ( !impl_hasCursor_nothrow() )
             return false;
 
-        // nothing to do if the record is not modified
+        
         sal_Bool bResult = !impl_isModifiedRow_throw();
         if ( !bResult )
         {
-            // insert respectively update the row
+            
             if ( impl_isInsertionRow_throw() )
             {
                 m_xUpdateCursor->insertRow();
@@ -920,14 +920,14 @@ namespace frm
         return bResult;
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL FormOperations::commitCurrentControl() throw (RuntimeException, SQLException)
     {
         MethodGuard aGuard( *this );
         return impl_commitCurrentControl_throw();
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_commitCurrentControl_throw() const
     {
         DBG_ASSERT( m_nMethodNestingLevel, "FormOperations::impl_commitCurrentControl_throw: to be called within a MethodGuard'ed section only!" );
@@ -940,19 +940,19 @@ namespace frm
         {
             Reference< XControl > xCurrentControl( m_xController->getCurrentControl() );
 
-            // check whether the control is locked
+            
             Reference< XBoundControl > xCheckLock( xCurrentControl, UNO_QUERY );
             sal_Bool bControlIsLocked = xCheckLock.is() && xCheckLock->getLock();
 
-            // commit if necessary
+            
             bSuccess = true;
             if ( xCurrentControl.is() && !bControlIsLocked )
             {
-                // both the control and it's model can be committable, so try both
+                
                 Reference< XBoundComponent > xBound( xCurrentControl, UNO_QUERY );
                 if ( !xBound.is() )
                     xBound = xBound.query( xCurrentControl->getModel() );
-                // and now really commit
+                
                 if ( xBound.is() )
                     bSuccess = xBound->commit();
             }
@@ -969,7 +969,7 @@ namespace frm
         return bSuccess;
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL FormOperations::isInsertionRow() throw (RuntimeException, WrappedTargetException)
     {
         sal_Bool bIs = sal_False;
@@ -985,7 +985,7 @@ namespace frm
         return bIs;
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL FormOperations::isModifiedRow() throw (RuntimeException, WrappedTargetException)
     {
         sal_Bool bIs = sal_False;
@@ -1001,7 +1001,7 @@ namespace frm
         return bIs;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::cursorMoved( const EventObject& /*_Event*/ ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -1010,19 +1010,19 @@ namespace frm
         impl_invalidateAllSupportedFeatures_nothrow( aGuard );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::rowChanged( const EventObject& /*_Event*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::rowSetChanged( const EventObject& /*_Event*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::modified( const EventObject& /*_Source*/ ) throw( RuntimeException )
     {
         MethodGuard aGuard( *this );
@@ -1035,7 +1035,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
     {
         MethodGuard aGuard( *this );
@@ -1083,13 +1083,13 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::disposing( const EventObject& /*_Source*/ ) throw (RuntimeException)
     {
-        // TODO: should we react on this? Or is this the responsibility of our owner to dispose us?
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormOperations::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -1098,7 +1098,7 @@ namespace frm
 
         try
         {
-            // revoke various listeners
+            
             if ( m_xCursor.is() )
                 m_xCursor->removeRowSetListener( this );
 
@@ -1127,14 +1127,14 @@ namespace frm
         m_bActiveControlModified = true;
     }
 
-    //--------------------------------------------------------------------
+    
     void FormOperations::impl_checkDisposed_throw() const
     {
         if ( impl_isDisposed_nothrow() )
             throw DisposedException( OUString(), *const_cast< FormOperations* >( this ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void FormOperations::impl_initFromController_throw()
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_initFromController_throw: invalid controller!" );
@@ -1149,7 +1149,7 @@ namespace frm
             xBroadcaster->addModifyListener( this );
     }
 
-    //--------------------------------------------------------------------
+    
     void FormOperations::impl_initFromForm_throw()
     {
         OSL_PRECOND( m_xCursor.is(), "FormOperations::impl_initFromForm_throw: invalid form!" );
@@ -1165,7 +1165,7 @@ namespace frm
         m_xCursorProperties->addPropertyChangeListener( PROPERTY_ISNEW, this );
     }
 
-    //--------------------------------------------------------------------
+    
     void FormOperations::createWithFormController( const Reference< XFormController >& _rxController )
     {
         m_xController = _rxController;
@@ -1177,7 +1177,7 @@ namespace frm
         m_bConstructed = true;
     }
 
-    //--------------------------------------------------------------------
+    
     void FormOperations::createWithForm( const Reference< XForm >& _rxForm )
     {
         m_xCursor = m_xCursor.query( _rxForm );
@@ -1189,11 +1189,11 @@ namespace frm
         m_bConstructed = true;
     }
 
-    //------------------------------------------------------------------------------
+    
     void FormOperations::impl_invalidateAllSupportedFeatures_nothrow( MethodGuard& _rClearForCallback ) const
     {
         if ( !m_xFeatureInvalidation.is() )
-            // nobody's interested in ...
+            
             return;
 
         Reference< XFeatureInvalidation > xInvalidation = m_xFeatureInvalidation;
@@ -1201,11 +1201,11 @@ namespace frm
         xInvalidation->invalidateAllFeatures();
     }
 
-    //------------------------------------------------------------------------------
+    
     void FormOperations::impl_invalidateModifyDependentFeatures_nothrow( MethodGuard& _rClearForCallback ) const
     {
         if ( !m_xFeatureInvalidation.is() )
-            // nobody's interested in ...
+            
             return;
 
         static Sequence< sal_Int16 > s_aModifyDependentFeatures;
@@ -1228,7 +1228,7 @@ namespace frm
         xInvalidation->invalidateFeatures( s_aModifyDependentFeatures );
     }
 
-    //--------------------------------------------------------------------
+    
     void FormOperations::impl_ensureInitializedParser_nothrow()
     {
         OSL_PRECOND( m_xCursorProperties.is(), "FormOperations::impl_ensureInitializedParser_nothrow: we're disposed!" );
@@ -1266,8 +1266,8 @@ namespace frm
                     m_xParser->setOrder          ( sSort      );
                 }
 
-                // start listening at the order/sort properties at the form, so
-                // we can keep our parser in sync
+                
+                
                 m_xCursorProperties->addPropertyChangeListener( PROPERTY_ACTIVECOMMAND, this );
                 m_xCursorProperties->addPropertyChangeListener( PROPERTY_FILTER, this );
                 m_xCursorProperties->addPropertyChangeListener( PROPERTY_SORT, this );
@@ -1281,13 +1281,13 @@ namespace frm
         m_bInitializedParser = true;
     }
 
-    //--------------------------------------------------------------------
+    
     void FormOperations::impl_disposeParser_nothrow()
     {
         try
         {
-            // if we have a parser (and a cursor), then we're listening at the cursor's
-            // properties to keep the parser in sync with the cursor
+            
+            
             if ( m_xParser.is() && m_xCursorProperties.is() )
             {
                 m_xCursorProperties->removePropertyChangeListener( PROPERTY_FILTER, this );
@@ -1308,7 +1308,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_canMoveLeft_throw( ) const
     {
         if ( !impl_hasCursor_nothrow() )
@@ -1317,7 +1317,7 @@ namespace frm
         return impl_getRowCount_throw() && ( !m_xCursor->isFirst() || impl_isInsertionRow_throw() );
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_canMoveRight_throw( ) const
     {
         if ( !impl_hasCursor_nothrow() )
@@ -1338,54 +1338,54 @@ namespace frm
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_isInsertionRow_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ISNEW, false );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 FormOperations::impl_getRowCount_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ROWCOUNT, (sal_Int32)0 );
     }
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_isRowCountFinal_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ROWCOUNTFINAL, false );
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_isModifiedRow_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_ISMODIFIED, false );
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_isParseable_throw() const
     {
         const_cast< FormOperations* >( this )->impl_ensureInitializedParser_nothrow();
         return m_xParser.is() && !m_xParser->getQuery().isEmpty();
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_hasFilterOrOrder_throw() const
     {
         return impl_isParseable_throw() && ( !m_xParser->getFilter().isEmpty() || !m_xParser->getOrder().isEmpty() );
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_isInsertOnlyForm_throw() const
     {
         return lcl_safeGetPropertyValue_throw( m_xCursorProperties, PROPERTY_INSERTONLY, true );
     }
 
-    //------------------------------------------------------------------------------
+    
     Reference< XControlModel > FormOperations::impl_getCurrentControlModel_throw() const
     {
         Reference< XControl > xControl( m_xController->getCurrentControl() );
 
-        // special handling for grid controls
+        
         Reference< XGrid > xGrid( xControl, UNO_QUERY );
         Reference< XControlModel > xControlModel;
 
@@ -1405,7 +1405,7 @@ namespace frm
         return xControlModel;
     }
 
-    //------------------------------------------------------------------------------
+    
     Reference< XPropertySet > FormOperations::impl_getCurrentBoundField_nothrow( ) const
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_getCurrentBoundField_nothrow: no controller -> no control!" );
@@ -1429,13 +1429,13 @@ namespace frm
         return xField;
     }
 
-    //------------------------------------------------------------------------------
+    
     sal_Int16 FormOperations::impl_gridView2ModelPos_nothrow( const Reference< XIndexAccess >& _rxColumns, sal_Int16 _nViewPos ) const
     {
         OSL_PRECOND( _rxColumns.is(), "FormOperations::impl_gridView2ModelPos_nothrow: invalid columns container!" );
         try
         {
-            // loop through all columns
+            
             sal_Int16 col = 0;
             Reference< XPropertySet > xCol;
             bool bHidden( false );
@@ -1446,8 +1446,8 @@ namespace frm
                 if ( bHidden )
                     continue;
 
-                // for every visible col : if nViewPos is greater zero, decrement it, else we
-                // have found the model position
+                
+                
                 if ( !_nViewPos )
                     break;
                 else
@@ -1463,7 +1463,7 @@ namespace frm
         return (sal_Int16)-1;
     }
 
-    //------------------------------------------------------------------------------
+    
     bool FormOperations::impl_moveLeft_throw( ) const
     {
         OSL_PRECOND( impl_hasCursor_nothrow(), "FormOperations::impl_moveLeft_throw: no cursor!" );
@@ -1478,7 +1478,7 @@ namespace frm
 
         if ( bRecordInserted )
         {
-            // retrieve the bookmark of the new record and move to the record preceding this bookmark
+            
             Reference< XRowLocate > xLocate( m_xCursor, UNO_QUERY );
             OSL_ENSURE( xLocate.is(), "FormOperations::impl_moveLeft_throw: no XRowLocate!" );
             if ( xLocate.is() )
@@ -1488,8 +1488,8 @@ namespace frm
         {
             if ( impl_isInsertionRow_throw() )
             {
-                // we assume that the inserted record is now the last record in the
-                // result set
+                
+                
                 m_xCursor->last();
             }
             else
@@ -1499,7 +1499,7 @@ namespace frm
         return true;
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormOperations::impl_moveRight_throw( ) const
     {
         OSL_PRECOND( impl_hasCursor_nothrow(), "FormOperations::impl_moveRight_throw: no cursor!" );
@@ -1514,7 +1514,7 @@ namespace frm
 
         if ( bRecordInserted )
         {
-            // go to insert row
+            
             m_xUpdateCursor->moveToInsertRow();
         }
         else
@@ -1528,7 +1528,7 @@ namespace frm
         return true;
     }
 
-    //--------------------------------------------------------------------
+    
     void FormOperations::impl_resetAllControls_nothrow() const
     {
         Reference< XIndexAccess > xContainer( m_xCursor, UNO_QUERY );
@@ -1543,7 +1543,7 @@ namespace frm
             {
                 if ( xContainer->getByIndex( i ) >>= xReset )
                 {
-                    // no resets on sub forms
+                    
                     Reference< XForm > xAsForm( xReset, UNO_QUERY );
                     if ( !xAsForm.is() )
                         xReset->reset();
@@ -1556,7 +1556,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void FormOperations::impl_executeAutoSort_throw( bool _bUp ) const
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_executeAutoSort_throw: need a controller for this!" );
@@ -1578,7 +1578,7 @@ namespace frm
             OUString sOriginalSort;
             m_xCursorProperties->getPropertyValue( PROPERTY_SORT ) >>= sOriginalSort;
 
-            // automatic sort by field is expected to always resets the previous sort order
+            
             m_xParser->setOrder( OUString() );
 
             impl_appendOrderByColumn_throw aAction(this, xBoundField, _bUp);
@@ -1597,7 +1597,7 @@ namespace frm
 
 
             if ( !m_xLoadableForm->isLoaded() )
-            {   // something went wrong -> restore the original state
+            {   
                 try
                 {
                     m_xParser->setOrder( sOriginalSort );
@@ -1619,7 +1619,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     void FormOperations::impl_executeAutoFilter_throw( ) const
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_executeAutoFilter_throw: need a controller for this!" );
@@ -1643,7 +1643,7 @@ namespace frm
             sal_Bool bApplied = sal_True;
             m_xCursorProperties->getPropertyValue( PROPERTY_APPLYFILTER ) >>= bApplied;
 
-            // if we have a filter, but it's not applied, then we have to overwrite it, else append one
+            
             if ( !bApplied )
                 m_xParser->setFilter( OUString() );
 
@@ -1665,7 +1665,7 @@ namespace frm
 
 
             if ( !m_xLoadableForm->isLoaded() )
-            {   // something went wrong -> restore the original state
+            {   
                 try
                 {
                     m_xParser->setOrder( sOriginalFilter );
@@ -1688,7 +1688,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void FormOperations::impl_executeFilterOrSort_throw( bool _bFilter ) const
     {
         OSL_PRECOND( m_xController.is(), "FormOperations::impl_executeFilterOrSort_throw: need a controller for this!" );
@@ -1732,7 +1732,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------------------
+    
     template < typename FunctObj >
     void FormOperations::impl_doActionInSQLContext_throw( FunctObj f, sal_uInt16 _nErrorResourceId ) const
     {
@@ -1744,7 +1744,7 @@ namespace frm
         {
             (void)e;
             if ( !_nErrorResourceId )
-                // no information to prepend
+                
                 throw;
 
             SQLExceptionInfo aInfo( ::cppu::getCaughtException() );
@@ -1760,8 +1760,8 @@ namespace frm
         }
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

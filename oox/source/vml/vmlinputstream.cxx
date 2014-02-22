@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/vml/vmlinputstream.hxx"
@@ -29,12 +29,12 @@
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -77,7 +77,7 @@ inline void lclAppendToBuffer( OStringBuffer& rBuffer, const sal_Char* pcBeg, co
     rBuffer.append( pcBeg, static_cast< sal_Int32 >( pcEnd - pcBeg ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal_Char* pcEnd )
 {
@@ -96,34 +96,34 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
     const sal_Char* pcNameBeg = pcBeg;
     while( bOk && (pcNameBeg < pcEnd) )
     {
-        // pcNameBeg points to begin of attribute name, find equality sign
+        
         const sal_Char* pcEqualSign = lclFindCharacter( pcNameBeg, pcEnd, '=' );
         if ((bOk = (pcEqualSign < pcEnd)) == true)
         {
-            // find end of attribute name (ignore whitespace between name and equality sign)
+            
             const sal_Char* pcNameEnd = lclTrimWhiteSpaceFromEnd( pcNameBeg, pcEqualSign );
             if( (bOk = (pcNameBeg < pcNameEnd)) == true )
             {
-                // find begin of attribute value (must be single or double quote)
+                
                 const sal_Char* pcValueBeg = lclFindNonWhiteSpace( pcEqualSign + 1, pcEnd );
                 if( (bOk = (pcValueBeg < pcEnd) && ((*pcValueBeg == '\'') || (*pcValueBeg == '"'))) == true )
                 {
-                    // find end of attribute value (matching quote character)
+                    
                     const sal_Char* pcValueEnd = lclFindCharacter( pcValueBeg + 1, pcEnd, *pcValueBeg );
                     if( (bOk = (pcValueEnd < pcEnd)) == true )
                     {
                         ++pcValueEnd;
                         OString aAttribName( pcNameBeg, static_cast< sal_Int32 >( pcNameEnd - pcNameBeg ) );
                         OString aAttribData( pcNameBeg, static_cast< sal_Int32 >( pcValueEnd - pcNameBeg ) );
-                        // search for an existing attribute with the same name
+                        
                         AttributeNameMap::iterator aIt = aAttributeNames.find( aAttribName );
-                        // remove its definition from the data map
+                        
                         if( aIt != aAttributeNames.end() )
                             aAttributes.erase( aIt->second );
-                        // insert the attribute into both maps
+                        
                         aAttributeNames[ aAttribName ] = pcNameBeg;
                         aAttributes[ pcNameBeg ] = aAttribData;
-                        // continue with next attribute (skip whitespace after this attribute)
+                        
                         pcNameBeg = pcValueEnd;
                         if( (pcNameBeg < pcEnd) && ((bOk = lclIsWhiteSpace( *pcNameBeg )) == true) )
                             pcNameBeg = lclFindNonWhiteSpace( pcNameBeg + 1, pcEnd );
@@ -133,18 +133,18 @@ void lclProcessAttribs( OStringBuffer& rBuffer, const sal_Char* pcBeg, const sal
         }
     }
 
-    // if no error has occurred, build the resulting attribute list
+    
     if( bOk )
         for( AttributeDataMap::iterator aIt = aAttributes.begin(), aEnd = aAttributes.end(); aIt != aEnd; ++aIt )
             rBuffer.append( ' ' ).append( aIt->second );
-    // on error, just append the complete passed string
+    
     else
         lclAppendToBuffer( rBuffer, pcBeg, pcEnd );
 }
 
 void lclProcessElement( OStringBuffer& rBuffer, const OString& rElement )
 {
-    // check that passed string starts and ends with the brackets of an XML element
+    
     sal_Int32 nElementLen = rElement.getLength();
     if( nElementLen == 0 )
         return;
@@ -152,46 +152,46 @@ void lclProcessElement( OStringBuffer& rBuffer, const OString& rElement )
     const sal_Char* pcOpen = rElement.getStr();
     const sal_Char* pcClose = pcOpen + nElementLen - 1;
 
-    // no complete element found
+    
     if( (pcOpen >= pcClose) || (*pcOpen != '<') || (*pcClose != '>') )
     {
-        // just append all passed characters
+        
         rBuffer.append( rElement );
     }
 
-    // skip parser instructions: '<![...]>'
+    
     else if( (nElementLen >= 5) && (pcOpen[ 1 ] == '!') && (pcOpen[ 2 ] == '[') && (pcClose[ -1 ] == ']') )
     {
-        // do nothing
+        
     }
 
-    // replace '<br>' element with newline
+    
     else if( (nElementLen >= 4) && (pcOpen[ 1 ] == 'b') && (pcOpen[ 2 ] == 'r') && (lclFindNonWhiteSpace( pcOpen + 3, pcClose ) == pcClose) )
     {
         rBuffer.append( '\n' );
     }
 
-    // check start elements and simple elements for repeated attributes
+    
     else if( pcOpen[ 1 ] != '/' )
     {
-        // find positions of text content inside brackets, exclude '/' in '<simpleelement/>'
+        
         const sal_Char* pcContentBeg = pcOpen + 1;
         bool bIsEmptyElement = pcClose[ -1 ] == '/';
         const sal_Char* pcContentEnd = bIsEmptyElement ? (pcClose - 1) : pcClose;
-        // append opening bracket and element name to buffer
+        
         const sal_Char* pcWhiteSpace = lclFindWhiteSpace( pcContentBeg, pcContentEnd );
         lclAppendToBuffer( rBuffer, pcOpen, pcWhiteSpace );
-        // find begin of attributes, and process all attributes
+        
         const sal_Char* pcAttribBeg = lclFindNonWhiteSpace( pcWhiteSpace, pcContentEnd );
         if( pcAttribBeg < pcContentEnd )
             lclProcessAttribs( rBuffer, pcAttribBeg, pcContentEnd );
-        // close the element
+        
         if( bIsEmptyElement )
             rBuffer.append( '/' );
         rBuffer.append( '>' );
     }
 
-    // append end elements without further processing
+    
     else
     {
         rBuffer.append( rElement );
@@ -233,13 +233,13 @@ bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
         strings have to be handled by the VML import filter implementation.
      */
 
-    // passed string ends with the leading opening bracket of an XML element
+    
     const sal_Char* pcBeg = rChars.getStr();
     const sal_Char* pcEnd = pcBeg + rChars.getLength();
     bool bHasBracket = (pcBeg < pcEnd) && (pcEnd[ -1 ] == '<');
     if( bHasBracket ) --pcEnd;
 
-    // skip leading whitespace
+    
     const sal_Char* pcContentsBeg = lclFindNonWhiteSpace( pcBeg, pcEnd );
     while( pcContentsBeg < pcEnd )
     {
@@ -253,12 +253,12 @@ bool lclProcessCharacters( OStringBuffer& rBuffer, const OString& rChars )
     return bHasBracket;
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 InputStream::InputStream( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStrm ) :
-    // use single-byte ISO-8859-1 encoding which maps all byte characters to the first 256 Unicode characters
+    
     mxTextStrm( TextInputStream::createXTextInputStream( rxContext, rxInStrm, RTL_TEXTENCODING_ISO_8859_1 ) ),
     maOpeningBracket( 1 ),
     maClosingBracket( 1 ),
@@ -332,37 +332,37 @@ void SAL_CALL InputStream::closeInput() throw (NotConnectedException, IOExceptio
     mxTextStrm->closeInput();
 }
 
-// private --------------------------------------------------------------------
+
 
 void InputStream::updateBuffer() throw (IOException, RuntimeException)
 {
     while( (mnBufferPos >= maBuffer.getLength()) && !mxTextStrm->isEOF() )
     {
-        // collect new contents in a string buffer
+        
         OStringBuffer aBuffer;
 
-        // read and process characters until the opening bracket of the next XML element
+        
         OString aChars = readToElementBegin();
         bool bHasOpeningBracket = lclProcessCharacters( aBuffer, aChars );
 
-        // read and process characters until (and including) closing bracket (an XML element)
+        
         OSL_ENSURE( bHasOpeningBracket || mxTextStrm->isEOF(), "InputStream::updateBuffer - missing opening bracket of XML element" );
         if( bHasOpeningBracket && !mxTextStrm->isEOF() )
         {
-            // read the element text (add the leading opening bracket manually)
+            
             OString aElement = OString( '<' ) + readToElementEnd();
-            // check for CDATA part, starting with '<![CDATA['
+            
             if( aElement.match( maOpeningCData ) )
             {
-                // search the end tag ']]>'
+                
                 while( ((aElement.getLength() < maClosingCData.getLength()) || !aElement.match( maClosingCData, aElement.getLength() - maClosingCData.getLength() )) && !mxTextStrm->isEOF() )
                     aElement += readToElementEnd();
-                // copy the entire CDATA part
+                
                 aBuffer.append( aElement );
             }
             else
             {
-                // no CDATA part - process the contents of the element
+                
                 lclProcessElement( aBuffer, aElement );
             }
         }
@@ -384,9 +384,9 @@ OString InputStream::readToElementEnd() throw (IOException, RuntimeException)
     return aText;
 }
 
-// ============================================================================
 
-} // namespace vml
-} // namespave oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

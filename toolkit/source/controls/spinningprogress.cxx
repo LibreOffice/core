@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustrbuf.hxx>
@@ -36,13 +36,13 @@ public:
 
     virtual UnoControlModel* Clone() const;
 
-    // XPropertySet
+    
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException);
 
-    // XPersistObject
+    
     OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException);
 
-    // XServiceInfo
+    
     OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException);
     css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException);
 
@@ -53,7 +53,7 @@ protected:
     SpinningProgressControlModel::SpinningProgressControlModel( Reference< XComponentContext > const & i_factory )
         :SpinningProgressControlModel_Base( i_factory )
     {
-        // default image sets
+        
         osl_atomic_increment( &m_refCount );
         {
             try
@@ -77,43 +77,43 @@ protected:
         osl_atomic_decrement( &m_refCount );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     SpinningProgressControlModel::SpinningProgressControlModel( const SpinningProgressControlModel& i_copySource )
         :SpinningProgressControlModel_Base( i_copySource )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     SpinningProgressControlModel::~SpinningProgressControlModel()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     UnoControlModel* SpinningProgressControlModel::Clone() const
     {
         return new SpinningProgressControlModel( *this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< beans::XPropertySetInfo > SAL_CALL SpinningProgressControlModel::getPropertySetInfo(  ) throw(RuntimeException)
     {
         static Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString SAL_CALL SpinningProgressControlModel::getServiceName() throw(RuntimeException)
     {
         return OUString("com.sun.star.awt.SpinningProgressControlModel");
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString SAL_CALL SpinningProgressControlModel::getImplementationName(  ) throw(RuntimeException)
     {
         return OUString("org.openoffice.comp.toolkit.SpinningProgressControlModel");
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL SpinningProgressControlModel::getSupportedServiceNames() throw(RuntimeException)
     {
         Sequence< OUString > aServiceNames(3);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -68,8 +68,8 @@ CSerializationAppXML::CSerializationAppXML()
 Reference< CSS::io::XInputStream >
 CSerializationAppXML::getInputStream()
 {
-    // The pipes output is provided through it's
-    // XOutputStream interface aspect
+    
+    
     return Reference< CSS::io::XInputStream >(m_xBuffer, UNO_QUERY);
 }
 
@@ -81,7 +81,7 @@ CSerializationAppXML::serialize_node(const Reference< XNode >& rNode)
         Reference< XSAXSerializable > xSerializer( rNode, UNO_QUERY );
         if ( !xSerializer.is() )
         {
-            // ensure we have a "real" node
+            
             Reference< XNode > xNode = rNode;
             if ( xNode->getNodeType() == NodeType_DOCUMENT_NODE )
             {
@@ -91,26 +91,26 @@ CSerializationAppXML::serialize_node(const Reference< XNode >& rNode)
             ENSURE_OR_RETURN_VOID( xNode->getNodeType() == NodeType_ELEMENT_NODE,
                 "CSerializationAppXML::serialize_node: invalid node type!" );
 
-            // create a new document
+            
             Reference< XDocumentBuilder > const xDocBuilder = DocumentBuilder::create( comphelper::getProcessComponentContext() );
             Reference< XDocument > const xDocument( xDocBuilder->newDocument(), UNO_SET_THROW );
 
-            // copy the to-be-serialized node
+            
             Reference< XNode > const xImportedNode( xDocument->importNode( xNode, true ), UNO_SET_THROW );
             xDocument->appendChild( xImportedNode );
 
-            // ask the doc for the serializer
+            
             xSerializer.set( xDocument, UNO_QUERY );
         }
 
         ENSURE_OR_RETURN_VOID( xSerializer.is(),
             "CSerializationAppXML::serialize_node: no serialization access to the node/document!" );
 
-        // create a SAXWriter to take the serialization events, and connect it to our pipe
+        
         Reference< CSS::xml::sax::XWriter > const xSaxWriter = Writer::create( comphelper::getProcessComponentContext() );
         xSaxWriter->setOutputStream( Reference< CSS::io::XOutputStream >( m_xBuffer, UNO_QUERY_THROW) );
 
-        // do the serialization
+        
         xSerializer->serialize( Reference< XDocumentHandler >(xSaxWriter, UNO_QUERY_THROW), Sequence< StringPair >() );
     }
     catch( const Exception& )

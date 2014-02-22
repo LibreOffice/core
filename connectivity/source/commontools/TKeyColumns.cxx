@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/TKeyColumns.hxx"
@@ -36,7 +36,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
-// -------------------------------------------------------------------------
+
 OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
                 ::osl::Mutex& _rMutex,
                 const ::std::vector< OUString> &_rVector)
@@ -44,7 +44,7 @@ OKeyColumnsHelper::OKeyColumnsHelper(   OTableKeyHelper* _pKey,
             ,m_pKey(_pKey)
 {
 }
-// -------------------------------------------------------------------------
+
 sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
 {
     ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
@@ -54,7 +54,7 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
     m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_SCHEMANAME))   >>= aSchema;
     m_pKey->getTable()->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_NAME))         >>= aTable;
 
-    // frist get the related column to _rName
+    
     Reference< XResultSet > xResult = m_pKey->getTable()->getMetaData()->getImportedKeys(
             Catalog, aSchema, aTable);
 
@@ -76,7 +76,7 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
 
     sdbcx::ObjectType xRet;
 
-    // now describe the column _rName and set his related column
+    
     xResult = m_pKey->getTable()->getMetaData()->getColumns(Catalog, aSchema, aTable, _rName);
 
     if ( xResult.is() )
@@ -98,7 +98,7 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
                 }
                 catch(const SQLException&)
                 {
-                    // somethimes we get an error when asking for this param
+                    
                 }
 
                 OKeyColumn* pRet = new OKeyColumn(aRefColumnName,
@@ -123,17 +123,17 @@ sdbcx::ObjectType OKeyColumnsHelper::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OKeyColumnsHelper::createDescriptor()
 {
     return new OKeyColumn(isCaseSensitive());
 }
-// -------------------------------------------------------------------------
+
 void OKeyColumnsHelper::impl_refresh() throw(::com::sun::star::uno::RuntimeException)
 {
     m_pKey->refreshColumns();
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/supportsservice.hxx>
@@ -51,17 +51,17 @@ MozillaBootstrap::MozillaBootstrap(
       m_ProfileAccess(NULL), m_ProfileManager(NULL)
 {
 }
-// -----------------------------------------------------------------------------
+
 MozillaBootstrap::~MozillaBootstrap()
 {
 }
-// -----------------------------------------------------------------------------
+
 void MozillaBootstrap::Init()
 {
     sal_Bool aProfileExists=sal_False;
 
 #ifndef MINIMAL_PROFILEDISCOVER
-    //This must be call before any mozilla code
+    
     MNS_Init(aProfileExists);
 
     m_ProfileManager = new ProfileManager();
@@ -72,30 +72,30 @@ void MozillaBootstrap::Init()
     bootupProfile(::com::sun::star::mozilla::MozillaProductType_Mozilla,OUString());
 }
 
-// --------------------------------------------------------------------------------
+
 void MozillaBootstrap::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     OMozillaBootstrap_BASE::disposing();
 }
 
-// static ServiceInfo
-//------------------------------------------------------------------------------
+
+
 OUString MozillaBootstrap::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString(MOZAB_MozillaBootstrap_IMPL_NAME);
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > MozillaBootstrap::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported
-    // for more information @see com.sun.star.mozilla.MozillaBootstrap
+    
+    
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.mozilla.MozillaBootstrap";
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL MozillaBootstrap::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -106,14 +106,14 @@ sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceNa
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
 
-// XProfileDiscover
+
 ::sal_Int32 SAL_CALL MozillaBootstrap::getProfileCount( ::com::sun::star::mozilla::MozillaProductType product) throw (::com::sun::star::uno::RuntimeException)
 {
     return m_ProfileAccess->getProfileCount(product);
@@ -139,7 +139,7 @@ OUString SAL_CALL MozillaBootstrap::getProfilePath( ::com::sun::star::mozilla::M
     return m_ProfileAccess->getProfileExists(product,profileName);
 }
 
-// XProfileManager
+
 ::sal_Int32 SAL_CALL MozillaBootstrap::bootupProfile( ::com::sun::star::mozilla::MozillaProductType product, const OUString& profileName ) throw (::com::sun::star::uno::RuntimeException)
 {
 #ifndef MINIMAL_PROFILEDISCOVER
@@ -193,7 +193,7 @@ OUString SAL_CALL MozillaBootstrap::setCurrentProfile( ::com::sun::star::mozilla
 #endif
 }
 
-// XProxyRunner
+
 ::sal_Int32 SAL_CALL MozillaBootstrap::Run( const ::com::sun::star::uno::Reference< ::com::sun::star::mozilla::XCodeProxy >& aCode ) throw (::com::sun::star::uno::RuntimeException)
 {
 #ifndef MINIMAL_PROFILEDISCOVER
@@ -201,7 +201,7 @@ OUString SAL_CALL MozillaBootstrap::setCurrentProfile( ::com::sun::star::mozilla
     OUString currProfileName = getCurrentProfile();
     ::com::sun::star::mozilla::MozillaProductType currProduct = getCurrentProduct();
 
-     //if client provides a profileName, we will use it
+     
     if (!profileName.isEmpty()
              && ( aCode->getProductType() != currProduct  || !profileName.equals(currProfileName)) )
         setCurrentProfile(aCode->getProductType(),profileName);

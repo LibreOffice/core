@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/overlay/overlayselection.hxx>
@@ -30,13 +30,13 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <svx/sdr/overlay/overlaymanager.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace overlay
     {
-        // combine rages geometrically to a single, ORed polygon
+        
         basegfx::B2DPolyPolygon impCombineRangesToPolyPolygon(const std::vector< basegfx::B2DRange >& rRanges)
         {
             const sal_uInt32 nCount(rRanges.size());
@@ -59,8 +59,8 @@ namespace sdr
             return aRetval;
         }
 
-        // check if wanted type OVERLAY_TRANSPARENT or OVERLAY_SOLID
-        // is possible. If not, fallback to invert mode (classic mode)
+        
+        
         OverlayType impCheckPossibleOverlayType(OverlayType aOverlayType)
         {
             if(OVERLAY_INVERT != aOverlayType)
@@ -69,7 +69,7 @@ namespace sdr
 
                 if(!aSvtOptionsDrawinglayer.IsTransparentSelection())
                 {
-                    // not possible when switched off by user
+                    
                     return OVERLAY_INVERT;
                 }
                 else
@@ -78,13 +78,13 @@ namespace sdr
 
                     if(pOut->GetSettings().GetStyleSettings().GetHighContrastMode())
                     {
-                        // not possible when in high contrast mode
+                        
                         return  OVERLAY_INVERT;
                     }
 
                     if(!pOut->supportsOperation(OutDevSupport_TransparentRect))
                     {
-                        // not possible when no fast transparence paint is supported on the system
+                        
                         return OVERLAY_INVERT;
                     }
                 }
@@ -100,14 +100,14 @@ namespace sdr
 
             if(nCount)
             {
-                // create range primitives
+                
                 const bool bInvert(OVERLAY_INVERT == maLastOverlayType);
                 basegfx::BColor aRGBColor(getBaseColor().getBColor());
                 aRetval.realloc(nCount);
 
                 if(bInvert)
                 {
-                    // force color to white for invert to get a full invert
+                    
                     aRGBColor = basegfx::BColor(1.0, 1.0, 1.0);
                 }
 
@@ -122,7 +122,7 @@ namespace sdr
 
                 if(bInvert)
                 {
-                    // embed all in invert primitive
+                    
                     const drawinglayer::primitive2d::Primitive2DReference aInvert(
                         new drawinglayer::primitive2d::InvertPrimitive2D(
                             aRetval));
@@ -130,7 +130,7 @@ namespace sdr
                 }
                 else if(OVERLAY_TRANSPARENT == maLastOverlayType)
                 {
-                    // embed all rectangles in transparent paint
+                    
                     const double fTransparence(mnLastTransparence / 100.0);
                     const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
@@ -145,14 +145,14 @@ namespace sdr
                                 aPolyPolygon,
                                 aRGBColor));
 
-                        // add both to result
+                        
                         aRetval.realloc(2);
                         aRetval[0] = aUnifiedTransparence;
                         aRetval[1] = aSelectionOutline;
                     }
                     else
                     {
-                        // just add transparent part
+                        
                         aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparence, 1);
                     }
                 }
@@ -173,7 +173,7 @@ namespace sdr
             mnLastTransparence(0),
             mbBorder(bBorder)
         {
-            // no AA for selection overlays
+            
             allowAntiAliase(false);
         }
 
@@ -187,7 +187,7 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence OverlaySelection::getOverlayObjectPrimitive2DSequence() const
         {
-            // get current values
+            
                const OverlayType aNewOverlayType(impCheckPossibleOverlayType(meOverlayType));
             const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
             const sal_uInt16 nNewTransparence(aSvtOptionsDrawinglayer.GetTransparentSelectionPercent());
@@ -197,19 +197,19 @@ namespace sdr
                 if(aNewOverlayType != maLastOverlayType
                     || nNewTransparence != mnLastTransparence)
                 {
-                    // conditions of last local decomposition have changed, delete
+                    
                     const_cast< OverlaySelection* >(this)->setPrimitive2DSequence(drawinglayer::primitive2d::Primitive2DSequence());
                 }
             }
 
             if(!getPrimitive2DSequence().hasElements())
             {
-                // remember new values
+                
                 const_cast< OverlaySelection* >(this)->maLastOverlayType = aNewOverlayType;
                 const_cast< OverlaySelection* >(this)->mnLastTransparence = nNewTransparence;
             }
 
-            // call base implementation
+            
             return OverlayObject::getOverlayObjectPrimitive2DSequence();
         }
 
@@ -221,7 +221,7 @@ namespace sdr
                 objectChange();
             }
         }
-    } // end of namespace overlay
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

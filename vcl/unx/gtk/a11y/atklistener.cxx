@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -68,14 +68,14 @@ AtkStateType mapState( const uno::Any &rAny )
 /*****************************************************************************/
 
 extern "C" {
-    // rhbz#1001768 - down to horrific problems releasing the solar mutex
-    // while destroying a Window - which occurs inside these notifications.
+    
+    
     static gint
     idle_defunc_state_change( AtkObject *atk_obj )
     {
         SolarMutexGuard aGuard;
 
-        // This is an equivalent to a state change to DEFUNC(T).
+        
         atk_object_notify_state_change( atk_obj, ATK_STATE_DEFUNCT, TRUE );
         if( atk_get_focus_object() == atk_obj )
         {
@@ -88,21 +88,21 @@ extern "C" {
     }
 }
 
-// XEventListener implementation
+
 void AtkListener::disposing( const lang::EventObject& ) throw (uno::RuntimeException)
 {
     if( mpWrapper )
     {
         AtkObject *atk_obj = ATK_OBJECT( mpWrapper );
 
-        // Release all interface references to avoid shutdown problems with
-        // global mutex
+        
+        
         atk_object_wrapper_dispose( mpWrapper );
 
         g_idle_add( (GSourceFunc) idle_defunc_state_change,
                     g_object_ref( G_OBJECT( atk_obj ) ) );
 
-        // Release the wrapper object so that it can vanish ..
+        
         g_object_unref( mpWrapper );
         mpWrapper = NULL;
     }
@@ -119,7 +119,7 @@ static AtkObject *getObjFromAny( const uno::Any &rAny )
 
 /*****************************************************************************/
 
-// Updates the child list held to provide the old IndexInParent on children_changed::remove
+
 void AtkListener::updateChildList(accessibility::XAccessibleContext* pContext)
 {
      m_aChildList.clear();
@@ -139,7 +139,7 @@ void AtkListener::updateChildList(accessibility::XAccessibleContext* pContext)
              }
              catch (lang::IndexOutOfBoundsException const&)
              {
-                 assert(false); // not consistent with getAccessibleChildCount
+                 assert(false); 
              }
              OSL_ASSERT(m_aChildList[n].is());
          }
@@ -173,7 +173,7 @@ void AtkListener::handleChildRemoved(
 {
     sal_Int32 nIndex = -1;
 
-    // Locate the child in the children list
+    
     size_t n, nmax = m_aChildList.size();
     for( n = 0; n < nmax; ++n )
     {
@@ -184,15 +184,15 @@ void AtkListener::handleChildRemoved(
         }
     }
 
-    // FIXME: two problems here:
-    // a) we get child-removed events for objects that are no real children
-    //    in the accessibility hierarchy or have been removed before due to
-    //    some child removing batch.
-    // b) spi_atk_bridge_signal_listener ignores the given parameters
-    //    for children_changed events and always asks the parent for the
-    //    0. child, which breaks somehow on vanishing list boxes.
-    // Ignoring "remove" events for objects not in the m_aChildList
-    // for now.
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if( nIndex >= 0 )
     {
         updateChildList(rxParent.get());
@@ -211,7 +211,7 @@ void AtkListener::handleChildRemoved(
 void AtkListener::handleInvalidateChildren(
     const uno::Reference< accessibility::XAccessibleContext >& rxParent)
 {
-    // Send notifications for all previous children
+    
     size_t n = m_aChildList.size();
     while( n-- > 0 )
     {
@@ -228,7 +228,7 @@ void AtkListener::handleInvalidateChildren(
 
     updateChildList(rxParent.get());
 
-    // Send notifications for all new children
+    
     size_t nmax = m_aChildList.size();
     for( n = 0; n < nmax; ++n )
     {
@@ -255,8 +255,8 @@ getAccessibleContextFromSource( const uno::Reference< uno::XInterface >& rxSourc
     {
          g_warning( "ERROR: Event source does not implement XAccessibleContext" );
 
-         // Second try - query for XAccessible, which should give us access to
-         // XAccessibleContext.
+         
+         
          uno::Reference< accessibility::XAccessible > xAccessible(rxSource, uno::UNO_QUERY);
          if( xAccessible.is() )
              xContext = xAccessible->getAccessibleContext();
@@ -267,7 +267,7 @@ getAccessibleContextFromSource( const uno::Reference< uno::XInterface >& rxSourc
 
 /*****************************************************************************/
 
-// XAccessibleEventListener
+
 void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEvent ) throw( uno::RuntimeException )
 {
     if( !mpWrapper )
@@ -277,8 +277,8 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
 
     switch( aEvent.EventId )
     {
-    // AtkObject signals:
-        // Hierarchy signals
+    
+        
         case accessibility::AccessibleEventId::CHILD:
         {
             uno::Reference< accessibility::XAccessibleContext > xParent;
@@ -377,7 +377,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
         }
 
-        // #i92103#
+        
         case accessibility::AccessibleEventId::LISTBOX_ENTRY_EXPANDED:
         {
             AtkObject *pChild = getObjFromAny( aEvent.NewValue );
@@ -402,12 +402,12 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             break;
         }
 
-        // AtkAction signals ...
+        
         case accessibility::AccessibleEventId::ACTION_CHANGED:
             g_signal_emit_by_name( G_OBJECT( atk_obj ), "property_change::accessible-actions");
             break;
 
-        // AtkText
+        
         case accessibility::AccessibleEventId::CARET_CHANGED:
         {
             sal_Int32 nPos=0;
@@ -417,13 +417,13 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
         }
         case accessibility::AccessibleEventId::TEXT_CHANGED:
         {
-            // TESTME: and remove this comment:
-            // cf. comphelper/source/misc/accessibletexthelper.cxx (implInitTextChangedEvent)
+            
+            
             accessibility::TextSegment aDeletedText;
             accessibility::TextSegment aInsertedText;
 
-            // TODO: when GNOME starts to send "update" kind of events, change
-            // we need to re-think this implementation as well
+            
+            
             if( aEvent.OldValue >>= aDeletedText )
             {
                 /* Remember the text segment here to be able to return removed text in get_text().
@@ -458,7 +458,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
             g_signal_emit_by_name( atk_obj, "text-attributes-changed" );
             break;
 
-        // AtkValue
+        
         case accessibility::AccessibleEventId::VALUE_CHANGED:
             g_object_notify( G_OBJECT( atk_obj ), "accessible-value" );
             break;
@@ -471,10 +471,10 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
         case accessibility::AccessibleEventId::LABELED_BY_RELATION_CHANGED:
         case accessibility::AccessibleEventId::MEMBER_OF_RELATION_CHANGED:
         case accessibility::AccessibleEventId::SUB_WINDOW_OF_RELATION_CHANGED:
-            // FIXME: ask Bill how Atk copes with this little lot ...
+            
             break;
 
-        // AtkTable
+        
         case accessibility::AccessibleEventId::TABLE_MODEL_CHANGED:
         {
             accessibility::AccessibleTableModelChange aChange;
@@ -488,9 +488,9 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                     const char *col;
             } aSignalNames[] =
             {
-                { NULL, NULL }, // dummy
-                { "row_inserted", "column_inserted" }, // INSERT = 1
-                { "row_deleted", "column_deleted" } // DELETE = 2
+                { NULL, NULL }, 
+                { "row_inserted", "column_inserted" }, 
+                { "row_deleted", "column_deleted" } 
             };
             switch( aChange.Type )
             {
@@ -507,7 +507,7 @@ void AtkListener::notifyEvent( const accessibility::AccessibleEventObject& aEven
                 break;
 
             case accessibility::AccessibleTableModelChangeType::UPDATE:
-                // This is not really a model change, is it ?
+                
                 break;
             default:
                 g_warning( "TESTME: unusual table model change %d\n", aChange.Type );

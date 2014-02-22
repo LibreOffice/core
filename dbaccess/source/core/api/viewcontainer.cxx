@@ -56,7 +56,7 @@ using namespace ::comphelper;
 using namespace ::cppu;
 using namespace ::connectivity::sdbcx;
 
-// OViewContainer
+
 
 OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
                                  ,::osl::Mutex& _rMutex
@@ -74,7 +74,7 @@ OViewContainer::~OViewContainer()
 {
 }
 
-// XServiceInfo
+
 IMPLEMENT_SERVICE_INFO2(OViewContainer, "com.sun.star.sdb.dbaccess.OViewContainer", SERVICE_SDBCX_CONTAINER, SERVICE_SDBCX_TABLES)
 
 ObjectType OViewContainer::createObject(const OUString& _rName)
@@ -106,8 +106,8 @@ ObjectType OViewContainer::createObject(const OUString& _rName)
 Reference< XPropertySet > OViewContainer::createDescriptor()
 {
     Reference< XPropertySet > xRet;
-    // first we have to look if the master tables support this
-    // and if so then create a table object as well with the master tables
+    
+    
     Reference<XColumnsSupplier > xMasterColumnsSup;
     Reference<XDataDescriptorFactory> xDataFactory(m_xMasterContainer,UNO_QUERY);
     if(xDataFactory.is())
@@ -118,10 +118,10 @@ Reference< XPropertySet > OViewContainer::createDescriptor()
     return xRet;
 }
 
-// XAppend
+
 ObjectType OViewContainer::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    // append the new table with a create stmt
+    
     OUString aName = getString(descriptor->getPropertyValue(PROPERTY_NAME));
 
     Reference<XAppend> xAppend(m_xMasterContainer,UNO_QUERY);
@@ -162,7 +162,7 @@ ObjectType OViewContainer::appendObject( const OUString& _rForName, const Refere
     return createObject( _rForName );
 }
 
-// XDrop
+
 void OViewContainer::dropObject(sal_Int32 _nPos,const OUString _sElementName)
 {
     if ( !m_bInElementRemoved )
@@ -249,7 +249,7 @@ void SAL_CALL OViewContainer::elementReplaced( const ContainerEvent& /*Event*/ )
 
 OUString OViewContainer::getTableTypeRestriction() const
 {
-    // no restriction at all (other than the ones provided externally)
+    
     return OUString( "VIEW"  );
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DrawViewWrapper.hxx"
@@ -24,20 +24,20 @@
 
 #include <unotools/lingucfg.hxx>
 #include <editeng/langitem.hxx>
-// header for class SdrPage
+
 #include <svx/svdpage.hxx>
-//header for class SdrPageView
+
 #include <svx/svdpagv.hxx>
-// header for class SdrModel
+
 #include <svx/svdmodel.hxx>
-// header for class E3dScene
+
 #include <svx/scene3d.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdoutl.hxx>
 
 #include <svx/svxids.hrc>
 
-// header for class SvxShape
+
 #include <svx/unoshape.hxx>
 #include <editeng/fhgtitem.hxx>
 
@@ -56,14 +56,14 @@ namespace
 {
     short lcl_getHitTolerance( OutputDevice* pOutDev )
     {
-        const short HITPIX=2; //hit-tolerance in pixel
+        const short HITPIX=2; 
         short nHitTolerance = 50;
         if(pOutDev)
             nHitTolerance = static_cast<short>(pOutDev->PixelToLogic(Size(HITPIX,0)).Width());
         return nHitTolerance;
     }
 
-// this code is copied from sfx2/source/doc/objembed.cxx
+
 SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel > & xModel )
 {
     SfxObjectShell* pResult = NULL;
@@ -84,14 +84,14 @@ SfxObjectShell * lcl_GetParentObjectShell( const uno::Reference< frame::XModel >
     }
     catch( const uno::Exception& )
     {
-        // TODO: error handling
+        
     }
 
     return pResult;
 }
 
-// this code is copied from sfx2/source/doc/objembed.cxx.  It is a workaround to
-// get the reference device (e.g. printer) fromthe parent document
+
+
 OutputDevice * lcl_GetParentRefDevice( const uno::Reference< frame::XModel > & xModel )
 {
     SfxObjectShell * pParent = lcl_GetParentObjectShell( xModel );
@@ -113,7 +113,7 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
 
     SetPagePaintingAllowed(bPaintPageForEditMode);
 
-    // #i12587# support for shapes in chart
+    
     SdrOutliner* pOutliner = getOutliner();
     SfxItemPool* pOutlinerPool = ( pOutliner ? pOutliner->GetEditTextObjectPool() : NULL );
     if ( pOutlinerPool )
@@ -127,11 +127,11 @@ DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool 
             pOutlinerPool->SetPoolDefaultItem( SvxLanguageItem( aLinguOptions.nDefaultLanguage_CTL, EE_CHAR_LANGUAGE_CTL ) );
         }
 
-        // set font height without changing SdrEngineDefaults
-        pOutlinerPool->SetPoolDefaultItem( SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ) );  // 12pt
+        
+        pOutlinerPool->SetPoolDefaultItem( SvxFontHeightItem( 423, 100, EE_CHAR_FONTHEIGHT ) );  
     }
 
-    // #i121463# Use big handles by default
+    
     SetMarkHdlSizePixel(9);
 
     ReInit();
@@ -150,9 +150,9 @@ void DrawViewWrapper::ReInit()
     bGridVisible = false;
     bHlplVisible = false;
 
-    this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
+    this->SetNoDragXorPolys(true);
 
-    //a correct work area is at least necessary for correct values in the position and  size dialog
+    
     Rectangle aRect(Point(0,0), aOutputSize);
     this->SetWorkArea(aRect);
 
@@ -161,8 +161,8 @@ void DrawViewWrapper::ReInit()
 
 DrawViewWrapper::~DrawViewWrapper()
 {
-    aComeBackTimer.Stop();//@todo this should be done in destructor of base class
-    UnmarkAllObj();//necessary to aavoid a paint call during the destructor hierarchy
+    aComeBackTimer.Stop();
+    UnmarkAllObj();
 }
 
 SdrPageView* DrawViewWrapper::GetPageView() const
@@ -189,7 +189,7 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 
     if( pRet )
     {
-        //ignore some special shapes
+        
         OUString aShapeName = pRet->GetName();
         if( aShapeName.match("PlotAreaIncludingAxes") || aShapeName.match("PlotAreaExcludingAxes") )
         {
@@ -197,22 +197,22 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
             return getHitObject( rPnt );
         }
 
-        //3d objects need a special treatment
-        //because the simple PickObj method is not accurate in this case for performance reasons
+        
+        
         E3dObject* pE3d = dynamic_cast< E3dObject* >(pRet);
         if( pE3d )
         {
             E3dScene* pScene = pE3d->GetScene();
             if( pScene )
             {
-                // prepare result vector and call helper
+                
                 ::std::vector< const E3dCompoundObject* > aHitList;
                 const basegfx::B2DPoint aHitPoint(rPnt.X(), rPnt.Y());
                 getAllHit3DObjectsSortedFrontToBack(aHitPoint, *pScene, aHitList);
 
                 if(!aHitList.empty())
                 {
-                    // choose the frontmost hit 3D object of the scene
+                    
                     pRet = const_cast< E3dCompoundObject* >(aHitList[0]);
                 }
             }
@@ -223,13 +223,13 @@ SdrObject* DrawViewWrapper::getHitObject( const Point& rPnt ) const
 
 void DrawViewWrapper::MarkObject( SdrObject* pObj )
 {
-    bool bFrameDragSingles = true;//true == green == surrounding handles
+    bool bFrameDragSingles = true;
     if(pObj)
         pObj->SetMarkProtect(false);
     if( m_pMarkHandleProvider )
         bFrameDragSingles = m_pMarkHandleProvider->getFrameDragSingles();
 
-    this->SetFrameDragSingles(bFrameDragSingles);//decide whether each single object should get handles
+    this->SetFrameDragSingles(bFrameDragSingles);
     this->SdrView::MarkObj( pObj, this->GetPageView() );
     this->showMarkHandles();
 }
@@ -321,14 +321,14 @@ bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt ) const
 
 void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
-    //prevent wrong reselection of objects
+    
     SdrModel* pSdrModel( this->GetModel() );
     if( pSdrModel && pSdrModel->isLocked() )
         return;
 
     const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
 
-    //#i76053# do nothing when only changes on the hidden draw page were made ( e.g. when the symbols for the dialogs are created )
+    
     SdrPageView* pSdrPageView = this->GetPageView();
     if( pSdrHint && pSdrPageView )
     {
@@ -343,7 +343,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         SdrHintKind eKind = pSdrHint->GetKind();
         if( eKind == HINT_BEGEDIT )
         {
-            // #i79965# remember map mode
+            
             OSL_ASSERT( ! m_bRestoreMapMode );
             OutputDevice* pOutDev = this->GetFirstOutputDevice();
             if( pOutDev )
@@ -354,7 +354,7 @@ void DrawViewWrapper::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
         }
         else if( eKind == HINT_ENDEDIT )
         {
-            // #i79965# scroll back view when ending text edit
+            
             OSL_ASSERT( m_bRestoreMapMode );
             if( m_bRestoreMapMode )
             {
@@ -384,6 +384,6 @@ SdrObject* DrawViewWrapper::getSdrObject( const uno::Reference<
     return pRet;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/bitmap.hxx>
@@ -27,7 +27,7 @@
 
 #include <algorithm>
 
-// struct PageWindow_Impl ------------------------------------------------
+
 
 struct PageWindow_Impl
 {
@@ -51,12 +51,12 @@ struct PageWindow_Impl
 
 };
 
-// STATIC DATA -----------------------------------------------------------
+
 
 #define CELL_WIDTH      1600L
 #define CELL_HEIGHT      800L
 
-// class SvxPageWindow ---------------------------------------------------
+
 
 SvxPageWindow::SvxPageWindow( Window* pParent ) :
 
@@ -88,7 +88,7 @@ SvxPageWindow::SvxPageWindow( Window* pParent ) :
 {
     pImpl = new PageWindow_Impl;
 
-    // Count in Twips by default
+    
     SetMapMode( MapMode( MAP_TWIP ) );
     aWinSize = GetOptimalSize();
     aWinSize.Height() -= 4;
@@ -98,7 +98,7 @@ SvxPageWindow::SvxPageWindow( Window* pParent ) :
     SetBackground();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPageWindow::~SvxPageWindow()
 {
@@ -113,7 +113,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxPageWindow(Window *pPare
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::Paint( const Rectangle& )
 {
@@ -137,10 +137,10 @@ void SvxPageWindow::Paint( const Rectangle& )
 
     if ( eUsage == SVX_PAGE_ALL )
     {
-        // all pages are equal -> draw one page
+        
         if ( aSize.Width() > aSize.Height() )
         {
-            // Draw Landscape page of the same size
+            
             Fraction aX = aMapMode.GetScaleX();
             Fraction aY = aMapMode.GetScaleY();
             Fraction a2( 1.5 );
@@ -155,19 +155,19 @@ void SvxPageWindow::Paint( const Rectangle& )
             DrawPage( Point( nXPos, nYPos ), sal_True, sal_True );
         }
         else
-            // Portrait
+            
             DrawPage( Point( ( aSz.Width() - aSize.Width() ) / 2, nYPos ), sal_True, sal_True );
     }
     else
     {
-        // Left and right page are different -> draw two pages if possible
+        
         DrawPage( Point( 0, nYPos ), sal_False, (sal_Bool)( eUsage & SVX_PAGE_LEFT ) );
         DrawPage( Point( aSize.Width() + aSize.Width() / 8, nYPos ), sal_True,
                   (sal_Bool)( eUsage & SVX_PAGE_RIGHT ) );
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const sal_Bool bEnabled )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -176,7 +176,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
     const Color& rDisableColor = rStyleSettings.GetDisableColor();
     const Color& rDlgColor = rStyleSettings.GetDialogColor();
 
-    // background
+    
     if(!bSecond || pImpl->bResetBackground)
     {
         SetLineColor( Color(COL_TRANSPARENT) );
@@ -188,9 +188,9 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
             pImpl->bResetBackground = false;
     }
     SetLineColor( rFieldTextColor );
-    // Shadow
+    
     Size aTempSize = aSize;
-    // Page
+    
     if ( !bEnabled )
     {
         SetFillColor( rDisableColor );
@@ -205,7 +205,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
 
     if ( eUsage == SVX_PAGE_MIRROR && !bSecond )
     {
-        // turn for mirrored
+        
         nL = nRight;
         nR = nLeft;
     }
@@ -222,7 +222,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
 
     if ( bHeader )
     {
-        // show headers if possible
+        
         aHdRect.Left() += nHdLeft;
         aHdRect.Right() -= nHdRight;
         aHdRect.Bottom() = aRect.Top() + nHdHeight;
@@ -233,7 +233,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
 
     if ( bFooter )
     {
-        // show footer if possible
+        
         aFtRect.Left() += nFtLeft;
         aFtRect.Right() -= nFtRight;
         aFtRect.Top() = aRect.Bottom() - nFtHeight;
@@ -242,7 +242,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
         DrawRect( aFtRect );
     }
 
-    // Paint Body
+    
     SetFillColor( aColor );
     if ( pImpl->bBitmap )
     {
@@ -327,7 +327,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
     }
     if ( bTable )
     {
-        // Paint Table, if necessary center it
+        
         SetLineColor( Color(COL_LIGHTGRAY) );
 
         long nW = aRect.GetWidth(), nH = aRect.GetHeight();
@@ -353,7 +353,7 @@ void SvxPageWindow::DrawPage( const Point& rOrg, const sal_Bool bSecond, const s
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::SetBorder( const SvxBoxItem& rNew )
 {
@@ -361,7 +361,7 @@ void SvxPageWindow::SetBorder( const SvxBoxItem& rNew )
     pImpl->pBorder = new SvxBoxItem( rNew );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::SetBitmap( Bitmap* pBmp )
 {
@@ -374,14 +374,14 @@ void SvxPageWindow::SetBitmap( Bitmap* pBmp )
         pImpl->bBitmap = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::SetHdBorder( const SvxBoxItem& rNew )
 {
     delete pHdBorder;
     pHdBorder = new SvxBoxItem( rNew );
 }
-// -----------------------------------------------------------------------
+
 
 void SvxPageWindow::SetFtBorder( const SvxBoxItem& rNew )
 {

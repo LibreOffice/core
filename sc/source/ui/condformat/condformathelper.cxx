@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <rtl/ustrbuf.hxx>
@@ -172,8 +172,8 @@ OUString ScCondFormatHelper::GetExpression( ScCondFormatEntryType eType, sal_Int
     aBuffer.append(" ");
     if(eType == CONDITION)
     {
-        // workaround missing FORMULA option in the conditions case
-        // FORMULA is handled later
+        
+        
         if(nIndex > 9)
             ++nIndex;
         aBuffer.append(getExpression(nIndex));

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 #include "osx/salframe.h"
 #include "osx/salinst.h"
 
-// =======================================================================
+
 
 NSTimer* AquaSalTimer::pRunningTimer = nil;
 bool AquaSalTimer::bDispatchTimer = false;
@@ -40,7 +40,7 @@ void ImplSalStartTimer( sal_uLong nMS )
         if( AquaSalTimer::pRunningTimer != nil )
         {
             if( [AquaSalTimer::pRunningTimer timeInterval] == aTI )
-                // set new fire date
+                
                 [AquaSalTimer::pRunningTimer setFireDate: [NSDate dateWithTimeIntervalSinceNow: aTI]];
             else
             {
@@ -64,7 +64,7 @@ void ImplSalStartTimer( sal_uLong nMS )
     else
     {
         SalData::ensureThreadAutoreleasePool();
-        // post an event so we can get into the main thread
+        
         NSPoint aPt = { 0, 0 };
         NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
                                    location: aPt
@@ -95,7 +95,7 @@ void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
         if( (posted - current) <= 0.0 )
         {
             YIELD_GUARD;
-            // timer already elapsed since event posted
+            
             pSVData->mpSalTimer->CallCallback();
         }
         ImplSalStartTimer( sal_uLong( [pEvent data1] ) );

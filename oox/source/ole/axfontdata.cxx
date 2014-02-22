@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ole/axfontdata.hxx"
@@ -25,7 +25,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 AxFontData::AxFontData() :
     mnFontEffects( 0 ),
@@ -55,11 +55,11 @@ bool AxFontData::importBinaryModel( BinaryInputStream& rInStrm )
     aReader.readStringProperty( maFontName );
     aReader.readIntProperty< sal_uInt32 >( mnFontEffects );
     aReader.readIntProperty< sal_Int32 >( mnFontHeight );
-    aReader.skipIntProperty< sal_Int32 >(); // font offset
+    aReader.skipIntProperty< sal_Int32 >(); 
     aReader.readIntProperty< sal_uInt8 >( mnFontCharSet );
-    aReader.skipIntProperty< sal_uInt8 >(); // font pitch/family
+    aReader.skipIntProperty< sal_uInt8 >(); 
     aReader.readIntProperty< sal_uInt8 >( mnHorAlign );
-    aReader.skipIntProperty< sal_uInt16 >(); // font weight
+    aReader.skipIntProperty< sal_uInt16 >(); 
     mbDblUnderline = false;
     return aReader.finalizeImport();
 }
@@ -70,13 +70,13 @@ void AxFontData::exportBinaryModel( BinaryOutputStream& rOutStrm )
     aWriter.writeStringProperty( maFontName );
     aWriter.writeIntProperty< sal_uInt32 >( mnFontEffects );
     aWriter.writeIntProperty< sal_Int32 >( mnFontHeight );
-    aWriter.skipProperty(); // font offset
-    // TODO make AxFontDataModel::convertFromProperties convert the textencoding
+    aWriter.skipProperty(); 
+    
     aWriter.writeIntProperty< sal_uInt8 >( mnFontCharSet );
-    aWriter.skipProperty(); // font pitch/family
+    aWriter.skipProperty(); 
 
     aWriter.writeIntProperty< sal_uInt8 >( mnHorAlign );
-    aWriter.skipProperty(); // font weight
+    aWriter.skipProperty(); 
     aWriter.finalizeExport();
 }
 
@@ -92,7 +92,7 @@ bool AxFontData::importStdFont( BinaryInputStream& rInStrm )
         setFlag( mnFontEffects, AX_FONTDATA_UNDERLINE, getFlag( aFontInfo.mnFlags, OLE_STDFONT_UNDERLINE ) );
         setFlag( mnFontEffects, AX_FONTDATA_STRIKEOUT, getFlag( aFontInfo.mnFlags,OLE_STDFONT_STRIKE ) );
         mbDblUnderline = false;
-        // StdFont stores font height in 1/10,000 of points
+        
         setHeightPoints( getLimitedValue< sal_Int16, sal_Int32 >( aFontInfo.mnHeight / 10000, 0, SAL_MAX_INT16 ) );
         mnFontCharSet = aFontInfo.mnCharSet;
         mnHorAlign = AX_FONTDATA_LEFT;
@@ -111,9 +111,9 @@ bool AxFontData::importGuidAndFont( BinaryInputStream& rInStrm )
     return false;
 }
 
-// ============================================================================
 
-} // namespace ole
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

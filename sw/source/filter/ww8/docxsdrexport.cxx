@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <com/sun/star/drawing/XShape.hpp>
@@ -57,7 +57,7 @@ ExportDataSaveRestore::~ExportDataSaveRestore()
     m_rExport.RestoreData();
 }
 
-/// Holds data used by DocxSdrExport only.
+
 struct DocxSdrExport::Impl
 {
     DocxSdrExport& m_rSdrExport;
@@ -100,7 +100,7 @@ struct DocxSdrExport::Impl
         delete m_pTextboxAttrList, m_pTextboxAttrList = NULL;
     }
 
-    /// Writes wp wrapper code around an SdrObject, which itself is written using drawingML syntax.
+    
     void writeDMLDrawing(const SdrObject* pSdrObj, const SwFrmFmt* pFrmFmt, int nAnchorId);
     void textFrameShadow(const SwFrmFmt& rFrmFmt);
 };
@@ -202,7 +202,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         ::sax_fastparser::FastAttributeList* attrList = m_pImpl->m_pSerializer->createAttrList();
         bool bOpaque = pFrmFmt->GetOpaque().GetValue();
         if (const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
-            // SdrObjects know their layer, consider that instead of the frame format.
+            
             bOpaque = pObj->GetLayer() != pFrmFmt->GetDoc()->GetHellId() && pObj->GetLayer() != pFrmFmt->GetDoc()->GetInvisibleHellId();
         attrList->add(XML_behindDoc, bOpaque ? "0" : "1");
         attrList->add(XML_distT, OString::number(TwipsToEMU(pULSpaceItem.GetUpper())).getStr());
@@ -212,16 +212,16 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
         attrList->add(XML_simplePos, "0");
         attrList->add(XML_locked, "0");
         attrList->add(XML_layoutInCell, "1");
-        attrList->add(XML_allowOverlap, "1");   // TODO
+        attrList->add(XML_allowOverlap, "1");   
         if (const SdrObject* pObj = pFrmFmt->FindRealSdrObject())
-            // It seems 0 and 1 have special meaning: just start counting from 2 to avoid issues with that.
+            
             attrList->add(XML_relativeHeight, OString::number(pObj->GetOrdNum() + 2));
         else
-            // relativeHeight is mandatory attribute, if value is not present, we must write default value
+            
             attrList->add(XML_relativeHeight, "0");
         sax_fastparser::XFastAttributeListRef xAttrList(attrList);
         m_pImpl->m_pSerializer->startElementNS(XML_wp, XML_anchor, xAttrList);
-        m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND);   // required, unused
+        m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_simplePos, XML_x, "0", XML_y, "0", FSEND);   
         const char* relativeFromH;
         const char* relativeFromV;
         const char* alignH = NULL;
@@ -347,8 +347,8 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
                                                FSEND);
     }
 
-    // now the common parts
-    // extent of the image
+    
+    
     OString aWidth(OString::number(TwipsToEMU(rSize.Width())));
     OString aHeight(OString::number(TwipsToEMU(rSize.Height())));
     m_pImpl->m_pSerializer->singleElementNS(XML_wp, XML_extent,
@@ -356,7 +356,7 @@ void DocxSdrExport::startDMLAnchorInline(const SwFrmFmt* pFrmFmt, const Size& rS
                                             XML_cy, (rSize.Height() > 0 ? aHeight.getStr() : "0"),
                                             FSEND);
 
-    // effectExtent, extent including the effect (shadow only for now)
+    
     SvxShadowItem aShadowItem = pFrmFmt->GetShadow();
     OString aLeftExt("0"), aRightExt("0"), aTopExt("0"), aBottomExt("0");
     if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
@@ -437,7 +437,7 @@ void DocxSdrExport::writeVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFr
 
     m_pImpl->m_pSerializer->startElementNS(XML_w, XML_pict, FSEND);
     m_pImpl->m_pDrawingML->SetFS(m_pImpl->m_pSerializer);
-    // See WinwordAnchoring::SetAnchoring(), these are not part of the SdrObject, have to be passed around manually.
+    
 
     SwFmtHoriOrient rHoriOri = (rFrmFmt).GetHoriOrient();
     SwFmtVertOrient rVertOri = (rFrmFmt).GetVertOrient();
@@ -469,13 +469,13 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
 
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(pSdrObject)->getUnoShape(), uno::UNO_QUERY_THROW);
     uno::Reference<lang::XServiceInfo> xServiceInfo(xShape, uno::UNO_QUERY_THROW);
-    const char* pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingShape";
+    const char* pNamespace = "http:
     if (xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
-        pNamespace = "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup";
+        pNamespace = "http:
     else if (xServiceInfo->supportsService("com.sun.star.drawing.GraphicObjectShape"))
-        pNamespace = "http://schemas.openxmlformats.org/drawingml/2006/picture";
+        pNamespace = "http:
     pFS->startElementNS(XML_a, XML_graphic,
-                        FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                        FSNS(XML_xmlns, XML_a), "http:
                         FSEND);
     pFS->startElementNS(XML_a, XML_graphicData,
                         XML_uri, pNamespace,
@@ -486,10 +486,10 @@ void DocxSdrExport::Impl::writeDMLDrawing(const SdrObject* pSdrObject, const SwF
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
 
-    // Relative size of the drawing.
+    
     if (pSdrObject->GetRelativeWidth())
     {
-        // At the moment drawinglayer objects are always relative from page.
+        
         pFS->startElementNS(XML_wp14, XML_sizeRelH,
                             XML_relativeFrom, (pSdrObject->GetRelativeWidthRelation() == text::RelOrientation::FRAME ? "margin" : "page"),
                             FSEND);
@@ -551,7 +551,7 @@ void DocxSdrExport::Impl::textFrameShadow(const SwFrmFmt& rFrmFmt)
 
 void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFmt& rFrmFmt,const Point& rNdTopLeft, int nAnchorId)
 {
-    // Depending on the shape type, we actually don't write the shape as DML.
+    
     OUString sShapeType;
     sal_uInt32 nMirrorFlags = 0;
     uno::Reference<drawing::XShape> xShape(const_cast<SdrObject*>(sdrObj)->getUnoShape(), uno::UNO_QUERY_THROW);
@@ -578,7 +578,7 @@ void DocxSdrExport::writeDMLAndVMLDrawing(const SdrObject* sdrObj, const SwFrmFm
         writeVMLDrawing(sdrObj, rFrmFmt, rNdTopLeft);
 }
 
-// Converts ARGB transparency (0..255) to drawingml alpha (opposite, and 0..100000)
+
 OString lcl_ConvertTransparency(const Color& rColor)
 {
     if (rColor.GetTransparency() > 0)
@@ -594,10 +594,10 @@ void DocxSdrExport::writeDMLEffectLst(const SwFrmFmt& rFrmFmt)
 {
     SvxShadowItem aShadowItem = rFrmFmt.GetShadow();
 
-    // Output effects
+    
     if (aShadowItem.GetLocation() != SVX_SHADOW_NONE)
     {
-        // Distance is measured diagonally from corner
+        
         double nShadowDist = sqrt((double)aShadowItem.GetWidth()*aShadowItem.GetWidth()*2.0);
         OString aShadowDist(OString::number(TwipsToEMU(nShadowDist)));
         OString aShadowColor = msfilter::util::ConvertColor(aShadowItem.GetColor());
@@ -654,7 +654,7 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
     uno::Reference<xml::dom::XDocument> colorDom;
     uno::Reference<xml::dom::XDocument> drawingDom;
 
-    // retrieve the doms from the GrabBag
+    
     OUString pName = UNO_NAME_MISC_OBJ_INTEROPGRABBAG;
     uno::Sequence< beans::PropertyValue > propList;
     xPropSet->getPropertyValue(pName) >>= propList;
@@ -673,16 +673,16 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
             propList[nProp].Value >>= drawingDom;
     }
 
-    // check that we have the 4 mandatory XDocuments
-    // if not, there was an error importing and we won't output anything
+    
+    
     if (!dataDom.is() || !layoutDom.is() || !styleDom.is() || !colorDom.is())
         return;
 
-    // write necessary tags to document.xml
+    
     Size aSize(sdrObject->GetSnapRect().GetWidth(), sdrObject->GetSnapRect().GetHeight());
     startDMLAnchorInline(&rFrmFmt, aSize);
 
-    // generate an unique id
+    
     sax_fastparser::FastAttributeList* pDocPrAttrList = pFS->createAttrList();
     pDocPrAttrList->add(XML_id, OString::number(nAnchorId).getStr());
     OUString sName = "Diagram" + OUString::number(nAnchorId);
@@ -698,67 +698,67 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
                          FSEND);
 
     pFS->startElementNS(XML_a, XML_graphic,
-                        FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                        FSNS(XML_xmlns, XML_a), "http:
                         FSEND);
 
     pFS->startElementNS(XML_a, XML_graphicData,
-                        XML_uri, "http://schemas.openxmlformats.org/drawingml/2006/diagram",
+                        XML_uri, "http:
                         FSEND);
 
-    // add data relation
+    
     OUString dataFileName = "diagrams/data" + OUString::number(diagramCount) + ".xml";
     OString dataRelId = OUStringToOString(m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                          "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramData",
+                                          "http:
                                           dataFileName, false), RTL_TEXTENCODING_UTF8);
 
-    // add layout relation
+    
     OUString layoutFileName = "diagrams/layout" + OUString::number(diagramCount) + ".xml";
     OString layoutRelId = OUStringToOString(m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                            "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramLayout",
+                                            "http:
                                             layoutFileName, false), RTL_TEXTENCODING_UTF8);
 
-    // add style relation
+    
     OUString styleFileName = "diagrams/quickStyle" + OUString::number(diagramCount) + ".xml";
     OString styleRelId = OUStringToOString(m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                           "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramQuickStyle",
+                                           "http:
                                            styleFileName , false), RTL_TEXTENCODING_UTF8);
 
-    // add color relation
+    
     OUString colorFileName = "diagrams/colors" + OUString::number(diagramCount) + ".xml";
     OString colorRelId = OUStringToOString(m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                           "http://schemas.openxmlformats.org/officeDocument/2006/relationships/diagramColors",
+                                           "http:
                                            colorFileName, false), RTL_TEXTENCODING_UTF8);
 
     OUString drawingFileName;
     if (drawingDom.is())
     {
-        // add drawing relation
+        
         drawingFileName = "diagrams/drawing" + OUString::number(diagramCount) + ".xml";
         OUString drawingRelId = m_pImpl->m_rExport.GetFilter().addRelation(pFS->getOutputStream(),
-                                "http://schemas.microsoft.com/office/2007/relationships/diagramDrawing",
+                                "http:
                                 drawingFileName , false);
 
-        // the data dom contains a reference to the drawing relation. We need to update it with the new generated
-        // relation value before writing the dom to a file
+        
+        
 
-        // Get the dsp:damaModelExt node from the dom
+        
         uno::Reference< xml::dom::XNodeList > nodeList =
-            dataDom->getElementsByTagNameNS("http://schemas.microsoft.com/office/drawing/2008/diagram", "dataModelExt");
+            dataDom->getElementsByTagNameNS("http:
 
-        // There must be one element only so get it
+        
         uno::Reference< xml::dom::XNode > node = nodeList->item(0);
 
-        // Get the list of attributes of the node
+        
         uno::Reference< xml::dom::XNamedNodeMap > nodeMap = node->getAttributes();
 
-        // Get the node with the relId attribute and set its new value
+        
         uno::Reference< xml::dom::XNode > relIdNode = nodeMap->getNamedItem("relId");
         relIdNode->setNodeValue(drawingRelId);
     }
 
     pFS->singleElementNS(XML_dgm, XML_relIds,
-                         FSNS(XML_xmlns, XML_dgm), "http://schemas.openxmlformats.org/drawingml/2006/diagram",
-                         FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+                         FSNS(XML_xmlns, XML_dgm), "http:
+                         FSNS(XML_xmlns, XML_r), "http:
                          FSNS(XML_r, XML_dm), dataRelId.getStr(),
                          FSNS(XML_r, XML_lo), layoutRelId.getStr(),
                          FSNS(XML_r, XML_qs), styleRelId.getStr(),
@@ -772,35 +772,35 @@ void DocxSdrExport::writeDiagram(const SdrObject* sdrObject, const SwFrmFmt& rFr
     uno::Reference< xml::sax::XSAXSerializable > serializer;
     uno::Reference< xml::sax::XWriter > writer = xml::sax::Writer::create(comphelper::getProcessComponentContext());
 
-    // write data file
+    
     serializer.set(dataDom, uno::UNO_QUERY);
     writer->setOutputStream(m_pImpl->m_rExport.GetFilter().openFragmentStream("word/" + dataFileName,
                             "application/vnd.openxmlformats-officedocument.drawingml.diagramData+xml"));
     serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence< beans::StringPair >());
 
-    // write layout file
+    
     serializer.set(layoutDom, uno::UNO_QUERY);
     writer->setOutputStream(m_pImpl->m_rExport.GetFilter().openFragmentStream("word/" + layoutFileName,
                             "application/vnd.openxmlformats-officedocument.drawingml.diagramLayout+xml"));
     serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence< beans::StringPair >());
 
-    // write style file
+    
     serializer.set(styleDom, uno::UNO_QUERY);
     writer->setOutputStream(m_pImpl->m_rExport.GetFilter().openFragmentStream("word/" + styleFileName,
                             "application/vnd.openxmlformats-officedocument.drawingml.diagramStyle+xml"));
     serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence< beans::StringPair >());
 
-    // write color file
+    
     serializer.set(colorDom, uno::UNO_QUERY);
     writer->setOutputStream(m_pImpl->m_rExport.GetFilter().openFragmentStream("word/" + colorFileName,
                             "application/vnd.openxmlformats-officedocument.drawingml.diagramColors+xml"));
     serializer->serialize(uno::Reference< xml::sax::XDocumentHandler >(writer, uno::UNO_QUERY_THROW),
                           uno::Sequence< beans::StringPair >());
 
-    // write drawing file
+    
     if (drawingDom.is())
     {
         serializer.set(drawingDom, uno::UNO_QUERY);
@@ -820,11 +820,11 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
     sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
 
-    //Save data here and restore when out of scope
+    
     ExportDataSaveRestore aDataGuard(m_pImpl->m_rExport, nStt, nEnd, pParentFrame);
 
-    // When a frame has some low height, but automatically expanded due
-    // to lots of contents, this size contains the real size.
+    
+    
     const Size aSize = pParentFrame->GetSize();
 
     startDMLAnchorInline(&rFrmFmt, aSize);
@@ -836,10 +836,10 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     pFS->singleElementNS(XML_wp, XML_docPr, xDocPrAttrListRef);
 
     pFS->startElementNS(XML_a, XML_graphic,
-                        FSNS(XML_xmlns, XML_a), "http://schemas.openxmlformats.org/drawingml/2006/main",
+                        FSNS(XML_xmlns, XML_a), "http:
                         FSEND);
     pFS->startElementNS(XML_a, XML_graphicData,
-                        XML_uri, "http://schemas.microsoft.com/office/word/2010/wordprocessingShape",
+                        XML_uri, "http:
                         FSEND);
     pFS->startElementNS(XML_wps, XML_wsp, FSEND);
     pFS->singleElementNS(XML_wps, XML_cNvSpPr,
@@ -872,7 +872,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     }
     aRotation >>= nRotation ;
     OString sRotation(OString::number(nRotation));
-    // Shape properties
+    
     pFS->startElementNS(XML_wps, XML_spPr, FSEND);
     if (nRotation)
     {
@@ -940,7 +940,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     sax_fastparser::XFastAttributeListRef xBodyPrAttrList(m_pImpl->m_pBodyPrAttrList);
     m_pImpl->m_pBodyPrAttrList = NULL;
     pFS->startElementNS(XML_wps, XML_bodyPr, xBodyPrAttrList);
-    // AutoSize of the Text Frame.
+    
     const SwFmtFrmSize& rSize = rFrmFmt.GetFrmSize();
     pFS->singleElementNS(XML_a, (rSize.GetHeightSizeType() == ATT_VAR_SIZE ? XML_spAutoFit : XML_noAutofit), FSEND);
     pFS->endElementNS(XML_wps, XML_bodyPr);
@@ -949,7 +949,7 @@ void DocxSdrExport::writeDMLTextFrame(sw::Frame* pParentFrame, int nAnchorId)
     pFS->endElementNS(XML_a, XML_graphicData);
     pFS->endElementNS(XML_a, XML_graphic);
 
-    // Relative size of the Text Frame.
+    
     if (rSize.GetWidthPercent())
     {
         pFS->startElementNS(XML_wp14, XML_sizeRelH,
@@ -983,11 +983,11 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
     sal_uLong nStt = pNodeIndex ? pNodeIndex->GetIndex()+1                  : 0;
     sal_uLong nEnd = pNodeIndex ? pNodeIndex->GetNode().EndOfSectionIndex() : 0;
 
-    //Save data here and restore when out of scope
+    
     ExportDataSaveRestore aDataGuard(m_pImpl->m_rExport, nStt, nEnd, pParentFrame);
 
-    // When a frame has some low height, but automatically expanded due
-    // to lots of contents, this size contains the real size.
+    
+    
     const Size aSize = pParentFrame->GetSize();
     m_pImpl->m_pFlyFrameSize = &aSize;
 
@@ -1041,7 +1041,7 @@ void DocxSdrExport::writeVMLTextFrame(sw::Frame* pParentFrame)
 
 bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttributeList* pTextboxAttrList)
 {
-    // The intended usage is to pass either a valid VML or DML attribute list.
+    
     assert(pTextboxAttrList || m_pImpl->m_pBodyPrAttrList);
 
     if (!pStartNode->IsTxtNode())
@@ -1049,7 +1049,7 @@ bool DocxSdrExport::checkFrameBtlr(SwNode* pStartNode, sax_fastparser::FastAttri
 
     SwTxtNode* pTxtNode = static_cast<SwTxtNode*>(pStartNode);
 
-    const SfxPoolItem* pItem = 0; // explicitly init to avoid warnings
+    const SfxPoolItem* pItem = 0; 
     bool bItemSet = false;
     if (pTxtNode->HasSwAttrSet())
     {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -53,14 +53,14 @@ namespace backend {
 namespace help {
 namespace {
 
-//==============================================================================
+
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 {
     class PackageImpl : public ::dp_registry::backend::Package
     {
         BackendImpl * getMyBackend() const;
 
-        // Package
+        
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -82,13 +82,13 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
         bool extensionContainsCompiledHelp();
 
-        //XPackage
+        
         virtual css::beans::Optional< OUString > SAL_CALL getRegistrationDataURL()
             throw (deployment::ExtensionRemovedException, css::uno::RuntimeException);
     };
     friend class PackageImpl;
 
-    // PackageRegistryBackend
+    
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         sal_Bool bRemoved, OUString const & identifier,
@@ -116,7 +116,7 @@ public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
 
-    // XPackageRegistry
+    
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
         getSupportedPackageTypes() throw (RuntimeException);
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
@@ -125,7 +125,7 @@ public:
 
 };
 
-//______________________________________________________________________________
+
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
@@ -143,18 +143,18 @@ BackendImpl::BackendImpl(
         m_backendDb.reset(
             new HelpBackendDb(getComponentContext(), dbFile));
 
-        //clean up data folders which are no longer used.
-        //This must not be done in the same process where the help files
-        //are still registers. Only after revoking and restarting OOo the folders
-        //can be removed. This works now, because the extension manager is a singleton
-        //and the backends are only create once per process.
+        
+        
+        
+        
+        
         ::std::list<OUString> folders = m_backendDb->getAllDataUrls();
         deleteUnusedFolders(OUString(), folders);
    }
 }
 
-// XPackageRegistry
-//______________________________________________________________________________
+
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -169,14 +169,14 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
         m_backendDb->removeEntry(url);
 }
 
-// PackageRegistryBackend
-//______________________________________________________________________________
+
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
     sal_Bool bRemoved, OUString const & identifier,
     Reference<XCommandEnvironment> const & xCmdEnv )
 {
-    // we don't support auto detection:
+    
     if (mediaType_.isEmpty())
         throw lang::IllegalArgumentException(
             StrCannotDetectMediaType::get() + url,
@@ -257,15 +257,15 @@ BackendImpl::PackageImpl::PackageImpl(
 {
 }
 
-// Package
+
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
     if (NULL == pBackend)
     {
-        //May throw a DisposedException
+        
         check();
-        //We should never get here...
+        
         throw RuntimeException("Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
     }
@@ -280,22 +280,22 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
     ::osl::Directory helpFolder(aExpandedHelpURL);
     if ( helpFolder.open() == ::osl::File::E_None)
     {
-        //iterate over the contents of the help folder
-        //We assume that all folders withing the help folder contain language specific
-        //help files. If just one of them does not contain compiled help then this
-        //function returns false.
+        
+        
+        
+        
         ::osl::DirectoryItem item;
         ::osl::File::RC errorNext = ::osl::File::E_None;
         while ((errorNext = helpFolder.getNextItem(item)) == ::osl::File::E_None)
         {
-            //No find the language folders
+            
             ::osl::FileStatus stat(osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName |osl_FileStatus_Mask_FileURL);
             if (item.getFileStatus(stat) == ::osl::File::E_None)
             {
                 if (stat.getFileType() != ::osl::FileStatus::Directory)
                     continue;
 
-                //look if there is the folder help.idxl in the language folder
+                
                 OUString compUrl(stat.getFileURL() + "/help.idxl");
                 ::osl::Directory compiledFolder(compUrl);
                 if (compiledFolder.open() != ::osl::File::E_None)
@@ -306,7 +306,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
             }
             else
             {
-                //Error
+                
                 OSL_ASSERT(false);
                 bCompiled = false;
                 break;
@@ -315,7 +315,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
         if (errorNext != ::osl::File::E_NOENT
             && errorNext != ::osl::File::E_None)
         {
-            //Error
+            
             OSL_ASSERT(false);
             bCompiled = false;
         }
@@ -323,7 +323,7 @@ bool BackendImpl::PackageImpl::extensionContainsCompiledHelp()
     return bCompiled;
 }
 
-//______________________________________________________________________________
+
 beans::Optional< beans::Ambiguous<sal_Bool> >
 BackendImpl::PackageImpl::isRegistered_(
     ::osl::ResettableMutexGuard &,
@@ -339,7 +339,7 @@ BackendImpl::PackageImpl::isRegistered_(
     return beans::Optional< beans::Ambiguous<sal_Bool> >( true, beans::Ambiguous<sal_Bool>( bReg, false ) );
 }
 
-//______________________________________________________________________________
+
 void BackendImpl::PackageImpl::processPackage_(
     ::osl::ResettableMutexGuard &,
     bool doRegisterPackage,
@@ -379,7 +379,7 @@ void BackendImpl::implProcessHelp(
     OSL_ASSERT(xPackage.is());
     if (doRegisterPackage)
     {
-        //revive already processed help if possible
+        
         if ( !activateEntry(xPackage->getURL()))
         {
             HelpBackendDb::Data data;
@@ -402,7 +402,7 @@ void BackendImpl::implProcessHelp(
                                                            makeAny( uno::Exception( aErrStr, oWeakThis ) ) );
                 }
 
-                // Scan languages
+                
                 Sequence< OUString > aLanguageFolderSeq = xSFA->getFolderContents( aExpandedHelpURL, true );
                 sal_Int32 nLangCount = aLanguageFolderSeq.getLength();
                 const OUString* pSeq = aLanguageFolderSeq.getConstArray();
@@ -413,14 +413,14 @@ void BackendImpl::implProcessHelp(
                     {
                         std::vector< OUString > aXhpFileVector;
 
-                        // calculate jar file URL
+                        
                         sal_Int32 indexStartSegment = aLangURL.lastIndexOf('/');
-                        // for example "/en"
+                        
                         OUString langFolderURLSegment(
                             aLangURL.copy(
                                 indexStartSegment + 1, aLangURL.getLength() - indexStartSegment - 1));
 
-                        //create the folder in the "temporary folder"
+                        
                         ::ucbhelper::Content langFolderContent;
                         const OUString langFolderDest = makeURL(sHelpFolder, langFolderURLSegment);
                         const OUString langFolderDestExpanded = ::dp_misc::expandUnoRcUrl(langFolderDest);
@@ -439,7 +439,7 @@ void BackendImpl::implProcessHelp(
                             aJarFile, rtl_UriCharClassPchar,
                             rtl_UriEncodeIgnoreEscapes,
                             RTL_TEXTENCODING_UTF8 );
-                        OUString aDestBasePath = "vnd.sun.star.zip://";
+                        OUString aDestBasePath = "vnd.sun.star.zip:
                         aDestBasePath += aEncodedJarFilePath;
                         aDestBasePath += "/" ;
 
@@ -456,14 +456,14 @@ void BackendImpl::implProcessHelp(
 
                             implCollectXhpFiles( aSubFolderURL, aXhpFileVector );
 
-                            // Copy to package (later: move?)
+                            
                             OUString aDestPath = aDestBasePath;
                             OUString aPureFolderName = aSubFolderURL.copy( nLenLangFolderURL );
                             aDestPath += aPureFolderName;
                             xSFA->copy( aSubFolderURL, aDestPath );
                         }
 
-                        // Call compiler
+                        
                         sal_Int32 nXhpFileCount = aXhpFileVector.size();
                         OUString* pXhpFiles = new OUString[nXhpFileCount];
                         for( sal_Int32 iXhp = 0 ; iXhp < nXhpFileCount ; ++iXhp )
@@ -514,7 +514,7 @@ void BackendImpl::implProcessHelp(
                             {
                                 aErrStr = getResourceString( nErrStrId );
 
-                                // Remoce CR/LF
+                                
                                 OUString aErrMsg( aErrorInfo.m_aErrorMsg );
                                 sal_Unicode nCR = 13, nLF = 10;
                                 sal_Int32 nSearchCR = aErrMsg.indexOf( nCR );
@@ -557,11 +557,11 @@ void BackendImpl::implProcessHelp(
                 (void) xCmdEnv;
 #endif
             }
-                //Writing the data entry replaces writing the flag file. If we got to this
-                //point the registration was successful.
+                
+                
             addDataToDb(xPackage->getURL(), data);
         }
-    } //if (doRegisterPackage)
+    } 
     else
     {
         revokeEntryFromDb(xPackage->getURL());
@@ -573,7 +573,7 @@ void BackendImpl::implCollectXhpFiles( const OUString& aDir,
 {
     Reference< ucb::XSimpleFileAccess3 > xSFA = getFileAccess();
 
-    // Scan xhp files recursively
+    
     Sequence< OUString > aSeq = xSFA->getFolderContents( aDir, true );
     sal_Int32 nCount = aSeq.getLength();
     const OUString* pSeq = aSeq.getConstArray();
@@ -618,7 +618,7 @@ Reference< ucb::XSimpleFileAccess3 > BackendImpl::getFileAccess( void )
     return m_xSFA;
 }
 
-} // anon namespace
+} 
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
@@ -627,8 +627,8 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.help.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
-} // namespace help
-} // namespace backend
-} // namespace dp_registry
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

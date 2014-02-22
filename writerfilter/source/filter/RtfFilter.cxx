@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustring.hxx>
@@ -86,7 +86,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
         aMediaDesc.addInputStream();
         aMediaDesc[ utl::MediaDescriptor::PROP_INPUTSTREAM() ] >>= xInputStream;
 
-        // If this is set, write to this file, instead of the real document during paste.
+        
         char* pEnv = getenv("SW_DEBUG_RTF_PASTE_TO");
         OUString aOutStr;
         if (!bIsNewDoc && pEnv && utl::LocalFileHelper::ConvertPhysicalNameToURL(OStringToOUString(pEnv, RTL_TEXTENCODING_UTF8), aOutStr))
@@ -98,7 +98,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
             return true;
         }
 
-        // If this is set, read from this file, instead of the real clipboard during paste.
+        
         pEnv = getenv("SW_DEBUG_RTF_PASTE_FROM");
         if (!bIsNewDoc && pEnv)
         {
@@ -129,7 +129,7 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
     }
     catch (const io::WrongFormatException& e)
     {
-        // cannot throw WrongFormatException directly :(
+        
         throw lang::WrappedTargetRuntimeException("",
                 static_cast<OWeakObject*>(this), uno::makeAny(e));
     }
@@ -159,8 +159,8 @@ void RtfFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc
 
 void RtfFilter::initialize(const uno::Sequence< uno::Any >& /*aArguments*/) throw(uno::Exception, uno::RuntimeException)
 {
-    // The DOCX exporter here extracts 'type' of the filter, ie 'Word' or
-    // 'Word Template' but we don't need it for RTF.
+    
+    
 }
 
 OUString RtfFilter::getImplementationName() throw(uno::RuntimeException)

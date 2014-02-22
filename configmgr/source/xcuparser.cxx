@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -180,7 +180,7 @@ bool XcuParser::startElement(
             }
             break;
         case Node::KIND_ROOT:
-            assert(false); // this cannot happen
+            assert(false); 
             break;
         }
     }
@@ -207,8 +207,8 @@ void XcuParser::endElement(xmlreader::XmlReader const &) {
     }
     if (pop && !path_.empty()) {
         path_.pop_back();
-            // </item> will pop less than <item> pushed, but that is harmless,
-            // as the next <item> will reset path_
+            
+            
     }
 }
 
@@ -561,8 +561,8 @@ void XcuParser::handleLocpropValue(
         }
         break;
     case OPERATION_REMOVE:
-        //TODO: only allow if parent.op == OPERATION_FUSE
-        //TODO: disallow removing when e.g. lang=""?
+        
+        
         if (i != members.end()) {
             members.erase(i);
         }
@@ -614,8 +614,8 @@ void XcuParser::handleGroupProp(
     }
     if (trackPath_) {
         path_.push_back(name);
-        //TODO: This ignores locprop values for which specific include paths
-        // exist (i.e., for which contains(locprop path) = CONTAINS_SUBNODES):
+        
+        
         if (partial_ != 0 &&
             partial_->contains(path_) != Partial::CONTAINS_NODE)
         {
@@ -672,7 +672,7 @@ void XcuParser::handleUnknownGroupProp(
             recordModification(false);
             break;
         }
-        // fall through
+        
     default:
         SAL_WARN(
             "configmgr",
@@ -975,10 +975,10 @@ void XcuParser::handleSetNode(xmlreader::XmlReader & reader, SetNode * set) {
         break;
     case OPERATION_REMOVE:
         {
-            // Ignore removal of unknown members and members made mandatory in
-            // this or a lower layer; forget about user-layer removals that no
-            // longer remove anything (so that paired additions/removals in the
-            // user layer do not grow registrymodifications.xcu unbounded):
+            
+            
+            
+            
             bool known = i != members.end();
             if (known &&
                 (mandatoryLayer == Data::NO_LAYER ||

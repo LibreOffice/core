@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <cstdlib>
@@ -19,7 +19,7 @@
 
 namespace
 {
-    //Find ascii escaped unicode
+    
     static sal_Int32 lcl_IndexOfUnicode(
         const OString& rSource, const sal_Int32 nFrom = 0 )
     {
@@ -40,7 +40,7 @@ namespace
         return bIsUnicode ? nIndex : -1;
     }
 
-    //Convert ascii escaped unicode to utf-8
+    
     static OString lcl_ConvertToUTF8( const OString& rText )
     {
         OString sResult = rText;
@@ -58,7 +58,7 @@ namespace
         return sResult;
     }
 
-    //Escape unicode characters
+    
     static void lcl_PrintJavaStyle( const OString& rText, std::ofstream &rOfstream )
     {
         const OUString sTemp =
@@ -83,7 +83,7 @@ namespace
     }
 }
 
-//Open source file and store its lines
+
 PropParser::PropParser(
     const OString& rInputFile, const OString& rLang,
     const bool bMergeMode )
@@ -122,7 +122,7 @@ PropParser::~PropParser()
 {
 }
 
-//Extract strings form source file
+
 void PropParser::Extract( const OString& rPOFile )
 {
     assert( m_bIsInitialized );
@@ -153,7 +153,7 @@ void PropParser::Extract( const OString& rPOFile )
     aPOStream.close();
 }
 
-//Merge strings to source file
+
 void PropParser::Merge( const OString &rMergeSrc, const OString &rDestinationFile )
 {
     assert( m_bIsInitialized );

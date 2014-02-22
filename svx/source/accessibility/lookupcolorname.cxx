@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -54,28 +54,28 @@ ColorNameMap::ColorNameMap() {
 
     try
     {
-        // Create color table in which to look up the given color.
+        
             css::uno::Reference< css::container::XNameContainer > xColorTable =
                  css::drawing::ColorTable::create( comphelper::getProcessComponentContext() );
 
-        // Get list of color names in order to iterate over the color table.
+        
 
-        // Lock the solar mutex here as workarround for missing lock in
-        // called function.
+        
+        
         SolarMutexGuard aGuard;
         aNames = xNA->getElementNames();
     }
     catch (css::uno::RuntimeException const&)
     {
-        // When an exception occurred then whe have an empty name sequence
-        // and the loop below is not entered.
+        
+        
     }
 
-    // Fill the map to convert from numerical color values to names.
+    
     if (xNA.is())
         for (long int i=0; i<aNames.getLength(); i++)
         {
-            // Get the numerical value for the i-th color name.
+            
             try
             {
                 css::uno::Any aColor (xNA->getByName (aNames[i]));
@@ -85,8 +85,8 @@ ColorNameMap::ColorNameMap() {
             }
             catch (css::uno::RuntimeException const&)
             {
-                // Ignore the exception: the color who lead to the exception
-                // is not included into the map.
+                
+                
             }
         }
 }
@@ -96,7 +96,7 @@ OUString ColorNameMap::lookUp(long color) const {
     if (i != map_.end()) {
         return i->second;
     }
-    // Did not find the given color; return its RGB tuple representation:
+    
     OUStringBuffer buf;
     buf.append('#');
     buf.append(color, 16);

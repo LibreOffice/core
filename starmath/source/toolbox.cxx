@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/eitem.hxx>
@@ -32,7 +32,7 @@
 #include "view.hxx"
 
 
-////////////////////////////////////////////////////////////
+
 
 static sal_uInt16  GetImageListRID( sal_uInt16 nCategoryRID )
 {
@@ -102,7 +102,7 @@ static sal_uInt16  GetCategoryRID( sal_uInt16 nResId )
 }
 
 
-////////////////////////////////////////////////////////////
+
 
 
 SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
@@ -114,7 +114,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pTmpBindings,
 {
     SAL_INFO( "starmath", "starmath: SmToolBoxWindow::SmToolBoxWindow" );
 
-    // allow for cursor travelling between toolbox and sub-categories
+    
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
     nActiveCategoryRID = USHRT_MAX;
@@ -158,12 +158,12 @@ SmViewShell * SmToolBoxWindow::GetView()
 
 const ImageList * SmToolBoxWindow::GetImageList( sal_uInt16 nResId )
 {
-    // creates the image list via its resource id and stores that
-    // list for later use in the respective array.
+    
+    
 
     const ImageList *pIL = 0;
 
-    // get index to use
+    
     sal_uInt16 nCategoryRID = GetCategoryRID( nResId );
     sal_Int16 nIndex = GetToolBoxCategoriesIndex( nCategoryRID );
     if (nIndex == -1 && (nResId == RID_IL_CATALOG))
@@ -184,13 +184,13 @@ const ImageList * SmToolBoxWindow::GetImageList( sal_uInt16 nResId )
 
 void SmToolBoxWindow::ApplyImageLists( sal_uInt16 nCategoryRID )
 {
-    // set image list for toolbox 'catalog'
+    
     const ImageList *pImageList = GetImageList( RID_IL_CATALOG );
     OSL_ENSURE( pImageList, "image list missing" );
     if (pImageList)
         aToolBoxCat.SetImageList( *pImageList );
 
-    // set image list for active (visible) category of 'catalog'
+    
     sal_Int16 nIdx = GetToolBoxCategoriesIndex( nCategoryRID );
     sal_uInt16 nResId = GetImageListRID( nCategoryRID );
     pImageList = GetImageList( nResId );
@@ -214,11 +214,11 @@ void SmToolBoxWindow::StateChanged( StateChangedType nStateChange )
     {
         SetCategory( nActiveCategoryRID == USHRT_MAX ? RID_UNBINOPS_CAT : nActiveCategoryRID );
 
-        // calculate initial position to be used after creation of the window...
+        
         AdjustPosSize( bSetPosition );
         bSetPosition = false;
     }
-    //... otherwise the base class will remember the last position of the window
+    
     SfxFloatingWindow::StateChanged( nStateChange );
 }
 
@@ -229,22 +229,22 @@ void SmToolBoxWindow::AdjustPosSize( bool bSetPos )
     Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( 7 /* see nLines in SetCategory*/ ) );
     OSL_ENSURE( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
 
-    // catalog settings
+    
     aToolBoxCat.SetPosPixel( Point(0, 3) );
     aToolBoxCat.SetSizePixel( aCatSize );
-    // settings for catalog / category delimiter
+    
     Point aP( aToolBoxCat_Delim.GetPosPixel() );
     aP.X() = 0;
     aToolBoxCat_Delim.SetPosPixel( aP );
     aToolBoxCat_Delim.SetSizePixel( Size( aCatSize.Width(), aToolBoxCat_Delim.GetSizePixel().Height() ) );
-    // category settings
+    
     aP.Y() += aToolBoxCat_Delim.GetSizePixel().Height();
     for (int i = 0;  i < NUM_TBX_CATEGORIES;  ++i)
     {
         vToolBoxCategories[i]->SetPosPixel( aP );
         vToolBoxCategories[i]->SetSizePixel( aCmdSize );
     }
-    // main window settings
+    
     Size    aWndSize ( aCatSize.Width(), pToolBoxCmd->GetPosPixel().Y() + pToolBoxCmd->GetSizePixel().Height() + 3);
     SetOutputSizePixel( aWndSize );
 
@@ -280,8 +280,8 @@ bool SmToolBoxWindow::Close()
 
 void SmToolBoxWindow::GetFocus()
 {
-    // give focus to category toolbox
-    // (allow for cursor travelling when a category is selected with the mouse)
+    
+    
     aToolBoxCat.GrabFocus();
 }
 
@@ -291,7 +291,7 @@ void SmToolBoxWindow::SetCategory(sal_uInt16 nCategoryRID)
         ApplyImageLists( nCategoryRID );
 
     sal_uInt16 nLines;
-    // check for valid resource id
+    
     switch (nCategoryRID)
     {
         case RID_UNBINOPS_CAT :     nLines = 4; break;
@@ -304,7 +304,7 @@ void SmToolBoxWindow::SetCategory(sal_uInt16 nCategoryRID)
         case RID_BRACKETS_CAT:      nLines = 5; break;
         case RID_FORMAT_CAT:        nLines = 3; break;
         default:
-            // nothing to be done
+            
             return;
     }
 
@@ -315,11 +315,11 @@ void SmToolBoxWindow::SetCategory(sal_uInt16 nCategoryRID)
     if (nIdx >= 0)
         pToolBoxCmd = vToolBoxCategories[nIdx];
 
-    // calculate actual size of window to use
+    
     Size aCatSize( aToolBoxCat.CalcWindowSizePixel( 2 ) );
     Size aCmdSize( pToolBoxCmd->CalcWindowSizePixel( nLines ) );
         OSL_ENSURE( aCatSize.Width() == aCmdSize.Width(), "width mismatch" );
-    // main window settings
+    
     Size  aWndSize ( aCatSize.Width(), pToolBoxCmd->GetPosPixel().Y() + aCmdSize.Height() + 3);
     SetOutputSizePixel( aWndSize );
 

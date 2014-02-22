@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "bridges/cpp_uno/shared/cppinterfaceproxy.hxx"
@@ -124,8 +124,8 @@ void CppInterfaceProxy::acquireProxy() SAL_THROW(())
 {
     if (1 == osl_atomic_increment( &nRef ))
     {
-        // rebirth of proxy zombie
-        // register at cpp env
+        
+        
         void * pThis = castProxyToInterface( this );
         (*pBridge->getCppEnv()->registerProxyInterface)(
             pBridge->getCppEnv(), &pThis, freeCppInterfaceProxy, oid.pData,
@@ -136,9 +136,9 @@ void CppInterfaceProxy::acquireProxy() SAL_THROW(())
 
 void CppInterfaceProxy::releaseProxy() SAL_THROW(())
 {
-    if (! osl_atomic_decrement( &nRef )) // last release
+    if (! osl_atomic_decrement( &nRef )) 
     {
-        // revoke from cpp env
+        
         (*pBridge->getCppEnv()->revokeInterface)(
             pBridge->getCppEnv(), castProxyToInterface( this ) );
     }
@@ -174,8 +174,8 @@ com::sun::star::uno::XInterface * CppInterfaceProxy::castProxyToInterface(
 
 CppInterfaceProxy * CppInterfaceProxy::castInterfaceToProxy(void * pInterface)
 {
-    // pInterface == &pProxy->vtables (this emulated offsetof is not truly
-    // portable):
+    
+    
     char const * const base = reinterpret_cast< char const * >(16);
     std::ptrdiff_t const offset = reinterpret_cast< char const * >(
         &reinterpret_cast< CppInterfaceProxy const * >(base)->vtables) - base;

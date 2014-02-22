@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/range/b2drange.hxx>
@@ -39,9 +39,9 @@ namespace basegfx
         {
             o_rRanges.clear();
 
-            // special-casing the empty rect case (this will fail most
-            // of the times below, because of the DBL_MIN/MAX special
-            // values denoting emptiness in the rectangle.
+            
+            
+            
             if( a.isEmpty() )
             {
                 o_rRanges.push_back( b );
@@ -68,8 +68,8 @@ namespace basegfx
             const typename RangeType::TraitsType::DifferenceType    w2( (ax + aw > bx + bw) ? ax + aw - bx - bw : 0 );
             const typename RangeType::TraitsType::DifferenceType    h12( (h0 + h3 < ah) ? ah - h0 - h3 : 0 );
 
-            // TODO(E2): Use numeric_cast instead of static_cast here,
-            // need range checks!
+            
+            
             if (h0 > 0)
                 o_rRanges.push_back(
                     RangeType(ax,ay,
@@ -117,6 +117,6 @@ namespace basegfx
         return o_rResult;
     }
 
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

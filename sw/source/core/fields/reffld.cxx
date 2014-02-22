@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/ReferenceFieldPart.hpp>
@@ -72,13 +72,13 @@ static void lcl_GetLayTree( const SwFrm* pFrm, std::vector<const SwFrm*>& rArr )
 {
     while( pFrm )
     {
-        if( pFrm->IsBodyFrm() ) // unspectacular
+        if( pFrm->IsBodyFrm() ) 
             pFrm = pFrm->GetUpper();
         else
         {
             rArr.push_back( pFrm );
 
-            // this is the last page
+            
             if( pFrm->IsPageFrm() )
                 break;
 
@@ -112,7 +112,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
     sal_Bool bVert = sal_False;
     sal_Bool bR2L = sal_False;
 
-    // Loop as long as a frame does not equal?
+    
     while( nRefCnt && nCnt && aRefArr[ nRefCnt ] == aArr[ nCnt ] )
     {
         const SwFrm* pTmpFrm = aArr[ nCnt ];
@@ -121,7 +121,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
         --nCnt, --nRefCnt;
     }
 
-    // If a counter overflows?
+    
     if( aRefArr[ nRefCnt ] == aArr[ nCnt ] )
     {
         if( nCnt )
@@ -133,14 +133,14 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
     const SwFrm* pRefFrm = aRefArr[ nRefCnt ];
     const SwFrm* pFldFrm = aArr[ nCnt ];
 
-    // different frames, check their Y-/X-position
+    
     bool bRefIsLower = false;
     if( ( FRM_COLUMN | FRM_CELL ) & pFldFrm->GetType() ||
         ( FRM_COLUMN | FRM_CELL ) & pRefFrm->GetType() )
     {
         if( pFldFrm->GetType() == pRefFrm->GetType() )
         {
-            // here, the X-pos is more important
+            
             if( bVert )
             {
                 if( bR2L )
@@ -168,7 +168,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
             pRefFrm = aRefArr[ nRefCnt - 1 ];
     }
 
-    if( pRefFrm ) // misuse as flag
+    if( pRefFrm ) 
     {
         if( bVert )
         {
@@ -193,7 +193,7 @@ bool IsFrameBehind( const SwTxtNode& rMyNd, sal_Int32 nMySttPos,
     return bRefIsLower;
 }
 
-/// get references
+
 SwGetRefField::SwGetRefField( SwGetRefFieldType* pFldType,
                               const OUString& rSetRef, sal_uInt16 nSubTyp,
                               sal_uInt16 nSeqenceNo, sal_uLong nFmt )
@@ -223,7 +223,7 @@ void SwGetRefField::SetSubType( sal_uInt16 n )
     nSubType = n;
 }
 
-// #i81002#
+
 bool SwGetRefField::IsRefToHeadingCrossRefBookmark() const
 {
     return GetSubType() == REF_BOOKMARK &&
@@ -243,7 +243,7 @@ const SwTxtNode* SwGetRefField::GetReferencedTxtNode() const
     return SwGetRefFieldType::FindAnchor( pDoc, sSetRefName, nSubType, nSeqNo, &nDummy );
 }
 
-// #i85090#
+
 OUString SwGetRefField::GetExpandedTxtOfReferencedTxtNode() const
 {
     const SwTxtNode* pReferencedTxtNode( GetReferencedTxtNode() );
@@ -267,34 +267,34 @@ OUString SwGetRefField::GetFieldName() const
     return Expand();
 }
 
-// #i81002# - parameter <pFldTxtAttr> added
+
 void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 {
     sTxt = OUString();
 
     SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
-    // finding the reference target (the number)
+    
     sal_Int32 nNumStart = -1;
     sal_Int32 nNumEnd = -1;
     SwTxtNode* pTxtNd = SwGetRefFieldType::FindAnchor(
         pDoc, sSetRefName, nSubType, nSeqNo, &nNumStart, &nNumEnd
     );
-    // not found?
+    
     if ( !pTxtNd )
     {
         sTxt = SwViewShell::GetShellRes()->aGetRefFld_RefItemNotFound;
         return ;
     }
-    // where is the category name (e.g. "Illustration")?
+    
     OUString const sText = pTxtNd->GetTxt();
     const sal_Int32 nCatStart = sText.indexOf(sSetRefName);
     const bool bHasCat = nCatStart>=0;
     const sal_Int32 nCatEnd = bHasCat ? nCatStart + sSetRefName.getLength() : -1;
 
-    // length of the referenced text
+    
     const sal_Int32 nLen = sText.getLength();
 
-    // which format?
+    
     switch( GetFormat() )
     {
     case REF_CONTENT:
@@ -302,7 +302,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     case REF_ONLYCAPTION:
     case REF_ONLYSEQNO:
         {
-            // needed part of Text
+            
             sal_Int32 nStart;
             sal_Int32 nEnd;
 
@@ -312,7 +312,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
                 switch( GetFormat() )
                 {
-                // "Category and Number"
+                
                 case REF_ONLYNUMBER:
                     if (bHasCat) {
                         nStart = std::min(nNumStart, nCatStart);
@@ -323,13 +323,13 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                     }
                     break;
 
-                // "Caption Text"
+                
                 case REF_ONLYCAPTION: {
-                    // next alphanumeric character after category+number
+                    
                     if (const SwTxtAttr* const pTxtAttr =
                         pTxtNd->GetTxtAttrForCharAt(nNumStart, RES_TXTATR_FIELD)
                     ) {
-                        // start searching from nFrom
+                        
                         const sal_Int32 nFrom = bHasCat
                             ? std::max(nNumStart + 1, nCatEnd)
                             : nNumStart + 1;
@@ -341,13 +341,13 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                     break;
                 }
 
-                // "Numbering"
+                
                 case REF_ONLYSEQNO:
                     nStart = nNumStart;
                     nEnd = std::min(nStart + 1, nLen);
                     break;
 
-                // "Reference" (whole Text)
+                
                 default:
                     nStart = 0;
                     nEnd = nLen;
@@ -357,8 +357,8 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
             case REF_BOOKMARK:
                 nStart = nNumStart;
-                // Text steht ueber verschiedene Nodes verteilt.
-                // Gesamten Text oder nur bis zum Ende vom Node?
+                
+                
                 nEnd = nNumEnd<0 ? nLen : nNumEnd;
                 break;
 
@@ -369,7 +369,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
             case REF_FOOTNOTE:
             case REF_ENDNOTE:
-                // die Nummer oder den NumString besorgen
+                
                 for( unsigned i = 0; i < pDoc->GetFtnIdxs().size(); ++i )
                 {
                     SwTxtFtn* const pFtnIdx = pDoc->GetFtnIdxs()[i];
@@ -387,11 +387,11 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                 break;
             }
 
-            if( nStart != nEnd ) // a section?
+            if( nStart != nEnd ) 
             {
                 sTxt = pTxtNd->GetExpandTxt( nStart, nEnd - nStart );
 
-                // remove all special characters (replace them with blanks)
+                
                 if( !sTxt.isEmpty() )
                 {
                     sTxt = comphelper::string::remove(sTxt, 0xad);
@@ -438,7 +438,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
     case REF_CHAPTER:
         {
-            // a bit tricky: search any frame
+            
             const SwFrm* pFrm = pTxtNd->getLayoutFrm( pDoc->GetCurrentLayout() );
             if( pFrm )
             {
@@ -453,15 +453,15 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
 
     case REF_UPDOWN:
         {
-            // #i81002#
-            // simplified: use parameter <pFldTxtAttr>
+            
+            
             if( !pFldTxtAttr || !pFldTxtAttr->GetpTxtNode() )
                 break;
 
             LanguageTag aLanguageTag( GetLanguage());
             LocaleDataWrapper aLocaleData( aLanguageTag );
 
-            // first a "short" test - in case both are in the same node
+            
             if( pFldTxtAttr->GetpTxtNode() == pTxtNd )
             {
                 sTxt = nNumStart < *pFldTxtAttr->GetStart()
@@ -476,7 +476,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
                         : aLocaleData.getBelowWord();
         }
         break;
-    // #i81002#
+    
     case REF_NUMBER:
     case REF_NUMBER_NO_CONTEXT:
     case REF_NUMBER_FULL_CONTEXT:
@@ -493,7 +493,7 @@ void SwGetRefField::UpdateField( const SwTxtFld* pFldTxtAttr )
     }
 }
 
-// #i81002#
+
 OUString SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
                                      const SwTxtNode& rTxtNodeOfReferencedItem,
                                      const sal_uInt32 nRefNumFormat ) const
@@ -504,13 +504,13 @@ OUString SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
         OSL_ENSURE( rTxtNodeOfReferencedItem.GetNum(),
                 "<SwGetRefField::MakeRefNumStr(..)> - referenced paragraph has number, but no <SwNodeNum> instance --> please inform OD!" );
 
-        // Determine, up to which level the superior list labels have to be
-        // included - default is to include all superior list labels.
+        
+        
         sal_uInt8 nRestrictInclToThisLevel( 0 );
-        // Determine for format REF_NUMBER the level, up to which the superior
-        // list labels have to be restricted, if the text node of the reference
-        // field and the text node of the referenced item are in the same
-        // document context.
+        
+        
+        
+        
         if ( nRefNumFormat == REF_NUMBER &&
              rTxtNodeOfField.FindFlyStartNode()
                             == rTxtNodeOfReferencedItem.FindFlyStartNode() &&
@@ -552,7 +552,7 @@ OUString SwGetRefField::MakeRefNumStr( const SwTxtNode& rTxtNodeOfField,
             }
         }
 
-        // Determine, if superior list labels have to be included
+        
         const bool bInclSuperiorNumLabels(
             ( nRestrictInclToThisLevel < rTxtNodeOfReferencedItem.GetActualListLevel() &&
               ( nRefNumFormat == REF_NUMBER || nRefNumFormat == REF_NUMBER_FULL_CONTEXT ) ) );
@@ -577,13 +577,13 @@ SwField* SwGetRefField::Copy() const
     return pFld;
 }
 
-/// get reference name
+
 OUString SwGetRefField::GetPar1() const
 {
     return sSetRefName;
 }
 
-/// set reference name
+
 void SwGetRefField::SetPar1( const OUString& rName )
 {
     sSetRefName = rName;
@@ -611,7 +611,7 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
             case REF_ONLYNUMBER : nPart = ReferenceFieldPart::CATEGORY_AND_NUMBER ; break;
             case REF_ONLYCAPTION: nPart = ReferenceFieldPart::ONLY_CAPTION        ; break;
             case REF_ONLYSEQNO  : nPart = ReferenceFieldPart::ONLY_SEQUENCE_NUMBER; break;
-            // #i81002#
+            
             case REF_NUMBER:              nPart = ReferenceFieldPart::NUMBER;              break;
             case REF_NUMBER_NO_CONTEXT:   nPart = ReferenceFieldPart::NUMBER_NO_CONTEXT;   break;
             case REF_NUMBER_FULL_CONTEXT: nPart = ReferenceFieldPart::NUMBER_FULL_CONTEXT; break;
@@ -683,7 +683,7 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             case ReferenceFieldPart::CATEGORY_AND_NUMBER:   nPart = REF_ONLYNUMBER; break;
             case ReferenceFieldPart::ONLY_CAPTION:          nPart = REF_ONLYCAPTION; break;
             case ReferenceFieldPart::ONLY_SEQUENCE_NUMBER : nPart = REF_ONLYSEQNO; break;
-            // #i81002#
+            
             case ReferenceFieldPart::NUMBER:              nPart = REF_NUMBER;              break;
             case ReferenceFieldPart::NUMBER_NO_CONTEXT:   nPart = REF_NUMBER_NO_CONTEXT;   break;
             case ReferenceFieldPart::NUMBER_FULL_CONTEXT: nPart = REF_NUMBER_FULL_CONTEXT; break;
@@ -748,7 +748,7 @@ void SwGetRefField::ConvertProgrammaticToUIName()
     {
         SwDoc* pDoc = ((SwGetRefFieldType*)GetTyp())->GetDoc();
         const OUString rPar1 = GetPar1();
-        // don't convert when the name points to an existing field type
+        
         if(!pDoc->GetFldType(RES_SETEXPFLD, rPar1, false))
         {
             sal_uInt16 nPoolId = SwStyleNameMapper::GetPoolIdFromProgName( rPar1, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL );
@@ -785,14 +785,14 @@ SwFieldType* SwGetRefFieldType::Copy() const
 
 void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    // update to all GetReference fields
+    
     if( !pNew && !pOld )
     {
         SwIterator<SwFmtFld,SwFieldType> aIter( *this );
         for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
         {
-            // update only the GetRef fields
-            //JP 3.4.2001: Task 71231 - we need the correct language
+            
+            
             SwGetRefField* pGRef = (SwGetRefField*)pFmtFld->GetField();
             const SwTxtFld* pTFld;
             if( !pGRef->GetLanguage() &&
@@ -803,11 +803,11 @@ void SwGetRefFieldType::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew
                                                 *pTFld->GetStart() ) );
             }
 
-            // #i81002#
+            
             pGRef->UpdateField( pFmtFld->GetTxtFld() );
         }
     }
-    // forward to text fields, they "expand" the text
+    
     NotifyClients( pOld, pNew );
 }
 
@@ -872,7 +872,7 @@ SwTxtNode* SwGetRefFieldType::FindAnchor( SwDoc* pDoc, const OUString& rRefMark,
                     if(!pBkmk->IsExpanded())
                     {
                         *pEnd = *pStt;
-                        // #i81002#
+                        
                         if(dynamic_cast< ::sw::mark::CrossRefBookmark const *>(pBkmk))
                         {
                             OSL_ENSURE( pTxtNd,
@@ -925,7 +925,7 @@ private:
     OUString aName;
     std::set<sal_uInt16> aIds;
     std::set<sal_uInt16> aDstIds;
-    std::map<sal_uInt16, sal_uInt16> sequencedIds; /// ID numbers sorted by sequence number.
+    std::map<sal_uInt16, sal_uInt16> sequencedIds; 
     bool bInit;
 
     void       Init(SwDoc& rDoc, SwDoc& rDestDoc, bool bField );
@@ -944,9 +944,9 @@ public:
 
 typedef boost::ptr_vector<_RefIdsMap> _RefIdsMaps;
 
-/// Get a sorted list of the field IDs from a document.
-/// @param[in]     rDoc The document to search.
-/// @param[in,out] rIds The list of IDs found in the document.
+
+
+
 void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
     SwFieldType *const pType = rDoc.GetFldType(RES_SETEXPFLD, aName, false);
@@ -969,19 +969,19 @@ void _RefIdsMap::GetFieldIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
     }
 }
 
-/// Get a sorted list of the footnote/endnote IDs from a document.
-/// @param[in]     rDoc The document to search.
-/// @param[in,out] rIds The list of IDs found in the document.
+
+
+
 void _RefIdsMap::GetNoteIdsFromDoc( SwDoc& rDoc, std::set<sal_uInt16> &rIds)
 {
     for( sal_uInt16 n = rDoc.GetFtnIdxs().size(); n; )
         rIds.insert( rDoc.GetFtnIdxs()[ --n ]->GetSeqRefNo() );
 }
 
-/// Initialise the aIds and aDestIds collections from the source documents.
-/// @param[in] rDoc     The source document.
-/// @param[in] rDestDoc The destination document.
-/// @param[in] bField   True if we're interested in all fields, false for footnotes.
+
+
+
+
 void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
 {
     if( bInit )
@@ -992,11 +992,11 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
         GetFieldIdsFromDoc( rDestDoc, aIds );
         GetFieldIdsFromDoc( rDoc, aDstIds );
 
-        // Map all the new src fields to the next available unused id
+        
         for ( std::set<sal_uInt16>::iterator pIt = aDstIds.begin(); pIt != aDstIds.end(); ++pIt )
             AddId( GetFirstUnusedId(aIds), *pIt );
 
-        // Change the Sequence number of all SetExp fields in the source document
+        
         SwFieldType* pType = rDoc.GetFldType( RES_SETEXPFLD, aName, false );
         if( pType )
         {
@@ -1019,9 +1019,9 @@ void _RefIdsMap::Init( SwDoc& rDoc, SwDoc& rDestDoc, bool bField )
     bInit = true;
 }
 
-/// Get the lowest number unused in the passed set.
-/// @param[in] rIds The set of used ID numbers.
-/// @returns The lowest number unused by the passed set
+
+
+
 sal_uInt16 _RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
 {
     sal_uInt16 num(0);
@@ -1038,9 +1038,9 @@ sal_uInt16 _RefIdsMap::GetFirstUnusedId( std::set<sal_uInt16> &rIds )
     return num;
 }
 
-/// Add a new ID and sequence number to the "occupied" collection.
-/// @param[in] id     The ID number.
-/// @param[in] seqNum The sequence number.
+
+
+
 void _RefIdsMap::AddId( sal_uInt16 id, sal_uInt16 seqNum )
 {
     aIds.insert( id );
@@ -1054,29 +1054,29 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
 
     sal_uInt16 nSeqNo = rFld.GetSeqNo();
 
-    // Check if the number is used in both documents
-    // Note: For fields, aIds contains both the ids of SetExp from rDestDoc
-    // and the targets of the already remapped ones from rDoc.
-    // It is possible that aDstIds contains numbers that aIds does not contain!
-    // For example, copying a selection to clipboard that does not contain
-    // the first SwSetExpField will result in id 0 missing, then pasting that
-    // into empty document gives a mapping 1->0 ... N->N-1 (fdo#63553).
+    
+    
+    
+    
+    
+    
+    
     if (aIds.count(nSeqNo) || aDstIds.count(nSeqNo))
     {
-        // Number already taken, so need a new one.
+        
         if( sequencedIds.count(nSeqNo) )
             rFld.SetSeqNo( sequencedIds[nSeqNo] );
         else
         {
-            assert(!bField || !aDstIds.count(nSeqNo)); // postcond of Init
+            assert(!bField || !aDstIds.count(nSeqNo)); 
 
             sal_uInt16 n = GetFirstUnusedId( aIds );
 
-            // register the new SeqNo, so that it's "in use"
+            
             AddId( n, nSeqNo );
             rFld.SetSeqNo( n );
 
-            // and move the footnotes/endnotes to the new ID
+            
             if( !bField )
             {
                 SwTxtFtn* pFtnIdx;
@@ -1091,7 +1091,7 @@ void _RefIdsMap::Check( SwDoc& rDoc, SwDoc& rDestDoc, SwGetRefField& rFld,
     }
     else
     {
-        AddId( nSeqNo, nSeqNo ); // this requires that nSeqNo is unused in both!
+        AddId( nSeqNo, nSeqNo ); 
     }
 }
 
@@ -1099,8 +1099,8 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
 {
     if( &rDestDoc != pDoc )
     {
-        // then there are RefFields in the DescDox - so all RefFields in the SourceDoc
-        // need to be converted to have unique IDs for both documents
+        
+        
         _RefIdsMap aFntMap( aEmptyOUStr );
         _RefIdsMaps aFldMap;
 

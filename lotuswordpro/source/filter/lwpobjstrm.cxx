@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -112,7 +112,7 @@ void LwpObjectStream::Read2Buffer()
 
         m_pContentBuf = AllocBuffer(m_nBufSize);
         memcpy(m_pContentBuf, pTempDst, m_nBufSize);
-        //delete [] pTempDst;
+        
 
     }
     else
@@ -319,9 +319,9 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
         switch (*pSrc & 0xC0)
         {
             case 0x00:
-                // 1 - 64 bytes of 0
-                // Code 00zzzzzz
-                // where zzzzzz is the count - 1 of compressed 0 bytes
+                
+                
+                
 
                 Cnt = (*pSrc++ & 0x3F) + 1;
                 if (DstSize+Cnt >= IO_BUFFERSIZE)
@@ -333,10 +333,10 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
                 break;
 
             case 0x40:
-                // 1 - 8 zeros followed by 1 - 8 non-zero
-                // Code 01zzznnn binary
-                // where zzz is the count - 1 of compressed zero bytes
-                // and nnn is the count - 1 of following non-zero bytes
+                
+                
+                
+                
 
                 Cnt = ((*pSrc & 0x38) >> 3) + 1;
                 if (DstSize+Cnt >= IO_BUFFERSIZE)
@@ -357,19 +357,19 @@ sal_uInt16 LwpObjectStream::DecompressBuffer(sal_uInt8* pDst, sal_uInt8* pSrc, s
                 break;
 
             case 0x80:
-                // 1 0 followed by 1 - 64 bytes of non-zero
-                // Code 0x80 (or 0x40 if 8 or less non-zero)
-                // Code 10nnnnnn binary
-                // where nnnnnn is the count - 1 of following non-zero bytes
+                
+                
+                
+                
 
                 *pDst++ = 0;
                 DstSize++;
-                // fall thru into next case!
+                
 
             case 0xC0:
-                // 1 - 64 bytes of non-zero
-                // Code = 11nnnnnn binary
-                // nnnnnn is the count less 1 of following non-zero bytes
+                
+                
+                
 
                 Cnt = (*pSrc++ & 0x3F) + 1;
                 if (Size < Cnt + 1)
@@ -398,7 +398,7 @@ OUString LwpObjectStream::QuickReadStringPtr(void)
     sal_uInt16 diskSize;
 
     diskSize = QuickReaduInt16();
-    QuickReaduInt16(); //len
+    QuickReaduInt16(); 
 
     OUString str;
     rtl_TextEncoding rEncode =  RTL_TEXTENCODING_MS_1252;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef OSL_DEBUG_LEVEL
@@ -40,7 +40,7 @@ CBaseReader( DocumentName )
         m_pSimple_Builder = new CSimpleTag( );
         m_pDummy_Builder   = new CDummyTag( );
 
-        //retrieve all information that is useful
+        
         m_AllMetaInfo[META_INFO_AUTHOR]               = EMPTY_XML_TAG;
         m_AllMetaInfo[META_INFO_TITLE]                = EMPTY_XML_TAG;
         m_AllMetaInfo[META_INFO_SUBJECT]              = EMPTY_XML_TAG;
@@ -81,7 +81,7 @@ try
         m_pSimple_Builder = new CSimpleTag( );
         m_pDummy_Builder   = new CDummyTag( );
 
-        //retrieve all information that is useful
+        
         m_AllMetaInfo[META_INFO_AUTHOR]               = EMPTY_XML_TAG;
         m_AllMetaInfo[META_INFO_TITLE]                = EMPTY_XML_TAG;
         m_AllMetaInfo[META_INFO_SUBJECT]              = EMPTY_XML_TAG;
@@ -223,9 +223,9 @@ ITag* CMetaInfoReader::chooseTagReader( const std::wstring& tag_name, const XmlT
 
 }
 
-//------------------------------
-// save the received content into structure.
-//------------------------------
+
+
+
 void CMetaInfoReader::saveTagContent( const std::wstring& tag_name )
 {
     ITag* pTagBuilder;
@@ -233,7 +233,7 @@ void CMetaInfoReader::saveTagContent( const std::wstring& tag_name )
         pTagBuilder = m_pKeywords_Builder;
     else if ( tag_name == META_INFO_KEYWORD )
     {
-        // added for support for OASIS xml file format.
+        
         m_AllMetaInfo[META_INFO_KEYWORDS].first =m_pKeywords_Builder->getTagContent( );
         return;
     }
@@ -250,16 +250,16 @@ void CMetaInfoReader::saveTagContent( const std::wstring& tag_name )
 
 /***********************   event handler functions  ***********************/
 
-//------------------------------
-// start_element occurs when a tag is start
-//------------------------------
+
+
+
 
 void CMetaInfoReader::start_element(
     const std::wstring& /*raw_name*/,
     const std::wstring& local_name,
     const XmlTagAttributes_t& attributes)
 {
-    //get appropriate Xml Tag Builder using MetaInfoBuilderFactory;
+    
     ITag* pTagBuilder = chooseTagReader( local_name,attributes );
     assert( pTagBuilder!= NULL );
     pTagBuilder->startTag( );
@@ -267,9 +267,9 @@ void CMetaInfoReader::start_element(
 
 }
 
-//------------------------------
-// end_element occurs when a tag is closed
-//------------------------------
+
+
+
 
 void CMetaInfoReader::end_element(const std::wstring& /*raw_name*/, const std::wstring& local_name)
 {
@@ -282,9 +282,9 @@ void CMetaInfoReader::end_element(const std::wstring& /*raw_name*/, const std::w
 
 }
 
-//------------------------------
-// characters occurs when receiving characters
-//------------------------------
+
+
+
 
 void CMetaInfoReader::characters( const std::wstring& character )
 {

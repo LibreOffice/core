@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,10 +42,10 @@
 #include <vector>
 #include <sal/macros.h>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::logging::XLogger;
@@ -71,10 +71,10 @@ namespace logging
 
     namespace
     {
-        //----------------------------------------------------------------
+        
         typedef void (*SettingTranslation)( const Reference< XLogger >&, const OUString&, Any& );
 
-        //----------------------------------------------------------------
+        
         void    lcl_substituteFileHandlerURLVariables_nothrow( const Reference< XLogger >& _rxLogger, OUString& _inout_rFileURL )
         {
             struct Variable
@@ -151,17 +151,17 @@ namespace logging
                         )
                     )
                 {
-                    // found an (unescaped) variable
+                    
                     _inout_rFileURL = _inout_rFileURL.replaceAt( nVariableIndex, sPattern.getLength(), aVariables[i].sVariableValue );
                 }
             }
         }
 
-        //----------------------------------------------------------------
+        
         void    lcl_transformFileHandlerSettings_nothrow( const Reference< XLogger >& _rxLogger, const OUString& _rSettingName, Any& _inout_rSettingValue )
         {
             if ( _rSettingName != "FileURL" )
-                // not interested in this setting
+                
                 return;
 
             OUString sURL;
@@ -170,7 +170,7 @@ namespace logging
             _inout_rSettingValue <<= sURL;
         }
 
-        //----------------------------------------------------------------
+        
         Reference< XInterface > lcl_createInstanceFromSetting_throw(
                 const Reference<XComponentContext>& _rContext,
                 const Reference< XLogger >& _rxLogger,
@@ -182,7 +182,7 @@ namespace logging
         {
             Reference< XInterface > xInstance;
 
-            // read the settings for the to-be-created service
+            
             Reference< XNameAccess > xServiceSettingsNode( _rxLoggerSettings->getByName(
                 OUString::createFromAscii( _pServiceSettingsAsciiNodeName ) ), UNO_QUERY_THROW );
 
@@ -234,7 +234,7 @@ namespace logging
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void initializeLoggerFromConfiguration( const Reference<XComponentContext>& _rContext, const Reference< XLogger >& _rxLogger )
     {
         try
@@ -245,7 +245,7 @@ namespace logging
             Reference< XMultiServiceFactory > xConfigProvider(
                 com::sun::star::configuration::theDefaultProvider::get(_rContext));
 
-            // write access to the "Settings" node (which includes settings for all loggers)
+            
             Sequence< Any > aArguments(1);
             aArguments[0] <<= NamedValue(
                 OUString( "nodepath" ),
@@ -259,7 +259,7 @@ namespace logging
             OUString sLoggerName( _rxLogger->getName() );
             if ( !xAllSettings->hasByName( sLoggerName ) )
             {
-                // no node yet for this logger. Create default settings.
+                
                 Reference< XSingleServiceFactory > xNodeFactory( xAllSettings, UNO_QUERY_THROW );
                 Reference< XInterface > xLoggerSettings( xNodeFactory->createInstance(), UNO_QUERY_THROW );
                 xAllSettings->insertByName( sLoggerName, makeAny( xLoggerSettings ) );
@@ -267,37 +267,37 @@ namespace logging
                 xChanges->commitChanges();
             }
 
-            // actually read and forward the settings
+            
             Reference< XNameAccess > xLoggerSettings( xAllSettings->getByName( sLoggerName ), UNO_QUERY_THROW );
 
-            // the log level
+            
             sal_Int32 nLogLevel( LogLevel::OFF );
             OSL_VERIFY( xLoggerSettings->getByName("LogLevel") >>= nLogLevel );
             _rxLogger->setLevel( nLogLevel );
 
-            // the default handler, if any
+            
             Reference< XInterface > xUntyped( lcl_createInstanceFromSetting_throw( _rContext, _rxLogger, xLoggerSettings, "DefaultHandler", "HandlerSettings", &lcl_transformFileHandlerSettings_nothrow ) );
             if ( !xUntyped.is() )
-                // no handler -> we're done
+                
                 return;
             Reference< XLogHandler > xHandler( xUntyped, UNO_QUERY_THROW );
             _rxLogger->addLogHandler( xHandler );
 
-            // The newly created handler might have an own (default) level. Ensure that it uses
-            // the same level as the logger.
+            
+            
             xHandler->setLevel( nLogLevel );
 
-            // the default formatter for the handler
+            
             xUntyped = lcl_createInstanceFromSetting_throw( _rContext, _rxLogger, xLoggerSettings, "DefaultFormatter", "FormatterSettings" );
             if ( !xUntyped.is() )
-                // no formatter -> we're done
+                
                 return;
             Reference< XLogFormatter > xFormatter( xUntyped, UNO_QUERY_THROW );
             xHandler->setFormatter( xFormatter );
 
-            // TODO: we could first create the formatter, then the handler. This would allow
-            // passing the formatter as value in the component context, so the handler would
-            // not create an own default formatter
+            
+            
+            
         }
         catch( const Exception& )
         {
@@ -305,8 +305,8 @@ namespace logging
         }
     }
 
-//........................................................................
-} // namespace logging
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

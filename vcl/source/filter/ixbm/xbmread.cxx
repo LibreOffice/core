@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,9 +23,9 @@
 #include <comphelper/string.hxx>
 #include "xbmread.hxx"
 
-// -------------
-// - XBMReader -
-// -------------
+
+
+
 
 XBMReader::XBMReader( SvStream& rStm ) :
             rIStm           ( rStm ),
@@ -40,7 +40,7 @@ XBMReader::XBMReader( SvStream& rStm ) :
     InitTable();
 }
 
-// ------------------------------------------------------------------------
+
 
 XBMReader::~XBMReader()
 {
@@ -50,7 +50,7 @@ XBMReader::~XBMReader()
         aBmp1.ReleaseAccess( pAcc1 );
 }
 
-// ------------------------------------------------------------------------
+
 
 void XBMReader::InitTable()
 {
@@ -88,7 +88,7 @@ void XBMReader::InitTable()
     pHexTable[(int)'\0'] = -1;
 }
 
-// ------------------------------------------------------------------------
+
 
 OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
                                  const char* pTok2, const char* pTok3 )
@@ -135,7 +135,7 @@ OString XBMReader::FindTokenLine( SvStream* pInStm, const char* pTok1,
     return aRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 long XBMReader::ParseDefine( const sal_Char* pDefine )
 {
@@ -143,22 +143,22 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
     char*   pTmp = (char*) pDefine;
     unsigned char   cTmp;
 
-    // move to end
+    
     pTmp += ( strlen( pDefine ) - 1 );
     cTmp = *pTmp--;
 
-    // search last digit
+    
     while( pHexTable[ cTmp ] == -1 )
         cTmp = *pTmp--;
 
-    // move before number
+    
     while( pHexTable[ cTmp ] != -1 )
         cTmp = *pTmp--;
 
-    // move to start of number
+    
     pTmp += 2;
 
-    // read Hex
+    
     if( ( pTmp[0] == '0' ) && ( ( pTmp[1] == 'X' ) || ( pTmp[1] == 'x' ) ) )
     {
         pTmp += 2;
@@ -170,7 +170,7 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
             cTmp = *pTmp++;
         }
     }
-    // read decimal
+    
     else
     {
         cTmp = *pTmp++;
@@ -184,7 +184,7 @@ long XBMReader::ParseDefine( const sal_Char* pDefine )
     return nRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat eFormat )
 {
@@ -203,7 +203,7 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
         {
             sal_Int32 nPos;
 
-            // delete opening curly bracket
+            
             if( (nPos = ( aLine = aLastLine ).indexOf('{') ) != -1 )
                 aLine = aLine.copy(nPos + 1);
 
@@ -257,19 +257,19 @@ bool XBMReader::ParseData( SvStream* pInStm, const OString& aLastLine, XBMFormat
     return true;
 }
 
-// ------------------------------------------------------------------------
+
 
 ReadState XBMReader::ReadXBM( Graphic& rGraphic )
 {
     ReadState   eReadState;
     sal_uInt8       cDummy;
 
-    // check if we can read ALL
+    
     rIStm.Seek( STREAM_SEEK_TO_END );
     rIStm.ReadUChar( cDummy );
 
-    // if we cannot read all
-    // we returnn and wait for new data
+    
+    
     if ( rIStm.GetError() != ERRCODE_IO_PENDING )
     {
         rIStm.Seek( nLastPos );
@@ -284,8 +284,8 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
                 nWidth = nValue;
                 aLine = FindTokenLine( &rIStm, "#define", "_height" );
 
-                // if height was not received, we search again
-                // from start of the file
+                
+                
                 if ( !bStatus )
                 {
                     rIStm.Seek( nLastPos );
@@ -353,9 +353,9 @@ ReadState XBMReader::ReadXBM( Graphic& rGraphic )
     return eReadState;
 }
 
-// -------------
-// - ImportXBM -
-// -------------
+
+
+
 
 bool ImportXBM( SvStream& rStm, Graphic& rGraphic )
 {

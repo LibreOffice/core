@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,7 +30,7 @@ using namespace ::com::sun::star::uno;
 namespace sd {
 
 
-//===== SdGlobalResourceContainer::Implementation =============================
+
 
 class SdGlobalResourceContainer::Implementation
 {
@@ -56,12 +56,12 @@ private:
 
 
 
-// static
+
 SdGlobalResourceContainer& SdGlobalResourceContainer::Instance (void)
 {
     DBG_ASSERT(Implementation::mpInstance!=NULL,
         "SdGlobalResourceContainer::Instance(): instance has been deleted");
-    // Maybe we should throw an exception when the instance has been deleted.
+    
     return *Implementation::mpInstance;
 }
 
@@ -71,7 +71,7 @@ SdGlobalResourceContainer*
 
 
 
-//===== SdGlobalResourceContainer =============================================
+
 
 void SdGlobalResourceContainer::AddResource (
     ::std::auto_ptr<SdGlobalResource> pResource)
@@ -87,13 +87,13 @@ void SdGlobalResourceContainer::AddResource (
         mpImpl->maResources.push_back(pResource.get());
     else
     {
-        // Because the given resource is an auto_ptr it is highly unlikely
-        // that we come here.  But who knows?
+        
+        
         DBG_ASSERT (false,
             "SdGlobalResourceContainer:AddResource(): Resource added twice.");
     }
-    // We can not put the auto_ptr into the vector so we release the
-    // auto_ptr and document that we take ownership explicitly.
+    
+    
     pResource.release();
 }
 
@@ -155,10 +155,10 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
 {
     ::osl::MutexGuard aGuard (mpImpl->maMutex);
 
-    // Release the resources in reversed order of their addition to the
-    // container.  This is because a resource A added before resource B
-    // may have been created due to a request of B.  Thus B depends on A and
-    // should be destroyed first.
+    
+    
+    
+    
     Implementation::ResourceList::reverse_iterator iResource;
     for (iResource = mpImpl->maResources.rbegin();
          iResource != mpImpl->maResources.rend();
@@ -167,8 +167,8 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
         delete *iResource;
     }
 
-    // The SharedResourceList has not to be released manually.  We just
-    // assert resources that are still held by someone other than us.
+    
+    
     Implementation::SharedResourceList::reverse_iterator iSharedResource;
     for (iSharedResource = mpImpl->maSharedResources.rbegin();
          iSharedResource != mpImpl->maSharedResources.rend();
@@ -202,6 +202,6 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
 
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

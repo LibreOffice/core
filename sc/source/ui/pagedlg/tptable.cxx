@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef SC_DLLIMPLEMENTATION
@@ -31,7 +31,7 @@
 #include "pagedlg.hrc"
 
 
-// Static Data
+
 
 static sal_uInt16 pPageTableRanges[] =
 {
@@ -76,7 +76,7 @@ static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
 #define GET_USHORT(sid,set) (sal_uInt16)((const SfxUInt16Item&)((set).Get(GetWhich((sid))))).GetValue()
 #define GET_SHOW(sid,set)   ( ScVObjMode( ((const ScViewObjectModeItem&)((set).Get(GetWhich((sid))))).GetValue() ) \
                               == VOBJ_MODE_SHOW )
-// List box entries "Scaling mode"
+
 #define SC_TPTABLE_SCALE_PERCENT    0
 #define SC_TPTABLE_SCALE_TO         1
 #define SC_TPTABLE_SCALE_TO_PAGES   2
@@ -145,7 +145,7 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     sal_Bool    bTopDown = GET_BOOL( SID_SCATTR_PAGE_TOPDOWN, rCoreSet );
     sal_uInt16  nWhich   = 0;
 
-    // sal_Bool flags
+    
     m_pBtnNotes->Check( GET_BOOL(SID_SCATTR_PAGE_NOTES,rCoreSet) );
     m_pBtnGrid->Check( GET_BOOL(SID_SCATTR_PAGE_GRID,rCoreSet) );
     m_pBtnHeaders->Check( GET_BOOL(SID_SCATTR_PAGE_HEADERS,rCoreSet) );
@@ -154,18 +154,18 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     m_pBtnTopDown->Check( bTopDown );
     m_pBtnLeftRight->Check( !bTopDown );
 
-    // first printed page:
+    
     sal_uInt16 nPage = GET_USHORT(SID_SCATTR_PAGE_FIRSTPAGENO,rCoreSet);
     m_pBtnPageNo->Check( nPage != 0 );
     m_pEdPageNo->SetValue( (nPage != 0) ? nPage : 1 );
     PageNoHdl( NULL );
 
-    // object representation:
+    
     m_pBtnCharts->Check( GET_SHOW( SID_SCATTR_PAGE_CHARTS, rCoreSet ) );
     m_pBtnObjects->Check( GET_SHOW( SID_SCATTR_PAGE_OBJECTS, rCoreSet ) );
     m_pBtnDrawings->Check( GET_SHOW( SID_SCATTR_PAGE_DRAWINGS, rCoreSet ) );
 
-    // scaling:
+    
     nWhich = GetWhich(SID_SCATTR_PAGE_SCALE);
     if ( rCoreSet.GetItemState( nWhich, true ) >= SFX_ITEM_AVAILABLE )
     {
@@ -202,7 +202,7 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
 
     if( m_pLbScaleMode->GetSelectEntryCount() == 0 )
     {
-        // fall back to 100%
+        
         OSL_FAIL( "ScTablePage::Reset - missing scaling item" );
         m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
         m_pEdScaleAll->SetValue( 100 );
@@ -211,7 +211,7 @@ void ScTablePage::Reset( const SfxItemSet& rCoreSet )
     PageDirHdl( NULL );
     ScaleHdl( NULL );
 
-    // remember for FillItemSet
+    
     m_pBtnFormulas->SaveValue();
     m_pBtnNullVals->SaveValue();
     m_pBtnNotes->SaveValue();
@@ -237,7 +237,7 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     sal_uInt16              nWhichPageNo = GetWhich(SID_SCATTR_PAGE_FIRSTPAGENO);
     sal_Bool                bDataChanged = false;
 
-    // sal_Bool flags
+    
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NOTES),
                                      rCoreSet, rOldSet,
                                      m_pBtnNotes->IsChecked(),
@@ -268,7 +268,7 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
                                      m_pBtnNullVals->IsChecked(),
                                      m_pBtnNullVals->GetSavedValue() != STATE_NOCHECK );
 
-    // first printed page:
+    
     sal_Bool bUseValue = m_pBtnPageNo->IsChecked();
 
     if (   WAS_DEFAULT(nWhichPageNo,rOldSet)
@@ -288,7 +288,7 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
         bDataChanged = sal_True;
     }
 
-    // object representation:
+    
     bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_CHARTS),
                                          rCoreSet, rOldSet, *m_pBtnCharts );
 
@@ -298,7 +298,7 @@ sal_Bool ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     bDataChanged |= lcl_PutVObjModeItem( GetWhich(SID_SCATTR_PAGE_DRAWINGS),
                                          rCoreSet, rOldSet, *m_pBtnDrawings );
 
-    // scaling:
+    
     if( !m_pEdScalePageWidth->GetValue() && !m_pEdScalePageHeight->GetValue() )
     {
         m_pLbScaleMode->SelectEntryPos( SC_TPTABLE_SCALE_PERCENT );
@@ -338,7 +338,7 @@ void ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
     SfxTabPage::DataChanged( rDCEvt );
 }
 
-// Handler:
+
 
 IMPL_LINK_NOARG(ScTablePage, PageDirHdl)
 {
@@ -362,19 +362,19 @@ IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
 
 IMPL_LINK_NOARG(ScTablePage, ScaleHdl)
 {
-    // controls for Box "Reduce/enlarge"
+    
     m_pBxScaleAll->Show(m_pLbScaleMode->GetSelectEntryPos() == SC_TPTABLE_SCALE_PERCENT);
 
-    // controls for Grid "Scale to width/height"
+    
     m_pGrHeightWidth->Show(m_pLbScaleMode->GetSelectEntryPos() == SC_TPTABLE_SCALE_TO);
 
-    // controls for Box "Scale to pages"
+    
     m_pBxScalePageNum->Show(m_pLbScaleMode->GetSelectEntryPos() == SC_TPTABLE_SCALE_TO_PAGES);
 
     return 0;
 }
 
-// Helper functions for FillItemSet:
+
 
 static sal_Bool lcl_PutBoolItem( sal_uInt16            nWhich,
                      SfxItemSet&        rCoreSet,

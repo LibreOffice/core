@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ftnidx.hxx>
@@ -291,8 +291,8 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
                     std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), sal_False));
                 if ( bExtra )
                 {
-                    // For messages regarding ErgoSum etc. we save the extra code and use the
-                    // available methods.
+                    
+                    
                     SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
                     for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
                     {
@@ -313,7 +313,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
             mpFtnInfo->ModifyNotification( &aOld, &aNew );
         }
 
-        // #i81002# no update during loading
+        
         if ( !IsInReading() )
         {
             UpdateRefFlds(NULL);
@@ -334,9 +334,9 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         }
 
         bool bNumChg  = rInfo.nFtnOffset != GetEndNoteInfo().nFtnOffset;
-        // this seems to be an optimization: UpdateAllFtn() is only called
-        // if the offset changes; if the offset is the same,
-        // but type/prefix/suffix changes, just set new numbers.
+        
+        
+        
         bool const bExtra = !bNumChg &&
                 (   (rInfo.aFmt.GetNumberingType() !=
                         GetEndNoteInfo().aFmt.GetNumberingType())
@@ -360,8 +360,8 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             }
             if ( bExtra )
             {
-                // For messages regarding ErgoSum etc. we save the extra code and use the
-                // available methods.
+                
+                
                 SwFtnIdxs& rFtnIdxs = GetFtnIdxs();
                 for( sal_uInt16 nPos = 0; nPos < rFtnIdxs.size(); ++nPos )
                 {
@@ -381,7 +381,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
             mpEndNoteInfo->ModifyNotification( &aOld, &aNew );
         }
 
-        // #i81002# no update during loading
+        
         if ( !IsInReading() )
         {
             UpdateRefFlds(NULL);
@@ -408,7 +408,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
     SwUndoChangeFootNote* pUndo = 0;
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
+        GetIDocumentUndoRedo().ClearRedo(); 
         pUndo = new SwUndoChangeFootNote( rPam, rNumStr, nNumber, bIsEndNote );
     }
 
@@ -416,7 +416,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
     sal_uLong nIdx;
     bool bChg = false;
     bool bTypeChgd = false;
-    sal_uInt16 n = nPos;        // save
+    sal_uInt16 n = nPos;        
     while( nPos < rFtnArr.size() &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ nPos++ ] )))
                 < nEndNd || ( nIdx == nEndNd &&
@@ -440,14 +440,14 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
                     ((SwFmtFtn&)rFtn).SetEndNote( bIsEndNote );
                     bTypeChgd = true;
                     pTxtFtn->CheckCondColl();
-                    //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
+                    
                     SwPtrMsgPoolItem aMsgHint( RES_FOOTNOTE_DELETED, (void*)&pTxtFtn->GetAttr() );
                     GetUnoCallBack()->ModifyNotification( &aMsgHint, &aMsgHint );
                 }
             }
         }
 
-    nPos = n;       // There are more in the front!
+    nPos = n;       
     while( nPos &&
             (( nIdx = _SwTxtFtn_GetIndex((pTxtFtn = rFtnArr[ --nPos ] )))
                 > nSttNd || ( nIdx == nSttNd &&
@@ -475,7 +475,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const OUString& rNumStr,
             }
         }
 
-    // Who needs to be triggered?
+    
     if( bChg )
     {
         if( pUndo )

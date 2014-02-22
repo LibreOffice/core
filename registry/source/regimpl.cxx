@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -252,22 +252,22 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
                 break;
 
             case RT_TYPE_INT64:
-                // TODO: no portable way to print hyper values
+                
                 printf("hyper");
                 break;
 
             case RT_TYPE_UINT64:
-                // TODO: no portable way to print unsigned hyper values
+                
                 printf("unsigned hyper");
                 break;
 
             case RT_TYPE_FLOAT:
-                // TODO: no portable way to print float values
+                
                 printf("float");
                 break;
 
             case RT_TYPE_DOUBLE:
-                // TODO: no portable way to print double values
+                
                 printf("double");
                 break;
 
@@ -420,8 +420,8 @@ void dumpType(typereg::Reader const & reader, OString const & indent) {
 
 }
 
-//*********************************************************************
-//  ORegistry()
+
+
 //
 ORegistry::ORegistry()
     : m_refCount(1)
@@ -431,8 +431,8 @@ ORegistry::ORegistry()
 {
 }
 
-//*********************************************************************
-//  ~ORegistry()
+
+
 //
 ORegistry::~ORegistry()
 {
@@ -445,8 +445,8 @@ ORegistry::~ORegistry()
 }
 
 
-//*********************************************************************
-//  initRegistry
+
+
 //
 RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMode)
 {
@@ -512,8 +512,8 @@ RegError ORegistry::initRegistry(const OUString& regName, RegAccessMode accessMo
 }
 
 
-//*********************************************************************
-//  closeRegistry
+
+
 //
 RegError ORegistry::closeRegistry()
 {
@@ -532,8 +532,8 @@ RegError ORegistry::closeRegistry()
 }
 
 
-//*********************************************************************
-//  destroyRegistry
+
+
 //
 RegError ORegistry::destroyRegistry(const OUString& regName)
 {
@@ -594,8 +594,8 @@ RegError ORegistry::destroyRegistry(const OUString& regName)
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  acquireKey
+
+
 //
 RegError ORegistry::acquireKey (RegKeyHandle hKey)
 {
@@ -609,8 +609,8 @@ RegError ORegistry::acquireKey (RegKeyHandle hKey)
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  releaseKey
+
+
 //
 RegError ORegistry::releaseKey (RegKeyHandle hKey)
 {
@@ -627,8 +627,8 @@ RegError ORegistry::releaseKey (RegKeyHandle hKey)
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  createKey
+
+
 //
 RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
                               RegKeyHandle* phNewKey)
@@ -688,8 +688,8 @@ RegError ORegistry::createKey(RegKeyHandle hKey, const OUString& keyName,
 }
 
 
-//*********************************************************************
-//  openKey
+
+
 //
 RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
                             RegKeyHandle* phOpenKey)
@@ -739,8 +739,8 @@ RegError ORegistry::openKey(RegKeyHandle hKey, const OUString& keyName,
 }
 
 
-//*********************************************************************
-//  closeKey
+
+
 //
 RegError ORegistry::closeKey(RegKeyHandle hKey)
 {
@@ -757,12 +757,12 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
         ORegKey * pRootKey = getRootKey();
         if (pKey != pRootKey)
         {
-            // propagate "modified" state to RootKey.
+            
             pRootKey->setModified();
         }
         else
         {
-            // closing modified RootKey, flush registry file.
+            
             OSL_TRACE("registry::ORegistry::closeKey(): flushing modified RootKey");
             (void) m_file.flush();
         }
@@ -773,8 +773,8 @@ RegError ORegistry::closeKey(RegKeyHandle hKey)
     return releaseKey(pKey);
 }
 
-//*********************************************************************
-//  deleteKey
+
+
 //
 RegError ORegistry::deleteKey(RegKeyHandle hKey, const OUString& keyName)
 {
@@ -849,14 +849,14 @@ RegError ORegistry::eraseKey(ORegKey* pKey, const OUString& keyName)
     }
     pOldKey->setModified();
 
-    // set flag deleted !!!
+    
     pOldKey->setDeleted(true);
 
     return pKey->closeKey(pOldKey);
 }
 
-//*********************************************************************
-//  deleteSubKeysAndValues
+
+
 //
 RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 {
@@ -896,8 +896,8 @@ RegError ORegistry::deleteSubkeysAndValues(ORegKey* pKey)
 }
 
 
-//*********************************************************************
-//  loadKey
+
+
 //
 RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
                             bool bWarnings, bool bReport)
@@ -944,8 +944,8 @@ RegError ORegistry::loadKey(RegKeyHandle hKey, const OUString& regFileName,
 }
 
 
-//*********************************************************************
-//  saveKey
+
+
 //
 RegError ORegistry::saveKey(RegKeyHandle hKey, const OUString& regFileName,
                             bool bWarnings, bool bReport)
@@ -995,8 +995,8 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 
-//*********************************************************************
-//  loadAndSaveValue()
+
+
 //
 RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
                                      ORegKey* pSourceKey,
@@ -1099,7 +1099,7 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
         }
     }
 
-    // write
+    
     if (rValue.create(rTargetFile, sTargetPath, valueName, VALUE_MODE_CREATE))
     {
         rtl_freeMemory(pBuffer);
@@ -1123,8 +1123,8 @@ RegError ORegistry::loadAndSaveValue(ORegKey* pTargetKey,
 }
 
 
-//*********************************************************************
-//  checkblop()
+
+
 //
 RegError ORegistry::checkBlop(OStoreStream& rValue,
                               const OUString& sTargetPath,
@@ -1253,8 +1253,8 @@ static sal_uInt32 checkTypeReaders(RegistryTypeReader& reader1,
     return count;
 }
 
-//*********************************************************************
-//  mergeModuleValue()
+
+
 //
 RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
                                      RegistryTypeReader& reader,
@@ -1328,8 +1328,8 @@ RegError ORegistry::mergeModuleValue(OStoreStream& rTargetValue,
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  loadAndSaveKeys()
+
+
 //
 RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
                                     ORegKey* pSourceKey,
@@ -1398,8 +1398,8 @@ RegError ORegistry::loadAndSaveKeys(ORegKey* pTargetKey,
 }
 
 
-//*********************************************************************
-//  getRootKey()
+
+
 //
 ORegKey* ORegistry::getRootKey()
 {
@@ -1408,8 +1408,8 @@ ORegKey* ORegistry::getRootKey()
 }
 
 
-//*********************************************************************
-//  dumpRegistry()
+
+
 //
 RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
 {
@@ -1447,8 +1447,8 @@ RegError ORegistry::dumpRegistry(RegKeyHandle hKey) const
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  dumpValue()
+
+
 //
 RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_Int16 nSpc) const
 {
@@ -1569,7 +1569,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
             break;
         case 5:
             {
-                sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays
+                sal_uInt32 offset = 4; 
                 sal_uInt32 len = 0;
 
                 readUINT32(pBuffer, len);
@@ -1595,13 +1595,13 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                         stdout, "%lu = %ld\n",
                         sal::static_int_cast< unsigned long >(i),
                         sal::static_int_cast< long >(longValue));
-                    offset += 4; // 4 Bytes fuer sal_Int32
+                    offset += 4; 
                 }
             }
             break;
         case 6:
             {
-                sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays
+                sal_uInt32 offset = 4; 
                 sal_uInt32 sLen = 0;
                 sal_uInt32 len = 0;
 
@@ -1621,7 +1621,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 {
                     readUINT32(pBuffer+offset, sLen);
 
-                    offset += 4; // 4 Bytes (sal_uInt32) fuer die Groesse des strings in Bytes
+                    offset += 4; 
 
                     pValue = (sal_Char*)rtl_allocateMemory(sLen);
                     readUtf8(pBuffer+offset, pValue, sLen);
@@ -1639,7 +1639,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
             break;
         case 7:
             {
-                sal_uInt32 offset = 4; // initial 4 Bytes fuer die Laenge des Arrays
+                sal_uInt32 offset = 4; 
                 sal_uInt32 sLen = 0;
                 sal_uInt32 len = 0;
 
@@ -1660,7 +1660,7 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
                 {
                     readUINT32(pBuffer+offset, sLen);
 
-                    offset += 4; // 4 Bytes (sal_uInt32) fuer die Groesse des strings in Bytes
+                    offset += 4; 
 
                     pValue = (sal_Unicode*)rtl_allocateMemory((sLen / 2) * sizeof(sal_Unicode));
                     readString(pBuffer+offset, pValue, sLen);
@@ -1688,8 +1688,8 @@ RegError ORegistry::dumpValue(const OUString& sPath, const OUString& sName, sal_
     return REG_NO_ERROR;
 }
 
-//*********************************************************************
-//  dumpKey()
+
+
 //
 RegError ORegistry::dumpKey(const OUString& sPath, const OUString& sName, sal_Int16 nSpace) const
 {

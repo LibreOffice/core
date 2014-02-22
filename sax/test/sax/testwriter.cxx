@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <vector>
 #include <stdio.h>
@@ -192,7 +192,7 @@ struct AttributeListImpl_impl
 {
     AttributeListImpl_impl()
     {
-        // performance improvement during adding
+        
         vecAttribute.reserve(20);
     }
     vector<struct TagAttribute> vecAttribute;
@@ -400,7 +400,7 @@ sal_Int32 OSaxWriterTest::test(
         hTestHandle ++;
 
         if( hTestHandle >= 5) {
-            // all tests finished.
+            
             hTestHandle = -1;
         }
     }
@@ -496,10 +496,10 @@ void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r 
     r->startElement( OUString( "hi") , rList );
     r->ignorableWhitespace( OUString() );
 
-    // the enpassant must be converted & -> &amp;
+    
     r->characters( OUString( "&#252;") );
 
-    // Test added for mib. Tests if errors during conversions occurs
+    
     r->ignorableWhitespace( OUString() );
     sal_Char array[256];
     for( sal_Int32 n = 32 ; n < 254 ; n ++ ) {
@@ -511,7 +511,7 @@ void OSaxWriterTest::testSimple( const Reference< XExtendedDocumentHandler > &r 
         );
     r->ignorableWhitespace( OUString() );
 
-    // '>' must not be converted
+    
     r->startCDATA();
     r->characters( OUString( ">fsfsdf<")  );
     r->endCDATA();
@@ -551,7 +551,7 @@ void OSaxWriterTest::testExceptions( const Reference< XExtendedDocumentHandler >
 
     source->setOutputStream( ref );
 
-    { // startDocument must be called before start element
+    { 
         sal_Bool bException = sal_True;
         try
         {
@@ -654,8 +654,8 @@ void OSaxWriterTest::testPerformance(const  Reference< XExtendedDocumentHandler 
 
 
     r->startDocument();
-    // just write a bunch of xml tags !
-    // for performance testing
+    
+    
     sal_Int32 i2;
     OUString huhu( "huhu" );
     OUString emptyString;

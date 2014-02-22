@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,10 +27,10 @@
 #include <vcl/event.hxx>
 #include <vcl/cursor.hxx>
 
-//......................................................................................................................
+
 namespace svt { namespace table
 {
-//......................................................................................................................
+
 
     typedef ::rtl::Reference< IMouseFunction >  PMouseFunction;
     typedef ::std::vector< PMouseFunction >     MouseFunctions;
@@ -40,10 +40,10 @@ namespace svt { namespace table
         MouseFunctions  aMouseFunctions;
     };
 
-    //==================================================================================================================
-    //= DefaultInputHandler
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     DefaultInputHandler::DefaultInputHandler()
         :m_pImpl( new DefaultInputHandler_Impl )
     {
@@ -52,12 +52,12 @@ namespace svt { namespace table
         m_pImpl->aMouseFunctions.push_back( new ColumnSortHandler );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     DefaultInputHandler::~DefaultInputHandler()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     namespace
     {
         bool lcl_delegateMouseEvent( DefaultInputHandler_Impl& i_impl, ITableControl& i_control, const MouseEvent& i_event,
@@ -81,11 +81,11 @@ namespace svt { namespace table
                     break;
                 }
                 if ( !furtherHandler )
-                    // handled the event
+                    
                     return true;
             }
 
-            // ask all other handlers
+            
             bool handled = false;
             for (   MouseFunctions::iterator handler = i_impl.aMouseFunctions.begin();
                     ( handler != i_impl.aMouseFunctions.end() ) && !handled;
@@ -93,7 +93,7 @@ namespace svt { namespace table
                 )
             {
                 if ( *handler == i_impl.pActiveFunction )
-                    // we already invoked this function
+                    
                     continue;
 
                 switch ( (handler->get()->*i_handlerMethod)( i_control, i_event ) )
@@ -115,25 +115,25 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::MouseMove( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
         return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseMove );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::MouseButtonDown( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
         return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseDown );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::MouseButtonUp( ITableControl& i_tableControl, const MouseEvent& i_event )
     {
         return lcl_delegateMouseEvent( *m_pImpl, i_tableControl, i_event, &IMouseFunction::handleMouseUp );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::KeyInput( ITableControl& _rControl, const KeyEvent& rKEvt )
     {
         bool bHandled = false;
@@ -182,57 +182,57 @@ namespace svt { namespace table
         return bHandled;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::GetFocus( ITableControl& _rControl )
     {
         _rControl.showCursor();
-        return false;   // continue processing
+        return false;   
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::LoseFocus( ITableControl& _rControl )
     {
         _rControl.hideCursor();
-        return false;   // continue processing
+        return false;   
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::RequestHelp( ITableControl& _rControl, const HelpEvent& _rHEvt )
     {
         (void)_rControl;
         (void)_rHEvt;
-        // TODO
+        
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::Command( ITableControl& _rControl, const CommandEvent& _rCEvt )
     {
         (void)_rControl;
         (void)_rCEvt;
-        // TODO
+        
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::PreNotify( ITableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;
         (void)_rNEvt;
-        // TODO
+        
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DefaultInputHandler::Notify( ITableControl& _rControl, NotifyEvent& _rNEvt )
     {
         (void)_rControl;
         (void)_rNEvt;
-        // TODO
+        
         return false;
     }
-//......................................................................................................................
-} } // namespace svt::table
-//......................................................................................................................
+
+} } 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

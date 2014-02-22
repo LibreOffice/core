@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ucalc.hxx"
@@ -77,7 +77,7 @@ ScRange getCachedRange(const ScExternalRefCache::TableTypeRef& pCacheTab)
 
 void Test::testFormulaCreateStringFromTokens()
 {
-    // Insert sheets.
+    
     OUString aTabName1("Test");
     OUString aTabName2("Kevin's Data");
     OUString aTabName3("Past Data");
@@ -87,7 +87,7 @@ void Test::testFormulaCreateStringFromTokens()
     m_pDoc->InsertTab(2, aTabName3);
     m_pDoc->InsertTab(3, aTabName4);
 
-    // Insert named ranges.
+    
     struct {
         bool bGlobal;
         const char* pName;
@@ -123,7 +123,7 @@ void Test::testFormulaCreateStringFromTokens()
         }
     }
 
-    // Insert DB ranges.
+    
     struct {
         const char* pName;
         SCTAB nTab;
@@ -155,20 +155,20 @@ void Test::testFormulaCreateStringFromTokens()
         "AVERAGE('2013'.B10:C20)",
         "'Kevin''s Data'.B10",
         "'Past Data'.B1+'2013'.B2*(1+'Kevin''s Data'.C10)",
-        "x+y*z", // named ranges
-        "SUM(sheetx;x;y;z)", // sheet local and global named ranges mixed
-        "MAX(Table1)+MIN(Table2)*SUM(Table3)", // database ranges
-        "{1;TRUE;3|FALSE;5;\"Text\"|;;}", // inline matrix
-        "SUM('file:///path/to/fake.file'#$Sheet.A1:B10)",
+        "x+y*z", 
+        "SUM(sheetx;x;y;z)", 
+        "MAX(Table1)+MIN(Table2)*SUM(Table3)", 
+        "{1;TRUE;3|FALSE;5;\"Text\"|;;}", 
+        "SUM('file:
     };
 
     boost::scoped_ptr<ScTokenArray> pArray;
 
     sc::TokenStringContext aCxt(m_pDoc, formula::FormulaGrammar::GRAM_ENGLISH);
 
-    // Artificially add external refererence data after the context object is
-    // initialized.
-    aCxt.maExternalFileNames.push_back("file:///path/to/fake.file");
+    
+    
+    aCxt.maExternalFileNames.push_back("file:
     std::vector<OUString> aExtTabNames;
     aExtTabNames.push_back("Sheet");
     aCxt.maExternalCachedTabNames.insert(
@@ -183,7 +183,7 @@ void Test::testFormulaCreateStringFromTokens()
 #endif
         ScCompiler aComp(m_pDoc, aPos);
         aComp.SetGrammar(FormulaGrammar::GRAM_ENGLISH);
-#if 0 // TODO: This call to CompileString() causes the cppunittester to somehow fail on Windows.
+#if 0 
         pArray.reset(aComp.CompileString(aFormula));
         CPPUNIT_ASSERT_MESSAGE("Failed to compile formula string.", pArray.get());
 
@@ -217,7 +217,7 @@ bool isEmpty( const formula::VectorRefArray& rArray, size_t nPos )
 bool equals( const formula::VectorRefArray& rArray, size_t nPos, double fVal )
 {
     if (rArray.mpStringArray && rArray.mpStringArray[nPos])
-        // This is a string cell.
+        
         return false;
 
     if (rArray.mpNumericArray && rArray.mpNumericArray[nPos] == fVal)
@@ -245,11 +245,11 @@ bool equals( const formula::VectorRefArray& rArray, size_t nPos, const OUString&
 void Test::testFormulaParseReference()
 {
     OUString aTab1("90's Music"), aTab2("90's and 70's"), aTab3("All Others"), aTab4("NoQuote");
-    m_pDoc->InsertTab(0, "Dummy"); // just to shift the sheet indices...
-    m_pDoc->InsertTab(1, aTab1); // name with a single quote.
-    m_pDoc->InsertTab(2, aTab2); // name with 2 single quotes.
-    m_pDoc->InsertTab(3, aTab3); // name without single quotes.
-    m_pDoc->InsertTab(4, aTab4); // name that doesn't require to be quoted.
+    m_pDoc->InsertTab(0, "Dummy"); 
+    m_pDoc->InsertTab(1, aTab1); 
+    m_pDoc->InsertTab(2, aTab2); 
+    m_pDoc->InsertTab(3, aTab3); 
+    m_pDoc->InsertTab(4, aTab4); 
 
     OUString aTabName;
     m_pDoc->GetName(1, aTabName);
@@ -261,7 +261,7 @@ void Test::testFormulaParseReference()
     m_pDoc->GetName(4, aTabName);
     CPPUNIT_ASSERT_EQUAL(aTab4, aTabName);
 
-    // Make sure the formula input and output match.
+    
     {
         const char* aChecks[] = {
             "'90''s Music'.B12",
@@ -272,7 +272,7 @@ void Test::testFormulaParseReference()
 
         for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
         {
-            // Use the 'Dummy' sheet for this.
+            
             OUString aInput("=");
             aInput += OUString::createFromAscii(aChecks[i]);
             m_pDoc->SetString(ScAddress(0,0,0), aInput);
@@ -322,7 +322,7 @@ void Test::testFetchVectorRefArray()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    // All numeric cells in Column A.
+    
     m_pDoc->SetValue(ScAddress(0,0,0), 1);
     m_pDoc->SetValue(ScAddress(0,1,0), 2);
     m_pDoc->SetValue(ScAddress(0,2,0), 3);
@@ -345,10 +345,10 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_EQUAL(4.0, aArray.mpNumericArray[3]);
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 4));
 
-    // All string cells in Column B.  Note that the fetched string arrays are
-    // only to be compared case-insensitively.  Right now, we use upper cased
-    // strings to achieve case-insensitive-ness, but that may change. So,
-    // don't count on that.
+    
+    
+    
+    
     m_pDoc->SetString(ScAddress(1,0,0), "Andy");
     m_pDoc->SetString(ScAddress(1,1,0), "Bruce");
     m_pDoc->SetString(ScAddress(1,2,0), "Charlie");
@@ -362,7 +362,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 3, "David"));
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 4));
 
-    // Mixture of numeric, string, and empty cells in Column C.
+    
     m_pDoc->SetString(ScAddress(2,0,0), "Header");
     m_pDoc->SetValue(ScAddress(2,1,0), 11);
     m_pDoc->SetValue(ScAddress(2,2,0), 12);
@@ -381,10 +381,10 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 5, 36));
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 6));
 
-    // Mixed type again in Column D, but it starts with a numeric cell.
+    
     m_pDoc->SetValue(ScAddress(3,0,0), 10);
     m_pDoc->SetString(ScAddress(3,1,0), "Below 10");
-    // Leave 2 empty cells.
+    
     m_pDoc->SetValue(ScAddress(3,4,0), 11);
     m_pDoc->SetString(ScAddress(3,5,0), "=12");
     m_pDoc->SetString(ScAddress(3,6,0), "=13");
@@ -403,16 +403,16 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 6, 13));
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 7, "ABC"));
 
-    // Column E consists of formula cells whose results are all numeric.
+    
     for (SCROW i = 0; i <= 6; ++i)
         m_pDoc->SetString(ScAddress(4,i,0), "=ROW()");
     m_pDoc->CalcAll();
 
-    // Leave row 7 empty.
+    
     m_pDoc->SetString(ScAddress(4,8,0), "Andy");
     m_pDoc->SetValue(ScAddress(4,9,0), 123);
 
-    // This array fits within a single formula block.
+    
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(4,0,0), 5);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should be purely numeric.", aArray.mpNumericArray && !aArray.mpStringArray);
@@ -422,7 +422,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 3, 4));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 4, 5));
 
-    // This array spans over multiple blocks.
+    
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(4,0,0), 11);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have both numeric and string arrays.", aArray.mpNumericArray && aArray.mpStringArray);
@@ -438,7 +438,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 9, 123));
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 10));
 
-    // Hit the cache but at a different start row.
+    
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(4,2,0), 3);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should at least have a numeric array.", aArray.mpNumericArray);
@@ -446,7 +446,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 1, 4));
     CPPUNIT_ASSERT_MESSAGE("Unexpected numeric cell.", equals(aArray, 2, 5));
 
-    // Column F begins with empty rows at the top.
+    
     m_pDoc->SetValue(ScAddress(5,2,0), 1.1);
     m_pDoc->SetValue(ScAddress(5,3,0), 1.2);
     m_pDoc->SetString(ScAddress(5,4,0), "=2*8");
@@ -481,13 +481,13 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 8));
     CPPUNIT_ASSERT_MESSAGE("This should be empty.", isEmpty(aArray, 9));
 
-    // Get the array for F3:F4. This array should only consist of numeric array.
+    
     aArray = m_pDoc->FetchVectorRefArray(ScAddress(5,2,0), 3);
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
 
-    // Column G consists only of strings.
+    
     m_pDoc->SetString(ScAddress(6,0,0), "Title");
     m_pDoc->SetString(ScAddress(6,1,0), "foo");
     m_pDoc->SetString(ScAddress(6,2,0), "bar");
@@ -497,7 +497,7 @@ void Test::testFetchVectorRefArray()
     m_pDoc->SetString(ScAddress(6,6,0), "beep");
     m_pDoc->SetString(ScAddress(6,7,0), "kerker");
 
-    aArray = m_pDoc->FetchVectorRefArray(ScAddress(6,1,0), 4); // G2:G5
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(6,1,0), 4); 
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a numeric array.", !aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should have a string array.", aArray.mpStringArray);
@@ -506,7 +506,7 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 2, "foo"));
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 3, "baz"));
 
-    aArray = m_pDoc->FetchVectorRefArray(ScAddress(6,2,0), 4); // G3:G6
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(6,2,0), 4); 
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a numeric array.", !aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should have a string array.", aArray.mpStringArray);
@@ -515,12 +515,12 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 2, "baz"));
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 3, "quack"));
 
-    // Column H starts with formula cells.
+    
     for (SCROW i = 0; i < 10; ++i)
         m_pDoc->SetString(ScAddress(7,i,0), "=ROW()");
 
     m_pDoc->CalcAll();
-    aArray = m_pDoc->FetchVectorRefArray(ScAddress(7,3,0), 3); // H4:H6
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(7,3,0), 3); 
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
@@ -528,42 +528,42 @@ void Test::testFetchVectorRefArray()
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 1, 5.0));
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 2, 6.0));
 
-    aArray = m_pDoc->FetchVectorRefArray(ScAddress(7,4,0), 10); // H5:H15
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(7,4,0), 10); 
     CPPUNIT_ASSERT_MESSAGE("Failed to fetch vector ref array.", aArray.isValid());
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
     CPPUNIT_ASSERT_MESSAGE("Unexpected string cell.", equals(aArray, 0, 5.0));
 
-    // Clear everything and start over.
+    
     clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,MAXROW,0));
     m_pDoc->ClearFormulaContext();
 
-    // Totally empty range in a totally empty column (Column A).
-    aArray = m_pDoc->FetchVectorRefArray(ScAddress(0,0,0), 3); // A1:A3
+    
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(0,0,0), 3); 
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
 
-    // Totally empty range in a non-empty column (Column B).
-    m_pDoc->SetString(ScAddress(1,10,0), "Some text"); // B11
-    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,0,0), 3); // B1:B3
+    
+    m_pDoc->SetString(ScAddress(1,10,0), "Some text"); 
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,0,0), 3); 
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
 
-    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,12,0), 3); // B13:B15
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,12,0), 3); 
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[1]));
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[2]));
 
-    // These values come from a cache because of the call above.
-    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,1,0), 3); // B2:B4
+    
+    aArray = m_pDoc->FetchVectorRefArray(ScAddress(1,1,0), 3); 
     CPPUNIT_ASSERT_MESSAGE("Array should have a numeric array.", aArray.mpNumericArray);
     CPPUNIT_ASSERT_MESSAGE("Array should NOT have a string array.", !aArray.mpStringArray);
     CPPUNIT_ASSERT(rtl::math::isNan(aArray.mpNumericArray[0]));
@@ -579,25 +579,25 @@ void Test::testFormulaHashAndTag()
 
     ScAddress aPos1(0,0,0), aPos2(1,0,0);
 
-    // Test formula hashing.
+    
 
     struct {
         const char* pFormula1; const char* pFormula2; bool bEqual;
     } aHashTests[] = {
-        { "=1", "=2", false }, // different constants
-        { "=SUM(1;2;3;4;5)", "=AVERAGE(1;2;3;4;5)", false }, // different functions
-        { "=C2*3", "=D2*3", true },  // relative references
-        { "=C2*3", "=D2*4", false }, // different constants
-        { "=C2*4", "=D2*4", true },  // relative references
-        { "=3*4*5", "=3*4*\"foo\"", false }, // numeric vs string constants
-        { "=$C3/2", "=$C3/2", true }, // absolute column references
-        { "=C$3/2", "=D$3/2", true }, // absolute row references
-        { "=$E$30/2", "=$E$30/2", true }, // absolute references
-        { "=X20", "=$X$20", false }, // absolute vs relative
-        { "=X20", "=X$20", false }, // absolute vs relative
-        { "=X20", "=$X20", false }, // absolute vs relative
-        { "=X$20", "=$X20", false }, // column absolute vs row absolute
-        // similar enough for merging ...
+        { "=1", "=2", false }, 
+        { "=SUM(1;2;3;4;5)", "=AVERAGE(1;2;3;4;5)", false }, 
+        { "=C2*3", "=D2*3", true },  
+        { "=C2*3", "=D2*4", false }, 
+        { "=C2*4", "=D2*4", true },  
+        { "=3*4*5", "=3*4*\"foo\"", false }, 
+        { "=$C3/2", "=$C3/2", true }, 
+        { "=C$3/2", "=D$3/2", true }, 
+        { "=$E$30/2", "=$E$30/2", true }, 
+        { "=X20", "=$X$20", false }, 
+        { "=X20", "=X$20", false }, 
+        { "=X20", "=$X20", false }, 
+        { "=X$20", "=$X20", false }, 
+        
         { "=A1", "=B1", true },
         { "=$A$1", "=$B$1", true },
         { "=A1", "=C2", true },
@@ -630,11 +630,11 @@ void Test::testFormulaHashAndTag()
         aPos2.IncRow();
     }
 
-    // Go back to row 1.
+    
     aPos1.SetRow(0);
     aPos2.SetRow(0);
 
-    // Test formula vectorization state.
+    
 
     struct {
         const char* pFormula; ScFormulaVectorState eState;
@@ -737,7 +737,7 @@ void Test::testFormulaRefData()
     ASSERT_EQUAL_TYPE(SCROW, 3, aRef.Row());
     ASSERT_EQUAL_TYPE(SCTAB, 1, aRef.Tab());
 
-    // Test extension of range reference.
+    
 
     ScComplexRefData aDoubleRef;
     aDoubleRef.InitRange(ScRange(2,2,0,4,4,0));
@@ -789,11 +789,11 @@ void Test::testFormulaRefUpdate()
 {
     m_pDoc->InsertTab(0, "Formula");
 
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
-    m_pDoc->SetValue(ScAddress(0,0,0), 2.0); // A1
-    m_pDoc->SetString(ScAddress(2,2,0), "=A1");   // C3
-    m_pDoc->SetString(ScAddress(2,3,0), "=$A$1"); // C4
+    m_pDoc->SetValue(ScAddress(0,0,0), 2.0); 
+    m_pDoc->SetString(ScAddress(2,2,0), "=A1");   
+    m_pDoc->SetString(ScAddress(2,3,0), "=$A$1"); 
 
     ScAddress aPos(2,2,0);
     if (!checkFormula(*m_pDoc, aPos, "A1"))
@@ -803,7 +803,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$1"))
         CPPUNIT_FAIL("Wrong formula in C4.");
 
-    // Delete row 2 to push formula cells up (to C2:C3).
+    
     m_pDoc->DeleteRow(ScRange(0,1,0,MAXCOL,1,0));
 
     aPos = ScAddress(2,1,0);
@@ -814,7 +814,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$1"))
         CPPUNIT_FAIL("Wrong formula in C3.");
 
-    // Insert one row at row 2 to move them back.
+    
     m_pDoc->InsertRow(ScRange(0,1,0,MAXCOL,1,0));
 
     aPos = ScAddress(2,2,0);
@@ -825,7 +825,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$1"))
         CPPUNIT_FAIL("Wrong formula in C4.");
 
-    // Insert 2 rows at row 1 to shift all of A1 and C3:C4 down.
+    
     m_pDoc->InsertRow(ScRange(0,0,0,MAXCOL,1,0));
 
     aPos = ScAddress(2,4,0);
@@ -836,7 +836,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$3"))
         CPPUNIT_FAIL("Wrong formula in C6.");
 
-    // Delete 2 rows at row 1 to shift them back.
+    
     m_pDoc->DeleteRow(ScRange(0,0,0,MAXCOL,1,0));
 
     aPos = ScAddress(2,2,0);
@@ -847,7 +847,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$1"))
         CPPUNIT_FAIL("Wrong formula in C4.");
 
-    // Insert 3 columns at column B. to shift C3:C4 to F3:F4.
+    
     m_pDoc->InsertCol(ScRange(1,0,0,3,MAXROW,0));
 
     aPos = ScAddress(5,2,0);
@@ -858,7 +858,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$1"))
         CPPUNIT_FAIL("Wrong formula in F4.");
 
-    // Delete columns B:D to shift them back.
+    
     m_pDoc->DeleteCol(ScRange(1,0,0,3,MAXROW,0));
 
     aPos = ScAddress(2,2,0);
@@ -869,7 +869,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$1"))
         CPPUNIT_FAIL("Wrong formula in C4.");
 
-    // Insert cells over A1:A3 to only shift A1 down to A4.
+    
     m_pDoc->InsertRow(ScRange(0,0,0,0,2,0));
 
     aPos = ScAddress(2,2,0);
@@ -880,7 +880,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$4"))
         CPPUNIT_FAIL("Wrong formula in C4.");
 
-    // .. and back.
+    
     m_pDoc->DeleteRow(ScRange(0,0,0,0,2,0));
 
     aPos = ScAddress(2,2,0);
@@ -891,7 +891,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "$A$1"))
         CPPUNIT_FAIL("Wrong formula in C4.");
 
-    // Delete row 1 which will delete the value cell (A1).
+    
     m_pDoc->DeleteRow(ScRange(0,0,0,MAXCOL,0,0));
 
     aPos = ScAddress(2,1,0);
@@ -903,14 +903,14 @@ void Test::testFormulaRefUpdate()
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
 
-    // Clear all and start over.
+    
     clearRange(m_pDoc, ScRange(0,0,0,10,10,0));
 
-    // ------------------------------------------
-    // Test range updates
-    // ------------------------------------------
+    
+    
+    
 
-    // Fill B2:C3 with values.
+    
     m_pDoc->SetValue(ScAddress(1,1,0), 1);
     m_pDoc->SetValue(ScAddress(1,2,0), 2);
     m_pDoc->SetValue(ScAddress(2,1,0), 3);
@@ -927,7 +927,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "SUM($B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in A7.");
 
-    // Insert a row at row 1.
+    
     m_pDoc->InsertRow(ScRange(0,0,0,MAXCOL,0,0));
 
     aPos = ScAddress(0,6,0);
@@ -938,7 +938,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "SUM($B$3:$C$4)"))
         CPPUNIT_FAIL("Wrong formula in A8.");
 
-    // ... and back.
+    
     m_pDoc->DeleteRow(ScRange(0,0,0,MAXCOL,0,0));
 
     aPos = ScAddress(0,5,0);
@@ -949,7 +949,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "SUM($B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in A7.");
 
-    // Insert columns B:C to shift only the value range.
+    
     m_pDoc->InsertCol(ScRange(1,0,0,2,MAXROW,0));
 
     aPos = ScAddress(0,5,0);
@@ -960,7 +960,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "SUM($D$2:$E$3)"))
         CPPUNIT_FAIL("Wrong formula in A7.");
 
-    // ... and back.
+    
     m_pDoc->DeleteCol(ScRange(1,0,0,2,MAXROW,0));
 
     aPos = ScAddress(0,5,0);
@@ -971,7 +971,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "SUM($B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in A7.");
 
-    // Insert rows 5:6 to shift the formula cells only.
+    
     m_pDoc->InsertRow(ScRange(0,4,0,MAXCOL,5,0));
 
     aPos = ScAddress(0,7,0);
@@ -982,7 +982,7 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "SUM($B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in A9.");
 
-    // ... and back.
+    
     m_pDoc->DeleteRow(ScRange(0,4,0,MAXCOL,5,0));
 
     aPos = ScAddress(0,5,0);
@@ -993,28 +993,28 @@ void Test::testFormulaRefUpdate()
     if (!checkFormula(*m_pDoc, aPos, "SUM($B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in A7.");
 
-    // Check the values of the formula cells in A6:A7.
+    
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,5,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,6,0)));
 
-    // Insert cells over B1:B2 to partially shift value range.
+    
     m_pDoc->InsertRow(ScRange(1,0,0,1,1,0));
 
-    // Check the values of the formula cells in A6:A7 again.
+    
     CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0,5,0)));
     CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0,6,0)));
 
-    // ... and shift them back.
+    
     m_pDoc->DeleteRow(ScRange(1,0,0,1,1,0));
 
-    // The formula cell results should be back too.
+    
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,5,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,6,0)));
 
-    // Delete rows 2:3 to completely remove the referenced range.
+    
     m_pDoc->DeleteRow(ScRange(0,1,0,MAXCOL,2,0));
 
-    // Both A4 and A5 should show #REF! errors.
+    
     pFC = m_pDoc->GetFormulaCell(ScAddress(0,3,0));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(ScErrorCodes::errNoRef, pFC->GetErrCode());
@@ -1030,14 +1030,14 @@ void Test::testFormulaRefUpdateRange()
 {
     m_pDoc->InsertTab(0, "Formula");
 
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
     ScModule* pMod = SC_MOD();
     ScInputOptions aOpt = pMod->GetInputOptions();
     aOpt.SetExpandRefs(false);
     pMod->SetInputOptions(aOpt);
 
-    // Set values to B2:C5.
+    
     m_pDoc->SetValue(ScAddress(1,1,0), 1);
     m_pDoc->SetValue(ScAddress(1,2,0), 2);
     m_pDoc->SetValue(ScAddress(1,3,0), 3);
@@ -1047,7 +1047,7 @@ void Test::testFormulaRefUpdateRange()
     m_pDoc->SetValue(ScAddress(2,3,0), 7);
     m_pDoc->SetValue(ScAddress(2,4,0), 8);
 
-    // Set formula cells to A7 and A8.
+    
     m_pDoc->SetString(ScAddress(0,6,0), "=SUM(B2:C5)");
     m_pDoc->SetString(ScAddress(0,7,0), "=SUM($B$2:$C$5)");
 
@@ -1060,7 +1060,7 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(ScAddress(0,6,0)));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(ScAddress(0,7,0)));
 
-    // Delete row 3. This should shrink the range references by one row.
+    
     m_pDoc->DeleteRow(ScRange(0,2,0,MAXCOL,2,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM(B2:C4)"))
@@ -1072,7 +1072,7 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,5,0)));
     CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,6,0)));
 
-    // Delete row 4 - bottom of range
+    
     m_pDoc->DeleteRow(ScRange(0,3,0,MAXCOL,3,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(B2:C3)"))
@@ -1084,7 +1084,7 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(0,4,0)));
     CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(0,5,0)));
 
-    // Delete row 2 - top of range
+    
     m_pDoc->DeleteRow(ScRange(0,1,0,MAXCOL,1,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,3,0), "SUM(B2:C2)"))
@@ -1096,10 +1096,10 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,3,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,4,0)));
 
-    // Clear the range and start over.
+    
     clearRange(m_pDoc, ScRange(0,0,0,20,20,0));
 
-    // Fill C2:F3 with values.
+    
     m_pDoc->SetValue(ScAddress(2,1,0), 1);
     m_pDoc->SetValue(ScAddress(3,1,0), 2);
     m_pDoc->SetValue(ScAddress(4,1,0), 3);
@@ -1109,7 +1109,7 @@ void Test::testFormulaRefUpdateRange()
     m_pDoc->SetValue(ScAddress(4,2,0), 7);
     m_pDoc->SetValue(ScAddress(5,2,0), 8);
 
-    // Set formulas to A2 and A3.
+    
     m_pDoc->SetString(ScAddress(0,1,0), "=SUM(C2:F3)");
     m_pDoc->SetString(ScAddress(0,2,0), "=SUM($C$2:$F$3)");
 
@@ -1122,7 +1122,7 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(36.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
-    // Delete column D.
+    
     m_pDoc->DeleteCol(ScRange(3,0,0,3,MAXROW,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C2:E3)"))
@@ -1134,7 +1134,7 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(28.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
-    // Delete column E - the right edge of reference range.
+    
     m_pDoc->DeleteCol(ScRange(4,0,0,4,MAXROW,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C2:D3)"))
@@ -1146,7 +1146,7 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(16.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
-    // Delete column C - the left edge of reference range.
+    
     m_pDoc->DeleteCol(ScRange(2,0,0,2,MAXROW,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C2:C3)"))
@@ -1158,19 +1158,19 @@ void Test::testFormulaRefUpdateRange()
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,1,0)));
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
-    // Clear the range and start over.
+    
     clearRange(m_pDoc, ScRange(0,0,0,20,20,0));
 
-    // Disable expansion of range reference on insertion in adjacent areas.
+    
     m_pDoc->SetExpandRefs(false);
 
-    // Fill C2:D3 with values.
+    
     m_pDoc->SetValue(ScAddress(2,1,0), 1);
     m_pDoc->SetValue(ScAddress(3,1,0), 2);
     m_pDoc->SetValue(ScAddress(2,2,0), 3);
     m_pDoc->SetValue(ScAddress(3,2,0), 4);
 
-    // Set formulas at A5 and A6.
+    
     m_pDoc->SetString(ScAddress(0,4,0), "=SUM(C2:D3)");
     m_pDoc->SetString(ScAddress(0,5,0), "=SUM($C$2:$D$3)");
 
@@ -1180,7 +1180,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($C$2:$D$3)"))
         CPPUNIT_FAIL("Wrong formula in A6.");
 
-    // Insert a column at column C. This should simply shift the reference without expansion.
+    
     m_pDoc->InsertCol(ScRange(2,0,0,2,MAXROW,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(D2:E3)"))
@@ -1189,7 +1189,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($D$2:$E$3)"))
         CPPUNIT_FAIL("Wrong formula in A6.");
 
-    // Shift it back.
+    
     m_pDoc->DeleteCol(ScRange(2,0,0,2,MAXROW,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(C2:D3)"))
@@ -1198,7 +1198,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($C$2:$D$3)"))
         CPPUNIT_FAIL("Wrong formula in A6.");
 
-    // Insert at column D. This should expand the reference by one column length.
+    
     m_pDoc->InsertCol(ScRange(3,0,0,3,MAXROW,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(C2:E3)"))
@@ -1207,7 +1207,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($C$2:$E$3)"))
         CPPUNIT_FAIL("Wrong formula in A6.");
 
-    // Insert at column F. No expansion should occur since the edge expansion is turned off.
+    
     m_pDoc->InsertCol(ScRange(5,0,0,5,MAXROW,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,4,0), "SUM(C2:E3)"))
@@ -1216,7 +1216,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM($C$2:$E$3)"))
         CPPUNIT_FAIL("Wrong formula in A6.");
 
-    // Insert at row 2. No expansion should occur with edge expansion turned off.
+    
     m_pDoc->InsertRow(ScRange(0,1,0,MAXCOL,1,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,5,0), "SUM(C3:E4)"))
@@ -1225,7 +1225,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "SUM($C$3:$E$4)"))
         CPPUNIT_FAIL("Wrong formula in A7.");
 
-    // Insert at row 4 to expand the reference range.
+    
     m_pDoc->InsertRow(ScRange(0,3,0,MAXCOL,3,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,6,0), "SUM(C3:E5)"))
@@ -1234,7 +1234,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "SUM($C$3:$E$5)"))
         CPPUNIT_FAIL("Wrong formula in A8.");
 
-    // Insert at row 6. No expansion with edge expansion turned off.
+    
     m_pDoc->InsertRow(ScRange(0,5,0,MAXCOL,5,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,7,0), "SUM(C3:E5)"))
@@ -1243,20 +1243,20 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,8,0), "SUM($C$3:$E$5)"))
         CPPUNIT_FAIL("Wrong formula in A9.");
 
-    // Clear the range and start over.
+    
     clearRange(m_pDoc, ScRange(0,0,0,20,20,0));
 
-    // Turn edge expansion on.
+    
     aOpt.SetExpandRefs(true);
     pMod->SetInputOptions(aOpt);
 
-    // Fill C6:D7 with values.
+    
     m_pDoc->SetValue(ScAddress(2,5,0), 1);
     m_pDoc->SetValue(ScAddress(2,6,0), 2);
     m_pDoc->SetValue(ScAddress(3,5,0), 3);
     m_pDoc->SetValue(ScAddress(3,6,0), 4);
 
-    // Set formulas at A2 and A3.
+    
     m_pDoc->SetString(ScAddress(0,1,0), "=SUM(C6:D7)");
     m_pDoc->SetString(ScAddress(0,2,0), "=SUM($C$6:$D$7)");
 
@@ -1266,7 +1266,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$6:$D$7)"))
         CPPUNIT_FAIL("Wrong formula in A3.");
 
-    // Insert at column E. This should expand the reference range by one column.
+    
     m_pDoc->InsertCol(ScRange(4,0,0,4,MAXROW,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C6:E7)"))
@@ -1275,7 +1275,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$6:$E$7)"))
         CPPUNIT_FAIL("Wrong formula in A3.");
 
-    // Insert at column C to edge-expand the reference range.
+    
     m_pDoc->InsertCol(ScRange(2,0,0,2,MAXROW,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C6:F7)"))
@@ -1284,7 +1284,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$6:$F$7)"))
         CPPUNIT_FAIL("Wrong formula in A3.");
 
-    // Insert at row 8 to edge-expand.
+    
     m_pDoc->InsertRow(ScRange(0,7,0,MAXCOL,7,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C6:F8)"))
@@ -1293,7 +1293,7 @@ void Test::testFormulaRefUpdateRange()
     if (!checkFormula(*m_pDoc, ScAddress(0,2,0), "SUM($C$6:$F$8)"))
         CPPUNIT_FAIL("Wrong formula in A3.");
 
-    // Insert at row 6 to edge-expand.
+    
     m_pDoc->InsertRow(ScRange(0,5,0,MAXCOL,5,0));
 
     if (!checkFormula(*m_pDoc, ScAddress(0,1,0), "SUM(C6:F9)"))
@@ -1316,15 +1316,15 @@ void Test::testFormulaRefUpdateSheets()
     m_pDoc->GetName(1, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet2"), aName);
 
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
-    // Set values to B2:C3 on sheet Sheet1.
+    
     m_pDoc->SetValue(ScAddress(1,1,0), 1);
     m_pDoc->SetValue(ScAddress(1,2,0), 2);
     m_pDoc->SetValue(ScAddress(2,1,0), 3);
     m_pDoc->SetValue(ScAddress(2,2,0), 4);
 
-    // Set formulas to B2 and B3 on sheet Sheet2.
+    
     m_pDoc->SetString(ScAddress(1,1,1), "=SUM(Sheet1.B2:C3)");
     m_pDoc->SetString(ScAddress(1,2,1), "=SUM($Sheet1.$B$2:$C$3)");
 
@@ -1334,7 +1334,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Swap the sheets.
+    
     m_pDoc->MoveTab(0, 1);
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet2"), aName);
@@ -1347,7 +1347,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Swap back.
+    
     m_pDoc->MoveTab(0, 1);
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet1"), aName);
@@ -1360,7 +1360,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Insert a new sheet between the two.
+    
     m_pDoc->InsertTab(1, "Temp");
 
     m_pDoc->GetName(1, aName);
@@ -1374,7 +1374,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,2), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Move the last sheet (Sheet2) to the first position.
+    
     m_pDoc->MoveTab(2, 0);
 
     if (!checkFormula(*m_pDoc, ScAddress(1,1,0), "SUM(Sheet1.B2:C3)"))
@@ -1383,7 +1383,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,0), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Move back.
+    
     m_pDoc->MoveTab(0, 2);
 
     if (!checkFormula(*m_pDoc, ScAddress(1,1,2), "SUM(Sheet1.B2:C3)"))
@@ -1392,7 +1392,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,2), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Move the "Temp" sheet to the last position.
+    
     m_pDoc->MoveTab(1, 2);
 
     if (!checkFormula(*m_pDoc, ScAddress(1,1,1), "SUM(Sheet1.B2:C3)"))
@@ -1401,10 +1401,10 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Move back.
+    
     m_pDoc->MoveTab(2, 1);
 
-    // Delete the temporary sheet.
+    
     m_pDoc->DeleteTab(1);
 
     m_pDoc->GetName(1, aName);
@@ -1416,7 +1416,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Insert a new sheet before the first one.
+    
     m_pDoc->InsertTab(0, "Temp");
 
     m_pDoc->GetName(1, aName);
@@ -1430,7 +1430,7 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,2), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Delete the temporary sheet.
+    
     m_pDoc->DeleteTab(0);
 
     if (!checkFormula(*m_pDoc, ScAddress(1,1,1), "SUM(Sheet1.B2:C3)"))
@@ -1439,12 +1439,12 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Append a bunch of sheets.
+    
     m_pDoc->InsertTab(2, "Temp1");
     m_pDoc->InsertTab(3, "Temp2");
     m_pDoc->InsertTab(4, "Temp3");
 
-    // Move these tabs around. This shouldn't affects the first 2 sheets.
+    
     m_pDoc->MoveTab(2, 4);
     m_pDoc->MoveTab(3, 2);
 
@@ -1454,12 +1454,12 @@ void Test::testFormulaRefUpdateSheets()
     if (!checkFormula(*m_pDoc, ScAddress(1,2,1), "SUM($Sheet1.$B$2:$C$3)"))
         CPPUNIT_FAIL("Wrong formula in Sheet2.B3.");
 
-    // Delete the temp sheets.
+    
     m_pDoc->DeleteTab(4);
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);
 
-    // Delete Sheet1.
+    
     m_pDoc->DeleteTab(0);
     m_pDoc->GetName(0, aName);
     CPPUNIT_ASSERT_EQUAL(OUString("Sheet2"), aName);
@@ -1477,14 +1477,14 @@ void Test::testFormulaRefUpdateMove()
 {
     m_pDoc->InsertTab(0, "Sheet1");
 
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
-    // Set value to B4:B6.
+    
     m_pDoc->SetValue(ScAddress(1,3,0), 1);
     m_pDoc->SetValue(ScAddress(1,4,0), 2);
     m_pDoc->SetValue(ScAddress(1,5,0), 3);
 
-    // Set formulas to A9:A12 that references B4:B6.
+    
     m_pDoc->SetString(ScAddress(0,8,0), "=SUM(B4:B6)");
     m_pDoc->SetString(ScAddress(0,9,0), "=SUM($B$4:$B$6)");
     m_pDoc->SetString(ScAddress(0,10,0), "=B5");
@@ -1495,12 +1495,12 @@ void Test::testFormulaRefUpdateMove()
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0,10,0));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(0,11,0));
 
-    // Move B4:B6 to D4 (two columsn to the right).
+    
     ScDocFunc& rFunc = getDocShell().GetDocFunc();
     bool bMoved = rFunc.MoveBlock(ScRange(1,3,0,1,5,0), ScAddress(3,3,0), true, false, false, false);
     CPPUNIT_ASSERT_MESSAGE("Failed to move B4:B6.", bMoved);
 
-    // The results of the formula cells that reference the moved range should remain the same.
+    
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(0,8,0));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(0,9,0));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(0,10,0));
@@ -1518,17 +1518,17 @@ void Test::testFormulaRefUpdateMove()
     if (!checkFormula(*m_pDoc, ScAddress(0,11,0), "$D$6"))
         CPPUNIT_FAIL("Wrong formula.");
 
-    // Move A9:A12 to B10:B13.
+    
     bMoved = rFunc.MoveBlock(ScRange(0,8,0,0,11,0), ScAddress(1,9,0), true, false, false, false);
     CPPUNIT_ASSERT_MESSAGE("Failed to move A9:A12 to B10:B13", bMoved);
 
-    // The results of these formula cells should still stay the same.
+    
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(1,9,0));
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(1,10,0));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,11,0));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1,12,0));
 
-    // Displayed formulas should stay the same since the referenced range hasn't moved.
+    
     if (!checkFormula(*m_pDoc, ScAddress(1,9,0), "SUM(D4:D6)"))
         CPPUNIT_FAIL("Wrong formula.");
 
@@ -1541,12 +1541,12 @@ void Test::testFormulaRefUpdateMove()
     if (!checkFormula(*m_pDoc, ScAddress(1,12,0), "$D$6"))
         CPPUNIT_FAIL("Wrong formula.");
 
-    // The value cells are in D4:D6. Move D4:D5 to the right but leave D6
-    // where it is.
+    
+    
     bMoved = rFunc.MoveBlock(ScRange(3,3,0,3,4,0), ScAddress(4,3,0), true, false, false, false);
     CPPUNIT_ASSERT_MESSAGE("Failed to move D4:D5 to E4:E5", bMoved);
 
-    // Only the values of B10 and B11 should be updated.
+    
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1,9,0));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1,10,0));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(1,11,0));
@@ -1571,15 +1571,15 @@ void Test::testFormulaRefUpdateNamedExpression()
 {
     m_pDoc->InsertTab(0, "Formula");
 
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
-    // Fill C2:C5 with values.
+    
     m_pDoc->SetValue(ScAddress(2,1,0), 1);
     m_pDoc->SetValue(ScAddress(2,2,0), 2);
     m_pDoc->SetValue(ScAddress(2,3,0), 3);
     m_pDoc->SetValue(ScAddress(2,4,0), 4);
 
-    // Add a named expression that references the immediate left cell.
+    
     ScRangeName* pGlobalNames = m_pDoc->GetRangeName();
     CPPUNIT_ASSERT_MESSAGE("Failed to obtain global named expression object.", pGlobalNames);
     ScRangeData* pName = new ScRangeData(
@@ -1588,71 +1588,71 @@ void Test::testFormulaRefUpdateNamedExpression()
     bool bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
-    // Insert formulas in D2:D5 using the named expression.
+    
     m_pDoc->SetString(ScAddress(3,1,0), "=ToLeft");
     m_pDoc->SetString(ScAddress(3,2,0), "=ToLeft");
     m_pDoc->SetString(ScAddress(3,3,0), "=ToLeft");
     m_pDoc->SetString(ScAddress(3,4,0), "=ToLeft");
 
-    // Make sure the results are correct.
+    
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3,1,0));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3,2,0));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3,3,0));
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3,4,0));
 
-    // Push cells in column C down by one cell.
+    
     m_pDoc->InsertRow(ScRange(2,0,0,2,0,0));
 
-    // Make sure the results change accordingly.
+    
     CPPUNIT_ASSERT_EQUAL(0.0, m_pDoc->GetValue(3,1,0));
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3,2,0));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3,3,0));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3,4,0));
 
-    // Move cells back.
+    
     m_pDoc->DeleteRow(ScRange(2,0,0,2,0,0));
 
-    // Make sure the results are back as well.
+    
     CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(3,1,0));
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(3,2,0));
     CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(3,3,0));
     CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(3,4,0));
 
-    // Fill B10:B12 with values.
+    
     m_pDoc->SetValue(ScAddress(1,9,0), 10);
     m_pDoc->SetValue(ScAddress(1,10,0), 11);
     m_pDoc->SetValue(ScAddress(1,11,0), 12);
 
-    // Insert a new named expression that references these values as absolute range.
+    
     pName = new ScRangeData(
         m_pDoc, "MyRange", "$B$10:$B$12", ScAddress(0,0,0), RT_NAME, formula::FormulaGrammar::GRAM_NATIVE);
     bInserted = pGlobalNames->insert(pName);
     CPPUNIT_ASSERT_MESSAGE("Failed to insert a new name.", bInserted);
 
-    // Set formula at C8 that references this named expression.
+    
     m_pDoc->SetString(ScAddress(2,7,0), "=SUM(MyRange)");
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(ScAddress(2,7,0)));
 
-    // Shift B10:B12 to right by 2 columns.
+    
     m_pDoc->InsertCol(ScRange(1,9,0,2,11,0));
 
-    // This should shift the absolute range B10:B12 that MyRange references.
+    
     pName = pGlobalNames->findByUpperName("MYRANGE");
     CPPUNIT_ASSERT_MESSAGE("Failed to find named expression 'MyRange' in the global scope.", pName);
     OUString aExpr;
     pName->GetSymbol(aExpr);
     CPPUNIT_ASSERT_EQUAL(OUString("$D$10:$D$12"), aExpr);
 
-    // This move shouldn't affect the value of C8.
+    
     ScFormulaCell* pFC = m_pDoc->GetFormulaCell(ScAddress(2,7,0));
     CPPUNIT_ASSERT_MESSAGE("This should be a formula cell.", pFC);
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(ScAddress(2,7,0)));
 
-    // Update the value of D10 and make sure C8 gets updated.
+    
     m_pDoc->SetValue(ScAddress(3,9,0), 20);
     CPPUNIT_ASSERT_EQUAL(43.0, m_pDoc->GetValue(ScAddress(2,7,0)));
 
-    // Insert a new sheet before the current.
+    
     m_pDoc->InsertTab(0, "New");
     OUString aName;
     m_pDoc->GetName(1, aName);
@@ -1664,7 +1664,7 @@ void Test::testFormulaRefUpdateNamedExpression()
     m_pDoc->SetValue(ScAddress(3,9,1), 10);
     CPPUNIT_ASSERT_EQUAL(33.0, m_pDoc->GetValue(ScAddress(2,7,1)));
 
-    // Delete the inserted sheet, which will shift the 'Formula' sheet to the left.
+    
     m_pDoc->DeleteTab(0);
 
     aName = OUString();
@@ -1677,7 +1677,7 @@ void Test::testFormulaRefUpdateNamedExpression()
     m_pDoc->SetValue(ScAddress(3,9,0), 11);
     CPPUNIT_ASSERT_EQUAL(34.0, m_pDoc->GetValue(ScAddress(2,7,0)));
 
-    // Clear all and start over.
+    
     clearRange(m_pDoc, ScRange(0,0,0,100,100,0));
     pGlobalNames->clear();
 
@@ -1688,10 +1688,10 @@ void Test::testFormulaRefUpdateNamedExpression()
     pName->GetSymbol(aExpr);
     CPPUNIT_ASSERT_EQUAL(OUString("$B$1:$C$6"), aExpr);
 
-    // Insert range of cells to shift right. The range partially overlaps the named range.
+    
     m_pDoc->InsertCol(ScRange(2,4,0,3,8,0));
 
-    // This should not alter the range.
+    
     pName->GetSymbol(aExpr);
     CPPUNIT_ASSERT_EQUAL(OUString("$B$1:$C$6"), aExpr);
 
@@ -1702,43 +1702,43 @@ void Test::testMultipleOperations()
 {
     m_pDoc->InsertTab(0, "MultiOp");
 
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
-    // Insert the reference formula at top row.
+    
     m_pDoc->SetValue(ScAddress(0,0,0), 1);
     m_pDoc->SetString(ScAddress(1,0,0), "=A1*10");
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(1,0,0)));
 
-    // Insert variable inputs in A3:A5.
+    
     m_pDoc->SetValue(ScAddress(0,2,0), 2);
     m_pDoc->SetValue(ScAddress(0,3,0), 3);
     m_pDoc->SetValue(ScAddress(0,4,0), 4);
 
-    // Set multiple operations range.
+    
     ScTabOpParam aParam;
     aParam.aRefFormulaCell = ScRefAddress(1,0,0,false,false,false);
     aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
     aParam.aRefColCell = ScRefAddress(0,0,0,false,false,false);
     ScMarkData aMark;
-    aMark.SetMarkArea(ScRange(0,2,0,1,4,0)); // Select A3:B5.
+    aMark.SetMarkArea(ScRange(0,2,0,1,4,0)); 
     m_pDoc->InsertTableOp(aParam, 0, 2, 1, 4, aMark);
     CPPUNIT_ASSERT_EQUAL(20.0, m_pDoc->GetValue(1,2,0));
     CPPUNIT_ASSERT_EQUAL(30.0, m_pDoc->GetValue(1,3,0));
     CPPUNIT_ASSERT_EQUAL(40.0, m_pDoc->GetValue(1,4,0));
 
-    // Clear A3:B5.
+    
     clearRange(m_pDoc, ScRange(0,2,0,1,4,0));
 
-    // This time, use indirect reference formula cell.
-    m_pDoc->SetString(ScAddress(2,0,0), "=B1"); // C1 simply references B1.
+    
+    m_pDoc->SetString(ScAddress(2,0,0), "=B1"); 
     CPPUNIT_ASSERT_EQUAL(10.0, m_pDoc->GetValue(ScAddress(2,0,0)));
 
-    // Insert variable inputs in A3:A5.
+    
     m_pDoc->SetValue(ScAddress(0,2,0), 3);
     m_pDoc->SetValue(ScAddress(0,3,0), 4);
     m_pDoc->SetValue(ScAddress(0,4,0), 5);
 
-    // Set multiple operations range again, but this time, we'll use C1 as the reference formula.
+    
     aParam.aRefFormulaCell.Set(2,0,0,false,false,false);
     aParam.aRefFormulaEnd = aParam.aRefFormulaCell;
     m_pDoc->InsertTableOp(aParam, 0, 2, 1, 4, aMark);
@@ -1752,7 +1752,7 @@ void Test::testMultipleOperations()
 void Test::testFuncCOLUMN()
 {
     m_pDoc->InsertTab(0, "Formula");
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
     m_pDoc->SetString(ScAddress(5,10,0), "=COLUMN()");
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(5,10,0)));
@@ -1760,19 +1760,19 @@ void Test::testFuncCOLUMN()
     m_pDoc->SetString(ScAddress(0,1,0), "=F11");
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
-    // Move the formula cell with COLUMN() function to change its value.
+    
     m_pDoc->InsertCol(ScRange(5,0,0,5,MAXROW,0));
     CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(6,10,0)));
 
-    // The cell that references the moved cell should update its value as well.
+    
     CPPUNIT_ASSERT_EQUAL(7.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
-    // Move the column in the other direction.
+    
     m_pDoc->DeleteCol(ScRange(5,0,0,5,MAXROW,0));
 
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(5,10,0)));
 
-    // The cell that references the moved cell should update its value as well.
+    
     CPPUNIT_ASSERT_EQUAL(6.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
     m_pDoc->DeleteTab(0);
@@ -1781,11 +1781,11 @@ void Test::testFuncCOLUMN()
 void Test::testFuncCOUNT()
 {
     m_pDoc->InsertTab(0, "Formula");
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
-    m_pDoc->SetValue(ScAddress(0,0,0), 2); // A1
-    m_pDoc->SetValue(ScAddress(0,1,0), 4); // A2
-    m_pDoc->SetValue(ScAddress(0,2,0), 6); // A3
+    m_pDoc->SetValue(ScAddress(0,0,0), 2); 
+    m_pDoc->SetValue(ScAddress(0,1,0), 4); 
+    m_pDoc->SetValue(ScAddress(0,2,0), 6); 
 
     ScAddress aPos(1,0,0);
     m_pDoc->SetString(aPos, "=COUNT(A1:A3)");
@@ -1809,7 +1809,7 @@ void Test::testFuncCOUNT()
 void Test::testFuncROW()
 {
     m_pDoc->InsertTab(0, "Formula");
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn auto calc on.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
     m_pDoc->SetString(ScAddress(5,10,0), "=ROW()");
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(5,10,0)));
@@ -1817,19 +1817,19 @@ void Test::testFuncROW()
     m_pDoc->SetString(ScAddress(0,1,0), "=F11");
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
-    // Insert 2 new rows at row 4.
+    
     m_pDoc->InsertRow(ScRange(0,3,0,MAXCOL,4,0));
     CPPUNIT_ASSERT_EQUAL(13.0, m_pDoc->GetValue(ScAddress(5,12,0)));
 
-    // The cell that references the moved cell should update its value as well.
+    
     CPPUNIT_ASSERT_EQUAL(13.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
-    // Delete 2 rows to move it back.
+    
     m_pDoc->DeleteRow(ScRange(0,3,0,MAXCOL,4,0));
 
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(5,10,0)));
 
-    // The cell that references the moved cell should update its value as well.
+    
     CPPUNIT_ASSERT_EQUAL(11.0, m_pDoc->GetValue(ScAddress(0,1,0)));
 
     m_pDoc->DeleteTab(0);
@@ -1841,14 +1841,14 @@ void Test::testFuncSUM()
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    // Single argument case.
+    
     m_pDoc->SetValue(ScAddress(0,0,0), 1);
     m_pDoc->SetValue(ScAddress(0,1,0), 1);
     m_pDoc->SetString(ScAddress(0,2,0), "=SUM(A1:A2)");
     m_pDoc->CalcAll();
     CPPUNIT_ASSERT_EQUAL(2.0, m_pDoc->GetValue(ScAddress(0,2,0)));
 
-    // Multiple argument case.
+    
     m_pDoc->SetValue(ScAddress(0,0,0), 1);
     m_pDoc->SetValue(ScAddress(0,1,0), 22);
     m_pDoc->SetValue(ScAddress(0,2,0), 4);
@@ -1902,22 +1902,22 @@ void Test::testFuncSUMPRODUCT()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto recalc.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
     ScAddress aPos(0,0,0);
     m_pDoc->SetString(aPos, "=SUMPRODUCT(B1:B3;C1:C3)");
     CPPUNIT_ASSERT_EQUAL(0.0,  m_pDoc->GetValue(aPos));
-    m_pDoc->SetValue(ScAddress(2,0,0),  1.0); // C1
+    m_pDoc->SetValue(ScAddress(2,0,0),  1.0); 
     CPPUNIT_ASSERT_EQUAL(0.0,  m_pDoc->GetValue(aPos));
-    m_pDoc->SetValue(ScAddress(1,0,0),  1.0); // B1
+    m_pDoc->SetValue(ScAddress(1,0,0),  1.0); 
     CPPUNIT_ASSERT_EQUAL(1.0,  m_pDoc->GetValue(aPos));
-    m_pDoc->SetValue(ScAddress(1,1,0),  2.0); // B2
+    m_pDoc->SetValue(ScAddress(1,1,0),  2.0); 
     CPPUNIT_ASSERT_EQUAL(1.0,  m_pDoc->GetValue(aPos));
-    m_pDoc->SetValue(ScAddress(2,1,0),  3.0); // C2
+    m_pDoc->SetValue(ScAddress(2,1,0),  3.0); 
     CPPUNIT_ASSERT_EQUAL(7.0,  m_pDoc->GetValue(aPos));
-    m_pDoc->SetValue(ScAddress(2,2,0), -2.0); // C3
+    m_pDoc->SetValue(ScAddress(2,2,0), -2.0); 
     CPPUNIT_ASSERT_EQUAL(7.0,  m_pDoc->GetValue(aPos));
-    m_pDoc->SetValue(ScAddress(1,2,0),  5.0); // B3
+    m_pDoc->SetValue(ScAddress(1,2,0),  5.0); 
     CPPUNIT_ASSERT_EQUAL(-3.0, m_pDoc->GetValue(aPos));
 
     m_pDoc->DeleteTab(0);
@@ -1931,10 +1931,10 @@ void Test::testFuncN()
 
     double result;
 
-    // Clear the area first.
+    
     clearRange(m_pDoc, ScRange(0, 0, 0, 1, 20, 0));
 
-    // Put values to reference.
+    
     double val = 0;
     m_pDoc->SetValue(0, 0, 0, val);
     m_pDoc->SetString(0, 2, 0, OUString("Text"));
@@ -1946,7 +1946,7 @@ void Test::testFuncN()
     m_pDoc->SetValue(0, 5, 0, val);
     m_pDoc->SetString(0, 6, 0, OUString("'12.3"));
 
-    // Cell references
+    
     m_pDoc->SetString(1, 0, 0, OUString("=N(A1)"));
     m_pDoc->SetString(1, 1, 0, OUString("=N(A2)"));
     m_pDoc->SetString(1, 2, 0, OUString("=N(A3)"));
@@ -1955,7 +1955,7 @@ void Test::testFuncN()
     m_pDoc->SetString(1, 5, 0, OUString("=N(A6)"));
     m_pDoc->SetString(1, 6, 0, OUString("=N(A9)"));
 
-    // In-line values
+    
     m_pDoc->SetString(1, 7, 0, OUString("=N(0)"));
     m_pDoc->SetString(1, 8, 0, OUString("=N(1)"));
     m_pDoc->SetString(1, 9, 0, OUString("=N(-1)"));
@@ -1964,17 +1964,17 @@ void Test::testFuncN()
     m_pDoc->SetString(1, 12, 0, OUString("=N(\"12\")"));
     m_pDoc->SetString(1, 13, 0, OUString("=N(\"foo\")"));
 
-    // Range references
+    
     m_pDoc->SetString(2, 2, 0, OUString("=N(A1:A8)"));
     m_pDoc->SetString(2, 3, 0, OUString("=N(A1:A8)"));
     m_pDoc->SetString(2, 4, 0, OUString("=N(A1:A8)"));
     m_pDoc->SetString(2, 5, 0, OUString("=N(A1:A8)"));
 
-    // Calculate and check the results.
+    
     m_pDoc->CalcAll();
     double checks1[] = {
-        0, 0,  0,    1, -1, 12.3, 0, // cell reference
-        0, 1, -1, 123,  0,    0, 0   // in-line values
+        0, 0,  0,    1, -1, 12.3, 0, 
+        0, 1, -1, 123,  0,    0, 0   
     };
     for (size_t i = 0; i < SAL_N_ELEMENTS(checks1); ++i)
     {
@@ -1987,7 +1987,7 @@ void Test::testFuncN()
         }
     }
     double checks2[] = {
-        0, 1, -1, 12.3               // range references
+        0, 1, -1, 12.3               
     };
     for (size_t i = 0; i < SAL_N_ELEMENTS(checks2); ++i)
     {
@@ -2005,16 +2005,16 @@ void Test::testFuncN()
 
 void Test::testFuncCOUNTIF()
 {
-    // COUNTIF (test case adopted from OOo i#36381)
+    
 
     OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    // Empty A1:A39 first.
+    
     clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
 
-    // Raw data (rows 1 through 9)
+    
     const char* aData[] = {
         "1999",
         "2000",
@@ -2033,7 +2033,7 @@ void Test::testFuncCOUNTIF()
 
     printRange(m_pDoc, ScRange(0, 0, 0, 0, 8, 0), "data range for COUNTIF");
 
-    // formulas and results
+    
     struct {
         const char* pFormula; double fResult;
     } aChecks[] = {
@@ -2072,9 +2072,9 @@ void Test::testFuncCOUNTIF()
         }
     }
 
-    // Don't count empty strings when searching for a number.
+    
 
-    // Clear A1:A2.
+    
     clearRange(m_pDoc, ScRange(0, 0, 0, 0, 1, 0));
 
     m_pDoc->SetString(0, 0, 0, OUString("=\"\""));
@@ -2089,16 +2089,16 @@ void Test::testFuncCOUNTIF()
 
 void Test::testFuncIFERROR()
 {
-    // IFERROR/IFNA (fdo#56124)
+    
 
     OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    // Empty A1:A39 first.
+    
     clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
 
-    // Raw data (rows 1 through 12)
+    
     const char* aData[] = {
         "1",
         "e",
@@ -2120,7 +2120,7 @@ void Test::testFuncIFERROR()
 
     printRange(m_pDoc, ScRange(0, 0, 0, 0, nRows-1, 0), "data range for IFERROR/IFNA");
 
-    // formulas and results
+    
     struct {
         const char* pFormula; const char* pResult;
     } aChecks[] = {
@@ -2135,8 +2135,8 @@ void Test::testFuncIFERROR()
         { "=IFNA(A7;-7)",                          "-7" },
         { "=IFNA(VLOOKUP(\"4\";A8:A10;1;0);-2)",    "4" },
         { "=IFNA(VLOOKUP(\"fop\";A8:A10;1;0);-2)", "-2" },
-        { "{=IFERROR(3*A11:A12;1998)}[0]",       "1998" },  // um.. this is not the correct way to insert a
-        { "{=IFERROR(3*A11:A12;1998)}[1]",         "69" }   // matrix formula, just a place holder, see below
+        { "{=IFERROR(3*A11:A12;1998)}[0]",       "1998" },  
+        { "{=IFERROR(3*A11:A12;1998)}[1]",         "69" }   
     };
 
     nRows = SAL_N_ELEMENTS(aChecks);
@@ -2146,8 +2146,8 @@ void Test::testFuncIFERROR()
         m_pDoc->SetString(0, nRow, 0, OUString::createFromAscii(aChecks[i].pFormula));
     }
 
-    // Create a matrix range in last two rows of the range above, actual data
-    // of the placeholders.
+    
+    
     ScMarkData aMark;
     aMark.SelectOneTable(0);
     m_pDoc->InsertMatrixFormula(0, 20 + nRows-2, 0, 20 + nRows-1, aMark, "=IFERROR(3*A11:A12;1998)", NULL);
@@ -2167,16 +2167,16 @@ void Test::testFuncIFERROR()
 
 void Test::testFuncNUMBERVALUE()
 {
-    // NUMBERVALUE fdo#57180
+    
 
     OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    // Empty A1:A39 first.
+    
     clearRange(m_pDoc, ScRange(0, 0, 0, 0, 40, 0));
 
-    // Raw data (rows 1 through 6)
+    
     const char* aData[] = {
         "1ag9a9b9",
         "1ag34 5g g6  78b9%%",
@@ -2192,7 +2192,7 @@ void Test::testFuncNUMBERVALUE()
 
     printRange(m_pDoc, ScRange(0, 0, 0, 0, nRows - 1, 0), "data range for NUMBERVALUE");
 
-    // formulas and results
+    
     struct {
         const char* pFormula; const char* pResult;
     } aChecks[] = {
@@ -2231,15 +2231,15 @@ void Test::testFuncLOOKUP()
 
     m_pDoc->InsertTab(0, "Test");
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "=CONCATENATE(\"A\")", "1" },
         { "=CONCATENATE(\"B\")", "2" },
         { "=CONCATENATE(\"C\")", "3" },
-        { 0, 0 } // terminator
+        { 0, 0 } 
     };
 
-    // Insert raw data into A1:B3.
+    
     for (SCROW i = 0; aData[i][0]; ++i)
     {
         m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i][0]));
@@ -2250,10 +2250,10 @@ void Test::testFuncLOOKUP()
         { "A", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
         { "B", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
         { "C", "=LOOKUP(RC[-1];R1C1:R3C1;R1C2:R3C2)" },
-        { 0, 0 } // terminator
+        { 0, 0 } 
     };
 
-    // Insert check formulas into A5:B7.
+    
     for (SCROW i = 0; aData2[i][0]; ++i)
     {
         m_pDoc->SetString(0, i+4, 0, OUString::createFromAscii(aData2[i][0]));
@@ -2262,7 +2262,7 @@ void Test::testFuncLOOKUP()
 
     printRange(m_pDoc, ScRange(0,4,0,1,6,0), "Data range for LOOKUP.");
 
-    // Values for B5:B7 should be 1, 2, and 3.
+    
     CPPUNIT_ASSERT_MESSAGE("This formula should not have an error code.", m_pDoc->GetErrCode(ScAddress(1,4,0)) == 0);
     CPPUNIT_ASSERT_MESSAGE("This formula should not have an error code.", m_pDoc->GetErrCode(ScAddress(1,5,0)) == 0);
     CPPUNIT_ASSERT_MESSAGE("This formula should not have an error code.", m_pDoc->GetErrCode(ScAddress(1,6,0)) == 0);
@@ -2276,16 +2276,16 @@ void Test::testFuncLOOKUP()
 
 void Test::testFuncVLOOKUP()
 {
-    // VLOOKUP
+    
 
     OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    // Clear A1:F40.
+    
     clearRange(m_pDoc, ScRange(0, 0, 0, 5, 39, 0));
 
-    // Raw data
+    
     const char* aData[][2] = {
         { "Key", "Val" },
         {  "10",   "3" },
@@ -2301,10 +2301,10 @@ void Test::testFuncVLOOKUP()
         {   "D",  "13" },
         {   "E",  "14" },
         {   "F",  "15" },
-        { 0, 0 } // terminator
+        { 0, 0 } 
     };
 
-    // Insert raw data into A1:B14.
+    
     for (SCROW i = 0; aData[i][0]; ++i)
     {
         m_pDoc->SetString(0, i, 0, OUString::createFromAscii(aData[i][0]));
@@ -2313,7 +2313,7 @@ void Test::testFuncVLOOKUP()
 
     printRange(m_pDoc, ScRange(0, 0, 0, 1, 13, 0), "raw data for VLOOKUP");
 
-    // Formula data
+    
     struct {
         const char* pLookup; const char* pFormula; const char* pRes;
     } aChecks[] = {
@@ -2337,7 +2337,7 @@ void Test::testFuncVLOOKUP()
         { "Zena",    "=VLOOKUP(D18;A2:B14;2;1)",   "15" }
     };
 
-    // Insert formula data into D1:E18.
+    
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
         m_pDoc->SetString(3, i, 0, OUString::createFromAscii(aChecks[i].pLookup));
@@ -2346,11 +2346,11 @@ void Test::testFuncVLOOKUP()
     m_pDoc->CalcAll();
     printRange(m_pDoc, ScRange(3, 0, 0, 4, 17, 0), "formula data for VLOOKUP");
 
-    // Verify results.
+    
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
     {
         if (i == 0)
-            // Skip the header row.
+            
             continue;
 
         OUString aRes = m_pDoc->GetString(4, i, 0);
@@ -2363,12 +2363,12 @@ void Test::testFuncVLOOKUP()
         }
     }
 
-    // Clear the sheet and start over.
+    
     clearRange(m_pDoc, ScRange(0,0,0,MAXCOL,MAXROW,0));
 
-    // Lookup on sorted data intersparsed with empty cells.
+    
 
-    // A1:B8 is the search range.
+    
     m_pDoc->SetValue(ScAddress(0,2,0), 1.0);
     m_pDoc->SetValue(ScAddress(0,4,0), 2.0);
     m_pDoc->SetValue(ScAddress(0,7,0), 4.0);
@@ -2376,14 +2376,14 @@ void Test::testFuncVLOOKUP()
     m_pDoc->SetString(ScAddress(1,4,0), "Two");
     m_pDoc->SetString(ScAddress(1,7,0), "Four");
 
-    // D1:D5 contain match values.
+    
     m_pDoc->SetValue(ScAddress(3,0,0), 1.0);
     m_pDoc->SetValue(ScAddress(3,1,0), 2.0);
     m_pDoc->SetValue(ScAddress(3,2,0), 3.0);
     m_pDoc->SetValue(ScAddress(3,3,0), 4.0);
     m_pDoc->SetValue(ScAddress(3,4,0), 5.0);
 
-    // E1:E5 contain formulas.
+    
     m_pDoc->SetString(ScAddress(4,0,0), "=VLOOKUP(D1;$A$1:$B$8;2)");
     m_pDoc->SetString(ScAddress(4,1,0), "=VLOOKUP(D2;$A$1:$B$8;2)");
     m_pDoc->SetString(ScAddress(4,2,0), "=VLOOKUP(D3;$A$1:$B$8;2)");
@@ -2391,7 +2391,7 @@ void Test::testFuncVLOOKUP()
     m_pDoc->SetString(ScAddress(4,4,0), "=VLOOKUP(D5;$A$1:$B$8;2)");
     m_pDoc->CalcAll();
 
-    // Check the formula results in E1:E5.
+    
     CPPUNIT_ASSERT_EQUAL(OUString("One"), m_pDoc->GetString(ScAddress(4,0,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Two"), m_pDoc->GetString(ScAddress(4,1,0)));
     CPPUNIT_ASSERT_EQUAL(OUString("Two"), m_pDoc->GetString(ScAddress(4,2,0)));
@@ -2437,7 +2437,7 @@ void runTestMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrStrCheck aC
     pDoc->CalcAll();
     Test::printRange(pDoc, ScRange(0, 0, 0, 2, _FormulaSize-1, 0), "MATCH");
 
-    // verify the results.
+    
     for (size_t i = 0; i < _FormulaSize; ++i)
     {
         OUString aStr = pDoc->GetString(2, i, 0);
@@ -2461,7 +2461,7 @@ void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrS
     {
         pDoc->SetString(i, 1, 0, OUString::createFromAscii(aChecks[i].pVal));
 
-        // Assume we don't have more than 26 data columns..
+        
         OUStringBuffer aBuf;
         aBuf.appendAscii("=MATCH(");
         aBuf.append(static_cast<sal_Unicode>('A'+i));
@@ -2477,7 +2477,7 @@ void runTestHorizontalMATCH(ScDocument* pDoc, const char* aData[_DataSize], StrS
     pDoc->CalcAll();
     Test::printRange(pDoc, ScRange(0, 0, 0, _FormulaSize-1, 2, 0), "MATCH");
 
-    // verify the results.
+    
     for (size_t i = 0; i < _FormulaSize; ++i)
     {
         OUString aStr = pDoc->GetString(i, 2, 0);
@@ -2498,9 +2498,9 @@ void Test::testFuncMATCH()
 
     clearRange(m_pDoc, ScRange(0, 0, 0, 40, 40, 0));
     {
-        // Ascending in-exact match
+        
 
-        // data range (A1:A9)
+        
         const char* aData[] = {
             "1",
             "2",
@@ -2516,7 +2516,7 @@ void Test::testFuncMATCH()
             "C",
         };
 
-        // formula (B1:C12)
+        
         StrStrCheck aChecks[] = {
             { "0.8",   "#N/A" },
             { "1.2",      "1" },
@@ -2542,9 +2542,9 @@ void Test::testFuncMATCH()
     }
 
     {
-        // Descending in-exact match
+        
 
-        // data range (A1:A9)
+        
         const char* aData[] = {
             "D",
             "C",
@@ -2560,7 +2560,7 @@ void Test::testFuncMATCH()
             "1"
         };
 
-        // formula (B1:C12)
+        
         StrStrCheck aChecks[] = {
             { "10",      "#N/A" },
             { "8.9",     "4" },
@@ -2587,17 +2587,17 @@ void Test::testFuncMATCH()
     }
 
     {
-        // search range contains leading and trailing empty cell ranges.
+        
 
         clearRange(m_pDoc, ScRange(0,0,0,2,100,0));
 
-        // A5:A8 contains sorted values.
+        
         m_pDoc->SetValue(ScAddress(0,4,0), 1.0);
         m_pDoc->SetValue(ScAddress(0,5,0), 2.0);
         m_pDoc->SetValue(ScAddress(0,6,0), 3.0);
         m_pDoc->SetValue(ScAddress(0,7,0), 4.0);
 
-        // Find value 2 which is in A6.
+        
         m_pDoc->SetString(ScAddress(1,0,0), "=MATCH(2;A1:A20)");
         m_pDoc->CalcAll();
 
@@ -2613,15 +2613,15 @@ void Test::testFuncCELL()
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
 
-    clearRange(m_pDoc, ScRange(0, 0, 0, 2, 20, 0)); // Clear A1:C21.
+    clearRange(m_pDoc, ScRange(0, 0, 0, 2, 20, 0)); 
 
     {
         const char* pContent = "Some random text";
-        m_pDoc->SetString(2, 9, 0, OUString::createFromAscii(pContent)); // Set this value to C10.
+        m_pDoc->SetString(2, 9, 0, OUString::createFromAscii(pContent)); 
         double val = 1.2;
-        m_pDoc->SetValue(2, 0, 0, val); // Set numeric value to C1;
+        m_pDoc->SetValue(2, 0, 0, val); 
 
-        // We don't test: FILENAME, FORMAT, WIDTH, PROTECT, PREFIX
+        
         StrStrCheck aChecks[] = {
             { "=CELL(\"COL\";C10)",           "3" },
             { "=CELL(\"ROW\";C10)",          "10" },
@@ -2671,7 +2671,7 @@ void Test::testFuncDATEDIF()
         { "2007-01-01", "2007-01-31", "md",  "30", "=DATEDIF(A12;B12;C12)" } ,
         { "2007-02-01", "2009-03-01", "md",   "0", "=DATEDIF(A13;B13;C13)" } ,
         { "2008-02-01", "2009-03-01", "md",   "0", "=DATEDIF(A14;B14;C14)" } ,
-        { "2007-01-02", "2007-01-01", "md", "Err:502", "=DATEDIF(A15;B15;C15)" }    // fail date1 > date2
+        { "2007-01-02", "2007-01-01", "md", "Err:502", "=DATEDIF(A15;B15;C15)" }    
     };
 
     clearRange( m_pDoc, ScRange(0, 0, 0, 4, SAL_N_ELEMENTS(aData), 0));
@@ -2684,7 +2684,7 @@ void Test::testFuncDATEDIF()
     for (size_t i = 0; i < SAL_N_ELEMENTS(aData); ++i)
     {
         OUString aVal = m_pDoc->GetString( 4, i, 0);
-        //std::cout << "row "<< i << ": " << OUStringToOString( aVal, RTL_TEXTENCODING_UTF8).getStr() << ", expected " << aData[i][3] << std::endl;
+        
         CPPUNIT_ASSERT_MESSAGE("Unexpected result for DATEDIF", aVal.equalsAscii( aData[i][3]));
     }
 
@@ -2696,7 +2696,7 @@ void Test::testFuncINDIRECT()
     OUString aTabName("foo");
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
                             m_pDoc->InsertTab (0, aTabName));
-    clearRange(m_pDoc, ScRange(0, 0, 0, 0, 10, 0)); // Clear A1:A11
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, 10, 0)); 
 
     bool bGood = m_pDoc->GetName(0, aTabName);
     CPPUNIT_ASSERT_MESSAGE("failed to get sheet name.", bGood);
@@ -2707,18 +2707,18 @@ void Test::testFuncINDIRECT()
 
     OUString aPrefix = "=INDIRECT(\"";
 
-    OUString aFormula = aPrefix + aTabName + ".A11\")"; // Calc A1
+    OUString aFormula = aPrefix + aTabName + ".A11\")"; 
     m_pDoc->SetString(0, 0, 0, aFormula);
-    aFormula = aPrefix + aTabName + "!A11\")"; // Excel A1
+    aFormula = aPrefix + aTabName + "!A11\")"; 
     m_pDoc->SetString(0, 1, 0, aFormula);
-    aFormula = aPrefix + aTabName + "!R11C1\")"; // Excel R1C1
+    aFormula = aPrefix + aTabName + "!R11C1\")"; 
     m_pDoc->SetString(0, 2, 0, aFormula);
-    aFormula = aPrefix + aTabName + "!R11C1\";0)"; // Excel R1C1 (forced)
+    aFormula = aPrefix + aTabName + "!R11C1\";0)"; 
     m_pDoc->SetString(0, 3, 0, aFormula);
 
     m_pDoc->CalcAll();
     {
-        // Default is to use the current formula syntax, which is Calc A1.
+        
         const OUString* aChecks[] = {
             &aTest, &aRefErr, &aRefErr, &aTest
         };
@@ -2735,7 +2735,7 @@ void Test::testFuncINDIRECT()
     ScInterpreter::SetGlobalConfig(aConfig);
     m_pDoc->CalcAll();
     {
-        // Explicit Calc A1 syntax
+        
         const OUString* aChecks[] = {
             &aTest, &aRefErr, &aRefErr, &aTest
         };
@@ -2751,7 +2751,7 @@ void Test::testFuncINDIRECT()
     ScInterpreter::SetGlobalConfig(aConfig);
     m_pDoc->CalcAll();
     {
-        // Excel A1 syntax
+        
         const OUString* aChecks[] = {
             &aRefErr, &aTest, &aRefErr, &aTest
         };
@@ -2767,7 +2767,7 @@ void Test::testFuncINDIRECT()
     ScInterpreter::SetGlobalConfig(aConfig);
     m_pDoc->CalcAll();
     {
-        // Excel R1C1 syntax
+        
         const OUString* aChecks[] = {
             &aRefErr, &aRefErr, &aTest, &aTest
         };
@@ -2785,7 +2785,7 @@ void Test::testFuncINDIRECT()
 void Test::testExternalRef()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
-    OUString aExtDocName("file:///extdata.fake");
+    OUString aExtDocName("file:
     OUString aExtSh1Name("Data1");
     OUString aExtSh2Name("Data2");
     OUString aExtSh3Name("Data3");
@@ -2794,7 +2794,7 @@ void Test::testExternalRef()
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
                            findLoadedDocShellByName(aExtDocName) != NULL);
 
-    // Populate the external source document.
+    
     ScDocument* pExtDoc = xExtDocSh->GetDocument();
     pExtDoc->InsertTab(0, aExtSh1Name);
     pExtDoc->InsertTab(1, aExtSh2Name);
@@ -2811,7 +2811,7 @@ void Test::testExternalRef()
     OUString george("George");
     OUString henry("Henry");
 
-    // Sheet 1
+    
     pExtDoc->SetString(0, 0, 0, name);
     pExtDoc->SetString(0, 1, 0, andy);
     pExtDoc->SetString(0, 2, 0, bruce);
@@ -2827,9 +2827,9 @@ void Test::testExternalRef()
     val = 13;
     pExtDoc->SetValue(1, 4, 0, val);
 
-    // Sheet 2 remains empty.
+    
 
-    // Sheet 3
+    
     pExtDoc->SetString(0, 0, 2, name);
     pExtDoc->SetString(0, 1, 2, edward);
     pExtDoc->SetString(0, 2, 2, frank);
@@ -2845,17 +2845,17 @@ void Test::testExternalRef()
     val = 96;
     pExtDoc->SetValue(1, 4, 2, val);
 
-    // Test external refernces on the main document while the external
-    // document is still in memory.
+    
+    
     m_pDoc->InsertTab(0, OUString("Test Sheet"));
-    m_pDoc->SetString(0, 0, 0, OUString("='file:///extdata.fake'#Data1.A1"));
+    m_pDoc->SetString(0, 0, 0, OUString("='file:
     OUString test = m_pDoc->GetString(0, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(name));
 
-    // After the initial access to the external document, the external ref
-    // manager should create sheet cache entries for *all* sheets from that
-    // document.  Note that the doc may have more than 3 sheets but ensure
-    // that the first 3 are what we expect.
+    
+    
+    
+    
     ScExternalRefManager* pRefMgr = m_pDoc->GetExternalRefManager();
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aExtDocName);
     vector<OUString> aTabNames;
@@ -2865,18 +2865,18 @@ void Test::testExternalRef()
     CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[1].equals(aExtSh2Name));
     CPPUNIT_ASSERT_MESSAGE("Unexpected sheet name.", aTabNames[2].equals(aExtSh3Name));
 
-    m_pDoc->SetString(1, 0, 0, OUString("='file:///extdata.fake'#Data1.B1"));
+    m_pDoc->SetString(1, 0, 0, OUString("='file:
     test = m_pDoc->GetString(1, 0, 0);
     CPPUNIT_ASSERT_MESSAGE("Value is different from the original", test.equals(value));
 
-    m_pDoc->SetString(0, 1, 0, OUString("='file:///extdata.fake'#Data1.A2"));
-    m_pDoc->SetString(0, 2, 0, OUString("='file:///extdata.fake'#Data1.A3"));
-    m_pDoc->SetString(0, 3, 0, OUString("='file:///extdata.fake'#Data1.A4"));
-    m_pDoc->SetString(0, 4, 0, OUString("='file:///extdata.fake'#Data1.A5"));
-    m_pDoc->SetString(0, 5, 0, OUString("='file:///extdata.fake'#Data1.A6"));
+    m_pDoc->SetString(0, 1, 0, OUString("='file:
+    m_pDoc->SetString(0, 2, 0, OUString("='file:
+    m_pDoc->SetString(0, 3, 0, OUString("='file:
+    m_pDoc->SetString(0, 4, 0, OUString("='file:
+    m_pDoc->SetString(0, 5, 0, OUString("='file:
 
     {
-        // Referencing an empty cell should display '0'.
+        
         const char* pChecks[] = { "Andy", "Bruce", "Charlie", "David", "0" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
         {
@@ -2884,11 +2884,11 @@ void Test::testExternalRef()
             CPPUNIT_ASSERT_MESSAGE("Unexpected cell value.", test.equalsAscii(pChecks[i]));
         }
     }
-    m_pDoc->SetString(1, 1, 0, OUString("='file:///extdata.fake'#Data1.B2"));
-    m_pDoc->SetString(1, 2, 0, OUString("='file:///extdata.fake'#Data1.B3"));
-    m_pDoc->SetString(1, 3, 0, OUString("='file:///extdata.fake'#Data1.B4"));
-    m_pDoc->SetString(1, 4, 0, OUString("='file:///extdata.fake'#Data1.B5"));
-    m_pDoc->SetString(1, 5, 0, OUString("='file:///extdata.fake'#Data1.B6"));
+    m_pDoc->SetString(1, 1, 0, OUString("='file:
+    m_pDoc->SetString(1, 2, 0, OUString("='file:
+    m_pDoc->SetString(1, 3, 0, OUString("='file:
+    m_pDoc->SetString(1, 4, 0, OUString("='file:
+    m_pDoc->SetString(1, 5, 0, OUString("='file:
     {
         double pChecks[] = { 10, 11, 12, 13, 0 };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
@@ -2898,10 +2898,10 @@ void Test::testExternalRef()
         }
     }
 
-    m_pDoc->SetString(2, 0, 0, OUString("='file:///extdata.fake'#Data3.A1"));
-    m_pDoc->SetString(2, 1, 0, OUString("='file:///extdata.fake'#Data3.A2"));
-    m_pDoc->SetString(2, 2, 0, OUString("='file:///extdata.fake'#Data3.A3"));
-    m_pDoc->SetString(2, 3, 0, OUString("='file:///extdata.fake'#Data3.A4"));
+    m_pDoc->SetString(2, 0, 0, OUString("='file:
+    m_pDoc->SetString(2, 1, 0, OUString("='file:
+    m_pDoc->SetString(2, 2, 0, OUString("='file:
+    m_pDoc->SetString(2, 3, 0, OUString("='file:
     {
         const char* pChecks[] = { "Name", "Edward", "Frank", "George" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
@@ -2911,10 +2911,10 @@ void Test::testExternalRef()
         }
     }
 
-    m_pDoc->SetString(3, 0, 0, OUString("='file:///extdata.fake'#Data3.B1"));
-    m_pDoc->SetString(3, 1, 0, OUString("='file:///extdata.fake'#Data3.B2"));
-    m_pDoc->SetString(3, 2, 0, OUString("='file:///extdata.fake'#Data3.B3"));
-    m_pDoc->SetString(3, 3, 0, OUString("='file:///extdata.fake'#Data3.B4"));
+    m_pDoc->SetString(3, 0, 0, OUString("='file:
+    m_pDoc->SetString(3, 1, 0, OUString("='file:
+    m_pDoc->SetString(3, 2, 0, OUString("='file:
+    m_pDoc->SetString(3, 3, 0, OUString("='file:
     {
         const char* pChecks[] = { "Value", "99", "98", "97" };
         for (size_t i = 0; i < SAL_N_ELEMENTS(pChecks); ++i)
@@ -2924,8 +2924,8 @@ void Test::testExternalRef()
         }
     }
 
-    // At this point, all accessed cell data from the external document should
-    // have been cached.
+    
+    
     ScExternalRefCache::TableTypeRef pCacheTab = pRefMgr->getCacheTable(
         nFileId, aExtSh1Name, false);
     CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 1 should exist.", pCacheTab.get() != NULL);
@@ -2934,11 +2934,11 @@ void Test::testExternalRef()
                            aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
                            aCachedRange.aStart.Row() == 0 && aCachedRange.aEnd.Row() == 4);
 
-    // Sheet2 is not referenced at all; the cache table shouldn't even exist.
+    
     pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh2Name, false);
     CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 2 should *not* exist.", pCacheTab.get() == NULL);
 
-    // Sheet3's row 5 is not referenced; it should not be cached.
+    
     pCacheTab = pRefMgr->getCacheTable(nFileId, aExtSh3Name, false);
     CPPUNIT_ASSERT_MESSAGE("Cache table for sheet 3 should exist.", pCacheTab.get() != NULL);
     aCachedRange = getCachedRange(pCacheTab);
@@ -2946,7 +2946,7 @@ void Test::testExternalRef()
                            aCachedRange.aStart.Col() == 0 && aCachedRange.aEnd.Col() == 1 &&
                            aCachedRange.aStart.Row() == 0 && aCachedRange.aEnd.Row() == 3);
 
-    // Unload the external document shell.
+    
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
                            findLoadedDocShellByName(aExtDocName) == NULL);
@@ -2962,9 +2962,9 @@ void testExtRefFuncT(ScDocument* pDoc, ScDocument* pExtDoc)
     pExtDoc->SetString(0, 0, 0, OUString("'1.2"));
     pExtDoc->SetString(0, 1, 0, OUString("Foo"));
     pExtDoc->SetValue(0, 2, 0, 12.3);
-    pDoc->SetString(0, 0, 0, OUString("=T('file:///extdata.fake'#Data.A1)"));
-    pDoc->SetString(0, 1, 0, OUString("=T('file:///extdata.fake'#Data.A2)"));
-    pDoc->SetString(0, 2, 0, OUString("=T('file:///extdata.fake'#Data.A3)"));
+    pDoc->SetString(0, 0, 0, OUString("=T('file:
+    pDoc->SetString(0, 1, 0, OUString("=T('file:
+    pDoc->SetString(0, 2, 0, OUString("=T('file:
     pDoc->CalcAll();
 
     OUString aRes = pDoc->GetString(0, 0, 0);
@@ -2982,9 +2982,9 @@ void testExtRefFuncOFFSET(ScDocument* pDoc, ScDocument* pExtDoc)
 
     sc::AutoCalcSwitch aACSwitch(*pDoc, true);
 
-    // External document has sheet named 'Data', and the internal doc has sheet named 'Test'.
-    pExtDoc->SetValue(ScAddress(0,1,0), 1.2); // Set 1.2 to A2.
-    pDoc->SetString(ScAddress(0,0,0), "=OFFSET('file:///extdata.fake'#Data.$A$1;1;0;1;1)");
+    
+    pExtDoc->SetValue(ScAddress(0,1,0), 1.2); 
+    pDoc->SetString(ScAddress(0,0,0), "=OFFSET('file:
     CPPUNIT_ASSERT_EQUAL(1.2, pDoc->GetValue(ScAddress(0,0,0)));
 }
 
@@ -2993,7 +2993,7 @@ void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument* pExtDoc)
     Test::clearRange(pDoc, ScRange(0, 0, 0, 1, 9, 0));
     Test::clearRange(pExtDoc, ScRange(0, 0, 0, 1, 9, 0));
 
-    // Populate the external document.
+    
     pExtDoc->SetString(ScAddress(0,0,0), "A1");
     pExtDoc->SetString(ScAddress(0,1,0), "A2");
     pExtDoc->SetString(ScAddress(0,2,0), "A3");
@@ -3006,23 +3006,23 @@ void testExtRefFuncVLOOKUP(ScDocument* pDoc, ScDocument* pExtDoc)
     pExtDoc->SetString(ScAddress(1,3,0), "B4");
     pExtDoc->SetString(ScAddress(1,4,0), "B5");
 
-    // Put formula in the source document.
+    
 
     pDoc->SetString(ScAddress(0,0,0), "A2");
 
-    // Sort order TRUE
-    pDoc->SetString(ScAddress(1,0,0), "=VLOOKUP(A1;'file:///extdata.fake'#Data.A1:B5;2;1)");
+    
+    pDoc->SetString(ScAddress(1,0,0), "=VLOOKUP(A1;'file:
     CPPUNIT_ASSERT_EQUAL(OUString("B2"), pDoc->GetString(ScAddress(1,0,0)));
 
-    // Sort order FALSE. It should return the same result.
-    pDoc->SetString(ScAddress(1,0,0), "=VLOOKUP(A1;'file:///extdata.fake'#Data.A1:B5;2;0)");
+    
+    pDoc->SetString(ScAddress(1,0,0), "=VLOOKUP(A1;'file:
     CPPUNIT_ASSERT_EQUAL(OUString("B2"), pDoc->GetString(ScAddress(1,0,0)));
 }
 
 void Test::testExternalRefFunctions()
 {
     ScDocShellRef xExtDocSh = new ScDocShell;
-    OUString aExtDocName("file:///extdata.fake");
+    OUString aExtDocName("file:
     SfxMedium* pMed = new SfxMedium(aExtDocName, STREAM_STD_READWRITE);
     xExtDocSh->DoInitNew(pMed);
     CPPUNIT_ASSERT_MESSAGE("external document instance not loaded.",
@@ -3035,14 +3035,14 @@ void Test::testExternalRefFunctions()
     CPPUNIT_ASSERT_MESSAGE("file name registration has somehow failed.",
                            pFileName && pFileName->equals(aExtDocName));
 
-    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); // turn on auto calc.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true); 
 
-    // Populate the external source document.
+    
     ScDocument* pExtDoc = xExtDocSh->GetDocument();
     pExtDoc->InsertTab(0, OUString("Data"));
     double val = 1;
     pExtDoc->SetValue(0, 0, 0, val);
-    // leave cell B1 empty.
+    
     val = 2;
     pExtDoc->SetValue(0, 1, 0, val);
     pExtDoc->SetValue(1, 1, 0, val);
@@ -3058,12 +3058,12 @@ void Test::testExternalRefFunctions()
     struct {
         const char* pFormula; double fResult;
     } aChecks[] = {
-        { "=SUM('file:///extdata.fake'#Data.A1:A4)",     10 },
-        { "=SUM('file:///extdata.fake'#Data.B1:B4)",     9 },
-        { "=AVERAGE('file:///extdata.fake'#Data.A1:A4)", 2.5 },
-        { "=AVERAGE('file:///extdata.fake'#Data.B1:B4)", 3 },
-        { "=COUNT('file:///extdata.fake'#Data.A1:A4)",   4 },
-        { "=COUNT('file:///extdata.fake'#Data.B1:B4)",   3 }
+        { "=SUM('file:
+        { "=SUM('file:
+        { "=AVERAGE('file:
+        { "=AVERAGE('file:
+        { "=COUNT('file:
+        { "=COUNT('file:
     };
 
     for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
@@ -3078,7 +3078,7 @@ void Test::testExternalRefFunctions()
     testExtRefFuncOFFSET(m_pDoc, pExtDoc);
     testExtRefFuncVLOOKUP(m_pDoc, pExtDoc);
 
-    // Unload the external document shell.
+    
     xExtDocSh->DoClose();
     CPPUNIT_ASSERT_MESSAGE("external document instance should have been unloaded.",
                            findLoadedDocShellByName(aExtDocName) == NULL);

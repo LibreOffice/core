@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "browserids.hxx"
@@ -129,18 +129,18 @@ namespace dbaui
         ::cppu::OInterfaceContainerHelper
                                         m_aModifyListeners;
 
-        // <properties>
+        
         SharedConnection                m_xConnection;
         ::dbtools::DatabaseMetaData     m_aSdbMetaData;
-        // </properties>
-        OUString                 m_sDataSourceName;      // the data source we're working for
+        
+        OUString                 m_sDataSourceName;      
         DataSourceHolder                m_aDataSource;
         Reference< XModel >             m_xDocument;
-        Reference< XNumberFormatter >   m_xFormatter;   // a number formatter working with the connection's NumberFormatsSupplier
+        Reference< XNumberFormatter >   m_xFormatter;   
         sal_Int32                       m_nDocStartNumber;
-        sal_Bool                        m_bSuspended;   // is true when the controller was already suspended
-        sal_Bool                        m_bEditable;    // is the control readonly or not
-        sal_Bool                        m_bModified;    // is the data modified
+        sal_Bool                        m_bSuspended;   
+        sal_Bool                        m_bEditable;    
+        sal_Bool                        m_bModified;    
         bool                            m_bNotAttached;
 
         DBSubComponentController_Impl( ::osl::Mutex& i_rMutex )
@@ -169,7 +169,7 @@ namespace dbaui
         }
     };
 
-    // DBSubComponentController
+    
     DBSubComponentController::DBSubComponentController(const Reference< XComponentContext >& _rxORB)
         :DBSubComponentController_Base( _rxORB )
         ,m_pImpl( new DBSubComponentController_Impl( getMutex() ) )
@@ -241,7 +241,7 @@ namespace dbaui
     void DBSubComponentController::initializeConnection( const Reference< XConnection >& _rxForeignConn )
     {
         DBG_ASSERT( !isConnected(), "DBSubComponentController::initializeConnection: not to be called when already connected!" );
-            // usually this gets called from within initialize of derived classes ...
+            
         if ( isConnected() )
             disconnect();
 
@@ -249,10 +249,10 @@ namespace dbaui
         m_pImpl->m_aSdbMetaData.reset( m_pImpl->m_xConnection );
         startConnectionListening( m_pImpl->m_xConnection );
 
-        // get the data source the connection belongs to
+        
         try
         {
-            // determine our data source
+            
             OSL_PRECOND( !m_pImpl->m_aDataSource.is(), "DBSubComponentController::initializeConnection: already a data source in this phase?" );
             {
                 Reference< XChild > xConnAsChild( m_pImpl->m_xConnection, UNO_QUERY );
@@ -260,7 +260,7 @@ namespace dbaui
                 if ( xConnAsChild.is() )
                     xDS = Reference< XDataSource >( xConnAsChild->getParent(), UNO_QUERY );
 
-                // (take the indirection through XDataSource to ensure we have a correct object ....)
+                
                 m_pImpl->m_aDataSource = xDS;
             }
             OSL_POSTCOND( m_pImpl->m_aDataSource.is(), "DBSubComponentController::initializeConnection: unable to obtain the data source object!" );
@@ -273,11 +273,11 @@ namespace dbaui
                     m_pImpl->m_nDocStartNumber = xUntitledProvider->leaseNumber( static_cast< XWeak* >( this ) );
             }
 
-            // determine the availability of script support in our document. Our own XScriptInvocationContext
-            // interface depends on this
+            
+            
             m_pImpl->setDocumentScriptSupport( Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY ).is() );
 
-            // get a number formatter
+            
             Reference< XPropertySet > xDataSourceProps( m_pImpl->m_aDataSource.getDataSourceProps(), UNO_SET_THROW );
             xDataSourceProps->getPropertyValue( PROPERTY_NAME ) >>= m_pImpl->m_sDataSourceName;
             DBG_ASSERT( !m_pImpl->m_sDataSourceName.isEmpty(), "DBSubComponentController::initializeConnection: invalid data source name!" );
@@ -304,7 +304,7 @@ namespace dbaui
         m_pImpl->m_aSdbMetaData.reset( NULL );
         m_pImpl->m_xConnection.clear();
 
-        // reconnect
+        
         sal_Bool bReConnect = sal_True;
         if ( _bUI )
         {
@@ -312,14 +312,14 @@ namespace dbaui
             bReConnect = ( RET_YES == aQuery.Execute() );
         }
 
-        // now really reconnect ...
+        
         if ( bReConnect )
         {
             m_pImpl->m_xConnection.reset( connect( m_pImpl->m_aDataSource.getDataSource(), NULL ), SharedConnection::TakeOwnership );
             m_pImpl->m_aSdbMetaData.reset( m_pImpl->m_xConnection );
         }
 
-        // invalidate all slots
+        
         InvalidateAll();
     }
 
@@ -334,7 +334,7 @@ namespace dbaui
 
     void DBSubComponentController::losingConnection()
     {
-        // our connection was disposed so we need a new one
+        
         reconnect( sal_True );
         InvalidateAll();
     }
@@ -354,7 +354,7 @@ namespace dbaui
     {
         if ( _rSource.Source == getConnection() )
         {
-            if (    !m_pImpl->m_bSuspended // when already suspended then we don't have to reconnect
+            if (    !m_pImpl->m_bSuspended 
                 &&  !getBroadcastHelper().bInDispose
                 &&  !getBroadcastHelper().bDisposed
                 &&  isConnected()
@@ -365,7 +365,7 @@ namespace dbaui
             else
             {
                 m_pImpl->m_xConnection.reset( m_pImpl->m_xConnection, SharedConnection::NoTakeOwnership );
-                    // this prevents the "disposeComponent" call in disconnect
+                    
                 disconnect();
             }
         }
@@ -528,7 +528,7 @@ namespace dbaui
     {
         return getDatabaseDocument();
     }
-    // XTitle
+    
     OUString SAL_CALL DBSubComponentController::getTitle()
         throw (RuntimeException)
     {
@@ -606,6 +606,6 @@ namespace dbaui
             InvalidateFeature( ID_BROWSER_SAVEASDOC );
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

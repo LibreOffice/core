@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,11 +27,11 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScSheetEventsObj, "ScSheetEventsObj", "com.sun.star.document.Events" )
 
-//------------------------------------------------------------------------
+
 
 ScSheetEventsObj::ScSheetEventsObj(ScDocShell* pDocSh, SCTAB nT) :
     mpDocShell( pDocSh ),
@@ -48,7 +48,7 @@ ScSheetEventsObj::~ScSheetEventsObj()
 
 void ScSheetEventsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
-    //! reference update
+    
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
@@ -62,10 +62,10 @@ static sal_Int32 lcl_GetEventFromName( const OUString& aName )
         if ( aName == ScSheetEvents::GetEventName(nEvent) )
             return nEvent;
 
-    return -1;      // not found
+    return -1;      
 }
 
-// XNameReplace
+
 
 void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno::Any& aElement )
     throw(lang::IllegalArgumentException, container::NoSuchElementException,
@@ -85,7 +85,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
         aNewEvents = *pOldEvents;
 
     OUString aScript;
-    if ( aElement.hasValue() )      // empty Any -> reset event
+    if ( aElement.hasValue() )      
     {
         uno::Sequence<beans::PropertyValue> aPropSeq;
         if ( aElement >>= aPropSeq )
@@ -99,7 +99,7 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
                     OUString aEventType;
                     if ( rProp.Value >>= aEventType )
                     {
-                        // only "Script" is supported
+                        
                         if ( aEventType.compareToAscii( SC_UNO_SCRIPT ) != 0 )
                             throw lang::IllegalArgumentException();
                     }
@@ -112,13 +112,13 @@ void SAL_CALL ScSheetEventsObj::replaceByName( const OUString& aName, const uno:
     if (!aScript.isEmpty())
         aNewEvents.SetScript( nEvent, &aScript );
     else
-        aNewEvents.SetScript( nEvent, NULL );       // reset
+        aNewEvents.SetScript( nEvent, NULL );       
 
     mpDocShell->GetDocument()->SetSheetEvents( mnTab, &aNewEvents );
     mpDocShell->SetDocumentModified();
 }
 
-// XNameAccess
+
 
 uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
@@ -148,7 +148,7 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
                         uno::makeAny( *pScript ), beans::PropertyState_DIRECT_VALUE );
         aRet <<= aPropSeq;
     }
-    // empty Any if nothing was set
+    
     return aRet;
 }
 
@@ -168,7 +168,7 @@ sal_Bool SAL_CALL ScSheetEventsObj::hasByName( const OUString& aName ) throw(uno
     return (nEvent >= 0);
 }
 
-// XElementAccess
+
 
 uno::Type SAL_CALL ScSheetEventsObj::getElementType() throw(uno::RuntimeException)
 {

@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 
-// end of temp classes
+
 OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     :Window(_pParent)
 {
@@ -67,7 +67,7 @@ void OQueryTextView::Resize()
     m_pEdit->SetSizePixel( GetOutputSizePixel() );
 }
 
-// check if the statement is correct when not returning false
+
 sal_Bool OQueryTextView::checkStatement()
 {
     return sal_True;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@ TYPEINIT1(SwFmtFldHint, SfxHint);
  *
  ****************************************************************************/
 
-// constructor for default item in attribute-pool
+
 SwFmtFld::SwFmtFld( sal_uInt16 nWhich )
     : SfxPoolItem( nWhich )
     , SwClient()
@@ -66,21 +66,21 @@ SwFmtFld::SwFmtFld( const SwField &rFld )
 {
     if ( GetField()->GetTyp()->Which() == RES_INPUTFLD )
     {
-        // input field in-place editing
+        
         SetWhich( RES_TXTATR_INPUTFIELD );
         static_cast<SwInputField*>(GetField())->SetFmtFld( *this );
     }
     else if ( GetField()->GetTyp()->Which() == RES_POSTITFLD )
     {
-        // text annotation field
+        
         SetWhich( RES_TXTATR_ANNOTATION );
     }
 }
 
-// #i24434#
-// Since Items are used in ItemPool and in default constructed ItemSets with
-// full pool range, all items need to be clonable. Thus, this one needed to be
-// corrected
+
+
+
+
 SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
     : SfxPoolItem( RES_TXTATR_FIELD )
     , SwClient()
@@ -94,7 +94,7 @@ SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
         mpField = rAttr.GetField()->CopyField();
         if ( GetField()->GetTyp()->Which() == RES_INPUTFLD )
         {
-            // input field in-place editing
+            
             SetWhich( RES_TXTATR_INPUTFIELD );
             SwInputField *pField = dynamic_cast<SwInputField*>(GetField());
             assert(pField);
@@ -103,7 +103,7 @@ SwFmtFld::SwFmtFld( const SwFmtFld& rAttr )
         }
         else if ( GetField()->GetTyp()->Which() == RES_POSTITFLD )
         {
-            // text annotation field
+            
             SetWhich( RES_TXTATR_ANNOTATION );
         }
     }
@@ -114,12 +114,12 @@ SwFmtFld::~SwFmtFld()
     SwFieldType* pType = mpField ? mpField->GetTyp() : 0;
 
     if (pType && pType->Which() == RES_DBFLD)
-        pType = 0;  // DB-Feldtypen zerstoeren sich selbst
+        pType = 0;  
 
     Broadcast( SwFmtFldHint( this, SWFMTFLD_REMOVED ) );
     delete mpField;
 
-    // bei einige FeldTypen muessen wir den FeldTypen noch loeschen
+    
     if( pType && pType->IsLastDepend() )
     {
         sal_Bool bDel = sal_False;
@@ -140,7 +140,7 @@ SwFmtFld::~SwFmtFld()
 
         if( bDel )
         {
-            // vorm loeschen erstmal austragen
+            
             pType->Remove( this );
             delete pType;
         }
@@ -153,7 +153,7 @@ void SwFmtFld::RegisterToFieldType( SwFieldType& rType )
 }
 
 
-// #111840#
+
 void SwFmtFld::SetField(SwField * _pField)
 {
     delete mpField;
@@ -198,7 +198,7 @@ void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
     const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
     if ( pHint )
     {
-        // replace field content by text
+        
         SwPaM* pPaM = pHint->GetPaM();
         SwDoc* pDoc = pPaM->GetDoc();
         const SwTxtNode& rTxtNode = mpTxtFld->GetTxtNode();
@@ -218,7 +218,7 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     if( !mpTxtFld )
         return;
 
-    // don't do anything, especially not expand!
+    
     if( pNew && pNew->Which() == RES_OBJECTDYING )
         return;
 
@@ -229,20 +229,20 @@ void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         switch( pNew->Which() )
         {
         case RES_TXTATR_FLDCHG:
-                // "Farbe hat sich geaendert !"
-                // this, this fuer "nur Painten"
+                
+                
                 pTxtNd->ModifyNotification( this, this );
                 return;
         case RES_REFMARKFLD_UPDATE:
-                // GetReferenz-Felder aktualisieren
+                
                 if( RES_GETREFFLD == GetField()->GetTyp()->Which() )
                 {
-                    // #i81002#
+                    
                     static_cast<SwGetRefField*>(GetField())->UpdateField( mpTxtFld );
                 }
                 break;
         case RES_DOCPOS_UPDATE:
-                // Je nach DocPos aktualisieren (SwTxtFrm::Modify())
+                
                 pTxtNd->ModifyNotification( pNew, this );
                 return;
 
@@ -312,8 +312,8 @@ SwTxtFld::SwTxtFld(
     sal_Int32 const nStartPos,
     bool const bInClipboard)
     : SwTxtAttr( rAttr, nStartPos )
-// fdo#39694 the ExpandField here may not give the correct result in all cases,
-// but is better than nothing
+
+
     , m_aExpand( rAttr.GetField()->ExpandField(bInClipboard) )
     , m_pTxtNode( NULL )
 {
@@ -346,13 +346,13 @@ void SwTxtFld::ExpandTxtFld() const
 
     if( aNewExpand == m_aExpand )
     {
-        // Bei Seitennummernfeldern
+        
         const sal_uInt16 nWhich = pFld->GetTyp()->Which();
         if ( RES_CHAPTERFLD != nWhich
              && RES_PAGENUMBERFLD != nWhich
              && RES_REFPAGEGETFLD != nWhich
-             // Page count fields to not use aExpand during formatting,
-             // therefore an invalidation of the text frame has to be triggered even if aNewExpand == aExpand:
+             
+             
              && ( RES_DOCSTATFLD != nWhich || DS_PAGE != static_cast<const SwDocStatField*>(pFld)->GetSubType() )
              && ( RES_GETEXPFLD != nWhich || ((SwGetExpField*)pFld)->IsInBodyTxt() ) )
         {
@@ -383,9 +383,9 @@ void SwTxtFld::CopyTxtFld( SwTxtFld *pDest ) const
 
     if( pIDFA != pDestIDFA )
     {
-        // Die Hints stehen in unterschiedlichen Dokumenten,
-        // der Feldtyp muss im neuen Dokument angemeldet werden.
-        // Z.B: Kopieren ins ClipBoard.
+        
+        
+        
         SwFieldType* pFldType;
         if( nFldWhich != RES_DBFLD
             && nFldWhich != RES_USERFLD
@@ -400,7 +400,7 @@ void SwTxtFld::CopyTxtFld( SwTxtFld *pDest ) const
             pFldType = pDestIDFA->InsertFldType( *rDestFmtFld.GetField()->GetTyp() );
         }
 
-        // Sonderbehandlung fuer DDE-Felder
+        
         if( RES_DDEFLD == nFldWhich )
         {
             if( rDestFmtFld.GetTxtFld() )
@@ -411,11 +411,11 @@ void SwTxtFld::CopyTxtFld( SwTxtFld *pDest ) const
         }
 
         OSL_ENSURE( pFldType, "unbekannter FieldType" );
-        pFldType->Add( &rDestFmtFld );          // ummelden
+        pFldType->Add( &rDestFmtFld );          
         rDestFmtFld.GetField()->ChgTyp( pFldType );
     }
 
-    // Expressionfelder Updaten
+    
     if( nFldWhich == RES_SETEXPFLD
         || nFldWhich == RES_GETEXPFLD
         || nFldWhich == RES_HIDDENTXTFLD )
@@ -423,20 +423,20 @@ void SwTxtFld::CopyTxtFld( SwTxtFld *pDest ) const
         SwTxtFld* pFld = (SwTxtFld*)this;
         pDestIDFA->UpdateExpFlds( pFld, true );
     }
-    // Tabellenfelder auf externe Darstellung
+    
     else if( RES_TABLEFLD == nFldWhich
              && ((SwTblField*)rDestFmtFld.GetField())->IsIntrnlName() )
     {
-        // erzeuge aus der internen (fuer CORE) die externe (fuer UI) Formel
+        
         const SwTableNode* pTblNd = m_pTxtNode->FindTableNode();
-        if( pTblNd )        // steht in einer Tabelle
+        if( pTblNd )        
             ((SwTblField*)rDestFmtFld.GetField())->PtrToBoxNm( &pTblNd->GetTable() );
     }
 }
 
 void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
 {
-    //if not in undo section notify the change
+    
     if (m_pTxtNode && m_pTxtNode->GetNodes().IsDocNodes())
     {
         m_pTxtNode->ModifyNotification(0, &rFmtFld);
@@ -444,7 +444,7 @@ void SwTxtFld::NotifyContentChange(SwFmtFld& rFmtFld)
 }
 
 
-// input field in-place editing
+
 SwTxtInputFld::SwTxtInputFld(
     SwFmtFld & rAttr,
     sal_Int32 const nStart,
@@ -512,9 +512,9 @@ void SwTxtInputFld::UpdateFieldContent()
     {
         OSL_ENSURE( (*End()) - (*GetStart()) >= 2,
                 "<SwTxtInputFld::UpdateFieldContent()> - Are CH_TXT_ATR_INPUTFIELDSTART and/or CH_TXT_ATR_INPUTFIELDEND missing?" );
-        // skip CH_TXT_ATR_INPUTFIELDSTART character
+        
         const sal_Int32 nIdx = (*GetStart()) + 1;
-        // skip CH_TXT_ATR_INPUTFIELDEND character
+        
         const sal_Int32 nLen = static_cast<sal_Int32>(std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) ));
         const OUString aNewFieldContent = GetTxtNode().GetExpandTxt( nIdx, nLen );
 
@@ -538,9 +538,9 @@ void SwTxtInputFld::UpdateTextNodeContent( const OUString& rNewContent )
 
     OSL_ENSURE( (*End()) - (*GetStart()) >= 2,
             "<SwTxtInputFld::UpdateTextNodeContent(..)> - Are CH_TXT_ATR_INPUTFIELDSTART and/or CH_TXT_ATR_INPUTFIELDEND missing?" );
-    // skip CH_TXT_ATR_INPUTFIELDSTART character
+    
     const sal_Int32 nIdx = (*GetStart()) + 1;
-    // skip CH_TXT_ATR_INPUTFIELDEND character
+    
     const sal_Int32 nDelLen = std::max<sal_Int32>( 0, ( (*End()) - 1 - nIdx ) );
     SwIndex aIdx( &GetTxtNode(), nIdx );
     GetTxtNode().ReplaceText( aIdx, nDelLen, rNewContent );
@@ -549,7 +549,7 @@ void SwTxtInputFld::UpdateTextNodeContent( const OUString& rNewContent )
 
 
 
-// text annotation field
+
 SwTxtAnnotationFld::SwTxtAnnotationFld(
     SwFmtFld & rAttr,
     sal_Int32 const nStart,

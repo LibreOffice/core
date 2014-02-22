@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -67,10 +67,10 @@ using namespace com::sun::star::plugin;
 
 typedef map< OString, OUString, less< OString > > PluginLocationMap;
 
-//__________________________________________________________________________________________________
+
 static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & rPlugins )
 {
-    // append dll name pattern we are looking for
+    
     TCHAR arPluginsPath[MAX_PATH];
     arPluginsPath[0] = 0;
 
@@ -97,8 +97,8 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
     {
         OString aName = OString( aFindData.cFileName ).toAsciiLowerCase();
 
-        // no netscape default plugin anymore...
-        // and no double plugin dlls
+        
+        
         if ( !aName.equals( "npnul32.dll" ) &&
              ! aName.equals( "npnrvp.dll" ) &&
              rPlugins.find( aName ) == rPlugins.end())
@@ -118,7 +118,7 @@ static void addPluginsFromPath( const TCHAR * pPluginsPath, PluginLocationMap & 
     if (hFind != INVALID_HANDLE_VALUE)
         ::FindClose( hFind );
 }
-//__________________________________________________________________________________________________
+
 static void addPluginsFromPath( const OUString & rPath, PluginLocationMap & rPlugins )
 {
     TCHAR arPluginsPath[MAX_PATH];
@@ -132,7 +132,7 @@ static void addPluginsFromPath( const OUString & rPath, PluginLocationMap & rPlu
 }
 
 
-//__________________________________________________________________________________________________
+
 static void add_IE_Plugins( PluginLocationMap & rPlugins )
 {
     HKEY hKey;
@@ -146,7 +146,7 @@ static void add_IE_Plugins( PluginLocationMap & rPlugins )
                                (LPBYTE)arCurrent, &dwCurrentSize ) == ERROR_SUCCESS &&
             (dwType == REG_SZ || dwType == REG_EXPAND_SZ))
         {
-            // add \\Plugins
+            
             ::lstrcat( arCurrent, _T("\\Plugins") );
 
             addPluginsFromPath( arCurrent, rPlugins );
@@ -155,13 +155,13 @@ static void add_IE_Plugins( PluginLocationMap & rPlugins )
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
 {
     TCHAR value[MAX_PATH];
     DWORD dwType, size;
 
-    // 4.7
+    
     size = sizeof(value);
     if (::RegQueryValueEx(
         hKey, _T("Plugins Directory"), NULL, &dwType,
@@ -170,7 +170,7 @@ static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
     {
         addPluginsFromPath( value, rPlugins );
     }
-    // 6
+    
     size = sizeof(value);
     if (::RegQueryValueEx(
         hKey, _T("Install Directory"), NULL, &dwType,
@@ -194,7 +194,7 @@ static void add_NS_keys( HKEY hKey, PluginLocationMap & rPlugins )
         addPluginsFromPath( value, rPlugins );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
 {
     add_NS_keys( hKey, rPlugins );
@@ -214,7 +214,7 @@ static void add_NS_lookupRecursive( HKEY hKey, PluginLocationMap & rPlugins )
         ++dwIndex;
     }
 }
-//__________________________________________________________________________________________________
+
 static void add_MozPlugin( HKEY hKey, PluginLocationMap & rPlugins )
 {
     TCHAR value[MAX_PATH];
@@ -230,8 +230,8 @@ static void add_MozPlugin( HKEY hKey, PluginLocationMap & rPlugins )
         INetURLObject aURL( aUPath );
         OString aName( OUStringToOString( aURL.GetName().toAsciiLowerCase(), RTL_TEXTENCODING_MS_1252 ) );
 
-        // no netscape default plugin anymore...
-        // and no double plugin dlls
+        
+        
         if ( !aName.equals( "npnul32.dll" ) &&
              ! aName.equals( "npnrvp.dll" ) &&
              rPlugins.find( aName ) == rPlugins.end())
@@ -257,11 +257,11 @@ static void add_MozillaPlugin( HKEY hKey, PluginLocationMap & rPlugins )
         ++dwIndex;
     }
 }
-//__________________________________________________________________________________________________
+
 static void add_NS_Plugins( PluginLocationMap & rPlugins )
 {
     HKEY hKey;
-    // Netscape
+    
     if (::RegOpenKeyEx(
         HKEY_LOCAL_MACHINE, _T("Software\\Netscape"),
         0, KEY_READ, &hKey ) == ERROR_SUCCESS)
@@ -269,7 +269,7 @@ static void add_NS_Plugins( PluginLocationMap & rPlugins )
         add_NS_lookupRecursive( hKey, rPlugins );
         ::RegCloseKey( hKey );
     }
-    // Mozilla
+    
     if (::RegOpenKeyEx(
         HKEY_LOCAL_MACHINE, _T("Software\\Mozilla"),
         0, KEY_READ, &hKey ) == ERROR_SUCCESS)
@@ -277,7 +277,7 @@ static void add_NS_Plugins( PluginLocationMap & rPlugins )
         add_NS_lookupRecursive( hKey, rPlugins );
         ::RegCloseKey( hKey );
     }
-    // Mozilla - plugins
+    
     if (::RegOpenKeyEx(
         HKEY_LOCAL_MACHINE, _T("Software\\MozillaPlugins"),
         0, KEY_READ, &hKey ) == ERROR_SUCCESS)
@@ -287,7 +287,7 @@ static void add_NS_Plugins( PluginLocationMap & rPlugins )
     }
 }
 
-//__________________________________________________________________________________________________
+
 static void add_SO_Plugins( PluginLocationMap & rPlugins )
 {
     const Sequence< OUString > & rPaths = PluginManager::getAdditionalSearchPaths();
@@ -299,7 +299,7 @@ static void add_SO_Plugins( PluginLocationMap & rPlugins )
     }
 }
 
-//__________________________________________________________________________________________________
+
 Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(void) throw()
 {
     Guard< Mutex > aGuard( Mutex::getGlobalMutex() );
@@ -308,13 +308,13 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
 
     if (! s_bInit)
     {
-        // collect all distinct plugin dlls
+        
         PluginLocationMap aPlugins;
         add_SO_Plugins( aPlugins );
         add_NS_Plugins( aPlugins );
         add_IE_Plugins( aPlugins );
 
-        // collect mime types of plugin dlls
+        
         for ( PluginLocationMap::iterator iPos( aPlugins.begin() );
               iPos != aPlugins.end();
               ++iPos )
@@ -322,7 +322,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
             TCHAR arFileName[MAX_PATH];
             DWORD dwDummy, dwSize;
 
-            // DLL name
+            
             OUString aName( (*iPos).second.getStr() );
 
             OString aStr( OUStringToOString( aName, RTL_TEXTENCODING_MS_1252 ) );
@@ -335,7 +335,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
             char * pVersionData = new char[dwSize];
             if (pVersionData && ::GetFileVersionInfo( arFileName, 0, dwSize, pVersionData ))
             {
-                // optional comment
+                
                 OUString aComment;
 
                 TCHAR * pInfo = NULL, * pInfo2 = NULL;
@@ -346,7 +346,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                     aComment.operator=( OStringToOUString( OString(pInfo), RTL_TEXTENCODING_MS_1252 ) );
                 }
 
-                // mandatory mime type and file extensions
+                
                 if (::VerQueryValue( pVersionData, _T("\\StringFileInfo\\040904E4\\MIMEType"),
                                      (void**)&pInfo, &nSize ) && pInfo &&
                     ::VerQueryValue( pVersionData, _T("\\StringFileInfo\\040904E4\\FileExtents"),
@@ -356,7 +356,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                     OString aMIME( pInfo );
                     aMIME.trim();
 
-                    // count mime tokens
+                    
                     USHORT nToken = 0;
                     if (aMIME.getLength())
                     {
@@ -374,7 +374,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                     UINT32 nStart = s_aDescriptions.getLength();
                     s_aDescriptions.realloc( nStart + nToken );
                     PluginDescription* pDescriptions = s_aDescriptions.getArray();
-                    // for every MIME Type
+                    
                     sal_Int32 nTok = 0;
                     while (true)
                     {

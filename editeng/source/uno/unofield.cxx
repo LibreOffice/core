@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/util/DateTime.hpp>
@@ -159,7 +159,7 @@ static sal_Int16 getFileNameDisplayFormat( SvxFileFormat nFormat )
     case SVXFILEFORMAT_NAME_EXT:    return text::FilenameDisplayFormat::NAME_AND_EXT;
     case SVXFILEFORMAT_FULLPATH:    return text::FilenameDisplayFormat::FULL;
     case SVXFILEFORMAT_PATH:    return text::FilenameDisplayFormat::PATH;
-//  case SVXFILEFORMAT_NAME:
+
     default: return text::FilenameDisplayFormat::NAME;
     }
 }
@@ -171,7 +171,7 @@ static SvxFileFormat setFileNameDisplayFormat( sal_Int16 nFormat )
     case text::FilenameDisplayFormat::FULL: return SVXFILEFORMAT_FULLPATH;
     case text::FilenameDisplayFormat::PATH: return SVXFILEFORMAT_PATH;
     case text::FilenameDisplayFormat::NAME: return SVXFILEFORMAT_NAME;
-//  case text::FilenameDisplayFormat::NAME_AND_EXT:
+
     default:
         return SVXFILEFORMAT_NAME_EXT;
     }
@@ -216,9 +216,9 @@ inline Time setTime( util::DateTime& rDate )
     return Time( rDate.Hours, rDate.Minutes, rDate.Seconds, rDate.NanoSeconds  );
 }
 
-// ====================================================================
-// class SvxUnoTextField
-// ====================================================================
+
+
+
 namespace
 {
     class theSvxUnoTextFieldUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextFieldUnoTunnelId> {};
@@ -309,14 +309,14 @@ SvxUnoTextField::SvxUnoTextField( uno::Reference< text::XTextRange > xAnchor, co
         DBG_ASSERT(mnServiceId != text::textfield::Type::UNSPECIFIED, "unknown SvxFieldData! [CL]");
         if (mnServiceId != text::textfield::Type::UNSPECIFIED)
         {
-            // extract field properties from data class
+            
             switch( mnServiceId )
             {
             case text::textfield::Type::DATE:
                 {
                     mpImpl->mbBoolean2 = sal_True;
-                    // #i35416# for variable date field, don't use invalid "0000-00-00" date,
-                    // use current date instead
+                    
+                    
                     sal_Bool bFixed = ((SvxDateField*)pData)->GetType() == SVXDATETYPE_FIX;
                     mpImpl->maDateTime = getDate( bFixed ?
                                             ((SvxDateField*)pData)->GetFixDate() :
@@ -387,7 +387,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     case text::textfield::Type::EXTENDED_TIME:
     case text::textfield::Type::DATE:
     {
-        if( mpImpl->mbBoolean2 ) // IsDate?
+        if( mpImpl->mbBoolean2 ) 
         {
             Date aDate( setDate( mpImpl->maDateTime ) );
             pData = new SvxDateField( aDate, mpImpl->mbBoolean1?SVXDATETYPE_FIX:SVXDATETYPE_VAR );
@@ -438,7 +438,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
 
     case text::textfield::Type::EXTENDED_FILE:
     {
-        // #92009# pass fixed attribute to constructor
+        
         pData = new SvxExtFileField( mpImpl->msString1,
                                      mpImpl->mbBoolean1 ? SVXFILETYPE_FIX : SVXFILETYPE_VAR,
                                      setFileNameDisplayFormat(mpImpl->mnInt16 ) );
@@ -452,10 +452,10 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         OUString aLastName;
         OUString aEmpty;
 
-        // do we have CurrentPresentation given?
-        // mimic behaviour of writer, which means:
-        // prefer CurrentPresentation over Content
-        // if both are given.
+        
+        
+        
+        
         if( !mpImpl->msString1.isEmpty() )
             aContent = mpImpl->msString1;
         else
@@ -472,7 +472,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
             aLastName = aContent;
         }
 
-        // #92009# pass fixed attribute to constructor
+        
         pData = new SvxAuthorField( aFirstName, aLastName, aEmpty,
                                     mpImpl->mbBoolean1 ? SVXAUTHORTYPE_FIX : SVXAUTHORTYPE_VAR );
 
@@ -510,7 +510,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
     return pData;
 }
 
-// uno::XInterface
+
 uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const uno::Type & rType )
     throw(uno::RuntimeException)
 {
@@ -527,7 +527,7 @@ uno::Any SAL_CALL SvxUnoTextField::queryAggregation( const uno::Type & rType )
     return aAny;
 }
 
-// XTypeProvider
+
 
 uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
     throw (uno::RuntimeException)
@@ -537,7 +537,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxUnoTextField::getTypes()
         maTypeSequence = OComponentHelper::getTypes();
         sal_Int32 nOldCount = maTypeSequence.getLength();
 
-        maTypeSequence.realloc( nOldCount + 4 ); // !DANGER! keep this updated
+        maTypeSequence.realloc( nOldCount + 4 ); 
         uno::Type* pTypes = &maTypeSequence.getArray()[nOldCount];
 
         *pTypes++ = ::getCppuType(( const uno::Reference< text::XTextField >*)0);
@@ -575,7 +575,7 @@ void SAL_CALL SvxUnoTextField::release() throw( )
     OComponentHelper::release();
 }
 
-// Interface text::XTextField
+
 OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
     throw(uno::RuntimeException)
 {
@@ -622,7 +622,7 @@ OUString SAL_CALL SvxUnoTextField::getPresentation( sal_Bool bShowCommand )
     }
 }
 
-// Interface text::XTextContent
+
 void SAL_CALL SvxUnoTextField::attach( const uno::Reference< text::XTextRange >& xTextRange )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -643,7 +643,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextField::getAnchor()
     return mxAnchor;
 }
 
-// lang::XComponent
+
 void SAL_CALL SvxUnoTextField::dispose()
     throw(uno::RuntimeException)
 {
@@ -663,7 +663,7 @@ void SAL_CALL SvxUnoTextField::removeEventListener( const uno::Reference< lang::
 }
 
 
-// Interface beans::XPropertySet
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SvxUnoTextField::getPropertySetInfo(  )
     throw(uno::RuntimeException)
 {
@@ -781,13 +781,13 @@ void SAL_CALL SvxUnoTextField::removePropertyChangeListener( const OUString&, co
 void SAL_CALL SvxUnoTextField::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL SvxUnoTextField::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& ) throw(::com::sun::star::beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
-// OComponentHelper
+
 void SvxUnoTextField::disposing()
 {
-    // nothing to do
+    
 }
 
-// lang::XServiceInfo
+
 OUString SAL_CALL SvxUnoTextField::getImplementationName() throw(uno::RuntimeException)
 {
     return OUString("SvxUnoTextField");
@@ -877,8 +877,8 @@ uno::Reference< uno::XInterface > SAL_CALL SvxUnoTextCreateTextField( const OUSt
 
     const OUString aTextFieldPrexit( "com.sun.star.text.textfield." );
 
-    // #i93308# up to OOo 3.2 we used this wrong namespace name with the capital T & F. This is
-    // fixed since OOo 3.2 but for compatibility we will still provide support for the wrong notation.
+    
+    
     const OUString aTextFieldPrexit2( "com.sun.star.text.TextField." );
 
     if( (ServiceSpecifier.startsWith( aTextFieldPrexit )) ||

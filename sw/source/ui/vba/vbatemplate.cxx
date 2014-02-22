@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbatemplate.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 static OUString lcl_CheckGroupName( const OUString& rGroupName )
 {
     OUString sRet;
-    //group name should contain only A-Z and a-z and spaces
+    
     for( sal_Int32 i = 0; i < rGroupName.getLength(); i++ )
     {
         sal_Unicode cChar = rGroupName[i];
@@ -88,7 +88,7 @@ SwVbaTemplate::AutoTextEntries( const uno::Any& index ) throw (uno::RuntimeExcep
     uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
     uno::Reference< text::XAutoTextContainer2 > xAutoTextContainer = text::AutoTextContainer::create( xContext );
 
-    // the default template is "Normal.dot" in Word.
+    
     OUString sGroup("Normal");
     OUString sName = getName();
     sal_Int32 nIndex = sName.lastIndexOf( '.' );

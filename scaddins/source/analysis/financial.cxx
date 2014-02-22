@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "analysis.hxx"
@@ -366,7 +366,7 @@ double SAL_CALL AnalysisAddIn::getTbillprice( const css::uno::Reference< css::be
 
     nMat++;
 
-    double  fFraction = GetYearFrac( xOpt, nSettle, nMat, 0 );  // method: USA 30/360
+    double  fFraction = GetYearFrac( xOpt, nSettle, nMat, 0 );  
 
     double  fDummy;
     if( modf( fFraction, &fDummy ) == 0.0 )
@@ -395,8 +395,8 @@ double SAL_CALL AnalysisAddIn::getTbillyield( const css::uno::Reference< css::be
     RETURN_FINITE( fRet );
 }
 
-// Encapsulation violation: We *know* that GetOddfprice() always
-// throws.
+
+
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
@@ -413,8 +413,8 @@ double SAL_CALL AnalysisAddIn::getOddfprice( const css::uno::Reference< css::bea
 
 SAL_WNOUNREACHABLE_CODE_POP
 
-// Encapsulation violation: We *know* that Getoddfyield() always
-// throws.
+
+
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
@@ -458,8 +458,8 @@ double SAL_CALL AnalysisAddIn::getOddlyield( const css::uno::Reference< css::bea
 }
 
 
-// ============================================================================
-// XIRR helper functions
+
+
 
 #define V_(i) (rValues.Get(i))
 #define D_(i) (rDates.Get(i))
@@ -519,8 +519,8 @@ static double lcl_sca_XirrResult_Deriv1( const ScaDoubleList& rValues, const Sca
 #undef D_
 
 
-// ----------------------------------------------------------------------------
-// XIRR calculation
+
+
 
 double SAL_CALL AnalysisAddIn::getXirr(
     const css::uno::Reference< css::beans::XPropertySet >& xOpt, const css::uno::Sequence< css::uno::Sequence< double > >& rValues, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rDates, const css::uno::Any& rGuessRate ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException )
@@ -532,17 +532,17 @@ double SAL_CALL AnalysisAddIn::getXirr(
     if( (aValues.Count() < 2) || (aValues.Count() != aDates.Count()) )
         throw css::lang::IllegalArgumentException();
 
-    // result interest rate, initialized with passed guessed rate, or 10%
+    
     double fResultRate = aAnyConv.getDouble( xOpt, rGuessRate, 0.1 );
     if( fResultRate <= -1 )
         throw css::lang::IllegalArgumentException();
 
-    // maximum epsilon for end of iteration
+    
     static const double fMaxEps = 1e-10;
-    // maximum number of iterations
+    
     static const sal_Int32 nMaxIter = 50;
 
-    // Newton's method - try to find a fResultRate, so that lcl_sca_XirrResult() returns 0.
+    
     double fNewRate, fRateEps, fResultValue;
     sal_Int32 nIter = 0;
     bool bContLoop;
@@ -562,7 +562,7 @@ double SAL_CALL AnalysisAddIn::getXirr(
 }
 
 
-// ============================================================================
+
 
 double SAL_CALL AnalysisAddIn::getXnpv(
     double fRate, const css::uno::Sequence< css::uno::Sequence< double > >& rValues, const css::uno::Sequence< css::uno::Sequence< sal_Int32 > >& rDates ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException )

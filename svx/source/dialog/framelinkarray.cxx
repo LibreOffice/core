@@ -85,7 +85,7 @@ void Cell::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 
 void lclRecalcCoordVec( LongVec& rCoords, const LongVec& rSizes )
@@ -112,7 +112,7 @@ void lclSetMergedRange( CellVec& rCells, size_t nWidth, size_t nFirstCol, size_t
     rCells[ nFirstRow * nWidth + nFirstCol ].mbMergeOrig = true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 static const Style OBJ_STYLE_NONE;
 static const Cell OBJ_CELL_NONE;
@@ -186,7 +186,7 @@ ArrayImpl::ArrayImpl( size_t nWidth, size_t nHeight, bool bDiagDblClip ) :
     mbYCoordsDirty( false ),
     mbDiagDblClip( bDiagDblClip )
 {
-    // default-construct all vectors
+    
     maCells.resize( mnWidth * mnHeight );
     maWidths.resize( mnWidth, 0L );
     maHeights.resize( mnHeight, 0L );
@@ -316,7 +316,7 @@ double ArrayImpl::GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple ) cons
         }
         else
         {
-            // return correct angle for each cell in the merged range
+            
             size_t nFirstCol = GetMergedFirstCol( nCol, nRow );
             size_t nFirstRow = GetMergedFirstRow( nCol, nRow );
             const Cell& rCell = GetCell( nFirstCol, nFirstRow );
@@ -334,7 +334,7 @@ double ArrayImpl::GetVerDiagAngle( size_t nCol, size_t nRow, bool bSimple ) cons
     return (fAngle > 0.0) ? (F_PI2 - fAngle) : 0.0;
 }
 
-// ============================================================================
+
 
 class MergedCellIterator
 {
@@ -356,7 +356,7 @@ private:
     size_t              mnRow;
 };
 
-// ----------------------------------------------------------------------------
+
 
 MergedCellIterator::MergedCellIterator( const Array& rArray, size_t nCol, size_t nRow )
 {
@@ -377,7 +377,7 @@ MergedCellIterator& MergedCellIterator::operator++()
     return *this;
 }
 
-// ============================================================================
+
 
 #define DBG_FRAME_CHECK( cond, funcname, error )        DBG_ASSERT( cond, "svx::frame::Array::" funcname " - " error )
 #define DBG_FRAME_CHECK_COL( col, funcname )            DBG_FRAME_CHECK( (col) < GetColCount(), funcname, "invalid column index" )
@@ -386,13 +386,13 @@ MergedCellIterator& MergedCellIterator::operator++()
 #define DBG_FRAME_CHECK_COL_1( col, funcname )          DBG_FRAME_CHECK( (col) <= GetColCount(), funcname, "invalid column index" )
 #define DBG_FRAME_CHECK_ROW_1( row, funcname )          DBG_FRAME_CHECK( (row) <= GetRowCount(), funcname, "invalid row index" )
 
-// ----------------------------------------------------------------------------
+
 
 #define CELL( col, row )        mxImpl->GetCell( col, row )
 #define CELLACC( col, row )     mxImpl->GetCellAcc( col, row )
 #define ORIGCELL( col, row )    mxImpl->GetMergedOriginCell( col, row )
 
-// ----------------------------------------------------------------------------
+
 
 Array::Array()
 {
@@ -403,7 +403,7 @@ Array::~Array()
 {
 }
 
-// array size and column/row indexes ------------------------------------------
+
 
 void Array::Initialize( size_t nWidth, size_t nHeight )
 {
@@ -434,7 +434,7 @@ size_t Array::GetCellIndex( size_t nCol, size_t nRow, bool bRTL ) const
     return mxImpl->GetIndex( nCol, nRow );
 }
 
-// cell border styles ---------------------------------------------------------
+
 
 void Array::SetCellStyleLeft( size_t nCol, size_t nRow, const Style& rStyle )
 {
@@ -510,85 +510,85 @@ void Array::SetRowStyleBottom( size_t nRow, const Style& rStyle )
 
 const Style& Array::GetCellStyleLeft( size_t nCol, size_t nRow, bool bSimple ) const
 {
-    // simple: always return own left style
+    
     if( bSimple )
         return CELL( nCol, nRow ).maLeft;
-    // outside clipping rows or overlapped in merged cells: invisible
+    
     if( !mxImpl->IsRowInClipRange( nRow ) || mxImpl->IsMergedOverlappedLeft( nCol, nRow ) )
         return OBJ_STYLE_NONE;
-    // left clipping border: always own left style
+    
     if( nCol == mxImpl->mnFirstClipCol )
         return ORIGCELL( nCol, nRow ).maLeft;
-    // right clipping border: always right style of left neighbor cell
+    
     if( nCol == mxImpl->mnLastClipCol + 1 )
         return ORIGCELL( nCol - 1, nRow ).maRight;
-    // outside clipping columns: invisible
+    
     if( !mxImpl->IsColInClipRange( nCol ) )
         return OBJ_STYLE_NONE;
-    // inside clipping range: maximum of own left style and right style of left neighbor cell
+    
     return std::max( ORIGCELL( nCol, nRow ).maLeft, ORIGCELL( nCol - 1, nRow ).maRight );
 }
 
 const Style& Array::GetCellStyleRight( size_t nCol, size_t nRow, bool bSimple ) const
 {
-    // simple: always return own right style
+    
     if( bSimple )
         return CELL( nCol, nRow ).maRight;
-    // outside clipping rows or overlapped in merged cells: invisible
+    
     if( !mxImpl->IsRowInClipRange( nRow ) || mxImpl->IsMergedOverlappedRight( nCol, nRow ) )
         return OBJ_STYLE_NONE;
-    // left clipping border: always left style of right neighbor cell
+    
     if( nCol + 1 == mxImpl->mnFirstClipCol )
         return ORIGCELL( nCol + 1, nRow ).maLeft;
-    // right clipping border: always own right style
+    
     if( nCol == mxImpl->mnLastClipCol )
         return ORIGCELL( nCol, nRow ).maRight;
-    // outside clipping columns: invisible
+    
     if( !mxImpl->IsColInClipRange( nCol ) )
         return OBJ_STYLE_NONE;
-    // inside clipping range: maximum of own right style and left style of right neighbor cell
+    
     return std::max( ORIGCELL( nCol, nRow ).maRight, ORIGCELL( nCol + 1, nRow ).maLeft );
 }
 
 const Style& Array::GetCellStyleTop( size_t nCol, size_t nRow, bool bSimple ) const
 {
-    // simple: always return own top style
+    
     if( bSimple )
         return CELL( nCol, nRow ).maTop;
-    // outside clipping columns or overlapped in merged cells: invisible
+    
     if( !mxImpl->IsColInClipRange( nCol ) || mxImpl->IsMergedOverlappedTop( nCol, nRow ) )
         return OBJ_STYLE_NONE;
-    // top clipping border: always own top style
+    
     if( nRow == mxImpl->mnFirstClipRow )
         return ORIGCELL( nCol, nRow ).maTop;
-    // bottom clipping border: always bottom style of top neighbor cell
+    
     if( nRow == mxImpl->mnLastClipRow + 1 )
         return ORIGCELL( nCol, nRow - 1 ).maBottom;
-    // outside clipping rows: invisible
+    
     if( !mxImpl->IsRowInClipRange( nRow ) )
         return OBJ_STYLE_NONE;
-    // inside clipping range: maximum of own top style and bottom style of top neighbor cell
+    
     return std::max( ORIGCELL( nCol, nRow ).maTop, ORIGCELL( nCol, nRow - 1 ).maBottom );
 }
 
 const Style& Array::GetCellStyleBottom( size_t nCol, size_t nRow, bool bSimple ) const
 {
-    // simple: always return own bottom style
+    
     if( bSimple )
         return CELL( nCol, nRow ).maBottom;
-    // outside clipping columns or overlapped in merged cells: invisible
+    
     if( !mxImpl->IsColInClipRange( nCol ) || mxImpl->IsMergedOverlappedBottom( nCol, nRow ) )
         return OBJ_STYLE_NONE;
-    // top clipping border: always top style of bottom neighbor cell
+    
     if( nRow + 1 == mxImpl->mnFirstClipRow )
         return ORIGCELL( nCol, nRow + 1 ).maTop;
-    // bottom clipping border: always own bottom style
+    
     if( nRow == mxImpl->mnLastClipRow )
         return ORIGCELL( nCol, nRow ).maBottom;
-    // outside clipping rows: invisible
+    
     if( !mxImpl->IsRowInClipRange( nRow ) )
         return OBJ_STYLE_NONE;
-    // inside clipping range: maximum of own bottom style and top style of bottom neighbor cell
+    
     return std::max( ORIGCELL( nCol, nRow ).maBottom, ORIGCELL( nCol, nRow + 1 ).maTop );
 }
 
@@ -606,10 +606,10 @@ const Style& Array::GetCellStyleBLTR( size_t nCol, size_t nRow, bool bSimple ) c
 
 const Style& Array::GetCellStyleTL( size_t nCol, size_t nRow ) const
 {
-    // not in clipping range: always invisible
+    
     if( !mxImpl->IsInClipRange( nCol, nRow ) )
         return OBJ_STYLE_NONE;
-    // return style only for top-left cell
+    
     size_t nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
     size_t nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
     return ((nCol == nFirstCol) && (nRow == nFirstRow)) ?
@@ -618,10 +618,10 @@ const Style& Array::GetCellStyleTL( size_t nCol, size_t nRow ) const
 
 const Style& Array::GetCellStyleBR( size_t nCol, size_t nRow ) const
 {
-    // not in clipping range: always invisible
+    
     if( !mxImpl->IsInClipRange( nCol, nRow ) )
         return OBJ_STYLE_NONE;
-    // return style only for bottom-right cell
+    
     size_t nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
     size_t nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
     return ((nCol == nLastCol) && (nRow == nLastRow)) ?
@@ -630,10 +630,10 @@ const Style& Array::GetCellStyleBR( size_t nCol, size_t nRow ) const
 
 const Style& Array::GetCellStyleBL( size_t nCol, size_t nRow ) const
 {
-    // not in clipping range: always invisible
+    
     if( !mxImpl->IsInClipRange( nCol, nRow ) )
         return OBJ_STYLE_NONE;
-    // return style only for bottom-left cell
+    
     size_t nFirstCol = mxImpl->GetMergedFirstCol( nCol, nRow );
     size_t nLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
     return ((nCol == nFirstCol) && (nRow == nLastRow)) ?
@@ -642,17 +642,17 @@ const Style& Array::GetCellStyleBL( size_t nCol, size_t nRow ) const
 
 const Style& Array::GetCellStyleTR( size_t nCol, size_t nRow ) const
 {
-    // not in clipping range: always invisible
+    
     if( !mxImpl->IsInClipRange( nCol, nRow ) )
         return OBJ_STYLE_NONE;
-    // return style only for top-right cell
+    
     size_t nFirstRow = mxImpl->GetMergedFirstRow( nCol, nRow );
     size_t nLastCol = mxImpl->GetMergedLastCol( nCol, nRow );
     return ((nCol == nLastCol) && (nRow == nFirstRow)) ?
         CELL( mxImpl->GetMergedFirstCol( nCol, nRow ), nFirstRow ).maBLTR : OBJ_STYLE_NONE;
 }
 
-// cell merging ---------------------------------------------------------------
+
 
 void Array::SetMergedRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow )
 {
@@ -736,7 +736,7 @@ void Array::GetMergedRange( size_t& rnFirstCol, size_t& rnFirstRow,
     rnLastRow = mxImpl->GetMergedLastRow( nCol, nRow );
 }
 
-// clipping -------------------------------------------------------------------
+
 
 void Array::SetClipRange( size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow )
 {
@@ -757,7 +757,7 @@ Rectangle Array::GetClipRangeRectangle() const
         mxImpl->GetRowPosition( mxImpl->mnLastClipRow + 1 ) );
 }
 
-// cell coordinates -----------------------------------------------------------
+
 
 void Array::SetXOffset( long nXOffset )
 {
@@ -853,7 +853,7 @@ Rectangle Array::GetCellRect( size_t nCol, size_t nRow, bool bSimple ) const
 {
     Rectangle aRect( GetCellPosition( nCol, nRow, bSimple ), GetCellSize( nCol, nRow, bSimple ) );
 
-    // adjust rectangle for partly visible merged cells
+    
     const Cell& rCell = CELL( nCol, nRow );
     if( !bSimple && rCell.IsMerged() )
     {
@@ -865,7 +865,7 @@ Rectangle Array::GetCellRect( size_t nCol, size_t nRow, bool bSimple ) const
     return aRect;
 }
 
-// diagonal frame borders -----------------------------------------------------
+
 
 double Array::GetHorDiagAngle( size_t nCol, size_t nRow, bool bSimple ) const
 {
@@ -884,7 +884,7 @@ void Array::SetUseDiagDoubleClipping( bool bSet )
     mxImpl->mbDiagDblClip = bSet;
 }
 
-// mirroring ------------------------------------------------------------------
+
 
 void Array::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
 {
@@ -920,7 +920,7 @@ void Array::MirrorSelfX( bool bMirrorStyles, bool bSwapDiag )
     mxImpl->mbXCoordsDirty = true;
 }
 
-// drawing --------------------------------------------------------------------
+
 
 void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
         size_t nFirstCol, size_t nFirstRow, size_t nLastCol, size_t nLastRow,
@@ -931,7 +931,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
 
     size_t nCol, nRow;
 
-    // *** diagonal frame borders ***
+    
     for( nRow = nFirstRow; nRow <= nLastRow; ++nRow )
     {
         for( nCol = nFirstCol; nCol <= nLastCol; ++nCol )
@@ -966,14 +966,14 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
         }
     }
 
-    // *** horizontal frame borders ***
+    
 
     for( nRow = nFirstRow; nRow <= nLastRow + 1; ++nRow )
     {
         double fAngle = mxImpl->GetHorDiagAngle( nFirstCol, nRow );
         double fTAngle = mxImpl->GetHorDiagAngle( nFirstCol, nRow - 1 );
 
-        // *Start*** variables store the data of the left end of the cached frame border
+        
         Point aStartPos( mxImpl->GetColPosition( nFirstCol ), mxImpl->GetRowPosition( nRow ) );
         const Style* pStart = &GetCellStyleTop( nFirstCol, nRow );
         DiagStyle aStartLFromTR( GetCellStyleBL( nFirstCol, nRow - 1 ), fTAngle );
@@ -982,7 +982,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
         const Style* pStartLFromB = &GetCellStyleLeft( nFirstCol, nRow );
         DiagStyle aStartLFromBR( GetCellStyleTL( nFirstCol, nRow ), fAngle );
 
-        // *End*** variables store the data of the right end of the cached frame border
+        
         DiagStyle aEndRFromTL( GetCellStyleBR( nFirstCol, nRow - 1 ), fTAngle );
         const Style* pEndRFromT = &GetCellStyleRight( nFirstCol, nRow - 1 );
         const Style* pEndRFromR = &GetCellStyleTop( nFirstCol + 1, nRow );
@@ -1008,18 +1008,18 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
             const Style& rRFromB = GetCellStyleRight( nCol, nRow );
             DiagStyle aRFromBL( GetCellStyleTR( nCol, nRow ), fAngle );
 
-            // check if current frame border can be connected to cached frame border
+            
             if( !CheckFrameBorderConnectable( *pStart, rCurr,
                     aEndRFromTL, rLFromT, aLFromTR, aEndRFromBL, rLFromB, aLFromBR ) )
             {
-                // draw previous frame border
+                
                 Point aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.Y() );
                 if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
                    pProcessor->process( CreateBorderPrimitives( aStartPos, aEndPos, *pStart,
                         aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
                         aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor ) );
 
-                // re-init "*Start***" variables
+                
                 aStartPos = aEndPos;
                 pStart = &rCurr;
                 aStartLFromTR = aLFromTR;
@@ -1029,7 +1029,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                 aStartLFromBR = aLFromBR;
             }
 
-            // store current styles in "*End***" variables
+            
             aEndRFromTL = aRFromTL;
             pEndRFromT = &rRFromT;
             pEndRFromR = &rRFromR;
@@ -1037,7 +1037,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
             aEndRFromBL = aRFromBL;
         }
 
-        // draw last frame border
+        
         Point aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.Y() );
         if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
             pProcessor->process( CreateBorderPrimitives( aStartPos, aEndPos, *pStart,
@@ -1045,13 +1045,13 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                 aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor ) );
     }
 
-    // *** vertical frame borders ***
+    
     for( nCol = nFirstCol; nCol <= nLastCol + 1; ++nCol )
     {
         double fAngle = mxImpl->GetVerDiagAngle( nCol, nFirstRow );
         double fLAngle = mxImpl->GetVerDiagAngle( nCol - 1, nFirstRow );
 
-        // *Start*** variables store the data of the top end of the cached frame border
+        
         Point aStartPos( mxImpl->GetColPosition( nCol ), mxImpl->GetRowPosition( nFirstRow ) );
         const Style* pStart = &GetCellStyleLeft( nCol, nFirstRow );
         DiagStyle aStartTFromBL( GetCellStyleTR( nCol - 1, nFirstRow ), fLAngle );
@@ -1060,7 +1060,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
         const Style* pStartTFromR = &GetCellStyleTop( nCol, nFirstRow );
         DiagStyle aStartTFromBR( GetCellStyleTL( nCol, nFirstRow ), fAngle );
 
-        // *End*** variables store the data of the bottom end of the cached frame border
+        
         DiagStyle aEndBFromTL( GetCellStyleBR( nCol - 1, nFirstRow ), fLAngle );
         const Style* pEndBFromL = &GetCellStyleBottom( nCol - 1, nFirstRow );
         const Style* pEndBFromB = &GetCellStyleLeft( nCol, nFirstRow + 1 );
@@ -1086,18 +1086,18 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
             const Style& rBFromR = GetCellStyleBottom( nCol, nRow );
             DiagStyle aBFromTR( GetCellStyleBL( nCol, nRow ), fAngle );
 
-            // check if current frame border can be connected to cached frame border
+            
             if( !CheckFrameBorderConnectable( *pStart, rCurr,
                     aEndBFromTL, rTFromL, aTFromBL, aEndBFromTR, rTFromR, aTFromBR ) )
             {
-                // draw previous frame border
+                
                 Point aEndPos( aStartPos.X(), mxImpl->GetRowPosition( nRow ) );
                 if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
                     pProcessor->process( CreateBorderPrimitives( aEndPos, aStartPos, *pStart,
                         aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR,
                         aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR, pForceColor ) );
 
-                // re-init "*Start***" variables
+                
                 aStartPos = aEndPos;
                 pStart = &rCurr;
                 aStartTFromBL = aTFromBL;
@@ -1107,7 +1107,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
                 aStartTFromBR = aTFromBR;
             }
 
-            // store current styles in "*End***" variables
+            
             aEndBFromTL = aBFromTL;
             pEndBFromL = &rBFromL;
             pEndBFromB = &rBFromB;
@@ -1115,7 +1115,7 @@ void Array::DrawRange( drawinglayer::processor2d::BaseProcessor2D* pProcessor,
             aEndBFromTR = aBFromTR;
         }
 
-        // draw last frame border
+        
         Point aEndPos( aStartPos.X(), mxImpl->GetRowPosition( nRow ) );
         if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
             pProcessor->process( CreateBorderPrimitives( aEndPos, aStartPos, *pStart,
@@ -1133,9 +1133,9 @@ void Array::DrawRange( OutputDevice& rDev,
 
     size_t nCol, nRow;
 
-    // *** diagonal frame borders ***
+    
 
-    // set clipping region to clip partly visible merged cells
+    
     rDev.Push( PUSH_CLIPREGION );
     rDev.IntersectClipRegion( GetClipRangeRectangle() );
     for( nRow = nFirstRow; nRow <= nLastRow; ++nRow )
@@ -1169,16 +1169,16 @@ void Array::DrawRange( OutputDevice& rDev,
             }
         }
     }
-    rDev.Pop(); // clip region
+    rDev.Pop(); 
 
-    // *** horizontal frame borders ***
+    
 
     for( nRow = nFirstRow; nRow <= nLastRow + 1; ++nRow )
     {
         double fAngle = mxImpl->GetHorDiagAngle( nFirstCol, nRow );
         double fTAngle = mxImpl->GetHorDiagAngle( nFirstCol, nRow - 1 );
 
-        // *Start*** variables store the data of the left end of the cached frame border
+        
         Point aStartPos( mxImpl->GetColPosition( nFirstCol ), mxImpl->GetRowPosition( nRow ) );
         const Style* pStart = &GetCellStyleTop( nFirstCol, nRow );
         DiagStyle aStartLFromTR( GetCellStyleBL( nFirstCol, nRow - 1 ), fTAngle );
@@ -1187,7 +1187,7 @@ void Array::DrawRange( OutputDevice& rDev,
         const Style* pStartLFromB = &GetCellStyleLeft( nFirstCol, nRow );
         DiagStyle aStartLFromBR( GetCellStyleTL( nFirstCol, nRow ), fAngle );
 
-        // *End*** variables store the data of the right end of the cached frame border
+        
         DiagStyle aEndRFromTL( GetCellStyleBR( nFirstCol, nRow - 1 ), fTAngle );
         const Style* pEndRFromT = &GetCellStyleRight( nFirstCol, nRow - 1 );
         const Style* pEndRFromR = &GetCellStyleTop( nFirstCol + 1, nRow );
@@ -1213,18 +1213,18 @@ void Array::DrawRange( OutputDevice& rDev,
             const Style& rRFromB = GetCellStyleRight( nCol, nRow );
             DiagStyle aRFromBL( GetCellStyleTR( nCol, nRow ), fAngle );
 
-            // check if current frame border can be connected to cached frame border
+            
             if( !CheckFrameBorderConnectable( *pStart, rCurr,
                     aEndRFromTL, rLFromT, aLFromTR, aEndRFromBL, rLFromB, aLFromBR ) )
             {
-                // draw previous frame border
+                
                 Point aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.Y() );
                 if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
                     DrawHorFrameBorder( rDev, aStartPos, aEndPos, *pStart,
                         aStartLFromTR, *pStartLFromT, *pStartLFromL, *pStartLFromB, aStartLFromBR,
                         aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor );
 
-                // re-init "*Start***" variables
+                
                 aStartPos = aEndPos;
                 pStart = &rCurr;
                 aStartLFromTR = aLFromTR;
@@ -1234,7 +1234,7 @@ void Array::DrawRange( OutputDevice& rDev,
                 aStartLFromBR = aLFromBR;
             }
 
-            // store current styles in "*End***" variables
+            
             aEndRFromTL = aRFromTL;
             pEndRFromT = &rRFromT;
             pEndRFromR = &rRFromR;
@@ -1242,7 +1242,7 @@ void Array::DrawRange( OutputDevice& rDev,
             aEndRFromBL = aRFromBL;
         }
 
-        // draw last frame border
+        
         Point aEndPos( mxImpl->GetColPosition( nCol ), aStartPos.Y() );
         if( pStart->Prim() && (aStartPos.X() <= aEndPos.X()) )
             DrawHorFrameBorder( rDev, aStartPos, aEndPos, *pStart,
@@ -1250,14 +1250,14 @@ void Array::DrawRange( OutputDevice& rDev,
                 aEndRFromTL, *pEndRFromT, *pEndRFromR, *pEndRFromB, aEndRFromBL, pForceColor );
     }
 
-    // *** vertical frame borders ***
+    
 
     for( nCol = nFirstCol; nCol <= nLastCol + 1; ++nCol )
     {
         double fAngle = mxImpl->GetVerDiagAngle( nCol, nFirstRow );
         double fLAngle = mxImpl->GetVerDiagAngle( nCol - 1, nFirstRow );
 
-        // *Start*** variables store the data of the top end of the cached frame border
+        
         Point aStartPos( mxImpl->GetColPosition( nCol ), mxImpl->GetRowPosition( nFirstRow ) );
         const Style* pStart = &GetCellStyleLeft( nCol, nFirstRow );
         DiagStyle aStartTFromBL( GetCellStyleTR( nCol - 1, nFirstRow ), fLAngle );
@@ -1266,7 +1266,7 @@ void Array::DrawRange( OutputDevice& rDev,
         const Style* pStartTFromR = &GetCellStyleTop( nCol, nFirstRow );
         DiagStyle aStartTFromBR( GetCellStyleTL( nCol, nFirstRow ), fAngle );
 
-        // *End*** variables store the data of the bottom end of the cached frame border
+        
         DiagStyle aEndBFromTL( GetCellStyleBR( nCol - 1, nFirstRow ), fLAngle );
         const Style* pEndBFromL = &GetCellStyleBottom( nCol - 1, nFirstRow );
         const Style* pEndBFromB = &GetCellStyleLeft( nCol, nFirstRow + 1 );
@@ -1292,18 +1292,18 @@ void Array::DrawRange( OutputDevice& rDev,
             const Style& rBFromR = GetCellStyleBottom( nCol, nRow );
             DiagStyle aBFromTR( GetCellStyleBL( nCol, nRow ), fAngle );
 
-            // check if current frame border can be connected to cached frame border
+            
             if( !CheckFrameBorderConnectable( *pStart, rCurr,
                     aEndBFromTL, rTFromL, aTFromBL, aEndBFromTR, rTFromR, aTFromBR ) )
             {
-                // draw previous frame border
+                
                 Point aEndPos( aStartPos.X(), mxImpl->GetRowPosition( nRow ) );
                 if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
                     DrawVerFrameBorder( rDev, aStartPos, aEndPos, *pStart,
                         aStartTFromBL, *pStartTFromL, *pStartTFromT, *pStartTFromR, aStartTFromBR,
                         aEndBFromTL, *pEndBFromL, *pEndBFromB, *pEndBFromR, aEndBFromTR, pForceColor );
 
-                // re-init "*Start***" variables
+                
                 aStartPos = aEndPos;
                 pStart = &rCurr;
                 aStartTFromBL = aTFromBL;
@@ -1313,7 +1313,7 @@ void Array::DrawRange( OutputDevice& rDev,
                 aStartTFromBR = aTFromBR;
             }
 
-            // store current styles in "*End***" variables
+            
             aEndBFromTL = aBFromTL;
             pEndBFromL = &rBFromL;
             pEndBFromB = &rBFromB;
@@ -1321,7 +1321,7 @@ void Array::DrawRange( OutputDevice& rDev,
             aEndBFromTR = aBFromTR;
         }
 
-        // draw last frame border
+        
         Point aEndPos( aStartPos.X(), mxImpl->GetRowPosition( nRow ) );
         if( pStart->Prim() && (aStartPos.Y() <= aEndPos.Y()) )
             DrawVerFrameBorder( rDev, aStartPos, aEndPos, *pStart,
@@ -1336,13 +1336,13 @@ void Array::DrawArray( OutputDevice& rDev, const Color* pForceColor ) const
         DrawRange( rDev, 0, 0, mxImpl->mnWidth - 1, mxImpl->mnHeight - 1, pForceColor );
 }
 
-// ----------------------------------------------------------------------------
+
 
 #undef ORIGCELL
 #undef CELLACC
 #undef CELL
 
-// ----------------------------------------------------------------------------
+
 
 #undef DBG_FRAME_CHECK_ROW_1
 #undef DBG_FRAME_CHECK_COL_1
@@ -1351,9 +1351,9 @@ void Array::DrawArray( OutputDevice& rDev, const Color* pForceColor ) const
 #undef DBG_FRAME_CHECK_COL
 #undef DBG_FRAME_CHECK
 
-// ============================================================================
 
-} // namespace frame
-} // namespace svx
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

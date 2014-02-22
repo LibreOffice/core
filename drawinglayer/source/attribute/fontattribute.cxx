@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/fontattribute.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/ustring.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -30,18 +30,18 @@ namespace drawinglayer
         class ImpFontAttribute
         {
         public:
-            /// core data
-            OUString                                    maFamilyName;       // Font Family Name
-            OUString                                    maStyleName;        // Font Style Name
-            sal_uInt16                                  mnWeight;           // Font weight
+            
+            OUString                                    maFamilyName;       
+            OUString                                    maStyleName;        
+            sal_uInt16                                  mnWeight;           
 
-            /// bitfield
-            bool                                        mbSymbol : 1;       // Symbol Font Flag
-            bool                                        mbVertical : 1;     // Vertical Text Flag
-            bool                                        mbItalic : 1;       // Italic Flag
-            bool                                        mbOutline : 1;      // Outline Flag
-            bool                                        mbRTL : 1;          // RTL Flag
-            bool                                        mbBiDiStrong : 1;   // BiDi Flag
+            
+            bool                                        mbSymbol : 1;       
+            bool                                        mbVertical : 1;     
+            bool                                        mbItalic : 1;       
+            bool                                        mbOutline : 1;      
+            bool                                        mbRTL : 1;          
+            bool                                        mbBiDiStrong : 1;   
             bool                                        mbMonospaced : 1;
 
             ImpFontAttribute(
@@ -82,7 +82,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             const OUString& getFamilyName() const { return maFamilyName; }
             const OUString& getStyleName() const { return maStyleName; }
             sal_uInt16 getWeight() const { return mnWeight; }
@@ -207,7 +207,7 @@ namespace drawinglayer
         }
 
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

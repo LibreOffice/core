@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unosection.hxx>
@@ -105,7 +105,7 @@ class SwXTextSection::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
 
 public:
     SwXTextSection &            m_rThis;
@@ -125,7 +125,7 @@ public:
         , m_rPropSet(*aSwMapProvider.GetPropertySet(PROPERTY_MAP_SECTION))
         , m_EventListeners(m_Mutex)
         , m_bIndexHeader(bIndexHeader)
-        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
+        
         , m_bIsDescriptor((0 == pFmt) ? true : false)
         , m_pProps((pFmt) ? 0 : new SwTextSectionProperties_Impl())
     {
@@ -158,7 +158,7 @@ public:
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 uno::RuntimeException);
 protected:
-    // SwClient
+    
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
@@ -182,8 +182,8 @@ uno::Reference< text::XTextSection >
 SwXTextSection::CreateXTextSection(
         SwSectionFmt *const pFmt, const bool bIndexHeader)
 {
-    // re-use existing SwXTextSection
-    // #i105557#: do not iterate over the registered clients: race condition
+    
+    
     uno::Reference< text::XTextSection > xSection;
     if (pFmt)
     {
@@ -289,7 +289,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwUnoInternalPaM aPam(*pDoc);
-    //das muss jetzt sal_True liefern
+    
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     UnoActionContext aCont(pDoc);
     pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_INSSECTION, NULL );
@@ -303,23 +303,23 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         : ((!m_pImpl->m_pProps->m_sLinkFileName.isEmpty() ||
             !m_pImpl->m_pProps->m_sSectionRegion.isEmpty())
                 ?  FILE_LINK_SECTION : CONTENT_SECTION);
-    // index header section?
+    
     if (m_pImpl->m_bIndexHeader)
     {
-        // caller wants an index header section, but will only
-        // give him one if a) we are inside an index, and b) said
-        // index doesn't yet have a header section.
+        
+        
+        
         const SwTOXBase* pBase = aPam.GetDoc()->GetCurTOX(*aPam.Start());
 
-        // are we inside an index?
+        
         if (pBase)
         {
-            // get all child sections
+            
             SwSections aSectionsArr;
             static_cast<const SwTOXBaseSection*>(pBase)->GetFmt()->
                 GetChildSections(aSectionsArr);
 
-            // and search for current header section
+            
             const sal_uInt16 nCount = aSectionsArr.size();
             bool bHeaderPresent = false;
             for(sal_uInt16 i = 0; i < nCount; i++)
@@ -386,7 +386,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         aSet.Put(*m_pImpl->m_pProps->m_pLRSpaceItem);
     }
-    // section password
+    
     if (m_pImpl->m_pProps->m_Password.getLength() > 0)
     {
         aSect.SetPassword(m_pImpl->m_pProps->m_Password);
@@ -394,9 +394,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     SwSection *const pRet =
         pDoc->InsertSwSection( aPam, aSect, 0, aSet.Count() ? &aSet : 0 );
-    if (!pRet) // fdo#42450 text range could parially overlap existing section
+    if (!pRet) 
     {
-        // shouldn't have created an undo object yet
+        
         pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
         throw lang::IllegalArgumentException(
                 "SwXTextSection::attach(): invalid TextRange",
@@ -405,14 +405,14 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     pRet->GetFmt()->Add(m_pImpl.get());
     pRet->GetFmt()->SetXObject(static_cast< ::cppu::OWeakObject*>(this));
 
-    // XML import must hide sections depending on their old
-    //         condition status
+    
+    
     if (!m_pImpl->m_pProps->m_sCondition.isEmpty())
     {
         pRet->SetCondHidden(m_pImpl->m_pProps->m_bCondHidden);
     }
 
-    // set update type if DDE link (and connect, if necessary)
+    
     if (m_pImpl->m_pProps->m_bDDE)
     {
         if (! pRet->IsConnected())
@@ -424,7 +424,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 sfx2::LINKUPDATE_ALWAYS : sfx2::LINKUPDATE_ONCALL) );
     }
 
-    // Undo-Klammerung hier beenden
+    
     pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_INSSECTION, NULL );
     m_pImpl->m_pProps.reset();
     m_pImpl->m_bIsDescriptor = false;
@@ -472,7 +472,7 @@ void SAL_CALL SwXTextSection::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -480,7 +480,7 @@ void SAL_CALL SwXTextSection::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -499,7 +499,7 @@ lcl_UpdateLinkType(SwSection & rSection, bool const bLinkUpdateAlways = true)
 {
     if (rSection.GetType() == DDE_LINK_SECTION)
     {
-        // set update type; needs an established link
+        
         if (!rSection.IsConnected())
         {
             rSection.CreateLink(CREATE_CONNECT);
@@ -530,7 +530,7 @@ lcl_UpdateSection(SwSectionFmt *const pFmt,
                 pDoc->UpdateSection(i, *pSectionData, pItemSet.get(),
                         pDoc->IsInReading());
                 {
-                    // temporarily remove actions to allow cursor update
+                    
                     UnoActionRemoveContext aRemoveContext( pDoc );
                 }
 
@@ -538,7 +538,7 @@ lcl_UpdateSection(SwSectionFmt *const pFmt,
                 {
                     lcl_UpdateLinkType(rSection, bLinkUpdateAlways);
                 }
-                // section found and processed: break from loop
+                
                 break;
             }
         }
@@ -931,15 +931,15 @@ throw (beans::PropertyVetoException, lang::IllegalArgumentException,
 {
     SolarMutexGuard aGuard;
 
-    // workaround for bad designed API
+    
     try
     {
         m_pImpl->SetPropertyValues_Impl( rPropertyNames, rValues );
     }
     catch (const beans::UnknownPropertyException &rException)
     {
-        // wrap the original (here not allowed) exception in
-        // a WrappedTargetException that gets thrown instead.
+        
+        
         lang::WrappedTargetException aWExc;
         aWExc.TargetException <<= rException;
         throw aWExc;
@@ -1024,8 +1024,8 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_SECT_DDE_AUTOUPDATE:
             {
-                // GetUpdateType() returns .._ALWAYS or .._ONCALL
-                if (pSect && pSect->IsLinkType() && pSect->IsConnected())  // #i73247#
+                
+                if (pSect && pSect->IsLinkType() && pSect->IsConnected())  
                 {
                     const sal_Bool bTemp =
                         (pSect->GetUpdateType() == sfx2::LINKUPDATE_ALWAYS);
@@ -1110,7 +1110,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             break;
             case WID_SECT_DOCUMENT_INDEX:
             {
-                // search enclosing index
+                
                 SwSection* pEnclosingSection = pSect;
                 while ((pEnclosingSection != NULL) &&
                        (TOX_CONTENT_SECTION != pEnclosingSection->GetType()))
@@ -1119,7 +1119,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 }
                 if (pEnclosingSection)
                 {
-                    // convert section to TOXBase and get SwXDocumentIndex
+                    
                     SwTOXBaseSection *const pTOXBaseSect =
                         PTR_CAST(SwTOXBaseSection, pEnclosingSection);
                     const uno::Reference<text::XDocumentIndex> xIndex =
@@ -1127,7 +1127,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                             *pTOXBaseSect->GetFmt()->GetDoc(), *pTOXBaseSect);
                     pRet[nProperty] <<= xIndex;
                 }
-                // else: no enclosing index found -> empty return value
+                
             }
             break;
             case WID_SECT_IS_GLOBAL_DOC_SECTION:
@@ -1147,7 +1147,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             case FN_UNO_REDLINE_NODE_END:
             {
                 if (!pFmt)
-                    break;      // #i73247#
+                    break;      
                 SwNode* pSectNode = pFmt->GetSectionNode();
                 if (FN_UNO_REDLINE_NODE_END == pEntry->nWID)
                 {
@@ -1282,7 +1282,7 @@ throw (uno::RuntimeException)
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
 
-    // workaround for bad designed API
+    
     try
     {
         aValues = m_pImpl->GetPropertyValues_Impl( rPropertyNames );
@@ -1452,7 +1452,7 @@ throw (beans::UnknownPropertyException, uno::RuntimeException)
                             pStates[i] = beans::PropertyState_DIRECT_VALUE;
                         }
                     }
-                    else //if(RES_BACKGROUND == pEntry->nWID)
+                    else 
                     {
                         if (!m_pImpl->m_pProps->m_pBrushItem.get())
                         {
@@ -1733,7 +1733,7 @@ throw (uno::RuntimeException)
                 pFmt->GetDoc()->UpdateSection(nApplyPos, aSection);
             }
             {
-                // temporarily remove actions to allow cursor update
+                
                 UnoActionRemoveContext aRemoveContext( pFmt->GetDoc() );
             }
         }
@@ -1775,7 +1775,7 @@ SwXTextSection::getSupportedServiceNames() throw (uno::RuntimeException)
                 g_ServicesTextSection);
 }
 
-// MetadatableMixin
+
 ::sfx2::Metadatable* SwXTextSection::GetCoreObject()
 {
     SwSectionFmt *const pSectionFmt( m_pImpl->GetSectionFmt() );

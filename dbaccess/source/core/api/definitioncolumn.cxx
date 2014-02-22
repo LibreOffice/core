@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <bitset>
@@ -56,7 +56,7 @@ namespace
     const sal_Int32 HAS_TABLENAME              = 0x00000040;
 }
 
-// OTableColumnDescriptor
+
 IMPLEMENT_FORWARD_XINTERFACE2(OTableColumnDescriptor,OColumn,TXChild)
 
 void OTableColumnDescriptor::impl_registerProperties()
@@ -83,7 +83,7 @@ void OTableColumnDescriptor::impl_registerProperties()
 
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptor )
 
-// ::com::sun::star::lang::XServiceInfo
+
 OUString OTableColumnDescriptor::getImplementationName(  ) throw (RuntimeException)
 {
     return OUString("com.sun.star.sdb.OTableColumnDescriptor");
@@ -97,7 +97,7 @@ Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw 
     return aSNS;
 }
 
-// comphelper::OPropertyArrayUsageHelper
+
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptor::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
@@ -105,7 +105,7 @@ Sequence< OUString > OTableColumnDescriptor::getSupportedServiceNames(  ) throw 
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-// cppu::OPropertySetHelper
+
 ::cppu::IPropertyArrayHelper& OTableColumnDescriptor::getInfoHelper()
 {
     return *static_cast< ::comphelper::OPropertyArrayUsageHelper< OTableColumnDescriptor >* >(this)->getArrayHelper();
@@ -129,7 +129,7 @@ void SAL_CALL OTableColumnDescriptor::setParent( const Reference< XInterface >& 
     m_xParent = _xParent;
 }
 
-// OTableColumn
+
 
 OTableColumn::OTableColumn( const OUString& _rName )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
@@ -158,7 +158,7 @@ OUString OTableColumn::getImplementationName(  ) throw (RuntimeException)
     return OTableColumnDescriptor::createArrayHelper();
 }
 
-// OQueryColumn
+
 
 OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, const Reference< XConnection >& _rxConnection, const OUString &i_sLabel )
     :OTableColumnDescriptor( false /* do not act as descriptor */ )
@@ -187,7 +187,7 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
     if ( xPSI->hasPropertyByName( PROPERTY_DEFAULTVALUE ) )
         OSL_VERIFY( _rxParserColumn->getPropertyValue( PROPERTY_DEFAULTVALUE ) >>= m_aDefaultValue );
 
-    // copy some optional properties from the parser column
+    
     struct PropertyDescriptor
     {
         OUString sName;
@@ -206,7 +206,7 @@ OQueryColumn::OQueryColumn( const Reference< XPropertySet >& _rxParserColumn, co
             setFastPropertyValue_NoBroadcast( aProps[i].nHandle, _rxParserColumn->getPropertyValue( aProps[i].sName ) );
     }
 
-    // determine the table column we're based on
+    
     osl_atomic_increment( &m_refCount );
     {
         m_xOriginalTableColumn = impl_determineOriginalTableColumn( _rxConnection );
@@ -227,8 +227,8 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
     Reference< XPropertySet > xOriginalTableColumn;
     try
     {
-        // determine the composed table name, plus the column name, as indicated by the
-        // respective properties
+        
+        
         OUString sCatalog, sSchema, sTable;
         OSL_VERIFY( getPropertyValue( PROPERTY_CATALOGNAME ) >>= sCatalog );
         OSL_VERIFY( getPropertyValue( PROPERTY_SCHEMANAME ) >>= sSchema );
@@ -239,7 +239,7 @@ Reference< XPropertySet > OQueryColumn::impl_determineOriginalTableColumn( const
         OUString sComposedTableName = ::dbtools::composeTableName(
             _rxConnection->getMetaData(), sCatalog, sSchema, sTable, sal_False, ::dbtools::eComplete );
 
-        // retrieve the table in question
+        
         Reference< XTablesSupplier > xSuppTables( _rxConnection, UNO_QUERY_THROW );
         Reference< XNameAccess > xTables( xSuppTables->getTables(), UNO_QUERY_THROW );
         if ( !xTables->hasByName( sComposedTableName ) )
@@ -283,12 +283,12 @@ void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
 {
     OTableColumnDescriptor::getFastPropertyValue( _rValue, _nHandle );
 
-    // special treatment for column settings:
+    
     if ( !OColumnSettings::isColumnSettingProperty( _nHandle ) )
         return;
 
-    // If the setting has its default value, then try to obtain the value from the table column which
-    // this query column is based on
+    
+    
     if ( !OColumnSettings::isDefaulted( _nHandle, _rValue ) )
         return;
 
@@ -297,7 +297,7 @@ void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
 
     try
     {
-        // determine original property name
+        
         OUString sPropName;
         sal_Int16 nAttributes( 0 );
         const_cast< OQueryColumn* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, &nAttributes, _nHandle );
@@ -311,15 +311,15 @@ void SAL_CALL OQueryColumn::getFastPropertyValue( Any& _rValue, sal_Int32 _nHand
     }
 }
 
-// OColumnWrapper
+
 
 OColumnWrapper::OColumnWrapper( const Reference< XPropertySet > & rCol, const bool _bNameIsReadOnly )
     :OColumn( _bNameIsReadOnly )
     ,m_xAggregate(rCol)
     ,m_nColTypeID(-1)
 {
-    // which type of aggregate property do we have?
-    // we distingish the properties by the containment of optional properties
+    
+    
     m_nColTypeID = 0;
     if ( m_xAggregate.is() )
     {
@@ -351,9 +351,9 @@ OUString OColumnWrapper::impl_getPropertyNameFromHandle( const sal_Int32 _nHandl
 
 void OColumnWrapper::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
-    // derived classes are free to either use the OPropertyContainer(Helper) mechanisms for properties,
-    // or to declare additional properties which are to be forwarded to the wrapped object. So we need
-    // to distinguish those cases.
+    
+    
+    
     if ( OColumn::isRegisteredProperty( nHandle ) )
     {
         OColumn::getFastPropertyValue( rValue, nHandle );
@@ -404,20 +404,20 @@ sal_Int64 SAL_CALL OColumnWrapper::getSomething( const Sequence< sal_Int8 >& aId
     return 0;
 }
 
-// OTableColumnDescriptorWrapper
+
 OTableColumnDescriptorWrapper::OTableColumnDescriptorWrapper( const Reference< XPropertySet >& _rCol, const bool _bPureWrap, const bool _bIsDescriptor )
     :OColumnWrapper( _rCol, !_bIsDescriptor )
     ,m_bPureWrap( _bPureWrap )
     ,m_bIsDescriptor( _bIsDescriptor )
 {
-    // let the ColumnSettings register its properties
+    
     OColumnSettings::registerProperties( *this );
 }
 
-// com::sun::star::lang::XTypeProvider
+
 IMPLEMENT_GET_IMPLEMENTATION_ID( OTableColumnDescriptorWrapper )
 
-// ::com::sun::star::lang::XServiceInfo
+
 OUString OTableColumnDescriptorWrapper::getImplementationName(  ) throw (RuntimeException)
 {
     return OUString("com.sun.star.sdb.OTableColumnDescriptorWrapper");
@@ -431,12 +431,12 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
     return aSNS;
 }
 
-// comphelper::OPropertyArrayUsageHelper
+
 ::cppu::IPropertyArrayHelper* OTableColumnDescriptorWrapper::createArrayHelper( sal_Int32 nId ) const
 {
     const sal_Int32 nHaveAlways = 7;
 
-    // Which optional properties are contained?
+    
     const sal_Int32 nHaveOptionally (::std::bitset<7>(nId).count());
 
     BEGIN_PROPERTY_SEQUENCE( nHaveAlways + nHaveOptionally )
@@ -491,7 +491,7 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
         }
     }
 
-    // finally also describe the properties which are maintained by our base class, in particular the OPropertyContainerHelper
+    
     Sequence< Property > aBaseProperties;
     describeProperties( aBaseProperties );
 
@@ -499,7 +499,7 @@ Sequence< OUString > OTableColumnDescriptorWrapper::getSupportedServiceNames(  )
     return new ::cppu::OPropertyArrayHelper( aAllProperties, sal_False );
 }
 
-// cppu::OPropertySetHelper
+
 ::cppu::IPropertyArrayHelper& OTableColumnDescriptorWrapper::getInfoHelper()
 {
     return *static_cast< OIdPropertyArrayUsageHelper< OTableColumnDescriptorWrapper >* >(this)->getArrayHelper(m_nColTypeID);
@@ -522,11 +522,11 @@ sal_Bool OTableColumnDescriptorWrapper::convertFastPropertyValue( Any & rConvert
     sal_Bool bModified(sal_False);
     if ( m_bPureWrap )
     {
-        // do not delegate to OColumnWrapper: It would, for the properties which were registered with registerProperty,
-        // ask the OPropertyContainer base class, which is not what we want here.
-        // TODO: the whole "m_bPureWrap"-thingie is strange. We should have a dedicated class doing this wrapping,
-        // not a class which normally serves other purposes, and only sometimes does a "pure wrap". It makes the
-        // code unnecessarily hard to maintain, and error prone.
+        
+        
+        
+        
+        
         rOldValue = m_xAggregate->getPropertyValue( impl_getPropertyNameFromHandle( nHandle ) );
         if ( rOldValue != rValue )
         {
@@ -557,7 +557,7 @@ void OTableColumnDescriptorWrapper::setFastPropertyValue_NoBroadcast(
     }
 }
 
-// OTableColumnWrapper
+
 OTableColumnWrapper::OTableColumnWrapper( const Reference< XPropertySet >& rCol, const Reference< XPropertySet >& _xColDefintion,
             const bool _bPureWrap )
     :OTableColumnDescriptorWrapper( rCol, _bPureWrap, false )
@@ -601,7 +601,7 @@ Sequence< OUString > OTableColumnWrapper::getSupportedServiceNames(  ) throw (Ru
     return *static_cast< OIdPropertyArrayUsageHelper< OTableColumnWrapper >* >(this)->getArrayHelper(m_nColTypeID);
 }
 
-// comphelper::OPropertyArrayUsageHelper
+
 ::cppu::IPropertyArrayHelper* OTableColumnWrapper::createArrayHelper( sal_Int32 nId ) const
 {
     return OTableColumnDescriptorWrapper::createArrayHelper( nId );

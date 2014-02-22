@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/uri.hxx>
@@ -53,7 +53,7 @@ using namespace com::sun::star::ucb;
 #define THROW_WHERE ""
 #endif
 
-// PropertyListeners
+
 
 
 typedef cppu::OMultiTypeInterfaceContainerHelperVar< OUString,OUStringHash >
@@ -76,8 +76,8 @@ public:
 /*                                                                                      */
 /****************************************************************************************/
 
-////////////////////////////////////////////////////////////////////////////////
-// Private Constructor for just inserted Contents
+
+
 
 BaseContent::BaseContent( shell* pMyShell,
                           const OUString& parentName,
@@ -93,12 +93,12 @@ BaseContent::BaseContent( shell* pMyShell,
       m_pPropertyListener( 0 )
 {
     m_pMyShell->m_pProvider->acquire();
-    // No registering, since we have no name
+    
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Constructor for full featured Contents
+
+
 
 BaseContent::BaseContent( shell* pMyShell,
                           const Reference< XContentIdentifier >& xContentIdentifier,
@@ -134,9 +134,9 @@ BaseContent::~BaseContent( )
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// XInterface
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 void SAL_CALL
 BaseContent::acquire( void )
@@ -175,9 +175,9 @@ BaseContent::queryInterface( const Type& rType )
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// XComponent
-////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 void SAL_CALL
 BaseContent::addEventListener( const Reference< lang::XEventListener >& Listener )
@@ -253,9 +253,9 @@ BaseContent::dispose()
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//  XServiceInfo
-//////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 OUString SAL_CALL
 BaseContent::getImplementationName()
@@ -289,9 +289,9 @@ BaseContent::getSupportedServiceNames()
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//  XTypeProvider
-//////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 XTYPEPROVIDER_IMPL_10( BaseContent,
                        lang::XComponent,
@@ -306,9 +306,9 @@ XTYPEPROVIDER_IMPL_10( BaseContent,
                        beans::XPropertySetInfoChangeNotifier )
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//  XCommandProcessor
-//////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 sal_Int32 SAL_CALL
 BaseContent::createCommandIdentifier( void )
@@ -335,7 +335,7 @@ BaseContent::execute( const Command& aCommand,
            RuntimeException )
 {
     if( ! CommandId )
-        // A Command with commandid zero cannot be aborted
+        
         CommandId = createCommandIdentifier();
 
     m_pMyShell->startTask( CommandId,
@@ -343,11 +343,11 @@ BaseContent::execute( const Command& aCommand,
 
     Any aAny;
 
-    if (aCommand.Name == "getPropertySetInfo")  // No exceptions
+    if (aCommand.Name == "getPropertySetInfo")  
     {
         aAny <<= getPropertySetInfo( CommandId );
     }
-    else if (aCommand.Name == "getCommandInfo")  // no exceptions
+    else if (aCommand.Name == "getCommandInfo")  
     {
         aAny <<= getCommandInfo();
     }
@@ -359,7 +359,7 @@ BaseContent::execute( const Command& aCommand,
             m_pMyShell->installError( CommandId,
                                       TASKHANDLING_WRONG_SETPROPERTYVALUES_ARGUMENT );
         else
-            aAny <<= setPropertyValues( CommandId,sPropertyValues );  // calls endTask by itself
+            aAny <<= setPropertyValues( CommandId,sPropertyValues );  
     }
     else if ( aCommand.Name == "getPropertyValues" )
     {
@@ -438,7 +438,7 @@ BaseContent::execute( const Command& aCommand,
                                   TASKHANDLER_UNSUPPORTED_COMMAND );
 
 
-    // This is the only function allowed to throw an exception
+    
     endTask( CommandId );
 
     return aAny;
@@ -493,9 +493,9 @@ BaseContent::removePropertiesChangeListener( const Sequence< OUString >& Propert
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-// XContent
-/////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 Reference< ucb::XContentIdentifier > SAL_CALL
 BaseContent::getIdentifier()
@@ -522,7 +522,7 @@ BaseContent::getContentType()
         {
             try
             {
-                // Who am I ?
+                
                 Sequence< beans::Property > seq(1);
                 seq[0] = beans::Property( OUString("IsDocument"),
                                           -1,
@@ -584,9 +584,9 @@ BaseContent::removeContentEventListener(
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// XPropertyContainer
-////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 void SAL_CALL
@@ -622,9 +622,9 @@ BaseContent::removeProperty(
     m_pMyShell->deassociate( m_aUncPath, Name );
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// XContentCreator
-////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 Sequence< ContentInfo > SAL_CALL
 BaseContent::queryCreatableContentsInfo(
@@ -640,7 +640,7 @@ BaseContent::createNewContent(
     const ContentInfo& Info )
     throw( RuntimeException )
 {
-    // Check type.
+    
     if ( Info.Type.isEmpty() )
         return Reference< XContent >();
 
@@ -650,12 +650,12 @@ BaseContent::createNewContent(
     {
         if ( Info.Type.compareTo( m_pMyShell->FileContentType ) != 0 )
         {
-            // Neither folder nor file to create!
+            
             return Reference< XContent >();
         }
     }
 
-    // Who am I ?
+    
     sal_Bool IsDocument = false;
 
     try
@@ -671,8 +671,8 @@ BaseContent::createNewContent(
         if ( xRow->wasNull() )
         {
             IsDocument = false;
-//              OSL_FAIL( //                          "BaseContent::createNewContent - Property value was null!" );
-//              return Reference< XContent >();
+
+
         }
     }
     catch (const sdbc::SQLException&)
@@ -685,7 +685,7 @@ BaseContent::createNewContent(
 
     if( IsDocument )
     {
-        // KSO: Why is a document a XContentCreator? This is quite unusual.
+        
         dstUncPath = getParentName( m_aUncPath );
     }
     else
@@ -696,9 +696,9 @@ BaseContent::createNewContent(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// XPropertySetInfoChangeNotifier
-////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 void SAL_CALL
@@ -726,9 +726,9 @@ BaseContent::removePropertySetInfoChangeListener(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// XChild
-////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 Reference< XInterface > SAL_CALL
 BaseContent::getParent(
@@ -767,9 +767,9 @@ BaseContent::setParent(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-// Private Methods
-//////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 
 Reference< XCommandInfo > SAL_CALL
@@ -857,13 +857,13 @@ BaseContent::setPropertyValues(
     throw()
 {
     if( m_nState & Deleted )
-    {   //  To do
+    {   
         return Sequence< Any >( Values.getLength() );
     }
 
     const OUString Title("Title");
 
-    // Special handling for files which have to be inserted
+    
     if( m_nState & JustInserted )
     {
         for( sal_Int32 i = 0; i < Values.getLength(); ++i )
@@ -875,8 +875,8 @@ BaseContent::setPropertyValues(
                 {
                     if ( m_nState & NameForInsertionSet )
                     {
-                        // User wants to set another Title before "insert".
-                        // m_aUncPath contains previous own URI.
+                        
+                        
 
                         sal_Int32 nLastSlash = m_aUncPath.lastIndexOf( '/' );
                         bool bTrailingSlash = false;
@@ -911,8 +911,8 @@ BaseContent::setPropertyValues(
                     {
                         if ( !NewTitle.isEmpty() )
                         {
-                            // Initial Title before "insert".
-                            // m_aUncPath contains parent's URI.
+                            
+                            
 
                             if( !m_aUncPath.endsWith( "/" ) )
                                 m_aUncPath += "/";
@@ -932,14 +932,14 @@ BaseContent::setPropertyValues(
     }
     else
     {
-        Sequence< Any > ret = m_pMyShell->setv( m_aUncPath,  // Does not handle Title
+        Sequence< Any > ret = m_pMyShell->setv( m_aUncPath,  
                                                 Values );
 
-        // Special handling Title: Setting Title is equivalent to a renaming of the underlying file
+        
         for( sal_Int32 i = 0; i < Values.getLength(); ++i )
         {
             if( Values[i].Name != Title )
-                continue;                  // handled by setv
+                continue;                  
 
             OUString NewTitle;
             if( !( Values[i].Value >>= NewTitle ) )
@@ -963,7 +963,7 @@ BaseContent::setPropertyValues(
                                           rtl_UriEncodeIgnoreEscapes,
                                           RTL_TEXTENCODING_UTF8 );
 
-            m_pMyShell->move( nMyCommandIdentifier,     // move notifies the children also;
+            m_pMyShell->move( nMyCommandIdentifier,     
                               m_aUncPath,
                               aDstName,
                               NameClash::KEEP );
@@ -977,9 +977,9 @@ BaseContent::setPropertyValues(
                 ret[i] <<= e;
             }
 
-            // NameChanges come back trough a ContentEvent
-            break; // only handling Title
-        } // end for
+            
+            break; 
+        } 
 
         return ret;
     }
@@ -1047,13 +1047,13 @@ BaseContent::open(
                                        aCommandArgument.Properties,
                                        aCommandArgument.SortingInfo );
         }
-//          else if(  aCommandArgument.Mode ==
-//                    OpenMode::DOCUMENT_SHARE_DENY_NONE  ||
-//                    aCommandArgument.Mode ==
-//                    OpenMode::DOCUMENT_SHARE_DENY_WRITE )
-//              m_pMyShell->installError( nMyCommandIdentifier,
-//                                        TASKHANDLING_UNSUPPORTED_OPEN_MODE,
-//                                        aCommandArgument.Mode);
+
+
+
+
+
+
+
         else
             m_pMyShell->installError( nMyCommandIdentifier,
                                       TASKHANDLING_UNSUPPORTED_OPEN_MODE,
@@ -1106,7 +1106,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 
     OUString srcUncPath = srcUnc;
 
-    // Determine the new title !
+    
     OUString NewTitle;
     if( !aTransferInfo.NewTitle.isEmpty() )
         NewTitle = rtl::Uri::encode( aTransferInfo.NewTitle,
@@ -1116,7 +1116,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     else
         NewTitle = srcUncPath.copy( 1 + srcUncPath.lastIndexOf( '/' ) );
 
-    // Is destination a document or a folder ?
+    
     Sequence< beans::Property > seq(1);
     seq[0] = beans::Property( OUString("IsDocument"),
                               -1,
@@ -1125,7 +1125,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
     Reference< sdbc::XRow > xRow = getPropertyValues( nMyCommandIdentifier,seq );
     sal_Bool IsDocument = xRow->getBoolean( 1 );
     if( xRow->wasNull() )
-    {   // Destination file type could not be determined
+    {   
         m_pMyShell->installError( nMyCommandIdentifier,
                                   TASKHANDLING_TRANSFER_DESTFILETYPE );
         return;
@@ -1133,12 +1133,12 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 
     OUString dstUncPath;
     if( IsDocument )
-    {   // as sibling
+    {   
         sal_Int32 lastSlash = m_aUncPath.lastIndexOf( '/' );
         dstUncPath = m_aUncPath.copy(0,lastSlash );
     }
     else
-        // as child
+        
         dstUncPath = m_aUncPath;
 
     dstUncPath += ( OUString("/") + NewTitle );
@@ -1174,7 +1174,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
         return;
     }
 
-    // Inserts the content, which has the flag m_bIsFresh
+    
 
     if( ! (m_nState & NameForInsertionSet) )
     {
@@ -1183,7 +1183,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
         return;
     }
 
-    // Inserting a document or a file?
+    
     sal_Bool bDocument = false;
 
     Sequence< beans::Property > seq(1);
@@ -1194,7 +1194,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
     Reference< sdbc::XRow > xRow = getPropertyValues( -1,seq );
 
-    bool contentTypeSet = true;  // is set to false, if contentType not set
+    bool contentTypeSet = true;  
     try
     {
         bDocument = xRow->getBoolean( 1 );
@@ -1245,10 +1245,10 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
             m_pMyShell->handleTask( nMyCommandIdentifier,aReq );
             if(  aRequestImpl->aborted() ||
                  aRequestImpl->newName().isEmpty() )
-                // means aborting
+                
                 break;
 
-            // determine new uncpath
+            
             m_pMyShell->clearError( nMyCommandIdentifier );
             m_aUncPath = getParentName( m_aUncPath );
             if( !m_aUncPath.endsWith( "/" ) )
@@ -1278,7 +1278,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
 void SAL_CALL BaseContent::endTask( sal_Int32 CommandId )
 {
-    // This is the only function allowed to throw an exception
+    
     m_pMyShell->endTask( CommandId,m_aUncPath,this );
 }
 

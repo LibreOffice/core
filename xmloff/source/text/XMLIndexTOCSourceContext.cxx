@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLIndexTOCSourceContext.hxx"
@@ -59,7 +59,7 @@ XMLIndexTOCSourceContext::XMLIndexTOCSourceContext(
 ,   sLevel(sAPI_Level)
 ,   sCreateFromOutline(sAPI_CreateFromOutline)
 ,   sCreateFromLevelParagraphStyles(sAPI_CreateFromLevelParagraphStyles)
-    // use all chapters by default
+    
 ,   nOutlineLevel(rImport.GetTextImport()->GetChapterNumbering()->getCount())
 ,   bUseOutline(sal_True)
 ,   bUseMarks(sal_True)
@@ -80,9 +80,9 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
         case XML_TOK_INDEXSOURCE_OUTLINE_LEVEL:
             if ( IsXMLToken( rValue, XML_NONE ) )
             {
-                // #104651# use OUTLINE_LEVEL and USE_OUTLINE_LEVEL instead of
-                // OUTLINE_LEVEL with values none|1..10. For backwards
-                // compatibility, 'none' must still be read.
+                
+                
+                
                 bUseOutline = sal_False;
             }
             else
@@ -130,7 +130,7 @@ void XMLIndexTOCSourceContext::ProcessAttribute(
         }
 
         default:
-            // default: ask superclass
+            
             XMLIndexSourceBaseContext::ProcessAttribute(eParam, rValue);
             break;
     }
@@ -152,7 +152,7 @@ void XMLIndexTOCSourceContext::EndElement()
     aAny <<= (sal_Int16)nOutlineLevel;
     rIndexPropertySet->setPropertyValue(sLevel, aAny);
 
-    // process common attributes
+    
     XMLIndexSourceBaseContext::EndElement();
 }
 

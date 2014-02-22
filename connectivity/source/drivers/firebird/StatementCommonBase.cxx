@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Driver.hxx"
@@ -80,7 +80,7 @@ void OStatementCommonBase::freeStatementHandle()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 Any SAL_CALL OStatementCommonBase::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = OStatementCommonBase_Base::queryInterface(rType);
@@ -88,7 +88,7 @@ Any SAL_CALL OStatementCommonBase::queryInterface( const Type & rType ) throw(Ru
         aRet = OPropertySetHelper::queryInterface(rType);
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OStatementCommonBase::getTypes(  ) throw(RuntimeException)
 {
     ::cppu::OTypeCollection aTypes(
@@ -98,13 +98,13 @@ Sequence< Type > SAL_CALL OStatementCommonBase::getTypes(  ) throw(RuntimeExcept
 
     return concatSequences(aTypes.getTypes(),OStatementCommonBase_Base::getTypes());
 }
-// -------------------------------------------------------------------------
+
 
 void SAL_CALL OStatementCommonBase::cancel(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
-    // cancel the current sql statement
+    
 }
 
 void SAL_CALL OStatementCommonBase::close()
@@ -163,7 +163,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 
     if (aErr)
     {
-        // TODO: free statement handle?
+        
         free(pOutSqlda);
         pOutSqlda = 0;
         evaluateStatusVector(m_statusVector,
@@ -179,7 +179,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
 
     if (aErr)
     {
-        // TODO: free statement handle, etc.?
+        
         free(pOutSqlda);
         pOutSqlda = 0;
         evaluateStatusVector(m_statusVector,
@@ -187,7 +187,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
                              *this);
     }
 
-    // Ensure we have enough space in pOutSqlda
+    
     if (pOutSqlda->sqld > pOutSqlda->sqln)
     {
         int n = pOutSqlda->sqld;
@@ -200,7 +200,7 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
                                  pOutSqlda);
     }
 
-    // Process each XSQLVAR parameter structure in the output XSQLDA
+    
     if (aErr)
         evaluateStatusVector(m_statusVector,
                              "isc_dsql_describe",
@@ -209,11 +209,11 @@ void OStatementCommonBase::prepareAndDescribeStatement(const OUString& sql,
     mallocSQLVAR(pOutSqlda);
 }
 
-// ---- XMultipleResults - UNSUPPORTED ----------------------------------------
+
 uno::Reference< XResultSet > SAL_CALL OStatementCommonBase::getResultSet() throw(SQLException, RuntimeException)
 {
-    // TODO: verify we really can't support this
-//     return uno::Reference< XResultSet >();
+    
+
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
 
@@ -222,20 +222,20 @@ uno::Reference< XResultSet > SAL_CALL OStatementCommonBase::getResultSet() throw
 
 sal_Bool SAL_CALL OStatementCommonBase::getMoreResults() throw(SQLException, RuntimeException)
 {
-    // TODO: verify we really can't support this
+    
     return sal_False;
-//     MutexGuard aGuard( m_aMutex );
-//     checkDisposed(OStatementCommonBase_Base::rBHelper.bDisposed);
+
+
 }
 
 sal_Int32 SAL_CALL OStatementCommonBase::getUpdateCount() throw(SQLException, RuntimeException)
 {
-    // TODO: verify we really can't support this
+    
     return 0;
 }
 
 
-// ---- XWarningsSupplier - UNSUPPORTED ----------------------------------------
+
 Any SAL_CALL OStatementCommonBase::getWarnings() throw(SQLException, RuntimeException)
 {
     return Any();
@@ -247,8 +247,8 @@ void SAL_CALL OStatementCommonBase::clearWarnings() throw(SQLException, RuntimeE
 
 ::cppu::IPropertyArrayHelper* OStatementCommonBase::createArrayHelper( ) const
 {
-    // this properties are define by the service statement
-    // they must in alphabetic order
+    
+    
     Sequence< Property > aProps(10);
     Property* pProperties = aProps.getArray();
     sal_Int32 nPos = 0;
@@ -271,7 +271,7 @@ void SAL_CALL OStatementCommonBase::clearWarnings() throw(SQLException, RuntimeE
 {
     return *const_cast<OStatementCommonBase*>(this)->getArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 sal_Bool OStatementCommonBase::convertFastPropertyValue(
                             Any & rConvertedValue,
                             Any & rOldValue,
@@ -284,14 +284,14 @@ sal_Bool OStatementCommonBase::convertFastPropertyValue(
     (void) nHandle;
     (void) rValue;
     sal_Bool bConverted = sal_False;
-    // here we have to try to convert
+    
     return bConverted;
 }
-// -------------------------------------------------------------------------
+
 void OStatementCommonBase::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue) throw (Exception)
 {
     (void) rValue;
-    // set the value to what ever is necessary
+    
     switch(nHandle)
     {
         case PROPERTY_ID_QUERYTIMEOUT:
@@ -308,7 +308,7 @@ void OStatementCommonBase::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,co
             ;
     }
 }
-// -------------------------------------------------------------------------
+
 void OStatementCommonBase::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
 {
     (void) rValue;
@@ -391,7 +391,7 @@ sal_Int32 OStatementCommonBase::getStatementChangeCount()
     ISC_STATUS_ARRAY aStatusVector;
     ISC_STATUS aErr;
 
-    // This is somewhat undocumented so I'm just guessing and hoping for the best.
+    
     char aInfoItems[] = {isc_info_sql_records};
     char aResultsBuffer[1024];
 
@@ -426,16 +426,16 @@ sal_Int32 OStatementCommonBase::getStatementChangeCount()
             aDesiredInfoType = isc_info_req_delete_count;
             break;
         default:
-            throw SQLException(); // TODO: better error message?
+            throw SQLException(); 
     }
 
     char* pResults = aResultsBuffer;
     if (((short) *pResults++) == isc_info_sql_records)
     {
-//         const short aTotalLength = (short) isc_vax_integer(pResults, 2);
+
         pResults += 2;
 
-        // Seems to be of form TOKEN (1 byte), LENGTH (2 bytes), DATA (LENGTH bytes)
+        
         while (*pResults != isc_info_rsb_end)
         {
             const char aToken = *pResults;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "basidesh.hxx"
@@ -81,14 +81,14 @@ ManageLanguageDialog::~ManageLanguageDialog()
 
 void ManageLanguageDialog::Init()
 {
-    // get current IDE
+    
     Shell* pShell = GetShell();
     OUString sLibName = pShell->GetCurLibName();
-    // set dialog title with library name
+    
     OUString sText = GetText();
     sText = sText.replaceAll("$1", sLibName);
     SetText( sText );
-    // set handler
+    
     m_pAddPB->SetClickHdl( LINK( this, ManageLanguageDialog, AddHdl ) );
     m_pDeletePB->SetClickHdl( LINK( this, ManageLanguageDialog, DeleteHdl ) );
     m_pMakeDefPB->SetClickHdl( LINK( this, ManageLanguageDialog, MakeDefHdl ) );
@@ -141,10 +141,10 @@ IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
     SetDefaultLanguageDialog aDlg( this, m_xLocalizationMgr );
     if ( RET_OK == aDlg.Execute() )
     {
-        // add new locales
+        
         Sequence< Locale > aLocaleSeq = aDlg.GetLocales();
         m_xLocalizationMgr->handleAddLocales( aLocaleSeq );
-        // update listbox
+        
         ClearLanguageBox();
         FillLanguageBox();
 
@@ -162,7 +162,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
     {
         sal_uInt16 i, nCount = m_pLanguageLB->GetSelectEntryCount();
         sal_uInt16 nPos = m_pLanguageLB->GetSelectEntryPos();
-        // remove locales
+        
         Sequence< Locale > aLocaleSeq( nCount );
         for ( i = 0; i < nCount; ++i )
         {
@@ -172,10 +172,10 @@ IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
                 aLocaleSeq[i] = pEntry->m_aLocale;
         }
         m_xLocalizationMgr->handleRemoveLocales( aLocaleSeq );
-        // update listbox
+        
         ClearLanguageBox();
         FillLanguageBox();
-        // reset selection
+        
         nCount = m_pLanguageLB->GetEntryCount();
         if ( nCount <= nPos )
             nPos = nCount - 1;
@@ -191,12 +191,12 @@ IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl)
     LanguageEntry* pSelectEntry = (LanguageEntry*)( m_pLanguageLB->GetEntryData( nPos ) );
     if ( pSelectEntry && !pSelectEntry->m_bIsDefault )
     {
-        // set new default entry
+        
         m_xLocalizationMgr->handleSetDefaultLocale( pSelectEntry->m_aLocale );
-        // update Listbox
+        
         ClearLanguageBox();
         FillLanguageBox();
-        // reset selection
+        
         m_pLanguageLB->SelectEntryPos( nPos );
         SelectHdl( NULL );
     }
@@ -218,7 +218,7 @@ IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
     return 1;
 }
 
-// class SetDefaultLanguageDialog -----------------------------------------------
+
 
 SetDefaultLanguageDialog::SetDefaultLanguageDialog(Window* pParent, boost::shared_ptr<LocalizationMgr> xLMgr)
     : ModalDialog(pParent, "DefaultLanguageDialog", "modules/BasicIDE/ui/defaultlanguage.ui")
@@ -237,7 +237,7 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(Window* pParent, boost::share
 
     if (m_xLocalizationMgr->isLibraryLocalized())
     {
-        // change to "Add Interface Language" mode
+        
         m_pLanguageLB->Hide();
         m_pCheckLangLB->Show();
         SetText(get<FixedText>("alttitle")->GetText());
@@ -252,16 +252,16 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog(Window* pParent, boost::share
 
 void SetDefaultLanguageDialog::FillLanguageBox()
 {
-    // fill list with all languages
+    
     m_pLanguageLB->SetLanguageList( LANG_LIST_ALL, false );
-    // remove the already localized languages
+    
     Sequence< Locale > aLocaleSeq = m_xLocalizationMgr->getStringResourceManager()->getLocales();
     const Locale* pLocale = aLocaleSeq.getConstArray();
     sal_Int32 i, nCount = aLocaleSeq.getLength();
     for ( i = 0;  i < nCount;  ++i )
         m_pLanguageLB->RemoveLanguage( LanguageTag::convertToLanguageType( pLocale[i] ) );
 
-    // fill checklistbox if not in default mode
+    
     if ( m_xLocalizationMgr->isLibraryLocalized() )
     {
         sal_uInt16 j, nCount_ = m_pLanguageLB->GetEntryCount();
@@ -273,7 +273,7 @@ void SetDefaultLanguageDialog::FillLanguageBox()
         m_pLanguageLB = NULL;
     }
     else
-        // preselect current UI language
+        
         m_pLanguageLB->SelectLanguage( Application::GetSettings().GetUILanguageTag().getLanguageType() );
 }
 
@@ -303,6 +303,6 @@ Sequence< Locale > SetDefaultLanguageDialog::GetLocales() const
     return aLocaleSeq;
 }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

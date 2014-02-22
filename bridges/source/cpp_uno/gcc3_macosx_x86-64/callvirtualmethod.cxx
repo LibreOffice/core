@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -29,21 +29,21 @@
 #include "abi.hxx"
 #include "callvirtualmethod.hxx"
 
-// The call instruction within the asm block of callVirtualMethod may throw
-// exceptions.  At least GCC 4.7.0 with -O0 would create (unnecessary)
-// .gcc_exception_table call-site table entries around all other calls in this
-// function that can throw, leading to std::terminate if the asm call throws an
-// exception and the unwinding C++ personality routine finds the unexpected hole
-// in the .gcc_exception_table.  Therefore, make sure this function explicitly
-// only calls nothrow-functions (so GCC 4.7.0 with -O0 happens to not create a
-// .gcc_exception_table section at all for this function).  For some reason,
-// this also needs to be in a source file of its own.
+
+
+
+
+
+
+
+
+
 //
-// Also, this file should be compiled with -fnon-call-exceptions, and ideally
-// there would be a way to tell the compiler that the asm block contains calls
-// to functions that can potentially throw; see the mail thread starting at
-// <http://gcc.gnu.org/ml/gcc/2012-03/msg00454.html> "C++: Letting compiler know
-// asm block can call function that can throw?"
+
+
+
+
+
 
 void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     void * pThis, sal_uInt32 nVtableIndex, void * pRegisterReturn,
@@ -51,27 +51,27 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
     sal_uInt64 *pStack, sal_uInt32 nStack, sal_uInt64 *pGPR, sal_uInt32 nGPR,
     double * pFPR, sal_uInt32 nFPR)
 {
-    // Should not happen, but...
+    
     if ( nFPR > x86_64::MAX_SSE_REGS )
         nFPR = x86_64::MAX_SSE_REGS;
     if ( nGPR > x86_64::MAX_GPR_REGS )
         nGPR = x86_64::MAX_GPR_REGS;
 
-    // Get pointer to method
+    
     sal_uInt64 pMethod = *((sal_uInt64 *)pThis);
     pMethod += 8 * nVtableIndex;
     pMethod = *((sal_uInt64 *)pMethod);
 
-    // Load parameters to stack, if necessary
+    
     if ( nStack )
     {
-        // 16-bytes aligned
+        
         sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 16;
         sal_uInt64 *pCallStack = (sal_uInt64 *) __builtin_alloca( nStackBytes );
         std::memcpy( pCallStack, pStack, nStackBytes );
     }
 
-    // Return values
+    
     sal_uInt64 rax;
     sal_uInt64 rdx;
     double xmm0;
@@ -79,7 +79,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
 
     asm volatile (
 
-        // Fill the xmm registers
+        
         "movq %6, %%rax\n\t"
 
         "movsd   (%%rax), %%xmm0\n\t"
@@ -91,7 +91,7 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         "movsd 48(%%rax), %%xmm6\n\t"
         "movsd 56(%%rax), %%xmm7\n\t"
 
-        // Fill the general purpose registers
+        
         "movq %5, %%rax\n\t"
 
         "movq    (%%rax), %%rdi\n\t"
@@ -101,12 +101,12 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         "movq  32(%%rax), %%r8\n\t"
         "movq  40(%%rax), %%r9\n\t"
 
-        // Perform the call
+        
         "movq %4, %%r11\n\t"
         "movq %7, %%rax\n\t"
         "call *%%r11\n\t"
 
-        // Fill the return values
+        
         "movq   %%rax, %0\n\t"
         "movq   %%rdx, %1\n\t"
         "movsd %%xmm0, %2\n\t"

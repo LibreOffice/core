@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -57,7 +57,7 @@ void SvMetaObject::WriteStars( SvStream & rOutStm )
 
 sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegPos )
 {
-    // write no empty brackets
+    
     sal_uLong nPos = rOutStm.Tell();
     rOutStm.Seek( nBegPos );
     sal_Bool bOnlySpace = sal_True;
@@ -69,7 +69,7 @@ sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegP
             bOnlySpace = sal_False;
     }
     if( bOnlySpace )
-        // nothing written
+        
         rOutStm.Seek( nBegPos );
     else
         rOutStm.Seek( nPos );
@@ -78,7 +78,7 @@ sal_Bool SvMetaObject::TestAndSeekSpaceOnly( SvStream & rOutStm, sal_uLong nBegP
 
 void SvMetaObject::Back2Delemitter( SvStream & rOutStm )
 {
-    // write no empty brackets
+    
     sal_uLong nPos = rOutStm.Tell();
     rOutStm.SeekRel( -1 );
     char c = 0;
@@ -164,7 +164,7 @@ sal_Bool SvMetaName::ReadNameSvIdl( SvIdlDataBase & rBase,
     sal_uInt32 nTokPos = rInStm.Tell();
     SvToken * pTok = rInStm.GetToken_Next();
 
-    // read module name
+    
     if( pTok->IsIdentifier() )
         if( SetName( pTok->GetString(), &rBase ) )
             return sal_True;
@@ -192,7 +192,7 @@ void SvMetaName::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 void SvMetaName::DoReadContextSvIdl( SvIdlDataBase & rBase,
                                    SvTokenStream & rInStm, char cDel )
 {
-    sal_uInt32 nBeginPos = 0; // can not happen with Tell
+    sal_uInt32 nBeginPos = 0; 
     while( nBeginPos != rInStm.Tell() )
     {
         nBeginPos = rInStm.Tell();
@@ -241,7 +241,7 @@ void SvMetaName::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( aHelpContext.IsSet() || aHelpText.IsSet() || aConfigName.IsSet() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "// class SvMetaName" ) << endl;
+        rOutStm.WriteCharPtr( "
     }
     if( aHelpContext.IsSet() )
     {
@@ -269,7 +269,7 @@ sal_Bool SvMetaName::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
     sal_Bool bOk = sal_True;
     if( rInStm.Read( '[' ) )
     {
-        sal_uInt32 nBeginPos = 0; // can not happen with Tell
+        sal_uInt32 nBeginPos = 0; 
         while( nBeginPos != rInStm.Tell() )
         {
             nBeginPos = rInStm.Tell();
@@ -302,9 +302,9 @@ void SvMetaName::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
     sal_uLong nOldPos = rOutStm.Tell();
     WriteAttributesSvIdl( rBase, rOutStm, nTab +1 );
 
-    // write no empty brackets
+    
     if( TestAndSeekSpaceOnly( rOutStm, nOldPos ) )
-        // nothing written
+        
         rOutStm.Seek( nBeginPos );
     else
     {
@@ -319,9 +319,9 @@ void SvMetaName::WriteSvIdl( SvIdlDataBase & rBase, SvStream & rOutStm,
     nOldPos = rOutStm.Tell();
     WriteContextSvIdl( rBase, rOutStm, nTab +1 );
 
-    // write no empty brackets
+    
     if( TestAndSeekSpaceOnly( rOutStm, nOldPos ) )
-        // nothing written
+        
         rOutStm.Seek( nBeginPos );
     else
     {
@@ -340,7 +340,7 @@ void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
     sal_uLong nOldPos = rOutStm.Tell();
     WriteAttributes( rBase, rOutStm, nTab +1, nT, nA );
 
-    // write no empty brackets
+    
     sal_uLong nPos = rOutStm.Tell();
     rOutStm.Seek( nOldPos );
     sal_Bool bOnlySpace = sal_True;
@@ -352,7 +352,7 @@ void SvMetaName::Write( SvIdlDataBase & rBase, SvStream & rOutStm,
             bOnlySpace = sal_False;
     }
     if( bOnlySpace )
-        // nothing written
+        
         rOutStm.Seek( nBeginPos );
     else
     {
@@ -369,7 +369,7 @@ void SvMetaName::WriteAttributes( SvIdlDataBase &, SvStream & rOutStm,
     if( GetHelpText().IsSet() || GetHelpContext().IsSet() )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "// class SvMetaName" ) << endl;
+        rOutStm.WriteCharPtr( "
     }
     if( GetHelpText().IsSet() )
     {
@@ -421,12 +421,12 @@ void SvMetaReference::Save( SvPersistStream & rStm )
 {
     SvMetaName::Save( rStm );
 
-    // create mask
+    
     sal_uInt8 nMask = 0;
     if( aRef.Is() )
         nMask |= 0x01;
 
-    // write data
+    
     rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) WriteSvPersistBase( rStm, aRef );
 }
@@ -463,7 +463,7 @@ void SvMetaExtern::Save( SvPersistStream & rStm )
 {
     SvMetaReference::Save( rStm );
 
-    // create mask
+    
     sal_uInt8 nMask = 0;
     if( pModule )                   nMask |= 0x01;
     if( aUUId != SvGlobalName() )   nMask |= 0x02;
@@ -471,7 +471,7 @@ void SvMetaExtern::Save( SvPersistStream & rStm )
     if( bReadUUId )                 nMask |= 0x08;
     if( bReadVersion )              nMask |= 0x10;
 
-    // write data
+    
     rStm.WriteUChar( nMask );
     if( nMask & 0x01 ) WriteSvPersistBase( rStm, pModule );
     if( nMask & 0x02 ) WriteSvGlobalName( rStm, aUUId );
@@ -513,7 +513,7 @@ void SvMetaExtern::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( bReadUUId || bReadVersion )
     {
         WriteTab( rOutStm, nTab );
-        rOutStm.WriteCharPtr( "// class SvMetaExtern" ) << endl;
+        rOutStm.WriteCharPtr( "
 
         if( bReadUUId )
         {
@@ -533,7 +533,7 @@ void SvMetaExtern::WriteAttributesSvIdl( SvIdlDataBase & rBase,
 sal_Bool SvMetaExtern::ReadSvIdl( SvIdlDataBase & rBase, SvTokenStream & rInStm )
 {
     SetModule( rBase );
-    GetUUId(); // id gets created
+    GetUUId(); 
     return SvMetaReference::ReadSvIdl( rBase, rInStm );
 }
 
@@ -557,7 +557,7 @@ void SvMetaExtern::WriteAttributes( SvIdlDataBase & rBase, SvStream & rOutStm,
     SvMetaReference::WriteAttributes( rBase, rOutStm, nTab, nT, nA );
 
     WriteTab( rOutStm, nTab );
-    rOutStm.WriteCharPtr( "// class SvMetaExtern" ) << endl;
+    rOutStm.WriteCharPtr( "
     WriteTab( rOutStm, nTab );
     rOutStm.WriteCharPtr( "uuid(" ).WriteCharPtr( OUStringToOString(GetUUId().GetHexName(), RTL_TEXTENCODING_UTF8).getStr() ).WriteCharPtr( ")," ) << endl;
     WriteTab( rOutStm, nTab );

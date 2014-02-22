@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "formularesult.hxx"
@@ -35,10 +35,10 @@ ScFormulaResult::ScFormulaResult( const ScFormulaResult & r ) :
         mpToken = r.mpToken;
         if (mpToken)
         {
-            // Since matrix dimension and
-            // results are assigned to a matrix
-            // cell formula token we have to
-            // clone that instead of sharing it.
+            
+            
+            
+            
             const ScMatrixFormulaCellToken* pMatFormula =
                 r.GetMatrixFormulaCellToken();
             if (pMatFormula)
@@ -92,7 +92,7 @@ void ScFormulaResult::ResolveToken( const formula::FormulaToken * p )
                 mnError = p->GetError();
                 p->DecRef();
                 mbToken = false;
-                // set in case mnError is 0 now, which shouldn't happen but ...
+                
                 mfValue = 0.0;
                 meMultiline = MULTILINE_FALSE;
                 break;
@@ -137,7 +137,7 @@ void ScFormulaResult::Assign( const ScFormulaResult & r )
     }
     else if (r.mbToken)
     {
-        // Matrix formula cell token must be cloned, see copy-ctor.
+        
         const ScMatrixFormulaCellToken* pMatFormula =
             r.GetMatrixFormulaCellToken();
         if (pMatFormula)
@@ -147,8 +147,8 @@ void ScFormulaResult::Assign( const ScFormulaResult & r )
     }
     else
         SetDouble( r.mfValue);
-    // If there was an error there will be an error, no matter what Set...()
-    // methods did.
+    
+    
     mnError = r.mnError;
 }
 
@@ -156,8 +156,8 @@ void ScFormulaResult::SetToken( const formula::FormulaToken* p )
 {
     ResetToDefaults();
     IncrementTokenRef( p);
-    // Handle a result obtained from the interpreter to be assigned to a matrix
-    // formula cell's ScMatrixFormulaCellToken.
+    
+    
     ScMatrixFormulaCellToken* pMatFormula = GetMatrixFormulaCellTokenNonConst();
     if (pMatFormula)
     {
@@ -179,15 +179,15 @@ void ScFormulaResult::SetToken( const formula::FormulaToken* p )
         }
         else if (p)
         {
-            // This may be the result of some constant expression like
-            // {="string"} that doesn't result in a matrix but still would
-            // display the result in all cells of this matrix formula.
+            
+            
+            
             pMatFormula->Assign( *p);
             p->DecRef();
         }
         else
         {
-            // NULL result? Well, if you say so ...
+            
             pMatFormula->ResetResult();
         }
     }
@@ -202,8 +202,8 @@ void ScFormulaResult::SetToken( const formula::FormulaToken* p )
 void ScFormulaResult::SetDouble( double f )
 {
     ResetToDefaults();
-    // Handle a result obtained from the interpreter to be assigned to a matrix
-    // formula cell's ScMatrixFormulaCellToken.
+    
+    
     ScMatrixFormulaCellToken* pMatFormula = GetMatrixFormulaCellTokenNonConst();
     if (pMatFormula)
         pMatFormula->SetUpperLeftDouble( f);
@@ -219,7 +219,7 @@ void ScFormulaResult::SetDouble( double f )
 
 formula::StackVar ScFormulaResult::GetType() const
 {
-    // Order is significant.
+    
     if (mnError)
         return formula::svError;
     if (mbEmpty)
@@ -235,7 +235,7 @@ formula::StackVar ScFormulaResult::GetCellResultType() const
 {
     formula::StackVar sv = GetType();
     if (sv == formula::svMatrixCell)
-        // don't need to test for mpToken here, GetType() already did it
+        
         sv = static_cast<const ScMatrixCellResultToken*>(mpToken)->GetUpperLeftType();
     return sv;
 }
@@ -246,7 +246,7 @@ bool ScFormulaResult::IsEmptyDisplayedAsString() const
         return mbEmptyDisplayedAsString;
     if (GetType() == formula::svMatrixCell)
     {
-        // don't need to test for mpToken here, GetType() already did it
+        
         const ScEmptyCellToken* p = dynamic_cast<const ScEmptyCellToken*>(
                 static_cast<const ScMatrixCellResultToken*>(
                     mpToken)->GetUpperLeftToken().get());
@@ -325,7 +325,7 @@ bool ScFormulaResult::GetErrorOrDouble( sal_uInt16& rErr, double& rVal ) const
     {
         if (GetType() == formula::svMatrixCell)
         {
-            // don't need to test for mpToken here, GetType() already did it
+            
             rErr = static_cast<const ScMatrixCellResultToken*>(mpToken)->
                 GetUpperLeftToken()->GetError();
         }
@@ -358,7 +358,7 @@ bool ScFormulaResult::GetErrorOrString( sal_uInt16& rErr, svl::SharedString& rSt
     {
         if (GetType() == formula::svMatrixCell)
         {
-            // don't need to test for mpToken here, GetType() already did it
+            
             rErr = static_cast<const ScMatrixCellResultToken*>(mpToken)->
                 GetUpperLeftToken()->GetError();
         }
@@ -392,7 +392,7 @@ sc::FormulaResultValue ScFormulaResult::GetResult() const
     {
         if (GetType() == formula::svMatrixCell)
         {
-            // don't need to test for mpToken here, GetType() already did it
+            
             nErr = static_cast<const ScMatrixCellResultToken*>(mpToken)->
                 GetUpperLeftToken()->GetError();
         }
@@ -409,13 +409,13 @@ sc::FormulaResultValue ScFormulaResult::GetResult() const
         return sc::FormulaResultValue(GetDouble());
 
     if (!mbToken)
-        // String result type needs token.
+        
         return sc::FormulaResultValue();
 
     if (isString(sv))
         return sc::FormulaResultValue(GetString());
 
-    // Invalid
+    
     return sc::FormulaResultValue();
 }
 
@@ -427,7 +427,7 @@ sal_uInt16 ScFormulaResult::GetResultError() const
     if (sv == formula::svError)
     {
         if (GetType() == formula::svMatrixCell)
-            // don't need to test for mpToken here, GetType() already did it
+            
             return static_cast<const ScMatrixCellResultToken*>(mpToken)->
                 GetUpperLeftToken()->GetError();
         if (mpToken)
@@ -451,7 +451,7 @@ formula::FormulaConstTokenRef ScFormulaResult::GetToken() const
 formula::FormulaConstTokenRef ScFormulaResult::GetCellResultToken() const
 {
     if (GetType() == formula::svMatrixCell)
-        // don't need to test for mpToken here, GetType() already did it
+        
         return static_cast<const ScMatrixCellResultToken*>(mpToken)->GetUpperLeftToken();
     return GetToken();
 }
@@ -460,7 +460,7 @@ double ScFormulaResult::GetDouble() const
 {
     if (mbToken)
     {
-        // Should really not be of type formula::svDouble here.
+        
         if (mpToken)
         {
             switch (mpToken->GetType())
@@ -477,7 +477,7 @@ double ScFormulaResult::GetDouble() const
                     }
                     break;
                 default:
-                    ;   // nothing
+                    ;   
             }
         }
         return 0.0;
@@ -506,7 +506,7 @@ svl::SharedString ScFormulaResult::GetString() const
                 }
                 break;
             default:
-                ;   // nothing
+                ;   
         }
     }
     return svl::SharedString::getEmptyString();
@@ -556,7 +556,7 @@ void ScFormulaResult::SetHybridDouble( double f )
 
 void ScFormulaResult::SetHybridString( const OUString & rStr )
 {
-    // Obtain values before changing anything.
+    
     double f = GetDouble();
     OUString aFormula( GetHybridFormula());
     ResetToDefaults();
@@ -569,7 +569,7 @@ void ScFormulaResult::SetHybridString( const OUString & rStr )
 
 void ScFormulaResult::SetHybridFormula( const OUString & rFormula )
 {
-    // Obtain values before changing anything.
+    
     double f = GetDouble();
     svl::SharedString aStr = GetString();
     ResetToDefaults();

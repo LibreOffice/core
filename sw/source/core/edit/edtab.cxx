@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -51,7 +51,7 @@ using namespace ::com::sun::star::uno;
 
 extern void ClearFEShellTabCols();
 
-//Added for bug #i119954# Application crashed if undo/redo covert nest table to text
+
 sal_Bool ConvertTableToText( const SwTableNode *pTableNode, sal_Unicode cCh );
 
 void    ConvertNestedTablesToText( const SwTableLines &rTableLines, sal_Unicode cCh )
@@ -86,7 +86,7 @@ sal_Bool ConvertTableToText( const SwTableNode *pConstTableNode, sal_Unicode cCh
     ConvertNestedTablesToText( pTableNode->GetTable().GetTabLines(), cCh );
     return pTableNode->GetDoc()->TableToText( pTableNode, cCh );
 }
-//End for bug #i119954#
+
 
 const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                                          sal_uInt16 nRows, sal_uInt16 nCols,
@@ -103,8 +103,8 @@ const SwTable& SwEditShell::InsertTable( const SwInsertTableOptions& rInsTblOpts
         GetDoc()->SplitNode( *pPos, false );
     }
 
-    // If called from a shell the adjust item is propagated
-    // from pPos to the new content nodes in the table.
+    
+    
     const SwTable *pTable = GetDoc()->InsertTable( rInsTblOpts, *pPos,
                                                    nRows, nCols,
                                                    eAdj, pTAFmt,
@@ -148,26 +148,26 @@ sal_Bool SwEditShell::TableToText( sal_Unicode cCh )
     else if( !pTblNd || pCrsr->GetNext() != pCrsr )
         return bRet;
 
-    // TL_CHART2:
-    // tell the charts about the table to be deleted and have them use their own data
+    
+    
     GetDoc()->CreateChartInternalDataProviders( &pTblNd->GetTable() );
 
     StartAllAction();
 
-    // move current Cursor out of the listing area
+    
     SwNodeIndex aTabIdx( *pTblNd );
     pCrsr->DeleteMark();
     pCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
     pCrsr->GetPoint()->nContent.Assign( 0, 0 );
-    // move sPoint and Mark out of the area!
+    
     pCrsr->SetMark();
     pCrsr->DeleteMark();
 
-    //Modified for bug #i119954# Application crashed if undo/redo covert nest table to text
+    
     StartUndo();
     bRet = ConvertTableToText( pTblNd, cCh );
     EndUndo();
-    //End  for bug #i119954#
+    
     pCrsr->GetPoint()->nNode = aTabIdx;
 
     SwCntntNode* pCNd = pCrsr->GetCntntNode();
@@ -188,7 +188,7 @@ sal_Bool SwEditShell::IsTextToTableAvailable() const
         {
             bOnlyText = sal_True;
 
-            // check if selection is in listing
+            
             sal_uLong nStt = PCURCRSR->GetMark()->nNode.GetIndex(),
                   nEnd = PCURCRSR->GetPoint()->nNode.GetIndex();
             if( nStt > nEnd )   { sal_uLong n = nStt; nStt = nEnd; nEnd = n; }
@@ -232,7 +232,7 @@ void SwEditShell::InsertDDETable( const SwInsertTableOptions& rInsTblOpts,
     SwTableNode* pTblNode = (SwTableNode*)pTbl->GetTabSortBoxes()[ 0 ]->
                                                 GetSttNd()->FindTableNode();
     SwDDETable* pDDETbl = new SwDDETable( *pTbl, pDDEType );
-    pTblNode->SetNewTable( pDDETbl );       // setze die DDE-Tabelle
+    pTblNode->SetNewTable( pDDETbl );       
 
     if( bEndUndo )
         EndUndo( UNDO_END );
@@ -245,7 +245,7 @@ void SwEditShell::UpdateTable()
 {
     const SwTableNode* pTblNd = IsCrsrInTbl();
 
-    // Keine Arme keine Kekse
+    
     if( pTblNd )
     {
         StartAllAction();
@@ -260,7 +260,7 @@ void SwEditShell::UpdateTable()
     }
 }
 
-// get/set Change Mode
+
 
 TblChgMode SwEditShell::GetTblChgMode() const
 {
@@ -280,7 +280,7 @@ void SwEditShell::SetTblChgMode( TblChgMode eMode )
     if( pTblNd )
     {
         ((SwTable&)pTblNd->GetTable()).SetTblChgMode( eMode );
-        if( !GetDoc()->IsModified() )   // Bug 57028
+        if( !GetDoc()->IsModified() )   
         {
             GetDoc()->GetIDocumentUndoRedo().SetUndoNoResetModified();
         }
@@ -314,7 +314,7 @@ sal_Bool SwEditShell::GetTblBoxFormulaAttrs( SfxItemSet& rSet ) const
         const SwTableBoxFmt* pTblFmt = (SwTableBoxFmt*)pSelBox->GetFrmFmt();
         if( !n )
         {
-            // Convert formulae into external presentation
+            
             const SwTable& rTbl = pSelBox->GetSttNd()->FindTableNode()->GetTable();
 
             SwTableFmlUpdate aTblUpdate( (SwTable*)&rTbl );
@@ -350,7 +350,7 @@ void SwEditShell::SetTblBoxFormulaAttrs( const SfxItemSet& rSet )
         } while( false );
     }
 
-    // When setting a formula, do not check further!
+    
     if( SFX_ITEM_SET == rSet.GetItemState( RES_BOXATR_FORMULA ))
         ClearTblBoxCntnt();
 
@@ -476,15 +476,15 @@ sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) 
             const SwTableNode* pChkNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
             if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
                 bNew == pChkNd->GetTable().IsNewModel() &&
-                // Consider table in table case
+                
                 pChkNd->EndOfSectionIndex() == pTblNd->GetIndex() - 1 )
-                *pChkNxtPrv = sal_True, bRet = sal_True;        // using Prev is possible
+                *pChkNxtPrv = sal_True, bRet = sal_True;        
             else
             {
                 pChkNd = rNds[ pTblNd->EndOfSectionIndex() + 1 ]->GetTableNode();
                 if( pChkNd && !pChkNd->GetTable().ISA( SwDDETable ) &&
                     bNew == pChkNd->GetTable().IsNewModel() )
-                    *pChkNxtPrv = sal_False, bRet = sal_True;   // using Next is possible
+                    *pChkNxtPrv = sal_False, bRet = sal_True;   
             }
         }
         else
@@ -494,7 +494,7 @@ sal_Bool SwEditShell::CanMergeTable( sal_Bool bWithPrev, sal_Bool* pChkNxtPrv ) 
             if( bWithPrev )
             {
                 pTmpTblNd = rNds[ pTblNd->GetIndex() - 1 ]->FindTableNode();
-                // Consider table in table case
+                
                 if ( pTmpTblNd && pTmpTblNd->EndOfSectionIndex() != pTblNd->GetIndex() - 1 )
                     pTmpTblNd = 0;
             }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbahelper/vbadocumentbase.hxx"
@@ -92,7 +92,7 @@ OUString
 VbaDocumentBase::getFullName() throw (uno::RuntimeException)
 {
     OUString sPath = getName();
-    //::osl::File::getSystemPathFromFileURL( getModel()->getURL(), sPath );
+    
     return sPath;
 }
 
@@ -124,7 +124,7 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
     else
         xModifiable->setModified( false );
 
-    // first try to close the document using UI dispatch functionality
+    
     sal_Bool bUIClose = sal_False;
     try
     {
@@ -150,18 +150,18 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
 
     if ( !bUIClose )
     {
-        // if it is not possible to use UI dispatch, try to close the model directly
+        
         bool bCloseable = false;
         uno::Reference< frame::XModel > xModel = getModel();
         try
         {
             uno::Reference< util::XCloseable > xCloseable( xModel, uno::UNO_QUERY );
 
-            // use close(boolean DeliverOwnership)
-            // The boolean parameter DeliverOwnership tells objects vetoing the close
-            // process that they may assume ownership if they object the closure by
-            // throwing a CloseVetoException. Here we give up ownership. To be on the
-            // safe side, catch possible veto exception anyway.
+            
+            
+            
+            
+            
             if ( xCloseable.is() )
             {
                 bCloseable = true;
@@ -170,14 +170,14 @@ VbaDocumentBase::Close( const uno::Any &rSaveArg, const uno::Any &rFileArg,
         }
         catch (const uno::Exception &)
         {
-            // vetoed
+            
         }
         if (!bCloseable)
         {
             try {
-                // If close is not supported by this model - try to dispose it.
-                // But if the model disagree with a reset request for the modify state
-                // we shouldn't do so. Otherwhise some strange things can happen.
+                
+                
+                
                 uno::Reference< lang::XComponent > xDisposable ( xModel, uno::UNO_QUERY_THROW );
                 xDisposable->dispose();
             }
@@ -226,7 +226,7 @@ VbaDocumentBase::setSaved( sal_Bool bSave ) throw (uno::RuntimeException)
     }
     catch (const lang::DisposedException&)
     {
-        // impossibility to set the modified state on disposed document should not trigger an error
+        
     }
     catch (const beans::PropertyVetoException&)
     {
@@ -268,8 +268,8 @@ VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
         uno::Reference< XApplicationBase > xApp( Application(), uno::UNO_QUERY_THROW );
         uno::Reference< XInterface > xVBE( xApp->getVBE(), uno::UNO_QUERY_THROW );
         uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= xVBE;          // the VBE
-        aArgs[ 1 ] <<= getModel();    // document model for script container access
+        aArgs[ 0 ] <<= xVBE;          
+        aArgs[ 1 ] <<= getModel();    
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         mxVBProject = xServiceManager->createInstanceWithArgumentsAndContext(
             "ooo.vba.vbide.VBProject", aArgs, mxContext );

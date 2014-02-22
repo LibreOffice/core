@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <tools/stream.hxx>
 #include "giflzwc.hxx"
 
-// ----------------------------
-// - GIFImageDataOutputStream -
-// ----------------------------
+
+
+
 
 class GIFImageDataOutputStream
 {
@@ -46,7 +46,7 @@ public:
     inline void WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen );
 };
 
-// ------------------------------------------------------------------------
+
 
 inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
 {
@@ -61,7 +61,7 @@ inline void GIFImageDataOutputStream::FlushBitsBufsFullBytes()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nCodeLen )
 {
@@ -72,7 +72,7 @@ inline void GIFImageDataOutputStream::WriteBits( sal_uInt16 nCode, sal_uInt16 nC
     nBitsBufSize = nBitsBufSize + nCodeLen;
 }
 
-// ------------------------------------------------------------------------
+
 
 GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 nLZWDataSize ) :
         rStream(rGIF)
@@ -84,7 +84,7 @@ GIFImageDataOutputStream::GIFImageDataOutputStream( SvStream & rGIF, sal_uInt8 n
     rStream.WriteUChar( nLZWDataSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 
 GIFImageDataOutputStream::~GIFImageDataOutputStream()
@@ -96,7 +96,7 @@ GIFImageDataOutputStream::~GIFImageDataOutputStream()
     delete[] pBlockBuf;
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFImageDataOutputStream::FlushBlockBuf()
 {
@@ -108,22 +108,22 @@ void GIFImageDataOutputStream::FlushBlockBuf()
     }
 }
 
-// -------------------
-// - GIFLZWCTreeNode -
-// -------------------
+
+
+
 
 struct GIFLZWCTreeNode
 {
 
-    GIFLZWCTreeNode*    pBrother;       // next node which has the same father
-    GIFLZWCTreeNode*    pFirstChild;    // first
-    sal_uInt16              nCode;          // the code for the string of pixel values which comes about
-    sal_uInt16              nValue;         // the pixel value
+    GIFLZWCTreeNode*    pBrother;       
+    GIFLZWCTreeNode*    pFirstChild;    
+    sal_uInt16              nCode;          
+    sal_uInt16              nValue;         
 };
 
-// --------------------
-// - GIFLZWCompressor -
-// --------------------
+
+
+
 
 GIFLZWCompressor::GIFLZWCompressor()
     : pIDOS(NULL), pTable(NULL), pPrefix(NULL), nDataSize(0), nClearCode(0),
@@ -131,14 +131,14 @@ GIFLZWCompressor::GIFLZWCompressor()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 GIFLZWCompressor::~GIFLZWCompressor()
 {
     if (pIDOS!=NULL) EndCompression();
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
 {
@@ -170,7 +170,7 @@ void GIFLZWCompressor::StartCompression( SvStream& rGIF, sal_uInt16 nPixelSize )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFLZWCompressor::Compress( HPBYTE pSrc, sal_uLong nSize )
 {
@@ -230,7 +230,7 @@ void GIFLZWCompressor::Compress( HPBYTE pSrc, sal_uLong nSize )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void GIFLZWCompressor::EndCompression()
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustrbuf.hxx>
@@ -85,14 +85,14 @@ enum XMLUserDefinedTransformerAction
 #define ENTRY0( n, l, a ) \
     ENTRY3( n, l, a, 0, 0, 0 )
 
-// BM: a macro to put two tokens into one sal_Int32 for the action
-// XML_ATACTION_RENAME_ATTRIBUTE
+
+
 #define RENAME_ENTRY( f, s ) \
     (static_cast< sal_Int32 >(f) | (static_cast< sal_Int32 >(s) << 16))
 
 static XMLTransformerActionInit aActionTable[] =
 {
-    // remove office:class from <office:document> and <office:document-content>
+    
     ENTRY0( OFFICE, DOCUMENT, XML_ETACTION_DOCUMENT ),
     ENTRY0( OFFICE, DOCUMENT_CONTENT, XML_ETACTION_DOCUMENT ),
     ENTRY0( OFFICE, DOCUMENT_STYLES, XML_ETACTION_DOCUMENT ),
@@ -100,61 +100,61 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1Q( OFFICE, AUTO_TEXT_EVENTS, XML_ETACTION_DOCUMENT_RENAME,
                           XML_NAMESPACE_OOO, XML_AUTO_TEXT_EVENTS),
 
-    // remove <meta:keywords>
+    
     ENTRY0( META, KEYWORDS, XML_ETACTION_COPY_CONTENT ),
 
-    // rename <office:script> to <office:scripts>
+    
     ENTRY1Q( OFFICE, SCRIPT, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_OFFICE, XML_SCRIPTS ),
 
-    // rename <office:script-data> to <office:script> and process attributes
+    
     ENTRY2QN( OFFICE, SCRIPT_DATA, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_OFFICE, XML_SCRIPT,
                         OOO_SCRIPT_ACTIONS ),
 
-    // rename <script:libraries> to <ooo:libraries>
+    
     ENTRY1Q( SCRIPT, LIBRARIES, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_OOO, XML_LIBRARIES ),
 
-    // rename <script:library-linked> to <ooo:library-linked> and process attributes
+    
     ENTRY2QN( SCRIPT, LIBRARY_LINKED, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_OOO, XML_LIBRARY_LINKED,
                         OOO_SCRIPT_ACTIONS ),
 
-    // rename <script:library-embedded> to <ooo:library-embedded> and process attributes
+    
     ENTRY2QN( SCRIPT, LIBRARY_EMBEDDED, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_OOO, XML_LIBRARY_EMBEDDED,
                         OOO_SCRIPT_ACTIONS ),
 
-    // rename <script:module> to <ooo:module> and process attributes
+    
     ENTRY2QN( SCRIPT, MODULE, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_OOO, XML_MODULE,
                         OOO_SCRIPT_ACTIONS ),
 
-    // rename <script:source-code> to <ooo:source-code>
+    
     ENTRY1Q( SCRIPT, SOURCE_CODE, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_OOO, XML_SOURCE_CODE ),
 
-    // rename <office:font-decls> to <office:font-face-decl>,
-    // rename <style:font-decl> to <style:font-face>, process attrs
+    
+    
     ENTRY1Q( OFFICE, FONT_DECLS, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS ),
     ENTRY2QN( STYLE, FONT_DECL, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_STYLE, XML_FONT_FACE,
                            OOO_FONT_DECL_ACTIONS ),
 
-    // add genre element
+    
     ENTRY0( OFFICE, BODY, XML_ETACTION_BODY ),
 
-    // rename <style:page-master> to <style:page-layout>
+    
     ENTRY2QN( STYLE, PAGE_MASTER, XML_ETACTION_STYLE_RENAME,
                         XML_NAMESPACE_STYLE, XML_PAGE_LAYOUT,
                            XML_FAMILY_TYPE_PAGE_LAYOUT  ),
     ENTRY1( STYLE, MASTER_PAGE, XML_ETACTION_PROC_ATTRS,
                         OOO_MASTER_PAGE_ACTIONS ),
 
-    // split <style:properties> into <style:*-properties> and do other
-    // styles processing
+    
+    
     ENTRY1( STYLE, STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_END ),
     ENTRY1( STYLE, DEFAULT_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_END ),
     ENTRY1( NUMBER, NUMBER_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_DATA ),
@@ -165,7 +165,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( NUMBER, BOOLEAN_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_DATA ),
     ENTRY1( NUMBER, TEXT_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_DATA ),
     ENTRY1( TEXT, LIST_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_LIST ),
-//  ENTRY0( TEXT, OUTLINE_STYLE, STYLE ),
+
     ENTRY1( STYLE, HEADER_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_HEADER_FOOTER ),
     ENTRY1( STYLE, FOOTER_STYLE, XML_ETACTION_STYLE, XML_FAMILY_TYPE_HEADER_FOOTER ),
     ENTRY1( TEXT, LIST_LEVEL_STYLE_NUMBER, XML_ETACTION_STYLE, XML_FAMILY_TYPE_LIST ),
@@ -186,12 +186,12 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( DRAW, STROKE_DASH, XML_ETACTION_STYLE,
                  XML_FAMILY_TYPE_STROKE_DASH ),
 
-    // rename <text:h>'s text:level to text:outline-level
-    // process <text:h/p>: process style-name attributes,
+    
+    
     ENTRY1( TEXT, H, XML_ETACTION_PROC_ATTRS, OOO_PARA_ACTIONS ),
     ENTRY1( TEXT, P, XML_ETACTION_PROC_ATTRS, OOO_PARA_ACTIONS ),
 
-    // rename <text:ordered-list> and <text:unordered-list> to <text:list>
+    
     ENTRY2QN( TEXT, UNORDERED_LIST, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                         XML_NAMESPACE_TEXT, XML_LIST,
                           OOO_STYLE_REF_ACTIONS ),
@@ -199,7 +199,7 @@ static XMLTransformerActionInit aActionTable[] =
                         XML_NAMESPACE_TEXT, XML_LIST,
                           OOO_STYLE_REF_ACTIONS ),
 
-    // rename <text:footnote*> to <text:note*>
+    
     ENTRY3QQN( TEXT, FOOTNOTE, XML_ETACTION_RENAME_ELEM_ADD_ATTR,
                         XML_NAMESPACE_TEXT, XML_NOTE,
                            XML_NAMESPACE_TEXT, XML_NOTE_CLASS, XML_FOOTNOTE ),
@@ -213,7 +213,7 @@ static XMLTransformerActionInit aActionTable[] =
                            XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
                         XML_FOOTNOTE | (OOO_STYLE_REF_ACTIONS << 16) ),
 
-    // rename <text:endnote*> to <text:endnote*>
+    
     ENTRY3QQN( TEXT, ENDNOTE, XML_ETACTION_RENAME_ELEM_ADD_ATTR,
                         XML_NAMESPACE_TEXT, XML_NOTE,
                            XML_NAMESPACE_TEXT, XML_NOTE_CLASS, XML_ENDNOTE ),
@@ -227,7 +227,7 @@ static XMLTransformerActionInit aActionTable[] =
                            XML_NAMESPACE_TEXT, XML_NOTE_CLASS,
                         XML_ENDNOTE | (OOO_STYLE_REF_ACTIONS << 16) ),
 
-    // rename <text:footnote> and <text:endnote> to <text:note>
+    
     ENTRY3QQN( TEXT, ENDNOTE_REF, XML_ETACTION_RENAME_ELEM_ADD_ATTR,
                         XML_NAMESPACE_TEXT, XML_NOTE_REF,
                            XML_NAMESPACE_TEXT, XML_NOTE_CLASS, XML_ENDNOTE ),
@@ -235,16 +235,16 @@ static XMLTransformerActionInit aActionTable[] =
                         XML_NAMESPACE_TEXT, XML_NOTE_REF,
                            XML_NAMESPACE_TEXT, XML_NOTE_CLASS, XML_FOOTNOTE ),
 
-    // rename <text:tab-stop> to <text:tab>
+    
     ENTRY1Q( TEXT, TAB_STOP, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_TEXT, XML_TAB ),
 
-    // replace <table:sub-table> with <table:table table:is-sub-table>
+    
     ENTRY3QQN( TABLE, SUB_TABLE, XML_ETACTION_RENAME_ELEM_ADD_ATTR,
                         XML_NAMESPACE_TABLE, XML_TABLE,
                            XML_NAMESPACE_TABLE, XML_IS_SUB_TABLE, XML_TRUE ),
 
-    // process *:style-name attributes
+    
     ENTRY1( TEXT, SECTION, XML_ETACTION_PROC_ATTRS,
         OOO_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( TEXT, SPAN, XML_ETACTION_PROC_ATTRS,
@@ -352,7 +352,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
     ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
 
-    // split frame elements
+    
     ENTRY0( DRAW, TEXT_BOX, XML_ETACTION_FRAME ),
     ENTRY0( DRAW, IMAGE, XML_ETACTION_FRAME ),
     ENTRY0( DRAW, OBJECT, XML_ETACTION_FRAME ),
@@ -362,13 +362,13 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY0( DRAW, FLOATING_FRAME, XML_ETACTION_FRAME ),
     ENTRY0( SVG, DESC, XML_ETACTION_COPY_TEXT ),
 
-    // process events
+    
     ENTRY1Q( OFFICE, EVENTS, XML_ETACTION_RENAME_ELEM,
                       XML_NAMESPACE_OFFICE, XML_EVENT_LISTENERS ),
     ENTRY0( SCRIPT, EVENT, XML_ETACTION_EVENT ),
     ENTRY0( PRESENTATION, EVENT, XML_ETACTION_EVENT ),
 
-    // process length attributes
+    
     ENTRY1( DRAW, RECT, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, LINE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, POLYLINE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
@@ -382,7 +382,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( DRAW, PAGE_THUMBNAIL, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, MEASURE, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, G, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
-//  ENTRY1( DRAW, TEXT_BOX, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
+
     ENTRY1( PRESENTATION, PLACEHOLDER, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, CONTOUR_POLYGON, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
     ENTRY1( DRAW, CONTOUR_PATH, XML_ETACTION_PROC_ATTRS, OOO_SHAPE_ACTIONS ),
@@ -433,7 +433,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY1( STYLE, COLUMNS, XML_ETACTION_PROC_ATTRS, OOO_COLUMNS_ACTIONS ),
     ENTRY1( STYLE, COLUMN, XML_ETACTION_PROC_ATTRS, OOO_COLUMNS_ACTIONS ),
 
-    // rename office:value-* to *:value-*
+    
     ENTRY1( TEXT, VARIABLE_DECL, XML_ETACTION_PROC_ATTRS,
             OOO_TEXT_VALUE_TYPE_ACTIONS ), /* generated entry */
     ENTRY1( TEXT, VARIABLE_SET, XML_ETACTION_PROC_ATTRS,
@@ -444,18 +444,18 @@ static XMLTransformerActionInit aActionTable[] =
             OOO_TEXT_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TEXT, EXPRESSION, XML_ETACTION_PROC_ATTRS,
             OOO_TEXT_VALUE_TYPE_ACTIONS), /* generated entry */
-//  ENTRY1( TEXT, USER_DEFINED, XML_ETACTION_PROC_ATTRS,
-//          OOO_TEXT_VALUE_TYPE_ACTIONS), /* text:user-defined has no attrs so far */
+
+
     ENTRY1( TABLE, TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OOO_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TABLE, COVERED_TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OOO_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
     ENTRY1( TABLE, CHANGE_TRACK_TABLE_CELL, XML_ETACTION_PROC_ATTRS,
             OOO_TABLE_VALUE_TYPE_ACTIONS), /* generated entry */
-//  ENTRY1( FORM, PROPERTY, XML_ETACTION_PROC_ATTRS,
-//          OOO_VALUE_TYPE_ACTIONS), /* TODO: generated entry */
-//  ENTRY1( FORM, LIST_PROPERTY, XML_ETACTION_PROC_ATTRS,
-//          OOO_VALUE_TYPE_ACTIONS), /* generated entry */
+
+
+
+
 
     ENTRY1( OFFICE, ANNOTATION, XML_ETACTION_MOVE_ATTRS_TO_ELEMS,
             OOO_ANNOTATION_ACTIONS ), /* generated entry */
@@ -470,7 +470,7 @@ static XMLTransformerActionInit aActionTable[] =
                      OOO_FORM_COLUMN_ACTIONS  ),
     ENTRY0( FORM, PROPERTY, XML_ETACTION_FORM_PROPERTY ),
 
-    // process xlink:href
+    
     ENTRY1( META, TEMPLATE, XML_ETACTION_PROC_ATTRS,
         OOO_XLINK_ACTIONS ), /* generated entry */
     ENTRY1( META, AUTO_RELOAD, XML_ETACTION_PROC_ATTRS,
@@ -499,63 +499,63 @@ static XMLTransformerActionInit aActionTable[] =
         XML_NAMESPACE_OFFICE, XML_SETTINGS,
         OOO_CONFIG_ITEM_SET_ACTIONS ),
 
-    // add namespace prefix
-    //  text:formula
+    
+    
     ENTRY1( TEXT, SEQUENCE, XML_ETACTION_PROC_ATTRS,
         OOO_FORMULA_ACTIONS ), /* generated entry */
-    //  text:condition
+    
     ENTRY1( TEXT, DATABASE_NEXT, XML_ETACTION_PROC_ATTRS,
         OOO_FORMULA_ACTIONS ), /* generated entry */
-    //  text:condition
+    
     ENTRY2QN( TEXT, DATABASE_SELECT, XML_ETACTION_RENAME_ELEM_PROC_ATTRS,
                 XML_NAMESPACE_TEXT, XML_DATABASE_ROW_SELECT,
         OOO_FORMULA_ACTIONS ),
-    //  text:condition
+    
     ENTRY1( TEXT, CONDITIONAL_TEXT, XML_ETACTION_PROC_ATTRS,
         OOO_FORMULA_ACTIONS ), /* generated entry */
-    //  text:condition
+    
     ENTRY1( TEXT, HIDDEN_TEXT, XML_ETACTION_PROC_ATTRS,
         OOO_FORMULA_ACTIONS ), /* generated entry */
-    //  text:condition
+    
     ENTRY1( TEXT, HIDDEN_PARAGRAPH, XML_ETACTION_PROC_ATTRS,
         OOO_FORMULA_ACTIONS ), /* generated entry */
-    //  table:condition
+    
     ENTRY1( TABLE, CONTENT_VALIDATION, XML_ETACTION_PROC_ATTRS,
         OOO_FORMULA_ACTIONS ), /* generated entry */
 
-    // rename <table:dependences> to <table:dependencies>
+    
     ENTRY1Q( TABLE, DEPENDENCES, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_TABLE, XML_DEPENDENCIES ),
     ENTRY1Q( TABLE, DEPENDENCE, XML_ETACTION_RENAME_ELEM,
                         XML_NAMESPACE_TABLE, XML_DEPENDENCY ),
 
-    // process table::error-macro
+    
     ENTRY1( TABLE, ERROR_MACRO, XML_ETACTION_PROC_ATTRS,
             OOO_ERROR_MACRO_ACTIONS ),
 
-    // process table::conversion-mode
+    
     ENTRY1( TABLE, CONVERSION_MODE, XML_ETACTION_PROC_ATTRS,
             OOO_DDE_CONV_MODE_ACTIONS ),
 
-    // fix <text:alphabatical-index-mark text:main-etry>
+    
     ENTRY1( TEXT, ALPHABETICAL_INDEX_MARK, XML_ETACTION_PROC_ATTRS,
             OOO_ALPHABETICAL_INDEX_MARK_ACTIONS ),
     ENTRY1( TEXT, ALPHABETICAL_INDEX_MARK_START, XML_ETACTION_PROC_ATTRS,
             OOO_ALPHABETICAL_INDEX_MARK_ACTIONS ),
 
-    // process table::data-pilot-member
+    
     ENTRY1( TABLE, DATA_PILOT_MEMBER, XML_ETACTION_PROC_ATTRS,
             OOO_DATAPILOT_MEMBER_ACTIONS ),
 
-    // process table::data-pilot-level
+    
     ENTRY1( TABLE, DATA_PILOT_LEVEL, XML_ETACTION_PROC_ATTRS,
             OOO_DATAPILOT_LEVEL_ACTIONS ),
 
-    // process table::source-service
+    
     ENTRY1( TABLE, SOURCE_SERVICE, XML_ETACTION_PROC_ATTRS,
             OOO_SOURCE_SERVICE_ACTIONS ),
 
-    // fix id strings in old animation elements
+    
     ENTRY1( PRESENTATION, DIM, XML_ETACTION_PROC_ATTRS, OOO_ANIMATION_ACTIONS ),
     ENTRY1( PRESENTATION, PLAY, XML_ETACTION_PROC_ATTRS, OOO_ANIMATION_ACTIONS ),
     ENTRY1( PRESENTATION, SHOW_TEXT, XML_ETACTION_PROC_ATTRS, OOO_ANIMATION_ACTIONS ),
@@ -566,7 +566,7 @@ static XMLTransformerActionInit aActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ETACTION_EOT )
 };
 
-// XML_ETACTION_STYLE
+
 static XMLTransformerActionInit aStyleActionTable[] =
 {
     ENTRY0( STYLE, FAMILY, XML_ATACTION_STYLE_FAMILY ),
@@ -588,7 +588,7 @@ static XMLTransformerActionInit aStyleActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_FRAME_ELEM_ACTIONS
+
 static XMLTransformerActionInit aFrameElemActionTable[] =
 {
     ENTRY1Q( OFFICE, EVENTS, XML_ETACTION_RENAME_ELEM,
@@ -601,7 +601,7 @@ static XMLTransformerActionInit aFrameElemActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ETACTION_EOT )
 };
 
-// OOO_FRAME_ATTR_ACTIONS
+
 static XMLTransformerActionInit aFrameAttrActionTable[] =
 {
     ENTRY0( DRAW, ZINDEX, XML_ATACTION_MOVE_TO_ELEM ), /* generated entry */
@@ -630,7 +630,7 @@ static XMLTransformerActionInit aFrameAttrActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_EVENT_ELEM_ACTIONS
+
 static XMLTransformerActionInit aEventActionTable[] =
 {
     ENTRY0( XLINK, HREF, XML_ATACTION_HREF ),
@@ -639,11 +639,11 @@ static XMLTransformerActionInit aEventActionTable[] =
     ENTRY0( SCRIPT, EVENT_NAME, XML_ATACTION_EVENT_NAME ),
     ENTRY0( SCRIPT, MACRO_NAME, XML_ATACTION_MACRO_NAME ),
     ENTRY0( SCRIPT, LOCATION, XML_ATACTION_MACRO_LOCATION ),
-    ENTRY0( SCRIPT, LIBRARY, XML_ATACTION_MACRO_LOCATION ), // bug in draw
+    ENTRY0( SCRIPT, LIBRARY, XML_ATACTION_MACRO_LOCATION ), 
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OOO_MASTER_PAGE_ACTIONS
+
 static XMLTransformerActionInit aMasterPageActionTable[] =
 {
     ENTRY0( STYLE, NAME, XML_ATACTION_ENCODE_STYLE_NAME ),
@@ -663,18 +663,18 @@ static XMLTransformerActionInit aFontDeclActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OOO_PARA_ACTIONS
+
 static XMLTransformerActionInit aParaActionTable[] =
 {
     ENTRY0( TEXT, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
     ENTRY0( TEXT, COND_STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
-//  ENTRY0( TEXT, CLASS_NAMES, XML_ATACTION_REMOVE ),
+
     ENTRY1Q( TEXT, LEVEL, XML_ATACTION_RENAME,
                         XML_NAMESPACE_TEXT, XML_OUTLINE_LEVEL ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OOO_STYLE_REF_ACTIONS
+
 static XMLTransformerActionInit aStyleRefActionTable[] =
 {
     ENTRY0( TEXT, STYLE_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF ),
@@ -702,9 +702,9 @@ static XMLTransformerActionInit aStyleRefActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_SHAPE_ACTIONS
-// !!ATTENTION!! If you change something here, please also change
-// aConnectorActionTable if apropriate
+
+
+
 static XMLTransformerActionInit aShapeActionTable[] =
 {
     ENTRY0( SVG, X, XML_ATACTION_INCH2IN ),
@@ -739,8 +739,8 @@ static XMLTransformerActionInit aShapeActionTable[] =
                     XML_NAMESPACE_DRAW, XML_CONTROL ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
 
-    // BM: needed by chart:legend.  The legend needs also the draw actions.  As
-    // there is no merge mechanism, all actions have to be in the same table
+    
+    
     ENTRY2( CHART, LEGEND_POSITION, XML_ATACTION_RENAME_ATTRIBUTE,
             RENAME_ENTRY( XML_LEFT, XML_START ),
             RENAME_ENTRY( XML_RIGHT, XML_END )),
@@ -774,7 +774,7 @@ static XMLTransformerActionInit aConnectorActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_INDEX_ENTRY_TAB_STOP_ACTIONS
+
 static XMLTransformerActionInit aIndexEntryTabStopActionTable[] =
 {
     ENTRY0( STYLE, POSITION, XML_ATACTION_INCH2IN ),
@@ -782,7 +782,7 @@ static XMLTransformerActionInit aIndexEntryTabStopActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_TAB_STOP_ACTIONS
+
 static XMLTransformerActionInit aTabStopActionTable[] =
 {
     ENTRY0( STYLE, POSITION, XML_ATACTION_INCH2IN ),
@@ -791,7 +791,7 @@ static XMLTransformerActionInit aTabStopActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_LINENUMBERING_ACTIONS
+
 static XMLTransformerActionInit aLineNumberingActionTable[] =
 {
     ENTRY0( TEXT, OFFSET, XML_ATACTION_INCH2IN ),
@@ -809,7 +809,7 @@ static XMLTransformerActionInit aFootnoteSepActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_DROP_CAP_ACTIONS
+
 static XMLTransformerActionInit aDropCapActionTable[] =
 {
     ENTRY0( STYLE, DISTANCE, XML_ATACTION_INCH2IN ),
@@ -820,8 +820,8 @@ static XMLTransformerActionInit aDropCapActionTable[] =
 static XMLTransformerActionInit aColumnsActionTable[] =
 {
     ENTRY0( STYLE, COLUMN_GAP, XML_ATACTION_INCH2IN ),
-//  ENTRY0( STYLE, SPACE_BEFORE, XML_ATACTION_INCH2IN ),
-//  ENTRY0( STYLE, SPACE_AFTER, XML_ATACTION_INCH2IN ),
+
+
     ENTRY1Q( FO, MARGIN_LEFT, XML_ATACTION_RENAME_INCH2IN,
            XML_NAMESPACE_FO, XML_START_INDENT ),
     ENTRY1Q( FO, MARGIN_RIGHT, XML_ATACTION_RENAME_INCH2IN,
@@ -830,7 +830,7 @@ static XMLTransformerActionInit aColumnsActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_TEXT_VALUE_TYPE_ACTIONS
+
 static XMLTransformerActionInit aTextValueTypeActionTable[] =
 {
     ENTRY1Q( TEXT, VALUE_TYPE, XML_ATACTION_RENAME,
@@ -853,7 +853,7 @@ static XMLTransformerActionInit aTextValueTypeActionTable[] =
     ENTRY0( TEXT, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_TABLE_VALUE_TYPE_ACTIONS
+
 static XMLTransformerActionInit aTableValueTypeActionTable[] =
 {
     ENTRY1Q( TABLE, VALUE_TYPE, XML_ATACTION_RENAME,
@@ -878,7 +878,7 @@ static XMLTransformerActionInit aTableValueTypeActionTable[] =
     ENTRY0( TABLE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OOO_ANNOTATION_ACTIONS
+
 static XMLTransformerActionInit aAnnotationActionTable[] =
 {
     ENTRY1Q( OFFICE, AUTHOR, XML_ATACTION_MOVE_TO_ELEM,
@@ -890,7 +890,7 @@ static XMLTransformerActionInit aAnnotationActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// action table for OOO_CHANGE_INFO_ACTIONS
+
 static XMLTransformerActionInit aChangeInfoActionTable[] =
 {
     ENTRY1Q( OFFICE, CHG_AUTHOR, XML_ATACTION_MOVE_TO_ELEM,
@@ -900,7 +900,7 @@ static XMLTransformerActionInit aChangeInfoActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_BACKGROUND_IMAGE_ACTIONS
+
 static XMLTransformerActionInit aBackgroundImageActionTable[] =
 {
     ENTRY1Q( DRAW, TRANSPARENCY, XML_ATACTION_RENAME_NEG_PERCENT,
@@ -920,7 +920,7 @@ static XMLTransformerActionInit aWriterBackgroundImageActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_DDE_CONNECTION_DECL
+
 static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
 {
     ENTRY1Q( TEXT, NAME, XML_ATACTION_RENAME,
@@ -928,7 +928,7 @@ static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_FORM_CONTROL_ACTIONS
+
 static XMLTransformerActionInit aFormControlActionTable[] =
 {
     ENTRY2QN( FORM, SERVICE_NAME,
@@ -939,7 +939,7 @@ static XMLTransformerActionInit aFormControlActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_FORM_COLUMN_ACTIONS
+
 static XMLTransformerActionInit aFormColumnActionTable[] =
 {
     ENTRY1Q( FORM, COLUMN_STYLE_NAME, XML_ATACTION_RENAME_ENCODE_STYLE_NAME_REF,
@@ -951,7 +951,7 @@ static XMLTransformerActionInit aFormColumnActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_FORM_PROP_ACTIONS
+
 static XMLTransformerActionInit aFormPropActionTable[] =
 {
     ENTRY1Q( FORM, PROPERTY_TYPE, XML_ATACTION_RENAME,
@@ -960,14 +960,14 @@ static XMLTransformerActionInit aFormPropActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_XLINK_ACTIONS
+
 static XMLTransformerActionInit aXLinkActionTable[] =
 {
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_False ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_CONFIG_ITEM_SET_ACTIONS
+
 static XMLTransformerActionInit aConfigItemSetActionTable[] =
 {
     ENTRY1( CONFIG, NAME, XML_ATACTION_ADD_NAMESPACE_PREFIX,
@@ -975,7 +975,7 @@ static XMLTransformerActionInit aConfigItemSetActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OASIS_FORMULA_ACTIONS
+
 static XMLTransformerActionInit aFormulaActionTable[] =
 {
     ENTRY1( TEXT, CONDITION, XML_ATACTION_ADD_NAMESPACE_PREFIX,
@@ -989,14 +989,14 @@ static XMLTransformerActionInit aFormulaActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_ERROR_MACRO_ACTIONS
+
 static XMLTransformerActionInit aErrorMacroActionTable[] =
 {
     ENTRY0( TABLE, NAME, XML_ATACTION_REMOVE ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_DDE_CONV_MODE_ACTIONS
+
 static XMLTransformerActionInit aDDEConvModeActionTable[] =
 {
     ENTRY1Q( TABLE, LET_TEXT, XML_ATACTION_RENAME,
@@ -1004,7 +1004,7 @@ static XMLTransformerActionInit aDDEConvModeActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_DATAPILOT_MEMBER_ACTIONS
+
 static XMLTransformerActionInit aDataPilotMemberActionTable[] =
 {
     ENTRY1Q( TABLE, DISPLAY_DETAILS, XML_ATACTION_RENAME,
@@ -1012,7 +1012,7 @@ static XMLTransformerActionInit aDataPilotMemberActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_DATAPILOT_LEVEL_ACTIONS
+
 static XMLTransformerActionInit aDataPilotLevelActionTable[] =
 {
     ENTRY1Q( TABLE, DISPLAY_EMPTY, XML_ATACTION_RENAME,
@@ -1020,7 +1020,7 @@ static XMLTransformerActionInit aDataPilotLevelActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_SOURCE_SERVICE_ACTIONS
+
 static XMLTransformerActionInit aSourceServiceActionTable[] =
 {
     ENTRY1Q( TABLE, USERNAME, XML_ATACTION_RENAME,
@@ -1028,7 +1028,7 @@ static XMLTransformerActionInit aSourceServiceActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_ANIMATION_ACTIONS
+
 static XMLTransformerActionInit aAnimationsActionTable[] =
 {
     ENTRY0( DRAW, SHAPE_ID, XML_ATACTION_SHAPEID ),
@@ -1036,7 +1036,7 @@ static XMLTransformerActionInit aAnimationsActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_DRAW_AREA_POLYGON_ACTIONS (to be added to OOO_SHAPE_ACTIONS)
+
 static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
 {
     ENTRY1Q( SVG, POINTS, XML_ATACTION_RENAME,
@@ -1044,7 +1044,7 @@ static XMLTransformerActionInit aDrawAreaPolygonActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_CHART_ACTIONS
+
 static XMLTransformerActionInit aChartActionTable[] =
 {
     ENTRY1( CHART, CLASS, XML_ATACTION_ADD_NAMESPACE_PREFIX,
@@ -1056,7 +1056,7 @@ static XMLTransformerActionInit aChartActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_ALPHABETICAL_INDEX_MARK_ACTIONS
+
 static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
 {
     ENTRY1Q( TEXT, MAIN_ETRY, XML_ATACTION_RENAME,
@@ -1064,7 +1064,7 @@ static XMLTransformerActionInit aAlphabeticalIndexMarkActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// OOO_SCRIPT_ACTIONS
+
 static XMLTransformerActionInit aScriptActionTable[] =
 {
     ENTRY1( SCRIPT, LANGUAGE, XML_ATACTION_ADD_NAMESPACE_PREFIX, XML_NAMESPACE_OOO ),
@@ -1504,7 +1504,7 @@ XMLTableOOoTransformerContext_Impl::~XMLTableOOoTransformerContext_Impl()
 void XMLTableOOoTransformerContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
-    // Perform OOO_STYLE_REF_ACTIONS for all applications (#i50521#)
+    
     Reference< XAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList* pMutableAttrList =
         GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, sal_False );
@@ -1592,7 +1592,7 @@ XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(
         OSL_ENSURE( !this, "no user defined context found!" );
     }
 
-    // default is copying
+    
     return new XMLTransformerContext( *this, rQName );
 }
 
@@ -1688,7 +1688,7 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                         new XMLTransformerActions( aFrameAttrActionTable );
                     break;
                 case OOO_BACKGROUND_IMAGE_ACTIONS:
-                    // Use special actions for Writer documents. (#i50322#)
+                    
                     m_aActions[OOO_BACKGROUND_IMAGE_ACTIONS] =
                         isWriter()
                         ? new XMLTransformerActions( aWriterBackgroundImageActionTable )
@@ -1883,15 +1883,15 @@ Any OOo2OasisTransformer::queryInterface( const Type& rType )
     return aRet;
 }
 
-// XImporter
+
 void SAL_CALL OOo2OasisTransformer::setTargetDocument(
         const Reference< XComponent >& xDoc )
     throw( IllegalArgumentException, RuntimeException)
 {
     if( !GetDocHandler().is() )
     {
-        // if initialize hasn't been called, then we have to call it now
-        // to get the sub component initialized.
+        
+        
         Sequence<Any> aArgs( 0 );
         Initialize( aArgs );
     }
@@ -1904,7 +1904,7 @@ void SAL_CALL OOo2OasisTransformer::setTargetDocument(
         xImp->setTargetDocument( xDoc );
 }
 
-// XFilter
+
 sal_Bool SAL_CALL OOo2OasisTransformer::filter(
         const Sequence< PropertyValue >& aDescriptor )
     throw ( RuntimeException)
@@ -1926,7 +1926,7 @@ void SAL_CALL OOo2OasisTransformer::cancel(  )
         xFilter->cancel();
 }
 
-// XInitialize
+
 void SAL_CALL OOo2OasisTransformer::initialize(
                 const Sequence< Any >& rArguments )
     throw( Exception, RuntimeException )
@@ -1939,8 +1939,8 @@ void SAL_CALL OOo2OasisTransformer::startDocument( void )
 {
     if( !GetDocHandler().is() )
     {
-        // if initialize hasn't been called, then we have to call it now
-        // to get the sub component initialized.
+        
+        
         Sequence<Any> aArgs( 0 );
         Initialize( aArgs );
     }
@@ -1961,7 +1961,7 @@ void SAL_CALL OOo2OasisTransformer::Initialize(
             comphelper::getProcessComponentContext();
         try
         {
-            // get filter component
+            
             xDocHandler = Reference< XDocumentHandler >(
                     xContext->getServiceManager()->createInstanceWithArgumentsAndContext(m_aSubServiceName, rArguments, xContext),
                     UNO_QUERY);
@@ -1999,7 +1999,7 @@ const Sequence< sal_Int8 > & OOo2OasisTransformer::getUnoTunnelId() throw()
     return theOOo2OasisTransformerUnoTunnelId::get().getSeq();
 }
 
-// XUnoTunnel
+
 sal_Int64 SAL_CALL OOo2OasisTransformer::getSomething( const Sequence< sal_Int8 >& rId )
     throw(RuntimeException)
 {
@@ -2015,7 +2015,7 @@ sal_Int64 SAL_CALL OOo2OasisTransformer::getSomething( const Sequence< sal_Int8 
     }
 }
 
-// XServiceInfo
+
 OUString SAL_CALL OOo2OasisTransformer::getImplementationName()
     throw(RuntimeException)
 {
@@ -2035,7 +2035,7 @@ Sequence< OUString > SAL_CALL OOo2OasisTransformer::getSupportedServiceNames(  )
     return aSeq;
 }
 
-// XTypeProvider
+
 Sequence< ::com::sun::star::uno::Type > SAL_CALL
     OOo2OasisTransformer::getTypes() throw(RuntimeException)
 {
@@ -2052,7 +2052,7 @@ Sequence< ::com::sun::star::uno::Type > SAL_CALL
     return aTypes;
 }
 
-// Service registration
+
 
 OUString SAL_CALL OOo2OasisTransformer_getImplementationName() throw()
 {

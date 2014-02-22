@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/i18n/ScriptType.hpp>
@@ -69,15 +69,15 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
     sal_uInt16 nField = pFldTyp->Which();
     sal_uLong nFmt = pFld->GetFormat();
 
-    const sal_Char *pTypeStr=0, // TYPE
-                      *pSubStr=0,   // SUBTYPE
-                   *pFmtStr=0;  // FORMAT (SW)
-    OUString aValue;              // VALUE (SW)
-    sal_Bool bNumFmt=sal_False;         // SDNUM (Number-Formatter-Format)
-    sal_Bool bNumValue=sal_False;       // SDVAL (Number-Formatter-Value)
-    double dNumValue = 0.0;     // SDVAL (Number-Formatter-Value)
-    sal_Bool bFixed=sal_False;          // SDFIXED
-    OUString aName;               // NAME (CUSTOM)
+    const sal_Char *pTypeStr=0, 
+                      *pSubStr=0,   
+                   *pFmtStr=0;  
+    OUString aValue;              
+    sal_Bool bNumFmt=sal_False;         
+    sal_Bool bNumValue=sal_False;       
+    double dNumValue = 0.0;     
+    sal_Bool bFixed=sal_False;          
+    OUString aName;               
 
     switch( nField )
     {
@@ -203,16 +203,16 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 {
                     if( bFixed )
                     {
-                        // Fuer ein fixes Feld och den Num-Value ausgeben.
-                        // Fixe Felder ohne Zahlenformate sollte es
-                        // eigentlich nicht geben. OSL_ENSURE(ist unten.
+                        
+                        
+                        
                         dNumValue = ((const SwDocInfoField*)pFld)->GetValue();
                         bNumValue = sal_True;
                     }
                     else if( !nFmt  )
                     {
-                        // Nicht fixe Felder muessen kein Zahlenformat haben,
-                        // wenn sie aus 4.0-Dokumenten stammen.
+                        
+                        
                         bNumFmt = sal_False;
                     }
                 }
@@ -254,7 +254,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
             break;
     }
 
-    // <SDFIELD>-Tag ausgeben
+    
     if( pTypeStr )
     {
         OStringBuffer sOut;
@@ -304,7 +304,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
     }
 
-    // Inhalt des Feldes ausgeben
+    
     OUString const sExpand( pFld->ExpandField(true) );
     sal_Bool bNeedsCJKProcessing = sal_False;
     if( !sExpand.isEmpty() )
@@ -323,8 +323,8 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
 
     if( bNeedsCJKProcessing )
     {
-        //sequence of (start, end) property ranges we want to
-        //query
+        
+        
         SfxItemSet aScriptItemSet( rWrt.pDoc->GetAttrPool(),
                                    RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
                                    RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
@@ -424,7 +424,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
               rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
     }
 
-    // Off-Tag ausgeben
+    
     if( pTypeStr )
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_sdfield, sal_False );
 
@@ -451,16 +451,16 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         rWrt.Strm().WriteChar( '<' );
         if( !bOn )
             rWrt.Strm().WriteChar( '/' );
-        // TODO: HTML-Tags are written without entitities, that for, characters
-        // not contained in the destination encoding are lost!
+        
+        
         OString sTmp(OUStringToOString(rTxt,
             ((SwHTMLWriter&)rWrt).eDestEnc));
         rWrt.Strm().WriteCharPtr( sTmp.getStr() ).WriteChar( '>' );
     }
     else if( RES_POSTITFLD == pFldTyp->Which() )
     {
-        // Kommentare werden im ANSI-Zeichensetz, aber mit System-Zeilen-
-        // Umbruechen gesschrieben.
+        
+        
         const OUString& rComment = pFld->GetPar2();
         bool bWritten = false;
 
@@ -470,10 +470,10 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
              rComment.startsWith( "<!--" ) &&
              rComment.endsWith( "-->" )) )
         {
-            // META-Tags direkt ausgeben
+            
             OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
-            // TODO: HTML-Tags are written without entitities, that for,
-            // characters not contained in the destination encoding are lost!
+            
+            
             OString sTmp(OUStringToOString(sComment,
                 ((SwHTMLWriter&)rWrt).eDestEnc));
             rWrt.Strm().WriteCharPtr( sTmp.getStr() );
@@ -487,9 +487,9 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
             if( '<' == sComment[0] )
             {
                 sComment = convertLineEnd(sComment, GetSystemLineEnd());
-                // TODO: HTML-Tags are written without entitities, that for,
-                // characters not contained in the destination encoding are
-                // lost!
+                
+                
+                
                 OString sTmp(OUStringToOString(sComment,
                     ((SwHTMLWriter&)rWrt).eDestEnc));
                 rWrt.Strm().WriteCharPtr( sTmp.getStr() );
@@ -502,7 +502,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         {
             OUString sComment(convertLineEnd(rComment, GetSystemLineEnd()));
             OStringBuffer sOut;
-            // TODO: ???
+            
             sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_comment)
                 .append(' ').append(OUStringToOString(sComment,
                     ((SwHTMLWriter&)rWrt).eDestEnc)).append(" -->");
@@ -523,8 +523,8 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         else
             aContents = pFld->GetPar2();
 
-        // sonst ist es der Script-Inhalt selbst. Da nur noh JavaScript
-        // in Feldern landet, muss es sich um JavaSrript handeln ...:)
+        
+        
         HTMLOutFuncs::OutScript( rWrt.Strm(), rWrt.GetBaseURL(), aContents, rType, JAVASCRIPT,
                                  aURL, 0, 0, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 

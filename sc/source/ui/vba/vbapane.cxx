@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbapane.hxx"
@@ -74,17 +74,17 @@ ScVbaPane::setScrollRow( sal_Int32 _scrollrow ) throw (uno::RuntimeException)
 uno::Reference< excel::XRange > SAL_CALL
 ScVbaPane::getVisibleRange() throw (uno::RuntimeException)
 {
-    // TODO: Excel includes partly visible rows/columns, Calc does not
+    
     table::CellRangeAddress aRangeAddr = m_xViewPane->getVisibleRange();
     uno::Reference< sheet::XSpreadsheetDocument > xDoc( m_xModel, uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xSheetsIA( xDoc->getSheets(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSpreadsheet > xSheet( xSheetsIA->getByIndex( aRangeAddr.Sheet ), uno::UNO_QUERY_THROW );
     uno::Reference< table::XCellRange > xRange( xSheet->getCellRangeByPosition( aRangeAddr.StartColumn, aRangeAddr.StartRow, aRangeAddr.EndColumn, aRangeAddr.EndRow ), uno::UNO_SET_THROW );
-    // TODO: getParent() returns the window, Range needs the worksheet
+    
     return new ScVbaRange( getParent(), mxContext, xRange );
 }
 
-//Method
+
 void SAL_CALL
 ScVbaPane::SmallScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any& ToRight, const uno::Any& ToLeft ) throw (uno::RuntimeException)
 {
@@ -193,7 +193,7 @@ ScVbaPane::LargeScroll( const uno::Any& Down, const uno::Any& Up, const uno::Any
     m_xViewPane->setFirstVisibleColumn( newStartCol );
 }
 
-// XHelperInterface
+
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaPane, "ooo.vba.excel.Pane" )
 

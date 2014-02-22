@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/attribute/lineattribute.hxx>
 #include <basegfx/color/bcolor.hxx>
 #include <rtl/instance.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -30,11 +30,11 @@ namespace drawinglayer
         class ImpLineAttribute
         {
         public:
-            // data definitions
-            basegfx::BColor                         maColor;                // color
-            double                                  mfWidth;                // absolute line width
-            basegfx::B2DLineJoin                    meLineJoin;             // type of LineJoin
-            com::sun::star::drawing::LineCap        meLineCap;              // BUTT, ROUND, or SQUARE
+            
+            basegfx::BColor                         maColor;                
+            double                                  mfWidth;                
+            basegfx::B2DLineJoin                    meLineJoin;             
+            com::sun::star::drawing::LineCap        meLineCap;              
 
             ImpLineAttribute(
                 const basegfx::BColor& rColor,
@@ -56,7 +56,7 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             const basegfx::BColor& getColor() const { return maColor; }
             double getWidth() const { return mfWidth; }
             basegfx::B2DLineJoin getLineJoin() const { return meLineJoin; }
@@ -141,7 +141,7 @@ namespace drawinglayer
             return mpLineAttribute->getLineCap();
         }
 
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

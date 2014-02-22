@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -54,7 +54,7 @@ using namespace ::com::sun::star;
 
 #include <boost/make_shared.hpp>
 
-// =======================================================================
+
 
 ImplMouseData::ImplMouseData()
 {
@@ -81,7 +81,7 @@ ImplMouseData::ImplMouseData()
     mnWheelBehavior             = MOUSE_WHEEL_ALWAYS;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplMouseData::ImplMouseData( const ImplMouseData& rData )
 {
@@ -108,27 +108,27 @@ ImplMouseData::ImplMouseData( const ImplMouseData& rData )
     mnWheelBehavior             = rData.mnWheelBehavior;
 }
 
-// -----------------------------------------------------------------------
+
 
 MouseSettings::MouseSettings()
 : mpData(boost::make_shared<ImplMouseData>())
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 MouseSettings::MouseSettings( const MouseSettings& rSet )
 {
     mpData = rSet.mpData;
 }
 
-// -----------------------------------------------------------------------
+
 
 MouseSettings::~MouseSettings()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 const MouseSettings& MouseSettings::operator =( const MouseSettings& rSet )
 {
@@ -136,17 +136,17 @@ const MouseSettings& MouseSettings::operator =( const MouseSettings& rSet )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MouseSettings::CopyData()
 {
-    // copy if other references exist
+    
     if ( ! mpData.unique() ) {
         mpData = boost::make_shared<ImplMouseData>(*mpData);
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool MouseSettings::operator ==( const MouseSettings& rSet ) const
 {
@@ -179,7 +179,7 @@ bool MouseSettings::operator ==( const MouseSettings& rSet ) const
         return false;
 }
 
-// =======================================================================
+
 
 ImplStyleData::ImplStyleData() :
     mIconThemeScanner(vcl::IconThemeScanner::Create(vcl::IconThemeScanner::GetStandardIconThemePath())),
@@ -216,14 +216,14 @@ ImplStyleData::ImplStyleData() :
     mnColorValueSetColumnCount = 12;
     mnColorValueSetMaximumRowCount = 40;
     maListBoxPreviewDefaultLogicSize = Size(15, 7);
-    maListBoxPreviewDefaultPixelSize = Size(0, 0); // on-demand calculated in GetListBoxPreviewDefaultPixelSize()
+    maListBoxPreviewDefaultPixelSize = Size(0, 0); 
     mnListBoxPreviewDefaultLineWidth = 1;
     mbPreviewUsesCheckeredBackground = true;
 
     SetStandardStyles();
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     maActiveBorderColor( rData.maActiveBorderColor ),
@@ -345,7 +345,7 @@ ImplStyleData::ImplStyleData( const ImplStyleData& rData ) :
     mbPreviewUsesCheckeredBackground = rData.mbPreviewUsesCheckeredBackground;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplStyleData::SetStandardStyles()
 {
@@ -437,21 +437,21 @@ void ImplStyleData::SetStandardStyles()
     maWorkspaceGradient = Wallpaper( aGrad );
 }
 
-// -----------------------------------------------------------------------
+
 
 StyleSettings::StyleSettings()
 : mpData(boost::make_shared<ImplStyleData>())
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 StyleSettings::StyleSettings( const StyleSettings& rSet )
 {
     mpData = rSet.mpData;
 }
 
-// -----------------------------------------------------------------------
+
 
 StyleSettings::~StyleSettings()
 {
@@ -468,7 +468,7 @@ const Size& StyleSettings::GetListBoxPreviewDefaultPixelSize() const
     return mpData->maListBoxPreviewDefaultPixelSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StyleSettings::Set3DColors( const Color& rColor )
 {
@@ -504,7 +504,7 @@ void StyleSettings::Set3DColors( const Color& rColor )
 void StyleSettings::SetCheckedColorSpecialCase( )
 {
     CopyData();
-    // Light gray checked color special case
+    
     if ( GetFaceColor() == COL_LIGHTGRAY )
         mpData->maCheckedColor = Color( 0xCC, 0xCC, 0xCC );
     else
@@ -518,25 +518,25 @@ void StyleSettings::SetCheckedColorSpecialCase( )
 
 bool StyleSettings::GetUseImagesInMenus() const
 {
-    // icon mode selected in Tools -> Options... -> OpenOffice.org -> View
+    
     switch (mpData->mnUseImagesInMenus) {
     case AUTO_STATE_OFF:
         return false;
     case AUTO_STATE_ON:
         return true;
-    default: // AUTO_STATE_AUTO:
+    default: 
         return GetPreferredUseImagesInMenus();
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static BitmapEx readBitmapEx( const OUString& rPath )
 {
     OUString aPath( rPath );
     rtl::Bootstrap::expandMacros( aPath );
 
-    // import the image
+    
     Graphic aGraphic;
     if ( GraphicFilter::LoadGraphic( aPath, OUString(), aGraphic ) != GRFILTER_OK )
         return BitmapEx();
@@ -553,11 +553,11 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     if ( !xContext.is() )
         return;
 
-    // read from the configuration
+    
     OUString aPersona( officecfg::Office::Common::Misc::Persona::get( xContext ) );
     OUString aPersonaSettings( officecfg::Office::Common::Misc::PersonaSettings::get( xContext ) );
 
-    // have the settings changed?
+    
     OUString aOldValue( aPersona + ";" + aPersonaSettings );
     if ( rHeaderFooter == aOldValue )
         return;
@@ -565,7 +565,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     rHeaderFooter = aOldValue;
     rHeaderFooterBitmap = BitmapEx();
 
-    // now read the new values and setup bitmaps
+    
     OUString aHeader, aFooter;
     if ( aPersona == "own" )
     {
@@ -574,7 +574,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
         if ( nIndex > 0 )
             aFooter = aPersonaSettings.getToken( 0, ';', nIndex );
 
-        // change menu text color, advance nIndex to skip the '#'
+        
         if ( nIndex > 0 )
         {
             OUString aColor = aPersonaSettings.getToken( 0, ';', ++nIndex );
@@ -596,7 +596,7 @@ static void setupPersonaHeaderFooter( WhichPersona eWhich, OUString& rHeaderFoot
     if ( !aName.isEmpty() )
     {
         OUString gallery("");
-        // try the gallery first, then the program path:
+        
         if ( aPersona == "own")
         {
             gallery = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE( "bootstrap") "::UserInstallation}";
@@ -621,7 +621,7 @@ const BitmapEx StyleSettings::GetPersonaHeader() const
     return mpData->maPersonaHeaderBitmap;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StyleSettings::SetStandardStyles()
 {
@@ -629,12 +629,12 @@ void StyleSettings::SetStandardStyles()
     mpData->SetStandardStyles();
 }
 
-// -----------------------------------------------------------------------
+
 
 Color StyleSettings::GetFaceGradientColor() const
 {
-    // compute a brighter face color that can be used in gradients
-    // for a convex look (eg toolbars)
+    
+    
 
     sal_uInt16 h, s, b;
     GetFaceColor().RGBtoHSB( h, s, b );
@@ -643,11 +643,11 @@ Color StyleSettings::GetFaceGradientColor() const
     return Color( Color::HSBtoRGB( h, s, b ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 Color StyleSettings::GetSeparatorColor() const
 {
-    // compute a brighter shadow color for separators (used in toolbars or between menubar and toolbars on Windows XP)
+    
     sal_uInt16 h, s, b;
     GetShadowColor().RGBtoHSB( h, s, b );
     b += b/4;
@@ -655,7 +655,7 @@ Color StyleSettings::GetSeparatorColor() const
     return Color( Color::HSBtoRGB( h, s, b ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
 {
@@ -663,17 +663,17 @@ const StyleSettings& StyleSettings::operator =( const StyleSettings& rSet )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 void StyleSettings::CopyData()
 {
-    // copy if other references exist
+    
     if ( ! mpData.unique() ) {
         mpData = boost::make_shared<ImplStyleData>(*mpData);
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool StyleSettings::operator ==( const StyleSettings& rSet ) const
 {
@@ -796,17 +796,17 @@ bool StyleSettings::operator ==( const StyleSettings& rSet ) const
         return false;
 }
 
-// =======================================================================
+
 
 ImplMiscData::ImplMiscData()
 {
     mnEnableATT                 = AUTO_STATE_AUTO;
     mnDisablePrinting           = AUTO_STATE_AUTO;
-    static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); // set default without UI
+    static const char* pEnv = getenv("SAL_DECIMALSEP_ENABLED" ); 
     mbEnableLocalizedDecimalSep = (pEnv != NULL) ? sal_True : sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplMiscData::ImplMiscData( const ImplMiscData& rData )
 {
@@ -815,27 +815,27 @@ ImplMiscData::ImplMiscData( const ImplMiscData& rData )
     mbEnableLocalizedDecimalSep = rData.mbEnableLocalizedDecimalSep;
 }
 
-// -----------------------------------------------------------------------
+
 
 MiscSettings::MiscSettings()
 : mpData(boost::make_shared<ImplMiscData>())
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 MiscSettings::MiscSettings( const MiscSettings& rSet )
 {
     mpData = rSet.mpData;
 }
 
-// -----------------------------------------------------------------------
+
 
 MiscSettings::~MiscSettings()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 const MiscSettings& MiscSettings::operator =( const MiscSettings& rSet )
 {
@@ -843,17 +843,17 @@ const MiscSettings& MiscSettings::operator =( const MiscSettings& rSet )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MiscSettings::CopyData()
 {
-    // copy if other references exist
+    
     if ( ! mpData.unique() ) {
         mpData = boost::make_shared<ImplMiscData>(*mpData);
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool MiscSettings::operator ==( const MiscSettings& rSet ) const
 {
@@ -868,7 +868,7 @@ bool MiscSettings::operator ==( const MiscSettings& rSet ) const
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool MiscSettings::GetDisablePrinting() const
 {
@@ -883,7 +883,7 @@ bool MiscSettings::GetDisablePrinting() const
 
     return mpData->mnDisablePrinting != AUTO_STATE_OFF;
 }
-// -----------------------------------------------------------------------
+
 
 bool MiscSettings::GetEnableATToolSupport() const
 {
@@ -891,8 +891,8 @@ bool MiscSettings::GetEnableATToolSupport() const
 #ifdef WNT
     if( mpData->mnEnableATT == AUTO_STATE_AUTO )
     {
-        // Check in the Windows registry if an AT tool wants Accessibility support to
-        // be activated ..
+        
+        
         HKEY hkey;
 
         if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
@@ -900,7 +900,7 @@ bool MiscSettings::GetEnableATToolSupport() const
             &hkey) )
         {
             DWORD dwType;
-            sal_uInt8 Data[6]; // possible values: "true", "false", "1", "0", DWORD
+            sal_uInt8 Data[6]; 
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
@@ -921,12 +921,12 @@ bool MiscSettings::GetEnableATToolSupport() const
                             break;
                         default:
                             mpData->mnEnableATT = AUTO_STATE_AUTO;
-                                //TODO: or AUTO_STATE_ON?
+                                
                             break;
                         }
                         break;
                     default:
-                        // Unsupported registry type
+                        
                         break;
                 }
             }
@@ -966,13 +966,13 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
 
         HKEY hkey;
 
-        // If the accessibility key in the Windows registry exists, change it synchronously
+        
         if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
             "Software\\LibreOffice\\Accessibility\\AtToolSupport",
             &hkey) )
         {
             DWORD dwType;
-            sal_uInt8 Data[6]; // possible values: "true", "false", 1, 0
+            sal_uInt8 Data[6]; 
             DWORD cbData = sizeof(Data);
 
             if( ERROR_SUCCESS == RegQueryValueEx(hkey, "SupportAssistiveTechnology",
@@ -992,7 +992,7 @@ void MiscSettings::SetEnableATToolSupport( sal_Bool bEnable )
                             0, dwType, Data, sizeof(DWORD));
                         break;
                     default:
-                        // Unsupported registry type
+                        
                         break;
                 }
             }
@@ -1020,7 +1020,7 @@ bool MiscSettings::GetEnableLocalizedDecimalSep() const
     return mpData->mbEnableLocalizedDecimalSep;
 }
 
-// =======================================================================
+
 
 ImplHelpData::ImplHelpData()
 {
@@ -1030,7 +1030,7 @@ ImplHelpData::ImplHelpData()
     mnBalloonDelay              = 1500;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplHelpData::ImplHelpData( const ImplHelpData& rData )
 {
@@ -1040,27 +1040,27 @@ ImplHelpData::ImplHelpData( const ImplHelpData& rData )
     mnBalloonDelay              = rData.mnBalloonDelay;
 }
 
-// -----------------------------------------------------------------------
+
 
 HelpSettings::HelpSettings()
 : mpData(boost::make_shared<ImplHelpData>())
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 HelpSettings::HelpSettings( const HelpSettings& rSet )
 {
     mpData = rSet.mpData;
 }
 
-// -----------------------------------------------------------------------
+
 
 HelpSettings::~HelpSettings()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 const HelpSettings& HelpSettings::operator =( const HelpSettings& rSet )
 {
@@ -1068,17 +1068,17 @@ const HelpSettings& HelpSettings::operator =( const HelpSettings& rSet )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HelpSettings::CopyData()
 {
-    // copy if other references exist
+    
     if ( ! mpData.unique() ) {
         mpData = boost::make_shared<ImplHelpData>(*mpData);
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool HelpSettings::operator ==( const HelpSettings& rSet ) const
 {
@@ -1094,7 +1094,7 @@ bool HelpSettings::operator ==( const HelpSettings& rSet ) const
         return false;
 }
 
-// =======================================================================
+
 
 ImplAllSettingsData::ImplAllSettingsData()
     :
@@ -1110,7 +1110,7 @@ ImplAllSettingsData::ImplAllSettingsData()
     maMiscSettings.SetEnableLocalizedDecimalSep( maSysLocale.GetOptions().IsDecimalSeparatorAsLocale() );
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
     maMouseSettings( rData.maMouseSettings ),
@@ -1122,16 +1122,16 @@ ImplAllSettingsData::ImplAllSettingsData( const ImplAllSettingsData& rData ) :
 {
     mnSystemUpdate              = rData.mnSystemUpdate;
     mnWindowUpdate              = rData.mnWindowUpdate;
-    // Pointer couldn't shared and objects haven't a copy ctor
-    // So we create the cache objects new, if the GetFunction is
-    // called
+    
+    
+    
     mpLocaleDataWrapper         = NULL;
     mpUILocaleDataWrapper       = NULL;
     mpI18nHelper                = NULL;
     mpUII18nHelper              = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplAllSettingsData::~ImplAllSettingsData()
 {
@@ -1143,27 +1143,27 @@ ImplAllSettingsData::~ImplAllSettingsData()
         delete mpUII18nHelper;
 }
 
-// -----------------------------------------------------------------------
+
 
 AllSettings::AllSettings()
 : mpData(boost::make_shared<ImplAllSettingsData>())
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 AllSettings::AllSettings( const AllSettings& rSet )
 {
     mpData = rSet.mpData;
 }
 
-// -----------------------------------------------------------------------
+
 
 AllSettings::~AllSettings()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 const AllSettings& AllSettings::operator =( const AllSettings& rSet )
 {
@@ -1171,18 +1171,18 @@ const AllSettings& AllSettings::operator =( const AllSettings& rSet )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AllSettings::CopyData()
 {
-    // copy if other references exist
+    
     if ( ! mpData.unique() ) {
         mpData = boost::make_shared<ImplAllSettingsData>(*mpData);
     }
 
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
 {
@@ -1240,13 +1240,13 @@ sal_uLong AllSettings::Update( sal_uLong nFlags, const AllSettings& rSet )
 
     if ( nFlags & SETTINGS_UILOCALE )
     {
-        // UILocale can't be changed
+        
     }
 
     return nChangeFlags;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
 {
@@ -1271,7 +1271,7 @@ sal_uLong AllSettings::GetChangeFlags( const AllSettings& rSet ) const
     return nChangeFlags;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AllSettings::operator ==( const AllSettings& rSet ) const
 {
@@ -1293,7 +1293,7 @@ bool AllSettings::operator ==( const AllSettings& rSet ) const
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
 {
@@ -1316,23 +1316,23 @@ void AllSettings::SetLanguageTag( const LanguageTag& rLanguageTag )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void AllSettings::SetUILanguageTag( const LanguageTag& )
 {
-    // there is only one UILocale per process
+    
 }
 
-// -----------------------------------------------------------------------
+
 
 namespace
 {
     bool GetConfigLayoutRTL(bool bMath)
     {
         static const char* pEnv = getenv("SAL_RTL_ENABLED" );
-        static int  nUIMirroring = -1;   // -1: undef, 0: auto, 1: on 2: off
+        static int  nUIMirroring = -1;   
 
-        // environment always overrides
+        
         if( pEnv )
             return true;
 
@@ -1340,23 +1340,23 @@ namespace
 
         if( nUIMirroring == -1 )
         {
-            nUIMirroring = 0; // ask configuration only once
+            nUIMirroring = 0; 
             utl::OConfigurationNode aNode = utl::OConfigurationTreeRoot::tryCreateWithComponentContext(
                 comphelper::getProcessComponentContext(),
-                OUString("org.openoffice.Office.Common/I18N/CTL") );    // note: case sensitive !
+                OUString("org.openoffice.Office.Common/I18N/CTL") );    
             if ( aNode.isValid() )
             {
                 bool bTmp = bool();
                 ::com::sun::star::uno::Any aValue = aNode.getNodeValue( OUString("UIMirroring") );
                 if( aValue >>= bTmp )
                 {
-                    // found true or false; if it was nil, nothing is changed
+                    
                     nUIMirroring = bTmp ? 1 : 2;
                 }
             }
         }
 
-        if( nUIMirroring == 0 )  // no config found (eg, setup) or default (nil) was set: check language
+        if( nUIMirroring == 0 )  
         {
             LanguageType aLang = LANGUAGE_DONTKNOW;
             ImplSVData* pSVData = ImplGetSVData();
@@ -1384,29 +1384,29 @@ bool AllSettings::GetMathLayoutRTL() const
     return GetConfigLayoutRTL(true);
 }
 
-// -----------------------------------------------------------------------
+
 
 const LanguageTag& AllSettings::GetLanguageTag() const
 {
-    // SYSTEM locale means: use settings from SvtSysLocale that is resolved
+    
     if ( mpData->maLocale.isSystemLocale() )
         mpData->maLocale = mpData->maSysLocale.GetLanguageTag();
 
     return mpData->maLocale;
 }
 
-// -----------------------------------------------------------------------
+
 
 const LanguageTag& AllSettings::GetUILanguageTag() const
 {
-    // the UILocale is never changed
+    
     if ( mpData->maUILocale.isSystemLocale() )
         mpData->maUILocale = mpData->maSysLocale.GetUILanguageTag();
 
     return mpData->maUILocale;
 }
 
-// -----------------------------------------------------------------------
+
 
 const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
 {
@@ -1416,7 +1416,7 @@ const LocaleDataWrapper& AllSettings::GetLocaleDataWrapper() const
     return *mpData->mpLocaleDataWrapper;
 }
 
-// -----------------------------------------------------------------------
+
 
 const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
 {
@@ -1426,7 +1426,7 @@ const LocaleDataWrapper& AllSettings::GetUILocaleDataWrapper() const
     return *mpData->mpUILocaleDataWrapper;
 }
 
-// -----------------------------------------------------------------------
+
 
 const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
 {
@@ -1437,7 +1437,7 @@ const vcl::I18nHelper& AllSettings::GetLocaleI18nHelper() const
     return *mpData->mpI18nHelper;
 }
 
-// -----------------------------------------------------------------------
+
 
 const vcl::I18nHelper& AllSettings::GetUILocaleI18nHelper() const
 {

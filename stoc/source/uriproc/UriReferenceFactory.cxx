@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -173,8 +173,8 @@ public:
     { m_base.clearFragment(); }
 
 private:
-    UriReference(UriReference &); // not implemented
-    void operator =(UriReference); // not implemented
+    UriReference(UriReference &); 
+    void operator =(UriReference); 
 
     virtual ~UriReference() {}
 
@@ -218,7 +218,7 @@ css::uno::Reference< css::uri::XUriReference > parseGeneric(
         }
     } else {
         if (schemeSpecificPart.isEmpty()) {
-            // The scheme-specific part of an opaque URI must not be empty:
+            
             return 0;
         }
         path = schemeSpecificPart;
@@ -296,8 +296,8 @@ public:
         throw (css::uno::RuntimeException);
 
 private:
-    Factory(Factory &); // not implemented
-    void operator =(Factory); // not implemented
+    Factory(Factory &); 
+    void operator =(Factory); 
 
     virtual ~Factory() {}
 
@@ -378,7 +378,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::parse(
                 throw css::lang::WrappedTargetRuntimeException(
                     "creating service " + serviceName,
                     static_cast< cppu::OWeakObject * >(this),
-                    css::uno::makeAny(e)); //TODO: preserve type of e
+                    css::uno::makeAny(e)); 
             }
             if (service.is()) {
                 parser = css::uno::Reference< css::uri::XUriSchemeParser >(
@@ -423,10 +423,10 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
         OUStringBuffer abs(baseUriReference->getScheme());
         abs.append(':');
         if (uriReference->hasAuthority()) {
-            abs.append("//");
+            abs.append("
             abs.append(uriReference->getAuthority());
         } else if (baseUriReference->hasAuthority()) {
-            abs.append("//");
+            abs.append("
             abs.append(baseUriReference->getAuthority());
         }
         if (uriReference->hasRelativePath()) {
@@ -434,12 +434,12 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeAbsolute(
             processSegments(
                 segments, baseUriReference, true, processSpecialBaseSegments);
             processSegments(segments, uriReference, false, true);
-            // If the path component of the base URI reference is empty (which
-            // implies that the base URI reference denotes a "root entity"), and
-            // the resulting URI reference denotes the same root entity, make
-            // sure the path component of the resulting URI reference is also
-            // empty (and not "/").  RFC 2396 is unclear about this, and I chose
-            // these rules for consistent results.
+            
+            
+            
+            
+            
+            
             bool slash = !baseUriReference->getPath().isEmpty();
             if (slash) {
                 abs.append('/');
@@ -535,7 +535,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                 uriReference->getAuthority()))
         {
             if (uriReference->hasAuthority()) {
-                rel.append("//");
+                rel.append("
                 rel.append(uriReference->getAuthority());
             }
             rel.append(uriReference->getPath());
@@ -564,7 +564,7 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
             }
             if (i == 0 && preferAbsoluteOverRelativePath
                 && (preferAuthorityOverRelativePath
-                    || !uriReference->getPath().startsWith("//")))
+                    || !uriReference->getPath().startsWith("
             {
                 if (baseUriReference->getPath().getLength() > 1
                     || uriReference->getPath().getLength() > 1)
@@ -573,9 +573,9 @@ css::uno::Reference< css::uri::XUriReference > Factory::makeRelative(
                         rel.append('/');
                     } else {
                         assert(uriReference->getPath()[0] == '/');
-                        if (uriReference->getPath().startsWith("//")) {
+                        if (uriReference->getPath().startsWith("
                             assert(uriReference->hasAuthority());
-                            rel.append("//");
+                            rel.append("
                             rel.append(uriReference->getAuthority());
                         }
                         rel.append(uriReference->getPath());

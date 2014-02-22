@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "accessibility/extended/AccessibleGridControlTable.hxx"
 #include "accessibility/extended/AccessibleGridControlTableCell.hxx"
 #include <svtools/accessibletable.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -31,11 +31,11 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 using namespace ::svt::table;
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 AccessibleGridControlTable::AccessibleGridControlTable(
         const Reference< XAccessible >& rxParent,
@@ -51,7 +51,7 @@ AccessibleGridControlTable::~AccessibleGridControlTable()
 {
 }
 
-// XAccessibleContext ---------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleGridControlTable::getAccessibleChild( sal_Int32 nChildIndex )
@@ -88,7 +88,7 @@ sal_Int32 SAL_CALL AccessibleGridControlTable::getAccessibleIndexInParent()
         return 2;
 }
 
-// XAccessibleComponent -------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleGridControlTable::getAccessibleAtPoint( const awt::Point& rPoint )
@@ -119,10 +119,10 @@ Any SAL_CALL AccessibleGridControlTable::getAccessibleKeyBinding()
     throw ( uno::RuntimeException )
 {
     ensureIsAlive();
-    return Any();   // no special key bindings for data table
+    return Any();   
 }
 
-// XAccessibleTable -----------------------------------------------------------
+
 
 OUString SAL_CALL AccessibleGridControlTable::getAccessibleRowDescription( sal_Int32 nRow )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
@@ -176,7 +176,7 @@ Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessible
     return aSelSeq;
 }
 
-//columns aren't selectable
+
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlTable::getSelectedAccessibleColumns()
     throw ( uno::RuntimeException )
 {
@@ -204,7 +204,7 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleRowSelected( sal_Int32
     return bSelected;
 }
 
-//columns aren't selectable
+
 sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleColumnSelected( sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
@@ -245,7 +245,7 @@ sal_Bool SAL_CALL AccessibleGridControlTable::isAccessibleSelected(
     ensureIsAlive();
     ensureIsValidAddress( nRow, nColumn );
     (void) nColumn;
-    //selection of single cells not possible, so if row is selected, the cell will be selected too
+    
     return isAccessibleRowSelected(nRow);
 }
 void SAL_CALL AccessibleGridControlTable::selectAccessibleChild( sal_Int32 nChildIndex )
@@ -310,7 +310,7 @@ AccessibleGridControlTable::getSelectedAccessibleChild( sal_Int32 nSelectedChild
     else
         return NULL;
 }
-//not implemented yet, because only row selection possible
+
 void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
         sal_Int32 nSelectedChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
@@ -320,7 +320,7 @@ void SAL_CALL AccessibleGridControlTable::deselectAccessibleChild(
     ensureIsAlive();
     (void)nSelectedChildIndex;
 }
-// XInterface -----------------------------------------------------------------
+
 
 Any SAL_CALL AccessibleGridControlTable::queryInterface( const uno::Type& rType )
     throw ( uno::RuntimeException )
@@ -339,7 +339,7 @@ void SAL_CALL AccessibleGridControlTable::release() throw ()
 {
     AccessibleGridControlTableBase::release();
 }
-// XServiceInfo ---------------------------------------------------------------
+
 
 OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
     throw ( uno::RuntimeException )
@@ -347,7 +347,7 @@ OUString SAL_CALL AccessibleGridControlTable::getImplementationName()
     return OUString( "com.sun.star.accessibility.AccessibleGridControlTable" );
 }
 
-// internal virtual methods ---------------------------------------------------
+
 
 Rectangle AccessibleGridControlTable::implGetBoundingBox()
 {
@@ -374,7 +374,7 @@ Rectangle AccessibleGridControlTable::implGetBoundingBoxOnScreen()
     Rectangle aTable( Point( nX, nY ), Size( nWidth, nHeight ));
     return aTable;
 }
-// internal helper methods ----------------------------------------------------
+
 Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
         sal_Int32 nChildIndex )
     throw ( uno::RuntimeException )
@@ -391,7 +391,7 @@ Reference< XAccessibleTable > AccessibleGridControlTable::implGetHeaderBar(
         {
             OSL_FAIL( "implGetHeaderBar - wrong child index" );
         }
-        // RuntimeException goes to caller
+        
     }
     return Reference< XAccessibleTable >( xRet, uno::UNO_QUERY );
 }
@@ -405,10 +405,10 @@ std::vector< Reference< XAccessible > >& AccessibleGridControlTable::getAccessib
 {
     return m_pAccessCellVector;
 }
-// ============================================================================
 
-} // namespace accessibility
 
-// ============================================================================
+} 
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if defined _MSC_VER
@@ -55,7 +55,7 @@ int lc_isInstalled(const  char* realFilePath)
         ret = 0;
     }
 
-    // GetCurrentDirectory return the char number of the string
+    
     if(ret == 0){
         DWORD  dType = REG_SZ;
         DWORD  dSize = SO_PATH_SIZE;
@@ -172,7 +172,7 @@ int lc_installPlugin(const  char* realFilePath)
         ret = 0;
     }
 
-    // GetCurrentDirectory return the char number of the string
+    
     if(ret == 0){
         ret = RegSetValueEx( hStarOffice, "Path", 0, REG_SZ,  (LPBYTE) sSoPath, strlen(sSoPath) + 1);
         if(ret == ERROR_SUCCESS)

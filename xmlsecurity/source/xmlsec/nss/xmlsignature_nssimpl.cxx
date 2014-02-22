@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -71,7 +71,7 @@ SAL_CALL XMLSignature_NssImpl :: generate(
     if( !aEnvironment.is() )
         throw RuntimeException() ;
 
-    //Get the xml node
+    
     Reference< XXMLElementWrapper > xElement = aTemplate->getTemplate() ;
     if( !xElement.is() ) {
         throw RuntimeException() ;
@@ -92,21 +92,21 @@ SAL_CALL XMLSignature_NssImpl :: generate(
 
     pNode = pElement->getNativeElement() ;
 
-    //Get the stream/URI binding
+    
     Reference< XUriBinding > xUriBinding = aTemplate->getBinding() ;
     if( xUriBinding.is() ) {
-        //Register the stream input callbacks into libxml2
+        
         if( xmlRegisterStreamInputCallbacks( xUriBinding ) < 0 )
             throw RuntimeException() ;
     }
 
-    //Get Keys Manager
+    
     Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
     if( !xSecTunnel.is() ) {
          throw RuntimeException() ;
     }
 
-    //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
+    
 
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
@@ -117,22 +117,22 @@ SAL_CALL XMLSignature_NssImpl :: generate(
 
      setErrorRecorder();
 
-    pMngr = pSecEnv->createKeysManager() ; //i39448
+    pMngr = pSecEnv->createKeysManager() ; 
     if( !pMngr ) {
         throw RuntimeException() ;
     }
 
-    //Create Signature context
+    
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
     {
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-        //throw XMLSignatureException() ;
+        pSecEnv->destroyKeysManager( pMngr ) ; 
+        
         clearErrorRecorder();
         return aTemplate;
     }
 
-    //Sign the template
+    
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
@@ -147,9 +147,9 @@ SAL_CALL XMLSignature_NssImpl :: generate(
 
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+    pSecEnv->destroyKeysManager( pMngr ) ; 
 
-    //Unregistered the stream/URI binding
+    
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
 
@@ -168,7 +168,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecDSigCtxPtr pDsigCtx = NULL ;
     xmlNodePtr pNode = NULL ;
-    //sal_Bool valid ;
+    
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -176,7 +176,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
     if( !aSecurityCtx.is() )
         throw RuntimeException() ;
 
-    //Get the xml node
+    
     Reference< XXMLElementWrapper > xElement = aTemplate->getTemplate() ;
     if( !xElement.is() )
         throw RuntimeException() ;
@@ -195,10 +195,10 @@ SAL_CALL XMLSignature_NssImpl :: validate(
 
     pNode = pElement->getNativeElement() ;
 
-    //Get the stream/URI binding
+    
     Reference< XUriBinding > xUriBinding = aTemplate->getBinding() ;
     if( xUriBinding.is() ) {
-        //Register the stream input callbacks into libxml2
+        
         if( xmlRegisterStreamInputCallbacks( xUriBinding ) < 0 )
             throw RuntimeException() ;
     }
@@ -212,7 +212,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
     {
         Reference< XSecurityEnvironment > aEnvironment = aSecurityCtx->getSecurityEnvironmentByIndex(i);
 
-        //Get Keys Manager
+        
         Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
         if( !xSecTunnel.is() ) {
              throw RuntimeException() ;
@@ -225,22 +225,22 @@ SAL_CALL XMLSignature_NssImpl :: validate(
         if( pSecEnv == NULL )
             throw RuntimeException() ;
 
-        pMngr = pSecEnv->createKeysManager() ; //i39448
+        pMngr = pSecEnv->createKeysManager() ; 
         if( !pMngr ) {
             throw RuntimeException() ;
         }
 
-        //Create Signature context
+        
         pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
         if( pDsigCtx == NULL )
         {
-            pSecEnv->destroyKeysManager( pMngr ) ; //i39448
-            //throw XMLSignatureException() ;
+            pSecEnv->destroyKeysManager( pMngr ) ; 
+            
             clearErrorRecorder();
             return aTemplate;
         }
 
-        //Verify signature
+        
         int rs = xmlSecDSigCtxVerify( pDsigCtx , pNode );
 
 
@@ -262,11 +262,11 @@ SAL_CALL XMLSignature_NssImpl :: validate(
 
 
 
-    //Unregistered the stream/URI binding
+    
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
 
-    //return valid ;
+    
     clearErrorRecorder();
     return aTemplate;
 }
@@ -292,7 +292,7 @@ Sequence< OUString > SAL_CALL XMLSignature_NssImpl :: getSupportedServiceNames()
     return impl_getSupportedServiceNames() ;
 }
 
-//Helper for XServiceInfo
+
 Sequence< OUString > XMLSignature_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
@@ -304,15 +304,15 @@ OUString XMLSignature_NssImpl :: impl_getImplementationName() throw( RuntimeExce
     return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl") ;
 }
 
-//Helper for registry
+
 Reference< XInterface > SAL_CALL XMLSignature_NssImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
     return Reference< XInterface >( *new XMLSignature_NssImpl( aServiceManager ) ) ;
 }
 
 Reference< XSingleServiceFactory > XMLSignature_NssImpl :: impl_createFactory( const Reference< XMultiServiceFactory >& aServiceManager ) {
-    //Reference< XSingleServiceFactory > xFactory ;
-    //xFactory = ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName , impl_createInstance , impl_getSupportedServiceNames ) ;
-    //return xFactory ;
+    
+    
+    
     return ::cppu::createSingleFactory( aServiceManager , impl_getImplementationName() , impl_createInstance , impl_getSupportedServiceNames() ) ;
 }
 

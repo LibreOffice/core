@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,7 +35,7 @@ transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 n
     Sequence< sal_Int32 > offset1;
     Sequence< sal_Int32 > offset2;
 
-    // The method folding is defined in a sub class.
+    
     OUString s1 = this->folding( str1, pos1, nCount1, offset1);
     OUString s2 = this->folding( str2, pos2, nCount2, offset2);
 
@@ -49,11 +49,11 @@ transliteration_Ignore::equals(const OUString& str1, sal_Int32 pos1, sal_Int32 n
             break;
 
     if (nmatch > 0) {
-        nMatch1 = offset1[ nmatch - 1 ] + 1; // Subtract 1 from nmatch because the index starts from zero.
-        nMatch2 = offset2[ nmatch - 1 ] + 1; // And then, add 1 to position because it means the number of character matched.
+        nMatch1 = offset1[ nmatch - 1 ] + 1; 
+        nMatch2 = offset2[ nmatch - 1 ] + 1; 
     }
     else {
-        nMatch1 = 0;  // No character was matched.
+        nMatch1 = 0;  
         nMatch2 = 0;
     }
 
@@ -77,7 +77,7 @@ transliteration_Ignore::transliterateRange( const OUString& str1, const OUString
 sal_Int16 SAL_CALL
 transliteration_Ignore::getType() throw(RuntimeException)
 {
-    // The type is also defined in com/sun/star/util/TransliterationType.hdl
+    
     return TransliterationType::IGNORE;
 }
 
@@ -86,7 +86,7 @@ OUString SAL_CALL
 transliteration_Ignore::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset  ) throw(RuntimeException)
 {
-    // The method folding is defined in a sub class.
+    
     return this->folding( inStr, startPos, nCount, offset);
 }
 
@@ -123,13 +123,13 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
     sal_Int32 nCount, Sequence< sal_Int32 >& offset)
     throw(RuntimeException)
 {
-    // Create a string buffer which can hold nCount + 1 characters.
-    // The reference count is 1 now.
+    
+    
     rtl_uString * newStr = rtl_uString_alloc(nCount);
     sal_Unicode * dst = newStr->buffer;
     const sal_Unicode * src = inStr.getStr() + startPos;
 
-    // Allocate nCount length to offset argument.
+    
     sal_Int32 *p = 0;
     sal_Int32 position = 0;
     if (useOffset) {
@@ -142,7 +142,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
         sal_Unicode previousChar = *src ++;
         sal_Unicode currentChar;
 
-        // Translation
+        
         while (-- nCount > 0) {
             currentChar = *src ++;
 
@@ -178,7 +178,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
             *dst ++ = previousChar;
         }
     } else {
-        // Translation
+        
         while (nCount -- > 0) {
             sal_Unicode c = *src++;
             c = func ? func( c) : (*table)[ c ];
@@ -196,7 +196,7 @@ transliteration_Ignore::folding( const OUString& inStr, sal_Int32 startPos,
       offset.realloc(newStr->length);
     *dst = (sal_Unicode) 0;
 
-    return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
+    return OUString(newStr, SAL_NO_ACQUIRE); 
 }
 
 sal_Unicode SAL_CALL

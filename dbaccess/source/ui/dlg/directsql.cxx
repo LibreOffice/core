@@ -34,7 +34,7 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-    // DirectSQLDialog
+    
     DirectSQLDialog::DirectSQLDialog( Window* _pParent, const Reference< XConnection >& _rxConn )
         :ModalDialog(_pParent, "DirectSQLDialog" , "dbaccess/ui/directsqldialog.ui")
         ,m_nHistoryLimit(20)
@@ -64,7 +64,7 @@ namespace dbaui
         m_pSQLHistory->SetSelectHdl(LINK(this, DirectSQLDialog, OnListEntrySelected));
         m_pSQLHistory->SetDropDownLineCount(10);
 
-        // add a dispose listener to the connection
+        
         Reference< XComponent > xConnComp(m_xConnection, UNO_QUERY);
         OSL_ENSURE(xConnComp.is(), "DirectSQLDialog::DirectSQLDialog: invalid connection!");
         if (xConnComp.is())
@@ -112,7 +112,7 @@ namespace dbaui
         CHECK_INVARIANTS("DirectSQLDialog::implEnsureHistoryLimit");
 
         if (getHistorySize() <= m_nHistoryLimit)
-            // nothing to do
+            
             return;
 
         sal_Int32 nRemoveEntries = getHistorySize() - m_nHistoryLimit;
@@ -128,18 +128,18 @@ namespace dbaui
     {
         CHECK_INVARIANTS("DirectSQLDialog::implAddToStatementHistory");
 
-        // add the statement to the history
+        
         m_aStatementHistory.push_back(_rStatement);
 
-        // normalize the statement, and remember the normalized form, too
+        
         OUString sNormalized(_rStatement);
         sNormalized = sNormalized.replaceAll("\n", " ");
         m_aNormalizedHistory.push_back(sNormalized);
 
-        // add the normalized version to the list box
+        
         m_pSQLHistory->InsertEntry(sNormalized);
 
-        // ensure that we don't exceed the history limit
+        
         implEnsureHistoryLimit();
     }
 
@@ -172,53 +172,53 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > xResultSet;
         try
         {
-            // create a statement
+            
             Reference< XStatement > xStatement = m_xConnection->createStatement();
             OSL_ENSURE(xStatement.is(), "DirectSQLDialog::implExecuteStatement: no statement returned by the connection!");
 
-            // clear the output box
+            
             m_pOutput->SetText(OUString());
             if (xStatement.is())
             {
                 if (OUString(_rStatement).toAsciiUpperCase().startsWith("SELECT") && m_pShowOutput->IsChecked())
                 {
-                    // execute it as a query
+                    
                     xResultSet = xStatement->executeQuery(_rStatement);
-                    // get a handle for the rows
+                    
                     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow > xRow( xResultSet, ::com::sun::star::uno::UNO_QUERY );
-                    // work through each of the rows
+                    
                     while (xResultSet->next())
                     {
-                        // initialise the output line for each row
+                        
                         OUString out("");
-                        // work along the columns until that are none left
+                        
                         try
                         {
                             int i = 1;
                             for (;;)
                             {
-                                // be dumb, treat everything as a string
+                                
                                 out += xRow->getString(i) + ",";
                                 i++;
                             }
                         }
-                        // trap for when we fall off the end of the row
+                        
                         catch (const SQLException&)
                         {
                         }
-                        // report the output
+                        
                         addOutputText(OUString(out));
                     }
                 } else {
-                    // execute it
+                    
                     xStatement->execute(_rStatement);
                 }
             }
 
-            // successful
+            
             sStatus = ModuleRes(STR_COMMAND_EXECUTED_SUCCESSFULLY);
 
-            // dispose the statement
+            
             ::comphelper::disposeComponent(xStatement);
         }
         catch(const SQLException& e)
@@ -230,7 +230,7 @@ namespace dbaui
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        // add the status text
+        
         addStatusText(sStatus);
     }
 
@@ -260,10 +260,10 @@ namespace dbaui
 
         OUString sStatement = m_pSQL->GetText();
 
-        // execute
+        
         implExecuteStatement(sStatement);
 
-        // add the statement to the history
+        
         implAddToStatementHistory(sStatement);
 
         m_pSQL->SetSelection(Selection());
@@ -276,14 +276,14 @@ namespace dbaui
 
         if ((_nHistoryPos >= 0) && (_nHistoryPos < getHistorySize()))
         {
-            // set the text in the statement editor
+            
             OUString sStatement = m_aStatementHistory[_nHistoryPos];
             m_pSQL->SetText(sStatement);
             OnStatementModified(m_pSQL);
 
             if (_bUpdateListBox)
             {
-                // selecte the normalized statement in the list box
+                
                 m_pSQLHistory->SelectEntryPos((sal_uInt16)_nHistoryPos);
                 OSL_ENSURE(m_pSQLHistory->GetSelectEntry() == m_aNormalizedHistory[_nHistoryPos],
                     "DirectSQLDialog::switchToHistory: inconsistent listbox entries!");
@@ -325,6 +325,6 @@ namespace dbaui
         return 0L;
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -75,7 +75,7 @@ sal_uInt16 SwDoc::FillRubyList( const SwPaM& rPam, SwRubyList& rList,
                     delete pNew;
                      if( *aPam.GetPoint() < *pEnd )
                      {
-                        // goto next paragraph
+                        
                         aPam.DeleteMark();
                         aPam.Move( fnMoveForward, fnGoNode );
                      }
@@ -123,7 +123,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                     const SwRubyListEntry* pEntry = &rList[ nListEntry++ ];
                     if( aCheckEntry.GetRubyAttr() != pEntry->GetRubyAttr() )
                     {
-                        // set/reset the attribut
+                        
                         if( !pEntry->GetRubyAttr().GetText().isEmpty() )
                         {
                             InsertPoolItem( aPam, pEntry->GetRubyAttr(), 0 );
@@ -137,7 +137,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                     if( !pEntry->GetText().isEmpty() &&
                         aCheckEntry.GetText() != pEntry->GetText() )
                     {
-                        // text is changed, so replace the original
+                        
                         ReplaceRange( aPam, pEntry->GetText(), false );
                     }
                     aPam.DeleteMark();
@@ -146,7 +146,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                 {
                      if( *aPam.GetPoint() < *pEnd )
                      {
-                        // goto next paragraph
+                        
                         aPam.DeleteMark();
                         aPam.Move( fnMoveForward, fnGoNode );
                      }
@@ -154,7 +154,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
                     {
                         const SwRubyListEntry* pEntry = &rList[ nListEntry++ ];
 
-                        // set/reset the attribut
+                        
                         if( !pEntry->GetRubyAttr().GetText().isEmpty() &&
                             !pEntry->GetText().isEmpty() )
                         {
@@ -181,7 +181,7 @@ sal_uInt16 SwDoc::SetRubyList( const SwPaM& rPam, const SwRubyList& rList,
 
 sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_uInt16 )
 {
-    // Point must be the startposition, Mark is optional the end position
+    
     SwPosition* pPos = rPam.GetPoint();
        const SwTxtNode* pTNd = pPos->nNode.GetNode().GetTxtNode();
     OUString const& rTxt = pTNd->GetTxt();
@@ -191,10 +191,10 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
     sal_Bool bHasMark = rPam.HasMark();
     if( bHasMark )
     {
-        // in the same node?
+        
         if( rPam.GetMark()->nNode == pPos->nNode )
         {
-            // then use that end
+            
             const sal_Int32 nTEnd = rPam.GetMark()->nContent.GetIndex();
             if( nTEnd < nEnd )
                 nEnd = nTEnd;
@@ -202,8 +202,8 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
         rPam.DeleteMark();
     }
 
-    // ----- search the start
-    // --- look where a ruby attribut starts
+    
+    
     sal_uInt16 nHtIdx = USHRT_MAX;
     const SwpHints* pHts = pTNd->GetpSwpHints();
     const SwTxtAttr* pAttr = 0;
@@ -229,7 +229,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
 
     if( !bHasMark && nStart && ( !pAttr || nStart != *pAttr->GetStart()) )
     {
-        // skip to the word begin!
+        
         const sal_Int32 nWordStt = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             rTxt, nStart,
                             g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),
@@ -300,7 +300,7 @@ sal_Bool SwDoc::_SelectNextRubyChars( SwPaM& rPam, SwRubyListEntry& rEntry, sal_
             bAlphaNum = bIsAlphaNum;
             if( bChkNxtWrd && g_pBreakIt->GetBreakIter().is() )
             {
-                // search the end of this word
+                
                 nWordEnd = g_pBreakIt->GetBreakIter()->getWordBoundary(
                             rTxt, nStart,
                             g_pBreakIt->GetLocale( pTNd->GetLang( nStart )),

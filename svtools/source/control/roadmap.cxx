@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/roadmap.hxx>
@@ -32,16 +32,16 @@
 #define ROADMAP_ITEM_DISTANCE_Y 6
 #define RMINCOMPLETE        -1
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
+
 
     typedef std::vector< RoadmapItem* > HL_Vector;
 
-    //=====================================================================
-    //= ColorChanger
-    //=====================================================================
+    
+    
+    
     class IDLabel :  public FixedText
     {
     public:
@@ -50,9 +50,9 @@ namespace svt
         virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     };
 
-    //=====================================================================
-    //= ColorChanger
-    //=====================================================================
+    
+    
+    
     class ColorChanger
     {
     protected:
@@ -73,9 +73,9 @@ namespace svt
         }
     };
 
-    //=====================================================================
-    //= RoadmapItem
-    //=====================================================================
+    
+    
+    
     class RoadmapItem : public RoadmapTypes
     {
     private:
@@ -114,9 +114,9 @@ namespace svt
         void                    ImplUpdatePosSize();
     };
 
-    //=====================================================================
-    //= RoadmapImpl
-    //=====================================================================
+    
+    
+    
     class RoadmapImpl : public RoadmapTypes
     {
     protected:
@@ -178,7 +178,7 @@ namespace svt
         }
     };
 
-    //---------------------------------------------------------------------
+    
     void RoadmapImpl::initItemSize()
     {
         Size aLabelSize( m_rAntiImpl.GetOutputSizePixel() );
@@ -187,10 +187,10 @@ namespace svt
         m_aItemSizePixel = aLabelSize;
     }
 
-    //=====================================================================
-    //= Roadmap
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     ORoadmap::ORoadmap( Window* _pParent, WinBits _nWinStyle )
         :Control( _pParent, _nWinStyle )
         ,m_pImpl( new RoadmapImpl( *this ) )
@@ -199,7 +199,7 @@ namespace svt
         implInit();
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::implInit()
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -214,24 +214,24 @@ namespace svt
         m_pImpl->setCurItemID(-1 );
         m_pImpl->setComplete( sal_True );
 
-        // Roadmap control should be reachable as one unit with a Tab key
-        // the next Tab key should spring out of the control.
-        // To reach it the control itself should get focus and set it
-        // on entries. The entries themself should not be reachable with
-        // the Tab key directly. So each entry should have WB_NOTABSTOP.
+        
+        
+        
+        
+        
         //
-        // In other words the creator should create the control with the following
-        // flags:
-        // SetStyle( ( GetStyle() | WB_TABSTOP ) & ~WB_DIALOGCONTROL );
+        
+        
+        
 
-// TODO: if somebody sets a new font from outside (OutputDevice::SetFont), we would have to react
-// on this with calculating a new bold font.
-// Unfortunately, the OutputDevice does not offer a notify mechanism for a changed font.
-// So settings the font from outside is simply a forbidded scenario at the moment
+
+
+
+
         EnableMapMode( false );
     }
 
-    //---------------------------------------------------------------------
+    
     ORoadmap::~ORoadmap( )
     {
         HL_Vector aItemsCopy = m_pImpl->getHyperLabels();
@@ -262,7 +262,7 @@ namespace svt
     }
 
 
-       //---------------------------------------------------------------------
+       
 
     RoadmapItem* ORoadmap::InsertHyperLabel( ItemIndex _Index, const OUString& _sLabel, ItemId _RMID, sal_Bool _bEnabled)
     {
@@ -292,7 +292,7 @@ namespace svt
         return pItem;
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::SetRoadmapBitmap( const BitmapEx& _rBmp, sal_Bool _bInvalidate )
     {
         m_pImpl->setPicture( _rBmp );
@@ -300,7 +300,7 @@ namespace svt
             Invalidate( );
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::SetRoadmapInteractive( sal_Bool _bInteractive )
     {
         m_pImpl->setInteractive( _bInteractive );
@@ -315,13 +315,13 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool ORoadmap::IsRoadmapInteractive()
     {
         return m_pImpl->isInteractive();
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::SetRoadmapComplete( sal_Bool _bComplete )
     {
         sal_Bool bWasComplete = m_pImpl->isComplete();
@@ -338,7 +338,7 @@ namespace svt
             m_pImpl->InCompleteHyperLabel = InsertHyperLabel( m_pImpl->getItemCount(), OUString("..."), RMINCOMPLETE );
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::UpdatefollowingHyperLabels( ItemIndex _nIndex )
     {
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
@@ -364,7 +364,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::ReplaceRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _RMID, sal_Bool _bEnabled )
     {
         RoadmapItem* pItem = GetByIndex( _Index);
@@ -376,13 +376,13 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     RoadmapTypes::ItemIndex ORoadmap::GetItemCount() const
     {
         return m_pImpl->getItemCount();
     }
 
-    //---------------------------------------------------------------------
+    
     RoadmapTypes::ItemId ORoadmap::GetItemID( ItemIndex _nIndex ) const
     {
         const RoadmapItem* pHyperLabel = GetByIndex( _nIndex );
@@ -391,15 +391,15 @@ namespace svt
         return -1;
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::InsertRoadmapItem( ItemIndex _Index, const OUString& _RoadmapItem, ItemId _nUniqueId, sal_Bool _bEnabled )
     {
         InsertHyperLabel( _Index, _RoadmapItem, _nUniqueId, _bEnabled );
-            // Todo: YPos is superfluous, if items are always appended
+            
         UpdatefollowingHyperLabels( _Index + 1 );
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::DeleteRoadmapItem( ItemIndex _Index )
     {
         if ( m_pImpl->getItemCount() > 0 && ( _Index > -1)  &&  ( _Index < m_pImpl->getItemCount() ) )
@@ -409,13 +409,13 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool ORoadmap::IsRoadmapComplete( ) const
     {
         return m_pImpl->isComplete();
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::EnableRoadmapItem( ItemId _nItemId, sal_Bool _bEnable, ItemIndex _nStartIndex )
     {
         RoadmapItem* pItem = GetByID( _nItemId, _nStartIndex );
@@ -423,7 +423,7 @@ namespace svt
             pItem->Enable( _bEnable );
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::ChangeRoadmapItemLabel( ItemId _nID, const OUString& _sLabel, ItemIndex _nStartIndex )
     {
         RoadmapItem* pItem = GetByID( _nID, _nStartIndex );
@@ -442,7 +442,7 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::ChangeRoadmapItemID( ItemId _nID, ItemId _NewID, ItemIndex _nStartIndex )
     {
         RoadmapItem* pItem = GetByID( _nID, _nStartIndex );
@@ -450,7 +450,7 @@ namespace svt
             pItem->SetID( _NewID );
     }
 
-    //---------------------------------------------------------------------
+    
     RoadmapItem* ORoadmap::GetByID( ItemId _nID, ItemIndex _nStartIndex)
     {
         ItemId nLocID = 0;
@@ -467,13 +467,13 @@ namespace svt
         return NULL;
     }
 
-    //---------------------------------------------------------------------
+    
     const RoadmapItem* ORoadmap::GetByID( ItemId _nID, ItemIndex _nStartIndex  ) const
     {
         return const_cast< ORoadmap* >( this )->GetByID( _nID, _nStartIndex );
     }
 
-    //---------------------------------------------------------------------
+    
     RoadmapItem* ORoadmap::GetByIndex( ItemIndex _nItemIndex)
     {
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
@@ -484,13 +484,13 @@ namespace svt
         return NULL;
     }
 
-    //---------------------------------------------------------------------
+    
     const RoadmapItem* ORoadmap::GetByIndex( ItemIndex _nItemIndex ) const
     {
         return const_cast< ORoadmap* >( this )->GetByIndex( _nItemIndex );
     }
 
-    //---------------------------------------------------------------------
+    
     RoadmapTypes::ItemId ORoadmap::GetNextAvailableItemId( ItemIndex _nNewIndex )
     {
         RoadmapItem* pItem = NULL;
@@ -507,7 +507,7 @@ namespace svt
         return -1;
     }
 
-    //---------------------------------------------------------------------
+    
     RoadmapTypes::ItemId ORoadmap::GetPreviousAvailableItemId( ItemIndex _nNewIndex )
     {
         RoadmapItem* pItem = NULL;
@@ -523,7 +523,7 @@ namespace svt
         return -1;
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::DeselectOldRoadmapItems()
     {
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
@@ -536,26 +536,26 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::SetItemSelectHdl( const Link& _rHdl )
     {
         m_pImpl->setSelectHdl( _rHdl );
     }
 
-    //---------------------------------------------------------------------
+    
     Link ORoadmap::GetItemSelectHdl( ) const
     {
         return m_pImpl->getSelectHdl();
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::Select()
     {
         GetItemSelectHdl().Call( this );
         CallEventListeners( VCLEVENT_ROADMAP_ITEMSELECTED );
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::GetFocus()
     {
         RoadmapItem* pCurHyperLabel = GetByID( GetCurrentRoadmapItemID() );
@@ -563,7 +563,7 @@ namespace svt
             pCurHyperLabel->GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool ORoadmap::SelectRoadmapItemByID( ItemId _nNewID )
     {
         DeselectOldRoadmapItems();
@@ -573,7 +573,7 @@ namespace svt
             if ( pItem->IsEnabled() )
             {
                 const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-                pItem->ToggleBackgroundColor( rStyleSettings.GetHighlightColor() ); //HighlightColor
+                pItem->ToggleBackgroundColor( rStyleSettings.GetHighlightColor() ); 
 
                 pItem->GrabFocus();
                 m_pImpl->setCurItemID(_nNewID);
@@ -585,13 +585,13 @@ namespace svt
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::Paint( const Rectangle& _rRect )
     {
         Control::Paint( _rRect );
 
 
-        // draw the bitmap
+        
         if ( !!m_pImpl->getPicture() )
         {
             Size aBitmapSize = m_pImpl->getPicture().GetSizePixel();
@@ -599,23 +599,23 @@ namespace svt
 
             Point aBitmapPos( aMySize.Width() - aBitmapSize.Width(),  aMySize.Height() - aBitmapSize.Height() );
 
-            // draw it
+            
             DrawBitmapEx( aBitmapPos, m_pImpl->getPicture() );
         }
 
-        //.................................................................
-        // draw the headline
+        
+        
         DrawHeadline();
     }
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::DrawHeadline()
     {
         Point aTextPos = LogicToPixel( Point( ROADMAP_INDENT_X, 8 ), MAP_APPFONT );
 
         Size aOutputSize( GetOutputSizePixel() );
 
-        // draw it
+        
         DrawText( Rectangle( aTextPos, aOutputSize ), GetText(), TEXT_DRAW_LEFT | TEXT_DRAW_TOP | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
         DrawTextLine( aTextPos, aOutputSize.Width(), STRIKEOUT_NONE, UNDERLINE_SINGLE, UNDERLINE_NONE, false );
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -623,7 +623,7 @@ namespace svt
         SetTextColor(rStyleSettings.GetFieldTextColor());
     }
 
-    //---------------------------------------------------------------------
+    
     RoadmapItem* ORoadmap::GetByPointer(Window* pWindow)
     {
         const HL_Vector& rItems = m_pImpl->getHyperLabels();
@@ -638,10 +638,10 @@ namespace svt
         return NULL;
     }
 
-    //---------------------------------------------------------------------
+    
     bool ORoadmap::PreNotify( NotifyEvent& _rNEvt )
     {
-        // capture KeyEvents for taskpane cycling
+        
         if ( _rNEvt.GetType() == EVENT_KEYINPUT )
         {
             Window* pWindow = _rNEvt.GetWindow();
@@ -652,9 +652,9 @@ namespace svt
                 switch( nKeyCode )
                 {
                     case KEY_UP:
-                        {   // Note: Performancewise this is not optimal, because we search for an ID in the labels
-                            //       and afterwards we search again for a label with the appropriate ID ->
-                            //       unnecessarily we search twice!!!
+                        {   
+                            
+                            
                             ItemId nPrevItemID = GetPreviousAvailableItemId( pItem->GetIndex() );
                             if ( nPrevItemID != -1 )
                                 return SelectRoadmapItemByID( nPrevItemID );
@@ -675,7 +675,7 @@ namespace svt
         return Window::PreNotify( _rNEvt );
     }
 
-    //---------------------------------------------------------------------
+    
       IMPL_LINK(ORoadmap, ImplClickHdl, HyperLabel*, _CurHyperLabel)
     {
        return SelectRoadmapItemByID( _CurHyperLabel->GetID() );
@@ -683,7 +683,7 @@ namespace svt
 
 
 
-    //---------------------------------------------------------------------
+    
     void ORoadmap::DataChanged( const DataChangedEvent& rDCEvt )
     {
         if ((( rDCEvt.GetType() == DATACHANGED_SETTINGS )   ||
@@ -707,7 +707,7 @@ namespace svt
     }
 
 
-    //---------------------------------------------------------------------
+    
     RoadmapItem::RoadmapItem( ORoadmap& _rParent, const Size& _rItemPlayground )
         :m_aItemPlayground( _rItemPlayground )
     {
@@ -718,40 +718,40 @@ namespace svt
         mpDescription->Show();
     }
 
-    //---------------------------------------------------------------------
+    
     bool RoadmapItem::Contains( const Window* _pWindow ) const
     {
         return ( mpID == _pWindow ) || ( mpDescription == _pWindow );
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::GrabFocus()
     {
         if ( mpDescription )
             mpDescription->GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::SetInteractive( sal_Bool _bInteractive )
     {
         if ( mpDescription )
         mpDescription->SetInteractive(_bInteractive);
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::SetID( sal_Int16 _ID )
     {
         if ( mpDescription )
             mpDescription->SetID(_ID);
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Int16 RoadmapItem::GetID() const
     {
         return mpDescription ? mpDescription->GetID() : sal_Int16(-1);
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::ImplUpdateIndex( const ItemIndex _nIndex )
     {
         if ( mpDescription )
@@ -763,23 +763,23 @@ namespace svt
              mpID->SetText( aIDText );
         }
 
-        // update the geometry of both controls
+        
         ImplUpdatePosSize();
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::SetIndex( ItemIndex _Index )
     {
         ImplUpdateIndex( _Index );
     }
 
-    //---------------------------------------------------------------------
+    
     RoadmapTypes::ItemIndex RoadmapItem::GetIndex() const
     {
         return mpDescription ? mpDescription->GetIndex() : ItemIndex(-1);
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::SetPosition( RoadmapItem* _pOldItem )
     {
         Point aIDPos;
@@ -801,20 +801,20 @@ namespace svt
         mpDescription->SetPosPixel( Point( nDescPos, aIDPos.Y() ) );
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::Enable( sal_Bool _bEnable)
     {
         mpID->Enable(_bEnable);
         mpDescription->Enable(_bEnable);
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool RoadmapItem::IsEnabled() const
     {
         return mpID->IsEnabled();
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::ToggleBackgroundColor( const Color& _rGBColor )
     {
         if (_rGBColor == COL_TRANSPARENT)
@@ -830,18 +830,18 @@ namespace svt
         mpDescription->ToggleBackgroundColor(_rGBColor);
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::ImplUpdatePosSize()
     {
-        // calculate widths
+        
         long nIDWidth = mpID->GetTextWidth( mpID->GetText() );
         long nMaxIDWidth = mpID->GetTextWidth( OUString( "100." ) );
         nIDWidth = ::std::min( nIDWidth, nMaxIDWidth );
 
-        // check how many space the description would need
+        
         Size aDescriptionSize = mpDescription->CalcMinimumSize( m_aItemPlayground.Width() - nIDWidth );
 
-        // position and size both controls
+        
         Size aIDSize( nIDWidth, aDescriptionSize.Height() );
          mpID->SetSizePixel( aIDSize );
 
@@ -850,17 +850,17 @@ namespace svt
         mpDescription->SetSizePixel( aDescriptionSize );
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::Update( ItemIndex _RMIndex, const OUString& _rText )
     {
-        // update description label
+        
         mpDescription->SetLabel( _rText );
 
-        // update the index in both controls, which triggers updating the geometry of both
+        
         ImplUpdateIndex( _RMIndex );
     }
 
-    //---------------------------------------------------------------------
+    
     RoadmapItem::~RoadmapItem( )
     {
         {
@@ -873,26 +873,26 @@ namespace svt
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void RoadmapItem::SetClickHdl( const Link& rLink )
     {
         if ( mpDescription )
             mpDescription->SetClickHdl( rLink);
     }
 
-    //---------------------------------------------------------------------
+    
     IDLabel::IDLabel( Window* _pParent, WinBits _nWinStyle )
         :FixedText( _pParent, _nWinStyle )
     {
 
     }
 
-    //---------------------------------------------------------------------
+    
     IDLabel::~IDLabel( )
     {
     }
 
-    //---------------------------------------------------------------------
+    
     void IDLabel::DataChanged( const DataChangedEvent& rDCEvt )
     {
         const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -916,8 +916,8 @@ namespace svt
 
 
 
-//.........................................................................
-}   // namespace svt
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

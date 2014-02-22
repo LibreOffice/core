@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/progressbar.hxx"
@@ -24,7 +24,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
@@ -33,22 +33,22 @@ namespace {
 
 const sal_Int32 PROGRESS_RANGE      = 1000000;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 IProgressBar::~IProgressBar()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ISegmentProgressBar::~ISegmentProgressBar()
 {
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 ProgressBar::ProgressBar( const Reference< XStatusIndicator >& rxIndicator, const OUString& rText ) :
     mxIndicator( rxIndicator ),
@@ -77,7 +77,7 @@ void ProgressBar::setPosition( double fPosition )
         mxIndicator->setValue( static_cast< sal_Int32 >( mfPosition * PROGRESS_RANGE ) );
 }
 
-// ============================================================================
+
 
 namespace prv {
 
@@ -100,7 +100,7 @@ private:
     double              mfFreeStart;
 };
 
-// ----------------------------------------------------------------------------
+
 
 SubSegment::SubSegment( IProgressBar& rParentProgress, double fStartPos, double fLength ) :
     mrParentProgress( rParentProgress ),
@@ -137,9 +137,9 @@ ISegmentProgressBarRef SubSegment::createSegment( double fLength )
     return xSegment;
 }
 
-} // namespace prv
+} 
 
-// ============================================================================
+
 
 SegmentProgressBar::SegmentProgressBar( const Reference< XStatusIndicator >& rxIndicator, const OUString& rText ) :
     maProgress( rxIndicator, rText ),
@@ -171,8 +171,8 @@ ISegmentProgressBarRef SegmentProgressBar::createSegment( double fLength )
     return xSegment;
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

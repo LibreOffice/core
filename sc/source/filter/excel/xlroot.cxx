@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xlroot.hxx"
@@ -66,7 +66,7 @@ using ::com::sun::star::lang::XMultiServiceFactory;
 
 using namespace ::com::sun::star;
 
-// Global data ================================================================
+
 
 #ifdef DBG_UTIL
 XclDebugObjCounter::~XclDebugObjCounter()
@@ -75,7 +75,7 @@ XclDebugObjCounter::~XclDebugObjCounter()
 }
 #endif
 
-// ----------------------------------------------------------------------------
+
 
 XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         SotStorageRef xRootStrg, ScDocument& rDoc, rtl_TextEncoding eTextEnc, bool bExport ) :
@@ -95,7 +95,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     maMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
     mxFontPropSetHlp( new XclFontPropSetHelper ),
     mxChPropSetHlp( new XclChPropSetHelper ),
-    mxRD( new RootData ),//!
+    mxRD( new RootData ),
     mfScreenPixelX( 50.0 ),
     mfScreenPixelY( 50.0 ),
     mnCharWidth( 110 ),
@@ -114,7 +114,7 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
         default:    SAL_WARN( "sc", "XclRootData::XclRootData - unknown script type" );
     }
 
-    // maximum cell position
+    
     switch( meBiff )
     {
         case EXC_BIFF2: maXclMaxPos.Set( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 );   break;
@@ -128,19 +128,19 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     maMaxPos.SetRow( ::std::min( maScMaxPos.Row(), maXclMaxPos.Row() ) );
     maMaxPos.SetTab( ::std::min( maScMaxPos.Tab(), maXclMaxPos.Tab() ) );
 
-    // document URL and path
+    
     if( const SfxItemSet* pItemSet = mrMedium.GetItemSet() )
         if( const SfxStringItem* pItem = static_cast< const SfxStringItem* >( pItemSet->GetItem( SID_FILE_NAME ) ) )
             maDocUrl = pItem->GetValue();
     maBasePath = maDocUrl.copy( 0, maDocUrl.lastIndexOf( '/' ) + 1 );
 
-    // extended document options - always own object, try to copy existing data from document
+    
     if( const ScExtDocOptions* pOldDocOpt = mrDoc.GetExtDocOptions() )
         mxExtDocOpt.reset( new ScExtDocOptions( *pOldDocOpt ) );
     else
         mxExtDocOpt.reset( new ScExtDocOptions );
 
-    // screen pixel size
+    
     try
     {
         Reference< frame::XDesktop2 > xFramesSupp = frame::Desktop::create( ::comphelper::getProcessComponentContext() );
@@ -160,7 +160,7 @@ XclRootData::~XclRootData()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclRoot::XclRoot( XclRootData& rRootData ) :
     mrData( rRootData )
@@ -169,7 +169,7 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
     ++mrData.mnObjCnt;
 #endif
 
-    // filter tracer
+    
     mrData.mxTracer.reset( new XclTracer( GetDocUrl() ) );
 }
 
@@ -190,8 +190,8 @@ XclRoot::~XclRoot()
 
 XclRoot& XclRoot::operator=( const XclRoot& rRoot )
 {
-    (void)rRoot;    // avoid compiler warning
-    // allowed for assignment in derived classes - but test if the same root data is used
+    (void)rRoot;    
+    
     OSL_ENSURE( &mrData == &rRoot.mrData, "XclRoot::operator= - incompatible root data" );
     return *this;
 }
@@ -216,7 +216,7 @@ void XclRoot::SetCharWidth( const XclFontData& rFontData )
     }
     if( mrData.mnCharWidth <= 0 )
     {
-        // #i48717# Win98 with HP LaserJet returns 0
+        
         SAL_WARN( "sc", "XclRoot::SetCharWidth - invalid character width (no printer?)" );
         mrData.mnCharWidth = 11 * rFontData.mnHeight / 20;
     }
@@ -313,14 +313,14 @@ DateTime XclRoot::GetNullDate() const
 
 sal_uInt16 XclRoot::GetBaseYear() const
 {
-    // return 1904 for 1904-01-01, and 1900 for 1899-12-30
+    
     return (GetNullDate().GetYear() == 1904) ? 1904 : 1900;
 }
 
 double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 {
     double fValue = rDateTime - GetNullDate();
-    // adjust dates before 1900-03-01 to get correct time values in the range [0.0,1.0)
+    
     if( rDateTime < DateTime( Date( 1, 3, 1900 ) ) )
         fValue -= 1.0;
     return fValue;
@@ -329,7 +329,7 @@ double XclRoot::GetDoubleFromDateTime( const DateTime& rDateTime ) const
 DateTime XclRoot::GetDateTimeFromDouble( double fValue ) const
 {
     DateTime aDateTime = GetNullDate() + fValue;
-    // adjust dates before 1900-03-01 to get correct time values
+    
     if( aDateTime < DateTime( Date( 1, 3, 1900 ) ) )
         aDateTime += 1L;
     return aDateTime;
@@ -356,20 +356,20 @@ ScHeaderEditEngine& XclRoot::GetHFEditEngine() const
     {
         mrData.mxHFEditEngine.reset( new ScHeaderEditEngine( EditEngine::CreatePool(), true ) );
         ScHeaderEditEngine& rEE = *mrData.mxHFEditEngine;
-        rEE.SetRefMapMode( MAP_TWIP );  // headers/footers use twips as default metric
+        rEE.SetRefMapMode( MAP_TWIP );  
         rEE.SetUpdateMode( false );
         rEE.EnableUndo( false );
         rEE.SetControlWord( rEE.GetControlWord() & ~EE_CNTRL_ALLOWBIGOBJS );
 
-        // set Calc header/footer defaults
+        
         SfxItemSet* pEditSet = new SfxItemSet( rEE.GetEmptyItemSet() );
         SfxItemSet aItemSet( *GetDoc().GetPool(), ATTR_PATTERN_START, ATTR_PATTERN_END );
         ScPatternAttr::FillToEditItemSet( *pEditSet, aItemSet );
-        // FillToEditItemSet() adjusts font height to 1/100th mm, we need twips
+        
         pEditSet->Put( aItemSet.Get( ATTR_FONT_HEIGHT ), EE_CHAR_FONTHEIGHT );
         pEditSet->Put( aItemSet.Get( ATTR_CJK_FONT_HEIGHT ), EE_CHAR_FONTHEIGHT_CJK );
         pEditSet->Put( aItemSet.Get( ATTR_CTL_FONT_HEIGHT ), EE_CHAR_FONTHEIGHT_CTL );
-        rEE.SetDefaults( pEditSet );    // takes ownership
+        rEE.SetDefaults( pEditSet );    
    }
     return *mrData.mxHFEditEngine;
 }
@@ -408,6 +408,6 @@ XclTracer& XclRoot::GetTracer() const
     return *mrData.mxTracer;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

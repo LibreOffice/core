@@ -34,9 +34,9 @@ namespace drawinglayer
 
             if( rSubstituteContent.GetActionSize() )
             {
-                // the default decomposition will use the Metafile replacement visualisation.
-                // To really use the Eps data, a renderer has to know and interpret this primitive
-                // directly.
+                
+                
+                
                 xRetval.realloc(1);
 
                 xRetval[0] = Primitive2DReference(
@@ -75,17 +75,17 @@ namespace drawinglayer
 
         basegfx::B2DRange EpsPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // use own implementation to quickly answer the getB2DRange question.
+            
             basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
             aRetval.transform(getEpsTransform());
 
             return aRetval;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(EpsPrimitive2D, PRIMITIVE2D_ID_EPSPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

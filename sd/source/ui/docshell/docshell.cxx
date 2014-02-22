@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -97,14 +97,14 @@ SFX_IMPL_OBJECTFACTORY(
 void DrawDocShell::Construct( bool bClipboard )
 {
     mbInDestruction = sal_False;
-    SetSlotFilter();     // setzt Filter zurueck
+    SetSlotFilter();     
 
     mbOwnDocument = mpDoc == 0;
     if( mbOwnDocument )
         mpDoc = new SdDrawDocument(meDocType, this);
 
-    // The document has been created so we can call UpdateRefDevice() to set
-    // the document's ref device.
+    
+    
     UpdateRefDevice();
 
     SetBaseModel( new SdXImpressDocument( this, bClipboard ) );
@@ -113,7 +113,7 @@ void DrawDocShell::Construct( bool bClipboard )
     mpDoc->SetSdrUndoManager( mpUndoManager );
     mpDoc->SetSdrUndoFactory( new sd::UndoFactory );
     UpdateTablePointers();
-    SetStyleFamily(5);       //CL: actually SFX_STYLE_FAMILY_PSEUDO
+    SetStyleFamily(5);       
 }
 
 DrawDocShell::DrawDocShell(SfxObjectCreateMode eMode,
@@ -170,10 +170,10 @@ DrawDocShell::DrawDocShell(SdDrawDocument* pDoc, SfxObjectCreateMode eMode,
 
 DrawDocShell::~DrawDocShell()
 {
-    // Tell all listeners that the doc shell is about to be
-    // destroyed.  This has been introduced for the PreviewRenderer to
-    // free its view (that uses the item poll of the doc shell) but
-    // may be useful in other places as well.
+    
+    
+    
+    
     Broadcast(SfxSimpleHint(SFX_HINT_DYING));
 
     mbInDestruction = sal_True;
@@ -192,7 +192,7 @@ DrawDocShell::~DrawDocShell()
     if( mbOwnDocument )
         delete mpDoc;
 
-    // that the navigator get informed about the disappearance of the document
+    
     SfxBoolItem     aItem(SID_NAVIGATOR_INIT, true);
     SfxViewFrame*   pFrame = mpViewShell ? mpViewShell->GetFrame() : GetFrame();
 
@@ -306,7 +306,7 @@ void DrawDocShell::InPlaceActivate( sal_Bool bActive )
 
         while (pSfxViewFrame)
         {
-            // determine the number of FrameViews
+            
             pSfxViewSh = pSfxViewFrame->GetViewShell();
             pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
 
@@ -326,7 +326,7 @@ void DrawDocShell::InPlaceActivate( sal_Bool bActive )
     {
         for( sal_uInt32 i = 0; pSfxViewFrame && (i < rViews.size()); i++ )
         {
-            // determine the number of FrameViews
+            
             pSfxViewSh = pSfxViewFrame->GetViewShell();
             pViewSh = PTR_CAST( ViewShell, pSfxViewSh );
 
@@ -411,8 +411,8 @@ void DrawDocShell::SetModified( sal_Bool bSet /* = sal_True */ )
 {
     SfxObjectShell::SetModified( bSet );
 
-    // change model state, too
-    // only set the changed state if modification is enabled
+    
+    
     if( IsEnableSetModified() )
     {
         if ( mpDoc )
@@ -425,8 +425,8 @@ void DrawDocShell::SetModified( sal_Bool bSet /* = sal_True */ )
 /**
  * Callback for ExecuteSpellPopup()
  */
-// ExecuteSpellPopup now handled by DrawDocShell. This is necessary
-// to get hands on the outliner and the text object.
+
+
 IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
     SdrObject* pObj = NULL;
@@ -444,7 +444,7 @@ IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 
 void DrawDocShell::ClearUndoBuffer()
 {
-    // clear possible undo buffers of outliners
+    
     SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, false);
     while(pSfxViewFrame)
     {
@@ -476,6 +476,6 @@ void DrawDocShell::ClearUndoBuffer()
         pUndoManager->Clear();
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

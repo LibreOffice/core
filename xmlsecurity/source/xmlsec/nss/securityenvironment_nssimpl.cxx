@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "nssrenam.h"
@@ -43,7 +43,7 @@
 
 #include "secerror.hxx"
 
-// added for password exception
+
 #include <com/sun/star/security/NoPasswordException.hpp>
 namespace csss = ::com::sun::star::security;
 using namespace xmlsecurity;
@@ -176,7 +176,7 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl :: getSupportedService
     return impl_getSupportedServiceNames() ;
 }
 
-//Helper for XServiceInfo
+
 Sequence< OUString > SecurityEnvironment_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
@@ -188,7 +188,7 @@ OUString SecurityEnvironment_NssImpl :: impl_getImplementationName() throw( Runt
     return OUString("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl") ;
 }
 
-//Helper for registry
+
 Reference< XInterface > SAL_CALL SecurityEnvironment_NssImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& ) throw( RuntimeException ) {
     return Reference< XInterface >( *new SecurityEnvironment_NssImpl ) ;
 }
@@ -239,7 +239,7 @@ CERTCertDBHandle* SecurityEnvironment_NssImpl :: getCertDb() throw( Exception , 
     return m_pHandler ;
 }
 
-//Could we have multiple cert dbs?
+
 void SecurityEnvironment_NssImpl :: setCertDb( CERTCertDBHandle* aCertDb ) throw( Exception , RuntimeException ) {
     m_pHandler = aCertDb ;
 }
@@ -249,13 +249,13 @@ void SecurityEnvironment_NssImpl :: adoptSymKey( PK11SymKey* aSymKey ) throw( Ex
     std::list< PK11SymKey* >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
-        //First try to find the key in the list
+        
         for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
             if( *keyIt == aSymKey )
                 return ;
         }
 
-        //If we do not find the key in the list, add a new node
+        
         symkey = PK11_ReferenceSymKey( aSymKey ) ;
         if( symkey == NULL )
             throw RuntimeException() ;
@@ -303,13 +303,13 @@ void SecurityEnvironment_NssImpl :: adoptPubKey( SECKEYPublicKey* aPubKey ) thro
     std::list< SECKEYPublicKey* >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
-        //First try to find the key in the list
+        
         for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPubKey )
                 return ;
         }
 
-        //If we do not find the key in the list, add a new node
+        
         pubkey = SECKEY_CopyPublicKey( aPubKey ) ;
         if( pubkey == NULL )
             throw RuntimeException() ;
@@ -357,13 +357,13 @@ void SecurityEnvironment_NssImpl :: adoptPriKey( SECKEYPrivateKey* aPriKey ) thr
     std::list< SECKEYPrivateKey* >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
-        //First try to find the key in the list
+        
         for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPriKey )
                 return ;
         }
 
-        //If we do not find the key in the list, add a new node
+        
         prikey = SECKEY_CopyPrivateKey( aPriKey ) ;
         if( prikey == NULL )
             throw RuntimeException() ;
@@ -408,7 +408,7 @@ SECKEYPrivateKey* SecurityEnvironment_NssImpl :: getPriKey( unsigned int positio
 
 void SecurityEnvironment_NssImpl::updateSlots()
 {
-    //In case new tokens are present then we can obtain the corresponding slot
+    
     PK11SlotList * soltList = NULL;
     PK11SlotListElement * soltEle = NULL;
     PK11SlotInfo * pSlot = NULL;
@@ -433,23 +433,23 @@ void SecurityEnvironment_NssImpl::updateSlots()
                     "Found a slot: SlotName=" << PK11_GetSlotName(pSlot)
                         << ", TokenName=" << PK11_GetTokenName(pSlot));
 
-//The following code which is commented out checks if a slot, that is a smart card for example, is
-//              able to generate a symmetric key of type CKM_DES3_CBC. If this fails then this token
-//              will not be used. This key is possibly used for the encryption service. However, all
-//              interfaces and services used for public key signature and encryption are not published
-//              and the encryption is not used in OOo. Therefore it does not do any harm to remove
-//              this code, hence allowing smart cards which cannot generate this type of key.
+
+
+
+
+
+
 //
-//              By doing this, the encryption may fail if a smart card is being used which does not
-//              support this key generation.
+
+
 //
                 pSymKey = PK11_KeyGen( pSlot , CKM_DES3_CBC, NULL, 128, NULL ) ;
-//              if( pSymKey == NULL )
-//              {
-//                  PK11_FreeSlot( pSlot ) ;
-//                  SAL_INFO( "xmlsecurity", "XMLSEC: Error - pSymKey is NULL" );
-//                  continue;
-//              }
+
+
+
+
+
+
                 addCryptoSlot(pSlot);
                 PK11_FreeSlot( pSlot ) ;
                 pSlot = NULL;
@@ -461,9 +461,9 @@ void SecurityEnvironment_NssImpl::updateSlots()
                     pSymKey = NULL;
                 }
 
-            }// end of if(pSlot != NULL)
-        }// end of for
-    }// end of if( soltList != NULL )
+            }
+        }
+    }
 
 }
 
@@ -476,7 +476,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
     std::list< X509Certificate_NssImpl* > certsList ;
 
     updateSlots();
-    //firstly, we try to find private keys in slot
+    
     for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
     {
         PK11SlotInfo *slot = *is;
@@ -485,9 +485,9 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
 
         if( PK11_NeedLogin(slot ) ) {
             SECStatus nRet = PK11_Authenticate(slot, PR_TRUE, NULL);
-            //PK11_Authenticate may fail in case the a slot has not been initialized.
-            //this is the case if the user has a new profile, so that they have never
-            //added a personal certificate.
+            
+            
+            
             if( nRet != SECSuccess && PORT_GetError() != SEC_ERROR_IO) {
                 throw NoPasswordException();
             }
@@ -510,7 +510,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
 
     }
 
-    //secondly, we try to find certificate from registered private keys.
+    
     if( !m_tPriKeyList.empty()  ) {
         std::list< SECKEYPrivateKey* >::iterator priKeyIt ;
 
@@ -553,14 +553,14 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
         if( arena == NULL )
             throw RuntimeException() ;
 
-        // Create cert info from issue and serial
+        
         OString ostr = OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
         chIssuer = PL_strndup( ( char* )ostr.getStr(), ( int )ostr.getLength() ) ;
         nmIssuer = CERT_AsciiToName( chIssuer ) ;
         if( nmIssuer == NULL ) {
             PL_strfree( chIssuer ) ;
             PORT_FreeArena( arena, PR_FALSE ) ;
-            return NULL; // no need for exception cf. i40394
+            return NULL; 
         }
 
         derIssuer = SEC_ASN1EncodeItem( arena, NULL, ( void* )nmIssuer, SEC_ASN1_GET( CERT_NameTemplate ) ) ;
@@ -588,7 +588,7 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
 
         PL_strfree( chIssuer ) ;
         CERT_DestroyName( nmIssuer ) ;
-        //SECITEM_FreeItem( derIssuer, PR_FALSE ) ;
+        
         CERT_DestroyCertificate( cert ) ;
         PORT_FreeArena( arena, PR_FALSE ) ;
     } else {
@@ -623,7 +623,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: buildCerti
     if( cert != NULL ) {
         int64 timeboundary ;
 
-        //Get the system clock time
+        
         timeboundary = PR_Now() ;
 
         certChain = CERT_GetCertChainFromCert( ( CERTCertificate* )cert, timeboundary, certUsageAnyCA ) ;
@@ -726,16 +726,16 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         throw RuntimeException() ;
     }
 
-    //CERT_PKIXVerifyCert does not take a db as argument. It will therefore
-    //internally use CERT_GetDefaultCertDB
-    //Make sure m_pHandler is the default DB
+    
+    
+    
     OSL_ASSERT(m_pHandler == CERT_GetDefaultCertDB());
     CERTCertDBHandle * certDb = m_pHandler != NULL ? m_pHandler : CERT_GetDefaultCertDB();
     cert = xcert->getNssCert() ;
     if( cert != NULL )
     {
 
-        //prepare the intermediate certificates
+        
         for (sal_Int32 i = 0; i < intermediateCerts.getLength(); i++)
         {
             Sequence<sal_Int8> der = intermediateCerts[i]->getEncoded();
@@ -788,19 +788,19 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         CERTRevocationFlags rev;
         rev.leafTests.number_of_defined_methods = 2;
         rev.leafTests.cert_rev_flags_per_method = revFlagsLeaf;
-        //the flags are defined in cert.h
-        //We check both leaf and chain.
-        //It is enough if one revocation method has fresh info,
-        //but at least one must have some. Otherwise validation fails.
-        //!!! using leaf test and CERT_REV_MI_REQUIRE_SOME_FRESH_INFO_AVAILABLE
-        // when validating a root certificate will result in "revoked". Usually
-        //there is no revocation information available for the root cert because
-        //it must be trusted anyway and it does itself issue revocation information.
-        //When we use the flag here and OOo shows the certification path then the root
-        //cert is invalid while all other can be valid. It would probably best if
-        //this interface method returned the whole chain.
-        //Otherwise we need to check if the certificate is self-signed and if it is
-        //then not use the flag when doing the leaf-test.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         rev.leafTests.cert_rev_flags_per_method[cert_revocation_method_crl] =
             CERT_REV_M_TEST_USING_THIS_METHOD
             | CERT_REV_M_IGNORE_IMPLICIT_DEFAULT_SOURCE;
@@ -829,10 +829,10 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         cvin[ncvinCount].type = cert_pi_revocationFlags;
         cvin[ncvinCount].value.pointer.revocation = &rev;
         ncvinCount++;
-        // does not work, not implemented yet in 3.12.4
-//         cvin[ncvinCount].type = cert_pi_keyusage;
-//         cvin[ncvinCount].value.scalar.ui = KU_DIGITAL_SIGNATURE;
-//         ncvinCount++;
+        
+
+
+
         cvin[ncvinCount].type = cert_pi_end;
 
         cvout[0].type = cert_po_trustAnchor;
@@ -841,19 +841,19 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         cvout[1].value.pointer.log = &log;
         cvout[2].type = cert_po_end;
 
-        // We check SSL server certificates, CA certificates and signing sertificates.
+        
         //
-        // ToDo check keyusage, looking at CERT_KeyUsageAndTypeForCertUsage (
-        // mozilla/security/nss/lib/certdb/certdb.c indicates that
-        // certificateUsageSSLClient, certificateUsageSSLServer and certificateUsageSSLCA
-        // are sufficient. They cover the key usages for digital signature, key agreement
-        // and encipherment and certificate signature
+        
+        
+        
+        
+        
 
-        //never use the following usages because they are not checked properly
-        // certificateUsageUserCertImport
-        // certificateUsageVerifyCA
-        // certificateUsageAnyCA
-        // certificateUsageProtectedObjectSigner
+        
+        
+        
+        
+        
 
         UsageDescription arUsages[5];
         arUsages[0] = UsageDescription( certificateUsageSSLClient, "certificateUsageSSLClient"  );
@@ -873,14 +873,14 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
             if( status == SECSuccess )
             {
                 xmlsec_trace("CERT_PKIXVerifyCert returned SECSuccess.");
-                //When an intermediate or root certificate is checked then we expect the usage
-                //certificateUsageSSLCA. This, however, will be only set when in the trust settings dialog
-                //the button "This certificate can identify websites" is checked. If for example only
-                //"This certificate can identify mail users" is set then the end certificate can
-                //be validated and the returned usage will conain certificateUsageEmailRecipient.
-                //But checking directly the root or intermediate certificate will fail. In the
-                //certificate path view the end certificate will be shown as valid but the others
-                //will be displayed as invalid.
+                
+                
+                
+                
+                
+                
+                
+                
 
                 validity = csss::CertificateValidity::VALID;
                 xmlsec_trace("Certificate is valid.\n");
@@ -921,7 +921,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
         validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
 
-    //Destroying the temporary certificates
+    
     std::vector<CERTCertificate*>::const_iterator cert_i;
     for (cert_i = vecTmpNSSCertificates.begin(); cert_i != vecTmpNSSCertificates.end(); ++cert_i)
     {
@@ -952,14 +952,14 @@ sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
 
     characters = 0x00000000 ;
 
-    //Firstly, find out whether or not the cert is self-signed.
+    
     if( SECITEM_CompareItem( &(cert->derIssuer), &(cert->derSubject) ) == SECEqual ) {
         characters |= ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
     } else {
         characters &= ~ ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
     }
 
-    //Secondly, find out whether or not the cert has a private key.
+    
 
     /*
      * i40394

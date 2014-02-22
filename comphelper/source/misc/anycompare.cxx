@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper/anycompare.hxx"
@@ -57,9 +57,9 @@ namespace comphelper
     using ::com::sun::star::util::Time;
     using ::com::sun::star::util::DateTime;
 
-    //==================================================================================================================
-    //= DatePredicateLess
-    //==================================================================================================================
+    
+    
+    
     class DatePredicateLess : public IKeyPredicateLess
     {
     public:
@@ -70,7 +70,7 @@ namespace comphelper
                 ||  !( _rhs >>= rhs )
                 )
                 throw ::com::sun::star::lang::IllegalArgumentException();
-            // FIXME Timezone?
+            
 
             if ( lhs.Year < rhs.Year )
                 return true;
@@ -88,9 +88,9 @@ namespace comphelper
         }
     };
 
-    //==================================================================================================================
-    //= TimePredicateLess
-    //==================================================================================================================
+    
+    
+    
     class TimePredicateLess : public IKeyPredicateLess
     {
     public:
@@ -101,7 +101,7 @@ namespace comphelper
                 ||  !( _rhs >>= rhs )
                 )
                 throw ::com::sun::star::lang::IllegalArgumentException();
-            // FIXME Timezone?
+            
 
             if ( lhs.Hours < rhs.Hours )
                 return true;
@@ -124,9 +124,9 @@ namespace comphelper
         }
     };
 
-    //==================================================================================================================
-    //= DateTimePredicateLess
-    //==================================================================================================================
+    
+    
+    
     class DateTimePredicateLess : public IKeyPredicateLess
     {
     public:
@@ -137,7 +137,7 @@ namespace comphelper
                 ||  !( _rhs >>= rhs )
                 )
                 throw ::com::sun::star::lang::IllegalArgumentException();
-            // FIXME Timezone?
+            
 
             if ( lhs.Year < rhs.Year )
                 return true;
@@ -175,7 +175,7 @@ namespace comphelper
         }
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::std::auto_ptr< IKeyPredicateLess > getStandardLessPredicate( Type const & i_type, Reference< XCollator > const & i_collator )
     {
 	SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -245,8 +245,8 @@ namespace comphelper
         return pComparator;
     }
 
-//......................................................................................................................
-} // namespace comphelper
-//......................................................................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

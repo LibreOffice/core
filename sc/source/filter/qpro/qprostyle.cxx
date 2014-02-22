@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -65,7 +65,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     sal_uInt8 nVer = ( nTmp & 0x18 );
     sal_uInt8 nOrient = ( nTmp & 0x60 );
 
-    // Horizontal Alignment
+    
     SvxCellHorJustify eJustify = SVX_HOR_JUSTIFY_STANDARD;
     switch( nHor )
     {
@@ -91,7 +91,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     }
     rItemSet.Put( SvxHorJustifyItem( eJustify, ATTR_HOR_JUSTIFY ) );
 
-    // Vertical Alignment
+    
     SvxCellVerJustify eVerJustify = SVX_VER_JUSTIFY_STANDARD;
     switch( nVer )
     {
@@ -110,7 +110,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
 
     rItemSet.Put(SvxVerJustifyItem( eVerJustify, ATTR_VER_JUSTIFY ) );
 
-    // Orientation
+    
     SvxCellOrientation eOrient = SVX_ORIENTATION_STANDARD;
     switch( nOrient )
     {
@@ -121,7 +121,7 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     }
     rItemSet.Put( SvxOrientationItem( eOrient, 0) );
 
-    // Wrap cell contents
+    
     if( nTmp & 0x80 )
     {
         SfxBoolItem aWrapItem( ATTR_LINEBREAK );
@@ -129,14 +129,14 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
         rItemSet.Put( aWrapItem );
     }
 
-    // Font Attributes
+    
     sal_uInt16 nTmpFnt = maFontRecord[ maFont[ nStyle ] ];
     sal_Bool bIsBold, bIsItalic, bIsUnderLine;
 
     bIsBold = ( nTmpFnt & 0x0001 ) != 0;
     bIsItalic = ( nTmpFnt & 0x0002 ) != 0;
     bIsUnderLine = ( nTmpFnt & 0x0004 ) != 0;
-    //(nTmpFnt & 0x0020 ) for StrikeThrough
+    
 
     if( bIsBold )
         rItemSet.Put( SvxWeightItem( WEIGHT_BOLD,ATTR_FONT_WEIGHT) );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ComponentDefinition.hxx"
@@ -49,7 +49,7 @@ extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition()
 namespace dbaccess
 {
 
-/// helper class for column property change events which holds the OComponentDefinition weak
+
 typedef ::cppu::WeakImplHelper1 < XPropertyChangeListener > TColumnPropertyListener_BASE;
 class OColumnPropertyListener : public TColumnPropertyListener_BASE
 {
@@ -61,13 +61,13 @@ protected:
     virtual ~OColumnPropertyListener(){}
 public:
     OColumnPropertyListener(OComponentDefinition* _pComponent) : m_pComponent(_pComponent){}
-    // XPropertyChangeListener
+    
     virtual void SAL_CALL propertyChange( const PropertyChangeEvent& /*_rEvent*/ ) throw (RuntimeException)
     {
         if ( m_pComponent )
             m_pComponent->notifyDataSourceModified();
     }
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException)
     {
     }
@@ -82,7 +82,7 @@ OComponentDefinition_Impl::~OComponentDefinition_Impl()
 {
 }
 
-// OComponentDefinition
+
 
 
 void OComponentDefinition::initialize( const Sequence< Any >& aArguments ) throw(Exception)
@@ -250,7 +250,7 @@ OColumn* OComponentDefinition::createColumn(const OUString& _rName) const
         return new OTableColumnWrapper( aFind->second, aFind->second, true );
     }
     OSL_FAIL( "OComponentDefinition::createColumn: is this a valid case?" );
-        // This here is the last place creating a OTableColumn, and somehow /me thinks it is not needed ...
+        
     return new OTableColumn( _rName );
 }
 
@@ -280,18 +280,18 @@ void OComponentDefinition::columnAppended( const Reference< XPropertySet >& _rxS
     ::comphelper::copyProperties( _rxSourceDescriptor, xColDesc );
     getDefinition().insert( sName, xColDesc );
 
-    // formerly, here was a setParent at the xColDesc. The parent used was an adapter (ChildHelper_Impl)
-    // which held another XChild weak, and forwarded all getParent requests to this other XChild.
-    // m_pColumns was used for this. This was nonsense, since m_pColumns dies when our instance dies,
-    // but xColDesc will live longer than this. So effectively, the setParent call was pretty useless.
+    
+    
+    
+    
     //
-    // The intention for this parenting was that the column descriptor is able to find the data source,
-    // by traveling up the parent hierachy until there's an XDataSource. This didn't work (which
-    // for instance causes #i65023#). We need another way to properly ensure this.
+    
+    
+    
 
     notifyDataSourceModified();
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

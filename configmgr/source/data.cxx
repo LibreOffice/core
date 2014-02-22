@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -86,7 +86,7 @@ OUString Data::createSegment(
         return name;
     }
     OUStringBuffer buf(templateName);
-        //TODO: verify template name contains no bad chars?
+        
     buf.appendAscii("['");
     for (sal_Int32 i = 0; i < name.getLength(); ++i) {
         sal_Unicode c = name[i];
@@ -246,7 +246,7 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                 "bad path " + pathRepresentation,
                 css::uno::Reference< css::uno::XInterface >());
         }
-        // for backwards compatibility, ignore a final slash
+        
         if (n == pathRepresentation.getLength()) {
             if (canonicRepresentation != 0) {
                 *canonicRepresentation = canonic.makeStringAndClear();
@@ -265,8 +265,8 @@ rtl::Reference< Node > Data::resolvePathRepresentation(
                 "bad path " + pathRepresentation,
                 css::uno::Reference< css::uno::XInterface >());
         }
-        // For backwards compatibility, allow set members to be accessed with
-        // simple path segments, like group members:
+        
+        
         p = p->getMember(seg);
         if (setElement) {
             switch (parent->kind()) {
@@ -337,12 +337,12 @@ rtl::Reference< Data::ExtensionXcu > Data::removeExtensionXcuAdditions(
 {
     ExtensionXcuAdditions::iterator i(extensionXcuAdditions_.find(url));
     if (i == extensionXcuAdditions_.end()) {
-        // This can happen, as migration of pre OOo 3.3 UserInstallation
-        // extensions in dp_registry::backend::configuration::BackendImpl::
-        // PackageImpl::processPackage_ can cause just-in-time creation of
-        // extension xcu files that are never added via addExtensionXcuAdditions
-        // (also, there might be url spelling differences between calls to
-        // addExtensionXcuAdditions and removeExtensionXcuAdditions?):
+        
+        
+        
+        
+        
+        
         SAL_INFO(
             "configmgr",
             "unknown Data::removeExtensionXcuAdditions(" << url << ")");

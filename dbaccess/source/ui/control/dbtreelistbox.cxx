@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbtreelistbox.hxx"
@@ -53,7 +53,7 @@ using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::view;
 
 #define SPACEBETWEENENTRIES     4
-// class DBTreeListBox
+
 DBTreeListBox::DBTreeListBox( Window* pParent, WinBits nWinStyle ,sal_Bool _bHandleEnterKey)
     :SvTreeListBox(pParent,nWinStyle)
     ,m_pDragedEntry(NULL)
@@ -114,7 +114,7 @@ SvTreeListEntry* DBTreeListBox::GetEntryPosByName( const OUString& aName, SvTree
         if (pItem && pItem->GetText().equals(aName))
         {
             if (!_pFilter || _pFilter->includeEntry(pEntry))
-                // found
+                
                 break;
         }
         pEntry = NULL;
@@ -134,9 +134,9 @@ void DBTreeListBox::RequestingChildren( SvTreeListEntry* pParent )
     {
         if (!m_aPreExpandHandler.Call(pParent))
         {
-            // an error occurred. The method calling us will reset the entry flags, so it can't be expanded again.
-            // But we want that the user may do a second try (i.e. because he misstypes a password in this try), so
-            // we have to reset these flags controlling the expand ability
+            
+            
+            
             PostUserEvent(LINK(this, DBTreeListBox, OnResetEntry), pParent);
         }
     }
@@ -187,9 +187,9 @@ void DBTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 
 IMPL_LINK(DBTreeListBox, OnResetEntry, SvTreeListEntry*, pEntry)
 {
-    // set the flag which allows if the entry can be expanded
+    
     pEntry->SetFlags( (pEntry->GetFlags() & ~(SV_ENTRYFLAG_NO_NODEBMP | SV_ENTRYFLAG_HAD_CHILDREN)) | SV_ENTRYFLAG_CHILDREN_ON_DEMAND );
-    // redraw the entry
+    
     GetModel()->InvalidateEntry( pEntry );
     return 0L;
 }
@@ -206,7 +206,7 @@ void DBTreeListBox::ModelHasEntryInvalidated( SvTreeListEntry* _pEntry )
         {
             implStopSelectionTimer();
             m_aSelectedEntries.erase(pLBEntry);
-                // ehm - why?
+                
         }
     }
 }
@@ -228,11 +228,11 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     if ( m_pActionListener )
     {
         SvTreeListEntry* pDroppedEntry = GetEntry(_rEvt.maPosPixel);
-        // check if drag is on child entry, which is not allowed
+        
         SvTreeListEntry* pParent = NULL;
         if ( _rEvt.mnAction & DND_ACTION_MOVE )
         {
-            if ( !m_pDragedEntry ) // no entry to move
+            if ( !m_pDragedEntry ) 
             {
                 nDropOption = m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
                 m_aMousePos = _rEvt.maPosPixel;
@@ -248,11 +248,11 @@ sal_Int8 DBTreeListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
         if ( !pParent )
         {
             nDropOption = m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
-            // check if move is allowed
+            
             if ( nDropOption & DND_ACTION_MOVE )
             {
                 if ( m_pDragedEntry == pDroppedEntry || GetEntryPosByName(GetEntryText(m_pDragedEntry),pDroppedEntry) )
-                    nDropOption = nDropOption & ~DND_ACTION_MOVE;//DND_ACTION_NONE;
+                    nDropOption = nDropOption & ~DND_ACTION_MOVE;
             }
             m_aMousePos = _rEvt.maPosPixel;
             m_aScrollHelper.scroll(m_aMousePos,GetOutputSizePixel());
@@ -277,9 +277,9 @@ void DBTreeListBox::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         m_pDragedEntry = GetEntry(_rPosPixel);
         if ( m_pDragedEntry && m_pActionListener->requestDrag( _nAction, _rPosPixel ) )
         {
-            // if the (asynchronous) drag started, stop the selection timer
+            
             implStopSelectionTimer();
-            // and stop selecting entries by simply moving the mouse
+            
             EndSelection();
         }
     }
@@ -355,27 +355,27 @@ void DBTreeListBox::KeyInput( const KeyEvent& rKEvt )
         bHandled = m_bHandleEnterKey;
         if ( m_aEnterKeyHdl.IsSet() )
             m_aEnterKeyHdl.Call(this);
-        // this is a HACK. If the data source browser is opened in the "beamer", while the main frame
+        
         //
-        // contains a writer document, then pressing enter in the DSB would be rerouted to the writer
+        
         //
-        // document if we would not do this hack here.
-        // The problem is that the Writer uses RETURN as _accelerator_ (which is quite weird itself),
+        
+        
         //
-        // so the SFX framework is _obligated_ to pass it to the Writer if nobody else handled it. There
+        
         //
-        // is no chance to distinguish between
-        //   "accelerators which are to be executed if the main document has the focus"
-        // and
-        //   "accelerators which are always to be executed"
+        
+        
+        
+        
         //
-        // Thus we cannot prevent the handling of this key in the writer without declaring the key event
-        // as "handled" herein.
+        
+        
         //
-        // The bad thing about this approach is that it does not scale. Every other accelerator which
-        // is used by the document will raise a similar bug once somebody discovers it.
-        // If this is the case, we should discuss a real solution with the framework (SFX) and the
-        // applications.
+        
+        
+        
+        
     }
 
     if ( !bHandled )
@@ -399,13 +399,13 @@ sal_Bool DBTreeListBox::EditedEntry( SvTreeListEntry* pEntry, const OUString& rN
     }
     SetEntryText(pEntry,aEntry.aNewText);
 
-    return sal_False;  // we never want that the base change our text
+    return sal_False;  
 }
 
 sal_Bool DBTreeListBox::DoubleClickHdl()
 {
     long nResult = aDoubleClickHdl.Call( this );
-    // continue default processing if the DoubleClickHandler didn't handle it
+    
     return nResult == 0;
 }
 
@@ -471,7 +471,7 @@ namespace
         sal_uInt16 nCount = _rMenu.GetItemCount();
         for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
         {
-            // do not adjust separators
+            
             if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
                 continue;
 
@@ -488,13 +488,13 @@ namespace
             _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
                 _rMenu.GetItemBits( nId ), OString(), pos );
 
-            // more things to preserve:
-            // - the help command
+            
+            
             OUString sHelpURL = _rMenu.GetHelpCommand( nId );
             if ( !sHelpURL.isEmpty() )
                 _rMenu.SetHelpCommand(  nCommandId, sHelpURL  );
 
-            // remove the "old" item
+            
             _rMenu.RemoveItem( pos+1 );
         }
     }
@@ -507,7 +507,7 @@ namespace
         sal_uInt16 nCount = _rMenu.GetItemCount();
         for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
         {
-            // do not adjust separators
+            
             if ( _rMenu.GetItemType( pos ) == MENUITEM_SEPARATOR )
                 continue;
 
@@ -524,7 +524,7 @@ namespace
                 _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,false));
         }
     }
-    // SelectionSupplier
+    
     typedef ::cppu::WeakImplHelper1 <   XSelectionSupplier
                                     >   SelectionSupplier_Base;
     class SelectionSupplier : public SelectionSupplier_Base
@@ -552,7 +552,7 @@ namespace
     ::sal_Bool SAL_CALL SelectionSupplier::select( const Any& /*_Selection*/ ) throw (IllegalArgumentException, RuntimeException)
     {
         throw IllegalArgumentException();
-        // API bug: this should be a NoSupportException
+        
     }
 
     Any SAL_CALL SelectionSupplier::getSelection(  ) throw (RuntimeException)
@@ -563,13 +563,13 @@ namespace
     void SAL_CALL SelectionSupplier::addSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
         OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
-        // API bug: this should be a NoSupportException
+        
     }
 
     void SAL_CALL SelectionSupplier::removeSelectionChangeListener( const Reference< XSelectionChangeListener >& /*_Listener*/ ) throw (RuntimeException)
     {
         OSL_FAIL( "SelectionSupplier::removeSelectionChangeListener: no support!" );
-        // API bug: this should be a NoSupportException
+        
     }
 }
 
@@ -580,13 +580,13 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
     if ( !m_pContextMenuProvider )
         return pContextMenu.release();
 
-    // the basic context menu
+    
     pContextMenu.reset( m_pContextMenuProvider->getContextMenu( *this ) );
-    // disable what is not available currently
+    
     lcl_enableEntries( pContextMenu.get(), m_pContextMenuProvider->getCommandController() );
-    // set images
+    
     lcl_insertMenuItemImages( *pContextMenu, m_pContextMenuProvider->getCommandController() );
-    // allow context menu interception
+    
     ::cppu::OInterfaceContainerHelper* pInterceptors = m_pContextMenuProvider->getContextMenuInterceptors();
     if ( !pInterceptors || !pInterceptors->getLength() )
         return pContextMenu.release();
@@ -642,15 +642,15 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
 
     if ( bModifiedMenu )
     {
-        // the interceptor(s) modified the menu description => create a new PopupMenu
+        
         PopupMenu* pModifiedMenu = new PopupMenu;
         ::framework::ActionTriggerHelper::CreateMenuFromActionTriggerContainer(
             pModifiedMenu, aEvent.ActionTriggerContainer );
         aEvent.ActionTriggerContainer.clear();
         pContextMenu.reset( pModifiedMenu );
 
-        // the interceptors only know command URLs, but our menus primarily work
-        // with IDs -> we need to translate the commands to IDs
+        
+        
         lcl_adjustMenuItemIDs( *pModifiedMenu, m_pContextMenuProvider->getCommandController() );
     }
 
@@ -677,6 +677,6 @@ void DBTreeListBox::StateChanged( StateChangedType nStateChange )
         implStopSelectionTimer();
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/componentmodule.hxx>
@@ -24,10 +24,10 @@
 
 #include <vector>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using namespace ::cppu;
     using ::com::sun::star::uno::Sequence;
@@ -40,9 +40,9 @@ namespace comphelper
 
     typedef ::std::vector< ComponentDescription >   ComponentDescriptions;
 
-    //=========================================================================
-    //= OModuleImpl
-    //=========================================================================
+    
+    
+    
     /** implementation for <type>OModule</type>. not threadsafe, has to be guarded by it's owner
     */
     class OModuleImpl
@@ -54,20 +54,20 @@ namespace comphelper
         ~OModuleImpl();
     };
 
-    //-------------------------------------------------------------------------
+    
     OModuleImpl::OModuleImpl()
     {
     }
 
-    //-------------------------------------------------------------------------
+    
     OModuleImpl::~OModuleImpl()
     {
     }
 
-    //=========================================================================
-    //= OModule
-    //=========================================================================
-    //-------------------------------------------------------------------------
+    
+    
+    
+    
     OModule::OModule()
         : m_nClients(0)
         , m_pImpl(new OModuleImpl)
@@ -79,7 +79,7 @@ namespace comphelper
         delete m_pImpl;
     }
 
-    //-------------------------------------------------------------------------
+    
     void OModule::registerClient( OModule::ClientAccess )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -87,7 +87,7 @@ namespace comphelper
             onFirstClient();
     }
 
-    //-------------------------------------------------------------------------
+    
     void OModule::revokeClient( OModule::ClientAccess )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -95,17 +95,17 @@ namespace comphelper
             onLastClient();
     }
 
-    //--------------------------------------------------------------------------
+    
     void OModule::onFirstClient()
     {
     }
 
-    //--------------------------------------------------------------------------
+    
     void OModule::onLastClient()
     {
     }
 
-    //--------------------------------------------------------------------------
+    
     void OModule::registerImplementation( const ComponentDescription& _rComp )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -115,7 +115,7 @@ namespace comphelper
         m_pImpl->m_aRegisteredComponents.push_back( _rComp );
     }
 
-    //--------------------------------------------------------------------------
+    
     void OModule::registerImplementation( const OUString& _rImplementationName, const ::com::sun::star::uno::Sequence< OUString >& _rServiceNames,
         ::cppu::ComponentFactoryFunc _pCreateFunction, FactoryInstantiation _pFactoryFunction )
     {
@@ -123,7 +123,7 @@ namespace comphelper
         registerImplementation( aComponent );
     }
 
-    //--------------------------------------------------------------------------
+    
     void* OModule::getComponentFactory( const sal_Char* _pImplementationName )
     {
         Reference< XInterface > xFactory( getComponentFactory(
@@ -131,7 +131,7 @@ namespace comphelper
         return xFactory.get();
     }
 
-    //--------------------------------------------------------------------------
+    
     Reference< XInterface > OModule::getComponentFactory( const OUString& _rImplementationName )
     {
         Reference< XInterface > xReturn;
@@ -160,8 +160,8 @@ namespace comphelper
         return NULL;
     }
 
-//........................................................................
-} // namespace comphelper
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DataPointItemConverter.hxx"
@@ -34,19 +34,19 @@
 #include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/chart2/Symbol.hpp>
 
-// header for class XFillColorItem
+
 #include <svx/xflclit.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/sizeitem.hxx>
-// header for class SfxStringItem
+
 #include <svl/stritem.hxx>
 #include <editeng/brushitem.hxx>
-//SfxIntegerListItem
+
 #include <svl/ilstitem.hxx>
 #include <vcl/graph.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
-// for SVX_SYMBOLTYPE_...
+
 #include <svx/tabline.hxx>
 
 #include <functional>
@@ -87,9 +87,9 @@ sal_Int32 lcl_getSymbolStyleForSymbol( const chart2::Symbol & rSymbol )
             break;
 
         case chart2::SymbolStyle_POLYGON:
-            // to avoid warning
+            
         case chart2::SymbolStyle_MAKE_FIXED_SIZE:
-            // nothing
+            
             break;
     }
     return nStyle;
@@ -190,7 +190,7 @@ bool lcl_UseSourceFormatFromItemToPropertySet( sal_uInt16 nWhichId, const SfxIte
     return bChanged;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -256,7 +256,7 @@ void DataPointItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
                      ::comphelper::FillItemSetFunc( rOutItemSet ));
 
-    // own items
+    
     ItemConverter::FillItemSet( rOutItemSet );
 
     if( m_bUseSpecialFillColor )
@@ -273,13 +273,13 @@ bool DataPointItemConverter::ApplyItemSet( const SfxItemSet & rItemSet )
     ::std::for_each( m_aConverters.begin(), m_aConverters.end(),
                      ::comphelper::ApplyItemSetFunc( rItemSet, bResult ));
 
-    // own items
+    
     return ItemConverter::ApplyItemSet( rItemSet ) || bResult;
 }
 
 const sal_uInt16 * DataPointItemConverter::GetWhichPairs() const
 {
-    // must span all used items!
+    
     if( m_bDataSeries )
         return nRowWhichPairs;
     return nDataPointWhichPairs;
@@ -341,14 +341,14 @@ bool DataPointItemConverter::ApplySpecialItem(
         break;
 
         case SID_ATTR_NUMBERFORMAT_VALUE:
-        case SCHATTR_PERCENT_NUMBERFORMAT_VALUE:  //fall through intended
+        case SCHATTR_PERCENT_NUMBERFORMAT_VALUE:  
         {
             bChanged = lcl_NumberFormatFromItemToPropertySet( nWhichId, rItemSet, GetPropertySet(), m_bOverwriteLabelsForAttributedDataPointsAlso );
         }
         break;
 
         case SID_ATTR_NUMBERFORMAT_SOURCE:
-        case SCHATTR_PERCENT_NUMBERFORMAT_SOURCE: //fall through intended
+        case SCHATTR_PERCENT_NUMBERFORMAT_SOURCE: 
         {
             bChanged = lcl_UseSourceFormatFromItemToPropertySet( nWhichId, rItemSet, GetPropertySet(), m_bOverwriteLabelsForAttributedDataPointsAlso );
         }
@@ -676,7 +676,7 @@ void DataPointItemConverter::FillSpecialItem(
    }
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

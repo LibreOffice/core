@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@ class SvtSearchOptions_Impl : public ConfigItem
     sal_Int32   nFlags;
     bool    bModified;
 
-    // disallow copy-constructor and assignment-operator for now
+    
     SvtSearchOptions_Impl( const SvtSearchOptions_Impl & );
     SvtSearchOptions_Impl & operator = ( const SvtSearchOptions_Impl & );
 
@@ -57,7 +57,7 @@ public:
     SvtSearchOptions_Impl();
     virtual ~SvtSearchOptions_Impl();
 
-    // ConfigItem
+    
     virtual void    Commit();
     virtual void    Notify( const com::sun::star::uno::Sequence< OUString >& aPropertyNames );
 
@@ -69,7 +69,7 @@ public:
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
     ConfigItem( OUString("Office.Common/SearchOptions") )
 {
-    nFlags = 0x0003FFFF;    // set all options values to 'true'
+    nFlags = 0x0003FFFF;    
     Load();
     SetModified( false );
 }
@@ -123,34 +123,34 @@ Sequence< OUString > SvtSearchOptions_Impl::GetPropertyNames() const
 {
     static const char* aPropNames[ MAX_FLAGS_OFFSET + 1 ] =
     {
-        "IsWholeWordsOnly",                     //  0
-        "IsBackwards",                          //  1
-        "IsUseRegularExpression",               //  2
-        //"IsCurrentSelectionOnly",             // interactively set or not...
-        "IsSearchForStyles",                    //  3
-        "IsSimilaritySearch",                   //  4
-        "IsUseAsianOptions",                    //  5
-        "IsMatchCase",                          //  6
-        "Japanese/IsMatchFullHalfWidthForms",   //  7
-        "Japanese/IsMatchHiraganaKatakana",     //  8
-        "Japanese/IsMatchContractions",         //  9
-        "Japanese/IsMatchMinusDashCho-on",      // 10
-        "Japanese/IsMatchRepeatCharMarks",      // 11
-        "Japanese/IsMatchVariantFormKanji",     // 12
-        "Japanese/IsMatchOldKanaForms",         // 13
-        "Japanese/IsMatch_DiZi_DuZu",           // 14
-        "Japanese/IsMatch_BaVa_HaFa",           // 15
-        "Japanese/IsMatch_TsiThiChi_DhiZi",     // 16
-        "Japanese/IsMatch_HyuIyu_ByuVyu",       // 17
-        "Japanese/IsMatch_SeShe_ZeJe",          // 18
-        "Japanese/IsMatch_IaIya",               // 19
-        "Japanese/IsMatch_KiKu",                // 20
-        "Japanese/IsIgnorePunctuation",         // 21
-        "Japanese/IsIgnoreWhitespace",          // 22
-        "Japanese/IsIgnoreProlongedSoundMark",      // 23
-        "Japanese/IsIgnoreMiddleDot",           // 24
-        "IsNotes",                              // 25
-        "IsIgnoreDiacritics_CTL"                // 26
+        "IsWholeWordsOnly",                     
+        "IsBackwards",                          
+        "IsUseRegularExpression",               
+        
+        "IsSearchForStyles",                    
+        "IsSimilaritySearch",                   
+        "IsUseAsianOptions",                    
+        "IsMatchCase",                          
+        "Japanese/IsMatchFullHalfWidthForms",   
+        "Japanese/IsMatchHiraganaKatakana",     
+        "Japanese/IsMatchContractions",         
+        "Japanese/IsMatchMinusDashCho-on",      
+        "Japanese/IsMatchRepeatCharMarks",      
+        "Japanese/IsMatchVariantFormKanji",     
+        "Japanese/IsMatchOldKanaForms",         
+        "Japanese/IsMatch_DiZi_DuZu",           
+        "Japanese/IsMatch_BaVa_HaFa",           
+        "Japanese/IsMatch_TsiThiChi_DhiZi",     
+        "Japanese/IsMatch_HyuIyu_ByuVyu",       
+        "Japanese/IsMatch_SeShe_ZeJe",          
+        "Japanese/IsMatch_IaIya",               
+        "Japanese/IsMatch_KiKu",                
+        "Japanese/IsIgnorePunctuation",         
+        "Japanese/IsIgnoreWhitespace",          
+        "Japanese/IsIgnoreProlongedSoundMark",      
+        "Japanese/IsIgnoreMiddleDot",           
+        "IsNotes",                              
+        "IsIgnoreDiacritics_CTL"                
     };
 
     const int nCount = SAL_N_ELEMENTS( aPropNames );
@@ -172,7 +172,7 @@ bool SvtSearchOptions_Impl::Load()
     const Sequence< Any > aValues = GetProperties( aNames );
     DBG_ASSERT( aValues.getLength() == aNames.getLength(),
             "GetProperties failed" );
-    //EnableNotification( aNames );
+    
 
     if (nProps  &&  aValues.getLength() == nProps)
     {
@@ -190,7 +190,7 @@ bool SvtSearchOptions_Impl::Load()
                 {
                     if (i <= MAX_FLAGS_OFFSET)
                     {
-                        // use index in sequence as flag index
+                        
                         SetFlag( i, bVal );
                     }
                     else {
@@ -254,7 +254,7 @@ sal_Int32 SvtSearchOptions::GetTransliterationFlags() const
 {
     sal_Int32 nRes = 0;
 
-    if (!IsMatchCase()) // 'IsMatchCase' means act case sensitive
+    if (!IsMatchCase()) 
         nRes |= TransliterationModules_IGNORE_CASE;
     if ( IsMatchFullHalfWidthForms())
         nRes |= TransliterationModules_IGNORE_WIDTH;

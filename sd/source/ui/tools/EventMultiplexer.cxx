@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -80,25 +80,25 @@ public:
 
     ViewShellBase& GetViewShellBase() const { return mrBase; }
 
-    //===== lang::XEventListener ==============================================
+    
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
 
 
-    //===== beans::XPropertySetListener =======================================
+    
     virtual void SAL_CALL
         propertyChange (
             const com::sun::star::beans::PropertyChangeEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //===== view::XSelectionChangeListener ====================================
+    
     virtual void SAL_CALL
         selectionChanged (
             const com::sun::star::lang::EventObject& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //===== frame::XFrameActionListener  ======================================
+    
     /** For certain actions the listener connects to a new controller of the
         frame it is listening to.  This usually happens when the view shell
         in the center pane is replaced by another view shell.
@@ -107,7 +107,7 @@ public:
         frameAction (const ::com::sun::star::frame::FrameActionEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //===== drawing::framework::XConfigurationChangeListener ==================
+    
     virtual void SAL_CALL
         notifyConfigurationChange (
             const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
@@ -127,9 +127,9 @@ private:
     typedef ::std::vector<ListenerDescriptor> ListenerList;
     ListenerList maListeners;
 
-    /// Remember whether we are listening to the UNO controller.
+    
     bool mbListeningToController;
-    /// Remember whether we are listening to the frame.
+    
     bool mbListeningToFrame;
 
     ::com::sun::star::uno::WeakReference<
@@ -166,7 +166,7 @@ const char aCurrentPagePropertyName[] = "CurrentPage";
 const char aEditModePropertyName[] = "IsMasterPageMode";
 
 
-//===== EventMultiplexer ======================================================
+
 
 EventMultiplexer::EventMultiplexer (ViewShellBase& rBase)
     : mpImpl (new EventMultiplexer::Implementation(rBase))
@@ -182,10 +182,10 @@ EventMultiplexer::~EventMultiplexer (void)
     try
     {
         mpImpl->dispose();
-        // Now we call release twice.  One decreases the use count of the
-        // implementation object (if all goes well to zero and thus deletes
-        // it.)  The other releases the auto_ptr and prevents the
-        // implementation object from being deleted a second time.
+        
+        
+        
+        
         mpImpl->release();
         mpImpl.release();
     }
@@ -231,7 +231,7 @@ void EventMultiplexer::MultiplexEvent(
 
 
 
-//===== EventMultiplexer::Implementation ======================================
+
 
 EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     : MutexOwner(),
@@ -246,8 +246,8 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
       mpDocument(NULL),
       mxConfigurationControllerWeak()
 {
-    // Connect to the frame to listen for controllers being exchanged.
-    // Listen to changes of certain properties.
+    
+    
     Reference<frame::XFrame> xFrame (
         mrBase.GetFrame()->GetTopFrame().GetFrameInterface(),
         uno::UNO_QUERY);
@@ -260,15 +260,15 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
         mbListeningToFrame = true;
     }
 
-    // Connect to the current controller.
+    
     ConnectToController ();
 
-    // Listen for document changes.
+    
     mpDocument = mrBase.GetDocument();
     if (mpDocument != NULL)
         StartListening (*mpDocument);
 
-    // Listen for configuration changes.
+    
     Reference<XControllerManager> xControllerManager (
         Reference<XWeak>(&mrBase.GetDrawController()), UNO_QUERY);
     if (xControllerManager.is())
@@ -316,7 +316,7 @@ void EventMultiplexer::Implementation::ReleaseListeners (void)
     {
         mbListeningToFrame = false;
 
-        // Stop listening for changes of certain properties.
+        
         Reference<frame::XFrame> xFrame (mxFrameWeak);
         if (xFrame.is())
         {
@@ -334,7 +334,7 @@ void EventMultiplexer::Implementation::ReleaseListeners (void)
         mpDocument = NULL;
     }
 
-    // Stop listening for configuration changes.
+    
     Reference<XConfigurationController> xConfigurationController (mxConfigurationControllerWeak);
     if (xConfigurationController.is())
     {
@@ -360,7 +360,7 @@ void EventMultiplexer::Implementation::AddEventListener (
             break;
     if (iListener != maListeners.end())
     {
-        // Listener exists.  Update its event type set.
+        
         iListener->second |= aEventTypes;
     }
     else
@@ -383,9 +383,9 @@ void EventMultiplexer::Implementation::RemoveEventListener (
             break;
     if (iListener != maListeners.end())
     {
-        // Update the event type set.
+        
         iListener->second &= ~aEventTypes;
-        // When no events remain in the set then remove the listener.
+        
         if (iListener->second == EID_EMPTY_SET)
             maListeners.erase (iListener);
     }
@@ -396,21 +396,21 @@ void EventMultiplexer::Implementation::RemoveEventListener (
 
 void EventMultiplexer::Implementation::ConnectToController (void)
 {
-    // Just in case that we missed some event we now disconnect from the old
-    // controller.
+    
+    
     DisconnectFromController ();
 
-    // Register at the controller of the main view shell.
+    
 
-    // We have to store a (weak) reference to the controller so that we can
-    // unregister without having to ask the mrBase member (which at that
-    // time may be destroyed.)
+    
+    
+    
     Reference<frame::XController> xController = mrBase.GetController();
     mxControllerWeak = mrBase.GetController();
 
     try
     {
-        // Listen for disposing events.
+        
         Reference<lang::XComponent> xComponent (xController, UNO_QUERY);
         if (xComponent.is())
         {
@@ -420,7 +420,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
             mbListeningToController = true;
         }
 
-        // Listen to changes of certain properties.
+        
         Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
         if (xSet.is())
         {
@@ -443,7 +443,7 @@ void EventMultiplexer::Implementation::ConnectToController (void)
                 }
         }
 
-        // Listen for selection change events.
+        
         Reference<view::XSelectionSupplier> xSelection (xController, UNO_QUERY);
         if (xSelection.is())
         {
@@ -468,7 +468,7 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
         Reference<frame::XController> xController = mxControllerWeak;
 
         Reference<beans::XPropertySet> xSet (xController, UNO_QUERY);
-        // Remove the property listener.
+        
         if (xSet.is())
         {
             try
@@ -490,14 +490,14 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
             }
         }
 
-        // Remove selection change listener.
+        
         Reference<view::XSelectionSupplier> xSelection (xController, UNO_QUERY);
         if (xSelection.is())
         {
             xSelection->removeSelectionChangeListener(this);
         }
 
-        // Remove listener for disposing events.
+        
         Reference<lang::XComponent> xComponent (xController, UNO_QUERY);
         if (xComponent.is())
         {
@@ -510,7 +510,7 @@ void EventMultiplexer::Implementation::DisconnectFromController (void)
 
 
 
-//=====  lang::XEventListener  ================================================
+
 
 void SAL_CALL EventMultiplexer::Implementation::disposing (
     const lang::EventObject& rEventObject)
@@ -537,7 +537,7 @@ void SAL_CALL EventMultiplexer::Implementation::disposing (
 
 
 
-//=====  beans::XPropertySetListener  =========================================
+
 
 void SAL_CALL EventMultiplexer::Implementation::propertyChange (
     const beans::PropertyChangeEvent& rEvent)
@@ -563,7 +563,7 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
 
 
 
-//===== frame::XFrameActionListener  ==========================================
+
 
 void SAL_CALL EventMultiplexer::Implementation::frameAction (
     const frame::FrameActionEvent& rEvent)
@@ -598,7 +598,7 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
 
 
 
-//===== view::XSelectionChangeListener ========================================
+
 
 void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
     const lang::EventObject& )
@@ -610,7 +610,7 @@ void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
 
 
 
-//===== drawing::framework::XConfigurationChangeListener ==================
+
 
 void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
@@ -631,7 +631,7 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
                     CallListeners (EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
                 }
 
-                // Add selection change listener at slide sorter.
+                
                 if (rEvent.ResourceId->getResourceURL().equals(FrameworkHelper::msSlideSorterURL))
                 {
                     slidesorter::SlideSorterViewShell* pViewShell
@@ -658,8 +658,8 @@ void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
                     CallListeners (EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED);
                 }
 
-                // Remove selection change listener from slide sorter.  Add
-                // selection change listener at slide sorter.
+                
+                
                 if (rEvent.ResourceId->getResourceURL().equals(FrameworkHelper::msSlideSorterURL))
                 {
                     slidesorter::SlideSorterViewShell* pViewShell
@@ -790,7 +790,7 @@ IMPL_LINK_NOARG(EventMultiplexer::Implementation, SlideSorterSelectionChangeList
 
 
 
-//===== EventMultiplexerEvent =================================================
+
 
 EventMultiplexerEvent::EventMultiplexerEvent (
     const ViewShellBase& rBase,
@@ -803,6 +803,6 @@ EventMultiplexerEvent::EventMultiplexerEvent (
 {
 }
 
-} } // end of namespace ::sd::tools
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

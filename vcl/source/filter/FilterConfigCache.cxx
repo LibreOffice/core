@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "FilterConfigCache.hxx"
@@ -28,10 +28,10 @@
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-using namespace ::com::sun::star::lang          ;   // XMultiServiceFactory
-using namespace ::com::sun::star::container     ;   // XNameAccess
-using namespace ::com::sun::star::uno           ;   // Reference
-using namespace ::com::sun::star::beans         ;   // PropertyValue
+using namespace ::com::sun::star::lang          ;   
+using namespace ::com::sun::star::container     ;   
+using namespace ::com::sun::star::uno           ;   
+using namespace ::com::sun::star::beans         ;   
 using namespace ::com::sun::star::configuration ;
 
 const char* FilterConfigCache::FilterConfigCacheEntry::InternalPixelFilterNameList[] =
@@ -125,13 +125,13 @@ Reference< XInterface > openConfig(const char* sPackage)
     Reference< XInterface >           xCfg;
     try
     {
-        // get access to config API (not to file!)
+        
         Reference< XMultiServiceFactory > xConfigProvider = theDefaultProvider::get( xContext );
 
         Sequence< Any > lParams(1);
         PropertyValue   aParam    ;
 
-        // define cfg path for open
+        
         aParam.Name = "nodepath";
         if (rtl_str_compareIgnoreAsciiCase(sPackage, "types") == 0)
             aParam.Value <<= OUString( "/org.openoffice.TypeDetection.Types/Types" );
@@ -139,7 +139,7 @@ Reference< XInterface > openConfig(const char* sPackage)
             aParam.Value <<= OUString( "/org.openoffice.TypeDetection.GraphicFilter/Filters" );
         lParams[0] = makeAny(aParam);
 
-        // get access to file
+        
         xCfg = xConfigProvider->createInstanceWithArguments(
             OUString( "com.sun.star.configuration.ConfigurationAccess" ), lParams);
     }
@@ -161,7 +161,7 @@ void FilterConfigCache::ImplInit()
     OUString SFORMATNAME          ( "FormatName"          );
     OUString SREALFILTERNAME      ( "RealFilterName"      );
 
-    // get access to config
+    
     Reference< XNameAccess > xTypeAccess  ( openConfig("types"  ), UNO_QUERY );
     Reference< XNameAccess > xFilterAccess( openConfig("filters"), UNO_QUERY );
 
@@ -205,8 +205,8 @@ void FilterConfigCache::ImplInit()
             xTypeSet->getPropertyValue(SMEDIATYPE) >>= aEntry.sMediaType;
             xTypeSet->getPropertyValue(SEXTENSIONS) >>= aEntry.lExtensionList;
 
-            // The first extension will be used
-            // to generate our internal FilterType ( BMP, WMF ... )
+            
+            
             OUString aExtension( aEntry.GetShortName() );
             if (aExtension.getLength() != 3)
                 continue;
@@ -216,9 +216,9 @@ void FilterConfigCache::ImplInit()
             if ( aEntry.nFlags & 2 )
                 aExport.push_back( aEntry );
 
-            // bFilterEntryCreated!?
+            
             if (!( aEntry.nFlags & 3 ))
-                continue; //? Entry was already inserted ... but following code will be supressed?!
+                continue; 
         }
     }
 };
@@ -300,7 +300,7 @@ void FilterConfigCache::ImplInitSmart()
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 FilterConfigCache::FilterConfigCache( bool bConfig ) :
     bUseConfig ( bConfig )
@@ -333,7 +333,7 @@ sal_uInt16 FilterConfigCache::GetImportFormatNumber( const OUString& rFormatName
     return sal::static_int_cast< sal_uInt16 >(aIter == aImport.end() ? GRFILTER_FORMAT_NOTFOUND : aIter - aImport.begin());
 }
 
-/// get the index of the filter that matches this extension
+
 sal_uInt16 FilterConfigCache::GetImportFormatNumberForExtension( const OUString& rExt )
 {
     CacheVector::const_iterator aIter, aEnd;
@@ -442,7 +442,7 @@ bool FilterConfigCache::IsImportPixelFormat( sal_uInt16 nFormat )
     return (nFormat < aImport.size()) && aImport[ nFormat ].bIsPixelFormat;
 }
 
-// ------------------------------------------------------------------------
+
 
 OUString FilterConfigCache::GetExportFilterName( sal_uInt16 nFormat )
 {
@@ -556,6 +556,6 @@ bool FilterConfigCache::IsExportPixelFormat( sal_uInt16 nFormat )
     return (nFormat < aExport.size()) && aExport[ nFormat ].bIsPixelFormat;
 }
 
-// ------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

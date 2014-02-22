@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlbasici.hxx"
@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-// XMLBasicImportContext
+
 
 XMLBasicImportContext::XMLBasicImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< frame::XModel >& rxModel )
@@ -68,7 +68,7 @@ void XMLBasicImportContext::StartElement(
     {
         m_xHandler->startDocument();
 
-        // copy namespace declarations
+        
         SvXMLAttributeList* pAttrList = new SvXMLAttributeList( rxAttrList );
         Reference< xml::sax::XAttributeList > xAttrList( pAttrList );
         const SvXMLNamespaceMap& rNamespaceMap = GetImport().GetNamespaceMap();
@@ -103,7 +103,7 @@ void XMLBasicImportContext::Characters( const OUString& rChars )
         m_xHandler->characters( rChars );
 }
 
-// XMLBasicImportChildContext
+
 
 XMLBasicImportChildContext::XMLBasicImportChildContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< xml::sax::XDocumentHandler >& rxHandler )

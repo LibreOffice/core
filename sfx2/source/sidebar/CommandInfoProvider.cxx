@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/sidebar/CommandInfoProvider.hxx>
@@ -136,20 +136,20 @@ void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
 {
     if (rxFrame != mxCachedDataFrame)
     {
-        // Detach from the old frame.
+        
         if (mxFrameListener.is())
         {
             mxFrameListener->dispose();
             mxFrameListener = NULL;
         }
 
-        // Release objects that are tied to the old frame.
+        
         mxCachedDocumentAcceleratorConfiguration = NULL;
         mxCachedModuleAcceleratorConfiguration = NULL;
         msCachedModuleIdentifier = OUString();
         mxCachedDataFrame = rxFrame;
 
-        // Connect to the new frame.
+        
         if (rxFrame.is())
             mxFrameListener = new FrameListener(*this, rxFrame);
     }
@@ -162,7 +162,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetDocumentAcceler
 {
     if ( ! mxCachedDocumentAcceleratorConfiguration.is())
     {
-        // Get the accelerator configuration for the document.
+        
         if (mxCachedDataFrame.is())
         {
             Reference<frame::XController> xController = mxCachedDataFrame->getController();
@@ -218,7 +218,7 @@ Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetModuleAccelerat
 
 Reference<ui::XAcceleratorConfiguration> CommandInfoProvider::GetGlobalAcceleratorConfiguration (void)
 {
-    // Get the global accelerator configuration.
+    
     if ( ! mxCachedGlobalAcceleratorConfiguration.is())
     {
         mxCachedGlobalAcceleratorConfiguration = ui::GlobalAcceleratorConfiguration::create(mxContext);
@@ -337,6 +337,6 @@ OUString CommandInfoProvider::GetCommandLabel (const OUString& rsCommandName)
 }
 
 
-} } // end of namespace sfx2/framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

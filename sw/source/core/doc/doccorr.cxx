@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <doc.hxx>
@@ -50,8 +50,8 @@
 
 namespace
 {
-    /// find the relevant section in which the SwUnoCrsr may wander.
-    /// returns NULL if no restrictions apply
+    
+    
     static const SwStartNode* lcl_FindUnoCrsrSection( const SwNode& rNode )
     {
         const SwStartNode* pStartNode = rNode.StartOfSectionNode();
@@ -138,10 +138,10 @@ void PaMCorrAbs( const SwPaM& rRange,
         {
             SwUnoCrsr *const pUnoCursor = *it;
 
-            bool bChange = false; // has the UNO cursor been corrected?
+            bool bChange = false; 
 
-            // determine whether the UNO cursor will leave it's designated
-            // section
+            
+            
             bool const bLeaveSection =
                 pUnoCursor->IsRemainInSection() &&
                 ( lcl_FindUnoCrsrSection( aNewPos.nNode.GetNode() ) !=
@@ -162,11 +162,11 @@ void PaMCorrAbs( const SwPaM& rRange,
                 FOREACHPAM_END()
             }
 
-            // if a UNO cursor leaves its designated section, we must inform
-            // (and invalidate) said cursor
+            
+            
             if (bChange && bLeaveSection)
             {
-                // the UNO cursor has left its section. We need to notify it!
+                
                 SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
                 pUnoCursor->ModifyNotification( &aHint, NULL );
             }
@@ -186,16 +186,16 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
     aNewPos.nContent += nOffset;
 
     getIDocumentMarkAccess()->correctMarksAbsolute(rOldNode, rNewPos, nOffset);
-    // fix redlines
+    
     {
         SwRedlineTbl& rTbl = *mpRedlineTbl;
         for (sal_uInt16 n = 0; n < rTbl.size(); )
         {
-            // is on position ??
+            
             SwRangeRedline *const pRedline( rTbl[ n ] );
             bool const bChanged =
                 lcl_PaMCorrAbs(*pRedline, *aPam.Start(), *aPam.End(), aNewPos);
-            // clean up empty redlines: docredln.cxx asserts these as invalid
+            
             if (bChanged && (*pRedline->GetPoint() == *pRedline->GetMark())
                          && (pRedline->GetContentIdx() == NULL))
             {
@@ -207,7 +207,7 @@ void SwDoc::CorrAbs(const SwNodeIndex& rOldNode,
             }
         }
 
-        // To-Do - need to add here 'SwExtraRedlineTbl' also ?
+        
     }
 
     if(bMoveCrsr)
@@ -305,16 +305,16 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
 {
     getIDocumentMarkAccess()->correctMarksRelative(rOldNode, rNewPos, nOffset);
 
-    { // fix the Redlines
+    { 
         SwRedlineTbl& rTbl = *mpRedlineTbl;
         SwPosition aNewPos(rNewPos);
         for( sal_uInt16 n = 0; n < rTbl.size(); ++n )
         {
-            // lies on the position ??
+            
             lcl_PaMCorrRel1( rTbl[ n ], &rOldNode.GetNode(), aNewPos, aNewPos.nContent.GetIndex() + nOffset );
         }
 
-        // To-Do - need to add here 'SwExtraRedlineTbl' also ?
+        
     }
 
     if(bMoveCrsr)
@@ -323,14 +323,14 @@ void SwDoc::CorrRel(const SwNodeIndex& rOldNode,
 
 SwEditShell* SwDoc::GetEditShell( SwViewShell** ppSh ) const
 {
-    // Layout and OLE shells should be available
+    
     if( mpCurrentView )
     {
         SwViewShell *pSh = mpCurrentView, *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 
-        // look for an EditShell (if it exists)
+        
         do {
             if( pSh->IsA( TYPE( SwEditShell ) ) )
                 return (SwEditShell*)pSh;

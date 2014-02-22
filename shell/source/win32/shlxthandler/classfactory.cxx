@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef OSL_DEBUG_LEVEL
@@ -35,11 +35,11 @@ using ::std::min;
 #include "internal/thumbviewer.hxx"
 #include "internal/shlxthdl.hxx"
 
-//-----------------------------
+
 
 long CClassFactory::s_ServerLocks = 0;
 
-//-----------------------------
+
 
 CClassFactory::CClassFactory(const CLSID& clsid) :
     m_RefCnt(1),
@@ -48,16 +48,16 @@ CClassFactory::CClassFactory(const CLSID& clsid) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 
 CClassFactory::~CClassFactory()
 {
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-//-----------------------------
-// IUnknown methods
-//-----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
@@ -74,14 +74,14 @@ HRESULT STDMETHODCALLTYPE CClassFactory::QueryInterface(REFIID riid, void __RPC_
     return E_NOINTERFACE;
 }
 
-//-----------------------------
+
 
 ULONG STDMETHODCALLTYPE CClassFactory::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//-----------------------------
+
 
 ULONG STDMETHODCALLTYPE CClassFactory::Release(void)
 {
@@ -93,9 +93,9 @@ ULONG STDMETHODCALLTYPE CClassFactory::Release(void)
     return refcnt;
 }
 
-//-----------------------------
-// IClassFactory methods
-//-----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
             IUnknown __RPC_FAR *pUnkOuter,
@@ -126,13 +126,13 @@ HRESULT STDMETHODCALLTYPE CClassFactory::CreateInstance(
 
     HRESULT hr = pUnk->QueryInterface(riid, ppvObject);
 
-    // if QueryInterface failed the component will destroy itself
+    
     pUnk->Release();
 
     return hr;
 }
 
-//-----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
 {
@@ -144,7 +144,7 @@ HRESULT STDMETHODCALLTYPE CClassFactory::LockServer(BOOL fLock)
     return S_OK;
 }
 
-//-----------------------------
+
 
 bool CClassFactory::IsLocked()
 {

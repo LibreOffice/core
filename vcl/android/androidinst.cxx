@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <jni.h>
@@ -29,7 +29,7 @@
 
 static jclass appClass = 0;
 
-// Horrible hack
+
 static int viewWidth = 1, viewHeight = 1;
 
 class AndroidSalData : public SalGenericData
@@ -50,7 +50,7 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
     sal_Int32 nStride = aDev->getScanlineStride();
     unsigned char *pSrc = aSrcData.get();
 
-    // FIXME: do some cropping goodness on aSrcRect to ensure no overflows etc.
+    
     ARect aSrcRect = rSrcRect;
 
     for (unsigned int y = 0; y < (unsigned int)(aSrcRect.bottom - aSrcRect.top); y++)
@@ -67,10 +67,10 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                   nDestX * 4 /* dest pixel size */ );
             for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
             {
-                dp[x*4 + 0] = sp[x*4 + 0]; // R
-                dp[x*4 + 1] = sp[x*4 + 1]; // G
-                dp[x*4 + 2] = sp[x*4 + 2]; // B
-                dp[x*4 + 3] = 255; // A
+                dp[x*4 + 0] = sp[x*4 + 0]; 
+                dp[x*4 + 1] = sp[x*4 + 1]; 
+                dp[x*4 + 2] = sp[x*4 + 2]; 
+                dp[x*4 + 3] = 255; 
             }
             break;
         }
@@ -81,9 +81,9 @@ static void BlitFrameRegionToWindow(ANativeWindow_Buffer *pOutBuffer,
                                   nDestX * 2 /* dest pixel size */ );
             for (unsigned int x = 0; x < (unsigned int)(aSrcRect.right - aSrcRect.left); x++)
             {
-                unsigned char b = sp[x*3 + 0]; // B
-                unsigned char g = sp[x*3 + 1]; // G
-                unsigned char r = sp[x*3 + 2]; // R
+                unsigned char b = sp[x*3 + 0]; 
+                unsigned char g = sp[x*3 + 1]; 
+                unsigned char r = sp[x*3 + 2]; 
                 dp[x*2 + 0] = (r & 0xf8) | (g >> 5);
                 dp[x*2 + 1] = ((g & 0x1c) << 5) | ((b & 0xf8) >> 3);
             }
@@ -129,9 +129,9 @@ void AndroidSalInstance::damaged(AndroidSalFrame */* frame */)
     static bool beenHere = false;
     static jmethodID nCallbackDamaged = 0;
 
-    // Check if we are running in an app that has registered for damage callbacks
-    // static public void callbackDamaged();
-    // Call the Java layer to post an invalidate if necessary
+    
+    
+    
 
     if (appClass != 0 && !beenHere) {
         nCallbackDamaged = m_pJNIEnv->GetStaticMethodID(appClass, "callbackDamaged", "()V");
@@ -200,8 +200,8 @@ bool AndroidSalInstance::AnyInput( sal_uInt16 nType )
     if( (nType & VCL_INPUT_TIMER) != 0 )
         return CheckTimeout( false );
 
-    // Unfortunately there is no way to check for a specific type of
-    // input being queued. That information is too hidden, sigh.
+    
+    
     return SvpSalInstance::s_pDefaultInstance->PostedEventsInQueue();
 }
 
@@ -253,7 +253,7 @@ public:
 
     virtual void UpdateSettings( AllSettings &rSettings )
     {
-        // Clobber the UI fonts
+        
 #if 0
         psp::FastPrintFontInfo aInfo;
         aInfo.m_aFamilyName = "Roboto";
@@ -263,7 +263,7 @@ public:
         psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILocale() );
 #endif
 
-        // FIXME: is 14 point enough ?
+        
         Font aFont( OUString( "Roboto" ), Size( 0, 14 ) );
 
         StyleSettings aStyleSet = rSettings.GetStyleSettings();
@@ -294,7 +294,7 @@ SalFrame *AndroidSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nStyle )
 }
 
 
-// All the interesting stuff is slaved from the AndroidSalInstance
+
 void InitSalData()   {}
 void DeInitSalData() {}
 void InitSalMain()   {}
@@ -331,7 +331,7 @@ SalData::~SalData()
 {
 }
 
-// This is our main entry point:
+
 SalInstance *CreateSalInstance()
 {
     LOGI("Android: CreateSalInstance!");
@@ -364,13 +364,13 @@ int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
 
     if (AndroidSalInstance::getInstance() != NULL)
     {
-        // Does Android have a native dialog ? if not,. we have to do this ...
+        
 
-        // Of course it has. android.app.AlertDialog seems like a good
-        // choice, it even has one, two or three buttons. Naturally,
-        // it intended to be used from Java, so some verbose JNI
-        // horror would be needed to use it directly here. Probably we
-        // want some easier to use magic wrapper, hmm.
+        
+        
+        
+        
+        
 
         ErrorBox aVclErrBox( NULL, WB_OK, rTitle );
         aVclErrBox.SetText( rMessage );
@@ -381,7 +381,7 @@ int AndroidSalSystem::ShowNativeDialog( const OUString& rTitle,
     return 0;
 }
 
-// public static native void renderVCL(Bitmap bitmap);
+
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_android_AppSupport_renderVCL(JNIEnv *env,
                                                   jobject /* clazz */,
@@ -402,31 +402,31 @@ Java_org_libreoffice_android_AppSupport_renderVCL(JNIEnv *env,
 
 /*
 typedef struct ANativeWindow_Buffer {
-    // The number of pixels that are show horizontally.
+    
     int32_t width;
 
-    // The number of pixels that are shown vertically.
+    
     int32_t height;
 
-    // The number of *pixels* that a line in the buffer takes in
-    // memory.  This may be >= width.
+    
+    
     int32_t stride;
 
-    // The format of the buffer.  One of WINDOW_FORMAT_*
+    
     int32_t format;
 
-    // The actual bits.
+    
     void* bits;
 
-    // Do not touch.
+    
     uint32_t reserved[6];
 } ANativeWindow_Buffer;
 */
 
-    ANativeWindow_Buffer dummyOut; // look like a window for now ...
+    ANativeWindow_Buffer dummyOut; 
     dummyOut.width = info.width;
     dummyOut.height = info.height;
-    dummyOut.stride = info.stride / 4; // sigh !
+    dummyOut.stride = info.stride / 4; 
     dummyOut.format = info.format;
     dummyOut.bits = pixels;
     AndroidSalInstance::getInstance()->RedrawWindows (&dummyOut);
@@ -434,7 +434,7 @@ typedef struct ANativeWindow_Buffer {
     AndroidBitmap_unlockPixels(env, bitmap);
 }
 
-// public static native void registerForDamageCallback(Class destinationClass);
+
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_android_AppSupport_registerForDamageCallback(JNIEnv * env,
                                                                   jobject /* clazz */,
@@ -443,19 +443,19 @@ Java_org_libreoffice_android_AppSupport_registerForDamageCallback(JNIEnv * env,
     appClass = (jclass) env->NewGlobalRef(destinationClass);
 }
 
-// public static native void setViewSize(int width, int height);
+
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_android_AppSupport_setViewSize(JNIEnv * /* env */,
                                                     jobject /* clazz */,
                                                     jint width,
                                                     jint height)
 {
-    // Horrible
+    
     viewWidth = width;
     viewHeight = height;
 }
 
-// public static native void key(char c);
+
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_android_AppSupport_key(JNIEnv * /* env */,
                                             jobject /* clazz */,
@@ -471,7 +471,7 @@ Java_org_libreoffice_android_AppSupport_key(JNIEnv * /* env */,
         LOGW("No focused frame to emit event on");
 }
 
-// public static native void touch(int action, int x, int y);
+
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_android_AppSupport_touch(JNIEnv * /* env */,
                                               jobject /* clazz */,
@@ -507,7 +507,7 @@ Java_org_libreoffice_android_AppSupport_touch(JNIEnv * /* env */,
         LOGW("No focused frame to emit event on");
 }
 
-// public static native void zoom(float scale, int x, int y);
+
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_android_AppSupport_zoom(JNIEnv * /* env */,
                                              jobject /* clazz */,
@@ -525,7 +525,7 @@ Java_org_libreoffice_android_AppSupport_zoom(JNIEnv * /* env */,
         LOGW("No focused frame to emit event on");
 }
 
-// public static native void scroll(int x, int y);
+
 extern "C" SAL_JNI_EXPORT void JNICALL
 Java_org_libreoffice_android_AppSupport_scroll(JNIEnv * /* env */,
                                                jobject /* clazz */,

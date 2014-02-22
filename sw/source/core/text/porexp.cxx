@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <viewopt.hxx>
@@ -36,8 +36,8 @@ sal_Int32 SwExpandPortion::GetCrsrOfst( const MSHORT nOfst ) const
 bool SwExpandPortion::GetExpTxt( const SwTxtSizeInfo&, OUString &rTxt ) const
 {
     rTxt = OUString();
-    // Nicht etwa: return 0 != rTxt.Len();
-    // Weil: leere Felder ersetzen CH_TXTATR gegen einen Leerstring
+    
+    
     return true;
 }
 
@@ -65,19 +65,19 @@ SwPosSize SwExpandPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
  *                 virtual SwExpandPortion::Format()
  *************************************************************************/
 
-// 5010: Exp und Tabs
+
 
 bool SwExpandPortion::Format( SwTxtFormatInfo &rInf )
 {
     SwTxtSlot aDiffTxt( &rInf, this, true, false );
     const sal_Int32 nFullLen = rInf.GetLen();
 
-    // So komisch es aussieht, die Abfrage auf GetLen() muss wegen der
-    // ExpandPortions _hinter_ aDiffTxt (vgl. SoftHyphs)
-    // false returnen wegen SetFull ...
+    
+    
+    
     if( !nFullLen )
     {
-        // nicht Init(), weil wir Hoehe und Ascent brauchen
+        
         Width(0);
         return false;
     }
@@ -100,17 +100,17 @@ void SwExpandPortion::Paint( const SwTxtPaintInfo &rInf ) const
     rInf.DrawBackBrush( *this );
     rInf.DrawBorder( *this );
 
-    // do we have to repaint a post it portion?
+    
     if( rInf.OnWin() && pPortion && !pPortion->Width() )
         pPortion->PrePaint( rInf, this );
 
-    // The contents of field portions is not considered during the
-    // calculation of the directions. Therefore we let vcl handle
-    // the calculation by removing the BIDI_STRONG_FLAG temporarily.
+    
+    
+    
     SwLayoutModeModifier aLayoutModeModifier( *rInf.GetOut() );
     aLayoutModeModifier.SetAuto();
 
-    // ST2
+    
     if ( rInf.GetSmartTags() || rInf.GetGrammarCheckList() )
         rInf.DrawMarkedText( *this, rInf.GetLen(), false, false,
             0 != rInf.GetSmartTags(), 0 != rInf.GetGrammarCheckList() );
@@ -131,10 +131,10 @@ SwLinePortion *SwBlankPortion::Compress() { return this; }
  *                 SwBlankPortion::MayUnderFlow()
  *************************************************************************/
 
-// 5497: Es gibt schon Gemeinheiten auf der Welt...
-// Wenn eine Zeile voll mit HardBlanks ist und diese ueberlaeuft,
-// dann duerfen keine Underflows generiert werden!
-// Komplikationen bei Flys...
+
+
+
+
 
 MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
     sal_Int32 nIdx, bool bUnderFlow ) const
@@ -147,9 +147,9 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
     while( pPos && pPos->IsBlankPortion() )
         pPos = pPos->GetPortion();
     if( !pPos || !rInf.GetIdx() || ( !pPos->GetLen() && pPos == rInf.GetRoot() ) )
-        return 0; // Nur noch BlankPortions unterwegs
-    // Wenn vor uns ein Blank ist, brauchen wir kein Underflow ausloesen,
-    // wenn hinter uns ein Blank ist, brauchen wir kein Underflow weiterreichen
+        return 0; 
+    
+    
     if (bUnderFlow && nIdx + 1 < rInf.GetTxt().getLength() && CH_BLANK == rInf.GetTxt()[nIdx + 1])
         return 0;
     if( nIdx && !((SwTxtFormatInfo&)rInf).GetFly() )
@@ -158,9 +158,9 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
             pPos = pPos->GetPortion();
         if( !pPos )
         {
-        //Hier wird ueberprueft, ob es in dieser Zeile noch sinnvolle Umbrueche
-        //gibt, Blanks oder Felder etc., wenn nicht, kein Underflow.
-        //Wenn Flys im Spiel sind, lassen wir das Underflow trotzdem zu.
+        
+        
+        
             sal_Int32 nBlank = nIdx;
             while( --nBlank > rInf.GetLineStart() )
             {
@@ -185,7 +185,7 @@ MSHORT SwBlankPortion::MayUnderFlow( const SwTxtFormatInfo &rInf,
 /*************************************************************************
  *                 virtual SwBlankPortion::FormatEOL()
  *************************************************************************/
-// Format end of Line
+
 
 void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
@@ -210,7 +210,7 @@ void SwBlankPortion::FormatEOL( SwTxtFormatInfo &rInf )
  *                 virtual SwBlankPortion::Format()
  *************************************************************************/
 
-// 7771: UnderFlows weiterreichen und selbst ausloesen!
+
 bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
 {
     const bool bFull = rInf.IsUnderFlow() || SwExpandPortion::Format( rInf );
@@ -230,7 +230,7 @@ bool SwBlankPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwBlankPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    if( !bMulti ) // No gray background for multiportion brackets
+    if( !bMulti ) 
         rInf.DrawViewOpt( *this, POR_BLANK );
     SwExpandPortion::Paint( rInf );
 }
@@ -274,7 +274,7 @@ void SwPostItsPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 KSHORT SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    // Nicht zu fassen: PostIts sind immer zu sehen.
+    
     return rInf.OnWin() ?
                 (KSHORT)rInf.GetOpt().GetPostItsWidth( rInf.GetOut() ) : 0;
 }
@@ -286,7 +286,7 @@ KSHORT SwPostItsPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 bool SwPostItsPortion::Format( SwTxtFormatInfo &rInf )
 {
     const bool bRet = SwLinePortion::Format( rInf );
-    // 32749: PostIts sollen keine Auswirkung auf Zeilenhoehe etc. haben
+    
     SetAscent( 1 );
     Height( 1 );
     return bRet;

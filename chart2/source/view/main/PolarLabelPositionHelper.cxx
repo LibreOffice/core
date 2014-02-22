@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PolarLabelPositionHelper.hxx"
@@ -72,7 +72,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
 
     double fAngleDegree = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
     double fRadius = 0.0;
-    if( !bCenter ) //e.g. for pure pie chart(one ring only) or for angle axis of polyar coordinate system
+    if( !bCenter ) 
         fRadius = fUnitCircleOuterRadius;
     else
         fRadius = fUnitCircleInnerRadius + (fUnitCircleOuterRadius-fUnitCircleInnerRadius)/2.0 ;
@@ -82,8 +82,8 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
 
     if(3==m_nDimensionCount && nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE)
     {
-        //check whether the upper or the downer edge is more distant from the center
-        //take the farest point to put the label to
+        
+        
 
         awt::Point aP0( this->transformSceneToScreenPosition(
             m_pPosHelper->transformUnitCircleToScene( 0, 0, fLogicZ ) ) );
@@ -101,10 +101,10 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
         if(fL2>fL1)
             aRet = aP2;
 
-        //calculate new angle for alignment
+        
         double fDX = aRet.X-aP0.X;
         double fDY = aRet.Y-aP0.Y;
-        fDY*=-1.0;//drawing layer has inverse y values
+        fDY*=-1.0;
         if( fDX != 0.0 )
         {
             fAngleDegree = atan(fDY/fDX)*180.0/F_PI;
@@ -119,7 +119,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
                 fAngleDegree = 270.0;
         }
     }
-    //set LabelAlignment
+    
     if( !bCenter )
     {
         while(fAngleDegree>360.0)
@@ -155,7 +155,7 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
         rAlignment = LABEL_ALIGN_CENTER;
     }
 
-    //add a scaling independent Offset if requested
+    
     if( nScreenValueOffsetInRadiusDirection != 0)
     {
         awt::Point aOrigin( this->transformSceneToScreenPosition(
@@ -169,6 +169,6 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
     return aRet;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

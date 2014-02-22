@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/sfxsids.hrc>
@@ -57,17 +57,17 @@
 #include <svx/flagsdef.hxx>
 #include <vcl/settings.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
-    //========================================================================
-    //= OFontPropertyExtractor
-    //========================================================================
+    
+    
+    
     class OFontPropertyExtractor
     {
     protected:
@@ -94,7 +94,7 @@ namespace pcr
                             sal_Bool _bForceInvalidation = sal_False);
     };
 
-    //------------------------------------------------------------------------
+    
     OFontPropertyExtractor::OFontPropertyExtractor(const Reference< XPropertySet >& _rxProps)
         :m_xPropValueAccess(_rxProps)
         ,m_xPropStateAccess(_rxProps, UNO_QUERY)
@@ -102,7 +102,7 @@ namespace pcr
         OSL_ENSURE(m_xPropValueAccess.is(), "OFontPropertyExtractor::OFontPropertyExtractor: invalid property set!");
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Bool OFontPropertyExtractor::getCheckFontProperty(const OUString& _rPropName, Any& _rValue)
     {
         _rValue = m_xPropValueAccess->getPropertyValue(_rPropName);
@@ -112,7 +112,7 @@ namespace pcr
         return sal_False;
     }
 
-    //------------------------------------------------------------------------
+    
     OUString OFontPropertyExtractor::getStringFontProperty(const OUString& _rPropName, const OUString& _rDefault)
     {
         Any aValue;
@@ -122,7 +122,7 @@ namespace pcr
         return ::comphelper::getString(aValue);
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Int16 OFontPropertyExtractor::getInt16FontProperty(const OUString& _rPropName, const sal_Int16 _nDefault)
     {
         Any aValue;
@@ -134,7 +134,7 @@ namespace pcr
         return (sal_Int16)nValue;
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Int32 OFontPropertyExtractor::getInt32FontProperty(const OUString& _rPropName, const sal_Int32 _nDefault)
     {
         Any aValue;
@@ -146,7 +146,7 @@ namespace pcr
         return nValue;
     }
 
-    //------------------------------------------------------------------------
+    
     float OFontPropertyExtractor::getFloatFontProperty(const OUString& _rPropName, const float _nDefault)
     {
         Any aValue;
@@ -156,7 +156,7 @@ namespace pcr
         return ::comphelper::getFloat(aValue);
     }
 
-    //------------------------------------------------------------------------
+    
     void OFontPropertyExtractor::invalidateItem(const OUString& _rPropName, sal_uInt16 _nItemId, SfxItemSet& _rSet, sal_Bool _bForceInvalidation)
     {
         if  (   _bForceInvalidation
@@ -167,27 +167,27 @@ namespace pcr
             _rSet.InvalidateItem(_nItemId);
     }
 
-    //========================================================================
-    //= ControlCharacterDialog
-    //========================================================================
-    //------------------------------------------------------------------------
+    
+    
+    
+    
     ControlCharacterDialog::ControlCharacterDialog(Window* _pParent, const SfxItemSet& _rCoreSet)
         : SfxTabDialog(_pParent, "ControlFontDialog",
             "modules/spropctrlr/ui/controlfontdialog.ui", &_rCoreSet)
         , m_nCharsId(0)
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        assert(pFact); //CreateFactory fail!
+        assert(pFact); 
         m_nCharsId = AddTabPage("font", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_NAME), 0 );
         AddTabPage("fonteffects", pFact->GetTabPageCreatorFunc(RID_SVXPAGE_CHAR_EFFECTS), 0 );
     }
 
-    //------------------------------------------------------------------------
+    
     ControlCharacterDialog::~ControlCharacterDialog()
     {
     }
 
-    //------------------------------------------------------------------------
+    
     void ControlCharacterDialog::translatePropertiesToItems(const Reference< XPropertySet >& _rxModel, SfxItemSet* _pSet)
     {
         OSL_ENSURE(_pSet && _rxModel.is(), "ControlCharacterDialog::translatePropertiesToItems: invalid arguments!");
@@ -198,11 +198,11 @@ namespace pcr
         {
             OFontPropertyExtractor aPropExtractor(_rxModel);
 
-            // some items, which may be in default state, have to be filled with non-void information
+            
             Font aDefaultVCLFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
             ::com::sun::star::awt::FontDescriptor aDefaultFont = VCLUnoHelper::CreateFontDescriptor(aDefaultVCLFont);
 
-            // get the current properties
+            
             OUString aFontName       = aPropExtractor.getStringFontProperty(PROPERTY_FONT_NAME, aDefaultFont.Name);
             OUString aFontStyleName  = aPropExtractor.getStringFontProperty(PROPERTY_FONT_STYLENAME, aDefaultFont.StyleName);
             sal_Int16   nFontFamily         = aPropExtractor.getInt16FontProperty(PROPERTY_FONT_FAMILY, aDefaultFont.Family);
@@ -221,7 +221,7 @@ namespace pcr
             sal_Bool bWordLineMode          = aPropExtractor.getCheckFontProperty(PROPERTY_WORDLINEMODE, aValue) ? aDefaultFont.WordLineMode : ::cppu::any2bool(aValue);
             sal_Int32 nColor32              = aPropExtractor.getInt32FontProperty(PROPERTY_TEXTCOLOR, 0);
 
-            // build SfxItems with the values
+            
             SvxFontItem aFontItem((FontFamily)nFontFamily, aFontName, aFontStyleName, PITCH_DONTKNOW, nFontCharset, CFID_FONT);
 
             nFontHeight = (float)OutputDevice::LogicToLogic(Size(0, (sal_Int32)nFontHeight), MAP_POINT, MAP_TWIP).Height();
@@ -244,7 +244,7 @@ namespace pcr
             SvxColorItem aSvxColorItem(nColor32,CFID_CHARCOLOR);
             SvxLanguageItem aLanguageItem(Application::GetSettings().GetUILanguageTag().getLanguageType(), CFID_LANGUAGE);
 
-            // the 2 CJK props
+            
             SvxCharReliefItem aFontReliefItem((FontRelief)nFontRelief, CFID_RELIEF);
             SvxEmphasisMarkItem aEmphasisMarkitem((FontEmphasisMark)nFontEmphasisMark, CFID_EMPHASIS);
 
@@ -288,7 +288,7 @@ namespace pcr
 
     }
 
-    //------------------------------------------------------------------------
+    
     namespace
     {
         void lcl_pushBackPropertyValue( Sequence< NamedValue >& _out_properties, const OUString& _name, const Any& _value )
@@ -298,15 +298,15 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, Sequence< NamedValue >& _out_properties )
     {
         _out_properties.realloc( 0 );
 
         try
         {
-            // --------------------------
-            // font name
+            
+            
             SfxItemState eState = _rSet.GetItemState(CFID_FONT);
 
             if ( eState == SFX_ITEM_SET )
@@ -320,8 +320,8 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_CHARSET  , makeAny((sal_Int16)rFontItem.GetCharSet()));
             }
 
-            // --------------------------
-            // font height
+            
+            
             eState = _rSet.GetItemState(CFID_HEIGHT);
 
             if ( eState == SFX_ITEM_SET )
@@ -334,8 +334,8 @@ namespace pcr
 
             }
 
-            // --------------------------
-            // font weight
+            
+            
             eState = _rSet.GetItemState(CFID_WEIGHT);
 
             if ( eState == SFX_ITEM_SET )
@@ -347,8 +347,8 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_WEIGHT,makeAny(nWeight));
             }
 
-            // --------------------------
-            // font slant
+            
+            
             eState = _rSet.GetItemState(CFID_POSTURE);
 
             if ( eState == SFX_ITEM_SET )
@@ -360,8 +360,8 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_SLANT, makeAny((sal_Int16)eSlant));
             }
 
-            // --------------------------
-            // font underline
+            
+            
             eState = _rSet.GetItemState(CFID_UNDERLINE);
 
             if ( eState == SFX_ITEM_SET )
@@ -372,7 +372,7 @@ namespace pcr
                 sal_Int16 nUnderline = (sal_Int16)rUnderlineItem.GetLineStyle();
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_UNDERLINE,makeAny(nUnderline));
 
-                // the text line color is transported in this item, too
+                
                 sal_Int32 nColor = rUnderlineItem.GetColor().GetColor();
 
                 Any aUnoColor;
@@ -382,8 +382,8 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTLINECOLOR, aUnoColor );
             }
 
-            // --------------------------
-            // font strikeout
+            
+            
             eState = _rSet.GetItemState(CFID_STRIKEOUT);
 
             if ( eState == SFX_ITEM_SET )
@@ -396,8 +396,8 @@ namespace pcr
             }
 
 
-            // --------------------------
-            // font wordline mode
+            
+            
             eState = _rSet.GetItemState(CFID_WORDLINEMODE);
 
             if ( eState == SFX_ITEM_SET )
@@ -409,8 +409,8 @@ namespace pcr
             }
 
 
-            // --------------------------
-            // text color
+            
+            
             eState = _rSet.GetItemState(CFID_CHARCOLOR);
 
             if ( eState == SFX_ITEM_SET )
@@ -427,8 +427,8 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTCOLOR, aUnoColor );
             }
 
-            // --------------------------
-            // font relief
+            
+            
             eState = _rSet.GetItemState(CFID_RELIEF);
 
             if ( eState == SFX_ITEM_SET )
@@ -439,8 +439,8 @@ namespace pcr
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_FONT_RELIEF, makeAny((sal_Int16)rReliefItem.GetValue()) );
             }
 
-            // --------------------------
-            // font emphasis mark
+            
+            
             eState = _rSet.GetItemState(CFID_EMPHASIS);
 
             if ( eState == SFX_ITEM_SET )
@@ -457,7 +457,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     void ControlCharacterDialog::translateItemsToProperties( const SfxItemSet& _rSet, const Reference< XPropertySet >& _rxModel)
     {
         OSL_ENSURE( _rxModel.is(), "ControlCharacterDialog::translateItemsToProperties: invalid arguments!" );
@@ -479,20 +479,20 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------------
+    
     SfxItemSet* ControlCharacterDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
     {
-        // just to be sure ....
+        
         _rpSet = NULL;
         _rpPool = NULL;
         _rppDefaults = NULL;
 
-        // create and initialize the defaults
+        
         _rppDefaults = new SfxPoolItem*[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1];
 
         Font aDefaultVCLFont = Application::GetDefaultDevice()->GetSettings().GetStyleSettings().GetAppFont();
 
-        SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
+        SfxPoolItem** pCounter = _rppDefaults;  
         *pCounter++ = new SvxFontItem(aDefaultVCLFont.GetFamily(), aDefaultVCLFont.GetName(), aDefaultVCLFont.GetStyleName(), aDefaultVCLFont.GetPitch(), aDefaultVCLFont.GetCharSet(), CFID_FONT);
         *pCounter++ = new SvxFontHeightItem(aDefaultVCLFont.GetHeight(), 100, CFID_HEIGHT);
         *pCounter++ = new SvxWeightItem(aDefaultVCLFont.GetWeight(), CFID_WEIGHT);
@@ -517,7 +517,7 @@ namespace pcr
 
         *pCounter++ = new SvxFontListItem (new FontList(Application::GetDefaultDevice()), CFID_FONTLIST);
 
-        // create the pool
+        
         static SfxItemInfo const aItemInfos[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1] =
         {
             { SID_ATTR_CHAR_FONT,               0 },
@@ -546,40 +546,40 @@ namespace pcr
             aItemInfos, _rppDefaults);
         _rpPool->FreezeIdRanges();
 
-        // and, finally, the set
+        
         _rpSet = new SfxItemSet(*_rpPool, true);
 
         return _rpSet;
     }
 
-    //-------------------------------------------------------------------------
+    
     void ControlCharacterDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
     {
-        // from the pool, get and remember the font list (needs to be deleted)
+        
         const SvxFontListItem& rFontListItem = static_cast<const SvxFontListItem&>(_rpPool->GetDefaultItem(CFID_FONTLIST));
         const FontList* pFontList = rFontListItem.GetFontList();
 
-        // _first_ delete the set (refering the pool)
+        
         if (_rpSet)
         {
             delete _rpSet;
             _rpSet = NULL;
         }
 
-        // delete the pool
+        
         _rpPool->ReleaseDefaults(true);
-            // the "true" means delete the items, too
+            
         SfxItemPool::Free(_rpPool);
         _rpPool = NULL;
 
-        // reset the defaults ptr
+        
         _rppDefaults = NULL;
-            // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
+            
 
         delete pFontList;
     }
 
-    //------------------------------------------------------------------------
+    
     void ControlCharacterDialog::PageCreated( sal_uInt16 _nId, SfxTabPage& _rPage )
     {
         SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
@@ -590,8 +590,8 @@ namespace pcr
         }
     }
 
-//............................................................................
-}   // namespace pcr
-//............................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

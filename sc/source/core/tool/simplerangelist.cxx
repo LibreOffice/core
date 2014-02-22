@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "simplerangelist.hxx"
@@ -37,16 +37,16 @@ bool maybeJoin(ScSimpleRangeList::Range& rOld, SCCOL nCol1, SCROW nRow1, SCCOL n
 {
     if (rOld.mnRow1 == nRow1 && rOld.mnRow2 == nRow2)
     {
-        // Check their column spans to see if they overlap.
+        
         if (rOld.mnCol1 == nCol1)
         {
-            // Their share the start column position.
+            
             rOld.mnCol2 = max(rOld.mnCol2, nCol2);
             return true;
         }
         else if (rOld.mnCol1 < nCol1)
         {
-            // Old range sits on the left.
+            
             if (nCol1 - rOld.mnCol2 <= 1)
             {
                 rOld.mnCol2 = max(rOld.mnCol2, nCol2);
@@ -55,7 +55,7 @@ bool maybeJoin(ScSimpleRangeList::Range& rOld, SCCOL nCol1, SCROW nRow1, SCCOL n
         }
         else if (nCol1 < rOld.mnCol1)
         {
-            // New range sits on the left.
+            
             if (nCol1 - rOld.mnCol2 <= 1)
             {
                 rOld.mnCol1 = nCol1;
@@ -69,13 +69,13 @@ bool maybeJoin(ScSimpleRangeList::Range& rOld, SCCOL nCol1, SCROW nRow1, SCCOL n
     {
         if (rOld.mnRow1 == nRow1)
         {
-            // Their share the start row position.
+            
             rOld.mnRow2 = max(rOld.mnRow2, nRow2);
             return true;
         }
         else if (rOld.mnRow1 < nRow1)
         {
-            // Old range sits above.
+            
             if (nRow1 - rOld.mnRow2 <= 1)
             {
                 rOld.mnRow2 = max(rOld.mnRow2, nRow2);
@@ -84,7 +84,7 @@ bool maybeJoin(ScSimpleRangeList::Range& rOld, SCCOL nCol1, SCROW nRow1, SCCOL n
         }
         else if (nRow1 < rOld.mnRow1)
         {
-            // New range sits above.
+            
             if (nRow1 - rOld.mnRow2 <= 1)
             {
                 rOld.mnRow1 = nRow1;
@@ -112,11 +112,11 @@ void ScSimpleRangeList::addRange(const ScRange& rRange)
     {
         RangeListRef pRef = findTab(nTab);
         if (!pRef)
-            // This should never happen!
+            
             return;
 
         if (pRef->empty() || !maybeJoin(pRef->back(), nCol1, nRow1, nCol2, nRow2))
-            // Not joinable.  Append it to the list.
+            
             pRef->push_back(Range(nCol1, nRow1, nCol2, nRow2));
     }
 }
@@ -125,7 +125,7 @@ void ScSimpleRangeList::insertCol(SCCOL nCol, SCTAB nTab)
 {
     RangeListRef pRef = findTab(nTab);
     if (!pRef)
-        // This should never happen!
+        
         return;
 
     list<Range>::iterator itr = pRef->begin(), itrEnd = pRef->end();
@@ -133,18 +133,18 @@ void ScSimpleRangeList::insertCol(SCCOL nCol, SCTAB nTab)
     {
         Range& r = *itr;
         if (r.mnCol2 < nCol)
-            // insertion point to the right of the range.
+            
             continue;
 
         if (nCol <= r.mnCol1)
         {
-            // insertion point to the left of the range.
+            
             ++r.mnCol1;
             ++r.mnCol2;
         }
         else if (nCol <= r.mnCol2)
         {
-            // insertion point cuts through the range.
+            
             ++r.mnCol2;
         }
     }

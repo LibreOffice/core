@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -58,9 +58,9 @@ namespace vclcanvas
             virtual OutputDevice&       getOutDev() { return mrOutDev; }
             virtual const OutputDevice& getOutDev() const { return mrOutDev; }
 
-            // TODO(Q2): Lifetime issue. This _only_ works reliably,
-            // if disposing the Canvas correctly disposes all
-            // entities which hold this pointer.
+            
+            
+            
             OutputDevice& mrOutDev;
         };
     }
@@ -74,7 +74,7 @@ namespace vclcanvas
 
     void Canvas::initialize()
     {
-        // #i64742# Only perform initialization when not in probe mode
+        
         if( maArguments.getLength() == 0 )
             return;
 
@@ -105,12 +105,12 @@ namespace vclcanvas
 
         OutDevProviderSharedPtr pOutdevProvider( new OutDevHolder(*pOutDev) );
 
-        // setup helper
+        
         maDeviceHelper.init( pOutdevProvider );
         maCanvasHelper.init( *this,
                              pOutdevProvider,
-                             true,   // OutDev state preservation
-                             false ); // no alpha on surface
+                             true,   
+                             false ); 
 
         maArguments.realloc(0);
     }
@@ -126,7 +126,7 @@ namespace vclcanvas
 
         mxComponentContext.clear();
 
-        // forward to parent
+        
         CanvasBaseT::disposeThis();
     }
 

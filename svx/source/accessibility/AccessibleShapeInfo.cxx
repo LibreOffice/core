@@ -34,7 +34,7 @@ AccessibleShapeInfo::AccessibleShapeInfo (
       mpChildrenManager (pChildrenManager),
       mnIndex (nIndex)
 {
-    // empty.
+    
 }
 
 
@@ -51,7 +51,7 @@ AccessibleShapeInfo::AccessibleShapeInfo (
       mpChildrenManager (NULL),
       mnIndex (nIndex)
 {
-    // empty.
+    
 }
 
 AccessibleShapeInfo::AccessibleShapeInfo (const AccessibleShapeInfo &rOther)
@@ -60,15 +60,15 @@ AccessibleShapeInfo::AccessibleShapeInfo (const AccessibleShapeInfo &rOther)
       mpChildrenManager (rOther.mpChildrenManager),
       mnIndex (rOther.mnIndex)
 {
-    // empty.
+    
 }
 
 
 AccessibleShapeInfo::~AccessibleShapeInfo (void)
 {
-    // empty.
+    
 }
 
-} // end of namespace accessibility.
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

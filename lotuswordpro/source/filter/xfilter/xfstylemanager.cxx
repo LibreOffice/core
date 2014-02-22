@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -95,7 +95,7 @@ void    XFStyleManager::Reset()
     s_aDateStyles.Reset();
     s_aGraphicsStyles.Reset();
     s_aConfigManager.Reset();
-    //must clear all static containers.
+    
     s_aFontDecls.clear();
 }
 
@@ -150,7 +150,7 @@ IXFStyle*   XFStyleManager::AddStyle(IXFStyle *pStyle)
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleMasterPage )
     {
-        //Master page don't need name.
+        
         pStyleRet = s_aMasterpages.AddStyle(pStyle);
     }
     else if( pStyle->GetStyleFamily() == enumXFStyleDate )
@@ -313,7 +313,7 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     pAttrList->Clear();
     pStrm->StartElement( A2OUSTR("office:font-decls") );
 
-    //font declarations:
+    
     for( itDecl = s_aFontDecls.begin(); itDecl != s_aFontDecls.end(); ++itDecl )
     {
         XFFontDecl &f = *itDecl;
@@ -331,7 +331,7 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
 
     pStrm->EndElement( A2OUSTR("office:font-decls") );
 
-    //office:styles:
+    
     pAttrList->Clear();
     pStrm->StartElement( A2OUSTR("office:styles") );
 
@@ -340,10 +340,10 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     s_aStdStrokeDashStyles.ToXml(pStrm);
     s_aStdAreaStyles.ToXml(pStrm);
     s_aStdArrowStyles.ToXml(pStrm);
-    //date,time styles:
+    
     s_aDateStyles.ToXml(pStrm);
     s_aConfigManager.ToXml(pStrm);
-    //for optimist.
+    
     s_aListStyles.ToXml(pStrm);
 
     if( s_pOutlineStyle )
@@ -351,7 +351,7 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
 
     pStrm->EndElement( A2OUSTR("office:styles") );
 
-    //automatic styles:
+    
     pAttrList->Clear();
     pStrm->StartElement( A2OUSTR("office:automatic-styles") );
 
@@ -364,15 +364,15 @@ void    XFStyleManager::ToXml(IXFStream *pStrm)
     s_aSectionStyles.ToXml(pStrm);
     s_aPageMasters.ToXml(pStrm);
     s_aRubyStyles.ToXml(pStrm);
-    //graphics:
+    
     s_aGraphicsStyles.ToXml(pStrm);
 
     pStrm->EndElement( A2OUSTR("office:automatic-styles") );
 
-    //master:styles
+    
     pAttrList->Clear();
     pStrm->StartElement( A2OUSTR("office:master-styles") );
-    //masters pages:
+    
     s_aMasterpages.ToXml(pStrm);
 
     pStrm->EndElement( A2OUSTR("office:master-styles") );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vcl/svapp.hxx"
@@ -41,13 +41,13 @@ using namespace ::com::sun::star;
 
 namespace dp_gui {
 
-//------------------------------------------------------------------------------
+
 
 ::rtl::Reference< TheExtensionManager > TheExtensionManager::s_ExtMgr;
 
-//------------------------------------------------------------------------------
-//                             TheExtensionManager
-//------------------------------------------------------------------------------
+
+
+
 
 TheExtensionManager::TheExtensionManager( Window *pParent,
                                           const uno::Reference< uno::XComponentContext > &xContext ) :
@@ -70,7 +70,7 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
         xConfig->createInstanceWithArguments( OUString("com.sun.star.configuration.ConfigurationAccess"),
                                               uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
 
-    // get the 'get more extensions here' url
+    
     uno::Reference< container::XNameAccess > xNameAccessRepositories;
     beans::PropertyValue aValue2( OUString("nodepath"), 0, uno::Any( OUString("/org.openoffice.Office.ExtensionManager/ExtensionRepositories") ),
                                   beans::PropertyState_DIRECT_VALUE );
@@ -79,7 +79,7 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
         xConfig->createInstanceWithArguments( OUString("com.sun.star.configuration.ConfigurationAccess"),
                                               uno::Sequence< uno::Any >( args, 1 )), uno::UNO_QUERY_THROW);
     try
-    {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
+    {   
         uno::Any value = xNameAccessRepositories->getByName("WebsiteLink");
         m_sGetExtensionsURL = value.get< OUString > ();
      }
@@ -88,14 +88,14 @@ TheExtensionManager::TheExtensionManager( Window *pParent,
 
     if ( dp_misc::office_is_running() )
     {
-        // the registration should be done after the construction has been ended
-        // otherwise an exception prevents object creation, but it is registered as a listener
+        
+        
         m_xDesktop.set( frame::Desktop::create(xContext), uno::UNO_QUERY_THROW );
         m_xDesktop->addTerminateListener( this );
     }
 }
 
-//------------------------------------------------------------------------------
+
 TheExtensionManager::~TheExtensionManager()
 {
     delete m_pUpdReqDialog;
@@ -103,7 +103,7 @@ TheExtensionManager::~TheExtensionManager()
     delete m_pExecuteCmdQueue;
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
 {
     const SolarMutexGuard guard;
@@ -128,7 +128,7 @@ void TheExtensionManager::createDialog( const bool bCreateUpdDlg )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::Show()
 {
     const SolarMutexGuard guard;
@@ -136,7 +136,7 @@ void TheExtensionManager::Show()
     getDialog()->Show();
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::SetText( const OUString &rTitle )
 {
     const SolarMutexGuard guard;
@@ -144,7 +144,7 @@ void TheExtensionManager::SetText( const OUString &rTitle )
     getDialog()->SetText( rTitle );
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::ToTop( sal_uInt16 nFlags )
 {
     const SolarMutexGuard guard;
@@ -152,7 +152,7 @@ void TheExtensionManager::ToTop( sal_uInt16 nFlags )
     getDialog()->ToTop( nFlags );
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::Close()
 {
     if ( m_pExtMgrDialog )
@@ -163,7 +163,7 @@ bool TheExtensionManager::Close()
         return true;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int16 TheExtensionManager::execute()
 {
     sal_Int16 nRet = 0;
@@ -178,13 +178,13 @@ sal_Int16 TheExtensionManager::execute()
     return nRet;
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::isVisible()
 {
     return getDialog()->IsVisible();
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bParentVisible*/ )
 {
     std::vector< uno::Reference< deployment::XPackage >  > vEntries;
@@ -217,7 +217,7 @@ bool TheExtensionManager::checkUpdates( bool /* bShowUpdateOnly */, bool /*bPare
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWarnUser )
 {
     if ( rPackageURL.isEmpty() )
@@ -228,7 +228,7 @@ bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWar
     bool bInstall = true;
     bool bInstallForAll = false;
 
-    // DV! missing function is read only repository from extension manager
+    
     if ( !bWarnUser && ! m_xExtensionManager->isReadOnlyRepository( SHARED_PACKAGE_MANAGER ) )
         bInstall = getDialogHelper()->installForAllUsers( bInstallForAll );
 
@@ -243,17 +243,17 @@ bool TheExtensionManager::installPackage( const OUString &rPackageURL, bool bWar
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::queryTermination()
 {
     if ( dp_misc::office_is_running() )
         return true;
-    // the standalone application unopkg must not close ( and quit ) the dialog
-    // when there are still actions in the queue
+    
+    
     return true;
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::terminateDialog()
 {
     if ( ! dp_misc::office_is_running() )
@@ -267,7 +267,7 @@ void TheExtensionManager::terminateDialog()
     }
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::createPackageList()
 {
     uno::Sequence< uno::Sequence< uno::Reference< deployment::XPackage > > > xAllPackages;
@@ -296,8 +296,8 @@ void TheExtensionManager::createPackageList()
             {
                 PackageState eState = getPackageState( xPackage );
                 getDialogHelper()->addPackageToList( xPackage );
-                // When the package is enabled, we can stop here, otherwise we have to look for
-                // another version of this package
+                
+                
                 if ( ( eState == REGISTERED ) || ( eState == NOT_AVAILABLE ) )
                     break;
             }
@@ -317,7 +317,7 @@ void TheExtensionManager::createPackageList()
     }
 }
 
-//------------------------------------------------------------------------------
+
 PackageState TheExtensionManager::getPackageState( const uno::Reference< deployment::XPackage > &xPackage ) const
 {
     try {
@@ -345,7 +345,7 @@ PackageState TheExtensionManager::getPackageState( const uno::Reference< deploym
     }
 }
 
-//------------------------------------------------------------------------------
+
 bool TheExtensionManager::isReadOnly( const uno::Reference< deployment::XPackage > &xPackage ) const
 {
     if ( m_xExtensionManager.is() && xPackage.is() )
@@ -356,8 +356,8 @@ bool TheExtensionManager::isReadOnly( const uno::Reference< deployment::XPackage
         return true;
 }
 
-//------------------------------------------------------------------------------
-// The function investigates if the extension supports options.
+
+
 bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPackage > &xPackage ) const
 {
     bool bOptions = false;
@@ -367,16 +367,16 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
 
     beans::Optional< OUString > aId = xPackage->getIdentifier();
 
-    //a bundle must always have an id
+    
     OSL_ASSERT( aId.IsPresent );
 
-    //iterate over all available nodes
+    
     uno::Sequence< OUString > seqNames = m_xNameAccessNodes->getElementNames();
 
     for ( int i = 0; i < seqNames.getLength(); i++ )
     {
         uno::Any anyNode = m_xNameAccessNodes->getByName( seqNames[i] );
-        //If we have a node then then it must contain the set of leaves. This is part of OptionsDialog.xcs
+        
         uno::Reference< XInterface> xIntNode = anyNode.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xNode( xIntNode, uno::UNO_QUERY_THROW );
 
@@ -384,15 +384,15 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
         uno::Reference< XInterface > xIntLeaves = anyLeaves.get< uno::Reference< XInterface > >();
         uno::Reference< container::XNameAccess > xLeaves( xIntLeaves, uno::UNO_QUERY_THROW );
 
-        //iterate over all available leaves
+        
         uno::Sequence< OUString > seqLeafNames = xLeaves->getElementNames();
         for ( int j = 0; j < seqLeafNames.getLength(); j++ )
         {
             uno::Any anyLeaf = xLeaves->getByName( seqLeafNames[j] );
             uno::Reference< XInterface > xIntLeaf = anyLeaf.get< uno::Reference< XInterface > >();
             uno::Reference< beans::XPropertySet > xLeaf( xIntLeaf, uno::UNO_QUERY_THROW );
-            //investigate the Id property if it matches the extension identifier which
-            //has been passed in.
+            
+            
             uno::Any anyValue = xLeaf->getPropertyValue("Id");
 
             OUString sId = anyValue.get< OUString >();
@@ -408,8 +408,8 @@ bool TheExtensionManager::supportsOptions( const uno::Reference< deployment::XPa
     return bOptions;
 }
 
-//------------------------------------------------------------------------------
-// XEventListener
+
+
 void TheExtensionManager::disposing( lang::EventObject const & rEvt )
     throw ( uno::RuntimeException )
 {
@@ -435,8 +435,8 @@ void TheExtensionManager::disposing( lang::EventObject const & rEvt )
     }
 }
 
-//------------------------------------------------------------------------------
-// XTerminateListener
+
+
 void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     throw ( frame::TerminationVetoException, uno::RuntimeException )
 {
@@ -458,15 +458,15 @@ void TheExtensionManager::queryTermination( ::lang::EventObject const & )
     }
 }
 
-//------------------------------------------------------------------------------
+
 void TheExtensionManager::notifyTermination( ::lang::EventObject const & rEvt )
     throw ( uno::RuntimeException )
 {
     disposing( rEvt );
 }
 
-//------------------------------------------------------------------------------
-// XModifyListener
+
+
 void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     throw ( uno::RuntimeException )
 {
@@ -475,7 +475,7 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     getDialogHelper()->checkEntries();
 }
 
-//------------------------------------------------------------------------------
+
 ::rtl::Reference< TheExtensionManager > TheExtensionManager::get( const uno::Reference< uno::XComponentContext > &xContext,
                                                                   const uno::Reference< awt::XWindow > &xParent,
                                                                   const OUString & extensionURL )
@@ -507,6 +507,6 @@ void TheExtensionManager::modified( ::lang::EventObject const & /*rEvt*/ )
     return s_ExtMgr;
 }
 
-} //namespace dp_gui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <mmoutputpage.hxx>
@@ -262,7 +262,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     FreeResource();
 
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-    // #i51949# hide e-Mail option if e-Mail is not supported
+    
     if(!rConfigItem.IsMailAvailable())
         m_aSendMailRB.Hide();
 
@@ -302,7 +302,7 @@ SwMailMergeOutputPage::SwMailMergeOutputPage( SwMailMergeWizard* _pParent) :
     m_aSendAllRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
 
     m_aFromRB.SetClickHdl(LINK(this, SwMailMergeOutputPage, DocumentSelectionHdl_Impl));
-    //#i63267# printing might be disabled
+    
     m_aPrintRB.Enable(!Application::GetSettings().GetMiscSettings().GetDisablePrinting());
 }
 
@@ -313,7 +313,7 @@ SwMailMergeOutputPage::~SwMailMergeOutputPage()
 
 void SwMailMergeOutputPage::ActivatePage()
 {
-    //fill printer ListBox
+    
     const std::vector<OUString>& rPrinters = Printer::GetPrinterQueues();
     unsigned int nCount = rPrinters.size();
     if ( nCount )
@@ -407,7 +407,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             m_aSaveIndividualRB.Check();
         }
         m_aSeparatorFL.SetText(m_sSaveMergedST);
-        //reposition the from/to line
+        
         if(m_aFromRB.GetPosPixel().Y() != m_nFromToRBPos)
         {
             Point aPos(m_aFromRB.GetPosPixel()); aPos.Y() = m_nFromToRBPos; m_aFromRB.SetPosPixel(aPos);
@@ -435,7 +435,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             m_aPrintAllRB.Check();
 
         m_aSeparatorFL.SetText(m_sPrintST);
-        //reposition the from/to line
+        
         long nRB_FT_Offset = m_nFromToRBPos - m_nFromToFTPos;
         long nNewRBXPos = m_aPrintAllRB.GetPosPixel().Y() + m_nRBOffset;
 
@@ -474,13 +474,13 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
 
         }
         m_aSeparatorFL.SetText(m_sSendMailST);
-        //fill mail address ListBox
+        
         if(!m_aMailToLB.GetEntryCount())
         {
             SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
-            //select first column
+            
             uno::Reference< sdbcx::XColumnsSupplier > xColsSupp( rConfigItem.GetResultSet(), uno::UNO_QUERY);
-            //get the name of the actual columns
+            
             uno::Reference < container::XNameAccess> xColAccess = xColsSupp.is() ? xColsSupp->getColumns() : 0;
             uno::Sequence< OUString > aFields;
             if(xColAccess.is())
@@ -490,7 +490,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
                 m_aMailToLB.InsertEntry(pFields[nField]);
 
             m_aMailToLB.SelectEntryPos(0);
-            // then select the right one - may not be available
+            
             const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
             OUString sEMailColumn = rHeaders.GetString( MM_PART_E_MAIL );
             Sequence< OUString> aAssignment =
@@ -498,7 +498,7 @@ IMPL_LINK(SwMailMergeOutputPage, OutputTypeHdl_Impl, RadioButton*, pButton)
             if(aAssignment.getLength() > MM_PART_E_MAIL && !aAssignment[MM_PART_E_MAIL].isEmpty())
                 sEMailColumn = aAssignment[MM_PART_E_MAIL];
             m_aMailToLB.SelectEntry(sEMailColumn);
-            // HTML format pre-selected
+            
             m_aSendAsLB.SelectEntryPos(3);
             SendTypeHdl_Impl(&m_aSendAsLB);
         }
@@ -556,12 +556,12 @@ IMPL_LINK(SwMailMergeOutputPage, SaveStartHdl_Impl, PushButton*, pButton)
         pSourceViewFrm->GetDispatcher()->Execute(SID_SAVEDOC, SFX_CALLMODE_SYNCHRON);
         xFrame->getContainerWindow()->setVisible(sal_False);
         SwDocShell* pDocShell = pSourceView->GetDocShell();
-        //if the document has been saved it's URL has to be stored for
-        // later use and it can be closed now
+        
+        
         if(pDocShell->HasName() && !pDocShell->IsModified())
         {
             INetURLObject aURL = pDocShell->GetMedium()->GetURLObject();
-            //update the attachment name
+            
             if(m_aAttachmentED.GetText().isEmpty())
             {
                 if ( pDocShell->HasName() )
@@ -701,8 +701,8 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             OUString sStat = OUString(SW_RES(STR_STATSTR_LETTER)) + " " + OUString::number( nDoc );
             aSaveMonitor.m_pPrintInfo->SetText(sStat);
 
-            //now extract a document from the target document
-            // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
+            
+            
             SfxObjectShellLock xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
             xTempDocShell->DoInitNew( 0 );
             SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
@@ -720,14 +720,14 @@ IMPL_LINK(SwMailMergeOutputPage, SaveOutputHdl_Impl, PushButton*, pButton)
             pTargetView->GetWrtShell().PastePages(pTempView->GetWrtShell(),
                     (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
             pTargetView->GetWrtShell().EndAction();
-            //then save it
+            
             OUString sOutPath = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
             OUString sCounter = "_" + OUString::number(nDoc);
             sOutPath = sOutPath.replaceAt( sOutPath.getLength() - sExtension.getLength() - 1, 0, sCounter);
 
             while(true)
             {
-                //time for other slots is needed
+                
                 for(sal_Int16 r = 0; r < 10; ++r)
                     Application::Reschedule();
                 bool bFailed = false;
@@ -846,7 +846,7 @@ IMPL_LINK_NOARG(SwMailMergeOutputPage, PrintHdl_Impl)
         SfxPrinter *const pDocumentPrinter = pTargetView->GetWrtShell()
             .getIDocumentDeviceAccess()->getPrinter(true);
         pDocumentPrinter->SetPrinterProps(m_pTempPrinter);
-        // this should be able to handle setting its own printer
+        
         pTargetView->SetPrinter(pDocumentPrinter);
     }
 
@@ -888,9 +888,9 @@ IMPL_LINK(SwMailMergeOutputPage, SendTypeHdl_Impl, ListBox*, pBox)
     m_aAttachmentED.Enable( bEnable );
     if(bEnable)
     {
-        //add the correct extension
+        
         OUString sAttach(m_aAttachmentED.GetText());
-        //do nothing if the user has removed the name - the warning will come early enough
+        
         if (!sAttach.isEmpty())
         {
             sal_Int32 nTokenCount = comphelper::string::getTokenCount(sAttach, '.');
@@ -924,7 +924,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
 {
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
 
-    //get the composed document
+    
     SwView* pTargetView = rConfigItem.GetTargetView();
     OSL_ENSURE(pTargetView, "no target view exists");
     if(!pTargetView)
@@ -946,7 +946,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         if(nRet != RET_OK && nRet != RET_YES)
             return 0;
     }
-    //add the documents
+    
     sal_uInt32 nBegin = 0;
     sal_uInt32 nEnd = 0;
     if(m_aSendAllRB.IsChecked())
@@ -971,8 +971,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     {
         case MM_DOCTYPE_OOO:
         {
-            //Make sure we don't pick e.g. the flat xml filter
-            //for this format
+            
+            
             pSfxFlt = SwIoSystem::GetFilterOfFormat(
                 OUString( FILTER_XML ),
                 SwDocShell::Factory().GetFilterContainer() );
@@ -987,8 +987,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         break;
         case MM_DOCTYPE_WORD:
         {
-            //the method SwIOSystemGetFilterOfFormat( ) returns the template filter
-            //because it uses the same user data :-(
+            
+            
             SfxFilterMatcher aMatcher( pFilterContainer->GetName() );
             SfxFilterMatcherIter aIter( aMatcher );
             const SfxFilter* pFilter = aIter.First();
@@ -1095,13 +1095,13 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( sTargetTempURL, aValues   );
 
-    //create the send dialog
+    
     SwSendMailDialog* pDlg = new SwSendMailDialog( pButton, rConfigItem );
     pDlg->SetDocumentCount( nEnd );
     pDlg->ShowDialog();
-    //help to force painting the dialog
-    //TODO/CLEANUP
-    //predetermined breaking point
+    
+    
+    
     for ( sal_Int16 i = 0; i < 25; i++)
         Application::Reschedule();
     for(sal_uInt32 nDoc = nBegin; nDoc < nEnd; ++nDoc)
@@ -1109,8 +1109,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         m_pWizard->EnterWait();
         SwDocMergeInfo& rInfo = rConfigItem.GetDocumentMergeInfo(nDoc);
 
-        //now extract a document from the target document
-        // the shell will be closed at the end, but it is more safe to use SfxObjectShellLock here
+        
+        
         SfxObjectShellLock xTempDocShell( new SwDocShell( SFX_CREATE_MODE_STANDARD ) );
         xTempDocShell->DoInitNew( 0 );
         SfxViewFrame* pTempFrame = SfxViewFrame::LoadHiddenDocument( *xTempDocShell, 0 );
@@ -1128,7 +1128,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                 (sal_uInt16)rInfo.nStartPageInTarget, (sal_uInt16)rInfo.nEndPageInTarget );
         pTargetView->GetWrtShell().EndAction();
 
-        //then save it
+        
         SfxStringItem aName(SID_FILE_NAME,
                 URIHelper::SmartRel2Abs(
                     INetURLObject(), utl::TempFile::CreateTempName(0),
@@ -1161,7 +1161,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         if(bAsBody)
         {
             {
-                //read in the temporary file and use it as mail body
+                
                 SfxMedium aMedium( aName.GetValue(),    STREAM_READ);
                 SvStream* pInStream = aMedium.GetInStream();
                 if(pInStream)
@@ -1180,7 +1180,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
                     bDone = pInStream->ReadLine( sLine );
                 }
             }
-            //remove the temporary file
+            
             SWUnoHelper::UCB_DeleteFile( aName.GetValue() );
         }
         else
@@ -1243,10 +1243,10 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         aDesc.sCC = m_sCC;
         aDesc.sBCC = m_sBCC;
         pDlg->AddDocument( aDesc );
-        //help to force painting the dialog
+        
         for ( sal_Int16 i = 0; i < 25; i++)
             Application::Reschedule();
-        //stop creating of data when dialog has been closed
+        
         if(!pDlg->IsVisible())
         {
             m_pWizard->LeaveWait();
@@ -1258,8 +1258,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     ::osl::File::remove( sTargetTempURL );
 
     m_pWizard->enableButtons(WZB_FINISH, sal_True);
-    //the dialog deletes itself
-    //delete pDlg;
+    
+    
     return 0;
 }
 

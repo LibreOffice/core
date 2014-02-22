@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/gen.hxx>
@@ -41,7 +41,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-    //=====  internal  ========================================================
+    
 
 ScAccessiblePageHeaderArea::ScAccessiblePageHeaderArea(
         const uno::Reference<XAccessible>& rxParent,
@@ -64,7 +64,7 @@ ScAccessiblePageHeaderArea::~ScAccessiblePageHeaderArea(void)
 {
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        
         osl_atomic_increment( &m_refCount );
         dispose();
     }
@@ -86,14 +86,14 @@ void SAL_CALL ScAccessiblePageHeaderArea::disposing()
     ScAccessibleContextBase::disposing();
 }
 
-//=====  SfxListener  =====================================================
+
 
 void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA( SfxSimpleHint ) )
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        // only notify if child exist, otherwise it is not necessary
+        
         if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             if (mpTextHelper)
@@ -107,7 +107,7 @@ void ScAccessiblePageHeaderArea::Notify( SfxBroadcaster& rBC, const SfxHint& rHi
     }
     ScAccessibleContextBase::Notify(rBC, rHint);
 }
-    //=====  XAccessibleComponent  ============================================
+    
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessibleAtPoint(
         const awt::Point& rPoint )
@@ -128,7 +128,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeaderArea::getAccessible
     return xRet;
 }
 
-    //=====  XAccessibleContext  ==============================================
+    
 
 sal_Int32 SAL_CALL
     ScAccessiblePageHeaderArea::getAccessibleChildCount(void)
@@ -179,7 +179,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     return pStateSet;
 }
 
-//=====  XServiceInfo  ========================================================
+
 
 OUString SAL_CALL
        ScAccessiblePageHeaderArea::getImplementationName(void)
@@ -201,7 +201,7 @@ uno::Sequence< OUString> SAL_CALL
     return aSequence;
 }
 
-//=====  XTypeProvider  =======================================================
+
 
 namespace
 {
@@ -215,7 +215,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     return theScAccessiblePageHeaderAreaImplementationId::get().getSeq();
 }
 
-//===== internal ==============================================================
+
 OUString SAL_CALL ScAccessiblePageHeaderArea::createAccessibleDescription(void)
     throw(uno::RuntimeException)
 {
@@ -270,7 +270,7 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBoxOnScreen(void) const
         uno::Reference<XAccessibleComponent> xComp(xContext, uno::UNO_QUERY);
         if (xComp.is())
         {
-            // has the same size and position on screen like the parent
+            
             aRect = Rectangle(VCLPoint(xComp->getLocationOnScreen()), VCLRectangle(xComp->getBounds()).GetSize());
         }
     }
@@ -287,7 +287,7 @@ Rectangle ScAccessiblePageHeaderArea::GetBoundingBox(void) const
         uno::Reference<XAccessibleComponent> xComp(xContext, uno::UNO_QUERY);
         if (xComp.is())
         {
-            // has the same size and position on screen like the parent and so the pos is (0, 0)
+            
             Rectangle aNewRect(Point(0, 0), VCLRectangle(xComp->getBounds()).GetSize());
             aRect = aNewRect;
         }

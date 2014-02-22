@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -71,7 +71,7 @@ using com::sun::star::sdbc::XParameters;
 using com::sun::star::sdbc::XPreparedStatement;
 using com::sun::star::sdbc::XDatabaseMetaData;
 
-//  using com::sun::star::sdbcx::Privilege;
+
 
 namespace pq_sdbc_driver
 {
@@ -96,10 +96,10 @@ void Views::refresh()
         Reference< XStatement > stmt = m_origin->createStatement();
 
         Reference< XResultSet > rs = stmt->executeQuery("SELECT "
-                                                        "DISTINCT ON( pg_namespace.nspname, relname) " // needed because of duplicates
-                                                        "pg_namespace.nspname,"    // 1
-                                                        "relname,"                 // 2
-                                                        "pg_get_viewdef(ev_class) " // 3
+                                                        "DISTINCT ON( pg_namespace.nspname, relname) " 
+                                                        "pg_namespace.nspname,"    
+                                                        "relname,"                 
+                                                        "pg_get_viewdef(ev_class) " 
                                                         "FROM pg_namespace, pg_class, pg_rewrite "
                                                        "WHERE pg_namespace.oid = relnamespace "
                                                          "AND pg_class.oid = ev_class "

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "propertystorage.hxx"
@@ -37,12 +37,12 @@ namespace dbaui
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::uno::makeAny;
 
-    // PropertyStorage
+    
     PropertyStorage::~PropertyStorage()
     {
     }
 
-    // helper
+    
     namespace
     {
         #undef UNOTYPE
@@ -59,9 +59,9 @@ namespace dbaui
 
                 UNOTYPE aValue( pTypedItem->GetValue() );
                 OSL_VERIFY( _rValue >>= aValue );
-                // TODO: one could throw an IllegalArgumentException here - finally, this method
-                // is (to be) used from within an XPropertySet::setPropertyValue implementation,
-                // where this would be the appropriate reaction on wrong value types
+                
+                
+                
                 boost::scoped_ptr< ITEMTYPE > pClone( dynamic_cast< ITEMTYPE* >( pTypedItem->Clone() ) );
                 assert(pClone.get());
                 pClone->SetValue( aValue );
@@ -81,12 +81,12 @@ namespace dbaui
         };
     }
 
-    // SetItemPropertyStorage
+    
     void SetItemPropertyStorage::getPropertyValue( Any& _out_rValue ) const
     {
         const SfxPoolItem& rItem( m_rItemSet.Get( m_nItemID ) );
 
-        // try some known item types
+        
         if  (   ItemAdapter< SfxBoolItem, sal_Bool >::tryGet( rItem, _out_rValue )
             ||  ItemAdapter< SfxStringItem, OUString >::tryGet( rItem, _out_rValue )
             )
@@ -97,7 +97,7 @@ namespace dbaui
 
     void SetItemPropertyStorage::setPropertyValue( const Any& _rValue )
     {
-        // try some known item types
+        
         if  (   ItemAdapter< SfxBoolItem, sal_Bool >::trySet( m_rItemSet, m_nItemID, _rValue )
             ||  ItemAdapter< SfxStringItem, OUString >::trySet( m_rItemSet, m_nItemID, _rValue )
             )
@@ -106,6 +106,6 @@ namespace dbaui
         OSL_FAIL( "SetItemPropertyStorage::setPropertyValue: unsupported item type!" );
     }
 
-} // namespace dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -82,9 +82,9 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     m_timerInvalidate.Start();
 
     ImplSetFont();
-    // Listen for change of Font and Color Settings:
-    // Using "this" in ctor is a little fishy, but should work here at least as
-    // long as there are no derivations:
+    
+    
+    
     m_listener = new ChangesListener(*this);
     css::uno::Reference< css::beans::XMultiPropertySet > n(
         officecfg::Office::Common::Font::SourceViewFont::get(),
@@ -99,7 +99,7 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     n->addPropertiesChangeListener(s, m_listener.get());
     m_ColorConfig.AddListener(this);
 
-    //#i97044#
+    
     EnableFocusSelectionHide( false );
 }
 
@@ -124,7 +124,7 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
     rController.InvalidateFeature(SID_CUT);
     rController.InvalidateFeature(SID_COPY);
 
-    // Is this a cut, copy, paste event?
+    
     KeyFuncType aKeyFunc = rKEvt.GetKeyCode().GetFunction();
     if( (aKeyFunc==KEYFUNC_CUT)||(aKeyFunc==KEYFUNC_COPY)||(aKeyFunc==KEYFUNC_PASTE) )
         m_bAccelAction = sal_True;
@@ -137,9 +137,9 @@ void OSqlEdit::KeyInput( const KeyEvent& rKEvt )
 
 sal_Bool OSqlEdit::IsInAccelAct()
 {
-    // Cut, Copy, Paste by Accel. runs the action in the Edit but also the
-    // corresponding slot in the View. Therefore, the action occurs twice.
-    // To prevent this, SlotExec in View can call this function.
+    
+    
+    
 
     return m_bAccelAction;
 }
@@ -202,7 +202,7 @@ IMPL_LINK(OSqlEdit, ModifyHdl, void*, /*EMPTYTAG*/)
 void OSqlEdit::SetText(const OUString& rNewText)
 {
     if (m_timerUndoActionCreation.IsActive())
-    {   // create the trailing undo-actions
+    {   
         m_timerUndoActionCreation.Stop();
         LINK(this, OSqlEdit, OnUndoActionTimer).Call(NULL);
     }
@@ -228,7 +228,7 @@ void OSqlEdit::startTimer()
 void OSqlEdit::ConfigurationChanged( utl::ConfigurationBroadcaster* pOption, sal_uInt32 )
 {
     assert( pOption == &m_ColorConfig );
-    (void) pOption; // avoid warnings
+    (void) pOption; 
     MultiLineEditSyntaxHighlight::UpdateData();
 }
 

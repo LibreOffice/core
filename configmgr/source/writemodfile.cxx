@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -237,8 +237,8 @@ void writeValue(oslFileHandle handle, Type type, css::uno::Any const & value) {
     case TYPE_HEXBINARY_LIST:
         writeItemListValue< css::uno::Sequence< sal_Int8 > >(handle, value);
         break;
-    default: // TYPE_ERROR, TYPE_NIL, TYPE_ANY
-        assert(false); // this cannot happen
+    default: 
+        assert(false); 
     }
 }
 
@@ -249,7 +249,7 @@ void writeNode(
 {
     static xmlreader::Span const typeNames[] = {
         xmlreader::Span(), xmlreader::Span(), xmlreader::Span(),
-            // TYPE_ERROR, TYPE_NIL, TYPE_ANY
+            
         xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:boolean")),
         xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:short")),
         xmlreader::Span(RTL_CONSTASCII_STRINGPARAM("xs:int")),
@@ -342,7 +342,7 @@ void writeNode(
     case Node::KIND_SET:
         writeData_(handle, RTL_CONSTASCII_STRINGPARAM("<node oor:name=\""));
         writeAttributeValue(handle, name);
-        if (!node->getTemplateName().isEmpty()) { // set member
+        if (!node->getTemplateName().isEmpty()) { 
             writeData_(
                 handle, RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"replace"));
         }
@@ -355,7 +355,7 @@ void writeNode(
         writeData_(handle, RTL_CONSTASCII_STRINGPARAM("</node>"));
         break;
     case Node::KIND_ROOT:
-        assert(false); // this cannot happen
+        assert(false); 
         break;
     }
 }
@@ -367,11 +367,11 @@ void writeModifications(
     rtl::Reference< Node > const & node,
     Modifications::Node const & modifications)
 {
-    // It is never necessary to write oor:finalized or oor:mandatory attributes,
-    // as they cannot be set via the UNO API.
+    
+    
     if (modifications.children.empty()) {
         assert(parent.is());
-            // components themselves have no parent but must have children
+            
         writeData_(handle, RTL_CONSTASCII_STRINGPARAM("<item oor:path=\""));
         writeAttributeValue(handle, parentPathRepresentation);
         writeData_(handle, RTL_CONSTASCII_STRINGPARAM("\">"));
@@ -409,7 +409,7 @@ void writeModifications(
                     RTL_CONSTASCII_STRINGPARAM("\" oor:op=\"remove\"/>"));
                 break;
             default:
-                assert(false); // this cannot happen
+                assert(false); 
                 break;
             }
         }
@@ -509,8 +509,8 @@ void writeValueContent(oslFileHandle handle, OUString const & value) {
             writeData_(handle, RTL_CONSTASCII_STRINGPARAM("&lt;"));
             i = j + 1;
         } else if (c == '>') {
-            // "MUST, for compatibility, be escaped [...] when it appears in the
-            // string ']]>'":
+            
+            
             writeData(handle, convertToUtf8(value, i, j - i));
             writeData_(handle, RTL_CONSTASCII_STRINGPARAM("&gt;"));
             i = j + 1;
@@ -559,12 +559,12 @@ void writeModFile(
         tmp.handle,
         RTL_CONSTASCII_STRINGPARAM(
             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<oor:items"
-            " xmlns:oor=\"http://openoffice.org/2001/registry\""
-            " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
-            " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"));
-    //TODO: Do not write back information about those removed items that did not
-    // come from the .xcs/.xcu files, anyway (but had been added dynamically
-    // instead):
+            " xmlns:oor=\"http:
+            " xmlns:xs=\"http:
+            " xmlns:xsi=\"http:
+    
+    
+    
     for (Modifications::Node::Children::const_iterator j(
              data.modifications.getRoot().children.begin());
          j != data.modifications.getRoot().children.end(); ++j)

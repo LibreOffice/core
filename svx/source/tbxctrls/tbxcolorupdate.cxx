@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,14 +26,14 @@
 #include <vcl/settings.hxx>
 #include <tools/debug.hxx>
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-    //====================================================================
-    //= ToolboxButtonColorUpdater
-    //====================================================================
+
+    
+    
+    
     /* Note:
        The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
        (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
@@ -72,13 +72,13 @@ namespace svx
         }
     }
 
-    // -----------------------------------------------------------------------
+    
 
     ToolboxButtonColorUpdater::~ToolboxButtonColorUpdater()
     {
     }
 
-    // -----------------------------------------------------------------------
+    
 
     void ToolboxButtonColorUpdater::Update( const Color& rColor )
     {
@@ -89,18 +89,18 @@ namespace svx
         const bool  bDisplayModeChanged = ( mbWasHiContrastMode != mpTbx->GetSettings().GetStyleSettings().GetHighContrastMode() );
         Color       aColor( rColor );
 
-        // !!! #109290# Workaround for SetFillColor with COL_AUTO
+        
         if( aColor.GetColor() == COL_AUTO )
             aColor = Color( COL_TRANSPARENT );
 
-        // For a shape selected in 'Draw', when color selected in Sidebar > Line > Color
-        // is COL_BLACK, then (maCurColor != aColor) becomes 'false', therefore we take
-        // explicit care of COL_BLACK from the last argument in the condition so that the
-        // Update() does its routine job appropriately !
+        
+        
+        
+        
         if( ( maCurColor != aColor ) || bSizeChanged || bDisplayModeChanged || ( aColor == COL_BLACK ) )
         {
-            // create an empty bitmap, and copy the original bitmap inside
-            // (so that it grows in case the original bitmap was smaller)
+            
+            
             sal_uInt8 nAlpha = 255;
             BitmapEx aBmpEx( Bitmap( aItemSize, 24 ), AlphaMask( aItemSize, &nAlpha ) );
             BitmapEx aSource( aImage.GetBitmapEx() );
@@ -173,8 +173,8 @@ namespace svx
         }
     }
 
-//........................................................................
-} // namespace svx
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

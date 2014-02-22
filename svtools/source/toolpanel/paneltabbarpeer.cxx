@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,10 +26,10 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/svapp.hxx>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -45,22 +45,22 @@ namespace svt
     using ::com::sun::star::accessibility::XAccessibleContext;
     using ::com::sun::star::lang::DisposedException;
 
-    //==================================================================================================================
-    //= PanelTabBarPeer
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     PanelTabBarPeer::PanelTabBarPeer( PanelTabBar& i_rTabBar )
         :VCLXWindow()
         ,m_pTabBar( &i_rTabBar )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     PanelTabBarPeer::~PanelTabBarPeer()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XAccessibleContext > PanelTabBarPeer::CreateAccessibleContext()
     {
         SolarMutexGuard aSolarGuard;
@@ -75,7 +75,7 @@ namespace svt
         return m_aAccessibleFactory.getFactory().createAccessibleToolPanelTabBar( xAccessibleParent, m_pTabBar->GetPanelDeck(), *m_pTabBar );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL PanelTabBarPeer::dispose() throw(RuntimeException)
     {
         {
@@ -85,8 +85,8 @@ namespace svt
         VCLXWindow::dispose();
     }
 
-//........................................................................
-} // namespace svt
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

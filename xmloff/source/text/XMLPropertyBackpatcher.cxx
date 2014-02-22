@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -56,26 +56,26 @@ void XMLPropertyBackpatcher<A>::ResolveId(
     const OUString& sName,
     A aValue)
 {
-    // insert ID into ID map
+    
     aIDMap[sName] = aValue;
 
-    // backpatch old references, if backpatch list exists
+    
     if (aBackpatchListMap.count(sName))
     {
-        // aah, we have a backpatch list!
+        
         BackpatchListType* pList =
             (BackpatchListType*)aBackpatchListMap[sName];
 
-        // a) remove list from list map
+        
         aBackpatchListMap.erase(sName);
 
-        // b) for every item, set SequenceNumber
-        //    (and preserve Property, if appropriate)
+        
+        
         Any aAny;
         aAny <<= aValue;
         if (bPreserveProperty)
         {
-            // preserve version
+            
             for(BackpatchListType::iterator aIter = pList->begin();
                 aIter != pList->end();
                 ++aIter)
@@ -88,7 +88,7 @@ void XMLPropertyBackpatcher<A>::ResolveId(
         }
         else
         {
-            // without preserve
+            
             for(BackpatchListType::iterator aIter = pList->begin();
                 aIter != pList->end();
                 ++aIter)
@@ -97,10 +97,10 @@ void XMLPropertyBackpatcher<A>::ResolveId(
             }
         }
 
-        // c) delete list
+        
         delete pList;
     }
-    // else: no backpatch list -> then we're finished
+    
 }
 
 template<class A>
@@ -119,22 +119,22 @@ void XMLPropertyBackpatcher<A>::SetProperty(
 {
     if (aIDMap.count(sName))
     {
-        // we know this ID -> set property
+        
         Any aAny;
         aAny <<= aIDMap[sName];
         xPropSet->setPropertyValue(sPropertyName, aAny);
     }
     else
     {
-        // ID unknown -> into backpatch list for later fixup
+        
         if (! aBackpatchListMap.count(sName))
         {
-            // create backpatch list for this name
+            
             BackpatchListType* pTmp = new BackpatchListType() ;
             aBackpatchListMap[sName] = (void*)pTmp;
         }
 
-        // insert footnote
+        
         ((BackpatchListType*)aBackpatchListMap[sName])->push_back(xPropSet);
     }
 }
@@ -144,22 +144,22 @@ void XMLPropertyBackpatcher<A>::SetDefault()
 {
     if (bDefaultHandling)
     {
-        // not implemented yet
+        
     }
 }
 
-// force instantiation of templates
+
 template class XMLPropertyBackpatcher<sal_Int16>;
 template class XMLPropertyBackpatcher<OUString>;
 
 struct XMLTextImportHelper::BackpatcherImpl
 {
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    /// backpatcher for references to footnotes and endnotes
+    
     ::std::auto_ptr< XMLPropertyBackpatcher<sal_Int16> >
         m_pFootnoteBackpatcher;
 
-    /// backpatchers for references to sequences
+    
     ::std::auto_ptr< XMLPropertyBackpatcher<sal_Int16> >
         m_pSequenceIdBackpatcher;
 
@@ -171,7 +171,7 @@ struct XMLTextImportHelper::BackpatcherImpl
 ::boost::shared_ptr<XMLTextImportHelper::BackpatcherImpl>
 XMLTextImportHelper::MakeBackpatcherImpl()
 {
-    // n.b.: the shared_ptr stores the dtor!
+    
     return ::boost::shared_ptr<BackpatcherImpl>(new BackpatcherImpl);
 }
 
@@ -182,17 +182,17 @@ static OUString const& GetSequenceNumber()
 }
 
 //
-// XMLTextImportHelper
+
 //
-// Code from XMLTextImportHelper using the XMLPropertyBackpatcher is
-// implemented here. The reason is that in the unxsols2 environment,
-// all templates are instatiated as file local (switch
-// -instances=static), and thus are not accessible from the outside.
+
+
+
+
 //
-// The previous solution was to force additional instantiation of
-// XMLPropertyBackpatcher in txtimp.cxx. This solution combines all
-// usage of the XMLPropertyBackpatcher in XMLPropertyBackpatcher.cxx
-// instead.
+
+
+
+
 //
 
 XMLPropertyBackpatcher<sal_Int16>& XMLTextImportHelper::GetFootnoteBP()

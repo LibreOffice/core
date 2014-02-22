@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dlg_DataSource.hxx"
@@ -29,7 +29,7 @@
 #include "tp_DataSource.hxx"
 
 #include <vcl/layout.hxx>
-#include <vcl/msgbox.hxx> // for RET_OK
+#include <vcl/msgbox.hxx> 
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -48,7 +48,7 @@ public:
         const Reference< chart2::XChartDocument > & xDoc );
     virtual ~DocumentChartTypeTemplateProvider();
 
-    // ____ ChartTypeTemplateProvider ____
+    
     virtual Reference< chart2::XChartTypeTemplate > getCurrentTemplate() const;
 
 private:
@@ -190,9 +190,9 @@ void DataSourceDialog::setInvalidPage( TabPage * pTabPage )
     {
         m_pBtnOK->Enable( false );
         OSL_ASSERT( m_pTabControl );
-        // note: there seems to be no suitable mechanism to address pages by
-        // identifier, at least it is unclear what the page identifiers are.
-        // @todo: change the fixed numbers to identifiers
+        
+        
+        
         if( m_bRangeChooserTabIsValid )
             m_pTabControl->SetCurPageId( m_pTabControl->GetPageId( 1 ));
         else if( m_bDataSourceTabIsValid )
@@ -216,6 +216,6 @@ void DataSourceDialog::setValidPage( TabPage * pTabPage )
     }
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

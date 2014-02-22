@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "Section.hxx"
 #include <comphelper/enumhelper.hxx>
@@ -37,14 +37,14 @@
 #include "RptObject.hxx"
 #include "ReportDrawPage.hxx"
 #include <comphelper/property.hxx>
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 
-// -----------------------------------------------------------------------------
+
 uno::Sequence< OUString> lcl_getGroupAbsent()
 {
     OUString pProps[] = {
@@ -55,7 +55,7 @@ uno::Sequence< OUString> lcl_getGroupAbsent()
     return uno::Sequence< OUString >(pProps,sizeof(pProps)/sizeof(pProps[0]));
 }
 
-// -----------------------------------------------------------------------------
+
 uno::Sequence< OUString> lcl_getAbsent(bool _bPageSection)
 {
     if ( _bPageSection )
@@ -102,7 +102,7 @@ uno::Reference<report::XSection> OSection::createOSection(
     return pNew;
 }
 
-// -----------------------------------------------------------------------------
+
 OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
                    ,const uno::Reference< report::XGroup >& xParentGroup
                    ,const uno::Reference< uno::XComponentContext >& context
@@ -127,16 +127,16 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& xParentDef
 ,m_bInInsertNotify(false)
 {
 }
-//--------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
+
+
 //
 OSection::~OSection()
 {
 }
-//--------------------------------------------------------------------------
-//IMPLEMENT_FORWARD_XINTERFACE2(OSection,SectionBase,SectionPropertySet)
+
+
 IMPLEMENT_FORWARD_REFCOUNT( OSection, SectionBase )
-// --------------------------------------------------------------------------------
+
 uno::Any SAL_CALL OSection::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
 {
     uno::Any aReturn = SectionBase::queryInterface(_rType);
@@ -149,7 +149,7 @@ uno::Any SAL_CALL OSection::queryInterface( const uno::Type& _rType ) throw (uno
     return aReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::dispose() throw(uno::RuntimeException)
 {
     OSL_ENSURE(!rBHelper.bDisposed,"Already disposed!");
@@ -163,8 +163,8 @@ void SAL_CALL OSection::dispose() throw(uno::RuntimeException)
     cppu::WeakComponentImplHelperBase::dispose();
 
 }
-// -----------------------------------------------------------------------------
-// TODO: VirtualFunctionFinder: This is virtual function!
+
+
 //
 void SAL_CALL OSection::disposing()
 {
@@ -172,93 +172,93 @@ void SAL_CALL OSection::disposing()
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
     m_xContext.clear();
 }
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.report.Section");
 }
-//------------------------------------------------------------------------------
+
 uno::Sequence< OUString> OSection::getSupportedServiceNames_Static(void) throw( uno::RuntimeException )
 {
     uno::Sequence< OUString> aSupported(1);
     aSupported.getArray()[0] = SERVICE_SECTION;
     return aSupported;
 }
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString> SAL_CALL OSection::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OSection::supportsService( const OUString& _rServiceName ) throw(uno::RuntimeException)
 {
     return cppu::supportsService(this, _rServiceName);
 }
-// -----------------------------------------------------------------------------
+
 void OSection::init()
 {
     uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
     ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
-    assert(pModel); //"No model set at the report definition!"
+    assert(pModel); 
     if ( pModel )
     {
         uno::Reference<report::XSection> const xSection(this);
         SdrPage & rSdrPage(*pModel->createNewPage(xSection));
         m_xDrawPage.set(rSdrPage.getUnoPage(), uno::UNO_QUERY_THROW);
         m_xDrawPage_ShapeGrouper.set(m_xDrawPage, uno::UNO_QUERY_THROW);
-        // apparently we may also get OReportDrawPage which doesn't support this
+        
         m_xDrawPage_FormSupplier.set(m_xDrawPage, uno::UNO_QUERY);
         m_xDrawPage_Tunnel.set(m_xDrawPage, uno::UNO_QUERY_THROW);
-        // fdo#53872: now also exchange the XDrawPage in the SdrPage so that
-        // rSdrPage.getUnoPage returns this
+        
+        
         rSdrPage.SetUnoPage(this);
-        // createNewPage _should_ have stored away 2 uno::References to this,
-        // so our ref count cannot be 1 here, so this isn't destroyed here
+        
+        
         assert(m_refCount > 1);
     }
 }
-// -----------------------------------------------------------------------------
-// XSection
-// -----------------------------------------------------------------------------
+
+
+
 ::sal_Bool SAL_CALL OSection::getVisible() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bVisible;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setVisible( ::sal_Bool _visible ) throw (uno::RuntimeException)
 {
     set(PROPERTY_VISIBLE,_visible,m_bVisible);
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OSection::getName() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_sName;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setName( const OUString& _name ) throw (uno::RuntimeException)
 {
     set(PROPERTY_NAME,_name,m_sName);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_uInt32 SAL_CALL OSection::getHeight() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_nHeight;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setHeight( ::sal_uInt32 _height ) throw (uno::RuntimeException)
 {
     set(PROPERTY_HEIGHT,_height,m_nHeight);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Int32 SAL_CALL OSection::getBackColor() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bBacktransparent ? COL_TRANSPARENT : m_nBackgroundColor;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setBackColor( ::sal_Int32 _backgroundcolor ) throw (uno::RuntimeException)
 {
     sal_Bool bTransparent = _backgroundcolor == static_cast<sal_Int32>(COL_TRANSPARENT);
@@ -266,31 +266,31 @@ void SAL_CALL OSection::setBackColor( ::sal_Int32 _backgroundcolor ) throw (uno:
     if ( !bTransparent )
         set(PROPERTY_BACKCOLOR,_backgroundcolor,m_nBackgroundColor);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OSection::getBackTransparent() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bBacktransparent;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setBackTransparent( ::sal_Bool _backtransparent ) throw (uno::RuntimeException)
 {
     set(PROPERTY_BACKTRANSPARENT,_backtransparent,m_bBacktransparent);
     if ( _backtransparent )
         set(PROPERTY_BACKCOLOR,static_cast<sal_Int32>(COL_TRANSPARENT),m_nBackgroundColor);
 }
-// -----------------------------------------------------------------------------
+
 OUString SAL_CALL OSection::getConditionalPrintExpression() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_sConditionalPrintExpression;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setConditionalPrintExpression( const OUString& _conditionalprintexpression ) throw (uno::RuntimeException)
 {
     set(PROPERTY_CONDITIONALPRINTEXPRESSION,_conditionalprintexpression,m_sConditionalPrintExpression);
 }
-// -----------------------------------------------------------------------------
+
 void OSection::checkNotPageHeaderFooter()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -303,7 +303,7 @@ void OSection::checkNotPageHeaderFooter()
             throw beans::UnknownPropertyException();
     }
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Int16 SAL_CALL OSection::getForceNewPage() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -311,7 +311,7 @@ void OSection::checkNotPageHeaderFooter()
     checkNotPageHeaderFooter();
     return m_nForceNewPage;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     if ( _forcenewpage < report::ForceNewPage::NONE || _forcenewpage > report::ForceNewPage::BEFORE_AFTER_SECTION )
@@ -322,14 +322,14 @@ void SAL_CALL OSection::setForceNewPage( ::sal_Int16 _forcenewpage ) throw (lang
     checkNotPageHeaderFooter();
     set(PROPERTY_FORCENEWPAGE,_forcenewpage,m_nForceNewPage);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Int16 SAL_CALL OSection::getNewRowOrCol() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkNotPageHeaderFooter();
     return m_nNewRowOrCol;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setNewRowOrCol( ::sal_Int16 _newroworcol ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     if ( _newroworcol < report::ForceNewPage::NONE || _newroworcol > report::ForceNewPage::BEFORE_AFTER_SECTION )
@@ -341,14 +341,14 @@ void SAL_CALL OSection::setNewRowOrCol( ::sal_Int16 _newroworcol ) throw (lang::
 
     set(PROPERTY_NEWROWORCOL,_newroworcol,m_nNewRowOrCol);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OSection::getKeepTogether() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkNotPageHeaderFooter();
     return m_bKeepTogether;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setKeepTogether( ::sal_Bool _keeptogether ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     {
@@ -358,27 +358,27 @@ void SAL_CALL OSection::setKeepTogether( ::sal_Bool _keeptogether ) throw (lang:
 
     set(PROPERTY_KEEPTOGETHER,_keeptogether,m_bKeepTogether);
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OSection::getCanGrow() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    throw beans::UnknownPropertyException(); ///TODO: unsupported at the moment
+    throw beans::UnknownPropertyException(); 
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setCanGrow( ::sal_Bool /*_cangrow*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
-    throw beans::UnknownPropertyException(); ///TODO: unsupported at the moment
+    throw beans::UnknownPropertyException(); 
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OSection::getCanShrink() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    throw beans::UnknownPropertyException(); ///TODO: unsupported at the moment
+    throw beans::UnknownPropertyException(); 
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setCanShrink( ::sal_Bool /*_canshrink*/ ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
-    throw beans::UnknownPropertyException(); ///TODO: unsupported at the moment
+    throw beans::UnknownPropertyException(); 
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OSection::getRepeatSection() throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -387,7 +387,7 @@ void SAL_CALL OSection::setCanShrink( ::sal_Bool /*_canshrink*/ ) throw (lang::I
         throw beans::UnknownPropertyException();
     return m_bRepeatSection;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setRepeatSection( ::sal_Bool _repeatsection ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException)
 {
     {
@@ -398,13 +398,13 @@ void SAL_CALL OSection::setRepeatSection( ::sal_Bool _repeatsection ) throw (lan
     }
     set(PROPERTY_REPEATSECTION,_repeatsection,m_bRepeatSection);
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< report::XGroup > SAL_CALL OSection::getGroup() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xGroup;
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< report::XReportDefinition > SAL_CALL OSection::getReportDefinition() throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -419,7 +419,7 @@ uno::Reference< report::XReportDefinition > SAL_CALL OSection::getReportDefiniti
 
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 const ::std::vector< OUString >& lcl_getControlModelMap()
 {
     static ::std::vector< OUString > s_sControlModels;
@@ -434,7 +434,7 @@ const ::std::vector< OUString >& lcl_getControlModelMap()
     return s_sControlModels;
 
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportComponent( const OUString& _sReportComponentSpecifier ) throw (uno::Exception, lang::IllegalArgumentException,uno::RuntimeException)
 {
     ::osl::ResettableMutexGuard aGuard(m_aMutex);
@@ -467,7 +467,7 @@ uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportCompon
     }
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OSection::getAvailableReportComponentNames(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -476,8 +476,8 @@ uno::Sequence< OUString > SAL_CALL OSection::getAvailableReportComponentNames(  
     const OUString* pRet = aRet.empty() ? 0 : &aRet[0];
     return uno::Sequence< OUString >(pRet, aRet.size());
 }
-// -----------------------------------------------------------------------------
-// XChild
+
+
 uno::Reference< uno::XInterface > SAL_CALL OSection::getParent(  ) throw (uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xRet;
@@ -489,90 +489,90 @@ uno::Reference< uno::XInterface > SAL_CALL OSection::getParent(  ) throw (uno::R
     }
     return  xRet;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::setParent( const uno::Reference< uno::XInterface >& /*Parent*/ ) throw (lang::NoSupportException, uno::RuntimeException)
 {
     throw lang::NoSupportException();
 }
-// -----------------------------------------------------------------------------
-// XContainer
+
+
 void SAL_CALL OSection::addContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
 {
     m_aContainerListeners.addInterface(xListener);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException)
 {
     m_aContainerListeners.removeInterface(xListener);
 }
-// -----------------------------------------------------------------------------
-// XElementAccess
+
+
 uno::Type SAL_CALL OSection::getElementType(  ) throw (uno::RuntimeException)
 {
     return ::getCppuType(static_cast< uno::Reference<report::XReportComponent>*>(NULL));
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL OSection::hasElements(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xDrawPage.is() ? m_xDrawPage->hasElements() : sal_False;
 }
-// -----------------------------------------------------------------------------
-// XIndexAccess
+
+
 ::sal_Int32 SAL_CALL OSection::getCount(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xDrawPage.is() ? m_xDrawPage->getCount() : 0;
 }
-// -----------------------------------------------------------------------------
+
 uno::Any SAL_CALL OSection::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_xDrawPage.is() ? m_xDrawPage->getByIndex(Index) : uno::Any();
 }
-// -----------------------------------------------------------------------------
-// XEnumerationAccess
+
+
 uno::Reference< container::XEnumeration > SAL_CALL OSection::createEnumeration(  ) throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return new ::comphelper::OEnumerationByIndex(static_cast<XSection*>(this));
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OSection::getPropertySetInfo(  ) throw(uno::RuntimeException)
 {
     return SectionPropertySet::getPropertySetInfo();
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OSection::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::setPropertyValue( aPropertyName, aValue );
 }
-// -----------------------------------------------------------------------------
+
 uno::Any SAL_CALL OSection::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return SectionPropertySet::getPropertyValue( PropertyName);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     SectionPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
-// -----------------------------------------------------------------------------
+
 void OSection::lcl_copySection(const uno::Reference< report::XSection>& _xSource,uno::Reference< report::XSection>& _xDest)
 {
     if ( _xSource.is() )
@@ -591,7 +591,7 @@ void OSection::lcl_copySection(const uno::Reference< report::XSection>& _xSource
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::add( const uno::Reference< drawing::XShape >& xShape ) throw (uno::RuntimeException)
 {
     {
@@ -603,7 +603,7 @@ void SAL_CALL OSection::add( const uno::Reference< drawing::XShape >& xShape ) t
     }
     notifyElementAdded(xShape);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OSection::remove( const uno::Reference< drawing::XShape >& xShape ) throw (uno::RuntimeException)
 {
     {
@@ -616,12 +616,12 @@ void SAL_CALL OSection::remove( const uno::Reference< drawing::XShape >& xShape 
     notifyElementRemoved(xShape);
 }
 
-// XShapeGrouper
+
 uno::Reference< drawing::XShapeGroup > SAL_CALL
 OSection::group(uno::Reference< drawing::XShapes > const& xShapes)
     throw (uno::RuntimeException)
 {
-    // no lock because m_xDrawPage_ShapeGrouper is const
+    
     return (m_xDrawPage_ShapeGrouper.is())
         ? m_xDrawPage_ShapeGrouper->group(xShapes)
         : 0;
@@ -630,33 +630,33 @@ void SAL_CALL
 OSection::ungroup(uno::Reference<drawing::XShapeGroup> const& xGroup)
     throw (uno::RuntimeException)
 {
-    // no lock because m_xDrawPage_ShapeGrouper is const
+    
     if (m_xDrawPage_ShapeGrouper.is()) {
         m_xDrawPage_ShapeGrouper->ungroup(xGroup);
     }
 }
 
-// XFormsSupplier
+
 uno::Reference<container::XNameContainer> SAL_CALL OSection::getForms()
     throw (uno::RuntimeException)
 {
-    // no lock because m_xDrawPage_FormSupplier is const
+    
     return (m_xDrawPage_FormSupplier.is())
         ? m_xDrawPage_FormSupplier->getForms()
         : 0;
 }
-// XFormsSupplier2
+
 sal_Bool SAL_CALL OSection::hasForms() throw (uno::RuntimeException)
 {
-    // no lock because m_xDrawPage_FormSupplier is const
+    
     return (m_xDrawPage_FormSupplier.is())
         ? m_xDrawPage_FormSupplier->hasForms()
         : 0;
 }
 
-// -----------------------------------------------------------------------------
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
+
+
 sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId ) throw (uno::RuntimeException)
 {
     if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
@@ -664,7 +664,7 @@ sal_Int64 OSection::getSomething( const uno::Sequence< sal_Int8 > & rId ) throw 
     return (m_xDrawPage_Tunnel.is()) ? m_xDrawPage_Tunnel->getSomething(rId) : 0;
 }
 
-// -----------------------------------------------------------------------------
+
 OSection* OSection::getImplementation( const uno::Reference< uno::XInterface >& _rxComponent )
 {
     OSection* pContent( NULL );
@@ -675,7 +675,7 @@ OSection* OSection::getImplementation( const uno::Reference< uno::XInterface >& 
 
     return pContent;
 }
-//------------------------------------------------------------------------
+
 uno::Sequence< sal_Int8 > OSection::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -690,7 +690,7 @@ uno::Sequence< sal_Int8 > OSection::getUnoTunnelImplementationId()
     }
     return pId->getImplementationId();
 }
-// -----------------------------------------------------------------------------
+
 void OSection::notifyElementAdded(const uno::Reference< drawing::XShape >& xShape )
 {
     if ( !m_bInInsertNotify )
@@ -699,18 +699,18 @@ void OSection::notifyElementAdded(const uno::Reference< drawing::XShape >& xShap
         m_aContainerListeners.notifyEach(&container::XContainerListener::elementInserted,aEvent);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OSection::notifyElementRemoved(const uno::Reference< drawing::XShape >& xShape)
 {
     if ( !m_bInRemoveNotify )
     {
-        // notify our container listeners
+        
         container::ContainerEvent aEvent(static_cast<container::XContainer*>(this), uno::Any(), uno::makeAny(xShape), uno::Any());
         m_aContainerListeners.notifyEach(&container::XContainerListener::elementRemoved,aEvent);
     }
 }
-// =============================================================================
-} // namespace reportdesign
-// =============================================================================
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

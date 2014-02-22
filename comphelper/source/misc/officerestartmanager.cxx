@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,7 +32,7 @@ using namespace ::com::sun::star;
 namespace comphelper
 {
 
-// ----------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNames_static()
 {
     uno::Sequence< OUString > aResult( 1 );
@@ -40,32 +40,32 @@ uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNam
     return aResult;
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OOfficeRestartManager::getImplementationName_static()
 {
     return OUString( "com.sun.star.comp.task.OfficeRestartManager" );
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OOfficeRestartManager::getSingletonName_static()
 {
     return OUString( "com.sun.star.task.OfficeRestartManager" );
 }
 
-// ----------------------------------------------------------
+
 OUString SAL_CALL OOfficeRestartManager::getServiceName_static()
 {
     return OUString( "com.sun.star.comp.task.OfficeRestartManager" );
 }
 
-// ----------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OOfficeRestartManager::Create( const uno::Reference< uno::XComponentContext >& rxContext )
 {
     return static_cast< cppu::OWeakObject* >( new OOfficeRestartManager( rxContext ) );
 }
 
-// XRestartManager
-// ----------------------------------------------------------
+
+
 void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task::XInteractionHandler >& /* xInteractionHandler */ )
     throw (uno::Exception, uno::RuntimeException)
 {
@@ -75,21 +75,21 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // if the restart already running there is no need to trigger it again
+        
         if ( m_bRestartRequested )
             return;
 
         m_bRestartRequested = true;
 
-        // the office is still not initialized, no need to terminate, changing the state is enough
+        
         if ( !m_bOfficeInitialized )
             return;
     }
 
-    // TODO: use InteractionHandler to report errors
+    
     try
     {
-        // register itself as a job that should be executed asynchronously
+        
         uno::Reference< lang::XMultiComponentFactory > xFactory( m_xContext->getServiceManager(), uno::UNO_SET_THROW );
 
         uno::Reference< awt::XRequestCallback > xRequestCallback(
@@ -102,12 +102,12 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
     }
     catch ( uno::Exception& )
     {
-        // the try to request restart has failed
+        
         m_bRestartRequested = false;
     }
 }
 
-// ----------------------------------------------------------
+
 ::sal_Bool SAL_CALL OOfficeRestartManager::isRestartRequested( ::sal_Bool bOfficeInitialized )
     throw (uno::Exception, uno::RuntimeException)
 {
@@ -119,8 +119,8 @@ void SAL_CALL OOfficeRestartManager::requestRestart( const uno::Reference< task:
     return m_bRestartRequested;
 }
 
-// XCallback
-// ----------------------------------------------------------
+
+
 void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
     throw ( uno::RuntimeException )
 {
@@ -132,7 +132,7 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
         {
             uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);
 
-            // Turn Quickstarter veto off
+            
             uno::Reference< beans::XPropertySet > xPropertySet( xDesktop, uno::UNO_QUERY_THROW );
             OUString aVetoPropName( "SuspendQuickstartVeto" );
             uno::Any aValue;
@@ -157,13 +157,13 @@ void SAL_CALL OOfficeRestartManager::notify( const uno::Any& /* aData */ )
     }
     catch( uno::Exception& )
     {
-        // the try to restart has failed
+        
         m_bRestartRequested = false;
     }
 }
 
-// XServiceInfo
-// ----------------------------------------------------------
+
+
 OUString SAL_CALL OOfficeRestartManager::getImplementationName() throw (uno::RuntimeException)
 {
     return getImplementationName_static();
@@ -179,7 +179,7 @@ uno::Sequence< OUString > SAL_CALL OOfficeRestartManager::getSupportedServiceNam
     return getSupportedServiceNames_static();
 }
 
-} // namespace comphelper
+} 
 
 void createRegistryInfo_OOfficeRestartManager()
 {

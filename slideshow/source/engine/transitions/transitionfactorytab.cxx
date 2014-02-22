@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,249 +49,249 @@ static const TransitionInfo lcl_transitionInfo[] =
         false
     },
     {
-        // mapped to BarWipePolyPolygon:
+        
         animations::TransitionType::BARWIPE,
-        animations::TransitionSubType::LEFTTORIGHT, // (1)
+        animations::TransitionSubType::LEFTTORIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        false, // 'out' by subtraction
-        false // scale isotrophically to target size
+        false, 
+        false 
     },
     {
-        // mapped to BarWipePolyPolygon:
+        
         animations::TransitionType::BARWIPE,
-        animations::TransitionSubType::TOPTOBOTTOM, // (2)
+        animations::TransitionSubType::TOPTOBOTTOM, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        false, // 'out' by subtraction
-        false // scale isotrophically to target size
+        false, 
+        false 
     },
 
     {
-        // mapped to BarWipePolyPolygon(nBars=5):
+        
         animations::TransitionType::BLINDSWIPE,
         animations::TransitionSubType::VERTICAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BarWipePolyPolygon(nBars=5):
+        
         animations::TransitionType::BLINDSWIPE,
         animations::TransitionSubType::HORIZONTAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to BoxWipe:
+        
         animations::TransitionType::BOXWIPE,
-        animations::TransitionSubType::TOPLEFT, // (3)
+        animations::TransitionSubType::TOPLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // possible via bottomRight
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        0.0, 
+        1.0, 
+        1.0, 
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true, 
+        false 
     },
     {
-        // mapped to BoxWipe:
+        
         animations::TransitionType::BOXWIPE,
-        animations::TransitionSubType::TOPRIGHT, // (4)
+        animations::TransitionSubType::TOPRIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // possible via bottomLeft
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        90.0, 
+        1.0, 
+        1.0, 
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true, 
+        false 
     },
     {
-        // mapped to BoxWipe:
+        
         animations::TransitionType::BOXWIPE,
-        animations::TransitionSubType::BOTTOMRIGHT, // (5)
+        animations::TransitionSubType::BOTTOMRIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // possible via topLeft
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        180.0, 
+        1.0, 
+        1.0, 
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true, 
+        false 
     },
     {
-        // mapped to BoxWipe:
+        
         animations::TransitionType::BOXWIPE,
-        animations::TransitionSubType::BOTTOMLEFT, // (6)
+        animations::TransitionSubType::BOTTOMLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // possible via topRight
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        -90.0, 
+        1.0, 
+        1.0, 
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true, 
+        false 
     },
     {
-        // mapped to BoxWipe:
+        
         animations::TransitionType::BOXWIPE,
-        animations::TransitionSubType::TOPCENTER, // (23)
+        animations::TransitionSubType::TOPCENTER, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BoxWipe:
+        
         animations::TransitionType::BOXWIPE,
-        animations::TransitionSubType::RIGHTCENTER, // (24)
+        animations::TransitionSubType::RIGHTCENTER, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BoxWipe:
+        
         animations::TransitionType::BOXWIPE,
-        animations::TransitionSubType::BOTTOMCENTER, // (25)
+        animations::TransitionSubType::BOTTOMCENTER, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BoxWipe:
+        
         animations::TransitionType::BOXWIPE,
-        animations::TransitionSubType::LEFTCENTER, // (26)
+        animations::TransitionSubType::LEFTCENTER, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to FourBoxWipe:
+        
         animations::TransitionType::FOURBOXWIPE,
-        animations::TransitionSubType::CORNERSIN, // (7)
+        animations::TransitionSubType::CORNERSIN, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FourBoxWipe:
+        
         animations::TransitionType::FOURBOXWIPE,
-        animations::TransitionSubType::CORNERSOUT, // (8)
+        animations::TransitionSubType::CORNERSOUT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to BarnDoorWipe:
+        
         animations::TransitionType::BARNDOORWIPE,
-        animations::TransitionSubType::VERTICAL, // (21)
+        animations::TransitionSubType::VERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BarnDoorWipe:
+        
         animations::TransitionType::BARNDOORWIPE,
-        animations::TransitionSubType::HORIZONTAL, // (22)
+        animations::TransitionSubType::HORIZONTAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BarnDoorWipe:
+        
         animations::TransitionType::BARNDOORWIPE,
-        animations::TransitionSubType::DIAGONALBOTTOMLEFT, // (45)
+        animations::TransitionSubType::DIAGONALBOTTOMLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        45.0, // rotation
-        M_SQRT2, // scaling
-        M_SQRT2, // scaling
+        45.0, 
+        M_SQRT2, 
+        M_SQRT2, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BarnDoorWipe:
+        
         animations::TransitionType::BARNDOORWIPE,
-        animations::TransitionSubType::DIAGONALTOPLEFT, // (46)
+        animations::TransitionSubType::DIAGONALTOPLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -45.0, // rotation
-        M_SQRT2, // scaling
-        M_SQRT2, // scaling
+        -45.0, 
+        M_SQRT2, 
+        M_SQRT2, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to BarWipePolyPolygon:
+        
         animations::TransitionType::DIAGONALWIPE,
-        animations::TransitionSubType::TOPLEFT, // (41)
+        animations::TransitionSubType::TOPLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        45.0, // rotation
-        M_SQRT2, // scaling
-        M_SQRT2, // scaling
+        45.0, 
+        M_SQRT2, 
+        M_SQRT2, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BarWipePolyPolygon:
+        
         animations::TransitionType::DIAGONALWIPE,
-        animations::TransitionSubType::TOPRIGHT, // (42)
+        animations::TransitionSubType::TOPRIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        135.0, // rotation
-        M_SQRT2, // scaling
-        M_SQRT2, // scaling
+        135.0, 
+        M_SQRT2, 
+        M_SQRT2, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
 
@@ -299,97 +299,97 @@ static const TransitionInfo lcl_transitionInfo[] =
         animations::TransitionType::BOWTIEWIPE,
         animations::TransitionSubType::VERTICAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::BOWTIEWIPE,
         animations::TransitionSubType::HORIZONTAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
 
     {
-        // mapped to BarnDoorWipe (doubled=true):
+        
         animations::TransitionType::MISCDIAGONALWIPE,
-        animations::TransitionSubType::DOUBLEBARNDOOR, // (47)
+        animations::TransitionSubType::DOUBLEBARNDOOR, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        45.0, // rotation
-        M_SQRT2, // scaling
-        M_SQRT2, // scaling
+        45.0, 
+        M_SQRT2, 
+        M_SQRT2, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to DoubleDiamondWipe:
+        
         animations::TransitionType::MISCDIAGONALWIPE,
-        animations::TransitionSubType::DOUBLEDIAMOND, // (48)
+        animations::TransitionSubType::DOUBLEDIAMOND, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to VeeWipe:
+        
         animations::TransitionType::VEEWIPE,
-        animations::TransitionSubType::DOWN, // (61)
+        animations::TransitionSubType::DOWN, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to VeeWipe:
+        
         animations::TransitionType::VEEWIPE,
-        animations::TransitionSubType::LEFT, // (62)
+        animations::TransitionSubType::LEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
         animations::TransitionType::VEEWIPE,
-        animations::TransitionSubType::UP, // (63)
+        animations::TransitionSubType::UP, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
         animations::TransitionType::VEEWIPE,
         animations::TransitionSubType::RIGHT,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
 
@@ -397,309 +397,309 @@ static const TransitionInfo lcl_transitionInfo[] =
         animations::TransitionType::BARNVEEWIPE,
         animations::TransitionSubType::TOP,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::BARNVEEWIPE,
         animations::TransitionSubType::LEFT,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::BARNVEEWIPE,
         animations::TransitionSubType::UP,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::BARNVEEWIPE,
         animations::TransitionSubType::RIGHT,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
 
     {
-        // mapped to ZigZagWipe:
+        
         animations::TransitionType::ZIGZAGWIPE,
-        animations::TransitionSubType::LEFTTORIGHT, // (71)
+        animations::TransitionSubType::LEFTTORIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ZigZagWipe:
+        
         animations::TransitionType::ZIGZAGWIPE,
-        animations::TransitionSubType::TOPTOBOTTOM, // (72)
+        animations::TransitionSubType::TOPTOBOTTOM, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BarnZigZagWipe:
+        
         animations::TransitionType::BARNZIGZAGWIPE,
-        animations::TransitionSubType::VERTICAL, // (73)
+        animations::TransitionSubType::VERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BarnZigZagWipe:
+        
         animations::TransitionType::BARNZIGZAGWIPE,
-        animations::TransitionSubType::HORIZONTAL, // (74)
+        animations::TransitionSubType::HORIZONTAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to IrisWipe:
+        
         animations::TransitionType::IRISWIPE,
-        animations::TransitionSubType::RECTANGLE, // (101)
+        animations::TransitionSubType::RECTANGLE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to IrisWipe:
+        
         animations::TransitionType::IRISWIPE,
-        animations::TransitionSubType::DIAMOND, // (102)
+        animations::TransitionSubType::DIAMOND, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        45.0, // rotation
-        M_SQRT2, // scaling
-        M_SQRT2, // scaling
+        45.0, 
+        M_SQRT2, 
+        M_SQRT2, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
 
     {
-        // mapped to FigureWipe(triangle):
+        
         animations::TransitionType::TRIANGLEWIPE,
-        animations::TransitionSubType::UP, // (103)
+        animations::TransitionSubType::UP, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(triangle):
+        
         animations::TransitionType::TRIANGLEWIPE,
-        animations::TransitionSubType::RIGHT, // (104)
+        animations::TransitionSubType::RIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(triangle):
+        
         animations::TransitionType::TRIANGLEWIPE,
-        animations::TransitionSubType::DOWN, // (105)
+        animations::TransitionSubType::DOWN, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(triangle):
+        
         animations::TransitionType::TRIANGLEWIPE,
-        animations::TransitionSubType::LEFT, // (106)
+        animations::TransitionSubType::LEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        270.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        270.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to FigureWipe(arrowHead):
+        
         animations::TransitionType::ARROWHEADWIPE,
-        animations::TransitionSubType::UP, // (107)
+        animations::TransitionSubType::UP, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(arrowHead):
+        
         animations::TransitionType::ARROWHEADWIPE,
-        animations::TransitionSubType::RIGHT, // (108)
+        animations::TransitionSubType::RIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(arrowHead):
+        
         animations::TransitionType::ARROWHEADWIPE,
-        animations::TransitionSubType::DOWN, // (109)
+        animations::TransitionSubType::DOWN, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(arrowHead):
+        
         animations::TransitionType::ARROWHEADWIPE,
-        animations::TransitionSubType::LEFT, // (110)
+        animations::TransitionSubType::LEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        270.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        270.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to FigureWipe(pentagon):
+        
         animations::TransitionType::PENTAGONWIPE,
-        animations::TransitionSubType::UP, // (111)
+        animations::TransitionSubType::UP, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(pentagon):
+        
         animations::TransitionType::PENTAGONWIPE,
-        animations::TransitionSubType::DOWN, // (112)
+        animations::TransitionSubType::DOWN, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to FigureWipe(hexagon):
+        
         animations::TransitionType::HEXAGONWIPE,
-        animations::TransitionSubType::HORIZONTAL, // (113)
+        animations::TransitionSubType::HORIZONTAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(hexagon):
+        
         animations::TransitionType::HEXAGONWIPE,
-        animations::TransitionSubType::VERTICAL, // (114)
+        animations::TransitionSubType::VERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to EllipseWipe:
+        
         animations::TransitionType::ELLIPSEWIPE,
         animations::TransitionSubType::CIRCLE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        true // scale isotrophically to target size
+        true, 
+        true 
     },
     {
-        // mapped to EllipseWipe:
+        
         animations::TransitionType::ELLIPSEWIPE,
         animations::TransitionSubType::HORIZONTAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to EllipseWipe:
+        
         animations::TransitionType::ELLIPSEWIPE,
         animations::TransitionSubType::VERTICAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
 
@@ -707,1406 +707,1406 @@ static const TransitionInfo lcl_transitionInfo[] =
         animations::TransitionType::EYEWIPE,
         animations::TransitionSubType::HORIZONTAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::EYEWIPE,
         animations::TransitionSubType::VERTICAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::ROUNDRECTWIPE,
         animations::TransitionSubType::HORIZONTAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::ROUNDRECTWIPE,
         animations::TransitionSubType::VERTICAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
 
     {
-        // mapped to FigureWipe(star, points=4):
+        
         animations::TransitionType::STARWIPE,
-        animations::TransitionSubType::FOURPOINT, // (127)
+        animations::TransitionSubType::FOURPOINT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(star, points=5):
+        
         animations::TransitionType::STARWIPE,
-        animations::TransitionSubType::FIVEPOINT, // (128)
+        animations::TransitionSubType::FIVEPOINT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FigureWipe(star, points=6):
+        
         animations::TransitionType::STARWIPE,
-        animations::TransitionSubType::SIXPOINT, // (129)
+        animations::TransitionSubType::SIXPOINT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
         animations::TransitionType::MISCSHAPEWIPE,
         animations::TransitionSubType::HEART,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::MISCSHAPEWIPE,
         animations::TransitionSubType::KEYHOLE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
 
     {
-        // mapped to ClockWipe:
+        
         animations::TransitionType::CLOCKWIPE,
-        animations::TransitionSubType::CLOCKWISETWELVE, // (201)
+        animations::TransitionSubType::CLOCKWISETWELVE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ClockWipe:
+        
         animations::TransitionType::CLOCKWIPE,
-        animations::TransitionSubType::CLOCKWISETHREE, // (202)
+        animations::TransitionSubType::CLOCKWISETHREE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ClockWipe:
+        
         animations::TransitionType::CLOCKWIPE,
-        animations::TransitionSubType::CLOCKWISESIX, // (203)
+        animations::TransitionSubType::CLOCKWISESIX, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ClockWipe:
+        
         animations::TransitionType::CLOCKWIPE,
-        animations::TransitionSubType::CLOCKWISENINE, // (204)
+        animations::TransitionSubType::CLOCKWISENINE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        270.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        270.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to PinWheelWipe:
+        
         animations::TransitionType::PINWHEELWIPE,
         animations::TransitionSubType::ONEBLADE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        true // scale isotrophically to target size, like ppt
+        true, 
+        true 
     },
     {
-        // mapped to PinWheelWipe:
+        
         animations::TransitionType::PINWHEELWIPE,
-        animations::TransitionSubType::TWOBLADEVERTICAL, // (205)
+        animations::TransitionSubType::TWOBLADEVERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        true // scale isotrophically to target size, like ppt
+        true, 
+        true 
     },
     {
-        // mapped to PinWheelWipe:
+        
         animations::TransitionType::PINWHEELWIPE,
-        animations::TransitionSubType::TWOBLADEHORIZONTAL, // (206)
+        animations::TransitionSubType::TWOBLADEHORIZONTAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        true // scale isotrophically to target size, like ppt
+        true, 
+        true 
     },
     {
-        // mapped to PinWheelWipe:
+        
         animations::TransitionType::PINWHEELWIPE,
         animations::TransitionSubType::THREEBLADE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        true // scale isotrophically to target size, like ppt
+        true, 
+        true 
     },
     {
-        // mapped to PinWheelWipe:
+        
         animations::TransitionType::PINWHEELWIPE,
-        animations::TransitionSubType::FOURBLADE, // (207)
+        animations::TransitionSubType::FOURBLADE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        true // scale isotrophically to target size, like ppt
+        true, 
+        true 
     },
     {
-        // mapped to PinWheelWipe:
+        
         animations::TransitionType::PINWHEELWIPE,
         animations::TransitionSubType::EIGHTBLADE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        true // scale isotrophically to target size, like ppt
+        true, 
+        true 
     },
 
     {
-        // mapped to SweepWipe (center=true, single=true):
+        
         animations::TransitionType::SINGLESWEEPWIPE,
-        animations::TransitionSubType::CLOCKWISETOP, // (221)
+        animations::TransitionSubType::CLOCKWISETOP, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=true, single=true):
+        
         animations::TransitionType::SINGLESWEEPWIPE,
-        animations::TransitionSubType::CLOCKWISERIGHT, // (222)
+        animations::TransitionSubType::CLOCKWISERIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=true, single=true):
+        
         animations::TransitionType::SINGLESWEEPWIPE,
-        animations::TransitionSubType::CLOCKWISEBOTTOM, // (223)
+        animations::TransitionSubType::CLOCKWISEBOTTOM, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=true, single=true):
+        
         animations::TransitionType::SINGLESWEEPWIPE,
-        animations::TransitionSubType::CLOCKWISELEFT, // (224)
+        animations::TransitionSubType::CLOCKWISELEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        270.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        270.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=false, single=true):
+        
         animations::TransitionType::SINGLESWEEPWIPE,
-        animations::TransitionSubType::CLOCKWISETOPLEFT, // (241)
+        animations::TransitionSubType::CLOCKWISETOPLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=false, single=true, flipOnYAxis=true):
+        
         animations::TransitionType::SINGLESWEEPWIPE,
-        animations::TransitionSubType::COUNTERCLOCKWISEBOTTOMLEFT, // (242)
+        animations::TransitionSubType::COUNTERCLOCKWISEBOTTOMLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=false, single=true):
+        
         animations::TransitionType::SINGLESWEEPWIPE,
-        animations::TransitionSubType::CLOCKWISEBOTTOMRIGHT, // (243)
+        animations::TransitionSubType::CLOCKWISEBOTTOMRIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=false, single=true, flipOnYAxis=true):
+        
         animations::TransitionType::SINGLESWEEPWIPE,
-        animations::TransitionSubType::COUNTERCLOCKWISETOPRIGHT, // (244)
+        animations::TransitionSubType::COUNTERCLOCKWISETOPRIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to FanWipe(center=true):
+        
         animations::TransitionType::FANWIPE,
-        animations::TransitionSubType::CENTERTOP, // (211)
+        animations::TransitionSubType::CENTERTOP, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FanWipe(center=true):
+        
         animations::TransitionType::FANWIPE,
-        animations::TransitionSubType::CENTERRIGHT, // (212)
+        animations::TransitionSubType::CENTERRIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FanWipe:
+        
         animations::TransitionType::FANWIPE,
-        animations::TransitionSubType::TOP, // (231)
+        animations::TransitionSubType::TOP, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FanWipe:
+        
         animations::TransitionType::FANWIPE,
-        animations::TransitionSubType::RIGHT, // (232)
+        animations::TransitionSubType::RIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FanWipe:
+        
         animations::TransitionType::FANWIPE,
-        animations::TransitionSubType::BOTTOM, // (233)
+        animations::TransitionSubType::BOTTOM, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FanWipe:
+        
         animations::TransitionType::FANWIPE,
-        animations::TransitionSubType::LEFT, // (234)
+        animations::TransitionSubType::LEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to FanWipe(center=true, single=false, fanIn=false):
+        
         animations::TransitionType::DOUBLEFANWIPE,
-        animations::TransitionSubType::FANOUTVERTICAL, // (213)
+        animations::TransitionSubType::FANOUTVERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FanWipe(center=true, single=false, fanIn=false):
+        
         animations::TransitionType::DOUBLEFANWIPE,
-        animations::TransitionSubType::FANOUTHORIZONTAL, // (214)
+        animations::TransitionSubType::FANOUTHORIZONTAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FanWipe(center=true, single=false, fanIn=true):
+        
         animations::TransitionType::DOUBLEFANWIPE,
-        animations::TransitionSubType::FANINVERTICAL, // (235)
+        animations::TransitionSubType::FANINVERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to FanWipe(center=true, single=false, fanIn=true):
+        
         animations::TransitionType::DOUBLEFANWIPE,
-        animations::TransitionSubType::FANINHORIZONTAL, // (236)
+        animations::TransitionSubType::FANINHORIZONTAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to SweepWipe (center=true, single=false):
+        
         animations::TransitionType::DOUBLESWEEPWIPE,
-        animations::TransitionSubType::PARALLELVERTICAL, // (225)
+        animations::TransitionSubType::PARALLELVERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=true, single=false):
+        
         animations::TransitionType::DOUBLESWEEPWIPE,
-        animations::TransitionSubType::PARALLELDIAGONAL, // (226)
+        animations::TransitionSubType::PARALLELDIAGONAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=true, single=false,
-        //                      oppositeVertical=true):
+        
+        
         animations::TransitionType::DOUBLESWEEPWIPE,
-        animations::TransitionSubType::OPPOSITEVERTICAL, // (227)
+        animations::TransitionSubType::OPPOSITEVERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=true, single=false,
-        //                      oppositeVertical=true):
+        
+        
         animations::TransitionType::DOUBLESWEEPWIPE,
         animations::TransitionSubType::OPPOSITEHORIZONTAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=false, single=false):
+        
         animations::TransitionType::DOUBLESWEEPWIPE,
         animations::TransitionSubType::PARALLELDIAGONALTOPLEFT,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SweepWipe (center=false, single=false):
+        
         animations::TransitionType::DOUBLESWEEPWIPE,
         animations::TransitionSubType::PARALLELDIAGONALBOTTOMLEFT,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
         animations::TransitionType::SALOONDOORWIPE,
-        animations::TransitionSubType::TOP, // (251)
+        animations::TransitionSubType::TOP, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SALOONDOORWIPE,
-        animations::TransitionSubType::LEFT, // (252)
+        animations::TransitionSubType::LEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SALOONDOORWIPE,
-        animations::TransitionSubType::BOTTOM, // (253)
+        animations::TransitionSubType::BOTTOM, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SALOONDOORWIPE,
-        animations::TransitionSubType::RIGHT, // (254)
+        animations::TransitionSubType::RIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::WINDSHIELDWIPE,
         animations::TransitionSubType::RIGHT,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::WINDSHIELDWIPE,
         animations::TransitionSubType::UP,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::WINDSHIELDWIPE,
         animations::TransitionSubType::VERTICAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::WINDSHIELDWIPE,
         animations::TransitionSubType::HORIZONTAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
 
     {
-        // mapped to SnakeWipe:
+        
         animations::TransitionType::SNAKEWIPE,
-        animations::TransitionSubType::TOPLEFTHORIZONTAL, // (301)
+        animations::TransitionSubType::TOPLEFTHORIZONTAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SnakeWipe(flipOnYAxis=true):
+        
         animations::TransitionType::SNAKEWIPE,
-        animations::TransitionSubType::TOPLEFTVERTICAL, // (302)
+        animations::TransitionSubType::TOPLEFTVERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SnakeWipe(diagonal=true):
+        
         animations::TransitionType::SNAKEWIPE,
-        animations::TransitionSubType::TOPLEFTDIAGONAL, // (303)
+        animations::TransitionSubType::TOPLEFTDIAGONAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SnakeWipe(diagonal=true, flipOnYAxis=true):
+        
         animations::TransitionType::SNAKEWIPE,
-        animations::TransitionSubType::TOPRIGHTDIAGONAL, // (304)
+        animations::TransitionSubType::TOPRIGHTDIAGONAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SnakeWipe(diagonal=true):
+        
         animations::TransitionType::SNAKEWIPE,
-        animations::TransitionSubType::BOTTOMRIGHTDIAGONAL, // (305)
+        animations::TransitionSubType::BOTTOMRIGHTDIAGONAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SnakeWipe(diagonal=true, flipOnYAxis=true):
+        
         animations::TransitionType::SNAKEWIPE,
-        animations::TransitionSubType::BOTTOMLEFTDIAGONAL, // (306)
+        animations::TransitionSubType::BOTTOMLEFTDIAGONAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to SpiralWipe:
+        
         animations::TransitionType::SPIRALWIPE,
-        animations::TransitionSubType::TOPLEFTCLOCKWISE, // (310)
+        animations::TransitionSubType::TOPLEFTCLOCKWISE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SpiralWipe:
+        
         animations::TransitionType::SPIRALWIPE,
-        animations::TransitionSubType::TOPRIGHTCLOCKWISE, // (311)
+        animations::TransitionSubType::TOPRIGHTCLOCKWISE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SpiralWipe:
+        
         animations::TransitionType::SPIRALWIPE,
-        animations::TransitionSubType::BOTTOMRIGHTCLOCKWISE, // (312)
+        animations::TransitionSubType::BOTTOMRIGHTCLOCKWISE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SpiralWipe:
+        
         animations::TransitionType::SPIRALWIPE,
-        animations::TransitionSubType::BOTTOMLEFTCLOCKWISE, // (313)
+        animations::TransitionSubType::BOTTOMLEFTCLOCKWISE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        270.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        270.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SpiralWipe(flipOnYAxis=true):
+        
         animations::TransitionType::SPIRALWIPE,
-        animations::TransitionSubType::TOPLEFTCOUNTERCLOCKWISE, // (314)
+        animations::TransitionSubType::TOPLEFTCOUNTERCLOCKWISE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SpiralWipe(flipOnYAxis=true):
+        
         animations::TransitionType::SPIRALWIPE,
-        animations::TransitionSubType::TOPRIGHTCOUNTERCLOCKWISE, // (315)
+        animations::TransitionSubType::TOPRIGHTCOUNTERCLOCKWISE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SpiralWipe(flipOnYAxis=true):
+        
         animations::TransitionType::SPIRALWIPE,
-        animations::TransitionSubType::BOTTOMRIGHTCOUNTERCLOCKWISE, // (316)
+        animations::TransitionSubType::BOTTOMRIGHTCOUNTERCLOCKWISE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        270.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        270.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to SpiralWipe(flipOnYAxis=true):
+        
         animations::TransitionType::SPIRALWIPE,
-        animations::TransitionSubType::BOTTOMLEFTCOUNTERCLOCKWISE, // (317)
+        animations::TransitionSubType::BOTTOMLEFTCOUNTERCLOCKWISE, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_SUBTRACT_AND_INVERT,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to ParallelSnakesWipe:
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::VERTICALTOPSAME,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ParallelSnakesWipe:
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::VERTICALBOTTOMSAME,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ParallelSnakesWipe (opposite=true):
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::VERTICALTOPLEFTOPPOSITE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ParallelSnakesWipe (flipOnYAxis=true, opposite=true):
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::VERTICALBOTTOMLEFTOPPOSITE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ParallelSnakesWipe:
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::HORIZONTALLEFTSAME,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ParallelSnakesWipe:
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::HORIZONTALRIGHTSAME,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ParallelSnakesWipe (flipOnYAxis=true, opposite=true):
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::HORIZONTALTOPLEFTOPPOSITE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ParallelSnakesWipe (opposite=true):
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::HORIZONTALTOPRIGHTOPPOSITE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ParallelSnakesWipe (diagonal=true, opposite=true):
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::DIAGONALBOTTOMLEFTOPPOSITE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to ParallelSnakesWipe (diagonal=true, opposite=true,
-        //                               flipOnYAxis=true):
+        
+        
         animations::TransitionType::PARALLELSNAKESWIPE,
         animations::TransitionSubType::DIAGONALTOPLEFTOPPOSITE,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to BoxSnakesWipe:
+        
         animations::TransitionType::BOXSNAKESWIPE,
-        animations::TransitionSubType::TWOBOXTOP, // (340)
+        animations::TransitionSubType::TWOBOXTOP, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BoxSnakesWipe:
+        
         animations::TransitionType::BOXSNAKESWIPE,
-        animations::TransitionSubType::TWOBOXBOTTOM, // (341)
+        animations::TransitionSubType::TWOBOXBOTTOM, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BoxSnakesWipe:
+        
         animations::TransitionType::BOXSNAKESWIPE,
-        animations::TransitionSubType::TWOBOXLEFT, // (342)
+        animations::TransitionSubType::TWOBOXLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BoxSnakesWipe:
+        
         animations::TransitionType::BOXSNAKESWIPE,
-        animations::TransitionSubType::TWOBOXRIGHT, // (343)
+        animations::TransitionSubType::TWOBOXRIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        180.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        180.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BoxSnakesWipe(fourBox=true):
+        
         animations::TransitionType::BOXSNAKESWIPE,
-        animations::TransitionSubType::FOURBOXVERTICAL, // (344)
+        animations::TransitionSubType::FOURBOXVERTICAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to BoxSnakesWipe(fourBox=true):
+        
         animations::TransitionType::BOXSNAKESWIPE,
-        animations::TransitionSubType::FOURBOXHORIZONTAL, // (345)
+        animations::TransitionSubType::FOURBOXHORIZONTAL, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to WaterfallWipe:
+        
         animations::TransitionType::WATERFALLWIPE,
-        animations::TransitionSubType::VERTICALLEFT, // (350)
+        animations::TransitionSubType::VERTICALLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to WaterfallWipe (flipOnYAxis=true):
+        
         animations::TransitionType::WATERFALLWIPE,
-        animations::TransitionSubType::VERTICALRIGHT, // (351)
+        animations::TransitionSubType::VERTICALRIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to WaterfallWipe (flipOnYAxis=true):
+        
         animations::TransitionType::WATERFALLWIPE,
-        animations::TransitionSubType::HORIZONTALLEFT, // (352)
+        animations::TransitionSubType::HORIZONTALLEFT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        -90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        -90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to WaterfallWipe, flipOnYAxis=false:
+        
         animations::TransitionType::WATERFALLWIPE,
-        animations::TransitionSubType::HORIZONTALRIGHT, // (353)
+        animations::TransitionSubType::HORIZONTALRIGHT, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_ROTATE_180,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::FROMLEFT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::FROMTOP,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::FROMRIGHT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::FROMBOTTOM,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::FROMBOTTOMRIGHT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::FROMBOTTOMLEFT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::FROMTOPRIGHT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::FROMTOPLEFT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::COMBHORIZONTAL,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::PUSHWIPE,
         animations::TransitionSubType::COMBVERTICAL,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SLIDEWIPE,
         animations::TransitionSubType::FROMLEFT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // special code for this transition
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SLIDEWIPE,
         animations::TransitionSubType::FROMTOP,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // special code for this transition
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SLIDEWIPE,
         animations::TransitionSubType::FROMRIGHT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // special code for this transition
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SLIDEWIPE,
         animations::TransitionSubType::FROMBOTTOM,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // special code for this transition
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SLIDEWIPE,
         animations::TransitionSubType::FROMBOTTOMRIGHT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // special code for this transition
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SLIDEWIPE,
         animations::TransitionSubType::FROMTOPRIGHT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // special code for this transition
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SLIDEWIPE,
         animations::TransitionSubType::FROMTOPLEFT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // special code for this transition
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::SLIDEWIPE,
         animations::TransitionSubType::FROMBOTTOMLEFT,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
-        TransitionInfo::REVERSEMETHOD_IGNORE, // special code for this transition
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
+        TransitionInfo::REVERSEMETHOD_IGNORE, 
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::FADE,
         animations::TransitionSubType::CROSSFADE,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::FADE,
         animations::TransitionSubType::FADETOCOLOR,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::FADE,
         animations::TransitionSubType::FADEFROMCOLOR,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
     {
         animations::TransitionType::FADE,
         animations::TransitionSubType::FADEOVERCOLOR,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
-    // this is the cut through black fade (does not fade, but does a
-    // hard cut)
+    
+    
     {
         animations::TransitionType::BARWIPE,
         animations::TransitionSubType::FADEOVERCOLOR,
         TransitionInfo::TRANSITION_SPECIAL,
-        // TODO(F2): Setup parameters
-        0.0,                    // no rotation
-        1.0,                    // no scaling
-        1.0,                    // no scaling
+        
+        0.0,                    
+        1.0,                    
+        1.0,                    
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true,                   // 'out' by parameter sweep inversion
-        false                   // scale isotrophically to target size
+        true,                   
+        false                   
     },
 
     {
-        // mapped to RandomWipe:
+        
         animations::TransitionType::RANDOMBARWIPE,
         animations::TransitionSubType::VERTICAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to RandomWipe:
+        
         animations::TransitionType::RANDOMBARWIPE,
         animations::TransitionSubType::HORIZONTAL,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to CheckerBoard:
+        
         animations::TransitionType::CHECKERBOARDWIPE,
         animations::TransitionSubType::DOWN,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        90.0, // rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        90.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_Y,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
     {
-        // mapped to CheckerBoard:
+        
         animations::TransitionType::CHECKERBOARDWIPE,
-        animations::TransitionSubType::ACROSS, // (default)
+        animations::TransitionSubType::ACROSS, 
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_FLIP_X,
-        true, // 'out' by parameter sweep inversion
-        false // scale isotrophically to target size
+        true, 
+        false 
     },
 
     {
-        // mapped to RandomWipe:
+        
         animations::TransitionType::DISSOLVE,
         animations::TransitionSubType::DEFAULT,
         TransitionInfo::TRANSITION_CLIP_POLYPOLYGON,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        true // scale isotrophically to target size
+        true, 
+        true 
     },
 
-    /////////////////////////////////////////////////////////
-    // NOTE: This entry MUST be the last, to keep
-    // createSlideTransition() from infinite recursion. Because
-    // getRandomTransitionInfo() below will exclude the last entry of
-    // the table from the random number generation.
-    /////////////////////////////////////////////////////////
+    
+    
+    
+    
+    
+    
     {
-        // specially handled
+        
         animations::TransitionType::RANDOM,
         animations::TransitionSubType::DEFAULT,
         TransitionInfo::TRANSITION_SPECIAL,
-        0.0, // no rotation
-        1.0, // no scaling
-        1.0, // no scaling
+        0.0, 
+        1.0, 
+        1.0, 
         TransitionInfo::REVERSEMETHOD_IGNORE,
-        true, // 'out' by parameter sweep inversion
-        true // scale isotrophically to target size
+        true, 
+        true 
     }
-    /////////////////////////////////////////////////////////
-    // NOTE: DON'T add after this entry! See comment above!
-    /////////////////////////////////////////////////////////
+    
+    
+    
 };
 
-} // anon namespace
+} 
 
 const TransitionInfo* TransitionFactory::getTransitionInfo(
     sal_Int16 nTransitionType, sal_Int16 nTransitionSubType )
@@ -2131,7 +2131,7 @@ const TransitionInfo* TransitionFactory::getRandomTransitionInfo()
         - 1 /* exclude random transition at end of table */ );
 }
 
-} // namespace internal
-} // namespace presentation
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

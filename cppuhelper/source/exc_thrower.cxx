@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@ namespace
 
 using cppuhelper::detail::XExceptionThrower;
 
-//==============================================================================
+
 struct ExceptionThrower : public uno_Interface, XExceptionThrower
 {
     inline ExceptionThrower();
@@ -53,13 +53,13 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
             reinterpret_cast< Reference< XExceptionThrower > const * >(0) );
     }
 
-    // XInterface
+    
     virtual Any SAL_CALL queryInterface( Type const & type )
         throw (RuntimeException);
     virtual void SAL_CALL acquire() throw ();
     virtual void SAL_CALL release() throw ();
 
-    // XExceptionThrower
+    
     virtual void SAL_CALL throwException( Any const & exc ) throw (Exception);
     virtual void SAL_CALL rethrowException() throw (Exception);
 };
@@ -67,12 +67,12 @@ struct ExceptionThrower : public uno_Interface, XExceptionThrower
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL ExceptionThrower_acquire_release_nop(
     SAL_UNUSED_PARAMETER uno_Interface * )
 {}
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL ExceptionThrower_dispatch(
     uno_Interface * pUnoI, typelib_TypeDescription const * pMemberType,
     void * pReturn, void * pArgs [], uno_Any ** ppException )
@@ -83,7 +83,7 @@ static void SAL_CALL ExceptionThrower_dispatch(
                 const_cast< typelib_TypeDescription * >( pMemberType ) )->
             nPosition)
     {
-    case 0: // queryInterace()
+    case 0: 
     {
         Type const & rType_demanded =
             *reinterpret_cast< Type const * >( pArgs[ 0 ] );
@@ -106,11 +106,11 @@ static void SAL_CALL ExceptionThrower_dispatch(
         *ppException = 0;
         break;
     }
-    case 1: // acquire()
-    case 2: // release()
+    case 1: 
+    case 2: 
         *ppException = 0;
         break;
-    case 3: // throwException()
+    case 3: 
     {
         uno_Any * pAny = reinterpret_cast< uno_Any * >( pArgs[ 0 ] );
         OSL_ASSERT( pAny->pType->eTypeClass == typelib_TypeClass_EXCEPTION );
@@ -129,9 +129,9 @@ static void SAL_CALL ExceptionThrower_dispatch(
     }
 }
 
-} // extern "C"
+} 
 
-//______________________________________________________________________________
+
 Any ExceptionThrower::queryInterface( Type const & type )
     throw (RuntimeException)
 {
@@ -145,29 +145,29 @@ Any ExceptionThrower::queryInterface( Type const & type )
     return Any();
 }
 
-//______________________________________________________________________________
+
 void ExceptionThrower::acquire() throw ()
 {
 }
-//______________________________________________________________________________
+
 void ExceptionThrower::release() throw ()
 {
 }
 
-//______________________________________________________________________________
+
 void ExceptionThrower::throwException( Any const & exc ) throw (Exception)
 {
     OSL_FAIL( "unexpected!" );
     throwException( exc );
 }
 
-//______________________________________________________________________________
+
 void ExceptionThrower::rethrowException() throw (Exception)
 {
     throw;
 }
 
-//______________________________________________________________________________
+
 inline ExceptionThrower::ExceptionThrower()
 {
     uno_Interface::acquire = ExceptionThrower_acquire_release_nop;
@@ -177,13 +177,13 @@ inline ExceptionThrower::ExceptionThrower()
 
 class theExceptionThrower : public rtl::Static<ExceptionThrower, theExceptionThrower> {};
 
-} // anonymous namespace
+} 
 
 
 namespace cppu
 {
 
-//==============================================================================
+
 void SAL_CALL throwException( Any const & exc ) SAL_THROW( (Exception) )
 {
     if (exc.getValueTypeClass() != TypeClass_EXCEPTION)
@@ -211,7 +211,7 @@ void SAL_CALL throwException( Any const & exc ) SAL_THROW( (Exception) )
     xThrower->throwException( exc );
 }
 
-//==============================================================================
+
 Any SAL_CALL getCaughtException()
 {
     Mapping cpp2uno(Environment::getCurrent(), Environment(UNO_LB_UNO));

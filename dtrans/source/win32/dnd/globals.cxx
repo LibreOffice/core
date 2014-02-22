@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,20 +14,20 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 
 #include "globals.hxx"
 
-//--> TRA
+
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-// used as shortcut when drag-source and drop-target are the same
+
 ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > g_XTransferable;
 
-//<-- TRA
+
 
 using namespace com::sun::star::datatransfer::dnd::DNDConstants;
 
@@ -35,7 +35,7 @@ sal_Int8 dndOleKeysToAction( DWORD grfKeyState, sal_Int8 nSourceActions)
 {
     sal_Int8 ret= 0;
 
-    // no MK_ALT, MK_CONTROL, MK_SHIFT
+    
     if( !(grfKeyState & MK_CONTROL) &&
         !(grfKeyState & MK_ALT)    &&
         !(grfKeyState & MK_RBUTTON) &&
@@ -123,7 +123,7 @@ DWORD dndActionsToSingleDropEffect( sal_Int8 actions)
     if( effects & DROPEFFECT_LINK)
         countEffect++;
 
-    // DROPEFFECT_MOVE is the default effect
+    
     DWORD retVal= countEffect > 1 ? DROPEFFECT_MOVE : effects;
     return retVal;
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -101,20 +101,20 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
     {
         case XML_TOK_DOC_AUTOSTYLES:
             if( nFlags & IMPORT_AUTOSTYLES )
-                // not nice, but this is safe, as the SchXMLDocContext class can only by
-                // instantiated by the chart import class SchXMLImport (header is not exported)
+                
+                
                 pContext =
                     static_cast< SchXMLImport& >( GetImport() ).CreateStylesContext( rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_STYLES:
-            // for draw styles containing gradients/hatches/markers and dashes
+            
             if( nFlags & IMPORT_STYLES )
                 pContext = new SvXMLStylesContext( GetImport(), nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_META:
-          // we come here in the flat ODF file format,
-          // if XDocumentPropertiesSupplier is not supported at the model
-//        DBG_WARNING("XML_TOK_DOC_META: should not have come here, maybe document is invalid?");
+          
+          
+
             pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
             break;
         case XML_TOK_DOC_BODY:
@@ -123,7 +123,7 @@ SvXMLImportContext* SchXMLDocContext::CreateChildContext(
             break;
     }
 
-    // call parent when no own context was created
+    
     if( ! pContext )
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
@@ -148,7 +148,7 @@ SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
-    // behave like meta base class iff we encounter office:meta
+    
     const SvXMLTokenMap& rTokenMap =
         mrImportHelper.GetDocElemTokenMap();
     if ( XML_TOK_DOC_META == rTokenMap.Get( i_nPrefix, i_rLocalName ) ) {
@@ -185,7 +185,7 @@ SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
 
-    // <chart:chart> element
+    
     if( nPrefix == XML_NAMESPACE_CHART &&
         IsXMLToken( rLocalName, XML_CHART ) )
     {
@@ -197,7 +197,7 @@ SvXMLImportContext* SchXMLBodyContext::CreateChildContext(
     else if(nPrefix == XML_NAMESPACE_TABLE &&
             IsXMLToken( rLocalName, XML_CALCULATION_SETTINGS ))
     {
-        // i99104 handle null date correctly
+        
         pContext = new SchXMLCalculationSettingsContext ( GetImport(), nPrefix, rLocalName, xAttrList);
     }
     else

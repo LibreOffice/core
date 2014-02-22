@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "SceneProperties.hxx"
@@ -38,7 +38,7 @@ namespace chart
 void SceneProperties::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
-    // transformation matrix
+    
     rOutProperties.push_back(
         Property( "D3DTransformMatrix",
                   PROP_SCENE_TRANSF_MATRIX,
@@ -47,7 +47,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // distance: deprecated ( this is not used by the chart view; it's only here for compatibility with old chart  )
+    
     rOutProperties.push_back(
         Property( "D3DSceneDistance",
                   PROP_SCENE_DISTANCE,
@@ -56,7 +56,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // focalLength: deprecated ( this is not used by the chart view; it's only here for compatibility with old chart  )
+    
     rOutProperties.push_back(
         Property( "D3DSceneFocalLength",
                   PROP_SCENE_FOCAL_LENGTH,
@@ -65,7 +65,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // shadowSlant
+    
     rOutProperties.push_back(
         Property( "D3DSceneShadowSlant",
                   PROP_SCENE_SHADOW_SLANT,
@@ -74,7 +74,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // shadeMode
+    
     rOutProperties.push_back(
         Property( "D3DSceneShadeMode",
                   PROP_SCENE_SHADE_MODE,
@@ -83,7 +83,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // ambientColor
+    
     rOutProperties.push_back(
         Property( "D3DSceneAmbientColor",
                   PROP_SCENE_AMBIENT_COLOR,
@@ -92,7 +92,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // lightingMode
+    
     rOutProperties.push_back(
         Property( "D3DSceneTwoSidedLighting",
                   PROP_SCENE_TWO_SIDED_LIGHTING,
@@ -101,7 +101,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // camera geometry
+    
     rOutProperties.push_back(
         Property( "D3DCameraGeometry",
                   PROP_SCENE_CAMERA_GEOMETRY,
@@ -110,7 +110,7 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // perspective
+    
     rOutProperties.push_back(
         Property( "D3DScenePerspective",
                   PROP_SCENE_PERSPECTIVE,
@@ -119,8 +119,8 @@ void SceneProperties::AddPropertiesToVector(
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    // Light Sources
-    // light source 1
+    
+    
     rOutProperties.push_back(
         Property( "D3DSceneLightColor1",
                   PROP_SCENE_LIGHT_COLOR_1,
@@ -142,7 +142,7 @@ void SceneProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // light source 2
+    
     rOutProperties.push_back(
         Property( "D3DSceneLightColor2",
                   PROP_SCENE_LIGHT_COLOR_2,
@@ -164,7 +164,7 @@ void SceneProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // light source 3
+    
     rOutProperties.push_back(
         Property( "D3DSceneLightColor3",
                   PROP_SCENE_LIGHT_COLOR_3,
@@ -186,7 +186,7 @@ void SceneProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // light source 4
+    
     rOutProperties.push_back(
         Property( "D3DSceneLightColor4",
                   PROP_SCENE_LIGHT_COLOR_4,
@@ -208,7 +208,7 @@ void SceneProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // light source 5
+    
     rOutProperties.push_back(
         Property( "D3DSceneLightColor5",
                   PROP_SCENE_LIGHT_COLOR_5,
@@ -230,7 +230,7 @@ void SceneProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // light source 6
+    
     rOutProperties.push_back(
         Property( "D3DSceneLightColor6",
                   PROP_SCENE_LIGHT_COLOR_6,
@@ -252,7 +252,7 @@ void SceneProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // light source 7
+    
     rOutProperties.push_back(
         Property( "D3DSceneLightColor7",
                   PROP_SCENE_LIGHT_COLOR_7,
@@ -274,7 +274,7 @@ void SceneProperties::AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
-    // light source 8
+    
     rOutProperties.push_back(
         Property( "D3DSceneLightColor8",
                   PROP_SCENE_LIGHT_COLOR_8,
@@ -301,7 +301,7 @@ void SceneProperties::AddPropertiesToVector(
 void SceneProperties::AddDefaultsToMap(
     ::chart::tPropertyValueMap & rOutMap )
 {
-    // Identity Matrix
+    
     drawing::HomogenMatrix aMtx;
     aMtx.Line1.Column1 = aMtx.Line2.Column2 =
         aMtx.Line3.Column3 = aMtx.Line4.Column4 = 1.0;
@@ -314,7 +314,7 @@ void SceneProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCENE_DISTANCE, 4200 );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCENE_FOCAL_LENGTH, 8000 );
 
-//     PROP_SCENE_SHADOW_SLANT;
+
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_SHADE_MODE, drawing::ShadeMode_SMOOTH );
 
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >(
@@ -330,7 +330,7 @@ void SceneProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_CAMERA_GEOMETRY, aDefaultCameraGeometry );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_PERSPECTIVE, drawing::ProjectionMode_PERSPECTIVE );
 
-    // Light Sources
+    
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_1, false );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_2, true );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_ON_3, false );
@@ -362,6 +362,6 @@ void SceneProperties::AddDefaultsToMap(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCENE_LIGHT_COLOR_8, aDefaultLightColor );
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

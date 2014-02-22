@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -72,7 +72,7 @@
 
 using namespace ::com::sun::star;
 
-/// Painting buffer
+
 class SwQueuedPaint
 {
 public:
@@ -89,7 +89,7 @@ public:
 
 SwQueuedPaint *SwPaintQueue::pQueue = 0;
 
-// saves some settings from the draw view
+
 class SwDrawViewSave
 {
     OUString sLayerNm;
@@ -132,7 +132,7 @@ void SwPaintQueue::Repaint()
             {
                 if ( pSh->GetWin() )
                 {
-                    // for previewing, since rows/columns are known in PaintHdl (UI)
+                    
                     pSh->GetWin()->Invalidate();
                     pSh->GetWin()->Update();
                 }
@@ -179,10 +179,10 @@ void SetSwVisArea( SwViewShell *pSh, const SwRect &rRect )
     pSh->Imp()->SetFirstVisPageInvalid();
     Point aPt( rRect.Pos() );
 
-    // calculate an offset for the rectangle of the n-th page to
-    // move the start point of the output operation to a position
-    // such that in the output device all pages will be painted
-    // at the same position
+    
+    
+    
+    
     aPt.X() = -aPt.X(); aPt.Y() = -aPt.Y();
 
     OutputDevice *pOut = pSh->GetOut();
@@ -194,9 +194,9 @@ void SetSwVisArea( SwViewShell *pSh, const SwRect &rRect )
 
 void SwViewShell::InitPrt( OutputDevice *pOutDev )
 {
-    // For printing we use a negative offset (exactly the offset of OutputSize).
-    // This is necessary because the origin is in the upper left corner of the
-    // physical page while the output uses OutputOffset as origin.
+    
+    
+    
     if ( pOutDev )
     {
         maPrtOffst = Point();
@@ -237,10 +237,10 @@ void SwViewShell::ChgAllPageOrientation( sal_uInt16 eOri )
             aNew.SetLandscape( bNewOri );
             SwFrmFmt& rFmt = aNew.GetMaster();
             SwFmtFrmSize aSz( rFmt.GetFrmSize() );
-            // adjust size
-            // PORTRAIT  -> higher than wide
-            // LANDSCAPE -> wider than high
-            // Height is the VarSize, width the FixSize (per Def.)
+            
+            
+            
+            
             if( bNewOri ? aSz.GetHeight() > aSz.GetWidth()
                         : aSz.GetHeight() < aSz.GetWidth() )
             {
@@ -311,7 +311,7 @@ void SwViewShell::CalcPagesForPrint( sal_uInt16 nMax )
 
         aAction.Action();
 
-        maVisArea = aOldVis; //reset due to the paints
+        maVisArea = aOldVis; 
         Imp()->SetFirstVisPageInvalid();
     }
 
@@ -324,9 +324,9 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     SwFEShell* pFESh = (SwFEShell*)this;
     pPrtDoc->LockExpFlds();
 
-    // use given printer
-    //! Make a copy of it since it gets destroyed with the temporary document
-    //! used for PDF export
+    
+    
+    
     if (pPrt)
         pPrtDoc->setPrinter( new SfxPrinter(*pPrt), true, true );
 
@@ -336,18 +336,18 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
         if( 0 != ( pCpyItem = rPool.GetPoolDefaultItem( nWh ) ) )
             pPrtDoc->GetAttrPool().SetPoolDefaultItem( *pCpyItem );
 
-    // JP 29.07.99 - Bug 67951 - set all Styles from the SourceDoc into
-    //                              the PrintDoc - will be replaced!
+    
+    
     pPrtDoc->ReplaceStyles( *GetDoc() );
 
     SwShellCrsr *pActCrsr = pFESh->_GetCrsr();
     SwShellCrsr *pFirstCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetNext());
-    if( !pActCrsr->HasMark() ) // with a multi-selection the current cursor might be empty
+    if( !pActCrsr->HasMark() ) 
     {
         pActCrsr = dynamic_cast<SwShellCrsr*>(pActCrsr->GetPrev());
     }
 
-    // Y-position of the first selection
+    
     Point aSelPoint;
     if( pFESh->IsTableMode() )
     {
@@ -371,28 +371,28 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     const SwPageFrm* pPage = GetLayout()->GetPageAtPos( aSelPoint );
     OSL_ENSURE( pPage, "no page found!" );
 
-    // get page descriptor - fall back to the first one if pPage could not be found
+    
     const SwPageDesc* pPageDesc = pPage ? pPrtDoc->FindPageDescByName(
         pPage->GetPageDesc()->GetName() ) : &pPrtDoc->GetPageDesc( (sal_uInt16)0 );
 
     if( !pFESh->IsTableMode() && pActCrsr->HasMark() )
-    {   // Tweak paragraph attributes of last paragraph
+    {   
         SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
         SwTxtNode* pTxtNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx )->GetTxtNode();
         SwCntntNode *pLastNd =
             pActCrsr->GetCntntNode( (*pActCrsr->GetMark()) <= (*pActCrsr->GetPoint()) );
-        // copy the paragraph attributes of the first paragraph
+        
         if( pLastNd && pLastNd->IsTxtNode() )
             ((SwTxtNode*)pLastNd)->CopyCollFmt( *pTxtNd );
     }
 
-    // fill it with the selected content
+    
     pFESh->Copy( pPrtDoc );
 
-    // set the page style at the first paragraph
+    
     {
         SwNodeIndex aNodeIdx( *pPrtDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
-        SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); // go to 1st ContentNode
+        SwCntntNode* pCNd = pPrtDoc->GetNodes().GoNext( &aNodeIdx ); 
         if( pFESh->IsTableMode() )
         {
             SwTableNode* pTNd = pCNd->FindTableNode();
@@ -409,7 +409,7 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
                 {
                     SwCntntNode *pFirstNd =
                         pFirstCrsr->GetCntntNode( (*pFirstCrsr->GetMark()) > (*pFirstCrsr->GetPoint()) );
-                    // copy paragraph attributes of the first paragraph
+                    
                     if( pFirstNd && pFirstNd->IsTxtNode() )
                         ((SwTxtNode*)pFirstNd)->CopyCollFmt( *pTxtNd );
                 }
@@ -419,16 +419,16 @@ SwDoc * SwViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
     return pPrtDoc;
 }
 
-// TODO: there is already a GetPageByPageNum, but it checks some physical page
-// number; unsure if we want that here, should find out what that is...
+
+
 SwPageFrm const*
 sw_getPage(SwRootFrm const& rLayout, sal_Int32 const nPage)
 {
-    // yes this is O(n^2) but at least it does not crash...
+    
     SwPageFrm const* pPage = dynamic_cast<const SwPageFrm*>(rLayout.Lower());
     for (sal_Int32 i = nPage; pPage && (i > 0); --i)
     {
-        if (1 == i) { // note: nPage is 1-based, i.e. 0 is invalid!
+        if (1 == i) { 
             return pPage;
         }
         pPage = dynamic_cast<SwPageFrm const*>(pPage->GetNext());
@@ -443,23 +443,23 @@ sal_Bool SwViewShell::PrintOrPDFExport(
     SwPrintData const& rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
 {
-    // CAUTION: Do also always update the printing routines in viewpg.cxx (PrintProspect)!
+    
 
     const sal_Int32 nMaxRenderer = rPrintData.GetRenderData().GetPagesToPrint().size() - 1;
     OSL_ENSURE( 0 <= nRenderer && nRenderer <= nMaxRenderer, "nRenderer out of bounds");
     if (!pOutDev || nMaxRenderer < 0 || nRenderer < 0 || nRenderer > nMaxRenderer)
         return sal_False;
 
-    // save settings of OutputDevice (should be done always since the
-    // output device is now provided by a call from outside the Writer)
+    
+    
     pOutDev->Push();
 
-    // Print/PDF export for (multi-)selection has already generated a
-    // temporary document with the selected text.
-    // (see XRenderable implementation in unotxdoc.cxx)
-    // It is implemented this way because PDF export calls this Prt function
-    // once per page and we do not like to always have the temporary document
-    // to be created that often here.
+    
+    
+    
+    
+    
+    
     SwViewShell *pShell = new SwViewShell( *this, 0, pOutDev );
 
     SdrView *pDrawView = pShell->GetDrawView();
@@ -469,15 +469,15 @@ sal_Bool SwViewShell::PrintOrPDFExport(
         pDrawView->SetBufferedOverlayAllowed( false );
     }
 
-    {   // additional scope so that the CurrShell is reset before destroying the shell
+    {   
 
         SET_CURR_SHELL( pShell );
 
-        //JP 01.02.99: Bug 61335 - the ReadOnly flag is never copied
+        
         if( mpOpt->IsReadonly() )
             pShell->mpOpt->SetReadonly( sal_True );
 
-        // save options at draw view:
+        
         SwDrawViewSave aDrawViewSave( pShell->GetDrawView() );
 
         pShell->PrepareForPrint( rPrintData );
@@ -487,8 +487,8 @@ sal_Bool SwViewShell::PrintOrPDFExport(
             rPrintData.GetRenderData().GetValidPagesSet().count( nPage ) == 1,
             "SwViewShell::PrintOrPDFExport: nPage not valid" );
         SwViewShell *const pViewSh2 = (nPage < 0)
-                ? rPrintData.GetRenderData().m_pPostItShell.get()// post-it page
-                : pShell; // a 'regular' page, not one from the post-it doc
+                ? rPrintData.GetRenderData().m_pPostItShell.get()
+                : pShell; 
 
         SwPageFrm const*const pStPage =
             sw_getPage(*pViewSh2->GetLayout(), abs(nPage));
@@ -498,7 +498,7 @@ sal_Bool SwViewShell::PrintOrPDFExport(
             return sal_False;
         }
 
-        //!! applying view options and formatting the document should now only be done in getRendererCount!
+        
 
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
@@ -513,8 +513,8 @@ sal_Bool SwViewShell::PrintOrPDFExport(
 
     delete pShell;
 
-    // restore settings of OutputDevice (should be done always now since the
-    // output device is now provided by a call from outside the Writer)
+    
+    
     pOutDev->Pop();
 
     return sal_True;
@@ -523,8 +523,8 @@ sal_Bool SwViewShell::PrintOrPDFExport(
 void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintData& rOptions,
                          OutputDevice* pOleOut, const Rectangle& rRect )
 {
-    // For printing a shell is needed. Either the Doc already has one, than we
-    // create a new view, or it has none, than we create the first view.
+    
+    
     SwViewShell *pSh;
     if( pDoc->GetCurrentViewShell() )
         pSh = new SwViewShell( *pDoc->GetCurrentViewShell(), 0, pOleOut,VSHELLFLAG_SHARELAYOUT );
@@ -546,23 +546,23 @@ void SwViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintD
             pSh->GetLayout()->Lower()->InvalidateSize();
         }
 
-        // CalcPagesForPrint() should not be necessary here. The pages in the
-        // visible area will be formatted in SwRootFrm::Paint().
-        // Removing this gives us a performance gain during saving the
-        // document because the thumbnail creation will not trigger a complete
-        // formatting of the document.
+        
+        
+        
+        
+        
 
         pOleOut->Push( PUSH_CLIPREGION );
         pOleOut->IntersectClipRegion( aSwRect.SVRect() );
         pSh->GetLayout()->Paint( aSwRect );
 
         pOleOut->Pop();
-        // first the CurrShell object needs to be destroyed!
+        
     }
     delete pSh;
 }
 
-/// Check if the DocNodesArray contains fields.
+
 sal_Bool SwViewShell::IsAnyFieldInDoc() const
 {
     const SfxPoolItem* pItem;
@@ -597,7 +597,7 @@ sal_Bool SwViewShell::IsAnyFieldInDoc() const
     return sal_False;
 }
 
-///  Saves some settings at the draw view
+
 SwDrawViewSave::SwDrawViewSave( SdrView* pSdrView )
     : pDV( pSdrView )
 {
@@ -616,7 +616,7 @@ SwDrawViewSave::~SwDrawViewSave()
     }
 }
 
-// OD 09.01.2003 #i6467# - method also called for page preview
+
 void SwViewShell::PrepareForPrint( const SwPrintData &rOptions )
 {
     mpOpt->SetGraphic ( sal_True == rOptions.bPrintGraphic );
@@ -631,7 +631,7 @@ void SwViewShell::PrepareForPrint( const SwPrintData &rOptions )
         SdrView *pDrawView = GetDrawView();
         OUString sLayerNm;
         sLayerNm = "Controls";
-        // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
+        
         if ( !IsPreview() )
         {
             pDrawView->SetLayerPrintable( sLayerNm, rOptions.bPrintControl );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,14 +26,14 @@
 
 #include <controldata.hxx>
 
-// =======================================================================
+
 
 #define GROUP_BORDER            12
 #define GROUP_TEXT_BORDER       2
 
 #define GROUP_VIEW_STYLE        (WB_3DLOOK | WB_NOLABEL)
 
-// =======================================================================
+
 
 void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -43,7 +43,7 @@ void GroupBox::ImplInit( Window* pParent, WinBits nStyle )
     ImplInitSettings( true, true, true );
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits GroupBox::ImplInitStyle( WinBits nStyle )
 {
@@ -52,20 +52,20 @@ WinBits GroupBox::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------
+
 
 const Font& GroupBox::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupFont();
 }
 
-// -----------------------------------------------------------------
+
 const Color& GroupBox::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetGroupTextColor();
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::ImplInitSettings( bool bFont,
                                  bool bForeground, bool bBackground )
@@ -98,7 +98,7 @@ void GroupBox::ImplInitSettings( bool bFont,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 GroupBox::GroupBox( Window* pParent, WinBits nStyle ) :
     Control( WINDOW_GROUPBOX )
@@ -106,7 +106,7 @@ GroupBox::GroupBox( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
     Control( WINDOW_GROUPBOX )
@@ -120,7 +120,7 @@ GroupBox::GroupBox( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
                          const Point& rPos, const Size& rSize, bool bLayout )
@@ -188,8 +188,8 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
         pDev->DrawLine( Point( rPos.X()+rSize.Width()-2, rPos.Y()+rSize.Height()-2 ), Point( rPos.X()+rSize.Width()-2, nTop ) );
 
         bool bIsPrinter = OUTDEV_PRINTER == pDev->GetOutDevType();
-        // if we're drawing onto a printer, spare the 3D effect
-        // #i46986# / 2005-04-13 / frank.schoenheit@sun.com
+        
+        
 
         if ( !bIsPrinter && !(nDrawFlags & WINDOW_DRAW_MONO) )
         {
@@ -212,7 +212,7 @@ void GroupBox::ImplDraw( OutputDevice* pDev, sal_uLong nDrawFlags,
     DrawControlText( *pDev, aRect, aText, nTextStyle, pVector, pDisplayText );
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::FillLayoutData() const
 {
@@ -220,14 +220,14 @@ void GroupBox::FillLayoutData() const
     const_cast<GroupBox*>(this)->   ImplDraw( const_cast<GroupBox*>(this), 0, Point(), GetOutputSizePixel(), true );
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::Paint( const Rectangle& )
 {
     ImplDraw( this, 0, Point(), GetOutputSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                      sal_uLong nFlags )
@@ -249,7 +249,7 @@ void GroupBox::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::Resize()
 {
@@ -257,7 +257,7 @@ void GroupBox::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::StateChanged( StateChangedType nType )
 {
@@ -295,7 +295,7 @@ void GroupBox::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void GroupBox::DataChanged( const DataChangedEvent& rDCEvt )
 {

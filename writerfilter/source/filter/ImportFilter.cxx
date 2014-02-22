@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -68,7 +68,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         uno::Reference< io::XInputStream > xInputStream;
         try
         {
-            // use the oox.core.FilterDetect implementation to extract the decrypted ZIP package
+            
             ::oox::core::FilterDetect aDetector( m_xContext );
             xInputStream = aDetector.extractUnencryptedPackage( aMediaDesc );
         }
@@ -101,7 +101,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 
     writerfilter::dmapper::DomainMapper* aDomainMapper = new writerfilter::dmapper::DomainMapper(m_xContext, xInputStream, m_xDstDoc, bRepairStorage, eType, uno::Reference<text::XTextRange>());
     writerfilter::Stream::Pointer_t pStream(aDomainMapper);
-    //create the tokenizer and domain mapper
+    
     if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
     {
         writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream, bRepairStorage);
@@ -118,36 +118,36 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
 
         pDocument->resolve(*pStream);
 
-        // Adding some properties to the document's grab bag for interoperability purposes:
+        
         uno::Sequence<beans::PropertyValue> aGrabBagProperties(9);
 
-        // Adding the saved Theme DOM
+        
         aGrabBagProperties[0].Name = "OOXTheme";
         aGrabBagProperties[0].Value = uno::makeAny( pDocument->getThemeDom() );
 
-        // Adding the saved custom xml DOM
+        
         aGrabBagProperties[1].Name = "OOXCustomXml";
         aGrabBagProperties[1].Value = uno::makeAny( pDocument->getCustomXmlDomList() );
         aGrabBagProperties[2].Name = "OOXCustomXmlProps";
         aGrabBagProperties[2].Value = uno::makeAny( pDocument->getCustomXmlDomPropsList() );
 
-        // Adding the saved ActiveX DOM
+        
         aGrabBagProperties[3].Name = "OOXActiveX";
         aGrabBagProperties[3].Value = uno::makeAny( pDocument->getActiveXDomList() );
         aGrabBagProperties[4].Name = "OOXActiveXBin";
         aGrabBagProperties[4].Value = uno::makeAny( pDocument->getActiveXBinList() );
 
-        // Adding the saved w:themeFontLang setting
+        
         aGrabBagProperties[5].Name = "ThemeFontLangProps";
         aGrabBagProperties[5].Value = uno::makeAny( aDomainMapper->GetThemeFontLangProperties() );
 
-        // Adding the saved Glossary Documnet DOM to the document's grab bag
+        
         aGrabBagProperties[6].Name = "OOXGlossary";
         aGrabBagProperties[6].Value = uno::makeAny( pDocument->getGlossaryDocDom() );
         aGrabBagProperties[7].Name = "OOXGlossaryDom";
         aGrabBagProperties[7].Value = uno::makeAny( pDocument->getGlossaryDomList() );
 
-        // Adding the saved embedding document to document's grab bag
+        
         aGrabBagProperties[8].Name = "OOXEmbeddings";
         aGrabBagProperties[8].Value = uno::makeAny( pDocument->getEmbeddingsList() );
 
@@ -160,7 +160,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
             ::oox::ole::VbaProject aVbaProject( m_xContext, xModel, "Writer" );
             uno::Reference< frame::XFrame > xFrame = aMediaDesc.getUnpackedValueOrDefault(  MediaDescriptor::PROP_FRAME(), uno::Reference< frame::XFrame > () );
 
-            // if no XFrame try fallback to what we can glean from the Model
+            
             if ( !xFrame.is() )
             {
                 uno::Reference< frame::XController > xController =  xModel->getCurrentController();
@@ -196,7 +196,7 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
 {
    m_xDstDoc = xDoc;
 
-   // Set some compatibility options that are valid for all the formats
+   
    uno::Reference< lang::XMultiServiceFactory > xFactory( xDoc, uno::UNO_QUERY );
    uno::Reference< beans::XPropertySet > xSettings( xFactory->createInstance("com.sun.star.document.Settings"), uno::UNO_QUERY );
 
@@ -216,7 +216,7 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
    xSettings->setPropertyValue( "TabOverflow", uno::makeAny( sal_True ) );
    xSettings->setPropertyValue( "UnbreakableNumberings", uno::makeAny( sal_True ) );
 
-   // Don't load the default style definitions to avoid weird mix
+   
    xSettings->setPropertyValue( "StylesNoDefault", uno::makeAny( sal_True ) );
 
    xSettings->setPropertyValue("FloattableNomargins", uno::makeAny( sal_True ));
@@ -304,22 +304,22 @@ void WriterFilter::putPropertiesToDocumentGrabBag( const uno::Sequence< beans::P
             const OUString aGrabBagPropName = "InteropGrabBag";
             if( xPropsInfo.is() && xPropsInfo->hasPropertyByName( aGrabBagPropName ) )
             {
-                // get existing grab bag
+                
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xDocProps->getPropertyValue( aGrabBagPropName ) >>= aGrabBag;
                 sal_Int32 length = aGrabBag.getLength();
 
-                // update grab bag size to contain the new items
+                
                 aGrabBag.realloc( length + aProperties.getLength() );
 
-                // put the new items
+                
                 for( sal_Int32 i=0; i < aProperties.getLength(); ++i )
                 {
                     aGrabBag[length + i].Name = aProperties[i].Name;
                     aGrabBag[length + i].Value = aProperties[i].Value;
                 }
 
-                // put it back to the document
+                
                 xDocProps->setPropertyValue( aGrabBagPropName, uno::Any( aGrabBag ) );
             }
         }

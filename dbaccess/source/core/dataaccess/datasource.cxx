@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "datasource.hxx"
@@ -95,7 +95,7 @@ using namespace ::comphelper;
 namespace dbaccess
 {
 
-// FlushNotificationAdapter
+
 typedef ::cppu::WeakImplHelper1< XFlushListener > FlushNotificationAdapter_Base;
 /** helper class which implements a XFlushListener, and forwards all
     notification events to another XFlushListener
@@ -126,9 +126,9 @@ protected:
     void SAL_CALL impl_dispose( bool _bRevokeListener );
 
 protected:
-    // XFlushListener
+    
     virtual void SAL_CALL flushed( const ::com::sun::star::lang::EventObject& rEvent ) throw (::com::sun::star::uno::RuntimeException);
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 };
 
@@ -185,7 +185,7 @@ void SAL_CALL FlushNotificationAdapter::disposing( const EventObject& Source ) t
 }
 
 OAuthenticationContinuation::OAuthenticationContinuation()
-    :m_bRemberPassword(sal_True),   // TODO: a meaningful default
+    :m_bRemberPassword(sal_True),   
     m_bCanSetUserName(sal_True)
 {
 }
@@ -202,8 +202,8 @@ void SAL_CALL OAuthenticationContinuation::setRealm( const OUString& /*Realm*/ )
 
 sal_Bool SAL_CALL OAuthenticationContinuation::canSetUserName(  ) throw(RuntimeException)
 {
-    // we always allow this, even if the database document is read-only. In this case,
-    // it's simply that the user cannot store the new user name.
+    
+    
     return m_bCanSetUserName;
 }
 
@@ -261,7 +261,7 @@ void SAL_CALL OAuthenticationContinuation::setRememberAccount( RememberAuthentic
     It owns the master connections which will be disposed when the last connection proxy is gone.
 */
 typedef ::cppu::WeakImplHelper1< XEventListener > OConnectionHelper_BASE;
-// need to hold the digest
+
 struct TDigestHolder
 {
     sal_uInt8 m_pBuffer[RTL_DIGEST_LENGTH_SHA1];
@@ -275,14 +275,14 @@ struct TDigestHolder
 class OSharedConnectionManager : public OConnectionHelper_BASE
 {
 
-     // contains the currently used master connections
+     
     typedef struct
     {
         Reference< XConnection >    xMasterConnection;
         oslInterlockedCount         nALiveCount;
     } TConnectionHolder;
 
-    // the less-compare functor, used for the stl::map
+    
     struct TDigestLess : public ::std::binary_function< TDigestHolder, TDigestHolder, bool>
     {
         bool operator() (const TDigestHolder& x, const TDigestHolder& y) const
@@ -294,12 +294,12 @@ class OSharedConnectionManager : public OConnectionHelper_BASE
         }
     };
 
-    typedef ::std::map< TDigestHolder,TConnectionHolder,TDigestLess>        TConnectionMap;      // holds the master connections
-    typedef ::std::map< Reference< XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;// holds the shared connections
+    typedef ::std::map< TDigestHolder,TConnectionHolder,TDigestLess>        TConnectionMap;      
+    typedef ::std::map< Reference< XConnection >,TConnectionMap::iterator>  TSharedConnectionMap;
 
     ::osl::Mutex                m_aMutex;
-    TConnectionMap              m_aConnections;         // remember the master connection in conjunction with the digest
-    TSharedConnectionMap        m_aSharedConnection;    // the shared connections with conjunction with an iterator into the connections map
+    TConnectionMap              m_aConnections;         
+    TSharedConnectionMap        m_aSharedConnection;    
     Reference< XProxyFactory >  m_xProxyFactory;
 
 protected:
@@ -362,8 +362,8 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
     OUString sUser = user;
     OUString sPassword = password;
     if ((sUser.isEmpty()) && (sPassword.isEmpty()) && (!_pDataSource->m_pImpl->m_sUser.isEmpty()))
-    {   // ease the usage of this method. data source which are intended to have a user automatically
-        // fill in the user/password combination if the caller of this method does not specify otherwise
+    {   
+        
         sUser = _pDataSource->m_pImpl->m_sUser;
         if (!_pDataSource->m_pImpl->m_aPassword.isEmpty())
             sPassword = _pDataSource->m_pImpl->m_aPassword;
@@ -375,7 +375,7 @@ Reference<XConnection> OSharedConnectionManager::getConnection( const OUString& 
     if ( m_aConnections.end() == aIter )
     {
         TConnectionHolder aHolder;
-        aHolder.nALiveCount = 0; // will be incremented by addListener
+        aHolder.nALiveCount = 0; 
         aHolder.xMasterConnection = _pDataSource->buildIsolatedConnection(user,password);
         aIter = m_aConnections.insert(TConnectionMap::value_type(nId,aHolder)).first;
     }
@@ -421,14 +421,14 @@ namespace
                 for ( ; pSetting->AsciiName; ++pSetting )
                 {
                     if ( pDataSourceSetting->Name.equalsAscii( pSetting->AsciiName ) )
-                    {   // the particular data source setting is known
+                    {   
 
                         const DriverPropertyInfo* pAllowedDriverSetting = aDriverInfo.getConstArray();
                         const DriverPropertyInfo* pDriverSettingsEnd = pAllowedDriverSetting + aDriverInfo.getLength();
                         for ( ; pAllowedDriverSetting != pDriverSettingsEnd; ++pAllowedDriverSetting )
                         {
                             if ( pAllowedDriverSetting->Name.equalsAscii( pSetting->AsciiName ) )
-                            {   // the driver also allows this setting
+                            {   
                                 bAllowSetting = sal_True;
                                 break;
                             }
@@ -437,8 +437,8 @@ namespace
                     }
                 }
                 if ( bAllowSetting || !pSetting->AsciiName )
-                {   // if the driver allows this particular setting, or if the setting is completely unknown,
-                    // we pass it to the driver
+                {   
+                    
                     aRet.push_back( *pDataSourceSetting );
                 }
             }
@@ -475,7 +475,7 @@ namespace
     };
 }
 
-// ODatabaseContext
+
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()
 {
@@ -489,7 +489,7 @@ ODatabaseSource::ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pI
             ,m_aBookmarks( *this, getMutex() )
             ,m_aFlushListeners( getMutex() )
 {
-    // some kind of default
+    
     SAL_INFO("dbaccess", "DS: ctor: " << std::hex << this << ": " << std::hex << m_pImpl.get() );
 }
 
@@ -513,7 +513,7 @@ void ODatabaseSource::setName( const Reference< XDocumentDataSource >& _rxDocume
         rModelImpl.m_pImpl->m_sName = _rNewName;
 }
 
-// com::sun::star::lang::XTypeProvider
+
 Sequence< Type > ODatabaseSource::getTypes() throw (RuntimeException)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getTypes" );
@@ -543,7 +543,7 @@ Sequence< sal_Int8 > ODatabaseSource::getImplementationId() throw (RuntimeExcept
     return pId->getImplementationId();
 }
 
-// com::sun::star::uno::XInterface
+
 Any ODatabaseSource::queryInterface( const Type & rType ) throw (RuntimeException)
 {
     Any aIface = ODatabaseSource_Base::queryInterface( rType );
@@ -568,7 +568,7 @@ void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObj
         m_pImpl->disposing(Source);
 }
 
-// XServiceInfo
+
 OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getImplementationName" );
@@ -608,7 +608,7 @@ sal_Bool ODatabaseSource::supportsService( const OUString& _rServiceName ) throw
     return cppu::supportsService(this, _rServiceName);
 }
 
-// OComponentHelper
+
 void ODatabaseSource::disposing()
 {
     SAL_INFO("dbaccess", "DS: disp: " << std::hex << this << ", " << std::hex << m_pImpl.get() );
@@ -633,14 +633,14 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         xManager.set( ConnectionPool::create( m_pImpl->m_aContext ), UNO_QUERY_THROW );
     } catch( const Exception& ) {  }
     if ( !xManager.is() )
-        // no connection pool installed, fall back to driver manager
+        
         xManager.set( DriverManager::create(m_pImpl->m_aContext ), UNO_QUERY_THROW );
 
     OUString sUser(_rUid);
     OUString sPwd(_rPwd);
     if ((sUser.isEmpty()) && (sPwd.isEmpty()) && (!m_pImpl->m_sUser.isEmpty()))
-    {   // ease the usage of this method. data source which are intended to have a user automatically
-        // fill in the user/password combination if the caller of this method does not specify otherwise
+    {   
+        
         sUser = m_pImpl->m_sUser;
         if (!m_pImpl->m_aPassword.isEmpty())
             sPwd = m_pImpl->m_aPassword;
@@ -679,9 +679,9 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
         }
         if ( !xDriver.is() || !xDriver->acceptsURL( m_pImpl->m_sConnectURL ) )
         {
-            // Nowadays, it's allowed for a driver to be registered for a given URL, but actually not to accept it.
-            // This is because registration nowadays happens at compile time (by adding respective configuration data),
-            // but acceptance is decided at runtime.
+            
+            
+            
             nExceptionMessageId = RID_STR_COULDNOTCONNECT_NODRIVER;
         }
         else
@@ -715,8 +715,8 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
 
             if ( m_pImpl->isEmbeddedDatabase() )
             {
-                // see ODatabaseSource::flushed for comment on why we register as FlushListener
-                // at the connection
+                
+                
                 Reference< XFlushable > xFlushable( xReturn, UNO_QUERY );
                 if ( xFlushable.is() )
                     FlushNotificationAdapter::installAdapter( xFlushable, this );
@@ -741,14 +741,14 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const OUString
     return xReturn;
 }
 
-// OPropertySetHelper
+
 Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (RuntimeException)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getPropertySetInfo" );
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-// comphelper::OPropertyArrayUsageHelper
+
 ::cppu::IPropertyArrayHelper* ODatabaseSource::createArrayHelper( ) const
 {
     SAL_INFO("dbaccess", "ODatabaseSource::createArrayHelper" );
@@ -769,7 +769,7 @@ Reference< XPropertySetInfo >  ODatabaseSource::getPropertySetInfo() throw (Runt
     END_PROPERTY_HELPER();
 }
 
-// cppu::OPropertySetHelper
+
 ::cppu::IPropertyArrayHelper& ODatabaseSource::getInfoHelper()
 {
     return *getArrayHelper();
@@ -874,7 +874,7 @@ namespace
     */
     void lcl_setPropertyValues_resetOrRemoveOther( const Reference< XPropertyBag >& _rxPropertyBag, const Sequence< PropertyValue >& _rAllNewPropertyValues )
     {
-        // sequences are ugly to operate on
+        
         typedef ::std::set< OUString >   StringSet;
         StringSet aToBeSetPropertyNames;
         ::std::transform(
@@ -886,13 +886,13 @@ namespace
 
         try
         {
-            // obtain all properties currently known at the bag
+            
             Reference< XPropertySetInfo > xPSI( _rxPropertyBag->getPropertySetInfo(), UNO_QUERY_THROW );
             Sequence< Property > aAllExistentProperties( xPSI->getProperties() );
 
             Reference< XPropertyState > xPropertyState( _rxPropertyBag, UNO_QUERY_THROW );
 
-            // loop through them, and reset resp. default properties which are not to be set
+            
             const Property* pExistentProperty( aAllExistentProperties.getConstArray() );
             const Property* pExistentPropertyEnd( aAllExistentProperties.getConstArray() + aAllExistentProperties.getLength() );
             for ( ; pExistentProperty != pExistentPropertyEnd; ++pExistentProperty )
@@ -900,15 +900,15 @@ namespace
                 if ( aToBeSetPropertyNames.find( pExistentProperty->Name ) != aToBeSetPropertyNames.end() )
                     continue;
 
-                // this property is not to be set, but currently exists in the bag.
-                // -> Remove it, or reset it to the default.
+                
+                
                 if ( ( pExistentProperty->Attributes & PropertyAttribute::REMOVABLE ) != 0 )
                     _rxPropertyBag->removeProperty( pExistentProperty->Name );
                 else
                     xPropertyState->setPropertyToDefault( pExistentProperty->Name );
             }
 
-            // finally, set the new property values
+            
             _rxPropertyBag->setPropertyValues( _rAllNewPropertyValues );
         }
         catch( const Exception& )
@@ -933,7 +933,7 @@ void ODatabaseSource::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const
                 break;
             case PROPERTY_ID_USER:
                 rValue >>= m_pImpl->m_sUser;
-                // if the user name has changed, reset the password
+                
                 m_pImpl->m_aPassword = OUString();
                 break;
             case PROPERTY_ID_PASSWORD:
@@ -994,7 +994,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
             {
                 try
                 {
-                    // collect the property attributes of all current settings
+                    
                     Reference< XPropertySet > xSettingsAsProps( m_pImpl->m_xSettings, UNO_QUERY_THROW );
                     Reference< XPropertySetInfo > xPST( xSettingsAsProps->getPropertySetInfo(), UNO_QUERY_THROW );
                     Sequence< Property > aSettings( xPST->getProperties() );
@@ -1007,11 +1007,11 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
                         aPropertyAttributes[ pSettings->Name ] = pSettings->Attributes;
                     }
 
-                    // get all current settings with their values
+                    
                     Sequence< PropertyValue > aValues( m_pImpl->m_xSettings->getPropertyValues() );
 
-                    // transform them so that only property values which fulfill certain
-                    // criteria survive
+                    
+                    
                     Sequence< PropertyValue > aNonDefaultOrUserDefined( aValues.getLength() );
                     const PropertyValue* pCopyEnd = ::std::remove_copy_if(
                         aValues.getConstArray(),
@@ -1049,7 +1049,7 @@ void ODatabaseSource::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) con
     }
 }
 
-// XDataSource
+
 void ODatabaseSource::setLoginTimeout(sal_Int32 seconds) throw( SQLException, RuntimeException )
 {
     SAL_INFO("dbaccess", "ODatabaseSource::setLoginTimeout" );
@@ -1064,7 +1064,7 @@ sal_Int32 ODatabaseSource::getLoginTimeout(void) throw( SQLException, RuntimeExc
     return m_pImpl->m_nLoginTimeout;
 }
 
-// XCompletedConnection
+
 Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::connectWithCompletion" );
@@ -1104,21 +1104,21 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
     sal_Bool bNewPasswordGiven = sal_False;
 
     if (m_pImpl->m_bPasswordRequired && sPassword.isEmpty())
-    {   // we need a password, but don't have one yet.
-        // -> ask the user
+    {   
+        
 
-        // build an interaction request
-        // two continuations (Ok and Cancel)
+        
+        
         OInteractionAbort* pAbort = new OInteractionAbort;
         OAuthenticationContinuation* pAuthenticate = new OAuthenticationContinuation;
 
-        // the name which should be referred in the login dialog
+        
         OUString sServerName( m_pImpl->m_sName );
         INetURLObject aURLCheck( sServerName );
         if ( aURLCheck.GetProtocol() != INET_PROT_NOT_VALID )
             sServerName = aURLCheck.getBase( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_UNAMBIGUOUS );
 
-        // the request
+        
         AuthenticationRequest aRequest;
         aRequest.ServerName = sServerName;
         aRequest.HasRealm = aRequest.HasAccount = sal_False;
@@ -1127,15 +1127,15 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         aRequest.Password = m_pImpl->m_sFailedPassword.isEmpty() ?  m_pImpl->m_aPassword : m_pImpl->m_sFailedPassword;
         OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
         Reference< XInteractionRequest > xRequest(pRequest);
-        // some knittings
+        
         pRequest->addContinuation(pAbort);
         pRequest->addContinuation(pAuthenticate);
 
-        // handle the request
+        
         try
         {
             MutexRelease aRelease( getMutex() );
-                // release the mutex when calling the handler, it may need to lock the SolarMutex
+                
             _rxHandler->handle(xRequest);
         }
         catch(Exception&)
@@ -1146,7 +1146,7 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         if (!pAuthenticate->wasSelected())
             return Reference< XConnection >();
 
-        // get the result
+        
         sUser = m_pImpl->m_sUser = pAuthenticate->getUser();
         sPassword = pAuthenticate->getPassword();
 
@@ -1167,9 +1167,9 @@ Reference< XConnection > SAL_CALL ODatabaseSource::connectWithCompletion( const 
         if (bNewPasswordGiven)
         {
             m_pImpl->m_sFailedPassword = m_pImpl->m_aPassword;
-            // assume that we had an authentication problem. Without this we may, after an unsucessful connect, while
-            // the user gave us a password an the order to remember it, never allow an password input again (at least
-            // not without restarting the session)
+            
+            
+            
             m_pImpl->m_aPassword = OUString();
         }
         throw;
@@ -1182,10 +1182,10 @@ Reference< XConnection > ODatabaseSource::buildIsolatedConnection(const OUString
     Reference< XConnection > xConn;
     Reference< XConnection > xSdbcConn = buildLowLevelConnection(user, password);
     OSL_ENSURE( xSdbcConn.is(), "ODatabaseSource::buildIsolatedConnection: invalid return value of buildLowLevelConnection!" );
-    // buildLowLevelConnection is expected to always succeed
+    
     if ( xSdbcConn.is() )
     {
-        // build a connection server and return it (no stubs)
+        
         xConn = new OConnection(*this, xSdbcConn, m_pImpl->m_aContext);
     }
     return xConn;
@@ -1202,7 +1202,7 @@ Reference< XConnection > ODatabaseSource::getConnection(const OUString& user, co
         xConn = buildIsolatedConnection(user,password);
     }
     else
-    { // create a new proxy for the connection
+    { 
         if ( !m_pImpl->m_xSharedConnectionManager.is() )
         {
             m_pImpl->m_pSharedConnectionManager = new OSharedConnectionManager( m_pImpl->m_aContext );
@@ -1261,7 +1261,7 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
     return xContainer;
 }
 
-// XTablesSupplier
+
 Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getTables" );
@@ -1282,7 +1282,7 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
     SAL_INFO("dbaccess", "ODatabaseSource::flush" );
     try
     {
-        // SYNCHRONIZED ->
+        
         {
             ModelMethodGuard aGuard( *this );
 
@@ -1295,7 +1295,7 @@ void SAL_CALL ODatabaseSource::flush(  ) throw (RuntimeException)
             Reference< css::frame::XStorable> xStorable( xModel, UNO_QUERY_THROW );
             xStorable->store();
         }
-        // <- SYNCHRONIZED
+        
 
         css::lang::EventObject aFlushedEvent(*this);
         m_aFlushListeners.notifyEach( &XFlushListener::flushed, aFlushedEvent );
@@ -1311,27 +1311,27 @@ void SAL_CALL ODatabaseSource::flushed( const EventObject& /*rEvent*/ ) throw (R
     SAL_INFO("dbaccess", "ODatabaseSource::flushed" );
     ModelMethodGuard aGuard( *this );
 
-    // Okay, this is some hack.
+    
     //
-    // In general, we have the problem that embedded databases write into their underlying storage, which
-    // logically is one of our sub storage, and practically is a temporary file maintained by the
-    // package implementation. As long as we did not commit this storage and our main storage,
-    // the changes made by the embedded database engine are not really reflected in the database document
-    // file. This is Bad (TM) for a "real" database application - imagine somebody entering some
-    // data, and then crashing: For a database application, you would expect that the data still is present
-    // when you connect to the database next time.
+    
+    
+    
+    
+    
+    
+    
     //
-    // Since this is a conceptual problem as long as we do use those ZIP packages (in fact, we *cannot*
-    // provide the desired functionality as long as we do not have a package format which allows O(1) writes),
-    // we cannot completely fix this. However, we can relax the problem by commiting more often - often
-    // enough so that data loss is more seldom, and seldom enough so that there's no noticable performance
-    // decrease.
+    
+    
+    
+    
+    
     //
-    // For this, we introduced a few places which XFlushable::flush their connections, and register as
-    // XFlushListener at the embedded connection (which needs to provide the XFlushable functionality).
-    // Then, when the connection is flushed, we commit both the database storage and our main storage.
+    
+    
+    
     //
-    // #i55274#
+    
 
     OSL_ENSURE( m_pImpl->isEmbeddedDatabase(), "ODatabaseSource::flushed: no embedded database?!" );
     sal_Bool bWasModified = m_pImpl->m_bModified;
@@ -1375,7 +1375,7 @@ void SAL_CALL ODatabaseSource::elementReplaced( const ContainerEvent& /*Event*/ 
         m_pImpl->setModified(sal_True);
 }
 
-// XDocumentDataSource
+
 Reference< XOfficeDatabaseDocument > SAL_CALL ODatabaseSource::getDatabaseDocument() throw (RuntimeException)
 {
     SAL_INFO("dbaccess", "ODatabaseSource::getDatabaseDocument" );
@@ -1394,6 +1394,6 @@ Reference< XInterface > ODatabaseSource::getThis() const
     return *const_cast< ODatabaseSource* >( this );
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

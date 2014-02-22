@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /* PURPOSE
@@ -167,7 +167,7 @@ int MzString::rfind(char ch, int pos)
 }
 
 
-// += operator
+
 
 MzString &MzString::operator += (char ch)
 {
@@ -190,7 +190,7 @@ MzString &MzString::operator += (MzString const &s)
 }
 
 
-// << operator
+
 MzString &MzString::operator << (const char *str)
 {
     append(str);
@@ -248,13 +248,13 @@ void MzString::replace(int pos, char ch)
 }
 
 
-//------------------------------------------------------------------------
-// Private Methods.
+
+
 //
 
 bool MzString::allocate(int len)
 {
-    len++;                                        // In case we want to add a null.
+    len++;                                        
 
     if (len < 0)
         return false;
@@ -277,7 +277,7 @@ bool MzString::allocate(int len)
     }
     else
     {
-// In case we want to add a null.
+
         int n = get_alloc_size(len);
         Data  = (char *)malloc(n);
         if (Data)

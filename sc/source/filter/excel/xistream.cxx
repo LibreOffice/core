@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,9 +30,9 @@
 
 using namespace ::com::sun::star;
 
-// ============================================================================
-// Decryption
-// ============================================================================
+
+
+
 
 XclImpDecrypter::XclImpDecrypter() :
     mnError( EXC_ENCR_ERROR_UNSUPP_CRYPT ),
@@ -106,7 +106,7 @@ sal_uInt16 XclImpDecrypter::Read( SvStream& rStrm, void* pData, sal_uInt16 nByte
     return nRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpBiff5Decrypter::XclImpBiff5Decrypter( sal_uInt16 nKey, sal_uInt16 nHash ) :
     mnKey( nKey ),
@@ -139,14 +139,14 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
     sal_Int32 nLen = aBytePassword.getLength();
     if( (0 < nLen) && (nLen < 16) )
     {
-        // init codec
+        
         maCodec.InitKey( (sal_uInt8*)aBytePassword.getStr() );
 
         if ( maCodec.VerifyKey( mnKey, mnHash ) )
         {
             maEncryptionData = maCodec.GetEncryptionData();
 
-            // since the export uses Std97 encryption always we have to request it here
+            
             ::std::vector< sal_uInt16 > aPassVect( 16 );
             ::std::vector< sal_uInt16 >::iterator aIt = aPassVect.begin();
             for( sal_Int32 nInd = 0; nInd < nLen; ++nInd, ++aIt )
@@ -158,7 +158,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff5Decrypter::OnVerifyPassword( const
             ::msfilter::MSCodec_Std97 aCodec97;
             aCodec97.InitKey( &aPassVect.front(), (sal_uInt8*)aDocId.getConstArray() );
 
-            // merge the EncryptionData, there should be no conflicts
+            
             ::comphelper::SequenceAsHashMap aEncryptionHash( maEncryptionData );
             aEncryptionHash.update( ::comphelper::SequenceAsHashMap( aCodec97.GetEncryptionData() ) );
             aEncryptionHash >> maEncryptionData;
@@ -174,7 +174,7 @@ bool XclImpBiff5Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::N
 
     if( rEncryptionData.getLength() )
     {
-        // init codec
+        
         maCodec.InitCodec( rEncryptionData );
 
         if ( maCodec.VerifyKey( mnKey, mnHash ) )
@@ -197,7 +197,7 @@ sal_uInt16 XclImpBiff5Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
     return nRet;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpBiff8Decrypter::XclImpBiff8Decrypter( sal_uInt8 pnSalt[ 16 ],
         sal_uInt8 pnVerifier[ 16 ], sal_uInt8 pnVerifierHash[ 16 ] ) :
@@ -230,7 +230,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const
     sal_Int32 nLen = rPassword.getLength();
     if( (0 < nLen) && (nLen < 16) )
     {
-        // copy string to sal_uInt16 array
+        
         ::std::vector< sal_uInt16 > aPassVect( 16 );
         const sal_Unicode* pcChar = rPassword.getStr();
         const sal_Unicode* pcCharEnd = pcChar + nLen;
@@ -238,7 +238,7 @@ uno::Sequence< beans::NamedValue > XclImpBiff8Decrypter::OnVerifyPassword( const
         for( ; pcChar < pcCharEnd; ++pcChar, ++aIt )
             *aIt = static_cast< sal_uInt16 >( *pcChar );
 
-        // init codec
+        
         maCodec.InitKey( &aPassVect.front(), &maSalt.front() );
         if ( maCodec.VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
             maEncryptionData = maCodec.GetEncryptionData();
@@ -253,7 +253,7 @@ bool XclImpBiff8Decrypter::OnVerifyEncryptionData( const uno::Sequence< beans::N
 
     if( rEncryptionData.getLength() )
     {
-        // init codec
+        
         maCodec.InitCodec( rEncryptionData );
 
         if ( maCodec.VerifyKey( &maVerifier.front(), &maVerifierHash.front() ) )
@@ -277,7 +277,7 @@ void XclImpBiff8Decrypter::OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos,
         if( (nNewBlock != nOldBlock) || (nNewOffset < nOldOffset) )
         {
             maCodec.InitCipher( nNewBlock );
-            nOldOffset = 0;     // reset nOldOffset for next if() statement
+            nOldOffset = 0;     
         }
 
         /*  Seek to correct offset. */
@@ -297,9 +297,9 @@ sal_uInt16 XclImpBiff8Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
         sal_uInt16 nBlockLeft = EXC_ENCR_BLOCKSIZE - GetOffset( rStrm.Tell() );
         sal_uInt16 nDecBytes = ::std::min< sal_uInt16 >( nBytesLeft, nBlockLeft );
 
-        // read the block from stream
+        
         nRet = nRet + static_cast< sal_uInt16 >( rStrm.Read( pnCurrData, nDecBytes ) );
-        // decode the block inplace
+        
         maCodec.Decode( pnCurrData, nDecBytes, pnCurrData, nDecBytes );
         if( GetOffset( rStrm.Tell() ) == 0 )
             maCodec.InitCipher( GetBlock( rStrm.Tell() ) );
@@ -321,9 +321,9 @@ sal_uInt16 XclImpBiff8Decrypter::GetOffset( sal_Size nStrmPos ) const
     return static_cast< sal_uInt16 >( nStrmPos % EXC_ENCR_BLOCKSIZE );
 }
 
-// ============================================================================
-// Stream
-// ============================================================================
+
+
+
 
 XclImpStreamPos::XclImpStreamPos() :
     mnPos( STREAM_SEEK_TO_BEGIN ),
@@ -364,7 +364,7 @@ void XclImpStreamPos::Get(
     rbValid = mbValid;
 }
 
-// ============================================================================
+
 
 XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
 {
@@ -389,10 +389,10 @@ XclBiff XclImpStream::DetectBiffVersion( SvStream& rStrm )
         {
             sal_uInt16 nVersion;
             rStrm.ReadUInt16( nVersion );
-            // #i23425# #i44031# #i62752# there are some *really* broken documents out there...
+            
             switch( nVersion & 0xFF00 )
             {
-                case 0:             eBiff = EXC_BIFF5;  break;  // #i44031# #i62752#
+                case 0:             eBiff = EXC_BIFF5;  break;  
                 case EXC_BOF_BIFF2: eBiff = EXC_BIFF2;  break;
                 case EXC_BOF_BIFF3: eBiff = EXC_BIFF3;  break;
                 case EXC_BOF_BIFF4: eBiff = EXC_BIFF4;  break;
@@ -513,7 +513,7 @@ void XclImpStream::EnableDecryption( bool bEnable )
     mbUseDecr = bEnable && HasValidDecrypter();
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpStream::PushPosition()
 {
@@ -562,7 +562,7 @@ sal_Size XclImpStream::GetRecSize()
     if( !mbHasComplRec )
     {
         PushPosition();
-        while( JumpToNextContinue() ) ;  // JumpToNextContinue() adds up mnCurrRecSize
+        while( JumpToNextContinue() ) ;  
         mnComplRecSize = mnCurrRecSize;
         mbHasComplRec = true;
         PopPosition();
@@ -581,7 +581,7 @@ sal_uInt16 XclImpStream::GetNextRecId()
     if( mbValidRec )
     {
         PushPosition();
-        while( JumpToNextContinue() ) ;  // skip following CONTINUE records
+        while( JumpToNextContinue() ) ;  
         if( mnNextRecPos < mnStreamSize )
         {
             mrStrm.Seek( mnNextRecPos );
@@ -605,7 +605,7 @@ sal_uInt16 XclImpStream::PeekRecId( sal_Size nPos )
     return nRecId;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpStream& XclImpStream::operator>>( sal_Int8& rnValue )
 {
@@ -816,7 +816,7 @@ sal_Size XclImpStream::CopyToStream( SvStream& rOutStrm, sal_Size nBytes )
         {
             sal_Size nReadSize = ::std::min( nBytesLeft, nMaxBuffer );
             nRet += Read( pnBuffer, nReadSize );
-            // writing more bytes than read results in invalid memory access
+            
             SAL_WARN_IF(nRet != nReadSize, "sc", "read less bytes than requested");
             rOutStrm.Write( pnBuffer, nReadSize );
             nBytesLeft -= nReadSize;
@@ -845,12 +845,12 @@ void XclImpStream::Seek( sal_Size nPos )
     if( mbValidRec )
     {
         sal_Size nCurrPos = GetRecPos();
-        if( !mbValid || (nPos < nCurrPos) ) // from invalid state or backward
+        if( !mbValid || (nPos < nCurrPos) ) 
         {
             RestorePosition( maFirstRec );
             Ignore( nPos );
         }
-        else if( nPos > nCurrPos )          // forward
+        else if( nPos > nCurrPos )          
         {
             Ignore( nPos - nCurrPos );
         }
@@ -859,7 +859,7 @@ void XclImpStream::Seek( sal_Size nPos )
 
 void XclImpStream::Ignore( sal_Size nBytes )
 {
-    // implementation similar to Read(), but without really reading anything
+    
     sal_Size nBytesLeft = nBytes;
     while( mbValid && (nBytesLeft > 0) )
     {
@@ -873,7 +873,7 @@ void XclImpStream::Ignore( sal_Size nBytes )
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 sal_Size XclImpStream::ReadUniStringExtHeader(
         bool& rb16Bit, bool& rbRich, bool& rbFareast,
@@ -896,7 +896,7 @@ sal_Size XclImpStream::ReadUniStringExtHeader( bool& rb16Bit, sal_uInt8 nFlags )
     return ReadUniStringExtHeader( rb16Bit, bRich, bFareast, nCrun, nExtInf, nFlags );
 }
 
-// ----------------------------------------------------------------------------
+
 
 OUString XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
 {
@@ -1009,7 +1009,7 @@ void XclImpStream::IgnoreUniString( sal_uInt16 nChars )
     IgnoreUniString( nChars, ReaduInt8() );
 }
 
-// ----------------------------------------------------------------------------
+
 
 OUString XclImpStream::ReadRawByteString( sal_uInt16 nChars )
 {
@@ -1026,7 +1026,7 @@ OUString XclImpStream::ReadByteString( bool b16BitLen )
     return ReadRawByteString( ReadByteStrLen( b16BitLen ) );
 }
 
-// private --------------------------------------------------------------------
+
 
 void XclImpStream::StorePosition( XclImpStreamPos& rPos )
 {
@@ -1059,12 +1059,12 @@ void XclImpStream::SetupDecrypter()
 
 void XclImpStream::SetupRawRecord()
 {
-    // pre: mnRawRecSize contains current raw record size
-    // pre: mrStrm points to start of raw record data
+    
+    
     mnNextRecPos = mrStrm.Tell() + mnRawRecSize;
     mnRawRecLeft = mnRawRecSize;
     mnCurrRecSize += mnRawRecSize;
-    SetupDecrypter();   // decrypter works on raw record level
+    SetupDecrypter();   
 }
 
 void XclImpStream::SetupRecord()
@@ -1088,7 +1088,7 @@ bool XclImpStream::IsContinueId( sal_uInt16 nRecId ) const
 bool XclImpStream::JumpToNextContinue()
 {
     mbValid = mbValid && mbCont && ReadNextRawRecHeader() && IsContinueId( mnRawRecId );
-    if( mbValid )   // do not setup a following non-CONTINUE record
+    if( mbValid )   
         SetupRawRecord();
     return mbValid;
 }
@@ -1103,11 +1103,11 @@ bool XclImpStream::JumpToNextStringContinue( bool& rb16Bit )
     }
     else if( mnRecId == EXC_ID_CONT )
     {
-        // CONTINUE handling is off, but we have started reading in a CONTINUE record
-        // -> start next CONTINUE for TXO import
+        
+        
         mbValidRec = ReadNextRawRecHeader() && ((mnRawRecId != 0) || (mnRawRecSize > 0));
         mbValid = mbValidRec && (mnRawRecId == EXC_ID_CONT);
-        // we really start a new record here - no chance to return to string origin
+        
         if( mbValid )
             SetupRecord();
     }
@@ -1147,6 +1147,6 @@ sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )
     return nRet;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,10 +40,10 @@ using namespace ::com::sun::star;
 
 namespace
 {
-    // TODO(Q3): move to o3tl bithacks or somesuch. A similar method is in canvas/canvastools.hxx
+    
 
-    // Good ole HAKMEM tradition. Calc number of 1 bits in 32bit word,
-    // unrolled loop. See e.g. Hackers Delight, p. 66
+    
+    
     inline sal_Int32 bitcount( sal_uInt32 val )
     {
         val = val - ((val >> 1) & 0x55555555);
@@ -57,8 +57,8 @@ namespace
 
 void VclCanvasBitmap::setComponentInfo( sal_uLong redShift, sal_uLong greenShift, sal_uLong blueShift )
 {
-    // sort channels in increasing order of appearance in the pixel
-    // (starting with the least significant bits)
+    
+    
     sal_Int8 redPos(0);
     sal_Int8 greenPos(1);
     sal_Int8 bluePos(2);
@@ -141,43 +141,43 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
             case BMP_FORMAT_1BIT_MSB_PAL:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 1;
-                m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
+                m_nEndianness        = util::Endianness::LITTLE; 
                 m_aLayout.IsMsbFirst = sal_True;
                 break;
 
             case BMP_FORMAT_1BIT_LSB_PAL:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 1;
-                m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
+                m_nEndianness        = util::Endianness::LITTLE; 
                 m_aLayout.IsMsbFirst = sal_False;
                 break;
 
             case BMP_FORMAT_4BIT_MSN_PAL:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 4;
-                m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
+                m_nEndianness        = util::Endianness::LITTLE; 
                 m_aLayout.IsMsbFirst = sal_True;
                 break;
 
             case BMP_FORMAT_4BIT_LSN_PAL:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 4;
-                m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
+                m_nEndianness        = util::Endianness::LITTLE; 
                 m_aLayout.IsMsbFirst = sal_False;
                 break;
 
             case BMP_FORMAT_8BIT_PAL:
                 m_bPalette           = true;
                 m_nBitsPerInputPixel = 8;
-                m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_nEndianness        = util::Endianness::LITTLE; 
+                m_aLayout.IsMsbFirst = sal_False; 
                 break;
 
             case BMP_FORMAT_8BIT_TC_MASK:
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 8;
-                m_nEndianness        = util::Endianness::LITTLE; // doesn't matter
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_nEndianness        = util::Endianness::LITTLE; 
+                m_aLayout.IsMsbFirst = sal_False; 
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -187,7 +187,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 16;
                 m_nEndianness        = util::Endianness::BIG;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -197,7 +197,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 16;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -207,7 +207,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
                 setComponentInfo( 0xff0000LL,
                                   0x00ff00LL,
                                   0x0000ffLL );
@@ -217,7 +217,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
                 setComponentInfo( 0x0000ffLL,
                                   0x00ff00LL,
                                   0xff0000LL );
@@ -227,7 +227,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 24;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -238,7 +238,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
 
                 m_aComponentTags.realloc(4);
                 sal_Int8* pTags = m_aComponentTags.getArray();
@@ -266,7 +266,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
 
                 m_aComponentTags.realloc(4);
                 sal_Int8* pTags = m_aComponentTags.getArray();
@@ -294,7 +294,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
 
                 m_aComponentTags.realloc(4);
                 sal_Int8* pTags = m_aComponentTags.getArray();
@@ -322,7 +322,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
 
                 m_aComponentTags.realloc(4);
                 sal_Int8* pTags = m_aComponentTags.getArray();
@@ -349,7 +349,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_bPalette           = false;
                 m_nBitsPerInputPixel = 32;
                 m_nEndianness        = util::Endianness::LITTLE;
-                m_aLayout.IsMsbFirst = sal_False; // doesn't matter
+                m_aLayout.IsMsbFirst = sal_False; 
                 setComponentInfo( m_pBmpAcc->GetColorMask().GetRedMask(),
                                   m_pBmpAcc->GetColorMask().GetGreenMask(),
                                   m_pBmpAcc->GetColorMask().GetBlueMask() );
@@ -374,19 +374,19 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
         m_nBitsPerOutputPixel = m_nBitsPerInputPixel;
         if( m_aBmpEx.IsTransparent() )
         {
-            // TODO(P1): need to interleave alpha with bitmap data -
-            // won't fuss with less-than-8 bit for now
+            
+            
             m_nBitsPerOutputPixel = std::max(sal_Int32(8),m_nBitsPerInputPixel);
 
-            // check whether alpha goes in front or behind the
-            // bitcount sequence. If pixel format is little endian,
-            // put it behind all the other channels. If it's big
-            // endian, put it in front (because later, the actual data
-            // always gets written after the pixel data)
+            
+            
+            
+            
+            
 
-            // TODO(Q1): slight catch - in the case of the
-            // BMP_FORMAT_32BIT_XX_ARGB formats, duplicate alpha
-            // channels might happen!
+            
+            
+            
             m_aComponentTags.realloc(m_aComponentTags.getLength()+1);
             m_aComponentTags[m_aComponentTags.getLength()-1] = rendering::ColorComponentTag::ALPHA;
 
@@ -395,7 +395,7 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
 
             if( m_nEndianness == util::Endianness::BIG )
             {
-                // put alpha in front of all the color channels
+                
                 sal_Int8*  pTags  =m_aComponentTags.getArray();
                 sal_Int32* pCounts=m_aComponentBitCounts.getArray();
                 std::rotate(pTags,
@@ -411,11 +411,11 @@ VclCanvasBitmap::VclCanvasBitmap( const BitmapEx& rBitmap ) :
                 m_nAlphaIndex=0;
             }
 
-            // always add a full byte to the pixel size, otherwise
-            // pixel packing hell breaks loose.
+            
+            
             m_nBitsPerOutputPixel += 8;
 
-            // adapt scanline parameters
+            
             const Size aSize = m_aBitmap.GetSizePixel();
             m_aLayout.ScanLineBytes  =
             m_aLayout.ScanLineStride = (aSize.Width()*m_nBitsPerOutputPixel + 7)/8;
@@ -431,7 +431,7 @@ VclCanvasBitmap::~VclCanvasBitmap()
         m_aBitmap.ReleaseAccess(m_pBmpAcc);
 }
 
-// XBitmap
+
 geometry::IntegerSize2D SAL_CALL VclCanvasBitmap::getSize() throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -454,7 +454,7 @@ uno::Reference< rendering::XBitmap > SAL_CALL VclCanvasBitmap::getScaledBitmap( 
     return uno::Reference<rendering::XBitmap>( new VclCanvasBitmap( aNewBmp ) );
 }
 
-// XIntegerReadOnlyBitmap
+
 uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerBitmapLayout&     bitmapLayout,
                                                              const geometry::IntegerRectangle2D& rect ) throw( lang::IndexOutOfBoundsException,
                                                                                                                rendering::VolatileContentDestroyedException,
@@ -468,7 +468,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     if( aRequestedArea.IsEmpty() )
         return uno::Sequence< sal_Int8 >();
 
-    // Invalid/empty bitmap: no data available
+    
     if( !m_pBmpAcc )
         throw lang::IndexOutOfBoundsException();
     if( m_aBmpEx.IsTransparent() && !m_pAlphaAcc )
@@ -484,11 +484,11 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     uno::Sequence< sal_Int8 > aRet;
     Rectangle aRequestedBytes( aRequestedArea );
 
-    // adapt to byte boundaries
+    
     aRequestedBytes.Left()  = aRequestedArea.Left()*m_nBitsPerOutputPixel/8;
     aRequestedBytes.Right() = (aRequestedArea.Right()*m_nBitsPerOutputPixel + 7)/8;
 
-    // copy stuff to output sequence
+    
     aRet.realloc(aRequestedBytes.getWidth()*aRequestedBytes.getHeight());
     sal_Int8* pOutBuf = aRet.getArray();
 
@@ -507,7 +507,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
     {
         OSL_ENSURE(m_pBmpAcc,"Invalid bmp read access");
 
-        // can return bitmap data as-is
+        
         for( long y=aRequestedBytes.Top(); y<aRequestedBytes.Bottom(); ++y )
         {
             Scanline pScan = m_pBmpAcc->GetScanline(y);
@@ -520,8 +520,8 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
         OSL_ENSURE(m_pBmpAcc,"Invalid bmp read access");
         OSL_ENSURE(m_pAlphaAcc,"Invalid alpha read access");
 
-        // interleave alpha with bitmap data - note, bitcount is
-        // always integer multiple of 8
+        
+        
         OSL_ENSURE((m_nBitsPerOutputPixel & 0x07) == 0,
                    "Transparent bitmap bitcount not integer multiple of 8" );
 
@@ -531,7 +531,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
 
             if( m_nBitsPerInputPixel < 8 )
             {
-                // input less than a byte - copy via GetPixel()
+                
                 for( long x=aRequestedArea.Left(); x<aRequestedArea.Right(); ++x )
                 {
                     *pOutScan++ = m_pBmpAcc->GetPixelIndex(y,x);
@@ -544,7 +544,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getData( rendering::IntegerB
                 const long nScanlineOffsetLeft(aRequestedArea.Left()*nNonAlphaBytes);
                 Scanline  pScan = m_pBmpAcc->GetScanline(y) + nScanlineOffsetLeft;
 
-                // input integer multiple of byte - copy directly
+                
                 for( long x=aRequestedArea.Left(); x<aRequestedArea.Right(); ++x )
                 {
                     for( long i=0; i<nNonAlphaBytes; ++i )
@@ -569,7 +569,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
 
     bitmapLayout = getMemoryLayout();
 
-    // Invalid/empty bitmap: no data available
+    
     if( !m_pBmpAcc )
         throw lang::IndexOutOfBoundsException();
     if( m_aBmpEx.IsTransparent() && !m_pAlphaAcc )
@@ -584,7 +584,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
     uno::Sequence< sal_Int8 > aRet((m_nBitsPerOutputPixel + 7)/8);
     sal_Int8* pOutBuf = aRet.getArray();
 
-    // copy stuff to output sequence
+    
     bitmapLayout.ScanLines     = 1;
     bitmapLayout.ScanLineBytes =
     bitmapLayout.ScanLineStride= aRet.getLength();
@@ -594,7 +594,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
     {
         OSL_ENSURE(m_pBmpAcc,"Invalid bmp read access");
 
-        // can return bitmap data as-is
+        
         Scanline pScan = m_pBmpAcc->GetScanline(pos.Y);
         memcpy(pOutBuf, pScan+nScanlineLeftOffset, aRet.getLength() );
     }
@@ -603,14 +603,14 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
         OSL_ENSURE(m_pBmpAcc,"Invalid bmp read access");
         OSL_ENSURE(m_pAlphaAcc,"Invalid alpha read access");
 
-        // interleave alpha with bitmap data - note, bitcount is
-        // always integer multiple of 8
+        
+        
         OSL_ENSURE((m_nBitsPerOutputPixel & 0x07) == 0,
                    "Transparent bitmap bitcount not integer multiple of 8" );
 
         if( m_nBitsPerInputPixel < 8 )
         {
-            // input less than a byte - copy via GetPixel()
+            
             *pOutBuf++ = m_pBmpAcc->GetPixelIndex(pos.Y,pos.X);
             *pOutBuf   = m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
         }
@@ -619,7 +619,7 @@ uno::Sequence< sal_Int8 > SAL_CALL VclCanvasBitmap::getPixel( rendering::Integer
             const long nNonAlphaBytes( m_nBitsPerInputPixel/8 );
             Scanline  pScan = m_pBmpAcc->GetScanline(pos.Y);
 
-            // input integer multiple of byte - copy directly
+            
             memcpy(pOutBuf, pScan+nScanlineLeftOffset, nNonAlphaBytes );
             pOutBuf += nNonAlphaBytes;
             *pOutBuf++ = m_pAlphaAcc->GetPixelIndex(pos.Y,pos.X);
@@ -646,9 +646,9 @@ rendering::IntegerBitmapLayout SAL_CALL VclCanvasBitmap::getMemoryLayout() throw
 
     rendering::IntegerBitmapLayout aLayout( m_aLayout );
 
-    // only set references to self on separate copy of
-    // IntegerBitmapLayout - if we'd set that on m_aLayout, we'd have
-    // a circular reference!
+    
+    
+    
     if( m_bPalette )
         aLayout.Palette.set( this );
 
@@ -685,7 +685,7 @@ sal_Bool SAL_CALL VclCanvasBitmap::getIndex( uno::Sequence< double >& o_entry, s
     pColor[1] = aCol.GetGreen();
     pColor[2] = aCol.GetBlue();
 
-    return sal_True; // no palette transparency here.
+    return sal_True; 
 }
 
 sal_Bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, sal_Bool, sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::IllegalArgumentException, uno::RuntimeException)
@@ -700,7 +700,7 @@ sal_Bool SAL_CALL VclCanvasBitmap::setIndex( const uno::Sequence< double >&, sal
         throw lang::IndexOutOfBoundsException("Palette index out of range",
                                               static_cast<rendering::XBitmapPalette*>(this));
 
-    return sal_False; // read-only implementation
+    return sal_False; 
 }
 
 namespace
@@ -717,8 +717,8 @@ namespace
 
 uno::Reference< rendering::XColorSpace > SAL_CALL VclCanvasBitmap::getColorSpace(  ) throw (uno::RuntimeException)
 {
-    // this is the method from XBitmapPalette. Return palette color
-    // space here
+    
+    
     return PaletteColorSpaceHolder::get();
 }
 
@@ -746,8 +746,8 @@ uno::Sequence< ::beans::PropertyValue > SAL_CALL VclCanvasBitmap::getProperties(
 uno::Sequence< double > SAL_CALL VclCanvasBitmap::convertColorSpace( const uno::Sequence< double >& deviceColor,
                                                                      const uno::Reference< ::rendering::XColorSpace >& targetColorSpace ) throw (uno::RuntimeException)
 {
-    // TODO(P3): if we know anything about target
-    // colorspace, this can be greatly sped up
+    
+    
     uno::Sequence<rendering::ARGBColor> aIntermediate(
         convertToARGB(deviceColor));
     return targetColorSpace->convertFromARGB(aIntermediate);
@@ -778,7 +778,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertToRGB( const
             const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(
                 sal::static_int_cast<sal_uInt16>(deviceColor[i+m_nIndexIndex]));
 
-            // TODO(F3): Convert result to sRGB color space
+            
             *pOut++ = rendering::RGBColor(toDoubleColor(aCol.GetRed()),
                                           toDoubleColor(aCol.GetGreen()),
                                           toDoubleColor(aCol.GetBlue()));
@@ -791,7 +791,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertToRGB( const
 
         for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
         {
-            // TODO(F3): Convert result to sRGB color space
+            
             *pOut++ = rendering::RGBColor(
                 deviceColor[i+m_nRedIndex],
                 deviceColor[i+m_nGreenIndex],
@@ -827,7 +827,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToARGB( con
             const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(
                 sal::static_int_cast<sal_uInt16>(deviceColor[i+m_nIndexIndex]));
 
-            // TODO(F3): Convert result to sRGB color space
+            
             const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
             *pOut++ = rendering::ARGBColor(nAlpha,
                                            toDoubleColor(aCol.GetRed()),
@@ -842,7 +842,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToARGB( con
 
         for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
         {
-            // TODO(F3): Convert result to sRGB color space
+            
             const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
             *pOut++ = rendering::ARGBColor(
                 nAlpha,
@@ -880,7 +880,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToPARGB( co
             const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(
                 sal::static_int_cast<sal_uInt16>(deviceColor[i+m_nIndexIndex]));
 
-            // TODO(F3): Convert result to sRGB color space
+            
             const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
             *pOut++ = rendering::ARGBColor(nAlpha,
                                            nAlpha*toDoubleColor(aCol.GetRed()),
@@ -895,7 +895,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertToPARGB( co
 
         for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
         {
-            // TODO(F3): Convert result to sRGB color space
+            
             const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
             *pOut++ = rendering::ARGBColor(
                 nAlpha,
@@ -1076,7 +1076,7 @@ uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( co
                 const BitmapColor aCol = m_pBmpAcc->GetPaletteColor(
                     sal::static_int_cast<sal_uInt16>(deviceColor[i+m_nIndexIndex]));
 
-                // TODO(F3): Convert result to sRGB color space
+                
                 const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
                 *pOut++ = toDoubleColor(aCol.GetRed());
                 *pOut++ = toDoubleColor(aCol.GetGreen());
@@ -1091,7 +1091,7 @@ uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( co
 
             for( sal_Size i=0; i<nLen; i+=nComponentsPerPixel )
             {
-                // TODO(F3): Convert result to sRGB color space
+                
                 const double nAlpha( m_nAlphaIndex != -1 ? 1.0 - deviceColor[i+m_nAlphaIndex] : 1.0 );
                 *pOut++ = deviceColor[i+m_nRedIndex];
                 *pOut++ = deviceColor[i+m_nGreenIndex];
@@ -1104,8 +1104,8 @@ uno::Sequence<double> SAL_CALL VclCanvasBitmap::convertFromIntegerColorSpace( co
     }
     else
     {
-        // TODO(P3): if we know anything about target
-        // colorspace, this can be greatly sped up
+        
+        
         uno::Sequence<rendering::ARGBColor> aIntermediate(
             convertIntegerToARGB(deviceColor));
         return targetColorSpace->convertFromARGB(aIntermediate);
@@ -1117,13 +1117,13 @@ uno::Sequence< ::sal_Int8 > SAL_CALL VclCanvasBitmap::convertToIntegerColorSpace
 {
     if( dynamic_cast<VclCanvasBitmap*>(targetColorSpace.get()) )
     {
-        // it's us, so simply pass-through the data
+        
         return deviceColor;
     }
     else
     {
-        // TODO(P3): if we know anything about target
-        // colorspace, this can be greatly sped up
+        
+        
         uno::Sequence<rendering::ARGBColor> aIntermediate(
             convertIntegerToARGB(deviceColor));
         return targetColorSpace->convertIntegerFromARGB(aIntermediate);
@@ -1149,17 +1149,17 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB
         const sal_Int32 nBytesPerPixel((m_nBitsPerOutputPixel+7)/8);
         for( sal_Size i=0; i<nLen; i+=nBytesPerPixel )
         {
-            // if palette, index is guaranteed to be 8 bit
+            
             const BitmapColor aCol =
                 m_bPalette ?
                 m_pBmpAcc->GetPaletteColor(*pIn) :
                 m_pBmpAcc->GetPixelFromData(pIn,0);
 
-            // TODO(F3): Convert result to sRGB color space
+            
             *pOut++ = rendering::RGBColor(toDoubleColor(aCol.GetRed()),
                                           toDoubleColor(aCol.GetGreen()),
                                           toDoubleColor(aCol.GetBlue()));
-            // skips alpha
+            
             pIn += nBytesPerPixel;
         }
     }
@@ -1172,7 +1172,7 @@ uno::Sequence<rendering::RGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToRGB
                 m_pBmpAcc->GetPaletteColor( m_pBmpAcc->GetPixelFromData( pIn, i ).GetIndex()) :
                 m_pBmpAcc->GetPixelFromData(pIn, i);
 
-            // TODO(F3): Convert result to sRGB color space
+            
             *pOut++ = rendering::RGBColor(toDoubleColor(aCol.GetRed()),
                                           toDoubleColor(aCol.GetGreen()),
                                           toDoubleColor(aCol.GetBlue()));
@@ -1203,13 +1203,13 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
         const sal_uInt8 nAlphaFactor( m_aBmpEx.IsAlpha() ? 1 : 255 );
         for( sal_Size i=0; i<nLen; i+=nBytesPerPixel )
         {
-            // if palette, index is guaranteed to be 8 bit
+            
             const BitmapColor aCol =
                 m_bPalette ?
                 m_pBmpAcc->GetPaletteColor(*pIn) :
                 m_pBmpAcc->GetPixelFromData(pIn,0);
 
-            // TODO(F3): Convert result to sRGB color space
+            
             *pOut++ = rendering::ARGBColor(1.0 - toDoubleColor(nAlphaFactor*pIn[nNonAlphaBytes]),
                                            toDoubleColor(aCol.GetRed()),
                                            toDoubleColor(aCol.GetGreen()),
@@ -1226,7 +1226,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToAR
                 m_pBmpAcc->GetPaletteColor( m_pBmpAcc->GetPixelFromData( pIn, i ).GetIndex() ) :
                 m_pBmpAcc->GetPixelFromData(pIn, i);
 
-            // TODO(F3): Convert result to sRGB color space
+            
             *pOut++ = rendering::ARGBColor(1.0,
                                            toDoubleColor(aCol.GetRed()),
                                            toDoubleColor(aCol.GetGreen()),
@@ -1258,13 +1258,13 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
         const sal_uInt8 nAlphaFactor( m_aBmpEx.IsAlpha() ? 1 : 255 );
         for( sal_Size i=0; i<nLen; i+=nBytesPerPixel )
         {
-            // if palette, index is guaranteed to be 8 bit
+            
             const BitmapColor aCol =
                 m_bPalette ?
                 m_pBmpAcc->GetPaletteColor(*pIn) :
                 m_pBmpAcc->GetPixelFromData(pIn,0);
 
-            // TODO(F3): Convert result to sRGB color space
+            
             const double nAlpha( 1.0 - toDoubleColor(nAlphaFactor*pIn[nNonAlphaBytes]) );
             *pOut++ = rendering::ARGBColor(nAlpha,
                                            nAlpha*toDoubleColor(aCol.GetRed()),
@@ -1282,7 +1282,7 @@ uno::Sequence<rendering::ARGBColor> SAL_CALL VclCanvasBitmap::convertIntegerToPA
                 m_pBmpAcc->GetPaletteColor( m_pBmpAcc->GetPixelFromData( pIn, i ).GetIndex() ) :
                 m_pBmpAcc->GetPixelFromData(pIn, i);
 
-            // TODO(F3): Convert result to sRGB color space
+            
             *pOut++ = rendering::ARGBColor(1.0,
                                            toDoubleColor(aCol.GetRed()),
                                            toDoubleColor(aCol.GetGreen()),

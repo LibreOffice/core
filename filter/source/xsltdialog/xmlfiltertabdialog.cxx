@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/container/XNameAccess.hpp>
@@ -71,7 +71,7 @@ XMLFilterTabDialog::XMLFilterTabDialog(Window *pParent, ResMgr& rResMgr,
     ActivatePageHdl(m_pTabCtrl);
 }
 
-// -----------------------------------------------------------------------
+
 
 XMLFilterTabDialog::~XMLFilterTabDialog()
 {
@@ -80,7 +80,7 @@ XMLFilterTabDialog::~XMLFilterTabDialog()
     delete mpNewInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool XMLFilterTabDialog::onOk()
 {
@@ -93,10 +93,10 @@ bool XMLFilterTabDialog::onOk()
     OUString aReplace1;
     OUString aReplace2;
 
-    // 1. see if the filter name is ok
+    
     if( (mpNewInfo->maFilterName.isEmpty()) || (mpNewInfo->maFilterName != mpOldInfo->maFilterName) )
     {
-        // if the user deleted the filter name, we reset the original filter name
+        
         if( mpNewInfo->maFilterName.isEmpty() )
         {
             mpNewInfo->maFilterName = mpOldInfo->maFilterName;
@@ -125,10 +125,10 @@ bool XMLFilterTabDialog::onOk()
         }
     }
 
-    // 2. see if the interface name is ok
+    
     if( (mpNewInfo->maInterfaceName.isEmpty()) || (mpNewInfo->maInterfaceName != mpOldInfo->maInterfaceName) )
     {
-        // if the user deleted the interface name, we reset the original filter name
+        
         if( mpNewInfo->maInterfaceName.isEmpty() )
         {
             mpNewInfo->maInterfaceName = mpOldInfo->maInterfaceName;
@@ -185,7 +185,7 @@ bool XMLFilterTabDialog::onOk()
 
     if( 0 == nErrorId )
     {
-        // 4. see if the export xslt is valid
+        
         if( (mpNewInfo->maExportXSLT != mpOldInfo->maExportXSLT) && isFileURL( mpNewInfo->maExportXSLT ) )
         {
             osl::File aFile( mpNewInfo->maExportXSLT );
@@ -201,7 +201,7 @@ bool XMLFilterTabDialog::onOk()
 
     if( 0 == nErrorId )
     {
-        // 5. see if the import xslt is valid
+        
         if( (mpNewInfo->maImportXSLT != mpOldInfo->maImportXSLT) && isFileURL( mpNewInfo->maImportXSLT ) )
         {
             osl::File aFile( mpNewInfo->maImportXSLT );
@@ -215,7 +215,7 @@ bool XMLFilterTabDialog::onOk()
         }
     }
 
-    // see if we have at least an import or an export xslt
+    
     if((mpNewInfo->maImportXSLT.isEmpty()) && (mpNewInfo->maExportXSLT.isEmpty()) )
     {
         nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
@@ -225,7 +225,7 @@ bool XMLFilterTabDialog::onOk()
 
     if( 0 == nErrorId )
     {
-        // 6. see if the import template is valid
+        
         if( (mpNewInfo->maImportTemplate != mpOldInfo->maImportTemplate) && isFileURL( mpNewInfo->maImportTemplate ) )
         {
             osl::File aFile( mpNewInfo->maImportTemplate );
@@ -271,14 +271,14 @@ bool XMLFilterTabDialog::onOk()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 filter_info_impl* XMLFilterTabDialog::getNewFilterInfo() const
 {
     return mpNewInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(XMLFilterTabDialog, OkHdl)
 {
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(XMLFilterTabDialog, OkHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 {
@@ -299,7 +299,7 @@ IMPL_LINK( XMLFilterTabDialog, ActivatePageHdl, TabControl *, pTabCtrl )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( XMLFilterTabDialog, DeactivatePageHdl, TabControl *, /* pTabCtrl */ )
 {

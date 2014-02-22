@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/macros.h>
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-//------------------------------------------------------------------------------
+
 OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {
     static const sal_Char* s_pProgrammaticNames[] =
@@ -87,29 +87,29 @@ OColumnAlias::OColumnAlias( const ::com::sun::star::uno::Reference< ::com::sun::
     initialize( _rxORB );
 }
 
-//------------------------------------------------------------------------------
+
 void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
 {
-    // open our driver settings config node
+    
 
-    // the config path for our own driver's settings
+    
     Reference< XPropertySet > xDriverNode = createDriverConfigNode( _rxORB );
     if ( xDriverNode.is() )
     {
         try
         {
-            //.............................................................
+            
             Reference< XNameAccess > xAliasesNode;
             xDriverNode->getPropertyValue("ColumnAliases") >>= xAliasesNode;
             OSL_ENSURE( xAliasesNode.is(), "OColumnAlias::setAlias: missing the aliases node!" );
 
-            // this is a set of string nodes
+            
             Sequence< OUString > aProgrammaticNames;
             if ( xAliasesNode.is() )
                 aProgrammaticNames = xAliasesNode->getElementNames();
 
-            //.............................................................
-            // travel through all the set elements
+            
+            
             const OUString* pProgrammaticNames = aProgrammaticNames.getConstArray();
             const OUString* pProgrammaticNamesEnd = pProgrammaticNames + aProgrammaticNames.getLength();
             OUString sAssignedAlias;
@@ -118,13 +118,13 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
             {
                 OSL_VERIFY( xAliasesNode->getByName( *pProgrammaticNames ) >>= sAssignedAlias );
 
-                // normalize in case the config data is corrupted
-                // (what we really don't need is an empty alias ...)
+                
+                
                 if ( sAssignedAlias.isEmpty() )
                       sAssignedAlias = *pProgrammaticNames;
 
                 OString sAsciiProgrammaticName( OUStringToOString( *pProgrammaticNames, RTL_TEXTENCODING_ASCII_US ) );
-                //.............................................................
+                
             #if OSL_DEBUG_LEVEL > 0
                 bool bFound = false;
             #endif
@@ -157,7 +157,7 @@ void OColumnAlias::initialize( const ::com::sun::star::uno::Reference< ::com::su
     }
 }
 
-//------------------------------------------------------------------
+
 OString OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias( const OUString& _rAlias ) const
 {
     AliasMap::const_iterator pos = m_aAliasMap.find( _rAlias );
@@ -169,7 +169,7 @@ OString OColumnAlias::getProgrammaticNameOrFallbackToUTF8Alias( const OUString& 
     return pos->second.programmaticAsciiName;
 }
 
-//------------------------------------------------------------------
+
 bool OColumnAlias::isColumnSearchable( const OUString _alias ) const
 {
     OString sProgrammatic = getProgrammaticNameOrFallbackToUTF8Alias( _alias );
@@ -177,8 +177,8 @@ bool OColumnAlias::isColumnSearchable( const OUString _alias ) const
     return  (   !sProgrammatic.equals( "HomeCountry" )
             &&  !sProgrammatic.equals( "WorkCountry" )
             );
-    // for those, we know that they're not searchable in the Mozilla/LDAP implementation.
-    // There might be more ...
+    
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

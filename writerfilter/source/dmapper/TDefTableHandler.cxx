@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <TDefTableHandler.hxx>
 #include <PropertyMap.hxx>
@@ -283,7 +283,7 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
     switch( rName )
     {
         case NS_ooxml::LN_CT_Border_sz:
-            //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
+            
             m_nLineWidth = nIntValue * 5 / 2;
             appendGrabBag("sz", OUString::number(nIntValue));
         break;
@@ -300,16 +300,16 @@ void TDefTableHandler::lcl_attribute(Id rName, Value & rVal)
             m_nLineDistance = nIntValue;
         break;
         case NS_ooxml::LN_CT_Border_shadow:
-            //if 1 then line has shadow - unsupported
+            
         case NS_ooxml::LN_CT_Border_frame:
-            // ignored
+            
         break;
         case NS_ooxml::LN_CT_Border_themeColor:
             appendGrabBag("themeColor", TDefTableHandler::getThemeColorTypeString(nIntValue));
         break;
         case NS_ooxml::LN_CT_Border_themeTint:
         case NS_ooxml::LN_CT_Border_themeShade:
-            // ignored
+            
         break;
         default:
             OSL_FAIL("unknown attribute");
@@ -332,7 +332,7 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
         table::BorderLine2 aBorderLine;
         ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
                                                                         aBorderLine, m_bOOXML );
-        bool rtl = false; // TODO
+        bool rtl = false; 
         switch( rName )
         {
             case NS_ooxml::LN_CT_TcBorders_top:
@@ -425,12 +425,12 @@ PropertyMapPtr  TDefTableHandler::getRowProperties() const
 {
     PropertyMapPtr pPropertyMap(new PropertyMap);
 
-    // Writer only wants the separators, Word provides also the outer border positions
+    
     if( m_aCellBorderPositions.size() > 2 )
     {
-        //determine table width
+        
         double nFullWidth = m_aCellBorderPositions[m_aCellBorderPositions.size() - 1] - m_aCellBorderPositions[0];
-        //the positions have to be distibuted in a range of 10000
+        
         const double nFullWidthRelative = 10000.;
         uno::Sequence< text::TableColumnSeparator > aSeparators( m_aCellBorderPositions.size() - 2 );
         text::TableColumnSeparator* pSeparators = aSeparators.getArray();
@@ -455,7 +455,7 @@ void TDefTableHandler::fillCellProperties(
     if( m_aCellBorderPositions.size() > nCell )
     {
         sal_Int16 nVertOrient = text::VertOrientation::NONE;
-        switch( m_aCellVertAlign[nCell] ) //0 - top 1 - center 2 - bottom
+        switch( m_aCellVertAlign[nCell] ) 
         {
             case 1: nVertOrient = text::VertOrientation::CENTER; break;
             case 2: nVertOrient = text::VertOrientation::BOTTOM; break;
@@ -483,7 +483,7 @@ sal_Int32 TDefTableHandler::getTableWidth() const
     sal_Int32 nWidth = 0;
     if( m_aCellBorderPositions.size() > 1 )
     {
-        //determine table width
+        
         nWidth = m_aCellBorderPositions[m_aCellBorderPositions.size() - 1] - m_aCellBorderPositions[0];
     }
     return nWidth;
@@ -526,7 +526,7 @@ void TDefTableHandler::appendGrabBag(OUString aKey, OUString aValue)
     m_aInteropGrabBag.push_back(aProperty);
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

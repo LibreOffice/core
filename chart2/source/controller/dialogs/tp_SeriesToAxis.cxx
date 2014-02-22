@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_SeriesToAxis.hxx"
@@ -22,11 +22,11 @@
 #include "ResId.hxx"
 #include "chartview/ChartSfxItemIds.hxx"
 
-// header for class SfxBoolItem
+
 #include <svl/eitem.hxx>
-// header for SfxInt32Item
+
 #include <svl/intitem.hxx>
-//SfxIntegerListItem
+
 #include <svl/ilstitem.hxx>
 #include <svtools/controldims.hrc>
 
@@ -98,8 +98,8 @@ sal_Bool SchOptionTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     if(m_pCBConnect->IsVisible())
         rOutAttrs.Put(SfxBoolItem(SCHATTR_BAR_CONNECT,m_pCBConnect->IsChecked()));
 
-    // model property is "group bars per axis", UI feature is the other way
-    // round: "show bars side by side"
+    
+    
     if(m_pCBAxisSideBySide->IsVisible())
         rOutAttrs.Put(SfxBoolItem(SCHATTR_GROUP_BARS_PER_AXIS, ! m_pCBAxisSideBySide->IsChecked()));
 
@@ -158,8 +158,8 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
     }
     if (rInAttrs.GetItemState(SCHATTR_GROUP_BARS_PER_AXIS, true, &pPoolItem) == SFX_ITEM_SET)
     {
-        // model property is "group bars per axis", UI feature is the other way
-        // round: "show bars side by side"
+        
+        
         sal_Bool bCheck = ! static_cast< const SfxBoolItem * >( pPoolItem )->GetValue();
         m_pCBAxisSideBySide->Check( bCheck );
     }
@@ -168,7 +168,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
         m_pCBAxisSideBySide->Show(false);
     }
 
-    //missing value treatment
+    
     {
         ::com::sun::star::uno::Sequence < sal_Int32 > aMissingValueTreatments;
         if( rInAttrs.GetItemState(SCHATTR_AVAILABLE_MISSING_VALUE_TREATMENTS, true, &pPoolItem) == SFX_ITEM_SET )
@@ -205,7 +205,7 @@ void SchOptionTabPage::Reset(const SfxItemSet& rInAttrs)
         }
     }
 
-    // Include hidden cells
+    
     if (rInAttrs.GetItemState(SCHATTR_INCLUDE_HIDDEN_CELLS, true, &pPoolItem) == SFX_ITEM_SET)
     {
         bool bVal = static_cast<const SfxBoolItem*>(pPoolItem)->GetValue();
@@ -242,6 +242,6 @@ void SchOptionTabPage::AdaptControlPositionsAndVisibility()
          m_pGrpBar->Show(false);
      }
 }
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

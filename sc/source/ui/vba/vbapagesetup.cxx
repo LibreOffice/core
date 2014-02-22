@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbapagesetup.hxx"
 #include "cellsuno.hxx"
@@ -48,7 +48,7 @@ ScVbaPageSetup::ScVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
                 const uno::Reference< frame::XModel >& xModel) throw (uno::RuntimeException):
            ScVbaPageSetup_BASE( xParent, xContext ), mxSheet( xSheet ), mbIsLandscape( false )
 {
-    // query for current page style
+    
     mxModel.set( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xSheetProps( mxSheet, uno::UNO_QUERY_THROW );
     uno::Any aValue = xSheetProps->getPropertyValue("PageStyle");
@@ -95,7 +95,7 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const OUString& rAreas ) throw (css:
     if( rAreas.isEmpty() ||
         rAreas.equalsIgnoreAsciiCase( "FALSE" ) )
     {
-        // print the whole sheet
+        
         uno::Sequence< table::CellRangeAddress > aSeq;
         xPrintAreas->setPrintAreas( aSeq );
     }
@@ -212,7 +212,7 @@ void SAL_CALL ScVbaPageSetup::setZoom( const uno::Any& zoom) throw (css::uno::Ru
             }
         }
 
-        // these only exist in S08
+        
         sal_uInt16 nScale = 0;
         mxPageProps->setPropertyValue("ScaleToPages", uno::makeAny( nScale ));
         mxPageProps->setPropertyValue("ScaleToPagesX", uno::makeAny( nScale ));
@@ -628,7 +628,7 @@ void SAL_CALL ScVbaPageSetup::setPrintTitleColumns( const OUString& /*_printtitl
 
 sal_Int32 SAL_CALL ScVbaPageSetup::getPaperSize() throw (uno::RuntimeException)
 {
-    awt::Size aSize; // current papersize
+    awt::Size aSize; 
     mxPageProps->getPropertyValue( "Size" ) >>= aSize;
     if ( mbIsLandscape )
         ::std::swap( aSize.Width, aSize.Height );

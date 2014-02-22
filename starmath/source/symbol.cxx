@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -157,7 +157,7 @@ const SymbolPtrVec_t SmSymbolManager::GetSymbols() const
     SymbolMap_t::const_iterator aIt( m_aSymbols.begin() );
     for ( ; aIt != m_aSymbols.end(); ++aIt)
         aRes.push_back( &aIt->second );
-//    OSL_ENSURE( sSymbols.size() == m_aSymbols.size(), "number of symbols mismatch " );
+
     return aRes;
 }
 
@@ -172,7 +172,7 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
         const SmSym *pFound = GetSymbolByName( aSymbolName );
         const bool bSymbolConflict = pFound && !pFound->IsEqualInUI( rSymbol );
 
-        // avoid having the same symbol name twice but with different symbols in use
+        
         if (!pFound || bForceChange)
         {
             m_aSymbols[ aSymbolName ] = rSymbol;
@@ -180,12 +180,12 @@ bool SmSymbolManager::AddOrReplaceSymbol( const SmSym &rSymbol, bool bForceChang
         }
         else if (pFound && !bForceChange && bSymbolConflict)
         {
-            // TODO: to solve this a document owned symbol manager would be required ...
+            
                 SAL_WARN("starmath", "symbol conflict, different symbol with same name found!");
-            // symbols in all formulas. A copy of the global one would be needed here
-            // and then the new symbol has to be forcefully applied. This would keep
-            // the current formula intact but will leave the set of symbols in the
-            // global symbol manager somewhat to chance.
+            
+            
+            
+            
         }
 
     OSL_ENSURE( bAdded, "failed to add symbol" );
@@ -258,7 +258,7 @@ void SmSymbolManager::Load()
         m_bModified = false;
     }
 
-    // now add a %i... symbol to the 'iGreek' set for every symbol found in the 'Greek' set.
+    
     SmLocalizedSymbolData   aLocalizedData;
     const OUString aGreekSymbolSetName(aLocalizedData.GetUiSymbolSetName(OUString("Greek")));
     const SymbolPtrVec_t    aGreekSymbols( GetSymbolSet( aGreekSymbolSetName ) );
@@ -267,7 +267,7 @@ void SmSymbolManager::Load()
     size_t nSymbols = aGreekSymbols.size();
     for (size_t i = 0;  i < nSymbols;  ++i)
     {
-        // make the new symbol a copy but with ITALIC_NORMAL, and add it to iGreek
+        
         const SmSym &rSym = *aGreekSymbols[i];
         Font aFont( rSym.GetFace() );
         OSL_ENSURE( aFont.GetItalic() == ITALIC_NONE, "expected Font with ITALIC_NONE, failed." );
@@ -287,7 +287,7 @@ void SmSymbolManager::Save()
     {
         SmMathConfig &rCfg = *SM_MOD()->GetConfig();
 
-        // prepare to skip symbols from iGreek on saving
+        
         SmLocalizedSymbolData   aLocalizedData;
         OUString aSymbolSetName('i');
         aSymbolSetName += aLocalizedData.GetUiSymbolSetName(OUString("Greek"));
@@ -296,8 +296,8 @@ void SmSymbolManager::Save()
         std::vector< SmSym > aSymbols;
         for (size_t i = 0; i < aTmp.size(); ++i)
         {
-            // skip symbols from iGreek set since those symbols always get added
-            // by computational means in SmSymbolManager::Load
+            
+            
             if (aTmp[i]->GetSymbolSetName() != aSymbolSetName)
                 aSymbols.push_back( *aTmp[i] );
         }

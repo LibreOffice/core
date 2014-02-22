@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "ColorListener.hxx"
 #include <svl/smplhint.hxx>
@@ -22,10 +22,10 @@
 
 #include "uistrings.hrc"
 
-//=====================================================================
+
 namespace rptui
 {
-//=====================================================================
+
 OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
 : Window(_pParent)
 ,m_sColorEntry(_sColorEntry)
@@ -37,12 +37,12 @@ OColorListener::OColorListener(Window* _pParent ,const OUString& _sColorEntry)
     m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
     m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;
 }
-// -----------------------------------------------------------------------------
+
 OColorListener::~OColorListener()
 {
     EndListening(m_aExtendedColorConfig);
 }
-// -----------------------------------------------------------------------
+
 void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
 {
     if (rHint.ISA(SfxSimpleHint)
@@ -54,7 +54,7 @@ void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
         Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
     }
 }
-//-----------------------------------------------------------------------------
+
 void OColorListener::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -66,7 +66,7 @@ void OColorListener::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-// -----------------------------------------------------------------------------
+
 void OColorListener::setCollapsed(sal_Bool _bCollapsed)
 {
     if ( m_bCollapsed != _bCollapsed )
@@ -76,7 +76,7 @@ void OColorListener::setCollapsed(sal_Bool _bCollapsed)
             m_aCollapsedLink.Call(this);
     }
 }
-// -----------------------------------------------------------------------------
+
 void OColorListener::setMarked(sal_Bool _bMark)
 {
     if ( m_bMarked != _bMark)
@@ -85,8 +85,8 @@ void OColorListener::setMarked(sal_Bool _bMark)
         Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
     }
 }
-// =======================================================================
+
 }
-// =======================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

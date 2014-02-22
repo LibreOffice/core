@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppunit/TestAssert.h>
@@ -62,7 +62,7 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0",
                                countPixel( rDevice, aCol ) == 0);
 
-        // --------------------------------------------------
+        
 
         rDevice->clear(aBgCol);
         aPoly.clear();
@@ -94,7 +94,7 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 7",
                                countPixel( rDevice, aCol ) == 7);
 
-        // --------------------------------------------------
+        
 
         rDevice->clear(aBgCol);
         aPoly.clear();
@@ -108,7 +108,7 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 6",
                                countPixel( rDevice, aCol ) == 6);
 
-        // --------------------------------------------------
+        
 
         rDevice->clear(aBgCol);
         aPoly.clear();
@@ -187,14 +187,14 @@ private:
         const Color aBgCol(0);
         rDevice->clear(aBgCol);
 
-        // create rectangular subset, such that we can 'see' extra
-        // pixel outside
+        
+        
         BitmapDeviceSharedPtr pClippedDevice=(
             subsetBitmapDevice( rDevice,
                                 basegfx::B2IBox(3,3,5,9) ));
 
-        // trigger "alternate bresenham" case in
-        // clippedlinerenderer.hxx, first point not clipped
+        
+        
         const basegfx::B2IPoint aPt1(3,3);
         const basegfx::B2IPoint aPt2(4,2);
         pClippedDevice->drawLine( aPt1, aPt2, aCol, DrawMode_PAINT );
@@ -202,27 +202,27 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 1",
                                countPixel( rDevice, aCol ) == 1);
 
-        // trigger "alternate bresenham" case in
-        // clippedlinerenderer.hxx, both start and endpoint clipped
+        
+        
         const basegfx::B2IPoint aPt3(0,4);
         pClippedDevice->drawLine( aPt3, aPt2, aCol, DrawMode_XOR );
 
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 0",
                                countPixel( rDevice, aCol ) == 0);
 
-        // trigger "standard bresenham" case in
-        // clippedlinerenderer.hxx, first point not clipped
+        
+        
         const basegfx::B2IPoint aPt4(6,2);
         pClippedDevice->drawLine( aPt1, aPt4, aCol, DrawMode_PAINT );
 
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 2",
                                countPixel( rDevice, aCol ) == 2);
 
-        // trigger "clipCode1 & aMinFlag/bMinFlag" cases in
-        // clippedlinerenderer.hxx (note1: needs forcing end point to
-        // be clipped as well, otherwise optimisation kicks in. note2:
-        // needs forcing end point to clip on two edges, not only on
-        // one, otherwise swap kicks in)
+        
+        
+        
+        
+        
         const basegfx::B2IPoint aPt5(1,1);
         const basegfx::B2IPoint aPt6(6,10);
         pClippedDevice->drawLine( aPt5, aPt6, aCol, DrawMode_XOR );
@@ -230,9 +230,9 @@ private:
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 6",
                                countPixel( rDevice, aCol ) == 6);
 
-        // trigger "clipCode1 & (aMinFlag|aMaxFlag)" case in
-        // clippedlinerenderer.hxx that was not taken for the test
-        // above
+        
+        
+        
         pClippedDevice->drawLine( aPt3, aPt6, aCol, DrawMode_XOR );
 
         CPPUNIT_ASSERT_MESSAGE("number of rendered pixel is not 8",
@@ -247,9 +247,9 @@ private:
         rDevice->clear(aBgCol);
         basegfx::B2DPolyPolygon aPoly;
 
-        // test all corner-touching lines of our clip rect. note that
-        // *all* of the four two-pixel lines in that polygon do *not*
-        // generate a single pixel, due to the rasterization effect.
+        
+        
+        
         basegfx::tools::importFromSvgD( aPoly,
                                         OUString( "M2 3 l1 -1 M4 2 l1 1 M2 8 l1 1 M5 8 l-1 1 M2 5 h4 M3 0 v10" ),
                                         false, NULL );
@@ -344,9 +344,9 @@ public:
         implTestPolyPolyCrissCross(mpDevice32bpp);
     }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(PolyTest);
     CPPUNIT_TEST(testEmpty);

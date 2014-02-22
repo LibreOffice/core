@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sbcomp.hxx"
 #include "iosys.hxx"
 
-// test if there's an I/O channel
+
 
 bool SbiParser::Channel( bool bAlways )
 {
@@ -40,8 +40,8 @@ bool SbiParser::Channel( bool bAlways )
     return bRes;
 }
 
-// it's tried that at object variables the Default-
-// Property is addressed for PRINT and WRITE
+
+
 
 void SbiParser::Print()
 {
@@ -72,7 +72,7 @@ void SbiParser::Print()
         aGen.Gen( _CHAN0 );
 }
 
-// WRITE #chan, expr, ...
+
 
 void SbiParser::Write()
 {
@@ -101,10 +101,10 @@ void SbiParser::Write()
 }
 
 
-// #i92642 Handle LINE keyword outside ::Next()
+
 void SbiParser::Line()
 {
-    // #i92642: Special handling to allow name as symbol
+    
     if( Peek() == INPUT )
     {
         Next();
@@ -124,7 +124,7 @@ void SbiParser::Line()
 }
 
 
-// LINE INPUT [prompt], var$
+
 
 void SbiParser::LineInput()
 {
@@ -137,10 +137,10 @@ void SbiParser::LineInput()
     pExpr->Gen();
     aGen.Gen( _LINPUT );
     delete pExpr;
-    aGen.Gen( _CHAN0 );     // ResetChannel() not in StepLINPUT() anymore
+    aGen.Gen( _CHAN0 );     
 }
 
-// INPUT
+
 
 void SbiParser::Input()
 {
@@ -165,7 +165,7 @@ void SbiParser::Input()
     aGen.Gen( _CHAN0 );
 }
 
-// OPEN stringexpr FOR mode ACCCESS access mode AS Channel [Len=n]
+
 
 void SbiParser::Open()
 {
@@ -194,8 +194,8 @@ void SbiParser::Open()
     {
         Next();
         eTok = Next();
-        // influence only STREAM_READ,STREAM_WRITE-Flags in nMode
-        nMode &= ~(STREAM_READ | STREAM_WRITE);     // delete
+        
+        nMode &= ~(STREAM_READ | STREAM_WRITE);     
         if( eTok == READ )
         {
             if( Peek() == WRITE )
@@ -239,7 +239,7 @@ void SbiParser::Open()
         default: break;
     }
     TestToken( AS );
-    // channel number
+    
     SbiExpression* pChan = new SbiExpression( this );
     if( !pChan )
         Error( SbERR_SYNTAX );
@@ -254,10 +254,10 @@ void SbiParser::Open()
         }
     }
     if( !pLen ) pLen = new SbiExpression( this, 128, SbxINTEGER );
-    // the stack for the OPEN command looks as follows:
-    // block length
-    // channel number
-    // file name
+    
+    
+    
+    
     pLen->Gen();
     if( pChan )
         pChan->Gen();
@@ -268,11 +268,11 @@ void SbiParser::Open()
     bInStatement = false;
 }
 
-// NAME file AS file
+
 
 void SbiParser::Name()
 {
-    // #i92642: Special handling to allow name as symbol
+    
     if( Peek() == EQ )
     {
         aGen.Statement();
@@ -293,7 +293,7 @@ void SbiParser::Name()
     aGen.Gen( _RENAME );
 }
 
-// CLOSE [n,...]
+
 
 void SbiParser::Close()
 {

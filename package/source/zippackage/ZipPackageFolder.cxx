@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -98,7 +98,7 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath 
         {
             if ( aPath == "META-INF/" )
             {
-                // META-INF is not allowed to contain subfolders
+                
                 bHasUnexpected = sal_True;
             }
             else
@@ -114,19 +114,19 @@ sal_Bool ZipPackageFolder::LookForUnexpectedODF12Streams( const OUString& aPath 
                 if ( rShortName != "manifest.xml"
                   && rShortName.indexOf( "signatures" ) == -1 )
                 {
-                    // a stream from META-INF with unexpected name
+                    
                     bHasUnexpected = sal_True;
                 }
 
-                // streams from META-INF with expected names are allowed not to be registered in manifest.xml
+                
             }
             else if ( !rInfo.pStream->IsFromManifest() )
             {
-                // the stream is not in META-INF and is not registered in manifest.xml,
-                // check whether it is an internal part of the package format
+                
+                
                 if ( !aPath.isEmpty() || rShortName != "mimetype" )
                 {
-                    // if it is not "mimetype" from the root it is not a part of the package
+                    
                     bHasUnexpected = sal_True;
                 }
             }
@@ -183,7 +183,7 @@ const ::com::sun::star::uno::Sequence < sal_Int8 >& ZipPackageFolder::static_get
     return lcl_CachedImplId::get();
 }
 
-    // XNameContainer
+    
 void SAL_CALL ZipPackageFolder::insertByName( const OUString& aName, const uno::Any& aElement )
         throw(IllegalArgumentException, ElementExistException, WrappedTargetException, uno::RuntimeException)
 {
@@ -226,13 +226,13 @@ void SAL_CALL ZipPackageFolder::removeByName( const OUString& Name )
         throw NoSuchElementException(THROW_WHERE, uno::Reference< uno::XInterface >() );
     maContents.erase( aIter );
 }
-    // XEnumerationAccess
+    
 uno::Reference< XEnumeration > SAL_CALL ZipPackageFolder::createEnumeration(  )
         throw(uno::RuntimeException)
 {
     return uno::Reference < XEnumeration> (new ZipPackageFolderEnumeration(maContents));
 }
-    // XElementAccess
+    
 uno::Type SAL_CALL ZipPackageFolder::getElementType(  )
         throw(uno::RuntimeException)
 {
@@ -243,7 +243,7 @@ sal_Bool SAL_CALL ZipPackageFolder::hasElements(  )
 {
     return maContents.size() > 0;
 }
-    // XNameAccess
+    
 ContentInfo& ZipPackageFolder::doGetByName( const OUString& aName )
     throw(NoSuchElementException, WrappedTargetException, uno::RuntimeException)
 {
@@ -273,7 +273,7 @@ sal_Bool SAL_CALL ZipPackageFolder::hasByName( const OUString& aName )
 {
     return maContents.find ( aName ) != maContents.end ();
 }
-    // XNameReplace
+    
 void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const uno::Any& aElement )
         throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, uno::RuntimeException)
 {
@@ -286,10 +286,10 @@ void SAL_CALL ZipPackageFolder::replaceByName( const OUString& aName, const uno:
 
 static void ImplSetStoredData( ZipEntry & rEntry, uno::Reference< XInputStream> & rStream )
 {
-    // It's very annoying that we have to do this, but lots of zip packages
-    // don't allow data descriptors for STORED streams, meaning we have to
-    // know the size and CRC32 of uncompressed streams before we actually
-    // write them !
+    
+    
+    
+    
     CRC32 aCRC32;
     rEntry.nMethod = STORED;
     rEntry.nCompressedSize = rEntry.nSize = aCRC32.updateStream ( rStream );
@@ -336,13 +336,13 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
     }
     else
     {
-        // if pTempEntry is necessary, it will be released and passed to the ZipOutputStream
-        // and be deleted in the ZipOutputStream destructor
+        
+        
         auto_ptr < ZipEntry > pAutoTempEntry ( new ZipEntry );
         ZipEntry* pTempEntry = pAutoTempEntry.get();
 
-        // In case the entry we are reading is also the entry we are writing, we will
-        // store the ZipEntry data in pTempEntry
+        
+        
 
         ZipPackageFolder::copyZipEntry ( *pTempEntry, rInfo.pStream->aEntry );
         pTempEntry->sPath = rPath + rShortName;
@@ -354,7 +354,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
         aPropSet[PKG_MNFST_MEDIATYPE].Name = sMediaTypeProperty;
         aPropSet[PKG_MNFST_MEDIATYPE].Value <<= rInfo.pStream->GetMediaType( );
         aPropSet[PKG_MNFST_VERSION].Name = sVersionProperty;
-        aPropSet[PKG_MNFST_VERSION].Value <<= OUString(); // no version is stored for streams currently
+        aPropSet[PKG_MNFST_VERSION].Value <<= OUString(); 
         aPropSet[PKG_MNFST_FULLPATH].Name = sFullPathProperty;
         aPropSet[PKG_MNFST_FULLPATH].Value <<= pTempEntry->sPath;
 
@@ -367,17 +367,17 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
             bRawStream = sal_True;
 
         sal_Bool bTransportOwnEncrStreamAsRaw = sal_False;
-        // During the storing the original size of the stream can be changed
-        // TODO/LATER: get rid of this hack
+        
+        
         sal_Int64 nOwnStreamOrigSize = bRawStream ? rInfo.pStream->GetMagicalHackSize() : rInfo.pStream->getSize();
 
         sal_Bool bUseNonSeekableAccess = sal_False;
         uno::Reference < XInputStream > xStream;
         if ( !rInfo.pStream->IsPackageMember() && !bRawStream && !bToBeEncrypted && bToBeCompressed )
         {
-            // the stream is not a package member, not a raw stream,
-            // it should not be encrypted and it should be compressed,
-            // in this case nonseekable access can be used
+            
+            
+            
 
             xStream = rInfo.pStream->GetOwnStreamNoWrap();
             uno::Reference < XSeekable > xSeek ( xStream, uno::UNO_QUERY );
@@ -401,20 +401,20 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
             {
                 if ( xSeek.is() )
                 {
-                    // If the stream is a raw one, then we should be positioned
-                    // at the beginning of the actual data
+                    
+                    
                     if ( !bToBeCompressed || bRawStream )
                     {
-                        // The raw stream can neither be encrypted nor connected
+                        
                         OSL_ENSURE( !bRawStream || !(bToBeCompressed || bToBeEncrypted), "The stream is already encrypted!\n" );
                         xSeek->seek ( bRawStream ? rInfo.pStream->GetMagicalHackPos() : 0 );
                         ImplSetStoredData ( *pTempEntry, xStream );
 
-                        // TODO/LATER: Get rid of hacks related to switching of Flag Method and Size properties!
+                        
                     }
                     else if ( bToBeEncrypted )
                     {
-                        // this is the correct original size
+                        
                         pTempEntry->nSize = xSeek->getLength();
                         nOwnStreamOrigSize = pTempEntry->nSize;
                     }
@@ -423,22 +423,22 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
                 }
                 else
                 {
-                    // Okay, we don't have an xSeekable stream. This is possibly bad.
-                    // check if it's one of our own streams, if it is then we know that
-                    // each time we ask for it we'll get a new stream that will be
-                    // at position zero...otherwise, assert and skip this stream...
+                    
+                    
+                    
+                    
                     if ( rInfo.pStream->IsPackageMember() )
                     {
-                        // if the password has been changed than the stream should not be package member any more
+                        
                         if ( rInfo.pStream->IsEncrypted() && rInfo.pStream->IsToBeEncrypted() )
                         {
-                            // Should be handled close to the raw stream handling
+                            
                             bTransportOwnEncrStreamAsRaw = sal_True;
                             pTempEntry->nMethod = STORED;
 
-                            // TODO/LATER: get rid of this situation
-                            // this size should be different from the one that will be stored in manifest.xml
-                            // it is used in storing algorithms and after storing the correct size will be set
+                            
+                            
+                            
                             pTempEntry->nSize = pTempEntry->nCompressedSize;
                         }
                     }
@@ -472,8 +472,8 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
                     rInfo.pStream->setIterationCount ( nIterationCount );
                 }
 
-                // last property is digest, which is inserted later if we didn't have
-                // a magic header
+                
+                
                 aPropSet.realloc(PKG_SIZE_ENCR_MNFST);
 
                 aPropSet[PKG_MNFST_INIVECTOR].Name = sInitialisationVectorProperty;
@@ -483,7 +483,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
                 aPropSet[PKG_MNFST_ITERATION].Name = sIterationCountProperty;
                 aPropSet[PKG_MNFST_ITERATION].Value <<= rInfo.pStream->getIterationCount ();
 
-                // Need to store the uncompressed size in the manifest
+                
                 OSL_ENSURE( nOwnStreamOrigSize >= 0, "The stream size was not correctly initialized!\n" );
                 aPropSet[PKG_MNFST_UCOMPSIZE].Name = sSizeProperty;
                 aPropSet[PKG_MNFST_UCOMPSIZE].Value <<= nOwnStreamOrigSize;
@@ -508,22 +508,22 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
             }
         }
 
-        // If the entry is already stored in the zip file in the format we
-        // want for this write...copy it raw
+        
+        
         if ( !bUseNonSeekableAccess
           && ( bRawStream || bTransportOwnEncrStreamAsRaw
             || ( rInfo.pStream->IsPackageMember() && !bToBeEncrypted
               && ( ( rInfo.pStream->aEntry.nMethod == DEFLATED && bToBeCompressed )
                 || ( rInfo.pStream->aEntry.nMethod == STORED && !bToBeCompressed ) ) ) ) )
         {
-            // If it's a PackageMember, then it's an unbuffered stream and we need
-            // to get a new version of it as we can't seek backwards.
+            
+            
             if ( rInfo.pStream->IsPackageMember() )
             {
                 xStream = rInfo.pStream->getRawData();
                 if ( !xStream.is() )
                 {
-                    // Make sure that we actually _got_ a new one !
+                    
                     bSuccess = false;
                     return bSuccess;
                 }
@@ -535,7 +535,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
                     xStream->skipBytes( rInfo.pStream->GetMagicalHackPos() );
 
                 rZipOut.putNextEntry ( *pTempEntry, rInfo.pStream, sal_False );
-                // the entry is provided to the ZipOutputStream that will delete it
+                
                 pAutoTempEntry.release();
 
                 uno::Sequence < sal_Int8 > aSeq ( n_ConstBufferSize );
@@ -561,22 +561,22 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
         }
         else
         {
-            // This stream is defenitly not a raw stream
+            
 
-            // If nonseekable access is used the stream should be at the beginning and
-            // is useless after the storing. Thus if the storing fails the package should
-            // be thrown away ( as actually it is done currently )!
-            // To allow to reuse the package after the error, the optimization must be removed!
+            
+            
+            
+            
 
-            // If it's a PackageMember, then our previous reference held a 'raw' stream
-            // so we need to re-get it, unencrypted, uncompressed and positioned at the
-            // beginning of the stream
+            
+            
+            
             if ( rInfo.pStream->IsPackageMember() )
             {
                 xStream = rInfo.pStream->getInputStream();
                 if ( !xStream.is() )
                 {
-                    // Make sure that we actually _got_ a new one !
+                    
                     bSuccess = false;
                     return bSuccess;
                 }
@@ -592,7 +592,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
             try
             {
                 rZipOut.putNextEntry ( *pTempEntry, rInfo.pStream, bToBeEncrypted);
-                // the entry is provided to the ZipOutputStream that will delete it
+                
                 pAutoTempEntry.release();
 
                 sal_Int32 nLength;
@@ -646,22 +646,22 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
 
             if ( bRawStream )
             {
-                // the raw stream was integrated and now behaves
-                // as usual encrypted stream
+                
+                
                 rInfo.pStream->SetToBeEncrypted( sal_True );
             }
 
-            // Then copy it back afterwards...
+            
             ZipPackageFolder::copyZipEntry ( rInfo.pStream->aEntry, *pTempEntry );
 
-            // Remove hacky bit from entry flags
+            
             if ( rInfo.pStream->aEntry.nFlag & ( 1 << 4 ) )
             {
                 rInfo.pStream->aEntry.nFlag &= ~( 1 << 4 );
                 rInfo.pStream->aEntry.nMethod = STORED;
             }
 
-            // TODO/LATER: get rid of this hack ( the encrypted stream size property is changed during saving )
+            
             if ( rInfo.pStream->IsEncrypted() )
                 rInfo.pStream->setSize( nOwnStreamOrigSize );
 
@@ -669,7 +669,7 @@ bool ZipPackageFolder::saveChild( const OUString &rShortName, const ContentInfo 
         }
     }
 
-    // folder can have a mediatype only in package format
+    
     if ( aPropSet.getLength()
       && ( m_nFormat == embed::StorageFormats::PACKAGE || ( m_nFormat == embed::StorageFormats::OFOPXML && !rInfo.bFolder ) ) )
         rManList.push_back( aPropSet );
@@ -684,7 +684,7 @@ void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequenc
 
     if ( maContents.begin() == maContents.end() && !rPath.isEmpty() && m_nFormat != embed::StorageFormats::OFOPXML )
     {
-        // it is an empty subfolder, use workaround to store it
+        
         ZipEntry* pTempEntry = new ZipEntry();
         ZipPackageFolder::copyZipEntry ( *pTempEntry, aEntry );
         pTempEntry->nPathLen = (sal_Int16)( OUStringToOString( rPath, RTL_TEXTENCODING_UTF8 ).getLength() );
@@ -710,7 +710,7 @@ void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequenc
     OUString aMimeTypeStreamName("mimetype");
     if ( m_nFormat == embed::StorageFormats::ZIP && rPath.isEmpty() )
     {
-        // let the "mimtype" stream in root folder be stored as the first stream if it is zip format
+        
         ContentHash::iterator aIter = maContents.find ( aMimeTypeStreamName );
         if ( aIter != maContents.end() && !(*aIter).second->bFolder )
         {
@@ -736,13 +736,13 @@ void ZipPackageFolder::saveContents( OUString &rPath, std::vector < uno::Sequenc
 
 void ZipPackageFolder::releaseUpwardRef( void )
 {
-    // Now it is possible that a package folder is disconnected from the package before removing of the folder.
-    // Such a scenario is used in storage implementation. When a new version of a folder is provided the old
-    // one is retrieved, removed from the package but preserved for the error handling.
-    // In this scenario the referencing to the parent is not really useful, since it requires disposing.
+    
+    
+    
+    
 
-    // Actually there is no need in having a reference to the parent, it even make things more complicated and
-    // requires disposing mechanics. Using of a simple pointer seems to be easier solution and also a safe enough.
+    
+    
 
     clearParent();
 
@@ -752,9 +752,9 @@ void ZipPackageFolder::releaseUpwardRef( void )
           aCI++)
     {
         ContentInfo &rInfo = * (*aCI).second;
-        if ( rInfo.bFolder )// && ! rInfo.pFolder->HasReleased () )
+        if ( rInfo.bFolder )
             rInfo.pFolder->releaseUpwardRef();
-        else //if ( !rInfo.bFolder && !rInfo.pStream->HasReleased() )
+        else 
             rInfo.pStream->clearParent();
     }
     clearParent();
@@ -777,9 +777,9 @@ void SAL_CALL ZipPackageFolder::setPropertyValue( const OUString& aPropertyName,
 {
     if ( aPropertyName == "MediaType" )
     {
-        // TODO/LATER: activate when zip ucp is ready
-        // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        //  throw UnknownPropertyException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        
+        
+        
 
         aValue >>= sMediaType;
     }
@@ -795,9 +795,9 @@ uno::Any SAL_CALL ZipPackageFolder::getPropertyValue( const OUString& PropertyNa
 {
     if ( PropertyName == "MediaType" )
     {
-        // TODO/LATER: activate when zip ucp is ready
-        // if ( m_nFormat != embed::StorageFormats::PACKAGE )
-        //  throw UnknownPropertyException(THROW_WHERE, uno::Reference< uno::XInterface >() );
+        
+        
+        
 
         return uno::makeAny ( sMediaType );
     }

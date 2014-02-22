@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WallFloorWrapper.hxx"
@@ -73,7 +73,7 @@ struct StaticWallFloorWrapperPropertyArray : public rtl::StaticAggregate< Sequen
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -93,7 +93,7 @@ WallFloorWrapper::~WallFloorWrapper()
 {
 }
 
-// ____ XComponent ____
+
 void SAL_CALL WallFloorWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -118,7 +118,7 @@ void SAL_CALL WallFloorWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// WrappedPropertySet
+
 Reference< beans::XPropertySet > WallFloorWrapper::getInnerPropertySet()
 {
     Reference< beans::XPropertySet > xRet;
@@ -144,9 +144,9 @@ const std::vector< WrappedProperty* > WallFloorWrapper::createWrappedProperties(
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
-    // use direct state always, so that in XML the value is always
-    // exported. Because in the old chart the defaults is as follows:
-    // Floor: SOLID (new and old model default), Wall: NONE, except for some chart types (line, scatter)
+    
+    
+    
     if( m_bWall )
         aWrappedProperties.push_back( new WrappedDirectStateProperty( "FillStyle", "FillStyle" ));
     aWrappedProperties.push_back( new WrappedDirectStateProperty( "FillColor", "FillColor" ));
@@ -165,10 +165,10 @@ Sequence< OUString > WallFloorWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( WallFloorWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -64,7 +64,7 @@ CheckConfigMacros::CheckConfigMacros( const InstantiationData& data )
 
 void CheckConfigMacros::run()
     {
-    // nothing, only check preprocessor usage
+    
     }
 
 #if __clang_major__ < 3 || __clang_major__ == 3 && __clang_minor__ < 3
@@ -81,7 +81,7 @@ void CheckConfigMacros::MacroDefined( const Token& macroToken, const MacroDirect
         && ( strncmp( filename, BUILDDIR "/config_host/", strlen( BUILDDIR "/config_host/" )) == 0
             || strncmp( filename, BUILDDIR "/config_build/", strlen( BUILDDIR "/config_build/" )) == 0 ))
         {
-//        fprintf(stderr,"DEF: %s %s\n", macroToken.getIdentifierInfo()->getName().data(), filename );
+
         configMacros.insert( macroToken.getIdentifierInfo()->getName());
         }
     }
@@ -136,6 +136,6 @@ void CheckConfigMacros::checkMacro( const Token& macroToken, SourceLocation loca
 
 static Plugin::Registration< CheckConfigMacros > X( "bodynotinblock" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "controller/SlsAnimationFunction.hxx"
@@ -27,7 +27,7 @@
 
 namespace sd { namespace slidesorter { namespace controller {
 
-//===== AnimationBezierFunction ===============================================
+
 
 AnimationBezierFunction::AnimationBezierFunction (
     const double nX1,
@@ -59,8 +59,8 @@ double AnimationBezierFunction::EvaluateComponent (
 {
     const double nS (1-nT);
 
-    // While the control point values 1 and 2 are explicitly given the start
-    // and end values are implicitly given.
+    
+    
     const double nV0 (0);
     const double nV3 (1);
 
@@ -79,14 +79,14 @@ double AnimationBezierFunction::EvaluateComponent (
 
 
 
-//===== AnimationParametricFunction ===========================================
+
 
 AnimationParametricFunction::AnimationParametricFunction (const ParametricFunction& rFunction)
     : maY()
 {
     const sal_Int32 nSampleCount (64);
 
-    // Sample the given parametric function.
+    
     ::std::vector<basegfx::B2DPoint> aPoints;
     aPoints.reserve(nSampleCount);
     for (sal_Int32 nIndex=0; nIndex<nSampleCount; ++nIndex)
@@ -95,7 +95,7 @@ AnimationParametricFunction::AnimationParametricFunction (const ParametricFuncti
         aPoints.push_back(basegfx::B2DPoint(rFunction(nT)));
     }
 
-    // Interpolate at evenly spaced points.
+    
     maY.clear();
     maY.reserve(nSampleCount);
     double nX0 (aPoints[0].getX());
@@ -140,6 +140,6 @@ double AnimationParametricFunction::operator() (const double nX)
 }
 
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

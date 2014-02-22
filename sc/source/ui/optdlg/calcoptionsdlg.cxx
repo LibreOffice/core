@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "calcoptionsdlg.hxx"
@@ -54,9 +54,9 @@ void OptionString::InitViewData(
     Font aOldFont = pView->GetFont();
     Font aFont = aOldFont;
     aFont.SetWeight(WEIGHT_BOLD);
-    //To not make the SvTreeListBox try and recalculate all rows, call the
-    //underlying SetFont, we just want to know what size this text will be
-    //and are going to reset the font to the original again afterwards
+    
+    
+    
     pView->Control::SetFont(aFont);
     Size aValueSize(pView->GetTextWidth(maValue), pView->GetTextHeight());
     pView->Control::SetFont(aOldFont);
@@ -75,9 +75,9 @@ void OptionString::Paint(const Point& rPos, SvTreeListBox& rDev, const SvViewDat
     Font aFont = aOldFont;
     aFont.SetWeight(WEIGHT_BOLD);
 
-    //To not make the SvTreeListBox try and recalculate all rows, call the
-    //underlying SetFont, we are going to draw this string and then going to
-    //reset the font to the original again afterwards
+    
+    
+    
     rDev.Control::SetFont(aFont);
     rDev.DrawText(aPos, maValue);
     rDev.Control::SetFont(aOldFont);
@@ -149,7 +149,7 @@ ScCalcOptionsDialog::ScCalcOptionsDialog(Window* pParent, const ScCalcConfig& rC
     mpLbOptionEdit->SetSelectHdl(aLink);
 
     aLink = LINK(this, ScCalcOptionsDialog, BtnToggleHdl);
-    mpBtnTrue->SetToggleHdl(aLink); // Set handler only to the 'True' button.
+    mpBtnTrue->SetToggleHdl(aLink); 
 
     maTrue = mpBtnTrue->GetText();
     maFalse = mpBtnFalse->GetText();
@@ -245,7 +245,7 @@ void ScCalcOptionsDialog::FillOptionsList()
     SvTreeList* pModel = mpLbSettings->GetModel();
 
     {
-        // Syntax for INDIRECT function.
+        
         SvTreeListEntry* pEntry = new SvTreeListEntry;
         pEntry->AddItem(new SvLBoxString(pEntry, 0, OUString()));
         pEntry->AddItem(new SvLBoxContextBmp(pEntry, 0, Image(), Image(), false));
@@ -274,7 +274,7 @@ void ScCalcOptionsDialog::SelectionChanged()
     {
         case CALC_OPTION_REF_SYNTAX:
         {
-            // Formula syntax for INDIRECT function.
+            
             mpBtnTrue->Hide();
             mpBtnFalse->Hide();
             mpLbOptionEdit->Show();
@@ -304,11 +304,11 @@ void ScCalcOptionsDialog::SelectionChanged()
         }
         break;
 
-        // booleans
+        
         case CALC_OPTION_EMPTY_AS_ZERO:
         case CALC_OPTION_ENABLE_OPENCL:
         {
-            // Treat empty string as zero.
+            
             mpLbOptionEdit->Hide();
             mpBtnTrue->Show();
             mpBtnFalse->Show();
@@ -358,7 +358,7 @@ void ScCalcOptionsDialog::ListOptionValueChanged()
     {
         case CALC_OPTION_REF_SYNTAX:
         {
-            // Formula syntax for INDIRECT function.
+            
             sal_uInt16 nPos = mpLbOptionEdit->GetSelectEntryPos();
             maConfig.meStringRefAddressSyntax = toAddressConvention(nPos);
 
@@ -405,7 +405,7 @@ void ScCalcOptionsDialog::SelectedDeviceChanged()
     }
 
     OUString aDevice = dynamic_cast<SvLBoxString*>(pEntry->GetItem(1))->GetText();
-    // use english string for configuration
+    
     if(aDevice == maSoftware)
         aDevice = OPENCL_SOFTWARE_DEVICE_CONFIG_NAME;
 

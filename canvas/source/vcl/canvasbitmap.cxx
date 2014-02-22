@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <canvas/debug.hxx>
@@ -29,25 +29,25 @@ using namespace ::com::sun::star;
 
 namespace vclcanvas
 {
-    // Currently, the only way to generate an XBitmap is from
-    // XGraphicDevice.getCompatibleBitmap(). Therefore, we don't even
-    // take a bitmap here, but a VDev directly.
+    
+    
+    
     CanvasBitmap::CanvasBitmap( const ::Size&                  rSize,
                                 bool                           bAlphaBitmap,
                                 rendering::XGraphicDevice&     rDevice,
                                 const OutDevProviderSharedPtr& rOutDevProvider )
     {
-        // create bitmap for given reference device
-        // ========================================
+        
+        
         const sal_uInt16 nBitCount( (sal_uInt16)24U );
         const BitmapPalette*    pPalette = NULL;
 
         Bitmap aBitmap( rSize, nBitCount, pPalette );
 
-        // only create alpha channel bitmap, if factory requested
-        // that. Providing alpha-channeled bitmaps by default has,
-        // especially under VCL, a huge performance penalty (have to
-        // use alpha VDev, then).
+        
+        
+        
+        
         if( bAlphaBitmap )
         {
             AlphaMask   aAlpha ( rSize );
@@ -94,8 +94,8 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        // TODO(T3): Rework to use shared_ptr all over the place for
-        // BmpEx. This is highly un-threadsafe
+        
+        
         return maCanvasHelper.getBitmap();
     }
 

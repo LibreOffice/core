@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -45,7 +45,7 @@ namespace svtools {
 ODocumentInfoPreview::ODocumentInfoPreview(Window * pParent, WinBits nBits):
     Window(pParent, WB_DIALOGCONTROL), m_pEditWin(this, nBits),
     m_pInfoTable(new SvtDocInfoTable_Impl),
-    m_aLanguageTag(SvtPathOptions().GetLanguageTag()) // detect application language
+    m_aLanguageTag(SvtPathOptions().GetLanguageTag()) 
 {
     m_pEditWin.SetLeftMargin(10);
     m_pEditWin.Show();
@@ -96,7 +96,7 @@ void ODocumentInfoPreview::fill(
         }
     }
 
-    // User-defined (custom) properties:
+    
     css::uno::Reference< css::beans::XPropertySet > user(
         xDocProps->getUserDefinedProperties(), css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::beans::XPropertySetInfo > info(

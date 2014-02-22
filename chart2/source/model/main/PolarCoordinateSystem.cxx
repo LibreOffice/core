@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PolarCoordinateSystem.hxx"
@@ -40,7 +40,7 @@ static const OUString lcl_aImplementationNamePolar3d( "com.sun.star.comp.chart2.
 namespace chart
 {
 
-// explicit
+
 PolarCoordinateSystem::PolarCoordinateSystem(
     const uno::Reference< uno::XComponentContext > & xContext,
     sal_Int32 nDimensionCount /* = 2 */,
@@ -56,7 +56,7 @@ PolarCoordinateSystem::PolarCoordinateSystem(
 PolarCoordinateSystem::~PolarCoordinateSystem()
 {}
 
-// ____ XCoordinateSystem ____
+
 OUString SAL_CALL PolarCoordinateSystem::getCoordinateSystemType()
     throw (RuntimeException)
 {
@@ -69,14 +69,14 @@ OUString SAL_CALL PolarCoordinateSystem::getViewServiceName()
     return CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME;
 }
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL PolarCoordinateSystem::createClone()
     throw (RuntimeException)
 {
     return Reference< util::XCloneable >( new PolarCoordinateSystem( *this ));
 }
 
-// ____ XServiceInfo ____
+
 Sequence< OUString > PolarCoordinateSystem::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 1 );
@@ -84,11 +84,11 @@ Sequence< OUString > PolarCoordinateSystem::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem,
                              OUString("com.sun.star.comp.chart.PolarCoordinateSystem") )
 
-// ==== PolarCoordinateSystem2d ====
+
 
 PolarCoordinateSystem2d::PolarCoordinateSystem2d(
     const uno::Reference< uno::XComponentContext > & xContext ) :
@@ -98,7 +98,7 @@ PolarCoordinateSystem2d::PolarCoordinateSystem2d(
 PolarCoordinateSystem2d::~PolarCoordinateSystem2d()
 {}
 
-// ____ XServiceInfo ____
+
 Sequence< OUString > PolarCoordinateSystem2d::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
@@ -107,10 +107,10 @@ Sequence< OUString > PolarCoordinateSystem2d::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem2d, lcl_aImplementationNamePolar2d )
 
-// ==== PolarCoordinateSystem3d ====
+
 
 PolarCoordinateSystem3d::PolarCoordinateSystem3d(
     const uno::Reference< uno::XComponentContext > & xContext ) :
@@ -120,7 +120,7 @@ PolarCoordinateSystem3d::PolarCoordinateSystem3d(
 PolarCoordinateSystem3d::~PolarCoordinateSystem3d()
 {}
 
-// ____ XServiceInfo ____
+
 Sequence< OUString > PolarCoordinateSystem3d::getSupportedServiceNames_Static()
 {
     Sequence< OUString > aServices( 2 );
@@ -129,9 +129,9 @@ Sequence< OUString > PolarCoordinateSystem3d::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( PolarCoordinateSystem3d, lcl_aImplementationNamePolar3d )
 
-}  // namespace chart
+}  
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgstyleattributes.hxx>
@@ -39,7 +39,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -224,10 +224,10 @@ namespace svgio
         {
             if(rSource.hasElements())
             {
-                // at this point the primitives in rSource are of type TextSimplePortionPrimitive2D
-                // or TextDecoratedPortionPrimitive2D and have the Fill Color (pAttributes->getFill())
-                // set. When another fill is used and also evtl. stroke is set it gets necessary to
-                // dismantle to geometry and add needed primitives
+                
+                
+                
+                
                 const basegfx::BColor* pFill = getFill();
                 const SvgGradientNode* pFillGradient = getSvgGradientNodeFill();
                 const SvgPatternNode* pFillPattern = getSvgPatternNodeFill();
@@ -238,15 +238,15 @@ namespace svgio
 
                 if(pFillGradient || pFillPattern || pStroke || pStrokeGradient || pStrokePattern)
                 {
-                    // text geometry is needed, create
-                    // use neutral ViewInformation and create LineGeometryExtractor2D
+                    
+                    
                     const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
                     drawinglayer::processor2d::TextAsPolygonExtractor2D aExtractor(aViewInformation2D);
 
-                    // proccess
+                    
                     aExtractor.process(rSource);
 
-                    // get results
+                    
                     const drawinglayer::processor2d::TextAsPolygonDataNodeVector& rResult = aExtractor.getTarget();
                     const sal_uInt32 nResultCount(rResult.size());
                     basegfx::B2DPolyPolygonVector aTextFillVector;
@@ -270,25 +270,25 @@ namespace svgio
 
                 const bool bStrokeUsed(pStroke || pStrokeGradient || pStrokePattern);
 
-                // add fill. Use geometry even for simple color fill when stroke
-                // is used, else text rendering and the geometry-based stroke will
-                // normally not really match optically due to divrese system text
-                // renderers
+                
+                
+                
+                
                 if(aMergedArea.count() && (pFillGradient || pFillPattern || bStrokeUsed))
                 {
-                    // create text fill content based on geometry
+                    
                     add_fill(aMergedArea, rTarget, aMergedArea.getB2DRange());
                 }
                 else if(pFill)
                 {
-                    // add the already prepared primitives for single color fill
+                    
                     drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, rSource);
                 }
 
-                // add stroke
+                
                 if(aMergedArea.count() && bStrokeUsed)
                 {
-                    // create text stroke content
+                    
                     add_stroke(aMergedArea, rTarget, aMergedArea.getB2DRange());
                 }
             }
@@ -300,10 +300,10 @@ namespace svgio
             const SvgGradientNode& rFillGradient,
             const basegfx::B2DRange& rGeoRange) const
         {
-            // create fill content
+            
             drawinglayer::primitive2d::SvgGradientEntryVector aSvgGradientEntryVector;
 
-            // get the color stops
+            
             rFillGradient.collectGradientEntries(aSvgGradientEntryVector);
 
             if(!aSvgGradientEntryVector.empty())
@@ -329,7 +329,7 @@ namespace svgio
 
                     if(userSpaceOnUse == rFillGradient.getGradientUnits())
                     {
-                        // all possible units
+                        
                         aStart.setX(rFillGradient.getX1().solve(mrOwner, xcoordinate));
                         aStart.setY(rFillGradient.getY1().solve(mrOwner, ycoordinate));
                         aEnd.setX(rFillGradient.getX2().solve(mrOwner, xcoordinate));
@@ -337,7 +337,7 @@ namespace svgio
                     }
                     else
                     {
-                        // fractions or percent relative to object bounds
+                        
                         const SvgNumber X1(rFillGradient.getX1());
                         const SvgNumber Y1(rFillGradient.getY1());
                         const SvgNumber X2(rFillGradient.getX2());
@@ -377,7 +377,7 @@ namespace svgio
 
                     if(userSpaceOnUse == rFillGradient.getGradientUnits())
                     {
-                        // all possible units
+                        
                         aStart.setX(rFillGradient.getCx().solve(mrOwner, xcoordinate));
                         aStart.setY(rFillGradient.getCy().solve(mrOwner, ycoordinate));
                         fRadius = rFillGradient.getR().solve(mrOwner, length);
@@ -390,7 +390,7 @@ namespace svgio
                     }
                     else
                     {
-                        // fractions or percent relative to object bounds
+                        
                         const SvgNumber Cx(rFillGradient.getCx());
                         const SvgNumber Cy(rFillGradient.getCy());
                         const SvgNumber R(rFillGradient.getR());
@@ -438,11 +438,11 @@ namespace svgio
             const SvgPatternNode& rFillPattern,
             const basegfx::B2DRange& rGeoRange) const
         {
-            // prepare fill polyPolygon with given pattern, check for patternTransform
+            
             if(rFillPattern.getPatternTransform() && !rFillPattern.getPatternTransform()->isIdentity())
             {
-                // PatternTransform is active; Handle by filling the inverse transformed
-                // path and back-transforming the result
+                
+                
                 basegfx::B2DPolyPolygon aPath(rPath);
                 basegfx::B2DHomMatrix aInv(*rFillPattern.getPatternTransform());
                 drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
@@ -462,7 +462,7 @@ namespace svgio
             }
             else
             {
-                // no patternTransform, create fillPattern directly
+                
                 add_fillPattern(rPath, rTarget, rFillPattern, rGeoRange);
             }
         }
@@ -473,7 +473,7 @@ namespace svgio
             const SvgPatternNode& rFillPattern,
             const basegfx::B2DRange& rGeoRange) const
         {
-            // fill polyPolygon with given pattern
+            
             const drawinglayer::primitive2d::Primitive2DSequence& rPrimitives = rFillPattern.getPatternPrimitives();
 
             if(rPrimitives.hasElements())
@@ -483,7 +483,7 @@ namespace svgio
 
                 if(fTargetWidth > 0.0 && fTargetHeight > 0.0)
                 {
-                    // get relative values from pattern
+                    
                     double fX(0.0);
                     double fY(0.0);
                     double fW(0.0);
@@ -493,38 +493,38 @@ namespace svgio
 
                     if(fW > 0.0 && fH > 0.0)
                     {
-                        // build the reference range relative to the rGeoRange
+                        
                         const basegfx::B2DRange aReferenceRange(fX, fY, fX + fW, fY + fH);
 
-                        // find out how the content is mapped to the reference range
+                        
                         basegfx::B2DHomMatrix aMapPrimitivesToUnitRange;
                         const basegfx::B2DRange* pViewBox = rFillPattern.getViewBox();
 
                         if(pViewBox)
                         {
-                            // use viewBox/preserveAspectRatio
+                            
                             const SvgAspectRatio& rRatio = rFillPattern.getSvgAspectRatio();
                             const basegfx::B2DRange aUnitRange(0.0, 0.0, 1.0, 1.0);
 
                             if(rRatio.isSet())
                             {
-                                // let mapping be created from SvgAspectRatio
+                                
                                 aMapPrimitivesToUnitRange = rRatio.createMapping(aUnitRange, *pViewBox);
                             }
                             else
                             {
-                                // choose default mapping
+                                
                                 aMapPrimitivesToUnitRange = rRatio.createLinearMapping(aUnitRange, *pViewBox);
                             }
                         }
                         else
                         {
-                            // use patternContentUnits
+                            
                             const SvgUnits aPatternContentUnits(rFillPattern.getPatternContentUnits() ? *rFillPattern.getPatternContentUnits() : userSpaceOnUse);
 
                             if(userSpaceOnUse == aPatternContentUnits)
                             {
-                                // create relative mapping to unit coordinates
+                                
                                 aMapPrimitivesToUnitRange.scale(1.0 / (fW * fTargetWidth), 1.0 / (fH * fTargetHeight));
                             }
                             else
@@ -533,7 +533,7 @@ namespace svgio
                             }
                         }
 
-                        // apply aMapPrimitivesToUnitRange to content when used
+                        
                         drawinglayer::primitive2d::Primitive2DSequence aPrimitives(rPrimitives);
 
                         if(!aMapPrimitivesToUnitRange.isIdentity())
@@ -546,7 +546,7 @@ namespace svgio
                             aPrimitives = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
                         }
 
-                        // embed in PatternFillPrimitive2D
+                        
                         drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                             rTarget,
                             new drawinglayer::primitive2d::PatternFillPrimitive2D(
@@ -577,17 +577,17 @@ namespace svgio
 
                     if(pFillGradient)
                     {
-                        // create fill content with SVG gradient primitive
+                        
                         add_fillGradient(rPath, aNewFill, *pFillGradient, rGeoRange);
                     }
                     else if(pFillPattern)
                     {
-                        // create fill content with SVG pattern primitive
+                        
                         add_fillPatternTransform(rPath, aNewFill, *pFillPattern, rGeoRange);
                     }
-                    else // if(pFill)
+                    else 
                     {
-                        // create fill content
+                        
                         aNewFill.realloc(1);
                         aNewFill[0] = new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
                             rPath,
@@ -598,7 +598,7 @@ namespace svgio
                     {
                         if(basegfx::fTools::less(fFillOpacity, 1.0))
                         {
-                            // embed in UnifiedTransparencePrimitive2D
+                            
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                                 rTarget,
                                 new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
@@ -607,7 +607,7 @@ namespace svgio
                         }
                         else
                         {
-                            // append
+                            
                             drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewFill);
                         }
                     }
@@ -631,12 +631,12 @@ namespace svgio
 
                 if(basegfx::fTools::more(fStrokeOpacity, 0.0))
                 {
-                    // get stroke width; SVG does not use 0.0 == hairline, so 0.0 is no line at all
+                    
                     const double fStrokeWidth(getStrokeWidth().isSet() ? getStrokeWidth().solve(mrOwner, length) : 1.0);
 
                     if(basegfx::fTools::more(fStrokeWidth, 0.0))
                     {
-                        // get LineJoin, LineCap and stroke array
+                        
                         const basegfx::B2DLineJoin aB2DLineJoin(StrokeLinejoinToB2DLineJoin(getStrokeLinejoin()));
                         const com::sun::star::drawing::LineCap aLineCap(StrokeLinecapToDrawingLineCap(getStrokeLinecap()));
                         ::std::vector< double > aDashArray;
@@ -646,9 +646,9 @@ namespace svgio
                             aDashArray = solveSvgNumberVector(getStrokeDasharray(), mrOwner, length);
                         }
 
-                        // todo: Handle getStrokeDashOffset()
+                        
 
-                        // prepare line attribute
+                        
                         drawinglayer::primitive2d::Primitive2DReference aNewLinePrimitive;
                         const drawinglayer::attribute::LineAttribute aLineAttribute(
                             pStroke ? *pStroke : basegfx::BColor(0.0, 0.0, 0.0),
@@ -674,17 +674,17 @@ namespace svgio
 
                         if(pStrokeGradient || pStrokePattern)
                         {
-                            // put primitive into Primitive2DReference and Primitive2DSequence
+                            
                             const drawinglayer::primitive2d::Primitive2DSequence aSeq(&aNewLinePrimitive, 1);
 
-                            // use neutral ViewInformation and create LineGeometryExtractor2D
+                            
                             const drawinglayer::geometry::ViewInformation2D aViewInformation2D;
                             drawinglayer::processor2d::LineGeometryExtractor2D aExtractor(aViewInformation2D);
 
-                            // proccess
+                            
                             aExtractor.process(aSeq);
 
-                            // check for fill rsults
+                            
                             const basegfx::B2DPolyPolygonVector& rLineFillVector(aExtractor.getExtractedLineFills());
 
                             if(!rLineFillVector.empty())
@@ -697,20 +697,20 @@ namespace svgio
                                 {
                                     if(pStrokeGradient)
                                     {
-                                        // create fill content with SVG gradient primitive. Use original GeoRange,
-                                        // e.g. from circle without LineWidth
+                                        
+                                        
                                         add_fillGradient(aMergedArea, aNewStroke, *pStrokeGradient, rGeoRange);
                                     }
-                                    else // if(pStrokePattern)
+                                    else 
                                     {
-                                        // create fill content with SVG pattern primitive. Use GeoRange
-                                        // from the expanded data, e.g. circle with extended geo by half linewidth
+                                        
+                                        
                                         add_fillPatternTransform(aMergedArea, aNewStroke, *pStrokePattern, aMergedArea.getB2DRange());
                                     }
                                 }
                             }
                         }
-                        else // if(pStroke)
+                        else 
                         {
                             drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aNewStroke, aNewLinePrimitive);
                         }
@@ -719,7 +719,7 @@ namespace svgio
                         {
                             if(basegfx::fTools::less(fStrokeOpacity, 1.0))
                             {
-                                // embed in UnifiedTransparencePrimitive2D
+                                
                                 drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(
                                     rTarget,
                                     new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
@@ -728,7 +728,7 @@ namespace svgio
                             }
                             else
                             {
-                                // append
+                                
                                 drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewStroke);
                             }
                         }
@@ -743,11 +743,11 @@ namespace svgio
             basegfx::B2DRange& rClipRange,
             const SvgMarkerNode& rMarker) const
         {
-            // reset return values
+            
             rMarkerTransform.identity();
             rClipRange.reset();
 
-            // get marker primitive representation
+            
             rMarkerPrimitives = rMarker.getMarkerPrimitives();
 
             if(rMarkerPrimitives.hasElements())
@@ -769,25 +769,25 @@ namespace svgio
 
                     if(bStrokeWidth)
                     {
-                        // relative to strokeWidth
+                        
                         fTargetWidth *= fStrokeWidth;
                         fTargetHeight *= fStrokeWidth;
                     }
 
                     if(fTargetWidth > 0.0 && fTargetHeight > 0.0)
                     {
-                        // create mapping
+                        
                         const basegfx::B2DRange aTargetRange(0.0, 0.0, fTargetWidth, fTargetHeight);
                         const SvgAspectRatio& rRatio = rMarker.getSvgAspectRatio();
 
                         if(rRatio.isSet())
                         {
-                            // let mapping be created from SvgAspectRatio
+                            
                             rMarkerTransform = rRatio.createMapping(aTargetRange, aPrimitiveRange);
 
                             if(rRatio.isMeetOrSlice())
                             {
-                                // need to clip
+                                
                                 rClipRange = aPrimitiveRange;
                             }
                         }
@@ -797,26 +797,26 @@ namespace svgio
                             {
                                 if(bStrokeWidth)
                                 {
-                                    // adapt to strokewidth if needed
+                                    
                                     rMarkerTransform.scale(fStrokeWidth, fStrokeWidth);
                                 }
                             }
                             else
                             {
-                                // choose default mapping
+                                
                                 rMarkerTransform = rRatio.createLinearMapping(aTargetRange, aPrimitiveRange);
                             }
                         }
 
-                        // get and apply reference point. Initially it's in marker local coordinate system
+                        
                         basegfx::B2DPoint aRefPoint(
                             rMarker.getRefX().isSet() ? rMarker.getRefX().solve(mrOwner, xcoordinate) : 0.0,
                             rMarker.getRefY().isSet() ? rMarker.getRefY().solve(mrOwner, ycoordinate) : 0.0);
 
-                        // apply MarkerTransform to have it in mapped coordinates
+                        
                         aRefPoint *= rMarkerTransform;
 
-                        // apply by moving RepPoint to (0.0)
+                        
                         rMarkerTransform.translate(-aRefPoint.getX(), -aRefPoint.getY());
 
                         return true;
@@ -832,7 +832,7 @@ namespace svgio
             drawinglayer::primitive2d::Primitive2DSequence& rTarget,
             const basegfx::tools::PointIndexSet* pHelpPointIndices) const
         {
-            // try to access linked markers
+            
             const SvgMarkerNode* pStart = accessMarkerStartXLink();
             const SvgMarkerNode* pMid = accessMarkerMidXLink();
             const SvgMarkerNode* pEnd = accessMarkerEndXLink();
@@ -843,28 +843,28 @@ namespace svgio
 
                 if(nSubPathCount)
                 {
-                    // remember prepared marker; pStart, pMid and pEnd may all be equal when
-                    // only 'marker' was used instead of 'marker-start', 'marker-mid' or 'marker-end',
-                    // see 'case SVGTokenMarker' in this file; thus in this case only one common
-                    // marker in primitive form will be prepared
+                    
+                    
+                    
+                    
                     const SvgMarkerNode* pPrepared = 0;
 
-                    // values for the prepared marker, results of prepare_singleMarker
+                    
                     drawinglayer::primitive2d::Primitive2DSequence aPreparedMarkerPrimitives;
                     basegfx::B2DHomMatrix aPreparedMarkerTransform;
                     basegfx::B2DRange aPreparedMarkerClipRange;
 
                     for (sal_uInt32 a(0); a < nSubPathCount; a++)
                     {
-                        // iterate over sub-paths
+                        
                         const basegfx::B2DPolygon aSubPolygonPath(rPath.getB2DPolygon(a));
                         const sal_uInt32 nSubPolygonPointCount(aSubPolygonPath.count());
                         const bool bSubPolygonPathIsClosed(aSubPolygonPath.isClosed());
 
                         if(nSubPolygonPointCount)
                         {
-                            // for each sub-path, create one marker per point (when closed, two markers
-                            // need to pe created for the 1st point)
+                            
+                            
                             const sal_uInt32 nTargetMarkerCount(bSubPolygonPathIsClosed ? nSubPolygonPointCount + 1 : nSubPolygonPointCount);
 
                             for (sal_uInt32 b(0); b < nTargetMarkerCount; b++)
@@ -875,17 +875,17 @@ namespace svgio
 
                                 if(bIsFirstMarker)
                                 {
-                                    // 1st point in 1st sub-polygon, use pStart
+                                    
                                     pNeeded = pStart;
                                 }
                                 else if(bIsLastMarker)
                                 {
-                                    // last point in last sub-polygon, use pEnd
+                                    
                                     pNeeded = pEnd;
                                 }
                                 else
                                 {
-                                    // anything in-between, use pMid
+                                    
                                     pNeeded = pMid;
                                 }
 
@@ -896,49 +896,49 @@ namespace svgio
 
                                     if(aFound != pHelpPointIndices->end())
                                     {
-                                        // this point is a pure helper point; do not create a marker for it
+                                        
                                         continue;
                                     }
                                 }
 
                                 if(!pNeeded)
                                 {
-                                    // no marker needs to be created for this point
+                                    
                                     continue;
                                 }
 
                                 if(pPrepared != pNeeded)
                                 {
-                                    // if needed marker is not yet prepared, do it now
+                                    
                                     if(prepare_singleMarker(aPreparedMarkerPrimitives, aPreparedMarkerTransform, aPreparedMarkerClipRange, *pNeeded))
                                     {
                                         pPrepared = pNeeded;
                                     }
                                     else
                                     {
-                                        // error: could not prepare given marker
+                                        
                                         OSL_ENSURE(false, "OOps, could not prepare given marker as primitives (!)");
                                         pPrepared = 0;
                                         continue;
                                     }
                                 }
 
-                                // prepare complete transform
+                                
                                 basegfx::B2DHomMatrix aCombinedTransform(aPreparedMarkerTransform);
 
-                                // get rotation
+                                
                                 if(pPrepared->getOrientAuto())
                                 {
                                     const sal_uInt32 nPointIndex(b % nSubPolygonPointCount);
 
-                                    // get entering and leaving tangents; this will search backward/froward
-                                    // in the polygon to find tangents unequal to zero, skipping empty edges
-                                    // see basegfx descriptions)
-                                    // Hint: Mozilla, Inkscape and others use only leaving tangent for start marker
-                                    // and entering tangent for end marker. To achieve this (if wanted) it is possibe
-                                    // to make the fetch of aEntering/aLeaving dependent on bIsFirstMarker/bIsLastMarker.
-                                    // This is not done here, see comment 14 in task #1232379#
-                                    // or http://www.w3.org/TR/SVG/painting.html#OrientAttribute
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                     basegfx::B2DVector aEntering(
                                         basegfx::tools::getTangentEnteringPoint(
                                             aSubPolygonPath,
@@ -968,23 +968,23 @@ namespace svgio
                                         {
                                             const double fAngle(atan2(aSum.getY(), aSum.getX()));
 
-                                            // apply rotation
+                                            
                                             aCombinedTransform.rotate(fAngle);
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    // apply rotation
+                                    
                                     aCombinedTransform.rotate(pPrepared->getAngle());
                                 }
 
-                                // get and apply target position
+                                
                                 const basegfx::B2DPoint aPoint(aSubPolygonPath.getB2DPoint(b % nSubPolygonPointCount));
 
                                 aCombinedTransform.translate(aPoint.getX(), aPoint.getY());
 
-                                // prepare marker
+                                
                                 drawinglayer::primitive2d::Primitive2DReference xMarker(
                                     new drawinglayer::primitive2d::TransformPrimitive2D(
                                         aCombinedTransform,
@@ -992,7 +992,7 @@ namespace svgio
 
                                 if(!aPreparedMarkerClipRange.isEmpty())
                                 {
-                                    // marker needs to be clipped, it's bigger as the mapping
+                                    
                                     basegfx::B2DPolyPolygon aClipPolygon(basegfx::tools::createPolygonFromRect(aPreparedMarkerClipRange));
 
                                     aClipPolygon.transform(aCombinedTransform);
@@ -1001,7 +1001,7 @@ namespace svgio
                                         drawinglayer::primitive2d::Primitive2DSequence(&xMarker, 1));
                                 }
 
-                                // add marker
+                                
                                 drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(rTarget, xMarker);
                             }
                         }
@@ -1017,7 +1017,7 @@ namespace svgio
         {
             if(!rPath.count())
             {
-                // no geometry at all
+                
                 return;
             }
 
@@ -1025,7 +1025,7 @@ namespace svgio
 
             if(aGeoRange.isEmpty())
             {
-                // no geometry range
+                
                 return;
             }
 
@@ -1033,11 +1033,11 @@ namespace svgio
 
             if(basegfx::fTools::equalZero(fOpacity))
             {
-                // not visible
+                
                 return;
             }
 
-            // check if it's a line
+            
             const bool bNoWidth(basegfx::fTools::equalZero(aGeoRange.getWidth()));
             const bool bNoHeight(basegfx::fTools::equalZero(aGeoRange.getHeight()));
             const bool bIsTwoPointLine(1 == rPath.count()
@@ -1047,7 +1047,7 @@ namespace svgio
 
             if(!bIsLine)
             {
-                // create fill
+                
                 basegfx::B2DPolyPolygon aPath(rPath);
                 const bool bNeedToCheckClipRule(SVGTokenPath == mrOwner.getType() || SVGTokenPolygon == mrOwner.getType());
                 const bool bClipPathIsNonzero(!bIsLine && bNeedToCheckClipRule && mbIsClipPathContent && FillRule_nonzero == maClipRule);
@@ -1055,22 +1055,22 @@ namespace svgio
 
                 if(bClipPathIsNonzero || bFillRuleIsNonzero)
                 {
-                    // nonzero is wanted, solve geometrically (see description on basegfx)
+                    
                     aPath = basegfx::tools::createNonzeroConform(aPath);
                 }
 
                 add_fill(aPath, rTarget, aGeoRange);
             }
 
-            // create stroke
+            
             add_stroke(rPath, rTarget, aGeoRange);
 
-            // Svg supports markers for path, polygon, polyline and line
-            if(SVGTokenPath == mrOwner.getType() ||         // path
-                SVGTokenPolygon == mrOwner.getType() ||     // polygon, polyline
-                SVGTokenLine == mrOwner.getType())          // line
+            
+            if(SVGTokenPath == mrOwner.getType() ||         
+                SVGTokenPolygon == mrOwner.getType() ||     
+                SVGTokenLine == mrOwner.getType())          
             {
-                // try to add markers
+                
                 add_markers(rPath, rTarget, pHelpPointIndices);
             }
         }
@@ -1093,7 +1093,7 @@ namespace svgio
 
                 if(basegfx::fTools::less(fOpacity, 1.0))
                 {
-                    // embed in UnifiedTransparencePrimitive2D
+                    
                     const drawinglayer::primitive2d::Primitive2DReference xRef(
                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                             aSource,
@@ -1104,8 +1104,8 @@ namespace svgio
 
                 if(pTransform)
                 {
-                    // create embedding group element with transformation. This applies the given
-                    // transformation to the graphical content, but *not* to mask and/or clip (as needed)
+                    
+                    
                     const drawinglayer::primitive2d::Primitive2DReference xRef(
                         new drawinglayer::primitive2d::TransformPrimitive2D(
                             *pTransform,
@@ -1116,7 +1116,7 @@ namespace svgio
 
                 if(!getClipPathXLink().isEmpty())
                 {
-                    // try to access linked ClipPath
+                    
                     const SvgClipPathNode* mpClip = dynamic_cast< const SvgClipPathNode* >(mrOwner.getDocument().findSvgNodeById(getClipPathXLink()));
 
                     if(mpClip)
@@ -1125,11 +1125,11 @@ namespace svgio
                     }
                 }
 
-                if(aSource.hasElements()) // test again, applied clipPath may have lead to empty geometry
+                if(aSource.hasElements()) 
                 {
                     if(!getMaskXLink().isEmpty())
                     {
-                        // try to access linked Mask
+                        
                         const SvgMaskNode* mpMask = dynamic_cast< const SvgMaskNode* >(mrOwner.getDocument().findSvgNodeById(getMaskXLink()));
 
                         if(mpMask)
@@ -1138,9 +1138,9 @@ namespace svgio
                         }
                     }
 
-                    if(aSource.hasElements()) // test again, applied mask may have lead to empty geometry
+                    if(aSource.hasElements()) 
                     {
-                        // append to current target
+                        
                         drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aSource);
                     }
                 }
@@ -1303,10 +1303,10 @@ namespace svgio
 
                         if(aContent.startsWith("none"))
                         {
-                            // #121221# The special value 'none' needs to be handled
-                            // in the sense that *when* it is set, the parent shall not
-                            // be used. Before this was only dependent on the array being
-                            // empty
+                            
+                            
+                            
+                            
                             setStrokeDasharraySet(true);
                         }
                         else if(readSvgNumberVector(aContent, aVector))
@@ -1758,10 +1758,10 @@ namespace svgio
                 }
                 case SVGTokenDisplay:
                 {
-                    // There may be display:none statements inside of style defines, e.g. the following line:
-                    // style="display:none"
-                    // taken from a svg example; this needs to be parsed and set at the owning node. Do not call
-                    // mrOwner.parseAttribute(...) here, this would lead to a recursion
+                    
+                    
+                    
+                    
                     if(!aContent.isEmpty())
                     {
                         mrOwner.setDisplay(getDisplayFromContent(aContent));
@@ -1797,7 +1797,7 @@ namespace svgio
                         }
                         else
                         {
-                            // no BaselineShift or inherit (which is automatically)
+                            
                             setBaselineShift(BaselineShift_Baseline);
                         }
                     }
@@ -1994,7 +1994,7 @@ namespace svgio
                 return pSvgStyleAttributes->getStrokeWidth();
             }
 
-            // default is 1
+            
             return SvgNumber(1.0);
         }
 
@@ -2005,7 +2005,7 @@ namespace svgio
                 return maStopOpacity;
             }
 
-            // default is 1
+            
             return SvgNumber(1.0);
         }
 
@@ -2027,7 +2027,7 @@ namespace svgio
                 return pSvgStyleAttributes->getFillOpacity();
             }
 
-            // default is 1
+            
             return SvgNumber(1.0);
         }
 
@@ -2045,7 +2045,7 @@ namespace svgio
                 return pSvgStyleAttributes->getFillRule();
             }
 
-            // default is NonZero
+            
             return FillRule_nonzero;
         }
 
@@ -2057,7 +2057,7 @@ namespace svgio
             }
             else if(getStrokeDasharraySet())
             {
-                // #121221# is set to empty *by purpose*, do not visit parent styles
+                
                 return maStrokeDasharray;
             }
 
@@ -2068,7 +2068,7 @@ namespace svgio
                 return pSvgStyleAttributes->getStrokeDasharray();
             }
 
-            // default empty
+            
             return maStrokeDasharray;
         }
 
@@ -2086,7 +2086,7 @@ namespace svgio
                 return pSvgStyleAttributes->getStrokeDashOffset();
             }
 
-            // default is 0
+            
             return SvgNumber(0.0);
         }
 
@@ -2104,7 +2104,7 @@ namespace svgio
                 return pSvgStyleAttributes->getStrokeLinecap();
             }
 
-            // default is StrokeLinecap_butt
+            
             return StrokeLinecap_butt;
         }
 
@@ -2122,7 +2122,7 @@ namespace svgio
                 return pSvgStyleAttributes->getStrokeLinejoin();
             }
 
-            // default is StrokeLinejoin_butt
+            
             return StrokeLinejoin_miter;
         }
 
@@ -2140,7 +2140,7 @@ namespace svgio
                 return pSvgStyleAttributes->getStrokeMiterLimit();
             }
 
-            // default is 4
+            
             return SvgNumber(4.0);
         }
 
@@ -2158,7 +2158,7 @@ namespace svgio
                 return pSvgStyleAttributes->getStrokeOpacity();
             }
 
-            // default is 1
+            
             return SvgNumber(1.0);
         }
 
@@ -2176,7 +2176,7 @@ namespace svgio
                 return pSvgStyleAttributes->getFontFamily();
             }
 
-            // default is empty
+            
             return maFontFamily;
         }
 
@@ -2184,9 +2184,9 @@ namespace svgio
         {
             if(maFontSize.isSet())
             {
-                // #122524# Handle Unit_percent realtive to parent FontSize (see SVG1.1
-                // spec 10.10 Font selection properties \91font-size\92, lastline (klick 'normative
-                // definition of the property')
+                
+                
+                
                 if(Unit_percent == maFontSize.getUnit())
                 {
                     const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
@@ -2212,7 +2212,7 @@ namespace svgio
                 return pSvgStyleAttributes->getFontSize();
             }
 
-            // default is 'medium'
+            
             return SvgNumber(12.0);
         }
 
@@ -2244,7 +2244,7 @@ namespace svgio
                 return aInherited;
             }
 
-            // default is FontStretch_normal
+            
             return FontStretch_normal;
         }
 
@@ -2262,7 +2262,7 @@ namespace svgio
                 return pSvgStyleAttributes->getFontStyle();
             }
 
-            // default is FontStyle_normal
+            
             return FontStyle_normal;
         }
 
@@ -2294,7 +2294,7 @@ namespace svgio
                 return aInherited;
             }
 
-            // default is FontWeight_400 (FontWeight_normal)
+            
             return FontWeight_400;
         }
 
@@ -2312,7 +2312,7 @@ namespace svgio
                 return pSvgStyleAttributes->getTextAlign();
             }
 
-            // default is TextAlign_left
+            
             return TextAlign_left;
         }
 
@@ -2330,7 +2330,7 @@ namespace svgio
                 return pSvgStyleAttributes->getTextDecorationDefiningSvgStyleAttributes();
             }
 
-            // default is 0
+            
             return 0;
         }
 
@@ -2344,7 +2344,7 @@ namespace svgio
             }
             else
             {
-                // default is TextDecoration_none
+                
                 return TextDecoration_none;
             }
         }
@@ -2363,7 +2363,7 @@ namespace svgio
                 return pSvgStyleAttributes->getTextAnchor();
             }
 
-            // default is TextAnchor_start
+            
             return TextAnchor_start;
         }
 
@@ -2492,7 +2492,7 @@ namespace svgio
 
         SvgNumber SvgStyleAttributes::getBaselineShiftNumber() const
         {
-            // #122524# Handle Unit_percent realtive to parent BaselineShift
+            
             if(Unit_percent == maBaselineShiftNumber.getUnit())
             {
                 const SvgStyleAttributes* pSvgStyleAttributes = getParentStyle();
@@ -2510,10 +2510,10 @@ namespace svgio
 
             return maBaselineShiftNumber;
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

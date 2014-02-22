@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef _MSC_VER
@@ -45,7 +45,7 @@
 #include <systools/win32/uwinapi.h>
 #include <../tools/seterror.hxx>
 
-//----------------------------------------------------------
+
 #ifdef DEBUG
 inline void OutputDebugStringFormat( LPCSTR pFormat, ... )
 {
@@ -88,7 +88,7 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
     std::_tstring sPattern = sPath + TEXT("\\") + TEXT("*.*");
     WIN32_FIND_DATA aFindData;
 
-    // Finding all content in sPath
+    
 
     HANDLE hFindContent = FindFirstFile( sPattern.c_str(), &aFindData );
 
@@ -123,9 +123,9 @@ static BOOL RemoveCompleteDirectory( std::_tstring sPath )
 
         FindClose( hFindContent );
 
-        // empty directory can be removed now
-        // RemoveDirectory is only successful, if the last handle to the directory is closed
-        // -> first removing content -> closing handle -> remove empty directory
+        
+        
+        
 
 
         if( !( RemoveDirectory(sPath.c_str()) ) )

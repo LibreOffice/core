@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -37,48 +37,48 @@
 #include <basegfx/polygon/b3dpolygontools.hxx>
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
-// DrawContact section
+
+
 
 sdr::contact::ViewContact* E3dExtrudeObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfE3dExtrude(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 sdr::properties::BaseProperties* E3dExtrudeObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::E3dExtrudeProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(E3dExtrudeObj, E3dCompoundObject);
 
-// Constructor creates a two cover surface PolyPolygon and (point-count 1) side
-// surfaces rectangles from the passed PolyPolygon
+
+
 
 E3dExtrudeObj::E3dExtrudeObj(E3dDefaultAttributes& rDefault, const basegfx::B2DPolyPolygon& rPP, double fDepth)
 :   E3dCompoundObject(rDefault),
     maExtrudePolygon(rPP)
 {
-    // since the old class PolyPolygon3D did mirror the given PolyPolygons in Y, do the same here
+    
     basegfx::B2DHomMatrix aMirrorY;
     aMirrorY.scale(1.0, -1.0);
     maExtrudePolygon.transform(aMirrorY);
 
-    // Set Defaults
+    
     SetDefaultAttributes(rDefault);
 
-    // set extrude depth
+    
     GetProperties().SetObjectItemDirect(Svx3DDepthItem((sal_uInt32)(fDepth + 0.5)));
 }
 
 E3dExtrudeObj::E3dExtrudeObj()
 :   E3dCompoundObject()
 {
-    // Set Defaults
+    
     E3dDefaultAttributes aDefault;
     SetDefaultAttributes(aDefault);
 }
@@ -91,7 +91,7 @@ void E3dExtrudeObj::SetDefaultAttributes(E3dDefaultAttributes& rDefault)
     GetProperties().SetObjectItemDirect(Svx3DCloseFrontItem(rDefault.GetDefaultExtrudeCloseFront()));
     GetProperties().SetObjectItemDirect(Svx3DCloseBackItem(rDefault.GetDefaultExtrudeCloseBack()));
 
-    // For extrudes use StdTexture in X and Y by default
+    
     GetProperties().SetObjectItemDirect(Svx3DTextureProjectionXItem(1));
     GetProperties().SetObjectItemDirect(Svx3DTextureProjectionYItem(1));
 }
@@ -107,7 +107,7 @@ E3dExtrudeObj* E3dExtrudeObj::Clone() const
 }
 
 
-// Set local parameters with geometry re-creating
+
 
 void E3dExtrudeObj::SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew)
 {
@@ -118,7 +118,7 @@ void E3dExtrudeObj::SetExtrudePolygon(const basegfx::B2DPolyPolygon &rNew)
     }
 }
 
-// Get the name of the object (singular)
+
 
 OUString E3dExtrudeObj::TakeObjNameSingul() const
 {
@@ -135,7 +135,7 @@ OUString E3dExtrudeObj::TakeObjNameSingul() const
     return sName.makeStringAndClear();
 }
 
-// Get the name of the object (plural)
+
 
 OUString E3dExtrudeObj::TakeObjNamePlural() const
 {
@@ -177,7 +177,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
 
             if(100 != GetPercentBackScale())
             {
-                // scale polygon from center
+                
                 const double fScaleFactor(GetPercentBackScale() / 100.0);
                 const basegfx::B3DRange aPolyPolyRange(basegfx::tools::getRange(aBackSide));
                 const basegfx::B3DPoint aCenter(aPolyPolyRange.getCenter());
@@ -187,7 +187,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
                 aTransform.translate(aCenter.getX(), aCenter.getY(), aCenter.getZ());
             }
 
-            // translate by extrude depth
+            
             aTransform.translate(0.0, 0.0, (double)GetExtrudeDepth());
 
             aBackSide.transform(aTransform);
@@ -196,7 +196,7 @@ SdrAttrObj* E3dExtrudeObj::GetBreakObj()
 
     if(aBackSide.count())
     {
-    // create PathObj
+    
         basegfx::B2DPolyPolygon aPoly = TransformToScreenCoor(aBackSide);
         SdrPathObj* pPathObj = new SdrPathObj(OBJ_PLIN, aPoly);
 

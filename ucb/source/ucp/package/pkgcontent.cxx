@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -76,13 +76,13 @@ using namespace package_ucp;
 #define ENCRYPTED_MODIFIED      sal_uInt32( 0x04 )
 #define ENCRYPTIONKEY_MODIFIED  sal_uInt32( 0x08 )
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// ContentProperties Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 ContentProperties::ContentProperties( const OUString& rContentType )
 : aContentType( rContentType ),
@@ -98,7 +98,7 @@ ContentProperties::ContentProperties( const OUString& rContentType )
                 "ContentProperties::ContentProperties - Unknown type!" );
 }
 
-//=========================================================================
+
 
 uno::Sequence< ucb::ContentInfo >
 ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
@@ -114,14 +114,14 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
 
         uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
-        // Folder.
+        
         aSeq.getArray()[ 0 ].Type
             = Content::getContentType( rUri.getScheme(), sal_True );
         aSeq.getArray()[ 0 ].Attributes
             = ucb::ContentInfoAttribute::KIND_FOLDER;
         aSeq.getArray()[ 0 ].Properties = aProps;
 
-        // Stream.
+        
         aSeq.getArray()[ 1 ].Type
             = Content::getContentType( rUri.getScheme(), sal_False );
         aSeq.getArray()[ 1 ].Attributes
@@ -137,15 +137,15 @@ ContentProperties::getCreatableContentsInfo( PackageUri const & rUri ) const
     }
 }
 
-//=========================================================================
-//=========================================================================
-//
-// Content Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-// static ( "virtual" ctor )
+
+//
+
+//
+
+
+
+
 Content* Content::create(
             const uno::Reference< uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
@@ -158,12 +158,12 @@ Content* Content::create(
 
     if ( loadData( pProvider, aURI, aProps, xPackage ) )
     {
-        // resource exists
+        
 
         sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
         if ( ( nLastSlash + 1 ) == aURL.getLength() )
         {
-            // Client explicitly requested a folder!
+            
             if ( !aProps.bIsFolder )
                 return 0;
         }
@@ -174,11 +174,11 @@ Content* Content::create(
     }
     else
     {
-        // resource doesn't exist
+        
 
         sal_Bool bFolder = sal_False;
 
-        // Guess type according to URI.
+        
         sal_Int32 nLastSlash = aURL.lastIndexOf( '/' );
         if ( ( nLastSlash + 1 ) == aURL.getLength() )
             bFolder = sal_True;
@@ -196,8 +196,8 @@ Content* Content::create(
     }
 }
 
-//=========================================================================
-// static ( "virtual" ctor )
+
+
 Content* Content::create(
             const uno::Reference< uno::XComponentContext >& rxContext,
             ContentProvider* pProvider,
@@ -224,8 +224,8 @@ Content* Content::create(
     return new Content( rxContext, pProvider, xId, xPackage, aURI, Info );
 }
 
-//=========================================================================
-// static
+
+
 OUString Content::getContentType(
     const OUString& aScheme, sal_Bool bFolder )
 {
@@ -236,7 +236,7 @@ OUString Content::getContentType(
                  : OUString("-stream") ) );
 }
 
-//=========================================================================
+
 Content::Content(
         const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider* pProvider,
@@ -254,7 +254,7 @@ Content::Content(
 {
 }
 
-//=========================================================================
+
 Content::Content(
         const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider* pProvider,
@@ -272,35 +272,35 @@ Content::Content(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 Content::~Content()
 {
 }
 
-//=========================================================================
-//
-// XInterface methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL Content::acquire()
     throw( )
 {
     ContentImplHelper::acquire();
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Content::release()
     throw( )
 {
     ContentImplHelper::release();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     throw ( uno::RuntimeException )
 {
@@ -313,16 +313,16 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     throw( uno::RuntimeException )
 {
@@ -351,7 +351,7 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
                     CPPU_TYPE_REF( beans::XPropertyContainer ),
                     CPPU_TYPE_REF( beans::XPropertySetInfoChangeNotifier ),
                     CPPU_TYPE_REF( container::XChild ),
-                    CPPU_TYPE_REF( ucb::XContentCreator ) ); // !!
+                    CPPU_TYPE_REF( ucb::XContentCreator ) ); 
                 pCollection = &aCollection;
                 OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
                 pFolderTypes = pCollection;
@@ -397,21 +397,21 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     return (*pCollection).getTypes();
 }
 
-//=========================================================================
-//
-// XServiceInfo methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
     return OUString( "com.sun.star.comp.ucb.PackageContent" );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
@@ -424,26 +424,26 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     return aSNS;
 }
 
-//=========================================================================
-//
-// XContent methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
 {
     return m_aProps.aContentType;
 }
 
-//=========================================================================
-//
-// XCommandProcessor methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Any SAL_CALL Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
@@ -456,9 +456,9 @@ uno::Any SAL_CALL Content::execute(
 
     if ( aCommand.Name == "getPropertyValues" )
     {
-        //////////////////////////////////////////////////////////////////
-        // getPropertyValues
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
@@ -469,16 +469,16 @@ uno::Any SAL_CALL Content::execute(
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
-            // Unreachable
+            
         }
 
         aRet <<= getPropertyValues( Properties );
     }
     else if ( aCommand.Name == "setPropertyValues" )
     {
-        //////////////////////////////////////////////////////////////////
-        // setPropertyValues
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         uno::Sequence< beans::PropertyValue > aProperties;
         if ( !( aCommand.Argument >>= aProperties ) )
@@ -489,7 +489,7 @@ uno::Any SAL_CALL Content::execute(
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
-            // Unreachable
+            
         }
 
         if ( !aProperties.getLength() )
@@ -500,34 +500,34 @@ uno::Any SAL_CALL Content::execute(
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
-            // Unreachable
+            
         }
 
         aRet <<= setPropertyValues( aProperties, Environment );
     }
     else if ( aCommand.Name == "getPropertySetInfo" )
     {
-        //////////////////////////////////////////////////////////////////
-        // getPropertySetInfo
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
-        // Note: Implemented by base class.
+        
         aRet <<= getPropertySetInfo( Environment );
     }
     else if ( aCommand.Name == "getCommandInfo" )
     {
-        //////////////////////////////////////////////////////////////////
-        // getCommandInfo
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
-        // Note: Implemented by base class.
+        
         aRet <<= getCommandInfo( Environment );
     }
     else if ( aCommand.Name == "open" )
     {
-        //////////////////////////////////////////////////////////////////
-        // open
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
@@ -538,16 +538,16 @@ uno::Any SAL_CALL Content::execute(
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
-            // Unreachable
+            
         }
 
         aRet = open( aOpenCommand, Environment );
     }
     else if ( !m_aUri.isRootFolder() && aCommand.Name == "insert" )
     {
-        //////////////////////////////////////////////////////////////////
-        // insert
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         ucb::InsertCommandArgument aArg;
         if ( !( aCommand.Argument >>= aArg ) )
@@ -558,7 +558,7 @@ uno::Any SAL_CALL Content::execute(
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
-            // Unreachable
+            
         }
 
         sal_Int32 nNameClash = aArg.ReplaceExisting
@@ -568,15 +568,15 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( !m_aUri.isRootFolder() && aCommand.Name == "delete" )
     {
-        //////////////////////////////////////////////////////////////////
-        // delete
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         sal_Bool bDeletePhysical = sal_False;
         aCommand.Argument >>= bDeletePhysical;
         destroy( bDeletePhysical, Environment );
 
-        // Remove own and all children's persistent data.
+        
         if ( !removeData() )
         {
             uno::Any aProps
@@ -593,18 +593,18 @@ uno::Any SAL_CALL Content::execute(
                 Environment,
                 OUString( "Cannot remove persistent data!" ),
                 this );
-            // Unreachable
+            
         }
 
-        // Remove own and all children's Additional Core Properties.
+        
         removeAdditionalPropertySet( true );
     }
     else if ( aCommand.Name == "transfer" )
     {
-        //////////////////////////////////////////////////////////////////
-        // transfer
-        //      ( Not available at stream objects )
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
+        
 
         ucb::TransferInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
@@ -615,17 +615,17 @@ uno::Any SAL_CALL Content::execute(
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
-            // Unreachable
+            
         }
 
         transfer( aInfo, Environment );
     }
     else if ( aCommand.Name == "createNewContent" && isFolder() )
     {
-        //////////////////////////////////////////////////////////////////
-        // createNewContent
-        //      ( Not available at stream objects )
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
+        
 
         ucb::ContentInfo aInfo;
         if ( !( aCommand.Argument >>= aInfo ) )
@@ -637,17 +637,17 @@ uno::Any SAL_CALL Content::execute(
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
-            // Unreachable
+            
         }
 
         aRet <<= createNewContent( aInfo );
     }
     else if ( aCommand.Name == "flush" )
     {
-        //////////////////////////////////////////////////////////////////
-        // flush
-        //      ( Not available at stream objects )
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
+        
 
         if( !flushData() )
         {
@@ -665,42 +665,42 @@ uno::Any SAL_CALL Content::execute(
                 Environment,
                 OUString( "Cannot write file to disk!" ),
                 this );
-            // Unreachable
+            
         }
     }
     else
     {
-        //////////////////////////////////////////////////////////////////
-        // Unsupported command
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             Environment );
-        // Unreachable
+        
     }
 
     return aRet;
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
-    // @@@ Implement logic to abort running commands, if this makes
-    //     sense for your content.
+    
+    
 }
 
-//=========================================================================
-//
-// XContentCreator methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
     throw( uno::RuntimeException )
@@ -708,8 +708,8 @@ Content::queryCreatableContentsInfo()
     return m_aProps.getCreatableContentsInfo( m_aUri );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< ucb::XContent > SAL_CALL
 Content::createNewContent( const ucb::ContentInfo& Info )
     throw( uno::RuntimeException )
@@ -748,20 +748,20 @@ Content::createNewContent( const ucb::ContentInfo& Info )
     }
 }
 
-//=========================================================================
-//
-// Non-interface methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 OUString Content::getParentURL()
 {
     return m_aUri.getParentUri();
 }
 
-//=========================================================================
-// static
+
+
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Reference< uno::XComponentContext >& rxContext,
                 const uno::Sequence< beans::Property >& rProperties,
@@ -797,8 +797,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     }
 }
 
-//=========================================================================
-// static
+
+
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Sequence< beans::Property >& rProperties,
@@ -807,7 +807,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             rProvider,
         const OUString& rContentId )
 {
-    // Note: Empty sequence means "get values of all supported properties".
+    
 
     rtl::Reference< ::ucbhelper::PropertyValueSet > xRow
         = new ::ucbhelper::PropertyValueSet( rxContext );
@@ -823,7 +823,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         {
             const beans::Property& rProp = pProps[ n ];
 
-            // Process Core properties.
+            
 
             if ( rProp.Name == "ContentType" )
             {
@@ -854,7 +854,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if ( rProp.Name == "Size" )
             {
-                // Property only available for streams.
+                
                 if ( rData.bIsDocument )
                     xRow->appendLong( rProp, rData.nSize );
                 else
@@ -862,7 +862,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if ( rProp.Name == "Compressed" )
             {
-                // Property only available for streams.
+                
                 if ( rData.bIsDocument )
                     xRow->appendBoolean( rProp, rData.bCompressed );
                 else
@@ -870,7 +870,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if ( rProp.Name == "Encrypted" )
             {
-                // Property only available for streams.
+                
                 if ( rData.bIsDocument )
                     xRow->appendBoolean( rProp, rData.bEncrypted );
                 else
@@ -878,7 +878,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else if ( rProp.Name == "HasEncryptedEntries" )
             {
-                // Property only available for root folder.
+                
                 PackageUri aURI( rContentId );
                 if ( aURI.isRootFolder() )
                     xRow->appendBoolean( rProp, rData.bHasEncryptedEntries );
@@ -887,7 +887,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             }
             else
             {
-                // Not a Core Property! Maybe it's an Additional Core Property?!
+                
 
                 if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
                 {
@@ -905,13 +905,13 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                                                 xAdditionalPropSet,
                                                 rProp ) )
                     {
-                        // Append empty entry.
+                        
                         xRow->appendVoid( rProp );
                     }
                 }
                 else
                 {
-                    // Append empty entry.
+                    
                     xRow->appendVoid( rProp );
                 }
             }
@@ -919,7 +919,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     }
     else
     {
-        // Append all Core Properties.
+        
         xRow->appendString (
             beans::Property(
                 OUString("ContentType"),
@@ -969,7 +969,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 beans::PropertyAttribute::BOUND ),
             rData.aMediaType );
 
-        // Properties only available for streams.
+        
         if ( rData.bIsDocument )
         {
             xRow->appendLong(
@@ -998,7 +998,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 rData.bEncrypted );
         }
 
-        // Properties only available for root folder.
+        
         PackageUri aURI( rContentId );
         if ( aURI.isRootFolder() )
         {
@@ -1012,7 +1012,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 rData.bHasEncryptedEntries );
         }
 
-        // Append all Additional Core Properties.
+        
 
         uno::Reference< beans::XPropertySet > xSet(
             rProvider->getAdditionalPropertySet( rContentId, false ),
@@ -1023,7 +1023,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     return uno::Reference< sdbc::XRow >( xRow.get() );
 }
 
-//=========================================================================
+
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         const uno::Sequence< beans::Property >& rProperties )
 {
@@ -1037,7 +1037,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                               m_xIdentifier->getContentIdentifier() );
 }
 
-//=========================================================================
+
 uno::Sequence< uno::Any > Content::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -1052,10 +1052,10 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     beans::PropertyChangeEvent aEvent;
     aEvent.Source         = static_cast< cppu::OWeakObject * >( this );
     aEvent.Further        = sal_False;
-//    aEvent.PropertyName   =
+
     aEvent.PropertyHandle = -1;
-//    aEvent.OldValue       =
-//    aEvent.NewValue       =
+
+
 
     const beans::PropertyValue* pValues = rValues.getConstArray();
     sal_Int32 nCount = rValues.getLength();
@@ -1073,7 +1073,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
         if ( rValue.Name == "ContentType" )
         {
-            // Read-only property!
+            
             aRet[ n ] <<= lang::IllegalAccessException(
                             OUString(
                                 "Property is read-only!" ),
@@ -1081,7 +1081,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "IsDocument" )
         {
-            // Read-only property!
+            
             aRet[ n ] <<= lang::IllegalAccessException(
                             OUString(
                                 "Property is read-only!" ),
@@ -1089,7 +1089,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "IsFolder" )
         {
-            // Read-only property!
+            
             aRet[ n ] <<= lang::IllegalAccessException(
                             OUString(
                                 "Property is read-only!" ),
@@ -1097,7 +1097,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "CreatableContentsInfo" )
         {
-            // Read-only property!
+            
             aRet[ n ] <<= lang::IllegalAccessException(
                             OUString(
                                 "Property is read-only!" ),
@@ -1107,7 +1107,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             if ( m_aUri.isRootFolder() )
             {
-                // Read-only property!
+                
                 aRet[ n ] <<= lang::IllegalAccessException(
                                 OUString(
                                     "Property is read-only!" ),
@@ -1118,20 +1118,20 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 OUString aNewValue;
                 if ( rValue.Value >>= aNewValue )
                 {
-                    // No empty titles!
+                    
                     if ( !aNewValue.isEmpty() )
                     {
                         if ( aNewValue != m_aProps.aTitle )
                         {
-                            // modified title -> modified URL -> exchange !
+                            
                             if ( m_eState == PERSISTENT )
                                 bExchange = sal_True;
 
-                            // new value will be set later...
+                            
                             aNewTitle = aNewValue;
 
-                            // remember position within sequence of values
-                            // (for error handling).
+                            
+                            
                             nTitlePos = n;
                         }
                     }
@@ -1182,7 +1182,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "Size" )
         {
-            // Read-only property!
+            
             aRet[ n ] <<= lang::IllegalAccessException(
                             OUString(
                                 "Property is read-only!" ),
@@ -1190,7 +1190,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "Compressed" )
         {
-            // Property only available for streams.
+            
             if ( m_aProps.bIsDocument )
             {
                 sal_Bool bNewValue;
@@ -1226,7 +1226,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "Encrypted" )
         {
-            // Property only available for streams.
+            
             if ( m_aProps.bIsDocument )
             {
                 sal_Bool bNewValue;
@@ -1262,7 +1262,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "HasEncryptedEntries" )
         {
-            // Read-only property!
+            
             aRet[ n ] <<= lang::IllegalAccessException(
                             OUString(
                                 "Property is read-only!" ),
@@ -1270,11 +1270,11 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else if ( rValue.Name == "EncryptionKey" )
         {
-            // @@@ This is a temporary solution. In the future submitting
-            //     the key should be done using an interaction handler!
+            
+            
 
-            // Write-Only property. Only supported by root folder and streams
-            // (all non-root folders of a package have the same encryption key).
+            
+            
             if ( m_aUri.isRootFolder() || m_aProps.bIsDocument )
             {
                 uno::Sequence < sal_Int8 > aNewValue;
@@ -1311,7 +1311,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         }
         else
         {
-            // Not a Core Property! Maybe it's an Additional Core Property?!
+            
 
             if ( !bTriedToGetAdditionalPropSet && !xAdditionalPropSet.is() )
             {
@@ -1369,7 +1369,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     {
         uno::Reference< ucb::XContentIdentifier > xOldId = m_xIdentifier;
 
-        // Assemble new content identifier...
+        
         OUString aNewURL = m_aUri.getParentUri();
         aNewURL += "/";
         aNewURL += ::ucb_impl::urihelper::encodeSegment( aNewTitle );
@@ -1379,20 +1379,20 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         aGuard.clear();
         if ( exchangeIdentity( xNewId ) )
         {
-            // Adapt persistent data.
+            
             renameData( xOldId, xNewId );
 
-            // Adapt Additional Core Properties.
+            
             renameAdditionalPropertySet( xOldId->getContentIdentifier(),
                                          xNewId->getContentIdentifier(),
                                          true );
         }
         else
         {
-            // Do not set new title!
+            
             aNewTitle = "";
 
-            // Set error .
+            
             aRet[ nTitlePos ] <<= uno::Exception(
                     OUString("Exchange failed!"),
                     static_cast< cppu::OWeakObject * >( this ) );
@@ -1413,7 +1413,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 
     if ( nChanged > 0 )
     {
-        // Save changes, if content was already made persistent.
+        
         if ( ( m_nModifiedProps & ENCRYPTIONKEY_MODIFIED ) ||
              ( bStore && ( m_eState == PERSISTENT ) ) )
         {
@@ -1435,7 +1435,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                     OUString(
                         "Cannot store persistent data!" ),
                     this );
-                // Unreachable
+                
             }
         }
 
@@ -1447,7 +1447,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     return aRet;
 }
 
-//=========================================================================
+
 uno::Any Content::open(
                 const ucb::OpenCommandArgument2& rArg,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -1457,9 +1457,9 @@ uno::Any Content::open(
          rArg.Mode == ucb::OpenMode::FOLDERS ||
          rArg.Mode == ucb::OpenMode::DOCUMENTS )
     {
-        //////////////////////////////////////////////////////////////////
-        // open command for a folder content
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         uno::Reference< ucb::XDynamicResultSet > xSet
             = new DynamicResultSet( m_xContext, this, rArg, xEnv );
@@ -1467,32 +1467,32 @@ uno::Any Content::open(
     }
     else
     {
-        //////////////////////////////////////////////////////////////////
-        // open command for a document content
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         if ( ( rArg.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_NONE ) ||
              ( rArg.Mode == ucb::OpenMode::DOCUMENT_SHARE_DENY_WRITE ) )
         {
-            // Currently(?) unsupported.
+            
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( ucb::UnsupportedOpenModeException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     sal_Int16( rArg.Mode ) ) ),
                 xEnv );
-            // Unreachable
+            
         }
 
         uno::Reference< io::XOutputStream > xOut( rArg.Sink, uno::UNO_QUERY );
         if ( xOut.is() )
         {
-            // PUSH: write data into xOut
+            
 
             uno::Reference< io::XInputStream > xIn = getInputStream();
             if ( !xIn.is() )
             {
-                // No interaction if we are not persistent!
+                
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
@@ -1510,7 +1510,7 @@ uno::Any Content::open(
                         : uno::Reference< ucb::XCommandEnvironment >(),
                     OUString("Got no data stream!"),
                     this );
-                // Unreachable
+                
             }
 
             try
@@ -1530,15 +1530,15 @@ uno::Any Content::open(
             }
             catch ( io::NotConnectedException const & )
             {
-                // closeOutput, readSomeBytes, writeBytes
+                
             }
             catch ( io::BufferSizeExceededException const & )
             {
-                // closeOutput, readSomeBytes, writeBytes
+                
             }
             catch ( io::IOException const & )
             {
-                // closeOutput, readSomeBytes, writeBytes
+                
             }
         }
         else
@@ -1547,12 +1547,12 @@ uno::Any Content::open(
                                             rArg.Sink, uno::UNO_QUERY );
             if ( xDataSink.is() )
             {
-                // PULL: wait for client read
+                
 
                 uno::Reference< io::XInputStream > xIn = getInputStream();
                 if ( !xIn.is() )
                 {
-                    // No interaction if we are not persistent!
+                    
                     uno::Any aProps
                         = uno::makeAny(
                                  beans::PropertyValue(
@@ -1570,17 +1570,17 @@ uno::Any Content::open(
                                   ucb::XCommandEnvironment >(),
                         OUString( "Got no data stream!" ),
                         this );
-                    // Unreachable
+                    
                 }
 
-                // Done.
+                
                 xDataSink->setInputStream( xIn );
             }
             else
             {
-                // Note: aOpenCommand.Sink may contain an XStream
-                //       implementation. Support for this type of
-                //       sink is optional...
+                
+                
+                
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
                         ucb::UnsupportedDataSinkException(
@@ -1588,7 +1588,7 @@ uno::Any Content::open(
                                 static_cast< cppu::OWeakObject * >( this ),
                                 rArg.Sink ) ),
                     xEnv );
-                // Unreachable
+                
             }
         }
     }
@@ -1596,7 +1596,7 @@ uno::Any Content::open(
     return uno::Any();
 }
 
-//=========================================================================
+
 void Content::insert(
             const uno::Reference< io::XInputStream >& xStream,
             sal_Int32 nNameClashResolve,
@@ -1605,17 +1605,17 @@ void Content::insert(
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    // Check, if all required properties were set.
+    
     if ( isFolder() )
     {
-        // Required: Title
+        
 
         if ( m_aProps.aTitle.isEmpty() )
             m_aProps.aTitle = m_aUri.getName();
     }
     else
     {
-        // Required: rArg.Data
+        
 
         if ( !xStream.is() )
         {
@@ -1624,10 +1624,10 @@ void Content::insert(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
                 xEnv );
-            // Unreachable
+            
         }
 
-        // Required: Title
+        
 
         if ( m_aProps.aTitle.isEmpty() )
             m_aProps.aTitle = m_aUri.getName();
@@ -1639,10 +1639,10 @@ void Content::insert(
     aNewURL += ::ucb_impl::urihelper::encodeSegment( m_aProps.aTitle );
     PackageUri aNewUri( aNewURL );
 
-    // Handle possible name clash...
+    
     switch ( nNameClashResolve )
     {
-        // fail.
+        
         case ucb::NameClash::ERROR:
             if ( hasData( aNewUri ) )
             {
@@ -1653,15 +1653,15 @@ void Content::insert(
                                     task::InteractionClassification_ERROR,
                                     m_aProps.aTitle ) ),
                     xEnv );
-                // Unreachable
+                
             }
             break;
 
-        // replace (possibly) existing object.
+        
         case ucb::NameClash::OVERWRITE:
             break;
 
-        // "invent" a new valid title.
+        
         case ucb::NameClash::RENAME:
             if ( hasData( aNewUri ) )
             {
@@ -1685,7 +1685,7 @@ void Content::insert(
                                 static_cast< cppu::OWeakObject * >( this ),
                                 nNameClashResolve ) ),
                     xEnv );
-                    // Unreachable
+                    
                 }
                 else
                 {
@@ -1695,7 +1695,7 @@ void Content::insert(
             }
             break;
 
-        case ucb::NameClash::KEEP: // deprecated
+        case ucb::NameClash::KEEP: 
         case ucb::NameClash::ASK:
         default:
             if ( hasData( aNewUri ) )
@@ -1707,12 +1707,12 @@ void Content::insert(
                             static_cast< cppu::OWeakObject * >( this ),
                             nNameClashResolve ) ),
                     xEnv );
-                // Unreachable
+                
             }
             break;
     }
 
-    // Identifier changed?
+    
     sal_Bool bNewId = ( m_aUri.getUri() != aNewUri.getUri() );
 
     if ( bNewId )
@@ -1736,14 +1736,14 @@ void Content::insert(
             xEnv,
             OUString("Cannot store persistent data!"),
             this );
-        // Unreachable
+        
     }
 
     m_eState = PERSISTENT;
 
     if ( bNewId )
     {
-        // Take over correct default values from underlying packager...
+        
         uno::Reference< container::XHierarchicalNameAccess > xXHierarchicalNameAccess;
         loadData( m_pProvider,
                   m_aUri,
@@ -1755,19 +1755,19 @@ void Content::insert(
     }
 }
 
-//=========================================================================
+
 void Content::destroy(
                 sal_Bool bDeletePhysical,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     throw( uno::Exception )
 {
-    // @@@ take care about bDeletePhysical -> trashcan support
+    
 
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
     uno::Reference< ucb::XContent > xThis = this;
 
-    // Persistent?
+    
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
@@ -1775,7 +1775,7 @@ void Content::destroy(
                                 OUString( "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
-        // Unreachable
+        
     }
 
     m_eState = DEAD;
@@ -1785,7 +1785,7 @@ void Content::destroy(
 
     if ( isFolder() )
     {
-        // Process instanciated children...
+        
 
         ContentRefList aChildren;
         queryChildren( aChildren );
@@ -1801,7 +1801,7 @@ void Content::destroy(
     }
 }
 
-//=========================================================================
+
 void Content::transfer(
             const ucb::TransferInfo& rInfo,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -1809,7 +1809,7 @@ void Content::transfer(
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
-    // Persistent?
+    
     if ( m_eState != PERSISTENT )
     {
         ucbhelper::cancelCommandExecution(
@@ -1817,10 +1817,10 @@ void Content::transfer(
                                 OUString( "Not persistent!" ),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
-        // Unreachable
+        
     }
 
-    // Is source a package content?
+    
     if ( ( rInfo.SourceURL.isEmpty() ) ||
          ( rInfo.SourceURL.compareTo(
             m_aUri.getUri(), PACKAGE_URL_SCHEME_LENGTH + 3 ) != 0 ) )
@@ -1830,10 +1830,10 @@ void Content::transfer(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
-        // Unreachable
+        
     }
 
-    // Is source not a parent of me / not me?
+    
     OUString aId = m_aUri.getParentUri();
     aId += "/";
 
@@ -1854,19 +1854,19 @@ void Content::transfer(
                 xEnv,
                 OUString( "Target is equal to or is a child of source!" ),
                 this );
-            // Unreachable
+            
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // 0) Obtain content object for source.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     uno::Reference< ucb::XContentIdentifier > xId
         = new ::ucbhelper::ContentIdentifier( rInfo.SourceURL );
 
-    // Note: The static cast is okay here, because its sure that
-    //       m_xProvider is always the PackageContentProvider.
+    
+    
     rtl::Reference< Content > xSource;
 
     try
@@ -1876,7 +1876,7 @@ void Content::transfer(
     }
     catch ( ucb::IllegalIdentifierException const & )
     {
-        // queryContent
+        
     }
 
     if ( !xSource.is() )
@@ -1893,12 +1893,12 @@ void Content::transfer(
             xEnv,
             OUString( "Cannot instanciate source object!" ),
             this );
-        // Unreachable
+        
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // 1) Create new child content.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     OUString aType = xSource->isFolder()
             ? getContentType( m_aUri.getScheme(), sal_True )
@@ -1907,8 +1907,8 @@ void Content::transfer(
     aContentInfo.Type = aType;
     aContentInfo.Attributes = 0;
 
-    // Note: The static cast is okay here, because its sure that
-    //       createNewContent always creates a Content.
+    
+    
     rtl::Reference< Content > xTarget
         = static_cast< Content * >( createNewContent( aContentInfo ).get() );
     if ( !xTarget.is() )
@@ -1925,12 +1925,12 @@ void Content::transfer(
             xEnv,
             OUString( "XContentCreator::createNewContent failed!" ),
             this );
-        // Unreachable
+        
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // 2) Copy data from source content to child content.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     uno::Sequence< beans::Property > aSourceProps
                     = xSource->getPropertySetInfo( xEnv )->getProperties();
@@ -1940,7 +1940,7 @@ void Content::transfer(
     {
         sal_Bool bHadTitle = rInfo.NewTitle.isEmpty();
 
-        // Get all source values.
+        
         uno::Reference< sdbc::XRow > xRow
             = xSource->getPropertyValues( aSourceProps );
 
@@ -1958,7 +1958,7 @@ void Content::transfer(
 
             if ( !bHadTitle && rProp.Name == "Title" )
             {
-                // Set new title instead of original.
+                
                 bHadTitle = sal_True;
                 rValue.Value <<= rInfo.NewTitle;
             }
@@ -1972,7 +1972,7 @@ void Content::transfer(
 
             if ( rProp.Attributes & beans::PropertyAttribute::REMOVABLE )
             {
-                // Add Additional Core Property.
+                
                 try
                 {
                     xTarget->addProperty( rProp.Name,
@@ -1991,19 +1991,19 @@ void Content::transfer(
             }
         }
 
-        // Set target values.
+        
         xTarget->setPropertyValues( aValues, xEnv );
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // 3) Commit (insert) child.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     xTarget->insert( xSource->getInputStream(), rInfo.NameClash, xEnv );
 
-    //////////////////////////////////////////////////////////////////////
-    // 4) Transfer (copy) children of source.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     if ( xSource->isFolder() )
     {
@@ -2045,7 +2045,7 @@ void Content::transfer(
                     aInfo.SourceURL = aChildId;
                     aInfo.NameClash = rInfo.NameClash;
 
-                    // Transfer child to target.
+                    
                     xTarget->transfer( aInfo, xEnv );
                 }
                 catch ( container::NoSuchElementException const & )
@@ -2058,15 +2058,15 @@ void Content::transfer(
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // 5) Destroy source ( when moving only ) .
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     if ( rInfo.MoveData )
     {
         xSource->destroy( sal_True, xEnv );
 
-        // Remove all persistent data of source and its children.
+        
         if ( !xSource->removeData() )
         {
             uno::Any aProps
@@ -2084,15 +2084,15 @@ void Content::transfer(
                 xEnv,
                 OUString( "Cannot remove persistent data of source object!" ),
                 this );
-            // Unreachable
+            
         }
 
-        // Remove own and all children's Additional Core Properties.
+        
         xSource->removeAdditionalPropertySet( true );
     }
 }
 
-//=========================================================================
+
 sal_Bool Content::exchangeIdentity(
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
 {
@@ -2103,16 +2103,16 @@ sal_Bool Content::exchangeIdentity(
 
     uno::Reference< ucb::XContent > xThis = this;
 
-    // Already persistent?
+    
     if ( m_eState != PERSISTENT )
     {
         OSL_FAIL( "Content::exchangeIdentity - Not persistent!" );
         return sal_False;
     }
 
-    // Exchange own identitity.
+    
 
-    // Fail, if a content with given id already exists.
+    
     PackageUri aNewUri( xNewId->getContentIdentifier() );
     if ( !hasData( aNewUri ) )
     {
@@ -2124,7 +2124,7 @@ sal_Bool Content::exchangeIdentity(
             m_aUri = aNewUri;
             if ( isFolder() )
             {
-                // Process instanciated children...
+                
 
                 ContentRefList aChildren;
                 queryChildren( aChildren );
@@ -2136,7 +2136,7 @@ sal_Bool Content::exchangeIdentity(
                 {
                     ContentRef xChild = (*it);
 
-                    // Create new content identifier for the child...
+                    
                     uno::Reference< ucb::XContentIdentifier > xOldChildId
                         = xChild->getIdentifier();
                     OUString aOldChildURL
@@ -2163,12 +2163,12 @@ sal_Bool Content::exchangeIdentity(
     return sal_False;
 }
 
-//=========================================================================
+
 void Content::queryChildren( ContentRefList& rChildren )
 {
-    // Obtain a list with a snapshot of all currently instanciated contents
-    // from provider and extract the contents which are direct children
-    // of this content.
+    
+    
+    
 
     ::ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
@@ -2191,13 +2191,13 @@ void Content::queryChildren( ContentRefList& rChildren )
         OUString aChildURL
             = xChild->getIdentifier()->getContentIdentifier();
 
-        // Is aURL a prefix of aChildURL?
+        
         if ( ( aChildURL.getLength() > nLen ) &&
              ( aChildURL.compareTo( aURL, nLen ) == 0 ) )
         {
             if ( aChildURL.indexOf( '/', nLen ) == -1 )
             {
-                // No further slashes. It's a child!
+                
                 rChildren.push_back(
                     ContentRef(
                         static_cast< Content * >( xChild.get() ) ) );
@@ -2207,7 +2207,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     }
 }
 
-//=========================================================================
+
 uno::Reference< container::XHierarchicalNameAccess > Content::getPackage(
                                                 const PackageUri& rURI )
 {
@@ -2225,14 +2225,14 @@ uno::Reference< container::XHierarchicalNameAccess > Content::getPackage(
     return m_pProvider->createPackage( rURI );
 }
 
-//=========================================================================
+
 uno::Reference< container::XHierarchicalNameAccess > Content::getPackage()
 {
     return getPackage( m_aUri );
 }
 
-//=========================================================================
-// static
+
+
 sal_Bool Content::hasData(
             ContentProvider* pProvider,
             const PackageUri& rURI,
@@ -2242,7 +2242,7 @@ sal_Bool Content::hasData(
     return rxPackage->hasByHierarchicalName( rURI.getPath() );
 }
 
-//=========================================================================
+
 sal_Bool Content::hasData( const PackageUri& rURI )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2257,8 +2257,8 @@ sal_Bool Content::hasData( const PackageUri& rURI )
     return hasData( m_pProvider, rURI, xPackage );
 }
 
-//=========================================================================
-//static
+
+
 sal_Bool Content::loadData(
             ContentProvider* pProvider,
             const PackageUri& rURI,
@@ -2269,7 +2269,7 @@ sal_Bool Content::loadData(
 
     if ( rURI.isRootFolder() )
     {
-        // Properties available only from package
+        
         uno::Reference< beans::XPropertySet > xPackagePropSet(
                                                 rxPackage, uno::UNO_QUERY );
 
@@ -2279,7 +2279,7 @@ sal_Bool Content::loadData(
 
         if ( xPackagePropSet.is() )
         {
-            // HasEncryptedEntries ( only avalibale at root folder )
+            
             try
             {
                 uno::Any aHasEncryptedEntries
@@ -2324,10 +2324,10 @@ sal_Bool Content::loadData(
                 return sal_False;
             }
 
-            // Title
+            
             rProps.aTitle = rURI.getName();
 
-            // MediaType
+            
             try
             {
                 uno::Any aMediaType
@@ -2353,17 +2353,17 @@ sal_Bool Content::loadData(
             uno::Reference< container::XEnumerationAccess > xEnumAccess;
             aEntry >>= xEnumAccess;
 
-            // ContentType / IsFolder / IsDocument
+            
             if ( xEnumAccess.is() )
             {
-                // folder
+                
                 rProps.aContentType = getContentType( rURI.getScheme(), sal_True );
                 rProps.bIsDocument = sal_False;
                 rProps.bIsFolder = sal_True;
             }
             else
             {
-                // stream
+                
                 rProps.aContentType = getContentType( rURI.getScheme(), sal_False );
                 rProps.bIsDocument = sal_True;
                 rProps.bIsFolder = sal_False;
@@ -2371,7 +2371,7 @@ sal_Bool Content::loadData(
 
             if ( rProps.bIsDocument )
             {
-                // Size ( only available for streams )
+                
                 try
                 {
                     uno::Any aSize
@@ -2394,7 +2394,7 @@ sal_Bool Content::loadData(
                     return sal_False;
                 }
 
-                // Compressed ( only available for streams )
+                
                 try
                 {
                     uno::Any aCompressed
@@ -2417,7 +2417,7 @@ sal_Bool Content::loadData(
                     return sal_False;
                 }
 
-                // Encrypted ( only available for streams )
+                
                 try
                 {
                     uno::Any aEncrypted
@@ -2445,13 +2445,13 @@ sal_Bool Content::loadData(
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByHierarchicalName
+        
     }
 
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool Content::renameData(
             const uno::Reference< ucb::XContentIdentifier >& xOldId,
             const uno::Reference< ucb::XContentIdentifier >& xNewId )
@@ -2479,20 +2479,20 @@ sal_Bool Content::renameData(
 
         PackageUri aNewURI( xNewId->getContentIdentifier() );
 
-        // No success indicator!? No return value / exceptions specified.
+        
         xNamed->setName( aNewURI.getName() );
 
         return sal_True;
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByHierarchicalName
+        
     }
 
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2512,7 +2512,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
     {
         if ( m_aUri.isRootFolder() )
         {
-            // Property available only from package and from streams (see below)
+            
             try
             {
                 xPackagePropSet->setPropertyValue(
@@ -2522,31 +2522,31 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             }
             catch ( beans::UnknownPropertyException const & )
             {
-                // setPropertyValue
+                
             }
             catch ( beans::PropertyVetoException const & )
             {
-                // setPropertyValue
+                
             }
             catch ( lang::IllegalArgumentException const & )
             {
-                // setPropertyValue
+                
             }
             catch ( lang::WrappedTargetException const & )
             {
-                // setPropertyValue
+                
             }
         }
     }
 
     if ( !xNA->hasByHierarchicalName( m_aUri.getPath() ) )
     {
-//        if ( !bCreate )
-//            return sal_True;
+
+
 
         try
         {
-            // Create new resource...
+            
             uno::Reference< lang::XSingleServiceFactory > xFac(
                                                     xNA, uno::UNO_QUERY );
             if ( !xFac.is() )
@@ -2586,7 +2586,7 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         }
         catch ( lang::IllegalArgumentException const & )
         {
-            // insertByName
+            
             OSL_FAIL( "Content::storeData - insertByName failed!" );
             return sal_False;
         }
@@ -2596,25 +2596,25 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
         }
         catch ( container::ElementExistException const & )
         {
-            // insertByName
+            
             OSL_FAIL( "Content::storeData - insertByName failed!" );
             return sal_False;
         }
         catch ( lang::WrappedTargetException const & )
         {
-            // insertByName
+            
             OSL_FAIL( "Content::storeData - insertByName failed!" );
             return sal_False;
         }
         catch ( container::NoSuchElementException const & )
         {
-            // getByHierarchicalName
+            
             OSL_FAIL( "Content::storeData - getByHierarchicalName failed!" );
             return sal_False;
         }
         catch ( uno::Exception const & )
         {
-            // createInstanceWithArguments
+            
             OSL_FAIL( "Content::storeData - Error!" );
             return sal_False;
         }
@@ -2634,9 +2634,9 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             return sal_False;
         }
 
-        //////////////////////////////////////////////////////////////////
-        // Store property values...
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         if ( m_nModifiedProps & MEDIATYPE_MODIFIED )
         {
@@ -2676,9 +2676,9 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
             m_nModifiedProps &= ~ENCRYPTIONKEY_MODIFIED;
         }
 
-        //////////////////////////////////////////////////////////////////
-        // Store data stream...
-        //////////////////////////////////////////////////////////////////
+        
+        
+        
 
         if ( xStream.is() && !isFolder() )
         {
@@ -2699,30 +2699,30 @@ sal_Bool Content::storeData( const uno::Reference< io::XInputStream >& xStream )
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByHierarchicalName
+        
     }
     catch ( beans::UnknownPropertyException const & )
     {
-        // setPropertyValue
+        
     }
     catch ( beans::PropertyVetoException const & )
     {
-        // setPropertyValue
+        
     }
     catch ( lang::IllegalArgumentException const & )
     {
-        // setPropertyValue
+        
     }
     catch ( lang::WrappedTargetException const & )
     {
-        // setPropertyValue
+        
     }
 
     OSL_FAIL( "Content::storeData - Error!" );
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool Content::removeData()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2751,24 +2751,24 @@ sal_Bool Content::removeData()
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByHierarchicalName, removeByName
+        
     }
     catch ( lang::WrappedTargetException const & )
     {
-        // removeByName
+        
     }
 
     OSL_FAIL( "Content::removeData - Error!" );
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool Content::flushData()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
-    // Note: XChangesBatch is only implemented by the package itself, not
-    //       by the single entries. Maybe this has to change...
+    
+    
 
     uno::Reference< container::XHierarchicalNameAccess > xNA = getPackage();
 
@@ -2792,7 +2792,7 @@ sal_Bool Content::flushData()
     return sal_False;
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > Content::getInputStream()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2823,13 +2823,13 @@ uno::Reference< io::XInputStream > Content::getInputStream()
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByHierarchicalName
+        
     }
 
     return xStream;
 }
 
-//=========================================================================
+
 uno::Reference< container::XEnumeration > Content::getIterator()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -2860,7 +2860,7 @@ uno::Reference< container::XEnumeration > Content::getIterator()
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByHierarchicalName
+        
     }
 
     return xIter;

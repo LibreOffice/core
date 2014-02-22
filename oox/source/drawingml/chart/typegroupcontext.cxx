@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/typegroupcontext.hxx"
@@ -26,12 +26,12 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 UpDownBarsContext::UpDownBarsContext( ContextHandler2Helper& rParent, UpDownBarsModel& rModel ) :
     ContextBase< UpDownBarsModel >( rParent, rModel )
@@ -62,7 +62,7 @@ ContextHandlerRef UpDownBarsContext::onCreateContext( sal_Int32 nElement, const 
     return 0;
 }
 
-// ============================================================================
+
 
 AreaTypeGroupContext::AreaTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -93,14 +93,14 @@ ContextHandlerRef AreaTypeGroupContext::onCreateContext( sal_Int32 nElement, con
         case C_TOKEN( ser ):
             return new AreaSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return 0;
     }
     return 0;
 }
 
-// ============================================================================
+
 
 BarTypeGroupContext::BarTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -130,7 +130,7 @@ ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.mnGapWidth = rAttribs.getInteger( XML_val, 150 );
             return 0;
         case C_TOKEN( grouping ):
-            // default is 'standard', not 'clustered' as specified
+            
             mrModel.mnGrouping = rAttribs.getToken( XML_val, XML_standard );
             return 0;
         case C_TOKEN( overlap ):
@@ -144,14 +144,14 @@ ContextHandlerRef BarTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.mnShape = rAttribs.getToken( XML_val, XML_box );
             return 0;
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return 0;
     }
     return 0;
 }
 
-// ============================================================================
+
 
 BubbleTypeGroupContext::BubbleTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -170,7 +170,7 @@ ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, c
             mrModel.maAxisIds.push_back( rAttribs.getInteger( XML_val, -1 ) );
             return 0;
         case C_TOKEN( bubble3D ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbBubble3d = rAttribs.getBool( XML_val, false );
             return 0;
         case C_TOKEN( bubbleScale ):
@@ -181,21 +181,21 @@ ContextHandlerRef BubbleTypeGroupContext::onCreateContext( sal_Int32 nElement, c
         case C_TOKEN( ser ):
             return new BubbleSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( showNegBubbles ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbShowNegBubbles = rAttribs.getBool( XML_val, false );
             return 0;
         case C_TOKEN( sizeRepresents ):
             mrModel.mnSizeRepresents = rAttribs.getToken( XML_val, XML_area );
             return 0;
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return 0;
     }
     return 0;
 }
 
-// ============================================================================
+
 
 LineTypeGroupContext::LineTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -226,26 +226,26 @@ ContextHandlerRef LineTypeGroupContext::onCreateContext( sal_Int32 nElement, con
         case C_TOKEN( hiLowLines ):
             return new ShapePrWrapperContext( *this, mrModel.mxHiLowLines.create() );
         case C_TOKEN( marker ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbShowMarker = rAttribs.getBool( XML_val, false );
             return 0;
         case C_TOKEN( ser ):
             return new LineSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( smooth ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbSmooth = rAttribs.getBool( XML_val, false );
             return 0;
         case C_TOKEN( upDownBars ):
             return new UpDownBarsContext( *this, mrModel.mxUpDownBars.create() );
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return 0;
     }
     return 0;
 }
 
-// ============================================================================
+
 
 PieTypeGroupContext::PieTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -288,14 +288,14 @@ ContextHandlerRef PieTypeGroupContext::onCreateContext( sal_Int32 nElement, cons
             mrModel.mnSplitType = rAttribs.getToken( XML_val, XML_auto );
             return 0;
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return 0;
     }
     return 0;
 }
 
-// ============================================================================
+
 
 RadarTypeGroupContext::RadarTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -321,14 +321,14 @@ ContextHandlerRef RadarTypeGroupContext::onCreateContext( sal_Int32 nElement, co
         case C_TOKEN( ser ):
             return new RadarSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return 0;
     }
     return 0;
 }
 
-// ============================================================================
+
 
 ScatterTypeGroupContext::ScatterTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -354,14 +354,14 @@ ContextHandlerRef ScatterTypeGroupContext::onCreateContext( sal_Int32 nElement, 
         case C_TOKEN( ser ):
             return new ScatterSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( varyColors ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbVaryColors = rAttribs.getBool( XML_val, false );
             return 0;
     }
     return 0;
 }
 
-// ============================================================================
+
 
 SurfaceTypeGroupContext::SurfaceTypeGroupContext( ContextHandler2Helper& rParent, TypeGroupModel& rModel ) :
     TypeGroupContextBase( rParent, rModel )
@@ -382,17 +382,17 @@ ContextHandlerRef SurfaceTypeGroupContext::onCreateContext( sal_Int32 nElement, 
         case C_TOKEN( ser ):
             return new SurfaceSeriesContext( *this, mrModel.maSeries.create() );
         case C_TOKEN( wireframe ):
-            // default is 'false', not 'true' as specified
+            
             mrModel.mbWireframe = rAttribs.getBool( XML_val, false );
             return 0;
     }
     return 0;
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

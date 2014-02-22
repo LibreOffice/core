@@ -21,7 +21,7 @@
 
 #include "numhead.hxx"
 
-// ID's for files:
+
 #define SV_NUMID_SIZES                      0x4200
 
 //#pragma SEG_FUNCDEF(numhead_06)
@@ -71,7 +71,7 @@ void ImpSvNumMultipleReadHeader::EndEntry()
     sal_uLong nPos = rStream.Tell();
     DBG_ASSERT( nPos <= nEntryEnd, "Read too much" );
     if ( nPos != nEntryEnd )
-        rStream.Seek( nEntryEnd ); // Skip the rest
+        rStream.Seek( nEntryEnd ); 
 }
 
 //#pragma SEG_FUNCDEF(numhead_0d)
@@ -122,12 +122,12 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
     rStream.WriteUInt32( static_cast<sal_uInt32>(aMemStream.Tell()) );
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
-    if ( nDataEnd - nDataPos != nDataSize ) // Hit Default?
+    if ( nDataEnd - nDataPos != nDataSize ) 
     {
         nDataSize = nDataEnd - nDataPos;
         sal_uLong nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
-        rStream.WriteUInt32( nDataSize ); // Add size at the start
+        rStream.WriteUInt32( nDataSize ); 
         rStream.Seek(nPos);
     }
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -31,13 +31,13 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::beans;
 using namespace ::osl;
 
-//------------------------------------------------------------------------------
+
 OMetaConnection::OMetaConnection()
     : OMetaConnection_BASE(m_aMutex)
     , m_nTextEncoding(RTL_TEXTENCODING_MS_1252)
 {
 }
-//------------------------------------------------------------------------------
+
 void OMetaConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -55,14 +55,14 @@ void OMetaConnection::disposing()
     }
     m_aStatements.clear();
 }
-//XUnoTunnel
+
 sal_Int64 SAL_CALL OMetaConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         ? reinterpret_cast< sal_Int64 >( this )
         : (sal_Int64)0;
 }
-// -----------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -77,13 +77,13 @@ Sequence< sal_Int8 > OMetaConnection::getUnoTunnelImplementationId()
     }
     return pId->getImplementationId();
 }
-// -----------------------------------------------------------------------------
+
 ::dbtools::OPropertyMap& OMetaConnection::getPropMap()
 {
     static ::dbtools::OPropertyMap s_aPropertyNameMap;
     return s_aPropertyNameMap;
 }
-// -----------------------------------------------------------------------------
+
 void OMetaConnection::throwGenericSQLException( sal_uInt16 _nErrorResourceId,const Reference< XInterface>& _xContext )
 {
     OUString sErrorMessage;

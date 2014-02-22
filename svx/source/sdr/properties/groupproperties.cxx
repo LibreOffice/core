@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/properties/groupproperties.hxx>
@@ -26,18 +26,18 @@
 #include <svx/svdpool.hxx>
 #include <svx/svdpage.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
     namespace properties
     {
-        // create a new itemset
+        
         SfxItemSet& GroupProperties::CreateObjectSpecificItemSet(SfxItemPool& rPool)
         {
-            // Groups have in principle no ItemSet. To support methods like
-            // GetMergedItemSet() the local one is used. Thus, all items in the pool
-            // may be used and a pool itemset is created.
+            
+            
+            
             return *(new SfxItemSet(rPool));
         }
 
@@ -68,19 +68,19 @@ namespace sdr
 
         const SfxItemSet& GroupProperties::GetMergedItemSet() const
         {
-            // prepare ItemSet
+            
             if(mpItemSet)
             {
-                // clear local itemset for merge
+                
                 mpItemSet->ClearItem();
             }
             else
             {
-                // force local itemset
+                
                 DefaultProperties::GetObjectItemSet();
             }
 
-            // collect all ItemSets in mpItemSet
+            
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());
 
@@ -105,14 +105,14 @@ namespace sdr
                 }
             }
 
-            // For group proerties, do not call parent since groups do
-            // not have local ItemSets.
+            
+            
             return *mpItemSet;
         }
 
         void GroupProperties::SetMergedItemSet(const SfxItemSet& rSet, sal_Bool bClearAllItems)
         {
-            // iterate over contained SdrObjects
+            
             const SdrObjList* pSub = ((const SdrObjGroup&)GetSdrObject()).GetSubList();
             const sal_uInt32 nCount(pSub->GetObjCount());
 
@@ -122,14 +122,14 @@ namespace sdr
 
                 if(pObj)
                 {
-                    // Set merged ItemSet at contained object
+                    
                     pObj->SetMergedItemSet(rSet, bClearAllItems);
                 }
             }
 
-            // Do not call parent here. Group objects do not have local ItemSets
-            // where items need to be set.
-            // DefaultProperties::SetMergedItemSet(rSet, bClearAllItems);
+            
+            
+            
         }
 
         void GroupProperties::SetObjectItem(const SfxPoolItem& /*rItem*/)
@@ -215,7 +215,7 @@ namespace sdr
                 {
                     if(pCandidate != pRetval)
                     {
-                        // different StyleSheelts, return none
+                        
                         return 0L;
                     }
                 }
@@ -241,7 +241,7 @@ namespace sdr
 
         void GroupProperties::ForceDefaultAttributes()
         {
-            // nothing to do here, groups have no items and thus no default items, too.
+            
         }
 
         void GroupProperties::MoveToItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool, SdrModel* pNewModel)
@@ -256,15 +256,15 @@ namespace sdr
                     pSub->GetObj(a)->GetProperties().MoveToItemPool(pSrcPool, pDestPool, pNewModel);
                 }
 
-                // also clear local ItemSet, it's only temporary for group objects anyways.
+                
                 if(mpItemSet)
                 {
-                    // #121905#
-                    // copy/paste is still using clone operators and MoveToItemPool functionality.
-                    // Since SfxItemSet contains a pool pointer, ClearItem is not enough here.
-                    // The ItemSet for merge is constructed on demand, so it's enough here to
-                    // just delete it and set to 0L.
-                    // mpItemSet->ClearItem();
+                    
+                    
+                    
+                    
+                    
+                    
                     delete mpItemSet;
                     mpItemSet = 0L;
                 }
@@ -281,7 +281,7 @@ namespace sdr
                 pSub->GetObj(a)->GetProperties().ForceStyleToHardAttributes();
             }
         }
-    } // end of namespace properties
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

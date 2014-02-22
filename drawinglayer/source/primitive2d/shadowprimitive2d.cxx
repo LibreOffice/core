@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive2d/shadowprimitive2d.hxx>
@@ -26,11 +26,11 @@
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -72,7 +72,7 @@ namespace drawinglayer
 
             if(getChildren().hasElements())
             {
-                // create a modifiedColorPrimitive containing the shadow color and the content
+                
                 const basegfx::BColorModifierSharedPtr aBColorModifier(
                     new basegfx::BColorModifier_replace(
                         getShadowColor()));
@@ -82,7 +82,7 @@ namespace drawinglayer
                         aBColorModifier));
                 const Primitive2DSequence aSequenceB(&xRefA, 1L);
 
-                // build transformed primitiveVector with shadow offset and add to target
+                
                 const Primitive2DReference xRefB(new TransformPrimitive2D(getShadowTransform(), aSequenceB));
                 aRetval = Primitive2DSequence(&xRefB, 1L);
             }
@@ -90,10 +90,10 @@ namespace drawinglayer
             return aRetval;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(ShadowPrimitive2D, PRIMITIVE2D_ID_SHADOWPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

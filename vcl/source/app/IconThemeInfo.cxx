@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <vcl/IconThemeInfo.hxx>
@@ -98,11 +98,11 @@ IconThemeInfo::FileNameToThemeId(const OUString& filename)
     }
     OUString r;
     sal_Int32 positionOfLastDot = filename.lastIndexOf(EXTENSION_FOR_ICON_PACKAGES);
-    if (positionOfLastDot < 0) { // -1 means index not found
+    if (positionOfLastDot < 0) { 
         throw std::runtime_error("IconThemeInfo::FileNameToThemeId() called with invalid filename.");
     }
     sal_Int32 positionOfFirstUnderscore = filename.indexOf(ICON_THEME_PACKAGE_PREFIX);
-    if (positionOfFirstUnderscore < 0) { // -1 means index not found. Use the whole name instead
+    if (positionOfFirstUnderscore < 0) { 
         throw std::runtime_error("IconThemeInfo::FileNameToThemeId() called with invalid filename.");
     }
     positionOfFirstUnderscore += RTL_CONSTASCII_LENGTH(ICON_THEME_PACKAGE_PREFIX);
@@ -121,7 +121,7 @@ IconThemeInfo::ThemeIdToDisplayName(const OUString& themeId)
         return OUString("Galaxy");
     }
 
-    // make the first letter uppercase
+    
     OUString r;
     sal_Unicode firstLetter = themeId[0];
     if (rtl::isAsciiLowerCase(firstLetter)) {
@@ -175,6 +175,6 @@ IconThemeInfo::IconThemeIsInVector(const std::vector<vcl::IconThemeInfo>& themes
     }
 }
 
-} // end namespace vcl
+} 
 
 

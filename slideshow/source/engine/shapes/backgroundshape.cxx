@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 
 #include <com/sun/star/awt/Rectangle.hpp>
@@ -76,13 +76,13 @@ namespace slideshow
                                  ::com::sun::star::drawing::XDrawPage >& xDrawPage,
                              const ::com::sun::star::uno::Reference<
                                  ::com::sun::star::drawing::XDrawPage >& xMasterPage,
-                             const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
+                             const SlideShowContext&                    rContext ); 
 
             virtual ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShape > getXShape() const;
 
-            // View layer methods
-            //------------------------------------------------------------------
+            
+            
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer );
@@ -90,8 +90,8 @@ namespace slideshow
             virtual bool clearAllViewLayers();
 
 
-            // attribute methods
-            //------------------------------------------------------------------
+            
+            
 
             virtual ::basegfx::B2DRectangle getBounds() const;
             virtual ::basegfx::B2DRectangle getDomBounds() const;
@@ -101,27 +101,27 @@ namespace slideshow
             virtual bool isBackgroundDetached() const;
 
 
-            // render methods
-            //------------------------------------------------------------------
+            
+            
 
             virtual bool update() const;
             virtual bool render() const;
             virtual bool isContentChanged() const;
 
         private:
-            /// The metafile actually representing the Shape
+            
             GDIMetaFileSharedPtr        mpMtf;
 
-            // The attributes of this Shape
-            ::basegfx::B2DRectangle     maBounds; // always needed for rendering
+            
+            ::basegfx::B2DRectangle     maBounds; 
 
-            /// the list of active view shapes (one for each registered view layer)
+            
             typedef ::std::vector< ViewBackgroundShapeSharedPtr > ViewBackgroundShapeVector;
             ViewBackgroundShapeVector   maViewShapes;
         };
 
 
-        ////////////////////////////////////////////////////////////////////////////////
+        
 
 
         BackgroundShape::BackgroundShape( const uno::Reference< drawing::XDrawPage >& xDrawPage,
@@ -135,8 +135,8 @@ namespace slideshow
                                                             uno::UNO_QUERY_THROW );
             GDIMetaFileSharedPtr pMtf( new GDIMetaFile() );
 
-            // first try the page background (overrides
-            // masterpage background), then try masterpage
+            
+            
             if( !getMetaFile( uno::Reference<lang::XComponent>(xDrawPage, uno::UNO_QUERY),
                               xDrawPage, *pMtf, MTF_LOAD_BACKGROUND_ONLY,
                               rContext.mxComponentContext ) &&
@@ -147,9 +147,9 @@ namespace slideshow
                 throw ShapeLoadFailedException();
             }
 
-            // there is a special background shape, add it
-            // as the first one
-            // ---------------------------------------------------
+            
+            
+            
 
             sal_Int32 nDocWidth=0;
             sal_Int32 nDocHeight=0;
@@ -162,7 +162,7 @@ namespace slideshow
 
         uno::Reference< drawing::XShape > BackgroundShape::getXShape() const
         {
-            // no real XShape representative
+            
             return uno::Reference< drawing::XShape >();
         }
 
@@ -171,7 +171,7 @@ namespace slideshow
         {
             ViewBackgroundShapeVector::iterator aEnd( maViewShapes.end() );
 
-            // already added?
+            
             if( ::std::find_if( maViewShapes.begin(),
                                 aEnd,
                                 ::boost::bind<bool>(
@@ -180,7 +180,7 @@ namespace slideshow
                                                    _1 ),
                                     ::boost::cref( rNewLayer ) ) ) != aEnd )
             {
-                // yes, nothing to do
+                
                 return;
             }
 
@@ -189,7 +189,7 @@ namespace slideshow
                     new ViewBackgroundShape( rNewLayer,
                                              maBounds ) ) );
 
-            // render the Shape on the newly added ViewLayer
+            
             if( bRedrawLayer )
                 maViewShapes.back()->render( mpMtf );
         }
@@ -217,11 +217,11 @@ namespace slideshow
                                                             _1 ),
                                              ::boost::cref( rLayer ) ) )) == aEnd )
             {
-                // view layer seemingly was not added, failed
+                
                 return false;
             }
 
-            // actually erase from container
+            
             maViewShapes.erase( aIter, aEnd );
 
             return true;
@@ -245,10 +245,10 @@ namespace slideshow
 
         ::basegfx::B2DRectangle BackgroundShape::getUpdateArea() const
         {
-            // TODO(F1): Need to expand background, too, when
-            // antialiasing?
+            
+            
 
-            // no transformation etc. possible for background shape
+            
             return maBounds;
         }
 
@@ -259,7 +259,7 @@ namespace slideshow
 
         double BackgroundShape::getPriority() const
         {
-            return 0.0; // lowest prio, we're the background
+            return 0.0; 
         }
 
         bool BackgroundShape::update() const
@@ -272,17 +272,17 @@ namespace slideshow
             SAL_INFO( "slideshow", "::presentation::internal::BackgroundShape::render()" );
             SAL_INFO( "slideshow", "::presentation::internal::BackgroundShape: 0x" << std::hex << this );
 
-            // gcc again...
+            
             const ::basegfx::B2DRectangle& rCurrBounds( BackgroundShape::getBounds() );
 
             if( rCurrBounds.getRange().equalZero() )
             {
-                // zero-sized shapes are effectively invisible,
-                // thus, we save us the rendering...
+                
+                
                 return true;
             }
 
-            // redraw all view shapes, by calling their render() method
+            
             if( ::std::count_if( maViewShapes.begin(),
                                  maViewShapes.end(),
                                  ::boost::bind( &ViewBackgroundShape::render,
@@ -290,8 +290,8 @@ namespace slideshow
                                                 ::boost::cref( mpMtf ) ) )
                 != static_cast<ViewBackgroundShapeVector::difference_type>(maViewShapes.size()) )
             {
-                // at least one of the ViewBackgroundShape::render() calls did return
-                // false - update failed on at least one ViewLayer
+                
+                
                 return false;
             }
 
@@ -305,10 +305,10 @@ namespace slideshow
 
         bool BackgroundShape::isBackgroundDetached() const
         {
-            return false; // we're not animatable
+            return false; 
         }
 
-        //////////////////////////////////////////////////////////
+        
 
         ShapeSharedPtr createBackgroundShape(
             const uno::Reference< drawing::XDrawPage >& xDrawPage,

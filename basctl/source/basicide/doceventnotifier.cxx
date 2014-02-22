@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "doceventnotifier.hxx"
 #include "scriptdocument.hxx"
 
@@ -36,10 +35,8 @@
 #include <cppuhelper/compbase1.hxx>
 #include <cppuhelper/basemutex.hxx>
 
-//........................................................................
 namespace basctl
 {
-//........................................................................
 
     using ::com::sun::star::document::XDocumentEventBroadcaster;
     using ::com::sun::star::document::XDocumentEventListener;
@@ -55,9 +52,8 @@ namespace basctl
 
     namespace csslang = ::com::sun::star::lang;
 
-    //====================================================================
-    //= DocumentEventNotifier::Impl
-    //====================================================================
+    
+    
     typedef ::cppu::WeakComponentImplHelper1    <   XDocumentEventListener
                                                 >   DocumentEventNotifier_Impl_Base;
 
@@ -77,23 +73,23 @@ namespace basctl
         Impl (DocumentEventListener&, Reference<XModel> const& rxDocument);
         ~Impl ();
 
-        // XDocumentEventListener
+        
         virtual void SAL_CALL documentEventOccured( const DocumentEvent& Event ) throw (RuntimeException);
 
-        // XEventListener
+        
         virtual void SAL_CALL disposing( const csslang::EventObject& Event ) throw (RuntimeException);
 
-        // ComponentHelper
+        
         virtual void SAL_CALL disposing();
 
     private:
-        /// determines whether the instance is already disposed
+        /
         bool    impl_isDisposed_nothrow() const { return m_pListener == NULL; }
 
-        /// disposes the instance
+        /
         void    impl_dispose_nothrow();
 
-        /// registers or revokes the instance as listener at the global event broadcaster
+        /
         void    impl_listenerAction_nothrow( ListenerAction _eAction );
 
     private:
@@ -101,7 +97,6 @@ namespace basctl
         Reference< XModel >     m_xModel;
     };
 
-    //--------------------------------------------------------------------
     DocumentEventNotifier::Impl::Impl (DocumentEventListener& rListener, Reference<XModel> const& rxDocument) :
         DocumentEventNotifier_Impl_Base(m_aMutex),
         m_pListener(&rListener),
@@ -112,7 +107,6 @@ namespace basctl
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
     DocumentEventNotifier::Impl::~Impl ()
     {
         if ( !impl_isDisposed_nothrow() )
@@ -122,7 +116,6 @@ namespace basctl
         }
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEventNotifier::Impl::documentEventOccured( const DocumentEvent& _rEvent ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -160,14 +153,14 @@ namespace basctl
 
             ScriptDocument aDocument( xDocument );
             {
-                // the listener implementations usually require the SolarMutex, so lock it here.
-                // But ensure the proper order of locking the solar and the own mutex
+                
+                
                 aGuard.clear();
                 SolarMutexGuard aSolarGuard;
                 ::osl::MutexGuard aGuard2( m_aMutex );
 
                 if ( impl_isDisposed_nothrow() )
-                    // somebody took the chance to dispose us -> bail out
+                    
                     return;
 
                 (m_pListener->*aEvents[i].listenerMethod)( aDocument );
@@ -176,7 +169,6 @@ namespace basctl
         }
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEventNotifier::Impl::disposing( const csslang::EventObject& /*Event*/ ) throw (RuntimeException)
     {
         SolarMutexGuard aSolarGuard;
@@ -186,21 +178,18 @@ namespace basctl
             impl_dispose_nothrow();
     }
 
-    //--------------------------------------------------------------------
     void SAL_CALL DocumentEventNotifier::Impl::disposing()
     {
         impl_listenerAction_nothrow( RemoveListener );
         impl_dispose_nothrow();
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::Impl::impl_dispose_nothrow()
     {
         m_pListener = NULL;
         m_xModel.clear();
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::Impl::impl_listenerAction_nothrow( ListenerAction _eAction )
     {
         try
@@ -225,39 +214,31 @@ namespace basctl
         }
     }
 
-    //====================================================================
-    //= DocumentEventNotifier
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
     DocumentEventNotifier::DocumentEventNotifier (DocumentEventListener& rListener, Reference<XModel> const& rxDocument) :
         m_pImpl(new Impl(rListener, rxDocument))
     { }
 
-    //--------------------------------------------------------------------
     DocumentEventNotifier::DocumentEventNotifier (DocumentEventListener& rListener) :
         m_pImpl(new Impl(rListener, Reference<XModel>()))
     { }
 
-    //--------------------------------------------------------------------
     DocumentEventNotifier::~DocumentEventNotifier()
     {
     }
 
-    //--------------------------------------------------------------------
     void DocumentEventNotifier::dispose()
     {
         m_pImpl->dispose();
     }
 
-    //====================================================================
-    //= DocumentEventListener
-    //====================================================================
+    
+    
     DocumentEventListener::~DocumentEventListener()
     {
     }
 
-//........................................................................
-} // namespace basctl
-//........................................................................
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

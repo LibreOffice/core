@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -61,9 +61,9 @@ PropertyMapImpl::~PropertyMapImpl() throw()
 
 void PropertyMapImpl::add( PropertyMapEntry const * pMap, sal_Int32 nCount ) throw()
 {
-    // nCount < 0   => add all
-    // nCount == 0  => add nothing
-    // nCount > 0   => add at most nCount entries
+    
+    
+    
 
     while( !pMap->maName.isEmpty() && ( ( nCount < 0) || ( nCount-- > 0 ) ) )
     {
@@ -94,9 +94,9 @@ void PropertyMapImpl::remove( const OUString& aName ) throw()
 
 Sequence< Property > PropertyMapImpl::getProperties() throw()
 {
-    // maybe we have to generate the properties after
-    // a change in the property map or at first call
-    // to getProperties
+    
+    
+    
     if( maProperties.getLength() != (sal_Int32)maPropertyMap.size() )
     {
         maProperties = Sequence< Property >( maPropertyMap.size() );
@@ -143,7 +143,7 @@ bool PropertyMapImpl::hasPropertyByName( const OUString& aName ) throw()
     return maPropertyMap.find( aName ) != maPropertyMap.end();
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 PropertySetInfo::PropertySetInfo() throw()
 {

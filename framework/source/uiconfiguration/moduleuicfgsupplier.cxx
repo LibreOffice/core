@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdtypes.h>
@@ -84,7 +84,7 @@ public:
         return aSeq;
     }
 
-    // XModuleUIConfigurationManagerSupplier
+    
     virtual css::uno::Reference< css::ui::XUIConfigurationManager > SAL_CALL getUIConfigurationManager( const OUString& ModuleIdentifier )
         throw (css::container::NoSuchElementException, css::uno::RuntimeException);
 
@@ -93,9 +93,9 @@ private:
 
     typedef ::boost::unordered_map< OUString, css::uno::Reference< css::ui::XModuleUIConfigurationManager2 >, OUStringHash, ::std::equal_to< OUString > > ModuleToModuleCfgMgr;
 
-//TODO_AS            void impl_initStorages();
 
-    // private methods
+
+    
     ModuleToModuleCfgMgr                                                                m_aModuleToModuleUICfgMgrMap;
     css::uno::Reference< css::frame::XModuleManager2 >          m_xModuleMgr;
     css::uno::Reference< css::uno::XComponentContext >            m_xContext;
@@ -108,7 +108,7 @@ ModuleUIConfigurationManagerSupplier::ModuleUIConfigurationManagerSupplier( cons
 {
     try
     {
-        // Retrieve known modules and insert them into our boost::unordered_map to speed-up access time.
+        
         Reference< XNameAccess > xNameAccess( m_xModuleMgr, UNO_QUERY_THROW );
         const Sequence< OUString >     aNameSeq   = xNameAccess->getElementNames();
         const OUString*                pNameSeq   = aNameSeq.getConstArray();
@@ -129,7 +129,7 @@ void SAL_CALL ModuleUIConfigurationManagerSupplier::disposing()
 {
     osl::MutexGuard g(rBHelper.rMutex);
 
-    // dispose all our module user interface configuration managers
+    
     ModuleToModuleCfgMgr::iterator pIter = m_aModuleToModuleUICfgMgrMap.begin();
     while ( pIter != m_aModuleToModuleUICfgMgrMap.end() )
     {
@@ -142,7 +142,7 @@ void SAL_CALL ModuleUIConfigurationManagerSupplier::disposing()
     m_xModuleMgr.clear();
 }
 
-// XModuleUIConfigurationManagerSupplier
+
 Reference< XUIConfigurationManager > SAL_CALL ModuleUIConfigurationManagerSupplier::getUIConfigurationManager( const OUString& sModuleIdentifier )
 throw ( NoSuchElementException, RuntimeException)
 {
@@ -152,9 +152,9 @@ throw ( NoSuchElementException, RuntimeException)
     ModuleToModuleCfgMgr::iterator pIter = m_aModuleToModuleUICfgMgrMap.find( sModuleIdentifier );
     if ( pIter == m_aModuleToModuleUICfgMgrMap.end() )
         throw NoSuchElementException();
-//TODO_AS    impl_initStorages();
 
-    // Create instance on demand
+
+    
     if ( !pIter->second.is() )
     {
         OUString sShort;

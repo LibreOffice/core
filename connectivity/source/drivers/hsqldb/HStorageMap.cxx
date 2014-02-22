@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hsqldb/HStorageMap.hxx"
@@ -28,13 +28,13 @@
 
 #include <o3tl/compat_functional.hxx>
 
-//........................................................................
+
 namespace connectivity
 {
-//........................................................................
+
     namespace hsqldb
     {
-    //........................................................................
+    
         using namespace ::com::sun::star::uno;
         using namespace ::com::sun::star::lang;
         using namespace ::com::sun::star::embed;
@@ -44,7 +44,7 @@ namespace connectivity
             : m_xStream(_xStream)
         {
         }
-        // -----------------------------------------------------------------------------
+        
         StreamHelper::~StreamHelper()
         {
             try
@@ -56,7 +56,7 @@ namespace connectivity
                     m_xInputStream->closeInput();
                     m_xInputStream.clear();
                 }
-                // this is done implicity by the closing of the input stream
+                
                 else if ( m_xOutputStream.is() )
                 {
                     m_xOutputStream->closeOutput();
@@ -79,45 +79,45 @@ namespace connectivity
                 OSL_FAIL("Exception caught!");
             }
         }
-        // -----------------------------------------------------------------------------
+        
         Reference< XInputStream> StreamHelper::getInputStream()
         {
             if ( !m_xInputStream.is() )
                 m_xInputStream = m_xStream->getInputStream();
             return m_xInputStream;
         }
-        // -----------------------------------------------------------------------------
+        
         Reference< XOutputStream> StreamHelper::getOutputStream()
         {
             if ( !m_xOutputStream.is() )
                 m_xOutputStream = m_xStream->getOutputStream();
             return m_xOutputStream;
         }
-        // -----------------------------------------------------------------------------
+        
         Reference< XSeekable> StreamHelper::getSeek()
         {
             if ( !m_xSeek.is() )
                 m_xSeek.set(m_xStream,UNO_QUERY);
             return m_xSeek;
         }
-        // -----------------------------------------------------------------------------
+        
         TStorages& lcl_getStorageMap()
         {
             static TStorages s_aMap;
             return s_aMap;
         }
-        // -----------------------------------------------------------------------------
+        
         OUString lcl_getNextCount()
         {
             static sal_Int32 s_nCount = 0;
             return OUString::number(s_nCount++);
         }
-        // -----------------------------------------------------------------------------
+        
         OUString StorageContainer::removeURLPrefix(const OUString& _sURL,const OUString& _sFileURL)
         {
             return _sURL.copy(_sFileURL.getLength()+1);
         }
-        // -----------------------------------------------------------------------------
+        
         OUString StorageContainer::removeOldURLPrefix(const OUString& _sURL)
         {
             OUString sRet = _sURL;
@@ -163,12 +163,12 @@ namespace connectivity
             return aStr;
         }
 
-        // -----------------------------------------------------------------------------
+        
         OUString StorageContainer::registerStorage(const Reference< XStorage>& _xStorage,const OUString& _sURL)
         {
             OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
             TStorages& rMap = lcl_getStorageMap();
-            // check if the storage is already in our map
+            
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
                                         ::o3tl::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
@@ -181,7 +181,7 @@ namespace connectivity
 
             return aFind->first;
         }
-        // -----------------------------------------------------------------------------
+        
         TStorages::mapped_type StorageContainer::getRegisteredStorage(const OUString& _sKey)
         {
             TStorages::mapped_type aRet;
@@ -193,13 +193,13 @@ namespace connectivity
 
             return aRet;
         }
-        // -----------------------------------------------------------------------------
+        
         OUString StorageContainer::getRegisteredKey(const Reference< XStorage>& _xStorage)
         {
             OUString sKey;
             OSL_ENSURE(_xStorage.is(),"Storage is NULL!");
             TStorages& rMap = lcl_getStorageMap();
-            // check if the storage is already in our map
+            
             TStorages::iterator aFind = ::std::find_if(rMap.begin(),rMap.end(),
                                         ::o3tl::compose1(
                                             ::std::bind2nd(::std::equal_to<Reference<XStorage> >(),_xStorage)
@@ -209,7 +209,7 @@ namespace connectivity
                 sKey = aFind->first;
             return sKey;
         }
-        // -----------------------------------------------------------------------------
+        
         void StorageContainer::revokeStorage(const OUString& _sKey,const Reference<XTransactionListener>& _xListener)
         {
             TStorages& rMap = lcl_getStorageMap();
@@ -234,7 +234,7 @@ namespace connectivity
                 rMap.erase(aFind);
             }
         }
-        // -----------------------------------------------------------------------------
+        
         TStreamMap::mapped_type StorageContainer::registerStream(JNIEnv * env,jstring name, jstring key,sal_Int32 _nMode)
         {
             TStreamMap::mapped_type pHelper;
@@ -280,7 +280,7 @@ namespace connectivity
                                         bIsStream = sal_False;
                                     }
                                     if ( !bIsStream )
-                                        return pHelper; // readonly file without data stream
+                                        return pHelper; 
                                 }
                                 pHelper.reset( new StreamHelper(aStoragePair.first.first->openStreamElement( sStrippedName, _nMode ) ) );
                             }
@@ -305,7 +305,7 @@ namespace connectivity
             }
             return pHelper;
         }
-        // -----------------------------------------------------------------------------
+        
         void StorageContainer::revokeStream( JNIEnv * env,jstring name, jstring key)
         {
             TStorages& rMap = lcl_getStorageMap();
@@ -314,7 +314,7 @@ namespace connectivity
             if ( aFind != rMap.end() )
                 aFind->second.second.erase(removeURLPrefix(jstring2ustring(env,name),aFind->second.first.second));
         }
-        // -----------------------------------------------------------------------------
+        
         TStreamMap::mapped_type StorageContainer::getRegisteredStream( JNIEnv * env,jstring name, jstring key)
         {
             TStreamMap::mapped_type  pRet;
@@ -330,7 +330,7 @@ namespace connectivity
 
             return pRet;
         }
-        // -----------------------------------------------------------------------------
+        
         void StorageContainer::throwJavaException(const Exception& _aException,JNIEnv * env)
         {
             if (JNI_FALSE != env->ExceptionCheck())
@@ -339,12 +339,12 @@ namespace connectivity
             OSL_TRACE( __FILE__": forwarding Exception: %s", cstr.getStr() );
             env->ThrowNew(env->FindClass("java/io/IOException"), cstr.getStr());
         }
-    //........................................................................
-    }   // namespace hsqldb
-    //........................................................................
-//........................................................................
+    
+    }   
+    
+
 }
-// namespace connectivity
-//........................................................................
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

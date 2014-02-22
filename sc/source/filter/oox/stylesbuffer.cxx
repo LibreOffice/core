@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "stylesbuffer.hxx"
@@ -82,7 +82,7 @@ using ::com::sun::star::table::BorderLine2;
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace com::sun::star;
 using namespace ::com::sun::star::awt;
@@ -94,17 +94,17 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::FilterBase;
 
-// ============================================================================
+
 
 namespace {
 
-// OOXML constants ------------------------------------------------------------
 
-// OOXML predefined color indexes (also used in BIFF3-BIFF8)
-const sal_Int32 OOX_COLOR_USEROFFSET        = 0;        /// First user defined color in palette (OOXML/BIFF12).
-const sal_Int32 BIFF_COLOR_USEROFFSET       = 8;        /// First user defined color in palette (BIFF3-BIFF8).
 
-// OOXML font family (also used in BIFF)
+
+const sal_Int32 OOX_COLOR_USEROFFSET        = 0;        
+const sal_Int32 BIFF_COLOR_USEROFFSET       = 8;        
+
+
 const sal_Int32 OOX_FONTFAMILY_NONE         = 0;
 const sal_Int32 OOX_FONTFAMILY_ROMAN        = 1;
 const sal_Int32 OOX_FONTFAMILY_SWISS        = 2;
@@ -112,46 +112,46 @@ const sal_Int32 OOX_FONTFAMILY_MODERN       = 3;
 const sal_Int32 OOX_FONTFAMILY_SCRIPT       = 4;
 const sal_Int32 OOX_FONTFAMILY_DECORATIVE   = 5;
 
-// OOXML cell text direction (also used in BIFF)
+
 const sal_Int32 OOX_XF_TEXTDIR_CONTEXT      = 0;
 const sal_Int32 OOX_XF_TEXTDIR_LTR          = 1;
 const sal_Int32 OOX_XF_TEXTDIR_RTL          = 2;
 
-// OOXML cell rotation (also used in BIFF)
+
 const sal_Int32 OOX_XF_ROTATION_NONE        = 0;
 const sal_Int32 OOX_XF_ROTATION_STACKED     = 255;
 
-// OOXML cell indentation
+
 const sal_Int32 OOX_XF_INDENT_NONE          = 0;
 
-// OOXML built-in cell styles (also used in BIFF)
-const sal_Int32 OOX_STYLE_NORMAL            = 0;        /// Default cell style.
-const sal_Int32 OOX_STYLE_ROWLEVEL          = 1;        /// RowLevel_x cell style.
-const sal_Int32 OOX_STYLE_COLLEVEL          = 2;        /// ColLevel_x cell style.
 
-// BIFF12 constants -----------------------------------------------------------
+const sal_Int32 OOX_STYLE_NORMAL            = 0;        
+const sal_Int32 OOX_STYLE_ROWLEVEL          = 1;        
+const sal_Int32 OOX_STYLE_COLLEVEL          = 2;        
 
-// BIFF12 color types
+
+
+
 const sal_uInt8 BIFF12_COLOR_AUTO           = 0;
 const sal_uInt8 BIFF12_COLOR_INDEXED        = 1;
 const sal_uInt8 BIFF12_COLOR_RGB            = 2;
 const sal_uInt8 BIFF12_COLOR_THEME          = 3;
 
-// BIFF12 diagonal borders
-const sal_uInt8 BIFF12_BORDER_DIAG_TLBR     = 0x01;     /// Top-left to bottom-right.
-const sal_uInt8 BIFF12_BORDER_DIAG_BLTR     = 0x02;     /// Bottom-left to top-right.
 
-// BIFF12 gradient fill
+const sal_uInt8 BIFF12_BORDER_DIAG_TLBR     = 0x01;     
+const sal_uInt8 BIFF12_BORDER_DIAG_BLTR     = 0x02;     
+
+
 const sal_Int32 BIFF12_FILL_GRADIENT        = 40;
 
-// BIFF12 XF flags
+
 const sal_uInt32 BIFF12_XF_WRAPTEXT         = 0x00400000;
 const sal_uInt32 BIFF12_XF_JUSTLASTLINE     = 0x00800000;
 const sal_uInt32 BIFF12_XF_SHRINK           = 0x01000000;
 const sal_uInt32 BIFF12_XF_LOCKED           = 0x10000000;
 const sal_uInt32 BIFF12_XF_HIDDEN           = 0x20000000;
 
-// BIFF12 XF attribute used flags
+
 const sal_uInt16 BIFF12_XF_NUMFMT_USED      = 0x0001;
 const sal_uInt16 BIFF12_XF_FONT_USED        = 0x0002;
 const sal_uInt16 BIFF12_XF_ALIGN_USED       = 0x0004;
@@ -159,7 +159,7 @@ const sal_uInt16 BIFF12_XF_BORDER_USED      = 0x0008;
 const sal_uInt16 BIFF12_XF_AREA_USED        = 0x0010;
 const sal_uInt16 BIFF12_XF_PROT_USED        = 0x0020;
 
-// BIFF12 DXF constants
+
 const sal_uInt16 BIFF12_DXF_FILL_PATTERN    = 0;
 const sal_uInt16 BIFF12_DXF_FILL_FGCOLOR    = 1;
 const sal_uInt16 BIFF12_DXF_FILL_BGCOLOR    = 2;
@@ -183,30 +183,30 @@ const sal_uInt16 BIFF12_DXF_FONT_SCHEME     = 37;
 const sal_uInt16 BIFF12_DXF_NUMFMT_CODE     = 38;
 const sal_uInt16 BIFF12_DXF_NUMFMT_ID       = 41;
 
-// BIFF12 CELLSTYLE flags
+
 const sal_uInt16 BIFF12_CELLSTYLE_BUILTIN   = 0x0001;
 const sal_uInt16 BIFF12_CELLSTYLE_HIDDEN    = 0x0002;
 const sal_uInt16 BIFF12_CELLSTYLE_CUSTOM    = 0x0004;
 
-// BIFF constants -------------------------------------------------------------
 
-// BIFF font flags, also used in BIFF12
+
+
 const sal_uInt16 BIFF_FONTFLAG_ITALIC       = 0x0002;
 const sal_uInt16 BIFF_FONTFLAG_STRIKEOUT    = 0x0008;
 const sal_uInt16 BIFF_FONTFLAG_OUTLINE      = 0x0010;
 const sal_uInt16 BIFF_FONTFLAG_SHADOW       = 0x0020;
 
-// BIFF font weight
+
 const sal_uInt16 BIFF_FONTWEIGHT_BOLD       = 450;
 
-// BIFF font underline, also used in BIFF12
+
 const sal_uInt8 BIFF_FONTUNDERL_NONE        = 0;
 const sal_uInt8 BIFF_FONTUNDERL_SINGLE      = 1;
 const sal_uInt8 BIFF_FONTUNDERL_DOUBLE      = 2;
 const sal_uInt8 BIFF_FONTUNDERL_SINGLE_ACC  = 33;
 const sal_uInt8 BIFF_FONTUNDERL_DOUBLE_ACC  = 34;
 
-// ----------------------------------------------------------------------------
+
 
 sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
 {
@@ -222,9 +222,9 @@ sal_Int32 lclReadRgbColor( BinaryInputStream& rStrm )
     return nValue;
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 ExcelGraphicHelper::ExcelGraphicHelper( const WorkbookHelper& rHelper ) :
     GraphicHelper( rHelper.getBaseFilter().getComponentContext(), rHelper.getBaseFilter().getTargetFrame(), rHelper.getBaseFilter().getStorage() ),
@@ -244,7 +244,7 @@ sal_Int32 ExcelGraphicHelper::getPaletteColor( sal_Int32 nPaletteIdx ) const
     return getStyles().getPaletteColor( nPaletteIdx );
 }
 
-// ============================================================================
+
 
 void Color::setAuto()
 {
@@ -299,7 +299,7 @@ void Color::importColor( SequenceInputStream& rStrm )
     sal_Int16 nTint;
     rStrm >> nFlags >> nIndex >> nTint;
 
-    // scale tint from signed 16-bit to double range -1.0 ... 1.0
+    
     double fTint = nTint;
     if( nTint < 0 )
         fTint /= -SAL_MIN_INT16;
@@ -341,7 +341,7 @@ SequenceInputStream& operator>>( SequenceInputStream& rStrm, Color& orColor )
     return rStrm;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -395,14 +395,14 @@ static const sal_Int32 spnDefColors8[] =
 #undef PALETTE_EGA_COLORS_LIGHT
 #undef PALETTE_EGA_COLORS_DARK
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 ColorPalette::ColorPalette( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
 {
-    // default colors
+    
     switch( getFilterType() )
     {
         case FILTER_OOXML:
@@ -470,7 +470,7 @@ void ColorPalette::appendColor( sal_Int32 nRGBValue )
     ++mnAppendIndex;
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -480,7 +480,7 @@ void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDe
     {
         rFontName.maName = rFontDesc.Name;
         rFontName.mnFamily = rFontDesc.Family;
-        // API font descriptor contains rtl_TextEncoding constants
+        
         rFontName.mnTextEnc = rFontDesc.CharSet;
     }
     else
@@ -489,9 +489,9 @@ void lclSetFontName( ApiScriptFontName& rFontName, const FontDescriptor& rFontDe
     }
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 FontModel::FontModel() :
     mnScheme( XML_none ),
@@ -516,7 +516,7 @@ void FontModel::setBiff12Scheme( sal_uInt8 nScheme )
 
 void FontModel::setBiffHeight( sal_uInt16 nHeight )
 {
-    mfHeight = nHeight / 20.0;  // convert twips to points
+    mfHeight = nHeight / 20.0;  
 }
 
 void FontModel::setBiffWeight( sal_uInt16 nWeight )
@@ -543,7 +543,7 @@ void FontModel::setBiffEscapement( sal_uInt16 nEscapement )
     mnEscapement = STATIC_ARRAY_SELECT( spnEscapes, nEscapement, XML_baseline );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
     mbNameUsed( bAllUsed ),
@@ -560,7 +560,7 @@ ApiFontUsedFlags::ApiFontUsedFlags( bool bAllUsed ) :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiScriptFontName::ApiScriptFontName() :
     mnFamily( ::com::sun::star::awt::FontFamily::DONTKNOW ),
@@ -568,12 +568,12 @@ ApiScriptFontName::ApiScriptFontName() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiFontData::ApiFontData() :
     maDesc(
         "Calibri",
-        220,                                            // height 11 points
+        220,                                            
         0,
         OUString(),
         ::com::sun::star::awt::FontFamily::DONTKNOW,
@@ -597,7 +597,7 @@ ApiFontData::ApiFontData() :
     maLatinFont.maName = maDesc.Name;
 }
 
-// ============================================================================
+
 
 Font::Font( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -620,8 +620,8 @@ void Font::importAttribs( sal_Int32 nElement, const AttributeList& rAttribs )
     const FontModel& rDefModel = getTheme().getDefaultFontModel();
     switch( nElement )
     {
-        case XLS_TOKEN( name ):     // when in <font> element
-        case XLS_TOKEN( rFont ):    // when in <rPr> element
+        case XLS_TOKEN( name ):     
+        case XLS_TOKEN( rFont ):    
             if( rAttribs.hasAttribute( XML_val ) )
             {
                 maModel.maName = rAttribs.getXString( XML_val, OUString() );
@@ -686,7 +686,7 @@ void Font::importFont( SequenceInputStream& rStrm )
     rStrm.skip( 1 );
     rStrm >> maModel.maColor >> nScheme >> maModel.maName;
 
-    // equal constants in all BIFFs for weight, underline, and escapement
+    
     maModel.setBiff12Scheme( nScheme );
     maModel.setBiffHeight( nHeight );
     maModel.setBiffWeight( nWeight );
@@ -694,7 +694,7 @@ void Font::importFont( SequenceInputStream& rStrm )
     maModel.setBiffEscapement( nEscapement );
     maModel.mnFamily    = nFamily;
     maModel.mnCharSet   = nCharSet;
-    // equal flags in all BIFFs
+    
     maModel.mbItalic    = getFlag( nFlags, BIFF_FONTFLAG_ITALIC );
     maModel.mbStrikeout = getFlag( nFlags, BIFF_FONTFLAG_STRIKEOUT );
     maModel.mbOutline   = getFlag( nFlags, BIFF_FONTFLAG_OUTLINE );
@@ -781,10 +781,10 @@ void Font::finalizeImport()
 {
     namespace cssawt = ::com::sun::star::awt;
 
-    // font name
+    
     maApiData.maDesc.Name = maModel.maName;
 
-    // font family
+    
     switch( maModel.mnFamily )
     {
         case OOX_FONTFAMILY_NONE:           maApiData.maDesc.Family = cssawt::FontFamily::DONTKNOW;     break;
@@ -795,12 +795,12 @@ void Font::finalizeImport()
         case OOX_FONTFAMILY_DECORATIVE:     maApiData.maDesc.Family = cssawt::FontFamily::DECORATIVE;   break;
     }
 
-    // character set (API font descriptor uses rtl_TextEncoding in member CharSet!)
+    
     if( (0 <= maModel.mnCharSet) && (maModel.mnCharSet <= SAL_MAX_UINT8) )
         maApiData.maDesc.CharSet = static_cast< sal_Int16 >(
             rtl_getTextEncodingFromWindowsCharset( static_cast< sal_uInt8 >( maModel.mnCharSet ) ) );
 
-    // color, height, weight, slant, strikeout, outline, shadow
+    
     maApiData.mnColor          = maModel.maColor.getColor( getBaseFilter().getGraphicHelper() );
     maApiData.maDesc.Height    = static_cast< sal_Int16 >( maModel.mfHeight * 20.0 );
     maApiData.maDesc.Weight    = maModel.mbBold ? cssawt::FontWeight::BOLD : cssawt::FontWeight::NORMAL;
@@ -809,7 +809,7 @@ void Font::finalizeImport()
     maApiData.mbOutline        = maModel.mbOutline;
     maApiData.mbShadow         = maModel.mbShadow;
 
-    // underline
+    
     switch( maModel.mnUnderline )
     {
         case XML_double:            maApiData.maDesc.Underline = cssawt::FontUnderline::DOUBLE; break;
@@ -819,7 +819,7 @@ void Font::finalizeImport()
         case XML_singleAccounting:  maApiData.maDesc.Underline = cssawt::FontUnderline::SINGLE; break;
     }
 
-    // escapement
+    
     switch( maModel.mnEscapement )
     {
         case XML_baseline:
@@ -836,7 +836,7 @@ void Font::finalizeImport()
         break;
     }
 
-    // supported script types
+    
     if( maUsedFlags.mbNameUsed )
     {
         PropertySet aDocProps( getDocument() );
@@ -846,32 +846,32 @@ void Font::finalizeImport()
             Reference< XFont2 > xFont( xDevice->getFont( maApiData.maDesc ), UNO_QUERY );
             if( xFont.is() )
             {
-                // #91658# CJK fonts
+                
                 bool bHasAsian =
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3041 ) ) ) ||    // 3040-309F: Hiragana
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x30A1 ) ) ) ||    // 30A0-30FF: Katakana
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3111 ) ) ) ||    // 3100-312F: Bopomofo
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3131 ) ) ) ||    // 3130-318F: Hangul Compatibility Jamo
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3301 ) ) ) ||    // 3300-33FF: CJK Compatibility
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3401 ) ) ) ||    // 3400-4DBF: CJK Unified Ideographs Extension A
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x4E01 ) ) ) ||    // 4E00-9FAF: CJK Unified Ideographs
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x7E01 ) ) ) ||    // 4E00-9FAF: CJK unified ideographs
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xA001 ) ) ) ||    // A001-A48F: Yi Syllables
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xAC01 ) ) ) ||    // AC00-D7AF: Hangul Syllables
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xCC01 ) ) ) ||    // AC00-D7AF: Hangul Syllables
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xF901 ) ) ) ||    // F900-FAFF: CJK Compatibility Ideographs
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFF71 ) ) );      // FF00-FFEF: Halfwidth/Fullwidth Forms
-                // #113783# CTL fonts
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3041 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x30A1 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3111 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3131 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3301 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x3401 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x4E01 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x7E01 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0xA001 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0xAC01 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0xCC01 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0xF901 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFF71 ) ) );      
+                
                 bool bHasCmplx =
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x05D1 ) ) ) ||    // 0590-05FF: Hebrew
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0631 ) ) ) ||    // 0600-06FF: Arabic
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0721 ) ) ) ||    // 0700-074F: Syriac
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0911 ) ) ) ||    // 0900-0DFF: Indic scripts
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0E01 ) ) ) ||    // 0E00-0E7F: Thai
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFB21 ) ) ) ||    // FB1D-FB4F: Hebrew Presentation Forms
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFB51 ) ) ) ||    // FB50-FDFF: Arabic Presentation Forms-A
-                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFE71 ) ) );      // FE70-FEFF: Arabic Presentation Forms-B
-                // Western fonts
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x05D1 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0631 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0721 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0911 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0x0E01 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFB21 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFB51 ) ) ) ||    
+                    xFont->hasGlyphs( OUString( sal_Unicode( 0xFE71 ) ) );      
+                
                 bool bHasLatin =
                     (!bHasAsian && !bHasCmplx) ||
                     xFont->hasGlyphs( OUString( 'A' ) );
@@ -931,7 +931,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
         if( !maApiData.maLatinFont.maName.isEmpty() )
         {
             rtl_TextEncoding eFontEnc = maApiData.maLatinFont.mnTextEnc;
-            // taken from binary importer
+            
             rtl_TextEncoding eTempTextEnc = (bEdit && (eFontEnc == getTextEncoding())) ?
                 ScfTools::GetSystemTextEncoding() : eFontEnc;
 
@@ -942,7 +942,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
         if( !maApiData.maAsianFont.maName.isEmpty() )
         {
             rtl_TextEncoding eFontEnc = maApiData.maAsianFont.mnTextEnc;
-            // taken from binary importer
+            
             rtl_TextEncoding eTempTextEnc = (bEdit && (eFontEnc == getTextEncoding())) ?
                 ScfTools::GetSystemTextEncoding() : eFontEnc;
             SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maAsianFont.mnFamily ), maApiData.maAsianFont.maName, OUString(),
@@ -952,7 +952,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
         if( !maApiData.maCmplxFont.maName.isEmpty() )
         {
             rtl_TextEncoding eFontEnc = maApiData.maCmplxFont.mnTextEnc;
-            // taken from binary importer
+            
             rtl_TextEncoding eTempTextEnc = (bEdit && (eFontEnc == getTextEncoding())) ?
                 ScfTools::GetSystemTextEncoding() : eFontEnc;
             SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maCmplxFont.mnFamily ), maApiData.maCmplxFont.maName, OUString(),
@@ -960,19 +960,19 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
             ScfTools::PutItem( rItemSet, aFontItem, bEdit ? EE_CHAR_FONTINFO_CTL : ATTR_CTL_FONT, bSkipPoolDefs );
         }
     }
-    // font height
+    
     if( maUsedFlags.mbHeightUsed )
     {
         sal_Int32 nHeight = maApiData.maDesc.Height;
-        // do we use EXC_FONTITEM_HF ( or is it just relevant for the binary filter )
-        if( bEdit/* && (eType != EXC_FONTITEM_HF) */)     // do not convert header/footer height
-            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // 1 in == 72 pt
+        
+        if( bEdit/* && (eType != EXC_FONTITEM_HF) */)     
+            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   
         SvxFontHeightItem aHeightItem( nHeight, 100, ATTR_FONT_HEIGHT );
         ScfTools::PutItem( rItemSet, aHeightItem, bEdit ? EE_CHAR_FONTHEIGHT :  ATTR_FONT_HEIGHT, bSkipPoolDefs );
         ScfTools::PutItem( rItemSet, aHeightItem, bEdit ? EE_CHAR_FONTHEIGHT_CJK : ATTR_CJK_FONT_HEIGHT, bSkipPoolDefs );
         ScfTools::PutItem( rItemSet, aHeightItem, bEdit ? EE_CHAR_FONTHEIGHT_CTL : ATTR_CTL_FONT_HEIGHT, bSkipPoolDefs );
     }
-    // font weight
+    
     if( maUsedFlags.mbWeightUsed )
     {
         ::FontWeight fWeight = VCLUnoHelper::ConvertFontWeight( maApiData.maDesc.Weight );
@@ -981,7 +981,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
         ScfTools::PutItem( rItemSet, aWeightItem, bEdit ? EE_CHAR_WEIGHT_CTL : ATTR_CTL_FONT_WEIGHT, bSkipPoolDefs );
         ScfTools::PutItem( rItemSet, aWeightItem, bEdit ? EE_CHAR_WEIGHT_CJK : ATTR_CJK_FONT_WEIGHT, bSkipPoolDefs );
     }
-    // font posture
+    
     if( maUsedFlags.mbPostureUsed )
     {
         SvxPostureItem aPostItem( ( maApiData.maDesc.Slant == cssawt::FontSlant_ITALIC ) ? ITALIC_NORMAL :  ITALIC_NONE,  ATTR_FONT_POSTURE);
@@ -989,12 +989,12 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
         ScfTools::PutItem( rItemSet, aPostItem, bEdit ? EE_CHAR_ITALIC_CJK : ATTR_CJK_FONT_POSTURE, bSkipPoolDefs );
         ScfTools::PutItem( rItemSet, aPostItem, bEdit ? EE_CHAR_ITALIC_CTL : ATTR_CTL_FONT_POSTURE, bSkipPoolDefs );
     }
-    // character color
+    
     if( maUsedFlags.mbColorUsed )
     {
         ScfTools::PutItem( rItemSet,SvxColorItem( maApiData.mnColor, bEdit ? EE_CHAR_COLOR : ATTR_FONT_COLOR  ) , bSkipPoolDefs );
     }
-    // underline style
+    
     if( maUsedFlags.mbUnderlineUsed )
     {
         ::FontUnderline eScUnderl;
@@ -1007,19 +1007,19 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
         SvxUnderlineItem aUnderlItem( eScUnderl, ATTR_FONT_UNDERLINE );
         ScfTools::PutItem( rItemSet, aUnderlItem, bEdit ? EE_CHAR_UNDERLINE : ATTR_FONT_UNDERLINE, bSkipPoolDefs );
     }
-    // strike out style
+    
     if( maUsedFlags.mbStrikeoutUsed )
     {
         ScfTools::PutItem( rItemSet, SvxCrossedOutItem( maModel.mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, bEdit ? EE_CHAR_STRIKEOUT : ATTR_FONT_CROSSEDOUT ), ATTR_FONT_CROSSEDOUT, bSkipPoolDefs );
     }
 
-    // outline style
+    
     if( maUsedFlags.mbOutlineUsed )
     {
         ScfTools::PutItem( rItemSet, SvxContourItem( maApiData.mbOutline, ATTR_FONT_CONTOUR ), bEdit ? EE_CHAR_OUTLINE : ATTR_FONT_CONTOUR, bSkipPoolDefs );
     }
 
-    // shadow style
+    
     if( maUsedFlags.mbShadowUsed )
     {
         ScfTools::PutItem( rItemSet, SvxShadowedItem( maApiData.mbShadow, ATTR_FONT_SHADOWED ), bEdit ? EE_CHAR_SHADOW : ATTR_FONT_SHADOWED, bSkipPoolDefs );
@@ -1033,7 +1033,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
             eScEscapem = SVX_ESCAPEMENT_SUBSCRIPT;
         if( ePropType == FONT_PROPTYPE_TEXT && bEdit )
         {
-           // #TODO handle EscapementHeight
+           
             rItemSet.Put( SvxEscapementItem( eScEscapem, EE_CHAR_ESCAPEMENT ) );
         }
     }
@@ -1041,7 +1041,7 @@ void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool
 
 void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType ) const
 {
-    // font name properties
+    
     if( maUsedFlags.mbNameUsed )
     {
         if( !maApiData.maLatinFont.maName.isEmpty() )
@@ -1063,15 +1063,15 @@ void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType
             rPropMap[ PROP_CharFontCharSetComplex ] <<= maApiData.maCmplxFont.mnTextEnc;
         }
     }
-    // font height
+    
     if( maUsedFlags.mbHeightUsed )
     {
-        float fHeight = static_cast< float >( maApiData.maDesc.Height / 20.0 ); // twips to points
+        float fHeight = static_cast< float >( maApiData.maDesc.Height / 20.0 ); 
         rPropMap[ PROP_CharHeight ] <<= fHeight;
         rPropMap[ PROP_CharHeightAsian ] <<= fHeight;
         rPropMap[ PROP_CharHeightComplex ] <<= fHeight;
     }
-    // font weight
+    
     if( maUsedFlags.mbWeightUsed )
     {
         float fWeight = maApiData.maDesc.Weight;
@@ -1079,29 +1079,29 @@ void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType
         rPropMap[ PROP_CharWeightAsian ] <<= fWeight;
         rPropMap[ PROP_CharWeightComplex ] <<= fWeight;
     }
-    // font posture
+    
     if( maUsedFlags.mbPostureUsed )
     {
         rPropMap[ PROP_CharPosture ] <<= maApiData.maDesc.Slant;
         rPropMap[ PROP_CharPostureAsian ] <<= maApiData.maDesc.Slant;
         rPropMap[ PROP_CharPostureComplex ] <<= maApiData.maDesc.Slant;
     }
-    // character color
+    
     if( maUsedFlags.mbColorUsed )
         rPropMap[ PROP_CharColor ] <<= maApiData.mnColor;
-    // underline style
+    
     if( maUsedFlags.mbUnderlineUsed )
         rPropMap[ PROP_CharUnderline ] <<= maApiData.maDesc.Underline;
-    // strike out style
+    
     if( maUsedFlags.mbStrikeoutUsed )
         rPropMap[ PROP_CharStrikeout ] <<= maApiData.maDesc.Strikeout;
-    // outline style
+    
     if( maUsedFlags.mbOutlineUsed )
         rPropMap[ PROP_CharContoured ] <<= maApiData.mbOutline;
-    // shadow style
+    
     if( maUsedFlags.mbShadowUsed )
         rPropMap[ PROP_CharShadowed ] <<= maApiData.mbShadow;
-    // escapement
+    
     if( maUsedFlags.mbEscapementUsed )
     {
         rPropMap[ PROP_CharEscapement ] <<= maApiData.mnEscapement;
@@ -1117,7 +1117,7 @@ void Font::writeToPropertySet( PropertySet& rPropSet, FontPropertyType ePropType
     rPropSet.setProperties( aPropMap );
 }
 
-// ============================================================================
+
 
 AlignmentModel::AlignmentModel() :
     mnHorAlign( XML_general ),
@@ -1146,7 +1146,7 @@ void AlignmentModel::setBiffVerAlign( sal_uInt8 nVerAlign )
     mnVerAlign = STATIC_ARRAY_SELECT( spnVerAligns, nVerAlign, XML_bottom );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiAlignmentData::ApiAlignmentData() :
     meHorJustify( ::com::sun::star::table::CellHoriJustify_STANDARD ),
@@ -1177,7 +1177,7 @@ bool operator==( const ApiAlignmentData& rLeft, const ApiAlignmentData& rRight )
         (rLeft.mbShrink      == rRight.mbShrink);
 }
 
-// ============================================================================
+
 
 Alignment::Alignment( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1213,7 +1213,7 @@ void Alignment::finalizeImport()
     namespace csstab = ::com::sun::star::table;
     namespace csstxt = ::com::sun::star::text;
 
-    // horizontal alignment
+    
     switch( maModel.mnHorAlign )
     {
         case XML_center:            maApiData.meHorJustify = csstab::CellHoriJustify_CENTER;    break;
@@ -1229,7 +1229,7 @@ void Alignment::finalizeImport()
     if (maModel.mnHorAlign == XML_distributed)
         maApiData.mnHorJustifyMethod = csstab::CellJustifyMethod::DISTRIBUTE;
 
-    // vertical alignment
+    
     switch( maModel.mnVerAlign )
     {
         case XML_bottom:        maApiData.mnVerJustify = csstab::CellVertJustify2::BOTTOM;    break;
@@ -1254,7 +1254,7 @@ void Alignment::finalizeImport()
     if( (0 <= nIndent) && (nIndent <= SAL_MAX_INT16) )
         maApiData.mnIndent = static_cast< sal_Int16 >( nIndent );
 
-    // complex text direction
+    
     switch( maModel.mnTextDir )
     {
         case OOX_XF_TEXTDIR_CONTEXT:    maApiData.mnWritingMode = csstxt::WritingMode2::PAGE;   break;
@@ -1262,17 +1262,17 @@ void Alignment::finalizeImport()
         case OOX_XF_TEXTDIR_RTL:        maApiData.mnWritingMode = csstxt::WritingMode2::RL_TB;  break;
     }
 
-    // rotation: 0-90 means 0 to 90 degrees ccw, 91-180 means 1 to 90 degrees cw, 255 means stacked
+    
     sal_Int32 nOoxRot = maModel.mnRotation;
     maApiData.mnRotation = ((0 <= nOoxRot) && (nOoxRot <= 90)) ?
         (100 * nOoxRot) :
         (((91 <= nOoxRot) && (nOoxRot <= 180)) ? (100 * (450 - nOoxRot)) : 0);
 
-    // "Orientation" property used for character stacking
+    
     maApiData.meOrientation = (nOoxRot == OOX_XF_ROTATION_STACKED) ?
         csstab::CellOrientation_STACKED : csstab::CellOrientation_STANDARD;
 
-    // alignment flags (#i84960 automatic line break, if vertically justified/distributed)
+    
     maApiData.mbWrapText = maModel.mbWrapText || (maModel.mnVerAlign == XML_distributed) || (maModel.mnVerAlign == XML_justify);
     maApiData.mbShrink = maModel.mbShrink;
 
@@ -1357,22 +1357,22 @@ void Alignment::finalizeImport()
 void Alignment::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
 {
     namespace csstab = ::com::sun::star::table;
-    // horizontal alignment
+    
     ScfTools::PutItem( rItemSet, SvxHorJustifyItem( GetScHorAlign(), ATTR_HOR_JUSTIFY ), bSkipPoolDefs );
     ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( ( maApiData.mnHorJustifyMethod == csstab::CellJustifyMethod::DISTRIBUTE ) ? ::SVX_JUSTIFY_METHOD_DISTRIBUTE : ::SVX_JUSTIFY_METHOD_AUTO, ATTR_HOR_JUSTIFY_METHOD ), bSkipPoolDefs );
     ScfTools::PutItem( rItemSet, SvxVerJustifyItem( GetScVerAlign(), ATTR_VER_JUSTIFY ), bSkipPoolDefs );
-    // vertical alignment
+    
     ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( ( maApiData.mnVerJustifyMethod == csstab::CellJustifyMethod::DISTRIBUTE ) ? ::SVX_JUSTIFY_METHOD_DISTRIBUTE : ::SVX_JUSTIFY_METHOD_AUTO, ATTR_VER_JUSTIFY_METHOD ), bSkipPoolDefs );
 
-    // CTL text direction
+    
     ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( GetScFrameDir(), ATTR_WRITINGDIR ), bSkipPoolDefs );
-    // set an angle in the range from -90 to 90 degrees
+    
     ScfTools::PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, maApiData.mnRotation ), bSkipPoolDefs );
-    // Orientation
+    
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_STACKED, maApiData.meOrientation == csstab::CellOrientation_STACKED ), bSkipPoolDefs );
-    // indent
+    
     ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_INDENT, maApiData.mnIndent ), bSkipPoolDefs );
-    // line wrap
+    
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_LINEBREAK, maApiData.mbWrapText ), bSkipPoolDefs );
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_SHRINKTOFIT, maApiData.mbShrink ), bSkipPoolDefs );
 }
@@ -1391,15 +1391,15 @@ void Alignment::writeToPropertyMap( PropertyMap& rPropMap ) const
     rPropMap[ PROP_ShrinkToFit ]     <<= maApiData.mbShrink;
 }
 
-// ============================================================================
+
 
 ProtectionModel::ProtectionModel() :
-    mbLocked( true ),   // default in Excel and Calc
+    mbLocked( true ),   
     mbHidden( false )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiProtectionData::ApiProtectionData() :
     maCellProt( sal_True, sal_False, sal_False, sal_False )
@@ -1415,7 +1415,7 @@ bool operator==( const ApiProtectionData& rLeft, const ApiProtectionData& rRight
         (rLeft.maCellProt.IsPrintHidden   == rRight.maCellProt.IsPrintHidden);
 }
 
-// ============================================================================
+
 
 Protection::Protection( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1450,7 +1450,7 @@ void Protection::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
     ScfTools::PutItem( rItemSet, ScProtectionAttr( maApiData.maCellProt.IsLocked, maApiData.maCellProt.IsFormulaHidden ), bSkipPoolDefs );
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1478,7 +1478,7 @@ void BorderLineModel::setBiffStyle( sal_Int32 nLineStyle )
     mnStyle = STATIC_ARRAY_SELECT( spnStyleIds, nLineStyle, XML_none );
 }
 
-// ----------------------------------------------------------------------------
+
 
 BorderModel::BorderModel( bool bDxf ) :
     maLeft( bDxf ),
@@ -1491,7 +1491,7 @@ BorderModel::BorderModel( bool bDxf ) :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiBorderData::ApiBorderData() :
     mbBorderUsed( false ),
@@ -1519,7 +1519,7 @@ bool operator==( const BorderLine& rLeft, const BorderLine& rRight )
         (rLeft.LineDistance   == rRight.LineDistance);
 }
 
-} // namespace
+} 
 
 bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
 {
@@ -1534,7 +1534,7 @@ bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
         (rLeft.mbDiagUsed   == rRight.mbDiagUsed);
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1546,9 +1546,9 @@ inline void lclSetBorderLineWidth( BorderLine& rBorderLine,
     rBorderLine.InnerLineWidth = nInner;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 Border::Border( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -1757,7 +1757,7 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
 }
 
 
-// ============================================================================
+
 
 PatternFillModel::PatternFillModel( bool bDxf ) :
     mnPattern( XML_none ),
@@ -1780,7 +1780,7 @@ void PatternFillModel::setBiffPattern( sal_Int32 nPattern )
     mnPattern = STATIC_ARRAY_SELECT( spnPatternIds, nPattern, XML_none );
 }
 
-// ----------------------------------------------------------------------------
+
 
 GradientFillModel::GradientFillModel() :
     mnType( XML_linear ),
@@ -1817,7 +1817,7 @@ void GradientFillModel::readGradientStop( SequenceInputStream& rStrm, bool bDxf 
         maColors[ fPosition ] = aColor;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ApiSolidFillData::ApiSolidFillData() :
     mnColor( API_RGB_TRANSPARENT ),
@@ -1834,7 +1834,7 @@ bool operator==( const ApiSolidFillData& rLeft, const ApiSolidFillData& rRight )
         (rLeft.mbUsed        == rRight.mbUsed);
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -1851,9 +1851,9 @@ sal_Int32 lclGetMixedColor( sal_Int32 nPattColor, sal_Int32 nFillColor, sal_Int3
         (lclGetMixedColorComp( nPattColor & 0x0000FF, nFillColor & 0x0000FF, nAlpha ) & 0x0000FF);
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 Fill::Fill( const WorkbookHelper& rHelper, bool bDxf ) :
     WorkbookHelper( rHelper ),
@@ -1978,7 +1978,7 @@ void Fill::finalizeImport()
 
     if( mxPatternModel.get() )
     {
-        // finalize the OOXML data struct
+        
         PatternFillModel& rModel = *mxPatternModel;
         if( mbDxf )
         {
@@ -1994,7 +1994,7 @@ void Fill::finalizeImport()
             }
         }
 
-        // convert to API fill settings
+        
         maApiData.mbUsed = rModel.mbPatternUsed;
         if( rModel.mnPattern == XML_none )
         {
@@ -2044,7 +2044,7 @@ void Fill::finalizeImport()
     else if( mxGradientModel.get() && !mxGradientModel->maColors.empty() )
     {
         GradientFillModel& rModel = *mxGradientModel;
-        maApiData.mbUsed = true;    // no support for differential attributes
+        maApiData.mbUsed = true;    
         GradientFillModel::ColorMap::const_iterator aIt = rModel.maColors.begin();
         OSL_ENSURE( !aIt->second.isAuto(), "Fill::finalizeImport - automatic gradient color" );
         maApiData.mnColor = aIt->second.getColor( rGraphicHelper, API_RGB_WHITE );
@@ -2084,7 +2084,7 @@ void Fill::writeToPropertyMap( PropertyMap& rPropMap ) const
     }
 }
 
-// ============================================================================
+
 
 XfModel::XfModel() :
     mnStyleXfId( -1 ),
@@ -2102,7 +2102,7 @@ XfModel::XfModel() :
 {
 }
 
-// ============================================================================
+
 
 Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -2153,7 +2153,7 @@ void Xf::importXf( SequenceInputStream& rStrm, bool bCellXf )
     sal_uInt32 nFlags = rStrm.readuInt32();
     maAlignment.setBiff12Data( nFlags );
     maProtection.setBiff12Data( nFlags );
-    // used flags, see comments in Xf::setBiffUsedFlags()
+    
     sal_uInt16 nUsedFlags = rStrm.readuInt16();
     maModel.mbFontUsed   = maModel.mbCellXf == getFlag( nUsedFlags, BIFF12_XF_FONT_USED );
     maModel.mbNumFmtUsed = maModel.mbCellXf == getFlag( nUsedFlags, BIFF12_XF_NUMFMT_USED );
@@ -2165,7 +2165,7 @@ void Xf::importXf( SequenceInputStream& rStrm, bool bCellXf )
 
 void Xf::finalizeImport()
 {
-    // alignment and protection
+    
     maAlignment.finalizeImport();
     maProtection.finalizeImport();
 }
@@ -2189,7 +2189,7 @@ void Xf::applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, 
         mpStyleSheet = rStyles.getCellStyleSheet( maModel.mnStyleXfId );
         if ( mpStyleSheet )
         {
-            //rDoc.ApplySelectionStyle( static_cast<ScStyleSheet&>(*mpStyleSheet), rMarkData );
+            
             rPat.SetStyleSheet(mpStyleSheet, false);
         }
         else
@@ -2214,10 +2214,10 @@ void Xf::applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, 
     }
     if (rPat.GetStyleName())
     {
-        // Check for a gap between the last entry and this one.
+        
         bool bHasGap = false;
         if (rAttrs.empty() && nRow1 > 0)
-            // First attribute range doesn't start at row 0.
+            
             bHasGap = true;
 
         if (!rAttrs.empty() && rAttrs.back().nRow + 1 < nRow1)
@@ -2225,7 +2225,7 @@ void Xf::applyPatternToAttrList( ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, 
 
         if (bHasGap)
         {
-            // Fill this gap with the default pattern.
+            
             ScAttrEntry aEntry;
             aEntry.nRow = nRow1 - 1;
             aEntry.pPattern = rDoc.GetDefPattern();
@@ -2243,7 +2243,7 @@ void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     StylesBuffer& rStyles = getStyles();
 
-    // create and set cell style
+    
     if( isCellXf() )
         rPropMap[ PROP_CellStyle ] <<= rStyles.createCellStyle( maModel.mnStyleXfId );
 
@@ -2310,36 +2310,36 @@ Xf::createPattern( bool bSkipPoolDefs )
         if( !maModel.mbAreaUsed )
             maModel.mbAreaUsed = !rStyleData.mbAreaUsed || !rStyles.equalFills( maModel.mnFillId, rStyleData.mnFillId );
     }
-    // cell protection
+    
     if( maModel.mbProtUsed )
     {
         maProtection.fillToItemSet( rItemSet, bSkipPoolDefs );
     }
 
-    // font
+    
     if( maModel.mbFontUsed )
     {
         rStyles.writeFontToItemSet( rItemSet, maModel.mnFontId, bSkipPoolDefs );
     }
 
-    // value format
+    
     if( maModel.mbNumFmtUsed )
     {
         rStyles.writeNumFmtToItemSet( rItemSet, maModel.mnNumFmtId, bSkipPoolDefs );
     }
-    // alignment
+    
     if( maModel.mbAlignUsed )
     {
         maAlignment.fillToItemSet( rItemSet, bSkipPoolDefs );
     }
 
-    // border
+    
     if( maModel.mbBorderUsed )
     {
         rStyles.writeBorderToItemSet( rItemSet, maModel.mnBorderId, bSkipPoolDefs );
     }
 
-    // area
+    
     if( maModel.mbAreaUsed )
     {
         rStyles.writeFillToItemSet( rItemSet, maModel.mnFillId, bSkipPoolDefs );
@@ -2367,7 +2367,7 @@ Xf::createPattern( bool bSkipPoolDefs )
     return *mpPattern;
 }
 
-// ============================================================================
+
 
 Dxf::Dxf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -2397,11 +2397,11 @@ FillRef Dxf::createFill( bool bAlwaysNew )
 
 void Dxf::importNumFmt( const AttributeList& rAttribs )
 {
-    // don't propagate number formats defined in Dxf entries
-    // they can have the same id ( but different format codes ) as those
-    // defined globally earlier. We discard the id defined in XML_numFmtId
-    // and generate one ourselves ( this assumes that the normal numberformat
-    // import has already taken place )
+    
+    
+    
+    
+    
     sal_Int32 nNumFmtId  = getStyles().nextFreeNumFmtId();
     OUString aFmtCode = rAttribs.getXString( XML_formatCode, OUString() );
     mxNumFmt = getStyles().createNumFmt( nNumFmtId, aFmtCode );
@@ -2412,7 +2412,7 @@ void Dxf::importDxf( SequenceInputStream& rStrm )
     sal_Int32 nNumFmtId = -1;
     OUString aFmtCode;
     sal_uInt16 nRecCount;
-    rStrm.skip( 4 );    // flags
+    rStrm.skip( 4 );    
     rStrm >> nRecCount;
     for( sal_uInt16 nRec = 0; !rStrm.isEof() && (nRec < nRecCount); ++nRec )
     {
@@ -2456,12 +2456,12 @@ void Dxf::finalizeImport()
     if( mxFont.get() )
         mxFont->finalizeImport();
     bool bRTL = false;
-    // number format already finalized by the number formats buffer
+    
     if( mxAlignment.get() )
     {
         mxAlignment->finalizeImport();
-        // how do we detect RTL when text dir is OOX_XF_CONTEXT? ( seems you
-        // would need access to the cell content, which we don't here )
+        
+        
         if ( mxAlignment->getModel().mnTextDir == OOX_XF_TEXTDIR_RTL )
             bRTL = true;
     }
@@ -2491,7 +2491,7 @@ void Dxf::fillToItemSet( SfxItemSet& rSet ) const
         mxFill->fillToItemSet(rSet);
 }
 
-// ============================================================================
+
 
 namespace {
 
@@ -2499,16 +2499,16 @@ const sal_Char* const spcStyleNamePrefix = "Excel Built-in ";
 const sal_Char* const sppcStyleNames[] =
 {
     "Normal",
-    "RowLevel_",            // outline level will be appended
-    "ColLevel_",            // outline level will be appended
+    "RowLevel_",            
+    "ColLevel_",            
     "Comma",
     "Currency",
     "Percent",
-    "Comma [0]",            // new in BIFF4
+    "Comma [0]",            
     "Currency [0]",
-    "Hyperlink",            // new in BIFF8
+    "Hyperlink",            
     "Followed Hyperlink",
-    "Note",                 // new in OOX
+    "Note",                 
     "Warning Text",
     0,
     0,
@@ -2576,9 +2576,9 @@ OUString lclCreateStyleName( const CellStyleModel& rModel )
     return rModel.mbBuiltin ? lclGetBuiltinStyleName( rModel.mnBuiltinId, rModel.maName, rModel.mnLevel ) : rModel.maName;
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 CellStyleModel::CellStyleModel() :
     mnXfId( -1 ),
@@ -2600,7 +2600,7 @@ bool CellStyleModel::isDefaultStyle() const
     return mbBuiltin && (mnBuiltinId == OOX_STYLE_NORMAL);
 }
 
-// ============================================================================
+
 
 CellStyle::CellStyle( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -2635,7 +2635,7 @@ void CellStyle::importCellStyle( SequenceInputStream& rStrm )
 void CellStyle::createCellStyle()
 {
 
-    // #i1624# #i1768# ignore unnamed user styles
+    
     bool bDefStyle = maModel.isDefaultStyle();
     if( !mbCreated )
     {
@@ -2652,7 +2652,7 @@ void CellStyle::createCellStyle()
 
         if( bDefStyle )
         {
-            // use existing "Default" style sheet
+            
             mpStyleSheet = static_cast< ScStyleSheet* >( static_cast< ScStyleSheetPool* >( rDoc.GetStyleSheetPool() )->Find(
                 ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) );
             OSL_ENSURE( mpStyleSheet, "CellStyle::createStyle - Default style not found" );
@@ -2668,7 +2668,7 @@ void CellStyle::createCellStyle()
             }
         }
 
-        // bDefStyle==true omits default pool items in CreatePattern()
+        
         if( bCreatePattern && mpStyleSheet && pXF )
             mpStyleSheet->GetItemSet().Put( pXF->createPattern( bDefStyle ).GetItemSet() );
     }
@@ -2681,7 +2681,7 @@ void CellStyle::finalizeImport( const OUString& rFinalName )
         createCellStyle();
 }
 
-// ============================================================================
+
 
 CellStyleBuffer::CellStyleBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -2706,7 +2706,7 @@ CellStyleRef CellStyleBuffer::importCellStyle( SequenceInputStream& rStrm )
 
 void CellStyleBuffer::finalizeImport()
 {
-    // calculate final names of all styles
+    
     typedef RefMap< OUString, CellStyle, IgnoreCaseCompare > CellStyleNameMap;
     CellStyleNameMap aCellStyles;
     CellStyleVector aConflictNameStyles;
@@ -2722,14 +2722,14 @@ void CellStyleBuffer::finalizeImport()
     bool bReserveAll = (getFilterType() == FILTER_BIFF) && (getBiff() == BIFF4) && isWorkbookFile() && (getCurrentSheetIndex() > 0);
     try
     {
-        // unfortunately, com.sun.star.style.StyleFamily does not implement XEnumerationAccess...
+        
         Reference< XIndexAccess > xStyleFamilyIA( getStyleFamily( false ), UNO_QUERY_THROW );
         for( sal_Int32 nIndex = 0, nCount = xStyleFamilyIA->getCount(); nIndex < nCount; ++nIndex )
         {
             Reference< XStyle > xStyle( xStyleFamilyIA->getByIndex( nIndex ), UNO_QUERY_THROW );
             if( bReserveAll || !xStyle->isUserDefined() )
             {
-                // create an empty entry by using ::std::map<>::operator[]
+                
                 aCellStyles[ xStyle->getName() ];
             }
         }
@@ -2762,7 +2762,7 @@ void CellStyleBuffer::finalizeImport()
     {
         const CellStyleModel& rModel = (*aIt)->getModel();
         OUString aStyleName = lclCreateStyleName( rModel );
-        // #i1624# #i1768# ignore unnamed user styles
+        
         if( aStyleName.getLength() > 0 )
         {
             if( aCellStyles.count( aStyleName ) > 0 )
@@ -2772,7 +2772,7 @@ void CellStyleBuffer::finalizeImport()
         }
     }
 
-    // find unused names for all styles with conflicting names
+    
     for( CellStyleVector::iterator aIt = aConflictNameStyles.begin(), aEnd = aConflictNameStyles.end(); aIt != aEnd; ++aIt )
     {
         const CellStyleModel& rModel = (*aIt)->getModel();
@@ -2787,7 +2787,7 @@ void CellStyleBuffer::finalizeImport()
         aCellStyles[ aUnusedName ] = *aIt;
     }
 
-    // set final names and create user-defined and modified built-in cell styles
+    
     aCellStyles.forEachMemWithKey( &CellStyle::finalizeImport );
 }
 
@@ -2811,21 +2811,21 @@ OUString CellStyleBuffer::createCellStyle( sal_Int32 nXfId ) const
     return getCellStyleSheet( maStylesByXf.get( nXfId ) );
 }
 
-// private --------------------------------------------------------------------
+
 
 void CellStyleBuffer::insertCellStyle( CellStyleRef xCellStyle )
 {
     const CellStyleModel& rModel = xCellStyle->getModel();
     if( rModel.mnXfId >= 0 )
     {
-        // insert into the built-in map or user defined map
+        
         (rModel.isBuiltin() ? maBuiltinStyles : maUserStyles).push_back( xCellStyle );
 
-        // insert into the XF identifier map
+        
         OSL_ENSURE( maStylesByXf.count( rModel.mnXfId ) == 0, "CellStyleBuffer::insertCellStyle - multiple styles with equal XF identifier" );
         maStylesByXf[ rModel.mnXfId ] = xCellStyle;
 
-        // remember default cell style
+        
         if( rModel.isDefaultStyle() )
             mxDefStyle = xCellStyle;
     }
@@ -2848,11 +2848,11 @@ OUString CellStyleBuffer::createCellStyle( const CellStyleRef& rxCellStyle ) con
         if( !rStyleName.isEmpty() )
             return rStyleName;
     }
-    // on error: fallback to default style
+    
     return lclGetBuiltinStyleName( OOX_STYLE_NORMAL, OUString() );
 }
 
-// ============================================================================
+
 
 AutoFormatModel::AutoFormatModel() :
     mnAutoFormatId( 0 ),
@@ -2865,7 +2865,7 @@ AutoFormatModel::AutoFormatModel() :
 {
 }
 
-// ============================================================================
+
 
 StylesBuffer::StylesBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -2965,23 +2965,23 @@ void StylesBuffer::importCellStyle( SequenceInputStream& rStrm )
 
 void StylesBuffer::finalizeImport()
 {
-    // fonts first, are needed to finalize unit converter and XFs below
+    
     maFonts.forEachMem( &Font::finalizeImport );
-    // finalize unit coefficients after default font is known
+    
     getUnitConverter().finalizeImport();
-    // number formats
+    
     maNumFmts.finalizeImport();
-    // borders and fills
-    // is there a document wide RTL setting that we
-    // would/could need to pass to finalizeImport here ?
+    
+    
+    
     maBorders.forEachMem( &Border::finalizeImport, false );
     maFills.forEachMem( &Fill::finalizeImport );
-    // style XFs and cell XFs
+    
     maStyleXfs.forEachMem( &Xf::finalizeImport );
     maCellXfs.forEachMem( &Xf::finalizeImport );
-    // built-in and user defined cell styles
+    
     maCellStyles.finalizeImport();
-    // differential formatting (for conditional formatting)
+    
     maDxfs.forEachMem( &Dxf::finalizeImport );
 }
 
@@ -3023,7 +3023,7 @@ FontRef StylesBuffer::getDefaultFont() const
     FontRef xDefFont;
     if( const Xf* pXf = getStyleXf( maCellStyles.getDefaultXfId() ).get() )
         xDefFont = pXf->getFont();
-    // no font from styles - try first loaded font (e.g. BIFF2)
+    
     if( !xDefFont )
         xDefFont = maFonts.get( 0 );
     OSL_ENSURE( xDefFont.get(), "StylesBuffer::getDefaultFont - no default font found" );
@@ -3044,12 +3044,12 @@ bool StylesBuffer::equalBorders( sal_Int32 nBorderId1, sal_Int32 nBorderId2 ) co
     switch( getFilterType() )
     {
         case FILTER_OOXML:
-            // in OOXML, borders are assumed to be unique
+            
             return false;
 
         case FILTER_BIFF:
         {
-            // in BIFF, a new border entry has been created for every XF
+            
             const Border* pBorder1 = maBorders.get( nBorderId1 ).get();
             const Border* pBorder2 = maBorders.get( nBorderId2 ).get();
             return pBorder1 && pBorder2 && (pBorder1->getApiData() == pBorder2->getApiData());
@@ -3069,12 +3069,12 @@ bool StylesBuffer::equalFills( sal_Int32 nFillId1, sal_Int32 nFillId2 ) const
     switch( getFilterType() )
     {
         case FILTER_OOXML:
-            // in OOXML, fills are assumed to be unique
+            
             return false;
 
         case FILTER_BIFF:
         {
-            // in BIFF, a new fill entry has been created for every XF
+            
             const Fill* pFill1 = maFills.get( nFillId1 ).get();
             const Fill* pFill2 = maFills.get( nFillId2 ).get();
             return pFill1 && pFill2 && (pFill1->getApiData() == pFill2->getApiData());
@@ -3111,8 +3111,8 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
     {
         rStyleName = OUStringBuffer("ConditionalStyle_").append(nDxfId + 1).makeStringAndClear();
 
-        // Create a cell style. This may overwrite an existing style if
-        // one with the same name exists.
+        
+        
         SfxItemSet& rStyleItemSet =
             ScfTools::MakeCellStyleSheet(
                 *getScDocument().GetStyleSheetPool(), rStyleName, true).GetItemSet();
@@ -3120,7 +3120,7 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
         pDxf->fillToItemSet(rStyleItemSet);
     }
 
-    // on error: fallback to default style
+    
     if (rStyleName.isEmpty())
         rStyleName = maCellStyles.getDefaultStyleName();
 
@@ -3220,7 +3220,7 @@ bool StylesBuffer::hasBorder( sal_Int32 nBorderId ) const
     return pBorder && pBorder->hasBorder();
 }
 
-} // namespace xls
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

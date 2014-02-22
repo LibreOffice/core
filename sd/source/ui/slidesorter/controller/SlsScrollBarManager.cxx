@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -53,11 +53,11 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
       mpContentWindow(mrSlideSorter.GetContentWindow()),
       maAutoScrollFunctor()
 {
-    // Hide the scroll bars by default to prevent display errors while
-    // switching between view shells:  In the short time between initiating
-    // such a switch and the final rearrangement of UI controls the scroll
-    // bars and the filler where displayed in the upper left corner of the
-    // ViewTabBar.
+    
+    
+    
+    
+    
     mpHorizontalScrollBar->Hide();
     mpVerticalScrollBar->Hide();
     mpScrollBarFiller->Hide();
@@ -154,11 +154,11 @@ Rectangle ScrollBarManager::PlaceScrollBars (
 
 void ScrollBarManager::PlaceHorizontalScrollBar (const Rectangle& aAvailableArea)
 {
-    // Save the current relative position.
+    
     mnHorizontalPosition = double(mpHorizontalScrollBar->GetThumbPos())
         / double(mpHorizontalScrollBar->GetRange().Len());
 
-    // Place the scroll bar.
+    
     Size aScrollBarSize (mpHorizontalScrollBar->GetSizePixel());
     mpHorizontalScrollBar->SetPosSizePixel (
         Point(aAvailableArea.Left(),
@@ -166,7 +166,7 @@ void ScrollBarManager::PlaceHorizontalScrollBar (const Rectangle& aAvailableArea
         Size (aAvailableArea.GetWidth() - GetVerticalScrollBarWidth(),
             aScrollBarSize.Height()));
 
-    // Restore the relative position.
+    
     mpHorizontalScrollBar->SetThumbPos(
         (long)(0.5 + mnHorizontalPosition * mpHorizontalScrollBar->GetRange().Len()));
 }
@@ -178,13 +178,13 @@ void ScrollBarManager::PlaceVerticalScrollBar (const Rectangle& aArea)
 {
     const sal_Int32 nThumbPosition (mpVerticalScrollBar->GetThumbPos());
 
-    // Place the scroll bar.
+    
     Size aScrollBarSize (mpVerticalScrollBar->GetSizePixel());
     Point aPosition (aArea.Right()-aScrollBarSize.Width()+1, aArea.Top());
     Size aSize (aScrollBarSize.Width(), aArea.GetHeight() - GetHorizontalScrollBarHeight());
     mpVerticalScrollBar->SetPosSizePixel(aPosition, aSize);
 
-    // Restore the position.
+    
     mpVerticalScrollBar->SetThumbPos(static_cast<long>(nThumbPosition));
     mnVerticalPosition = nThumbPosition / double(mpVerticalScrollBar->GetRange().Len());
 }
@@ -212,8 +212,8 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
     SharedSdWindow pWindow (mrSlideSorter.GetContentWindow());
     Size aWindowModelSize (pWindow->PixelToLogic(pWindow->GetSizePixel()));
 
-    // The horizontal scroll bar is only shown when the window is
-    // horizontally smaller than the view.
+    
+    
     if (mpHorizontalScrollBar != 0 && mpHorizontalScrollBar->IsVisible())
     {
         mpHorizontalScrollBar->Show();
@@ -233,9 +233,9 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
 
         const long nWidth (mpContentWindow->PixelToLogic(
             mpContentWindow->GetSizePixel()).Width());
-        // Make the line size about 10% of the visible width.
+        
         mpHorizontalScrollBar->SetLineSize (nWidth / 10);
-        // Make the page size about 90% of the visible width.
+        
         mpHorizontalScrollBar->SetPageSize ((nWidth * 9) / 10);
     }
     else
@@ -243,7 +243,7 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
         mnHorizontalPosition = 0;
     }
 
-    // The vertical scroll bar is always shown.
+    
     if (mpVerticalScrollBar != 0 && mpVerticalScrollBar->IsVisible())
     {
         mpVerticalScrollBar->SetRange (
@@ -262,9 +262,9 @@ void ScrollBarManager::UpdateScrollBars (bool bResetThumbPosition, bool bUseScro
 
         const long nHeight (mpContentWindow->PixelToLogic(
             mpContentWindow->GetSizePixel()).Height());
-        // Make the line size about 10% of the visible height.
+        
         mpVerticalScrollBar->SetLineSize (nHeight / 10);
-        // Make the page size about 90% of the visible height.
+        
         mpVerticalScrollBar->SetPageSize ((nHeight * 9) / 10);
     }
     else
@@ -363,16 +363,16 @@ Rectangle ScrollBarManager::DetermineScrollBarVisibilities (
     const bool bIsHorizontalScrollBarAllowed,
     const bool bIsVerticalScrollBarAllowed)
 {
-    // Test which combination of scroll bars is the best.
+    
     bool bShowHorizontal = false;
     bool bShowVertical = false;
     if (mrSlideSorter.GetModel().GetPageCount() == 0)
     {
-        // No pages => no scroll bars.
+        
     }
     else if (TestScrollBarVisibilities(false, false, rAvailableArea))
     {
-        // Nothing to be done.
+        
     }
     else if (bIsHorizontalScrollBarAllowed
         && TestScrollBarVisibilities(true, false, rAvailableArea))
@@ -390,12 +390,12 @@ Rectangle ScrollBarManager::DetermineScrollBarVisibilities (
         bShowVertical = true;
     }
 
-    // Make the visibility of the scroll bars permanent.
+    
     mpVerticalScrollBar->Show(bShowVertical);
     mpHorizontalScrollBar->Show(bShowHorizontal);
     mpScrollBarFiller->Show(bShowVertical && bShowHorizontal);
 
-    // Adapt the remaining space accordingly.
+    
     Rectangle aRemainingSpace (rAvailableArea);
     if (bShowVertical)
         aRemainingSpace.Right() -= mpVerticalScrollBar->GetSizePixel().Width();
@@ -415,16 +415,16 @@ bool ScrollBarManager::TestScrollBarVisibilities (
 {
     model::SlideSorterModel& rModel (mrSlideSorter.GetModel());
 
-    // Adapt the available size by subtracting the sizes of the scroll bars
-    // visible in this combination.
+    
+    
     Size aBrowserSize (rAvailableArea.GetSize());
     if (bHorizontalScrollBarVisible)
         aBrowserSize.Height() -= mpHorizontalScrollBar->GetSizePixel().Height();
     if (bVerticalScrollBarVisible)
         aBrowserSize.Width() -= mpVerticalScrollBar->GetSizePixel().Width();
 
-    // Tell the view to rearrange its page objects and check whether the
-    // page objects can be shown without clipping.
+    
+    
     bool bRearrangeSuccess (mrSlideSorter.GetView().GetLayouter().Rearrange (
         mrSlideSorter.GetView().GetOrientation(),
         aBrowserSize,
@@ -436,8 +436,8 @@ bool ScrollBarManager::TestScrollBarVisibilities (
         Size aPageSize = mrSlideSorter.GetView().GetLayouter().GetTotalBoundingBox().GetSize();
         Size aWindowModelSize = mpContentWindow->PixelToLogic(aBrowserSize);
 
-        // The content may be clipped, i.e. not fully visible, in one
-        // direction only when the scroll bar is visible in that direction.
+        
+        
         if (aPageSize.Width() > aWindowModelSize.Width())
             if ( ! bHorizontalScrollBarVisible)
                 return false;
@@ -462,7 +462,7 @@ void ScrollBarManager::SetTopLeft (const Point aNewTopLeft)
             || mpHorizontalScrollBar->GetThumbPos() == aNewTopLeft.X()))
         return;
 
-    // Flush pending repaints before scrolling to avoid temporary artifacts.
+    
     mrSlideSorter.GetContentWindow()->Update();
 
     if (mpVerticalScrollBar)
@@ -659,13 +659,13 @@ void ScrollBarManager::Scroll(
         {
             view::Layouter& rLayouter (mrSlideSorter.GetView().GetLayouter());
 
-            // Calculate estimate of new location.
+            
             if (bIsVertical)
                 aNewTopLeft.Y() += nDistance * rLayouter.GetPageObjectSize().Height();
             else
                 aNewTopLeft.X() += nDistance * rLayouter.GetPageObjectSize().Width();
 
-            // Adapt location to show whole slides.
+            
             if (bIsVertical)
                 if (nDistance > 0)
                 {
@@ -705,6 +705,6 @@ void ScrollBarManager::Scroll(
 }
 
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

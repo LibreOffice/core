@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
@@ -67,14 +67,14 @@ namespace filter {
             {
             }
 
-            // XImportFilter
+            
             virtual sal_Bool SAL_CALL
             importer(const Sequence< PropertyValue >& sourceData,
                      const Reference< XDocumentHandler >& docHandler,
                      const Sequence< OUString >& userData)
                 throw (IllegalArgumentException, RuntimeException);
 
-            // XExportFilter
+            
             virtual sal_Bool SAL_CALL
             exporter(
                      const Sequence< PropertyValue >& sourceData,
@@ -82,7 +82,7 @@ namespace filter {
                 throw (IllegalArgumentException,
                        RuntimeException);
 
-            // UNO component helper methods
+            
 
             static OUString impl_getImplementationName();
 
@@ -102,8 +102,8 @@ OdfFlatXml::importer(
                      const Sequence< OUString >& /* userData */)
     throw (IllegalArgumentException, RuntimeException)
 {
-    // Read InputStream to read from and an URL used for the system id
-    // of the InputSource we create from the given sourceData sequence
+    
+    
     Reference<XInputStream> inputStream;
     OUString paramName;
     OUString url;
@@ -152,7 +152,7 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
     OUString targetURL;
     Reference<XOutputStream> outputStream;
 
-    // Read output stream and target URL from the parameters given in sourceData.
+    
     sal_Int32 paramCount = sourceData.getLength();
     for (sal_Int32 paramIdx = 0; paramIdx < paramCount; paramIdx++)
         {
@@ -168,7 +168,7 @@ OdfFlatXml::exporter(const Sequence< PropertyValue >& sourceData,
             Reference< XDocumentHandler > saxWriter = Writer::create(m_xContext);
             setDelegate(saxWriter);
         }
-    // get data source interface ...
+    
     Reference<XActiveDataSource> dataSource(getDelegate(), UNO_QUERY);
     OSL_ASSERT(dataSource.is());
     if (!dataSource.is())

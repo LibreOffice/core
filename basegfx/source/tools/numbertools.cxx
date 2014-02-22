@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <basegfx/tools/tools.hxx>
@@ -21,11 +21,11 @@ namespace basegfx { namespace tools
 {
     B2DPolyPolygon number2PolyPolygon(double fValue, sal_Int32 nTotalDigits, sal_Int32 nDecPlaces, bool bLitSegments)
     {
-        // config here
-        // {
+        
+        
         const double fSpace=0.2;
-        // }
-        // config here
+        
+        
 
         rtl::OUStringBuffer aNum;
         rtl::math::doubleToUStringBuffer(aNum,

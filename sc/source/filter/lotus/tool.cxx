@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -36,22 +36,22 @@
 
 #include <math.h>
 
-// External variable
-extern WKTYP                eTyp;           // -> filter.cxx, aktueller Dateityp
-extern ScDocument*          pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
 
-// Global variable
-sal_uInt8                       nDefaultFormat; // -> op.cpp, Standard-Zellenformat
+extern WKTYP                eTyp;           
+extern ScDocument*          pDoc;           
+
+
+sal_uInt8                       nDefaultFormat; 
 
 extern SvxHorJustifyItem    *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
 extern ScProtectionAttr*    pAttrUnprot;
 extern SfxUInt32Item**      pAttrValForms;
 
 SvxHorJustifyItem           *pAttrRight, *pAttrLeft, *pAttrCenter, *pAttrRepeat, *pAttrStandard;
-                                                    // -> in memory.cxx initialisiert
-ScProtectionAttr*           pAttrUnprot;            // ->  " memory.cxx    "
+                                                    
+ScProtectionAttr*           pAttrUnprot;            
 
-extern FormCache*           pValueFormCache;        // -> in memory.cxx initialisiert
+extern FormCache*           pValueFormCache;        
 FormCache*                  pValueFormCache;
 
 SCCOL                       LotusRangeList::nEingCol;
@@ -59,7 +59,7 @@ SCROW                       LotusRangeList::nEingRow;
 
 void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
 {
-    // Label-Format-Auswertung
+    
     OSL_ENSURE( pString != NULL, "PutFormString(): pString == NULL" );
     if (!pString)
         return;
@@ -71,26 +71,26 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
 
     switch( cForm )
     {
-        case '"':   // rechtsbuendig
+        case '"':   
             pJustify = pAttrRight;
             pString++;
             break;
-        case '\'':  // linksbuendig
+        case '\'':  
             pJustify = pAttrLeft;
             pString++;
             break;
-        case '^':   // zentriert
+        case '^':   
             pJustify = pAttrCenter;
             pString++;
             break;
-        case '|':   // printer command
+        case '|':   
             pString = NULL;
             break;
-        case '\\':  // Wiederholung
+        case '\\':  
             pJustify = pAttrRepeat;
             pString++;
             break;
-        default:    // kenn' ich nicht!
+        default:    
             pJustify = pAttrStandard;
     }
 
@@ -102,7 +102,7 @@ void PutFormString( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Char* pString )
 
 void SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8 nSt )
 {
-    //  PREC:   nSt = Standard-Dezimalstellenanzahl
+    
     pDoc->ApplyAttr( nCol, nRow, nTab, *( pValueFormCache->GetAttr( nFormat, nSt ) ) );
 
     ScProtectionAttr aAttr;
@@ -113,8 +113,8 @@ void SetFormat( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_uInt8 nFormat, sal_uInt8
 }
 
 void InitPage( void )
-{   // Seitenformat initialisieren, d.h. Default-Werte von SC holen
-    //scGetPageFormat( 0, &aPage );
+{   
+    
 }
 
 double SnumToDouble( sal_Int16 nVal )
@@ -162,7 +162,7 @@ double Snum32ToDouble( sal_uInt32 nValue )
 }
 
 FormCache::FormCache( ScDocument* pDoc1, sal_uInt8 nNewDefaultFormat )
-{   // Default-Format ist 'Default'
+{   
     nDefaultFormat = nNewDefaultFormat;
     pFormTable = pDoc1->GetFormatTable();
     for( sal_uInt16 nC = 0 ; nC < __nSize ; nC++ )
@@ -178,8 +178,8 @@ FormCache::~FormCache()
 
 SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
 {
-    // neues Format erzeugen
-    sal_uInt8       nL, nH; // Low-/High-Nibble
+    
+    sal_uInt8       nL, nH; 
     sal_uInt8       nForm = nFormat;
     OUString          aFormString;
     sal_Int16       eType = NUMBERFORMAT_ALL;
@@ -188,154 +188,154 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
     NfIndexTableOffset eIndexTableOffset = NF_NUMERIC_START;
     sal_Bool        bDefault = false;
 
-    if( nForm == 0xFF ) // Default-Format?
+    if( nForm == 0xFF ) 
         nForm = nDefaultFormat;
 
-    // Aufdroeseln in Low- und High-Nibble
+    
     nL = nFormat & 0x0F;
     nH = ( nFormat & 0xF0 ) / 16;
 
-    nH &= 0x07;     // Bits 4-6 'rausziehen
+    nH &= 0x07;     
     switch( nH )
     {
-        case 0x00:  // Festkommaformat (fixed)
-            //fStandard;nL;
+        case 0x00:  
+            
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
-        case 0x01:  // Exponentdarstellung (scientific notation)
-            //fExponent;nL;
+        case 0x01:  
+            
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_SCIENTIFIC, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
-        case 0x02:  // Waehrungsdarstellung (currency)
-            //fMoney;nL;
+        case 0x02:  
+            
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_CURRENCY, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
-        case 0x03:  // Prozent
-            //fPercent;nL;
+        case 0x03:  
+            
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_PERCENT, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
-        case 0x04:  // Komma
-            //fStandard;nL;
+        case 0x04:  
+            
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, true, false, nL, 1);
             break;
-        case 0x05:  // frei
-            //fStandard;nL;
+        case 0x05:  
+            
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             break;
-        case 0x06:  // frei
-            //fStandard;nL;
+        case 0x06:  
+            
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
                 eLanguage, false, false, nL, 1);
             nIndex1 = 0;
             break;
-        case 0x07:  // Spezialformat
+        case 0x07:  
             switch( nL )
             {
-                case 0x00:  // +/-
-                    //fStandard;nSt;
+                case 0x00:  
+                    
                     nIndex1 = pFormTable->GetStandardFormat(
                         NUMBERFORMAT_NUMBER, eLanguage );
                     aFormString = pFormTable->GenerateFormat(nIndex1,
                         eLanguage, false, true, nSt, 1);
                     break;
-                case 0x01:  // generelles Format
-                    //fStandard;nSt;
+                case 0x01:  
+                    
                     nIndex1 = pFormTable->GetStandardFormat(
                         NUMBERFORMAT_NUMBER, eLanguage );
                     aFormString = pFormTable->GenerateFormat(nIndex1,
                         eLanguage, false, false, nSt, 1);
                     break;
-                case 0x02:  // Datum: Tag, Monat, Jahr
-                    //fDate;dfDayMonthYearLong;
+                case 0x02:  
+                    
                     eType = NUMBERFORMAT_DATE;
                     eIndexTableOffset = NF_DATE_SYS_DDMMYYYY;
                     break;
-                case 0x03:  // Datum: Tag, Monat
-                    //fDate;dfDayMonthLong;
+                case 0x03:  
+                    
                     eType = NUMBERFORMAT_DATE;
                     aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_DD);
-                    aFormString += pFormTable->GetDateSep();    // matches last eLanguage
+                    aFormString += pFormTable->GetDateSep();    
                     aFormString += pFormTable->GetKeyword( eLanguage, NF_KEY_MMMM);
                     break;
-                case 0x04:  // Datum: Monat, Jahr
-                    //fDate;dfMonthYearLong;
+                case 0x04:  
+                    
                     eType = NUMBERFORMAT_DATE;
                     aFormString = pFormTable->GetKeyword( eLanguage, NF_KEY_MM);
-                    aFormString += pFormTable->GetDateSep();    // matches last eLanguage
+                    aFormString += pFormTable->GetDateSep();    
                     aFormString += pFormTable->GetKeyword( eLanguage, NF_KEY_YYYY);
                     break;
-                case 0x05:  // Textformate
-                    //fString;nSt;
+                case 0x05:  
+                    
                     eType = NUMBERFORMAT_TEXT;
                     eIndexTableOffset = NF_TEXT;
                     break;
-                case 0x06:  // versteckt
-                    //wFlag |= paHideAll;bSetFormat = sal_False;
+                case 0x06:  
+                    
                     eType = NUMBERFORMAT_NUMBER;
                     aFormString = "\"\"";
                     break;
-                case 0x07:  // Time: hour, min, sec
-                    //fTime;tfHourMinSec24;
+                case 0x07:  
+                    
                     eType = NUMBERFORMAT_TIME;
                     eIndexTableOffset = NF_TIME_HHMMSS;
                     break;
-                case 0x08:  // Time: hour, min
-                    //fTime;tfHourMin24;
+                case 0x08:  
+                    
                     eType = NUMBERFORMAT_TIME;
                     eIndexTableOffset = NF_TIME_HHMM;
                     break;
-                case 0x09:  // Date, intern sal_Int32 1
-                    //fDate;dfDayMonthYearLong;
+                case 0x09:  
+                    
                     eType = NUMBERFORMAT_DATE;
                     eIndexTableOffset = NF_DATE_SYS_DDMMYYYY;
                     break;
-                case 0x0A:  // Date, intern sal_Int32 2
-                    //fDate;dfDayMonthYearLong;
+                case 0x0A:  
+                    
                     eType = NUMBERFORMAT_DATE;
                     eIndexTableOffset = NF_DATE_SYS_DDMMYYYY;
                     break;
-                case 0x0B:  // Time, intern sal_Int32 1
-                    //fTime;tfHourMinSec24;
+                case 0x0B:  
+                    
                     eType = NUMBERFORMAT_TIME;
                     eIndexTableOffset = NF_TIME_HHMMSS;
                     break;
-                case 0x0C:  // Time, intern sal_Int32 2
-                    //fTime;tfHourMinSec24;
+                case 0x0C:  
+                    
                     eType = NUMBERFORMAT_TIME;
                     eIndexTableOffset = NF_TIME_HHMMSS;
                     break;
-                case 0x0F:  // Standardeinstellung
-                    //fStandard;nSt;
+                case 0x0F:  
+                    
                     bDefault = sal_True;
                     break;
                 default:
-                    //fStandard;nSt;
+                    
                     bDefault = sal_True;
                     break;
             }
             break;
         default:
-            //fStandard;nL;
+            
             nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
             aFormString = pFormTable->GenerateFormat(nIndex1,
@@ -344,7 +344,7 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
             break;
     }
 
-    // Format in Table schieben
+    
     if( bDefault )
         nHandle = 0;
     else if (eIndexTableOffset != NF_NUMERIC_START)
@@ -360,12 +360,12 @@ SfxUInt32Item* FormCache::NewAttr( sal_uInt8 nFormat, sal_uInt8 nSt )
 
 void LotusRange::MakeHash( void )
 {
-    // 33222222222211111111110000000000
-    // 10987654321098765432109876543210
-    //                         ******** nColS
-    //                   ********       nColE
-    //     ****************             nRowS
-    // ****************                 nRowE
+    
+    
+    
+    
+    
+    
     nHash =  static_cast<sal_uInt32>(nColStart);
     nHash += static_cast<sal_uInt32>(nColEnd) << 6;
     nHash += static_cast<sal_uInt32>(nRowStart) << 12;
@@ -531,14 +531,14 @@ bool RangeNameBufferWK3::FindAbs( const OUString& rRef, sal_uInt16& rIndex )
 {
     OUString            aTmp( rRef );
     aTmp = aTmp.copy(1);
-    StringHashEntry     aRef( aTmp ); // ohne '$' suchen!
+    StringHashEntry     aRef( aTmp ); 
 
     std::vector<Entry>::iterator itr;
     for ( itr = maEntries.begin(); itr != maEntries.end(); ++itr )
     {
         if ( aRef == itr->aStrHashEntry )
         {
-            // eventuell neuen Range Name aufbauen
+            
             if( itr->nAbsInd )
                 rIndex = itr->nAbsInd;
             else

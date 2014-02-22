@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "pyuno_impl.hxx"
@@ -53,7 +53,7 @@ PyRef ustring2PyUnicode( const OUString & str )
 {
     PyRef ret;
 #if Py_UNICODE_SIZE == 2
-    // YD force conversion since python/2 uses wchar_t
+    
     ret = PyRef( PyUnicode_FromUnicode( (const Py_UNICODE*)str.getStr(), str.getLength() ), SAL_NO_ACQUIRE );
 #else
     OString sUtf8(OUStringToOString(str, RTL_TEXTENCODING_UTF8));
@@ -90,7 +90,7 @@ OUString pyString2ustring( PyObject *pystr )
     else
     {
 #if PY_MAJOR_VERSION >= 3
-        char *name = PyBytes_AsString(pystr); // hmmm... is this a good idea?
+        char *name = PyBytes_AsString(pystr); 
 #else
         char *name = PyString_AsString(pystr);
 #endif
@@ -114,9 +114,9 @@ PyRef getObjectFromUnoModule( const Runtime &runtime, const char * func )
 }
 
 
-//------------------------------------------------------------------------------------
-// Logging
-//------------------------------------------------------------------------------------
+
+
+
 
 bool isLog( RuntimeCargo * cargo, sal_Int32 loglevel )
 {

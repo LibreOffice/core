@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,7 +54,7 @@ OUString SvxIconChoiceCtrlEntry::GetDisplayText() const
     return MnemonicGenerator::EraseAllMnemonicChars( aText );
 }
 
-// ----------------------------------------------------------------------------
+
 
 SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtrlColumnInfo& rInfo )
     : aColText( rInfo.aColText ), aColImage( rInfo.aColImage )
@@ -72,7 +72,7 @@ SvxIconChoiceCtrlColumnInfo::SvxIconChoiceCtrlColumnInfo( const SvxIconChoiceCtr
 
 SvtIconChoiceCtrl::SvtIconChoiceCtrl( Window* pParent, WinBits nWinStyle ) :
 
-     // WB_CLIPCHILDREN on, as ScrollBars lie on the window!
+     
     Control( pParent, nWinStyle | WB_CLIPCHILDREN ),
 
     _pCurKeyEvent   ( NULL ),
@@ -336,7 +336,7 @@ void SvtIconChoiceCtrl::KeyInput( const KeyEvent& rKEvt )
 }
 sal_Bool SvtIconChoiceCtrl::DoKeyInput( const KeyEvent& rKEvt )
 {
-    // under OS/2, we get key up/down even while editing
+    
     if( IsEntryEditing() )
         return sal_True;
     _pCurKeyEvent = (KeyEvent*)&rKEvt;
@@ -392,7 +392,7 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
         else
         {
             Wallpaper aBackground( rPaper );
-            // HACK, as background might be transparent!
+            
             if( !aBackground.IsBitmap() )
                 aBackground.SetStyle( WALLPAPER_TILE );
 
@@ -420,8 +420,8 @@ void SvtIconChoiceCtrl::SetBackground( const Wallpaper& rPaper )
             Control::SetBackground( aBackground );
         }
 
-        // If text colors are attributed "hard," don't use automatism to select
-        // a readable text color.
+        
+        
         Font aFont( GetFont() );
         aFont.SetColor( rStyleSettings.GetFieldTextColor() );
         SetFont( aFont );
@@ -452,7 +452,7 @@ void SvtIconChoiceCtrl::FillLayoutData() const
 
     SvtIconChoiceCtrl* pNonConstMe = const_cast< SvtIconChoiceCtrl* >( this );
 
-    // loop through all entries
+    
     sal_uInt16 nCount = (sal_uInt16)GetEntryCount();
     sal_uInt16 nPos = 0;
     while ( nPos < nCount )

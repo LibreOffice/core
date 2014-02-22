@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
 #endif
-// LO/windows.h conflict
+
 #undef WB_LEFT
 #undef WB_RIGHT
 #include "msdasc.h"
@@ -68,16 +68,16 @@ BSTR PromptNew(long hWnd)
     ADOConnection* piTmpConnection = NULL;
     BSTR _result=NULL;
 
-     // Initialize COM
+     
      ::CoInitialize( NULL );
 
-    // Instantiate DataLinks object.
+    
       hr = CoCreateInstance(
-                    CLSID_DataLinks,                //clsid -- Data Links UI
-                    NULL,                           //pUnkOuter
-                    CLSCTX_INPROC_SERVER,           //dwClsContext
-                    IID_IDataSourceLocator,     //riid
-                    (void**)&dlPrompt   //ppvObj
+                    CLSID_DataLinks,                
+                    NULL,                           
+                    CLSCTX_INPROC_SERVER,           
+                    IID_IDataSourceLocator,     
+                    (void**)&dlPrompt   
                     );
     if( FAILED( hr ) )
     {
@@ -94,7 +94,7 @@ BSTR PromptNew(long hWnd)
         return connstr;
     }
 
-    // Prompt for connection information.
+    
     hr = dlPrompt->PromptNew((IDispatch **)&piTmpConnection);
 
     if( FAILED( hr ) || !piTmpConnection )
@@ -124,7 +124,7 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
     ADOConnection* piTmpConnection = NULL;
     BSTR _result=NULL;
 
-     // Initialize COM
+     
      ::CoInitialize( NULL );
 
      hr = CoCreateInstance(CLSID_CADOConnection,
@@ -146,13 +146,13 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
         return connstr;
     }
 
-    // Instantiate DataLinks object.
+    
       hr = CoCreateInstance(
-                    CLSID_DataLinks,                //clsid -- Data Links UI
-                    NULL,                           //pUnkOuter
-                    CLSCTX_INPROC_SERVER,           //dwClsContext
-                    IID_IDataSourceLocator,     //riid
-                    (void**)&dlPrompt   //ppvObj
+                    CLSID_DataLinks,                
+                    NULL,                           
+                    CLSCTX_INPROC_SERVER,           
+                    IID_IDataSourceLocator,     
+                    (void**)&dlPrompt   
                     );
     if( FAILED( hr ) )
     {
@@ -171,9 +171,9 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
 
     VARIANT_BOOL pbSuccess;
 
-    // Prompt for connection information.
+    
     hr = dlPrompt->PromptEdit((IDispatch **)&piTmpConnection,&pbSuccess);
-    if( SUCCEEDED( hr ) && sal_False == pbSuccess ) //if user press cancel then sal_False == pbSuccess
+    if( SUCCEEDED( hr ) && sal_False == pbSuccess ) 
     {
         piTmpConnection->Release( );
         dlPrompt->Release( );
@@ -182,7 +182,7 @@ BSTR PromptEdit(long hWnd,BSTR connstr)
 
     if( FAILED( hr ) )
     {
-        // Prompt for new connection information.
+        
         piTmpConnection->Release( );
         piTmpConnection = NULL;
         hr = dlPrompt->PromptNew((IDispatch **)&piTmpConnection);

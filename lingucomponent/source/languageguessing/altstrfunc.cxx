@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "altstrfunc.hxx"
@@ -31,7 +31,7 @@ int start(const std::string &s1, const std::string &s2){
 
     for(i = 0; i < min && s2[i] && s1[i] && !ret; i++){
         ret = toupper(s1[i]) - toupper(s2[i]);
-        if(s1[i] == '.' || s2[i] == '.'){ret = 0;}//. is a neutral character
+        if(s1[i] == '.' || s2[i] == '.'){ret = 0;}
     }
     return ret;
 }

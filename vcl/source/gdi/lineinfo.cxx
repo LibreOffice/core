@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -27,9 +27,9 @@
 #include <numeric>
 
 
-// ----------------
-// - ImplLineInfo -
-// ----------------
+
+
+
 
 ImplLineInfo::ImplLineInfo() :
     mnRefCount  ( 1 ),
@@ -45,7 +45,7 @@ ImplLineInfo::ImplLineInfo() :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
     mnRefCount  ( 1 ),
@@ -61,7 +61,7 @@ ImplLineInfo::ImplLineInfo( const ImplLineInfo& rImplLineInfo ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
 {
@@ -76,9 +76,9 @@ inline bool ImplLineInfo::operator==( const ImplLineInfo& rB ) const
         && meLineCap == rB.meLineCap);
 }
 
-// ------------
-// - LineInfo -
-// ------------
+
+
+
 
 LineInfo::LineInfo( LineStyle eStyle, long nWidth )
 {
@@ -87,7 +87,7 @@ LineInfo::LineInfo( LineStyle eStyle, long nWidth )
     mpImplLineInfo->mnWidth = nWidth;
 }
 
-// -----------------------------------------------------------------------
+
 
 LineInfo::LineInfo( const LineInfo& rLineInfo )
 {
@@ -95,7 +95,7 @@ LineInfo::LineInfo( const LineInfo& rLineInfo )
     mpImplLineInfo->mnRefCount++;
 }
 
-// -----------------------------------------------------------------------
+
 
 LineInfo::~LineInfo()
 {
@@ -103,7 +103,7 @@ LineInfo::~LineInfo()
         delete mpImplLineInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
 {
@@ -117,7 +117,7 @@ LineInfo& LineInfo::operator=( const LineInfo& rLineInfo )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool LineInfo::operator==( const LineInfo& rLineInfo ) const
 {
@@ -126,7 +126,7 @@ bool LineInfo::operator==( const LineInfo& rLineInfo ) const
            *mpImplLineInfo == *rLineInfo.mpImplLineInfo );
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::ImplMakeUnique()
 {
@@ -139,7 +139,7 @@ void LineInfo::ImplMakeUnique()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetStyle( LineStyle eStyle )
 {
@@ -147,7 +147,7 @@ void LineInfo::SetStyle( LineStyle eStyle )
     mpImplLineInfo->meStyle = eStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetWidth( long nWidth )
 {
@@ -155,7 +155,7 @@ void LineInfo::SetWidth( long nWidth )
     mpImplLineInfo->mnWidth = nWidth;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDashCount( sal_uInt16 nDashCount )
 {
@@ -163,7 +163,7 @@ void LineInfo::SetDashCount( sal_uInt16 nDashCount )
     mpImplLineInfo->mnDashCount = nDashCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDashLen( long nDashLen )
 {
@@ -171,7 +171,7 @@ void LineInfo::SetDashLen( long nDashLen )
     mpImplLineInfo->mnDashLen = nDashLen;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDotCount( sal_uInt16 nDotCount )
 {
@@ -179,7 +179,7 @@ void LineInfo::SetDotCount( sal_uInt16 nDotCount )
     mpImplLineInfo->mnDotCount = nDotCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDotLen( long nDotLen )
 {
@@ -187,7 +187,7 @@ void LineInfo::SetDotLen( long nDotLen )
     mpImplLineInfo->mnDotLen = nDotLen;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetDistance( long nDistance )
 {
@@ -195,7 +195,7 @@ void LineInfo::SetDistance( long nDistance )
     mpImplLineInfo->mnDistance = nDistance;
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
 {
@@ -207,7 +207,7 @@ void LineInfo::SetLineJoin(basegfx::B2DLineJoin eLineJoin)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
 {
@@ -218,7 +218,7 @@ void LineInfo::SetLineCap(com::sun::star::drawing::LineCap eLineCap)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool LineInfo::IsDefault() const
 {
@@ -227,7 +227,7 @@ bool LineInfo::IsDefault() const
         && ( com::sun::star::drawing::LineCap_BUTT == mpImplLineInfo->meLineCap));
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 {
@@ -235,14 +235,14 @@ SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
     sal_uInt16          nTmp16(0);
     sal_Int32       nTmp32(0);
 
-    //#fdo39428 SvStream no longer supports operator>>(long&)
+    
     rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meStyle = (LineStyle) nTmp16;
     rIStm.ReadInt32( nTmp32 );
     rImplLineInfo.mnWidth = nTmp32;
 
     if( aCompat.GetVersion() >= 2 )
     {
-        // version 2
+        
         rIStm.ReadUInt16( rImplLineInfo.mnDashCount ).ReadInt32( nTmp32 );
         rImplLineInfo.mnDashLen = nTmp32;
         rIStm.ReadUInt16( rImplLineInfo.mnDotCount ).ReadInt32( nTmp32 );
@@ -253,44 +253,44 @@ SvStream& ReadImplLineInfo( SvStream& rIStm, ImplLineInfo& rImplLineInfo )
 
     if( aCompat.GetVersion() >= 3 )
     {
-        // version 3
+        
         rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meLineJoin = (basegfx::B2DLineJoin) nTmp16;
     }
 
     if( aCompat.GetVersion() >= 4 )
     {
-        // version 4
+        
         rIStm.ReadUInt16( nTmp16 ); rImplLineInfo.meLineCap = (com::sun::star::drawing::LineCap) nTmp16;
     }
 
     return rIStm;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& WriteImplLineInfo( SvStream& rOStm, const ImplLineInfo& rImplLineInfo )
 {
     VersionCompat aCompat( rOStm, STREAM_WRITE, 4 );
 
-    //#fdo39428 SvStream no longer supports operator<<(long)
-    // version 1
+    
+    
     rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meStyle ).WriteInt32( sal::static_int_cast<sal_Int32>(rImplLineInfo.mnWidth) );
 
-    // since version2
+    
     rOStm.WriteUInt16( rImplLineInfo.mnDashCount ).WriteInt32( sal::static_int_cast<sal_Int32>(rImplLineInfo.mnDashLen) );
     rOStm.WriteUInt16( rImplLineInfo.mnDotCount ).WriteInt32( sal::static_int_cast<sal_Int32>(rImplLineInfo.mnDotLen) );
     rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(rImplLineInfo.mnDistance) );
 
-    // since version3
+    
     rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meLineJoin );
 
-    // since version4
+    
     rOStm.WriteUInt16( (sal_uInt16) rImplLineInfo.meLineCap );
 
     return rOStm;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
 {
@@ -298,14 +298,14 @@ SvStream& ReadLineInfo( SvStream& rIStm, LineInfo& rLineInfo )
     return ReadImplLineInfo( rIStm, *rLineInfo.mpImplLineInfo );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& WriteLineInfo( SvStream& rOStm, const LineInfo& rLineInfo )
 {
     return WriteImplLineInfo( rOStm, *rLineInfo.mpImplLineInfo );
 }
 
-// -----------------------------------------------------------------------
+
 
 void LineInfo::applyToB2DPolyPolygon(
     basegfx::B2DPolyPolygon& io_rLinePolyPolygon,

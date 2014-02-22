@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/bootstrapfixture.hxx>
@@ -45,9 +45,9 @@ void CanvasTest::testComposite()
 
     uno::Reference<rendering::XCanvas> xCanvas = pWin->GetCanvas ();
     if( !xCanvas.is() )
-        return; // can't get a canvas working at all - truly headless ?
+        return; 
 
-    // a huge canvas ...
+    
     Size aSize (1, 1);
     uno::Reference<rendering::XBitmap> xBitmap;
     xBitmap = xCanvas->getDevice ()->createCompatibleAlphaBitmap(
@@ -59,7 +59,7 @@ void CanvasTest::testComposite()
 
     BitmapEx aBitmapEx;
     {
-        // clear the canvas and basic sanity check ...
+        
         xBitmapCanvas->clear();
         CPPUNIT_ASSERT( aBitmapEx.Create( xBitmapCanvas, aSize ) );
         CPPUNIT_ASSERT( aBitmapEx.IsAlpha() );
@@ -67,18 +67,18 @@ void CanvasTest::testComposite()
     }
 
     {
-        // render something
+        
         rendering::RenderState aDefaultState;
         uno::Sequence< double > aRedTransparent( 4 );
-        aRedTransparent[0] = 1.0; // R
-        aRedTransparent[1] = 0.0; // G
-        aRedTransparent[2] = 0.0; // B
-        aRedTransparent[3] = 0.5; // A
+        aRedTransparent[0] = 1.0; 
+        aRedTransparent[1] = 0.0; 
+        aRedTransparent[2] = 0.0; 
+        aRedTransparent[3] = 0.5; 
         aDefaultState.DeviceColor = aRedTransparent;
 #if 0
-        // words fail me to describe the sheer beauty of allocating an UNO
-        // object to represent a polygon, and manually handling the ViewState
-        // and there being no public helper for this - to render ... a rectangle.
+        
+        
+        
         XCachedPrimitive    fillPolyPolygon( [in] XPolyPolygon2D xPolyPolygon, [in] ViewState aViewState, [in] RenderState aRenderState )
 #endif
     }

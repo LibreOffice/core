@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "abspilot.hxx"
@@ -34,10 +34,10 @@
 #include "fieldmappingpage.hxx"
 #include "fieldmappingimpl.hxx"
 
-//.........................................................................
+
 namespace abp
 {
-//.........................................................................
+
 
 #define STATE_SELECT_ABTYPE         0
 #define STATE_INVOKE_ADMIN_DIALOG   1
@@ -54,10 +54,10 @@ namespace abp
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
 
-    //=====================================================================
-    //= OAddessBookSourcePilot
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OAddessBookSourcePilot::OAddessBookSourcePilot(Window* _pParent, const Reference< XComponentContext >& _rxORB)
         :OAddessBookSourcePilot_Base( _pParent, ModuleRes( RID_DLG_ADDRESSBOOKSOURCEPILOT ),
             WZB_HELP | WZB_FINISH | WZB_CANCEL | WZB_NEXT | WZB_PREVIOUS )
@@ -106,12 +106,12 @@ namespace abp
 
         m_pCancel->SetClickHdl( LINK( this, OAddessBookSourcePilot, OnCancelClicked) );
 
-        // some initial settings
+        
 #ifdef UNX
 #ifdef MACOSX
         m_aSettings.eType = AST_MACAB;
 #else
-// FIXME: if KDE use KAB instead
+
         m_aSettings.eType = AST_EVOLUTION;
 #endif
 #else
@@ -133,7 +133,7 @@ namespace abp
         FreeResource();
     }
 
-    //---------------------------------------------------------------------
+    
     OUString OAddessBookSourcePilot::getStateDisplayName( WizardState _nState ) const
     {
         sal_uInt16 nResId = 0;
@@ -157,50 +157,50 @@ namespace abp
         return sDisplayName;
     }
 
-    //---------------------------------------------------------------------
+    
     void OAddessBookSourcePilot::implCommitAll()
     {
-        // in real, the data source already exists in the data source context
-        // Thus, if the user changed the name, we have to rename the data source
+        
+        
         if ( m_aSettings.sDataSourceName != m_aNewDataSource.getName() )
             m_aNewDataSource.rename( m_aSettings.sDataSourceName );
 
-        // 1. the data source
+        
         m_aNewDataSource.store();
 
-        // 2. check if we need to register the data source
+        
         if ( m_aSettings.bRegisterDataSource )
             m_aNewDataSource.registerDataSource(m_aSettings.sRegisteredDataSourceName);
 
-        // 3. write the data source / table names into the configuration
+        
         addressconfig::writeTemplateAddressSource( getORB(), m_aSettings.bRegisterDataSource ? m_aSettings.sRegisteredDataSourceName : m_aSettings.sDataSourceName, m_aSettings.sSelectedTable );
 
-        // 4. write the field mapping
+        
         fieldmapping::writeTemplateAddressFieldMapping( getORB(), m_aSettings.aFieldMapping );
     }
 
-    //---------------------------------------------------------------------
+    
     void OAddessBookSourcePilot::implCleanup()
     {
         if ( m_aNewDataSource.isValid() )
             m_aNewDataSource.remove();
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK( OAddessBookSourcePilot, OnCancelClicked, void*, /*NOTINTERESTEDIN*/ )
     {
-        // do cleanups
+        
         implCleanup();
 
-        // reset the click hdl
+        
         m_pCancel->SetClickHdl( Link() );
-        // simulate the click again - this time, the default handling of the button will strike ....
+        
         m_pCancel->Click();
 
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+    
     bool OAddessBookSourcePilot::Close()
     {
         implCleanup();
@@ -208,7 +208,7 @@ namespace abp
         return OAddessBookSourcePilot_Base::Close();
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OAddessBookSourcePilot::onFinish()
     {
         if ( !OAddessBookSourcePilot_Base::onFinish() )
@@ -221,7 +221,7 @@ namespace abp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+    
     void OAddessBookSourcePilot::enterState( WizardState _nState )
     {
         switch ( _nState )
@@ -243,7 +243,7 @@ namespace abp
         OAddessBookSourcePilot_Base::enterState(_nState);
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OAddessBookSourcePilot::prepareLeaveCurrentState( CommitPageReason _eReason )
     {
         if ( !OAddessBookSourcePilot_Base::prepareLeaveCurrentState( _eReason ) )
@@ -260,25 +260,25 @@ namespace abp
             implCreateDataSource();
             if ( needAdminInvokationPage() )
                 break;
-            // no break here
+            
 
         case STATE_INVOKE_ADMIN_DIALOG:
             if ( !connectToDataSource( sal_False ) )
             {
-                // connecting did not succeed -> do not allow proceeding
+                
                 bAllow = sal_False;
                 break;
             }
 
-            // ........................................................
-            // now that we connected to the data source, check whether we need the "table selection" page
+            
+            
             const StringBag& aTables = m_aNewDataSource.getTableNames();
 
             if ( aTables.empty() )
             {
                 if ( RET_YES != QueryBox( this, ModuleRes( ( getSettings().eType == AST_EVOLUTION_GROUPWISE ? RID_QRY_NO_EVO_GW : RID_QRY_NOTABLES ) ) ).Execute() )
                 {
-                    // cannot ask the user, or the user chose to use this data source, though there are no tables
+                    
                     bAllow = sal_False;
                     break;
                 }
@@ -287,7 +287,7 @@ namespace abp
             }
 
             if ( aTables.size() == 1 )
-                // remember the one and only table we have
+                
                 m_aSettings.sSelectedTable = *aTables.begin();
 
             break;
@@ -297,12 +297,12 @@ namespace abp
         return bAllow;
     }
 
-    //---------------------------------------------------------------------
+    
     void OAddessBookSourcePilot::implDefaultTableName()
     {
         const StringBag& rTableNames = getDataSource().getTableNames();
         if ( rTableNames.end() != rTableNames.find( getSettings().sSelectedTable ) )
-            // already a valid table selected
+            
             return;
 
         const sal_Char* pGuess = NULL;
@@ -323,7 +323,7 @@ namespace abp
             getSettings().sSelectedTable = sGuess;
     }
 
-    //---------------------------------------------------------------------
+    
     void OAddessBookSourcePilot::implDoAutoFieldMapping()
     {
         DBG_ASSERT( !needManualFieldMapping( ), "OAddessBookSourcePilot::implDoAutoFieldMapping: invalid call!" );
@@ -331,16 +331,16 @@ namespace abp
         fieldmapping::defaultMapping( getORB(), m_aSettings.aFieldMapping );
     }
 
-    //---------------------------------------------------------------------
+    
     void OAddessBookSourcePilot::implCreateDataSource()
     {
         if (m_aNewDataSource.isValid())
-        {   // we already have a data source object
+        {   
             if ( m_aSettings.eType == m_eNewDataSourceType )
-                // and it already has the correct type
+                
                 return;
 
-            // it has a wrong type -> remove it
+            
             m_aNewDataSource.remove();
         }
 
@@ -400,7 +400,7 @@ namespace abp
         m_eNewDataSourceType = m_aSettings.eType;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OAddessBookSourcePilot::connectToDataSource( sal_Bool _bForceReConnect )
     {
         DBG_ASSERT( m_aNewDataSource.isValid(), "OAddessBookSourcePilot::implConnect: invalid current data source!" );
@@ -412,7 +412,7 @@ namespace abp
         return m_aNewDataSource.connect( this );
     }
 
-    //---------------------------------------------------------------------
+    
     OWizardPage* OAddessBookSourcePilot::createPage(WizardState _nState)
     {
         switch (_nState)
@@ -438,7 +438,7 @@ namespace abp
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void OAddessBookSourcePilot::impl_updateRoadmap( AddressSourceType _eType )
     {
         bool bSettingsPage = needAdminInvokationPage( _eType );
@@ -455,7 +455,7 @@ namespace abp
 
         enableState( STATE_TABLE_SELECTION,
             bTablesPage &&  ( bConnected ? !bCanSkipTables : !bSettingsPage )
-            // if we do not need a settings page, we connect upon "Next" on the first page
+            
         );
 
         enableState( STATE_MANUAL_FIELD_MAPPING,
@@ -467,7 +467,7 @@ namespace abp
         );
     }
 
-    //---------------------------------------------------------------------
+    
     void OAddessBookSourcePilot::typeSelectionChanged( AddressSourceType _eType )
     {
         PathId nCurrentPathID( PATH_COMPLETE );
@@ -490,8 +490,8 @@ namespace abp
         impl_updateRoadmap( _eType );
     }
 
-//.........................................................................
-}   // namespace abp
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

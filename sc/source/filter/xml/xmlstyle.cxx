@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlstyle.hxx"
@@ -55,9 +55,9 @@ using namespace ::xmloff::token;
 using namespace ::formula;
 
 #define MAP(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_010, false }
-// extensions import/export
+
 #define MAP_EXT(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, false }
-// extensions import only
+
 #define MAP_EXT_I(name,prefix,token,type,context)  { name, sizeof(name)-1, prefix, token, type, context, SvtSaveOptions::ODFVER_012_EXT_COMPAT, true }
 #define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0, 0, SvtSaveOptions::ODFVER_010, false }
 
@@ -73,10 +73,10 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "ConditionalFormatXML", XML_NAMESPACE_STYLE, XML_MAP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_IMPORT_MAP ),
     MAP( "ConditionalFormatXML", XML_NAMESPACE_STYLE, XML_MAP, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MAP ),
     MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BL_TR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_DIAGONALBLTR ),
-    MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BL_TR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALBLTRWIDTH ), // #i102690# for old files
+    MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BL_TR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALBLTRWIDTH ), 
     MAP( "DiagonalBLTR", XML_NAMESPACE_STYLE, XML_DIAGONAL_BL_TR_WIDTHS, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALBLTRWIDTHS ),
     MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TL_BR, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER, CTF_SC_DIAGONALTLBR ),
-    MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TL_BR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALTLBRWIDTH ), // #i102690# for old files
+    MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TL_BR_WIDTH, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALTLBRWIDTH ), 
     MAP( "DiagonalTLBR", XML_NAMESPACE_STYLE, XML_DIAGONAL_TL_BR_WIDTHS, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BORDER_WIDTH, CTF_SC_DIAGONALTLBRWIDTHS ),
     MAP( "HoriJustify", XML_NAMESPACE_FO, XML_TEXT_ALIGN, XML_TYPE_PROP_PARAGRAPH|XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 ),
     MAP( "HoriJustify", XML_NAMESPACE_STYLE, XML_TEXT_ALIGN_SOURCE, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 ),
@@ -109,8 +109,8 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
     MAP( "UserDefinedAttributes", XML_NAMESPACE_TEXT, XML_XMLNS, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     MAP( "ValidationXML", XML_NAMESPACE_TABLE, XML_CONTENT_VALIDATION, XML_TYPE_PROP_TABLE_CELL|XML_TYPE_BUILDIN_CMP_ONLY, CTF_SC_VALIDATION ),
     MAP( "VertJustify", XML_NAMESPACE_STYLE, XML_VERTICAL_ALIGN, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY, 0),
-    MAP_EXT_I( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_STYLE, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ), // proposed ODF 1.2+
-    MAP_EXT( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_LO_EXT, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ),  // extension namespace
+    MAP_EXT_I( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_STYLE, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ), 
+    MAP_EXT( SC_UNONAME_CELLVJUS_METHOD, XML_NAMESPACE_LO_EXT, XML_VERTICAL_JUSTIFY, XML_TYPE_PROP_TABLE_CELL|XML_SC_TYPE_VERTJUSTIFY_METHOD, 0 ),  
     MAP_END()
 };
 
@@ -124,10 +124,10 @@ const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
 
 const XMLPropertyMapEntry aXMLScRowStylesImportProperties[] =
 {
-    // #i57867# Include background color (CellBackColor/IsCellBackgroundTransparent) for import only.
-    // Import and export should use the same map, with MID_FLAG_NO_PROPERTY_EXPORT for the background entries,
-    // but this doesn't work at the moment because SvXMLImportPropertyMapper compares MID_FLAG_NO_PROPERTY to 0.
-    // If this is changed (not for 2.0.x), a single map can be used again.
+    
+    
+    
+    
 
     MAP( "CellBackColor", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     MAP( "Height", XML_NAMESPACE_STYLE, XML_ROW_HEIGHT, XML_TYPE_PROP_TABLE_ROW|XML_TYPE_MEASURE, CTF_SC_ROWHEIGHT),
@@ -155,10 +155,10 @@ const XMLPropertyMapEntry aXMLScFromXLSRowStylesProperties[] =
 
 const XMLPropertyMapEntry aXMLScTableStylesImportProperties[] =
 {
-    // #i57869# Include background color (CellBackColor/IsCellBackgroundTransparent) for import only.
-    // Import and export should use the same map, with MID_FLAG_NO_PROPERTY_EXPORT for the background entries,
-    // but this doesn't work at the moment because SvXMLImportPropertyMapper compares MID_FLAG_NO_PROPERTY to 0.
-    // If this is changed (not for 2.0.x), a single map can be used again.
+    
+    
+    
+    
 
     MAP( "CellBackColor", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     MAP( "IsCellBackgroundTransparent", XML_NAMESPACE_FO, XML_BACKGROUND_COLOR, XML_TYPE_PROP_TABLE|XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
@@ -270,9 +270,9 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
                 case CTF_RIGHTBORDERWIDTH:      pSWRightBorderWidthState = propertie; break;
                 case CTF_TOPBORDERWIDTH:        pSWTopBorderWidthState = propertie; break;
                 case CTF_BOTTOMBORDERWIDTH:     pSWBottomBorderWidthState = propertie; break;
-                case CTF_SC_DIAGONALTLBR:       break; //old diagonal line attribute names without "s" are only read, not written
+                case CTF_SC_DIAGONALTLBR:       break; 
                 case CTF_SC_DIAGONALTLBRWIDTH:  pDiagonalTLBRWidthState = propertie; break;
-                case CTF_SC_DIAGONALBLTR:       break; //old diagonal line attribute names without "s" are only read, not written
+                case CTF_SC_DIAGONALBLTR:       break; 
                 case CTF_SC_DIAGONALBLTRWIDTH:  pDiagonalBLTRWidthState = propertie; break;
                 case CTF_SD_SHAPE_PARA_ADJUST:  pParaAdjust = propertie; break;
                 case CTF_PARA_ADJUSTLAST:       pParaAdjustLast = propertie; break;
@@ -496,7 +496,7 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
         pParaMarginBottomRel->maValue.clear();
     }
 
-    // #i102690# old diagonal line attribute names without "s" are only read, not written
+    
     if (pDiagonalTLBRWidthState)
     {
         pDiagonalTLBRWidthState->mnIndex = -1;
@@ -520,9 +520,9 @@ void ScXMLCellExportPropertyMapper::handleSpecialItem(
             const ::std::vector< XMLPropertyState > * /* pProperties */,
             sal_uInt32 /* nIdx */ ) const
 {
-    // the SpecialItem NumberFormat must not be handled by this method
-    // the SpecialItem ConditionlaFormat must not be handled by this method
-    // the SpecialItem CharBackColor must not be handled by this method
+    
+    
+    
 }
 void ScXMLCellExportPropertyMapper::handleElementItem(
             SvXMLExport& rExport,
@@ -562,7 +562,7 @@ void ScXMLRowExportPropertyMapper::ContextFilter(
     ::std::vector< XMLPropertyState >& /* rProperties */,
     uno::Reference< beans::XPropertySet > /* rPropSet */ ) const
 {
-    //#108550#; don't filter the height, so other applications know the calculated height
+    
 }
 
 ScXMLColumnExportPropertyMapper::ScXMLColumnExportPropertyMapper(
@@ -584,7 +584,7 @@ void ScXMLColumnExportPropertyMapper::handleSpecialItem(
             const ::std::vector< XMLPropertyState > * /* pProperties */,
             sal_uInt32 /* nIdx */ ) const
 {
-    // the SpecialItem IsVisible must not be handled by this method
+    
 }
 
 ScXMLTableExportPropertyMapper::ScXMLTableExportPropertyMapper(
@@ -606,7 +606,7 @@ void ScXMLTableExportPropertyMapper::handleSpecialItem(
             const ::std::vector< XMLPropertyState > * /* pProperties */,
             sal_uInt32 /* nIdx */ ) const
 {
-    // the SpecialItem PageStyle must not be handled by this method
+    
 }
 
 void ScXMLAutoStylePoolP::exportStyleAttributes(
@@ -771,7 +771,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                         break;
                                                         default:
                                                         {
-                                                            // added to avoid warnings
+                                                            
                                                         }
                                                     }
                                                     sCondition += xSheetCondition->getFormula1();
@@ -1067,8 +1067,8 @@ bool XmlScPropHdl_CellProtection::exportXML(
         }
         else if (aCellProtection.IsHidden)
         {
-            // #i105964# "Hide all" implies "Protected" in the UI, so it must be saved as "hidden-and-protected"
-            // even if "IsLocked" is not set in the CellProtection struct.
+            
+            
             rStrExpValue = GetXMLToken(XML_HIDDEN_AND_PROTECTED);
             bRetval = true;
         }
@@ -1228,7 +1228,7 @@ bool XmlScPropHdl_JustifyMethod::exportXML(
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -1331,7 +1331,7 @@ bool XmlScPropHdl_HoriJustify::exportXML(
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -1671,7 +1671,7 @@ bool XmlScPropHdl_RotateReference::exportXML(
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -1780,7 +1780,7 @@ bool XmlScPropHdl_VertJustify::exportXML(
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }

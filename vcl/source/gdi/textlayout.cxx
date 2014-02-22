@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -76,7 +76,7 @@ namespace vcl
         ReferenceDeviceTextLayout( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice );
         virtual ~ReferenceDeviceTextLayout();
 
-        // ITextLayout
+        
         virtual long        GetTextWidth( const OUString& rStr, sal_Int32 nIndex, sal_Int32 nLen ) const;
         virtual void        DrawText( const Point& _rStartPoint, const OUString& _rText, sal_Int32 _nStartIndex, sal_Int32 _nLength, MetricVector* _pVector, OUString* _pDisplayText );
         virtual bool        GetCaretPositions( const OUString& _rText, sal_Int32* _pCaretXArray, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
@@ -84,7 +84,7 @@ namespace vcl
         virtual bool        DecomposeTextRectAction() const;
 
     public:
-        // equivalents to the respective OutputDevice methods, which take the reference device into account
+        
         long        GetTextArray( const OUString& _rText, sal_Int32* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
         Rectangle   DrawText( const Rectangle& _rRect, const OUString& _rText, sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText );
 
@@ -121,18 +121,18 @@ namespace vcl
         MapMode aTargetMapMode( m_rTargetDevice.GetMapMode() );
         OSL_ENSURE( aTargetMapMode.GetOrigin() == Point(), "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: uhm, the code below won't work here ..." );
 
-        // normally, controls simulate "zoom" by "zooming" the font. This is responsible for (part of) the discrepancies
-        // between text in Writer and text in controls in Writer, though both have the same font.
-        // So, if we have a zoom set at the control, then we do not scale the font, but instead modify the map mode
-        // to accommodate for the zoom.
-        aTargetMapMode.SetScaleX( m_aZoom );    // TODO: shouldn't this be "current_scale * zoom"?
+        
+        
+        
+        
+        aTargetMapMode.SetScaleX( m_aZoom );    
         aTargetMapMode.SetScaleY( m_aZoom );
 
-        // also, use a higher-resolution map unit than "pixels", which should save us some rounding errors when
-        // translating coordinates between the reference device and the target device.
+        
+        
         OSL_ENSURE( aTargetMapMode.GetMapUnit() == MAP_PIXEL,
             "ReferenceDeviceTextLayout::ReferenceDeviceTextLayout: this class is not expected to work with such target devices!" );
-            // we *could* adjust all the code in this class to handle this case, but at the moment, it's not necessary
+            
         const MapUnit eTargetMapUnit = m_rReferenceDevice.GetMapMode().GetMapUnit();
         aTargetMapMode.SetMapUnit( eTargetMapUnit );
         OSL_ENSURE( aTargetMapMode.GetMapUnit() != MAP_PIXEL,
@@ -140,12 +140,12 @@ namespace vcl
 
         m_rTargetDevice.SetMapMode( aTargetMapMode );
 
-        // now that the Zoom is part of the map mode, reset the target device's font to the "unzoomed" version
+        
         Font aDrawFont( m_aUnzoomedPointFont );
         aDrawFont.SetSize( m_rTargetDevice.LogicToLogic( aDrawFont.GetSize(), MAP_POINT, eTargetMapUnit ) );
         _rTargetDevice.SetFont( aDrawFont );
 
-        // transfer font to the reference device
+        
         m_rReferenceDevice.Push( PUSH_FONT | PUSH_TEXTLAYOUTMODE );
         Font aRefFont( m_aUnzoomedPointFont );
         aRefFont.SetSize( OutputDevice::LogicToLogic(
@@ -177,7 +177,7 @@ namespace vcl
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
             return 0;
 
-        // retrieve the character widths from the reference device
+        
         long nTextWidth = m_rReferenceDevice.GetTextArray( _rText, _pDXAry, _nStartIndex, _nLength );
 #if OSL_DEBUG_LEVEL > 1
         if ( _pDXAry )
@@ -236,7 +236,7 @@ namespace vcl
         if ( !lcl_normalizeLength( _rText, _nStartIndex, _nLength ) )
             return false;
 
-        // retrieve the caret positions from the reference device
+        
         if ( !m_rReferenceDevice.GetCaretPositions( _rText, _pCaretXArray, _nStartIndex, _nLength ) )
             return false;
 
@@ -261,15 +261,15 @@ namespace vcl
         if ( _rText.isEmpty() )
             return Rectangle();
 
-        // determine text layout mode from the RTL-ness of the control whose text we render
+        
         sal_uLong nTextLayoutMode = m_bRTLEnabled ? TEXT_LAYOUT_BIDI_RTL : TEXT_LAYOUT_BIDI_LTR;
         m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
         m_rTargetDevice.SetLayoutMode( nTextLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
 
-        // TEXT_LAYOUT_TEXTORIGIN_LEFT is because when we do actually draw the text (in DrawText( Point, ... )), then
-        // our caller gives us the left border of the draw position, regardless of script type, text layout,
-        // and the like in our ctor, we set the map mode of the target device from pixel to twip, but our caller doesn't know this,
-        // but passed pixel coordinates. So, adjust the rect.
+        
+        
+        
+        
         Rectangle aRect( m_rTargetDevice.PixelToLogic( _rRect ) );
 
         onBeginDrawText();
@@ -278,20 +278,20 @@ namespace vcl
 
         if ( aTextRect.IsEmpty() && !aRect.IsEmpty() )
         {
-            // this happens for instance if we're in a PaintToDevice call, where only a MetaFile is recorded,
-            // but no actual painting happens, so our "DrawText( Point, ... )" is never called
-            // In this case, calculate the rect from what OutputDevice::GetTextRect would give us. This has
-            // the disadvantage of less accuracy, compared with the approach to calculate the rect from the
-            // single "DrawText( Point, ... )" calls, since more intermediate arithmetics will translate
-            // from ref- to target-units.
+            
+            
+            
+            
+            
+            
             aTextRect = m_rTargetDevice.GetTextRect( aRect, _rText, _nStyle, NULL, this );
         }
 
-        // similar to above, the text rect now contains TWIPs (or whatever unit the ref device has), but the caller
-        // expects pixel coordinates
+        
+        
         aTextRect = m_rTargetDevice.LogicToPixel( aTextRect );
 
-        // convert the metric vector
+        
         if ( _pVector )
         {
             for (   MetricVector::iterator charRect = _pVector->begin();
@@ -321,6 +321,6 @@ namespace vcl
         return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText );
     }
 
-} // namespace vcl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

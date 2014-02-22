@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -54,7 +54,7 @@ using sc::HMMToTwips;
 using sc::TwipsToHMM;
 using sc::TwipsToEvenHMM;
 
-//------------------------------------------------------------------
+
 
 void ScCellShell::Execute( SfxRequest& rReq )
 {
@@ -64,21 +64,21 @@ void ScCellShell::Execute( SfxRequest& rReq )
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     sal_uInt16              nSlot       = rReq.GetSlot();
 
-    if (nSlot != SID_CURRENTCELL)       // this comes with MouseButtonUp
-        pTabViewShell->HideListBox();   // Autofilter-DropDown-Listbox
+    if (nSlot != SID_CURRENTCELL)       
+        pTabViewShell->HideListBox();   
 
     if ( IS_EDITMODE() )
     {
         switch ( nSlot )
         {
-            //  when opening a reference-dialog the subshell may not be switched
-            //  (on closing the dialog StopEditShell is called)
+            
+            
             case SID_OPENDLG_FUNCTION:
-                    //  inplace leads to trouble with EditShell ...
-                    //! cannot always be switched werden ????
+                    
+                    
                     if (!pTabViewShell->GetViewFrame()->GetFrame().IsInPlace())
-                        pTabViewShell->SetDontSwitch(true);         // do not switch off EditShell
-                    // no break
+                        pTabViewShell->SetDontSwitch(true);         
+                    
 
             case FID_CELL_FORMAT:
             case SID_ENABLE_HYPHENATION:
@@ -101,7 +101,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
     switch ( nSlot )
     {
-        case SID_ATTR_SIZE://XXX ???
+        case SID_ATTR_SIZE:
             break;
 
         case SID_COLLABORATION:
@@ -122,7 +122,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 switch ( nMode )
                 {
                     case 1: nMode = KEY_SHIFT;  break;
-                    case 2: nMode = KEY_MOD1;   break; // control-key
+                    case 2: nMode = KEY_MOD1;   break; 
                     case 0:
                     default:
                         nMode = 0;
@@ -132,15 +132,15 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             else
             {
-                //  no arguments (also executed by double click on the status bar controller):
-                //  advance to next selection mode
+                
+                
 
                 sal_uInt16 nModifiers = pTabViewShell->GetLockedModifiers();
                 switch ( nModifiers )
                 {
-                    case KEY_SHIFT: nModifiers = KEY_MOD1;  break;      // EXT -> ADD
-                    case KEY_MOD1:  nModifiers = 0;         break;      // ADD -> STD
-                    default:        nModifiers = KEY_SHIFT; break;      // STD -> EXT
+                    case KEY_SHIFT: nModifiers = KEY_MOD1;  break;      
+                    case KEY_MOD1:  nModifiers = 0;         break;      
+                    default:        nModifiers = KEY_SHIFT; break;      
                 }
                 pTabViewShell->LockModifiers( nModifiers );
             }
@@ -149,14 +149,14 @@ void ScCellShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
-        //  SID_STATUS_SELMODE_NORM is not used ???
+        
 
         case SID_STATUS_SELMODE_NORM:
             pTabViewShell->LockModifiers( 0 );
             rBindings.Invalidate( SID_STATUS_SELMODE );
             break;
 
-        //  SID_STATUS_SELMODE_ERG / SID_STATUS_SELMODE_ERW as toggles:
+        
 
         case SID_STATUS_SELMODE_ERG:
             if ( pTabViewShell->GetLockedModifiers() & KEY_MOD1 )
@@ -189,18 +189,18 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     ScInputHandler* pHdl = SC_MOD()->GetInputHdl( pTabViewShell );
                     if ( !pHdl || !pHdl->IsInEnterHandler() )
                     {
-                        //  UpdateInputHandler is needed after the cell content
-                        //  has changed, but if called from EnterHandler, UpdateInputHandler
-                        //  will be called later when moving the cursor.
+                        
+                        
+                        
 
                         pTabViewShell->UpdateInputHandler();
                     }
 
                     rReq.Done();
 
-                    //  no GrabFocus here, as otherwise on a Mac the tab jumps before the
-                    //  sideview, when the input was not finished
-                    //  (GrabFocus is called in KillEditView)
+                    
+                    
+                    
                 }
             }
             break;
@@ -222,7 +222,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
         case FID_INPUTLINE_BLOCK:
         case FID_INPUTLINE_MATRIX:
             {
-                if( pReqArgs == 0 ) //XXX temporary HACK to avoid GPF
+                if( pReqArgs == 0 ) 
                     break;
 
                 const ScInputStatusItem* pStatusItem
@@ -260,7 +260,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         {
                             SfxStringItem   aItem( SID_ENTER_STRING, aString );
 
-                            // SfxBindings& rBindings = pTabViewShell->GetViewFrame()->GetBindings();
+                            
                             const SfxPoolItem* aArgs[2];
                             aArgs[0] = &aItem;
                             aArgs[1] = NULL;
@@ -291,9 +291,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 pTabViewShell->SetAutoSpellData(
                     aCursorPos.Col(), aCursorPos.Row(), pStatusItem->GetMisspellRanges());
 
-                //  no GrabFocus here, as otherwise on a Mac the tab jumps before the
-                //  sideview, when the input was not finished
-                //  (GrabFocus is called in KillEditView)
+                
+                
+                
             }
             break;
 
@@ -322,9 +322,9 @@ void ScCellShell::Execute( SfxRequest& rReq )
             {
                 if ( pReqArgs != NULL )
                 {
-                    //----------------------------------
-                    // set cell attribute without dialog:
-                    //----------------------------------
+                    
+                    
+                    
                     SfxItemSet*     pEmptySet =
                                         new SfxItemSet( *pReqArgs->GetPool(),
                                                         ATTR_PATTERN_START,
@@ -449,8 +449,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         aBaseName += ScGlobal::GetRscString(STR_SCENARIO);
                         aBaseName += "_";
 
-                        //  first test, if the prefix is recognised as valid,
-                        //  else avoid only doubles
+                        
+                        
                         sal_Bool bPrefix = pDoc->ValidTabName( aBaseName );
                         OSL_ENSURE(bPrefix, "ungueltiger Tabellenname");
 
@@ -480,8 +480,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                             if ( pReqArgs->GetItemState( SID_NEW_TABLENAME, true, &pItem ) == SFX_ITEM_SET )
                                 aArgComment = ((const SfxStringItem*)pItem)->GetValue();
 
-                            aColor = Color( COL_LIGHTGRAY );        // Default
-                            nFlags = 0;                             // not-TwoWay
+                            aColor = Color( COL_LIGHTGRAY );        
+                            nFlags = 0;                             
 
                             pTabViewShell->MakeScenario( aArgName, aArgComment, aColor, nFlags );
                             if( ! rReq.IsAPI() )
@@ -523,7 +523,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        //----------------------------------------------------------------
+        
 
         case FID_ROW_HEIGHT:
             {
@@ -531,7 +531,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_ROW_HEIGHT );
 
-                    // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
+                    
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT,
                                     sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     if( ! rReq.IsAPI() )
@@ -545,20 +545,20 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetRowHeight( pData->GetCurY(),
                                                               pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
+                    assert(pFact); 
 
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "RowHeightDialog",
                         nCurHeight, ScGlobal::nStdRowHeight,
                         eMetric, 2, MAX_ROW_HEIGHT);
-                    assert(pDlg); //Dialog create fail
+                    assert(pDlg); 
 
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
                         pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_DIRECT, (sal_uInt16)nVal );
 
-                        // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
+                        
                         rReq.AppendItem( SfxUInt16Item( FID_ROW_HEIGHT, (sal_uInt16)TwipsToEvenHMM(nVal) ) );
                         rReq.Done();
 
@@ -574,7 +574,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_ROW_OPT_HEIGHT );
 
-                    // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
+                    
                     pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL,
                                     sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     ScGlobal::nLastRowHeightExtra = rUInt16Item.GetValue();
@@ -587,12 +587,12 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
+                    assert(pFact); 
 
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "OptimalRowHeightDialog",
                         ScGlobal::nLastRowHeightExtra, 0, eMetric, 1, MAX_EXTRA_HEIGHT);
-                    assert(pDlg); //Dialog create fail!
+                    assert(pDlg); 
 
                     if ( pDlg->Execute() == RET_OK )
                     {
@@ -600,7 +600,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         pTabViewShell->SetMarkedWidthOrHeight( false, SC_SIZE_OPTIMAL, (sal_uInt16)nVal );
                         ScGlobal::nLastRowHeightExtra = nVal;
 
-                        // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
+                        
                         rReq.AppendItem( SfxUInt16Item( FID_ROW_OPT_HEIGHT, (sal_uInt16)TwipsToEvenHMM(nVal) ) );
                         rReq.Done();
 
@@ -616,7 +616,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_COL_WIDTH );
 
-                    // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
+                    
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT,
                                     sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     if( ! rReq.IsAPI() )
@@ -630,19 +630,19 @@ void ScCellShell::Execute( SfxRequest& rReq )
                                                 GetColWidth( pData->GetCurX(),
                                                              pData->GetTabNo() );
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
+                    assert(pFact); 
 
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "ColWidthDialog", nCurHeight,
                         STD_COL_WIDTH, eMetric, 2, MAX_COL_WIDTH);
-                    assert(pDlg); //Dialog create fail!
+                    assert(pDlg); 
 
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
                         pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_DIRECT, (sal_uInt16)nVal );
 
-                        // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
+                        
                         rReq.AppendItem( SfxUInt16Item( FID_COL_WIDTH, (sal_uInt16)TwipsToEvenHMM(nVal)) );
                         rReq.Done();
 
@@ -658,7 +658,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 {
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_COL_OPT_WIDTH );
 
-                    // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
+                    
                     pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL,
                                     sal::static_int_cast<sal_uInt16>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     ScGlobal::nLastColWidthExtra = rUInt16Item.GetValue();
@@ -671,19 +671,19 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     FieldUnit eMetric = SC_MOD()->GetAppOptions().GetAppMetric();
 
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                    assert(pFact); //ScAbstractFactory create fail!
+                    assert(pFact); 
 
                     AbstractScMetricInputDlg* pDlg = pFact->CreateScMetricInputDlg(
                         pTabViewShell->GetDialogParent(), "OptimalColWidthDialog",
                         ScGlobal::nLastColWidthExtra, STD_EXTRA_WIDTH, eMetric, 1, MAX_EXTRA_WIDTH);
-                    assert(pDlg); //Dialog create fail!
+                    assert(pDlg); 
                     if ( pDlg->Execute() == RET_OK )
                     {
                         long nVal = pDlg->GetInputValue();
                         pTabViewShell->SetMarkedWidthOrHeight( true, SC_SIZE_OPTIMAL, (sal_uInt16)nVal );
                         ScGlobal::nLastColWidthExtra = nVal;
 
-                        // #101390#; the value of the macro should be in HMM so use TwipsToEvenHMM to convert
+                        
                         rReq.AppendItem( SfxUInt16Item( FID_COL_OPT_WIDTH, (sal_uInt16)TwipsToEvenHMM(nVal) ) );
                         rReq.Done();
                     }
@@ -714,7 +714,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
             rReq.Done();
             break;
 
-        //----------------------------------------------------------------
+        
 
 
         case SID_CELL_FORMAT_RESET:
@@ -730,7 +730,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
         {
             if ( !GetViewData()->GetDocument()->GetChangeTrack() )
             {
-                // test whether to merge or to split
+                
                 bool bMerge = false;
                 sal_Bool bCenter = false;
                 switch( nSlot )
@@ -755,7 +755,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                 if( bMerge )
                 {
-                    // merge - check if to move contents of covered cells
+                    
                     bool bMoveContents = false;
                     sal_Bool bApi = rReq.IsAPI();
                     const SfxPoolItem* pItem;
@@ -768,7 +768,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                     if (pTabViewShell->MergeCells( bApi, bMoveContents, true, bCenter ))
                     {
-                        if (!bApi && bMoveContents)             // "yes" clicked in dialog
+                        if (!bApi && bMoveContents)             
                             rReq.AppendItem( SfxBoolItem( nSlot, bMoveContents ) );
                         rBindings.Invalidate( nSlot );
                         rReq.Done();
@@ -776,7 +776,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    // split cells
+                    
                     if (pTabViewShell->RemoveMerge())
                     {
                         rBindings.Invalidate( nSlot );
@@ -861,14 +861,14 @@ void ScCellShell::Execute( SfxRequest& rReq )
                 if (GetViewData()->HasEditView(GetViewData()->GetActivePart()))
                     pScMod->InputCancelHandler();
                 else if (pTabViewShell->HasPaintBrush())
-                    pTabViewShell->ResetBrushDocument();            // abort format paint brush
+                    pTabViewShell->ResetBrushDocument();            
                 else if (pTabViewShell->HasHintWindow())
                     pTabViewShell->RemoveHintWindow();
                 else if( ScViewUtil::IsFullScreen( *pTabViewShell ) )
                     ScViewUtil::SetFullScreen( *pTabViewShell, false );
                 else
                 {
-                    // TODO/LATER: when is this code executed?
+                    
                     pTabViewShell->Escape();
                 }
             }
@@ -886,20 +886,20 @@ void ScCellShell::Execute( SfxRequest& rReq )
             }
             break;
 
-        //  ----------------------------------------------------------------
+        
 
         case FID_INPUTLINE_STATUS:
             OSL_FAIL("Execute von InputLine-Status");
             break;
 
         case SID_STATUS_DOCPOS:
-            // Launch navigator.
+            
             GetViewData()->GetDispatcher().Execute(
                 SID_NAVIGATOR, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
             break;
 
         case SID_MARKAREA:
-            // called from Basic at the hidden view to select a range in the visible view
+            
             OSL_FAIL("old slot SID_MARKAREA");
             break;
 

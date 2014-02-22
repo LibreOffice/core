@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <swtypes.hxx>
@@ -66,11 +66,11 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
 
-#define DEFAULT_LEFT_DISTANCE (MM50*5)  // 2,5 cm
-#define DEFAULT_TOP_DISTANCE  (MM50*11) // 5,5 cm
-#define GREETING_TOP_DISTANCE (MM50*25) //12,5 cm
-#define DEFAULT_ADDRESS_WIDTH  (MM50*15)// 7,5 cm
-#define DEFAULT_ADDRESS_HEIGHT (MM50*7) // 3,5cm
+#define DEFAULT_LEFT_DISTANCE (MM50*5)  
+#define DEFAULT_TOP_DISTANCE  (MM50*11) 
+#define GREETING_TOP_DISTANCE (MM50*25) 
+#define DEFAULT_ADDRESS_WIDTH  (MM50*15)
+#define DEFAULT_ADDRESS_HEIGHT (MM50*7) 
 
 SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_LAYOUT_PAGE)),
@@ -100,10 +100,10 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     const SfxFilter *pSfxFlt = SwIoSystem::GetFilterOfFormat(
             OUString( FILTER_XML ),
             SwDocShell::Factory().GetFilterContainer() );
-    //save the current document into a temporary file
+    
     {
-        //temp file needs it's own block
-        //creating with extension is not supported by a static method :-(
+        
+        
         OUString const sExt(
             comphelper::string::stripStart(pSfxFlt->GetDefaultExtension(),'*'));
         utl::TempFile aTempFile( OUString(), &sExt );
@@ -131,7 +131,7 @@ SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     m_aZoomLB.InsertEntry(OUString("50 %"), 1);
     m_aZoomLB.InsertEntry(OUString("75 %"), 2);
     m_aZoomLB.InsertEntry(OUString("100 %"), 3);
-    m_aZoomLB.SelectEntryPos(0); //page size
+    m_aZoomLB.SelectEntryPos(0); 
     m_aZoomLB.SetSelectHdl(LINK(this, SwMailMergeLayoutPage, ZoomHdl_Impl));
 
     Link aFrameHdl = LINK(this, SwMailMergeLayoutPage, ChangeAddressHdl_Impl);
@@ -179,8 +179,8 @@ void SwMailMergeLayoutPage::ActivatePage()
     m_aUpFT.Enable(bGreetingLine);
     m_aDownFT.Enable(bGreetingLine);
 
-    //check if greeting and/or address frame have to be inserted/removed
-    if(m_pExampleWrtShell) // initially there's nothing to check
+    
+    if(m_pExampleWrtShell) 
     {
         if(!rConfigItem.IsGreetingInserted() &&
                 m_bIsGreetingInserted != (0 != bGreetingLine) )
@@ -223,7 +223,7 @@ void SwMailMergeLayoutPage::ActivatePage()
 
 sal_Bool SwMailMergeLayoutPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
 {
-    //now insert the frame and the greeting
+    
     SwMailMergeConfigItem& rConfigItem = m_pWizard->GetConfigItem();
     if(::svt::WizardTypes::eTravelForward == _eReason)
     {
@@ -247,7 +247,7 @@ SwFrmFmt*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
     pView->GetWrtShell().StartUndo(UNDO_INSERT);
     if(rConfigItem.IsAddressBlock() && !rConfigItem.IsAddressInserted())
     {
-        //insert the frame
+        
         Point aAddressPosition(DEFAULT_LEFT_DISTANCE, DEFAULT_TOP_DISTANCE);
         if(rAddressPosition.X() > 0 && rAddressPosition.Y() > 0)
             aAddressPosition = rAddressPosition;
@@ -256,7 +256,7 @@ SwFrmFmt*  SwMailMergeLayoutPage::InsertAddressAndGreeting(SwView* pView,
                                         aAddressPosition, bAlignToBody, false);
         rConfigItem.SetAddressInserted(pAddressBlockFormat->GetName());
     }
-    //now the greeting
+    
     if(rConfigItem.IsGreetingLine(sal_False) && !rConfigItem.IsGreetingInserted())
     {
         InsertGreeting( pView->GetWrtShell(), rConfigItem, false);
@@ -273,7 +273,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         bool bAlignLeft,
         bool bExample)
 {
-    // insert the address block and the greeting line
+    
     SfxItemSet aSet(rShell.GetAttrPool(), RES_ANCHOR, RES_ANCHOR,
                         RES_VERT_ORIENT, RES_VERT_ORIENT,
                         RES_HORI_ORIENT, RES_HORI_ORIENT,
@@ -288,7 +288,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         aSet.Put(SwFmtHoriOrient( rDestination.X(), text::HoriOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     aSet.Put(SwFmtVertOrient( rDestination.Y(), text::VertOrientation::NONE, text::RelOrientation::PAGE_FRAME ));
     aSet.Put(SwFmtFrmSize( ATT_MIN_SIZE, DEFAULT_ADDRESS_WIDTH, DEFAULT_ADDRESS_HEIGHT ));
-    // the example gets a border around the frame, the real document doesn't get one
+    
     if(!bExample)
         aSet.Put(SvxBoxItem( RES_BOX ));
     aSet.Put(SwFmtSurround( SURROUND_NONE ));
@@ -305,9 +305,9 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
     }
     else
     {
-        //the placeholders should be replaced by the appropriate fields
+        
         SwFldMgr aFldMgr(&rShell);
-        //create a database string source.command.commandtype.column
+        
         const SwDBData& rData = rConfigItem.GetCurrentDBData();
         OUString sDBName(rData.sDataSource);
         sDBName += OUString(DB_DELIM);
@@ -318,9 +318,9 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
         sDBName += OUString::number(rData.nCommandType);
         sDBName += OUString(DB_DELIM);
 
-        // if only the country is in an address line the
-        // paragraph has to be hidden depending on the
-        // IsIncludeCountry()/GetExcludeCountry() settings
+        
+        
+        
 
         sal_Bool bIncludeCountry = rConfigItem.IsIncludeCountry();
         sal_Bool bHideEmptyParagraphs = rConfigItem.IsHideEmptyParagraphs();
@@ -363,7 +363,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
 
                 if( bSpecialReplacementForCountry && sCountryColumn == sConvertedColumn )
                 {
-                    // now insert a hidden paragraph field
+                    
                     OUString sExpression;
                     if( !rExcludeCountry.isEmpty() )
                     {
@@ -398,7 +398,7 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
                     aFldMgr.InsertFld( aData );
                 }
                 sHideParagraphsExpression = "";
-                //now add a new paragraph
+                
                 rShell.SplitNode();
             }
         }
@@ -413,8 +413,8 @@ SwFrmFmt* SwMailMergeLayoutPage::InsertAddressFrame(
 
 void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfigItem& rConfigItem, bool bExample)
 {
-    //set the cursor to the desired position - if no text content is here then
-    //new paragraphs are inserted
+    
+    
     const SwRect& rPageRect = rShell.GetAnyCurRect(RECT_PAGE);
     const Point aGreetingPos( DEFAULT_LEFT_DISTANCE + rPageRect.Left(), GREETING_TOP_DISTANCE );
 
@@ -422,10 +422,10 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
 
     if(!bRet)
     {
-        //there's already text at the desired position
-        //go to start of the doc, directly!
+        
+        
         rShell.SttEndDoc(sal_True);
-        //and go by paragraph until the position is reached
+        
         long nYPos = rShell.GetCharRect().Top();
         while(nYPos < GREETING_TOP_DISTANCE)
         {
@@ -433,7 +433,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                 break;
             nYPos = rShell.GetCharRect().Top();
         }
-        //text needs to be appended
+        
         while(nYPos < GREETING_TOP_DISTANCE)
         {
             if(!rShell.AppendTxtNode())
@@ -443,7 +443,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
     }
     else
     {
-        //we may end up inside of a paragraph if the left margin is not at DEFAULT_LEFT_DISTANCE
+        
         rShell.MovePara(GetfnParaCurr(), GetfnParaStart());
     }
     bool bSplitNode = !rShell.GetText().isEmpty();
@@ -460,18 +460,18 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                 bool bMoved = rShell.MoveParagraph( 1 );
                 if(!bMoved)
                 {
-                    //insert a new paragraph before the greeting line
+                    
                     rShell.SplitNode();
                 }
                 --nMoves;
             }
     }
-    //now insert the greeting text - if we have any?
+    
     const sal_Bool bIndividual = rConfigItem.IsIndividualGreeting(sal_False);
     OUString sGreeting;
     if(bIndividual)
     {
-        //lock expression fields - prevents hiding of the paragraph to insert into
+        
         rShell.LockExpFlds();
         if(bExample)
         {
@@ -492,10 +492,10 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
         else
         {
             SwFldMgr aFldMgr(&rShell);
-            //three paragraphs, each with an appropriate hidden paragraph field
-            //are to be inserted
+            
+            
 
-            //name of the gender column
+            
             OUString sGenderColumn = rConfigItem.GetAssignedColumn(MM_PART_GENDER);
             OUString sNameColumn = rConfigItem.GetAssignedColumn(MM_PART_LASTNAME);
 
@@ -506,7 +506,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             sConditionBase += ".";
             sConditionBase += rData.sCommand;
             sConditionBase += ".";
-            //split the name column from here
+            
             OUString sNameColumnBase(sConditionBase);
 
             sConditionBase += sGenderColumn;
@@ -524,12 +524,12 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             sDBName += OUString::number(rData.nCommandType);
             sDBName += OUString(DB_DELIM);
 
-//          Female:  [database.sGenderColumn] != "rFemaleGenderValue" && [database.NameColumn]
-//          Male:    [database.sGenderColumn] == "rFemaleGenderValue" && [database.rGenderColumn]
-//          Neutral: [database.sNameColumn]
+
+
+
             OSL_ENSURE(!sGenderColumn.isEmpty() && !rFemaleGenderValue.isEmpty(),
                     "gender settings not available - how to form the condition?");
-            //column used as lastname
+            
             for(sal_Int8 eGender = SwMailMergeConfigItem::FEMALE;
                 eGender <= SwMailMergeConfigItem::NEUTRAL; ++eGender)
             {
@@ -573,7 +573,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                         SwInsertFld_Data aData(TYP_HIDDENPARAFLD, 0, sCondition, aEmptyOUStr, 0, &rShell );
                         aFldMgr.InsertFld( aData );
                     }
-                    //now the text has to be inserted
+                    
                     const ResStringArray& rHeaders = rConfigItem.GetDefaultAddressHeaders();
                     Sequence< OUString> aAssignment =
                                     rConfigItem.GetColumnAssignment( rConfigItem.GetCurrentDBData() );
@@ -606,7 +606,7 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
                             rShell.Insert(aItem.sText);
                         }
                     }
-                    //now add a new paragraph
+                    
                     rShell.SplitNode();
                 }
             }
@@ -622,14 +622,14 @@ void SwMailMergeLayoutPage::InsertGreeting(SwWrtShell& rShell, SwMailMergeConfig
             sGreeting = aEntries[nCurrent];
         rShell.Insert(sGreeting);
     }
-    // now insert a new paragraph here if necessary
+    
     if(bSplitNode)
     {
         rShell.Push();
         rShell.SplitNode();
         rShell.Pop(sal_False);
     }
-    //put the cursor to the start of the paragraph
+    
     rShell.SttPara();
 
     OSL_ENSURE(0 == rShell.GetTableFmt(), "What to do with a table here?");
@@ -640,7 +640,7 @@ IMPL_LINK_NOARG(SwMailMergeLayoutPage, PreviewLoadedHdl_Impl)
     m_aExampleContainerWIN.Show(true);
 
     Reference< XModel > & xModel = m_pExampleFrame->GetModel();
-    //now the ViewOptions should be set properly
+    
     Reference< XViewSettingsSupplier >  xSettings(xModel->getCurrentController(), UNO_QUERY);
     m_xViewProperties = xSettings->getViewSettings();
     Reference< XUnoTunnel > xDocTunnel(xModel, UNO_QUERY);
@@ -728,7 +728,7 @@ IMPL_LINK(SwMailMergeLayoutPage, GreetingsHdl_Impl, PushButton*, pButton)
         m_pWizard->GetConfigItem().MoveGreeting(bDown ? 1 : -1 );
     if(!bMoved && bDown)
     {
-        //insert a new paragraph before the greeting line
+        
         m_pExampleWrtShell->SplitNode();
     }
 

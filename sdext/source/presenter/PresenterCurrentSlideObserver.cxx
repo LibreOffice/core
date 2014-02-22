@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterCurrentSlideObserver.hxx"
@@ -24,7 +24,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sdext { namespace presenter {
 
-//===== PresenterCurrentSlideObserver =========================================
+
 
 PresenterCurrentSlideObserver::PresenterCurrentSlideObserver (
     const ::rtl::Reference<PresenterController>& rxPresenterController,
@@ -40,7 +40,7 @@ PresenterCurrentSlideObserver::PresenterCurrentSlideObserver (
 
     if( mxSlideShowController.is() )
     {
-        // Listen for events from the slide show controller.
+        
         mxSlideShowController->addSlideShowListener(static_cast<XSlideShowListener*>(this));
     }
 }
@@ -51,7 +51,7 @@ PresenterCurrentSlideObserver::~PresenterCurrentSlideObserver (void)
 
 void SAL_CALL PresenterCurrentSlideObserver::disposing (void)
 {
-    // Disconnect form the slide show controller.
+    
     if(mxSlideShowController.is())
     {
         mxSlideShowController->removeSlideShowListener(static_cast<XSlideShowListener*>(this));
@@ -59,7 +59,7 @@ void SAL_CALL PresenterCurrentSlideObserver::disposing (void)
     }
 }
 
-//----- XSlideShowListener ----------------------------------------------------
+
 
 void SAL_CALL PresenterCurrentSlideObserver::beginEvent (
     const Reference<animations::XAnimationNode>& rNode)
@@ -96,9 +96,9 @@ void SAL_CALL PresenterCurrentSlideObserver::resumed (void)
 void SAL_CALL PresenterCurrentSlideObserver::slideEnded (sal_Bool bReverse)
     throw (css::uno::RuntimeException)
 {
-    // Determine whether the new current slide (the one after the one that
-    // just ended) is the slide past the last slide in the presentation,
-    // i.e. the one that says something like "click to end presentation...".
+    
+    
+    
     if (mxSlideShowController.is() && !bReverse)
         if (mxSlideShowController->getNextSlideIndex() < 0)
             if( mpPresenterController.is() )
@@ -127,7 +127,7 @@ void SAL_CALL PresenterCurrentSlideObserver::slideAnimationsEnded (void)
 {
 }
 
-//----- XEventListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterCurrentSlideObserver::disposing (
     const lang::EventObject& rEvent)
@@ -139,6 +139,6 @@ void SAL_CALL PresenterCurrentSlideObserver::disposing (
         mxSlideShowController = NULL;
 }
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

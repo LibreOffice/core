@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,7 +60,7 @@ static const struct SvXMLTokenMapEntry aAttributeMap[] =
     XML_TOKEN_MAP_END
 };
 
-// helper function; see below
+
 static void lcl_fillNamespaceContainer( const SvXMLNamespaceMap&,
                                  Reference<XNameContainer>& );
 
@@ -73,7 +73,7 @@ XFormsBindContext::XFormsBindContext(
         mxModel( xModel ),
         mxBinding( NULL )
 {
-    // attach binding to model
+    
     mxBinding = mxModel->createBinding();
     DBG_ASSERT( mxBinding.is(), "can't create binding" );
     mxModel->getBindings()->insert( makeAny( mxBinding ) );
@@ -124,7 +124,7 @@ void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
 void XFormsBindContext::StartElement(
     const Reference<XAttributeList>& xAttributeList )
 {
-    // we need to register the namespaces
+    
     Reference<XNameContainer> xContainer(
         mxBinding->getPropertyValue( "BindingNamespaces" ),
         UNO_QUERY );
@@ -133,7 +133,7 @@ void XFormsBindContext::StartElement(
     if( xContainer.is() )
         lcl_fillNamespaceContainer( GetImport().GetNamespaceMap(), xContainer);
 
-    // call super-class for attribute handling
+    
     TokenContext::StartElement( xAttributeList );
 }
 
@@ -156,23 +156,23 @@ static void lcl_fillNamespaceContainer(
     sal_uInt16 nKeyIter = aMap.GetFirstKey();
     do
     {
-        // get prefix and namespace
+        
         const OUString& sPrefix = aMap.GetPrefixByKey( nKeyIter );
         const OUString& sNamespace = aMap.GetNameByKey( nKeyIter );
 
-        // as a hack, we will ignore our own 'default' namespaces
+        
         DBG_ASSERT( !sPrefix.isEmpty(), "no prefix?" );
         if( !sPrefix.startsWith("_") &&
             nKeyIter >= XML_OLD_NAMESPACE_META_IDX )
         {
-            // insert prefix (use replace if already known)
+            
             if( xContainer->hasByName( sPrefix ) )
                 xContainer->replaceByName( sPrefix, makeAny( sNamespace ) );
             else
                 xContainer->insertByName( sPrefix, makeAny( sNamespace ) );
         }
 
-        // proceed to next
+        
         nKeyIter = aMap.GetNextKey( nKeyIter );
     }
     while( nKeyIter != XML_NAMESPACE_UNKNOWN );

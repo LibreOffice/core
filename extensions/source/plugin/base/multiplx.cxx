@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -29,9 +29,9 @@
 #include <osl/diagnose.h>
 #include <plugin/multiplx.hxx>
 
-//  ---------------------------------------------------------------------
-//  class MRCListenerMultiplexerHelper
-//  ---------------------------------------------------------------------
+
+
+
 MRCListenerMultiplexerHelper::MRCListenerMultiplexerHelper
 (
       const Reference< ::com::sun::star::awt::XWindow >  & rControl
@@ -51,29 +51,29 @@ void MRCListenerMultiplexerHelper::setPeer( const Reference< ::com::sun::star::a
     {
         if( xPeer.is() )
         {
-            // get all uiks from the listener added to the peer
+            
             Sequence<Type> aContainedTypes = aListenerHolder.getContainedTypes();
             const Type* pArray = aContainedTypes.getConstArray();
             sal_Int32 nCount = aContainedTypes.getLength();
-            // loop over all listener types and remove the listeners from the peer
+            
             for( sal_Int32 i = 0; i < nCount; i++ )
                 unadviseFromPeer( xPeer, pArray[i] );
         }
         xPeer = rPeer;
         if( xPeer.is() )
         {
-            // get all uiks from the listener added to the peer
+            
             Sequence<Type> aContainedTypes = aListenerHolder.getContainedTypes();
             const Type * pArray = aContainedTypes.getConstArray();
             sal_Int32 nCount = aContainedTypes.getLength();
-            // loop over all listener types and add the listeners to the peer
+            
             for( sal_Int32 i = 0; i < nCount; i++ )
                 adviseToPeer( xPeer, pArray[i] );
         }
     }
 }
 
-// MRCListenerMultiplexerHelper
+
 void MRCListenerMultiplexerHelper::disposeAndClear()
 {
     ::com::sun::star::lang::EventObject aEvt;
@@ -81,10 +81,10 @@ void MRCListenerMultiplexerHelper::disposeAndClear()
     aListenerHolder.disposeAndClear( aEvt );
 }
 
-// MRCListenerMultiplexerHelper
+
 void MRCListenerMultiplexerHelper::adviseToPeer( const Reference< ::com::sun::star::awt::XWindow >  & rPeer, const Type & type )
 {
-    // add a listener to the source (peer)
+    
     if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XWindowListener >*)0) )
         rPeer->addWindowListener( this );
     else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XKeyListener >*)0) )
@@ -109,10 +109,10 @@ void MRCListenerMultiplexerHelper::adviseToPeer( const Reference< ::com::sun::st
     }
 }
 
-// MRCListenerMultiplexerHelper
+
 void MRCListenerMultiplexerHelper::unadviseFromPeer( const Reference< ::com::sun::star::awt::XWindow >  & rPeer, const Type & type )
 {
-    // the last listener is removed, remove the listener from the source (peer)
+    
     if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XWindowListener >*)0) )
         rPeer->removeWindowListener( this );
     else if( type == ::getCppuType((const Reference< ::com::sun::star::awt::XKeyListener >*)0) )
@@ -137,19 +137,19 @@ void MRCListenerMultiplexerHelper::unadviseFromPeer( const Reference< ::com::sun
     }
 }
 
-// MRCListenerMultiplexerHelper
+
 void MRCListenerMultiplexerHelper::advise( const Type & type, const Reference< XInterface > & listener)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
     if( 1 == aListenerHolder.addInterface( type, listener ) )
     {
-        // the first listener is added
+        
         if( xPeer.is() )
             adviseToPeer( xPeer, type );
     }
 }
 
-// MRCListenerMultiplexerHelper
+
 void MRCListenerMultiplexerHelper::unadvise(const Type & type, const Reference< XInterface > & listener)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
@@ -157,16 +157,16 @@ void MRCListenerMultiplexerHelper::unadvise(const Type & type, const Reference< 
     if( pCont )
     {
         if( 0 == pCont->removeInterface( listener ) && xPeer.is() )
-            // the last listener is removed
+            
             unadviseFromPeer( xPeer, type );
     }
 }
 
-// ::com::sun::star::lang::XEventListener
+
 void MRCListenerMultiplexerHelper::disposing(const ::com::sun::star::lang::EventObject& ) throw()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( aMutex );
-    // peer is disposed, clear the reference
+    
     xPeer = Reference< ::com::sun::star::awt::XWindow > ();
 }
 
@@ -198,133 +198,133 @@ if( pCont )                                                                 \
     }                                                                       \
 }
 
-// ::com::sun::star::awt::XFocusListener
+
 void MRCListenerMultiplexerHelper::focusGained(const ::com::sun::star::awt::FocusEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XFocusListener, focusGained, ::com::sun::star::awt::FocusEvent )
 }
 
-// ::com::sun::star::awt::XFocusListener
+
 void MRCListenerMultiplexerHelper::focusLost(const ::com::sun::star::awt::FocusEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XFocusListener, focusLost, ::com::sun::star::awt::FocusEvent )
 }
 
-// ::com::sun::star::awt::XWindowListener
+
 void MRCListenerMultiplexerHelper::windowResized(const ::com::sun::star::awt::WindowEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XWindowListener, windowResized, ::com::sun::star::awt::WindowEvent )
 }
 
-// ::com::sun::star::awt::XWindowListener
+
 void MRCListenerMultiplexerHelper::windowMoved(const ::com::sun::star::awt::WindowEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XWindowListener, windowMoved, ::com::sun::star::awt::WindowEvent )
 }
 
-// ::com::sun::star::awt::XWindowListener
+
 void MRCListenerMultiplexerHelper::windowShown(const ::com::sun::star::lang::EventObject& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XWindowListener, windowShown, ::com::sun::star::lang::EventObject )
 }
 
-// ::com::sun::star::awt::XWindowListener
+
 void MRCListenerMultiplexerHelper::windowHidden(const ::com::sun::star::lang::EventObject& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XWindowListener, windowHidden, ::com::sun::star::lang::EventObject )
 }
 
-// ::com::sun::star::awt::XKeyListener
+
 void MRCListenerMultiplexerHelper::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XKeyListener, keyPressed, ::com::sun::star::awt::KeyEvent )
 }
 
-// ::com::sun::star::awt::XKeyListener
+
 void MRCListenerMultiplexerHelper::keyReleased(const ::com::sun::star::awt::KeyEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XKeyListener, keyReleased, ::com::sun::star::awt::KeyEvent )
 }
 
-// ::com::sun::star::awt::XMouseListener
+
 void MRCListenerMultiplexerHelper::mousePressed(const ::com::sun::star::awt::MouseEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XMouseListener, mousePressed, ::com::sun::star::awt::MouseEvent )
 }
 
-// ::com::sun::star::awt::XMouseListener
+
 void MRCListenerMultiplexerHelper::mouseReleased(const ::com::sun::star::awt::MouseEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XMouseListener, mouseReleased, ::com::sun::star::awt::MouseEvent )
 }
 
-// ::com::sun::star::awt::XMouseListener
+
 void MRCListenerMultiplexerHelper::mouseEntered(const ::com::sun::star::awt::MouseEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XMouseListener, mouseEntered, ::com::sun::star::awt::MouseEvent )
 }
 
-// ::com::sun::star::awt::XMouseListener
+
 void MRCListenerMultiplexerHelper::mouseExited(const ::com::sun::star::awt::MouseEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XMouseListener, mouseExited, ::com::sun::star::awt::MouseEvent )
 }
 
-// ::com::sun::star::awt::XMouseMotionListener
+
 void MRCListenerMultiplexerHelper::mouseDragged(const ::com::sun::star::awt::MouseEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XMouseMotionListener, mouseDragged, ::com::sun::star::awt::MouseEvent )
 }
 
-// ::com::sun::star::awt::XMouseMotionListener
+
 void MRCListenerMultiplexerHelper::mouseMoved(const ::com::sun::star::awt::MouseEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XMouseMotionListener, mouseMoved, ::com::sun::star::awt::MouseEvent )
 }
 
-// ::com::sun::star::awt::XPaintListener
+
 void MRCListenerMultiplexerHelper::windowPaint(const ::com::sun::star::awt::PaintEvent& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XPaintListener, windowPaint, ::com::sun::star::awt::PaintEvent )
 }
 
-// ::com::sun::star::awt::XTopWindowListener
+
 void MRCListenerMultiplexerHelper::windowOpened(const ::com::sun::star::lang::EventObject& e) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XTopWindowListener, windowOpened, ::com::sun::star::lang::EventObject )
 }
 
-// ::com::sun::star::awt::XTopWindowListener
+
 void MRCListenerMultiplexerHelper::windowClosing( const ::com::sun::star::lang::EventObject& e ) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XTopWindowListener, windowClosing, ::com::sun::star::lang::EventObject )
 }
 
-// ::com::sun::star::awt::XTopWindowListener
+
 void MRCListenerMultiplexerHelper::windowClosed( const ::com::sun::star::lang::EventObject& e ) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XTopWindowListener, windowClosed, ::com::sun::star::lang::EventObject )
 }
 
-// ::com::sun::star::awt::XTopWindowListener
+
 void MRCListenerMultiplexerHelper::windowMinimized( const ::com::sun::star::lang::EventObject& e ) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XTopWindowListener, windowMinimized, ::com::sun::star::lang::EventObject )
 }
 
-// ::com::sun::star::awt::XTopWindowListener
+
 void MRCListenerMultiplexerHelper::windowNormalized( const ::com::sun::star::lang::EventObject& e ) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XTopWindowListener, windowNormalized, ::com::sun::star::lang::EventObject )
 }
 
-// ::com::sun::star::awt::XTopWindowListener
+
 void MRCListenerMultiplexerHelper::windowActivated( const ::com::sun::star::lang::EventObject& e ) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XTopWindowListener, windowActivated, ::com::sun::star::lang::EventObject )
 }
 
-// ::com::sun::star::awt::XTopWindowListener
+
 void MRCListenerMultiplexerHelper::windowDeactivated( const ::com::sun::star::lang::EventObject& e ) throw()
 {
     MULTIPLEX( ::com::sun::star::awt::XTopWindowListener, windowDeactivated, ::com::sun::star::lang::EventObject )

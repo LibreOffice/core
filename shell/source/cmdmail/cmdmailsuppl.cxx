@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -40,9 +40,9 @@
 #include <errno.h>
 #include <unistd.h>
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+
+
+
 
 using com::sun::star::beans::PropertyValue;
 using com::sun::star::system::XSimpleMailClientSupplier;
@@ -62,11 +62,11 @@ using namespace com::sun::star::configuration;
 
 #define COMP_IMPL_NAME  "com.sun.star.comp.system.SimpleCommandMail2"
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
 
-namespace // private
+
+
+
+namespace 
 {
     Sequence< OUString > SAL_CALL Component_getSupportedServiceNames()
     {
@@ -75,9 +75,9 @@ namespace // private
         return aRet;
     }
 
-} // end private namespace
+} 
 
-//-------------------------------------------------
+
 
 CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     WeakImplHelper3< XSimpleMailClientSupplier, XSimpleMailClient, XServiceInfo >()
@@ -85,9 +85,9 @@ CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
     m_xConfigurationProvider = theDefaultProvider::get(xContext);
 }
 
-//-------------------------------------------------
-// XSimpleMailClientSupplier
-//-------------------------------------------------
+
+
+
 
 Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
     throw (RuntimeException)
@@ -95,9 +95,9 @@ Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
     return static_cast < XSimpleMailClient * > (this);
 }
 
-//------------------------------------------------
-// XSimpleMailClient
-//------------------------------------------------
+
+
+
 
 Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage(  )
         throw (::com::sun::star::uno::RuntimeException)
@@ -105,9 +105,9 @@ Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage( 
     return Reference< XSimpleMailMessage >( new CmdMailMsg(  ) );
 }
 
-//------------------------------------------------
-// XSimpleMailClient
-//------------------------------------------------
+
+
+
 
 namespace {
 
@@ -181,9 +181,9 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 
     try
     {
-        // Query XNameAccess interface of the org.openoffice.Office.Common/ExternalMailer
-        // configuration node to retriece the users preferred email application. This may
-        // transparently by redirected to e.g. the corresponding GConf setting in GNOME.
+        
+        
+        
         OUString aConfigRoot = "org.openoffice.Office.Common/ExternalMailer";
 
         PropertyValue aProperty;
@@ -204,13 +204,13 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         {
             OUString aMailer;
 
-            // Retrieve the value for "Program" node and append it feed senddoc with it
-            // using the (undocumented) --mailclient switch
+            
+            
             xNameAccess->getByName("Program") >>= aMailer;
 
             if( !aMailer.isEmpty() )
             {
-                // make sure we have a system path
+                
                 FileBase::getSystemPathFromFileURL( aMailer, aMailer );
 
                 aBuffer.append(" --mailclient ");
@@ -243,26 +243,26 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         }
     }
 
-    // Convert from, to, etc. in a best-effort rather than a strict way to the
-    // system encoding, based on the assumption that the relevant address parts
-    // of those strings are ASCII anyway and any problematic characters are only
-    // in the human-readable, informational-only parts:
+    
+    
+    
+    
 
-    // Append originator if set in the message
+    
     if ( !xSimpleMailMessage->getOriginator().isEmpty() )
     {
         aBuffer.append(" --from ");
         appendShellWord(aBuffer, xSimpleMailMessage->getOriginator(), false);
     }
 
-    // Append receipient if set in the message
+    
     if ( !xSimpleMailMessage->getRecipient().isEmpty() )
     {
         aBuffer.append(" --to ");
         appendShellWord(aBuffer, xSimpleMailMessage->getRecipient(), false);
     }
 
-    // Append carbon copy receipients set in the message
+    
     Sequence< OUString > aStringList = xSimpleMailMessage->getCcRecipient();
     sal_Int32 n, nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
@@ -271,7 +271,7 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         appendShellWord(aBuffer, aStringList[n], false);
     }
 
-    // Append blind carbon copy receipients set in the message
+    
     aStringList = xSimpleMailMessage->getBccRecipient();
     nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
@@ -280,14 +280,14 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
         appendShellWord(aBuffer, aStringList[n], false);
     }
 
-    // Append subject if set in the message
+    
     if ( !xSimpleMailMessage->getSubject().isEmpty() )
     {
         aBuffer.append(" --subject ");
         appendShellWord(aBuffer, xSimpleMailMessage->getSubject(), false);
     }
 
-    // Append attachments set in the message
+    
     aStringList = xSimpleMailMessage->getAttachement();
     nmax = aStringList.getLength();
     for ( n = 0; n < nmax; n++ )
@@ -309,21 +309,21 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
     }
 }
 
-// XServiceInfo
+
 OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
     throw( RuntimeException )
 {
     return OUString(COMP_IMPL_NAME);
 }
 
-//  XServiceInfo
+
 sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
     throw( RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-//  XServiceInfo
+
 Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
     throw( RuntimeException )
 {

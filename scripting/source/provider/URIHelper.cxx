@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -76,7 +76,7 @@ ScriptingFrameworkURIHelper::ScriptingFrameworkURIHelper(
 
 ScriptingFrameworkURIHelper::~ScriptingFrameworkURIHelper()
 {
-    // currently does nothing
+    
 }
 
 void SAL_CALL
@@ -164,13 +164,13 @@ ScriptingFrameworkURIHelper::initBaseURI()
         OUString child = children[i];
         sal_Int32 idx = child.lastIndexOf(test);
 
-        // OSL_TRACE("Trying: %s", PRTSTR(child));
-        // OSL_TRACE("idx=%d, testlen=%d, children=%d",
-        //     idx, test.getLength(), child.getLength());
+        
+        
+        
 
         if ( idx != -1 && (idx + test.getLength()) == child.getLength() )
         {
-            // OSL_TRACE("FOUND PATH: %s", PRTSTR(child));
+            
             if ( bAppendScriptsPart )
             {
                 m_sBaseURI = child.concat( SCRIPTS_PART );

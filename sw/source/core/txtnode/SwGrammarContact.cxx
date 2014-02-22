@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,18 +52,18 @@ public:
     SwGrammarContact();
     ~SwGrammarContact() { aTimer.Stop(); delete mpProxyList; }
 
-    // (pure) virtual functions of IGrammarContact
+    
     virtual void updateCursorPosition( const SwPosition& rNewPos );
     virtual SwGrammarMarkUp* getGrammarCheck( SwTxtNode& rTxtNode, bool bCreate );
     virtual void finishGrammarCheck( SwTxtNode& rTxtNode );
 protected:
-    // virtual function of SwClient
+    
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 };
 
 SwGrammarContact::SwGrammarContact() : mpProxyList(0), mbFinished( false )
 {
-    aTimer.SetTimeout( 2000 );  // Repaint of grammar check after 'setChecked'
+    aTimer.SetTimeout( 2000 );  
     aTimer.SetTimeoutHdl( LINK(this, SwGrammarContact, TimerRepaint) );
 }
 
@@ -73,7 +73,7 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer )
     {
         pTimer->Stop();
         if( GetRegisteredIn() )
-        {   //Replace the old wrong list by the proxy list and repaint all frames
+        {   
             getMyTxtNode()->SetGrammarCheck( mpProxyList, true );
             mpProxyList = 0;
             SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
@@ -86,21 +86,21 @@ IMPL_LINK( SwGrammarContact, TimerRepaint, Timer *, pTimer )
 void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
 {
     SwTxtNode* pTxtNode = rNewPos.nNode.GetNode().GetTxtNode();
-    if( pTxtNode != GetRegisteredIn() ) // paragraph has been changed
+    if( pTxtNode != GetRegisteredIn() ) 
     {
         aTimer.Stop();
-        if( GetRegisteredIn() ) // My last paragraph has been left
+        if( GetRegisteredIn() ) 
         {
             if( mpProxyList )
-            {   // replace old list by the proxy list and repaint
+            {   
                 getMyTxtNode()->SetGrammarCheck( mpProxyList, true );
                 SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
             }
-            GetRegisteredInNonConst()->Remove( this ); // good bye old paragraph
+            GetRegisteredInNonConst()->Remove( this ); 
             mpProxyList = 0;
         }
         if( pTxtNode )
-            pTxtNode->Add( this ); // welcome new paragraph
+            pTxtNode->Add( this ); 
     }
 }
 
@@ -108,8 +108,8 @@ void SwGrammarContact::updateCursorPosition( const SwPosition& rNewPos )
 SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bCreate )
 {
     SwGrammarMarkUp *pRet = 0;
-    if( GetRegisteredIn() == &rTxtNode ) // hey, that's my current paragraph!
-    {   // so you will get a proxy list...
+    if( GetRegisteredIn() == &rTxtNode ) 
+    {   
         if( bCreate )
         {
             if( mbFinished )
@@ -133,8 +133,8 @@ SwGrammarMarkUp* SwGrammarContact::getGrammarCheck( SwTxtNode& rTxtNode, bool bC
     }
     else
     {
-        pRet = rTxtNode.GetGrammarCheck(); // do you have already a list?
-        if( bCreate && !pRet ) // do you want to create a list?
+        pRet = rTxtNode.GetGrammarCheck(); 
+        if( bCreate && !pRet ) 
         {
             pRet = new SwGrammarMarkUp();
             pRet->SetInvalid( 0, COMPLETE_STRING );
@@ -152,7 +152,7 @@ void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
 
     SwPtrMsgPoolItem *pDead = (SwPtrMsgPoolItem *)pOld;
     if( pDead->pObject == GetRegisteredIn() )
-    {    // if my current paragraph dies, I throw the proxy list away
+    {    
         aTimer.Stop();
         GetRegisteredInNonConst()->Remove( this );
         delete mpProxyList;
@@ -162,17 +162,17 @@ void SwGrammarContact::Modify( const SfxPoolItem* pOld, const SfxPoolItem * )
 
 void SwGrammarContact::finishGrammarCheck( SwTxtNode& rTxtNode )
 {
-    if( &rTxtNode != GetRegisteredIn() ) // not my paragraph
-        SwTxtFrm::repaintTextFrames( rTxtNode ); // can be repainted directly
+    if( &rTxtNode != GetRegisteredIn() ) 
+        SwTxtFrm::repaintTextFrames( rTxtNode ); 
     else
     {
         if( mpProxyList )
         {
             mbFinished = true;
-            aTimer.Start(); // will replace old list and repaint with delay
+            aTimer.Start(); 
         }
         else if( getMyTxtNode()->GetGrammarCheck() )
-        {   // all grammar problems seems to be gone, no delay needed
+        {   
             getMyTxtNode()->SetGrammarCheck( 0, true );
             SwTxtFrm::repaintTextFrames( *getMyTxtNode() );
         }

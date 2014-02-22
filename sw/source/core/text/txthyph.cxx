@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -67,28 +67,28 @@ bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
 
     if( !g_pBreakIt->GetBreakIter().is() )
         return false;
-    // Wir machen den Laden erstmal dicht:
+    
     OSL_ENSURE( !IsLocked(), "SwTxtFrm::Hyphenate: this is locked" );
-    // 4935: Der frame::Frame muss eine gueltige SSize haben!
+    
     Calc();
     GetFormatted();
 
     bool bRet = false;
     if( !IsEmpty() )
     {
-        // Wir muessen die Trennung immer einschalten.
-        // Keine Angst, der SwTxtIter sichert im Hyphenate die alte Zeile.
+        
+        
         SwTxtFrmLocker aLock( this );
 
         if ( IsVertical() )
             SwapWidthAndHeight();
 
-        SwTxtFormatInfo aInf( this, true );     // true for interactive hyph!
+        SwTxtFormatInfo aInf( this, true );     
         SwTxtFormatter aLine( this, &aInf );
         aLine.CharToLine( rHyphInf.nStart );
-        // Wenn wir innerhalb des ersten Wortes einer Zeile stehen, so koennte
-        // dieses in der vorherigen getrennt werden, deshalb gehen wir ein Zeile
-        // zurueck.
+        
+        
+        
         if( aLine.Prev() )
         {
             SwLinePortion *pPor = aLine.GetCurr()->GetFirstPortion();
@@ -118,11 +118,11 @@ bool SwTxtFrm::Hyphenate( SwInterHyphInfo &rHyphInf )
  *
  * Wir formatieren eine Zeile fuer die interaktive Trennung
  *************************************************************************/
-// Wir koennen davon ausgehen, dass bereits formatiert wurde.
-// Fuer die CeBIT'93 gehen wir den einfachen, sicheren Weg:
-// Die Zeile wird einfach neu formatiert, der Hyphenator wird dann
-// so vorbereitet, wie ihn die UI erwartet.
-// Hier stehen natuerlich enorme Optimierungsmoeglichkeiten offen.
+
+
+
+
+
 
 void SetParaPortion( SwTxtInfo *pInf, SwParaPortion *pRoot )
 {
@@ -134,25 +134,25 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 {
     SwTxtFormatInfo &rInf = GetInfo();
 
-    // In der letzten Zeile gibt es nie etwas zu trennen.
-    // Es sei denn, es befindet sich eine FlyPortion darin,
-    // oder es ist die letzte Zeile des Masters
+    
+    
+    
     if( !GetNext() && !rInf.GetTxtFly()->IsOn() && !pFrm->GetFollow() )
         return false;
 
     sal_Int32 nWrdStart = nStart;
 
-    // Wir muessen die alte Zeile erhalten. Ein Beispiel:
-    // Das Attribut fuer Trennung wurde nicht gesetzt,
-    // in SwTxtFrm::Hyphenate wird es jedoch immer gesetzt,
-    // weil wir Trennpositionen im Hyphenator einstellen wollen.
+    
+    
+    
+    
     SwLineLayout *pOldCurr = pCurr;
 
     InitCntHyph();
 
-    // 5298: IsParaLine() (ex.IsFirstLine) fragt auf GetParaPortion() ab.
-    // wir muessen gleiche Bedingungen schaffen: in der ersten
-    // Zeile formatieren wir SwParaPortions...
+    
+    
+    
     if( pOldCurr->IsParaPortion() )
     {
         SwParaPortion *pPara = new SwParaPortion();
@@ -165,14 +165,14 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
 
     nWrdStart = FormatLine( nWrdStart );
 
-    // Man muss immer im Hinterkopf behalten, dass es z.B.
-    // Felder gibt, die aufgetrennt werden koennen ...
+    
+    
     if( pCurr->PrtWidth() && pCurr->GetLen() )
     {
-        // Wir muessen uns darauf einstellen, dass in der Zeile
-        // FlyFrms haengen, an denen auch umgebrochen werden darf.
-        // Wir suchen also die erste HyphPortion in dem angegebenen
-        // Bereich.
+        
+        
+        
+        
 
         SwLinePortion *pPos = pCurr->GetPortion();
         const sal_Int32 nPamStart = rHyphInf.nStart;
@@ -180,8 +180,8 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         const sal_Int32 nEnd = rHyphInf.GetEnd();
         while( pPos )
         {
-            // Entweder wir liegen drueber oder wir laufen gerade auf eine
-            // Hyphportion die am Ende der Zeile oder vor einem Flys steht.
+            
+            
             if( nWrdStart >= nEnd )
             {
                 nWrdStart = 0;
@@ -199,12 +199,12 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
             nWrdStart = nWrdStart + pPos->GetLen();
             pPos = pPos->GetPortion();
         }
-        // Wenn pPos 0 ist, wurde keine Trennstelle ermittelt.
+        
         if( !pPos )
             nWrdStart = 0;
     }
 
-    // Das alte LineLayout wird wieder eingestellt ...
+    
     delete pCurr;
     pCurr = pOldCurr;
 
@@ -217,15 +217,15 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( nWrdStart==0 )
         return false;
 
-    // nWrdStart bezeichnet nun die Position im String, der
-    // fuer eine Trennung zur Debatte steht.
-    // Start() hangelt sich zum End()
+    
+    
+    
     rHyphInf.nWordStart = nWrdStart;
 
     sal_Int32 nLen = 0;
     const sal_Int32 nEnd = nWrdStart;
 
-    // Wir suchen vorwaerts
+    
     Reference< XHyphenatedWord > xHyphWord;
 
     Boundary aBound =
@@ -241,7 +241,7 @@ bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
     if( nWrdStart + nLen > nEnd )
         nMinTrail = nWrdStart + nLen - nEnd - 1;
 
-    //!! rHyphInf.SetHyphWord( ... ) mu??? hier geschehen
+    
     xHyphWord = rInf.HyphWord( aSelTxt, nMinTrail );
     if ( xHyphWord.is() )
     {
@@ -271,9 +271,9 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
     OSL_ENSURE( xHyphWord.is(), "SwTxtPortion::CreateHyphen(): You are lucky! The code is robust here." );
 
     if( rInf.IsHyphForbud() ||
-        pPortion || // robust
-        !xHyphWord.is() || // more robust
-        // Mehrzeilige Felder duerfen nicht interaktiv getrennt werden.
+        pPortion || 
+        !xHyphWord.is() || 
+        
         ( rInf.IsInterHyph() && InFldGrp() ) )
         return false;
 
@@ -281,7 +281,7 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
     sal_Int32 nPorEnd;
     SwTxtSizeInfo aInf( rInf );
 
-    // first case: hyphenated word has alternative spelling
+    
     if ( xHyphWord->isAlternativeSpelling() )
     {
         SvxAlternativeSpelling aAltSpell;
@@ -292,7 +292,7 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         nPorEnd = aAltSpell.nChangedPos + rGuess.BreakStart() - rGuess.FieldDiff();
         sal_Int32 nTmpLen = 0;
 
-        // soft hyphen at alternative spelling position?
+        
         if( rInf.GetTxt()[ rInf.GetSoftHyphPos() ] == CHAR_SOFTHYPHEN )
         {
             pHyphPor = new SwSoftHyphStrPortion( aAltTxt );
@@ -302,14 +302,14 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
             pHyphPor = new SwHyphStrPortion( aAltTxt );
         }
 
-        // length of pHyphPor is adjusted
+        
         pHyphPor->SetLen( aAltTxt.getLength() + 1 );
         (SwPosSize&)(*pHyphPor) = pHyphPor->GetTxtSize( rInf );
         pHyphPor->SetLen( aAltSpell.nChangedLength + nTmpLen );
     }
     else
     {
-        // second case: no alternative spelling
+        
         SwHyphPortion aHyphPor;
         aHyphPor.SetLen( 1 );
 
@@ -330,13 +330,13 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
 
         pHyphPor->SetWhichPor( POR_HYPH );
 
-        // values required for this
+        
         nPorEnd = xHyphWord->getHyphenPos() + 1 + rGuess.BreakStart()
                 - rGuess.FieldDiff();
     }
 
-    // portion end must be in front of us
-    // we do not put hyphens at start of line
+    
+    
     if ( nPorEnd > rInf.GetIdx() ||
          ( nPorEnd == rInf.GetIdx() && rInf.GetLineStart() != rInf.GetIdx() ) )
     {
@@ -354,7 +354,7 @@ bool SwTxtPortion::CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess )
         return true;
     }
 
-    // last exit for the lost
+    
     delete pHyphPor;
     BreakCut( rInf, rGuess );
     return false;
@@ -439,8 +439,8 @@ SwSoftHyphPortion::SwSoftHyphPortion() :
 
 KSHORT SwSoftHyphPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    // Wir stehen zwar im const, aber nViewWidth sollte erst im letzten
-    // Moment errechnet werden:
+    
+    
     if( !Width() && rInf.OnWin() && rInf.GetOpt().IsSoftHyph() && !IsExpand() )
     {
         if( !nViewWidth )
@@ -494,7 +494,7 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
 {
     bool bFull = true;
 
-    // special case for old german spelling
+    
     if( rInf.IsUnderFlow()  )
     {
         if( rInf.GetSoftHyphPos() )
@@ -505,9 +505,9 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
         {
             rInf.SetSoftHyphPos( rInf.GetIdx() );
             Width(0);
-            // if the soft hyphend word has an alternative spelling
-            // when hyphenated (old german spelling), the soft hyphen
-            // portion has to trigger an underflow
+            
+            
+            
             SwTxtGuess aGuess;
             bFull = rInf.IsInterHyph() ||
                     !aGuess.AlternativeSpelling( rInf, rInf.GetIdx() - 1 );
@@ -538,7 +538,7 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
     SetExpand( false );
     if( !bFull )
     {
-        // default-maessig besitzen wir keine Breite, aber eine Hoehe
+        
         nHyphWidth = Width();
         Width(0);
     }
@@ -548,7 +548,7 @@ bool SwSoftHyphPortion::Format( SwTxtFormatInfo &rInf )
 /*************************************************************************
  *                 virtual SwSoftHyphPortion::FormatEOL()
  *************************************************************************/
-// Format end of Line
+
 
 void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
@@ -558,7 +558,7 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
         if( rInf.GetLast() == this )
             rInf.SetLast( FindPrevPortion( rInf.GetRoot() ) );
 
-        // 5964: alte Werte muessen wieder zurueckgesetzt werden.
+        
         const SwTwips nOldX  = rInf.X();
         const sal_Int32 nOldIdx = rInf.GetIdx();
         rInf.X( rInf.X() - PrtWidth() );
@@ -566,9 +566,9 @@ void SwSoftHyphPortion::FormatEOL( SwTxtFormatInfo &rInf )
         const bool bFull = SwHyphPortion::Format( rInf );
         nHyphWidth = Width();
 
-        // 6976: Eine truebe Sache: Wir werden erlaubterweise breiter,
-        // aber gleich wird noch ein Fly verarbeitet, der eine korrekte
-        // X-Position braucht.
+        
+        
+        
         if( bFull || !rInf.GetFly() )
             rInf.X( nOldX );
         else
@@ -617,8 +617,8 @@ void SwSoftHyphPortion::HandlePortion( SwPortionHandler& rPH ) const
 
 void SwSoftHyphStrPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // Bug oder feature?:
-    // {Zu}{k-}{ker}, {k-} wird grau statt {-}
+    
+    
     rInf.DrawViewOpt( *this, POR_SOFTHYPH );
     SwHyphStrPortion::Paint( rInf );
 }

@@ -127,7 +127,7 @@ IndexEntrySupplier_asian::getIndexCharacter( const OUString& rIndexEntry,
         }
     }
 
-    // using alphanumeric index for non-define stirng
+    
     return OUString(&idxStr[(ch & 0xFFFFFF00) ? 0 : ch], 1);
 }
 
@@ -147,13 +147,13 @@ IndexEntrySupplier_asian::compareIndexEntry(
     sal_Int32 result = collator->compareString(getEntry(rIndexEntry1, rPhoneticEntry1, rLocale1),
                                     getEntry(rIndexEntry2, rPhoneticEntry2, rLocale2));
 
-    // equivalent of phonetic entries does not mean equivalent of index entries.
-    // we have to continue comparing index entry here.
+    
+    
     if (result == 0 && usePhonetic && !rPhoneticEntry1.isEmpty() &&
             rLocale1.Language == rLocale2.Language && rLocale1.Country == rLocale2.Country &&
             rLocale1.Variant == rLocale2.Variant)
         result = collator->compareString(rIndexEntry1, rIndexEntry2);
-    return sal::static_int_cast< sal_Int16 >(result); // result in { -1, 0, 1 }
+    return sal::static_int_cast< sal_Int16 >(result); 
 }
 
 OUString SAL_CALL

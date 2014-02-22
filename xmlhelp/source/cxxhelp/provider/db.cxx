@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,13 +40,13 @@ void HDFData::copyToBuffer( const char* pSrcData, int nSize )
 }
 
 
-// Hdf
+
 
 bool Hdf::implReadLenAndData( const char* pData, int& riPos, HDFData& rValue )
 {
     bool bSuccess = false;
 
-    // Read key len
+    
     const char* pStartPtr = pData + riPos;
     char* pEndPtr;
     sal_Int32 nKeyLen = strtol( pStartPtr, &pEndPtr, 16 );
@@ -95,7 +95,7 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
 
             OString aOKeyStr = aDBKey.getData();
 
-            // Read val len
+            
             const char* pStartPtr = pData + iPos;
             char* pEndPtr;
             sal_Int32 nValLen = strtol( pStartPtr, &pEndPtr, 16 );
@@ -112,7 +112,7 @@ void Hdf::createHashMap( bool bOptimizeForPerformance )
             }
             else
             {
-                // store value start position
+                
                 (*m_pStringToValPosMap)[aOKeyStr] = std::pair<int,int>( iPos, nValLen );
             }
             iPos += nValLen + 1;
@@ -254,6 +254,6 @@ void Hdf::stopIteration( void )
     m_iItPos = -1;
 }
 
-} // end of namespace helpdatafileproxy
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

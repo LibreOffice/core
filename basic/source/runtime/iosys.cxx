@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -141,7 +141,7 @@ SbiStream::~SbiStream()
     delete pStrm;
 }
 
-// map an SvStream-error to StarBASIC-code
+
 
 void SbiStream::MapError()
 {
@@ -177,7 +177,7 @@ void SbiStream::MapError()
     }
 }
 
-// TODO: Code is copied from daemons2/source/uno/asciiEncoder.cxx
+
 
 OUString findUserInDescription( const OUString& aDescription )
 {
@@ -218,14 +218,14 @@ bool needSecurityRestrictions( void )
     {
         bNeedInit = false;
 
-        // Get system user to compare to portal user
+        
         oslSecurity aSecurity = osl_getCurrentSecurity();
         OUString aSystemUser;
         sal_Bool bRet = osl_getUserName( aSecurity, &aSystemUser.pData );
         osl_freeSecurityHandle(aSecurity);
         if( !bRet )
         {
-            // No valid security! -> Secure mode!
+            
             return true;
         }
 
@@ -237,14 +237,14 @@ bool needSecurityRestrictions( void )
 
         if( nBridgeCount == 0 )
         {
-            // No bridges -> local
+            
             bRetVal = false;
             return bRetVal;
         }
 
-        // Iterate through all bridges to find (portal) user property
+        
         const Reference< XBridge >* pBridges = aBridgeSeq.getConstArray();
-        bRetVal = false;    // Now only sal_True if user different from portal user is found
+        bRetVal = false;    
         sal_Int32 i;
         for( i = 0 ; i < nBridgeCount ; i++ )
         {
@@ -253,29 +253,29 @@ bool needSecurityRestrictions( void )
             OUString aPortalUser = findUserInDescription( aDescription );
             if( !aPortalUser.isEmpty() )
             {
-                // User Found, compare to system user
+                
                 if( aPortalUser == aSystemUser )
                 {
-                    // Same user -> system security is ok, bRetVal stays FALSE
+                    
                     break;
                 }
                 else
                 {
-                    // Different user -> Secure mode!
+                    
                     bRetVal = true;
                     break;
                 }
             }
         }
-        // No user found or PortalUser != SystemUser -> Secure mode! (Keep default value)
+        
     }
 
     return bRetVal;
 }
 
-// Returns sal_True if UNO is available, otherwise the old file
-// system implementation has to be used
-// #89378 New semantic: Don't just ask for UNO but for UCB
+
+
+
 bool hasUno( void )
 {
     static bool bNeedInit = true;
@@ -287,16 +287,16 @@ bool hasUno( void )
         Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
         if( !xContext.is() )
         {
-            // No service manager at all
+            
             bRetVal = false;
         }
         else
         {
             Reference< XUniversalContentBroker > xManager = UniversalContentBroker::create(xContext);
 
-            if ( !( xManager->queryContentProvider( OUString("file:///" ) ).is() ) )
+            if ( !( xManager->queryContentProvider( OUString("file:
             {
-                // No UCB
+                
                 bRetVal = false;
             }
         }
@@ -333,7 +333,7 @@ OslStream::OslStream( const OUString& rName, short nStrmMode )
     {
         nFlags = osl_File_OpenFlag_Write;
     }
-    else //if( nStrmMode & STREAM_READ )
+    else 
     {
         nFlags = osl_File_OpenFlag_Read;
     }
@@ -580,7 +580,7 @@ SbError SbiStream::Open
         try
         {
 
-        // #??? For write access delete file if it already exists (not for appending)
+        
         if( (nStrmMode & STREAM_WRITE) != 0 && !IsAppend() && !IsBinary() &&
             xSFI->exists( aNameStr ) && !xSFI->isFolder( aNameStr ) )
         {
@@ -597,7 +597,7 @@ SbError SbiStream::Open
             Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
             pStrm = new UCBStream( xIS );
         }
-        else //if( nStrmMode & STREAM_READ )
+        else 
         {
             Reference< XInputStream > xIS = xSFI->openFileRead( aNameStr );
             pStrm = new UCBStream( xIS );
@@ -657,7 +657,7 @@ SbError SbiStream::Read(OString& rBuf, sal_uInt16 n, bool bForceReadingPerByte)
             return nError = SbERR_BAD_RECORD_LENGTH;
         }
         OStringBuffer aBuffer(read_uInt8s_ToOString(*pStrm, n));
-        //Pad it out with ' ' to the requested length on short read
+        
         sal_Int32 nRequested = sal::static_int_cast<sal_Int32>(n);
         comphelper::string::padToLength(aBuffer, nRequested, ' ');
         rBuf = aBuffer.makeStringAndClear();
@@ -725,8 +725,8 @@ SbError SbiStream::Write( const OString& rBuf, sal_uInt16 n )
     if( IsText() )
     {
         aLine = aLine + rBuf;
-        // Get it out, if the end is an LF, but strip CRLF before,
-        // because the SvStrm adds a CRLF!
+        
+        
         sal_Int32 nLineLen = aLine.getLength();
         if (nLineLen && aLine[--nLineLen] == 0x0A)
         {
@@ -845,7 +845,7 @@ void SbiIoSystem::Shutdown()
         }
     }
     nChan = 0;
-    // anything left to PRINT?
+    
     if( !aOut.isEmpty() )
     {
 #if defined __GNUC__
@@ -915,7 +915,7 @@ void SbiIoSystem::Write(const OUString& rBuf, short n)
     }
 }
 
-// nChannel == 0..CHANNELS-1
+
 
 SbiStream* SbiIoSystem::GetStream( short nChannel ) const
 {
@@ -966,7 +966,7 @@ void SbiIoSystem::ReadCon(OString& rIn)
     aPrompt = OString();
 }
 
-// output of a MessageBox, if theres a CR in the console-buffer
+
 
 void SbiIoSystem::WriteCon(const OUString& rText)
 {

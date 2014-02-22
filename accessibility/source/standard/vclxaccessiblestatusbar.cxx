@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/standard/vclxaccessiblestatusbar.hxx>
@@ -31,9 +31,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleStatusBar
-//  ----------------------------------------------------
+
+
+
 
 VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
@@ -44,13 +44,13 @@ VCLXAccessibleStatusBar::VCLXAccessibleStatusBar( VCLXWindow* pVCLXWindow )
         m_aAccessibleChildren.assign( m_pStatusBar->GetItemCount(), Reference< XAccessible >() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleStatusBar::~VCLXAccessibleStatusBar()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, sal_Bool bShowing )
 {
@@ -66,7 +66,7 @@ void VCLXAccessibleStatusBar::UpdateShowing( sal_Int32 i, sal_Bool bShowing )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
 {
@@ -85,7 +85,7 @@ void VCLXAccessibleStatusBar::UpdateItemName( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
 {
@@ -104,16 +104,16 @@ void VCLXAccessibleStatusBar::UpdateItemText( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
 {
     if ( i >= 0 && i <= (sal_Int32)m_aAccessibleChildren.size() )
     {
-        // insert entry in child list
+        
         m_aAccessibleChildren.insert( m_aAccessibleChildren.begin() + i, Reference< XAccessible >() );
 
-        // send accessible child event
+        
         Reference< XAccessible > xChild( getAccessibleChild( i ) );
         if ( xChild.is() )
         {
@@ -124,19 +124,19 @@ void VCLXAccessibleStatusBar::InsertChild( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
 {
     if ( i >= 0 && i < (sal_Int32)m_aAccessibleChildren.size() )
     {
-        // get the accessible of the removed page
+        
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
 
-        // remove entry in child list
+        
         m_aAccessibleChildren.erase( m_aAccessibleChildren.begin() + i );
 
-        // send accessible child event
+        
         if ( xChild.is() )
         {
             Any aOldValue, aNewValue;
@@ -150,7 +150,7 @@ void VCLXAccessibleStatusBar::RemoveChild( sal_Int32 i )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -237,7 +237,7 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
             {
                 m_pStatusBar = NULL;
 
-                // dispose all children
+                
                 for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
                 {
                     Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
@@ -255,9 +255,9 @@ void VCLXAccessibleStatusBar::ProcessWindowEvent( const VclWindowEvent& rVclWind
    }
 }
 
-// -----------------------------------------------------------------------------
-// XComponent
-// -----------------------------------------------------------------------------
+
+
+
 
 void VCLXAccessibleStatusBar::disposing()
 {
@@ -267,7 +267,7 @@ void VCLXAccessibleStatusBar::disposing()
     {
         m_pStatusBar = NULL;
 
-        // dispose all children
+        
         for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
         {
             Reference< XComponent > xComponent( m_aAccessibleChildren[i], UNO_QUERY );
@@ -278,16 +278,16 @@ void VCLXAccessibleStatusBar::disposing()
     }
 }
 
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
+
+
+
 
 OUString VCLXAccessibleStatusBar::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleStatusBar" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -296,9 +296,9 @@ Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleContext
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount() throw (RuntimeException)
 {
@@ -307,7 +307,7 @@ sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount() throw (RuntimeExcep
     return m_aAccessibleChildren.size();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -325,7 +325,7 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 
 
             xChild = new VCLXAccessibleStatusBarItem( m_pStatusBar, nItemId );
 
-            // insert into status bar item list
+            
             m_aAccessibleChildren[i] = xChild;
         }
     }
@@ -333,9 +333,9 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleComponent
-// -----------------------------------------------------------------------------
+
+
+
 
 Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException)
 {
@@ -353,6 +353,6 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleAtPoint( const aw
     return xChild;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

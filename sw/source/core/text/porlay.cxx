@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -93,7 +93,7 @@ bool isTransparentChar ( sal_Unicode cCh )
 
 static bool lcl_IsLigature( sal_Unicode cCh, sal_Unicode cNextCh )
 {
-            // Lam + Alef
+            
     return ( isLamChar ( cCh ) && isAlefChar ( cNextCh ));
 }
 
@@ -108,7 +108,7 @@ static bool lcl_ConnectToPrev( sal_Unicode cCh, sal_Unicode cPrevCh )
     const int32_t nJoiningType = u_getIntPropertyValue( cPrevCh, UCHAR_JOINING_TYPE );
     bool bRet = nJoiningType != U_JT_RIGHT_JOINING && nJoiningType != U_JT_NON_JOINING;
 
-    // check for ligatures cPrevChar + cChar
+    
     if( bRet )
         bRet = !lcl_IsLigature( cPrevCh, cCh );
 
@@ -153,8 +153,8 @@ SwLineLayout::~SwLineLayout()
 
 SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
 {
-   // First attribute change: copy mass and length from *pIns into the first
-   // text portion
+   
+   
     if( !pPortion )
     {
         if( GetLen() )
@@ -172,21 +172,21 @@ SwLinePortion *SwLineLayout::Insert( SwLinePortion *pIns )
             return pIns;
         }
     }
-    // Call with scope or we'll end up with recursion!
+    
     return pPortion->SwLinePortion::Insert( pIns );
 }
 
 SwLinePortion *SwLineLayout::Append( SwLinePortion *pIns )
 {
-    // First attribute change: copy mass and length from *pIns into the first
-    // text portion
+    
+    
     if( !pPortion )
         pPortion = new SwTxtPortion( *(SwLinePortion*)this );
-    // Call with scope or we'll end up with recursion!
+    
     return pPortion->SwLinePortion::Append( pIns );
 }
 
-// For special treatment of empty lines
+
 
 bool SwLineLayout::Format( SwTxtFormatInfo &rInf )
 {
@@ -231,7 +231,7 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
     {
         if( pPos->IsFlyPortion() )
         {
-            // The FlyPortion get's sucked out ...
+            
             pLeft->Join( (SwGluePortion*)pPos );
             pPos = pLeft->GetPortion();
             if( GetpKanaComp() && !GetKanaComp().empty() )
@@ -302,7 +302,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         nFlyDescent = 0;
     }
 
-    // #i3952#
+    
     const bool bIgnoreBlanksAndTabsForLineHeightCalculation =
             rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION);
 
@@ -326,19 +326,19 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
             SwLinePortion *pLast = this;
             KSHORT nMaxDescent = 0;
 
-            // A group is a segment in the portion chain of pCurr or a fixed
-            // portion spanning to the end or the next fixed portion
+            
+            
             while( pPos )
             {
                 SAL_WARN_IF( POR_LIN == pPos->GetWhichPor(),
                         "sw.core", "SwLineLayout::CalcLine: don't use SwLinePortions !" );
 
-                // Null portions are eliminated. They can form if two FlyFrms
-                // overlap.
+                
+                
                 if( !pPos->Compress() )
                 {
-                    // Only take over Height and Ascent if the rest of the line
-                    // is empty.
+                    
+                    
                     if( !pPos->GetPortion() )
                     {
                         if( !Height() )
@@ -355,7 +355,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                 nLineLength += pPos->GetLen();
                 AddPrtWidth( pPos->Width() );
 
-                // #i3952#
+                
                 if ( bIgnoreBlanksAndTabsForLineHeightCalculation )
                 {
                     if ( pPos->InTabGrp() || pPos->IsHolePortion() ||
@@ -369,7 +369,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     }
                 }
 
-                // Ignore drop portion height
+                
                 if( pPos->IsDropPortion() && static_cast<SwDropPortion*>(pPos)->GetLines() > 1)
                 {
                     pLast = pPos;
@@ -379,7 +379,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
 
                 bHasOnlyBlankPortions = false;
 
-                // We had an attribute change: Sum up/build maxima of length and mass
+                
 
                 KSHORT nPosHeight = pPos->Height();
                 KSHORT nPosAscent = pPos->GetAscent();
@@ -393,9 +393,9 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     rInf.GetParaPortion()->SetMargin();
                 }
 
-                // To prevent that a paragraph-end-character does not change
-                // the line height through a Descent and thus causing the line
-                // to reformat.
+                
+                
+                
                 if ( !pPos->IsBreakPortion() || !Height() )
                 {
                     if (!pPos->IsPostItsPortion()) bOnlyPostIts = false;
@@ -436,12 +436,12 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     {
                         if( Height() < nPosHeight )
                         {
-                            // Height is set to 0 when Init() is called.
+                            
                             if (bIgnoreBlanksAndTabsForLineHeightCalculation && pPos->GetWhichPor() == POR_FLYCNT)
-                                // Compat flag set: take the line height, if it's larger.
+                                
                                 Height(std::max(nPosHeight, nLineHeight));
                             else
-                                // Just care about the portion height.
+                                
                                 Height(nPosHeight);
                         }
                         if( pPos->IsFlyCntPortion() || ( pPos->IsMultiPortion()
@@ -492,9 +492,9 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
                     pFlyCnt->SetMax( true );
                     if( Height() > nMaxDescent + nAscent )
                     {
-                        if( 3 == pFlyCnt->GetAlign() ) // Bottom
+                        if( 3 == pFlyCnt->GetAlign() ) 
                             nAscent = Height() - nMaxDescent;
-                        else if( 2 == pFlyCnt->GetAlign() ) // Center
+                        else if( 2 == pFlyCnt->GetAlign() ) 
                             nAscent = ( Height() + nAscent - nMaxDescent ) / 2;
                     }
                     pFlyCnt->SetAscent( nAscent );
@@ -523,7 +523,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
     {
         SetCntnt( !bTmpDummy );
 
-        // #i3952#
+        
         if ( bIgnoreBlanksAndTabsForLineHeightCalculation &&
              lcl_HasOnlyBlanks( rInf.GetTxt(), rInf.GetLineStart(), rInf.GetLineStart() + GetLen() ) )
         {
@@ -531,7 +531,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         }
     }
 
-    // #i3952#
+    
     if ( bHasBlankPortion && bHasOnlyBlankPortions )
     {
         sal_uInt16 nTmpAscent = GetAscent();
@@ -541,7 +541,7 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         Height( nTmpHeight );
     }
 
-    // Robust:
+    
     if( nLineWidth < Width() )
         Width( nLineWidth );
     SAL_WARN_IF( nLineWidth < Width(), "sw.core", "SwLineLayout::CalcLine: line is bursting" );
@@ -550,8 +550,8 @@ void SwLineLayout::CalcLine( SwTxtFormatter &rLine, SwTxtFormatInfo &rInf )
         rLine.GetRedln()->CheckLine( rLine.GetStart(), rLine.GetEnd() ) );
 }
 
-// #i47162# - add optional parameter <_bNoFlyCntPorAndLinePor>
-// to control, if the fly content portions and line portion are considered.
+
+
 void SwLineLayout::MaxAscentDescent( SwTwips& _orAscent,
                                      SwTwips& _orDescent,
                                      SwTwips& _orObjAscent,
@@ -643,11 +643,11 @@ sal_uInt8 SwScriptInfo::WhichFont( sal_Int32 nIdx, const OUString* pTxt, const S
     SAL_WARN_IF( !pTxt && !pSI, "sw.core", "How should I determine the script type?" );
     sal_uInt16 nScript;
 
-    // First we try to use our SwScriptInfo
+    
     if ( pSI )
         nScript = pSI->ScriptType( nIdx );
     else
-        // Ok, we have to ask the break iterator
+        
         nScript = g_pBreakIt->GetRealScriptOfText( *pTxt, nIdx );
 
     switch ( nScript ) {
@@ -679,7 +679,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     const OUString& rTxt = rNode.GetTxt();
 
     //
-    // HIDDEN TEXT INFORMATION
+    
     //
     Range aRange( 0, !rTxt.isEmpty() ? rTxt.getLength() - 1 : 0 );
     MultiSelection aHiddenMulti( aRange );
@@ -697,42 +697,42 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     }
 
     //
-    // SCRIPT AND SCRIPT RELATED INFORMATION
+    
     //
 
     sal_Int32 nChg = nInvalidityPos;
 
-    // COMPLETE_STRING means the data structure is up to date
+    
     nInvalidityPos = COMPLETE_STRING;
 
-    // this is the default direction
+    
     nDefaultDir = static_cast<sal_uInt8>(bRTL ? UBIDI_RTL : UBIDI_LTR);
 
-    // counter for script info arrays
+    
     sal_uInt16 nCnt = 0;
-    // counter for compression information arrays
+    
     sal_uInt16 nCntComp = 0;
-    // counter for kashida array
+    
     sal_uInt16 nCntKash = 0;
 
     sal_uInt8 nScript = i18n::ScriptType::LATIN;
 
-    // compression type
+    
     const SwCharCompressType aCompEnum = rNode.getIDocumentSettingAccess()->getCharacterCompressionType();
 
-    // justification type
+    
     const bool bAdjustBlock = SVX_ADJUST_BLOCK ==
                                   rNode.GetSwAttrSet().GetAdjust().GetAdjust();
 
     //
-    // FIND INVALID RANGES IN SCRIPT INFO ARRAYS:
+    
     //
 
     if( nChg )
     {
-        // if change position = 0 we do not use any data from the arrays
-        // because by deleting all characters of the first group at the beginning
-        // of a paragraph nScript is set to a wrong value
+        
+        
+        
         SAL_WARN_IF( !CountScriptChg(), "sw.core", "Where're my changes of script?" );
         while( nCnt < CountScriptChg() )
         {
@@ -765,35 +765,35 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     }
 
     //
-    // ADJUST nChg VALUE:
+    
     //
 
-    // by stepping back one position we know that we are inside a group
-    // declared as an nScript group
+    
+    
     if ( nChg )
         --nChg;
 
     const sal_Int32 nGrpStart = nCnt ? GetScriptChg( nCnt - 1 ) : 0;
 
-    // we go back in our group until we reach the first character of
-    // type nScript
+    
+    
     while ( nChg > nGrpStart &&
             nScript != g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
         --nChg;
 
-    // If we are at the start of a group, we do not trust nScript,
-    // we better get nScript from the breakiterator:
+    
+    
     if ( nChg == nGrpStart )
         nScript = (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg );
 
     //
-    // INVALID DATA FROM THE SCRIPT INFO ARRAYS HAS TO BE DELETED:
+    
     //
 
-    // remove invalid entries from script information arrays
+    
     aScriptChanges.erase( aScriptChanges.begin() + nCnt, aScriptChanges.end() );
 
-    // get the start of the last compression group
+    
     sal_Int32 nLastCompression = nChg;
     if( nCntComp )
     {
@@ -806,10 +806,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         }
     }
 
-    // remove invalid entries from compression information arrays
+    
     aCompressionChanges.erase(aCompressionChanges.begin() + nCntComp, aCompressionChanges.end() );
 
-    // get the start of the last kashida group
+    
     sal_Int32 nLastKashida = nChg;
     if( nCntKash && i18n::ScriptType::COMPLEX == nScript )
     {
@@ -817,20 +817,20 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         nLastKashida = GetKashida( nCntKash );
     }
 
-    // remove invalid entries from kashida array
+    
     aKashida.erase( aKashida.begin() + nCntKash, aKashida.end() );
 
     //
-    // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
-    // SCRIPT FOR WEAK CHARACTERS AT THE BEGINNING OF A PARAGRAPH
+    
+    
     //
 
     if( WEAK == g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nChg ) )
     {
-        // If the beginning of the current group is weak, this means that
-        // all of the characters in this grounp are weak. We have to assign
-        // the scripts to these characters depending on the fonts which are
-        // set for these characters to display them.
+        
+        
+        
+        
         sal_Int32 nEnd =
                 g_pBreakIt->GetBreakIter()->endOfScript( rTxt, nChg, WEAK );
 
@@ -845,7 +845,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
 
         nChg = nEnd;
 
-        // Get next script type or set to weak in order to exit
+        
         sal_uInt8 nNextScript = ( nEnd < rTxt.getLength() ) ?
            (sal_uInt8)g_pBreakIt->GetBreakIter()->getScriptType( rTxt, nEnd ) :
            (sal_uInt8)WEAK;
@@ -859,7 +859,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     }
 
     //
-    // UPDATE THE SCRIPT INFO ARRAYS:
+    
     //
 
     while ( nChg < rTxt.getLength() || ( aScriptChanges.empty() && rTxt.isEmpty() ) )
@@ -873,9 +873,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         if (nChg > rTxt.getLength() || nChg < 0)
             nChg = rTxt.getLength();
 
-        // #i28203#
-        // for 'complex' portions, we make sure that a portion does not contain more
-        // than one script:
+        
+        
+        
         if( i18n::ScriptType::COMPLEX == nScript )
         {
             const short nScriptType = ScriptTypeDetector::getCTLScriptType( rTxt, nSearchStt );
@@ -891,8 +891,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
             nChg = std::min( nChg, nNextCTLScriptStart );
         }
 
-        // special case for dotted circle since it can be used with complex
-        // before a mark, so we want it associated with the mark's script
+        
+        
         if (nChg < rTxt.getLength() && nChg > 0 && (i18n::ScriptType::WEAK ==
             g_pBreakIt->GetBreakIter()->getScriptType(rTxt,nChg - 1)))
         {
@@ -913,8 +913,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
         }
         ++nCnt;
 
-        // if current script is asian, we search for compressable characters
-        // in this range
+        
+        
         if ( CHARCOMPRESS_NONE != aCompEnum &&
              i18n::ScriptType::ASIAN == nScript )
         {
@@ -926,16 +926,16 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
             {
                 sal_Unicode cChar = rTxt[ nLastCompression ];
 
-                // examine current character
+                
                 switch ( cChar )
                 {
-                // Left punctuation found
+                
                 case 0x3008: case 0x300A: case 0x300C: case 0x300E:
                 case 0x3010: case 0x3014: case 0x3016: case 0x3018:
                 case 0x301A: case 0x301D:
                     eState = SPECIAL_LEFT;
                     break;
-                // Right punctuation found
+                
                 case 0x3001: case 0x3002: case 0x3009: case 0x300B:
                 case 0x300D: case 0x300F: case 0x3011: case 0x3015:
                 case 0x3017: case 0x3019: case 0x301B: case 0x301E:
@@ -946,12 +946,12 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                     eState = static_cast<sal_uInt8>( ( 0x3040 <= cChar && 0x3100 > cChar ) ? KANA : NONE );
                 }
 
-                // insert range of compressable characters
+                
                 if( ePrevState != eState )
                 {
                     if ( ePrevState != NONE )
                     {
-                        // insert start and type
+                        
                         if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
                              ePrevState != KANA )
                         {
@@ -966,10 +966,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                 nLastCompression++;
             }
 
-            // we still have to examine last entry
+            
             if ( ePrevState != NONE )
             {
-                // insert start and type
+                
                 if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
                      ePrevState != KANA )
                 {
@@ -978,14 +978,14 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
             }
         }
 
-        // we search for connecting opportunities (kashida)
+        
         else if ( bAdjustBlock && i18n::ScriptType::COMPLEX == nScript )
         {
             SwScanner aScanner( rNode, rNode.GetTxt(), 0, ModelToViewHelper(),
                                 i18n::WordType::DICTIONARY_WORD,
                                 nLastKashida, nChg );
 
-            // the search has to be performed on a per word base
+            
             while ( aScanner.NextWord() )
             {
                 const OUString& rWord = aScanner.GetWord();
@@ -995,12 +995,12 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                 sal_Unicode cCh;
                 sal_Unicode cPrevCh = 0;
 
-                sal_uInt16 nPriorityLevel = 7; // 0..6 = level found
-                                           // 7 not found
+                sal_uInt16 nPriorityLevel = 7; 
+                                           
 
                 sal_Int32 nWordLen = rWord.getLength();
 
-                // ignore trailing vowel chars
+                
                 while( nWordLen && isTransparentChar( rWord[ nWordLen - 1 ] ))
                     --nWordLen;
 
@@ -1008,37 +1008,37 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                 {
                     cCh = rWord[ nIdx ];
 
-                    // 1. Priority:
-                    // after user inserted kashida
+                    
+                    
                     if ( 0x640 == cCh )
                     {
                         nKashidaPos = aScanner.GetBegin() + nIdx;
                         nPriorityLevel = 0;
                     }
 
-                    // 2. Priority:
-                    // after a Seen or Sad
+                    
+                    
                     if (nPriorityLevel >= 1 && nIdx < nWordLen - 1)
                     {
                         if( isSeenOrSadChar( cCh )
-                         && (rWord[ nIdx+1 ] != 0x200C) ) // #i98410#: prevent ZWNJ expansion
+                         && (rWord[ nIdx+1 ] != 0x200C) ) 
                         {
                             nKashidaPos  = aScanner.GetBegin() + nIdx;
                             nPriorityLevel = 1;
                         }
                     }
 
-                    // 3. Priority:
-                    // before final form of Teh Marbuta, Hah, Dal
+                    
+                    
                     if ( nPriorityLevel >= 2 && nIdx > 0 )
                     {
-                        if ( isTehMarbutaChar ( cCh ) || // Teh Marbuta (right joining)
-                             isDalChar ( cCh ) ||        // Dal (right joining) final form may appear in the middle of word
-                             ( isHahChar ( cCh ) && nIdx == nWordLen - 1))  // Hah (dual joining) only at end of word
+                        if ( isTehMarbutaChar ( cCh ) || 
+                             isDalChar ( cCh ) ||        
+                             ( isHahChar ( cCh ) && nIdx == nWordLen - 1))  
                         {
 
                             SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
-                            // check if character is connectable to previous character,
+                            
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
                                 nKashidaPos = aScanner.GetBegin() + nIdx - 1;
@@ -1047,18 +1047,18 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                         }
                     }
 
-                    // 4. Priority:
-                    // before final form of Alef, Lam or Kaf
+                    
+                    
                     if ( nPriorityLevel >= 3 && nIdx > 0 )
                     {
-                        if ( isAlefChar ( cCh ) ||   // Alef (right joining) final form may appear in the middle of word
-                             (( isLamChar ( cCh ) || // Lam
-                              isKafChar ( cCh )   || // Kaf (both dual joining)
+                        if ( isAlefChar ( cCh ) ||   
+                             (( isLamChar ( cCh ) || 
+                              isKafChar ( cCh )   || 
                               isGafChar ( cCh ) )
-                              && nIdx == nWordLen - 1))  // only at end of word
+                              && nIdx == nWordLen - 1))  
                         {
                             SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
-                            // check if character is connectable to previous character,
+                            
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
                                 nKashidaPos = aScanner.GetBegin() + nIdx - 1;
@@ -1067,18 +1067,18 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                         }
                     }
 
-                    // 5. Priority:
-                    // before media Bah
+                    
+                    
                     if ( nPriorityLevel >= 4 && nIdx > 0 && nIdx < nWordLen - 1 )
                     {
-                        if ( isBaaChar ( cCh )) // Bah
+                        if ( isBaaChar ( cCh )) 
                         {
-                            // check if next character is Reh, Yeh or Alef Maksura
+                            
                             sal_Unicode cNextCh = rWord[ nIdx + 1 ];
                             if ( isRehChar ( cNextCh ) || isYehChar ( cNextCh ))
                            {
                                 SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
-                                // check if character is connectable to previous character,
+                                
                                 if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                                 {
                                     nKashidaPos = aScanner.GetBegin() + nIdx - 1;
@@ -1088,19 +1088,19 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                         }
                     }
 
-                    // 6. Priority:
-                    // before the final form of Waw, Ain, Qaf and Fa
+                    
+                    
                     if ( nPriorityLevel >= 5 && nIdx > 0 )
                     {
-                        if ( isWawChar ( cCh )   || // Wav (right joining)
-                                                    // final form may appear in the middle of word
-                             (( isAinChar ( cCh ) ||  // Ain (dual joining)
-                                isQafChar ( cCh ) ||  // Qaf (dual joining)
-                                isFehChar ( cCh ) )   // Feh (dual joining)
-                                && nIdx == nWordLen - 1))  // only at end of word
+                        if ( isWawChar ( cCh )   || 
+                                                    
+                             (( isAinChar ( cCh ) ||  
+                                isQafChar ( cCh ) ||  
+                                isFehChar ( cCh ) )   
+                                && nIdx == nWordLen - 1))  
                         {
                             SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
-                            // check if character is connectable to previous character,
+                            
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
                                 nKashidaPos = aScanner.GetBegin() + nIdx - 1;
@@ -1109,18 +1109,18 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                         }
                     }
 
-                    // other connecting possibilities
+                    
                     if ( nPriorityLevel >= 6 && nIdx > 0 )
                     {
-                        // remaining right joiners
-                        // Reh, Zain, Thal,
-                        if ( isRehChar ( cCh ) ||   // Reh Zain (right joining)
-                                                    // final form may appear in the middle of word
-                             ( 0x60C <= cCh && 0x6FE >= cCh // all others
-                              && nIdx == nWordLen - 1))   // only at end of word
+                        
+                        
+                        if ( isRehChar ( cCh ) ||   
+                                                    
+                             ( 0x60C <= cCh && 0x6FE >= cCh 
+                              && nIdx == nWordLen - 1))   
                         {
                             SAL_WARN_IF( 0 == cPrevCh, "sw.core", "No previous character" );
-                            // check if character is connectable to previous character,
+                            
                             if ( lcl_ConnectToPrev( cCh, cPrevCh ) )
                             {
                                 nKashidaPos = aScanner.GetBegin() + nIdx - 1;
@@ -1129,21 +1129,21 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                         }
                     }
 
-                    // Do not consider Fathatan, Dammatan, Kasratan, Fatha,
-                    // Damma, Kasra, Shadda and Sukun when checking if
-                    // a character can be connected to previous character.
+                    
+                    
+                    
                     if ( !isTransparentChar ( cCh) )
                         cPrevCh = cCh;
 
                    ++nIdx;
-                } // end of current word
+                } 
 
                 if ( -1 != nKashidaPos )
                 {
                     aKashida.insert( aKashida.begin() + nCntKash, nKashidaPos);
                     nCntKash++;
                 }
-            } // end of kashida search
+            } 
         }
 
         if ( nChg < rTxt.getLength() )
@@ -1154,7 +1154,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     }
 
 #if OSL_DEBUG_LEVEL > 0
-    // check kashida data
+    
     long nTmpKashidaPos = -1;
     bool bWrongKash = false;
     for (size_t i = 0; i < aKashida.size(); ++i )
@@ -1170,10 +1170,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
     SAL_WARN_IF( bWrongKash, "sw.core", "Kashida array contains wrong data" );
 #endif
 
-    // remove invalid entries from direction information arrays
+    
     aDirectionChanges.clear();
 
-    // Perform Unicode Bidi Algorithm for text direction information
+    
     bool bPerformUBA = UBIDI_LTR != nDefaultDir;
     nCnt = 0;
     while( !bPerformUBA && nCnt < CountScriptChg() )
@@ -1182,33 +1182,33 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
             bPerformUBA = true;
     }
 
-    // do not call the unicode bidi algorithm if not required
+    
     if ( bPerformUBA )
     {
         UpdateBidiInfo( rTxt );
 
-        // #i16354# Change script type for RTL text to CTL:
-        // 1. All text in RTL runs will use the CTL font
-        // #i89825# change the script type also to CTL (hennerdrewes)
-        // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
+        
+        
+        
+        
         for ( sal_uInt32 nDirIdx = 0; nDirIdx < aDirectionChanges.size(); ++nDirIdx )
         {
             const sal_uInt8 nCurrDirType = GetDirType( nDirIdx );
-                // nStart ist start of RTL run:
+                
                 const sal_Int32 nStart = nDirIdx > 0 ? GetDirChg( nDirIdx - 1 ) : 0;
-                // nEnd is end of RTL run:
+                
                 const sal_Int32 nEnd = GetDirChg( nDirIdx );
 
-            if ( nCurrDirType % 2 == UBIDI_RTL  || // text in RTL run
-                ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( rTxt, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
+            if ( nCurrDirType % 2 == UBIDI_RTL  || 
+                ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( rTxt, nStart, nEnd ) ) ) 
             {
-                // nScriptIdx points into the ScriptArrays:
+                
                 size_t nScriptIdx = 0;
 
-                // Skip entries in ScriptArray which are not inside the RTL run:
-                // Make nScriptIdx become the index of the script group with
-                // 1. nStartPosOfGroup <= nStart and
-                // 2. nEndPosOfGroup > nStart
+                
+                
+                
+                
                 while ( GetScriptChg( nScriptIdx ) <= nStart )
                     ++nScriptIdx;
 
@@ -1218,9 +1218,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                 SAL_WARN_IF( nStartPosOfGroup > nStart || GetScriptChg( nScriptIdx ) <= nStart,
                         "sw.core", "Script override with CTL font trouble" );
 
-                // Check if we have to insert a new script change at
-                // position nStart. If nStartPosOfGroup < nStart,
-                // we have to insert a new script change:
+                
+                
+                
                 if ( nStart > 0 && nStartPosOfGroup < nStart )
                 {
                     aScriptChanges.insert(aScriptChanges.begin() + nScriptIdx,
@@ -1228,19 +1228,19 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
                     ++nScriptIdx;
                 }
 
-                // Remove entries in ScriptArray which end inside the RTL run:
+                
                 while ( nScriptIdx < aScriptChanges.size() && GetScriptChg( nScriptIdx ) <= nEnd )
                 {
                     aScriptChanges.erase(aScriptChanges.begin() + nScriptIdx);
                 }
 
-                // Insert a new entry in ScriptArray for the end of the RTL run:
+                
                 aScriptChanges.insert(aScriptChanges.begin() + nScriptIdx,
                                       ScriptChangeInfo(nEnd, i18n::ScriptType::COMPLEX) );
 
 #if OSL_DEBUG_LEVEL > 1
-                // Check that ScriptChangeInfos are in increasing order of
-                // position and that we don't have "empty" changes.
+                
+                
                 sal_uInt8 nLastTyp = i18n::ScriptType::WEAK;
                 sal_Int32 nLastPos = 0;
                 for (std::vector<ScriptChangeInfo>::const_iterator i2 = aScriptChanges.begin(); i2 != aScriptChanges.end(); ++i2)
@@ -1259,16 +1259,16 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, bool bRTL )
 
 void SwScriptInfo::UpdateBidiInfo( const OUString& rTxt )
 {
-    // remove invalid entries from direction information arrays
+    
     aDirectionChanges.clear();
     //
-    // Bidi functions from icu 2.0
+    
     //
     UErrorCode nError = U_ZERO_ERROR;
     UBiDi* pBidi = ubidi_openSized( rTxt.getLength(), 0, &nError );
     nError = U_ZERO_ERROR;
 
-    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.getStr()), rTxt.getLength(),    // UChar != sal_Unicode in MinGW
+    ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(rTxt.getStr()), rTxt.getLength(),    
                    nDefaultDir, NULL, &nError );
     nError = U_ZERO_ERROR;
     int nCount = ubidi_countRuns( pBidi, &nError );
@@ -1323,7 +1323,7 @@ sal_uInt8 SwScriptInfo::ScriptType(const sal_Int32 nPos) const
             return GetScriptType( nX );
     }
 
-    // the default is the application language script
+    
     return (sal_uInt8)GetI18NScriptTypeOfLanguage( (sal_uInt16)GetAppLanguage() );
 }
 
@@ -1432,7 +1432,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
     bool bNewContainsHiddenChars = false;
 
     //
-    // Optimization: First examine the flags at the text node:
+    
     //
     if ( !rNode.IsCalcHiddenCharFlags() )
     {
@@ -1459,7 +1459,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
     if ( pSI )
     {
         //
-        // Check first, if we have a valid SwScriptInfo object for this text node:
+        
         //
         bNewContainsHiddenChars = pSI->GetBoundsOfHiddenRange( nPos, rnStartPos, rnEndPos, pList );
         const bool bNewHiddenCharsHidePara =
@@ -1469,7 +1469,7 @@ bool SwScriptInfo::GetBoundsOfHiddenRange( const SwTxtNode& rNode, sal_Int32 nPo
     else
     {
         //
-        // No valid SwScriptInfo Object, we have to do it the hard way:
+        
         //
         Range aRange(0, (!rNode.GetTxt().isEmpty())
                             ? rNode.GetTxt().getLength() - 1
@@ -1614,9 +1614,9 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
     SAL_WARN_IF( !nLen, "sw.core", "Compression without text?!" );
     sal_uInt16 nCompCount = CountCompChg();
 
-    // In asian typography, there are full width and half width characters.
-    // Full width punctuation characters can be compressed by 50 %
-    // to determine this, we compare the font width with 75 % of its height
+    
+    
+    
     sal_uInt16 nMinWidth = ( 3 * nFontHeight ) / 4;
 
     sal_uInt16 nCompIdx = HasKana( nIdx, nLen );
@@ -1652,7 +1652,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
         if( nCompLen > nLen )
             nCompLen = nLen;
 
-        // are we allowed to compress the character?
+        
         if ( pKernArray[ nI ] - nLast < nMinWidth )
         {
             nIdx++; nI++;
@@ -1663,7 +1663,7 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
             {
                 SAL_WARN_IF( SwScriptInfo::NONE == nType, "sw.core", "None compression?!" );
 
-                // nLast is width of current character
+                
                 nLast -= pKernArray[ nI ];
 
                 nLast *= nCompress;
@@ -1719,10 +1719,10 @@ long SwScriptInfo::Compress( sal_Int32* pKernArray, sal_Int32 nIdx, sal_Int32 nL
  * SwScriptInfo::KashidaJustify()
  *************************************************************************/
 
-// Note on calling KashidaJustify():
-// Kashida positions may be marked as invalid. Therefore KashidaJustify may return the clean
-// total number of kashida positions, or the number of kashida positions after some positions
-// have been dropped, depending on the state of the aKashidaInvalid array.
+
+
+
+
 
 sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
                                     sal_Int32* pScrArray,
@@ -1735,7 +1735,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
     if( !IsKashidaLine(nStt))
         return -1;
 
-    // evaluate kashida information in collected in SwScriptInfo
+    
 
     size_t nCntKash = 0;
     while( nCntKash < CountKashida() )
@@ -1765,10 +1765,10 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
     if ( !pKernArray )
         return nActualKashCount;
 
-    // do nothing if there is no more kashida
+    
     if ( nCntKash < CountKashida() )
     {
-        // skip any invalid kashidas
+        
         while ( ! IsKashidaValid ( nCntKash ) && nCntKash < nCntKashEnd )
             ++nCntKash;
 
@@ -1780,7 +1780,7 @@ sal_Int32 SwScriptInfo::KashidaJustify( sal_Int32* pKernArray,
         {
             sal_Int32 nArrayPos = nIdx - nStt;
 
-            // next kashida position
+            
             ++nCntKash;
             while ( ! IsKashidaValid ( nCntKash ) && nCntKash < nCntKashEnd )
                 ++nCntKash;
@@ -1816,11 +1816,11 @@ bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32
 {
     using namespace ::com::sun::star::i18n;
     static const ScriptTypeList typeList[] = {
-        { UnicodeScript_kArabic, UnicodeScript_kArabic, UnicodeScript_kArabic },        // 11,
-        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, UnicodeScript_kScriptCount }    // 88
+        { UnicodeScript_kArabic, UnicodeScript_kArabic, UnicodeScript_kArabic },        
+        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, UnicodeScript_kScriptCount }    
     };
 
-    // go forward if current position does not hold a regular character:
+    
     const CharClass& rCC = GetAppCharClass();
     sal_Int32 nIdx = nStt;
     const sal_Int32 nEnd = nStt + nLen;
@@ -1831,7 +1831,7 @@ bool SwScriptInfo::IsArabicText( const OUString& rTxt, sal_Int32 nStt, sal_Int32
 
     if( nIdx == nEnd )
     {
-        // no regular character found in this portion. Go backward:
+        
         --nIdx;
         while ( nIdx >= 0 && !rCC.isLetterNumeric( rTxt, nIdx ) )
         {
@@ -2008,7 +2008,7 @@ bool SwScriptInfo::MarkKashidasInvalid(sal_Int32 nCnt, sal_Int32* pKashidaPositi
         }
 
         if ( pKashidaPositions [nKashidaPosIdx] != GetKashida( nCntKash ) || !IsKashidaValid ( nCntKash ) )
-            return false; // something is wrong
+            return false; 
 
         MarkKashidaInvalid ( nCntKash );
         nKashidaPosIdx++;
@@ -2033,7 +2033,7 @@ sal_Int32 SwScriptInfo::ThaiJustify( const OUString& rTxt, sal_Int32* pKernArray
     {
         const sal_Unicode cCh = rTxt[nStt + nI];
 
-        // check if character is not above or below base
+        
         if ( ( 0xE34 > cCh || cCh > 0xE3A ) &&
              ( 0xE47 > cCh || cCh > 0xE4E ) && cCh != 0xE31 )
         {
@@ -2144,13 +2144,13 @@ SwTwips SwLineLayout::_GetHangingMargin() const
             if( nDiff )
                 bFound = true;
         }
-        // the last post its portion
+        
         else if ( pPor->IsPostItsPortion() && ! pPor->GetPortion() )
             nDiff = nAscent;
 
         pPor = pPor->GetPortion();
     }
-    if( !bFound ) // update the hanging-flag
+    if( !bFound ) 
         ((SwLineLayout*)this)->SetHanging( false );
     return nDiff;
 }
@@ -2169,7 +2169,7 @@ SwTwips SwTxtFrm::HangingMargin() const
             nRet = nDiff;
         pLine = pLine->GetNext();
     } while ( pLine );
-    if( !nRet ) // update the margin-flag
+    if( !nRet ) 
         ((SwParaPortion*)GetPara())->SetMargin( false );
     return nRet;
 }
@@ -2231,7 +2231,7 @@ void SwScriptInfo::selectRedLineDeleted(const SwTxtNode& rNode, MultiSelection &
             sal_Int32 nRedlStart;
             sal_Int32 nRedlnEnd;
             pRed->CalcStartEnd( rNode.GetIndex(), nRedlStart, nRedlnEnd );
-            //clip it if the redline extends past the end of the nodes text
+            
             nRedlnEnd = std::min<sal_Int32>(nRedlnEnd, rNode.GetTxt().getLength());
             if ( nRedlnEnd > nRedlStart )
             {
@@ -2252,12 +2252,12 @@ void SwScriptInfo::CalcHiddenRanges( const SwTxtNode& rNode, MultiSelection& rHi
 {
     selectHiddenTextProperty(rNode, rHiddenMulti);
 
-    // If there are any hidden ranges in the current text node, we have
-    // to unhide the redlining ranges:
+    
+    
     selectRedLineDeleted(rNode, rHiddenMulti, false);
 
     //
-    // We calculated a lot of stuff. Finally we can update the flags at the text node.
+    
     //
     const bool bNewContainsHiddenChars = rHiddenMulti.GetRangeCount() > 0;
     bool bNewHiddenCharsHidePara = false;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,11 +38,11 @@ using namespace ::com::sun::star::accessibility;
 
 namespace accessibility {
 
-// Pointer to the shape type handler singleton.
+
 ShapeTypeHandler* ShapeTypeHandler::instance = NULL;
 
 
-// Create an empty reference to an accessible object.
+
 AccessibleShape*
     CreateEmptyShapeReference (
         const AccessibleShapeInfo& /*rShapeInfo*/,
@@ -57,17 +57,17 @@ AccessibleShape*
 
 ShapeTypeHandler& ShapeTypeHandler::Instance (void)
 {
-    // Using double check pattern to make sure that exactly one instance of
-    // the shape type handler is instantiated.
+    
+    
     if (instance == NULL)
     {
         SolarMutexGuard aGuard;
         if (instance == NULL)
         {
-            // Create the single instance of the shape type handler.
+            
             instance = new ShapeTypeHandler;
 
-            // Register the basic SVX shape types.
+            
             RegisterDrawShapeTypes ();
         }
     }
@@ -137,8 +137,8 @@ AccessibleShape*
 ShapeTypeHandler::ShapeTypeHandler (void)
     : maShapeTypeDescriptorList (1)
 {
-    // Make sure that at least the UNKNOWN entry is present.
-    // Resize the list, if necessary, so that the new type can be inserted.
+    
+    
     maShapeTypeDescriptorList[0].mnShapeTypeId = UNKNOWN_SHAPE_TYPE;
     maShapeTypeDescriptorList[0].msServiceName = "UNKNOWN_SHAPE_TYPE";
     maShapeTypeDescriptorList[0].maCreateFunction = CreateEmptyShapeReference;
@@ -150,11 +150,11 @@ ShapeTypeHandler::ShapeTypeHandler (void)
 
 ShapeTypeHandler::~ShapeTypeHandler (void)
 {
-    //  Because this class is a singleton and the only instance, whose
-    //  destructor has just been called, is pointed to from instance,
-    //  we reset the static variable instance, so that further calls to
-    //  getInstance do not return an undefined object but create a new
-    //  singleton.
+    
+    
+    
+    
+    
     instance = NULL;
 }
 
@@ -166,10 +166,10 @@ bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
 {
     SolarMutexGuard aGuard;
 
-    // Determine first id of new type descriptor(s).
+    
     int nFirstId = maShapeTypeDescriptorList.size();
 
-    // Resize the list, if necessary, so that the types can be inserted.
+    
     maShapeTypeDescriptorList.resize (nFirstId + nDescriptorCount);
 
     for (int i=0; i<nDescriptorCount; i++)
@@ -179,12 +179,12 @@ bool ShapeTypeHandler::AddShapeTypeList (int nDescriptorCount,
         (void)nId;
     #endif
 
-        // Fill Type descriptor.
+        
         maShapeTypeDescriptorList[nFirstId+i].mnShapeTypeId = aDescriptorList[i].mnShapeTypeId;
         maShapeTypeDescriptorList[nFirstId+i].msServiceName = aDescriptorList[i].msServiceName;
         maShapeTypeDescriptorList[nFirstId+i].maCreateFunction = aDescriptorList[i].maCreateFunction;
 
-        // Update inverse mapping from service name to the descriptor's position.
+        
         maServiceNameToSlotId[aDescriptorList[i].msServiceName] = nFirstId+i;
     }
 
@@ -206,8 +206,8 @@ long ShapeTypeHandler::GetSlotId (const OUString& aServiceName) const
 
 
 
-// Extract the given shape's service name and forward request to appropriate
-// method.
+
+
 long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape) const
 {
     uno::Reference<drawing::XShapeDescriptor> xDescriptor (rxShape, uno::UNO_QUERY);
@@ -217,7 +217,7 @@ long ShapeTypeHandler::GetSlotId (const uno::Reference<drawing::XShape>& rxShape
         return 0;
 }
 
-/// get the accessible base name for an object
+
 OUString
     ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawing::XShape>& rxShape)
     throw (::com::sun::star::uno::RuntimeException)
@@ -227,9 +227,9 @@ OUString
 
     switch (ShapeTypeHandler::Instance().GetTypeId (rxShape))
     {
-      // case DRAWING_3D_POLYGON: was removed in original code in
-      // AccessibleShape::CreateAccessibleBaseName.  See issue 11190 for details.
-      // Id can be removed from SvxShapeTypes.hxx as well.
+      
+      
+      
         case DRAWING_3D_CUBE:
             nResourceId = STR_ObjNameSingulCube3d;
             break;
@@ -345,6 +345,6 @@ OUString
     return sName;
 }
 
-} // end of namespace accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

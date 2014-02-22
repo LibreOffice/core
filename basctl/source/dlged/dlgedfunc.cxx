@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/scrbar.hxx>
@@ -27,8 +27,6 @@
 namespace basctl
 {
 
-//----------------------------------------------------------------------------
-
 IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
 {
     (void)pTimer;
@@ -39,8 +37,6 @@ IMPL_LINK_INLINE_START( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
     return 0;
 }
 IMPL_LINK_INLINE_END( DlgEdFunc, ScrollTimeout, Timer *, pTimer )
-
-//----------------------------------------------------------------------------
 
 void DlgEdFunc::ForceScroll( const Point& rPos )
 {
@@ -83,8 +79,6 @@ void DlgEdFunc::ForceScroll( const Point& rPos )
     aScrollTimer.Start();
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFunc::DlgEdFunc (DlgEditor& rParent_) :
     rParent(rParent_)
 {
@@ -92,20 +86,14 @@ DlgEdFunc::DlgEdFunc (DlgEditor& rParent_) :
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFunc::~DlgEdFunc()
 {
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFunc::MouseButtonDown( const MouseEvent& )
 {
     return true;
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFunc::MouseButtonUp( const MouseEvent& )
 {
@@ -113,14 +101,10 @@ bool DlgEdFunc::MouseButtonUp( const MouseEvent& )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdFunc::MouseMove( const MouseEvent& )
 {
     return true;
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 {
@@ -158,10 +142,10 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
         {
             if ( !aCode.IsMod1() && !aCode.IsMod2() )
             {
-                // mark next object
+                
                 if ( !rView.MarkNextObj( !aCode.IsShift() ) )
                 {
-                    // if no next object, mark first/last
+                    
                     rView.UnmarkAllObj();
                     rView.MarkNextObj( !aCode.IsShift() );
                 }
@@ -173,11 +157,11 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
             }
             else if ( aCode.IsMod1() )
             {
-                // selected handle
+                
                 const SdrHdlList& rHdlList = rView.GetHdlList();
                 const_cast<SdrHdlList&>(rHdlList).TravelFocusHdl( !aCode.IsShift() );
 
-                // guarantee visibility of focused handle
+                
                 if (SdrHdl* pHdl = rHdlList.GetFocusHdl())
                 {
                     Point aHdlPosition( pHdl->GetPos() );
@@ -199,25 +183,25 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
             if ( nCode == KEY_UP )
             {
-                // scroll up
+                
                 nX =  0;
                 nY = -1;
             }
             else if ( nCode == KEY_DOWN )
             {
-                // scroll down
+                
                 nX =  0;
                 nY =  1;
             }
             else if ( nCode == KEY_LEFT )
             {
-                // scroll left
+                
                 nX = -1;
                 nY =  0;
             }
             else if ( nCode == KEY_RIGHT )
             {
-                // scroll right
+                
                 nX =  1;
                 nY =  0;
             }
@@ -226,14 +210,14 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
             {
                 if ( aCode.IsMod2() )
                 {
-                    // move in 1 pixel distance
+                    
                     Size aPixelSize = rWindow.PixelToLogic(Size(1, 1));
                     nX *= aPixelSize.Width();
                     nY *= aPixelSize.Height();
                 }
                 else
                 {
-                    // move in 1 mm distance
+                    
                     nX *= 100;
                     nY *= 100;
                 }
@@ -243,10 +227,10 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
 
                 if ( pHdl == 0 )
                 {
-                    // no handle selected
+                    
                     if ( rView.IsMoveAllowed() )
                     {
-                        // restrict movement to work area
+                        
                         const Rectangle& rWorkArea = rView.GetWorkArea();
 
                         if ( !rWorkArea.IsEmpty() )
@@ -279,14 +263,14 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                 }
                 else
                 {
-                    // move the handle
+                    
                     if ( pHdl && ( nX || nY ) )
                     {
                         Point aStartPoint( pHdl->GetPos() );
                         Point aEndPoint( pHdl->GetPos() + Point( nX, nY ) );
                         const SdrDragStat& rDragStat = rView.GetDragStat();
 
-                        // start dragging
+                        
                         rView.BegDragObj( aStartPoint, 0, pHdl, 0 );
 
                         if ( rView.IsDragObj() )
@@ -294,7 +278,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                             bool const bWasNoSnap = rDragStat.IsNoSnap();
                             bool const bWasSnapEnabled = rView.IsSnapEnabled();
 
-                            // switch snapping off
+                            
                             if ( !bWasNoSnap )
                                 const_cast<SdrDragStat&>(rDragStat).SetNoSnap(true);
                             if ( bWasSnapEnabled )
@@ -303,14 +287,14 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
                             rView.MovAction( aEndPoint );
                             rView.EndDragObj();
 
-                            // restore snap
+                            
                             if ( !bWasNoSnap )
                                 const_cast<SdrDragStat&>(rDragStat).SetNoSnap( bWasNoSnap );
                             if ( bWasSnapEnabled )
                                 rView.SetSnapEnabled( bWasSnapEnabled );
                         }
 
-                        // make moved handle visible
+                        
                         Rectangle aVisRect( aEndPoint - Point( 100, 100 ), Size( 200, 200 ) );
                         rView.MakeVisible( aVisRect, rWindow );
                     }
@@ -318,7 +302,7 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
             }
             else
             {
-                // scroll page
+                
                 ScrollBar* pScrollBar = ( nX != 0 ) ? rParent.GetHScroll() : rParent.GetVScroll();
                 if ( pScrollBar )
                 {
@@ -349,22 +333,16 @@ bool DlgEdFunc::KeyInput( const KeyEvent& rKEvt )
     return bReturn;
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFuncInsert::DlgEdFuncInsert (DlgEditor& rParent_) :
     DlgEdFunc(rParent_)
 {
     rParent.GetView().SetCreateMode(true);
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFuncInsert::~DlgEdFuncInsert()
 {
     rParent.GetView().SetEditMode( true );
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -385,27 +363,25 @@ bool DlgEdFuncInsert::MouseButtonDown( const MouseEvent& rMEvt )
     {
         SdrHdl* pHdl = rView.PickHandle(aPos);
 
-        // if selected object was hit, drag object
+        
         if ( pHdl!=NULL || rView.IsMarkedHit(aPos, nHitLog) )
             rView.BegDragObj(aPos, (OutputDevice*) NULL, pHdl, nDrgLog);
         else if ( rView.AreObjectsMarked() )
             rView.UnmarkAll();
 
-        // if no action, create object
+        
         if ( !rView.IsAction() )
             rView.BegCreateObj(aPos);
     }
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
-        // if object was hit, show property browser
+        
         if ( rView.IsMarkedHit(aPos, nHitLog) && rParent.GetMode() != DlgEditor::READONLY )
             rParent.ShowProperties();
     }
 
     return true;
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -417,7 +393,7 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
 
     rWindow.ReleaseMouse();
 
-    // object creation active?
+    
     if ( rView.IsCreateObj() )
     {
         rView.EndCreateObj(SDRCREATE_FORCEEND);
@@ -439,8 +415,6 @@ bool DlgEdFuncInsert::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
 {
     SdrView& rView  = rParent.GetView();
@@ -461,25 +435,19 @@ bool DlgEdFuncInsert::MouseMove( const MouseEvent& rMEvt )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFuncSelect::DlgEdFuncSelect (DlgEditor& rParent_) :
     DlgEdFunc(rParent_),
     bMarkAction(false)
 {
 }
 
-//----------------------------------------------------------------------------
-
 DlgEdFuncSelect::~DlgEdFuncSelect()
 {
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    // get view from parent
+    
     SdrView& rView  = rParent.GetView();
     Window& rWindow = rParent.GetWindow();
     rView.SetActualWin(&rWindow);
@@ -494,36 +462,36 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
         SdrObject* pObj;
         SdrPageView* pPV;
 
-        // hit selected object?
+        
         if ( pHdl!=NULL || rView.IsMarkedHit(aMDPos, nHitLog) )
         {
             rView.BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
         }
         else
         {
-            // if not multi selection, unmark all
+            
             if ( !rMEvt.IsShift() )
                 rView.UnmarkAll();
             else
             {
                 if( rView.PickObj( aMDPos, nHitLog, pObj, pPV ) )
                 {
-                    //if (dynamic_cast<DlgEdForm*>(pObj))
-                    //  rView.UnmarkAll();
-                    //else
-                    //  rParent.UnmarkDialog();
+                    
+                    
+                    
+                    
                 }
             }
 
             if ( rView.MarkObj(aMDPos, nHitLog) )
             {
-                // drag object
+                
                 pHdl = rView.PickHandle(aMDPos);
                 rView.BegDragObj(aMDPos, (OutputDevice*) NULL, pHdl, nDrgLog);
             }
             else
             {
-                // select object
+                
                 rView.BegMarkObj(aMDPos);
                 bMarkAction = true;
             }
@@ -531,7 +499,7 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else if ( rMEvt.IsLeft() && rMEvt.GetClicks() == 2 )
     {
-        // if object was hit, show property browser
+        
         if ( rView.IsMarkedHit(aMDPos, nHitLog) && rParent.GetMode() != DlgEditor::READONLY )
             rParent.ShowProperties();
     }
@@ -539,13 +507,11 @@ bool DlgEdFuncSelect::MouseButtonDown( const MouseEvent& rMEvt )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
 bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DlgEdFunc::MouseButtonUp( rMEvt );
 
-    // get view from parent
+    
     SdrView& rView  = rParent.GetView();
     Window& rWindow = rParent.GetWindow();
     rView.SetActualWin(&rWindow);
@@ -557,7 +523,7 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if (rView.IsDragObj())
         {
-            // object was dragged
+            
             rView.EndDragObj( rMEvt.IsMod1() );
             rView.ForceMarkedToAnotherPage();
         }
@@ -574,8 +540,6 @@ bool DlgEdFuncSelect::MouseButtonUp( const MouseEvent& rMEvt )
 
     return true;
 }
-
-//----------------------------------------------------------------------------
 
 bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
 {
@@ -600,8 +564,6 @@ bool DlgEdFuncSelect::MouseMove( const MouseEvent& rMEvt )
     return true;
 }
 
-//----------------------------------------------------------------------------
-
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

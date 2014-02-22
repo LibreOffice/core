@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #define UNICODE
@@ -58,30 +58,30 @@ BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
     DWORD dwCounter;
     DWORD dwSidSize;
 
-    // Validate the binary SID.
+    
 
     if(!IsValidSid(pSid)) return FALSE;
 
-    // Get the identifier authority value from the SID.
+    
 
     psia = GetSidIdentifierAuthority(pSid);
 
-    // Get the number of subauthorities in the SID.
+    
 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    // Compute the buffer length.
-    // S-SID_REVISION- + IdentifierAuthority- + subauthorities- + NULL
+    
+    
 
     dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
 
     *StringSid = (LPTSTR)LocalAlloc( LMEM_FIXED, dwSidSize );
 
-    // Add 'S' prefix and revision number to the string.
+    
 
     dwSidSize=wsprintf(*StringSid, TEXT("S-%lu-"), dwSidRev );
 
-    // Add a SID identifier authority to the string.
+    
 
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
     {
@@ -104,7 +104,7 @@ BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
                     (ULONG)(psia->Value[2] << 24)   );
     }
 
-    // Add SID subauthorities to the string.
+    
     for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
     {
         dwSidSize+=wsprintf(*StringSid + dwSidSize, TEXT("-%lu"),
@@ -115,7 +115,7 @@ BOOL WINAPI ConvertSidToStringSid( PSID pSid, LPTSTR* StringSid )
 }
 
 
-//---------------------------------------------------------------------------
+
 
 static LPTSTR   *GetCommandArgs( int *pArgc )
 {
@@ -127,7 +127,7 @@ static LPTSTR   *GetCommandArgs( int *pArgc )
 #endif
 }
 
-//---------------------------------------------------------------------------
+
 
 namespace {
 
@@ -135,10 +135,10 @@ bool writeArgument(HANDLE pipe, char prefix, WCHAR const * argument) {
     CHAR szBuffer[4096];
     int n = WideCharToMultiByte(
         CP_UTF8, 0, argument, -1, szBuffer, sizeof (szBuffer), NULL, NULL);
-    char b[1 + 2 * ((sizeof szBuffer) - 1)]; // hopefully does not overflow
+    char b[1 + 2 * ((sizeof szBuffer) - 1)]; 
     b[0] = prefix;
     char * p = b + 1;
-    for (int i = 0; i < n - 1; ++i) { // cannot underflow (n >= 0)
+    for (int i = 0; i < n - 1; ++i) { 
         char c = szBuffer[i];
         switch (c) {
         case '\0':
@@ -181,7 +181,7 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
     aStartupInfo.cb = sizeof(aStartupInfo);
 
     GetStartupInfo( &aStartupInfo );
-    // Get image path with same name but with .bin extension
+    
 
     TCHAR               szModuleFileName[MAX_PATH];
 
@@ -194,8 +194,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         _tcsncpy( szPerfTuneIniFile + len, _T("perftune.ini"), SAL_N_ELEMENTS(szPerfTuneIniFile) - len );
     }
 
-    // Create process with same command line, environment and stdio handles which
-    // are directed to the created pipes
+    
+    
 
     DWORD   dwExitCode = (DWORD)-1;
 
@@ -332,8 +332,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
             }
             n += MY_LENGTH(L" \"-env:OOO_CWD=2") + 4 * cwdLen +
                 MY_LENGTH(L"\"") + 1;
-                // 4 * cwdLen: each char preceded by backslash, each trailing
-                // backslash doubled
+                
+                
             lpCommandLine = new WCHAR[n];
         }
         WCHAR * p = desktop_win32::commandLineAppend(
@@ -357,15 +357,15 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         desktop_win32::commandLineAppend(p, MY_STRING(L"\""));
         bFirst = false;
 
-        TCHAR   szParentProcessId[64]; // This is more than large enough for a 128 bit decimal value
+        TCHAR   szParentProcessId[64]; 
         BOOL    bHeadlessMode( FALSE );
 
         {
-            // Check command line arguments for "--headless" parameter. We only
-            // set the environment variable "ATTACHED_PARENT_PROCESSID" for the headless
-            // mode as self-destruction of the soffice.bin process can lead to
-            // certain side-effects (log-off can result in data-loss, ".lock" is not deleted.
-            // See 138244 for more information.
+            
+            
+            
+            
+            
             int     argc2;
             LPTSTR  *argv2 = GetCommandArgs( &argc2 );
 
@@ -407,8 +407,8 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
 
             do
             {
-                // On Windows XP it seems as the desktop calls WaitForInputIdle after "OpenWidth" so we have to do so
-                // as if we where processing any messages
+                
+                
 
                 dwWaitResult = MsgWaitForMultipleObjects( 1, &aProcessInfo.hProcess, FALSE, INFINITE, QS_ALLEVENTS );
 

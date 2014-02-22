@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dispatch/dispatchinformationprovider.hxx>
@@ -32,7 +32,7 @@
 
 namespace framework{
 
-//_________________________________________________________________________________________________________________
+
 DispatchInformationProvider::DispatchInformationProvider(const css::uno::Reference< css::uno::XComponentContext >& xContext ,
                                                          const css::uno::Reference< css::frame::XFrame >&          xFrame)
     : ThreadHelpBase(&Application::GetSolarMutex())
@@ -41,12 +41,12 @@ DispatchInformationProvider::DispatchInformationProvider(const css::uno::Referen
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 DispatchInformationProvider::~DispatchInformationProvider()
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupportedCommandGroups()
     throw (css::uno::RuntimeException)
 {
@@ -58,7 +58,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
 
     for (i1=0; i1<c1; ++i1)
     {
-        // ignore controller, which doesn't implement the right interface
+        
         css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider = lProvider[i1];
         if (!xProvider.is())
             continue;
@@ -78,7 +78,7 @@ css::uno::Sequence< sal_Int16 > SAL_CALL DispatchInformationProvider::getSupport
     return lGroups.getAsConstList();
 }
 
-//_________________________________________________________________________________________________________________
+
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformationProvider::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
     throw (css::uno::RuntimeException)
 {
@@ -92,7 +92,7 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     {
         try
         {
-            // ignore controller, which doesn't implement the right interface
+            
             css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider = lProvider[i1];
             if (!xProvider.is())
                 continue;
@@ -128,20 +128,20 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL DispatchInformati
     return lReturn;
 }
 
-//_________________________________________________________________________________________________________________
+
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > > DispatchInformationProvider::implts_getAllSubProvider()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     css::uno::Reference< css::frame::XFrame >          xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     if (!xFrame.is())
         return css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvider > >();
 
-    CloseDispatcher* pCloser = new CloseDispatcher(xContext, xFrame, OUString("_self")); // explicit "_self" ... not "" ... see implementation of close dispatcher itself!
+    CloseDispatcher* pCloser = new CloseDispatcher(xContext, xFrame, OUString("_self")); 
     css::uno::Reference< css::uno::XInterface > xCloser(static_cast< css::frame::XDispatch* >(pCloser), css::uno::UNO_QUERY);
 
     css::uno::Reference< css::frame::XDispatchInformationProvider > xCloseDispatch(xCloser                                                      , css::uno::UNO_QUERY);
@@ -155,6 +155,6 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatchInformationProvide
     return lProvider;
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

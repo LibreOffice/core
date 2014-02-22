@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "thumbnailviewacc.hxx"
@@ -98,7 +98,7 @@ void ThumbnailViewAcc::GetFocus (void)
 {
     mbIsFocused = true;
 
-    // Broadcast the state change.
+    
     ::com::sun::star::uno::Any aOldState, aNewState;
     aNewState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
@@ -110,7 +110,7 @@ void ThumbnailViewAcc::LoseFocus (void)
 {
     mbIsFocused = false;
 
-    // Broadcast the state change.
+    
     ::com::sun::star::uno::Any aOldState, aNewState;
     aOldState <<= ::com::sun::star::accessibility::AccessibleStateType::FOCUSED;
     FireAccessibleEvent(
@@ -194,8 +194,8 @@ sal_Int16 SAL_CALL ThumbnailViewAcc::getAccessibleRole()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    // #i73746# As the Java Access Bridge (v 2.0.1) uses "managesDescendants"
-    // always if the role is LIST, we need a different role in this case
+    
+    
     return (mbIsTransientChildrenDisabled
             ? accessibility::AccessibleRole::PANEL
             : accessibility::AccessibleRole::LIST );
@@ -242,7 +242,7 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewAcc::
     ThrowIfDisposed();
     ::utl::AccessibleStateSetHelper* pStateSet = new ::utl::AccessibleStateSetHelper();
 
-    // Set some states.
+    
     pStateSet->AddState (accessibility::AccessibleStateType::ENABLED);
     pStateSet->AddState (accessibility::AccessibleStateType::SENSITIVE);
     pStateSet->AddState (accessibility::AccessibleStateType::SHOWING);
@@ -479,7 +479,7 @@ void SAL_CALL ThumbnailViewAcc::selectAllAccessibleChildren()
     throw (uno::RuntimeException)
 {
     ThrowIfDisposed();
-    // unsupported due to single selection only
+    
 }
 
 sal_Int32 SAL_CALL ThumbnailViewAcc::getSelectedAccessibleChildCount()
@@ -523,10 +523,10 @@ void SAL_CALL ThumbnailViewAcc::deselectAccessibleChild( sal_Int32 nChildIndex )
 {
     ThrowIfDisposed();
     const SolarMutexGuard aSolarGuard;
-    // Because of the single selection we can reset the whole selection when
-    // the specified child is currently selected.
-//FIXME TODO    if (isAccessibleChildSelected(nChildIndex))
-//FIXME TODO        ;
+    
+    
+
+
     (void) nChildIndex;
 }
 
@@ -547,18 +547,18 @@ void SAL_CALL ThumbnailViewAcc::disposing (void)
     ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> > aListenerListCopy;
 
     {
-        // Make a copy of the list and clear the original.
+        
         const SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard (m_aMutex);
         aListenerListCopy = mxEventListeners;
         mxEventListeners.clear();
 
-        // Reset the pointer to the parent.  It has to be the one who has
-        // disposed us because he is dying.
+        
+        
         mpParent = NULL;
     }
 
-    // Inform all listeners that this objects is disposing.
+    
     ::std::vector<uno::Reference<accessibility::XAccessibleEventListener> >::const_iterator
           aListenerIterator (aListenerListCopy.begin());
     lang::EventObject aEvent (static_cast<accessibility::XAccessible*>(this));
@@ -570,7 +570,7 @@ void SAL_CALL ThumbnailViewAcc::disposing (void)
         }
         catch(const uno::Exception&)
         {
-            // Ignore exceptions.
+            
         }
 
         ++aListenerIterator;
@@ -706,8 +706,8 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
     throw (uno::RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
-    // The index defaults to -1 to indicate the child does not belong to its
-    // parent.
+    
+    
     sal_Int32 nIndexInParent = -1;
 
     if( mpParent )
@@ -718,8 +718,8 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
         ThumbnailViewItem* pItem;
         for (sal_uInt16 i=0; i<nCount && !bDone; i++)
         {
-            // Guard the retrieval of the i-th child with a try/catch block
-            // just in case the number of children changes in the mean time.
+            
+            
             try
             {
                 pItem = mpParent->mrParent.ImplGetVisibleItem (i);
@@ -729,7 +729,7 @@ sal_Int32 SAL_CALL ThumbnailViewItemAcc::getAccessibleIndexInParent()
                 pItem = NULL;
             }
 
-            // Do not create an accessible object for the test.
+            
             if (pItem != NULL && pItem->mpxAcc != NULL)
                 if (pItem->GetAccessible( mbIsTransientChildrenDisabled ).get() == this )
                 {
@@ -796,15 +796,15 @@ uno::Reference< accessibility::XAccessibleStateSet > SAL_CALL ThumbnailViewItemA
         if ( !mbIsTransientChildrenDisabled )
             pStateSet->AddState (accessibility::AccessibleStateType::TRANSIENT);
 
-        // SELECTABLE
+        
         pStateSet->AddState( accessibility::AccessibleStateType::SELECTABLE );
-        //      pStateSet->AddState( accessibility::AccessibleStateType::FOCUSABLE );
+        
 
-        // SELECTED
+        
         if( mpParent->isSelected() )
         {
             pStateSet->AddState( accessibility::AccessibleStateType::SELECTED );
-            //              pStateSet->AddState( accessibility::AccessibleStateType::FOCUSED );
+            
         }
     }
 
@@ -953,7 +953,7 @@ awt::Size SAL_CALL ThumbnailViewItemAcc::getSize()
 void SAL_CALL ThumbnailViewItemAcc::grabFocus()
     throw (uno::RuntimeException)
 {
-    // nothing to do
+    
 }
 
 uno::Any SAL_CALL ThumbnailViewItemAcc::getAccessibleKeyBinding()

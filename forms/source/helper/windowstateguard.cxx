@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "windowstateguard.hxx"
@@ -25,10 +25,10 @@
 #include <cppuhelper/implbase1.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::awt::XWindowListener2;
     using ::com::sun::star::uno::Reference;
@@ -41,9 +41,9 @@ namespace frm
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::Exception;
 
-    //====================================================================
-    //= WindowStateGuard_Impl
-    //====================================================================
+    
+    
+    
     typedef ::cppu::WeakImplHelper1 <   XWindowListener2
                                     >   WindowStateGuard_Impl_Base;
     class WindowStateGuard_Impl : public WindowStateGuard_Impl_Base
@@ -65,17 +65,17 @@ namespace frm
         void dispose();
 
     protected:
-        // XWindowListener2
+        
         virtual void SAL_CALL windowEnabled( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowDisabled( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
 
-        // XWindowListener
+        
         virtual void SAL_CALL windowResized( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowMoved( const ::com::sun::star::awt::WindowEvent& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowShown( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL windowHidden( const ::com::sun::star::lang::EventObject& e ) throw (::com::sun::star::uno::RuntimeException);
 
-        // XEventListener
+        
         virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
     private:
@@ -86,7 +86,7 @@ namespace frm
         void    impl_ensureEnabledState_nothrow_nolck();
     };
 
-    //--------------------------------------------------------------------
+    
     WindowStateGuard_Impl::WindowStateGuard_Impl( const Reference< XWindow2 >& _rxWindow, const Reference< XPropertySet >& _rxMdelProps )
         :m_xWindow( _rxWindow )
         ,m_xModelProps( _rxMdelProps )
@@ -101,19 +101,19 @@ namespace frm
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+    
     void WindowStateGuard_Impl::dispose()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
-            // already disposed
+            
             return;
 
         m_xWindow->removeWindowListener( this );
         m_xWindow.clear();
     }
 
-    //--------------------------------------------------------------------
+    
     void WindowStateGuard_Impl::impl_ensureEnabledState_nothrow_nolck()
     {
         try
@@ -128,7 +128,7 @@ namespace frm
                 xWindow = m_xWindow;
                 xModelProps = m_xModelProps;
             }
-            // fdo#42157: do not lock m_aMutex to prevent deadlock
+            
             bool const bEnabled = xWindow->isEnabled();
             OSL_VERIFY( xModelProps->getPropertyValue( PROPERTY_ENABLED )
                         >>= bShouldBeEnabled );
@@ -142,43 +142,43 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL WindowStateGuard_Impl::windowEnabled( const EventObject& /*e*/ ) throw (RuntimeException)
     {
         impl_ensureEnabledState_nothrow_nolck();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL WindowStateGuard_Impl::windowDisabled( const EventObject& /*e*/ ) throw (RuntimeException)
     {
         impl_ensureEnabledState_nothrow_nolck();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL WindowStateGuard_Impl::windowResized( const WindowEvent& /*e*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL WindowStateGuard_Impl::windowMoved( const WindowEvent& /*e*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL WindowStateGuard_Impl::windowShown( const EventObject& /*e*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL WindowStateGuard_Impl::windowHidden( const EventObject& /*e*/ ) throw (RuntimeException)
     {
-        // not interested in
+        
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL WindowStateGuard_Impl::disposing( const EventObject& Source ) throw (RuntimeException)
     {
         OSL_ENSURE( Source.Source == m_xWindow, "WindowStateGuard_Impl::disposing: where does this come from?" );
@@ -186,20 +186,20 @@ namespace frm
         dispose();
     }
 
-    //====================================================================
-    //= WindowStateGuard
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     WindowStateGuard::WindowStateGuard()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     WindowStateGuard::~WindowStateGuard()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void WindowStateGuard::attach( const Reference< XWindow2 >& _rxWindow, const Reference< XControlModel >& _rxModel )
     {
         if ( m_pImpl.is() )
@@ -214,8 +214,8 @@ namespace frm
             m_pImpl = new WindowStateGuard_Impl( _rxWindow, xModelProps );
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

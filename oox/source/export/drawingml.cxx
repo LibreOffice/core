@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/core/xmlfilterbase.hxx"
@@ -99,7 +99,7 @@ using ::sax_fastparser::FSHelperPtr;
 
 DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
 
-// Defined in generated code.
+
 extern std::map< OString, std::vector<OString> > ooxDrawingMLGetAdjNames();
 
 namespace oox {
@@ -115,7 +115,7 @@ namespace drawingml {
     if ( GETA(propName) ) \
         mAny >>= variable;
 
-// not thread safe
+
 int DrawingML::mnImageCounter = 1;
 
 void DrawingML::ResetCounters()
@@ -182,7 +182,7 @@ void DrawingML::WriteColor( sal_uInt32 nColor, sal_Int32 nAlpha )
 
 void DrawingML::WriteColor( OUString sColorSchemeName, Sequence< PropertyValue > aTransformations )
 {
-    // prevent writing a tag with empty val attribute
+    
     if( sColorSchemeName.isEmpty() )
         return;
 
@@ -229,12 +229,12 @@ void DrawingML::WriteSolidFill( OUString sSchemeName, Sequence< PropertyValue > 
 
 void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
 {
-    // get fill color
+    
     if ( !GetProperty( rXPropSet, "FillColor" ) )
         return;
     sal_uInt32 nFillColor = mAny.get<sal_uInt32>();
 
-    // get InteropGrabBag and search the relevant attributes
+    
     OUString sColorFillScheme;
     sal_uInt32 nOriginalColor = 0;
     Sequence< PropertyValue > aStyleProperties, aTransformations;
@@ -258,16 +258,16 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
     {
         sal_Int32 nTransparency = 0;
         mAny >>= nTransparency;
-        // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
+        
         nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
     }
 
-    // write XML
+    
     if ( nFillColor != nOriginalColor )
-        // the user has set a different color for the shape
+        
         WriteSolidFill( nFillColor & 0xffffff, nAlpha );
     else if ( !sColorFillScheme.isEmpty() )
-        // the shape had a scheme color and the user didn't change it
+        
         WriteSolidFill( sColorFillScheme, aTransformations );
     else if ( aStyleProperties.hasElements() )
     {
@@ -279,13 +279,13 @@ void DrawingML::WriteSolidFill( Reference< XPropertySet > rXPropSet )
                 break;
             }
         if ( nFillColor != nThemeColor )
-            // the shape contains a theme but it wasn't being used
+            
             WriteSolidFill( nFillColor & 0xffffff, nAlpha );
-        // in case the shape used the style color and the user didn't change it,
-        // we must not write a <a: solidFill> tag.
+        
+        
     }
     else
-        // the shape had a custom color and the user didn't change it
+        
         WriteSolidFill( nFillColor & 0xffffff, nAlpha );
 }
 
@@ -325,7 +325,7 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
     if( GETA( FillGradient ) ) {
         aGradient = *static_cast< const awt::Gradient* >( mAny.getValue() );
 
-        // get InteropGrabBag and search the relevant attributes
+        
         awt::Gradient aOriginalGradient;
         Sequence< PropertyValue > aGradientStops;
         if ( GetProperty( rXPropSet, "InteropGrabBag" ) )
@@ -339,10 +339,10 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
                     aGrabBag[i].Value >>= aOriginalGradient;
         }
 
-        // check if an ooxml gradient had been imported and if the user has modified it
+        
         if( EqualGradients( aOriginalGradient, aGradient ) )
         {
-            // If we have no gradient stops that means original gradient were defined by a theme.
+            
             if( aGradientStops.hasElements() )
             {
                 mpFS->startElementNS( XML_a, XML_gradFill, FSEND );
@@ -361,16 +361,16 @@ void DrawingML::WriteGradientFill( Reference< XPropertySet > rXPropSet )
 
 void DrawingML::WriteGrabBagGradientFill( Sequence< PropertyValue > aGradientStops, awt::Gradient rGradient )
 {
-    // write back the original gradient
+    
     mpFS->startElementNS( XML_a, XML_gsLst, FSEND );
 
-    // get original stops and write them
+    
     for( sal_Int32 i=0; i < aGradientStops.getLength(); ++i )
     {
         Sequence< PropertyValue > aGradientStop;
         aGradientStops[i].Value >>= aGradientStop;
 
-        // get values
+        
         OUString sSchemeClr;
         double nPos = 0;
         sal_Int16 nTransparency = 0;
@@ -388,13 +388,13 @@ void DrawingML::WriteGrabBagGradientFill( Sequence< PropertyValue > aGradientSto
             else if( aGradientStop[j].Name == "Transformations" )
                 aGradientStop[j].Value >>= aTransformations;
 
-        // write stop
+        
         mpFS->startElementNS( XML_a, XML_gs,
                               XML_pos, OString::number( nPos * 100000.0 ).getStr(),
                               FSEND );
         if( sSchemeClr.isEmpty() )
         {
-            // Calculate alpha value (see oox/source/drawingml/color.cxx : getTransparency())
+            
             sal_Int32 nAlpha = (MAX_PERCENT - ( PER_PERCENT * nTransparency ) );
             WriteColor( nRgbClr, nAlpha );
         }
@@ -533,7 +533,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
     sal_Bool bDashSet = sal_False;
     bool bNoFill = false;
 
-    // get InteropGrabBag and search the relevant attributes
+    
     OUString sColorFillScheme;
     sal_uInt32 nOriginalColor( 0 ), nStyleColor( 0 ), nStyleLineWidth( 0 );
     Sequence< PropertyValue > aStyleProperties, aTransformations;
@@ -601,25 +601,25 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
     if( bColorSet )
     {
         if( nColor != nOriginalColor )
-            // the user has set a different color for the line
+            
             WriteSolidFill( nColor );
         else if( !sColorFillScheme.isEmpty() )
-            // the line had a scheme color and the user didn't change it
+            
             WriteSolidFill( sColorFillScheme, aTransformations );
         else if( aStyleProperties.hasElements() )
         {
             if( nColor != nStyleColor )
-                // the line style defines some color but it wasn't being used
+                
                 WriteSolidFill( nColor );
-            // in case the shape used the style color and the user didn't change it,
-            // we must not write a <a: solidFill> tag.
+            
+            
         }
         else
             WriteSolidFill( nColor );
     }
 
     if( bDashSet && aStyleLineStyle != drawing::LineStyle_DASH ) {
-        // line style is a dash and it was not set by the shape style
+        
         mpFS->startElementNS( XML_a, XML_custDash, FSEND );
         int i;
         for( i = 0; i < aLineDash.Dots; i ++ )
@@ -640,7 +640,7 @@ void DrawingML::WriteOutline( Reference< XPropertySet > rXPropSet )
 
         mAny >>= eLineJoint;
         if( aStyleLineJoint == LineJoint_NONE || aStyleLineJoint != eLineJoint )
-            // style-defined line joint does not exist, or is different from the shape's joint
+            
             switch( eLineJoint ) {
                 case LineJoint_NONE:
                 case LineJoint_MIDDLE:
@@ -684,7 +684,7 @@ OUString DrawingML::WriteImage( const OUString& rURL, bool bRelPathToMedia )
 
         return WriteImage( aGraphic , bRelPathToMedia );
     } else {
-        // add link to relations
+        
     }
 
     return OUString();
@@ -793,7 +793,7 @@ OUString DrawingML::WriteImage( const Graphic& rGraphic , bool bRelPathToMedia )
     if ( bRelPathToMedia )
         sRelPathToMedia = "../" + sRelPathToMedia;
     sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                                "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+                                "http:
                                 OUStringBuffer()
                                 .appendAscii( GetRelationCompPrefix() )
                                 .appendAscii( sRelPathToMedia.getStr() )
@@ -903,7 +903,7 @@ void DrawingML::WritePattFill( Reference< XPropertySet > rXPropSet )
         WriteColor(aHatch.Color);
         mpFS->endElementNS( XML_a , XML_fgClr );
 
-        // In Writer hatching has no background so use white as a default value.
+        
         mpFS->startElementNS( XML_a , XML_bgClr, FSEND );
         WriteColor(COL_WHITE);
         mpFS->endElementNS( XML_a , XML_bgClr );
@@ -1125,7 +1125,7 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
         sal_uInt32 nCharEscapementHeight = 0;
         mAny >>= nCharEscapementHeight;
         nSize = (nSize * nCharEscapementHeight) / 100;
-        // MSO uses default ~58% size
+        
         nSize = (nSize / 0.58);
     }
 
@@ -1138,19 +1138,19 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
                           XML_baseline, nCharEscapement == 0 ? NULL : IS( nCharEscapement*1000 ),
                           FSEND );
 
-    // mso doesn't like text color to be placed after typeface
+    
     if( GETAD( CharColor ) ) {
         sal_uInt32 color = *((sal_uInt32*) mAny.getValue());
         DBG(fprintf(stderr, "run color: %x auto: %x\n", static_cast<unsigned int>( color ), static_cast<unsigned int>( COL_AUTO )));
 
-        if( color == COL_AUTO ) { // nCharColor depends to the background color
+        if( color == COL_AUTO ) { 
             sal_Bool bIsDark = sal_False;
             GET( bIsDark, IsBackgroundDark );
             color = bIsDark ? 0xffffff : 0x000000;
         }
         color &= 0xffffff;
 
-        // TODO: special handle embossed/engraved
+        
 
         WriteSolidFill( color );
     }
@@ -1192,14 +1192,14 @@ void DrawingML::WriteRunProperties( Reference< XPropertySet > rRun, sal_Bool bIs
             rRun.set( rXTextField, UNO_QUERY );
     }
 
-    // field properties starts here
+    
     if( GETA( URL ) ) {
     OUString sURL;
 
     mAny >>= sURL;
     if( !sURL.isEmpty() ) {
         OUString sRelId = mpFB->addRelation( mpFS->getOutputStream(),
-                              "http://schemas.openxmlformats.org/officeDocument/2006/relationships/hyperlink",
+                              "http:
                               sURL, true );
 
         mpFS->singleElementNS( XML_a, XML_hlinkClick,
@@ -1234,10 +1234,10 @@ const char* DrawingML::GetFieldType( ::com::sun::star::uno::Reference< ::com::su
                 if( aFieldKind == "Page" ) {
                     return "slidenum";
                 }
-        // else if( aFieldKind == "URL" ) {
-        // do not return here
-        // and make URL field text run with hyperlink property later
-        // }
+        
+        
+        
+        
             }
         }
     }
@@ -1388,7 +1388,7 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                 bool bSDot = false;
                 bool bPBehind = false;
                 bool bPBoth = false;
-                sal_Unicode aBulletChar = 0x2022; // a bullet
+                sal_Unicode aBulletChar = 0x2022; 
                 awt::FontDescriptor aFontDesc;
                 bool bHasFontDesc = false;
                 OUString aGraphicURL;
@@ -1412,17 +1412,17 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                         } else if ( aPropName == "BulletChar" )
                         {
                             aBulletChar = OUString ( *( (OUString*)pValue ) )[ 0 ];
-                            //printf ("bullet char: %d\n", aBulletChar.getStr());
+                            
                         }
                         else if ( aPropName == "BulletFont" )
                         {
                             aFontDesc = *( (awt::FontDescriptor*)pValue );
                             bHasFontDesc = true;
 
-                            // Our numbullet dialog has set the wrong textencoding for our "StarSymbol" font,
-                            // instead of a Unicode encoding the encoding RTL_TEXTENCODING_SYMBOL was used.
-                            // Because there might exist a lot of damaged documemts I added this two lines
-                            // which fixes the bullet problem for the export.
+                            
+                            
+                            
+                            
                             if ( aFontDesc.Name.equalsIgnoreAsciiCase("StarSymbol") )
                                 aFontDesc.CharSet = RTL_TEXTENCODING_MS_1252;
 
@@ -1435,11 +1435,11 @@ void DrawingML::WriteParagraphNumbering( Reference< XPropertySet > rXPropSet, sa
                         {
                             if ( pPropValue[ i ].Value.getValueType() == ::getCppuType( (awt::Size*)0) )
                             {
-                                // don't cast awt::Size to Size as on 64-bits they are not the same.
+                                
                                 ::com::sun::star::awt::Size aSize;
                                 pPropValue[ i ].Value >>= aSize;
-                                //aBuGraSize.nA = aSize.Width;
-                                //aBuGraSize.nB = aSize.Height;
+                                
+                                
                                 DBG(fprintf(stderr, "graphic size: %dx%d\n", int( aSize.Width ), int( aSize.Height )));
                             }
                         }
@@ -1596,8 +1596,8 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
     nLeft = nRight = DEFLRINS;
     nTop = nBottom = DEFTBINS;
 
-    // top inset looks a bit different compared to ppt export
-    // check if something related doesn't work as expected
+    
+    
     GET( nLeft, TextLeftDistance );
     GET( nRight, TextRightDistance );
     GET( nTop, TextUpperDistance );
@@ -1661,9 +1661,9 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
         const char* pWrap = bHasWrap && !bWrap ? "none" : NULL;
         if (GetDocumentType() == DOCUMENT_DOCX)
         {
-            // In case of DOCX, if we want to have the same effect as
-            // TextShape's automatic word wrapping, then we need to set
-            // wrapping to square.
+            
+            
+            
             uno::Reference<lang::XServiceInfo> xServiceInfo(rXIface, uno::UNO_QUERY);
             if (xServiceInfo.is() && xServiceInfo->supportsService("com.sun.star.drawing.TextShape"))
                 pWrap = "square";
@@ -1710,7 +1710,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, bool bBodyPr, bool b
 
         if (pParaObj)
         {
-            // this is reached only in case some text is attached to the shape
+            
             mpTextExport->WriteOutliner(*pParaObj);
             if (bOwnParaObj)
                 delete pParaObj;
@@ -1740,7 +1740,7 @@ void DrawingML::WritePresetShape( const char* pShape )
 void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bool bPredefinedHandlesUsed, sal_Int32 nAdjustmentsWhichNeedsToBeConverted, const PropertyValue& rProp )
 {
     static std::map< OString, std::vector<OString> > aAdjMap = ooxDrawingMLGetAdjNames();
-    // If there are predefined adj names for this shape type, look them up now.
+    
     std::vector<OString> aAdjustments;
     if (aAdjMap.find(OString(pShape)) != aAdjMap.end())
         aAdjustments = aAdjMap[OString(pShape)];
@@ -1752,9 +1752,9 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
 
     Sequence< drawing::EnhancedCustomShapeAdjustmentValue > aAdjustmentSeq;
     if ( ( rProp.Value >>= aAdjustmentSeq )
-         && eShapeType != mso_sptActionButtonForwardNext  // we have adjustments values for these type of shape, but MSO doesn't like them
-         && eShapeType != mso_sptActionButtonBackPrevious // so they are now disabled
-         && OString(pShape) != "rect" //some shape types are commented out in pCustomShapeTypeTranslationTable[] & are being defaulted to rect & rect does not have adjustment values/name.
+         && eShapeType != mso_sptActionButtonForwardNext  
+         && eShapeType != mso_sptActionButtonBackPrevious 
+         && OString(pShape) != "rect" 
         ) {
         DBG(fprintf(stderr, "adj seq len: %d\n", int( aAdjustmentSeq.getLength() )));
         if ( bPredefinedHandlesUsed )
@@ -1764,7 +1764,7 @@ void DrawingML::WritePresetShape( const char* pShape, MSO_SPT eShapeType, sal_Bo
         for( sal_Int32 i=0; i < nLength; i++ )
             if( EscherPropertyContainer::GetAdjustmentValue( aAdjustmentSeq[ i ], i, nAdjustmentsWhichNeedsToBeConverted, nValue ) )
             {
-                // If the document model doesn't have an adjustment name (e.g. shape was created from VML), then take it from the predefined list.
+                
                 OString aAdjName;
                 if (aAdjustmentSeq[i].Name.isEmpty() && static_cast<sal_uInt32>(i) < aAdjustments.size())
                     aAdjName = aAdjustments[i];
@@ -1825,7 +1825,7 @@ void DrawingML::WritePolyPolygon( const PolyPolygon& rPolyPolygon )
             enum PolyFlags flags = rPoly.GetFlags(j);
             if( flags == POLY_CONTROL )
             {
-                // a:cubicBezTo can only contain 3 a:pt elements, so we need to make sure of this
+                
                 if( j+2 < rPoly.GetSize() && rPoly.GetFlags(j+1) == POLY_CONTROL && rPoly.GetFlags(j+2) != POLY_CONTROL )
                 {
 
@@ -1918,7 +1918,7 @@ void DrawingML::WriteFill( Reference< XPropertySet > xPropSet )
 
     if ( aFillStyle == FillStyle_SOLID && GetProperty( xPropSet, "FillTransparence" ) )
     {
-        // map full transparent background to no fill
+        
         sal_Int16 nVal = 0;
         xPropSet->getPropertyValue( "FillTransparence" ) >>= nVal;
         if ( nVal == 100 )
@@ -1968,17 +1968,17 @@ void DrawingML::WriteStyleProperties( sal_Int32 nTokenId, Sequence< PropertyValu
         mpFS->endElementNS( XML_a, nTokenId );
     }
     else
-        // write mock <a:*Ref> tag
+        
         mpFS->singleElementNS( XML_a, nTokenId, XML_idx, I32S( 0 ), FSEND );
 }
 
 void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
 {
-    // check existence of the grab bag
+    
     if ( !GetProperty( xPropSet, "InteropGrabBag" ) )
         return;
 
-    // extract the relevant properties from the grab bag
+    
     Sequence< PropertyValue > aGrabBag;
     Sequence< PropertyValue > aFillRefProperties, aLnRefProperties, aEffectRefProperties;
     mAny >>= aGrabBag;
@@ -1994,7 +1994,7 @@ void DrawingML::WriteShapeStyle( Reference< XPropertySet > xPropSet )
     WriteStyleProperties( XML_fillRef, aFillRefProperties );
     WriteStyleProperties( XML_effectRef, aEffectRefProperties );
 
-    // write mock <a:fontRef>
+    
     mpFS->singleElementNS( XML_a, XML_fontRef, XML_idx, "minor", FSEND );
 }
 

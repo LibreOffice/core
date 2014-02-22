@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,14 +30,14 @@ namespace vclcanvas
     {
         if( !bMonochromeBuffer )
         {
-            // #i95645#
+            
 #if defined( MACOSX )
-            // use AA on VCLCanvas for Mac
+            
             maVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW | maVDev->GetAntialiasing() );
 #else
-            // switch off AA for WIN32 and UNIX, the VCLCanvas does not look good with it and
-            // is not required to do AA. It would need to be adapted to use it correctly
-            // (especially gradient painting). This will need extra work.
+            
+            
+            
             maVDev->SetAntialiasing( maVDev->GetAntialiasing() & ~ANTIALIASING_ENABLE_B2DDRAW);
 #endif
         }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "acceptor.hxx"
@@ -88,7 +88,7 @@ namespace io_acceptor {
         virtual OUString SAL_CALL getDescription(  )
             throw(::com::sun::star::uno::RuntimeException);
 
-        // XConnectionBroadcaster
+        
         virtual void SAL_CALL addStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
             throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL removeStreamListener(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStreamListener>& aListener)
@@ -162,7 +162,7 @@ namespace io_acceptor {
         _closed(sal_False),
         _error(sal_False)
     {
-        // make it unique
+        
         m_sDescription += ",uniqueValue=" ;
         m_sDescription += OUString::number(
             sal::static_int_cast< sal_Int64 >(
@@ -285,7 +285,7 @@ namespace io_acceptor {
             throw(::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException)
     {
-        // enshure close is called only once
+        
         if(  1 == osl_atomic_increment( (&m_nStatus) ) )
         {
             m_socket.shutdown();
@@ -300,7 +300,7 @@ namespace io_acceptor {
     }
 
 
-    // XConnectionBroadcaster
+    
     void SAL_CALL SocketConnection::addStreamListener(const Reference<XStreamListener> & aListener) throw(RuntimeException)
     {
         MutexGuard guard(_mutex);
@@ -373,7 +373,7 @@ namespace io_acceptor {
 
         if( m_socket.acceptConnection( pConn->m_socket )!= osl_Socket_Ok )
         {
-            // stopAccepting was called
+            
             delete pConn;
             return Reference < XConnection > ();
         }

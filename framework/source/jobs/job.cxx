@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <jobs/job.hxx>
@@ -36,7 +36,7 @@
 
 namespace framework{
 
-//________________________________
+
 /**
     @short      standard ctor
     @descr      It initialize this new instance. But it set some generic parameters here only.
@@ -65,7 +65,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 {
 }
 
-//________________________________
+
 /**
     @short      standard ctor
     @descr      It initialize this new instance. But it set some generic parameters here only.
@@ -94,7 +94,7 @@ Job::Job( /*IN*/ const css::uno::Reference< css::uno::XComponentContext >& xCont
 {
 }
 
-//________________________________
+
 /**
     @short  superflous!
     @descr  Releasing of memory and reference must be done inside die() call.
@@ -104,7 +104,7 @@ Job::~Job()
 {
 }
 
-//________________________________
+
 /**
     @short  set (or delete) a listener for sending dispatch result events
     @descr  Because this object is used in a wrapped mode ... the original listener
@@ -124,7 +124,7 @@ void Job::setDispatchResultFake( /*IN*/ const css::uno::Reference< css::frame::X
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // reject dangerous calls
+    
     if (m_eRunState != E_NEW)
     {
         SAL_INFO("fwk", "Job::setJobData(): job may still running or already finished");
@@ -142,7 +142,7 @@ void Job::setJobData( const JobData& aData )
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // reject dangerous calls
+    
     if (m_eRunState != E_NEW)
     {
         SAL_INFO("fwk", "Job::setJobData(): job may still running or already finished");
@@ -154,7 +154,7 @@ void Job::setJobData( const JobData& aData )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  runs the job
     @descr  It doesn't matter, if the job is an asynchronous or
@@ -171,14 +171,14 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // reject dangerous calls
+    
     if (m_eRunState != E_NEW)
     {
         SAL_INFO("fwk", "Job::execute(): job may still running or already finished");
         return;
     }
 
-    // create the environment and mark this job as running ...
+    
     m_eRunState = E_RUNNING;
     impl_startListening();
 
@@ -186,35 +186,35 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     css::uno::Reference< css::task::XJob >       xSJob;
     css::uno::Sequence< css::beans::NamedValue > lJobArgs = impl_generateJobArgs(lDynamicArgs);
 
-    // It's necessary to hold us self alive!
-    // Otherwhise we might die by ref count ...
+    
+    
     css::uno::Reference< css::task::XJobListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
 
     try
     {
-        // create the job
-        // We must check for the supported interface on demand!
-        // But we preferr the synchronous one ...
+        
+        
+        
         m_xJob = m_xContext->getServiceManager()->createInstanceWithContext(m_aJobCfg.getService(), m_xContext);
         xSJob  = css::uno::Reference< css::task::XJob >(m_xJob, css::uno::UNO_QUERY);
         if (!xSJob.is())
             xAJob = css::uno::Reference< css::task::XAsyncJob >(m_xJob, css::uno::UNO_QUERY);
 
-        // execute it asynchron
+        
         if (xAJob.is())
         {
             m_aAsyncWait.reset();
             aWriteLock.unlock();
             /* } SAFE */
             xAJob->executeAsync(lJobArgs, xThis);
-            // wait for finishing this job - so this method
-            // does the same for synchronous and asynchronous jobs!
+            
+            
             m_aAsyncWait.wait();
             aWriteLock.lock();
             /* SAFE { */
-            // Note: Result handling was already done inside the callback!
+            
         }
-        // execute it synchron
+        
         else if (xSJob.is())
         {
             aWriteLock.unlock();
@@ -235,17 +235,17 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
         {}
     #endif
 
-    // deinitialize the environment and mark this job as finished ...
-    // but don't overwrite any information about STOPPED or might DISPOSED jobs!
+    
+    
     impl_stopListening();
     if (m_eRunState == E_RUNNING)
         m_eRunState = E_STOPPED_OR_FINISHED;
 
-    // If we got a close request from our frame or model ...
-    // but we disagreed wit that by throwing a veto exception...
-    // and got the ownership ...
-    // we have to close the resource frame or model now -
-    // and to disable ourself!
+    
+    
+    
+    
+    
     if (m_bPendingCloseFrame)
     {
         m_bPendingCloseFrame = sal_False;
@@ -277,11 +277,11 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     aWriteLock.unlock();
     /* SAFE { */
 
-    // release this instance ...
+    
     die();
 }
 
-//________________________________
+
 /**
     @short  kill this job
     @descr  It doesn't matter if this request is called from inside or
@@ -327,7 +327,7 @@ void Job::die()
     /* SAFE { */
 }
 
-//________________________________
+
 /**
     @short  generates list of arguments for job execute
     @descr  There exist a set of information, which can be needed by a job.
@@ -350,11 +350,11 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
 
-    // the real structure of the returned list depends from the environment of this job!
+    
     JobData::EMode eMode = m_aJobCfg.getMode();
 
-    // Create list of environment variables. This list must be part of the
-    // returned structure everytimes ... but some of its members are opetional!
+    
+    
     css::uno::Sequence< css::beans::NamedValue > lEnvArgs(1);
     lEnvArgs[0].Name = "EnvType";
     lEnvArgs[0].Value <<= m_aJobCfg.getEnvironmentDescriptor();
@@ -381,9 +381,9 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
         lEnvArgs[c].Value <<= m_aJobCfg.getEvent();
     }
 
-    // get the configuration data from the job data container ... if possible
-    // Means: if this job has any configuration data. Note: only really
-    // filled lists will be set to the return structure at the end of this method.
+    
+    
+    
     css::uno::Sequence< css::beans::NamedValue > lConfigArgs   ;
     css::uno::Sequence< css::beans::NamedValue > lJobConfigArgs;
     if (eMode==JobData::E_ALIAS || eMode==JobData::E_EVENT)
@@ -395,7 +395,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     aReadLock.unlock();
     /* } SAFE */
 
-    // Add all valid (not empty) lists to the return list
+    
     if (lConfigArgs.getLength()>0)
     {
         sal_Int32 nLength = lAllArgs.getLength();
@@ -428,7 +428,7 @@ css::uno::Sequence< css::beans::NamedValue > Job::impl_generateJobArgs( /*IN*/ c
     return lAllArgs;
 }
 
-//________________________________
+
 /**
     @short  analyze the given job result and change the job configuration
     @descr  Note: Some results can be handled only, if this job has a valid configuration!
@@ -445,15 +445,15 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // analyze the result set ...
+    
     JobResult aAnalyzedResult(aResult);
 
-    // some of the following operations will be supported for different environments
-    // or different type of jobs only.
+    
+    
     JobData::EEnvironment eEnvironment = m_aJobCfg.getEnvironment();
 
-    // write back the job specific configuration data ...
-    // If the environment allow it and if this job has a configuration!
+    
+    
     if (
         (m_aJobCfg.hasConfig()                            ) &&
         (aAnalyzedResult.existPart(JobResult::E_ARGUMENTS))
@@ -462,10 +462,10 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
         m_aJobCfg.setJobConfig(aAnalyzedResult.getArguments());
     }
 
-    // disable a job for further executions.
-    // Note: this option is available inside the environment EXECUTOR only
+    
+    
     if (
-//        (eEnvironment == JobData::E_EXECUTION              ) &&
+
         (m_aJobCfg.hasConfig()                             ) &&
         (aAnalyzedResult.existPart(JobResult::E_DEACTIVATE))
        )
@@ -473,8 +473,8 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
         m_aJobCfg.disableJob();
     }
 
-    // notify any interested listener with the may given result state.
-    // Note: this option is available inside the environment DISPATCH only
+    
+    
     if (
         (eEnvironment == JobData::E_DISPATCH                   ) &&
         (m_xResultListener.is()                                ) &&
@@ -482,9 +482,9 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
        )
     {
         m_aJobCfg.setResult(aAnalyzedResult);
-        // Attention: Because the listener expect that the original object send this event ...
-        // and we nor the job are the right ones ...
-        // our user has set itself before. So we can fake this source address!
+        
+        
+        
         css::frame::DispatchResultEvent aEvent        = aAnalyzedResult.getDispatchResult();
                                         aEvent.Source = m_xResultSourceFake;
         m_xResultListener->dispatchFinished(aEvent);
@@ -494,7 +494,7 @@ void Job::impl_reactForJobResult( /*IN*/ const css::uno::Any& aResult )
     /* SAFE { */
 }
 
-//________________________________
+
 /**
     @short  starts listening for office shutdown and closing of our
             given target frame (if it's a valid reference)
@@ -516,7 +516,7 @@ void Job::impl_startListening()
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // listening for office shutdown
+    
     if (!m_xDesktop.is() && !m_bListenOnDesktop)
     {
         try
@@ -532,7 +532,7 @@ void Job::impl_startListening()
         }
     }
 
-    // listening for frame closing
+    
     if (m_xFrame.is() && !m_bListenOnFrame)
     {
         try
@@ -551,7 +551,7 @@ void Job::impl_startListening()
         }
     }
 
-    // listening for model closing
+    
     if (m_xModel.is() && !m_bListenOnModel)
     {
         try
@@ -574,7 +574,7 @@ void Job::impl_startListening()
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  release listener connection for office shutdown
     @descr  see description of impl_startListening()
@@ -584,7 +584,7 @@ void Job::impl_stopListening()
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // stop listening for office shutdown
+    
     if (m_xDesktop.is() && m_bListenOnDesktop)
     {
         try
@@ -599,7 +599,7 @@ void Job::impl_stopListening()
         }
     }
 
-    // stop listening for frame closing
+    
     if (m_xFrame.is() && m_bListenOnFrame)
     {
         try
@@ -617,7 +617,7 @@ void Job::impl_stopListening()
         }
     }
 
-    // stop listening for model closing
+    
     if (m_xModel.is() && m_bListenOnModel)
     {
         try
@@ -639,7 +639,7 @@ void Job::impl_stopListening()
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  callback from any asynchronous executed job
 
@@ -660,30 +660,30 @@ void SAL_CALL Job::jobFinished( /*IN*/ const css::uno::Reference< css::task::XAs
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // It's necessary to check this.
-    // May this job was cancelled by any other reason
-    // some milliseconds before. :-)
+    
+    
+    
     if (m_xJob.is() && m_xJob==xJob)
     {
-        // react for his results
-        // (means enable/disable it for further requests
-        // or save arguments or notify listener ...)
+        
+        
+        
         impl_reactForJobResult(aResult);
 
-        // Let the job die!
+        
         m_xJob = css::uno::Reference< css::uno::XInterface >();
     }
 
-    // And let the start method "execute()" finishing it's job.
-    // But do it everytime. So any outside blocking code can finish
-    // his work too.
+    
+    
+    
     m_aAsyncWait.set();
 
     aWriteLock.unlock();
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  prevent internal wrapped job against office termination
     @descr  This event is broadcasted by the desktop instance and ask for an office termination.
@@ -705,7 +705,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
     ReadGuard aReadLock(m_aLock);
 
 
-    // Otherwhise try to close() it
+    
     css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);
     if (xClose.is())
     {
@@ -728,7 +728,7 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
 }
 
 
-//________________________________
+
 /**
     @short  inform us about office termination
     @descr  Instead of the method queryTermination(), here is no chance to disagree with that.
@@ -745,10 +745,10 @@ void SAL_CALL Job::queryTermination( /*IN*/ const css::lang::EventObject& ) thro
 void SAL_CALL Job::notifyTermination( /*IN*/ const css::lang::EventObject& ) throw(css::uno::RuntimeException)
 {
     die();
-    // Do nothing else here. Our internal resources was released ...
+    
 }
 
-//________________________________
+
 /**
     @short  prevent internal wrapped job against frame closing
     @descr  This event is broadcasted by the frame instance and ask for closing.
@@ -774,26 +774,26 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     /* SAFE { */
     WriteGuard aWriteLock(m_aLock);
 
-    // do nothing, if no internal job is still running ...
-    // The frame or model can be closed then successfully.
+    
+    
     if (m_eRunState != E_RUNNING)
         return;
 
-    // try close() first at the job.
-    // The job can agree or disagree with this request.
+    
+    
     css::uno::Reference< css::util::XCloseable > xClose(m_xJob, css::uno::UNO_QUERY);
     if (xClose.is())
     {
         xClose->close(bGetsOwnership);
-        // Here we can say: "this job was stopped successfully". Because
-        // no veto exception was thrown!
+        
+        
         m_eRunState = E_STOPPED_OR_FINISHED;
         return;
     }
 
-    // try dispose() then
-    // Here the job has no chance for a veto.
-    // But we must be aware of an "already disposed exception"...
+    
+    
+    
     try
     {
         css::uno::Reference< css::lang::XComponent > xDispose(m_xJob, css::uno::UNO_QUERY);
@@ -805,35 +805,35 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
     }
     catch(const css::lang::DisposedException&)
     {
-        // the job was already disposed by any other mechanism !?
-        // But it's not interesting for us. For us this job is stopped now.
+        
+        
         m_eRunState = E_DISPOSED;
     }
 
     if (m_eRunState != E_DISPOSED)
     {
-        // analyze event source - to find out, which resource called queryClosing() at this
-        // job wrapper. We must bind a "pending close" request to this resource.
-        // Closing of the corresponding resource will be done if our internal job finish it's work.
+        
+        
+        
         m_bPendingCloseFrame = (m_xFrame.is() && aEvent.Source == m_xFrame);
         m_bPendingCloseModel = (m_xModel.is() && aEvent.Source == m_xModel);
 
-        // throw suitable veto exception - because the internal job could not be cancelled.
+        
         css::uno::Reference< css::uno::XInterface > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
         throw css::util::CloseVetoException("job still in progress", xThis);
     }
 
-    // No veto ...
-    // But don't call die() here or free our internal member.
-    // This must be done inside notifyClosing() only. Otherwhise the
-    // might stopped job has no chance to return it's results or
-    // call us back. We must give him the chance to finish it's work successfully.
+    
+    
+    
+    
+    
 
     aWriteLock.unlock();
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  inform us about frame closing
     @descr  Instead of the method queryClosing(), here is no chance to disagree with that.
@@ -845,10 +845,10 @@ void SAL_CALL Job::queryClosing( const css::lang::EventObject& aEvent         ,
 void SAL_CALL Job::notifyClosing( const css::lang::EventObject& ) throw(css::uno::RuntimeException)
 {
     die();
-    // Do nothing else here. Our internal resources was released ...
+    
 }
 
-//________________________________
+
 /**
     @short      shouldn't be called normaly
     @descr      But it doesn't matter, who called it. We have to kill our internal
@@ -882,9 +882,9 @@ void SAL_CALL Job::disposing( const css::lang::EventObject& aEvent ) throw(css::
     /* } SAFE */
 
     die();
-    // Do nothing else here. Our internal resources was released ...
+    
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

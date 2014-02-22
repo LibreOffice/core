@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartController.hxx"
@@ -33,9 +33,9 @@
 
 #include <svx/svdotext.hxx>
 
-// header for define RET_OK
+
 #include <vcl/msgbox.hxx>
-// header for class SdrOutliner
+
 #include <svx/svdoutl.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -56,7 +56,7 @@ void SAL_CALL ChartController::executeDispatch_EditText( const Point* pMousePixe
 
 void ChartController::StartTextEdit( const Point* pMousePixel )
 {
-    //the first marked object will be edited
+    
 
     SolarMutexGuard aGuard;
     SdrObject* pTextObj = m_pDrawViewWrapper->getTextEditObject();
@@ -68,7 +68,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
         SCH_RESSTR( STR_ACTION_EDIT_TEXT ), m_xUndoManager ) );
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
 
-    //#i77362 change notification for changes on additional shapes are missing
+    
     uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
     if( xChartViewProps.is() )
         xChartViewProps->setPropertyValue( "SdrViewIsInEditMode", uno::makeAny(sal_True) );
@@ -76,17 +76,17 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     sal_Bool bEdit = m_pDrawViewWrapper->SdrBeginTextEdit( pTextObj
                     , m_pDrawViewWrapper->GetPageView()
                     , m_pChartWindow
-                    , sal_False //bIsNewObj
+                    , sal_False 
                     , pOutliner
-                    , 0L //pOutlinerView
-                    , sal_True //bDontDeleteOutliner
-                    , sal_True //bOnlyOneView
+                    , 0L 
+                    , sal_True 
+                    , sal_True 
                     );
     if(bEdit)
     {
         m_pDrawViewWrapper->SetEditMode();
 
-        // #i12587# support for shapes in chart
+        
         if ( pMousePixel )
         {
             OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
@@ -98,8 +98,8 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
             }
         }
 
-        //we invalidate the outliner region because the outliner has some
-        //paint problems (some characters are painted twice a little bit shifted)
+        
+        
         m_pChartWindow->Invalidate( m_pDrawViewWrapper->GetMarkedObjBoundRect() );
     }
 }
@@ -108,7 +108,7 @@ bool ChartController::EndTextEdit()
 {
     m_pDrawViewWrapper->SdrEndTextEdit();
 
-    //#i77362 change notification for changes on additional shapes are missing
+    
     uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
     if( xChartViewProps.is() )
         xChartViewProps->setPropertyValue( "SdrViewIsInEditMode", uno::makeAny(sal_False) );
@@ -133,7 +133,7 @@ bool ChartController::EndTextEdit()
             uno::Reference< beans::XPropertySet > xPropSet =
                 ObjectIdentifier::getObjectPropertySet( aObjectCID, getModel() );
 
-            // lock controllers till end of block
+            
             ControllerLockGuardUNO aCLGuard( getModel() );
 
             TitleHelper::setCompleteString( aString, uno::Reference<
@@ -165,8 +165,8 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
     SfxAllItemSet aSet( m_pDrawModelWrapper->GetItemPool() );
     aSet.Put( SfxBoolItem( FN_PARAM_1, false ) );
 
-    //set fixed current font
-    aSet.Put( SfxBoolItem( FN_PARAM_2, true ) ); //maybe not necessary in future
+    
+    aSet.Put( SfxBoolItem( FN_PARAM_2, true ) ); 
 
     Font aCurFont = m_pDrawViewWrapper->getOutliner()->GetRefDevice()->GetFont();
     aSet.Put( SvxFontItem( aCurFont.GetFamily(), aCurFont.GetName(), aCurFont.GetStyleName(), aCurFont.GetPitch(), aCurFont.GetCharSet(), SID_ATTR_CHAR_FONT ) );
@@ -188,14 +188,14 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         if(!pOutliner || !pOutlinerView)
             return;
 
-        // insert string to outliner
+        
 
-        // prevent flicker
+        
         pOutlinerView->HideCursor();
         pOutliner->SetUpdateMode(sal_False);
 
-        // delete current selection by inserting empty String, so current
-        // attributes become unique (sel. has to be erased anyway)
+        
+        
         pOutlinerView->InsertText(OUString());
 
         pOutlinerView->InsertText(aString, true);
@@ -205,7 +205,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
         aSel.nStartPos = aSel.nEndPos;
         pOutlinerView->SetSelection(aSel);
 
-        // show changes
+        
         pOutliner->SetUpdateMode(sal_True);
         pOutlinerView->ShowCursor();
     }
@@ -222,6 +222,6 @@ uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
     return xResult;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

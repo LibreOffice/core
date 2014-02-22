@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <swmodeltestbase.hxx>
@@ -24,7 +24,7 @@ public:
 
     bool mustTestImportOf(const char* filename) const
     {
-        // If the testcase is stored in some other format, it's pointless to test.
+        
         return OString(filename).endsWith(".doc");
     }
 };
@@ -47,7 +47,7 @@ DECLARE_WW8EXPORT_TEST(testN325936, "n325936.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo45724, "fdo45724.odt")
 {
-    // The text and background color of the control shape was not correct.
+    
     uno::Reference<drawing::XControlShape> xControlShape(getShape(1), uno::UNO_QUERY);
     uno::Reference<form::validation::XValidatableFormComponent> xComponent(xControlShape->getControl(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<sal_uInt32>(xComponent, "BackgroundColor"));
@@ -56,7 +56,7 @@ DECLARE_WW8EXPORT_TEST(testFdo45724, "fdo45724.odt")
 
 DECLARE_WW8EXPORT_TEST(testFdo46020, "fdo46020.odt")
 {
-    // The footnote in that document wasn't exported, check that it is actually exported
+    
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
@@ -64,10 +64,10 @@ DECLARE_WW8EXPORT_TEST(testFdo46020, "fdo46020.odt")
 
 DECLARE_WW8EXPORT_TEST(testFirstHeaderFooter, "first-header-footer.doc")
 {
-    // Test import and export of a section's headerf/footerf properties.
+    
 
-    // The document has 6 pages. Note that we don't test if 4 or just 2 page
-    // styles are created, the point is that layout should be correct.
+    
+    
     CPPUNIT_ASSERT_EQUAL(OUString("First page header"),  parseDump("/root/page[1]/header/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("First page footer"),  parseDump("/root/page[1]/footer/txt/text()"));
     CPPUNIT_ASSERT_EQUAL(OUString("Even page header"),   parseDump("/root/page[2]/header/txt/text()"));
@@ -108,7 +108,7 @@ DECLARE_WW8EXPORT_TEST(testNewPageStylesTable, "new-page-styles.doc")
 
 DECLARE_WW8EXPORT_TEST(testFdo42144, "fdo42144.odt")
 {
-    // Footer wasn't disabled -- instead empty footer was exported.
+    
     uno::Reference<beans::XPropertySet> xStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(false, bool(getProperty<sal_Bool>(xStyle, "FooterIsOn")));
 }
@@ -116,19 +116,19 @@ DECLARE_WW8EXPORT_TEST(testFdo42144, "fdo42144.odt")
 DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
-    // WW8 has just one border attribute (sprmCBrc) for text border so all side has
-    // the same border
-    // Border
+    
+    
+    
     {
         const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
-        // In the original ODT file the border color is 0xFF3333
+        
         CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF0000,0,318,0,0,318), aTopBorder);
         CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
         CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharBottomBorder"));
         CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
     }
 
-    // Padding (dptSpace) it is constant 0
+    
     {
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharTopBorderDistance"));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharLeftBorderDistance"));
@@ -136,7 +136,7 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xRun,"CharRightBorderDistance"));
     }
 
-    // Shadow (fShadow)
+    
     /* WW8 use just one bool value for shadow so the next conversions
        are made during an export-import round
        color: any -> black
@@ -152,8 +152,8 @@ DECLARE_WW8EXPORT_TEST(testCharacterBorder, "charborder.odt")
 
 DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
 {
-    // See ooxmlexport's testFdo38244().
-    // Test comment range feature.
+    
+    
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -166,21 +166,21 @@ DECLARE_WW8EXPORT_TEST(testFdo59530, "fdo59530.doc")
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 
-    // Test initials.
+    
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
     xPropertySet.set(xFields->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("M"), getProperty<OUString>(xPropertySet, "Initials"));
 
-    // Test commented text range which spans over more text nodes
-    // Comment starts in the second paragraph
+    
+    
     xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("Annotation"), getProperty<OUString>(xPropertySet, "TextPortionType"));
-    // Comment ends in the third paragraph
+    
     xRunEnumAccess.set(xParaEnum->nextElement(), uno::UNO_QUERY);
     xRunEnum = xRunEnumAccess->createEnumeration();
     xRunEnum->nextElement();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,16 +39,16 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_ONavigationBarControl()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::ONavigationBarControl > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
@@ -65,24 +65,24 @@ namespace frm
         xTypedPeer->method( param1 );  \
     }
 
-    //==================================================================
-    // ONavigationBarControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ONavigationBarControl::ONavigationBarControl( const Reference< XComponentContext >& _rxORB)
         :UnoControl(), m_xContext(_rxORB)
     {
     }
 
-    //------------------------------------------------------------------
+    
     ONavigationBarControl::~ONavigationBarControl()
     {
     }
 
-    //------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarControl, UnoControl, ONavigationBarControl_Base )
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL ONavigationBarControl::queryAggregation( const Type& _rType ) throw ( RuntimeException )
     {
         Any aReturn = UnoControl::queryAggregation( _rType );
@@ -93,10 +93,10 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------
+    
     namespace
     {
-        //..............................................................
+        
         static WinBits lcl_getWinBits_nothrow( const Reference< XControlModel >& _rxModel )
         {
             WinBits nBits = 0;
@@ -123,7 +123,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarControl::createPeer( const Reference< XToolkit >& /*_rToolkit*/, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
@@ -132,7 +132,7 @@ namespace frm
         {
             mbCreatingPeer = sal_True;
 
-            // determine the VLC window for the parent
+            
             Window* pParentWin = NULL;
             if ( _rParentPeer.is() )
             {
@@ -142,17 +142,17 @@ namespace frm
                 DBG_ASSERT( pParentWin, "ONavigationBarControl::createPeer: could not obtain the VCL-level parent window!" );
             }
 
-            // create the peer
+            
             ONavigationBarPeer* pPeer = ONavigationBarPeer::Create( m_xContext, pParentWin, getModel() );
             DBG_ASSERT( pPeer, "ONavigationBarControl::createPeer: invalid peer returned!" );
             if ( pPeer )
-                // by definition, the returned component is aquired once
+                
                 pPeer->release();
 
-            // announce the peer to the base class
+            
             setPeer( pPeer );
 
-            // initialize ourself (and thus the peer) with the model properties
+            
             updateFromModel();
 
             Reference< XView >  xPeerView( getPeer(), UNO_QUERY );
@@ -162,7 +162,7 @@ namespace frm
                 xPeerView->setGraphics( mxGraphics );
             }
 
-            // a lot of initial settings from our component infos
+            
             setPosSize( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight, PosSize::POSSIZE );
 
             pPeer->setVisible   ( maComponentInfos.bVisible && !mbDesignMode );
@@ -177,25 +177,25 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ONavigationBarControl::getImplementationName()  throw( RuntimeException )
     {
         return getImplementationName_Static();
     }
 
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames()  throw( RuntimeException )
     {
         return getSupportedServiceNames_Static();
     }
 
-    //------------------------------------------------------------------
+    
     OUString SAL_CALL ONavigationBarControl::getImplementationName_Static()
     {
         return OUString( "com.sun.star.comp.form.ONavigationBarControl" );
     }
 
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames_Static()
     {
         Sequence< OUString > aServices( 2 );
@@ -204,45 +204,45 @@ namespace frm
         return aServices;
     }
 
-    //------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL ONavigationBarControl::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return *( new ONavigationBarControl( comphelper::getComponentContext(_rxFactory) ) );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_1( XDispatchProviderInterception, registerDispatchProviderInterceptor, _rxInterceptor );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException)
     {
         FORWARD_TO_PEER_1( XDispatchProviderInterception, releaseDispatchProviderInterceptor, _rxInterceptor );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeException )
     {
         UnoControl::setDesignMode( _bOn );
         FORWARD_TO_PEER_1( XVclWindowPeer, setDesignMode, _bOn );
     }
 
-    //==================================================================
-    // ONavigationBarPeer
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ONavigationBarPeer* ONavigationBarPeer::Create( const Reference< XComponentContext >& _rxORB,
         Window* _pParentWindow, const Reference< XControlModel >& _rxModel )
     {
         DBG_TESTSOLARMUTEX();
 
-        // the peer itself
+        
         ONavigationBarPeer* pPeer = new ONavigationBarPeer( _rxORB );
-        pPeer->acquire();   // by definition, the returned object is aquired once
+        pPeer->acquire();   
 
-        // the VCL control for the peer
+        
         Reference< XModel > xContextDocument( getXModel( _rxModel ) );
         NavigationToolBar* pNavBar = new NavigationToolBar(
             _pParentWindow,
@@ -251,47 +251,47 @@ namespace frm
             createDocumentCommandDescriptionProvider( _rxORB, xContextDocument )
         );
 
-        // some knittings
+        
         pNavBar->setDispatcher( pPeer );
         pNavBar->SetComponentInterface( pPeer );
 
-        // we want a faster repeating rate for the slots in this
-        // toolbox
+        
+        
         AllSettings aSettings = pNavBar->GetSettings();
         MouseSettings aMouseSettings = aSettings.GetMouseSettings();
         aMouseSettings.SetButtonRepeat( 10 );
         aSettings.SetMouseSettings( aMouseSettings );
         pNavBar->SetSettings( aSettings, sal_True );
 
-        // outta here
+        
         return pPeer;
     }
 
-    //------------------------------------------------------------------
+    
     ONavigationBarPeer::ONavigationBarPeer( const Reference< XComponentContext >& _rxORB )
         :OFormNavigationHelper( _rxORB )
     {
     }
 
-    //------------------------------------------------------------------
+    
     ONavigationBarPeer::~ONavigationBarPeer()
     {
     }
 
-    //------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XINTERFACE2( ONavigationBarPeer, VCLXWindow, OFormNavigationHelper )
 
-    //------------------------------------------------------------------
+    
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarPeer, VCLXWindow, OFormNavigationHelper )
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarPeer::dispose(  ) throw( RuntimeException )
     {
         VCLXWindow::dispose();
         OFormNavigationHelper::dispose();
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
@@ -308,8 +308,8 @@ namespace frm
         sal_Bool  bBoolValue = sal_False;
         sal_Int32 nColor = COL_TRANSPARENT;
 
-        // TODO: more generic mechanisms for this (the grid control implementation,
-        // when used herein, will do the same stuff for lot of these)
+        
+        
 
         if ( _rPropertyName.equals( PROPERTY_BACKGROUNDCOLOR ) )
         {
@@ -371,7 +371,7 @@ namespace frm
         }
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL ONavigationBarPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeException )
     {
         SolarMutexGuard aGuard;
@@ -415,28 +415,28 @@ namespace frm
         return aReturn;
     }
 
-    //------------------------------------------------------------------
+    
     void ONavigationBarPeer::interceptorsChanged( )
     {
         if ( isDesignMode() )
-            // not interested in if we're in design mode
+            
             return;
 
         OFormNavigationHelper::interceptorsChanged();
     }
 
-    //------------------------------------------------------------------
+    
     void ONavigationBarPeer::featureStateChanged( sal_Int16 _nFeatureId, sal_Bool _bEnabled )
     {
-        // enable this button on the toolbox
+        
         NavigationToolBar* pNavBar = static_cast< NavigationToolBar* >( GetWindow() );
         if ( pNavBar )
         {
             pNavBar->enableFeature( _nFeatureId, _bEnabled );
 
-            // is it a feature with additional state information?
+            
             if ( _nFeatureId == FormFeature::ToggleApplyFilter )
-            {   // additional boolean state
+            {   
                 pNavBar->checkFeature( _nFeatureId, getBooleanState( _nFeatureId ) );
             }
             else if ( _nFeatureId == FormFeature::TotalRecords )
@@ -449,23 +449,23 @@ namespace frm
             }
         }
 
-        // base class
+        
         OFormNavigationHelper::featureStateChanged( _nFeatureId, _bEnabled );
     }
 
-    //------------------------------------------------------------------
+    
     void ONavigationBarPeer::allFeatureStatesChanged( )
     {
-        // force the control to update it's states
+        
         NavigationToolBar* pNavBar = static_cast< NavigationToolBar* >( GetWindow() );
         if ( pNavBar )
             pNavBar->setDispatcher( this );
 
-        // base class
+        
         OFormNavigationHelper::allFeatureStatesChanged( );
     }
 
-    //------------------------------------------------------------------
+    
     bool ONavigationBarPeer::isEnabled( sal_Int16 _nFeatureId ) const
     {
         if ( const_cast< ONavigationBarPeer* >( this )->isDesignMode() )
@@ -474,7 +474,7 @@ namespace frm
         return OFormNavigationHelper::isEnabled( _nFeatureId );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarPeer::setDesignMode( sal_Bool _bOn ) throw( RuntimeException )
     {
         VCLXWindow::setDesignMode( _bOn  );
@@ -483,17 +483,17 @@ namespace frm
             disconnectDispatchers();
         else
             connectDispatchers();
-            // this will connect if not already connected and just update else
+            
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ONavigationBarPeer::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         VCLXWindow::disposing( _rSource );
         OFormNavigationHelper::disposing( _rSource );
     }
 
-    //------------------------------------------------------------------
+    
     void ONavigationBarPeer::getSupportedFeatures( ::std::vector< sal_Int16 >& _rFeatureIds )
     {
         _rFeatureIds.push_back( FormFeature::MoveAbsolute );
@@ -517,8 +517,8 @@ namespace frm
         _rFeatureIds.push_back( FormFeature::RemoveFilterAndSort );
     }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

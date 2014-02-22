@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -165,8 +165,8 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
                 {
                     mpOLEDataHelper = new TransferableDataHelper( new SvEmbedTransferHelper( xObj, static_cast< SdrOle2Obj* >( pObj )->GetGraphic(), static_cast< SdrOle2Obj* >( pObj )->GetAspect() ) );
 
-                    // TODO/LATER: the standalone handling of the graphic should not be used any more in future
-                    // The EmbedDataHelper should bring the graphic in future
+                    
+                    
                     const Graphic* pObjGr = static_cast< SdrOle2Obj* >( pObj )->GetGraphic();
                     if ( pObjGr )
                         mpGraphic = new Graphic( *pObjGr );
@@ -281,7 +281,7 @@ void SdTransferable::CreateData()
             mbOwnDocument = sal_True;
         }
 
-        // Use dimension of source page
+        
         SdrPageView*        pPgView = mpSdView->GetSdrPageView();
         SdPage*             pOldPage = (SdPage*) pPgView->GetPage();
         SdrModel*           pOldModel = mpSdView->GetModel();
@@ -302,7 +302,7 @@ void SdTransferable::CreateData()
         pNewStylePool->CopyLayoutSheets( aOldLayoutName, *pOldStylePool, aCreatedSheets );
     }
 
-    // set VisArea and adjust objects if necessary
+    
     if( maVisArea.IsEmpty() &&
         mpSdDrawDocumentIntern && mpSdViewIntern &&
         mpSdDrawDocumentIntern->GetPageCount() )
@@ -311,8 +311,8 @@ void SdTransferable::CreateData()
 
         if( 1 == mpSdDrawDocumentIntern->GetPageCount() )
         {
-            // #112978# need to use GetAllMarkedBoundRect instead of GetAllMarkedRect to get
-            // fat lines correctly
+            
+            
             Point   aOrigin( ( maVisArea = mpSdViewIntern->GetAllMarkedBoundRect() ).TopLeft() );
             Size    aVector( -aOrigin.X(), -aOrigin.Y() );
 
@@ -325,14 +325,14 @@ void SdTransferable::CreateData()
         else
             maVisArea.SetSize( pPage->GetSize() );
 
-        // output is at the zero point
+        
         maVisArea.SetPos( Point() );
     }
 }
 
 static sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
 {
-    sal_Bool bOnlyControls = sal_False;         // default if there are no objects
+    sal_Bool bOnlyControls = sal_False;         
 
     if ( pModel )
     {
@@ -343,7 +343,7 @@ static sal_Bool lcl_HasOnlyControls( SdrModel* pModel )
             SdrObject* pObj = aIter.Next();
             if ( pObj )
             {
-                bOnlyControls = sal_True;   // only set if there are any objects at all
+                bOnlyControls = sal_True;   
                 while ( pObj )
                 {
                     if (!pObj->ISA(SdrUnoObj))
@@ -396,7 +396,7 @@ void SdTransferable::AddSupportedFormats()
         }
         else if( mpGraphic )
         {
-            // #i25616#
+            
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
 
             AddFormat( SOT_FORMATSTR_ID_SVXB );
@@ -463,7 +463,7 @@ sal_Bool SdTransferable::GetData( const DataFlavor& rFlavor )
             mpSdDrawDocumentIntern->SetSwapGraphicsMode( SDR_SWAPGRAPHICSMODE_PURGE );
         }
 
-        // TODO/LATER: support all the graphical formats, the embedded object scenario should not have separated handling
+        
         if( nFormat == FORMAT_GDIMETAFILE && mpGraphic )
             bOK = SetGDIMetaFile( mpGraphic->GetGDIMetaFile(), rFlavor );
         else
@@ -610,9 +610,9 @@ sal_Bool SdTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pObject
                 uno::Reference< embed::XStorage > xWorkStore =
                     ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
-                // write document storage
+                
                 pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT, sal_False );
-                // mba: no relative ULRs for clipboard!
+                
                 SfxMedium aMedium( xWorkStore, OUString() );
                 bRet = pEmbObj->DoSaveObjectAs( aMedium, sal_False );
                 pEmbObj->DoSaveCompleted();
@@ -705,8 +705,8 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
             }
         }
 
-        // set flags for page transferable; if ( mbPageTransferablePersistent == sal_False ),
-        // don't offer any formats => it's just for internal puposes
+        
+        
         mbPageTransferable = sal_True;
         mbPageTransferablePersistent = bPersistent;
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/layout.hxx>
@@ -88,11 +88,11 @@ AboutDialog::AboutDialog(Window* pParent)
 
     SetLogo();
 
-    // Allow the button to be identifiable once they are clicked
+    
     m_pCreditsButton->SetData( (void*)CREDITS_BUTTON );
     m_pWebsiteButton->SetData( (void*)WEBSITE_BUTTON );
 
-    // Connect all handlers
+    
     m_pCreditsButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
     m_pWebsiteButton->SetClickHdl( LINK( this, AboutDialog, HandleClick ) );
 
@@ -103,7 +103,7 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
 {
     OUString sURL = "";
 
-    // Find which button was pressed and from this, get the URL to be opened
+    
     AboutDialogButton* pDialogButton = (AboutDialogButton*)pButton->GetData();
     if ( pDialogButton ==  (AboutDialogButton*)CREDITS_BUTTON )
         sURL = m_aCreditsLinkStr;
@@ -113,7 +113,7 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
         localizeWebserviceURI(sURL);
     }
 
-    // If the URL is empty, don't do anything
+    
     if ( sURL.isEmpty() )
         return 1;
     try
@@ -137,7 +137,7 @@ IMPL_LINK( AboutDialog, HandleClick, PushButton*, pButton )
 
 void AboutDialog::StyleControls()
 {
-    // Make all the controls have a transparent background
+    
     m_pLogoImage->SetBackground();
     m_pLogoReplacement->SetPaintTransparent(true);
     m_pVersion->SetPaintTransparent(true);
@@ -148,18 +148,18 @@ void AboutDialog::StyleControls()
     Font aLargeFont = aLabelFont;
     aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 3 ) );
 
-    // Logo Replacement Text
+    
     m_pLogoReplacement->SetControlFont( aLargeFont );
 
-    // Description Text
+    
     aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 1.3 ) );
     m_pDescriptionText->SetControlFont(aLargeFont);
 
-    // Version Text
+    
     aLargeFont.SetSize( Size( 0, aLabelFont.GetSize().Height() * 1.2 ) );
     m_pVersion->SetControlFont(aLargeFont);
 
-    // If not in high-contrast mode, hard-code colors
+    
     if ( !(Application::GetSettings().GetStyleSettings().GetHighContrastMode()) )
     {
         m_pLogoReplacement->SetControlForeground(Color(51, 51, 51));
@@ -173,12 +173,12 @@ void AboutDialog::SetLogo()
 {
     long nWidth = get_content_area()->get_preferred_size().Width();
 
-    // fdo#67401 set AntiAliasing for SVG logo
+    
     SvtOptionsDrawinglayer aDrawOpt;
     sal_Bool bOldAntiAliasSetting = aDrawOpt.IsAntiAliasing();
     aDrawOpt.SetAntiAliasing(sal_True);
 
-    // load svg logo, specify desired width, scale height isotrophically
+    
     if( SfxApplication::loadBrandSvg("flat_logo", aLogoBitmap, nWidth) &&
         !aLogoBitmap.IsEmpty() )
     {
@@ -197,7 +197,7 @@ void AboutDialog::SetLogo()
 void AboutDialog::Resize()
 {
     SfxModalDialog::Resize();
-    // Load background image
+    
     if (isInitialLayout(this) && !(Application::GetSettings().GetStyleSettings().GetHighContrastMode()))
     {
         SfxApplication::loadBrandSvg("shell/about", aBackgroundBitmap, GetOutputSizePixel().Width());

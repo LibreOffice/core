@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -57,7 +57,7 @@ bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
     const SwTableBox* pSttBox, *pEndBox;
     if( 2 < rSelection.getLength() )
     {
-        // Remove brackets at the beginning and from the end
+        
         OUString sBox( rSelection );
         if( '<' == sBox[0] ) sBox = sBox.copy( 0, 1 );
         if( '>' == sBox[ sBox.getLength()-1  ] ) sBox = sBox.copy( 0, sBox.getLength()-1 );
@@ -73,14 +73,14 @@ bool SwTable::IsTblComplexForChart( const OUString& rSelection ) const
         const SwTableLines* pLns = &GetTabLines();
         pSttBox = (*pLns)[ 0 ]->GetTabBoxes().front();
         while( !pSttBox->GetSttNd() )
-            // Until the Content Box!
+            
             pSttBox = pSttBox->GetTabLines().front()->GetTabBoxes().front();
 
         const SwTableBoxes* pBoxes = &pLns->back()->GetTabBoxes();
         pEndBox = pBoxes->back();
         while( !pEndBox->GetSttNd() )
         {
-            // Until the Content Box!
+            
             pLns = &pEndBox->GetTabLines();
             pBoxes = &pLns->back()->GetTabBoxes();
             pEndBox = pBoxes->back();
@@ -130,8 +130,8 @@ void SwDoc::_UpdateCharts( const SwTable& rTbl, SwViewShell& rVSh ) const
             SwChartDataProvider *pPCD = GetChartDataProvider();
             if (pPCD)
                 pPCD->InvalidateTable( &rTbl );
-            // following this the framework will now take care of repainting
-            // the chart or it's replacement image...
+            
+            
         }
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
@@ -190,8 +190,8 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
             SwChartDataProvider *pPCD = GetChartDataProvider();
             if (pPCD)
                 pPCD->InvalidateTable( pTable );
-            // following this the framework will now take care of repainting
-            // the chart or it's replacement image...
+            
+            
         }
         aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );
     }
@@ -200,8 +200,8 @@ void SwDoc::SetTableName( SwFrmFmt& rTblFmt, const OUString &rNewName )
 
 SwChartDataProvider * SwDoc::GetChartDataProvider( bool bCreate ) const
 {
-    // since there must be only one instance of this object per document
-    // we need a mutex here
+    
+    
     SolarMutexGuard aGuard;
 
     if (bCreate && !maChartDataProviderImplRef.get())
@@ -234,7 +234,7 @@ void SwDoc::CreateChartInternalDataProviders( const SwTable *pTable )
                     if (xChart.is())
                         xChart->createInternalDataProvider( sal_True );
 
-                    // there may be more than one chart for each table thus we need to continue the loop...
+                    
                 }
             }
             aIdx.Assign( *pStNd->EndOfSectionNode(), + 1 );

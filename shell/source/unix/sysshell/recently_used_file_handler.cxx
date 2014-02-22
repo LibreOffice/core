@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,10 +47,10 @@ namespace /* private */ {
     #define TAG_GROUPS       "Groups"
     #define TAG_GROUP        "Group"
 
-    //------------------------------------------------
-    // compare two string_t's case insensitive, may also be done
-    // by specifying special traits for the string type but in this
-    // case it's easier to do it this way
+    
+    
+    
+    
     struct str_icase_cmp :
         public std::binary_function<string_t, string_t, bool>
     {
@@ -58,7 +58,7 @@ namespace /* private */ {
         { return (0 == strcasecmp(s1.c_str(), s2.c_str())); }
     };
 
-    //------------------------------------------------
+    
     struct recently_used_item
     {
         recently_used_item() :
@@ -203,7 +203,7 @@ namespace /* private */ {
     typedef std::vector<recently_used_item*> recently_used_item_list_t;
     typedef void (recently_used_item::* SET_COMMAND)(const string_t&);
 
-    // thrown if we encounter xml tags that we do not know
+    
     class unknown_xml_format_exception {};
 
     class recently_used_file_filter : public i_xml_parser_event_handler
@@ -234,9 +234,9 @@ namespace /* private */ {
 
         virtual void end_element(const string_t& /*raw_name*/, const string_t& local_name)
         {
-            // check for end tags w/o start tag
+            
             if( local_name != TAG_RECENT_FILES && NULL == item_ )
-                return; // will result in an XML parser error anyway
+                return; 
 
             if (named_command_map_.find(local_name) != named_command_map_.end())
                 (item_->*named_command_map_[local_name])(current_element_);
@@ -282,7 +282,7 @@ namespace /* private */ {
         recently_used_file_filter& operator=(const recently_used_file_filter&);
     };
 
-    //------------------------------------------------
+    
     void read_recently_used_items(
         recently_used_file& file,
         recently_used_item_list_t& item_list)
@@ -300,9 +300,9 @@ namespace /* private */ {
         }
     }
 
-    //------------------------------------------------
-    // The file ~/.recently_used shall not contain more than 500
-    // entries (see www.freedesktop.org)
+    
+    
+    
     const int MAX_RECENTLY_USED_ITEMS = 500;
 
     class recent_item_writer
@@ -327,12 +327,12 @@ namespace /* private */ {
         int items_written_;
     };
 
-    //------------------------------------------------
+    
     const char* XML_HEADER = "<?xml version=\"1.0\"?>\n<RecentFiles>\n";
     const char* XML_FOOTER = "</RecentFiles>";
 
-    //------------------------------------------------
-    // assumes that the list is ordered decreasing
+    
+    
     void write_recently_used_items(
         recently_used_file& file,
         recently_used_item_list_t& item_list)
@@ -353,14 +353,14 @@ namespace /* private */ {
         }
     }
 
-    //------------------------------------------------
+    
     struct delete_recently_used_item
     {
         void operator() (const recently_used_item* item) const
         { delete item; }
     };
 
-    //------------------------------------------------
+    
     void recently_used_item_list_clear(recently_used_item_list_t& item_list)
     {
         std::for_each(
@@ -370,7 +370,7 @@ namespace /* private */ {
         item_list.clear();
     }
 
-    //------------------------------------------------
+    
     class find_item_predicate
     {
     public:
@@ -384,19 +384,19 @@ namespace /* private */ {
         string_t uri_;
     };
 
-    //------------------------------------------------
+    
     struct greater_recently_used_item
     {
         bool operator ()(const recently_used_item* lhs, const recently_used_item* rhs) const
         { return (lhs->timestamp_ > rhs->timestamp_); }
     };
 
-    //------------------------------------------------
+    
     const char* GROUP_OOO         = "openoffice.org";
     const char* GROUP_STAR_OFFICE = "staroffice";
     const char* GROUP_STAR_SUITE  = "starsuite";
 
-    //------------------------------------------------
+    
     void recently_used_item_list_add(
         recently_used_item_list_t& item_list, const OUString& file_url, const OUString& mime_type)
     {
@@ -435,15 +435,15 @@ namespace /* private */ {
             item_list.push_back(new recently_used_item(uri, mimetype, groups));
         }
 
-        // sort decreasing after the timestamp
-        // so that the newest items appear first
+        
+        
         std::sort(
             item_list.begin(),
             item_list.end(),
             greater_recently_used_item());
     }
 
-    //------------------------------------------------
+    
     struct cleanup_guard
     {
         cleanup_guard(recently_used_item_list_t& item_list) :
@@ -455,14 +455,14 @@ namespace /* private */ {
         recently_used_item_list_t& item_list_;
     };
 
-} // namespace private
+} 
 
 /*
    example (see http::www.freedesktop.org):
     <?xml version="1.0"?>
                 <RecentFiles>
                      <RecentItem>
-                        <URI>file:///home/federico/gedit.txt</URI>
+                        <URI>file:
                         <Mime-Type>text/plain</Mime-Type>
                         <Timestamp>1046485966</Timestamp>
                         <Groups>
@@ -470,7 +470,7 @@ namespace /* private */ {
                         </Groups>
                     </RecentItem>
                     <RecentItem>
-                        <URI>file:///home/federico/gedit-2.2.0.tar.bz2</URI>
+                        <URI>file:
                         <Mime-Type>application/x-bzip</Mime-Type>
                         <Timestamp>1046209851</Timestamp>
                         <Private/>

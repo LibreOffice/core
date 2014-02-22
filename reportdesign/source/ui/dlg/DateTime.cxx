@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "DateTime.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -44,9 +44,9 @@ namespace rptui
 using namespace ::com::sun::star;
 using namespace ::comphelper;
 
-//========================================================================
-// class ODateTimeDialog
-//========================================================================
+
+
+
 ODateTimeDialog::ODateTimeDialog( Window* _pParent
                                            ,const uno::Reference< report::XSection >& _xHoldAlive
                                            ,OReportController* _pController)
@@ -70,7 +70,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
     {
         SvtSysLocale aSysLocale;
         m_nLocale = aSysLocale.GetLanguageTag().getLocale();
-        // Fill listbox with all well known date types
+        
         InsertEntry(util::NumberFormat::DATE);
         InsertEntry(util::NumberFormat::TIME);
     }
@@ -82,7 +82,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
 
     m_pTimeListBox->SelectEntryPos(0);
 
-    // use nice enhancement, to toggle enable/disable if a checkbox is checked or not
+    
     m_aDateControlling.enableOnCheckMark( *m_pDate, *m_pFTDateFormat, *m_pDateListBox);
     m_aTimeControlling.enableOnCheckMark( *m_pTime, *m_pFTTimeFormat, *m_pTimeListBox);
 
@@ -91,7 +91,7 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
         aCheckBoxes[i]->SetClickHdl(LINK(this,ODateTimeDialog,CBClickHdl));
 
 }
-// -----------------------------------------------------------------------------
+
     void ODateTimeDialog::InsertEntry(sal_Int16 _nNumberFormatId)
     {
         const bool bTime = util::NumberFormat::TIME == _nNumberFormatId;
@@ -110,11 +110,11 @@ ODateTimeDialog::ODateTimeDialog( Window* _pParent
             pListBox->SetEntryData(nPos, reinterpret_cast<void*>(*pIter));
         }
     }
-//------------------------------------------------------------------------
+
 ODateTimeDialog::~ODateTimeDialog()
 {
 }
-// -----------------------------------------------------------------------------
+
 short ODateTimeDialog::Execute()
 {
     short nRet = ModalDialog::Execute();
@@ -166,7 +166,7 @@ short ODateTimeDialog::Execute()
     }
     return nRet;
 }
-// -----------------------------------------------------------------------------
+
 OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,const uno::Reference< util::XNumberFormats>& _xFormats,bool _bTime)
 {
     uno::Reference< beans::XPropertySet> xFormSet = _xFormats->getByKey(_nNumberFormatKey);
@@ -191,7 +191,7 @@ OUString ODateTimeDialog::getFormatStringByKey(::sal_Int32 _nNumberFormatKey,con
     OSL_ENSURE(xPreviewer.is(),"XNumberFormatPreviewer is null!");
     return xPreviewer->convertNumberToPreviewString(sFormat,nValue,m_nLocale,sal_True);
 }
-// -----------------------------------------------------------------------------
+
 IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
 {
    (void)_pBox;
@@ -211,7 +211,7 @@ IMPL_LINK( ODateTimeDialog, CBClickHdl, CheckBox*, _pBox )
     }
     return 1L;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
 {
     sal_Int32 nFormatKey;
@@ -225,8 +225,8 @@ sal_Int32 ODateTimeDialog::getFormatKey(sal_Bool _bDate) const
     }
     return nFormatKey;
 }
-// =============================================================================
-} // rptui
-// =============================================================================
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

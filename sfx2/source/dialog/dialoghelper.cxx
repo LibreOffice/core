@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sfx2/dialoghelper.hxx>
@@ -14,10 +14,10 @@
 #include <vcl/settings.hxx>
 #include <vector>
 
-//these tab pages both have the same basic layout with a preview on the
-//right, get both of their non-preview areas to request the same size
-//so that the preview appears in the same place in each one so
-//flipping between tabs isn't distracting as it jumps around
+
+
+
+
 void setPreviewsToSamePlace(Window *pParent, VclBuilderContainer *pPage)
 {
     Window *pOurGrid = pPage->get<Window>("maingrid");

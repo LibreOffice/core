@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MasterPageObserver.hxx"
@@ -100,7 +100,7 @@ MasterPageObserver* MasterPageObserver::Implementation::mpInstance = NULL;
 
 
 
-//===== MasterPageObserver ====================================================
+
 
 MasterPageObserver&  MasterPageObserver::Instance (void)
 {
@@ -176,12 +176,12 @@ MasterPageObserver::~MasterPageObserver (void)
 
 
 
-//===== MasterPageObserver::Implementation ====================================
+
 
 void MasterPageObserver::Implementation::RegisterDocument (
     SdDrawDocument& rDocument)
 {
-    // Gather the names of all the master pages in the given document.
+    
     MasterPageContainer::mapped_type aMasterPageSet;
     sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
     for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
@@ -222,8 +222,8 @@ void MasterPageObserver::Implementation::AddEventListener (
     {
         maListeners.push_back (rEventListener);
 
-        // Tell the new listener about all the master pages that are
-        // currently in use.
+        
+        
         MasterPageContainer::iterator aDocumentIterator;
         for (aDocumentIterator=maUsedMasterPages.begin();
              aDocumentIterator!=maUsedMasterPages.end();
@@ -269,7 +269,7 @@ MasterPageObserver::MasterPageNameSet
     if (aMasterPageDescriptor != maUsedMasterPages.end())
         return aMasterPageDescriptor->second;
     else
-        // Not found so return an empty set.
+        
         return MasterPageObserver::MasterPageNameSet();
 }
 
@@ -286,11 +286,11 @@ void MasterPageObserver::Implementation::Notify(
         switch (rSdrHint.GetKind())
         {
             case HINT_PAGEORDERCHG:
-                // Process the modified set of pages only when the number of
-                // standard and notes master pages are equal.  This test
-                // filters out events that are sent in between the insertion
-                // of a new standard master page and a new notes master
-                // page.
+                
+                
+                
+                
+                
                 if (rBroadcaster.ISA(SdDrawDocument))
                 {
                     SdDrawDocument& rDocument (
@@ -315,7 +315,7 @@ void MasterPageObserver::Implementation::Notify(
 void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
     SdDrawDocument& rDocument)
 {
-    // Create a set of names of the master pages used by the given document.
+    
     sal_uInt16 nMasterPageCount = rDocument.GetMasterSdPageCount(PK_STANDARD);
     ::std::set<OUString> aCurrentMasterPages;
     for (sal_uInt16 nIndex=0; nIndex<nMasterPageCount; nIndex++)
@@ -348,7 +348,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
             ::rtl::OUStringToOString(*J,
                 RTL_TEXTENCODING_UTF8).getStr());
 
-        // Send events about the newly used master pages.
+        
         ::std::set_difference (
             aCurrentMasterPages.begin(),
             aCurrentMasterPages.end(),
@@ -368,7 +368,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
             SendEvent (aEvent);
         }
 
-        // Send events about master pages that are not used any longer.
+        
         ::std::set_difference (
             aOldMasterPagesDescriptor->second.begin(),
             aOldMasterPagesDescriptor->second.end(),
@@ -388,7 +388,7 @@ void MasterPageObserver::Implementation::AnalyzeUsedMasterPages (
             SendEvent (aEvent);
         }
 
-        // Store the new list of master pages.
+        
         aOldMasterPagesDescriptor->second = aCurrentMasterPages;
     }
 }
@@ -409,6 +409,6 @@ void MasterPageObserver::Implementation::SendEvent (
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

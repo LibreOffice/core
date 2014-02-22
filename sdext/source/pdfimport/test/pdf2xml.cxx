@@ -60,7 +60,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                                   &aTmpURL.pData );
     osl_getAbsoluteFileURL(aBaseURL.pData,aTmpURL.pData,&aDstURL.pData);
 
-    // bootstrap UNO
+    
     uno::Reference< uno::XComponentContext > xContext(
         cppu::defaultBootstrap_InitialComponentContext() );
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager());

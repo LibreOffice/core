@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WTypeSelect.hxx"
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 
-// OWizTypeSelectControl
+
 OWizTypeSelectControl::OWizTypeSelectControl(Window* pParent, const ResId& rResId,OTableDesignHelpBar* pHelpBar)
     : OFieldDescControl(pParent,rResId,pHelpBar)
 {
@@ -108,7 +108,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
         case FIELD_PROPERTY_COLUMNNAME:
             {
                 OCopyTableWizard* pWiz = static_cast<OCopyTableWizard*>(GetParentDialog());
-                // first we have to check if this name already exists
+                
                 sal_Bool bDoubleName = sal_False;
                 sal_Bool bCase = sal_True;
                 if ( getMetaData().is() && !getMetaData()->supportsMixedCaseQuotedIdentifiers() )
@@ -144,7 +144,7 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                 pCurFieldDescr->SetName(sNewName);
                 static_cast<OWizTypeSelect*>(GetParent())->setDuplicateName(sal_False);
 
-                // now we change the name
+                
                 OCopyTableWizard::TNameMapping::iterator aIter = pWiz->m_mNameMapping.begin();
                 OCopyTableWizard::TNameMapping::iterator aEnd  = pWiz->m_mNameMapping.end();
 
@@ -277,7 +277,7 @@ IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
 
 void OWizTypeSelect::Reset()
 {
-    // restore original state
+    
 
     while(m_lbColumnNames.GetEntryCount())
         m_lbColumnNames.RemoveEntry(0);
@@ -393,7 +393,7 @@ bool OWizTypeSelectList::PreNotify( NotifyEvent& rEvt )
             const CommandEvent* pComEvt = rEvt.GetCommandEvent();
             if(pComEvt->GetCommand() != COMMAND_CONTEXTMENU)
                 break;
-            // the place, at which was clicked
+            
             Point ptWhere(0,0);
             if (pComEvt->IsMouseEvent())
                 ptWhere = pComEvt->GetMousePosPixel();
@@ -433,7 +433,7 @@ void OWizTypeSelect::fillColumnList(sal_uInt32 nRows)
 {
     if(m_pParserStream)
     {
-        sal_uInt32 nTell = m_pParserStream->Tell(); // might change seek position of stream
+        sal_uInt32 nTell = m_pParserStream->Tell(); 
 
         SvParser *pReader = createReader(nRows);
         if(pReader)

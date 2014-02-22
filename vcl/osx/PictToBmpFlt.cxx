@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <premac.h>
@@ -30,7 +30,7 @@ bool ImageToPNG( com::sun::star::uno::Sequence<sal_Int8>& rImgData,
                  com::sun::star::uno::Sequence<sal_Int8>& rPngData,
                  NSBitmapImageFileType eInFormat)
 {
-    (void) eInFormat; // Really not needed? Weird.
+    (void) eInFormat; 
 
     NSData* pData = [NSData dataWithBytesNoCopy: (void*)rImgData.getConstArray() length: rImgData.getLength() freeWhenDone: 0];
     if( !pData)

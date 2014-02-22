@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,21 +14,21 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbptools.hxx"
 #include <tools/debug.hxx>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
 
-    //---------------------------------------------------------------------
+    
     void disambiguateName(const Reference< XNameAccess >& _rxContainer, OUString& _rElementsName)
     {
         DBG_ASSERT(_rxContainer.is(), "::dbp::disambiguateName: invalid container!");
@@ -45,7 +45,7 @@ namespace dbp
                 if (!_rxContainer->hasByName(_rElementsName))
                     return;
             }
-            // can't do anything ... no free names
+            
             _rElementsName = sBase;
         }
         catch(const Exception&)
@@ -54,8 +54,8 @@ namespace dbp
         }
     }
 
-//.........................................................................
-}   // namespace dbp
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

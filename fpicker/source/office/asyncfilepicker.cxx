@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,16 +25,16 @@
 
 #include <boost/scoped_ptr.hpp>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
-    //= AsyncPickerAction
-    //====================================================================
+
+    
+    
+    
     DBG_NAME( AsyncPickerAction )
-    //--------------------------------------------------------------------
+    
     AsyncPickerAction::AsyncPickerAction( SvtFileDialog* _pDialog, SvtFileView* _pView, const Action _eAction )
         :m_refCount ( 0        )
         ,m_eAction  ( _eAction )
@@ -47,19 +47,19 @@ namespace svt
         DBG_ASSERT( m_pView, "AsyncPickerAction::AsyncPickerAction: invalid view!" );
     }
 
-    //--------------------------------------------------------------------
+    
     AsyncPickerAction::~AsyncPickerAction()
     {
         DBG_DTOR( AsyncPickerAction, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL AsyncPickerAction::acquire()
     {
         return osl_atomic_increment( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+    
     oslInterlockedCount SAL_CALL AsyncPickerAction::release()
     {
         if ( 0 == osl_atomic_decrement( &m_refCount ) )
@@ -70,18 +70,18 @@ namespace svt
         return m_refCount;
     }
 
-    //--------------------------------------------------------------------
+    
     void AsyncPickerAction::cancel()
     {
         DBG_TESTSOLARMUTEX();
-            // if this asserts, we'd need to have an own mutex per instance
+            
 
         OSL_ENSURE( m_bRunning, "AsyncPickerAction::cancel: not running" );
         if ( m_pView )
             m_pView->CancelRunningAsyncAction();
     }
 
-    //--------------------------------------------------------------------
+    
     void AsyncPickerAction::execute(
         const OUString& _rURL,
         const OUString& _rFilter,
@@ -90,13 +90,13 @@ namespace svt
         const OUStringList& rBlackList )
     {
         DBG_TESTSOLARMUTEX();
-            // if this asserts, we'd need to have an own mutex per instance
+            
 
         sal_Int32 nMinTimeout = _nMinTimeout;
         sal_Int32 nMaxTimeout = _nMaxTimeout;
-        // normalizations
+        
         if ( nMinTimeout < 0 )
-            // if negative, this is considered as "do it synchronously"
+            
             nMinTimeout = 0;
         else if ( nMinTimeout < 1000 )
             nMinTimeout = 1000;
@@ -125,9 +125,9 @@ namespace svt
             break;
 
         case eExecuteFilter:
-            // preserve the filename (FS: why?)
+            
             m_sFileName = m_pDialog->getCurrentFileText();
-            // execute the new filter
+            
             eResult = m_pView->ExecuteFilter( _rFilter, pActionDescriptor.get() );
             break;
 
@@ -139,9 +139,9 @@ namespace svt
         acquire();
         if ( ( eResult == eSuccess ) || ( eResult == eFailure ) )
         {
-            // the handler is only called if the action could not be finished within
-            // the given minimum time period. In case of success, we need to call it
-            // explicitly
+            
+            
+            
             OnActionDone( reinterpret_cast< void* >( eResult ) );
         }
         else if ( eResult == eStillRunning )
@@ -151,17 +151,17 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+    
     IMPL_LINK( AsyncPickerAction, OnActionDone, void*, pEmptyArg )
     {
         DBG_TESTSOLARMUTEX();
-            // if this asserts, we'd need to have an own mutex per instance
+            
 
         FileViewResult eResult = static_cast< FileViewResult >( reinterpret_cast< sal_IntPtr >( pEmptyArg ) );
         OSL_ENSURE( eStillRunning != eResult, "AsyncPickerAction::OnActionDone: invalid result!" );
 
-        // release once (since we acquired in |execute|), but keep alive until the
-        // end of the method
+        
+        
         ::rtl::Reference< AsyncPickerAction > xKeepAlive( this );
         release();
 
@@ -169,7 +169,7 @@ namespace svt
         m_bRunning = true;
 
         if ( eFailure == eResult )
-            // TODO: do we need some kind of cleanup here?
+            
             return 0L;
 
         if ( eTimeout == eResult )
@@ -188,11 +188,11 @@ namespace svt
             break;
 
         case eExecuteFilter:
-            // restore the filename
+            
             m_pView->SetNoSelection();
             m_pDialog->setCurrentFileText( m_sFileName, true );
 
-            // notify listeners
+            
             m_pDialog->FilterSelect();
             break;
 
@@ -204,8 +204,8 @@ namespace svt
         return 1L;
     }
 
-//........................................................................
-} // namespace svt
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

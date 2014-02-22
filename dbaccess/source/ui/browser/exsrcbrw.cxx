@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "exsrcbrw.hxx"
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::frame;
 using namespace dbaui;
 
-// SbaExternalSourceBrowser
+
 extern "C" void SAL_CALL createRegistryInfo_OFormGridView()
 {
     static OMultiInstanceAutoRegistration< SbaExternalSourceBrowser > aAutoRegistration;
@@ -112,8 +112,8 @@ sal_Bool SbaExternalSourceBrowser::InitializeForm(const Reference< XPropertySet 
 
 sal_Bool SbaExternalSourceBrowser::LoadForm()
 {
-    // as we don't have a main form (yet), we have nothing to do
-    // we don't call FormLoaded, because this expects a working data source
+    
+    
     return sal_True;
 }
 
@@ -121,7 +121,7 @@ void SbaExternalSourceBrowser::modified(const ::com::sun::star::lang::EventObjec
 {
     SbaXDataBrowserController::modified(aEvent);
 
-    // multiplex this event to all my listeners
+    
     ::com::sun::star::lang::EventObject aEvt(*this);
     ::cppu::OInterfaceIteratorHelper aIt(m_aModifyListeners);
     while (aIt.hasMoreElements())
@@ -133,7 +133,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
     const ::com::sun::star::beans::PropertyValue* pArguments = aArgs.getConstArray();
     if ( aURL.Complete == ".uno:FormSlots/AddGridColumn" )
     {
-        // search the argument describing the column to create
+        
         OUString sControlType;
         sal_Int32 nControlPos = -1;
         Sequence< ::com::sun::star::beans::PropertyValue> aControlProps;
@@ -171,13 +171,13 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         }
         OSL_ENSURE(aControlProps.getLength(), "SbaExternalSourceBrowser::dispatch(AddGridColumn) : missing argument (ColumnProperties) !");
 
-        // create the col
+        
         Reference< ::com::sun::star::form::XGridColumnFactory >  xColFactory(getControlModel(), UNO_QUERY);
         Reference< ::com::sun::star::beans::XPropertySet >  xNewCol = xColFactory->createColumn(sControlType);
         Reference< XPropertySetInfo > xNewColProperties;
         if (xNewCol.is())
             xNewColProperties = xNewCol->getPropertySetInfo();
-        // set its properties
+        
         if (xNewColProperties.is())
         {
             const ::com::sun::star::beans::PropertyValue* pControlProps = aControlProps.getConstArray();
@@ -195,7 +195,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
             }
         }
 
-        // correct the position
+        
         Reference< ::com::sun::star::container::XIndexContainer >  xColContainer(getControlModel(), UNO_QUERY);
 
         if (nControlPos > xColContainer->getCount())
@@ -203,7 +203,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
         if (nControlPos < 0)
             nControlPos = 0;
 
-        // append the column
+        
         xColContainer->insertByIndex(nControlPos, makeAny(xNewCol));
     }
     else if ( aURL.Complete == ".uno:FormSlots/ClearView" )
@@ -216,7 +216,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const ::com::sun::star::util::U
             return;
 
         Reference< XRowSet >  xMasterForm;
-        // search the arguments for the master form
+        
         for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArguments)
         {
             if ( (pArguments->Name == "MasterForm") && (pArguments->Value.getValueTypeClass() == TypeClass_INTERFACE) )
@@ -246,11 +246,11 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
     m_bInQueryDispatch = sal_True;
 
     if  (   ( aURL.Complete == ".uno:FormSlots/AttachToForm" )
-            // attach a new external form
+            
         ||  ( aURL.Complete == ".uno:FormSlots/AddGridColumn" )
-            // add a column to the grid
+            
         ||  ( aURL.Complete == ".uno:FormSlots/ClearView" )
-            // clear the grid
+            
         )
         xReturn = (::com::sun::star::frame::XDispatch*)this;
 
@@ -264,15 +264,15 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
         OSL_ENSURE(aURL.Mark.isEmpty(), "SbaExternalSourceBrowser::queryDispatch : the ::com::sun::star::util::URL shouldn't have a mark !");
         ::com::sun::star::util::URL aNewUrl = aURL;
 
-        // split the ::com::sun::star::util::URL
+        
         OSL_ENSURE( m_xUrlTransformer.is(), "SbaExternalSourceBrowser::queryDispatch : could not create an URLTransformer !" );
         if ( m_xUrlTransformer.is() )
             m_xUrlTransformer->parseStrict( aNewUrl );
 
-        // set a new mark
+        
         aNewUrl.Mark = "DB/FormGridView";
-            // this controller is instantiated when somebody dispatches the ".component:DB/FormGridView" in any
-            // frame, so we use "FormGridView" as mark that a dispatch request came from this view
+            
+            
 
         if (m_xUrlTransformer.is())
             m_xUrlTransformer->assemble(aNewUrl);
@@ -292,7 +292,7 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
 
 void SAL_CALL SbaExternalSourceBrowser::disposing()
 {
-    // say our modify listeners goodbye
+    
     ::com::sun::star::lang::EventObject aEvt;
     aEvt.Source = (XWeak*) this;
     m_aModifyListeners.disposeAndClear(aEvt);
@@ -333,12 +333,12 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 
     try
     {
-        // switch the control to design mode
+        
         if (getBrowserView() && getBrowserView()->getGridControl().is())
             getBrowserView()->getGridControl()->setDesignMode(sal_True);
 
-        // the grid will move the form's cursor to the first record, but we want the form to remain unchanged
-        // restore the old position
+        
+        
         if (xCursor.is() && xMaster.is())
         {
             bBeforeFirst = xMaster->isBeforeFirst();
@@ -363,9 +363,9 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 
     if (xMaster.is())
     {
-        // at this point we have to reset the formatter for the new form
+        
         initFormatter();
-        // assume that the master form is already loaded
+        
 #if OSL_DEBUG_LEVEL > 0
         {
             Reference< XLoadable > xLoadable( xMaster, UNO_QUERY );
@@ -397,10 +397,10 @@ void SbaExternalSourceBrowser::Attach(const Reference< XRowSet > & xMaster)
 
 void SbaExternalSourceBrowser::ClearView()
 {
-    // set a new (empty) datasource
+    
     Attach(Reference< XRowSet > ());
 
-    // clear all cols in the grid
+    
     Reference< ::com::sun::star::container::XIndexContainer >  xColContainer(getControlModel(), UNO_QUERY);
     while (xColContainer->getCount() > 0)
         xColContainer->removeByIndex(0);

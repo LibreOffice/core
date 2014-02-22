@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -121,7 +121,7 @@ uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) th
 
 
 
-//----- XResource -------------------------------------------------------------
+
 
 Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId (void)
     throw (RuntimeException)
@@ -139,7 +139,7 @@ sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly (void)
 }
 
 
-//----- XSelectionSupplier --------------------------------------------------
+
 
 sal_Bool SAL_CALL ViewShellWrapper::select( const ::com::sun::star::uno::Any& aSelection ) throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -165,7 +165,7 @@ sal_Bool SAL_CALL ViewShellWrapper::select( const ::com::sun::star::uno::Any& aS
                 Any aNumber = xSet->getPropertyValue("Number");
                 sal_Int32 nPageNumber = 0;
                 aNumber >>= nPageNumber;
-                nPageNumber -=1; // Transform 1-based page numbers to 0-based ones.
+                nPageNumber -=1; 
                 rSelector.SelectPage(nPageNumber);
             }
             catch (const RuntimeException&)
@@ -211,7 +211,7 @@ void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Refere
 }
 
 
-//----- XRelocatableResource --------------------------------------------------
+
 
 sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
     const Reference<XResource>& xResource)
@@ -222,7 +222,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
     Reference<XPane> xPane (xResource, UNO_QUERY);
     if (xPane.is())
     {
-        // Detach from the window of the old pane.
+        
         Reference<awt::XWindow> xWindow (mxWindow);
         if (xWindow.is())
             xWindow->removeWindowListener(this);
@@ -235,7 +235,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
             {
                 bResult = sal_True;
 
-                // Attach to the window of the new pane.
+                
                 xWindow = Reference<awt::XWindow>(xPane->getWindow(), UNO_QUERY);
                 if (xWindow.is())
                 {
@@ -252,7 +252,7 @@ sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
 
 
 
-//----- XUnoTunnel ------------------------------------------------------------
+
 
 namespace
 {
@@ -284,7 +284,7 @@ sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId
 
 
 
-//===== awt::XWindowListener ==================================================
+
 
 void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
@@ -328,7 +328,7 @@ void SAL_CALL ViewShellWrapper::windowHidden (const lang::EventObject& rEvent)
 
 
 
-//===== XEventListener ========================================================
+
 
 void SAL_CALL ViewShellWrapper::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -338,6 +338,6 @@ void SAL_CALL ViewShellWrapper::disposing (const lang::EventObject& rEvent)
 }
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

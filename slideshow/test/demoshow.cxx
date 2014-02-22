@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ref.hxx>
@@ -210,7 +210,7 @@ public:
     DummySlide() : SlideBase( m_aMutex ) {}
 
 private:
-    // XDrawPage
+    
     virtual void SAL_CALL add( const uno::Reference< drawing::XShape >& /*xShape*/ ) throw (uno::RuntimeException)
     {
     }
@@ -239,7 +239,7 @@ private:
         return false;
     }
 
-    // XPropertySet
+    
     virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw (uno::RuntimeException)
     {
         return uno::Reference< beans::XPropertySetInfo >();
@@ -254,7 +254,7 @@ private:
     {
         typedef ::canvas::tools::ValueMap< sal_Int16 > PropMapT;
 
-        // fixed PropertyValue map
+        
         static const PropMapT::MapEntry lcl_propertyMap[] =
             {
                 {"Height",               100},
@@ -483,7 +483,7 @@ void DemoWindow::Paint( const Rectangle& /*rRect*/ )
 
 void DemoWindow::Resize()
 {
-    // TODO
+    
 }
 
 sal_uInt16 DemoApp::Exception( sal_uInt16 nError )
@@ -515,7 +515,7 @@ void DemoApp::Main()
         return;
     }
 
-    // bootstrap UNO
+    
     uno::Reference< lang::XMultiServiceFactory > xFactory;
     try
     {

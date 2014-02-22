@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -51,10 +51,10 @@
 namespace framework{
 
 
-sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
+sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  
 const char PROGRESS_RESOURCE[] = "private:resource/progressbar/progressbar";
 
-//-----------------------------------------------
+
 StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase      (         )
     , m_xContext          (xContext )
@@ -65,19 +65,19 @@ StatusIndicatorFactory::StatusIndicatorFactory(const css::uno::Reference< css::u
 {
 }
 
-//-----------------------------------------------
+
 StatusIndicatorFactory::~StatusIndicatorFactory()
 {
     impl_stopWakeUpThread();
 }
 
-//-----------------------------------------------
+
 void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
     if (lArguments.getLength() > 0) {
-        // SAFE -> ----------------------------------
+        
         WriteGuard aWriteLock(m_aLock);
 
         css::uno::Reference< css::frame::XFrame > xTmpFrame;
@@ -85,17 +85,17 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
         bool b1 = lArguments[0] >>= xTmpFrame;
         bool b2 = lArguments[0] >>= xTmpWindow;
         if (lArguments.getLength() == 3 && b1) {
-           // it's the first service constructor "createWithFrame"
+           
             m_xFrame = xTmpFrame;
             lArguments[1] >>= m_bDisableReschedule;
             lArguments[2] >>= m_bAllowParentShow;
         } else if (lArguments.getLength() == 3 && b2) {
-           // it's the second service constructor "createWithWindow"
+           
             m_xPluggWindow = xTmpWindow;
             lArguments[1] >>= m_bDisableReschedule;
             lArguments[2] >>= m_bAllowParentShow;
         } else {
-           // it's an old-style initialisation using properties
+           
             ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
             m_xFrame             = lArgs.getUnpackedValueOrDefault("Frame"            , css::uno::Reference< css::frame::XFrame >());
@@ -104,14 +104,14 @@ void SAL_CALL StatusIndicatorFactory::initialize(const css::uno::Sequence< css::
             m_bDisableReschedule = lArgs.getUnpackedValueOrDefault("DisableReschedule", (sal_Bool)sal_False                        );
 
             aWriteLock.unlock();
-           // <- SAFE ----------------------------------
+           
        }
     }
 
     impl_createProgress();
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFactory::createStatusIndicator()
     throw(css::uno::RuntimeException)
 {
@@ -121,26 +121,26 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL StatusIndicatorFacto
     return xIndicator;
 }
 
-//-----------------------------------------------
+
 void SAL_CALL StatusIndicatorFactory::update()
     throw(css::uno::RuntimeException)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
     m_bAllowReschedule = sal_True;
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                    const OUString&                                    sText ,
                                          sal_Int32                                           nRange)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
-    // create new info structure for this child or move it to the front of our stack
+    
     IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
         m_aStack.erase(pItem);
@@ -151,7 +151,7 @@ void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatus
     css::uno::Reference< css::task::XStatusIndicator > xProgress = m_xProgress;
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     implts_makeParentVisibleIfAllowed();
 
@@ -162,13 +162,13 @@ void StatusIndicatorFactory::start(const css::uno::Reference< css::task::XStatus
     impl_reschedule(sal_True);
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatusIndicator >& xChild)
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
-    // reset the internal info structure related to this child
+    
     IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
     {
@@ -180,10 +180,10 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     css::uno::Reference< css::task::XStatusIndicator > xProgress = m_xProgress;
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // not the top most child => dont change UI
-    // But dont forget Reschedule!
+    
+    
     if (
         (xChild == xActive) &&
         (xProgress.is()   )
@@ -193,18 +193,18 @@ void StatusIndicatorFactory::reset(const css::uno::Reference< css::task::XStatus
     impl_reschedule(sal_True);
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIndicator >& xChild)
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
-    // remove this child from our stack
+    
     IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
     if (pItem != m_aStack.end())
         m_aStack.erase(pItem);
 
-    // activate next child ... or finish the progress if there is no further one.
+    
     m_xActiveChild.clear();
     OUString                  sText;
     sal_Int32                        nValue = 0;
@@ -220,12 +220,12 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
     css::uno::Reference< css::task::XStatusIndicator > xProgress = m_xProgress;
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     if (xActive.is())
     {
-        // There is at least one further child indicator.
-        // Actualize our progress, so it shows these values from now.
+        
+        
         if (xProgress.is())
         {
             xProgress->setText (sText );
@@ -234,11 +234,11 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
     }
     else
     {
-        // Our stack is empty. No further child exists.
-        // Se we must "end" our progress really
+        
+        
         if (xProgress.is())
             xProgress->end();
-        // Now hide the progress bar again.
+        
         impl_hideProgress();
 
         impl_stopWakeUpThread();
@@ -247,11 +247,11 @@ void StatusIndicatorFactory::end(const css::uno::Reference< css::task::XStatusIn
     impl_reschedule(sal_True);
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStatusIndicator >& xChild,
                                      const OUString&                                    sText )
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     IndicatorStack::iterator pItem = ::std::find(m_aStack.begin(), m_aStack.end(), xChild);
@@ -262,10 +262,10 @@ void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStat
     css::uno::Reference< css::task::XStatusIndicator > xProgress = m_xProgress;
 
     aWriteLock.unlock();
-    // SAFE -> ----------------------------------
+    
 
-    // paint only the top most indicator
-    // but dont forget to Reschedule!
+    
+    
     if (
         (xChild == xActive) &&
         (xProgress.is()   )
@@ -277,11 +277,11 @@ void StatusIndicatorFactory::setText(const css::uno::Reference< css::task::XStat
     impl_reschedule(sal_True);
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XStatusIndicator >& xChild ,
                                              sal_Int32                                           nValue )
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     sal_Int32 nOldValue = 0;
@@ -296,7 +296,7 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
     css::uno::Reference< css::task::XStatusIndicator > xProgress  = m_xProgress;
 
     aWriteLock.unlock();
-    // SAFE -> ----------------------------------
+    
 
     if (
         (xChild    == xActive) &&
@@ -310,10 +310,10 @@ void StatusIndicatorFactory::setValue( const css::uno::Reference< css::task::XSt
     impl_reschedule(sal_False);
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     if (!m_bAllowParentShow)
@@ -324,7 +324,7 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     css::uno::Reference< css::uno::XComponentContext > xContext( m_xContext);
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
     css::uno::Reference< css::awt::XWindow > xParentWindow;
     if (xFrame.is())
@@ -332,9 +332,9 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     else
         xParentWindow = xPluggWindow;
 
-    // dont disturb user in case he put the loading document into the background!
-    // Supress any setVisible() or toFront() call in case the initial show was
-    // already made.
+    
+    
+    
     css::uno::Reference< css::awt::XWindow2 > xVisibleCheck(xParentWindow, css::uno::UNO_QUERY);
     sal_Bool bIsVisible = sal_False;
     if (xVisibleCheck.is())
@@ -346,8 +346,8 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         return;
     }
 
-    // Check if the layout manager has been set to invisible state. It this case we are also
-    // not allowed to set the frame visible!
+    
+    
     css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
     if (xPropSet.is())
     {
@@ -360,12 +360,12 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         }
     }
 
-    // Ok the window should be made visible ... because it isnt currently visible.
-    // BUT ..!
-    // We need a Hack for our applications: They get her progress from the frame directly
-    // on saving documents. Because there is no progress set on the MediaDescriptor.
-    // But that's wrong. In case the document was opened hidden, they should not use any progress .-(
-    // They only possible workaround: dont show the parent window here, if the document was opened hidden.
+    
+    
+    
+    
+    
+    
     sal_Bool bHiddenDoc = sal_False;
     if (xFrame.is())
     {
@@ -386,11 +386,11 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
     if (bHiddenDoc)
         return;
 
-    // OK: The document was not opened in hidden mode ...
-    // and the window isnt already visible.
-    // Show it and bring it to front.
-    // But before we have to be sure, that our internal used helper progress
-    // is visible too.
+    
+    
+    
+    
+    
     impl_showProgress();
 
     SolarMutexGuard aSolarGuard;
@@ -403,29 +403,29 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::impl_createProgress()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
 
     aReadLock.lock();
-    // <- SAFE ----------------------------------
+    
 
     css::uno::Reference< css::task::XStatusIndicator > xProgress;
 
     if (xWindow.is())
     {
-        // use vcl based progress implementation in plugged mode
+        
         VCLStatusIndicator* pVCLProgress = new VCLStatusIndicator(xWindow);
         xProgress = css::uno::Reference< css::task::XStatusIndicator >(static_cast< css::task::XStatusIndicator* >(pVCLProgress), css::uno::UNO_QUERY);
     }
     else if (xFrame.is())
     {
-        // use frame layouted progress implementation
+        
         css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
         if (xPropSet.is())
         {
@@ -446,30 +446,30 @@ void StatusIndicatorFactory::impl_createProgress()
         }
     }
 
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
     m_xProgress = xProgress;
     aWriteLock.lock();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::impl_showProgress()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
 
     aReadLock.lock();
-    // <- SAFE ----------------------------------
+    
 
     css::uno::Reference< css::task::XStatusIndicator > xProgress;
 
     if (xFrame.is())
     {
-        // use frame layouted progress implementation
+        
         css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
         if (xPropSet.is())
         {
@@ -477,9 +477,9 @@ void StatusIndicatorFactory::impl_showProgress()
             xPropSet->getPropertyValue(FRAME_PROPNAME_LAYOUTMANAGER) >>= xLayoutManager;
             if (xLayoutManager.is())
             {
-                // Be sure that we have always a progress. It can be that our frame
-                // was recycled and therefore the progress was destroyed!
-                // CreateElement does nothing if there is already a valid progress.
+                
+                
+                
                 OUString sPROGRESS_RESOURCE(PROGRESS_RESOURCE);
                 xLayoutManager->createElement( sPROGRESS_RESOURCE );
                 xLayoutManager->showElement( sPROGRESS_RESOURCE );
@@ -490,29 +490,29 @@ void StatusIndicatorFactory::impl_showProgress()
             }
         }
 
-        // SAFE -> ----------------------------------
+        
         WriteGuard aWriteLock(m_aLock);
         m_xProgress = xProgress;
         aWriteLock.lock();
-        // <- SAFE ----------------------------------
+        
     }
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::impl_hideProgress()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     css::uno::Reference< css::frame::XFrame >              xFrame (m_xFrame.get()      , css::uno::UNO_QUERY);
     css::uno::Reference< css::awt::XWindow >               xWindow(m_xPluggWindow.get(), css::uno::UNO_QUERY);
 
     aReadLock.lock();
-    // <- SAFE ----------------------------------
+    
 
     if (xFrame.is())
     {
-        // use frame layouted progress implementation
+        
         css::uno::Reference< css::beans::XPropertySet > xPropSet(xFrame, css::uno::UNO_QUERY);
         if (xPropSet.is())
         {
@@ -524,54 +524,54 @@ void StatusIndicatorFactory::impl_hideProgress()
     }
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::impl_reschedule(sal_Bool bForce)
 {
-    // SAFE ->
+    
     ReadGuard aReadLock(m_aLock);
     if (m_bDisableReschedule)
         return;
     aReadLock.unlock();
-    // <- SAFE
+    
 
     sal_Bool bReschedule = bForce;
     if (!bReschedule)
     {
-        // SAFE ->
+        
         WriteGuard aWriteLock(m_aLock);
         bReschedule        = m_bAllowReschedule;
         m_bAllowReschedule = sal_False;
         aWriteLock.unlock();
-        // <- SAFE
+        
     }
 
     if (!bReschedule)
         return;
 
-    // SAFE ->
+    
     WriteGuard aGlobalLock(LockHelper::getGlobalLock());
 
     if (m_nInReschedule == 0)
     {
         ++m_nInReschedule;
         aGlobalLock.unlock();
-        // <- SAFE
+        
 
         {
             SolarMutexGuard g;
             Application::Reschedule(true);
         }
 
-        // SAFE ->
+        
         aGlobalLock.lock();
         --m_nInReschedule;
     }
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::impl_startWakeUpThread()
 {
-    // SAFE ->
+    
     WriteGuard aWriteLock(m_aLock);
 
     if (m_bDisableReschedule)
@@ -583,25 +583,25 @@ void StatusIndicatorFactory::impl_startWakeUpThread()
         m_pWakeUp->create();
     }
     aWriteLock.unlock();
-    // <- SAFE
+    
 }
 
-//-----------------------------------------------
+
 void StatusIndicatorFactory::impl_stopWakeUpThread()
 {
-    // SAFE ->
+    
     WriteGuard aWriteLock(m_aLock);
     if (m_pWakeUp)
     {
-        // Thread kill itself after terminate()!
+        
         m_pWakeUp->terminate();
         m_pWakeUp = 0;
     }
     aWriteLock.unlock();
-    // <- SAFE
+    
 }
 
-} // namespace framework
+} 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_StatusIndicatorFactory_get_implementation(

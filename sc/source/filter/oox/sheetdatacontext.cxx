@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sheetdatacontext.hxx"
@@ -34,7 +34,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::table;
@@ -43,11 +43,11 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 namespace {
 
-// record constants -----------------------------------------------------------
+
 
 const sal_uInt32 BIFF12_CELL_SHOWPHONETIC   = 0x01000000;
 
@@ -64,9 +64,9 @@ const sal_uInt16 BIFF12_ROW_CUSTOMHEIGHT    = 0x2000;
 const sal_uInt16 BIFF12_ROW_CUSTOMFORMAT    = 0x4000;
 const sal_uInt8 BIFF12_ROW_SHOWPHONETIC     = 0x01;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 SheetDataContextBase::SheetDataContextBase( const WorksheetHelper& rHelper ) :
     mrAddressConv( rHelper.getAddressConverter() ),
@@ -80,7 +80,7 @@ SheetDataContextBase::~SheetDataContextBase()
 {
 }
 
-// ============================================================================
+
 
 SheetDataContext::SheetDataContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment ),
@@ -107,7 +107,7 @@ ContextHandlerRef SheetDataContext::onCreateContext( sal_Int32 nElement, const A
         break;
 
         case XLS_TOKEN( row ):
-            // do not process cell elements with invalid (out-of-range) address
+            
             if( nElement == XLS_TOKEN( c ) && importCell( rAttribs ) )
                 return this;
         break;
@@ -119,10 +119,10 @@ ContextHandlerRef SheetDataContext::onCreateContext( sal_Int32 nElement, const A
                     mxInlineStr.reset( new RichString( *this ) );
                     return new RichStringContext( *this, mxInlineStr );
                 case XLS_TOKEN( v ):
-                    return this;    // characters contain cell value
+                    return this;    
                 case XLS_TOKEN( f ):
                     importFormula( rAttribs );
-                    return this;    // characters contain formula string
+                    return this;    
             }
         break;
     }
@@ -149,18 +149,18 @@ void SheetDataContext::onEndElement()
 {
     if( getCurrentElement() == XLS_TOKEN( c ) )
     {
-        // try to create a formula cell
+        
         if( mbHasFormula ) switch( maFmlaData.mnFormulaType )
         {
-            // will buffer formulas but need to
-            // a) need to set format first
-            // :/
+            
+            
+            
             case XML_normal:
                 setCellFormula( maCellData.maCellAddr, maFormulaStr );
                 mrSheetData.setCellFormat( maCellData );
 
-                // If a number cell has some preloaded value, stick it into the buffer
-                // but do this only for real cell formulas (not array, shared etc.)
+                
+                
                 if( !( maCellValue.isEmpty() ) && ( maCellData.mnCellType == XML_n ) )
                     setCellFormulaValue( maCellData.maCellAddr, maCellValue.toDouble() );
                 break;
@@ -175,19 +175,19 @@ void SheetDataContext::onEndElement()
                     mrSheetData.setCellFormat( maCellData );
                 }
                 else
-                    // no success, set plain cell value and formatting below
+                    
                     mbHasFormula = false;
             break;
             case XML_array:
                 if( mbValidRange && maFmlaData.isValidArrayRef( maCellData.maCellAddr ) )
                     setCellArrayFormula( maFmlaData.maFormulaRef, maCellData.maCellAddr, maFormulaStr );
-                // set cell formatting, but do not set result as cell value
+                
                 mrSheetData.setBlankCell( maCellData );
             break;
             case XML_dataTable:
                 if( mbValidRange )
                     mrSheetData.createTableOperation( maFmlaData.maFormulaRef, maTableData );
-                // set cell formatting, but do not set result as cell value
+                
                 mrSheetData.setBlankCell( maCellData );
             break;
             default:
@@ -197,7 +197,7 @@ void SheetDataContext::onEndElement()
 
         if( !mbHasFormula )
         {
-            // no formula created: try to set the cell value
+            
             if( !maCellValue.isEmpty() ) switch( maCellData.mnCellType )
             {
                 case XML_n:
@@ -223,7 +223,7 @@ void SheetDataContext::onEndElement()
             }
             else
             {
-                // empty cell, update cell type
+                
                 maCellData.mnCellType = XML_TOKEN_INVALID;
                 mrSheetData.setBlankCell( maCellData );
             }
@@ -271,7 +271,7 @@ ContextHandlerRef SheetDataContext::onCreateRecordContext( sal_Int32 nRecId, Seq
     return 0;
 }
 
-// private --------------------------------------------------------------------
+
 
 void SheetDataContext::importRow( const AttributeList& rAttribs )
 {
@@ -297,7 +297,7 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
     aModel.mbThickTop     = rAttribs.getBool( XML_thickTop, false );
     aModel.mbThickBottom  = rAttribs.getBool( XML_thickBot, false );
 
-    // decode the column spans (space-separated list of colon-separated integer pairs)
+    
     OUString aColSpansText = rAttribs.getString( XML_spans, OUString() );
     sal_Int32 nMaxCol = mrAddressConv.getMaxApiAddress().Column;
     sal_Int32 nIndex = 0;
@@ -307,13 +307,13 @@ void SheetDataContext::importRow( const AttributeList& rAttribs )
         sal_Int32 nSepPos = aColSpanToken.indexOf( ':' );
         if( (0 < nSepPos) && (nSepPos + 1 < aColSpanToken.getLength()) )
         {
-            // OOXML uses 1-based integer column indexes, row model expects 0-based colspans
+            
             sal_Int32 nLastCol = ::std::min( aColSpanToken.copy( nSepPos + 1 ).toInt32() - 1, nMaxCol );
             aModel.insertColSpan( ValueRange( aColSpanToken.copy( 0, nSepPos ).toInt32() - 1, nLastCol ) );
         }
     }
 
-    // set row properties in the current sheet
+    
     setRowModel( aModel );
 }
 
@@ -339,12 +339,12 @@ bool SheetDataContext::importCell( const AttributeList& rAttribs )
         maCellData.mnXfId         = rAttribs.getInteger( XML_s, -1 );
         maCellData.mbShowPhonetic = rAttribs.getBool( XML_ph, false );
 
-        // reset cell value, formula settings, and inline string
+        
         maCellValue = OUString();
         mxInlineStr.reset();
         mbHasFormula = false;
 
-        // update used area of the sheet
+        
         extendUsedArea( maCellData.maCellAddr );
     }
     return bValid;
@@ -380,9 +380,9 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
     rStrm >> maCurrPos.mnRow >> aModel.mnXfId >> nHeight >> nFlags1 >> nFlags2 >> nSpanCount;
     maCurrPos.mnCol = 0;
 
-    // row index is 0-based in BIFF12, but RowModel expects 1-based
+    
     aModel.mnRow          = maCurrPos.mnRow + 1;
-    // row height is in twips in BIFF12, convert to points
+    
     aModel.mfHeight       = nHeight / 20.0;
     aModel.mnLevel        = extractValue< sal_Int32 >( nFlags1, 8, 3 );
     aModel.mbCustomHeight = getFlag( nFlags1, BIFF12_ROW_CUSTOMHEIGHT );
@@ -393,7 +393,7 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
     aModel.mbThickTop     = getFlag( nFlags1, BIFF12_ROW_THICKTOP );
     aModel.mbThickBottom  = getFlag( nFlags1, BIFF12_ROW_THICKBOTTOM );
 
-    // read the column spans
+    
     sal_Int32 nMaxCol = mrAddressConv.getMaxApiAddress().Column;
     for( sal_Int32 nSpanIdx = 0; (nSpanIdx < nSpanCount) && !rStrm.isEof(); ++nSpanIdx )
     {
@@ -402,7 +402,7 @@ void SheetDataContext::importRow( SequenceInputStream& rStrm )
         aModel.insertColSpan( ValueRange( nFirstCol, ::std::min( nLastCol, nMaxCol ) ) );
     }
 
-    // set row properties in the current sheet
+    
     setRowModel( aModel );
 }
 
@@ -422,7 +422,7 @@ bool SheetDataContext::readCellHeader( SequenceInputStream& rStrm, CellType eCel
     maCellData.mnXfId = extractValue< sal_Int32 >( nXfId, 0, 24 );
     maCellData.mbShowPhonetic = getFlag( nXfId, BIFF12_CELL_SHOWPHONETIC );
 
-    // update used area of the sheet
+    
     if( bValidAddr )
         extendUsedArea( maCellData.maCellAddr );
     return bValidAddr;
@@ -525,7 +525,7 @@ void SheetDataContext::importCellString( SequenceInputStream& rStrm, CellType eC
     if( readCellHeader( rStrm, eCellType ) )
     {
         maCellData.mnCellType = XML_inlineStr;
-        // always import the string, stream will point to formula afterwards, if existing
+        
         RichStringRef xString( new RichString( *this ) );
         xString->importString( rStrm, false );
         xString->finalizeImport();
@@ -567,7 +567,7 @@ void SheetDataContext::importSharedFmla( SequenceInputStream& /*rStrm*/ )
 {
 }
 
-} // namespace xls
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

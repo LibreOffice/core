@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ErrorBar.hxx"
@@ -61,8 +61,8 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
         {OUString("NegativeError"),3,getCppuType((const double*)0), 0, 0},
         {OUString("PercentageError"),4,getCppuType((const double*)0), 0, 0},
         {OUString("ErrorBarStyle"),5,getCppuType((sal_Int32*)0),0,0},
-        {OUString("ErrorBarRangePositive"),6,getCppuType((OUString*)0),0,0}, // read-only for export
-        {OUString("ErrorBarRangeNegative"),7,getCppuType((OUString*)0),0,0}, // read-only for export
+        {OUString("ErrorBarRangePositive"),6,getCppuType((OUString*)0),0,0}, 
+        {OUString("ErrorBarRangeNegative"),7,getCppuType((OUString*)0),0,0}, 
         {OUString("Weight"),8,getCppuType((const double*)0),0,0},
         {OUString("LineStyle"),9,getCppuType((com::sun::star::drawing::LineStyle*)0),0,0},
         {OUString("LineDash"),10,getCppuType((drawing::LineDash*)0),0,0},
@@ -76,7 +76,7 @@ const SfxItemPropertySet* GetErrorBarPropertySet()
     return &aPropSet;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -132,7 +132,7 @@ uno::Reference< util::XCloneable > SAL_CALL ErrorBar::createClone()
     return uno::Reference< util::XCloneable >( new ErrorBar( *this ));
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ErrorBar::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -204,8 +204,8 @@ OUString getSourceRangeStrFromLabeledSequences( uno::Sequence< uno::Reference< c
         }
         catch (...)
         {
-            // we can't be sure that this is 100% safe and we don't want to kill the export
-            // we should at least check why the exception is thrown
+            
+            
             SAL_WARN("chart2", "unexpected exception!");
         }
     }
@@ -315,12 +315,12 @@ beans::PropertyState ErrorBar::getPropertyState( const OUString& rPropName )
     }
     else if(rPropName == "ShowPositiveError")
     {
-        // this value should be never default
+        
         return beans::PropertyState_DIRECT_VALUE;
     }
     else if(rPropName == "ShowNegativeError")
     {
-        // this value should be never default
+        
         return beans::PropertyState_DIRECT_VALUE;
     }
     else if(rPropName == "ErrorBarRangePositive")
@@ -353,13 +353,13 @@ uno::Sequence< beans::PropertyState > ErrorBar::getPropertyStates( const uno::Se
 void ErrorBar::setPropertyToDefault( const OUString& )
         throw (beans::UnknownPropertyException)
 {
-    //keep them unimplemented for now
+    
 }
 
 uno::Any ErrorBar::getPropertyDefault( const OUString& )
         throw (beans::UnknownPropertyException, lang::WrappedTargetException)
 {
-    //keep them unimplemented for now
+    
     return uno::Any();
 }
 
@@ -383,7 +383,7 @@ void ErrorBar::removeVetoableChangeListener( const OUString&, const ::com::sun::
 {
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL ErrorBar::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -412,21 +412,21 @@ void SAL_CALL ErrorBar::removeModifyListener( const uno::Reference< util::XModif
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL ErrorBar::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL ErrorBar::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ XDataSink ____
+
 void SAL_CALL ErrorBar::setData( const uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > >& aData )
     throw (uno::RuntimeException)
 {
@@ -437,14 +437,14 @@ void SAL_CALL ErrorBar::setData( const uno::Sequence< uno::Reference< chart2::da
     ModifyListenerHelper::addListenerToAllElements( m_aDataSequences, m_xModifyEventForwarder );
 }
 
-// ____ XDataSource ____
+
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ErrorBar::getDataSequences()
     throw (uno::RuntimeException)
 {
     return ContainerHelper::ContainerToSequence( m_aDataSequences );
 }
 
-// ____ XChild ____
+
 uno::Reference< uno::XInterface > SAL_CALL ErrorBar::getParent()
     throw (uno::RuntimeException)
 {
@@ -467,12 +467,12 @@ uno::Sequence< OUString > ErrorBar::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ErrorBar, lcl_aServiceName );
 
-// needed by MSC compiler
+
 using impl::ErrorBar_Base;
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

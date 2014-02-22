@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,15 +39,15 @@ class AnnotationEnumeration: public ::cppu::WeakImplHelper1< css::office::XAnnot
 public:
     AnnotationEnumeration( const AnnotationVector& rAnnotations );
 
-    // ::com::sun::star::office::XAnnotationEnumeration:
+    
     virtual ::sal_Bool SAL_CALL hasMoreElements() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::office::XAnnotation > SAL_CALL nextElement() throw (css::uno::RuntimeException, css::container::NoSuchElementException);
 
 private:
-    AnnotationEnumeration(const AnnotationEnumeration &); // not defined
-    AnnotationEnumeration& operator=(const AnnotationEnumeration &); // not defined
+    AnnotationEnumeration(const AnnotationEnumeration &); 
+    AnnotationEnumeration& operator=(const AnnotationEnumeration &); 
 
-    // destructor is private and will be called indirectly by the release call    virtual ~AnnotationEnumeration() {}
+    
 
     AnnotationVector maAnnotations;
     AnnotationVector::iterator maIter;
@@ -64,7 +64,7 @@ AnnotationEnumeration::AnnotationEnumeration( const AnnotationVector& rAnnotatio
     maIter = maAnnotations.begin();
 }
 
-// ::com::sun::star::office::XAnnotationEnumeration:
+
 ::sal_Bool SAL_CALL AnnotationEnumeration::hasMoreElements() throw (css::uno::RuntimeException)
 {
     return maIter != maAnnotations.end() ? sal_True : sal_False;
@@ -78,6 +78,6 @@ css::uno::Reference< css::office::XAnnotation > SAL_CALL AnnotationEnumeration::
     return (*maIter++);
 }
 
-} // namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

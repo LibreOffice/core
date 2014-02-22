@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swdetect.hxx"
@@ -81,14 +81,14 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     Reference< XInteractionHandler > xInteraction;
     OUString aURL;
     OUString sTemp;
-    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
+    OUString aTypeName;            
+    OUString aPreselectedFilterName;      
 
-    OUString aDocumentTitle; // interesting only if set in this method
+    OUString aDocumentTitle; 
 
-    // opening as template is done when a parameter tells to do so and a template filter can be detected
-    // (otherwise no valid filter would be found) or if the detected filter is a template filter and
-    // there is no parameter that forbids to open as template
+    
+    
+    
     sal_Bool bOpenAsTemplate = sal_False;
     sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
 
@@ -96,8 +96,8 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     sal_Bool bRepairAllowed = sal_False;
     bool bDeepDetection = false;
 
-    // now some parameters that can already be in the array, but may be overwritten or new inserted here
-    // remember their indices in the case new values must be added to the array
+    
+    
     sal_Int32 nPropertyCount = lDescriptor.getLength();
     sal_Int32 nIndexOfInputStream = -1;
     sal_Int32 nIndexOfContent = -1;
@@ -108,7 +108,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // extract properties
+        
         if ( lDescriptor[nProperty].Name == "URL" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
@@ -175,13 +175,13 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     }
     else
     {
-        // ctor of SfxMedium uses owner transition of ItemSet
+        
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
         aMedium.UseInteractionHandler( sal_True );
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
-            // remember input stream and content and put them into the descriptor later
-            // should be done here since later the medium can switch to a version
+            
+            
             xStream = aMedium.GetInputStream();
             xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
@@ -192,9 +192,9 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                 Reference< embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
-                    // error during storage creation means _here_ that the medium
-                    // is broken, but we can not handle it in medium since impossibility
-                    // to create a storage does not _always_ means that the medium is broken
+                    
+                    
+                    
                     aMedium.SetError( aMedium.GetLastStorageCreationState(), OUString( OSL_LOG_PREFIX  ) );
                     if ( xInteraction.is() )
                     {
@@ -239,19 +239,19 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     catch (const WrappedTargetException& aWrap)
                     {
                         if (!bDeepDetection)
-                            // Bail out early unless it's a deep detection.
+                            
                             return OUString();
 
                         packages::zip::ZipIOException aZipException;
 
-                        // repairing is done only if this type is requested from outside
-                        // we don't do any type detection on broken packages (f.e. because it might be impossible), so any requested
-                        // type will be accepted if the user allows to repair the file
+                        
+                        
+                        
                         if ( ( aWrap.TargetException >>= aZipException ) && ( !aTypeName.isEmpty() || !aPreselectedFilterName.isEmpty() ) )
                         {
                             if ( xInteraction.is() )
                             {
-                                // the package is a broken one
+                                
                                    aDocumentTitle = aMedium.GetURLObject().getName(
                                                             INetURLObject::LAST_SEGMENT,
                                                             true,
@@ -259,7 +259,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
                                 if ( !bRepairPackage )
                                 {
-                                    // ask the user whether he wants to try to repair
+                                    
                                     RequestPackageReparation aRequest( aDocumentTitle );
                                     xInteraction->handle( aRequest.GetRequest() );
                                     bRepairAllowed = aRequest.isApproved();
@@ -267,8 +267,8 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
                                 if ( !bRepairAllowed )
                                 {
-                                    // repair either not allowed or not successful
-                                    // repair either not allowed or not successful
+                                    
+                                    
                                     NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
                                     xInteraction->handle( aNotifyRequest.GetRequest() );
 
@@ -280,7 +280,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                                 }
                             }
                             else
-                                // no interaction, error handling as usual
+                                
                                 aMedium.SetError( ERRCODE_IO_BROKENPACKAGE, OUString( OSL_LOG_PREFIX  ) );
 
                             if ( !bRepairAllowed )
@@ -318,9 +318,9 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     const SfxFilter* pOrigFilter = NULL;
                     if ( !bTestWriter && !bTestGlobal && pFilter )
                     {
-                        // cross filter; now this should be a type detection only, not a filter detection
-                        // we can simulate it by preserving the preselected filter if the type matches
-                        // example: HTML filter for Calc
+                        
+                        
+                        
                         pOrigFilter = pFilter;
                         pFilter = SfxFilterMatcher().GetFilter4EA( pFilter->GetTypeName() );
                         bTestWriter = true;
@@ -332,7 +332,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     if ( nErr != ERRCODE_NONE )
                         pFilter = NULL;
                     else if ( pOrigFilter && pFilter && pFilter->GetTypeName() == pOrigFilter->GetTypeName() )
-                        // cross filter, see above
+                        
                         pFilter = pOrigFilter;
                 }
 
@@ -346,7 +346,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     if ( nIndexOfInputStream == -1 && xStream.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "InputStream";
         lDescriptor[nPropertyCount].Value <<= xStream;
@@ -355,7 +355,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     if ( nIndexOfContent == -1 && xContent.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "UCBContent";
         lDescriptor[nPropertyCount].Value <<= xContent;
@@ -382,7 +382,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
         bOpenAsTemplate = sal_True;
-        // TODO/LATER: set progress bar that should be used
+        
     }
 
     if ( bOpenAsTemplate )
@@ -400,7 +400,7 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     if ( !aDocumentTitle.isEmpty() )
     {
-        // the title was set here
+        
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
@@ -421,15 +421,15 @@ sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** pp
     sal_uLong nRet = ERRCODE_NONE;
     if( *ppFilter )
     {
-        // verify the given filter
+        
         OUString aPrefFlt = (*ppFilter)->GetUserData();
 
-        // detection for TextFilter needs an additional checking
+        
         sal_Bool bDetected = SwIoSystem::IsFileFilter(rMedium, aPrefFlt);
         return bDetected ? nRet : ERRCODE_ABORT;
     }
 
-    // mba: without preselection there is no PrefFlt
+    
     OUString aPrefFlt;
     const SfxFilter* pTmp = SwIoSystem::GetFileFilter( rMedium.GetPhysicalName(), aPrefFlt, &rMedium );
     if( !pTmp )
@@ -437,7 +437,7 @@ sal_uLong SwFilterDetect::DetectFilter( SfxMedium& rMedium, const SfxFilter** pp
 
     else
     {
-        //Bug 41417: JP 09.07.97: HTML documents should be loaded by WebWriter
+        
         SfxFilterContainer aFilterContainer( OUString("swriter/web") );
         if( !pTmp->GetUserData().equals(sHTML) ||
             pTmp->GetServiceName() == "com.sun.star.text.WebDocument" ||

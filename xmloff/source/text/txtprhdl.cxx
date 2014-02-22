@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -43,7 +43,7 @@
 #include "XMLTextColumnsPropertyHandler.hxx"
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include "txtprhdl.hxx"
-// OD 2004-05-05 #i28701#
+
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 
@@ -56,12 +56,12 @@ using namespace ::xmloff::token;
 static SvXMLEnumMapEntry const pXML_HoriPos_Enum[] =
 {
     { XML_FROM_LEFT,        HoriOrientation::NONE   },
-    { XML_FROM_INSIDE,      HoriOrientation::NONE   },  // import only
+    { XML_FROM_INSIDE,      HoriOrientation::NONE   },  
     { XML_LEFT,             HoriOrientation::LEFT   },
-    { XML_INSIDE,           HoriOrientation::LEFT   },  // import only
+    { XML_INSIDE,           HoriOrientation::LEFT   },  
     { XML_CENTER,           HoriOrientation::CENTER },
     { XML_RIGHT,            HoriOrientation::RIGHT  },
-    { XML_OUTSIDE,          HoriOrientation::RIGHT  },  // import only
+    { XML_OUTSIDE,          HoriOrientation::RIGHT  },  
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -85,10 +85,10 @@ static SvXMLEnumMapEntry const pXML_HoriRel_Enum[] =
     { XML_PAGE_START_MARGIN,    RelOrientation::PAGE_LEFT   },
     { XML_PAGE_END_MARGIN,      RelOrientation::PAGE_RIGHT  },
     { XML_CHAR,                 RelOrientation::CHAR    },
-    { XML_FRAME,                RelOrientation::FRAME   },      // import only
-    { XML_FRAME_CONTENT,        RelOrientation::PRINT_AREA  },  // import only
-    { XML_FRAME_START_MARGIN,   RelOrientation::FRAME_LEFT  },  // import only
-    { XML_FRAME_END_MARGIN,     RelOrientation::FRAME_RIGHT },  // import only
+    { XML_FRAME,                RelOrientation::FRAME   },      
+    { XML_FRAME_CONTENT,        RelOrientation::PRINT_AREA  },  
+    { XML_FRAME_START_MARGIN,   RelOrientation::FRAME_LEFT  },  
+    { XML_FRAME_END_MARGIN,     RelOrientation::FRAME_RIGHT },  
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -122,15 +122,15 @@ static SvXMLEnumMapEntry const pXML_VertPos_Enum[] =
 {
     { XML_FROM_TOP,         VertOrientation::NONE       },
     { XML_TOP,              VertOrientation::TOP        },
-    { XML_TOP,              VertOrientation::CHAR_TOP   },  // export only
-    { XML_TOP,              VertOrientation::LINE_TOP   },  // export only
+    { XML_TOP,              VertOrientation::CHAR_TOP   },  
+    { XML_TOP,              VertOrientation::LINE_TOP   },  
     { XML_MIDDLE,           VertOrientation::CENTER     },
-    { XML_MIDDLE,           VertOrientation::CHAR_CENTER    },  // export only
-    { XML_MIDDLE,           VertOrientation::LINE_CENTER    },  // export only
+    { XML_MIDDLE,           VertOrientation::CHAR_CENTER    },  
+    { XML_MIDDLE,           VertOrientation::LINE_CENTER    },  
     { XML_BOTTOM,           VertOrientation::BOTTOM     },
-    { XML_BOTTOM,           VertOrientation::CHAR_BOTTOM    },  // export only
-    { XML_BOTTOM,           VertOrientation::LINE_BOTTOM    },  // export only
-    { XML_BELOW,            VertOrientation::CHAR_BOTTOM    },  // import only
+    { XML_BOTTOM,           VertOrientation::CHAR_BOTTOM    },  
+    { XML_BOTTOM,           VertOrientation::LINE_BOTTOM    },  
+    { XML_BELOW,            VertOrientation::CHAR_BOTTOM    },  
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -138,14 +138,14 @@ static SvXMLEnumMapEntry const pXML_VertPosAtChar_Enum[] =
 {
     { XML_FROM_TOP,         VertOrientation::NONE       },
     { XML_TOP,              VertOrientation::TOP        },
-    { XML_TOP,              VertOrientation::CHAR_TOP   },  // export only
-    { XML_TOP,              VertOrientation::LINE_TOP   },  // export only
+    { XML_TOP,              VertOrientation::CHAR_TOP   },  
+    { XML_TOP,              VertOrientation::LINE_TOP   },  
     { XML_MIDDLE,           VertOrientation::CENTER     },
-    { XML_MIDDLE,           VertOrientation::CHAR_CENTER    },  // export only
-    { XML_MIDDLE,           VertOrientation::LINE_CENTER    },  // export only
+    { XML_MIDDLE,           VertOrientation::CHAR_CENTER    },  
+    { XML_MIDDLE,           VertOrientation::LINE_CENTER    },  
     { XML_BOTTOM,           VertOrientation::BOTTOM     },
-    { XML_BELOW,            VertOrientation::CHAR_BOTTOM    },  // export only
-    { XML_BOTTOM,           VertOrientation::LINE_BOTTOM    },  // export only
+    { XML_BELOW,            VertOrientation::CHAR_BOTTOM    },  
+    { XML_BOTTOM,           VertOrientation::LINE_BOTTOM    },  
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -154,12 +154,12 @@ static SvXMLEnumMapEntry const pXML_VertRel_Enum[] =
     { XML_PARAGRAPH,            RelOrientation::FRAME   },
     { XML_PARAGRAPH_CONTENT,    RelOrientation::PRINT_AREA  },
     { XML_CHAR,                 RelOrientation::CHAR    },
-    // DVO, OD 17.09.2003 #i18732# - allow vertical alignment at page
+    
     { XML_PAGE,                 RelOrientation::PAGE_FRAME  },
     { XML_PAGE_CONTENT,         RelOrientation::PAGE_PRINT_AREA },
-    { XML_FRAME,                RelOrientation::FRAME   },      // import only
-    { XML_FRAME_CONTENT,        RelOrientation::PRINT_AREA  },  // import only
-    // OD 13.11.2003 #i22341# - new vertical alignment at top of line
+    { XML_FRAME,                RelOrientation::FRAME   },      
+    { XML_FRAME_CONTENT,        RelOrientation::PRINT_AREA  },  
+    
     { XML_LINE,                 RelOrientation::TEXT_LINE },
     { XML_TOKEN_INVALID, 0 }
 };
@@ -183,14 +183,14 @@ static SvXMLEnumMapEntry const pXML_VertRelFrame_Enum[] =
 static SvXMLEnumMapEntry const pXML_VertRelAsChar_Enum[] =
 {
     { XML_BASELINE,     VertOrientation::TOP        },
-    { XML_BASELINE,     VertOrientation::CENTER     },  // export only
-    { XML_BASELINE,     VertOrientation::BOTTOM     },  // export only
+    { XML_BASELINE,     VertOrientation::CENTER     },  
+    { XML_BASELINE,     VertOrientation::BOTTOM     },  
     { XML_TEXT,         VertOrientation::CHAR_TOP   },
-    { XML_TEXT,         VertOrientation::CHAR_CENTER    },  // export only
-    { XML_TEXT,         VertOrientation::CHAR_BOTTOM    },  // export only
+    { XML_TEXT,         VertOrientation::CHAR_CENTER    },  
+    { XML_TEXT,         VertOrientation::CHAR_BOTTOM    },  
     { XML_LINE,         VertOrientation::LINE_TOP   },
-    { XML_LINE,         VertOrientation::LINE_CENTER    },  // export only
-    { XML_LINE,         VertOrientation::LINE_BOTTOM    },  // export only
+    { XML_LINE,         VertOrientation::LINE_CENTER    },  
+    { XML_LINE,         VertOrientation::LINE_BOTTOM    },  
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -222,10 +222,10 @@ static SvXMLEnumMapEntry const pXML_ParaVerticalAlign_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-// OD 2004-05-05 #i28701#
+
 static SvXMLEnumMapEntry const pXML_WrapInfluenceOnPosition_Enum[] =
 {
-    // Tokens have been renamed and <XML_ITERATIVE> has been added (#i35017#)
+    
     { XML_ONCE_SUCCESSIVE, WrapInfluenceOnPosition::ONCE_SUCCESSIVE },
     { XML_ONCE_CONCURRENT, WrapInfluenceOnPosition::ONCE_CONCURRENT },
     { XML_ITERATIVE,       WrapInfluenceOnPosition::ITERATIVE },
@@ -260,7 +260,7 @@ public:
             const ::com::sun::star::uno::Any& r1,
             const ::com::sun::star::uno::Any& r2 ) const;
 
-    /// TabStops will be imported/exported as XML-Elements. So the Import/Export-work must be done at another place.
+    
     virtual bool importXML(
             const OUString& rStrImpValue,
             ::com::sun::star::uno::Any& rValue,
@@ -997,7 +997,7 @@ bool XMLTextCombineCharPropHdl_Impl::exportXML(
 {
     rValue >>= rStrExpValue;
 
-    // #i114107# attribute of type "character": export only if length is 1
+    
     return (1 == rStrExpValue.getLength());
 }
 
@@ -1295,11 +1295,11 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLGrfMirrorPropHdl_Impl( XML_VERTICAL, false );
         break;
     case XML_TYPE_TEXT_MIRROR_HORIZONTAL_LEFT:
-        // XML_HORIZONTAL_ON_LEFT_PAGES is replaced by XML_HORIZONTAL_ON_EVEN. (#i49139#)
+        
         pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_EVEN, true );
         break;
     case XML_TYPE_TEXT_MIRROR_HORIZONTAL_RIGHT:
-        // XML_HORIZONTAL_ON_RIGHT_PAGES is replaced by XML_HORIZONTAL_ON_ODD. (#i49139#)
+        
         pHdl = new XMLGrfMirrorPropHdl_Impl( XML_HORIZONTAL_ON_ODD, true );
         break;
     case XML_TYPE_TEXT_CLIP:
@@ -1363,7 +1363,7 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         pHdl = new XMLNamedBoolPropertyHdl( ::xmloff::token::XML_ABOVE,
                                             ::xmloff::token::XML_BELOW );
         break;
-    // OD 2004-05-05 #i28701#
+    
     case XML_TYPE_WRAP_INFLUENCE_ON_POSITION:
         pHdl = new XMLConstantsPropertyHandler( pXML_WrapInfluenceOnPosition_Enum,
                                                 XML_TOKEN_INVALID );

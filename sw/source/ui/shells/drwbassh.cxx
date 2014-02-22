@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -107,7 +107,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
     if(pArgs)
         pArgs->GetItemState(nSlotId, false, &pItem);
 
-    //Special case align by menu
+    
     if(pItem && nSlotId == SID_OBJECT_ALIGN)
     {
         OSL_ENSURE(PTR_CAST(SfxEnumItem, pItem),"SfxEnumItem expected");
@@ -187,7 +187,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         SfxAbstractTabDialog *pDlg=NULL;
                         bool bCaption = false;
 
-                        // Allowed anchorages:
+                        
                         short nAnchor = pSh->GetAnchorId();
                         sal_uInt16 nAllowedAnchors = SVX_OBJ_AT_CNTNT | SVX_OBJ_IN_CNTNT | SVX_OBJ_PAGE;
                         sal_uInt16 nHtmlMode = ::GetHtmlMode(pSh->GetView().GetDocShell());
@@ -265,7 +265,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
                             pSh->StartAllAction();
 
-                            // #i30451#
+                            
                             pSh->StartUndo(UNDO_INSFMTATTR);
 
                             pSdrView->SetGeoAttrToMarked(*pOutSet);
@@ -348,7 +348,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                             rBind.InvalidateAll(sal_False);
 
-                            // #i30451#
+                            
                             pSh->EndUndo( UNDO_INSFMTATTR );
 
                             pSh->EndAllAction();
@@ -383,20 +383,20 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 if (rReq.IsAPI() ||
                     GetView().GetEditWin().IsObjectSelect() )
                 {
-                    // If basic call, then back to the text shell, because the
-                    // Basic otherwise has no possibility to return.
+                    
+                    
                     if (GetView().GetDrawFuncPtr())
                     {
                         GetView().GetDrawFuncPtr()->Deactivate();
                         GetView().SetDrawFuncPtr(NULL);
                     }
-                    GetView().LeaveDrawCreate();    // Switch to selection mode
+                    GetView().LeaveDrawCreate();    
                 }
 
                 if (pSh->IsSelFrmMode())
                 {
                     pSh->LeaveSelFrmMode();
-                    // #105852# FME
+                    
                 }
                 bNotify = true;
             }
@@ -446,7 +446,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             {
                 const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() == 1 && bAlignPossible )
-                {   // Do not align objects to each other
+                {   
                     sal_uInt16 nAnchor = pSh->GetAnchorId();
                     if (nAnchor == FLY_AS_CHAR)
                     {
@@ -479,7 +479,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         break;
                     }
                     if (nAnchor == FLY_AT_PARA)
-                        break;  // Do not align frames of an anchored paragraph
+                        break;  
                 }
 
                 pSh->StartAction();
@@ -529,7 +529,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
             if(1L == pSdrView->GetMarkedObjectCount())
             {
-                // #i68101#
+                
                 SdrObject* pSelected = pSdrView->GetMarkedObjectByIndex(0L);
                 OSL_ENSURE(pSelected, "DrawViewShell::FuTemp03: nMarkCount, but no object (!)");
                 OUString aName(pSelected->GetName());
@@ -554,7 +554,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             break;
         }
 
-        // #i68101#
+        
         case FN_TITLE_DESCRIPTION_SHAPE:
         {
             bDone = true;
@@ -600,13 +600,13 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
             pSh->SetModified();
         else if (bChanged)
             pSdrView->GetModel()->SetChanged(true);
-        // 40220: After Delete from DrawObjecs over the API GPF through self-destruction
+        
         if(bNotify)
-            GetView().AttrChangedNotify(pSh); // Shell switch if applicable...
+            GetView().AttrChangedNotify(pSh); 
     }
 }
 
-// Checks whether a given name is allowed for a group shape
+
 
 IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNameDialog )
 {
@@ -647,7 +647,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
     sal_uInt16 nWhich = aIter.FirstWhich();
     bool bProtected = rSh.IsSelObjProtected(FLYPROTECT_CONTENT);
 
-    if (!bProtected)    // Look in the parent
+    if (!bProtected)    
         bProtected |= rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT ) != 0;
 
     while( nWhich )
@@ -694,8 +694,8 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 {
                     SfxAllEnumItem aEnumItem(nWhich, USHRT_MAX);
                     const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
-                    //if only one object is selected it can only be vertically
-                    // aligned because it is character bound
+                    
+                    
                     if( rMarkList.GetMarkCount() == 1 )
                     {
                         aEnumItem.DisableValue(SID_OBJECT_ALIGN_LEFT);
@@ -715,7 +715,7 @@ void SwDrawBaseShell::GetState(SfxItemSet& rSet)
                 }
                 break;
 
-            // #i68101#
+            
             case FN_TITLE_DESCRIPTION_SHAPE:
                 {
                     const bool bIsWebView(NULL != dynamic_cast<SwWebView*>(&GetView()));
@@ -766,7 +766,7 @@ sal_Bool SwDrawBaseShell::Disable(SfxItemSet& rSet, sal_uInt16 nWhich)
     return bDisable;
 }
 
-// Validate of drawing positions
+
 
 IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation )
 {
@@ -776,8 +776,8 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
 
     SwRect aBoundRect;
 
-    // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
-    //      aligned to page for fly frame anchored to paragraph or to character.
+    
+    
     const RndStdIds eAnchorType = static_cast<RndStdIds >(pValidation->nAnchorType);
     const SwPosition* pCntntPos = 0;
     SdrView*  pSdrView = pSh->GetDrawView();
@@ -813,14 +813,14 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         aSize.Width() = aSize.Height();
         aSize.Height() = nTmp;
         aBoundRect.Chg( aPos, aSize );
-        //exchange width/height to enable correct values
+        
         nTmp = pValidation->nWidth;
         pValidation->nWidth = pValidation->nHeight;
         pValidation->nHeight = nTmp;
     }
     if ((eAnchorType == FLY_AT_PAGE) || (eAnchorType == FLY_AT_FLY))
     {
-        // MinimalPosition
+        
         pValidation->nMinHPos = aBoundRect.Left();
         pValidation->nMinVPos = aBoundRect.Top();
         SwTwips nH = pValidation->nHPos;
@@ -878,8 +878,8 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
                 pValidation->nWidth = aBoundRect.Right() - pValidation->nHPos;
         }
 
-        // OD 29.09.2003 #i17567#, #i18732# - consider following the text flow
-        // and alignment at page areas.
+        
+        
         const bool bMaxVPosAtBottom = !pValidation->bFollowTextFlow ||
                                       pValidation->nVRelOrient == text::RelOrientation::PAGE_FRAME ||
                                       pValidation->nVRelOrient == text::RelOrientation::PAGE_PRINT_AREA;
@@ -907,7 +907,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
         pValidation->nMaxHPos  = aBoundRect.Right() - pValidation->nWidth;
 
         pValidation->nMinVPos  = aBoundRect.Top();
-        // OD 26.09.2003 #i17567#, #i18732# - determine maximum vertical position
+        
         if ( bMaxVPosAtBottom )
         {
             pValidation->nMaxVPos  = aBoundRect.Bottom() - pValidation->nHeight;
@@ -917,7 +917,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
             pValidation->nMaxVPos  = aBoundRect.Height() - pValidation->nHeight;
         }
 
-        // Maximum width height
+        
         const SwTwips nH = ( pValidation->nHoriOrient != text::HoriOrientation::NONE )
                            ? aBoundRect.Left()
                            : pValidation->nHPos;
@@ -945,7 +945,7 @@ IMPL_LINK(SwDrawBaseShell, ValidatePosition, SvxSwFrameValidation*, pValidation 
     }
     if(bIsInVertical)
     {
-        //restore width/height exchange
+        
         long nTmp = pValidation->nWidth;
         pValidation->nWidth = pValidation->nHeight;
         pValidation->nHeight = nTmp;

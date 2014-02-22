@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -81,35 +81,35 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo* pInfo)
 {
     static bool bIn = false;
 
-    // if we crash again, bail out immediately
+    
     if ( !bIn )
     {
         sal_uInt16 nVCLException = 0;
 
-        // UAE
+        
         if ( (pInfo->Signal == osl_Signal_AccessViolation)     ||
              (pInfo->Signal == osl_Signal_IntegerDivideByZero) ||
              (pInfo->Signal == osl_Signal_FloatDivideByZero)   ||
              (pInfo->Signal == osl_Signal_DebugBreak) )
             nVCLException = EXC_SYSTEM;
 
-        // RC
+        
         if ((pInfo->Signal == osl_Signal_User) &&
             (pInfo->UserSignal == OSL_SIGNAL_USER_RESOURCEFAILURE) )
             nVCLException = EXC_RSCNOTLOADED;
 
-        // DISPLAY-Unix
+        
         if ((pInfo->Signal == osl_Signal_User) &&
             (pInfo->UserSignal == OSL_SIGNAL_USER_X11SUBSYSTEMERROR) )
             nVCLException = EXC_DISPLAY;
 
-        // Remote-Client
+        
         if ((pInfo->Signal == osl_Signal_User) &&
             (pInfo->UserSignal == OSL_SIGNAL_USER_RVPCONNECTIONERROR) )
             nVCLException = EXC_REMOTE;
@@ -120,7 +120,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 
             SolarMutexGuard aLock;
 
-            // do not stop timer because otherwise the UAE-Box will not be painted as well
+            
             ImplSVData* pSVData = ImplGetSVData();
             if ( pSVData->mpApp )
             {
@@ -139,10 +139,10 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 
 }
 
-// =======================================================================
+
 int ImplSVMain()
 {
-    // The 'real' SVMain()
+    
     SAL_INFO( "vcl.app", "vcl (ss112471) ::SVMain" );
 
     ImplSVData* pSVData = ImplGetSVData();
@@ -155,7 +155,7 @@ int ImplSVMain()
 
     if( bInit )
     {
-        // call application main
+        
         pSVData->maAppData.mbInAppMain = true;
         nReturn = pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = false;
@@ -167,11 +167,11 @@ int ImplSVMain()
         pSVData->mxDisplayConnection.clear();
     }
 
-    // This is a hack to work around the problem of the asynchronous nature
-    // of bridging accessibility through Java: on shutdown there might still
-    // be some events in the AWT EventQueue, which need the SolarMutex which
-    // - on the other hand - is destroyed in DeInitVCL(). So empty the queue
-    // here ..
+    
+    
+    
+    
+    
     if( pSVData->mxAccessBridge.is() )
     {
       sal_uLong nCount = Application::ReleaseSolarMutex();
@@ -186,7 +186,7 @@ int ImplSVMain()
 
 int SVMain()
 {
-    // #i47888# allow for alternative initialization as required for e.g. MacOSX
+    
     extern bool ImplSVMainHook( int* );
 
     int nRet;
@@ -195,10 +195,10 @@ int SVMain()
     else
         return ImplSVMain();
 }
-// This variable is set, when no Application object is instantiated
-// before SVInit is called
+
+
 static Application *        pOwnSvApp = NULL;
-// Exception handler. pExceptionHandler != NULL => VCL already inited
+
 oslSignalHandler   pExceptionHandler = NULL;
 
 class Application_Impl : public Application
@@ -213,7 +213,7 @@ public:
     DesktopEnvironmentContext( const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > & ctx)
         : m_xNextContext( ctx ) {}
 
-    // XCurrentContext
+    
     virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
             throw (com::sun::star::uno::RuntimeException);
 
@@ -231,7 +231,7 @@ uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Nam
     }
     else if( m_xNextContext.is() )
     {
-        // Call next context in chain if found
+        
         retVal = m_xNextContext->getValueByName( Name );
     }
     return retVal;
@@ -257,49 +257,49 @@ bool InitVCL()
 
     ImplSVData* pSVData = ImplGetSVData();
 
-    // register with tools
+    
     InitTools();
 
-    // remember Main-Thread-Id
+    
     pSVData->mnMainThreadId = ::osl::Thread::getCurrentIdentifier();
 
-    // Initialize Sal
+    
     SAL_INFO( "vcl.app", "{ ::CreateSalInstance" );
     pSVData->mpDefInst = CreateSalInstance();
     if ( !pSVData->mpDefInst )
         return false;
     SAL_INFO( "vcl.app", "} ::CreateSalInstance" );
 
-    // Desktop Environment context (to be able to get value of "system.desktop-environment" as soon as possible)
+    
     com::sun::star::uno::setCurrentContext(
         new DesktopEnvironmentContext( com::sun::star::uno::getCurrentContext() ) );
 
-    // Initialize application instance (should be done after initialization of VCL SAL part)
+    
     if( pSVData->mpApp )
-        // call init to initialize application class
-        // soffice/sfx implementation creates the global service manager
+        
+        
         pSVData->mpApp->Init();
 
     pSVData->mpDefInst->AfterAppInit();
 
-    // Fetch AppFileName and make it absolute before the workdir changes...
+    
     OUString aExeFileName;
     osl_getExecutableFile( &aExeFileName.pData );
 
-    // convert path to native file format
+    
     OUString aNativeFileName;
     osl::FileBase::getSystemPathFromFileURL( aExeFileName, aNativeFileName );
     pSVData->maAppData.mpAppFileName = new OUString( aNativeFileName );
 
-    // Initialize global data
+    
     pSVData->maGDIData.mpScreenFontList     = new ImplDevFontList;
     pSVData->maGDIData.mpScreenFontCache    = new ImplFontCache;
     pSVData->maGDIData.mpGrfConverter       = new GraphicConverter;
 
-    // Set exception handler
+    
     pExceptionHandler = osl_addSignalHandler(VCLExceptionSignal_impl, NULL);
 
-    // initialise debug data
+    
     DBGGUI_INIT();
 
     return true;
@@ -356,7 +356,7 @@ void DeInitVCL()
 
     vcl::DeleteOnDeinitBase::ImplDeleteOnDeInit();
 
-    // give ime status a chance to destroy its own windows
+    
     delete pSVData->mpImeStatus;
     pSVData->mpImeStatus = NULL;
 
@@ -368,8 +368,8 @@ void DeInitVCL()
     for( long i = 0; i < nTopWindowCount; i++ )
     {
         Window* pWin = Application::GetTopWindow( i );
-        // default window will be destroyed further down
-        // but may still be useful during deinit up to that point
+        
+        
         if( pWin == pSVData->mpDefaultWin )
             nBadTopWindows--;
         else
@@ -391,10 +391,10 @@ void DeInitVCL()
     osl_removeSignalHandler( pExceptionHandler);
     pExceptionHandler = NULL;
 
-    // Debug Daten zuruecksetzen
+    
     DBGGUI_DEINIT();
 
-    // free global data
+    
     delete pSVData->maGDIData.mpGrfConverter;
 
     if( pSVData->mpSettingsConfigItem )
@@ -470,16 +470,16 @@ void DeInitVCL()
         }
         catch (uno::Exception const&)
         {
-            // ignore
+            
         }
     }
 
     if( pSVData->mpApp )
     {
         sal_uLong nCount = Application::ReleaseSolarMutex();
-        // call deinit to deinitialize application class
-        // soffice/sfx implementation disposes the global service manager
-        // Warning: After this call you can't call uno services
+        
+        
+        
         pSVData->mpApp->DeInit();
         Application::AcquireSolarMutex(nCount);
     }
@@ -553,14 +553,14 @@ void DeInitVCL()
 
     ResMgr::DestroyAllResMgr();
 
-    // destroy all Sal interfaces before destorying the instance
-    // and thereby unloading the plugin
+    
+    
     delete pSVData->mpSalSystem;
     pSVData->mpSalSystem = NULL;
     delete pSVData->mpSalTimer;
     pSVData->mpSalTimer = NULL;
 
-    // Deinit Sal
+    
     DestroySalInstance( pSVData->mpDefInst );
 
     DeInitTools();
@@ -574,7 +574,7 @@ void DeInitVCL()
     EmbeddedFontsHelper::clearTemporaryFontFiles();
 }
 
-// only one call is allowed
+
 struct WorkerThreadData
 {
     oslWorkerFunction   pWorker;
@@ -607,22 +607,22 @@ static void SAL_CALL MainWorkerFunction( void* pArgs )
     delete (WorkerThreadData*)pArgs;
     hThreadID = 0;
 }
-} // extern "C"
+} 
 #endif
 
 void CreateMainLoopThread( oslWorkerFunction pWorker, void * pThreadData )
 {
 #ifdef WNT
-    // sal thread always call CoInitializeEx, so a sysdepen implementation is necessary
+    
 
     unsigned uThreadID;
     hThreadID = (HANDLE)_beginthreadex(
-        NULL,       // no security handle
-        0,          // stacksize 0 means default
-        _threadmain,    // thread worker function
-        new WorkerThreadData( pWorker, pThreadData ),       // arguments for worker function
-        0,          // 0 means: create immediately otherwise use CREATE_SUSPENDED
-        &uThreadID );   // thread id to fill
+        NULL,       
+        0,          
+        _threadmain,    
+        new WorkerThreadData( pWorker, pThreadData ),       
+        0,          
+        &uThreadID );   
 #else
     hThreadID = osl_createThread( MainWorkerFunction, new WorkerThreadData( pWorker, pThreadData ) );
 #endif

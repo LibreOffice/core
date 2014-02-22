@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sortparam.hxx"
@@ -24,14 +24,14 @@
 #include "subtotalparam.hxx"
 
 
-//------------------------------------------------------------------------
+
 
 ScSortParam::ScSortParam()
 {
     Clear();
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortParam::ScSortParam( const ScSortParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nUserIndex(r.nUserIndex),
@@ -47,7 +47,7 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
 
 ScSortParam::~ScSortParam() {}
 
-//------------------------------------------------------------------------
+
 
 void ScSortParam::Clear()
 {
@@ -67,11 +67,11 @@ void ScSortParam::Clear()
     aKeyState.nField = 0;
     aKeyState.bAscending = true;
 
-    // Initialize to default size
+    
     maKeyState.assign( DEFSORT, aKeyState );
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortParam& ScSortParam::operator=( const ScSortParam& r )
 {
@@ -98,12 +98,12 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     return *this;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScSortParam::operator==( const ScSortParam& rOther ) const
 {
     bool bEqual = false;
-    // Anzahl der Sorts gleich?
+    
     sal_uInt16 nLast      = 0;
     sal_uInt16 nOtherLast = 0;
     sal_uInt16 nSortSize = GetSortKeyCount();
@@ -154,7 +154,7 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
     return bEqual;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld ) :
         nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),nUserIndex(rSub.nUserIndex),
@@ -167,7 +167,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
 {
     sal_uInt16 i;
 
-    //  zuerst die Gruppen aus den Teilergebnissen
+    
     if (rSub.bDoSort)
         for (i=0; i<MAXSUBTOTAL; i++)
             if (rSub.bGroupActive[i])
@@ -179,7 +179,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
                 maKeyState.push_back(key);
             }
 
-    //  dann dahinter die alten Einstellungen
+    
     for (i=0; i < rOld.GetSortKeyCount(); i++)
         if (rOld.maKeyState[i].bDoSort)
         {
@@ -188,7 +188,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
             for (sal_uInt16 j = 0; j < GetSortKeyCount(); j++)
                 if ( maKeyState[j].nField == nThisField )
                     bDouble = true;
-            if (!bDouble)               // ein Feld nicht zweimal eintragen
+            if (!bDouble)               
             {
                 ScSortKeyState key;
                 key.bDoSort = true;
@@ -199,13 +199,13 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         }
 }
 
-//------------------------------------------------------------------------
+
 
 ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         nCol1(nCol),nRow1(rParam.nRow1),nCol2(nCol),nRow2(rParam.nRow2),nUserIndex(0),
         bHasHeader(rParam.bHasHeader),bByRow(true),bCaseSens(rParam.bCaseSens),
         bNaturalSort(false),
-//! TODO: what about Locale and Algorithm?
+
         bUserDef(false),bIncludePattern(false),
         bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0), nCompatHeader(2)
@@ -217,7 +217,7 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
 
     maKeyState.push_back( aKeyState );
 
-    // Set the rest
+    
     aKeyState.bDoSort = false;
     aKeyState.nField = 0;
 
@@ -225,7 +225,7 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         maKeyState.push_back( aKeyState );
 }
 
-//------------------------------------------------------------------------
+
 
 void ScSortParam::MoveToDest()
 {

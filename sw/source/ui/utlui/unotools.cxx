@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -82,7 +82,7 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
     if( pInitializedLink )
         aInitializedLink = *pInitializedLink;
 
-    // the controller is asynchronously set
+    
     aLoadedTimer.SetTimeoutHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
     aLoadedTimer.SetTimeout(200);
 
@@ -131,7 +131,7 @@ void SwOneExampleFrame::CreateControl()
 
         uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
         uno::Any aURL;
-        // create new doc
+        
         OUString sTempURL(cFactory);
         if(!sArgumentURL.isEmpty())
             sTempURL = sArgumentURL;
@@ -150,7 +150,7 @@ void SwOneExampleFrame::CreateControl()
         aArgs.setValue(&aSeq, ::getCppuType((uno::Sequence<beans::PropertyValue>*)0));
 
         xPrSet->setPropertyValue( "LoaderArguments", aArgs );
-        //save and set readonly???
+        
 
         xPrSet->setPropertyValue("ComponentURL", aURL);
 
@@ -172,16 +172,16 @@ void    SwOneExampleFrame::DisposeControl()
 static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,
     bool bEnableOnlineMode)
 {
-    //the scrollbar logic is kind of busted looking in writer, when the hori scrollbar
-    //property is changed then the hori scrollbar is enabled if the property is
-    //true or browse (online) mode is enabled. So...
-    //disable online mode
-    //turn off scrollbars
-    //turn back on online mode if that's what we want
-    //which subverts the (dodgy/buggy) scrollbar setting
+    
+    
+    
+    
+    
+    
+    
     //
-    //To reproduce this problem, in edit->autotext and click through
-    //the examples and see if the preview gets a horizontal scrollbar
+    
+    
     uno::Any aFalseSet(uno::makeAny(sal_False));
     xViewProps->setPropertyValue(UNO_NAME_SHOW_ONLINE_LAYOUT, aFalseSet);
 
@@ -199,7 +199,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
     if(!_xControl.is())
         return 0;
 
-    // now get the model
+    
     uno::Reference< beans::XPropertySet >  xPrSet(_xControl, uno::UNO_QUERY);
     uno::Any aFrame = xPrSet->getPropertyValue("Frame");
     uno::Reference< frame::XFrame >  xFrm;
@@ -225,7 +225,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
     if(_xController.is())
     {
         _xModel = _xController->getModel();
-        //now the ViewOptions should be set properly
+        
         uno::Reference< view::XViewSettingsSupplier >  xSettings(_xController, uno::UNO_QUERY);
         uno::Reference< beans::XPropertySet >  xViewProps = xSettings->getViewSettings();
 
@@ -272,7 +272,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
                 xViewProps->setPropertyValue(UNO_NAME_ZOOM_VALUE, aZoom);
             }
 
-            // set onlinelayout property after setting the zoom
+            
             disableScrollBars(xViewProps, nStyleFlags&EX_SHOW_ONLINE_LAYOUT);
             bIsInitialized = sal_True;
         }
@@ -281,8 +281,8 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         uno::Reference< text::XText >  xText = xDoc->getText();
         _xCursor = xText->createTextCursor();
 
-        //From here, a cursor is defined, which goes through the template,
-        //and overwrites the template words where it is necessary.
+        
+        
 
         uno::Reference< lang::XUnoTunnel> xTunnel( _xCursor, uno::UNO_QUERY);
         if( xTunnel.is() )
@@ -354,7 +354,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
             uno::Any aSize = xPProp->getPropertyValue(UNO_NAME_SIZE);
             awt::Size aPSize;
             aSize >>= aPSize;
-            //TODO: set page width to card width
+            
             aPSize.Width = 10000;
             aSize.setValue(&aPSize, ::getCppuType((awt::Size*)0));
             xPProp->setPropertyValue(UNO_NAME_SIZE, aSize);
@@ -368,7 +368,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         Size aWinSize(aTopWindow.GetOutputSizePixel());
         xWin->setPosSize( 0, 0, aWinSize.Width(), aWinSize.Height(), awt::PosSize::SIZE );
 
-        // can only be done here - the SFX changes the ScrollBar values
+        
         disableScrollBars(xViewProps, nStyleFlags&EX_SHOW_ONLINE_LAYOUT);
 
         if (aInitializedLink.IsSet())
@@ -529,7 +529,7 @@ void SwFrmCtrlWindow::Command( const CommandEvent& rCEvt )
     {
         case COMMAND_CONTEXTMENU:
         {
-            //#125881# quickly clicking crashes because the control is not fully initialized
+            
             if(pExampleFrame->GetController().is())
                 pExampleFrame->CreatePopup(rCEvt.GetMousePosPixel());
         }

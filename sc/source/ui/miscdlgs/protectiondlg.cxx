@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 #include <vcl/msgbox.hxx>
 
 
-// The order must match that of the list box.
+
 static const ScTableProtection::Option aOptions[] = {
     ScTableProtection::SELECT_LOCKED_CELLS,
     ScTableProtection::SELECT_UNLOCKED_CELLS,
@@ -70,7 +70,7 @@ void ScTableProtectionDlg::WriteData(ScTableProtection& rData) const
 {
     rData.setProtected(m_pBtnProtect->IsChecked());
 
-    // We assume that the two password texts match.
+    
     rData.setPassword(m_pPassword1Edit->GetText());
 
     for (sal_uInt16 i = 0; i < nOptionCount; ++i)
@@ -100,7 +100,7 @@ void ScTableProtectionDlg::Init()
 
     m_pOptionsListBox->SetUpdateMode(true);
 
-    // Set the default state of the dialog.
+    
     m_pBtnProtect->Check(true);
     m_pPassword1Edit->GrabFocus();
 }

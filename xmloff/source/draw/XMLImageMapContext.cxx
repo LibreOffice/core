@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLImageMapContext.hxx"
@@ -112,8 +112,8 @@ protected:
     const OUString sTarget;
     const OUString sURL;
 
-    Reference<XIndexContainer> xImageMap;   /// the image map
-    Reference<XPropertySet> xMapEntry;      /// one map-entry (one area)
+    Reference<XIndexContainer> xImageMap;   
+    Reference<XPropertySet> xMapEntry;      
 
     OUString sUrl;
     OUString sTargt;
@@ -198,9 +198,9 @@ XMLImageMapObjectContext::XMLImageMapObjectContext(
 
             xMapEntry = xPropertySet;
         }
-        // else: can't create service -> ignore
+        
     }
-    // else: can't even get factory -> ignore
+    
 }
 
 void XMLImageMapObjectContext::StartElement(
@@ -224,19 +224,19 @@ void XMLImageMapObjectContext::StartElement(
 
 void XMLImageMapObjectContext::EndElement()
 {
-    // only create and insert image map object if validity flag is set
-    // (and we actually have an image map)
+    
+    
     if ( bValid && xImageMap.is() && xMapEntry.is() )
     {
-        // set values
+        
         Prepare( xMapEntry );
 
-        // insert into image map
+        
         Any aAny;
         aAny <<= xMapEntry;
         xImageMap->insertByIndex( xImageMap->getCount(), aAny );
     }
-    // else: not valid -> don't create and insert
+    
 }
 
 SvXMLImportContext* XMLImageMapObjectContext::CreateChildContext(
@@ -291,7 +291,7 @@ void XMLImageMapObjectContext::ProcessAttribute(
             sNam = rValue;
             break;
         default:
-            // do nothing
+            
             break;
     }
 }
@@ -415,7 +415,7 @@ void XMLImageMapRectangleContext::Prepare(
     aAny <<= aRectangle;
     rPropertySet->setPropertyValue( sBoundary, aAny );
 
-    // common properties handled by super class
+    
     XMLImageMapObjectContext::Prepare(rPropertySet);
 }
 
@@ -494,10 +494,10 @@ void XMLImageMapPolygonContext::ProcessAttribute(
 
 void XMLImageMapPolygonContext::Prepare(Reference<XPropertySet> & rPropertySet)
 {
-    // process view box
+    
     SdXMLImExViewBox aViewBox(sViewBoxString, GetImport().GetMM100UnitConverter());
 
-    // get polygon sequence
+    
     basegfx::B2DPolygon aPolygon;
 
     if(basegfx::tools::importFromSvgPoints(aPolygon, sPointsString))
@@ -513,7 +513,7 @@ void XMLImageMapPolygonContext::Prepare(Reference<XPropertySet> & rPropertySet)
         }
     }
 
-    // parent properties
+    
     XMLImageMapObjectContext::Prepare(rPropertySet);
 }
 
@@ -609,16 +609,16 @@ void XMLImageMapCircleContext::ProcessAttribute(
 void XMLImageMapCircleContext::Prepare(
     Reference<XPropertySet> & rPropertySet)
 {
-    // center (x,y)
+    
     Any aAny;
     aAny <<= aCenter;
     rPropertySet->setPropertyValue( sCenter, aAny );
 
-    // radius
+    
     aAny <<= nRadius;
     rPropertySet->setPropertyValue( sRadius, aAny );
 
-    // common properties handled by super class
+    
     XMLImageMapObjectContext::Prepare(rPropertySet);
 }
 

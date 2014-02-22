@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -36,10 +36,10 @@ OUString getFileURLFromSystemPath(OUString const & path) {
 
 }
 
-// NB. this constructor is called before any tests are run, once for each
-// test function in a rather non-intuitive way. This is why all the 'real'
-// heavy lifting is deferred until setUp. setUp and tearDown are interleaved
-// between the tests as you might expect.
+
+
+
+
 test::BootstrapFixtureBase::BootstrapFixtureBase()
 {
 #ifndef ANDROID
@@ -83,7 +83,7 @@ OUString test::BootstrapFixtureBase::getURLFromWorkdir( const char *pPath )
     return m_aWorkdirRootURL + OUString::createFromAscii( pPath );
 }
 
-#ifdef _WIN32 // ifdef just to keep it out of unusedcode.easy
+#ifdef _WIN32 
 OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
 {
     return m_aWorkdirRootPath + OUString::createFromAscii( pPath );
@@ -93,7 +93,7 @@ OUString test::BootstrapFixtureBase::getPathFromWorkdir( const char *pPath )
 
 void test::BootstrapFixtureBase::setUp()
 {
-    // set UserInstallation to user profile dir in test/user-template
+    
     rtl::Bootstrap aDefaultVars;
     OUString sUserInstallURL = m_aWorkdirRootURL + "/unittest";
     aDefaultVars.set(OUString("UserInstallation"), sUserInstallURL);

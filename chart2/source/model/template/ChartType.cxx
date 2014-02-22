@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartType.hxx"
@@ -71,7 +71,7 @@ Reference< uno::XComponentContext > ChartType::GetComponentContext() const
     return m_xContext;
 }
 
-// ____ XChartType ____
+
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
     throw (lang::IllegalArgumentException,
@@ -139,7 +139,7 @@ void ChartType::impl_addDataSeriesWithoutNotification(
     ModifyListenerHelper::addListener( xDataSeries, m_xModifyEventForwarder );
 }
 
-// ____ XDataSeriesContainer ____
+
 void SAL_CALL ChartType::addDataSeries( const Reference< chart2::XDataSeries >& xDataSeries )
     throw (lang::IllegalArgumentException,
            uno::RuntimeException)
@@ -198,7 +198,7 @@ void SAL_CALL ChartType::setDataSeries( const Sequence< Reference< chart2::XData
     fireModifyEvent();
 }
 
-// ____ OPropertySet ____
+
 uno::Any ChartType::GetDefaultValue( sal_Int32 /* nHandle */ ) const
     throw(beans::UnknownPropertyException)
 {
@@ -212,7 +212,7 @@ struct StaticChartTypeInfoHelper_Initializer
 {
     ::cppu::OPropertyArrayHelper* operator()()
     {
-        // using assignment for broken gcc 3.3
+        
         static ::cppu::OPropertyArrayHelper aPropHelper = ::cppu::OPropertyArrayHelper(
             Sequence< beans::Property >() );
         return &aPropHelper;
@@ -239,20 +239,20 @@ struct StaticChartTypeInfo : public rtl::StaticAggregate< uno::Reference< beans:
 
 }
 
-// ____ OPropertySet ____
+
 ::cppu::IPropertyArrayHelper & SAL_CALL ChartType::getInfoHelper()
 {
     return *StaticChartTypeInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticChartTypeInfo::get();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL ChartType::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -281,21 +281,21 @@ void SAL_CALL ChartType::removeModifyListener( const uno::Reference< util::XModi
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL ChartType::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL ChartType::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void ChartType::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -312,6 +312,6 @@ using impl::ChartType_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( ChartType, ChartType_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ChartType, ChartType_Base, ::property::OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

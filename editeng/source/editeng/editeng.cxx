@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include <vcl/wrkwin.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/msgbox.hxx>
@@ -81,7 +80,7 @@
 #endif
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-// later -> TOOLS\STRING.H (for Grep: WS_TARGET)
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -94,9 +93,6 @@ static bool bDebugPaint = false;
 
 static SfxItemPool* pGlobalPool=0;
 
-// ----------------------------------------------------------------------
-// EditEngine
-// ----------------------------------------------------------------------
 EditEngine::EditEngine( SfxItemPool* pItemPool )
 {
     pImpEditEngine = new ImpEditEngine( this, pItemPool );
@@ -218,8 +214,8 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect )
 
 void EditEngine::Draw( OutputDevice* pOutDev, const Point& rStartPos, short nOrientation )
 {
-    // Create with 2 points, as with positive points it will end up with
-    // LONGMAX as Size, Bottom and Right in the range > LONGMAX.
+    
+    
     Rectangle aBigRect( -0x3FFFFFFF, -0x3FFFFFFF, 0x3FFFFFFF, 0x3FFFFFFF );
     if( pOutDev->GetConnectMetaFile() )
         pOutDev->Push();
@@ -247,8 +243,8 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
         EditDbg::ShowEditEngineData( this, sal_False );
 #endif
 
-    // Align to the pixel boundary, so that it becomes exactly the same
-    // as Paint ().
+    
+    
     Rectangle aOutRect( pOutDev->LogicToPixel( rOutRect ) );
     aOutRect = pOutDev->PixelToLogic( aOutRect );
 
@@ -268,15 +264,15 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
     bool bMetafile = pOutDev->GetConnectMetaFile();
     Region aOldRegion = pOutDev->GetClipRegion();
 
-    // If one existed => intersection!
-    // Use Push/pop for creating the Meta file
+    
+    
     if ( bMetafile )
         pOutDev->Push();
 
-    // Always use the Intersect method, it is a must for Metafile!
+    
     if ( bClip )
     {
-        // Clip only if neccesary...
+        
         if ( !rStartDocPos.X() && !rStartDocPos.Y() &&
              ( rOutRect.GetHeight() >= (long)GetTextHeight() ) &&
              ( rOutRect.GetWidth() >= (long)CalcTextWidth() ) )
@@ -285,8 +281,8 @@ void EditEngine::Draw( OutputDevice* pOutDev, const Rectangle& rOutRect, const P
         }
         else
         {
-            // Some printer drivers cause problems if characters graze the
-            // ClipRegion, therefore rather add a pixel more ...
+            
+            
             Rectangle aClipRect( aOutRect );
             if ( pOutDev->GetOutDevType() == OUTDEV_PRINTER )
             {
@@ -423,9 +419,9 @@ void EditEngine::SetPaperSize( const Size& rNewSize )
 
         if ( bAutoPageSize || pImpEditEngine->IsFormatted() )
         {
-            // Changing the width has no effect for AutoPageSize, as this is
-            // determined by the text width.
-            // Optimization first after Vobis delivery was enabled ...
+            
+            
+            
             pImpEditEngine->FormatFullDoc();
 
             pImpEditEngine->UpdateViews( pImpEditEngine->GetActiveView() );
@@ -523,7 +519,7 @@ void EditEngine::SetPolygon(const basegfx::B2DPolyPolygon& rPolyPolygon, const b
     {
         if(rPolyPolygon.getB2DPolygon(0L).isClosed())
         {
-            // open polygon
+            
             bSimple = true;
         }
     }
@@ -609,7 +605,7 @@ sal_Int32 EditEngine::GetLineNumberAtIndex( sal_Int32 nPara, sal_Int32 nIndex ) 
 
 sal_uInt32 EditEngine::GetLineHeight( sal_Int32 nParagraph, sal_Int32 nLine )
 {
-    // If someone calls GetLineHeight() with an empty Engine.
+    
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
     return pImpEditEngine->GetLineHeight( nParagraph, nLine );
@@ -635,7 +631,7 @@ OUString EditEngine::GetWord( sal_Int32 nPara, sal_Int32 nIndex )
 
 ESelection EditEngine::GetWord( const ESelection& rSelection, sal_uInt16 nWordType  ) const
 {
-    // ImpEditEngine-Iteration-Methods should be const!
+    
     EditEngine* pE = (EditEngine*)this;
 
     EditSelection aSel( pE->pImpEditEngine->CreateSel( rSelection ) );
@@ -988,16 +984,16 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
                     pEditView->Undo();
                 return true;
             }
-            // break;
+            
             case KEYFUNC_REDO:
             {
                 if ( !bReadOnly )
                     pEditView->Redo();
                 return true;
             }
-            // break;
+            
 
-            default:    // is then possible edited below.
+            default:    
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -1090,7 +1086,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
                 if ( !rKeyEvent.GetKeyCode().IsMod2() || ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) )
                 {
                     if ( pImpEditEngine->DoVisualCursorTraveling( aCurSel.Max().GetNode() ) && ( ( nCode == KEY_LEFT ) || ( nCode == KEY_RIGHT ) /* || ( nCode == KEY_HOME ) || ( nCode == KEY_END ) */ ) )
-                        bSetCursorFlags = false;    // Will be manipulated within visual cursor move
+                        bSetCursorFlags = false;    
 
                     aCurSel = pImpEditEngine->MoveCursor( rKeyEvent, pEditView );
 
@@ -1120,33 +1116,33 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
             {
                 if ( !bReadOnly && !rKeyEvent.GetKeyCode().IsMod2() )
                 {
-                    // check if we are behind a bullet and using the backspace key
+                    
                     ContentNode *pNode = aCurSel.Min().GetNode();
                     const SvxNumberFormat *pFmt = pImpEditEngine->GetNumberFormat( pNode );
                     if (pFmt && nCode == KEY_BACKSPACE &&
                         !aCurSel.HasRange() && aCurSel.Min().GetIndex() == 0)
                     {
-                        // if the bullet is still visible just do not paint it from
-                        // now on and that will be all. Otherwise continue as usual.
-                        // ...
+                        
+                        
+                        
 
                         sal_Int32 nPara = pImpEditEngine->GetEditDoc().GetPos( pNode );
                         SfxBoolItem aBulletState( (const SfxBoolItem&) pImpEditEngine->GetParaAttrib( nPara, EE_PARA_BULLETSTATE ) );
                         bool bBulletIsVisible = aBulletState.GetValue() ? true : false;
 
-                        // just toggling EE_PARA_BULLETSTATE should be fine for both cases...
+                        
                         aBulletState.SetValue( !bBulletIsVisible );
                         SfxItemSet aSet( pImpEditEngine->GetParaAttribs( nPara ) );
                         aSet.Put( aBulletState );
                         pImpEditEngine->SetParaAttribs( nPara, aSet );
 
-                        // have this and the following paragraphs formatted and repainted.
-                        // (not painting a numbering in the list may cause the following
-                        // numberings to have different numbers than before and thus the
-                        // length may have changed as well )
+                        
+                        
+                        
+                        
                         pImpEditEngine->FormatAndUpdate( pImpEditEngine->GetActiveView() );
 
-                        if (bBulletIsVisible)   // bullet just turned invisible...
+                        if (bBulletIsVisible)   
                             break;
                     }
 
@@ -1273,7 +1269,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
                 {
                     sal_Unicode nCharCode = rKeyEvent.GetCharCode();
                     pEditView->pImpEditView->DrawSelection();
-                    // Autocorrection?
+                    
                     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
                     if ( ( pImpEditEngine->GetStatus().DoAutoCorrect() ) &&
                         ( SvxAutoCorrect::IsAutoCorrectChar( nCharCode ) ||
@@ -1286,10 +1282,10 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
                     {
                         aCurSel = pImpEditEngine->InsertText( (const EditSelection&)aCurSel, nCharCode, !pEditView->IsInsertMode(), sal_True );
                     }
-                    // AutoComplete ???
+                    
                     if ( pImpEditEngine->GetStatus().DoAutoComplete() && ( nCharCode != ' ' ) )
                     {
-                        // Only at end of word...
+                        
                         sal_Int32 nIndex = aCurSel.Max().GetIndex();
                         if ( ( nIndex >= aCurSel.Max().GetNode()->Len() ) ||
                              ( pImpEditEngine->aWordDelimiters.indexOf( aCurSel.Max().GetNode()->GetChar( nIndex ) ) != -1 ) )
@@ -1386,7 +1382,7 @@ bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditView, W
     if ( bModified )
     {
         DBG_ASSERT( !bReadOnly, "ReadOnly but modified???" );
-        // Idle-Formatter only when AnyInput.
+        
         if ( bAllowIdle && pImpEditEngine->GetStatus().UseIdleFormatter()
                 && Application::AnyInput( VCL_INPUT_KEYBOARD) )
             pImpEditEngine->IdleFormatAndUpdate( pEditView );
@@ -1593,7 +1589,7 @@ void EditEngine::RemoveParagraph( sal_Int32 nPara )
     DBG_ASSERT( pPortion && pNode, "Paragraph not found: RemoveParagraph" );
     if ( pNode && pPortion )
     {
-        // No Undo encapsulation needed.
+        
         pImpEditEngine->ImpRemoveParagraph( nPara );
         pImpEditEngine->InvalidateFromParagraph( nPara );
         pImpEditEngine->UpdateSelections();
@@ -1660,10 +1656,10 @@ void EditEngine::InsertParagraph( sal_Int32 nPara, const EditTextObject& rTxtObj
 
     pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
 
-    // No Undo componding needed.
+    
     EditPaM aPaM( pImpEditEngine->InsertParagraph( nPara ) );
-    // When InsertParagraph from the outside, no hard attributes
-    // should be taken over!
+    
+    
     pImpEditEngine->RemoveCharAttribs( nPara );
     pImpEditEngine->InsertText( rTxtObj, EditSelection( aPaM, aPaM ) );
 
@@ -1682,8 +1678,8 @@ void EditEngine::InsertParagraph(sal_Int32 nPara, const OUString& rTxt)
 
     pImpEditEngine->UndoActionStart( EDITUNDO_INSERT );
     EditPaM aPaM( pImpEditEngine->InsertParagraph( nPara ) );
-    // When InsertParagraph from the outside, no hard attributes
-    // should be taken over!
+    
+    
     pImpEditEngine->RemoveCharAttribs( nPara );
     pImpEditEngine->UndoActionEnd( EDITUNDO_INSERT );
     pImpEditEngine->ImpInsertText( EditSelection( aPaM, aPaM ), rTxt );
@@ -1813,7 +1809,7 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
         sal_uInt32 nChanges = nPrev ^ nWord;
         if ( pImpEditEngine->IsFormatted() )
         {
-            // possibly reformat:
+            
             if ( ( nChanges & EE_CNTRL_USECHARATTRIBS ) ||
                  ( nChanges & EE_CNTRL_USEPARAATTRIBS ) ||
                  ( nChanges & EE_CNTRL_ONECHARPERLINE ) ||
@@ -1841,7 +1837,7 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
             pImpEditEngine->StopOnlineSpellTimer();
             if ( bSpellingChanged && ( nWord & EE_CNTRL_ONLINESPELLING ) )
             {
-                // Create WrongList, start timer...
+                
                 sal_Int32 nNodes = pImpEditEngine->GetEditDoc().Count();
                 for ( sal_Int32 n = 0; n < nNodes; n++ )
                 {
@@ -1919,20 +1915,20 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
     if ( pPPortion )
     {
 
-        // If someone calls GetLineHeight() with an empty Engine.
+        
         DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetDocPosTopLeft: Doc not formatted - unable to format!" );
         if ( !pImpEditEngine->IsFormatted() )
             pImpEditEngine->FormatAndUpdate();
         if ( pPPortion->GetLines().Count() )
         {
-            // Correct it if large Bullet.
+            
             const EditLine* pFirstLine = pPPortion->GetLines()[0];
             aPoint.X() = pFirstLine->GetStartPosX();
         }
         else
         {
             const SvxLRSpaceItem& rLRItem = pImpEditEngine->GetLRSpaceItem( pPPortion->GetNode() );
-// TL_NF_LR         aPoint.X() = pImpEditEngine->GetXValue( (short)(rLRItem.GetTxtLeft() + rLRItem.GetTxtFirstLineOfst()) );
+
             sal_Int32 nSpaceBefore = 0;
             pImpEditEngine->GetSpaceBeforeAndMinLabelWidth( pPPortion->GetNode(), &nSpaceBefore );
             short nX = (short)(rLRItem.GetTxtLeft()
@@ -1948,8 +1944,8 @@ Point EditEngine::GetDocPosTopLeft( sal_Int32 nParagraph )
 
 const SvxNumberFormat* EditEngine::GetNumberFormat( sal_Int32 nPara ) const
 {
-    // derived objects may overload this function to give access to
-    // bullet information (see Outliner)
+    
+    
     (void) nPara;
     return 0;
 }
@@ -1966,7 +1962,7 @@ bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
         pImpEditEngine->FormatDoc();
 
     bool bTextPos = false;
-    // take unrotated positions for calculation here
+    
     Point aDocPos = GetDocPos( rPaperPos );
 
     if ( ( aDocPos.Y() > 0  ) && ( aDocPos.Y() < (long)pImpEditEngine->GetTextHeight() ) )
@@ -2071,7 +2067,7 @@ void EditEngine::QuickFormatDoc( bool bFull )
     else
         pImpEditEngine->FormatDoc();
 
-    // Don't pass active view, maybe selection is not updated yet...
+    
     pImpEditEngine->UpdateViews( NULL );
 }
 
@@ -2363,7 +2359,7 @@ sal_Int32 EditEngine::FindParagraph( long nDocPosY )
 EPosition EditEngine::FindDocPosition( const Point& rDocPos ) const
 {
     EPosition aPos;
-    // From the point of the API, this is const....
+    
     EditPaM aPaM = ((EditEngine*)this)->pImpEditEngine->GetPaM( rDocPos, sal_False );
     if ( aPaM.GetNode() )
     {
@@ -2378,7 +2374,7 @@ Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
     Rectangle aBounds;
     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( rPos.nPara );
 
-    // Check against index, not paragraph
+    
     if ( pNode && ( rPos.nIndex < pNode->Len() ) )
     {
         aBounds = pImpEditEngine->PaMtoEditCursor( EditPaM( pNode, rPos.nIndex ), GETCRSR_TXTONLY );
@@ -2392,7 +2388,7 @@ Rectangle EditEngine::GetCharacterBounds( const EPosition& rPos ) const
 ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
 {
 
-    // This only works if not already in the format ...
+    
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatDoc();
 
@@ -2425,9 +2421,9 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_Int32 nPara )
     return pImpEditEngine->CreateTransferable( aSel );
 }
 
-// =====================================================================
-// ======================    Virtual Methods    ========================
-// =====================================================================
+
+
+
 void EditEngine::DrawingText( const Point&, const OUString&, sal_Int32, sal_Int32,
     const sal_Int32*, const SvxFont&, sal_Int32, sal_Int32, sal_uInt8,
     const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
@@ -2478,7 +2474,7 @@ void EditEngine::ParagraphConnected( sal_Int32 /*nLeftParagraph*/, sal_Int32 /*n
 
 bool EditEngine::FormattingParagraph( sal_Int32 )
 {
-    // return true, if the Attribute was changed ...
+    
     return false;
 }
 
@@ -2572,9 +2568,9 @@ void EditEngine::FieldSelected( const SvxFieldItem&, sal_Int32, sal_Int32 )
 {
 }
 
-// =====================================================================
-// ======================     Static Methods     =======================
-// =====================================================================
+
+
+
 SfxItemPool* EditEngine::CreatePool( bool bPersistentRefCounts )
 {
     SfxItemPool* pPool = new EditEngineItemPool( bPersistentRefCounts );
@@ -2669,7 +2665,7 @@ bool EditEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
             case KEYFUNC_CUT:
             case KEYFUNC_PASTE: bDoesChange = true;
             break;
-            default:    // is then possibly edited below.
+            default:    
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -2713,7 +2709,7 @@ bool EditEngine::HasValidData( const ::com::sun::star::uno::Reference< ::com::su
 
     if ( rTransferable.is() )
     {
-        // Every application that copies rtf or any other text format also copies plain text into the clipboard....
+        
         datatransfer::DataFlavor aFlavor;
         SotExchange::GetFormatDataFlavor( SOT_FORMAT_STRING, aFlavor );
         bValidData = rTransferable->isDataFlavorSupported( aFlavor );

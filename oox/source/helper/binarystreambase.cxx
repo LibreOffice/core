@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/binarystreambase.hxx"
@@ -24,12 +24,12 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 BinaryStreamBase::~BinaryStreamBase()
 {
@@ -37,7 +37,7 @@ BinaryStreamBase::~BinaryStreamBase()
 
 sal_Int64 BinaryStreamBase::getRemaining() const
 {
-    // do not use isSeekable(), implementations may provide stream position and size even if not seekable
+    
     sal_Int64 nPos = tell();
     sal_Int64 nLen = size();
     return ((nPos >= 0) && (nLen >= 0)) ? ::std::max< sal_Int64 >( nLen - nPos, 0 ) : -1;
@@ -46,10 +46,10 @@ sal_Int64 BinaryStreamBase::getRemaining() const
 void BinaryStreamBase::alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos )
 {
     sal_Int64 nStrmPos = tell();
-    // nothing to do, if stream is at anchor position
+    
     if( mbSeekable && (0 <= nAnchorPos) && (nAnchorPos != nStrmPos) && (nBlockSize > 1) )
     {
-        // prevent modulo with negative arguments...
+        
         sal_Int64 nSkipSize = (nAnchorPos < nStrmPos) ?
             (nBlockSize - ((nStrmPos - nAnchorPos - 1) % nBlockSize) - 1) :
             ((nAnchorPos - nStrmPos) % nBlockSize);
@@ -57,7 +57,7 @@ void BinaryStreamBase::alignToBlock( sal_Int32 nBlockSize, sal_Int64 nAnchorPos 
     }
 }
 
-// ============================================================================
+
 
 BinaryXSeekableStream::BinaryXSeekableStream( const Reference< XSeekable >& rxSeekable ) :
     BinaryStreamBase( mxSeekable.is() ),
@@ -114,7 +114,7 @@ void BinaryXSeekableStream::close()
     mbEof = true;
 }
 
-// ============================================================================
+
 
 SequenceSeekableStream::SequenceSeekableStream( const StreamDataSequence& rData ) :
     BinaryStreamBase( true ),
@@ -148,8 +148,8 @@ void SequenceSeekableStream::close()
     mbEof = true;
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

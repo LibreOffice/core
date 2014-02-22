@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -32,19 +32,19 @@
 
 SFX_IMPL_STATUSBAR_CONTROL(SvxSelectionModeControl, SfxUInt16Item);
 
-/// Popup menu to select the selection type
+/
 class SelectionTypePopup : public PopupMenu
 {
 public:
     SelectionTypePopup( sal_uInt16 nCurrent );
 };
 
-/// Item id's cannot start from 0, so we need to convert
+/
 static sal_uInt16 id_to_state( sal_uInt16 nId )
 {
     switch ( nId )
     {
-        default: // fall through
+        default: 
         case SELECTION_STANDARD: return 0;
         case SELECTION_EXTENDED: return 1;
         case SELECTION_ADDED:    return 2;
@@ -52,12 +52,12 @@ static sal_uInt16 id_to_state( sal_uInt16 nId )
     }
 }
 
-/// Item id's cannot start from 0, so we need to convert
+/
 static sal_uInt16 state_to_id( sal_uInt16 nState )
 {
     switch ( nState )
     {
-        default: // fall through
+        default: 
         case 0: return SELECTION_STANDARD;
         case 1: return SELECTION_EXTENDED;
         case 2: return SELECTION_ADDED;
@@ -71,7 +71,7 @@ SelectionTypePopup::SelectionTypePopup( sal_uInt16 nCurrent )
     CheckItem( state_to_id( nCurrent ), true );
 }
 
-// class SvxSelectionModeControl -----------------------------------------
+
 
 SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
                                                   sal_uInt16 _nId,
@@ -91,7 +91,7 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
     GetStatusBar().SetItemText( GetId(), "" );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )
@@ -107,7 +107,7 @@ void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
 {
@@ -139,7 +139,7 @@ sal_Bool SvxSelectionModeControl::MouseButtonDown( const MouseEvent& rEvt )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxSelectionModeControl::Paint( const UserDrawEvent& rUsrEvt )
 {

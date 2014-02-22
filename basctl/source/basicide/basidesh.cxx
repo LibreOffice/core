@@ -104,10 +104,10 @@ public:
         catch(const uno::Exception& ) {}
     }
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const lang::EventObject& ) throw( uno::RuntimeException ) {}
 
-    // XContainerListener
+    
     virtual void SAL_CALL elementInserted( const container::ContainerEvent& Event ) throw( uno::RuntimeException )
     {
         OUString sModuleName;
@@ -212,12 +212,12 @@ void Shell::Init()
 
     GetExtraData()->ShellInCriticalSection() = false;
 
-    // It's enough to create the controller ...
-    // It will be public by using magic :-)
+    
+    
     new Controller(this);
 
-    // Force updating the title ! Because it must be set to the controller
-    // it has to be called directly after creating those controller.
+    
+    
     SetMDITitle ();
 
     UpdateWindows();
@@ -229,7 +229,7 @@ Shell::~Shell()
 
     ShellDestroyed(this);
 
-    // so that on a basic saving error, the shell doesn't pop right up again
+    
     GetExtraData()->ShellInCriticalSection() = true;
 
     SetWindow( 0 );
@@ -237,11 +237,11 @@ Shell::~Shell()
 
     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
     {
-        // no store; does already happen when the BasicManagers are destroyed
+        
         delete it->second;
     }
 
-    // Destroy all ContainerListeners for Basic Container.
+    
     if (ContainerListenerImpl* pListener = static_cast<ContainerListenerImpl*>(m_xLibListener.get()))
         pListener->removeContainerListener(m_aCurDocument, m_aCurLibName);
 
@@ -271,7 +271,7 @@ void Shell::onDocumentSave( const ScriptDocument& /*_rDocument*/ )
 
 void Shell::onDocumentSaveDone( const ScriptDocument& /*_rDocument*/ )
 {
-    // #i115671: Update SID_SAVEDOC after saving is completed
+    
     if (SfxBindings* pBindings = GetBindingsPtr())
         pBindings->Invalidate( SID_SAVEDOC );
 }
@@ -283,7 +283,7 @@ void Shell::onDocumentSaveAs( const ScriptDocument& /*_rDocument*/ )
 
 void Shell::onDocumentSaveAsDone( const ScriptDocument& /*_rDocument*/ )
 {
-    // not interested in
+    
 }
 
 void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
@@ -295,7 +295,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
     bool bSetCurLib = ( _rDocument == m_aCurDocument );
     std::vector<BaseWindow*> aDeleteVec;
 
-    // remove all windows which belong to this document
+    
     for (WindowTableIt it = aWindowTable.begin(); it != aWindowTable.end(); ++it)
     {
         BaseWindow* pWin = it->second;
@@ -306,14 +306,14 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
                 pWin->AddStatus( BASWIN_TOBEKILLED );
                 pWin->Hide();
                 StarBASIC::Stop();
-                // there's no notify
+                
                 pWin->BasicStopped();
             }
             else
                 aDeleteVec.push_back( pWin );
         }
     }
-    // delete windows outside main loop so we don't invalidate the original iterator
+    
     for (std::vector<BaseWindow*>::const_iterator it = aDeleteVec.begin(); it != aDeleteVec.end(); ++it)
     {
         BaseWindow* pWin = *it;
@@ -323,7 +323,7 @@ void Shell::onDocumentClosed( const ScriptDocument& _rDocument )
         RemoveWindow( pWin, true, false );
     }
 
-    // remove lib info
+    
     if (ExtraData* pData = GetExtraData())
         pData->GetLibInfos().RemoveInfoFor( _rDocument );
 
@@ -376,7 +376,7 @@ void Shell::StoreAllWindowData( bool bPersistent )
 
 bool Shell::PrepareClose( sal_Bool bUI )
 {
-    // reset here because it's modified after printing etc. (DocInfo)
+    
     GetViewFrame()->GetObjectShell()->SetModified(false);
 
     if ( StarBASIC::IsRunning() )
@@ -404,7 +404,7 @@ bool Shell::PrepareClose( sal_Bool bUI )
         }
 
         if ( bCanClose )
-            StoreAllWindowData( false );    // don't write on the disk, that will be done later automatically
+            StoreAllWindowData( false );    
 
         return bCanClose;
     }
@@ -563,11 +563,11 @@ void Shell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
 
                     if ( nHintId == SBX_HINT_BASICSTOP )
                     {
-                        // not only at error/break or explicit stoppage,
-                        // if the update is turned off due to a programming bug
+                        
+                        
                         BasicStopped();
                         if (pLayout)
-                            pLayout->UpdateDebug(true); // clear...
+                            pLayout->UpdateDebug(true); 
                         if( m_pCurLocalizationMgr )
                             m_pCurLocalizationMgr->handleBasicStopped();
                     }
@@ -642,7 +642,7 @@ void Shell::RemoveWindows( const ScriptDocument& rDocument, const OUString& rLib
 
 void Shell::UpdateWindows()
 {
-    // remove all windows that may not be displayed
+    
     bool bChangeCurWindow = pCurWin ? false : true;
     if ( !m_aCurLibName.isEmpty() )
     {
@@ -655,9 +655,9 @@ void Shell::UpdateWindows()
                 if ( pWin == pCurWin )
                     bChangeCurWindow = true;
                 pWin->StoreData();
-                // The request of RUNNING prevents the crash when in reschedule.
-                // Window is frozen at first, later the windows should be changed
-                // anyway to be marked as hidden instead of being deleted.
+                
+                
+                
                 if ( !(pWin->GetStatus() & ( BASWIN_TOBEKILLED | BASWIN_RUNNINGBASIC | BASWIN_SUSPENDED ) ) )
                     aDeleteVec.push_back( pWin );
             }
@@ -673,7 +673,7 @@ void Shell::UpdateWindows()
 
     BaseWindow* pNextActiveWindow = 0;
 
-    // show all windows that are to be shown
+    
     ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( ScriptDocument::AllWithApplication ) );
     for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
             doc != aDocuments.end();
@@ -682,7 +682,7 @@ void Shell::UpdateWindows()
     {
         StartListening( *doc->getBasicManager(), true /* log on only once */ );
 
-        // libraries
+        
         Sequence< OUString > aLibNames( doc->getLibraryNames() );
         sal_Int32 nLibCount = aLibNames.getLength();
         const OUString* pLibNames = aLibNames.getConstArray();
@@ -693,7 +693,7 @@ void Shell::UpdateWindows()
 
             if ( m_aCurLibName.isEmpty() || ( *doc == m_aCurDocument && aLibName == m_aCurLibName ) )
             {
-                // check, if library is password protected and not verified
+                
                 bool bProtected = false;
                 Reference< script::XLibraryContainer > xModLibContainer( doc->getLibraryContainer( E_SCRIPTS ) );
                 if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
@@ -711,7 +711,7 @@ void Shell::UpdateWindows()
                     if (ExtraData* pData = GetExtraData())
                         pLibInfoItem = pData->GetLibInfos().GetInfo(*doc, aLibName);
 
-                    // modules
+                    
                     if ( xModLibContainer.is() && xModLibContainer->hasByName( aLibName ) )
                     {
                         StarBASIC* pLib = doc->getBasicManager()->GetLib( aLibName );
@@ -743,7 +743,7 @@ void Shell::UpdateWindows()
                         }
                     }
 
-                    // dialogs
+                    
                     Reference< script::XLibraryContainer > xDlgLibContainer( doc->getLibraryContainer( E_DIALOGS ) );
                     if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) )
                     {
@@ -756,8 +756,8 @@ void Shell::UpdateWindows()
                             for ( sal_Int32 j = 0 ; j < nDlgCount ; j++ )
                             {
                                 OUString aDlgName = pDlgNames[ j ];
-                                // this find only looks for non-suspended windows;
-                                // suspended windows are handled in CreateDlgWin
+                                
+                                
                                 DialogWindow* pWin = FindDlgWin( *doc, aLibName, aDlgName, false );
                                 if ( !pWin )
                                     pWin = CreateDlgWin( *doc, aLibName, aDlgName );
@@ -815,9 +815,9 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
         {
             pWindow_->AddStatus( BASWIN_TOBEKILLED );
             pWindow_->Hide();
-            // In normal mode stop basic in windows to be deleted
-            // In VBA stop basic only if the running script is trying to delete
-            // its parent module
+            
+            
+            
             bool bStop = true;
             if ( pWindow_->GetDocument().isInVBAMode() )
             {
@@ -830,17 +830,17 @@ void Shell::RemoveWindow( BaseWindow* pWindow_, bool bDestroy, bool bAllowChange
             if ( bStop )
             {
                 StarBASIC::Stop();
-                // there will be no notify...
+                
                 pWindow_->BasicStopped();
             }
-            aWindowTable[ nKey ] = pWindow_;   // jump in again
+            aWindowTable[ nKey ] = pWindow_;   
         }
     }
     else
     {
         pWindow_->AddStatus( BASWIN_SUSPENDED );
         pWindow_->Deactivating();
-        aWindowTable[ nKey ] = pWindow_;   // jump in again
+        aWindowTable[ nKey ] = pWindow_;   
     }
 
 }
@@ -858,7 +858,7 @@ sal_uInt16 Shell::InsertWindowInTable( BaseWindow* pNewWin )
 
 void Shell::InvalidateBasicIDESlots()
 {
-    // only those that have an optic effect...
+    
 
     if (GetShell())
     {
@@ -941,7 +941,7 @@ void Shell::SetCurLib( const ScriptDocument& rDocument, OUString aLibName, bool 
 
 void Shell::SetCurLibForLocalization( const ScriptDocument& rDocument, OUString aLibName )
 {
-    // Create LocalizationMgr
+    
     Reference< resource::XStringResourceManager > xStringResourceManager;
     try
     {
@@ -963,6 +963,6 @@ void Shell::ImplStartListening( StarBASIC* pBasic )
     StartListening( pBasic->GetBroadcaster(), true /* log on only once */ );
 }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

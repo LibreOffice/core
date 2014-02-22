@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Hidden.hxx"
@@ -25,7 +25,7 @@
 #include <comphelper/basicio.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -40,36 +40,36 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OHiddenModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory) throw (RuntimeException)
 {
     return *(new OHiddenModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OHiddenModel::OHiddenModel(const Reference<XComponentContext>& _rxFactory)
     :OControlModel(_rxFactory, OUString())
 {
     m_nClassId = FormComponentType::HIDDENCONTROL;
 }
 
-//------------------------------------------------------------------
+
 OHiddenModel::OHiddenModel( const OHiddenModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OControlModel( _pOriginal, _rxFactory )
 {
     m_sHiddenValue = _pOriginal->m_sHiddenValue;
 }
 
-//------------------------------------------------------------------------------
+
 OHiddenModel::~OHiddenModel( )
 {
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OHiddenModel )
 
-//------------------------------------------------------------------------------
+
 void OHiddenModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
 {
     switch (_nHandle)
@@ -80,7 +80,7 @@ void OHiddenModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle) const
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (com::sun::star::uno::Exception)
 {
     switch (_nHandle)
@@ -94,7 +94,7 @@ void OHiddenModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const An
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OHiddenModel::convertFastPropertyValue(
             Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue)
             throw (IllegalArgumentException)
@@ -112,7 +112,7 @@ sal_Bool OHiddenModel::convertFastPropertyValue(
     return bModified;
 }
 
-//------------------------------------------------------------------------------
+
 void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_BASE_PROPERTIES(4)
@@ -123,8 +123,8 @@ void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) cons
     END_DESCRIBE_PROPERTIES();
 }
 
-// XServiceInfo
-//------------------------------------------------------------------------------
+
+
 StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
     StringSequence aSupported( 2 );
@@ -133,32 +133,32 @@ StringSequence SAL_CALL OHiddenModel::getSupportedServiceNames() throw(::com::su
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OHiddenModel::getServiceName() throw(RuntimeException)
 {
-    return OUString(FRM_COMPONENT_HIDDEN);    // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_HIDDEN);    
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OHiddenModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
     throw(IOException, RuntimeException)
 {
-    // Version
+    
     _rxOutStream->writeShort(0x0002);
 
-    // Wert
+    
     _rxOutStream << m_sHiddenValue;
 
     OControlModel::write(_rxOutStream);
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException)
 {
-    // Version
+    
     sal_uInt16 nVersion = _rxInStream->readShort();
 
-    // Name
+    
     DBG_ASSERT(nVersion != 1, "OHiddenModel::read : this version is obsolete !");
     switch (nVersion)
     {
@@ -169,8 +169,8 @@ void SAL_CALL OHiddenModel::read(const Reference<XObjectInputStream>& _rxInStrea
     OControlModel::read(_rxInStream);
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbasheetobject.hxx"
@@ -36,7 +36,7 @@
 using namespace ::com::sun::star;
 using namespace ::ooo::vba;
 
-// ============================================================================
+
 
 ScVbaButtonCharacters::ScVbaButtonCharacters(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -49,12 +49,12 @@ ScVbaButtonCharacters::ScVbaButtonCharacters(
     maPalette( rPalette ),
     mxPropSet( rxPropSet, uno::UNO_SET_THROW )
 {
-    // extract optional start parameter (missing or invalid -> from beginning)
+    
     if( !(rStart >>= mnStart) || (mnStart < 1) )
         mnStart = 1;
-    --mnStart;  // VBA is 1-based, rtl string is 0-based
+    --mnStart;  
 
-    // extract optional length parameter (missing or invalid -> to end)
+    
     if( !(rLength >>= mnLength) || (mnLength < 1) )
         mnLength = SAL_MAX_INT32;
 }
@@ -63,11 +63,11 @@ ScVbaButtonCharacters::~ScVbaButtonCharacters()
 {
 }
 
-// XCharacters attributes
+
 
 OUString SAL_CALL ScVbaButtonCharacters::getCaption() throw (uno::RuntimeException)
 {
-    // ignore invalid mnStart and/or mnLength members
+    
     OUString aString = getFullString();
     sal_Int32 nStart = ::std::min( mnStart, aString.getLength() );
     sal_Int32 nLength = ::std::min( mnLength, aString.getLength() - nStart );
@@ -91,19 +91,19 @@ void SAL_CALL ScVbaButtonCharacters::setCaption( const OUString& rCaption ) thro
 
 sal_Int32 SAL_CALL ScVbaButtonCharacters::getCount() throw (uno::RuntimeException)
 {
-    // always return the total length of the caption
+    
     return getFullString().getLength();
 }
 
 OUString SAL_CALL ScVbaButtonCharacters::getText() throw (uno::RuntimeException)
 {
-    // Text attribute same as Caption attribute?
+    
     return getCaption();
 }
 
 void SAL_CALL ScVbaButtonCharacters::setText( const OUString& rText ) throw (uno::RuntimeException)
 {
-    // Text attribute same as Caption attribute?
+    
     setCaption( rText );
 }
 
@@ -114,10 +114,10 @@ uno::Reference< excel::XFont > SAL_CALL ScVbaButtonCharacters::getFont() throw (
 
 void SAL_CALL ScVbaButtonCharacters::setFont( const uno::Reference< excel::XFont >& /*rxFont*/ ) throw (uno::RuntimeException)
 {
-    // TODO
+    
 }
 
-// XCharacters methods
+
 
 void SAL_CALL ScVbaButtonCharacters::Insert( const OUString& rString ) throw (uno::RuntimeException)
 {
@@ -136,11 +136,11 @@ void SAL_CALL ScVbaButtonCharacters::Delete() throw (uno::RuntimeException)
     setCaption( OUString() );
 }
 
-// XHelperInterface
+
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButtonCharacters, "ooo.vba.excel.Characters" )
 
-// private
+
 
 OUString ScVbaButtonCharacters::getFullString() const throw (uno::RuntimeException)
 {
@@ -152,7 +152,7 @@ void ScVbaButtonCharacters::setFullString( const OUString& rString ) throw (uno:
     mxPropSet->setPropertyValue( "Label", uno::Any( rString ) );
 }
 
-// ============================================================================
+
 
 ScVbaSheetObjectBase::ScVbaSheetObjectBase(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -167,7 +167,7 @@ ScVbaSheetObjectBase::ScVbaSheetObjectBase(
 {
 }
 
-// XSheetObject attributes
+
 
 double SAL_CALL ScVbaSheetObjectBase::getLeft() throw (uno::RuntimeException)
 {
@@ -230,7 +230,7 @@ void SAL_CALL ScVbaSheetObjectBase::setName( const OUString& rName ) throw (uno:
 sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement() throw (uno::RuntimeException)
 {
     sal_Int32 nRet = excel::XlPlacement::xlMoveAndSize;
-#if 0 // TODO: not working at the moment.
+#if 0 
     SvxShape* pShape = SvxShape::getImplementation( mxShape );
     if(pShape)
     {
@@ -248,7 +248,7 @@ sal_Int32 SAL_CALL ScVbaSheetObjectBase::getPlacement() throw (uno::RuntimeExcep
 
 void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ ) throw (uno::RuntimeException)
 {
-#if 0 // TODO: not working at the moment.
+#if 0 
     SvxShape* pShape = SvxShape::getImplementation( mxShape );
     if(pShape)
     {
@@ -259,7 +259,7 @@ void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ ) thr
             if ( nPlacement == excel::XlPlacement::xlFreeFloating )
                 eType = SCA_PAGE;
 
-            // xlMove is not supported, treated as SCA_CELL (xlMoveAndSize)
+            
 
             ScDrawLayer::SetAnchor(pObj, eType);
         }
@@ -269,16 +269,16 @@ void SAL_CALL ScVbaSheetObjectBase::setPlacement( sal_Int32 /*nPlacement*/ ) thr
 
 sal_Bool SAL_CALL ScVbaSheetObjectBase::getPrintObject() throw (uno::RuntimeException)
 {
-    // not supported
+    
     return sal_True;
 }
 
 void SAL_CALL ScVbaSheetObjectBase::setPrintObject( sal_Bool /*bPrintObject*/ ) throw (uno::RuntimeException)
 {
-    // not supported
+    
 }
 
-// private
+
 
 void ScVbaSheetObjectBase::setDefaultProperties( sal_Int32 nIndex ) throw (uno::RuntimeException)
 {
@@ -291,7 +291,7 @@ void ScVbaSheetObjectBase::implSetDefaultProperties() throw (uno::RuntimeExcepti
 {
 }
 
-// ============================================================================
+
 
 ScVbaControlObjectBase::ScVbaControlObjectBase(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -304,7 +304,7 @@ ScVbaControlObjectBase::ScVbaControlObjectBase(
     mxFormIC( rxFormIC, uno::UNO_SET_THROW ),
     mxControlProps( rxControlShape->getControl(), uno::UNO_QUERY_THROW )
 {
-    // set listener and event name to be used for OnAction attribute
+    
     switch( eListenerType )
     {
         case LISTENER_ACTION:
@@ -327,11 +327,11 @@ ScVbaControlObjectBase::ScVbaControlObjectBase(
             maListenerType = "XChangeListener";
             maEventMethod = "changed";
         break;
-        // no default, to let the compiler complain about missing case
+        
     }
 }
 
-// XSheetObject attributes
+
 
 OUString SAL_CALL ScVbaControlObjectBase::getName() throw (uno::RuntimeException)
 {
@@ -365,10 +365,10 @@ void SAL_CALL ScVbaControlObjectBase::setOnAction( const OUString& rMacroName ) 
     uno::Reference< script::XEventAttacherManager > xEventMgr( mxFormIC, uno::UNO_QUERY_THROW );
     sal_Int32 nIndex = getModelIndexInForm();
 
-    // first, remove a registered event (try/catch just in case implementation throws)
+    
     try { xEventMgr->revokeScriptEvent( nIndex, maListenerType, maEventMethod, OUString() ); } catch( uno::Exception& ) {}
 
-    // if a macro name has been passed, try to attach it to the event
+    
     if( !rMacroName.isEmpty() )
     {
         MacroResolvedInfo aResolvedMacro = resolveVBAMacro( getSfxObjShell( mxModel ), rMacroName );
@@ -393,20 +393,20 @@ void SAL_CALL ScVbaControlObjectBase::setPrintObject( sal_Bool bPrintObject ) th
     mxControlProps->setPropertyValue( "Printable", uno::Any( bPrintObject ) );
 }
 
-// XControlObject attributes
+
 
 sal_Bool SAL_CALL ScVbaControlObjectBase::getAutoSize() throw (uno::RuntimeException)
 {
-    // not supported
+    
     return false;
 }
 
 void SAL_CALL ScVbaControlObjectBase::setAutoSize( sal_Bool /*bAutoSize*/ ) throw (uno::RuntimeException)
 {
-    // not supported
+    
 }
 
-// private
+
 
 sal_Int32 ScVbaControlObjectBase::getModelIndexInForm() const throw (uno::RuntimeException)
 {
@@ -419,7 +419,7 @@ sal_Int32 ScVbaControlObjectBase::getModelIndexInForm() const throw (uno::Runtim
     throw uno::RuntimeException();
 }
 
-// ============================================================================
+
 
 ScVbaButton::ScVbaButton(
         const uno::Reference< XHelperInterface >& rxParent,
@@ -431,7 +431,7 @@ ScVbaButton::ScVbaButton(
 {
 }
 
-// XButton attributes
+
 
 OUString SAL_CALL ScVbaButton::getCaption() throw (uno::RuntimeException)
 {
@@ -450,7 +450,7 @@ uno::Reference< excel::XFont > SAL_CALL ScVbaButton::getFont() throw (uno::Runti
 
 void SAL_CALL ScVbaButton::setFont( const uno::Reference< excel::XFont >& /*rxFont*/ ) throw (uno::RuntimeException)
 {
-    // TODO
+    
 }
 
 sal_Int32 SAL_CALL ScVbaButton::getHorizontalAlignment() throw (uno::RuntimeException)
@@ -473,7 +473,7 @@ void SAL_CALL ScVbaButton::setHorizontalAlignment( sal_Int32 nAlign ) throw (uno
         case excel::Constants::xlRight:     nAwtAlign = awt::TextAlign::RIGHT;  break;
         case excel::Constants::xlCenter:    nAwtAlign = awt::TextAlign::CENTER; break;
     }
-    // form controls expect short value
+    
     mxControlProps->setPropertyValue( "Align", uno::Any( static_cast< sal_Int16 >( nAwtAlign ) ) );
 }
 
@@ -503,27 +503,27 @@ void SAL_CALL ScVbaButton::setVerticalAlignment( sal_Int32 nAlign ) throw (uno::
 
 sal_Int32 SAL_CALL ScVbaButton::getOrientation() throw (uno::RuntimeException)
 {
-    // not supported
+    
     return excel::XlOrientation::xlHorizontal;
 }
 
 void SAL_CALL ScVbaButton::setOrientation( sal_Int32 /*nOrientation*/ ) throw (uno::RuntimeException)
 {
-    // not supported
+    
 }
 
-// XButton methods
+
 
 uno::Reference< excel::XCharacters > SAL_CALL ScVbaButton::Characters( const uno::Any& rStart, const uno::Any& rLength ) throw (uno::RuntimeException)
 {
     return new ScVbaButtonCharacters( this, mxContext, mxControlProps, maPalette, rStart, rLength );
 }
 
-// XHelperInterface
+
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaButton, "ooo.vba.excel.Button" )
 
-// private
+
 
 OUString ScVbaButton::implGetBaseName() const
 {
@@ -535,6 +535,6 @@ void ScVbaButton::implSetDefaultProperties() throw (uno::RuntimeException)
     setCaption( getName() );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

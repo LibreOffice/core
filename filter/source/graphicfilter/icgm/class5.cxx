@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,16 +14,16 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-//#define VCL_NEED_BASETSD
+
 
 #include <main.hxx>
 #include <outact.hxx>
 
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass5()
 {
@@ -53,7 +53,7 @@ void CGM::ImplDoClass5()
                 ImplMapDouble( nWidth );
             }
             else
-                nWidth = (sal_uInt32)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ) * 25; // scaling in 1/4 mm
+                nWidth = (sal_uInt32)ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ) * 25; 
 
             ( pElement->nAspectSourceFlags & ASF_LINEWIDTH )
                 ? pElement->aLineBundle.nLineWidth = nWidth
@@ -160,7 +160,7 @@ void CGM::ImplDoClass5()
         {
                 if ( pElement->eVDCType == VDC_INTEGER )
                     pElement->nCharacterHeight = ImplGetI( pElement->nVDCIntegerPrecision );
-                else // ->floating points
+                else 
                     pElement->nCharacterHeight = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
                 ImplMapDouble( pElement->nCharacterHeight );
                 pElement->nCharacterHeight /= 18.0;
@@ -175,7 +175,7 @@ void CGM::ImplDoClass5()
                 pElement->nCharacterOrientation[2] = ImplGetI( pElement->nVDCIntegerPrecision );
                 pElement->nCharacterOrientation[3] = ImplGetI( pElement->nVDCIntegerPrecision );
             }
-            else // ->floating points
+            else 
             {
                 pElement->nCharacterOrientation[0] = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
                 pElement->nCharacterOrientation[1] = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
@@ -371,8 +371,8 @@ void CGM::ImplDoClass5()
                 sal_uInt32  nASF = ImplGetUI16();
                 switch ( nASF )
                 {
-                    case 0 : pElement->nAspectSourceFlags &= ~nFlag; break; // INDIVIDUAL
-                    case 1 : pElement->nAspectSourceFlags |= nFlag; break;  // BUNDLED
+                    case 0 : pElement->nAspectSourceFlags &= ~nFlag; break; 
+                    case 1 : pElement->nAspectSourceFlags |= nFlag; break;  
                     default : mbStatus = sal_False; break;
                 }
             }
@@ -403,19 +403,19 @@ void CGM::ImplDoClass5()
             }
         }
         break;
-        case 0x27 : /*Line Type Continuation*/ break;           // NS
-        case 0x28 : /*Line Type Initial Offset*/ break;         // NS
+        case 0x27 : /*Line Type Continuation*/ break;           
+        case 0x28 : /*Line Type Initial Offset*/ break;         
         case 0x29 : /*Text Score Type*/ break;
         case 0x2a : /*Restricted Text Type*/ break;
         case 0x2b : /*Interpolated interior*/ break;
-        case 0x2c : /*Edge Cap*/ break;                         // NS
+        case 0x2c : /*Edge Cap*/ break;                         
         case 0x2d : /*Edge Join*/ break;
-        case 0x2e : /*Edge Type Continuation*/ break;           // NS
-        case 0x2f : /*Edge Type Initial Offset*/ break;         // NS
-        case 0x30 : /*Symbol Library Index*/ break;             // NS
-        case 0x31 : /*Symbol Color*/ break;                     // NS
-        case 0x32 : /*Symbol Size*/ break;                      // NS
-        case 0x33 : /*Symbol Orientation*/ break;               // NS
+        case 0x2e : /*Edge Type Continuation*/ break;           
+        case 0x2f : /*Edge Type Initial Offset*/ break;         
+        case 0x30 : /*Symbol Library Index*/ break;             
+        case 0x31 : /*Symbol Color*/ break;                     
+        case 0x32 : /*Symbol Size*/ break;                      
+        case 0x33 : /*Symbol Orientation*/ break;               
         case 0x50 : /*Block Text Region Margins*/ break;
         case 0x51 : /*Block Text Region Expansion*/ break;
         case 0x52 : /*Block Text Region Anchor*/ break;
@@ -456,15 +456,15 @@ void CGM::ImplDoClass5()
         break;
         case 0x7d : /*set Gradient Description*/
         {
-            ImplGetI( pElement->nIndexPrecision ); // -Wall is this needed?
+            ImplGetI( pElement->nIndexPrecision ); 
             sal_uInt32  nNumberOfStages = ImplGetI( pElement->nIndexPrecision );
             sal_uInt32  i, nColorFrom = 0;
             sal_uInt32  nColorTo = 0xffffff;
 
-            //FIXME,  does this loop actually do anything?
+            
             for ( i = 0; i < nNumberOfStages; i++ )
             {
-                ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ); // -Wall is this needed
+                ImplGetFloat( pElement->eRealPrecision, pElement->nRealSize ); 
             }
 
             for ( i = 0; i <= nNumberOfStages; i++ )

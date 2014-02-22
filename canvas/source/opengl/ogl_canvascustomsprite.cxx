@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "ogl_canvascustomsprite.hxx"
@@ -59,7 +59,7 @@ namespace oglcanvas
 
         mpSpriteCanvas.clear();
 
-        // forward to parent
+        
         CanvasCustomSpriteBaseT::disposeThis();
     }
 
@@ -87,7 +87,7 @@ namespace oglcanvas
                                                      viewState,
                                                      renderState);
 
-        // convert position to device pixel
+        
         maPosition = ::basegfx::unotools::b2DPointFromRealPoint2D(aNewPos);
         maPosition *= aTransform;
     }
@@ -139,13 +139,13 @@ namespace oglcanvas
             ::canvas::tools::roundUp( maSize.Width ),
             ::canvas::tools::roundUp( maSize.Height ));
 
-        // translate sprite to output position
+        
         glTranslated(maPosition.getX(), maPosition.getY(), 0);
 
         {
             TransformationPreserver aPreserver2;
 
-            // apply sprite content transformation matrix
+            
             double aGLTransform[] =
                 {
                     maTransformation.m00, maTransformation.m10, 0, 0,
@@ -158,24 +158,24 @@ namespace oglcanvas
             IBufferContextSharedPtr pBufferContext;
             if( mfAlpha != 1.0 || mxClip.is() )
             {
-                // drats. need to render to temp surface before, and then
-                // composite that to screen
+                
+                
 
-                // TODO(P3): buffer pbuffer, maybe even keep content
-                // (in a texture?)
+                
+                
                 pBufferContext=maCanvasHelper.getDeviceHelper()->createBufferContext(aSpriteSizePixel);
                 pBufferContext->startBufferRendering();
             }
 
-            // this ends up in pBufferContext, if that one's "current"
+            
             if( !maCanvasHelper.renderRecordedActions() )
                 return false;
 
             if( pBufferContext )
             {
-                // content ended up in background buffer - compose to
-                // screen now. Calls below switches us back to window
-                // context, and binds to generated, dynamic texture
+                
+                
+                
                 pBufferContext->endBufferRendering();
 
                 glEnable(GL_TEXTURE_2D);
@@ -189,7 +189,7 @@ namespace oglcanvas
                 glBlendFunc(GL_SRC_ALPHA,
                             GL_ONE_MINUS_SRC_ALPHA);
 
-                // blend against fixed vertex color; texture alpha is multiplied in
+                
                 glColor4f(1,1,1,mfAlpha);
 
                 if( mxClip.is() )
@@ -197,7 +197,7 @@ namespace oglcanvas
                     const double fWidth=maSize.Width;
                     const double fHeight=maSize.Height;
 
-                    // TODO(P3): buffer triangulation
+                    
                     const ::basegfx::B2DPolygon& rTriangulatedPolygon(
                         ::basegfx::triangulator::triangulate(
                             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(mxClip)));

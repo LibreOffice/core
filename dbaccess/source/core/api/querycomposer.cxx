@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -85,7 +85,7 @@ void SAL_CALL OQueryComposer::disposing()
     ::comphelper::disposeComponent(m_xComposer);
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 Sequence< Type > SAL_CALL OQueryComposer::getTypes() throw (RuntimeException)
 {
     SAL_INFO("dbaccess", "OQueryComposer::getTypes" );
@@ -108,7 +108,7 @@ Sequence< sal_Int8 > SAL_CALL OQueryComposer::getImplementationId() throw (Runti
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
+
 sal_Int64 SAL_CALL OQueryComposer::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "OQueryComposer::getSomething" );
@@ -120,14 +120,14 @@ sal_Int64 SAL_CALL OQueryComposer::getSomething( const Sequence< sal_Int8 >& rId
 
 Any SAL_CALL OQueryComposer::queryInterface( const Type & rType ) throw(RuntimeException)
 {
-    //SAL_INFO("dbaccess", "OQueryComposer::queryInterface" );
+    
     Any aRet = OSubComponent::queryInterface(rType);
     if(!aRet.hasValue())
         aRet = OQueryComposer_BASE::queryInterface(rType);
     return aRet;
 }
 
-// XServiceInfo
+
 OUString OQueryComposer::getImplementationName(  ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "OQueryComposer::getImplementationName" );
@@ -147,7 +147,7 @@ Sequence< OUString > OQueryComposer::getSupportedServiceNames(  ) throw (Runtime
     return aSNS;
 }
 
-// XSQLQueryComposer
+
 OUString SAL_CALL OQueryComposer::getQuery(  ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "OQueryComposer::getQuery" );
@@ -282,7 +282,7 @@ void SAL_CALL OQueryComposer::setOrder( const OUString& order ) throw(SQLExcepti
     m_xComposer->setOrder(aOrderCreator.getComposedAndClear());
 }
 
-// XTablesSupplier
+
 Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "OQueryComposer::getTables" );
@@ -292,7 +292,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeExc
     return Reference<XTablesSupplier>(m_xComposer,UNO_QUERY)->getTables();
 }
 
-// XColumnsSupplier
+
 Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  ) throw(RuntimeException)
 {
     SAL_INFO("dbaccess", "OQueryComposer::getColumns" );

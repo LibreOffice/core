@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,7 +34,7 @@
 
 using namespace ::com::sun::star::uno;
 
-// =======================================================================
+
 
 void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
                                     long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
@@ -64,7 +64,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         mpVirDev = NULL;
     if ( !mpVirDev )
     {
-        // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
+        
         throw ::com::sun::star::uno::RuntimeException(
             OUString( "Could not create system bitmap!" ),
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >() );
@@ -76,9 +76,9 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     mbScreenComp    = true;
     mnAlphaDepth    = -1;
 
-    // #i59315# init vdev size from system object, when passed a
-    // SystemGraphicsData. Otherwise, output size will always
-    // incorrectly stay at (1,1)
+    
+    
+    
     if( pData && mpVirDev )
         mpVirDev->GetSize(mnOutWidth,mnOutHeight);
 
@@ -105,14 +105,14 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
         mbInitTextColor = true;
     }
 
-    // virtual devices have white background by default
+    
     SetBackground( Wallpaper( Color( COL_WHITE ) ) );
 
-    // #i59283# don't erase user-provided surface
+    
     if( !pData )
         Erase();
 
-    // register VirDev in the list
+    
     mpNext = pSVData->maGDIData.mpFirstVirDev;
     mpPrev = NULL;
     if ( mpNext )
@@ -122,7 +122,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     pSVData->maGDIData.mpFirstVirDev = this;
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
@@ -135,7 +135,7 @@ VirtualDevice::VirtualDevice( sal_uInt16 nBitCount )
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount );
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount )
     : mpVirDev( NULL ),
@@ -148,7 +148,7 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount, sal_uInt16 nAlphaBitCount )
     : mpVirDev( NULL ),
@@ -161,11 +161,11 @@ VirtualDevice::VirtualDevice( const OutputDevice& rCompDev, sal_uInt16 nBitCount
 
     ImplInitVirDev( &rCompDev, 1, 1, nBitCount );
 
-    // Enable alpha channel
+    
     mnAlphaDepth = sal::static_int_cast<sal_Int8>(nAlphaBitCount);
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCount )
 :   mpVirDev( NULL ),
@@ -176,7 +176,7 @@ VirtualDevice::VirtualDevice( const SystemGraphicsData *pData, sal_uInt16 nBitCo
     ImplInitVirDev( Application::GetDefaultDevice(), 1, 1, nBitCount, pData );
 }
 
-// -----------------------------------------------------------------------
+
 
 VirtualDevice::~VirtualDevice()
 {
@@ -189,7 +189,7 @@ VirtualDevice::~VirtualDevice()
     if ( mpVirDev )
         pSVData->mpDefInst->DestroyVirtualDevice( mpVirDev );
 
-    // remove this VirtualDevice from the double-linked global list
+    
     if( mpPrev )
         mpPrev->mpNext = mpNext;
     else
@@ -201,7 +201,7 @@ VirtualDevice::~VirtualDevice()
         pSVData->maGDIData.mpLastVirDev = mpPrev;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
@@ -215,8 +215,8 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     {
         if ( bErase )
             Erase();
-        // Yeah, so trying to re-use a VirtualDevice but this time using a
-        // pre-allocated buffer won't work. Big deal.
+        
+        
         return true;
     }
 
@@ -248,7 +248,7 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
         SalVirtualDevice*   pNewVirDev;
         ImplSVData*         pSVData = ImplGetSVData();
 
-        // we need a graphics
+        
         if ( !mpGraphics )
         {
             if ( !ImplGetGraphics() )
@@ -303,15 +303,15 @@ bool VirtualDevice::InnerImplSetOutputSizePixel( const Size& rNewSize, bool bEra
     return bRet;
 }
 
-// -----------------------------------------------------------------------
 
-// #i32109#: Fill opaque areas correctly (without relying on
-// fill/linecolor state)
+
+
+
 void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
 {
-    // Set line and fill color to black (->opaque),
-    // fill rect with that (linecolor, too, because of
-    // those pesky missing pixel problems)
+    
+    
+    
     Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
     SetLineColor( COL_BLACK );
     SetFillColor( COL_BLACK );
@@ -319,7 +319,7 @@ void VirtualDevice::ImplFillOpaqueRectangle( const Rectangle& rRect )
     Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, const basebmp::RawMemorySharedArray &pBuffer )
 {
@@ -327,7 +327,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, c
     {
         if( mnAlphaDepth != -1 )
         {
-            // #110958# Setup alpha bitmap
+            
             if(mpAlphaVDev && mpAlphaVDev->GetOutputSizePixel() != rNewSize)
             {
                 delete mpAlphaVDev;
@@ -340,7 +340,7 @@ bool VirtualDevice::ImplSetOutputSizePixel( const Size& rNewSize, bool bErase, c
                 mpAlphaVDev->InnerImplSetOutputSizePixel(rNewSize, bErase, basebmp::RawMemorySharedArray() );
             }
 
-            // TODO: copy full outdev state to new one, here. Also needed in outdev2.cxx:DrawOutDev
+            
             if( GetLineColor() != Color( COL_TRANSPARENT ) )
                 mpAlphaVDev->SetLineColor( COL_BLACK );
 
@@ -373,7 +373,7 @@ bool VirtualDevice::SetOutputSizePixelScaleOffsetAndBuffer( const Size& rNewSize
     return ImplSetOutputSizePixel( rNewSize, true, pBuffer);
 }
 
-// -----------------------------------------------------------------------
+
 
 void VirtualDevice::SetReferenceDevice( RefDevMode i_eRefDevMode )
 {
@@ -408,22 +408,22 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
     mnDPIY = i_nDPIY;
     mnDPIScaleFactor = 1;
 
-    EnableOutput( false );  // prevent output on reference device
+    EnableOutput( false );  
     mbScreenComp = false;
 
-    // invalidate currently selected fonts
+    
     mbInitFont = true;
     mbNewFont = true;
 
-    // avoid adjusting font lists when already in refdev mode
+    
     sal_uInt8 nOldRefDevMode = meRefDevMode;
     sal_uInt8 nOldCompatFlag = (sal_uInt8)meRefDevMode & REFDEV_FORCE_ZERO_EXTLEAD;
     meRefDevMode = (sal_uInt8)(i_eRefDevMode | nOldCompatFlag);
     if( (nOldRefDevMode ^ nOldCompatFlag) != REFDEV_NONE )
         return;
 
-    // the reference device should have only scalable fonts
-    // => clean up the original font lists before getting new ones
+    
+    
     if ( mpFontEntry )
     {
         mpFontCache->Release( mpFontEntry );
@@ -440,28 +440,28 @@ void VirtualDevice::ImplSetReferenceDevice( RefDevMode i_eRefDevMode, sal_Int32 
         mpGetDevSizeList = NULL;
     }
 
-    // preserve global font lists
+    
     ImplSVData* pSVData = ImplGetSVData();
     if( mpFontList && (mpFontList != pSVData->maGDIData.mpScreenFontList) )
         delete mpFontList;
     if( mpFontCache && (mpFontCache != pSVData->maGDIData.mpScreenFontCache) )
         delete mpFontCache;
 
-    // get font list with scalable fonts only
+    
     ImplGetGraphics();
     mpFontList = pSVData->maGDIData.mpScreenFontList->Clone( true, false );
 
-    // prepare to use new font lists
+    
     mpFontCache = new ImplFontCache();
 }
 
-// -----------------------------------------------------------------------
+
 
 void VirtualDevice::Compat_ZeroExtleadBug()
 {
     meRefDevMode = (sal_uInt8)meRefDevMode | REFDEV_FORCE_ZERO_EXTLEAD;
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/sfxmodelfactory.hxx>
@@ -30,10 +30,10 @@
 #include <algorithm>
 #include <functional>
 
-//........................................................................
+
 namespace sfx2
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -52,9 +52,9 @@ namespace sfx2
     using ::com::sun::star::beans::PropertyValue;
     using ::com::sun::star::lang::XInitialization;
 
-    //====================================================================
-    //= SfxModelFactory - declaration
-    //====================================================================
+    
+    
+    
     typedef ::cppu::WeakImplHelper2 <   XSingleServiceFactory
                                     ,   XServiceInfo
                                     >   SfxModelFactory_Base;
@@ -75,11 +75,11 @@ namespace sfx2
             const Sequence< OUString >& _rServiceNames
         );
 
-        // XSingleServiceFactory
+        
         virtual Reference< XInterface > SAL_CALL createInstance(  ) throw (Exception, RuntimeException);
         virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
@@ -97,10 +97,10 @@ namespace sfx2
         const SfxModelFactoryFunc                   m_pComponentFactoryFunc;
     };
 
-    //====================================================================
-    //= SfxModelFactory - implementation
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     SfxModelFactory::SfxModelFactory( const Reference< XMultiServiceFactory >& _rxServiceFactory,
             const OUString& _rImplementationName, const SfxModelFactoryFunc _pComponentFactoryFunc,
             const Sequence< OUString >& _rServiceNames )
@@ -111,24 +111,24 @@ namespace sfx2
     {
     }
 
-    //--------------------------------------------------------------------
+    
     SfxModelFactory::~SfxModelFactory()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XInterface > SfxModelFactory::impl_createInstance( const sal_uInt64 _nCreationFlags ) const
     {
         return (*m_pComponentFactoryFunc)( m_xServiceFactory, _nCreationFlags );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL SfxModelFactory::createInstance(  ) throw (Exception, RuntimeException)
     {
         return createInstanceWithArguments( Sequence< Any >() );
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         struct IsSpecialArgument : public ::std::unary_function< Any, bool >
@@ -151,7 +151,7 @@ namespace sfx2
         };
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL SfxModelFactory::createInstanceWithArguments( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException)
     {
         ::comphelper::NamedValueCollection aArgs( _rArguments );
@@ -166,8 +166,8 @@ namespace sfx2
 
         Reference< XInterface > xInstance( impl_createInstance( nCreationFlags ) );
 
-        // to mimic the bahaviour of the default factory's createInstanceWithArguments, we initialize
-        // the object with the given arguments, stripped by the three special ones
+        
+        
         Sequence< Any > aStrippedArguments( _rArguments.getLength() );
         Any* pStrippedArgs = aStrippedArguments.getArray();
         Any* pStrippedArgsEnd = ::std::remove_copy_if(
@@ -210,6 +210,6 @@ namespace sfx2
     {
         return new SfxModelFactory( _rxServiceFactory, _rImplementationName, _pComponentFactoryFunc, _rServiceNames );
     }
-} // namespace sfx2
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

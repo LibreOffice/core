@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -84,7 +84,7 @@ namespace stoc_connector {
         _closed(sal_False),
         _error(sal_False)
     {
-        // make it unique
+        
         m_sDescription += ",uniqueValue=";
         m_sDescription += OUString::number(
             sal::static_int_cast< sal_Int64 >(
@@ -209,7 +209,7 @@ namespace stoc_connector {
             throw(::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException)
     {
-            // ensure that close is called only once
+            
         if( 1 == osl_atomic_increment( (&m_nStatus) ) )
         {
             m_socket.shutdown();
@@ -225,7 +225,7 @@ namespace stoc_connector {
 
 
 
-    // XConnectionBroadcaster
+    
     void SAL_CALL SocketConnection::addStreamListener(const Reference<XStreamListener> & aListener) throw(RuntimeException)
     {
         MutexGuard guard(_mutex);

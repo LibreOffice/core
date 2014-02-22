@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "mysql/YCatalog.hxx"
@@ -26,7 +26,7 @@
 #include <comphelper/types.hxx>
 
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity;
 using namespace connectivity::mysql;
 using namespace connectivity::sdbcx;
@@ -36,12 +36,12 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
-// -------------------------------------------------------------------------
+
 OMySQLCatalog::OMySQLCatalog(const Reference< XConnection >& _xConnection) : OCatalog(_xConnection)
                 ,m_xConnection(_xConnection)
 {
 }
-// -----------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TStringVector& _rNames)
 {
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
@@ -50,7 +50,7 @@ void OMySQLCatalog::refreshObjects(const Sequence< OUString >& _sKindOfObject,TS
                                                             _sKindOfObject);
     fillNames(xResult,_rNames);
 }
-// -------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshTables()
 {
     TStringVector aVector;
@@ -61,7 +61,7 @@ void OMySQLCatalog::refreshTables()
     Sequence< OUString > sTableTypes(3);
     sTableTypes[0] = s_sTableTypeView;
     sTableTypes[1] = s_sTableTypeTable;
-    sTableTypes[2] = s_sAll;    // just to be sure to include anything else ....
+    sTableTypes[2] = s_sAll;    
 
     refreshObjects(sTableTypes,aVector);
 
@@ -70,16 +70,16 @@ void OMySQLCatalog::refreshTables()
     else
         m_pTables = new OTables(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshViews()
 {
     Sequence< OUString > aTypes(1);
     aTypes[0] = "VIEW";
 
-    // let's simply assume the server is new enough to support views. Current drivers
-    // as of this writing might not return the proper information in getTableTypes, so
-    // don't rely on it.
-    // during #73245# / 2007-10-26 / frank.schoenheit@sun.com
+    
+    
+    
+    
     bool bSupportsViews = true;
 
     TStringVector aVector;
@@ -91,11 +91,11 @@ void OMySQLCatalog::refreshViews()
     else
         m_pViews = new OViews(m_xMetaData,*this,m_aMutex,aVector);
 }
-// -------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshGroups()
 {
 }
-// -------------------------------------------------------------------------
+
 void OMySQLCatalog::refreshUsers()
 {
     TStringVector aVector;
@@ -116,7 +116,7 @@ void OMySQLCatalog::refreshUsers()
     else
         m_pUsers = new OUsers(*this,m_aMutex,aVector,m_xConnection,this);
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL OMySQLCatalog::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if ( rType == ::getCppuType((const Reference<XGroupsSupplier>*)0) )
@@ -125,7 +125,7 @@ Any SAL_CALL OMySQLCatalog::queryInterface( const Type & rType ) throw(RuntimeEx
 
     return OCatalog::queryInterface(rType);
 }
-// -----------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  ) throw(RuntimeException)
 {
     Sequence< Type > aTypes = OCatalog::getTypes();
@@ -143,7 +143,7 @@ Sequence< Type > SAL_CALL OMySQLCatalog::getTypes(  ) throw(RuntimeException)
     const Type* pTypes = aOwnTypes.empty() ? 0 : &aOwnTypes[0];
     return Sequence< Type >(pTypes, aOwnTypes.size());
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

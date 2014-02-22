@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <regexp.hxx>
@@ -28,16 +28,16 @@
 #include <comphelper/string.hxx>
 
 namespace unnamed_ucb_regexp {} using namespace unnamed_ucb_regexp;
-    // unnamed namespaces don't work well yet...
+    
 
 using namespace com::sun::star;
 using namespace ucb_impl;
 
-//============================================================================
+
 //
-//  Regexp
+
 //
-//============================================================================
+
 
 inline Regexp::Regexp(Kind eTheKind, OUString const & rThePrefix,
                       bool bTheEmptyDomain, OUString const & rTheInfix,
@@ -55,7 +55,7 @@ inline Regexp::Regexp(Kind eTheKind, OUString const & rThePrefix,
     OSL_ASSERT(m_bTranslation || m_aReversePrefix.isEmpty());
 }
 
-//============================================================================
+
 namespace unnamed_ucb_regexp {
 
 bool matchStringIgnoreCase(sal_Unicode const ** pBegin,
@@ -173,15 +173,15 @@ bool Regexp::matches(OUString const & rString,
     return bMatches;
 }
 
-//============================================================================
+
 namespace unnamed_ucb_regexp {
 
 bool isScheme(OUString const & rString, bool bColon)
 {
     using comphelper::string::isalphaAscii;
     using comphelper::string::isdigitAscii;
-    // Return true if rString matches <scheme> (plus a trailing ":" if bColon
-    // is true) from RFC 2396:
+    
+    
     sal_Unicode const * p = rString.getStr();
     sal_Unicode const * pEnd = p + rString.getLength();
     if (p != pEnd && isalphaAscii(*p))
@@ -293,7 +293,7 @@ OUString Regexp::getRegexp(bool bReverse) const
     }
 }
 
-//============================================================================
+
 namespace unnamed_ucb_regexp {
 
 bool matchString(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
@@ -355,8 +355,8 @@ bool scanStringLiteral(sal_Unicode const ** pBegin, sal_Unicode const * pEnd,
 
 Regexp Regexp::parse(OUString const & rRegexp)
 {
-    // Detect an input of '<scheme>' as an abbreviation of '"<scheme>:".*'
-    // where <scheme> is as defined in RFC 2396:
+    
+    
     if (isScheme(rRegexp, false))
         return Regexp(Regexp::KIND_PREFIX,
                       rRegexp + ":",
@@ -374,9 +374,9 @@ Regexp Regexp::parse(OUString const & rRegexp)
     if (p == pEnd)
         throw lang::IllegalArgumentException();
 
-    // This and the matchString() calls below are some of the few places where
-    // RTL_CONSTASCII_STRINGPARAM() should NOT be removed.
-    // (c.f. https://gerrit.libreoffice.org/3117)
+    
+    
+    
     if (matchString(&p, pEnd, RTL_CONSTASCII_STRINGPARAM(".*")))
     {
         if (p != pEnd)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,9 +43,9 @@
 
 #include <boost/scoped_ptr.hpp>
 
-// filename of configuration files
+
 #define PRINT_FILENAME  "psprint.conf"
-// the group of the global defaults
+
 #define GLOBAL_DEFAULTS_GROUP "__Global_Printer_Defaults__"
 
 #include <boost/unordered_set.hpp>
@@ -73,16 +73,16 @@ namespace psp
         bool hasChanged() const;
         OUString getCommand() const;
 
-        // sets changed status to false; therefore not const
+        
         void getSystemQueues( std::list< PrinterInfoManager::SystemPrintQueue >& rQueues );
     };
-} // namespace
+} 
 
 /*
 *  class PrinterInfoManager
 */
 
-// -----------------------------------------------------------------
+
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
@@ -110,7 +110,7 @@ void PrinterInfoManager::release()
     pSalData->m_pPIManager = NULL;
 }
 
-// -----------------------------------------------------------------
+
 
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_pQueueInfo( NULL ),
@@ -125,7 +125,7 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
     initSystemDefaultPaper();
 }
 
-// -----------------------------------------------------------------
+
 
 PrinterInfoManager::~PrinterInfoManager()
 {
@@ -135,25 +135,25 @@ PrinterInfoManager::~PrinterInfoManager()
     #endif
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::isCUPSDisabled() const
 {
     return m_bDisableCUPS;
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::setCUPSDisabled( bool bDisable )
 {
     m_bDisableCUPS = bDisable;
     writePrinterConfig();
-    // actually we know the printers changed
-    // however this triggers reinitialization the right way
+    
+    
     checkPrintersChanged( true );
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::initSystemDefaultPaper()
 {
@@ -162,11 +162,11 @@ void PrinterInfoManager::initSystemDefaultPaper()
         RTL_TEXTENCODING_UTF8);
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::checkPrintersChanged( bool bWait )
 {
-    // check if files were created, deleted or modified since initialize()
+    
     ::std::list< WatchFile >::const_iterator it;
     bool bChanged = false;
     for( it = m_aWatchFiles.begin(); it != m_aWatchFiles.end() && ! bChanged; ++it )
@@ -175,13 +175,13 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
         if( DirectoryItem::get( it->m_aFilePath, aItem ) )
         {
             if( it->m_aModified.Seconds != 0 )
-                bChanged = true; // file probably has vanished
+                bChanged = true; 
         }
         else
         {
             FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
             if( aItem.getFileStatus( aStatus ) )
-                bChanged = true; // unlikely but not impossible
+                bChanged = true; 
             else
             {
                 TimeValue aModified = aStatus.getModifyTime();
@@ -212,7 +212,7 @@ bool PrinterInfoManager::checkPrintersChanged( bool bWait )
     return bChanged;
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::initialize()
 {
@@ -222,13 +222,13 @@ void PrinterInfoManager::initialize()
     m_aWatchFiles.clear();
     OUString aDefaultPrinter;
 
-    // first initialize the global defaults
-    // have to iterate over all possible files
-    // there should be only one global setup section in all
-    // available config files
+    
+    
+    
+    
     m_aGlobalDefaults = PrinterInfo();
 
-    // need a parser for the PPDContext. generic printer should do.
+    
     m_aGlobalDefaults.m_pParser = PPDParser::getParser( OUString( "SGENPRT" ) );
     m_aGlobalDefaults.m_aContext.setParser( m_aGlobalDefaults.m_pParser );
     m_bDisableCUPS = false;
@@ -300,7 +300,7 @@ void PrinterInfoManager::initialize()
                     m_bDisableCUPS = false;
             }
 
-            // get the PPDContext of global JobData
+            
             for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
             {
                 OString aKey( aConfig.GetKeyName( nKey ) );
@@ -321,14 +321,14 @@ void PrinterInfoManager::initialize()
     }
     setDefaultPaper( m_aGlobalDefaults.m_aContext );
 
-    // now collect all available printers
+    
     for( print_dir_it = aDirList.begin(); print_dir_it != aDirList.end(); ++print_dir_it )
     {
         INetURLObject aDir( *print_dir_it, INET_PROT_FILE, INetURLObject::ENCODE_ALL );
         INetURLObject aFile( aDir );
         aFile.Append( OUString( PRINT_FILENAME ) );
 
-        // check directory validity
+        
         OUString aUniPath;
         FileBase::getFileURLFromSystemPath( aDir.PathToFileName(), aUniPath );
         Directory aDirectory( aUniPath );
@@ -341,7 +341,7 @@ void PrinterInfoManager::initialize()
         FileStatus aStatus( osl_FileStatus_Mask_ModifyTime );
         DirectoryItem aItem;
 
-        // setup WatchFile list
+        
         WatchFile aWatchFile;
         aWatchFile.m_aFilePath = aUniPath;
         if( ! DirectoryItem::get( aUniPath, aItem ) &&
@@ -366,12 +366,12 @@ void PrinterInfoManager::initialize()
                 OUString aPrinterName;
 
                 sal_Int32 nNamePos = aValue.indexOf('/');
-                // check for valid value of "Printer"
+                
                 if (nNamePos == -1)
                     continue;
 
                 Printer aPrinter;
-                // initialize to global defaults
+                
                 aPrinter.m_aInfo = m_aGlobalDefaults;
 
                 aPrinterName = OStringToOUString(aValue.copy(nNamePos+1),
@@ -379,37 +379,37 @@ void PrinterInfoManager::initialize()
                 aPrinter.m_aInfo.m_aPrinterName = aPrinterName;
                 aPrinter.m_aInfo.m_aDriverName = OStringToOUString(aValue.copy(0, nNamePos), RTL_TEXTENCODING_UTF8);
 
-                // set parser, merge settings
-                // don't do this for CUPS printers as this is done
-                // by the CUPS system itself
+                
+                
+                
                 if( !aPrinter.m_aInfo.m_aDriverName.startsWith( "CUPS:" ) )
                 {
                     aPrinter.m_aInfo.m_pParser          = PPDParser::getParser( aPrinter.m_aInfo.m_aDriverName );
                     aPrinter.m_aInfo.m_aContext.setParser( aPrinter.m_aInfo.m_pParser );
-                    // note: setParser also purges the context
+                    
 
-                    // ignore this printer if its driver is not found
+                    
                     if( ! aPrinter.m_aInfo.m_pParser )
                         continue;
 
-                    // merge the ppd context keys if the printer has the same keys and values
-                    // this is a bit tricky, since it involves mixing two PPDs
-                    // without constraints which might end up badly
-                    // this feature should be use with caution
-                    // it is mainly to select default paper sizes for new printers
+                    
+                    
+                    
+                    
+                    
                     for( int nPPDValueModified = 0; nPPDValueModified < m_aGlobalDefaults.m_aContext.countValuesModified(); nPPDValueModified++ )
                     {
                         const PPDKey* pDefKey = m_aGlobalDefaults.m_aContext.getModifiedKey( nPPDValueModified );
                         const PPDValue* pDefValue = m_aGlobalDefaults.m_aContext.getValue( pDefKey );
                         const PPDKey* pPrinterKey = pDefKey ? aPrinter.m_aInfo.m_pParser->getKey( pDefKey->getKey() ) : NULL;
                         if( pDefKey && pPrinterKey )
-                            // at least the options exist in both PPDs
+                            
                         {
                             if( pDefValue )
                             {
                                 const PPDValue* pPrinterValue = pPrinterKey->getValue( pDefValue->m_aOption );
                                 if( pPrinterValue )
-                                    // the printer has a corresponding option for the key
+                                    
                                 aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
                             }
                             else
@@ -418,7 +418,7 @@ void PrinterInfoManager::initialize()
                     }
 
                     aValue = aConfig.ReadKey( "Command" );
-                    // no printer without a command
+                    
                     if (aValue.isEmpty())
                     {
                         /*  TODO:
@@ -440,7 +440,7 @@ void PrinterInfoManager::initialize()
                 aValue = aConfig.ReadKey( "Features" );
                 aPrinter.m_aInfo.m_aFeatures = OStringToOUString(aValue, RTL_TEXTENCODING_UTF8);
 
-                // override the settings in m_aGlobalDefaults if keys exist
+                
                 aValue = aConfig.ReadKey( "DefaultPrinter" );
                 if (!aValue.equals("0") && !aValue.equalsIgnoreAsciiCase("false"))
                     aDefaultPrinter = aPrinterName;
@@ -486,8 +486,8 @@ void PrinterInfoManager::initialize()
                 if (!aValue.isEmpty())
                     aPrinter.m_aInfo.m_nPDFDevice = aValue.toInt32();
 
-                // now iterate over all keys to extract multi key information:
-                // 1. PPDContext information
+                
+                
                 for( int nKey = 0; nKey < aConfig.GetKeyCount(); ++nKey )
                 {
                     OString aKey( aConfig.GetKeyName( nKey ) );
@@ -507,7 +507,7 @@ void PrinterInfoManager::initialize()
 
                 setDefaultPaper( aPrinter.m_aInfo.m_aContext );
 
-                // finally insert printer
+                
                 FileBase::getFileURLFromSystemPath( aFile.PathToFileName(), aPrinter.m_aFile );
                 aPrinter.m_bModified    = false;
                 aPrinter.m_aGroup       = aConfig.GetGroupName( nGroup );
@@ -523,7 +523,7 @@ void PrinterInfoManager::initialize()
         }
     }
 
-    // set default printer
+    
     if( m_aPrinters.size() )
     {
         if( m_aPrinters.find( aDefaultPrinter ) == m_aPrinters.end() )
@@ -536,8 +536,8 @@ void PrinterInfoManager::initialize()
     if( m_eType != Default )
         return;
 
-    // add a default printer for every available print queue
-    // merge paper default printer, all else from global defaults
+    
+    
     PrinterInfo aMergeInfo( m_aGlobalDefaults );
     aMergeInfo.m_aDriverName    = "SGENPRT";
     aMergeInfo.m_aFeatures      = "autoqueue";
@@ -562,7 +562,7 @@ void PrinterInfoManager::initialize()
         aPrinterName += ">";
 
         if( m_aPrinters.find( aPrinterName ) != m_aPrinters.end() )
-            // probably user made this one permanent in padmin
+            
             continue;
 
         OUString aCmd( m_aSystemPrintCommand );
@@ -570,20 +570,20 @@ void PrinterInfoManager::initialize()
 
         Printer aPrinter;
 
-        // initialize to merged defaults
+        
         aPrinter.m_aInfo = aMergeInfo;
         aPrinter.m_aInfo.m_aPrinterName     = aPrinterName;
         aPrinter.m_aInfo.m_aCommand         = aCmd;
         aPrinter.m_aInfo.m_aComment         = it->m_aComment;
         aPrinter.m_aInfo.m_aLocation        = it->m_aLocation;
         aPrinter.m_bModified                = false;
-        aPrinter.m_aGroup                   = OUStringToOString(aPrinterName, aEncoding); //provide group name in case user makes this one permanent in padmin
+        aPrinter.m_aGroup                   = OUStringToOString(aPrinterName, aEncoding); 
 
         m_aPrinters[ aPrinterName ] = aPrinter;
     }
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
 {
@@ -593,7 +593,7 @@ void PrinterInfoManager::listPrinters( ::std::list< OUString >& rList ) const
         rList.push_back( it->first );
 }
 
-// -----------------------------------------------------------------
+
 
 const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter ) const
 {
@@ -605,7 +605,7 @@ const PrinterInfo& PrinterInfoManager::getPrinterInfo( const OUString& rPrinter 
     return it != m_aPrinters.end() ? it->second.m_aInfo : aEmptyInfo;
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo& rNewInfo )
 {
@@ -621,9 +621,9 @@ void PrinterInfoManager::changePrinterInfo( const OUString& rPrinter, const Prin
     }
 }
 
-// -----------------------------------------------------------------
 
-// need to check writeability / creatability of config files
+
+
 static bool checkWriteability( const OUString& rUniPath )
 {
     bool bRet = false;
@@ -637,7 +637,7 @@ static bool checkWriteability( const OUString& rUniPath )
 
 bool PrinterInfoManager::writePrinterConfig()
 {
-    // find at least one writeable config
+    
     ::boost::unordered_map< OUString, Config*, OUStringHash > files;
     ::boost::unordered_map< OUString, int, OUStringHash > rofiles;
     ::boost::unordered_map< OUString, Config*, OUStringHash >::iterator file_it;
@@ -662,10 +662,10 @@ bool PrinterInfoManager::writePrinterConfig()
     for( it = m_aPrinters.begin(); it != m_aPrinters.end(); ++it )
     {
         if( ! it->second.m_bModified )
-            // printer was not changed, do nothing
+            
             continue;
 
-        // don't save autoqueue printers
+        
         sal_Int32 nIndex = 0;
         bool bAutoQueue = false;
         while( nIndex != -1 && ! bAutoQueue )
@@ -679,11 +679,11 @@ bool PrinterInfoManager::writePrinterConfig()
 
         if( !it->second.m_aFile.isEmpty() )
         {
-            // check if file is writable
+            
             if( files.find( it->second.m_aFile ) == files.end() )
             {
                 bool bInsertToNewFile = false;
-                // maybe it is simply not inserted yet
+                
                 if( rofiles.find( it->second.m_aFile ) == rofiles.end() )
                 {
                     if( checkWriteability( it->second.m_aFile ) )
@@ -693,30 +693,30 @@ bool PrinterInfoManager::writePrinterConfig()
                 }
                 else
                     bInsertToNewFile = true;
-                // original file is read only, insert printer in a new writeable file
+                
                 if( bInsertToNewFile )
                 {
                     rofiles[ it->second.m_aFile ] = 1;
-                    // update alternate file list
-                    // the remove operation ensures uniqueness of each alternate
+                    
+                    
                     it->second.m_aAlternateFiles.remove( it->second.m_aFile );
                     it->second.m_aAlternateFiles.remove( files.begin()->first );
                     it->second.m_aAlternateFiles.push_front( it->second.m_aFile );
-                    // update file
+                    
                     it->second.m_aFile = files.begin()->first;
                 }
             }
         }
-        else // a new printer, write it to the first file available
+        else 
             it->second.m_aFile = files.begin()->first;
 
-        if( it->second.m_aGroup.isEmpty() ) // probably a new printer
+        if( it->second.m_aGroup.isEmpty() ) 
             it->second.m_aGroup = OString( it->first.getStr(), it->first.getLength(), RTL_TEXTENCODING_UTF8 );
 
         if( files.find( it->second.m_aFile ) != files.end() )
         {
             Config* pConfig = files[ it->second.m_aFile ];
-            pConfig->DeleteGroup( it->second.m_aGroup ); // else some old keys may remain
+            pConfig->DeleteGroup( it->second.m_aGroup ); 
             pConfig->SetGroup( it->second.m_aGroup );
 
             OStringBuffer aValue(OUStringToOString(it->second.m_aInfo.m_aDriverName, RTL_TEXTENCODING_UTF8));
@@ -746,7 +746,7 @@ bool PrinterInfoManager::writePrinterConfig()
 
             if( ! it->second.m_aInfo.m_aDriverName.startsWith( "CUPS:" ) )
             {
-                // write PPDContext (not for CUPS)
+                
                 for( int i = 0; i < it->second.m_aInfo.m_aContext.countValuesModified(); i++ )
                 {
                     const PPDKey* pKey = it->second.m_aInfo.m_aContext.getModifiedKey( i );
@@ -764,14 +764,14 @@ bool PrinterInfoManager::writePrinterConfig()
         }
     }
 
-    // get rid of Config objects. this also writes any changes
+    
     for( file_it = files.begin(); file_it != files.end(); ++file_it )
         delete file_it->second;
 
     return true;
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUString& rDriverName )
 {
@@ -788,20 +788,20 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         aPrinter.m_aInfo.m_aContext.setParser( pParser );
         aPrinter.m_aInfo.m_aPrinterName             = rPrinterName;
 
-        // merge PPD values with global defaults
+        
         for( int nPPDValueModified = 0; nPPDValueModified < m_aGlobalDefaults.m_aContext.countValuesModified(); nPPDValueModified++ )
         {
             const PPDKey* pDefKey = m_aGlobalDefaults.m_aContext.getModifiedKey( nPPDValueModified );
             const PPDValue* pDefValue = m_aGlobalDefaults.m_aContext.getValue( pDefKey );
             const PPDKey* pPrinterKey = pDefKey ? aPrinter.m_aInfo.m_pParser->getKey( pDefKey->getKey() ) : NULL;
             if( pDefKey && pPrinterKey )
-                // at least the options exist in both PPDs
+                
             {
                 if( pDefValue )
                 {
                     const PPDValue* pPrinterValue = pPrinterKey->getValue( pDefValue->m_aOption );
                     if( pPrinterValue )
-                        // the printer has a corresponding option for the key
+                        
                     aPrinter.m_aInfo.m_aContext.setValue( pPrinterKey, pPrinterValue );
                 }
                 else
@@ -819,15 +819,15 @@ bool PrinterInfoManager::addPrinter( const OUString& rPrinterName, const OUStrin
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDevice,
         m_aPrinters[rPrinterName].m_aInfo.m_nColorDepth );
         #endif
-        // comment: logically one should writePrinterConfig() here
-        // but immediately after addPrinter() a changePrinterInfo()
-        // will follow (see padmin code), which writes it again,
-        // so we can currently save some performance here
+        
+        
+        
+        
     }
     return bSuccess;
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bCheckOnly )
 {
@@ -838,10 +838,10 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
     {
         if( !it->second.m_aFile.isEmpty() )
         {
-            // this printer already exists in a config file
+            
 
 
-            // check writeability of config file(s)
+            
             if( ! checkWriteability( it->second.m_aFile ) )
                 bSuccess = false;
             else
@@ -871,17 +871,17 @@ bool PrinterInfoManager::removePrinter( const OUString& rPrinterName, bool bChec
         if( bSuccess && ! bCheckOnly )
         {
             m_aPrinters.erase( it );
-            // need this here because someone may call
-            // checkPrintersChanged after the removal
-            // but then other added printers were not flushed
-            // to disk, so they are discarded
+            
+            
+            
+            
             writePrinterConfig();
         }
     }
     return bSuccess;
 }
 
-// -----------------------------------------------------------------
+
 
 bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
 {
@@ -900,13 +900,13 @@ bool PrinterInfoManager::setDefaultPrinter( const OUString& rPrinterName )
     return bSuccess;
 }
 
-// -----------------------------------------------------------------
+
 bool PrinterInfoManager::addOrRemovePossible() const
 {
     return true;
 }
 
-// -----------------------------------------------------------------
+
 
 void PrinterInfoManager::getSystemPrintCommands( std::list< OUString >& rCommands )
 {
@@ -996,7 +996,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
         rContext.getModifiedKey( nModified ) != pPageSizeKey )
         ;
 
-    if( nModified >= 0 ) // paper was set already, do not modify
+    if( nModified >= 0 ) 
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "not setting default paper, already set %s\n",
@@ -1005,7 +1005,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
         return;
     }
 
-    // paper not set, fill in default value
+    
     const PPDValue* pPaperVal = NULL;
     int nValues = pPageSizeKey->countValues();
     for( int i = 0; i < nValues && ! pPaperVal; i++ )
@@ -1027,7 +1027,7 @@ void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
     }
 }
 
-// -----------------------------------------------------------------
+
 
 SystemQueueInfo::SystemQueueInfo() :
     m_bChanged( false )
@@ -1092,10 +1092,10 @@ static void lpgetSysQueueTokenHandler(
     aUniqueSet.insert( OUString( "_all" ) );
     aUniqueSet.insert( OUString( "_default" ) );
 
-    // the eventual "all" attribute of the "_all" queue tells us, which
-    // printers are to be used for this user at all
+    
+    
 
-    // find _all: line
+    
     OString aAllLine( "_all:" );
     OString aAllAttr( "all=" );
     for( std::list< OString >::const_iterator it = i_rLines.begin();
@@ -1103,14 +1103,14 @@ static void lpgetSysQueueTokenHandler(
     {
         if( it->indexOf( aAllLine, 0 ) == 0 )
         {
-            // now find the "all" attribute
+            
             ++it;
             while( it != i_rLines.end() )
             {
                 OString aClean( WhitespaceToSpace( *it ) );
                 if( aClean.startsWith( aAllAttr ) )
                 {
-                    // insert the comma separated entries into the set of printers to use
+                    
                     sal_Int32 nPos = aAllAttr.getLength();
                     while( nPos != -1 )
                     {
@@ -1132,14 +1132,14 @@ static void lpgetSysQueueTokenHandler(
          it != i_rLines.end(); ++it )
     {
         sal_Int32 nPos = 0;
-        // find the begin of a new printer section
+        
         nPos = it->indexOf( ':', 0 );
         if( nPos != -1 )
         {
             OUString aSysQueue( OStringToOUString( it->copy( 0, nPos ), aEncoding ) );
-            // do not insert duplicates (e.g. lpstat tends to produce such lines)
-            // in case there was a "_all" section, insert only those printer explicitly
-            // set in the "all" attribute
+            
+            
+            
             if( aUniqueSet.find( aSysQueue ) == aUniqueSet.end() &&
                 ( aOnlySet.empty() || aOnlySet.find( aSysQueue ) != aOnlySet.end() )
                 )
@@ -1156,7 +1156,7 @@ static void lpgetSysQueueTokenHandler(
         }
         if( bInsertAttribute && ! o_rQueues.empty() )
         {
-            // look for "description" attribute, insert as comment
+            
             nPos = it->indexOf( aDescrStr, 0 );
             if( nPos != -1 )
             {
@@ -1165,7 +1165,7 @@ static void lpgetSysQueueTokenHandler(
                     o_rQueues.back().m_aComment = OStringToOUString(aComment, aEncoding);
                 continue;
             }
-            // look for "location" attribute, inser as location
+            
             nPos = it->indexOf( aLocStr, 0 );
             if( nPos != -1 )
             {
@@ -1194,8 +1194,8 @@ static void standardSysQueueTokenHandler(
     {
         sal_Int32 nPos = 0;
 
-        // search for a line describing a printer:
-        // find if there are enough tokens before the name
+        
+        
         for( unsigned int i = 0; i < i_pParms->nForeTokenCount && nPos != -1; i++ )
         {
             nPos = it->indexOf( aForeToken, nPos );
@@ -1204,13 +1204,13 @@ static void standardSysQueueTokenHandler(
         }
         if( nPos != -1 )
         {
-            // find if there is the token after the queue
+            
             sal_Int32 nAftPos = it->indexOf( aAftToken, nPos );
             if( nAftPos != -1 )
             {
-                // get the queue name between fore and aft tokens
+                
                 OUString aSysQueue( OStringToOUString( it->copy( nPos, nAftPos - nPos ), aEncoding ) );
-                // do not insert duplicates (e.g. lpstat tends to produce such lines)
+                
                 if( aUniqueSet.find( aSysQueue ) == aUniqueSet.end() )
                 {
                     o_rQueues.push_back( PrinterInfoManager::SystemPrintQueue() );

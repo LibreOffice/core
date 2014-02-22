@@ -23,14 +23,14 @@
 sal_Char CSS1_CONSTASCII_DEF( sCSS_mimetype, "text/css" );
 
 
-// ein par allgemeine Strings
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_import, "import" );
 
-// Feature: PrintExt
+
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_page, "page" );
 //sal_Char CSS1_CONSTASCII_DEF( sCSS1_media, "media" );
-// /Feature: PrintExt
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_important, "important" );
 
@@ -38,11 +38,11 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_link, "link" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_visited, "visited" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_first_letter, "first-letter" );
 
-// Feature: PrintExt
+
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_left, "left" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_right, "right" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_first, "first" );
-// /Feature: PrintExt
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_url, "url" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_rgb, "rgb" );
@@ -57,7 +57,7 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_UNIT_em, "em" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_UNIT_ex, "ex" );
 
 
-// Strings fuer Font-Properties
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_font_family, "font-family" );
 
@@ -118,7 +118,7 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_font, "font" );
 
 
 
-// Strings fuer Farb- und Hintergrund-Properties
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_color, "color" );
 
@@ -141,7 +141,7 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_scroll, "scroll" );
 
 
 
-// Strings fuer Text-Properties
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_letter_spacing, "letter-spacing" );
 
@@ -170,7 +170,7 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_line_height, "line-height" );
 
 
 
-// Strings fuer Box-Properties
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_margin_left, "margin-left" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_margin_right, "margin-right" );
@@ -221,7 +221,7 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_float, "float" );
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_column_count, "column-count" );
 
-// Strings fuer Positioning
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_position, "position" );
 
@@ -234,9 +234,9 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_left, "left" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_top, "top" );
 
 
-// Feature: PrintExt
 
-// Strings fuer Printing Extensions
+
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_page_break_before, "page-break-before" );
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_P_page_break_after, "page-break-after" );
@@ -255,7 +255,7 @@ sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_landscape, "landscape" );
 //sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_crop, "crop" );
 //sal_Char CSS1_CONSTASCII_DEF( sCSS1_PV_cross, "cross" );
 
-// /Feature: PrintExt
+
 
 sal_Char CSS1_CONSTASCII_DEF( sCSS1_class_abs_pos, "sd-abs-pos" );
 

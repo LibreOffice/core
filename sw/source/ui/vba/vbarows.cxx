@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbarows.hxx"
 #include "vbarow.hxx"
@@ -161,7 +161,7 @@ void SAL_CALL SwVbaRows::setAllowBreakAcrossPages( const uno::Any& _allowbreakac
 
 float SAL_CALL SwVbaRows::getSpaceBetweenColumns() throw (uno::RuntimeException)
 {
-    // just get the first spacing of the first cell
+    
     uno::Reference< table::XCellRange > xCellRange( mxTextTable, uno::UNO_QUERY_THROW );
     uno::Reference< beans::XPropertySet > xCellProps( xCellRange->getCellByPosition( 0, mnStartRowIndex ), uno::UNO_QUERY_THROW );
     sal_Int32 nLeftBorderDistance = 0;
@@ -252,7 +252,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
     sal_Int32 indent
 ) throw (uno::RuntimeException)
  {
-    // calculate the new width and get the proportion between old and new
+    
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
     sal_Int32 nWidth = 0;
     xTableProps->getPropertyValue("Width") >>= nWidth;
@@ -267,7 +267,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
     }
     double propFactor = (double)nNewWidth/(double)nWidth;
 
-    // get all columns, calculate and set the new width of the columns
+    
     uno::Reference< XCollection > xCol( xColumns, uno::UNO_QUERY_THROW );
     sal_Int32 nColCount = xCol->getCount();
     for( sal_Int32 i = 0; i < nColCount; i++ )
@@ -278,20 +278,20 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
         xColumn->setWidth( nNewColWidth );
     }
 
-    // set the width and position of the table
+    
     setIndentWithAdjustNone( indent );
     xTableProps->setPropertyValue("Width", uno::makeAny( nNewWidth ) );
  }
 
  void SwVbaRows::setIndentWithAdjustSameWidth( const uno::Reference< word::XColumns >& xColumns, sal_Int32 indent ) throw (uno::RuntimeException)
  {
-    // calculate the new width and get the width of all columns
+    
     uno::Reference< beans::XPropertySet > xTableProps( mxTextTable, uno::UNO_QUERY_THROW );
     sal_Int32 nWidth = 0;
     xTableProps->getPropertyValue("Width") >>= nWidth;
     sal_Int32 nNewWidth = nWidth - indent;
 
-    // get all columns, calculate and set the new width of the columns
+    
     uno::Reference< XCollection > xCol( xColumns, uno::UNO_QUERY_THROW );
     sal_Int32 nColCount = xCol->getCount();
     sal_Int32 nNewColWidth = (sal_Int32)( double( nNewWidth )/nColCount );
@@ -301,7 +301,7 @@ void SwVbaRows::setIndentWithAdjustNone( sal_Int32 indent ) throw (uno::RuntimeE
         xColumn->setWidth( nNewColWidth );
     }
 
-    // set the width and position of the table
+    
     setIndentWithAdjustNone( indent );
     xTableProps->setPropertyValue("Width", uno::makeAny( nNewWidth ) );
  }
@@ -330,7 +330,7 @@ uno::Any SAL_CALL SwVbaRows::Item( const uno::Any& Index1, const uno::Any& /*not
     throw  uno::RuntimeException("Index out of bounds", uno::Reference< uno::XInterface >() );
 }
 
-// XEnumerationAccess
+
 uno::Type
 SwVbaRows::getElementType() throw (uno::RuntimeException)
 {

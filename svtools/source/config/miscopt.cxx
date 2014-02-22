@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/miscopt.hxx>
@@ -42,7 +42,7 @@ using namespace ::com::sun::star;
 
 #define ROOTNODE_MISC                       "Office.Common/Misc"
 
-// PROPERTYHANDLE defines must be sequential from zero for Commit/Load
+
 #define PROPERTYNAME_PLUGINSENABLED         "PluginsEnabled"
 #define PROPERTYHANDLE_PLUGINSENABLED           0
 #define PROPERTYNAME_SYMBOLSET              "SymbolSet"
@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 #define PROPERTYNAME_MACRORECORDERMODE       "MacroRecorderMode"
 #define PROPERTYHANDLE_MACRORECORDERMODE        10
 
-#define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) // from <vcl/toolbox.hxx>
+#define VCL_TOOLBOX_STYLE_FLAT              ((sal_uInt16)0x0004) 
 
 class SvtMiscOptions_Impl : public ConfigItem
 {
@@ -96,7 +96,7 @@ class SvtMiscOptions_Impl : public ConfigItem
          SvtMiscOptions_Impl();
         ~SvtMiscOptions_Impl();
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      called for notify of configmanager
             @descr      These method is called from the ConfigManager before application ends or from the
                          PropertyChangeListener if the sub tree broadcasts changes. You must update your
@@ -108,7 +108,7 @@ class SvtMiscOptions_Impl : public ConfigItem
             @return     -
 
             @onerror    -
-        *//*-*****************************************************************************************************/
+        *
 
         virtual void Notify( const Sequence< OUString >& seqPropertyNames );
 
@@ -118,7 +118,7 @@ class SvtMiscOptions_Impl : public ConfigItem
          */
         void Load( const Sequence< OUString >& rPropertyNames );
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      write changes to configuration
             @descr      These method writes the changed values into the sub tree
                         and should always called in our destructor to guarantee consistency of config data.
@@ -129,13 +129,13 @@ class SvtMiscOptions_Impl : public ConfigItem
             @return     -
 
             @onerror    -
-        *//*-*****************************************************************************************************/
+        *
 
         virtual void Commit();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  public interface
-        //---------------------------------------------------------------------------------------------------------
+        
+        
+        
 
         inline sal_Bool UseSystemFileDialog() const
         { return m_bUseSystemFileDialog; }
@@ -211,11 +211,11 @@ class SvtMiscOptions_Impl : public ConfigItem
         inline sal_Bool IsGetSymbolsStyleReadOnly()
         { return m_bIsSymbolsStyleRO; }
 
-        // translate to VCL settings ( "0" = 3D, "1" = FLAT )
+        
         inline sal_Int16 GetToolboxStyle()
         { return m_nToolboxStyle ? VCL_TOOLBOX_STYLE_FLAT : 0; }
 
-        // translate from VCL settings
+        
         void SetToolboxStyle( sal_Int16 nStyle, bool _bSetModified );
 
         inline sal_Bool IsGetToolboxStyleReadOnly()
@@ -243,13 +243,13 @@ class SvtMiscOptions_Impl : public ConfigItem
         void RemoveListenerLink( const Link& rLink );
         void CallListeners();
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
+    
+    
+    
 
     private:
 
-        /*-****************************************************************************************************//**
+        /*-****************************************************************************************************
             @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
@@ -260,20 +260,20 @@ class SvtMiscOptions_Impl : public ConfigItem
             @return     A list of needed configuration keys is returned.
 
             @onerror    -
-        *//*-*****************************************************************************************************/
+        *
 
         static Sequence< OUString > GetPropertyNames();
 
     private:
-        // The unittests fail if we call SetModified during initialization in the constructor.
+        
         void ImplSetSymbolsStyleWithoutSettingModifiedFlag( bool bValue, sal_Int16 nSet, const OUString &rName );
 };
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 SvtMiscOptions_Impl::SvtMiscOptions_Impl()
-    // Init baseclasses first
+    
     : ConfigItem( ROOTNODE_MISC )
 
     , m_bUseSystemFileDialog( sal_False )
@@ -294,18 +294,18 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     , m_bMacroRecorderMode( sal_False )
     , m_bIconThemeWasSetAutomatically( sal_False )
 {
-    // Use our static list of configuration keys to get his values.
+    
     Sequence< OUString >    seqNames    = GetPropertyNames  (           );
     Load( seqNames );
     Sequence< Any >         seqValues   = GetProperties     ( seqNames  );
     Sequence< sal_Bool >    seqRO       = GetReadOnlyStates ( seqNames  );
 
-    // Safe impossible cases.
-    // We need values from ALL configuration keys.
-    // Follow assignment use order of values in relation to our list of key names!
+    
+    
+    
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtMiscOptions_Impl::SvtMiscOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to our internal member.
+    
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -419,17 +419,17 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
         }
     }
 
-    // Enable notification mechanism of our baseclass.
-    // We need it to get information about changes outside these class on our used configuration keys!
+    
+    
     EnableNotification( seqNames );
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
 {
-    // We must save our current values .. if user forgets it!
+    
     if( IsModified() )
     {
         Commit();
@@ -452,12 +452,12 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
     const uno::Sequence< OUString> aInternalPropertyNames( GetPropertyNames());
     Sequence< Any > seqValues = GetProperties( rPropertyNames  );
 
-    // Safe impossible cases.
-    // We need values from ALL configuration keys.
-    // Follow assignment use order of values in relation to our list of key names!
+    
+    
+    
     DBG_ASSERT( !(rPropertyNames.getLength()!=seqValues.getLength()), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to our internal member.
+    
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -598,21 +598,21 @@ SvtMiscOptions_Impl::SetIconTheme(const OUString &rName, SetModifiedFlag setModi
     CallListeners();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 void SvtMiscOptions_Impl::Notify( const Sequence< OUString >& rPropertyNames )
 {
     Load( rPropertyNames );
     CallListeners();
 }
 
-//*****************************************************************************************************************
-//  public method
-//*****************************************************************************************************************
+
+
+
 void SvtMiscOptions_Impl::Commit()
 {
-    // Get names of supported properties, create a list for values and copy current values to it.
+    
     Sequence< OUString >    seqNames    = GetPropertyNames  ();
     sal_Int32               nCount      = seqNames.getLength();
     Sequence< Any >         seqValues   ( nCount );
@@ -699,16 +699,16 @@ void SvtMiscOptions_Impl::Commit()
             }
         }
     }
-    // Set properties in configuration.
+    
     PutProperties( seqNames, seqValues );
 }
 
-//*****************************************************************************************************************
-//  private method
-//*****************************************************************************************************************
+
+
+
 Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
 {
-    // Build list of configuration key names.
+    
     const OUString pProperties[] =
     {
         OUString(PROPERTYNAME_PLUGINSENABLED),
@@ -724,30 +724,30 @@ Sequence< OUString > SvtMiscOptions_Impl::GetPropertyNames()
         OUString(PROPERTYNAME_MACRORECORDERMODE)
     };
 
-    // Initialize return sequence with these list ...
+    
     const Sequence< OUString > seqPropertyNames( pProperties, SAL_N_ELEMENTS( pProperties ) );
-    // ... and return it.
+    
     return seqPropertyNames;
 }
 
-//*****************************************************************************************************************
-//  initialize static member
-//  DON'T DO IT IN YOUR HEADER!
-//  see definition for further information
-//*****************************************************************************************************************
+
+
+
+
+
 SvtMiscOptions_Impl*    SvtMiscOptions::m_pDataContainer    = NULL  ;
 sal_Int32               SvtMiscOptions::m_nRefCount = 0     ;
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 SvtMiscOptions::SvtMiscOptions()
 {
-    // Global access, must be guarded (multithreading!).
+    
     MutexGuard aGuard( GetInitMutex() );
-    // Increase our refcount ...
+    
     ++m_nRefCount;
-    // ... and initialize our data container only if it not already exist!
+    
     if( m_pDataContainer == NULL )
     {
        m_pDataContainer = new SvtMiscOptions_Impl;
@@ -755,17 +755,17 @@ SvtMiscOptions::SvtMiscOptions()
     }
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 SvtMiscOptions::~SvtMiscOptions()
 {
-    // Global access, must be guarded (multithreading!)
+    
     MutexGuard aGuard( GetInitMutex() );
-    // Decrease our refcount.
+    
     --m_nRefCount;
-    // If last instance was deleted ...
-    // we must destroy our static data container!
+    
+    
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
@@ -809,8 +809,8 @@ sal_Int16 SvtMiscOptions::GetCurrentSymbolsSize() const
 
     if ( eOptSymbolsSize == SFX_SYMBOLS_SIZE_AUTO )
     {
-        // Use system settings, we have to retrieve the toolbar icon size from the
-        // Application class
+        
+        
         sal_uLong nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
         if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
             eOptSymbolsSize = SFX_SYMBOLS_SIZE_LARGE;

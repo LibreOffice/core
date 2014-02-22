@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -76,14 +76,14 @@
 
 TYPEINIT1( SwTxtFrm, SwCntntFrm );
 
-// Switches width and height of the text frame
+
 void SwTxtFrm::SwapWidthAndHeight()
 {
     if ( ! bIsSwapped )
     {
         const long nPrtOfstX = Prt().Pos().X();
         Prt().Pos().X() = Prt().Pos().Y();
-        // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        
         if( IsVertLR() )
             Prt().Pos().Y() = nPrtOfstX;
         else
@@ -94,7 +94,7 @@ void SwTxtFrm::SwapWidthAndHeight()
     {
         const long nPrtOfstY = Prt().Pos().Y();
         Prt().Pos().Y() = Prt().Pos().X();
-        // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+        
         if( IsVertLR() )
             Prt().Pos().X() = nPrtOfstY;
         else
@@ -111,12 +111,12 @@ void SwTxtFrm::SwapWidthAndHeight()
     bIsSwapped = ! bIsSwapped;
 }
 
-// Calculates the coordinates of a rectangle when switching from
-// horizontal to vertical layout.
+
+
 void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
 {
-    // calc offset inside frame
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
+    
     long nOfstX, nOfstY;
     if ( IsVertLR() )
     {
@@ -132,7 +132,7 @@ void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
     const long nWidth = rRect.Width();
     const long nHeight = rRect.Height();
 
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     if ( IsVertLR() )
         rRect.Left(Frm().Left() + nOfstY);
     else
@@ -140,7 +140,7 @@ void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
         if ( bIsSwapped )
             rRect.Left( Frm().Left() + Frm().Height() - nOfstY );
         else
-            // frame is rotated
+            
             rRect.Left( Frm().Left() + Frm().Width() - nOfstY );
     }
 
@@ -149,14 +149,14 @@ void SwTxtFrm::SwitchHorizontalToVertical( SwRect& rRect ) const
     rRect.Height( nWidth );
 }
 
-// Calculates the coordinates of a point when switching from
-// horizontal to vertical layout.
+
+
 void SwTxtFrm::SwitchHorizontalToVertical( Point& rPoint ) const
 {
-    // calc offset inside frame
+    
     const long nOfstX = rPoint.X() - Frm().Left();
     const long nOfstY = rPoint.Y() - Frm().Top();
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     if ( IsVertLR() )
         rPoint.X() = Frm().Left() + nOfstY;
     else
@@ -164,15 +164,15 @@ void SwTxtFrm::SwitchHorizontalToVertical( Point& rPoint ) const
         if ( bIsSwapped )
             rPoint.X() = Frm().Left() + Frm().Height() - nOfstY;
         else
-            // calc rotated coords
+            
             rPoint.X() = Frm().Left() + Frm().Width() - nOfstY;
     }
 
     rPoint.Y() = Frm().Top() + nOfstX;
 }
 
-// Calculates the a limit value when switching from
-// horizontal to vertical layout.
+
+
 long SwTxtFrm::SwitchHorizontalToVertical( long nLimit ) const
 {
     Point aTmp( 0, nLimit );
@@ -180,15 +180,15 @@ long SwTxtFrm::SwitchHorizontalToVertical( long nLimit ) const
     return aTmp.X();
 }
 
-// Calculates the coordinates of a rectangle when switching from
-// vertical to horizontal layout.
+
+
 void SwTxtFrm::SwitchVerticalToHorizontal( SwRect& rRect ) const
 {
     long nOfstX;
 
-    // calc offset inside frame
+    
 
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     if ( IsVertLR() )
         nOfstX = rRect.Left() - Frm().Left();
     else
@@ -203,22 +203,22 @@ void SwTxtFrm::SwitchVerticalToHorizontal( SwRect& rRect ) const
     const long nWidth = rRect.Height();
     const long nHeight = rRect.Width();
 
-    // calc rotated coords
+    
     rRect.Left( Frm().Left() + nOfstY );
     rRect.Top( Frm().Top() + nOfstX );
     rRect.Width( nWidth );
     rRect.Height( nHeight );
 }
 
-// Calculates the coordinates of a point when switching from
-// vertical to horizontal layout.
+
+
 void SwTxtFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
 {
     long nOfstX;
 
-    // calc offset inside frame
+    
 
-    // Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+    
     if ( IsVertLR() )
         nOfstX = rPoint.X() - Frm().Left();
     else
@@ -231,13 +231,13 @@ void SwTxtFrm::SwitchVerticalToHorizontal( Point& rPoint ) const
 
     const long nOfstY = rPoint.Y() - Frm().Top();
 
-    // calc rotated coords
+    
     rPoint.X() = Frm().Left() + nOfstY;
     rPoint.Y() = Frm().Top() + nOfstX;
 }
 
-// Calculates the a limit value when switching from
-// vertical to horizontal layout.
+
+
 long SwTxtFrm::SwitchVerticalToHorizontal( long nLimit ) const
 {
     Point aTmp( nLimit, 0 );
@@ -336,10 +336,10 @@ void SwTxtFrm::Init()
     {
         ClearPara();
         ResetBlinkPor();
-        // set flags directly to save a ResetPreps call,
-        // and thereby an unnecessary GetPara call
-        // don't set bOrphan, bLocked or bWait to false!
-        // bOrphan = bFlag7 = bFlag8 = sal_False;
+        
+        
+        
+        
     }
 }
 
@@ -350,7 +350,7 @@ SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
     , mnFlyAnchorOfst( 0 )
     , mnFlyAnchorOfstNoWrap( 0 )
     , mnFtnLine( 0 )
-    , mnHeightOfLastLine( 0 ) // OD 2004-03-17 #i11860#
+    , mnHeightOfLastLine( 0 ) 
     , mnAdditionalFirstLineOffset( 0 )
     , nOfst( 0 )
     , nCacheIdx( MSHRT_MAX )
@@ -366,14 +366,14 @@ SwTxtFrm::SwTxtFrm(SwTxtNode * const pNode, SwFrm* pSib )
     , bFieldFollow( false )
     , bHasAnimation( false )
     , bIsSwapped( false )
-    , mbFollowFormatAllowed( true ) // OD 14.03.2003 #i11760#
+    , mbFollowFormatAllowed( true ) 
 {
     mnType = FRMC_TXT;
 }
 
 SwTxtFrm::~SwTxtFrm()
 {
-    // Remove associated SwParaPortion from pTxtCache
+    
     ClearPara();
 }
 
@@ -397,9 +397,9 @@ bool SwTxtFrm::IsHiddenNow() const
     SwFrmSwapper aSwapper( this, true );
 
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
-                                       // invalid when stack overflows (StackHack)!
+                                       
     {
-//        OSL_FAIL( "SwTxtFrm::IsHiddenNow: thin frame" );
+
         return true;
     }
 
@@ -423,7 +423,7 @@ bool SwTxtFrm::IsHiddenNow() const
     return false;
 }
 
-// removes Textfrm's attachments, when it's hidden
+
 void SwTxtFrm::HideHidden()
 {
     OSL_ENSURE( !GetFollow() && IsHiddenNow(),
@@ -431,10 +431,10 @@ void SwTxtFrm::HideHidden()
 
     const sal_Int32 nEnd = COMPLETE_STRING;
     HideFootnotes( GetOfst(), nEnd );
-    // OD 2004-01-15 #110582#
+    
     HideAndShowObjects();
 
-    // format information is obsolete
+    
     ClearPara();
 }
 
@@ -464,14 +464,14 @@ void SwTxtFrm::HideFootnotes( sal_Int32 nStart, sal_Int32 nEnd )
     }
 }
 
-// #120729# - hotfix
-// as-character anchored graphics, which are used for a graphic bullet list.
-// As long as these graphic bullet list aren't imported, do not hide a
-// at-character anchored object, if
-// (a) the document is an imported WW8 document -
-//     checked by checking certain compatibility options -,
-// (b) the paragraph is the last content in the document and
-// (c) the anchor character is an as-character anchored graphic.
+
+
+
+
+
+
+
+
 bool sw_HideObj( const SwTxtFrm& _rFrm,
                   const RndStdIds _eAnchorType,
                   const sal_Int32 _nObjAnchorPos,
@@ -506,7 +506,7 @@ bool sw_HideObj( const SwTxtFrm& _rFrm,
                         if ( nCntntIndex.GetNode().IsNoTxtNode() )
                         {
                             bRet = false;
-                            // set needed data structure values for object positioning
+                            
                             SWRECTFN( (&_rFrm) );
                             SwRect aLastCharRect( _rFrm.Frm() );
                             (aLastCharRect.*fnRect->fnSetWidth)( 1 );
@@ -538,13 +538,13 @@ void SwTxtFrm::HideAndShowObjects()
     {
         if ( IsHiddenNow() )
         {
-            // complete paragraph is hidden. Thus, hide all objects
+            
             for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
-                // #120729# - hotfix
-                // under certain conditions
+                
+                
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
                 const sal_Int32 nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
                 if ((eAnchorType != FLY_AT_CHAR) ||
@@ -557,21 +557,21 @@ void SwTxtFrm::HideAndShowObjects()
         }
         else
         {
-            // paragraph is visible, but can contain hidden text portion.
-            // first we check if objects are allowed to be hidden:
+            
+            
             const SwTxtNode& rNode = *GetTxtNode();
             const SwViewShell* pVsh = getRootFrm()->GetCurrShell();
             const bool bShouldBeHidden = !pVsh || !pVsh->GetWin() ||
                                          !pVsh->GetViewOptions()->IsShowHiddenChar();
 
-            // Thus, show all objects, which are anchored at paragraph and
-            // hide/show objects, which are anchored at/as character, according
-            // to the visibility of the anchor character.
+            
+            
+            
             for ( sal_uInt32 i = 0; i < GetDrawObjs()->Count(); ++i )
             {
                 SdrObject* pObj = (*GetDrawObjs())[i]->DrawObj();
                 SwContact* pContact = static_cast<SwContact*>(pObj->GetUserCall());
-                // #120729# - determine anchor type only once
+                
                 const RndStdIds eAnchorType( pContact->GetAnchorId() );
 
                 if (eAnchorType == FLY_AT_PARA)
@@ -585,8 +585,8 @@ void SwTxtFrm::HideAndShowObjects()
                     sal_Int32 nHiddenEnd;
                     const sal_Int32 nObjAnchorPos = pContact->GetCntntAnchorIndex().GetIndex();
                     SwScriptInfo::GetBoundsOfHiddenRange( rNode, nObjAnchorPos, nHiddenStart, nHiddenEnd, 0 );
-                    // #120729# - hotfix
-                    // under certain conditions
+                    
+                    
                     if ( nHiddenStart != COMPLETE_STRING && bShouldBeHidden &&
                          sw_HideObj( *this, eAnchorType, nObjAnchorPos, (*GetDrawObjs())[i] ) )
                         pContact->MoveObjToInvisibleLayer( pObj );
@@ -626,16 +626,16 @@ sal_Int32 SwTxtFrm::FindBrk( const OUString &rTxt,
     sal_Int32 nFound = nStart;
     const sal_Int32 nEndLine = std::min( nEnd, rTxt.getLength() - 1 );
 
-    // skip all leading blanks (see bug #2235).
+    
     while( nFound <= nEndLine && ' ' == rTxt[nFound] )
     {
          nFound++;
     }
 
-    // A tricky situation with the TxtAttr-Dummy-character (in this case "$"):
-    // "Dr.$Meyer" at the beginning of the second line. Typing a blank after that
-    // doesn't result in the word moving into first line, even though that would work.
-    // For this reason we don't skip the dummy char.
+    
+    
+    
+    
     while( nFound <= nEndLine && ' ' != rTxt[nFound] )
     {
         nFound++;
@@ -646,19 +646,19 @@ sal_Int32 SwTxtFrm::FindBrk( const OUString &rTxt,
 
 bool SwTxtFrm::IsIdxInside( const sal_Int32 nPos, const sal_Int32 nLen ) const
 {
-    if( nLen != COMPLETE_STRING && GetOfst() > nPos + nLen ) // the range preceded us
+    if( nLen != COMPLETE_STRING && GetOfst() > nPos + nLen ) 
         return false;
 
-    if( !GetFollow() )            // the range doesn't precede us,
-        return true;          // nobody follows us.
+    if( !GetFollow() )            
+        return true;          
 
     const sal_Int32 nMax = GetFollow()->GetOfst();
 
-    // either the range overlap or our text has been deleted
+    
     if( nMax > nPos || nMax > GetTxt().getLength() )
         return true;
 
-    // changes made in the first line of a follow can modify the master
+    
     const SwParaPortion* pPara = GetFollow()->GetPara();
     return pPara && ( nPos <= nMax + pPara->GetLen() );
 }
@@ -682,10 +682,10 @@ void SwTxtFrm::_InvalidateRange( const SwCharRange &aRange, const long nD)
     bool bInv = false;
     if( 0 != nD )
     {
-        // In nDelta the differences betwen old and new
-        // linelengths are being added, that's why it's negative
-        // if chars have been added and positive, if chars have
-        // deleted
+        
+        
+        
+        
         *(pPara->GetDelta()) += nD;
         bInv = true;
     }
@@ -736,7 +736,7 @@ void SwTxtFrm::CalcLineSpace()
     aNewSize.Height() = (aLine.Y() - Frm().Top()) + aLine.GetLineHeight();
 
     SwTwips nDelta = aNewSize.Height() - Prt().Height();
-    // 4291: underflow with free-flying frames
+    
     if( aInf.GetTxtFly()->IsOn() )
     {
         SwRect aTmpFrm( Frm() );
@@ -756,12 +756,12 @@ void SwTxtFrm::CalcLineSpace()
         SwTxtFrmBreak aBreak( this );
         if( GetFollow() || aBreak.IsBreakNow( aLine ) )
         {
-            // if there is a Follow() or if we need to break here, reformat
+            
             Init();
         }
         else
         {
-            // everything is business as usual...
+            
             pPara->SetPrepAdjust();
             pPara->SetPrep();
         }
@@ -806,7 +806,7 @@ static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, sal_Int32 nCnt, bool b
         }
         if ( !pTxtNode->GetSmartTags() && !pTxtNode->IsSmartTagDirty() )
         {
-            // SMARTTAGS
+            
             pTxtNode->SetSmartTags( new SwWrongList( WRONGLIST_SMARTTAG ) );
             pTxtNode->GetSmartTags()->SetInvalid( nPos, nEnd );
         }
@@ -814,7 +814,7 @@ static void lcl_SetWrong( SwTxtFrm& rFrm, sal_Int32 nPos, sal_Int32 nCnt, bool b
         pTxtNode->SetGrammarCheckDirty( true );
         pTxtNode->SetWordCountDirty( true );
         pTxtNode->SetAutoCompleteWordDirty( true );
-        // SMARTTAGS
+        
         pTxtNode->SetSmartTagDirty( true );
     }
 
@@ -854,8 +854,8 @@ static void lcl_ModifyOfst( SwTxtFrm* pFrm, sal_Int32 nPos, sal_Int32 nLen )
     }
 }
 
-// Related: fdo#56031 filter out attribute changes that don't matter for
-// humans/a11y to stop flooding the destination mortal with useless noise
+
+
 static bool isA11yRelevantAttribute(MSHORT nWhich)
 {
     return nWhich != RES_CHRATR_RSID;
@@ -865,32 +865,32 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const MSHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
 
-    // modifications concerning frame attributes are processed by the base class
+    
     if( IsInRange( aFrmFmtSetRange, nWhich ) || RES_FMT_CHG == nWhich )
     {
         SwCntntFrm::Modify( pOld, pNew );
         if( nWhich == RES_FMT_CHG && getRootFrm()->GetCurrShell() )
         {
-            // collection has changed
+            
             Prepare( PREP_CLEAR );
             _InvalidatePrt();
             lcl_SetWrong( *this, 0, COMPLETE_STRING, false );
             SetDerivedR2L( sal_False );
             CheckDirChange();
-            // OD 09.12.2002 #105576# - Force complete paint due to existing
-            // indents.
+            
+            
             SetCompletePaint();
             InvalidateLineNum();
         }
         return;
     }
 
-    // while locked ignore all modifications
+    
     if( IsLocked() )
         return;
 
-    // save stack
-    // warning: one has to ensure that all variables are set
+    
+    
     sal_Int32 nPos;
     sal_Int32 nLen;
     bool bSetFldsDirty = false;
@@ -911,7 +911,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             {
                 if( !nLen )
                 {
-                    // 6969: refresh NumPortions even when line is empty!
+                    
                     if( nPos )
                         InvalidateSize();
                     else
@@ -963,12 +963,12 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             nLen = ((SwUpdateAttr*)pNew)->nEnd - nPos;
             if( IsIdxInside( nPos, nLen ) )
             {
-                // Es muss in jedem Fall neu formatiert werden,
-                // auch wenn der invalidierte Bereich null ist.
-                // Beispiel: leere Zeile, 14Pt einstellen !
-                // if( !nLen ) nLen = 1;
+                
+                
+                
+                
 
-                // 6680: FtnNummern muessen formatiert werden.
+                
                 if( !nLen )
                     nLen = 1;
 
@@ -983,7 +983,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 }
             }
 
-            // #i104008#
+            
             SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
             if ( pViewSh  )
             {
@@ -1006,10 +1006,10 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                         pSect->InvalidatePrt();
                 }
 
-                // OD 09.01.2004 #i11859# - correction:
-                //  (1) Also invalidate next frame on next page/column.
-                //  (2) Skip empty sections and hidden paragraphs
-                //  Thus, use method <InvalidateNextPrtArea()>
+                
+                
+                
+                
                 InvalidateNextPrtArea();
 
                 SetCompletePaint();
@@ -1024,8 +1024,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 {
                     if( pNew == pOld )
                     {
-                        // only repaint
-                        // opt: invalidate window?
+                        
+                        
                         InvalidatePage();
                         SetCompletePaint();
                     }
@@ -1033,7 +1033,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                         _InvalidateRange( SwCharRange( nPos, 1 ) );
                 }
                 bSetFldsDirty = true;
-                // ST2
+                
                 if ( SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                     lcl_SetWrong( *this, nPos, nPos + 1, false );
             }
@@ -1094,10 +1094,10 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                 InvalidateSize();
                 _InvalidatePrt();
 
-                // OD 09.01.2004 #i11859# - correction:
-                //  (1) Also invalidate next frame on next page/column.
-                //  (2) Skip empty sections and hidden paragraphs
-                //  Thus, use method <InvalidateNextPrtArea()>
+                
+                
+                
+                
                 InvalidateNextPrtArea();
 
                 SetCompletePaint();
@@ -1140,14 +1140,14 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
                         {
                             const SvxBrushItem &rBack =
                                 pFly->GetAttrSet()->GetBackground();
-                            // OD 20.08.2002 #99657# #GetTransChg#
-                            //     following condition determines, if the fly frame
-                            //     "inherites" the background color of text frame.
-                            //     This is the case, if fly frame background
-                            //     color is "no fill"/"auto fill" and if the fly frame
-                            //     has no background graphic.
-                            //     Thus, check complete fly frame background
-                            //     color and *not* only its transparency value
+                            
+                            
+                            
+                            
+                            
+                            
+                            
+                            
                             if ( (rBack.GetColor() == COL_TRANSPARENT)  &&
                                 rBack.GetGraphicPos() == GPOS_NONE )
                             {
@@ -1184,8 +1184,8 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             {
                 SetDerivedR2L( sal_False );
                 CheckDirChange();
-                // OD 09.12.2002 #105576# - Force complete paint due to existing
-                // indents.
+                
+                
                 SetCompletePaint();
             }
 
@@ -1239,7 +1239,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
             if (isA11yRelevantAttribute(nWhich))
             {
-                // #i88069#
+                
                 SwViewShell* pViewSh = getRootFrm() ? getRootFrm()->GetCurrShell() : 0;
                 if ( pViewSh  )
                 {
@@ -1249,7 +1249,7 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
         }
         break;
 
-        // 6870: process SwDocPosUpdate
+        
         case RES_DOCPOS_UPDATE:
         {
             if( pOld && pNew )
@@ -1280,13 +1280,13 @@ void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
             _InvalidatePrt();
             if ( !nWhich )
             {
-                // is called by e. g. HiddenPara with 0
+                
                 SwFrm *pNxt;
                 if ( 0 != (pNxt = FindNext()) )
                     pNxt->InvalidatePrt();
             }
         }
-    } // switch
+    } 
 
     if( bSetFldsDirty )
         GetNode()->getIDocumentFieldsAccess()->SetFieldsDirty( true, GetNode(), 1 );
@@ -1305,15 +1305,15 @@ bool SwTxtFrm::GetInfo( SfxPoolItem &rHnt ) const
         {
             if ( pPage == rInfo.GetOrigPage() && !GetPrev() )
             {
-                // this should be the one
-                // (could only differ temporarily; is that disturbing?)
+                
+                
                 rInfo.SetInfo( pPage, this );
                 return false;
             }
             if ( pPage->GetPhyPageNum() < rInfo.GetOrigPage()->GetPhyPageNum() &&
                  (!rInfo.GetPage() || pPage->GetPhyPageNum() > rInfo.GetPage()->GetPhyPageNum()))
             {
-                // this could be the one
+                
                 rInfo.SetInfo( pPage, this );
             }
         }
@@ -1332,7 +1332,7 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, bool bNotify )
 
     MSHORT nHave = nNeed;
 
-    // Wir geben ein paar Zeilen ab und schrumpfen im CalcPreps()
+    
     SWAP_IF_NOT_SWAPPED( this )
 
     SwTxtSizeInfo aInf( this );
@@ -1345,13 +1345,13 @@ void SwTxtFrm::PrepWidows( const MSHORT nNeed, bool bNotify )
             --nHave;
         nTmpLen = aLine.GetCurr()->GetLen();
     }
-    // In dieser Ecke tummelten sich einige Bugs: 7513, 7606.
-    // Wenn feststeht, dass Zeilen abgegeben werden koennen,
-    // muss der Master darueber hinaus die Widow-Regel ueberpruefen.
+    
+    
+    
     if( !nHave )
     {
         bool bSplit = true;
-        if( !IsFollow() )   // only a master decides about orphans
+        if( !IsFollow() )   
         {
             const WidowsAndOrphans aWidOrp( this );
             bSplit = ( aLine.GetLineNr() >= aWidOrp.GetOrphansLines() &&
@@ -1393,7 +1393,7 @@ static bool lcl_ErgoVadis( SwTxtFrm* pFrm, sal_Int32 &rPos, const PrepareHint eP
         else
             rPos = pFrm->GetTxt().getLength();
         if( rPos )
-            --rPos; // our last character
+            --rPos; 
     }
     return true;
 }
@@ -1413,15 +1413,15 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         switch ( ePrep )
         {
             case PREP_BOSS_CHGD:
-                SetInvalidVert( sal_True );  // Test
+                SetInvalidVert( sal_True );  
             case PREP_WIDOWS_ORPHANS:
             case PREP_WIDOWS:
             case PREP_FTN_GONE :    return;
 
             case PREP_POS_CHGD :
             {
-                // Auch in (spaltigen) Bereichen ist ein InvalidateSize notwendig,
-                // damit formatiert wird und ggf. das bUndersized gesetzt wird.
+                
+                
                 if( IsInFly() || IsInSct() )
                 {
                     SwTwips nTmpBottom = GetUpper()->Frm().Top() +
@@ -1429,11 +1429,11 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     if( nTmpBottom < Frm().Bottom() )
                         break;
                 }
-                // are there any free-flying frames on this page?
+                
                 SwTxtFly aTxtFly( this );
                 if( aTxtFly.IsOn() )
                 {
-                    // does any free-flying frame overlap?
+                    
                     if ( aTxtFly.Relax() || IsUndersized() )
                         break;
                 }
@@ -1444,7 +1444,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if ( pGrid && GetTxtNode()->GetSwAttrSet().GetParaGrid().GetValue() )
                     break;
 
-                // #i28701# - consider anchored objects
+                
                 if ( GetDrawObjs() )
                     break;
 
@@ -1457,7 +1457,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
 
     if( !HasPara() && PREP_MUST_FIT != ePrep )
     {
-        SetInvalidVert( sal_True );  // Test
+        SetInvalidVert( sal_True );  
         OSL_ENSURE( !IsLocked(), "SwTxtFrm::Prepare: three of a perfect pair" );
         if ( bNotify )
             InvalidateSize();
@@ -1466,7 +1466,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         return;
     }
 
-    // get object from cache while locking
+    
     SwTxtLineAccess aAccess( this );
     SwParaPortion *pPara = aAccess.GetPara();
 
@@ -1492,10 +1492,10 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                                     break;
 
         case PREP_WIDOWS :
-            // MustFit is stronger than anything else
+            
             if( pPara->IsPrepMustFit() )
                 return;
-            // see comment in WidowsAndOrphans::FindOrphans and CalcPreps()
+            
             PrepWidows( *(const MSHORT *)pVoid, bNotify );
             break;
 
@@ -1504,17 +1504,17 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             SwTxtFtn *pFtn = (SwTxtFtn *)pVoid;
             if( IsInFtn() )
             {
-                // am I the first TxtFrm of a footnote?
+                
                 if( !GetPrev() )
-                    // Wir sind also ein TxtFrm der Fussnote, die
-                    // die Fussnotenzahl zur Anzeige bringen muss.
-                    // Oder den ErgoSum-Text...
+                    
+                    
+                    
                     InvalidateRange( SwCharRange( 0, 1 ), 1);
 
                 if( !GetNext() )
                 {
-                    // Wir sind der letzte Ftn, jetzt muessten die
-                    // QuoVadis-Texte geupdated werden.
+                    
+                    
                     const SwFtnInfo &rFtnInfo = GetNode()->GetDoc()->GetFtnInfo();
                     if( !pPara->UpdateQuoVadis( rFtnInfo.aQuoVadis ) )
                     {
@@ -1527,7 +1527,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             }
             else
             {
-                // we are the TxtFrm _with_ the footnote
+                
                 const sal_Int32 nPos = *pFtn->GetStart();
                 InvalidateRange( SwCharRange( nPos, 1 ), 1);
             }
@@ -1535,7 +1535,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
         }
         case PREP_BOSS_CHGD :
         {
-    // Test
+    
             {
                 SetInvalidVert( sal_False );
                 bool bOld = IsVertical();
@@ -1559,7 +1559,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 if( lcl_ErgoVadis( this, nPos, PREP_ERGOSUM ) )
                     InvalidateRange( SwCharRange( nPos, 1 ), 0 );
             }
-            // 4739: if we have a page number field, we must invalidate those spots
+            
             SwpHints *pHints = GetTxtNode()->GetpSwpHints();
             if( pHints )
             {
@@ -1573,13 +1573,13 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     if( nStart >= GetOfst() )
                     {
                         if( nStart >= nEnd )
-                            i = nSize;          // induce end of the loop
+                            i = nSize;          
                         else
                         {
-                // 4029: wenn wir zurueckfliessen und eine Ftn besitzen, so
-                // fliesst die Ftn in jedem Fall auch mit. Damit sie nicht im
-                // Weg steht, schicken wir uns ein ADJUST_FRM.
-                // pVoid != 0 bedeutet MoveBwd()
+                
+                
+                
+                
                             const MSHORT nWhich = pHt->Which();
                             if( RES_TXTATR_FIELD == nWhich ||
                                 (HasFtn() && pVoid && RES_TXTATR_FTN == nWhich))
@@ -1588,7 +1588,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     }
                 }
             }
-            // A new boss, a new chance for growing
+            
             if( IsUndersized() )
             {
                 _InvalidateSize();
@@ -1606,8 +1606,8 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     InvalidatePrt();
             }
 
-            // if we don't overlap with anybody:
-            // did any free-flying frame overlapped _before_ the position change?
+            
+            
             bool bFormat = pPara->HasFly();
             if( !bFormat )
             {
@@ -1626,8 +1626,8 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                         for ( MSHORT i = 0; i < nCnt; ++i )
                         {
                             SwAnchoredObject* pAnchoredObj = (*GetDrawObjs())[i];
-                            // #i28701# - consider all
-                            // to-character anchored objects
+                            
+                            
                             if ( pAnchoredObj->GetFrmFmt().GetAnchor().GetAnchorId()
                                     == FLY_AT_CHAR )
                             {
@@ -1638,11 +1638,11 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                     }
                     if( !bFormat )
                     {
-                        // are there any free-flying frames on this page?
+                        
                         SwTxtFly aTxtFly( this );
                         if( aTxtFly.IsOn() )
                         {
-                            // does any free-flying frame overlap?
+                            
                             bFormat = aTxtFly.Relax() || IsUndersized();
                         }
                     }
@@ -1664,15 +1664,15 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             {
                 if( GetTxtNode()->GetSwAttrSet().GetRegister().GetValue() )
                     Prepare( PREP_REGISTER, 0, bNotify );
-                // Durch Positionsverschiebungen mit Ftns muessen die
-                // Frames neu adjustiert werden.
+                
+                
                 else if( HasFtn() )
                 {
                     Prepare( PREP_ADJUST_FRM, 0, bNotify );
                     _InvalidateSize();
                 }
                 else
-                    return;     // damit kein SetPrep() erfolgt.
+                    return;     
             }
             break;
         }
@@ -1695,16 +1695,16 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
             break;
         case PREP_FTN_GONE :
             {
-                // Wenn ein Follow uns ruft, weil eine Fussnote geloescht wird, muss unsere
-                // letzte Zeile formatiert werden, damit ggf. die erste Zeile des Follows
-                // hochrutschen kann, die extra auf die naechste Seite gerutscht war, um mit
-                // der Fussnote zusammen zu sein, insbesondere bei spaltigen Bereichen.
+                
+                
+                
+                
                 OSL_ENSURE( GetFollow(), "PREP_FTN_GONE darf nur vom Follow gerufen werden" );
                 sal_Int32 nPos = GetFollow()->GetOfst();
-                if( IsFollow() && GetOfst() == nPos )       // falls wir gar keine Textmasse besitzen,
-                    FindMaster()->Prepare( PREP_FTN_GONE ); // rufen wir das Prepare unseres Masters
+                if( IsFollow() && GetOfst() == nPos )       
+                    FindMaster()->Prepare( PREP_FTN_GONE ); 
                 if( nPos )
-                    --nPos; // das Zeichen vor unserem Follow
+                    --nPos; 
                 InvalidateRange( SwCharRange( nPos, 1 ), 0 );
                 return;
             }
@@ -1725,7 +1725,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 InvalidateRange( SwCharRange( nWhere, 1 ) );
                 return;
             }
-            // else: continue with default case block
+            
         }
         case PREP_CLEAR:
         default:
@@ -1752,7 +1752,7 @@ void SwTxtFrm::Prepare( const PrepareHint ePrep, const void* pVoid,
                 else
                     _InvalidateSize();
             }
-            return;     // no SetPrep() happened
+            return;     
         }
     }
     if( pPara )
@@ -1869,14 +1869,14 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
     if( IsLocked() )
         return sal_False;
 
-    // it can happen that the IdleCollector removed the cached information
+    
     if( !IsEmpty() )
         GetFormatted();
 
-    // OD 2004-05-24 #i27801# - correction: 'short cut' for empty paragraph
-    // can *not* be applied, if test format is in progress. The test format doesn't
-    // adjust the frame and the printing area - see method <SwTxtFrm::_Format(..)>,
-    // which is called in <SwTxtFrm::TestFormat(..)>
+    
+    
+    
+    
     if ( IsEmpty() && !bTst )
     {
         bSplit = sal_False;
@@ -1890,16 +1890,16 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
         }
     }
 
-    // In sehr unguenstigen Faellen kann GetPara immer noch 0 sein.
-    // Dann returnen wir sal_True, um auf der neuen Seite noch einmal
-    // anformatiert zu werden.
+    
+    
+    
     OSL_ENSURE( HasPara() || IsHiddenNow(), "WouldFit: GetFormatted() and then !HasPara()" );
     if( !HasPara() || ( !(Frm().*fnRect->fnGetHeight)() && IsHiddenNow() ) )
         return sal_True;
 
-    // Da das Orphan-Flag nur sehr fluechtig existiert, wird als zweite
-    // Bedingung  ueberprueft, ob die Rahmengroesse durch CalcPreps
-    // auf riesengross gesetzt wird, um ein MoveFwd zu erzwingen.
+    
+    
+    
     if( IsWidow() || ( bVert ?
                        ( 0 == Frm().Left() ) :
                        ( LONG_MAX - 20000 < Frm().Bottom() ) ) )
@@ -1907,11 +1907,11 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
         SetWidow(false);
         if ( GetFollow() )
         {
-            // Wenn wir hier durch eine Widow-Anforderung unseres Follows gelandet
-            // sind, wird ueberprueft, ob es ueberhaupt einen Follow mit einer
-            // echten Hoehe gibt, andernfalls (z.B. in neu angelegten SctFrms)
-            // ignorieren wir das IsWidow() und pruefen doch noch, ob wir
-            // genung Platz finden.
+            
+            
+            
+            
+            
             if( ( ( ! bVert && LONG_MAX - 20000 >= Frm().Bottom() ) ||
                   (   bVert && 0 < Frm().Left() ) ) &&
                   ( GetFollow()->IsVertical() ?
@@ -1942,13 +1942,13 @@ sal_Bool SwTxtFrm::WouldFit( SwTwips &rMaxHeight, sal_Bool &bSplit, sal_Bool bTs
     sal_Bool bRet = sal_True;
 
     aLine.Bottom();
-    // is breaking necessary?
+    
     bSplit = !aFrmBreak.IsInside( aLine );
     if ( bSplit )
         bRet = !aFrmBreak.IsKeepAlways() && aFrmBreak.WouldFit( aLine, rMaxHeight, bTst );
     else
     {
-        // we need the total height including the current line
+        
         aLine.Top();
         do
         {
@@ -1967,8 +1967,8 @@ KSHORT SwTxtFrm::GetParHeight() const
             "SwTxtFrm::GetParHeight with swapped frame" );
 
     if( !HasPara() )
-    {   // Fuer nichtleere Absaetze ist dies ein Sonderfall, da koennen wir
-        // bei UnderSized ruhig nur 1 Twip mehr anfordern.
+    {   
+        
         KSHORT nRet = (KSHORT)Prt().SSize().Height();
         if( IsUndersized() )
         {
@@ -1980,12 +1980,12 @@ KSHORT SwTxtFrm::GetParHeight() const
         return nRet;
     }
 
-    // FME, OD 08.01.2004 #i11859# - refactoring and improve code
+    
     const SwLineLayout* pLineLayout = GetPara();
     KSHORT nHeight = pLineLayout->GetRealHeight();
-    if( GetOfst() && !IsFollow() )  // Ist dieser Absatz gescrollt? Dann ist unsere
-        nHeight *= 2;               // bisherige Hoehe mind. eine Zeilenhoehe zu gering
-    // OD 2004-03-04 #115793#
+    if( GetOfst() && !IsFollow() )  
+        nHeight *= 2;               
+    
     while ( pLineLayout && pLineLayout->GetNext() )
     {
         pLineLayout = pLineLayout->GetNext();
@@ -1995,23 +1995,23 @@ KSHORT SwTxtFrm::GetParHeight() const
     return nHeight;
 }
 
-// returns this _always_ in the formated state!
+
 SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
 {
     SWAP_IF_SWAPPED( this )
 
-    // Kann gut sein, dass mir der IdleCollector mir die gecachten
-    // Informationen entzogen hat. Calc() ruft unser Format.
-                      // Nicht bei leeren Absaetzen!
+    
+    
+                      
     if( !HasPara() && !(IsValid() && IsEmpty()) )
     {
-        // Calc() must be called, because frame position can be wrong
+        
         const sal_Bool bFormat = GetValidSizeFlag();
         Calc();
-        // Es kann durchaus sein, dass Calc() das Format()
-        // nicht anstiess (weil wir einst vom Idle-Zerstoerer
-        // aufgefordert wurden unsere Formatinformationen wegzuschmeissen).
-        // 6995: Optimierung mit FormatQuick()
+        
+        
+        
+        
         if( bFormat && !FormatQuick( bForceQuickFormat ) )
             Format();
     }
@@ -2023,9 +2023,9 @@ SwTxtFrm* SwTxtFrm::GetFormatted( bool bForceQuickFormat )
 
 SwTwips SwTxtFrm::CalcFitToContent()
 {
-    // #i31490#
-    // If we are currently locked, we better return with a
-    // fairly reasonable value:
+    
+    
+    
     if ( IsLocked() )
         return Prt().Width();
 
@@ -2044,11 +2044,11 @@ SwTwips SwTxtFrm::CalcFitToContent()
     Frm().Width( nPageWidth );
     Prt().Width( nPageWidth );
 
-    // #i25422# objects anchored as character in RTL
+    
     if ( IsRightToLeft() )
         Frm().Pos().X() += nOldFrmWidth - nPageWidth;
 
-    // #i31490#
+    
     SwTxtFrmLocker aLock( this );
 
     SwTxtFormatInfo aInf( this, false, true, true );
@@ -2056,14 +2056,14 @@ SwTwips SwTxtFrm::CalcFitToContent()
     SwTxtFormatter  aLine( this, &aInf );
     SwHookOut aHook( aInf );
 
-    // #i54031# - assure mininum of MINLAY twips.
+    
     const SwTwips nMax = std::max( (SwTwips)MINLAY,
                               aLine._CalcFitToContent() + 1 );
 
     Frm().Width( nOldFrmWidth );
     Prt().Width( nOldPrtWidth );
 
-    // #i25422# objects anchored as character in RTL
+    
     if ( IsRightToLeft() )
         Frm().Pos() = aOldFrmPos;
 
@@ -2083,7 +2083,7 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
     if ( IsLocked() )
         return;
 
-    // reset additional first line offset
+    
     mnAdditionalFirstLineOffset = 0;
 
     const SwTxtNode* pTxtNode( GetTxtNode() );
@@ -2102,22 +2102,22 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
                 pTxtNode->GetNumRule()->Get( static_cast<sal_uInt16>(nListLevel) );
         if ( rNumFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-            // keep current paragraph portion and apply dummy paragraph portion
+            
             SwParaPortion* pOldPara = GetPara();
             SwParaPortion *pDummy = new SwParaPortion();
             SetPara( pDummy, false );
 
-            // lock paragraph
+            
             SwTxtFrmLocker aLock( this );
 
-            // simulate text formatting
+            
             SwTxtFormatInfo aInf( this, false, true, true );
             aInf.SetIgnoreFly( true );
             SwTxtFormatter aLine( this, &aInf );
             SwHookOut aHook( aInf );
             aLine._CalcFitToContent();
 
-            // determine additional first line offset
+            
             const SwLinePortion* pFirstPortion = aLine.GetCurr()->GetFirstPortion();
             if ( pFirstPortion->InNumberGrp() && !pFirstPortion->IsFtnNumPortion() )
             {
@@ -2144,7 +2144,7 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
                 }
             }
 
-            // restore paragraph portion
+            
             SetPara( pOldPara );
         }
     }
@@ -2164,15 +2164,15 @@ void SwTxtFrm::CalcAdditionalFirstLineOffset()
 */
 void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
 {
-    // #i71281#
-    // invalidate printing area, if height of last line changes
+    
+    
     const SwTwips mnOldHeightOfLastLine( mnHeightOfLastLine );
-    // determine output device
+    
     SwViewShell* pVsh = getRootFrm()->GetCurrShell();
     OSL_ENSURE( pVsh, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no SwViewShell" );
-    // #i78921# - make code robust, according to provided patch
-    // There could be no <SwViewShell> instance in the case of loading a binary
-    // StarOffice file format containing an embedded Writer document.
+    
+    
+    
     if ( !pVsh )
     {
         return;
@@ -2185,22 +2185,22 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
         pOut = GetTxtNode()->getIDocumentDeviceAccess()->getReferenceDevice( true );
     }
     OSL_ENSURE( pOut, "<SwTxtFrm::_GetHeightOfLastLineForPropLineSpacing()> - no OutputDevice" );
-    // #i78921# - make code robust, according to provided patch
+    
     if ( !pOut )
     {
         return;
     }
 
-    // determine height of last line
+    
 
     if ( _bUseFont || pIDSA->get(IDocumentSettingAccess::OLD_LINE_SPACING ) )
     {
-        // former determination of last line height for proprotional line
-        // spacing - take height of font set at the paragraph
+        
+        
         SwFont aFont( GetAttrSet(), pIDSA );
 
-        // we must ensure that the font is restored correctly on the OutputDevice
-        // otherwise Last!=Owner could occur
+        
+        
         if ( pLastFont )
         {
             SwFntObj *pOldFont = pLastFont;
@@ -2225,9 +2225,9 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
     }
     else
     {
-        // new determination of last line height - take actually height of last line
-        // #i89000#
-        // assure same results, if paragraph is undersized
+        
+        
+        
         if ( IsUndersized() )
         {
             mnHeightOfLastLine = 0;
@@ -2248,26 +2248,26 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
                 const SwLineLayout* pLineLayout = GetPara();
                 while ( pLineLayout && pLineLayout->GetNext() )
                 {
-                    // iteration to last line
+                    
                     pLineLayout = pLineLayout->GetNext();
                 }
                 if ( pLineLayout )
                 {
                     SwTwips nAscent, nDescent, nDummy1, nDummy2;
-                    // #i47162# - suppress consideration of
-                    // fly content portions and the line portion.
+                    
+                    
                     pLineLayout->MaxAscentDescent( nAscent, nDescent,
                                                    nDummy1, nDummy2,
                                                    0, true );
-                    // #i71281#
-                    // Suppress wrong invalidation of printing area, if method is
-                    // called recursive.
-                    // Thus, member <mnHeightOfLastLine> is only set directly, if
-                    // no recursive call is needed.
+                    
+                    
+                    
+                    
+                    
                     const SwTwips nNewHeightOfLastLine = nAscent + nDescent;
-                    // #i47162# - if last line only contains
-                    // fly content portions, <mnHeightOfLastLine> is zero.
-                    // In this case determine height of last line by the font
+                    
+                    
+                    
                     if ( nNewHeightOfLastLine == 0 )
                     {
                         _CalcHeightOfLastLine( true );
@@ -2280,23 +2280,23 @@ void SwTxtFrm::_CalcHeightOfLastLine( const bool _bUseFont )
             }
         }
     }
-    // #i71281#
-    // invalidate printing area, if height of last line changes
+    
+    
     if ( mnHeightOfLastLine != mnOldHeightOfLastLine )
     {
         InvalidatePrt();
     }
 }
 
-// OD 07.01.2004 #i11859# - change return data type
-//      add default parameter <_bNoPropLineSpacing> to control, if the
-//      value of a proportional line spacing is returned or not
-// OD 07.01.2004 - trying to describe purpose of method:
-//      Method returns the value of the inter line spacing for a text frame.
-//      Such a value exists for proportional line spacings ("1,5 Lines",
-//      "Double", "Proportional" and for leading line spacing ("Leading").
-//      By parameter <_bNoPropLineSpace> (default value false) it can be
-//      controlled, if the value of a proportional line spacing is returned.
+
+
+
+
+
+
+
+
+
 long SwTxtFrm::GetLineSpace( const bool _bNoPropLineSpace ) const
 {
     long nRet = 0;
@@ -2308,13 +2308,13 @@ long SwTxtFrm::GetLineSpace( const bool _bNoPropLineSpace ) const
     {
         case SVX_INTER_LINE_SPACE_PROP:
         {
-            // OD 07.01.2004 #i11859#
+            
             if ( _bNoPropLineSpace )
             {
                 break;
             }
 
-            // OD 2004-03-17 #i11860# - use method <GetHeightOfLastLine()>
+            
             nRet = GetHeightOfLastLine();
 
             long nTmp = nRet;
@@ -2377,7 +2377,7 @@ MSHORT SwTxtFrm::GetLineCount( sal_Int32 nPos )
 
 void SwTxtFrm::ChgThisLines()
 {
-    // not necessary to format here (GerFormatted etc.), because we have to come from there!
+    
     sal_uLong nNew = 0;
     const SwLineNumberInfo &rInf = GetNode()->getIDocumentLineNumberAccess()->GetLineNumberInfo();
     if ( !GetTxt().isEmpty() && HasPara() )
@@ -2417,7 +2417,7 @@ void SwTxtFrm::ChgThisLines()
             if( pNxt )
                 pNxt->InvalidateLineNum();
 
-            // Extend repaint to the bottom.
+            
             if ( HasPara() )
             {
                 SwRepaint *pRepaint = GetPara()->GetRepaint();
@@ -2425,7 +2425,7 @@ void SwTxtFrm::ChgThisLines()
                                        Frm().Top()+Prt().Bottom()));
             }
         }
-        else // Paragraphs which are not counted should not manipulate the AllLines.
+        else 
             nThisLines = nNew;
     }
 }
@@ -2446,8 +2446,8 @@ void SwTxtFrm::RecalcAllLines()
 
         if ( !IsFollow() && rLineNum.GetStartValue() && rLineNum.IsCount() )
             nNewNum = rLineNum.GetStartValue() - 1;
-        // If it is a follow or not has not be considered if it is a restart at each page; the
-        // restart should also take affekt at follows.
+        
+        
         else if ( bRestart && FindPageFrm()->FindFirstBodyCntnt() == this )
         {
             nNewNum = 0;
@@ -2459,8 +2459,8 @@ void SwTxtFrm::RecalcAllLines()
                     (pPrv->IsInTab() || pPrv->IsInDocBody() != IsInDocBody()) )
                 pPrv = pPrv->GetPrevCntntFrm();
 
-            // #i78254# Restart line numbering at page change
-            // First body content may be in table!
+            
+            
             if ( bRestart && pPrv && pPrv->FindPageFrm() != FindPageFrm() )
                 pPrv = 0;
 
@@ -2520,7 +2520,7 @@ const SwScriptInfo* SwTxtFrm::GetScriptInfo() const
     return pPara ? &pPara->GetScriptInfo() : 0;
 }
 
-// Helper function for SwTxtFrm::CalcBasePosForFly()
+
 static SwTwips lcl_CalcFlyBasePos( const SwTxtFrm& rFrm, SwRect aFlyRect,
                             SwTxtFly& rTxtFly )
 {
@@ -2580,9 +2580,9 @@ void SwTxtFrm::CalcBaseOfstForFly()
 
     SwRect aFlyRect( Frm().Pos() + Prt().Pos(), Prt().SSize() );
 
-    // Get first 'real' line and adjust position and height of line rectangle
-    // OD 08.09.2003 #110978#, #108749#, #110354# - correct behaviour,
-    // if no 'real' line exists (empty paragraph with and without a dummy portion)
+    
+    
+    
     {
         SwTwips nTop = (aFlyRect.*fnRect->fnGetTop)();
         const SwLineLayout* pLay = GetPara();
@@ -2602,14 +2602,14 @@ void SwTxtFrm::CalcBaseOfstForFly()
     SwTxtFly aTxtFly( this );
     aTxtFly.SetIgnoreCurrentFrame( true );
     aTxtFly.SetIgnoreContour( true );
-    // #118809# - ignore objects in page header|footer for
-    // text frames not in page header|footer
+    
+    
     aTxtFly.SetIgnoreObjsInHeaderFooter( true );
     SwTwips nRet1 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );
     aTxtFly.SetIgnoreCurrentFrame( false );
     SwTwips nRet2 = lcl_CalcFlyBasePos( *this, aFlyRect, aTxtFly );
 
-    // make values relative to frame start position
+    
     SwTwips nLeft = IsRightToLeft() ?
                     (Frm().*fnRect->fnGetRight)() :
                     (Frm().*fnRect->fnGetLeft)();

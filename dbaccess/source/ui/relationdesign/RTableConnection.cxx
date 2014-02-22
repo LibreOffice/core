@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RTableConnection.hxx"
@@ -25,7 +25,7 @@
 #include "ConnectionLine.hxx"
 
 using namespace dbaui;
-// class ORelationTableConnection
+
 ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContainer,
                                                    const TTableConnectionData::value_type& pTabConnData )
     :OTableConnection( pContainer, pTabConnData )
@@ -35,7 +35,7 @@ ORelationTableConnection::ORelationTableConnection( ORelationTableView* pContain
 ORelationTableConnection::ORelationTableConnection( const ORelationTableConnection& rConn )
     : OTableConnection( rConn )
 {
-    // keine eigenen Members, also reicht die Basisklassenfunktionalitaet
+    
 }
 
 ORelationTableConnection::~ORelationTableConnection()
@@ -44,7 +44,7 @@ ORelationTableConnection::~ORelationTableConnection()
 
 ORelationTableConnection& ORelationTableConnection::operator=( const ORelationTableConnection& rConn )
 {
-    // nicht dass es was aendern wuerde, da die Basisklasse das auch testet und ich keine eigenen Members zu kopieren habe
+    
     if (&rConn == this)
         return *this;
 
@@ -59,7 +59,7 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
     if ( pData && (pData->GetCardinality() == CARDINAL_UNDEFINED) )
         return;
 
-    // Linien nach oberster Linie durchsuchen
+    
     Rectangle aBoundingRect;
     long nTop = GetBoundingRect().Bottom();
     long nTemp;
@@ -82,7 +82,7 @@ void ORelationTableConnection::Draw( const Rectangle& rRect )
         }
     }
 
-    // Kardinalitaet antragen
+    
     if( !pTopLine )
         return;
 

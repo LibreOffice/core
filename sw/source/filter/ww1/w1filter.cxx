@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -67,72 +67,72 @@
 using namespace css;
 using namespace nsSwDocInfoSubType;
 
-// hier stehen die methoden operator<<, Out, Start und Stop mit
-// folgender Bedeutung: wenn moeglich wird die information aus dem
-// dokument per
-//   operator<<()
-// in die shell uebertragen. sind jedoch weitere parameter noetig
-// wurde der name
-//   Out()
-// gewaehlt. ist ein bereich zu kennzeichnen (zB bei attributen
-// von/bis), heissen die methoden
-//   Start(), Stop()
-// alle diese methoden stehen in diesem modul, das fuer den filter,
-// jedoch nicht fuer den dumper noetig ist.  und da alle regeln ihre
-// ausnahme haben: hier stehen auch methoden, die aus anderen gruenden
-// fuer den dumper sinnlos sind, zB wenn sie auf sv-strukturen beruhen
-// wie zB GetFont() auf SvxFontItem.
 
-// Manager
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Ww1Shell& operator <<(Ww1Shell& rOut, Ww1Manager& This)
 {
-    // verhindern, das bei rekusivem aufruf dies mehrfach passiert:
+    
     if (!This.Pushed())
     {
         {
-            // is only needed temporarily
+            
             This.SetInStyle( true );
             Ww1StyleSheet(This.aFib).Out(rOut, This);
             This.SetInStyle( false );
         }
         {
-            // this one, too
+            
             Ww1Assoc(This.aFib).Out(rOut);
         }
-        // dieser nicht, der ist bereits member:
+        
         This.aDop.Out(rOut);
-        // Jetzt entscheiden, wie Seitenvorlagen erzeugt werden
+        
         if (This.GetSep().Count() <= 1)
             rOut.SetUseStdPageDesc();
     }
-    // and now the actual dok
+    
     sal_Unicode cUnknown = ' ';
     while (*This.pSeek < This.pDoc->Count())
     {
-        // ausgabe des ProgressState nur, wenn im haupttext, da sonst
-        // nicht bestimmt werden kann, wie weit wir sind:
+        
+        
         if (!This.Pushed())
             ::SetProgressState(This.Where() * 100 / This.pDoc->Count(),
              rOut.GetDoc().GetDocShell());
-        // hier werden abwechselnd die attribute und die zeichen in die
-        // shell gepumpt.  die positionen werden durch das lesen der
-        // zeichen aus dem manager hoch- gezaehlt.  erst alle attribute:
+        
+        
+        
         This.Out(rOut, cUnknown);
-        // das textdocument pDoc ist ein Ww1PlainText, dessen Out()
-        // methode solange ausgibt, bis entweder ein sonderzeichen
-        // auftaucht oder die anzahl der auszugebenden zeichen erreicht
-        // ist:
+        
+        
+        
+        
         cUnknown = This.pDoc->Out(rOut, *This.pSeek);
     }
     This.SetStopAll(true);
-    This.OutStop(rOut, cUnknown);   // Damit die Attribute am Ende geschlossen
-    This.SetStopAll(false);         // werden
+    This.OutStop(rOut, cUnknown);   
+    This.SetStopAll(false);         
     return rOut;
 }
 
 void Ww1Manager::OutStop(Ww1Shell& rOut, sal_Unicode cUnknown)
 {
-    // bookmarks don't need to be ended?
+    
     if (pFld)
         pFld->Stop(rOut, *this, cUnknown);
     if (!Pushed())
@@ -147,7 +147,7 @@ void Ww1Manager::OutStop(Ww1Shell& rOut, sal_Unicode cUnknown)
 
 void Ww1Manager::OutStart( Ww1Shell& rOut )
 {
-    // alle attribute, die's brauchen beginnen
+    
     if (!Pushed())
         aSep.Start(rOut, *this);
     if (true)
@@ -160,54 +160,54 @@ void Ww1Manager::OutStart( Ww1Shell& rOut )
         pFld->Start(rOut, *this);
     if (!Pushed())
         aBooks.Start(rOut, *this);
-    // bestimmen, wo das naechste Ereigniss ist:
-    sal_uLong ulEnd = pDoc->Count(); // spaetestens am textende
+    
+    sal_uLong ulEnd = pDoc->Count(); 
     if (!Pushed())
-        if (ulEnd > aSep.Where()) // next Sep prior?
+        if (ulEnd > aSep.Where()) 
             ulEnd = aSep.Where();
     if (true)
-        if (ulEnd > aPap.Where()) // next Pap prior?
+        if (ulEnd > aPap.Where()) 
             ulEnd = aPap.Where();
     if (true)
-        if (ulEnd > aChp.Where()) // next Chp prior?
+        if (ulEnd > aChp.Where()) 
             ulEnd = aChp.Where();
     if (!Pushed())
-        if (ulEnd > aFtn.Where()) // next Ftn prior?
+        if (ulEnd > aFtn.Where()) 
             ulEnd = aFtn.Where();
     if (pFld)
-        if (ulEnd > pFld->Where()) // next Fld prior?
+        if (ulEnd > pFld->Where()) 
             ulEnd = pFld->Where();
     if (!Pushed())
-        if (ulEnd > aBooks.Where()) // next Bookmark prior?
+        if (ulEnd > aBooks.Where()) 
             ulEnd = aBooks.Where();
-    *pSeek = Where(); // current position
-    if (*pSeek < ulEnd) // sind wir bereits weiter?
+    *pSeek = Where(); 
+    if (*pSeek < ulEnd) 
         *pSeek = ulEnd;
 }
 
 void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
 {
-// Je nach modus wird hier mit feldern, fusznoten, zeichenattributen,
-// absatzatributen und sektionen wie folgt verfahren: von allen wird
-// zuallererst die stop-methoden gerufen. stellt das objekt fest, dasz
-// etwas zu beenden ist (natuerlich nicht im ersten durchgang) beendet
-// es dies, ansonsten ist der aufruf wirkungslos.  dann werden
-// unbehandelte sonderzeichen augegeben. das werden genauso alle
-// start-methoden gerufen und danach per where festgestellt, an
-// welcher stelle die naechste aktion zu erwarten ist.
 
-// ist der manager in einem ge'push'ten mode, werden bestimmte
-// elemente ausgeklammert. felder werden wiederum nur in besonderen
-// faellen augeklammert, wenn naemlich bereiche ausgegeben werden, die
-// keine felder enthalten koennen. charakterattribute und
-// paragraphenattribute werden jedoch nie ausgeklammert. die if (1)
-// wurden zur verdeutlichung der einheitlichkeit eingefuegt.
 
-// Erstmal eine Sonderbehandlung fuer Tabellen:
-// die wichtigen Attribute lassen sich am Besten vor Beendigung derselben
-// abfragen.
-// Optimierung: Sie werden nur auf sinnvolle Werte gesetzt, wenn
-// das 0x07-Zeiche ansteht.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     bool bLIsTtp = false;
     sal_Bool bLHasTtp = sal_False;
@@ -217,45 +217,45 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
         bLHasTtp = HasTtp();
     }
 
-    OutStop( rOut, cUnknown );      // Attrs ggfs. beenden
+    OutStop( rOut, cUnknown );      
 
-    // meta-zeichen interpretieren:
+    
     if (!Ww1PlainText::IsChar(cUnknown))
         switch (cUnknown)
         {
         case 0x02:
-            // dontknow
+            
         break;
-        case 0x07: // table
+        case 0x07: 
             if (rOut.IsInTable() && HasInTable() && !bLIsTtp && !bLHasTtp)
                 rOut.NextTableCell();
         break;
-        case 0x09: // tab
+        case 0x09: 
             rOut.NextTab();
         break;
-        case 0x0a: // linefeed
+        case 0x0a: 
             rOut.NextParagraph();
         break;
-        case 0x0b: // linebreak
+        case 0x0b: 
             if (rOut.IsInTable())
                 ;
             else
                 rOut.NextLine();
         break;
-        case 0x0d: // carriage return
-            // ignore
+        case 0x0d: 
+            
         break;
-        case 0x0c: // pagebreak
+        case 0x0c: 
             rOut.NextPage();
         break;
-        case 0x14: // sectionendchar
-            // ignore here
+        case 0x14: 
+            
         break;
         default:
         break;
         }
 
-    OutStart( rOut );   // Attrs ggfs. starten und Naechste Pos berechnen
+    OutStart( rOut );   
 }
 
 SvxFontItem Ww1Manager::GetFont(sal_uInt16 nFCode)
@@ -274,9 +274,9 @@ void Ww1Manager::Push0(Ww1PlainText* _pDoc, sal_uLong ulSeek, Ww1Fields* _pFld)
     this->pFld = _pFld;
 }
 
-// ulSeek ist der FC-Abstand zwischen Hauptest-Start und Sondertext-Start
-// ulSeek2 ist der Offset dieses bestimmten Sondertextes im Sondertext-Bereich,
-// also z.B. der Offset des speziellen K/F-Textes
+
+
+
 void Ww1Manager::Push1(Ww1PlainText* _pDoc, sal_uLong ulSeek, sal_uLong ulSeek2,
                        Ww1Fields* _pFld)
 {
@@ -313,23 +313,23 @@ void Ww1Bookmarks::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16)
     }
 
     const OUString & rName = GetName();
-    if( rName.startsWith( "_Toc" ) ) // "_Toc*" is superfluous
+    if( rName.startsWith( "_Toc" ) ) 
         return;
 
     if( rOut.IsFlagSet( SwFltControlStack::HYPO )
         && rName.equalsIgnoreAsciiCase( "FORMULAR" ) )
         rOut.SetProtect();
 
-    // Fuer UEbersetzung Bookmark -> Variable setzen
+    
     long nLen = Len();
     if( nLen > MAX_FIELDLEN )
         nLen = MAX_FIELDLEN;
 
-    // read content of the bookmark
-    // geht vermulich auch ueber Ww1PlainText
+    
+    
     OUString aVal( rMan.GetText().GetText( Where(), nLen ) );
 
-    // in 2 steps, since OS/2 is too stupid
+    
     SwFltBookmark aBook( rName, aVal, GetHandle() );
     rOut << aBook;
 }
@@ -354,17 +354,17 @@ void Ww1Footnotes::Start(Ww1Shell& rOut, Ww1Manager& rMan)
         if (c==0x02)
         {
             Ww1FtnText* pText = new Ww1FtnText(rMan.GetFib());
-        // beginn des textes dieser fusznote:
+        
             sal_uLong start = aText.Where(nPlcIndex);
             pText->Seek(start);
-        // laenge des textes
+        
             sal_uLong count = aText.Where(nPlcIndex+1) - start;
             pText->SetCount(count);
-        // fusznotenkennung sollte das erste byte sein
+        
             pText->Out(c);
             OSL_ENSURE(c==0x02, "Ww1Footnotes");
-            count--; // fuer das eben gelesene kenn-byte
-        // fusznoten mode beginnen:
+            count--; 
+        
             rOut.BeginFootnote();
             bStarted = sal_True;
             rMan.Push0(pText, pText->Offset(rMan.GetFib()),
@@ -395,7 +395,7 @@ void Ww1Fields::Start(Ww1Shell& rOut, Ww1Manager& rMan)
         if (GetData()->chGet() == 19)
             Out(rOut, rMan);
         else
-            ++(*this); // ignore
+            ++(*this); 
     }
 }
 
@@ -411,14 +411,14 @@ void Ww1Fields::Stop( Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode& c)
             ++(*this);
             c = ' ';
             if (pField)
-            // haben wir ein fertiges feld da, das  eingefuegt werden soll?
+            
             {
                 rOut << *pField;
                 delete pField;
                 pField = 0;
-            // das macht der filter so, damit attribute die ueber das feld
-            // gelten auch wirklich eingelesen werden und dem feld
-            // zugeordnet werden.
+            
+            
+            
             }
             if (!sErgebnis.isEmpty())
                 rOut << sErgebnis;
@@ -433,17 +433,17 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
                                      SwDateFormat* pDate = 0 )
 {
     WWDateTime eDT = WW_BOTH;
-    if (rForm.indexOf('H') != -1)         // H    -> 24h
+    if (rForm.indexOf('H') != -1)         
     {
         if( pTime )
             *pTime = TF_SSMM_24;
     }
-    else if (rForm.indexOf('H') != -1)    // h    -> 24h
+    else if (rForm.indexOf('H') != -1)    
     {
         if( pTime )
             *pTime = TF_SSMM_12;
     }
-    else                                    // no time
+    else                                    
     {
         eDT = (WWDateTime)( eDT & ~(sal_uInt16)WW_TIME );
     }
@@ -451,18 +451,18 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
     sal_Int32 nDPos = 0;
     while (true)
     {
-        nDPos = rForm.indexOf('M', nDPos);     // M    -> date
+        nDPos = rForm.indexOf('M', nDPos);     
         if (nDPos == 0 || nDPos == -1)
             break;
         sal_Unicode cPrev = rForm[nDPos - 1];
-        // ignoriere dabei "AM", "aM", "PM", "pM"
+        
         if( 'a' != cPrev && 'A' != cPrev && 'p' != cPrev && 'P' != cPrev )
             break;
-        // else search again
+        
         ++nDPos;
     }
 
-    if (nDPos != -1)                  // month -> date ?
+    if (nDPos != -1)                  
     {
         static SwDateFormat const aDateA[32] =
         {
@@ -491,13 +491,13 @@ static WWDateTime GetTimeDatePara( const OUString& rForm,
                               rForm.indexOf("ddd") != -1 ||
                               rForm.indexOf("DDD") != -1;
 
-                    //  M, MM -> numeric month
-                    //  MMM, MMMM -> text. month
+                    
+                    
         sal_Bool bLitMonth = rForm.indexOf("MMM") != -1;
-                    //  MMMM -> full month
+                    
         sal_Bool bFullMonth = rForm.indexOf("MMMM") != -1;
-                    //  jj, JJ -> 2-col-year
-                    //  jjjj, JJJJ -> 4-col-year
+                    
+                    
         sal_Bool bFullYear = rForm.indexOf("jjj") != -1 ||
                              rForm.indexOf("JJJ") != -1 ||
                              rForm.indexOf("yyy") != -1 ||
@@ -530,23 +530,23 @@ extern void sw3io_ConvertFromOldField( SwDoc& rDoc, sal_uInt16& rWhich,
 
 void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
 {
-    OUString sType; // the type as string
-    OUString sFormel; // the formula
+    OUString sType; 
+    OUString sFormel; 
     OUString sFormat;
-    OUString sDTFormat;   // date/time format
-    W1_FLD* pData = GetData(); // die an den plc gebunden daten
-    OSL_ENSURE(pData->chGet()==19, "Ww1Fields"); // sollte beginn sein
+    OUString sDTFormat;   
+    W1_FLD* pData = GetData(); 
+    OSL_ENSURE(pData->chGet()==19, "Ww1Fields"); 
 
     sal_Unicode c;
     rMan.Fill( c );
-    OSL_ENSURE(c==19, "Ww1Fields"); // sollte auch beginn sein
+    OSL_ENSURE(c==19, "Ww1Fields"); 
     if (pData->chGet()==19 && c == 19)
     {
         OUString aStr;
         c = rMan.Fill( aStr, GetLength() );
         OSL_ENSURE(Ww1PlainText::IsChar(c), "Ww1Fields");
         sal_Int32 pos = aStr.indexOf(' ');
-        // get type out of text
+        
         if ( pos != -1 )
         {
             sType = aStr.copy(0, pos);
@@ -560,13 +560,13 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
         sFormel += aStr;
         sal_uInt8 rbType = pData->fltGet();
         do {
-        // solange den formelteil einlesen, bis das feld entweder
-        // zuende ist oder der ergebnisteil beginnt. dabei koennen
-        // natuerlich neue felder beginnen (word unterstuetzt felder,
-        // die wiederum felder beinhalten).
+        
+        
+        
+        
             ++(*this);
             pData = GetData();
-            if (pData->chGet()==19) // nested field
+            if (pData->chGet()==19) 
             {
                 Out(rOut, rMan, nDepth+1);
                 rMan.Fill(c);
@@ -579,7 +579,7 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
         }
         while (pData->chGet()==19);
 
-        // get format out of text
+        
         pos = sFormel.indexOf("\\*");
         if (pos != -1)
         {
@@ -594,14 +594,14 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
             sFormel = sFormel.copy(0, pos);
         }
 
-        // der formelteil ist zuende, kommt ein ergebnisteil?
+        
         if( pData->chGet() == 20 )
         {
             rMan.Fill( c );
             OSL_ENSURE(c==20, "Ww1PlainText");
             c = rMan.Fill(sErgebnis, GetLength());
             if (!Ww1PlainText::IsChar(c))
-                sErgebnis += OUString(c); //~ mdt: sonderzeichenbenhandlung
+                sErgebnis += OUString(c); 
             ++(*this);
             pData = GetData();
         }
@@ -614,11 +614,11 @@ void Ww1Fields::Out(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 nDepth)
             delete pField;
             pField = 0;
         }
-// naja, aber info enthaelt alle moeglichkeiten, die auch direkt da sind
+
 oncemore:
         switch (rbType)
         {
-        case 3: // bookmark reference
+        case 3: 
             sFormel = rOut.ConvertUStr(sFormel);
             pField = new SwGetRefField( (SwGetRefFieldType*)
                 rOut.GetSysFldType( RES_GETREFFLD ),
@@ -628,7 +628,7 @@ oncemore:
                 REF_CONTENT );
 
         break;
-        case 6: // set command
+        case 6: 
         {
             pos = aStr.indexOf(' ');
             OUString aName;
@@ -649,12 +649,12 @@ oncemore:
                 SwSetExpFieldType( &rOut.GetDoc(), aName, nsSwGetSetExpType::GSE_STRING ) );
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr);
             ((SwSetExpField*)pField)->SetSubType( nsSwExtendedSubType::SUB_INVISIBLE );
-            // Invisible macht in 378 AErger, soll aber demnaechst gehen
+            
 
-            // das Ignorieren des Bookmarks ist nicht implementiert
+            
         }
         break;
-        case 14: // info variable
+        case 14: 
         {
             OUString aSubType;
             pos = aStr.indexOf(' ');
@@ -672,20 +672,20 @@ oncemore:
             aSubType = rOut.ConvertUStr(aSubType);
 
 
-            // huge pile of shit: the type 'info' can represent one of
-            // types 15 to 31. it contains as formula the actual field
-            // of the doc info.
-            // Don't use ';' with the following macro
+            
+            
+            
+            
 #define IS(sd, se, t) \
     if (aSubType == sd || aSubType == se) \
         rbType = t; \
     else
 
-            // german name       english name    type-code
+            
             IS("titel",          "title",          15)
             IS("thema",          "subject",        16)
             IS("autor",          "author",         17)
-            IS("stichw?rter",    "keywords",       18) //~ mdt: umlaut
+            IS("stichw?rter",    "keywords",       18) 
             IS("kommentar",      "comment",        19)
             IS("gespeichertvon", "lastrevisedby",  20)
             IS("ertelldat",      "creationdate",   21)
@@ -694,7 +694,7 @@ oncemore:
             IS("version",        "revisionnumber", 24)
             IS("zeit",           "edittime",       25)
             IS("anzseit",        "numberofpages",  26)
-            IS("anzw?rter",      "numberofwords",  27) //~ mdt: umlaut
+            IS("anzw?rter",      "numberofwords",  27) 
             IS("anzzeichen",     "numberofchars",  28)
             IS("dateiname",      "filename",       29)
             IS("vorlage",        "templatename",   30)
@@ -704,36 +704,36 @@ oncemore:
                 goto oncemore;
         }
         break;
-        case 15: // title
+        case 15: 
             pField = new SwDocInfoField((SwDocInfoFieldType*)
              rOut.GetSysFldType(RES_DOCINFOFLD), DI_TITEL, OUString(), 0);
         break;
-        case 16: // subject
+        case 16: 
             pField = new SwDocInfoField((SwDocInfoFieldType*)
              rOut.GetSysFldType(RES_DOCINFOFLD), DI_THEMA, OUString(), 0);
         break;
-        case 17: // author
+        case 17: 
             pField = new SwAuthorField((SwAuthorFieldType*)
              rOut.GetSysFldType(RES_AUTHORFLD), AF_NAME );
         break;
-        case 18: // keywords
+        case 18: 
             pField = new SwDocInfoField((SwDocInfoFieldType*)
              rOut.GetSysFldType(RES_DOCINFOFLD), DI_KEYS, OUString(), 0);
         break;
-        case 19: // comments
+        case 19: 
             pField = new SwDocInfoField((SwDocInfoFieldType*)
              rOut.GetSysFldType(RES_DOCINFOFLD), DI_COMMENT, OUString(), 0);
         break;
-        case 20: // last revised by
+        case 20: 
             pField = new SwDocInfoField((SwDocInfoFieldType*)
              rOut.GetSysFldType(RES_DOCINFOFLD), DI_CHANGE|DI_SUB_AUTHOR, OUString());
         break;
-        case 21: // creation date
-        case 22: // revision date
-        case 23: // print date
-        case 25:{// edit time
+        case 21: 
+        case 22: 
+        case 23: 
+        case 25:{
                     sal_uInt16 nSub;
-                    sal_uInt16 nReg = 0;    // RegInfoFormat, DefaultFormat fuer DocInfoFelder
+                    sal_uInt16 nReg = 0;    
 
                     switch( rbType )
                     {
@@ -750,33 +750,33 @@ oncemore:
                         case WW_BOTH: nReg = DI_SUB_DATE; break;
                         default:
                             break;
-                        // WW_DONTKNOW -> Default already set
+                        
                     }
                     pField = new SwDocInfoField((SwDocInfoFieldType*)
                         rOut.GetSysFldType(RES_DOCINFOFLD), nSub | nReg, OUString());
                 }
         break;
-        case 24: // revision number
+        case 24: 
             pField = new SwDocInfoField((SwDocInfoFieldType*)
              rOut.GetSysFldType(RES_DOCINFOFLD),  DI_DOCNO, OUString(), 0);
         break;
-        case 26: // number of pages
+        case 26: 
             pField = new SwDocStatField((SwDocStatFieldType*)
              rOut.GetSysFldType(RES_DOCSTATFLD), DS_PAGE, SVX_NUM_ARABIC);
         break;
-        case 27: // number of words
+        case 27: 
             pField = new SwDocStatField((SwDocStatFieldType*)
              rOut.GetSysFldType(RES_DOCSTATFLD), DS_WORD, SVX_NUM_ARABIC);
         break;
-        case 28: // number of chars
+        case 28: 
             pField = new SwDocStatField((SwDocStatFieldType*)
              rOut.GetSysFldType(RES_DOCSTATFLD), DS_CHAR, SVX_NUM_ARABIC);
         break;
-        case 29: // file name
+        case 29: 
             pField = new SwFileNameField((SwFileNameFieldType*)
              rOut.GetSysFldType(RES_FILENAMEFLD));
         break;
-        case 30: // doc template name
+        case 30: 
             pField = new SwTemplNameField((SwTemplNameFieldType*)
              rOut.GetSysFldType(RES_TEMPLNAMEFLD), FF_NAME);
         break;
@@ -786,8 +786,8 @@ oncemore:
                     SwTimeFormat aTime = TF_SYSTEM;
 
                     WWDateTime eDT = GetTimeDatePara(sDTFormat, &aTime, &aDate);
-                    if( eDT == WW_DONTKNOW )        // no D/T-format string
-                        eDT = ( rbType == 32 ) ? WW_TIME : WW_DATE;    // use ID
+                    if( eDT == WW_DONTKNOW )        
+                        eDT = ( rbType == 32 ) ? WW_TIME : WW_DATE;    
 
                     if( eDT & WW_DATE )
                     {
@@ -801,7 +801,7 @@ oncemore:
 
                         if( eDT == WW_BOTH )
                             rOut << * pField << ' ';
-                                // Cheat: insert directly and a space afterwards
+                                
                     }
                     if( eDT & WW_TIME )
                     {
@@ -816,11 +816,11 @@ oncemore:
 
                 }
         break;
-        case 33: // current page
+        case 33: 
             pField = new SwPageNumberField((SwPageNumberFieldType*)
              rOut.GetSysFldType(RES_PAGENUMBERFLD), PG_RANDOM, SVX_NUM_ARABIC);
         break;
-        case 34: // evaluation exp
+        case 34: 
         {
             if (nDepth == 0)
             {
@@ -831,7 +831,7 @@ oncemore:
                     pField = new SwGetExpField(pFieldType, sFormel,
                      nsSwGetSetExpType::GSE_STRING, VVF_SYS);
             }
-            else // rekursion:
+            else 
             {
                 OUString aName("Ww");
                 aName += OUString::number( nPlcIndex );
@@ -847,7 +847,7 @@ oncemore:
             }
         }
         break;
-        case 36: // print command, Einfuegendatei
+        case 36: 
         {
             OUString aFName;
             pos = aStr.indexOf(' ');
@@ -878,12 +878,12 @@ oncemore:
             rOut.EndItem( RES_FLTR_SECTION );
             rOut.NextParagraph();
         }
-        case 37: // page ref
+        case 37: 
             pField = new SwGetRefField(
              (SwGetRefFieldType*)rOut.GetSysFldType(RES_GETREFFLD),
              sFormel, 0, 0, REF_PAGE);
         break;
-        case 38: // ask command
+        case 38: 
         {
             OUString aName;
             pos = aStr.indexOf(' ');
@@ -907,13 +907,13 @@ oncemore:
             ((SwSetExpField*)pField)->SetInputFlag( sal_True );
             ((SwSetExpField*)pField)->SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
         }
-        case 39: // filling command
+        case 39: 
             pField = new SwInputField(
                 static_cast<SwInputFieldType*>(rOut.GetSysFldType( RES_INPUTFLD )),
                 OUString(), sFormel,
                 INP_TXT, 0, false );
         break;
-        case 51: // macro button
+        case 51: 
         {
             OUString aName;
             pos = aStr.indexOf(' ');
@@ -936,18 +936,18 @@ oncemore:
                             "StarOffice.Standard.Modul1." + aName, aStr );
         }
         break;
-        case 55: // read tiff / or better: import anything
+        case 55: 
         {
             const sal_Unicode* pFormel = sFormel.getStr();
             const sal_Unicode* pDot = 0;
             OUString sName;
             while (*pFormel != '\0' && *pFormel != ' ')
             {
-                // from here on a extension could appear
+                
                 if (*pFormel == '.')
                     pDot = pFormel;
                 else
-                    // so far we were in directories
+                    
                     if (*pFormel == '\\')
                     {
                         pDot = 0;
@@ -977,41 +977,41 @@ oncemore:
                 bKnown = false;
         }
         break;
-        default: // unknown
+        default: 
             OSL_ENSURE(false, "Ww1PlainText");
-        // unsupported:
-        case 1: // unknown
-        case 2: // possible bookmark
-        case 4: // index entry
-        // wwpar5: 1351/1454
-        case 5: // footnote ref
-        case 7: // if command
-        case 8: // create index
-        // wwpar5: 1351/1454
-        case 9: // table of contents entry
-        // wwpar5: 1351/1454
-        case 10: // style ref
-        case 11: // doc ref
-        case 12: // seq ref
-        case 13: // create table of contents
-        // wwpar5: 1351/1454
-        case 35: // literal text
-        // print merge:
-        case 40: // data command
-        case 41: // next command
-        case 42: // nextif command
-        case 43: // skipif command
-        case 44: // number of record
+        
+        case 1: 
+        case 2: 
+        case 4: 
+        
+        case 5: 
+        case 7: 
+        case 8: 
+        
+        case 9: 
+        
+        case 10: 
+        case 11: 
+        case 12: 
+        case 13: 
+        
+        case 35: 
+        
+        case 40: 
+        case 41: 
+        case 42: 
+        case 43: 
+        case 44: 
         //
-        case 45: // dde ref
-        case 46: // dde auto ref
-        case 47: // glossary entry
-        case 48: // print char
-        case 49: // formula def
-        case 50: // goto button
-        case 52: // auto number outline
-        case 53: // auto number legal
-        case 54: // auto number arabic
+        case 45: 
+        case 46: 
+        case 47: 
+        case 48: 
+        case 49: 
+        case 50: 
+        case 52: 
+        case 53: 
+        case 54: 
             bKnown = false;
         break;
         }
@@ -1020,15 +1020,15 @@ oncemore:
         else
             this->sErgebnis = sErgebnis;
     }
-    else // oops: we are terribly wrong: skip this
+    else 
         ++(*this);
 }
 
 sal_uLong Ww1Fields::GetLength()
 {
-    // berechnet die laenge eines feldteiles. nicht mitgerechnet werden
-    // die terminierenden zeichen im text (19, 20, 21) die beginn, trenner
-    // und ende bedeuten.
+    
+    
+    
     sal_uLong ulBeg = Where();
     sal_uLong ulEnd = Where(nPlcIndex+1);
     OSL_ENSURE(ulBeg<ulEnd, "Ww1Fields");
@@ -1052,10 +1052,10 @@ void Ww1Sep::Start(Ww1Shell& rOut, Ww1Manager& rMan)
         rFmt.SetFmtAttr(aLR);
         SvxULSpaceItem aUL(rDOP.dyaTopGet(), rDOP.dyaBottomGet(), RES_UL_SPACE);
         rFmt.SetFmtAttr(aUL);
-        // sobald wir mit dem lesen der zeichen soweit sind, wo sep's
-        // momentanes attribut beginnt, wird dieses attribut eingefuegt.
-        // diese methode ist bei den meisten start/stop methoden der
-        // memberklassen des managers identisch.
+        
+        
+        
+        
         sal_uInt8* pByte = GetData();
         Ww1SprmSep aSprm(rFib, SVBT32ToUInt32(pByte + 2));
         aSprm.Start(rOut, rMan);
@@ -1071,11 +1071,11 @@ void Ww1Pap::Start(Ww1Shell& rOut, Ww1Manager& rMan)
     {
         sal_uInt8* pByte;
         sal_uInt16 cb;
-        // bereitstellen der zu startenden attribute
+        
         if (FillStart(pByte, cb))
         {
             Ww1SprmPapx aSprm(pByte, cb);
-            // and give the following output
+            
             aSprm.Start(rOut, rMan);
         }
         ++(*this);
@@ -1097,8 +1097,8 @@ void Ww1Pap::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
     }
 }
 
-// momentan laesst sich die ausgabe von W1CHPxen nicht nur per define
-// loesen...
+
+
 void W1_CHP::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     if (fBoldGet())
@@ -1206,7 +1206,7 @@ void Ww1Chp::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
         W1_CHP aChpx;
         if (FillStop(aChpx))
         {
-            // zuerst alle toggle-flags
+            
             if (aChpx.fBoldGet())
                 rOut.EndItem(RES_CHRATR_WEIGHT);
             if (aChpx.fItalicGet())
@@ -1217,8 +1217,8 @@ void Ww1Chp::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
                 rOut.EndItem(RES_CHRATR_CONTOUR);
             if (aChpx.fSmallCapsGet() || aChpx.fCapsGet())
                 rOut.EndItem(RES_CHRATR_CASEMAP);
-            // dann alle zahl-werte, diese haben flags, wenn sie gesetzt
-            // sind...
+            
+            
             if (aChpx.fsHpsGet())
                 rOut.EndItem(RES_CHRATR_FONTSIZE);
             if (aChpx.fsKulGet())
@@ -1240,35 +1240,35 @@ void Ww1Chp::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
 
 void Ww1Style::Out(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-    // Zuerst Basis, damit Attribute des Basis-Styles erkannt werden
-    // first: Base
-    if(pParent->GetStyle(stcBase).IsUsed() )    // Basis gueltig ?
+    
+    
+    if(pParent->GetStyle(stcBase).IsUsed() )    
         rOut.BaseStyle(stcBase);
 
-    // next of all: CHP
+    
     aChpx.Out(rOut, rMan);
-    // Last: PAP
+    
     if (pPapx)
         pPapx->Start(rOut, rMan);
 }
 
-// die Out() methoden von plaintext fuer den filter geben eine anzahl
-// zeichen aus auf die shell, einen string oder einen char, wieviel
-// zeichen ausgegeben werden, bestimmt ulEnd, das das ende bestimmt,
-// bis zudem ausgegeben wird. ausserdem beenden die methoden die
-// ausgabe bei kontrollzeichen.
-// diese sind definiert durch MinChar. alle zeichen mit wert darunter
-// gelten als kontroll- zeichen. dafuer gibts die methode IsChar, die
-// zurueckgibt, ob es sich um ein standard zeichen handelt. kommt ein
-// solches zeichen, wird dieses zeichen zurueckgegeben und die methode
-// beendet, auch wenn ulEnd noch nicht erreicht wurde. bei nutzung
-// also beachten, dasz wenn !IsChar(Out(...)) gilt, ulEnd unter
-// umstaenden nicht erreicht wurde. dann wurde das kontrollzeichen
-// zwar (weg-)gelesen, jedoch noch nicht ausgegeben.
+
+
+
+
+
+
+
+
+
+
+
+
+
 sal_Unicode Ww1PlainText::Out( Ww1Shell& rOut, sal_uLong& ulEnd )
 {
-    // gibt die zeichen bis ulEnd aus, es sei den es kommen sonderzeichen
-    // die eine bedeutung haben wie absatzende oder seitenumbruch.
+    
+    
     if (ulEnd > Count())
         ulEnd = Count();
     while (ulSeek < ulEnd)
@@ -1285,7 +1285,7 @@ sal_Unicode Ww1PlainText::Out( Ww1Shell& rOut, sal_uLong& ulEnd )
 
 sal_Unicode Ww1PlainText::Out(OUString& rStr, sal_uLong ulEnd)
 {
-    // wie Out(Shell..., jedoch ausgabe auf einen string
+    
     rStr = "";
     if (ulEnd > Count())
         ulEnd = Count();
@@ -1301,7 +1301,7 @@ sal_Unicode Ww1PlainText::Out(OUString& rStr, sal_uLong ulEnd)
     return Ww1PlainText::MinChar;
 }
 
-// hier eruebrigt sich ulEnd...oder?
+
 sal_Unicode Ww1PlainText::Out( sal_Unicode& rRead )
 {
     rRead = (*this)[ulSeek];
@@ -1311,12 +1311,12 @@ sal_Unicode Ww1PlainText::Out( sal_Unicode& rRead )
 
 void Ww1SprmPapx::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-    if( !rMan.IsInStyle() ){        // Innerhalb Style gehts ueber die
-                                    // normalen Attribute
+    if( !rMan.IsInStyle() ){        
+                                    
         if (!rOut.IsInFly()
-            && !rOut.IsInTable()    // Nicht innerhalb Tabelle!
-            && ( rMan.HasPPc() || rMan.HasPDxaAbs())){ // Fly-Start
-            rOut.BeginFly();        // eAnchor );
+            && !rOut.IsInTable()    
+            && ( rMan.HasPPc() || rMan.HasPDxaAbs())){ 
+            rOut.BeginFly();        
         }
         if (!rOut.IsInTable() && rMan.HasInTable())
         {
@@ -1331,31 +1331,31 @@ void Ww1SprmPapx::Stop(Ww1Shell& rOut, Ww1Manager& rMan)
 {
     Ww1Sprm::Stop(rOut, rMan);
 
-    if( !rMan.IsInStyle() )         // Innerhalb Style gehts ueber die
-    {                               // normalen Attribute
+    if( !rMan.IsInStyle() )         
+    {                               
         if (rOut.IsInTable() &&( rMan.IsStopAll() || !rMan.HasInTable()))
             rOut.EndTable();
 
         if( rOut.IsInFly() &&
             ( rMan.IsStopAll()
-                || ( !rMan.HasPPc() && !rMan.HasPDxaAbs()   // Fly-Ende
-                    && !rOut.IsInTable())))     // Nicht innerhalb Tabelle!
+                || ( !rMan.HasPPc() && !rMan.HasPDxaAbs()   
+                    && !rOut.IsInTable())))     
             rOut.EndFly();
     }
 }
 
 SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
 {
-    // erzeugen eine fonts im sw-sinne aus den word-strukturen
+    
     FontFamily eFamily = FAMILY_DONTKNOW;
     OUString aName;
     FontPitch ePitch = PITCH_DONTKNOW;
     rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
     switch (nFCode)
     {
-    // In the Winword 1.x format, the names of the first three fonts were
-    // omitted from the table and assumed to be "Tms Rmn" (for ftc = 0),
-    // "Symbol", and "Helv"
+    
+    
+    
     case 0:
          eFamily = FAMILY_ROMAN;
          aName = "Tms Rmn";
@@ -1378,23 +1378,23 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
         W1_FFN* pF = GetFFN(nFCode - 3);
         if (pF != 0)
         {
-            // Fontname
+            
             aName = OUString( (sal_Char*)pF->szFfnGet(), strlen( (sal_Char*)pF->szFfnGet() ),
                             RTL_TEXTENCODING_MS_1252 );
-            // Pitch
+            
             static const FontPitch ePitchA[] =
             {
                 PITCH_DONTKNOW, PITCH_FIXED, PITCH_VARIABLE, PITCH_DONTKNOW
             };
             ePitch = ePitchA[pF->prgGet()];
-            // CharSet
+            
             eCharSet = RTL_TEXTENCODING_MS_1252;
             if (aName.equalsIgnoreAsciiCase("Symbol")
              || aName.equalsIgnoreAsciiCase("Symbol Set")
              || aName.equalsIgnoreAsciiCase("Wingdings")
              || aName.equalsIgnoreAsciiCase("ITC Zapf Dingbats") )
                 eCharSet = RTL_TEXTENCODING_SYMBOL;
-            // FontFamily
+            
             sal_uInt16 b = pF->ffGet();
             static const FontFamily eFamilyA[] =
             {
@@ -1415,7 +1415,7 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
     }
     break;
     }
-    // Extrawurst Hypo
+    
     if ( SwFltGetFlag( nFieldFlags, SwFltControlStack::HYPO )
          && ( aName.equalsIgnoreAsciiCase("Helv")
             || aName.equalsIgnoreAsciiCase("Helvetica") ) )
@@ -1426,12 +1426,12 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
     }
     else
     {
-        // VCL matcht die Fonts selber
-        // allerdings passiert bei Helv, Tms Rmn und System Monospaced
-        // Scheisse, so dass diese ersetzt werden muessen.
-        // Nach TH sollen diese durch feste Werte ersetzt werden,
-        // also nicht ueber System::GetStandardFont, damit keine
-        // Namenslisten auftauchen ( Dieses koennte den User verwirren )
+        
+        
+        
+        
+        
+        
         if( aName.equalsIgnoreAsciiCase("Helv"))
         {
             aName  = "Helvetica";
@@ -1450,21 +1450,21 @@ SvxFontItem Ww1Fonts::GetFont(sal_uInt16 nFCode)
             ePitch = PITCH_FIXED;
         }
     }
-    // nun koennen wir den font basteln
+    
     return SvxFontItem(eFamily, aName, OUString(), ePitch, eCharSet, RES_CHRATR_FONT);
 }
 
 void Ww1Dop::Out(Ww1Shell& rOut)
 {
-    //~ mdt: fehlt
+    
     long nDefTabSiz = aDop.dxaTabGet();
     if (nDefTabSiz < 56)
         nDefTabSiz = 709;
 
-    // wir wollen genau einen DefaultTab
+    
     SvxTabStopItem aNewTab(1, sal_uInt16(nDefTabSiz), SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP);
     ((SvxTabStop&)aNewTab[0]).GetAdjustment() = SVX_TAB_ADJUST_DEFAULT;
-    rOut.GetDoc().GetAttrPool().SetPoolDefaultItem( aNewTab); //~ mdt: besser (GetDoc)
+    rOut.GetDoc().GetAttrPool().SetPoolDefaultItem( aNewTab); 
 
     SwFrmFmt &rFmt = rOut.GetPageDesc().GetMaster();
     W1_DOP& rDOP = GetDOP();
@@ -1480,19 +1480,19 @@ void Ww1Dop::Out(Ww1Shell& rOut)
     rFmt.SetFmtAttr(aUL);
 
     SwFtnInfo aInfo;
-    aInfo = rOut.GetDoc().GetFtnInfo();     // Copy-Ctor privat
-                // wo positioniert ? ( 0 == Section, 1 == Page,
-                // 2 == beim Text -> Page, 3 == Doc  )
+    aInfo = rOut.GetDoc().GetFtnInfo();     
+                
+                
     switch( rDOP.fpcGet() ){
     case 1:
     case 2: aInfo.ePos = FTNPOS_PAGE; break;
     default: aInfo.ePos = FTNPOS_CHAPTER; break;
     }
-    // Da Sw unter Chapter anscheinend was anderes versteht als PMW
-    // hier also immer Doc !
+    
+    
     aInfo.eNum = FTNNUM_DOC;
-                            // wie neu nummerieren ?
-                            // SW-UI erlaubt Nummer nur bei FTNNUM_DOC
+                            
+                            
     if( rDOP.nFtnGet() > 0 && aInfo.eNum == FTNNUM_DOC )
         aInfo.nFtnOffset = rDOP.nFtnGet() - 1;
     rOut.GetDoc().SetFtnInfo( aInfo );
@@ -1501,8 +1501,8 @@ void Ww1Dop::Out(Ww1Shell& rOut)
 
 void Ww1Assoc::Out(Ww1Shell& rOut)
 {
-    //~ mdt: fehlen: FileNext, Dot, DataDoc, HeaderDoc, Criteria1,
-    // Criteria2, Criteria3, Criteria4, Criteria5, Criteria6, Criteria7
+    
+    
     SwDocShell *pDocShell(rOut.GetDoc().GetDocShell());
     OSL_ENSURE(pDocShell, "no SwDocShell");
     if (pDocShell) {
@@ -1526,109 +1526,109 @@ void Ww1Assoc::Out(Ww1Shell& rOut)
 void Ww1StyleSheet::OutDefaults(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc)
 {
     switch (stc){
-    case 222: // Null
+    case 222: 
         rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         rOut << SvxFontItem(rMan.GetFont(2));
         break;
-    case 223: // annotation reference
+    case 223: 
         rOut << SvxFontHeightItem(160, 100, RES_CHRATR_FONTSIZE);
         break;
-    case 224: // annotation text
+    case 224: 
         rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
-    case 225: // table of contents 8
-    case 226: // table of contents 7
-    case 227: // table of contents 6
-    case 228: // table of contents 5
-    case 229: // table of contents 4
-    case 230: // table of contents 3
-    case 231: // table of contents 2
-    case 232: // table of contents 1
+    case 225: 
+    case 226: 
+    case 227: 
+    case 228: 
+    case 229: 
+    case 230: 
+    case 231: 
+    case 232: 
         rOut << SvxLRSpaceItem(( 232 - stc ) * 720, 720, 0, 0, RES_LR_SPACE);
-            // Tabulatoren fehlen noch !
+            
         break;
-    case 233: // index 7
-    case 234: // und index 6
-    case 235: // und index 5
-    case 236: // und index 4
-    case 237: // und index 3
-    case 238: // und index 2
+    case 233: 
+    case 234: 
+    case 235: 
+    case 236: 
+    case 237: 
+    case 238: 
         rOut << SvxLRSpaceItem(( 239 - stc ) * 360, 0, 0, 0, RES_LR_SPACE);
         break;
-    case 239: // index 1
+    case 239: 
         break;
-    case 240: // line number
+    case 240: 
         break;
-    case 241: // index heading
+    case 241: 
         break;
-    case 242:  // footer
-    case 243:{ // ... und header
+    case 242:  
+    case 243:{ 
             SvxTabStopItem aAttr(RES_PARATR_TABSTOP);
             SvxTabStop aTabStop;
-            aTabStop.GetTabPos() = 4535;  // 8 cm
+            aTabStop.GetTabPos() = 4535;  
             aTabStop.GetAdjustment() = SVX_TAB_ADJUST_CENTER;
             aAttr.Insert( aTabStop );
-            aTabStop.GetTabPos() = 9071;  // 16 cm
+            aTabStop.GetTabPos() = 9071;  
             aTabStop.GetAdjustment() = SVX_TAB_ADJUST_RIGHT;
             aAttr.Insert( aTabStop );
             rOut << aAttr;
         }
         break;
-    case 244: // footnote reference
+    case 244: 
         rOut << SvxFontHeightItem(160, 100, RES_CHRATR_FONTSIZE);
         rOut << SvxEscapementItem(6 * 100 / 24, 100, RES_CHRATR_ESCAPEMENT);
         break;
-    case 245: // footnote text
+    case 245: 
         rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
-    case 246: // heading 9
-    case 247: // und heading 8
-    case 248: // und heading 7
+    case 246: 
+    case 247: 
+    case 248: 
         rOut << SvxLRSpaceItem(720, 0, 0, 0, RES_LR_SPACE);
         rOut << SvxPostureItem(
                     rOut.GetPostureItalic()?ITALIC_NONE:ITALIC_NORMAL, RES_CHRATR_POSTURE);
         rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
-    case 249: // heading 6
+    case 249: 
         rOut << SvxLRSpaceItem(720, 0, 0, 0, RES_LR_SPACE);
         rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
         rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
-    case 250: // heading 5
+    case 250: 
         rOut << SvxLRSpaceItem(720, 0, 0, 0, RES_LR_SPACE);
         rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD, RES_CHRATR_WEIGHT);
         rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
-    case 251: // heading 4
+    case 251: 
         rOut << SvxLRSpaceItem(360, 0, 0, 0, RES_LR_SPACE);
         rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
         rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         break;
-    case 252: // heading 3
+    case 252: 
         rOut << SvxLRSpaceItem(360, 0, 0, 0, RES_LR_SPACE);
         rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD, RES_CHRATR_WEIGHT);
         rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         break;
-    case 253: // heading 2
+    case 253: 
         rOut << SvxULSpaceItem(120, 0, RES_UL_SPACE);
         rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD, RES_CHRATR_WEIGHT);
         rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         rOut << SvxFontItem(rMan.GetFont(2));
         break;
-    case 254: // heading 1
+    case 254: 
         rOut << SvxULSpaceItem(240, 0, RES_UL_SPACE);
         rOut << SvxWeightItem(rOut.GetWeightBold()?WEIGHT_NORMAL:WEIGHT_BOLD, RES_CHRATR_WEIGHT);
         rOut << SvxUnderlineItem(UNDERLINE_SINGLE, RES_CHRATR_UNDERLINE);
         rOut << SvxFontHeightItem(240, 100, RES_CHRATR_FONTSIZE);
         rOut << SvxFontItem(rMan.GetFont(2));
         break;
-    case 255: // Normal indent
+    case 255: 
         rOut << SvxLRSpaceItem(720, 0, 0, 0, RES_LR_SPACE);
         break;
-    case 0: // Normal
+    case 0: 
         rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
-    default: // selbstdefiniert
+    default: 
         rOut << SvxFontHeightItem(200, 100, RES_CHRATR_FONTSIZE);
         break;
     }
@@ -1641,75 +1641,75 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc)
 
     switch (stc)
     {
-    case 222: // Null
-        aType = RES_POOLCOLL_TEXT; break;   //???
-    case 223: // annotation reference
+    case 222: 
+        aType = RES_POOLCOLL_TEXT; break;   
+    case 223: 
         break;
-    case 224: // annotation text
+    case 224: 
         break;
-    case 225: // table of contents 8
+    case 225: 
         aType = RES_POOLCOLL_TOX_CNTNT8; break;
-    case 226: // table of contents 7
+    case 226: 
         aType = RES_POOLCOLL_TOX_CNTNT7; break;
-    case 227: // table of contents 6
+    case 227: 
         aType = RES_POOLCOLL_TOX_CNTNT6; break;
-    case 228: // table of contents 5
+    case 228: 
         aType = RES_POOLCOLL_TOX_CNTNT5; break;
-    case 229: // table of contents 4
+    case 229: 
         aType = RES_POOLCOLL_TOX_CNTNT4; break;
-    case 230: // table of contents 3
+    case 230: 
         aType = RES_POOLCOLL_TOX_CNTNT3; break;
-    case 231: // table of contents 2
+    case 231: 
         aType = RES_POOLCOLL_TOX_CNTNT2; break;
-    case 232: // table of contents 1
+    case 232: 
         aType = RES_POOLCOLL_TOX_CNTNT1; break;
-    case 233: // index 7
+    case 233: 
         break;
-    case 234: // index 6
+    case 234: 
         break;
-    case 235: // index 5
+    case 235: 
         break;
-    case 236: // index 4
+    case 236: 
         break;
-    case 237: // index 3
+    case 237: 
         aType = RES_POOLCOLL_TOX_IDX3; break;
-    case 238: // index 2
+    case 238: 
         aType = RES_POOLCOLL_TOX_IDX2; break;
-    case 239: // index 1
+    case 239: 
         aType = RES_POOLCOLL_TOX_IDX1; break;
-    case 240: // line number
+    case 240: 
         break;
-    case 241: // index heading
+    case 241: 
         break;
-    case 242: // footer
+    case 242: 
         aType = RES_POOLCOLL_FOOTER; break;
-    case 243: // header
+    case 243: 
         aType = RES_POOLCOLL_HEADER; break;
-    case 244: // footnote reference
+    case 244: 
         break;
-    case 245: // footnote text
+    case 245: 
         aType = RES_POOLCOLL_FOOTNOTE; break;
-    case 246: // heading 9
+    case 246: 
         break;
-    case 247: // heading 8
+    case 247: 
         break;
-    case 248: // heading 7
+    case 248: 
         break;
-    case 249: // heading 6
+    case 249: 
         break;
-    case 250: // heading 5
+    case 250: 
         aType = RES_POOLCOLL_HEADLINE5; break;
-    case 251: // heading 4
+    case 251: 
         aType = RES_POOLCOLL_HEADLINE4; break;
-    case 252: // heading 3
+    case 252: 
         aType = RES_POOLCOLL_HEADLINE3; break;
-    case 253: // heading 2
+    case 253: 
         aType = RES_POOLCOLL_HEADLINE2; break;
-    case 254: // heading 1
+    case 254: 
         aType = RES_POOLCOLL_HEADLINE1; break;
-    case 255: // Normal indent
+    case 255: 
         aType = RES_POOLCOLL_TEXT_IDENT; break;
-    case 0: // Normal
+    case 0: 
         aType = RES_POOLCOLL_STANDARD; break;
     }
     if (aType == RES_NONE)
@@ -1720,13 +1720,13 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, sal_uInt16 stc)
     GetStyle(stc).Out(rOut, rMan);
     rOut.EndStyle();
 }
-// OutOneWithBase() liest einen Style mit OutOne() einen Style ein
-// Jedoch liest er, wenn noch nicht geschehen, den Basisstyle rekursiv ein
+
+
 void Ww1StyleSheet::OutOneWithBase(Ww1Shell& rOut, Ww1Manager& rMan,
                                    sal_uInt16 stc, sal_uInt8* pbStopRecur )
 {
-// SH: lineares Einlesen ist Scheisse, da dann BasedOn nicht gesetzt
-// werden kann und ausserdem Toggle- und Modify-Attrs (z.B. Tabs ) nicht gehen.
+
+
 
     Ww1Style& rSty = GetStyle(stc);
     sal_uInt16 nBase = rSty.GetnBase();
@@ -1736,7 +1736,7 @@ void Ww1StyleSheet::OutOneWithBase(Ww1Shell& rOut, Ww1Manager& rMan,
         && !pbStopRecur[nBase] ){
 
         pbStopRecur[nBase] = 1;
-        OutOneWithBase( rOut, rMan, nBase, pbStopRecur ); // Rekursiv
+        OutOneWithBase( rOut, rMan, nBase, pbStopRecur ); 
     }
     OutOne( rOut, rMan, stc );
 }
@@ -1747,12 +1747,12 @@ void Ww1StyleSheet::Out(Ww1Shell& rOut, Ww1Manager& rMan)
     sal_uInt8 bStopRecur[256];
     memset( bStopRecur, sal_False, sizeof(bStopRecur) );
 
-// 1. Durchlauf: Styles mit Basisstyles rekursiv
+
     for (stc=0;stc<Count();stc++)
         if (GetStyle(stc).IsUsed() && !rOut.IsStyleImported( stc ) )
             OutOneWithBase( rOut, rMan, stc, bStopRecur );
 
-// 2. Durchlauf: Follow-Styles
+
     for (stc=0;stc<Count();stc++){
         Ww1Style& rSty = GetStyle(stc);
         if ( rSty.IsUsed() ){
@@ -1763,7 +1763,7 @@ void Ww1StyleSheet::Out(Ww1Shell& rOut, Ww1Manager& rMan)
     }
 }
 
-// Picture
+
 static sal_uLong GuessPicSize(W1_PIC* pPic)
 {
     sal_uInt16 maxx = pPic->mfp.xExtGet();
@@ -1772,9 +1772,9 @@ static sal_uLong GuessPicSize(W1_PIC* pPic)
     return 120L + (sal_uLong)padx * maxy;
 }
 
-// folgende methode schreibt eine windows-.BMP-datei aus einem
-// embeddeten bild in ww-1 dateien
-// gelesen wird 4-bit format, geschrieben jedoch 8-bit.
+
+
+
 void Ww1Picture::WriteBmp(SvStream& rOut)
 {
     long nSize = pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb));
@@ -1899,7 +1899,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
     sal_uInt16 mm;
     switch (mm = pPic->mfp.mmGet())
     {
-    case 8: // embedded metafile
+    case 8: 
     {
         SvMemoryStream aOut(8192, 8192);
         aOut.Write(pPic->rgbGet(), pPic->lcbGet() -
@@ -1919,8 +1919,8 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
         }
         break;
     }
-    case 94: // embedded name SH:??? Was denn nun ? Embeddet oder Name ?
-    case 98: // TIFF-Name
+    case 94: 
+    case 98: 
     {
         OUString aDir( (sal_Char*)pPic->rgbGet(),
                 (sal_uInt16)(pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb))),
@@ -1929,7 +1929,7 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
         rOut.AddGraphic( aDir );
     }
     break;
-    case 97: // embedded bitmap
+    case 97: 
     {
         sal_uLong nSiz = GuessPicSize(pPic);
         SvMemoryStream aOut(nSiz, 8192);
@@ -1947,8 +1947,8 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
 
 void Ww1HeaderFooter::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 {
-    // wird sowieso nur bei SEPs aufgerufen, keine weitere pruefung
-    // noetig:
+    
+    
     if (!rMan.Pushed())
     {
         while (++(*this))

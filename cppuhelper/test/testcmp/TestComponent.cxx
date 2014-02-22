@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -76,7 +76,7 @@ public:
     void SAL_CALL release() throw ();
     void SAL_CALL acquire() throw ();
 
-    // lang::XServiceInfo
+    
     virtual rtl::OUString SAL_CALL getImplementationName() throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
         throw (uno::RuntimeException);
@@ -204,7 +204,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT  void SAL_CALL component_getImplementationEnviro
 {
     rtl::OString purpose;
 
-    if (pImplName) // this is the purpose for a specified impl
+    if (pImplName) 
     {
         rtl::OUString uImplName(pImplName, rtl_str_getLength(pImplName), RTL_TEXTENCODING_ASCII_US);
         purpose = rtl::OUStringToOString(cppu::EnvDcp::getPurpose(uImplName), RTL_TEXTENCODING_ASCII_US);

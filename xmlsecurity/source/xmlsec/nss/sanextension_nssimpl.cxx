@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -49,7 +49,7 @@ SanExtensionImpl :: ~SanExtensionImpl() {
 }
 
 
-//Methods from XCertificateExtension
+
 sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno::RuntimeException ) {
     return m_critical ;
 }
@@ -63,7 +63,7 @@ sal_Bool SAL_CALL SanExtensionImpl :: isCritical() throw( ::com::sun::star::uno:
 }
 
 namespace {
-    // Helper functions from nss/lib/certdb/genname.c
+    
     static int GetNamesLength(CERTGeneralName *names)
     {
         int              length = 0;
@@ -81,7 +81,7 @@ namespace {
 
 }
 
-//Methods from XSanExtension
+
 ::com::sun::star::uno::Sequence< com::sun::star::security::CertAltNameEntry > SAL_CALL SanExtensionImpl :: getAlternativeNames() throw( ::com::sun::star::uno::RuntimeException ){
 
     if (!m_Entries.hasElements())
@@ -130,17 +130,17 @@ namespace {
                     arrCertAltNameEntry[i].Value <<= OUString((const sal_Char*)current->name.other.data, current->name.other.len, RTL_TEXTENCODING_ASCII_US);
                     break;
                 case certX400Address: {
-                    // unsupported
+                    
                     arrCertAltNameEntry[i].Type = ExtAltNameType_X400_ADDRESS;
                     break;
                                       }
                 case certDirectoryName: {
-                    // unsupported
+                    
                     arrCertAltNameEntry[i].Type = ExtAltNameType_DIRECTORY_NAME;
                     break;
                                         }
                 case certEDIPartyName:  {
-                    // unsupported
+                    
                     arrCertAltNameEntry[i].Type = ExtAltNameType_EDI_PARTY_NAME;
                     break;
                                         }

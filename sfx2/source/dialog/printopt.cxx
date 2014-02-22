@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -247,7 +247,7 @@ void SfxCommonPrintOptionsTabPage::ImplSaveControls( PrinterOptions* pCurrentOpt
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*, pBox )
 {
-    (void)pBox; //unused
+    (void)pBox; 
     const sal_Bool bReduceTransparency = m_pReduceTransparencyCB->IsChecked();
 
     m_pReduceTransparencyAutoRB->Enable( bReduceTransparency );
@@ -260,7 +260,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceTransparencyCBHdl, CheckBox*
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, pBox )
 {
-    (void)pBox; //unused
+    (void)pBox; 
     const sal_Bool bEnable = m_pReduceGradientsCB->IsChecked();
 
     m_pReduceGradientsStripesRB->Enable( bEnable );
@@ -274,7 +274,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceGradientsCBHdl, CheckBox*, p
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBox )
 {
-    (void)pBox; //unused
+    (void)pBox; 
     const sal_Bool bEnable = m_pReduceBitmapsCB->IsChecked();
 
     m_pReduceBitmapsOptimalRB->Enable( bEnable );
@@ -290,7 +290,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ClickReduceBitmapsCBHdl, CheckBox*, pBo
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, RadioButton*, pButton )
 {
-    (void)pButton; //unused
+    (void)pButton; 
     const sal_Bool bEnable = m_pReduceGradientsCB->IsChecked() && m_pReduceGradientsStripesRB->IsChecked();
 
     m_pReduceGradientsStepCountNF->Enable( bEnable );
@@ -300,7 +300,7 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceGradientsStripesRBHdl, Radi
 
 IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleReduceBitmapsResolutionRBHdl, RadioButton*, pButton )
 {
-    (void)pButton; //unused
+    (void)pButton; 
     const sal_Bool bEnable = m_pReduceBitmapsCB->IsChecked() && m_pReduceBitmapsResolutionRB->IsChecked();
 
     m_pReduceBitmapsResolutionLB->Enable( bEnable );

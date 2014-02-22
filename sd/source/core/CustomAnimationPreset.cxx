@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/util/XCloneable.hpp>
@@ -243,29 +243,29 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
 
     try
     {
-        // create stream
+        
         SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
         Reference<XInputStream> xInputStream( new utl::OInputStreamWrapper( pIStm, true ) );
 
-        // prepare ParserInputSrouce
+        
         xml::sax::InputSource aParserInput;
         aParserInput.sSystemId = rPath;
         aParserInput.aInputStream = xInputStream;
 
-        // get parser
+        
         Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( comphelper::getComponentContext(xServiceFactory) );
 
-        // get filter
+        
         Reference< xml::sax::XDocumentHandler > xFilter( xServiceFactory->createInstance("com.sun.star.comp.Xmloff.AnimationsImport" ), UNO_QUERY );
 
         DBG_ASSERT( xFilter.is(), "Can't instantiate filter component." );
         if( !xFilter.is() )
             return xRootNode;
 
-        // connect parser and filter
+        
         xParser->setDocumentHandler( xFilter );
 
-        // finally, parser the stream
+        
         xParser->parseStream( aParserInput );
 
         Reference< XAnimationNodeSupplier > xAnimationNodeSupplier( xFilter, UNO_QUERY );
@@ -307,7 +307,7 @@ void CustomAnimationPresets::importEffects()
         Reference< XMultiServiceFactory > xConfigProvider =
             configuration::theDefaultProvider::get( xContext );
 
-        // read path to transition effects files from config
+        
         Any propValue = uno::makeAny(
             beans::PropertyValue(
                 "nodepath", -1,
@@ -377,7 +377,7 @@ void CustomAnimationPresets::importResources()
 {
     try
     {
-        // Get service factory
+        
         Reference< XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
         Reference< XMultiServiceFactory > xConfigProvider =

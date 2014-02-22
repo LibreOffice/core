@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "conditioncontext.hxx"
@@ -112,7 +112,7 @@ namespace oox { namespace ppt {
         {
         case PPT_TOKEN( rtn ):
         {
-            // ST_TLTriggerRuntimeNode { first, last, all }
+            
             sal_Int32 aTok;
             sal_Int16 nEnum;
             aTok = rAttribs.getToken( XML_val, XML_first );
@@ -142,7 +142,7 @@ namespace oox { namespace ppt {
             return this;
         }
         case PPT_TOKEN( tgtEl ):
-            // CT_TLTimeTargetElement
+            
             return new TimeTargetElementContext( *this, maCond.getTarget() );
         default:
             break;
@@ -175,7 +175,7 @@ namespace oox { namespace ppt {
         switch( aElement )
         {
         case PPT_TOKEN( cond ):
-            // add a condition to the list
+            
             maConditions.push_back( AnimationCondition() );
             return new CondContext( *this, rAttribs.getFastAttributeList(), mpNode, maConditions.back() );
         default:

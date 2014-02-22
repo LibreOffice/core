@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <switerator.hxx>
@@ -39,17 +39,17 @@ class SwNode2LayImpl
 {
     SwIterator<SwFrm,SwModify>* pIter;
     SwModify* pMod;
-    std::vector<SwFrm*>* pUpperFrms; // To collect the Upper
-    sal_uLong nIndex;        // The Index of the to-be-inserted Nodes
-    bool bMaster    : 1; // true => only Master, false => only Frames without Follow
-    bool bInit      : 1; // Did we already call First() at SwClient?
+    std::vector<SwFrm*>* pUpperFrms; 
+    sal_uLong nIndex;        
+    bool bMaster    : 1; 
+    bool bInit      : 1; 
 public:
     SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearch );
     ~SwNode2LayImpl() { delete pIter; delete pUpperFrms; }
-    SwFrm* NextFrm(); // Returns the next "useful" Frame
+    SwFrm* NextFrm(); 
     SwLayoutFrm* UpperFrm( SwFrm* &rpFrm, const SwNode &rNode );
-    void SaveUpperFrms(); // Saves (and locks if needed) the pUpper
-    // Inserts a Frame under every pUpper of the array
+    void SaveUpperFrms(); 
+    
     void RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong nEnd );
 
     SwFrm* GetFrm( const Point* pDocPos = 0,
@@ -136,14 +136,14 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
     const SwNode* pNd;
     if( bSearch || rNode.IsSectionNode() )
     {
-        // Find the next Cntnt/TableNode that contains a Frame, so that we can add
-        // ourselves before/after it
+        
+        
         if( !bSearch && rNode.GetIndex() < nIndex )
         {
             SwNodeIndex aTmp( *rNode.EndOfSectionNode(), +1 );
             pNd = GoPreviousWithFrm( &aTmp );
             if( !bSearch && pNd && rNode.GetIndex() > pNd->GetIndex() )
-                pNd = NULL; // Do not go over the limits
+                pNd = NULL; 
             bMaster = false;
         }
         else
@@ -152,7 +152,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, sal_uLong nIdx, bool bSearc
             pNd = GoNextWithFrm( rNode.GetNodes(), &aTmp );
             bMaster = true;
             if( !bSearch && pNd && rNode.EndOfSectionIndex() < pNd->GetIndex() )
-                pNd = NULL; // Do not go over the limits
+                pNd = NULL; 
         }
     }
     else
@@ -208,9 +208,9 @@ SwFrm* SwNode2LayImpl::NextFrm()
     {
         SwFlowFrm* pFlow = SwFlowFrm::CastFlowFrm( pRet );
         OSL_ENSURE( pFlow, "Cntnt or Table expected?!" );
-        // Follows are pretty volatile, thus we ignore them.
-        // Even if we insert after the Frame, we start from the Master
-        // and iterate through it until the last Follow
+        
+        
+        
         if( !pFlow->IsFollow() )
         {
             if( !bMaster )
@@ -222,19 +222,19 @@ SwFrm* SwNode2LayImpl::NextFrm()
             if( pRet->IsInSct() )
             {
                 SwSectionFrm* pSct = pRet->FindSctFrm();
-                // ATTENTION: If we are in a Footnote, from a Layout point of view
-                // it could be located in a Section with columns, although it
-                // should be outside of it when looking at the Nodes.
-                // Thus, when dealing with Footnotes, we need to check whether the
-                // SectionFrm is also located within the Footnote and not outside of it.
+                
+                
+                
+                
+                
                 if( !pRet->IsInFtn() || pSct->IsInFtn() )
                 {
                     OSL_ENSURE( pSct && pSct->GetSection(), "Where's my section?" );
                     SwSectionNode* pNd = pSct->GetSection()->GetFmt()->GetSectionNode();
                     OSL_ENSURE( pNd, "Lost SectionNode" );
-                    // If the result Frame is located within a Section Frame
-                    // whose Section does not contain the Node, we return with
-                    // the SectionFrm, else we return with the Cntnt/TabFrm
+                    
+                    
+                    
                     if( bMaster )
                     {
                         if( pNd->GetIndex() >= nIndex )
@@ -290,14 +290,14 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
             SwFrm* pFrm = bMaster ? rpFrm->FindPrev() : rpFrm->FindNext();
             if( pFrm && pFrm->IsSctFrm() )
             {
-                // pFrm could be a "dummy"-section
+                
                 if( ((SwSectionFrm*)pFrm)->GetSection() &&
                     (&((SwSectionNode*)pNode)->GetSection() ==
                      ((SwSectionFrm*)pFrm)->GetSection()) )
                 {
-                    // #i22922# - consider columned sections
-                    // 'Go down' the section frame as long as the layout frame
-                    // is found, which would contain content.
+                    
+                    
+                    
                     while ( pFrm->IsLayoutFrm() &&
                             static_cast<SwLayoutFrm*>(pFrm)->Lower() &&
                             !static_cast<SwLayoutFrm*>(pFrm)->Lower()->IsFlowFrm() &&
@@ -319,8 +319,8 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                                bMaster ? rpFrm : rpFrm->GetNext() );
                 static_cast<SwSectionFrm*>(pUpper)->Init();
                 rpFrm = NULL;
-                // 'Go down' the section frame as long as the layout frame
-                // is found, which would contain content.
+                
+                
                 while ( pUpper->Lower() &&
                         !pUpper->Lower()->IsFlowFrm() &&
                         pUpper->Lower()->IsLayoutFrm() )
@@ -405,9 +405,9 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, sal_uLong nStt, sal_uLong 
         {
             SwSectionFrm* pSctFrm = pTmp->FindSctFrm();
             pSctFrm->ColUnlock();
-            // #i18103# - invalidate size of section in order to
-            // assure, that the section is formatted, unless it was 'Collocked'
-            // from its 'collection' until its 'restoration'.
+            
+            
+            
             pSctFrm->_InvalidateSize();
         }
     }
@@ -417,7 +417,7 @@ SwFrm* SwNode2LayImpl::GetFrm( const Point* pDocPos,
                                 const SwPosition *pPos,
                                 const sal_Bool bCalcFrm ) const
 {
-    // test if change of member pIter -> pMod broke anything
+    
     return pMod ? ::GetFrmOfModify( 0, *pMod, USHRT_MAX, pDocPos, pPos, bCalcFrm ) : 0;
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -163,11 +163,11 @@ sal_Bool Writer::CopyNextPam( SwPaM ** ppPam )
 {
     if( (*ppPam)->GetNext() == pOrigPam )
     {
-        *ppPam = pOrigPam;          // set back to the beginning pam
-        return sal_False;           // end of the ring
+        *ppPam = pOrigPam;          
+        return sal_False;           
     }
 
-    // otherwise copy the next value from the next Pam
+    
     *ppPam = ((SwPaM*)(*ppPam)->GetNext() );
 
     *pCurPam->GetPoint() = *(*ppPam)->Start();
@@ -176,7 +176,7 @@ sal_Bool Writer::CopyNextPam( SwPaM ** ppPam )
     return sal_True;
 }
 
-// search the next Bookmark-Position from the Bookmark-Table
+
 
 sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
 {
@@ -185,7 +185,7 @@ sal_Int32 Writer::FindPos_Bkmk(const SwPosition& rPos) const
         pMarkAccess->getAllMarksBegin(),
         pMarkAccess->getAllMarksEnd(),
         rPos,
-        sw::mark::CompareIMarkStartsBefore()); // find the first Mark that does not start before
+        sw::mark::CompareIMarkStartsBefore()); 
     if(ppBkmk != pMarkAccess->getAllMarksEnd())
         return ppBkmk - pMarkAccess->getAllMarksBegin();
     return -1;
@@ -217,7 +217,7 @@ Writer::NewSwPaM(SwDoc & rDoc, sal_uLong const nStartIdx, sal_uLong const nEndId
     return pNew;
 }
 
-// Stream-specific
+
 SvStream& Writer::Strm()
 {
     OSL_ENSURE( m_pImpl->m_pStream, "Oh-oh. Writer with no Stream!" );
@@ -257,9 +257,9 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
     pOrigFileName = pFName;
     m_pImpl->m_pStream = &rStrm;
 
-    // Copy PaM, so that it can be modified
+    
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    // for comparison secure to the current Pam
+    
     pOrigPam = &rPaM;
 
     sal_uLong nRet = WriteStream();
@@ -271,8 +271,8 @@ sal_uLong Writer::Write( SwPaM& rPaM, SvStream& rStrm, const OUString* pFName )
 
 sal_uLong Writer::Write( SwPaM& rPam, SfxMedium& rMed, const OUString* pFileName )
 {
-    // This method must be overloaded in SwXMLWriter a storage from medium will be used there.
-    // The microsoft format can write to storage but the storage will be based on the stream.
+    
+    
     return Write( rPam, *rMed.GetOutStream(), pFileName );
 }
 
@@ -290,9 +290,9 @@ sal_uLong Writer::Write( SwPaM&, const uno::Reference < embed::XStorage >&, cons
 
 void Writer::PutNumFmtFontsInAttrPool()
 {
-    // then there are a few fonts in the NumRules
-    // These put into the Pool. After this does they have a RefCount > 1
-    // it can be removed - it is already in the Pool
+    
+    
+    
     SfxItemPool& rPool = pDoc->GetAttrPool();
     const SwNumRuleTbl& rListTbl = pDoc->GetNumRuleTbl();
     const SwNumRule* pRule;
@@ -372,8 +372,8 @@ void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
     }
 }
 
-// build a bookmark table, which is sort by the node position. The
-// OtherPos of the bookmarks also inserted.
+
+
 void Writer::CreateBookmarkTbl()
 {
     const IDocumentMarkAccess* const pMarkAccess = pDoc->getIDocumentMarkAccess();
@@ -386,7 +386,7 @@ void Writer::CreateBookmarkTbl()
 }
 
 
-// search alle Bookmarks in the range and return it in the Array
+
 sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
     sal_Int32 nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
 {
@@ -397,9 +397,9 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
         = m_pImpl->aBkmkNodePos.equal_range( nNd );
     if( aIterPair.first != aIterPair.second )
     {
-        // there exist some bookmarks, search now all which is in the range
+        
         if( !nStt && nEnd == rNd.Len() )
-            // all
+            
             for( SwBookmarkNodeTable::const_iterator it = aIterPair.first; it != aIterPair.second; ++it )
                 rArr.push_back( it->second );
         else
@@ -427,7 +427,7 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, sal_Int32 nStt,
     return rArr.size();
 }
 
-// Storage-specific
+
 sal_uLong StgWriter::WriteStream()
 {
     OSL_ENSURE( !this, "Write in Storages on a stream?" );
@@ -441,9 +441,9 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, SvStorage& rStg, const OUString* pFName
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
 
-    // Copy PaM, so that it can be modified
+    
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    // for comparison secure to the current Pam
+    
     pOrigPam = &rPaM;
 
     sal_uLong nRet = WriteStorage();
@@ -462,9 +462,9 @@ sal_uLong StgWriter::Write( SwPaM& rPaM, const uno::Reference < embed::XStorage 
     pDoc = rPaM.GetDoc();
     pOrigFileName = pFName;
 
-    // Copy PaM, so that it can be modified
+    
     pCurPam = new SwPaM( *rPaM.End(), *rPaM.Start() );
-    // for comparison secure to the current Pam
+    
     pOrigPam = &rPaM;
 
     sal_uLong nRet = pMedium ? WriteMedium( *pMedium ) : WriteStorage();

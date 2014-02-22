@@ -38,11 +38,11 @@
 #include <string.h>
 
 namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
-    // unnamed namespaces don't work well yet...
+    
 
 using namespace com::sun;
 
-//  INetURLObject
+
 
 /* The URI grammar (using RFC 2234 conventions).
 
@@ -328,7 +328,7 @@ struct INetURLObject::SchemeInfo
 
 struct INetURLObject::PrefixInfo
 {
-    enum Kind { OFFICIAL, INTERNAL, EXTERNAL, ALIAS }; // order is important!
+    enum Kind { OFFICIAL, INTERNAL, EXTERNAL, ALIAS }; 
 
     sal_Char const * m_pPrefix;
     sal_Char const * m_pTranslatedPrefix;
@@ -389,7 +389,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
           false },
         { "vnd.sun.star.cmd", "vnd.sun.star.cmd:", 0, false, false, false,
           false, false, false, false, false },
-        { "", "", 0, false, false, false, false, true, true, true, false }, // Placeholder for removed 26: ODMA
+        { "", "", 0, false, false, false, false, true, true, true, false }, 
         { "telnet", "telnet://", 23, true, true, false, true, true, true, true,
           false },
         { "vnd.sun.star.expand", "vnd.sun.star.expand:", 0, false, false, false,
@@ -406,7 +406,7 @@ static INetURLObject::SchemeInfo const aSchemeInfoMap[INET_PROT_END]
         { "vnd.libreoffice.cmis", "vnd.libreoffice.cmis://", 0, true, true, false,
           false, true, false, true, true } };
 
-// static
+
 inline INetURLObject::SchemeInfo const &
 INetURLObject::getSchemeInfo(INetProtocol eTheScheme)
 {
@@ -418,7 +418,7 @@ inline INetURLObject::SchemeInfo const & INetURLObject::getSchemeInfo() const
     return getSchemeInfo(m_eScheme);
 }
 
-// static
+
 inline void INetURLObject::appendEscape(OUStringBuffer & rTheText,
                                         sal_Char cEscapePrefix,
                                         sal_uInt32 nOctet)
@@ -639,8 +639,8 @@ OUString parseScheme(
         } while (p != end
                  && (rtl::isAsciiAlphanumeric(*p) || *p == '+' || *p == '-'
                      || *p == '.'));
-        // #i34835# To avoid problems with Windows file paths like "C:\foo",
-        // do not accept generic schemes that are only one character long:
+        
+        
         if (end - p > 1 && p[0] == ':' && p[1] != fragmentDelimiter
             && p - *begin >= 2)
         {
@@ -671,7 +671,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
     OUStringBuffer aSynAbsURIRef;
 
-    // Parse <scheme>:
+    
     sal_Unicode const * p = pPos;
     PrefixInfo const * pPrefix = getPrefix(p, pEnd);
     if (pPrefix)
@@ -690,45 +690,45 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     {
         if (bSmart)
         {
-            // For scheme detection, the first (if any) of the following
-            // productions that matches the input string (and for which the
-            // appropriate style bit is set in eStyle, if applicable)
-            // determines the scheme. The productions use the auxiliary rules
+            
+            
+            
+            
             //
-            //    domain = label *("." label)
-            //    label = alphanum [*(alphanum / "-") alphanum]
-            //    alphanum = ALPHA / DIGIT
-            //    IPv6reference = "[" IPv6address "]"
-            //    IPv6address = hexpart [":" IPv4address]
-            //    IPv4address = 1*3DIGIT 3("." 1*3DIGIT)
-            //    hexpart = (hexseq ["::" [hexseq]]) / ("::" [hexseq])
-            //    hexseq = hex4 *(":" hex4)
-            //    hex4 = 1*4HEXDIG
-            //    UCS4 = <any UCS4 character>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             //
-            // 1st Production (known scheme):
-            //    <one of the known schemes, ignoring case> ":" *UCS4
-            // 2nd Production (mailto):
-            //    domain "@" domain
-            // 3rd Production (ftp):
-            //    "FTP" 2*("." label) ["/" *UCS4]
-            // 4th Production (http):
-            //    label 2*("." label) ["/" *UCS4]
-            // 5th Production (file):
-            //    "//" (domain / IPv6reference) ["/" *UCS4]
-            // 6th Production (Unix file):
-            //    "/" *UCS4
-            // 7th Production (UNC file; FSYS_DOS only):
-            //    "\\" domain ["\" *UCS4]
-            // 8th Production (Unix-like DOS file; FSYS_DOS only):
-            //    ALPHA ":" ["/" *UCS4]
-            // 9th Production (DOS file; FSYS_DOS only):
-            //    ALPHA ":" ["\" *UCS4]
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             //
-            // For the 'non URL' file productions 6--9, the interpretation of
-            // the input as a (degenerate) URI is turned off, i.e., escape
-            // sequences and fragments are never detected as such, but are
-            // taken as literal characters.
+            
+            
+            
+            
 
             sal_Unicode const * p1 = pPos;
             if (eStyle & FSYS_DOS
@@ -737,7 +737,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 && p1[1] == ':'
                 && (pEnd - p1 == 2 || p1[2] == '/' || p1[2] == '\\'))
             {
-                m_eScheme = INET_PROT_FILE; // 8th, 9th
+                m_eScheme = INET_PROT_FILE; 
                 eMechanism = ENCODE_ALL;
                 nFragmentDelimiter = 0x80000000;
             }
@@ -746,11 +746,11 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 p1 += 2;
                 if ((scanDomain(p1, pEnd) > 0 || scanIPv6reference(p1, pEnd))
                     && (p1 == pEnd || *p1 == '/'))
-                    m_eScheme = INET_PROT_FILE; // 5th
+                    m_eScheme = INET_PROT_FILE; 
             }
             else if (p1 != pEnd && *p1 == '/')
             {
-                m_eScheme = INET_PROT_FILE; // 6th
+                m_eScheme = INET_PROT_FILE; 
                 eMechanism = ENCODE_ALL;
                 nFragmentDelimiter = 0x80000000;
             }
@@ -770,7 +770,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     (scanDomain(p1, pe) > 0 && p1 == pe)
                    )
                 {
-                    m_eScheme = INET_PROT_FILE; // 7th
+                    m_eScheme = INET_PROT_FILE; 
                     eMechanism = ENCODE_ALL;
                     nFragmentDelimiter = 0x80000000;
                 }
@@ -784,7 +784,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     ++pDomainEnd;
                     if (scanDomain(pDomainEnd, pEnd) > 0
                         && pDomainEnd == pEnd)
-                        m_eScheme = INET_PROT_MAILTO; // 2nd
+                        m_eScheme = INET_PROT_MAILTO; 
                 }
                 else if (nLabels >= 3
                          && (pDomainEnd == pEnd || *pDomainEnd == '/'))
@@ -794,7 +794,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                           && (p1[1] == 't' || p1[1] == 'T')
                           && (p1[2] == 'p' || p1[2] == 'P')
                           && p1[3] == '.' ?
-                              INET_PROT_FTP : INET_PROT_HTTP; // 3rd, 4th
+                              INET_PROT_FTP : INET_PROT_HTTP; 
             }
         }
 
@@ -833,9 +833,9 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     sal_uInt32 nAltSegmentDelimiter = 0x80000000;
     bool bSkippedInitialSlash = false;
 
-    // Parse //<user>;AUTH=<auth>@<host>:<port> or
-    // //<user>:<password>@<host>:<port> or
-    // //<reg_name>
+    
+    
+    
     if (getSchemeInfo().m_bAuthority)
     {
         sal_Unicode const * pUserInfoBegin = 0;
@@ -869,7 +869,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 m_aHost.set(aSynAbsURIRef,
                             aSynAuthority.makeStringAndClear(),
                             aSynAbsURIRef.getLength());
-                    // misusing m_aHost to store the authority
+                    
                 break;
             }
 
@@ -909,7 +909,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                     m_aHost.set(aSynAbsURIRef,
                                 aSynAuthority.makeStringAndClear(),
                                 aSynAbsURIRef.getLength());
-                        // misusing m_aHost to store the authority
+                        
                 }
                 break;
             }
@@ -975,36 +975,36 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 m_aHost.set(aSynAbsURIRef,
                             aSynAuthority.makeStringAndClear(),
                             aSynAbsURIRef.getLength());
-                    // misusing m_aHost to store the authority
+                    
                 break;
             }
 
             case INET_PROT_FILE:
                 if (bSmart)
                 {
-                    // The first of the following seven productions that
-                    // matches the rest of the input string (and for which the
-                    // appropriate style bit is set in eStyle, if applicable)
-                    // determines the used notation.  The productions use the
-                    // auxiliary rules
+                    
+                    
+                    
+                    
+                    
                     //
-                    //    domain = label *("." label)
-                    //    label = alphanum [*(alphanum / "-") alphanum]
-                    //    alphanum = ALPHA / DIGIT
-                    //    IPv6reference = "[" IPv6address "]"
-                    //    IPv6address = hexpart [":" IPv4address]
-                    //    IPv4address = 1*3DIGIT 3("." 1*3DIGIT)
-                    //    hexpart = (hexseq ["::" [hexseq]]) / ("::" [hexseq])
-                    //    hexseq = hex4 *(":" hex4)
-                    //    hex4 = 1*4HEXDIG
-                    //    path = <any UCS4 character except "#">
-                    //    UCS4 = <any UCS4 character>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
 
-                    // 1st Production (URL):
-                    //    "//" [domain / IPv6reference] ["/" *path]
-                    //        ["#" *UCS4]
-                    //  becomes
-                    //    "file://" domain "/" *path ["#" *UCS4]
+                    
+                    
+                    
+                    
+                    
                     if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     {
                         sal_Unicode const * p1 = pPos + 2;
@@ -1025,20 +1025,20 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         }
                     }
 
-                    // 2nd Production (MS IE generated 1; FSYS_DOS only):
-                    //    "//" ALPHA ":" ["/" *path] ["#" *UCS4]
-                    //  becomes
-                    //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
-                    //  replacing "\" by "/" within <*path>
-                    // 3rd Production (MS IE generated 2; FSYS_DOS only):
-                    //    "//" ALPHA ":" ["\" *path] ["#" *UCS4]
-                    //  becomes
-                    //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
-                    //  replacing "\" by "/" within <*path>
-                    // 4th Production (misscounted slashes):
-                    //    "//" *path ["#" *UCS4]
-                    //  becomes
-                    //    "file:///" *path ["#" *UCS4]
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     {
                         aSynAbsURIRef.append("//");
@@ -1054,21 +1054,21 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         break;
                     }
 
-                    // 5th Production (Unix):
-                    //    "/" *path ["#" *UCS4]
-                    //  becomes
-                    //    "file:///" *path ["#" *UCS4]
+                    
+                    
+                    
+                    
                     if (pPos < pEnd && *pPos == '/')
                     {
                         aSynAbsURIRef.append("//");
                         break;
                     }
 
-                    // 6th Production (UNC; FSYS_DOS only):
-                    //    "\\" domain ["\" *path] ["#" *UCS4]
-                    //  becomes
-                    //    "file://" domain "/" *path ["#" *UCS4]
-                    //  replacing "\" by "/" within <*path>
+                    
+                    
+                    
+                    
+                    
                     if (eStyle & FSYS_DOS
                         && pEnd - pPos >= 2
                         && pPos[0] == '\\'
@@ -1097,16 +1097,16 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         }
                     }
 
-                    // 7th Production (Unix-like DOS; FSYS_DOS only):
-                    //    ALPHA ":" ["/" *path] ["#" *UCS4]
-                    //  becomes
-                    //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
-                    //  replacing "\" by "/" within <*path>
-                    // 8th Production (DOS; FSYS_DOS only):
-                    //    ALPHA ":" ["\" *path] ["#" *UCS4]
-                    //  becomes
-                    //    "file:///" ALPHA ":" ["/" *path] ["#" *UCS4]
-                    //  replacing "\" by "/" within <*path>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     if (eStyle & FSYS_DOS
                         && pEnd - pPos >= 2
                         && rtl::isAsciiAlpha(pPos[0])
@@ -1121,21 +1121,21 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                         break;
                     }
 
-                    // 9th Production (any):
-                    //    *path ["#" *UCS4]
-                    //  becomes
-                    //    "file:///" *path ["#" *UCS4]
-                    //  replacing the delimiter by "/" within <*path>.  The
-                    //  delimiter is that character from the set { "/", "\",
-                    //  ":" } which appears most often in <*path> (if FSYS_UNX
-                    //  is not among the style bits, "/" is removed from the
-                    //  set; if FSYS_DOS is not among the style bits, "\" is
-                    //  removed from the set; if FSYS_MAC is not among the
-                    //  style bits, ":" is removed from the set).  If two or
-                    //  more characters appear the same number of times, the
-                    //  character mentioned first in that set is chosen.  If
-                    //  the first character of <*path> is the delimiter, that
-                    //  character is not copied.
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     if (eStyle & (FSYS_UNX | FSYS_DOS | FSYS_MAC))
                     {
                         aSynAbsURIRef.appendAscii("//");
@@ -1166,10 +1166,10 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
                 }
             default:
             {
-                // For INET_PROT_FILE, allow an empty authority ("//") to be
-                // missing if the following path starts with an explicit "/"
-                // (Java is notorious in generating such file URLs, so be
-                // liberal here):
+                
+                
+                
+                
                 if (pEnd - pPos >= 2 && pPos[0] == '/' && pPos[1] == '/')
                     pPos += 2;
                 else if (!bSmart
@@ -1329,8 +1329,8 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             switch (m_eScheme)
             {
                 case INET_PROT_FILE:
-                    // If the host equals "LOCALHOST" (unencoded and ignoring
-                    // case), turn it into an empty host:
+                    
+                    
                     if (INetMIME::equalIgnoreCase(pHostPortBegin, pPort,
                                                   "localhost"))
                         pHostPortBegin = pPort;
@@ -1373,7 +1373,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
         }
     }
 
-    // Parse <path>
+    
     OUStringBuffer aSynPath;
     if (!parsePath(m_eScheme, &pPos, pEnd, bOctets, eMechanism, eCharset,
                    bSkippedInitialSlash, nSegmentDelimiter,
@@ -1387,7 +1387,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
     m_aPath.set(aSynAbsURIRef, aSynPath.makeStringAndClear(),
         aSynAbsURIRef.getLength());
 
-    // Parse ?<query>
+    
     if (getSchemeInfo().m_bQuery && pPos < pEnd && *pPos == '?')
     {
         aSynAbsURIRef.append('?');
@@ -1404,7 +1404,7 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
             aSynAbsURIRef.getLength());
     }
 
-    // Parse #<fragment>
+    
     if (pPos < pEnd && *pPos == nFragmentDelimiter)
     {
         aSynAbsURIRef.append(sal_Unicode(nFragmentDelimiter));
@@ -1429,22 +1429,22 @@ bool INetURLObject::setAbsURIRef(OUString const & rTheAbsURIRef,
 
     m_aAbsURIRef = aSynAbsURIRef;
 
-    // At this point references of type "\\server\paths" have
-    // been converted to file:://server/path".
+    
+    
 #ifdef LINUX
     if (m_eScheme==INET_PROT_FILE && !m_aHost.isEmpty()) {
-        // Change "file:://server/path" URIs to "smb:://server/path" on
-        // Linux
-        // Leave "file::path" URIs unchanged.
+        
+        
+        
         changeScheme(INET_PROT_SMB);
     }
 #endif
 
 #ifdef WIN
     if (m_eScheme==INET_PROT_SMB) {
-        // Change "smb://server/path" URIs to "file://server/path"
-        // URIs on Windows, since Windows doesn't understand the
-        // SMB scheme.
+        
+        
+        
         changeScheme(INET_PROT_FILE);
     }
 #endif
@@ -1498,25 +1498,25 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
 
     if (!hasScheme && bSmart)
     {
-        // If the input matches any of the following productions (for which
-        // the appropriate style bit is set in eStyle), it is assumed to be an
-        // absolute file system path, rather than a relative URI reference.
-        // (This is only a subset of the productions used for scheme detection
-        // in INetURLObject::setAbsURIRef(), because most of those productions
-        // interfere with the syntax of relative URI references.)  The
-        // productions use the auxiliary rules
+        
+        
+        
+        
+        
+        
+        
         //
-        //    domain = label *("." label)
-        //    label = alphanum [*(alphanum / "-") alphanum]
-        //    alphanum = ALPHA / DIGIT
-        //    UCS4 = <any UCS4 character>
+        
+        
+        
+        
         //
-        // 1st Production (UNC file; FSYS_DOS only):
-        //    "\\" domain ["\" *UCS4]
-        // 2nd Production (Unix-like DOS file; FSYS_DOS only):
-        //    ALPHA ":" ["/" *UCS4]
-        // 3rd Production (DOS file; FSYS_DOS only):
-        //    ALPHA ":" ["\" *UCS4]
+        
+        
+        
+        
+        
+        
         if (eStyle & FSYS_DOS)
         {
             bool bFSys = false;
@@ -1525,7 +1525,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                 && rtl::isAsciiAlpha(q[0])
                 && q[1] == ':'
                 && (pEnd - q == 2 || q[2] == '/' || q[2] == '\\'))
-                bFSys = true; // 2nd, 3rd
+                bFSys = true; 
             else if (pEnd - q >= 2 && q[0] == '\\' && q[1] == '\\')
             {
                 q += 2;
@@ -1536,7 +1536,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                         q, qe, bOctets, ENCODE_ALL, RTL_TEXTENCODING_DONTKNOW,
                         true, NULL))
                 {
-                    bFSys = true; // 1st
+                    bFSys = true; 
                 }
             }
             if (bFSys)
@@ -1553,9 +1553,9 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
             }
         }
 
-        // When the base URL is a file URL, accept relative file system paths
-        // using "\" or ":" as delimiter (and ignoring URI conventions for "%"
-        // and "#"), as well as relative URIs using "/" as delimiter:
+        
+        
+        
         if (m_eScheme == INET_PROT_FILE)
             switch (guessFSysStyleByCounting(p, pEnd, eStyle))
             {
@@ -1588,10 +1588,10 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
         }
     }
 
-    // If the relative URI has the same scheme as the base URI, and that
-    // scheme is hierarchical, then ignore its presence in the relative
-    // URI in order to be backward compatible (cf. RFC 2396 section 5.2
-    // step 3):
+    
+    
+    
+    
     if (pPrefix && pPrefix->m_eScheme == m_eScheme
         && getSchemeInfo().m_bHierarchical)
     {
@@ -1600,7 +1600,7 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     }
     rWasAbsolute = hasScheme;
 
-    // Fast solution for non-relative URIs:
+    
     if (hasScheme)
     {
         INetURLObject aNewURI(rTheRelURIRef, eMechanism, eCharset);
@@ -1620,8 +1620,8 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
                  STATE_DONE };
 
     OUStringBuffer aSynAbsURIRef;
-    // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
-    // is empty ("") in that case, so take the scheme from m_aAbsURIRef
+    
+    
     if (m_eScheme != INET_PROT_GENERIC)
     {
         aSynAbsURIRef.appendAscii(getSchemeInfo().m_pScheme);
@@ -1731,9 +1731,9 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     {
         if (!getSchemeInfo().m_bHierarchical)
         {
-            // Detect cases where a relative input could not be made absolute
-            // because the given base URL is broken (most probably because it is
-            // empty):
+            
+            
+            
             SAL_WARN_IF(
                 HasError(), "tools.urlobj",
                 "cannot make <" << rTheRelURIRef
@@ -1862,9 +1862,9 @@ bool INetURLObject::convertRelToAbs(OUString const & rTheRelURIRef,
     INetURLObject aNewURI(aSynAbsURIRef.makeStringAndClear());
     if (aNewURI.HasError())
     {
-        // Detect cases where a relative input could not be made absolute
-        // because the given base URL is broken (most probably because it is
-        // empty):
+        
+        
+        
         SAL_WARN_IF(
             HasError(), "tools.urlobj",
             "cannot make <" << rTheRelURIRef
@@ -1885,7 +1885,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
                                     rtl_TextEncoding eCharset,
                                     FSysStyle eStyle) const
 {
-    // Check for hierarchical base URL:
+    
     if (!getSchemeInfo().m_bHierarchical)
     {
         rTheRelURIRef
@@ -1895,8 +1895,8 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
         return false;
     }
 
-    // Convert the input (absolute or relative URI ref) to an absolute URI
-    // ref:
+    
+    
     INetURLObject aSubject;
     bool bWasAbsolute;
     if (!convertRelToAbs(rTheAbsURIRef, bOctets, aSubject, bWasAbsolute,
@@ -1910,7 +1910,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
         return false;
     }
 
-    // Check for differing scheme or authority parts:
+    
     if ((m_aScheme.compare(
              aSubject.m_aScheme, m_aAbsURIRef, aSubject.m_aAbsURIRef)
          != 0)
@@ -1939,8 +1939,8 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     sal_Unicode const * pSubjectPathEnd
         = pSubjectPathBegin + aSubject.m_aPath.getLength();
 
-    // Make nMatch point past the last matching slash, or past the end of the
-    // paths, in case they are equal:
+    
+    
     sal_Unicode const * pSlash = 0;
     sal_Unicode const * p1 = pBasePathBegin;
     sal_Unicode const * p2 = pSubjectPathBegin;
@@ -1961,15 +1961,15 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     }
     if (!pSlash)
     {
-        // One of the paths does not start with '/':
+        
         rTheRelURIRef = aSubject.GetMainURL(eDecodeMechanism, eCharset);
         return false;
     }
     sal_Int32 nMatch = pSlash - pBasePathBegin;
 
-    // If the two URLs are DOS file URLs starting with different volumes
-    // (e.g., file:///a:/... and file:///b:/...), the subject is not made
-    // relative (it could be, but some people do not like that):
+    
+    
+    
     if (m_eScheme == INET_PROT_FILE
         && nMatch <= 1
         && hasDosVolume(eStyle)
@@ -1979,11 +1979,11 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
         return false;
     }
 
-    // For every slash in the base path after nMatch, a prefix of "../" is
-    // added to the new relative URL (if the common prefix of the two paths is
-    // only "/"---but see handling of file URLs above---, the complete subject
-    // path could go into the new relative URL instead, but some people don't
-    // like that):
+    
+    
+    
+    
+    
     OUStringBuffer aSynRelURIRef;
     for (sal_Unicode const * p = pBasePathBegin + nMatch; p != pBasePathEnd;
          ++p)
@@ -1992,11 +1992,11 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
             aSynRelURIRef.append("../");
     }
 
-    // If the new relative URL would start with "//" (i.e., it would be
-    // mistaken for a relative URL starting with an authority part), or if the
-    // new relative URL would neither be empty nor start with <"/"> nor start
-    // with <1*rseg> (i.e., it could be mistaken for an absolute URL starting
-    // with a scheme part), then the new relative URL is prefixed with "./":
+    
+    
+    
+    
+    
     if (aSynRelURIRef.isEmpty())
     {
         if (pSubjectPathEnd - pSubjectPathBegin >= nMatch + 2
@@ -2019,14 +2019,14 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
         }
     }
 
-    // The remainder of the subject path, starting at nMatch, is appended to
-    // the new relative URL:
+    
+    
     sal_Char cEscapePrefix = getEscapePrefix();
     aSynRelURIRef.append(decode(pSubjectPathBegin + nMatch, pSubjectPathEnd,
                             cEscapePrefix, eDecodeMechanism, eCharset));
 
-    // If the subject has defined query or fragment parts, they are appended
-    // to the new relative URL:
+    
+    
     if (aSubject.m_aQuery.isPresent())
     {
         aSynRelURIRef.append('?');
@@ -2044,7 +2044,7 @@ bool INetURLObject::convertAbsToRel(OUString const & rTheAbsURIRef,
     return true;
 }
 
-// static
+
 bool INetURLObject::convertIntToExt(OUString const & rTheIntURIRef,
                                     bool bOctets, OUString & rTheExtURIRef,
                                     DecodeMechanism eDecodeMechanism,
@@ -2071,7 +2071,7 @@ bool INetURLObject::convertIntToExt(OUString const & rTheIntURIRef,
     return bConvert;
 }
 
-// static
+
 bool INetURLObject::convertExtToInt(OUString const & rTheExtURIRef,
                                     bool bOctets, OUString & rTheIntURIRef,
                                     DecodeMechanism eDecodeMechanism,
@@ -2098,12 +2098,12 @@ bool INetURLObject::convertExtToInt(OUString const & rTheExtURIRef,
     return bConvert;
 }
 
-// static
+
 INetURLObject::PrefixInfo const * INetURLObject::getPrefix(sal_Unicode const *& rBegin,
                                                            sal_Unicode const * pEnd)
 {
     static PrefixInfo const aMap[]
-        = { // dummy entry at front needed, because pLast may point here:
+        = { 
             { 0, 0, INET_PROT_NOT_VALID, PrefixInfo::INTERNAL },
             { ".component:", "staroffice.component:", INET_PROT_COMPONENT,
               PrefixInfo::INTERNAL },
@@ -2377,14 +2377,14 @@ bool INetURLObject::setPassword(OUString const & rThePassword,
     return true;
 }
 
-// static
+
 bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * pEnd,
     OUString & rCanonic)
 {
-    // RFC 2373 is inconsistent about how to write an IPv6 address in which an
-    // IPv4 address directly follows the abbreviating "::".  The ABNF in
-    // Appendix B suggests ":::13.1.68.3", while an example in 2.2/3 explicitly
-    // mentions "::13:1.68.3".  This algorithm accepts both variants:
+    
+    
+    
+    
     enum State { STATE_INITIAL, STATE_LABEL, STATE_LABEL_HYPHEN,
                  STATE_LABEL_DOT, STATE_TOPLABEL, STATE_TOPLABEL_HYPHEN,
                  STATE_TOPLABEL_DOT, STATE_IP4, STATE_IP4_DOT, STATE_IP6,
@@ -2811,7 +2811,7 @@ bool INetURLObject::parseHost(sal_Unicode const *& rBegin, sal_Unicode const * p
     }
 }
 
-// static
+
 bool INetURLObject::parseHostOrNetBiosName(
     sal_Unicode const * pBegin, sal_Unicode const * pEnd, bool bOctets,
     EncodeMechanism eMechanism, rtl_TextEncoding eCharset, bool bNetBiosName,
@@ -2915,7 +2915,7 @@ bool INetURLObject::setHost(OUString const & rTheHost, bool bOctets,
     return true;
 }
 
-// static
+
 bool INetURLObject::parsePath(INetProtocol eScheme,
                               sal_Unicode const ** pBegin,
                               sal_Unicode const * pEnd,
@@ -3007,8 +3007,8 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                              && aTheSynPath.getLength() == 2
                              && rtl::isAsciiAlpha(aTheSynPath[1]))
                     {
-                        // A first segment of <ALPHA "|"> is translated to
-                        // <ALPHA ":">:
+                        
+                        
                         aTheSynPath.append(':');
                         continue;
                     }
@@ -3039,7 +3039,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 || *pPos == nFragmentDelimiter)
                 return false;
 
-            // Match <"*">:
+            
             if (*pPos == '*'
                 && (pEnd - pPos == 1 || pPos[1] == nQueryDelimiter
                     || pPos[1] == nFragmentDelimiter))
@@ -3049,7 +3049,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 break;
             }
 
-            // Match <group>:
+            
             if (rtl::isAsciiAlpha(*pPos))
             {
                 for (sal_Unicode const * p = pPos + 1;; ++p)
@@ -3070,7 +3070,7 @@ bool INetURLObject::parsePath(INetProtocol eScheme,
                 }
             }
 
-            // Match <article>:
+            
             for (;;)
             {
                 if (pPos == pEnd || *pPos == nQueryDelimiter
@@ -3628,7 +3628,7 @@ bool INetURLObject::hasDosVolume(FSysStyle eStyle) const
            && (m_aPath.getLength() == 3 || p[3] == '/');
 }
 
-// static
+
 OUString INetURLObject::encodeText(sal_Unicode const * pBegin,
                                     sal_Unicode const * pEnd, bool bOctets,
                                     Part ePart, sal_Char cEscapePrefix,
@@ -3648,7 +3648,7 @@ OUString INetURLObject::encodeText(sal_Unicode const * pBegin,
     return aResult.makeStringAndClear();
 }
 
-// static
+
 OUString INetURLObject::decode(sal_Unicode const * pBegin,
                                 sal_Unicode const * pEnd,
                                 sal_Char cEscapePrefix,
@@ -3732,8 +3732,8 @@ INetURLObject::getAbbreviated(
     OSL_ENSURE(rStringWidth.is(), "specification violation");
     sal_Char cEscapePrefix = getEscapePrefix();
     OUStringBuffer aBuffer;
-    // make sure that the scheme is copied for generic schemes: getSchemeInfo().m_pScheme
-    // is empty ("") in that case, so take the scheme from m_aAbsURIRef
+    
+    
     if (m_eScheme != INET_PROT_GENERIC)
     {
         aBuffer.appendAscii(getSchemeInfo().m_pScheme);
@@ -3934,9 +3934,9 @@ bool INetURLObject::operator ==(INetURLObject const & rObject) const
     {
         case INET_PROT_FILE:
         {
-            // If the URL paths of two file URLs only differ in that one has a
-            // final '/' and the other has not, take the two paths as
-            // equivalent (this could be useful for other schemes, too):
+            
+            
+            
             sal_Int32 nLength = aPath1.getLength();
             switch (nLength - aPath2.getLength())
             {
@@ -4157,7 +4157,7 @@ bool INetURLObject::ConcatData(INetProtocol eTheScheme,
     return true;
 }
 
-// static
+
 OUString INetURLObject::GetAbsURL(OUString const & rTheBaseURIRef,
                                        OUString const & rTheRelURIRef,
                                        bool bIgnoreFragment,
@@ -4166,7 +4166,7 @@ OUString INetURLObject::GetAbsURL(OUString const & rTheBaseURIRef,
                                        rtl_TextEncoding eCharset,
                                        FSysStyle eStyle)
 {
-    // Backwards compatibility:
+    
     if (rTheRelURIRef.isEmpty() || rTheRelURIRef[0] == '#')
         return rTheRelURIRef;
 
@@ -4193,19 +4193,19 @@ OUString INetURLObject::getExternalURL(DecodeMechanism eMechanism,
     return aTheExtURIRef;
 }
 
-// static
+
 OUString INetURLObject::GetScheme(INetProtocol eTheScheme)
 {
     return OUString::createFromAscii(getSchemeInfo(eTheScheme).m_pPrefix);
 }
 
-// static
+
 OUString INetURLObject::GetSchemeName(INetProtocol eTheScheme)
 {
     return OUString::createFromAscii(getSchemeInfo(eTheScheme).m_pScheme);
 }
 
-// static
+
 INetProtocol INetURLObject::CompareProtocolScheme(OUString const &
                                                       rTheAbsURIRef)
 {
@@ -4217,8 +4217,8 @@ INetProtocol INetURLObject::CompareProtocolScheme(OUString const &
 OUString INetURLObject::GetHostPort(DecodeMechanism eMechanism,
                                      rtl_TextEncoding eCharset)
 {
-    // Check because PROT_VND_SUN_STAR_HELP, PROT_VND_SUN_STAR_HIER, and
-    // PROT_VND_SUN_STAR_PKG misuse m_aHost:
+    
+    
     if (!getSchemeInfo().m_bHost)
         return OUString();
     OUStringBuffer aHostPort(decode(m_aHost, getEscapePrefix(),
@@ -4612,7 +4612,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                     && pFSysBegin[2] == '.'
                     && (pFSysEnd - pFSysBegin == 3 || pFSysBegin[3] == '/'))
                 {
-                    eStyle = FSYS_VOS; // Production T1
+                    eStyle = FSYS_VOS; 
                     break;
                 }
 
@@ -4621,7 +4621,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                 if (parseHost(p, pFSysEnd, aHost)
                     && (p == pFSysEnd || *p == '/'))
                 {
-                    eStyle = FSYS_VOS; // Production T2
+                    eStyle = FSYS_VOS; 
                     break;
                 }
             }
@@ -4636,7 +4636,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                 if (parseHost(p, pFSysEnd, aHost)
                     && (p == pFSysEnd || *p == '\\'))
                 {
-                    eStyle = FSYS_DOS; // Production T3
+                    eStyle = FSYS_DOS; 
                     break;
                 }
             }
@@ -4649,7 +4649,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                     || pFSysBegin[2] == '/'
                     || pFSysBegin[2] == '\\'))
             {
-                eStyle = FSYS_DOS; // Productions T4, T5
+                eStyle = FSYS_DOS; 
                 break;
             }
 
@@ -4657,7 +4657,7 @@ bool INetURLObject::setFSysPath(OUString const & rFSysPath,
                 return false;
 
             eStyle = guessFSysStyleByCounting(pFSysBegin, pFSysEnd, eStyle);
-                // Production T6
+                
             break;
     }
 
@@ -4919,7 +4919,7 @@ OUString INetURLObject::GetMsgId(DecodeMechanism eMechanism,
     return OUString();
 }
 
-// static
+
 void INetURLObject::appendUCS4Escape(OUStringBuffer & rTheText,
                                      sal_Char cEscapePrefix, sal_uInt32 nUCS4)
 {
@@ -4964,7 +4964,7 @@ void INetURLObject::appendUCS4Escape(OUStringBuffer & rTheText,
     }
 }
 
-// static
+
 void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
                                EscapeType eEscapeType, bool bOctets,
                                Part ePart, sal_Char cEscapePrefix,
@@ -5029,7 +5029,7 @@ void INetURLObject::appendUCS4(OUStringBuffer& rTheText, sal_uInt32 nUCS4,
         rTheText.append(sal_Unicode(nUCS4));
 }
 
-// static
+
 sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
                                    sal_Unicode const * pEnd, bool bOctets,
                                    sal_Char cEscapePrefix,
@@ -5164,7 +5164,7 @@ sal_uInt32 INetURLObject::getUTF32(sal_Unicode const *& rBegin,
     return nUTF32;
 }
 
-// static
+
 sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
                                      sal_Unicode const * pEnd,
                                      bool bEager)
@@ -5226,7 +5226,7 @@ sal_uInt32 INetURLObject::scanDomain(sal_Unicode const *& rBegin,
         }
 }
 
-// static
+
 bool INetURLObject::scanIPv6reference(sal_Unicode const *& rBegin,
                                       sal_Unicode const * pEnd)
 {

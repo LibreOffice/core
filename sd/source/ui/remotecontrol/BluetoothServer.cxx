@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "BluetoothServer.hxx"
@@ -29,7 +29,7 @@
 #endif
 
 #ifdef WIN32
-  // LO vs WinAPI conflict
+  
   #undef WB_LEFT
   #undef WB_RIGHT
   #include <winsock2.h>
@@ -54,7 +54,7 @@
 #endif
 
 #ifdef __MINGW32__
-// Value taken from http://msdn.microsoft.com/en-us/library/windows/desktop/ms738518%28v=vs.85%29.aspx
+
 #define NS_BTH 16
 #endif
 
@@ -91,7 +91,7 @@ struct DBusObject {
 };
 
 struct sd::BluetoothServer::Impl {
-    // the glib mainloop running in the thread
+    
     GMainContext *mpContext;
     DBusConnection *mpConnection;
     DBusObject *mpService;
@@ -146,7 +146,7 @@ sendUnrefAndWaitForReply( DBusConnection *pConnection, DBusMessage *pMsg )
     dbus_connection_flush( pConnection );
     dbus_message_unref( pMsg );
 
-    dbus_pending_call_block( pPending ); // block for reply
+    dbus_pending_call_block( pPending ); 
 
     pMsg = dbus_pending_call_steal_reply( pPending );
     if( !pMsg )
@@ -205,8 +205,8 @@ bluezRegisterServiceRecord( DBusConnection *pConnection, DBusObject *pAdapter,
         return false;
     }
 
-    // We ignore the uint de-registration handle we get back:
-    // bluez will clean us up automatically on exit
+    
+    
 
     return true;
 }
@@ -225,11 +225,11 @@ bluezCreateAttachListeningSocket( GMainContext *pContext, GPollFD *pSocketFD )
     }
 
     sockaddr_rc aAddr;
-    // Initialize whole structure. Mainly to appease valgrind, which
-    // doesn't know about the padding at the end of sockaddr_rc which
-    // it will dutifully check for definedness. But also the standard
-    // definition of BDADDR_ANY is unusable in C++ code, so just use
-    // memset to set aAddr.rc_bdaddr to 0.
+    
+    
+    
+    
+    
     memset( &aAddr, 0, sizeof( aAddr ) );
     aAddr.rc_family = AF_BLUETOOTH;
     aAddr.rc_channel = 5;
@@ -248,7 +248,7 @@ bluezCreateAttachListeningSocket( GMainContext *pContext, GPollFD *pSocketFD )
         return;
     }
 
-    // set non-blocking behaviour ...
+    
     if( fcntl( nSocket, F_SETFL, O_NONBLOCK) < 0 )
     {
         close( nSocket );
@@ -273,7 +273,7 @@ bluezDetachCloseSocket( GMainContext *pContext, GPollFD *pSocketFD )
     }
 }
 
-#endif // LINUX_BLUETOOTH
+#endif 
 
 #if defined(MACOSX)
 
@@ -284,7 +284,7 @@ OSXBluetoothWrapper::OSXBluetoothWrapper( IOBluetoothRFCOMMChannel* channel ) :
     mMutex(),
     mBuffer()
 {
-    // silly enough, can't write more than mnMTU bytes at once
+    
     mnMTU = [channel getMTU];
 
     SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::OSXBluetoothWrapper(): mnMTU=" << mnMTU );
@@ -302,8 +302,8 @@ sal_Int32 OSXBluetoothWrapper::readLine( OString& aLine )
             SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::readLine: entered mutex" );
 
 #ifdef SAL_LOG_INFO
-            // We should have in the sal logging some standard way to
-            // output char buffers with non-printables escaped.
+            
+            
             std::ostringstream s;
             if (mBuffer.size() > 0)
             {
@@ -320,7 +320,7 @@ sal_Int32 OSXBluetoothWrapper::readLine( OString& aLine )
             SAL_INFO( "sdremote.bluetooth", "OSXBluetoothWrapper::readLine mBuffer:  \"" << s.str() << "\"" );
 #endif
 
-            // got enough bytes to return a line?
+            
             std::vector<char>::iterator aIt;
             if ( (aIt = find( mBuffer.begin(), mBuffer.end(), '\n' ))
                  != mBuffer.end() )
@@ -329,14 +329,14 @@ sal_Int32 OSXBluetoothWrapper::readLine( OString& aLine )
 
                 aLine = OString( &(*mBuffer.begin()), aLocation );
 
-                mBuffer.erase( mBuffer.begin(), aIt + 1 ); // Also delete the empty line
+                mBuffer.erase( mBuffer.begin(), aIt + 1 ); 
 
-                // yeps
+                
                 SAL_INFO( "sdremote.bluetooth", "  returning, got \"" << OStringToOUString( aLine, RTL_TEXTENCODING_UTF8 ) << "\"" );
                 return aLine.getLength() + 1;
             }
 
-            // nope - wait some more (after releasing the mutex)
+            
             SAL_INFO( "sdremote.bluetooth", "  resetting mHaveBytes" );
             mHaveBytes.reset();
             SAL_INFO( "sdremote.bluetooth", "  leaving mutex" );
@@ -426,7 +426,7 @@ void BluetoothServer::addCommunicator( Communicator* pCommunicator )
     mpCommunicators->push_back( pCommunicator );
 }
 
-#endif // MACOSX
+#endif 
 
 #ifdef LINUX_BLUETOOTH
 
@@ -434,12 +434,12 @@ extern "C" {
     static gboolean ensureDiscoverable_cb(gpointer)
     {
         BluetoothServer::doEnsureDiscoverable();
-        return FALSE; // remove source
+        return FALSE; 
     }
     static gboolean restoreDiscoverable_cb(gpointer)
     {
         BluetoothServer::doRestoreDiscoverable();
-        return FALSE; // remove source
+        return FALSE; 
     }
 }
 
@@ -530,12 +530,12 @@ setDiscoverable( DBusConnection *pConnection, DBusObject *pAdapter, bool bDiscov
 
     bool bPowered = false;
     if( !getBooleanProperty( pConnection, pAdapter, "Powered", &bPowered ) || !bPowered )
-        return; // nothing to do
+        return; 
 
     DBusMessage *pMsg;
     DBusMessageIter it, varIt;
 
-    // set timeout to zero
+    
     pMsg = pAdapter->getMethodCall( "SetProperty" );
     dbus_message_iter_init_append( pMsg, &it );
     const char *pTimeoutStr = "DiscoverableTimeout";
@@ -545,10 +545,10 @@ setDiscoverable( DBusConnection *pConnection, DBusObject *pAdapter, bool bDiscov
     dbus_uint32_t nTimeout = 0;
     dbus_message_iter_append_basic( &varIt, DBUS_TYPE_UINT32, &nTimeout );
     dbus_message_iter_close_container( &it, &varIt );
-    dbus_connection_send( pConnection, pMsg, NULL ); // async send - why not ?
+    dbus_connection_send( pConnection, pMsg, NULL ); 
     dbus_message_unref( pMsg );
 
-    // set discoverable value
+    
     pMsg = pAdapter->getMethodCall( "SetProperty" );
     dbus_message_iter_init_append( pMsg, &it );
     const char *pDiscoverableStr = "Discoverable";
@@ -557,7 +557,7 @@ setDiscoverable( DBusConnection *pConnection, DBusObject *pAdapter, bool bDiscov
                                       DBUS_TYPE_BOOLEAN_AS_STRING, &varIt );
     dbus_bool_t bValue = bDiscoverable;
     dbus_message_iter_append_basic( &varIt, DBUS_TYPE_BOOLEAN, &bValue );
-    dbus_message_iter_close_container( &it, &varIt ); // async send - why not ?
+    dbus_message_iter_close_container( &it, &varIt ); 
     dbus_connection_send( pConnection, pMsg, NULL );
     dbus_message_unref( pMsg );
 }
@@ -580,16 +580,16 @@ registerWithDefaultAdapter( DBusConnection *pConnection )
     return pService;
 }
 
-#endif // LINUX_BLUETOOTH
+#endif 
 
 BluetoothServer::BluetoothServer( std::vector<Communicator*>* pCommunicators )
   : meWasDiscoverable( UNKNOWN ),
     mpCommunicators( pCommunicators )
 {
 #ifdef LINUX_BLUETOOTH
-    // D-Bus requires the following in order to be thread-safe (and we
-    // potentially access D-Bus from different threads in different places of
-    // the code base):
+    
+    
+    
     if (!dbus_threads_init_default()) {
         throw std::bad_alloc();
     }
@@ -605,7 +605,7 @@ BluetoothServer::~BluetoothServer()
 void BluetoothServer::ensureDiscoverable()
 {
 #ifdef LINUX_BLUETOOTH
-    // Push it all across into our mainloop
+    
     if( !spServer )
         return;
     GSource *pIdle = g_idle_source_new();
@@ -619,7 +619,7 @@ void BluetoothServer::ensureDiscoverable()
 void BluetoothServer::restoreDiscoverable()
 {
 #ifdef LINUX_BLUETOOTH
-    // Push it all across into our mainloop
+    
     if( !spServer )
         return;
     GSource *pIdle = g_idle_source_new();
@@ -637,7 +637,7 @@ void BluetoothServer::doEnsureDiscoverable()
         spServer->meWasDiscoverable != UNKNOWN )
         return;
 
-    // Find out if we are discoverable already ...
+    
     DBusObject *pAdapter = spServer->mpImpl->getAdapter();
     if( !pAdapter )
         return;
@@ -670,15 +670,15 @@ void BluetoothServer::doRestoreDiscoverable()
     spServer->meWasDiscoverable = UNKNOWN;
 }
 
-// We have to have all our clients shut otherwise we can't
-// re-bind to the same port number it appears.
+
+
 void BluetoothServer::cleanupCommunicators()
 {
     for (std::vector<Communicator *>::iterator it = mpCommunicators->begin();
          it != mpCommunicators->end(); ++it)
         (*it)->forceClose();
-    // the hope is that all the threads then terminate cleanly and
-    // clean themselves up.
+    
+    
 }
 
 void SAL_CALL BluetoothServer::run()
@@ -690,22 +690,22 @@ void SAL_CALL BluetoothServer::run()
     if( !pConnection )
         return;
 
-    // listen for connection state and power changes - we need to close
-    // and re-create our socket code on suspend / resume, enable/disable
+    
+    
     DBusError aError;
     dbus_error_init( &aError );
     dbus_bus_add_match( pConnection, "type='signal',interface='org.bluez.Manager'", &aError );
     dbus_connection_flush( pConnection );
 
-    // Try to setup the default adapter, otherwise wait for add/remove signal
+    
     mpImpl->mpService = registerWithDefaultAdapter( pConnection );
 
-    // poll on our bluetooth socket - if we can.
+    
     GPollFD aSocketFD;
     if( mpImpl->mpService )
         bluezCreateAttachListeningSocket( mpImpl->mpContext, &aSocketFD );
 
-    // also poll on our dbus connection
+    
     int fd = -1;
     GPollFD aDBusFD;
     if( dbus_connection_get_unix_fd( pConnection, &fd ) && fd >= 0 )
@@ -791,7 +791,7 @@ void SAL_CALL BluetoothServer::run()
 
     if ( WSAStartup(wVersionRequested, &wsaData) )
     {
-        return; // winsock dll couldn't be loaded
+        return; 
     }
 
     int aSocket = socket( AF_BTH, SOCK_STREAM, BTHPROTO_RFCOMM );
@@ -804,7 +804,7 @@ void SAL_CALL BluetoothServer::run()
     aAddr.addressFamily = AF_BTH;
     aAddr.btAddr = 0;
     aAddr.serviceClassId = GUID_NULL;
-    aAddr.port = BT_PORT_ANY; // Select any free socket.
+    aAddr.port = BT_PORT_ANY; 
     if ( bind( aSocket, (SOCKADDR*) &aAddr, sizeof(aAddr) ) == SOCKET_ERROR )
     {
         closesocket( aSocket );
@@ -814,7 +814,7 @@ void SAL_CALL BluetoothServer::run()
 
     SOCKADDR aName;
     int aNameSize = sizeof(aAddr);
-    getsockname( aSocket, &aName, &aNameSize ); // Retrieve the local address and port
+    getsockname( aSocket, &aName, &aNameSize ); 
 
     CSADDR_INFO aAddrInfo;
     memset( &aAddrInfo, 0, sizeof(aAddrInfo) );
@@ -825,14 +825,14 @@ void SAL_CALL BluetoothServer::run()
     aAddrInfo.iSocketType = SOCK_STREAM;
     aAddrInfo.iProtocol = BTHPROTO_RFCOMM;
 
-    // To be used for setting a custom UUID once available.
-//    GUID uuid;
-//    uuid.Data1 = 0x00001101;
-//  memset( &uuid, 0x1000 + UUID*2^96, sizeof( GUID ) );
-//    uuid.Data2 = 0;
-//    uuid.Data3 = 0x1000;
-//    ULONGLONG aData4 = 0x800000805F9B34FB;
-//    memcpy( uuid.Data4, &aData4, sizeof(uuid.Data4) );
+    
+
+
+
+
+
+
+
 
     WSAQUERYSET aRecord;
     memset( &aRecord, 0, sizeof(aRecord));
@@ -876,22 +876,22 @@ void SAL_CALL BluetoothServer::run()
     }
 
 #elif defined(MACOSX)
-    // Build up dictionary at run-time instead of bothering with a
-    // .plist file, using the Objective-C API
+    
+    
 
-    // Compare to BluetoothServiceRecord.hxx
+    
 
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
     NSDictionary *dict =
         [NSDictionary dictionaryWithObjectsAndKeys:
 
-         // Service class ID list
+         
          [NSArray arrayWithObject:
           [IOBluetoothSDPUUID uuid16: kBluetoothSDPUUID16ServiceClassSerialPort]],
          @"0001 - ServiceClassIDList",
 
-         // Protocol descriptor list
+         
          [NSArray arrayWithObjects:
           [NSArray arrayWithObject: [IOBluetoothSDPUUID uuid16: kBluetoothSDPUUID16L2CAP]],
           [NSArray arrayWithObjects:
@@ -901,19 +901,19 @@ void SAL_CALL BluetoothServer::run()
             @"DataElementSize",
             [NSNumber numberWithInt: 1],
             @"DataElementType",
-            [NSNumber numberWithInt: 5], // RFCOMM port number, will be replaced if necessary automatically
+            [NSNumber numberWithInt: 5], 
             @"DataElementValue",
             nil],
            nil],
           nil],
          @"0004 - Protocol descriptor list",
 
-         // Browse group list
+         
          [NSArray arrayWithObject:
           [IOBluetoothSDPUUID uuid16: kBluetoothSDPUUID16ServiceClassPublicBrowseGroup]],
          @"0005 - BrowseGroupList",
 
-         // Language base attribute ID list
+         
          [NSArray arrayWithObjects:
           [NSData dataWithBytes: "en" length: 2],
           [NSDictionary dictionaryWithObjectsAndKeys:
@@ -921,7 +921,7 @@ void SAL_CALL BluetoothServer::run()
            @"DataElementSize",
            [NSNumber numberWithInt: 1],
            @"DataElementType",
-           [NSNumber numberWithInt: 0x006a], // encoding
+           [NSNumber numberWithInt: 0x006a], 
            @"DataElementValue",
            nil],
           [NSDictionary dictionaryWithObjectsAndKeys:
@@ -929,13 +929,13 @@ void SAL_CALL BluetoothServer::run()
            @"DataElementSize",
            [NSNumber numberWithInt: 1],
            @"DataElementType",
-           [NSNumber numberWithInt: 0x0100], // offset
+           [NSNumber numberWithInt: 0x0100], 
            @"DataElementValue",
            nil],
           nil],
          @"0006 - LanguageBaseAttributeIDList",
 
-         // Bluetooth profile descriptor list
+         
          [NSArray arrayWithObject:
           [NSArray arrayWithObjects:
            [IOBluetoothSDPUUID uuid16: kBluetoothSDPUUID16ServiceClassSerialPort],
@@ -944,20 +944,20 @@ void SAL_CALL BluetoothServer::run()
             @"DataElementSize",
             [NSNumber numberWithInt: 1],
             @"DataElementType",
-            [NSNumber numberWithInt: 0x0100], // version number ?
+            [NSNumber numberWithInt: 0x0100], 
             @"DataElementValue",
             nil],
            nil]],
          @"0009 - BluetoothProfileDescriptorList",
 
-         // Attributes pointed to by the LanguageBaseAttributeIDList
+         
          @"LibreOffice Impress Remote Control",
          @"0100 - ServiceName",
          @"The Document Foundation",
          @"0102 - ProviderName",
          nil];
 
-    // Create service
+    
     IOBluetoothSDPServiceRecordRef serviceRecordRef;
     IOReturn rc = IOBluetoothAddServiceDict((CFDictionaryRef) dict, &serviceRecordRef);
 
@@ -974,7 +974,7 @@ void SAL_CALL BluetoothServer::run()
         BluetoothSDPServiceRecordHandle serviceRecordHandle;
         [serviceRecord getServiceRecordHandle: &serviceRecordHandle];
 
-        // Register callback for incoming connections
+        
         IOBluetoothUserNotificationRef callbackRef =
             IOBluetoothRegisterForFilteredRFCOMMChannelOpenNotifications(
                 incomingCallback,
@@ -991,7 +991,7 @@ void SAL_CALL BluetoothServer::run()
 
     (void) mpCommunicators;
 #else
-    (void) mpCommunicators; // avoid warnings about unused member
+    (void) mpCommunicators; 
 #endif
 }
 

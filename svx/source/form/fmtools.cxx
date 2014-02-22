@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -98,7 +98,7 @@ using namespace ::com::sun::star::form;
 using namespace ::svxform;
 using namespace ::connectivity::simple;
 
-//  ------------------------------------------------------------------------------
+
 namespace
 {
     static bool lcl_shouldDisplayError( const Any& _rError )
@@ -108,29 +108,29 @@ namespace
             return true;
 
         if ( ! aError.Message.startsWith( "[OOoBase]" ) )
-            // it is an exception *not* thrown by an OOo Base core component
+            
             return true;
 
-        // the only exception we do not display ATM is a RowSetVetoException, which
-        // has been raised because an XRowSetApprovalListener vetoed a change
+        
+        
         if ( aError.ErrorCode + ErrorCondition::ROW_SET_OPERATION_VETOED == 0 )
             return false;
 
-        // everything else is to be displayed
+        
         return true;
     }
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const Any& _rExcept, Window* _pParent)
 {
-    // check whether we need to display it
+    
     if ( !lcl_shouldDisplayError( _rExcept ) )
         return;
 
     try
     {
-        // the parent window
+        
         Window* pParentWindow = _pParent ? _pParent : GetpApp()->GetDefDialogParent();
         Reference< XWindow > xParentWindow = VCLUnoHelper::GetInterface(pParentWindow);
 
@@ -143,31 +143,31 @@ void displayException(const Any& _rExcept, Window* _pParent)
     }
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const ::com::sun::star::sdbc::SQLException& _rExcept, Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const ::com::sun::star::sdbc::SQLWarning& _rExcept, Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const ::com::sun::star::sdb::SQLContext& _rExcept, Window* _pParent)
 {
     displayException(makeAny(_rExcept), _pParent);
 }
 
-//  ------------------------------------------------------------------------------
+
 void displayException(const ::com::sun::star::sdb::SQLErrorEvent& _rEvent, Window* _pParent)
 {
     displayException(_rEvent.Reason, _pParent);
 }
 
-//------------------------------------------------------------------------------
+
 sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAccess>& xCont, const Reference< XInterface >& xElement)
 {
     sal_Int32 nIndex = -1;
@@ -179,7 +179,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
     DBG_ASSERT( xElement.is(), "getElementPos: invalid element!" );
     if ( xNormalized.is() )
     {
-        // Feststellen an welcher Position sich das Kind befindet
+        
         nIndex = xCont->getCount();
         while (nIndex--)
         {
@@ -201,7 +201,7 @@ sal_Int32 getElementPos(const Reference< ::com::sun::star::container::XIndexAcce
     return nIndex;
 }
 
-//------------------------------------------------------------------
+
 OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& xControlModel)
 {
     if (!xControlModel.is())
@@ -222,21 +222,21 @@ OUString getLabelName(const Reference< ::com::sun::star::beans::XPropertySet>& x
     return ::comphelper::getString(xControlModel->getPropertyValue(FM_PROP_CONTROLSOURCE));
 }
 
-//========================================================================
-// = CursorWrapper
-//------------------------------------------------------------------------
+
+
+
 CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor, sal_Bool bUseCloned)
 {
     ImplConstruct(Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, UNO_QUERY), bUseCloned);
 }
 
-//------------------------------------------------------------------------
+
 CursorWrapper::CursorWrapper(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
 {
     ImplConstruct(_rxCursor, bUseCloned);
 }
 
-//------------------------------------------------------------------------
+
 void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResultSet>& _rxCursor, sal_Bool bUseCloned)
 {
     if (bUseCloned)
@@ -258,7 +258,7 @@ void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResu
     m_xPropertyAccess       = m_xPropertyAccess.query( m_xMoveOperations );
 
     if ( !m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is() || !m_xPropertyAccess.is() )
-    {   // all or nothing !!
+    {   
         m_xMoveOperations = NULL;
         m_xBookmarkOperations = NULL;
         m_xColumnsSupplier = NULL;
@@ -267,14 +267,14 @@ void CursorWrapper::ImplConstruct(const Reference< ::com::sun::star::sdbc::XResu
         m_xGeneric = m_xMoveOperations.get();
 }
 
-//------------------------------------------------------------------------
+
 const CursorWrapper& CursorWrapper::operator=(const Reference< ::com::sun::star::sdbc::XRowSet>& _rxCursor)
 {
     m_xMoveOperations = Reference< ::com::sun::star::sdbc::XResultSet>(_rxCursor, UNO_QUERY);
     m_xBookmarkOperations = Reference< ::com::sun::star::sdbcx::XRowLocate>(_rxCursor, UNO_QUERY);
     m_xColumnsSupplier = Reference< ::com::sun::star::sdbcx::XColumnsSupplier>(_rxCursor, UNO_QUERY);
     if (!m_xMoveOperations.is() || !m_xBookmarkOperations.is() || !m_xColumnsSupplier.is())
-    {   // all or nothing !!
+    {   
         m_xMoveOperations = NULL;
         m_xBookmarkOperations = NULL;
         m_xColumnsSupplier = NULL;
@@ -282,13 +282,13 @@ const CursorWrapper& CursorWrapper::operator=(const Reference< ::com::sun::star:
     return *this;
 }
 
-//------------------------------------------------------------------------------
+
 FmXDisposeListener::~FmXDisposeListener()
 {
     setAdapter(NULL);
 }
 
-//------------------------------------------------------------------------------
+
 void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
 {
     if (m_pAdapter)
@@ -306,9 +306,9 @@ void FmXDisposeListener::setAdapter(FmXDisposeMultiplexer* pAdapter)
     }
 }
 
-//==============================================================================
+
 DBG_NAME(FmXDisposeMultiplexer);
-//------------------------------------------------------------------------------
+
 FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const Reference< ::com::sun::star::lang::XComponent>& _rxObject, sal_Int16 _nId)
     :m_xObject(_rxObject)
     ,m_pListener(_pListener)
@@ -321,14 +321,14 @@ FmXDisposeMultiplexer::FmXDisposeMultiplexer(FmXDisposeListener* _pListener, con
         m_xObject->addEventListener(this);
 }
 
-//------------------------------------------------------------------------------
+
 FmXDisposeMultiplexer::~FmXDisposeMultiplexer()
 {
     DBG_DTOR(FmXDisposeMultiplexer, NULL);
 }
 
-// ::com::sun::star::lang::XEventListener
-//------------------------------------------------------------------
+
+
 void FmXDisposeMultiplexer::disposing(const ::com::sun::star::lang::EventObject& _Source) throw( RuntimeException )
 {
     Reference< ::com::sun::star::lang::XEventListener> xPreventDelete(this);
@@ -342,7 +342,7 @@ void FmXDisposeMultiplexer::disposing(const ::com::sun::star::lang::EventObject&
     m_xObject = NULL;
 }
 
-//------------------------------------------------------------------
+
 void FmXDisposeMultiplexer::dispose()
 {
     if (m_xObject.is())
@@ -357,20 +357,20 @@ void FmXDisposeMultiplexer::dispose()
     }
 }
 
-//==============================================================================
-//------------------------------------------------------------------------------
+
+
 sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServiceInfo>& _rxObject)
 {
-    // ask for the persistent service name
+    
     Reference< ::com::sun::star::io::XPersistObject> xPersistence(_rxObject, UNO_QUERY);
     DBG_ASSERT(xPersistence.is(), "::getControlTypeByObject : argument shold be an ::com::sun::star::io::XPersistObject !");
     if (!xPersistence.is())
         return OBJ_FM_CONTROL;
 
     OUString sPersistentServiceName = xPersistence->getServiceName();
-    if (sPersistentServiceName.equals(FM_COMPONENT_EDIT))   // 5.0-Name
+    if (sPersistentServiceName.equals(FM_COMPONENT_EDIT))   
     {
-        // may be a simple edit field or a formatted field, dependent of the supported services
+        
         if (_rxObject->supportsService(FM_SUN_COMPONENT_FORMATTEDFIELD))
             return OBJ_FM_FORMATTEDFIELD;
         return OBJ_FM_EDIT;
@@ -391,7 +391,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         return OBJ_FM_GROUPBOX;
     if (sPersistentServiceName.equals(FM_COMPONENT_COMBOBOX))
         return OBJ_FM_COMBOBOX;
-    if (sPersistentServiceName.equals(FM_COMPONENT_GRID))   // 5.0-Name
+    if (sPersistentServiceName.equals(FM_COMPONENT_GRID))   
         return OBJ_FM_GRID;
     if (sPersistentServiceName.equals(FM_COMPONENT_GRIDCONTROL))
         return OBJ_FM_GRID;
@@ -409,7 +409,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
         return OBJ_FM_CURRENCYFIELD;
     if (sPersistentServiceName.equals(FM_COMPONENT_PATTERNFIELD))
         return OBJ_FM_PATTERNFIELD;
-    if (sPersistentServiceName.equals(FM_COMPONENT_HIDDEN)) // 5.0-Name
+    if (sPersistentServiceName.equals(FM_COMPONENT_HIDDEN)) 
         return OBJ_FM_HIDDEN;
     if (sPersistentServiceName.equals(FM_COMPONENT_HIDDENCONTROL))
         return OBJ_FM_HIDDEN;
@@ -418,7 +418,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
     if (sPersistentServiceName.equals(FM_COMPONENT_FORMATTEDFIELD))
     {
         OSL_FAIL("::getControlTypeByObject : suspicious persistent service name (formatted field) !");
-            // objects with that service name should exist as they aren't compatible with older versions
+            
         return OBJ_FM_FORMATTEDFIELD;
     }
     if ( sPersistentServiceName.equals( FM_SUN_COMPONENT_SCROLLBAR ) )
@@ -432,7 +432,7 @@ sal_Int16 getControlTypeByObject(const Reference< ::com::sun::star::lang::XServi
     return OBJ_FM_CONTROL;
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool isRowSetAlive(const Reference< XInterface >& _rxRowSet)
 {
     sal_Bool bIsAlive = sal_False;

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -83,8 +83,8 @@ CBenTOCReader::ReadLabelAndTOC()
 BenError
 CBenTOCReader::ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize)
 {
-    // If seek fails, then probably because stream is smaller than
-    // BEN_LABEL_SIZE and thus can't be Bento container
+    
+    
     BenError Err;
     if ((Err = cpContainer->SeekFromEnd(-BEN_LABEL_SIZE)) != BenErr_OK)
         return BenErr_NotBentoContainer;
@@ -102,19 +102,19 @@ CBenTOCReader::ReadLabel(unsigned long * pTOCOffset, unsigned long * pTOCSize)
 #ifndef NDEBUG
     BenWord Flags =
 #endif
-        UtGetIntelWord(pCurrLabel); pCurrLabel += 2; // Flags
-    // Newer files are 0x0101--indicates if big or little endian.  Older
-    // files are 0x0 for flags
+        UtGetIntelWord(pCurrLabel); pCurrLabel += 2; 
+    
+    
     assert(Flags == 0x0101 || Flags == 0x0);
 
     cBlockSize = UtGetIntelWord(pCurrLabel) * 1024; pCurrLabel += 2;
 
-    // Check major version
+    
     if (UtGetIntelWord(pCurrLabel) != BEN_CURR_MAJOR_VERSION)
         return BenErr_UnknownBentoFormatVersion;
     pCurrLabel += 2;
 
-    UtGetIntelWord(pCurrLabel); pCurrLabel += 2;    // Minor version
+    UtGetIntelWord(pCurrLabel); pCurrLabel += 2;    
 
     *pTOCOffset = UtGetIntelDWord(pCurrLabel); pCurrLabel += 4;
     *pTOCSize = UtGetIntelDWord(pCurrLabel);
@@ -136,23 +136,23 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
     if ((Err = cpContainer->GetSize(&Length)) != BenErr_OK)
         return Err;
 
-    // Always ready to check for MagicBytes from
-    // CurrOffset - BEN_MAGIC_BYTES_SIZE to CurrOffset - 1
+    
+    
     unsigned long CurrOffset = Length - BEN_LABEL_SIZE + BEN_MAGIC_BYTES_SIZE -
       1;
 
     char Buffer[LABEL_READ_BUFFER_SIZE] = {0};
 
-    unsigned long BufferStartOffset = Length;   // Init to big value
+    unsigned long BufferStartOffset = Length;   
 
     while (CurrOffset >= BEN_MAGIC_BYTES_SIZE)
     {
-        // Don't search backwards more than 1 meg
+        
         if (Length - CurrOffset > MAX_SEARCH_AMOUNT)
             break;
 
 
-        // If before beginning of buffer
+        
         if (CurrOffset - BEN_MAGIC_BYTES_SIZE < BufferStartOffset)
         {
             unsigned long UsedBufferSize;
@@ -184,7 +184,7 @@ CBenTOCReader::SearchForLabel(BenByte * pLabel)
         --CurrOffset;
     }
 
-    return BenErr_NotBentoContainer;    // Didn't find magic bytes
+    return BenErr_NotBentoContainer;    
 }
 
 BenError
@@ -194,7 +194,7 @@ CBenTOCReader::ReadTOC()
     BenByte LookAhead = GetCode();
     BenGeneration Generation = 0;
 
-    // Read in all objects
+    
     while (LookAhead == BEN_NEW_OBJECT)
     {
         BenObjectID ObjectID;
@@ -202,7 +202,7 @@ CBenTOCReader::ReadTOC()
             return Err;
         pCBenObject pObject = NULL;
 
-        // Read in all properties for object
+        
         do
         {
             BenObjectID PropertyID;
@@ -211,7 +211,7 @@ CBenTOCReader::ReadTOC()
                 return Err;
             pCBenProperty pProperty = NULL;
 
-            // Read in all values for property
+            
             do
             {
                 BenObjectID ReferencedListID = 0;
@@ -238,7 +238,7 @@ CBenTOCReader::ReadTOC()
                 if (PropertyID == BEN_PROPID_GLOBAL_PROPERTY_NAME ||
                     PropertyID == BEN_PROPID_GLOBAL_TYPE_NAME)
                 {
-                    // Read property or type name
+                    
 
                     if (pObject != NULL || TypeID != BEN_TYPEID_7_BIT_ASCII ||
                       LookAhead != BEN_OFFSET4_LEN4)
@@ -299,8 +299,8 @@ CBenTOCReader::ReadTOC()
                 }
                 else if (PropertyID == BEN_PROPID_OBJ_REFERENCES)
                 {
-                    // Don't need to read in references object--we assume
-                    // that all references use object ID as key
+                    
+                    
                     if ((Err = ReadSegments(NULL, &LookAhead)) != BenErr_OK)
                         return Err;
                 }
@@ -321,7 +321,7 @@ CBenTOCReader::ReadTOC()
                     }
                     else
                     {
-                        // Ignore the other BEN_OBJID_TOC properties
+                        
                         if ((Err = ReadSegments(NULL, &LookAhead)) != BenErr_OK)
                             return Err;
                     }
@@ -478,7 +478,7 @@ CBenTOCReader::GetCode()
             return BEN_READ_PAST_END_OF_TOC;
 
         if (Code == BEN_END_OF_BUFFER)
-            // Advance to next block
+            
             cCurr = cBlockSize * ((cCurr + (cBlockSize - 1)) /
               cBlockSize);
     }
@@ -496,6 +496,6 @@ CBenTOCReader::GetData(BenDataPtr pBuffer, unsigned long Amt)
     cCurr += Amt;
     return BenErr_OK;
 }
-}//end OpenStormBento namespace
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

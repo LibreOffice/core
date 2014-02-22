@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,9 +55,9 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
-//***************************************************************************
-// SfxURLToolBoxControl_Impl
-//***************************************************************************
+
+
+
 
 SFX_IMPL_TOOLBOX_CONTROL(SfxURLToolBoxControl_Impl,SfxStringItem)
 
@@ -76,7 +76,7 @@ SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
     return (SvtURLBox*)GetToolBox().GetItemWindow( GetId() );
 }
 
-//***************************************************************************
+
 
 void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*/ ) const
 {
@@ -132,15 +132,15 @@ void SfxURLToolBoxControl_Impl::OpenURL( const OUString& rName, sal_Bool /*bNew*
     }
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK_NOINSTANCE( SfxURLToolBoxControl_Impl, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
     try
     {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
+        
+        
+        
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
     }
     catch ( Exception& )
@@ -192,7 +192,7 @@ IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
     return 1L;
 }
 
-//***************************************************************************
+
 
 void SfxURLToolBoxControl_Impl::StateChanged
 (
@@ -203,7 +203,7 @@ void SfxURLToolBoxControl_Impl::StateChanged
 {
     if ( nSID == SID_OPENURL )
     {
-        // Disable URL box if command is disabled
+        
         GetURLBox()->Enable( SFX_ITEM_DISABLED != eState );
     }
 

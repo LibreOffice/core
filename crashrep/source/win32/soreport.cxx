@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -116,9 +116,9 @@ bool    g_bLoadReport = false;
 #define REPORT_PORT     g_uReportPort
 
 
-//***************************************************************************
-// tmpfile from msvcrt creates the temporary file in the root of the current
-// volume and can fail.
+
+
+
 
 static FILE *_xfopen( const _TCHAR *file, const _TCHAR *mode )
 {
@@ -157,7 +157,7 @@ static FILE *_tmpfile(void)
 
     return fp;
 }
-//***************************************************************************
+
 
 static BOOL GetCrashDataPath( LPTSTR szBuffer )
 {
@@ -203,7 +203,7 @@ static FILE *_open_reportfile( LPCTSTR lpExt, LPCTSTR lpMode )
     return fp;
 }
 
-//***************************************************************************
+
 
 struct CrashReportParams
 {
@@ -225,7 +225,7 @@ struct CrashReportParams
 bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams );
 BOOL WriteCommentFile( LPCTSTR lpComment );
 
-//***************************************************************************
+
 
 LONG RegReadValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, LPVOID lpData, DWORD cbData )
 {
@@ -243,7 +243,7 @@ LONG RegReadValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, LPVOID 
     return lResult;
 }
 
-//***************************************************************************
+
 
 LONG RegWriteValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD dwType, LPCVOID lpData, DWORD cbData )
 {
@@ -261,7 +261,7 @@ LONG RegWriteValue( HKEY hBaseKey, LPCTSTR lpSubKey, LPCTSTR lpValueName, DWORD 
     return lResult;
 }
 
-//***************************************************************************
+
 
 CrashReportParams::CrashReportParams()
 {
@@ -274,7 +274,7 @@ CrashReportParams::CrashReportParams()
     sProxyPort = TEXT("");
 }
 
-//***************************************************************************
+
 
 void CrashReportParams::ReadFromRegistry()
 {
@@ -324,7 +324,7 @@ void CrashReportParams::ReadFromRegistry()
         sizeof(uInternetConnection) );
 }
 
-//***************************************************************************
+
 
 void CrashReportParams::WriteToRegistry()
 {
@@ -368,7 +368,7 @@ void CrashReportParams::WriteToRegistry()
         sizeof(TCHAR) * (sEmail.length() + 1) );
 }
 
-//***************************************************************************
+
 
 void CrashReportParams::ReadFromEnvironment()
 {
@@ -389,7 +389,7 @@ void CrashReportParams::ReadFromEnvironment()
     if ( dwResult && dwResult < SAL_N_ELEMENTS(szBuffer) )
     {
         sEmail = szBuffer;
-        // fAllowContact = TRUE;
+        
     }
 
     dwResult = GetEnvironmentVariable( TEXT("ERRORREPORT_HTTPCONNECTIONTYPE"), szBuffer, SAL_N_ELEMENTS(szBuffer) );
@@ -437,7 +437,7 @@ void CrashReportParams::ReadFromEnvironment()
     }
 }
 
-//***************************************************************************
+
 
 typedef BOOL (WINAPI *MiniDumpWriteDump_PROC)(
     IN HANDLE hProcess,
@@ -449,21 +449,21 @@ typedef BOOL (WINAPI *MiniDumpWriteDump_PROC)(
     IN CONST PMINIDUMP_CALLBACK_INFORMATION CallbackParam OPTIONAL
     );
 
-//***************************************************************************
+
 
 static BOOL WINAPI InitRichEdit()
 {
     return (NULL != LoadLibrary( RICHEDIT ));
 }
 
-//***************************************************************************
+
 
 static BOOL WINAPI DeinitRichEdit()
 {
     return FreeLibrary( GetModuleHandle( RICHEDIT ) );
 }
 
-//***************************************************************************
+
 
 static string trim_string( const string& rString )
 {
@@ -483,7 +483,7 @@ static string trim_string( const string& rString )
     return temp;
 }
 
-//***************************************************************************
+
 
 static int LoadAndFormatString( HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, int nBufferMax )
 {
@@ -525,7 +525,7 @@ static int LoadAndFormatString( HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, 
 }
 
 
-//***************************************************************************
+
 
 static string wstring2utf8( const wstring &rString )
 {
@@ -538,15 +538,15 @@ static string wstring2utf8( const wstring &rString )
     return string( pBuffer );
 }
 
-//***************************************************************************
+
 
 static string xml_encode( const string &rString )
 {
     string temp = rString;
     string::size_type pos = 0;
 
-    // First replace all occurrences of '&' because it may occur in further
-    // encoded chardters too
+    
+    
 
     for( pos = 0; (pos = temp.find( '&', pos )) != string::npos; pos += 4 )
         temp.replace( pos, 1, "&amp;" );
@@ -560,7 +560,7 @@ static string xml_encode( const string &rString )
     return temp;
 }
 
-//***************************************************************************
+
 
 static size_t fcopy( FILE *fpin, FILE *fpout )
 {
@@ -579,7 +579,7 @@ static size_t fcopy( FILE *fpin, FILE *fpout )
     return nBytesWritten;
 }
 
-//***************************************************************************
+
 
 static string GetModuleDirectory( HMODULE hModule )
 {
@@ -601,7 +601,7 @@ static string GetModuleDirectory( HMODULE hModule )
     return string( szModuleNameUTF8 );
 }
 
-//***************************************************************************
+
 
 string GetFileDirectory( const string& rFilePath )
 {
@@ -616,7 +616,7 @@ string GetFileDirectory( const string& rFilePath )
     return aDir;
 }
 
-//***************************************************************************
+
 
 string GetFileName( const string& rFilePath )
 {
@@ -629,7 +629,7 @@ string GetFileName( const string& rFilePath )
         return aName;
 }
 
-//***************************************************************************
+
 
 BOOL WriteReportFile( CrashReportParams *pParams )
 {
@@ -659,9 +659,9 @@ BOOL WriteReportFile( CrashReportParams *pParams )
 
                 fprintf( fp,
                     "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                    "<!DOCTYPE errormail:errormail PUBLIC \"-//OpenOffice.org//DTD ErrorMail 1.0//EN\" \"errormail.dtd\">\n"
-                    "<errormail:errormail xmlns:errormail=\"http://openoffice.org/2002/errormail\" usertype=\"%s\">\n"
-                    "<reportmail:mail xmlns:reportmail=\"http://openoffice.org/2002/reportmail\" version=\"1.1\" feedback=\"%s\" email=\"%s\">\n",
+                    "<!DOCTYPE errormail:errormail PUBLIC \"-
+                    "<errormail:errormail xmlns:errormail=\"http:
+                    "<reportmail:mail xmlns:reportmail=\"http:
                     pszUserType ? pszUserType : "",
                     pParams->fAllowContact ? "true" : "false",
                     pParams->fAllowContact ? xml_encode(szEmail).c_str() : ""
@@ -676,7 +676,7 @@ BOOL WriteReportFile( CrashReportParams *pParams )
                     "<reportmail:attachment name=\"user.dmp\" media-type=\"application/octet-stream\" class=\"UserDump\"/>\n"
                     "</reportmail:mail>\n"
 
-                    "<officeinfo:officeinfo xmlns:officeinfo=\"http://openoffice.org/2002/officeinfo\" build=\"%s\" platform=\"%s\" language=\"%s\" procpath=\"%s\" exceptiontype=\"0x%08X\" product=\"%s\"/>\n",
+                    "<officeinfo:officeinfo xmlns:officeinfo=\"http:
                     szBuildId,
                     _INPATH,
                     xml_encode(g_strDefaultLanguage).c_str(),
@@ -693,7 +693,7 @@ BOOL WriteReportFile( CrashReportParams *pParams )
                 GetVersionEx( &VersionInfo );
 
                 fprintf( fp,
-                    "<systeminfo:systeminfo xmlns:systeminfo=\"http://openoffice.org/2002/systeminfo\">\n"
+                    "<systeminfo:systeminfo xmlns:systeminfo=\"http:
                     "<systeminfo:System name=\"%s\" version=\"%d.%d\" build=\"%d\" locale=\"0x%08x\"/>\n"
                     ,
                     VER_PLATFORM_WIN32_NT == VersionInfo.dwPlatformId ? "Windows NT" : "Windows",
@@ -728,7 +728,7 @@ BOOL WriteReportFile( CrashReportParams *pParams )
     return fSuccess;
 }
 
-//***************************************************************************
+
 
 static BOOL SaveDumpFile( HWND hwndOwner )
 {
@@ -752,7 +752,7 @@ static BOOL SaveDumpFile( HWND hwndOwner )
     return FALSE;
 }
 
-//***************************************************************************
+
 
 static BOOL ScreenToClientRect( HWND hwnd, LPRECT lprc )
 {
@@ -802,8 +802,8 @@ static BOOL GrowWindow( HWND hwnd, LONG dxClient, LONG dyClient, BOOL fRepaint )
 }
 
 BOOL CALLBACK GrowChildWindows(
-  HWND hwnd,      // handle to child window
-  LPARAM lParam   // application-defined value
+  HWND hwnd,      
+  LPARAM lParam   
 )
 {
     LONG    cx = (SHORT)LOWORD( lParam );
@@ -946,7 +946,7 @@ BOOL CALLBACK PreviewDialogProc(
 
     return FALSE;
 }
-//***************************************************************************
+
 
 static void PreviewReport( HWND hwndParent, CrashReportParams *pParams )
 {
@@ -964,7 +964,7 @@ static void PreviewReport( HWND hwndParent, CrashReportParams *pParams )
 
     DeleteFileA( g_szReportFileNameA );
 }
-//***************************************************************************
+
 void UpdateOptionsDialogControls( HWND hwndDlg )
 {
     if ( Button_GetCheck( GetDlgItem(hwndDlg, IDC_RADIO_MANUAL) ) & BST_CHECKED )
@@ -979,7 +979,7 @@ void UpdateOptionsDialogControls( HWND hwndDlg )
     }
 }
 
-//***************************************************************************
+
 
 BOOL CALLBACK OptionsDialogProc(
     HWND hwndDlg,
@@ -996,7 +996,7 @@ BOOL CALLBACK OptionsDialogProc(
         {
             TCHAR   szBuffer[1024] = TEXT("");
             HINSTANCE   hInstance = (HINSTANCE)GetWindowLong( hwndDlg, GWL_HINSTANCE );
-            //HWND  hwndParent = (HWND)GetWindowLong( hwndDlg, GWL_HWNDPARENT );
+            
 
             pParams = (CrashReportParams *)lParam;
 
@@ -1081,7 +1081,7 @@ BOOL CALLBACK OptionsDialogProc(
     return FALSE;
 }
 
-//***************************************************************************
+
 
 static void OptionsDialog( HWND hwndParent, CrashReportParams *pParams )
 {
@@ -1097,7 +1097,7 @@ static void OptionsDialog( HWND hwndParent, CrashReportParams *pParams )
         pParams->WriteToRegistry();
 
 }
-//***************************************************************************
+
 
 void UpdateReportDialogControls( HWND hwndDlg )
 {
@@ -1109,7 +1109,7 @@ void UpdateReportDialogControls( HWND hwndDlg )
         Button_GetCheck(GetDlgItem(hwndDlg, IDC_ALLOW_CONTACT)) & BST_CHECKED ? TRUE : FALSE );
 }
 
-//***************************************************************************
+
 
 BOOL CALLBACK ReportDialogProc(
     HWND hwndDlg,
@@ -1235,7 +1235,7 @@ BOOL CALLBACK ReportDialogProc(
 
     return FALSE;
 }
-//***************************************************************************
+
 
 BOOL CALLBACK WelcomeDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -1325,7 +1325,7 @@ BOOL CALLBACK WelcomeDialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 
     return FALSE;
 }
-//***************************************************************************
+
 
 BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
@@ -1379,7 +1379,7 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
             ShowWindow( hwndPages[1], SW_HIDE );
             ShowWindow( hwndPages[0], SW_SHOW );
 
-            // Let Crash Reporter window stay on top of all other windows
+            
             SetWindowPos( hwndDlg, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE );
         }
         return FALSE;
@@ -1425,7 +1425,7 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
                     LoadAndFormatString( GetModuleHandle(NULL), IDS_ERROR_MSG_NOEMAILADDRESS, szMessage, SAL_N_ELEMENTS(szMessage) );
 
                     MessageBox( hwndDlg, szMessage, NULL, MB_ICONERROR | MB_OK );
-                    break;  // Don't end the dialog
+                    break;  
                 }
                 else
                 {
@@ -1435,10 +1435,10 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
                     WriteReportFile( pParams );
 
                     if ( !SendCrashReport( hwndDlg, *pParams ) )
-                        break; // Don't end the dialog
+                        break; 
                 }
             }
-            // Fallthrough !!!
+            
         case IDCANCEL:
             EndDialog( hwndDlg, wParam );
             return TRUE;
@@ -1453,9 +1453,9 @@ BOOL CALLBACK DialogProc( HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam 
 
 
 
-//*****************************************************************************
-//* Generate MD5 checksum
-//*****************************************************************************
+
+
+
 
 #define MAGIC_DESCRIPTION_FILLER    'x'
 #define MAGIC_DESCRIPTION_COUNT     80
@@ -1504,12 +1504,12 @@ static void repatch_soffice_exe( void *pBuffer, size_t nBufSize )
     } while ( !bPatched && nBufSize );
 }
 
-// Normalize executable/library images to prevent different MD5 checksums due
-// to a different PE header date/checksum (this doesn't affect the code/data
-// sections of a executable/library. Please see tools/source/bootstrp/md5.cxx
-// where the same method is also used. The tool so_checksum creates the MD5
-// checksums during build time. You have to make sure that both methods use the
-// same algorithm otherwise there could be problems with stack reports.
+
+
+
+
+
+
 static void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
 {
     const int OFFSET_PE_OFFSET                  = 0x3c;
@@ -1518,7 +1518,7 @@ static void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
     const int COFFHEADER_SIZE                   = 20;
     const int OFFSET_PE_OPTIONALHEADER_CHECKSUM = 64;
 
-    // Check the header part of the file buffer
+    
     if (buffer[0] == 'M' && buffer[1] == 'Z')
     {
         unsigned long PEHeaderOffset = (long)buffer[OFFSET_PE_OFFSET];
@@ -1532,9 +1532,9 @@ static void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
                 PEHeaderOffset += PE_SIGNATURE_SIZE;
                 if (PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP < nBufferSize-4)
                 {
-                    // Set timedatestamp and checksum fields to a normalized
-                    // value to enforce the same MD5 checksum for identical
-                    // Windows  executables/libraries.
+                    
+                    
+                    
                     buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP] = 0;
                     buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+1] = 0;
                     buffer[PEHeaderOffset+OFFSET_COFF_TIMEDATESTAMP+2] = 0;
@@ -1543,7 +1543,7 @@ static void normalize_pe_image(sal_uInt8* buffer, size_t nBufferSize)
 
                 if (PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM < nBufferSize-4)
                 {
-                    // Set checksum to a normalized value
+                    
                     buffer[PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM] = 0;
                     buffer[PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM+1] = 0;
                     buffer[PEHeaderOffset+COFFHEADER_SIZE+OFFSET_PE_OPTIONALHEADER_CHECKSUM+2] = 0;
@@ -1595,7 +1595,7 @@ static sal_uInt32 calc_md5_checksum(  const char *filename, sal_uInt8 *pChecksum
     return nBytesProcessed;
 }
 
-//***************************************************************************
+
 
 static bool WriteStackFile( FILE *fout, boost::unordered_map< string, string >& rLibraries, DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers )
 {
@@ -1655,9 +1655,9 @@ static bool WriteStackFile( FILE *fout, boost::unordered_map< string, string >& 
 
                 if ( bSuccess )
                 {
-                    // Note: ImageHelp ANSI functions do not have an A postfix while
-                    //       Unicode versions have a W postfix. There's no macro
-                    //       that depends on define UNICODE
+                    
+                    
+                    
 
                     IMAGEHLP_MODULE moduleInfo;
 
@@ -1755,7 +1755,7 @@ bool WriteChecksumFile( FILE *fchksum, const boost::unordered_map< string, strin
     return success;
 }
 
-//***************************************************************************
+
 
 BOOL FindDumpFile()
 {
@@ -1881,7 +1881,7 @@ BOOL WriteDumpFile( DWORD dwProcessId, PEXCEPTION_POINTERS pExceptionPointers, D
     return fSuccess;
 }
 
-//***************************************************************************
+
 
 static DWORD FindProcessForImage( LPCTSTR lpImagePath )
 {
@@ -1921,7 +1921,7 @@ static DWORD FindProcessForImage( LPCTSTR lpImagePath )
 
     return dwProcessId;
 }
-//***************************************************************************
+
 
 static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppException, LPDWORD pdwThreadId )
 {
@@ -2033,7 +2033,7 @@ static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppExcep
         {
             g_bLoadReport = true;
         }
-        else // treat parameter as image path
+        else 
         {
             TCHAR   szImagePath[MAX_PATH];
             LPTSTR  lpImageName;
@@ -2069,7 +2069,7 @@ static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppExcep
     return bSuccess;
 }
 
-//***************************************************************************
+
 
 BOOL WriteCommentFile( LPCTSTR lpComment )
 {
@@ -2112,7 +2112,7 @@ BOOL WriteCommentFile( LPCTSTR lpComment )
     return fSuccess;
 }
 
-//***************************************************************************
+
 
 static int _tsetenv( const _TCHAR *lpVar, const _TCHAR *lpValue )
 {
@@ -2301,7 +2301,7 @@ static bool ReadBootstrapParams( CrashReportParams &rParams )
     return bSuccess;
 }
 
-//***************************************************************************
+
 
 bool SendHTTPRequest(
                 FILE *fp,
@@ -2345,7 +2345,7 @@ bool SendHTTPRequest(
 
                 if ( pszProxyServer )
                     sprintf( buffer,
-                    "POST http://%s:%d/soap/servlet/rpcrouter HTTP/1.0\r\n"
+                    "POST http:
                         "Content-Type: text/xml; charset=\"utf-8\"\r\n"
                         "Content-Length: %d\r\n"
                         "SOAPAction: \"\"\r\n\r\n",
@@ -2398,19 +2398,19 @@ bool SendHTTPRequest(
     return success;
 }
 
-//***************************************************************************
+
 
 static void WriteSOAPRequest( FILE *fp )
 {
     fprintf( fp,
         "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-        "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"\n"
-        "xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\"\n"
-        "xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\"\n"
-        "xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\"\n"
+        "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http:
+        "xmlns:SOAP-ENC=\"http:
+        "xmlns:xsi=\"http:
+        "xmlns:xsd=\"http:
         "xmlns:rds=\"urn:ReportDataService\"\n"
-        "xmlns:apache=\"http://xml.apache.org/xml-soap\"\n"
-        "SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\">\n"
+        "xmlns:apache=\"http:
+        "SOAP-ENV:encodingStyle=\"http:
         "<SOAP-ENV:Body>\n"
         );
 
@@ -2473,7 +2473,7 @@ static void WriteSOAPRequest( FILE *fp )
         );
 }
 
-//***************************************************************************
+
 
 struct RequestParams
 {
@@ -2495,7 +2495,7 @@ void _cdecl SendingThread( void *lpArgs )
     PostMessage( pParams->hwndStatus, WM_COMMAND, IDOK, 0 );
 }
 
-//***************************************************************************
+
 
 BOOL CALLBACK SendingStatusDialogProc(
     HWND hwndDlg,
@@ -2549,7 +2549,7 @@ BOOL CALLBACK SendingStatusDialogProc(
     return FALSE;
 }
 
-//***************************************************************************
+
 
 bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
 {
@@ -2716,7 +2716,7 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
     return success;
 }
 
-//***************************************************************************
+
 
 #ifdef __MINGW32__
 int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE, LPSTR /*lpCmdLine*/, int )
@@ -2823,7 +2823,7 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR /*lpCmdLine*/, int 
             {
                 InitCommonControls();
 
-                // Actually this should never be true anymore
+                
                 if ( !g_bNoUserInterface && InitRichEdit() )
                 {
 

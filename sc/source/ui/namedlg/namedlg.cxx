@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "global.hxx"
@@ -37,7 +37,7 @@
 
 #include <map>
 
-// defines -------------------------------------------------------------------
+
 
 #define ABS_SREF          SCA_VALID \
     | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
@@ -45,7 +45,7 @@
     | SCA_COL2_ABSOLUTE | SCA_ROW2_ABSOLUTE | SCA_TAB2_ABSOLUTE
 #define ABS_DREF3D      ABS_DREF | SCA_TAB_3D
 
-//logic
+
 
 ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         ScViewData*       ptrViewData,
@@ -111,7 +111,7 @@ void ScNameDlg::Init()
 
     OSL_ENSURE( mpViewData && mpDoc, "ViewData oder Document nicht gefunden!" );
 
-    //init UI
+    
     m_pFtInfo->SetStyle(WB_VCENTER);
 
     SvSimpleTableContainer *pCtrl = get<SvSimpleTableContainer>("names");
@@ -134,7 +134,7 @@ void ScNameDlg::Init()
     m_pBtnRowHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
     m_pBtnColHeader->SetToggleHdl( LINK(this, ScNameDlg, EdModifyHdl ) );
 
-    // Initialize scope list.
+    
     m_pLbScope->InsertEntry(maGlobalNameStr);
     m_pLbScope->SelectEntryPos(0);
     SCTAB n = mpDoc->GetTableCount();
@@ -230,11 +230,11 @@ void ScNameDlg::SetActive()
 
 void ScNameDlg::UpdateChecks(ScRangeData* pData)
 {
-    // remove handlers, we only want the handlers to process
-    // user input and not when we are syncing the controls  with our internal
-    // model ( also UpdateChecks is called already from some other event
-    // handlers, triggering handlers while already processing a handler can
-    // ( and does in this case ) corrupt the internal data
+    
+    
+    
+    
+    
 
     m_pBtnCriteria->SetToggleHdl( Link() );
     m_pBtnPrintArea->SetToggleHdl( Link() );
@@ -246,7 +246,7 @@ void ScNameDlg::UpdateChecks(ScRangeData* pData)
     m_pBtnColHeader->Check( pData->HasType( RT_COLHEADER ) );
     m_pBtnRowHeader->Check( pData->HasType( RT_ROWHEADER ) );
 
-    // Restore handlers so user input is processed again
+    
     Link aToggleHandler = LINK( this, ScNameDlg, EdModifyHdl );
     m_pBtnCriteria->SetToggleHdl( aToggleHandler );
     m_pBtnPrintArea->SetToggleHdl( aToggleHandler );
@@ -347,7 +347,7 @@ void ScNameDlg::RemovePushed()
         ScRangeName* pRangeName = GetRangeName(itr->aScope);
         ScRangeData* pData = pRangeName->findByUpperName(ScGlobal::pCharClass->uppercase(itr->aName));
         OSL_ENSURE(pData, "table and model should be in sync");
-        // be safe and check for possible problems
+        
         if (pData)
             pRangeName->erase(*pData);
 
@@ -376,12 +376,12 @@ void ScNameDlg::NameModified()
 
     if (!IsFormulaValid())
     {
-        //TODO: implement an info text
+        
         return;
     }
 
     OUString aOldScope = aLine.aScope;
-    //empty table
+    
     if (aOldScope.isEmpty())
         return;
     OUString aExpr = m_pEdAssign->GetText();
@@ -391,7 +391,7 @@ void ScNameDlg::NameModified()
     ScRangeData* pData = pOldRangeName->findByUpperName( ScGlobal::pCharClass->uppercase(aOldName) );
     ScRangeName* pNewRangeName = GetRangeName( aNewScope );
     OSL_ENSURE(pData, "model and table should be in sync");
-    // be safe and check for range data
+    
     if (pData)
     {
         pOldRangeName->erase(*pData);
@@ -419,7 +419,7 @@ void ScNameDlg::SelectionChanged()
 {
 
 
-    //don't update if we have just modified due to user input
+    
     if (!mbNeedUpdate)
     {
         return;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -69,8 +69,8 @@ SwAccessibleNoTextFrame::SwAccessibleNoTextFrame(
     msDesc()
 {
     const SwNoTxtNode* pNd = GetNoTxtNode();
-    // #i73249#
-    // consider new attributes Title and Description
+    
+    
     if( pNd )
     {
         msTitle = pNd->GetTitle();
@@ -91,22 +91,22 @@ SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
 void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
-    // #i73249#
-    // suppress handling of RES_NAME_CHANGED in case that attribute Title is
-    // used as the accessible name.
+    
+    
+    
     if ( nWhich != RES_NAME_CHANGED ||
          msTitle.isEmpty() )
     {
         SwAccessibleFrameBase::Modify( pOld, pNew );
         if (!GetRegisteredIn())
-            return; // probably was deleted - avoid doing anything
+            return; 
     }
 
     const SwNoTxtNode *pNd = GetNoTxtNode();
     OSL_ENSURE( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
     switch( nWhich )
     {
-        // #i73249#
+        
         case RES_TITLE_CHANGED:
         {
             const OUString& sOldTitle(
@@ -129,7 +129,7 @@ void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem
                 break;
             }
         }
-        // intentional no break here
+        
         case RES_DESCRIPTION_CHANGED:
         {
             if ( pNd && GetFrm() )
@@ -168,7 +168,7 @@ void SwAccessibleNoTextFrame::Dispose( sal_Bool bRecursive )
     SwAccessibleFrameBase::Dispose( bRecursive );
 }
 
-// #i73249#
+
 OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleName (void)
         throw (uno::RuntimeException)
 {
@@ -194,7 +194,7 @@ OUString SAL_CALL SwAccessibleNoTextFrame::getAccessibleDescription (void)
     return msDesc;
 }
 
-// XInterface
+
 
 uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aType )
     throw (uno::RuntimeException)
@@ -218,7 +218,7 @@ uno::Any SAL_CALL SwAccessibleNoTextFrame::queryInterface( const uno::Type& aTyp
         return SwAccessibleContext::queryInterface( aType );
 }
 
-// XTypeProvider
+
 
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(uno::RuntimeException)
 {
@@ -233,7 +233,7 @@ uno::Sequence< uno::Type > SAL_CALL SwAccessibleNoTextFrame::getTypes() throw(un
     return aTypes;
 }
 
-/// XAccessibleImage
+
 /** implementation of the XAccessibleImage methods is a no-brainer, as
     all relevant information is already accessible through other
     methods. So we just delegate to those. */
@@ -256,7 +256,7 @@ sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getAccessibleImageWidth(  )
     return getSize().Width;
 }
 
-//=====  XAccesibleText  ==================================================
+
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getCaretPosition(  ) throw (::com::sun::star::uno::RuntimeException){return 0;}
 sal_Bool SAL_CALL SwAccessibleNoTextFrame::setCaretPosition( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return 0;}
 sal_Unicode SAL_CALL SwAccessibleNoTextFrame::getCharacter( sal_Int32 ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException){return 0;}
@@ -297,7 +297,7 @@ sal_Bool SAL_CALL SwAccessibleNoTextFrame::copyText( sal_Int32, sal_Int32 ) thro
 
 
 //
-//  XAccessibleHyperText
+
 //
 sal_Int32 SAL_CALL SwAccessibleNoTextFrame::getHyperLinkCount()
 throw (uno::RuntimeException)

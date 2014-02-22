@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/macros.h>
@@ -83,7 +83,7 @@ GConfClient* getGconfClient()
             "/apps/openoffice",
             "/desktop/gnome/lockdown",
             "/apps/openoffice/lockdown",
-#endif // ENABLE_LOCKDOWN
+#endif 
             NULL
         };
         int i = 0;
@@ -177,7 +177,7 @@ static OUString xdg_user_dir_lookup (const char *type)
                     p++;
                 aUserDirBuf.append((sal_Unicode)*p++);
             }
-        }//end of while
+        }
         osl_closeFile(handle);
     }
     else
@@ -200,7 +200,7 @@ static OUString xdg_user_dir_lookup (const char *type)
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
 {
@@ -224,14 +224,14 @@ uno::Any makeAnyOfGconfValue( GConfValue *pGconfValue )
     return uno::Any();
 }
 
-//------------------------------------------------------------------------------
+
 
 static void splitFontName( GConfValue *pGconfValue, OUString &rName, sal_Int16 &rHeight)
 {
    OString aFont( gconf_value_get_string( pGconfValue ) );
    aFont = aFont.trim();
    sal_Int32 nIdx = aFont.lastIndexOf( ' ' );
-   if (nIdx < 1) { // urk
+   if (nIdx < 1) { 
        rHeight = 12;
        nIdx = aFont.getLength();
    } else {
@@ -242,7 +242,7 @@ static void splitFontName( GConfValue *pGconfValue, OUString &rName, sal_Int16 &
    rName = OStringToOUString( aFont.copy( 0, nIdx ), RTL_TEXTENCODING_UTF8 );
 }
 
-//------------------------------------------------------------------------------
+
 
 uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfValue )
 {
@@ -272,7 +272,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
                 {
                     aBuffer.append(gconf_value_get_string((GConfValue *) list->data) + OString(";"));
                 }
-                // Remove trailing ";"
+                
                 aBuffer.setLength(aBuffer.getLength()-1);
                 return uno::makeAny(OStringToOUString(aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
             }
@@ -291,7 +291,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
         }
 
 #ifdef ENABLE_LOCKDOWN
-        // "short" values need to be returned a sal_Int16
+        
         case SETTING_FONT_ANTI_ALIASING_MIN_PIXEL:
         case SETTING_SYMBOL_SET:
         {
@@ -301,13 +301,13 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
             return uno::makeAny( (sal_Int16) nShortValue );
         }
             break;
-#endif // ENABLE_LOCKDOWN
+#endif 
 
-        // "boolean" values that need a string to be returned
+        
         case SETTING_ENABLE_ACCESSIBILITY:
 #ifdef ENABLE_LOCKDOWN
         case SETTING_DISABLE_PRINTING:
-#endif // ENABLE_LOCKDOWN
+#endif 
         {
             sal_Bool bBooleanValue = false;
             uno::Any aOriginalValue = makeAnyOfGconfValue( pGconfValue );
@@ -371,7 +371,7 @@ uno::Any translateToOOo( const ConfigurationValue &rValue, GConfValue *pGconfVal
     return uno::Any();
 }
 
-//------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const ConfigurationValue &rValue )
 {
@@ -446,7 +446,7 @@ sal_Bool SAL_CALL isDependencySatisfied( GConfClient* pClient, const Configurati
             }
         }
             break;
-#endif // ENABLE_LOCKDOWN
+#endif 
 
         default:
             fprintf( stderr, "Unhandled setting to check dependency.\n" );
@@ -556,15 +556,15 @@ ConfigurationValue const ConfigurationValues[] =
 
     {
         SETTING_WORK_DIRECTORY,
-        "/desktop/gnome/url-handlers/mailto/command", // dummy
+        "/desktop/gnome/url-handlers/mailto/command", 
         RTL_CONSTASCII_STRINGPARAM("WorkPathVariable"),
         sal_True,
-        SETTING_WORK_DIRECTORY, // so that the existence of the dir can be checked
+        SETTING_WORK_DIRECTORY, 
     },
 
     {
         SETTING_USER_GIVENNAME,
-        "/desktop/gnome/url-handlers/mailto/command", // dummy
+        "/desktop/gnome/url-handlers/mailto/command", 
         RTL_CONSTASCII_STRINGPARAM("givenname"),
         sal_True,
         SETTING_USER_GIVENNAME
@@ -572,7 +572,7 @@ ConfigurationValue const ConfigurationValues[] =
 
     {
         SETTING_USER_SURNAME,
-        "/desktop/gnome/url-handlers/mailto/command", // dummy
+        "/desktop/gnome/url-handlers/mailto/command", 
         RTL_CONSTASCII_STRINGPARAM("sn"),
         sal_True,
         SETTING_USER_SURNAME
@@ -811,7 +811,7 @@ ConfigurationValue const ConfigurationValues[] =
         SETTINGS_LAST
     },
 
-#endif // ENABLE_LOCKDOWN
+#endif 
 };
 
 std::size_t const nConfigurationValues =

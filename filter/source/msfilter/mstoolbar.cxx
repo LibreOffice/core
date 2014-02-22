@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include <filter/msfilter/mstoolbar.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -101,10 +101,10 @@ CustomToolBarImportHelper::getAppCfgManager()
 uno::Any
 CustomToolBarImportHelper::createCommandFromMacro( const OUString& sCmd )
 {
-//"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
+
     static OUString scheme( "vnd.sun.star.script:" );
     static OUString part2( "?language=Basic&location=document" );
-    // create script url
+    
     OUString scriptURL = scheme + sCmd + part2;
     return uno::makeAny( scriptURL );
 }
@@ -136,7 +136,7 @@ CustomToolBarImportHelper::createMenu( const OUString& rName, const uno::Referen
         sMenuBar += rName;
         uno::Reference< container::XIndexContainer > xPopup( xCfgManager->createSettings(), uno::UNO_QUERY_THROW );
         uno::Reference< beans::XPropertySet > xProps( xPopup, uno::UNO_QUERY_THROW );
-        // set name for menubar
+        
         xProps->setPropertyValue("UIName", uno::makeAny( rName ) );
         if ( xPopup.is() )
         {
@@ -172,10 +172,10 @@ TBBase::indent_printf( FILE* fp, const char* format, ... )
    va_list ap;
    va_start ( ap, format );
 
-   // indent nIndent spaces
+   
    for ( int i=0; i<nIndent; ++i)
       fprintf(fp," ");
-   // append the rest of the message
+   
    vfprintf( fp, format, ap );
    va_end( ap );
 }
@@ -184,7 +184,7 @@ TBCHeader::TBCHeader()
     : bSignature(0x3)
     , bVersion(0x01)
     , bFlagsTCR(0)
-    , tct(0x1) // default to Button
+    , tct(0x1) 
     , tcid(0)
     , tbct(0)
     , bPriority(0)
@@ -200,7 +200,7 @@ bool TBCHeader::Read( SvStream &rS )
     OSL_TRACE("TBCHeader::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
     rS.ReadSChar( bSignature ).ReadSChar( bVersion ).ReadUChar( bFlagsTCR ).ReadUChar( tct ).ReadUInt16( tcid ).ReadUInt32( tbct ).ReadUChar( bPriority );
-    //  bit 4 ( from lsb )
+    
     if ( bFlagsTCR & 0x10 )
     {
         width.reset( new sal_uInt16 );
@@ -239,22 +239,22 @@ bool TBCData::Read(SvStream &rS)
         return false;
     switch ( rHeader.getTct() )
     {
-        case 0x01: // (Button control)
-        case 0x10: // (ExpandingGrid control)
+        case 0x01: 
+        case 0x10: 
             controlSpecificInfo.reset( new TBCBSpecific() );
             break;
-        case 0x0A: // (Popup control)
-        case 0x0C: // (ButtonPopup control)
-        case 0x0D: // (SplitButtonPopup control)
-        case 0x0E: // (SplitButtonMRUPopup control)
+        case 0x0A: 
+        case 0x0C: 
+        case 0x0D: 
+        case 0x0E: 
             controlSpecificInfo.reset( new TBCMenuSpecific() );
             break;
-        case 0x02: // (Edit control)
-        case 0x04: // (ComboBox control)
-        case 0x14: // (GraphicCombo control)
-        case 0x03: // (DropDown control)
-        case 0x06: // (SplitDropDown control)
-        case 0x09: // (GraphicDropDown control)
+        case 0x02: 
+        case 0x04: 
+        case 0x14: 
+        case 0x03: 
+        case 0x06: 
+        case 0x09: 
             controlSpecificInfo.reset( new TBCComboDropdownSpecific( rHeader ) );
             break;
         default:
@@ -262,7 +262,7 @@ bool TBCData::Read(SvStream &rS)
     }
     if ( controlSpecificInfo.get() )
         return controlSpecificInfo->Read( rS );
-    //#FIXME I need to be able to handle different controlSpecificInfo types.
+    
     return true;
 }
 
@@ -278,7 +278,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     controlGeneralInfo.ImportToolBarControlData( helper, props );
     beans::PropertyValue aProp;
     aProp.Name = "Visible";
-    aProp.Value = uno::makeAny( rHeader.isVisible() ); // where is the visible attribute stored
+    aProp.Value = uno::makeAny( rHeader.isVisible() ); 
     props.push_back( aProp );
     if ( rHeader.getTct() == 0x01
     || rHeader.getTct() == 0x10 )
@@ -286,7 +286,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
         TBCBSpecific* pSpecificInfo = dynamic_cast< TBCBSpecific* >( controlSpecificInfo.get() );
         if ( pSpecificInfo )
         {
-            // if we have a icon then lets  set it for the command
+            
             OUString sCommand;
             for ( std::vector< css::beans::PropertyValue >::iterator it = props.begin(); it != props.end(); ++it )
             {
@@ -295,14 +295,14 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
             }
             if ( TBCBitMap* pIcon = pSpecificInfo->getIcon() )
             {
-                // Without a command openoffice won't display the icon
+                
                 if ( !sCommand.isEmpty() )
                 {
                     BitmapEx aBitEx( pIcon->getBitMap() );
                     if ( pSpecificInfo->getIconMask() )
-                         // according to the spec:
-                         // "the iconMask is white in all the areas in which the icon is
-                         // displayed as transparent and is black in all other areas."
+                         
+                         
+                         
                          aBitEx = BitmapEx( aBitEx.GetBitmap(), pSpecificInfo->getIconMask()->getBitMap().CreateMask( Color( COL_WHITE ) ) );
 
                     Graphic aGraphic( aBitEx );
@@ -318,7 +318,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
                     uno::Sequence< OUString> sCmds(1);
                     sCmds[ 0 ] = sBuiltInCmd;
                     uno::Reference< ui::XImageManager > xImageManager( helper.getAppCfgManager()->getImageManager(), uno::UNO_QUERY_THROW );
-                    // 0 = default image size
+                    
                     uno::Sequence< uno::Reference< graphic::XGraphic > > sImages = xImageManager->getImages( 0, sCmds );
                     if ( sImages.getLength() && sImages[0].is() )
                         helper.addIcon( sImages[0], sCommand );
@@ -333,7 +333,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
 
         TBCMenuSpecific* pMenu = getMenuSpecific();
         if ( pMenu )
-            aProp.Value = uno::makeAny( sMenuBar += pMenu->Name() ); // name of popup
+            aProp.Value = uno::makeAny( sMenuBar += pMenu->Name() ); 
         nStyle |= ui::ItemStyle::DROP_DOWN;
         props.push_back( aProp );
     }
@@ -344,7 +344,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     {
         nStyle |= ui::ItemStyle::TEXT;
         if ( !icontext || icontext == 0x3 )
-            // Text And image
+            
             nStyle |= ui::ItemStyle::ICON;
     }
     else
@@ -356,7 +356,7 @@ bool TBCData::ImportToolBarControl( CustomToolBarImportHelper& helper, std::vect
     }
     aProp.Value <<= nStyle;
     props.push_back( aProp );
-    return true; // just ignore
+    return true; 
 }
 
 void TBCData::Print( FILE* fp )
@@ -365,7 +365,7 @@ void TBCData::Print( FILE* fp )
     indent_printf(fp,"[ 0x%x ] TBCData -- dump\n", nOffSet );
     indent_printf(fp,"  dumping controlGeneralInfo( TBCGeneralInfo )\n");
     controlGeneralInfo.Print( fp );
-    //if ( rHeader.getTct() == 1 )
+    
     if ( controlSpecificInfo.get() )
     {
         indent_printf(fp,"  dumping controlSpecificInfo( TBCBSpecificInfo )\n");
@@ -474,8 +474,8 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
     if ( ( bFlags & 0x5 ) )
     {
         beans::PropertyValue aProp;
-        // probably access to the header would be a better test than seeing if there is an action, e.g.
-        // if ( rHeader.getTct() == 0x01 && rHeader.getTcID() == 0x01 ) // not defined, probably this is a command
+        
+        
         if ( !extraInfo.getOnAction().isEmpty() )
         {
             aProp.Name = "CommandURL";
@@ -558,9 +558,9 @@ bool TBCBSpecific::Read( SvStream &rS)
     nOffSet = rS.Tell();
     rS.ReadUChar( bFlags );
 
-    // bFlags determines what we read next
+    
 
-    // bFlags.fCustomBitmap = 1 ( 0x8 ) set
+    
     if ( bFlags & 0x8 )
     {
         icon.reset( new TBCBitMap() );
@@ -568,13 +568,13 @@ bool TBCBSpecific::Read( SvStream &rS)
         if ( !icon->Read( rS ) || !iconMask->Read( rS ) )
             return false;
     }
-    // if bFlags.fCustomBtnFace = 1 ( 0x10 )
+    
     if ( bFlags & 0x10 )
     {
         iBtnFace.reset( new sal_uInt16 );
         rS.ReadUInt16( *iBtnFace.get() );
     }
-    // if bFlags.fAccelerator equals 1 ( 0x04 )
+    
     if ( bFlags & 0x04 )
     {
         wstrAcc.reset( new WString() );
@@ -595,7 +595,7 @@ void TBCBSpecific::Print( FILE* fp )
     {
         Indent b;
         indent_printf( fp, "  icon: \n");
-        icon->Print( fp ); // will dump size
+        icon->Print( fp ); 
     }
     bResult = ( iconMask.get() != NULL );
     indent_printf( fp, "  icon mask present? %s\n", bResult ? "true" : "false" );
@@ -603,7 +603,7 @@ void TBCBSpecific::Print( FILE* fp )
     {
         Indent c;
         indent_printf( fp, "  icon mask: \n");
-        iconMask->Print( fp ); // will dump size
+        iconMask->Print( fp ); 
     }
     if ( iBtnFace.get() )
     {
@@ -706,7 +706,7 @@ TBCBitMap::~TBCBitMap()
 {
 }
 
-// #FIXME Const-ness
+
 Bitmap&
 TBCBitMap::getBitMap()
 {
@@ -718,7 +718,7 @@ bool TBCBitMap::Read( SvStream& rS)
     OSL_TRACE("TBCBitMap::Read() stream pos 0x%x", rS.Tell() );
     nOffSet = rS.Tell();
     rS.ReadInt32( cbDIB );
-    // cbDIB = sizeOf(biHeader) + sizeOf(colors) + sizeOf(bitmapData) + 10
+    
     return ReadDIB(mBitMap, rS, false);
 }
 

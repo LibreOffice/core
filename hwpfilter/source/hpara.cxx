@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "precompile.h"
@@ -34,7 +34,7 @@ bool LineInfo::Read(HWPFile & hwpf, HWPPara *pPara)
     pos = sal::static_int_cast<unsigned short>(hwpf.Read2b());
     space_width = (short) hwpf.Read2b();
     height = (short) hwpf.Read2b();
-// internal information
+
     pgy = (short) hwpf.Read2b();
     sx = (short) hwpf.Read2b();
     psx = (short) hwpf.Read2b();
@@ -72,7 +72,7 @@ HWPPara::~HWPPara(void)
         delete[]cshapep;
     if (hhstr)
     {
-// virtual destructor
+
 /* C++은 null에 대해서도 동작한다. */
         for (int ii = 0; ii < nch; ++ii)
             delete hhstr[ii];
@@ -88,7 +88,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
     unsigned char same_cshape;
     int ii;
     scflag = flag;
-// Paragraph Information
+
     hwpf.Read1b(&reuse_shape, 1);
     hwpf.Read2b(&nch, 1);
     hwpf.Read2b(&nline, 1);
@@ -162,7 +162,7 @@ bool HWPPara::Read(HWPFile & hwpf, unsigned char flag)
                 cshapep[ii] = cshapep[ii - 1];
         }
     }
-// read string
+
     hhstr = ::comphelper::newArray_null<HBox *>(nch);
     if (!hhstr) { return false; }
     for (ii = 0; ii < nch; ii++)
@@ -218,73 +218,73 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
     {
         switch (hh)
         {
-            case CH_FIELD:                        // 5
+            case CH_FIELD:                        
                 hbox = new FieldCode;
                 break;
-            case CH_BOOKMARK:                     // 6
+            case CH_BOOKMARK:                     
                 hbox = new Bookmark;
                 break;
-            case CH_DATE_FORM:                    // 7
+            case CH_DATE_FORM:                    
                 hbox = new DateFormat;
                 break;
-            case CH_DATE_CODE:                    // 8
+            case CH_DATE_CODE:                    
                 hbox = new DateCode;
                 break;
-            case CH_TAB:                          // 9
+            case CH_TAB:                          
                 hbox = new Tab;
                 break;
-            case CH_TEXT_BOX:                     // 10
+            case CH_TEXT_BOX:                     
                 hbox = new TxtBox;
                 break;
-            case CH_PICTURE:                      // 11
+            case CH_PICTURE:                      
                 hbox = new Picture;
                 break;
-            case CH_LINE:                         // 14
+            case CH_LINE:                         
                 hbox = new Line;
                 break;
-            case CH_HIDDEN:                       // 15
+            case CH_HIDDEN:                       
                 hbox = new Hidden;
                 break;
-            case CH_HEADER_FOOTER:                // 16
+            case CH_HEADER_FOOTER:                
                 hbox = new HeaderFooter;
                 break;
-            case CH_FOOTNOTE:                     // 17
+            case CH_FOOTNOTE:                     
                 hbox = new Footnote;
                 break;
-            case CH_AUTO_NUM:                     // 18
+            case CH_AUTO_NUM:                     
                 hbox = new AutoNum;
                 break;
-            case CH_NEW_NUM:                      // 19
+            case CH_NEW_NUM:                      
                 hbox = new NewNum;
                 break;
-            case CH_SHOW_PAGE_NUM:                // 20
+            case CH_SHOW_PAGE_NUM:                
                 hbox = new ShowPageNum;
                 break;
-            case CH_PAGE_NUM_CTRL:                // 21
+            case CH_PAGE_NUM_CTRL:                
                 hbox = new PageNumCtrl;
                 break;
-            case CH_MAIL_MERGE:                   // 22
+            case CH_MAIL_MERGE:                   
                 hbox = new MailMerge;
                 break;
-            case CH_COMPOSE:                      // 23
+            case CH_COMPOSE:                      
                 hbox = new Compose;
                 break;
-            case CH_HYPHEN:                       // 24
+            case CH_HYPHEN:                       
                 hbox = new Hyphen;
                 break;
-            case CH_TOC_MARK:                     // 25
+            case CH_TOC_MARK:                     
                 hbox = new TocMark;
                 break;
-            case CH_INDEX_MARK:                   // 26
+            case CH_INDEX_MARK:                   
                 hbox = new IndexMark;
                 break;
-            case CH_OUTLINE:                      // 28
+            case CH_OUTLINE:                      
                 hbox = new Outline;
                 break;
-            case CH_KEEP_SPACE:                   // 30
+            case CH_KEEP_SPACE:                   
                 hbox = new KeepSpace;
                 break;
-            case CH_FIXED_SPACE:                  // 31
+            case CH_FIXED_SPACE:                  
                 hbox = new FixedSpace;
                 break;
             default:
@@ -302,7 +302,7 @@ HBox *HWPPara::readHBox(HWPFile & hwpf)
         FBox *fbox = static_cast<FBox *>(hbox);
         if( ( fbox->style.anchor_type == 1) && ( fbox->pgy >= begin_ypos) )
         {
-            //strange construct to compile without warning
+            
             int nTemp = fbox->pgy;
             nTemp -= begin_ypos;
             fbox->pgy = sal::static_int_cast<short>(nTemp);

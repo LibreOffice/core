@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/classids.hxx>
@@ -203,8 +203,8 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
     if( !pGrfNd->IsGrfLink() )
     {
-        // #i15411# save-as will swap all graphics in; we need to swap
-        // them out again, to prevent excessive memory use
+        
+        
         pGrfNd->SwapOut();
     }
 }
@@ -251,8 +251,8 @@ static void lcl_addOutplaceProperties(
         const UniReference < XMLPropertySetMapper >& rMapper )
 {
     {
-        MapMode aMode( MAP_100TH_MM ); // the API expects this map mode for the embedded objects
-        Size aSize = rObj.GetSize( &aMode ); // get the size in the requested map mode
+        MapMode aMode( MAP_100TH_MM ); 
+        Size aSize = rObj.GetSize( &aMode ); 
 
         if( aSize.Width() && aSize.Height() )
         {
@@ -416,7 +416,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
     enum XMLTokenEnum eElementName = XML__UNKNOWN_;
     SvXMLExport &rXMLExport = GetExport();
 
-    // First the stuff common to each of Applet/Plugin/Floating Frame
+    
     OUString sStyle;
     Any aAny;
     if( rPropSetInfo->hasPropertyByName( sFrameStyleName ) )
@@ -480,7 +480,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                 }
                 catch(const uno::Exception&)
                 {
-                    // TODO/LATER: error handling
+                    
                     OSL_FAIL( "Link detection or retrieving of the URL of OOo link is failed!\n" );
                 }
             }
@@ -514,7 +514,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
                         }
                         if( '\'' == c || '\\' == c )
                             aBuffer.append( '\\' );
-                        // no break!
+                        
                     default:
                         if( !aBuffer.isEmpty() )
                             aBuffer.append( c );
@@ -534,7 +534,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         break;
     case SV_EMBEDDED_APPLET:
         {
-            // It's an applet!
+            
             if( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
             {
                 uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
@@ -581,7 +581,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         break;
     case SV_EMBEDDED_PLUGIN:
         {
-            // It's a plugin!
+            
             if ( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
             {
                 uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
@@ -600,7 +600,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         break;
     case SV_EMBEDDED_FRAME:
         {
-            // It's a floating frame!
+            
             if ( svt::EmbeddedObjectRef::TryRunningState( rObjRef.GetObject() ) )
             {
                 uno::Reference < beans::XPropertySet > xSet( rObjRef->getComponent(), uno::UNO_QUERY );
@@ -722,9 +722,9 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             GetExport().AddEmbeddedObjectAsBase64( sURL );
     }
 
-    // Lastly the stuff common to each of Applet/Plugin/Floating Frame
+    
     exportEvents( rPropSet );
-    exportTitleAndDescription( rPropSet, rPropSetInfo );  // #i73249#
+    exportTitleAndDescription( rPropSet, rPropSetInfo );  
     exportContour( rPropSet, rPropSetInfo );
 }
 

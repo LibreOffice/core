@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**************************************************************************
@@ -32,13 +32,13 @@
 
 using namespace com::sun::star;
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// PropertySetInfo Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 namespace ucbhelper {
 
@@ -51,40 +51,40 @@ PropertySetInfo::PropertySetInfo(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 PropertySetInfo::~PropertySetInfo()
 {
     delete m_pProps;
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_2( PropertySetInfo,
                    lang::XTypeProvider,
                    beans::XPropertySetInfo );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_2( PropertySetInfo,
                           lang::XTypeProvider,
                           beans::XPropertySetInfo );
 
-//=========================================================================
-//
-// XPropertySetInfo methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
     throw( uno::RuntimeException )
 {
@@ -93,9 +93,9 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
         osl::MutexGuard aGuard( m_aMutex );
         if ( !m_pProps )
         {
-            //////////////////////////////////////////////////////////////
-            // Get info for core ( native) properties.
-            //////////////////////////////////////////////////////////////
+            
+            
+            
 
             try
             {
@@ -112,16 +112,16 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
                 m_pProps = new uno::Sequence< beans::Property >( 0 );
             }
 
-            //////////////////////////////////////////////////////////////
-            // Get info for additional properties.
-            //////////////////////////////////////////////////////////////
+            
+            
+            
 
             uno::Reference< com::sun::star::ucb::XPersistentPropertySet >
                 xSet ( m_pContent->getAdditionalPropertySet( false ) );
 
             if ( xSet.is() )
             {
-                // Get property set info.
+                
                 uno::Reference< beans::XPropertySetInfo > xInfo(
                     xSet->getPropertySetInfo() );
                 if ( xInfo.is() )
@@ -148,8 +148,8 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
     return *m_pProps;
 }
 
-//=========================================================================
-// virtual
+
+
 beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
         const OUString& aName )
     throw( beans::UnknownPropertyException, uno::RuntimeException )
@@ -161,8 +161,8 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
     throw beans::UnknownPropertyException();
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
         const OUString& Name )
     throw( uno::RuntimeException )
@@ -171,11 +171,11 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
     return queryProperty( Name, aProp );
 }
 
-//=========================================================================
+
 //
-// Non-Interface methods.
+
 //
-//=========================================================================
+
 
 void PropertySetInfo::reset()
 {
@@ -184,7 +184,7 @@ void PropertySetInfo::reset()
     m_pProps = 0;
 }
 
-//=========================================================================
+
 bool PropertySetInfo::queryProperty(
     const OUString& rName, beans::Property& rProp )
 {
@@ -207,13 +207,13 @@ bool PropertySetInfo::queryProperty(
     return false;
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// CommandProcessorInfo Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 CommandProcessorInfo::CommandProcessorInfo(
     const uno::Reference< com::sun::star::ucb::XCommandEnvironment >& rxEnv,
@@ -224,40 +224,40 @@ CommandProcessorInfo::CommandProcessorInfo(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 CommandProcessorInfo::~CommandProcessorInfo()
 {
     delete m_pCommands;
 }
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
 
 XINTERFACE_IMPL_2( CommandProcessorInfo,
                    lang::XTypeProvider,
                    com::sun::star::ucb::XCommandInfo );
 
-//=========================================================================
+
 //
-// XTypeProvider methods.
+
 //
-//=========================================================================
+
 
 XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
                          lang::XTypeProvider,
                          com::sun::star::ucb::XCommandInfo );
 
-//=========================================================================
-//
-// XCommandInfo methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Sequence< com::sun::star::ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
     throw( uno::RuntimeException )
@@ -267,9 +267,9 @@ CommandProcessorInfo::getCommands()
         osl::MutexGuard aGuard( m_aMutex );
         if ( !m_pCommands )
         {
-            //////////////////////////////////////////////////////////////
-            // Get info for commands.
-            //////////////////////////////////////////////////////////////
+            
+            
+            
 
             try
             {
@@ -294,8 +294,8 @@ CommandProcessorInfo::getCommands()
     return *m_pCommands;
 }
 
-//=========================================================================
-// virtual
+
+
 com::sun::star::ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName(
         const OUString& Name )
@@ -309,8 +309,8 @@ CommandProcessorInfo::getCommandInfoByName(
     throw com::sun::star::ucb::UnsupportedCommandException();
 }
 
-//=========================================================================
-// virtual
+
+
 com::sun::star::ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
     throw( com::sun::star::ucb::UnsupportedCommandException,
@@ -323,8 +323,8 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
     throw com::sun::star::ucb::UnsupportedCommandException();
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
        const OUString& Name )
     throw( uno::RuntimeException )
@@ -333,8 +333,8 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
     return queryCommand( Name, aInfo );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
     throw( uno::RuntimeException )
 {
@@ -342,11 +342,11 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
     return queryCommand( Handle, aInfo );
 }
 
-//=========================================================================
+
 //
-// Non-Interface methods.
+
 //
-//=========================================================================
+
 
 void CommandProcessorInfo::reset()
 {
@@ -356,7 +356,7 @@ void CommandProcessorInfo::reset()
 }
 
 
-//=========================================================================
+
 bool CommandProcessorInfo::queryCommand(
     const OUString& rName,
     com::sun::star::ucb::CommandInfo& rCommand )
@@ -381,7 +381,7 @@ bool CommandProcessorInfo::queryCommand(
     return false;
 }
 
-//=========================================================================
+
 bool CommandProcessorInfo::queryCommand(
     sal_Int32 nHandle,
     com::sun::star::ucb::CommandInfo& rCommand )
@@ -406,6 +406,6 @@ bool CommandProcessorInfo::queryCommand(
     return false;
 }
 
-} // namespace ucbhelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

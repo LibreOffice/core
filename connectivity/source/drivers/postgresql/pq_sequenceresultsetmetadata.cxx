@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -58,7 +58,7 @@ SequenceResultSetMetaData::SequenceResultSetMetaData(
 }
 
 
-// Methods
+
 sal_Int32 SequenceResultSetMetaData::getColumnCount(  )
     throw (SQLException, RuntimeException)
 {
@@ -76,12 +76,12 @@ sal_Bool SequenceResultSetMetaData::isCaseSensitive( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
 
-    return sal_True; // ??? hmm, numeric types or
+    return sal_True; 
 }
 
 sal_Bool SequenceResultSetMetaData::isSearchable( sal_Int32 /* column */ ) throw (SQLException, RuntimeException)
 {
-    return sal_True; // mmm, what types are not searchable ?
+    return sal_True; 
 }
 
 sal_Bool SequenceResultSetMetaData::isCurrency( sal_Int32 column ) throw (SQLException, RuntimeException)
@@ -154,7 +154,7 @@ OUString SequenceResultSetMetaData::getTableName( sal_Int32 column )
 OUString SequenceResultSetMetaData::getCatalogName( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)
 {
-    // can do this through XConnection.getCatalog() !
+    
     return OUString();
 }
 sal_Int32 SequenceResultSetMetaData::getColumnType( sal_Int32 column )
@@ -181,13 +181,13 @@ sal_Bool SequenceResultSetMetaData::isReadOnly( sal_Int32 /* column */ )
 sal_Bool SequenceResultSetMetaData::isWritable( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
-    return ! isReadOnly( column ); // what's the sense if this method ?
+    return ! isReadOnly( column ); 
 }
 
 sal_Bool SequenceResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
     throw (SQLException, RuntimeException)
 {
-    return isWritable(column); // uhh, now it becomes really esoteric ....
+    return isWritable(column); 
 }
 OUString SequenceResultSetMetaData::getColumnServiceName( sal_Int32 /* column */ )
     throw (SQLException, RuntimeException)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -100,11 +100,11 @@ using namespace ::com::sun::star::office;
 
 namespace sd {
 
-// --------------------------------------------------------------------
+
 
 extern TextApiObject* getTextApiObject( const Reference< XAnnotation >& xAnnotation );
 
-// --------------------------------------------------------------------
+
 
 SfxItemPool* GetAnnotationPool()
 {
@@ -121,7 +121,7 @@ SfxItemPool* GetAnnotationPool()
     return mpAnnotationPool;
 }
 
-// --------------------------------------------------------------------
+
 
 static SfxBindings* getBindings( ViewShellBase& rBase )
 {
@@ -131,7 +131,7 @@ static SfxBindings* getBindings( ViewShellBase& rBase )
     return 0;
 }
 
-// --------------------------------------------------------------------
+
 
 static SfxDispatcher* getDispatcher( ViewShellBase& rBase )
 {
@@ -176,7 +176,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
     return sRet;
 }
 
-// --------------------------------------------------------------------
+
 
 AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
 : AnnotationManagerImplBase( m_aMutex )
@@ -190,11 +190,11 @@ AnnotationManagerImpl::AnnotationManagerImpl( ViewShellBase& rViewShellBase )
         mbShowAnnotations = pOptions->IsShowComments() == sal_True;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::init()
 {
-    // get current controller and initialize listeners
+    
     try
     {
         addListener();
@@ -216,9 +216,9 @@ void AnnotationManagerImpl::init()
     }
 }
 
-// --------------------------------------------------------------------
 
-// WeakComponentImplHelper1
+
+
 void SAL_CALL AnnotationManagerImpl::disposing ()
 {
     try
@@ -244,9 +244,9 @@ void SAL_CALL AnnotationManagerImpl::disposing ()
     mxCurrentPage.clear();
 }
 
-// --------------------------------------------------------------------
 
-// XEventListener
+
+
 void SAL_CALL AnnotationManagerImpl::notifyEvent( const ::com::sun::star::document::EventObject& aEvent ) throw (::com::sun::star::uno::RuntimeException)
 {
     if( aEvent.EventName == "OnAnnotationInserted" || aEvent.EventName == "OnAnnotationRemoved" || aEvent.EventName == "OnAnnotationChanged" )
@@ -261,7 +261,7 @@ void SAL_CALL AnnotationManagerImpl::disposing( const ::com::sun::star::lang::Ev
 
 void AnnotationManagerImpl::ShowAnnotations( bool bShow )
 {
-    // enforce show annotations if a new annotation is inserted
+    
     if( mbShowAnnotations != bShow )
     {
         mbShowAnnotations = bShow;
@@ -274,7 +274,7 @@ void AnnotationManagerImpl::ShowAnnotations( bool bShow )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
 {
@@ -301,7 +301,7 @@ void AnnotationManagerImpl::ExecuteAnnotation(SfxRequest& rReq )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& /*rReq*/)
 {
@@ -309,7 +309,7 @@ void AnnotationManagerImpl::ExecuteInsertAnnotation(SfxRequest& /*rReq*/)
     InsertAnnotation();
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
 {
@@ -358,7 +358,7 @@ void AnnotationManagerImpl::ExecuteDeleteAnnotation(SfxRequest& rReq)
     UpdateTags();
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::InsertAnnotation()
 {
@@ -368,7 +368,7 @@ void AnnotationManagerImpl::InsertAnnotation()
         if( mpDoc->IsUndoEnabled() )
             mpDoc->BegUndo( SD_RESSTR( STR_ANNOTATION_UNDO_INSERT ) );
 
-        // find free space for new annotation
+        
         int y = 0, x = 0;
 
         AnnotationVector aAnnotations( pPage->getAnnotations() );
@@ -418,14 +418,14 @@ void AnnotationManagerImpl::InsertAnnotation()
         Reference< XAnnotation > xAnnotation;
         pPage->createAnnotation( xAnnotation );
 
-        // set current author to new annotation
+        
         SvtUserOptions aUserOptions;
         xAnnotation->setAuthor( aUserOptions.GetFullName() );
 
-        // set current time to new annotation
+        
         xAnnotation->setDateTime( getCurrentDateTime() );
 
-        // set position
+        
         RealPoint2D aPos( ((double)x) / 100.0, ((double)y) / 100.0 );
         xAnnotation->setPosition( aPos );
 
@@ -437,7 +437,7 @@ void AnnotationManagerImpl::InsertAnnotation()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
 {
@@ -496,7 +496,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
         SvtUserOptions aUserOptions;
         xAnnotation->setAuthor( aUserOptions.GetFullName() );
 
-        // set current time to reply
+        
         xAnnotation->setDateTime( getCurrentDateTime() );
 
         UpdateTags(true);
@@ -504,7 +504,7 @@ void AnnotationManagerImpl::ExecuteReplyToAnnotation( SfxRequest& rReq )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::DeleteAnnotation( Reference< XAnnotation > xAnnotation )
 {
@@ -582,7 +582,7 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
         mpDoc->EndUndo();
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
 {
@@ -628,7 +628,7 @@ void AnnotationManagerImpl::GetAnnotationState(SfxItemSet& rSet)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 {
@@ -701,7 +701,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
 
             if( pPage && !pPage->getAnnotations().empty() )
             {
-                // switch to next/previous slide with annotations
+                
                 ::boost::shared_ptr<DrawViewShell> pDrawViewShell(::boost::dynamic_pointer_cast<DrawViewShell>(mrBase.GetMainViewShell()));
                 if (pDrawViewShell.get() != NULL)
                 {
@@ -718,7 +718,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
         }
         while( pPage );
 
-        // The question text depends on the search direction.
+        
         bool bImpress = mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
         sal_uInt16 nStringId;
         if(bForeward)
@@ -726,8 +726,8 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
         else
             nStringId = bImpress ? STR_ANNOTATION_WRAP_BACKWARD : STR_ANNOTATION_WRAP_BACKWARD_DRAW;
 
-        // Pop up question box that asks the user whether to wrap arround.
-        // The dialog is made modal with respect to the whole application.
+        
+        
         QueryBox aQuestionBox ( NULL, (WB_YES_NO | WB_DEF_YES), SD_RESSTR(nStringId));
         aQuestionBox.SetImage (QueryBox::GetStandardImage());
         short nBoxResult = aQuestionBox.Execute();
@@ -737,7 +737,7 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     while( true );
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::onTagSelected( AnnotationTag& rTag )
 {
@@ -745,7 +745,7 @@ void AnnotationManagerImpl::onTagSelected( AnnotationTag& rTag )
     invalidateSlots();
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
 {
@@ -756,7 +756,7 @@ void AnnotationManagerImpl::onTagDeselected( AnnotationTag& rTag )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation > xAnnotation, bool bEdit /* = sal_False */ )
 {
@@ -776,7 +776,7 @@ void AnnotationManagerImpl::SelectAnnotation( ::com::sun::star::uno::Reference< 
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::GetSelectedAnnotation( ::com::sun::star::uno::Reference< ::com::sun::star::office::XAnnotation >& xAnnotation )
 {
@@ -798,7 +798,7 @@ void AnnotationManagerImpl::invalidateSlots()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::onSelectionChanged()
 {
@@ -882,7 +882,7 @@ void AnnotationManagerImpl::CreateTags()
         }
         else
         {
-            // no tag, no selection!
+            
             mxSelectedAnnotation.clear();
         }
     }
@@ -892,7 +892,7 @@ void AnnotationManagerImpl::CreateTags()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::DisposeTags()
 {
@@ -909,7 +909,7 @@ void AnnotationManagerImpl::DisposeTags()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::addListener()
 {
@@ -922,7 +922,7 @@ void AnnotationManagerImpl::addListener()
         | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
 }
 
-// --------------------------------------------------------------------
+
 
 void AnnotationManagerImpl::removeListener()
 {
@@ -930,7 +930,7 @@ void AnnotationManagerImpl::removeListener()
     mrBase.GetEventMultiplexer()->RemoveEventListener( aLink );
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK(AnnotationManagerImpl,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)
@@ -1031,7 +1031,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
 
     sal_uInt16 nId = 0;
 
-    // set slot images
+    
     Reference< ::com::sun::star::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
     if( xFrame.is() )
     {
@@ -1086,7 +1086,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     }
 }
 
-// ====================================================================
+
 
 Color AnnotationManagerImpl::GetColor(sal_uInt16 aAuthorIndex)
 {
@@ -1140,14 +1140,14 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
 
     sal_uInt16 nPageNum = (pPage->GetPageNum() - 1) >> 1;
 
-    // first all non master pages
+    
     if( !pPage->IsMasterPage() )
     {
         if( bForeward )
         {
             if( nPageNum >= mpDoc->GetSdPageCount(PK_STANDARD)-1 )
             {
-                // we reached end of draw pages, start with master pages (skip handout master for draw)
+                
                 return mpDoc->GetMasterSdPage( (mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) ? 0 : 1, PK_STANDARD );
             }
             nPageNum++;
@@ -1155,7 +1155,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
         else
         {
             if( nPageNum == 0 )
-                return 0; // we are already on the first draw page, finished
+                return 0; 
 
             nPageNum--;
         }
@@ -1167,7 +1167,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
         {
             if( nPageNum >= mpDoc->GetMasterSdPageCount(PK_STANDARD)-1 )
             {
-                return 0;   // we reached the end, there is nothing more to see here
+                return 0;   
             }
             nPageNum++;
         }
@@ -1175,7 +1175,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
         {
             if( nPageNum == (mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ? 0 : 1) )
             {
-                // we reached beginning of master pages, start with end if pages
+                
                 return mpDoc->GetSdPage( mpDoc->GetSdPageCount(PK_STANDARD)-1, PK_STANDARD );
             }
 
@@ -1187,7 +1187,7 @@ SdPage* AnnotationManagerImpl::GetNextPage( SdPage* pPage, bool bForeward )
 
 SdPage* AnnotationManagerImpl::GetFirstPage()
 {
-    // return first drawing page
+    
     return mpDoc->GetSdPage(0, PK_STANDARD );
 }
 
@@ -1201,7 +1201,7 @@ SdPage* AnnotationManagerImpl::GetCurrentPage()
     return mrBase.GetMainViewShell()->getCurrentPage();
 }
 
-// ====================================================================
+
 
 AnnotationManager::AnnotationManager( ViewShellBase& rViewShellBase )
 : mxImpl( new AnnotationManagerImpl( rViewShellBase ) )

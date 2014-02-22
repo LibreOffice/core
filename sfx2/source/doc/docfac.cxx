@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/registry/MergeConflictException.hpp>
@@ -55,19 +55,19 @@
 
 using namespace ::com::sun::star;
 
-//========================================================================
+
 
 typedef std::vector<SfxViewFactory*> SfxViewFactoryArr_Impl;
 
-//========================================================================
+
 
 DBG_NAME(SfxObjectFactory)
 
-//========================================================================
+
 
 struct SfxObjectFactory_Impl
 {
-    SfxViewFactoryArr_Impl      aViewFactoryArr;// List of <SfxViewFactory>s
+    SfxViewFactoryArr_Impl      aViewFactoryArr;
     ResId*                      pNameResId;
     OUString             aServiceName;
     SfxFilterContainer*         pFilterContainer;
@@ -86,14 +86,14 @@ struct SfxObjectFactory_Impl
         {}
 };
 
-//========================================================================
+
 
 SfxFilterContainer* SfxObjectFactory::GetFilterContainer( sal_Bool /*bForceLoad*/ ) const
 {
     return pImpl->pFilterContainer;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectFactory::SfxObjectFactory
 (
@@ -126,7 +126,7 @@ SfxObjectFactory::SfxObjectFactory
         pImpl->pNameResId = new SfxResId( STR_DOCTYPENAME_MESSAGE );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxObjectFactory::~SfxObjectFactory()
 {
@@ -137,7 +137,7 @@ SfxObjectFactory::~SfxObjectFactory()
     delete pImpl;
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxObjectFactory::RegisterViewFactory
 (
@@ -167,21 +167,21 @@ void SfxObjectFactory::RegisterViewFactory
     pImpl->aViewFactoryArr.insert(it, &rFactory);
 }
 
-//--------------------------------------------------------------------
+
 
 sal_uInt16 SfxObjectFactory::GetViewFactoryCount() const
 {
     return pImpl->aViewFactoryArr.size();
 }
 
-//--------------------------------------------------------------------
+
 
 SfxViewFactory& SfxObjectFactory::GetViewFactory(sal_uInt16 i) const
 {
     return *pImpl->aViewFactoryArr[i];
 }
 
-//--------------------------------------------------------------------
+
 
 SfxModule* SfxObjectFactory::GetModule() const
 {
@@ -241,7 +241,7 @@ void SfxObjectFactory::SetSystemTemplate( const OUString& rServiceName, const OU
             ::comphelper::SequenceAsHashMap aProps1( xTypeDetection->getByName( aActualFilterTypeName ) );
             uno::Sequence< OUString > aAllExt =
                 aProps1.getUnpackedValueOrDefault("Extensions", uno::Sequence< OUString >() );
-            //To-do: check if aAllExt is empty first
+            
             OUString aExt = aAllExt[0];
 
             aUserTemplateURL += DEF_TPL_STR;

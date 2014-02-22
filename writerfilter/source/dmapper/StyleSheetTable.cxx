@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <resourcemodel/ResourceModelHelper.hxx>
 #include <StyleSheetTable.hxx>
@@ -130,16 +130,16 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
 
             if ( bHasChecked && bHasInside )
             {
-                // In this case, remove the inside border
+                
                 pProps->erase( pInsideIt );
             }
 
-            i = 4; // Stop looping stupidly
+            i = 4; 
         }
         i++;
     }
 
-    // Append the tblStylePr
+    
     m_aStyles[nType] = pProps;
 }
 
@@ -147,7 +147,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
 {
     PropertyMapPtr pProps( new PropertyMap );
 
-    // First get the parent properties
+    
     StyleSheetEntryPtr pEntry = m_pStyleSheet->FindParentStyleSheet( sBaseStyleIdentifier );
 
     if ( pEntry.get( ) )
@@ -168,7 +168,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
     }
     }
 
-    // And finally get the mask ones
+    
     pProps->InsertProps(GetLocalPropertiesFromMask(nMask));
 
     return pProps;
@@ -228,7 +228,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
 
             if ( pRemoveInside[i] )
             {
-                // Remove the insideH and insideV depending on the cell pos
+                
                 PropertyIds nInsideProp = ( i < 2 ) ? META_PROP_HORIZONTAL_BORDER : META_PROP_VERTICAL_BORDER;
                 pDestIt = pToFill->find(nInsideProp);
                 if ( pDestIt != pToFill->end( ) )
@@ -242,7 +242,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
 
 PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask )
 {
-    // Order from right to left
+    
     struct TblStyleTypeAndMask {
         sal_Int32       mask;
         TblStyleType    type;
@@ -264,7 +264,7 @@ PropertyMapPtr TableStyleSheetEntry::GetLocalPropertiesFromMask( sal_Int32 nMask
         { 0x008, TBL_STYLE_NECELL }
     };
 
-    // Get the properties applying according to the mask
+    
     PropertyMapPtr pProps( new PropertyMap( ) );
     for (size_t i = 0; i < sizeof(aOrderedStyleTable)/sizeof(aOrderedStyleTable[0]); ++i)
     {
@@ -307,7 +307,7 @@ struct StyleSheetTable_Impl
 
     OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
 
-    /// Appends the given key-value pair to the list of latent style properties of the current entry.
+    
     void AppendLatentStyleProperty(OUString aName, Value& rValue);
 };
 
@@ -320,7 +320,7 @@ StyleSheetTable_Impl::StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Referenc
             m_pDefaultCharProps(new PropertyMap),
             m_bIsNewDoc(bIsNewDoc)
 {
-    //set font height default to 10pt
+    
     uno::Any aVal = uno::makeAny( double(10.) );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT, aVal );
     m_pDefaultCharProps->Insert( PROP_CHAR_HEIGHT_ASIAN, aVal );
@@ -334,15 +334,15 @@ OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rP
     ListCharStylePropertyVector_t::const_iterator aListVectorIter = m_aListCharStylePropertyVector.begin();
     while( aListVectorIter != m_aListCharStylePropertyVector.end() )
     {
-        //if size is identical
+        
         if( aListVectorIter->aPropertyValues.size() == rPropValues.size() )
         {
             bool bBreak = false;
-            //then search for all contained properties
+            
             PropertyValueVector_t::const_iterator aList1Iter = rPropValues.begin();
             while( aList1Iter != rPropValues.end() && !bBreak)
             {
-                //find the property
+                
                 bool bElementFound = false;
                 PropertyValueVector_t::const_iterator aList2Iter = aListVectorIter->aPropertyValues.begin();
                 while( aList2Iter != aListVectorIter->aPropertyValues.end() && !bBreak )
@@ -356,7 +356,7 @@ OUString StyleSheetTable_Impl::HasListCharStyle( const PropertyValueVector_t& rP
                     }
                     ++aList2Iter;
                 }
-                //set break flag if property hasn't been found
+                
                 if(!bElementFound )
                 {
                     bBreak = true;
@@ -408,9 +408,9 @@ void StyleSheetTable::lcl_attribute(Id Name, Value & val)
     (void)nIntValue;
     OUString sValue = val.getString();
 
-    // The default type is paragraph, and it needs to be processed first,
-    // because the NS_ooxml::LN_CT_Style_type handling may set m_pImpl->m_pCurrentEntry
-    // to point to a different object.
+    
+    
+    
     if( m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_UNKNOWN )
     {
         if( Name != NS_ooxml::LN_CT_Style_type )
@@ -510,7 +510,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
     switch(nSprmId)
     {
         case NS_ooxml::LN_CT_Style_name:
-            //this is only a UI name!
+            
             m_pImpl->m_pCurrentEntry->sStyleName = sStringValue;
             m_pImpl->m_pCurrentEntry->sStyleName1 = sStringValue;
             if(m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
@@ -575,7 +575,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 {
                 case NS_ooxml::LN_CT_Style_rsid:
                 {
-                    // We want the rsid as a hex string, but always with the length of 8.
+                    
                     OUStringBuffer aBuf = OUString::number(nIntValue, 16);
                     OUStringBuffer aStr;
                     comphelper::string::padToLength(aStr, 8 - aBuf.getLength(), '0');
@@ -615,10 +615,10 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 pEntry->AppendInteropGrabBag(aValue);
             }
         break;
-        case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
-        case NS_ooxml::LN_CT_Style_tblStylePr: //contains  to table properties
-        case NS_ooxml::LN_CT_TblPrBase_tblInd: //table properties - at least width value and type
-        case NS_ooxml::LN_EG_RPrBase_rFonts: //table fonts
+        case NS_ooxml::LN_CT_Style_tblPr: 
+        case NS_ooxml::LN_CT_Style_tblStylePr: 
+        case NS_ooxml::LN_CT_TblPrBase_tblInd: 
+        case NS_ooxml::LN_EG_RPrBase_rFonts: 
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
@@ -626,7 +626,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 TblStylePrHandlerPtr pTblStylePrHandler( new TblStylePrHandler( m_pImpl->m_rDMapper ) );
                 pProperties->resolve( *pTblStylePrHandler );
 
-                // Add the properties to the table style
+                
                 TblStyleType nType = pTblStylePrHandler->getType( );
                 PropertyMapPtr pProps = pTblStylePrHandler->getProperties( );
                 StyleSheetEntry *  pEntry = m_pImpl->m_pCurrentEntry.get();
@@ -670,14 +670,14 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( false );
         break;
-        case NS_ooxml::LN_CT_TblPrBase_jc:     //table alignment - row properties!
+        case NS_ooxml::LN_CT_TblPrBase_jc:     
              m_pImpl->m_pCurrentEntry->pProperties->Insert( PROP_HORI_ORIENT,
                 uno::makeAny( ConversionHelper::convertTableJustification( nIntValue )));
         break;
-        case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment - row properties!
+        case NS_ooxml::LN_CT_TrPrBase_jc:     
                 dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TrPrBase_jc(nIntValue);
         break;
-        case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
+        case NS_ooxml::LN_CT_TblPrBase_tblBorders: 
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
@@ -704,7 +704,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         }
         break;
         case NS_ooxml::LN_CT_TblPrBase_tblCellMar:
-            //no cell margins in styles
+            
         break;
         case NS_ooxml::LN_CT_LatentStyles_lsdException:
         {
@@ -721,9 +721,9 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
         }
         break;
         case NS_ooxml::LN_CT_Style_pPr:
-            // no break
+            
         case NS_ooxml::LN_CT_Style_rPr:
-            // no break
+            
         default:
             {
                 if (!m_pImpl->m_pCurrentEntry)
@@ -764,11 +764,11 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 
                     if (m_pImpl->m_pCurrentEntry->nStyleTypeCode == STYLE_TYPE_PARA && m_pImpl->m_pCurrentEntry->bIsDefaultStyle)
                     {
-                        // The current style is the default paragraph style.
+                        
                         PropertyMapPtr pProperties = m_pImpl->m_pCurrentEntry->pProperties;
                         if (pProperties->find(PROP_CHAR_HEIGHT) != pProperties->end() && m_pImpl->m_pDefaultParaProps->find(PROP_CHAR_HEIGHT) == m_pImpl->m_pDefaultParaProps->end())
                         {
-                            // We provide a character height value, but a document-level default wasn't set.
+                            
                             if (m_pImpl->m_xTextDefaults.is())
                             {
                                 m_pImpl->m_xTextDefaults->setPropertyValue("CharHeight", pProperties->operator[](PROP_CHAR_HEIGHT).getValue());
@@ -784,13 +784,13 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
 
 void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
-    //create a new style entry
+    
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry, "current entry has to be NULL here");
     StyleSheetEntryPtr pNewEntry( new StyleSheetEntry );
     m_pImpl->m_pCurrentEntry = pNewEntry;
     m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pCurrentEntry->pProperties );
     ref->resolve(*this);
-    //append it to the table
+    
     m_pImpl->m_rDMapper.PopStyleSheetProperties();
     if( !m_pImpl->m_rDMapper.IsOOXMLImport() || !m_pImpl->m_pCurrentEntry->sStyleName.isEmpty())
     {
@@ -799,12 +799,12 @@ void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>
     }
     else
     {
-        //TODO: this entry contains the default settings - they have to be added to the settings
+        
     }
 
     if (!m_pImpl->m_pCurrentEntry->aLatentStyles.empty())
     {
-        // We have latent styles for this entry, then process them.
+        
         std::vector<beans::PropertyValue>& rLatentStyles = m_pImpl->m_pCurrentEntry->aLatentStyles;
 
         if (!m_pImpl->m_pCurrentEntry->aLsdExceptions.empty())
@@ -826,9 +826,9 @@ void StyleSheetTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>
         for (std::vector<beans::PropertyValue>::iterator i = rLatentStyles.begin(); i != rLatentStyles.end(); ++i)
             *pLatentStyles++ = *i;
 
-        // We can put all latent style info directly to the document interop
-        // grab bag, as we can be sure that only a single style entry has
-        // latent style info.
+        
+        
+        
         uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
         uno::Sequence<beans::PropertyValue> aGrabBag;
         xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
@@ -930,7 +930,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 
                     if(xStyles->hasByName( sConvertedStyleName ))
                     {
-                        // When pasting, don't update existing styles.
+                        
                         if (!m_pImpl->m_bIsNewDoc)
                         {
                             ++aIt;
@@ -947,7 +947,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                         (bListStyle ? OUString("com.sun.star.style.NumberingStyle") : rPropNameSupplier.GetName( PROP_SERVICE_CHAR_STYLE ))),
                                         uno::UNO_QUERY_THROW);
 
-                        // Numbering styles have to be inserted early, as e.g. the NumberingRules property is only available after insertion.
+                        
                         if (bListStyle)
                         {
                             xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle ) );
@@ -956,7 +956,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             StyleSheetPropertyMap* pPropertyMap = dynamic_cast<StyleSheetPropertyMap*>(pEntry->pProperties.get());
                             if (pPropertyMap && pPropertyMap->GetListId() == -1)
                             {
-                                // No properties? Word default is 'none', Writer one is 'arabic', handle this.
+                                
                                 uno::Reference<beans::XPropertySet> xPropertySet(xStyle, uno::UNO_QUERY_THROW);
                                 uno::Reference<container::XIndexReplace> xNumberingRules;
                                 xPropertySet->getPropertyValue("NumberingRules") >>= xNumberingRules;
@@ -976,9 +976,9 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     {
                         try
                         {
-                            //TODO: Handle cases where a paragraph <> character style relation is needed
+                            
                             StyleSheetEntryPtr pParent = FindStyleSheetByISTD( pEntry->sBaseStyleIdentifier );
-                            // Writer core doesn't support numbering styles having a parent style, it seems
+                            
                             if (pParent.get() != NULL && !bListStyle)
                                 xStyle->setParentStyle(ConvertStyleName( pParent->sStyleName ));
                         }
@@ -989,30 +989,30 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                     }
                     else if( bParaStyle )
                     {
-                        //now it's time to set the default parameters - for paragraph styles
-                        //Fonts: Western first entry in font table
-                        //CJK: second entry
-                        //CTL: third entry, if it exists
+                        
+                        
+                        
+                        
 
                         sal_uInt32 nFontCount = rFontTable->size();
                         if( !m_pImpl->m_rDMapper.IsOOXMLImport() && nFontCount > 2 )
                         {
                             uno::Any aTwoHundredFortyTwip = uno::makeAny(12.);
 
-                            // font size to 240 twip (12 pts) for all if not set
+                            
                             pEntry->pProperties->Insert(PROP_CHAR_HEIGHT, aTwoHundredFortyTwip, false);
 
-                            // western font not already set -> apply first font
+                            
                             const FontEntry::Pointer_t pWesternFontEntry(rFontTable->getFontEntry( 0 ));
                             OUString sWesternFontName = pWesternFontEntry->sFontName;
                             pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( sWesternFontName ), false);
 
-                            // CJK  ... apply second font
+                            
                             const FontEntry::Pointer_t pCJKFontEntry(rFontTable->getFontEntry( 2 ));
                             pEntry->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( pCJKFontEntry->sFontName ), false);
                             pEntry->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN, aTwoHundredFortyTwip, false);
 
-                            // CTL  ... apply third font, if available
+                            
                             if( nFontCount > 3 )
                             {
                                 const FontEntry::Pointer_t pCTLFontEntry(rFontTable->getFontEntry( 3 ));
@@ -1021,14 +1021,14 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             }
                         }
 
-                        // Widow/Orphan -> set both to two if not already set
+                        
                         uno::Any aTwo = uno::makeAny(sal_Int8(2));
                         pEntry->pProperties->Insert(PROP_PARA_WIDOWS, aTwo, false);
                         pEntry->pProperties->Insert(PROP_PARA_ORPHANS, aTwo, false);
 
-                        // Left-to-right direction if not already set
+                        
                         pEntry->pProperties->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
-                        // Left aligment if not already set
+                        
                         pEntry->pProperties->Insert(PROP_PARA_ADJUST, uno::makeAny( sal_Int16(style::ParagraphAdjust_LEFT) ), false);
                     }
 
@@ -1039,10 +1039,10 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         bAddFollowStyle = true;
                     }
 
-                    // remove Left/RightMargin values from TOX heading styles
+                    
                     if( bParaStyle )
                     {
-                        // Set the outline levels
+                        
                         const StyleSheetPropertyMap* pStyleSheetProperties = dynamic_cast<const StyleSheetPropertyMap*>(pEntry ? pEntry->pProperties.get() : 0);
                         if ( pStyleSheetProperties )
                         {
@@ -1059,7 +1059,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             sConvertedStyleName == "User Index Heading" ||
                             sConvertedStyleName == "Index Heading" )
                         {
-                            //left margin is set to NULL by default
+                            
                             uno::Reference< beans::XPropertyState >xState1( xStyle, uno::UNO_QUERY_THROW );
                             xState1->setPropertyToDefault(rPropNameSupplier.GetName( PROP_PARA_LEFT_MARGIN ));
                         }
@@ -1087,7 +1087,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         }
                         else if (sConvertedStyleName == "Title" || sConvertedStyleName == "Subtitle")
                         {
-                            //set the default adjust for ParaStyle Title and Subtitle to left
+                            
                             try
                             {
                                 uno::Reference< beans::XPropertySet > xProp( xStyle, uno::UNO_QUERY );
@@ -1109,7 +1109,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         PropValVector aSortedPropVals;
                         for( sal_Int32 nProp = 0; nProp < aPropValues.getLength(); ++nProp)
                         {
-                            // Don't add the style name properties
+                            
                             bool bIsParaStyleName = aPropValues[nProp].Name == "ParaStyleName";
                             bool bIsCharStyleName = aPropValues[nProp].Name == "CharStyleName";
                             if ( !bIsParaStyleName && !bIsCharStyleName )
@@ -1119,7 +1119,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                         }
                         if(bAddFollowStyle)
                         {
-                            //find the name of the Next style
+                            
                             std::vector< StyleSheetEntryPtr >::iterator it = m_pImpl->m_aStyleSheetEntries.begin();
                             for (; it != m_pImpl->m_aStyleSheetEntries.end(); ++it)
                             {
@@ -1162,7 +1162,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                             OSL_FAIL( "Some style properties could not be set");
                         }
                     }
-                    // Numbering style got inserted earlier.
+                    
                     if(bInsert && !bListStyle)
                     {
                         xStyles->insertByName( sConvertedStyleName, uno::makeAny( xStyle) );
@@ -1180,7 +1180,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                 }
                 else if(pEntry->nStyleTypeCode == STYLE_TYPE_TABLE)
                 {
-                    // If this is a table style, save its contents as-is for roundtrip purposes.
+                    
                     TableStyleSheetEntry* pTableEntry = static_cast<TableStyleSheetEntry *>(pEntry.get());
                     aTableStylesVec.push_back(pTableEntry->GetInteropGrabBag());
                 }
@@ -1189,7 +1189,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 
             if (!aTableStylesVec.empty())
             {
-                // If we had any table styles, add a new document-level InteropGrabBag entry for them.
+                
                 uno::Reference<beans::XPropertySet> xPropertySet(m_pImpl->m_xTextDocument, uno::UNO_QUERY);
                 uno::Sequence<beans::PropertyValue> aGrabBag;
                 xPropertySet->getPropertyValue("InteropGrabBag") >>= aGrabBag;
@@ -1439,9 +1439,9 @@ OUString StyleSheetTable::ConvertStyleName( const OUString& rWWName, bool bExten
     OUString sRet( rWWName );
     if( bExtendedSearch )
     {
-        //search for the rWWName in the IdentifierD of the existing styles and convert the sStyleName member
+        
         std::vector< StyleSheetEntryPtr >::iterator aIt = m_pImpl->m_aStyleSheetEntries.begin();
-        //TODO: performance issue - put styles list into a map sorted by it's sStyleIdentifierD members
+        
         while( aIt != m_pImpl->m_aStyleSheetEntries.end() )
         {
             if( rWWName == ( *aIt )->sStyleIdentifierD )
@@ -1522,7 +1522,7 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
 
 OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProperties )
 {
-    //find out if any of the styles already has the required properties then return it's name
+    
     OUString sListLabel = m_pImpl->HasListCharStyle(rCharProperties);
     if( !sListLabel.isEmpty() )
         return sListLabel;
@@ -1531,7 +1531,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     uno::Reference< container::XNameAccess > xStyleFamilies = xStylesSupplier->getStyleFamilies();
     uno::Reference<container::XNameContainer> xCharStyles;
     xStyleFamilies->getByName("CharacterStyles") >>= xCharStyles;
-    //search for all character styles with the name sListLabel + <index>
+    
     sal_Int32 nStyleFound = 0;
     uno::Sequence< OUString > aStyleNames = xCharStyles->getElementNames();
     const OUString* pStyleNames = aStyleNames.getConstArray();
@@ -1550,7 +1550,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     }
     sListLabel = OUString::createFromAscii( cListLabel );
     sListLabel += OUString::number( ++nStyleFound );
-    //create a new one otherwise
+    
     uno::Reference< lang::XMultiServiceFactory > xDocFactory( m_pImpl->m_xTextDocument, uno::UNO_QUERY_THROW );
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     try
@@ -1584,7 +1584,7 @@ OUString StyleSheetTable::getOrCreateCharStyle( PropertyValueVector_t& rCharProp
     return sListLabel;
 }
 
-}//namespace dmapper
-}//namespace writerfilter
+}
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

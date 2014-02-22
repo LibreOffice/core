@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -96,8 +96,8 @@ void IMapObject::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 
     WriteIMapObject( rOStm );
-    aEventList.Write( rOStm );                                      // V4
-    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aName, eEncoding); // V5
+    aEventList.Write( rOStm );                                      
+    write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aName, eEncoding); 
 
     delete pCompat;
 }
@@ -114,7 +114,7 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
     IMapCompat*         pCompat;
     rtl_TextEncoding    nTextEncoding;
 
-    // read on type and version
+    
     rIStm.SeekRel( 2 );
     rIStm.ReadUInt16( nReadVersion );
     rIStm.ReadUInt16( nTextEncoding );
@@ -123,18 +123,18 @@ void IMapObject::Read( SvStream& rIStm, const OUString& rBaseURL )
     rIStm.ReadUChar( bActive );
     aTarget = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
 
-    // make URL absolute
+    
     aURL = URIHelper::SmartRel2Abs( INetURLObject(rBaseURL), aURL, URIHelper::GetMaybeFileHdl(), true, false, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
     pCompat = new IMapCompat( rIStm, STREAM_READ );
 
     ReadIMapObject( rIStm );
 
-    // from version 4 onwards we read a eventlist
+    
     if ( nReadVersion >= 0x0004 )
     {
         aEventList.Read(rIStm);
 
-        // from version 5 onwards an objectname could be available
+        
         if ( nReadVersion >= 0x0005 )
             aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, nTextEncoding);
     }
@@ -432,8 +432,8 @@ void IMapPolygonObject::ImpConstruct( const Polygon& rPoly, sal_Bool bPixel )
 void IMapPolygonObject::WriteIMapObject( SvStream& rOStm ) const
 {
     WritePolygon( rOStm, aPoly );
-    rOStm.WriteUChar( bEllipse );  // >= Version 2
-    WriteRectangle( rOStm, aEllipse );  // >= Version 2
+    rOStm.WriteUChar( bEllipse );  
+    WriteRectangle( rOStm, aEllipse );  
 }
 
 
@@ -447,7 +447,7 @@ void IMapPolygonObject::ReadIMapObject( SvStream& rIStm )
 {
     ReadPolygon( rIStm, aPoly );
 
-    // Version >= 2 has additional ellipses information
+    
     if ( nReadVersion >= 2 )
     {
         rIStm.ReadUChar( bEllipse );
@@ -811,7 +811,7 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
     Point aRelPoint( rTotalSize.Width() * rRelHitPoint.X() / rDisplaySize.Width(),
                      rTotalSize.Height() * rRelHitPoint.Y() / rDisplaySize.Height() );
 
-    // transform point to check before checking if flags to mirror etc. are set,
+    
     if ( nFlags )
     {
         if ( nFlags & IMAP_MIRROR_HORZ )
@@ -821,7 +821,7 @@ IMapObject* ImageMap::GetHitIMapObject( const Size& rTotalSize,
             aRelPoint.Y() = rTotalSize.Height() - aRelPoint.Y();
     }
 
-    // walk over all objects and execute HitTest
+    
     IMapObject* pObj = NULL;
     for( size_t i = 0, n = maList.size(); i < n; ++i ) {
         if ( maList[ i ]->IsHit( aRelPoint ) ) {
@@ -889,7 +889,7 @@ void ImageMap::ImpWriteImageMap( SvStream& rOStm, const OUString& rBaseURL ) con
 
 void ImageMap::ImpReadImageMap( SvStream& rIStm, size_t nCount, const OUString& rBaseURL )
 {
-    // neue Objekte einlesen
+    
     for ( size_t i = 0; i < nCount; i++ )
     {
         sal_uInt16 nType;
@@ -942,21 +942,21 @@ void ImageMap::Write( SvStream& rOStm, const OUString& rBaseURL ) const
     OUString                aImageName( GetName() );
     sal_uInt16                  nOldFormat = rOStm.GetNumberFormatInt();
     sal_uInt16                  nCount = (sal_uInt16) GetIMapObjectCount();
-    const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding(); //vomit!
+    const rtl_TextEncoding  eEncoding = osl_getThreadTextEncoding(); 
 
     rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    // write MagicCode
+    
     rOStm.WriteCharPtr( IMAPMAGIC );
     rOStm.WriteUInt16( GetVersion() );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
-    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, OString()); //dummy
+    write_uInt16_lenPrefixed_uInt8s_FromOString(rOStm, OString()); 
     rOStm.WriteUInt16( nCount );
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rOStm, aImageName, eEncoding);
 
     pCompat = new IMapCompat( rOStm, STREAM_WRITE );
 
-    // here one can insert in newer versions
+    
 
     delete pCompat;
 
@@ -985,20 +985,20 @@ void ImageMap::Read( SvStream& rIStm, const OUString& rBaseURL )
     {
         IMapCompat* pCompat;
 
-        // delete old content
+        
         ClearImageMap();
 
-        // read on version
+        
         rIStm.SeekRel( 2 );
 
         aName = read_uInt16_lenPrefixed_uInt8s_ToOUString(rIStm, osl_getThreadTextEncoding());
-        read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); // Dummy
+        read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); 
         rIStm.ReadUInt16( nCount );
-        read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); // Dummy
+        read_uInt16_lenPrefixed_uInt8s_ToOString(rIStm); 
 
         pCompat = new IMapCompat( rIStm, STREAM_READ );
 
-        // here one can read in newer versions
+        
 
         delete pCompat;
         ImpReadImageMap( rIStm, nCount, rBaseURL );

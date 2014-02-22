@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "officeforms.hxx"
@@ -39,7 +39,7 @@ namespace xmloff
     using ::xmloff::token::XML_FORMS;
     using ::com::sun::star::xml::sax::XAttributeList;
 
-    //= OFormsRootImport
+    
     TYPEINIT1(OFormsRootImport, SvXMLImportContext);
     OFormsRootImport::OFormsRootImport( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLocalName )
         :SvXMLImportContext(rImport, nPrfx, rLocalName)
@@ -60,17 +60,17 @@ namespace xmloff
             const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
             const OUString& _rPropName, sal_Bool _bDefault)
     {
-        // the complete attribute name to look for
+        
         OUString sCompleteAttributeName = GetImport().GetNamespaceMap().GetQNameByIndex(
             OAttributeMetaData::getOfficeFormsAttributeNamespace(_eAttribute),
             OUString::createFromAscii(OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute)));
 
-        // get and convert the value
+        
         OUString sAttributeValue = _rxAttributes->getValueByName(sCompleteAttributeName);
         bool bValue = _bDefault;
         ::sax::Converter::convertBool(bValue, sAttributeValue);
 
-        // set the property
+        
         if (_rxPropInfo->hasPropertyByName(_rPropName))
         {
             _rxProps->setPropertyValue(_rPropName, makeAny(bValue));
@@ -86,8 +86,8 @@ namespace xmloff
         {
             Reference< XPropertySet > xDocProperties(GetImport().GetModel(), UNO_QUERY);
             if ( xDocProperties.is() )
-            {   // an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
-                // this is done via streaming the controls as XML.
+            {   
+                
                 Reference< XPropertySetInfo > xDocPropInfo;
                 if (xDocProperties.is())
                     xDocPropInfo = xDocProperties->getPropertySetInfo();
@@ -108,7 +108,7 @@ namespace xmloff
         LEAVE_LOG_CONTEXT( );
     }
 
-    //= OFormsRootExport
+    
     OFormsRootExport::OFormsRootExport( SvXMLExport& _rExp )
         :m_pImplElement(NULL)
     {
@@ -126,16 +126,16 @@ namespace xmloff
         const Reference< XPropertySet >& _rxProps, const Reference< XPropertySetInfo >& _rxPropInfo,
         const OUString& _rPropName, sal_Bool _bDefault)
     {
-        // retrieve the property value
+        
         sal_Bool bValue = _bDefault;
         if (_rxPropInfo->hasPropertyByName(_rPropName))
             bValue = ::cppu::any2bool(_rxProps->getPropertyValue(_rPropName));
 
-        // convert into a string
+        
         OUStringBuffer aValue;
         ::sax::Converter::convertBool(aValue, bValue);
 
-        // add the attribute
+        
         _rExp.AddAttribute(
             OAttributeMetaData::getOfficeFormsAttributeNamespace(_eAttribute),
             OAttributeMetaData::getOfficeFormsAttributeName(_eAttribute),
@@ -148,8 +148,8 @@ namespace xmloff
         {
             Reference< XPropertySet > xDocProperties(_rExp.GetModel(), UNO_QUERY);
             if ( xDocProperties.is() )
-            {   // an empty model is allowed: when doing a copy'n'paste from e.g. Writer to Calc,
-                // this is done via streaming the controls as XML.
+            {   
+                
                 Reference< XPropertySetInfo > xDocPropInfo;
                 if (xDocProperties.is())
                     xDocPropInfo = xDocProperties->getPropertySetInfo();
@@ -164,6 +164,6 @@ namespace xmloff
         }
     }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

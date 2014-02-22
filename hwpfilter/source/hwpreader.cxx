@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <deque>
@@ -34,12 +34,12 @@ extern int getRepFamilyName(const char* , char *, double &ratio);
 #include <iostream>
 #include <locale.h>
 #include <sal/types.h>
-// #i42367# prevent MS compiler from using system locale for parsing
+
 #ifdef _MSC_VER
 #pragma setlocale("C")
 #endif
 
-// To be shorten source code by realking
+
 #define hconv(x)        OUString(hstr2ucsstr(x).c_str())
 #define ascii(x)        OUString::createFromAscii(x)
 #define rstartEl(x,y)   do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->startElement(x,y); } while(false)
@@ -47,13 +47,13 @@ extern int getRepFamilyName(const char* , char *, double &ratio);
 #define rchars(x)       do { if (m_rxDocumentHandler.is()) m_rxDocumentHandler->characters(x); } while(false)
 #define padd(x,y,z)     pList->addAttribute(x,y,z)
 #define Double2Str(x)   OUString::number((double)(x))
-#define WTI(x)          ((double)(x) / 1800.)     // unit => inch
-#define WTMM(x)     ((double)(x) / 1800. * 25.4)  // unit => mm
-#define WTSM(x)     ((int)((x) / 1800. * 2540))   // unit ==> 1/100 mm
+#define WTI(x)          ((double)(x) / 1800.)     
+#define WTMM(x)     ((double)(x) / 1800. * 25.4)  
+#define WTSM(x)     ((int)((x) / 1800. * 2540))   
 
 #define PI 3.14159265358979323846
 
-// xmloff/xmlkyd.hxx
+
 #define sXML_CDATA ascii("CDATA")
 
 #define STARTP  padd( ascii("text:style-name"), ascii("CDATA"), ascii(getPStyleName(((ParaShape *)para->GetParaShape())->index,buf))); \
@@ -154,22 +154,22 @@ sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(R
     padd(ascii("office:class"), sXML_CDATA, ascii("text"));
     padd(ascii("office:version"), sXML_CDATA, ascii("0.9"));
 
-    padd(ascii("xmlns:office"), ascii("CDATA"), ascii("http://openoffice.org/2000/office"));
-    padd(ascii("xmlns:style"), ascii("CDATA"), ascii("http://openoffice.org/2000/style"));
-    padd(ascii("xmlns:text"), ascii("CDATA"), ascii("http://openoffice.org/2000/text"));
-    padd(ascii("xmlns:table"), ascii("CDATA"), ascii("http://openoffice.org/2000/table"));
-    padd(ascii("xmlns:draw"), ascii("CDATA"), ascii("http://openoffice.org/2000/drawing"));
-    padd(ascii("xmlns:fo"), ascii("CDATA"), ascii("http://www.w3.org/1999/XSL/Format"));
-    padd(ascii("xmlns:xlink"), ascii("CDATA"), ascii("http://www.w3.org/1999/xlink"));
-    padd(ascii("xmlns:dc"), ascii("CDATA"), ascii("http://purl.org/dc/elements/1.1/"));
-    padd(ascii("xmlns:meta"), ascii("CDATA"), ascii("http://openoffice.org/2000/meta"));
-    padd(ascii("xmlns:number"), ascii("CDATA"), ascii("http://openoffice.org/2000/datastyle"));
-    padd(ascii("xmlns:svg"), ascii("CDATA"), ascii("http://www.w3.org/2000/svg"));
-    padd(ascii("xmlns:chart"), ascii("CDATA"), ascii("http://openoffice.org/2000/chart"));
-    padd(ascii("xmlns:dr3d"), ascii("CDATA"), ascii("http://openoffice.org/2000/dr3d"));
-    padd(ascii("xmlns:math"), ascii("CDATA"), ascii("http://www.w3.org/1998/Math/MathML"));
-    padd(ascii("xmlns:form"), ascii("CDATA"), ascii("http://openoffice.org/2000/form"));
-    padd(ascii("xmlns:script"), ascii("CDATA"), ascii("http://openoffice.org/2000/script"));
+    padd(ascii("xmlns:office"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:style"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:text"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:table"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:draw"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:fo"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:xlink"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:dc"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:meta"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:number"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:svg"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:chart"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:dr3d"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:math"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:form"), ascii("CDATA"), ascii("http:
+    padd(ascii("xmlns:script"), ascii("CDATA"), ascii("http:
 
     rstartEl(ascii("office:document"), rList);
     pList->clear();
@@ -533,9 +533,9 @@ void HwpReader::makeDrawMiscStyle( HWPDrawingObject *hdo )
                             else buf[j] = dirname[j];
                         }
                         buf[j] = '\0';
-                        sprintf(filename, "file:///%s%s",buf, emp->name );
+                        sprintf(filename, "file:
 #else
-                        sprintf(filename, "file://%s%s",dirname, emp->name );
+                        sprintf(filename, "file:
 #endif
                         padd( ascii("xlink:href"), sXML_CDATA, ascii(filename));
                     }
@@ -951,7 +951,7 @@ void HwpReader::makeMasterStyles()
     {
         HeaderFooter* hf = hwpfile.getHeaderFooter(i);
         pSet[hf->m_nPageNumber].bIsSet = true;
-        if( hf->type == 0 )                       // header
+        if( hf->type == 0 )                       
         {
             switch( hf->where )
             {
@@ -980,7 +980,7 @@ void HwpReader::makeMasterStyles()
                     break;
             }
         }
-        else                                      // footer
+        else                                      
         {
             switch( hf->where )
             {
@@ -1097,7 +1097,7 @@ void HwpReader::makeMasterStyles()
 
             continue;
         }
-// ------------- header ------------- //
+
         if( pPage->header )
         {
             rstartEl(ascii("style:header"), rList);
@@ -1197,7 +1197,7 @@ void HwpReader::makeMasterStyles()
             rendEl(ascii("text:p"));
             rendEl(ascii("style:header"));
         }
-// ------------- footer ------------- //
+
         if( pPage->footer )
         {
             rstartEl(ascii("style:footer"), rList);
@@ -1538,7 +1538,7 @@ void HwpReader::makePageStyle()
 
          switch( hwpinfo->paper.paper_kind )
          {
-              case 3:                                   // A4
+              case 3:                                   
                     if( hwpinfo->paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("210mm"));
@@ -1550,7 +1550,7 @@ void HwpReader::makePageStyle()
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("297mm"));
                     }
                     break;
-              case 4:                                   // 80 column
+              case 4:                                   
                     if( hwpinfo->paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("8.5inch"));
@@ -1562,7 +1562,7 @@ void HwpReader::makePageStyle()
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("11inch"));
                     }
                     break;
-              case 5:                                   // B5
+              case 5:                                   
                     if( hwpinfo->paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("176mm"));
@@ -1574,7 +1574,7 @@ void HwpReader::makePageStyle()
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("250mm"));
                     }
                     break;
-              case 6:                                   // B4
+              case 6:                                   
                     if( hwpinfo->paper.paper_direction )
                     {
                          padd(ascii("fo:page-height"),sXML_CDATA, ascii("250mm"));
@@ -1851,7 +1851,7 @@ void HwpReader::makeTStyle(CharShape * cshape)
 
 void HwpReader::makeTableStyle(Table *tbl)
 {
-// --------------- table ---------------- //
+
     TxtBox *hbox = tbl->box;
 
     padd(ascii("style:name"), sXML_CDATA,
@@ -1868,7 +1868,7 @@ void HwpReader::makeTableStyle(Table *tbl)
     rendEl(ascii("style:properties"));
     rendEl(ascii("style:style"));
 
-// --------------- column ---------------- //
+
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
@@ -1884,7 +1884,7 @@ void HwpReader::makeTableStyle(Table *tbl)
         rendEl(ascii("style:style"));
     }
 
-// --------------- row ---------------- //
+
     for (size_t i = 0 ; i < tbl->rows.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.row%" SAL_PRI_SIZET "u",hbox->style.boxnum, i + 1);
@@ -1900,7 +1900,7 @@ void HwpReader::makeTableStyle(Table *tbl)
         rendEl(ascii("style:style"));
     }
 
-// --------------- cell --------------------- //
+
     for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
     {
         TCell *tcell = *it;
@@ -2027,7 +2027,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                 break;
         }
         long color;
-// invisible line
+
         if( hdo->property.line_color > 0xffffff )
         {
             padd(ascii("draw:stroke"), sXML_CDATA, ascii("none") );
@@ -2109,12 +2109,12 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
 
             color = hdo->property.fill_color;
 
-            if( hdo->property.flag >> 18 & 0x01 ) // bitmap pattern
+            if( hdo->property.flag >> 18 & 0x01 ) 
             {
                 padd(ascii("draw:fill"), sXML_CDATA, ascii("bitmap"));
                 padd(ascii("draw:fill-image-name"), sXML_CDATA,
                     ascii(Int2Str(hdo->index, "fillimage%d", buf)));
-                                                  // bitmap resizing
+                                                  
                 if( hdo->property.flag >> 3 & 0x01 )
                 {
                     padd(ascii("style:repeat"), sXML_CDATA, ascii("stretch"));
@@ -2134,7 +2134,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                 }
 
             }
-                                                  // Gradation
+                                                  
             else if( hdo->property.flag >> 16 & 0x01 )
             {
                 padd(ascii("draw:fill"), sXML_CDATA, ascii("gradient"));
@@ -2144,7 +2144,7 @@ void HwpReader::makeDrawStyle( HWPDrawingObject * hdo, FBoxStyle * fstyle)
                     ascii(Int2Str(hdo->property.nstep, "%d", buf)));
 
             }
-                                                  // Hatching
+                                                  
             else if( hdo->property.pattern_type >> 24 & 0x01 )
             {
                 padd(ascii("draw:fill"), sXML_CDATA, ascii("hatch"));
@@ -2418,21 +2418,21 @@ void HwpReader::makeFStyle(FBoxStyle * fstyle)
     }
     switch( fstyle->boxtype )
     {
-        case 'X' :                                // txtbox
-        case 'E' :                                // equation
-        case 'B' :                                // button
-        case 'O' :                                // other
-        case 'T' :                                // table
+        case 'X' :                                
+        case 'E' :                                
+        case 'B' :                                
+        case 'O' :                                
+        case 'T' :                                
             padd(ascii("style:name"), sXML_CDATA,
                 ascii(Int2Str(fstyle->boxnum, "Txtbox%d", buf)));
             padd(ascii("style:family"), sXML_CDATA, ascii("graphics"));
             break;
-        case 'G' :                                // graphics
+        case 'G' :                                
             padd(ascii("style:name"), sXML_CDATA,
                 ascii(Int2Str(fstyle->boxnum, "G%d", buf)));
             padd(ascii("style:family"), sXML_CDATA, ascii("graphics"));
             break;
-        case 'L' :                                // line TODO : all
+        case 'L' :                                
             padd(ascii("style:name"), sXML_CDATA,
                 ascii(Int2Str(fstyle->boxnum, "L%d", buf)));
             padd( ascii("style:family") , sXML_CDATA , ascii("paragraph") );
@@ -2955,15 +2955,15 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     makeChars(str);
                     makeBookmark((Bookmark *) para->hhstr[n]);
                     break;
-                case CH_DATE_FORM:                // 7
+                case CH_DATE_FORM:                
                     break;
-                case CH_DATE_CODE:                // 8
+                case CH_DATE_CODE:                
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
                     makeDateCode((DateCode *) para->hhstr[n]);
                     break;
-                case CH_TAB:                      // 9
+                case CH_TAB:                      
                     if( !pstart ) {STARTP;}
                     if (str.size() > 0)
                     {
@@ -2995,19 +2995,19 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     }
                     switch (hbox->type)
                     {
-                        case TBL_TYPE:            // table
-                        case TXT_TYPE:            // text box
-                        case EQU_TYPE:            // formula
+                        case TBL_TYPE:            
+                        case TXT_TYPE:            
+                        case EQU_TYPE:            
                             makeTextBox(hbox);
                             break;
-                        case BUTTON_TYPE:         // text button
-                        case HYPERTEXT_TYPE:      // hypertext
+                        case BUTTON_TYPE:         
+                        case HYPERTEXT_TYPE:      
                             makeHyperText(hbox);
                             break;
                     }
                     break;
                 }
-                case CH_PICTURE:                  // 11
+                case CH_PICTURE:                  
                 {
                     Picture *hbox = (Picture *) para->hhstr[n];
                     if( hbox->style.anchor_type == 0 )
@@ -3029,7 +3029,7 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     makePicture(hbox);
                     break;
                 }
-                case CH_LINE:                     // 14
+                case CH_LINE:                     
                 {
                     Line *hbox = (Line *) para->hhstr[n];
                     if (str.size() > 0)
@@ -3044,29 +3044,29 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     pstart = true;
                     break;
                 }
-                case CH_HIDDEN:                   // 15
+                case CH_HIDDEN:                   
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
                     makeHidden((Hidden *) para->hhstr[n]);
                     break;
-                case CH_FOOTNOTE:                 // 17
+                case CH_FOOTNOTE:                 
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
                     makeFootnote((Footnote *) para->hhstr[n]);
                     break;
-                case CH_AUTO_NUM:                 // 18
+                case CH_AUTO_NUM:                 
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
                     makeAutoNum((AutoNum *) para->hhstr[n]);
                     break;
-                case CH_NEW_NUM:                  // 19 -skip
+                case CH_NEW_NUM:                  
                     break;
-                case CH_PAGE_NUM_CTRL:            // 21
+                case CH_PAGE_NUM_CTRL:            
                     break;
-                case CH_MAIL_MERGE:               // 22
+                case CH_MAIL_MERGE:               
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
@@ -3074,7 +3074,7 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     break;
                 case CH_COMPOSE:                  /* 23 - 글자겹침 */
                     break;
-                case CH_HYPHEN:                   // 24
+                case CH_HYPHEN:                   
                     break;
                 case CH_TOC_MARK:                 /* 25 아래의 3개는 작업해야 한다. */
                     if( !pstart ) {STARTP;}
@@ -3082,13 +3082,13 @@ void HwpReader::make_text_p3(HWPPara * para,sal_Bool bParaStart)
                     makeChars(str);
                     makeTocMark((TocMark *) para->hhstr[n]);
                     break;
-                case CH_INDEX_MARK:               // 26
+                case CH_INDEX_MARK:               
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
                     makeIndexMark((IndexMark *) para->hhstr[n]);
                     break;
-                case CH_OUTLINE:                  // 28
+                case CH_OUTLINE:                  
                     if( !pstart ) {STARTP;}
                     if( !tstart ) {STARTT;}
                     makeChars(str);
@@ -3386,7 +3386,7 @@ void HwpReader::makeDateFormat(DateCode * hbox)
                 pList->clear();
                 rendEl(ascii("number:am-pm"));
                 break;
-            case '~':                             // Chinese Locale
+            case '~':                             
                 break;
             default:
                 hchar sbuf[2];
@@ -3432,7 +3432,7 @@ void HwpReader::makeTable(TxtBox * hbox)
     pList->clear();
 
     Table *tbl = hbox->m_pTable;
-// ----------- column ---------------- //
+
     for (size_t i = 0 ; i < tbl->columns.nCount -1 ; i++)
     {
         sprintf(buf,"Table%d.%c",hbox->style.boxnum, static_cast<char>('A'+i));
@@ -3442,7 +3442,7 @@ void HwpReader::makeTable(TxtBox * hbox)
         rendEl(ascii("table:table-column"));
     }
 
-// ----------- cell ---------------- //
+
     int j = -1, k = -1;
     for (std::list<TCell*>::iterator it = tbl->cells.begin(), aEnd = tbl->cells.end(); it != aEnd; ++it)
     {
@@ -3454,7 +3454,7 @@ void HwpReader::makeTable(TxtBox * hbox)
                 rendEl(ascii("table:table-row"));
                 k = j;
             }
-// --------------- row ---------------- //
+
             sprintf(buf,"Table%d.row%d",hbox->style.boxnum, tcell->nRowIndex + 1);
             padd(ascii("table:style-name"), sXML_CDATA, ascii( buf ));
             rstartEl(ascii("table:table-row"), rList);
@@ -3601,11 +3601,11 @@ void HwpReader::makeTextBox(TxtBox * hbox)
         {
             parsePara(hbox->caption.front());
         }
-        if( hbox->type == TBL_TYPE)               // Is Table
+        if( hbox->type == TBL_TYPE)               
         {
             makeTable(hbox);
         }
-        else                                      // Is TextBox
+        else                                      
         {
             parsePara(hbox->plists[0].front());
         }
@@ -3615,7 +3615,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             parsePara(hbox->caption.front());
         }
         rendEl(ascii("draw:text-box"));
-// Caption exist and it is text-box
+
         if( hbox->style.cap_len > 0 && hbox->type == TXT_TYPE)
         {
             rendEl( ascii("text:p"));
@@ -3626,7 +3626,7 @@ void HwpReader::makeTextBox(TxtBox * hbox)
             rendEl( ascii("draw:text-box"));
         }
     }
-    else                                          // is Formula
+    else                                          
     {
         rstartEl(ascii("draw:object"), rList);
         pList->clear();
@@ -3862,7 +3862,7 @@ void HwpReader::makePicture(Picture * hbox)
 
             if ( hbox->pictype == PICTYPE_FILE ){
 #ifdef _WIN32
-                sprintf(buf, "file:///%s", hbox->picinfo.picun.path );
+                sprintf(buf, "file:
                 padd(ascii("xlink:href"), sXML_CDATA, (hconv(kstr2hstr((uchar *) buf).c_str())));
 #else
                 padd(ascii("xlink:href"), sXML_CDATA,
@@ -4001,7 +4001,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                 bIsRotate = sal_False;
             if( (drawobj->property.flag & HWPDO_FLAG_ROTATION) &&
                     (drawobj->property.parall.pt[0].y != drawobj->property.parall.pt[1].y) &&
-                    //(drawobj->type == HWPDO_RECT || drawobj->type == HWPDO_ADVANCED_ELLIPSE || drawobj->type == HWPDO_ADVANCED_ARC )
+                    
                     (drawobj->type == HWPDO_RECT || drawobj->type == HWPDO_ADVANCED_ELLIPSE )
                     )
             {
@@ -4137,10 +4137,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     rstartEl(ascii("draw:rect"), rList);
                     pList->clear();
                     if( (drawobj->property.flag & HWPDO_FLAG_AS_TEXTBOX) &&
-                        drawobj->property.pPara ) // As Textbox
+                        drawobj->property.pPara ) 
                     {
                         HWPPara *pPara = drawobj->property.pPara;
-                                //parsePara(pPara);
+                                
                         while(pPara)
                         {
                             make_text_p1( pPara );
@@ -4185,10 +4185,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     rstartEl(ascii("draw:ellipse"), rList);
                     pList->clear();
                     if( drawobj->property.flag >> 19 & 0x01 &&
-                        drawobj->property.pPara ) // As Textbox
+                        drawobj->property.pPara ) 
                     {
                         HWPPara *pPara = drawobj->property.pPara;
-                                //parsePara(pPara);
+                                
                         while(pPara)
                         {
                             make_text_p1( pPara );
@@ -4295,10 +4295,10 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     rstartEl(ascii("draw:ellipse"), rList);
                     pList->clear();
                     if( drawobj->property.flag >> 19 & 0x01 &&
-                        drawobj->property.pPara ) // As Textbox
+                        drawobj->property.pPara ) 
                     {
                         HWPPara *pPara = drawobj->property.pPara;
-                                //parsePara(pPara);
+                                
                         while(pPara)
                         {
                             make_text_p1( pPara );
@@ -4360,7 +4360,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                               if( bIsNatural == sal_False ){
                                   PeriodicSpline(n, tarr, xarr, xb, carr, darr);
-                                  // prevent memory leak
+                                  
                                   delete[] carr;
                                   carr = 0;
                                   delete[] darr;
@@ -4369,7 +4369,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                               }
                               else{
                                   NaturalSpline(n, tarr, xarr, xb, carr, darr);
-                                  // prevent memory leak
+                                  
                                   delete[] carr;
                                   carr = 0;
                                   delete[] darr;
@@ -4411,7 +4411,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
 
                     rstartEl(ascii("draw:path"), rList);
                     pList->clear();
-                                                  // As Textbox
+                                                  
                     if( drawobj->property.flag >> 19 & 0x01 && drawobj->property.pPara )
                     {
                         HWPPara *pPara = drawobj->property.pPara;
@@ -4475,11 +4475,11 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                         rstartEl(ascii("draw:polygon"), rList);
                         pList->clear();
                         if( drawobj->property.flag >> 19 & 0x01 &&
-                                                  // As Textbox
+                                                  
                             drawobj->property.pPara )
                         {
                             HWPPara *pPara = drawobj->property.pPara;
-                            //  parsePara(pPara);
+                            
                             while(pPara)
                             {
                                 make_text_p1( pPara );
@@ -4493,11 +4493,11 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                         rstartEl(ascii("draw:polyline"), rList);
                         pList->clear();
                         if( drawobj->property.flag >> 19 & 0x01 &&
-                                                  // As Textbox
+                                                  
                             drawobj->property.pPara )
                         {
                             HWPPara *pPara = drawobj->property.pPara;
-                                //parsePara(pPara);
+                                
                             while(pPara)
                             {
                                 make_text_p1( pPara );
@@ -4539,7 +4539,7 @@ void HwpReader::makePictureDRAW(HWPDrawingObject *drawobj, Picture * hbox)
                     pList->clear();
 
                     HWPPara *pPara = drawobj->u.textbox.h;
-                                //parsePara(pPara);
+                                
                     while(pPara)
                     {
                         make_text_p1( pPara );

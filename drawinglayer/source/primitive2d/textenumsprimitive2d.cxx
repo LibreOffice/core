@@ -46,7 +46,7 @@ namespace drawinglayer
                 case UNDERLINE_BOLDDASHDOT:     return TEXT_LINE_BOLDDASHDOT;
                 case UNDERLINE_BOLDDASHDOTDOT:  return TEXT_LINE_BOLDDASHDOTDOT;
                 case UNDERLINE_BOLDWAVE:        return TEXT_LINE_BOLDWAVE;
-                // FontUnderline_FORCE_EQUAL_SIZE, UNDERLINE_DONTKNOW, UNDERLINE_NONE
+                
                 default:                        return TEXT_LINE_NONE;
             }
         }
@@ -85,7 +85,7 @@ namespace drawinglayer
                 case STRIKEOUT_BOLD:    return TEXT_STRIKEOUT_BOLD;
                 case STRIKEOUT_SLASH:   return TEXT_STRIKEOUT_SLASH;
                 case STRIKEOUT_X:       return TEXT_STRIKEOUT_X;
-                // FontStrikeout_FORCE_EQUAL_SIZE, STRIKEOUT_NONE, STRIKEOUT_DONTKNOW
+                
                 default:                return TEXT_STRIKEOUT_NONE;
             }
         }
@@ -103,7 +103,7 @@ namespace drawinglayer
             }
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

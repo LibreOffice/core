@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "unotools/configitem.hxx"
@@ -85,10 +85,10 @@ namespace utl{
             ConfigChangeListener_Impl(ConfigItem& rItem, const Sequence< OUString >& rNames);
             ~ConfigChangeListener_Impl();
 
-        //XChangesListener
+        
         virtual void SAL_CALL changesOccurred( const ChangesEvent& Event ) throw(RuntimeException);
 
-        //XEventListener
+        
         virtual void SAL_CALL disposing( const EventObject& Source ) throw(RuntimeException);
     };
 }
@@ -123,14 +123,14 @@ static bool lcl_Find(
         const OUString* pCheckPropertyNames,
         sal_Int32 nLength)
 {
-    //return true if the path is completely correct or if it is longer
-    //i.e ...Print/Content/Graphic and .../Print
+    
+    
     for(sal_Int32 nIndex = 0; nIndex < nLength; nIndex++)
         if( isPrefixOfConfigurationPath(rTemp, pCheckPropertyNames[nIndex]) )
             return true;
     return false;
 }
-//-----------------------------------------------------------------------------
+
 void ConfigChangeListener_Impl::changesOccurred( const ChangesEvent& rEvent ) throw(RuntimeException)
 {
     const ElementChange* pElementChanges = rEvent.Changes.getConstArray();
@@ -186,9 +186,9 @@ ConfigItem::~ConfigItem()
 
 void ConfigItem::CallNotify( const com::sun::star::uno::Sequence<OUString>& rPropertyNames )
 {
-    // the call is forwarded to the virtual Notify() method
-    // it is pure virtual, so all classes deriving from ConfigItem have to decide how they
-    // want to notify listeners
+    
+    
+    
     if(!IsInValueChange() || m_bEnableInternalNotification)
         Notify(rPropertyNames);
 }
@@ -197,39 +197,39 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
                                                 const   Sequence< Any >&        lInValues   ,
                                                         Sequence< Any >&        lOutValues  )
 {
-    // Safe impossible cases.
-    // This method should be called for special ConfigItem-mode only!
+    
+    
     OSL_ENSURE( ((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_packLocalizedProperties()\nWrong call of this method detected!\n" );
 
-    sal_Int32                   nSourceCounter      ;   // used to step during input lists
-    sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
-    sal_Int32                   nDestinationCounter ;   // actual position in output lists
-    sal_Int32                   nPropertyCounter    ;   // counter of inner loop for Sequence< PropertyValue >
-    sal_Int32                   nPropertiesSize     ;   // marks end of inner loop
-    Sequence< OUString >        lPropertyNames      ;   // list of all locales for localized entry
-    Sequence< PropertyValue >   lProperties         ;   // localized values of an configuration entry packed for return
-    Reference< XInterface >     xLocalizedNode      ;   // if cfg entry is localized ... lInValues contains an XInterface!
+    sal_Int32                   nSourceCounter      ;   
+    sal_Int32                   nSourceSize         ;   
+    sal_Int32                   nDestinationCounter ;   
+    sal_Int32                   nPropertyCounter    ;   
+    sal_Int32                   nPropertiesSize     ;   
+    Sequence< OUString >        lPropertyNames      ;   
+    Sequence< PropertyValue >   lProperties         ;   
+    Reference< XInterface >     xLocalizedNode      ;   
 
-    // Optimise follow algorithm ... A LITTLE BIT :-)
-    // There exist two different possibilities:
-    //  i ) There exist no localized entries ...                        =>  size of lOutValues will be the same like lInNames/lInValues!
-    //  ii) There exist some (mostly one or two) localized entries ...  =>  size of lOutValues will be the same like lInNames/lInValues!
-    //  ... Why? If a localized value exist - the any is filled with an XInterface object (is a SetNode-service).
-    //      We read all his child nodes and pack it into Sequence< PropertyValue >.
-    //      The result list we pack into the return any. We never change size of lists!
+    
+    
+    
+    
+    
+    
+    
     nSourceSize = lInNames.getLength();
     lOutValues.realloc( nSourceSize );
 
-    // Algorithm:
-    // Copy all names and values from in to out lists.
-    // Look for special localized entries ... You can detect it as "XInterface" packed into an Any.
-    // Use this XInterface-object to read all localized values and pack it into Sequence< PropertValue >.
-    // Add this list to out lists then.
+    
+    
+    
+    
+    
 
     nDestinationCounter = 0;
     for( nSourceCounter=0; nSourceCounter<nSourceSize; ++nSourceCounter )
     {
-        // If item a special localized one ... convert and pack it ...
+        
         if( lInValues[nSourceCounter].getValueTypeName() == "com.sun.star.uno.XInterface" )
         {
             lInValues[nSourceCounter] >>= xLocalizedNode;
@@ -243,7 +243,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
                 for( nPropertyCounter=0; nPropertyCounter<nPropertiesSize; ++nPropertyCounter )
                 {
                     #if OSL_DEBUG_LEVEL > 1
-                    // Sometimes it's better to see what's going on :-)
+                    
                     OUString sPropName   = lInNames[nSourceCounter];
                     OUString sLocaleName = lPropertyNames[nPropertyCounter];
                     #endif
@@ -256,7 +256,7 @@ void ConfigItem::impl_packLocalizedProperties(  const   Sequence< OUString >&   
                 lOutValues[nDestinationCounter] <<= lProperties;
             }
         }
-        // ... or copy normal items to return lists directly.
+        
         else
         {
             lOutValues[nDestinationCounter] = lInValues[nSourceCounter];
@@ -270,40 +270,40 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
                                                             Sequence< OUString >&   lOutNames   ,
                                                             Sequence< Any >&        lOutValues  )
 {
-    // Safe impossible cases.
-    // This method should be called for special ConfigItem-mode only!
+    
+    
     OSL_ENSURE( ((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES), "ConfigItem::impl_unpackLocalizedProperties()\nWrong call of this method detected!\n" );
 
-    sal_Int32                   nSourceCounter      ;   // used to step during input lists
-    sal_Int32                   nSourceSize         ;   // marks end of loop over input lists
-    sal_Int32                   nDestinationCounter ;   // actual position in output lists
-    sal_Int32                   nPropertyCounter    ;   // counter of inner loop for Sequence< PropertyValue >
-    sal_Int32                   nPropertiesSize     ;   // marks end of inner loop
-    OUString                    sNodeName           ;   // base name of node ( e.g. "UIName/" ) ... expand to locale ( e.g. "UIName/de" )
-    Sequence< PropertyValue >   lProperties         ;   // localized values of an configuration entry getted from lInValues-Any
+    sal_Int32                   nSourceCounter      ;   
+    sal_Int32                   nSourceSize         ;   
+    sal_Int32                   nDestinationCounter ;   
+    sal_Int32                   nPropertyCounter    ;   
+    sal_Int32                   nPropertiesSize     ;   
+    OUString                    sNodeName           ;   
+    Sequence< PropertyValue >   lProperties         ;   
 
-    // Optimise follow algorithm ... A LITTLE BIT :-)
-    // There exist two different possibilities:
-    //  i ) There exist no localized entries ...                        =>  size of lOutNames/lOutValues will be the same like lInNames/lInValues!
-    //  ii) There exist some (mostly one or two) localized entries ...  =>  size of lOutNames/lOutValues will be some bytes greater then lInNames/lInValues.
-    //  =>  I think we should make it fast for i). ii) is a special case and mustn't be SOOOO... fast.
-    //      We should reserve same space for output list like input ones first.
-    //      Follow algorithm looks for these borders and change it for ii) only!
-    //      It will be faster then a "realloc()" call in every loop ...
+    
+    
+    
+    
+    
+    
+    
+    
     nSourceSize = lInNames.getLength();
 
     lOutNames.realloc   ( nSourceSize );
     lOutValues.realloc  ( nSourceSize );
 
-    // Algorithm:
-    // Copy all names and values from const to return lists.
-    // Look for special localized entries ... You can detect it as Sequence< PropertyValue > packed into an Any.
-    // Split it ... insert PropertyValue.Name to lOutNames and PropertyValue.Value to lOutValues.
+    
+    
+    
+    
 
     nDestinationCounter = 0;
     for( nSourceCounter=0; nSourceCounter<nSourceSize; ++nSourceCounter )
     {
-        // If item a special localized one ... split it and insert his parts to output lists ...
+        
         if( lInValues[nSourceCounter].getValueType() == ::getCppuType( (const Sequence< PropertyValue >*)NULL ) )
         {
             lInValues[nSourceCounter] >>= lProperties;
@@ -324,7 +324,7 @@ void ConfigItem::impl_unpackLocalizedProperties(    const   Sequence< OUString >
                 ++nDestinationCounter;
             }
         }
-        // ... or copy normal items to return lists directly.
+        
         else
         {
             if( (nDestinationCounter+1) > lOutNames.getLength() )
@@ -344,17 +344,17 @@ Sequence< sal_Bool > ConfigItem::GetReadOnlyStates(const com::sun::star::uno::Se
 {
     sal_Int32 i;
 
-    // size of return list is fix!
-    // Every item must match to length of incoming name list.
+    
+    
     sal_Int32 nCount = rNames.getLength();
     Sequence< sal_Bool > lStates(nCount);
 
-    // We must be shure to return a valid information everytime!
-    // Set default to non readonly ... similar to the configuration handling of this property.
+    
+    
     for ( i=0; i<nCount; ++i)
         lStates[i] = sal_False;
 
-    // no access - no information ...
+    
     Reference< XHierarchicalNameAccess > xHierarchyAccess = GetTree();
     if (!xHierarchyAccess.is())
         return lStates;
@@ -444,7 +444,7 @@ Sequence< Any > ConfigItem::GetProperties(const Sequence< OUString >& rNames)
             }
         }
 
-        // In special mode "ALL_LOCALES" we must convert localized values to Sequence< PropertyValue >.
+        
         if((m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES)
         {
             Sequence< Any > lValues;
@@ -471,10 +471,10 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         sal_Int32               nNameCount      ;
         if(( m_nMode & CONFIG_MODE_ALL_LOCALES ) == CONFIG_MODE_ALL_LOCALES )
         {
-            // If ConfigItem works in "ALL_LOCALES"-mode ... we must support a Sequence< PropertyValue >
-            // as value of an localized configuration entry!
-            // How we can do that?
-            // We must split all PropertyValues to "Sequence< OUString >" AND "Sequence< Any >"!
+            
+            
+            
+            
             impl_unpackLocalizedProperties( rNames, rValues, lNames, lValues );
             pNames      = lNames.getConstArray  ();
             pValues     = lValues.getConstArray ();
@@ -482,8 +482,8 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
         }
         else
         {
-            // This is the normal mode ...
-            // Use given input lists directly.
+            
+            
             pNames      = rNames.getConstArray  ();
             pValues     = rValues.getConstArray ();
             nNameCount  = rNames.getLength      ();
@@ -511,7 +511,7 @@ bool ConfigItem::PutProperties( const Sequence< OUString >& rNames,
                         else
                             bRet = false;
                 }
-                else //direct value
+                else 
                 {
                     xTopNodeReplace->replaceByName(sProperty, pValues[i]);
                 }
@@ -584,7 +584,7 @@ static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFor
     switch (_eFormat)
     {
     case CONFIG_NAME_LOCAL_NAME:
-        // unaltered - this is our input format
+        
         break;
 
     case CONFIG_NAME_FULL_PATH:
@@ -605,7 +605,7 @@ static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFor
             }
         }
         OSL_FAIL("Cannot create absolute paths: missing interface");
-        // make local paths instaed
+        
 
     case CONFIG_NAME_LOCAL_PATH:
         {
@@ -657,7 +657,7 @@ static void lcl_normalizeLocalNames(Sequence< OUString >& _rNames, ConfigNameFor
 
 Sequence< OUString > ConfigItem::GetNodeNames(const OUString& rNode)
 {
-    ConfigNameFormat const eDefaultFormat = CONFIG_NAME_LOCAL_NAME; // CONFIG_NAME_DEFAULT;
+    ConfigNameFormat const eDefaultFormat = CONFIG_NAME_LOCAL_NAME; 
 
     return GetNodeNames(rNode, eDefaultFormat);
 }
@@ -764,14 +764,14 @@ bool ConfigItem::ClearNodeElements(const OUString& rNode, Sequence< OUString >& 
     }
     return bRet;
 }
-//----------------------------------------------------------------------------
+
 static inline
 OUString lcl_extractSetPropertyName( const OUString& rInPath, const OUString& rPrefix )
 {
     OUString const sSubPath = dropPrefixFromConfigurationPath( rInPath, rPrefix);
     return extractFirstFromConfigurationPath( sSubPath );
 }
-//----------------------------------------------------------------------------
+
 static
 Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue >& rValues, const OUString& rPrefix )
 {
@@ -800,7 +800,7 @@ Sequence< OUString > lcl_extractSetPropertyNames( const Sequence< PropertyValue 
     return aSubNodeNames;
 }
 
-// Add or change properties
+
 bool ConfigItem::SetSetProperties(
     const OUString& rNode, Sequence< PropertyValue > rValues)
 {
@@ -839,7 +839,7 @@ bool ConfigItem::SetSetProperties(
                         Any aVal; aVal <<= xInst;
                         xCont->insertByName(aSubNodeNames[j], aVal);
                     }
-                    //set values
+                    
                 }
                 try
                 {
@@ -865,7 +865,7 @@ bool ConfigItem::SetSetProperties(
             }
             else
             {
-                //if no factory is available then the node contains basic data elements
+                
                 const PropertyValue* pValues = rValues.getConstArray();
                 for(int nValue = 0; nValue < rValues.getLength();nValue++)
                 {
@@ -922,7 +922,7 @@ bool ConfigItem::ReplaceSetProperties(
             if(!xCont.is())
                 return false;
 
-            // JB: Change: now the same name handling for sets of simple values
+            
             const Sequence< OUString > aSubNodeNames = lcl_extractSetPropertyNames(rValues, rNode);
             const OUString* pSubNodeNames = aSubNodeNames.getConstArray();
             const sal_Int32 nSubNodeCount = aSubNodeNames.getLength();
@@ -930,7 +930,7 @@ bool ConfigItem::ReplaceSetProperties(
             Reference<XSingleServiceFactory> xFac(xCont, UNO_QUERY);
             const bool isSimpleValueSet = !xFac.is();
 
-            //remove unknown members first
+            
             {
                 const Sequence<OUString> aContainerSubNodes = xCont->getElementNames();
                 const OUString* pContainerSubNodes = aContainerSubNodes.getConstArray();
@@ -957,13 +957,13 @@ bool ConfigItem::ReplaceSetProperties(
                         {
                             try
                             {
-                                // #i37322#: fallback action: replace with <void/>
+                                
                                 xCont->replaceByName(pContainerSubNodes[nContSub], Any());
-                                // fallback successful: continue looping
+                                
                                 continue;
                             }
                             catch (Exception &)
-                            {} // propagate original exception, if fallback fails
+                            {} 
                         }
                         throw;
                     }
@@ -972,13 +972,13 @@ bool ConfigItem::ReplaceSetProperties(
                 CATCH_INFO("Exception from commitChanges(): ")
             }
 
-            if(xFac.is()) // !isSimpleValueSet
+            if(xFac.is()) 
             {
                 for(sal_Int32 j = 0; j < nSubNodeCount; j++)
                 {
                     if(!xCont->hasByName(pSubNodeNames[j]))
                     {
-                        //create if not available
+                        
                         Reference<XInterface> xInst = xFac->createInstance();
                         Any aVal; aVal <<= xInst;
                         xCont->insertByName(pSubNodeNames[j], aVal);
@@ -1007,7 +1007,7 @@ bool ConfigItem::ReplaceSetProperties(
             {
                 const PropertyValue* pValues = rValues.getConstArray();
 
-                //if no factory is available then the node contains basic data elements
+                
                 for(int nValue = 0; nValue < rValues.getLength();nValue++)
                 {
                     try
@@ -1077,7 +1077,7 @@ bool ConfigItem::AddNode(const OUString& rNode, const OUString& rNewNode)
             }
             else
             {
-                //if no factory is available then the node contains basic data elements
+                
                 try
                 {
                     if(!xCont->hasByName(rNewNode))

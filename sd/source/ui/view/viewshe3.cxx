@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ViewShell.hxx"
@@ -106,7 +106,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
                         nFamily = 2;
                     else if(eFamily == SD_STYLE_FAMILY_CELL )
                         nFamily = 3;
-                    else // SD_STYLE_FAMILY_PSEUDO
+                    else 
                         nFamily = 5;
 
                     GetDocSh()->SetStyleFamily(nFamily);
@@ -141,8 +141,8 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(bActivate)
         {
-            // Set the necessary string like in
-            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
+            
+            
             OUString aTmp(SVT_RESSTR(STR_UNDO));
             aTmp += pUndoManager->GetUndoActionComment(0);
             rSet.Put(SfxStringItem(SID_UNDO, aTmp));
@@ -168,8 +168,8 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
 
         if(bActivate)
         {
-            // Set the necessary string like in
-            // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
+            
+            
             OUString aTmp(SVT_RESSTR(STR_REDO));
             aTmp += pUndoManager->GetRedoActionComment(0);
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
@@ -201,9 +201,9 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     sal_uInt8 aBckgrnd = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRND), false);
     sal_uInt8 aBckgrndObj = rLayerAdmin.GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false);
     SetOfByte aVisibleLayers;
-    // Determine the page from which to copy some values, such as layers,
-    // size, master page, to the new page.  This is usually the given page.
-    // When the given page is NULL then use the first page of the document.
+    
+    
+    
     SdPage* pTemplatePage = pPage;
     if (pTemplatePage == NULL)
         pTemplatePage = pDocument->GetSdPage(0, ePageKind);
@@ -219,14 +219,14 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     sal_Bool bIsPageBack = aVisibleLayers.IsSet(aBckgrnd);
     sal_Bool bIsPageObj = aVisibleLayers.IsSet(aBckgrndObj);
 
-    // 1. Process the arguments.
+    
     const SfxItemSet* pArgs = rRequest.GetArgs();
     if (! pArgs)
     {
-        // AutoLayouts must be ready
+        
         pDocument->StopWorkStartupDelay();
 
-        // Use the layouts of the previous page and notes page as template.
+        
         if (pTemplatePage != NULL)
         {
             eStandardLayout = pTemplatePage->GetAutoLayout();
@@ -256,7 +256,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     }
     else if (pArgs->Count() == 4)
     {
-        // AutoLayouts must be ready
+        
         pDocument->StopWorkStartupDelay();
 
         SFX_REQUEST_ARG (rRequest, pPageName, SfxStringItem, ID_VAL_PAGENAME, false);
@@ -306,7 +306,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         return NULL;
     }
 
-    // 2. Create a new page or duplicate an existing one.
+    
     View* pDrView = GetView();
     const bool bUndo = pDrView && pDrView->IsUndoEnabled();
     if( bUndo )
@@ -318,13 +318,13 @@ SdPage* ViewShell::CreateOrDuplicatePage (
         case SID_INSERTPAGE:
         case SID_INSERTPAGE_QUICK:
         case SID_INSERT_MASTER_PAGE:
-            // There are three cases.  a) pPage is not NULL: we use it as a
-            // template and create a new slide behind it. b) pPage is NULL
-            // but the document is not empty: we use the first slide/notes
-            // page as template, create a new slide after it and move it
-            // then to the head of the document. c) pPage is NULL and the
-            // document is empty: We use CreateFirstPages to create the
-            // first page of the document.
+            
+            
+            
+            
+            
+            
+            
             if (pPage == NULL)
                 if (pTemplatePage == NULL)
                 {
@@ -333,8 +333,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                 }
                 else
                 {
-                    // Create a new page with the first page as template and
-                    // insert it after the first page.
+                    
+                    
                     nNewPageIndex = pDocument->CreatePage (
                         pTemplatePage,
                         ePageKind,
@@ -345,7 +345,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                         bIsPageBack,
                         bIsPageObj,
                         nInsertPosition);
-                    // Select exactly the new page.
+                    
                     sal_uInt16 nPageCount (pDocument->GetSdPageCount(ePageKind));
                     for (sal_uInt16 i=0; i<nPageCount; i++)
                     {
@@ -354,7 +354,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
                         pDocument->GetSdPage(i, PK_NOTES)->SetSelected(
                             i == nNewPageIndex);
                     }
-                    // Move the selected page to the head of the document
+                    
                     pDocument->MovePages ((sal_uInt16)-1);
                     nNewPageIndex = 0;
                 }
@@ -372,7 +372,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
             break;
 
         case SID_DUPLICATE_PAGE:
-            // Duplication makes no sense when pPage is NULL.
+            
             if (pPage != NULL)
                 nNewPageIndex = pDocument->DuplicatePage (
                     pPage,
@@ -386,7 +386,7 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 
         default:
             DBG_WARNING("wrong slot id given to CreateOrDuplicatePage");
-            // Try to handle another slot id gracefully.
+            
     }
     SdPage* pNewPage = 0;
     if(nNewPageIndex != 0xffff)
@@ -407,6 +407,6 @@ SdPage* ViewShell::CreateOrDuplicatePage (
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

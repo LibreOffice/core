@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,32 +14,32 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "paneldecklisteners.hxx"
 #include "svtools/toolpanel/toolpaneldeck.hxx"
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
 
-    //====================================================================
-    //= PanelDeckListeners
-    //====================================================================
-    //--------------------------------------------------------------------
+
+    
+    
+    
+    
     PanelDeckListeners::PanelDeckListeners()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     PanelDeckListeners::~PanelDeckListeners()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void PanelDeckListeners::PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
@@ -52,7 +52,7 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void PanelDeckListeners::PanelRemoved( const size_t i_nPosition )
     {
         ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
@@ -65,7 +65,7 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void PanelDeckListeners::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
         ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
@@ -78,7 +78,7 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void PanelDeckListeners::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
     {
         ::std::vector< IToolPanelDeckListener* > aListeners( m_aListeners );
@@ -91,7 +91,7 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void PanelDeckListeners::Dying()
     {
         while ( !m_aListeners.empty() )
@@ -102,13 +102,13 @@ namespace svt
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void PanelDeckListeners::AddListener( IToolPanelDeckListener& i_rListener )
     {
         m_aListeners.push_back( &i_rListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void PanelDeckListeners::RemoveListener( IToolPanelDeckListener& i_rListener )
     {
         for (   ::std::vector< IToolPanelDeckListener* >::iterator lookup = m_aListeners.begin();
@@ -124,8 +124,8 @@ namespace svt
         }
     }
 
-//........................................................................
-} // namespace svt
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

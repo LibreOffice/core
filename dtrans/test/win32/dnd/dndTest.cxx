@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if defined _MSC_VER
@@ -85,8 +85,8 @@ HRESULT doTest()
 
     MultiServiceFactory= createRegistryServiceFactory( OUString(L"types.rdb"), OUString( L"services.rdb") , sal_True);
 
-    // create the MTA thread that is used to realize MTA calls to the services
-    // We create the thread and wait until the thread has created its message queue
+    
+    
     HANDLE evt= CreateEvent(NULL, FALSE, FALSE, NULL);
     DWORD threadIdMTA=0;
     HANDLE hMTAThread= CreateThread( NULL, 0, MTAFunc, &evt, 0, &threadIdMTA);
@@ -101,7 +101,7 @@ HRESULT doTest()
     RECT pos2={ 0, 205, 300, 405};
     AWindow win2( _T("DnD starting in MTA"), threadIdMTA, pos2, true);
 
-    // win3 and win4 call initialize from an MTA but they are created in an STA
+    
     RECT pos3={300,0,600,200};
     AWindow win3(_T("DnD starting in OLE STA"), threadIdMTA, pos3, false, true);
 
@@ -116,7 +116,7 @@ HRESULT doTest()
         DispatchMessage( &msg);
     }
 
-    // Shut down the MTA thread
+    
     PostThreadMessage( threadIdMTA, WM_QUIT, 0, 0);
     WaitForSingleObject(hMTAThread, INFINITE);
     CloseHandle(hMTAThread);
@@ -131,7 +131,7 @@ DWORD WINAPI MTAFunc( void* threadData)
     hr= CoInitializeEx( NULL, COINIT_MULTITHREADED);
     ATLASSERT( FAILED(hr) );
     MSG msg;
-    // force the creation of a message queue
+    
     PeekMessage(&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
     SetEvent( *(HANDLE*)threadData );
 
@@ -154,10 +154,10 @@ DWORD WINAPI MTAFunc( void* threadData)
         }
         case WM_SOURCE_STARTDRAG:
         {
-            // wParam contains necessary data
+            
             StartDragData* pData= (StartDragData*)msg.wParam;
             Sequence<DataFlavor> seq= pData->transferable->getTransferDataFlavors();
-            // have a look what flavours are supported
+            
             for( int i=0; i<seq.getLength(); i++)
             {
                 DataFlavor d= seq[i];
@@ -173,7 +173,7 @@ DWORD WINAPI MTAFunc( void* threadData)
             break;
         }
 
-        } // end switch
+        } 
 
         TranslateMessage(  &msg);
         DispatchMessage( &msg);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "doc.hxx"
@@ -34,10 +34,10 @@
 namespace
 {
 
-// Small helper class to ensure that we write to nodes.xml if nothing
-// has been explicitly specified.
-// Always use at the beginning of dumpAsXml().
-// Also, there are some functions to save typing.
+
+
+
+
 class WriterHelper
 {
 public:
@@ -100,8 +100,8 @@ void WriterHelper::writeFormatAttribute( const char* attribute, const char* form
     va_end( va );
 }
 
-// Hack: somehow conversion from "..." to va_list does
-// bomb on two string litterals in the format.
+
+
 static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
 static const char* TMP_FORMAT_I32 = "%" SAL_PRIdINT32;
 
@@ -160,8 +160,8 @@ void MarkManager::dumpAsXml( xmlTextWriterPtr w )
     writer.endElement();
     writer.endElement();
 }
-} // namespace mark
-} // namespace sw
+} 
+} 
 
 void SwFldTypes::dumpAsXml( xmlTextWriterPtr w )
 {
@@ -225,7 +225,7 @@ void SwNode::dumpAsXml( xmlTextWriterPtr w )
             break;
         case ND_STARTNODE:
         case ND_TEXTNODE:
-            abort(); // overridden
+            abort(); 
         case ND_TABLENODE:
             name = "table";
             break;
@@ -241,7 +241,7 @@ void SwNode::dumpAsXml( xmlTextWriterPtr w )
     writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
     writer.endElement();
     if( GetNodeType() == ND_ENDNODE )
-        writer.endElement(); // end start node
+        writer.endElement(); 
 }
 
 void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
@@ -283,7 +283,7 @@ void SwStartNode::dumpAsXml( xmlTextWriterPtr w )
     writer.startElement( name );
     writer.writeFormatAttribute( "ptr", "%p", this );
     writer.writeFormatAttribute( "index", TMP_FORMAT, GetIndex() );
-    // writer.endElement(); - it is a start node, so don't end, will make xml better nested
+    
 }
 
 void SwCharFmts::dumpAsXml(xmlTextWriterPtr w)
@@ -508,76 +508,76 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
             const SwPosition* pStart = pRedline->Start();
 
             writer.startElement( "swposition_start" );
-            //writer.writeFormatAttribute( "ptr", "%p", pStart );
+            
             {
                 const SwNodeIndex pStartNodeIndex = pStart->nNode;
-                //writer.startElement( "swnodeindex" );
-                //writer.writeFormatAttribute( "ptr", "%p", &pStartNodeIndex );
+                
+                
                 {
                     const SwNode&     pStartSwNode      = pStartNodeIndex.GetNode();
-                    //writer.startElement( "swnode" );
-                    //writer.writeFormatAttribute( "ptr", "%p", &pStartSwNode );
-                    //writer.writeFormatAttribute( "type", "%d", pStartSwNode.GetNodeType() );
-                    //writer.endElement( );    // swnode
+                    
+                    
+                    
+                    
                     writer.writeFormatAttribute( "swnode_type", TMP_FORMAT, pStartSwNode.GetNodeType() );
 
                     writer.writeFormatAttribute( "paragraph_index", "%d", (int)pStartNodeIndex.GetIndex() );
 
                     const SwIndex&    pStartContent   = pStart->nContent;
-                    //writer.startElement( "swindex" );
-                    //writer.writeFormatAttribute( "ptr", "%p", &pStartContent );
-                    //writer.writeFormatAttribute( "content_index", "%d", pStartContent.GetIndex() );
-                    //writer.endElement( );    // swindex
+                    
+                    
+                    
+                    
                     writer.writeFormatAttribute( "character_index", TMP_FORMAT_I32, pStartContent.GetIndex() );
                 }
-                //writer.endElement( );    // swnodeindex
+                
             }
-            writer.endElement( );    // swposition_start
+            writer.endElement( );    
 
 
             const SwPosition* pEnd;
             bool bEndIsMark = false;
             if ( pStart == pRedline->GetPoint() )
             {
-                // End = Mark
+                
                 pEnd = pRedline->GetMark();
                 bEndIsMark = true;
             }
             else
             {
-                // End = Point
+                
                 pEnd = pRedline->GetPoint();
             }
 
             writer.startElement( "swposition_end" );
-            //writer.writeFormatAttribute( "ptr", "%p", pStart );
+            
             {
                 const SwNodeIndex pEndNodeIndex = pEnd->nNode;
-                //writer.startElement( "swnodeindex" );
-                //writer.writeFormatAttribute( "ptr", "%p", &pEndNodeIndex );
+                
+                
                 {
                     const SwNode&     pEndSwNode      = pEndNodeIndex.GetNode();
-                    //writer.startElement( "swnode" );
-                    //writer.writeFormatAttribute( "ptr", "%p", &pEndSwNode );
-                    //writer.writeFormatAttribute( "type", "%d", pEndSwNode.GetNodeType() );
-                    //writer.endElement( );    // swnode
+                    
+                    
+                    
+                    
                     writer.writeFormatAttribute( "swnode_type", TMP_FORMAT, pEndSwNode.GetNodeType() );
 
                     writer.writeFormatAttribute( "paragraph_index", "%d", (int)pEndNodeIndex.GetIndex() );
 
                     const SwIndex&    pEndContent   = pEnd->nContent;
-                    //writer.startElement( "swindex" );
-                    //writer.writeFormatAttribute( "ptr", "%p", &pEndContent );
-                    //writer.writeFormatAttribute( "content_index", "%d", pEndContent.GetIndex() );
-                    //writer.endElement( );    // swindex
+                    
+                    
+                    
+                    
                     writer.writeFormatAttribute( "character_index", TMP_FORMAT_I32, pEndContent.GetIndex() );
                 }
-                //writer.endElement( );    // swnodeindex
+                
             }
             writer.writeFormatAttribute( "end_is", "%s", BAD_CAST(bEndIsMark ? "mark" : "point"));
-            writer.endElement( );    // swposition_end
+            writer.endElement( );    
 
-            //const SwRedlineData& aRedlineData = pRedline->GetRedlineData();
+            
             const SwRedlineExtraData* pExtraRedlineData = pRedline->GetExtraData();
             writer.startElement( "extra_redline_data" );
             {
@@ -593,13 +593,13 @@ void SwRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
                 else
                     writer.writeFormatAttribute( "extra_data_type", "%s", BAD_CAST( "UNKNOWN" ) );
             }
-            writer.endElement( );    // extra_redline_data
+            writer.endElement( );    
         }
 
-        writer.endElement( );    // extra_redline_data
+        writer.endElement( );    
     }
 
-    writer.endElement( );    // swredlinetbl
+    writer.endElement( );    
 }
 
 void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
@@ -626,10 +626,10 @@ void SwExtraRedlineTbl::dumpAsXml( xmlTextWriterPtr w )
             else
                 writer.writeFormatAttribute( "extra_redline_type", "%s", BAD_CAST( "UNKNOWN" ) );
         }
-        writer.endElement( );    // extra_redline_data
+        writer.endElement( );    
     }
 
-    writer.endElement( );    // swextraredlinetbl
+    writer.endElement( );    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unocrsrhelper.hxx>
@@ -125,7 +125,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
                 {
                     SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
                     if (pSdrObject)
-                    {   // hmm... needs view to verify it's in right doc...
+                    {   
                         o_rSdrObjects.push_back(pSdrObject);
                     }
                 }
@@ -135,7 +135,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
     }
 
     uno::Reference<lang::XUnoTunnel> const xTunnel(xIfc, UNO_QUERY);
-    if (!xTunnel.is()) // everything below needs tunnel
+    if (!xTunnel.is()) 
     {
         return;
     }
@@ -153,7 +153,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
             {
                 SdrObject *const pSdrObject = pSvxShape->GetSdrObject();
                 if (pSdrObject)
-                {   // hmm... needs view to verify it's in right doc...
+                {   
                     o_rSdrObjects.push_back(pSdrObject);
                 }
             }
@@ -184,8 +184,8 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         return;
     }
 
-    // check these before Range to prevent misinterpretation of text frames
-    // and cells also implement XTextRange
+    
+    
     SwXFrame *const pFrame(
         ::sw::UnoTunnelGetImplementation<SwXFrame>(xTunnel));
     if (pFrame)
@@ -219,7 +219,7 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         {
             SwTableBox * pBox = pCell->GetTblBox();
             SwTable *const pTable = SwTable::FindTable(pFrmFmt);
-            // ??? what's the benefit of setting pBox in this convoluted way?
+            
             pBox = pCell->FindBox(pTable, pBox);
             if (pBox)
             {
@@ -250,8 +250,8 @@ void GetSelectableFromAny(uno::Reference<uno::XInterface> const& xIfc,
         SwUnoCrsr const*const pUnoCrsr(pCellRange->GetTblCrsr());
         if (pUnoCrsr && pUnoCrsr->GetDoc() == &rTargetDoc)
         {
-            // probably can't copy it to o_rpPaM for this since it's
-            // a SwTableCursor
+            
+            
             o_rpTableCursor = dynamic_cast<SwUnoTableCrsr const*>(pUnoCrsr);
         }
         return;
@@ -270,14 +270,14 @@ uno::Reference<text::XTextContent>
 GetNestedTextContent(SwTxtNode & rTextNode, sal_Int32 const nIndex,
         bool const bParent)
 {
-    // these should be unambiguous because of the dummy character
+    
     SwTxtNode::GetTxtAttrMode const eMode( (bParent)
         ? SwTxtNode::PARENT : SwTxtNode::EXPAND );
     SwTxtAttr *const pMetaTxtAttr =
         rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_META, eMode);
     SwTxtAttr *const pMetaFieldTxtAttr =
         rTextNode.GetTxtAttrAt(nIndex, RES_TXTATR_METAFIELD, eMode);
-    // which is innermost?
+    
     SwTxtAttr *const pTxtAttr = (pMetaTxtAttr)
         ? ((pMetaFieldTxtAttr)
             ? ((*pMetaFieldTxtAttr->GetStart() >
@@ -306,8 +306,8 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                                         , const SwTxtNode* pNode  )
 {
     PropertyState eNewState = PropertyState_DIRECT_VALUE;
-//    PropertyState_DEFAULT_VALUE
-//    PropertyState_AMBIGUOUS_VALUE
+
+
     bool bDone = true;
     switch(rEntry.nWID)
     {
@@ -407,11 +407,11 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         break;
         case FN_UNO_NUM_LEVEL  :
         case FN_UNO_IS_NUMBER  :
-        // #i91601#
+        
         case FN_UNO_LIST_ID:
         case FN_NUMBER_NEWSTART:
         {
-            // a multi selection is not considered
+            
             const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
             if ( pTxtNd && pTxtNd->IsInList() )
             {
@@ -424,7 +424,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         sal_Bool bIsNumber = pTxtNd->IsCountedInList();
                         pAny->setValue(&bIsNumber, ::getBooleanCppuType());
                     }
-                    // #i91601#
+                    
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
                         const OUString sListId = pTxtNd->GetListId();
@@ -443,12 +443,12 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
 
                 if( pAny )
                 {
-                    // #i30838# set default values for default properties
+                    
                     if(rEntry.nWID == FN_UNO_NUM_LEVEL)
                         *pAny <<= static_cast<sal_Int16>( 0 );
                     else if(rEntry.nWID == FN_UNO_IS_NUMBER)
                         *pAny <<= false;
-                    // #i91601#
+                    
                     else if ( rEntry.nWID == FN_UNO_LIST_ID )
                     {
                         *pAny <<= OUString();
@@ -457,7 +457,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         *pAny <<= false;
                 }
             }
-            //PROPERTY_MAYBEVOID!
+            
         }
         break;
         case FN_UNO_NUM_RULES  :
@@ -480,7 +480,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             if (marks.size())
             {
                 if( pAny )
-                {   // hmm... can only return 1 here
+                {   
                     SwTOXMark & rMark =
                         static_cast<SwTOXMark &>((*marks.begin())->GetAttr());
                     const uno::Reference< text::XDocumentIndexMark > xRef =
@@ -491,7 +491,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 }
             }
             else
-                //also here - indistinguishable
+                
                 eNewState = PropertyState_DEFAULT_VALUE;
         }
         break;
@@ -546,7 +546,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                 {
                     const SwTableNode* pTblNode = pSttNode->FindTableNode();
                     SwFrmFmt* pTableFmt = (SwFrmFmt*)pTblNode->GetTable().GetFrmFmt();
-                    //SwTable& rTable = ((SwTableNode*)pSttNode)->GetTable();
+                    
                     if(FN_UNO_TEXT_TABLE == rEntry.nWID)
                     {
                         uno::Reference< XTextTable >  xTable = SwXTextTables::GetObject(*pTableFmt);
@@ -634,7 +634,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             if (marks.size())
             {
                 if( pAny )
-                {   // hmm... can only return 1 here
+                {   
                     const SwFmtRefMark& rRef = (*marks.begin())->GetRefMark();
                     uno::Reference< XTextContent >  xRef = SwXReferenceMarks::GetObject( rPam.GetDoc(), &rRef );
                     pAny->setValue(&xRef, ::getCppuType((uno::Reference<XTextContent>*)0));
@@ -687,11 +687,11 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         continue;
                     sal_uInt16 nAttrStart = *pAttr->GetStart();
                     sal_uInt16 nAttrEnd = *pAttr->GetEnd();
-                    //check if the attribute touches the selection
+                    
                     if( ( nAttrEnd > nPaMStart && nAttrStart < nPaMEnd ) ||
                         ( !nAttrStart && !nAttrEnd && !nPaMStart && !nPaMEnd ) )
                     {
-                        //check for overlapping
+                        
                         if(nAttrStart > nPaMStart ||
                                     nAttrEnd < nPaMEnd)
                         {
@@ -701,11 +701,11 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
                         }
                         else
                         {
-                            //now the attribute should start before or at the selection
-                            //and it should end at the end of the selection or behind
+                            
+                            
                             OSL_ENSURE(nAttrStart <= nPaMStart && nAttrEnd >=nPaMEnd,
                                     "attribute overlaps or is outside");
-                            //now the name of the style has to be added to the sequence
+                            
                             aCharStyles.realloc(aCharStyles.getLength() + 1);
                             OSL_ENSURE(pAttr->GetCharFmt().GetCharFmt(), "no character format set");
                             aCharStyles.getArray()[aCharStyles.getLength() - 1] =
@@ -726,7 +726,7 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
         }
         break;
         case RES_TXTATR_CHARFMT:
-        // no break here!
+        
         default: bDone = false;
     }
     if( bDone )
@@ -737,8 +737,8 @@ bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
 sal_Int16 IsNodeNumStart(SwPaM& rPam, PropertyState& eState)
 {
     const SwTxtNode* pTxtNd = rPam.GetNode()->GetTxtNode();
-    // correction: check, if restart value is set at the text node and use
-    // new method <SwTxtNode::GetAttrListRestartValue()> to retrieve the value
+    
+    
     if ( pTxtNd && pTxtNd->GetNumRule() && pTxtNd->IsListRestart() &&
          pTxtNd->HasAttrListRestartValue() )
     {
@@ -781,15 +781,15 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     {
                         if (pNewCharStyles[i].isEmpty())
                         {
-                            // FIXME
-                            // Is something missing/wrong here?
-                            // if condition is always false due to outer check!
+                            
+                            
+                            
                             aFmt.SetCharFmt(0);
                         }
                         else
                         {
 
-                            // get CharStyle and set the rule
+                            
                             sal_uInt16 nChCount = pDoc->GetCharFmts()->size();
                             SwCharFmt* pCharFmt = 0;
                             for(sal_uInt16 nCharFmt = 0; nCharFmt < nChCount; nCharFmt++)
@@ -807,7 +807,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                                 SfxStyleSheetBasePool* pPool = pDoc->GetDocShell()->GetStyleSheetPool();
                                 SfxStyleSheetBase* pBase;
                                 pBase = pPool->Find(pNewCharStyles[i], SFX_STYLE_FAMILY_CHAR);
-                            // shall it really be created?
+                            
                                 if(!pBase)
                                     pBase = &pPool->Make(pNewCharStyles[i], SFX_STYLE_FAMILY_PAGE);
                                 pCharFmt = ((SwDocStyleSheet*)pBase)->GetCharFmt();
@@ -816,7 +816,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                                 aFmt.SetCharFmt(pCharFmt);
                         }
                     }
-                    //Now again for fonts
+                    
                     if(
                        !pBulletFontNames[i].isEmpty() &&
                        !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
@@ -837,21 +837,21 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 }
                 UnoActionContext aAction(pDoc);
 
-                if( rPam.GetNext() != &rPam )           // Multiple selection?
+                if( rPam.GetNext() != &rPam )           
                 {
                     pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                     SwPamRanges aRangeArr( rPam );
                     SwPaM aPam( *rPam.GetPoint() );
                     for( sal_uInt16 n = 0; n < aRangeArr.Count(); ++n )
                     {
-                        // no start of a new list
+                        
                         pDoc->SetNumRule( aRangeArr.SetPam( n, aPam ), aRule, false );
                     }
                     pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
                 }
                 else
                 {
-                    // no start of a new list
+                    
                     pDoc->SetNumRule( rPam, aRule, false );
                 }
 
@@ -863,11 +863,11 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 SwNumRule* pRule = pDoc->FindNumRulePtr( pSwNum->GetCreatedNumRuleName() );
                 if(!pRule)
                     throw RuntimeException();
-                // no start of a new list
+                
                 pDoc->SetNumRule( rPam, *pRule, false );
             }
-            // #i103817#
-            // outline numbering
+            
+            
             else
             {
                 UnoActionContext aAction(pDoc);
@@ -901,7 +901,7 @@ void  getNumberingProperty(SwPaM& rPam, PropertyState& eState, Any * pAny )
 void GetCurPageStyle(SwPaM& rPaM, OUString &rString)
 {
     if (!rPaM.GetCntntNode())
-        return; // TODO: is there an easy way to get it for tables/sections?
+        return; 
     const SwPageFrm* pPage = rPaM.GetCntntNode()->getLayoutFrm(rPaM.GetDoc()->GetCurrentLayout())->FindPageFrm();
     if(pPage)
     {
@@ -921,7 +921,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
     switch(rEntry.nWID)
     {
         case FN_UNO_PARA_STYLE :
-//          lcl_SetTxtFmtColl(aValue, pUnoCrsr);
+
         break;
         case FN_UNO_PAGE_STYLE :
         break;
@@ -929,7 +929,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         {
             UnoActionContext aAction(pDoc);
 
-            if( rPam.GetNext() != &rPam )           // Multiple selection?
+            if( rPam.GetNext() != &rPam )           
             {
                 pDoc->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
                 SwPamRanges aRangeArr( rPam );
@@ -946,7 +946,7 @@ void resetCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& rPa
         case FN_UNO_NUM_LEVEL  :
         break;
         case FN_UNO_NUM_RULES:
-//          lcl_setNumberingProperty(aValue, pUnoCrsr);
+
         break;
         case FN_UNO_CHARFMT_SEQUENCE:
         {
@@ -1059,11 +1059,11 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     if( !pMed )
         return;
 
-    // this sourcecode is not responsible for the lifetime of the shell, SfxObjectShellLock should not be used
+    
     SfxObjectShellRef aRef( pDocSh );
 
-    pMed->DownLoad();   // if necessary: start the download
-    if( aRef.Is() && 1 < aRef->GetRefCount() )  // Ref still valid?
+    pMed->DownLoad();   
+    if( aRef.Is() && 1 < aRef->GetRefCount() )  
     {
         SwReader* pRdr;
         SfxItemSet* pSet =  pMed->GetItemSet();
@@ -1082,7 +1082,7 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
             SwNodeIndex aSave(  pUnoCrsr->GetPoint()->nNode, -1 );
             sal_Int32 nCntnt = pUnoCrsr->GetPoint()->nContent.GetIndex();
 
-            sal_uInt32 nErrno = pRdr->Read( *pRead );   // and paste the document
+            sal_uInt32 nErrno = pRdr->Read( *pRead );   
 
             if(!nErrno)
             {
@@ -1104,8 +1104,8 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     delete pMed;
 }
 
-// insert text and scan for CR characters in order to insert
-// paragraph breaks at those positions by calling SplitNode
+
+
 bool DocInsertStringSplitCR(
         SwDoc &rDoc,
         const SwPaM &rNewCursor,
@@ -1121,7 +1121,7 @@ bool DocInsertStringSplitCR(
                     IDocumentContentOperations::INS_EMPTYEXPAND)
             : IDocumentContentOperations::INS_EMPTYEXPAND;
 
-    // grouping done in InsertString is intended for typing, not API calls
+    
     ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     OUString aTxt;
     sal_Int32 nStartIdx = 0;
@@ -1190,7 +1190,7 @@ void makeRedline( SwPaM& rPaM,
     else
         throw lang::IllegalArgumentException();
 
-    //todo: what about REDLINE_FMTCOLL?
+    
     comphelper::SequenceAsHashMap aPropMap( rRedlineProperties );
     uno::Any aAuthorValue;
     aAuthorValue = aPropMap.getUnpackedValueOrDefault("RedlineAuthor", aAuthorValue);
@@ -1218,25 +1218,25 @@ void makeRedline( SwPaM& rPaM,
 
     SwRedlineExtraData_FormattingChanges* pRedlineExtraData = NULL;
 
-    // Read the 'Redline Revert Properties' from the parameters
+    
     uno::Sequence< beans::PropertyValue > aRevertProperties;
     uno::Any aRevertPropertiesValue;
     aRevertPropertiesValue = aPropMap.getUnpackedValueOrDefault("RedlineRevertProperties", aRevertPropertiesValue);
 
-    // Check if the value exists
+    
     if ( aRevertPropertiesValue >>= aRevertProperties )
     {
-        // sw/source/core/unocore/unoport.cxx#83 is where it's decided what map gets used for a text portion
-        // so it's PROPERTY_MAP_TEXTPORTION_EXTENSIONS, unless it's a redline portion
+        
+        
         SfxItemPropertySet const& rPropSet = (*aSwMapProvider.GetPropertySet(PROPERTY_MAP_TEXTPORTION_EXTENSIONS));
 
-        // Check if there are any properties
+        
         if (aRevertProperties.getLength())
         {
             SwDoc *const pDoc = rPaM.GetDoc();
             OUString aUnknownExMsg, aPropertyVetoExMsg;
 
-            // Build set of attributes we want to fetch
+            
             std::vector<sal_uInt16> aWhichPairs;
             std::vector<SfxItemPropertySimpleEntry const*> aEntries;
             aEntries.reserve(aRevertProperties.getLength());
@@ -1245,7 +1245,7 @@ void makeRedline( SwPaM& rPaM,
                 const OUString &rPropertyName = aRevertProperties[i].Name;
                 SfxItemPropertySimpleEntry const* pEntry = rPropSet.getPropertyMap().getByName(rPropertyName);
 
-                // Queue up any exceptions until the end ...
+                
                 if (!pEntry)
                 {
                     aUnknownExMsg += "Unknown property: '" + rPropertyName + "' ";
@@ -1258,7 +1258,7 @@ void makeRedline( SwPaM& rPaM,
                 }
                 else
                 {
-                    // FIXME: we should have some nice way of merging ranges surely ?
+                    
                     aWhichPairs.push_back(pEntry->nWID);
                     aWhichPairs.push_back(pEntry->nWID);
                 }
@@ -1267,7 +1267,7 @@ void makeRedline( SwPaM& rPaM,
 
             if (!aWhichPairs.empty())
             {
-                aWhichPairs.push_back(0); // terminate
+                aWhichPairs.push_back(0); 
                 SfxItemSet aItemSet(pDoc->GetAttrPool(), &aWhichPairs[0]);
 
                 for (size_t i = 0; i < aEntries.size(); ++i)
@@ -1441,6 +1441,6 @@ bool    SwAnyMapHelper::FillValue( sal_uInt16 nWhichId, sal_uInt16 nMemberId, co
     return bRet;
 }
 
-}//namespace SwUnoCursorHelper
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

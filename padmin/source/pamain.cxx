@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -66,7 +66,7 @@ OUString MyApp::ReadStringHook( const OUString& rStr )
 };
 
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 MyApp::Exception( sal_uInt16 nError )
 {
@@ -85,9 +85,9 @@ int MyApp::Main()
 
     EnableAutoHelpId();
 
-    //-------------------------------------------------
-    // create the global service-manager
-    //-------------------------------------------------
+    
+    
+    
     Reference< XComponentContext > xCtx;
     Reference< XMultiServiceFactory > xFactory;
     try
@@ -107,12 +107,12 @@ int MyApp::Main()
         exit( 1 );
     }
 
-    // Detect desktop environment - need to do this as early as possible
+    
     com::sun::star::uno::setCurrentContext(
         new DesktopContext( com::sun::star::uno::getCurrentContext() ) );
 
-    // Create UCB (for backwards compatibility, in case some code still uses
-    // plain createInstance w/o args directly to obtain an instance):
+    
+    
     com::sun::star::ucb::UniversalContentBroker::create(xCtx);
 
     /*

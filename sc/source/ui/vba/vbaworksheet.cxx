@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vbahelper/helperdecl.hxx>
@@ -70,7 +70,7 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 
-//zhangyun showdataform
+
 #include <sfx2/sfxdlg.hxx>
 #include "scabstdlg.hxx"
 #include "tabvwsh.hxx"
@@ -254,7 +254,7 @@ ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> xSheet, bool b
     bool bDestSheetExists = ScVbaWorksheets::nameExists (xDestDoc, aSheetName, nDest );
     bool bSheetExists = ScVbaWorksheets::nameExists (xSrcDoc, aCurrSheetName, nSrc );
 
-    // set sheet name to be newSheet name
+    
     aSheetName = aCurrSheetName;
     if ( bSheetExists && bDestSheetExists )
     {
@@ -274,7 +274,7 @@ ScVbaWorksheet::createSheetCopy(uno::Reference<excel::XWorksheet> xSheet, bool b
                 pDestDocShell->TransferTab( *pSrcDocShell, static_cast<SCTAB>(nSrc), static_cast<SCTAB>(nDest), true, true );
         }
     }
-    // return new sheet
+    
     uno::Reference< excel::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
     uno::Reference< excel::XWorksheet > xNewSheet( xApplication->Worksheets( uno::makeAny( aSheetName ) ), uno::UNO_QUERY_THROW );
     return xNewSheet;
@@ -311,7 +311,7 @@ ScVbaWorksheet::setVisible( sal_Int32 nVisible ) throw (uno::RuntimeException)
     bool bVisible = true;
     switch( nVisible )
     {
-        case xlSheetVisible: case 1:  // Excel accepts -1 and 1 for visible sheets
+        case xlSheetVisible: case 1:  
             bVisible = true;
             mbVeryHidden = false;
         break;
@@ -382,7 +382,7 @@ ScVbaWorksheet::setEnableSelection( sal_Int32 nSelection ) throw (uno::RuntimeEx
         uno::Reference< frame::XModel > xModel( getModel(), uno::UNO_QUERY_THROW );
         ScDocument* pDoc = excel::getDocShell( xModel )->GetDocument();
         ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
-        // default is xlNoSelection
+        
         sal_Bool bLockedCells = false;
         sal_Bool bUnlockedCells = false;
         if( nSelection == excel::XlEnableSelection::xlNoRestrictions )
@@ -560,7 +560,7 @@ ScVbaWorksheet::Move( const uno::Any& Before, const uno::Any& After ) throw (uno
         uno::Reference< sheet::XSheetCellCursor > xSheetCellCursor = getSheet()->createCursor( );
         uno::Reference<sheet::XUsedAreaCursor> xUsedCursor(xSheetCellCursor,uno::UNO_QUERY_THROW);
             uno::Reference< table::XCellRange > xRange1( xSheetCellCursor, uno::UNO_QUERY);
-        // #FIXME needs worksheet as parent
+        
         uno::Reference<excel::XRange> xRange =  new ScVbaRange( this, mxContext, xRange1);
         if (xRange.is())
             xRange->Select();
@@ -604,7 +604,7 @@ ScVbaWorksheet::Copy( const uno::Any& Before, const uno::Any& After ) throw (uno
 void
 ScVbaWorksheet::Paste( const uno::Any& Destination, const uno::Any& /*Link*/ ) throw (uno::RuntimeException)
 {
-    // #TODO# #FIXME# Link is not used
+    
     uno::Reference<excel::XRange> xRange( Destination, uno::UNO_QUERY );
     if ( xRange.is() )
         xRange->Select();
@@ -642,7 +642,7 @@ ScVbaWorksheet::getSheetAtOffset(SCTAB offset) throw (uno::RuntimeException)
         return uno::Reference< excel::XWorksheet >();
     nIdx = nIdx + offset;
     uno::Reference< sheet::XSpreadsheet > xSheet(xIndex->getByIndex(nIdx), uno::UNO_QUERY_THROW);
-    // parent will be the parent of 'this' worksheet
+    
     return new ScVbaWorksheet (getParent(), mxContext, xSheet, getModel());
 }
 
@@ -662,8 +662,8 @@ ScVbaWorksheet::getPrevious() throw (uno::RuntimeException)
 void
 ScVbaWorksheet::Protect( const uno::Any& Password, const uno::Any& /*DrawingObjects*/, const uno::Any& /*Contents*/, const uno::Any& /*Scenarios*/, const uno::Any& /*UserInterfaceOnly*/ ) throw (uno::RuntimeException)
 {
-    // #TODO# #FIXME# is there anything we can do witht the unused param
-    // can the implementation use anything else here
+    
+    
     uno::Reference<util::XProtectable > xProtectable(getSheet(), uno::UNO_QUERY_THROW);
     OUString aPasswd;
     Password >>= aPasswd;
@@ -697,7 +697,7 @@ ScVbaWorksheet::Range( const ::uno::Any& Cell1, const ::uno::Any& Cell2 ) throw 
 void
 ScVbaWorksheet::CheckSpelling( const uno::Any& /*CustomDictionary*/,const uno::Any& /*IgnoreUppercase*/,const uno::Any& /*AlwaysSuggest*/, const uno::Any& /*SpellingLang*/ ) throw (uno::RuntimeException)
 {
-    // #TODO# #FIXME# unused params above, can we do anything with those
+    
     OUString url = ".uno:SpellDialog";
     uno::Reference< frame::XModel > xModel( getModel() );
     dispatchRequests(xModel,url);
@@ -710,14 +710,14 @@ ScVbaWorksheet::getSheetRange() throw (uno::RuntimeException)
     return uno::Reference< excel::XRange >( new ScVbaRange( this, mxContext, xRange ) );
 }
 
-// These are hacks - we prolly (somehow) need to inherit
-// the vbarange functionality here ...
+
+
 uno::Reference< excel::XRange >
 ScVbaWorksheet::Cells( const ::uno::Any &nRow, const ::uno::Any &nCol )
         throw (uno::RuntimeException)
 {
-    // Performance optimization for often-called Cells method:
-    // Use a common helper method instead of creating a new ScVbaRange object
+    
+    
     uno::Reference< table::XCellRange > xRange( getSheet(), uno::UNO_QUERY_THROW );
     return ScVbaRange::CellsHelper( this, mxContext, xRange, nRow, nCol );
 }
@@ -796,9 +796,9 @@ ScVbaWorksheet::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
 uno::Any SAL_CALL
 ScVbaWorksheet::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    // fake sheet-local names by returning all global names
-    // #163498# initialize Names object with correct parent (this worksheet)
-    // TODO: real sheet-local names...
+    
+    
+    
     uno::Reference< beans::XPropertySet > xProps( mxModel, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue("NamedRanges"), uno::UNO_QUERY_THROW );
     uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
@@ -914,9 +914,9 @@ ScVbaWorksheet::ShowDataForm( ) throw (uno::RuntimeException)
 uno::Any SAL_CALL
 ScVbaWorksheet::Evaluate( const OUString& Name ) throw (uno::RuntimeException)
 {
-    // #TODO Evaluate allows other things to be evaluated, e.g. functions
-    // I think ( like SIN(3) etc. ) need to investigate that
-    // named Ranges also? e.g. [MyRange] if so need a list of named ranges
+    
+    
+    
     uno::Any aVoid;
     return uno::Any( Range( uno::Any( Name ), aVoid ) );
 }
@@ -934,7 +934,7 @@ ScVbaWorksheet::invoke( const OUString& aFunctionName, const uno::Sequence< uno:
     OSL_TRACE("** ScVbaWorksheet::invoke( %s ), will barf",
         OUStringToOString( aFunctionName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-    throw uno::RuntimeException(); // unsupported operation
+    throw uno::RuntimeException(); 
 }
 
 void SAL_CALL
@@ -969,9 +969,9 @@ ScVbaWorksheet::getFormControls()
         uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( xSpreadsheet, uno::UNO_QUERY_THROW );
         uno::Reference< form::XFormsSupplier >  xFormSupplier( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xIndexAccess( xFormSupplier->getForms(), uno::UNO_QUERY_THROW );
-        // get the www-standard container ( maybe we should access the
-        // 'www-standard' by name rather than index, this seems an
-        // implementation detail
+        
+        
+        
         if( xIndexAccess->hasElements() )
             xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY );
 
@@ -994,14 +994,14 @@ ScVbaWorksheet::hasProperty( const OUString& aName ) throw (uno::RuntimeExceptio
 uno::Any
 ScVbaWorksheet::getControlShape( const OUString& sName )
 {
-    // ideally we would get an XControl object but it appears an XControl
-    // implementation only exists for a Control implementation optained from the
-    // view ( e.g. in basic you would get this from
-    // thiscomponent.currentcontroller.getControl( controlModel ) )
-    // and the thing to realise is that it is only possible to get an XControl
-    // for a currently displayed control :-( often we would want to modify
-    // a control not on the active sheet. But.. you can always access the
-    // XControlShape from the DrawPage whether that is the active drawpage or not
+    
+    
+    
+    
+    
+    
+    
+    
 
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( getSheet(), uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xIndexAccess( xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
@@ -1010,7 +1010,7 @@ ScVbaWorksheet::getControlShape( const OUString& sName )
     for( int index = 0; index < nCount; index++ )
     {
         uno::Any aUnoObj =  xIndexAccess->getByIndex( index );
-         // It seems there are some drawing objects that can not query into Control shapes?
+         
         uno::Reference< drawing::XControlShape > xControlShape( aUnoObj, uno::UNO_QUERY );
          if( xControlShape.is() )
          {
@@ -1066,7 +1066,7 @@ ScVbaWorksheet::getCodeName() throw (css::uno::RuntimeException)
 sal_Int16
 ScVbaWorksheet::getSheetID() throw (uno::RuntimeException)
 {
-    uno::Reference< sheet::XCellRangeAddressable > xAddressable( mxSheet, uno::UNO_QUERY_THROW ); // if ActiveSheet, mxSheet is null.
+    uno::Reference< sheet::XCellRangeAddressable > xAddressable( mxSheet, uno::UNO_QUERY_THROW ); 
     return xAddressable->getRangeAddress().Sheet;
 }
 
@@ -1083,7 +1083,7 @@ ScVbaWorksheet::PrintOut( const uno::Any& From, const uno::Any& To, const uno::A
     To >>= nTo;
     Copies >>= nCopies;
     IgnorePrintAreas >>= bIgnorePrintAreas;
-    if ( nCopies > 1 ) // Collate only useful when more that 1 copy
+    if ( nCopies > 1 ) 
         Collate >>= bCollate;
 
     if ( !( nFrom || nTo ) )

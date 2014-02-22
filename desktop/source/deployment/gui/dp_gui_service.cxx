@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,29 +48,29 @@ using namespace ::com::sun::star::uno;
 
 namespace dp_gui {
 
-//==============================================================================
+
 class MyApp : public Application, private boost::noncopyable
 {
 public:
     MyApp();
     virtual ~MyApp();
 
-    // Application
+    
     virtual int Main();
     virtual void DeInit();
 };
 
-//______________________________________________________________________________
+
 MyApp::~MyApp()
 {
 }
 
-//______________________________________________________________________________
+
 MyApp::MyApp()
 {
 }
 
-//______________________________________________________________________________
+
 int MyApp::Main()
 {
     return EXIT_SUCCESS;
@@ -136,7 +136,7 @@ OUString ReplaceProductNameHookProc( const OUString& rStr )
     return sRet;
 }
 
-//==============================================================================
+
 class ServiceImpl
     : public ::cppu::WeakImplHelper2<ui::dialogs::XAsynchronousExecutableDialog,
                                      task::XJobExecutor>
@@ -154,19 +154,19 @@ public:
     ServiceImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
 
-    // XAsynchronousExecutableDialog
+    
     virtual void SAL_CALL setDialogTitle( OUString const & aTitle )
         throw (RuntimeException);
     virtual void SAL_CALL startExecuteModal(
         Reference< ui::dialogs::XDialogClosedListener > const & xListener )
         throw (RuntimeException);
 
-    // XJobExecutor
+    
     virtual void SAL_CALL trigger( OUString const & event )
         throw (RuntimeException);
 };
 
-//______________________________________________________________________________
+
 ServiceImpl::ServiceImpl( Sequence<Any> const& args,
                           Reference<XComponentContext> const& xComponentContext)
     : m_xComponentContext(xComponentContext),
@@ -187,8 +187,8 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
         ResMgr::SetReadStringHook( ReplaceProductNameHookProc );
 }
 
-// XAsynchronousExecutableDialog
-//______________________________________________________________________________
+
+
 void ServiceImpl::setDialogTitle( OUString const & title )
     throw (RuntimeException)
 {
@@ -205,14 +205,14 @@ void ServiceImpl::setDialogTitle( OUString const & title )
         m_initialTitle = title;
 }
 
-//______________________________________________________________________________
+
 void ServiceImpl::startExecuteModal(
     Reference< ui::dialogs::XDialogClosedListener > const & xListener )
     throw (RuntimeException)
 {
-    bool bCloseDialog = true;  // only used if m_bShowUpdateOnly is true
+    bool bCloseDialog = true;  
     ::std::auto_ptr<Application> app;
-    //ToDo: synchronize access to s_dialog !!!
+    
     if (! dp_gui::TheExtensionManager::s_ExtMgr.is())
     {
         const bool bAppUp = (GetpApp() != 0);
@@ -249,9 +249,9 @@ void ServiceImpl::startExecuteModal(
     }
     else
     {
-        // When m_bShowUpdateOnly is set, we are inside the office and the user clicked
-        // the update notification icon in the menu bar. We must not close the extensions
-        // dialog after displaying the update dialog when it has been visible before
+        
+        
+        
         if ( m_bShowUpdateOnly )
             bCloseDialog = ! dp_gui::TheExtensionManager::s_ExtMgr->isVisible();
     }
@@ -295,8 +295,8 @@ void ServiceImpl::startExecuteModal(
                 sal_Int16(0)) );
 }
 
-// XJobExecutor
-//______________________________________________________________________________
+
+
 void ServiceImpl::trigger( OUString const &rEvent ) throw (RuntimeException)
 {
     if ( rEvent == "SHOW_UPDATE_DIALOG" )
@@ -325,7 +325,7 @@ sdecl::ServiceDecl const updateDecl(
     updateSI,
     "com.sun.star.comp.deployment.ui.UpdateRequiredDialog",
     "com.sun.star.deployment.ui.UpdateRequiredDialog" );
-} // namespace dp_gui
+} 
 
 extern "C" {
 
@@ -338,6 +338,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL deploymentgui_component_getFactory(
         pImplName, pServiceManager, pRegistryKey, dp_gui::serviceDecl, dp_gui::licenseDecl, dp_gui::updateDecl );
 }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

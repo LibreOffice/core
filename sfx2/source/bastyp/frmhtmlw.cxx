@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/htmlkywd.hxx>
@@ -46,7 +46,7 @@
 #include <rtl/strbuf.hxx>
 
 
-// -----------------------------------------------------------------------
+
 
 using namespace ::com::sun::star;
 
@@ -95,7 +95,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
                  eDestEnc, pNonConvertableChars );
     }
 
-    // Titel (auch wenn er leer ist)
+    
     rStrm.WriteCharPtr( SAL_NEWLINE_STRING );
     if( pIndent )
         rStrm.WriteCharPtr( pIndent );
@@ -108,7 +108,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
     }
     HTMLOutFuncs::Out_AsciiTag( rStrm, OOO_STRING_SVTOOLS_HTML_title, sal_False );
 
-    // Target-Frame
+    
     if( i_xDocProps.is() )
     {
         const OUString& rTarget = i_xDocProps->getDefaultTarget();
@@ -127,7 +127,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         }
     }
 
-    // Who we are
+    
     OUString sGenerator( SfxResId(STR_HTML_GENERATOR).toString() );
     OUString os( "$_OS" );
     ::rtl::Bootstrap::expandMacros(os);
@@ -136,7 +136,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
 
     if( i_xDocProps.is() )
     {
-        // Reload
+        
         if( (i_xDocProps->getAutoloadSecs() != 0) ||
             !i_xDocProps->getAutoloadURL().isEmpty() )
         {
@@ -155,13 +155,13 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
                      eDestEnc, pNonConvertableChars );
         }
 
-        // Author
+        
         const OUString& rAuthor = i_xDocProps->getAuthor();
         if( !rAuthor.isEmpty() )
             OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_author, rAuthor, sal_False,
                      eDestEnc, pNonConvertableChars );
 
-        // created
+        
         ::util::DateTime uDT = i_xDocProps->getCreationDate();
         Date aD(uDT.Day, uDT.Month, uDT.Year);
         Time aT(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
@@ -171,13 +171,13 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_created, sOut, sal_False,
                  eDestEnc, pNonConvertableChars );
 
-        // changedby
+        
         const OUString& rChangedBy = i_xDocProps->getModifiedBy();
         if( !rChangedBy.isEmpty() )
             OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changedby, rChangedBy, sal_False,
                      eDestEnc, pNonConvertableChars );
 
-        // changed
+        
         uDT = i_xDocProps->getModificationDate();
         Date aD2(uDT.Day, uDT.Month, uDT.Year);
         Time aT2(uDT.Hours, uDT.Minutes, uDT.Seconds, uDT.NanoSeconds);
@@ -187,19 +187,19 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
         OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_changed, sOut, sal_False,
                  eDestEnc, pNonConvertableChars );
 
-        // Subject
+        
         const OUString& rTheme = i_xDocProps->getSubject();
         if( !rTheme.isEmpty() )
             OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_classification, rTheme, sal_False,
                      eDestEnc, pNonConvertableChars );
 
-        // Description
+        
         const OUString& rComment = i_xDocProps->getDescription();
         if( !rComment.isEmpty() )
             OutMeta( rStrm, pIndent, OOO_STRING_SVTOOLS_HTML_META_description, rComment, sal_False,
                      eDestEnc, pNonConvertableChars);
 
-        // Keywords
+        
         OUString Keywords = ::comphelper::string::convertCommaSeparated(
             i_xDocProps->getKeywords());
         if( !Keywords.isEmpty() )
@@ -231,7 +231,7 @@ void SfxFrameHTMLWriter::Out_DocInfo( SvStream& rStrm, const OUString& rBaseURL,
             }
             catch (const uno::Exception&)
             {
-                // may happen with concurrent modification...
+                
                 DBG_WARNING("SfxFrameHTMLWriter::Out_DocInfo: exception");
             }
         }
@@ -299,7 +299,7 @@ void SfxFrameHTMLWriter::Out_FrameDescriptor(
             }
         }
 
-        // frame border (MS+Netscape-Extension)
+        
         aAny = xSet->getPropertyValue("FrameIsAutoBorder");
         if ( (aAny >>= bVal) && !bVal )
         {

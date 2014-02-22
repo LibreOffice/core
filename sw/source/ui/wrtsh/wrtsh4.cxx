@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,53 +14,53 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <wrtsh.hxx>
 #include <crsskip.hxx>
 
-// Private methods, which move the cursor over search.
-// The removal of the selection must be made on the level above.
 
-// The beginning of a word is the follow of a
-// non-delimiter to delimiter. Furthermore, the follow of
-// non-sentence separators on sentence separator.
-// The begin of paragraph is also the word beginning.
+
+
+
+
+
+
 
 bool SwWrtShell::_SttWrd()
 {
     if ( IsSttPara() )
         return true;
-        // Create temporary cursor without selection.
+        
     Push();
     ClearMark();
     if( !GoStartWord() )
-            // not found --> go to the beginning of the paragraph.
+            
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
     ClearMark();
-        // If Mark was previously set, summarize.
+        
     Combine();
     return true;
 }
 
-// The end of a word is the follow of separator to nonseparator.
-// The end of a word is also the sequence of wordseparators to
-// punctuation marks.
-// The end of a paragraph is also the end of a word.
+
+
+
+
 
 bool SwWrtShell::_EndWrd()
 {
     if ( IsEndWrd() )
         return true;
-        // Create temporary cursor without selection.
+        
     Push();
     ClearMark();
     if( !GoEndWord() )
-            // not found --> go to the end of the paragraph.
+            
         SwCrsrShell::MovePara(fnParaCurr, fnParaEnd);
     ClearMark();
-        // If Mark was previously set, summarize.
+        
     Combine();
     return true;
 }
@@ -68,9 +68,9 @@ bool SwWrtShell::_EndWrd()
 sal_Bool SwWrtShell::_NxtWrd()
 {
     sal_Bool bRet = sal_False;
-    while( IsEndPara() )               // If already at the end, then the next???
+    while( IsEndPara() )               
     {
-        if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  // Document - end ??
+        if(!SwCrsrShell::Right(1,CRSR_SKIP_CHARS))  
         {
             Pop( sal_False );
             return bRet;
@@ -100,9 +100,9 @@ sal_Bool SwWrtShell::_PrvWrd()
 {
     sal_Bool bRet = sal_False;
     while( IsSttPara() )
-    {                            // if already at the beginning, then the next???
+    {                            
         if(!SwCrsrShell::Left(1,CRSR_SKIP_CHARS))
-        {                        // Document - beginning ??
+        {                        
             Pop( sal_False );
             return bRet;
         }
@@ -127,8 +127,8 @@ sal_Bool SwWrtShell::_PrvWrd()
     return bRet;
 }
 
-// #i92468#
-// method code of <SwWrtShell::_NxtWrd()> before fix for issue i72162
+
+
 sal_Bool SwWrtShell::_NxtWrdForDelete()
 {
     if ( IsEndPara() )
@@ -151,7 +151,7 @@ sal_Bool SwWrtShell::_NxtWrdForDelete()
     return sal_True;
 }
 
-// method code of <SwWrtShell::_PrvWrd()> before fix for issue i72162
+
 sal_Bool SwWrtShell::_PrvWrdForDelete()
 {
     if ( IsSttPara() )
@@ -201,7 +201,7 @@ sal_Bool SwWrtShell::_BwdSentence()
         return 0;
     }
     if( !GoStartSentence()  && !IsSttPara() )
-            // not found --> go to the beginning of the paragraph
+            
         SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
     ClearMark();
     Combine();

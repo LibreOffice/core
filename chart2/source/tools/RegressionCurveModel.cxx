@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RegressionCurveModel.hxx"
@@ -177,7 +177,7 @@ struct StaticRegressionCurveInfo : public rtl::StaticAggregate< uno::Reference< 
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -191,8 +191,8 @@ RegressionCurveModel::RegressionCurveModel(
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder()),
         m_xEquationProperties( new RegressionEquation( xContext ))
 {
-    // set 0 line width (default) hard, so that it is always written to XML,
-    // because the old implementation uses different defaults
+    
+    
     setFastPropertyValue_NoBroadcast(
         LinePropertiesHelper::PROP_LINE_WIDTH, uno::makeAny( sal_Int32( 0 )));
     ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
@@ -213,7 +213,7 @@ RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther 
 RegressionCurveModel::~RegressionCurveModel()
 {}
 
-// ____ XRegressionCurve ____
+
 uno::Reference< chart2::XRegressionCurveCalculator > SAL_CALL
     RegressionCurveModel::getCalculator()
     throw (uno::RuntimeException)
@@ -241,7 +241,7 @@ void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference<
     }
 }
 
-// ____ XServiceName ____
+
 OUString SAL_CALL RegressionCurveModel::getServiceName()
     throw (uno::RuntimeException)
 {
@@ -266,7 +266,7 @@ OUString SAL_CALL RegressionCurveModel::getServiceName()
     return OUString();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL RegressionCurveModel::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -295,21 +295,21 @@ void SAL_CALL RegressionCurveModel::removeModifyListener( const uno::Reference< 
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL RegressionCurveModel::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL RegressionCurveModel::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void RegressionCurveModel::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -320,7 +320,7 @@ void RegressionCurveModel::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// ____ OPropertySet ____
+
 uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -336,20 +336,20 @@ uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticRegressionCurveInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL RegressionCurveModel::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticRegressionCurveInfo::get();
 }
 
-// needed by MSC compiler
+
 using impl::RegressionCurveModel_Base;
 
 IMPLEMENT_FORWARD_XINTERFACE2( RegressionCurveModel, RegressionCurveModel_Base, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( RegressionCurveModel, RegressionCurveModel_Base, OPropertySet )
 
-// implementations
+
 
 MeanValueRegressionCurve::MeanValueRegressionCurve(
     const uno::Reference< uno::XComponentContext > & xContext )
@@ -368,7 +368,7 @@ uno::Sequence< OUString > MeanValueRegressionCurve::getSupportedServiceNames_Sta
     aServices[ 1 ] = "com.sun.star.chart2.MeanValueRegressionCurve";
     return aServices;
 }
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( MeanValueRegressionCurve, lcl_aImplementationName_MeanValue );
 
 uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClone()
@@ -394,7 +394,7 @@ uno::Sequence< OUString > LinearRegressionCurve::getSupportedServiceNames_Static
     aServices[ 1 ] = "com.sun.star.chart2.LinearRegressionCurve";
     return aServices;
 }
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( LinearRegressionCurve, lcl_aImplementationName_Linear );
 
 uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
@@ -420,7 +420,7 @@ uno::Sequence< OUString > LogarithmicRegressionCurve::getSupportedServiceNames_S
     aServices[ 1 ] = "com.sun.star.chart2.LogarithmicRegressionCurve";
     return aServices;
 }
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( LogarithmicRegressionCurve, lcl_aImplementationName_Logarithmic );
 
 uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createClone()
@@ -446,7 +446,7 @@ uno::Sequence< OUString > ExponentialRegressionCurve::getSupportedServiceNames_S
     aServices[ 1 ] = "com.sun.star.chart2.ExponentialRegressionCurve";
     return aServices;
 }
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ExponentialRegressionCurve, lcl_aImplementationName_Exponential );
 
 uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createClone()
@@ -472,7 +472,7 @@ uno::Sequence< OUString > PotentialRegressionCurve::getSupportedServiceNames_Sta
     aServices[ 1 ] = "com.sun.star.chart2.PotentialRegressionCurve";
     return aServices;
 }
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( PotentialRegressionCurve, lcl_aImplementationName_Potential );
 
 uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClone()
@@ -498,7 +498,7 @@ uno::Sequence< OUString > PolynomialRegressionCurve::getSupportedServiceNames_St
     aServices[ 1 ] = "com.sun.star.chart2.PolynomialRegressionCurve";
     return aServices;
 }
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( PolynomialRegressionCurve, lcl_aImplementationName_Polynomial );
 
 uno::Reference< util::XCloneable > SAL_CALL PolynomialRegressionCurve::createClone()
@@ -524,7 +524,7 @@ uno::Sequence< OUString > MovingAverageRegressionCurve::getSupportedServiceNames
     aServices[ 1 ] = "com.sun.star.chart2.MovingAverageRegressionCurve";
     return aServices;
 }
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( MovingAverageRegressionCurve, lcl_aImplementationName_MovingAverage );
 
 uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::createClone()
@@ -533,6 +533,6 @@ uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::create
     return uno::Reference< util::XCloneable >( new MovingAverageRegressionCurve( *this ));
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

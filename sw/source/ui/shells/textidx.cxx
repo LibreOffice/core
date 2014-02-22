@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -66,7 +66,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
         break;
         case FN_INSERT_AUTH_ENTRY_DLG:
         {
-            // no BASIC support
+            
             pVFrame->ToggleChildWindow(FN_INSERT_AUTH_ENTRY_DLG);
             Invalidate(rReq.GetSlot());
         }
@@ -82,7 +82,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
             SwTOXMgr aMgr(GetShellPtr());
             sal_uInt16 nRet = RET_OK;
             if(aMgr.GetTOXMarkCount() > 1)
-            {   // Several marks, which should it be?
+            {   
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
                 VclAbstractDialog* pMultDlg = pFact->CreateMultiTOXMarkDlg(pMDI, aMgr);
@@ -122,7 +122,7 @@ void SwTextShell::ExecIdx(SfxRequest &rReq)
 
             long nWidth = aRect.Width();
             aSet.Put(SwFmtFrmSize(ATT_VAR_SIZE, nWidth));
-            // Height = width for a more consistent preview (analogous to edit range)
+            
             aSet.Put(SvxSizeItem(SID_ATTR_PAGE_SIZE, Size(nWidth, nWidth)));
             const SwTOXBase* pCurTOX = 0;
             sal_Bool bGlobal = sal_False;

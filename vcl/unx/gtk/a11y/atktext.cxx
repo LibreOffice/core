@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,7 +30,7 @@
 #include <com/sun/star/accessibility/XAccessibleTextMarkup.hpp>
 #include <com/sun/star/text/TextMarkupType.hpp>
 
-// #define ENABLE_TRACING
+
 
 #ifdef ENABLE_TRACING
 #include <stdio.h>
@@ -84,7 +84,7 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
             aString = rTextSegment.SegmentText;
             break;
 
-        // the OOo break iterator behaves as SENTENCE_START
+        
         case ATK_TEXT_BOUNDARY_SENTENCE_END:
             start = rTextSegment.SegmentStart;
             end = rTextSegment.SegmentEnd;
@@ -100,7 +100,7 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
         case ATK_TEXT_BOUNDARY_WORD_START:
             start = rTextSegment.SegmentStart;
 
-            // Determine the start index of the next segment
+            
             aTextSegment = pText->getTextBehindIndex(rTextSegment.SegmentEnd,
                                                      text_type_from_boundary(boundary_type));
             if( !aTextSegment.SegmentText.isEmpty() )
@@ -114,7 +114,7 @@ adjust_boundaries( accessibility::XAccessibleText* pText,
         case ATK_TEXT_BOUNDARY_WORD_END:
             end = rTextSegment.SegmentEnd;
 
-            // Determine the end index of the previous segment
+            
             aTextSegment = pText->getTextBeforeIndex(rTextSegment.SegmentStart,
                                                      text_type_from_boundary(boundary_type));
             if( !aTextSegment.SegmentText.isEmpty() )
@@ -444,7 +444,7 @@ text_wrapper_set_caret_offset (AtkText *text,
     return FALSE;
 }
 
-// #i92232#
+
 AtkAttributeSet*
 handle_text_markup_as_run_attribute( accessibility::XAccessibleTextMarkup* pTextMarkup,
                                      const gint nTextMarkupType,
@@ -468,7 +468,7 @@ handle_text_markup_as_run_attribute( accessibility::XAccessibleTextMarkup* pText
             {
                 if ( offset < nEndOffsetTextMarkup )
                 {
-                    // text markup at <offset>
+                    
                     *start_offset = ::std::max( *start_offset,
                                                 nStartOffsetTextMarkup );
                     *end_offset = ::std::min( *end_offset,
@@ -500,22 +500,22 @@ handle_text_markup_as_run_attribute( accessibility::XAccessibleTextMarkup* pText
                             OSL_ASSERT( false );
                         }
                     }
-                    break; // no further iteration needed.
+                    break; 
                 }
                 else
                 {
                     *start_offset = ::std::max( *start_offset,
                                                 nEndOffsetTextMarkup );
-                    // continue iteration.
+                    
                 }
             }
             else
             {
                 *end_offset = ::std::min( *end_offset,
                                           nStartOffsetTextMarkup );
-                break; // no further iteration.
+                break; 
             }
-        } // eof iteration over text markups
+        } 
     }
 
     return pSet;
@@ -540,28 +540,28 @@ text_wrapper_get_run_attributes( AtkText        *text,
                 pTextAttributes->getRunAttributes( offset, uno::Sequence< OUString > () );
 
             pSet = attribute_set_new_from_property_values( aAttributeList, true, text );
-            //  #i100938#
-            // - always provide start_offset and end_offset
+            
+            
             {
                 accessibility::TextSegment aTextSegment =
                     pText->getTextAtIndex(offset, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
 
                 *start_offset = aTextSegment.SegmentStart;
-                // #i100938#
-                // Do _not_ increment the end_offset provide by <accessibility::TextSegment> instance
+                
+                
                 *end_offset = aTextSegment.SegmentEnd;
                 bOffsetsAreValid = true;
             }
         }
 
-        // Special handling for misspelled text
-        // #i92232#
-        // - add special handling for tracked changes and refactor the
-        //   corresponding code for handling misspelled text.
+        
+        
+        
+        
         accessibility::XAccessibleTextMarkup* pTextMarkup = getTextMarkup( text );
         if( pTextMarkup )
         {
-            // Get attribute run here if it hasn't been done before
+            
             if( !bOffsetsAreValid )
             {
                 accessibility::TextSegment aAttributeTextSegment =
@@ -569,12 +569,12 @@ text_wrapper_get_run_attributes( AtkText        *text,
                 *start_offset = aAttributeTextSegment.SegmentStart;
                 *end_offset = aAttributeTextSegment.SegmentEnd;
             }
-            // handle misspelled text
+            
             pSet = handle_text_markup_as_run_attribute(
                     pTextMarkup,
                     com::sun::star::text::TextMarkupType::SPELLCHECK,
                     offset, pSet, start_offset, end_offset );
-            // handle tracked changes
+            
             pSet = handle_text_markup_as_run_attribute(
                     pTextMarkup,
                     com::sun::star::text::TextMarkupType::TRACK_CHANGE_INSERTION,
@@ -727,7 +727,7 @@ text_wrapper_get_offset_at_point (AtkText     *text,
     return -1;
 }
 
-// FIXME: the whole series of selections API is problematic ...
+
 
 static gint
 text_wrapper_get_n_selections (AtkText *text)
@@ -780,13 +780,13 @@ text_wrapper_add_selection (AtkText *text,
                             gint     start_offset,
                             gint     end_offset)
 {
-    // FIXME: can we try to be more compatible by expanding an
-    //        existing adjacent selection ?
+    
+    
 
     try {
         accessibility::XAccessibleText* pText = getText( text );
         if( pText )
-            return pText->setSelection( start_offset, end_offset ); // ?
+            return pText->setSelection( start_offset, end_offset ); 
     }
     catch(const uno::Exception&) {
         g_warning( "Exception in setSelection()" );
@@ -804,7 +804,7 @@ text_wrapper_remove_selection (AtkText *text,
     try {
         accessibility::XAccessibleText* pText = getText( text );
         if( pText )
-            return pText->setSelection( 0, 0 ); // ?
+            return pText->setSelection( 0, 0 ); 
     }
     catch(const uno::Exception&) {
         g_warning( "Exception in setSelection()" );
@@ -833,7 +833,7 @@ text_wrapper_set_selection (AtkText *text,
     return FALSE;
 }
 
-} // extern "C"
+} 
 
 void
 textIfaceInit (AtkTextIface *iface)

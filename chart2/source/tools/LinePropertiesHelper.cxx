@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "LinePropertiesHelper.hxx"
@@ -34,7 +34,7 @@ namespace chart
 void LinePropertiesHelper::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
-    // Line Properties see service drawing::LineProperties
+    
     rOutProperties.push_back(
         Property( "LineStyle",
                   PROP_LINE_STYLE,
@@ -49,7 +49,7 @@ void LinePropertiesHelper::AddPropertiesToVector(
                    beans::PropertyAttribute::BOUND
                    | beans::PropertyAttribute::MAYBEVOID ));
 
-//not in service description
+
     rOutProperties.push_back(
         Property( "LineDashName",
                   PROP_LINE_DASH_NAME,
@@ -92,7 +92,7 @@ void LinePropertiesHelper::AddDefaultsToMap(
 {
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_STYLE, drawing::LineStyle_SOLID );
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_WIDTH, 0 );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_COLOR, 0x000000 );  // black
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINE_COLOR, 0x000000 );  
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, PROP_LINE_TRANSPARENCE, 0 );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINE_JOINT, drawing::LineJoint_ROUND );
 }
@@ -168,6 +168,6 @@ void LinePropertiesHelper::SetLineInvisible( const ::com::sun::star::uno::Refere
     }
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

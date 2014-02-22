@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustring.hxx>
@@ -161,8 +161,8 @@ bool SwXMLImportTableItemMapper_Impl::handleSpecialItem(
         switch( nMemberId )
         {
         case MID_FRMSIZE_COL_WIDTH:
-            // If the item is existing already, a relative value has been set
-            // already that must be preserved.
+            
+            
             if( SFX_ITEM_SET != rItemSet.GetItemState( RES_FRM_SIZE,
                                                        false ) )
                 bRet = SvXMLImportItemMapper::PutXMLValue(
@@ -210,20 +210,20 @@ void SwXMLImportTableItemMapper_Impl::finished(
         {
             if (m_bHaveMargin[i])
             {
-                continue; // already read fo:margin-top etc.
+                continue; 
             }
-            // first get item from itemset
+            
             SfxPoolItem const* pItem = 0;
             SfxItemState eState =
                 rSet.GetItemState(Ids[i][0], true, &pItem);
 
-            // if not set, try the pool
+            
             if ((SFX_ITEM_SET != eState) && (SFX_WHICH_MAX > Ids[i][0]))
             {
                 pItem = &rSet.GetPool()->GetDefaultItem(Ids[i][0]);
             }
 
-            // do we have an item?
+            
             if (eState >= SFX_ITEM_DEFAULT && pItem)
             {
                 SfxPoolItem *const pNewItem = pItem->Clone();

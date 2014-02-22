@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -54,8 +54,8 @@ throw (::com::sun::star::uno::RuntimeException)
         HandleChildChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::SELECTION_CHANGED:
-        //don't need to process anything,just same as word behavior
-        //handleSelectionChangedEvent();
+        
+        
         break;
     default:
         AccComponentEventListener::notifyEvent(aEvent);
@@ -74,13 +74,13 @@ void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
     Reference< XAccessible > xChild;
     if( newValue >>= xChild)
     {
-        //create a new child
+        
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            //add this child
+            
             pAgent->InsertAccObj(pAcc, m_xAccessible.get());
-            //add all oldValue's existing children
+            
             pAgent->InsertChildrenAccObj(pAcc);
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
         }
@@ -89,14 +89,14 @@ void AccMenuEventListener::HandleChildChangedEvent(Any oldValue, Any newValue)
     }
     else if (oldValue >>= xChild)
     {
-        //delete an existing child
+        
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_REMOVED, pAcc);
-            //delete all oldValue's existing children
+            
             pAgent->DeleteChildrenAccObj( pAcc );
-            //delete this child
+            
             pAgent->DeleteAccObj( pAcc );
         }
         else
@@ -120,10 +120,10 @@ void AccMenuEventListener::FireStatePropertyChange(short state, bool set)
 {
     if( set )
     {
-        // new value
+        
         switch(state)
         {
-            //for sub menu is popup, there is a menu selected event.
+            
         case AccessibleStateType::SELECTED:
             pAgent->IncreaseState(m_xAccessible.get(), state);
             pAgent->UpdateChildState(m_xAccessible.get());
@@ -137,7 +137,7 @@ void AccMenuEventListener::FireStatePropertyChange(short state, bool set)
     {
         switch(state)
         {
-            //for sub menu is popup, there is a menu selected event.
+            
         case AccessibleStateType::SELECTED:
             pAgent->DecreaseState(m_xAccessible.get(), state);
 

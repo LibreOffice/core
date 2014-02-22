@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -153,8 +153,8 @@ void PropertyChgHelper::GetCurrentValues()
 
 void PropertyChgHelper::SetTmpPropVals( const PropertyValues &rPropVals )
 {
-    // return value is default value unless there is an explicitly supplied
-    // temporary value
+    
+    
     bResIsIgnoreControlCharacters   = bIsIgnoreControlCharacters;
     bResIsUseDictionaryList         = bIsUseDictionaryList;
 
@@ -189,8 +189,8 @@ sal_Bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt
     {
         sal_Int16 nLngSvcFlags = (nEvtFlags & AE_HYPHENATOR) ?
                     LinguServiceEventFlags::HYPHENATE_AGAIN : 0;
-        sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
+        sal_Bool bSCWA = sal_False, 
+             bSWWA = sal_False; 
 
         sal_Bool  *pbVal = NULL;
         switch (rEvt.PropertyHandle)
@@ -215,7 +215,7 @@ sal_Bool PropertyChgHelper::propertyChange_Impl( const PropertyChangeEvent& rEvt
         if (pbVal)
             rEvt.NewValue >>= *pbVal;
 
-        bRes = 0 != pbVal;  // sth changed?
+        bRes = 0 != pbVal;  
         if (bRes)
         {
             sal_Bool bSpellEvts = (nEvtFlags & AE_SPELLCHECKER) ? sal_True : sal_False;
@@ -358,8 +358,8 @@ void SAL_CALL
 
 
 
-// list of properties from the property set to be used
-// and listened to
+
+
 static const char *aSP[] =
 {
     UPN_IS_SPELL_UPPER_CASE,
@@ -441,8 +441,8 @@ sal_Bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& r
 
     if (!bRes  &&  GetPropSet().is()  &&  rEvt.Source == GetPropSet())
     {
-        sal_Bool bSCWA = sal_False, // SPELL_CORRECT_WORDS_AGAIN ?
-             bSWWA = sal_False; // SPELL_WRONG_WORDS_AGAIN ?
+        sal_Bool bSCWA = sal_False, 
+             bSWWA = sal_False; 
 
         sal_Bool *pbVal = NULL;
         switch (rEvt.PropertyHandle)
@@ -450,22 +450,22 @@ sal_Bool PropertyHelper_Spell::propertyChange_Impl( const PropertyChangeEvent& r
             case UPH_IS_SPELL_UPPER_CASE          :
             {
                 pbVal = &bIsSpellUpperCase;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = sal_False == *pbVal;    
+                bSWWA = !bSCWA;             
                 break;
             }
             case UPH_IS_SPELL_WITH_DIGITS         :
             {
                 pbVal = &bIsSpellWithDigits;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = sal_False == *pbVal;    
+                bSWWA = !bSCWA;             
                 break;
             }
             case UPH_IS_SPELL_CAPITALIZATION      :
             {
                 pbVal = &bIsSpellCapitalization;
-                bSCWA = sal_False == *pbVal;    // sal_False->sal_True change?
-                bSWWA = !bSCWA;             // sal_True->sal_False change?
+                bSCWA = sal_False == *pbVal;    
+                bSWWA = !bSCWA;             
                 break;
             }
             default:
@@ -507,8 +507,8 @@ void PropertyHelper_Spell::SetTmpPropVals( const PropertyValues &rPropVals )
 {
     PropertyChgHelper::SetTmpPropVals( rPropVals );
 
-    // return value is default value unless there is an explicitly supplied
-    // temporary value
+    
+    
     nResMaxNumberOfSuggestions  = GetDefaultNumberOfSuggestions();
     bResIsSpellWithDigits       = bIsSpellWithDigits;
     bResIsSpellCapitalization   = bIsSpellCapitalization;
@@ -669,8 +669,8 @@ void PropertyHelper_Hyphen::SetTmpPropVals( const PropertyValues &rPropVals )
 {
     PropertyChgHelper::SetTmpPropVals( rPropVals );
 
-    // return value is default value unless there is an explicitly supplied
-    // temporary value
+    
+    
     nResHyphMinLeading      = nHyphMinLeading;
     nResHyphMinTrailing     = nHyphMinTrailing;
     nResHyphMinWordLength   = nHyphMinWordLength;
@@ -848,6 +848,6 @@ sal_Bool PropertyHelper_Spelling::removeLinguServiceEventListener(
     return pInst->removeLinguServiceEventListener( rxListener );
 }
 
-}   // namespace linguistic
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

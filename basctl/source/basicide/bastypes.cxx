@@ -46,8 +46,8 @@ using namespace ::com::sun::star;
 
 
 //
-// BaseWindow
-// ==========
+
+
 //
 
 DBG_NAME( BaseWindow )
@@ -85,7 +85,7 @@ void BaseWindow::Init()
         pShellVScrollBar->SetScrollHdl( LINK( this, BaseWindow, ScrollHdl ) );
     if ( pShellHScrollBar )
         pShellHScrollBar->SetScrollHdl( LINK( this, BaseWindow, ScrollHdl ) );
-    DoInit();   // virtual...
+    DoInit();   
 }
 
 
@@ -100,7 +100,7 @@ void BaseWindow::GrabScrollBars( ScrollBar* pHScroll, ScrollBar* pVScroll )
     DBG_CHKTHIS( BaseWindow, 0 );
     pShellHScrollBar = pHScroll;
     pShellVScrollBar = pVScroll;
-//  Init(); // does not make sense, leads to flickering and errors...
+
 }
 
 
@@ -254,10 +254,10 @@ bool BaseWindow::Is (
 {
     if (bFindSuspended || !IsSuspended())
     {
-        // any non-suspended window is ok
+        
         if (rLibName.isEmpty() || rName.isEmpty() || eType == TYPE_UNKNOWN)
             return true;
-        // ok if the parameters match
+        
         if (m_aDocument == rDocument && m_aLibName == rLibName && m_aName == rName && GetType() == eType)
             return true;
     }
@@ -271,11 +271,11 @@ bool BaseWindow::HasActiveEditor () const
 
 
 //
-// DockingWindow
-// =============
+
+
 //
 
-// style bits for DockingWindow
+
 WinBits const DockingWindow::StyleBits =
     WB_BORDER | WB_3DLOOK | WB_CLIPCHILDREN |
     WB_MOVEABLE | WB_SIZEABLE | WB_ROLLABLE | WB_DOCKABLE;
@@ -292,16 +292,16 @@ DockingWindow::DockingWindow (Layout* pParent) :
     nShowCount(0)
 { }
 
-// Sets the position and the size of the docking window. This property is saved
-// when the window is floating. Called by Layout.
+
+
 void DockingWindow::ResizeIfDocking (Point const& rPos, Size const& rSize)
 {
     Rectangle const rRect(rPos, rSize);
     if (rRect != aDockingRect)
     {
-        // saving the position and the size
+        
         aDockingRect = rRect;
-        // resizing if actually docking
+        
         if (!IsFloatingMode())
             SetPosSizePixel(rPos, rSize);
     }
@@ -311,8 +311,8 @@ void DockingWindow::ResizeIfDocking (Size const& rSize)
     ResizeIfDocking(aDockingRect.TopLeft(), rSize);
 }
 
-// Sets the parent Layout window.
-// The physical parent is set only when the window is docking.
+
+
 void DockingWindow::SetLayoutWindow (Layout* pLayout_)
 {
     pLayout = pLayout_;
@@ -321,9 +321,9 @@ void DockingWindow::SetLayoutWindow (Layout* pLayout_)
 
 }
 
-// Increases the "show" reference count.
-// The window is shown when the reference count is positive.
-void DockingWindow::Show (bool bShow) // = true
+
+
+void DockingWindow::Show (bool bShow) 
 {
     if (bShow)
     {
@@ -337,8 +337,8 @@ void DockingWindow::Show (bool bShow) // = true
     }
 }
 
-// Decreases the "show" reference count.
-// The window is hidden when the reference count reaches zero.
+
+
 void DockingWindow::Hide ()
 {
     Show(false);
@@ -349,13 +349,13 @@ bool DockingWindow::Docking( const Point& rPos, Rectangle& rRect )
     if (!IsDockingPrevented() && aDockingRect.IsInside(rPos))
     {
         rRect.SetSize(aDockingRect.GetSize());
-        return false; // dock
+        return false; 
     }
-    else // adjust old size
+    else 
     {
         if (!aFloatingRect.IsEmpty())
             rRect.SetSize(aFloatingRect.GetSize());
-        return true; // float
+        return true; 
     }
 }
 
@@ -387,7 +387,7 @@ bool DockingWindow::PrepareToggleFloatingMode()
 {
     if (IsFloatingMode())
     {
-        // memorize position and size on the desktop...
+        
         aFloatingRect = Rectangle(
             GetParent()->OutputToScreenPixel(GetPosPixel()),
             GetSizePixel()
@@ -409,7 +409,7 @@ void DockingWindow::StartDocking()
 
 void DockingWindow::DockThis ()
 {
-    // resizing when floating -> docking
+    
     if (!IsFloatingMode())
     {
         Point const aPos = aDockingRect.TopLeft();
@@ -428,8 +428,8 @@ void DockingWindow::DockThis ()
 
 
 //
-// ExtendedEdit
-// ============
+
+
 //
 
 ExtendedEdit::ExtendedEdit( Window* pParent, IDEResId nRes ) :
@@ -464,8 +464,8 @@ IMPL_LINK_INLINE_END( ExtendedEdit, EditAccHdl, Accelerator *, pAcc )
 
 
 //
-//  TabBar
-// ========
+
+
 //
 
 TabBar::TabBar( Window* pParent ) :
@@ -485,7 +485,7 @@ void TabBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
     else
     {
-        ::TabBar::MouseButtonDown( rMEvt ); // base class version
+        ::TabBar::MouseButtonDown( rMEvt ); 
     }
 }
 
@@ -494,11 +494,11 @@ void TabBar::Command( const CommandEvent& rCEvt )
     if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && !IsInEditMode() )
     {
         Point aPos( rCEvt.IsMouseEvent() ? rCEvt.GetMousePosPixel() : Point(1,1) );
-        if ( rCEvt.IsMouseEvent() )     // select right tab
+        if ( rCEvt.IsMouseEvent() )     
         {
             Point aP = PixelToLogic( aPos );
             MouseEvent aMouseEvent( aP, 1, MOUSE_SIMPLECLICK, MOUSE_LEFT );
-            ::TabBar::MouseButtonDown( aMouseEvent ); // base class
+            ::TabBar::MouseButtonDown( aMouseEvent ); 
         }
 
         PopupMenu aPopup( IDEResId( RID_POPUP_TABBAR ) );
@@ -532,7 +532,7 @@ void TabBar::Command( const CommandEvent& rCEvt )
             }
              if ( aDocument.isInVBAMode() )
             {
-                // disable to delete or remove object modules in IDE
+                
                 if (BasicManager* pBasMgr = aDocument.getBasicManager())
                 {
                     if (StarBASIC* pBasic = pBasMgr->GetLib(aOULibName))
@@ -584,7 +584,7 @@ void TabBar::EndRenaming()
 namespace
 {
 
-// helper class for sorting TabBar
+
 struct TabBarSortHelper
 {
     sal_uInt16      nPageId;
@@ -596,7 +596,7 @@ struct TabBarSortHelper
     }
 };
 
-} // namespace
+} 
 
 void TabBar::Sort()
 {
@@ -609,7 +609,7 @@ void TabBar::Sort()
         sal_uInt16 nPageCount = GetPageCount();
         sal_uInt16 i;
 
-        // create module and dialog lists for sorting
+        
         for ( i = 0; i < nPageCount; i++)
         {
             sal_uInt16 nId = GetPageId( i );
@@ -627,7 +627,7 @@ void TabBar::Sort()
             }
         }
 
-        // sort module and dialog lists by page text
+        
         ::std::sort( aModuleList.begin() , aModuleList.end() );
         ::std::sort( aDialogList.begin() , aDialogList.end() );
 
@@ -635,13 +635,13 @@ void TabBar::Sort()
         sal_uInt16 nModules = sal::static_int_cast<sal_uInt16>( aModuleList.size() );
         sal_uInt16 nDialogs = sal::static_int_cast<sal_uInt16>( aDialogList.size() );
 
-        // move module pages to new positions
+        
         for (i = 0; i < nModules; i++)
         {
             MovePage( aModuleList[i].nPageId , i );
         }
 
-        // move dialog pages to new positions
+        
         for (i = 0; i < nDialogs; i++)
         {
             MovePage( aDialogList[i].nPageId , nModules + i );
@@ -658,7 +658,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
         nStartPos = searchEOL( rStr, nStartPos );
         if( nStartPos == -1 )
             break;
-        nStartPos++;    // not the \n.
+        nStartPos++;    
         nLine++;
     }
 
@@ -672,7 +672,7 @@ void CutLines( OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, bool bEra
     for ( sal_Int32 i = 0; i < nLines; i++ )
         nEndPos = searchEOL( rStr, nEndPos+1 );
 
-    if ( nEndPos == -1 ) // might happen at the last line
+    if ( nEndPos == -1 ) 
         nEndPos = rStr.getLength();
     else
         nEndPos++;
@@ -724,8 +724,8 @@ sal_uLong CalcLineCount( SvStream& rStream )
 }
 
 //
-// LibInfos
-// ========
+
+
 //
 
 LibInfos::LibInfos ()
@@ -839,11 +839,11 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 
     do
     {
-        // password dialog
+        
         SfxPasswordDialog aDlg(Application::GetDefDialogParent());
         aDlg.SetMinLen( 1 );
 
-        // set new title
+        
         if ( bNewTitle )
         {
             OUString aTitle(IDE_RESSTR(RID_STR_ENTERPASSWORD));
@@ -851,10 +851,10 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
             aDlg.SetText( aTitle );
         }
 
-        // execute dialog
+        
         nRet = aDlg.Execute();
 
-        // verify password
+        
         if ( nRet == RET_OK )
         {
             if ( xLibContainer.is() && xLibContainer->hasByName( rLibName ) )
@@ -863,7 +863,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( rLibName ) && !xPasswd->isLibraryPasswordVerified( rLibName ) )
                 {
                     rPassword = aDlg.GetPassword();
-                    //                    OUString aOUPassword( rPassword );
+                    
                     bOK = xPasswd->verifyLibraryPassword( rLibName, rPassword );
 
                     if ( !bOK )
@@ -881,6 +881,6 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
 }
 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

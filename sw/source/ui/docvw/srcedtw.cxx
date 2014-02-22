@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -74,10 +74,10 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
 
 
     const sal_uInt16 nStrLen = rSource.getLength();
-    sal_uInt16 nInsert = 0;         // number of inserted portions
-    sal_uInt16 nActPos = 0;         // position, where '<' was found
-    sal_uInt16 nOffset = 0;         // Offset of nActPos to '<'
-    sal_uInt16 nPortStart = USHRT_MAX;  // for the TextPortion
+    sal_uInt16 nInsert = 0;         
+    sal_uInt16 nActPos = 0;         
+    sal_uInt16 nOffset = 0;         
+    sal_uInt16 nPortStart = USHRT_MAX;  
     sal_uInt16 nPortEnd  =  0;          //
     SwTextPortion aText;
     while(nActPos < nStrLen)
@@ -85,11 +85,11 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
         svtools::ColorConfigEntry eFoundType = svtools::HTMLUNKNOWN;
         if((nActPos < nStrLen - 2) && (rSource[nActPos] == cOpenBracket))
         {
-            // insert 'empty' portion
+            
             if(nPortEnd < nActPos - 1 )
             {
                 aText.nLine = 0;
-                // don't move at the beginning
+                
                 aText.nStart = nPortEnd;
                 if(nInsert)
                     aText.nStart += 1;
@@ -102,7 +102,7 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
             sal_Unicode cFollowNext = rSource[nActPos + 2];
             if(cExclamation == cFollowFirst)
             {
-                // "<!" SGML or comment
+                
                 if(cMinus == cFollowNext &&
                     nActPos < nStrLen - 3 && cMinus == rSource[nActPos + 3])
                 {
@@ -115,14 +115,14 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
             }
             else if(cSlash == cFollowFirst)
             {
-                // "</" ignore slash
+                
                 nPortStart = nActPos;
                 nActPos++;
                 nOffset++;
             }
             if(svtools::HTMLUNKNOWN == eFoundType)
             {
-                // now here a keyword could follow
+                
                 sal_uInt16 nSrchPos = nActPos;
                 while(++nSrchPos < nStrLen - 1)
                 {
@@ -139,20 +139,20 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
                 }
                 if(nSrchPos > nActPos + 1)
                 {
-                    // some string was found
+                    
                     OUString sToken = rSource.copy(nActPos + 1, nSrchPos - nActPos - 1 );
                     sToken = sToken.toAsciiUpperCase();
                     int nToken = ::GetHTMLToken(sToken);
                     if(nToken)
                     {
-                        // Token was found
+                        
                         eFoundType = svtools::HTMLKEYWORD;
                         nPortEnd = nSrchPos;
                         nPortStart = nActPos;
                     }
                     else
                     {
-                        // what was that?
+                        
                         SAL_WARN(
                             "sw.level2",
                             "Token " << sToken
@@ -161,7 +161,7 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
 
                 }
             }
-            // now we still have to look for '>'
+            
             if(svtools::HTMLUNKNOWN != eFoundType)
             {
                 bool bFound = false;
@@ -174,7 +174,7 @@ static void lcl_Highlight(const OUString& rSource, SwTextPortions& aPortionList)
                     }
                 if(!bFound && (eFoundType == svtools::HTMLCOMMENT))
                 {
-                    // comment without ending in this line
+                    
                     bFound  = true;
                     nPortEnd = nStrLen - 1;
                 }
@@ -253,8 +253,8 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     SetHelpId(HID_SOURCE_EDITWIN);
     CreateTextEngine();
 
-    // Using "this" in ctor is a little fishy, but should work here at least as
-    // long as there are no derivations:
+    
+    
     listener_ = new ChangesListener(*this);
     css::uno::Reference< css::beans::XMultiPropertySet > n(
         officecfg::Office::Common::Font::SourceViewFont::get(),
@@ -301,10 +301,10 @@ void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
     switch ( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
-        // newly rearrange ScrollBars or trigger Resize, because
-        // ScrollBar size could have changed. For this, in the
-        // Resize handler the size of ScrollBars has to be queried
-        // from the settings as well.
+        
+        
+        
+        
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
             Resize();
         break;
@@ -313,7 +313,7 @@ void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 void  SwSrcEditWindow::Resize()
 {
-    // ScrollBars, etc. happens in Adjust...
+    
     if ( pTextView )
     {
         long nVisY = pTextView->GetStartDocPos().Y();
@@ -345,7 +345,7 @@ void  SwSrcEditWindow::Resize()
         pOutWin->SetOutputSizePixel(aOutSz);
         InitScrollBars();
 
-        // set line in first Resize
+        
         if(USHRT_MAX != nStartLine)
         {
             if(nStartLine < pTextEngine->GetParagraphCount())
@@ -370,7 +370,7 @@ void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
     switch( rDCEvt.GetType() )
     {
     case DATACHANGED_SETTINGS:
-        // query settings
+        
         if( rDCEvt.GetFlags() & SETTINGS_STYLE )
         {
             const Color &rCol = GetSettings().GetStyleSettings().GetWindowColor();
@@ -487,14 +487,14 @@ void SwSrcEditWindow::CreateTextEngine()
     pOutWin->SetPointer(Pointer(POINTER_TEXT));
     pOutWin->Show();
 
-    // create Scrollbars
+    
     pHScrollbar = new ScrollBar(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
-        pHScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
+        pHScrollbar->EnableRTL( false ); 
     pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     pHScrollbar->Show();
 
     pVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
-        pVScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
+        pVScrollbar->EnableRTL( false ); 
     pVScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     pHScrollbar->EnableDrag();
     pVScrollbar->Show();
@@ -532,7 +532,7 @@ void SwSrcEditWindow::CreateTextEngine()
 
 void SwSrcEditWindow::SetScrollBarRanges()
 {
-    // Extra method, not InitScrollBars, because also for TextEngine events.
+    
 
     pHScrollbar->SetRange( Range( 0, nCurTextWidth-1 ) );
     pVScrollbar->SetRange( Range(0, pTextEngine->GetTextHeight()-1) );
@@ -581,7 +581,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 
     bHighlighting = sal_True;
     sal_uInt16 nCount  = 0;
-    // at first the region around the cursor is processed
+    
     TextSelection aSel = pTextView->GetSelection();
     sal_uInt16 nCur = (sal_uInt16)aSel.GetStart().GetPara();
     if(nCur > 40)
@@ -606,7 +606,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
             }
         }
 
-    // when there is still anything left by then, go on from the beginning
+    
     while ( !aSyntaxLineTable.empty() && nCount < MAX_SYNTAX_HIGHLIGHT)
     {
         sal_uInt16 nLine = *aSyntaxLineTable.begin();
@@ -622,10 +622,10 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 
     if(!aSyntaxLineTable.empty() && !pTimer->IsActive())
         pTimer->Start();
-    // SyntaxTimerHdl is called when text changed
-    // => good opportunity to determine text width!
+    
+    
     long nPrevTextWidth = nCurTextWidth;
-    nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  // kleine Toleranz
+    nCurTextWidth = pTextEngine->CalcTextWidth() + 25;  
     if ( nCurTextWidth != nPrevTextWidth )
         SetScrollBarRanges();
     bHighlighting = sal_False;
@@ -635,8 +635,8 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 
 void SwSrcEditWindow::DoSyntaxHighlight( sal_uInt16 nPara )
 {
-    // Because of DelayedSyntaxHighlight it could happen,
-    // that the line doesn't exist anymore!
+    
+    
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         sal_Bool bTempModified = IsModified();
@@ -676,7 +676,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
         return;
 
     SwTextPortion& rLast = aPortionList[nCount-1];
-    if ( rLast.nStart > rLast.nEnd )    // Only until Bug from MD is resolved
+    if ( rLast.nStart > rLast.nEnd )    
     {
         nCount--;
         aPortionList.pop_back();
@@ -685,9 +685,9 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
     }
 
     {
-        // Only blanks and tabs have to be attributed along.
-        // When two identical attributes are placed consecutively,
-        // it optimises the TextEngine.
+        
+        
+        
         sal_uInt16 nLastEnd = 0;
 
         for ( size_t i = 0; i < nCount; i++ )
@@ -696,13 +696,13 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
             SAL_WARN_IF(
                 r.nLine != aPortionList[0].nLine, "sw.level2",
                 "multiple lines after all?");
-            if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
+            if ( r.nStart > r.nEnd )    
                 continue;
 
             if ( r.nStart > nLastEnd )
             {
-                // Can I rely on the fact that all except blank and tab
-                // are being highlighted?!
+                
+                
                 r.nStart = nLastEnd;
             }
             nLastEnd = r.nEnd+1;
@@ -714,7 +714,7 @@ void SwSrcEditWindow::ImpDoHighlight( const OUString& rSource, sal_uInt16 nLineO
     for ( size_t i = 0; i < aPortionList.size(); i++ )
     {
         SwTextPortion& r = aPortionList[i];
-        if ( r.nStart > r.nEnd )    // only until Bug from MD is resolved
+        if ( r.nStart > r.nEnd )    
             continue;
         if(r.eType !=  svtools::HTMLSGML    &&
             r.eType != svtools::HTMLCOMMENT &&
@@ -794,7 +794,7 @@ static bool lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLan
     {
         case RTL_TEXTENCODING_UTF7             :
         case RTL_TEXTENCODING_UTF8             :
-            // don#t fill - all LANGUAGE_SYSTEM means unicode font has to be used
+            
         break;
 
         case RTL_TEXTENCODING_ISO_8859_3:
@@ -804,7 +804,7 @@ static bool lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLan
         case RTL_TEXTENCODING_IBM_850     :
         case RTL_TEXTENCODING_ISO_8859_14 :
         case RTL_TEXTENCODING_ISO_8859_15 :
-            //fill with western languages
+            
             aLanguages[0] = LANGUAGE_GERMAN;
             aLanguages[1] = LANGUAGE_FRENCH;
             aLanguages[2] = LANGUAGE_ITALIAN;
@@ -812,7 +812,7 @@ static bool lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLan
         break;
 
         case RTL_TEXTENCODING_IBM_865     :
-            //scandinavian
+            
             aLanguages[0] = LANGUAGE_FINNISH;
             aLanguages[1] = LANGUAGE_NORWEGIAN;
             aLanguages[2] = LANGUAGE_SWEDISH;
@@ -961,7 +961,7 @@ void SwSrcEditWindow::SetFont()
         Font aFont;
         if(lcl_GetLanguagesForEncoding(eSourceEncoding, aLanguages))
         {
-            //TODO: check for multiple languages
+            
             aFont = OutputDevice::GetDefaultFont(DEFAULTFONT_FIXED, aLanguages[0], 0, this);
         }
         else
@@ -977,7 +977,7 @@ void SwSrcEditWindow::SetFont()
     const Font& rFont = GetTextEngine()->GetFont();
     Font aFont(aInfo);
     Size aSize(rFont.GetSize());
-    //font height is stored in point and set in twip
+    
     aSize.Height() =
         officecfg::Office::Common::Font::SourceViewFont::FontHeight::get() * 20;
     aFont.SetSize(pOutWin->LogicToPixel(aSize, MAP_TWIP));

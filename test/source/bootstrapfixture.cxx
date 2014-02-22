@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include <test/bootstrapfixture.hxx>
 #include <tools/errinf.hxx>
@@ -35,10 +35,10 @@ static void aBasicErrorFunc( const OUString &rErr, const OUString &rAction )
     CPPUNIT_ASSERT_MESSAGE( aErr.getStr(), false);
 }
 
-// NB. this constructor is called before any tests are run, once for each
-// test function in a rather non-intuitive way. This is why all the 'real'
-// heavy lifting is deferred until setUp. setUp and tearDown are interleaved
-// between the tests as you might expect.
+
+
+
+
 test::BootstrapFixture::BootstrapFixture( bool bAssertOnDialog, bool bNeedUCB )
     : m_bNeedUCB( bNeedUCB )
     , m_bAssertOnDialog( bAssertOnDialog )
@@ -51,7 +51,7 @@ extern "C"
 void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
         lang::XMultiServiceFactory * pSFactory)
 {
-    // force locale (and resource files loaded) to en-US
+    
     OUString aLangISO( "en-US" );
     ResMgr::SetDefaultLocale( LanguageTag( aLangISO) );
 
@@ -66,13 +66,13 @@ void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
     if (bAssertOnDialog)
         ErrorHandler::RegisterDisplay( aBasicErrorFunc );
 
-    // Make GraphicConverter work, normally done in desktop::Desktop::Main()
+    
     Application::SetFilterHdl(
             STATIC_LINK(0, test::BootstrapFixture, ImplInitFilterHdl));
 
     if (bNeedUCB)
     {
-        // initialise unconfigured UCB:
+        
         uno::Reference<ucb::XUniversalContentBroker> xUcb(pSFactory->createInstance("com.sun.star.ucb.UniversalContentBroker"), uno::UNO_QUERY_THROW);
         uno::Reference<ucb::XContentProvider> xFileProvider(pSFactory->createInstance("com.sun.star.ucb.FileContentProvider"), uno::UNO_QUERY_THROW);
         xUcb->registerContentProvider(xFileProvider, "file", sal_True);
@@ -84,7 +84,7 @@ void test_init_impl(bool bAssertOnDialog, bool bNeedUCB,
     }
 }
 
-// this is called from pyuno
+
 SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
 {
     try
@@ -95,7 +95,7 @@ SAL_DLLPUBLIC_EXPORT void test_init(lang::XMultiServiceFactory *pFactory)
     catch (...) { abort(); }
 }
 
-} // extern "C"
+} 
 
 void test::BootstrapFixture::setUp()
 {

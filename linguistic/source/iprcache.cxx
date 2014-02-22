@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -150,12 +150,12 @@ void SAL_CALL FlushListener::disposing( const EventObject& rSource )
     if (xDicList.is()  &&  rSource.Source == xDicList)
     {
         xDicList->removeDictionaryListEventListener( this );
-        xDicList = NULL;    //! release reference
+        xDicList = NULL;    
     }
     if (xPropSet.is()  &&  rSource.Source == xPropSet)
     {
         lcl_RemoveAsPropertyChangeListener( this, xPropSet );
-        xPropSet = NULL;    //! release reference
+        xPropSet = NULL;    
     }
 }
 
@@ -206,9 +206,9 @@ SpellCache::SpellCache()
     pFlushLstnr = new FlushListener( this );
     xFlushLstnr = pFlushLstnr;
     Reference<XSearchableDictionaryList> aDictionaryList(GetDictionaryList());
-    pFlushLstnr->SetDicList( aDictionaryList ); //! after reference is established
+    pFlushLstnr->SetDicList( aDictionaryList ); 
     Reference<XLinguProperties> aPropertySet(GetLinguProperties());
-    pFlushLstnr->SetPropSet( aPropertySet );    //! after reference is established
+    pFlushLstnr->SetPropSet( aPropertySet );    
 }
 
 SpellCache::~SpellCache()
@@ -222,7 +222,7 @@ SpellCache::~SpellCache()
 void SpellCache::Flush()
 {
     MutexGuard  aGuard( GetLinguMutex() );
-    // clear word list
+    
     LangWordList_t aEmpty;
     aWordLists.swap( aEmpty );
 }
@@ -239,12 +239,12 @@ void SpellCache::AddWord( const OUString& rWord, LanguageType nLang )
 {
     MutexGuard  aGuard( GetLinguMutex() );
     WordList_t & rList = aWordLists[ nLang ];
-    // occasional clean-up...
+    
     if (rList.size() > 500)
         rList.clear();
     rList.insert( rWord );
 }
 
-}   // namespace linguistic
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -41,30 +41,30 @@ using namespace com::sun::star;
 
 namespace
 {
-    // animated extractor
+    
 
-    // Necessary to filter a sequence of animated primitives from
-    // a sequence of primitives to find out if animated or not. The decision for
-    // what to decompose is hard-coded and only done for knowingly animated primitives
-    // to not decompose too deeply and unnecessarily. This implies that the list
-    // which is view-specific needs to be expanded by hand when new animated objects
-    // are added. This may eventually be changed to a dynamically configurable approach
-    // if necessary.
+    
+    
+    
+    
+    
+    
+    
     class AnimatedExtractingProcessor2D : public drawinglayer::processor2d::BaseProcessor2D
     {
     protected:
-        // the found animated primitives
+        
         drawinglayer::primitive2d::Primitive2DSequence  maPrimitive2DSequence;
 
-        // bitfield
-        // text animation allowed?
+        
+        
         bool                                            mbTextAnimationAllowed : 1;
 
-        // graphic animation allowed?
+        
         bool                                            mbGraphicAnimationAllowed : 1;
 
-        // as tooling, the process() implementation takes over API handling and calls this
-        // virtual render method when the primitive implementation is BasePrimitive2D-based.
+        
+        
         virtual void processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate);
 
     public:
@@ -74,7 +74,7 @@ namespace
             bool bGraphicAnimationAllowed);
         virtual ~AnimatedExtractingProcessor2D();
 
-        // data access
+        
         const drawinglayer::primitive2d::Primitive2DSequence& getPrimitive2DSequence() const { return maPrimitive2DSequence; }
         bool isTextAnimationAllowed() const { return mbTextAnimationAllowed; }
         bool isGraphicAnimationAllowed() const { return mbGraphicAnimationAllowed; }
@@ -97,10 +97,10 @@ namespace
 
     void AnimatedExtractingProcessor2D::processBasePrimitive2D(const drawinglayer::primitive2d::BasePrimitive2D& rCandidate)
     {
-        // known implementation, access directly
+        
         switch(rCandidate.getPrimitive2DID())
         {
-            // add and accept animated primitives directly, no need to decompose
+            
             case PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D :
             case PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D :
             case PRIMITIVE2D_ID_ANIMATEDINTERPOLATEPRIMITIVE2D :
@@ -116,12 +116,12 @@ namespace
                 break;
             }
 
-            // decompose animated gifs where SdrGrafPrimitive2D produces a GraphicPrimitive2D
-            // which then produces the animation infos (all when used/needed)
+            
+            
             case PRIMITIVE2D_ID_SDRGRAFPRIMITIVE2D :
             case PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D :
 
-            // decompose SdrObjects with evtl. animated text
+            
             case PRIMITIVE2D_ID_SDRCAPTIONPRIMITIVE2D :
             case PRIMITIVE2D_ID_SDRCONNECTORPRIMITIVE2D :
             case PRIMITIVE2D_ID_SDRCUSTOMSHAPEPRIMITIVE2D :
@@ -131,14 +131,14 @@ namespace
             case PRIMITIVE2D_ID_SDRPATHPRIMITIVE2D :
             case PRIMITIVE2D_ID_SDRRECTANGLEPRIMITIVE2D :
 
-            // #121194# With Graphic as Bitmap FillStyle, also check
-            // for primitives filled with animated graphics
+            
+            
             case PRIMITIVE2D_ID_POLYPOLYGONGRAPHICPRIMITIVE2D:
             case PRIMITIVE2D_ID_FILLGRAPHICPRIMITIVE2D:
             case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D:
 
-            // decompose evtl. animated text contained in MaskPrimitive2D
-            // or group rimitives
+            
+            
             case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
             case PRIMITIVE2D_ID_GROUPPRIMITIVE2D :
             {
@@ -148,12 +148,12 @@ namespace
 
             default :
             {
-                // nothing to do for the rest
+                
                 break;
             }
         }
     }
-} // end of anonymous namespace
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -169,37 +169,37 @@ namespace sdr
             mpPrimitiveAnimation(0),
             mbLazyInvalidate(false)
         {
-            // make the ViewContact remember me
+            
             mrViewContact.AddViewObjectContact(*this);
 
-            // make the ObjectContact remember me
+            
             mrObjectContact.AddViewObjectContact(*this);
         }
 
         ViewObjectContact::~ViewObjectContact()
         {
-            // invalidate in view
+            
             if(!maObjectRange.isEmpty())
             {
                 GetObjectContact().InvalidatePartOfView(maObjectRange);
             }
 
-            // delete PrimitiveAnimation
+            
             if(mpPrimitiveAnimation)
             {
                 delete mpPrimitiveAnimation;
                 mpPrimitiveAnimation = 0;
             }
 
-            // take care of remebered ObjectContact. Remove from
-            // OC first. The VC removal (below) CAN trigger a StopGettingViewed()
-            // which (depending of it's implementation) may destroy other OCs. This
-            // can trigger the deletion of the helper OC of a page visualising object
-            // which IS the OC of this object. Eventually StopGettingViewed() needs
-            // to get asynchron later
+            
+            
+            
+            
+            
+            
             GetObjectContact().RemoveViewObjectContact(*this);
 
-            // take care of remebered ViewContact
+            
             GetViewContact().RemoveViewObjectContact(*this);
         }
 
@@ -207,7 +207,7 @@ namespace sdr
         {
             if(maObjectRange.isEmpty())
             {
-                // if range is not computed (new or LazyInvalidate objects), force it
+                
                 const DisplayInfo aDisplayInfo;
                 const drawinglayer::primitive2d::Primitive2DSequence xSequence(getPrimitive2DSequence(aDisplayInfo));
 
@@ -226,22 +226,22 @@ namespace sdr
         {
             if(!mbLazyInvalidate)
             {
-                // set local flag
+                
                 mbLazyInvalidate = true;
 
-                // force ObjectRange
+                
                 getObjectRange();
 
                 if(!maObjectRange.isEmpty())
                 {
-                    // invalidate current valid range
+                    
                     GetObjectContact().InvalidatePartOfView(maObjectRange);
 
-                    // reset ObjectRange, it needs to be recalculated
+                    
                     maObjectRange.reset();
                 }
 
-                // register at OC for lazy invalidate
+                
                 GetObjectContact().setLazyInvalidate(*this);
             }
         }
@@ -250,42 +250,42 @@ namespace sdr
         {
             if(mbLazyInvalidate)
             {
-                // reset flag
+                
                 mbLazyInvalidate = false;
 
-                // force ObjectRange
+                
                 getObjectRange();
 
                 if(!maObjectRange.isEmpty())
                 {
-                    // invalidate current valid range
+                    
                     GetObjectContact().InvalidatePartOfView(maObjectRange);
                 }
             }
         }
 
-        // Take some action when new objects are inserted
+        
         void ViewObjectContact::ActionChildInserted(ViewContact& rChild)
         {
-            // force creation of the new VOC and trigger it's refresh, so it
-            // will take part in LazyInvalidate immediately
+            
+            
             rChild.GetViewObjectContact(GetObjectContact()).ActionChanged();
 
-            // forward action to ObjectContact
-            // const ViewObjectContact& rChildVOC = rChild.GetViewObjectContact(GetObjectContact());
-            // GetObjectContact().InvalidatePartOfView(rChildVOC.getObjectRange());
+            
+            
+            
         }
 
         void ViewObjectContact::checkForPrimitive2DAnimations()
         {
-            // remove old one
+            
             if(mpPrimitiveAnimation)
             {
                 delete mpPrimitiveAnimation;
                 mpPrimitiveAnimation = 0;
             }
 
-            // check for animated primitives
+            
             if(mxPrimitive2DSequence.hasElements())
             {
                 const bool bTextAnimationAllowed(GetObjectContact().IsTextAnimationAllowed());
@@ -299,7 +299,7 @@ namespace sdr
 
                     if(aAnimatedExtractor.getPrimitive2DSequence().hasElements())
                     {
-                        // dervied primitiveList is animated, setup new PrimitiveAnimation
+                        
                         mpPrimitiveAnimation =  new sdr::animation::PrimitiveAnimation(*this, aAnimatedExtractor.getPrimitive2DSequence());
                     }
                 }
@@ -308,12 +308,12 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewObjectContact::createPrimitive2DSequence(const DisplayInfo& rDisplayInfo) const
         {
-            // get the view-independent Primitive from the viewContact
+            
             drawinglayer::primitive2d::Primitive2DSequence xRetval(GetViewContact().getViewIndependentPrimitive2DSequence());
 
             if(xRetval.hasElements())
             {
-                // handle GluePoint
+                
                 if(!GetObjectContact().isOutputToPrinter() && GetObjectContact().AreGluePointsVisible())
                 {
                     const drawinglayer::primitive2d::Primitive2DSequence xGlue(GetViewContact().createGluePointPrimitive2DSequence());
@@ -324,7 +324,7 @@ namespace sdr
                     }
                 }
 
-                // handle ghosted
+                
                 if(isPrimitiveGhosted(rDisplayInfo))
                 {
                     const basegfx::BColor aRGBWhite(1.0, 1.0, 1.0);
@@ -348,7 +348,7 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xNewPrimitiveSequence;
 
-            // take care of redirectors and create new list
+            
             ViewObjectContactRedirector* pRedirector = GetObjectContact().GetViewObjectContactRedirector();
 
             if(pRedirector)
@@ -360,34 +360,34 @@ namespace sdr
                 xNewPrimitiveSequence = createPrimitive2DSequence(rDisplayInfo);
             }
 
-            // local up-to-date checks. New list different from local one?
+            
             if(!drawinglayer::primitive2d::arePrimitive2DSequencesEqual(mxPrimitive2DSequence, xNewPrimitiveSequence))
             {
-                // has changed, copy content
+                
                 const_cast< ViewObjectContact* >(this)->mxPrimitive2DSequence = xNewPrimitiveSequence;
 
-                // check for animated stuff
+                
                 const_cast< ViewObjectContact* >(this)->checkForPrimitive2DAnimations();
 
-                // always update object range when PrimitiveSequence changes
+                
                 const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
                 const_cast< ViewObjectContact* >(this)->maObjectRange =
                     drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(mxPrimitive2DSequence, rViewInformation2D);
             }
 
-            // return current Primitive2DSequence
+            
             return mxPrimitive2DSequence;
         }
 
         bool ViewObjectContact::isPrimitiveVisible(const DisplayInfo& /*rDisplayInfo*/) const
         {
-            // default: always visible
+            
             return true;
         }
 
         bool ViewObjectContact::isPrimitiveGhosted(const DisplayInfo& rDisplayInfo) const
         {
-            // default: standard check
+            
             return (GetObjectContact().DoVisualizeEnteredGroup() && !GetObjectContact().isOutputToPrinter() && rDisplayInfo.IsGhostedDrawModeActive());
         }
 
@@ -395,22 +395,22 @@ namespace sdr
         {
             drawinglayer::primitive2d::Primitive2DSequence xRetval;
 
-            // check model-view visibility
+            
             if(isPrimitiveVisible(rDisplayInfo))
             {
                 xRetval = getPrimitive2DSequence(rDisplayInfo);
 
                 if(xRetval.hasElements())
                 {
-                    // get ranges
+                    
                     const drawinglayer::geometry::ViewInformation2D& rViewInformation2D(GetObjectContact().getViewInformation2D());
                     const basegfx::B2DRange aObjectRange(drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(xRetval, rViewInformation2D));
                     const basegfx::B2DRange aViewRange(rViewInformation2D.getViewport());
 
-                    // check geometrical visibility
+                    
                     if(!aViewRange.isEmpty() && !aViewRange.overlaps(aObjectRange))
                     {
-                        // not visible, release
+                        
                         xRetval.realloc(0);
                     }
                 }
@@ -433,7 +433,7 @@ namespace sdr
 
             return xSeqRetval;
         }
-    } // end of namespace contact
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

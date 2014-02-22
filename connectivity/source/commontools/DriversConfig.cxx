@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <connectivity/DriversConfig.hxx>
 #include <tools/wldcrd.hxx>
@@ -56,8 +56,8 @@ namespace
                     lcl_convert(aStringSeq,aValue);
                 }
                 _rValues.put(*pPropertiesIter,aValue);
-            } // for (;pPropertiesIter != pPropertiesEnd ; ++pPropertiesIter,++pNamedIter)
-        } // if ( aPropertiesNode.isValid() )
+            } 
+        } 
     }
     void lcl_readURLPatternNode(const ::utl::OConfigurationTreeRoot& _aInstalled,const OUString& _sEntry,TInstalledDriver& _rInstalledDriver)
     {
@@ -86,18 +86,18 @@ namespace
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 DriversConfigImpl::DriversConfigImpl()
 {
 }
-// -----------------------------------------------------------------------------
+
 void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rxORB) const
 {
     if ( m_aDrivers.empty() )
     {
         if ( !m_aInstalled.isValid() )
         {
-            static const OUString s_sNodeName("org.openoffice.Office.DataAccess.Drivers/Installed"); ///Installed
+            static const OUString s_sNodeName("org.openoffice.Office.DataAccess.Drivers/Installed"); 
             m_aInstalled = ::utl::OConfigurationTreeRoot::createWithComponentContext(_rxORB, s_sNodeName, -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
         }
 
@@ -117,27 +117,27 @@ void DriversConfigImpl::Load(const uno::Reference< uno::XComponentContext >& _rx
                        !aInstalledDriver.sDriverFactory.equals("com.sun.star.comp.sdbc.firebird.Driver") ))
                     m_aDrivers.insert(TInstalledDrivers::value_type(*pPatternIter,aInstalledDriver));
             }
-        } // if ( m_aInstalled.isValid() )
+        } 
     }
 }
-// -----------------------------------------------------------------------------
+
 DriversConfig::DriversConfig(const uno::Reference< uno::XComponentContext >& _rxORB)
 :m_xORB(_rxORB)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 DriversConfig::~DriversConfig()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 DriversConfig::DriversConfig( const DriversConfig& _rhs )
 {
     *this = _rhs;
 }
 
-// -----------------------------------------------------------------------------
+
 DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
 {
     if ( this != &_rhs )
@@ -147,7 +147,7 @@ DriversConfig& DriversConfig::operator=( const DriversConfig& _rhs )
     return *this;
 }
 
-// -----------------------------------------------------------------------------
+
 OUString DriversConfig::getDriverFactoryName(const OUString& _sURL) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
@@ -167,7 +167,7 @@ OUString DriversConfig::getDriverFactoryName(const OUString& _sURL) const
 
     return sRet;
 }
-// -----------------------------------------------------------------------------
+
 OUString DriversConfig::getDriverTypeDisplayName(const OUString& _sURL) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
@@ -187,22 +187,22 @@ OUString DriversConfig::getDriverTypeDisplayName(const OUString& _sURL) const
 
     return sRet;
 }
-// -----------------------------------------------------------------------------
+
 const ::comphelper::NamedValueCollection& DriversConfig::getProperties(const OUString& _sURL) const
 {
     return impl_get(_sURL,1);
 }
-// -----------------------------------------------------------------------------
+
 const ::comphelper::NamedValueCollection& DriversConfig::getFeatures(const OUString& _sURL) const
 {
     return impl_get(_sURL,0);
 }
-// -----------------------------------------------------------------------------
+
 const ::comphelper::NamedValueCollection& DriversConfig::getMetaData(const OUString& _sURL) const
 {
     return impl_get(_sURL,2);
 }
-// -----------------------------------------------------------------------------
+
 const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const OUString& _sURL,sal_Int32 _nProps) const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);
@@ -229,7 +229,7 @@ const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const OUString
             }
             sOldPattern = aIter->first;
         }
-    } // for(;aIter != aEnd;++aIter)
+    } 
     if ( pRet == NULL )
     {
         static const ::comphelper::NamedValueCollection s_sEmpty;
@@ -237,7 +237,7 @@ const ::comphelper::NamedValueCollection& DriversConfig::impl_get(const OUString
     }
     return *pRet;
 }
-// -----------------------------------------------------------------------------
+
 uno::Sequence< OUString > DriversConfig::getURLs() const
 {
     const TInstalledDrivers& rDrivers = m_aNode->getInstalledDrivers(m_xORB);

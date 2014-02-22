@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "maildispatcher.hxx"
@@ -34,7 +34,7 @@ namespace /* private */
     class GenericEventNotifier
     {
     public:
-        // pointer to virtual function typedef
+        
         typedef void (IMailDispatcherListener::*GenericNotificationFunc_t)(::rtl::Reference<MailDispatcher>);
 
         GenericEventNotifier(
@@ -89,7 +89,7 @@ namespace /* private */
         OUString error_message_;
     };
 
-} // namespace private
+} 
 
 MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
     mailserver_ (mailserver),
@@ -102,9 +102,9 @@ MailDispatcher::MailDispatcher(uno::Reference<mail::XSmtpService> mailserver) :
     if (!create())
         throw uno::RuntimeException();
 
-    // wait until the mail dispatcher thread is really alive
-    // and has aquired a reference to this instance of the
-    // class
+    
+    
+    
     mail_dispatcher_active_.wait();
 }
 
@@ -225,15 +225,15 @@ void MailDispatcher::sendMailMessageNotifyListener(uno::Reference<mail::XMailMes
 
 void MailDispatcher::run()
 {
-    // aquire a self reference in order to avoid race
-    // conditions. The last client of this class must
-    // call shutdown before releasing his last reference
-    // to this class in order to shutdown this thread
-    // which will release his (the very last reference
-    // to the class and so force their destruction
+    
+    
+    
+    
+    
+    
     m_xSelfReference = this;
 
-    // signal that the mail dispatcher thread is now alive
+    
     mail_dispatcher_active_.set();
 
     for(;;)
@@ -254,7 +254,7 @@ void MailDispatcher::run()
             message_container_guard.clear();
             sendMailMessageNotifyListener(message);
         }
-        else // idle - put ourself to sleep
+        else 
         {
             wakening_call_.reset();
             message_container_guard.clear();
@@ -262,13 +262,13 @@ void MailDispatcher::run()
             MailDispatcherListenerContainer_t listeners_cloned(cloneListener());
             std::for_each(listeners_cloned.begin(), listeners_cloned.end(), GenericEventNotifier(&IMailDispatcherListener::idle, this));
         }
-    } // end for        SSH ALI
+    } 
 }
 
 void MailDispatcher::onTerminated()
 {
-    //keep the reference until the end of onTerminated() because of the call order in the
-    //_threadFunc() from osl/thread.hxx
+    
+    
     m_xSelfReference = 0;
 }
 

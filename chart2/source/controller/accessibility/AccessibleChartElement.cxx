@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleChartElement.hxx"
@@ -30,7 +30,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 
-// for SolarMutex
+
 #include <vcl/svapp.hxx>
 #include <rtl/ustrbuf.hxx>
 
@@ -64,7 +64,7 @@ AccessibleChartElement::~AccessibleChartElement()
     OSL_ASSERT( CheckDisposeState( false /* don't throw exceptions */ ) );
 }
 
-// ________ protected ________
+
 
 bool AccessibleChartElement::ImplUpdateChildren()
 {
@@ -90,9 +90,9 @@ void AccessibleChartElement::InitTextEdit()
 {
     if( ! m_xTextHelper.is())
     {
-        // get hard reference
+        
         Reference< view::XSelectionSupplier > xSelSupp( GetInfo().m_xSelectionSupplier );
-        // get factory from selection supplier (controller)
+        
         Reference< lang::XMultiServiceFactory > xFact( xSelSupp, uno::UNO_QUERY );
         if( xFact.is())
         {
@@ -118,9 +118,9 @@ void AccessibleChartElement::InitTextEdit()
 }
 
 //
-//             Interfaces
 
-// ________ AccessibleBase::XAccessibleContext ________
+
+
 Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal_Int32 i ) const
     throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
@@ -147,14 +147,14 @@ sal_Int32 AccessibleChartElement::ImplGetAccessibleChildCount() const
     return AccessibleBase::ImplGetAccessibleChildCount();
 }
 
-// ________ XServiceInfo ________
+
 OUString SAL_CALL AccessibleChartElement::getImplementationName()
     throw (RuntimeException)
 {
     return OUString( "AccessibleChartElement" );
 }
 
-// ________ AccessibleChartElement::XAccessibleContext (overloaded) ________
+
 OUString SAL_CALL AccessibleChartElement::getAccessibleName()
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -162,21 +162,21 @@ OUString SAL_CALL AccessibleChartElement::getAccessibleName()
         GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
 }
 
-// ________ AccessibleChartElement::XAccessibleContext (overloaded) ________
+
 OUString SAL_CALL AccessibleChartElement::getAccessibleDescription()
     throw (::com::sun::star::uno::RuntimeException)
 {
     return getToolTipText();
 }
 
-// ________ AccessibleChartElement::XAccessibleExtendedComponent ________
+
 Reference< awt::XFont > SAL_CALL AccessibleChartElement::getFont()
     throw (uno::RuntimeException)
 {
     CheckDisposeState();
 
     Reference< awt::XFont > xFont;
-    // using assignment for broken gcc 3.3
+    
     Reference< awt::XDevice > xDevice = Reference< awt::XDevice >(
         Reference< awt::XWindow >( GetInfo().m_xWindow ), uno::UNO_QUERY );
 
@@ -208,7 +208,7 @@ OUString SAL_CALL AccessibleChartElement::getToolTipText()
         GetInfo().m_aOID.getObjectCID(), Reference< chart2::XChartDocument >( GetInfo().m_xChartDocument ));
 }
 
-// ________ XAccessibleComponent ________
+
 sal_Bool SAL_CALL AccessibleChartElement::containsPoint( const awt::Point& aPoint )
     throw (uno::RuntimeException)
 {
@@ -263,6 +263,6 @@ sal_Int32 SAL_CALL AccessibleChartElement::getBackground()
     return AccessibleBase::getBackground();
 }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

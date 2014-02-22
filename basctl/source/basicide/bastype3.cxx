@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basic/basmgr.hxx>
@@ -61,7 +61,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
     {
         OUString aOULibName( aDesc.GetLibName() );
 
-        // check password
+        
         bool bOK = true;
         Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
@@ -76,7 +76,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 
         if ( bOK )
         {
-            // load module library
+            
             bool bModLibLoaded = false;
             if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
             {
@@ -89,7 +89,7 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
                 bModLibLoaded = xModLibContainer->isLibraryLoaded( aOULibName );
             }
 
-            // load dialog library
+            
             bool bDlgLibLoaded = false;
             Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
@@ -105,10 +105,10 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
 
             if ( bModLibLoaded || bDlgLibLoaded )
             {
-                // create the sub entries
+                
                 ImpCreateLibSubEntries( pEntry, aDocument, aOULibName );
 
-                // exchange image
+                
                 bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
                 Image aImage( IDEResId( bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB ) );
                 SetEntryBitmaps( pEntry, aImage );
@@ -142,7 +142,7 @@ void TreeListBox::ExpandedHdl()
         SvTreeListEntry* pChild = FirstChild( pEntry );
         while ( pChild )
         {
-            GetModel()->Remove( pChild );   // does also call the DTOR
+            GetModel()->Remove( pChild );   
             pChild = FirstChild( pEntry );
         }
     }
@@ -218,7 +218,7 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
                 {
                     break;
                 }
-                // extract the module name from the string like "Sheet1 (Example1)"
+                
                 if( bDocumentObjects )
                 {
                     sal_Int32 nIndex = 0;
@@ -235,14 +235,14 @@ SbxVariable* TreeListBox::FindVariable( SvTreeListEntry* pEntry )
                 pVar = static_cast<SbxObject*>(pVar)->GetMethods()->Find(aName, SbxCLASS_METHOD);
                 break;
             case OBJ_TYPE_DIALOG:
-                // sbx dialogs removed
+                
                 break;
             case OBJ_TYPE_DOCUMENT_OBJECTS:
                 bDocumentObjects = true;
             case OBJ_TYPE_USERFORMS:
             case OBJ_TYPE_NORMAL_MODULES:
             case OBJ_TYPE_CLASS_MODULES:
-                // skip, to find the child entry.
+                
                 continue;
             default:
                 OSL_FAIL( "FindVariable: Unbekannter Typ!" );
@@ -455,6 +455,6 @@ OUString CreateMgrAndLibStr( const OUString& rMgrName, const OUString& rLibName 
 }
 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

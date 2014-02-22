@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/storagehelper.hxx>
@@ -54,7 +54,7 @@
 #include <sfx2/docfile.hxx>
 #include <switerator.hxx>
 
-// for locking SolarMutex: svapp + mutex
+
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
@@ -125,7 +125,7 @@ static void lcl_setObjectVisualArea( const uno::Reference< embed::XEmbeddedObjec
 {
     if( xObj.is() && nAspect != embed::Aspects::MSOLE_ICON )
     {
-        // convert the visual area to the objects units
+        
         MapUnit aObjUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
         Size aObjVisSize = OutputDevice::LogicToLogic( aVisSize, aUnit, aObjUnit );
         awt::Size aSz;
@@ -161,15 +161,15 @@ SwXMLTextImportHelper::SwXMLTextImportHelper(
 
 SwXMLTextImportHelper::~SwXMLTextImportHelper()
 {
-    // the redline helper destructor sets properties on the document
-    // and may through an exception while doing so... catch this
+    
+    
     try
     {
         delete pRedlineHelper;
     }
     catch ( const RuntimeException& )
     {
-        // ignore
+        
     }
 }
 
@@ -215,7 +215,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         const OUString& rTblName,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
@@ -272,7 +272,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
             uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
             try
             {
-                // create object with desired ClassId
+                
                 sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
                 OUString aName("DummyName");
                 uno::Sequence < sal_Int8 > aClass( aClassName.GetByteSequence() );
@@ -283,7 +283,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
                     uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
                 if ( xObj.is() )
                 {
-                    //TODO/LATER: is it enough to only set the VisAreaSize?
+                    
                     lcl_setObjectVisualArea( xObj, nAspect, aTwipSize, MAP_TWIP );
                 }
 
@@ -303,7 +303,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     }
     else
     {
-        // check whether an object with this name already exists in the document
+        
         OUString aName;
         SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
         for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
@@ -337,8 +337,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         if ( aName.isEmpty() )
             aName = aObjName;
 
-        // the correct aspect will be set later
-        // TODO/LATER: Actually it should be set here
+        
+        
         if( pTxtCrsr )
         {
             pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, NULL, NULL );
@@ -362,7 +362,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     xPropSet = pXFrame;
     if( pDoc->GetDrawModel() )
         SwXFrame::GetOrCreateSdrObject(
-                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); 
     if( !rTblName.isEmpty() )
     {
         const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
@@ -532,7 +532,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         const OUString& /*rTblName*/,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
@@ -550,8 +550,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth,
                            &aTwipSize.Height(), &aTwipSize.Width() );
 
-    // We'll need a (valid) URL. If we don't have do not insert the link and return early.
-    // Copy URL into URL oject on the way.
+    
+    
        INetURLObject aURLObj;
     bool bValidURL = !rHRef.isEmpty() &&
                      aURLObj.SetURL( URIHelper::SmartRel2Abs(
@@ -562,7 +562,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     try
     {
-        // create object with desired ClassId
+        
         OUString aName("DummyName");
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =
                 embed::OOoEmbeddedObjectFactory::create(::comphelper::getProcessComponentContext());
@@ -594,20 +594,20 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
                                             NULL,
                                             NULL );
 
-            // TODO/LATER: in future may need a way to set replacement image url to the link ( may be even to the object ), needs oasis cws???
+            
 
             SwXFrame *pXFrame = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
                 SwXFrame::GetOrCreateSdrObject(
-                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); 
         }
     }
     catch ( uno::Exception& )
     {
     }
 
-    // TODO/LATER: should the rStyleName and rTblName be handled as for usual embedded object?
+    
 
     return xPropSet;
 }
@@ -619,7 +619,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
         const OUString& rHRef,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
@@ -642,7 +642,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
 
     aAppletImpl.CreateApplet ( rCode, rName, bMayScript, sCodeBase, GetXMLImport().GetDocumentBase() );
 
-    // set the size of the applet
+    
     lcl_setObjectVisualArea( aAppletImpl.GetApplet(),
                             embed::Aspects::MSOLE_CONTENT,
                             Size( nWidth, nHeight ),
@@ -657,7 +657,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertApplet(
     xPropSet = pXFrame;
     if( pDoc->GetDrawModel() )
         SwXFrame::GetOrCreateSdrObject(
-                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+                static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); 
 
     return xPropSet;
 }
@@ -679,9 +679,9 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
                          RES_FRMATR_END );
     lcl_putHeightAndWidth( aItemSet, nHeight, nWidth);
 
-    // We'll need a (valid) URL, or we need a MIME type. If we don't have
-    // either, do not insert plugin and return early. Copy URL into URL oject
-    // on the way.
+    
+    
+    
        INetURLObject aURLObj;
 
     bool bValidURL = !rHRef.isEmpty() &&
@@ -693,7 +693,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     try
     {
-        // create object with desired ClassId
+        
         OUString aName("DummyName");
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory =  embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
@@ -702,7 +702,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             aClass, OUString(), xStorage, aName,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
-        // set size to the object
+        
         lcl_setObjectVisualArea( xObj,
                                 embed::Aspects::MSOLE_CONTENT,
                                 Size( nWidth, nHeight ),
@@ -730,7 +730,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertPlugin(
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
                 SwXFrame::GetOrCreateSdrObject(
-                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); 
         }
     }
     catch ( uno::Exception& )
@@ -745,7 +745,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
         const OUString& rStyleName,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
     uno::Reference < XPropertySet > xPropSet;
@@ -824,7 +824,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
     try
     {
-        // create object with desired ClassId
+        
         OUString aName("DummyName");
         uno::Sequence < sal_Int8 > aClass( SvGlobalName( SO3_IFRAME_CLASSID ).GetByteSequence() );
         uno::Reference < embed::XEmbeddedObjectCreator > xFactory = embed::EmbeddedObjectCreator::create( ::comphelper::getProcessComponentContext() );
@@ -833,7 +833,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             aClass, OUString(), xStorage, aName,
             uno::Sequence < beans::PropertyValue >() ), uno::UNO_QUERY );
 
-        // set size to the object
+        
         lcl_setObjectVisualArea( xObj,
                                 embed::Aspects::MSOLE_CONTENT,
                                 Size( nWidth, nHeight ),
@@ -881,7 +881,7 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertFloatingFra
             xPropSet = pXFrame;
             if( pDoc->GetDrawModel() )
                 SwXFrame::GetOrCreateSdrObject(
-                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); // req for z-order
+                        static_cast<SwFlyFrmFmt*>( pXFrame->GetFrmFmt() ) ); 
         }
     }
     catch ( uno::Exception& )
@@ -895,7 +895,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
         const uno::Reference < XPropertySet > &rPropSet,
         ::std::map < const OUString, OUString > &rParamMap)
 {
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
     uno::Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
@@ -930,7 +930,7 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
                 ++aIter, ++nIndex;
             }
 
-            // unfortunately the names of the properties are depending on the object
+            
             OUString aParaName("AppletCommands");
             try
             {
@@ -951,8 +951,8 @@ void SwXMLTextImportHelper::endAppletOrPlugin(
     }
 }
 
-// redlining helper methods
-// (override to provide the real implementation)
+
+
 void SwXMLTextImportHelper::RedlineAdd(
     const OUString& rType,
     const OUString& rId,
@@ -961,7 +961,7 @@ void SwXMLTextImportHelper::RedlineAdd(
     const util::DateTime& rDateTime,
     sal_Bool bMergeLastPara)
 {
-    // create redline helper on demand
+    
     OSL_ENSURE(NULL != pRedlineHelper, "helper should have been created in constructor");
     if (NULL != pRedlineHelper)
         pRedlineHelper->Add(rType, rId, rAuthor, rComment, rDateTime,
@@ -992,7 +992,7 @@ void SwXMLTextImportHelper::RedlineSetCursor(
         pRedlineHelper->SetCursor(rId, bStart, xTextRange,
                                   bIsOutsideOfParagraph);
     }
-    // else: ignore redline (wasn't added before, else we'd have a helper)
+    
 }
 
 void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
@@ -1005,7 +1005,7 @@ void SwXMLTextImportHelper::RedlineAdjustStartNodeCursor(
         pRedlineHelper->AdjustStartNodeCursor(rId, bStart, xTextRange );
         ResetOpenRedlineId();
     }
-    // else: ignore redline (wasn't added before, or no open redline ID
+    
 }
 
 void SwXMLTextImportHelper::SetShowChanges( sal_Bool bShowChanges )

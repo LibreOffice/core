@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
@@ -63,12 +63,12 @@ namespace slideshow
             MediaShape( const ::com::sun::star::uno::Reference<
                                ::com::sun::star::drawing::XShape >& xShape,
                         double                                      nPrio,
-                        const SlideShowContext&                     rContext ); // throw ShapeLoadFailedException;
+                        const SlideShowContext&                     rContext ); 
 
         private:
 
-            // View layer methods
-            //------------------------------------------------------------------
+            
+            
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer );
@@ -76,8 +76,8 @@ namespace slideshow
             virtual bool clearAllViewLayers();
 
 
-            // ExternalShapeBase methods
-            //------------------------------------------------------------------
+            
+            
 
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const;
             virtual void implViewChanged( const UnoViewSharedPtr& rView );
@@ -88,7 +88,7 @@ namespace slideshow
             virtual bool implIsIntrinsicAnimationPlaying() const;
             virtual void implSetIntrinsicAnimationTime(double);
 
-            /// the list of active view shapes (one for each registered view layer)
+            
             typedef ::std::vector< ViewMediaShapeSharedPtr > ViewMediaShapeVector;
             ViewMediaShapeVector                             maViewMediaShapes;
             bool                                             mbIsPlaying;
@@ -104,11 +104,11 @@ namespace slideshow
         {
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void MediaShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
-            // determine ViewMediaShape that needs update
+            
             ViewMediaShapeVector::const_iterator       aIter(maViewMediaShapes.begin());
             ViewMediaShapeVector::const_iterator const aEnd (maViewMediaShapes.end());
             while( aIter != aEnd )
@@ -120,11 +120,11 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void MediaShape::implViewsChanged()
         {
-            // resize all ViewShapes
+            
             ::std::for_each( maViewMediaShapes.begin(),
                              maViewMediaShapes.end(),
                              ::boost::bind(
@@ -133,7 +133,7 @@ namespace slideshow
                                  ::boost::cref( getBounds())) );
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void MediaShape::addViewLayer( const ViewLayerSharedPtr& rNewLayer,
                                        bool                      bRedrawLayer )
@@ -143,15 +143,15 @@ namespace slideshow
                                                              getXShape(),
                                                              mxComponentContext )));
 
-            // push new size to view shape
+            
             maViewMediaShapes.back()->resize( getBounds() );
 
-            // render the Shape on the newly added ViewLayer
+            
             if( bRedrawLayer )
                 maViewMediaShapes.back()->render( getBounds() );
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool MediaShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
         {
@@ -175,17 +175,17 @@ namespace slideshow
                                                             _1 ),
                                              ::boost::cref( rLayer ) ) )) == aEnd )
             {
-                // view layer seemingly was not added, failed
+                
                 return false;
             }
 
-            // actually erase from container
+            
             maViewMediaShapes.erase( aIter, aEnd );
 
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool MediaShape::clearAllViewLayers()
         {
@@ -193,11 +193,11 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool MediaShape::implRender( const ::basegfx::B2DRange& rCurrBounds ) const
         {
-            // redraw all view shapes, by calling their update() method
+            
             if( ::std::count_if( maViewMediaShapes.begin(),
                                  maViewMediaShapes.end(),
                                  ::boost::bind<bool>(
@@ -206,15 +206,15 @@ namespace slideshow
                                      ::boost::cref( rCurrBounds ) ) )
                 != static_cast<ViewMediaShapeVector::difference_type>(maViewMediaShapes.size()) )
             {
-                // at least one of the ViewShape::update() calls did return
-                // false - update failed on at least one ViewLayer
+                
+                
                 return false;
             }
 
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool MediaShape::implStartIntrinsicAnimation()
         {
@@ -227,7 +227,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool MediaShape::implEndIntrinsicAnimation()
         {
@@ -240,7 +240,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool MediaShape::implPauseIntrinsicAnimation()
         {
@@ -253,14 +253,14 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool MediaShape::implIsIntrinsicAnimationPlaying() const
         {
             return mbIsPlaying;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void MediaShape::implSetIntrinsicAnimationTime(double fTime)
         {
@@ -270,7 +270,7 @@ namespace slideshow
                                             _1, boost::cref(fTime)) );
         }
 
-        // ---------------------------------------------------------------------
+        
 
         ShapeSharedPtr createMediaShape(
             const uno::Reference< drawing::XShape >& xShape,

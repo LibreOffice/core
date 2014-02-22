@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dispatch/popupmenudispatcher.hxx>
@@ -62,9 +62,9 @@ using namespace ::rtl                           ;
 
 PopupMenuDispatcher::PopupMenuDispatcher(
     const uno::Reference< XComponentContext >& xContext )
-        //  Init baseclasses first
+        
         :   ThreadHelpBase          ( &Application::GetSolarMutex()  )
-        // Init member
+        
         ,   m_xContext              ( xContext                       )
         ,   m_aListenerContainer    ( m_aLock.getShareableOslMutex() )
         ,   m_bAlreadyDisposed      ( sal_False                      )
@@ -74,9 +74,9 @@ PopupMenuDispatcher::PopupMenuDispatcher(
 
 PopupMenuDispatcher::~PopupMenuDispatcher()
 {
-    // Warn programmer if he forgot to dispose this instance.
-    // We must release all our references ...
-    // and a dtor isn't the best place to do that!
+    
+    
+    
 }
 
 OUString SAL_CALL PopupMenuDispatcher::getImplementationName() throw( css::uno::RuntimeException )
@@ -181,7 +181,7 @@ throw( css::uno::RuntimeException )
 
     if ( rURL.Complete.startsWith( "vnd.sun.star.popup:" ) )
     {
-        // --- SAFE ---
+        
         ResetableGuard aGuard( m_aLock );
         impl_RetrievePopupControllerQuery();
         impl_CreateUriRefFactory();
@@ -189,13 +189,13 @@ throw( css::uno::RuntimeException )
         css::uno::Reference< css::container::XNameAccess > xPopupCtrlQuery( m_xPopupCtrlQuery );
         css::uno::Reference< css::uri::XUriReferenceFactory > xUriRefFactory( m_xUriRefFactory );
         aGuard.unlock();
-        // --- SAFE ---
+        
 
         if ( xPopupCtrlQuery.is() )
         {
             try
             {
-                // Just use the main part of the URL for popup menu controllers
+                
                 sal_Int32     nQueryPart( 0 );
                 sal_Int32     nSchemePart( 0 );
                 OUString aBaseURL( "vnd.sun.star.popup:" );
@@ -214,11 +214,11 @@ throw( css::uno::RuntimeException )
 
                 css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider;
 
-                // Find popup menu controller using the base URL
+                
                 xPopupCtrlQuery->getByName( aBaseURL ) >>= xDispatchProvider;
                 aGuard.unlock();
 
-                // Ask popup menu dispatch provider for dispatch object
+                
                 if ( xDispatchProvider.is() )
                     xDispatch = xDispatchProvider->queryDispatch( rURL, sTarget, nFlags );
             }
@@ -260,10 +260,10 @@ void SAL_CALL PopupMenuDispatcher::addStatusListener( const uno::Reference< XSta
                                                       const URL& aURL )
 throw( RuntimeException )
 {
-    // Ready for multithreading
+    
     ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Add listener to container.
+    
+    
     m_aListenerContainer.addInterface( aURL.Complete, xControl );
 }
 
@@ -271,10 +271,10 @@ void SAL_CALL PopupMenuDispatcher::removeStatusListener( const uno::Reference< X
                                                          const URL& aURL )
 throw( RuntimeException )
 {
-    // Ready for multithreading
+    
     ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
-    // Add listener to container.
+    
+    
     m_aListenerContainer.removeInterface( aURL.Complete, xControl );
 }
 
@@ -286,16 +286,16 @@ throw ( RuntimeException )
     if (( aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING ) ||
         ( aEvent.Action == css::frame::FrameAction_COMPONENT_ATTACHED  ))
     {
-        // Reset query reference to requery it again next time
+        
         m_xPopupCtrlQuery.clear();
     }
 }
 
 void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( RuntimeException )
 {
-    // Ready for multithreading
+    
     ResetableGuard aGuard( m_aLock );
-    // Safe impossible cases
+    
     SAL_WARN_IF( m_bAlreadyDisposed, "fwk", "MenuDispatcher::disposing(): Object already disposed .. don't call it again!" );
 
     if( m_bAlreadyDisposed == sal_False )
@@ -312,7 +312,7 @@ void SAL_CALL PopupMenuDispatcher::disposing( const EventObject& ) throw( Runtim
             }
         }
 
-        // Forget our factory.
+        
         m_xContext = uno::Reference< XComponentContext >();
     }
 }
@@ -363,6 +363,6 @@ void PopupMenuDispatcher::impl_CreateUriRefFactory()
     }
 }
 
-} //  namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

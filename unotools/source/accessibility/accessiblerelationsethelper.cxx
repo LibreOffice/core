@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "unotools/accessiblerelationsethelper.hxx"
@@ -81,7 +81,7 @@ AccessibleRelation AccessibleRelationSetHelperImpl::getRelation( sal_Int32 nInde
 bool AccessibleRelationSetHelperImpl::containsRelation( sal_Int16 aRelationType )
     throw (uno::RuntimeException)
 {
-    AccessibleRelation defaultRelation; // default is INVALID
+    AccessibleRelation defaultRelation; 
     AccessibleRelation relationByType = getRelationByType(aRelationType);
     return relationByType.RelationType != defaultRelation.RelationType;
 }
@@ -121,7 +121,7 @@ void AccessibleRelationSetHelperImpl::AddRelation(const AccessibleRelation& rRel
         maRelations.push_back(rRelation);
 }
 
-//=====  internal  ============================================================
+
 
 AccessibleRelationSetHelper::AccessibleRelationSetHelper ()
     : mpHelperImpl(NULL)
@@ -144,7 +144,7 @@ AccessibleRelationSetHelper::~AccessibleRelationSetHelper(void)
     delete mpHelperImpl;
 }
 
-//=====  XAccessibleRelationSet  ==============================================
+
 
     /** Returns the number of relations in this relation set.
 
@@ -227,7 +227,7 @@ void AccessibleRelationSetHelper::AddRelation(const AccessibleRelation& rRelatio
     mpHelperImpl->AddRelation(rRelation);
 }
 
-//=====  XTypeProvider  =======================================================
+
 
 uno::Sequence< ::com::sun::star::uno::Type>
     AccessibleRelationSetHelper::getTypes (void)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "parclass.hxx"
@@ -29,7 +29,7 @@
 #include <string.h>
 
 #if OSL_DEBUG_LEVEL > 1
-// the documentation thingy
+
 #include <stdio.h>
 #include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include <rtl/strbuf.hxx>
@@ -48,16 +48,16 @@
 
 const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
 {
-    // { OpCode, {{ Type, ... }, nRepeatLast }},
+    
 
-    // IF() and CHOOSE() are somewhat special, since the ScJumpMatrix is
-    // created inside those functions and ConvertMatrixParameters() is not
-    // called for them.
+    
+    
+    
     { ocIf,              {{ Array, Reference, Reference                          }, 0 }},
     { ocIfError,         {{ Array, Reference                                     }, 0 }},
     { ocIfNA,            {{ Array, Reference                                     }, 0 }},
     { ocChose,           {{ Array, Reference                                     }, 1 }},
-    // Other specials.
+    
     { ocOpen,            {{ Bounds                                               }, 0 }},
     { ocClose,           {{ Bounds                                               }, 0 }},
     { ocSep,             {{ Bounds                                               }, 0 }},
@@ -65,10 +65,10 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocStop,            {{ Bounds                                               }, 0 }},
     { ocUnion,           {{ Reference, Reference                                 }, 0 }},
     { ocRange,           {{ Reference, Reference                                 }, 0 }},
-    // Functions with Value parameters only but not in resource.
+    
     { ocBackSolver,      {{ Value, Value, Value                                  }, 0 }},
     { ocTableOp,         {{ Value, Value, Value, Value, Value                    }, 0 }},
-    // Operators and functions.
+    
     { ocAdd,             {{ Array, Array                                         }, 0 }},
     { ocAmpersand,       {{ Array, Array                                         }, 0 }},
     { ocAnd,             {{ Reference                                            }, 1 }},
@@ -130,7 +130,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocMatDet,          {{ ForceArray                                           }, 0 }},
     { ocMatInv,          {{ ForceArray                                           }, 0 }},
     { ocMatMult,         {{ ForceArray, ForceArray                               }, 0 }},
-    { ocMatTrans,        {{ Array                                                }, 0 }}, // strange, but Xcl doesn't force MatTrans array
+    { ocMatTrans,        {{ Array                                                }, 0 }}, 
     { ocMatValue,        {{ Reference, Value, Value                              }, 0 }},
     { ocMax,             {{ Reference                                            }, 1 }},
     { ocMaxA,            {{ Reference                                            }, 1 }},
@@ -197,16 +197,16 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocVLookup,         {{ Value, Reference, Value, Value                       }, 0 }},
     { ocXor,             {{ Reference                                            }, 1 }},
     { ocZTest,           {{ Reference, Value, Value                              }, 0 }},
-    // Excel doubts:
-    // ocN, ocT: Excel says (and handles) Reference, error? This means no
-    // position dependent SingleRef if DoubleRef, and no array calculation,
-    // just the upper left corner. We never did that for ocT and now also not
-    // for ocN (position dependent intersection worked before but array
-    // didn't). No specifics in ODFF, so the general rule applies. Gnumeric
-    // does the same.
+    
+    
+    
+    
+    
+    
+    
     { ocN, {{ Value }, 0 }},
     { ocT, {{ Value }, 0 }},
-    // The stopper.
+    
     { ocNone, {{ Bounds }, 0 } }
 };
 
@@ -219,7 +219,7 @@ void ScParameterClassification::Init()
     pData = new RunData[ SC_OPCODE_LAST_OPCODE_ID + 1 ];
     memset( pData, 0, sizeof(RunData) * (SC_OPCODE_LAST_OPCODE_ID + 1));
 
-    // init from specified static data above
+    
     for ( size_t i=0; i < SAL_N_ELEMENTS(pRawData); ++i )
     {
         const RawData* pRaw = &pRawData[i];
@@ -237,7 +237,7 @@ void ScParameterClassification::Init()
             }
 #endif
             memcpy( &(pRun->aData), &(pRaw->aData), sizeof(CommonData));
-            // fill 0-initialized fields with real values
+            
             if ( pRun->aData.nRepeatLast )
             {
                 for ( sal_Int32 j=0; j < CommonData::nMaxParams; ++j )
@@ -273,7 +273,7 @@ void ScParameterClassification::Init()
                 if ( pRun->aData.nParam[j] == ForceArray || pRun->aData.nParam[j] == ReferenceOrForceArray )
                 {
                     pRun->bHasForceArray = true;
-                    break;  // for
+                    break;  
                 }
             }
         }
@@ -298,13 +298,13 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
     {
         case ocExternal:
             return GetExternalParameterType( pToken, nParameter);
-        //break;
+        
         case ocMacro:
             return Reference;
-        //break;
+        
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     if ( 0 <= (short)eOp && eOp <= SC_OPCODE_LAST_OPCODE_ID )
@@ -315,8 +315,8 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
             eType = pData[eOp].aData.nParam[nParameter];
         else if ( (nRepeat = pData[eOp].aData.nRepeatLast) > 0 )
         {
-            // The usual case is 1 repeated parameter, we don't need to
-            // calculate that on each call.
+            
+            
             sal_uInt16 nParam = (nRepeat > 1 ?
                     (pData[eOp].nMinParams -
                      ((nParameter - pData[eOp].nMinParams) % nRepeat)) :
@@ -335,7 +335,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
         sal_uInt16 nParameter)
 {
     Type eRet = Unknown;
-    // similar to ScInterpreter::ScExternal()
+    
     OUString aFuncName = ScGlobal::pCharClass->uppercase( pToken->GetExternal());
     {
         const FuncData* pFuncData = ScGlobal::GetFuncCollection()->findByName(aFuncName);
@@ -353,7 +353,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
                     break;
                     default:
                         eRet = Reference;
-                        // also array types are created using an area reference
+                        
                 }
             }
             return eRet;
@@ -365,9 +365,9 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
 
     if (!aUnoName.isEmpty())
     {
-        // the relevant parts of ScUnoAddInCall without having to create one
+        
         const ScUnoAddInFuncData* pFuncData =
-            ScGlobal::GetAddInCollection()->GetFuncData( aUnoName, true );      // need fully initialized data
+            ScGlobal::GetAddInCollection()->GetFuncData( aUnoName, true );      
         if ( pFuncData )
         {
             long nCount = pFuncData->GetArgumentCount();
@@ -379,8 +379,8 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
                 if ( nParameter >= nCount &&
                         pArgs[nCount-1].eType == SC_ADDINARG_VARARGS )
                     eRet = Value;
-                    // last arg is sequence, optional "any"s, we simply can't
-                    // determine the type
+                    
+                    
                 if ( eRet == Unknown )
                 {
                     if ( nParameter >= nCount )
@@ -407,7 +407,7 @@ ScParameterClassification::GetExternalParameterType( const formula::FormulaToken
 
 #if OSL_DEBUG_LEVEL > 1
 
-// add remaining functions, all Value parameters
+
 void ScParameterClassification::MergeArgumentsFromFunctionResource()
 {
     ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
@@ -416,7 +416,7 @@ void ScParameterClassification::MergeArgumentsFromFunctionResource()
     {
         if ( pDesc->nFIndex > SC_OPCODE_LAST_OPCODE_ID ||
                 pData[pDesc->nFIndex].aData.nParam[0] != Unknown )
-            continue;   // not an internal opcode or already done
+            continue;   
 
         RunData* pRun = &pData[ pDesc->nFIndex ];
         sal_uInt16 nArgs = pDesc->GetSuppressedArgCount();
@@ -486,8 +486,8 @@ void ScParameterClassification::GenerateDocumentation()
             aStr.append('(');
             formula::FormulaByteToken aToken( eOp);
             sal_uInt8 nParams = GetMinimumParameters( eOp);
-            // preset parameter count according to opcode value, with some
-            // special handling
+            
+            
             if ( eOp < SC_OPCODE_STOP_DIV )
             {
                 switch ( eOp )
@@ -514,7 +514,7 @@ void ScParameterClassification::GenerateDocumentation()
                 {
                     case ocAnd:
                     case ocOr:
-                        aToken.SetByte(1);  // (r1)AND(r2) --> AND( r1, ...)
+                        aToken.SetByte(1);  
                     break;
                     default:
                         aToken.SetByte(2);
@@ -528,9 +528,9 @@ void ScParameterClassification::GenerateDocumentation()
                 aToken.SetByte(1);
             else
                 aToken.SetByte( nParams);
-            // compare (this is a mere test for opcode order Div, BinOp, UnOp,
-            // NoPar, 1Par, ...) and override parameter count with
-            // classification
+            
+            
+            
             if ( nParams != aToken.GetByte() )
                 fprintf( stdout, "(parameter count differs, token Byte: %d  classification: %d) ",
                         aToken.GetByte(), nParams);
@@ -575,19 +575,19 @@ void ScParameterClassification::GenerateDocumentation()
             switch ( eOp )
             {
                 case ocZGZ:
-                    aStr.append("   // RRI in English resource, but ZGZ in English-only section");
+                    aStr.append("   
                 break;
                 case ocMultiArea:
-                    aStr.append("   // e.g. combined first parameter of INDEX() function, not a real function");
+                    aStr.append("   
                 break;
                 case ocBackSolver:
-                    aStr.append("   // goal seek via menu, not a real function");
+                    aStr.append("   
                 break;
                 case ocTableOp:
-                    aStr.append("   // MULTIPLE.OPERATIONS in English resource, but TABLE in English-only section");
+                    aStr.append("   
                 break;
                 case ocNoName:
-                    aStr.append("   // error function, not a real function");
+                    aStr.append("   
                 break;
                 default:;
             }
@@ -597,6 +597,6 @@ void ScParameterClassification::GenerateDocumentation()
     fflush( stdout);
 }
 
-#endif // OSL_DEBUG_LEVEL
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

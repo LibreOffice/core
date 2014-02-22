@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -52,7 +52,7 @@ const char* StringContainer::putString( const char* pString )
 }
 
 int             c;
-bool            bLastInclude;// War letztes Symbol INCLUDE
+bool            bLastInclude;
 RscFileInst*    pFI;
 RscTypCont*     pTC;
 RscExpression * pExp;
@@ -102,10 +102,10 @@ sal_uInt32 GetNumber()
         }
     }
 
-    while( c=='U' || c=='u' || c=='l' || c=='L' ) //Wg. Unsigned Longs
+    while( c=='U' || c=='u' || c=='l' || c=='L' ) 
         c = pFI->GetFastChar();
 
-    if( l > 0x7fffffff ) //Oberstes bit gegebenenfalls abschneiden;
+    if( l > 0x7fffffff ) 
         l &= 0x7fffffff;
 
     return l;
@@ -115,7 +115,7 @@ int MakeToken( YYSTYPE * pTokenVal )
 {
     int             c1;
 
-    while( true ) // Kommentare und Leerzeichen ueberlesen
+    while( true ) 
     {
         while( isspace( c ) )
             c = pFI->GetFastChar();
@@ -151,7 +151,7 @@ int MakeToken( YYSTYPE * pTokenVal )
             break;
     };
 
-    // FIXME: wtf is this supposed to do?
+    
     if( (c != 0) == pFI->IsEof() )
     {
         return( 0 );
@@ -159,7 +159,7 @@ int MakeToken( YYSTYPE * pTokenVal )
 
     if( bLastInclude )
     {
-        bLastInclude = false; //Zuruecksetzten
+        bLastInclude = false; 
         if( '<' == c )
         {
             OStringBuffer aBuf( 256 );
@@ -192,9 +192,9 @@ int MakeToken( YYSTYPE * pTokenVal )
 
                 if( c == '"' )
                 {
-                    // this is a continued string
-                    // note: multiline string continuations are handled by the parser
-                    // see rscyacc.y
+                    
+                    
+                    
                 }
                 else
                     bDone = true;
@@ -234,11 +234,11 @@ int MakeToken( YYSTYPE * pTokenVal )
         {
             KEY_STRUCT  aKey;
 
-            // Suche nach dem Schluesselwort
+            
             if( pTC->aNmTb.Get( nHashId, &aKey ) )
             {
 
-                // Schluesselwort gefunden
+                
                 switch( aKey.nTyp )
                 {
                 case CLASSNAME:
@@ -270,7 +270,7 @@ int MakeToken( YYSTYPE * pTokenVal )
         }
         else
         {
-            // Symbol
+            
             RscDefine  * pDef;
 
             pDef = pTC->aFileTab.FindDef( aBuf.getStr() );
@@ -343,24 +343,24 @@ void yyerror( char* pMessage )
 
 void InitParser( RscFileInst * pFileInst )
 {
-    pTC = pFileInst->pTypCont;          // Datenkontainer setzten
+    pTC = pFileInst->pTypCont;          
     pFI = pFileInst;
     pStringContainer = new StringContainer();
-    pExp = NULL;                //fuer MacroParser
+    pExp = NULL;                
     bTargetDefined = false;
 
-    // Anfangszeichen initialisieren
+    
     bLastInclude = false;
     c = pFI->GetFastChar();
 }
 
 void EndParser()
 {
-    // Stack abraeumen
+    
     while( ! S.IsEmpty() )
         S.Pop();
 
-    // free string container
+    
     delete pStringContainer;
     pStringContainer = NULL;
 
@@ -374,10 +374,10 @@ void EndParser()
 
 void IncludeParser( RscFileInst * pFileInst )
 {
-    int           nToken;   // Wert des Tokens
-    YYSTYPE       aYYSType; // Daten des Tokens
-    RscFile     * pFName;   // Filestruktur
-    sal_uLong         lKey;     // Fileschluessel
+    int           nToken;   
+    YYSTYPE       aYYSType; 
+    RscFile     * pFName;   
+    sal_uLong         lKey;     
     RscTypCont  * pTypCon  = pFileInst->pTypCont;
 
     pFName = pTypCon->aFileTab.Get( pFileInst->GetFileIndex() );
@@ -420,7 +420,7 @@ ERRTYPE parser( RscFileInst * pFileInst )
 
     EndParser();
 
-    // yyparser gibt 0 zurueck, wenn erfolgreich
+    
     if( 0 == aError )
         aError.Clear();
     if( pFileInst->pTypCont->pEH->nErrors )

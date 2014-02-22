@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "document.hxx"
@@ -33,12 +33,12 @@ FltError ImportLotus::Read()
 {
     enum STATE
     {
-        S_START,        // analyse first BOF
-        S_WK1,          // in WK1-Stream
-        S_WK3,          // in WK3-Section
-        S_WK4,          // ...
-        S_FM3,          // ...
-        S_END           // Import finished
+        S_START,        
+        S_WK1,          
+        S_WK3,          
+        S_WK4,          
+        S_FM3,          
+        S_END           
     };
 
     sal_uInt16          nOp;
@@ -46,7 +46,7 @@ FltError ImportLotus::Read()
     sal_uInt16          nRecLen;
     sal_uInt32          nNextRec = 0UL;
     FltError        eRet = eERR_OK;
-//  ScFormulaCell   *pLastFormCell;
+
 
     STATE           eAkt = S_START;
 
@@ -55,7 +55,7 @@ FltError ImportLotus::Read()
 
     pIn->Seek( nNextRec );
 
-    // Progressbar starten
+    
     ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
 
     while( eAkt != S_END )
@@ -69,8 +69,8 @@ FltError ImportLotus::Read()
 
         switch( eAkt )
         {
-            // -----------------------------------------------------------
-            case S_START:                                           // S_START
+            
+            case S_START:                                           
             if( nOp )
             {
                 eRet = SCERR_IMPORT_UNKNOWN_WK;
@@ -94,80 +94,80 @@ FltError ImportLotus::Read()
                 }
                 else
                 {
-                    eAkt = S_END;   // hier kommt wat fuer <= WK1 hinne!
+                    eAkt = S_END;   
                     eRet = 0xFFFFFFFF;
                 }
             }
             break;
-            // -----------------------------------------------------------
-            case S_WK1:                                             // S_WK1
+            
+            case S_WK1:                                             
             break;
-            // -----------------------------------------------------------
-            case S_WK3:                                             // S_WK3
-            case S_WK4:                                             // S_WK4
+            
+            case S_WK3:                                             
+            case S_WK4:                                             
             switch( nOp )
             {
-                case 0x0001:                            // EOF
+                case 0x0001:                            
                 eAkt = S_FM3;
                 nTab++;
                 break;
 
-                case 0x0002:                            // PASSWORD
+                case 0x0002:                            
                 eRet = eERR_FILEPASSWD;
                 eAkt = S_END;
                 break;
 
-                case 0x0007:                            // COLUMNWIDTH
+                case 0x0007:                            
                 Columnwidth( nRecLen );
                 break;
 
-                case 0x0008:                            // HIDDENCOLUMN
+                case 0x0008:                            
                 Hiddencolumn( nRecLen );
                 break;
 
-                case 0x0009:                            // USERRANGE
+                case 0x0009:                            
                 Userrange();
                 break;
 
-                case 0x0013:                            // FORMAT
+                case 0x0013:                            
 
                 break;
-                case 0x0014:                            // ERRCELL
+                case 0x0014:                            
                 Errcell();
                 break;
 
-                case 0x0015:                            // NACELL
+                case 0x0015:                            
                 Nacell();
                 break;
 
-                case 0x0016:                            // LABELCELL
+                case 0x0016:                            
                 Labelcell();
                 break;
 
-                case 0x0017:                            // NUMBERCELL
+                case 0x0017:                            
                 Numbercell();
                 break;
 
-                case 0x0018:                            // SMALLNUMCELL
+                case 0x0018:                            
                 Smallnumcell();
                 break;
 
-                case 0x0019:                            // FORMULACELL
+                case 0x0019:                            
                 Formulacell( nRecLen );
                 break;
 
-                case 0x001b:                            // extended attributes
+                case 0x001b:                            
                 if (nRecLen > 2)
                 {
                     Read( nSubType );
                     nRecLen -= 2;
                     switch( nSubType )
                     {
-                        case 2007:                      // ROW PRESENTATION
+                        case 2007:                      
                             RowPresentation( nRecLen );
                             break;
 
-                        case 14000:                     // NAMED SHEET
+                        case 14000:                     
                             NamedSheet();
                             break;
                     }
@@ -180,11 +180,11 @@ FltError ImportLotus::Read()
             }
 
             break;
-            // -----------------------------------------------------------
-            case S_FM3:                                             // S_FM3
+            
+            case S_FM3:                                             
             break;
-            // -----------------------------------------------------------
-            case S_END:                                             // S_END
+            
+            case S_END:                                             
             break;
         }
 
@@ -195,7 +195,7 @@ FltError ImportLotus::Read()
         aPrgrsBar.Progress();
     }
 
-    // duemmliche Namen eliminieren
+    
     SCTAB       nTabs = pD->GetTableCount();
     SCTAB       nCnt;
     OUString aTabName;
@@ -243,7 +243,7 @@ FltError ImportLotus::Read( SvStream& rIn )
 
     pIn->Seek( nNextRec );
 
-    // Progressbar starten
+    
     ScfStreamProgressBar aPrgrsBar( *pIn, pD->GetDocumentShell() );
 
     while( bRead )
@@ -258,7 +258,7 @@ FltError ImportLotus::Read( SvStream& rIn )
 
             switch( nOp )
             {
-                case 0x0000:                            // BOF
+                case 0x0000:                            
                 if( nRecLen != 26 || !BofFm3() )
                 {
                     bRead = false;
@@ -266,22 +266,22 @@ FltError ImportLotus::Read( SvStream& rIn )
                 }
                 break;
 
-                case 0x0001:                            // EOF
+                case 0x0001:                            
                     bRead = false;
                     OSL_ENSURE( nTab == 0,
                         "-ImportLotus::Read( SvStream& ): Zweimal EOF nicht erlaubt" );
                     nTab++;
                 break;
 
-                case 174:                               // FONT_FACE
+                case 174:                               
                     Font_Face();
                 break;
 
-                case 176:                               // FONT_TYPE
+                case 176:                               
                     Font_Type();
                 break;
 
-                case 177:                               // FONT_YSIZE
+                case 177:                               
                     Font_Ysize();
                 break;
 

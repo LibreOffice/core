@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/string.hxx>
@@ -36,9 +36,9 @@ using ::rtl::OUStringToOString;
 namespace cppu
 {
 
-//  ----------------------------------------------------
-//  class OComponentHelper
-//  ----------------------------------------------------
+
+
+
 
 OComponentHelper::OComponentHelper( Mutex & rMutex ) SAL_THROW(())
     : rBHelper( rMutex )
@@ -80,34 +80,34 @@ void OComponentHelper::release() throw()
         {
             if (! rBHelper.bDisposed)
             {
-                // *before* again incrementing our ref count, ensure that our weak connection point
-                // will not create references to us anymore (via XAdapter::queryAdapted)
+                
+                
                 disposeWeakConnectionPoint();
 
                 Reference<XInterface > xHoldAlive( *this );
-                // First dispose
+                
                 try
                 {
                     dispose();
                 }
                 catch (::com::sun::star::uno::RuntimeException & exc)
                 {
-                    // release should not throw exceptions
+                    
 #if OSL_DEBUG_LEVEL > 0
                     OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
                     OSL_FAIL( msg.getStr() );
 #else
-                    (void) exc; // avoid warning about unused variable
+                    (void) exc; 
 #endif
                 }
 
-                // only the alive ref holds the object
+                
                 OSL_ASSERT( m_refCount == 1 );
-                // destroy the object if xHoldAlive decrement the refcount to 0
+                
                 return;
             }
         }
-        // restore the reference count
+        
         osl_atomic_increment( &m_refCount );
     }
     OWeakAggObject::release();
@@ -132,37 +132,37 @@ Sequence< Type > OComponentHelper::getTypes() throw (RuntimeException)
     return s_pTypes->getTypes();
 }
 
-// XComponent
+
 void OComponentHelper::disposing()
 {
 }
 
-// XComponent
+
 void OComponentHelper::dispose()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    // An frequently programming error is to release the last
-    // reference to this object in the disposing message.
-    // Make it rubust, hold a self Reference.
+    
+    
+    
     Reference<XComponent > xSelf( this );
 
-    // Guard dispose against multible threading
-    // Remark: It is an error to call dispose more than once
+    
+    
     bool bDoDispose = false;
     {
     MutexGuard aGuard( rBHelper.rMutex );
     if( !rBHelper.bDisposed && !rBHelper.bInDispose )
     {
-        // only one call go into this section
+        
         rBHelper.bInDispose = sal_True;
         bDoDispose = true;
     }
     }
 
-    // Do not hold the mutex because we are broadcasting
+    
     if( bDoDispose )
     {
-        // Create an event with this as sender
+        
         try
         {
             try
@@ -171,22 +171,22 @@ void OComponentHelper::dispose()
                     Reference<XInterface >::query( (XComponent *)this ) );
                 EventObject aEvt;
                 aEvt.Source = xSource;
-                // inform all listeners to release this object
-                // The listener container are automaticly cleared
+                
+                
                 rBHelper.aLC.disposeAndClear( aEvt );
-                // notify subclasses to do their dispose
+                
                 disposing();
             }
             catch (...)
             {
                 MutexGuard aGuard( rBHelper.rMutex );
-                // bDispose and bInDisposing must be set in this order:
+                
                 rBHelper.bDisposed = sal_True;
                 rBHelper.bInDispose = sal_False;
                 throw;
             }
             MutexGuard aGuard( rBHelper.rMutex );
-            // bDispose and bInDisposing must be set in this order:
+            
             rBHelper.bDisposed = sal_True;
             rBHelper.bInDispose = sal_False;
         }
@@ -204,14 +204,14 @@ void OComponentHelper::dispose()
     }
     else
     {
-        // in a multithreaded environment, it can't be avoided
-        // that dispose is called twice.
-        // However this condition is traced, because it MAY indicate an error.
+        
+        
+        
         OSL_TRACE( "OComponentHelper::dispose() - dispose called twice" );
     }
 }
 
-// XComponent
+
 void OComponentHelper::addEventListener(
     const Reference<XEventListener > & rxListener )
     throw(::com::sun::star::uno::RuntimeException)
@@ -229,7 +229,7 @@ void OComponentHelper::addEventListener(
     }
 }
 
-// XComponent
+
 void OComponentHelper::removeEventListener(
     const Reference<XEventListener > & rxListener )
     throw(::com::sun::star::uno::RuntimeException)

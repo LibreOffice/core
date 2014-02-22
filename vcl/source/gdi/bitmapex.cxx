@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ctype.h>
@@ -39,7 +39,7 @@
 #include <impimagetree.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-// BitmapEx::Create
+
 #include <salbmp.hxx>
 #include <salinst.hxx>
 #include <svdata.hxx>
@@ -130,7 +130,7 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const Bitmap& rMask ) :
         aMask.Scale(aBitmap.GetSizePixel());
     }
 
-    // Ensure a mask is exactly one bit deep
+    
     if( !!aMask && aMask.GetBitCount() != 1 )
     {
         OSL_TRACE("BitmapEx: forced mask to monochrome");
@@ -151,9 +151,9 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
         aMask.Scale(rBmp.GetSizePixel());
     }
 
-    // #i75531# the workaround below can go when
-    // X11SalGraphics::drawAlphaBitmap()'s render acceleration
-    // can handle the bitmap depth mismatch directly
+    
+    
+    
     if( aBitmap.GetBitCount() < aMask.GetBitCount() )
         aBitmap.Convert( BMP_CONVERSION_24BIT );
 }
@@ -322,7 +322,7 @@ sal_uLong BitmapEx::GetChecksum() const
     return nCrc;
 }
 
-// ------------------------------------------------------------------
+
 
 void BitmapEx::SetSizePixel( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
@@ -362,7 +362,7 @@ bool BitmapEx::Mirror( sal_uLong nMirrorFlags )
     return bRet;
 }
 
-// ------------------------------------------------------------------
+
 
 bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nScaleFlag )
 {
@@ -386,7 +386,7 @@ bool BitmapEx::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 n
     return bRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool BitmapEx::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
@@ -529,7 +529,7 @@ bool BitmapEx::CopyPixel( const Rectangle& rRectDst, const Rectangle& rRectSrc,
                 if( pBmpExSrc->IsAlpha() )
                 {
                     if( IsAlpha() )
-                        // cast to use the optimized AlphaMask::CopyPixel
+                        
                         ((AlphaMask*) &aMask)->CopyPixel( rRectDst, rRectSrc, (AlphaMask*)&pBmpExSrc->aMask );
                     else if( IsTransparent() )
                     {
@@ -600,7 +600,7 @@ bool BitmapEx::Erase( const Color& rFillColor )
 
         if( bRet && ( eTransparent == TRANSPARENT_BITMAP ) && !!aMask )
         {
-            // Respect transparency on fill color
+            
             if( rFillColor.GetTransparency() )
             {
                 const Color aFill( rFillColor.GetTransparency(), rFillColor.GetTransparency(), rFillColor.GetTransparency() );
@@ -703,7 +703,7 @@ BitmapEx BitmapEx:: AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize
     aVirDevice.SetFillColor( COL_TRANSPARENT );
     aVirDevice.SetLineColor( COL_TRANSPARENT );
 
-    // Draw a rect into virDevice
+    
     aVirDevice.DrawRect( aRect );
     Point aPointPixel( (long)imgposX, (long)imgposY );
     aVirDevice.DrawBitmapEx( aPointPixel, aRet );
@@ -724,7 +724,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
             {
                 case TRANSPARENT_NONE:
                 {
-                    // Not transparent, ergo all covered
+                    
                     nTransparency = 0x00;
                     break;
                 }
@@ -737,7 +737,7 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
                     {
                         const Color aColor = pRead->GetColor(nY, nX);
 
-                        // If color is not equal to TransparentColor, we are not transparent
+                        
                         if(aColor != aTransparentColor)
                         {
                             nTransparency = 0x00;
@@ -782,8 +782,8 @@ sal_uInt8 BitmapEx::GetTransparency(sal_Int32 nX, sal_Int32 nY) const
     return nTransparency;
 }
 
-// Shift alpha transparent pixels between cppcanvas/ implementations
-// and vcl in a generally grotesque and under-performing fashion
+
+
 bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
                        ::com::sun::star::rendering::XBitmapCanvas > &xBitmapCanvas,
                        const Size &rSize )
@@ -791,7 +791,7 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
     uno::Reference< beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, uno::UNO_QUERY );
     if( xFastPropertySet.get() )
     {
-        // 0 means get BitmapEx
+        
         uno::Any aAny = xFastPropertySet->getFastPropertyValue( 0 );
         BitmapEx* pBitmapEx = (BitmapEx*) *reinterpret_cast<const sal_Int64*>(aAny.getValue());
         if( pBitmapEx )
@@ -828,7 +828,7 @@ bool BitmapEx::Create( const ::com::sun::star::uno::Reference<
     return false;
 }
 
-// ------------------------------------------------------------------
+
 
 namespace
 {
@@ -843,7 +843,7 @@ namespace
 
         if(pWrite)
         {
-            //const Size aContentSizePixel(rSource.GetSizePixel());
+            
             BitmapReadAccess* pRead = (const_cast< Bitmap& >(rSource)).AcquireReadAccess();
 
             if(pRead)
@@ -869,8 +869,8 @@ namespace
                         }
                         else
                         {
-                            // this version does the correct <= 0.0 checks, so no need
-                            // to do the static_cast< sal_Int32 > self and make an error
+                            
+                            
                             pWrite->SetPixel(
                                 y,
                                 x,
@@ -892,7 +892,7 @@ namespace
 
         return aDestination;
     }
-} // end of anonymous namespace
+} 
 
 BitmapEx BitmapEx::TransformBitmapEx(
     double fWidth,
@@ -903,11 +903,11 @@ BitmapEx BitmapEx::TransformBitmapEx(
     if(fWidth <= 1 || fHeight <= 1)
         return BitmapEx();
 
-    // force destination to 24 bit, we want to smooth output
+    
     const Size aDestinationSize(basegfx::fround(fWidth), basegfx::fround(fHeight));
     const Bitmap aDestination(impTransformBitmap(GetBitmap(), aDestinationSize, rTransformation, bSmooth));
 
-    // create mask
+    
     if(IsTransparent())
     {
         if(IsAlpha())
@@ -925,7 +925,7 @@ BitmapEx BitmapEx::TransformBitmapEx(
     return BitmapEx(aDestination);
 }
 
-// ------------------------------------------------------------------
+
 
 BitmapEx BitmapEx::getTransformed(
     const basegfx::B2DHomMatrix& rTransformation,
@@ -944,12 +944,12 @@ BitmapEx BitmapEx::getTransformed(
     if(!nSourceWidth || !nSourceHeight)
         return aRetval;
 
-    // Get aOutlineRange
+    
     basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
 
     aOutlineRange.transform(rTransformation);
 
-    // create visible range from it by moving from relative to absolute
+    
     basegfx::B2DRange aVisibleRange(rVisibleRange);
 
     aVisibleRange.transform(
@@ -957,7 +957,7 @@ BitmapEx BitmapEx::getTransformed(
             aOutlineRange.getRange(),
             aOutlineRange.getMinimum()));
 
-    // get target size (which is visible range's size)
+    
     double fWidth(aVisibleRange.getWidth());
     double fHeight(aVisibleRange.getHeight());
 
@@ -966,7 +966,7 @@ BitmapEx BitmapEx::getTransformed(
         return aRetval;
     }
 
-    // test if discrete size (pixel) maybe too big and limit it
+    
     const double fArea(fWidth * fHeight);
     const bool bNeedToReduce(basegfx::fTools::more(fArea, fMaximumArea));
     double fReduceFactor(1.0);
@@ -978,38 +978,38 @@ BitmapEx BitmapEx::getTransformed(
         fHeight *= fReduceFactor;
     }
 
-    // Build complete transform from source pixels to target pixels.
-    // Start by scaling from source pixel size to unit coordinates
+    
+    
     basegfx::B2DHomMatrix aTransform(
         basegfx::tools::createScaleB2DHomMatrix(
             1.0 / nSourceWidth,
             1.0 / nSourceHeight));
 
-    // multiply with given transform which leads from unit coordinates inside
-    // aOutlineRange
+    
+    
     aTransform = rTransformation * aTransform;
 
-    // substract top-left of absolute VisibleRange
+    
     aTransform.translate(
         -aVisibleRange.getMinX(),
         -aVisibleRange.getMinY());
 
-    // scale to target pixels (if needed)
+    
     if(bNeedToReduce)
     {
         aTransform.scale(fReduceFactor, fReduceFactor);
     }
 
-    // invert to get transformation from target pixel coordiates to source pixels
+    
     aTransform.invert();
 
-    // create bitmap using source, destination and linear back-transformation
+    
     aRetval = TransformBitmapEx(fWidth, fHeight, aTransform, bSmooth);
 
     return aRetval;
 }
 
-// ------------------------------------------------------------------
+
 
 BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack) const
 {
@@ -1023,15 +1023,15 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
 
         if(pReplace)
         {
-            // complete replace
+            
             if(IsTransparent())
             {
-                // clear bitmap with dest color
+                
                 if(aChangedBitmap.GetBitCount() <= 8)
                 {
-                    // do NOT use erase; for e.g. 8bit Bitmaps, the nearest color to the given
-                    // erase color is determined and used -> this may be different from what is
-                    // wanted here. Better create a new bitmap with the needed color explicitely
+                    
+                    
+                    
                     BitmapReadAccess* pReadAccess = aChangedBitmap.AcquireReadAccess();
                     OSL_ENSURE(pReadAccess, "Got no Bitmap ReadAccess ?!?");
 
@@ -1053,7 +1053,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
             }
             else
             {
-                // erase bitmap, caller will know to paint direct
+                
                 aChangedBitmap.SetEmpty();
             }
 
@@ -1167,7 +1167,7 @@ BitmapEx BitmapEx::ModifyBitmapEx(const basegfx::BColorModifierStack& rBColorMod
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 BitmapEx VCL_DLLPUBLIC createBlendFrame(
     const Size& rSize,
@@ -1240,11 +1240,11 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
             long x(0);
             long y(0);
 
-            // x == 0, y == 0, top-left corner
+            
             pContent->SetPixel(0, 0, aColorTopLeft);
             pAlpha->SetPixelIndex(0, 0, nAlpha);
 
-            // y == 0, top line left to right
+            
             for(x = 1; x < nW - 1; x++)
             {
                 Color aMix(aColorTopLeft);
@@ -1254,15 +1254,15 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
                 pAlpha->SetPixelIndex(0, x, nAlpha);
             }
 
-            // x == nW - 1, y == 0, top-right corner
-            // #i123690# Caution! When nW is 1, x == nW is possible (!)
+            
+            
             if(x < nW)
             {
                 pContent->SetPixel(0, x, aColorTopRight);
                 pAlpha->SetPixelIndex(0, x, nAlpha);
             }
 
-            // x == 0 and nW - 1, left and right line top-down
+            
             for(y = 1; y < nH - 1; y++)
             {
                 Color aMixA(aColorTopLeft);
@@ -1271,7 +1271,7 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
                 pContent->SetPixel(y, 0, aMixA);
                 pAlpha->SetPixelIndex(y, 0, nAlpha);
 
-                // #i123690# Caution! When nW is 1, x == nW is possible (!)
+                
                 if(x < nW)
                 {
                     Color aMixB(aColorTopRight);
@@ -1282,14 +1282,14 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
                 }
             }
 
-            // #i123690# Caution! When nH is 1, y == nH is possible (!)
+            
             if(y < nH)
             {
-                // x == 0, y == nH - 1, bottom-left corner
+                
                 pContent->SetPixel(y, 0, aColorBottomLeft);
                 pAlpha->SetPixelIndex(y, 0, nAlpha);
 
-                // y == nH - 1, bottom line left to right
+                
                 for(x = 1; x < nW - 1; x++)
                 {
                     Color aMix(aColorBottomLeft);
@@ -1299,8 +1299,8 @@ BitmapEx VCL_DLLPUBLIC createBlendFrame(
                     pAlpha->SetPixelIndex(y, x, nAlpha);
                 }
 
-                // x == nW - 1, y == nH - 1, bottom-right corner
-                // #i123690# Caution! When nW is 1, x == nW is possible (!)
+                
+                
                 if(x < nW)
                 {
                     pContent->SetPixel(y, x, aColorBottomRight);

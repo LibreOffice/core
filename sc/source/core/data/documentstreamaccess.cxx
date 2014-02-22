@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "documentstreamaccess.hxx"
@@ -47,11 +47,11 @@ void DocumentStreamAccess::setNumericCell( const ScAddress& rPos, double fVal )
     if (!pBlockPos)
         return;
 
-    // Set the numeric value.
+    
     CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), fVal);
 
-    // Be sure to set the corresponding text attribute to the default value.
+    
     CellTextAttrStoreType& rAttrs = pTab->aCol[rPos.Col()].maCellTextAttrs;
     pBlockPos->miCellTextAttrPos = rAttrs.set(pBlockPos->miCellTextAttrPos, rPos.Row(), CellTextAttr());
 }
@@ -72,11 +72,11 @@ void DocumentStreamAccess::setStringCell( const ScAddress& rPos, const OUString&
     if (!aSS.getData())
         return;
 
-    // Set the string.
+    
     CellStoreType& rCells = pTab->aCol[rPos.Col()].maCells;
     pBlockPos->miCellPos = rCells.set(pBlockPos->miCellPos, rPos.Row(), aSS);
 
-    // Be sure to set the corresponding text attribute to the default value.
+    
     CellTextAttrStoreType& rAttrs = pTab->aCol[rPos.Col()].maCellTextAttrs;
     pBlockPos->miCellTextAttrPos = rAttrs.set(pBlockPos->miCellTextAttrPos, rPos.Row(), CellTextAttr());
 }
@@ -104,10 +104,10 @@ void DocumentStreamAccess::shiftRangeUp( const ScRange& rRange )
             return;
 
         CellStoreType& rCells = pTab->aCol[nCol].maCells;
-        rCells.erase(nTopRow, nTopRow); // Erase the top, and shift the rest up.
+        rCells.erase(nTopRow, nTopRow); 
         pBlockPos->miCellPos = rCells.insert_empty(nLastRow, 1);
 
-        // Do the same for the text attribute storage.
+        
         CellTextAttrStoreType& rAttrs = pTab->aCol[nCol].maCellTextAttrs;
         rAttrs.erase(nTopRow, nTopRow);
         pBlockPos->miCellTextAttrPos = rAttrs.insert_empty(nLastRow, 1);
@@ -132,10 +132,10 @@ void DocumentStreamAccess::shiftRangeDown( const ScRange& rRange )
             return;
 
         CellStoreType& rCells = pTab->aCol[nCol].maCells;
-        rCells.erase(nLastRow, nLastRow); // Erase the bottom.
-        pBlockPos->miCellPos = rCells.insert_empty(nTopRow, 1); // insert at the top and shift everything down.
+        rCells.erase(nLastRow, nLastRow); 
+        pBlockPos->miCellPos = rCells.insert_empty(nTopRow, 1); 
 
-        // Do the same for the text attribute storage.
+        
         CellTextAttrStoreType& rAttrs = pTab->aCol[nCol].maCellTextAttrs;
         rAttrs.erase(nLastRow, nLastRow);
         pBlockPos->miCellTextAttrPos = rAttrs.insert_empty(nTopRow, 1);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -105,7 +105,7 @@ void ImpAddGraphicEntity( const Reference< XComponentContext >& rxMSF, Reference
         xShapePropertySet->getPropertyValue( "GraphicCrop" ) >>= aGraphicCropLogic;
         awt::Size aLogicalSize( rxShape->getSize() );
 
-        // calculating the logical size, as if there were no cropping
+        
         if ( aGraphicCropLogic.Left || aGraphicCropLogic.Right || aGraphicCropLogic.Top || aGraphicCropLogic.Bottom )
         {
             awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxMSF, xGraphic ) );
@@ -236,7 +236,7 @@ void ImpCollectGraphicObjects( const Reference< XComponentContext >& rxMSF, cons
             if ( sShapeType == sGraphicObjectShape )
                 ImpAddGraphicEntity( rxMSF, xShape, rGraphicSettings, rGraphicEntities );
 
-            // now check for a fillstyle
+            
             Reference< XPropertySet > xEmptyPagePropSet;
             Reference< XPropertySet > xShapePropertySet( xShape, UNO_QUERY_THROW );
             awt::Size aLogicalSize( xShape->getSize() );
@@ -255,7 +255,7 @@ awt::Size GraphicCollector::GetOriginalSize( const Reference< XComponentContext 
     if ( xGraphicPropertySet->getPropertyValue( "Size100thMM" ) >>= aSize100thMM )
     {
         if ( !aSize100thMM.Width && !aSize100thMM.Height )
-        {   // MAPMODE_PIXEL USED :-(
+        {   
             awt::Size aSourceSizePixel( 0, 0 );
             if ( xGraphicPropertySet->getPropertyValue( "SizePixel" ) >>= aSourceSizePixel )
             {
@@ -303,7 +303,7 @@ void GraphicCollector::CollectGraphics( const Reference< XComponentContext >& rx
         std::vector< GraphicCollector::GraphicEntity >::iterator aGraphicIEnd( rGraphicList.end() );
         while( aGraphicIter != aGraphicIEnd )
         {
-            // check if it is possible to remove the crop area
+            
             aGraphicIter->mbRemoveCropArea = rGraphicSettings.mbRemoveCropArea;
             if ( aGraphicIter->mbRemoveCropArea )
             {
@@ -360,7 +360,7 @@ void ImpCountGraphicObjects( const Reference< XComponentContext >& rxMSF, const 
                 rnGraphics++;
             }
 
-            // now check for a fillstyle
+            
             Reference< XPropertySet > xEmptyPagePropSet;
             Reference< XPropertySet > xShapePropertySet( xShape, UNO_QUERY_THROW );
             FillStyle eFillStyle;

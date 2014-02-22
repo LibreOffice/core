@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -52,9 +52,9 @@
 #include <map>
 #include <set>
 
-//_________________________________________________________________________________________________________________
-//  Defines
-//_________________________________________________________________________________________________________________
+
+
+
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -85,7 +85,7 @@ LanguageSelectionMenuController::~LanguageSelectionMenuController()
 {
 }
 
-// XEventListener
+
 void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -100,7 +100,7 @@ void SAL_CALL LanguageSelectionMenuController::disposing( const EventObject& ) t
     m_xPopupMenu.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     SolarMutexGuard aSolarMutexGuard;
@@ -109,7 +109,7 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
         return;
 
     m_bShowMenu = sal_True;
-    m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  //set the default value
+    m_nScriptType = LS_SCRIPT_LATIN | LS_SCRIPT_ASIAN | LS_SCRIPT_COMPLEX;  
 
     Sequence< OUString > aSeq;
 
@@ -117,8 +117,8 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
     {
         if ( aSeq.getLength() == 4 )
         {
-            // Retrieve all other values from the sequence and
-            // store it members!
+            
+            
             m_aCurLang          = aSeq[0];
             m_nScriptType       = static_cast< sal_Int16 >(aSeq[1].toInt32());
             m_aKeyboardLang     = aSeq[2];
@@ -127,25 +127,25 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
     }
     else if ( !Event.State.hasValue() )
     {
-        m_bShowMenu = sal_False;    // no language -> no sub-menu entries -> disable menu
+        m_bShowMenu = sal_False;    
     }
 }
 
-// XMenuListener
+
 void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& _xDispatch,const ::com::sun::star::util::URL& aTargetURL)
 {
     Reference< XDispatch > xDispatch = _xDispatch;
 
     if ( aTargetURL.Complete == m_aMenuCommandURL_Font )
-    {   //open format/character dialog for current selection
+    {   
         xDispatch = m_xMenuDispatch_Font;
     }
     else if ( aTargetURL.Complete == m_aMenuCommandURL_Lang )
-    {   //open language tab-page in tools/options dialog
+    {   
         xDispatch = m_xMenuDispatch_Lang;
     }
     else if ( aTargetURL.Complete == m_aMenuCommandURL_CharDlgForParagraph )
-    {   //open format/character dialog for current selection
+    {   
         xDispatch = m_xMenuDispatch_CharDlgForParagraph;
     }
 
@@ -163,29 +163,29 @@ void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& 
     }
 }
 
-// XPopupMenuController
+
 void LanguageSelectionMenuController::impl_setPopupMenu()
 {
     Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
 
     com::sun::star::util::URL aTargetURL;
 
-    // Register for language updates
+    
     aTargetURL.Complete = m_aLangStatusCommandURL;
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xLanguageDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-    // Register for setting languages and opening language dialog
+    
     aTargetURL.Complete = m_aMenuCommandURL_Lang;
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xMenuDispatch_Lang = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-    // Register for opening character dialog
+    
     aTargetURL.Complete = m_aMenuCommandURL_Font;
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xMenuDispatch_Font = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 
-    // Register for opening character dialog with preselected paragraph
+    
     aTargetURL.Complete = m_aMenuCommandURL_CharDlgForParagraph;
     m_xURLTransformer->parseStrict( aTargetURL );
     m_xMenuDispatch_CharDlgForParagraph = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
@@ -226,18 +226,18 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
 
     SvtLanguageTable    aLanguageTable;
 
-    // get languages to be displayed in the menu
+    
     std::set< OUString > aLangItems;
     FillLangItems( aLangItems, aLanguageTable, m_xFrame, m_aLangGuessHelper,
             m_nScriptType, m_aCurLang, m_aKeyboardLang, m_aGuessedTextLang );
 
-    // now add menu entries
-    // the different menus purpose will be handled by the different string
-    // for aCmd_Dialog and aCmd_Language
+    
+    
+    
 
-    sal_Int16 nItemId = 1;  // in this control the item id is not important for executing the command
-    const OUString sAsterisk("*");  // multiple languages in current selection
-    const OUString sEmpty;  // 'no language found' from language guessing
+    sal_Int16 nItemId = 1;  
+    const OUString sAsterisk("*");  
+    const OUString sEmpty;  
     std::set< OUString >::const_iterator it;
     for (it = aLangItems.begin(); it != aLangItems.end(); ++it)
     {
@@ -252,26 +252,26 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
             pPopupMenu->SetItemCommand( nItemId, aCmd );
             if (rStr == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
-                //make a sign for the current language
+                
                 pPopupMenu->CheckItem( nItemId, true );
             }
             ++nItemId;
         }
     }
 
-    // entry for LANGUAGE_NONE
+    
     ++nItemId;
     pPopupMenu->InsertItem( nItemId, FwlResId(STR_LANGSTATUS_NONE).toString() );
     aCmd = aCmd_Language + "LANGUAGE_NONE";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
-    // entry for 'Reset to default language'
+    
     ++nItemId;
     pPopupMenu->InsertItem( nItemId, FwlResId(STR_RESET_TO_DEFAULT_LANGUAGE).toString() );
     aCmd = aCmd_Language + "RESET_LANGUAGES";
     pPopupMenu->SetItemCommand( nItemId, aCmd );
 
-    // entry for opening the Format/Character dialog
+    
     ++nItemId;
     pPopupMenu->InsertItem( nItemId, FwlResId(STR_LANGSTATUS_MORE).toString());
     pPopupMenu->SetItemCommand( nItemId, aCmd_Dialog );
@@ -282,7 +282,7 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
 {
     svt::PopupMenuControllerBase::updatePopupMenu();
 
-    // Force status update to get information about the current languages
+    
     osl::ClearableMutexGuard aLock( m_aMutex );
     Reference< XDispatch > xDispatch( m_xLanguageDispatch );
     com::sun::star::util::URL aTargetURL;
@@ -296,7 +296,7 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
         xDispatch->removeStatusListener( (static_cast< XStatusListener* >(this)), aTargetURL );
     }
 
-    // TODO: Fill menu with the information retrieved by the status update
+    
 
     if ( m_aCommandURL == ".uno:SetLanguageSelectionMenu" )
     {
@@ -312,7 +312,7 @@ void SAL_CALL LanguageSelectionMenuController::updatePopupMenu() throw ( ::com::
     }
 }
 
-// XInitialization
+
 void SAL_CALL LanguageSelectionMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     osl::MutexGuard aLock( m_aMutex );

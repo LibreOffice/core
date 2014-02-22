@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "datasourceconnector.hxx"
@@ -56,7 +56,7 @@ namespace dbaui
     using namespace ::dbtools;
     using ::svt::OFileNotation;
 
-    // ODatasourceConnector
+    
     ODatasourceConnector::ODatasourceConnector(const Reference< XComponentContext >& _rxContext, Window* _pMessageParent)
         :m_pErrorMessageParent(_pMessageParent)
         ,m_xContext(_rxContext)
@@ -80,7 +80,7 @@ namespace dbaui
         if (!isValid())
             return xConnection;
 
-        // get the data source
+        
         Reference< XDataSource > xDatasource(
             getDataSourceByName( _rDataSourceName, m_pErrorMessageParent, m_xContext, _pErrorInfo ),
             UNO_QUERY
@@ -100,7 +100,7 @@ namespace dbaui
         if ( !isValid() || !_xDataSource.is() )
             return xConnection;
 
-        // get user/password
+        
         OUString sPassword, sUser;
         sal_Bool bPwdRequired = sal_False;
         Reference<XPropertySet> xProp(_xDataSource,UNO_QUERY);
@@ -115,12 +115,12 @@ namespace dbaui
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        // try to connect
+        
         SQLExceptionInfo aInfo;
         try
         {
             if (bPwdRequired && sPassword.isEmpty())
-            {   // password required, but empty -> connect using an interaction handler
+            {   
                 Reference< XCompletedConnection > xConnectionCompletion( _xDataSource, UNO_QUERY_THROW );
 
                 Reference< XModel > xModel( getDataSourceOrModel( _xDataSource ), UNO_QUERY_THROW );
@@ -129,7 +129,7 @@ namespace dbaui
 
                 if ( !xHandler.is() )
                 {
-                    // instantiate the default SDB interaction handler
+                    
                     xHandler = Reference< XInteractionHandler >( InteractionHandler::createWithParent(m_xContext, 0), UNO_QUERY );
                 }
 
@@ -151,7 +151,7 @@ namespace dbaui
 
         if ( !aInfo.isValid() )
         {
-            // there was no error during connecting, but perhaps a warning?
+            
             Reference< XWarningsSupplier > xConnectionWarnings( xConnection, UNO_QUERY );
             if ( xConnectionWarnings.is() )
             {
@@ -189,7 +189,7 @@ namespace dbaui
             }
         }
 
-        // was there an error?
+        
         if ( aInfo.isValid() )
         {
             if ( _pErrorInfo )
@@ -204,6 +204,6 @@ namespace dbaui
         return xConnection;
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <msfilter.hxx>
@@ -84,7 +84,7 @@ namespace myImplHelpers
                     nDist += rSize.GetHeight();
                 else
                 {
-                    nDist += 274;       // default for 12pt text
+                    nDist += 274;       
                     nDist += nSpacing;
                 }
             }
@@ -156,9 +156,9 @@ namespace myImplHelpers
         OSL_ENSURE(SAL_N_ELEMENTS(aArr) == 75, "Style Array has false size");
 
         SwTxtFmtColl* pRet = 0;
-        //If this is a built-in word style that has a built-in writer
-        //equivalent, then map it to one of our built in styles regardless
-        //of its name
+        
+        
+        
         if (sal::static_int_cast< size_t >(eSti) < SAL_N_ELEMENTS(aArr) && aArr[eSti] != RES_NONE)
             pRet = mrDoc.GetTxtCollFromPool( static_cast< sal_uInt16 >(aArr[eSti]), false);
         return pRet;
@@ -253,14 +253,14 @@ namespace myImplHelpers
     {
         C *pRet = maHelper.GetBuiltInStyle(eSti);
 
-        //If we've used it once, don't reuse it
+        
         if (pRet && (maUsedStyles.end() != maUsedStyles.find(pRet)))
             pRet = 0;
 
         if (!pRet)
         {
             pRet = maHelper.GetStyle(rName);
-            //If we've used it once, don't reuse it
+            
             if (pRet && (maUsedStyles.end() != maUsedStyles.find(pRet)))
                 pRet = 0;
         }
@@ -271,7 +271,7 @@ namespace myImplHelpers
         {
             OUString aName(rName);
             sal_Int32 nIdx = rName.indexOf(',');
-            // No commas allow in SW style names
+            
             if (-1 != nIdx)
                 aName = rName.copy( 0, nIdx );
             pRet = MakeNonCollidingStyle( aName );
@@ -291,9 +291,9 @@ namespace myImplHelpers
 
         if (0 != (pColl = maHelper.GetStyle(aName)))
         {
-            //If the style collides first stick WW- in front of it, unless
-            //it already has it and then successively add a larger and
-            //larger number after it, its got to work at some stage!
+            
+            
+            
             if (!aName.startsWith("WW-"))
                 aName = "WW-" + aName;
 
@@ -319,7 +319,7 @@ namespace myImplHelpers
         return GetSubsFontName(rFont, SUBSFONT_ONLYONE | SUBSFONT_MS);
     }
 
-    //Utility to remove entries before a given starting position
+    
     class IfBeforeStart
         : public std::unary_function<const sw::util::CharRunEntry&, bool>
     {
@@ -354,7 +354,7 @@ namespace sw
 
             if (rFirstColumns.size() != rFollowColumns.size())
             {
-                //e.g. #i4320#
+                
                 bPlausableSingleWordSection = false;
             }
             else if (rOneLR != rTwoLR)
@@ -365,7 +365,7 @@ namespace sw
             {
                 HdFtDistanceGlue aOne(rTitleFmt.GetAttrSet());
                 HdFtDistanceGlue aTwo(rFollowFmt.GetAttrSet());
-                //e.g. #i14509#
+                
                 if (!aOne.StrictEqualTopBottom(aTwo))
                     bPlausableSingleWordSection = false;
             }
@@ -416,8 +416,8 @@ namespace sw
         bool HdFtDistanceGlue::StrictEqualTopBottom(const HdFtDistanceGlue &rOther)
             const
         {
-            // Check top only if both object have a header or if
-            // both object don't have a header
+            
+            
             if ( (  HasHeader() &&  rOther.HasHeader() ) ||
                  ( !HasHeader() && !rOther.HasHeader() ) )
             {
@@ -425,8 +425,8 @@ namespace sw
                     return false;
             }
 
-            // Check bottom only if both object have a footer or if
-            // both object don't have a footer
+            
+            
             if ( (  HasFooter() &&  rOther.HasFooter() ) ||
                  ( !HasFooter() && !rOther.HasFooter() ) )
             {
@@ -585,8 +585,8 @@ namespace sw
 
             if (bSplitOnCharSet)
             {
-                //Split unicode text into plausable 8bit ranges for export to
-                //older non unicode aware format
+                
+                
                 sal_Int32 nLen = rTxt.getLength();
                 sal_Int32 nPos = 0;
                 while (nPos != nLen)
@@ -749,14 +749,14 @@ namespace sw
             SvNumberFormatter *pFormatter, sal_uInt16 &rLang, bool bHijri,
             sal_uInt16 nDocLang)
         {
-            // tell the Formatter about the new entry
+            
             sal_Int32 nCheckPos = 0;
             short  nType = NUMBERFORMAT_DEFINED;
             sal_uInt32  nKey = 0;
 
             SwapQuotesInField(rParams);
 
-            // Force to Japanese when finding one of 'geaE'
+            
             bool bForceJapanese = (-1 != rParams.indexOf('g')
                 || -1 != rParams.indexOf('e') || -1 != rParams.indexOf('E') );
             if ( bForceJapanese )
@@ -765,7 +765,7 @@ namespace sw
             }
             if (LANGUAGE_FRENCH != nDocLang)
             {
-                // Handle the 'a' case here
+                
                 sal_Int32 nLastPos = 0;
                 do
                 {
@@ -775,13 +775,13 @@ namespace sw
                 } while ( -1 != nLastPos );
             }
 
-            // Force to NatNum when finding one of 'oOA'
+            
             OUString sOldParams( rParams );
             rParams = rParams.replaceAll( "o", "m" ).replaceAll( "O", "M" );
             bool bForceNatNum = !sOldParams.equals( rParams );
             if (LANGUAGE_FRENCH != nDocLang)
             {
-                // Handle the 'A' case here
+                
                 sal_Int32 nLastPos = 0;
                 do
                 {
@@ -802,7 +802,7 @@ namespace sw
                 else if (rParams[nI] == '\"')
                 {
                     ++nI;
-                    // While not at the end and not at an unescaped end quote
+                    
                     while (nI < nLen)
                     {
                         if (rParams[nI] == '\"' && rParams[nI-1] != '\\')
@@ -810,11 +810,11 @@ namespace sw
                         ++nI;
                     }
                 }
-                else //normal unquoted section
+                else 
                 {
                     sal_Unicode nChar = rParams[nI];
 
-                    // Change the localized word string to english
+                    
                     switch ( nDocLang )
                     {
                         case LANGUAGE_FRENCH:
@@ -826,8 +826,8 @@ namespace sw
                     }
                     if (nChar == '/')
                     {
-                        // MM: We have to escape '/' in case it's used as a char.
-                        // But not if it's a '/' inside AM/PM
+                        
+                        
                         if (!(IsPreviousAM(rParams, nI) && IsNextPM(rParams, nI)))
                         {
                             rParams = rParams.replaceAt(nI, 1, "\\/");
@@ -836,13 +836,13 @@ namespace sw
                         nI++;
                     }
 
-                    // Deal with language differences in date format expression.
-                    // Should be made with i18n framework.
-                    // The list of the mappings and of those "special" locales is to be found at:
-                    // http://l10n.openoffice.org/i18n_framework/LocaleData.html
+                    
+                    
+                    
+                    
                     if ( !bForceJapanese && !bForceNatNum )
                     {
-                        // Convert to the localized equivalent for OOo
+                        
                         switch ( rLang )
                         {
                         case LANGUAGE_FINNISH:
@@ -946,7 +946,7 @@ namespace sw
                             break;
                         default:
                             {
-                                ; // Nothing
+                                ; 
                             }
                         }
                     }
@@ -986,7 +986,7 @@ namespace sw
 
         void SwapQuotesInField(OUString &rFmt)
         {
-            //Swap unescaped " and ' with ' and "
+            
             const sal_Int32 nLen = rFmt.getLength();
             for (sal_Int32 nI = 0; nI < nLen; ++nI)
             {

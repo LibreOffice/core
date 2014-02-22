@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,11 +36,11 @@ using namespace hierarchy_ucp;
 namespace hierarchy_ucp
 {
 
-//=========================================================================
+
 //
-// struct ResultListEntry.
+
 //
-//=========================================================================
+
 
 struct ResultListEntry
 {
@@ -53,19 +53,19 @@ struct ResultListEntry
     ResultListEntry( const HierarchyEntryData& rEntry ) : aData( rEntry ) {}
 };
 
-//=========================================================================
+
 //
-// ResultList.
+
 //
-//=========================================================================
+
 
 typedef std::vector< ResultListEntry* > ResultList;
 
-//=========================================================================
+
 //
-// struct DataSupplier_Impl.
+
 //
-//=========================================================================
+
 
 struct DataSupplier_Impl
 {
@@ -91,7 +91,7 @@ struct DataSupplier_Impl
     ~DataSupplier_Impl();
 };
 
-//=========================================================================
+
 DataSupplier_Impl::~DataSupplier_Impl()
 {
     ResultList::const_iterator it  = m_aResults.begin();
@@ -106,13 +106,13 @@ DataSupplier_Impl::~DataSupplier_Impl()
 
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// HierarchyResultSetDataSupplier Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 HierarchyResultSetDataSupplier::HierarchyResultSetDataSupplier(
                 const uno::Reference< uno::XComponentContext >& rxContext,
@@ -122,15 +122,15 @@ HierarchyResultSetDataSupplier::HierarchyResultSetDataSupplier(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 HierarchyResultSetDataSupplier::~HierarchyResultSetDataSupplier()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
-// virtual
+
+
 OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
                                                         sal_uInt32 nIndex )
 {
@@ -141,7 +141,7 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
         OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
         if ( !aId.isEmpty() )
         {
-            // Already cached.
+            
             return aId;
         }
     }
@@ -162,8 +162,8 @@ OUString HierarchyResultSetDataSupplier::queryContentIdentifierString(
     return OUString();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< ucb::XContentIdentifier >
 HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
@@ -175,7 +175,7 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
                                 = m_pImpl->m_aResults[ nIndex ]->xId;
         if ( xId.is() )
         {
-            // Already cached.
+            
             return xId;
         }
     }
@@ -191,8 +191,8 @@ HierarchyResultSetDataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContentIdentifier >();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< ucb::XContent >
 HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
 {
@@ -204,7 +204,7 @@ HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
                                 = m_pImpl->m_aResults[ nIndex ]->xContent;
         if ( xContent.is() )
         {
-            // Already cached.
+            
             return xContent;
         }
     }
@@ -228,24 +228,24 @@ HierarchyResultSetDataSupplier::queryContent( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContent >();
 }
 
-//=========================================================================
-// virtual
+
+
 bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( m_pImpl->m_aResults.size() > nIndex )
     {
-        // Result already present.
+        
         return true;
     }
 
-    // Result not (yet) present.
+    
 
     if ( m_pImpl->m_bCountFinal )
         return false;
 
-    // Try to obtain result...
+    
 
     sal_uInt32 nOldCount = m_pImpl->m_aResults.size();
     bool bFound = false;
@@ -260,7 +260,7 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
 
             if ( nPos == nIndex )
             {
-                // Result obtained.
+                
                 bFound = true;
                 break;
             }
@@ -274,7 +274,7 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
     {
-        // Callbacks follow!
+        
         aGuard.clear();
 
         if ( nOldCount < m_pImpl->m_aResults.size() )
@@ -288,8 +288,8 @@ bool HierarchyResultSetDataSupplier::getResult( sal_uInt32 nIndex )
     return bFound;
 }
 
-//=========================================================================
-// virtual
+
+
 sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -311,7 +311,7 @@ sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
     rtl::Reference< ::ucbhelper::ResultSet > xResultSet = getResultSet().get();
     if ( xResultSet.is() )
     {
-        // Callbacks follow!
+        
         aGuard.clear();
 
         if ( nOldCount < m_pImpl->m_aResults.size() )
@@ -324,22 +324,22 @@ sal_uInt32 HierarchyResultSetDataSupplier::totalCount()
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
-// virtual
+
+
 sal_uInt32 HierarchyResultSetDataSupplier::currentCount()
 {
     return m_pImpl->m_aResults.size();
 }
 
-//=========================================================================
-// virtual
+
+
 bool HierarchyResultSetDataSupplier::isCountFinal()
 {
     return m_pImpl->m_bCountFinal;
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< sdbc::XRow >
 HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
 {
@@ -351,7 +351,7 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
             = m_pImpl->m_aResults[ nIndex ]->xRow;
         if ( xRow.is() )
         {
-            // Already cached.
+            
             return xRow;
         }
     }
@@ -376,8 +376,8 @@ HierarchyResultSetDataSupplier::queryPropertyValues( sal_uInt32 nIndex  )
     return uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
-// virtual
+
+
 void HierarchyResultSetDataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -386,20 +386,20 @@ void HierarchyResultSetDataSupplier::releasePropertyValues( sal_uInt32 nIndex )
         m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
 }
 
-//=========================================================================
-// virtual
+
+
 void HierarchyResultSetDataSupplier::close()
 {
 }
 
-//=========================================================================
-// virtual
+
+
 void HierarchyResultSetDataSupplier::validate()
     throw( ucb::ResultSetException )
 {
 }
 
-//=========================================================================
+
 sal_Bool HierarchyResultSetDataSupplier::checkResult(
                                     const HierarchyEntryData& rResult )
 {
@@ -408,7 +408,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
         case ucb::OpenMode::FOLDERS:
             if ( rResult.getType() == HierarchyEntryData::LINK )
             {
-                // Entry is a link.
+                
                 return sal_False;
             }
             break;
@@ -416,7 +416,7 @@ sal_Bool HierarchyResultSetDataSupplier::checkResult(
         case ucb::OpenMode::DOCUMENTS:
             if ( rResult.getType() == HierarchyEntryData::FOLDER )
             {
-                // Entry is a folder.
+                
                 return sal_False;
             }
             break;

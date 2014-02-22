@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <BufferedStreamSocket.hxx>
@@ -12,7 +12,7 @@
 #include <algorithm>
 
 #ifdef WIN32
-  // LO vs WinAPI conflict
+  
   #undef WB_LEFT
   #undef WB_RIGHT
 
@@ -78,7 +78,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
 {
     while ( true )
     {
-        // Process buffer first incase data already present.
+        
         vector<char>::iterator aIt;
         if ( (aIt = find( aBuffer.begin(), aBuffer.end(), '\n' ))
              != aBuffer.end() )
@@ -87,7 +87,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
 
             aLine = OString( &(*aBuffer.begin()), aLocation );
 
-            aBuffer.erase( aBuffer.begin(), aIt + 1 ); // Also delete the empty line
+            aBuffer.erase( aBuffer.begin(), aIt + 1 ); 
             aRead -= (aLocation + 1);
 
             SAL_INFO( "sdremote.bluetooth", "recv line '" << aLine << "'" );
@@ -95,7 +95,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
             return aLine.getLength() + 1;
         }
 
-        // Then try and receive if nothing present
+        
         aBuffer.resize( aRead + 100 );
         if ( !usingCSocket)
             aRet = StreamSocket::recv( &aBuffer[aRead], 100 );
@@ -107,7 +107,7 @@ sal_Int32 BufferedStreamSocket::readLine( OString& aLine )
         {
             return 0;
         }
-        // Prevent buffer from growing massively large.
+        
         if ( aRead > MAX_LINE_LENGTH )
         {
             aBuffer.erase( aBuffer.begin(), aBuffer.end() );

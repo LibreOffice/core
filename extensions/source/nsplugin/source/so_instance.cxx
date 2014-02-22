@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -107,10 +107,10 @@ sal_Bool SoPluginInstance::SetURL(char* aURL)
     return sal_True;
 }
 
-// plugin window UI part: create window, load document
+
 sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 {
-    // If doc has been loaded, we just resize the window and return
+    
     if(m_bInit)
     {
         debug_fprintf(NSP_LOG_APPEND, "only reset windows size\n");
@@ -120,7 +120,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         return sal_True;
     }
 
-    // If mxRemoteMSF is not initialized, we assert and return sal_False
+    
     if(!mxRemoteMSF.is())
     {
         debug_fprintf(NSP_LOG_APPEND, "Remote StarOfiice ServiceManager is not initilzed correctly!\n");
@@ -132,21 +132,21 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         Reference< beans::XPropertySet > xFactoryProperties( mxRemoteMSF, uno::UNO_QUERY );
         Reference< uno::XComponentContext > xContext( xFactoryProperties->getPropertyValue( "DefaultContext" ), UNO_QUERY );
 
-        // try to create netscape plugin window
+        
         Reference< awt::XToolkit2 > xToolkit( awt::Toolkit::create(xContext) );
 
-        // prepare parameters for plugin window
+        
         css::uno::Any hwndParent = css::uno::makeAny((sal_Int32)hParent);
 #ifdef UNIX
         sal_Int16 nWindowType = css::lang::SystemDependent::SYSTEM_XWINDOW;
-#endif //end of UNIX
+#endif 
 #ifdef WNT
         sal_Int16 nWindowType = css::lang::SystemDependent::SYSTEM_WIN32;
-#endif //end of WNT
+#endif 
 
         debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin,  try to create plugin container window HWIN:%ld.\n", hParent);
 
-        // create the plugin window
+        
         Reference< awt::XWindowPeer > xNewWinPeer =
             xToolkit->createSystemChild( hwndParent,
                 css::uno::Sequence<sal_Int8>(), nWindowType );
@@ -156,7 +156,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             return sal_False;
         }
 
-        // get interface of first window
+        
         m_xUnoWin = Reference< awt::XWindow >( xNewWinPeer, uno::UNO_QUERY );
         if( !m_xUnoWin.is() )
         {
@@ -164,22 +164,22 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             return sal_False;
         }
 
-        // initialize window
+        
         xNewWinPeer->setBackground( COL_GRAY );
         m_xUnoWin->setVisible( sal_True );
         m_xUnoWin->setPosSize( m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag );
         debug_fprintf(NSP_LOG_APPEND, "set windows to x:%d y:%d w:%d h%d falg:%d\n",
             m_nX, m_nY, m_nWidth, m_nHeight, m_nFlag);
 
-        // create frame
+        
         m_xFrame = frame::Frame::create( xContext );
 
-        // initialize frame
+        
         m_xFrame->initialize( m_xUnoWin );
 
         try
         {
-            // currently ignore errors in this code
+            
             uno::Reference< beans::XPropertySet > xFrameProps( m_xFrame, uno::UNO_QUERY_THROW );
             uno::Reference< beans::XPropertySet > xLMProps;
             xFrameProps->getPropertyValue("LayoutManager") >>= xLMProps;
@@ -189,10 +189,10 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
         catch( const uno::Exception& )
         {}
 
-        // get frames supplier
+        
         Reference< frame::XDesktop2 > xFramesSupplier = frame::Desktop::create( xContext );
 
-        // get frames
+        
         m_xFrames = xFramesSupplier->getFrames();
         if ( !m_xFrames.is() )
         {
@@ -200,10 +200,10 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             return sal_False;
         }
 
-        // append m_xFrame to m_xFrames
+        
         m_xFrames->append( Reference<frame::XFrame>(m_xFrame, uno::UNO_QUERY_THROW) );
 
-        // create XComponentLoader
+        
         Reference< frame::XComponentLoader > xLoader( m_xFrame, uno::UNO_QUERY );
         if ( !xLoader.is() )
         {
@@ -211,7 +211,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             return sal_False;
         }
 
-        //create stream for the document
+        
         Reference< ucb::XSimpleFileAccess3 > xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
         Reference<io::XInputStream> xInputStream = xSimpleFileAccess->openFileRead( m_sURL );
 
@@ -221,7 +221,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             return sal_False;
         }
 
-        // prepare to load document
+        
         debug_fprintf(NSP_LOG_APPEND, "try to load document\n");
         Sequence< ::com::sun::star::beans::PropertyValue > setPropValues(3);
         setPropValues[0].Name = "ViewOnly";
@@ -238,7 +238,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             OUStringToOString( m_sURL, RTL_TEXTENCODING_ASCII_US ).getStr( ),
             m_sURL.getLength() );
 
-        // load document
+        
          Sequence< ::com::sun::star::beans::PropertyValue > setPropValues2(3);
         setPropValues2[0].Name = "ViewOnly";
         setPropValues2[0].Value <<= sal_True;
@@ -256,7 +256,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             return sal_False;
         }
 
-         // register the closelistener that will prevent closing of the component
+         
         Reference< util::XCloseable > xCloseable( m_xFrame, uno::UNO_QUERY );
         if ( xCloseable.is() )
         {
@@ -265,12 +265,12 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             xCloseable->addCloseListener( m_xCloseListener );
         }
 
-        //free the input stream, it is hold by the m_xComponent
+        
         xInputStream.clear();
 
         debug_fprintf(NSP_LOG_APPEND, "load document success\n");
 
-        // create frame::XDispatchHelper and frame::XDispatchProvider
+        
         m_xDispatcher = Reference< frame::XDispatchHelper >( frame::DispatchHelper::create( xContext ) );
         m_xDispatchProvider = Reference< frame::XDispatchProvider >(m_xFrame, uno::UNO_QUERY);
         if(!m_xDispatchProvider.is())
@@ -279,7 +279,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
             return sal_False;
         }
 
-        //try to enable toolbar and tool windows
+        
         Sequence< ::com::sun::star::beans::PropertyValue > propertyValue(1);
         propertyValue[0].Name = "FunctionBarVisible";
         propertyValue[0].Value <<= sal_True;
@@ -288,7 +288,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
                 m_xFrame->getName(), 0,
                 propertyValue );
 
-        // reset window style of parent window
+        
 #ifdef WNT
         m_dParentStyl = ::NSP_ResetWinStyl (m_hParent);
 #endif
@@ -296,7 +296,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         try
         {
-            // in case of presentation try to set the mode of slide-show, and start it
+            
             uno::Reference< presentation::XPresentationSupplier > xPresSuppl( m_xComponent, uno::UNO_QUERY_THROW );
             uno::Reference< presentation::XPresentation > xPres( xPresSuppl->getPresentation(), uno::UNO_SET_THROW );
             uno::Reference< beans::XPropertySet > xProps( xPresSuppl->getPresentation(), uno::UNO_QUERY_THROW );
@@ -322,8 +322,8 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
 
     if ( m_hParent && !hParent )
     {
-        // the plugin instance has the parent window set already and now it becomes NULL as parent window
-        // that means that the instance should be closed
+        
+        
         Destroy();
         m_hParent = hParent;
     }
@@ -348,9 +348,9 @@ sal_Bool SoPluginInstance::SetWindow(NSP_HWND hParent, int x, int y, int w, int 
             return sal_False;
         }
         debug_fprintf(NSP_LOG_APPEND, "in SoPluginInstance::SetWindow, begin LoadDocument(hParent)\n");
-        bRetval = LoadDocument(hParent);  // Load document into current window
+        bRetval = LoadDocument(hParent);  
         if(!bRetval){
-            // try to reload document again
+            
             debug_fprintf(NSP_LOG_APPEND, "load document error, try to reload it once again\n");
             mxRemoteMSF.clear();
             m_bInit = sal_False;
@@ -395,7 +395,7 @@ sal_Bool SoPluginInstance::Destroy(void)
                 aArgs ),
             uno::UNO_QUERY_THROW );
 
-        xDocumentCloser->dispose(); // this call should close the document
+        xDocumentCloser->dispose(); 
     }
     catch( const uno::Exception& )
     {

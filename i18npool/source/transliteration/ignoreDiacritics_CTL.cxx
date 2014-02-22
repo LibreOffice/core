@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #define TRANSLITERATION_Diacritics_CTL
@@ -17,7 +17,7 @@ sal_Unicode
 ignoreDiacritics_CTL_translator (const sal_Unicode c)
 {
     if(u_getIntPropertyValue(c, UCHAR_GENERAL_CATEGORY) == U_NON_SPACING_MARK)
-        return 0xffff; // Skip this character
+        return 0xffff; 
 
     return c;
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -53,8 +53,8 @@ namespace vclcanvas
         void spriteRedraw( OutputDevice&                      rOutDev,
                            const ::canvas::Sprite::Reference& rSprite )
         {
-            // downcast to derived vclcanvas::Sprite interface, which
-            // provides the actual redraw methods.
+            
+            
             ::boost::polymorphic_downcast< Sprite* >(rSprite.get())->redraw(rOutDev,
                                                                             true);
         }
@@ -84,20 +84,20 @@ namespace vclcanvas
             const Rectangle& rRequestedArea(
                 ::vcl::unotools::rectangleFromB2IRectangle( rArea ) );
 
-            // clip output to actual update region (otherwise a)
-            // wouldn't save much render time, and b) will clutter
-            // scrolled sprite content outside this area)
+            
+            
+            
             rOutDev.EnableMapMode( false );
             rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
             rOutDev.SetClipRegion(Region(rRequestedArea));
 
-            // repaint affected sprite directly to output device (at
-            // the actual screen output position)
+            
+            
             ::boost::polymorphic_downcast< Sprite* >(
                 rSprite.get() )->redraw( rOutDev,
-                                         false ); // rendering
-                                                  // directly to
-                                                  // frontbuffer
+                                         false ); 
+                                                  
+                                                  
         }
 
         /** Repaint sprite at original position
@@ -130,8 +130,8 @@ namespace vclcanvas
                 Sprite* pSprite = ::boost::polymorphic_downcast< Sprite* >(
                     rSprite.get() );
 
-                // calc relative sprite position in rUpdateArea (which
-                // need not be the whole screen!)
+                
+                
                 const ::basegfx::B2DPoint& rSpriteScreenPos( pSprite->getPosPixel() );
                 const ::basegfx::B2DPoint& rSpriteRenderPos( rSpriteScreenPos - rOutPos );
 
@@ -184,7 +184,7 @@ namespace vclcanvas
         mbIsUnsafeScrolling( false )
     {
 #if OSL_DEBUG_LEVEL > 2
-        // inverse defaults for verbose debug mode
+        
         mbShowSpriteBounds = mbShowFrameInfo = true;
 #endif
     }
@@ -206,7 +206,7 @@ namespace vclcanvas
         mpRedrawManager = NULL;
         mpOwningSpriteCanvas = NULL;
 
-        // forward to base
+        
         CanvasHelper::disposing();
     }
 
@@ -226,7 +226,7 @@ namespace vclcanvas
     uno::Reference< rendering::XCustomSprite > SpriteCanvasHelper::createCustomSprite( const geometry::RealSize2D& spriteSize )
     {
         if( !mpRedrawManager || !mpDevice )
-            return uno::Reference< rendering::XCustomSprite >(); // we're disposed
+            return uno::Reference< rendering::XCustomSprite >(); 
 
         return uno::Reference< rendering::XCustomSprite >(
             new CanvasCustomSprite( spriteSize,
@@ -249,18 +249,18 @@ namespace vclcanvas
             !mpOwningSpriteCanvas->getFrontBuffer() ||
             !mpOwningSpriteCanvas->getBackBuffer() )
         {
-            return sal_False; // disposed, or otherwise dysfunctional
+            return sal_False; 
         }
 
-        // commit to backbuffer
+        
         flush();
 
         OutputDevice&       rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
         BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
         OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
 
-        // actual OutputDevice is a shared resource - restore its
-        // state when done.
+        
+        
         tools::OutDevStateKeeper aStateKeeper( rOutDev );
 
         const Size  aOutDevSize( rBackOutDev.GetOutputSizePixel() );
@@ -269,25 +269,25 @@ namespace vclcanvas
         Window* pTargetWindow = NULL;
         if( rOutDev.GetOutDevType() == OUTDEV_WINDOW )
         {
-            pTargetWindow = &static_cast<Window&>(rOutDev); // TODO(Q3): Evil downcast.
+            pTargetWindow = &static_cast<Window&>(rOutDev); 
 
-            // we're double-buffered, thus no need for paint area-limiting
-            // clips. besides that, will interfere with animations (as for
-            // Window-invalidate repaints, only parts of the window will
-            // be redrawn otherwise)
+            
+            
+            
+            
             const Region aFullWindowRegion( Rectangle(aEmptyPoint,
                                                       aOutDevSize) );
             pTargetWindow->ExpandPaintClipRegion(aFullWindowRegion);
         }
 
-        // TODO(P1): Might be worthwile to track areas of background
-        // changes, too.
+        
+        
         if( !bUpdateAll && !io_bSurfaceDirty )
         {
             if( mbShowFrameInfo )
             {
-                // also repaint background below frame counter (fake
-                // that as a sprite vanishing in this area)
+                
+                
                 mpRedrawManager->updateSprite( ::canvas::Sprite::Reference(),
                                                ::basegfx::B2DPoint(),
                                                ::basegfx::B2DRectangle( 0.0, 0.0,
@@ -295,17 +295,17 @@ namespace vclcanvas
                                                                         FPS_BOUNDS.Bottom() ) );
             }
 
-            // background has not changed, so we're free to optimize
-            // repaint to areas where a sprite has changed
+            
+            
 
-            // process each independent area of overlapping sprites
-            // separately.
+            
+            
             mpRedrawManager->forEachSpriteArea( *this );
         }
         else
         {
-            // background has changed, so we currently have no choice
-            // but repaint everything (or caller requested that)
+            
+            
 
             maVDev->SetOutputSizePixel( aOutDevSize );
             maVDev->EnableMapMode( false );
@@ -313,15 +313,15 @@ namespace vclcanvas
                                 aEmptyPoint, aOutDevSize,
                                 rBackOutDev );
 
-            // repaint all active sprites on top of background into
-            // VDev.
+            
+            
             mpRedrawManager->forEachSprite(
                 ::boost::bind(
                     &spriteRedraw,
                     ::boost::ref( maVDev.get() ),
                     _1 ) );
 
-            // flush to screen
+            
             rOutDev.EnableMapMode( false );
             rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
             rOutDev.SetClipRegion();
@@ -330,8 +330,8 @@ namespace vclcanvas
                                 *maVDev );
         }
 
-        // change record vector must be cleared, for the next turn of
-        // rendering and sprite changing
+        
+        
         mpRedrawManager->clearChangeRecords();
 
         io_bSurfaceDirty = false;
@@ -346,18 +346,18 @@ namespace vclcanvas
 #if OSL_DEBUG_LEVEL > 2
         static ::canvas::tools::ElapsedTime aElapsedTime;
 
-        // log time immediately after surface flip
+        
         OSL_TRACE( "SpriteCanvasHelper::updateScreen(): flip done at %f",
                    aElapsedTime.getElapsedTime() );
 #endif
 
-        // sync output with screen, to ensure that we don't queue up
-        // render requests (calling code might rely on timing,
-        // i.e. assume that things are visible on screen after
-        // updateScreen() returns).
+        
+        
+        
+        
         if( pTargetWindow )
         {
-            // commit to screen
+            
             pTargetWindow->Sync();
         }
 
@@ -396,11 +396,11 @@ namespace vclcanvas
                                                   rTargetSizePixel.Width(),
                                                   rTargetSizePixel.Height() );
 
-        // round rectangles to integer pixel. Note: have to be
-        // extremely careful here, to avoid off-by-one errors for
-        // the destination area: otherwise, the next scroll update
-        // would copy pixel that are not supposed to be part of
-        // the sprite.
+        
+        
+        
+        
+        
         ::basegfx::B2IRange aSourceRect(
             ::canvas::tools::spritePixelAreaFromB2DRange( rMoveStart ) );
         const ::basegfx::B2IRange& rDestRect(
@@ -409,25 +409,25 @@ namespace vclcanvas
 
         ::std::vector< ::basegfx::B2IRange > aUnscrollableAreas;
 
-        // Since strictly speaking, this scroll algorithm is plain
-        // buggy, the scrolled area might actually lie _below_ another
-        // window - we've made this feature configurable via
-        // mbIsUnsafeScrolling.
+        
+        
+        
+        
 
-        // clip to output bounds (cannot properly scroll stuff
-        // _outside_ our screen area)
+        
+        
         if( !mbIsUnsafeScrolling ||
             !::canvas::tools::clipScrollArea( aSourceRect,
                                               aDestPos,
                                               aUnscrollableAreas,
                                               aOutputBounds ) )
         {
-            // fully clipped scroll area: cannot simply scroll
-            // then. Perform normal opaque update (can use that, since
-            // one of the preconditions for scrollable update is
-            // opaque sprite content)
+            
+            
+            
+            
 
-            // repaint all affected sprites directly to output device
+            
             ::std::for_each( rUpdateArea.maComponentList.begin(),
                              rUpdateArea.maComponentList.end(),
                              ::boost::bind(
@@ -437,10 +437,10 @@ namespace vclcanvas
         }
         else
         {
-            // scroll rOutDev content
+            
             rOutDev.CopyArea( ::vcl::unotools::pointFromB2IPoint( aDestPos ),
                               ::vcl::unotools::pointFromB2IPoint( aSourceRect.getMinimum() ),
-                              // TODO(Q2): use numeric_cast to check range
+                              
                               ::Size( static_cast<sal_Int32>(aSourceRect.getRange().getX()),
                                       static_cast<sal_Int32>(aSourceRect.getRange().getY()) ) );
 
@@ -450,9 +450,9 @@ namespace vclcanvas
             ENSURE_OR_THROW( aFirst->second.getSprite().is(),
                               "VCLCanvas::scrollUpdate(): no sprite" );
 
-            // repaint uncovered areas from sprite. Need to actually
-            // clip here, since we're only repainting _parts_ of the
-            // sprite
+            
+            
+            
             rOutDev.Push( PUSH_CLIPREGION );
             ::std::for_each( aUnscrollableAreas.begin(),
                              aUnscrollableAreas.end(),
@@ -463,9 +463,9 @@ namespace vclcanvas
             rOutDev.Pop();
         }
 
-        // repaint uncovered areas from backbuffer - take the
-        // _rounded_ rectangles from above, to have the update
-        // consistent with the scroll above.
+        
+        
+        
         ::std::vector< ::basegfx::B2DRange > aUncoveredAreas;
         ::basegfx::computeSetDifference( aUncoveredAreas,
                                          rUpdateArea.maTotalBounds,
@@ -488,14 +488,14 @@ namespace vclcanvas
 
         OutputDevice& rOutDev( mpOwningSpriteCanvas->getFrontBuffer()->getOutDev() );
 
-        // no need to clip output to actual update region - there will
-        // always be ALL sprites contained in the rectangular update
-        // area containd in rTotalArea (that's the way
-        // B2DConnectedRanges work). If rTotalArea appears to be
-        // smaller than the sprite - then this sprite carries a clip,
-        // and the update will be constrained to that rect.
+        
+        
+        
+        
+        
+        
 
-        // repaint all affected sprites directly to output device
+        
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
                          ::boost::bind(
@@ -516,22 +516,22 @@ namespace vclcanvas
         BackBufferSharedPtr pBackBuffer( mpOwningSpriteCanvas->getBackBuffer() );
         OutputDevice&       rBackOutDev( pBackBuffer->getOutDev() );
 
-        // limit size of update VDev to target outdev's size
+        
         const Size& rTargetSizePixel( rOutDev.GetOutputSizePixel() );
 
-        // round output position towards zero. Don't want to truncate
-        // a fraction of a sprite pixel...  Clip position at origin,
-        // otherwise, truncation of size below might leave visible
-        // areas uncovered by VDev.
+        
+        
+        
+        
         const ::Point aOutputPosition(
             ::std::max( sal_Int32( 0 ),
                         static_cast< sal_Int32 >(rRequestedArea.getMinX()) ),
             ::std::max( sal_Int32( 0 ),
                         static_cast< sal_Int32 >(rRequestedArea.getMinY()) ) );
-        // round output size towards +infty. Don't want to truncate a
-        // fraction of a sprite pixel... Limit coverage of VDev to
-        // output device's area (i.e. not only to total size, but to
-        // cover _only_ the visible parts).
+        
+        
+        
+        
         const ::Size aOutputSize(
             ::std::max( sal_Int32( 0 ),
                         ::std::min( static_cast< sal_Int32 >(rTargetSizePixel.Width() - aOutputPosition.X()),
@@ -540,7 +540,7 @@ namespace vclcanvas
                         ::std::min( static_cast< sal_Int32 >(rTargetSizePixel.Height() - aOutputPosition.Y()),
                                     ::canvas::tools::roundUp( rRequestedArea.getMaxY() - aOutputPosition.Y() ))));
 
-        // early exit for empty output area.
+        
         if( aOutputSize.Width() == 0 &&
             aOutputSize.Height() == 0 )
         {
@@ -550,20 +550,20 @@ namespace vclcanvas
         const Point aEmptyPoint(0,0);
         const Size  aCurrOutputSize( maVDev->GetOutputSizePixel() );
 
-        // adapt maVDev's size to the area that actually needs the
-        // repaint.
+        
+        
         if( aCurrOutputSize.Width() < aOutputSize.Width() ||
             aCurrOutputSize.Height() < aOutputSize.Height() )
         {
-            // TODO(P1): Come up with a clever tactic to reduce maVDev
-            // from time to time. Reduction with threshold (say, if
-            // maVDev is more than twice too large) is not wise, as
-            // this might then toggle within the same updateScreen(),
-            // but for different disjunct sprite areas.
+            
+            
+            
+            
+            
             maVDev->SetOutputSizePixel( aOutputSize );
         }
 
-        // paint background
+        
         maVDev->EnableMapMode( false );
         maVDev->SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
         maVDev->SetClipRegion();
@@ -571,8 +571,8 @@ namespace vclcanvas
                             aOutputPosition, aOutputSize,
                             rBackOutDev );
 
-        // repaint all affected sprites on top of background into
-        // VDev.
+        
+        
         ::std::for_each( rSortedUpdateSprites.begin(),
                          rSortedUpdateSprites.end(),
                          ::boost::bind( &spriteRedrawStub2,
@@ -581,7 +581,7 @@ namespace vclcanvas
                                             ::vcl::unotools::b2DPointFromPoint(aOutputPosition)),
                                         _1 ) );
 
-        // flush to screen
+        
         rOutDev.EnableMapMode( false );
         rOutDev.SetAntialiasing( ANTIALIASING_ENABLE_B2DDRAW );
         rOutDev.DrawOutDev( aOutputPosition, aOutputSize,
@@ -598,7 +598,7 @@ namespace vclcanvas
                                                             rtl_math_StringFormat_F,
                                                             2,'.',NULL,' ') );
 
-        // pad with leading space
+        
         while( text.getLength() < 6 )
             text = " " + text;
 
@@ -646,10 +646,10 @@ namespace vclcanvas
             mpRedrawManager->forEachSprite( makeAdder(nCount,sal_Int32(1)) );
             OUString text(
                 OUString::number(
-                    // disambiguate overload...
+                    
                     nCount ) );
 
-            // pad with leading space
+            
             while( text.getLength() < 3 )
                 text = " " + text;
 
@@ -670,7 +670,7 @@ namespace vclcanvas
         {
             double nPixel(0.0);
 
-            // accumulate pixel count for each sprite into fCount
+            
             mpRedrawManager->forEachSprite( ::boost::bind(
                                                 makeAdder(nPixel,1.0),
                                                 ::boost::bind(
@@ -691,7 +691,7 @@ namespace vclcanvas
                                                                 rtl_math_StringFormat_F,
                                                                 2,'.',NULL,' ') );
 
-            // pad with leading space
+            
             while( text.getLength() < 4 )
                 text = " " + text;
 

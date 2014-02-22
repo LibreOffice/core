@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,7 +48,7 @@ static accessibility::XAccessibleValue*
 
 static void anyToGValue( uno::Any aAny, GValue *pValue )
 {
-    // FIXME: expand to lots of types etc.
+    
     double aDouble=0;
     aAny >>= aDouble;
 
@@ -109,7 +109,7 @@ value_wrapper_set_current_value( AtkValue     *value,
         accessibility::XAccessibleValue* pValue = getValue( value );
         if( pValue )
         {
-            // FIXME - this needs expanding
+            
             double aDouble = g_value_get_double( gval );
             uno::Any aAny;
             aAny <<= aDouble;
@@ -123,7 +123,7 @@ value_wrapper_set_current_value( AtkValue     *value,
     return FALSE;
 }
 
-} // extern "C"
+} 
 
 void
 valueIfaceInit (AtkValueIface *iface)

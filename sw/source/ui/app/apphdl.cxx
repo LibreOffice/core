@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -102,10 +102,10 @@
 using namespace ::com::sun::star;
 
 
-// Slotmaps for the application's methods
 
-// here are the SlotID's being included
-// see Idl-file
+
+
+
 #define SwModule
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
@@ -121,7 +121,7 @@ SFX_IMPL_INTERFACE( SwModule, SfxModule, SW_RES(RID_SW_NAME) )
             SW_RES(RID_MODULE_TOOLBOX) );
 }
 
-// other states
+
 void SwModule::StateOther(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
@@ -151,7 +151,7 @@ void SwModule::StateOther(SfxItemSet &rSet)
             }
             break;
             case FN_XFORMS_INIT:
-                // slot is always active!
+                
                 break;
             case FN_EDIT_FORMULA:
                 {
@@ -226,18 +226,18 @@ static SwView* lcl_LoadDoc(SwView* pView, const OUString& rURL)
     return pNewView;
 }
 
-// start field dialog
-void NewXForms( SfxRequest& rReq ); // implementation: below
+
+void NewXForms( SfxRequest& rReq ); 
 
 namespace
 {
 
 class SwMailMergeWizardExecutor : public salhelper::SimpleReferenceObject
 {
-    SwView*                  m_pView;       // never owner
-    SwView*                  m_pView2Close; // never owner
-    SwMailMergeConfigItem*   m_pMMConfig;   // sometimes owner
-    AbstractMailMergeWizard* m_pWizard;     // always owner
+    SwView*                  m_pView;       
+    SwView*                  m_pView2Close; 
+    SwMailMergeConfigItem*   m_pMMConfig;   
+    AbstractMailMergeWizard* m_pWizard;     
 
     DECL_LINK( EndDialogHdl, AbstractMailMergeWizard* );
     DECL_LINK( DestroyDialogHdl, void* );
@@ -277,15 +277,15 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
         return;
     }
 
-    m_pView = ::GetActiveView(); // not owner!
+    m_pView = ::GetActiveView(); 
     OSL_ENSURE(m_pView, "no current view?");
     if(m_pView)
     {
-        // keep self alive until done.
+        
         acquire();
 
-        // if called from the child window - get the config item and close the ChildWindow, then restore
-        // the wizard
+        
+        
         SwMailMergeChildWindow* pChildWin =
             static_cast<SwMailMergeChildWindow*>(m_pView->GetViewFrame()->GetChildWindow(FN_MAILMERGE_CHILDWINDOW));
         bool bRestoreWizard = false;
@@ -302,18 +302,18 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
             OSL_ENSURE(m_pMMConfig, "no MailMergeConfigItem available");
             bRestoreWizard = true;
         }
-        // to make it bullet proof ;-)
+        
         if(!m_pMMConfig)
         {
             m_pMMConfig = new SwMailMergeConfigItem;
             m_pMMConfig->SetSourceView(m_pView);
 
-            //set the first used database as default source on the config item
+            
             const SfxPoolItem* pItem = 0;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(
                    FN_PARAM_DATABASE_PROPERTIES, false, &pItem))
             {
-                //mailmerge has been called from the database beamer
+                
                 uno::Sequence< beans::PropertyValue> aDBValues;
                 if(static_cast<const SfxUsrAnyItem*>(pItem)->GetValue() >>= aDBValues)
                 {
@@ -352,7 +352,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                     aDBData.sDataSource = sDBName.getToken(0, DB_DELIM);
                     aDBData.sCommand = sDBName.getToken(1, DB_DELIM);
                     aDBData.nCommandType = sDBName.getToken(2, DB_DELIM ).toInt32();
-                    //set the currently used database for the wizard
+                    
                     m_pMMConfig->SetCurrentDBData( aDBData );
                 }
             }
@@ -373,12 +373,12 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
 void SwMailMergeWizardExecutor::ExecutionFinished( bool bDeleteConfigItem )
 {
     m_pMMConfig->Commit();
-    if ( bDeleteConfigItem ) // owner?
+    if ( bDeleteConfigItem ) 
         delete m_pMMConfig;
 
     m_pMMConfig = 0;
 
-    // release/destroy asynchronously
+    
     Application::PostUserEvent( LINK( this, SwMailMergeWizardExecutor, DestroyDialogHdl ) );
 }
 
@@ -402,7 +402,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
         {
             SwView* pNewView = lcl_LoadDoc(m_pView, m_pWizard->GetReloadDocument());
 
-            // destroy wizard asynchronously
+            
             Application::PostUserEvent(
                 LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
 
@@ -411,7 +411,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
             {
                 m_pView = pNewView;
                 m_pMMConfig->DocumentReloaded();
-                //new source view!
+                
                 m_pMMConfig->SetSourceView( m_pView );
                 m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *m_pMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
@@ -421,7 +421,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
                 m_pWizard = pFact->CreateMailMergeWizard(*m_pView, *m_pMMConfig);
             }
 
-            // execute the wizard again
+            
             ExecuteWizard();
             break;
         }
@@ -434,7 +434,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
             OSL_ENSURE(pTargetView, "No target view has been created");
             if(pTargetView)
             {
-                // destroy wizard asynchronously
+                
                 Application::PostUserEvent(
                     LINK( this, SwMailMergeWizardExecutor, DestroyWizardHdl ), m_pWizard );
 
@@ -442,12 +442,12 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
                 m_pWizard = pFact->CreateMailMergeWizard(*pTargetView, *m_pMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
 
-                // execute the wizard again
+                
                 ExecuteWizard();
             }
             else
             {
-                // should not happen - just in case no target view has been created
+                
                 ExecutionFinished( true );
             }
             break;
@@ -455,8 +455,8 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
     case RET_EDIT_DOC:
     case RET_EDIT_RESULT_DOC:
         {
-            //create a non-modal dialog that allows to return to the wizard
-            //the ConfigItem ownership moves to this dialog
+            
+            
             bool bResult = nRet == RET_EDIT_RESULT_DOC && m_pMMConfig->GetTargetView();
             SwView* pTempView = bResult ? m_pMMConfig->GetTargetView() : m_pMMConfig->GetSourceView();
             pTempView->SetMailMergeConfigItem(m_pMMConfig, m_pWizard->GetRestartPage(), !bResult);
@@ -476,11 +476,11 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
                 m_pView2Close = pTargetView;
                 pTargetView->GetViewFrame()->GetTopViewFrame()->GetWindow().Hide();
                 pSourceView->GetViewFrame()->GetFrame().AppearWithUpdate();
-                // the current view has be be set when the target is destroyed
+                
                 m_pView = pSourceView;
                 m_pMMConfig->SetTargetView(0);
 
-                // destroy wizard asynchronously
+                
                 Application::PostUserEvent(
                     LINK( this, SwMailMergeWizardExecutor, CloseFrameHdl ), m_pWizard );
 
@@ -488,24 +488,24 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
                 m_pWizard = pFact->CreateMailMergeWizard(*pSourceView, *m_pMMConfig);
                 m_pWizard->ShowPage( nRestartPage );
 
-                // execute the wizard again
+                
                 ExecuteWizard();
             }
             else
             {
-                // should not happen - just in case no target view has been created
+                
                 ExecutionFinished( true );
             }
             break;
         }
     case RET_CANCEL:
         {
-            // close frame and destroy wizard asynchronously
+            
             Application::PostUserEvent(
                 LINK( this, SwMailMergeWizardExecutor, CancelHdl ), m_pWizard );
             break;
         }
-    default: // finish
+    default: 
         {
             SwView* pSourceView = m_pMMConfig->GetSourceView();
             if(pSourceView)
@@ -520,7 +520,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, EndDialogHdl, AbstractMailMergeWizard*, pD
             break;
         }
 
-    } // switch
+    } 
 
     return 0L;
 }
@@ -553,7 +553,7 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CancelHdl)
     m_pMMConfig->Commit();
     delete m_pMMConfig;
     m_pMMConfig = 0;
-    // m_pWizard already deleted by closing the target view
+    
     m_pWizard = 0;
     release();
 
@@ -571,7 +571,7 @@ IMPL_LINK_NOARG(SwMailMergeWizardExecutor, CloseFrameHdl)
     return 0L;
 }
 
-} // namespace
+} 
 
 void SwModule::ExecOther(SfxRequest& rReq)
 {
@@ -611,7 +611,7 @@ void SwModule::ExecOther(SfxRequest& rReq)
                     ::SetDfltMetric(eUnit, bWebView);
                 }
                 break;
-                default:;//prevent warning
+                default:;
             }
         }
         break;
@@ -639,9 +639,9 @@ void SwModule::ExecOther(SfxRequest& rReq)
     }
 }
 
-// Catch notifications
 
-// Catch hint for DocInfo
+
+
 void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if( rHint.ISA( SfxEventHint ) )
@@ -655,8 +655,8 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             {
             case SFX_EVENT_LOADFINISHED:
                 OSL_ASSERT(!pWrtSh);
-                // if it is a new document created from a template,
-                // update fixed fields
+                
+                
                 if (pDocSh->GetMedium())
                 {
                     SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(),
@@ -669,7 +669,7 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 }
                 break;
             case SFX_EVENT_CREATEDOC:
-                // Update all FIX-Date/Time fields
+                
                 if( pWrtSh )
                 {
                     SFX_ITEMSET_ARG( pDocSh->GetMedium()->GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, false);
@@ -680,13 +680,13 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     {
                         pWrtSh->UpdateInputFlds();
 
-                        // Are database fields contained?
-                        // Get all used databases for the first time
+                        
+                        
                         SwDoc *pDoc = pDocSh->GetDoc();
                         std::vector<OUString> aDBNameList;
                         pDoc->GetAllUsedDB( aDBNameList );
                         if(!aDBNameList.empty())
-                        {   // Open database beamer
+                        {   
                             ShowDBObj(pWrtSh->GetView(), pDoc->GetDBData());
                         }
                     }
@@ -760,7 +760,7 @@ void SwModule::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdCst, sal
         else
             bAccessibility = true;
 
-        //invalidate all edit windows
+        
         const TypeId aSwViewTypeId = TYPE(SwView);
         const TypeId aSwPreviewTypeId = TYPE(SwPagePreview);
         const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
@@ -858,8 +858,8 @@ const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
     SwModule* pNonConstModule = (SwModule*)this;
     if(bWeb && !pWebUsrPref)
     {
-        // The SpellChecker is needed in SwMasterUsrPref's Load, but it must not
-        // be created there #58256#
+        
+        
         pNonConstModule->pWebUsrPref = new SwMasterUsrPref(sal_True);
     }
     else if(!bWeb && !pUsrPref)
@@ -873,19 +873,19 @@ const SwMasterUsrPref *SwModule::GetUsrPref(sal_Bool bWeb) const
 
 void NewXForms( SfxRequest& rReq )
 {
-    // copied & excerpted from SwModule::InsertLab(..)
+    
 
-    // create new document
+    
     SfxObjectShellLock xDocSh( new SwDocShell( SFX_CREATE_MODE_STANDARD) );
     xDocSh->DoInitNew( 0 );
 
-    // initialize XForms
+    
     static_cast<SwDocShell*>( &xDocSh )->GetDoc()->initXForms( true );
 
-    // load document into frame
+    
     SfxViewFrame::DisplayNewDocument( *xDocSh, rReq );
 
-    // set return value
+    
     rReq.SetReturnValue( SfxVoidItem( rReq.GetSlot() ) );
 }
 

@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  * This file incorporates work covered by the following license notice:
@@ -32,7 +32,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  ************************************************************************/
 
 #include <config_lgpl.h>
@@ -45,7 +45,7 @@
 
 #elif defined(MACOSX)
 
-#else // UNX == X11
+#else 
 
 namespace unx
 {

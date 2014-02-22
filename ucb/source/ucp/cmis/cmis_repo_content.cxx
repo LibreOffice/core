@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -50,7 +50,7 @@ namespace cmis
         m_sRepositoryId( ),
         m_aRepositories( aRepos )
     {
-        // Split the URL into bits
+        
         OUString sURL = m_xIdentifier->getContentIdentifier( );
         SAL_INFO( "ucb.ucp.cmis", "RepoContent::RepoContent() " << sURL );
 
@@ -120,7 +120,7 @@ namespace cmis
 
     void RepoContent::getRepositories( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {
-        // Set the proxy if needed. We are doing that all times as the proxy data shouldn't be cached.
+        
         ucbhelper::InternetProxyDecider aProxyDecider( m_xContext );
         INetURLObject aBindingUrl( m_aURL.getBindingUrl( ) );
         const ucbhelper::InternetProxyServer& rProxy = aProxyDecider.getProxy(
@@ -132,12 +132,12 @@ namespace cmis
 
         if ( m_aRepositories.empty() )
         {
-            // Set the SSL Validation handler
+            
             libcmis::CertValidationHandlerPtr certHandler(
                     new CertValidationHandler( xEnv, m_xContext, aBindingUrl.GetHost( ) ) );
             libcmis::SessionFactory::setCertificateValidationHandler( certHandler );
 
-            // Get the auth credentials
+            
             AuthProvider authProvider( xEnv, m_xIdentifier->getContentIdentifier( ), m_aURL.getBindingUrl( ) );
 
             string rUsername = OUSTR_TO_STDSTR( m_aURL.getUsername( ) );
@@ -146,7 +146,7 @@ namespace cmis
             {
                 try
                 {
-                    // Create a session to get repositories
+                    
                     libcmis::OAuth2DataPtr oauth2Data;
                     if ( m_aURL.getBindingUrl( ) == GDRIVE_BASE_URL )
                         oauth2Data.reset( new libcmis::OAuth2Data(
@@ -178,7 +178,7 @@ namespace cmis
             }
             else
             {
-                // Throw user cancelled exception
+                
                 ucbhelper::cancelCommandExecution(
                                     ucb::IOErrorCode_ABORT,
                                     uno::Sequence< uno::Any >( 0 ),
@@ -190,7 +190,7 @@ namespace cmis
 
     libcmis::RepositoryPtr RepoContent::getRepository( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
     {
-        // Ensure we have the repositories extracted
+        
         getRepositories( xEnv );
 
         libcmis::RepositoryPtr repo;
@@ -237,7 +237,7 @@ namespace cmis
     {
         static const ucb::CommandInfo aCommandInfoTable[] =
         {
-            // Required commands
+            
             ucb::CommandInfo
             ( OUString( "getCommandInfo" ),
               -1, getCppuVoidType() ),
@@ -251,7 +251,7 @@ namespace cmis
             ( OUString( "setPropertyValues" ),
               -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
-            // Optional standard commands
+            
             ucb::CommandInfo
             ( OUString( "open" ),
               -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
@@ -267,7 +267,7 @@ namespace cmis
 
         SAL_INFO( "ucb.ucp.cmis", "RepoContent::getParentURL()" );
 
-        // TODO Implement me
+        
 
         return sRet;
     }
@@ -351,7 +351,7 @@ namespace cmis
     void SAL_CALL RepoContent::abort( sal_Int32 /*CommandId*/ ) throw( uno::RuntimeException )
     {
         SAL_INFO( "ucb.ucp.cmis", "TODO - RepoContent::abort()" );
-        // TODO Implement me
+        
     }
 
     uno::Sequence< uno::Type > SAL_CALL RepoContent::getTypes() throw( uno::RuntimeException )
@@ -374,7 +374,7 @@ namespace cmis
     {
         list< uno::Reference< ucb::XContent > > result;
 
-        // TODO Cache the results somehow
+        
         SAL_INFO( "ucb.ucp.cmis", "RepoContent::getChildren" );
 
         if ( m_sRepositoryId.isEmpty( ) )
@@ -393,14 +393,14 @@ namespace cmis
         }
         else
         {
-            // Return the repository root as child
+            
             OUString sUrl;
             OUString sEncodedBinding = rtl::Uri::encode(
                     m_aURL.getBindingUrl( ) + "#" + m_sRepositoryId,
                     rtl_UriCharClassRelSegment,
                     rtl_UriEncodeKeepEscapes,
                     RTL_TEXTENCODING_UTF8 );
-            sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
+            sUrl = "vnd.libreoffice.cmis:
 
             uno::Reference< ucb::XContentIdentifier > xId = new ucbhelper::ContentIdentifier( sUrl );
             uno::Reference< ucb::XContent > xContent = new Content( m_xContext, m_pProvider, xId );

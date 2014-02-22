@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/headbar.hxx>
@@ -42,7 +42,7 @@ public:
     OUString            maHelpText;
 };
 
-// =======================================================================
+
 
 #define HEAD_ARROWSIZE1             4
 #define HEAD_ARROWSIZE2             7
@@ -56,7 +56,7 @@ public:
 #define HEAD_HITTEST_ITEM           ((sal_uInt16)0x0001)
 #define HEAD_HITTEST_DIVIDER        ((sal_uInt16)0x0002)
 
-// =======================================================================
+
 
 void HeaderBar::ImplInit( WinBits nWinStyle )
 {
@@ -78,7 +78,7 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
     mbItemMode      = sal_False;
 
     m_pVCLXHeaderBar = NULL;
-    // StyleBits auswerten
+    
     if ( nWinStyle & WB_DRAG )
         mbDragable = sal_True;
     else
@@ -101,7 +101,7 @@ void HeaderBar::ImplInit( WinBits nWinStyle )
     ImplInitSettings( sal_True, sal_True, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 HeaderBar::HeaderBar( Window* pParent, WinBits nWinStyle ) :
     Window( pParent, nWinStyle & WB_3DLOOK )
@@ -110,11 +110,11 @@ HeaderBar::HeaderBar( Window* pParent, WinBits nWinStyle ) :
     SetSizePixel( CalcWindowSizePixel() );
 }
 
-// -----------------------------------------------------------------------
+
 
 HeaderBar::~HeaderBar()
 {
-    // Alle Items loeschen
+    
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
         delete (*mpItemList)[ i ];
     }
@@ -122,7 +122,7 @@ HeaderBar::~HeaderBar()
     delete mpItemList;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplInitSettings( sal_Bool bFont,
                                   sal_Bool bForeground, sal_Bool bBackground )
@@ -160,7 +160,7 @@ void HeaderBar::ImplInitSettings( sal_Bool bFont,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
 {
@@ -170,19 +170,19 @@ long HeaderBar::ImplGetItemPos( sal_uInt16 nPos ) const
     return nX;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle HeaderBar::ImplGetItemRect( sal_uInt16 nPos ) const
 {
     Rectangle aRect( ImplGetItemPos( nPos ), 0, 0, mnDY-1 );
     aRect.Right() = aRect.Left() + (*mpItemList)[ nPos ]->mnSize - 1;
-    // check for overflow on various systems
+    
     if ( aRect.Right() > 16000 )
         aRect.Right() = 16000;
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
                                long& nMouseOff, sal_uInt16& nPos ) const
@@ -247,7 +247,7 @@ sal_uInt16 HeaderBar::ImplHitTest( const Point& rPos,
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
 {
@@ -295,7 +295,7 @@ void HeaderBar::ImplInvertDrag( sal_uInt16 nStartPos, sal_uInt16 nEndPos )
     SetRasterOp( ROP_OVERPAINT );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                               sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
@@ -310,11 +310,11 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
 
     Rectangle aRect = rItemRect;
 
-    // do not display if there is no space
+    
     if ( aRect.GetWidth() <= 1 )
         return;
 
-    // check of rectangle is visible
+    
     if ( pRect )
     {
         if ( aRect.Right() < pRect->Left() )
@@ -344,11 +344,11 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     }
     else
     {
-        // do not draw border
+        
         aRect.Top()     += mnBorderOff1;
         aRect.Bottom()  -= mnBorderOff2;
 
-        // delete background
+        
         if ( !pRect || bDrag )
         {
             if ( bDrag )
@@ -377,24 +377,24 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     }
     else
     {
-        // draw separation line
+        
         pDev->SetLineColor( rStyleSettings.GetDarkShadowColor() );
         pDev->DrawLine( Point( aRect.Right(), aRect.Top() ),
                         Point( aRect.Right(), aRect.Bottom() ) );
 
-        // draw ButtonStyle
-        // avoid 3D borders
+        
+        
         if( bHigh )
             DrawSelectionBackground( aRect, 1, true, false, false, &aSelectionTextColor );
         else if ( !mbButtonStyle || (nBits & HIB_FLAT) )
             DrawSelectionBackground( aRect, 0, true, false, false, &aSelectionTextColor );
     }
 
-    // do not draw if there is no space
+    
     if ( aRect.GetWidth() < 1 )
         return;
 
-    // calculate size and position and draw content
+    
     pItem->maOutText = pItem->maText;
     Size aImageSize = pItem->maImage.GetSizePixel();
     Size aTxtSize( pDev->GetTextWidth( pItem->maOutText ), 0  );
@@ -404,7 +404,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     if ( nBits & (HIB_UPARROW | HIB_DOWNARROW) )
         nArrowWidth = HEAD_ARROWSIZE2+HEADERBAR_ARROWOFF;
 
-    // do not draw if there is not enough space for the image
+    
     long nTestHeight = aImageSize.Height();
     if ( !(nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) )
         nTestHeight += aTxtSize.Height();
@@ -414,7 +414,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         aImageSize.Height() = 0;
     }
 
-    // cut text to correct length
+    
     sal_Bool bLeftText = sal_False;
     long nMaxTxtWidth = aRect.GetWidth()-(HEADERBAR_TEXTOFF*2)-nArrowWidth;
     if ( nBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE) )
@@ -439,7 +439,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         }
     }
 
-    // calculate text/imageposition
+    
     long nTxtPos;
     if ( !bLeftText && (nBits & HIB_RIGHT) )
     {
@@ -474,7 +474,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             nTxtPos += nArrowWidth;
     }
 
-    // calculate text/imageposition
+    
     long nTxtPosY = 0;
     if ( !pItem->maOutText.isEmpty() || (nArrowWidth && aTxtSize.Height()) )
     {
@@ -497,7 +497,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         }
     }
 
-    // display text
+    
     if (!pItem->maOutText.isEmpty())
     {
         if( aSelectionTextColor != Color( COL_TRANSPARENT ) )
@@ -513,7 +513,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             pDev->Pop();
     }
 
-    // calculate the position and draw image if it is available
+    
     long nImagePosY = 0;
     if ( aImageSize.Width() && aImageSize.Height() )
     {
@@ -579,7 +579,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
                 nArrowX += aImageSize.Width();
         }
 
-        // is there enough space to draw the item?
+        
         sal_Bool bDraw = sal_True;
         if ( nArrowX < aRect.Left()+HEADERBAR_TEXTOFF )
             bDraw = sal_False;
@@ -591,7 +591,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
             if( pWin && pWin->IsNativeControlSupported(CTRL_LISTHEADER, PART_ARROW) )
             {
                 aCtrlRegion=Rectangle(Point(nArrowX,aRect.Top()),Size(nArrowWidth,aRect.GetHeight()));
-                // control value passes 1 if arrow points down, 0 otherwise
+                
                 aControlValue.setNumericVal((nBits&HIB_DOWNARROW)?1:0);
                 nState|=CTRL_STATE_ENABLED;
                 if(bHigh)
@@ -643,7 +643,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
         }
     }
 
-    // all UserDraw if required
+    
     if ( nBits & HIB_USERDRAW )
     {
         Region aRegion( aRect );
@@ -656,7 +656,7 @@ void HeaderBar::ImplDrawItem( OutputDevice* pDev,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplDrawItem( sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
                               const Rectangle* pRect )
@@ -665,7 +665,7 @@ void HeaderBar::ImplDrawItem( sal_uInt16 nPos, sal_Bool bHigh, sal_Bool bDrag,
     ImplDrawItem( this, nPos, bHigh, bDrag, aRect, pRect, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplUpdate( sal_uInt16 nPos, sal_Bool bEnd, sal_Bool bDirect )
 {
@@ -709,7 +709,7 @@ void HeaderBar::ImplUpdate( sal_uInt16 nPos, sal_Bool bEnd, sal_Bool bDirect )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplStartDrag( const Point& rMousePos, sal_Bool bCommand )
 {
@@ -772,7 +772,7 @@ void HeaderBar::ImplStartDrag( const Point& rMousePos, sal_Bool bCommand )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplDrag( const Point& rMousePos )
 {
@@ -788,7 +788,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
         else
             bNewOutDrag = sal_True;
 
-        //  if needed switch on ItemDrag
+        
         if ( bNewOutDrag && mbDragable && !mbItemDrag &&
              !((*mpItemList)[ nPos ]->mnBits & HIB_FIXEDPOS) )
         {
@@ -822,7 +822,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
                         mnItemDragPos = GetItemCount()-1;
                 }
 
-                // do not use non-movable items
+                
                 if ( mnItemDragPos < nPos )
                 {
                     while ( ((*mpItemList)[ mnItemDragPos ]->mnBits & HIB_FIXEDPOS) &&
@@ -879,7 +879,7 @@ void HeaderBar::ImplDrag( const Point& rMousePos )
     Drag();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::ImplEndDrag( sal_Bool bCancel )
 {
@@ -940,7 +940,7 @@ void HeaderBar::ImplEndDrag( sal_Bool bCancel )
     mbItemDrag      = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -969,7 +969,7 @@ void HeaderBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::MouseMove( const MouseEvent& rMEvt )
 {
@@ -984,7 +984,7 @@ void HeaderBar::MouseMove( const MouseEvent& rMEvt )
     SetPointer( aPtr );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Tracking( const TrackingEvent& rTEvt )
 {
@@ -996,7 +996,7 @@ void HeaderBar::Tracking( const TrackingEvent& rTEvt )
         ImplDrag( aMousePos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Paint( const Rectangle& rRect )
 {
@@ -1007,7 +1007,7 @@ void HeaderBar::Paint( const Rectangle& rRect )
             DrawLine( Point( 0, 0 ), Point( mnDX-1, 0 ) );
         if ( mnBorderOff2 )
             DrawLine( Point( 0, mnDY-1 ), Point( mnDX-1, mnDY-1 ) );
-        // #i40393# draw left and right border, if WB_BORDER was set in ImplInit()
+        
         if ( mnBorderOff1 && mnBorderOff2 )
         {
             DrawLine( Point( 0, 0 ), Point( 0, mnDY-1 ) );
@@ -1025,7 +1025,7 @@ void HeaderBar::Paint( const Rectangle& rRect )
         ImplDrawItem( i, (i == nCurItemPos) ? sal_True : sal_False, sal_False, &rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                       sal_uLong nFlags )
@@ -1054,7 +1054,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
                 pDev->DrawLine( aRect.TopLeft(), Point( aRect.Right(), aRect.Top() ) );
             if ( mnBorderOff2 )
                 pDev->DrawLine( Point( aRect.Left(), aRect.Bottom() ), Point( aRect.Right(), aRect.Bottom() ) );
-            // #i40393# draw left and right border, if WB_BORDER was set in ImplInit()
+            
             if ( mnBorderOff1 && mnBorderOff2 )
             {
                 pDev->DrawLine( aRect.TopLeft(), Point( aRect.Left(), aRect.Bottom() ) );
@@ -1069,7 +1069,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     {
         aItemRect.Left() = aRect.Left()+ImplGetItemPos( i );
         aItemRect.Right() = aItemRect.Left() + (*mpItemList)[ i ]->mnSize - 1;
-        // check for overflow on some systems
+        
         if ( aItemRect.Right() > 16000 )
             aItemRect.Right() = 16000;
         Region aRegion( aRect );
@@ -1081,7 +1081,7 @@ void HeaderBar::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->Pop();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Resize()
 {
@@ -1092,7 +1092,7 @@ void HeaderBar::Resize()
     mnDY = aSize.Height();
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Command( const CommandEvent& rCEvt )
 {
@@ -1105,7 +1105,7 @@ void HeaderBar::Command( const CommandEvent& rCEvt )
     Window::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
 {
@@ -1126,8 +1126,8 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
             if ( aStr.isEmpty() || !(rHEvt.GetMode() & HELPMODE_BALLOON) )
             {
                 ImplHeadItem* pItem = (*mpItemList)[ GetItemPos( nItemId ) ];
-                // Quick-help is only displayed if the text is not fully visible.
-                // Otherwise we display Helptext only if the items do not contain text
+                
+                
                 if ( pItem->maOutText != pItem->maText )
                     aStr = pItem->maText;
                 else if (!pItem->maText.isEmpty())
@@ -1148,7 +1148,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
             OUString aHelpId( OStringToOUString( GetHelpId( nItemId ), RTL_TEXTENCODING_UTF8 ) );
             if ( !aHelpId.isEmpty() )
             {
-                // display it if help is available
+                
                 Help* pHelp = Application::GetHelp();
                 if ( pHelp )
                     pHelp->Start( aHelpId, this );
@@ -1160,7 +1160,7 @@ void HeaderBar::RequestHelp( const HelpEvent& rHEvt )
     Window::RequestHelp( rHEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::StateChanged( StateChangedType nType )
 {
@@ -1186,7 +1186,7 @@ void HeaderBar::StateChanged( StateChangedType nType )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1202,48 +1202,48 @@ void HeaderBar::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::UserDraw( const UserDrawEvent& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::StartDrag()
 {
     maStartDragHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Drag()
 {
     maDragHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::EndDrag()
 {
     maEndDragHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Select()
 {
     maSelectHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::DoubleClick()
 {
     maDoubleClickHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
                             long nSize, HeaderBarItemBits nBits, sal_uInt16 nPos )
@@ -1252,7 +1252,7 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
     DBG_ASSERT( GetItemPos( nItemId ) == HEADERBAR_ITEM_NOTFOUND,
                 "HeaderBar::InsertItem(): ItemId already exists" );
 
-    // create item and insert in the list
+    
     ImplHeadItem* pItem = new ImplHeadItem;
     pItem->mnId         = nItemId;
     pItem->mnBits       = nBits;
@@ -1266,11 +1266,11 @@ void HeaderBar::InsertItem( sal_uInt16 nItemId, const OUString& rText,
         mpItemList->push_back( pItem );
     }
 
-    // update display
+    
     ImplUpdate( nPos, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::RemoveItem( sal_uInt16 nItemId )
 {
@@ -1286,7 +1286,7 @@ void HeaderBar::RemoveItem( sal_uInt16 nItemId )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
 {
@@ -1308,11 +1308,11 @@ void HeaderBar::MoveItem( sal_uInt16 nItemId, sal_uInt16 nNewPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::Clear()
 {
-    // delete all items
+    
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i ) {
         delete (*mpItemList)[ i ];
     }
@@ -1321,25 +1321,25 @@ void HeaderBar::Clear()
     ImplUpdate( 0, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::SetOffset( long nNewOffset )
 {
-    // move area
+    
     Rectangle aRect( 0, mnBorderOff1, mnDX-1, mnDY-mnBorderOff1-mnBorderOff2-1 );
     long nDelta = mnOffset-nNewOffset;
     mnOffset = nNewOffset;
     Scroll( nDelta, 0, aRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::GetItemCount() const
 {
     return (sal_uInt16)mpItemList->size();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::GetItemPos( sal_uInt16 nItemId ) const
 {
@@ -1351,7 +1351,7 @@ sal_uInt16 HeaderBar::GetItemPos( sal_uInt16 nItemId ) const
     return HEADERBAR_ITEM_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::GetItemId( sal_uInt16 nPos ) const
 {
@@ -1362,7 +1362,7 @@ sal_uInt16 HeaderBar::GetItemId( sal_uInt16 nPos ) const
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 HeaderBar::GetItemId( const Point& rPos ) const
 {
@@ -1374,7 +1374,7 @@ sal_uInt16 HeaderBar::GetItemId( const Point& rPos ) const
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle HeaderBar::GetItemRect( sal_uInt16 nItemId ) const
 {
@@ -1385,7 +1385,7 @@ Rectangle HeaderBar::GetItemRect( sal_uInt16 nItemId ) const
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::SetItemSize( sal_uInt16 nItemId, long nNewSize )
 {
@@ -1401,7 +1401,7 @@ void HeaderBar::SetItemSize( sal_uInt16 nItemId, long nNewSize )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 long HeaderBar::GetItemSize( sal_uInt16 nItemId ) const
 {
@@ -1412,7 +1412,7 @@ long HeaderBar::GetItemSize( sal_uInt16 nItemId ) const
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::SetItemBits( sal_uInt16 nItemId, HeaderBarItemBits nNewBits )
 {
@@ -1428,7 +1428,7 @@ void HeaderBar::SetItemBits( sal_uInt16 nItemId, HeaderBarItemBits nNewBits )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 HeaderBarItemBits HeaderBar::GetItemBits( sal_uInt16 nItemId ) const
 {
@@ -1439,7 +1439,7 @@ HeaderBarItemBits HeaderBar::GetItemBits( sal_uInt16 nItemId ) const
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void HeaderBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
 {
@@ -1451,7 +1451,7 @@ void HeaderBar::SetItemText( sal_uInt16 nItemId, const OUString& rText )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString HeaderBar::GetItemText( sal_uInt16 nItemId ) const
 {
@@ -1461,7 +1461,7 @@ OUString HeaderBar::GetItemText( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
 {
@@ -1482,7 +1482,7 @@ OUString HeaderBar::GetHelpText( sal_uInt16 nItemId ) const
     return OUString();
 }
 
-// -----------------------------------------------------------------------
+
 
 OString HeaderBar::GetHelpId( sal_uInt16 nItemId ) const
 {
@@ -1493,7 +1493,7 @@ OString HeaderBar::GetHelpId( sal_uInt16 nItemId ) const
     return aRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size HeaderBar::CalcWindowSizePixel() const
 {
@@ -1503,21 +1503,21 @@ Size HeaderBar::CalcWindowSizePixel() const
     for ( size_t i = 0, n = mpItemList->size(); i < n; ++i )
     {
         ImplHeadItem* pItem = (*mpItemList)[ i ];
-        // take image size into account
+        
         long nImageHeight = pItem->maImage.GetSizePixel().Height();
         if ( !(pItem->mnBits & (HIB_LEFTIMAGE | HIB_RIGHTIMAGE)) && !pItem->maText.isEmpty() )
             nImageHeight += aSize.Height();
         if ( nImageHeight > nMaxImageSize )
             nMaxImageSize = nImageHeight;
 
-        // add width
+        
         aSize.Width() += pItem->mnSize;
     }
 
     if ( nMaxImageSize > aSize.Height() )
         aSize.Height() = nMaxImageSize;
 
-    // add border
+    
     if ( mbButtonStyle )
         aSize.Height() += 4;
     else

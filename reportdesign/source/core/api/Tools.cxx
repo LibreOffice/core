@@ -39,7 +39,7 @@ uno::Reference< report::XSection> lcl_getSection(const uno::Reference< uno::XInt
     }
     return xRet;
 }
-// -----------------------------------------------------------------------------
+
 void throwIllegallArgumentException( const OUString& _sTypeName
                                     ,const uno::Reference< uno::XInterface >& ExceptionContext_
                                     ,const ::sal_Int16& ArgumentPosition_
@@ -50,7 +50,7 @@ void throwIllegallArgumentException( const OUString& _sTypeName
     sErrorMessage = sErrorMessage.replaceAt(sErrorMessage.indexOf('#'),2,_sTypeName);
     throw lang::IllegalArgumentException(sErrorMessage,ExceptionContext_,ArgumentPosition_);
 }
-// -----------------------------------------------------------------------------
+
 uno::Reference< util::XCloneable > cloneObject(const uno::Reference< report::XReportComponent>& _xReportComponent
     ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
     ,const OUString& _sServiceName)
@@ -60,7 +60,7 @@ uno::Reference< util::XCloneable > cloneObject(const uno::Reference< report::XRe
     ::comphelper::copyProperties(_xReportComponent.get(),xClone.get());
     return xClone.get();
 }
-// -----------------------------------------------------------------------------
+
 
 // =============================================================================
 } // namespace reportdesign

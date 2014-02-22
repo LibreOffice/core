@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
@@ -52,13 +52,13 @@ SdTpOptionsSnap::SdTpOptionsSnap( Window* pParent, const SfxItemSet& rInAttrs  )
     pSnapFrames->Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 SdTpOptionsSnap::~SdTpOptionsSnap()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -78,12 +78,12 @@ sal_Bool SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 
     rAttrs.Put( aOptsItem );
 
-    // we get a possible existing GridItem, this ensures that we do net set
-    // some default values by accident
+    
+    
     return( sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
 {
@@ -106,7 +106,7 @@ void SdTpOptionsSnap::Reset( const SfxItemSet& rAttrs )
     pCbxRotate->GetClickHdl().Call(0);
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
@@ -129,13 +129,13 @@ SdTpOptionsContents::SdTpOptionsContents( Window* pParent, const SfxItemSet& rIn
     get( m_pCbxMoveOutline, "moveoutline");
 }
 
-// -----------------------------------------------------------------------
+
 
 SdTpOptionsContents::~SdTpOptionsContents()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -159,7 +159,7 @@ sal_Bool SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
     return( bModified );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
 {
@@ -180,7 +180,7 @@ void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
     m_pCbxHandlesBezier->SaveValue();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SdTpOptionsContents::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
@@ -228,7 +228,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 
     SetExchangeSupport();
 
-    // set metric
+    
     FieldUnit eFUnit;
 
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
@@ -242,11 +242,11 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
 
     SetFieldUnit( *m_pMtrFldTabstop , eFUnit );
 
-    // Impress is default mode, let' hide the entire scale frame etc.
+    
     m_pCbxDistrot->Hide();
     m_pScaleFrame->Hide();
 
-    // fill ListBox with metrics
+    
     SvxStringArray aMetricArr( RID_SVXSTR_FIELDUNIT_TABLE );
     sal_uInt16 i;
 
@@ -266,7 +266,7 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     m_pMtrFldOriginalHeight->SetLast( 999999999 );
     m_pMtrFldOriginalHeight->SetMax( 999999999 );
 
-    // temporary fields for info texts (for formatting/calculation)
+    
     m_pMtrFldInfo1->SetUnit( eFUnit );
     m_pMtrFldInfo1->SetMax( 999999999 );
     m_pMtrFldInfo1->SetDecimalDigits( 2 );
@@ -274,12 +274,12 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
     m_pMtrFldInfo2->SetMax( 999999999 );
     m_pMtrFldInfo2->SetDecimalDigits( 2 );
 
-    // determine PoolUnit
+    
     SfxItemPool* pPool = rInAttrs.GetPool();
     DBG_ASSERT( pPool, "Where is the Pool?" );
     ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
-    // Fuellen der CB
+    
     sal_uInt16 aTable[ TABLE_COUNT ] =
         { 1, 2, 4, 5, 8, 10, 16, 20, 30, 40, 50, 100 };
 
@@ -289,19 +289,19 @@ SdTpOptionsMisc::SdTpOptionsMisc( Window* pParent, const SfxItemSet& rInAttrs  )
         m_pCbScale->InsertEntry( GetScale(  aTable[i], 1 ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SdTpOptionsMisc::~SdTpOptionsMisc()
 {
 }
-// -----------------------------------------------------------------------
+
 void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 {
-    // We have to call SaveValue again since it can happen that the value
-    // has no effect on other TabPages
+    
+    
     m_pLbMetric->SaveValue();
-    // change metric if necessary (since TabPage is in the Dialog where
-    // the metric is set)
+    
+    
     const SfxPoolItem* pAttr = NULL;
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , false,
                                     (const SfxPoolItem**)&pAttr ))
@@ -312,7 +312,7 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
 
         if( eFUnit != m_pMtrFldOriginalWidth->GetUnit() )
         {
-            // set metrics
+            
             sal_Int64 nVal = m_pMtrFldOriginalWidth->Denormalize( m_pMtrFldOriginalWidth->GetValue( FUNIT_TWIP ) );
             SetFieldUnit( *m_pMtrFldOriginalWidth, eFUnit, sal_True );
             m_pMtrFldOriginalWidth->SetValue( m_pMtrFldOriginalWidth->Normalize( nVal ), FUNIT_TWIP );
@@ -339,11 +339,11 @@ void SdTpOptionsMisc::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
 {
-    // check parser
+    
     sal_Int32 nX, nY;
     if( SetScale( m_pCbScale->GetText(), nX, nY ) )
     {
@@ -363,7 +363,7 @@ int SdTpOptionsMisc::DeactivatePage( SfxItemSet* pActiveSet )
     return( LEAVE_PAGE );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -400,7 +400,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         bModified = sal_True;
     }
 
-    // metric
+    
     const sal_uInt16 nMPos = m_pLbMetric->GetSelectEntryPos();
     if ( nMPos != m_pLbMetric->GetSavedValue() )
     {
@@ -410,7 +410,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
         bModified |= sal_True;
     }
 
-    // tabulator space
+    
     if( m_pMtrFldTabstop->GetText() != m_pMtrFldTabstop->GetSavedValue() )
     {
         sal_uInt16 nWh = GetWhich( SID_ATTR_DEFTABSTOP );
@@ -432,7 +432,7 @@ sal_Bool SdTpOptionsMisc::FillItemSet( SfxItemSet& rAttrs )
     return( bModified );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
 {
@@ -461,7 +461,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     m_pCbxCompatibility->SaveValue();
     m_pCbxUsePrinterMetrics->SaveValue();
 
-    // metric
+    
     sal_uInt16 nWhich = GetWhich( SID_ATTR_METRIC );
     m_pLbMetric->SetNoSelection();
 
@@ -480,7 +480,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
         }
     }
 
-    // tabulator space
+    
     nWhich = GetWhich( SID_ATTR_DEFTABSTOP );
     if( rAttrs.GetItemState( nWhich ) >= SFX_ITEM_AVAILABLE )
     {
@@ -490,7 +490,7 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     }
     m_pLbMetric->SaveValue();
     m_pMtrFldTabstop->SaveValue();
-    //Scale
+    
     sal_Int32 nX = ( (const SfxInt32Item&) rAttrs.
                  Get( ATTR_OPTIONS_SCALE_X ) ).GetValue();
     sal_Int32 nY = ( (const SfxInt32Item&) rAttrs.
@@ -503,23 +503,23 @@ void SdTpOptionsMisc::Reset( const SfxItemSet& rAttrs )
     m_pCbScale->SetText( GetScale( nX, nY ) );
 
     m_pMtrFldOriginalWidth->Hide();
-    m_pMtrFldOriginalWidth->SetText( aInfo1 ); // empty
+    m_pMtrFldOriginalWidth->SetText( aInfo1 ); 
     m_pMtrFldOriginalHeight->Hide();
-    m_pMtrFldOriginalHeight->SetText( aInfo2 ); //empty
+    m_pMtrFldOriginalHeight->SetText( aInfo2 ); 
     m_pFiInfo1->Hide();
     m_pFiInfo2->Hide();
 
     UpdateCompatibilityControls ();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SdTpOptionsMisc::Create( Window* pWindow,
                 const SfxItemSet& rAttrs )
 {
     return( new SdTpOptionsMisc( pWindow, rAttrs ) );
 }
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdTpOptionsMisc, SelectMetricHdl_Impl)
 {
@@ -564,19 +564,19 @@ void    SdTpOptionsMisc::SetDrawMode()
     m_pMtrFldOriginalHeight->Show();
     m_pCbxDistrot->Show();
     m_pCbxCompatibility->Hide();
-    // Move the printer-independent-metrics check box in the place that the
-    // spacing-between-paragraphs check box normally is in.
+    
+    
     m_pCbxUsePrinterMetrics->SetPosPixel (m_pCbxCompatibility->GetPosPixel());
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SdTpOptionsMisc::GetScale( sal_Int32 nX, sal_Int32 nY )
 {
     return OUString::number(nX) + OUString(TOKEN) + OUString::number(nY);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_Int32& rY )
 {
@@ -604,13 +604,13 @@ sal_Bool SdTpOptionsMisc::SetScale( const OUString& aScale, sal_Int32& rX, sal_I
 
 void SdTpOptionsMisc::UpdateCompatibilityControls (void)
 {
-    // Disable the compatibility controls by default.  Enable them only when
-    // there is at least one open document.
+    
+    
     sal_Bool bIsEnabled = sal_False;
 
     try
     {
-        // Get a component enumeration from the desktop and search it for documents.
+        
         Reference<uno::XComponentContext> xContext( ::comphelper::getProcessComponentContext());
         do
         {
@@ -631,19 +631,19 @@ void SdTpOptionsMisc::UpdateCompatibilityControls (void)
                 Reference<frame::XModel> xModel (xEnumeration->nextElement(), UNO_QUERY);
                 if (xModel.is())
                 {
-                    // There is at leas one model/document: Enable the compatibility controls.
+                    
                     bIsEnabled = sal_True;
                     break;
                 }
             }
 
         }
-        while (false); // One 'loop'.
+        while (false); 
     }
     catch (const uno::Exception&)
     {
-        // When there is an exception then simply use the default value of
-        // bIsEnabled and disable the controls.
+        
+        
     }
 
     m_pCbxCompatibility->Enable(bIsEnabled);

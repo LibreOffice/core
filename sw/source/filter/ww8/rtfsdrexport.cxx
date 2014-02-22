@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "rtfsdrexport.hxx"
@@ -76,11 +76,11 @@ void RtfSdrExport::CloseContainer()
 
     if ( mRecTypes.back() == ESCHER_SpContainer )
     {
-        // write the shape now when we have all the info
+        
         sal_Int32 nShapeElement = StartShape();
         EndShape( nShapeElement );
 
-        // cleanup
+        
         m_nShapeType = ESCHER_ShpInst_Nil;
     }
 
@@ -153,7 +153,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
     else
         AddRectangleDimensions( *m_pShapeStyle, rRect );
 
-    // properties
+    
     const EscherProperties &rOpts = rProps.GetOpts();
     for ( EscherProperties::const_iterator it = rOpts.begin(); it != rOpts.end(); ++it )
     {
@@ -190,7 +190,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                     m_aShapeProps.insert(std::pair<OString,OString>("fNoFillHitTest", OString::number(1)));
                 break;
             case ESCHER_Prop_fNoLineDrawDash:
-                // for some reason the value is set to 0x90000 if lines are switched off
+                
                 if( it->nPropValue == 0x90000 )
                     m_aShapeProps.insert(std::pair<OString,OString>("fLine", OString::number(0)));
                 break;
@@ -272,7 +272,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
 
                         sal_uInt16 nPointSize = aVertices.pBuf[4] + ( aVertices.pBuf[5] << 8 );
 
-                        // number of segments
+                        
                         sal_uInt16 nSegments = impl_GetUInt16( pSegmentIt );
                         sal_Int32 nVertices = 0;
                         aSegmentInfo.append("2;").append((sal_Int32)nSegments);
@@ -284,8 +284,8 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                             aSegmentInfo.append(';').append((sal_Int32)nSeg);
                             switch ( nSeg )
                             {
-                                case 0x0001: // lineto
-                                case 0x4000: // moveto
+                                case 0x0001: 
+                                case 0x4000: 
                                     {
                                         sal_Int32 nX = impl_GetPointComponent( pVerticesIt, nVerticesPos, nPointSize );
                                         sal_Int32 nY = impl_GetPointComponent( pVerticesIt, nVerticesPos, nPointSize );
@@ -293,7 +293,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                                         nVertices ++;
                                     }
                                     break;
-                                case 0x2001: // curveto
+                                case 0x2001: 
                                     {
                                         for (int i = 0; i < 3; i++)
                                         {
@@ -306,13 +306,13 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                                     break;
                                 case 0xb300:
                                 case 0xac00:
-                                case 0xaa00: // nofill
-                                case 0xab00: // nostroke
-                                case 0x6001: // close
-                                case 0x8000: // end
+                                case 0xaa00: 
+                                case 0xab00: 
+                                case 0x6001: 
+                                case 0x8000: 
                                     break;
                                 default:
-                                    // See EscherPropertyContainer::CreateCustomShapeProperties, by default nSeg is simply the number of points.
+                                    
                                     for (int i = 0; i < nSeg; ++i)
                                     {
                                         if (nVerticesPos >= aVertices.nPropSize)
@@ -328,7 +328,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
 
                         if (!aVerticies.isEmpty() )
                         {
-                            // We know the number of vertices at the end only, so we have to prepend them here.
+                            
                             m_aShapeProps.insert(std::pair<OString,OString>("pVerticies", "8;" + OString::number(nVertices) + aVerticies.makeStringAndClear()));
                         }
                         if ( !aSegmentInfo.isEmpty() )
@@ -339,7 +339,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                 }
                 break;
             case ESCHER_Prop_shapePath:
-                // noop, we use pSegmentInfo instead
+                
                 break;
             case ESCHER_Prop_fFillOK:
                 if (!it->nPropValue)
@@ -358,7 +358,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                 m_aShapeProps.insert(std::pair<OString,OString>("dyTextBottom", OString::number(it->nPropValue)));
                 break;
             case ESCHER_Prop_FitTextToShape:
-                // Size text to fit shape size: not supported by RTF
+                
                 break;
             case ESCHER_Prop_adjustValue:
                 m_aShapeProps.insert(std::pair<OString,OString>("adjustValue", OString::number(it->nPropValue)));
@@ -376,7 +376,7 @@ void RtfSdrExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRe
                 {
                     OStringBuffer aBuf;
                     aBuf.append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP).append(SAL_NEWLINE_STRING);
-                    int nHeaderSize = 25; // The first bytes are WW8-specific, we're only interested in the PNG
+                    int nHeaderSize = 25; 
                     aBuf.append(RtfAttributeOutput::WriteHex(it->pBuf + nHeaderSize, it->nPropSize - nHeaderSize));
                     aBuf.append('}');
                     m_aShapeProps.insert(std::pair<OString,OString>("fillBlip", aBuf.makeStringAndClear()));
@@ -393,7 +393,7 @@ void RtfSdrExport::AddLineDimensions( const Rectangle& rRectangle )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    // We get the position relative to (the current?) character
+    
     m_aShapeProps.insert(std::pair<OString,OString>("posrelh", "3"));
 
     switch ( m_nShapeFlags & 0xC0 )
@@ -410,7 +410,7 @@ void RtfSdrExport::AddLineDimensions( const Rectangle& rRectangle )
             break;
     }
 
-    // the actual dimensions
+    
     m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());
     m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPTOP).append(rRectangle.Top());
     m_pShapeStyle->append(OOO_STRING_SVTOOLS_RTF_SHPRIGHT).append(rRectangle.Right());
@@ -421,7 +421,7 @@ void RtfSdrExport::AddRectangleDimensions( OStringBuffer& rBuffer, const Rectang
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    // We get the position relative to (the current?) character
+    
     m_aShapeProps.insert(std::pair<OString,OString>("posrelh", "3"));
 
     rBuffer.append(OOO_STRING_SVTOOLS_RTF_SHPLEFT).append(rRectangle.Left());
@@ -442,7 +442,7 @@ static void lcl_AppendSP( OStringBuffer& rRunText, const char cName[], const OSt
 
 void RtfSdrExport::impl_writeGraphic()
 {
-    // Get the Graphic object from the Sdr one.
+    
     uno::Reference<drawing::XShape> xShape = GetXShapeForSdrObject(const_cast<SdrObject*>(m_pSdrObject));
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     OUString sGraphicURL;
@@ -452,7 +452,7 @@ void RtfSdrExport::impl_writeGraphic()
     }
     catch (beans::UnknownPropertyException& rException)
     {
-        // ATM groupshapes are not supported, just make sure we don't crash on them.
+        
         SAL_WARN("sw.rtf", "failed. Message: " << rException.Message);
         return;
     }
@@ -460,7 +460,7 @@ void RtfSdrExport::impl_writeGraphic()
     const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
     Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
 
-    // Export it to a stream.
+    
     SvMemoryStream aStream;
     GraphicConverter::Export(aStream, aGraphic, CVT_PNG);
     aStream.Seek(STREAM_SEEK_TO_END);
@@ -469,7 +469,7 @@ void RtfSdrExport::impl_writeGraphic()
 
     Size aMapped(aGraphic.GetPrefSize());
 
-    // Add it to the properties.
+    
     RtfStringBuffer aBuf;
     aBuf->append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP);
     aBuf->append(OOO_STRING_SVTOOLS_RTF_PICW).append(sal_Int32(aMapped.Width()));
@@ -494,9 +494,9 @@ sal_Int32 RtfSdrExport::StartShape()
     m_rAttrOutput.RunText().append('{').append(OOO_STRING_SVTOOLS_RTF_IGNORE).append(OOO_STRING_SVTOOLS_RTF_SHPINST);
 
     m_rAttrOutput.RunText().append(m_pShapeStyle->makeStringAndClear());
-    // Ignore \shpbxpage, \shpbxmargin, and \shpbxcolumn, in favor of the posrelh property.
+    
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBXIGNORE);
-    // Ignore \shpbypage, \shpbymargin, and \shpbycolumn, in favor of the posrelh property.
+    
     m_rAttrOutput.RunText().append(OOO_STRING_SVTOOLS_RTF_SHPBYIGNORE);
 
     for(std::map<OString,OString>::reverse_iterator i = m_aShapeProps.rbegin(); i != m_aShapeProps.rend(); ++i)
@@ -505,7 +505,7 @@ sal_Int32 RtfSdrExport::StartShape()
     lcl_AppendSP(m_rAttrOutput.RunText(), "wzDescription", msfilter::rtfutil::OutString( m_pSdrObject->GetDescription(), m_rExport.eCurrentEncoding));
     lcl_AppendSP(m_rAttrOutput.RunText(), "wzName", msfilter::rtfutil::OutString( m_pSdrObject->GetTitle(), m_rExport.eCurrentEncoding));
 
-    // now check if we have some text
+    
     const SdrTextObj* pTxtObj = PTR_CAST(SdrTextObj, m_pSdrObject);
     if (pTxtObj)
     {
@@ -529,7 +529,7 @@ sal_Int32 RtfSdrExport::StartShape()
 
         if( pParaObj )
         {
-            // this is reached only in case some text is attached to the shape
+            
             WriteOutliner(*pParaObj);
             if( bOwnParaObj )
                 delete pParaObj;
@@ -595,7 +595,7 @@ void RtfSdrExport::EndShape( sal_Int32 nShapeElement )
 
     if ( nShapeElement >= 0 )
     {
-        // end of the shape
+        
         m_rAttrOutput.RunText().append('}').append('}');
     }
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "composerdialogs.hxx"
@@ -52,7 +52,7 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
 
-    // ComposerDialog
+    
     ComposerDialog::ComposerDialog(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog( _rxORB )
     {
@@ -74,12 +74,12 @@ namespace dbaui
 
     Dialog* ComposerDialog::createDialog(Window* _pParent)
     {
-        // obtain all the objects needed for the dialog
+        
         Reference< XConnection > xConnection;
         Reference< XNameAccess > xColumns;
         try
         {
-            // the connection the row set is working with
+            
             if ( !::dbtools::isEmbeddedInDatabase( m_xRowSet, xConnection ) )
             {
                 Reference< XPropertySet > xRowsetProps( m_xRowSet, UNO_QUERY );
@@ -87,19 +87,19 @@ namespace dbaui
                     xRowsetProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
             }
 
-            // fallback: if there is a connection and thus a row set, but no composer, create one
+            
             if ( xConnection.is() && !m_xComposer.is() )
                 m_xComposer = ::dbtools::getCurrentSettingsComposer( Reference< XPropertySet >( m_xRowSet, UNO_QUERY ), m_aContext );
 
-            // the columns of the row set
+            
             Reference< XColumnsSupplier > xSuppColumns( m_xRowSet, UNO_QUERY );
             if ( xSuppColumns.is() )
                 xColumns = xSuppColumns->getColumns();
 
             if ( !xColumns.is() || !xColumns->hasElements() )
-            {   // perhaps the composer can supply us with columns? This is necessary for cases
-                // where the dialog is invoked for a rowset which is not yet loaded
-                // #i22878#
+            {   
+                
+                
                 xSuppColumns = xSuppColumns.query( m_xComposer );
                 if ( xSuppColumns.is() )
                     xColumns = xSuppColumns->getColumns();
@@ -113,13 +113,13 @@ namespace dbaui
         }
 
         if ( !xConnection.is() || !xColumns.is() || !m_xComposer.is() )
-            // can't create the dialog if I have improper settings
+            
             return NULL;
 
         return createComposerDialog( _pParent, xConnection, xColumns );
     }
 
-    // RowsetFilterDialog
+    
     RowsetFilterDialog::RowsetFilterDialog( const Reference< XComponentContext >& _rxORB )
         :ComposerDialog( _rxORB )
     {
@@ -144,7 +144,7 @@ namespace dbaui
     {
         if( aArguments.getLength() == 3 )
         {
-            // this is the FilterDialog::createWithQuery method
+            
             Reference<com::sun::star::sdb::XSingleSelectQueryComposer> xQueryComposer;
             aArguments[0] >>= xQueryComposer;
             Reference<com::sun::star::sdbc::XRowSet> xRowSet;
@@ -167,7 +167,7 @@ namespace dbaui
             static_cast< DlgFilterCrit* >( m_pDialog )->BuildWherePart();
     }
 
-    // RowsetOrderDialog
+    
     RowsetOrderDialog::RowsetOrderDialog( const Reference< XComponentContext >& _rxORB )
         :ComposerDialog( _rxORB )
     {
@@ -216,6 +216,6 @@ namespace dbaui
             m_xComposer->setOrder( static_cast< DlgOrderCrit* >( m_pDialog )->GetOrignalOrder() );
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

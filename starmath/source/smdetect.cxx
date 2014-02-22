@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -83,14 +83,14 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     Reference< XInteractionHandler > xInteraction;
     OUString aURL;
     OUString sTemp;
-    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
+    OUString aTypeName;            
+    OUString aPreselectedFilterName;      
 
-    OUString aDocumentTitle; // interesting only if set in this method
+    OUString aDocumentTitle; 
 
-    // opening as template is done when a parameter tells to do so and a template filter can be detected
-    // (otherwise no valid filter would be found) or if the detected filter is a template filter and
-    // there is no parameter that forbids to open as template
+    
+    
+    
     sal_Bool bOpenAsTemplate = sal_False;
     sal_Bool bWasReadOnly = sal_False, bReadOnly = sal_False;
 
@@ -98,8 +98,8 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     sal_Bool bRepairAllowed = sal_False;
     bool bDeepDetection = false;
 
-    // now some parameters that can already be in the array, but may be overwritten or new inserted here
-    // remember their indices in the case new values must be added to the array
+    
+    
     sal_Int32 nPropertyCount = lDescriptor.getLength();
     sal_Int32 nIndexOfInputStream = -1;
     sal_Int32 nIndexOfContent = -1;
@@ -109,7 +109,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // extract properties
+        
         if( lDescriptor[nProperty].Name == "URL" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
@@ -151,7 +151,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             bDeepDetection = lDescriptor[nProperty].Value.get<sal_Bool>();
     }
 
-    // can't check the type for external filters, so set the "dont" flag accordingly
+    
     SolarMutexGuard aGuard;
 
     SfxApplication* pApp = SFX_APP();
@@ -177,28 +177,28 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
     }
     else
     {
-        // ctor of SfxMedium uses owner transition of ItemSet
+        
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
         aMedium.UseInteractionHandler( true );
 
         bool bIsStorage = aMedium.IsStorage();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
-            // remember input stream and content and put them into the descriptor later
-            // should be done here since later the medium can switch to a version
+            
+            
             xStream = aMedium.GetInputStream();
             xContent = aMedium.GetContent();
             bReadOnly = aMedium.IsReadOnly();
 
             if ( bIsStorage )
             {
-                //TODO/LATER: factor this out!
+                
                 Reference < embed::XStorage > xStorage = aMedium.GetStorage( sal_False );
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
-                    // error during storage creation means _here_ that the medium
-                    // is broken, but we can not handle it in medium since unpossibility
-                    // to create a storage does not _always_ means that the medium is broken
+                    
+                    
+                    
                     aMedium.SetError( aMedium.GetLastStorageCreationState(), OSL_LOG_PREFIX );
                     if ( xInteraction.is() )
                     {
@@ -235,17 +235,17 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     catch( const WrappedTargetException& aWrap )
                     {
                         if (!bDeepDetection)
-                            // Bail out early unless it's a deep detection.
+                            
                             return OUString();
 
                         packages::zip::ZipIOException aZipException;
 
-                        // repairing is done only if this type is requested from outside
+                        
                         if ( ( aWrap.TargetException >>= aZipException ) && !aTypeName.isEmpty() )
                         {
                             if ( xInteraction.is() )
                             {
-                                // the package is broken one
+                                
                                    aDocumentTitle = aMedium.GetURLObject().getName(
                                                             INetURLObject::LAST_SEGMENT,
                                                             true,
@@ -253,7 +253,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
                                 if ( !bRepairPackage )
                                 {
-                                    // ask the user whether he wants to try to repair
+                                    
                                     RequestPackageReparation aRequest( aDocumentTitle );
                                     xInteraction->handle( aRequest.GetRequest() );
                                     bRepairAllowed = aRequest.isApproved();
@@ -261,7 +261,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
                                 if ( !bRepairAllowed )
                                 {
-                                    // repair either not allowed or not successful
+                                    
                                     NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
                                     xInteraction->handle( aNotifyRequest.GetRequest() );
                                 }
@@ -291,9 +291,9 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
             }
             else
             {
-                //Test to see if this begins with xml and if so run it through
-                //the MathML filter. There are all sorts of things wrong with
-                //this approach, to be fixed at a better level than here
+                
+                
+                
                 SvStream *pStrm = aMedium.GetInStream();
                 aTypeName = OUString();
                 if (pStrm && !pStrm->GetError())
@@ -310,14 +310,14 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                     }
                     else
                     {
-                        // 200 should be enough for the XML
-                        // version, encoding and !DOCTYPE
-                        // stuff I hope?
+                        
+                        
+                        
                         const sal_uInt16 nSize = 200;
                         sal_Char aBuffer[nSize+1];
                         aBuffer[nSize] = 0;
                         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-                        pStrm->StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW); // avoid BOM marker
+                        pStrm->StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW); 
                         sal_uLong nBytesRead = pStrm->Read( aBuffer, nSize );
                         if (nBytesRead >= 6)
                         {
@@ -329,7 +329,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
                                         strstr( aBuffer, "<math:math " ))
                                     bIsMathType = true;
                             }
-                            // this is the old <math tag to MathML in the beginning of the XML file
+                            
                             else if (0 == strncmp( "<math ", aBuffer, 6) ||
                                          0 == strncmp( "<math> ", aBuffer, 7) ||
                                          0 == strncmp( "<math:math> ", aBuffer, 12))
@@ -355,7 +355,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     if ( nIndexOfInputStream == -1 && xStream.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "InputStream";
         lDescriptor[nPropertyCount].Value <<= xStream;
@@ -364,7 +364,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     if ( nIndexOfContent == -1 && xContent.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "UCBContent";
         lDescriptor[nPropertyCount].Value <<= xContent;
@@ -393,7 +393,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
         bOpenAsTemplate = sal_True;
 
-        // TODO/LATER: set progress bar that should be used
+        
     }
 
     if ( bOpenAsTemplate )
@@ -411,7 +411,7 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 
     if ( !aDocumentTitle.isEmpty() )
     {
-        // the title was set here
+        
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );

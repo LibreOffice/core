@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include "vbamenuitems.hxx"
 #include "vbamenuitem.hxx"
@@ -32,7 +32,7 @@ public:
     }
     virtual uno::Any SAL_CALL nextElement() throw ( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
     {
-        // FIXME: should be add menu
+        
         if( hasMoreElements() )
         {
             uno::Reference< XCommandBarControl > xCommandBarControl( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
@@ -58,7 +58,7 @@ ScVbaMenuItems::ScVbaMenuItems( const uno::Reference< XHelperInterface >& xParen
 {
 }
 
-// XEnumerationAccess
+
 uno::Type SAL_CALL
 ScVbaMenuItems::getElementType() throw ( uno::RuntimeException )
 {
@@ -75,18 +75,18 @@ ScVbaMenuItems::createEnumeration() throw ( uno::RuntimeException )
 uno::Any
 ScVbaMenuItems::createCollectionObject( const uno::Any& aSource )
 {
-    // make no sense
+    
     return aSource;
 }
 
 sal_Int32 SAL_CALL
 ScVbaMenuItems::getCount() throw(css::uno::RuntimeException)
 {
-    // FIXME: should check if it is a popup menu
+    
     return m_xCommandBarControls->getCount();
 }
 
-// ScVbaCollectionBaseImpl
+
 uno::Any SAL_CALL
 ScVbaMenuItems::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) throw( uno::RuntimeException )
 {
@@ -112,7 +112,7 @@ uno::Reference< excel::XMenuItem > SAL_CALL ScVbaMenuItems::Add( const OUString&
     return uno::Reference< excel::XMenuItem >( new ScVbaMenuItem( this, mxContext, xCommandBarControl ) );
 }
 
-// XHelperInterface
+
 OUString
 ScVbaMenuItems::getServiceImplName()
 {

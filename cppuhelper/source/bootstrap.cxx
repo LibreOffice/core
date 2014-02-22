@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -122,13 +122,13 @@ Reference< XComponentContext > SAL_CALL bootstrap()
                 Bootstrap::encode(path + SAL_CONFIGFILE("fundamental")));
         }
 
-        // create default local component context
+        
         Reference< XComponentContext > xLocalContext(
             defaultBootstrap_InitialComponentContext() );
         if ( !xLocalContext.is() )
             throw BootstrapException( "no local component context!" );
 
-        // create a random pipe name
+        
         rtlRandomPool hPool = rtl_random_createPool();
         if ( hPool == 0 )
             throw BootstrapException( "cannot create random pool!" );
@@ -142,7 +142,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             buf.append( static_cast< sal_Int32 >( bytes[ i ] ) );
         OUString sPipeName( buf.makeStringAndClear() );
 
-        // arguments
+        
         OUString args [] = {
             OUString("--nologo"),
             OUString("--nodefault"),
@@ -161,14 +161,14 @@ Reference< XComponentContext > SAL_CALL bootstrap()
         };
         ::osl::Security sec;
 
-        // start office process
+        
         oslProcess hProcess = 0;
         oslProcessError rc = osl_executeProcess(
             OUString(path + "soffice").pData, ar_args, ARLEN( ar_args ),
             osl_Process_DETACHED,
             sec.getHandle(),
-            0, // => current working dir
-            0, 0, // => no env vars
+            0, 
+            0, 0, 
             &hProcess );
         switch ( rc )
         {
@@ -188,26 +188,26 @@ Reference< XComponentContext > SAL_CALL bootstrap()
                 throw BootstrapException( "unmapped error!" );
         }
 
-        // create a URL resolver
+        
         Reference< bridge::XUnoUrlResolver > xUrlResolver(
             bridge::UnoUrlResolver::create( xLocalContext ) );
 
-        // connection string
+        
         OUString sConnectString( "uno:pipe,name=" + sPipeName + ";urp;StarOffice.ComponentContext" );
 
-        // wait until office is started
+        
         for ( ; ; )
         {
             try
             {
-                // try to connect to office
+                
                 xRemoteContext.set(
                     xUrlResolver->resolve( sConnectString ), UNO_QUERY_THROW );
                 break;
             }
             catch ( connection::NoConnectException & )
             {
-                // wait 500 ms, then try to connect again
+                
                 TimeValue tv = { 0 /* secs */, 500000000 /* nanosecs */ };
                 ::osl::Thread::wait( tv );
             }
@@ -231,6 +231,6 @@ OUString bootstrap_expandUri(OUString const & uri) {
         : uri;
 }
 
-} // namespace cppu
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

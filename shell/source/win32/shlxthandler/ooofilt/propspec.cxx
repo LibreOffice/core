@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//+-------------------------------------------------------------------------
-//  File:       propspec.cxx
-//  Contents:   C++ wrappers for FULLPROPSPEC
-//--------------------------------------------------------------------------
+
+
+
+
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -36,19 +36,19 @@
 
 #include "propspec.hxx"
 
-//refer to ms-help://MS.VSCC/MS.MSDNVS.2052/com/stgasstg_7agk.htm
-//FMTID_SummaryInformation
-//GUID CLSID_SummaryInforation = {
-//    0xF29F85E0,
-//    0x4FF9,
-//    0x1068,
-//    { 0xAB, 0x91, 0x08, 0x00, 0x2B, 0x27, 0xB3, 0xD9 }
-//};
-//+-------------------------------------------------------------------------
-//  Member:     CFullPropSpec::CFullPropSpec, public
-//  Synopsis:   Default constructor
-//  Effects:    Defines property with null guid and propid 0
-//--------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 CFullPropSpec::CFullPropSpec()
 {
@@ -56,24 +56,24 @@ CFullPropSpec::CFullPropSpec()
     _psProperty.ulKind = PRSPEC_PROPID;
     _psProperty.propid = 0;
 }
-//+-------------------------------------------------------------------------
-//  Member:     CFullPropSpec::CFullPropSpec, public
-//  Synopsis:   Construct propid based propspec
-//  Arguments:  [guidPropSet]  -- Property set
-//              [pidProperty] -- Property
-//--------------------------------------------------------------------------
+
+
+
+
+
+
 CFullPropSpec::CFullPropSpec( GUID const & guidPropSet, PROPID pidProperty ) :
     _guidPropSet( guidPropSet )
 {
     _psProperty.ulKind = PRSPEC_PROPID;
     _psProperty.propid = pidProperty;
 }
-//+-------------------------------------------------------------------------
-//  Member:     CFullPropSpec::CFullPropSpec, public
-//  Synopsis:   Construct name based propspec
-//  Arguments:  [guidPropSet] -- Property set
-//              [wcsProperty] -- Property
-//--------------------------------------------------------------------------
+
+
+
+
+
+
 CFullPropSpec::CFullPropSpec( GUID const & guidPropSet,
                               WCHAR const * wcsProperty ) :
     _guidPropSet( guidPropSet )
@@ -81,11 +81,11 @@ CFullPropSpec::CFullPropSpec( GUID const & guidPropSet,
     _psProperty.ulKind = PRSPEC_PROPID;
     SetProperty( wcsProperty );
 }
-//+-------------------------------------------------------------------------
-//  Member:     CFullPropSpec::CFullPropSpec, public
-//  Synopsis:   Copy constructor
-//  Arguments:  [src] -- Source property spec
-//--------------------------------------------------------------------------
+
+
+
+
+
 CFullPropSpec::CFullPropSpec( CFullPropSpec const & src ) :
     _guidPropSet( src._guidPropSet )
 {
@@ -109,18 +109,18 @@ inline void * operator new( size_t /*size*/, void * p )
 {
     return( p );
 }
-//+-------------------------------------------------------------------------
-//  Member:     CFullPropSpec::operator=, public
-//  Synopsis:   Assignment operator
-//  Arguments:  [Property] -- Source property
-//--------------------------------------------------------------------------
+
+
+
+
+
 CFullPropSpec & CFullPropSpec::operator=( CFullPropSpec const & Property )
 {
-    // Clean up.
+    
     this->CFullPropSpec::~CFullPropSpec();
 
 #ifdef _MSC_VER
-#pragma warning( disable : 4291 )           // unmatched operator new
+#pragma warning( disable : 4291 )           
 #endif
     new (this) CFullPropSpec( Property );
 #ifdef _MSC_VER

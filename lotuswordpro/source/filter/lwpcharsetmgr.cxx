@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -58,7 +58,7 @@
  *  For LWP filter architecture prototype
  ************************************************************************/
 #include "lwpcharsetmgr.hxx"
-//Added for SS migration
+
 #include "rtl/textenc.h"
 
 LwpCharSetMgr* LwpCharSetMgr::Instance = NULL;
@@ -71,14 +71,14 @@ LwpCharSetMgr* LwpCharSetMgr::GetInstance()
 }
 
 void LwpCharSetMgr::SetCodePageMap()
-{//sal_uInt16 wordproCode,rtl_TextEncoding encoding, tmp hardcoding, 1-18
+{
 /*  m_CodePageMap[256] =
     m_CodePageMap[259] =
     m_CodePageMap[819] =
     m_CodePageMap[921] =*/
     m_CodePageMap[437]  = RTL_TEXTENCODING_ASCII_US;
     m_CodePageMap[850]  = RTL_TEXTENCODING_IBM_850;
-    //m_CodePageMap[851]  = RTL_TEXTENCODING_IBM_851;
+    
     m_CodePageMap[852]  = RTL_TEXTENCODING_IBM_852;
     m_CodePageMap[857]  = RTL_TEXTENCODING_IBM_857;
     m_CodePageMap[860]  = RTL_TEXTENCODING_IBM_860;
@@ -86,19 +86,19 @@ void LwpCharSetMgr::SetCodePageMap()
     m_CodePageMap[865]  = RTL_TEXTENCODING_IBM_865;
     m_CodePageMap[866]  = RTL_TEXTENCODING_IBM_866;
     m_CodePageMap[869]  = RTL_TEXTENCODING_IBM_869;
-    m_CodePageMap[874]  = RTL_TEXTENCODING_MS_874;//thai
-    m_CodePageMap[932]  = RTL_TEXTENCODING_MS_932; //japanese
-    m_CodePageMap[936]  = RTL_TEXTENCODING_MS_936; //chinese simple
-    m_CodePageMap[949]  = RTL_TEXTENCODING_MS_949;//korean
-    m_CodePageMap[950]  = RTL_TEXTENCODING_BIG5;//chinese traditional
-    m_CodePageMap[1250] = RTL_TEXTENCODING_MS_1250;//Central European
+    m_CodePageMap[874]  = RTL_TEXTENCODING_MS_874;
+    m_CodePageMap[932]  = RTL_TEXTENCODING_MS_932; 
+    m_CodePageMap[936]  = RTL_TEXTENCODING_MS_936; 
+    m_CodePageMap[949]  = RTL_TEXTENCODING_MS_949;
+    m_CodePageMap[950]  = RTL_TEXTENCODING_BIG5;
+    m_CodePageMap[1250] = RTL_TEXTENCODING_MS_1250;
     m_CodePageMap[1252] = RTL_TEXTENCODING_MS_1252;
-    m_CodePageMap[1251] = RTL_TEXTENCODING_MS_1251; //ukrainian belarusian macedonian russian
-    m_CodePageMap[1253] = RTL_TEXTENCODING_MS_1253;//greek
-    m_CodePageMap[1254] = RTL_TEXTENCODING_MS_1254;//Turkish
-    m_CodePageMap[1255] = RTL_TEXTENCODING_MS_1255;//hebrew
-    m_CodePageMap[1256] = RTL_TEXTENCODING_MS_1256;//arabic
-    m_CodePageMap[1257] = RTL_TEXTENCODING_MS_1257;//estonian
+    m_CodePageMap[1251] = RTL_TEXTENCODING_MS_1251; 
+    m_CodePageMap[1253] = RTL_TEXTENCODING_MS_1253;
+    m_CodePageMap[1254] = RTL_TEXTENCODING_MS_1254;
+    m_CodePageMap[1255] = RTL_TEXTENCODING_MS_1255;
+    m_CodePageMap[1256] = RTL_TEXTENCODING_MS_1256;
+    m_CodePageMap[1257] = RTL_TEXTENCODING_MS_1257;
 }
 
 rtl_TextEncoding LwpCharSetMgr::GetTextCharEncoding(sal_uInt16 wordproCode)
@@ -112,7 +112,7 @@ rtl_TextEncoding LwpCharSetMgr::GetTextCharEncoding(sal_uInt16 wordproCode)
 
 rtl_TextEncoding LwpCharSetMgr::GetTextCharEncoding()
 {
-    return RTL_TEXTENCODING_MS_1252;//here should be a default value,1252 or get from platform,  1-18
+    return RTL_TEXTENCODING_MS_1252;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

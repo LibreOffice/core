@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
+
 
 #include <scmod.hxx>
 #include <svl/eitem.hxx>
@@ -76,7 +76,7 @@ ScTpFormulaOptions::ScTpFormulaOptions(Window* pParent, const SfxItemSet& rCoreA
     mpEdSepArrayCol->SetGetFocusHdl(aLink);
     mpEdSepArrayRow->SetGetFocusHdl(aLink);
 
-    // Get the decimal separator for current locale.
+    
     OUString aSep = ScGlobal::GetpLocaleData()->getNumDecimalSep();
     mnDecSep = aSep.isEmpty() ? sal_Unicode('.') : aSep[0];
 }
@@ -99,7 +99,7 @@ void ScTpFormulaOptions::OnFocusSeparatorInput(Edit* pEdit)
     if (!pEdit)
         return;
 
-    // Make sure the entire text is selected.
+    
     sal_Int32 nLen = pEdit->GetText().getLength();
     Selection aSel(0, (sal_uInt16)nLen);
     pEdit->SetSelection(aSel);
@@ -134,7 +134,7 @@ void ScTpFormulaOptions::LaunchCustomCalcSettings()
 bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep) const
 {
     if (rSep.getLength() != 1)
-        // Must be one-character long.
+        
         return false;
 
     if (rSep.compareToAscii("a") >= 0 && rSep.compareToAscii("z") <= 0)
@@ -158,12 +158,12 @@ bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep) const
         case ')':
         case '"':
         case '\'':
-            // Disallowed characters.  Anything else we want to disallow ?
+            
             return false;
     }
 
     if (c == mnDecSep)
-        // decimal separator is not allowed.
+        
         return false;
 
     return true;
@@ -171,7 +171,7 @@ bool ScTpFormulaOptions::IsValidSeparator(const OUString& rSep) const
 
 bool ScTpFormulaOptions::IsValidSeparatorSet() const
 {
-    // Make sure the column and row separators are different.
+    
     OUString aColStr = mpEdSepArrayCol->GetText();
     OUString aRowStr = mpEdSepArrayRow->GetText();
     if (aColStr == aRowStr)
@@ -202,14 +202,14 @@ IMPL_LINK( ScTpFormulaOptions, SepModifyHdl, Edit*, pEdit )
     OUString aStr = pEdit->GetText();
     if (aStr.getLength() > 1)
     {
-        // In case the string is more than one character long, only grab the
-        // first character.
+        
+        
         aStr = aStr.copy(0, 1);
         pEdit->SetText(aStr);
     }
 
     if ((!IsValidSeparator(aStr) || !IsValidSeparatorSet()) && !maOldSepValue.isEmpty())
-        // Invalid separator.  Restore the old value.
+        
         pEdit->SetText(maOldSepValue);
 
     OnFocusSeparatorInput(pEdit);
@@ -241,7 +241,7 @@ sal_Bool ScTpFormulaOptions::FillItemSet(SfxItemSet& rCoreSet)
 
     if (mpBtnCustomCalcDefault->IsChecked())
     {
-        // When Default is selected, reset all the calc config settings to default.
+        
         maCurrentConfig.reset();
     }
 
@@ -295,7 +295,7 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SCFORMULAOPTIONS, false , &pItem))
         aOpt = ((const ScTpFormulaItem*)pItem)->GetFormulaOptions();
 
-    // formula grammar.
+    
     ::formula::FormulaGrammar::Grammar eGram = aOpt.GetFormulaSyntax();
 
     switch (eGram)
@@ -323,18 +323,18 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
     mpLbODFRecalcOptions->SelectEntryPos(static_cast<sal_uInt16>(eODFRecalc));
     mpLbODFRecalcOptions->SaveValue();
 
-    // english function name.
+    
     mpCbEnglishFuncName->Check( aOpt.GetUseEnglishFuncName() );
     mpCbEnglishFuncName->SaveValue();
 
-    // Separators
+    
     OUString aSep = aOpt.GetFormulaSepArg();
     OUString aSepArrayRow = aOpt.GetFormulaSepArrayRow();
     OUString aSepArrayCol = aOpt.GetFormulaSepArrayCol();
 
     if (aSep.getLength() == 1 && aSepArrayRow.getLength() == 1 && aSepArrayCol.getLength() == 1)
     {
-        // Each separator must be one character long.
+        
         mpEdSepFuncArg->SetText(aSep);
         mpEdSepArrayCol->SetText(aSepArrayCol);
         mpEdSepArrayRow->SetText(aSepArrayRow);
@@ -346,7 +346,7 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
     else
         ResetSeparators();
 
-    // detailed calc settings.
+    
     ScFormulaOptions aDefaults;
 
     maSavedConfig = aOpt.GetCalcConfig();
@@ -358,7 +358,7 @@ void ScTpFormulaOptions::Reset(const SfxItemSet& rCoreSet)
 
 int ScTpFormulaOptions::DeactivatePage(SfxItemSet* /*pSet*/)
 {
-    // What's this method for ?
+    
     return KEEP_PAGE;
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -181,7 +181,7 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-//==============================================================================================================
+
 
 LicenseDialogImpl::LicenseDialogImpl(
     Window * pParent,
@@ -216,7 +216,7 @@ LicenseDialogImpl::LicenseDialogImpl(
     m_pLicense->SetScrolledHdl( LINK(this, LicenseDialogImpl, ScrolledHdl) );
     m_pDown->SetClickHdl( LINK(this, LicenseDialogImpl, PageDownHdl) );
 
-    // We want a automatic repeating page down button
+    
     WinBits aStyle = m_pDown->GetStyle();
     aStyle |= WB_REPEAT;
     m_pDown->SetStyle( aStyle );
@@ -238,7 +238,7 @@ void LicenseDialogImpl::Activate()
 {
     if (!m_bLicenseRead)
     {
-        //Only enable the scroll down button if the license text does not fit into the window
+        
         if (m_pLicense->IsEndReached())
         {
             m_pDown->Disable();
@@ -281,7 +281,7 @@ IMPL_LINK_NOARG(LicenseDialogImpl, EndReachedHdl)
     return 0;
 }
 
-//=================================================================================
+
 
 
 
@@ -293,14 +293,14 @@ LicenseDialog::LicenseDialog( Sequence<Any> const& args,
     comphelper::unwrapArgs( args, m_parent, m_sExtensionName, m_sLicenseText );
 }
 
-// XExecutableDialog
-//______________________________________________________________________________
+
+
 void LicenseDialog::setTitle( OUString const & ) throw (RuntimeException)
 {
 
 }
 
-//______________________________________________________________________________
+
 sal_Int16 LicenseDialog::execute() throw (RuntimeException)
 {
     return vcl::solarthread::syncExecute(
@@ -317,6 +317,6 @@ sal_Int16 LicenseDialog::solar_execute()
     return dlg->Execute();
 }
 
-} // namespace dp_gui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

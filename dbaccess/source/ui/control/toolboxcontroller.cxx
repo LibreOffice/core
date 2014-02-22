@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "toolboxcontroller.hxx"
@@ -86,7 +86,7 @@ namespace dbaui
         return static_cast< XServiceInfo* >(new OToolboxController( comphelper::getComponentContext(_rxORB) ));
     }
 
-    // XInterface
+    
     Any SAL_CALL OToolboxController::queryInterface( const Type& _rType ) throw (RuntimeException)
     {
         Any aReturn = ToolboxController::queryInterface(_rType);
@@ -144,7 +144,7 @@ namespace dbaui
                 }
             }
 
-            // check if paste special is allowed, when not don't add DROPDOWN
+            
             pToolBox->SetItemBits(m_nToolBoxId,pToolBox->GetItemBits(m_nToolBoxId) | TIB_DROPDOWN);
         }
     }
@@ -226,7 +226,7 @@ namespace dbaui
     SAL_WNODEPRECATED_DECLARATIONS_POP
     Reference< ::com::sun::star::awt::XWindow > SAL_CALL OToolboxController::createPopupWindow() throw (RuntimeException)
     {
-        // execute the menu
+        
         SolarMutexGuard aSolarMutexGuard;
         ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -236,7 +236,7 @@ namespace dbaui
         SAL_WNODEPRECATED_DECLARATIONS_POP
 
         sal_uInt16 nSelected = pMenu->Execute(pToolBox, pToolBox->GetItemRect( m_nToolBoxId ),POPUPMENU_EXECUTE_DOWN);
-        // "cleanup" the toolbox state
+        
         Point aPoint = pToolBox->GetItemRect( m_nToolBoxId ).TopLeft();
         MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
         pToolBox->MouseMove( aLeave );
@@ -262,6 +262,6 @@ namespace dbaui
         }
         return Reference< ::com::sun::star::awt::XWindow >();
     }
-} // dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

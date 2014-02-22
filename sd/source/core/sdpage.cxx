@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -114,9 +114,9 @@ SdPage::SdPage(SdDrawDocument& rNewDoc, sal_Bool bMasterPage)
 ,   mfTransitionDuration(2.0)
 ,   mbIsPrecious(true)
 {
-    // The name of the layout of the page is used by SVDRAW to determine the
-    // presentation template of the outline objects. Therefore, it already
-    // contains the designator for the outline (STR_LAYOUT_OUTLINE).
+    
+    
+    
     OUStringBuffer aBuf(SdResId(STR_LAYOUT_DEFAULT_NAME).toString());
     aBuf.append(SD_LT_SEPARATOR).append(SdResId(STR_LAYOUT_OUTLINE).toString());
     maLayoutName = aBuf.makeStringAndClear();
@@ -160,7 +160,7 @@ struct OrdNumSorter
 /** returns the nIndex'th object from the given PresObjKind, index starts with 1 */
 SdrObject* SdPage::GetPresObj(PresObjKind eObjKind, int nIndex, bool bFuzzySearch /* = false */ )
 {
-    // first sort all matching shapes with z-order
+    
     std::vector< SdrObject* > aMatches;
 
     SdrObject* pObj = 0;
@@ -221,18 +221,18 @@ void SdPage::EnsureMasterPageDefaultBackground()
 {
     if(mbMaster)
     {
-        // no hard attributes on MasterPage attributes
+        
         getSdrPageProperties().ClearItem();
         SfxStyleSheet* pSheetForPresObj = GetStyleSheetForMasterPageBackground();
 
         if(pSheetForPresObj)
         {
-            // set StyleSheet for background fill attributes
+            
             getSdrPageProperties().SetStyleSheet(pSheetForPresObj);
         }
         else
         {
-            // no style found, assert and set at least XFILL_NONE
+            
             OSL_FAIL("No Style for MasterPageBackground fill found (!)");
             getSdrPageProperties().PutItem(XFillStyleItem(XFILL_NONE));
         }
@@ -248,7 +248,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
     SdrObject* pSdrObj = NULL;
 
-    bool bForceText = false;    // forces the shape text to be set even if its empty
+    bool bForceText = false;    
     bool bEmptyPresObj = true;
 
     switch( eObjKind )
@@ -354,21 +354,21 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
         case PRESOBJ_HANDOUT:
         {
-            // Save the first standard page at SdrPageObj
-            // #i105146# We want no content to be displayed for PK_HANDOUT,
-            // so just never set a page as content
+            
+            
+            
             pSdrObj = new SdrPageObj(0);
         }
         break;
 
         case PRESOBJ_PAGE:
         {
-            // Save note pages at SdrPageObj
+            
             sal_uInt16 nDestPageNum(GetPageNum());
 
             if(nDestPageNum)
             {
-                // decrement only when != 0, else we get a 0xffff
+                
                 nDestPageNum -= 1;
             }
 
@@ -408,8 +408,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
         if ( pSdrObj->ISA(SdrTextObj) )
         {
-            // Tell the object EARLY that it is vertical to have the
-            // defaults for AutoGrowWidth/Height reversed
+            
+            
             if(bVertical)
                 ((SdrTextObj*)pSdrObj)->SetVerticalWriting(sal_True);
 
@@ -421,18 +421,18 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
 
             if (mbMaster)
             {
-                // The size of presentation objects on the master page have to
-                // be freely selectable by the user.
+                
+                
 
-                // potential problem: This action was still NOT
-                // adapted for vertical text. This sure needs to be done.
+                
+                
                 if(bVertical)
                     aTempAttr.Put(SdrTextAutoGrowWidthItem(sal_False));
                 else
                     aTempAttr.Put(SdrTextAutoGrowHeightItem(sal_False));
             }
 
-            // check if we need another vertical adjustement than the default
+            
             SdrTextVertAdjust eV = SDRTEXTVERTADJUST_TOP;
 
             if( (eObjKind == PRESOBJ_FOOTER) && (mePageKind != PK_STANDARD) )
@@ -500,13 +500,13 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, sal_Bool bVertical, const
         {
             SdrLayerAdmin& rLayerAdmin = pModel->GetLayerAdmin();
 
-            // background objects of the master page
+            
             pSdrObj->SetLayer( rLayerAdmin.
                 GetLayerID(SD_RESSTR(STR_LAYER_BCKGRNDOBJ), false) );
         }
 
-        // Subscribe object at the style sheet
-        // Set style only when one was found (as in 5.2)
+        
+        
         if( mePageKind != PK_HANDOUT )
         {
             SfxStyleSheet* pSheetForPresObj = GetStyleSheetForPresObj(eObjKind);
@@ -710,14 +710,14 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                             if( bUndo )
                                 pUndoManager->AddUndoAction( new UndoObjectUserCall(*pObj) );
 
-                            // Objekt was resized by user and does not listen to its slide anymore
+                            
                             pObj->SetUserCall(0);
                         }
                     }
                     else if (pModel)
                     {
-                        // Object of the master page changed, therefore adjust
-                        // object on all pages
+                        
+                        
                         sal_uInt16 nPageCount = ((SdDrawDocument*) pModel)->GetSdPageCount(mePageKind);
 
                         for (sal_uInt16 i = 0; i < nPageCount; i++)
@@ -726,8 +726,8 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
 
                             if (pLoopPage && this == &(pLoopPage->TRG_GetMasterPage()))
                             {
-                                // Page listens to this master page, therefore
-                                // adjust AutoLayout
+                                
+                                
                                 pLoopPage->SetAutoLayout(pLoopPage->GetAutoLayout());
                             }
                         }
@@ -779,9 +779,9 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
     {
         if( mePageKind == PK_HANDOUT && bInit )
         {
-            // handout template
+            
 
-            // delete all available handout presentation objects
+            
             SdrObject *pObj=NULL;
             while( (pObj = pMasterPage->GetPresObj(PRESOBJ_HANDOUT)) != 0 )
             {
@@ -806,8 +806,8 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
             while( iter != aAreas.end() )
             {
                 SdrPageObj* pPageObj = static_cast<SdrPageObj*>(pMasterPage->CreatePresObj(PRESOBJ_HANDOUT, sal_False, (*iter++), sal_True) );
-                // #i105146# We want no content to be displayed for PK_HANDOUT,
-                // so just never set a page as content
+                
+                
                 pPageObj->SetReferencedPage(0L);
 
                 if( bSkip && iter != aAreas.end() )
@@ -826,7 +826,7 @@ void SdPage::CreateTitleAndLayout(sal_Bool bInit, sal_Bool bCreate )
                 pMasterPage->CreateDefaultPresObj( mePageKind == PK_STANDARD ? PRESOBJ_OUTLINE : PRESOBJ_NOTES, true );
         }
 
-        // create header&footer objects
+        
 
         if( bCreate )
         {
@@ -870,14 +870,14 @@ const char* const PresObjKindVector[] = {
 
 void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPageKind, double presObjPropValue[] )
 {
-    bool bNoObjectFound = true;  //used to break from outer loop
+    bool bNoObjectFound = true;  
 
     const std::vector< Reference<XNode> >& objectInfo = static_cast<const SdDrawDocument*>(rPage.GetModel())->GetObjectVector();
     for( std::vector< Reference<XNode> >::const_iterator aIter=objectInfo.begin(); aIter != objectInfo.end(); ++aIter )
     {
         if(bNoObjectFound)
         {
-            Reference<XNode> objectNode = *aIter;      //get i'th object element
+            Reference<XNode> objectNode = *aIter;      
             Reference<XNamedNodeMap> objectattrlist = objectNode->getAttributes();
             Reference<XNode> objectattr = objectattrlist->getNamedItem("type");
             rtl::OUString sObjType = objectattr->getNodeValue();
@@ -892,7 +892,7 @@ void getPresObjProp( const SdPage& rPage, const char* sObjKind, const char* sPag
                     Reference<XNode> obj = objectChildren->item(j);
                     rtl::OUString nodename = obj->getNodeName();
 
-                    //check whether children is blank 'text-node' or 'object-prop' node
+                    
                     if(nodename == "object-prop")
                     {
                         Reference<XNamedNodeMap> ObjAttributes = obj->getAttributes();
@@ -954,7 +954,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
         double propvalue[] = {0,0,0,0};
         const char* sObjKind = PresObjKindVector[eObjKind];
         const char* sPageKind = PageKindVector[mePageKind];
-        // create footer objects for standard master page
+        
         if( mePageKind == PK_STANDARD )
         {
             const long nLftBorder = GetLftBorder();
@@ -985,7 +985,7 @@ SdrObject* SdPage::CreateDefaultPresObj(PresObjKind eObjKind, bool bInsert)
         }
         else
         {
-            // create header&footer objects for handout and notes master
+            
             Size aPageSize ( GetSize() );
             aPageSize.Width()  -= GetLftBorder() + GetRgtBorder();
             aPageSize.Height() -= GetUppBorder() + GetLwrBorder();
@@ -1055,7 +1055,7 @@ Rectangle SdPage::GetTitleRect() const
             aPos.X() += long( aTitleSize.Width() * propvalue[2] );
             aPos.Y() += long( aTitleSize.Height() * propvalue[3] );
 
-            // limit height
+            
             aTitleSize.Height() = long( aTitleSize.Height() * propvalue[0] );
             aTitleSize.Width() = long( aTitleSize.Width() * propvalue[1] );
 
@@ -1066,7 +1066,7 @@ Rectangle SdPage::GetTitleRect() const
 
             if(nDestPageNum)
             {
-                // only decrement if != 0, else we get 0xffff
+                
                 nDestPageNum -= 1;
             }
 
@@ -1077,7 +1077,7 @@ Rectangle SdPage::GetTitleRect() const
 
             if ( pRefPage )
             {
-                // scale actually page size into handout rectangle
+                
                 double fH = (double) aPartArea.Width()  / pRefPage->GetWdt();
                 double fV = (double) aPartArea.Height() / pRefPage->GetHgt();
 
@@ -1154,7 +1154,7 @@ Rectangle SdPage::GetLayoutRect() const
 |*
 \*************************************************************************/
 
-const int MAX_PRESOBJS = 7; // maximum number of presentation objects per layout
+const int MAX_PRESOBJS = 7; 
 const int VERTICAL = 0x8000;
 
 struct LayoutDescriptor
@@ -1182,43 +1182,43 @@ static const LayoutDescriptor& GetLayoutDescriptor( AutoLayout eLayout )
 {
     static const LayoutDescriptor aLayouts[AUTOLAYOUT__END-AUTOLAYOUT__START] =
     {
-        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_TEXT ),                                 // AUTOLAYOUT_TITLE
-        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              // AUTOLAYOUT_ENUM
-        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              // AUTOLAYOUT_CHART
-        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_2TEXT
-        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_TEXTCHART
-        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              // AUTOLAYOUT_ORG
-        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_TEXTCLbIP
-        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_CHARTTEXT
-        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              // AUTOLAYOUT_TAB
-        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_CLIPTEXT
-        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_TEXTOBJ
-        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OBJECT ),                               // AUTOLAYOUT_OBJ
-        LayoutDescriptor( 2, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),    // AUTOLAYOUT_TEXT2OBJ
-        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_TEXTOBJ
-        LayoutDescriptor( 4, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_OBJOVERTEXT
-        LayoutDescriptor( 3, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),    // AUTOLAYOUT_2OBJTEXT
-        LayoutDescriptor( 5, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),    // AUTOLAYOUT_2OBJOVERTEXT
-        LayoutDescriptor( 4, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             // AUTOLAYOUT_TEXTOVEROBJ
-        LayoutDescriptor( 6, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE,                   // AUTOLAYOUT_4OBJ
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_TEXT ),                                 
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE ),                              
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OBJECT ),                               
+        LayoutDescriptor( 2, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),    
+        LayoutDescriptor( 1, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             
+        LayoutDescriptor( 4, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             
+        LayoutDescriptor( 3, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),    
+        LayoutDescriptor( 5, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),    
+        LayoutDescriptor( 4, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),             
+        LayoutDescriptor( 6, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE,                   
             PRESOBJ_OUTLINE, PRESOBJ_OUTLINE ),
-        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_NONE ),                                 // AUTOLAYOUT_ONLY_TITLE
-        LayoutDescriptor( 0, PRESOBJ_NONE ),                                                // AUTOLAYOUT_NONE
-        LayoutDescriptor( 0, PRESOBJ_PAGE, PRESOBJ_NOTES ),                                 // AUTOLAYOUT_NOTES
-        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT1
-        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT2
-        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT3
-        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT4
-        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT6
-        LayoutDescriptor( 7, PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL, PRESOBJ_OUTLINE ),// AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART
-        LayoutDescriptor( 8, PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL ),            // AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE
-        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL ),                     // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE
-        LayoutDescriptor( 9, PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL ),   // AUTOLAYOUT_TITLE_VERTICAL_OUTLINE_CLIPART
-        LayoutDescriptor( 0 ),                                                              // AUTOLAYOUT_HANDOUT9
-        LayoutDescriptor( 10, PRESOBJ_TEXT, PRESOBJ_NONE ),                                 // AUTOLAYOUT_ONLY_TEXT
-        LayoutDescriptor( 6, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE,               // AUTOLAYOUT_4CLIPART
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_NONE ),                                 
+        LayoutDescriptor( 0, PRESOBJ_NONE ),                                                
+        LayoutDescriptor( 0, PRESOBJ_PAGE, PRESOBJ_NOTES ),                                 
+        LayoutDescriptor( 0 ),                                                              
+        LayoutDescriptor( 0 ),                                                              
+        LayoutDescriptor( 0 ),                                                              
+        LayoutDescriptor( 0 ),                                                              
+        LayoutDescriptor( 0 ),                                                              
+        LayoutDescriptor( 7, PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL, PRESOBJ_OUTLINE ),
+        LayoutDescriptor( 8, PRESOBJ_TITLE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL ),            
+        LayoutDescriptor( 0, PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL ),                     
+        LayoutDescriptor( 9, PRESOBJ_TITLE, PRESOBJ_OUTLINE|VERTICAL, PRESOBJ_OUTLINE|VERTICAL ),   
+        LayoutDescriptor( 0 ),                                                              
+        LayoutDescriptor( 10, PRESOBJ_TEXT, PRESOBJ_NONE ),                                 
+        LayoutDescriptor( 6, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE,               
             PRESOBJ_GRAPHIC, PRESOBJ_GRAPHIC ),
-        LayoutDescriptor( 11, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE,              // AUTOLAYOUT_6CLIPART
+        LayoutDescriptor( 11, PRESOBJ_TITLE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE,              
             PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE, PRESOBJ_OUTLINE )
     };
 
@@ -1281,7 +1281,7 @@ rtl::OUString enumtoString(AutoLayout aut)
         default:
             retstr="unknown";
             break;
-        // case AUTOLAYOUT_TITLE_4SCONTENT:            return "AUTOLAYOUT_TITLE_4SCONTENT";
+        
     }
     return retstr;
 }
@@ -1327,7 +1327,7 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
         Reference<XNode> layoutNode = *aIter;
         Reference<XNamedNodeMap> layoutAttrList =layoutNode->getAttributes();
 
-        // get the attribute value of layout (i.e it's type)
+        
         rtl::OUString sLayoutAttName =
             layoutAttrList->getNamedItem("type")->getNodeValue();
         if(sLayoutAttName == sLayoutType)
@@ -1337,14 +1337,14 @@ static void CalcAutoLayoutRectangles( SdPage& rPage,Rectangle* rRectangle ,const
             const int presobjsize = layoutChildren->getLength();
             for( int j=0; j< presobjsize ; j++)
             {
-                // TODO: rework sd to permit arbitrary number of presentation objects
+                
                 OSL_ASSERT(count < MAX_PRESOBJS);
 
                 rtl::OUString nodename;
                 Reference<XNode> presobj = layoutChildren->item(j);
                 nodename=presobj->getNodeName();
 
-                //check whether children is blank 'text-node' or 'presobj' node
+                
                 if(nodename == "presobj")
                 {
                     Reference<XNamedNodeMap> presObjAttributes = presobj->getAttributes();
@@ -1396,21 +1396,21 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
 {
     int i;
 
-    // init list of indexes for each presentation shape kind
-    // this is used to find subsequent shapes with the same presentation shape kind
+    
+    
     int PresObjIndex[PRESOBJ_MAX];
     for( i = 0; i < PRESOBJ_MAX; i++ ) PresObjIndex[i] = 1;
 
     bool bMissing = false;
 
-    // for each entry in the layoutdescriptor, arrange a presentation shape
+    
     for (i = 0; (i < MAX_PRESOBJS) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++)
     {
         PresObjKind eKind = rDescriptor.meKind[i];
         SdrObject* pObj = 0;
         while( (pObj = rPage.GetPresObj( eKind, PresObjIndex[eKind], true )) != 0 )
         {
-            PresObjIndex[eKind]++; // on next search for eKind, find next shape with same eKind
+            PresObjIndex[eKind]++; 
 
             if( !bSwitchLayout || !pObj->IsEmptyPresObj() )
             {
@@ -1425,7 +1425,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
 
     if( bMissing && bInit )
     {
-        // for each entry in the layoutdescriptor, look for an alternative shape
+        
         for (i = 0; (i < MAX_PRESOBJS) && (rDescriptor.meKind[i] != PRESOBJ_NONE); i++)
         {
             if( rShapes[i] )
@@ -1448,7 +1448,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                 if( pObj->GetObjInventor() != SdrInventor )
                     continue;
 
-                // do not reuse shapes that are already part of the layout
+                
                 if( std::find( rShapes.begin(), rShapes.end(), pObj ) != rShapes.end() )
                     continue;
 
@@ -1491,7 +1491,7 @@ void findAutoLayoutShapesImpl( SdPage& rPage, const LayoutDescriptor& rDescripto
                                     uno::Reference < embed::XEmbeddedObject > xObject = pPersist->getEmbeddedObjectContainer().
                                             GetEmbeddedObject( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
 
-                                    // TODO CL->KA: Why is this not working anymore?
+                                    
                                     if( xObject.is() )
                                     {
                                         SvGlobalName aClassId( xObject->getClassID() );
@@ -1564,12 +1564,12 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
 
     meAutoLayout = eLayout;
 
-    // if needed, creates and initialises the presentation shapes on this slides master page
+    
     CreateTitleAndLayout(bInit, bCreate);
 
     if((meAutoLayout == AUTOLAYOUT_NONE && maPresentationShapeList.isEmpty()) || mbMaster)
     {
-        // MasterPage or no layout and no presentation shapes available, nothing to do
+        
         return;
     }
 
@@ -1585,16 +1585,16 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, sal_Bool bInit, sal_Bool bCreate 
 
     int i;
 
-    // for each entry in the layoutdescriptor, arrange a presentation shape
+    
     for (i = 0; (i < MAX_PRESOBJS) && (aDescriptor.meKind[i] != PRESOBJ_NONE); i++)
     {
         PresObjKind eKind = aDescriptor.meKind[i];
         SdrObject* pObj = InsertAutoLayoutShape( aLayoutShapes[i], eKind, aDescriptor.mbVertical[i], aRectangle[i], bInit );
         if( pObj )
-            aUsedPresentationObjects.insert(pObj); // remember that we used this empty shape
+            aUsedPresentationObjects.insert(pObj); 
     }
 
-    // now delete all empty presentation objects that are no longer used by the new layout
+    
     if( bInit )
     {
         SdrObject* pObj = 0;
@@ -1637,12 +1637,12 @@ void SdPage::NbcInsertObject(SdrObject* pObj, sal_uLong nPos, const SdrInsertRea
     if( mbMaster )
     {
         if( nId == 0 )
-            pObj->NbcSetLayer( 2 );     // wrong layer. corrected to BackgroundObj layer
+            pObj->NbcSetLayer( 2 );     
     }
     else
     {
         if( nId == 2 )
-            pObj->NbcSetLayer( 0 );     // wrong layer. corrected to layout layer
+            pObj->NbcSetLayer( 0 );     
     }
 }
 
@@ -1670,25 +1670,25 @@ SdrObject* SdPage::NbcRemoveObject(sal_uLong nObjNum)
     return FmFormPage::NbcRemoveObject(nObjNum);
 }
 
-// Also overload ReplaceObject methods to realize when
-// objects are removed with this mechanism instead of RemoveObject
+
+
 SdrObject* SdPage::NbcReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum)
 {
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::NbcReplaceObject(pNewObj, nObjNum);
 }
 
-// Also overload ReplaceObject methods to realize when
-// objects are removed with this mechanism instead of RemoveObject
+
+
 SdrObject* SdPage::ReplaceObject(SdrObject* pNewObj, sal_uLong nObjNum)
 {
     onRemoveObject(GetObj( nObjNum ));
     return FmFormPage::ReplaceObject(pNewObj, nObjNum);
 }
 
-// -------------------------------------------------------------------------
 
-// called after a shape is removed or replaced from this slide
+
+
 
 void SdPage::onRemoveObject( SdrObject* pObject )
 {
@@ -1713,8 +1713,8 @@ void SdPage::SetSize(const Size& aSize)
 
         if (aOldSize.Height() == 10 && aOldSize.Width() == 10)
         {
-            // this page gets a valid size for the first time. Therefore
-            // we initialize the orientation.
+            
+            
             if (aSize.Width() > aSize.Height())
             {
                 meOrientation = ORIENTATION_LANDSCAPE;
@@ -1805,8 +1805,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     sal_Int32 nUpper = rNewBorderRect.Top();
     sal_Int32 nLower = rNewBorderRect.Bottom();
 
-    // negative values are fixed values
-    // -> use up to date values
+    
+    
     if (aNewPageSize.Width() < 0)
     {
         aNewPageSize.Width() = GetWdt();
@@ -1856,18 +1856,18 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
     {
         sal_Bool bIsPresObjOnMaster = sal_False;
 
-        // all Objects
+        
         pObj = GetObj(nObj);
 
         if (mbMaster && IsPresObj(pObj))
         {
-            // There is a presentation object on the master page
+            
             bIsPresObjOnMaster = sal_True;
         }
 
         if (pObj)
         {
-            // remember aTopLeft as original TopLeft
+            
             Point aTopLeft(pObj->GetCurrentBoundRect().TopLeft());
 
             if (!pObj->IsEdgeObj())
@@ -1877,7 +1877,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                 **************************************************************/
                 if (mbScaleObjects)
                 {
-                    // use aTopLeft as original TopLeft
+                    
                     aRefPnt = aTopLeft;
                 }
 
@@ -1940,7 +1940,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
 
                                 if (pOutlineSheet)
                                 {
-                                    // Calculate new font height
+                                    
                                     SfxItemSet aTempSet(pOutlineSheet->GetItemSet());
 
                                     SvxFontHeightItem& rOldHgt = (SvxFontHeightItem&) aTempSet.Get(EE_CHAR_FONTHEIGHT);
@@ -1964,18 +1964,18 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                                         aTempSet.Put(SvxFontHeightItem(nFontHeight, 100, EE_CHAR_FONTHEIGHT_CTL));
                                     }
 
-                                    // adjust bullet
+                                    
                                     ((SdStyleSheet*) pOutlineSheet)->AdjustToFontHeight(aTempSet, sal_False);
 
-                                    // Special treatment: reset the INVALIDS to
-                                    // NULL pointer (otherwise we have INVALID's
-                                    // or pointer to the DefaultItems in the
-                                    // template; both would suppress the
-                                    // attribute inheritance)
+                                    
+                                    
+                                    
+                                    
+                                    
                                     aTempSet.ClearInvalidItems();
 
-                                    // Special treatment: only the valid parts
-                                    // of the BulletItems
+                                    
+                                    
                                     if (aTempSet.GetItemState(EE_PARA_BULLET) == SFX_ITEM_AVAILABLE)
                                     {
                                         SvxBulletItem aOldBulItem((SvxBulletItem&) pOutlineSheet->GetItemSet().Get(EE_PARA_BULLET));
@@ -2020,7 +2020,7 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                         else if ( nScriptType == SCRIPTTYPE_COMPLEX )
                             nWhich = EE_CHAR_FONTHEIGHT_CTL;
 
-                        // use more modern method to scale the text height
+                        
                         sal_uInt32 nFontHeight = ((SvxFontHeightItem&)pObj->GetMergedItem(nWhich)).GetHeight();
                         sal_uInt32 nNewFontHeight = sal_uInt32((double)nFontHeight * (double)aFractY);
 
@@ -2036,8 +2036,8 @@ void SdPage::ScaleObjects(const Size& rNewPageSize, const Rectangle& rNewBorderR
                 **************************************************************/
                 Point aNewPos;
 
-                // corrected scaling; only distances may be scaled
-                // use aTopLeft as original TopLeft
+                
+                
                 aNewPos.X() = long((aTopLeft.X() - GetLftBorder()) * (double)aFractX) + nLeft;
                 aNewPos.Y() = long((aTopLeft.Y() - GetUppBorder()) * (double)aFractY) + nUpper;
 
@@ -2070,12 +2070,12 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
     {
         pNewObj = rPage.CreatePresObj(PRESOBJ_OUTLINE, bVertical, aRect);
 
-        // Set text of the subtitle into PRESOBJ_OUTLINE
+        
         OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
 
         if(pOutlParaObj)
         {
-            // assign text
+            
             ::sd::Outliner* pOutl = pModel->GetInternalOutliner( sal_True );
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
@@ -2086,7 +2086,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
 
             for (sal_uInt16 nLevel = 1; nLevel < 10; nLevel++)
             {
-                // assign new template
+                
                 OUString aName( rPage.GetLayoutName() + " " + OUString::number( nLevel ) );
                 SfxStyleSheet* pSheet = static_cast<SfxStyleSheet*>( pModel->GetStyleSheetPool()->Find(aName, SD_STYLE_FAMILY_MASTERPAGE) );
 
@@ -2104,7 +2104,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
                 }
             }
 
-            // Remove LRSpace item
+            
             SfxItemSet aSet(pModel->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
             aSet.Put(pNewObj->GetMergedItemSet());
@@ -2116,7 +2116,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             if( bUndo )
                 pUndoManager->AddUndoAction( pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pSourceObj) );
 
-            // Remove outline shape from page
+            
             rPage.RemoveObject( pSourceObj->GetOrdNum() );
 
             if( !bUndo )
@@ -2125,15 +2125,15 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
     }
     else if((eObjKind == PRESOBJ_TEXT) && (pSourceObj->GetObjIdentifier() == OBJ_OUTLINETEXT) )
     {
-        // is there an outline shape we can use to replace empty subtitle shape?
+        
         pNewObj = rPage.CreatePresObj(PRESOBJ_TEXT, bVertical, aRect);
 
-        // Set text of the outline object into PRESOBJ_TITLE
+        
         OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
 
         if(pOutlParaObj)
         {
-            // assign text
+            
             ::sd::Outliner* pOutl = pModel->GetInternalOutliner();
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
@@ -2142,7 +2142,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             pOutl->Clear();
             pNewObj->SetEmptyPresObj(false);
 
-            // reset left indent
+            
             SfxItemSet aSet(pModel->GetPool(), EE_PARA_LRSPACE, EE_PARA_LRSPACE );
 
             aSet.Put(pNewObj->GetMergedItemSet());
@@ -2158,7 +2158,7 @@ SdrObject* convertPresentationObjectImpl( SdPage& rPage, SdrObject* pSourceObj, 
             if (pSheet)
                 pNewObj->SetStyleSheet(pSheet, true);
 
-            // Remove subtitle shape from page
+            
             if( bUndo )
                 pUndoManager->AddUndoAction(pModel->GetSdrUndoFactory().CreateUndoDeleteObject(*pSourceObj));
 
@@ -2209,7 +2209,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
     }
     else if ( pObj && (pObj->GetUserCall() || bInit) )
     {
-        // convert object if shape type does not match kind (f.e. converting outline text to subtitle text)
+        
         if( bInit )
             pObj = convertPresentationObjectImpl( *this, pObj, eObjKind, bVertical, aRect );
 
@@ -2231,8 +2231,8 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
             {
                 pTextObject->SetVerticalWriting( bVertical );
 
-                // here make sure the correct anchoring is used when the object
-                // is re-used but orientation is changed
+                
+                
                 if(PRESOBJ_OUTLINE == eObjKind)
                     pTextObject->SetMergedItem(SdrTextHorzAdjustItem( bVertical ? SDRTEXTHORZADJUST_RIGHT : SDRTEXTHORZADJUST_BLOCK ));
             }
@@ -2241,7 +2241,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
             {
                 if ( pTextObject->IsAutoGrowHeight() )
                 {
-                    // switch off AutoGrowHeight, set new MinHeight
+                    
                     SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     SdrTextMinFrameHeightItem aMinHeight( aRect.GetSize().Height() );
                     aTempAttr.Put( aMinHeight );
@@ -2249,7 +2249,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                     pTextObject->SetMergedItemSet(aTempAttr);
                     pTextObject->SetLogicRect(aRect);
 
-                    // switch on AutoGrowHeight
+                    
                     SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     aAttr.Put( SdrTextAutoGrowHeightItem(sal_True) );
 
@@ -2258,7 +2258,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
 
                 if ( pTextObject->IsAutoGrowWidth() )
                 {
-                    // switch off AutoGrowWidth , set new MinWidth
+                    
                     SfxItemSet aTempAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     SdrTextMinFrameWidthItem aMinWidth( aRect.GetSize().Width() );
                     aTempAttr.Put( aMinWidth );
@@ -2266,7 +2266,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
                     pTextObject->SetMergedItemSet(aTempAttr);
                     pTextObject->SetLogicRect(aRect);
 
-                    // switch on AutoGrowWidth
+                    
                     SfxItemSet aAttr( ((SdDrawDocument*) pModel)->GetPool() );
                     aAttr.Put( SdrTextAutoGrowWidthItem(sal_True) );
                     pTextObject->SetMergedItemSet(aAttr);
@@ -2285,7 +2285,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
             InsertPresObj( pObj, eObjKind );
         }
 
-        // make adjustments for vertical title and outline shapes
+        
         if( bVertical && (( eObjKind == PRESOBJ_TITLE) || (eObjKind == PRESOBJ_OUTLINE)))
         {
             SfxItemSet aNewSet(pObj->GetMergedItemSet());
@@ -2385,11 +2385,11 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         pOutl->SetUpdateMode(sal_False);
         pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
 
-        // Always set the object's StyleSheet at the Outliner to
-        // use the current objects StyleSheet. Thus it's the same as in
-        // SetText(...).
-        // Moved this implementation from where SetObjText(...) was called
-        // to inside this method to work even when outliner is fetched here.
+        
+        
+        
+        
+        
         pOutl->SetStyleSheet(0, pObj->GetStyleSheet());
 
         OUString aString;
@@ -2440,7 +2440,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
                 pOutl->Init( OUTLINERMODE_TEXTOBJECT );
                 aString += rString;
 
-                // check if we need to add a text field
+                
                 SvxFieldData* pData = NULL;
 
                 switch( eObjKind )
@@ -2486,7 +2486,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         }
         else
         {
-            // Outliner restaurieren
+            
             pOutl->Init( nOutlMode );
             pOutl->SetParaAttribs( 0, pOutl->GetEmptyItemSet() );
             pOutl->SetUpdateMode( bUpdateMode );
@@ -2527,16 +2527,16 @@ const OUString& SdPage::GetName() const
     {
         if ((mePageKind == PK_STANDARD || mePageKind == PK_NOTES) && !mbMaster)
         {
-            // default name for handout pages
+            
             sal_uInt16  nNum = (GetPageNum() + 1) / 2;
 
             aCreatedPageName = SD_RESSTR(STR_PAGE);
             aCreatedPageName += " ";
             if( GetModel()->GetPageNumType() == SVX_NUMBER_NONE )
             {
-                // if the document has number none as a formatting
-                // for page numbers we still default to arabic numbering
-                // to keep the default page names unique
+                
+                
+                
                 aCreatedPageName += OUString::number( (sal_Int32)nNum );
             }
             else
@@ -2726,13 +2726,13 @@ void SdPage::setHeaderFooterSettings( const sd::HeaderFooterSettings& rNewSettin
     {
         TRG_GetMasterPageDescriptorViewContact().ActionChanged();
 
-        // #i119056# For HeaderFooterSettings SdrObjects are used, but the properties
-        // used are not part of their model data, but kept in SD. This data is applied
-        // using a 'backdoor' on primitive creation. Thus, the normal mechanism to detect
-        // object changes does not work here. It is necessary to trigger updates here
-        // directly. BroadcastObjectChange used for PagePreview invalidations,
-        // flushViewObjectContacts used to invalidate and flush all visualizations in
-        // edit views.
+        
+        
+        
+        
+        
+        
+        
         SdPage* pMasterPage = dynamic_cast< SdPage* >(&TRG_GetMasterPage());
 
         if(pMasterPage)
@@ -2791,7 +2791,7 @@ bool SdPage::checkVisibility(
     const SdrPageView* pPageView = rOriginal.GetObjectContact().TryToGetSdrPageView();
     const bool bIsInsidePageObj(pPageView && pPageView->GetPage() != pVisualizedPage);
 
-    // empty presentation objects only visible during edit mode
+    
     if( (bIsPrinting || !bEdit || bIsInsidePageObj ) && pObj->IsEmptyPresObj() )
     {
         if( (pObj->GetObjInventor() != SdrInventor) || ( (pObj->GetObjIdentifier() != OBJ_RECT) && (pObj->GetObjIdentifier() != OBJ_PAGE) ) )
@@ -2812,12 +2812,12 @@ bool SdPage::checkVisibility(
 
                 if( bSubContentProcessing || ( pCheckPage->GetPageKind() == PK_HANDOUT && bIsPrinting ) )
                 {
-                    // use the page that is currently processed
+                    
                     const SdPage* pVisualizedSdPage = dynamic_cast< const SdPage* >(pVisualizedPage);
 
                     if( pVisualizedSdPage )
                     {
-                        // if we are not on a masterpage, see if we have to draw this header&footer object at all
+                        
                         const sd::HeaderFooterSettings& rSettings = pVisualizedSdPage->getHeaderFooterSettings();
 
                         switch( eKind )
@@ -2835,16 +2835,16 @@ bool SdPage::checkVisibility(
                         }
                     }
                 }
-            } // check for placeholders on master
+            } 
             else if( (eKind != PRESOBJ_NONE) && pCheckPage->IsMasterPage() && ( pVisualizedPage != pCheckPage ) )
             {
-                // presentation objects on master slide are always invisible if slide is shown.
+                
                 return false;
             }
         }
     }
 
-    // i63977, do not print SdrpageObjs from master pages
+    
     if( ( pObj->GetObjInventor() == SdrInventor ) && ( pObj->GetObjIdentifier() == OBJ_PAGE ) )
     {
         if( pObj->GetPage() && pObj->GetPage()->IsMasterPage() )
@@ -2876,16 +2876,16 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
                 sal_Bool bVertical = sal_False;
                 OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();
                 if( pOldPara )
-                    bVertical = pOldPara->IsVertical();  // is old para object vertical?
+                    bVertical = pOldPara->IsVertical();  
 
                 SetObjText( pTextObj, 0, ePresObjKind, aString );
 
                 if( pOldPara )
                 {
-                    // Here, only the vertical flag for the
-                    // OutlinerParaObjects needs to be changed. The
-                    // AutoGrowWidth/Height items still exist in the
-                    // not changed object.
+                    
+                    
+                    
+                    
                     if(pTextObj
                         && pTextObj->GetOutlinerParaObject()
                         && pTextObj->GetOutlinerParaObject()->IsVertical() != (bool)bVertical)
@@ -2896,7 +2896,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
                     }
                 }
 
-                pTextObj->SetTextEditOutliner( NULL );  // to make stylesheet settings work
+                pTextObj->SetTextEditOutliner( NULL );  
                 pTextObj->NbcSetStyleSheet( GetStyleSheetForPresObj(ePresObjKind), sal_True );
                 pTextObj->SetEmptyPresObj(true);
                 bRet = true;
@@ -2912,7 +2912,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 
     if( eLayout == AUTOLAYOUT_NONE )
     {
-        // use layout from handout master
+        
         SdrObjListIter aShapeIter (rHandoutMaster);
         while (aShapeIter.IsMore())
         {
@@ -2925,7 +2925,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
     {
         Size    aArea = rHandoutMaster.GetSize();
 
-        const long nGapW = 1000; // gap is 1cm
+        const long nGapW = 1000; 
         const long nGapH = 1000;
 
         long nLeftBorder = rHandoutMaster.GetLftBorder();
@@ -2948,11 +2948,11 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
 
         static const sal_uInt16 aOffsets[5][9] =
         {
-            { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, // AUTOLAYOUT_HANDOUT9, Portrait, Horizontal order
-            { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT3, Landscape, Vertical
-            { 0, 2, 1, 3, 0, 0, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Landscape, Vertical
-            { 0, 3, 1, 4, 2, 5, 0, 0, 0 }, // AUTOLAYOUT_HANDOUT4, Portrait, Vertical
-            { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, // AUTOLAYOUT_HANDOUT9, Landscape, Vertical
+            { 0, 1, 2, 3, 4, 5, 6, 7, 8 }, 
+            { 0, 2, 4, 1, 3, 5, 0, 0, 0 }, 
+            { 0, 2, 1, 3, 0, 0, 0, 0, 0 }, 
+            { 0, 3, 1, 4, 2, 5, 0, 0, 0 }, 
+            { 0, 3, 6, 1, 4, 7, 2, 5, 8 }, 
         };
 
         const sal_uInt16* pOffsets = aOffsets[0];
@@ -3022,7 +3022,7 @@ void SdPage::CalculateHandoutAreas( SdDrawDocument& rModel, AutoLayout eLayout, 
         SdrPage* pFirstPage = rModel.GetMasterSdPage(0, PK_STANDARD);
         if ( pFirstPage )
         {
-            // scale actual size into handout rect
+            
             double fScale = (double)aPartArea.Width() / (double)pFirstPage->GetWdt();
 
             aSize.Height() = (long)(fScale * pFirstPage->GetHgt() );

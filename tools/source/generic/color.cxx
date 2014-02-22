@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -38,17 +38,17 @@ Color::Color( const ResId& rResId )
     ResMgr* pResMgr = rResId.GetResMgr();
     if ( pResMgr && pResMgr->GetResource( rResId ) )
     {
-        // Header ueberspringen
+        
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
-        // Daten laden
+        
         sal_uInt16 nRed     = pResMgr->ReadShort();
         sal_uInt16 nGreen   = pResMgr->ReadShort();
         sal_uInt16 nBlue    = pResMgr->ReadShort();
-        // one more historical sal_uIntPtr
+        
         pResMgr->ReadLong();
 
-        // RGB-Farbe
+        
         mnColor = RGB_COLORDATA( nRed>>8, nGreen>>8, nBlue>>8 );
     }
     else
@@ -110,7 +110,7 @@ bool Color::IsBright() const
     return GetLuminance() >= 245;
 }
 
-// color space conversion
+
 
 void Color::RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) const
 {
@@ -127,7 +127,7 @@ void Color::RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) con
     if( c[2] > cMax )
         cMax = c[2];
 
-    // Brightness = max(R, G, B);
+    
     nBri = cMax * 100 / 255;
 
     cMin = c[0];
@@ -138,14 +138,14 @@ void Color::RGBtoHSB( sal_uInt16& nHue, sal_uInt16& nSat, sal_uInt16& nBri ) con
 
     sal_uInt8 cDelta = cMax - cMin;
 
-    // Saturation = max - min / max
+    
     if( nBri > 0 )
         nSat = cDelta * 100 / cMax;
     else
         nSat = 0;
 
     if( nSat == 0 )
-        nHue = 0; // Default = undefined
+        nHue = 0; 
     else
     {
         double dHue = 0.0;
@@ -258,37 +258,37 @@ SvStream& ReadColor( SvStream& rIStream, Color& rColor )
     {
         static const ColorData aColAry[] =
         {
-            COL_BLACK,                          // COL_BLACK
-            COL_BLUE,                           // COL_BLUE
-            COL_GREEN,                          // COL_GREEN
-            COL_CYAN,                           // COL_CYAN
-            COL_RED,                            // COL_RED
-            COL_MAGENTA,                        // COL_MAGENTA
-            COL_BROWN,                          // COL_BROWN
-            COL_GRAY,                           // COL_GRAY
-            COL_LIGHTGRAY,                      // COL_LIGHTGRAY
-            COL_LIGHTBLUE,                      // COL_LIGHTBLUE
-            COL_LIGHTGREEN,                     // COL_LIGHTGREEN
-            COL_LIGHTCYAN,                      // COL_LIGHTCYAN
-            COL_LIGHTRED,                       // COL_LIGHTRED
-            COL_LIGHTMAGENTA,                   // COL_LIGHTMAGENTA
-            COL_YELLOW,                         // COL_YELLOW
-            COL_WHITE,                          // COL_WHITE
-            COL_WHITE,                          // COL_MENUBAR
-            COL_BLACK,                          // COL_MENUBARTEXT
-            COL_WHITE,                          // COL_POPUPMENU
-            COL_BLACK,                          // COL_POPUPMENUTEXT
-            COL_BLACK,                          // COL_WINDOWTEXT
-            COL_WHITE,                          // COL_WINDOWWORKSPACE
-            COL_BLACK,                          // COL_HIGHLIGHT
-            COL_WHITE,                          // COL_HIGHLIGHTTEXT
-            COL_BLACK,                          // COL_3DTEXT
-            COL_LIGHTGRAY,                      // COL_3DFACE
-            COL_WHITE,                          // COL_3DLIGHT
-            COL_GRAY,                           // COL_3DSHADOW
-            COL_LIGHTGRAY,                      // COL_SCROLLBAR
-            COL_WHITE,                          // COL_FIELD
-            COL_BLACK                           // COL_FIELDTEXT
+            COL_BLACK,                          
+            COL_BLUE,                           
+            COL_GREEN,                          
+            COL_CYAN,                           
+            COL_RED,                            
+            COL_MAGENTA,                        
+            COL_BROWN,                          
+            COL_GRAY,                           
+            COL_LIGHTGRAY,                      
+            COL_LIGHTBLUE,                      
+            COL_LIGHTGREEN,                     
+            COL_LIGHTCYAN,                      
+            COL_LIGHTRED,                       
+            COL_LIGHTMAGENTA,                   
+            COL_YELLOW,                         
+            COL_WHITE,                          
+            COL_WHITE,                          
+            COL_BLACK,                          
+            COL_WHITE,                          
+            COL_BLACK,                          
+            COL_BLACK,                          
+            COL_WHITE,                          
+            COL_BLACK,                          
+            COL_WHITE,                          
+            COL_BLACK,                          
+            COL_LIGHTGRAY,                      
+            COL_WHITE,                          
+            COL_GRAY,                           
+            COL_LIGHTGRAY,                      
+            COL_WHITE,                          
+            COL_BLACK                           
         };
 
         if ( nColorName < (sizeof( aColAry )/sizeof(ColorData)) )

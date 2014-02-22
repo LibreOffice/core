@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -35,7 +35,7 @@
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 
-// class TabWin_Impl -----------------------------------------------------
+
 
 class TabWin_Impl : public Window
 {
@@ -62,7 +62,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeTabWin_Impl(Window *pParent
 {
     return new TabWin_Impl(pParent, 0);
 }
-// static ----------------------------------------------------------------
+
 
 static sal_uInt16 pRanges[] =
 {
@@ -71,7 +71,7 @@ static sal_uInt16 pRanges[] =
     0
 };
 
-// C function ------------------------------------------------------------
+
 
 void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
 {
@@ -83,11 +83,11 @@ void FillUpWithDefTabs_Impl( long nDefDist, SvxTabStopItem& rTabs )
     }
 }
 
-// class TabWin_Impl -----------------------------------------------------
+
 
 void TabWin_Impl::Paint( const Rectangle& )
 {
-    // Paint tabulators
+    
     Point aPnt;
     Size aSize = GetOutputSizePixel();
     aPnt.X() = aSize.Width() / 2;
@@ -95,7 +95,7 @@ void TabWin_Impl::Paint( const Rectangle& )
     Ruler::DrawTab( this, GetSettings().GetStyleSettings().GetFontColor(), aPnt, nTabStyle );
 }
 
-// class SvxTabulatorTabPage ---------------------------------------------
+
 
 SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAttr ):
 
@@ -109,7 +109,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
 
 {
     get(m_pTabBox,"ED_TABPOS");
-    //the tab images
+    
     get(m_pLeftWin,"drawingareaWIN_TABLEFT");
     get(m_pRightWin,"drawingareaWIN_TABRIGHT");
     get(m_pCenterWin,"drawingareaWIN_TABCENTER");
@@ -122,7 +122,7 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
     m_pRightWin->SetTabStyle((sal_uInt16)(RULER_TAB_RIGHT|WB_HORZ));
     m_pCenterWin->SetTabStyle((sal_uInt16)(RULER_TAB_CENTER|WB_HORZ));
     m_pDezWin->SetTabStyle((sal_uInt16)(RULER_TAB_DECIMAL|WB_HORZ));
-    //upper radiobuttons
+    
     SvtCJKOptions aCJKOptions;
     get(m_pLeftTab,  aCJKOptions.IsAsianTypographyEnabled() ? "radiobuttonST_LEFTTAB_ASIAN" : "radiobuttonBTN_TABTYPE_LEFT");
     get(m_pRightTab, aCJKOptions.IsAsianTypographyEnabled() ? "radiobuttonST_RIGHTTAB_ASIAN" : "radiobuttonBTN_TABTYPE_RIGHT");
@@ -132,14 +132,14 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
     get(m_pDezTab,"radiobuttonBTN_TABTYPE_DECIMAL");
     get(m_pDezChar,"entryED_TABTYPE_DECCHAR");
     get(m_pDezCharLabel,"labelFT_TABTYPE_DECCHAR");
-    //lower radio buttons
+    
     get(m_pNoFillChar,"radiobuttonBTN_FILLCHAR_NO");
     get(m_pFillPoints,"radiobuttonBTN_FILLCHAR_POINTS");
     get(m_pFillDashLine,"radiobuttonBTN_FILLCHAR_DASHLINE");
     get(m_pFillSolidLine,"radiobuttonBTN_FILLCHAR_UNDERSCORE");
     get(m_pFillSpecial,"radiobuttonBTN_FILLCHAR_OTHER");
     get(m_pFillChar,"entryED_FILLCHAR_OTHER");
-    //button bar
+    
     get(m_pNewBtn,"buttonBTN_NEW");
     get(m_pDelAllBtn,"buttonBTN_DELALL");
     get(m_pDelBtn,"buttonBTN_DEL");
@@ -147,14 +147,14 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
     get(m_pTypeFrame, "frameFL_TABTYPE");
     get(m_pFillFrame, "frameFL_FILLCHAR");
 
-    // This page needs ExchangeSupport
+    
     SetExchangeSupport();
 
-    // Set metric
+    
     FieldUnit eFUnit = GetModuleFieldUnit( rAttr );
     SetFieldUnit( *m_pTabBox, eFUnit );
 
-    // Initialize buttons
+    
     m_pNewBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, NewHdl_Impl ) );
     m_pDelBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, DelHdl_Impl ) );
     m_pDelAllBtn->SetClickHdl( LINK( this,SvxTabulatorTabPage, DelAllHdl_Impl ) );
@@ -181,35 +181,35 @@ SvxTabulatorTabPage::SvxTabulatorTabPage( Window* pParent, const SfxItemSet& rAt
     m_pTabBox->SetDoubleClickHdl( LINK( this, SvxTabulatorTabPage, SelectHdl_Impl ) );
     m_pTabBox->SetModifyHdl( LINK( this, SvxTabulatorTabPage, ModifyHdl_Impl ) );
 
-    // Get the default decimal char from the system
+    
     const LocaleDataWrapper& rLocaleWrapper( Application::GetSettings().GetLocaleDataWrapper() );
     aAktTab.GetDecimal() = rLocaleWrapper.getNumDecimalSep()[0];
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxTabulatorTabPage::~SvxTabulatorTabPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16* SvxTabulatorTabPage::GetRanges()
 {
     return pRanges;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
 {
     sal_Bool bModified = sal_False;
 
-    // Put the controls' values in here
+    
     if ( m_pNewBtn->IsEnabled() )
         NewHdl_Impl( 0 );
 
-    // Call the LoseFocus-Handler first
+    
     GetDezCharHdl_Impl( m_pDezChar );
     GetFillCharHdl_Impl( m_pFillChar );
 
@@ -220,10 +220,10 @@ sal_Bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
 
     if ( MAP_100TH_MM != eUnit )
     {
-        // If the ItemSet contains a LRSpaceItem with negative first line indent,
-        // the TabStopItem needs to have a DefTab at position 0.
+        
+        
         const SfxPoolItem* pLRSpace;
-        // If not in the new set, then maybe in the old one
+        
         if ( SFX_ITEM_SET != rSet.GetItemState( GetWhich( SID_ATTR_LRSPACE ), true, &pLRSpace ) )
             pLRSpace = GetOldItem( rSet, SID_ATTR_LRSPACE );
 
@@ -258,7 +258,7 @@ sal_Bool SvxTabulatorTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxTabulatorTabPage::Create( Window* pParent,
                                          const SfxItemSet& rSet)
@@ -266,14 +266,14 @@ SfxTabPage* SvxTabulatorTabPage::Create( Window* pParent,
     return ( new SvxTabulatorTabPage( pParent, rSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
 {
     SfxItemPool* pPool = rSet.GetPool();
     MapUnit eUnit = (MapUnit)pPool->GetMetric( GetWhich( SID_ATTR_TABSTOP ) );
 
-    // Current tabs
+    
     const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_TABSTOP );
 
     if ( pItem )
@@ -296,7 +296,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
     else
         aNewTabs.Remove( 0, aNewTabs.Count() );
 
-    // Defaul tab distance
+    
     nDefDist = SVX_TAB_DEFDIST;
     pItem = GetItem( rSet, SID_ATTR_TABSTOP_DEFAULTS );
 
@@ -304,7 +304,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
         nDefDist = LogicToLogic(
             (long)((const SfxUInt16Item*)pItem)->GetValue(), eUnit, MAP_100TH_MM );
 
-    // Tab pos currently selected
+    
     sal_uInt16 nTabPos = 0;
     pItem = GetItem( rSet, SID_ATTR_TABSTOP_POS );
 
@@ -314,7 +314,7 @@ void SvxTabulatorTabPage::Reset( const SfxItemSet& rSet )
     InitTabPos_Impl( nTabPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
 {
@@ -359,7 +359,7 @@ void SvxTabulatorTabPage::DisableControls( const sal_uInt16 nFlag )
          m_pFillFrame->Disable();
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
@@ -368,7 +368,7 @@ int SvxTabulatorTabPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
 {
@@ -384,7 +384,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
         nOffset = OutputDevice::LogicToLogic( nOffset, eUnit, MAP_100TH_MM  );
     }
 
-    // Correct current TabPos and default tabs
+    
     for ( sal_uInt16 i = 0; i < aNewTabs.Count(); i++ )
     {
         if ( aNewTabs[i].GetAdjustment() != SVX_TAB_ADJUST_DEFAULT )
@@ -396,13 +396,13 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
             aNewTabs.Remove( i-- );
     }
 
-    // Select current tabulator
+    
     const sal_uInt16 nSize = aNewTabs.Count();
 
     if ( nTabPos >= nSize )
         nTabPos = 0;
 
-    // Switch off all RadioButtons for a start
+    
     m_pLeftTab->Check( true );
     m_pNoFillChar->Check( true );
 
@@ -416,7 +416,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
         m_pDelBtn->Enable();
     }
     else
-    {   // If no entry, 0 is the default value
+    {   
         m_pTabBox->SetValue( 0, eDefUnit );
 
         m_pNewBtn->Enable();
@@ -424,7 +424,7 @@ void SvxTabulatorTabPage::InitTabPos_Impl( sal_uInt16 nTabPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTabulatorTabPage::SetFillAndTabType_Impl()
 {
@@ -471,15 +471,15 @@ void SvxTabulatorTabPage::SetFillAndTabType_Impl()
     pFillBtn->Check();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 {
-    // Add a new one and select it
-    // Get the value from the display
+    
+    
     long nVal = static_cast<long>(m_pTabBox->Denormalize( m_pTabBox->GetValue( eDefUnit ) ));
 
-    // If the pBtn == 0 && the value == 0 then do not create a tab, because we create via OK
+    
     if ( nVal == 0 && pBtn == 0 )
         return 0;
 
@@ -503,7 +503,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
             break;
     }
 
-    // Make ListBox entry
+    
     m_pTabBox->InsertValue( m_pTabBox->Normalize( nVal ), eDefUnit, i );
     aAktTab.GetTabPos() = nReal;
     SvxTabAdjust eAdj = SVX_TAB_ADJUST_LEFT;
@@ -522,14 +522,14 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
     m_pDelBtn->Enable();
     m_pTabBox->GrabFocus();
 
-    // If no RadioButton was clicked, we need to put anyway
+    
     bCheck |= sal_True;
-    // Set the selection into the position Edit
+    
     m_pTabBox->SetSelection(Selection(0, m_pTabBox->GetText().getLength()));
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
 {
@@ -544,22 +544,22 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
         return 0;
     }
 
-    // Delete Tab
+    
     m_pTabBox->RemoveEntryAt(nPos);
     aNewTabs.Remove( nPos );
 
-    // Reset aAktTab
+    
     const sal_uInt16 nSize = aNewTabs.Count();
 
     if ( nSize > 0 )
     {
-        // Correct Pos
+        
         nPos = ( ( nSize - 1 ) >= nPos) ? nPos : nPos - 1;
         m_pTabBox->SetValue( m_pTabBox->GetValue( nPos ) );
         aAktTab = aNewTabs[nPos];
     }
 
-    // If no Tabs Enable Disable Controls
+    
     if ( m_pTabBox->GetEntryCount() == 0 )
     {
         m_pDelBtn->Disable();
@@ -567,12 +567,12 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
         m_pTabBox->GrabFocus();
     }
 
-    // If no RadioButton was clicked, we need to put anyway
+    
     bCheck |= sal_True;
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
 {
@@ -581,13 +581,13 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
         aNewTabs = SvxTabStopItem( 0 );
         InitTabPos_Impl();
 
-        // So that we put in FillItemSet()
+        
         bCheck |= sal_True;
     }
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
 {
@@ -622,7 +622,7 @@ IMPL_LINK( SvxTabulatorTabPage, TabTypeCheckHdl_Impl, RadioButton *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
 {
@@ -653,7 +653,7 @@ IMPL_LINK( SvxTabulatorTabPage, FillTypeCheckHdl_Impl, RadioButton *, pBox )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
 {
@@ -671,7 +671,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetFillCharHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
 {
@@ -688,7 +688,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
 {
@@ -702,7 +702,7 @@ IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
 {

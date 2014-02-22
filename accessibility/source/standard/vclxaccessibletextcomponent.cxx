@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/standard/vclxaccessibletextcomponent.hxx>
@@ -43,9 +43,9 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-//  ----------------------------------------------------
-//  class VCLXAccessibleTextComponent
-//  ----------------------------------------------------
+
+
+
 
 VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindow )
     :VCLXAccessibleComponent( pVCLXWindow )
@@ -54,13 +54,13 @@ VCLXAccessibleTextComponent::VCLXAccessibleTextComponent( VCLXWindow* pVCLXWindo
         m_sText = OutputDevice::GetNonMnemonicString( GetWindow()->GetText() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleTextComponent::~VCLXAccessibleTextComponent()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTextComponent::SetText( const OUString& sText )
 {
@@ -72,7 +72,7 @@ void VCLXAccessibleTextComponent::SetText( const OUString& sText )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTextComponent::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -89,9 +89,9 @@ void VCLXAccessibleTextComponent::ProcessWindowEvent( const VclWindowEvent& rVcl
    }
 }
 
-// -----------------------------------------------------------------------------
-// OCommonAccessibleText
-// -----------------------------------------------------------------------------
+
+
+
 
 OUString VCLXAccessibleTextComponent::implGetText()
 {
@@ -102,14 +102,14 @@ OUString VCLXAccessibleTextComponent::implGetText()
     return aText;
 }
 
-// -----------------------------------------------------------------------------
+
 
 lang::Locale VCLXAccessibleTextComponent::implGetLocale()
 {
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleTextComponent::implGetSelection( sal_Int32& nStartIndex, sal_Int32& nEndIndex )
 {
@@ -117,9 +117,9 @@ void VCLXAccessibleTextComponent::implGetSelection( sal_Int32& nStartIndex, sal_
     nEndIndex = 0;
 }
 
-// -----------------------------------------------------------------------------
-// XComponent
-// -----------------------------------------------------------------------------
+
+
+
 
 void VCLXAccessibleTextComponent::disposing()
 {
@@ -128,21 +128,21 @@ void VCLXAccessibleTextComponent::disposing()
     m_sText = OUString();
 }
 
-// -----------------------------------------------------------------------------
-// XInterface
-// -----------------------------------------------------------------------------
+
+
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleTextComponent, VCLXAccessibleComponent, VCLXAccessibleTextComponent_BASE )
 
-// -----------------------------------------------------------------------------
-// XTypeProvider
-// -----------------------------------------------------------------------------
+
+
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleTextComponent, VCLXAccessibleComponent, VCLXAccessibleTextComponent_BASE )
 
-// -----------------------------------------------------------------------------
-// XAccessibleText
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 VCLXAccessibleTextComponent::getCaretPosition() throw (RuntimeException)
 {
@@ -151,7 +151,7 @@ sal_Int32 VCLXAccessibleTextComponent::getCaretPosition() throw (RuntimeExceptio
     return -1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleTextComponent::setCaretPosition( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -160,7 +160,7 @@ sal_Bool VCLXAccessibleTextComponent::setCaretPosition( sal_Int32 nIndex ) throw
     return setSelection( nIndex, nIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Unicode VCLXAccessibleTextComponent::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -169,7 +169,7 @@ sal_Unicode VCLXAccessibleTextComponent::getCharacter( sal_Int32 nIndex ) throw 
     return OCommonAccessibleText::getCharacter( nIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -188,8 +188,8 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
         sal_Int32 nBackColor = GetWindow()->GetControlBackground().GetColor();
         sal_Int32 nColor = GetWindow()->GetControlForeground().GetColor();
 
-        // MT: Code with default font was introduced with the IA2 CWS, but I am not convinced that this is the correct font...
-        // Decide what to do when we have a concrete issue.
+        
+        
         /*
         Font aDefaultVCLFont;
         OutputDevice* pDev = Application::GetDefaultDevice();
@@ -210,7 +210,7 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
                 aFont.SetWeight( aDefaultVCLFont.GetWeight() );
             }
 
-            //if nColor is -1, it may indicate that the default color black is using.
+            
             if ( nColor == -1)
             {
                 nColor = aDefaultVCLFont.GetColor().GetColor();
@@ -218,8 +218,8 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
         }
         */
 
-        // MT: Adjustment stuff was introduced with the IA2 CWS, but adjustment is not a character attribute...
-        // In case we reintroduce it, use adjustment as extra parameter for the CharacterAttributesHelper...
+        
+        
         /*
         WinBits aBits = GetWindow()->GetStyle();
         sal_Int16 nAdjust = -1;
@@ -244,7 +244,7 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
     return aValues;
 }
 
-// -----------------------------------------------------------------------------
+
 
 awt::Rectangle VCLXAccessibleTextComponent::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -261,7 +261,7 @@ awt::Rectangle VCLXAccessibleTextComponent::getCharacterBounds( sal_Int32 nIndex
     return aRect;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTextComponent::getCharacterCount() throw (RuntimeException)
 {
@@ -270,7 +270,7 @@ sal_Int32 VCLXAccessibleTextComponent::getCharacterCount() throw (RuntimeExcepti
     return OCommonAccessibleText::getCharacterCount();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException)
 {
@@ -284,7 +284,7 @@ sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint
     return nIndex;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTextComponent::getSelectedText() throw (RuntimeException)
 {
@@ -293,7 +293,7 @@ OUString VCLXAccessibleTextComponent::getSelectedText() throw (RuntimeException)
     return OCommonAccessibleText::getSelectedText();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTextComponent::getSelectionStart() throw (RuntimeException)
 {
@@ -302,7 +302,7 @@ sal_Int32 VCLXAccessibleTextComponent::getSelectionStart() throw (RuntimeExcepti
     return OCommonAccessibleText::getSelectionStart();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 VCLXAccessibleTextComponent::getSelectionEnd() throw (RuntimeException)
 {
@@ -311,7 +311,7 @@ sal_Int32 VCLXAccessibleTextComponent::getSelectionEnd() throw (RuntimeException
     return OCommonAccessibleText::getSelectionEnd();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -323,7 +323,7 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
     return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTextComponent::getText() throw (RuntimeException)
 {
@@ -332,7 +332,7 @@ OUString VCLXAccessibleTextComponent::getText() throw (RuntimeException)
     return OCommonAccessibleText::getText();
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -341,7 +341,7 @@ OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_I
     return OCommonAccessibleText::getTextRange( nStartIndex, nEndIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleTextComponent::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -350,7 +350,7 @@ OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_I
     return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -359,7 +359,7 @@ OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_I
     return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
 }
 
-// -----------------------------------------------------------------------------
+
 
 ::com::sun::star::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
@@ -368,7 +368,7 @@ OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_I
     return OCommonAccessibleText::getTextBehindIndex( nIndex, aTextType );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -400,6 +400,6 @@ sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -70,7 +70,7 @@ static int* gpnInit = 0;
 static NSMenu* pDockMenu = nil;
 static bool bNoSVMain = true;
 static bool bLeftMain = false;
-// -----------------------------------------------------------------------
+
 
 class AquaDelayedSettingsChanged : public Timer
 {
@@ -110,7 +110,7 @@ void AquaSalInstance::delayedSettingsChanged( bool bInvalidate )
 }
 
 
-// the AppEventList must be available before any SalData/SalInst/etc. objects are ready
+
 AquaSalInstance::AppEventList AquaSalInstance::aAppEventList;
 
 NSMenu* AquaSalInstance::GetDynamicDockMenu()
@@ -134,19 +134,19 @@ bool AquaSalInstance::isOnCommandLine( const OUString& rArg )
 }
 
 
-// initialize the cocoa VCL_NSApplication object
-// returns an NSAutoreleasePool that must be released when the event loop begins
+
+
 static void initNSApp()
 {
-    // create our cocoa NSApplication
+    
     [VCL_NSApplication sharedApplication];
 
     SalData::ensureThreadAutoreleasePool();
 
-    // put cocoa into multithreaded mode
+    
     [NSThread detachNewThreadSelector:@selector(enableCocoaThreads:) toTarget:[[CocoaThreadEnabler alloc] init] withObject:nil];
 
-    // activate our delegate methods
+    
     [NSApp setDelegate: NSApp];
 
     [[NSNotificationCenter defaultCenter] addObserver: NSApp
@@ -157,19 +157,19 @@ static void initNSApp()
                                           selector: @selector(screenParametersChanged:)
                                           name: NSApplicationDidChangeScreenParametersNotification
                                           object: nil ];
-    // add observers for some settings changes that affect vcl's settings
-    // scrollbar variant
+    
+    
     [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
                                           selector: @selector(scrollbarVariantChanged:)
                                           name: @"AppleAquaScrollBarVariantChanged"
                                           object: nil ];
-    // scrollbar page behavior ("jump to here" or not)
+    
     [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
                                           selector: @selector(scrollbarSettingsChanged:)
                                           name: @"AppleNoRedisplayAppearancePreferenceChanged"
                                           object: nil ];
 #if !HAVE_FEATURE_MACOSX_SANDBOX
-    // Initialize Apple Remote
+    
     GetSalData()->mpAppleRemoteMainController = [[AppleRemoteMainController alloc] init];
 
     [[NSDistributedNotificationCenter defaultCenter] addObserver: NSApp
@@ -227,10 +227,10 @@ sal_Bool ImplSVMainHook( int * pnInit )
         OSL_FAIL( "NSApplication initialization could not be done" );
     }
 
-    return TRUE;   // indicate that ImplSVMainHook is implemented
+    return TRUE;   
 }
 
-// =======================================================================
+
 
 void SalAbort( const OUString& rErrorText, bool bDumpCore )
 {
@@ -245,7 +245,7 @@ void SalAbort( const OUString& rErrorText, bool bDumpCore )
         _exit(1);
 }
 
-// -----------------------------------------------------------------------
+
 
 void InitSalData()
 {
@@ -253,7 +253,7 @@ void InitSalData()
     SetSalData( pSalData );
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& SalGetDesktopEnvironment()
 {
@@ -261,7 +261,7 @@ const OUString& SalGetDesktopEnvironment()
     return aDesktopEnvironment;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DeInitSalData()
 {
@@ -275,19 +275,19 @@ void DeInitSalData()
     SetSalData( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 extern "C" {
 #include <crt_externs.h>
 }
 
-// -----------------------------------------------------------------------
+
 
 void InitSalMain()
 {
 }
 
-// =======================================================================
+
 
 SalYieldMutex::SalYieldMutex()
 {
@@ -325,9 +325,9 @@ bool SalYieldMutex::tryToAcquire()
         return false;
 }
 
-// -----------------------------------------------------------------------
 
-// some convenience functions regarding the yield mutex, aka solar mutex
+
+
 
 sal_Bool ImplSalYieldMutexTryToAcquire()
 {
@@ -352,12 +352,12 @@ void ImplSalYieldMutexRelease()
         pInst->mpSalYieldMutex->release();
 }
 
-// =======================================================================
+
 
 SalInstance* CreateSalInstance()
 {
-    // this is the case for not using SVMain
-    // not so good
+    
+    
     if( bNoSVMain )
         initNSApp();
 
@@ -365,11 +365,11 @@ SalInstance* CreateSalInstance()
     DBG_ASSERT( pSalData->mpFirstInstance == NULL, "more than one instance created" );
     AquaSalInstance* pInst = new AquaSalInstance;
 
-    // init instance (only one instance in this version !!!)
+    
     pSalData->mpFirstInstance = pInst;
-    // this one is for outside AquaSalInstance::Yield
+    
     SalData::ensureThreadAutoreleasePool();
-    // no focus rects on NWF
+    
     ImplGetSVData()->maNWFData.mbNoFocusRects = true;
     ImplGetSVData()->maNWFData.mbNoActiveTabTextRaise = true;
     ImplGetSVData()->maNWFData.mbCenteredTabs = true;
@@ -382,14 +382,14 @@ SalInstance* CreateSalInstance()
     return pInst;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DestroySalInstance( SalInstance* pInst )
 {
     delete pInst;
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalInstance::AquaSalInstance()
 {
@@ -403,7 +403,7 @@ AquaSalInstance::AquaSalInstance()
     maWaitingYieldCond = osl_createCondition();
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalInstance::~AquaSalInstance()
 {
@@ -414,11 +414,11 @@ AquaSalInstance::~AquaSalInstance()
     osl_destroyCondition( maWaitingYieldCond );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::wakeupYield()
 {
-    // wakeup :Yield
+    
     if( mbWaitingYield )
     {
         SalData::ensureThreadAutoreleasePool();
@@ -437,7 +437,7 @@ void AquaSalInstance::wakeupYield()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, void* pData )
 {
@@ -445,18 +445,18 @@ void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, sal_uInt16 nType, voi
     maUserEvents.push_back( SalUserEvent( pFrame, pData, nType ) );
     osl_releaseMutex( maUserEventListMutex );
 
-    // notify main loop that an event has arrived
+    
     wakeupYield();
 }
 
-// -----------------------------------------------------------------------
+
 
 comphelper::SolarMutex* AquaSalInstance::GetYieldMutex()
 {
     return mpSalYieldMutex;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong AquaSalInstance::ReleaseYieldMutex()
 {
@@ -478,7 +478,7 @@ sal_uLong AquaSalInstance::ReleaseYieldMutex()
         return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::AcquireYieldMutex( sal_uLong nCount )
 {
@@ -490,7 +490,7 @@ void AquaSalInstance::AcquireYieldMutex( sal_uLong nCount )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInstance::CheckYieldMutex()
 {
@@ -505,14 +505,14 @@ bool AquaSalInstance::CheckYieldMutex()
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInstance::isNSAppThread() const
 {
     return osl::Thread::getCurrentIdentifier() == maMainThread;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 {
@@ -558,8 +558,8 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
                 nCommand = ( bIsFullScreenMode == true ) ? MEDIA_COMMAND_PLAY_PAUSE : MEDIA_COMMAND_PLAY;
                 break;
 
-            // kept for experimentation purpose (scheduled for future implementation)
-            // case kRemoteButtonMenu:         nCommand = MEDIA_COMMAND_MENU; break;
+            
+            
 
             case kRemoteButtonPlus:         nCommand = MEDIA_COMMAND_VOLUME_UP; break;
 
@@ -577,7 +577,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 
             case kRemoteButtonMenu_Hold:    nCommand = MEDIA_COMMAND_STOP; break;
 
-            // FIXME : not detected
+            
             case kRemoteButtonPlus_Hold:
             case kRemoteButtonMinus_Hold:
                 break;
@@ -602,7 +602,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     break;
 
     case YieldWakeupEvent:
-        // do nothing, fall out of Yield
+        
     break;
 
     default:
@@ -611,7 +611,7 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
     };
 }
 
-// -----------------------------------------------------------------------
+
 
 class ReleasePoolHolder
 {
@@ -623,22 +623,22 @@ class ReleasePoolHolder
 
 void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    // ensure that the per thread autorelease pool is top level and
-    // will therefore not be destroyed by cocoa implicitly
+    
+    
     SalData::ensureThreadAutoreleasePool();
 
-    // NSAutoreleasePool documentation suggests we should have
-    // an own pool for each yield level
+    
+    
     ReleasePoolHolder aReleasePool;
 
-    // Release all locks so that we don't deadlock when we pull pending
-    // events from the event queue
+    
+    
     bool bDispatchUser = true;
     while( bDispatchUser )
     {
         sal_uLong nCount = ReleaseYieldMutex();
 
-        // get one user event
+        
         osl_acquireMutex( maUserEventListMutex );
         SalUserEvent aEvent( NULL, NULL, 0 );
         if( ! maUserEvents.empty() )
@@ -652,27 +652,27 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
         AcquireYieldMutex( nCount );
 
-        // dispatch it
+        
         if( aEvent.mpFrame && AquaSalFrame::isAlive( aEvent.mpFrame ) )
         {
             aEvent.mpFrame->CallCallback( aEvent.mnType, aEvent.mpData );
             osl_setCondition( maWaitingYieldCond );
-            // return if only one event is asked for
+            
             if( ! bHandleAllCurrentEvents )
                 return;
         }
     }
 
-    // handle cocoa event queue
-    // cocoa events mye be only handled in the thread the NSApp was created
+    
+    
     if( isNSAppThread() && mnActivePrintJobs == 0 )
     {
-        // we need to be woken up by a cocoa-event
-        // if a user event should be posted by the event handling below
+        
+        
         bool bOldWaitingYield = mbWaitingYield;
         mbWaitingYield = bWait;
 
-        // handle available events
+        
         NSEvent* pEvent = nil;
         bool bHadEvent = false;
         do
@@ -691,7 +691,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
             AcquireYieldMutex( nCount );
         } while( bHandleAllCurrentEvents && pEvent );
 
-        // if we had no event yet, wait for one if requested
+        
         if( bWait && ! bHadEvent )
         {
             sal_uLong nCount = ReleaseYieldMutex();
@@ -705,21 +705,21 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
             AcquireYieldMutex( nCount );
 
-            // #i86581#
-            // FIXME: sometimes the NSTimer will never fire. Firing it by hand then
-            // fixes the problem even seems to set the correct next firing date
-            // Why oh why ?
+            
+            
+            
+            
             if( ! pEvent && AquaSalTimer::pRunningTimer )
             {
-                // this cause crashes on MacOSX 10.4
-                // [AquaSalTimer::pRunningTimer fire];
+                
+                
                 ImplGetSVData()->mpSalTimer->CallCallback();
             }
         }
 
         mbWaitingYield = bOldWaitingYield;
 
-        // collect update rectangles
+        
         const std::list< AquaSalFrame* > rFrames( GetSalData()->maFrames );
         for( std::list< AquaSalFrame* >::const_iterator it = rFrames.begin(); it != rFrames.end(); ++it )
         {
@@ -733,9 +733,9 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
     else if( bWait )
     {
-        // #i103162#
-        // wait until any thread (most likely the main thread)
-        // has dispatched an event, cop out at 200 ms
+        
+        
+        
         osl_resetCondition( maWaitingYieldCond );
         TimeValue aVal = { 0, 200000000 };
         sal_uLong nCount = ReleaseYieldMutex();
@@ -743,31 +743,31 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         AcquireYieldMutex( nCount );
     }
 
-    // we get some apple events way too early
-    // before the application is ready to handle them,
-    // so their corresponding application events need to be delayed
-    // now is a good time to handle at least one of them
+    
+    
+    
+    
     if( bWait && !aAppEventList.empty() && ImplGetSVData()->maAppData.mbInAppExecute )
     {
-        // make sure that only one application event is active at a time
+        
         static bool bInAppEvent = false;
         if( !bInAppEvent )
         {
             bInAppEvent = true;
-            // get the next delayed application event
+            
             const ApplicationEvent* pAppEvent = aAppEventList.front();
             aAppEventList.pop_front();
-            // handle one application event (no recursion)
+            
             const ImplSVData* pSVData = ImplGetSVData();
             pSVData->mpApp->AppEvent( *pAppEvent );
             delete pAppEvent;
-            // allow the next delayed application event
+            
             bInAppEvent = false;
         }
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalInstance::AnyInput( sal_uInt16 nType )
 {
@@ -798,13 +798,13 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
             NSLeftMouseUpMask      | NSRightMouseUpMask      | NSOtherMouseUpMask |
             NSLeftMouseDraggedMask | NSRightMouseDraggedMask | NSOtherMouseDraggedMask |
             NSScrollWheelMask |
-            // NSMouseMovedMask |
+            
             NSMouseEnteredMask | NSMouseExitedMask;
     if( nType & VCL_INPUT_KEYBOARD)
         nEventMask |= NSKeyDownMask | NSKeyUpMask | NSFlagsChangedMask;
     if( nType & VCL_INPUT_OTHER)
         nEventMask |= NSTabletPoint;
-    // TODO: VCL_INPUT_PAINT / more VCL_INPUT_OTHER
+    
     if( !nType)
         return false;
 
@@ -813,14 +813,14 @@ bool AquaSalInstance::AnyInput( sal_uInt16 nType )
     return (pEvent != NULL);
 }
 
-// -----------------------------------------------------------------------
+
 
 SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData*, sal_uLong /*nSalFrameStyle*/ )
 {
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameStyle )
 {
@@ -830,18 +830,18 @@ SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, sal_uLong nSalFrameSt
     return pFrame;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyFrame( SalFrame* pFrame )
 {
     delete pFrame;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* /* pWindowData */, sal_Bool /* bShow */ )
 {
-    // SystemWindowData is meaningless on Mac OS X
+    
     AquaSalObject *pObject = NULL;
 
     if ( pParent )
@@ -850,28 +850,28 @@ SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* /
     return pObject;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyObject( SalObject* pObject )
 {
     delete ( pObject );
 }
 
-// -----------------------------------------------------------------------
+
 
 SalPrinter* AquaSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     return new AquaSalPrinter( dynamic_cast<AquaSalInfoPrinter*>(pInfoPrinter) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyPrinter( SalPrinter* pPrinter )
 {
     delete pPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
 {
@@ -899,24 +899,24 @@ void AquaSalInstance::GetPrinterQueueInfo( ImplPrnQueueList* pList )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::GetPrinterQueueState( SalPrinterQueueInfo* )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 {
     delete pInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString AquaSalInstance::GetDefaultPrinter()
 {
-    // #i113170# may not be the main thread if called from UNO API
+    
     SalData::ensureThreadAutoreleasePool();
 
     if( maDefaultPrinter.isEmpty() )
@@ -938,12 +938,12 @@ OUString AquaSalInstance::GetDefaultPrinter()
     return maDefaultPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                 ImplJobSetup* pSetupData )
 {
-    // #i113170# may not be the main thread if called from UNO API
+    
     SalData::ensureThreadAutoreleasePool();
 
     SalInfoPrinter* pNewInfoPrinter = NULL;
@@ -957,43 +957,43 @@ SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueI
     return pNewInfoPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
-    // #i113170# may not be the main thread if called from UNO API
+    
     SalData::ensureThreadAutoreleasePool();
 
     delete pPrinter;
 }
 
-// -----------------------------------------------------------------------
+
 
 SalSystem* AquaSalInstance::CreateSystem()
 {
     return new AquaSalSystem();
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroySystem( SalSystem* pSystem )
 {
     delete pSystem;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::SetEventCallback( void*, bool(*)(void*,void*,int) )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::SetErrorEventCallback( void*, bool(*)(void*,void*,int) )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes )
 {
@@ -1002,8 +1002,8 @@ void* AquaSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rRetur
     return (void*)"";
 }
 
-// We need to re-encode file urls because osl_getFileURLFromSystemPath converts
-// to UTF-8 before encoding non ascii characters, which is not what other apps expect.
+
+
 static OUString translateToExternalUrl(const OUString& internalUrl)
 {
     uno::Reference< uno::XComponentContext > context(
@@ -1011,23 +1011,23 @@ static OUString translateToExternalUrl(const OUString& internalUrl)
     return uri::ExternalUriReferenceTranslator::create(context)->translateToExternal(internalUrl);
 }
 
-// #i104525# many versions of OSX have problems with some URLs:
-// when an app requests OSX to add one of these URLs to the "Recent Items" list
-// then this app gets killed (TextEdit, Preview, etc. and also OOo)
+
+
+
 static bool isDangerousUrl( const OUString& rUrl )
 {
-    // use a heuristic that detects all known cases since there is no official comment
-    // on the exact impact and root cause of the OSX bug
+    
+    
     const int nLen = rUrl.getLength();
     const sal_Unicode* p = rUrl.getStr();
     for( int i = 0; i < nLen-3; ++i, ++p ) {
         if( p[0] != '%' )
             continue;
-        // escaped percent?
+        
         if( (p[1] == '2') && (p[2] == '5') )
             return true;
-        // escapes are considered to be UTF-8 encoded
-        // => check for invalid UTF-8 leading byte
+        
+        
         if( (p[1] != 'f') && (p[1] != 'F') )
             continue;
         int cLowNibble = p[2];
@@ -1044,7 +1044,7 @@ static bool isDangerousUrl( const OUString& rUrl )
 
 void AquaSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OUString& /*rMimeType*/, const OUString& /*rDocumentService*/)
 {
-    // Convert file URL for external use (see above)
+    
     OUString externalUrl = translateToExternalUrl(rFileUrl);
     if( externalUrl.isEmpty() )
         externalUrl = rFileUrl;
@@ -1065,35 +1065,35 @@ void AquaSalInstance::AddToRecentDocumentList(const OUString& rFileUrl, const OU
 }
 
 
-// -----------------------------------------------------------------------
+
 
 SalTimer* AquaSalInstance::CreateSalTimer()
 {
     return new AquaSalTimer();
 }
 
-// -----------------------------------------------------------------------
+
 
 SalSystem* AquaSalInstance::CreateSalSystem()
 {
     return new AquaSalSystem();
 }
 
-// -----------------------------------------------------------------------
+
 
 SalBitmap* AquaSalInstance::CreateSalBitmap()
 {
     return new QuartzSalBitmap();
 }
 
-// -----------------------------------------------------------------------
+
 
 SalSession* AquaSalInstance::CreateSalSession()
 {
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 class MacImeStatus : public SalI18NImeStatus
 {
@@ -1101,20 +1101,20 @@ public:
     MacImeStatus() {}
     virtual ~MacImeStatus() {}
 
-    // asks whether there is a status window available
-    // to toggle into menubar
+    
+    
     virtual bool canToggle() { return false; }
     virtual void toggle() {}
 };
 
-// -----------------------------------------------------------------------
+
 
 SalI18NImeStatus* AquaSalInstance::CreateI18NImeStatus()
 {
     return new MacImeStatus();
 }
 
-// YieldMutexReleaser
+
 YieldMutexReleaser::YieldMutexReleaser() : mnCount( 0 )
 {
     SalData* pSalData = GetSalData();
@@ -1139,7 +1139,7 @@ CGImageRef CreateCGImage( const Image& rImage )
     if( ! aBmp || ! aBmp.ImplGetImpBitmap() )
         return NULL;
 
-    // simple case, no transparency
+    
     QuartzSalBitmap* pSalBmp = static_cast<QuartzSalBitmap*>(aBmp.ImplGetImpBitmap()->ImplGetSalBitmap());
 
     if( ! pSalBmp )

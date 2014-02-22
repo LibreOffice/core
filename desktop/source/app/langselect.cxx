@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -54,7 +54,7 @@ OUString getInstalledLocale(
     css::uno::Sequence<OUString> const & installed, OUString const & locale)
 {
     if (locale.isEmpty())
-        return OUString();  // do not attempt to resolve anything
+        return OUString();  
 
     for (sal_Int32 i = 0; i != installed.getLength(); ++i) {
         if (installed[i] == locale) {
@@ -74,8 +74,8 @@ OUString getInstalledLocale(
 }
 
 void setMsLangIdFallback(OUString const & locale) {
-    // #i32939# setting of default document language
-    // See #i42730# for rules for determining source of settings
+    
+    
     if (!locale.isEmpty()) {
         LanguageType type = LanguageTag::convertToLanguageTypeWithFallback(locale);
         switch (SvtLanguageOptions::GetScriptTypeOfLanguage(type)) {
@@ -128,10 +128,10 @@ OUString getEmergencyLocale() {
 }
 
 bool prepareLocale() {
-    // #i42730# Get the windows 16Bit locale, it should be preferred over the UI
-    // locale:
+    
+    
     setMsLangIdFallback(officecfg::System::L10N::SystemLocale::get());
-    // #i32939# Use system locale to set document default locale:
+    
     setMsLangIdFallback(officecfg::System::L10N::Locale::get());
     css::uno::Sequence<OUString> inst(
         officecfg::Setup::Office::InstalledLocales::get()->getElementNames());
@@ -139,7 +139,7 @@ bool prepareLocale() {
     if (!locale.isEmpty()) {
         locale = getInstalledLocale(inst, locale);
         if (locale.isEmpty()) {
-            // Selected language is not/no longer installed:
+            
             try {
                 boost::shared_ptr<comphelper::ConfigurationChanges> batch(
                     comphelper::ConfigurationChanges::create());
@@ -175,9 +175,9 @@ bool prepareLocale() {
         return false;
     }
     LanguageTag tag(locale);
-    // Prepare default config provider by localizing it to the selected
-    // locale this will ensure localized configuration settings to be
-    // selected according to the UI language:
+    
+    
+    
     css::uno::Reference<css::lang::XLocalizable>(
         com::sun::star::configuration::theDefaultProvider::get(
             comphelper::getProcessComponentContext()),
@@ -199,8 +199,8 @@ bool prepareLocale() {
         setupSysLoc.isEmpty()
         ? MsLangId::getSystemLanguage()
         : LanguageTag(setupSysLoc).getLanguageType(false));
-    // #i32939# setting of default document locale
-    // #i32939# this should not be based on the UI language
+    
+    
     setMsLangIdFallback(locale);
     foundLocale = locale;
     return true;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,7 +46,7 @@ private:
     FormShellManager& mrFormShellManager;
 };
 
-} // end of anonymous namespace
+} 
 
 
 FormShellManager::FormShellManager (ViewShellBase& rBase)
@@ -57,8 +57,8 @@ FormShellManager::FormShellManager (ViewShellBase& rBase)
       mbIsMainViewChangePending(false),
       mpMainViewShellWindow(NULL)
 {
-    // Register at the EventMultiplexer to be informed about changes in the
-    // center pane.
+    
+    
     Link aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
     mrBase.GetEventMultiplexer()->AddEventListener(
         aLink,
@@ -77,7 +77,7 @@ FormShellManager::~FormShellManager (void)
     SetFormShell(NULL);
     UnregisterAtCenterPane();
 
-    // Unregister from the EventMultiplexer.
+    
     Link aLink (LINK(this, FormShellManager, ConfigurationUpdateHandler));
     mrBase.GetEventMultiplexer()->RemoveEventListener(aLink);
 
@@ -96,7 +96,7 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
 {
     if (mpFormShell != pFormShell)
     {
-        // Disconnect from the old form shell.
+        
         if (mpFormShell != NULL)
         {
             mpFormShell->SetControlActivationHandler(Link());
@@ -106,7 +106,7 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
 
         mpFormShell = pFormShell;
 
-        // Connect to the new form shell.
+        
         if (mpFormShell != NULL)
         {
             mpFormShell->SetControlActivationHandler(
@@ -119,14 +119,14 @@ void FormShellManager::SetFormShell (FmFormShell* pFormShell)
             ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
             if (pMainViewShell != NULL)
             {
-                // Prevent setting the view twice at the FmFormShell.
+                
                 FmFormView* pFormView = static_cast<FmFormView*>(pMainViewShell->GetView());
                 if (mpFormShell->GetFormView() != pFormView)
                     mpFormShell->SetView(pFormView);
             }
         }
 
-        // Tell the ViewShellManager where on the stack to place the form shell.
+        
         mrBase.GetViewShellManager()->SetFormShell(
             mrBase.GetMainViewShell().get(),
             mpFormShell,
@@ -151,8 +151,8 @@ void FormShellManager::RegisterAtCenterPane (void)
     if (pShell == NULL)
         return;
 
-    // No form shell for the slide sorter.  Besides that it is not
-    // necessary, using both together results in crashes.
+    
+    
     if (pShell->GetShellType() == ViewShell::ST_SLIDE_SORTER)
         return;
 
@@ -160,15 +160,15 @@ void FormShellManager::RegisterAtCenterPane (void)
     if (mpMainViewShellWindow == NULL)
         return;
 
-    // Register at the window to get informed when to move the form
-    // shell to the bottom of the shell stack.
+    
+    
     mpMainViewShellWindow->AddEventListener(
         LINK(
             this,
             FormShellManager,
             WindowEventHandler));
 
-    // Create a shell factory and with it activate the form shell.
+    
     OSL_ASSERT(mpSubShellFactory.get()==NULL);
     mpSubShellFactory.reset(new FormShellManagerFactory(*pShell, *this));
     mrBase.GetViewShellManager()->AddSubShellFactory(pShell,mpSubShellFactory);
@@ -182,7 +182,7 @@ void FormShellManager::UnregisterAtCenterPane (void)
 {
     if (mpMainViewShellWindow != NULL)
     {
-        // Unregister from the window.
+        
         mpMainViewShellWindow->RemoveEventListener(
             LINK(
                 this,
@@ -191,10 +191,10 @@ void FormShellManager::UnregisterAtCenterPane (void)
         mpMainViewShellWindow = NULL;
     }
 
-    // Unregister form at the form shell.
+    
     SetFormShell(NULL);
 
-    // Deactivate the form shell and destroy the shell factory.
+    
     ViewShell* pShell = mrBase.GetMainViewShell().get();
     if (pShell != NULL)
     {
@@ -210,9 +210,9 @@ void FormShellManager::UnregisterAtCenterPane (void)
 
 IMPL_LINK_NOARG(FormShellManager, FormControlActivated)
 {
-    // The form shell has been actived.  To give it priority in reacting to
-    // slot calls the form shell is moved to the top of the object bar shell
-    // stack.
+    
+    
+    
     ViewShell* pShell = mrBase.GetMainViewShell().get();
     if (pShell!=NULL && !mbFormShellAboveViewShell)
     {
@@ -266,9 +266,9 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
         {
             case VCLEVENT_WINDOW_GETFOCUS:
             {
-                // The window of the center pane got the focus.  Therefore
-                // the form shell is moved to the bottom of the object bar
-                // stack.
+                
+                
+                
                 ViewShell* pShell = mrBase.GetMainViewShell().get();
                 if (pShell!=NULL && mbFormShellAboveViewShell)
                 {
@@ -283,11 +283,11 @@ IMPL_LINK(FormShellManager, WindowEventHandler, VclWindowEvent*, pEvent)
             break;
 
             case VCLEVENT_WINDOW_LOSEFOCUS:
-                // We follow the sloppy focus policy.  Losing the focus is
-                // ignored.  We wait for the focus to be placed either in
-                // the window or the form shell.  The later, however, is
-                // notified over the FormControlActivated handler, not this
-                // one.
+                
+                
+                
+                
+                
                 break;
 
             case VCLEVENT_OBJECT_DYING:
@@ -307,9 +307,9 @@ void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
     const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
     if (pSimpleHint!=NULL && pSimpleHint->GetId()==SFX_HINT_DYING)
     {
-        // If all goes well this listener is called after the
-        // FormShellManager was notified about the dying form shell by the
-        // FormShellManagerFactory.
+        
+        
+        
         OSL_ASSERT(mpFormShell==NULL);
         if (mpFormShell != NULL)
         {
@@ -326,7 +326,7 @@ void FormShellManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 
 
 
-//===== FormShellManagerFactory ===============================================
+
 
 namespace {
 
@@ -370,8 +370,8 @@ void FormShellManagerFactory::ReleaseShell (SfxShell* pShell)
     }
 }
 
-} // end of anonymous namespace
+} 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaheaderfooterhelper.hxx"
 #include "wordvbahelper.hxx"
@@ -33,7 +33,7 @@ using namespace ::ooo::vba;
 
 #define FIRST_PAGE 1
 
-// Class HeaderFooterHelper
+
 sal_Bool HeaderFooterHelper::isHeaderFooter( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
 {
     return isHeaderFooter( word::getCurrentXText( xModel ) );
@@ -91,7 +91,7 @@ sal_Bool HeaderFooterHelper::isFirstPageHeader( const uno::Reference< frame::XMo
     if( isHeader( xModel ) )
     {
         uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
-        // FIXME: getPage always returns 1
+        
         sal_Int32 nPage = xPageCursor->getPage();
         return nPage == FIRST_PAGE;
     }

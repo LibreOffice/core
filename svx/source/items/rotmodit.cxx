@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -36,14 +36,14 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxRotateModeItem, SfxEnumItem, new SvxRotateModeItem(SVX_ROTATE_MODE_STANDARD, 0));
 
 
-//-----------------------------------------------------------------------
-//  SvxRotateModeItem - Ausrichtung bei gedrehtem Text
-//-----------------------------------------------------------------------
+
+
+
 
 SvxRotateModeItem::SvxRotateModeItem( SvxRotateMode eMode, sal_uInt16 _nWhich )
     : SfxEnumItem( _nWhich, (sal_uInt16)eMode )
@@ -77,12 +77,12 @@ SfxItemPresentation SvxRotateModeItem::GetPresentation(
     {
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText += "...: ";
-//          break; // DURCHFALLEN!!!
+
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += OUString( GetValue() );
             break;
-        default: ;//prevent warning
+        default: ;
     }
 
     return ePres;
@@ -109,7 +109,7 @@ OUString SvxRotateModeItem::GetValueText( sal_uInt16 nVal ) const
 
 sal_uInt16 SvxRotateModeItem::GetValueCount() const
 {
-    return 4;       // STANDARD, TOP, CENTER, BOTTOM
+    return 4;       
 }
 
 SfxPoolItem* SvxRotateModeItem::Clone( SfxItemPool* ) const
@@ -151,7 +151,7 @@ bool SvxRotateModeItem::PutValue( const uno::Any& rVal, sal_uInt8 /*nMemberId*/ 
         case table::CellVertJustify2::TOP:      eSvx = SVX_ROTATE_MODE_TOP;      break;
         case table::CellVertJustify2::CENTER:   eSvx = SVX_ROTATE_MODE_CENTER;   break;
         case table::CellVertJustify2::BOTTOM:   eSvx = SVX_ROTATE_MODE_BOTTOM;   break;
-        default: ;//prevent warning
+        default: ;
     }
     SetValue( (sal_uInt16)eSvx );
     return true;

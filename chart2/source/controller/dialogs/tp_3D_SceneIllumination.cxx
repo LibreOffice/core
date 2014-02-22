@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_3D_SceneIllumination.hxx"
@@ -23,14 +23,14 @@
 #include "CommonConverters.hxx"
 
 #include "svx/dialogs.hrc"
-// header for define SVX_RES
+
 #include <svx/dialmgr.hxx>
 #include <rtl/math.hxx>
 
-// header for class SvColorDialog
+
 #include <svtools/colrdlg.hxx>
 
-// header for define RET_OK
+
 #include <vcl/msgbox.hxx>
 
 #include <svx/svx3ditems.hxx>
@@ -104,7 +104,7 @@ LightSourceInfo::LightSourceInfo()
     : pButton(0)
     , aLightSource()
 {
-    aLightSource.nDiffuseColor = 0xffffff; // white
+    aLightSource.nDiffuseColor = 0xffffff; 
     aLightSource.aDirection = drawing::Direction3D(1,1,1);
     aLightSource.bIsEnabled = false;
 }
@@ -163,7 +163,7 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
-                (void)(ex); // no warning in non-debug builds
+                (void)(ex); 
                 OSL_FAIL( OUStringToOString(OUString( "Property Exception caught. Message: " ) +
                                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
@@ -194,7 +194,7 @@ namespace
             }
             catch( const uno::Exception & ex )
             {
-                (void)(ex); // no warning in non-debug builds
+                (void)(ex); 
                 OSL_FAIL( OUStringToOString(OUString("Property Exception caught. Message: " ) +
                                             ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
             }
@@ -211,7 +211,7 @@ namespace
         }
         catch( const uno::Exception & ex )
         {
-            (void)(ex); // no warning in non-debug builds
+            (void)(ex); 
             OSL_FAIL( OUStringToOString(OUString("Property Exception caught. Message: " ) +
                                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -229,7 +229,7 @@ namespace
         }
         catch( const uno::Exception & ex )
         {
-            (void)(ex); // no warning in non-debug builds
+            (void)(ex); 
             OSL_FAIL( OUStringToOString(OUString( "Property Exception caught. Message: " ) +
                                         ex.Message, RTL_TEXTENCODING_ASCII_US ).getStr());
         }
@@ -318,7 +318,7 @@ void ThreeD_SceneIllumination_TabPage::commitPendingChanges()
 
 IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, fillControlsFromModel)
 {
-    if( m_bInCommitToModel )//don't read own changes
+    if( m_bInCommitToModel )
         return 0;
 
     sal_Int32 nL=0;
@@ -356,7 +356,7 @@ IMPL_LINK_NOARG(ThreeD_SceneIllumination_TabPage, PreviewChangeHdl)
 {
     m_aTimerTriggeredControllerLock.startTimer();
 
-    //update m_pLightSourceInfoList from preview
+    
     const SfxItemSet a3DLightAttributes(m_pCtl_Preview->GetSvx3DLightControl().Get3DAttributes());
     LightSourceInfo* pInfo = &m_pLightSourceInfoList[0];
 
@@ -437,7 +437,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ColorDialogHdl, Button*, pButton )
         }
         else
         {
-        //get active lightsource:
+        
             LightSourceInfo* pInfo = 0;
             sal_Int32 nL=0;
             for( nL=0; nL<8; nL++)
@@ -465,7 +465,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, SelectColorHdl, ColorLB*, pListBox 
     }
     else if(pListBox==m_pLB_LightSource)
     {
-        //get active lightsource:
+        
         LightSourceInfo* pInfo = 0;
         sal_Int32 nL=0;
         for( nL=0; nL<8; nL++)
@@ -501,7 +501,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, LightBut
         }
     }
 
-    //update light button
+    
     bool bIsChecked = pButton->IsChecked();
     if(bIsChecked)
     {
@@ -522,7 +522,7 @@ IMPL_LINK( ThreeD_SceneIllumination_TabPage, ClickLightSourceButtonHdl, LightBut
         }
     }
 
-    //update color list box
+    
     if(pInfo)
     {
         lcl_selectColor( *m_pLB_LightSource, pInfo->aLightSource.nDiffuseColor );
@@ -536,7 +536,7 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
     SfxItemSet aItemSet(m_pCtl_Preview->GetSvx3DLightControl().Get3DAttributes());
     LightSourceInfo* pInfo = &m_pLightSourceInfoList[0];
 
-    // AmbientColor
+    
     aItemSet.Put(Svx3DAmbientcolorItem(m_pLB_AmbientLight->GetSelectEntryColor()));
 
     aItemSet.Put(Svx3DLightcolor1Item(pInfo->aLightSource.nDiffuseColor));
@@ -578,10 +578,10 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
     aItemSet.Put(Svx3DLightOnOff8Item(pInfo->aLightSource.bIsEnabled));
     aItemSet.Put(Svx3DLightDirection8Item(Direction3DToB3DVector(pInfo->aLightSource.aDirection)));
 
-    // set lights and ambient light
+    
     m_pCtl_Preview->GetSvx3DLightControl().Set3DAttributes(aItemSet);
 
-    // select light
+    
     for(sal_uInt32 a(0); a < 8; a++)
     {
         if(m_pLightSourceInfoList[a].pButton->IsChecked())
@@ -593,6 +593,6 @@ void ThreeD_SceneIllumination_TabPage::updatePreview()
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sdmodeltestbase.hxx"
@@ -42,7 +42,7 @@
 
 using namespace ::com::sun::star;
 
-/// Impress import filters tests.
+
 class SdFiltersTest : public SdModelTestBase
 {
 public:
@@ -121,12 +121,12 @@ void SdFiltersTest::testDocumentLayout()
         { "n762695.pptx", "xml/n762695_", -1 },
         { "n593612.pptx", "xml/n593612_", -1 },
         { "fdo71434.pptx", "xml/fdo71434_", -1 },
-        // { "pptx/n828390.pptx", "pptx/xml/n828390_", PPTX }, // Example
+        
     };
 
     for ( int i = 0; i < static_cast< int >( SAL_N_ELEMENTS( aFilesToCompare ) ); ++i )
     {
-        int nUpdateMe = -1; // index of test we want to update; supposedly only when the test is created
+        int nUpdateMe = -1; 
 
         ::sd::DrawDocShellRef xDocShRef = loadURL( getURLFromSrc( "/sd/qa/unit/data/" ) + OUString::createFromAscii( aFilesToCompare[i].pInput ) );
         if( aFilesToCompare[i].nExportType >= 0 )
@@ -146,7 +146,7 @@ void SdFiltersTest::testSmoketest()
     SdDrawDocument *pDoc = xDocShRef->GetDoc();
     CPPUNIT_ASSERT_MESSAGE( "no document", pDoc != NULL );
 
-    // cf. SdrModel svx/svdmodel.hxx ...
+    
 
     CPPUNIT_ASSERT_MESSAGE( "wrong page count", pDoc->GetPageCount() == 3);
 
@@ -177,10 +177,10 @@ void SdFiltersTest::testN759180()
     const SdrPage *pPage = pDoc->GetPage (1);
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
 
-    //sal_uIntPtr nObjs = pPage->GetObjCount();
-    //for (sal_uIntPtr i = 0; i < nObjs; i++)
+    
+    
     {
-        // Get the object
+        
         SdrObject *pObj = pPage->GetObj(0);
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
         CPPUNIT_ASSERT(pTxtObj);
@@ -195,8 +195,8 @@ void SdFiltersTest::testN759180()
             const SvxFontHeightItem * pFontHeight = dynamic_cast<const SvxFontHeightItem *>((*it).pAttr);
             if(pFontHeight)
             {
-                // nStart == 9
-                // font height = 5 => 5*2540/72
+                
+                
                 CPPUNIT_ASSERT_MESSAGE( "Font height is wrong", pFontHeight->GetHeight() == 176 );
                 break;
             }
@@ -220,7 +220,7 @@ void SdFiltersTest::testN828390()
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
     {
         std::vector<EECharAttrib> rLst;
-        // Get the object
+        
         SdrObject *pObj = pPage->GetObj(0);
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
         CPPUNIT_ASSERT( pTxtObj );
@@ -356,7 +356,7 @@ void SdFiltersTest::testN828390_5()
         const EditTextObject& aEdit = pTxtObj->GetOutlinerParaObject()->GetTextObject();
         const SvxNumBulletItem *pNumFmt = dynamic_cast<const SvxNumBulletItem *>(aEdit.GetPool()->GetItem2(EE_PARA_NUMBULLET, 5));
         CPPUNIT_ASSERT( pNumFmt );
-        CPPUNIT_ASSERT_MESSAGE( "Bullet's relative size is wrong!", pNumFmt->GetNumRule()->GetLevel(1).GetBulletRelSize() == 75 ); // != 25
+        CPPUNIT_ASSERT_MESSAGE( "Bullet's relative size is wrong!", pNumFmt->GetNumRule()->GetLevel(1).GetBulletRelSize() == 75 ); 
     }
 }
 
@@ -371,7 +371,7 @@ void SdFiltersTest::testN778859()
     const SdrPage *pPage = pDoc->GetPage(1);
     CPPUNIT_ASSERT_MESSAGE( "no page", pPage != NULL );
     {
-        // Get the object
+        
         SdrObject *pObj = pPage->GetObj(1);
         SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pObj );
         CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
@@ -394,7 +394,7 @@ void SdFiltersTest::testFdo68594()
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != NULL);
     const SvxColorItem *pC = dynamic_cast<const SvxColorItem *>(&pTxtObj->GetMergedItem(EE_CHAR_COLOR));
     CPPUNIT_ASSERT_MESSAGE( "no color item", pC != NULL);
-    // Color should be black
+    
     CPPUNIT_ASSERT_MESSAGE( "Placeholder color mismatch", pC->GetValue().GetColor() == 0);
 }
 
@@ -464,7 +464,7 @@ void SdFiltersTest::testFdo64512()
                             xTargetShape != xSvgShape );
 }
 
-// Unit test for importing charts
+
 void SdFiltersTest::testFdo71075()
 {
     double values[] = { 12.0, 13.0, 14.0 };

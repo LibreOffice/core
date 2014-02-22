@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/vector/b2dvector.hxx>
@@ -184,18 +184,18 @@ namespace basegfx
 
         if(fTools::equal(rBackVector.getX(), -rForwardVector.getX()) && fTools::equal(rBackVector.getY(), -rForwardVector.getY()))
         {
-            // same direction and same length -> C2
+            
             return CONTINUITY_C2;
         }
 
         if(areParallel(rBackVector, rForwardVector) && rBackVector.scalar(rForwardVector) < 0.0)
         {
-            // parallel and opposite direction -> C1
+            
             return CONTINUITY_C1;
         }
 
         return CONTINUITY_NONE;
     }
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -36,25 +36,25 @@ using namespace com::sun::star::uno;
 
 TYPEINIT1(ScTpViewItem, SfxPoolItem);
 
-// class ScGridOptions
+
 
 void ScGridOptions::SetDefaults()
 {
     *this = ScGridOptions();
 
-    //  Raster-Defaults sind jetzt zwischen den Apps unterschiedlich
-    //  darum hier selber eintragen (alles in 1/100mm)
+    
+    
 
     if ( ScOptionsUtil::IsMetricSystem() )
     {
-        nFldDrawX = 1000;   // 1cm
+        nFldDrawX = 1000;   
         nFldDrawY = 1000;
         nFldSnapX = 1000;
         nFldSnapY = 1000;
     }
     else
     {
-        nFldDrawX = 1270;   // 0,5"
+        nFldDrawX = 1270;   
         nFldDrawY = 1270;
         nFldSnapX = 1270;
         nFldSnapY = 1270;
@@ -65,13 +65,13 @@ void ScGridOptions::SetDefaults()
 
 const ScGridOptions& ScGridOptions::operator=( const ScGridOptions& rCpy )
 {
-    nFldDrawX       = rCpy.nFldDrawX;       // UINT32
+    nFldDrawX       = rCpy.nFldDrawX;       
     nFldDivisionX   = rCpy.nFldDivisionX;
     nFldDrawY       = rCpy.nFldDrawY;
     nFldDivisionY   = rCpy.nFldDivisionY;
     nFldSnapX       = rCpy.nFldSnapX;
     nFldSnapY       = rCpy.nFldSnapY;
-    bUseGridsnap    = rCpy.bUseGridsnap;    // BitBool
+    bUseGridsnap    = rCpy.bUseGridsnap;    
     bSynchronize    = rCpy.bSynchronize;
     bGridVisible    = rCpy.bGridVisible;
     bEqualGrid      = rCpy.bEqualGrid;
@@ -93,7 +93,7 @@ bool ScGridOptions::operator==( const ScGridOptions& rCpy ) const
             && bEqualGrid       == rCpy.bEqualGrid );
 }
 
-// class ScViewOptions
+
 
 ScViewOptions::ScViewOptions()
 {
@@ -192,7 +192,7 @@ SvxGridItem* ScViewOptions::CreateGridItem( sal_uInt16 nId /* = SID_ATTR_GRID_OP
     return pItem;
 }
 
-//      ScTpViewItem - Daten fuer die ViewOptions-TabPage
+
 
 ScTpViewItem::ScTpViewItem( sal_uInt16 nWhichP, const ScViewOptions& rOpt )
     :   SfxPoolItem ( nWhichP ),
@@ -229,7 +229,7 @@ SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
     return new ScTpViewItem( *this );
 }
 
-//  Config Item containing view options
+
 
 #define CFGPATH_LAYOUT      "Office.Calc/Layout"
 
@@ -276,16 +276,16 @@ Sequence<OUString> ScViewCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Line/GridLine",            // SCLAYOUTOPT_GRIDLINES
-        "Line/GridLineColor",       // SCLAYOUTOPT_GRIDCOLOR
-        "Line/PageBreak",           // SCLAYOUTOPT_PAGEBREAK
-        "Line/Guide",               // SCLAYOUTOPT_GUIDE
-        "Window/ColumnRowHeader",   // SCLAYOUTOPT_COLROWHDR
-        "Window/HorizontalScroll",  // SCLAYOUTOPT_HORISCROLL
-        "Window/VerticalScroll",    // SCLAYOUTOPT_VERTSCROLL
-        "Window/SheetTab",          // SCLAYOUTOPT_SHEETTAB
-        "Window/OutlineSymbol",     // SCLAYOUTOPT_OUTLINE
-        "Line/GridOnColoredCells"   // SCLAYOUTOPT_GRID_ONCOLOR
+        "Line/GridLine",            
+        "Line/GridLineColor",       
+        "Line/PageBreak",           
+        "Line/Guide",               
+        "Window/ColumnRowHeader",   
+        "Window/HorizontalScroll",  
+        "Window/VerticalScroll",    
+        "Window/SheetTab",          
+        "Window/OutlineSymbol",     
+        "Line/GridOnColoredCells"   
     };
     Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -299,15 +299,15 @@ Sequence<OUString> ScViewCfg::GetDisplayPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Formula",                  // SCDISPLAYOPT_FORMULA
-        "ZeroValue",                // SCDISPLAYOPT_ZEROVALUE
-        "NoteTag",                  // SCDISPLAYOPT_NOTETAG
-        "ValueHighlighting",        // SCDISPLAYOPT_VALUEHI
-        "Anchor",                   // SCDISPLAYOPT_ANCHOR
-        "TextOverflow",             // SCDISPLAYOPT_TEXTOVER
-        "ObjectGraphic",            // SCDISPLAYOPT_OBJECTGRA
-        "Chart",                    // SCDISPLAYOPT_CHART
-        "DrawingObject"             // SCDISPLAYOPT_DRAWING
+        "Formula",                  
+        "ZeroValue",                
+        "NoteTag",                  
+        "ValueHighlighting",        
+        "Anchor",                   
+        "TextOverflow",             
+        "ObjectGraphic",            
+        "Chart",                    
+        "DrawingObject"             
     };
     Sequence<OUString> aNames(SCDISPLAYOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -321,23 +321,23 @@ Sequence<OUString> ScViewCfg::GetGridPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Resolution/XAxis/NonMetric",   // SCGRIDOPT_RESOLU_X
-        "Resolution/YAxis/NonMetric",   // SCGRIDOPT_RESOLU_Y
-        "Subdivision/XAxis",            // SCGRIDOPT_SUBDIV_X
-        "Subdivision/YAxis",            // SCGRIDOPT_SUBDIV_Y
-        "Option/XAxis/NonMetric",       // SCGRIDOPT_OPTION_X
-        "Option/YAxis/NonMetric",       // SCGRIDOPT_OPTION_Y
-        "Option/SnapToGrid",            // SCGRIDOPT_SNAPTOGRID
-        "Option/Synchronize",           // SCGRIDOPT_SYNCHRON
-        "Option/VisibleGrid",           // SCGRIDOPT_VISIBLE
-        "Option/SizeToGrid"             // SCGRIDOPT_SIZETOGRID
+        "Resolution/XAxis/NonMetric",   
+        "Resolution/YAxis/NonMetric",   
+        "Subdivision/XAxis",            
+        "Subdivision/YAxis",            
+        "Option/XAxis/NonMetric",       
+        "Option/YAxis/NonMetric",       
+        "Option/SnapToGrid",            
+        "Option/Synchronize",           
+        "Option/VisibleGrid",           
+        "Option/SizeToGrid"             
     };
     Sequence<OUString> aNames(SCGRIDOPT_COUNT);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < SCGRIDOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
 
-    //  adjust for metric system
+    
     if (ScOptionsUtil::IsMetricSystem())
     {
         pNames[SCGRIDOPT_RESOLU_X] = "Resolution/XAxis/Metric";
@@ -442,7 +442,7 @@ ScViewCfg::ScViewCfg() :
                     case SCDISPLAYOPT_OBJECTGRA:
                         if ( pValues[nProp] >>= nIntVal )
                         {
-                            //#i80528# adapt to new range eventually
+                            
                             if((sal_Int32)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int32)VOBJ_MODE_SHOW;
 
                             SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode)nIntVal);
@@ -451,7 +451,7 @@ ScViewCfg::ScViewCfg() :
                     case SCDISPLAYOPT_CHART:
                         if ( pValues[nProp] >>= nIntVal )
                         {
-                            //#i80528# adapt to new range eventually
+                            
                             if((sal_Int32)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int32)VOBJ_MODE_SHOW;
 
                             SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode)nIntVal);
@@ -460,7 +460,7 @@ ScViewCfg::ScViewCfg() :
                     case SCDISPLAYOPT_DRAWING:
                         if ( pValues[nProp] >>= nIntVal )
                         {
-                            //#i80528# adapt to new range eventually
+                            
                             if((sal_Int32)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int32)VOBJ_MODE_SHOW;
 
                             SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode)nIntVal);
@@ -472,7 +472,7 @@ ScViewCfg::ScViewCfg() :
     }
     aDisplayItem.SetCommitLink( LINK( this, ScViewCfg, DisplayCommitHdl ) );
 
-    ScGridOptions aGrid = GetGridOptions();     //! initialization necessary?
+    ScGridOptions aGrid = GetGridOptions();     
     aNames = GetGridPropertyNames();
     aValues = aGridItem.GetProperties(aNames);
     aGridItem.EnableNotification(aNames);

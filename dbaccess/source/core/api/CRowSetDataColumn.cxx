@@ -60,7 +60,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
 {
 }
 
-// comphelper::OPropertyArrayUsageHelper
+
 ::cppu::IPropertyArrayHelper* ORowSetDataColumn::createArrayHelper( ) const
 {
     BEGIN_PROPERTY_SEQUENCE(21)
@@ -95,7 +95,7 @@ ORowSetDataColumn::~ORowSetDataColumn()
     return new ::cppu::OPropertyArrayHelper( ::comphelper::concatSequences( aDescriptor, aRegisteredProperties ), sal_False );
 }
 
-// cppu::OPropertySetHelper
+
 ::cppu::IPropertyArrayHelper& ORowSetDataColumn::getInfoHelper()
 {
     return *static_cast< ::comphelper::OPropertyArrayUsageHelper< ORowSetDataColumn >* >(this)->getArrayHelper();

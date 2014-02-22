@@ -1346,7 +1346,7 @@ LocaleDataImpl::getContinuousNumberingLevels( const lang::Locale& rLocale ) thro
 namespace com{ namespace sun{ namespace star{ namespace lang {
     struct  Locale;
 }}}}
-//-----------------------------------------------------------------------------
+
 struct OutlineNumberingLevel_Impl
 {
     OUString        sPrefix;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <unotest/filters-test.hxx>
@@ -20,7 +20,7 @@ class VclComplexTextTest : public test::BootstrapFixture
 public:
     VclComplexTextTest() : BootstrapFixture(true, false) {}
 
-    /// Play with font measuring etc.
+    
     void testArabic();
 
     CPPUNIT_TEST_SUITE(VclComplexTextTest);
@@ -32,7 +32,7 @@ void VclComplexTextTest::testArabic()
 {
 #if !defined (LINUX)
     return;
-#else // only tested on Linux so far
+#else 
     const unsigned char pOneTwoThreeUTF8[] = {
         0xd9, 0x88, 0xd8, 0xa7, 0xd8, 0xad, 0xd9, 0x90,
         0xd8, 0xaf, 0xd9, 0x92, 0x20, 0xd8, 0xa5, 0xd8,
@@ -54,17 +54,17 @@ void VclComplexTextTest::testArabic()
                         DEFAULTFONT_FLAGS_ONLYONE, 0 );
     pOutDev->SetFont( aFont );
 
-    // normal orientation
+    
     Rectangle aInput;
     Rectangle aRect = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
-    // now rotate 270 degress
+    
     Font aRotated( aFont );
     aRotated.SetOrientation( 2700 );
     pOutDev->SetFont( aRotated );
     Rectangle aRectRot = pOutDev->GetTextRect( aInput, aOneTwoThree );
 
-    // Check that we did do the rotation ...
+    
 #if 0
     fprintf( stderr, "%ld %ld %ld %ld\n",
              aRect.GetWidth(), aRect.GetHeight(),

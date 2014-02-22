@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
@@ -97,8 +97,8 @@ void ScTpDefaultsOptions::CheckPrefix(Edit* pEdit)
 
     if ( !aSheetPrefix.isEmpty() && !ScDocument::ValidTabName( aSheetPrefix ) )
     {
-        // Revert to last good Prefix and also select it to
-        // indicate something illegal was typed
+        
+        
         Selection aSel( 0,  maOldPrefixValue.getLength() );
         pEdit->SetText( maOldPrefixValue, aSel );
     }
@@ -113,7 +113,7 @@ void ScTpDefaultsOptions::OnFocusPrefixInput(Edit* pEdit)
     if (!pEdit)
         return;
 
-    // Store Prefix in case we need to revert
+    
     maOldPrefixValue = pEdit->GetText();
 }
 

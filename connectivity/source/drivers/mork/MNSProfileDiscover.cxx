@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,18 +50,18 @@ namespace connectivity
 
         sal_Int32 ProfileAccess::LoadProductsInfo()
         {
-            //load SeaMonkey 2 profiles to m_ProductProfileList
+            
             sal_Int32 count = LoadXPToolkitProfiles(MozillaProductType_Mozilla);
 
-            //load thunderbird profiles to m_ProductProfileList
+            
             count += LoadXPToolkitProfiles(MozillaProductType_Thunderbird);
 
-            //load firefox profiles to m_ProductProfileList
-            //firefox profile does not containt address book, but maybe others need them
+            
+            
             count += LoadXPToolkitProfiles(MozillaProductType_Firefox);
             return count;
         }
-        //Thunderbird and firefox profiles are saved in profiles.ini
+        
         sal_Int32 ProfileAccess::LoadXPToolkitProfiles(MozillaProductType product)
         {
             sal_Int32 index=product;
@@ -147,7 +147,7 @@ namespace connectivity
             ProductStruct &m_Product = m_ProductProfileList[index];
             if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
             {
-                //Profile not found
+                
                 return OUString();
             }
             else
@@ -160,12 +160,12 @@ namespace connectivity
             ProductStruct &m_Product = m_ProductProfileList[index];
             if (!m_Product.mCurrentProfileName.isEmpty())
             {
-                //default profile setted in mozilla registry
+                
                 return m_Product.mCurrentProfileName;
             }
             if (m_Product.mProfileList.empty())
             {
-                //there are not any profiles
+                
                 return OUString();
             }
             ProfileStruct * aProfile = (*m_Product.mProfileList.begin()).second;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,7 +39,7 @@
 #include "salwtype.hxx"
 #include <sal/macros.h>
 
-// plugin factory function
+
 extern "C"
 {
     VCLPLUG_GEN_PUBLIC SalInstance* create_SalInstance()
@@ -56,7 +56,7 @@ extern "C"
 
         X11SalInstance* pInstance = new X11SalInstance( new SalYieldMutex() );
 
-        // initialize SalData
+        
         X11SalData *pSalData = new X11SalData( SAL_DATA_UNX, pInstance );
 
         pSalData->Init();
@@ -68,18 +68,18 @@ extern "C"
 
 X11SalInstance::~X11SalInstance()
 {
-    // close session management
+    
     SessionManagerClient::close();
 
-    // dispose SalDisplay list from SalData
-    // would be done in a static destructor else which is
-    // a little late
+    
+    
+    
     GetGenericData()->Dispose();
 }
 
 
-// --------------------------------------------------------
-// AnyInput from sv/mow/source/app/svapp.cxx
+
+
 
 struct PredicateReturn
 {
@@ -108,7 +108,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
             break;
 
         case XLIB_KeyPress:
-        //case KeyRelease:
+        
             nType = VCL_INPUT_KEYBOARD;
             break;
         case Expose:
@@ -244,7 +244,7 @@ void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
     DBG_ASSERT( pDisplay, "No Display !" );
     if( pDisplay )
     {
-        // get font paths to look for fonts
+        
         int nPaths = 0, i;
         char** pPaths = XGetFontPath( pDisplay, &nPaths );
 
@@ -271,7 +271,7 @@ void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
             XFreeFontPath( pPaths );
     }
 
-    // insert some standard directories
+    
     o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/TrueType" );
     o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/Type1" );
     o_rFontPaths.push_back( "/usr/openwin/lib/X11/fonts/Type1/sun" );
@@ -293,13 +293,13 @@ void X11SalInstance::FillFontPathList( std::list< OString >& o_rFontPaths )
 
         SvFileStream aStream( aOpenWinDir, STREAM_READ );
 
-        // TODO: replace environment variables
+        
         while( aStream.IsOpen() && ! aStream.IsEof() )
         {
             OString aLine;
             aStream.ReadLine( aLine );
             psp::normPath( aLine );
-            // try to avoid bad fonts in some cases
+            
             static bool bAvoid = (strncasecmp( lang, "ar", 2 ) == 0) || (strncasecmp( lang, "he", 2 ) == 0) || strncasecmp( lang, "iw", 2 ) == 0 || (strncasecmp( lang, "hi", 2 ) == 0);
             if( bAvoid && aLine.indexOf("iso_8859") != -1 )
                 continue;

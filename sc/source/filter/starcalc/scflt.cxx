@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -74,7 +74,7 @@ using namespace com::sun::star;
 
 #define SC10TOSTRING(p)     OUString((p), strlen(p), DEFCHARSET)
 
-const SCCOL SC10MAXCOL = 255;   // #i85906# don't try to load more columns than there are in the file
+const SCCOL SC10MAXCOL = 255;   
 
 
 /** Those strings are used with SC10TOSTRING() and strcmp() and such, hence
@@ -332,15 +332,15 @@ static void lcl_ReadChartTypeData(SvStream& rStream, Sc10ChartTypeData& rTypeDat
 static double lcl_PascalToDouble(sal_Char* tp6)
 {
     sal_uInt8* pnUnsigned = reinterpret_cast< sal_uInt8* >( tp6 );
-    // biased exponent
+    
     sal_uInt8 be = pnUnsigned[ 0 ];
-    // lower 16 bits of mantissa
+    
     sal_uInt16 v1 = static_cast< sal_uInt16 >( pnUnsigned[ 2 ] * 256 + pnUnsigned[ 1 ] );
-    // next 16 bits of mantissa
+    
     sal_uInt16 v2 = static_cast< sal_uInt16 >( pnUnsigned[ 4 ] * 256 + pnUnsigned[ 3 ] );
-    // upper 7 bits of mantissa
+    
     sal_uInt8 v3 = static_cast< sal_uInt8 >( pnUnsigned[ 5 ] & 0x7F );
-    // sign bit
+    
     bool s = (pnUnsigned[ 5 ] & 0x80) != 0;
 
     if (be == 0)
@@ -400,9 +400,9 @@ template < typename T > sal_uLong insert_new( ScCollection* pCollection, SvStrea
     return nError;
 }
 
-//--------------------------------------------
-// Font
-//--------------------------------------------
+
+
+
 
 Sc10FontData::Sc10FontData(SvStream& rStream)
 {
@@ -440,9 +440,9 @@ Sc10FontCollection::Sc10FontCollection(SvStream& rStream) :
   }
 }
 
-//--------------------------------------------
-// Benannte-Bereiche
-//--------------------------------------------
+
+
+
 
 Sc10NameData::Sc10NameData(SvStream& rStream)
 {
@@ -484,9 +484,9 @@ Sc10NameCollection::Sc10NameCollection(SvStream& rStream) :
   }
 }
 
-//--------------------------------------------
-// Vorlagen
-//--------------------------------------------
+
+
+
 
 Sc10PatternData::Sc10PatternData(SvStream& rStream)
 {
@@ -528,9 +528,9 @@ Sc10PatternCollection::Sc10PatternCollection(SvStream& rStream) :
   }
 }
 
-//--------------------------------------------
-// Datenbank
-//--------------------------------------------
+
+
+
 
 Sc10DataBaseData::Sc10DataBaseData(SvStream& rStream)
 {
@@ -717,7 +717,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         ScStyleSheet* pSheet = (ScStyleSheet*) &pStylePool->Make( aName,
                                     SFX_STYLE_FAMILY_PAGE,
                                     SFXSTYLEBIT_USERDEF | SCSTYLEBIT_STANDARD );
-        // #i68483# set page style name at sheet...
+        
         pDoc->SetPageStyle( static_cast< SCTAB >( i ), aName );
 
         SfxItemSet* pSet = &pSheet->GetItemSet();
@@ -749,7 +749,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             Sc10Color nColor = pHeadFootLine->TextColor;
             Color TextColor( nColor.Red, nColor.Green, nColor.Blue );
             aEditAttribs.Put(SvxColorItem(TextColor, EE_CHAR_COLOR), EE_CHAR_COLOR);
-            // FontAttr
+            
             if (pHeadFootLine->LogFont.lfWeight != fwNormal)
                 aEditAttribs.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT), EE_CHAR_WEIGHT);
             if (pHeadFootLine->LogFont.lfItalic != 0)
@@ -896,9 +896,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
         pSet->Put(SfxBoolItem( ATTR_PAGE_HORCENTER, pPage->HorCenter ));
         pSet->Put(SfxBoolItem( ATTR_PAGE_VERCENTER, pPage->VerCenter ));
 
-        //----------------
-        // Area-Parameter:
-        //----------------
+        
+        
+        
         {
             ScRange* pRepeatRow = NULL;
             ScRange* pRepeatCol = NULL;
@@ -912,7 +912,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             if ( pRepeatRow || pRepeatCol )
             {
                 //
-                // an allen Tabellen setzen
+                
                 //
                 for ( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
                 {
@@ -925,9 +925,9 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             delete pRepeatCol;
         }
 
-        //-----------------
-        // Table-Parameter:
-        //-----------------
+        
+        
+        
         pSet->Put( SfxBoolItem( ATTR_PAGE_NOTES,   pPage->PrintNote ) );
         pSet->Put( SfxBoolItem( ATTR_PAGE_GRID,    pPage->PrintGrid ) );
         pSet->Put( SfxBoolItem( ATTR_PAGE_HEADERS, pPage->PrintColRow ) );
@@ -952,9 +952,9 @@ ScDataObject* Sc10PageData::Clone() const
 }
 
 
-//--------------------------------------------
-// Import
-//--------------------------------------------
+
+
+
 
 
 Sc10Import::Sc10Import(SvStream& rStr, ScDocument* pDocument ) :
@@ -992,7 +992,7 @@ sal_uLong Sc10Import::Import()
 
     ScDocOptions aOpt = pDoc->GetDocOptions();
     aOpt.SetDate( 1, 1, 1900 );
-    aOpt.SetYear2000( 18 + 1901 );      // ab SO51 src513e vierstellig
+    aOpt.SetYear2000( 18 + 1901 );      
     pDoc->SetDocOptions( aOpt );
     pDoc->GetFormatTable()->ChangeNullDate( 1, 1, 1900 );
 
@@ -1055,7 +1055,7 @@ void Sc10Import::LoadFileInfo()
     rStream.Read(&FileInfo, sizeof(FileInfo));
 
     nError = rStream.GetError();
-    // Achtung Info Uebertragen
+    
 }
 
 
@@ -1067,7 +1067,7 @@ void Sc10Import::LoadEditStateInfo()
 
     nError = rStream.GetError();
     nShowTab = static_cast<SCTAB>(EditStateInfo.DeltaZ);
-    // Achtung Cursorposition und Offset der Tabelle Uebertragen (soll man das machen??)
+    
 }
 
 
@@ -1094,7 +1094,7 @@ void Sc10Import::LoadViewColRowBar()
 
 void Sc10Import::LoadScrZoom()
 {
-    // Achtung Zoom ist leider eine 6Byte TP real Zahl (keine Ahnung wie die Umzusetzen ist)
+    
     sal_Char cZoom[6];
     rStream.Read(cZoom, sizeof(cZoom));
     nError = rStream.GetError();
@@ -1148,7 +1148,7 @@ void Sc10Import::LoadPatternCollection()
     if (!nError)
         nError = pPatternCollection->GetError();
     if (nError == errOutOfMemory)
-        return;     // hopeless
+        return;     
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     for( sal_uInt16 i = 0 ; i < pPatternCollection->GetCount() ; i++ )
     {
@@ -1168,7 +1168,7 @@ void Sc10Import::LoadPatternCollection()
         if( pStyle != NULL )
         {
             SfxItemSet &rItemSet = pStyle->GetItemSet();
-            // Font
+            
             if( ( pPattern->FormatFlags & pfFont ) == pfFont )
             {
                 FontFamily eFam = FAMILY_DONTKNOW;
@@ -1188,7 +1188,7 @@ void Sc10Import::LoadPatternCollection()
                 Color TextColor( COL_BLACK );
                 lcl_ChangeColor( ( pPattern->nColor & 0x000F ), TextColor );
                 rItemSet.Put( SvxColorItem( TextColor, ATTR_FONT_COLOR ) );
-                // FontAttr
+                
                 if( pPattern->LogFont.lfWeight != fwNormal )
                     rItemSet.Put( SvxWeightItem( WEIGHT_BOLD, ATTR_FONT_WEIGHT ) );
                 if( pPattern->LogFont.lfItalic != 0 )
@@ -1198,7 +1198,7 @@ void Sc10Import::LoadPatternCollection()
                 if( pPattern->LogFont.lfStrikeOut != 0 )
                     rItemSet.Put( SvxCrossedOutItem( STRIKEOUT_SINGLE, ATTR_FONT_CROSSEDOUT ) );
             }
-            // Ausrichtung
+            
             if( ( pPattern->FormatFlags & pfJustify ) == pfJustify )
             {
                 sal_uInt16 HorJustify = ( pPattern->Justify & 0x000F );
@@ -1246,7 +1246,7 @@ void Sc10Import::LoadPatternCollection()
                     rItemSet.Put( SvxMarginItem( Margin, 20, Margin, 20, ATTR_MARGIN ) );
             }
 
-            // Frame
+            
             if( ( pPattern->FormatFlags & pfFrame ) == pfFrame )
             {
                 if( pPattern->Frame != 0 )
@@ -1313,7 +1313,7 @@ void Sc10Import::LoadPatternCollection()
                     rItemSet.Put( aBox );
                 }
             }
-            // Raster
+            
             if( ( pPattern->FormatFlags & pfRaster ) == pfRaster )
             {
                 if( pPattern->Raster != 0 )
@@ -1352,7 +1352,7 @@ void Sc10Import::LoadPatternCollection()
                     }
                 }
             }
-            // ZahlenFormate
+            
             if( ( pPattern->ValueFormat.Format != 0 ) &&
                 ( ( pPattern->FormatFlags & pfValue ) == pfValue ) )
             {
@@ -1361,7 +1361,7 @@ void Sc10Import::LoadPatternCollection()
                 rItemSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, ( sal_uInt32 ) nKey ) );
             }
 
-            // Zellattribute (Schutz, Versteckt...)
+            
             if( ( pPattern->Flags != 0 ) &&
                 ( ( pPattern->FormatFlags & pfProtection ) == pfProtection ) )
             {
@@ -1371,8 +1371,8 @@ void Sc10Import::LoadPatternCollection()
                 sal_Bool bHPrint   = ( ( pPattern->Flags & paHidePrint ) == paHidePrint );
                 rItemSet.Put( ScProtectionAttr( bProtect, bHFormula, bHCell, bHPrint ) );
             }
-        } // if Style != 0
-    } // for (i = 0; i < GetCount()
+        } 
+    } 
 }
 
 
@@ -1382,7 +1382,7 @@ void Sc10Import::LoadDataBaseCollection()
     if (!nError)
         nError = pDataBaseCollection->GetError();
     if (nError == errOutOfMemory)
-        return;     // hopeless
+        return;     
     for( sal_uInt16 i = 0 ; i < pDataBaseCollection->GetCount() ; i++ )
     {
         Sc10DataBaseData* pOldData = pDataBaseCollection->At(i);
@@ -1447,7 +1447,7 @@ void Sc10Import::LoadTables()
             nLen = sizeof(TabName) - 1;
         TabName[nLen] = 0;
 
-        //----------------------------------------------------------
+        
         rStream.ReadUInt16( Display );
 
         if ( Tab == (sal_Int16)nShowTab )
@@ -1464,13 +1464,13 @@ void Sc10Import::LoadTables()
             aSc30ViewOpt.SetOption( VOPT_OUTLINER,    true );
             aSc30ViewOpt.SetOption( VOPT_GRID,        IS_SET(dfGrid,Display) );
 
-            // VOPT_HEADER wird in LoadViewColRowBar() gesetzt
+            
 
-            if ( IS_SET(dfObjectAll,Display) )          // Objekte anzeigen
+            if ( IS_SET(dfObjectAll,Display) )          
                 eObjMode = VOBJ_MODE_SHOW;
-            else if ( IS_SET(dfObjectFrame,Display) )   // Objekte als Platzhalter
+            else if ( IS_SET(dfObjectFrame,Display) )   
                 eObjMode = VOBJ_MODE_SHOW;
-            else if ( IS_SET(dfObjectNone,Display) )    // Objekte nicht anzeigen
+            else if ( IS_SET(dfObjectNone,Display) )    
                 eObjMode = VOBJ_MODE_HIDE;
 
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_OLE,   eObjMode );
@@ -1478,7 +1478,7 @@ void Sc10Import::LoadTables()
             aSc30ViewOpt.SetObjMode( VOBJ_TYPE_DRAW,  eObjMode );
         }
 
-        //--------------------------------------------------------------------
+        
         rStream.ReadUChar( Visible );
 
         nError = rStream.GetError();
@@ -1493,7 +1493,7 @@ void Sc10Import::LoadTables()
 
         if (Visible == 0) pDoc->SetVisible(static_cast<SCTAB> (TabNo), false);
 
-        // ColWidth
+        
         rStream.ReadUInt16( ID );
         if (ID != ColWidthID)
         {
@@ -1512,7 +1512,7 @@ void Sc10Import::LoadTables()
         }
         pPrgrsBar->Progress();
 
-        // ColAttr
+        
         rStream.ReadUInt16( ID );
         if (ID != ColAttrID)
         {
@@ -1542,7 +1542,7 @@ void Sc10Import::LoadTables()
         }
         pPrgrsBar->Progress();
 
-        // RowHeight
+        
         rStream.ReadUInt16( ID );
         if (ID != RowHeightID)
         {
@@ -1562,7 +1562,7 @@ void Sc10Import::LoadTables()
         }
         pPrgrsBar->Progress();
 
-        // RowAttr
+        
         rStream.ReadUInt16( ID );
         if (ID != RowAttrID)
         {
@@ -1592,7 +1592,7 @@ void Sc10Import::LoadTables()
         }
         pPrgrsBar->Progress();
 
-        // DataTable
+        
         rStream.ReadUInt16( ID );
         if (ID != TableID)
         {
@@ -1639,12 +1639,12 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                     const SfxPoolItem* pValueFormat = pDoc->GetAttr(Col, static_cast<SCROW> (Row), Tab, ATTR_VALUE_FORMAT);
                     sal_uLong nFormat = ((SfxUInt32Item*)pValueFormat)->GetValue();
                     double Value = ScfTools::ReadLongDouble(rStream);
-                    //rStream.Read(&Value, sizeof(Value));
+                    
 
-                    // Achtung hier ist eine Anpassung Notwendig wenn Ihr das Basisdatum aendert
-                    // In StarCalc 1.0 entspricht 0 dem 01.01.1900
-                    // if ((nFormat >= 30) && (nFormat <= 35))
-                    // Value += 0;
+                    
+                    
+                    
+                    
                     if ((nFormat >= 40) && (nFormat <= 45))
                         Value /= 86400.0;
                     pDoc->SetValue(Col, static_cast<SCROW> (Row), Tab, Value);
@@ -1733,7 +1733,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         sal_uInt16 nValue1;
         Sc10ColData *pColData;
 
-        // Font (Name, Size)
+        
         nStart = 0;
         nEnd = 0;
         nLimit = aFont.Count;
@@ -1767,7 +1767,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             nStart = nEnd + 1;
         }
 
-    // Font color
+    
     nStart = 0;
     nEnd = 0;
     nLimit = aColor.Count;
@@ -1786,7 +1786,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
 
-    // Font attributes (Bold, Italic...)
+    
     nStart = 0;
     nEnd = 0;
     nLimit = aAttr.Count;
@@ -1811,7 +1811,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
 
-    // Cell alignment
+    
     nStart = 0;
     nEnd = 0;
     nLimit = aJustify.Count;
@@ -1870,12 +1870,12 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         }
         nStart = nEnd + 1;
     }
-    // Border
+    
     sal_Bool            bEnd = false;
     sal_uInt16          nColorIndex = 0;
     sal_uInt16          nFrameIndex = 0;
 
-    // Special Fix...
+    
     const sal_uInt32    nHelpMeStart = 100;
     sal_uInt32          nHelpMe = nHelpMeStart;
     sal_uInt16          nColorIndexOld = nColorIndex;
@@ -1994,16 +1994,16 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         pColData++;
     }
 
-    // ATTENTION: Code up to here works more or less ... from here I've had enough ! (GT)
+    
 
-    // Background (Color, Raster)
+    
     sal_uInt16      nRasterIndex = 0;
     bEnd        = false;
     nColorIndex = 0;
     nEnd        = 0;
     nStart      = 0;
 
-    // Special Fix...
+    
     nHelpMe     = nHelpMeStart;
     sal_uInt16      nRasterIndexOld = nRasterIndex;
 
@@ -2084,7 +2084,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nHelpMe--;
     }
 
-    // Number format
+    
     nStart = 0;
     nEnd = 0;
     nLimit = aValue.Count;
@@ -2106,7 +2106,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
 
-    // Cell attributes (Protected, hidden...)
+    
     nStart = 0;
     nEnd = 0;
     for (i=0; i<aFlag.Count; i++)
@@ -2125,7 +2125,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         nStart = nEnd + 1;
     }
 
-    // Cell style
+    
     nStart = 0;
     nEnd = 0;
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
@@ -2153,7 +2153,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
 void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
 {
-    // rAttr is not reused, otherwise we'd have to delete [] rAttr.pData;
+    
     rStream.ReadUInt16( rAttr.Count );
     if (rAttr.Count)
     {
@@ -2178,8 +2178,8 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
 
 void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& nKey)
 {
-  // Achtung: Die Formate werden nur auf die StarCalc 3.0 internen Formate gemappt
-  //          Korrekterweise muessten zum Teil neue Formate erzeugt werden (sollte Stephan sich ansehen)
+  
+  
   nKey = 0;
   switch (nFormat)
   {
@@ -2209,7 +2209,7 @@ void Sc10Import::ChangeFormat(sal_uInt16 nFormat, sal_uInt16 nInfo, sal_uLong& n
      nKey = 60;
      break;
     case vfZerro :
-     // Achtung kein Aequivalent
+     
      break;
     case vfDate :
       switch (nInfo)
@@ -2335,7 +2335,7 @@ void Sc10Import::LoadObjects()
     {
       sal_uInt8 ObjectType;
       Sc10GraphHeader GraphHeader;
-      sal_Bool IsOleObject = false; // Achtung dies ist nur ein Notnagel
+      sal_Bool IsOleObject = false; 
       for (sal_uInt16 i = 0; (i < nAnz) && (nError == 0) && !rStream.IsEof() && !IsOleObject; i++)
       {
         rStream.ReadUChar( ObjectType );
@@ -2360,7 +2360,7 @@ void Sc10Import::LoadObjects()
         switch (ObjectType)
         {
           case otOle :
-           // Achtung hier muss sowas wie OleLoadFromStream passieren
+           
            IsOleObject = sal_True;
            break;
           case otImage :
@@ -2368,9 +2368,9 @@ void Sc10Import::LoadObjects()
            Sc10ImageHeader ImageHeader;
            lcl_ReadImageHeaer(rStream, ImageHeader);
 
-           // Achtung nun kommen die Daten (Bitmap oder Metafile)
-           // Typ = 1 Device Dependend Bitmap DIB
-           // Typ = 2 MetaFile
+           
+           
+           
            rStream.SeekRel(ImageHeader.Size);
 
             if( ImageHeader.Typ != 1 && ImageHeader.Typ != 2 )
@@ -2388,7 +2388,7 @@ void Sc10Import::LoadObjects()
             {
                 lcl_ReadChartHeader(rStream, ChartHeader);
 
-                //! altes Metafile verwenden ??
+                
                 rStream.SeekRel(ChartHeader.Size);
 
                 lcl_ReadChartSheetData(rStream, ChartSheetData);
@@ -2420,7 +2420,7 @@ void Sc10Import::LoadObjects()
   }
 }
 
-//-----------------------------------------------------------------------------------------------
+
 
 FltError ScFormatFilterPluginImpl::ScImportStarCalc10( SvStream& rStream, ScDocument* pDocument )
 {

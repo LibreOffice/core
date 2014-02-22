@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -53,9 +53,9 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
 #define LOGICAL_EDIT_HEIGHT         12
-//========================================================================
-// SvxLineBox
-//========================================================================
+
+
+
 
 SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
@@ -73,13 +73,13 @@ SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinB
     aDelayTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxLineBox::~SvxLineBox()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl)
 {
@@ -91,11 +91,11 @@ IMPL_LINK_NOARG(SvxLineBox, DelayHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineBox::Select()
 {
-    // Call the parent's Select() member to trigger accessibility events.
+    
     LineLB::Select();
 
     if ( !IsTravelSelect() )
@@ -121,8 +121,8 @@ void SvxLineBox::Select()
                      SfxObjectShell::Current()  &&
                      SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) )
                 {
-                    // LineDashItem will only be sent if it also has a dash.
-                    // Notify cares!
+                    
+                    
                     SvxDashListItem aItem( *(const SvxDashListItem*)(
                         SfxObjectShell::Current()->GetItem( SID_DASH_LIST ) ) );
                     XLineDashItem aLineDashItem( GetSelectEntry(),
@@ -156,7 +156,7 @@ void SvxLineBox::Select()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -185,7 +185,7 @@ bool SvxLineBox::PreNotify( NotifyEvent& rNEvt )
     return LineLB::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxLineBox::Notify( NotifyEvent& rNEvt )
 {
@@ -212,7 +212,7 @@ bool SvxLineBox::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineBox::ReleaseFocus_Impl()
 {
@@ -246,7 +246,7 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxLineBox::FillControl()
 {
-    // FillStyles();
+    
     if ( !mpSh )
         mpSh = SfxObjectShell::Current();
 
@@ -258,9 +258,9 @@ void SvxLineBox::FillControl()
     }
 }
 
-//========================================================================
-// SvxColorBox
-//========================================================================
+
+
+
 
 SvxColorBox::SvxColorBox(
     Window* pParent,
@@ -288,19 +288,19 @@ SvxColorBox::SvxColorBox(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxColorBox::~SvxColorBox()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorBox::Update( const XLineColorItem* pItem )
 {
     if ( pItem )
     {
-      // fdo#64455
+      
         ::Color aColor = pItem->GetColorValue();
         OUString aString( pItem->GetName() );
         SelectEntry(aString);
@@ -309,7 +309,7 @@ void SvxColorBox::Update( const XLineColorItem* pItem )
         {
             SelectEntry( aColor );
         }
-        // Check if the entry is not in the list
+        
         if( GetSelectEntryPos() == LISTBOX_ENTRY_NOTFOUND ||
             GetSelectEntryColor() != aColor )
         {
@@ -317,7 +317,7 @@ void SvxColorBox::Update( const XLineColorItem* pItem )
             OUString aTmpStr;
             if( nCount > 0 )
             {
-                // Last entry gets tested against temporary color
+                
                 aTmpStr = GetEntry( nCount - 1 );
                 if(  aTmpStr.startsWith(TMP_STR_BEGIN) &&
                      aTmpStr.endsWith(TMP_STR_END) )
@@ -335,11 +335,11 @@ void SvxColorBox::Update( const XLineColorItem* pItem )
         SetNoSelection();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxColorBox::Select()
 {
-    // OJ: base class call needed here because otherwise no event is send for accessibility
+    
     ColorLB::Select();
     if ( !IsTravelSelect() )
     {
@@ -361,7 +361,7 @@ void SvxColorBox::Select()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxColorBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -391,7 +391,7 @@ bool SvxColorBox::PreNotify( NotifyEvent& rNEvt )
     return ColorLB::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxColorBox::Notify( NotifyEvent& rNEvt )
 {
@@ -430,7 +430,7 @@ void SvxColorBox::DataChanged( const DataChangedEvent& rDCEvt )
 
     ColorLB::DataChanged( rDCEvt );
 }
-// -----------------------------------------------------------------------
+
 
 void SvxColorBox::ReleaseFocus_Impl()
 {
@@ -449,9 +449,9 @@ void SvxColorBox::ReleaseFocus_Impl()
     }
 }
 
-//========================================================================
-// SvxMetricField
-//========================================================================
+
+
+
 
 SvxMetricField::SvxMetricField(
     Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits )
@@ -477,13 +477,13 @@ SvxMetricField::SvxMetricField(
     Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMetricField::~SvxMetricField()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::Update( const XLineWidthItem* pItem )
 {
@@ -496,7 +496,7 @@ void SvxMetricField::Update( const XLineWidthItem* pItem )
         SetText( "" );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::Modify()
 {
@@ -514,7 +514,7 @@ void SvxMetricField::Modify()
                                  aArgs );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::ReleaseFocus_Impl()
 {
@@ -526,33 +526,33 @@ void SvxMetricField::ReleaseFocus_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::Down()
 {
     sal_Int64 nValue = GetValue();
     nValue -= GetSpinSize();
 
-    // To prevent OS/2 to jump on Max
+    
     if ( nValue >= GetMin() )
         MetricField::Down();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::Up()
 {
     MetricField::Up();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::SetCoreUnit( SfxMapUnit eUnit )
 {
     ePoolUnit = eUnit;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMetricField::RefreshDlgUnit()
 {
@@ -564,7 +564,7 @@ void SvxMetricField::RefreshDlgUnit()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
 {
@@ -576,7 +576,7 @@ bool SvxMetricField::PreNotify( NotifyEvent& rNEvt )
     return MetricField::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxMetricField::Notify( NotifyEvent& rNEvt )
 {
@@ -629,9 +629,9 @@ void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
     MetricField::DataChanged( rDCEvt );
 }
 
-//========================================================================
-// SvxFillTypeBox
-//========================================================================
+
+
+
 
 SvxFillTypeBox::SvxFillTypeBox( Window* pParent, WinBits nBits ) :
     FillTypeLB( pParent, nBits | WB_TABSTOP ),
@@ -650,13 +650,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFillTypeBox(Window *pPar
     return new SvxFillTypeBox(pParent);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxFillTypeBox::~SvxFillTypeBox()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -677,7 +677,7 @@ bool SvxFillTypeBox::PreNotify( NotifyEvent& rNEvt )
     return FillTypeLB::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
 {
@@ -708,7 +708,7 @@ bool SvxFillTypeBox::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFillTypeBox::ReleaseFocus_Impl()
 {
@@ -721,9 +721,9 @@ void SvxFillTypeBox::ReleaseFocus_Impl()
     }
 }
 
-//========================================================================
-// SvxFillAttrBox
-//========================================================================
+
+
+
 
 SvxFillAttrBox::SvxFillAttrBox( Window* pParent, WinBits nBits ) :
 
@@ -743,13 +743,13 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxFillAttrBox(Window *pPar
     return new SvxFillAttrBox(pParent);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxFillAttrBox::~SvxFillAttrBox()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
 {
@@ -761,7 +761,7 @@ bool SvxFillAttrBox::PreNotify( NotifyEvent& rNEvt )
     return FillAttrLB::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
 {
@@ -792,14 +792,14 @@ bool SvxFillAttrBox::Notify( NotifyEvent& rNEvt )
     return nHandled;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFillAttrBox::Select()
 {
     FillAttrLB::Select();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxFillAttrBox::ReleaseFocus_Impl()
 {

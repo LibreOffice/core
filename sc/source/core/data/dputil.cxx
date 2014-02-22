@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "dputil.hxx"
@@ -26,7 +26,7 @@ using namespace com::sun::star;
 
 namespace {
 
-const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
+const sal_uInt16 SC_DP_LEAPYEAR = 1648;     
 
 OUString getTwoDigitString(sal_Int32 nValue)
 {
@@ -66,7 +66,7 @@ OUString ScDPUtil::getSourceDimensionName(const OUString& rName)
 
 sal_uInt8 ScDPUtil::getDuplicateIndex(const OUString& rName)
 {
-    // Count all trailing '*'s.
+    
 
     sal_Int32 n = rName.getLength();
     if (!n)
@@ -75,7 +75,7 @@ sal_uInt8 ScDPUtil::getDuplicateIndex(const OUString& rName)
     sal_uInt8 nDupCount = 0;
     const sal_Unicode* p = rName.getStr();
     const sal_Unicode* pStart = p;
-    p += n-1; // Set it to the last char.
+    p += n-1; 
     for (; p != pStart; --p, ++nDupCount)
     {
         if (*p != '*')
@@ -111,14 +111,14 @@ OUString ScDPUtil::getDateGroupName(
         case sheet::DataPilotFieldGroupBy::YEARS:
             return OUString::number(nValue);
         case sheet::DataPilotFieldGroupBy::QUARTERS:
-            return ScGlobal::pLocaleData->getQuarterAbbreviation(sal_Int16(nValue-1));    // nValue is 1-based
+            return ScGlobal::pLocaleData->getQuarterAbbreviation(sal_Int16(nValue-1));    
         case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
             return ScGlobal::GetCalendar()->getDisplayName(
-                        i18n::CalendarDisplayIndex::MONTH, sal_Int16(nValue-1), 0);    // 0-based, get short name
+                        i18n::CalendarDisplayIndex::MONTH, sal_Int16(nValue-1), 0);    
         case sheet::DataPilotFieldGroupBy::DAYS:
         {
             Date aDate(1, 1, SC_DP_LEAPYEAR);
-            aDate += (nValue - 1);            // nValue is 1-based
+            aDate += (nValue - 1);            
             Date aNullDate = *pFormatter->GetNullDate();
             long nDays = aDate - aNullDate;
 
@@ -130,7 +130,7 @@ OUString ScDPUtil::getDateGroupName(
         }
         case sheet::DataPilotFieldGroupBy::HOURS:
         {
-            //! allow am/pm format?
+            
             return getTwoDigitString(nValue);
         }
         break;
@@ -172,17 +172,17 @@ double ScDPUtil::getNumGroupStartValue(double fValue, const ScDPNumGroupInfo& rI
     {
         if (!rInfo.mbDateValues)
         {
-            // A group that would consist only of the end value is not
-            // created, instead the value is included in the last group
-            // before. So the previous group is used if the calculated group
-            // start value is the selected end value.
+            
+            
+            
+            
 
             fDiv -= 1.0;
             return rInfo.mfStart + fDiv * rInfo.mfStep;
         }
 
-        // For date values, the end value is instead treated as above the
-        // limit if it would be a group of its own.
+        
+        
 
         return rInfo.mfEnd + rInfo.mfStep;
     }
@@ -225,18 +225,18 @@ OUString lcl_GetNumGroupName(
     double fEndValue = fStartValue + fStep;
     if (rInfo.mbIntegerOnly && (rInfo.mbDateValues || !rtl::math::approxEqual(fEndValue, rInfo.mfEnd)))
     {
-        //  The second number of the group label is
-        //  (first number + size - 1) if there are only integer numbers,
-        //  (first number + size) if any non-integer numbers are involved.
-        //  Exception: The last group (containing the end value) is always
-        //  shown as including the end value (but not for dates).
+        
+        
+        
+        
+        
 
         fEndValue -= 1.0;
     }
 
     if ( fEndValue > rInfo.mfEnd && !rInfo.mbAutoEnd )
     {
-        // limit the last group to the end value
+        
 
         fEndValue = rInfo.mfEnd;
     }
@@ -245,7 +245,7 @@ OUString lcl_GetNumGroupName(
     if ( rInfo.mbDateValues )
     {
         lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
-        aBuffer.appendAscii( " - " );   // with spaces
+        aBuffer.appendAscii( " - " );   
         lcl_AppendDateStr( aBuffer, fEndValue, pFormatter );
     }
     else
@@ -280,8 +280,8 @@ OUString ScDPUtil::getNumGroupName(
     {
         if (rInfo.mbDateValues)
         {
-            //  For date values, the end value is instead treated as above the limit
-            //  if it would be a group of its own.
+            
+            
             return lcl_GetSpecialNumGroupName( rInfo.mfEnd, false, cDecSep, rInfo.mbDateValues, pFormatter );
         }
     }
@@ -293,8 +293,8 @@ sal_Int32 ScDPUtil::getDatePartValue(
     double fValue, const ScDPNumGroupInfo* pInfo, sal_Int32 nDatePart,
     SvNumberFormatter* pFormatter)
 {
-    // Start and end are inclusive
-    // (End date without a time value is included, with a time value it's not)
+    
+    
 
     if (pInfo)
     {
@@ -310,8 +310,8 @@ sal_Int32 ScDPUtil::getDatePartValue(
         nDatePart == sheet::DataPilotFieldGroupBy::MINUTES ||
         nDatePart == sheet::DataPilotFieldGroupBy::SECONDS)
     {
-        // handle time
-        // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
+        
+        
 
         double fTime = fValue - rtl::math::approxFloor(fValue);
         long nSeconds = (long)rtl::math::approxFloor(fTime*DATE_TIME_FACTOR+0.5);
@@ -340,18 +340,18 @@ sal_Int32 ScDPUtil::getDatePartValue(
                 nResult = aDate.GetYear();
                 break;
             case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS:
-                nResult = 1 + (aDate.GetMonth() - 1) / 3;     // 1..4
+                nResult = 1 + (aDate.GetMonth() - 1) / 3;     
                 break;
             case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
-                nResult = aDate.GetMonth();     // 1..12
+                nResult = aDate.GetMonth();     
                 break;
             case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
                 {
                     Date aYearStart(1, 1, aDate.GetYear());
-                    nResult = (aDate - aYearStart) + 1;       // Jan 01 has value 1
+                    nResult = (aDate - aYearStart) + 1;       
                     if (nResult >= 60 && !aDate.IsLeapYear())
                     {
-                        // days are counted from 1 to 366 - if not from a leap year, adjust
+                        
                         ++nResult;
                     }
                 }
@@ -367,18 +367,18 @@ sal_Int32 ScDPUtil::getDatePartValue(
 namespace {
 
 sal_uInt16 nFuncStrIds[12] = {
-    0,                              // SUBTOTAL_FUNC_NONE
-    STR_FUN_TEXT_AVG,               // SUBTOTAL_FUNC_AVE
-    STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT
-    STR_FUN_TEXT_COUNT,             // SUBTOTAL_FUNC_CNT2
-    STR_FUN_TEXT_MAX,               // SUBTOTAL_FUNC_MAX
-    STR_FUN_TEXT_MIN,               // SUBTOTAL_FUNC_MIN
-    STR_FUN_TEXT_PRODUCT,           // SUBTOTAL_FUNC_PROD
-    STR_FUN_TEXT_STDDEV,            // SUBTOTAL_FUNC_STD
-    STR_FUN_TEXT_STDDEV,            // SUBTOTAL_FUNC_STDP
-    STR_FUN_TEXT_SUM,               // SUBTOTAL_FUNC_SUM
-    STR_FUN_TEXT_VAR,               // SUBTOTAL_FUNC_VAR
-    STR_FUN_TEXT_VAR                // SUBTOTAL_FUNC_VARP
+    0,                              
+    STR_FUN_TEXT_AVG,               
+    STR_FUN_TEXT_COUNT,             
+    STR_FUN_TEXT_COUNT,             
+    STR_FUN_TEXT_MAX,               
+    STR_FUN_TEXT_MIN,               
+    STR_FUN_TEXT_PRODUCT,           
+    STR_FUN_TEXT_STDDEV,            
+    STR_FUN_TEXT_STDDEV,            
+    STR_FUN_TEXT_SUM,               
+    STR_FUN_TEXT_VAR,               
+    STR_FUN_TEXT_VAR                
 };
 
 }
@@ -389,10 +389,10 @@ OUString ScDPUtil::getDisplayedMeasureName(const OUString& rName, ScSubTotalFunc
     sal_uInt16 nId = nFuncStrIds[eFunc];
     if (nId)
     {
-        aRet.append(ScGlobal::GetRscString(nId));        // function name
+        aRet.append(ScGlobal::GetRscString(nId));        
         aRet.append(" - ");
     }
-    aRet.append(rName);                   // field name
+    aRet.append(rName);                   
 
     return aRet.makeStringAndClear();
 }

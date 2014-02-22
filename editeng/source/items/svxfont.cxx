@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -28,7 +28,7 @@
 #include <editeng/svxfont.hxx>
 #include <editeng/escapementitem.hxx>
 
-const sal_Unicode CH_BLANK = ' ';  // ' ' Space character
+const sal_Unicode CH_BLANK = ' ';  
 
 
 SvxFont::SvxFont()
@@ -100,7 +100,7 @@ OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
     if (!IsCaseMap() || rTxt.isEmpty())
         return rTxt;
     OUString aTxt(rTxt);
-    // I still have to get the language
+    
     const LanguageType eLang = LANGUAGE_DONTKNOW == GetLanguage()
                              ? LANGUAGE_SYSTEM : GetLanguage();
 
@@ -123,9 +123,9 @@ OUString SvxFont::CalcCaseMap(const OUString &rTxt) const
         }
         case SVX_CASEMAP_TITEL:
         {
-            // Every beginning of a word is capitalized,  the rest of the word
-            // is taken over as is.
-            // Bug: if the attribute starts in the middle of the word.
+            
+            
+            
             bool bBlank = true;
 
             for (sal_Int32 i = 0; i < aTxt.getLength(); ++i)
@@ -209,8 +209,8 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
     sal_Int32 nPos = 0;
     sal_Int32 nOldPos = nPos;
 
-    // #108210#
-    // Test if string length differ between original and CaseMapped
+    
+    
     sal_Bool bCaseMapLengthDiffers(aTxt.getLength() != rTxt.getLength());
 
     const LanguageType eLang = LANGUAGE_DONTKNOW == GetLanguage()
@@ -222,11 +222,11 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 
     while( nPos < nTxtLen )
     {
-        // first in turn are the uppercase letters
+        
 
-        // There are characters that are both upper- and lower-case L (eg blank)
-        // Such ambiguities lead to chaos, this is why these characters are
-        // allocated to the lowercase characters!
+        
+        
+        
 
         while( nPos < nTxtLen )
         {
@@ -242,9 +242,9 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
         {
             if(bCaseMapLengthDiffers)
             {
-                // #108210#
-                // If strings differ work preparing the necessary snippet to address that
-                // potential difference
+                
+                
+                
                 const OUString aSnippet = rTxt.copy(nIdx + nOldPos, nPos-nOldPos);
                 OUString aNewText = CalcCaseMap(aSnippet);
 
@@ -257,7 +257,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 
             nOldPos = nPos;
         }
-        // Now the lowercase are processed (without blanks)
+        
         while( nPos < nTxtLen )
         {
             sal_uInt32  nCharacterType = aCharClass.getCharacterType( aCharString, 0 );
@@ -272,9 +272,9 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
         {
             if(bCaseMapLengthDiffers)
             {
-                // #108210#
-                // If strings differ work preparing the necessary snippet to address that
-                // potential difference
+                
+                
+                
                 const OUString aSnippet = rTxt.copy(nIdx + nOldPos, nPos - nOldPos);
                 OUString aNewText = CalcCaseMap(aSnippet);
 
@@ -287,7 +287,7 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 
             nOldPos = nPos;
         }
-        // Now the blanks are<processed
+        
         while( nPos < nTxtLen && comphelper::string::equals(aCharString, CH_BLANK) && ++nPos < nTxtLen )
             aCharString = rTxt.copy( nPos + nIdx, 1 );
 
@@ -297,9 +297,9 @@ void SvxFont::DoOnCapitals(SvxDoCapitals &rDo) const
 
             if(bCaseMapLengthDiffers)
             {
-                // #108210#
-                // If strings differ work preparing the necessary snippet to address that
-                // potential difference
+                
+                
+                
                 const OUString aSnippet = rTxt.copy(nIdx + nOldPos, nPos - nOldPos);
                 OUString aNewText = CalcCaseMap(aSnippet);
 
@@ -359,15 +359,15 @@ Size SvxFont::GetPhysTxtSize( const OutputDevice *pOut, const OUString &rTxt,
         aTxtSize.setWidth( pOut->GetTextWidth( rTxt, nIdx, nLen ) );
     else
     {
-        // #108210#
+        
         const OUString aNewText = CalcCaseMap(rTxt);
         sal_Bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
         sal_Int32 nWidth(0L);
 
         if(bCaseMapLengthDiffers)
         {
-            // If strings differ work preparing the necessary snippet to address that
-            // potential difference
+            
+            
             const OUString aSnippet = rTxt.copy(nIdx, nLen);
             OUString _aNewText = CalcCaseMap(aSnippet);
             nWidth = pOut->GetTextWidth( _aNewText, 0, _aNewText.getLength() );
@@ -427,7 +427,7 @@ Size SvxFont::QuickGetTextSize( const OutputDevice *pOut, const OUString &rTxt,
         {
             for ( sal_Int32 i = 0; i < nLen; i++ )
                 pDXArray[i] += ( (i+1) * long( nKern ) );
-            // The last one is a nKern too big:
+            
             pDXArray[nLen-1] -= nKern;
         }
     }
@@ -439,7 +439,7 @@ Size SvxFont::GetTxtSize( const OutputDevice *pOut, const OUString &rTxt,
                          const sal_Int32 nIdx, const sal_Int32 nLen ) const
 {
     sal_Int32 nTmp = nLen;
-    if ( nTmp == SAL_MAX_INT32 )   // already initialized?
+    if ( nTmp == SAL_MAX_INT32 )   
         nTmp = rTxt.getLength();
     Font aOldFont( ChgPhysFont((OutputDevice *)pOut) );
     Size aTxtSize;
@@ -457,7 +457,7 @@ void SvxFont::QuickDrawText( OutputDevice *pOut,
     const Point &rPos, const OUString &rTxt,
     const sal_Int32 nIdx, const sal_Int32 nLen, const sal_Int32* pDXArray ) const
 {
-    // Font has to be selected in OutputDevice...
+    
     if ( !IsCaseMap() && !IsCapital() && !IsKern() && !IsEsc() )
     {
         pOut->DrawTextArray( rPos, rTxt, pDXArray, nIdx, nLen );
@@ -513,7 +513,7 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
         return;
     sal_Int32 nTmp = nLen;
 
-    if ( nTmp == SAL_MAX_INT32 )   // already initialized?
+    if ( nTmp == SAL_MAX_INT32 )   
         nTmp = rTxt.getLength();
     Point aPos( rPos );
 
@@ -542,14 +542,14 @@ void SvxFont::DrawPrev( OutputDevice *pOut, Printer* pPrinter,
             pOut->DrawStretchText( aPos, aSize.Width(), rTxt, nIdx, nTmp );
         else
         {
-            // #108210#
+            
             const OUString aNewText = CalcCaseMap(rTxt);
             sal_Bool bCaseMapLengthDiffers(aNewText.getLength() != rTxt.getLength());
 
             if(bCaseMapLengthDiffers)
             {
-                // If strings differ work preparing the necessary snippet to address that
-                // potential difference
+                
+                
                 const OUString aSnippet(rTxt.copy( nIdx, nTmp));
                 OUString _aNewText = CalcCaseMap(aSnippet);
 
@@ -632,12 +632,12 @@ void SvxDoGetCapitalSize::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
 Size SvxFont::GetCapitalSize( const OutputDevice *pOut, const OUString &rTxt,
                              const sal_Int32 nIdx, const sal_Int32 nLen) const
 {
-    // Start:
+    
     SvxDoGetCapitalSize aDo( (SvxFont *)this, pOut, rTxt, nIdx, nLen, nKern );
     DoOnCapitals( aDo );
     Size aTxtSize( aDo.GetSize() );
 
-    // End:
+    
     if( !aTxtSize.Height() )
     {
         aTxtSize.setWidth( 0 );
@@ -701,7 +701,7 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
     sal_uInt8 nProp = 0;
     Size aPartSize;
 
-    // Set the desired font
+    
     FontUnderline eUnder = pFont->GetUnderline();
     FontStrikeout eStrike = pFont->GetStrikeout();
     pFont->SetUnderline( UNDERLINE_NONE );
@@ -723,7 +723,7 @@ void SvxDoDrawCapital::Do( const OUString &_rTxt, const sal_Int32 _nIdx,
     }
     pOut->DrawStretchText(aPos,nWidth-nKern,_rTxt,_nIdx,_nLen);
 
-    // Restore Font
+    
     pFont->SetUnderline( eUnder );
     pFont->SetStrikeout( eStrike );
     if ( !bUpper )

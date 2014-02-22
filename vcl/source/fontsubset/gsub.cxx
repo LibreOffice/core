@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,20 +60,20 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
     if( !pGsubBase )
         return false;
 
-    // #129682# check offsets inside GSUB table
+    
     const FT_Byte* pGsubLimit = pGsubBase + pTTFile->tlens[ O_gsub ];
 
-    // parse GSUB header
+    
     const FT_Byte* pGsubHeader = pGsubBase;
     const sal_uLong nVersion            = NEXT_Long( pGsubHeader );
     const sal_uInt16 nOfsScriptList     = NEXT_UShort( pGsubHeader );
     const sal_uInt16 nOfsFeatureTable   = NEXT_UShort( pGsubHeader );
     const sal_uInt16 nOfsLookupList     = NEXT_UShort( pGsubHeader );
 
-    // sanity check the GSUB header
+    
     if( nVersion != 0x00010000 )
-        if( nVersion != 0x00001000 )    // workaround for SunBatang etc.
-            return false;               // unknown format or broken
+        if( nVersion != 0x00001000 )    
+            return false;               
 
     typedef std::vector<sal_uLong> ReqFeatureTagList;
     ReqFeatureTagList aReqFeatureTagList;
@@ -83,14 +83,14 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
     typedef std::vector<sal_uInt16> UshortList;
     UshortList aFeatureIndexList;
 
-    // parse Script Table
+    
     const FT_Byte* pScriptHeader = pGsubBase + nOfsScriptList;
     const sal_uInt16 nCntScript = NEXT_UShort( pScriptHeader );
     if( pGsubLimit < pScriptHeader + 6 * nCntScript )
         return false;
     for( sal_uInt16 nScriptIndex = 0; nScriptIndex < nCntScript; ++nScriptIndex )
     {
-        const sal_uLong nTag            = NEXT_Long( pScriptHeader ); // e.g. hani/arab/kana/hang
+        const sal_uLong nTag            = NEXT_Long( pScriptHeader ); 
         const sal_uInt16 nOfsScriptTable= NEXT_UShort( pScriptHeader );
         if( (nTag != (sal_uInt16)nRequestedScript) && (nRequestedScript != 0) )
             continue;
@@ -105,7 +105,7 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
             return false;
         for( sal_uInt16 nLangsysIndex = 0; nLangsysIndex < nCntLangSystem; ++nLangsysIndex )
         {
-            const sal_uLong nInnerTag = NEXT_Long( pScriptTable );    // e.g. KOR/ZHS/ZHT/JAN
+            const sal_uLong nInnerTag = NEXT_Long( pScriptTable );    
             const sal_uInt16 nOffset= NEXT_UShort( pScriptTable );
             if( (nInnerTag != (sal_uInt16)nRequestedLangsys) && (nRequestedLangsys != 0) )
                 continue;
@@ -156,7 +156,7 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
     UshortList aLookupIndexList;
     UshortList aLookupOffsetList;
 
-    // parse Feature Table
+    
     const FT_Byte* pFeatureHeader = pGsubBase + nOfsFeatureTable;
     if( pGsubLimit < pFeatureHeader + 2 )
           return false;
@@ -165,17 +165,17 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
           return false;
     for( sal_uInt16 nFeatureIndex = 0; nFeatureIndex < nCntFeature; ++nFeatureIndex )
     {
-        const sal_uLong nTag    = NEXT_Long( pFeatureHeader ); // e.g. locl/vert/trad/smpl/liga/fina/...
+        const sal_uLong nTag    = NEXT_Long( pFeatureHeader ); 
         const sal_uInt16 nOffset= NEXT_UShort( pFeatureHeader );
 
-        // ignore unneeded feature lookups
-        if( aFeatureIndexList[0] != nFeatureIndex ) // do not ignore the required feature
+        
+        if( aFeatureIndexList[0] != nFeatureIndex ) 
         {
             const int nRequested = std::count( aFeatureIndexList.begin(), aFeatureIndexList.end(), nFeatureIndex);
-            if( !nRequested )   // ignore features that are not requested
+            if( !nRequested )   
                 continue;
             const int nAvailable = std::count( aReqFeatureTagList.begin(), aReqFeatureTagList.end(), nTag);
-            if( !nAvailable )   // some fonts don't provide features they request!
+            if( !nAvailable )   
                 continue;
         }
 
@@ -190,11 +190,11 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
             const sal_uInt16 nLookupIndex = NEXT_UShort( pFeatureTable );
             aLookupIndexList.push_back( nLookupIndex );
         }
-        if( nCntLookups == 0 ) //### hack needed by Mincho/Gothic/Mingliu/Simsun/...
+        if( nCntLookups == 0 ) 
             aLookupIndexList.push_back( 0 );
     }
 
-    // parse Lookup List
+    
     const FT_Byte* pLookupHeader = pGsubBase + nOfsLookupList;
     if( pGsubLimit < pLookupHeader + 2 )
         return false;
@@ -219,8 +219,8 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
         /*const sal_uInt16 eLookupFlag        =*/ NEXT_UShort( pLookupTable );
         const sal_uInt16 nCntLookupSubtable = NEXT_UShort( pLookupTable );
 
-        // TODO: switch( eLookupType )
-        if( eLookupType != 1 )  // TODO: once we go beyond SingleSubst
+        
+        if( eLookupType != 1 )  
             continue;
 
         if( pGsubLimit < pLookupTable + 2 * nCntLookupSubtable )
@@ -245,11 +245,11 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
             const sal_uInt16 nFmtCoverage   = NEXT_UShort( pCoverage );
             switch( nFmtCoverage )
             {
-                case 1:         // Coverage Format 1
+                case 1:         
                 {
                     const sal_uInt16 nCntGlyph = NEXT_UShort( pCoverage );
                     if( pGsubLimit < pCoverage + 2 * nCntGlyph )
-                        // TODO? nCntGlyph = (pGsubLimit - pCoverage) / 2;
+                        
                         return false;
                     aSubstVector.reserve( nCntGlyph );
                     for( sal_uInt16 i = 0; i < nCntGlyph; ++i )
@@ -260,11 +260,11 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
                 }
                 break;
 
-                case 2:         // Coverage Format 2
+                case 2:         
                 {
                     const sal_uInt16 nCntRange = NEXT_UShort( pCoverage );
                     if( pGsubLimit < pCoverage + 6 * nCntRange )
-                        // TODO? nCntGlyph = (pGsubLimit - pCoverage) / 6;
+                        
                         return false;
                     for( int i = nCntRange; --i >= 0; )
                     {
@@ -282,7 +282,7 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
 
             switch( nFmtSubstitution )
             {
-                case 1:     // Single Substitution Format 1
+                case 1:     
                 {
                     const sal_uInt16 nDeltaGlyphId = NEXT_UShort( pSubLookup );
 
@@ -291,7 +291,7 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
                 }
                 break;
 
-                case 2:     // Single Substitution Format 2
+                case 2:     
                 {
                     const sal_uInt16 nCntGlyph = NEXT_UShort( pSubLookup );
                     for( int i = nCntGlyph; (subst_it != aSubstVector.end()) && (--i>=0); ++subst_it )
@@ -305,7 +305,7 @@ bool ReadGSUB( struct _TrueTypeFont* pTTFile,
                 break;
             }
 
-            // now apply the glyph substitutions that have been collected in this subtable
+            
             if( !aSubstVector.empty() )
             {
                 GlyphSubstitution* pGSubstitution = new GlyphSubstitution;

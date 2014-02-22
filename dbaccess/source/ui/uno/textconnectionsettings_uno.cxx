@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "textconnectionsettings.hxx"
@@ -52,7 +52,7 @@ namespace dbaui
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    // OTextConnectionSettingsDialog
+    
 
     class OTextConnectionSettingsDialog;
     typedef ::cppu::ImplInheritanceHelper1  <   ODatabaseAdministrationDialog
@@ -81,7 +81,7 @@ namespace dbaui
         virtual sal_Bool SAL_CALL convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw(IllegalArgumentException);
         virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const;
 
-        // Overrides to resolve inheritance ambiguity
+        
         virtual void SAL_CALL setPropertyValue(const OUString& p1, const css::uno::Any& p2) throw (css::uno::RuntimeException)
             { ODatabaseAdministrationDialog::setPropertyValue(p1, p2); }
         virtual css::uno::Any SAL_CALL getPropertyValue(const OUString& p1) throw (css::uno::RuntimeException)
@@ -100,14 +100,14 @@ namespace dbaui
             { return ODatabaseAdministrationDialog::execute(); }
 
     protected:
-        // OGenericUnoDialog overridables
+        
         virtual Dialog* createDialog( Window* _pParent );
         virtual void implInitialize( const com::sun::star::uno::Any& _rValue );
     protected:
         using OTextConnectionSettingsDialog_BASE::getFastPropertyValue;
     };
 
-    // OTextConnectionSettingsDialog
+    
     OTextConnectionSettingsDialog::OTextConnectionSettingsDialog( const Reference<XComponentContext>& _rContext )
         :OTextConnectionSettingsDialog_BASE( _rContext )
     {
@@ -145,9 +145,9 @@ namespace dbaui
         Sequence< Property > aProps;
         describeProperties( aProps );
 
-        // in addition to the properties registered by the base class, we have
-        // more properties which are not even handled by the PropertyContainer implementation,
-        // but whose values are stored in our item set
+        
+        
+        
         sal_Int32 nProp = aProps.getLength();
         aProps.realloc( nProp + 6 );
 
@@ -226,7 +226,7 @@ namespace dbaui
         PropertyValues::const_iterator pos = m_aPropertyValues.find( _nHandle );
         if ( pos != m_aPropertyValues.end() )
         {
-            // we're lazy here ...
+            
             _rConvertedValue = _rValue;
             pos->second->getPropertyValue( _rOldValue );
             bModified = sal_True;
@@ -252,7 +252,7 @@ namespace dbaui
         }
     }
 
-} // namespace dbaui
+} 
 
 extern "C" void SAL_CALL createRegistryInfo_OTextConnectionSettingsDialog()
 {

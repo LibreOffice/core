@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "eformshelper.hxx"
@@ -36,10 +36,10 @@
 #include <algorithm>
 #include <o3tl/compat_functional.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -50,12 +50,12 @@ namespace pcr
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::form;
 
-    //====================================================================
-    //= file-local helpers
-    //====================================================================
+    
+    
+    
     namespace
     {
-        //--------------------------------------------------------------------
+        
         OUString composeModelElementUIName( const OUString& _rModelName, const OUString& _rElementName )
         {
             OUStringBuffer aBuffer;
@@ -67,10 +67,10 @@ namespace pcr
         }
     }
 
-    //====================================================================
-    //= EFormsHelper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     EFormsHelper::EFormsHelper( ::osl::Mutex& _rMutex, const Reference< XPropertySet >& _rxControlModel, const Reference< frame::XModel >& _rxContextDocument )
         :m_xControlModel( _rxControlModel )
         ,m_aPropertyListeners( _rMutex )
@@ -83,7 +83,7 @@ namespace pcr
 
     }
 
-    //--------------------------------------------------------------------
+    
     bool EFormsHelper::isEForm( const Reference< frame::XModel >& _rxContextDocument )
     {
         try
@@ -101,14 +101,14 @@ namespace pcr
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     bool EFormsHelper::canBindToDataType( sal_Int32 _nDataType ) const SAL_THROW(())
     {
         if ( !m_xBindableControl.is() )
-            // cannot bind at all
+            
             return false;
 
-        // some types cannot be bound, independent from the control type
+        
         if (  ( DataTypeClass::hexBinary == _nDataType )
            || ( DataTypeClass::base64Binary == _nDataType )
            || ( DataTypeClass::QName == _nDataType )
@@ -119,11 +119,11 @@ namespace pcr
         bool bCan = false;
         try
         {
-            // classify the control model
+            
             sal_Int16 nControlType = FormComponentType::CONTROL;
             OSL_VERIFY( m_xControlModel->getPropertyValue( PROPERTY_CLASSID ) >>= nControlType );
 
-            // some lists
+            
             sal_Int16 nNumericCompatibleTypes[] = { DataTypeClass::DECIMAL, DataTypeClass::FLOAT, DataTypeClass::DOUBLE, 0 };
             sal_Int16 nDateCompatibleTypes[] = { DataTypeClass::DATE, 0 };
             sal_Int16 nTimeCompatibleTypes[] = { DataTypeClass::TIME, 0 };
@@ -153,8 +153,8 @@ namespace pcr
 
             case FormComponentType::TEXTFIELD:
             {
-                // both the normal text field, and the formatted field, claim to be a TEXTFIELD
-                // need to distinguish by service name
+                
+                
                 Reference< XServiceInfo > xSI( m_xControlModel, UNO_QUERY );
                 OSL_ENSURE( xSI.is(), "EFormsHelper::canBindToDataType: a control model which has no service info?" );
                 if ( xSI.is() )
@@ -165,11 +165,11 @@ namespace pcr
                         break;
                     }
                 }
-                // NO break here!
+                
             }
             case FormComponentType::LISTBOX:
             case FormComponentType::COMBOBOX:
-                // edit fields and list/combo boxes can be bound to anything
+                
                 bCan = true;
             }
 
@@ -177,7 +177,7 @@ namespace pcr
             {
                 if ( _nDataType == -1 )
                 {
-                    // the control can be bound to at least one type, and exactly this is being asked for
+                    
                     bCan = true;
                 }
                 else
@@ -195,7 +195,7 @@ namespace pcr
         return bCan;
     }
 
-    //--------------------------------------------------------------------
+    
     bool EFormsHelper::isListEntrySink() const SAL_THROW(())
     {
         bool bIs = false;
@@ -211,7 +211,7 @@ namespace pcr
         return bIs;
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::impl_switchBindingListening_throw( bool _bDoListening, const Reference< XPropertyChangeListener >& _rxListener )
     {
         Reference< XPropertySet > xBindingProps;
@@ -230,7 +230,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::registerBindingListener( const Reference< XPropertyChangeListener >& _rxBindingListener )
     {
         if ( !_rxBindingListener.is() )
@@ -238,7 +238,7 @@ namespace pcr
         impl_toggleBindingPropertyListening_throw( true, _rxBindingListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::impl_toggleBindingPropertyListening_throw( bool _bDoListen, const Reference< XPropertyChangeListener >& _rxConcreteListenerOrNull )
     {
         if ( !_bDoListen )
@@ -291,13 +291,13 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::revokeBindingListener( const Reference< XPropertyChangeListener >& _rxBindingListener )
     {
         impl_toggleBindingPropertyListening_throw( false, _rxBindingListener );
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::getFormModelNames( ::std::vector< OUString >& /* [out] */ _rModelNames ) const SAL_THROW(())
     {
         if ( m_xDocument.is() )
@@ -324,7 +324,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::getBindingNames( const OUString& _rModelName, ::std::vector< OUString >& /* [out] */ _rBindingNames ) const SAL_THROW(())
     {
         _rBindingNames.resize( 0 );
@@ -349,7 +349,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< xforms::XModel > EFormsHelper::getFormModelByName( const OUString& _rModelName ) const SAL_THROW(())
     {
         Reference< xforms::XModel > xReturn;
@@ -367,7 +367,7 @@ namespace pcr
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< xforms::XModel > EFormsHelper::getCurrentFormModel() const SAL_THROW(())
     {
         Reference< xforms::XModel > xModel;
@@ -386,7 +386,7 @@ namespace pcr
         return xModel;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString EFormsHelper::getCurrentFormModelName() const SAL_THROW(())
     {
         OUString sModelName;
@@ -403,7 +403,7 @@ namespace pcr
         return sModelName;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertySet > EFormsHelper::getCurrentBinding() const SAL_THROW(())
     {
         Reference< XPropertySet > xBinding;
@@ -421,7 +421,7 @@ namespace pcr
         return xBinding;
     }
 
-    //--------------------------------------------------------------------
+    
     OUString EFormsHelper::getCurrentBindingName() const SAL_THROW(())
     {
         OUString sBindingName;
@@ -438,7 +438,7 @@ namespace pcr
         return sBindingName;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XListEntrySource > EFormsHelper::getCurrentListSourceBinding() const SAL_THROW(())
     {
         Reference< XListEntrySource > xReturn;
@@ -456,7 +456,7 @@ namespace pcr
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::setListSourceBinding( const Reference< XListEntrySource >& _rxListSource ) SAL_THROW(())
     {
         try
@@ -472,7 +472,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::setBinding( const Reference< ::com::sun::star::beans::XPropertySet >& _rxBinding ) SAL_THROW(())
     {
         if ( !m_xBindableControl.is() )
@@ -498,14 +498,14 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertySet > EFormsHelper::getOrCreateBindingForModel( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(())
     {
         OSL_ENSURE( !_rBindingName.isEmpty(), "EFormsHelper::getOrCreateBindingForModel: invalid binding name!" );
         return implGetOrCreateBinding( _rTargetModel, _rBindingName );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertySet > EFormsHelper::implGetOrCreateBinding( const OUString& _rTargetModel, const OUString& _rBindingName ) const SAL_THROW(())
     {
         OSL_ENSURE( !( _rTargetModel.isEmpty() && !_rBindingName.isEmpty() ), "EFormsHelper::implGetOrCreateBinding: no model, but a binding name?" );
@@ -514,7 +514,7 @@ namespace pcr
         try
         {
             OUString sTargetModel( _rTargetModel );
-            // determine the model which the binding should belong to
+            
             if ( sTargetModel.isEmpty() )
             {
                 ::std::vector< OUString > aModelNames;
@@ -527,7 +527,7 @@ namespace pcr
             Reference< XNameAccess > xBindingNames( xModel.is() ? xModel->getBindings() : Reference< XSet >(), UNO_QUERY );
             if ( xBindingNames.is() )
             {
-                // get or create the binding instance
+                
                 if ( !_rBindingName.isEmpty() )
                 {
                     if ( xBindingNames->hasByName( _rBindingName ) )
@@ -547,7 +547,7 @@ namespace pcr
                     xBinding = xModel->createBinding( );
                     if ( xBinding.is() )
                     {
-                        // find a nice name for it
+                        
                         OUString sBaseName(PcrRes(RID_STR_BINDING_UI_NAME).toString());
                         sBaseName += " ";
                         OUString sNewName;
@@ -559,7 +559,7 @@ namespace pcr
                         while ( xBindingNames->hasByName( sNewName ) );
                         Reference< XNamed > xName( xBinding, UNO_QUERY_THROW );
                         xName->setName( sNewName );
-                        // and insert into the model
+                        
                         xModel->getBindings()->insert( makeAny( xBinding ) );
                     }
                 }
@@ -573,10 +573,10 @@ namespace pcr
         return xBinding;
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
-        //................................................................
+        
         struct PropertyBagInserter : public ::std::unary_function< Property, void >
         {
         private:
@@ -591,7 +591,7 @@ namespace pcr
             }
         };
 
-        //................................................................
+        
         Reference< XPropertySetInfo > collectPropertiesGetInfo( const Reference< XPropertySet >& _rxProps, PropertyBag& _rBag )
         {
             Reference< XPropertySetInfo > xInfo;
@@ -608,13 +608,13 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     OUString EFormsHelper::getModelElementUIName( const EFormsHelper::ModelElementType _eType, const Reference< XPropertySet >& _rxElement ) const SAL_THROW(())
     {
         OUString sUIName;
         try
         {
-            // determine the model which the element belongs to
+            
             Reference< xforms::XFormsUIHelper1 > xHelper;
             if ( _rxElement.is() )
                 _rxElement->getPropertyValue( PROPERTY_MODEL ) >>= xHelper;
@@ -634,7 +634,7 @@ namespace pcr
         return sUIName;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertySet > EFormsHelper::getModelElementFromUIName( const EFormsHelper::ModelElementType _eType, const OUString& _rUIName ) const SAL_THROW(())
     {
         const MapStringToPropertySet& rMapUINameToElement( ( _eType == Submission ) ? m_aSubmissionUINames : m_aBindingUINames );
@@ -644,7 +644,7 @@ namespace pcr
         return ( pos != rMapUINameToElement.end() ) ? pos->second : Reference< XPropertySet >();
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::getAllElementUINames( const ModelElementType _eType, ::std::vector< OUString >& /* [out] */ _rElementNames, bool _bPrepentEmptyEntry )
     {
         MapStringToPropertySet& rMapUINameToElement( ( _eType == Submission ) ? m_aSubmissionUINames : m_aBindingUINames );
@@ -656,12 +656,12 @@ namespace pcr
 
         try
         {
-            // obtain the model names
+            
             ::std::vector< OUString > aModels;
             getFormModelNames( aModels );
-            _rElementNames.reserve( aModels.size() * 2 );    // heuristics
+            _rElementNames.reserve( aModels.size() * 2 );    
 
-            // for every model, obtain the element
+            
             for ( ::std::vector< OUString >::const_iterator pModelName = aModels.begin();
                   pModelName != aModels.end();
                   ++pModelName
@@ -710,7 +710,7 @@ namespace pcr
         ::std::transform( rMapUINameToElement.begin(), rMapUINameToElement.end(), _rElementNames.begin(), ::o3tl::select1st< MapStringToPropertySet::value_type >() );
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::firePropertyChange( const OUString& _rName, const Any& _rOldValue, const Any& _rNewValue ) const
     {
         if ( m_aPropertyListeners.empty() )
@@ -736,7 +736,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void EFormsHelper::firePropertyChanges( const Reference< XPropertySet >& _rxOldProps, const Reference< XPropertySet >& _rxNewProps, ::std::set< OUString >& _rFilter ) const
     {
         if ( m_aPropertyListeners.empty() )
@@ -773,8 +773,8 @@ namespace pcr
         }
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

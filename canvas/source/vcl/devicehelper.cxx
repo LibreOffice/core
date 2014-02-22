@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <canvas/debug.hxx>
@@ -48,9 +48,9 @@ namespace vclcanvas
     geometry::RealSize2D DeviceHelper::getPhysicalResolution()
     {
         if( !mpOutDev )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvas::tools::createInfiniteSize2D(); 
 
-        // Map a one-by-one millimeter box to pixel
+        
         OutputDevice& rOutDev = mpOutDev->getOutDev();
         const MapMode aOldMapMode( rOutDev.GetMapMode() );
         rOutDev.SetMapMode( MapMode(MAP_MM) );
@@ -63,9 +63,9 @@ namespace vclcanvas
     geometry::RealSize2D DeviceHelper::getPhysicalSize()
     {
         if( !mpOutDev )
-            return ::canvas::tools::createInfiniteSize2D(); // we're disposed
+            return ::canvas::tools::createInfiniteSize2D(); 
 
-        // Map the pixel dimensions of the output window to millimeter
+        
         OutputDevice& rOutDev = mpOutDev->getOutDev();
         const MapMode aOldMapMode( rOutDev.GetMapMode() );
         rOutDev.SetMapMode( MapMode(MAP_MM) );
@@ -81,11 +81,11 @@ namespace vclcanvas
     {
         uno::Reference< rendering::XLinePolyPolygon2D > xPoly;
         if( !mpOutDev )
-            return xPoly; // we're disposed
+            return xPoly; 
 
         xPoly.set( new ::basegfx::unotools::UnoPolyPolygon(
                        ::basegfx::unotools::polyPolygonFromPoint2DSequenceSequence( points ) ) );
-        // vcl only handles even_odd polygons
+        
         xPoly->setFillRule(rendering::FillRule_EVEN_ODD);
 
         return xPoly;
@@ -97,11 +97,11 @@ namespace vclcanvas
     {
         uno::Reference< rendering::XBezierPolyPolygon2D > xPoly;
         if( !mpOutDev )
-            return xPoly; // we're disposed
+            return xPoly; 
 
         xPoly.set( new ::basegfx::unotools::UnoPolyPolygon(
                        ::basegfx::unotools::polyPolygonFromBezier2DSequenceSequence( points ) ) );
-        // vcl only handles even_odd polygons
+        
         xPoly->setFillRule(rendering::FillRule_EVEN_ODD);
 
         return xPoly;
@@ -112,7 +112,7 @@ namespace vclcanvas
         const geometry::IntegerSize2D&                     size )
     {
         if( !mpOutDev )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( ::vcl::unotools::sizeFromIntegerSize2D(size),
@@ -133,7 +133,7 @@ namespace vclcanvas
         const geometry::IntegerSize2D&                     size )
     {
         if( !mpOutDev )
-            return uno::Reference< rendering::XBitmap >(); // we're disposed
+            return uno::Reference< rendering::XBitmap >(); 
 
         return uno::Reference< rendering::XBitmap >(
             new CanvasBitmap( ::vcl::unotools::sizeFromIntegerSize2D(size),
@@ -162,7 +162,7 @@ namespace vclcanvas
 
     void DeviceHelper::disposing()
     {
-        // release all references
+        
         mpOutDev.reset();
     }
 
@@ -201,7 +201,7 @@ namespace vclcanvas
 
     uno::Reference<rendering::XColorSpace> DeviceHelper::getColorSpace() const
     {
-        // always the same
+        
         return DeviceColorSpace::get();
     }
 

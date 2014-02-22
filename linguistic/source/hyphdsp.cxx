@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/factory.hxx>
@@ -58,7 +58,7 @@ HyphenatorDispatcher::~HyphenatorDispatcher()
 
 void HyphenatorDispatcher::ClearSvcList()
 {
-    // release memory for each table entry
+    
     HyphSvcByLangMap_t aTmp;
     aSvcMap.swap( aTmp );
 }
@@ -78,7 +78,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
         OUString aText( xEntry->getDictionaryWord() );
         sal_Int32 nTextLen = aText.getLength();
 
-        // trailing '=' means "hyphenation should not be possible"
+        
         if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=' && aText[ nTextLen - 1 ] != '[')
         {
             sal_Int16 nHyphenationPos = -1;
@@ -111,7 +111,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                             nOrigHyphPos = i;
                         }
                     }
-                    bSkip = sal_True;   //! multiple '=' should count as one only
+                    bSkip = sal_True;   
                 }
             }
 
@@ -122,8 +122,8 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                 {
                     if (aTmp.toString() != rOrigWord)
                     {
-                        // both words should only differ by a having a trailing '.'
-                        // character or not...
+                        
+                        
                         OUString aShorter, aLonger;
                         if (aTmp.getLength() <= rOrigWord.getLength())
                         {
@@ -145,7 +145,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                     }
                 }
 #endif
-                if (aText[ nOrigHyphPos ] == '[')  // alternative hyphenation
+                if (aText[ nOrigHyphPos ] == '[')  
                 {
                     sal_Int16 split = 0;
                     sal_Unicode c = aText [ nOrigHyphPos + 1 ];
@@ -161,7 +161,7 @@ Reference<XHyphenatedWord>  HyphenatorDispatcher::buildHyphWord(
                         aTmp2.append( aText.copy( nOrigHyphPos + 1, endhyphpat - nOrigHyphPos - 1) );
                         nHyphenPos = aTmp2.getLength();
                         aTmp2.append( aTmp.copy( nHyphenationPos + 1 ) );
-                        //! take care of #i22591#
+                        
                         if (rOrigWord[ rOrigWord.getLength() - 1 ] == '.')
                             aTmp2.append( '.' );
                         aText = aTmp2.makeStringAndClear();
@@ -189,14 +189,14 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
 
     if (xEntry.is())
     {
-        // text with hyphenation info
+        
         OUString aText( xEntry->getDictionaryWord() );
         sal_Int32 nTextLen = aText.getLength();
 
-        // trailing '=' means "hyphenation should not be possible"
+        
         if (nTextLen > 0  &&  aText[ nTextLen - 1 ] != '=' && aText[ nTextLen - 1 ] != '[')
         {
-            // sequence to hold hyphenation positions
+            
             Sequence< sal_Int16 > aHyphPos( nTextLen );
             sal_Int16 *pPos = aHyphPos.getArray();
             sal_Int32 nHyphCount = 0;
@@ -220,11 +220,11 @@ Reference< XPossibleHyphens > HyphenatorDispatcher::buildPossHyphens(
                 {
                     if (!bSkip  &&  nHyphIdx >= 0)
                         pPos[ nHyphCount++ ] = (sal_Int16) nHyphIdx;
-                    bSkip = sal_True;   //! multiple '=' should count as one only
+                    bSkip = sal_True;   
                 }
             }
 
-            // ignore (multiple) trailing '='
+            
             if (bSkip  &&  nHyphIdx >= 0)
             {
                 nHyphCount--;
@@ -285,7 +285,7 @@ Reference< XHyphenatedWord > SAL_CALL
         nMaxLeading == 0 || nMaxLeading == nWordLen)
         return xRes;
 
-    // search for entry with that language
+    
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
@@ -298,7 +298,7 @@ Reference< XHyphenatedWord > SAL_CALL
     {
         OUString aChkWord( rWord );
 
-        // replace typographical apostroph by ascii apostroph
+        
         OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
         DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
         if (!aSingleQuote.isEmpty())
@@ -309,7 +309,7 @@ Reference< XHyphenatedWord > SAL_CALL
             bWordModified |= RemoveControlChars( aChkWord );
         sal_Int16 nChkMaxLeading = (sal_Int16) GetPosInWordToCheck( rWord, nMaxLeading );
 
-        // check for results from (positive) dictionaries which have precedence!
+        
         Reference< XDictionaryEntry > xEntry;
 
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
@@ -320,11 +320,11 @@ Reference< XHyphenatedWord > SAL_CALL
 
         if (xEntry.is())
         {
-            //! because queryDictionaryEntry (in the end DictionaryNeo::getEntry)
-            //! does not distinguish betwee "XYZ" and "XYZ." in order to avoid
-            //! to require them as different entry we have to supply the
-            //! original word here as well so it can be used in th result
-            //! otherwise a strange effect may occur (see #i22591#)
+            
+            
+            
+            
+            
             xRes = buildHyphWord( rWord, xEntry, nLanguage, nChkMaxLeading );
         }
         else
@@ -338,7 +338,7 @@ Reference< XHyphenatedWord > SAL_CALL
             if (pEntry->aSvcRefs.getLength() > 0)
                 xHyph = pEntry->aSvcRefs[0];
 
-            // try already instantiated service
+            
             if (i <= pEntry->nLastTriedSvcIndex)
             {
                 if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
@@ -347,18 +347,18 @@ Reference< XHyphenatedWord > SAL_CALL
                 ++i;
             }
             else if (pEntry->nLastTriedSvcIndex < nLen - 1)
-            // instantiate services and try it
+            
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
                 Reference< XComponentContext > xContext(
                     comphelper::getProcessComponentContext() );
 
-                // build service initialization argument
+                
                 Sequence< Any > aArgs(2);
                 aArgs.getArray()[0] <<= GetPropSet();
 
-                // create specific service via it's implementation name
+                
                 try
                 {
                     xHyph = Reference< XHyphenator >(
@@ -384,12 +384,12 @@ Reference< XHyphenatedWord > SAL_CALL
                 pEntry->nLastTriedSvcIndex = (sal_Int16) i;
                 ++i;
 
-                // if language is not supported by the services
-                // remove it from the list.
+                
+                
                 if (xHyph.is()  &&  !xHyph->hasLocale( rLocale ))
                     aSvcMap.erase( nLanguage );
             }
-        }   // if (xEntry.is())
+        }   
     }
 
     if (bWordModified  &&  xRes.is())
@@ -421,7 +421,7 @@ Reference< XHyphenatedWord > SAL_CALL
     if (LinguIsUnspecified(nLanguage) || !nWordLen)
         return xRes;
 
-    // search for entry with that language
+    
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
@@ -434,7 +434,7 @@ Reference< XHyphenatedWord > SAL_CALL
     {
         OUString aChkWord( rWord );
 
-        // replace typographical apostroph by ascii apostroph
+        
         OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
         DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
         if (!aSingleQuote.isEmpty())
@@ -445,7 +445,7 @@ Reference< XHyphenatedWord > SAL_CALL
             bWordModified |= RemoveControlChars( aChkWord );
         sal_Int16 nChkIndex = (sal_Int16) GetPosInWordToCheck( rWord, nIndex );
 
-        // check for results from (positive) dictionaries which have precedence!
+        
         Reference< XDictionaryEntry > xEntry;
 
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
@@ -471,7 +471,7 @@ Reference< XHyphenatedWord > SAL_CALL
             if (pEntry->aSvcRefs.getLength() > 0)
                 xHyph = pEntry->aSvcRefs[0];
 
-            // try already instantiated service
+            
             if (i <= pEntry->nLastTriedSvcIndex)
             {
                 if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
@@ -480,18 +480,18 @@ Reference< XHyphenatedWord > SAL_CALL
                 ++i;
             }
             else if (pEntry->nLastTriedSvcIndex < nLen - 1)
-            // instantiate services and try it
+            
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
                 Reference< XComponentContext > xContext(
                     comphelper::getProcessComponentContext() );
 
-                // build service initialization argument
+                
                 Sequence< Any > aArgs(2);
                 aArgs.getArray()[0] <<= GetPropSet();
 
-                // create specific service via it's implementation name
+                
                 try
                 {
                     xHyph = Reference< XHyphenator >(
@@ -516,12 +516,12 @@ Reference< XHyphenatedWord > SAL_CALL
                 pEntry->nLastTriedSvcIndex = (sal_Int16) i;
                 ++i;
 
-                // if language is not supported by the services
-                // remove it from the list.
+                
+                
                 if (xHyph.is()  &&  !xHyph->hasLocale( rLocale ))
                     aSvcMap.erase( nLanguage );
             }
-        }   // if (xEntry.is())
+        }   
     }
 
     if (bWordModified  &&  xRes.is())
@@ -552,7 +552,7 @@ Reference< XPossibleHyphens > SAL_CALL
     if (LinguIsUnspecified(nLanguage) || rWord.isEmpty())
         return xRes;
 
-    // search for entry with that language
+    
     HyphSvcByLangMap_t::iterator    aIt( aSvcMap.find( nLanguage ) );
     LangSvcEntries_Hyph     *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;
 
@@ -560,7 +560,7 @@ Reference< XPossibleHyphens > SAL_CALL
     {
         OUString aChkWord( rWord );
 
-        // replace typographical apostroph by ascii apostroph
+        
         OUString aSingleQuote( GetLocaleDataWrapper( nLanguage ).getQuotationMarkEnd() );
         DBG_ASSERT( 1 == aSingleQuote.getLength(), "unexpectend length of quotation mark" );
         if (!aSingleQuote.isEmpty())
@@ -570,7 +570,7 @@ Reference< XPossibleHyphens > SAL_CALL
         if (IsIgnoreControlChars( rProperties, GetPropSet() ))
             RemoveControlChars( aChkWord );
 
-        // check for results from (positive) dictionaries which have precedence!
+        
         Reference< XDictionaryEntry > xEntry;
 
         if (GetDicList().is()  &&  IsUseDicList( rProperties, GetPropSet() ))
@@ -594,7 +594,7 @@ Reference< XPossibleHyphens > SAL_CALL
             if (pEntry->aSvcRefs.getLength() > 0)
                 xHyph = pEntry->aSvcRefs[0];
 
-            // try already instantiated service
+            
             if (i <= pEntry->nLastTriedSvcIndex)
             {
                 if (xHyph.is()  &&  xHyph->hasLocale( rLocale ))
@@ -603,18 +603,18 @@ Reference< XPossibleHyphens > SAL_CALL
                 ++i;
             }
             else if (pEntry->nLastTriedSvcIndex < nLen - 1)
-            // instantiate services and try it
+            
             {
                 Reference< XHyphenator > *pRef = pEntry->aSvcRefs.getArray();
 
                 Reference< XComponentContext > xContext(
                     comphelper::getProcessComponentContext() );
 
-                // build service initialization argument
+                
                 Sequence< Any > aArgs(2);
                 aArgs.getArray()[0] <<= GetPropSet();
 
-                // create specific service via it's implementation name
+                
                 try
                 {
                     xHyph = Reference< XHyphenator >(
@@ -639,12 +639,12 @@ Reference< XPossibleHyphens > SAL_CALL
                 pEntry->nLastTriedSvcIndex = (sal_Int16) i;
                 ++i;
 
-                // if language is not supported by the services
-                // remove it from the list.
+                
+                
                 if (xHyph.is()  &&  !xHyph->hasLocale( rLocale ))
                     aSvcMap.erase( nLanguage );
             }
-        }   // if (xEntry.is())
+        }   
     }
 
     if (xRes.is()  &&  xRes->getWord() != rWord)
@@ -667,11 +667,11 @@ void HyphenatorDispatcher::SetServiceList( const Locale &rLocale,
 
     sal_Int32 nLen = rSvcImplNames.getLength();
     if (0 == nLen)
-        // remove entry
+        
         aSvcMap.erase( nLanguage );
     else
     {
-        // modify/add entry
+        
         LangSvcEntries_Hyph *pEntry = aSvcMap[ nLanguage ].get();
         if (pEntry)
         {
@@ -697,7 +697,7 @@ Sequence< OUString >
 
     Sequence< OUString > aRes;
 
-    // search for entry with that language and use data from that
+    
     sal_Int16 nLanguage = LinguLocaleToLanguage( rLocale );
     const HyphSvcByLangMap_t::const_iterator  aIt( aSvcMap.find( nLanguage ) );
     const LangSvcEntries_Hyph       *pEntry = aIt != aSvcMap.end() ? aIt->second.get() : NULL;

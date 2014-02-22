@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,7 +46,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     {
         BackendImpl * getMyBackend() const;
 
-        // Package
+        
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<dp_misc::AbortChannel> const & abortChannel,
@@ -76,7 +76,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     typedef ::boost::unordered_map< OUString, Reference<XInterface>,
                              OUStringHash > t_string2object;
 
-    // PackageRegistryBackend
+    
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
         OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv );
@@ -91,7 +91,7 @@ public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
 
-    // XPackageRegistry
+    
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
@@ -138,7 +138,7 @@ bool BackendImpl::hasActiveEntry(OUString const & url)
 }
 
 
-// XPackageRegistry
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -154,7 +154,7 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
         m_backendDb->removeEntry(url);
 }
 
-// PackageRegistryBackend
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
@@ -192,15 +192,15 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 
 
 
-// Package
+
 BackendImpl * BackendImpl::ExecutablePackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
     if (NULL == pBackend)
     {
-        //May throw a DisposedException
+        
         check();
-        //We should never get here...
+        
         throw RuntimeException( "Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<ExecutablePackageImpl *>(this)));
     }
@@ -236,7 +236,7 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
             return;
         }
         sal_uInt64 attributes = 0;
-        //Setting the executable attribut does not affect executables on Windows
+        
         if (getFileAttributes(attributes))
         {
             if(getMyBackend()->m_context == "user")
@@ -245,11 +245,11 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
                 attributes |= (osl_File_Attribute_OwnExe | osl_File_Attribute_GrpExe
                                | osl_File_Attribute_OthExe);
             else if (!(getMyBackend()->m_context == "bundled"))
-                //Bundled extension are required to be in the properly
-                //installed. That is an executable must have the right flags
+                
+                
                 OSL_ASSERT(false);
 
-            //This won't have affect on Windows
+            
             osl::File::setAttributes(
                     dp_misc::expandUnoRcUrl(m_url), attributes);
         }
@@ -261,10 +261,10 @@ void BackendImpl::ExecutablePackageImpl::processPackage_(
     }
 }
 
-//We currently cannot check if this XPackage represents a content of a particular extension
-//But we can check if we are within $UNO_USER_PACKAGES_CACHE etc.
-//Done for security reasons. For example an extension manifest could contain a path to
-//an executable outside the extension.
+
+
+
+
 bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
 {
     bool bSuccess = false;
@@ -277,7 +277,7 @@ bool BackendImpl::ExecutablePackageImpl::isUrlTargetInExtension()
         sExtensionDir = dp_misc::expandUnoRcTerm("$BUNDLED_EXTENSIONS");
     else
         OSL_ASSERT(false);
-    //remove file ellipses
+    
     if (osl::File::E_None == osl::File::getAbsoluteFileURL(OUString(), sExtensionDir, sExtensionDir))
     {
         OUString sFile;
@@ -310,7 +310,7 @@ bool BackendImpl::ExecutablePackageImpl::getFileAttributes(sal_uInt64& out_Attri
 
 
 
-} // anon namespace
+} 
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
@@ -319,9 +319,9 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.executable.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
-} // namespace component
-} // namespace backend
-} // namespace dp_registry
+} 
+} 
+} 
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

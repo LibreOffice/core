@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "accessibility/extended/AccessibleGridControlHeader.hxx"
@@ -24,7 +24,7 @@
 #include <comphelper/servicehelper.hxx>
 
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -37,11 +37,11 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::svt;
 using namespace ::svt::table;
 
-// ============================================================================
+
 
 namespace accessibility {
 
-// ============================================================================
+
 
 AccessibleGridControlHeader::AccessibleGridControlHeader(
         const Reference< XAccessible >& rxParent,
@@ -57,7 +57,7 @@ AccessibleGridControlHeader::~AccessibleGridControlHeader()
 {
 }
 
-// XAccessibleContext ---------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleGridControlHeader::getAccessibleChild( sal_Int32 nChildIndex )
@@ -92,7 +92,7 @@ sal_Int32 SAL_CALL AccessibleGridControlHeader::getAccessibleIndexInParent()
          return 0;
 }
 
-// XAccessibleComponent -------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL
 AccessibleGridControlHeader::getAccessibleAtPoint( const awt::Point& rPoint )
@@ -115,17 +115,17 @@ void SAL_CALL AccessibleGridControlHeader::grabFocus()
     throw ( uno::RuntimeException )
 {
     ensureIsAlive();
-    // focus on header not supported
+    
 }
 
 Any SAL_CALL AccessibleGridControlHeader::getAccessibleKeyBinding()
     throw ( uno::RuntimeException )
 {
     ensureIsAlive();
-    return Any();   // no special key bindings for header
+    return Any();   
 }
 
-// XAccessibleTable -----------------------------------------------------------
+
 
 OUString SAL_CALL AccessibleGridControlHeader::getAccessibleRowDescription( sal_Int32 nRow )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
@@ -134,7 +134,7 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleRowDescription( sal_
 
     ensureIsAlive();
     ensureIsValidRow( nRow );
-    return OUString();  // no headers in headers
+    return OUString();  
 }
 
 OUString SAL_CALL AccessibleGridControlHeader::getAccessibleColumnDescription( sal_Int32 nColumn )
@@ -144,7 +144,7 @@ OUString SAL_CALL AccessibleGridControlHeader::getAccessibleColumnDescription( s
 
     ensureIsAlive();
     ensureIsValidColumn( nColumn );
-    return OUString();  // no headers in headers
+    return OUString();  
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibleRowHeaders()
@@ -153,7 +153,7 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
     SolarMutexGuard g;
 
     ensureIsAlive();
-    return NULL;        // no headers in headers
+    return NULL;        
 }
 
 Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibleColumnHeaders()
@@ -162,43 +162,43 @@ Reference< XAccessibleTable > SAL_CALL AccessibleGridControlHeader::getAccessibl
     SolarMutexGuard g;
 
     ensureIsAlive();
-    return NULL;        // no headers in headers
+    return NULL;        
 }
-//not selectable
+
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibleRows()
     throw ( uno::RuntimeException )
 {
     Sequence< sal_Int32 > aSelSeq(0);
     return aSelSeq;
 }
-//columns aren't selectable
+
 Sequence< sal_Int32 > SAL_CALL AccessibleGridControlHeader::getSelectedAccessibleColumns()
     throw ( uno::RuntimeException )
 {
     Sequence< sal_Int32 > aSelSeq(0);
     return aSelSeq;
 }
-//row headers not selectable
+
 sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleRowSelected( sal_Int32 /*nRow*/ )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     return sal_False;
 }
-//columns aren't selectable
+
 sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleColumnSelected( sal_Int32 nColumn )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     (void)nColumn;
     return sal_False;
 }
-//not implemented
+
 Reference< XAccessible > SAL_CALL AccessibleGridControlHeader::getAccessibleCellAt(
         sal_Int32 /*nRow*/, sal_Int32 /*nColumn*/ )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
 {
     return NULL;
 }
-// not selectable
+
 sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
         sal_Int32 /*nRow*/, sal_Int32 /*nColumn */)
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException )
@@ -206,7 +206,7 @@ sal_Bool SAL_CALL AccessibleGridControlHeader::isAccessibleSelected(
     return sal_False;
 }
 
-// XServiceInfo ---------------------------------------------------------------
+
 
 OUString SAL_CALL AccessibleGridControlHeader::getImplementationName()
     throw ( uno::RuntimeException )
@@ -225,7 +225,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleGridControlHeader::getImplementationId()
     return theAccessibleGridControlHeaderImplementationId::get().getSeq();
 }
 
-// internal virtual methods ---------------------------------------------------
+
 
 Rectangle AccessibleGridControlHeader::implGetBoundingBox()
 {
@@ -259,7 +259,7 @@ sal_Int32 AccessibleGridControlHeader::implGetColumnCount() const
     return 1;
 }
 
-// internal helper methods ----------------------------------------------------
+
 
 Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
         sal_Int32 nRow, sal_uInt32 nColumnPos )
@@ -278,10 +278,10 @@ Reference< XAccessible > AccessibleGridControlHeader::implGetChild(
     return xChild;
 }
 
-// ============================================================================
 
-} // namespace accessibility
 
-// ============================================================================
+} 
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

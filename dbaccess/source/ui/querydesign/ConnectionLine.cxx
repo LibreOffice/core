@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ConnectionLine.hxx"
@@ -109,7 +109,7 @@ namespace
     }
 }
 
-// class OConnectionLine
+
 OConnectionLine::OConnectionLine( OTableConnection* _pConn, OConnectionLineDataRef _pLineData )
     : m_pTabConn( _pConn )
      ,m_pData( _pLineData )
@@ -130,9 +130,9 @@ OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
 {
     if( &rLine != this )
     {
-        // as the data does not belong to me, I don't delete the old one
+        
         m_pData->CopyFrom(*rLine.GetData());
-            // CopyFrom is virtual, therefore it is not a problem, if m_pData is of a type derived from OTableConnectionData
+            
 
         m_pTabConn = rLine.m_pTabConn;
         m_aSourceConnPos = rLine.m_aSourceConnPos;
@@ -146,7 +146,7 @@ OConnectionLine& OConnectionLine::operator=( const OConnectionLine& rLine )
 
 Rectangle OConnectionLine::GetBoundingRect()
 {
-    // determine surrounding rectangle
+    
     Rectangle aBoundingRect( Point(0,0), Point(0,0) );
     if( !IsValid() )
         return aBoundingRect;
@@ -178,7 +178,7 @@ Rectangle OConnectionLine::GetBoundingRect()
 
     const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
-    // line proceeds in in z-Form
+    
     if( pSourceWin == pDestWin || std::abs(m_aSourceConnPos.X() - m_aDestConnPos.X()) > std::abs(m_aSourceDescrLinePos.X() - m_aDestDescrLinePos.X()) )
     {
         aTopLeft.X() -= DESCRIPT_LINE_WIDTH;
@@ -206,7 +206,7 @@ void calcPointX2(const OTableWindow* _pWin,Point& _rNewConPos,Point& _rNewDescrP
 
 sal_Bool OConnectionLine::RecalcLine()
 {
-    // Windows and entries must be set
+    
     const OTableWindow* pSourceWin = m_pTabConn->GetSourceWin();
     const OTableWindow* pDestWin = m_pTabConn->GetDestWin();
 
@@ -216,7 +216,7 @@ sal_Bool OConnectionLine::RecalcLine()
     SvTreeListEntry* pSourceEntry = pSourceWin->GetListBox()->GetEntryFromText( GetData()->GetSourceFieldName() );
     SvTreeListEntry* pDestEntry = pDestWin->GetListBox()->GetEntryFromText( GetData()->GetDestFieldName() );
 
-    // determine X-coordinates
+    
     Point aSourceCenter( 0, 0 );
     Point aDestCenter( 0, 0 );
 
@@ -245,10 +245,10 @@ sal_Bool OConnectionLine::RecalcLine()
         calcPointX1(pFirstWin,*pFirstConPos,*pFirstDescrPos);
     calcPointX2(pSecondWin,*pSecondConPos,*pSecondDescrPos);
 
-    // determine aSourceConnPosY
+    
     calcPointsYValue(pSourceWin,pSourceEntry,m_aSourceConnPos,m_aSourceDescrLinePos);
 
-    // determine aDestConnPosY
+    
     calcPointsYValue(pDestWin,pDestEntry,m_aDestConnPos,m_aDestDescrLinePos);
 
     return sal_True;
@@ -258,11 +258,11 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
 {
     const sal_uInt16 nRectSize = 3;
 
-    // calculate new dimension
+    
     if( !RecalcLine() )
         return;
 
-    // draw lines
+    
     if (m_pTabConn->IsSelected())
         pOutDev->SetLineColor(Application::GetSettings().GetStyleSettings().GetHighlightColor());
     else
@@ -278,7 +278,7 @@ void OConnectionLine::Draw( OutputDevice* pOutDev )
     aPoly.Insert(3,m_aDestDescrLinePos);
     pOutDev->DrawPolyLine(aPoly,aLineInfo);
 
-    // draw the connection rectangles
+    
     pOutDev->SetFillColor(Application::GetSettings().GetStyleSettings().GetWindowColor());
 
     Point aVector(nRectSize,nRectSize);

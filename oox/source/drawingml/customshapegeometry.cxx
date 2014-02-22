@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/customshapegeometry.hxx"
@@ -122,7 +122,7 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
             }
             else
             {
-                // ups... we should have an index here and not the formula name
+                
             }
         }
         break;
@@ -140,7 +140,7 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
             }
             else
             {
-                // ups... we should have an index here and not the formula name
+                
             }
         }
         break;
@@ -220,7 +220,7 @@ OUString GetFormulaParameter( const EnhancedCustomShapeParameter& rParameter )
     return aRet;
 }
 
-// ---------------------------------------------------------------------
+
 
 static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCustomShapeProperties, const OUString& rValue, bool bNoSymbols = true )
 {
@@ -231,7 +231,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
         sal_Int32   nConstant = -1;
         sal_Int32   nIntVal = 0;
 
-        // first check if it's a constant value
+        
         switch( AttributeConversion::decodeToken( rValue ) )
         {
             case XML_3cd4 : nConstant = 270 * 60000; break;
@@ -243,7 +243,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             case XML_cd4  : nConstant =  90 * 60000; break;
             case XML_cd8  : nConstant =  45 * 60000; break;
 
-            case XML_b :    // variable height of the shape defined in spPr
+            case XML_b :    
             case XML_h :
             {
                 if ( bNoSymbols )
@@ -256,25 +256,25 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                     aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
                 }
                 else
-                    aRet.Type = EnhancedCustomShapeParameterType::LOGHEIGHT;   // TODO: HEIGHT needs to be implemented
+                    aRet.Type = EnhancedCustomShapeParameterType::LOGHEIGHT;   
             }
             break;
 
 
-            case XML_hd10 :   // !!PASSTHROUGH INTENDED
-                nIntVal += 2; // */ h 1.0 10.0
-            case XML_hd8 :    // */ h 1.0 8.0
+            case XML_hd10 :   
+                nIntVal += 2; 
+            case XML_hd8 :    
                 nIntVal += 2;
-            case XML_hd6 :    // */ h 1.0 6.0
+            case XML_hd6 :    
                 nIntVal++;
-            case XML_hd5 :    // */ h 1.0 5.0
+            case XML_hd5 :    
                 nIntVal++;
-            case XML_hd4 :    // */ h 1.0 4.0
+            case XML_hd4 :    
                 nIntVal++;
-            case XML_hd3 :    // */ h 1.0 3.0
+            case XML_hd3 :    
                 nIntVal++;
-            case XML_hd2 :    // */ h 1.0 2.0
-            case XML_vc :     // */ h 1.0 2.0
+            case XML_hd2 :    
+            case XML_vc :     
             {
                 nIntVal += 2;
 
@@ -295,7 +295,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             break;
 
-            case XML_ls :   // longest side: max w h
+            case XML_ls :   
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
@@ -305,7 +305,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
             }
             break;
-            case XML_ss :   // shortest side: min w h
+            case XML_ss :   
             {
                 CustomShapeGuide aGuide;
                 aGuide.maName = rValue;
@@ -315,17 +315,17 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                 aRet.Type = EnhancedCustomShapeParameterType::EQUATION;
             }
             break;
-            case XML_ssd32 : // */ ss 1.0 32.0
+            case XML_ssd32 : 
                 nIntVal += 16;
-            case XML_ssd16 : // */ ss 1.0 16.0
+            case XML_ssd16 : 
                 nIntVal += 8;
-            case XML_ssd8 :  // */ ss 1.0 8.0
+            case XML_ssd8 :  
                 nIntVal += 2;
-            case XML_ssd6 :  // */ ss 1.0 6.0
+            case XML_ssd6 :  
                 nIntVal += 2;
-            case XML_ssd4 :  // */ ss 1.0 4.0
+            case XML_ssd4 :  
                 nIntVal += 2;
-            case XML_ssd2 :  // */ ss 1.0 2.0
+            case XML_ssd2 :  
             {
                 nIntVal += 2;
 
@@ -338,7 +338,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             break;
 
-            case XML_r :    // variable width of the shape defined in spPr
+            case XML_r :    
             case XML_w :
             {
                 if ( bNoSymbols )
@@ -355,24 +355,24 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
             }
             break;
 
-            case XML_wd32 : // */ w 1.0 32.0
+            case XML_wd32 : 
                 nIntVal += 20;
-            case XML_wd12 : // */ w 1.0 12.0
+            case XML_wd12 : 
                 nIntVal += 2;
-            case XML_wd10 : // */ w 1.0 10.0
+            case XML_wd10 : 
                 nIntVal += 2;
-            case XML_wd8 :  // */ w 1.0 8.0
+            case XML_wd8 :  
                 nIntVal += 2;
-            case XML_wd6 :  // */ w 1.0 6.0
+            case XML_wd6 :  
                 nIntVal++;
-            case XML_wd5 :  // */ w 1.0 5.0
+            case XML_wd5 :  
                 nIntVal++;
-            case XML_wd4 :  // */ w 1.0 4.0
+            case XML_wd4 :  
                 nIntVal++;
-            case XML_wd3 :  // */ w 1.0 3.0
+            case XML_wd3 :  
                 nIntVal++;
-            case XML_hc :   // */ w 1.0 2.0
-            case XML_wd2 :  // */ w 1.0 2.0
+            case XML_hc :   
+            case XML_wd2 :  
             {
                 nIntVal += 2;
 
@@ -405,7 +405,7 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
                     n = rValue[ 1 ];
             }
             if ( ( n >= '0' ) && ( n <= '9' ) )
-            {   // seems to be a ST_Coordinate
+            {   
                 aRet.Value = Any( (sal_Int32)(rValue.toInt32() ) );
                 aRet.Type = EnhancedCustomShapeParameterType::NORMAL;
             }
@@ -437,8 +437,8 @@ static EnhancedCustomShapeParameter GetAdjCoordinate( CustomShapeProperties& rCu
     return aRet;
 }
 
-// ---------------------------------------------------------------------
-// CT_GeomGuideList
+
+
 class GeomGuideListContext : public ContextHandler2
 {
 public:
@@ -575,7 +575,7 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
                 break;
                 case FC_PIN :
                 {
-                    if ( nParameters == 3 ) // if(x-y,x,if(y-z,z,y))
+                    if ( nParameters == 3 ) 
                         aEquation = "if(" + sParameters[ 0 ] + "-" + sParameters[ 1 ]
                             + "," + sParameters[ 0 ] + ",if(" + sParameters[ 2 ]
                             + "-" + sParameters[ 1 ] + "," + sParameters[ 1 ]
@@ -625,7 +625,7 @@ static OUString convertToOOEquation( CustomShapeProperties& rCustomShapeProperti
 
 ContextHandlerRef GeomGuideListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    if ( aElementToken == A_TOKEN( gd ) )   // CT_GeomGuide
+    if ( aElementToken == A_TOKEN( gd ) )   
     {
         CustomShapeGuide aGuide;
         aGuide.maName = rAttribs.getString( XML_name ).get();
@@ -635,15 +635,15 @@ ContextHandlerRef GeomGuideListContext::onCreateContext( sal_Int32 aElementToken
     return this;
 }
 
-// ---------------------------------------------------------------------
+
 
 static const OUString GetGeomGuideName( const OUString& rValue )
 {
     return rValue;
 }
 
-// ---------------------------------------------------------------------
-// CT_AdjPoint2D
+
+
 class AdjPoint2DContext : public ContextHandler2
 {
 public:
@@ -657,8 +657,8 @@ AdjPoint2DContext::AdjPoint2DContext( ContextHandler2Helper& rParent, const Attr
     rAdjPoint2D.Second = GetAdjCoordinate( rCustomShapeProperties, rAttribs.getString( XML_y ).get(), true );
 }
 
-// ---------------------------------------------------------------------
-// CT_XYAdjustHandle
+
+
 class XYAdjustHandleContext : public ContextHandler2
 {
 public:
@@ -705,12 +705,12 @@ XYAdjustHandleContext::XYAdjustHandleContext( ContextHandler2Helper& rParent, co
 ContextHandlerRef XYAdjustHandleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pos ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_PolarAdjustHandle
+
+
 class PolarAdjustHandleContext : public ContextHandler2
 {
 public:
@@ -757,12 +757,12 @@ PolarAdjustHandleContext::PolarAdjustHandleContext( ContextHandler2Helper& rPare
 ContextHandlerRef PolarAdjustHandleContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pos ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandle.pos );   
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_AdjustHandleList
+
+
 class AdjustHandleListContext : public ContextHandler2
 {
 public:
@@ -783,13 +783,13 @@ AdjustHandleListContext::AdjustHandleListContext( ContextHandler2Helper& rParent
 
 ContextHandlerRef AdjustHandleListContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
-    if ( aElementToken == A_TOKEN( ahXY ) )         // CT_XYAdjustHandle
+    if ( aElementToken == A_TOKEN( ahXY ) )         
     {
         AdjustHandle aAdjustHandle( sal_False );
         mrAdjustHandleList.push_back( aAdjustHandle );
         return new XYAdjustHandleContext( *this, rAttribs, mrCustomShapeProperties, mrAdjustHandleList.back() );
     }
-    else if ( aElementToken == A_TOKEN( ahPolar ) ) // CT_PolarAdjustHandle
+    else if ( aElementToken == A_TOKEN( ahPolar ) ) 
     {
         AdjustHandle aAdjustHandle( sal_True );
         mrAdjustHandleList.push_back( aAdjustHandle );
@@ -798,8 +798,8 @@ ContextHandlerRef AdjustHandleListContext::onCreateContext( sal_Int32 aElementTo
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_ConnectionSite
+
+
 class ConnectionSiteContext : public ContextHandler2
 {
 public:
@@ -822,12 +822,12 @@ ConnectionSiteContext::ConnectionSiteContext( ContextHandler2Helper& rParent, co
 ContextHandlerRef ConnectionSiteContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pos ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrConnectionSite.pos ); // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrConnectionSite.pos ); 
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_Path2DMoveTo
+
+
 class Path2DMoveToContext : public ContextHandler2
 {
 public:
@@ -849,12 +849,12 @@ Path2DMoveToContext::Path2DMoveToContext( ContextHandler2Helper& rParent, Custom
 ContextHandlerRef Path2DMoveToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pt ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_Path2DLineTo
+
+
 class Path2DLineToContext : public ContextHandler2
 {
 public:
@@ -876,12 +876,12 @@ Path2DLineToContext::Path2DLineToContext( ContextHandler2Helper& rParent, Custom
 ContextHandlerRef Path2DLineToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pt ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, mrAdjPoint2D );     
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_Path2DQuadBezierTo
+
+
 class Path2DQuadBezierToContext : public ContextHandler2
 {
 public:
@@ -910,12 +910,12 @@ Path2DQuadBezierToContext::Path2DQuadBezierToContext( ContextHandler2Helper& rPa
 ContextHandlerRef Path2DQuadBezierToContext::onCreateContext( sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     if ( aElementToken == A_TOKEN( pt ) )
-        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 ); // CT_AdjPoint2D
+        return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties, nCount++ ? mrPt2 : mrPt1 ); 
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_Path2DCubicBezierTo
+
+
 class Path2DCubicBezierToContext : public ContextHandler2
 {
 public:
@@ -948,12 +948,12 @@ ContextHandlerRef Path2DCubicBezierToContext::onCreateContext( sal_Int32 aElemen
 {
     if ( aElementToken == A_TOKEN( pt ) )
         return new AdjPoint2DContext( *this, rAttribs, mrCustomShapeProperties,
-            nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1 );   // CT_AdjPoint2D
+            nCount++ ? nCount == 2 ? mrControlPt2 : mrEndPt : mrControlPt1 );   
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_Path2DContext
+
+
 class Path2DContext : public ContextHandler2
 {
 public:
@@ -1026,7 +1026,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
     {
         case A_TOKEN( close ) :
         {
-            // ignore close after move to (ppt does seems to do the same, see accentCallout2 preset for example)
+            
             if ( mrSegments.empty() || ( mrSegments.back().Command != EnhancedCustomShapeSegmentCommand::MOVETO ) ) {
                 EnhancedCustomShapeSegment aNewSegment;
                 aNewSegment.Command = EnhancedCustomShapeSegmentCommand::CLOSESUBPATH;
@@ -1063,7 +1063,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
             return new Path2DLineToContext( *this, mrCustomShapeProperties, mrPath2D.parameter.back() );
         }
         break;
-        case A_TOKEN( arcTo ) : // CT_Path2DArcTo
+        case A_TOKEN( arcTo ) : 
         {
             if ( !mrSegments.empty() && ( mrSegments.back().Command == EnhancedCustomShapeSegmentCommand::ARCANGLETO ) )
                 mrSegments.back().Count++;
@@ -1084,7 +1084,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
             CustomShapeGuide aGuide;
             sal_Int32 nArcNum = mrCustomShapeProperties.getArcNum();
 
-            // start angle
+            
             aGuide.maName = "arctosa" + OUString::number( nArcNum );
             aGuide.maFormula = "("
                 + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_stAng ).get() ) )
@@ -1092,7 +1092,7 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
             aAngles.First.Value = Any( CustomShapeProperties::SetCustomShapeGuideValue( mrCustomShapeProperties.getGuideList(), aGuide ) );
             aAngles.First.Type = EnhancedCustomShapeParameterType::EQUATION;
 
-            // swing angle
+            
             aGuide.maName = "arctosw" + OUString::number( nArcNum );
             aGuide.maFormula = "("
                 + GetFormulaParameter( GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_swAng ).get() ) )
@@ -1151,8 +1151,8 @@ ContextHandlerRef Path2DContext::onCreateContext( sal_Int32 aElementToken,
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_Path2DList
+
+
 class Path2DListContext : public ContextHandler2
 {
 public:
@@ -1188,8 +1188,8 @@ ContextHandlerRef Path2DListContext::onCreateContext( sal_Int32 aElementToken, c
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_CustomGeometry2D
+
+
 CustomShapeGeometryContext::CustomShapeGeometryContext( ContextHandler2Helper& rParent, const AttributeList& /* rAttribs */, CustomShapeProperties& rCustomShapeProperties )
 : ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -1200,15 +1200,15 @@ ContextHandlerRef CustomShapeGeometryContext::onCreateContext( sal_Int32 aElemen
 {
     switch( aElementToken )
     {
-        case A_TOKEN( avLst ):          // CT_GeomGuideList adjust value list
+        case A_TOKEN( avLst ):          
             return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustmentGuideList() );
-        case A_TOKEN( gdLst ):          // CT_GeomGuideList guide list
+        case A_TOKEN( gdLst ):          
             return new GeomGuideListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getGuideList() );
-        case A_TOKEN( ahLst ):          // CT_AdjustHandleList adjust handle list
+        case A_TOKEN( ahLst ):          
             return new AdjustHandleListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getAdjustHandleList() );
-        case A_TOKEN( cxnLst ):         // CT_ConnectionSiteList connection site list
+        case A_TOKEN( cxnLst ):         
             return this;
-        case A_TOKEN( rect ):           // CT_GeomRectList geometry rect list
+        case A_TOKEN( rect ):           
         {
             GeomRect aGeomRect;
             aGeomRect.l = GetAdjCoordinate( mrCustomShapeProperties, rAttribs.getString( XML_l ).get(), true );
@@ -1218,11 +1218,11 @@ ContextHandlerRef CustomShapeGeometryContext::onCreateContext( sal_Int32 aElemen
             mrCustomShapeProperties.getTextRect() = aGeomRect;
         }
         break;
-        case A_TOKEN( pathLst ):        // CT_Path2DList 2d path list
+        case A_TOKEN( pathLst ):        
             return new Path2DListContext( *this, mrCustomShapeProperties, mrCustomShapeProperties.getSegments(), mrCustomShapeProperties.getPath2DList() );
 
-        // from cxnLst:
-        case A_TOKEN( cxn ):                // CT_ConnectionSite
+        
+        case A_TOKEN( cxn ):                
         {
             ConnectionSite aConnectionSite;
             mrCustomShapeProperties.getConnectionSiteList().push_back( aConnectionSite );
@@ -1232,8 +1232,8 @@ ContextHandlerRef CustomShapeGeometryContext::onCreateContext( sal_Int32 aElemen
     return 0;
 }
 
-// ---------------------------------------------------------------------
-// CT_PresetGeometry2D
+
+
 PresetShapeGeometryContext::PresetShapeGeometryContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties )
 : ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )
@@ -1251,8 +1251,8 @@ ContextHandlerRef PresetShapeGeometryContext::onCreateContext( sal_Int32 aElemen
         return this;
 }
 
-// ---------------------------------------------------------------------
-// CT_PresetTextShape
+
+
 PresetTextShapeContext::PresetTextShapeContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs, CustomShapeProperties& rCustomShapeProperties )
 : ContextHandler2( rParent )
 , mrCustomShapeProperties( rCustomShapeProperties )

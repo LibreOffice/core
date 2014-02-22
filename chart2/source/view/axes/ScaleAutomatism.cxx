@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ScaleAutomatism.hxx"
@@ -56,7 +56,7 @@ void lcl_ensureMaximumSubIncrementCount( sal_Int32& rnSubIntervalCount )
         rnSubIntervalCount = MAXIMUM_SUB_INCREMENT_COUNT;
 }
 
-}//end anonymous namespace
+}
 
 ExplicitScaleData::ExplicitScaleData()
     : Minimum(0.0)
@@ -124,7 +124,7 @@ void ScaleAutomatism::setAutoScalingOptions(
         bool bExpandWideValuesToZero,
         bool bExpandNarrowValuesTowardZero )
 {
-    // if called multiple times, enable an option, if it is set in at least one call
+    
     m_bExpandBorderToIncrementRhythm |= bExpandBorderToIncrementRhythm;
     m_bExpandIfValuesCloseToBorder   |= bExpandIfValuesCloseToBorder;
     m_bExpandWideValuesToZero        |= bExpandWideValuesToZero;
@@ -137,7 +137,7 @@ void ScaleAutomatism::setAutoScalingOptions(
 void ScaleAutomatism::setMaximumAutoMainIncrementCount( sal_Int32 nMaximumAutoMainIncrementCount )
 {
     if( nMaximumAutoMainIncrementCount < 2 )
-        m_nMaximumAutoMainIncrementCount = 2; //#i82006
+        m_nMaximumAutoMainIncrementCount = 2; 
     else if( nMaximumAutoMainIncrementCount > lcl_getMaximumAutoIncrementCount( m_aSourceScale.AxisType ) )
         m_nMaximumAutoMainIncrementCount = lcl_getMaximumAutoIncrementCount( m_aSourceScale.AxisType );
     else
@@ -152,7 +152,7 @@ void ScaleAutomatism::setAutomaticTimeResolution( sal_Int32 nTimeResolution )
 void ScaleAutomatism::calculateExplicitScaleAndIncrement(
         ExplicitScaleData& rExplicitScale, ExplicitIncrementData& rExplicitIncrement ) const
 {
-    // fill explicit scale
+    
     rExplicitScale.Orientation = m_aSourceScale.Orientation;
     rExplicitScale.Scaling = m_aSourceScale.Scaling;
     rExplicitScale.AxisType = m_aSourceScale.AxisType;
@@ -162,7 +162,7 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
     bool bAutoMaximum = !(m_aSourceScale.Maximum >>= rExplicitScale.Maximum);
     bool bAutoOrigin = !(m_aSourceScale.Origin >>= rExplicitScale.Origin);
 
-    // automatic scale minimum
+    
     if( bAutoMinimum )
     {
         if( m_aSourceScale.AxisType==AxisType::PERCENT )
@@ -170,15 +170,15 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
         else if( ::rtl::math::isNan( m_fValueMinimum ) )
         {
             if( m_aSourceScale.AxisType==AxisType::DATE )
-                rExplicitScale.Minimum = 36526.0; //1.1.2000
+                rExplicitScale.Minimum = 36526.0; 
             else
-                rExplicitScale.Minimum = 0.0;   //@todo get Minimum from scaling or from plotter????
+                rExplicitScale.Minimum = 0.0;   
         }
         else
             rExplicitScale.Minimum = m_fValueMinimum;
     }
 
-    // automatic scale maximum
+    
     if( bAutoMaximum )
     {
         if( m_aSourceScale.AxisType==AxisType::PERCENT )
@@ -186,20 +186,20 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
         else if( ::rtl::math::isNan( m_fValueMaximum ) )
         {
             if( m_aSourceScale.AxisType==AxisType::DATE )
-                rExplicitScale.Maximum = 40179.0; //1.1.2010
+                rExplicitScale.Maximum = 40179.0; 
             else
-                rExplicitScale.Maximum = 10.0;  //@todo get Maximum from scaling or from plotter????
+                rExplicitScale.Maximum = 10.0;  
         }
         else
             rExplicitScale.Maximum = m_fValueMaximum;
     }
 
-    //fill explicit increment
+    
 
     rExplicitScale.ShiftedCategoryPosition = m_aSourceScale.ShiftedCategoryPosition;
     bool bIsLogarithm = false;
 
-    //minimum and maximum of the ExplicitScaleData may be changed if allowed
+    
     if( m_aSourceScale.AxisType==AxisType::DATE )
         calculateExplicitIncrementAndScaleForDateTimeAxis( rExplicitScale, rExplicitIncrement, bAutoMinimum, bAutoMaximum );
     else if( m_aSourceScale.AxisType==AxisType::CATEGORY || m_aSourceScale.AxisType==AxisType::SERIES )
@@ -213,10 +213,10 @@ void ScaleAutomatism::calculateExplicitScaleAndIncrement(
             calculateExplicitIncrementAndScaleForLinear( rExplicitScale, rExplicitIncrement, bAutoMinimum, bAutoMaximum );
     }
 
-    // automatic origin
+    
     if( bAutoOrigin )
     {
-        // #i71415# automatic origin for logarithmic axis
+        
         double fDefaulOrigin = bIsLogarithm ? 1.0 : 0.0;
 
         if( fDefaulOrigin < rExplicitScale.Minimum )
@@ -243,28 +243,28 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
         ExplicitIncrementData& rExplicitIncrement,
         bool bAutoMinimum, bool bAutoMaximum ) const
 {
-    // no scaling for categories
+    
     rExplicitScale.Scaling.clear();
 
     if( rExplicitScale.ShiftedCategoryPosition )
         rExplicitScale.Maximum += 1.0;
 
-    // ensure that at least one category is visible
+    
     if( rExplicitScale.Maximum <= rExplicitScale.Minimum )
         rExplicitScale.Maximum = rExplicitScale.Minimum + 1.0;
 
-    // default increment settings
-    rExplicitIncrement.PostEquidistant = true;  // does not matter anyhow
-    rExplicitIncrement.Distance = 1.0;              // category axis always have a main increment of 1
-    rExplicitIncrement.BaseValue = 0.0;             // category axis always have a base of 0
+    
+    rExplicitIncrement.PostEquidistant = true;  
+    rExplicitIncrement.Distance = 1.0;              
+    rExplicitIncrement.BaseValue = 0.0;             
 
-    // automatic minimum and maximum
+    
     if( bAutoMinimum && m_bExpandBorderToIncrementRhythm )
         rExplicitScale.Minimum = EquidistantTickFactory::getMinimumAtIncrement( rExplicitScale.Minimum, rExplicitIncrement );
     if( bAutoMaximum && m_bExpandBorderToIncrementRhythm )
         rExplicitScale.Maximum = EquidistantTickFactory::getMaximumAtIncrement( rExplicitScale.Maximum, rExplicitIncrement );
 
-    //prevent performace killover
+    
     double fDistanceCount = ::rtl::math::approxFloor( (rExplicitScale.Maximum-rExplicitScale.Minimum) / rExplicitIncrement.Distance );
     if( static_cast< sal_Int32 >( fDistanceCount ) > MAXIMUM_MANUAL_INCREMENT_COUNT )
     {
@@ -273,7 +273,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
         rExplicitIncrement.Distance = ::rtl::math::approxCeil( (fMaximumCeil - fMinimumFloor) / MAXIMUM_MANUAL_INCREMENT_COUNT );
     }
 
-    //fill explicit sub increment
+    
     sal_Int32 nSubCount = m_aSourceScale.IncrementData.SubIncrements.getLength();
     for( sal_Int32 nN=0; nN<nSubCount; nN++ )
     {
@@ -281,14 +281,14 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
         const SubIncrement& rSubIncrement= m_aSourceScale.IncrementData.SubIncrements[nN];
         if(!(rSubIncrement.IntervalCount>>=aExplicitSubIncrement.IntervalCount))
         {
-            //scaling dependent
-            //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
+            
+            
             aExplicitSubIncrement.IntervalCount = 2;
         }
         lcl_ensureMaximumSubIncrementCount( aExplicitSubIncrement.IntervalCount );
         if(!(rSubIncrement.PostEquidistant>>=aExplicitSubIncrement.PostEquidistant))
         {
-            //scaling dependent
+            
             aExplicitSubIncrement.PostEquidistant = false;
         }
         rExplicitIncrement.SubIncrements.push_back(aExplicitSubIncrement);
@@ -300,7 +300,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         ExplicitIncrementData& rExplicitIncrement,
         bool bAutoMinimum, bool bAutoMaximum ) const
 {
-    // *** STEP 1: initialize the range data ***
+    
 
     const double fInputMinimum = rExplicitScale.Minimum;
     const double fInputMaximum = rExplicitScale.Maximum;
@@ -308,8 +308,8 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
     double fSourceMinimum = rExplicitScale.Minimum;
     double fSourceMaximum = rExplicitScale.Maximum;
 
-    // set automatic PostEquidistant to true (maybe scaling dependent?)
-    // Note: scaling with PostEquidistant==false is untested and needs review
+    
+    
     if( !(m_aSourceScale.IncrementData.PostEquidistant >>= rExplicitIncrement.PostEquidistant) )
         rExplicitIncrement.PostEquidistant = true;
 
@@ -337,7 +337,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         is still allowed. */
     if( fSourceMinimum > fSourceMaximum )
     {
-        // force changing the maximum, if both limits are fixed
+        
         if( bAutoMaximum || !bAutoMinimum )
             fSourceMaximum = fSourceMinimum;
         else
@@ -359,7 +359,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         ::std::swap( bAutoMinimum, bAutoMaximum );
     }
 
-    // *** STEP 2: find temporary (unrounded) axis minimum and maximum ***
+    
 
     double fTempMinimum = fSourceMinimum;
     double fTempMaximum = fSourceMaximum;
@@ -376,7 +376,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             minimum to 0, which results in B^0=1 on the axis. */
         double fMinimumFloor = ::rtl::math::approxFloor( fTempMinimum );
         double fMaximumFloor = ::rtl::math::approxFloor( fTempMaximum );
-        // handle the exact value B^(n+1) to be in the range [B^n,B^(n+1)]
+        
         if( ::rtl::math::approxEqual( fTempMaximum, fMaximumFloor ) )
             fMaximumFloor -= 1.0;
 
@@ -401,16 +401,16 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         if( bAutoMinimum && (fTempMaximum > 0.0) )
             fTempMinimum = 0.0;
         else
-            fTempMaximum += 1.0;    // always add one interval, even if maximum is fixed
+            fTempMaximum += 1.0;    
     }
 
-    // *** STEP 3: calculate main interval size ***
+    
 
-    // base value (anchor position of the intervals), already scaled
+    
     if( !(m_aSourceScale.IncrementData.BaseValue >>= rExplicitIncrement.BaseValue) )
     {
-        //scaling dependent
-        //@maybe todo is this default also plotter dependent ??
+        
+        
         if( !bAutoMinimum )
             rExplicitIncrement.BaseValue = fTempMinimum;
         else if( !bAutoMaximum )
@@ -419,7 +419,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             rExplicitIncrement.BaseValue = 0.0;
     }
 
-    // calculate automatic interval
+    
     bool bAutoDistance = !(m_aSourceScale.IncrementData.Distance >>= rExplicitIncrement.Distance);
     if( bAutoDistance )
         rExplicitIncrement.Distance = 0.0;
@@ -429,14 +429,14 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
     sal_Int32 nMaxMainIncrementCount = bAutoDistance ?
         m_nMaximumAutoMainIncrementCount : MAXIMUM_MANUAL_INCREMENT_COUNT;
 
-    // repeat calculation until number of intervals are valid
+    
     bool bNeedIteration = true;
     bool bHasCalculatedDistance = false;
     while( bNeedIteration )
     {
         if( bAutoDistance )
         {
-            // first iteration: calculate interval size from axis limits
+            
             if( !bHasCalculatedDistance )
             {
                 double fMinimumFloor = ::rtl::math::approxFloor( fTempMinimum );
@@ -445,25 +445,25 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             }
             else
             {
-                // following iterations: increase distance
+                
                 rExplicitIncrement.Distance += 1.0;
             }
 
-            // for next iteration: distance calculated -> use else path to increase
+            
             bHasCalculatedDistance = true;
         }
 
-        // *** STEP 4: additional space above or below the data points ***
+        
 
         double fAxisMinimum = fTempMinimum;
         double fAxisMaximum = fTempMaximum;
 
-        // round to entire multiples of the distance and add additional space
+        
         if( bAutoMinimum && m_bExpandBorderToIncrementRhythm )
         {
             fAxisMinimum = EquidistantTickFactory::getMinimumAtIncrement( fAxisMinimum, rExplicitIncrement );
 
-            //ensure valid values after scaling #i100995#
+            
             if( !bAutoDistance )
             {
                 double fCheck = xInverseScaling->doScaling( fAxisMinimum );
@@ -479,7 +479,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         {
             fAxisMaximum = EquidistantTickFactory::getMaximumAtIncrement( fAxisMaximum, rExplicitIncrement );
 
-            //ensure valid values after scaling #i100995#
+            
             if( !bAutoDistance )
             {
                 double fCheck = xInverseScaling->doScaling( fAxisMaximum );
@@ -492,7 +492,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             }
         }
 
-        // set the resulting limits (swap back to negative range if needed)
+        
         if( bSwapAndNegateRange )
         {
             rExplicitScale.Minimum = -fAxisMaximum;
@@ -509,15 +509,15 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             calculate again with increased distance. */
         double fDistanceCount = ::rtl::math::approxFloor( (fAxisMaximum - fAxisMinimum) / rExplicitIncrement.Distance );
         bNeedIteration = static_cast< sal_Int32 >( fDistanceCount ) > nMaxMainIncrementCount;
-        // if manual distance is invalid, trigger automatic calculation
+        
         if( bNeedIteration )
             bAutoDistance = true;
 
-        // convert limits back to logarithmic scale
+        
         rExplicitScale.Minimum = xInverseScaling->doScaling( rExplicitScale.Minimum );
         rExplicitScale.Maximum = xInverseScaling->doScaling( rExplicitScale.Maximum );
 
-        //ensure valid values after scaling #i100995#
+        
         if( !::rtl::math::isFinite( rExplicitScale.Minimum ) || rExplicitScale.Minimum <= 0)
         {
             rExplicitScale.Minimum = fInputMinimum;
@@ -534,7 +534,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
             ::std::swap( rExplicitScale.Maximum, rExplicitScale.Minimum );
     }
 
-    //fill explicit sub increment
+    
     sal_Int32 nSubCount = m_aSourceScale.IncrementData.SubIncrements.getLength();
     for( sal_Int32 nN=0; nN<nSubCount; nN++ )
     {
@@ -542,14 +542,14 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLogarithmic(
         const SubIncrement& rSubIncrement = m_aSourceScale.IncrementData.SubIncrements[nN];
         if(!(rSubIncrement.IntervalCount>>=aExplicitSubIncrement.IntervalCount))
         {
-            //scaling dependent
-            //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
+            
+            
             aExplicitSubIncrement.IntervalCount = 9;
         }
         lcl_ensureMaximumSubIncrementCount( aExplicitSubIncrement.IntervalCount );
         if(!(rSubIncrement.PostEquidistant>>=aExplicitSubIncrement.PostEquidistant))
         {
-            //scaling dependent
+            
             aExplicitSubIncrement.PostEquidistant = false;
         }
         rExplicitIncrement.SubIncrements.push_back(aExplicitSubIncrement);
@@ -575,18 +575,18 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
 
     rExplicitScale.Scaling = new DateScaling(m_aNullDate,rExplicitScale.TimeResolution,false);
 
-    // choose min and max suitable to time resolution
+    
     switch( rExplicitScale.TimeResolution )
     {
     case DAY:
         if( rExplicitScale.ShiftedCategoryPosition )
-            aMaxDate++;//for explicit scales we need one interval more (maximum excluded)
+            aMaxDate++;
         break;
     case MONTH:
         aMinDate.SetDay(1);
         aMaxDate.SetDay(1);
         if( rExplicitScale.ShiftedCategoryPosition )
-            aMaxDate = DateHelper::GetDateSomeMonthsAway(aMaxDate,1);//for explicit scales we need one interval more (maximum excluded)
+            aMaxDate = DateHelper::GetDateSomeMonthsAway(aMaxDate,1);
         if( DateHelper::IsLessThanOneMonthAway( aMinDate, aMaxDate ) )
         {
             if( bAutoMaximum || !bAutoMinimum )
@@ -601,7 +601,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         aMaxDate.SetDay(1);
         aMaxDate.SetMonth(1);
         if( rExplicitScale.ShiftedCategoryPosition )
-            aMaxDate = DateHelper::GetDateSomeYearsAway(aMaxDate,1);//for explicit scales we need one interval more (maximum excluded)
+            aMaxDate = DateHelper::GetDateSomeYearsAway(aMaxDate,1);
         if( DateHelper::IsLessThanOneYearAway( aMinDate, aMaxDate ) )
         {
             if( bAutoMaximum || !bAutoMinimum )
@@ -612,7 +612,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         break;
     }
 
-    // set the resulting limits (swap back to negative range if needed)
+    
     rExplicitScale.Minimum = aMinDate - m_aNullDate;
     rExplicitScale.Maximum = aMaxDate - m_aNullDate;
 
@@ -624,7 +624,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
     if( nMaxMainIncrementCount > 1 )
         nMaxMainIncrementCount--;
 
-    //choose major time interval:
+    
     long nDayCount = (aMaxDate-aMinDate);
     long nMainIncrementCount = 1;
     if( !bAutoMajor )
@@ -637,10 +637,10 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         case DAY:
             break;
         case MONTH:
-            nIntervalDayCount*=31;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...
+            nIntervalDayCount*=31;
             break;
         case YEAR:
-            nIntervalDayCount*=365;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...
+            nIntervalDayCount*=365;
             break;
         }
         nMainIncrementCount = nDayCount/nIntervalDayCount;
@@ -655,12 +655,12 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         if( nIntervalDays>365 || YEAR==rExplicitScale.TimeResolution )
         {
             rExplicitIncrement.MajorTimeInterval.TimeUnit = YEAR;
-            nDaysPerInterval = 365.0;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...
+            nDaysPerInterval = 365.0;
         }
         else if( nIntervalDays>31 || MONTH==rExplicitScale.TimeResolution )
         {
             rExplicitIncrement.MajorTimeInterval.TimeUnit = MONTH;
-            nDaysPerInterval = 31.0;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...
+            nDaysPerInterval = 31.0;
         }
         else
         {
@@ -688,7 +688,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         nMainIncrementCount = static_cast<long>(nDayCount/(nNumer*nDaysPerInterval));
     }
 
-    //choose minor time interval:
+    
     if( !bAutoMinor )
     {
         if( rExplicitIncrement.MinorTimeInterval.TimeUnit > rExplicitIncrement.MajorTimeInterval.TimeUnit )
@@ -699,10 +699,10 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         case DAY:
             break;
         case MONTH:
-            nIntervalDayCount*=31;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...
+            nIntervalDayCount*=31;
             break;
         case YEAR:
-            nIntervalDayCount*=365;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...
+            nIntervalDayCount*=365;
             break;
         }
         if( nDayCount/nIntervalDayCount > nMaxMainIncrementCount )
@@ -753,12 +753,12 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
         ExplicitIncrementData& rExplicitIncrement,
         bool bAutoMinimum, bool bAutoMaximum ) const
 {
-    // *** STEP 1: initialize the range data ***
+    
 
     double fSourceMinimum = rExplicitScale.Minimum;
     double fSourceMaximum = rExplicitScale.Maximum;
 
-    // set automatic PostEquidistant to true (maybe scaling dependent?)
+    
     if( !(m_aSourceScale.IncrementData.PostEquidistant >>= rExplicitIncrement.PostEquidistant) )
         rExplicitIncrement.PostEquidistant = true;
 
@@ -767,7 +767,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
         is still allowed. */
     if( fSourceMinimum > fSourceMaximum )
     {
-        // force changing the maximum, if both limits are fixed
+        
         if( bAutoMaximum || !bAutoMinimum )
             fSourceMaximum = fSourceMinimum;
         else
@@ -789,7 +789,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
         ::std::swap( bAutoMinimum, bAutoMaximum );
     }
 
-    // *** STEP 2: find temporary (unrounded) axis minimum and maximum ***
+    
 
     double fTempMinimum = fSourceMinimum;
     double fTempMaximum = fSourceMaximum;
@@ -822,7 +822,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
     {
         if( bAutoMaximum || !bAutoMinimum )
         {
-            // change 0 to 1, otherwise double the value
+            
             if( fTempMaximum == 0.0 )
                 fTempMaximum = 1.0;
             else
@@ -830,7 +830,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
         }
         else
         {
-            // change 0 to -1, otherwise halve the value
+            
             if( fTempMinimum == 0.0 )
                 fTempMinimum = -1.0;
             else
@@ -838,9 +838,9 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
         }
     }
 
-    // *** STEP 3: calculate main interval size ***
+    
 
-    // base value (anchor position of the intervals)
+    
     if( !(m_aSourceScale.IncrementData.BaseValue >>= rExplicitIncrement.BaseValue) )
     {
         if( !bAutoMinimum )
@@ -851,7 +851,7 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
             rExplicitIncrement.BaseValue = 0.0;
     }
 
-    // calculate automatic interval
+    
     bool bAutoDistance = !(m_aSourceScale.IncrementData.Distance >>= rExplicitIncrement.Distance);
     /*  Restrict number of allowed intervals with user-defined distance to
         MAXIMUM_MANUAL_INCREMENT_COUNT. */
@@ -862,19 +862,19 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
     double fDistanceNormalized = 0.0;
     bool bHasNormalizedDistance = false;
 
-    // repeat calculation until number of intervals are valid
+    
     bool bNeedIteration = true;
     while( bNeedIteration )
     {
         if( bAutoDistance )
         {
-            // first iteration: calculate interval size from axis limits
+            
             if( !bHasNormalizedDistance )
             {
-                // raw size of an interval
+                
                 double fDistance = (fTempMaximum - fTempMinimum) / nMaxMainIncrementCount;
 
-                // if distance of is less than 1e-307, do not do anything
+                
                 if( fDistance <= 1.0e-307 )
                 {
                     fDistanceNormalized = 1.0;
@@ -882,17 +882,17 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
                 }
                 else if ( !rtl::math::isFinite(fDistance) )
                 {
-                    // fdo#43703: Handle values bigger than limits correctly
+                    
                     fDistanceNormalized = 1.0;
                     fDistanceMagnitude = std::numeric_limits<double>::max();
                 }
                 else
                 {
-                    // distance magnitude (a power of 10)
+                    
                     int nExponent = static_cast< int >( ::rtl::math::approxFloor( log10( fDistance ) ) );
                     fDistanceMagnitude = ::rtl::math::pow10Exp( 1.0, nExponent );
 
-                    // stick normalized distance to a few predefined values
+                    
                     fDistanceNormalized = fDistance / fDistanceMagnitude;
                     if( fDistanceNormalized <= 1.0 )
                         fDistanceNormalized = 1.0;
@@ -906,10 +906,10 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
                         fDistanceMagnitude *= 10;
                     }
                 }
-                // for next iteration: distance is normalized -> use else path to increase distance
+                
                 bHasNormalizedDistance = true;
             }
-            // following iterations: increase distance, use only allowed values
+            
             else
             {
                 if( fDistanceNormalized == 1.0 )
@@ -923,38 +923,38 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
                 }
             }
 
-            // set the resulting distance
+            
             rExplicitIncrement.Distance = fDistanceNormalized * fDistanceMagnitude;
         }
 
-        // *** STEP 4: additional space above or below the data points ***
+        
 
         double fAxisMinimum = fTempMinimum;
         double fAxisMaximum = fTempMaximum;
 
-        // round to entire multiples of the distance and add additional space
+        
         if( bAutoMinimum )
         {
-            // round to entire multiples of the distance, based on the base value
+            
             if( m_bExpandBorderToIncrementRhythm )
                 fAxisMinimum = EquidistantTickFactory::getMinimumAtIncrement( fAxisMinimum, rExplicitIncrement );
-            // additional space, if source minimum is to near at axis minimum
+            
             if( m_bExpandIfValuesCloseToBorder )
                 if( (fAxisMinimum != 0.0) && ((fAxisMaximum - fSourceMinimum) / (fAxisMaximum - fAxisMinimum) > 20.0 / 21.0) )
                     fAxisMinimum -= rExplicitIncrement.Distance;
         }
         if( bAutoMaximum )
         {
-            // round to entire multiples of the distance, based on the base value
+            
             if( m_bExpandBorderToIncrementRhythm )
                 fAxisMaximum = EquidistantTickFactory::getMaximumAtIncrement( fAxisMaximum, rExplicitIncrement );
-            // additional space, if source maximum is to near at axis maximum
+            
             if( m_bExpandIfValuesCloseToBorder )
                 if( (fAxisMaximum != 0.0) && ((fSourceMaximum - fAxisMinimum) / (fAxisMaximum - fAxisMinimum) > 20.0 / 21.0) )
                     fAxisMaximum += rExplicitIncrement.Distance;
         }
 
-        // set the resulting limits (swap back to negative range if needed)
+        
         if( bSwapAndNegateRange )
         {
             rExplicitScale.Minimum = -fAxisMaximum;
@@ -971,12 +971,12 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
             calculate again with increased distance. */
         double fDistanceCount = ::rtl::math::approxFloor( (fAxisMaximum - fAxisMinimum) / rExplicitIncrement.Distance );
         bNeedIteration = static_cast< sal_Int32 >( fDistanceCount ) > nMaxMainIncrementCount;
-        // if manual distance is invalid, trigger automatic calculation
+        
         if( bNeedIteration )
             bAutoDistance = true;
     }
 
-    //fill explicit sub increment
+    
     sal_Int32 nSubCount = m_aSourceScale.IncrementData.SubIncrements.getLength();
     for( sal_Int32 nN=0; nN<nSubCount; nN++ )
     {
@@ -984,20 +984,20 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForLinear(
         const SubIncrement& rSubIncrement= m_aSourceScale.IncrementData.SubIncrements[nN];
         if(!(rSubIncrement.IntervalCount>>=aExplicitSubIncrement.IntervalCount))
         {
-            //scaling dependent
-            //@todo autocalculate IntervalCount dependent on MainIncrement and scaling
+            
+            
             aExplicitSubIncrement.IntervalCount = 2;
         }
         lcl_ensureMaximumSubIncrementCount( aExplicitSubIncrement.IntervalCount );
         if(!(rSubIncrement.PostEquidistant>>=aExplicitSubIncrement.PostEquidistant))
         {
-            //scaling dependent
+            
             aExplicitSubIncrement.PostEquidistant = false;
         }
         rExplicitIncrement.SubIncrements.push_back(aExplicitSubIncrement);
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

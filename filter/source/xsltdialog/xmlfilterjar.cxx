@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/io/XActiveDataControl.hpp>
@@ -125,7 +125,7 @@ void XMLFilterJarHelper::addFile( Reference< XInterface > xRootFolder, Reference
     {
         OUString aFileURL( rSourceFile );
 
-        if( !aFileURL.matchIgnoreAsciiCase( OUString("file://") ) )
+        if( !aFileURL.matchIgnoreAsciiCase( OUString("file:
         {
             aFileURL = URIHelper::SmartRel2Abs( INetURLObject(sProgPath), aFileURL, Link(), false );
         }
@@ -145,12 +145,12 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
     {
         osl::File::remove( rPackageURL );
 
-        // create the package jar file
+        
 
         Sequence< Any > aArguments( 2 );
         aArguments[ 0 ] <<= rPackageURL;
 
-        // let ZipPackage be used ( no manifest.xml is required )
+        
         beans::NamedValue aArg;
         aArg.Name = "StorageFormat";
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
@@ -165,12 +165,12 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
         {
             Reference< XSingleServiceFactory > xFactory( xIfc, UNO_QUERY );
 
-            // get root zip folder
+            
             Reference< XInterface > xRootFolder;
             OUString szRootFolder("/");
             xIfc->getByHierarchicalName( szRootFolder ) >>= xRootFolder;
 
-            // export filters files
+            
             XMLFilterVector::const_iterator aIter( rFilters.begin() );
             while( aIter != rFilters.end() )
             {
@@ -189,8 +189,8 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                     }
                     catch(const com::sun::star::container::ElementExistException&)
                     {
-                    // in case of same named import / export XSLT the latter
-                    // is ignored
+                    
+                    
                         OSL_FAIL( "XMLFilterJarHelper::same named xslt filter exception!" );
                     }
 
@@ -201,7 +201,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
                 ++aIter;
             }
 
-            // create TypeDetection.xcu
+            
             utl::TempFile aTempFile;
             aTempFile.EnableKillingFile();
             OUString aTempFileURL( aTempFile.GetURL() );
@@ -244,12 +244,12 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
 {
     try
     {
-        // create the package jar file
+        
 
         Sequence< Any > aArguments( 2 );
         aArguments[ 0 ] <<= rPackageURL;
 
-        // let ZipPackage be used ( no manifest.xml is required )
+        
         beans::NamedValue aArg;
         aArg.Name = "StorageFormat";
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
@@ -264,7 +264,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
         {
             Reference< XSingleServiceFactory > xFactory( xIfc, UNO_QUERY );
 
-            // get root zip folder
+            
             Reference< XInterface > xRootFolder;
             OUString szRootFolder("/");
             xIfc->getByHierarchicalName( szRootFolder ) >>= xRootFolder;
@@ -282,8 +282,8 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
                     XMLFilterVector aFilters;
                     TypeDetectionImporter::doImport( mxContext, xIS, aFilters );
 
-                    // copy all files used by the filters imported from the
-                    // typedetection to office/user/xslt
+                    
+                    
                     XMLFilterVector::iterator aIter( aFilters.begin() );
                     while( aIter != aFilters.end() )
                     {
@@ -293,7 +293,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
                         }
                         else
                         {
-                            // failed to copy all files
+                            
                             delete (*aIter);
                         }
                         ++aIter;
@@ -349,7 +349,7 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
 
                 if( !rURL.isEmpty() )
                 {
-                    // create output directory if needed
+                    
                     if( !createDirectory( rURL ) )
                         return false;
 
@@ -359,7 +359,7 @@ bool XMLFilterJarHelper::copyFile( Reference< XHierarchicalNameAccess > xIfc, OU
                     if (::osl::FileBase::E_EXIST == rc) {
                         rc = file.open(osl_File_OpenFlag_Write);
                         if (::osl::FileBase::E_None == rc) {
-                            file.setSize(0); // #i97170# truncate
+                            file.setSize(0); 
                         }
                     }
                     if (::osl::FileBase::E_None != rc) {

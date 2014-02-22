@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,7 +35,7 @@ using namespace connectivity::mozab;
 NS_IMPL_THREADSAFE_ISUPPORTS1(connectivity::mozab::MQueryHelper,nsIAbDirectoryQueryResultListener)
 
 //
-// class MQueryHelperResultEntry
+
 //
 
 
@@ -84,7 +84,7 @@ void MQueryHelperResultEntry::setValue( const OString &key, const OUString & rVa
     m_Fields[ key ] = rValue;
 }
 //
-// class MQueryHelper
+
 //
 MQueryHelper::MQueryHelper()
     :m_nIndex( 0 )
@@ -92,7 +92,7 @@ MQueryHelper::MQueryHelper()
     ,m_bAtEnd( sal_False )
     ,m_bErrorCondition( sal_False )
     ,m_bQueryComplete( sal_False )
-    ,mRefCnt( 0 ) // NSISUPPORTS - Initialize RefCnt to 0
+    ,mRefCnt( 0 ) 
 {
     m_aResults.clear();
 #if OSL_DEBUG_LEVEL > 0
@@ -141,7 +141,7 @@ MQueryHelper::reset()
 void
 MQueryHelper::clearResultOrComplete()
 {
-    // Don't use a Mutex, it should be called by a method already holding it.
+    
     OSL_TRACE("In/Out : clearResultOrComplete()");
     m_aCondition.reset();
 }
@@ -156,12 +156,12 @@ MQueryHelper::notifyResultOrComplete()
 sal_Bool
 MQueryHelper::waitForResultOrComplete(  )
 {
-    TimeValue               timeValue = { 1, 0 };  // 20 Seconds 0 NanoSecond timeout
+    TimeValue               timeValue = { 1, 0 };  
     sal_Int32               times=0;
     osl::Condition::Result  rv = ::osl::Condition::result_ok;
 
     OSL_TRACE("In : waitForResultOrComplete()");
-    // Can't hold mutex or condition would never get set...
+    
     while( (m_aCondition.check() == sal_False || rv  == ::osl::Condition::result_error) && times < 20) {
         rv = m_aCondition.wait( &timeValue );
         times ++;
@@ -193,7 +193,7 @@ MQueryHelper::next( )
     index = m_nIndex;
     m_aMutex.release();
 
-    result = getByIndex( index + 1) ; // Add 1 as Row is numbered from 1 to N
+    result = getByIndex( index + 1) ; 
 
     if ( result ) {
         m_aMutex.acquire();
@@ -207,8 +207,8 @@ MQueryHelper::next( )
 MQueryHelperResultEntry*
 MQueryHelper::getByIndex( sal_uInt32 nRow )
 {
-    // Row numbers are from 1 to N, need to ensure this, and then
-    // substract 1
+    
+    
     if ( nRow < 1 ) {
         return( NULL );
     }
@@ -290,7 +290,7 @@ MQueryHelper::waitForRow( sal_Int32 rowNum )
     return( sal_True );
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Int32
 MQueryHelper::getResultCount() const
@@ -308,7 +308,7 @@ MQueryHelper::getResultCount() const
     }
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_uInt32
 MQueryHelper::getRealCount() const
@@ -317,7 +317,7 @@ MQueryHelper::getRealCount() const
     return static_cast<sal_Int32>(m_aResults.size());
 }
 
-// -------------------------------------------------------------------------
+
 NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -332,11 +332,11 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
         return NS_OK;
     }
 
-    // Get return status of executeQuery() call.
+    
     rv = result -> GetType(&resultType);
     NS_ENSURE_SUCCESS(rv, rv);
 
-    // Check for errors of the executeQuery() call.
+    
     switch ( resultType ) {
     case nsIAbDirectoryQueryResult::queryResultError:
         OSL_TRACE("\tresultType == nsIAbDirectoryQueryResult::queryResultError");
@@ -356,7 +356,7 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
         return NS_OK;
     case nsIAbDirectoryQueryResult::queryResultMatch:
         OSL_TRACE("IN MQueryHelper::OnQueryItem --> queryResultMatch");
-        // Don't return, continues onto rest of method.
+        
         break;
     default:
         OSL_TRACE("\t******** Unexpected : resultType");
@@ -364,7 +364,7 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
         return NS_OK;
     }
 
-    // Initialise an array that holds the resultset of the query.
+    
     nsCOMPtr<nsISupportsArray> properties;
     rv = result -> GetResult(getter_AddRefs (properties));
     NS_ENSURE_SUCCESS(rv, rv);
@@ -398,7 +398,7 @@ NS_IMETHODIMP MQueryHelper::OnQueryItem(nsIAbDirectoryQueryResult *result)
     return(NS_OK);
 }
 
-// -----------------------------------------------------------------------------
+
 void MQueryHelper::notifyQueryError()
 {
     m_bQueryComplete = sal_True ;
@@ -424,8 +424,8 @@ const char * getAddrURI(const nsIAbDirectory*  directory)
     }
 static NS_DEFINE_CID(kRDFServiceCID, NS_RDFSERVICE_CID);
 
-//Some address book does not support query uri on card
-//In this case, we can't resync the cards,  we just return the old cards
+
+
 nsIAbCard * getUpdatedCard( nsIAbCard*  card)
 {
     OSL_ENSURE(card != NULL, "getUpdatedCard for NULL");
@@ -489,7 +489,7 @@ sal_Int32 MQueryHelper::commitCard(const sal_uInt32 rowIndex,nsIAbDirectory * di
         if (!NS_FAILED(rv))
             resEntry->setCard(addedCard);
     }
-    //We return NS_ERROR_FILE_ACCESS_DENIED in the case the mozillaAB has been changed out side of our process
+    
     if (rv == NS_ERROR_FILE_ACCESS_DENIED )
         m_aError.setResId( STR_FOREIGN_PROCESS_CHANGED_AB );
 
@@ -537,7 +537,7 @@ sal_Int32 MQueryHelper::deleteCard(const sal_uInt32 rowIndex,nsIAbDirectory * di
 
     if (NS_SUCCEEDED(rv))
         resEntry->setRowStates(RowStates_Deleted);
-    //We return NS_ERROR_FILE_ACCESS_DENIED in the case the mozillaAB has been changed out side of our process
+    
     if (rv == NS_ERROR_FILE_ACCESS_DENIED )
         m_aError.setResId( STR_FOREIGN_PROCESS_CHANGED_AB );
     return !(NS_FAILED(rv));
@@ -591,13 +591,13 @@ sal_Bool MQueryHelper::resyncRow(sal_uInt32 rowIndex)
     getCardValues(card,rowIndex);
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 MQueryHelper::createNewCard()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     nsresult rv;
     nsCOMPtr <nsIAbCard> card = do_CreateInstance(NS_ABCARDPROPERTY_CONTRACTID, &rv);
-    //set default values
+    
       getCardValues(card);
     return static_cast<sal_Int32>(m_aResults.size());
 }

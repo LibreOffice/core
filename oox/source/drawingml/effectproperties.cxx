@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "oox/drawingml/effectproperties.hxx"
@@ -18,7 +18,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourceProps)
 {
@@ -37,7 +37,7 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
 {
     if (maShadow.moShadowDist.has())
     {
-        // Negative X or Y dist indicates left or up, respectively
+        
         double nAngle = (maShadow.moShadowDir.get(0) / PER_DEGREE) * F_PI180;
         sal_Int32 nDist = convertEmuToHmm(maShadow.moShadowDist.get(0));
         sal_Int32 nXDist = cos(nAngle) * nDist;
@@ -51,9 +51,9 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
     }
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

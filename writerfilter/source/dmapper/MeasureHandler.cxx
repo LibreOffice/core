@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <MeasureHandler.hxx>
 #include <PropertyMap.hxx>
@@ -50,10 +50,10 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
     (void)rName;
     switch( rName )
     {
-        case NS_ooxml::LN_CT_TblWidth_type:// = 90668;
+        case NS_ooxml::LN_CT_TblWidth_type:
         {
-            //can be: NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
-            //        NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
+            
+            
             m_nUnit = nIntValue;
 
             if (!m_aInteropGrabBagName.isEmpty())
@@ -71,14 +71,14 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
             }
         }
         break;
-        case NS_ooxml::LN_CT_Height_hRule: // 90666;
+        case NS_ooxml::LN_CT_Height_hRule: 
         {
             OUString sHeightType = rVal.getString();
             if ( sHeightType == "exact" )
                 m_nRowHeightSizeType = text::SizeType::FIX;
         }
         break;
-        case NS_ooxml::LN_CT_TblWidth_w:// = 90667;
+        case NS_ooxml::LN_CT_TblWidth_w:
             m_nMeasureValue = nIntValue;
             if (!m_aInteropGrabBagName.isEmpty())
             {
@@ -88,7 +88,7 @@ void MeasureHandler::lcl_attribute(Id rName, Value & rVal)
                 m_aInteropGrabBag.push_back(aValue);
             }
         break;
-        case NS_ooxml::LN_CT_Height_val: // 90665 -- a string value
+        case NS_ooxml::LN_CT_Height_val: 
         {
             m_nUnit = NS_ooxml::LN_Value_ST_TblWidth_dxa;
             OUString sHeight = rVal.getString();
@@ -112,14 +112,14 @@ sal_Int32 MeasureHandler::getMeasureValue() const
     sal_Int32 nRet = 0;
     if( m_nMeasureValue != 0 && m_nUnit >= 0 )
     {
-        // TODO m_nUnit 3 - twip, other values unknown :-(
+        
         if( m_nUnit == 3 || sal::static_int_cast<Id>(m_nUnit) == NS_ooxml::LN_Value_ST_TblWidth_dxa)
         {
             nRet = ConversionHelper::convertTwipToMM100( m_nMeasureValue );
         }
-        //todo: handle additional width types:
-        //NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
-        //NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
+        
+        
+        
     }
     return nRet;
 }
@@ -143,7 +143,7 @@ beans::PropertyValue MeasureHandler::getInteropGrabBag()
     return aRet;
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

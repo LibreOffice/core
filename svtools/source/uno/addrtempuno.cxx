@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/addresstemplate.hxx>
@@ -53,24 +53,24 @@ namespace {
     public:
         OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB);
 
-        // XTypeProvider
+        
         virtual Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual ::comphelper::StringSequence SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-        // XPropertySet
+        
         virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException);
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-        // OPropertyArrayUsageHelper
+        
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
         virtual void SAL_CALL initialize(const Sequence< Any >& aArguments) throw(Exception, RuntimeException);
 
     protected:
-    // OGenericUnoDialog overridables
+    
         virtual Dialog* createDialog(Window* _pParent);
 
         virtual void implInitialize(const com::sun::star::uno::Any& _rValue);
@@ -78,7 +78,7 @@ namespace {
         virtual void executedDialog(sal_Int16 _nExecutionResult);
     };
 
-    //-------------------------------------------------------------------------
+    
     OAddressBookSourceDialogUno::OAddressBookSourceDialogUno(const Reference< XComponentContext >& _rxORB)
         :OGenericUnoDialog(_rxORB)
     {
@@ -86,20 +86,20 @@ namespace {
             &m_aAliases, getCppuType(&m_aAliases));
     }
 
-    //-------------------------------------------------------------------------
+    
     Sequence<sal_Int8> SAL_CALL OAddressBookSourceDialogUno::getImplementationId(  ) throw(RuntimeException)
     {
         static ::cppu::OImplementationId aId;
         return aId.getImplementationId();
     }
 
-    //-------------------------------------------------------------------------
+    
     OUString SAL_CALL OAddressBookSourceDialogUno::getImplementationName() throw(RuntimeException)
     {
         return OUString( "com.sun.star.comp.svtools.OAddressBookSourceDialogUno" );
     }
 
-    //-------------------------------------------------------------------------
+    
     ::comphelper::StringSequence SAL_CALL OAddressBookSourceDialogUno::getSupportedServiceNames() throw(RuntimeException)
     {
         ::comphelper::StringSequence aSupported(1);
@@ -107,20 +107,20 @@ namespace {
         return aSupported;
     }
 
-    //-------------------------------------------------------------------------
+    
     Reference<XPropertySetInfo>  SAL_CALL OAddressBookSourceDialogUno::getPropertySetInfo() throw(RuntimeException)
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
-    //-------------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper& OAddressBookSourceDialogUno::getInfoHelper()
     {
         return *getArrayHelper();
     }
 
-    //------------------------------------------------------------------------------
+    
     ::cppu::IPropertyArrayHelper* OAddressBookSourceDialogUno::createArrayHelper( ) const
     {
         Sequence< Property > aProps;
@@ -128,7 +128,7 @@ namespace {
         return new ::cppu::OPropertyArrayHelper(aProps);
     }
 
-    //------------------------------------------------------------------------------
+    
     void OAddressBookSourceDialogUno::executedDialog(sal_Int16 _nExecutionResult)
     {
         OAddressBookSourceDialogUnoBase::executedDialog(_nExecutionResult);
@@ -137,7 +137,7 @@ namespace {
             if ( m_pDialog )
                 static_cast< AddressBookSourceDialog* >( m_pDialog )->getFieldMapping( m_aAliases );
     }
-    //------------------------------------------------------------------------------
+    
     void SAL_CALL OAddressBookSourceDialogUno::initialize(const Sequence< Any >& rArguments) throw(Exception, RuntimeException)
     {
         if( rArguments.getLength() == 5 )
@@ -154,17 +154,17 @@ namespace {
                && (rArguments[4] >>= sTitle) )
             {
 
-                // convert the parameters for creating the dialog to PropertyValues
+                
                 Sequence< Any > aArguments(5);
                 Any* pArguments = aArguments.getArray();
-                // the parent window
+                
                 *pArguments++ <<= PropertyValue(OUString( "ParentWindow" ), -1, makeAny( xParentWindow ), PropertyState_DIRECT_VALUE);
-                // the data source to use
+                
                 *pArguments++ <<= PropertyValue(OUString( "DataSource" ), -1, makeAny( xDataSource ), PropertyState_DIRECT_VALUE);
                 *pArguments++ <<= PropertyValue(OUString( "DataSourceName" ), -1, makeAny( sDataSourceName ), PropertyState_DIRECT_VALUE);
-                // the table to use
+                
                 *pArguments++ <<= PropertyValue(OUString( "Command" ), -1, makeAny( sCommand ), PropertyState_DIRECT_VALUE);
-                // the title
+                
                 *pArguments++ <<= PropertyValue(OUString( "Title" ), -1, makeAny( sTitle ), PropertyState_DIRECT_VALUE);
                 OGenericUnoDialog::initialize(aArguments);
                 return;
@@ -172,7 +172,7 @@ namespace {
         }
         OGenericUnoDialog::initialize(rArguments);
     }
-    //------------------------------------------------------------------------------
+    
     void OAddressBookSourceDialogUno::implInitialize(const com::sun::star::uno::Any& _rValue)
     {
         PropertyValue aVal;
@@ -212,7 +212,7 @@ namespace {
         OAddressBookSourceDialogUnoBase::implInitialize( _rValue );
     }
 
-    //------------------------------------------------------------------------------
+    
     Dialog* OAddressBookSourceDialogUno::createDialog(Window* _pParent)
     {
         if ( m_xDataSource.is() && !m_sTable.isEmpty() )

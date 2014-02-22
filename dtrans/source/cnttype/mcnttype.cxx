@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "mcnttype.hxx"
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+
+
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -30,54 +30,54 @@ using namespace std;
 using namespace osl;
 
 
-//------------------------------------------------------------------------
-// constants
-//------------------------------------------------------------------------
+
+
+
 
 const char TSPECIALS[] =  "()<>@,;:\\\"/[]?=";
 const char TOKEN[] = "!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~.";
 const char SPACE[] = " ";
 const char SEMICOLON[] = ";";
 
-//------------------------------------------------------------------------
-// ctor
-//------------------------------------------------------------------------
+
+
+
 
 CMimeContentType::CMimeContentType( const OUString& aCntType )
 {
     init( aCntType );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CMimeContentType::getMediaType( ) throw(RuntimeException)
 {
     return m_MediaType;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CMimeContentType::getMediaSubtype( ) throw(RuntimeException)
 {
     return m_MediaSubtype;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CMimeContentType::getFullMediaType( ) throw(RuntimeException)
 {
     return m_MediaType + "/" + m_MediaSubtype;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeException)
 {
@@ -97,9 +97,9 @@ Sequence< OUString > SAL_CALL CMimeContentType::getParameters( ) throw(RuntimeEx
     return seqParams;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName ) throw(RuntimeException)
 {
@@ -107,9 +107,9 @@ sal_Bool SAL_CALL CMimeContentType::hasParameter( const OUString& aName ) throw(
     return ( m_ParameterMap.end( ) != m_ParameterMap.find( aName ) );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) throw(NoSuchElementException, RuntimeException)
 {
@@ -121,9 +121,9 @@ OUString SAL_CALL CMimeContentType::getParameterValue( const OUString& aName ) t
     return m_ParameterMap.find( aName )->second;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalArgumentException )
 {
@@ -136,9 +136,9 @@ void SAL_CALL CMimeContentType::init( const OUString& aCntType ) throw( IllegalA
     type();
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CMimeContentType::getSym( void )
 {
@@ -152,9 +152,9 @@ void SAL_CALL CMimeContentType::getSym( void )
     m_nxtSym = OUString( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
 {
@@ -164,9 +164,9 @@ void SAL_CALL CMimeContentType::acceptSym( const OUString& pSymTlb )
     getSym();
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CMimeContentType::skipSpaces( void )
 {
@@ -174,9 +174,9 @@ void SAL_CALL CMimeContentType::skipSpaces( void )
         getSym( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CMimeContentType::type( void )
 {
@@ -184,11 +184,11 @@ void SAL_CALL CMimeContentType::type( void )
 
     OUString sToken(TOKEN);
 
-    // check FIRST( type )
+    
     if ( !isInRange( m_nxtSym, sToken ) )
         throw IllegalArgumentException( );
 
-    // parse
+    
     while(  !m_nxtSym.isEmpty( ) )
     {
         if ( isInRange( m_nxtSym, sToken ) )
@@ -200,16 +200,16 @@ void SAL_CALL CMimeContentType::type( void )
         getSym( );
     }
 
-    // check FOLLOW( type )
+    
     skipSpaces( );
     acceptSym( OUString("/") );
 
     subtype( );
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CMimeContentType::subtype( void )
 {
@@ -217,7 +217,7 @@ void SAL_CALL CMimeContentType::subtype( void )
 
     OUString sToken(TOKEN);
 
-    // check FIRST( subtype )
+    
     if ( !isInRange( m_nxtSym, sToken ) )
         throw IllegalArgumentException( );
 
@@ -232,14 +232,14 @@ void SAL_CALL CMimeContentType::subtype( void )
         getSym( );
     }
 
-    // parse the rest
+    
     skipSpaces( );
     trailer();
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CMimeContentType::trailer( void )
 {
@@ -254,7 +254,7 @@ void SAL_CALL CMimeContentType::trailer( void )
         }
         else if ( m_nxtSym == ";" )
         {
-            // get the parameter name
+            
             getSym( );
             skipSpaces( );
 
@@ -266,12 +266,12 @@ void SAL_CALL CMimeContentType::trailer( void )
             skipSpaces();
             acceptSym( OUString("=") );
 
-            // get the parameter value
+            
             skipSpaces( );
 
             OUString pvalue = pValue( );
 
-            // insert into map
+            
             if ( !m_ParameterMap.insert( pair < const OUString, OUString > ( pname, pvalue ) ).second )
                 throw IllegalArgumentException( );
         }
@@ -282,9 +282,9 @@ void SAL_CALL CMimeContentType::trailer( void )
     }
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CMimeContentType::pName( )
 {
@@ -305,16 +305,16 @@ OUString SAL_CALL CMimeContentType::pName( )
     return pname;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CMimeContentType::pValue( )
 {
     OUString pvalue;
 
     OUString sToken(TOKEN);
-    // quoted pvalue
+    
     if ( m_nxtSym == "\"" )
     {
         getSym( );
@@ -323,13 +323,13 @@ OUString SAL_CALL CMimeContentType::pValue( )
         if ( pvalue[pvalue.getLength() - 1] != '"' )
             throw IllegalArgumentException( );
 
-        // remove the last quote-sign
+        
         pvalue = pvalue.copy(0, pvalue.getLength() - 1);
 
         if ( pvalue.isEmpty( ) )
             throw IllegalArgumentException( );
     }
-    else if ( isInRange( m_nxtSym, sToken ) ) // unquoted pvalue
+    else if ( isInRange( m_nxtSym, sToken ) ) 
     {
         pvalue = nonquotedPValue( );
     }
@@ -339,11 +339,11 @@ OUString SAL_CALL CMimeContentType::pValue( )
     return pvalue;
 }
 
-//------------------------------------------------------------------------
-// the following combinations within a quoted value are not allowed:
-// '";' (quote sign followed by semicolon) and '" ' (quote sign followed
-// by space)
-//------------------------------------------------------------------------
+
+
+
+
+
 
 OUString SAL_CALL CMimeContentType::quotedPValue( )
 {
@@ -375,9 +375,9 @@ OUString SAL_CALL CMimeContentType::quotedPValue( )
     return pvalue;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 OUString SAL_CALL CMimeContentType::nonquotedPValue( )
 {
@@ -398,9 +398,9 @@ OUString SAL_CALL CMimeContentType::nonquotedPValue( )
     return pvalue;
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 void SAL_CALL CMimeContentType::comment( void )
 {
@@ -415,9 +415,9 @@ void SAL_CALL CMimeContentType::comment( void )
     }
 }
 
-//------------------------------------------------------------------------
+
 //
-//------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL CMimeContentType::isInRange( const OUString& aChr, const OUString& aRange )
 {

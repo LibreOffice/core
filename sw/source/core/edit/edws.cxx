@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/window.hxx>
@@ -30,7 +30,7 @@
 #include <swundo.hxx>
 #include <SwRewriter.hxx>
 
-// masqueraded copy constructor
+
 SwEditShell::SwEditShell( SwEditShell& rEdSH, Window *pWindow )
     : SwCrsrShell( rEdSH, pWindow )
 {
@@ -42,7 +42,7 @@ SwEditShell::SwEditShell( SwDoc& rDoc, Window *pWindow, const SwViewOption *pOpt
     GetDoc()->GetIDocumentUndoRedo().DoUndo(true);
 }
 
-SwEditShell::~SwEditShell() // USED
+SwEditShell::~SwEditShell() 
 {
 }
 
@@ -149,7 +149,7 @@ sal_Bool SwEditShell::HasOtherCnt() const
     return sal_False;
 }
 
-// access controll functions for file name handling
+
 
 SwActContext::SwActContext(SwEditShell *pShell)
     : pSh(pShell)
@@ -173,13 +173,13 @@ SwMvContext::~SwMvContext()
     pSh->EndCrsrMove();
 }
 
-SwFrmFmt *SwEditShell::GetTableFmt() // fastest test on a table
+SwFrmFmt *SwEditShell::GetTableFmt() 
 {
     const SwTableNode* pTblNd = IsCrsrInTbl();
     return pTblNd ? (SwFrmFmt*)pTblNd->GetTable().GetFrmFmt() : 0;
 }
 
-// TODO: Why is this called 3x for a new document?
+
 sal_uInt16 SwEditShell::GetTOXTypeCount(TOXTypes eTyp) const
 {
     return mpDoc->GetTOXTypeCount(eTyp);
@@ -211,7 +211,7 @@ void SwEditShell::DelAllUndoObj()
     GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
 }
 
-// Combine continuous calls of Insert/Delete/Overwrite on characters. Default: sdbcx::Group-Undo.
+
 
 /** open undo container
  *
@@ -253,7 +253,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
     SwTxtNode* pTNd = pCrsr->GetNode()->GetTxtNode();
 
     SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, cChar );
-    // FIXME: this _must_ be called with reference to the actual node text!
+    
     OUString const& rNodeText(pTNd->GetTxt());
     rACorr.DoAutoCorrect( aSwAutoCorrDoc,
                     rNodeText, pCrsr->GetPoint()->nContent.GetIndex(),

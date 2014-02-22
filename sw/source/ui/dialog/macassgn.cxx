@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hintids.hxx"
@@ -55,10 +55,10 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                             SW_EVENT_START_INS_GLOSSARY );
         aItem.AddEvent( OUString( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), OUString(),
                             SW_EVENT_END_INS_GLOSSARY);
-        // in order for the new handler to become active!
+        
         break;
     case MACASSGN_ALLFRM:
-    case MACASSGN_GRAPHIC:          // graphics
+    case MACASSGN_GRAPHIC:          
         {
             aItem.AddEvent( OUString( SW_RES(STR_EVENT_IMAGE_ERROR) ), OUString(),
                                 SVX_EVENT_IMAGE_ERROR);
@@ -67,8 +67,8 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
             aItem.AddEvent( OUString( SW_RES(STR_EVENT_IMAGE_LOAD) ), OUString(),
                                 SVX_EVENT_IMAGE_LOAD);
         }
-        // no break;
-    case MACASSGN_FRMURL:           // Frm - URL-Attributes
+        
+    case MACASSGN_FRMURL:           
         {
             if( !bHtmlMode &&
                 (MACASSGN_FRMURL == eType || MACASSGN_ALLFRM == eType))
@@ -83,15 +83,15 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
                                 SW_EVENT_FRM_MOVE );
             }
         }
-        // no break;
-    case MACASSGN_OLE:              // OLE
+        
+    case MACASSGN_OLE:              
         {
             if( !bHtmlMode )
                 aItem.AddEvent( OUString( SW_RES(STR_EVENT_OBJECT_SELECT) ), OUString(),
                                 SW_EVENT_OBJECT_SELECT );
         }
-        // no break;
-    case MACASSGN_INETFMT:          // INetFmt-Attributes
+        
+    case MACASSGN_INETFMT:          
         {
             aItem.AddEvent( OUString( SW_RES(STR_EVENT_MOUSEOVER_OBJECT) ), OUString(),
                                 SFX_EVENT_MOUSEOVER_OBJECT );

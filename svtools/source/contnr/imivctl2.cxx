@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "imivctl.hxx"
@@ -73,12 +73,12 @@ void IcnCursor_Impl::ImplCreate()
     for( size_t nCur = 0; nCur < nCount; nCur++ )
     {
         SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
-        // const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
+        
         Rectangle rRect( pView->CalcBmpRect( pEntry,0 ) );
         short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / nDeltaHeight );
         short nX = (short)( ((rRect.Left()+rRect.Right())/2) / nDeltaWidth );
 
-        // capture rounding errors
+        
         if( nY >= nRows )
             nY = sal::static_int_cast< short >(nRows - 1);
         if( nX >= nCols )
@@ -130,7 +130,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
     {
         SvxIconChoiceCtrlEntryPtrVec::const_iterator it = std::find( rList.begin(), rList.end(), pCurEntry );
 
-        assert(it != rList.end()); //Entry not in Col-List
+        assert(it != rList.end()); 
         if (it == rList.end())
             return 0;
 
@@ -209,7 +209,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
     {
         SvxIconChoiceCtrlEntryPtrVec::const_iterator it = std::find( rList.begin(), rList.end(), pCurEntry );
 
-        assert(it != rList.end()); //Entry not in Row-List
+        assert(it != rList.end()); 
         if (it == rList.end())
             return 0;
 
@@ -298,7 +298,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     sal_uInt16 nX = pCtrlEntry->nX;
     DBG_ASSERT(nY< nRows,"GoLeftRight:Bad column");
     DBG_ASSERT(nX< nCols,"GoLeftRight:Bad row");
-    // neighbor in same row?
+    
     if( bRight )
         pResult = SearchRow(
             nY, nX, sal::static_int_cast< sal_uInt16 >(nCols-1), nX, true, true );
@@ -318,7 +318,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     else
     {
         nColOffs = -1;
-        nLastCol = -1;   // 0-1
+        nLastCol = -1;   
     }
 
     sal_uInt16 nRowMin = nY;
@@ -417,7 +417,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     DBG_ASSERT(nY<nRows,"GoUpDown:Bad column");
     DBG_ASSERT(nX<nCols,"GoUpDown:Bad row");
 
-    // neighbor in same column?
+    
     if( bDown )
         pResult = SearchCol(
             nX, nY, sal::static_int_cast< sal_uInt16 >(nRows-1), nY, true, true );
@@ -437,7 +437,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     else
     {
         nRowOffs = -1;
-        nLastRow = -1;   // 0-1
+        nLastRow = -1;   
     }
 
     sal_uInt16 nColMin = nX;
@@ -487,7 +487,7 @@ void IcnCursor_Impl::CreateGridAjustData( IconChoiceMap& rLists, SvxIconChoiceCt
     if( !pRefEntry )
     {
         sal_uInt16 nGridRows = (sal_uInt16)(pView->aVirtOutputSize.Height() / pView->nGridDY);
-        nGridRows++; // because we round down later!
+        nGridRows++; 
 
         if( !nGridRows )
             return;
@@ -503,10 +503,10 @@ void IcnCursor_Impl::CreateGridAjustData( IconChoiceMap& rLists, SvxIconChoiceCt
     }
     else
     {
-        // build a horizontal "tube" in the RefEntry line
-        // STOP AND THINK: maybe use bounding rectangle because of overlaps?
+        
+        
         Rectangle rRefRect( pView->CalcBmpRect( pRefEntry ) );
-        //const Rectangle& rRefRect = pView->GetEntryBoundRect( pRefEntry );
+        
         short nRefRow = (short)( ((rRefRect.Top()+rRefRect.Bottom())/2) / pView->nGridDY );
         SvxIconChoiceCtrlEntryPtrVec& rRow = rLists[0];
         size_t nCount = pView->aEntries.size();
@@ -514,7 +514,7 @@ void IcnCursor_Impl::CreateGridAjustData( IconChoiceMap& rLists, SvxIconChoiceCt
         {
             SvxIconChoiceCtrlEntry* pEntry = pView->aEntries[ nCur ];
             Rectangle rRect( pView->CalcBmpRect(pEntry) );
-            //const Rectangle& rRect = pView->GetEntryBoundRect( pEntry );
+            
             short nY = (short)( ((rRect.Top()+rRect.Bottom())/2) / pView->nGridDY );
             if( nY == nRefRow )
             {
@@ -525,7 +525,7 @@ void IcnCursor_Impl::CreateGridAjustData( IconChoiceMap& rLists, SvxIconChoiceCt
     }
 }
 
-//static
+
 void IcnCursor_Impl::DestroyGridAdjustData( IconChoiceMap& rLists )
 {
     rLists.clear();
@@ -574,7 +574,7 @@ void IcnGridMap_Impl::Create_Impl()
         return;
     GetMinMapSize( _nGridCols, _nGridRows );
     if( _pView->nWinBits & WB_ALIGN_TOP )
-        _nGridRows += 50;  // avoid resize of gridmap too often
+        _nGridRows += 50;  
     else
         _nGridCols += 50;
 
@@ -591,7 +591,7 @@ void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
     long nX, nY;
     if( _pView->nWinBits & WB_ALIGN_TOP )
     {
-        // The view grows in vertical direction. Its max. width is _pView->nMaxVirtWidth
+        
         nX = _pView->nMaxVirtWidth;
         if( !nX )
             nX = _pView->pView->GetOutputSizePixel().Width();
@@ -602,7 +602,7 @@ void IcnGridMap_Impl::GetMinMapSize( sal_uInt16& rDX, sal_uInt16& rDY ) const
     }
     else
     {
-        // The view grows in horizontal direction. Its max. height is _pView->nMaxVirtHeight
+        
         nY = _pView->nMaxVirtHeight;
         if( !nY )
             nY = _pView->pView->GetOutputSizePixel().Height();
@@ -698,16 +698,16 @@ GridId IcnGridMap_Impl::GetUnoccupiedGrid( sal_Bool bOccupyFound )
         }
         DBG_ASSERT(!bExpanded,"ExpandGrid failed");
         if( bExpanded )
-            return 0; // prevent never ending loop
+            return 0; 
         bExpanded = sal_True;
         Expand();
         nStart = nCount;
     }
 }
 
-// An entry only means that there's a GridRect lying under its center. This
-// variant is much faster than allocating via the bounding rectangle but can
-// lead to small overlaps.
+
+
+
 void IcnGridMap_Impl::OccupyGrids( const SvxIconChoiceCtrlEntry* pEntry, sal_Bool bOccupy )
 {
     if( !_pGridMap || !_pView->IsBoundingRectValid( pEntry->aRect ))
@@ -758,9 +758,9 @@ void IcnGridMap_Impl::OutputSizeChanged()
     }
 }
 
-// Independently of the view's alignment (TOP or LEFT), the gridmap
-// should contain the data in a continuous region, to make it possible
-// to copy the whole block if the gridmap needs to be expanded.
+
+
+
 void IcnGridMap_Impl::GetGridCoord( GridId nId, sal_uInt16& rGridX, sal_uInt16& rGridY )
 {
     Create();

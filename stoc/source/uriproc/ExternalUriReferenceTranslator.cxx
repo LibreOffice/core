@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -68,8 +68,8 @@ public:
         throw (css::uno::RuntimeException);
 
 private:
-    Translator(Translator &); // not implemented
-    void operator =(Translator); // not implemented
+    Translator(Translator &); 
+    void operator =(Translator); 
 
     virtual ~Translator() {}
 
@@ -107,11 +107,11 @@ OUString Translator::translateToInternal(
     sal_Int32 i = RTL_CONSTASCII_LENGTH("file:");
     OUStringBuffer buf;
     buf.append(externalUriReference.getStr(), i);
-    // Some environments (e.g., Java) produce illegal file URLs without an
-    // authority part; treat them as having an empty authority part:
-    if (!externalUriReference.match("//", i))
+    
+    
+    if (!externalUriReference.match("
     {
-        buf.append("//");
+        buf.append("
     }
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
     for (bool path = true;;) {
@@ -149,11 +149,11 @@ OUString Translator::translateToExternal(
     OUString const & internalUriReference)
     throw (css::uno::RuntimeException)
 {
-    if (!internalUriReference.matchIgnoreAsciiCase("file://"))
+    if (!internalUriReference.matchIgnoreAsciiCase("file:
     {
         return internalUriReference;
     }
-    sal_Int32 i = RTL_CONSTASCII_LENGTH("file://");
+    sal_Int32 i = RTL_CONSTASCII_LENGTH("file:
     OUStringBuffer buf;
     buf.append(internalUriReference.getStr(), i);
     rtl_TextEncoding encoding = osl_getThreadTextEncoding();
@@ -166,9 +166,9 @@ OUString Translator::translateToExternal(
             ++j;
         }
         if (j != i) {
-            // Use rtl_UriDecodeToIuri -> rtl_UriEncodeStrictKeepEscapes instead
-            // of rtl_UriDecodeStrict -> rtl_UriEncodeStrict, so that spurious
-            // non--UTF-8 octets like "%FE" are copied verbatim:
+            
+            
+            
             OUString seg(
                 rtl::Uri::encode(
                     rtl::Uri::decode(

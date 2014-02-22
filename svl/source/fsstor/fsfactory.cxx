@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
     aTempURL = ::utl::TempFile( NULL, true ).GetURL();
 
     if ( aTempURL.isEmpty() )
-        throw uno::RuntimeException(); // TODO: can not create tempfile
+        throw uno::RuntimeException(); 
 
     ::ucbhelper::Content aResultContent(
         aTempURL, uno::Reference< ucb::XCommandEnvironment >(),
@@ -84,12 +84,12 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     throw ( uno::Exception,
             uno::RuntimeException )
 {
-    // The request for storage can be done with up to three arguments
+    
 
-    // The first argument specifies a source for the storage
-    // it must be URL.
-    // The second value is a mode the storage should be open in.
-    // And the third value is a media descriptor.
+    
+    
+    
+    
 
     sal_Int32 nArgNum = aArguments.getLength();
     OSL_ENSURE( nArgNum < 4, "Wrong parameter number" );
@@ -97,8 +97,8 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
     if ( !nArgNum )
         return createInstance();
 
-    // first try to retrieve storage open mode if any
-    // by default the storage will be open in readonly mode
+    
+    
     sal_Int32 nStorageMode = embed::ElementModes::READ;
     if ( nArgNum >= 2 )
     {
@@ -110,11 +110,11 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
                  " css.embed.ElementModes"),
                 static_cast< OWeakObject * >(this), -1);
         }
-        // it's always possible to read written storage in this implementation
+        
         nStorageMode |= embed::ElementModes::READ;
     }
 
-    // retrieve storage source URL
+    
     OUString aURL;
 
     if ( !( aArguments[0] >>= aURL ) || aURL.isEmpty() )
@@ -126,8 +126,8 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
             static_cast< OWeakObject * >(this), -1);
     }
 
-    // allow to use other ucp's
-    // if ( !isLocalNotFile_Impl( aURL ) )
+    
+    
     if ( aURL.startsWithIgnoreAsciiCase("vnd.sun.star.pkg:")
       || aURL.startsWithIgnoreAsciiCase("vnd.sun.star.zip:")
       || ::utl::UCBContentHelper::IsDocument( aURL ) )
@@ -152,7 +152,7 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
         aURL, uno::Reference< ucb::XCommandEnvironment >(),
         comphelper::getProcessComponentContext() );
 
-    // create storage based on source
+    
     return uno::Reference< uno::XInterface >(
         static_cast< OWeakObject* >( new FSStorage( aResultContent,
                                                     nStorageMode,
@@ -206,6 +206,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL fsstorage_component_getFactory (
     return pResult;
 }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

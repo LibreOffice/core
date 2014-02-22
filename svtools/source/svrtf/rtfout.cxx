@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -32,8 +32,8 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
     {
     case 0x1:
     case 0x2:
-        // this are control character of our textattributes and will never be
-        // written
+        
+        
         break;
     case 0xA0:
         rStream.WriteCharPtr( "\\~" );
@@ -94,11 +94,11 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                     rStream.WriteChar( (sal_Char)c );
                 else
                 {
-                    //If we can't convert to the dest encoding, or if
-                    //its an uncommon multibyte sequence which most
-                    //readers won't be able to handle correctly, then
-                    //If we can't convert to the dest encoding, then
-                    //export as unicode
+                    
+                    
+                    
+                    
+                    
                     OUString sBuf(&c, 1);
                     OString sConverted;
                     sal_uInt32 nFlags =
@@ -106,7 +106,7 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
                         RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR;
                     bool bWriteAsUnicode = !(sBuf.convertToString(&sConverted,
                                          eDestEnc, nFlags))
-                                            || (RTL_TEXTENCODING_UTF8==eDestEnc); // #i43933# do not export UTF-8 chars in RTF;
+                                            || (RTL_TEXTENCODING_UTF8==eDestEnc); 
                     if (bWriteAsUnicode)
                     {
                         sBuf.convertToString(&sConverted,
@@ -116,11 +116,11 @@ SvStream& RTFOutFuncs::Out_Char(SvStream& rStream, sal_Unicode c,
 
                     if (bWriteAsUnicode && pUCMode)
                     {
-                        // then write as unicode - character
+                        
                         if (*pUCMode != nLen)
                         {
-                            // #i47831# add an additional whitespace, so that
-                            // "document whitespaces" are not ignored.;
+                            
+                            
                             rStream.WriteCharPtr( "\\uc" )
                                .WriteCharPtr( OString::number(nLen).getStr() ).WriteCharPtr( " " );
                             *pUCMode = nLen;
@@ -154,7 +154,7 @@ SvStream& RTFOutFuncs::Out_String( SvStream& rStream, const OUString& rStr,
     for (sal_Int32 n = 0; n < rStr.getLength(); ++n)
         Out_Char(rStream, rStr[n], &nUCMode, eDestEnc, bWriteHelpFile);
     if (nUCMode != 1)
-      rStream.WriteCharPtr( "\\uc1" ).WriteCharPtr( " " ); // #i47831# add an additional whitespace, so that "document whitespaces" are not ignored.;
+      rStream.WriteCharPtr( "\\uc1" ).WriteCharPtr( " " ); 
     return rStream;
 }
 
@@ -166,7 +166,7 @@ SvStream& RTFOutFuncs::Out_Hex( SvStream& rStream, sal_uLong nHex, sal_uInt8 nLe
     if( nLen >= sizeof(aNToABuf) )
         nLen = (sizeof(aNToABuf)-1);
 
-    // set pointer to end of buffer
+    
     sal_Char* pStr = aNToABuf + (sizeof(aNToABuf)-1);
     for( sal_uInt8 n = 0; n < nLen; ++n )
     {

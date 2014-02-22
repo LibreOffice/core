@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include <TrackChangesHandler.hxx>
 #include <PropertyMap.hxx>
@@ -89,8 +89,8 @@ uno::Sequence<beans::PropertyValue> TrackChangesHandler::getRedlineProperties() 
     pRedlineProperties[1].Value <<= m_pRedlineParams->m_sAuthor;
     pRedlineProperties[2].Name = rPropNameSupplier.GetName( PROP_REDLINE_DATE_TIME );
     pRedlineProperties[2].Value <<= ConversionHelper::ConvertDateStringToDateTime( m_pRedlineParams->m_sDate );
-    //pRedlineProperties[3].Name = rPropNameSupplier.GetName( PROP_REDLINE_REVERT_PROPERTIES );
-    //pRedlineProperties[3].Value <<= pRedline->m_aRevertProperties;
+    
+    
 
     return aRedlineProperties;
 }
@@ -100,7 +100,7 @@ void TrackChangesHandler::lcl_sprm(Sprm & rSprm)
     (void)rSprm;
 }
 
-} //namespace dmapper
-} //namespace writerfilter
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

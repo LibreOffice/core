@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,7 +43,7 @@ namespace sd {
 static const sal_uLong HIDE_MOUSE_TIMEOUT = 10000;
 static const sal_uLong SHOW_MOUSE_TIMEOUT = 1000;
 
-// =============================================================================
+
 
 ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::Window* pParent )
 : ::sd::Window( pParent )
@@ -58,15 +58,15 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
 {
     SetOutDevViewType( OUTDEV_VIEWTYPE_SLIDESHOW );
 
-    // Do never mirror the preview window.  This explicitly includes right
-    // to left writing environments.
+    
+    
     EnableRTL (false);
 
     MapMode aMap(GetMapMode());
     aMap.SetMapUnit(MAP_100TH_MM);
     SetMapMode(aMap);
 
-    // set HelpId
+    
     SetHelpId( HID_SD_WIN_PRESENTATION );
     SetUniqueId( HID_SD_WIN_PRESENTATION );
 
@@ -76,7 +76,7 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
     maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
 
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
-    SetBackground(); // avoids that VCL paints any background!
+    SetBackground(); 
     GetParent()->Show();
     AddEventListener( LINK( this, ShowWindow, EventHdl ) );
 }
@@ -109,8 +109,8 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
         case KEY_HOME:
         case KEY_END:
         case awt::Key::CONTEXTMENU:
-            // these keys will be handled by the slide show even
-            // while in end mode
+            
+            
             break;
         default:
             TerminateShow();
@@ -138,8 +138,8 @@ void ShowWindow::KeyInput(const KeyEvent& rKEvt)
         case KEY_HOME:
         case KEY_END:
         case awt::Key::CONTEXTMENU:
-            // these keys will be handled by the slide show even
-            // while in end mode
+            
+            
             break;
         default:
             RestartShow();
@@ -192,8 +192,8 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
         {
             if( mnFirstMouseMove )
             {
-                // if this is not the first mouse move while hidden, see if
-                // enough time has pasted to show mouse pointer again
+                
+                
                 sal_uLong nTime = Time::GetSystemTicks();
                 if( (nTime - mnFirstMouseMove) >= SHOW_MOUSE_TIMEOUT )
                 {
@@ -206,9 +206,9 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
             }
             else
             {
-                // if this is the first mouse move, note current
-                // time and start idle timer to cancel show mouse pointer
-                // again if not enough mouse movement is measured
+                
+                
+                
                 mnFirstMouseMove = Time::GetSystemTicks();
                 maMouseTimer.SetTimeout( 2*SHOW_MOUSE_TIMEOUT );
                 maMouseTimer.Start();
@@ -216,7 +216,7 @@ void ShowWindow::MouseMove(const MouseEvent& /*rMEvt*/)
         }
         else
         {
-            // current mousemove restarts the idle timer to hide the mouse
+            
             maMouseTimer.Start();
         }
     }
@@ -285,11 +285,11 @@ void ShowWindow::Paint(const Rectangle& rRect)
 
 void ShowWindow::GetFocus()
 {
-    // base class
+    
     Window::GetFocus();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::LoseFocus()
 {
@@ -299,21 +299,21 @@ void ShowWindow::LoseFocus()
         TerminateShow();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::Resize()
 {
     ::sd::Window::Resize();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::Move()
 {
     ::sd::Window::Move();
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ShowWindow::SetEndMode()
 {
@@ -323,7 +323,7 @@ bool ShowWindow::SetEndMode()
         meShowWindowMode = SHOWWINDOWMODE_END;
         maShowBackground = Wallpaper( Color( COL_BLACK ) );
 
-        // hide navigator if it is visible
+        
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
             mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
@@ -336,7 +336,7 @@ bool ShowWindow::SetEndMode()
     return( SHOWWINDOWMODE_END == meShowWindowMode );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout, Graphic* pLogo )
 {
@@ -357,7 +357,7 @@ bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout
         meShowWindowMode = SHOWWINDOWMODE_PAUSE;
         maShowBackground = Wallpaper( Color( COL_BLACK ) );
 
-        // hide navigator if it is visible
+        
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
             mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
@@ -376,7 +376,7 @@ bool ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout
     return( SHOWWINDOWMODE_PAUSE == meShowWindowMode );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlankColor )
 {
@@ -387,7 +387,7 @@ bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlan
         meShowWindowMode = SHOWWINDOWMODE_BLANK;
         maShowBackground = Wallpaper( rBlankColor );
 
-        // hide navigator if it is visible
+        
         if( mpViewShell->GetViewFrame()->GetChildWindow( SID_NAVIGATOR ) )
         {
             mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_False );
@@ -400,14 +400,14 @@ bool ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlan
     return( SHOWWINDOWMODE_BLANK == meShowWindowMode );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::SetPreviewMode()
 {
     meShowWindowMode = SHOWWINDOWMODE_PREVIEW;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::TerminateShow()
 {
@@ -421,7 +421,7 @@ void ShowWindow::TerminateShow()
 
     if( mpViewShell )
     {
-        // show navigator?
+        
         if( mbShowNavigatorAfterSpecialMode )
         {
             mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
@@ -435,14 +435,14 @@ void ShowWindow::TerminateShow()
     mnRestartPageIndex = PAGE_NO_END;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::RestartShow()
 {
     RestartShow( mnRestartPageIndex );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
 
@@ -478,7 +478,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
 
     mnRestartPageIndex = PAGE_NO_END;
 
-    // show navigator?
+    
     if( mbShowNavigatorAfterSpecialMode )
     {
         mpViewShell->GetViewFrame()->ShowChildWindow( SID_NAVIGATOR, sal_True );
@@ -486,7 +486,7 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
 {
@@ -533,14 +533,14 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
         aVDev.SetMapMode( aVMap );
         aVDev.SetBackground( Wallpaper( Color( COL_BLACK ) ) );
 
-        // set font first, to determine real output height
+        
         aVDev.SetFont( aFont );
 
         const Size aVDevSize( aOutSize.Width(), aVDev.GetTextHeight() );
 
         if( aVDev.SetOutputSize( aVDevSize ) )
         {
-            // Note: if performance gets an issue here, we can use NumberFormatter directly
+            
             SvtSysLocale                aSysLocale;
             const LocaleDataWrapper&    aLocaleData = aSysLocale.GetLocaleData();
 
@@ -561,7 +561,7 @@ void ShowWindow::DrawPauseScene( bool bTimeoutOnly )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::DrawEndScene()
 {
@@ -581,14 +581,14 @@ void ShowWindow::DrawEndScene()
     SetFont( aOldFont );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ShowWindow::DrawBlankScene()
 {
-    // just blank through background color => nothing to be done here
+    
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )
 {
@@ -607,13 +607,13 @@ IMPL_LINK_NOARG(ShowWindow, MouseTimeoutHdl)
 {
     if( mbMouseCursorHidden )
     {
-        // not enough mouse movements since first recording so
-        // cancel show mouse pointer for now
+        
+        
         mnFirstMouseMove = 0;
     }
     else
     {
-        // mouse has been idle to long, hide pointer
+        
         ShowPointer( false );
         mbMouseCursorHidden = true;
     }
@@ -658,7 +658,7 @@ void ShowWindow::AddWindowToPaintView()
         GetChild( nChild )->Show( true );
 }
 
-// Overload the sd::Window's CreateAccessible to create a different accessible object
+
 ::com::sun::star::uno::Reference<
     ::com::sun::star::accessibility::XAccessible>
     ShowWindow::CreateAccessible (void)
@@ -680,6 +680,6 @@ void ShowWindow::AddWindowToPaintView()
         return ::Window::CreateAccessible ();
     }
 }
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

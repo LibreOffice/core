@@ -30,22 +30,22 @@ OReportRuler::OReportRuler(Window* _pParent,OReportWindow* _pReportWindow,const 
 
     Show();
 }
-//------------------------------------------------------------------------------
+
 OReportRuler::~OReportRuler()
 {
     delete m_pSection;
 }
-//------------------------------------------------------------------------------
+
 void OReportRuler::Resize()
 {
     m_pSection->SetPosSizePixel(Point(0,0),GetOutputSize());
 }
-//------------------------------------------------------------------------------
+
 void OReportRuler::SetGridVisible(sal_Bool _bVisible)
 {
     m_pSection->SetGridVisible( _bVisible );
 }
-//------------------------------------------------------------------------------
+
 //==============================================================================
 } // rptui
 //==============================================================================

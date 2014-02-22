@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,11 +24,11 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <tools/stream.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+
 
 DBG_NAME(SfxStringListItem)
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_AUTOFACTORY(SfxStringListItem, SfxPoolItem);
 
@@ -49,7 +49,7 @@ SfxImpStringList::~SfxImpStringList()
     nRefCount = 0xffff;
 }
 
-// class SfxStringListItem -----------------------------------------------
+
 
 SfxStringListItem::SfxStringListItem() :
     pImp(NULL)
@@ -61,8 +61,8 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, const std::vector<OUStri
     SfxPoolItem( which ),
     pImp(NULL)
 {
-    // PB: das Putten einer leeren Liste funktionierte nicht,
-    // deshalb habe ich hier die Abfrage nach dem Count auskommentiert
+    
+    
     if( pList /*!!! && pList->Count() */ )
     {
         pImp = new SfxImpStringList;
@@ -77,7 +77,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
     SfxPoolItem( which ),
     pImp(NULL)
 {
-    //fdo#39428 SvStream no longer supports operator>>(long&)
+    
     sal_Int32 nEntryCount;
     rStream.ReadInt32( nEntryCount );
 
@@ -180,7 +180,7 @@ SvStream& SfxStringListItem::Store( SvStream & rStream, sal_uInt16 ) const
 {
     if( !pImp )
     {
-        //fdo#39428 SvStream no longer supports operator<<(long)
+        
         rStream.WriteInt32( (sal_Int32) 0 );
         return rStream;
     }
@@ -216,7 +216,7 @@ void SfxStringListItem::SetString( const OUString& rStr )
         {
             if (nStart<aStr.getLength())
             {
-                // put last string only if not empty
+                
                 pImp->aList.push_back(aStr.copy(nStart));
             }
             break;
@@ -224,7 +224,7 @@ void SfxStringListItem::SetString( const OUString& rStr )
 
         pImp->aList.push_back(aStr.copy(nStart, nDelimPos-nStart));
 
-        // skip both inserted string and delimiter
+        
         nStart = nDelimPos + 1 ;
     }
 }
@@ -265,7 +265,7 @@ void SfxStringListItem::SetStringList( const com::sun::star::uno::Sequence< OUSt
 
     if (pImp)
     {
-        // String gehoert der Liste
+        
         for ( sal_Int32 n = 0; n < rList.getLength(); n++ )
             pImp->aList.push_back(rList[n]);
     }
@@ -280,7 +280,7 @@ void SfxStringListItem::GetStringList( com::sun::star::uno::Sequence< OUString >
         rList[i] = pImp->aList[i];
 }
 
-// virtual
+
 bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     com::sun::star::uno::Sequence< OUString > aValue;
@@ -294,10 +294,10 @@ bool SfxStringListItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt
     return false;
 }
 
-// virtual
+
 bool SfxStringListItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
-    // GetString() is not const!!!
+    
     SfxStringListItem* pThis = const_cast< SfxStringListItem * >( this );
 
     com::sun::star::uno::Sequence< OUString > aStringList;

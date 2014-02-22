@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 #include "listcombowizard.hxx"
 #include "gridwizard.hxx"
 
-// the registration methods
+
 extern "C" void SAL_CALL createRegistryInfo_OGroupBoxWizard()
 {
     static ::dbp::OMultiInstanceAutoRegistration<
@@ -46,23 +46,23 @@ extern "C" void SAL_CALL createRegistryInfo_OGridWizard()
     > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
 
-    //=====================================================================
-    //= OGroupBoxSI
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OUString OGroupBoxSI::getImplementationName() const
     {
         return OUString("org.openoffice.comp.dbp.OGroupBoxWizard");
     }
 
-    //---------------------------------------------------------------------
+    
     Sequence< OUString > OGroupBoxSI::getServiceNames() const
     {
         Sequence< OUString > aReturn(1);
@@ -70,16 +70,16 @@ namespace dbp
         return aReturn;
     }
 
-    //=====================================================================
-    //= OListComboSI
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OUString OListComboSI::getImplementationName() const
     {
         return OUString("org.openoffice.comp.dbp.OListComboWizard");
     }
 
-    //---------------------------------------------------------------------
+    
     Sequence< OUString > OListComboSI::getServiceNames() const
     {
         Sequence< OUString > aReturn(1);
@@ -87,16 +87,16 @@ namespace dbp
         return aReturn;
     }
 
-    //=====================================================================
-    //= OGridSI
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OUString OGridSI::getImplementationName() const
     {
         return OUString("org.openoffice.comp.dbp.OGridWizard");
     }
 
-    //---------------------------------------------------------------------
+    
     Sequence< OUString > OGridSI::getServiceNames() const
     {
         Sequence< OUString > aReturn(1);
@@ -104,8 +104,8 @@ namespace dbp
         return aReturn;
     }
 
-//.........................................................................
-}   // namespace dbp
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

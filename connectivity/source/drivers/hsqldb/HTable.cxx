@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -58,7 +58,7 @@ OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection)
     :OTableHelper(_pTables,_xConnection,sal_True)
 {
-    // we create a new table here, so we should have all the rights or ;-)
+    
     m_nPrivileges = Privilege::DROP         |
                     Privilege::REFERENCE    |
                     Privilege::ALTER        |
@@ -70,7 +70,7 @@ OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
                     Privilege::SELECT;
     construct();
 }
-// -------------------------------------------------------------------------
+
 OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
                            const Reference< XConnection >& _xConnection,
                     const OUString& _Name,
@@ -91,41 +91,41 @@ OHSQLTable::OHSQLTable( sdbcx::OCollection* _pTables,
 {
     construct();
 }
-// -------------------------------------------------------------------------
+
 void OHSQLTable::construct()
 {
     OTableHelper::construct();
     if ( !isNew() )
         registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRIVILEGES),  PROPERTY_ID_PRIVILEGES,PropertyAttribute::READONLY,&m_nPrivileges,  ::getCppuType(&m_nPrivileges));
 }
-// -----------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* OHSQLTable::createArrayHelper( sal_Int32 /*_nId*/ ) const
 {
     return doCreateArrayHelper();
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OHSQLTable::getInfoHelper()
 {
     return *static_cast<OHSQLTable_PROP*>(const_cast<OHSQLTable*>(this))->getArrayHelper(isNew() ? 1 : 0);
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* OHSQLTable::createColumns(const TStringVector& _rNames)
 {
     OHSQLColumns* pColumns = new OHSQLColumns(*this,sal_True,m_aMutex,_rNames);
     pColumns->setParent(this);
     return pColumns;
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* OHSQLTable::createKeys(const TStringVector& _rNames)
 {
     return new OKeysHelper(this,m_aMutex,_rNames);
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::OCollection* OHSQLTable::createIndexes(const TStringVector& _rNames)
 {
     return new OIndexesHelper(this,m_aMutex,_rNames);
 }
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -141,16 +141,16 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
+
 sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OTable_TYPEDEF::getSomething(rId);
 }
-// -------------------------------------------------------------------------
-// XAlterTable
+
+
 void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -168,38 +168,38 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
 
     if ( !isNew() )
     {
-        // first we have to check what should be altered
+        
         Reference<XPropertySet> xProp;
         m_pColumns->getByName(colName) >>= xProp;
-        // first check the types
+        
         sal_Int32 nOldType = 0,nNewType = 0,nOldPrec = 0,nNewPrec = 0,nOldScale = 0,nNewScale = 0;
         OUString sOldTypeName, sNewTypeName;
 
         ::dbtools::OPropertyMap& rProp = OMetaConnection::getPropMap();
 
-        // type/typename
+        
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))         >>= nOldType;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPE))    >>= nNewType;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME))     >>= sOldTypeName;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_TYPENAME))>>= sNewTypeName;
 
-        // and precsions and scale
+        
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))    >>= nOldPrec;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_PRECISION))>>= nNewPrec;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))        >>= nOldScale;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_SCALE))   >>= nNewScale;
 
-        // second: check the "is nullable" value
+        
         sal_Int32 nOldNullable = 0,nNewNullable = 0;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))       >>= nOldNullable;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISNULLABLE))  >>= nNewNullable;
 
-        // check also the auto_increment
+        
         sal_Bool bOldAutoIncrement = sal_False,bAutoIncrement = sal_False;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT))      >>= bOldAutoIncrement;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_ISAUTOINCREMENT)) >>= bAutoIncrement;
 
-        // now we should look if the name of the column changed
+        
         OUString sNewColumnName;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_NAME)) >>= sNewColumnName;
         if ( !sNewColumnName.equals(colName) )
@@ -222,16 +222,16 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
             ||  nNewNullable != nOldNullable
             ||  bOldAutoIncrement != bAutoIncrement )
         {
-            // special handling because they change the type names to distinguish
-            // if a column should be an auto_incmrement one
+            
+            
             if ( bOldAutoIncrement != bAutoIncrement )
             {
-                /// TODO: insert special handling for auto increment "IDENTITY" and primary key
+                
             }
             alterColumnType(nNewType,sNewColumnName,descriptor);
         }
 
-        // third: check the default values
+        
         OUString sNewDefault,sOldDefault;
         xProp->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE))     >>= sOldDefault;
         descriptor->getPropertyValue(rProp.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)) >>= sNewDefault;
@@ -257,7 +257,7 @@ void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Refe
     }
 
 }
-// -----------------------------------------------------------------------------
+
 void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
 {
     OUString sSql = getAlterTableColumnPart();
@@ -288,7 +288,7 @@ void OHSQLTable::alterColumnType(sal_Int32 nNewType,const OUString& _rColName, c
     sSql += ::dbtools::createStandardColumnPart(xProp,getConnection());
     executeStatement(sSql);
 }
-// -----------------------------------------------------------------------------
+
 void OHSQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString& _rColName)
 {
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
@@ -299,7 +299,7 @@ void OHSQLTable::alterDefaultValue(const OUString& _sNewDefault,const OUString& 
 
     executeStatement(sSql);
 }
-// -----------------------------------------------------------------------------
+
 void OHSQLTable::dropDefaultValue(const OUString& _rColName)
 {
     const OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
@@ -310,7 +310,7 @@ void OHSQLTable::dropDefaultValue(const OUString& _rColName)
 
     executeStatement(sSql);
 }
-// -----------------------------------------------------------------------------
+
 OUString OHSQLTable::getAlterTableColumnPart()
 {
     OUString sSql(  "ALTER TABLE " );
@@ -320,7 +320,7 @@ OUString OHSQLTable::getAlterTableColumnPart()
 
     return sSql;
 }
-// -----------------------------------------------------------------------------
+
 void OHSQLTable::executeStatement(const OUString& _rStatement )
 {
     OUString sSQL = _rStatement;
@@ -339,7 +339,7 @@ void OHSQLTable::executeStatement(const OUString& _rStatement )
         ::comphelper::disposeComponent(xStmt);
     }
 }
-// -----------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException)
 {
     if ( m_Type.equalsAscii("VIEW") )
@@ -361,8 +361,8 @@ Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException)
     }
     return OTableHelper::getTypes();
 }
-// -------------------------------------------------------------------------
-// XRename
+
+
 void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -398,7 +398,7 @@ void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, 
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
 }
 
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OHSQLTable::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     if( m_Type.equalsAscii("VIEW") && rType == ::getCppuType((const Reference<XRename>*)0) )
@@ -406,6 +406,6 @@ Any SAL_CALL OHSQLTable::queryInterface( const Type & rType ) throw(RuntimeExcep
 
     return OTableHelper::queryInterface(rType);
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

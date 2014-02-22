@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/chartspacefragment.hxx"
@@ -29,11 +29,11 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::oox::core;
 
-// ============================================================================
+
 
 ChartSpaceFragment::ChartSpaceFragment( XmlFilterBase& rFilter, const OUString& rFragmentPath, ChartSpaceModel& rModel ) :
     FragmentBase< ChartSpaceModel >( rFilter, rFragmentPath, rModel ),
@@ -85,7 +85,7 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
             switch( nElement )
             {
                 case C_TOKEN( autoTitleDeleted ):
-                    // default is 'false', not 'true' as specified
+                    
                     mrModel.mbAutoTitleDel = rAttribs.getBool( XML_val, false );
                     return 0;
                 case C_TOKEN( backWall ):
@@ -100,11 +100,11 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
                 case C_TOKEN( plotArea ):
                     return new PlotAreaContext( *this, mrModel.mxPlotArea.create() );
                 case C_TOKEN( plotVisOnly ):
-                    // default is 'false', not 'true' as specified
+                    
                     mrModel.mbPlotVisOnly = rAttribs.getBool( XML_val, false );
                     return 0;
                 case C_TOKEN( showDLblsOverMax ):
-                    // default is 'false', not 'true' as specified
+                    
                     mrModel.mbShowLabelsOverMax = rAttribs.getBool( XML_val, false );
                     return 0;
                 case C_TOKEN( sideWall ):
@@ -119,10 +119,10 @@ ContextHandlerRef ChartSpaceFragment::onCreateContext( sal_Int32 nElement, const
     return 0;
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

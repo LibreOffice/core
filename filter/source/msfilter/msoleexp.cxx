@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Reference.hxx>
@@ -126,7 +126,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         static struct _ObjExpType {
             sal_uInt32 nFlag;
             const char* pFilterNm;
-            // GlobalNameId
+            
             struct _GlobalNameIds {
                 sal_uInt32 n1;
                 sal_uInt16 n2, n3;
@@ -150,8 +150,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                 {{SO3_SCH_CLASSID_60}, {SO3_SCH_CLASSID_50},
                  {SO3_SCH_CLASSID_40}, {SO3_SCH_CLASSID_30 }}},
             { 0, "",
-                {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},    // SJ: !!!! SO3_SDRAW_CLASSID is only available up from
-                 {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50 }}}, // ver 5.0, it is purpose to have double entrys here.
+                {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},    
+                 {SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50 }}}, 
 
             { 0xffff,0,
                 {{SO3_SDRAW_CLASSID_60}, {SO3_SDRAW_CLASSID_50},
@@ -170,7 +170,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                 {
                     aOwnGlobalName = aGlbNm;
 
-                    // flags for checking if conversion is wanted at all (SaveOptions?!)
+                    
                     if( GetFlags() & pArr->nFlag )
                     {
                         pExpFilter = SfxFilterMatcher().GetFilter4FilterName(OUString::createFromAscii(pArr->pFilterNm));
@@ -181,14 +181,14 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         }
     }
 
-    if( pExpFilter )                        // use this filter for the export
+    if( pExpFilter )                        
     {
         try
         {
             if ( rObj->getCurrentState() == embed::EmbedStates::LOADED )
                 rObj->changeState( embed::EmbedStates::RUNNING );
-            //TODO/LATER: is stream instead of outputstream a better choice?!
-            //TODO/LATER: a "StoreTo" method at embedded object would be nice
+            
+            
             uno::Sequence < beans::PropertyValue > aSeq(2);
             SvStream* pStream = new SvMemoryStream;
             aSeq[0].Name = "OutputStream";
@@ -201,7 +201,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         {
             xStor->storeToURL( "private:stream", aSeq );
         }
-        catch( const uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
+        catch( const uno::Exception& ) {} 
 
             SotStorageRef xOLEStor = new SotStorage( pStream, true );
             xOLEStor->CopyTo( &rDestStg );
@@ -209,17 +209,17 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         }
         catch( const uno::Exception& )
         {
-            // TODO/LATER: Error handling
+            
             OSL_FAIL( "The object could not be exported!" );
         }
     }
     else if( aOwnGlobalName != SvGlobalName() )
     {
-        // own format, maybe SO6 format or lower
+        
         SvGlobalName aEmbName = GetEmbeddedVersion( aOwnGlobalName );
         if ( aEmbName != SvGlobalName() && !UseOldMSExport() )
         {
-            // this is a SO6 embedded object, save in old binary format
+            
             rDestStg.SetVersion( SOFFICE_FILEFORMAT_31 );
             rDestStg.SetClass( aEmbName,
                                 SOT_FORMATSTR_ID_EMBEDDED_OBJ_OLE,
@@ -231,16 +231,16 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             sal_Bool bExtentSuccess = sal_False;
             if( !xExtStm->GetError() )
             {
-                // write extent
-                //TODO/MBA: check if writing a size is enough
+                
+                
                 if( rObj.GetObject().is() )
                 {
-                    // MSOLE objects don't need to be in running state for VisualArea access
+                    
                     awt::Size aSize;
                     try
                     {
-                        // this is an own object, the content size must be stored in the
-                        // extension stream
+                        
+                        
                         aSize = rObj->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
                     }
                     catch( const embed::NoVisualAreaSizeException& )
@@ -288,8 +288,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                     {
                         if ( rObj->getCurrentState() == embed::EmbedStates::LOADED )
                             rObj->changeState( embed::EmbedStates::RUNNING );
-                        //TODO/LATER: is stream instead of outputstream a better choice?!
-                        //TODO/LATER: a "StoreTo" method at embedded object would be nice
+                        
+                        
                         uno::Sequence < beans::PropertyValue > aSeq(1);
                         aSeq[0].Name = "OutputStream";
                         ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *xEmbStm );
@@ -299,7 +299,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                     }
                     catch( const uno::Exception& )
                     {
-                        // TODO/LATER: Error handling
+                        
                         OSL_FAIL( "The object could not be exported!" );
                     }
                 }
@@ -312,8 +312,8 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
     }
     else
     {
-        // alien objects
-        //TODO/LATER: a "StoreTo" method at embedded object would be nice
+        
+        
         rDestStg.SetVersion( SOFFICE_FILEFORMAT_31 );
         uno::Reference < embed::XStorage > xStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
         uno::Reference < embed::XEmbedPersist > xPers( rObj.GetObject(), uno::UNO_QUERY );
@@ -334,7 +334,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         }
     }
 
-    //We never need this stream: See #99809# and #i2179#
+    
     rDestStg.Remove( OUString(SVEXT_PERSIST_STREAM) );
 }
 

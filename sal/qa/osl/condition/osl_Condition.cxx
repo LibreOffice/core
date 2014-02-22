@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//------------------------------------------------------------------------
-// include files
-//------------------------------------------------------------------------
+
+
+
 #include <osl_Condition_Const.h>
 #include <stdlib.h>
 
@@ -28,9 +28,9 @@ using namespace osl;
 using namespace rtl;
 
 
-//------------------------------------------------------------------------
-// helper functions and classes
-//------------------------------------------------------------------------
+
+
+
 
 /** print Boolean value.
 */
@@ -64,13 +64,13 @@ enum ConditionType
 class ConditionThread : public Thread
 {
 public:
-    //get the Condition to operate
+    
     ConditionThread( ::osl::Condition& Con, ConditionType tType): m_MyCon( Con ), m_MyType( tType ) { }
 
     ~ConditionThread( )
     {
-        // LLA: do not throw in DTors!
-        // LLA: CPPUNIT_ASSERT_MESSAGE( "#ConditionThread does not shutdown properly.\n", sal_False == this -> isRunning( ) );
+        
+        
     }
 protected:
     ::osl::Condition& m_MyCon;
@@ -93,9 +93,9 @@ protected:
 };
 
 
-//------------------------------------------------------------------------
-// test code start here
-//------------------------------------------------------------------------
+
+
+
 
 namespace osl_Condition
 {
@@ -131,7 +131,7 @@ namespace osl_Condition
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST( ctors_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class ctors
+    }; 
 
 
     /** testing the method:
@@ -176,7 +176,7 @@ namespace osl_Condition
         CPPUNIT_TEST( set_001 );
         CPPUNIT_TEST( set_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class set
+    }; 
 
 
     /** testing the method:
@@ -221,7 +221,7 @@ namespace osl_Condition
         CPPUNIT_TEST( reset_001 );
         CPPUNIT_TEST( reset_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class reset
+    }; 
 
 
     /** testing the method:
@@ -289,7 +289,7 @@ namespace osl_Condition
         CPPUNIT_TEST( wait_001 );
         CPPUNIT_TEST( wait_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class wait
+    }; 
 
 
     /** testing the method:
@@ -336,21 +336,21 @@ namespace osl_Condition
         CPPUNIT_TEST( check_001 );
         CPPUNIT_TEST( check_002 );
         CPPUNIT_TEST_SUITE_END( );
-    }; // class check
+    }; 
 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::set);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::reset);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::wait);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_Condition::check);
-// -----------------------------------------------------------------------------
-
-} // namespace osl_Condition
 
 
-// -----------------------------------------------------------------------------
+} 
+
+
+
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

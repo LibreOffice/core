@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -53,25 +53,25 @@ SlideShowRestarter::~SlideShowRestarter (void)
 
 void SlideShowRestarter::Restart (bool bForce)
 {
-    // Prevent multiple and concurrently restarts.
+    
     if (mnEventId != 0)
         return;
 
     if (bForce)
         mnDisplayCount = 0;
 
-    // Remember the current slide in order to restore it after the slide
-    // show has been restarted.
+    
+    
     if (mpSlideShow.is())
         mnCurrentSlideNumber = mpSlideShow->getCurrentPageNumber();
 
-    // Remember a shared pointer to this object to prevent its destruction
-    // before the whole restarting process has finished.
+    
+    
     mpSelf = shared_from_this();
 
-    // We do not know in what situation this method was called.  So, in
-    // order to be able to cleanly stop the presentation, we do that
-    // asynchronously.
+    
+    
+    
     mnEventId = Application::PostUserEvent(
         LINK(this, SlideShowRestarter, EndPresentation));
 }
@@ -85,16 +85,16 @@ IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation)
         {
             mpSlideShow->end();
 
-            // The following piece of code should not be here because the
-            // slide show should be aware of the existence of the presenter
-            // console (which is displayed in the FullScreenPane).  But the
-            // timing has to be right and I did not find a better place for
-            // it.
+            
+            
+            
+            
+            
 
-            // Wait for the full screen pane, which displays the presenter
-            // console, to disappear.  Only when it is gone, call
-            // InitiatePresenterStart(), in order to begin the asynchronous
-            // restart of the slide show.
+            
+            
+            
+            
             if (mpViewShellBase != NULL)
             {
                 ::boost::shared_ptr<FrameworkHelper> pHelper(
@@ -125,7 +125,7 @@ void SlideShowRestarter::StartPresentation (void)
     if (mpDispatcher == NULL && mpViewShellBase!=NULL)
         mpDispatcher = mpViewShellBase->GetViewFrame()->GetDispatcher();
 
-    // Start the slide show on the saved current slide.
+    
     if (mpDispatcher != NULL)
     {
         mpDispatcher->Execute(SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON);
@@ -140,6 +140,6 @@ void SlideShowRestarter::StartPresentation (void)
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

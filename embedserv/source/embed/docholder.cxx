@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
@@ -69,7 +69,7 @@ using namespace ::com::sun::star;
 
 extern OUString  getFilterNameFromGUID_Impl( GUID* );
 
-// add mutex locking ???
+
 
 DocumentHolder::DocumentHolder(
     const uno::Reference<lang::XMultiServiceFactory >& xFactory,
@@ -233,7 +233,7 @@ HRESULT DocumentHolder::InPlaceActivate(
     if ( !m_xDocument.is() )
         return ERROR;
 
-    //1.  Initialization, obtaining interfaces, OnInPlaceActivate.
+    
     hr=pActiveSite->QueryInterface(
         IID_IOleInPlaceSite,
         (void**) &m_pIOleIPSite);
@@ -251,17 +251,17 @@ HRESULT DocumentHolder::InPlaceActivate(
 
     m_pIOleIPSite->OnInPlaceActivate();
 
-    //2. Get the site window
-    //3. and determine container frame and
-    //   document window for tools and menus, as well
-    //   as frameInfo for accelerators
+    
+    
+    
+    
     m_pIOleIPSite->GetWindow(&hWndSite);
 
     frameInfo.cb=sizeof(OLEINPLACEFRAMEINFO);
     m_pIOleIPSite->GetWindowContext(
         &m_pIOleIPFrame,&m_pIOleIPUIWindow,&rcPos,&rcClip,&frameInfo);
 
-    // initialize the office as, with hwnd as parentwindow
+    
     uno::Any                      aAny;
     uno::Sequence<sal_Int8> aProcessIdent(16);
     rtl_getGlobalProcessId((sal_uInt8*)aProcessIdent.getArray());
@@ -269,25 +269,25 @@ HRESULT DocumentHolder::InPlaceActivate(
     try
     {
         if(!m_xEditWindow.is())
-        {   // determine XWindow and window handle of parent
+        {   
             HWND                          hWndxWinParent(0);
             uno::Reference<awt::XWindow>  xWin;
 
             uno::Reference<awt::XToolkit2> xToolkit =
                 awt::Toolkit::create(comphelper::getComponentContext(m_xFactory));
 
-            // create system window wrapper for hwnd
+            
             if( !m_pCHatchWin )
                 m_pCHatchWin = new winwrap::CHatchWin(
                     m_hInstance,this);
 
             if(m_pCHatchWin->Init(hWndSite,/*ID_HATCHWINDOW*/2000, NULL)) {
-                m_pCHatchWin->RectsSet(&rcPos,&rcClip); //set visible area
+                m_pCHatchWin->RectsSet(&rcPos,&rcClip); 
                 hWndxWinParent = m_pCHatchWin->Window();
-                ShowWindow(hWndxWinParent,SW_SHOW);  //Make visible.
+                ShowWindow(hWndxWinParent,SW_SHOW);  
             }
             else {
-                // no success initializing hatch window
+                
                 delete m_pCHatchWin, m_pCHatchWin = 0;
                 hWndxWinParent = hWndSite;
             }
@@ -318,12 +318,12 @@ HRESULT DocumentHolder::InPlaceActivate(
         else {
             if(m_hWndxWinParent) {
                 SetParent(m_hWndxWinParent,hWndSite);
-                ShowWindow(m_hWndxWinParent,SW_SHOW);  //Make visible.
+                ShowWindow(m_hWndxWinParent,SW_SHOW);  
             }
 
             if ( !m_xFrame.is() )
-                // initially set size to "empty", this guarantees that the final resize
-                // is always executed (will be done by "SetObjectRects" after getting internal border)
+                
+                
                 m_xEditWindow->setPosSize(
                     0,
                     0,
@@ -348,7 +348,7 @@ HRESULT DocumentHolder::InPlaceActivate(
         if(m_xFrame.is())
             m_xFrame->activate();
         else {
-            // create frame and initialize it with with the created window
+            
             m_xFrame = frame::Frame::create( comphelper::getComponentContext(m_xFactory) );
             m_xFrame->initialize(m_xEditWindow);
 
@@ -359,13 +359,13 @@ HRESULT DocumentHolder::InPlaceActivate(
             if(m_xLayoutManager.is())
                 m_xLayoutManager->setDockingAreaAcceptor(this);
 
-            // load the model into the frame
+            
             LoadDocInFrame( sal_True );
 
             uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(comphelper::getComponentContext(m_xFactory));
             xDesktop->getFrames()->append( uno::Reference<frame::XFrame>(m_xFrame, uno::UNO_QUERY_THROW) );
 
-            // determine the menuhandle to get menutitems.
+            
             if(m_xLayoutManager.is()) {
                 uno::Reference< ::com::sun::star::ui::XUIElement > xUIEl(
                     m_xLayoutManager->getElement(
@@ -386,14 +386,14 @@ HRESULT DocumentHolder::InPlaceActivate(
             }
         }
 
-        // TODO/cd: Workaround for status indicator bug. It always makes the
-        // document window visible, when someone tries to use the status
-        // indicator. As we save our document when we get the deactivation
-        // from OLE this conflict to hide floating windows.
+        
+        
+        
+        
         if(m_xLayoutManager.is())
             m_xLayoutManager->setVisible(true);
 
-        // get document border and resize rects according to border
+        
         GetDocumentBorder( &m_aBorder );
         SetObjectRects( &rcPos, &rcClip );
 
@@ -404,7 +404,7 @@ HRESULT DocumentHolder::InPlaceActivate(
                 aDocLock.GetEmbedDocument()->ShowObject();
         }
 
-        // setTitle(m_aDocumentNamePart);
+        
         if (fIncludeUI)
             hr=UIActivate();
 
@@ -438,10 +438,10 @@ void DocumentHolder::InPlaceDeactivate(void)
         SetParent(m_hWndxWinCont,0);
     }
 
-    // TODO/cd: Workaround for status indicator bug. It always makes the
-    // document window visible, when someone tries to use the status
-    // indicator. As we save our document when we get the deactivation
-    // from OLE this conflict to hide floating windows.
+    
+    
+    
+    
     if (m_xLayoutManager.is())
         m_xLayoutManager->setVisible(false);
 
@@ -467,15 +467,15 @@ void DocumentHolder::InPlaceDeactivate(void)
 
 HRESULT DocumentHolder::UIActivate()
 {
-    // 1.  Call IOleInPlaceSite::UIActivate
+    
     if (NULL!=m_pIOleIPSite)
         m_pIOleIPSite->OnUIActivate();
 
-    //2.  Critical for accelerators to work initially.
+    
     SetFocus(m_pCHatchWin->Window());
-    // if(m_xEditWindow.is()) m_xEditWindow->setFocus();
+    
 
-    //3.  Set the active object
+    
 
     OLECHAR starOffice[] = {'S','t','a','r','O','f','f','i','c','e',0};
     CComPtr< IOleInPlaceActiveObject > pObj = new CIIAObj( this );
@@ -488,7 +488,7 @@ HRESULT DocumentHolder::UIActivate()
         m_pIOleIPUIWindow->SetActiveObject(
             pObj, starOffice );
 
-    //4.  Create the shared menu.
+    
     InPlaceMenuCreate();
 
     return NOERROR;
@@ -496,7 +496,7 @@ HRESULT DocumentHolder::UIActivate()
 
 void DocumentHolder::UIDeactivate()
 {
-    //1.  Remove the shared menu.
+    
     InPlaceMenuDestroy();
 
     if (NULL!=m_pIOleIPFrame)
@@ -505,7 +505,7 @@ void DocumentHolder::UIDeactivate()
     if (NULL!=m_pIOleIPUIWindow)
         m_pIOleIPUIWindow->SetActiveObject(NULL, NULL);
 
-    //3.  Call IOleInPlaceSite::OnUIDeactivate
+    
     if (NULL!=m_pIOleIPSite)
         m_pIOleIPSite->OnUIDeactivate(FALSE);
 
@@ -540,27 +540,27 @@ BOOL DocumentHolder::InPlaceMenuCreate(void)
     for (i=0; i<6; i++)
         mgw.width[i]=0;
 
-    //We already have popup menu handles in m_pFR->m_phMenu[]
+    
 
-    //Create the new shared menu and let container do its thing
+    
     hMenu=CreateMenu();
     m_pIOleIPFrame->InsertMenus(hMenu,&mgw);
 
     int count = GetMenuItemCount(m_nMenuHandle);
     int help = count-1;
 
-    // start with 1, because we don't include "File"
+    
     WORD pos = (WORD)mgw.width[0];
     CopyToOLEMenu(m_nMenuHandle,1,hMenu,pos);
     mgw.width[1] = 1;
 
-    // insert object menu here
+    
     pos = ((WORD)(mgw.width[0] + mgw.width[1] + mgw.width[2]));
     for(WORD i = 2; i < help-1; ++i,++pos)
         CopyToOLEMenu(m_nMenuHandle,i,hMenu,pos);
     mgw.width[3] = help - 3;
 
-    // insert help menu
+    
     pos = (WORD)(mgw.width[0] + mgw.width[1] + mgw.width[2] +
                  mgw.width[3] + mgw.width[4]);
     CopyToOLEMenu(m_nMenuHandle,WORD(help),hMenu,pos);
@@ -599,12 +599,12 @@ BOOL DocumentHolder::InPlaceMenuDestroy(void)
 
 void DocumentHolder::OpenIntoWindow(void)
 {
-    // not implemented
+    
 }
 
 BOOL DocumentHolder::Undo(void)
 {
-    // not implemented
+    
     return false;
 }
 
@@ -716,7 +716,7 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, s
 
     if ( m_xDocument.is() && !m_bLink )
     {
-        // set the document mode to embedded
+        
         uno::Sequence< beans::PropertyValue > aSeq(1);
         aSeq[0].Name = "SetEmbedded";
         aSeq[0].Value <<= sal_True;
@@ -749,7 +749,7 @@ sal_Bool DocumentHolder::ExecuteSuspendCloseFrame()
                 }
                 catch( const util::CloseVetoException& )
                 {
-                    // should be called if the frame could not be closed
+                    
                     xController->suspend( sal_False );
                 }
             }
@@ -772,9 +772,9 @@ uno::Reference< frame::XFrame2 > DocumentHolder::DocumentFrame()
 
         uno::Reference<frame::XFrame2> xFrame(xDesktop,uno::UNO_QUERY);
 
-        // the frame will be registered on desktop here, later when the document
-        // is loaded into the frame in ::show() method the terminate listener will be removed
-        // this is so only for outplace activation
+        
+        
+        
         if( xFrame.is() )
             m_xFrame.set( xFrame->findFrame( OUString("_blank"), 0 ), uno::UNO_QUERY_THROW );
 
@@ -784,13 +784,13 @@ uno::Reference< frame::XFrame2 > DocumentHolder::DocumentFrame()
         if ( xBroadcaster.is() )
         {
             xBroadcaster->addCloseListener( (util::XCloseListener*)this );
-            FreeOffice(); // the frame is part of the desktop
+            FreeOffice(); 
         }
     }
 
     if( m_xFrame.is() )
     {
-        // intercept
+        
         m_xFrame->registerDispatchProviderInterceptor( CreateNewInterceptor() );
     }
 
@@ -844,7 +844,7 @@ void DocumentHolder::show()
         {
             LoadDocInFrame( sal_False );
 
-            // get rid of second closer if it is there
+            
             uno::Reference< beans::XPropertySet > xLMProps( m_xFrame->getLayoutManager(), uno::UNO_QUERY );
             if ( xLMProps.is() )
             {
@@ -971,12 +971,12 @@ void DocumentHolder::setTitle(const OUString& aDocumentName)
                     }
                 }
                 catch(const uno::Exception& ) {
-                    // nothing better to do here
+                    
                     m_aFilterName = aFilterName;
                 }
             }
         }
-        // set the title
+        
         static const sal_Unicode u[] = { ' ','(',0 };
         static const sal_Unicode c[] = { ')',0 };
         rtl::OUString aTotalName(m_aFilterName);
@@ -1019,8 +1019,8 @@ void DocumentHolder::hide()
 {
     if(m_xFrame.is()) m_xFrame->deactivate();
 
-    //todo: sendadvise
-    // after hiding the window it is always allowed to InPlaceActivate it
+    
+    
     m_bAllowInPlace = true;
 }
 
@@ -1103,10 +1103,10 @@ HRESULT DocumentHolder::SetExtent( const SIZEL *pSize )
 
                 sal_Int32 aMapMode = xVisObj->getMapUnit( DVASPECT_CONTENT );
 
-                // TODO/LATER: in future UNO API should be used for the conversion, currently there is no
+                
                 if ( aMapMode == embed::EmbedMapUnits::TWIP )
                 {
-                    // conversion from ONE_100TH_MM
+                    
                     aNewSize.Width = aNewSize.Width * 144 / 254;
                     aNewSize.Height = aNewSize.Height * 144 / 254;
                 }
@@ -1137,10 +1137,10 @@ HRESULT DocumentHolder::GetExtent( SIZEL *pSize )
 
                 sal_Int32 aMapMode = xVisObj->getMapUnit( DVASPECT_CONTENT );
 
-                // TODO/LATER: in future UNO API should be used for the conversion, currently there is no
+                
                 if ( aMapMode == embed::EmbedMapUnits::TWIP )
                 {
-                    // conversion to ONE_100TH_MM
+                    
                     aDocSize.Width = aDocSize.Width * 254 / 144;
                     aDocSize.Height = aDocSize.Height * 254 / 144;
                 }
@@ -1326,7 +1326,7 @@ DocumentHolder::setDockingAreaSpace(
         DeleteObject(hrgn2);
 
         SetWindowRgn(m_hWndxWinCont,hrgn1,true);
-        // not:: DeleteObject(hrgn1);
+        
         m_pIOleIPFrame->SetBorderSpace(&bw);
     }
 }
@@ -1380,7 +1380,7 @@ DocumentHolder::notifyClosing(
 
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
     {
-        // can happen only in case of links
+        
         m_pIDispatch = NULL;
         m_xDocument = uno::Reference< frame::XModel >();
         m_xFrame = uno::Reference< frame::XFrame2 >();
@@ -1432,9 +1432,9 @@ void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
     }
 }
 
-// Fix strange warnings about some
-// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
-// warning C4505: 'xxx' : unreferenced local function has been removed
+
+
+
 #ifdef _MSC_VER
 #pragma warning(disable: 4505)
 #endif

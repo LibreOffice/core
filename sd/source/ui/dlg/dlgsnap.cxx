@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svxids.hrc>
@@ -59,23 +59,23 @@ SdSnapLineDlg::SdSnapLineDlg(
     SetFieldUnit( *m_pMtrFldX, eUIUnit, sal_True );
     SetFieldUnit( *m_pMtrFldY, eUIUnit, sal_True );
 
-    // get WorkArea
+    
     Rectangle aWorkArea = pView->GetWorkArea();
 
-    // determine PoolUnit
+    
     SfxItemPool* pPool = rInAttrs.GetPool();
     DBG_ASSERT( pPool, "Where's the Pool?" );
     SfxMapUnit ePoolUnit = pPool->GetMetric( SID_ATTR_FILL_HATCH );
 
-    // #i48497# Consider page origin
+    
     SdrPageView* pPV = pView->GetSdrPageView();
     Point aLeftTop(aWorkArea.Left()+1, aWorkArea.Top()+1);
     pPV->LogicToPagePos(aLeftTop);
     Point aRightBottom(aWorkArea.Right()-2, aWorkArea.Bottom()-2);
     pPV->LogicToPagePos(aRightBottom);
 
-    // determine max and min values depending on
-    // WorkArea, PoolUnit and FieldUnit:
+    
+    
     SetMetricValue( *m_pMtrFldX, aLeftTop.X(), ePoolUnit );
 
     long nValue = static_cast<long>(m_pMtrFldX->GetValue());
@@ -101,7 +101,7 @@ SdSnapLineDlg::SdSnapLineDlg(
     m_pMtrFldY->SetMax( nValue );
     m_pMtrFldY->SetLast( nValue );
 
-    // set values
+    
     nXValue = ((const SfxUInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_X)).GetValue();
     nYValue = ((const SfxUInt32Item&) rInAttrs.Get(ATTR_SNAPLINE_Y)).GetValue();
     nXValue = Fraction(nXValue) / aUIScale;

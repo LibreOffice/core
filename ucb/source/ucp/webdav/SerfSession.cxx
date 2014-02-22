@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hash_map>
@@ -54,13 +54,13 @@ using namespace com::sun::star;
 using namespace http_dav_ucp;
 
 
-// -------------------------------------------------------------------
-// static members!
-//SerfLockStore SerfSession::m_aSerfLockStore;
 
-// -------------------------------------------------------------------
-// Constructor
-// -------------------------------------------------------------------
+
+
+
+
+
+
 SerfSession::SerfSession(
         const rtl::Reference< DAVSessionFactory > & rSessionFactory,
         const OUString& inUri,
@@ -84,9 +84,9 @@ SerfSession::SerfSession(
     m_pSerfBucket_Alloc = serf_bucket_allocator_create( getAprPool(), NULL, NULL );
 }
 
-// -------------------------------------------------------------------
-// Destructor
-// -------------------------------------------------------------------
+
+
+
 SerfSession::~SerfSession( )
 {
     if ( m_pSerfConnection )
@@ -96,7 +96,7 @@ SerfSession::~SerfSession( )
     }
 }
 
-// -------------------------------------------------------------------
+
 void SerfSession::Init( const DAVRequestEnvironment & rEnv )
   throw ( DAVException )
 {
@@ -105,7 +105,7 @@ void SerfSession::Init( const DAVRequestEnvironment & rEnv )
     Init();
 }
 
-// -------------------------------------------------------------------
+
 void SerfSession::Init()
     throw ( DAVException )
 {
@@ -120,7 +120,7 @@ void SerfSession::Init()
         m_aProxyName = rProxyCfg.aName;
         m_nProxyPort = rProxyCfg.nPort;
 
-        // Not yet initialized. Create new session.
+        
         bCreateNewSession = true;
     }
     else
@@ -133,7 +133,7 @@ void SerfSession::Init()
             m_aProxyName = rProxyCfg.aName;
             m_nProxyPort = rProxyCfg.nPort;
 
-            // new session needed, destroy old first
+            
             serf_connection_close( m_pSerfConnection );
             m_pSerfConnection = 0;
             bCreateNewSession = true;
@@ -142,7 +142,7 @@ void SerfSession::Init()
 
     if ( bCreateNewSession )
     {
-        // TODO - close_connection callback
+        
         apr_status_t status = serf_connection_create2( &m_pSerfConnection,
                                                        m_pSerfContext,
                                                        *(m_aUri.getAprUri()),
@@ -156,8 +156,8 @@ void SerfSession::Init()
                                 SerfUri::makeConnectionEndPointString( m_aUri.GetHost(), m_aUri.GetPort() ) );
         }
 
-        // Register the session with the lock store
-//        m_aSerfLockStore.registerSession( m_pSerfConnection );
+        
+
 
         if ( m_aProxyName.getLength() )
         {
@@ -220,8 +220,8 @@ char* SerfSession::getHostinfo()
 }
 
 
-// -------------------------------------------------------------------
-// virtual
+
+
 sal_Bool SerfSession::CanUse( const OUString & inUri )
 {
     try
@@ -241,8 +241,8 @@ sal_Bool SerfSession::CanUse( const OUString & inUri )
     return sal_False;
 }
 
-// -------------------------------------------------------------------
-// virtual
+
+
 sal_Bool SerfSession::UsesProxy()
 {
     Init();
@@ -296,7 +296,7 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
     DAVAuthListener * pListener = getRequestEnvironment().m_xAuthListener.get();
     if ( !pListener )
     {
-        // abort
+        
         return SERF_ERROR_AUTHN_FAILED;
     }
 
@@ -322,7 +322,7 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
     }
     catch ( DAVException const & )
     {
-        // abort
+        
         return SERF_ERROR_AUTHN_FAILED;
     }
 
@@ -346,8 +346,8 @@ apr_status_t SerfSession::provideSerfCredentials( bool bGiveProvidedCredentialsA
 }
 
 namespace {
-    // -------------------------------------------------------------------
-    // Helper function
+    
+    
     OUString GetHostnamePart( const OUString& _rRawString )
     {
         OUString sPart;
@@ -361,7 +361,7 @@ namespace {
         }
         return sPart;
     }
-} // namespace
+} 
 
 
 apr_status_t SerfSession::verifySerfCertificateChain (
@@ -369,7 +369,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
     const char** pCertificateChainBase64Encoded,
     int nCertificateChainLength)
 {
-    // Check arguments.
+    
     if (pCertificateChainBase64Encoded == NULL || nCertificateChainLength<=0)
     {
         OSL_ASSERT(pCertificateChainBase64Encoded != NULL);
@@ -377,15 +377,15 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         return SERF_SSL_CERT_UNKNOWN_FAILURE;
     }
 
-    // Create some crypto objects to decode and handle the base64
-    // encoded certificate chain.
+    
+    
     uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
     uno::Reference< security::XCertificateContainer > xCertificateContainer;
     uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext;
     uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv;
     try
     {
-        // Create a certificate container.
+        
         xCertificateContainer = security::CertificateContainer::create( comphelper::getComponentContext(getMSF()) );
 
         xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
@@ -399,7 +399,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
 
         if ( ! xSecurityContext.is() || ! xSecurityEnv.is())
         {
-            // Do we have to dispose xSEInitializer or xCertificateContainer?
+            
             return SERF_SSL_CERT_UNKNOWN_FAILURE;
         }
     }
@@ -408,14 +408,14 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         return SERF_SSL_CERT_UNKNOWN_FAILURE;
     }
 
-    // Decode the server certificate.
+    
     uno::Reference< security::XCertificate > xServerCertificate(
         xSecurityEnv->createCertificateFromAscii(
             OUString::createFromAscii(pCertificateChainBase64Encoded[0])));
     if ( ! xServerCertificate.is())
         return SERF_SSL_CERT_UNKNOWN_FAILURE;
 
-    // Get the subject from the server certificate.
+    
     OUString sServerCertificateSubject (xServerCertificate->getSubjectName());
     sal_Int32 nIndex = 0;
     while (nIndex >= 0)
@@ -433,9 +433,9 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         }
     }
 
-    // When the certificate container already contains a (trusted)
-    // entry for the server then we do not have to authenticate any
-    // certificate.
+    
+    
+    
     const security::CertificateContainerStatus eStatus (
         xCertificateContainer->hasCertificate(
             getHostName(), sServerCertificateSubject ) );
@@ -446,9 +446,9 @@ apr_status_t SerfSession::verifySerfCertificateChain (
                : SERF_SSL_CERT_UNKNOWN_FAILURE;
     }
 
-    // The shortcut failed, so try to verify the whole chain.  This is
-    // done outside the isDomainMatch() block because the result is
-    // used by the interaction handler.
+    
+    
+    
     std::vector< uno::Reference< security::XCertificate > > aChain;
     for (int nIndex=1; nIndex<nCertificateChainLength; ++nIndex)
     {
@@ -463,8 +463,8 @@ apr_status_t SerfSession::verifySerfCertificateChain (
             xServerCertificate,
             ::comphelper::containerToSequence(aChain)));
 
-    // When the certificate matches the host name then we can use the
-    // result of the verification.
+    
+    
     bool bHostnameMatchesCertHostnames = false;
     {
         uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = xServerCertificate->getExtensions();
@@ -503,32 +503,32 @@ apr_status_t SerfSession::verifySerfCertificateChain (
 
         if (nVerificationResult == 0)
         {
-            // Certificate (chain) is valid.
+            
             xCertificateContainer->addCertificate(getHostName(), sServerCertificateSubject,  sal_True);
             return APR_SUCCESS;
         }
         else if ((nVerificationResult & security::CertificateValidity::CHAIN_INCOMPLETE) != 0)
         {
-            // We do not have enough information for verification,
-            // neither automatically (as we just discovered) nor
-            // manually (so there is no point in showing any dialog.)
+            
+            
+            
             return SERF_SSL_CERT_UNKNOWN_FAILURE;
         }
         else if ((nVerificationResult &
                 (security::CertificateValidity::INVALID | security::CertificateValidity::REVOKED)) != 0)
         {
-            // Certificate (chain) is invalid.
+            
             xCertificateContainer->addCertificate(getHostName(), sServerCertificateSubject,  sal_False);
             return SERF_SSL_CERT_UNKNOWN_FAILURE;
         }
         else
         {
-            // For all other we have to ask the user.
+            
         }
     }
 
-    // We have not been able to automatically verify (or falsify) the
-    // certificate chain.  To resolve this we have to ask the user.
+    
+    
     const uno::Reference< ucb::XCommandEnvironment > xEnv( getRequestEnvironment().m_xEnv );
     if ( xEnv.is() )
     {
@@ -553,7 +553,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
                 }
                 else
                 {
-                    // Don't trust cert
+                    
                     xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject, sal_False );
                     return SERF_SSL_CERT_UNKNOWN_FAILURE;
                 }
@@ -561,7 +561,7 @@ apr_status_t SerfSession::verifySerfCertificateChain (
         }
         else
         {
-            // Don't trust cert
+            
             xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject, sal_False );
             return SERF_SSL_CERT_UNKNOWN_FAILURE;
         }
@@ -574,20 +574,20 @@ serf_bucket_t* SerfSession::acceptSerfResponse( serf_request_t * inSerfRequest,
                                                 serf_bucket_t * inSerfStreamBucket,
                                                 apr_pool_t* /*inAprPool*/ )
 {
-    // get the per-request bucket allocator
+    
     serf_bucket_alloc_t* SerfBktAlloc = serf_request_get_alloc( inSerfRequest );
 
-    // create a barrier bucket so the response doesn't eat us!
+    
     serf_bucket_t *responseBkt = serf_bucket_barrier_create( inSerfStreamBucket,
                                                              SerfBktAlloc );
 
-    // create response bucket
+    
     responseBkt = serf_bucket_response_create( responseBkt,
                                                SerfBktAlloc );
 
     if ( isHeadRequestInProgress() )
     {
-        // advise the response bucket that this was from a HEAD request and that it should not expect to see a response body.
+        
         serf_bucket_response_set_head( responseBkt );
     }
 
@@ -601,9 +601,9 @@ SerfRequestProcessor* SerfSession::createReqProc( const OUString & inPath )
                                      m_bUseChunkedEncoding );
 }
 
-// -------------------------------------------------------------------
-// PROPFIND - allprop & named
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
                             const std::vector< OUString > & inPropNames,
@@ -632,9 +632,9 @@ void SerfSession::PROPFIND( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// PROPFIND - propnames
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
                             std::vector< DAVResourceInfo > & ioResInfo,
@@ -661,9 +661,9 @@ void SerfSession::PROPFIND( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// PROPPATCH
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::PROPPATCH( const OUString & inPath,
                              const std::vector< ProppatchValue > & inValues,
                              const DAVRequestEnvironment & rEnv )
@@ -681,9 +681,9 @@ void SerfSession::PROPPATCH( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// HEAD
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::HEAD( const OUString & inPath,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource,
@@ -709,9 +709,9 @@ void SerfSession::HEAD( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
+
+
+
 uno::Reference< io::XInputStream >
 SerfSession::GET( const OUString & inPath,
                   const DAVRequestEnvironment & rEnv )
@@ -732,9 +732,9 @@ SerfSession::GET( const OUString & inPath,
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const DAVRequestEnvironment & rEnv )
@@ -752,9 +752,9 @@ void SerfSession::GET( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
+
+
+
 uno::Reference< io::XInputStream >
 SerfSession::GET( const OUString & inPath,
                   const std::vector< OUString > & inHeaderNames,
@@ -782,9 +782,9 @@ SerfSession::GET( const OUString & inPath,
 }
 
 
-// -------------------------------------------------------------------
-// GET
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const std::vector< OUString > & inHeaderNames,
@@ -808,9 +808,9 @@ void SerfSession::GET( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// PUT
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::PUT( const OUString & inPath,
                        const uno::Reference< io::XInputStream > & inInputStream,
                        const DAVRequestEnvironment & rEnv )
@@ -832,9 +832,9 @@ void SerfSession::PUT( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// POST
-// -------------------------------------------------------------------
+
+
+
 uno::Reference< io::XInputStream >
 SerfSession::POST( const OUString & inPath,
                    const OUString & rContentType,
@@ -867,9 +867,9 @@ SerfSession::POST( const OUString & inPath,
     return uno::Reference< io::XInputStream >( xInputStream.get() );
 }
 
-// -------------------------------------------------------------------
-// POST
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::POST( const OUString & inPath,
                         const OUString & rContentType,
                         const OUString & rReferer,
@@ -900,9 +900,9 @@ void SerfSession::POST( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// MKCOL
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::MKCOL( const OUString & inPath,
                          const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -918,9 +918,9 @@ void SerfSession::MKCOL( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// COPY
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::COPY( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
@@ -941,9 +941,9 @@ void SerfSession::COPY( const OUString & inSourceURL,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// MOVE
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::MOVE( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
@@ -964,9 +964,9 @@ void SerfSession::MOVE( const OUString & inSourceURL,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
-// DESTROY
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::DESTROY( const OUString & inPath,
                            const DAVRequestEnvironment & rEnv )
     throw ( DAVException )
@@ -982,7 +982,7 @@ void SerfSession::DESTROY( const OUString & inPath,
     HandleError( aReqProc );
 }
 
-// -------------------------------------------------------------------
+
 /*
 namespace
 {
@@ -992,8 +992,8 @@ namespace
         TimeValue aEnd;
         osl_getSystemTime( &aEnd );
 
-        // Try to estimate a safe absolute time for sending the
-        // lock refresh request.
+        
+        
         sal_Int32 lastChanceToSendRefreshRequest = -1;
         if ( timeout != NE_TIMEOUT_INFINITE )
         {
@@ -1011,11 +1011,11 @@ namespace
         return lastChanceToSendRefreshRequest;
     }
 
-} // namespace
+} 
 */
-// -------------------------------------------------------------------
-// LOCK (set new lock)
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::LOCK( const OUString & inPath,
                         ucb::Lock & /*rLock*/,
                         const DAVRequestEnvironment & rEnv )
@@ -1033,14 +1033,14 @@ void SerfSession::LOCK( const OUString & inPath,
     /*
     SerfLock * theLock = ne_lock_create();
 
-    // Set the lock uri
+    
     ne_uri aUri;
     ne_uri_parse( OUStringToOString( makeAbsoluteURL( inPath ),
                                           RTL_TEXTENCODING_UTF8 ).getStr(),
                   &aUri );
     theLock->uri = aUri;
 
-    // Set the lock depth
+    
     switch( rLock.Depth )
     {
     case ucb::LockDepth_ZERO:
@@ -1056,7 +1056,7 @@ void SerfSession::LOCK( const OUString & inPath,
         throw DAVException( DAVException::DAV_INVALID_ARG );
     }
 
-    // Set the lock scope
+    
     switch ( rLock.Scope )
     {
     case ucb::LockScope_EXCLUSIVE:
@@ -1069,10 +1069,10 @@ void SerfSession::LOCK( const OUString & inPath,
         throw DAVException( DAVException::DAV_INVALID_ARG );
     }
 
-    // Set the lock timeout
+    
     theLock->timeout = (long)rLock.Timeout;
 
-    // Set the lock owner
+    
     OUString aValue;
     rLock.Owner >>= aValue;
     theLock->owner =
@@ -1112,9 +1112,9 @@ void SerfSession::LOCK( const OUString & inPath,
     */
 }
 
-// -------------------------------------------------------------------
-// LOCK (refresh existing lock)
-// -------------------------------------------------------------------
+
+
+
 sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
                              sal_Int64 nTimeout,
                              const DAVRequestEnvironment & /*rEnv*/ )
@@ -1124,7 +1124,7 @@ sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
 
     return nTimeout;
     /*
-    // Try to get the neon lock from lock store
+    
     SerfLock * theLock
         = m_aSerfLockStore.findByUri( makeAbsoluteURL( inPath ) );
     if ( !theLock )
@@ -1132,7 +1132,7 @@ sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
 
     Init( rEnv );
 
-    // refresh existing lock.
+    
     theLock->timeout = static_cast< long >( nTimeout );
 
     TimeValue startCall;
@@ -1153,9 +1153,9 @@ sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
     */
 }
 
-// -------------------------------------------------------------------
-// LOCK (refresh existing lock)
-// -------------------------------------------------------------------
+
+
+
 bool SerfSession::LOCK( SerfLock * /*pLock*/,
                         sal_Int32 & /*rlastChanceToSendRefreshRequest*/ )
 {
@@ -1163,7 +1163,7 @@ bool SerfSession::LOCK( SerfLock * /*pLock*/,
 
     return true;
     /*
-    // refresh existing lock.
+    
 
     TimeValue startCall;
     osl_getSystemTime( &startCall );
@@ -1184,9 +1184,9 @@ bool SerfSession::LOCK( SerfLock * /*pLock*/,
     */
 }
 
-// -------------------------------------------------------------------
-// UNLOCK
-// -------------------------------------------------------------------
+
+
+
 void SerfSession::UNLOCK( const OUString & /*inPath*/,
                           const DAVRequestEnvironment & /*rEnv*/ )
     throw ( DAVException )
@@ -1194,7 +1194,7 @@ void SerfSession::UNLOCK( const OUString & /*inPath*/,
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
     /*
-    // get the neon lock from lock store
+    
     SerfLock * theLock
         = m_aSerfLockStore.findByUri( makeAbsoluteURL( inPath ) );
     if ( !theLock )
@@ -1220,9 +1220,9 @@ void SerfSession::UNLOCK( const OUString & /*inPath*/,
     */
 }
 
-// -------------------------------------------------------------------
-// UNLOCK
-// -------------------------------------------------------------------
+
+
+
 bool SerfSession::UNLOCK( SerfLock * /*pLock*/ )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -1242,19 +1242,19 @@ bool SerfSession::UNLOCK( SerfLock * /*pLock*/ )
     */
 }
 
-// -------------------------------------------------------------------
+
 void SerfSession::abort()
     throw ( DAVException )
 {
-    // 11.11.09 (tkr): The following code lines causing crashes if
-    // closing a ongoing connection. It turned out that this existing
-    // solution doesn't work in multi-threading environments.
-    // So I disabled them in 3.2. . Issue #73893# should fix it in OOo 3.3.
-    //if ( m_pHttpSession )
-    //    ne_close_connection( m_pHttpSession );
+    
+    
+    
+    
+    
+    
 }
 
-// -------------------------------------------------------------------
+
 const ucbhelper::InternetProxyServer & SerfSession::getProxySettings() const
 {
     if ( m_aUri.GetScheme() == "http" || m_aUri.GetScheme() == "https" )
@@ -1265,7 +1265,7 @@ const ucbhelper::InternetProxyServer & SerfSession::getProxySettings() const
     }
     else
     {
-        // TODO: figure out, if this case can occur
+        
         return m_rProxyDecider.getProxy( m_aUri.GetScheme(),
                                          OUString() /* not used */,
                                          -1 /* not used */ );
@@ -1273,7 +1273,7 @@ const ucbhelper::InternetProxyServer & SerfSession::getProxySettings() const
 }
 
 /*
-// -------------------------------------------------------------------
+
 namespace {
 
 bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
@@ -1292,10 +1292,10 @@ bool containsLocktoken( const uno::Sequence< ucb::Lock > & rLocks,
     return false;
 }
 
-} // namespace
+} 
 */
 
-// -------------------------------------------------------------------
+
 bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
                                           const DAVRequestEnvironment & /*rEnv*/ )
 {
@@ -1305,10 +1305,10 @@ bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
     if ( !theLock )
         return false;
 
-    // do a lockdiscovery to check whether this lock is still valid.
+    
     try
     {
-        // @@@ Alternative: use ne_lock_discover() => less overhead
+        
 
         std::vector< DAVResource > aResources;
         std::vector< OUString > aPropNames;
@@ -1334,18 +1334,18 @@ bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
 
                 if ( !containsLocktoken( aLocks, theLock->token ) )
                 {
-                    // expired!
+                    
                     break;
                 }
 
-                // still valid.
+                
                 return false;
             }
             ++it;
         }
 
-        // No lockdiscovery prop in propfind result / locktoken not found
-        // in propfind result -> not locked
+        
+        
         OSL_TRACE( "SerfSession::removeExpiredLocktoken: Removing "
                    " expired lock token for %s. token: %s",
                    OUStringToOString( inURL,
@@ -1363,10 +1363,10 @@ bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
     */
 }
 
-// -------------------------------------------------------------------
-// HandleError
-// Common Error Handler
-// -------------------------------------------------------------------
+
+
+
+
 void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc )
     throw ( DAVException )
 {
@@ -1391,13 +1391,13 @@ void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc 
     }
 
     /*
-    // Map error code to DAVException.
+    
     switch ( nError )
     {
         case NE_OK:
             return;
 
-        case NE_ERROR:        // Generic error
+        case NE_ERROR:        
         {
             OUString aText = OUString::createFromAscii(
                 ne_get_error( m_pHttpSession ) );
@@ -1409,20 +1409,20 @@ void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc 
                 if ( m_aSerfLockStore.findByUri(
                          makeAbsoluteURL( inPath ) ) == 0 )
                 {
-                    // locked by 3rd party
+                    
                     throw DAVException( DAVException::DAV_LOCKED );
                 }
                 else
                 {
-                    // locked by ourself
+                    
                     throw DAVException( DAVException::DAV_LOCKED_SELF );
                 }
             }
 
-            // Special handling for 400 and 412 status codes, which may indicate
-            // that a lock previously obtained by us has been released meanwhile
-            // by the server. Unfortunately, RFC is not clear at this point,
-            // thus server implementations behave different...
+            
+            
+            
+            
             else if ( code == SC_BAD_REQUEST || code == SC_PRECONDITION_FAILED )
             {
                 if ( removeExpiredLocktoken( makeAbsoluteURL( inPath ), rEnv ) )
@@ -1431,37 +1431,37 @@ void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc 
 
             throw DAVException( DAVException::DAV_HTTP_ERROR, aText, code );
         }
-        case NE_LOOKUP:       // Name lookup failed.
+        case NE_LOOKUP:       
             throw DAVException( DAVException::DAV_HTTP_LOOKUP,
                                 SerfUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
 
-        case NE_AUTH:         // User authentication failed on server
+        case NE_AUTH:         
             throw DAVException( DAVException::DAV_HTTP_AUTH,
                                 SerfUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
 
-        case NE_PROXYAUTH:    // User authentication failed on proxy
+        case NE_PROXYAUTH:    
             throw DAVException( DAVException::DAV_HTTP_AUTHPROXY,
                                 SerfUri::makeConnectionEndPointString(
                                     m_aProxyName, m_nProxyPort ) );
 
-        case NE_CONNECT:      // Could not connect to server
+        case NE_CONNECT:      
             throw DAVException( DAVException::DAV_HTTP_CONNECT,
                                 SerfUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
 
-        case NE_TIMEOUT:      // Connection timed out
+        case NE_TIMEOUT:      
             throw DAVException( DAVException::DAV_HTTP_TIMEOUT,
                                 SerfUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
 
-        case NE_FAILED:       // The precondition failed
+        case NE_FAILED:       
             throw DAVException( DAVException::DAV_HTTP_FAILED,
                                 SerfUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
 
-        case NE_RETRY:        // Retry request (ne_end_request ONLY)
+        case NE_RETRY:        
             throw DAVException( DAVException::DAV_HTTP_RETRY,
                                 SerfUri::makeConnectionEndPointString(
                                     m_aHostName, m_nPort ) );
@@ -1483,8 +1483,8 @@ void SerfSession::HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc 
     */
 }
 
-// -------------------------------------------------------------------
-// static
+
+
 bool
 SerfSession::getDataFromInputStream(
     const uno::Reference< io::XInputStream > & xStream,
@@ -1515,15 +1515,15 @@ SerfSession::getDataFromInputStream(
             }
             catch ( io::NotConnectedException const & )
             {
-                // readBytes
+                
             }
             catch ( io::BufferSizeExceededException const & )
             {
-                // readBytes
+                
             }
             catch ( io::IOException const & )
             {
-                // getLength, readBytes
+                
             }
         }
         else
@@ -1558,22 +1558,22 @@ SerfSession::getDataFromInputStream(
             }
             catch ( io::NotConnectedException const & )
             {
-                // readBytes
+                
             }
             catch ( io::BufferSizeExceededException const & )
             {
-                // readBytes
+                
             }
             catch ( io::IOException const & )
             {
-                // readBytes
+                
             }
         }
     }
     return false;
 }
 
-// ---------------------------------------------------------------------
+
 sal_Bool
 SerfSession::isDomainMatch( OUString certHostName )
 {
@@ -1595,15 +1595,15 @@ SerfSession::isDomainMatch( OUString certHostName )
 }
 
 /*
-// ---------------------------------------------------------------------
+
 OUString SerfSession::makeAbsoluteURL( OUString const & rURL ) const
 {
     try
     {
-        // Is URL relative or already absolute?
+        
         if ( rURL[ 0 ] != '/' )
         {
-            // absolute.
+            
             return OUString( rURL );
         }
         else
@@ -1623,7 +1623,7 @@ OUString SerfSession::makeAbsoluteURL( OUString const & rURL ) const
     catch ( DAVException const & )
     {
     }
-    // error.
+    
     return OUString();
 }
 */

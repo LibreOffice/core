@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,9 +42,9 @@ nsIAtom*   nsProfileDirServiceProvider::sApp_PreferencesFile50;
 nsIAtom*   nsProfileDirServiceProvider::sApp_UserProfileDirectory50;
 
 
-//*****************************************************************************
-// nsProfileDirServiceProvider::nsProfileDirServiceProvider
-//*****************************************************************************
+
+
+
 
 nsProfileDirServiceProvider::nsProfileDirServiceProvider()
 {
@@ -96,12 +96,12 @@ nsProfileDirServiceProvider::Shutdown()
   return directoryService->UnregisterProvider(this);
 }
 
-// nsProfileDirServiceProvider::nsISupports
+
 
 NS_IMPL_THREADSAFE_ISUPPORTS1(nsProfileDirServiceProvider,
                               nsIDirectoryServiceProvider)
 
-// nsProfileDirServiceProvider::nsIDirectoryServiceProvider
+
 
 NS_IMETHODIMP
 nsProfileDirServiceProvider::GetFile(const char *prop, PRBool *persistent, nsIFile **_retval)
@@ -143,9 +143,9 @@ nsProfileDirServiceProvider::GetFile(const char *prop, PRBool *persistent, nsIFi
   return rv;
 }
 
-//*****************************************************************************
-// Protected methods
-//*****************************************************************************
+
+
+
 
 nsresult
 nsProfileDirServiceProvider::Initialize()
@@ -158,7 +158,7 @@ nsProfileDirServiceProvider::Initialize()
     { NS_APP_PROFILE_DEFAULTS_NLOC_50_DIR, nsnull },
   };
 
-  // Register our directory atoms
+  
   NS_RegisterStaticAtoms(provider_atoms, NS_ARRAY_LENGTH(provider_atoms));
 
   return NS_OK;
@@ -178,10 +178,10 @@ nsProfileDirServiceProvider::EnsureProfileFileExists(nsIFile *aFile)
 
   nsCOMPtr<nsIFile> defaultsFile;
 
-  // Attempt first to get the localized subdir of the defaults
+  
   rv = NS_GetSpecialDirectory(NS_APP_PROFILE_DEFAULTS_50_DIR, getter_AddRefs(defaultsFile));
   if (NS_FAILED(rv)) {
-    // If that has not been defined, use the top level of the defaults
+    
     rv = NS_GetSpecialDirectory(NS_APP_PROFILE_DEFAULTS_NLOC_50_DIR, getter_AddRefs(defaultsFile));
     if (NS_FAILED(rv))
       return rv;
@@ -208,9 +208,9 @@ nsProfileDirServiceProvider::UndefineFileLocations()
   return NS_OK;
 }
 
-//*****************************************************************************
-// Global creation function
-//*****************************************************************************
+
+
+
 
 nsresult NS_NewProfileDirServiceProvider(nsProfileDirServiceProvider** aProvider)
 {

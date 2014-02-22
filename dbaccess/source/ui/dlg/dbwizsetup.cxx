@@ -101,7 +101,7 @@ using namespace ::com::sun::star::document;
 using namespace ::comphelper;
 using namespace ::cppu;
 
-// ODbTypeWizDialogSetup
+
 ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
                                ,SfxItemSet* _pItems
                                ,const Reference< XComponentContext >& _rxORB
@@ -135,8 +135,8 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     , m_pFinalPage( NULL )
     , m_pCollection( NULL )
 {
-    // no local resources needed anymore
-    // extract the datasource type collection from the item set
+    
+    
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, _pItems->GetItem(DSID_TYPECOLLECTION));
     if (pCollectionItem)
         m_pCollection = pCollectionItem->getCollection();
@@ -189,7 +189,7 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _n
 {
     bool bHasAuthentication = DataSourceMetaData::getAuthentication( _sURL ) != AuthNone;
 
-    // collect the elements of the path
+    
     WizardPath aPath;
 
     svt::RoadmapWizardTypes::WizardPath::const_iterator aIter = _rPaths.begin();
@@ -200,7 +200,7 @@ void ODbTypeWizDialogSetup::declareAuthDepPath( const OUString& _sURL, PathId _n
             aPath.push_back( *aIter );
     }
 
-    // call base method
+    
     ::svt::RoadmapWizard::declarePath( _nPathId, aPath );
 }
 
@@ -351,9 +351,9 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
     }
 
     enableButtons( WZB_NEXT, m_pGeneralPage->GetDatabaseCreationMode() != OGeneralPageWizard::eOpenExisting );
-        // TODO: this should go into the base class. Point is, we activate a path whose *last*
-        // step is also the current one. The base class should automatically disable
-        // the Next button in such a case. However, not for this patch ...
+        
+        
+        
 }
 
 void ODbTypeWizDialogSetup::updateTypeDependentStates()
@@ -380,10 +380,10 @@ sal_Bool ODbTypeWizDialogSetup::IsConnectionUrlRequired()
 
 void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatasource)
 {
-    // remove all items which relate to indirect properties from the input set
-    // (without this, the following may happen: select an arbitrary data source where some indirect properties
-    // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
-    // the indirect property values of the first ds are shown in the second ds ...)
+    
+    
+    
+    
     const ODbDataSourceAdministrationHelper::MapInt2String& rMap = m_pImpl->getIndirectProperties();
     for (   ODbDataSourceAdministrationHelper::MapInt2String::const_iterator aIndirect = rMap.begin();
             aIndirect != rMap.end();
@@ -391,7 +391,7 @@ void ODbTypeWizDialogSetup::resetPages(const Reference< XPropertySet >& _rxDatas
         )
         getWriteOutputSet()->ClearItem( (sal_uInt16)aIndirect->first );
 
-    // extract all relevant data from the property set of the data source
+    
     m_pImpl->translateProperties(_rxDatasource, *getWriteOutputSet());
 }
 
@@ -525,7 +525,7 @@ TabPage* ODbTypeWizDialogSetup::createPage(WizardState _nState)
             pPage = OLDAPConnectionPageSetup::CreateLDAPTabPage(this,*m_pOutSet);
             break;
 
-        case PAGE_DBSETUPWIZARD_SPREADSHEET:    /// first user defined driver
+        case PAGE_DBSETUPWIZARD_SPREADSHEET:    /
             pPage = OSpreadSheetConnectionPageSetup::CreateSpreadSheetTabPage(this,*m_pOutSet);
             break;
 
@@ -661,7 +661,7 @@ sal_Bool ODbTypeWizDialogSetup::leaveState(WizardState _nState)
 void ODbTypeWizDialogSetup::setTitle(const OUString& /*_sTitle*/)
 {
     OSL_FAIL( "ODbTypeWizDialogSetup::setTitle: not implemented!" );
-        // why?
+        
 }
 
 void ODbTypeWizDialogSetup::enableConfirmSettings( bool _bEnable )
@@ -721,7 +721,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
                 InteractiveIOException aRequest;
                 aRequest.Classification = InteractionClassification_ERROR;
                 if ( aError.isExtractableTo( ::cppu::UnoType< IOException >::get() ) )
-                    // assume savint the document faile
+                    
                     aRequest.Code = IOErrorCode_CANT_WRITE;
                 else
                     aRequest.Code = IOErrorCode_GENERAL;
@@ -892,10 +892,10 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 
             void doLoadAsync();
 
-            // XTerminateListener
+            
             virtual void SAL_CALL queryTermination( const com::sun::star::lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException);
             virtual void SAL_CALL notifyTermination( const com::sun::star::lang::EventObject& Event ) throw (RuntimeException);
-            // XEventListener
+            
             virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
 
         private:
@@ -955,8 +955,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             }
             catch( const Exception& )
             {
-                // do not assert.
-                // Such an exception happens for instance of the to-be-loaded document does not exist anymore.
+                
+                
             }
 
             try
@@ -987,10 +987,10 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
     {
         if ( m_pGeneralPage->GetDatabaseCreationMode() == OGeneralPageWizard::eOpenExisting )
         {
-            // we're not going to re-use the XModel we have - since the document the user
-            // wants us to load could be a non-database document. Instead, we asynchronously
-            // open the selected document. Thus, the wizard's return value is RET_CANCEL,
-            // which means to not continue loading the database document
+            
+            
+            
+            
             if ( !OWizardMachine::Finnish( RET_CANCEL ) )
                 return sal_False;
 
@@ -1021,6 +1021,6 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
     }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

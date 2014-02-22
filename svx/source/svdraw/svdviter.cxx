@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,7 +28,7 @@
 #include <svl/brdcst.hxx>
 #include <svx/sdrpaintwindow.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrViewIter::ImpInitVars()
 {
@@ -38,7 +38,7 @@ void SdrViewIter::ImpInitVars()
     mpAktView = 0L;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrViewIter::SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage)
 {
@@ -49,7 +49,7 @@ SdrViewIter::SdrViewIter(const SdrPage* pPage, sal_Bool bNoMasterPage)
     ImpInitVars();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrViewIter::SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage)
 {
@@ -67,7 +67,7 @@ SdrViewIter::SdrViewIter(const SdrObject* pObject, sal_Bool bNoMasterPage)
     ImpInitVars();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 {
@@ -80,8 +80,8 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
         {
             if(mpObject)
             {
-                // Looking for an object? First, determine if it visible in
-                // this PageView.
+                
+                
                 SetOfByte aObjLay;
                 mpObject->getMergedHierarchyLayerSet(aObjLay);
                 aObjLay &= pPV->GetVisibleLayers();
@@ -102,11 +102,11 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
 
                     if(&rMasterPage == mpPage)
                     {
-                        // the page we're looking for is a master page in this PageView
+                        
                         if(mpObject)
                         {
-                            // Looking for an object? First, determine if it visible in
-                            // this PageView.
+                            
+                            
                             SetOfByte aObjLay;
                             mpObject->getMergedHierarchyLayerSet(aObjLay);
                             aObjLay &= pPV->GetVisibleLayers();
@@ -115,7 +115,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                             if(!aObjLay.IsEmpty())
                             {
                                 return sal_True;
-                            } // else, look at the next master page of this page...
+                            } 
                         }
                         else
                         {
@@ -125,7 +125,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
                 }
             }
 
-            // master page forbidden or no fitting master page found
+            
             return sal_False;
         }
     }
@@ -135,7 +135,7 @@ sal_Bool SdrViewIter::ImpCheckPageView(SdrPageView* pPV) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrView* SdrViewIter::ImpFindView()
 {
@@ -176,7 +176,7 @@ SdrView* SdrViewIter::ImpFindView()
     return mpAktView;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrView* SdrViewIter::FirstView()
 {
@@ -184,7 +184,7 @@ SdrView* SdrViewIter::FirstView()
     return ImpFindView();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrView* SdrViewIter::NextView()
 {

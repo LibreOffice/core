@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "typedstrdata.hxx"
@@ -74,14 +74,14 @@ bool ScTypedStrData::EqualCaseInsensitive::operator() (const ScTypedStrData& lef
 
 bool ScTypedStrData::operator== (const ScTypedStrData& r) const
 {
-    // Case insensitive comparison by default.
+    
     EqualCaseInsensitive aHdl;
     return aHdl(*this, r);
 }
 
 bool ScTypedStrData::operator< (const ScTypedStrData& r) const
 {
-    // Case insensitive comparison by default.
+    
     LessCaseInsensitive aHdl;
     return aHdl(*this, r);
 }

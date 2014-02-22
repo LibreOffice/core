@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <calc.hxx>
@@ -31,9 +31,9 @@
 #include <switerator.hxx>
 #include <swtable.hxx>
 
-// -----------------
-// SwTblBoxNumFormat
-// -----------------
+
+
+
 
 SwTblBoxNumFormat::SwTblBoxNumFormat( sal_uInt32 nFormat, sal_Bool bFlag )
     : SfxUInt32Item( RES_BOXATR_FORMAT, nFormat ), bAuto( bFlag )
@@ -52,9 +52,9 @@ SfxPoolItem* SwTblBoxNumFormat::Clone( SfxItemPool* ) const
     return new SwTblBoxNumFormat( GetValue(), bAuto );
 }
 
-// -----------------
-// SwTblBoxFormula
-// -----------------
+
+
+
 
 SwTblBoxFormula::SwTblBoxFormula( const OUString& rFormula )
     : SfxPoolItem( RES_BOXATR_FORMULA ),
@@ -72,7 +72,7 @@ bool SwTblBoxFormula::operator==( const SfxPoolItem& rAttr ) const
 
 SfxPoolItem* SwTblBoxFormula::Clone( SfxItemPool* ) const
 {
-    // switch to external rendering
+    
     SwTblBoxFormula* pNew = new SwTblBoxFormula( GetFormula() );
     pNew->SwTableFormula::operator=( *this );
     return pNew;
@@ -113,14 +113,14 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
     SwTableFmlUpdate* pUpdtFld;
     if( !pItem || RES_TABLEFML_UPDATE != pItem->Which() )
     {
-        // reset value flag
+        
         ChgValid( false );
         return ;
     }
 
     pUpdtFld = (SwTableFmlUpdate*)pItem;
 
-    // detect table that contains this attribute
+    
     const SwTableNode* pTblNd;
     const SwNode* pNd = GetNodeOfFormula();
     if( pNd && &pNd->GetNodes() == &pNd->GetDoc()->GetNodes() &&
@@ -129,21 +129,21 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
         switch( pUpdtFld->eFlags )
         {
         case TBL_CALC:
-            // reset value flag
+            
             ChgValid( false );
             break;
         case TBL_BOXNAME:
             if( &pTblNd->GetTable() == pUpdtFld->pTbl )
-                // use external rendering
+                
                 PtrToBoxNm( pUpdtFld->pTbl );
             break;
         case TBL_BOXPTR:
-            // internal rendering
+            
             BoxNmToPtr( &pTblNd->GetTable() );
             break;
         case TBL_RELBOXNAME:
             if( &pTblNd->GetTable() == pUpdtFld->pTbl )
-                // relative rendering
+                
                 ToRelBoxNm( pUpdtFld->pTbl );
             break;
 
@@ -157,18 +157,18 @@ void SwTblBoxFormula::ChangeState( const SfxPoolItem* pItem )
             }
             else
                 pUpdtFld->bBehindSplitLine = sal_False;
-            // no break
+            
         case TBL_MERGETBL:
             if( pUpdtFld->pHistory )
             {
-                // for a history record the unchanged formula is needed
+                
                 SwTblBoxFormula aCopy( *this );
                 pUpdtFld->bModified = sal_False;
                 ToSplitMergeBoxNm( *pUpdtFld );
 
                 if( pUpdtFld->bModified )
                 {
-                    // external rendering
+                    
                     aCopy.PtrToBoxNm( &pTblNd->GetTable() );
                     pUpdtFld->pHistory->Add( &aCopy, &aCopy,
                                 pNd->FindTableBoxStartNode()->GetIndex() );
@@ -185,20 +185,20 @@ void SwTblBoxFormula::Calc( SwTblCalcPara& rCalcPara, double& rValue )
 {
     if( !rCalcPara.rCalc.IsCalcError() )
     {
-        // create pointers from box names
+        
         BoxNmToPtr( rCalcPara.pTbl );
         const OUString sFml( MakeFormula( rCalcPara ));
         if( !rCalcPara.rCalc.IsCalcError() )
             rValue = rCalcPara.rCalc.Calculate( sFml ).GetDouble();
         else
             rValue = DBL_MAX;
-        ChgValid( !rCalcPara.IsStackOverFlow() ); // value is now valid again
+        ChgValid( !rCalcPara.IsStackOverFlow() ); 
     }
 }
 
-// -------------
-// SwTblBoxValue
-// -------------
+
+
+
 
 SwTblBoxValue::SwTblBoxValue()
     : SfxPoolItem( RES_BOXATR_VALUE ), nValue( 0 )
@@ -214,7 +214,7 @@ bool SwTblBoxValue::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==(rAttr), "SwTblBoxValue: item not equal" );
     SwTblBoxValue const& rOther( static_cast<SwTblBoxValue const&>(rAttr) );
-    // items with NaN should be equal to enable pooling
+    
     return ::rtl::math::isNan( nValue )
         ?   ::rtl::math::isNan( rOther.nValue )
         :   ( nValue == rOther.nValue );

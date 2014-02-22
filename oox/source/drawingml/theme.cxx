@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/theme.hxx"
@@ -22,7 +22,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 Theme::Theme()
 {
@@ -41,7 +41,7 @@ const Type* lclGetStyleElement( const RefVector< Type >& rVector, sal_Int32 nInd
         rVector.get( ::std::min( static_cast< sal_Int32 >( nIndex - 1 ), static_cast< sal_Int32 >( rVector.size() - 1 ) ) ).get();
 }
 
-} // namespace
+} 
 
 const FillProperties* Theme::getFillStyle( sal_Int32 nIndex ) const
 {
@@ -91,9 +91,9 @@ const TextFont* Theme::resolveFont( const OUString& rName ) const
     return 0;
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,7 +39,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sd { namespace presenter {
 
-//===== Service ===============================================================
+
 
 Reference<XInterface> SAL_CALL PresenterCanvas_createInstance (
     const Reference<XComponentContext>& rxContext)
@@ -69,7 +69,7 @@ Sequence<OUString> SAL_CALL PresenterCanvas_getSupportedServiceNames (void)
 
 
 
-//===== PresenterCustomSprite =================================================
+
 
 /** Wrapper around a sprite that is displayed on a PresenterCanvas.
 */
@@ -93,7 +93,7 @@ public:
     virtual void SAL_CALL disposing (void)
         throw (RuntimeException);
 
-    // XSprite
+    
 
     virtual void SAL_CALL setAlpha (double nAlpha)
         throw (lang::IllegalArgumentException,RuntimeException);
@@ -119,7 +119,7 @@ public:
         throw (RuntimeException);
 
 
-    // XCustomSprite
+    
 
     virtual Reference<rendering::XCanvas> SAL_CALL getContentCanvas (void)
         throw (RuntimeException);
@@ -138,7 +138,7 @@ private:
 
 
 
-//===== PresenterCanvas =======================================================
+
 
 
 PresenterCanvas::PresenterCanvas (void)
@@ -201,7 +201,7 @@ void SAL_CALL PresenterCanvas::disposing (void)
 
 
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL PresenterCanvas::initialize (
     const Sequence<Any>& rArguments)
@@ -214,7 +214,7 @@ void SAL_CALL PresenterCanvas::initialize (
     {
         try
         {
-            // First and second argument may be NULL.
+            
             rArguments[0] >>= mxUpdateCanvas;
             rArguments[1] >>= mxUpdateWindow;
 
@@ -262,14 +262,14 @@ void SAL_CALL PresenterCanvas::initialize (
 
 
 
-//----- XCanvas ---------------------------------------------------------------
+
 
 void SAL_CALL PresenterCanvas::clear (void)
     throw (css::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    // ToDo: Clear the area covered by the child window.  A simple forward
-    // would clear the whole shared canvas.
+    
+    
 }
 
 
@@ -564,7 +564,7 @@ css::uno::Reference<css::rendering::XGraphicDevice> SAL_CALL
 
 
 
-//----- XBitmapCanvas ---------------------------------------------------------
+
 
 void SAL_CALL PresenterCanvas::copyRect(
     const css::uno::Reference<css::rendering::XBitmapCanvas>& rxSourceCanvas,
@@ -595,7 +595,7 @@ void SAL_CALL PresenterCanvas::copyRect(
 
 
 
-//----- XSpriteCanvas ---------------------------------------------------------
+
 
 Reference<rendering::XAnimatedSprite> SAL_CALL
     PresenterCanvas::createSpriteFromAnimation (
@@ -700,7 +700,7 @@ Reference<rendering::XSprite> SAL_CALL
 
 
 
-//----- XEventListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterCanvas::disposing (const css::lang::EventObject& rEvent)
     throw (css::uno::RuntimeException)
@@ -713,7 +713,7 @@ void SAL_CALL PresenterCanvas::disposing (const css::lang::EventObject& rEvent)
 
 
 
-//----- XWindowListener -------------------------------------------------------
+
 
 void SAL_CALL PresenterCanvas::windowResized (const css::awt::WindowEvent& rEvent)
         throw (css::uno::RuntimeException)
@@ -758,7 +758,7 @@ void SAL_CALL PresenterCanvas::windowHidden (const css::lang::EventObject& rEven
 
 
 
-//----- XBitmap ---------------------------------------------------------------
+
 
 geometry::IntegerSize2D SAL_CALL PresenterCanvas::getSize (void)
     throw (RuntimeException)
@@ -802,7 +802,7 @@ Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
 
     ThrowIfDisposed();
 
-    // Not implemented.
+    
 
     return NULL;
 }
@@ -810,12 +810,12 @@ Reference<rendering::XBitmap> SAL_CALL PresenterCanvas::getScaledBitmap(
 
 
 
-//-----------------------------------------------------------------------------
+
 
 rendering::ViewState PresenterCanvas::MergeViewState (
     const rendering::ViewState& rViewState)
 {
-    // Make sure the offset is up-to-date.
+    
     if (mbOffsetUpdatePending)
         maOffset = GetOffset(mxSharedWindow);
     return MergeViewState(rViewState, maOffset);
@@ -828,7 +828,7 @@ css::rendering::ViewState PresenterCanvas::MergeViewState (
     const css::rendering::ViewState& rViewState,
     const css::awt::Point& rOffset)
 {
-    // Early rejects.
+    
     if ( ! mxSharedCanvas.is())
         return rViewState;
 
@@ -836,31 +836,31 @@ css::rendering::ViewState PresenterCanvas::MergeViewState (
     if ( ! xDevice.is())
         return rViewState;
 
-    // Create a modifiable copy of the given view state.
+    
     rendering::ViewState aViewState (rViewState);
 
-    // Prepare the local clip rectangle.
+    
     ::basegfx::B2DRectangle aWindowRange (GetClipRectangle(aViewState.AffineTransform, rOffset));
 
-    // Adapt the offset of the view state.
+    
     aViewState.AffineTransform.m02 += rOffset.X;
     aViewState.AffineTransform.m12 += rOffset.Y;
 
-    // Adapt the clip polygon.
+    
     if ( ! aViewState.Clip.is())
     {
-        // Cancel out the later multiplication with the view state
-        // transformation.
+        
+        
         aViewState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
             xDevice,
             ::basegfx::B2DPolyPolygon(::basegfx::tools::createPolygonFromRect(aWindowRange)));
     }
     else
     {
-        // Have to compute the intersection of the given clipping polygon in
-        // the view state and the local clip rectangle.
+        
+        
 
-        // Clip the view state clipping polygon against the local clip rectangle.
+        
         const ::basegfx::B2DPolyPolygon aClipPolygon (
             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(
                 aViewState.Clip));
@@ -893,8 +893,8 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
         {
             Rectangle aBox = pWindow->GetWindowExtentsRelative(pSharedWindow);
 
-            // Calculate offset of this canvas with respect to the shared
-            // canvas.
+            
+            
             return awt::Point(aBox.Left(), aBox.Top());
         }
     }
@@ -919,18 +919,18 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
     if (pSharedWindow == NULL)
         return ::basegfx::B2DRectangle();
 
-    // Get the bounding box of the window and create a range in the
-    // coordinate system of the child window.
+    
+    
     Rectangle aLocalClip;
     if (maClipRectangle.Width <= 0 || maClipRectangle.Height <= 0)
     {
-        // No clip rectangle has been set via SetClip by the pane.
-        // Use the window extents instead.
+        
+        
         aLocalClip = pWindow->GetWindowExtentsRelative(pSharedWindow);
     }
     else
     {
-        // Use a previously given clip rectangle.
+        
         aLocalClip = Rectangle(
             maClipRectangle.X + rOffset.X,
             maClipRectangle.Y + rOffset.Y,
@@ -938,25 +938,25 @@ awt::Point PresenterCanvas::GetOffset (const Reference<awt::XWindow>& rxBaseWind
             maClipRectangle.Y + maClipRectangle.Height + rOffset.Y);
     }
 
-    // The local clip rectangle is used to clip the view state clipping
-    // polygon.
+    
+    
     ::basegfx::B2DRectangle aWindowRectangle (
         aLocalClip.Left() - rOffset.X,
         aLocalClip.Top() - rOffset.Y,
         aLocalClip.Right() - rOffset.X + 1,
         aLocalClip.Bottom() - rOffset.Y + 1);
 
-    // Calculate the inverted view state transformation to cancel out a
-    // later transformation of the local clip polygon with the view state
-    // transformation.
+    
+    
+    
     ::basegfx::B2DHomMatrix aInvertedViewStateTransformation;
     ::basegfx::unotools::homMatrixFromAffineMatrix(
         aInvertedViewStateTransformation,
         rViewTransform);
     if (aInvertedViewStateTransformation.invert())
     {
-        // Cancel out the later multiplication with the view state
-        // transformation.
+        
+        
         aWindowRectangle.transform(aInvertedViewStateTransformation);
     }
 
@@ -972,8 +972,8 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
 {
     (void)rSize;
 
-    // Check used resources and just return the original clip when not
-    // every one of them is available.
+    
+    
     if ( ! mxWindow.is())
         return rxOriginalClip;
 
@@ -981,19 +981,19 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
     if ( ! xDevice.is())
         return rxOriginalClip;
 
-    // Determine the bounds of the clip rectangle (the window border) in the
-    // coordinate system of the sprite.
+    
+    
     const awt::Rectangle aWindowBox (mxWindow->getPosSize());
     const double nMinX (-rLocation.X);
     const double nMinY (-rLocation.Y);
     const double nMaxX (aWindowBox.Width-rLocation.X);
     const double nMaxY (aWindowBox.Height-rLocation.Y);
 
-    // Create a clip polygon.
+    
     Reference<rendering::XPolyPolygon2D> xPolygon;
     if (rxOriginalClip.is())
     {
-        // Combine the original clip with the window clip.
+        
         const ::basegfx::B2DPolyPolygon aOriginalClip (
             ::basegfx::unotools::b2DPolyPolygonFromXPolyPolygon2D(rxOriginalClip));
         ::basegfx::B2DRectangle aWindowRange (nMinX, nMinY, nMaxX, nMaxY);
@@ -1009,7 +1009,7 @@ Reference<rendering::XPolyPolygon2D> PresenterCanvas::UpdateSpriteClip (
     }
     else
     {
-        // Create a new clip polygon from the window clip rectangle.
+        
         Sequence<Sequence<geometry::RealPoint2D> > aPoints (1);
         aPoints[0] = Sequence<geometry::RealPoint2D>(4);
         aPoints[0][0] = geometry::RealPoint2D(nMinX,nMinY);
@@ -1042,7 +1042,7 @@ void PresenterCanvas::ThrowIfDisposed (void)
 
 
 
-//===== PresenterCustomSprite =================================================
+
 
 
 PresenterCustomSprite::PresenterCustomSprite (
@@ -1082,7 +1082,7 @@ void SAL_CALL PresenterCustomSprite::disposing (void)
 
 
 
-//----- XSprite ---------------------------------------------------------------
+
 
 void SAL_CALL PresenterCustomSprite::setAlpha (const double nAlpha)
     throw (lang::IllegalArgumentException,RuntimeException)
@@ -1106,10 +1106,10 @@ void SAL_CALL PresenterCustomSprite::move (
         rNewPos,
         mpCanvas->MergeViewState(rViewState, mpCanvas->GetOffset(mxBaseWindow)),
         rRenderState);
-    // Clip sprite against window bounds.  This call is necessary because
-    // sprite clipping is done in the corrdinate system of the sprite.
-    // Therefore, after each change of the sprites location the window
-    // bounds have to be transformed into the sprites coordinate system.
+    
+    
+    
+    
     clip(NULL);
 }
 
@@ -1130,9 +1130,9 @@ void SAL_CALL PresenterCustomSprite::clip (const Reference<rendering::XPolyPolyg
     throw (RuntimeException)
 {
     ThrowIfDisposed();
-    // The clip region is expected in the coordinate system of the sprite.
-    // UpdateSpriteClip() integrates the window bounds, transformed into the
-    // sprites coordinate system, with the given clip.
+    
+    
+    
     mxSprite->clip(mpCanvas->UpdateSpriteClip(rxClip, maPosition, maSpriteSize));
 }
 
@@ -1168,7 +1168,7 @@ void SAL_CALL PresenterCustomSprite::hide (void)
 
 
 
-//----- XCustomSprite ---------------------------------------------------------
+
 
 Reference<rendering::XCanvas> PresenterCustomSprite::getContentCanvas (void)
     throw (RuntimeException)
@@ -1180,7 +1180,7 @@ Reference<rendering::XCanvas> PresenterCustomSprite::getContentCanvas (void)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterCustomSprite::ThrowIfDisposed (void)
     throw (css::lang::DisposedException)
@@ -1195,6 +1195,6 @@ void PresenterCustomSprite::ThrowIfDisposed (void)
 
 
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

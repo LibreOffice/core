@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formtoolbars.hxx"
@@ -23,28 +23,28 @@
 
 #include <svx/svxids.hrc>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
-    //= FormToolboxes
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     FormToolboxes::FormToolboxes( const Reference< XFrame >& _rxFrame )
     {
-        // the layout manager
+        
         Reference< XPropertySet > xFrameProps( _rxFrame, UNO_QUERY );
         if ( xFrameProps.is() )
             xFrameProps->getPropertyValue("LayoutManager") >>= m_xLayouter;
     }
 
-    //--------------------------------------------------------------------
+    
     void FormToolboxes::toggleToolbox( sal_uInt16 _nSlotId ) const
     {
         try
@@ -72,14 +72,14 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormToolboxes::isToolboxVisible( sal_uInt16 _nSlotId ) const
     {
         return m_xLayouter.is() && m_xLayouter->isElementVisible(
             getToolboxResourceName( _nSlotId ) );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString FormToolboxes::getToolboxResourceName( sal_uInt16 _nSlotId ) const
     {
         OSL_ENSURE( ( _nSlotId == SID_FM_MORE_CONTROLS ) || ( _nSlotId == SID_FM_FORM_DESIGN_TOOLS ) || ( _nSlotId == SID_FM_CONFIG ),
@@ -96,8 +96,8 @@ namespace svxform
         return aToolBarResStr;
     }
 
-//........................................................................
-} // namespace svxform
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

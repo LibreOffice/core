@@ -36,7 +36,7 @@ using namespace ::com::sun::star::registry;
 
 //***************************************************************************************
 //
-// registry functions
+
 namespace
 {
 

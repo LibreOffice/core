@@ -102,7 +102,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxRectCtl(Window *pParent,
     return new SvxRectCtl(pParent);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxRectCtl::~SvxRectCtl()
 {
@@ -112,14 +112,14 @@ SvxRectCtl::~SvxRectCtl()
         pAccContext->release();
 }
 
-// -----------------------------------------------------------------------
+
 void SvxRectCtl::Resize()
 {
     Resize_Impl();
     Control::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxRectCtl::Resize_Impl()
 {
@@ -160,7 +160,7 @@ void SvxRectCtl::Resize_Impl()
     Reset();
     InitSettings( sal_True, sal_True );
 }
-// -----------------------------------------------------------------------
+
 
 void SvxRectCtl::InitRectBitmap( void )
 {
@@ -209,7 +209,7 @@ void SvxRectCtl::InitRectBitmap( void )
     pBitmap->Replace( aColorAry1, aColorAry2, 7, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxRectCtl::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
 {
@@ -278,7 +278,7 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
 {
@@ -367,7 +367,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxRectCtl::StateChanged( StateChangedType nType )
 {
@@ -379,7 +379,7 @@ void SvxRectCtl::StateChanged( StateChangedType nType )
     Window::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxRectCtl::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -2043,7 +2043,7 @@ SvxXLinePreview::~SvxXLinePreview()
     SdrObject::Free( pFoo );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxXLinePreview::SetSymbol(Graphic* p,const Size& s)
 {
@@ -2051,7 +2051,7 @@ void SvxXLinePreview::SetSymbol(Graphic* p,const Size& s)
     maSymbolSize = s;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxXLinePreview::ResizeSymbol(const Size& s)
 {
@@ -2062,7 +2062,7 @@ void SvxXLinePreview::ResizeSymbol(const Size& s)
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
 {
@@ -2078,7 +2078,7 @@ void SvxXLinePreview::SetLineAttributes(const SfxItemSet& rItemSet)
     mpLineObjC->SetMergedItemSet(aTempSet);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxXLinePreview::Paint( const Rectangle& )
 {

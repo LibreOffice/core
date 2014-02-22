@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "User.hxx"
@@ -19,20 +19,20 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdbc;
 
 User::User(const uno::Reference< XConnection >& rConnection):
-    OUser(sal_True) // Case Sensitive
+    OUser(sal_True) 
 {
     (void) rConnection;
 }
 
 User::User(const uno::Reference< XConnection >& rConnection, const OUString& rName):
     OUser(rName,
-          sal_True) // Case Sensitive
+          sal_True) 
 {
     (void) rConnection;
 }
 
-//----- IRefreshableGroups ----------------------------------------------------
+
 void User::refreshGroups()
 {
-    // TODO: implement.
+    
 }

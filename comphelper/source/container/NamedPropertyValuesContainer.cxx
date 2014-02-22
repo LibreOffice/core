@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,7 +39,7 @@ public:
     NamedPropertyValuesContainer() throw();
     virtual ~NamedPropertyValuesContainer() throw();
 
-    // XNameContainer
+    
     virtual void SAL_CALL insertByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException,
         ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -47,12 +47,12 @@ public:
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
 
-    // XNameReplace
+    
     virtual void SAL_CALL replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException,
             ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    // XNameAccess
+    
     virtual ::com::sun::star::uno::Any SAL_CALL getByName( const OUString& aName )
         throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
@@ -61,18 +61,18 @@ public:
     virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
         throw(::com::sun::star::uno::RuntimeException);
 
-    // XElementAccess
+    
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
         throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    //XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XServiceInfo - static versions (used for component registration)
+    
     static OUString SAL_CALL getImplementationName_static();
     static uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
@@ -89,7 +89,7 @@ NamedPropertyValuesContainer::~NamedPropertyValuesContainer() throw()
 {
 }
 
-// XNameContainer
+
 void SAL_CALL NamedPropertyValuesContainer::insertByName( const OUString& aName, const uno::Any& aElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException,
         ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -115,7 +115,7 @@ void SAL_CALL NamedPropertyValuesContainer::removeByName( const OUString& Name )
     maProperties.erase( aIter );
 }
 
-// XNameReplace
+
 void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName, const ::com::sun::star::uno::Any& aElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException,
         ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -131,7 +131,7 @@ void SAL_CALL NamedPropertyValuesContainer::replaceByName( const OUString& aName
     (*aIter).second = aProps;
 }
 
-// XNameAccess
+
 ::com::sun::star::uno::Any SAL_CALL NamedPropertyValuesContainer::getByName( const OUString& aName )
     throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException,
         ::com::sun::star::uno::RuntimeException)
@@ -171,7 +171,7 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasByName( const OUString& aName
     return aIter != maProperties.end();
 }
 
-// XElementAccess
+
 ::com::sun::star::uno::Type SAL_CALL NamedPropertyValuesContainer::getElementType(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -184,7 +184,7 @@ sal_Bool SAL_CALL NamedPropertyValuesContainer::hasElements(  )
     return !maProperties.empty();
 }
 
-//XServiceInfo
+
 OUString SAL_CALL NamedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return getImplementationName_static();

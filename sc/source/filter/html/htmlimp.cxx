@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -43,7 +43,7 @@
 #include "tokenarray.hxx"
 
 
-//------------------------------------------------------------------------
+
 
 FltError ScFormatFilterPluginImpl::ScImportHTML( SvStream &rStream, const OUString& rBaseURL, ScDocument *pDoc,
         ScRange& rRange, double nOutputFactor, bool bCalcWidthHeight, SvNumberFormatter* pFormatter,
@@ -104,9 +104,9 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
 
 ScHTMLImport::~ScHTMLImport()
 {
-    // Reihenfolge wichtig, sonst knallt's irgendwann irgendwo in irgendeinem Dtor!
-    // Ist gewaehrleistet, da ScEEImport Basisklasse ist
-    delete (ScHTMLParser*) mpParser;        // vor EditEngine!
+    
+    
+    delete (ScHTMLParser*) mpParser;        
 }
 
 
@@ -130,10 +130,10 @@ void ScHTMLImport::WriteToDocument(
     if( !pGlobTable )
         return;
 
-    // set cell borders for HTML table cells
+    
     pGlobTable->ApplyCellBorders( mpDoc, maRange.aStart );
 
-    // correct cell borders for merged cells
+    
     for ( size_t i = 0, n = pParser->ListSize(); i < n; ++i )
     {
         const ScEEParseEntry* pEntry = pParser->ListEntry( i );
@@ -166,17 +166,17 @@ void ScHTMLImport::WriteToDocument(
         }
     }
 
-    // create ranges for HTML tables
-     // 1 - entire document
+    
+     
     ScRange aNewRange( maRange.aStart );
     aNewRange.aEnd.IncCol( static_cast<SCsCOL>(pGlobTable->GetDocSize( tdCol )) - 1 );
     aNewRange.aEnd.IncRow( pGlobTable->GetDocSize( tdRow ) - 1 );
     InsertRangeName( mpDoc, ScfTools::GetHTMLDocName(), aNewRange );
 
-    // 2 - all tables
+    
     InsertRangeName( mpDoc, ScfTools::GetHTMLTablesName(), ScRange( maRange.aStart ) );
 
-    // 3 - single tables
+    
     SCsCOL nColDiff = (SCsCOL)maRange.aStart.Col();
     SCsROW nRowDiff = (SCsROW)maRange.aStart.Row();
     SCsTAB nTabDiff = (SCsTAB)maRange.aStart.Tab();
@@ -187,9 +187,9 @@ void ScHTMLImport::WriteToDocument(
     {
         pTable->GetDocRange( aNewRange );
         aNewRange.Move( nColDiff, nRowDiff, nTabDiff );
-        // insert table number as name
+        
         InsertRangeName( mpDoc, ScfTools::GetNameFromHTMLIndex( nTableId ), aNewRange );
-        // insert table id as name
+        
         if (!pTable->GetTableName().isEmpty())
         {
             OUString aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
@@ -217,7 +217,7 @@ OUString ScHTMLImport::GetHTMLRangeNameList( ScDocument* pDoc, const OUString& r
     {
         OUString aToken( rOrigName.getToken( 0, ';', nStringIx ) );
         if( pRangeNames && ScfTools::IsHTMLTablesName( aToken ) )
-        {   // build list with all HTML tables
+        {   
             sal_uLong nIndex = 1;
             bool bLoop = true;
             while( bLoop )

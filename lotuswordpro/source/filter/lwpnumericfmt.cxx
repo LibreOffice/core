@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -64,7 +64,7 @@
 
 #include "lwpnumericfmt.hxx"
 
-///////////////////////////////////////////////////////////////////
+
 LwpCurrencyPool  LwpNumericFormat::m_aCurrencyInfo;
 
 /**
@@ -102,7 +102,7 @@ sal_Bool LwpCurrencyPool::IsShowSpace(sal_uInt16 nFormat)
 {
     return m_aCurrencyInfo[nFormat].bShowSpace;
 }
-//////////////////////////////////////////////////////////////////////
+
 /**
 *
 *   @date   03/26/2005
@@ -132,7 +132,7 @@ void LwpLayoutNumerics::Read()
         m_pObjStrm->SkipExtra();
     }
 }
-///////////////////////////////////////////////////////////////////
+
 
 /**
 *
@@ -175,7 +175,7 @@ LwpNumericFormatSubset::~LwpNumericFormatSubset()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+
 LwpNumericFormat::LwpNumericFormat(LwpObjectStream * pStrm)
     : m_pObjStrm(pStrm)
     , cFlags(0)
@@ -297,7 +297,7 @@ void LwpNumericFormat::GetCurrencyStr(LwpNumericFormatSubset aNumber, OUString& 
     aPrefix = aNumber.GetPrefix();
     aSuffix = aNumber.GetSuffix();
 
-    //Make the default prefix and suffix
+    
     OUString aSymbol = m_aCurrencyInfo.GetCurrencySymbol(cFormat);
     sal_Bool bPost = m_aCurrencyInfo.IsSymbolPost(cFormat);
     sal_Bool bShowSpace = m_aCurrencyInfo.IsShowSpace(cFormat);
@@ -368,7 +368,7 @@ void LwpNumericFormat::SetNumberType(XFNumberStyle* pStyle)
             pStyle->SetNumberType(enumXFNumberNumber);
         }
         break;
-    default://including text type, which is not a style of number format in SODC
+    default:
         {
             pStyle->SetNumberType(enumXFText);
         }
@@ -398,11 +398,11 @@ XFStyle* LwpNumericFormat::Convert()
     else
     {
         SetNumberType(pStyle);
-        {//Anynumber
+        {
             aPrefix     = cAnyNumber.GetPrefix();
-            //Set suffix
+            
             aSuffix     = cAnyNumber.GetSuffix();
-            //Set color
+            
             aColor  = cAnyNumber.GetColor();
         }
 
@@ -413,7 +413,7 @@ XFStyle* LwpNumericFormat::Convert()
             aNegativeColor  = aColor;
         }
         else
-        {//negative
+        {
             aNegPrefix      = cNegative.GetPrefix();
             aNegSuffix      = cNegative.GetSuffix();
             aNegativeColor  = cNegative.GetColor();
@@ -439,16 +439,16 @@ XFStyle* LwpNumericFormat::Convert()
     aNegPrefix = reencode(aNegPrefix);
     aNegSuffix = reencode(aNegSuffix);
 
-    {//Anynumber
-        //Set prefix
+    {
+        
         pStyle->SetPrefix(aPrefix);
-        //Set suffix
+        
         pStyle->SetSurfix(aSuffix);
         pStyle->SetColor( XFColor( (sal_uInt8)aColor.GetRed(),
                                    (sal_uInt8)aColor.GetGreen(),
                                    (sal_uInt8)aColor.GetBlue()) );
     }
-    {//Negtive
+    {
         pStyle->SetNegativeStyle( aNegPrefix, aNegSuffix, XFColor((sal_uInt8)aNegativeColor.GetRed(),
                                                                     (sal_uInt8)aNegativeColor.GetGreen(),
                                                                     (sal_uInt8)aNegativeColor.GetBlue()) );

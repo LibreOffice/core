@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hintids.hxx"
@@ -27,7 +27,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
-// #i18732#
+
 #include <fmtfollowtextflow.hxx>
 #include <svx/swframevalidation.hxx>
 
@@ -58,7 +58,7 @@ SwWrapDlg::SwWrapDlg(Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, bool bD
     , pWrtShell(pSh)
 
 {
-    // create TabPage
+    
     SwWrapTabPage* pNewPage = (SwWrapTabPage*) SwWrapTabPage::Create(get_content_area(), rSet);
     pNewPage->SetFormatUsed(sal_False, bDrawMode);
     pNewPage->SetShell(pWrtShell);
@@ -140,7 +140,7 @@ SfxTabPage* SwWrapTabPage::Create(Window *pParent, const SfxItemSet &rSet)
 
 void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 {
-    // contour for Draw, Graphic and OLE (Insert/Graphic/Properties still missing!)
+    
     if( bDrawMode )
     {
         m_pWrapOutlineCB->Show();
@@ -211,7 +211,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
 
         case SURROUND_THROUGHT:
         {
-            // transparent ?
+            
             pBtn = m_pWrapThroughRB;
 
             if (!bDrawMode)
@@ -246,9 +246,9 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     {
         pBtn->Check();
         WrapTypeHdl(pBtn);
-        // For character objects that currently are in passage, the default
-        // "contour on" is prepared here, in case we switch to any other
-        // passage later.
+        
+        
+        
         if (bDrawMode && !m_pWrapOutlineCB->IsEnabled())
             m_pWrapOutlineCB->Check();
     }
@@ -257,7 +257,7 @@ void SwWrapTabPage::Reset(const SfxItemSet &rSet)
     const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
     const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
 
-    // gap to text
+    
     m_pLeftMarginED->SetValue(m_pLeftMarginED->Normalize(rLR.GetLeft()), FUNIT_TWIP);
     m_pRightMarginED->SetValue(m_pRightMarginED->Normalize(rLR.GetRight()), FUNIT_TWIP);
     m_pTopMarginED->SetValue(m_pTopMarginED->Normalize(rUL.GetUpper()), FUNIT_TWIP);
@@ -377,7 +377,7 @@ sal_Bool SwWrapTabPage::FillItemSet(SfxItemSet &rSet)
  --------------------------------------------------------------------*/
 void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
 {
-    // anchor
+    
     const SwFmtAnchor &rAnch = (const SwFmtAnchor&)rSet.Get(RES_ANCHOR);
     nAnchorId = rAnch.GetAnchorId();
     sal_Bool bEnable = (nAnchorId != FLY_AS_CHAR);
@@ -388,11 +388,11 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         SwFlyFrmAttrMgr aMgr( bNew, pSh, (const SwAttrSet&)GetItemSet() );
         SvxSwFrameValidation aVal;
 
-        // size
+        
         const SwFmtFrmSize& rFrmSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
         Size aSize = rFrmSize.GetSize();
 
-        // margin
+        
         const SvxULSpaceItem& rUL = (const SvxULSpaceItem&)rSet.Get(RES_UL_SPACE);
         const SvxLRSpaceItem& rLR = (const SvxLRSpaceItem&)rSet.Get(RES_LR_SPACE);
         nOldLeftMargin  = static_cast< sal_uInt16 >(rLR.GetLeft());
@@ -400,7 +400,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         nOldUpperMargin = static_cast< sal_uInt16 >(rUL.GetUpper());
         nOldLowerMargin = static_cast< sal_uInt16 >(rUL.GetLower());
 
-        // position
+        
         const SwFmtHoriOrient& rHori = (const SwFmtHoriOrient&)rSet.Get(RES_HORI_ORIENT);
         const SwFmtVertOrient& rVert = (const SwFmtVertOrient&)rSet.Get(RES_VERT_ORIENT);
 
@@ -408,7 +408,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.bAutoHeight = rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE;
         aVal.bAutoWidth = rFrmSize.GetWidthSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
-        // #i18732#
+        
         aVal.bFollowTextFlow =
             static_cast<const SwFmtFollowTextFlow&>(rSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
 
@@ -452,7 +452,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
                     if (aVal.nVPos <= aVal.nMaxHeight)
                         nTop = aVal.nMaxVPos - aVal.nHeight;
                     else
-                        nTop = nBottom = 0; // no passage
+                        nTop = nBottom = 0; 
                 }
                 else
                     nTop = aVal.nMaxVPos - aVal.nHeight - aVal.nVPos;
@@ -621,7 +621,7 @@ IMPL_LINK_NOARG(SwWrapTabPage, ContourHdl)
     m_pWrapOutsideCB->Enable(!bEnable);
 
     bEnable =  !m_pWrapOutlineCB->IsChecked();
-    if (bEnable == bContourImage) // so that it doesn't always flicker
+    if (bEnable == bContourImage) 
     {
         bContourImage = !bEnable;
         ApplyImageList();

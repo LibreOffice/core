@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,10 +40,10 @@
 
 #include <limits>
 
-//......................................................................................................................
+
 namespace toolkit
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::XComponentContext;
     using ::com::sun::star::uno::Reference;
@@ -68,9 +68,9 @@ namespace toolkit
 
     namespace ImageScaleMode = ::com::sun::star::awt::ImageScaleMode;
 
-    //==================================================================================================================
-    //= AnimatedImagesPeer_Data
-    //==================================================================================================================
+    
+    
+    
     struct CachedImage
     {
         OUString                 sImageURL;
@@ -101,12 +101,12 @@ namespace toolkit
         }
     };
 
-    //==================================================================================================================
-    //= helper
-    //==================================================================================================================
+    
+    
+    
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+        
         OUString lcl_getHighContrastURL( OUString const& i_imageURL )
         {
             INetURLObject aURL( i_imageURL );
@@ -115,8 +115,8 @@ namespace toolkit
                 OSL_VERIFY( aURL.insertName( OUString( "hicontrast" ), false, 0 ) );
                 return aURL.GetMainURL( INetURLObject::NO_DECODE );
             }
-            // the private: scheme is not considered to be hierarchical by INetURLObject, so manually insert the
-            // segment
+            
+            
             const sal_Int32 separatorPos = i_imageURL.indexOf( '/' );
             ENSURE_OR_RETURN( separatorPos != -1, "lcl_getHighContrastURL: unsipported URL scheme - cannot automatically determine HC version!", i_imageURL );
 
@@ -127,7 +127,7 @@ namespace toolkit
             return composer.makeStringAndClear();
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         bool lcl_ensureImage_throw( Reference< XGraphicProvider > const& i_graphicProvider, const bool i_isHighContrast, const CachedImage& i_cachedImage )
         {
             if ( !i_cachedImage.xGraphic.is() )
@@ -135,7 +135,7 @@ namespace toolkit
                 ::comphelper::NamedValueCollection aMediaProperties;
                 if ( i_isHighContrast )
                 {
-                    // try (to find) the high-contrast version of the graphic first
+                    
                     aMediaProperties.put( "URL", lcl_getHighContrastURL( i_cachedImage.sImageURL ) );
                     i_cachedImage.xGraphic.set( i_graphicProvider->queryGraphic( aMediaProperties.getPropertyValues() ), UNO_QUERY );
                 }
@@ -148,7 +148,7 @@ namespace toolkit
             return i_cachedImage.xGraphic.is();
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         Size lcl_getGraphicSizePixel( Reference< XGraphic > const& i_graphic )
         {
             Size aSizePixel;
@@ -167,7 +167,7 @@ namespace toolkit
             return aSizePixel;
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         void lcl_init( Sequence< OUString > const& i_imageURLs, ::std::vector< CachedImage >& o_images )
         {
             o_images.resize(0);
@@ -179,7 +179,7 @@ namespace toolkit
             }
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         void lcl_updateImageList_nothrow( AnimatedImagesPeer_Data& i_data )
         {
             Throbber* pThrobber = dynamic_cast< Throbber* >( i_data.rAntiImpl.GetWindow() );
@@ -188,7 +188,7 @@ namespace toolkit
 
             try
             {
-                // collect the image sizes of the different image sets
+                
                 const Reference< XComponentContext > xContext( ::comphelper::getProcessComponentContext() );
                 const Reference< XGraphicProvider > xGraphicProvider( com::sun::star::graphic::GraphicProvider::create(xContext) );
 
@@ -218,7 +218,7 @@ namespace toolkit
                         }
                     }
 
-                    // find the set with the smallest difference between window size and image size
+                    
                     const ::Size aWindowSizePixel = pThrobber->GetSizePixel();
                     long nMinimalDistance = ::std::numeric_limits< long >::max();
                     for (   ::std::vector< Size >::const_iterator check = aImageSizes.begin();
@@ -229,7 +229,7 @@ namespace toolkit
                         if  (   ( check->Width > aWindowSizePixel.Width() )
                             ||  ( check->Height > aWindowSizePixel.Height() )
                             )
-                            // do not use an image set which doesn't fit into the window
+                            
                             continue;
 
                         const sal_Int64 distance =
@@ -243,11 +243,11 @@ namespace toolkit
                     }
                 }
 
-                // found a set?
+                
                 Sequence< Reference< XGraphic > > aImages;
                 if ( ( nPreferredSet >= 0 ) && ( size_t( nPreferredSet ) < nImageSetCount ) )
                 {
-                    // => set the images
+                    
                     ::std::vector< CachedImage > const& rImageSet( i_data.aCachedImageSets[ nPreferredSet ] );
                     aImages.realloc( rImageSet.size() );
                     sal_Int32 imageIndex = 0;
@@ -268,7 +268,7 @@ namespace toolkit
             }
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         void lcl_updateImageList_nothrow( AnimatedImagesPeer_Data& i_data, const Reference< XAnimatedImages >& i_images )
         {
             try
@@ -292,22 +292,22 @@ namespace toolkit
         }
     }
 
-    //==================================================================================================================
-    //= AnimatedImagesPeer
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     AnimatedImagesPeer::AnimatedImagesPeer()
         :AnimatedImagesPeer_Base()
         ,m_pData( new AnimatedImagesPeer_Data( *this ) )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     AnimatedImagesPeer::~AnimatedImagesPeer()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL AnimatedImagesPeer::startAnimation(  ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -316,7 +316,7 @@ namespace toolkit
             pThrobber->start();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL AnimatedImagesPeer::stopAnimation(  ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -325,7 +325,7 @@ namespace toolkit
             pThrobber->stop();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL AnimatedImagesPeer::isAnimationRunning(  ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -335,7 +335,7 @@ namespace toolkit
         return sal_False;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL AnimatedImagesPeer::setProperty( const OUString& i_propertyName, const Any& i_value ) throw(RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -382,7 +382,7 @@ namespace toolkit
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Any SAL_CALL AnimatedImagesPeer::getProperty( const OUString& i_propertyName ) throw(RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -419,7 +419,7 @@ namespace toolkit
         return aReturn;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void AnimatedImagesPeer::ProcessWindowEvent( const VclWindowEvent& i_windowEvent )
     {
         switch ( i_windowEvent.GetId() )
@@ -432,7 +432,7 @@ namespace toolkit
         AnimatedImagesPeer_Base::ProcessWindowEvent( i_windowEvent );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void AnimatedImagesPeer::impl_updateImages_nolck( const Reference< XInterface >& i_animatedImages )
     {
         SolarMutexGuard aGuard;
@@ -440,7 +440,7 @@ namespace toolkit
         lcl_updateImageList_nothrow( *m_pData, Reference< XAnimatedImages >( i_animatedImages, UNO_QUERY_THROW ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL AnimatedImagesPeer::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -463,7 +463,7 @@ namespace toolkit
         lcl_updateImageList_nothrow( *m_pData );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL AnimatedImagesPeer::elementRemoved( const ContainerEvent& i_event ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -482,7 +482,7 @@ namespace toolkit
         lcl_updateImageList_nothrow( *m_pData );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL AnimatedImagesPeer::elementReplaced( const ContainerEvent& i_event ) throw (RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -505,19 +505,19 @@ namespace toolkit
         lcl_updateImageList_nothrow( *m_pData );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL AnimatedImagesPeer::disposing( const EventObject& i_event ) throw (RuntimeException)
     {
         VCLXWindow::disposing( i_event );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL AnimatedImagesPeer::modified( const EventObject& i_event ) throw (RuntimeException)
     {
         impl_updateImages_nolck( i_event.Source );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL AnimatedImagesPeer::dispose(  ) throw(RuntimeException)
     {
         AnimatedImagesPeer_Base::dispose();
@@ -525,8 +525,8 @@ namespace toolkit
         m_pData->aCachedImageSets.resize(0);
     }
 
-//......................................................................................................................
-} // namespace toolkit
-//......................................................................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/FastToken.hpp>
@@ -46,7 +46,7 @@ using namespace ::com::sun::star::xml::sax;
 
 namespace oox { namespace ppt {
 
-// CT_Shape
+
 PPTShapeContext::PPTShapeContext( ContextHandler2Helper& rParent, const SlidePersistPtr pSlidePersistPtr, oox::drawingml::ShapePtr pMasterShapePtr, oox::drawingml::ShapePtr pShapePtr )
 : oox::drawingml::ShapeContext( rParent, pMasterShapePtr, pShapePtr )
 , mpSlidePersistPtr( pSlidePersistPtr )
@@ -84,7 +84,7 @@ oox::drawingml::ShapePtr findPlaceholder( const sal_Int32 nMasterPlaceholder, co
     return aShapePtr;
 }
 
-// if nFirstPlaceholder can't be found, it will be searched for nSecondPlaceholder
+
 oox::drawingml::ShapePtr findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder,
     const OptValue< sal_Int32 >& oSubTypeIndex, std::vector< oox::drawingml::ShapePtr >& rShapes )
 {
@@ -99,9 +99,9 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
 
     switch( aElementToken )
     {
-        // nvSpPr CT_ShapeNonVisual begin
-        //  case PPT_TOKEN( drElemPr ):
-        //      break;
+        
+        
+        
         case PPT_TOKEN( cNvPr ):
         {
             mpShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
@@ -123,39 +123,39 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                     oox::ppt::ShapeLocation eShapeLocation = pPPTShapePtr->getShapeLocation();
                     if ( ( eShapeLocation == Slide ) || ( eShapeLocation == Layout ) )
                     {
-                        // inheriting properties from placeholder objects by cloning shape
+                        
                         sal_Int32 nFirstPlaceholder = 0;
                         sal_Int32 nSecondPlaceholder = 0;
                         switch( nSubType )
                         {
-                            case XML_ctrTitle :     // slide/layout
+                            case XML_ctrTitle :     
                                   nFirstPlaceholder = XML_ctrTitle;
                                   nSecondPlaceholder = XML_title;
                               break;
 
-                              case XML_subTitle :       // slide/layout
+                              case XML_subTitle :       
                                   nFirstPlaceholder = XML_subTitle;
                                   nSecondPlaceholder = XML_title;
                               break;
 
-                             case XML_obj :         // slide/layout
+                             case XML_obj :         
                                   nFirstPlaceholder = XML_obj;
                                   nSecondPlaceholder = XML_body;
                               break;
 
-                            case XML_dt :           // slide/layout/master/notes/notesmaster/handoutmaster
-                              case XML_sldNum :     // slide/layout/master/notes/notesmaster/handoutmaster
-                              case XML_ftr :            // slide/layout/master/notes/notesmaster/handoutmaster
-                              case XML_hdr :            // notes/notesmaster/handoutmaster
-                              case XML_body :           // slide/layout/master/notes/notesmaster
-                              case XML_title :      // slide/layout/master/
-                              case XML_chart :      // slide/layout
-                              case XML_tbl :            // slide/layout
-                              case XML_clipArt :        // slide/layout
-                              case XML_dgm :            // slide/layout
-                              case XML_media :      // slide/layout
-                              case XML_sldImg :     // notes/notesmaster
-                              case XML_pic :            // slide/layout
+                            case XML_dt :           
+                              case XML_sldNum :     
+                              case XML_ftr :            
+                              case XML_hdr :            
+                              case XML_body :           
+                              case XML_title :      
+                              case XML_chart :      
+                              case XML_tbl :            
+                              case XML_clipArt :        
+                              case XML_dgm :            
+                              case XML_media :      
+                              case XML_sldImg :     
+                              case XML_pic :            
                                   nFirstPlaceholder = nSubType;
                               default:
                                   break;
@@ -163,7 +163,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                           if ( nFirstPlaceholder )
                           {
                               oox::drawingml::ShapePtr pPlaceholder;
-                              if ( eShapeLocation == Layout )       // for layout objects the referenced object can be found within the same shape tree
+                              if ( eShapeLocation == Layout )       
                               {
                                   if( pPPTShapePtr->getSubTypeIndex().has() )
                                       pPlaceholder = PPTShape::findPlaceholderByIndex( pPPTShapePtr->getSubTypeIndex().get(), mpSlidePersistPtr->getShapes()->getChildren() );
@@ -171,13 +171,13 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
                                       pPlaceholder = findPlaceholder( nFirstPlaceholder, nSecondPlaceholder, pPPTShapePtr->getSubTypeIndex(),
                                                                       mpSlidePersistPtr->getShapes()->getChildren() );
                               }
-                              else if ( eShapeLocation == Slide )   // normal slide shapes have to search within the corresponding master tree for referenced objects
+                              else if ( eShapeLocation == Slide )   
                               {
                                   SlidePersistPtr pMasterPersist( mpSlidePersistPtr->getMasterPersist() );
                                   if ( pMasterPersist.get() ) {
                                       if( pPPTShapePtr->getSubTypeIndex().has() )
                                           pPlaceholder = PPTShape::findPlaceholderByIndex( pPPTShapePtr->getSubTypeIndex().get(), pMasterPersist->getShapes()->getChildren() );
-                                      // TODO: Check if this is required for non-notes pages as well...
+                                      
                                       if ( !pPlaceholder.get() || ( pMasterPersist->isNotesPage() && pPlaceholder->getSubType() != nFirstPlaceholder &&
                                                                                                      pPlaceholder->getSubType() != nSecondPlaceholder ) )
                                       {
@@ -203,7 +203,7 @@ ContextHandlerRef PPTShapeContext::onCreateContext( sal_Int32 aElementToken, con
               break;
         }
 
-        // nvSpPr CT_ShapeNonVisual end
+        
 
         case PPT_TOKEN( spPr ):
             return new PPTShapePropertiesContext( *this, *mpShapePtr );

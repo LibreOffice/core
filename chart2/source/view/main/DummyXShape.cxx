@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include "DummyXShape.hxx"
 
@@ -523,27 +523,27 @@ namespace {
 
 void setProperties( const VLineProperties& rLineProperties, std::map<OUString, uno::Any>& rTargetProps )
 {
-    //Transparency
+    
     if(rLineProperties.Transparence.hasValue())
         rTargetProps.insert(std::pair<OUString, uno::Any>(
                     UNO_NAME_LINETRANSPARENCE, rLineProperties.Transparence));
 
-    //LineStyle
+    
     if(rLineProperties.LineStyle.hasValue())
         rTargetProps.insert(std::pair<OUString, uno::Any>(
                     UNO_NAME_LINESTYLE, rLineProperties.LineStyle));
 
-    //LineWidth
+    
     if(rLineProperties.Width.hasValue())
         rTargetProps.insert(std::pair<OUString, uno::Any>(
                     UNO_NAME_LINEWIDTH, rLineProperties.Width));
 
-    //LineColor
+    
     if(rLineProperties.Color.hasValue())
         rTargetProps.insert(std::pair<OUString, uno::Any>(
                     UNO_NAME_LINECOLOR, rLineProperties.Color));
 
-    //LineDashName
+    
     if(rLineProperties.DashName.hasValue())
         rTargetProps.insert(std::pair<OUString, uno::Any>(
                     "LineDashName", rLineProperties.DashName));
@@ -576,7 +576,7 @@ void DummyLine2D::render()
     debugProperties(maProperties);
     DummyChart* pChart = getRootShape();
 
-    //add style and transparency
+    
     std::map< OUString, uno::Any >::const_iterator itr = maProperties.find(UNO_NAME_LINESTYLE);
     if (itr != maProperties.end())
     {
@@ -584,7 +584,7 @@ void DummyLine2D::render()
         drawing::LineStyle nStyle = cow.get<drawing::LineStyle>();
         if (drawing::LineStyle_NONE == nStyle)
         {
-            // nothing to render
+            
             return;
         }
     }
@@ -600,7 +600,7 @@ void DummyLine2D::render()
     itr = maProperties.find(UNO_NAME_LINECOLOR);
     if(itr != maProperties.end())
     {
-        //set line color
+        
         uno::Any co =  itr->second;
         sal_Int32 nColorValue = co.get<sal_Int32>();
         SAL_INFO("chart2.opengl", "line colorvalue = " << nColorValue);
@@ -614,7 +614,7 @@ void DummyLine2D::render()
     else
         SAL_WARN("chart2.opengl", "no line color set");
 
-    //set line width
+    
     itr = maProperties.find(UNO_NAME_LINEWIDTH);
     if(itr != maProperties.end())
     {
@@ -710,7 +710,7 @@ void DummyRectangle::render()
         }
     }
 
-    //TODO: moggi: correct handling of gradients
+    
     itr =  maProperties.find("FillTransparenceGradientName");
     if (itr != maProperties.end())
     {
@@ -748,7 +748,7 @@ struct FontAttribSetter
         else if(rPropName == "CharHeight")
         {
             float fHeight = rProp.second.get<float>();
-            mrFont.SetSize(Size(0,(fHeight*127+36)/72)); //taken from the MCW implementation
+            mrFont.SetSize(Size(0,(fHeight*127+36)/72)); 
         }
         else if(rPropName == "CharUnderline")
         {
@@ -1009,7 +1009,7 @@ uno::Any SAL_CALL DummyXShapes::queryAggregation( const uno::Type & rType )
 {
     uno::Any aAny;
 
-    //QUERYINT( drawing::XShapeGroup );
+    
     QUERYINT( drawing::XShapes );
     else
         return DummyXShape::queryAggregation( rType );
@@ -1127,12 +1127,12 @@ bool DummyChart::initWindow()
 
 namespace {
 
-// we need them before glew can initialize them
-// glew needs an OpenGL context so we need to get the address manually
+
+
 void initOpenGLFunctionPointers()
 {
     glXChooseFBConfig = (GLXFBConfig*(*)(Display *dpy, int screen, const int *attrib_list, int *nelements))glXGetProcAddressARB((GLubyte*)"glXChooseFBConfig");
-    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    // try to find a visual for the current set of attributes
+    glXGetVisualFromFBConfig = (XVisualInfo*(*)(Display *dpy, GLXFBConfig config))glXGetProcAddressARB((GLubyte*)"glXGetVisualFromFBConfig");    
     glXGetFBConfigAttrib = (int(*)(Display *dpy, GLXFBConfig config, int attribute, int* value))glXGetProcAddressARB((GLubyte*)"glXGetFBConfigAttrib");
 
 }
@@ -1190,7 +1190,7 @@ bool DummyChart::initWindow()
         XVisualInfo* pVi = glXGetVisualFromFBConfig( GLWin.dpy, pFBC[i] );
         if(pVi)
         {
-            // pick the one with the most samples per pixel
+            
             int nSampleBuf = 0;
             int nSamples = 0;
             glXGetFBConfigAttrib( GLWin.dpy, pFBC[i], GLX_SAMPLE_BUFFERS, &nSampleBuf );
@@ -1292,29 +1292,29 @@ bool DummyChart::initOpengl()
 #endif
 
 #if defined( WNT )
-    PIXELFORMATDESCRIPTOR PixelFormatFront =                    // PixelFormat Tells Windows How We Want Things To Be
+    PIXELFORMATDESCRIPTOR PixelFormatFront =                    
     {
         sizeof(PIXELFORMATDESCRIPTOR),
-        1,                              // Version Number
+        1,                              
         PFD_DRAW_TO_WINDOW |
         PFD_SUPPORT_OPENGL |
         PFD_DOUBLEBUFFER,
-        PFD_TYPE_RGBA,                  // Request An RGBA Format
-        (BYTE)32,                       // Select Our Color Depth
-        0, 0, 0, 0, 0, 0,               // Color Bits Ignored
-        0,                              // No Alpha Buffer
-        0,                              // Shift Bit Ignored
-        0,                              // No Accumulation Buffer
-        0, 0, 0, 0,                     // Accumulation Bits Ignored
-        64,                             // 32 bit Z-BUFFER
-        0,                              // 0 bit stencil buffer
-        0,                              // No Auxiliary Buffer
-        0,                              // now ignored
-        0,                              // Reserved
-        0, 0, 0                         // Layer Masks Ignored
+        PFD_TYPE_RGBA,                  
+        (BYTE)32,                       
+        0, 0, 0, 0, 0, 0,               
+        0,                              
+        0,                              
+        0,                              
+        0, 0, 0, 0,                     
+        64,                             
+        0,                              
+        0,                              
+        0,                              
+        0,                              
+        0, 0, 0                         
     };
 
-    //  we must check whether can set the MSAA
+    
     int WindowPix;
     m_GLRender.InitMultisample(PixelFormatFront);
     if (m_GLRender.GetMSAASupport())
@@ -1349,20 +1349,20 @@ bool DummyChart::initOpengl()
 
     if( GLWin.HasGLXExtension("GLX_SGI_swap_control" ) )
     {
-        // enable vsync
+        
         typedef GLint (*glXSwapIntervalProc)(GLint);
         glXSwapIntervalProc glXSwapInterval = (glXSwapIntervalProc) glXGetProcAddress( (const GLubyte*) "glXSwapIntervalSGI" );
         if( glXSwapInterval ) {
         int (*oldHandler)(Display* /*dpy*/, XErrorEvent* /*evnt*/);
 
-        // replace error handler temporarily
+        
         oldHandler = XSetErrorHandler( oglErrorHandler );
 
         errorTriggered = false;
 
         glXSwapInterval( 1 );
 
-        // sync so that we possibly get an XError
+        
         glXWaitGL();
         XSync(GLWin.dpy, false);
 
@@ -1371,7 +1371,7 @@ bool DummyChart::initOpengl()
         else
             OSL_TRACE("set swap interval to 1 (enable vsync)");
 
-        // restore the error handler
+        
         XSetErrorHandler( oldHandler );
         }
     }
@@ -1381,7 +1381,7 @@ bool DummyChart::initOpengl()
     m_GLRender.InitOpenGL(GLWin);
 
 #ifdef DBG_UTIL
-    // only enable debug output in dbgutil build
+    
     if( GLEW_ARB_debug_output )
     {
         glEnable(GL_DEBUG_OUTPUT);
@@ -1393,9 +1393,9 @@ bool DummyChart::initOpengl()
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
-    // Enable depth test
+    
     glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
+    
     glDepthFunc(GL_LESS);
 
 #if defined( WNT )
@@ -1414,7 +1414,7 @@ bool DummyChart::initOpengl()
     glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
     SAL_WARN("chart2.opengl", "DummyChart::initOpengl----end");
-//    mpWindow->Show(1, 1);
+
     return true;
 }
 

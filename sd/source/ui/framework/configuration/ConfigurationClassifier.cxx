@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -87,8 +87,8 @@ void ConfigurationClassifier::PartitionResources (
     ResourceIdVector aC2minusC1;
     ResourceIdVector aC1andC2;
 
-    // Classify the resources in the configurations that are not bound to
-    // other resources.
+    
+    
     ClassifyResources(
         rS1,
         rS2,
@@ -101,7 +101,7 @@ void ConfigurationClassifier::PartitionResources (
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": copying resource ids to C2-C1");
     CopyResources(aC2minusC1, mxConfiguration2, maC2minusC1);
 
-    // Process the unique resources that belong to both configurations.
+    
     ResourceIdVector::const_iterator iResource;
     for (iResource=aC1andC2.begin(); iResource!=aC1andC2.end(); ++iResource)
     {
@@ -122,14 +122,14 @@ void ConfigurationClassifier::ClassifyResources (
     ResourceIdVector& rS2minusS1,
     ResourceIdVector& rS1andS2)
 {
-    // Get arrays from the sequences for faster iteration.
+    
     const Reference<XResourceId>* aA1 = rS1.getConstArray();
     const Reference<XResourceId>* aA2 = rS2.getConstArray();
     sal_Int32 nL1 (rS1.getLength());
     sal_Int32 nL2 (rS2.getLength());
 
-    // Find all elements in rS1 and place them in rS1minusS2 or rS1andS2
-    // depending on whether they are in rS2 or not.
+    
+    
     for (sal_Int32 i=0; i<nL1; ++i)
     {
         bool bFound (false);
@@ -143,9 +143,9 @@ void ConfigurationClassifier::ClassifyResources (
             rS1minusS2.push_back(aA1[i]);
     }
 
-    // Find all elements in rS2 that are not in rS1.  The elements that are
-    // in both rS1 and rS2 have been handled above and are therefore ignored
-    // here.
+    
+    
+    
     for (sal_Int32 j=0; j<nL2; ++j)
     {
         bool bFound (false);
@@ -166,7 +166,7 @@ void ConfigurationClassifier::CopyResources (
     const Reference<XConfiguration>& rxConfiguration,
     ResourceIdVector& rTarget)
 {
-    // Copy all resources bound to the ones in aC1minusC2Unique to rC1minusC2.
+    
     ResourceIdVector::const_iterator iResource (rSource.begin());
     ResourceIdVector::const_iterator iEnd(rSource.end());
     for ( ; iResource!=iEnd; ++iResource)
@@ -213,6 +213,6 @@ void ConfigurationClassifier::TraceResourceIdVector (
 }
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

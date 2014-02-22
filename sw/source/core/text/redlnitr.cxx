@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "hintids.hxx"
@@ -44,23 +44,23 @@ using namespace ::com::sun::star;
 
 void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, SwTxtFrm* pFrm )
 {
-    // during HTML-Import it can happen, that no layout exists
+    
     SwRootFrm* pRootFrm = rTxtNode.getIDocumentLayoutAccess()->GetCurrentLayout();
     pShell = pRootFrm ? pRootFrm->GetCurrShell() : 0;
 
     pScriptInfo = &rScrInf;
 
-    // attributes set at the whole paragraph
+    
     pAttrSet = rTxtNode.GetpSwAttrSet();
-    // attribute array
+    
     pHints = rTxtNode.GetpSwpHints();
 
-    // Build a font matching the default paragraph style:
+    
     SwFontAccess aFontAccess( &rTxtNode.GetAnyFmtColl(), pShell );
     delete pFnt;
     pFnt = new SwFont( *aFontAccess.Get()->GetFont() );
 
-    // set font to vertical if frame layout is vertical
+    
     bool bVertLayout = false;
     bool bRTL = false;
     if ( pFrm )
@@ -73,17 +73,17 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
         bRTL = pFrm->IsRightToLeft();
     }
 
-    // Initialize the default attribute of the attribute handler
-    // based on the attribute array cached together with the font.
-    // If any further attributes for the paragraph are given in pAttrSet
-    // consider them during construction of the default array, and apply
-    // them to the font
+    
+    
+    
+    
+    
     aAttrHandler.Init( aFontAccess.Get()->GetDefault(), pAttrSet,
                        *rTxtNode.getIDocumentSettingAccess(), pShell, *pFnt, bVertLayout );
 
     aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
 
-    // determine script changes if not already done for current paragraph
+    
     OSL_ENSURE( pScriptInfo, "No script info available");
     if ( pScriptInfo->GetInvalidityA() != COMPLETE_STRING )
          pScriptInfo->InitScriptInfo( rTxtNode, bRTL );
@@ -189,14 +189,14 @@ SwRedlineItr::~SwRedlineItr()
     delete pExt;
 }
 
-// The return value of SwRedlineItr::Seek tells you if the current font
-// has been manipulated by leaving (-1) or accessing (+1) of a section
+
+
 short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
 {
     short nRet = 0;
     if( ExtOn() )
-        return 0; // Abbreviation: if we're within an ExtendTextInputs
-                  // there can't be other changes of attributes (not even by redlining)
+        return 0; 
+                  
     if( bShow )
     {
         if( bOn )
@@ -204,20 +204,20 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
             if( nNew >= nEnd )
             {
                 --nRet;
-                _Clear( &rFnt );    // We go behind the current section
-                ++nAct;             // and check the next one
+                _Clear( &rFnt );    
+                ++nAct;             
             }
             else if( nNew < nStart )
             {
                 --nRet;
-                _Clear( &rFnt );    // We go in front of the current section
+                _Clear( &rFnt );    
                 if( nAct > nFirst )
-                    nAct = nFirst;  // the test has to run from the beginning
+                    nAct = nFirst;  
                 else
-                    return nRet + EnterExtend( rFnt, nNew ); // There's none prior to us
+                    return nRet + EnterExtend( rFnt, nNew ); 
             }
             else
-                return nRet + EnterExtend( rFnt, nNew ); // We stayed in the same section
+                return nRet + EnterExtend( rFnt, nNew ); 
         }
         if( COMPLETE_STRING == nAct || nOld > nNew )
             nAct = nFirst;
@@ -231,7 +231,7 @@ short SwRedlineItr::_Seek(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
 
             if( nNew < nEnd )
             {
-                if( nNew >= nStart ) // der einzig moegliche Kandidat
+                if( nNew >= nStart ) 
                 {
                     bOn = true;
                     const SwRangeRedline *pRed = rDoc.GetRedlineTbl()[ nAct ];
@@ -360,9 +360,9 @@ sal_Int32 SwRedlineItr::_GetNextRedln( sal_Int32 nNext )
 
 bool SwRedlineItr::_ChkSpecialUnderline() const
 {
-    // If the underlining or the escapement is caused by redlining,
-    // we always apply the SpecialUnderlining, i.e. the underlining
-    // below the base line
+    
+    
+    
     for (size_t i = 0; i < m_Hints.size(); ++i)
     {
         MSHORT nWhich = m_Hints[i]->Which();
@@ -377,7 +377,7 @@ bool SwRedlineItr::CheckLine( sal_Int32 nChkStart, sal_Int32 nChkEnd )
 {
     if( nFirst == COMPLETE_STRING )
         return false;
-    if( nChkEnd == nChkStart ) // empty lines look one char further
+    if( nChkEnd == nChkStart ) 
         ++nChkEnd;
     sal_Int32 nOldStart = nStart;
     sal_Int32 nOldEnd = nEnd;
@@ -446,9 +446,9 @@ bool SwExtend::_Leave(SwFont& rFnt, sal_Int32 nNew)
     MSHORT nOldAttr = rArr[ nPos - nStart ];
     nPos = nNew;
     if( Inside() )
-    {   // We stayed within the ExtendText-section
+    {   
         MSHORT nAttr = rArr[ nPos - nStart ];
-        if( nOldAttr != nAttr ) // Is there an (inner) change of attributes?
+        if( nOldAttr != nAttr ) 
         {
             rFnt = *pFnt;
             ActualizeFont( rFnt, nAttr );
@@ -476,7 +476,7 @@ sal_Int32 SwExtend::Next( sal_Int32 nNext )
         sal_Int32 nIdx = nPos - nStart;
         MSHORT nAttr = rArr[ nIdx ];
         while( ++nIdx < (sal_Int32)rArr.size() && nAttr == rArr[ nIdx ] )
-            ; //nothing
+            ; 
         nIdx = nIdx + nStart;
         if( nNext > nIdx )
             nNext = nIdx;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -30,7 +30,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <unotools/fontdefs.hxx>
 
-// ========================================================================
+
 
 inline void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
 {
@@ -38,7 +38,7 @@ inline void ImplScalePoint( Point& rPt, double fScaleX, double fScaleY )
     rPt.Y() = FRound( fScaleY * rPt.Y() );
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void ImplScaleRect( Rectangle& rRect, double fScaleX, double fScaleY )
 {
@@ -52,7 +52,7 @@ inline void ImplScaleRect( Rectangle& rRect, double fScaleX, double fScaleY )
     rRect.Justify();
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void ImplScalePoly( Polygon& rPoly, double fScaleX, double fScaleY )
 {
@@ -60,7 +60,7 @@ inline void ImplScalePoly( Polygon& rPoly, double fScaleX, double fScaleY )
         ImplScalePoint( rPoly[ i ], fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 inline void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScaleY )
 {
@@ -75,14 +75,14 @@ inline void ImplScaleLineInfo( LineInfo& rLineInfo, double fScaleX, double fScal
     }
 }
 
-// ========================================================================
+
 
 #define COMPAT( _def_rIStm ) VersionCompat aCompat( ( _def_rIStm ), STREAM_READ );
 #define WRITE_BASE_COMPAT( _def_rOStm, _def_nVer, _pWriteData )         \
     MetaAction::Write( ( _def_rOStm ), _pWriteData );                   \
     VersionCompat aCompat( ( _def_rOStm ), STREAM_WRITE, ( _def_nVer ) );
 
-// ========================================================================
+
 
 MetaAction::MetaAction() :
     mnRefCount( 1 ),
@@ -90,7 +90,7 @@ MetaAction::MetaAction() :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction::MetaAction( sal_uInt16 nType ) :
     mnRefCount( 1 ),
@@ -98,59 +98,59 @@ MetaAction::MetaAction( sal_uInt16 nType ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction::~MetaAction()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaAction::Execute( OutputDevice* )
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaAction::Clone()
 {
     return new MetaAction;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaAction::Move( long, long )
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaAction::Scale( double, double )
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaAction::Compare( const MetaAction& ) const
 {
     return true;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaAction::Write( SvStream& rOStm, ImplMetaWriteData* )
 {
     rOStm.WriteUInt16( mnType );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaAction::Read( SvStream&, ImplMetaReadData* )
 {
-    // DO NOT read mnType - ReadMetaAction already did that!
+    
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData )
 {
@@ -220,8 +220,8 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
 
         default:
         {
-            // Action ueberlesen durch Kombination Ctor/Dtor,
-            // new/delete, weil Compiler sonst vielleicht wegoptimieren
+            
+            
             delete ( new VersionCompat( rIStm, STREAM_READ ) );
         }
         break;
@@ -233,11 +233,11 @@ MetaAction* MetaAction::ReadMetaAction( SvStream& rIStm, ImplMetaReadData* pData
     return pAction;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Pixel, META_PIXEL_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaPixelAction::MetaPixelAction( const Point& rPt, const Color& rColor ) :
     MetaAction  ( META_PIXEL_ACTION ),
@@ -246,14 +246,14 @@ MetaPixelAction::MetaPixelAction( const Point& rPt, const Color& rColor ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPixelAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawPixel( maPt, maColor );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaPixelAction::Clone()
 {
@@ -262,21 +262,21 @@ MetaAction* MetaPixelAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPixelAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPixelAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaPixelAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -284,7 +284,7 @@ bool MetaPixelAction::Compare( const MetaAction& rMetaAction ) const
            ( maColor == ((MetaPixelAction&)rMetaAction).maColor );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -293,7 +293,7 @@ void MetaPixelAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     maColor.Write( rOStm, true );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPixelAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -302,11 +302,11 @@ void MetaPixelAction::Read( SvStream& rIStm, ImplMetaReadData* )
     maColor.Read( rIStm, true );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Point, META_POINT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaPointAction::MetaPointAction( const Point& rPt ) :
     MetaAction  ( META_POINT_ACTION ),
@@ -314,14 +314,14 @@ MetaPointAction::MetaPointAction( const Point& rPt ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPointAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawPixel( maPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaPointAction::Clone()
 {
@@ -330,28 +330,28 @@ MetaAction* MetaPointAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPointAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPointAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaPointAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maPt == ((MetaPointAction&)rMetaAction).maPt;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -359,7 +359,7 @@ void MetaPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WritePair( rOStm, maPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -367,11 +367,11 @@ void MetaPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Line, META_LINE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd ) :
     MetaAction  ( META_LINE_ACTION ),
@@ -380,7 +380,7 @@ MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd,
                                 const LineInfo& rLineInfo ) :
@@ -391,7 +391,7 @@ MetaLineAction::MetaLineAction( const Point& rStart, const Point& rEnd,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLineAction::Execute( OutputDevice* pOut )
 {
@@ -401,7 +401,7 @@ void MetaLineAction::Execute( OutputDevice* pOut )
         pOut->DrawLine( maStartPt, maEndPt, maLineInfo );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaLineAction::Clone()
 {
@@ -410,7 +410,7 @@ MetaAction* MetaLineAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLineAction::Move( long nHorzMove, long nVertMove )
 {
@@ -418,7 +418,7 @@ void MetaLineAction::Move( long nHorzMove, long nVertMove )
     maEndPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLineAction::Scale( double fScaleX, double fScaleY )
 {
@@ -427,7 +427,7 @@ void MetaLineAction::Scale( double fScaleX, double fScaleY )
     ImplScaleLineInfo( maLineInfo, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaLineAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -436,39 +436,39 @@ bool MetaLineAction::Compare( const MetaAction& rMetaAction ) const
            ( maEndPt == ((MetaLineAction&)rMetaAction).maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
 
     WritePair( rOStm, maStartPt );
-    WritePair( rOStm, maEndPt );  // Version 1
-    WriteLineInfo( rOStm, maLineInfo );            // Version 2
+    WritePair( rOStm, maEndPt );  
+    WriteLineInfo( rOStm, maLineInfo );            
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
 
-    // Version 1
+    
     ReadPair( rIStm, maStartPt );
     ReadPair( rIStm, maEndPt );
 
-    // Version 2
+    
     if( aCompat.GetVersion() >= 2 )
     {
         ReadLineInfo( rIStm, maLineInfo );
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Rect, META_RECT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaRectAction::MetaRectAction( const Rectangle& rRect ) :
     MetaAction  ( META_RECT_ACTION ),
@@ -476,14 +476,14 @@ MetaRectAction::MetaRectAction( const Rectangle& rRect ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRectAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawRect( maRect );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaRectAction::Clone()
 {
@@ -492,28 +492,28 @@ MetaAction* MetaRectAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRectAction::Move( long nHorzMove, long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRectAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaRectAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maRect == ((MetaRectAction&)rMetaAction).maRect;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -521,7 +521,7 @@ void MetaRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WriteRectangle( rOStm, maRect );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -529,11 +529,11 @@ void MetaRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRectangle( rIStm, maRect );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( RoundRect, META_ROUNDRECT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaRoundRectAction::MetaRoundRectAction( const Rectangle& rRect,
                                           sal_uInt32 nHorzRound, sal_uInt32 nVertRound ) :
@@ -544,14 +544,14 @@ MetaRoundRectAction::MetaRoundRectAction( const Rectangle& rRect,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRoundRectAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawRect( maRect, mnHorzRound, mnVertRound );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaRoundRectAction::Clone()
 {
@@ -560,14 +560,14 @@ MetaAction* MetaRoundRectAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRoundRectAction::Move( long nHorzMove, long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRoundRectAction::Scale( double fScaleX, double fScaleY )
 {
@@ -576,7 +576,7 @@ void MetaRoundRectAction::Scale( double fScaleX, double fScaleY )
     mnVertRound = FRound( mnVertRound * fabs(fScaleY) );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaRoundRectAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -585,7 +585,7 @@ bool MetaRoundRectAction::Compare( const MetaAction& rMetaAction ) const
            ( mnVertRound == ((MetaRoundRectAction&)rMetaAction).mnVertRound );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -594,7 +594,7 @@ void MetaRoundRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUInt32( mnHorzRound ).WriteUInt32( mnVertRound );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRoundRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -602,11 +602,11 @@ void MetaRoundRectAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRectangle( rIStm, maRect ).ReadUInt32( mnHorzRound ).ReadUInt32( mnVertRound );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Ellipse, META_ELLIPSE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaEllipseAction::MetaEllipseAction( const Rectangle& rRect ) :
     MetaAction  ( META_ELLIPSE_ACTION ),
@@ -614,14 +614,14 @@ MetaEllipseAction::MetaEllipseAction( const Rectangle& rRect ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEllipseAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawEllipse( maRect );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaEllipseAction::Clone()
 {
@@ -630,28 +630,28 @@ MetaAction* MetaEllipseAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEllipseAction::Move( long nHorzMove, long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEllipseAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaEllipseAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maRect == ((MetaEllipseAction&)rMetaAction).maRect;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEllipseAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -659,7 +659,7 @@ void MetaEllipseAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WriteRectangle( rOStm, maRect );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEllipseAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -667,11 +667,11 @@ void MetaEllipseAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRectangle( rIStm, maRect );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Arc, META_ARC_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaArcAction::MetaArcAction( const Rectangle& rRect,
                               const Point& rStart, const Point& rEnd ) :
@@ -682,14 +682,14 @@ MetaArcAction::MetaArcAction( const Rectangle& rRect,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaArcAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawArc( maRect, maStartPt, maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaArcAction::Clone()
 {
@@ -698,7 +698,7 @@ MetaAction* MetaArcAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaArcAction::Move( long nHorzMove, long nVertMove )
 {
@@ -707,7 +707,7 @@ void MetaArcAction::Move( long nHorzMove, long nVertMove )
     maEndPt.Move(  nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaArcAction::Scale( double fScaleX, double fScaleY )
 {
@@ -716,7 +716,7 @@ void MetaArcAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaArcAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -725,7 +725,7 @@ bool MetaArcAction::Compare( const MetaAction& rMetaAction ) const
            ( maEndPt == ((MetaArcAction&)rMetaAction).maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaArcAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -735,7 +735,7 @@ void MetaArcAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WritePair( rOStm, maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaArcAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -745,11 +745,11 @@ void MetaArcAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maEndPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Pie, META_PIE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaPieAction::MetaPieAction( const Rectangle& rRect,
                               const Point& rStart, const Point& rEnd ) :
@@ -760,14 +760,14 @@ MetaPieAction::MetaPieAction( const Rectangle& rRect,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPieAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawPie( maRect, maStartPt, maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaPieAction::Clone()
 {
@@ -776,7 +776,7 @@ MetaAction* MetaPieAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPieAction::Move( long nHorzMove, long nVertMove )
 {
@@ -785,7 +785,7 @@ void MetaPieAction::Move( long nHorzMove, long nVertMove )
     maEndPt.Move(  nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPieAction::Scale( double fScaleX, double fScaleY )
 {
@@ -794,7 +794,7 @@ void MetaPieAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaPieAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -803,7 +803,7 @@ bool MetaPieAction::Compare( const MetaAction& rMetaAction ) const
            ( maEndPt == ((MetaPieAction&)rMetaAction).maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPieAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -813,7 +813,7 @@ void MetaPieAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WritePair( rOStm, maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPieAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -823,11 +823,11 @@ void MetaPieAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maEndPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Chord, META_CHORD_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaChordAction::MetaChordAction( const Rectangle& rRect,
                                   const Point& rStart, const Point& rEnd ) :
@@ -838,14 +838,14 @@ MetaChordAction::MetaChordAction( const Rectangle& rRect,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaChordAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawChord( maRect, maStartPt, maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaChordAction::Clone()
 {
@@ -854,7 +854,7 @@ MetaAction* MetaChordAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaChordAction::Move( long nHorzMove, long nVertMove )
 {
@@ -863,7 +863,7 @@ void MetaChordAction::Move( long nHorzMove, long nVertMove )
     maEndPt.Move(  nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaChordAction::Scale( double fScaleX, double fScaleY )
 {
@@ -872,7 +872,7 @@ void MetaChordAction::Scale( double fScaleX, double fScaleY )
     ImplScalePoint( maEndPt, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaChordAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -881,7 +881,7 @@ bool MetaChordAction::Compare( const MetaAction& rMetaAction ) const
            ( maEndPt == ((MetaChordAction&)rMetaAction).maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaChordAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -891,7 +891,7 @@ void MetaChordAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WritePair( rOStm, maEndPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaChordAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -901,11 +901,11 @@ void MetaChordAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maEndPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( PolyLine, META_POLYLINE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaPolyLineAction::MetaPolyLineAction( const Polygon& rPoly ) :
     MetaAction  ( META_POLYLINE_ACTION ),
@@ -913,7 +913,7 @@ MetaPolyLineAction::MetaPolyLineAction( const Polygon& rPoly ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaPolyLineAction::MetaPolyLineAction( const Polygon& rPoly, const LineInfo& rLineInfo ) :
     MetaAction  ( META_POLYLINE_ACTION ),
@@ -922,7 +922,7 @@ MetaPolyLineAction::MetaPolyLineAction( const Polygon& rPoly, const LineInfo& rL
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyLineAction::Execute( OutputDevice* pOut )
 {
@@ -932,7 +932,7 @@ void MetaPolyLineAction::Execute( OutputDevice* pOut )
         pOut->DrawPolyLine( maPoly, maLineInfo );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaPolyLineAction::Clone()
 {
@@ -941,14 +941,14 @@ MetaAction* MetaPolyLineAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyLineAction::Move( long nHorzMove, long nVertMove )
 {
     maPoly.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyLineAction::Scale( double fScaleX, double fScaleY )
 {
@@ -956,7 +956,7 @@ void MetaPolyLineAction::Scale( double fScaleX, double fScaleY )
     ImplScaleLineInfo( maLineInfo, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaPolyLineAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -969,7 +969,7 @@ bool MetaPolyLineAction::Compare( const MetaAction& rMetaAction ) const
 
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -978,25 +978,25 @@ void MetaPolyLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     Polygon aSimplePoly;
     maPoly.AdaptiveSubdivide( aSimplePoly );
 
-    WritePolygon( rOStm, aSimplePoly );                               // Version 1
-    WriteLineInfo( rOStm, maLineInfo );                                // Version 2
+    WritePolygon( rOStm, aSimplePoly );                               
+    WriteLineInfo( rOStm, maLineInfo );                                
 
-    sal_uInt8 bHasPolyFlags = maPoly.HasFlags();        // Version 3
+    sal_uInt8 bHasPolyFlags = maPoly.HasFlags();        
     rOStm.WriteUChar( bHasPolyFlags );
     if ( bHasPolyFlags )
         maPoly.Write( rOStm );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
 
-    // Version 1
+    
     ReadPolygon( rIStm, maPoly );
 
-    // Version 2
+    
     if( aCompat.GetVersion() >= 2 )
         ReadLineInfo( rIStm, maLineInfo );
     if ( aCompat.GetVersion() >= 3 )
@@ -1008,11 +1008,11 @@ void MetaPolyLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Polygon, META_POLYGON_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaPolygonAction::MetaPolygonAction( const Polygon& rPoly ) :
     MetaAction  ( META_POLYGON_ACTION ),
@@ -1020,14 +1020,14 @@ MetaPolygonAction::MetaPolygonAction( const Polygon& rPoly ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolygonAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawPolygon( maPoly );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaPolygonAction::Clone()
 {
@@ -1036,52 +1036,52 @@ MetaAction* MetaPolygonAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolygonAction::Move( long nHorzMove, long nVertMove )
 {
     maPoly.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolygonAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoly( maPoly, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaPolygonAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maPoly.IsEqual(((MetaPolygonAction&)rMetaAction).maPoly );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
 
-    Polygon aSimplePoly;                            // Version 1
+    Polygon aSimplePoly;                            
     maPoly.AdaptiveSubdivide( aSimplePoly );
     WritePolygon( rOStm, aSimplePoly );
 
-    sal_uInt8 bHasPolyFlags = maPoly.HasFlags();    // Version 2
+    sal_uInt8 bHasPolyFlags = maPoly.HasFlags();    
     rOStm.WriteUChar( bHasPolyFlags );
     if ( bHasPolyFlags )
         maPoly.Write( rOStm );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
 
-    ReadPolygon( rIStm, maPoly );                    // Version 1
+    ReadPolygon( rIStm, maPoly );                    
 
-    if( aCompat.GetVersion() >= 2 )     // Version 2
+    if( aCompat.GetVersion() >= 2 )     
     {
         sal_uInt8 bHasPolyFlags;
         rIStm.ReadUChar( bHasPolyFlags );
@@ -1090,11 +1090,11 @@ void MetaPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( PolyPolygon, META_POLYPOLYGON_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaPolyPolygonAction::MetaPolyPolygonAction( const PolyPolygon& rPolyPoly ) :
     MetaAction  ( META_POLYPOLYGON_ACTION ),
@@ -1102,14 +1102,14 @@ MetaPolyPolygonAction::MetaPolyPolygonAction( const PolyPolygon& rPolyPoly ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyPolygonAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawPolyPolygon( maPolyPoly );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaPolyPolygonAction::Clone()
 {
@@ -1118,14 +1118,14 @@ MetaAction* MetaPolyPolygonAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyPolygonAction::Move( long nHorzMove, long nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyPolygonAction::Scale( double fScaleX, double fScaleY )
 {
@@ -1133,14 +1133,14 @@ void MetaPolyPolygonAction::Scale( double fScaleX, double fScaleY )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaPolyPolygonAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maPolyPoly.IsEqual(((MetaPolyPolygonAction&)rMetaAction).maPolyPoly );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -1149,7 +1149,7 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     sal_uInt16 nNumberOfComplexPolygons = 0;
     sal_uInt16 i, nPolyCount = maPolyPoly.Count();
 
-    Polygon aSimplePoly;                                // Version 1
+    Polygon aSimplePoly;                                
     rOStm.WriteUInt16( nPolyCount );
     for ( i = 0; i < nPolyCount; i++ )
     {
@@ -1160,7 +1160,7 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
         WritePolygon( rOStm, aSimplePoly );
     }
 
-    rOStm.WriteUInt16( nNumberOfComplexPolygons );                  // Version 2
+    rOStm.WriteUInt16( nNumberOfComplexPolygons );                  
     for ( i = 0; nNumberOfComplexPolygons && ( i < nPolyCount ); i++ )
     {
         const Polygon& rPoly = maPolyPoly.GetObject( i );
@@ -1174,14 +1174,14 @@ void MetaPolyPolygonAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    ReadPolyPolygon( rIStm, maPolyPoly );                // Version 1
+    ReadPolyPolygon( rIStm, maPolyPoly );                
 
-    if ( aCompat.GetVersion() >= 2 )    // Version 2
+    if ( aCompat.GetVersion() >= 2 )    
     {
         sal_uInt16 i, nIndex, nNumberOfComplexPolygons;
         rIStm.ReadUInt16( nNumberOfComplexPolygons );
@@ -1195,11 +1195,11 @@ void MetaPolyPolygonAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Text, META_TEXT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
                                 sal_Int32 nIndex, sal_Int32 nLen ) :
@@ -1211,14 +1211,14 @@ MetaTextAction::MetaTextAction( const Point& rPt, const OUString& rStr,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawText( maPt, maStr, mnIndex, mnLen );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTextAction::Clone()
 {
@@ -1227,21 +1227,21 @@ MetaAction* MetaTextAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTextAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -1251,7 +1251,7 @@ bool MetaTextAction::Compare( const MetaAction& rMetaAction ) const
            ( mnLen == ((MetaTextAction&)rMetaAction).mnLen );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -1261,10 +1261,10 @@ void MetaTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteInt32(mnIndex);
     rOStm.WriteInt32(mnLen);
 
-    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); 
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
@@ -1274,11 +1274,11 @@ void MetaTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm  .ReadInt32( mnIndex );
     rIStm  .ReadInt32( mnLen );
 
-    if ( aCompat.GetVersion() >= 2 )                            // Version 2
+    if ( aCompat.GetVersion() >= 2 )                            
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
-// ========================================================================
+
 
 MetaTextArrayAction::MetaTextArrayAction() :
     MetaAction  ( META_TEXTARRAY_ACTION ),
@@ -1288,7 +1288,7 @@ MetaTextArrayAction::MetaTextArrayAction() :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
     MetaAction  ( META_TEXTARRAY_ACTION ),
@@ -1308,7 +1308,7 @@ MetaTextArrayAction::MetaTextArrayAction( const MetaTextArrayAction& rAction ) :
         mpDXAry = NULL;
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
                                           const OUString& rStr,
@@ -1332,21 +1332,21 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
         mpDXAry = NULL;
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaTextArrayAction::~MetaTextArrayAction()
 {
     delete[] mpDXAry;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextArrayAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawTextArray( maStartPt, maStr, mpDXAry, mnIndex, mnLen );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTextArrayAction::Clone()
 {
@@ -1355,14 +1355,14 @@ MetaAction* MetaTextArrayAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextArrayAction::Move( long nHorzMove, long nVertMove )
 {
     maStartPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
 {
@@ -1375,7 +1375,7 @@ void MetaTextArrayAction::Scale( double fScaleX, double fScaleY )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTextArrayAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -1386,7 +1386,7 @@ bool MetaTextArrayAction::Compare( const MetaAction& rMetaAction ) const
            ( memcmp( mpDXAry, ((MetaTextArrayAction&)rMetaAction).mpDXAry, mnLen ) == 0 );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -1402,10 +1402,10 @@ void MetaTextArrayAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     for (sal_Int32 i = 0; i < nAryLen; ++i)
         rOStm.WriteInt32( mpDXAry[ i ] );
 
-    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); 
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
@@ -1429,7 +1429,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 
     if( nAryLen )
     {
-        // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
+        
         if ( mnLen >= nAryLen )
         {
             mpDXAry = new (std::nothrow)sal_Int32[ mnLen ];
@@ -1439,7 +1439,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
                 for( i = 0; i < nAryLen; i++ )
                     rIStm.ReadInt32( mpDXAry[ i ] );
 
-                // #106172# setup remainder
+                
                 for( ; i < mnLen; i++ )
                     mpDXAry[ i ] = 0;
             }
@@ -1453,7 +1453,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     else
         mpDXAry = NULL;
 
-    if ( aCompat.GetVersion() >= 2 )                            // Version 2
+    if ( aCompat.GetVersion() >= 2 )                            
     {
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 
@@ -1465,11 +1465,11 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( StretchText, META_STRETCHTEXT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidth,
                                               const OUString& rStr,
@@ -1483,14 +1483,14 @@ MetaStretchTextAction::MetaStretchTextAction( const Point& rPt, sal_uInt32 nWidt
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaStretchTextAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawStretchText( maPt, mnWidth, maStr, mnIndex, mnLen );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaStretchTextAction::Clone()
 {
@@ -1499,14 +1499,14 @@ MetaAction* MetaStretchTextAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaStretchTextAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
 {
@@ -1514,7 +1514,7 @@ void MetaStretchTextAction::Scale( double fScaleX, double fScaleY )
     mnWidth = (sal_uLong)FRound( mnWidth * fabs(fScaleX) );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaStretchTextAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -1525,7 +1525,7 @@ bool MetaStretchTextAction::Compare( const MetaAction& rMetaAction ) const
            ( mnLen == ((MetaStretchTextAction&)rMetaAction).mnLen );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -1536,10 +1536,10 @@ void MetaStretchTextAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteInt32( mnIndex );
     rOStm.WriteInt32( mnLen );
 
-    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); 
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
@@ -1550,15 +1550,15 @@ void MetaStretchTextAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm  .ReadInt32( mnIndex );
     rIStm  .ReadInt32( mnLen );
 
-    if ( aCompat.GetVersion() >= 2 )                            // Version 2
+    if ( aCompat.GetVersion() >= 2 )                            
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextRect, META_TEXTRECT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
                                         const OUString& rStr, sal_uInt16 nStyle ) :
@@ -1569,14 +1569,14 @@ MetaTextRectAction::MetaTextRectAction( const Rectangle& rRect,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextRectAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawText( maRect, maStr, mnStyle );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTextRectAction::Clone()
 {
@@ -1585,21 +1585,21 @@ MetaAction* MetaTextRectAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextRectAction::Move( long nHorzMove, long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextRectAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTextRectAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -1608,7 +1608,7 @@ bool MetaTextRectAction::Compare( const MetaAction& rMetaAction ) const
            ( mnStyle == ((MetaTextRectAction&)rMetaAction).mnStyle );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -1617,10 +1617,10 @@ void MetaTextRectAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUniOrByteString( maStr, pData->meActualCharSet );
     rOStm.WriteUInt16( mnStyle );
 
-    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); // version 2
+    write_uInt16_lenPrefixed_uInt16s_FromOUString(rOStm, maStr); 
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
@@ -1629,15 +1629,15 @@ void MetaTextRectAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     maStr = rIStm.ReadUniOrByteString(pData->meActualCharSet);
     rIStm  .ReadUInt16( mnStyle );
 
-    if ( aCompat.GetVersion() >= 2 )                            // Version 2
+    if ( aCompat.GetVersion() >= 2 )                            
         maStr = read_uInt16_lenPrefixed_uInt16s_ToOUString(rIStm);
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextLine, META_TEXTLINE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
                                         FontStrikeout eStrikeout,
@@ -1652,14 +1652,14 @@ MetaTextLineAction::MetaTextLineAction( const Point& rPos, long nWidth,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLineAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawTextLine( maPos, mnWidth, meStrikeout, meUnderline, meOverline );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTextLineAction::Clone()
 {
@@ -1668,14 +1668,14 @@ MetaAction* MetaTextLineAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLineAction::Move( long nHorzMove, long nVertMove )
 {
     maPos.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLineAction::Scale( double fScaleX, double fScaleY )
 {
@@ -1683,7 +1683,7 @@ void MetaTextLineAction::Scale( double fScaleX, double fScaleY )
     mnWidth = FRound( mnWidth * fabs(fScaleX) );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTextLineAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -1694,28 +1694,28 @@ bool MetaTextLineAction::Compare( const MetaAction& rMetaAction ) const
            ( meOverline  == ((MetaTextLineAction&)rMetaAction).meOverline );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLineAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 2, pData );
 
-    //#fdo39428 SvStream no longer supports operator<<(long)
+    
     WritePair( rOStm, maPos );
     rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(mnWidth) );
     rOStm.WriteUInt32( static_cast<sal_uInt32>(meStrikeout) );
     rOStm.WriteUInt32( static_cast<sal_uInt32>(meUnderline) );
-    // new in version 2
+    
     rOStm.WriteUInt32( static_cast<sal_uInt32>(meOverline) );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
 
-    //#fdo39428 SvStream no longer supports operator>>(long&)
+    
     sal_uInt32 nTemp;
     sal_Int32 nTemp2;
     ReadPair( rIStm, maPos );
@@ -1731,11 +1731,11 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
     }
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Bmp, META_BMP_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaBmpAction::MetaBmpAction( const Point& rPt, const Bitmap& rBmp ) :
     MetaAction  ( META_BMP_ACTION ),
@@ -1744,14 +1744,14 @@ MetaBmpAction::MetaBmpAction( const Point& rPt, const Bitmap& rBmp ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawBitmap( maPt, maBmp );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaBmpAction::Clone()
 {
@@ -1760,21 +1760,21 @@ MetaAction* MetaBmpAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaBmpAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -1782,7 +1782,7 @@ bool MetaBmpAction::Compare( const MetaAction& rMetaAction ) const
            ( maPt == ((MetaBmpAction&)rMetaAction).maPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -1794,7 +1794,7 @@ void MetaBmpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -1803,11 +1803,11 @@ void MetaBmpAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpScale, META_BMPSCALE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaBmpScaleAction::MetaBmpScaleAction( const Point& rPt, const Size& rSz,
                                         const Bitmap& rBmp ) :
@@ -1818,14 +1818,14 @@ MetaBmpScaleAction::MetaBmpScaleAction( const Point& rPt, const Size& rSz,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScaleAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawBitmap( maPt, maSz, maBmp );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaBmpScaleAction::Clone()
 {
@@ -1834,14 +1834,14 @@ MetaAction* MetaBmpScaleAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScaleAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScaleAction::Scale( double fScaleX, double fScaleY )
 {
@@ -1851,7 +1851,7 @@ void MetaBmpScaleAction::Scale( double fScaleX, double fScaleY )
     maSz = aRectangle.GetSize();
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaBmpScaleAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -1860,7 +1860,7 @@ bool MetaBmpScaleAction::Compare( const MetaAction& rMetaAction ) const
            ( maSz == ((MetaBmpScaleAction&)rMetaAction).maSz );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -1873,7 +1873,7 @@ void MetaBmpScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -1883,11 +1883,11 @@ void MetaBmpScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpScalePart, META_BMPSCALEPART_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaBmpScalePartAction::MetaBmpScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                 const Point& rSrcPt, const Size& rSrcSz,
@@ -1901,14 +1901,14 @@ MetaBmpScalePartAction::MetaBmpScalePartAction( const Point& rDstPt, const Size&
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScalePartAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawBitmap( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaBmpScalePartAction::Clone()
 {
@@ -1917,14 +1917,14 @@ MetaAction* MetaBmpScalePartAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScalePartAction::Move( long nHorzMove, long nVertMove )
 {
     maDstPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScalePartAction::Scale( double fScaleX, double fScaleY )
 {
@@ -1934,7 +1934,7 @@ void MetaBmpScalePartAction::Scale( double fScaleX, double fScaleY )
     maDstSz = aRectangle.GetSize();
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaBmpScalePartAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -1945,7 +1945,7 @@ bool MetaBmpScalePartAction::Compare( const MetaAction& rMetaAction ) const
            ( maSrcSz == ((MetaBmpScalePartAction&)rMetaAction).maSrcSz );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -1960,7 +1960,7 @@ void MetaBmpScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -1972,11 +1972,11 @@ void MetaBmpScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSrcSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpEx, META_BMPEX_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaBmpExAction::MetaBmpExAction( const Point& rPt, const BitmapEx& rBmpEx ) :
     MetaAction  ( META_BMPEX_ACTION ),
@@ -1985,14 +1985,14 @@ MetaBmpExAction::MetaBmpExAction( const Point& rPt, const BitmapEx& rBmpEx ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawBitmapEx( maPt, maBmpEx );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaBmpExAction::Clone()
 {
@@ -2001,21 +2001,21 @@ MetaAction* MetaBmpExAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaBmpExAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2023,7 +2023,7 @@ bool MetaBmpExAction::Compare( const MetaAction& rMetaAction ) const
            ( maPt == ((MetaBmpExAction&)rMetaAction).maPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2035,7 +2035,7 @@ void MetaBmpExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2044,11 +2044,11 @@ void MetaBmpExAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpExScale, META_BMPEXSCALE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaBmpExScaleAction::MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
                                             const BitmapEx& rBmpEx ) :
@@ -2059,14 +2059,14 @@ MetaBmpExScaleAction::MetaBmpExScaleAction( const Point& rPt, const Size& rSz,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScaleAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawBitmapEx( maPt, maSz, maBmpEx );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaBmpExScaleAction::Clone()
 {
@@ -2075,14 +2075,14 @@ MetaAction* MetaBmpExScaleAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScaleAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScaleAction::Scale( double fScaleX, double fScaleY )
 {
@@ -2092,7 +2092,7 @@ void MetaBmpExScaleAction::Scale( double fScaleX, double fScaleY )
     maSz = aRectangle.GetSize();
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaBmpExScaleAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2101,7 +2101,7 @@ bool MetaBmpExScaleAction::Compare( const MetaAction& rMetaAction ) const
            ( maSz == ((MetaBmpExScaleAction&)rMetaAction).maSz );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2114,7 +2114,7 @@ void MetaBmpExScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2124,11 +2124,11 @@ void MetaBmpExScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( BmpExScalePart, META_BMPEXSCALEPART_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaBmpExScalePartAction::MetaBmpExScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                     const Point& rSrcPt, const Size& rSrcSz,
@@ -2142,14 +2142,14 @@ MetaBmpExScalePartAction::MetaBmpExScalePartAction( const Point& rDstPt, const S
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScalePartAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawBitmapEx( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmpEx );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaBmpExScalePartAction::Clone()
 {
@@ -2158,14 +2158,14 @@ MetaAction* MetaBmpExScalePartAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScalePartAction::Move( long nHorzMove, long nVertMove )
 {
     maDstPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScalePartAction::Scale( double fScaleX, double fScaleY )
 {
@@ -2175,7 +2175,7 @@ void MetaBmpExScalePartAction::Scale( double fScaleX, double fScaleY )
     maDstSz = aRectangle.GetSize();
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaBmpExScalePartAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2186,7 +2186,7 @@ bool MetaBmpExScalePartAction::Compare( const MetaAction& rMetaAction ) const
            ( maSrcSz == ((MetaBmpExScalePartAction&)rMetaAction).maSrcSz );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2201,7 +2201,7 @@ void MetaBmpExScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData 
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaBmpExScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2213,11 +2213,11 @@ void MetaBmpExScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSrcSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Mask, META_MASK_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaMaskAction::MetaMaskAction( const Point& rPt,
                                 const Bitmap& rBmp,
@@ -2229,14 +2229,14 @@ MetaMaskAction::MetaMaskAction( const Point& rPt,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawMask( maPt, maBmp, maColor );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaMaskAction::Clone()
 {
@@ -2245,21 +2245,21 @@ MetaAction* MetaMaskAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScalePoint( maPt, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaMaskAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2268,7 +2268,7 @@ bool MetaMaskAction::Compare( const MetaAction& rMetaAction ) const
            ( maPt == ((MetaMaskAction&)rMetaAction).maPt );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2280,7 +2280,7 @@ void MetaMaskAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2289,11 +2289,11 @@ void MetaMaskAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maPt );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( MaskScale, META_MASKSCALE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaMaskScaleAction::MetaMaskScaleAction( const Point& rPt, const Size& rSz,
                                           const Bitmap& rBmp,
@@ -2306,14 +2306,14 @@ MetaMaskScaleAction::MetaMaskScaleAction( const Point& rPt, const Size& rSz,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScaleAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawMask( maPt, maSz, maBmp, maColor );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaMaskScaleAction::Clone()
 {
@@ -2322,14 +2322,14 @@ MetaAction* MetaMaskScaleAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScaleAction::Move( long nHorzMove, long nVertMove )
 {
     maPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScaleAction::Scale( double fScaleX, double fScaleY )
 {
@@ -2339,7 +2339,7 @@ void MetaMaskScaleAction::Scale( double fScaleX, double fScaleY )
     maSz = aRectangle.GetSize();
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaMaskScaleAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2349,7 +2349,7 @@ bool MetaMaskScaleAction::Compare( const MetaAction& rMetaAction ) const
            ( maSz == ((MetaMaskScaleAction&)rMetaAction).maSz );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2362,7 +2362,7 @@ void MetaMaskScaleAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2372,11 +2372,11 @@ void MetaMaskScaleAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( MaskScalePart, META_MASKSCALEPART_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaMaskScalePartAction::MetaMaskScalePartAction( const Point& rDstPt, const Size& rDstSz,
                                                   const Point& rSrcPt, const Size& rSrcSz,
@@ -2392,14 +2392,14 @@ MetaMaskScalePartAction::MetaMaskScalePartAction( const Point& rDstPt, const Siz
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScalePartAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawMask( maDstPt, maDstSz, maSrcPt, maSrcSz, maBmp, maColor );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaMaskScalePartAction::Clone()
 {
@@ -2408,14 +2408,14 @@ MetaAction* MetaMaskScalePartAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScalePartAction::Move( long nHorzMove, long nVertMove )
 {
     maDstPt.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScalePartAction::Scale( double fScaleX, double fScaleY )
 {
@@ -2425,7 +2425,7 @@ void MetaMaskScalePartAction::Scale( double fScaleX, double fScaleY )
     maDstSz = aRectangle.GetSize();
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaMaskScalePartAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2437,7 +2437,7 @@ bool MetaMaskScalePartAction::Compare( const MetaAction& rMetaAction ) const
            ( maSrcSz == ((MetaMaskScalePartAction&)rMetaAction).maSrcSz );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2453,7 +2453,7 @@ void MetaMaskScalePartAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2466,11 +2466,11 @@ void MetaMaskScalePartAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maSrcSz );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Gradient, META_GRADIENT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaGradientAction::MetaGradientAction( const Rectangle& rRect, const Gradient& rGradient ) :
     MetaAction  ( META_GRADIENT_ACTION ),
@@ -2479,14 +2479,14 @@ MetaGradientAction::MetaGradientAction( const Rectangle& rRect, const Gradient& 
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawGradient( maRect, maGradient );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaGradientAction::Clone()
 {
@@ -2495,21 +2495,21 @@ MetaAction* MetaGradientAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientAction::Move( long nHorzMove, long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaGradientAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2517,7 +2517,7 @@ bool MetaGradientAction::Compare( const MetaAction& rMetaAction ) const
            ( maGradient == ((MetaGradientAction&)rMetaAction).maGradient );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2526,7 +2526,7 @@ void MetaGradientAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WriteGradient( rOStm, maGradient );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2535,14 +2535,14 @@ void MetaGradientAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadGradient( rIStm, maGradient );
 }
 
-// ========================================================================
+
 
 MetaGradientExAction::MetaGradientExAction() :
     MetaAction  ( META_GRADIENTEX_ACTION )
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaGradientExAction::MetaGradientExAction( const PolyPolygon& rPolyPoly, const Gradient& rGradient ) :
     MetaAction  ( META_GRADIENTEX_ACTION ),
@@ -2551,13 +2551,13 @@ MetaGradientExAction::MetaGradientExAction( const PolyPolygon& rPolyPoly, const 
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaGradientExAction::~MetaGradientExAction()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientExAction::Execute( OutputDevice* pOut )
 {
@@ -2568,7 +2568,7 @@ void MetaGradientExAction::Execute( OutputDevice* pOut )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaGradientExAction::Clone()
 {
@@ -2577,14 +2577,14 @@ MetaAction* MetaGradientExAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientExAction::Move( long nHorzMove, long nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientExAction::Scale( double fScaleX, double fScaleY )
 {
@@ -2592,7 +2592,7 @@ void MetaGradientExAction::Scale( double fScaleX, double fScaleY )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaGradientExAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2600,13 +2600,13 @@ bool MetaGradientExAction::Compare( const MetaAction& rMetaAction ) const
            ( maGradient == ((MetaGradientExAction&)rMetaAction).maGradient );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
 
-    // #i105373# see comment at MetaTransparentAction::Write
+    
     PolyPolygon aNoCurvePolyPolygon;
     maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
 
@@ -2614,7 +2614,7 @@ void MetaGradientExAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WriteGradient( rOStm, maGradient );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaGradientExAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2623,11 +2623,11 @@ void MetaGradientExAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadGradient( rIStm, maGradient );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Hatch, META_HATCH_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaHatchAction::MetaHatchAction( const PolyPolygon& rPolyPoly, const Hatch& rHatch ) :
     MetaAction  ( META_HATCH_ACTION ),
@@ -2636,14 +2636,14 @@ MetaHatchAction::MetaHatchAction( const PolyPolygon& rPolyPoly, const Hatch& rHa
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaHatchAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawHatch( maPolyPoly, maHatch );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaHatchAction::Clone()
 {
@@ -2652,14 +2652,14 @@ MetaAction* MetaHatchAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaHatchAction::Move( long nHorzMove, long nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaHatchAction::Scale( double fScaleX, double fScaleY )
 {
@@ -2667,7 +2667,7 @@ void MetaHatchAction::Scale( double fScaleX, double fScaleY )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaHatchAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2675,13 +2675,13 @@ bool MetaHatchAction::Compare( const MetaAction& rMetaAction ) const
            ( maHatch == ((MetaHatchAction&)rMetaAction).maHatch );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
 
-    // #i105373# see comment at MetaTransparentAction::Write
+    
     PolyPolygon aNoCurvePolyPolygon;
     maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
 
@@ -2689,7 +2689,7 @@ void MetaHatchAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WriteHatch( rOStm, maHatch );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaHatchAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2698,11 +2698,11 @@ void MetaHatchAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadHatch( rIStm, maHatch );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Wallpaper, META_WALLPAPER_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaWallpaperAction::MetaWallpaperAction( const Rectangle& rRect,
                                           const Wallpaper& rPaper ) :
@@ -2712,14 +2712,14 @@ MetaWallpaperAction::MetaWallpaperAction( const Rectangle& rRect,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaWallpaperAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawWallpaper( maRect, maWallpaper );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaWallpaperAction::Clone()
 {
@@ -2728,21 +2728,21 @@ MetaAction* MetaWallpaperAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaWallpaperAction::Move( long nHorzMove, long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaWallpaperAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaWallpaperAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2750,7 +2750,7 @@ bool MetaWallpaperAction::Compare( const MetaAction& rMetaAction ) const
            ( maWallpaper == ((MetaWallpaperAction&)rMetaAction).maWallpaper );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaWallpaperAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2758,7 +2758,7 @@ void MetaWallpaperAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WriteWallpaper( rOStm, maWallpaper );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaWallpaperAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2766,11 +2766,11 @@ void MetaWallpaperAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadWallpaper( rIStm, maWallpaper );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( ClipRegion, META_CLIPREGION_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaClipRegionAction::MetaClipRegionAction( const Region& rRegion, bool bClip ) :
     MetaAction  ( META_CLIPREGION_ACTION ),
@@ -2779,7 +2779,7 @@ MetaClipRegionAction::MetaClipRegionAction( const Region& rRegion, bool bClip ) 
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaClipRegionAction::Execute( OutputDevice* pOut )
 {
@@ -2789,7 +2789,7 @@ void MetaClipRegionAction::Execute( OutputDevice* pOut )
         pOut->SetClipRegion();
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaClipRegionAction::Clone()
 {
@@ -2798,21 +2798,21 @@ MetaAction* MetaClipRegionAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaClipRegionAction::Move( long nHorzMove, long nVertMove )
 {
     maRegion.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaClipRegionAction::Scale( double fScaleX, double fScaleY )
 {
     maRegion.Scale( fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaClipRegionAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -2820,7 +2820,7 @@ bool MetaClipRegionAction::Compare( const MetaAction& rMetaAction ) const
            ( mbClip == ((MetaClipRegionAction&)rMetaAction).mbClip );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2829,7 +2829,7 @@ void MetaClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUChar( mbClip );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2838,11 +2838,11 @@ void MetaClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbClip );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( ISectRectClipRegion, META_ISECTRECTCLIPREGION_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaISectRectClipRegionAction::MetaISectRectClipRegionAction( const Rectangle& rRect ) :
     MetaAction  ( META_ISECTRECTCLIPREGION_ACTION ),
@@ -2850,14 +2850,14 @@ MetaISectRectClipRegionAction::MetaISectRectClipRegionAction( const Rectangle& r
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRectClipRegionAction::Execute( OutputDevice* pOut )
 {
     pOut->IntersectClipRegion( maRect );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaISectRectClipRegionAction::Clone()
 {
@@ -2866,28 +2866,28 @@ MetaAction* MetaISectRectClipRegionAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRectClipRegionAction::Move( long nHorzMove, long nVertMove )
 {
     maRect.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRectClipRegionAction::Scale( double fScaleX, double fScaleY )
 {
     ImplScaleRect( maRect, fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaISectRectClipRegionAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maRect == ((MetaISectRectClipRegionAction&)rMetaAction).maRect;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRectClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2895,7 +2895,7 @@ void MetaISectRectClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* p
     WriteRectangle( rOStm, maRect );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRectClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2903,11 +2903,11 @@ void MetaISectRectClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRectangle( rIStm, maRect );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( ISectRegionClipRegion, META_ISECTREGIONCLIPREGION_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( const Region& rRegion ) :
     MetaAction  ( META_ISECTREGIONCLIPREGION_ACTION ),
@@ -2915,14 +2915,14 @@ MetaISectRegionClipRegionAction::MetaISectRegionClipRegionAction( const Region& 
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRegionClipRegionAction::Execute( OutputDevice* pOut )
 {
     pOut->IntersectClipRegion( maRegion );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaISectRegionClipRegionAction::Clone()
 {
@@ -2931,28 +2931,28 @@ MetaAction* MetaISectRegionClipRegionAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRegionClipRegionAction::Move( long nHorzMove, long nVertMove )
 {
     maRegion.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRegionClipRegionAction::Scale( double fScaleX, double fScaleY )
 {
     maRegion.Scale( fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaISectRegionClipRegionAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maRegion == ((MetaISectRegionClipRegionAction&)rMetaAction).maRegion;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRegionClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -2960,7 +2960,7 @@ void MetaISectRegionClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData*
     WriteRegion( rOStm, maRegion );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaISectRegionClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -2968,11 +2968,11 @@ void MetaISectRegionClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadRegion( rIStm, maRegion );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( MoveClipRegion, META_MOVECLIPREGION_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaMoveClipRegionAction::MetaMoveClipRegionAction( long nHorzMove, long nVertMove ) :
     MetaAction  ( META_MOVECLIPREGION_ACTION ),
@@ -2981,14 +2981,14 @@ MetaMoveClipRegionAction::MetaMoveClipRegionAction( long nHorzMove, long nVertMo
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMoveClipRegionAction::Execute( OutputDevice* pOut )
 {
     pOut->MoveClipRegion( mnHorzMove, mnVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaMoveClipRegionAction::Clone()
 {
@@ -2997,7 +2997,7 @@ MetaAction* MetaMoveClipRegionAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMoveClipRegionAction::Scale( double fScaleX, double fScaleY )
 {
@@ -3005,7 +3005,7 @@ void MetaMoveClipRegionAction::Scale( double fScaleX, double fScaleY )
     mnVertMove = FRound( mnVertMove * fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaMoveClipRegionAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3013,32 +3013,32 @@ bool MetaMoveClipRegionAction::Compare( const MetaAction& rMetaAction ) const
            ( mnVertMove == ((MetaMoveClipRegionAction&)rMetaAction).mnVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMoveClipRegionAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
-    //#fdo39428 SvStream no longer supports operator<<(long)
+    
     rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(mnHorzMove) ).WriteInt32( sal::static_int_cast<sal_Int32>(mnVertMove) );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMoveClipRegionAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
-    //#fdo39428 SvStream no longer supports operator>>(long&)
+    
     sal_Int32 nTmpHM(0), nTmpVM(0);
     rIStm.ReadInt32( nTmpHM ).ReadInt32( nTmpVM );
     mnHorzMove = nTmpHM;
     mnVertMove = nTmpVM;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( LineColor, META_LINECOLOR_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaLineColorAction::MetaLineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_LINECOLOR_ACTION ),
@@ -3047,7 +3047,7 @@ MetaLineColorAction::MetaLineColorAction( const Color& rColor, bool bSet ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLineColorAction::Execute( OutputDevice* pOut )
 {
@@ -3057,7 +3057,7 @@ void MetaLineColorAction::Execute( OutputDevice* pOut )
         pOut->SetLineColor();
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaLineColorAction::Clone()
 {
@@ -3066,7 +3066,7 @@ MetaAction* MetaLineColorAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaLineColorAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3074,7 +3074,7 @@ bool MetaLineColorAction::Compare( const MetaAction& rMetaAction ) const
            ( mbSet == ((MetaLineColorAction&)rMetaAction).mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3083,7 +3083,7 @@ void MetaLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUChar( mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3092,11 +3092,11 @@ void MetaLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( FillColor, META_FILLCOLOR_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaFillColorAction::MetaFillColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_FILLCOLOR_ACTION ),
@@ -3105,7 +3105,7 @@ MetaFillColorAction::MetaFillColorAction( const Color& rColor, bool bSet ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFillColorAction::Execute( OutputDevice* pOut )
 {
@@ -3115,7 +3115,7 @@ void MetaFillColorAction::Execute( OutputDevice* pOut )
         pOut->SetFillColor();
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaFillColorAction::Clone()
 {
@@ -3124,7 +3124,7 @@ MetaAction* MetaFillColorAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaFillColorAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3132,7 +3132,7 @@ bool MetaFillColorAction::Compare( const MetaAction& rMetaAction ) const
            ( mbSet == ((MetaFillColorAction&)rMetaAction).mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3141,7 +3141,7 @@ void MetaFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUChar( mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3150,11 +3150,11 @@ void MetaFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextColor, META_TEXTCOLOR_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaTextColorAction::MetaTextColorAction( const Color& rColor ) :
     MetaAction  ( META_TEXTCOLOR_ACTION ),
@@ -3162,14 +3162,14 @@ MetaTextColorAction::MetaTextColorAction( const Color& rColor ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextColorAction::Execute( OutputDevice* pOut )
 {
     pOut->SetTextColor( maColor );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTextColorAction::Clone()
 {
@@ -3178,14 +3178,14 @@ MetaAction* MetaTextColorAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTextColorAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maColor == ((MetaTextColorAction&)rMetaAction).maColor;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3193,7 +3193,7 @@ void MetaTextColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     maColor.Write( rOStm, true );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3201,11 +3201,11 @@ void MetaTextColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     maColor.Read( rIStm, true );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextFillColor, META_TEXTFILLCOLOR_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaTextFillColorAction::MetaTextFillColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_TEXTFILLCOLOR_ACTION ),
@@ -3214,7 +3214,7 @@ MetaTextFillColorAction::MetaTextFillColorAction( const Color& rColor, bool bSet
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextFillColorAction::Execute( OutputDevice* pOut )
 {
@@ -3224,7 +3224,7 @@ void MetaTextFillColorAction::Execute( OutputDevice* pOut )
         pOut->SetTextFillColor();
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTextFillColorAction::Clone()
 {
@@ -3233,7 +3233,7 @@ MetaAction* MetaTextFillColorAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTextFillColorAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3241,7 +3241,7 @@ bool MetaTextFillColorAction::Compare( const MetaAction& rMetaAction ) const
            ( mbSet == ((MetaTextFillColorAction&)rMetaAction).mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3250,7 +3250,7 @@ void MetaTextFillColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUChar( mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3259,11 +3259,11 @@ void MetaTextFillColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextLineColor, META_TEXTLINECOLOR_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaTextLineColorAction::MetaTextLineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_TEXTLINECOLOR_ACTION ),
@@ -3272,7 +3272,7 @@ MetaTextLineColorAction::MetaTextLineColorAction( const Color& rColor, bool bSet
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLineColorAction::Execute( OutputDevice* pOut )
 {
@@ -3282,7 +3282,7 @@ void MetaTextLineColorAction::Execute( OutputDevice* pOut )
         pOut->SetTextLineColor();
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTextLineColorAction::Clone()
 {
@@ -3291,7 +3291,7 @@ MetaAction* MetaTextLineColorAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTextLineColorAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3299,7 +3299,7 @@ bool MetaTextLineColorAction::Compare( const MetaAction& rMetaAction ) const
            ( mbSet == ((MetaTextLineColorAction&)rMetaAction).mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3308,7 +3308,7 @@ void MetaTextLineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUChar( mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3317,11 +3317,11 @@ void MetaTextLineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( OverlineColor, META_OVERLINECOLOR_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaOverlineColorAction::MetaOverlineColorAction( const Color& rColor, bool bSet ) :
     MetaAction  ( META_OVERLINECOLOR_ACTION ),
@@ -3330,7 +3330,7 @@ MetaOverlineColorAction::MetaOverlineColorAction( const Color& rColor, bool bSet
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaOverlineColorAction::Execute( OutputDevice* pOut )
 {
@@ -3340,7 +3340,7 @@ void MetaOverlineColorAction::Execute( OutputDevice* pOut )
         pOut->SetOverlineColor();
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaOverlineColorAction::Clone()
 {
@@ -3349,7 +3349,7 @@ MetaAction* MetaOverlineColorAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaOverlineColorAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3357,7 +3357,7 @@ bool MetaOverlineColorAction::Compare( const MetaAction& rMetaAction ) const
            ( mbSet == ((MetaOverlineColorAction&)rMetaAction).mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3366,7 +3366,7 @@ void MetaOverlineColorAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUChar( mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3375,11 +3375,11 @@ void MetaOverlineColorAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextAlign, META_TEXTALIGN_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaTextAlignAction::MetaTextAlignAction( TextAlign aAlign ) :
     MetaAction  ( META_TEXTALIGN_ACTION ),
@@ -3387,14 +3387,14 @@ MetaTextAlignAction::MetaTextAlignAction( TextAlign aAlign ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextAlignAction::Execute( OutputDevice* pOut )
 {
     pOut->SetTextAlign( maAlign );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTextAlignAction::Clone()
 {
@@ -3403,14 +3403,14 @@ MetaAction* MetaTextAlignAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTextAlignAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maAlign == ((MetaTextAlignAction&)rMetaAction).maAlign;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3418,7 +3418,7 @@ void MetaTextAlignAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUInt16( (sal_uInt16) maAlign );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3428,11 +3428,11 @@ void MetaTextAlignAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt16( nTmp16 ); maAlign = (TextAlign) nTmp16;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( MapMode, META_MAPMODE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaMapModeAction::MetaMapModeAction( const MapMode& rMapMode ) :
     MetaAction  ( META_MAPMODE_ACTION ),
@@ -3440,14 +3440,14 @@ MetaMapModeAction::MetaMapModeAction( const MapMode& rMapMode ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMapModeAction::Execute( OutputDevice* pOut )
 {
     pOut->SetMapMode( maMapMode );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaMapModeAction::Clone()
 {
@@ -3456,7 +3456,7 @@ MetaAction* MetaMapModeAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMapModeAction::Scale( double fScaleX, double fScaleY )
 {
@@ -3466,14 +3466,14 @@ void MetaMapModeAction::Scale( double fScaleX, double fScaleY )
     maMapMode.SetOrigin( aPoint );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaMapModeAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maMapMode == ((MetaMapModeAction&)rMetaAction).maMapMode;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMapModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3481,7 +3481,7 @@ void MetaMapModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     WriteMapMode( rOStm, maMapMode );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaMapModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3489,20 +3489,20 @@ void MetaMapModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadMapMode( rIStm, maMapMode );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Font, META_FONT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaFontAction::MetaFontAction( const Font& rFont ) :
     MetaAction  ( META_FONT_ACTION ),
     maFont      ( rFont )
 {
-    // #96876: because RTL_TEXTENCODING_SYMBOL is often set at the StarSymbol font,
-    // we change the textencoding to RTL_TEXTENCODING_UNICODE here, which seems
-    // to be the right way; changing the textencoding at other sources
-    // is too dangerous at the moment
+    
+    
+    
+    
     if ( IsStarSymbol( maFont.GetName() )
         && ( maFont.GetCharSet() != RTL_TEXTENCODING_UNICODE ) )
     {
@@ -3510,14 +3510,14 @@ MetaFontAction::MetaFontAction( const Font& rFont ) :
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFontAction::Execute( OutputDevice* pOut )
 {
     pOut->SetFont( maFont );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaFontAction::Clone()
 {
@@ -3526,7 +3526,7 @@ MetaAction* MetaFontAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFontAction::Scale( double fScaleX, double fScaleY )
 {
@@ -3536,14 +3536,14 @@ void MetaFontAction::Scale( double fScaleX, double fScaleY )
     maFont.SetSize( aSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaFontAction::Compare( const MetaAction& rMetaAction ) const
 {
     return maFont == ((MetaFontAction&)rMetaAction).maFont;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3554,7 +3554,7 @@ void MetaFontAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
         pData->meActualCharSet = osl_getThreadTextEncoding();
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
 {
@@ -3565,11 +3565,11 @@ void MetaFontAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         pData->meActualCharSet = osl_getThreadTextEncoding();
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Push, META_PUSH_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaPushAction::MetaPushAction( sal_uInt16 nFlags ) :
     MetaAction  ( META_PUSH_ACTION ),
@@ -3577,14 +3577,14 @@ MetaPushAction::MetaPushAction( sal_uInt16 nFlags ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPushAction::Execute( OutputDevice* pOut )
 {
     pOut->Push( mnFlags );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaPushAction::Clone()
 {
@@ -3593,14 +3593,14 @@ MetaAction* MetaPushAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaPushAction::Compare( const MetaAction& rMetaAction ) const
 {
     return mnFlags == ((MetaPushAction&)rMetaAction).mnFlags;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3608,7 +3608,7 @@ void MetaPushAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUInt16( mnFlags );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPushAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3616,18 +3616,18 @@ void MetaPushAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt16( mnFlags );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Pop, META_POP_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 void MetaPopAction::Execute( OutputDevice* pOut )
 {
     pOut->Pop();
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaPopAction::Clone()
 {
@@ -3636,25 +3636,25 @@ MetaAction* MetaPopAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPopAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaPopAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
     COMPAT( rIStm );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( RasterOp, META_RASTEROP_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaRasterOpAction::MetaRasterOpAction( RasterOp eRasterOp ) :
     MetaAction  ( META_RASTEROP_ACTION ),
@@ -3662,14 +3662,14 @@ MetaRasterOpAction::MetaRasterOpAction( RasterOp eRasterOp ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRasterOpAction::Execute( OutputDevice* pOut )
 {
     pOut->SetRasterOp( meRasterOp );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaRasterOpAction::Clone()
 {
@@ -3678,14 +3678,14 @@ MetaAction* MetaRasterOpAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaRasterOpAction::Compare( const MetaAction& rMetaAction ) const
 {
     return meRasterOp == ((MetaRasterOpAction&)rMetaAction).meRasterOp;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3693,7 +3693,7 @@ void MetaRasterOpAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUInt16( (sal_uInt16) meRasterOp );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3703,11 +3703,11 @@ void MetaRasterOpAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt16( nTmp16 ); meRasterOp = (RasterOp) nTmp16;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( Transparent, META_TRANSPARENT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaTransparentAction::MetaTransparentAction( const PolyPolygon& rPolyPoly, sal_uInt16 nTransPercent ) :
     MetaAction      ( META_TRANSPARENT_ACTION ),
@@ -3716,14 +3716,14 @@ MetaTransparentAction::MetaTransparentAction( const PolyPolygon& rPolyPoly, sal_
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTransparentAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawTransparent( maPolyPoly, mnTransPercent );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTransparentAction::Clone()
 {
@@ -3732,14 +3732,14 @@ MetaAction* MetaTransparentAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTransparentAction::Move( long nHorzMove, long nVertMove )
 {
     maPolyPoly.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTransparentAction::Scale( double fScaleX, double fScaleY )
 {
@@ -3747,7 +3747,7 @@ void MetaTransparentAction::Scale( double fScaleX, double fScaleY )
         ImplScalePoly( maPolyPoly[ i ], fScaleX, fScaleY );
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTransparentAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3755,21 +3755,21 @@ bool MetaTransparentAction::Compare( const MetaAction& rMetaAction ) const
            ( mnTransPercent == ((MetaTransparentAction&)rMetaAction).mnTransPercent );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
     WRITE_BASE_COMPAT( rOStm, 1, pData );
 
-    // #i105373# The PolyPolygon in this action may be a curve; this
-    // was ignored until now what is an error. To make older office
-    // versions work with MetaFiles, i opt for applying AdaptiveSubdivide
-    // to the PolyPoylgon.
-    // The alternative would be to really write the curve information
-    // like in MetaPolyPolygonAction::Write (where someone extended it
-    // correctly, but not here :-( ).
-    // The golden solution would be to combine both, but i think it's
-    // not necessary; a good subdivision will be sufficient.
+    
+    
+    
+    
+    
+    
+    
+    
+    
     PolyPolygon aNoCurvePolyPolygon;
     maPolyPoly.AdaptiveSubdivide(aNoCurvePolyPolygon);
 
@@ -3777,7 +3777,7 @@ void MetaTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUInt16( mnTransPercent );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3786,11 +3786,11 @@ void MetaTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt16( mnTransPercent );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( FloatTransparent, META_FLOATTRANSPARENT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaFloatTransparentAction::MetaFloatTransparentAction( const GDIMetaFile& rMtf, const Point& rPos,
                                                         const Size& rSize, const Gradient& rGradient ) :
@@ -3802,14 +3802,14 @@ MetaFloatTransparentAction::MetaFloatTransparentAction( const GDIMetaFile& rMtf,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFloatTransparentAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawTransparent( maMtf, maPoint, maSize, maGradient );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaFloatTransparentAction::Clone()
 {
@@ -3818,14 +3818,14 @@ MetaAction* MetaFloatTransparentAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
 {
@@ -3835,7 +3835,7 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
     maSize = aRectangle.GetSize();
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaFloatTransparentAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3845,7 +3845,7 @@ bool MetaFloatTransparentAction::Compare( const MetaAction& rMetaAction ) const
            ( maGradient == ((MetaFloatTransparentAction&)rMetaAction).maGradient );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3857,7 +3857,7 @@ void MetaFloatTransparentAction::Write( SvStream& rOStm, ImplMetaWriteData* pDat
     WriteGradient( rOStm, maGradient );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaFloatTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3868,11 +3868,11 @@ void MetaFloatTransparentAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadGradient( rIStm, maGradient );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( EPS, META_EPS_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaEPSAction::MetaEPSAction( const Point& rPoint, const Size& rSize,
                               const GfxLink& rGfxLink, const GDIMetaFile& rSubst ) :
@@ -3884,14 +3884,14 @@ MetaEPSAction::MetaEPSAction( const Point& rPoint, const Size& rSize,
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEPSAction::Execute( OutputDevice* pOut )
 {
     pOut->DrawEPS( maPoint, maSize, maGfxLink, &maSubst );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaEPSAction::Clone()
 {
@@ -3900,14 +3900,14 @@ MetaAction* MetaEPSAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEPSAction::Move( long nHorzMove, long nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEPSAction::Scale( double fScaleX, double fScaleY )
 {
@@ -3917,7 +3917,7 @@ void MetaEPSAction::Scale( double fScaleX, double fScaleY )
     maSize = aRectangle.GetSize();
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaEPSAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3927,7 +3927,7 @@ bool MetaEPSAction::Compare( const MetaAction& rMetaAction ) const
            ( maSize == ((MetaEPSAction&)rMetaAction).maSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3938,7 +3938,7 @@ void MetaEPSAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     maSubst.Write( rOStm );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -3949,11 +3949,11 @@ void MetaEPSAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadGDIMetaFile( rIStm, maSubst );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( RefPoint, META_REFPOINT_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaRefPointAction::MetaRefPointAction( const Point& rRefPoint, bool bSet ) :
     MetaAction  ( META_REFPOINT_ACTION ),
@@ -3962,7 +3962,7 @@ MetaRefPointAction::MetaRefPointAction( const Point& rRefPoint, bool bSet ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRefPointAction::Execute( OutputDevice* pOut )
 {
@@ -3972,7 +3972,7 @@ void MetaRefPointAction::Execute( OutputDevice* pOut )
         pOut->SetRefPoint();
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaRefPointAction::Clone()
 {
@@ -3981,7 +3981,7 @@ MetaAction* MetaRefPointAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaRefPointAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -3989,7 +3989,7 @@ bool MetaRefPointAction::Compare( const MetaAction& rMetaAction ) const
            ( mbSet == ((MetaRefPointAction&)rMetaAction).mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -3998,7 +3998,7 @@ void MetaRefPointAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUChar( mbSet );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -4006,7 +4006,7 @@ void MetaRefPointAction::Read( SvStream& rIStm, ImplMetaReadData* )
     ReadPair( rIStm, maRefPoint ).ReadCharAsBool( mbSet );
 }
 
-// ========================================================================
+
 
 MetaCommentAction::MetaCommentAction( sal_Int32 nValue ) :
     MetaAction  ( META_COMMENT_ACTION ),
@@ -4015,7 +4015,7 @@ MetaCommentAction::MetaCommentAction( sal_Int32 nValue ) :
     ImplInitDynamicData( NULL, 0UL );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
     MetaAction  ( META_COMMENT_ACTION ),
@@ -4025,7 +4025,7 @@ MetaCommentAction::MetaCommentAction( const MetaCommentAction& rAct ) :
     ImplInitDynamicData( rAct.mpData, rAct.mnDataSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaCommentAction::MetaCommentAction( const OString& rComment, sal_Int32 nValue, const sal_uInt8* pData, sal_uInt32 nDataSize ) :
     MetaAction  ( META_COMMENT_ACTION ),
@@ -4035,7 +4035,7 @@ MetaCommentAction::MetaCommentAction( const OString& rComment, sal_Int32 nValue,
     ImplInitDynamicData( pData, nDataSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaCommentAction::~MetaCommentAction()
 {
@@ -4043,7 +4043,7 @@ MetaCommentAction::~MetaCommentAction()
         delete[] mpData;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaCommentAction::ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 nDataSize )
 {
@@ -4059,7 +4059,7 @@ void MetaCommentAction::ImplInitDynamicData( const sal_uInt8* pData, sal_uInt32 
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaCommentAction::Execute( OutputDevice* pOut )
 {
@@ -4070,7 +4070,7 @@ void MetaCommentAction::Execute( OutputDevice* pOut )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaCommentAction::Clone()
 {
@@ -4131,11 +4131,11 @@ void MetaCommentAction::Move( long nXMove, long nYMove )
     }
 }
 
-// ------------------------------------------------------------------------
-// SJ: 25.07.06 #i56656# we are not able to mirrorcertain kind of
-// comments properly, especially the XPATHSTROKE and XPATHFILL lead to
-// problems, so it is better to remove these comments when mirroring
-// FIXME: fake comment to apply the next hunk in the right location
+
+
+
+
+
 void MetaCommentAction::Scale( double fXScale, double fYScale )
 {
     if ( ( fXScale != 1.0 ) || ( fYScale != 1.0 ) )
@@ -4174,30 +4174,30 @@ void MetaCommentAction::Scale( double fXScale, double fYScale )
                 sal_Int32 nPixX, nPixY, nMillX, nMillY;
                 float m11, m12, m21, m22, mdx, mdy;
 
-                // read data
+                
                 aMemStm.ReadInt32( nLeft ).ReadInt32( nTop ).ReadInt32( nRight ).ReadInt32( nBottom );
                 aMemStm.ReadInt32( nPixX ).ReadInt32( nPixY ).ReadInt32( nMillX ).ReadInt32( nMillY );
                 aMemStm.ReadFloat( m11 ).ReadFloat( m12 ).ReadFloat( m21 ).ReadFloat( m22 ).ReadFloat( mdx ).ReadFloat( mdy );
 
-                // add scale to the transformation
+                
                 m11 *= fXScale;
                 m12 *= fXScale;
                 m22 *= fYScale;
                 m21 *= fYScale;
 
-                // prepare new data
+                
                 aDest.WriteInt32( nLeft ).WriteInt32( nTop ).WriteInt32( nRight ).WriteInt32( nBottom );
                 aDest.WriteInt32( nPixX ).WriteInt32( nPixY ).WriteInt32( nMillX ).WriteInt32( nMillY );
                 aDest.WriteFloat( m11 ).WriteFloat( m12 ).WriteFloat( m21 ).WriteFloat( m22 ).WriteFloat( mdx ).WriteFloat( mdy );
 
-                // save them
+                
                 ImplInitDynamicData( static_cast<const sal_uInt8*>( aDest.GetData() ), aDest.Tell() );
             }
         }
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaCommentAction::Compare( const MetaAction& rMetaAction ) const
 {
@@ -4207,7 +4207,7 @@ bool MetaCommentAction::Compare( const MetaAction& rMetaAction ) const
            ( memcmp( mpData, ((MetaCommentAction&)rMetaAction).mpData, mnDataSize ) == 0 );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -4219,7 +4219,7 @@ void MetaCommentAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
         rOStm.Write( mpData, mnDataSize );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -4240,11 +4240,11 @@ void MetaCommentAction::Read( SvStream& rIStm, ImplMetaReadData* )
         mpData = NULL;
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( LayoutMode, META_LAYOUTMODE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaLayoutModeAction::MetaLayoutModeAction( sal_uInt32 nLayoutMode ) :
     MetaAction  ( META_LAYOUTMODE_ACTION ),
@@ -4252,14 +4252,14 @@ MetaLayoutModeAction::MetaLayoutModeAction( sal_uInt32 nLayoutMode ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLayoutModeAction::Execute( OutputDevice* pOut )
 {
     pOut->SetLayoutMode( mnLayoutMode );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaLayoutModeAction::Clone()
 {
@@ -4268,14 +4268,14 @@ MetaAction* MetaLayoutModeAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaLayoutModeAction::Compare( const MetaAction& rMetaAction ) const
 {
     return mnLayoutMode == ((MetaLayoutModeAction&)rMetaAction).mnLayoutMode;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -4283,7 +4283,7 @@ void MetaLayoutModeAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUInt32( mnLayoutMode );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {
@@ -4291,11 +4291,11 @@ void MetaLayoutModeAction::Read( SvStream& rIStm, ImplMetaReadData* )
     rIStm.ReadUInt32( mnLayoutMode );
 }
 
-// ========================================================================
+
 
 IMPL_META_ACTION( TextLanguage, META_TEXTLANGUAGE_ACTION )
 
-// ------------------------------------------------------------------------
+
 
 MetaTextLanguageAction::MetaTextLanguageAction( LanguageType eTextLanguage ) :
     MetaAction  ( META_TEXTLANGUAGE_ACTION ),
@@ -4303,14 +4303,14 @@ MetaTextLanguageAction::MetaTextLanguageAction( LanguageType eTextLanguage ) :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLanguageAction::Execute( OutputDevice* pOut )
 {
     pOut->SetDigitLanguage( meTextLanguage );
 }
 
-// ------------------------------------------------------------------------
+
 
 MetaAction* MetaTextLanguageAction::Clone()
 {
@@ -4319,14 +4319,14 @@ MetaAction* MetaTextLanguageAction::Clone()
     return pClone;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool MetaTextLanguageAction::Compare( const MetaAction& rMetaAction ) const
 {
     return meTextLanguage == ((MetaTextLanguageAction&)rMetaAction).meTextLanguage;
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
 {
@@ -4334,7 +4334,7 @@ void MetaTextLanguageAction::Write( SvStream& rOStm, ImplMetaWriteData* pData )
     rOStm.WriteUInt16( meTextLanguage );
 }
 
-// ------------------------------------------------------------------------
+
 
 void MetaTextLanguageAction::Read( SvStream& rIStm, ImplMetaReadData* )
 {

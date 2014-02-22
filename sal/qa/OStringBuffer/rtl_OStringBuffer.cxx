@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -31,12 +31,12 @@
 
 using ::rtl::OStringBuffer;
 using ::rtl::OString;
-// This file contains cppunit tests for the
-// OString and OStringBuffer classes
 
-//------------------------------------------------------------------------
-// testing constructors
-//------------------------------------------------------------------------
+
+
+
+
+
 
 namespace rtl_OStringBuffer
 {
@@ -62,7 +62,7 @@ namespace rtl_OStringBuffer
             ::rtl::OString       aStrtmp( kTestStr1 );
             ::rtl::OStringBuffer aStrBuftmp( aStrtmp );
             ::rtl::OStringBuffer aStrBuf( aStrBuftmp );
-            // sal_Bool res = cmpstr(aStrBuftmp.getStr(),aStrBuf.getStr());
+            
 
             sal_Int32 nLenStrBuftmp = aStrBuftmp.getLength();
 
@@ -102,8 +102,8 @@ namespace rtl_OStringBuffer
 
         void ctor_003_1()
         {
-            // StringBuffer with created negative size are the
-            // same as empty StringBuffers
+            
+            
             ::rtl::OStringBuffer aStrBuf3(kNonSInt32Max);
 
             const sal_Char* pStr = aStrBuf3.getStr();
@@ -142,8 +142,8 @@ namespace rtl_OStringBuffer
 
         void ctor_006()
         {
-            //pass in a const char*, get a temp
-            //OString
+            
+            
             ::rtl::OStringBuffer aStrBuf(kTestStr1);
             sal_Int32 leg = aStrBuf.getLength();
 
@@ -166,7 +166,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  makeStringAndClear : public CppUnit::TestFixture
     {
@@ -372,7 +372,7 @@ namespace rtl_OStringBuffer
     };
 
 
-// -----------------------------------------------------------------------------
+
 
     class  getLength : public CppUnit::TestFixture
     {
@@ -505,7 +505,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  getCapacity : public CppUnit::TestFixture
     {
@@ -689,7 +689,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( getCapacity_013 );
         CPPUNIT_TEST_SUITE_END();
     };
-// -----------------------------------------------------------------------------
+
 
     class  ensureCapacity : public CppUnit::TestFixture
     {
@@ -741,7 +741,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void ensureCapacity_004()           //the testcase is based on comments
+        void ensureCapacity_004()           
         {
             sal_Int32          expVal = 20;
             ::rtl::OStringBuffer   aStrBuf;
@@ -821,7 +821,7 @@ namespace rtl_OStringBuffer
 
         }
 
-        void ensureCapacity_009()      //the testcase is based on comments
+        void ensureCapacity_009()      
         {
             sal_Int32          expVal = 10;
             ::rtl::OStringBuffer   aStrBuf( 6 );
@@ -853,9 +853,9 @@ namespace rtl_OStringBuffer
 
         }
 
-        void ensureCapacity_011()       //the testcase is based on comments
+        void ensureCapacity_011()       
         {
-            sal_Int32          expVal = 2;  // capacity is x = (str->length + 1) * 2; minimum < x ? x : minimum
+            sal_Int32          expVal = 2;  
             ::rtl::OStringBuffer   aStrBuf( 0 );
             sal_Int32              input = 1;
 
@@ -969,7 +969,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  setLength : public CppUnit::TestFixture
     {
@@ -1459,7 +1459,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  csuc : public CppUnit::TestFixture
     {
@@ -1469,7 +1469,7 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf( kTestStr1 );
             sal_Int32              cmpLen = kTestStr1Len;
 
-            // LLA: wrong access! const sal_Char* pstr = *&aStrBuf;
+            
             const sal_Char* pstr = aStrBuf.getStr();
             int nEqual = strncmp(pstr, expVal, cmpLen);
 
@@ -1486,14 +1486,14 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf;
 
-            // LLA: wrong access! const sal_Char* pstr = *&aStrBuf;
+            
             const sal_Char* pstr = aStrBuf.getStr();
             sal_Int32 nLen = strlen(pstr);
 
             CPPUNIT_ASSERT_MESSAGE
             (
                 "test empty string",
-                // cmpstr( pstr, &expVal, cmpLen )
+                
                 nLen == 0
                 );
 
@@ -1505,7 +1505,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  getStr : public CppUnit::TestFixture
     {
@@ -1528,10 +1528,10 @@ namespace rtl_OStringBuffer
 
         void getStr_002()
         {
-            // const sal_Char         tmpUC=0x0;
-            // const sal_Char*        expVal=&tmpUC;
+            
+            
             ::rtl::OStringBuffer   aStrBuf;
-            // sal_Int32              cmpLen = 1;
+            
 
             const sal_Char* pstr = aStrBuf.getStr();
             sal_Int32 nLen = strlen(pstr);
@@ -1551,7 +1551,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  append_001 : public CppUnit::TestFixture
     {
@@ -1960,7 +1960,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-// -----------------------------------------------------------------------------
+
 
     class  append_002 : public CppUnit::TestFixture
     {
@@ -2347,7 +2347,7 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-// -----------------------------------------------------------------------------
+
 
     class  append_003 : public CppUnit::TestFixture
     {
@@ -2733,7 +2733,7 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_003_024 );
         CPPUNIT_TEST_SUITE_END();
     };
-//-----------------------------------------------------------------------------
+
 
     class  append_004 : public CppUnit::TestFixture
     {
@@ -2967,9 +2967,9 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append(sal_Char c)
-//------------------------------------------------------------------------
+
+
+
     class  append_005 : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -5177,18 +5177,18 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( sal_Int32 i, sal_Int16 radix=2 )
-// where i = large constants
-// testing the method append( sal_Int32 i, sal_Int16 radix=8 )
-// where i = large constants
-// testing the method append( sal_Int32 i, sal_Int16 radix=10 )
-// where i = large constants
-// testing the method append( sal_Int32 i, sal_Int16 radix=16 )
-// where i = large constants
-// testing the method append( sal_Int32 i, sal_Int16 radix=36 )
-// where i = large constants
-//------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
     class  append_006_Int32_Bounderies : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -6188,18 +6188,18 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_049 ); CPPUNIT_TEST( append_050 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( sal_Int32 i, sal_Int16 radix=2 )
-// for negative value
-// testing the method append( sal_Int32 i, sal_Int16 radix=8 )
-// for negative value
-// testing the method append( sal_Int32 i, sal_Int16 radix=10 )
-// for negative value
-// testing the method append( sal_Int32 i, sal_Int16 radix=16 )
-// for negative value
-// testing the method append( sal_Int32 i, sal_Int16 radix=36 )
-// for negative value
-//------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
     class  append_006_Int32_Negative : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -8246,9 +8246,9 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( sal_Int32 i, sal_Int16 radix ) where radix = -5
-//------------------------------------------------------------------------
+
+
+
     class  append_006_Int32_WrongRadix : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -8377,7 +8377,7 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
     class  append_006_Int32_defaultParam : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -8945,13 +8945,13 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( sal_Int64 l, sal_Int16 radix=2 )
-// testing the method append( sal_Int64 l, sal_Int16 radix=8 )
-// testing the method append( sal_Int64 l, sal_Int16 radix=10 )
-// testing the method append( sal_Int64 l, sal_Int16 radix=16 )
-// testing the method append( sal_Int64 l, sal_Int16 radix=36 )
-//------------------------------------------------------------------------
+
+
+
+
+
+
+
     class  append_007_Int64 : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -10926,18 +10926,18 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( sal_Int64 i, sal_Int16 radix=2 )
-// where i = large constants
-// testing the method append( sal_Int64 i, sal_Int16 radix=8 )
-// where i = large constants
-// testing the method append( sal_Int64 i, sal_Int16 radix=10 )
-// where i = large constants
-// testing the method append( sal_Int64 i, sal_Int16 radix=16 )
-// where i = large constants
-// testing the method append( sal_Int64 i, sal_Int16 radix=36 )
-// where i = large constants
-//------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
     class  append_007_Int64_Bounderies : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -11937,18 +11937,18 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_049 ); CPPUNIT_TEST( append_050 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( sal_Int64 i, sal_Int16 radix=2 )
-// for negative value
-// testing the method append( sal_Int64 i, sal_Int16 radix=8 )
-// for negative value
-// testing the method append( sal_Int64 i, sal_Int16 radix=10 )
-// for negative value
-// testing the method append( sal_Int64 i, sal_Int16 radix=16 )
-// for negative value
-// testing the method append( sal_Int64 i, sal_Int16 radix=36 )
-// for negative value
-//------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
     class  append_007_Int64_Negative : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -13998,9 +13998,9 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_099 ); CPPUNIT_TEST( append_100 );
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( sal_Int64 i, sal_Int16 radix ) where radix = -5
-//------------------------------------------------------------------------
+
+
+
     class  append_007_Int64_WrongRadix : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -14127,7 +14127,7 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
+
     class  append_007_Int64_defaultParam : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -14220,7 +14220,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
             OString                expVal( kTestStr117 );
-            sal_Int64              input = SAL_MIN_INT64/*-9223372036854775808*/; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64/*-9223372036854775808*/; 
 
             aStrBuf.append( input );
 
@@ -14304,7 +14304,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
             OString                expVal( kTestStr119 );
-            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; 
 
             aStrBuf.append( input );
 
@@ -14388,7 +14388,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
             OString                expVal( kTestStr119 );
-            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; 
 
             aStrBuf.append( input );
 
@@ -14472,7 +14472,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
             OString                expVal( kTestStr119 );
-            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; 
 
             aStrBuf.append( input );
 
@@ -14556,7 +14556,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
             OString                expVal( kTestStr121 );
-            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; 
 
             aStrBuf.append( input );
 
@@ -14641,7 +14641,7 @@ namespace rtl_OStringBuffer
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt64Max );
             OString                expVal( kTestStr119 );
-            sal_Int64              input = SAL_MIN_INT64; // LLA: this is not the same :-( kNonSInt64Max;
+            sal_Int64              input = SAL_MIN_INT64; 
 
             aStrBuf.append( input );
 
@@ -14690,9 +14690,9 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( float f )
-//------------------------------------------------------------------------
+
+
+
     class checkfloat : public CppUnit::TestFixture
     {
     public:
@@ -14710,7 +14710,7 @@ namespace rtl_OStringBuffer
                 return false;
             }
     };
-// -----------------------------------------------------------------------------
+
     class  append_008_float : public checkfloat
     {
         OString* arrOUS[5];
@@ -14737,10 +14737,10 @@ namespace rtl_OStringBuffer
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
             float                  input = (float)atof("3.0");
 
-            // LLA:
-            // the complex problem is here, that a float value is not really what we write.
-            // So a 3.0 could also be 3 or 3.0 or 3.0000001 or 2.9999999
-            // this has to be checked.
+            
+            
+            
+            
             sal_Int32 nLen = aStrBuf.getLength();
             aStrBuf.append( input );
 
@@ -15444,9 +15444,9 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( float f ) for negative value
-//------------------------------------------------------------------------
+
+
+
     class  append_008_Float_Negative : public checkfloat
     {
         OString* arrOUS[5];
@@ -16176,9 +16176,9 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
-//------------------------------------------------------------------------
-// testing the method append( double d )
-//------------------------------------------------------------------------
+
+
+
 
     class checkdouble : public CppUnit::TestFixture
     {
@@ -16257,9 +16257,9 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST_SUITE_END();
     };
 
-//------------------------------------------------------------------------
-// testing the method append( double f ) for negative value
-//------------------------------------------------------------------------
+
+
+
     class  append_009_Double_Negative : public checkdouble
     {
         OString* arrOUS[5];
@@ -16318,9 +16318,9 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( append_035 );
         CPPUNIT_TEST_SUITE_END();
     };
-} // namespace rtl_OStringBuffer
+} 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::makeStringAndClear);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::getLength);

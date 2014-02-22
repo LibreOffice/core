@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "LayoutMenu.hxx"
@@ -114,7 +114,7 @@ static const snewfoil_value_info standard[] =
     {BMP_LAYOUT_HEAD04, STR_AUTOLAYOUT_4CONTENT, WritingMode_LR_TB,        AUTOLAYOUT_4OBJ},
     {BMP_LAYOUT_HEAD06, STR_AUTOLAYOUT_6CONTENT, WritingMode_LR_TB,    AUTOLAYOUT_6CLIPART},
 
-    // vertical
+    
     {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART, WritingMode_TB_RL,AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART},
     {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE},
     {BMP_LAYOUT_HEAD02, STR_AL_TITLE_VERT_OUTLINE, WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE},
@@ -161,7 +161,7 @@ void LayoutMenu::implConstruct( DrawDocShell& rDocumentShell )
 {
     OSL_ENSURE( mrBase.GetDocument()->GetDocSh() == &rDocumentShell,
         "LayoutMenu::implConstruct: hmm?" );
-    // if this fires, then my assumption that the rDocumentShell parameter to our first ctor is superfluous ...
+    
     (void) rDocumentShell;
 
     SetStyle (
@@ -294,7 +294,7 @@ void LayoutMenu::Resize (void)
     Size aWindowSize = GetOutputSizePixel();
     if (IsVisible() && aWindowSize.Width() > 0)
     {
-        // Calculate the number of rows and columns.
+        
         if (GetItemCount() > 0)
         {
             Image aImage = GetItemImage(GetItemId(0));
@@ -323,8 +323,8 @@ void LayoutMenu::Resize (void)
 
 void LayoutMenu::MouseButtonDown (const MouseEvent& rEvent)
 {
-    // As a preparation for the context menu the item under the mouse is
-    // selected.
+    
+    
     if (rEvent.IsRight())
     {
         ReleaseMouse();
@@ -353,8 +353,8 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
     if (pDispatcher == NULL)
         return;
 
-    // Call SID_INSERTPAGE with the right arguments.  This is because
-    // the popup menu can not call this slot with arguments directly.
+    
+    
     SfxRequest aRequest (CreateRequest(SID_INSERTPAGE, aLayout));
     if (aRequest.GetArgs() != NULL)
     {
@@ -371,8 +371,8 @@ void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 
 void LayoutMenu::InvalidateContent (void)
 {
-    // Throw away the current set and fill the menu anew according to the
-    // current settings (this includes the support for vertical writing.)
+    
+    
     Fill();
 
     if (mxSidebar.is())
@@ -389,7 +389,7 @@ int LayoutMenu::CalculateRowCount (const Size&, int nColumnCount)
     if (GetItemCount() > 0 && nColumnCount > 0)
     {
         nRowCount = (GetItemCount() + nColumnCount - 1) / nColumnCount;
-        //        nRowCount = GetOutputSizePixel().Height() / rItemSize.Height();
+        
         if (nRowCount < 1)
             nRowCount = 1;
     }
@@ -419,14 +419,14 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
 
     do
     {
-        // The view shell in the center pane has to be present.
+        
         ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
         if (pMainViewShell == NULL)
             break;
 
-        // Determine if the current view is in an invalid master page mode.
-        // The handout view is always in master page mode and therefore not
-        // invalid.
+        
+        
+        
         bool bMasterPageMode (false);
         switch (pMainViewShell->GetShellType())
         {
@@ -444,15 +444,15 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         if (bMasterPageMode)
             break;
 
-        // Get a list of all selected slides and call the SID_MODIFYPAGE
-        // slot for all of them.
+        
+        
         ::sd::slidesorter::SharedPageSelection pPageSelection;
 
-        // Get a list of selected pages.
-        // First we try to obtain this list from a slide sorter.  This is
-        // possible only some of the view shells in the center pane.  When
-        // no valid slide sorter is available then ask the main view shell
-        // for its current page.
+        
+        
+        
+        
+        
         SlideSorterViewShell* pSlideSorter = NULL;
         switch (pMainViewShell->GetShellType())
         {
@@ -466,14 +466,14 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
         }
         if (pSlideSorter != NULL)
         {
-            // There is a slide sorter visible so get the list of selected pages from it.
+            
             pPageSelection = pSlideSorter->GetPageSelection();
         }
 
         if( (pSlideSorter == NULL) || (pPageSelection.get() == 0) || pPageSelection->empty() )
         {
-            // No valid slide sorter available.  Ask the main view shell for
-            // its current page.
+            
+            
             pPageSelection.reset(new ::sd::slidesorter::SlideSorterViewShell::PageSelection());
             pPageSelection->push_back(pMainViewShell->GetActualPage());
         }
@@ -488,7 +488,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
                 if ((*iPage) == NULL)
                     continue;
 
-                // Call the SID_ASSIGN_LAYOUT slot with all the necessary parameters.
+                
                 SfxRequest aRequest (mrBase.GetViewFrame(), SID_ASSIGN_LAYOUT);
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATPAGE, ((*iPage)->GetPageNum()-1)/2));
                 aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
@@ -524,7 +524,7 @@ SfxRequest LayoutMenu::CreateRequest (
         SetOfByte aVisibleLayers (pPage->TRG_GetMasterPageVisibleLayers());
 
         aRequest.AppendItem(
-            SfxStringItem (ID_VAL_PAGENAME, OUString()));//pPage->GetName()));
+            SfxStringItem (ID_VAL_PAGENAME, OUString()));
         aRequest.AppendItem(SfxUInt32Item (ID_VAL_WHATLAYOUT, aLayout));
         aRequest.AppendItem(
             SfxBoolItem(ID_VAL_ISPAGEBACK, aVisibleLayers.IsSet(aBackground)));
@@ -549,7 +549,7 @@ void LayoutMenu::Fill (void)
     sal_Bool bRightToLeft = (pDocument!=NULL
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);
 
-    // Get URL of the view in the center pane.
+    
     OUString sCenterPaneViewName;
     try
     {
@@ -649,7 +649,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
         case COMMAND_CONTEXTMENU:
             if ( ! SD_MOD()->GetWaterCan())
             {
-                // Determine the position where to show the menu.
+                
                 Point aMenuPosition;
                 if (rEvent.IsMouseEvent())
                 {
@@ -665,7 +665,7 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                     aMenuPosition = aBBox.Center();
                 }
 
-                // Setup the menu.
+                
                 ::boost::shared_ptr<PopupMenu> pMenu (new PopupMenu(SdResId(RID_TASKPANE_LAYOUTMENU_POPUP)));
                 FloatingWindow* pMenuWindow = dynamic_cast<FloatingWindow*>(pMenu->GetWindow());
                 if (pMenuWindow != NULL)
@@ -673,15 +673,15 @@ void LayoutMenu::Command (const CommandEvent& rEvent)
                         pMenuWindow->GetPopupModeFlags() | FLOATWIN_POPUPMODE_NOMOUSEUPCLOSE);
                 pMenu->SetSelectHdl(LINK(this, LayoutMenu, OnMenuItemSelected));
 
-                // Disable the SID_INSERTPAGE_LAYOUT_MENU item when
-                // the document is read-only.
+                
+                
                 const SfxPoolItem* pItem = NULL;
                 const SfxItemState aState (
                     mrBase.GetViewFrame()->GetDispatcher()->QueryState(SID_INSERTPAGE, pItem));
                 if (aState == SFX_ITEM_DISABLED)
                     pMenu->EnableItem(SID_INSERTPAGE_LAYOUT_MENU, false);
 
-                // Show the menu.
+                
                 pMenu->Execute(this, Rectangle(aMenuPosition,Size(1,1)), POPUPMENU_EXECUTE_DOWN);
             }
             break;
@@ -721,8 +721,8 @@ IMPL_LINK(LayoutMenu, OnMenuItemSelected, Menu*, pMenu)
     }
     else if (nIndex == SID_INSERTPAGE_LAYOUT_MENU)
     {
-        // Add arguments to this slot and forward it to the main view
-        // shell.
+        
+        
         InsertPageWithLayout(GetSelectedAutoLayout());
     }
 
@@ -738,7 +738,7 @@ void LayoutMenu::UpdateSelection (void)
 
     do
     {
-        // Get current page of main view.
+        
         ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == NULL)
             break;
@@ -747,12 +747,12 @@ void LayoutMenu::UpdateSelection (void)
         if (pCurrentPage == NULL)
             break;
 
-        // Get layout of current page.
+        
         AutoLayout aLayout (pCurrentPage->GetAutoLayout());
         if (aLayout<AUTOLAYOUT__START || aLayout>AUTOLAYOUT__END)
             break;
 
-        // Find the entry of the menu for to the layout.
+        
         SetNoSelection();
         sal_uInt16 nItemCount (GetItemCount());
         for (sal_uInt16 nId=1; nId<=nItemCount; nId++)
@@ -845,6 +845,6 @@ void LayoutMenu::DataChanged (const DataChangedEvent& rEvent)
 
 
 
-} } // end of namespace ::sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

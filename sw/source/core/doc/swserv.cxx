@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sot/storage.hxx>
@@ -51,7 +51,7 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
         break;
 
     case FORMAT_RTF:
-        // mba: no BaseURL for data exchange
+        
         ::GetRTFWriter( OUString(), OUString(), xWrt );
         break;
     }
@@ -64,7 +64,7 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
         case BOOKMARK_SERVER:
             if( CNTNT_TYPE.pBkmk->IsExpanded() )
             {
-                // Span area
+                
                 pPam = new SwPaM( CNTNT_TYPE.pBkmk->GetMarkPos(),
                                 CNTNT_TYPE.pBkmk->GetOtherMarkPos() );
             }
@@ -87,12 +87,12 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
 
         if( pPam )
         {
-            // Create stream
+            
             SvMemoryStream aMemStm( 65535, 65535 );
             SwWriter aWrt( aMemStm, *pPam, sal_False );
             if( !IsError( aWrt.Write( xWrt )) )
             {
-                aMemStm.WriteChar( '\0' );        // append a zero char
+                aMemStm.WriteChar( '\0' );        
                 rData <<= uno::Sequence< sal_Int8 >(
                                         (sal_Int8*)aMemStm.GetData(),
                                         aMemStm.Seek( STREAM_SEEK_TO_END ) );
@@ -107,13 +107,13 @@ sal_Bool SwServerObject::GetData( uno::Any & rData,
 sal_Bool SwServerObject::SetData( const OUString & ,
                     const uno::Any& )
 {
-    // set new data into the "server" -> at first nothing to do
+    
     return sal_False;
 }
 
 void SwServerObject::SendDataChanged( const SwPosition& rPos )
 {
-    // Is someone interested in our changes?
+    
     if( HasDataLinks() )
     {
         bool bCall = false;
@@ -140,7 +140,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
 
         if( bCall )
         {
-            // Recognize recursions and flag them
+            
             IsLinkInServer( 0 );
             SvLinkSource::NotifyDataChanged();
         }
@@ -149,7 +149,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
 
 void SwServerObject::SendDataChanged( const SwPaM& rRange )
 {
-    // Is someone interested in our changes?
+    
     if( HasDataLinks() )
     {
         bool bCall = false;
@@ -171,14 +171,14 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
         }
         if( pNd )
         {
-            // Is the start area within the node area?
+            
             bCall = pStt->nNode.GetIndex() <  pNd->EndOfSectionIndex() &&
                     pEnd->nNode.GetIndex() >= pNd->GetIndex();
         }
 
         if( bCall )
         {
-            // Recognize recursions and flag them
+            
             IsLinkInServer( 0 );
             SvLinkSource::NotifyDataChanged();
         }
@@ -227,10 +227,10 @@ sal_Bool SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
 
     if( nSttNd && nEndNd )
     {
-        // Get LinkManager
+        
         const ::sfx2::SvBaseLinks& rLnks = pNds->GetDoc()->GetLinkManager().GetLinks();
 
-        // To avoid recursions: convert ServerType!
+        
         SwServerObject::ServerModes eSave = eType;
         if( !pChkLnk )
             ((SwServerObject*)this)->eType = NONE_SERVER;
@@ -302,7 +302,7 @@ SwDataChanged::SwDataChanged( SwDoc* pDc, const SwPosition& rPos )
 
 SwDataChanged::~SwDataChanged()
 {
-    // JP 09.04.96: Only if the Layout is available (thus during input)
+    
     if( pDoc->GetCurrentViewShell() )
     {
         const ::sfx2::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
@@ -311,7 +311,7 @@ SwDataChanged::~SwDataChanged()
         for( ::sfx2::SvLinkSources::const_iterator it = aTemp.begin(); it != aTemp.end(); ++it )
         {
             ::sfx2::SvLinkSourceRef refObj( *it );
-            // Any one else interested in the Object?
+            
             if( refObj->HasDataLinks() && refObj->ISA( SwServerObject ))
             {
                 SwServerObject& rObj = *(SwServerObject*)&refObj;
@@ -321,10 +321,10 @@ SwDataChanged::~SwDataChanged()
                     rObj.SendDataChanged( *pPam );
             }
 
-            // We shouldn't have a connection anymore
+            
             if( !refObj->HasDataLinks() )
             {
-                // Then remove from the list
+                
                 pDoc->GetLinkManager().RemoveServer( *it );
             }
         }

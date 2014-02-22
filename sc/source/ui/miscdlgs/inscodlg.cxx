@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,22 +22,22 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "inscodlg.hxx"
 #include "scresid.hxx"
 #include "miscdlgs.hrc"
 
 
-//==================================================================
+
 
 bool       ScInsertContentsDlg::bPreviousAllCheck = false;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks   = (IDF_VALUE | IDF_DATETIME | IDF_STRING);
 sal_uInt16 ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_NOFUNC;
 sal_uInt16 ScInsertContentsDlg::nPreviousChecks2 = 0;
-sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   // enum InsCellCmd
+sal_uInt16 ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;   
 
-//-----------------------------------------------------------------------
+
 
 ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
                                           sal_uInt16        nCheckDefaults,
@@ -124,7 +124,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
 
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
 {
@@ -152,7 +152,7 @@ sal_uInt16 ScInsertContentsDlg::GetInsContentsCmdBits() const
                 : ScInsertContentsDlg::nPreviousChecks );
 }
 
-//------------------------------------------------------------------------
+
 
 InsCellCmd ScInsertContentsDlg::GetMoveMode()
 {
@@ -164,7 +164,7 @@ InsCellCmd ScInsertContentsDlg::GetMoveMode()
     return INS_NONE;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertContentsDlg::DisableChecks( bool bInsAllChecked )
 {
@@ -187,7 +187,7 @@ void ScInsertContentsDlg::DisableChecks( bool bInsAllChecked )
         mpBtnInsNotes->Enable();
         mpBtnInsAttrs->Enable();
 
-        //  "Objects" is disabled for "Fill Tables"
+        
         if ( bFillMode )
             mpBtnInsObjects->Disable();
         else
@@ -195,7 +195,7 @@ void ScInsertContentsDlg::DisableChecks( bool bInsAllChecked )
     }
 }
 
-// Link to other document -> everything else is disabled
+
 
 void ScInsertContentsDlg::TestModes()
 {
@@ -285,7 +285,7 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
 }
 
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl)
 {
@@ -311,7 +311,7 @@ ScInsertContentsDlg::~ScInsertContentsDlg()
     if( mpBtnLink->IsChecked() )
         ScInsertContentsDlg::nPreviousChecks2 |= INS_CONT_LINK;
 
-    if (!bFillMode)     // im FillMode ist None gecheckt und alle 3 disabled
+    if (!bFillMode)     
     {
         if ( mpRbMoveNone->IsChecked() )
             ScInsertContentsDlg::nPreviousMoveMode = INS_NONE;
@@ -333,7 +333,7 @@ sal_uInt16  ScInsertContentsDlg::GetFormulaCmdBits() const
         ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_MUL;
     else if(mpRbDiv->IsChecked())
         ScInsertContentsDlg::nPreviousFormulaChecks = PASTE_DIV;
-    // Bits fuer Checkboxen ausblenden
+    
     return ScInsertContentsDlg::nPreviousFormulaChecks;
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@
 #include "docsh.hxx"
 #include "tablink.hxx"
 
-//==================================================================
+
 
 ScLinkedAreaDlg::ScLinkedAreaDlg(Window* pParent)
     : ModalDialog(pParent, "ExternalDataDialog", "modules/scalc/ui/externaldata.ui")
@@ -67,12 +67,12 @@ ScLinkedAreaDlg::ScLinkedAreaDlg(Window* pParent)
 
 ScLinkedAreaDlg::~ScLinkedAreaDlg()
 {
-    // pSourceShell is deleted by aSourceRef
+    
 }
 
 short ScLinkedAreaDlg::Execute()
 {
-    // set parent for file dialog or filter options
+    
 
     Window* pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
@@ -104,19 +104,19 @@ IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl)
         SfxMedium* pMed = pSourceShell->GetMedium();
         if ( aEntered.equals(pMed->GetName()) )
         {
-            //  already loaded - nothing to do
+            
             return 0;
         }
     }
 
     OUString aFilter;
     OUString aOptions;
-    //  get filter name by looking at the file content (bWithContent = true)
-    // Break operation if any error occurred inside.
+    
+    
     if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, true, true ))
         return 0;
 
-    // #i53241# replace HTML filter with DataQuery filter
+    
     if (aFilter.equalsAscii(FILTERNAME_HTML))
         aFilter = OUString(FILTERNAME_QUERY);
 
@@ -131,7 +131,7 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
 {
     if ( pSourceShell )
     {
-        //  unload old document
+        
         pSourceShell->DoClose();
         pSourceShell = NULL;
         aSourceRef.Clear();
@@ -146,16 +146,16 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
 
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, rFile );
 
-        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, true );    // with interaction
+        ScDocumentLoader aLoader( rFile, aNewFilter, aNewOptions, 0, true );    
         pSourceShell = aLoader.GetDocShell();
         if ( pSourceShell )
         {
             sal_uLong nErr = pSourceShell->GetErrorCode();
             if (nErr)
-                ErrorHandler::HandleError( nErr );      // including warnings
+                ErrorHandler::HandleError( nErr );      
 
             aSourceRef = pSourceShell;
-            aLoader.ReleaseDocRef();    // don't call DoClose in DocLoader dtor
+            aLoader.ReleaseDocRef();    
         }
     }
 }
@@ -212,7 +212,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
     {
         WaitObject aWait( this );
 
-        // replace HTML filter with DataQuery filter
+        
         const OUString aHTMLFilterName( FILTERNAME_HTML );
         const OUString aWebQFilterName( FILTERNAME_QUERY );
 
@@ -225,13 +225,13 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
                 pMed->SetFilter( pNewFilter );
         }
 
-        //  ERRCTX_SFX_OPENDOC -> "Fehler beim Laden des Dokumentes"
+        
         SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
 
         if (pSourceShell)
-            pSourceShell->DoClose();        // deleted when assigning aSourceRef
+            pSourceShell->DoClose();        
 
-        pMed->UseInteractionHandler( sal_True );    // to enable the filter options dialog
+        pMed->UseInteractionHandler( sal_True );    
 
         pSourceShell = new ScDocShell;
         aSourceRef = pSourceShell;
@@ -239,9 +239,9 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg 
 
         sal_uLong nErr = pSourceShell->GetErrorCode();
         if (nErr)
-            ErrorHandler::HandleError( nErr );              // including warnings
+            ErrorHandler::HandleError( nErr );              
 
-        if ( !pSourceShell->GetError() )                    // only errors
+        if ( !pSourceShell->GetError() )                    
         {
             m_pCbUrl->SetText( pMed->GetName() );
         }
@@ -341,7 +341,7 @@ sal_uLong ScLinkedAreaDlg::GetRefresh()
     if ( m_pBtnReload->IsChecked() )
         return sal::static_int_cast<sal_uLong>( m_pNfDelay->GetValue() );
     else
-        return 0;   // disabled
+        return 0;   
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

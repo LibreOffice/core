@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,10 +32,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//......................................................................................................................
+
 namespace sd { namespace colortoolpanel
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -70,9 +70,9 @@ namespace sd { namespace colortoolpanel
     namespace WindowAttribute = ::com::sun::star::awt::WindowAttribute;
     namespace PosSize = ::com::sun::star::awt::PosSize;
 
-    //==================================================================================================================
-    //= helpers
-    //==================================================================================================================
+    
+    
+    
     namespace
     {
         Reference< XWindow > lcl_createPlainWindow_nothrow( const Reference< XComponentContext >& i_rContext,
@@ -100,10 +100,10 @@ namespace sd { namespace colortoolpanel
             return NULL;
         }
     }
-    //==================================================================================================================
-    //= class SingleColorPanel
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     SingleColorPanel::SingleColorPanel( const Reference< XComponentContext >& i_rContext,
             const Reference< XConfigurationController >& i_rConfigController, const Reference< XResourceId >& i_rResourceId )
         :SingleColorPanel_Base( m_aMutex )
@@ -114,7 +114,7 @@ namespace sd { namespace colortoolpanel
         ENSURE_OR_THROW( i_rConfigController.is(), "invalid configuration controller" );
         ENSURE_OR_THROW( m_xResourceId.is(), "invalid resource id" );
 
-        // retrieve the parent window for our to-be-created pane window
+        
         Reference< XWindow > xParentWindow;
         Reference< XWindowPeer > xParentPeer;
         try
@@ -143,12 +143,12 @@ namespace sd { namespace colortoolpanel
         osl_atomic_decrement( &m_refCount );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     SingleColorPanel::~SingleColorPanel()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XWindow > SAL_CALL SingleColorPanel::getWindow(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -157,16 +157,16 @@ namespace sd { namespace colortoolpanel
         return m_xWindow;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XAccessible > SAL_CALL SingleColorPanel::createAccessible( const Reference< XAccessible >& i_rParentAccessible ) throw (RuntimeException)
     {
         (void)i_rParentAccessible;
         return Reference< XAccessible >( m_xWindow, UNO_QUERY );
-        // TODO: this is, strictly, not correct, as we ignore i_ParentAccessible here. If you are not doing a sample
-        // extension only, you'll want to do this correctly ....
+        
+        
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XResourceId > SAL_CALL SingleColorPanel::getResourceId(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -175,7 +175,7 @@ namespace sd { namespace colortoolpanel
         return m_xResourceId;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL SingleColorPanel::isAnchorOnly(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -184,7 +184,7 @@ namespace sd { namespace colortoolpanel
         return sal_False;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL SingleColorPanel::windowPaint( const PaintEvent& i_rEvent ) throw (RuntimeException)
     {
         try
@@ -204,18 +204,18 @@ namespace sd { namespace colortoolpanel
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL SingleColorPanel::disposing( const EventObject& i_rSource ) throw (RuntimeException)
     {
         (void)i_rSource;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void SAL_CALL SingleColorPanel::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_xWindow.is() )
-            // already disposed
+            
             return;
         m_xWindow->removePaintListener( this );
         try
@@ -230,8 +230,8 @@ namespace sd { namespace colortoolpanel
         m_xWindow.clear();
     }
 
-//......................................................................................................................
-} } // namespace sd::colortoolpanel
-//......................................................................................................................
+
+} } 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

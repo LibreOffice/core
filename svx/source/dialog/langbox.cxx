@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/linguistic2/XAvailableLocales.hpp>
@@ -39,7 +39,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::uno;
 
-// -----------------------------------------------------------------------
+
 
 OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg )
 {
@@ -66,9 +66,9 @@ OUString GetDicInfoStr( const OUString& rName, const sal_uInt16 nLang, bool bNeg
     return aTmp;
 }
 
-//========================================================================
-//  misc local helper functions
-//========================================================================
+
+
+
 
 static Sequence< sal_Int16 > lcl_LocaleSeqToLangSeq( Sequence< Locale > &rSeq )
 {
@@ -103,9 +103,9 @@ static bool lcl_SeqHasLang( const Sequence< sal_Int16 > & rLangSeq, sal_Int16 nL
     return i >= 0  &&  i < nLen;
 }
 
-//========================================================================
-//  class SvxLanguageBox
-//========================================================================
+
+
+
 
 sal_uInt16 TypeToPos_Impl( LanguageType eType, const ListBox& rLb )
 {
@@ -140,7 +140,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxLanguageBox(Window *pPar
     return pListBox;
 }
 
-//------------------------------------------------------------------------
+
 void SvxLanguageBox::Init()
 {
     m_pLangTable = new SvtLanguageTable;
@@ -151,7 +151,7 @@ void SvxLanguageBox::Init()
     m_bHasLangNone          = sal_False;
     m_bLangNoneIsLangAll    = sal_False;
 
-    // display entries sorted
+    
     SetStyle( GetStyle() | WB_SORT );
 
     if ( m_bWithCheckmark )
@@ -175,7 +175,7 @@ void SvxLanguageBox::Init()
         m_nLangList = LANG_LIST_ALL;
     }
 }
-//------------------------------------------------------------------------
+
 
 SvxLanguageBox::~SvxLanguageBox()
 {
@@ -183,7 +183,7 @@ SvxLanguageBox::~SvxLanguageBox()
     delete m_pLangTable;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_uInt16 nPos, bool bChecked )
 {
@@ -195,7 +195,7 @@ sal_uInt16 SvxLanguageBox::ImplInsertImgEntry( const OUString& rEntry, sal_uInt1
     return nRet;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
         sal_Bool bHasLangNone, sal_Bool bLangNoneIsLangAll, sal_Bool bCheckSpellAvail )
@@ -318,21 +318,21 @@ void SvxLanguageBox::SetLanguageList( sal_Int16 nLangList,
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType nLangType, sal_uInt16 nPos )
 {
     return ImplInsertLanguage( nLangType, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal_uInt16 nPos, sal_Int16 nType )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
-    // For obsolete and to be replaced languages check whether an entry of the
-    // replacement already exists and if so don't add an entry with identical
-    // string as would be returned by SvtLanguageTable::GetString().
+    
+    
+    
     if (nLang != nLangType)
     {
         sal_uInt16 nAt = TypeToPos_Impl( nLang, *this );
@@ -381,29 +381,29 @@ sal_uInt16 SvxLanguageBox::ImplInsertLanguage( const LanguageType nLangType, sal
     return nAt;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::InsertDefaultLanguage( sal_Int16 nType, sal_uInt16 nPos )
 {
     return ImplInsertLanguage( LANGUAGE_SYSTEM, nPos, nType );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::InsertSystemLanguage( sal_uInt16 nPos )
 {
     return ImplInsertLanguage( LANGUAGE_USER_SYSTEM_CONFIG, nPos, ::com::sun::star::i18n::ScriptType::WEAK );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
         sal_Bool bCheckEntry, sal_uInt16 nPos )
 {
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( nLangType);
-    // For obsolete and to be replaced languages check whether an entry of the
-    // replacement already exists and if so don't add an entry with identical
-    // string as would be returned by SvtLanguageTable::GetString().
+    
+    
+    
     if (nLang != nLangType)
     {
         sal_uInt16 nAt = TypeToPos_Impl( nLang, *this );
@@ -421,7 +421,7 @@ sal_uInt16 SvxLanguageBox::InsertLanguage( const LanguageType nLangType,
     return nAt;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLanguageBox::RemoveLanguage( const LanguageType eLangType )
 {
@@ -431,7 +431,7 @@ void SvxLanguageBox::RemoveLanguage( const LanguageType eLangType )
         RemoveEntry( nAt );
 }
 
-//------------------------------------------------------------------------
+
 
 LanguageType SvxLanguageBox::GetSelectLanguage() const
 {
@@ -443,28 +443,28 @@ LanguageType SvxLanguageBox::GetSelectLanguage() const
         return LanguageType( LANGUAGE_DONTKNOW );
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxLanguageBox::SelectLanguage( const LanguageType eLangType, sal_Bool bSelect )
 {
-    // If the core uses a LangID of an imported MS document and wants to select
-    // a language that is replaced, we need to select the replacement instead.
+    
+    
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
 
     sal_uInt16 nAt = TypeToPos_Impl( nLang, *this );
 
     if ( nAt == LISTBOX_ENTRY_NOTFOUND )
-        nAt = InsertLanguage( nLang );      // on-the-fly-ID
+        nAt = InsertLanguage( nLang );      
 
     if ( nAt != LISTBOX_ENTRY_NOTFOUND )
         SelectEntryPos( nAt, bSelect );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxLanguageBox::IsLanguageSelected( const LanguageType eLangType ) const
 {
-    // Same here, work on the replacement if applicable.
+    
     LanguageType nLang = MsLangId::getReplacementForObsoleteLanguage( eLangType);
 
     sal_uInt16 nAt = TypeToPos_Impl( nLang, *this );

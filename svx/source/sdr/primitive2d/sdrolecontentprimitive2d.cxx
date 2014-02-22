@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/primitive2d/sdrolecontentprimitive2d.hxx>
@@ -28,7 +28,7 @@
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -51,10 +51,10 @@ namespace drawinglayer
                     bScaleContent = pSource->IsEmptyPresObj();
                 }
             }
-#ifdef WNT // Little point in displaying the "broken OLE" graphic on OSes that don't have real OLE, maybe?
+#ifdef WNT 
             if(GRAPHIC_NONE == aGraphic.GetType())
             {
-                // no source, use fallback resource emty OLE graphic
+                
                 aGraphic = SdrOle2Obj::GetEmptyOLEReplacementGraphic();
                 bScaleContent = true;
             }
@@ -66,12 +66,12 @@ namespace drawinglayer
 
                 if(bScaleContent)
                 {
-                    // get transformation atoms
+                    
                     basegfx::B2DVector aScale, aTranslate;
                     double fRotate, fShearX;
                     getObjectTransform().decompose(aScale, aTranslate, fRotate, fShearX);
 
-                    // get PrefSize from the graphic in 100th mm
+                    
                     Size aPrefSize(aGraphic.GetPrefSize());
 
                     if(MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit())
@@ -88,7 +88,7 @@ namespace drawinglayer
 
                     if(basegfx::fTools::moreOrEqual(fOffsetX, 0.0) && basegfx::fTools::moreOrEqual(fOffsetY, 0.0))
                     {
-                        // if content fits into frame, create it
+                        
                         basegfx::B2DHomMatrix aInnerObjectMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
                             aPrefSize.getWidth(), aPrefSize.getHeight(), fOffsetX, fOffsetY));
                         aInnerObjectMatrix = basegfx::tools::createShearXRotateTranslateB2DHomMatrix(fShearX, fRotate, aTranslate)
@@ -104,7 +104,7 @@ namespace drawinglayer
                 }
                 else
                 {
-                    // create graphic primitive for content
+                    
                     const drawinglayer::primitive2d::Primitive2DReference aGraphicPrimitive(
                         new drawinglayer::primitive2d::GraphicPrimitive2D(
                             getObjectTransform(),
@@ -113,7 +113,7 @@ namespace drawinglayer
                     drawinglayer::primitive2d::appendPrimitive2DReferenceToPrimitive2DSequence(aRetval, aGraphicPrimitive);
                 }
 
-                // a standard gray outline is created for scaled content
+                
                 if(bScaleContent)
                 {
                     const svtools::ColorConfig aColorConfig;
@@ -131,7 +131,7 @@ namespace drawinglayer
                 }
             }
 
-            // get graphic and check scale content state
+            
             return aRetval;
         }
 
@@ -159,8 +159,8 @@ namespace drawinglayer
                 return ((bBothNot || bBothAndEqual)
                     && getObjectTransform() == rCompare.getObjectTransform()
 
-                    // #i104867# to find out if the Graphic content of the
-                    // OLE has changed, use GraphicVersion number
+                    
+                    
                     && getGraphicVersion() == rCompare.getGraphicVersion()
                 );
             }
@@ -176,10 +176,10 @@ namespace drawinglayer
             return aRange;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SdrOleContentPrimitive2D, PRIMITIVE2D_ID_SDROLECONTENTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

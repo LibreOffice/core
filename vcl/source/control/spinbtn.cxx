@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/rcid.h>
@@ -23,7 +23,7 @@
 #include <vcl/spin.hxx>
 #include <vcl/settings.hxx>
 
-// =======================================================================
+
 
 void SpinButton::ImplInit( Window* pParent, WinBits nStyle )
 {
@@ -50,7 +50,7 @@ void SpinButton::ImplInit( Window* pParent, WinBits nStyle )
     Control::ImplInit( pParent, nStyle, NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 SpinButton::SpinButton( Window* pParent, WinBits nStyle )
     :Control( WINDOW_SPINBUTTON )
@@ -59,13 +59,13 @@ SpinButton::SpinButton( Window* pParent, WinBits nStyle )
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 SpinButton::~SpinButton()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SpinButton, ImplTimeout, Timer*, pTimer )
 {
@@ -85,7 +85,7 @@ IMPL_LINK( SpinButton, ImplTimeout, Timer*, pTimer )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::Up()
 {
@@ -100,7 +100,7 @@ void SpinButton::Up()
     ImplCallEventListenersAndHandler( VCLEVENT_SPINBUTTON_UP, maUpHdlLink, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::Down()
 {
@@ -115,7 +115,7 @@ void SpinButton::Down()
     ImplCallEventListenersAndHandler( VCLEVENT_SPINBUTTON_DOWN, maDownHdlLink, this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::Resize()
 {
@@ -140,7 +140,7 @@ void SpinButton::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
@@ -151,7 +151,7 @@ void SpinButton::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize,
     pDev->SetMapMode();
     if ( !(nFlags & WINDOW_DRAW_MONO) )
     {
-        // DecoView uses the FaceColor...
+        
         AllSettings aSettings = pDev->GetSettings();
         StyleSettings aStyleSettings = aSettings.GetStyleSettings();
         if ( IsControlBackground() )
@@ -199,7 +199,7 @@ void SpinButton::Paint( const Rectangle& )
         ShowFocus( maFocusRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -225,7 +225,7 @@ void SpinButton::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::MouseButtonUp( const MouseEvent& )
 {
@@ -254,7 +254,7 @@ void SpinButton::MouseButtonUp( const MouseEvent& )
     mbInitialUp = mbInitialDown = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::MouseMove( const MouseEvent& rMEvt )
 {
@@ -297,7 +297,7 @@ void SpinButton::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::KeyInput( const KeyEvent& rKEvt )
 {
@@ -336,7 +336,7 @@ void SpinButton::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::StateChanged( StateChangedType nType )
 {
@@ -373,38 +373,38 @@ void SpinButton::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::SetRangeMin( long nNewRange )
 {
     SetRange( Range( nNewRange, GetRangeMax() ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::SetRangeMax( long nNewRange )
 {
     SetRange( Range( GetRangeMin(), nNewRange ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::SetRange( const Range& rRange )
 {
-    // adjust rage
+    
     Range aRange = rRange;
     aRange.Justify();
     long nNewMinRange = aRange.Min();
     long nNewMaxRange = aRange.Max();
 
-    // do something only if old and new range differ
+    
     if ( (mnMinRange != nNewMinRange) ||
          (mnMaxRange != nNewMaxRange) )
     {
         mnMinRange = nNewMinRange;
         mnMaxRange = nNewMaxRange;
 
-        // adjust value to new range, if necessary
+        
         if ( mnValue > mnMaxRange )
             mnValue = mnMaxRange;
         if ( mnValue < mnMinRange )
@@ -414,11 +414,11 @@ void SpinButton::SetRange( const Range& rRange )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::SetValue( long nValue )
 {
-    // adjust, if necessary
+    
     if ( nValue > mnMaxRange )
         nValue = mnMaxRange;
     if ( nValue < mnMinRange )
@@ -431,7 +431,7 @@ void SpinButton::SetValue( long nValue )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::GetFocus()
 {
@@ -439,7 +439,7 @@ void SpinButton::GetFocus()
     Control::GetFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::LoseFocus()
 {
@@ -447,7 +447,7 @@ void SpinButton::LoseFocus()
     Control::LoseFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SpinButton::ImplMoveFocus( bool _bUpper )
 {
@@ -461,12 +461,12 @@ bool SpinButton::ImplMoveFocus( bool _bUpper )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SpinButton::ImplCalcFocusRect( bool _bUpper )
 {
     maFocusRect = _bUpper ? maUpperRect : maLowerRect;
-    // inflate by some pixels
+    
     maFocusRect.Left() += 2;
     maFocusRect.Top() += 2;
     maFocusRect.Right() -= 2;
@@ -474,7 +474,7 @@ void SpinButton::ImplCalcFocusRect( bool _bUpper )
     mbUpperIsFocused = _bUpper;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle* SpinButton::ImplFindPartRect( const Point& rPt )
 {
@@ -494,7 +494,7 @@ bool SpinButton::PreNotify( NotifyEvent& rNEvt )
     {
         if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
         {
-            // trigger redraw if mouse over state has changed
+            
             if( IsNativeControlSupported(CTRL_SPINBOX, PART_ENTIRE_CONTROL) ||
                 IsNativeControlSupported(CTRL_SPINBOX, PART_ALL_BUTTONS) )
             {
@@ -523,6 +523,6 @@ bool SpinButton::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

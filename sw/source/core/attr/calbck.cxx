@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <frame.hxx>
@@ -27,37 +27,37 @@ static SwClientIter* pClientIters = 0;
 
 TYPEINIT0( SwClient );
 
-// ----------
-// SwClient
-// ----------
+
+
+
 
 SwClient::SwClient( SwModify* pToRegisterIn )
     : pLeft( 0 ), pRight( 0 ), pRegisteredIn( 0 ), mbIsAllowedToBeRemovedInModifyCall( false )
 {
     if(pToRegisterIn)
-        // connect to SwModify
+        
         pToRegisterIn->Add(this);
 }
 
 void SwClient::CheckRegistration( const SfxPoolItem* pOld, const SfxPoolItem* )
 {
-    // this method only handles notification about dying SwModify objects
+    
     if( (!pOld || pOld->Which() != RES_OBJECTDYING) )
         return;
 
     const SwPtrMsgPoolItem* pDead = static_cast<const SwPtrMsgPoolItem*>(pOld);
     if(pDead && pDead->pObject == pRegisteredIn)
     {
-        // I've got a notification from the object I know
+        
         SwModify* pAbove = const_cast<SwModify*>(pRegisteredIn->GetRegisteredIn());
         if(pAbove)
         {
-            // if the dying object itself was listening at an SwModify, I take over
-            // adding myself to pAbove will automatically remove me from my current pRegisteredIn
+            
+            
             pAbove->Add(this);
             return;
         }
-        // destroy connection
+        
         pRegisteredIn->Remove(this);
     }
 }
@@ -75,7 +75,7 @@ SwClient::~SwClient()
 {
     OSL_ENSURE( !pRegisteredIn || pRegisteredIn->GetDepends(), "SwModify still known, but Client already disconnected!" );
     if( pRegisteredIn && pRegisteredIn->GetDepends() )
-        // still connected
+        
         pRegisteredIn->Remove( this );
 }
 
@@ -84,9 +84,9 @@ bool SwClient::GetInfo( SfxPoolItem& ) const
     return true;
 }
 
-// ----------
-// SwModify
-// ----------
+
+
+
 
 SwModify::SwModify()
     : SwClient(0), pRoot(0)
@@ -120,12 +120,12 @@ SwModify::~SwModify()
 
     if( pRoot )
     {
-        // there are depending objects
+        
         if( IsInDocDTOR() )
         {
-            // If the document gets destroyed anyway, just tell clients to
-            // forget me so that they don't try to get removed from my list
-            // later when they also get destroyed
+            
+            
+            
             SwClientIter aIter( *this );
             SwClient* p = aIter.GoStart();
             while ( p )
@@ -136,12 +136,12 @@ SwModify::~SwModify()
         }
         else
         {
-            // notify all clients that they shall remove themselves
+            
             SwPtrMsgPoolItem aDyObject( RES_OBJECTDYING, this );
             NotifyClients( &aDyObject, &aDyObject );
 
-            // remove all clients that have not done themselves
-            // mba: possibly a hotfix for forgotten base class calls?!
+            
+            
             while( pRoot )
                 pRoot->CheckRegistration( &aDyObject, &aDyObject );
         }
@@ -167,7 +167,7 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
 
     LockModify();
 
-    // mba: WTF?!
+    
     if( !pOldValue )
     {
         bLockClientList = sal_True;
@@ -200,7 +200,7 @@ void SwModify::NotifyClients( const SfxPoolItem* pOldValue, const SfxPoolItem* p
 
 bool SwModify::GetInfo( SfxPoolItem& rInfo ) const
 {
-    bool bRet = true;       // means: continue with next
+    bool bRet = true;       
 
     if( pRoot )
     {
@@ -232,20 +232,20 @@ void SwModify::Add( SwClient* pDepend )
             pTmp = pTmp->pNxtIter;
         }
 #endif
-        // deregister new client in case it is already registered elsewhere
+        
         if( pDepend->pRegisteredIn != 0 )
             pDepend->pRegisteredIn->Remove( pDepend );
 
         if( !pRoot )
         {
-            // first client added
+            
             pRoot = pDepend;
             pRoot->pLeft = 0;
             pRoot->pRight = 0;
         }
         else
         {
-            // append client
+            
             pDepend->pRight = pRoot->pRight;
             pRoot->pRight = pDepend;
             pDepend->pLeft = pRoot;
@@ -253,7 +253,7 @@ void SwModify::Add( SwClient* pDepend )
                 pDepend->pRight->pLeft = pDepend;
         }
 
-        // connect client to me
+        
         pDepend->pRegisteredIn = this;
     }
 }
@@ -267,8 +267,8 @@ SwClient* SwModify::Remove( SwClient* pDepend )
 
     if( pDepend->pRegisteredIn == this )
     {
-        // SwClient is my listener
-        // remove it from my list
+        
+        
         SwClient* pR = pDepend->pRight;
         SwClient* pL = pDepend->pLeft;
         if( pRoot == pDepend )
@@ -279,14 +279,14 @@ SwClient* SwModify::Remove( SwClient* pDepend )
         if( pR )
             pR->pLeft = pL;
 
-        // update ClientIters
+        
         SwClientIter* pTmp = pClientIters;
         while( pTmp )
         {
             if( pTmp->pAct == pDepend || pTmp->pDelNext == pDepend )
             {
-                // if object being removed is the current or next object in an
-                // iterator, advance this iterator
+                
+                
                 pTmp->pDelNext = pR;
             }
             pTmp = pTmp->pNxtIter;
@@ -300,7 +300,7 @@ SwClient* SwModify::Remove( SwClient* pDepend )
         OSL_FAIL( "SwModify::Remove(): could not find pDepend" );
     }
 
-    // disconnect client from me
+    
     pDepend->pRegisteredIn = 0;
     return pDepend;
 }
@@ -359,9 +359,9 @@ void SwModify::ModifyBroadcast( const SfxPoolItem* pOldValue, const SfxPoolItem*
     }
 }
 
-// ----------
-// SwDepend
-// ----------
+
+
+
 
 SwDepend::SwDepend( SwClient* pTellHim, SwModify* pDepend )
     : SwClient( pDepend )
@@ -388,9 +388,9 @@ bool SwDepend::GetInfo( SfxPoolItem& rInfo ) const
     return pToTell ? pToTell->GetInfo( rInfo ) : true;
 }
 
-// ------------
-// SwClientIter
-// ------------
+
+
+
 
 SwClientIter::SwClientIter( const SwModify& rModify )
     : rRoot( rModify )
@@ -398,7 +398,7 @@ SwClientIter::SwClientIter( const SwModify& rModify )
     pNxtIter = 0;
     if( pClientIters )
     {
-        // append to list of ClientIters
+        
         SwClientIter* pTmp = pClientIters;
         while( pTmp->pNxtIter )
             pTmp = pTmp->pNxtIter;
@@ -415,7 +415,7 @@ SwClientIter::~SwClientIter()
 {
     if( pClientIters )
     {
-        // reorganize list of ClientIters
+        
         if( pClientIters == this )
             pClientIters = pNxtIter;
         else

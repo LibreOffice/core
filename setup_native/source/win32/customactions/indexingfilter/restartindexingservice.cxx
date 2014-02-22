@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /*
@@ -62,7 +62,7 @@ bool StopIndexingService(SC_HANDLE hService)
 
     if (ControlService_(hService, SERVICE_CONTROL_STOP, &status))
     {
-        // Check the status until the service is no longer stop pending.
+        
         if (QueryServiceStatus_(hService, &status))
         {
             DWORD startTime = GetTickCount();
@@ -70,9 +70,9 @@ bool StopIndexingService(SC_HANDLE hService)
 
             while (status.dwCurrentState == SERVICE_STOP_PENDING)
             {
-                // Do not wait longer than the wait hint. A good interval is
-                // one tenth the wait hint, but no less than 1 second and no
-                // more than 10 seconds.
+                
+                
+                
                 DWORD waitTime = status.dwWaitHint / 10;
 
                 if (waitTime < 1000)
@@ -82,7 +82,7 @@ bool StopIndexingService(SC_HANDLE hService)
 
                 Sleep(waitTime);
 
-                // Check the status again.
+                
                 if (!QueryServiceStatus_(hService, &status) ||
                     (status.dwCurrentState == SERVICE_STOPPED))
                     break;
@@ -94,7 +94,7 @@ bool StopIndexingService(SC_HANDLE hService)
                 }
                 else if ((GetTickCount() - startTime) > status.dwWaitHint)
                 {
-                    break; // service doesn't react anymore
+                    break; 
                 }
             }
         }
@@ -108,7 +108,7 @@ void StartIndexingService(SC_HANDLE hService)
     {
         SERVICE_STATUS status;
 
-        // Check the status until the service is no longer stop pending.
+        
         if (QueryServiceStatus_(hService, &status))
         {
             DWORD startTime = GetTickCount();
@@ -116,9 +116,9 @@ void StartIndexingService(SC_HANDLE hService)
 
             while (status.dwCurrentState == SERVICE_START_PENDING)
             {
-                // Do not wait longer than the wait hint. A good interval is
-                // one tenth the wait hint, but no less than 1 second and no
-                // more than 10 seconds.
+                
+                
+                
                 DWORD waitTime = status.dwWaitHint / 10;
 
                 if (waitTime < 1000)
@@ -128,7 +128,7 @@ void StartIndexingService(SC_HANDLE hService)
 
                 Sleep(waitTime);
 
-                // Check the status again.
+                
                 if (!QueryServiceStatus_(hService, &status) ||
                     (status.dwCurrentState == SERVICE_STOPPED))
                     break;
@@ -140,7 +140,7 @@ void StartIndexingService(SC_HANDLE hService)
                 }
                 else if ((GetTickCount() - startTime) > status.dwWaitHint)
                 {
-                    // service doesn't react anymore
+                    
                     break;
                 }
             }
@@ -150,7 +150,7 @@ void StartIndexingService(SC_HANDLE hService)
 
 extern "C" UINT __stdcall RestartIndexingService(MSIHANDLE)
 {
-    //MessageBox(NULL, TEXT("Restarting Indexing Service"), TEXT("Message"), MB_OK | MB_ICONINFORMATION);
+    
 
     HMODULE hAdvapi32 = LoadLibrary("advapi32.dll");
 
@@ -171,8 +171,8 @@ extern "C" UINT __stdcall RestartIndexingService(MSIHANDLE)
         return ERROR_SUCCESS;
 
     SC_HANDLE hSCManager = OpenSCManager_(
-        NULL, // local machine
-        NULL, // ServicesActive database
+        NULL, 
+        NULL, 
         SC_MANAGER_ALL_ACCESS);
 
     if (hSCManager != NULL)

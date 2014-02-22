@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/help.hxx>
@@ -80,7 +80,7 @@ SvxConfigFunctionListBox::SvxConfigFunctionListBox(Window* pParent, WinBits nSty
 {
     GetModel()->SetSortMode( SortAscending );
 
-    // Timer for the BallonHelp
+    
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
         LINK( this, SvxConfigFunctionListBox, TimerHdl ) );
@@ -174,7 +174,7 @@ void SvxConfigFunctionListBox::FunctionSelected()
     Help::ShowBalloon( this, Point(), OUString() );
 }
 
-// drag and drop support
+
 DragDropMode SvxConfigFunctionListBox::NotifyStartDrag(
     TransferDataContainer& /*aTransferDataContainer*/, SvTreeListEntry* pEntry )
 {
@@ -236,10 +236,10 @@ void SvxConfigGroupListBox::ClearAll()
     Clear();
 }
 
-//-----------------------------------------------
+
 namespace
 {
-    //...........................................
+    
     /** examines a component whether it supports XEmbeddedScripts, or provides access to such a
         component by implementing XScriptInvocationContext.
         @return
@@ -259,24 +259,24 @@ namespace
         return Reference< XModel >( xScripts, UNO_QUERY );
     }
 
-    //...........................................
+    
     static Reference< XModel > lcl_getScriptableDocument_nothrow( const Reference< XFrame >& _rxFrame )
     {
         Reference< XModel > xDocument;
 
-        // examine our associated frame
+        
         try
         {
             OSL_ENSURE( _rxFrame.is(), "lcl_getScriptableDocument_nothrow: you need to pass a frame to this dialog/tab page!" );
             if ( _rxFrame.is() )
             {
-                // first try the model in the frame
+                
                 Reference< XController > xController( _rxFrame->getController(), UNO_SET_THROW );
                 xDocument = lcl_getDocumentWithScripts_throw( xController->getModel() );
 
                 if ( !xDocument.is() )
                 {
-                    // if there is no suitable document in the frame, try the controller
+                    
                     xDocument = lcl_getDocumentWithScripts_throw( _rxFrame->getController() );
                 }
             }
@@ -321,7 +321,7 @@ void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode
             for ( long n = 0; n < children.getLength(); ++n )
             {
                 Reference< browse::XBrowseNode >& theChild = children[n];
-                //#139111# some crash reports show that it might be unset
+                
                 if ( !theChild.is() )
                     continue;
                 OUString sUIName = theChild->getName();
@@ -329,8 +329,8 @@ void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode
 
                 if  (   bIsRootNode
                     ||  ( m_bShowSlots && _pParentEntry && ( GetModel()->GetDepth( _pParentEntry ) == 0 ) )
-                        // if we show slots (as in the customize dialog)
-                        // then the user & share are added at depth=1
+                        
+                        
                     )
                 {
                     if ( sUIName == "user" )
@@ -376,8 +376,8 @@ void SvxConfigGroupListBox::fillScriptList( const Reference< browse::XBrowseNode
                 }
                 else
                 {
-                    // if there are granchildren we're interested in, display the '+' before
-                    // the entry, but do not yet expand
+                    
+                    
                     Sequence< Reference< browse::XBrowseNode > > grandchildren =
                         children[n]->getChildNodes();
 
@@ -410,7 +410,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
     Reference< XComponentContext > xContext(
         comphelper::getProcessComponentContext() );
 
-    // are we showing builtin commands?
+    
     if ( m_bShowSlots && m_xFrame.is() )
     {
         Reference< frame::XDispatchInformationProvider > xDIP(
@@ -494,7 +494,7 @@ void SvxConfigGroupListBox::Init(bool bShowSlots, const Reference< frame::XFrame
         }
     }
 
-    // Add Scripting Framework entries
+    
     Reference< browse::XBrowseNode > rootNode;
 
     try
@@ -551,7 +551,7 @@ Image SvxConfigGroupListBox::GetImage(
             if ( xDocumentModel.is() )
             {
                 Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
-                // get the long name of the document:
+                
                 OUString appModule( xModuleManager->identify(
                                     xDocumentModel ) );
                 Sequence<beans::PropertyValue> moduleDescr;
@@ -757,7 +757,7 @@ void SvxConfigGroupListBox::GroupSelected()
                                 value >>= description;
                             }
                             catch (Exception &) {
-                                // do nothing, the description will be empty
+                                
                             }
 
                             SvxGroupInfo_Impl* _pGroupInfo =
@@ -870,8 +870,8 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
     get(m_pCommands, "commands");
     if (m_bShowSlots)
     {
-        // If we are showing Slot API commands update labels in the UI, and
-        // enable drag'n'drop
+        
+        
         SetText(CUI_RESSTR(RID_SVXSTR_SELECTOR_ADD_COMMANDS));
         m_pCommands->SetDragDropMode( SV_DRAGDROP_APP_COPY );
 
@@ -932,8 +932,8 @@ IMPL_LINK( SvxScriptSelectorDialog, FunctionDoubleClickHdl, Control*, pCtrl )
     return 0;
 }
 
-// Check if command is selected and enable the OK button accordingly
-// Grab the help text for this id if available and update the description field
+
+
 void
 SvxScriptSelectorDialog::UpdateUI()
 {
@@ -957,8 +957,8 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
 {
     if (pButton == m_pCancelButton)
     {
-        // If we are displaying Slot API commands then the dialog is being
-        // run from Tools/Configure and we should not close it, just hide it
+        
+        
         if ( m_bShowSlots == sal_False )
         {
             EndDialog( RET_CANCEL );
@@ -972,15 +972,15 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
     {
         GetAddHdl().Call( this );
 
-        // If we are displaying Slot API commands then this the dialog is being
-        // run from Tools/Configure and we should not close it
+        
+        
         if ( m_bShowSlots == sal_False )
         {
             EndDialog( RET_OK );
         }
         else
         {
-            // Select the next entry in the list if possible
+            
             SvTreeListEntry* current = m_pCommands->FirstSelected();
             SvTreeListEntry* next = m_pCommands->NextSibling( current );
 

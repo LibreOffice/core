@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fusumry.hxx"
@@ -105,7 +105,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
             {
                 if (!pSummaryPage)
                 {
-                    // insert "table of content"-page and create outliner
+                    
                     const bool bUndo = mpView->IsUndoEnabled();
 
                     if( bUndo )
@@ -116,7 +116,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 
                     SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
-                    // page with title & structuring!
+                    
                     pSummaryPage = (SdPage*) mpDoc->AllocPage(false);
                     pSummaryPage->SetSize(pActualPage->GetSize() );
                     pSummaryPage->SetBorder(pActualPage->GetLftBorder(),
@@ -124,19 +124,19 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                                      pActualPage->GetRgtBorder(),
                                      pActualPage->GetLwrBorder() );
 
-                    // insert page at the back
+                    
                     mpDoc->InsertPage(pSummaryPage, nCount * 2 + 1);
                     if( bUndo )
                         mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pSummaryPage));
 
-                    // use MasterPage of the current page
+                    
                     pSummaryPage->TRG_SetMasterPage(pActualPage->TRG_GetMasterPage());
                     pSummaryPage->SetLayoutName(pActualPage->GetLayoutName());
                     pSummaryPage->SetAutoLayout(AUTOLAYOUT_ENUM, sal_True);
                     pSummaryPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     pSummaryPage->setHeaderFooterSettings(pActualPage->getHeaderFooterSettings());
 
-                    // notes-page
+                    
                     SdPage* pNotesPage = (SdPage*) mpDoc->AllocPage(false);
                     pNotesPage->SetSize(pActualNotesPage->GetSize());
                     pNotesPage->SetBorder(pActualNotesPage->GetLftBorder(),
@@ -145,13 +145,13 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                                           pActualNotesPage->GetLwrBorder() );
                     pNotesPage->SetPageKind(PK_NOTES);
 
-                    // insert page at the back
+                    
                     mpDoc->InsertPage(pNotesPage, nCount * 2 + 2);
 
                     if( bUndo )
                         mpView->AddUndo(mpDoc->GetSdrUndoFactory().CreateUndoNewPage(*pNotesPage));
 
-                    // use MasterPage of the current page
+                    
                     pNotesPage->TRG_SetMasterPage(pActualNotesPage->TRG_GetMasterPage());
                     pNotesPage->SetLayoutName(pActualNotesPage->GetLayoutName());
                     pNotesPage->SetAutoLayout(pActualNotesPage->GetAutoLayout(), sal_True);
@@ -171,9 +171,9 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                     pOutl->SetStyleSheet( 0, pStyle );
                 }
 
-                // add text
+                
                 OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
-                // #118876#, check if the OutlinerParaObject is created successfully
+                
                 if( pParaObj )
                 {
                     pParaObj->SetOutlinerMode( OUTLINERMODE_OUTLINEOBJECT );
@@ -187,7 +187,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
     {
         SdrTextObj* pTextObj = (SdrTextObj*) pSummaryPage->GetPresObj(PRESOBJ_OUTLINE);
 
-        // remove hard break- and character attributes
+        
         SfxItemSet aEmptyEEAttr(mpDoc->GetPool(), EE_ITEMS_START, EE_ITEMS_END);
         sal_Int32 nParaCount = pOutl->GetParagraphCount();
 
@@ -202,7 +202,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         pTextObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
         pTextObj->SetEmptyPresObj(false);
 
-        // remove hard attributes (Flag to sal_True)
+        
         SfxItemSet aAttr(mpDoc->GetPool());
         aAttr.Put(XLineStyleItem(XLINE_NONE));
         aAttr.Put(XFillStyleItem(XFILL_NONE));
@@ -221,6 +221,6 @@ void FuSummaryPage::DoExecute( SfxRequest& )
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

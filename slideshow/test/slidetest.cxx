@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -120,7 +120,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "Adding a shape requires a LayerManager update",
                                 mpLayerManager->isUpdatePending() );
 
-        // update does the delayed viewAdded call to the shape
+        
         CPPUNIT_ASSERT_MESSAGE( "Update failed on LayerManager",
                                 mpLayerManager->update() );
         CPPUNIT_ASSERT_MESSAGE( "Added shape must have one view layer",
@@ -130,7 +130,7 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "Shape must not been updated",
                                 !mpTestShape->getNumUpdates() );
 
-        // test second view, check whether shape gets additional view
+        
         TestViewSharedPtr pTestView( createTestView() );
         CPPUNIT_ASSERT_MESSAGE( "Adding second View failed",
                                 maViews.addView( pTestView ) );
@@ -168,13 +168,13 @@ public:
 
         mpLayerManager->activate( false );
 
-        // update does the delayed viewAdded call to the shape
+        
         CPPUNIT_ASSERT_MESSAGE( "Update failed on LayerManager",
                                 mpLayerManager->update() );
         CPPUNIT_ASSERT_MESSAGE( "View must have background layer only",
                                 mpTestView->getViewLayers().empty() );
 
-        // LayerManager must now generate one extra view layer
+        
         mpLayerManager->enterAnimationMode(pShape2);
         CPPUNIT_ASSERT_MESSAGE( "No update pending on LayerManager",
                                 mpLayerManager->isUpdatePending() );
@@ -186,7 +186,7 @@ public:
                                 mpTestView->getViewLayers().at(0)->getBounds() ==
                                 basegfx::B2DRange(0.0,0.0,10.0,10.0) );
 
-        // LayerManager must now remove the extra view layer
+        
         mpLayerManager->leaveAnimationMode(pShape2);
         CPPUNIT_ASSERT_MESSAGE( "No update pending on LayerManager",
                                 mpLayerManager->isUpdatePending() );
@@ -203,8 +203,8 @@ public:
         CPPUNIT_ASSERT_MESSAGE( "Shape 4 must be on background layer",
                                 pShape4->getViewLayers().at(0).first == mpTestView );
 
-        // checking deactivation (all layers except background layer
-        // must vanish)
+        
+        
         mpLayerManager->enterAnimationMode(pShape3);
         CPPUNIT_ASSERT_MESSAGE( "No update pending on LayerManager",
                                 mpLayerManager->isUpdatePending() );
@@ -349,7 +349,7 @@ public:
                                 mpTestView.use_count() == 1 );
     }
 
-    // hook up the test
+    
     CPPUNIT_TEST_SUITE(LayerManagerTest);
     CPPUNIT_TEST(testBasics);
     CPPUNIT_TEST(testLayer);
@@ -358,11 +358,11 @@ public:
     CPPUNIT_TEST(testRefCounting);
     CPPUNIT_TEST_SUITE_END();
 
-}; // class LayerManagerTest
+}; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(LayerManagerTest);
-} // namespace
+} 
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

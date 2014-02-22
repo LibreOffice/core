@@ -45,20 +45,20 @@ namespace drawinglayer
                 double fOffset(getOffset());
                 double fHeight(getHeight());
 
-                static const int aDottedArray[]     = { 1, 1, 0};               // DOTTED LINE
-                static const int aDotDashArray[]    = { 1, 1, 4, 1, 0};         // DASHDOT
-                static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   // DASHDOTDOT
-                static const int aDashedArray[]     = { 5, 2, 0};               // DASHED LINE
-                static const int aLongDashArray[]   = { 7, 2, 0};               // LONGDASH
+                static const int aDottedArray[]     = { 1, 1, 0};               
+                static const int aDotDashArray[]    = { 1, 1, 4, 1, 0};         
+                static const int aDashDotDotArray[] = { 1, 1, 1, 1, 4, 1, 0};   
+                static const int aDashedArray[]     = { 5, 2, 0};               
+                static const int aLongDashArray[]   = { 7, 2, 0};               
 
-                // get decomposition
+                
                 basegfx::B2DVector aScale, aTranslate;
                 double fRotate, fShearX;
                 getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
                 switch(getTextLine())
                 {
-                    default: // case TEXT_LINE_SINGLE:
+                    default: 
                     {
                         break;
                     }
@@ -168,7 +168,7 @@ namespace drawinglayer
                     fHeight *= 0.25;
                 }
 
-                // prepare Line and Stroke Attributes
+                
                 const attribute::LineAttribute aLineAttribute(getLineColor(), fHeight, eLineJoin);
                 attribute::StrokeAttribute aStrokeAttribute;
 
@@ -184,7 +184,7 @@ namespace drawinglayer
                     aStrokeAttribute = attribute::StrokeAttribute(aDoubleArray);
                 }
 
-                // create base polygon and new primitive
+                
                 basegfx::B2DPolygon aLine;
                 Primitive2DReference aNewPrimitive;
 
@@ -207,7 +207,7 @@ namespace drawinglayer
                     }
                     else if(TEXT_LINE_WAVE == getTextLine())
                     {
-                        // extra multiply to get the same WaveWidth as with the bold version
+                        
                         fWaveWidth *= 2.0;
                     }
 
@@ -218,13 +218,13 @@ namespace drawinglayer
                     aNewPrimitive = Primitive2DReference(new PolygonStrokePrimitive2D(aLine, aLineAttribute, aStrokeAttribute));
                 }
 
-                // add primitive
+                
                 appendPrimitive2DReferenceToPrimitive2DSequence(xRetval, aNewPrimitive);
 
                 if(bDoubleLine)
                 {
-                    // double line, create 2nd primitive with offset using TransformPrimitive based on
-                    // already created NewPrimitive
+                    
+                    
                     double fLineDist(2.3 * fHeight);
 
                     if(bWaveLine)
@@ -232,19 +232,19 @@ namespace drawinglayer
                         fLineDist = 6.3 * fHeight;
                     }
 
-                    // move base point of text to 0.0 and de-rotate
+                    
                     basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
                         -aTranslate.getX(), -aTranslate.getY()));
                     aTransform.rotate(-fRotate);
 
-                    // translate in Y by offset
+                    
                     aTransform.translate(0.0, fLineDist);
 
-                    // move back and rotate
+                    
                     aTransform.rotate(fRotate);
                     aTransform.translate(aTranslate.getX(), aTranslate.getY());
 
-                    // add transform primitive
+                    
                     const Primitive2DSequence aContent(&aNewPrimitive, 1);
                     appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
                         Primitive2DReference(new TransformPrimitive2D(aTransform, aContent)));
@@ -288,10 +288,10 @@ namespace drawinglayer
             return false;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(TextLinePrimitive2D, PRIMITIVE2D_ID_TEXTLINEPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

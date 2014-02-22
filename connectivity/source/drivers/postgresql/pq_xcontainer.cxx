@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -184,9 +184,9 @@ Sequence< OUString > Container::getElementNames(  )
          ii != m_name2index.end() ;
          ++ ii )
     {
-        // give element names in index order !
+        
         ret[ii->second] = ii->first;
-//         ret[i] = ii->first;
+
     }
     return ret;
 }
@@ -196,7 +196,7 @@ sal_Bool Container::hasByName( const OUString& aName )
 {
     return m_name2index.find( aName ) != m_name2index.end();
 }
-    // Methods
+    
 Type Container::getElementType(  )
         throw (::com::sun::star::uno::RuntimeException)
 {
@@ -246,7 +246,7 @@ public:
     {}
 
 public:
-    // XEnumeration
+    
     virtual sal_Bool SAL_CALL hasMoreElements(  )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL nextElement(  )
@@ -333,10 +333,10 @@ void Container::dropByName( const OUString& elementName )
         buf.append( elementName );
         buf.appendAscii( " is unknown in " );
         buf.append( m_type );
-//         buf.appendAscii( " " );
-//         buf.append( m_schemaName );
-//         buf.appendAscii( "." );
-//         buf.append( m_tableName );
+
+
+
+
         buf.appendAscii( " container, so it can't be dropped" );
         throw com::sun::star::container::NoSuchElementException(
             buf.makeStringAndClear(), *this );
@@ -380,7 +380,7 @@ void Container::dropByIndex( sal_Int32 index )
     {
         m_values[i-1] = m_values[i];
 
-        // I know, this is expensive, but don't want to maintain another map ...
+        
         for( String2IntMap::iterator ii = m_name2index.begin() ;
              ii != m_name2index.end() ;
              ++ ii )
@@ -466,8 +466,8 @@ void Container::fire( const EventBroadcastHelper &helper )
             catch ( com::sun::star::uno::RuntimeException & )
             {
                 OSL_ENSURE( false, "exception catched" );
-                // loose coupling, a runtime exception shall not break anything
-                // TODO: log away as warning !
+                
+                
             }
             catch( com::sun::star::uno::Exception & )
             {

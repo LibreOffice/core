@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/statusbarcontroller.hxx>
@@ -91,7 +91,7 @@ Reference< XURLTransformer > StatusbarController::getURLTransformer() const
     return m_xURLTransformer;
 }
 
-// XInterface
+
 Any SAL_CALL StatusbarController::queryInterface( const Type& rType )
 throw ( RuntimeException )
 {
@@ -178,11 +178,11 @@ throw ( RuntimeException )
             throw DisposedException();
     }
 
-    // Bind all registered listeners to their dispatch objects
+    
     bindListener();
 }
 
-// XComponent
+
 void SAL_CALL StatusbarController::dispose()
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -220,10 +220,10 @@ throw (::com::sun::star::uno::RuntimeException)
         ++pIter;
     }
 
-    // clear hash map
+    
     m_aListenerMap.clear();
 
-    // release references
+    
     m_xURLTransformer.clear();
     m_xContext.clear();
     m_xFrame.clear();
@@ -245,7 +245,7 @@ throw ( RuntimeException )
     m_aListenerContainer.removeInterface( ::getCppuType( ( const Reference< XEventListener >* ) NULL ), aListener );
 }
 
-// XEventListener
+
 void SAL_CALL StatusbarController::disposing( const EventObject& Source )
 throw ( RuntimeException )
 {
@@ -269,14 +269,14 @@ throw ( RuntimeException )
     URLToDispatchMap::iterator pIter = m_aListenerMap.begin();
     while ( pIter != m_aListenerMap.end() )
     {
-        // Compare references and release dispatch references if they are equal.
+        
         if ( xDispatch == pIter->second )
             pIter->second.clear();
         ++pIter;
     }
 }
 
-// XStatusListener
+
 void SAL_CALL StatusbarController::statusChanged( const FeatureStateEvent& Event )
 throw ( RuntimeException )
 {
@@ -298,7 +298,7 @@ throw ( RuntimeException )
     }
 }
 
-// XStatusbarController
+
 ::sal_Bool SAL_CALL StatusbarController::mouseButtonDown(
     const ::com::sun::star::awt::MouseEvent& )
 throw (::com::sun::star::uno::RuntimeException)
@@ -363,21 +363,21 @@ void StatusbarController::addStatusListener( const OUString& aCommandURL )
         SolarMutexGuard aSolarMutexGuard;
         URLToDispatchMap::iterator pIter = m_aListenerMap.find( aCommandURL );
 
-        // Already in the list of status listener. Do nothing.
+        
         if ( pIter != m_aListenerMap.end() )
             return;
 
-        // Check if we are already initialized. Implementation starts adding itself as status listener when
-        // intialize is called.
+        
+        
         if ( !m_bInitialized )
         {
-            // Put into the boost::unordered_map of status listener. Will be activated when initialized is called
+            
             m_aListenerMap.insert( URLToDispatchMap::value_type( aCommandURL, Reference< XDispatch >() ));
             return;
         }
         else
         {
-            // Add status listener directly as intialize has already been called.
+            
             Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
             if ( m_xContext.is() && xDispatchProvider.is() )
             {
@@ -408,7 +408,7 @@ void StatusbarController::addStatusListener( const OUString& aCommandURL )
         }
     }
 
-    // Call without locked mutex as we are called back from dispatch implementation
+    
     try
     {
         if ( xDispatch.is() )
@@ -430,7 +430,7 @@ void StatusbarController::bindListener()
         if ( !m_bInitialized )
             return;
 
-        // Collect all registered command URL's and store them temporary
+        
         Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
         if ( m_xContext.is() && xDispatchProvider.is() )
         {
@@ -446,8 +446,8 @@ void StatusbarController::bindListener()
                 Reference< XDispatch > xDispatch( pIter->second );
                 if ( xDispatch.is() )
                 {
-                    // We already have a dispatch object => we have to requery.
-                    // Release old dispatch object and remove it as listener
+                    
+                    
                     try
                     {
                         xDispatch->removeStatusListener( xStatusListener, aTargetURL );
@@ -460,7 +460,7 @@ void StatusbarController::bindListener()
                 pIter->second.clear();
                 xDispatch.clear();
 
-                // Query for dispatch object. Old dispatch will be released with this, too.
+                
                 try
                 {
                     xDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
@@ -477,7 +477,7 @@ void StatusbarController::bindListener()
         }
     }
 
-    // Call without locked mutex as we are called back from dispatch implementation
+    
     if ( !xStatusListener.is() )
         return;
 
@@ -490,9 +490,9 @@ void StatusbarController::bindListener()
                 rListener.xDispatch->addStatusListener( xStatusListener, rListener.aURL );
             else if ( rListener.aURL.Complete == m_aCommandURL )
             {
-                // Send status changed for the main URL, if we cannot get a valid dispatch object.
-                // UI disables the button. Catch exception as we release our mutex, it is possible
-                // that someone else already disposed this instance!
+                
+                
+                
                 FeatureStateEvent aFeatureStateEvent;
                 aFeatureStateEvent.IsEnabled = sal_False;
                 aFeatureStateEvent.FeatureURL = rListener.aURL;
@@ -613,6 +613,6 @@ void StatusbarController::execute(
     }
 }
 
-} // svt
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

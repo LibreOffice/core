@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**  test coder preface:
@@ -60,9 +60,9 @@ using ::rtl::OUString;
 const char * pTestString1 = "test socket";
 const char * pTestString2 = " Passed#OK";
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
+
+
+
 
 class CloseSocketThread : public Thread
 {
@@ -88,9 +88,9 @@ public:
     }
 };
 
-//------------------------------------------------------------------------
-// tests cases begins here
-//------------------------------------------------------------------------
+
+
+
 
 namespace osl_DatagramSocket
 {
@@ -107,7 +107,7 @@ namespace osl_DatagramSocket
 
         void ctors_001()
         {
-            /// Socket constructor.
+            
             ::osl::DatagramSocket dsSocket;
 
             CPPUNIT_ASSERT_MESSAGE( "test for ctors_001 constructor function: check if the datagram socket was created successfully.",
@@ -119,9 +119,9 @@ namespace osl_DatagramSocket
         CPPUNIT_TEST( ctors_001 );
         CPPUNIT_TEST_SUITE_END();
 
-    }; // class ctors
+    }; 
 
-/**thread do sendTo, refer to http://www.coding-zone.co.uk/cpp/articles/140101networkprogrammingv.shtml
+/**thread do sendTo, refer to http:
 */
 class TalkerThread : public Thread
 {
@@ -131,7 +131,7 @@ protected:
 
     void SAL_CALL run( )
     {
-        dsSocket.sendTo( saTargetSocketAddr, pTestString1, strlen( pTestString1 ) + 1 ); // "test socket"
+        dsSocket.sendTo( saTargetSocketAddr, pTestString1, strlen( pTestString1 ) + 1 ); 
         dsSocket.shutdown();
     }
 
@@ -152,7 +152,7 @@ public:
     }
 };
 
-/**thread do listen, refer to http://www.coding-zone.co.uk/cpp/articles/140101networkprogrammingv.shtml
+/**thread do listen, refer to http:
 */
 class ListenerThread : public Thread
 {
@@ -169,11 +169,11 @@ protected:
             t_print("DatagramSocket bind failed \n");
             return;
         }
-        //blocking mode: default
+        
 #if !SILENT_TEST
         sal_Int32 nRecv =
 #endif
-            dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); //strlen( pTestString2 ) + 1
+            dsSocket.recvFrom( pRecvBuffer, 30, &saTargetSocketAddr); 
         t_print("After recvFrom, nRecv is %d\n", (int) nRecv);
     }
 
@@ -220,7 +220,7 @@ public:
             myTalkThread.create();
             sal_Int32 nRecv = dsSocket.recvFrom( pReadBuffer, 30, &saLocalSocketAddr);
             myTalkThread.join();
-            //t_print("#received buffer is %s# \n", pReadBuffer);
+            
 
             sal_Bool bOk = ( strcmp(pReadBuffer, pTestString1) == 0 );
 
@@ -233,10 +233,10 @@ public:
             ::osl::SocketAddr saListenSocketAddr( rtl::OUString("127.0.0.1"), IP_PORT_MYPORT10 );
             ::osl::DatagramSocket dsSocket;
 
-            //listener thread construct a DatagramSocket, recvFrom waiting for data, then main thread sendto data
+            
             ListenerThread myListenThread;
             myListenThread.create();
-            //to grantee the recvFrom is before sendTo
+            
             thread_sleep( 1 );
 
             sal_Int32 nSend = dsSocket.sendTo( saListenSocketAddr, pTestString2, strlen( pTestString2 ) + 1 );
@@ -244,7 +244,7 @@ public:
             CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo failed: nSend <= 0.", nSend > 0);
 
             myListenThread.join();
-            //t_print("#received buffer is %s# \n", myListenThread.pRecvBuffer);
+            
 
             sal_Bool bOk = ( strcmp( myListenThread.pRecvBuffer, pTestString2) == 0 );
 
@@ -252,12 +252,12 @@ public:
                                     bOk == sal_True );
         }
 
-        //sendTo error, return -1; recvFrom error, return -1
+        
         void sr_003()
         {
             ::osl::SocketAddr saListenSocketAddr( rtl::OUString("123.345.67.89"), IP_PORT_MYPORT10 );
             ::osl::DatagramSocket dsSocket;
-            // Transport endpoint is not connected
+            
             sal_Int32 nSend = dsSocket.sendTo( saListenSocketAddr, pTestString2, strlen( pTestString2 ) + 1 );
             CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo should fail: nSend <= 0.",
                 nSend == -1 );
@@ -272,14 +272,14 @@ public:
             dsSocket.enableNonBlockingMode( sal_True );
 
             sal_Char pReadBuffer[30];
-            //sal_Int32 nRecv1 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
+            
 
-            // will block ?
+            
             CloseSocketThread myThread( dsSocket );
             myThread.create();
             sal_Int32 nRecv2 = dsSocket.recvFrom( pReadBuffer, 30, &saListenSocketAddr1 );
             myThread.join();
-            //t_print("#nRecv1 is %d nRecv2 is %d\n", nRecv1, nRecv2 );
+            
             CPPUNIT_ASSERT_MESSAGE( "DatagramSocket sendTo should fail: nSend <= 0.",
                  nRecv2 == -1 );
         }
@@ -291,19 +291,19 @@ public:
         CPPUNIT_TEST( sr_004 );
         CPPUNIT_TEST_SUITE_END();
 
-    }; // class sendTo_recvFrom
+    }; 
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::ctors);
 CPPUNIT_TEST_SUITE_REGISTRATION(osl_DatagramSocket::sendTo_recvFrom);
 
-} // namespace osl_DatagramSocket
+} 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

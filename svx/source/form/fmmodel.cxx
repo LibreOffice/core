@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -116,7 +116,7 @@ FmFormModel::~FmFormModel()
         SetObjectShell(NULL);
 
     ClearUndoBuffer();
-    // minimale grenze fuer undos
+    
     SetMaxUndoActionCount(1);
 
     m_pImpl->pUndoEnv->release();
@@ -141,7 +141,7 @@ SdrPage* FmFormModel::AllocPage(bool bMasterPage)
 \************************************************************************/
 void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 {
-    // hack solange Methode intern
+    
     if (m_pObjShell && !m_pImpl->pUndoEnv->IsListening( *m_pObjShell ))
         SetObjectShell(m_pObjShell);
 
@@ -156,7 +156,7 @@ void FmFormModel::InsertPage(SdrPage* pPage, sal_uInt16 nPos)
 void FmFormModel::MovePage( sal_uInt16 nPgNum, sal_uInt16 nNewPos )
 {
     m_pImpl->bMovingPage = sal_True;
-        // see InsertPage for this
+        
 
     SdrModel::MovePage( nPgNum, nNewPos );
 
@@ -192,7 +192,7 @@ SdrPage* FmFormModel::RemovePage(sal_uInt16 nPgNum)
 \************************************************************************/
 void FmFormModel::InsertMasterPage(SdrPage* pPage, sal_uInt16 nPos)
 {
-    // hack solange Methode intern
+    
     if (m_pObjShell && !m_pImpl->pUndoEnv->IsListening( *m_pObjShell ))
         SetObjectShell(m_pObjShell);
 
@@ -218,13 +218,13 @@ SdrPage* FmFormModel::RemoveMasterPage(sal_uInt16 nPgNum)
     return pPage;
 }
 
-//------------------------------------------------------------------------
+
 SdrLayerID FmFormModel::GetControlExportLayerId( const SdrObject& rObj ) const
 {
     return rObj.GetLayer();
 }
 
-//------------------------------------------------------------------------
+
 void FmFormModel::implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _bForce )
 {
     if( ( _bOpenDesignMode != m_bOpenInDesignMode ) || _bForce )
@@ -234,23 +234,23 @@ void FmFormModel::implSetOpenInDesignMode( sal_Bool _bOpenDesignMode, sal_Bool _
         if ( m_pObjShell )
             m_pObjShell->SetModified( sal_True );
     }
-    // no matter if we really did it or not - from now on, it does not count as defaulted anymore
+    
     m_pImpl->bOpenInDesignIsDefaulted = sal_False;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormModel::SetOpenInDesignMode( sal_Bool bOpenDesignMode )
 {
     implSetOpenInDesignMode( bOpenDesignMode, sal_False );
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFormModel::OpenInDesignModeIsDefaulted( )
 {
     return m_pImpl->bOpenInDesignIsDefaulted;
 }
 
-//------------------------------------------------------------------------
+
 sal_Bool FmFormModel::ControlsUseRefDevice() const
 {
     if ( !m_pImpl->aControlsUseRefDevice )
@@ -263,7 +263,7 @@ sal_Bool FmFormModel::ControlsUseRefDevice() const
     return *m_pImpl->aControlsUseRefDevice;
 }
 
-//------------------------------------------------------------------------
+
 void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
 {
     if( _bAutoControlFocus != m_bAutoControlFocus )
@@ -273,7 +273,7 @@ void FmFormModel::SetAutoControlFocus( sal_Bool _bAutoControlFocus )
     }
 }
 
-//------------------------------------------------------------------------
+
 void FmFormModel::SetObjectShell( SfxObjectShell* pShell )
 {
     if (pShell == m_pObjShell)
@@ -298,7 +298,7 @@ void FmFormModel::SetObjectShell( SfxObjectShell* pShell )
     }
 }
 
-//------------------------------------------------------------------------
+
 FmXUndoEnvironment& FmFormModel::GetUndoEnv()
 {
     return *m_pImpl->pUndoEnv;

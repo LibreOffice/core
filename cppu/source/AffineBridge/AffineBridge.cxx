@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -175,11 +175,11 @@ void AffineBridge::outerDispatch(int loop)
 
     do
     {
-        // FIXME: created outer thread must not wait
-        // in case of no message
-        // note: no message can happen in case newly created
-        // outer thread acquire outerMutex after a real outer
-        // thread enters outerDispatch!
+        
+        
+        
+        
+        
         m_outerCondition.wait();
         m_outerCondition.reset();
 
@@ -241,9 +241,9 @@ void AffineBridge::innerDispatch(void)
 
 void AffineBridge::v_callInto_v(uno_EnvCallee * pCallee, va_list * pParam)
 {
-    osl::MutexGuard guard(m_outerMutex); // only one thread at a time can call into
+    osl::MutexGuard guard(m_outerMutex); 
 
-    if (m_innerThreadId == 0) // no inner thread yet
+    if (m_innerThreadId == 0) 
     {
         m_pInnerThread  = new InnerThread(this);
         m_pInnerThread->resume();
@@ -273,7 +273,7 @@ void AffineBridge::v_callOut_v(uno_EnvCallee * pCallee, va_list * pParam)
 
     osl::MutexGuard guard(m_innerMutex);
 
-    if (m_outerThreadId == 0) // no outer thread yet
+    if (m_outerThreadId == 0) 
     {
         osl::MutexGuard guard_m_outerMutex(m_outerMutex);
 

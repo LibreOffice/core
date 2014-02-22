@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstddef>
@@ -67,8 +67,8 @@ static OUString toUncPath( const OUString& rPath )
 {
     OUString aFileURL;
 
-    // check if rFileName is already a URL; if not make it so
-    if( rPath.startsWith( "file://"))
+    
+    if( rPath.startsWith( "file:
     {
         aFileURL = rPath;
     }
@@ -113,7 +113,7 @@ static sal_uInt8* ImplSysReadConfig( const OUString& rFileName,
             sal_uInt64 nRead = 0;
             if( aFile.read( pBuf, nPos, nRead ) == ::osl::FileBase::E_None && nRead == nPos )
             {
-                //skip the byte-order-mark 0xEF 0xBB 0xBF, if it was UTF8 files
+                
                 unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
                 if (nRead > 2 && memcmp(pBuf, BOM, 3) == 0)
                 {
@@ -150,11 +150,11 @@ static bool ImplSysWriteConfig( const OUString& rFileName,
         eError = aFile.open( osl_File_OpenFlag_Write );
     if( eError == ::osl::FileBase::E_None )
     {
-        // truncate
+        
         aFile.setSize( 0 );
         sal_uInt64 nWritten;
 
-        //write the byte-order-mark 0xEF 0xBB 0xBF first , if it was UTF8 files
+        
         if ( rbIsUTF8BOM )
         {
             unsigned char BOM[3] = {0xEF, 0xBB, 0xBF};
@@ -186,7 +186,7 @@ OString makeOString(const sal_uInt8* p, sal_uInt64 n)
         #ifdef WNT
         abort();
         #else
-        ::std::abort(); //TODO: handle this gracefully
+        ::std::abort(); 
         #endif
     }
     return OString(
@@ -201,7 +201,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
     if ( !nLen )
         return;
 
-    // Parse buffer and build config list
+    
     sal_uInt64 nStart;
     sal_uInt64 nLineLen;
     sal_uInt64 nNameLen;
@@ -215,33 +215,33 @@ static void ImplMakeConfigList( ImplConfigData* pData,
     i = 0;
     while ( i < nLen )
     {
-        // Ctrl+Z
+        
         if ( pBuf[i] == 0x1A )
             break;
 
-        // Remove spaces and tabs
+        
         while ( (pBuf[i] == ' ') || (pBuf[i] == '\t') )
             i++;
 
-        // remember line-starts
+        
         nStart = i;
         pLine = pBuf+i;
 
-        // search line-endings
+        
         while (  (i < nLen) && pBuf[i] && (pBuf[i] != '\r') && (pBuf[i] != '\n') &&
                 (pBuf[i] != 0x1A) )
             i++;
 
         nLineLen = i-nStart;
 
-        // if Line-ending is found, continue once
+        
         if ( (i+1 < nLen) &&
              (pBuf[i] != pBuf[i+1]) &&
              ((pBuf[i+1] == '\r') || (pBuf[i+1] == '\n')) )
             i++;
         i++;
 
-        // evaluate line
+        
         if ( *pLine == '[' )
         {
             pGroup               = new ImplGroupData;
@@ -256,10 +256,10 @@ static void ImplMakeConfigList( ImplConfigData* pData,
             pPrevKey    = NULL;
             pKey        = NULL;
 
-            // filter group names
+            
             pLine++;
             nLineLen--;
-            // remove spaces and tabs
+            
             while ( (*pLine == ' ') || (*pLine == '\t') )
             {
                 nLineLen--;
@@ -279,7 +279,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
         {
             if ( nLineLen )
             {
-                // If no group exists yet, add to default
+                
                 if ( !pGroup )
                 {
                     pGroup              = new ImplGroupData;
@@ -294,7 +294,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                     pPrevKey    = NULL;
                 }
 
-                // if empty line, append it
+                
                 if ( pPrevKey )
                 {
                     while ( pGroup->mnEmptyLines )
@@ -307,7 +307,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                     }
                 }
 
-                // Generate new key
+                
                 pKey        = new ImplKeyData;
                 pKey->mpNext = NULL;
                 if ( pPrevKey )
@@ -327,7 +327,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                     while ( (nNameLen < nLineLen) && (pLine[nNameLen] != '=') )
                         nNameLen++;
                     nKeyLen = nNameLen;
-                    // Remove spaces and tabs
+                    
                     if ( nNameLen )
                     {
                         while ( (pLine[nNameLen-1] == ' ') || (pLine[nNameLen-1] == '\t') )
@@ -339,7 +339,7 @@ static void ImplMakeConfigList( ImplConfigData* pData,
                     {
                         pLine += nKeyLen;
                         nLineLen -= nKeyLen;
-                        // Remove spaces and tabs
+                        
                         while ( (*pLine == ' ') || (*pLine == '\t') )
                         {
                             nLineLen--;
@@ -356,8 +356,8 @@ static void ImplMakeConfigList( ImplConfigData* pData,
             }
             else
             {
-                // Spaces are counted and appended only after key generation,
-                // as we want to store spaces even after adding new keys
+                
+                
                 if ( pGroup )
                     pGroup->mnEmptyLines++;
             }
@@ -398,7 +398,7 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
     pGroup = pData->mpFirstGroup;
     while ( pGroup )
     {
-        // Don't write empty groups
+        
         if ( pGroup->mpFirstKey )
         {
             nBufLen += pGroup->maGroupName.getLength() + nLineEndLen + 2;
@@ -414,7 +414,7 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
                 pKey = pKey->mpNext;
             }
 
-            // Write empty lines after each group
+            
             if ( !pGroup->mnEmptyLines )
                 pGroup->mnEmptyLines = 1;
             nBufLen += nLineEndLen * pGroup->mnEmptyLines;
@@ -423,7 +423,7 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
         pGroup = pGroup->mpNext;
     }
 
-    // Output buffer length
+    
     rLen = nBufLen;
     if ( !nBufLen )
     {
@@ -439,17 +439,17 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
             return 0;
     }
 
-    // Allocate new write buffer (caller frees it)
+    
     pWriteBuf = new sal_uInt8[nBufLen];
     if ( !pWriteBuf )
         return 0;
 
-    // fill buffer
+    
     pBuf = pWriteBuf;
     pGroup = pData->mpFirstGroup;
     while ( pGroup )
     {
-        // Don't write empty groups
+        
         if ( pGroup->mpFirstKey )
         {
             *pBuf = '[';    pBuf++;
@@ -496,7 +496,7 @@ static sal_uInt8* ImplGetConfigBuffer( const ImplConfigData* pData, sal_uIntPtr&
                 pKey = pKey->mpNext;
             }
 
-            // Store empty line after each group
+            
             sal_uInt16 nEmptyLines = pGroup->mnEmptyLines;
             while ( nEmptyLines )
             {
@@ -523,7 +523,7 @@ static void ImplReadConfig( ImplConfigData* pData )
     bool    bIsUTF8BOM = false;
     sal_uInt8*  pBuf = ImplSysReadConfig( pData->maFileName, nRead, bRead, bIsUTF8BOM, nTimeStamp );
 
-    // Read config list from buffer
+    
     if ( pBuf )
     {
         ImplMakeConfigList( pData, pBuf, nRead );
@@ -542,7 +542,7 @@ static void ImplWriteConfig( ImplConfigData* pData )
     SAL_WARN_IF( pData->mnTimeStamp != ImplSysGetConfigTimeStamp( pData->maFileName ),
         "tools.generic", "Config overwrites modified configfile: " << pData->maFileName );
 
-    // Read config list from buffer
+    
     sal_uIntPtr nBufLen;
     sal_uInt8*  pBuf = ImplGetConfigBuffer( pData, nBufLen );
     if ( pBuf )
@@ -565,7 +565,7 @@ static void ImplDeleteConfigData( ImplConfigData* pData )
     {
         pTempGroup = pGroup->mpNext;
 
-        // remove all keys
+        
         pKey = pGroup->mpFirstKey;
         while ( pKey )
         {
@@ -574,7 +574,7 @@ static void ImplDeleteConfigData( ImplConfigData* pData )
             pKey = pTempKey;
         }
 
-        // remove group and continue
+        
         delete pGroup;
         pGroup = pTempGroup;
     }
@@ -607,7 +607,7 @@ static void ImplFreeConfigData( ImplConfigData* pDelData )
 
 bool Config::ImplUpdateConfig() const
 {
-    // Re-read file if timestamp differs
+    
     if ( mpData->mnTimeStamp != ImplSysGetConfigTimeStamp( maFileName ) )
     {
         ImplDeleteConfigData( mpData );
@@ -634,7 +634,7 @@ ImplGroupData* Config::ImplGetGroup() const
             pGroup = pGroup->mpNext;
         }
 
-        // Add group if not exists
+        
         if ( !pGroup )
         {
             pGroup               = new ImplGroupData;
@@ -647,7 +647,7 @@ ImplGroupData* Config::ImplGetGroup() const
                 mpData->mpFirstGroup = pGroup;
         }
 
-        // Always inherit group names and upate cache members
+        
         pGroup->maGroupName             = maGroupName;
         ((Config*)this)->mnDataUpdateId = mpData->mnDataUpdateId;
         ((Config*)this)->mpActGroup     = pGroup;
@@ -658,7 +658,7 @@ ImplGroupData* Config::ImplGetGroup() const
 
 Config::Config( const OUString& rFileName )
 {
-    // Initialize config data
+    
     maFileName      = toUncPath( rFileName );
     mpData          = ImplGetConfigData( maFileName );
     mpActGroup      = NULL;
@@ -686,7 +686,7 @@ Config::~Config()
 
 void Config::SetGroup(const OString& rGroup)
 {
-    // If group is to be reset, it needs to be updated on next call
+    
     if ( maGroupName != rGroup )
     {
         maGroupName     = rGroup;
@@ -696,7 +696,7 @@ void Config::SetGroup(const OString& rGroup)
 
 void Config::DeleteGroup(const OString& rGroup)
 {
-    // Update config data if necessary
+    
     if ( !mnLockCount || !mpData->mbRead )
     {
         ImplUpdateConfig();
@@ -716,7 +716,7 @@ void Config::DeleteGroup(const OString& rGroup)
 
     if ( pGroup )
     {
-        // Remove all keys
+        
         ImplKeyData* pTempKey;
         ImplKeyData* pKey = pGroup->mpFirstKey;
         while ( pKey )
@@ -726,14 +726,14 @@ void Config::DeleteGroup(const OString& rGroup)
             pKey = pTempKey;
         }
 
-        // Rewire pointers and remove group
+        
         if ( pPrevGroup )
             pPrevGroup->mpNext = pGroup->mpNext;
         else
             mpData->mpFirstGroup = pGroup->mpNext;
         delete pGroup;
 
-        // Rewrite config data
+        
         if ( !mnLockCount && mbPersistence )
             ImplWriteConfig( mpData );
         else
@@ -748,7 +748,7 @@ void Config::DeleteGroup(const OString& rGroup)
 
 OString Config::GetGroupName(sal_uInt16 nGroup) const
 {
-    // Update config data if necessary
+    
     if ( !mnLockCount )
         ImplUpdateConfig();
 
@@ -772,7 +772,7 @@ OString Config::GetGroupName(sal_uInt16 nGroup) const
 
 sal_uInt16 Config::GetGroupCount() const
 {
-    // Update config data if necessary
+    
     if ( !mnLockCount )
         ImplUpdateConfig();
 
@@ -789,7 +789,7 @@ sal_uInt16 Config::GetGroupCount() const
 
 bool Config::HasGroup(const OString& rGroup) const
 {
-    // Update config data if necessary
+    
     if ( !mnLockCount )
         ImplUpdateConfig();
 
@@ -834,11 +834,11 @@ OString Config::ReadKey(const OString& rKey, const OString& rDefault) const
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
-    // Update config data if necessary
+    
     if ( !mnLockCount )
         ImplUpdateConfig();
 
-    // Search key, return value if found
+    
     ImplGroupData* pGroup = ImplGetGroup();
     if ( pGroup )
     {
@@ -869,14 +869,14 @@ void Config::WriteKey(const OString& rKey, const OString& rStr)
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
-    // Update config data if necessary
+    
     if ( !mnLockCount || !mpData->mbRead )
     {
         ImplUpdateConfig();
         mpData->mbRead = true;
     }
 
-    // Search key and update value if found
+    
     ImplGroupData* pGroup = ImplGetGroup();
     if ( pGroup )
     {
@@ -923,14 +923,14 @@ void Config::WriteKey(const OString& rKey, const OString& rStr)
 
 void Config::DeleteKey(const OString& rKey)
 {
-    // Update config data if necessary
+    
     if ( !mnLockCount || !mpData->mbRead )
     {
         ImplUpdateConfig();
         mpData->mbRead = true;
     }
 
-    // Search key and update value
+    
     ImplGroupData* pGroup = ImplGetGroup();
     if ( pGroup )
     {
@@ -947,14 +947,14 @@ void Config::DeleteKey(const OString& rKey)
 
         if ( pKey )
         {
-            // Rewire group pointers and delete
+            
             if ( pPrevKey )
                 pPrevKey->mpNext = pKey->mpNext;
             else
                 pGroup->mpFirstKey = pKey->mpNext;
             delete pKey;
 
-            // Rewrite config file
+            
             if ( !mnLockCount && mbPersistence )
                 ImplWriteConfig( mpData );
             else
@@ -976,11 +976,11 @@ sal_uInt16 Config::GetKeyCount() const
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
-    // Update config data if necessary
+    
     if ( !mnLockCount )
         ImplUpdateConfig();
 
-    // Search key and update value
+    
     sal_uInt16 nCount = 0;
     ImplGroupData* pGroup = ImplGetGroup();
     if ( pGroup )
@@ -1011,7 +1011,7 @@ OString Config::GetKeyName(sal_uInt16 nKey) const
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
-    // search key and return name if found
+    
     ImplGroupData* pGroup = ImplGetGroup();
     if ( pGroup )
     {
@@ -1045,7 +1045,7 @@ OString Config::ReadKey(sal_uInt16 nKey) const
     OSL_TRACE("%s", aTraceStr.getStr());
 #endif
 
-    // Search key and return value if found
+    
     ImplGroupData* pGroup = ImplGetGroup();
     if ( pGroup )
     {

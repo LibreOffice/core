@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -92,14 +92,14 @@ void TRACES( char const* s, char const* s2 )
 using namespace com::sun::star::lang;
 
 
-// Move deprecated functions which no longer appear in npapi.h before
-// their use to avoid errors that they're undeclared at point of use
+
+
 extern "C"
 {
     const JRIEnvInterface** SAL_CALL NP_LOADDS  NPN_GetJavaEnv()
     {
         TRACE( "NPN_GetJavaEnv" );
-        // no java in this program
+        
         return NULL;
     }
 
@@ -144,11 +144,11 @@ static OString normalizeURL( XPlugin_Impl* plugin, const OString& url )
     {
         aLoadURL = OUStringToOString( plugin->getCreationURL(), plugin->getTextEncoding() );
         int nPos;
-        if( ( nPos = aLoadURL.indexOf( "://" ) ) != -1 )
+        if( ( nPos = aLoadURL.indexOf( ":
         {
             if( url.indexOf( '/' ) != -1 )
             {
-                // this means same server but new path
+                
                 nPos = aLoadURL.indexOf( '/', nPos+3 );
 
                 if( nPos != -1 )
@@ -156,7 +156,7 @@ static OString normalizeURL( XPlugin_Impl* plugin, const OString& url )
             }
             else
             {
-                // same server but new file
+                
                 nPos = aLoadURL.lastIndexOf( '/' );
                 aLoadURL = aLoadURL.copy( 0, nPos+1 );
             }
@@ -281,8 +281,8 @@ extern "C" {
             new PluginEventListener( pImpl, url, aLoadURL.getStr(), notifyData );
         if( ! target || ! *target )
         {
-            // stream will be fed back to plugin,
-            // notify immediately after destruction of stream
+            
+            
             pImpl->addPluginEventListener( pListener );
             pListener = NULL;
         }
@@ -297,7 +297,7 @@ extern "C" {
 
     NPError SAL_CALL NP_LOADDS  NPN_NewStream( NPP instance, NPMIMEType type, const char* target,
                            NPStream** stream )
-        // stream is a return value
+        
     {
         TRACE( "NPN_NewStream" );
         XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
@@ -344,8 +344,8 @@ extern "C" {
 
         if( ! target || ! *target )
         {
-            // stream will be fed back to plugin,
-            // notify immediately after destruction of stream
+            
+            
             pImpl->addPluginEventListener( pListener );
             pListener = NULL;
         }
@@ -555,30 +555,30 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
     switch( variable )
     {
         case NPNVxDisplay:
-            // Unix only, handled in sysdep part
+            
         case NPNVxtAppContext:
-            // Unix only, handled in sysdep part
+            
          default:
             aResult = NPERR_INVALID_PARAM;
             break;
         #ifdef MACOSX
-        case 2000: // NPNVsupportsQuickDrawBool
+        case 2000: 
             *(NPBool*)value = false;
             break;
-        case 2001: // NPNVsupportsCoreGraphicsBool
+        case 2001: 
             *(NPBool*)value = true;
             break;
         #endif
         case NPNVjavascriptEnabledBool:
-            // no javascript
+            
             *(NPBool*)value = false;
             break;
         case NPNVasdEnabledBool:
-            // no SmartUpdate
+            
             *(NPBool*)value = false;
             break;
         case NPNVisOfflineBool:
-            // no offline browsing
+            
             *(NPBool*)value = false;
             break;
     }

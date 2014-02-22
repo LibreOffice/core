@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,29 +29,29 @@ SfxAlienWarningDialog::SfxAlienWarningDialog(Window* pParent, const OUString& _r
     : MessageDialog(pParent, "AlienWarnDialog", "sfx/ui/alienwarndialog.ui")
 {
     get(m_pWarningOnBox, "ask");
-    //fdo#75121, a bit tricky because the widgets we want to align with
-    //don't actually exist in the ui description, they're implied
+    
+    
     m_pWarningOnBox->set_margin_left(QueryBox::GetStandardImage().GetSizePixel().Width() + 12);
 
     get(m_pKeepCurrentBtn, "save");
 
-    // replace formatname (text)
+    
     OUString sInfoText = get_primary_text();
     sInfoText = sInfoText.replaceAll( "%FORMATNAME", _rFormatName );
     set_primary_text(sInfoText);
 
-    // replace formatname (button)
+    
     sInfoText = m_pKeepCurrentBtn->GetText();
     sInfoText = sInfoText.replaceAll( "%FORMATNAME", _rFormatName );
     m_pKeepCurrentBtn->SetText( sInfoText );
 
-    // load value of "warning on" checkbox from save options
+    
     m_pWarningOnBox->Check( SvtSaveOptions().IsWarnAlienFormat() );
 }
 
 SfxAlienWarningDialog::~SfxAlienWarningDialog()
 {
-    // save value of "warning off" checkbox, if necessary
+    
     SvtSaveOptions aSaveOpt;
     bool bChecked = m_pWarningOnBox->IsChecked();
     if ( aSaveOpt.IsWarnAlienFormat() != bChecked )

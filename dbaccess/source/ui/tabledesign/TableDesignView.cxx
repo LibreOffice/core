@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableDesignView.hxx"
@@ -39,30 +39,30 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 
-// class OTableBorderWindow
+
 OTableBorderWindow::OTableBorderWindow(Window* pParent) : Window(pParent,WB_BORDER)
     ,m_aHorzSplitter( this )
 {
 
     ImplInitSettings( sal_True, sal_True, sal_True );
-    // Children erzeugen
+    
     m_pEditorCtrl   = new OTableEditorCtrl( this);
     m_pFieldDescWin = new OTableFieldDescWin( this );
 
     m_pFieldDescWin->SetHelpId(HID_TAB_DESIGN_DESCWIN);
 
-    // set depending windows and controls
+    
     m_pEditorCtrl->SetDescrWin(m_pFieldDescWin);
 
-    // Splitter einrichten
+    
     m_aHorzSplitter.SetSplitHdl( LINK(this, OTableBorderWindow, SplitHdl) );
     m_aHorzSplitter.Show();
 }
 
 OTableBorderWindow::~OTableBorderWindow()
 {
-    // Children zerstoeren
-    //  ::dbaui::notifySystemWindow(this,m_pFieldDescWin,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
+    
+    
     m_pEditorCtrl->Hide();
     m_pFieldDescWin->Hide();
 
@@ -85,24 +85,24 @@ void OTableBorderWindow::Resize()
 {
     const long nSplitterHeight(3);
 
-    // Abmessungen parent window
+    
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
     long nSplitPos      = m_aHorzSplitter.GetSplitPosPixel();
 
-    // Verschiebebereich Splitter mittleres Drittel des Outputs
+    
     long nDragPosY = nOutputHeight/3;
     long nDragSizeHeight = nOutputHeight/3;
     m_aHorzSplitter.SetDragRectPixel( Rectangle(Point(0,nDragPosY), Size(nOutputWidth,nDragSizeHeight) ), this );
     if( (nSplitPos < nDragPosY) || (nSplitPos > (nDragPosY+nDragSizeHeight)) )
         nSplitPos = nDragPosY+nDragSizeHeight-5;
 
-    // Splitter setzen
+    
     m_aHorzSplitter.SetPosSizePixel( Point( 0, nSplitPos ), Size(nOutputWidth, nSplitterHeight));
     m_aHorzSplitter.SetSplitPosPixel( nSplitPos );
 
-    // Fenster setzen
+    
     m_pEditorCtrl->SetPosSizePixel( Point(0, 0), Size(nOutputWidth , nSplitPos) );
 
     m_pFieldDescWin->SetPosSizePixel(   Point(0, nSplitPos+nSplitterHeight),
@@ -164,12 +164,12 @@ void OTableBorderWindow::GetFocus()
 {
     Window::GetFocus();
 
-    // forward the focus to the current cell of the editor control
+    
     if (m_pEditorCtrl)
         m_pEditorCtrl->GrabFocus();
 }
 
-// class OTableDesignView
+
 OTableDesignView::OTableDesignView( Window* pParent,
                                     const Reference< XComponentContext >& _rxOrb,
                                     OTableController& _rController
@@ -207,7 +207,7 @@ void OTableDesignView::initialize()
 {
     GetEditorCtrl()->Init();
     GetDescWin()->Init();
-    // first call after the editctrl has been set
+    
 
     GetEditorCtrl()->Show();
     GetDescWin()->Show();
@@ -219,7 +219,7 @@ void OTableDesignView::resizeDocumentView(Rectangle& _rPlayground)
 {
     m_pWin->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 
-    // just for completeness: there is no space left, we occupied it all ...
+    
     _rPlayground.SetPos( _rPlayground.BottomRight() );
     _rPlayground.SetSize( Size( 0, 0 ) );
 }
@@ -298,7 +298,7 @@ void OTableDesignView::paste()
         pTest->paste();
 }
 
-// set the view readonly or not
+
 void OTableDesignView::setReadOnly(sal_Bool _bReadOnly)
 {
     GetDescWin()->SetReadOnly(_bReadOnly);

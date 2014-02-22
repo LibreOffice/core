@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xistyle.hxx"
@@ -76,7 +76,7 @@ class PaletteIndex : public XIndexAccess_BASE
 public:
     PaletteIndex( const ColorDataVec& rColorDataTable ) : maColorData( rColorDataTable ) {}
 
-    // Methods XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException)
     {
          return  maColorData.size();
@@ -84,11 +84,11 @@ public:
 
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
     {
-        //--Index;  // apparently the palette is already 1 based
+        
         return uno::makeAny( sal_Int32( maColorData[ Index ] ) );
     }
 
-    // Methods XElementAcess
+    
     virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException)
     {
         return ::getCppuType( (sal_Int32*)0 );
@@ -107,7 +107,7 @@ XclImpPalette::ExportPalette()
 {
     if( SfxObjectShell* pDocShell = mrRoot.GetDocShell() )
     {
-        // copy values in color palette
+        
         sal_Int16 nColors =  maColorTable.size();
         ColorDataVec aColors;
         aColors.resize( nColors );
@@ -123,7 +123,7 @@ XclImpPalette::ExportPalette()
     }
 
 }
-// PALETTE record - color information =========================================
+
 
 XclImpPalette::XclImpPalette( const XclImpRoot& rRoot ) :
     XclDefaultPalette( rRoot ), mrRoot( rRoot )
@@ -163,7 +163,7 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
     ExportPalette();
 }
 
-// FONT record - font information =============================================
+
 
 XclImpFont::XclImpFont( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -214,8 +214,8 @@ void XclImpFont::SetFontData( const XclFontData& rFontData, bool bHasCharSet )
 
 rtl_TextEncoding XclImpFont::GetFontEncoding() const
 {
-    // #i63105# use text encoding from FONT record
-    // #i67768# BIFF2-BIFF4 FONT records do not contain character set
+    
+    
     rtl_TextEncoding eFontEnc = mbHasCharSet ? maData.GetFontEncoding() : GetTextEncoding();
     return (eFontEnc == RTL_TEXTENCODING_DONTKNOW) ? GetTextEncoding() : eFontEnc;
 }
@@ -289,17 +289,17 @@ void XclImpFont::ReadCFFontBlock( XclImpStream& rStrm )
 
 void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, bool bSkipPoolDefs ) const
 {
-    // true = edit engine Which-IDs (EE_CHAR_*); false = Calc Which-IDs (ATTR_*)
+    
     bool bEE = eType != EXC_FONTITEM_CELL;
 
-// item = the item to put into the item set
-// sc_which = the Calc Which-ID of the item
-// ee_which = the edit engine Which-ID of the item
+
+
+
 #define PUTITEM( item, sc_which, ee_which ) \
     ScfTools::PutItem( rItemSet, item, (bEE ? (ee_which) : (sc_which)), bSkipPoolDefs )
 
-// Font item
-    // #i36997# do not set default Tahoma font from notes
+
+    
     bool bDefNoteFont = (eType == EXC_FONTITEM_NOTE) && (maData.maName.equalsIgnoreAsciiCase( "Tahoma" ));
     if( mbFontNameUsed && !bDefNoteFont )
     {
@@ -307,10 +307,10 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
         rtl_TextEncoding eTempTextEnc = (bEE && (eFontEnc == GetTextEncoding())) ?
             ScfTools::GetSystemTextEncoding() : eFontEnc;
 
-        //add corresponding pitch for FontFamily
+        
         FontPitch ePitch = PITCH_DONTKNOW;
         FontFamily eFtFamily = maData.GetScFamily( GetTextEncoding() );
-        switch( eFtFamily ) //refer http://msdn.microsoft.com/en-us/library/aa246306(v=VS.60).aspx
+        switch( eFtFamily ) 
         {
             case FAMILY_ROMAN:              ePitch = PITCH_VARIABLE;        break;
             case FAMILY_SWISS:              ePitch = PITCH_VARIABLE;        break;
@@ -319,7 +319,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
          }
         SvxFontItem aFontItem( eFtFamily , maData.maName, EMPTY_OUSTRING, ePitch, eTempTextEnc, ATTR_FONT );
 
-        // set only for valid script types
+        
         if( mbHasWstrn )
             PUTITEM( aFontItem, ATTR_FONT,      EE_CHAR_FONTINFO );
         if( mbHasAsian )
@@ -328,12 +328,12 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
             PUTITEM( aFontItem, ATTR_CTL_FONT,  EE_CHAR_FONTINFO_CTL );
     }
 
-// Font height (for all script types)
+
     if( mbHeightUsed )
     {
         sal_Int32 nHeight = maData.mnHeight;
-        if( bEE && (eType != EXC_FONTITEM_HF) )     // do not convert header/footer height
-            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   // 1 in == 72 pt
+        if( bEE && (eType != EXC_FONTITEM_HF) )     
+            nHeight = (nHeight * 127 + 36) / EXC_POINTS_PER_INCH;   
 
         SvxFontHeightItem aHeightItem( nHeight, 100, ATTR_FONT_HEIGHT );
         PUTITEM( aHeightItem,   ATTR_FONT_HEIGHT,       EE_CHAR_FONTHEIGHT );
@@ -341,11 +341,11 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
         PUTITEM( aHeightItem,   ATTR_CTL_FONT_HEIGHT,   EE_CHAR_FONTHEIGHT_CTL );
     }
 
-// Font color - pass AUTO_COL to item
+
     if( mbColorUsed )
         PUTITEM( SvxColorItem( maData.maColor, ATTR_FONT_COLOR  ), ATTR_FONT_COLOR, EE_CHAR_COLOR );
 
-// Font weight (for all script types)
+
     if( mbWeightUsed )
     {
         SvxWeightItem aWeightItem( maData.GetScWeight(), ATTR_FONT_WEIGHT );
@@ -354,14 +354,14 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
         PUTITEM( aWeightItem,   ATTR_CTL_FONT_WEIGHT,   EE_CHAR_WEIGHT_CTL );
     }
 
-// Font underline
+
     if( mbUnderlUsed )
     {
         SvxUnderlineItem aUnderlItem( maData.GetScUnderline(), ATTR_FONT_UNDERLINE );
         PUTITEM( aUnderlItem,   ATTR_FONT_UNDERLINE,    EE_CHAR_UNDERLINE );
     }
 
-// Font posture (for all script types)
+
     if( mbItalicUsed )
     {
         SvxPostureItem aPostItem( maData.GetScPosture(), ATTR_FONT_POSTURE );
@@ -370,7 +370,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
         PUTITEM( aPostItem, ATTR_CTL_FONT_POSTURE,  EE_CHAR_ITALIC_CTL );
     }
 
-// Boolean attributes crossed out, contoured, shadowed
+
     if( mbStrikeUsed )
         PUTITEM( SvxCrossedOutItem( maData.GetScStrikeout(), ATTR_FONT_CROSSEDOUT ), ATTR_FONT_CROSSEDOUT, EE_CHAR_STRIKEOUT );
     if( mbOutlineUsed )
@@ -378,7 +378,7 @@ void XclImpFont::FillToItemSet( SfxItemSet& rItemSet, XclFontItemType eType, boo
     if( mbShadowUsed )
         PUTITEM( SvxShadowedItem( maData.mbShadow, ATTR_FONT_SHADOWED ), ATTR_FONT_SHADOWED, EE_CHAR_SHADOW );
 
-// Super-/subscript: only on edit engine objects
+
     if( mbEscapemUsed && bEE )
         rItemSet.Put( SvxEscapementItem( maData.GetScEscapement(), EE_CHAR_ESCAPEMENT ) );
 
@@ -442,7 +442,7 @@ void XclImpFont::GuessScriptType()
     mbHasWstrn = true;
     mbHasAsian = mbHasCmplx = false;
 
-    // find the script types for which the font contains characters
+    
     if( OutputDevice* pPrinter = GetPrinter() )
     {
         Font aFont( maData.maName, Size( 0, 10 ) );
@@ -451,38 +451,38 @@ void XclImpFont::GuessScriptType()
         pPrinter->SetFont( aFont );
         if( pPrinter->GetFontCharMap( aCharMap ) )
         {
-            // CJK fonts
+            
             mbHasAsian =
-                aCharMap.HasChar( 0x3041 ) ||   // 3040-309F: Hiragana
-                aCharMap.HasChar( 0x30A1 ) ||   // 30A0-30FF: Katakana
-                aCharMap.HasChar( 0x3111 ) ||   // 3100-312F: Bopomofo
-                aCharMap.HasChar( 0x3131 ) ||   // 3130-318F: Hangul Compatibility Jamo
-                aCharMap.HasChar( 0x3301 ) ||   // 3300-33FF: CJK Compatibility
-                aCharMap.HasChar( 0x3401 ) ||   // 3400-4DBF: CJK Unified Ideographs Extension A
-                aCharMap.HasChar( 0x4E01 ) ||   // 4E00-9FAF: CJK Unified Ideographs
-                aCharMap.HasChar( 0x7E01 ) ||   // 4E00-9FAF: CJK unified ideographs
-                aCharMap.HasChar( 0xA001 ) ||   // A001-A48F: Yi Syllables
-                aCharMap.HasChar( 0xAC01 ) ||   // AC00-D7AF: Hangul Syllables
-                aCharMap.HasChar( 0xCC01 ) ||   // AC00-D7AF: Hangul Syllables
-                aCharMap.HasChar( 0xF901 ) ||   // F900-FAFF: CJK Compatibility Ideographs
-                aCharMap.HasChar( 0xFF71 );     // FF00-FFEF: Halfwidth/Fullwidth Forms
-            // CTL fonts
+                aCharMap.HasChar( 0x3041 ) ||   
+                aCharMap.HasChar( 0x30A1 ) ||   
+                aCharMap.HasChar( 0x3111 ) ||   
+                aCharMap.HasChar( 0x3131 ) ||   
+                aCharMap.HasChar( 0x3301 ) ||   
+                aCharMap.HasChar( 0x3401 ) ||   
+                aCharMap.HasChar( 0x4E01 ) ||   
+                aCharMap.HasChar( 0x7E01 ) ||   
+                aCharMap.HasChar( 0xA001 ) ||   
+                aCharMap.HasChar( 0xAC01 ) ||   
+                aCharMap.HasChar( 0xCC01 ) ||   
+                aCharMap.HasChar( 0xF901 ) ||   
+                aCharMap.HasChar( 0xFF71 );     
+            
             mbHasCmplx =
-                aCharMap.HasChar( 0x05D1 ) ||   // 0590-05FF: Hebrew
-                aCharMap.HasChar( 0x0631 ) ||   // 0600-06FF: Arabic
-                aCharMap.HasChar( 0x0721 ) ||   // 0700-074F: Syriac
-                aCharMap.HasChar( 0x0911 ) ||   // 0900-0DFF: Indic scripts
-                aCharMap.HasChar( 0x0E01 ) ||   // 0E00-0E7F: Thai
-                aCharMap.HasChar( 0xFB21 ) ||   // FB1D-FB4F: Hebrew Presentation Forms
-                aCharMap.HasChar( 0xFB51 ) ||   // FB50-FDFF: Arabic Presentation Forms-A
-                aCharMap.HasChar( 0xFE71 );     // FE70-FEFF: Arabic Presentation Forms-B
-            // Western fonts
+                aCharMap.HasChar( 0x05D1 ) ||   
+                aCharMap.HasChar( 0x0631 ) ||   
+                aCharMap.HasChar( 0x0721 ) ||   
+                aCharMap.HasChar( 0x0911 ) ||   
+                aCharMap.HasChar( 0x0E01 ) ||   
+                aCharMap.HasChar( 0xFB21 ) ||   
+                aCharMap.HasChar( 0xFB51 ) ||   
+                aCharMap.HasChar( 0xFE71 );     
+            
             mbHasWstrn = (!mbHasAsian && !mbHasCmplx) || aCharMap.HasChar( 'A' );
         }
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -491,7 +491,7 @@ XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
 {
     Initialize();
 
-    // default font for form controls without own font information
+    
     XclFontData aCtrlFontData;
     switch( GetBiff() )
     {
@@ -518,7 +518,7 @@ void XclImpFontBuffer::Initialize()
 {
     maFontList.clear();
 
-    // application font for column width calculation, later filled with first font from font list
+    
     XclFontData aAppFontData;
     aAppFontData.maName = "Arial";
     aAppFontData.mnHeight = 200;
@@ -537,11 +537,11 @@ const XclImpFont* XclImpFontBuffer::GetFont( sal_uInt16 nFontIndex ) const
 
     if (nFontIndex < 4)
     {
-        // Font ID is zero-based when it's less than 4.
+        
         return nFontIndex >= maFontList.size() ? NULL : &maFontList[nFontIndex];
     }
 
-    // Font ID is greater than 4.  It is now 1-based.
+    
     return nFontIndex > maFontList.size() ? NULL : &maFontList[nFontIndex-1];
 }
 
@@ -554,7 +554,7 @@ void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
     if( maFontList.size() == 1 )
     {
         UpdateAppFont( pFont->GetFontData(), pFont->HasCharSet() );
-        // #i71033# set text encoding from application font, if CODEPAGE is missing
+        
         SetAppFontEncoding( pFont->GetFontEncoding() );
     }
 }
@@ -588,16 +588,16 @@ void XclImpFontBuffer::WriteDefaultCtrlFontProperties( ScfPropertySet& rPropSet 
 void XclImpFontBuffer::UpdateAppFont( const XclFontData& rFontData, bool bHasCharSet )
 {
     maAppFont = rFontData;
-    // #i3006# Calculate the width of '0' from first font and current printer.
+    
     SetCharWidth( maAppFont );
 
-    // font 4 is bold font 0
+    
     XclFontData aFont4Data( maAppFont );
     aFont4Data.mnWeight = EXC_FONTWGHT_BOLD;
     maFont4.SetFontData( aFont4Data, bHasCharSet );
 }
 
-// FORMAT record - number formats =============================================
+
 
 XclImpNumFmtBuffer::XclImpNumFmtBuffer( const XclImpRoot& rRoot ) :
     XclNumFmtBuffer( rRoot ),
@@ -610,7 +610,7 @@ void XclImpNumFmtBuffer::Initialize()
 {
     maIndexMap.clear();
     mnNextXclIdx = 0;
-    InitializeImport();     // base class
+    InitializeImport();     
 }
 
 void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
@@ -624,7 +624,7 @@ void XclImpNumFmtBuffer::ReadFormat( XclImpStream& rStrm )
         break;
 
         case EXC_BIFF4:
-            rStrm.Ignore( 2 );  // in BIFF4 the index field exists, but is undefined
+            rStrm.Ignore( 2 );  
             aFormat = rStrm.ReadByteString( false );
         break;
 
@@ -659,7 +659,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
     {
         const XclNumFmt& rNumFmt = aIt->second;
 
-        // insert/convert the Excel number format
+        
         sal_Int32 nCheckPos;
         short nType = NUMBERFORMAT_DEFINED;
         sal_uInt32 nKey;
@@ -672,7 +672,7 @@ void XclImpNumFmtBuffer::CreateScFormats()
         else
             nKey = rFormatter.GetFormatIndex( rNumFmt.meOffset, rNumFmt.meLanguage );
 
-        // insert the resulting format key into the Excel->Calc index map
+        
         maIndexMap[ aIt->first ] = nKey;
     }
 }
@@ -699,7 +699,7 @@ void XclImpNumFmtBuffer::FillScFmtToItemSet( SfxItemSet& rItemSet, sal_uLong nSc
         ScGlobal::AddLanguage( rItemSet, GetFormatter() );
 }
 
-// XF, STYLE record - Cell formatting =========================================
+
 
 void XclImpCellProt::FillFromXF2( sal_uInt8 nNumFmt )
 {
@@ -719,7 +719,7 @@ void XclImpCellProt::FillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) c
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpCellAlign::FillFromXF2( sal_uInt8 nFlags )
 {
@@ -729,14 +729,14 @@ void XclImpCellAlign::FillFromXF2( sal_uInt8 nFlags )
 void XclImpCellAlign::FillFromXF3( sal_uInt16 nAlign )
 {
     mnHorAlign = ::extract_value< sal_uInt8 >( nAlign, 0, 3 );
-    mbLineBreak = ::get_flag( nAlign, EXC_XF_LINEBREAK );   // new in BIFF3
+    mbLineBreak = ::get_flag( nAlign, EXC_XF_LINEBREAK );   
 }
 
 void XclImpCellAlign::FillFromXF4( sal_uInt16 nAlign )
 {
     FillFromXF3( nAlign );
-    mnVerAlign = ::extract_value< sal_uInt8 >( nAlign, 4, 2 );  // new in BIFF4
-    mnOrient = ::extract_value< sal_uInt8 >( nAlign, 6, 2 );    // new in BIFF4
+    mnVerAlign = ::extract_value< sal_uInt8 >( nAlign, 4, 2 );  
+    mnOrient = ::extract_value< sal_uInt8 >( nAlign, 6, 2 );    
 }
 
 void XclImpCellAlign::FillFromXF5( sal_uInt16 nAlign )
@@ -752,49 +752,49 @@ void XclImpCellAlign::FillFromXF8( sal_uInt16 nAlign, sal_uInt16 nMiscAttrib )
     mnHorAlign = ::extract_value< sal_uInt8 >( nAlign, 0, 3 );
     mnVerAlign = ::extract_value< sal_uInt8 >( nAlign, 4, 3 );
     mbLineBreak = ::get_flag( nAlign, EXC_XF_LINEBREAK );
-    mnRotation = ::extract_value< sal_uInt8 >( nAlign, 8, 8 );      // new in BIFF8
-    mnIndent = ::extract_value< sal_uInt8 >( nMiscAttrib, 0, 4 );   // new in BIFF8
-    mbShrink = ::get_flag( nMiscAttrib, EXC_XF8_SHRINK );           // new in BIFF8
-    mnTextDir = ::extract_value< sal_uInt8 >( nMiscAttrib, 6, 2 );  // new in BIFF8
+    mnRotation = ::extract_value< sal_uInt8 >( nAlign, 8, 8 );      
+    mnIndent = ::extract_value< sal_uInt8 >( nMiscAttrib, 0, 4 );   
+    mbShrink = ::get_flag( nMiscAttrib, EXC_XF8_SHRINK );           
+    mnTextDir = ::extract_value< sal_uInt8 >( nMiscAttrib, 6, 2 );  
 }
 
 void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFont, bool bSkipPoolDefs ) const
 {
-    // horizontal alignment
+    
     ScfTools::PutItem( rItemSet, SvxHorJustifyItem( GetScHorAlign(), ATTR_HOR_JUSTIFY ), bSkipPoolDefs );
     ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( GetScHorJustifyMethod(), ATTR_HOR_JUSTIFY_METHOD ), bSkipPoolDefs );
 
-    // text wrap (#i74508# always if vertical alignment is justified or distributed)
+    
     bool bLineBreak = mbLineBreak || (mnVerAlign == EXC_XF_VER_JUSTIFY) || (mnVerAlign == EXC_XF_VER_DISTRIB);
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_LINEBREAK, bLineBreak ), bSkipPoolDefs );
 
-    // vertical alignment
+    
     ScfTools::PutItem( rItemSet, SvxVerJustifyItem( GetScVerAlign(), ATTR_VER_JUSTIFY ), bSkipPoolDefs );
     ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( GetScVerJustifyMethod(), ATTR_VER_JUSTIFY_METHOD ), bSkipPoolDefs );
 
-    // indent
-    sal_uInt16 nScIndent = mnIndent * 200; // 1 Excel unit == 10 pt == 200 twips
+    
+    sal_uInt16 nScIndent = mnIndent * 200; 
     ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_INDENT, nScIndent ), bSkipPoolDefs );
 
-    // shrink to fit
+    
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_SHRINKTOFIT, mbShrink ), bSkipPoolDefs );
 
-    // text orientation/rotation (BIFF2-BIFF7 sets mnOrient)
+    
     sal_uInt8 nXclRot = (mnOrient == EXC_ORIENT_NONE) ? mnRotation : XclTools::GetXclRotFromOrient( mnOrient );
     bool bStacked = (nXclRot == EXC_ROT_STACKED);
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_STACKED, bStacked ), bSkipPoolDefs );
-    // set an angle in the range from -90 to 90 degrees
+    
     sal_Int32 nAngle = XclTools::GetScRotation( nXclRot, 0 );
     ScfTools::PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, nAngle ), bSkipPoolDefs );
-    // set "Use asian vertical layout", if cell is stacked and font contains CKJ characters
+    
     bool bAsianVert = bStacked && pFont && pFont->HasAsianChars();
     ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_VERTICAL_ASIAN, bAsianVert ), bSkipPoolDefs );
 
-    // CTL text direction
+    
     ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( GetScFrameDir(), ATTR_WRITINGDIR ), bSkipPoolDefs );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpCellBorder::XclImpCellBorder()
 {
@@ -896,21 +896,21 @@ bool lclConvertBorderLine( ::editeng::SvxBorderLine& rLine, const XclImpPalette&
 {
     static const sal_uInt16 ppnLineParam[][ 4 ] =
     {
-        //  outer width,        type
-        {   0,                  table::BorderLineStyle::SOLID },  // 0 = none
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  // 1 = thin
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  // 2 = medium
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::FINE_DASHED }, // 3 = dashed
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::DOTTED }, // 4 = dotted
-        {   EXC_BORDER_THICK,   table::BorderLineStyle::SOLID },  // 5 = thick
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::DOUBLE }, // 6 = double
-        {   EXC_BORDER_HAIR,    table::BorderLineStyle::SOLID },  // 7 = hair
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::DASHED }, // 8 = med dash
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  // 9 = thin dashdot
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  // A = med dashdot
-        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  // B = thin dashdotdot
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  // C = med dashdotdot
-        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID }   // D = med slant dashdot
+        
+        {   0,                  table::BorderLineStyle::SOLID },  
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::FINE_DASHED }, 
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::DOTTED }, 
+        {   EXC_BORDER_THICK,   table::BorderLineStyle::SOLID },  
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::DOUBLE }, 
+        {   EXC_BORDER_HAIR,    table::BorderLineStyle::SOLID },  
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::DASHED }, 
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  
+        {   EXC_BORDER_THIN,    table::BorderLineStyle::SOLID },  
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID },  
+        {   EXC_BORDER_MEDIUM,  table::BorderLineStyle::SOLID }   
     };
 
     if( nXclLine == EXC_LINE_NONE )
@@ -925,7 +925,7 @@ bool lclConvertBorderLine( ::editeng::SvxBorderLine& rLine, const XclImpPalette&
     return true;
 }
 
-} // namespace
+} 
 
 void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& rPalette, bool bSkipPoolDefs ) const
 {
@@ -960,7 +960,7 @@ void XclImpCellBorder::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette&
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpCellArea::XclImpCellArea()
 {
@@ -1027,11 +1027,11 @@ void XclImpCellArea::FillFromCF8( sal_uInt16 nPattern, sal_uInt16 nColor, sal_uI
 
 void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& rPalette, bool bSkipPoolDefs ) const
 {
-    if( mbPattUsed )    // colors may be both unused in cond. formats
+    if( mbPattUsed )    
     {
         SvxBrushItem aBrushItem( ATTR_BACKGROUND );
 
-        // do not use IsTransparent() - old Calc filter writes tranparency with different color indexes
+        
         if( mnPattern == EXC_PATT_NONE )
         {
             aBrushItem.SetColor( Color( COL_TRANSPARENT ) );
@@ -1048,10 +1048,10 @@ void XclImpCellArea::FillToItemSet( SfxItemSet& rItemSet, const XclImpPalette& r
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 XclImpXF::XclImpXF( const XclImpRoot& rRoot ) :
-    XclXFBase( true ),      // default is cell XF
+    XclXFBase( true ),      
     XclImpRoot( rRoot ),
     mpStyleSheet( 0 ),
     mnXclNumFmt( 0 ),
@@ -1070,10 +1070,10 @@ void XclImpXF::ReadXF2( XclImpStream& rStrm )
     rStrm.Ignore( 1 );
     rStrm >> nReadNumFmt >> nFlags;
 
-    // XF type always cell, no parent, used flags always true
+    
     SetAllUsedFlags( true );
 
-    // attributes
+    
     maProtection.FillFromXF2( nReadNumFmt );
     mnXclFont = nReadFont;
     mnXclNumFmt = nReadNumFmt & EXC_XF2_VALFMT_MASK;
@@ -1089,18 +1089,18 @@ void XclImpXF::ReadXF3( XclImpStream& rStrm )
     sal_uInt8 nReadFont, nReadNumFmt;
     rStrm >> nReadFont >> nReadNumFmt >> nTypeProt >> nAlign >> nArea >> nBorder;
 
-    // XF type/parent, attribute used flags
-    mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );          // new in BIFF3
-    mnParent = ::extract_value< sal_uInt16 >( nAlign, 4, 12 );  // new in BIFF3
+    
+    mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );          
+    mnParent = ::extract_value< sal_uInt16 >( nAlign, 4, 12 );  
     SetUsedFlags( ::extract_value< sal_uInt8 >( nTypeProt, 10, 6 ) );
 
-    // attributes
+    
     maProtection.FillFromXF3( nTypeProt );
     mnXclFont = nReadFont;
     mnXclNumFmt = nReadNumFmt;
     maAlignment.FillFromXF3( nAlign );
     maBorder.FillFromXF3( nBorder );
-    maArea.FillFromXF3( nArea );                        // new in BIFF3
+    maArea.FillFromXF3( nArea );                        
 }
 
 void XclImpXF::ReadXF4( XclImpStream& rStrm )
@@ -1110,12 +1110,12 @@ void XclImpXF::ReadXF4( XclImpStream& rStrm )
     sal_uInt8 nReadFont, nReadNumFmt;
     rStrm >> nReadFont >> nReadNumFmt >> nTypeProt >> nAlign >> nArea >> nBorder;
 
-    // XF type/parent, attribute used flags
+    
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );
     mnParent = ::extract_value< sal_uInt16 >( nTypeProt, 4, 12 );
     SetUsedFlags( ::extract_value< sal_uInt8 >( nAlign, 10, 6 ) );
 
-    // attributes
+    
     maProtection.FillFromXF3( nTypeProt );
     mnXclFont = nReadFont;
     mnXclNumFmt = nReadNumFmt;
@@ -1130,12 +1130,12 @@ void XclImpXF::ReadXF5( XclImpStream& rStrm )
     sal_uInt16 nTypeProt, nAlign;
     rStrm >> mnXclFont >> mnXclNumFmt >> nTypeProt >> nAlign >> nArea >> nBorder;
 
-    // XF type/parent, attribute used flags
+    
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );
     mnParent = ::extract_value< sal_uInt16 >( nTypeProt, 4, 12 );
     SetUsedFlags( ::extract_value< sal_uInt8 >( nAlign, 10, 6 ) );
 
-    // attributes
+    
     maProtection.FillFromXF3( nTypeProt );
     maAlignment.FillFromXF5( nAlign );
     maBorder.FillFromXF5( nBorder, nArea );
@@ -1148,12 +1148,12 @@ void XclImpXF::ReadXF8( XclImpStream& rStrm )
     sal_uInt16 nTypeProt, nAlign, nMiscAttrib, nArea;
     rStrm >> mnXclFont >> mnXclNumFmt >> nTypeProt >> nAlign >> nMiscAttrib >> nBorder1 >> nBorder2 >> nArea;
 
-    // XF type/parent, attribute used flags
+    
     mbCellXF = !::get_flag( nTypeProt, EXC_XF_STYLE );
     mnParent = ::extract_value< sal_uInt16 >( nTypeProt, 4, 12 );
     SetUsedFlags( ::extract_value< sal_uInt8 >( nMiscAttrib, 10, 6 ) );
 
-    // attributes
+    
     maProtection.FillFromXF3( nTypeProt );
     maAlignment.FillFromXF8( nAlign, nMiscAttrib );
     maBorder.FillFromXF8( nBorder1, nBorder2 );
@@ -1178,12 +1178,12 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
     if( mpPattern.get() )
         return *mpPattern;
 
-    // create new pattern attribute set
+    
     mpPattern.reset( new ScPatternAttr( GetDoc().GetPool() ) );
     SfxItemSet& rItemSet = mpPattern->GetItemSet();
     XclImpXF* pParentXF = IsCellXF() ? GetXFBuffer().GetXF( mnParent ) : 0;
 
-    // parent cell style
+    
     if( IsCellXF() && !mpStyleSheet )
     {
         mpStyleSheet = GetXFBuffer().CreateStyleSheet( mnParent );
@@ -1209,27 +1209,27 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
         }
     }
 
-    // cell protection
+    
     if( mbProtUsed )
         maProtection.FillToItemSet( rItemSet, bSkipPoolDefs );
 
-    // font
+    
     if( mbFontUsed )
         GetFontBuffer().FillToItemSet( rItemSet, EXC_FONTITEM_CELL, mnXclFont, bSkipPoolDefs );
 
-    // value format
+    
     if( mbFmtUsed )
     {
         GetNumFmtBuffer().FillToItemSet( rItemSet, mnXclNumFmt, bSkipPoolDefs );
-        // Trace occurrences of Windows date formats
+        
         GetTracer().TraceDates( mnXclNumFmt );
     }
 
-    // alignment
+    
     if( mbAlignUsed )
         maAlignment.FillToItemSet( rItemSet, GetFontBuffer().GetFont( mnXclFont ), bSkipPoolDefs );
 
-    // border
+    
     if( mbBorderUsed )
     {
         maBorder.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
@@ -1238,7 +1238,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
             maBorder.mnBottomLine > EXC_LINE_HAIR );
     }
 
-    // area
+    
     if( mbAreaUsed )
     {
         maArea.FillToItemSet( rItemSet, GetPalette(), bSkipPoolDefs );
@@ -1260,7 +1260,7 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
         ScfTools::PutItem( rItemSet, SvxRotateModeItem( eRotateMode, ATTR_ROTATE_MODE ), bSkipPoolDefs );
     }
 
-    // Excel's cell margins are different from Calc's default margins.
+    
     SvxMarginItem aItem(40, 40, 40, 40, ATTR_MARGIN);
     ScfTools::PutItem(rItemSet, aItem, bSkipPoolDefs);
 
@@ -1270,26 +1270,26 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
 void XclImpXF::ApplyPatternToAttrList(
     list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2, sal_uInt32 nForceScNumFmt)
 {
-    // force creation of cell style and hard formatting, do it here to have mpStyleSheet
+    
     CreatePattern();
     ScPatternAttr& rPat = *mpPattern;
 
-    // insert into document
+    
     ScDocument& rDoc = GetDoc();
 
     if (IsCellXF())
     {
         if (mpStyleSheet)
         {
-            // Apply style sheet.  Don't clear the direct formats.
+            
             rPat.SetStyleSheet(mpStyleSheet, false);
         }
         else
         {
-            // When the cell format is not associated with any style, use the
-            // 'Default' style.  Some buggy XLS docs generated by apps other
-            // than Excel (such as 1C) may not have any built-in styles at
-            // all.
+            
+            
+            
+            
             ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
             if (pStylePool)
             {
@@ -1311,13 +1311,13 @@ void XclImpXF::ApplyPatternToAttrList(
         rPat.GetItemSet().Put(aNumPat.GetItemSet());
     }
 
-    // Make sure we skip unnamed styles.
+    
     if (rPat.GetStyleName())
     {
-        // Check for a gap between the last entry and this one.
+        
         bool bHasGap = false;
         if (rAttrs.empty() && nRow1 > 0)
-            // First attribute range doesn't start at row 0.
+            
             bHasGap = true;
 
         if (!rAttrs.empty() && rAttrs.back().nRow + 1 < nRow1)
@@ -1325,7 +1325,7 @@ void XclImpXF::ApplyPatternToAttrList(
 
         if (bHasGap)
         {
-            // Fill this gap with the default pattern.
+            
             ScAttrEntry aEntry;
             aEntry.nRow = nRow1 - 1;
             aEntry.pPattern = rDoc.GetDefPattern();
@@ -1343,17 +1343,17 @@ void XclImpXF::ApplyPattern(
         SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2,
         SCTAB nScTab, sal_uLong nForceScNumFmt )
 {
-    // force creation of cell style and hard formatting, do it here to have mpStyleSheet
+    
     const ScPatternAttr& rPattern = CreatePattern();
 
-    // insert into document
+    
     ScDocument& rDoc = GetDoc();
     if( IsCellXF() && mpStyleSheet )
         rDoc.ApplyStyleAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, *mpStyleSheet );
     if( HasUsedFlags() )
         rDoc.ApplyPatternAreaTab( nScCol1, nScRow1, nScCol2, nScRow2, nScTab, rPattern );
 
-    // #108770# apply special number format
+    
     if( nForceScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
     {
         ScPatternAttr aPattern( GetDoc().GetPool() );
@@ -1369,10 +1369,10 @@ void XclImpXF::ApplyPattern(
         private members here. */
     XclImpXF aXF( rRoot );
 
-    // no used flags available in BIFF2 (always true)
+    
     aXF.SetAllUsedFlags( true );
 
-    // set the attributes
+    
     aXF.maProtection.FillFromXF2( nFlags1 );
     aXF.maAlignment.FillFromXF2( nFlags3 );
     aXF.maBorder.FillFromXF2( nFlags3 );
@@ -1380,7 +1380,7 @@ void XclImpXF::ApplyPattern(
     aXF.mnXclNumFmt = ::extract_value< sal_uInt16 >( nFlags2, 0, 6 );
     aXF.mnXclFont = ::extract_value< sal_uInt16 >( nFlags2, 6, 2 );
 
-    // write the attributes to the cell
+    
     aXF.ApplyPattern( rScPos.Col(), rScPos.Row(), rScPos.Col(), rScPos.Row(), rScPos.Tab() );
 }
 
@@ -1401,7 +1401,7 @@ void XclImpXF::SetUsedFlags( sal_uInt8 nUsedFlags )
     mbAreaUsed   = (mbCellXF == ::get_flag( nUsedFlags, EXC_XF_DIFF_AREA ));
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpStyle::XclImpStyle( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -1431,7 +1431,7 @@ void XclImpStyle::ReadStyle( XclImpStream& rStrm )
     else
     {
         maName = (GetBiff() <= EXC_BIFF5) ? rStrm.ReadByteString( false ) : rStrm.ReadUniString();
-        // #i103281# check if this is a new built-in style introduced in XL2007
+        
         if( (GetBiff() == EXC_BIFF8) && (rStrm.GetNextRecId() == EXC_ID_STYLEEXT) && rStrm.StartNextRecord() )
         {
             sal_uInt8 nExtFlags;
@@ -1442,7 +1442,7 @@ void XclImpStyle::ReadStyle( XclImpStream& rStrm )
             mbHidden = ::get_flag( nExtFlags, EXC_STYLEEXT_HIDDEN );
             if( mbBuiltin )
             {
-                rStrm.Ignore( 1 );  // category
+                rStrm.Ignore( 1 );  
                 rStrm >> mnBuiltinId >> mnLevel;
             }
         }
@@ -1451,7 +1451,7 @@ void XclImpStyle::ReadStyle( XclImpStream& rStrm )
 
 ScStyleSheet* XclImpStyle::CreateStyleSheet()
 {
-    // #i1624# #i1768# ignore unnamed user styles
+    
     if( !mpStyleSheet && (!maFinalName.isEmpty()) )
     {
         bool bCreatePattern = false;
@@ -1460,9 +1460,9 @@ ScStyleSheet* XclImpStyle::CreateStyleSheet()
         bool bDefStyle = mbBuiltin && (mnBuiltinId == EXC_STYLE_NORMAL);
         if( bDefStyle )
         {
-            // set all flags to true to get all items in XclImpXF::CreatePattern()
+            
             if( pXF ) pXF->SetAllUsedFlags( true );
-            // use existing "Default" style sheet
+            
             mpStyleSheet = static_cast< ScStyleSheet* >( GetStyleSheetPool().Find(
                 ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PARA ) );
             OSL_ENSURE( mpStyleSheet, "XclImpStyle::CreateStyleSheet - Default style not found" );
@@ -1481,7 +1481,7 @@ ScStyleSheet* XclImpStyle::CreateStyleSheet()
             }
         }
 
-        // bDefStyle==true omits default pool items in CreatePattern()
+        
         if( bCreatePattern && mpStyleSheet && pXF )
             mpStyleSheet->GetItemSet().Put( pXF->CreatePattern( bDefStyle ).GetItemSet() );
     }
@@ -1495,7 +1495,7 @@ void XclImpStyle::CreateUserStyle( const OUString& rFinalName )
         CreateStyleSheet();
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpXFBuffer::XclImpXFBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -1546,11 +1546,11 @@ struct IgnoreCaseCompare
         { return rName1.compareToIgnoreAsciiCase( rName2 ) < 0; }
 };
 
-} // namespace
+} 
 
 void XclImpXFBuffer::CreateUserStyles()
 {
-    // calculate final names of all styles
+    
     typedef ::std::map< OUString, XclImpStyle*, IgnoreCaseCompare > CellStyleNameMap;
     typedef ::std::vector< XclImpStyle* > XclImpStyleVector;
 
@@ -1590,7 +1590,7 @@ void XclImpXFBuffer::CreateUserStyles()
         names in the aConflictNameStyles list. */
     for( XclImpStyleList::iterator itStyle = maUserStyles.begin(); itStyle != maUserStyles.end(); ++itStyle )
     {
-        // #i1624# #i1768# ignore unnamed user styles
+        
         if( !itStyle->GetName().isEmpty() )
         {
             if( aCellStyles.count( itStyle->GetName() ) > 0 )
@@ -1600,7 +1600,7 @@ void XclImpXFBuffer::CreateUserStyles()
         }
     }
 
-    // find unused names for all styles with conflicting names
+    
     for( XclImpStyleVector::iterator aIt = aConflictNameStyles.begin(), aEnd = aConflictNameStyles.end(); aIt != aEnd; ++aIt )
     {
         XclImpStyle* pStyle = *aIt;
@@ -1614,7 +1614,7 @@ void XclImpXFBuffer::CreateUserStyles()
         aCellStyles[ aUnusedName ] = pStyle;
     }
 
-    // set final names and create user-defined and modified built-in cell styles
+    
     for( CellStyleNameMap::iterator aIt = aCellStyles.begin(), aEnd = aCellStyles.end(); aIt != aEnd; ++aIt )
         if( aIt->second )
             aIt->second->CreateUserStyle( aIt->first );
@@ -1626,7 +1626,7 @@ ScStyleSheet* XclImpXFBuffer::CreateStyleSheet( sal_uInt16 nXFIndex )
     return (aIt == maStylesByXf.end()) ? 0 : aIt->second->CreateStyleSheet();
 }
 
-// Buffer for XF indexes in cells =============================================
+
 
 IMPL_FIXEDMEMPOOL_NEWDEL( XclImpXFRange )
 
@@ -1660,19 +1660,19 @@ bool XclImpXFRange::Expand( const XclImpXFRange& rNextRange )
     return false;
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
 {
-    // List should be empty when inserting the default column format.
-    // Later explicit SetXF() calls will break up this range.
+    
+    
     OSL_ENSURE( maIndexList.empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
 
-    // insert a complete row range with one insert.
+    
     maIndexList.push_back( new XclImpXFRange( 0, MAXROW, rXFIndex ) );
 }
 
-// ----------------------------------------------------------------------------
+
 
 void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 {
@@ -1682,11 +1682,11 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 
     Find( pPrevRange, pNextRange, nNextIndex, nScRow );
 
-    // previous range:
-    // try to overwrite XF (if row is contained in) or try to expand range
+    
+    
     if( pPrevRange )
     {
-        if( pPrevRange->Contains( nScRow ) )        // overwrite old XF
+        if( pPrevRange->Contains( nScRow ) )        
         {
             if( rXFIndex == pPrevRange->maXFIndex )
                 return;
@@ -1697,46 +1697,46 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
             XclImpXFRange* pThisRange = pPrevRange;
             pPrevRange = (nIndex > 0 && nIndex <= maIndexList.size()) ? &(maIndexList[ nIndex - 1 ]) : 0;
 
-            if( nFirstScRow == nLastScRow )         // replace solely XF
+            if( nFirstScRow == nLastScRow )         
             {
                 pThisRange->maXFIndex = rXFIndex;
-                TryConcatPrev( nNextIndex );        // try to concat. next with this
-                TryConcatPrev( nIndex );            // try to concat. this with previous
+                TryConcatPrev( nNextIndex );        
+                TryConcatPrev( nIndex );            
             }
-            else if( nFirstScRow == nScRow )        // replace first XF
+            else if( nFirstScRow == nScRow )        
             {
                 ++(pThisRange->mnScRow1);
-                // try to concatenate with previous of this
+                
                 if( !pPrevRange || !pPrevRange->Expand( nScRow, rXFIndex ) )
                     Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
             }
-            else if( nLastScRow == nScRow )         // replace last XF
+            else if( nLastScRow == nScRow )         
             {
                 --(pThisRange->mnScRow2);
                 if( !pNextRange || !pNextRange->Expand( nScRow, rXFIndex ) )
                     Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
             }
-            else                                    // insert in the middle of the range
+            else                                    
             {
                 pThisRange->mnScRow1 = nScRow + 1;
-                // List::Insert() moves entries towards end of list, so insert twice at nIndex
+                
                 Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
                 Insert( new XclImpXFRange( nFirstScRow, nScRow - 1, pThisRange->maXFIndex ), nIndex );
             }
             return;
         }
-        else if( pPrevRange->Expand( nScRow, rXFIndex ) )    // try to expand
+        else if( pPrevRange->Expand( nScRow, rXFIndex ) )    
         {
-            TryConcatPrev( nNextIndex );    // try to concatenate next with expanded
+            TryConcatPrev( nNextIndex );    
             return;
         }
     }
 
-    // try to expand next range
+    
     if( pNextRange && pNextRange->Expand( nScRow, rXFIndex ) )
         return;
 
-    // create new range
+    
     Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
 }
 
@@ -1750,7 +1750,7 @@ void XclImpXFRangeColumn::Find(
         sal_uLong& rnNextIndex, SCROW nScRow )
 {
 
-    // test whether list is empty
+    
     if( maIndexList.empty() )
     {
         rpPrevRange = rpNextRange = 0;
@@ -1761,8 +1761,8 @@ void XclImpXFRangeColumn::Find(
     rpPrevRange = &maIndexList.front();
     rpNextRange = &maIndexList.back();
 
-    // test whether row is at end of list (contained in or behind last range)
-    // rpPrevRange will contain a possible existing row
+    
+    
     if( rpNextRange->mnScRow1 <= nScRow )
     {
         rpPrevRange = rpNextRange;
@@ -1771,7 +1771,7 @@ void XclImpXFRangeColumn::Find(
         return;
     }
 
-    // test whether row is at beginning of list (really before first range)
+    
     if( nScRow < rpPrevRange->mnScRow1 )
     {
         rpNextRange = rpPrevRange;
@@ -1780,9 +1780,9 @@ void XclImpXFRangeColumn::Find(
         return;
     }
 
-    // loop: find range entries before and after new row
-    // break the loop if there is no more range between first and last -or-
-    // if rpPrevRange contains nScRow (rpNextRange will never contain nScRow)
+    
+    
+    
     sal_uLong nPrevIndex = 0;
     sal_uLong nMidIndex;
     rnNextIndex = maIndexList.size() - 1;
@@ -1792,19 +1792,19 @@ void XclImpXFRangeColumn::Find(
         nMidIndex = (nPrevIndex + rnNextIndex) / 2;
         pMidRange = &maIndexList[nMidIndex];
         OSL_ENSURE( pMidRange, "XclImpXFRangeColumn::Find - missing XF index range" );
-        if( nScRow < pMidRange->mnScRow1 )      // row is really before pMidRange
+        if( nScRow < pMidRange->mnScRow1 )      
         {
             rpNextRange = pMidRange;
             rnNextIndex = nMidIndex;
         }
-        else                                    // row is in or after pMidRange
+        else                                    
         {
             rpPrevRange = pMidRange;
             nPrevIndex = nMidIndex;
         }
     }
 
-    // find next rpNextRange if rpPrevRange contains nScRow
+    
     if( nScRow <= rpPrevRange->mnScRow2 )
     {
         rnNextIndex = nPrevIndex + 1;
@@ -1824,7 +1824,7 @@ void XclImpXFRangeColumn::TryConcatPrev( sal_uLong nIndex )
         maIndexList.erase( maIndexList.begin() + nIndex );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpXFRangeBuffer::XclImpXFRangeBuffer( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -1847,27 +1847,27 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
     SCCOL nScCol = rScPos.Col();
     SCROW nScRow = rScPos.Row();
 
-    // set cell XF's
+    
     size_t nIndex = static_cast< size_t >( nScCol );
     if( maColumns.size() <= nIndex )
         maColumns.resize( nIndex + 1 );
     if( !maColumns[ nIndex ] )
         maColumns[ nIndex ].reset( new XclImpXFRangeColumn );
-    // remember all Boolean cells, they will get 'Standard' number format
+    
     maColumns[ nIndex ]->SetXF( nScRow, XclImpXFIndex( nXFIndex, eMode == xlXFModeBoolCell ) );
 
-    // set "center across selection" and "fill" attribute for all following empty cells
-    // ignore it on row default XFs
+    
+    
     if( eMode != xlXFModeRow )
     {
         const XclImpXF* pXF = GetXFBuffer().GetXF( nXFIndex );
         if( pXF && ((pXF->GetHorAlign() == EXC_XF_HOR_CENTER_AS) || (pXF->GetHorAlign() == EXC_XF_HOR_FILL)) )
         {
-            // expand last merged range if this attribute is set repeatedly
+            
             ScRange* pRange = maMergeList.empty() ? NULL : maMergeList.back();
             if (pRange && (pRange->aEnd.Row() == nScRow) && (pRange->aEnd.Col() + 1 == nScCol) && (eMode == xlXFModeBlank))
                 pRange->aEnd.IncCol();
-            else if( eMode != xlXFModeBlank )   // do not merge empty cells
+            else if( eMode != xlXFModeBlank )   
                 SetMerge( nScCol, nScRow );
         }
     }
@@ -1896,7 +1896,7 @@ void XclImpXFRangeBuffer::SetRowDefXF( SCROW nScRow, sal_uInt16 nXFIndex )
 
 void XclImpXFRangeBuffer::SetColumnDefXF( SCCOL nScCol, sal_uInt16 nXFIndex )
 {
-    // our array should not have values when creating the default column format.
+    
     size_t nIndex = static_cast< size_t >( nScCol );
     if( maColumns.size() <= nIndex )
         maColumns.resize( nIndex + 1 );
@@ -1942,11 +1942,11 @@ void XclImpXFRangeBuffer::Finalize()
     ScDocument& rDoc = GetDoc();
     SCTAB nScTab = GetCurrScTab();
 
-    // apply patterns
+    
     XclImpXFBuffer& rXFBuffer = GetXFBuffer();
     for( XclImpXFRangeColumnVec::const_iterator aVBeg = maColumns.begin(), aVEnd = maColumns.end(), aVIt = aVBeg; aVIt != aVEnd; ++aVIt )
     {
-        // apply all cell styles of an existing column
+        
         if( aVIt->get() )
         {
             XclImpXFRangeColumn& rColumn = **aVIt;
@@ -1987,11 +1987,11 @@ void XclImpXFRangeBuffer::Finalize()
         }
     }
 
-    // insert hyperlink cells
+    
     for( XclImpHyperlinkList::const_iterator aLIt = maHyperlinks.begin(), aLEnd = maHyperlinks.end(); aLIt != aLEnd; ++aLIt )
         XclImpHyperlink::InsertUrl( GetRoot(), aLIt->first, aLIt->second );
 
-    // apply cell merging
+    
     for ( size_t i = 0, nRange = maMergeList.size(); i < nRange; ++i )
     {
         const ScRange* pRange = maMergeList[ i ];
@@ -1999,16 +1999,16 @@ void XclImpXFRangeBuffer::Finalize()
         const ScAddress& rEnd = pRange->aEnd;
         bool bMultiCol = rStart.Col() != rEnd.Col();
         bool bMultiRow = rStart.Row() != rEnd.Row();
-        // set correct right border
+        
         if( bMultiCol )
             SetBorderLine( *pRange, nScTab, BOX_LINE_RIGHT );
-        // set correct lower border
+        
         if( bMultiRow )
             SetBorderLine( *pRange, nScTab, BOX_LINE_BOTTOM );
-        // do merge
+        
         if( bMultiCol || bMultiRow )
             rDoc.DoMerge( nScTab, rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
-        // #i93609# merged range in a single row: test if manual row height is needed
+        
         if( !bMultiRow )
         {
             bool bTextWrap = static_cast< const SfxBoolItem* >( rDoc.GetAttr( rStart.Col(), rStart.Row(), rStart.Tab(), ATTR_LINEBREAK ) )->GetValue();
@@ -2021,6 +2021,6 @@ void XclImpXFRangeBuffer::Finalize()
     }
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

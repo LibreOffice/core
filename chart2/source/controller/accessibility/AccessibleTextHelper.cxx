@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleTextHelper.hxx"
@@ -52,7 +52,7 @@ AccessibleTextHelper::~AccessibleTextHelper()
         delete m_pTextHelper;
 }
 
-// ____ XInitialization ____
+
 void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArguments )
     throw (uno::Exception,
            uno::RuntimeException)
@@ -99,7 +99,7 @@ void SAL_CALL AccessibleTextHelper::initialize( const Sequence< uno::Any >& aArg
     OSL_ENSURE( m_pTextHelper, "Couldn't create text helper" );
 }
 
-// ____ XAccessibleContext ____
+
 ::sal_Int32 SAL_CALL AccessibleTextHelper::getAccessibleChildCount()
     throw (uno::RuntimeException)
 {
@@ -180,6 +180,6 @@ lang::Locale SAL_CALL AccessibleTextHelper::getLocale()
     return lang::Locale();
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

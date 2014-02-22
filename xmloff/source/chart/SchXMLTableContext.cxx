@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sax/tools/converter.hxx>
@@ -109,7 +109,7 @@ void lcl_fillRangeMapping(
     const OUString lcl_aCategoriesRange(aCategoriesRange);
     const OUString lcl_aLabelPrefix(aLabelPrefix);
 
-    // Fill range mapping
+    
     const size_t nTableRowCount( rTable.aData.size());
     for( size_t nRow = 0; nRow < nTableRowCount; ++nRow )
     {
@@ -139,7 +139,7 @@ void lcl_fillRangeMapping(
                                                      aRangeId, aColNumStr ));
                     }
                 }
-                else // eDataRowSource == chart::ChartDataRowSource_ROWS
+                else 
                 {
                     if( nRow == 0 && rTable.bHasHeaderRow )
                     {
@@ -174,9 +174,9 @@ Reference< chart2::data::XDataSequence >
     lcl_tOriginalRangeToInternalRangeMap::iterator aIt( rRangeMap.find( rRange ));
     if( aIt != rRangeMap.end())
     {
-        // set sequence with correct data
+        
         xResult.set( xDataProvider->createDataSequenceByRangeRepresentation( aIt->second ));
-        // remove translation, because it was used
+        
         rRangeMap.erase( aIt );
     }
 
@@ -195,7 +195,7 @@ bool lcl_tableOfRangeMatches(
     const OUString & rRange,
     const OUString & rTableName )
 {
-    // both strings are non-empty and the table name is part of the range
+    
     return ( !rRange.isEmpty() &&
              !rTableName.isEmpty() &&
              (rRange.indexOf( rTableName ) != -1 ));
@@ -210,9 +210,9 @@ template< typename T >
     return aResult;
 }
 
-} // anonymous namespace
+} 
 
-// class SchXMLTableContext
+
 SchXMLTableContext::SchXMLTableContext( SchXMLImportHelper& rImpHelper,
                                         SvXMLImport& rImport,
                                         const OUString& rLName,
@@ -245,7 +245,7 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
     {
         case XML_TOK_TABLE_HEADER_COLS:
             mrTable.bHasHeaderColumn = true;
-            // fall through intended
+            
         case XML_TOK_TABLE_COLUMNS:
             pContext = new SchXMLTableColumnsContext( GetImport(), rLocalName, mrTable );
             break;
@@ -256,7 +256,7 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
 
         case XML_TOK_TABLE_HEADER_ROWS:
             mrTable.bHasHeaderRow = true;
-            // fall through intended
+            
         case XML_TOK_TABLE_ROWS:
             pContext = new SchXMLTableRowsContext( mrImportHelper, GetImport(), rLocalName, mrTable );
             break;
@@ -274,7 +274,7 @@ SvXMLImportContext *SchXMLTableContext::CreateChildContext(
 
 void SchXMLTableContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    // get table-name
+    
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
@@ -309,7 +309,7 @@ void SchXMLTableContext::EndElement()
         if( aPermutation.empty())
             return;
 
-        // permute the values of all rows according to aPermutation
+        
         for( ::std::vector< ::std::vector< SchXMLCell > >::iterator aRowIt( mrTable.aData.begin());
              aRowIt != mrTable.aData.end(); ++aRowIt )
         {
@@ -325,7 +325,7 @@ void SchXMLTableContext::EndElement()
                 if( nSourceIndex != nDestinationIndex &&
                     nSourceIndex < nRowSize )
                 {
-                    // copy original on first real permutation
+                    
                     if( !bModified )
                     {
                         SAL_WARN_IF( !aModifiedRow.empty(), "xmloff.chart", "aModifiedRow is NOT NULL");
@@ -338,7 +338,7 @@ void SchXMLTableContext::EndElement()
                     bModified = true;
                 }
             }
-            // copy back
+            
             if( bModified )
                 ::std::copy( aModifiedRow.begin(), aModifiedRow.end(), aRowIt->begin());
         }
@@ -362,7 +362,7 @@ void SchXMLTableContext::EndElement()
             if( nSourceIndex != nDestinationIndex &&
                 nSourceIndex < nTableRowCount )
             {
-                // copy original on first real permutation
+                
                 if( !bModified )
                 {
                     SAL_WARN_IF( !aDestination.empty(), "xmloff.chart", "aDestination is NOT NULL");
@@ -377,7 +377,7 @@ void SchXMLTableContext::EndElement()
         }
         if( bModified )
         {
-            // copy back
+            
             ::std::copy( aDestination.begin(), aDestination.end(), mrTable.aData.begin());
         }
     }
@@ -407,8 +407,8 @@ void SchXMLTableContext::setColumnPermutation( const uno::Sequence< sal_Int32 > 
     }
 }
 
-// classes for columns
-// class SchXMLTableColumnsContext
+
+
 SchXMLTableColumnsContext::SchXMLTableColumnsContext(
     SvXMLImport& rImport,
     const OUString& rLocalName,
@@ -440,7 +440,7 @@ SvXMLImportContext* SchXMLTableColumnsContext::CreateChildContext(
     return pContext;
 }
 
-// class SchXMLTableColumnContext
+
 SchXMLTableColumnContext::SchXMLTableColumnContext(
     SvXMLImport& rImport,
     const OUString& rLocalName,
@@ -452,7 +452,7 @@ SchXMLTableColumnContext::SchXMLTableColumnContext(
 
 void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    // get number-columns-repeated attribute
+    
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     sal_Int32 nRepeated = 1;
     bool bHidden = false;
@@ -484,7 +484,7 @@ void SchXMLTableColumnContext::StartElement( const uno::Reference< xml::sax::XAt
 
     if( bHidden )
     {
-        //i91578 display of hidden values (copy paste scenario; use hidden flag during migration to locale table upon paste )
+        
         sal_Int32 nColOffset = ( mrTable.bHasHeaderColumn ? 1 : 0 );
         for( sal_Int32 nN = nOldCount; nN<nNewCount; nN++ )
         {
@@ -499,8 +499,8 @@ SchXMLTableColumnContext::~SchXMLTableColumnContext()
 {
 }
 
-// classes for rows
-// class SchXMLTableRowsContext
+
+
 SchXMLTableRowsContext::SchXMLTableRowsContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
@@ -536,7 +536,7 @@ SvXMLImportContext* SchXMLTableRowsContext::CreateChildContext(
     return pContext;
 }
 
-// class SchXMLTableRowContext
+
 SchXMLTableRowContext::SchXMLTableRowContext(
     SchXMLImportHelper& rImpHelper,
     SvXMLImport& rImport,
@@ -566,7 +566,7 @@ SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
 
-    // <table:table-cell> element
+    
     if( nPrefix == XML_NAMESPACE_TABLE &&
         IsXMLToken(rLocalName, XML_TABLE_CELL ) )
     {
@@ -582,10 +582,10 @@ SvXMLImportContext* SchXMLTableRowContext::CreateChildContext(
 
 class SchXMLRangeSomewhereContext : public SvXMLImportContext
 {
-//#i113950# previously the range was exported to attribute text:id,
-//but that attribute does not allow arbitrary strings anymore
-//so we need to find an alternative to save that range info for copy/paste scenario ...
-//-> use description at an empty group element for now
+
+
+
+
 
 private:
     OUString& mrRangeString;
@@ -605,8 +605,8 @@ public:
     virtual void EndElement();
 };
 
-// classes for cells and their content
-// class SchXMLTableCellContext
+
+
 SchXMLTableCellContext::SchXMLTableCellContext(
     SchXMLImportHelper& rImpHelper, SvXMLImport& rImport,
     const OUString& rLocalName, SchXMLTable& aTable)
@@ -658,11 +658,11 @@ void SchXMLTableCellContext::StartElement( const uno::Reference< xml::sax::XAttr
     if( eValueType == SCH_CELL_TYPE_FLOAT )
     {
         double fData;
-        // the result may be false if a NaN is read, but that's ok
+        
         ::sax::Converter::convertDouble( fData, aCellContent );
 
         aCell.fValue = fData;
-        // dont read text from following <text:p> or <text:list> element
+        
         mbReadText = false;
     }
 
@@ -679,25 +679,25 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
 {
     SvXMLImportContext* pContext = 0;
 
-    // <text:list> element
+    
     if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_LIST ) && mbReadText )
     {
         SchXMLCell& rCell = mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ];
         rCell.aComplexString = Sequence< OUString >();
         rCell.eType = SCH_CELL_TYPE_COMPLEX_STRING;
         pContext = new SchXMLTextListContext( GetImport(), rLocalName, rCell.aComplexString );
-        mbReadText = false;//don't apply text from <text:p>
+        mbReadText = false;
     }
-    // <text:p> element - read text (and range from text:id old version)
+    
     else if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_P ) )
     {
         pContext = new SchXMLParagraphContext( GetImport(), rLocalName, maCellContent, &maRangeId );
     }
-    // <draw:g> element - read range
+    
     else if( nPrefix == XML_NAMESPACE_DRAW && IsXMLToken( rLocalName, XML_G ) )
     {
-        //#i113950# previously the range was exported to attribute text:id, but that attribute does not allow arbitrary strings anymore
-        //so we need to find an alternative to save that range info for copy/paste scenario ... -> use description at an empty group element for now
+        
+        
         pContext = new SchXMLRangeSomewhereContext( GetImport(), nPrefix, rLocalName, maRangeId );
     }
     else
@@ -710,7 +710,7 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
 
 void SchXMLTableCellContext::EndElement()
 {
-    if( mbReadText && !maCellContent.isEmpty() ) //apply text from <text:p> element
+    if( mbReadText && !maCellContent.isEmpty() ) 
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aString = maCellContent;
     if( !maRangeId.isEmpty())
         mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ].aRangeId = maRangeId;
@@ -741,14 +741,14 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
     const SchXMLTable& rTable,
     uno::Reference< chart2::XChartDocument > xChartDoc )
 {
-    // apply all data read from the local table to the internal data provider
+    
     if( !xChartDoc.is() || !xChartDoc->hasInternalDataProvider() )
         return;
     Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider() );
     if( !xDataProv.is() )
         return;
 
-    //prepare the read local table data
+    
     sal_Int32 nNumRows( static_cast< sal_Int32 >( rTable.aData.size()));
     sal_Int32 nRowOffset = 0;
     if( rTable.bHasHeaderRow )
@@ -772,7 +772,7 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
 
     if( rTable.aData.begin() != rTable.aData.end())
     {
-        //apply column labels
+        
         if( rTable.bHasHeaderRow )
         {
             const ::std::vector< SchXMLCell >& rFirstRow = rTable.aData.front();
@@ -790,22 +790,22 @@ void SchXMLTableHelper::applyTableToInternalDataProvider(
             const ::std::vector< SchXMLCell >& rRow = *aRowIter;
             if( !rRow.empty() )
             {
-                // row label
+                
                 if( rTable.bHasHeaderColumn )
                     lcl_ApplyCellToComplexLabel( rRow.front(), aComplexRowDescriptions[nRow] );
 
-                // values
+                
                 Sequence< double >& rTargetRow = aDataInRows[nRow];
                 lcl_ApplyCellToData aApplyCellToData = ::std::for_each( rRow.begin() + nColOffset, rRow.end(), lcl_ApplyCellToData( rTargetRow ) );
                 double fNaN = 0.0;
                 ::rtl::math::setNan( &fNaN );
                 for( sal_Int32 nCurrentIndex = aApplyCellToData.getCurrentIndex(); nCurrentIndex<nNumColumns; nCurrentIndex++ )
-                    rTargetRow[nCurrentIndex] = fNaN;//#i110615#
+                    rTargetRow[nCurrentIndex] = fNaN;
             }
         }
     }
 
-    //apply the collected data to the chart
+    
     Reference< chart2::XAnyDescriptionAccess > xDataAccess( xDataProv, uno::UNO_QUERY );
     if( !xDataAccess.is() )
         return;
@@ -839,29 +839,29 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     if( ! (xChartDoc.is() && xChartDoc->hasInternalDataProvider()))
         return;
 
-    // If the range-strings are valid (starting with "local-table") they should
-    // be interpreted like given, otherwise (when the ranges refer to Calc- or
-    // Writer-ranges, but the container is not available like when pasting a
-    // chart from Calc to Impress) the range is ignored, and every object gets
-    // one table column in the order of appearance, which is: 1. categories,
-    // 2. data series: 2.a) domains, 2.b) values (main-role, usually y-values)
+    
+    
+    
+    
+    
+    
 
     Reference< chart2::data::XDataProvider >  xDataProv( xChartDoc->getDataProvider());
 
-    // create a mapping from original ranges to new ranges
+    
     lcl_tOriginalRangeToInternalRangeMap aRangeMap;
 
     lcl_fillRangeMapping( rTable, aRangeMap, eDataRowSource );
 
     const OUString lcl_aCategoriesRange(aCategoriesRange);
 
-    // translate ranges (using the map created before)
+    
     for( tSchXMLLSequencesPerIndex::const_iterator aLSeqIt( rLSequencesPerIndex.begin());
          aLSeqIt != rLSequencesPerIndex.end(); ++aLSeqIt )
     {
         if( aLSeqIt->second.is())
         {
-            // values/error bars/categories
+            
             if( aLSeqIt->first.second == SCH_XML_PART_VALUES ||
                 aLSeqIt->first.second == SCH_XML_PART_ERROR_BARS )
             {
@@ -908,10 +908,10 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                     }
                 }
             }
-            else // labels
+            else 
             {
                 SAL_WARN_IF( aLSeqIt->first.second != SCH_XML_PART_LABEL, "xmloff.chart", "aLSeqIt->first.second != SCH_XML_PART_LABEL" );
-                // labels
+                
                 Reference< chart2::data::XDataSequence > xSeq( aLSeqIt->second->getLabel());
                 OUString aRange;
                 if( xSeq.is() &&
@@ -942,8 +942,8 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
         }
     }
 
-    //i91578 display of hidden values (copy paste scenario; use hidden flag during migration to locale table upon paste )
-    //remove series that consist only of hidden columns
+    
+    
     Reference< chart2::XInternalDataProvider > xInternalDataProvider( xDataProv, uno::UNO_QUERY );
     if( xInternalDataProvider.is() && !rTable.aHiddenColumns.empty() )
     {
@@ -1003,16 +1003,16 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
 
                     if( static_cast<sal_Int32>(aRemainingSeries.size()) != aSeriesSeq.getLength() )
                     {
-                        //remove the series that have only hidden data
+                        
                         Sequence< Reference< chart2::XDataSeries > > aRemainingSeriesSeq( aRemainingSeries.size());
                         ::std::copy( aRemainingSeries.begin(), aRemainingSeries.end(), aRemainingSeriesSeq.getArray());
                         xSeriesContainer->setDataSeries( aRemainingSeriesSeq );
 
-                        //remove unused sequences
+                        
                         Reference< chart2::data::XDataSource > xDataSource( xChartDoc, uno::UNO_QUERY );
                         if( xDataSource.is() )
                         {
-                            //first detect which collumns are really used
+                            
                             std::map< sal_Int32, bool > aUsageMap;
                             OUString aRange;
                             Sequence< Reference< chart2::data::XLabeledDataSequence > > aUsedSequences( xDataSource->getDataSequences() );
@@ -1050,9 +1050,9 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
                                 aSequenceIndexesToDelete.push_back(nSequenceIndex);
                             }
 
-                            // delete unnecessary sequences of the internal data
-                            // iterate using greatest index first, so that deletion does not
-                            // shift other sequences that will be deleted later
+                            
+                            
+                            
                             ::std::sort( aSequenceIndexesToDelete.begin(), aSequenceIndexesToDelete.end());
                             for( ::std::vector< sal_Int32 >::reverse_iterator aIt(
                                      aSequenceIndexesToDelete.rbegin()); aIt != aSequenceIndexesToDelete.rend(); ++aIt )

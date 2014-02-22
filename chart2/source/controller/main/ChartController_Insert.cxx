@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartController.hxx"
@@ -55,13 +55,13 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <svx/ActionDescriptionProvider.hxx>
 
-// header for define RET_OK
+
 #include <vcl/msgbox.hxx>
-// header for class OUStringBuffer
+
 #include <rtl/ustrbuf.hxx>
-// header for class Application
+
 #include <vcl/svapp.hxx>
-// header for class ::vos::OGuard
+
 #include <osl/mutex.hxx>
 
 using namespace ::com::sun::star;
@@ -93,7 +93,7 @@ private:
     uno::Reference< uno::XComponentContext > m_xContext;
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -116,7 +116,7 @@ void ChartController::executeDispatch_InsertAxes()
         SchAxisDlg aDlg( m_pChartWindow, aDialogInput );
         if( aDlg.Execute() == RET_OK )
         {
-            // lock controllers till end of block
+            
             ControllerLockGuardUNO aCLGuard( getModel() );
 
             InsertAxisOrGridDialogData aDialogOutput;
@@ -151,10 +151,10 @@ void ChartController::executeDispatch_InsertGrid()
         AxisHelper::getAxisOrGridPossibilities( aDialogInput.aPossibilityList, xDiagram, sal_False );
 
         SolarMutexGuard aGuard;
-        SchGridDlg aDlg( m_pChartWindow, aDialogInput );//aItemSet, b3D, bNet, bSecondaryX, bSecondaryY );
+        SchGridDlg aDlg( m_pChartWindow, aDialogInput );
         if( aDlg.Execute() == RET_OK )
         {
-            // lock controllers till end of block
+            
             ControllerLockGuardUNO aCLGuard( getModel() );
             InsertAxisOrGridDialogData aDialogOutput;
             aDlg.getResult( aDialogOutput );
@@ -186,7 +186,7 @@ void ChartController::executeDispatch_InsertTitles()
         SchTitleDlg aDlg( m_pChartWindow, aDialogInput );
         if( aDlg.Execute() == RET_OK )
         {
-            // lock controllers till end of block
+            
             ControllerLockGuardUNO aCLGuard( getModel() );
             TitleDialogData aDialogOutput( impl_createReferenceSizeProvider().release());
             aDlg.getResult( aDialogOutput );
@@ -234,13 +234,13 @@ void ChartController::executeDispatch_OpenLegendDialog()
 
     try
     {
-        //prepare and open dialog
+        
         SolarMutexGuard aGuard;
         SchLegendDlg aDlg( m_pChartWindow, m_xCC );
         aDlg.init( getModel() );
         if( aDlg.Execute() == RET_OK )
         {
-            // lock controllers till end of block
+            
             ControllerLockGuardUNO aCLGuard( getModel() );
             bool bChanged = aDlg.writeToModel( getModel() );
             if( bChanged )
@@ -260,12 +260,12 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
             ActionDescriptionProvider::INSERT, SCH_RESSTR( STR_OBJECT_DATALABELS )),
         m_xUndoManager );
 
-    //if a series is selected insert labels for that series only:
+    
     uno::Reference< chart2::XDataSeries > xSeries(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel()), uno::UNO_QUERY );
     if( xSeries.is() )
     {
-        // add labels
+        
         DataSeriesHelper::insertDataLabelsToSeriesAndAllPoints( xSeries );
 
         OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_LABELS ) + "=" );
@@ -288,10 +288,10 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
         aItemConverter.FillItemSet( aItemSet );
 
-        //prepare and open dialog
+        
         SolarMutexGuard aGuard;
 
-        //get number formatter
+        
         uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( getModel(), uno::UNO_QUERY );
         NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
         SvNumberFormatter* pNumberFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
@@ -302,9 +302,9 @@ void ChartController::executeDispatch_InsertMenu_DataLabels()
         {
             SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
             aDlg.FillItemSet( aOutItemSet );
-            // lock controllers till end of block
+            
             ControllerLockGuardUNO aCLGuard( getModel() );
-            bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+            bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );
             if( bChanged )
                 aUndoGuard.commit();
         }
@@ -337,7 +337,7 @@ void ChartController::executeDispatch_InsertMenu_MeanValues()
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
     if( xSeries.is() )
     {
-        //if a series is selected insert mean value only for that series:
+        
         lcl_InsertMeanValueLine( m_xCC ).operator()(xSeries);
     }
     else
@@ -391,7 +391,7 @@ void ChartController::executeDispatch_InsertTrendline()
         m_pDrawModelWrapper->getSdrModel(),
         uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY ));
 
-    // open dialog
+    
     SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
     aItemConverter.FillItemSet( aItemSet );
     ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
@@ -404,8 +404,8 @@ void ChartController::executeDispatch_InsertTrendline()
     SchAttribTabDlg aDialog( m_pChartWindow, &aItemSet, &aDialogParameter, &aViewElementListProvider,
                           uno::Reference< util::XNumberFormatsSupplier >( getModel(), uno::UNO_QUERY ));
 
-    // note: when a user pressed "OK" but didn't change any settings in the
-    // dialog, the SfxTabDialog returns "Cancel"
+    
+    
     if( aDialog.Execute() == RET_OK || aDialog.DialogWasClosedWithOK())
     {
         const SfxItemSet* pOutItemSet = aDialog.GetOutputItemSet();
@@ -422,7 +422,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 {
     ObjectType objType = bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
 
-    //if a series is selected insert error bars for that series only:
+    
     uno::Reference< chart2::XDataSeries > xSeries(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
 
@@ -434,19 +434,19 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
                 SCH_RESSTR( bYError ? STR_OBJECT_ERROR_BARS_Y : STR_OBJECT_ERROR_BARS_X )),
             m_xUndoManager );
 
-        // add error bars with standard deviation
+        
         uno::Reference< beans::XPropertySet > xErrorBarProp(
             StatisticsHelper::addErrorBars( xSeries, m_xCC,
                                             ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION,
                                             bYError));
 
-        // get an appropriate item converter
+        
         wrapper::ErrorBarItemConverter aItemConverter(
             getModel(), xErrorBarProp, m_pDrawModelWrapper->getSdrModel().GetItemPool(),
             m_pDrawModelWrapper->getSdrModel(),
             uno::Reference< lang::XMultiServiceFactory >( getModel(), uno::UNO_QUERY ));
 
-        // open dialog
+        
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
         aItemSet.Put(SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE,bYError));
         aItemConverter.FillItemSet( aItemSet );
@@ -462,8 +462,8 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(),
                                                                              m_xChartView, m_aSelection.getSelectedCID()));
 
-        // note: when a user pressed "OK" but didn't change any settings in the
-        // dialog, the SfxTabDialog returns "Cancel"
+        
+        
         if( aDlg.Execute() == RET_OK || aDlg.DialogWasClosedWithOK())
         {
             const SfxItemSet* pOutItemSet = aDlg.GetOutputItemSet();
@@ -477,7 +477,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
     }
     else
     {
-        //if no series is selected insert error bars for all series
+        
         UndoGuard aUndoGuard(
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::INSERT,
@@ -491,7 +491,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
             SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
             aItemConverter.FillItemSet( aItemSet );
 
-            //prepare and open dialog
+            
             SolarMutexGuard aGuard;
             InsertErrorBarsDialog aDlg(
                 m_pChartWindow, aItemSet,
@@ -506,9 +506,9 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
                 SfxItemSet aOutItemSet = aItemConverter.CreateEmptyItemSet();
                 aDlg.FillItemSet( aOutItemSet );
 
-                // lock controllers till end of block
+                
                 ControllerLockGuardUNO aCLGuard( getModel() );
-                bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );//model should be changed now
+                bool bChanged = aItemConverter.ApplyItemSet( aOutItemSet );
                 if( bChanged )
                     aUndoGuard.commit();
             }
@@ -535,7 +535,7 @@ void ChartController::executeDispatch_InsertTrendlineEquation( bool bInsertR2 )
         uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties());
         if( xEqProp.is())
         {
-            // using assignment for broken gcc 3.3
+            
             UndoGuard aUndoGuard = UndoGuard(
                 ActionDescriptionProvider::createDescription(
                     ActionDescriptionProvider::INSERT, SCH_RESSTR( STR_OBJECT_CURVE_EQUATION )),
@@ -879,6 +879,6 @@ void ChartController::executeDispatch_DeleteMinorGrid()
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

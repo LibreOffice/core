@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cellbindinghandler.hxx"
@@ -27,16 +27,16 @@
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <tools/debug.hxx>
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_CellBindingPropertyHandler()
 {
     ::pcr::CellBindingPropertyHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::table;
@@ -48,11 +48,11 @@ namespace pcr
     using namespace ::com::sun::star::form::binding;
     using namespace ::comphelper;
 
-    //====================================================================
-    //= CellBindingPropertyHandler
-    //====================================================================
+    
+    
+    
     DBG_NAME( CellBindingPropertyHandler )
-    //--------------------------------------------------------------------
+    
     CellBindingPropertyHandler::CellBindingPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :CellBindingPropertyHandler_Base( _rxContext )
         ,m_pCellExchangeConverter( new DefaultEnumRepresentation( *m_pInfoService, ::getCppuType( static_cast< sal_Int16* >( NULL ) ), PROPERTY_ID_CELL_EXCHANGE_TYPE ) )
@@ -60,13 +60,13 @@ namespace pcr
         DBG_CTOR( CellBindingPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL CellBindingPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.CellBindingPropertyHandler" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -74,7 +74,7 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+    
     void CellBindingPropertyHandler::onNewComponent()
     {
         PropertyHandlerComponent::onNewComponent();
@@ -85,13 +85,13 @@ namespace pcr
             m_pHelper.reset( new CellBindingHelper( m_xComponent, xDocument ) );
     }
 
-    //--------------------------------------------------------------------
+    
     CellBindingPropertyHandler::~CellBindingPropertyHandler( )
     {
         DBG_DTOR( CellBindingPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL CellBindingPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         Sequence< OUString > aInterestingProperties( 3 );
@@ -101,13 +101,13 @@ namespace pcr
         return aInterestingProperties;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL CellBindingPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nActuatingPropId( impl_getPropertyId_throw( _rActuatingPropertyName ) );
         OSL_PRECOND( m_pHelper.get(), "CellBindingPropertyHandler::actuatingPropertyChanged: inconsistentcy!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            
 
         OSL_PRECOND( _rxInspectorUI.is(), "FormComponentPropertyHandler::actuatingPropertyChanged: no access to the UI!" );
         if ( !_rxInspectorUI.is() )
@@ -117,11 +117,11 @@ namespace pcr
 
         switch ( nActuatingPropId )
         {
-        // ----- BoundCell -----
+        
         case PROPERTY_ID_BOUND_CELL:
         {
-            // the SQL-data-binding related properties need to be enabled if and only if
-            // there is *no* valid cell binding
+            
+            
             Reference< XValueBinding > xBinding;
             _rNewValue >>= xBinding;
 
@@ -139,19 +139,19 @@ namespace pcr
 
             if ( !xBinding.is() && m_pHelper->getCurrentBinding().is() )
             {
-                // ensure that the "transfer selection as" property is reset. Since we can't remember
-                // it at the object itself, but derive it from the binding only, we have to normalize
-                // it now that there *is* no binding anymore.
+                
+                
+                
                 setPropertyValue( PROPERTY_CELL_EXCHANGE_TYPE, makeAny( (sal_Int16) 0 ) );
             }
         }
         break;
 
-        // ----- CellRange -----
+        
         case PROPERTY_ID_LIST_CELL_RANGE:
         {
-            // the list source related properties need to be enabled if and only if
-            // there is *no* valid external list source for the control
+            
+            
             Reference< XListEntrySource > xSource;
             _rNewValue >>= xSource;
 
@@ -161,8 +161,8 @@ namespace pcr
 
             aDependentProperties.push_back( PROPERTY_ID_BOUNDCOLUMN );
 
-            // also reset the list entries if the cell range is reset
-            // #i28319#
+            
+            
             if ( !_bFirstTimeInit )
             {
                 try
@@ -176,9 +176,9 @@ namespace pcr
                 }
             }
         }
-        break;  // case PROPERTY_ID_LIST_CELL_RANGE
+        break;  
 
-        // ----- DataField -----
+        
         case PROPERTY_ID_CONTROLSOURCE:
         {
             OUString sControlSource;
@@ -186,7 +186,7 @@ namespace pcr
             if ( impl_isSupportedProperty_nothrow( PROPERTY_ID_BOUND_CELL ) )
                 _rxInspectorUI->enablePropertyUI( PROPERTY_BOUND_CELL, sControlSource.isEmpty() );
         }
-        break;  // case PROPERTY_ID_CONTROLSOURCE
+        break;  
 
         default:
             OSL_FAIL( "CellBindingPropertyHandler::actuatingPropertyChanged: did not register for this property!" );
@@ -201,14 +201,14 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void CellBindingPropertyHandler::impl_updateDependentProperty_nothrow( PropertyId _nPropId, const Reference< XObjectInspectorUI >& _rxInspectorUI ) const
     {
         try
         {
             switch ( _nPropId )
             {
-            // ----- BoundColumn -----
+            
             case PROPERTY_ID_BOUNDCOLUMN:
             {
                 CellBindingPropertyHandler* pNonConstThis = const_cast< CellBindingPropertyHandler* >( this );
@@ -218,9 +218,9 @@ namespace pcr
                 if ( impl_isSupportedProperty_nothrow( PROPERTY_ID_BOUNDCOLUMN ) )
                     _rxInspectorUI->enablePropertyUI( PROPERTY_BOUNDCOLUMN, !xBinding.is() && !xListSource.is() );
             }
-            break;  // case PROPERTY_ID_BOUNDCOLUMN
+            break;  
 
-            }   // switch
+            }   
 
         }
         catch( const Exception& )
@@ -229,14 +229,14 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL CellBindingPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "CellBindingPropertyHandler::getPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            
 
         Any aReturn;
         switch ( nPropId )
@@ -275,14 +275,14 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL CellBindingPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
 
         OSL_ENSURE( m_pHelper.get(), "CellBindingPropertyHandler::setPropertyValue: inconsistency!" );
-            // if we survived impl_getPropertyId_throw, we should have a helper, since no helper implies no properties
+            
 
         try
         {
@@ -337,9 +337,9 @@ namespace pcr
 
             Any aNewValue( getPropertyValue( _rPropertyName ) );
             firePropertyChange( _rPropertyName, nPropId, aOldValue, aNewValue );
-            // TODO/UNOize: can't we make this a part of the base class, for all those "virtual"
-            // properties? Base class'es |setPropertyValue| could call some |doSetPropertyValue|,
-            // and handle the listener notification itself
+            
+            
+            
         }
         catch( const Exception& )
         {
@@ -347,7 +347,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL CellBindingPropertyHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -369,9 +369,9 @@ namespace pcr
 
             case PROPERTY_ID_BOUND_CELL:
             {
-                // if we have the possibility of an integer binding, then we must preserve
-                // this property's value (e.g. if the current binding is an integer binding, then
-                // the newly created one must be, too)
+                
+                
+                
                 bool bIntegerBinding = false;
                 if ( m_pHelper->isCellIntegerBindingAllowed() )
                 {
@@ -395,7 +395,7 @@ namespace pcr
         return aPropertyValue;
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL CellBindingPropertyHandler::convertToControlValue( const OUString& _rPropertyName,
         const Any& _rPropertyValue, const Type& /*_rControlValueType*/ ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -419,7 +419,7 @@ namespace pcr
                 _rPropertyValue >>= xBinding;
                 OSL_ENSURE( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (1)!" );
 
-                // the only value binding we support so far is linking to spreadsheet cells
+                
                 aControlValue <<= m_pHelper->getStringAddressFromCellBinding( xBinding );
             }
             break;
@@ -433,7 +433,7 @@ namespace pcr
                 _rPropertyValue >>= xSource;
                 OSL_ENSURE( bSuccess, "CellBindingPropertyHandler::convertToControlValue: invalid value (2)!" );
 
-                // the only value binding we support so far is linking to spreadsheet cells
+                
                 aControlValue <<= m_pHelper->getStringAddressFromCellListSource( xSource );
             }
             break;
@@ -450,7 +450,7 @@ namespace pcr
         return aControlValue;
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< Property > SAL_CALL CellBindingPropertyHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;
@@ -487,8 +487,8 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-//........................................................................
-}   // namespace pcr
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,14 +70,14 @@ namespace sd {
 void DrawViewShell::ModelHasChanged()
 {
     Invalidate();
-    // that the navigator also gets an up to date state
+    
     GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, sal_True, sal_False );
 
     SfxBoolItem aItem( SID_3D_STATE, true );
     GetViewFrame()->GetDispatcher()->Execute(
         SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
 
-    // now initialize the TextEditOutliner which was newly created by the draw engine
+    
     ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
     if (pOutliner)
     {
@@ -110,9 +110,9 @@ void DrawViewShell::Resize (void)
 
 void DrawViewShell::ArrangeGUIElements (void)
 {
-    // Retrieve the current size (thickness) of the scroll bars.  That is
-    // the width of the vertical and the height of the horizontal scroll
-    // bar.
+    
+    
+    
     int nScrollBarSize =
         GetParentWindow()->GetSettings().GetStyleSettings().GetScrollBarSize();
     maScrBarWH = Size (nScrollBarSize, nScrollBarSize);
@@ -135,8 +135,8 @@ void DrawViewShell::ArrangeGUIElements (void)
 
     if ( mbZoomOnPage && !bInPlaceActive && !bClientActive )
     {
-        // with split, always resize first window
-        //af pWindow = mpContentWindow.get();
+        
+        
         SfxRequest aReq(SID_SIZE_PAGE, 0, GetDoc()->GetItemPool());
         ExecuteSlot( aReq );
     }
@@ -149,11 +149,11 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
 {
     ModifyGuard aGuard( GetDoc() );
 
-    // this option has to be adjust at the model
+    
     GetDoc()->SetPickThroughTransparentTextFrames(
              SD_MOD()->GetSdOptions(GetDoc()->GetDocumentType())->IsPickThrough());
 
-    // initialization of the Character-(Screen-) attribute
+    
     if (HasRuler() != pView->HasRuler())
         SetRuler( pView->HasRuler() );
 
@@ -238,11 +238,11 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mpDrawView->IsQuickTextEditMode() != pView->IsQuickEdit())
         mpDrawView->SetQuickTextEditMode( pView->IsQuickEdit() );
 
-    // #i26631#
+    
     if (mpDrawView->IsMasterPagePaintCaching() != pView->IsMasterPagePaintCaching())
         mpDrawView->SetMasterPagePaintCaching( pView->IsMasterPagePaintCaching() );
 
-    // handle size: 9 pixels
+    
     sal_uInt16 nTmp = mpDrawView->GetMarkHdlSizePixel();
     if( nTmp != 9 )
         mpDrawView->SetMarkHdlSizePixel( 9 );
@@ -292,7 +292,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     ChangeEditMode(eNewEditMode, bNewLayerMode);
     SwitchPage(nSelectedPage);
 
-    // restore DrawMode for 'normal' window
+    
     if(GetActiveWindow()->GetDrawMode() != pView->GetDrawMode())
       GetActiveWindow()->SetDrawMode(pView->GetDrawMode());
 
@@ -302,7 +302,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
         GetViewFrame()->GetDispatcher()->Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD, &aDesignModeItem, 0L );
     }
 
-    // has to be called in the end, because it executes a WriteFrameViewData()
+    
     if (mpDrawView->IsFrameDragSingles() != pView->IsFrameDragSingles() )
         mpDrawView->SetFrameDragSingles( pView->IsFrameDragSingles() );
 }
@@ -313,7 +313,7 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
  */
 void DrawViewShell::WriteFrameViewData()
 {
-    // store character-(screen-) attribute of FrameView
+    
     mpFrameView->SetRuler( HasRuler() );
     mpFrameView->SetGridCoarse( mpDrawView->GetGridCoarse() );
     mpFrameView->SetGridFine( mpDrawView->GetGridFine() );
@@ -388,7 +388,7 @@ void DrawViewShell::WriteFrameViewData()
     if ( mpFrameView->GetActiveLayer() != mpDrawView->GetActiveLayer() )
         mpFrameView->SetActiveLayer( mpDrawView->GetActiveLayer() );
 
-    // store DrawMode for 'normal' window
+    
     if(mpFrameView->GetDrawMode() != GetActiveWindow()->GetDrawMode())
       mpFrameView->SetDrawMode(GetActiveWindow()->GetDrawMode());
 }
@@ -408,7 +408,7 @@ void DrawViewShell::PrePaint()
  */
 void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
-    // Fill var FillColor here to have it available on later call
+    
     svtools::ColorConfig aColorConfig;
     Color aFillColor;
 
@@ -419,7 +419,7 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
 
-    // Set Application Background color for usage in SdrPaintView(s)
+    
     mpDrawView->SetApplicationBackgroundColor(aFillColor);
 
     /* This is done before each text edit, so why not do it before every paint.
@@ -602,10 +602,10 @@ void DrawViewShell::SetActiveTabLayerIndex (int nIndex)
     LayerTabBar* pBar = GetLayerTabControl ();
     if (pBar != NULL)
     {
-        // Ignore invalid indices silently.
+        
         if (nIndex>=0 && nIndex<pBar->GetPageCount())
         {
-            // Tell the draw view and the tab control of the new active layer.
+            
             mpDrawView->SetActiveLayer (pBar->GetPageText (pBar->GetPageId ((sal_uInt16)nIndex)));
             pBar->SetCurPageId (pBar->GetPageId ((sal_uInt16)nIndex));
             SdUnoDrawView* pUnoDrawView = new SdUnoDrawView (
@@ -648,6 +648,6 @@ int DrawViewShell::GetTabLayerCount (void) const
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

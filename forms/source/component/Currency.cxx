@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Currency.hxx"
@@ -24,10 +24,10 @@
 #include <unotools/syslocale.hxx>
 #include <comphelper/processfactory.hxx>
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
@@ -40,28 +40,28 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 
-//==================================================================
-// OCurrencyControl
-//==================================================================
-//------------------------------------------------------------------
+
+
+
+
 OCurrencyControl::OCurrencyControl(const Reference<XComponentContext>& _rxFactory)
     :OBoundControl(_rxFactory, VCL_CONTROL_CURRENCYFIELD)
 {
 }
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OCurrencyControl_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OCurrencyControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OCurrencyControl::_getTypes()
 {
     return OBoundControl::_getTypes();
 }
 
-//------------------------------------------------------------------------------
+
 StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -72,29 +72,29 @@ StringSequence SAL_CALL OCurrencyControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//==================================================================
-// OCurrencyModel
-//==================================================================
-//------------------------------------------------------------------
+
+
+
+
 InterfaceRef SAL_CALL OCurrencyModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OCurrencyModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OCurrencyModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
-//------------------------------------------------------------------
+
 void OCurrencyModel::implConstruct()
 {
     if (m_xAggregateSet.is())
     {
         try
         {
-            // get the system international information
+            
             const SvtSysLocale aSysLocale;
             const LocaleDataWrapper& aLocaleInfo = aSysLocale.GetLocaleData();
 
@@ -102,19 +102,19 @@ void OCurrencyModel::implConstruct()
             sal_Bool bPrependCurrencySymbol;
             switch ( aLocaleInfo.getCurrPositiveFormat() )
             {
-                case 0: // $1
+                case 0: 
                     sCurrencySymbol = aLocaleInfo.getCurrSymbol();
                     bPrependCurrencySymbol = sal_True;
                     break;
-                case 1: // 1$
+                case 1: 
                     sCurrencySymbol = aLocaleInfo.getCurrSymbol();
                     bPrependCurrencySymbol = sal_False;
                     break;
-                case 2: // $ 1
+                case 2: 
                     sCurrencySymbol = aLocaleInfo.getCurrSymbol() + " ";
                     bPrependCurrencySymbol = sal_True;
                     break;
-                case 3: // 1 $
+                case 3: 
                     sCurrencySymbol = " " + aLocaleInfo.getCurrSymbol();
                     bPrependCurrencySymbol = sal_False;
                     break;
@@ -132,11 +132,11 @@ void OCurrencyModel::implConstruct()
     }
 }
 
-//------------------------------------------------------------------
-//------------------------------------------------------------------
+
+
 OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, VCL_CONTROLMODEL_CURRENCYFIELD, FRM_SUN_CONTROL_CURRENCYFIELD, sal_False, sal_True )
-                                    // use the old control name for compytibility reasons
+                                    
 {
 
     m_nClassId = FormComponentType::CURRENCYFIELD;
@@ -145,24 +145,24 @@ OCurrencyModel::OCurrencyModel(const Reference<XComponentContext>& _rxFactory)
     implConstruct();
 }
 
-//------------------------------------------------------------------
+
 OCurrencyModel::OCurrencyModel( const OCurrencyModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
 {
     implConstruct();
 }
 
-//------------------------------------------------------------------
+
 OCurrencyModel::~OCurrencyModel()
 {
 }
 
-// XCloneable
-//------------------------------------------------------------------------------
+
+
 IMPLEMENT_DEFAULT_CLONING( OCurrencyModel )
 
-// XServiceInfo
-//------------------------------------------------------------------------------
+
+
 StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -180,25 +180,25 @@ StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-//------------------------------------------------------------------------------
+
 void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
-        // Value auf transient setzen
-//      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
+        
+
 
         DECL_PROP3(DEFAULT_VALUE,       double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP1(TABINDEX,        sal_Int16,              BOUND);
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OCurrencyModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return OUString(FRM_COMPONENT_CURRENCYFIELD); // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_CURRENCYFIELD); 
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aControlValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
@@ -222,7 +222,7 @@ sal_Bool OCurrencyModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 Any OCurrencyModel::translateDbColumnToControlValue()
 {
     m_aSaveValue <<= m_xColumn->getDouble();
@@ -231,8 +231,8 @@ Any OCurrencyModel::translateDbColumnToControlValue()
     return m_aSaveValue;
 }
 
-// XReset
-//------------------------------------------------------------------------------
+
+
 Any OCurrencyModel::getDefaultForReset() const
 {
     Any aValue;
@@ -242,15 +242,15 @@ Any OCurrencyModel::getDefaultForReset() const
     return aValue;
 }
 
-//------------------------------------------------------------------------------
+
 void OCurrencyModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();
     m_aSaveValue.clear();
 }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

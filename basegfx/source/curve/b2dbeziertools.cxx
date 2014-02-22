@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/curve/b2dbeziertools.hxx>
 #include <basegfx/curve/b2dcubicbezier.hxx>
 #include <algorithm>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -33,7 +33,7 @@ namespace basegfx
 
         if(bIsBezier)
         {
-            // check nDivisions; at least one is needed, but also prevent too big values
+            
             if(nDivisions < 1)
             {
                 nDivisions = 1;
@@ -43,10 +43,10 @@ namespace basegfx
                 nDivisions = 1000;
             }
 
-            // set nEdgeCount
+            
             mnEdgeCount = nDivisions + 1;
 
-            // fill in maLengthArray
+            
             maLengthArray.clear();
             maLengthArray.reserve(mnEdgeCount);
             B2DPoint aCurrent(rBase.getStartPoint());
@@ -97,15 +97,15 @@ namespace basegfx
             return 1.0;
         }
 
-        // fDistance is in ]0.0 .. fLength[
+        
 
         if(1 == mnEdgeCount)
         {
-            // not a bezier, linear edge
+            
             return fDistance / fLength;
         }
 
-        // it is a bezier
+        
         ::std::vector< double >::const_iterator aIter = ::std::lower_bound(maLengthArray.begin(), maLengthArray.end(), fDistance);
         const sal_uInt32 nIndex(aIter - maLengthArray.begin());
         const double fHighBound(maLengthArray[nIndex]);
@@ -115,6 +115,6 @@ namespace basegfx
         return (static_cast< double >(nIndex) + fLinearInterpolatedLength) / static_cast< double >(mnEdgeCount);
     }
 
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

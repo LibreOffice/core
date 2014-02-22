@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,17 +14,17 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ucpext_provider.hxx"
 
 #include <cppuhelper/implementationentry.hxx>
 
-//......................................................................................................................
+
 namespace ucb { namespace ucp { namespace ext
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -39,9 +39,9 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::uno::Type;
     using ::com::sun::star::lang::XSingleComponentFactory;
 
-    //==================================================================================================================
-    //= descriptors for the services implemented in this component
-    //==================================================================================================================
+    
+    
+    
     static struct ::cppu::ImplementationEntry s_aServiceEntries[] =
     {
         {
@@ -53,13 +53,13 @@ namespace ucb { namespace ucp { namespace ext
         { 0, 0, 0, 0, 0, 0 }
     };
 
-//......................................................................................................................
-} } }   // namespace ucb::ucp::ext
-//......................................................................................................................
+
+} } }   
+
 
 extern "C"
 {
-    //------------------------------------------------------------------------------------------------------------------
+    
     SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpext_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
     {
         return ::cppu::component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey , ::ucb::ucp::ext::s_aServiceEntries );

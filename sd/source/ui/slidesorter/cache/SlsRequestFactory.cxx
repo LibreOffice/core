@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,7 +38,7 @@ void RequestFactory::operator()(
 {
     ::boost::shared_ptr<std::vector<CacheKey> > aKeys;
 
-    // Add the requests for the visible pages.
+    
     aKeys = rpCacheContext->GetEntryList(true);
     if (aKeys.get() != NULL)
     {
@@ -48,7 +48,7 @@ void RequestFactory::operator()(
             rRequestQueue.AddRequest(*iKey, VISIBLE_NO_PREVIEW);
     }
 
-    // Add the requests for the non-visible pages.
+    
     aKeys = rpCacheContext->GetEntryList(false);
     if (aKeys.get() != NULL)
     {
@@ -61,7 +61,7 @@ void RequestFactory::operator()(
 
 
 
-} } } // end of namespace ::sd::slidesorter::cache
+} } } 
 
 
 

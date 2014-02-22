@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -53,7 +53,7 @@ namespace cmis
 
                 vector< string >::iterator pIt = aCertificates.begin();
                 string sCert = *pIt;
-                // We need to get rid of the PEM header/footer lines
+                
                 OUString sCleanCert = STD_TO_OUSTR( sCert );
                 sCleanCert = sCleanCert.replaceAll( "-----BEGIN CERTIFICATE-----", "" );
                 sCleanCert = sCleanCert.replaceAll( "-----END CERTIFICATE-----", "" );
@@ -80,7 +80,7 @@ namespace cmis
                         return status == security::CertificateContainerStatus_TRUSTED;
                 }
 
-                // If we had no certificate, ask what to do
+                
                 std::vector< uno::Reference< security::XCertificate > > vecCerts;
 
                 for ( ++pIt; pIt != aCertificates.end(); ++pIt )
@@ -113,7 +113,7 @@ namespace cmis
                             xSelection.get(), uno::UNO_QUERY );
                         bValidate = xApprove.is();
 
-                        // Store the decision in the container
+                        
                         xCertificateContainer->addCertificate(
                             m_sHostname, xCert->getSubjectName(), bValidate );
                     }

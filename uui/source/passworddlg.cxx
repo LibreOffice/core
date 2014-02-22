@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "passworddlg.hxx"
@@ -27,7 +27,7 @@
 using namespace ::com::sun::star;
 
 
-// -----------------------------------------------------------------------
+
 
 static void lcl_Move( Window &rWin, long nOffset )
 {
@@ -36,7 +36,7 @@ static void lcl_Move( Window &rWin, long nOffset )
     rWin.SetPosPixel( aTmp );
 }
 
-// -----------------------------------------------------------------------
+
 
 PasswordDialog::PasswordDialog(
     Window* _pParent,
@@ -69,14 +69,14 @@ PasswordDialog::PasswordDialog(
         aErrorBox.Execute();
     }
 
-    // default settings for enter password or reenter passwd...
+    
     OUString aTitle(ResId(STR_TITLE_ENTER_PASSWORD, *pResourceMgr).toString());
     aFTConfirmPassword.Hide();
     aEDConfirmPassword.Hide();
     aFTConfirmPassword.Enable( false );
     aEDConfirmPassword.Enable( false );
 
-    // settings for create password
+    
     if (nDialogMode == task::PasswordRequestMode_PASSWORD_CREATE)
     {
         aTitle = ResId(STR_TITLE_CREATE_PASSWORD, *pResourceMgr).toString();
@@ -90,7 +90,7 @@ PasswordDialog::PasswordDialog(
     }
     else
     {
-        // shrink dialog by size of hidden controls and move rest up accordingly
+        
 
         long nDelta = aFixedLine1.GetPosPixel().Y() - aFTConfirmPassword.GetPosPixel().Y();
 
@@ -121,8 +121,8 @@ PasswordDialog::PasswordDialog(
 
 
     //
-    // move controls down by extra height needed for aFTPassword
-    // (usually only needed if a URL was provided)
+    
+    
     //
 
     long nLabelWidth    = aFTPassword.GetSizePixel().Width();

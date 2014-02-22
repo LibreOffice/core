@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "worksheetbuffer.hxx"
@@ -37,14 +37,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 SheetInfoModel::SheetInfoModel() :
     mnBiffHandle( -1 ),
@@ -53,7 +53,7 @@ SheetInfoModel::SheetInfoModel() :
 {
 }
 
-// ============================================================================
+
 
 WorksheetBuffer::WorksheetBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -110,15 +110,15 @@ OUString WorksheetBuffer::getCalcSheetName( sal_Int32 nWorksheet ) const
 
 void WorksheetBuffer::convertSheetNameRef( OUString& sSheetNameRef ) const
 {
-    // convert '#SheetName!A1' to '#SheetName.A1'
+    
     if( sSheetNameRef.startsWith("#") )
     {
         sal_Int32 nSepPos = sSheetNameRef.lastIndexOf( '!' );
         if( nSepPos > 0 )
         {
-            // replace the exclamation mark with a period
+            
             sSheetNameRef = sSheetNameRef.replaceAt( nSepPos, 1, OUString( '.' ) );
-            // #i66592# convert sheet names that have been renamed on import
+            
             OUString aSheetName = sSheetNameRef.copy( 1, nSepPos - 1 );
             OUString aCalcName = getCalcSheetName( aSheetName );
             if( !aCalcName.isEmpty() )
@@ -143,22 +143,22 @@ OUString WorksheetBuffer::getCalcSheetName( const OUString& rWorksheetName ) con
     return OUString();
 }
 
-// private --------------------------------------------------------------------
+
 
 namespace {
 
 OUString lclQuoteName( const OUString& rName )
 {
     OUStringBuffer aBuffer( rName );
-    // duplicate all quote characters
+    
     for( sal_Int32 nPos = aBuffer.getLength() - 1; nPos >= 0; --nPos )
         if( aBuffer[nPos] == '\'' )
             aBuffer.insert( nPos, '\'' );
-    // add outer quotes and return
+    
     return aBuffer.insert( 0, '\'' ).append( '\'' ).makeStringAndClear();
 }
 
-} // namespace
+} 
 
 WorksheetBuffer::SheetInfo::SheetInfo( const SheetInfoModel& rModel, sal_Int16 nCalcSheet, const OUString& rCalcName ) :
     SheetInfoModel( rModel ),
@@ -180,7 +180,7 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
         if( nSheetPos < xSheetsIA->getCount() )
         {
             nCalcSheet = static_cast< sal_Int16 >( nSheetPos );
-            // existing sheet - try to rename
+            
             Reference< XNamed > xSheetName( xSheetsIA->getByIndex( nSheetPos ), UNO_QUERY_THROW );
             if( xSheetName->getName() != aSheetName )
             {
@@ -192,16 +192,16 @@ WorksheetBuffer::IndexNamePair WorksheetBuffer::createSheet( const OUString& rPr
         else
         {
             nCalcSheet = static_cast< sal_Int16 >( xSheetsIA->getCount() );
-            // new sheet - insert with unused name
+            
             aSheetName = ContainerHelper::getUnusedName( xSheets, aSheetName, ' ' );
             xSheets->insertNewByName( aSheetName, nCalcSheet );
             aPropSet.set( xSheetsIA->getByIndex( nCalcSheet ) );
         }
 
-        // sheet properties
+        
         aPropSet.setProperty( PROP_IsVisible, bVisible );
 
-        // return final sheet index if sheet exists
+        
         return IndexNamePair( nCalcSheet, aSheetName );
     }
     catch( Exception& )
@@ -221,9 +221,9 @@ void WorksheetBuffer::insertSheet( const SheetInfoModel& rModel )
     maSheetInfosByName[ lclQuoteName( rModel.maName ) ] = xSheetInfo;
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

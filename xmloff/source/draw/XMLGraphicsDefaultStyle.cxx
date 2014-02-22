@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -76,7 +76,7 @@ SvXMLImportContext *XMLGraphicsDefaultStyle::CreateChildContext( sal_uInt16 nPre
     return pContext;
 }
 
-// This method is called for every default style
+
 void XMLGraphicsDefaultStyle::SetDefaults()
 {
     Reference< XMultiServiceFactory > xFact( GetImport().GetModel(), UNO_QUERY );
@@ -86,8 +86,8 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     Reference< XPropertySet > xDefaults( xFact->createInstance( "com.sun.star.drawing.Defaults" ), UNO_QUERY );
     if( !xDefaults.is() )
         return;
-                                            // SJ: #i114750#
-    sal_Bool bWordWrapDefault = sal_True;   // initializing with correct ODF fo:wrap-option default
+                                            
+    sal_Bool bWordWrapDefault = sal_True;   
     sal_Int32 nUPD( 0 );
     sal_Int32 nBuild( 0 );
     const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
@@ -108,8 +108,8 @@ void XMLGraphicsDefaultStyle::SetDefaults()
     if (GetImport().IsOOoXML()
         && xInfo->hasPropertyByName("IsFollowingTextFlow"))
     {
-        // OOo 1.x only supported "true" so that is the more appropriate
-        // default for OOoXML format documents.
+        
+        
         xDefaults->setPropertyValue("IsFollowingTextFlow", uno::makeAny(true));
     }
 

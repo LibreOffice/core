@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,7 +32,7 @@
 using namespace connectivity::macab;
 using namespace com::sun::star::util;
 
-// -------------------------------------------------------------------------
+
 MacabRecords::MacabRecords(const ABAddressBookRef _addressBook, MacabHeader *_header, MacabRecord **_records, sal_Int32 _numRecords)
 {
     /* Variables passed in... */
@@ -50,7 +50,7 @@ MacabRecords::MacabRecords(const ABAddressBookRef _addressBook, MacabHeader *_he
     bootstrap_requiredProperties();
 }
 
-// -------------------------------------------------------------------------
+
 /* Creates a MacabRecords from another: copies the length, name, and
  * address book of the original, but the header or the records themselves.
  * The idea is that the only reason to copy a MacabRecords is to create
@@ -77,7 +77,7 @@ MacabRecords::MacabRecords(const MacabRecords *_copy)
     bootstrap_requiredProperties();
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecords::MacabRecords(const ABAddressBookRef _addressBook)
 {
     /* Variables passed in... */
@@ -95,7 +95,7 @@ MacabRecords::MacabRecords(const ABAddressBookRef _addressBook)
     bootstrap_requiredProperties();
 }
 
-// -------------------------------------------------------------------------
+
 void MacabRecords::initialize()
 {
 
@@ -145,12 +145,12 @@ void MacabRecords::initialize()
     CFRelease(allRecords);
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecords::~MacabRecords()
 {
 }
 
-// -------------------------------------------------------------------------
+
 void MacabRecords::setHeader(MacabHeader *_header)
 {
     if(header != NULL)
@@ -158,13 +158,13 @@ void MacabRecords::setHeader(MacabHeader *_header)
     header = _header;
 }
 
-// -------------------------------------------------------------------------
+
 MacabHeader *MacabRecords::getHeader() const
 {
     return header;
 }
 
-// -------------------------------------------------------------------------
+
 /* Inserts a MacabRecord at a given location. If there is already a
  * MacabRecord at that location, return it.
  */
@@ -199,14 +199,14 @@ MacabRecord *MacabRecords::insertRecord(MacabRecord *_newRecord, const sal_Int32
     return oldRecord;
 }
 
-// -------------------------------------------------------------------------
+
 /* Insert a record at the next available place. */
 void MacabRecords::insertRecord(MacabRecord *_newRecord)
 {
     insertRecord(_newRecord, currentRecord);
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecord *MacabRecords::getRecord(const sal_Int32 _location) const
 {
     if(_location >= recordsSize)
@@ -214,7 +214,7 @@ MacabRecord *MacabRecords::getRecord(const sal_Int32 _location) const
     return records[_location];
 }
 
-// -------------------------------------------------------------------------
+
 macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const sal_Int32 _columnNumber) const
 {
     if(_recordNumber >= recordsSize)
@@ -228,7 +228,7 @@ macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const sal_Int3
     return record->get(_columnNumber);
 }
 
-// -------------------------------------------------------------------------
+
 macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const OUString _columnName) const
 {
     if(header != NULL)
@@ -241,22 +241,22 @@ macabfield *MacabRecords::getField(const sal_Int32 _recordNumber, const OUString
     }
     else
     {
-        // error: shouldn't access field with null header!
+        
         return NULL;
     }
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MacabRecords::getFieldNumber(const OUString _columnName) const
 {
     if(header != NULL)
         return header->getColumnNumber(_columnName);
     else
-        // error: shouldn't access field with null header!
+        
         return -1;
 }
 
-// -------------------------------------------------------------------------
+
 /* Create the lcl_CFTypes array -- we need this because there is no
  * way to get the ABType of an object from the object itself, and the
  * function ABTypeOfProperty can't handle multiple levels of data
@@ -295,7 +295,7 @@ void MacabRecords::bootstrap_CF_types()
     lcl_CFTypes[5].ab = kABDataProperty;
 }
 
-// -------------------------------------------------------------------------
+
 /* This is based on the possible fields required in the mail merge template
  * in sw. If the fields possible there change, it would be optimal to
  * change these fields as well.
@@ -313,7 +313,7 @@ void MacabRecords::bootstrap_requiredProperties()
     requiredProperties[6] = kABEmailProperty;
 }
 
-// -------------------------------------------------------------------------
+
 /* Create the header for a given record type and a given array of records.
  * Because the array of records and the record type are given, if you want
  * to, you can run this method on the members of a group, or on any other
@@ -394,7 +394,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
             /* If we have found too many non-required properties */
             if(k == numNonRequiredProperties)
             {
-                k++; // so that the OSL_ENSURE below fails
+                k++; 
                 break;
             }
             nonRequiredProperties[k] = property;
@@ -402,9 +402,9 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
         }
     }
 
-    // Somehow, we got too many or too few non-requird properties...
-    // Most likely, one of the required properties no longer exists, which
-    // we also test later.
+    
+    
+    
     OSL_ENSURE(k == numNonRequiredProperties, "MacabRecords::createHeaderForRecordType: Found an unexpected number of non-required properties");
 
     /* Fill the header with required properties first... */
@@ -436,7 +436,7 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
         }
         else
         {
-            // Couldn't find a required property...
+            
             OSL_FAIL(OString(OString("MacabRecords::createHeaderForRecordType: could not find required property: ") +
                                     OUStringToOString(CFStringToOUString(requiredProperties[i]), RTL_TEXTENCODING_ASCII_US)).getStr());
         }
@@ -470,14 +470,14 @@ MacabHeader *MacabRecords::createHeaderForRecordType(const CFArrayRef _records, 
     return lcl_header;
 }
 
-// -------------------------------------------------------------------------
+
 /* Create a header for a single property. Basically, this method gets
  * the property's value and type and then calls another method of
  * the same name to do the dirty work.
  */
 MacabHeader *MacabRecords::createHeaderForProperty(const ABRecordRef _record, const CFStringRef _propertyName, const CFStringRef _recordType, const sal_Bool _isPropertyRequired) const
 {
-    // local variables
+    
     CFStringRef localizedPropertyName;
     CFTypeRef propertyValue;
     ABPropertyType propertyType;
@@ -499,7 +499,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABRecordRef _record, co
     return result;
 }
 
-// -------------------------------------------------------------------------
+
 /* Create a header for a single property. This method is recursive
  * because a single property might contain several sub-properties that
  * we also want to treat singly.
@@ -575,7 +575,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
             {
                 sal_Int32 i,j,k;
 
-                // Total number of multi-array or multi-dictionary elements.
+                
                 sal_Int32 multiLengthFirstLevel = ABMultiValueCount((ABMutableMultiValueRef) _propertyValue);
 
                 /* Total length, including the length of each element (e.g., if
@@ -810,7 +810,7 @@ MacabHeader *MacabRecords::createHeaderForProperty(const ABPropertyType _propert
         return NULL;
 }
 
-// -------------------------------------------------------------------------
+
 void MacabRecords::manageDuplicateHeaders(macabfield **_headerNames, const sal_Int32 _length) const
 {
     /* If we have two cases of, say, phone: home, this makes it:
@@ -830,10 +830,10 @@ void MacabRecords::manageDuplicateHeaders(macabfield **_headerNames, const sal_I
             }
         }
 
-        // duplicate!
+        
         if(count != 1)
         {
-            // There is probably a better way to do this...
+            
             OUString newName = CFStringToOUString((CFStringRef) _headerNames[i]->value);
             CFRelease(_headerNames[i]->value);
             newName += " (" + OUString::number(count) + ")";
@@ -842,7 +842,7 @@ void MacabRecords::manageDuplicateHeaders(macabfield **_headerNames, const sal_I
     }
 }
 
-// -------------------------------------------------------------------------
+
 /* Create a MacabRecord out of an ABRecord, using a given MacabHeader and
  * the record's type. We go through each property for this record type
  * then process it much like we processed the header (above), with two
@@ -889,7 +889,7 @@ MacabRecord *MacabRecords::createMacabRecord(const ABRecordRef _abrecord, const 
     return macabRecord;
 }
 
-// -------------------------------------------------------------------------
+
 /* Inserts a given property into a MacabRecord. This method calls another
  * method by the same name after getting the property type (it only
  * receives the property value). It is called when we aren't given the
@@ -904,7 +904,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(MacabRecord *_abrecord, const M
         insertPropertyIntoMacabRecord(ab_type, _abrecord, _header, _propertyName, _propertyValue);
 }
 
-// -------------------------------------------------------------------------
+
 /* Inserts a given property into a MacabRecord. This method is recursive
  * because properties can contain many sub-properties.
  */
@@ -945,14 +945,14 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
             OUString columnName = _propertyName;
             sal_Int32 i = 1;
 
-            // A big safeguard to prevent two fields from having the same name.
+            
             while(bPlaced != sal_True)
             {
                 sal_Int32 columnNumber = _header->getColumnNumber(columnName);
                 bPlaced = sal_True;
                 if(columnNumber != -1)
                 {
-                    // collision! A property already exists here!
+                    
                     if(_abrecord->get(columnNumber) != NULL)
                     {
                         bPlaced = sal_False;
@@ -960,7 +960,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
                         columnName = _propertyName + " (" + OUString::number(i) + ")";
                     }
 
-                    // success!
+                    
                     else
                     {
                         _abrecord->insertAtColumn(_propertyValue, _propertyType, columnNumber);
@@ -1105,7 +1105,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
 
 }
 
-// -------------------------------------------------------------------------
+
 ABPropertyType MacabRecords::getABTypeFromCFType(const CFTypeID cf_type ) const
 {
     sal_Int32 i;
@@ -1120,29 +1120,29 @@ ABPropertyType MacabRecords::getABTypeFromCFType(const CFTypeID cf_type ) const
     return kABErrorInProperty;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MacabRecords::size() const
 {
     return currentRecord;
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecords *MacabRecords::begin()
 {
     return this;
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecords::iterator::iterator ()
 {
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecords::iterator::~iterator ()
 {
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecords::iterator& MacabRecords::iterator::operator= (MacabRecords *_records)
 {
     id = 0;
@@ -1150,37 +1150,37 @@ MacabRecords::iterator& MacabRecords::iterator::operator= (MacabRecords *_record
     return *this;
 }
 
-// -------------------------------------------------------------------------
+
 void MacabRecords::iterator::operator++ ()
 {
     id++;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool MacabRecords::iterator::operator!= (const sal_Int32 i) const
 {
     return(id != i);
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool MacabRecords::iterator::operator== (const sal_Int32 i) const
 {
     return(id == i);
 }
 
-// -------------------------------------------------------------------------
+
 MacabRecord *MacabRecords::iterator::operator* () const
 {
     return records->getRecord(id);
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MacabRecords::end() const
 {
     return currentRecord;
 }
 
-// -------------------------------------------------------------------------
+
 void MacabRecords::swap(const sal_Int32 _id1, const sal_Int32 _id2)
 {
     MacabRecord *swapRecord = records[_id1];
@@ -1189,13 +1189,13 @@ void MacabRecords::swap(const sal_Int32 _id1, const sal_Int32 _id2)
     records[_id2] = swapRecord;
 }
 
-// -------------------------------------------------------------------------
+
 void MacabRecords::setName(const OUString _sName)
 {
     m_sName = _sName;
 }
 
-// -------------------------------------------------------------------------
+
 OUString MacabRecords::getName() const
 {
     return m_sName;

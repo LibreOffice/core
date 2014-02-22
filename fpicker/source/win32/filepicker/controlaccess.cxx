@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tchar.h>
@@ -23,24 +23,24 @@
 #include "controlaccess.hxx"
 #include "../misc/WinImplHelper.hxx"
 
-//------------------------------------------------------------
-// we are using a table based algorithm to dispatch control
-// actions there is one table containing one action table for
-// each control class and one action table per control class
-// which contains function pointer to control action functions
-//------------------------------------------------------------
-
-//------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------
 
 
-namespace // private
+
+
+
+
+
+
+
+
+
+
+namespace 
 {
 
-    //------------------------------------------------------------
-    // table setup
-    //------------------------------------------------------------
+    
+    
+    
 
     CTRL_SETVALUE_FUNCTION_T CheckboxSetValueFunctionTable[] =
     {
@@ -89,7 +89,7 @@ namespace // private
         size_t TableSize;
     };
 
-    // an array of function tables, one for each control class
+    
     _ENTRY CtrlClassSetValueFunctionTable[] =
     {
         { NULL, 0 },
@@ -98,7 +98,7 @@ namespace // private
         { NULL, 0 }
     };
 
-    // an array of function tables, one for each control class
+    
     _ENTRY CtrlClassGetValueFunctionTable[] =
     {
         { NULL, 0 },
@@ -107,9 +107,9 @@ namespace // private
         { NULL, 0 }
     };
 
-    //------------------------------------------------------------
+    
     //
-    //------------------------------------------------------------
+    
 
     CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction(
         CTRL_SETVALUE_FUNCTION_T* aCtrlSetValueFunctionTable, size_t aTableSize, sal_Int16 aCtrlAction )
@@ -122,9 +122,9 @@ namespace // private
         return aCtrlSetValueFunctionTable[aCtrlAction];
     }
 
-    //------------------------------------------------------------
+    
     //
-    //------------------------------------------------------------
+    
 
     CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction(
         CTRL_GETVALUE_FUNCTION_T* aCtrlGetValueFunctionTable, size_t aTableSize, sal_Int16 aCtrlAction )
@@ -137,9 +137,9 @@ namespace // private
         return aCtrlGetValueFunctionTable[aCtrlAction];
     }
 
-    //------------------------------------------------------------
+    
     //
-    //------------------------------------------------------------
+    
 
     inline
     _ENTRY SAL_CALL GetCtrlClassSetValueFunctionTable( CTRL_CLASS aCtrlClass )
@@ -147,9 +147,9 @@ namespace // private
         return CtrlClassSetValueFunctionTable[aCtrlClass];
     }
 
-    //------------------------------------------------------------
+    
     //
-    //------------------------------------------------------------
+    
 
     inline
     _ENTRY SAL_CALL GetCtrlClassGetValueFunctionTable( CTRL_CLASS aCtrlClass )
@@ -160,22 +160,22 @@ namespace // private
     int WindowsFileOpenCtrlIds[] =
     {
         0,
-        IDOK,       //  PUSHBUTTON_OK
-        IDCANCEL,   //  PUSHBUTTON_CANCEL
-        cmb1,       //  LISTBOX_FILTER
-        0,          //  CONTROL_FILEVIEW
-        0,          //  not available in system file picker
-        stc2,       //  LISTBOX_FILTER_LABEL
-        stc3        //  LISTBOX_FILE_NAME_LABEL
+        IDOK,       
+        IDCANCEL,   
+        cmb1,       
+        0,          
+        0,          
+        stc2,       
+        stc3        
     };
     const int SIZE_WINDOWS_FILEOPEN_CTRL_IDS =
         sizeof(WindowsFileOpenCtrlIds)/sizeof(WindowsFileOpenCtrlIds[0]);
 
-}; // end namespace
+}; 
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
 {
@@ -188,9 +188,9 @@ CTRL_SETVALUE_FUNCTION_T SAL_CALL GetCtrlSetValueFunction( CTRL_CLASS aCtrlClass
         aCtrlAction );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass, sal_Int16 aCtrlAction )
 {
@@ -203,9 +203,9 @@ CTRL_GETVALUE_FUNCTION_T SAL_CALL GetCtrlGetValueFunction( CTRL_CLASS aCtrlClass
         aCtrlAction );
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
 {
@@ -218,8 +218,8 @@ CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
     {
         if (0 == _tcsicmp(aClassName,TEXT("button")))
         {
-            // button means many things so we have
-            // to find out what button it is
+            
+            
             LONG lBtnStyle = GetWindowLong(hwndCtrl,GWL_STYLE);
             if (lBtnStyle & BS_CHECKBOX)
                 aCtrlClass = CHECKBOX;
@@ -234,9 +234,9 @@ CTRL_CLASS SAL_CALL GetCtrlClass( HWND hwndCtrl )
     return aCtrlClass;
 }
 
-//------------------------------------------------------------
+
 //
-//------------------------------------------------------------
+
 
 int SAL_CALL CommonFilePickerCtrlIdToWinFileOpenCtrlId( sal_Int16 aControlId )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -239,7 +239,7 @@ void BitmapReadAccess::ImplZeroInitUnusedBits()
             DBG_ASSERT( 8*nScanSize >= nBits,
                         "BitmapWriteAccess::ZeroInitUnusedBits: span size smaller than width?!");
             const sal_uInt32 nLeftOverBits = 8*sizeof(sal_uInt8)*nScanSize - nBits;
-            if( nLeftOverBits != 0 ) // else there is really nothing to do
+            if( nLeftOverBits != 0 ) 
             {
                 const sal_uInt32 nBytes = (nLeftOverBits + 7U) >> 3U;
                 sal_uInt8        nMask;
@@ -279,8 +279,8 @@ sal_uInt16 BitmapReadAccess::GetBestPaletteIndex( const BitmapColor& rBitmapColo
 
 BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const
 {
-    // ask directly doubles >= 0.0 here to avoid rounded values of 0 at small negative
-    // double values, e.g. static_cast< sal_Int32 >(-0.25) is 0, not -1, but *has* to be outside (!)
+    
+    
     if(mpBuffer && fX >= 0.0 && fY >= 0.0)
     {
         const sal_Int32 nX(static_cast< sal_Int32 >(fX));
@@ -288,12 +288,12 @@ BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, doubl
 
         if(nX < mpBuffer->mnWidth && nY < mpBuffer->mnHeight)
         {
-            // get base-return value from inside pixel
+            
             BitmapColor aRetval(GetColor(nY, nX));
 
-            // calculate deltas and indices for neighbour accesses
-            sal_Int16 nDeltaX((fX - (nX + 0.5)) * 255.0); // [-255 .. 255]
-            sal_Int16 nDeltaY((fY - (nY + 0.5)) * 255.0); // [-255 .. 255]
+            
+            sal_Int16 nDeltaX((fX - (nX + 0.5)) * 255.0); 
+            sal_Int16 nDeltaY((fY - (nY + 0.5)) * 255.0); 
             sal_Int16 nIndX(0);
             sal_Int16 nIndY(0);
 
@@ -317,7 +317,7 @@ BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, doubl
                 nDeltaY = -nDeltaY;
             }
 
-            // get right/left neighbour
+            
             BitmapColor aXCol(rFallback);
 
             if(nDeltaX && nIndX >= 0 && nIndX < mpBuffer->mnWidth)
@@ -325,7 +325,7 @@ BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, doubl
                 aXCol = GetColor(nY, nIndX);
             }
 
-            // get top/bottom neighbour
+            
             BitmapColor aYCol(rFallback);
 
             if(nDeltaY && nIndY >= 0 && nIndY < mpBuffer->mnHeight)
@@ -333,7 +333,7 @@ BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, doubl
                 aYCol = GetColor(nIndY, nX);
             }
 
-            // get one of four edge neighbours
+            
             BitmapColor aXYCol(rFallback);
 
             if(nDeltaX && nDeltaY && nIndX >=0 && nIndY >= 0 && nIndX < mpBuffer->mnWidth && nIndY < mpBuffer->mnHeight)
@@ -341,19 +341,19 @@ BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, doubl
                 aXYCol = GetColor(nIndY, nIndX);
             }
 
-            // merge return value with right/left neighbour
+            
             if(aXCol != aRetval)
             {
                 aRetval.Merge(aXCol, 255 - nDeltaX);
             }
 
-            // merge top/bottom neighbour with edge
+            
             if(aYCol != aXYCol)
             {
                 aYCol.Merge(aXYCol, 255 - nDeltaX);
             }
 
-            // merge return value with already merged top/bottom neighbour
+            
             if(aRetval != aYCol)
             {
                 aRetval.Merge(aYCol, 255 - nDeltaY);
@@ -368,8 +368,8 @@ BitmapColor BitmapReadAccess::GetInterpolatedColorWithFallback( double fY, doubl
 
 BitmapColor BitmapReadAccess::GetColorWithFallback( double fY, double fX, const BitmapColor& rFallback ) const
 {
-    // ask directly doubles >= 0.0 here to avoid rounded values of 0 at small negative
-    // double values, e.g. static_cast< sal_Int32 >(-0.25) is 0, not -1, but *has* to be outside (!)
+    
+    
     if(mpBuffer && fX >= 0.0 && fY >= 0.0)
     {
         const sal_Int32 nX(static_cast< sal_Int32 >(fX));
@@ -409,7 +409,7 @@ void BitmapWriteAccess::CopyScanline( long nY, const BitmapReadAccess& rReadAcc 
         memcpy( mpScanBuf[ nY ], rReadAcc.GetScanline( nY ), rReadAcc.GetScanlineSize() );
     }
     else
-        // TODO: use fastbmp infrastructure
+        
         for( long nX = 0L, nWidth = std::min( mpBuffer->mnWidth, rReadAcc.Width() ); nX < nWidth; nX++ )
             SetPixel( nY, nX, rReadAcc.GetPixel( nY, nX ) );
 }
@@ -438,7 +438,7 @@ void BitmapWriteAccess::CopyScanline( long nY, ConstScanline aSrcScanline,
                         nFormat != BMP_FORMAT_24BIT_TC_MASK && nFormat != BMP_FORMAT_32BIT_TC_MASK,
                         "No support for pixel formats with color masks yet!" );
 
-            // TODO: use fastbmp infrastructure
+            
             FncGetPixel pFncGetPixel;
 
             switch( nFormat )

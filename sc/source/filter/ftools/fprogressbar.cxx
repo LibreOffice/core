@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fprogressbar.hxx"
 #include "global.hxx"
 #include "progress.hxx"
 
-// ============================================================================
+
 
 ScfProgressBar::ScfProgressSegment::ScfProgressSegment( sal_Size nSize ) :
     mxProgress( 0 ),
@@ -34,7 +34,7 @@ ScfProgressBar::ScfProgressSegment::~ScfProgressSegment()
 {
 }
 
-// ============================================================================
+
 
 ScfProgressBar::ScfProgressBar( SfxObjectShell* pDocShell, const OUString& rText ) :
     maText( rText )
@@ -65,7 +65,7 @@ void ScfProgressBar::Init( SfxObjectShell* pDocShell )
     mpParentProgress = 0;
     mpParentSegment = mpCurrSegment = 0;
     mnTotalSize = mnTotalPos = mnUnitSize = mnNextUnitPos = 0;
-    mnSysProgressScale = 1;     // used to workaround the ULONG_MAX/100 limit
+    mnSysProgressScale = 1;     
     mbInProgress = false;
 }
 
@@ -88,7 +88,7 @@ void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
         }
         else if( !mxSysProgress.get() && (mnTotalSize > 0) )
         {
-            // System progress has an internal limit of ULONG_MAX/100.
+            
             mnSysProgressScale = 1;
             sal_uLong nSysTotalSize = static_cast< sal_uLong >( mnTotalSize );
             while( nSysTotalSize >= ULONG_MAX / 100 )
@@ -101,7 +101,7 @@ void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
 
         if( !mbInProgress && mpCurrSegment && (mnTotalSize > 0) )
         {
-            mnUnitSize = mnTotalSize / 256 + 1;   // at most 256 calls of system progress
+            mnUnitSize = mnTotalSize / 256 + 1;   
             mnNextUnitPos = 0;
             mbInProgress = true;
         }
@@ -112,15 +112,15 @@ void ScfProgressBar::IncreaseProgressBar( sal_Size nDelta )
 {
     sal_Size nNewPos = mnTotalPos + nDelta;
 
-    // call back to parent progress bar
+    
     if( mpParentProgress && mpParentSegment )
     {
-        // calculate new position of parent progress bar
+        
         sal_Size nParentPos = static_cast< sal_Size >(
             static_cast< double >( nNewPos ) * mpParentSegment->mnSize / mnTotalSize );
         mpParentProgress->ProgressAbs( nParentPos );
     }
-    // modify system progress bar
+    
     else if( mxSysProgress.get() )
     {
         if( nNewPos >= mnNextUnitPos )
@@ -194,7 +194,7 @@ void ScfProgressBar::Progress( sal_Size nDelta )
     ProgressAbs( mpCurrSegment ? (mpCurrSegment->mnPos + nDelta) : 0 );
 }
 
-// ============================================================================
+
 
 ScfSimpleProgressBar::ScfSimpleProgressBar( sal_Size nSize, SfxObjectShell* pDocShell, const OUString& rText ) :
     maProgress( pDocShell, rText )
@@ -237,6 +237,6 @@ void ScfStreamProgressBar::Init( SfxObjectShell* pDocShell, const OUString& rTex
     Progress();
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

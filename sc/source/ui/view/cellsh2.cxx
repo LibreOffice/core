@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -124,8 +124,8 @@ static sal_Bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortPar
 
     if( rSortParam.nRow2 == MAXROW )
     {
-        // Assume that user selected entire column(s), but cater for the
-        // possibility that the start row is not the first row.
+        
+        
         SCSIZE nCount = pDoc->GetEmptyLinesInBlock( rSortParam.nCol1, rSortParam.nRow1, nTab,
                                                     rSortParam.nCol2, rSortParam.nRow2, nTab, eFillDir );
         aExternalRange = ScRange( rSortParam.nCol1,
@@ -182,7 +182,7 @@ static sal_Bool lcl_GetSortParam( const ScViewData* pData, ScSortParam& rSortPar
     return bSort;
 }
 
-//after end execute from !IsModalInputMode, it is safer to delay deleting
+
 namespace
 {
     long DelayDeleteAbstractDialog( void *pAbstractDialog, void * /*pArg*/ )
@@ -199,7 +199,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     ScModule*           pScMod      = SC_MOD();
 
-    pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
+    pTabViewShell->HideListBox();                   
 
     if ( GetViewData()->HasEditView( GetViewData()->GetActivePart() ) )
     {
@@ -211,7 +211,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
     {
         case SID_VIEW_DATA_SOURCE_BROWSER:
             {
-                //  check if database beamer is open
+                
 
                 SfxViewFrame* pViewFrame = pTabViewShell->GetViewFrame();
                 sal_Bool bWasOpen = false;
@@ -226,26 +226,26 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                 if ( bWasOpen )
                 {
-                    //  close database beamer: just forward to SfxViewFrame
+                    
 
                     pViewFrame->ExecuteSlot( rReq );
                 }
                 else
                 {
-                    //  show database beamer: SfxViewFrame call must be synchronous
+                    
 
-                    pViewFrame->ExecuteSlot( rReq, (sal_Bool) false );      // sal_False = synchronous
+                    pViewFrame->ExecuteSlot( rReq, (sal_Bool) false );      
 
-                    //  select current database in database beamer
+                    
 
                     ScImportParam aImportParam;
-                    ScDBData* pDBData = pTabViewShell->GetDBData(true,SC_DB_OLD);       // don't create if none found
+                    ScDBData* pDBData = pTabViewShell->GetDBData(true,SC_DB_OLD);       
                     if (pDBData)
                         pDBData->GetImportParam( aImportParam );
 
                     ScDBDocFunc::ShowInBeamer( aImportParam, pTabViewShell->GetViewFrame() );
                 }
-                rReq.Done();        // needed because it's a toggle slot
+                rReq.Done();        
             }
             break;
 
@@ -260,7 +260,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     if (aImportParam.bImport && !pDBData->HasImportSelection())
                     {
                         pTabViewShell->ImportData( aImportParam );
-                        pDBData->SetImportParam( aImportParam );    //! Undo ??
+                        pDBData->SetImportParam( aImportParam );    
                         bOk = sal_True;
                     }
                 }
@@ -278,7 +278,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                 ScDBData* pDBData = pTabViewShell->GetDBData(true,SC_DB_OLD);
                 if (pDBData)
                 {
-                    //  repeat import like SID_REIMPORT_DATA
+                    
 
                     sal_Bool bContinue = sal_True;
                     ScImportParam aImportParam;
@@ -286,23 +286,23 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     if (aImportParam.bImport && !pDBData->HasImportSelection())
                     {
                         bContinue = pTabViewShell->ImportData( aImportParam );
-                        pDBData->SetImportParam( aImportParam );    //! Undo ??
+                        pDBData->SetImportParam( aImportParam );    
 
-                        //  mark (size may have been changed)
+                        
                         ScRange aNewRange;
                         pDBData->GetArea(aNewRange);
                         pTabViewShell->MarkRange(aNewRange);
                     }
 
-                    if ( bContinue )        // fail at import -> break
+                    if ( bContinue )        
                     {
-                        //  internal operations, when any stored
+                        
 
                         if ( pDBData->HasQueryParam() || pDBData->HasSortParam() ||
                                                           pDBData->HasSubTotalParam() )
                             pTabViewShell->RepeatDB();
 
-                        //  pivot tables that have the range as data source
+                        
 
                         ScRange aRange;
                         pDBData->GetArea(aRange);
@@ -341,8 +341,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         case SID_SORT_DESCENDING:
         case SID_SORT_ASCENDING:
             {
-                //#i60401 ux-ctest: Calc does not support all users' strategies regarding sorting data
-                //the patch comes from maoyg
+                
+                
                 ScSortParam aSortParam;
                 ScDBData*   pDBData = pTabViewShell->GetDBData();
                 ScViewData* pData   = GetViewData();
@@ -379,7 +379,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
                     aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
-                    pTabViewShell->UISort( aSortParam );        // subtotal when needed new
+                    pTabViewShell->UISort( aSortParam );        
 
                     rReq.Done();
                 }
@@ -390,10 +390,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
             {
                 const SfxItemSet* pArgs = rReq.GetArgs();
 
-                //#i60401 ux-ctest: Calc does not support all users' strategies regarding sorting data
-                //the patch comes from maoyg
+                
+                
 
-                if ( pArgs )        // Basic
+                if ( pArgs )        
                 {
                     ScSortParam aSortParam;
                     ScDBData*   pDBData = pTabViewShell->GetDBData();
@@ -410,7 +410,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if( bHasHeader )
                             aSortParam.bHasHeader = bHasHeader;
 
-                        aSortParam.bInplace = true;             // from Basic always
+                        aSortParam.bInplace = true;             
 
                         const SfxPoolItem* pItem;
                         if ( pArgs->GetItemState( SID_SORT_BYROW, true, &pItem ) == SFX_ITEM_SET )
@@ -428,7 +428,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             sal_uInt16 nUserIndex = static_cast<const SfxUInt16Item*>(pItem)->GetValue();
                             aSortParam.bUserDef = ( nUserIndex != 0 );
                             if ( nUserIndex )
-                                aSortParam.nUserIndex = nUserIndex - 1;     // Basic: 1-based
+                                aSortParam.nUserIndex = nUserIndex - 1;     
                         }
 
                         SCCOLROW nField0 = 0;
@@ -453,7 +453,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pArgs->GetItemState( FN_PARAM_6, true, &pItem ) == SFX_ITEM_SET )
                             aSortParam.maKeyState[2].bAscending = static_cast<const SfxBoolItem*>(pItem)->GetValue();
 
-                        // subtotal when needed new
+                        
                         pTabViewShell->UISort( aSortParam );
                         rReq.Done();
                     }
@@ -480,11 +480,11 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aArgSet.Put( ScSortItem( SCITEM_SORTDATA, GetViewData(), &aSortParam ) );
 
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
-                        assert(pFact); //ScAbstractFactory create fail!
+                        assert(pFact); 
 
                         pDlg = pFact->CreateScSortDlg(pTabViewShell->GetDialogParent(),  &aArgSet);
-                        assert(pDlg); //Dialog create fail!
-                        pDlg->SetCurPageId("criteria");  // 1=sort field tab  2=sort options tab
+                        assert(pDlg); 
+                        pDlg->SetCurPageId("criteria");  
 
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -492,7 +492,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             const ScSortParam& rOutParam = ((const ScSortItem&)
                                 pOutSet->Get( SCITEM_SORTDATA )).GetSortData();
 
-                            // subtotal when needed new
+                            
 
                             pTabViewShell->UISort( rOutParam );
 
@@ -597,8 +597,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SCTAB nCurTab = GetViewData()->GetTabNo();
                     SCTAB nRefTab = GetViewData()->GetRefTabNo();
 
-                    // If RefInput switched to a different sheet from the data sheet,
-                    // switch back:
+                    
+                    
 
                     if ( nCurTab != nRefTab )
                     {
@@ -650,8 +650,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     SCTAB nCurTab = GetViewData()->GetTabNo();
                     SCTAB nRefTab = GetViewData()->GetRefTabNo();
 
-                    // If RefInput switched to a different sheet from the data sheet,
-                    // switch back:
+                    
+                    
 
                     if ( nCurTab != nRefTab )
                     {
@@ -847,12 +847,12 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         }
                     }
 
-                    // cell range picker
+                    
                     SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg(NULL, &aArgSet, pTabViewShell);
-                    assert(pDlg); //Dialog create fail!
+                    assert(pDlg); 
 
                     short nResult = pDlg->Execute();
-                    //When picking Cell Range, other Tab may be switched. Need restore the correct tab
+                    
                     pTabViewShell->SetTabNo( nTab );
                     if ( nResult == RET_OK )
                     {
@@ -922,20 +922,20 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         aData.SetIgnoreBlank( bBlank );
                         aData.SetListType( nListType );
 
-                        aData.SetInput(aHelpTitle, aHelpText);          // sets bShowInput to TRUE
+                        aData.SetInput(aHelpTitle, aHelpText);          
                         if (!bShowHelp)
-                            aData.ResetInput();                         // reset only bShowInput
+                            aData.ResetInput();                         
 
-                        aData.SetError(aErrTitle, aErrText, eErrStyle); // sets bShowError to TRUE
+                        aData.SetError(aErrTitle, aErrText, eErrStyle); 
                         if (!bShowError)
-                            aData.ResetError();                         // reset only bShowError
+                            aData.ResetError();                         
 
                         pTabViewShell->SetValidation( aData );
                         pTabViewShell->TestHintWindow();
                         rReq.Done( *pOutSet );
                     }
-                    //after end execute from !IsModalInputMode, it is safer to delay deleting
-                    //delete pDlg;
+                    
+                    
                     Application::PostUserEvent( Link( pDlg, &DelayDeleteAbstractDialog ) );
                 }
             }
@@ -955,7 +955,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScImportExport aExport( pDoc, aRange );
                     aExport.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::None, 0, false ) );
 
-                    // #i87703# text to columns fails with tab separator
+                    
                     aExport.SetDelimiter( static_cast< sal_Unicode >( 0 ) );
 
                     SvMemoryStream aStream;
@@ -1016,8 +1016,8 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
         {
             case SID_REFRESH_DBAREA:
                 {
-                    //  imported data without selection
-                    //  or filter,sort,subtotal (also without import)
+                    
+                    
                     sal_Bool bOk = false;
                     ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
                     if (pDBData && pDoc->GetChangeTrack() == NULL)
@@ -1049,14 +1049,14 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                 break;
 
 
-                //in case of Redlining and multiselection disable
+                
             case SID_SORT_ASCENDING:
             case SID_SORT_DESCENDING:
             case SCITEM_SORTDATA:
             case SCITEM_SUBTDATA:
             case SID_OPENDLG_PIVOTTABLE:
                 {
-                    //! move ReadOnly check to idl flags
+                    
 
                     if ( pDocSh->IsReadOnly() || pDoc->GetChangeTrack()!=NULL ||
                             GetViewData()->IsMultiMarked() )
@@ -1068,7 +1068,7 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
 
             case SID_REIMPORT_DATA:
                 {
-                    //  only imported data without selection
+                    
                     ScDBData* pDBData = pTabViewShell->GetDBData(false,SC_DB_OLD);
                     if (!pDBData || !pDBData->HasImportParam() || pDBData->HasImportSelection() ||
                         pDoc->GetChangeTrack()!=NULL)
@@ -1083,13 +1083,13 @@ void ScCellShell::GetDBState( SfxItemSet& rSet )
                     if (!SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SDATABASE))
                         rSet.Put(SfxVisibilityItem(nWhich, false));
                     else
-                        //  get state (BoolItem) from SfxViewFrame
+                        
                         pTabViewShell->GetViewFrame()->GetSlotState( nWhich, NULL, &rSet );
                 }
                 break;
             case SID_SBA_BRW_INSERT:
                 {
-                    //  SBA wants a sal_Bool-item, enabled
+                    
 
                     sal_Bool bEnable = sal_True;
                     rSet.Put(SfxBoolItem(nWhich, bEnable));

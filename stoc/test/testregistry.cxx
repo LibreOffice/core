@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -155,7 +155,7 @@ void test_SimpleRegistry(
 
     if (module.load(dllName))
     {
-        // try to get provider from module
+        
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
             module.getFunctionSymbol( OUString(COMPONENT_GETFACTORY) );
 
@@ -347,7 +347,7 @@ void test_SimpleRegistry(
         xKey = xRootKey->openKey("FirstKey/SecondSubKey");
         OSL_ENSURE( !xKey.is(), "test_SimpleRegistry error 27" );
 
-        // Test Links
+        
         xKey = xRootKey->createKey(OUString( "FifthKey" ));
         xKey->createLink(OUString( "MyFirstLink" ),
                          OUString( "/ThirdKey/FirstSubKey" ));
@@ -432,7 +432,7 @@ void test_DefaultRegistry(
     OUString const & testreg2,
     bool bMergeDifferently = false )
 {
-    // Test NestedRegistry
+    
     OUString exePath( getExePath() );
     OUString userRdb(exePath);
     OUString applicatRdb(exePath);
@@ -441,7 +441,7 @@ void test_DefaultRegistry(
     applicatRdb += "stoctest.rdb";
 
     Reference < XMultiServiceFactory > rSMgr  = ::cppu::createRegistryServiceFactory( userRdb, applicatRdb, sal_False, OUString());
-                                                                                      //OUString("//./e:/src596/stoc/wntmsci3/bin") );
+                                                                                      
 
     Reference< XPropertySet > xPropSet( rSMgr, UNO_QUERY);
     OSL_ENSURE( xPropSet.is(), "test_DefaultRegistry error0");
@@ -530,7 +530,7 @@ void test_DefaultRegistry(
             OSL_ENSURE( seqLongValue.getArray()[2] == 7890, "test_DefaultRegistry error 17" );
         }
 
-        // Test Links
+        
         xKey = xRootKey->createKey(OUString( "/Test/FifthKey" ));
         xKey->createLink(OUString( "MyFirstLink" ),
                          OUString( "/Test/ThirdKey/FirstSubKey" ));
@@ -636,7 +636,7 @@ void test_DefaultRegistry(
 
     xReg.clear();
 
-    // shutdown
+    
     Reference< ::com::sun::star::lang::XComponent > xComp( rSMgr, UNO_QUERY );
     OSL_ENSURE( xComp.is(), "### serivce manager has to implement XComponent!" );
     xComp->dispose();
@@ -647,7 +647,7 @@ void test_DefaultRegistry(
 
 SAL_IMPLEMENT_MAIN()
 {
-//  setStarUserRegistry();
+
      setLinkInDefaultRegistry(OUString("/Test/DefaultLink"),
                               OUString("/Test/FifthKey/MyFirstLink"));
 
@@ -658,7 +658,7 @@ SAL_IMPLEMENT_MAIN()
 
       test_SimpleRegistry( reg1, reg2 );
       test_DefaultRegistry( reg1, reg2 );
-      test_SimpleRegistry( areg1, areg2, true ); // use different merge
+      test_SimpleRegistry( areg1, areg2, true ); 
       test_DefaultRegistry( areg1, areg2, true );
 
     Reference< XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );

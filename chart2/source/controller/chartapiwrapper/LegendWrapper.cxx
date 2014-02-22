@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "LegendWrapper.hxx"
@@ -118,11 +118,11 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
         if(!bNewShowLegend)
             return;
 
-        //set corresponding LegendPosition
+        
         Any aInnerValue = this->convertOuterToInnerValue( rOuterValue );
         xInnerPropertySet->setPropertyValue( m_aInnerName, aInnerValue );
 
-        //correct LegendExpansion
+        
         chart2::LegendPosition eNewInnerPos(chart2::LegendPosition_LINE_END);
         if( aInnerValue >>= eNewInnerPos )
         {
@@ -140,7 +140,7 @@ void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, c
                 xInnerPropertySet->setPropertyValue( "Expansion", uno::makeAny( eNewExpansion ));
         }
 
-        //correct RelativePosition
+        
         Any aRelativePosition( xInnerPropertySet->getPropertyValue("RelativePosition") );
         if(aRelativePosition.hasValue())
         {
@@ -199,7 +199,7 @@ Any WrappedLegendAlignmentProperty::convertOuterToInnerValue( const Any& rOuterV
             case ::com::sun::star::chart::ChartLegendPosition_BOTTOM:
                 eNewPos = chart2::LegendPosition_PAGE_END;
                 break;
-            default: // NONE
+            default: 
                 break;
         }
     }
@@ -225,14 +225,14 @@ void lcl_AddPropertiesToVector(
         Property( "Alignment",
                   PROP_LEGEND_ALIGNMENT,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendPosition * >(0)),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
         Property( "Expansion",
                   PROP_LEGEND_EXPANSION,
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartLegendExpansion * >(0)),
-                  //#i111967# no PropertyChangeEvent is fired on change so far
+                  
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 }
 
@@ -267,7 +267,7 @@ struct StaticLegendWrapperPropertyArray : public rtl::StaticAggregate< Sequence<
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -284,7 +284,7 @@ LegendWrapper::~LegendWrapper()
 {
 }
 
-// ____ XShape ____
+
 awt::Point SAL_CALL LegendWrapper::getPosition()
     throw (uno::RuntimeException)
 {
@@ -331,14 +331,14 @@ void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
     }
 }
 
-// ____ XShapeDescriptor (base of XShape) ____
+
 OUString SAL_CALL LegendWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
     return OUString( "com.sun.star.chart.ChartLegend" );
 }
 
-// ____ XComponent ____
+
 void SAL_CALL LegendWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -363,7 +363,7 @@ void SAL_CALL LegendWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-//ReferenceSizePropertyProvider
+
 void LegendWrapper::updateReferenceSize()
 {
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
@@ -388,7 +388,7 @@ awt::Size LegendWrapper::getCurrentSizeForReference()
     return m_spChart2ModelContact->GetPageSize();
 }
 
-// WrappedPropertySet
+
 Reference< beans::XPropertySet > LegendWrapper::getInnerPropertySet()
 {
     Reference< beans::XPropertySet > xRet;
@@ -411,7 +411,7 @@ const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedLegendAlignmentProperty() );
     aWrappedProperties.push_back( new WrappedProperty( "Expansion", "Expansion"));
     WrappedCharacterHeightProperty::addWrappedProperties( aWrappedProperties, this );
-    //same problem as for wall: thje defaults ion the old chart are different for different charttypes, so we need to export explicitly
+    
     aWrappedProperties.push_back( new WrappedDirectStateProperty("FillStyle", "FillStyle"));
     aWrappedProperties.push_back( new WrappedDirectStateProperty("FillColor", "FillColor"));
     WrappedAutomaticPositionProperties::addWrappedProperties( aWrappedProperties );
@@ -431,10 +431,10 @@ Sequence< OUString > LegendWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( LegendWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

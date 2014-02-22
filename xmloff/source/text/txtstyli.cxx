@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,7 +43,7 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-// STL includes
+
 #include <algorithm>
 #include <functional>
 #include <utility>
@@ -78,7 +78,7 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
 {
     if( XML_NAMESPACE_STYLE == nPrefixKey )
     {
-        // TODO: use a map here
+        
         if( IsXMLToken( rLocalName, XML_AUTO_UPDATE ) )
         {
             if( IsXMLToken( rValue, XML_TRUE ) )
@@ -87,7 +87,7 @@ void XMLTextStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
         else if( IsXMLToken( rLocalName, XML_LIST_STYLE_NAME ) )
         {
             sListStyleName = rValue;
-            // Inherited paragraph style lost information about unset numbering (#i69523#)
+            
             mbListStyleSet = sal_True;
         }
         else if( IsXMLToken( rLocalName, XML_MASTER_PAGE_NAME ) )
@@ -139,7 +139,7 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 ,   bAutoUpdate( sal_False )
 ,   bHasMasterPageName( sal_False )
 ,   bHasCombinedCharactersLetter( sal_False )
-// Inherited paragraph style lost information about unset numbering (#i69523#)
+
 ,   mbListStyleSet( sal_False )
 ,   pEventContext( NULL )
 {
@@ -185,8 +185,8 @@ SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
     else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
               IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
-        // create and remember events import context
-        // (for delayed processing of events)
+        
+        
         pEventContext = new XMLEventsImportContext( GetImport(), nPrefix,
                                                    rLocalName);
         pEventContext->AddRef();
@@ -229,16 +229,16 @@ void XMLTextStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         xPropSet->setPropertyValue( sCategory, aAny );
     }
 
-    // tell the style about it's events (if applicable)
+    
     if (NULL != pEventContext)
     {
-        // set event suppplier and release reference to context
+        
         Reference<document::XEventsSupplier> xEventsSupplier(xStyle,UNO_QUERY);
         pEventContext->SetEvents(xEventsSupplier);
         pEventContext->ReleaseRef();
     }
 
-    // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
+    
     if ( nOutlineLevel > 0 )
     {
         GetImport().GetTextImport()->AddOutlineStyleCandidate( nOutlineLevel,
@@ -269,7 +269,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
     XMLPropStyleContext::Finish( bOverwrite );
 
     Reference < XStyle > xStyle = GetStyle();
-    // Consider set empty list style (#i69523#)
+    
     if ( !( mbListStyleSet ||
             nOutlineLevel >= 0 ||
             !sDropCapTextStyleName.isEmpty() ||
@@ -292,7 +292,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         }
     }
 
-    // Consider set empty list style (#i69523#)
+    
     if ( mbListStyleSet &&
          xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
     {
@@ -312,10 +312,10 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
             {
                 sal_Int32 nUPD( 0 );
                 sal_Int32 nBuild( 0 );
-                // Check explicitly on certain versions (#i86058#)
+                
                 if ( GetImport().getBuildIds( nUPD, nBuild ) &&
-                     ( ( nUPD == 641 ) || ( nUPD == 645 ) || // prior OOo 2.0
-                       ( nUPD == 680 && nBuild <= 9073 ) ) ) // OOo 2.0 - OOo 2.0.4
+                     ( ( nUPD == 641 ) || ( nUPD == 645 ) || 
+                       ( nUPD == 680 && nBuild <= 9073 ) ) ) 
                 {
                     bApplyListStyle = false;
                 }
@@ -332,15 +332,15 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
             }
             else
             {
-                // change list style name to display name
+                
                 OUString sDisplayListStyleName(
                     GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_LIST,
                                                   sListStyleName ) );
-                // The families container must exist
+                
                 const Reference < XNameContainer >& rNumStyles =
                     GetImport().GetTextImport()->GetNumberingStyles();
-    //            if( rNumStyles.is() && rNumStyles->hasByName( sDisplayListStyleName ) &&
-    //                xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
+    
+    
                 if ( rNumStyles.is() &&
                      rNumStyles->hasByName( sDisplayListStyleName ) )
                 {
@@ -354,11 +354,11 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
 
     if( !sDropCapTextStyleName.isEmpty() )
     {
-        // change list style name to display name
+        
         OUString sDisplayDropCapTextStyleName(
             GetImport().GetStyleDisplayName( XML_STYLE_FAMILY_TEXT_TEXT,
                                           sDropCapTextStyleName ) );
-        // The families cointaner must exist
+        
         const Reference < XNameContainer >& rTextStyles =
             GetImport().GetTextImport()->GetTextStyles();
         if( rTextStyles.is() &&
@@ -376,7 +376,7 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
         OUString sDisplayName(
             GetImport().GetStyleDisplayName(
                             XML_STYLE_FAMILY_MASTER_PAGE, sMasterPageName ) );
-        // The families cointaner must exist
+        
         const Reference < XNameContainer >& rPageStyles =
             GetImport().GetTextImport()->GetPageStyles();
         if( ( sDisplayName.isEmpty() ||
@@ -394,24 +394,24 @@ void XMLTextStyleContext::Finish( bool bOverwrite )
 void XMLTextStyleContext::FillPropertySet(
     const Reference<XPropertySet > & rPropSet )
 {
-    // imitate the FillPropertySet of the super class, so we get a chance to
-    // catch the combined characters attribute
+    
+    
 
-    // imitate XMLPropStyleContext::FillPropertySet(...)
+    
     UniReference < SvXMLImportPropertyMapper > xImpPrMap =
         ((SvXMLStylesContext *)GetStyles())->GetImportPropertyMapper(GetFamily());
     DBG_ASSERT( xImpPrMap.is(), "Where is the import prop mapper?" );
     if( xImpPrMap.is() )
     {
 
-        // imitate SvXMLImportPropertyMapper::FillPropertySet(...)
+        
 
-        // The reason for this is that we have no other way to
-        // efficiently intercept the value of combined characters. To
-        // get that value, we could iterate through the map once more,
-        // but instead we chose to insert the code into this
-        // iteration. I haven't been able to come up with a much more
-        // intelligent solution.
+        
+        
+        
+        
+        
+        
 
 
         struct _ContextID_Index_Pair aContextIDs[] =
@@ -426,7 +426,7 @@ void XMLTextStyleContext::FillPropertySet(
             { -1, -1 }
         };
 
-        // get property set info
+        
         Reference< XPropertySetInfo > xInfo( rPropSet->getPropertySetInfo(), UNO_SET_THROW );
 
         bool bAutomatic = false;
@@ -459,7 +459,7 @@ void XMLTextStyleContext::FillPropertySet(
         else
             xImpPrMap->FillPropertySet( GetProperties(), rPropSet, aContextIDs );
 
-        // have we found a combined characters
+        
         sal_Int32 nIndex = aContextIDs[0].nIndex;
         if ( nIndex != -1 )
         {
@@ -468,11 +468,11 @@ void XMLTextStyleContext::FillPropertySet(
             bHasCombinedCharactersLetter = bVal;
         }
 
-        // keep-together: the application default is different from
-        // the file format default. Hence, if we always set this
-        // value; if we didn't find one, we'll set to false, the file
-        // format default.
-        // border-model: same
+        
+        
+        
+        
+        
         if( IsDefaultStyle() && GetFamily() == XML_STYLE_FAMILY_TABLE_ROW )
         {
             OUString sIsSplitAllowed( "IsSplitAllowed" );
@@ -496,21 +496,21 @@ void XMLTextStyleContext::FillPropertySet(
         }
 
 
-        // check for StarBats and StarMath fonts
+        
 
-        // iterate over aContextIDs entries 3..6
+        
         for ( sal_Int32 i = 3; i < 7; i++ )
         {
             nIndex = aContextIDs[i].nIndex;
             if ( nIndex != -1 )
             {
-                // Found!
+                
                 struct XMLPropertyState& rState = GetProperties()[nIndex];
                 Any rAny = rState.maValue;
                 sal_Int32 nMapperIndex = rState.mnIndex;
 
-                // Now check for font name in rState and set corrected value,
-                // if necessary.
+                
+                
                 OUString sFontName;
                 rAny >>= sFontName;
                 if ( !sFontName.isEmpty() )
@@ -518,16 +518,16 @@ void XMLTextStyleContext::FillPropertySet(
                     if ( sFontName.equalsIgnoreAsciiCase( "StarBats" ) ||
                          sFontName.equalsIgnoreAsciiCase( "StarMath" ) )
                     {
-                        // construct new value
+                        
                         sFontName = "StarSymbol";
                         Any aAny( rAny );
                         aAny <<= sFontName;
 
-                        // get property set mapper
+                        
                         UniReference<XMLPropertySetMapper> rPropMapper =
                             xImpPrMap->getPropertySetMapper();
 
-                        // set property
+                        
                         OUString rPropertyName(
                             rPropMapper->GetEntryAPIName(nMapperIndex) );
                         if ( xInfo->hasPropertyByName( rPropertyName ) )
@@ -535,9 +535,9 @@ void XMLTextStyleContext::FillPropertySet(
                             rPropSet->setPropertyValue( rPropertyName, aAny );
                         }
                     }
-                    // else: "normal" style name -> no correction is necessary
+                    
                 }
-                // else: no style name found -> illegal value -> ignore
+                
             }
         }
     }

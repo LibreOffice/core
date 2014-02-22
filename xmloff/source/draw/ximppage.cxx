@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/geometry/RealPoint2D.hpp>
@@ -141,7 +141,7 @@ SvXMLImportContext * DrawAnnotationContext::CreateChildContext( sal_uInt16 nPref
         }
         else
         {
-            // create text cursor on demand
+            
             if( !mxCursor.is() )
             {
                 uno::Reference< text::XText > xText( mxAnnotation->getTextRange() );
@@ -154,7 +154,7 @@ SvXMLImportContext * DrawAnnotationContext::CreateChildContext( sal_uInt16 nPref
                 }
             }
 
-            // if we have a text cursor, lets  try to import some text
+            
             if( mxCursor.is() )
             {
                 pContext = GetImport().GetTextImport()->CreateTextChildContext( GetImport(), nPrefix, rLocalName, xAttrList );
@@ -162,7 +162,7 @@ SvXMLImportContext * DrawAnnotationContext::CreateChildContext( sal_uInt16 nPref
         }
     }
 
-    // call parent for content
+    
     if(!pContext)
         pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
 
@@ -173,13 +173,13 @@ void DrawAnnotationContext::EndElement()
 {
     if(mxCursor.is())
     {
-        // delete addition newline
+        
         const OUString aEmpty;
         mxCursor->gotoEnd( sal_False );
         mxCursor->goLeft( 1, sal_True );
         mxCursor->setString( aEmpty );
 
-        // reset cursor
+        
         GetImport().GetTextImport()->ResetCursor();
     }
 
@@ -256,12 +256,12 @@ SvXMLImportContext* SdXMLGenericPageContext::CreateChildContext( sal_uInt16 nPre
     }
     else
     {
-        // call GroupChildContext function at common ShapeImport
+        
         pContext = GetImport().GetShapeImport()->CreateGroupChildContext(
             GetImport(), nPrefix, rLocalName, xAttrList, mxShapes);
     }
 
-    // call parent when no own context was created
+    
     if(!pContext)
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
@@ -346,7 +346,7 @@ void SdXMLGenericPageContext::EndElement()
 
 void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
 {
-    // set PageProperties?
+    
     if(!rStyleName.isEmpty())
     {
         try
@@ -411,7 +411,7 @@ void SdXMLGenericPageContext::SetStyle( OUString& rStyleName )
 
 void SdXMLGenericPageContext::SetLayout()
 {
-    // set PresentationPageLayout?
+    
     if(GetSdImport().IsImpress() && !maPageLayoutName.isEmpty())
     {
         sal_Int32 nType = -1;
@@ -460,8 +460,8 @@ void SdXMLGenericPageContext::SetLayout()
 
 void SdXMLGenericPageContext::DeleteAllShapes()
 {
-    // now delete all up-to-now contained shapes; they have been created
-    // when setting the presentation page layout.
+    
+    
     while(mxShapes->getCount())
     {
         Reference< drawing::XShape > xShape;
@@ -480,9 +480,9 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
 {
     if( GetSdImport().GetShapeImport()->GetStylesContext() )
     {
-        // look for PageMaster with this name
+        
 
-        // #80012# GetStylesContext() replaced with GetAutoStylesContext()
+        
         const SvXMLStylesContext* pAutoStyles = GetSdImport().GetShapeImport()->GetAutoStylesContext();
 
         const SvXMLStyleContext* pStyle = pAutoStyles ? pAutoStyles->FindStyleChildContext(XML_STYLE_FAMILY_SD_PAGEMASTERCONEXT_ID, rsPageMasterName) : NULL;
@@ -497,7 +497,7 @@ void SdXMLGenericPageContext::SetPageMaster( OUString& rsPageMasterName )
                 Reference< drawing::XDrawPage > xMasterPage(GetLocalShapesContext(), uno::UNO_QUERY);
                 if(xMasterPage.is())
                 {
-                    // set sizes for this masterpage
+                    
                     Reference <beans::XPropertySet> xPropSet(xMasterPage, uno::UNO_QUERY);
                     if(xPropSet.is())
                     {
@@ -536,11 +536,11 @@ class XoNavigationOrderAccess : public ::cppu::WeakImplHelper1< XIndexAccess >
 public:
     XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );
 
-    // XIndexAccess
+    
     virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException);
     virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException);
 
-    // XElementAccess
+    
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
 
@@ -553,7 +553,7 @@ XoNavigationOrderAccess::XoNavigationOrderAccess( std::vector< Reference< XShape
     maShapes.swap( rShapes );
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL XoNavigationOrderAccess::getCount(  ) throw (RuntimeException)
 {
     return static_cast< sal_Int32 >( maShapes.size() );
@@ -567,7 +567,7 @@ Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (Index
     return Any( maShapes[Index] );
 }
 
-// XElementAccess
+
 Type SAL_CALL XoNavigationOrderAccess::getElementType(  ) throw (RuntimeException)
 {
     return cppu::UnoType<XShape>::get();
@@ -602,7 +602,7 @@ void SdXMLGenericPageContext::SetNavigationOrder()
             if( !aShapes[nIndex].is() )
             {
                 OSL_FAIL("xmloff::SdXMLGenericPageContext::SetNavigationOrder(), draw:nav-order attribute incomplete!");
-                // todo: warning?
+                
                 return;
             }
         }

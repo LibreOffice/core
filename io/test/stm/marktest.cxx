@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/test/XSimpleTest.hpp>
@@ -40,7 +40,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::test;
-// streams
+
 
 #include "testfactreg.hxx"
 
@@ -51,7 +51,7 @@ public:
     OMarkableOutputStreamTest( const Reference< XMultiServiceFactory > & rFactory );
     ~OMarkableOutputStreamTest();
 
-public: // implementation names
+public: 
     static Sequence< OUString >     getSupportedServiceNames_Static(void) throw ();
     static OUString                 getImplementationName_Static() throw ();
 
@@ -143,7 +143,7 @@ sal_Int32 OMarkableOutputStreamTest::test(
                 OSL_ASSERT( rPipeInput.is() );
                 OSL_ASSERT( rOutput.is() );
                 if( 1 == hTestHandle ) {
-                    // checks usual streaming
+                    
                     testSimple( rOutput , rPipeInput );
                 }
             }
@@ -163,7 +163,7 @@ sal_Int32 OMarkableOutputStreamTest::test(
 
         if( 2 == hTestHandle )
         {
-            // all tests finished.
+            
             hTestHandle = -1;
         }
     }
@@ -206,7 +206,7 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
 
     ERROR_ASSERT( rMarkable.is() , "no MarkableStream implemented" );
 
-    // first check normal input/output facility
+    
     char pcStr[] = "Live long and prosper !";
 
     Sequence<sal_Int8> seqWrite( strlen( pcStr )+1 );
@@ -223,7 +223,7 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
                       "error during read/write/skip" );
     }
 
-    // Check buffer resizing
+    
     nMax = 3000;
     for( i = 0 ; i < nMax ; i ++ ) {
         rOutput->writeBytes( seqWrite );
@@ -235,7 +235,7 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
                       "error during read/write" );
     }
 
-    // Check creating marks !
+    
     sal_Int32 nMark = rMarkable->createMark();
 
     for( i = 0 ; i < nMax ; i ++ ) {
@@ -260,10 +260,10 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
     }
     catch ( IllegalArgumentException & )
     {
-        // ok, exception was thrown
+        
     }
 
-    // test putting marks not at the end of the stream!
+    
     ERROR_ASSERT( 0 == rInput->available(), "stream isn't clean" );
     {
         Sequence< sal_Int8 > aByte(256);
@@ -288,7 +288,7 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
 
         rOutput->writeBytes( aByte );
 
-        // allow the bytes to be written !
+        
         rMarkable->jumpToFurthest();
         rMarkable->deleteMark( nMark1 );
         rMarkable->deleteMark( nMark2 );
@@ -302,7 +302,7 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
     }
 
     {
-        // now a more extensive mark test !
+        
         Sequence<sal_Int8> as[4];
         sal_Int32 an[4];
 
@@ -313,7 +313,7 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
             rOutput->writeBytes( as[i] );
         }
 
-        // check offset to mark
+        
         for( i = 0 ; i < 4 ; i ++ ) {
             ERROR_ASSERT( rMarkable->offsetToMark( an[i] ) == 4-i , "offsetToMark failure" );
         }
@@ -324,14 +324,14 @@ void OMarkableOutputStreamTest::testSimple(     const Reference< XOutputStream >
         rMarkable->jumpToFurthest( );
         ERROR_ASSERT( rMarkable->offsetToMark( an[0] ) == 4 , "offsetToMark failure" );
 
-        // now do a rewrite !
+        
         for( i = 0 ; i < 4 ; i ++ ) {
             rMarkable->jumpToMark( an[3-i] );
             rOutput->writeBytes( as[i] );
         }
-        // NOTE : CursorPos 1
+        
 
-        // now delete the marks !
+        
         for( i = 0 ; i < 4 ; i ++ ) {
             rMarkable->deleteMark( an[i] );
         }
@@ -400,8 +400,8 @@ OUString    OMarkableOutputStreamTest_getImplementationName() throw ()
 
 
 
-//-----------------------------------------------------
-// Input stream
+
+
 
 
 class OMarkableInputStreamTest : public WeakImplHelper1< XSimpleTest >
@@ -410,7 +410,7 @@ public:
     OMarkableInputStreamTest( const Reference< XMultiServiceFactory > & rFactory );
     ~OMarkableInputStreamTest();
 
-public: // implementation names
+public: 
     static Sequence< OUString >     getSupportedServiceNames_Static(void) throw () ;
     static OUString                 getImplementationName_Static() throw () ;
 
@@ -510,7 +510,7 @@ sal_Int32 OMarkableInputStreamTest::test(
                 OSL_ASSERT( rPipeOutput.is() );
                 OSL_ASSERT( rInput.is() );
                 if( 1 == hTestHandle ) {
-                    // checks usual streaming
+                    
                     testSimple( rPipeOutput , rInput );
                 }
             }
@@ -529,7 +529,7 @@ sal_Int32 OMarkableInputStreamTest::test(
         hTestHandle ++;
 
         if( 2 == hTestHandle ) {
-            // all tests finished.
+            
             hTestHandle = -1;
         }
     }
@@ -597,7 +597,7 @@ void OMarkableInputStreamTest::testSimple(      const Reference< XOutputStream >
     rInput->readBytes( seqRead , 10 );
     ERROR_ASSERT( 10 == seqRead.getArray()[0] , "marking error" );
 
-    // pos 20
+    
     {
         sal_Int32 nInBetweenMark = rMarkable->createMark( );
         rMarkable->jumpToMark( nMark );
@@ -608,7 +608,7 @@ void OMarkableInputStreamTest::testSimple(      const Reference< XOutputStream >
 
         rMarkable->deleteMark( nMark );
 
-        // Check if releasing the first bytes works correct.
+        
         rMarkable->jumpToMark( nInBetweenMark);
         rInput->readBytes( seqRead , 10 );
         ERROR_ASSERT( 20 == seqRead.getArray()[0] , "Inbetween mark failed!\n" );

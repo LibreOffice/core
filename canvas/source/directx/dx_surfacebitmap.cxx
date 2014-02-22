@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -44,9 +44,9 @@ namespace dxcanvas
 {
     namespace
     {
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXColorBuffer
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         struct DXColorBuffer : public canvas::IColorBuffer
         {
@@ -59,7 +59,7 @@ namespace dxcanvas
             {
             }
 
-        // implementation of the 'IColorBuffer' interface
+        
         public:
 
             virtual sal_uInt8* lock() const;
@@ -129,9 +129,9 @@ namespace dxcanvas
             return canvas::IColorBuffer::FMT_X8R8G8B8;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // GDIColorBuffer
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         struct GDIColorBuffer : public canvas::IColorBuffer
         {
@@ -145,7 +145,7 @@ namespace dxcanvas
             {
             }
 
-        // implementation of the 'IColorBuffer' interface
+        
         public:
 
             virtual sal_uInt8* lock() const;
@@ -208,9 +208,9 @@ namespace dxcanvas
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::DXSurfaceBitmap
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     DXSurfaceBitmap::DXSurfaceBitmap( const ::basegfx::B2IVector&                   rSize,
                                       const canvas::ISurfaceProxyManagerSharedPtr&  rMgr,
@@ -231,22 +231,22 @@ namespace dxcanvas
         init();
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::getSize
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     ::basegfx::B2IVector DXSurfaceBitmap::getSize() const
     {
         return maSize;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::init
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     void DXSurfaceBitmap::init()
     {
-        // create container for pixel data
+        
         if(mbAlpha)
         {
             mpGDIPlusBitmap.reset(
@@ -257,30 +257,30 @@ namespace dxcanvas
                     ));
             mpGraphics.reset( tools::createGraphicsFromBitmap(mpGDIPlusBitmap) );
 
-            // create the colorbuffer object, which is basically a simple
-            // wrapper around the directx surface. the colorbuffer is the
-            // interface which is used by the surfaceproxy to support any
-            // kind of underlying structure for the pixel data container.
+            
+            
+            
+            
             mpColorBuffer.reset(new GDIColorBuffer(mpGDIPlusBitmap,maSize));
         }
         else
         {
             mpSurface = mpRenderModule->createSystemMemorySurface(maSize);
 
-            // create the colorbuffer object, which is basically a simple
-            // wrapper around the directx surface. the colorbuffer is the
-            // interface which is used by the surfaceproxy to support any
-            // kind of underlying structure for the pixel data container.
+            
+            
+            
+            
             mpColorBuffer.reset(new DXColorBuffer(mpSurface,maSize));
         }
 
-        // create a (possibly hardware accelerated) mirror surface.
+        
         mpSurfaceProxy = mpSurfaceManager->createSurfaceProxy(mpColorBuffer);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::resize
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool DXSurfaceBitmap::resize( const ::basegfx::B2IVector& rSize )
     {
@@ -293,9 +293,9 @@ namespace dxcanvas
         return true;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::clear
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     void DXSurfaceBitmap::clear()
     {
@@ -305,25 +305,25 @@ namespace dxcanvas
         pGraphics->Clear( transColor );
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::hasAlpha
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool DXSurfaceBitmap::hasAlpha() const
     {
         return mbAlpha;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::getGraphics
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     GraphicsSharedPtr DXSurfaceBitmap::getGraphics()
     {
-        // since clients will most probably draw directly
-        // to the GDI+ bitmap, we need to mark it as dirty
-        // to ensure that the corrosponding dxsurface will
-        // be updated.
+        
+        
+        
+        
         mbIsSurfaceDirty = true;
 
         if(hasAlpha())
@@ -332,9 +332,9 @@ namespace dxcanvas
             return createSurfaceGraphics(mpSurface);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::getBitmap
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     BitmapSharedPtr DXSurfaceBitmap::getBitmap() const
     {
@@ -349,31 +349,31 @@ namespace dxcanvas
         aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
         const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
 
-        // lock the directx surface to receive the pointer to the surface memory.
+        
         if(SUCCEEDED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
         {
-            // decide about the format we pass the gdi+, the directx surface is always
-            // 32bit, either with or without alpha component.
+            
+            
             Gdiplus::PixelFormat nFormat = hasAlpha() ? PixelFormat32bppARGB : PixelFormat32bppRGB;
 
-            // construct a gdi+ bitmap from the raw pixel data.
+            
             pResult.reset(new Gdiplus::Bitmap( maSize.getX(),maSize.getY(),
                                                aSurfaceDesc.lPitch,
                                                nFormat,
                                                (BYTE *)aSurfaceDesc.lpSurface ));
 
-            // unlock the directx surface
+            
             mpSurface->Unlock(NULL);
         }
 #else
         D3DLOCKED_RECT aLockedRect;
         if(SUCCEEDED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
         {
-            // decide about the format we pass the gdi+, the directx surface is always
-            // 32bit, either with or without alpha component.
+            
+            
             Gdiplus::PixelFormat nFormat = hasAlpha() ? PixelFormat32bppARGB : PixelFormat32bppRGB;
 
-            // construct a gdi+ bitmap from the raw pixel data.
+            
             pResult.reset(new Gdiplus::Bitmap( maSize.getX(),maSize.getY(),
                                                 aLockedRect.Pitch,
                                                 nFormat,
@@ -386,9 +386,9 @@ namespace dxcanvas
         return pResult;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::draw
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool DXSurfaceBitmap::draw( double                           fAlpha,
                                 const ::basegfx::B2DPoint&       rPos,
@@ -404,9 +404,9 @@ namespace dxcanvas
         return mpSurfaceProxy->draw( fAlpha, rPos, rClipPoly, rTransform );
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::draw
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool DXSurfaceBitmap::draw( double                         fAlpha,
                                 const ::basegfx::B2DPoint&     rPos,
@@ -422,9 +422,9 @@ namespace dxcanvas
         return mpSurfaceProxy->draw( fAlpha, rPos, rArea, rTransform );
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::draw
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool DXSurfaceBitmap::draw( double                         fAlpha,
                                 const ::basegfx::B2DPoint&     rPos,
@@ -439,9 +439,9 @@ namespace dxcanvas
         return mpSurfaceProxy->draw( fAlpha, rPos, rTransform );
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::draw
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     bool DXSurfaceBitmap::draw( const ::basegfx::B2IRange& rArea )
     {
@@ -460,9 +460,9 @@ namespace dxcanvas
                                     aTransform);
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::imageDebugger
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 #if defined(DX_DEBUG_IMAGES)
 # if OSL_DEBUG_LEVEL > 0
     void DXSurfaceBitmap::imageDebugger()
@@ -494,16 +494,16 @@ namespace dxcanvas
 # endif
 #endif
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::getData
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     uno::Sequence< sal_Int8 > DXSurfaceBitmap::getData( rendering::IntegerBitmapLayout&     /*bitmapLayout*/,
                                                         const geometry::IntegerRectangle2D& rect )
     {
         if(hasAlpha())
         {
-            uno::Sequence< sal_Int8 > aRes( (rect.X2-rect.X1)*(rect.Y2-rect.Y1)*4 ); // TODO(F1): Be format-agnostic here
+            uno::Sequence< sal_Int8 > aRes( (rect.X2-rect.X1)*(rect.Y2-rect.Y1)*4 ); 
 
             const Gdiplus::Rect aRect( tools::gdiPlusRectFromIntegerRectangle2D( rect ) );
 
@@ -514,18 +514,18 @@ namespace dxcanvas
             aBmpData.PixelFormat = PixelFormat32bppARGB;
             aBmpData.Scan0       = aRes.getArray();
 
-            // TODO(F1): Support more pixel formats natively
+            
 
-            // read data from bitmap
+            
             if( Gdiplus::Ok != mpGDIPlusBitmap->LockBits( &aRect,
                                                 Gdiplus::ImageLockModeRead | Gdiplus::ImageLockModeUserInputBuf,
-                                                PixelFormat32bppARGB, // TODO(F1): Adapt to
-                                                                           // Graphics native
-                                                                        // format/change
-                                                                        // getMemoryLayout
+                                                PixelFormat32bppARGB, 
+                                                                           
+                                                                        
+                                                                        
                                                 &aBmpData ) )
             {
-                // failed to lock, bail out
+                
                 return uno::Sequence< sal_Int8 >();
             }
 
@@ -546,7 +546,7 @@ namespace dxcanvas
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
             const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
 
-            // lock the directx surface to receive the pointer to the surface memory.
+            
             if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
                 return uno::Sequence< sal_Int8 >();
 
@@ -582,9 +582,9 @@ namespace dxcanvas
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::setData
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     void DXSurfaceBitmap::setData( const uno::Sequence< sal_Int8 >&      data,
                                    const rendering::IntegerBitmapLayout& /*bitmapLayout*/,
@@ -601,20 +601,20 @@ namespace dxcanvas
             aBmpData.PixelFormat = PixelFormat32bppARGB;
             aBmpData.Scan0       = (void*)data.getConstArray();
 
-            // TODO(F1): Support more pixel formats natively
+            
 
             if( Gdiplus::Ok != mpGDIPlusBitmap->LockBits( &aRect,
                                                 Gdiplus::ImageLockModeWrite | Gdiplus::ImageLockModeUserInputBuf,
-                                                PixelFormat32bppARGB, // TODO: Adapt to
-                                                                           // Graphics native
-                                                                          // format/change
-                                                                          // getMemoryLayout
+                                                PixelFormat32bppARGB, 
+                                                                           
+                                                                          
+                                                                          
                                                 &aBmpData ) )
             {
                 throw uno::RuntimeException();
             }
 
-            // commit data to bitmap
+            
             mpGDIPlusBitmap->UnlockBits( &aBmpData );
         }
         else
@@ -628,7 +628,7 @@ namespace dxcanvas
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
             const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_WRITEONLY;
 
-            // lock the directx surface to receive the pointer to the surface memory.
+            
             if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
                 throw uno::RuntimeException();
 
@@ -644,7 +644,7 @@ namespace dxcanvas
 
             mpSurface->Unlock(NULL);
 #else
-            // lock the directx surface to receive the pointer to the surface memory.
+            
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 throw uno::RuntimeException();
@@ -666,9 +666,9 @@ namespace dxcanvas
         mbIsSurfaceDirty = true;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::setPixel
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     void DXSurfaceBitmap::setPixel( const uno::Sequence< sal_Int8 >&      color,
                                     const rendering::IntegerBitmapLayout& /*bitmapLayout*/,
@@ -708,7 +708,7 @@ namespace dxcanvas
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
             const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_WRITEONLY;
 
-            // lock the directx surface to receive the pointer to the surface memory.
+            
             if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
                 throw uno::RuntimeException();
 
@@ -716,7 +716,7 @@ namespace dxcanvas
             *pDst = aColor.GetValue();
             mpSurface->Unlock(NULL);
 #else
-            // lock the directx surface to receive the pointer to the surface memory.
+            
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 throw uno::RuntimeException();
@@ -730,9 +730,9 @@ namespace dxcanvas
         mbIsSurfaceDirty = true;
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXSurfaceBitmap::getPixel
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     uno::Sequence< sal_Int8 > DXSurfaceBitmap::getPixel( rendering::IntegerBitmapLayout&   /*bitmapLayout*/,
                                                          const geometry::IntegerPoint2D&   pos )
@@ -766,7 +766,7 @@ namespace dxcanvas
             aSurfaceDesc.dwSize = sizeof(DDSURFACEDESC);
             const DWORD dwFlags = DDLOCK_NOSYSLOCK|DDLOCK_SURFACEMEMORYPTR|DDLOCK_WAIT|DDLOCK_READONLY;
 
-            // lock the directx surface to receive the pointer to the surface memory.
+            
             if(FAILED(mpSurface->Lock(NULL,&aSurfaceDesc,dwFlags,NULL)))
                 throw uno::RuntimeException();
 
@@ -774,7 +774,7 @@ namespace dxcanvas
             Gdiplus::Color aColor(*pDst);
             mpSurface->Unlock(NULL);
 #else
-            // lock the directx surface to receive the pointer to the surface memory.
+            
             D3DLOCKED_RECT aLockedRect;
             if(FAILED(mpSurface->LockRect(&aLockedRect,NULL,D3DLOCK_NOSYSLOCK|D3DLOCK_READONLY)))
                 throw uno::RuntimeException();

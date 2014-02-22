@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -114,7 +114,7 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_WM_STATE", WMAdaptor::NET_WM_STATE },
     { "_NET_WM_STATE_ABOVE", WMAdaptor::NET_WM_STATE_STAYS_ON_TOP },
     { "_NET_WM_STATE_FULLSCREEN", WMAdaptor::NET_WM_STATE_FULLSCREEN },
-    { "_NET_WM_STATE_MAXIMIZED_HORIZ", WMAdaptor::NET_WM_STATE_MAXIMIZED_HORZ }, // common bug in e.g. older kwin and sawfish implementations
+    { "_NET_WM_STATE_MAXIMIZED_HORIZ", WMAdaptor::NET_WM_STATE_MAXIMIZED_HORZ }, 
     { "_NET_WM_STATE_MAXIMIZED_HORZ", WMAdaptor::NET_WM_STATE_MAXIMIZED_HORZ },
     { "_NET_WM_STATE_MAXIMIZED_VERT", WMAdaptor::NET_WM_STATE_MAXIMIZED_VERT },
     { "_NET_WM_STATE_MODAL", WMAdaptor::NET_WM_STATE_MODAL },
@@ -132,7 +132,7 @@ static const WMAdaptorProtocol aProtocolTab[] =
     { "_NET_WM_WINDOW_TYPE_MENU", WMAdaptor::NET_WM_WINDOW_TYPE_MENU },
     { "_NET_WM_WINDOW_TYPE_NORMAL", WMAdaptor::NET_WM_WINDOW_TYPE_NORMAL },
     { "_NET_WM_WINDOW_TYPE_SPLASH", WMAdaptor::NET_WM_WINDOW_TYPE_SPLASH },
-    { "_NET_WM_WINDOW_TYPE_SPLASHSCREEN", WMAdaptor::NET_WM_WINDOW_TYPE_SPLASH }, // bug in Metacity 2.4.1
+    { "_NET_WM_WINDOW_TYPE_SPLASHSCREEN", WMAdaptor::NET_WM_WINDOW_TYPE_SPLASH }, 
     { "_NET_WM_WINDOW_TYPE_TOOLBAR", WMAdaptor::NET_WM_WINDOW_TYPE_TOOLBAR },
     { "_NET_WM_WINDOW_TYPE_UTILITY", WMAdaptor::NET_WM_WINDOW_TYPE_UTILITY },
     { "_NET_WORKAREA", WMAdaptor::NET_WORKAREA },
@@ -185,7 +185,7 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
 {
     WMAdaptor*          pAdaptor    = NULL;
 
-    // try a NetWM
+    
     pAdaptor = new NetWMAdaptor( pSalDisplay );
     if( ! pAdaptor->isValid() )
         delete pAdaptor, pAdaptor = NULL;
@@ -194,7 +194,7 @@ WMAdaptor* WMAdaptor::createWMAdaptor( SalDisplay* pSalDisplay )
         fprintf( stderr, "WM supports extended WM hints\n" );
 #endif
 
-    // try a GnomeWM
+    
     if( ! pAdaptor )
     {
         pAdaptor = new GnomeWMAdaptor( pSalDisplay );
@@ -238,7 +238,7 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     unsigned long       nBytesLeft  = 0;
     unsigned char*  pProperty   = NULL;
 
-    // default desktops
+    
     m_nDesktops = 1;
     m_aWMWorkAreas = ::std::vector< Rectangle >
         ( 1, Rectangle( Point(), m_pSalDisplay->GetScreenSize( m_pSalDisplay->GetDefaultXScreen() ) ) );
@@ -248,11 +248,11 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
     m_pDisplay = m_pSalDisplay->GetDisplay();
 
     initAtoms();
-    getNetWmName(); // try to discover e.g. Sawfish
+    getNetWmName(); 
 
     if( m_aWMName.isEmpty() )
     {
-        // check for ReflectionX wm (as it needs a workaround in Windows mode
+        
         Atom aRwmRunning = XInternAtom( m_pDisplay, "RWM_RUNNING", True );
         if( aRwmRunning != None &&
             XGetWindowProperty( m_pDisplay,
@@ -308,13 +308,13 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
             if( aRealType == XA_STRING )
             {
                 m_aWMName = "Tarantella";
-                // #i62319# pretend that AlwaysOnTop works since
-                // the alwaysontop workaround in salframe.cxx results
-                // in a raise/lower loop on a Windows tarantella client
-                // FIXME: this property contains an identification string that
-                // in theory should be good enough to recognize running on a
-                // Windows client; however this string does not seem to be
-                // documented as well as the property itself.
+                
+                
+                
+                
+                
+                
+                
                 m_bEnableAlwaysOnTopWorks = true;
             }
             XFree( pProperty );
@@ -337,7 +337,7 @@ WMAdaptor::~WMAdaptor()
 NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
         WMAdaptor( pSalDisplay )
 {
-    // currently all _NET WMs do transient like expected
+    
     m_bTransientBehaviour = true;
 
     Atom                aRealType   = None;
@@ -348,7 +348,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
 
     initAtoms();
 
-    // check for NetWM
+    
     bool bNetWM = getNetWmName();
     if( bNetWM
         && XGetWindowProperty( m_pDisplay,
@@ -371,7 +371,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             XFree( pProperty );
             pProperty = NULL;
         }
-        // collect supported protocols
+        
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ NET_SUPPORTED ],
@@ -395,7 +395,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
 #endif
                 for( unsigned int i = 0; i < nItems; i++ )
                 {
-                    // #i80971# protect against invalid atoms
+                    
                     if( pAtomNames[i] == NULL )
                         continue;
 
@@ -428,7 +428,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             pProperty = NULL;
         }
 
-        // get number of desktops
+        
         if( m_aWMAtoms[ NET_NUMBER_OF_DESKTOPS ]
             && XGetWindowProperty( m_pDisplay,
                                    m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
@@ -447,7 +447,7 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
             m_nDesktops = *(long*)pProperty;
             XFree( pProperty );
             pProperty = NULL;
-            // get work areas
+            
             if( m_aWMAtoms[ NET_WORKAREA ]
                 && XGetWindowProperty( m_pDisplay,
                                        m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
@@ -527,7 +527,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
         WMAdaptor( pSalDisplay ),
         m_bValid( false )
 {
-    // currently all Gnome WMs do transient like expected
+    
     m_bTransientBehaviour = true;
 
     Atom                aRealType   = None;
@@ -538,7 +538,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
 
     initAtoms();
 
-    // check for GnomeWM
+    
     if( m_aWMAtoms[ WIN_SUPPORTING_WM_CHECK ] && m_aWMAtoms[ WIN_PROTOCOLS ] )
     {
         XLIB_Window         aWMChild    = None;
@@ -629,7 +629,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             XFree( pProperty );
             pProperty = NULL;
         }
-        // collect supported protocols
+        
         if( XGetWindowProperty( m_pDisplay,
                                 m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
                                 m_aWMAtoms[ WIN_PROTOCOLS ],
@@ -653,7 +653,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
 #endif
                 for( unsigned int i = 0; i < nItems; i++ )
                 {
-                    // #i80971# protect against invalid atoms
+                    
                     if( pAtomNames[i] == NULL )
                         continue;
 
@@ -692,7 +692,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
             pProperty = NULL;
         }
 
-        // get number of desktops
+        
         if( m_aWMAtoms[ WIN_WORKSPACE_COUNT ]
             && XGetWindowProperty( m_pDisplay,
                                    m_pSalDisplay->GetRootWindow( m_pSalDisplay->GetDefaultXScreen() ),
@@ -792,7 +792,7 @@ bool WMAdaptor::getNetWmName()
                         if( aCheckWindow == aWMChild )
                         {
                             bNetWM = true;
-                            // get name of WM
+                            
                             m_aWMAtoms[ UTF8_STRING ] = XInternAtom( m_pDisplay, "UTF8_STRING", False );
                             if( XGetWindowProperty( m_pDisplay,
                                                     aWMChild,
@@ -822,7 +822,7 @@ bool WMAdaptor::getNetWmName()
                                 pProperty = NULL;
                             }
 
-                            // if this is metacity, check for version to enable a legacy workaround
+                            
                             if( m_aWMName.equalsAscii( "Metacity" ) )
                             {
                                 int nVersionMajor = 0, nVersionMinor = 0;
@@ -917,9 +917,9 @@ bool WMAdaptor::isValid() const
  */
 bool NetWMAdaptor::isValid() const
 {
-    // some necessary sanity checks; there are WMs out there
-    // which implement some of the WM hints spec without
-    // real functionality
+    
+    
+    
     return
         m_aWMAtoms[ NET_SUPPORTED ]
         && m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]
@@ -943,7 +943,7 @@ bool GnomeWMAdaptor::isValid() const
 
 void WMAdaptor::initAtoms()
 {
-    // get basic atoms
+    
     for( unsigned int i = 0; i < SAL_N_ELEMENTS( aAtomTab ); i++ )
         m_aWMAtoms[ aAtomTab[i].nProtocol ] = XInternAtom( m_pDisplay, aAtomTab[i].pProtocol, False );
     m_aWMAtoms[ NET_SUPPORTING_WM_CHECK ]   = XInternAtom( m_pDisplay, "_NET_SUPPORTING_WM_CHECK", True );
@@ -1123,7 +1123,7 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
         Atom aStateAtoms[ 10 ];
         int nStateAtoms = 0;
 
-        // set NET_WM_STATE_MODAL
+        
         if( m_aWMAtoms[ NET_WM_STATE_MODAL ]
             && pFrame->meWindowType == windowType_ModalDialogue )
         {
@@ -1190,7 +1190,7 @@ void NetWMAdaptor::setNetWMState( X11SalFrame* pFrame ) const
                 XSync( m_pDisplay, False );
             }
 
-            // SetPosSize necessary to set width/height, min/max w/h
+            
             sal_Int32 nCurrent = 0;
             /*
              *  get current desktop here if work areas have different size
@@ -1280,7 +1280,7 @@ void GnomeWMAdaptor::setGnomeWMState( X11SalFrame* pFrame ) const
                 XSync( m_pDisplay, False );
             }
 
-            // SetPosSize necessary to set width/height, min/max w/h
+            
             sal_Int32 nCurrent = 0;
             /*
              *  get current desktop here if work areas have different size
@@ -1333,7 +1333,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
 
     if( ! pFrame->mbFullScreen )
     {
-        // set mwm hints
+        
         struct _mwmhints {
             unsigned long flags, func, deco;
             long input_mode;
@@ -1346,7 +1346,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
         aHint.status = 0;
         aHint.input_mode = 0;
 
-        // evaluate decoration flags
+        
         if( nDecorationFlags & decoration_All )
             aHint.deco = 1, aHint.func = 1;
         else
@@ -1364,7 +1364,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
             if( nDecorationFlags & decoration_CloseBtn )
                 aHint.deco |= 1L << 4, aHint.func |= 1L << 5;
         }
-        // evaluate window type
+        
         switch( eType )
         {
             case windowType_ModalDialogue:
@@ -1374,7 +1374,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
                 break;
         }
 
-        // set the hint
+        
         XChangeProperty( m_pDisplay,
                          pFrame->GetShellWindow(),
                          m_aWMAtoms[ MOTIF_WM_HINTS ],
@@ -1385,7 +1385,7 @@ void WMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType eTy
                          5 );
     }
 
-    // set transientFor hint
+    
     /*  #91030# dtwm will not map a dialogue if the transient
      *  window is iconified. This is deemed undesireable because
      *  message boxes do not get mapped, so use the root as transient
@@ -1418,7 +1418,7 @@ void NetWMAdaptor::setFrameTypeAndDecoration( X11SalFrame* pFrame, WMWindowType 
 
     setNetWMState( pFrame );
 
-    // set NET_WM_WINDOW_TYPE
+    
     if( m_aWMAtoms[ NET_WM_WINDOW_TYPE ] )
     {
         Atom aWindowTypes[4];
@@ -1491,7 +1491,7 @@ void WMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bVert
 
     const SalFrameGeometry& rGeom( pFrame->GetUnmirroredGeometry() );
 
-    // discard pending configure notifies for this frame
+    
     XSync( m_pDisplay, False );
     XEvent aDiscard;
     while( XCheckTypedWindowEvent( m_pDisplay,
@@ -1604,7 +1604,7 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
     {
         if( pFrame->bMapped_ )
         {
-            // window already mapped, send WM a message
+            
             XEvent aEvent;
             aEvent.type                 = ClientMessage;
             aEvent.xclient.display      = m_pDisplay;
@@ -1637,7 +1637,7 @@ void NetWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool bV
         }
         else
         {
-            // window not mapped yet, set _NET_WM_STATE directly
+            
             setNetWMState( pFrame );
         }
         if( !bHorizontal && !bVertical )
@@ -1669,7 +1669,7 @@ void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool 
     {
         if( pFrame->bMapped_ )
         {
-             // window already mapped, send WM a message
+             
             XEvent aEvent;
             aEvent.type                 = ClientMessage;
             aEvent.xclient.display      = m_pDisplay;
@@ -1691,7 +1691,7 @@ void GnomeWMAdaptor::maximizeFrame( X11SalFrame* pFrame, bool bHorizontal, bool 
                         );
         }
         else
-            // window not mapped yet, set _WIN_STATE directly
+            
             setGnomeWMState( pFrame );
 
         if( !bHorizontal && !bVertical )
@@ -1724,7 +1724,7 @@ void NetWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) const
     {
         if( pFrame->bMapped_ )
         {
-            // window already mapped, send WM a message
+            
             XEvent aEvent;
             aEvent.type                 = ClientMessage;
             aEvent.xclient.display      = m_pDisplay;
@@ -1758,7 +1758,7 @@ void GnomeWMAdaptor::enableAlwaysOnTop( X11SalFrame* pFrame, bool bEnable ) cons
     {
         if( pFrame->bMapped_ )
         {
-            // window already mapped, send WM a message
+            
             XEvent aEvent;
             aEvent.type                 = ClientMessage;
             aEvent.xclient.display      = m_pDisplay;
@@ -1883,8 +1883,8 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
         else
         {
             const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
-            // the current geometry may already be changed by the corresponding
-            // ConfigureNotify, but this cannot be helped
+            
+            
             pFrame->maRestorePosSize =
                 Rectangle( Point( rGeom.nX, rGeom.nY ),
                            Size( rGeom.nWidth, rGeom.nHeight ) );
@@ -1949,8 +1949,8 @@ int GnomeWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* p
         else
         {
             const SalFrameGeometry& rGeom = pFrame->GetUnmirroredGeometry();
-            // the current geometry may already be changed by the corresponding
-            // ConfigureNotify, but this cannot be helped
+            
+            
             pFrame->maRestorePosSize =
                 Rectangle( Point( rGeom.nX, rGeom.nY ),
                            Size( rGeom.nWidth, rGeom.nHeight ) );
@@ -1986,7 +1986,7 @@ void NetWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
         pFrame->mbShaded = bToShaded;
         if( pFrame->bMapped_ )
         {
-            // window already mapped, send WM a message
+            
             XEvent aEvent;
             aEvent.type                 = ClientMessage;
             aEvent.xclient.display      = m_pDisplay;
@@ -2007,7 +2007,7 @@ void NetWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
         }
         else
         {
-            // window not mapped yet, set _NET_WM_STATE directly
+            
             setNetWMState( pFrame );
         }
     }
@@ -2023,7 +2023,7 @@ void GnomeWMAdaptor::shade( X11SalFrame* pFrame, bool bToShaded ) const
         pFrame->mbShaded = bToShaded;
         if( pFrame->bMapped_ )
         {
-            // window already mapped, send WM a message
+            
             XEvent aEvent;
             aEvent.type                 = ClientMessage;
             aEvent.xclient.display      = m_pDisplay;
@@ -2075,7 +2075,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
         }
         if( pFrame->bMapped_ )
         {
-            // window already mapped, send WM a message
+            
             XEvent aEvent;
             aEvent.type                 = ClientMessage;
             aEvent.xclient.display      = m_pDisplay;
@@ -2096,10 +2096,10 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
         }
         else
         {
-            // window not mapped yet, set _NET_WM_STATE directly
+            
             setNetWMState( pFrame );
         }
-        // #i42750# guess size before resize event shows up
+        
         if( bFullScreen )
         {
             if( m_pSalDisplay->IsXinerama() )
@@ -2142,7 +2142,7 @@ void NetWMAdaptor::showFullScreen( X11SalFrame* pFrame, bool bFullScreen ) const
 /*
  *  WMAdaptor::getCurrentWorkArea
  */
-// FIXME: multiscreen case
+
 int WMAdaptor::getCurrentWorkArea() const
 {
     int nCurrent = -1;
@@ -2221,7 +2221,7 @@ int WMAdaptor::getWindowWorkArea( XLIB_Window aWindow ) const
 /*
  *  WMAdaptor::getCurrentWorkArea
  */
-// fixme: multi screen case
+
 void WMAdaptor::switchToWorkArea( int nWorkArea, bool bConsiderWM ) const
 {
     if( bConsiderWM && ! getWMshouldSwitchWorkspace() )

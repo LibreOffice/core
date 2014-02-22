@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -79,9 +79,9 @@ namespace sd {
 
 sal_Bool DrawViewShell::mbPipette = sal_False;
 
-// ------------------------
-// - ScannerEventListener -
-// ------------------------
+
+
+
 
 class ScannerEventListener : public ::cppu::WeakImplHelper1< lang::XEventListener >
 {
@@ -94,19 +94,19 @@ public:
                             ScannerEventListener( DrawViewShell* pParent ) : mpParent( pParent )  {};
                             ~ScannerEventListener();
 
-    // XEventListener
+    
     virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException);
 
     void                    ParentDestroyed() { mpParent = NULL; }
 };
 
-// -----------------------------------------------------------------------------
+
 
 ScannerEventListener::~ScannerEventListener()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException)
 {
@@ -151,8 +151,8 @@ DrawViewShell::~DrawViewShell()
     if( mxScannerListener.is() )
         static_cast< ScannerEventListener* >( mxScannerListener.get() )->ParentDestroyed();
 
-    // Remove references to items within Svx3DWin
-    // (maybe do a listening sometime in Svx3DWin)
+    
+    
     sal_uInt16 nId = Svx3DChildWindow::GetChildWindowId();
     SfxChildWindow* pWindow = GetViewFrame() ? GetViewFrame()->GetChildWindow(nId) : NULL;
     if(pWindow)
@@ -190,13 +190,13 @@ DrawViewShell::~DrawViewShell()
     if ( mpClipEvtLstnr )
     {
         mpClipEvtLstnr->AddRemoveListener( GetActiveWindow(), sal_False );
-        mpClipEvtLstnr->ClearCallbackLink();        // prevent callback if another thread is waiting
+        mpClipEvtLstnr->ClearCallbackLink();        
         mpClipEvtLstnr->release();
     }
 
     delete mpDrawView;
-    // Set mpView to NULL so that the destructor of the ViewShell base class
-    // does not access it.
+    
+    
     mpView = mpDrawView = NULL;
 
     mpFrameView->Disconnect();
@@ -256,15 +256,15 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
     GetDoc()->CreateFirstPages();
 
     mpDrawView = new DrawView(pDocSh, GetActiveWindow(), this);
-    mpView = mpDrawView;             // Pointer of base class ViewShell
-    mpDrawView->SetSwapAsynchron(sal_True); // Asynchronous load of graphics
+    mpView = mpDrawView;             
+    mpDrawView->SetSwapAsynchron(sal_True); 
 
-    // We do not read the page kind from the frame view anymore so we have
-    // to set it in order to resync frame view and this view.
+    
+    
     mpFrameView->SetPageKind(eInitialPageKind);
     mePageKind = eInitialPageKind;
     meEditMode = EM_PAGE;
-    DocumentType eDocType = GetDoc()->GetDocumentType(); // RTTI does not work here
+    DocumentType eDocType = GetDoc()->GetDocumentType(); 
     switch (mePageKind)
     {
         case PK_STANDARD:
@@ -294,10 +294,10 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
 
     mpDrawView->SetWorkArea(Rectangle(Point() - aVisAreaPos - aPageOrg, aSize));
 
-    // objects can not grow bigger than ViewSize
+    
     GetDoc()->SetMaxObjSize(aSize);
 
-    // Split-Handler for TabControls
+    
     maTabControl.SetSplitHdl( LINK( this, DrawViewShell, TabSplitHdl ) );
 
     /* In order to set the correct EditMode of the FrameView, we select another
@@ -311,7 +311,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         meEditMode = EM_PAGE;
     }
 
-    // Use configuration of FrameView
+    
     ReadFrameViewData(mpFrameView);
 
     if( eDocType == DOCUMENT_TYPE_DRAW )
@@ -328,7 +328,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
             GetActiveWindow()->SetHelpId( CMD_SID_NOTESMODE );
             GetActiveWindow()->SetUniqueId( CMD_SID_NOTESMODE );
 
-            // AutoLayouts have to be created
+            
             GetDoc()->StopWorkStartupDelay();
         }
         else if (mePageKind == PK_HANDOUT)
@@ -337,7 +337,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
             GetActiveWindow()->SetHelpId( CMD_SID_HANDOUTMODE );
             GetActiveWindow()->SetUniqueId( CMD_SID_HANDOUTMODE );
 
-            // AutoLayouts have to be created
+            
             GetDoc()->StopWorkStartupDelay();
         }
         else
@@ -348,7 +348,7 @@ void DrawViewShell::Construct(DrawDocShell* pDocSh, PageKind eInitialPageKind)
         }
     }
 
-    // start selection function
+    
     SfxRequest aReq(SID_OBJECT_SELECT, 0, GetDoc()->GetItemPool());
     FuPermanent(aReq);
     mpDrawView->SetFrameDragSingles(sal_True);
@@ -400,7 +400,7 @@ void DrawViewShell::Shutdown (void)
 
     if(SlideShow::IsRunning( GetViewShellBase() ) )
     {
-        // Turn off effects.
+        
         GetDrawView()->SetAnimationMode(SDR_ANIMATION_DISABLE);
     }
 }
@@ -414,7 +414,7 @@ css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubCo
 
     if (IsMainViewShell())
     {
-        // Create uno sub controller for the main view shell.
+        
         xSubController = css::uno::Reference<css::drawing::XDrawSubController>(
             new SdUnoDrawView (
                 *this,
@@ -429,9 +429,9 @@ css::uno::Reference<css::drawing::XDrawSubController> DrawViewShell::CreateSubCo
 
 bool DrawViewShell::RelocateToParentWindow (::Window* pParentWindow)
 {
-    // DrawViewShells can not be relocated to a new parent window at the
-    // moment, so return <FALSE/> except when the given parent window is the
-    // parent window that is already in use.
+    
+    
+    
     return pParentWindow==GetParentWindow();
 }
 
@@ -487,7 +487,7 @@ void DrawViewShell::SetupPage (Size &rSize,
 
     for (i = 0; i < nPageCnt; i++)
     {
-        // first, handle all master pages
+        
         SdPage *pPage = GetDoc()->GetMasterSdPage(i, mePageKind);
 
         if( pPage )
@@ -520,7 +520,7 @@ void DrawViewShell::SetupPage (Size &rSize,
 
     for (i = 0; i < nPageCnt; i++)
     {
-        // then, handle all pages
+        
         SdPage *pPage = GetDoc()->GetSdPage(i, mePageKind);
 
         if( pPage )
@@ -579,7 +579,7 @@ void DrawViewShell::SetupPage (Size &rSize,
 
     GetViewFrame()->GetBindings().Invalidate(SID_RULER_NULL_OFFSET);
 
-    // zoom onto (new) page size
+    
     GetViewFrame()->GetDispatcher()->Execute(SID_SIZE_PAGE,
                         SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
 }
@@ -606,12 +606,12 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             else
                 pZoomItem = new SvxZoomItem( SVX_ZOOM_PERCENT, nZoom );
 
-            // constrain area
+            
             sal_uInt16 nZoomValues = SVX_ZOOM_ENABLE_ALL;
             SdrPageView* pPageView = mpDrawView->GetSdrPageView();
 
             if( ( pPageView && pPageView->GetObjList()->GetObjCount() == 0 ) )
-                // || ( mpDrawView->GetMarkedObjectList().GetMarkCount() == 0 ) )
+                
             {
                 nZoomValues &= ~SVX_ZOOM_ENABLE_OPTIMAL;
             }
@@ -662,7 +662,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
     aPos.X() = Fraction(aPos.X()) / aUIScale;
     aPos.Y() = Fraction(aPos.Y()) / aUIScale;
 
-    // position- and size items
+    
     if ( mpDrawView->IsAction() )
     {
         Rectangle aRect;
@@ -690,7 +690,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             Rectangle aRect = mpDrawView->GetAllMarkedRect();
             mpDrawView->GetSdrPageView()->LogicToPagePos(aRect);
 
-            // Show the position of the selected shape(s)
+            
             Point aShapePosition (aRect.TopLeft());
             aShapePosition.X() = Fraction(aShapePosition.X()) / aUIScale;
             aShapePosition.Y() = Fraction(aShapePosition.Y()) / aUIScale;
@@ -708,12 +708,12 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
         }
     }
 
-    // Display of current page and layer.
+    
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) )
     {
         sal_Int32 nPageCount = sal_Int32(GetDoc()->GetSdPageCount(mePageKind));
         sal_Int32 nActivePageCount = sal_Int32(GetDoc()->GetActiveSdPageCount());
-        // Always show the slide/page number.
+        
         OUString aOUString = SD_RESSTR(STR_SD_PAGE);
         aOUString += " ";
         aOUString += OUString::number( maTabControl.GetCurPageId() );
@@ -726,9 +726,9 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             aOUString += ")";
         }
 
-        // If in layer mode additionally show the layer that contains all
-        // selected shapes of the page.  If the shapes are distributed on
-        // more than one layer, no layer name is shown.
+        
+        
+        
         if (IsLayerModeActive())
         {
             SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
@@ -738,9 +738,9 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
             sal_uLong nMarkCount = rMarkList.GetMarkCount();
             bool bOneLayer = true;
 
-            // Use the first ten selected shapes as a (hopefully
-            // representative) sample of all shapes of the current page.
-            // Detect whether they belong to the same layer.
+            
+            
+            
             for( sal_uLong j = 0; j < nMarkCount && bOneLayer && j < 10; j++ )
             {
                 pObj = rMarkList.GetMark( j )->GetMarkedSdrObj();
@@ -755,7 +755,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
                 }
             }
 
-            // Append the layer name to the current page number.
+            
             if( bOneLayer && nMarkCount )
             {
                 SdrLayer* pLayer = rLayerAdmin.GetLayerPerID( nLayer );
@@ -770,7 +770,7 @@ void DrawViewShell::GetStatusBarState(SfxItemSet& rSet)
 
         rSet.Put (SfxStringItem (SID_STATUS_PAGE, aOUString));
     }
-    // Layout
+    
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )
     {
         OUString aString = mpActualPage->GetLayoutName();
@@ -788,14 +788,14 @@ void DrawViewShell::Notify (SfxBroadcaster&, const SfxHint& rHint)
     const SfxSimpleHint* pSimple = dynamic_cast< const SfxSimpleHint* >(&rHint);
     if (pSimple!=NULL && pSimple->GetId()==SFX_HINT_MODECHANGED)
     {
-        // Change to selection when turning on read-only mode.
+        
         if(GetDocSh()->IsReadOnly() && dynamic_cast< FuSelection* >( GetCurrentFunction().get() ) )
         {
             SfxRequest aReq(SID_OBJECT_SELECT, 0, GetDoc()->GetItemPool());
             FuPermanent(aReq);
         }
 
-        // Turn on design mode when document is not read-only.
+        
         if (GetDocSh()->IsReadOnly() != mbReadOnly )
         {
             mbReadOnly = GetDocSh()->IsReadOnly();
@@ -814,7 +814,7 @@ void DrawViewShell::ExecuteAnnotation (SfxRequest& rRequest)
         mpAnnotationManager->ExecuteAnnotation( rRequest );
 }
 
-// --------------------------------------------------------------------
+
 
 void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 {
@@ -850,6 +850,6 @@ void DrawViewShell::GetAnnotationState (SfxItemSet& rItemSet )
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

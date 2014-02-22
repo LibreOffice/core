@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -73,8 +73,8 @@ namespace dxcanvas
             {
                 const sal_Int32 nPolys( xPoly->getNumberOfPolygons() );
 
-                // not a known implementation object - try data source
-                // interfaces
+                
+                
                 uno::Reference< rendering::XBezierPolyPolygon2D > xBezierPoly(
                     xPoly,
                     uno::UNO_QUERY );
@@ -93,8 +93,8 @@ namespace dxcanvas
                         xPoly,
                         uno::UNO_QUERY );
 
-                    // no implementation class and no data provider
-                    // found - contract violation.
+                    
+                    
                     ENSURE_ARG_OR_THROW( xLinePoly.is(),
                                      "VCLCanvas::polyPolygonFromXPolyPolygon2D(): Invalid input "
                                      "poly-polygon, cannot retrieve vertex data" );
@@ -110,24 +110,24 @@ namespace dxcanvas
 
         void setupGraphics( Gdiplus::Graphics& rGraphics )
         {
-            // setup graphics with (somewhat arbitrary) defaults
-            //rGraphics.SetCompositingQuality( Gdiplus::CompositingQualityHighQuality );
+            
+            
             rGraphics.SetCompositingQuality( Gdiplus::CompositingQualityHighSpeed );
-            //rGraphics.SetInterpolationMode( Gdiplus::InterpolationModeHighQualityBilinear ); // with prefiltering for shrinks
+            
             rGraphics.SetInterpolationMode( Gdiplus::InterpolationModeBilinear );
 
-            // #122683# Switched precedence of pixel offset
-            // mode. Seemingly, polygon stroking needs
-            // PixelOffsetModeNone to achieve visually pleasing
-            // results, whereas all other operations (e.g. polygon
-            // fills, bitmaps) look better with PixelOffsetModeHalf.
-            rGraphics.SetPixelOffsetMode( Gdiplus::PixelOffsetModeHalf ); // Pixel center at (0.5, 0.5) etc.
-            //rGraphics.SetPixelOffsetMode( Gdiplus::PixelOffsetModeNone );
+            
+            
+            
+            
+            
+            rGraphics.SetPixelOffsetMode( Gdiplus::PixelOffsetModeHalf ); 
+            
 
-            //rGraphics.SetSmoothingMode( Gdiplus::SmoothingModeHighSpeed ); // no line/curve antialiasing
-            //rGraphics.SetSmoothingMode( Gdiplus::SmoothingModeHighQuality );
+            
+            
             rGraphics.SetSmoothingMode( Gdiplus::SmoothingModeAntiAlias );
-            //rGraphics.SetTextRenderingHint( Gdiplus::TextRenderingHintAntiAlias );
+            
             rGraphics.SetTextRenderingHint( Gdiplus::TextRenderingHintSystemDefault );
             rGraphics.SetPageUnit(Gdiplus::UnitPixel);
         }
@@ -171,8 +171,8 @@ namespace dxcanvas
 
         namespace
         {
-            // TODO(P2): Check whether this gets inlined. If not, make functor
-            // out of it
+            
+            
             inline Gdiplus::PointF implGdiPlusPointFromRealPoint2D( const ::com::sun::star::geometry::RealPoint2D& rPoint )
             {
                 return Gdiplus::PointF( static_cast<Gdiplus::REAL>(rPoint.X),
@@ -195,13 +195,13 @@ namespace dxcanvas
 
                 if( rPoly.areControlPointsUsed() )
                 {
-                    // control points used -> for now, add all
-                    // segments as curves to GraphicsPath
+                    
+                    
 
-                    // If the polygon is closed, we need to add the
-                    // first point, thus, one more (can't simply
-                    // GraphicsPath::CloseFigure() it, since the last
-                    // point cannot have any control points for GDI+)
+                    
+                    
+                    
+                    
                     rPoints.resize( 3*nPoints + bClosedPolygon );
 
                     sal_uInt32 nCurrOutput=0;
@@ -222,9 +222,9 @@ namespace dxcanvas
 
                     if( bClosedPolygon )
                     {
-                        // add first point again (to be able to pass
-                        // control points for the last point, see
-                        // above)
+                        
+                        
+                        
                         const ::basegfx::B2DPoint& rPoint( rPoly.getB2DPoint(0) );
                         rPoints[nCurrOutput++] = Gdiplus::PointF( static_cast<Gdiplus::REAL>(rPoint.getX()),
                                                                   static_cast<Gdiplus::REAL>(rPoint.getY()) );
@@ -244,11 +244,11 @@ namespace dxcanvas
                     }
                     else
                     {
-                        // GraphicsPath expects 3(n-1)+1 points (i.e. the
-                        // last point must not have any trailing control
-                        // points after it).
-                        // Therefore, simply don't pass the last two
-                        // points here.
+                        
+                        
+                        
+                        
+                        
                         if( nCurrOutput > 3 )
                         {
                             if(bNoLineJoin && nCurrOutput > 7)
@@ -268,8 +268,8 @@ namespace dxcanvas
                 }
                 else
                 {
-                    // no control points -> no curves, simply add
-                    // straigt lines to GraphicsPath
+                    
+                    
                     rPoints.resize( nPoints );
 
                     for( sal_uInt32 nCurrPoint=0; nCurrPoint<nPoints; ++nCurrPoint )
@@ -361,26 +361,26 @@ namespace dxcanvas
 
         uno::Sequence< double > argbToDoubleSequence( const Gdiplus::ARGB& rColor )
         {
-            // TODO(F1): handle color space conversions, when defined on canvas/graphicDevice
+            
             uno::Sequence< double > aRet(4);
 
-            aRet[0] = ((rColor >> 16) & 0xFF) / 255.0;  // red
-            aRet[1] = ((rColor >> 8) & 0xFF) / 255.0;   // green
-            aRet[2] = (rColor & 0xFF) / 255.0;          // blue
-            aRet[3] = ((rColor >> 24) & 0xFF) / 255.0;  // alpha
+            aRet[0] = ((rColor >> 16) & 0xFF) / 255.0;  
+            aRet[1] = ((rColor >> 8) & 0xFF) / 255.0;   
+            aRet[2] = (rColor & 0xFF) / 255.0;          
+            aRet[3] = ((rColor >> 24) & 0xFF) / 255.0;  
 
             return aRet;
         }
 
         uno::Sequence< sal_Int8 > argbToIntSequence( const Gdiplus::ARGB& rColor )
         {
-            // TODO(F1): handle color space conversions, when defined on canvas/graphicDevice
+            
             uno::Sequence< sal_Int8 > aRet(4);
 
-            aRet[0] = static_cast<sal_Int8>((rColor >> 16) & 0xFF); // red
-            aRet[1] = static_cast<sal_Int8>((rColor >> 8) & 0xFF);  // green
-            aRet[2] = static_cast<sal_Int8>(rColor & 0xFF);         // blue
-            aRet[3] = static_cast<sal_Int8>((rColor >> 24) & 0xFF); // alpha
+            aRet[0] = static_cast<sal_Int8>((rColor >> 16) & 0xFF); 
+            aRet[1] = static_cast<sal_Int8>((rColor >> 8) & 0xFF);  
+            aRet[2] = static_cast<sal_Int8>(rColor & 0xFF);         
+            aRet[3] = static_cast<sal_Int8>((rColor >> 24) & 0xFF); 
 
             return aRet;
         }
@@ -390,7 +390,7 @@ namespace dxcanvas
             ENSURE_OR_THROW( rColor.getLength() > 2,
                               "sequenceToArgb: need at least three channels" );
 
-            // TODO(F1): handle color space conversions, when defined on canvas/graphicDevice
+            
             Gdiplus::ARGB aColor;
 
             aColor = (static_cast<sal_uInt8>(rColor[0]) << 16) | (static_cast<sal_uInt8>(rColor[1]) << 8) | static_cast<sal_uInt8>(rColor[2]);
@@ -406,7 +406,7 @@ namespace dxcanvas
             ENSURE_OR_THROW( rColor.getLength() > 2,
                               "sequenceToColor: need at least three channels" );
 
-            // TODO(F1): handle color space conversions, when defined on canvas/graphicDevice
+            
             Gdiplus::ARGB aColor;
 
             ::canvas::tools::verifyRange(rColor[0],0.0,1.0);
@@ -440,9 +440,9 @@ namespace dxcanvas
                 {
                     aPoints.resize( nCurrSize );
 
-                    // TODO(F1): Closed/open polygons
+                    
 
-                    // convert from RealPoint2D array to Gdiplus::PointF array
+                    
                     ::std::transform( points[nCurrPoly].getConstArray(),
                                       points[nCurrPoly].getConstArray()+nCurrSize,
                                       aPoints.begin(),
@@ -527,7 +527,7 @@ namespace dxcanvas
             Gdiplus::BitmapData aBmpData;
             aBmpData.Width       = rRawRGBAData.mnWidth;
             aBmpData.Height      = rRawRGBAData.mnHeight;
-            aBmpData.Stride      = 4*aBmpData.Width; // bottom-up format
+            aBmpData.Stride      = 4*aBmpData.Width; 
             aBmpData.PixelFormat = PixelFormat32bppARGB;
             aBmpData.Scan0       = rRawRGBAData.mpBitmapData.get();
 
@@ -540,7 +540,7 @@ namespace dxcanvas
                 return false;
             }
 
-            // commit data to bitmap
+            
             pBitmap->UnlockBits( &aBmpData );
 
             return drawGdiPlusBitmap( rGraphics,
@@ -558,28 +558,28 @@ namespace dxcanvas
             }
             else
             {
-                // not a native CanvasBitmap, extract VCL bitmap and
-                // render into GDI+ bitmap of similar size
-                // =================================================
+                
+                
+                
 
                 const geometry::IntegerSize2D aBmpSize( xBitmap->getSize() );
                 BitmapSharedPtr               pBitmap;
 
                 if( xBitmap->hasAlpha() )
                 {
-                    // TODO(P2): At least for the alpha bitmap case, it
-                    // would be possible to generate the corresponding
-                    // bitmap directly
+                    
+                    
+                    
                     pBitmap.reset( new Gdiplus::Bitmap( aBmpSize.Width,
                                                         aBmpSize.Height,
                                                         PixelFormat32bppARGB ) );
                 }
                 else
                 {
-                    // TODO(F2): Might be wise to create bitmap compatible
-                    // to the VCL bitmap. Also, check whether the VCL
-                    // bitmap's system handles can be used to create the
-                    // GDI+ bitmap (currently, it does not seem so).
+                    
+                    
+                    
+                    
                     pBitmap.reset( new Gdiplus::Bitmap( aBmpSize.Width,
                                                         aBmpSize.Height,
                                                         PixelFormat24bppRGB ) );
@@ -614,9 +614,9 @@ namespace dxcanvas
                                          double                    nBlueModulation,
                                          double                    nAlphaModulation )
         {
-            // This gets rather verbose, but we have to setup a color
-            // transformation matrix, in order to incorporate the global
-            // alpha value mfAlpha into the bitmap rendering.
+            
+            
+            
             Gdiplus::ColorMatrix     aColorMatrix;
 
             aColorMatrix.m[0][0] = static_cast<Gdiplus::REAL>(nRedModulation);
@@ -654,7 +654,7 @@ namespace dxcanvas
                                     Gdiplus::ColorAdjustTypeDefault );
         }
 
-    } // namespace tools
-} // namespace dxcanvas
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

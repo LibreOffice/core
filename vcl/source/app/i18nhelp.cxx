@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -82,9 +82,9 @@ LocaleDataWrapper& vcl::I18nHelper::ImplGetLocaleDataWrapper() const
 
 inline bool is_formatting_mark( sal_Unicode c )
 {
-    if( (c >= 0x200B) && (c <= 0x200F) )    // BiDi and zero-width-markers
+    if( (c >= 0x200B) && (c <= 0x200F) )    
         return true;
-    if( (c >= 0x2028) && (c <= 0x202E) )    // BiDi and paragraph-markers
+    if( (c >= 0x2028) && (c <= 0x202E) )    
         return true;
     return false;
 }
@@ -117,8 +117,8 @@ sal_Int32 vcl::I18nHelper::CompareString( const OUString& rStr1, const OUString&
 
     if ( mbTransliterateIgnoreCase )
     {
-        // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
-        // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
+        
+        
         ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = false;
         delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
@@ -136,8 +136,8 @@ bool vcl::I18nHelper::MatchString( const OUString& rStr1, const OUString& rStr2 
 
     if ( !mbTransliterateIgnoreCase )
     {
-        // Change mbTransliterateIgnoreCase and destroy the warpper, next call to
-        // ImplGetTransliterationWrapper() will create a wrapper with the correct bIgnoreCase
+        
+        
         ((vcl::I18nHelper*)this)->mbTransliterateIgnoreCase = true;
         delete ((vcl::I18nHelper*)this)->mpTransliterationWrapper;
         ((vcl::I18nHelper*)this)->mpTransliterationWrapper = NULL;
@@ -156,7 +156,7 @@ bool vcl::I18nHelper::MatchMnemonic( const OUString& rString, sal_Unicode cMnemo
     sal_Int32 n = rString.indexOf( '~' );
     if ( n != -1 )
     {
-        OUString aMatchStr = rString.copy( n+1 );   // not only one char, because of transliteration...
+        OUString aMatchStr = rString.copy( n+1 );   
         bEqual = MatchString( OUString(cMnemonicChar), aMatchStr );
     }
     return bEqual;

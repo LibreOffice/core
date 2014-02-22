@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "gstframegrabber.hxx"
@@ -78,7 +78,7 @@ FrameGrabber::FrameGrabber( const OUString &rURL ) :
     }
 
     if( mpPipeline ) {
-        // pre-roll
+        
         switch( gst_element_set_state( mpPipeline, GST_STATE_PAUSED ) ) {
         case GST_STATE_CHANGE_FAILURE:
         case GST_STATE_CHANGE_NO_PREROLL:
@@ -125,7 +125,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     GstBuffer *pBuf = NULL;
     GstCaps *pCaps = NULL;
 
-    // synchronously fetch the frame
+    
 #ifdef AVMEDIA_GST_0_10
     g_signal_emit_by_name( pSink, "pull-preroll", &pBuf, NULL );
     if( pBuf )
@@ -141,7 +141,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     }
 #endif
 
-    // get geometry
+    
     int nWidth = 0, nHeight = 0;
     if( !pCaps )
         g_warning( "could not get snapshot format\n" );
@@ -156,7 +156,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
     }
 
     if( pBuf && nWidth > 0 && nHeight > 0 &&
-        // sanity check the size
+        
 #ifdef AVMEDIA_GST_0_10
         GST_BUFFER_SIZE( pBuf ) >= static_cast<unsigned>( nWidth * nHeight * 3 )
 #else
@@ -179,7 +179,7 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
         BitmapWriteAccess *pWrite = aBmp.AcquireWriteAccess();
         if( pWrite )
         {
-            // yet another cheesy pixel copying loop
+            
             for( int y = 0; y < nHeight; ++y )
             {
                 sal_uInt8 *p = pData + y * nStride;
@@ -224,7 +224,7 @@ uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames()
     return aRet;
 }
 
-} // namespace gstreamer
-} // namespace avmedia
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

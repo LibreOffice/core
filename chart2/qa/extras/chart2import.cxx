@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
@@ -50,17 +50,17 @@ public:
  *  this causes the UT to crash in sd.
  *  sd::DrawView::Notify tries to reset by calling sd::DrawViewShell::ResetActualPage
  */
-//    CPPUNIT_TEST(testPPTChartSeries);
-//    CPPUNIT_TEST(testPPTXChartSeries);
-//    CPPUNIT_TEST(testODPChartSeries);
+
+
+
     CPPUNIT_TEST_SUITE_END();
 
 private:
 
 };
 
-// error bar import
-// split method up into smaller chunks for more detailed tests
+
+
 void Chart2ImportTest::Fdo60083()
 {
     load("/chart2/qa/extras/data/ods/", "fdo60083.ods");
@@ -73,7 +73,7 @@ void Chart2ImportTest::Fdo60083()
     Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
     CPPUNIT_ASSERT( xPropSet.is() );
 
-    // test that y error bars are there
+    
     Reference< beans::XPropertySet > xErrorBarYProps;
     xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
     CPPUNIT_ASSERT(xErrorBarYProps.is());
@@ -105,7 +105,7 @@ void Chart2ImportTest::Fdo60083()
         CPPUNIT_ASSERT_EQUAL(bVal, true);
     }
 
-    // test that x error bars are not imported
+    
     Reference< beans::XPropertySet > xErrorBarXProps;
     xPropSet->getPropertyValue("ErrorBarX") >>= xErrorBarXProps;
     CPPUNIT_ASSERT(!xErrorBarXProps.is());
@@ -123,7 +123,7 @@ void Chart2ImportTest::testErrorBarRange()
     Reference< beans::XPropertySet > xPropSet( xDataSeries, UNO_QUERY_THROW );
     CPPUNIT_ASSERT( xPropSet.is() );
 
-    // test that y error bars are there
+    
     Reference< beans::XPropertySet > xErrorBarYProps;
     xPropSet->getPropertyValue("ErrorBarY") >>= xErrorBarYProps;
     CPPUNIT_ASSERT(xErrorBarYProps.is());
@@ -141,7 +141,7 @@ void Chart2ImportTest::testErrorBarRange()
     CPPUNIT_ASSERT_EQUAL(aRangePos, OUString("$Sheet1.$C$2:$C$4"));
 }
 
-// stepped line interpolation
+
 void Chart2ImportTest::testSteppedLines()
 {
     const sal_Int32 MAXSHEET = 14;
@@ -252,7 +252,7 @@ void Chart2ImportTest::testDOCXChartSeries()
 
 void Chart2ImportTest::testPPTChartSeries()
 {
-    //test chart series names for ppt
+    
     uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions("/chart2/qa/extras/data/ppt/", "chart.ppt");
 
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
@@ -263,7 +263,7 @@ void Chart2ImportTest::testPPTChartSeries()
 
 void Chart2ImportTest::testPPTXChartSeries()
 {
-    //test chart series names for pptx
+    
     uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions("/chart2/qa/extras/data/pptx/", "chart.pptx");
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[1]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[2]);
@@ -273,7 +273,7 @@ void Chart2ImportTest::testPPTXChartSeries()
 
 void Chart2ImportTest::testODPChartSeries()
 {
-    //test chart series names for odp
+    
     uno::Sequence < OUString > seriesList = getImpressChartColumnDescriptions("/chart2/qa/extras/data/odp/", "chart.odp");
     CPPUNIT_ASSERT_EQUAL(OUString("Column 1"), seriesList[0]);
     CPPUNIT_ASSERT_EQUAL(OUString("Column 2"), seriesList[1]);

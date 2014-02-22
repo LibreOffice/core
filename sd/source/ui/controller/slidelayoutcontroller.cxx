@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ namespace sd
 
 extern OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
 
-// -----------------------------------------------------------------------
+
 
 class LayoutToolbarMenu : public svtools::ToolbarMenu
 {
@@ -84,7 +84,7 @@ private:
     ValueSet* mpLayoutSet2;
 };
 
-// -----------------------------------------------------------------------
+
 
 struct snewfoil_value_info
 {
@@ -130,7 +130,7 @@ static const snewfoil_value_info standard[] =
 
 static const snewfoil_value_info v_standard[] =
 {
-    // vertical
+    
     {BMP_LAYOUT_VERTICAL02, STR_AL_VERT_TITLE_TEXT_CHART,      WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_TEXT_CHART       },
     {BMP_LAYOUT_VERTICAL01, STR_AL_VERT_TITLE_VERT_OUTLINE,    WritingMode_TB_RL, AUTOLAYOUT_VERTICAL_TITLE_VERTICAL_OUTLINE },
     {BMP_LAYOUT_HEAD02,     STR_AL_TITLE_VERT_OUTLINE,         WritingMode_TB_RL, AUTOLAYOUT_TITLE_VERTICAL_OUTLINE          },
@@ -138,7 +138,7 @@ static const snewfoil_value_info v_standard[] =
     {0, 0, WritingMode_LR_TB, AUTOLAYOUT_NONE}
 };
 
-// -----------------------------------------------------------------------
+
 
 static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pInfo )
 {
@@ -159,7 +159,7 @@ static void fillLayoutValueSet( ValueSet* pValue, const snewfoil_value_info* pIn
     pValue->SetSizePixel( pValue->CalcWindowSizePixel( aLayoutItemSize ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const Reference< XFrame >& xFrame, ::Window* pParent, const bool bInsertPage )
 : svtools::ToolbarMenu(xFrame, pParent, WB_CLIPCHILDREN )
@@ -171,7 +171,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
 {
     DrawViewMode eMode = DrawViewMode_DRAW;
 
-    // find out which view is running
+    
     if( xFrame.is() ) try
     {
         Reference< XPropertySet > xControllerSet( xFrame->getController(), UNO_QUERY_THROW );
@@ -203,7 +203,7 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     case DrawViewMode_DRAW: pInfo = &standard[0]; break;
     case DrawViewMode_HANDOUT: pInfo = &handout[0]; nColCount = 2; break;
     case DrawViewMode_NOTES: pInfo = &notes[0]; nColCount = 1; break;
-    default: assert(false); // can't happen, will crash later otherwise
+    default: assert(false); 
     }
 
     mpLayoutSet1->SetColCount( nColCount );
@@ -265,13 +265,13 @@ LayoutToolbarMenu::LayoutToolbarMenu( SlideLayoutController& rController, const 
     SetOutputSizePixel( getMenuSize() );
 }
 
-// -----------------------------------------------------------------------
+
 
 LayoutToolbarMenu::~LayoutToolbarMenu()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
 {
@@ -309,14 +309,14 @@ IMPL_LINK( LayoutToolbarMenu, SelectHdl, void *, pControl )
     return 0;
 }
 
-// ====================================================================
+
 
 OUString SlideLayoutController_getImplementationName()
 {
     return OUString( "com.sun.star.comp.sd.SlideLayoutController" );
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -325,7 +325,7 @@ Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( Ru
     return aSNS;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
@@ -333,14 +333,14 @@ Reference< XInterface > SAL_CALL SlideLayoutController_createInstance( const Ref
         new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:AssignLayout", false ));
 }
 
-// --------------------------------------------------------------------
+
 
 OUString InsertSlideController_getImplementationName()
 {
     return OUString( "com.sun.star.comp.sd.InsertSlideController" );
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -349,7 +349,7 @@ Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( Ru
     return aSNS;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
@@ -357,9 +357,9 @@ Reference< XInterface > SAL_CALL InsertSlideController_createInstance( const Ref
         new SlideLayoutController( comphelper::getComponentContext(rSMgr), ".uno:InsertPage" , true ) );
 }
 
-//========================================================================
-// class SlideLayoutController
-//========================================================================
+
+
+
 
 SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentContext >& rxContext, const OUString& sCommandURL, bool bInsertPage )
 : svt::PopupWindowController( rxContext, Reference< frame::XFrame >(), sCommandURL )
@@ -367,16 +367,16 @@ SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentCo
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ::Window* SlideLayoutController::createPopupWindow( ::Window* pParent )
 {
     return new sd::LayoutToolbarMenu( *this, m_xFrame, pParent, mbInsertPage );
 }
 
-// --------------------------------------------------------------------
-// XServiceInfo
-// --------------------------------------------------------------------
+
+
+
 
 OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeException )
 {
@@ -386,7 +386,7 @@ OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeE
         return SlideLayoutController_getImplementationName();
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  ) throw( RuntimeException )
 {

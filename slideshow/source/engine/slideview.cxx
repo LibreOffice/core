@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <canvas/debug.hxx>
@@ -114,10 +114,10 @@ basegfx::B2DPolyPolygon createClipPolygon( const basegfx::B2DPolyPolygon&    rCl
                                            const cppcanvas::CanvasSharedPtr& /*rCanvas*/,
                                            const basegfx::B2DSize&           rUserSize )
 {
-    // setup canvas clipping
-    // =====================
+    
+    
 
-    // AW: Simplified
+    
     const basegfx::B2DRange aClipRange(0, 0, rUserSize.getX(), rUserSize.getY());
 
     if(rClip.count())
@@ -141,13 +141,13 @@ basegfx::B2DPolyPolygon prepareClip( const basegfx::B2DPolyPolygon& rClip )
 {
     basegfx::B2DPolyPolygon aClip( rClip );
 
-    // TODO(P2): unnecessary, once XCanvas is correctly handling this
-    // AW: Should be no longer necessary; tools are now bezier-safe
+    
+    
     if( aClip.areControlPointsUsed() )
         aClip = basegfx::tools::adaptiveSubdivideByAngle( aClip );
 
-    // normalize polygon, preparation for clipping
-    // in updateCanvas()
+    
+    
     aClip = basegfx::tools::correctOrientations(aClip);
     aClip = basegfx::tools::solveCrossovers(aClip);
     aClip = basegfx::tools::stripNeutralPolygons(aClip);
@@ -160,7 +160,7 @@ basegfx::B2DPolyPolygon prepareClip( const basegfx::B2DPolyPolygon& rClip )
 void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
                 basegfx::B2IRange const&            rArea )
 {
-    // convert clip polygon to device coordinate system
+    
     ::basegfx::B2DPolyPolygon const* pClipPoly( pCanvas->getClip() );
     if( pClipPoly )
     {
@@ -169,14 +169,14 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
         pCanvas->setClip( aClipPoly );
     }
 
-    // set transformation to identitiy (->device pixel)
+    
     pCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
-    // #i42440# Fill the _full_ background in
-    // black. Since we had to extend the bitmap by one
-    // pixel, and the bitmap is initialized white,
-    // depending on the slide content a one pixel wide
-    // line will show to the bottom and the right.
+    
+    
+    
+    
+    
     const ::basegfx::B2DPolygon aPoly(
         ::basegfx::tools::createPolygonFromRect(
             basegfx::B2DRange(rArea)));
@@ -232,9 +232,9 @@ basegfx::B2IRange getLayerBoundsPixel( basegfx::B2DRange const&     rLayerBounds
     if( aTmpRect.isEmpty() )
         return ::basegfx::B2IRange();
 
-    // #i42440# Returned layer size is one pixel too small, as
-    // rendering happens one pixel to the right and below the
-    // actual bound rect.
+    
+    
+    
     return ::basegfx::B2IRange( ::basegfx::fround(aTmpRect.getMinX()),
                                 ::basegfx::fround(aTmpRect.getMinY()),
                                 ::basegfx::fround(aTmpRect.getMaxX()) + 1,
@@ -242,7 +242,7 @@ basegfx::B2IRange getLayerBoundsPixel( basegfx::B2DRange const&     rLayerBounds
 }
 
 
-// ----------------------------------------------------------------
+
 
 /** Container class for sprites issued by a ViewLayer
 
@@ -263,18 +263,18 @@ class LayerSpriteContainer
     */
     SpriteVector       maSprites;
 
-    /// Priority of this layer, relative to other view layers
+    
     basegfx::B1DRange  maLayerPrioRange;
 
     double getSpritePriority( std::size_t nSpriteNum ) const
     {
-        // divide the available layer range equally between all
-        // sprites, assign upper bound of individual sprite range as
-        // sprite prio (the layer itself gets assigned the lower bound
-        // of sprite 0's individual range):
+        
+        
+        
+        
         //
-        // | layer 0                    | layer 1                    | ...
-        // |    sprite 0 |    sprite 1  |    sprite 0 |    sprite 1  | ...
+        
+        
         return maLayerPrioRange.getMinimum() + maLayerPrioRange.getRange()*(nSpriteNum+1)/(maSprites.size()+1);
     }
 
@@ -288,7 +288,7 @@ class LayerSpriteContainer
     {
         SpriteVector aValidSprites;
 
-        // check all sprites for validity and set new priority
+        
         SpriteVector::iterator       aCurrSprite( maSprites.begin() );
         const SpriteVector::iterator aEnd( maSprites.end() );
         while( aCurrSprite != aEnd )
@@ -297,8 +297,8 @@ class LayerSpriteContainer
 
             if( pCurrSprite )
             {
-                // only copy still valid sprites over to the refreshed
-                // sprite vector.
+                
+                
                 aValidSprites.push_back( *aCurrSprite );
 
                 pCurrSprite->setPriority(
@@ -308,7 +308,7 @@ class LayerSpriteContainer
             ++aCurrSprite;
         }
 
-        // replace sprite list with pruned one
+        
         maSprites.swap( aValidSprites );
     }
 
@@ -330,7 +330,7 @@ public:
         {
             maLayerPrioRange = rRange;
 
-            // prune and recalc sprite prios
+            
             updateSprites();
         }
     }
@@ -343,7 +343,7 @@ public:
 
         SpriteEntry aEntry( pSprite,nPriority );
 
-        // insert new sprite, such that vector stays sorted
+        
         SpriteVector::iterator aInsertPos(
             maSprites.insert(
                 std::lower_bound( maSprites.begin(),
@@ -355,16 +355,16 @@ public:
         if( nNumSprites > SPRITE_ULLAGE ||
             maSprites.end() - aInsertPos > 1 )
         {
-            // updateSprites() also updates all sprite prios
+            
             updateSprites();
         }
         else
         {
-            // added sprite to the end, and not too many sprites in
-            // vector - perform optimized update (only need to set
-            // prio). This basically caters for the common case of
-            // iterated character animations, which generate lots of
-            // sprites, all added to the end.
+            
+            
+            
+            
+            
             pSprite->setPriority(
                 getSpritePriority( nNumSprites-1 ));
         }
@@ -377,7 +377,7 @@ public:
 };
 
 
-// ----------------------------------------------------------------
+
 
 
 /** This class provides layers for a slide view
@@ -395,25 +395,25 @@ public:
 class SlideViewLayer : public ViewLayer,
                        private boost::noncopyable
 {
-    /// Smart container for all sprites issued by this layer
+    
     mutable LayerSpriteContainer             maSpriteContainer;
 
-    /// Bounds of this layer in user space coordinates
+    
     basegfx::B2DRange                        maLayerBounds;
 
-    /// Bounds of this layer in device pixel
+    
     mutable basegfx::B2IRange                maLayerBoundsPixel;
 
-    /// Current clip polygon in user coordinates
+    
     basegfx::B2DPolyPolygon                  maClip;
 
-    /// Current size of the view in user coordinates
+    
     basegfx::B2DSize                         maUserSize;
 
-    /// Current overall view transformation
+    
     basegfx::B2DHomMatrix                    maTransformation;
 
-    /// 'parent' canvas, this viewlayer is associated with
+    
     const cppcanvas::SpriteCanvasSharedPtr   mpSpriteCanvas;
 
     /** output surface (necessarily a sprite, won't otherwise be able
@@ -421,10 +421,10 @@ class SlideViewLayer : public ViewLayer,
     */
     mutable cppcanvas::CustomSpriteSharedPtr mpSprite;
 
-    /// actual output canvas retrieved from a sprite
+    
     mutable cppcanvas::CanvasSharedPtr       mpOutputCanvas;
 
-    /// ptr back to owning view. needed for isOnView() method
+    
     View const* const                        mpParentView;
 
 public:
@@ -463,7 +463,7 @@ public:
         maTransformation = rMatrix;
         maUserSize = rUserSize;
 
-        // limit layer bounds to visible screen
+        
         maLayerBounds.intersect( basegfx::B2DRange(0.0,
                                                    0.0,
                                                    maUserSize.getX(),
@@ -474,7 +474,7 @@ public:
                                 maTransformation) );
         if( rNewLayerPixel != maLayerBoundsPixel )
         {
-            // re-gen sprite with new size
+            
             mpOutputCanvas.reset();
             mpSprite.reset();
         }
@@ -488,8 +488,8 @@ public:
                                                   maTransformation );
         geometry::IntegerSize2D offset(0, 0);
 
-        // Add translation according to the origin of aTmpRect.  Ignore the
-        // translation when aTmpRect was not properly initialized.
+        
+        
         if ( ! aTmpRect.isEmpty())
         {
             offset.Width  = basegfx::fround(aTmpRect.getMinX());
@@ -499,8 +499,8 @@ public:
     }
 
 private:
-    // ViewLayer interface
-    // ----------------------------------------------
+    
+    
 
     virtual cppcanvas::CustomSpriteSharedPtr createSprite(
         const ::basegfx::B2DSize& rSpriteSizePixel,
@@ -530,8 +530,8 @@ private:
 
     virtual basegfx::B2DHomMatrix getTransformation() const
     {
-        // Offset given transformation by left, top border of given
-        // range (after transformation through given transformation)
+        
+        
         basegfx::B2DRectangle aTmpRect;
         canvas::tools::calcTransformedRectBounds( aTmpRect,
                                                   maLayerBounds,
@@ -539,8 +539,8 @@ private:
 
         basegfx::B2DHomMatrix aMatrix( maTransformation );
 
-        // Add translation according to the origin of aTmpRect.  Ignore the
-        // translation when aTmpRect was not properly initialized.
+        
+        
         if ( ! aTmpRect.isEmpty())
         {
             aMatrix.translate( -basegfx::fround(aTmpRect.getMinX()),
@@ -557,10 +557,10 @@ private:
 
     virtual void clear() const
     {
-        // grab canvas - that also lazy-initializes maLayerBoundsPixel
+        
         cppcanvas::CanvasSharedPtr pCanvas=getCanvas()->clone();
 
-        // clear whole canvas
+        
         const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
         clearRect(pCanvas,
                   basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
@@ -568,13 +568,13 @@ private:
 
     virtual void clearAll() const
     {
-        // grab canvas - that also lazy-initializes maLayerBoundsPixel
+        
         ::cppcanvas::CanvasSharedPtr pCanvas( getCanvas()->clone() );
 
-        // clear layer clip, to clear whole area
+        
         pCanvas->setClip();
 
-        // clear whole canvas
+        
         const basegfx::B2I64Tuple& rSpriteSize(maLayerBoundsPixel.getRange());
         clearRect(pCanvas,
                   basegfx::B2IRange(0,0,rSpriteSize.getX(),rSpriteSize.getY()));
@@ -594,11 +594,11 @@ private:
                 maLayerBoundsPixel = getLayerBoundsPixel(maLayerBounds,
                                                          maTransformation);
 
-                // HACK: ensure at least 1x1 pixel size. clients might
-                // need an actual canvas (e.g. for bound rect
-                // calculations) without rendering anything. Better
-                // solution: introduce something like a reference
-                // canvas for ViewLayers, which is always available.
+                
+                
+                
+                
+                
                 if( maLayerBoundsPixel.isEmpty() )
                     maLayerBoundsPixel = basegfx::B2IRange(0,0,1,1);
 
@@ -633,7 +633,7 @@ private:
             ENSURE_OR_THROW( mpOutputCanvas,
                               "SlideViewLayer::getCanvas(): sprite doesn't yield a canvas" );
 
-            // new canvas retrieved - setup transformation and clip
+            
             mpOutputCanvas->setTransformation( getTransformation() );
             mpOutputCanvas->setClip(
                 createClipPolygon( maClip,
@@ -672,7 +672,7 @@ private:
 };
 
 
-// ---------------------------------------------------------
+
 
 typedef cppu::WeakComponentImplHelper2<
     ::com::sun::star::util::XModifyListener,
@@ -694,14 +694,14 @@ public:
     void updateCanvas();
 
 private:
-    // View:
+    
     virtual ViewLayerSharedPtr createViewLayer( const basegfx::B2DRange& rLayerBounds ) const;
     virtual bool updateScreen() const;
     virtual bool paintScreen() const;
     virtual void setViewSize( const ::basegfx::B2DSize& );
     virtual void setCursorShape( sal_Int16 nPointerShape );
 
-    // ViewLayer interface
+    
     virtual bool isOnView(boost::shared_ptr<View> const& rView) const;
     virtual void clear() const;
     virtual void clearAll() const;
@@ -715,23 +715,23 @@ private:
     virtual void setClip( const ::basegfx::B2DPolyPolygon& rClip );
     virtual bool resize( const ::basegfx::B2DRange& rArea );
 
-    // UnoView:
+    
     virtual void _dispose();
     virtual uno::Reference<presentation::XSlideShowView> getUnoView()const;
     virtual void setIsSoundEnabled (const bool bValue);
     virtual bool isSoundEnabled (void) const;
 
-    // XEventListener:
+    
     virtual void SAL_CALL disposing( lang::EventObject const& evt )
         throw (uno::RuntimeException);
-    // XModifyListener:
+    
     virtual void SAL_CALL modified( const lang::EventObject& aEvent )
         throw (uno::RuntimeException);
-    // XPaintListener:
+    
     virtual void SAL_CALL windowPaint( const awt::PaintEvent& e )
         throw (uno::RuntimeException);
 
-    // WeakComponentImplHelperBase:
+    
     virtual void SAL_CALL disposing();
 
     void updateClip();
@@ -739,7 +739,7 @@ private:
 private:
     typedef std::vector< boost::weak_ptr<SlideViewLayer> > ViewLayerVector;
 
-    /// Prune viewlayers from deceased ones, optionally update them
+    
     void pruneLayers( bool bWithViewLayerUpdate=false ) const;
 
     /** Max fill level of maViewLayers, before we try to prune it from
@@ -776,11 +776,11 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
     maViewLayers(),
     maClip(),
     maViewTransform(),
-    maUserSize( 1.0, 1.0 ), // default size: one-by-one rectangle
+    maUserSize( 1.0, 1.0 ), 
     mbIsSoundEnabled(true)
 {
-    // take care not constructing any UNO references to this _inside_
-    // ctor, shift that code to createSlideView()!
+    
+    
     ENSURE_OR_THROW( mxView.is(),
                       "SlideView::SlideView(): Invalid view" );
 
@@ -807,8 +807,8 @@ SlideView::SlideView( const uno::Reference<presentation::XSlideShowView>& xView,
     basegfx::unotools::homMatrixFromAffineMatrix(
         maViewTransform, aViewTransform );
 
-    // once and forever: set fixed prio to this 'layer' (we're always
-    // the background layer)
+    
+    
     maSprites.setLayerPriority( basegfx::B1DRange(0.0,1.0) );
 }
 
@@ -820,7 +820,7 @@ void SlideView::disposing()
     maSprites.clear();
     mpCanvas.reset();
 
-    // additionally, also de-register from XSlideShowView
+    
     if (mxView.is())
     {
         mxView->removeTransformationChangedListener( this );
@@ -838,8 +838,8 @@ ViewLayerSharedPtr SlideView::createViewLayer( const basegfx::B2DRange& rLayerBo
 
     const std::size_t nNumLayers( maViewLayers.size() );
 
-    // avoid filling up layer vector with lots of deceased layer weak
-    // ptrs
+    
+    
     if( nNumLayers > LAYER_ULLAGE )
         pruneLayers();
 
@@ -882,7 +882,7 @@ void SlideView::clear() const
     if( !mxView.is() || !mpCanvas )
         return;
 
-    // keep layer clip
+    
     clearRect(getCanvas()->clone(),
               getLayerBoundsPixel(
                   basegfx::B2DRange(0,0,
@@ -900,12 +900,12 @@ void SlideView::clearAll() const
     if( !mxView.is() || !mpCanvas )
         return;
 
-    mpCanvas->clear(); // this is unnecessary, strictly speaking. but
-                       // it makes the SlideView behave exactly like a
-                       // sprite-based SlideViewLayer, because those
-                       // are created from scratch after a resize
+    mpCanvas->clear(); 
+                       
+                       
+                       
 
-    // clear whole view
+    
     mxView->clear();
 }
 
@@ -1030,13 +1030,13 @@ void SlideView::_dispose()
     dispose();
 }
 
-// XEventListener
+
 void SlideView::disposing( lang::EventObject const& evt )
     throw (uno::RuntimeException)
 {
     (void)evt;
 
-    // no deregistration necessary anymore, XView has left:
+    
     osl::MutexGuard const guard( m_aMutex );
 
     if (mxView.is())
@@ -1048,7 +1048,7 @@ void SlideView::disposing( lang::EventObject const& evt )
     dispose();
 }
 
-// XModifyListener
+
 void SlideView::modified( const lang::EventObject& /*aEvent*/ )
     throw (uno::RuntimeException)
 {
@@ -1075,21 +1075,21 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
         canvas::tools::setIdentityAffineMatrix2D(aViewTransform);
     }
 
-    // view transformation really changed?
+    
     basegfx::B2DHomMatrix aNewTransform;
     basegfx::unotools::homMatrixFromAffineMatrix(
         aNewTransform,
         aViewTransform );
 
     if( aNewTransform == maViewTransform )
-        return; // No change, nothing to do
+        return; 
 
     maViewTransform = aNewTransform;
 
     updateCanvas();
 
-    // notify view change. Don't call EventMultiplexer directly, this
-    // might not be the main thread!
+    
+    
     mrEventQueue.addEvent(
         makeEvent( boost::bind( (bool (EventMultiplexer::*)(
                                      const uno::Reference<presentation::XSlideShowView>&))
@@ -1098,7 +1098,7 @@ void SlideView::modified( const lang::EventObject& /*aEvent*/ )
                    "EventMultiplexer::notifyViewChanged"));
 }
 
-// XPaintListener
+
 void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
     throw (uno::RuntimeException)
 {
@@ -1106,8 +1106,8 @@ void SlideView::windowPaint( const awt::PaintEvent& /*e*/ )
 
     OSL_ENSURE( mxView.is() && mpCanvas, "Disposed, but event received?!" );
 
-    // notify view clobbering. Don't call EventMultiplexer directly,
-    // this might not be the main thread!
+    
+    
     mrEventQueue.addEvent(
         makeEvent( boost::bind( &EventMultiplexer::notifyViewClobbered,
                                 boost::ref(mrEventMultiplexer), mxView ),
@@ -1129,7 +1129,7 @@ void SlideView::updateCanvas()
                            mpCanvas,
                            maUserSize ));
 
-    // forward update to viewlayers
+    
     pruneLayers( true );
 }
 
@@ -1156,7 +1156,7 @@ void SlideView::pruneLayers( bool bWithViewLayerUpdate ) const
     const basegfx::B2DHomMatrix& rCurrTransform(
         getTransformation() );
 
-    // check all layers for validity, and retain only the live ones
+    
     ViewLayerVector::const_iterator       aCurr( maViewLayers.begin() );
     const ViewLayerVector::const_iterator aEnd( maViewLayers.end() );
     while( aCurr != aEnd )
@@ -1175,11 +1175,11 @@ void SlideView::pruneLayers( bool bWithViewLayerUpdate ) const
         ++aCurr;
     }
 
-    // replace layer list with pruned one
+    
     maViewLayers.swap( aValidLayers );
 }
 
-} // anonymous namespace
+} 
 
 UnoViewSharedPtr createSlideView( uno::Reference< presentation::XSlideShowView> const& xView,
                                   EventQueue&                                          rEventQueue,
@@ -1191,17 +1191,17 @@ UnoViewSharedPtr createSlideView( uno::Reference< presentation::XSlideShowView> 
                           rEventQueue,
                           rEventMultiplexer)));
 
-    // register listeners with XSlideShowView
+    
     xView->addTransformationChangedListener( that.get() );
     xView->addPaintListener( that.get() );
 
-    // set new transformation
+    
     that->updateCanvas();
 
     return that;
 }
 
-} // namespace internal
-} // namespace slideshow
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

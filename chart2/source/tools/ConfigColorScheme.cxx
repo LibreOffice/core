@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ConfigColorScheme.hxx"
@@ -36,7 +36,7 @@ namespace
 
 static const OUString aSeriesPropName( "Series" );
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -59,7 +59,7 @@ public:
     uno::Any getProperty( const OUString & aPropertyName );
 
 protected:
-    // ____ ::utl::ConfigItem ____
+    
     virtual void                    Commit();
     virtual void Notify( const Sequence< OUString > & aPropertyNames );
 
@@ -103,9 +103,9 @@ uno::Any ChartConfigItem::getProperty( const OUString & aPropertyName )
     return aValues[0];
 }
 
-} // namespace impl
+} 
 
-// explicit
+
 ConfigColorScheme::ConfigColorScheme(
     const Reference< uno::XComponentContext > & xContext ) :
         m_xContext( xContext  ),
@@ -122,7 +122,7 @@ void ConfigColorScheme::retrieveConfigColors()
     if( ! m_xContext.is())
         return;
 
-    // create config item if necessary
+    
     if( ! m_apChartConfigItem.get())
     {
         m_apChartConfigItem.reset(
@@ -133,7 +133,7 @@ void ConfigColorScheme::retrieveConfigColors()
     if( ! m_apChartConfigItem.get())
         return;
 
-    // retrieve colors
+    
     uno::Any aValue(
         m_apChartConfigItem->getProperty( aSeriesPropName ));
     if( aValue >>= m_aColorSequence )
@@ -141,7 +141,7 @@ void ConfigColorScheme::retrieveConfigColors()
     m_bNeedsUpdate = false;
 }
 
-// ____ XColorScheme ____
+
 ::sal_Int32 SAL_CALL ConfigColorScheme::getColorByIndex( ::sal_Int32 nIndex )
     throw (uno::RuntimeException)
 {
@@ -151,7 +151,7 @@ void ConfigColorScheme::retrieveConfigColors()
     if( m_nNumberOfColors > 0 )
         return static_cast< sal_Int32 >( m_aColorSequence[ nIndex % m_nNumberOfColors ] );
 
-    // fall-back: hard-coded standard colors
+    
     static const sal_Int32 nDefaultColors[] =  {
         0x9999ff, 0x993366, 0xffffcc,
         0xccffff, 0x660066, 0xff8080,
@@ -176,10 +176,10 @@ Sequence< OUString > ConfigColorScheme::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ConfigColorScheme,
                              OUString("com.sun.star.comp.chart2.ConfigDefaultColorScheme") )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

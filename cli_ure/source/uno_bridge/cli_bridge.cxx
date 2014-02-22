@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcclr.h>
-//ToDo: remove when build with .NET 2
+
 #pragma warning(push, 1)
 #include <windows.h>
 #include "uno/environment.hxx"
@@ -44,7 +44,7 @@ void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     Mapping const * that = static_cast< Mapping const * >( mapping );
      that->m_bridge->acquire();
 }
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_release( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -53,7 +53,7 @@ void SAL_CALL Mapping_release( uno_Mapping * mapping )
 }
 
 
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_cli2uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -89,11 +89,11 @@ void SAL_CALL Mapping_cli2uno(
                 "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr_msg.getStr() );
 #else
-        (void) err; // unused
+        (void) err; 
 #endif
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_uno2cli(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -148,12 +148,12 @@ void SAL_CALL Mapping_uno2cli(
                 "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr_msg.getStr() );
 #else
-        (void) err; // unused
+        (void) err; 
 #endif
     }
 }
 
-//__________________________________________________________________________________________________
+
 void SAL_CALL Bridge_free( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -161,13 +161,13 @@ void SAL_CALL Bridge_free( uno_Mapping * mapping )
     delete that->m_bridge;
 }
 
-} //extern C
-} //namespace
+} 
+} 
 
 namespace cli_uno
 {
 
-//__________________________________________________________________________________________________
+
 /** ToDo
     I doubt that the case that the ref count raises from 0 to 1
     can occur.  uno_ext_getMapping returns an acquired mapping. Every time
@@ -195,7 +195,7 @@ void Bridge::acquire()  const SAL_THROW(())
         }
     }
 }
-//__________________________________________________________________________________________________
+
 void Bridge::release() const  SAL_THROW(())
 {
     if (! osl_atomic_decrement( &m_ref ))
@@ -206,7 +206,7 @@ void Bridge::release() const  SAL_THROW(())
             :  const_cast<Mapping*>(&m_uno2cli)  );
    }
 }
-//__________________________________________________________________________________________________
+
 Bridge::Bridge(
     uno_Environment * uno_cli_env, uno_ExtEnvironment * uno_env,
     bool registered_cli2uno )
@@ -219,12 +219,12 @@ Bridge::Bridge(
     (*((uno_Environment *)m_uno_env)->acquire)( (uno_Environment *)m_uno_env );
     (*m_uno_cli_env->acquire)( m_uno_cli_env );
 
-    // cli2uno
+    
     m_cli2uno.acquire = Mapping_acquire;
     m_cli2uno.release = Mapping_release;
     m_cli2uno.mapInterface = Mapping_cli2uno;
     m_cli2uno.m_bridge = this;
-    // uno2cli
+    
     m_uno2cli.acquire = Mapping_acquire;
     m_uno2cli.release = Mapping_release;
     m_uno2cli.mapInterface = Mapping_uno2cli;
@@ -232,58 +232,58 @@ Bridge::Bridge(
 
 }
 
-//__________________________________________________________________________________________________
+
 Bridge::~Bridge() SAL_THROW(())
 {
-    //System::GC::Collect();
+    
     (*m_uno_cli_env->release)( m_uno_cli_env );
     (*((uno_Environment *)m_uno_env)->release)( (uno_Environment *)m_uno_env );
 }
 
 
 
-} //namespace cli_uno
+} 
 
 extern "C"
 {
 
 namespace cli_uno
 {
-//--------------------------------------------------------------------------------------------------
+
 void SAL_CALL cli_env_disposing( uno_Environment * uno_cli_env )
     SAL_THROW_EXTERN_C()
 {
     uno_cli_env->pContext = 0;
 }
 
-//##################################################################################################
+
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * uno_cli_env )
     SAL_THROW_EXTERN_C()
 {
-    //ToDo: remove when compiled with .NET 2
+    
 
-    // Unclear whether the above comment refers to this whole function
-    // or a call to __crt_dll_initialize() that used to be here for
-    // _MSC_VER < 1400
+    
+    
+    
 
     uno_cli_env->environmentDisposing= cli_env_disposing;
     uno_cli_env->pExtEnv = 0;
-    //Set the console to print Trace messages
+    
 #if OSL_DEBUG_LEVEL >= 1
     System::Diagnostics::Trace::Listeners->
             Add( gcnew System::Diagnostics::TextWriterTraceListener(System::Console::Out));
 #endif
     OSL_ASSERT( 0 == uno_cli_env->pContext );
 
-    // We let the Cli_environment leak, since there is no good point where we could destruct it.
-    //dispose is not used because we would have then also synchronize the calls to proxies. If the
-    //Cli_environment is disposed, we must prevent all calls, otherwise we may crash at points
-    //where g_cli_env is accessed.
-    //When we compile the bridge with .NET 2 then we can again hold g_cli_env as a static gcroot
-    //member in a unmanaged class, such as Bridge.
+    
+    
+    
+    
+    
+    
     CliEnvHolder::g_cli_env = gcnew Cli_environment();
 }
-//##################################################################################################
+
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
@@ -307,14 +307,14 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     {
         if ( from_env_typename == UNO_LB_CLI && to_env_typename == UNO_LB_UNO )
         {
-            Bridge * bridge = new Bridge( pFrom, pTo->pExtEnv, true ); // ref count = 1
+            Bridge * bridge = new Bridge( pFrom, pTo->pExtEnv, true ); 
             mapping = &bridge->m_cli2uno;
             uno_registerMapping(
                 &mapping, Bridge_free, pFrom, (uno_Environment *)pTo->pExtEnv, 0 );
         }
         else if ( from_env_typename == UNO_LB_UNO && to_env_typename == UNO_LB_CLI )
         {
-            Bridge * bridge = new Bridge( pTo, pFrom->pExtEnv, false ); // ref count = 1
+            Bridge * bridge = new Bridge( pTo, pFrom->pExtEnv, false ); 
             mapping = &bridge->m_uno2cli;
             uno_registerMapping(
                 &mapping, Bridge_free, (uno_Environment *)pFrom->pExtEnv, pTo, 0 );
@@ -328,7 +328,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
                 "[cli_uno bridge error] " + err.m_message, RTL_TEXTENCODING_ASCII_US ) );
         OSL_FAIL( cstr_msg.getStr() );
 #else
-        (void) err; // unused
+        (void) err; 
 #endif
     }
     *ppMapping = mapping;

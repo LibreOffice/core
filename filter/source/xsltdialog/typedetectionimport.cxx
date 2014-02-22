@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/InputSource.hpp>
@@ -69,7 +69,7 @@ void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxCo
         InputSource source;
         source.aInputStream = xIS;
 
-        // start parsing
+        
         xParser->parseStream( source );
 
         pImporter->fillFilterVector( rFilters );
@@ -82,7 +82,7 @@ void TypeDetectionImporter::doImport( const Reference< XComponentContext >& rxCo
 
 void TypeDetectionImporter::fillFilterVector(  XMLFilterVector& rFilters )
 {
-    // create filter infos from imported filter nodes
+    
     NodeVector::iterator aIter = maFilterNodes.begin();
     while( aIter != maFilterNodes.end() )
     {
@@ -93,7 +93,7 @@ void TypeDetectionImporter::fillFilterVector(  XMLFilterVector& rFilters )
         delete (*aIter++);
     }
 
-    // now delete type nodes
+    
     aIter = maTypeNodes.begin();
     while( aIter != maTypeNodes.end() )
         delete (*aIter++);
@@ -132,7 +132,7 @@ static OUString getSubdata( int index, sal_Unicode delimiter, const OUString& rD
 
 Node* TypeDetectionImporter::findTypeNode( const OUString& rType )
 {
-    // now delete type nodes
+    
     for (NodeVector::const_iterator aIter(maTypeNodes.begin()), aEnd(maTypeNodes.end()); aIter != aEnd; ++aIter)
     {
         if( (*aIter)->maName == rType )
@@ -159,12 +159,12 @@ filter_info_impl* TypeDetectionImporter::createFilterForNode( Node * pNode )
     OUString aFilterService( getSubdata( 3, aComma, aData ) );
     pFilter->maFlags = getSubdata( 4, aComma, aData ).toInt32();
 
-    // parse filter user data
+    
     sal_Unicode aDelim(';');
     OUString aFilterUserData( getSubdata( 5, aComma, aData ) );
 
     OUString aAdapterService( getSubdata( 0, aDelim, aFilterUserData ) );
-    //Import/ExportService
+    
     pFilter->mbNeedsXSLT2 = getSubdata( 1, aDelim, aFilterUserData ).toBoolean();
     pFilter->maImportService = getSubdata( 2, aDelim, aFilterUserData );
     pFilter->maExportService = getSubdata( 3, aDelim, aFilterUserData );
@@ -237,7 +237,7 @@ void SAL_CALL TypeDetectionImporter::startElement( const OUString& aName, const 
 
     if( maStack.empty() )
     {
-        // #109668# support legacy name as well on import
+        
         if( aName == sRootNode || aName == "oor:node" )
         {
             eNewState = e_Root;

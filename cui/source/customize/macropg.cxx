@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basic/basmgr.hxx>
@@ -66,16 +66,16 @@ _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet )
         bIDEDialogMode = ((const SfxBoolItem*)pItem)->GetValue();
 }
 
-// attention, this array is indexed directly (0, 1, ...) in the code
+
 static long nTabs[] =
     {
-        2, // Number of Tabs
+        2, 
         0, 90
     };
 
 #define TAB_WIDTH_MIN        10
 
-// IDs for items in HeaderBar of EventLB
+
 #define    ITEMID_EVENT        1
 #define    ITMEID_ASSMACRO        2
 
@@ -137,7 +137,7 @@ MacroEventListBox::MacroEventListBox( Window* pParent, const ResId& rId )
 {
     maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
 
-    // enable the cell focus to show visible focus
+    
     maListBox.EnableCellFocus();
 }
 
@@ -148,7 +148,7 @@ MacroEventListBox::MacroEventListBox( Window* pParent, WinBits nStyle )
 {
     maListBox.SetHelpId( HID_MACRO_HEADERTABLISTBOX );
 
-    // enable the cell focus to show visible focus
+    
     maListBox.EnableCellFocus();
 }
 
@@ -172,14 +172,14 @@ void MacroEventListBox::Resize()
 {
     Control::Resize();
 
-    // calc pos and size of header bar
+    
     Point    aPnt( 0, 0 );
     Size    aSize( maHeaderBar.CalcWindowSizePixel() );
     Size    aCtrlSize( GetOutputSizePixel() );
     aSize.Width() = aCtrlSize.Width();
     maHeaderBar.SetPosSizePixel( aPnt, aSize );
 
-    // calc pos and size of ListBox
+    
     aPnt.Y() += aSize.Height();
     aSize.Height() = aCtrlSize.Height() - aSize.Height();
     maListBox.SetPosSizePixel( aPnt, aSize );
@@ -189,7 +189,7 @@ void MacroEventListBox::ConnectElements( void )
 {
     Resize();
 
-    // set handler
+    
     maHeaderBar.SetEndDragHdl( LINK( this, MacroEventListBox, HeaderEndDrag_Impl ) );
 
     maListBox.InitHeaderBar( &maHeaderBar );
@@ -207,9 +207,9 @@ void MacroEventListBox::Enable( bool bEnable, bool bChild )
     maHeaderBar.Enable( bEnable, bChild );
 }
 
-// assign button ("Add Command") is enabled only if it is not read only
-// delete button ("Remove Command") is enabled if a current binding exists
-//     and it is not read only
+
+
+
 void _SvxMacroTabPage::EnableButtons()
 {
     const SvTreeListEntry* pE = mpImpl->pEventLB->GetListBox().FirstSelected();
@@ -253,12 +253,12 @@ _SvxMacroTabPage::~_SvxMacroTabPage()
 {
     DELETEZ( mpImpl );
 }
-// -----------------------------------------------------------------------------
+
 void _SvxMacroTabPage::InitResources()
 {
-    // Note: the order here controls the order in which the events are displayed in the UI!
+    
 
-    // the event name to UI string mappings for App Events
+    
     aDisplayNames.push_back( EventDisplayName( "OnStartApp",            RID_SVXSTR_EVENT_STARTAPP ) );
     aDisplayNames.push_back( EventDisplayName( "OnCloseApp",            RID_SVXSTR_EVENT_CLOSEAPP ) );
     aDisplayNames.push_back( EventDisplayName( "OnCreate",              RID_SVXSTR_EVENT_CREATEDOC ) );
@@ -285,7 +285,7 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnModifyChanged",       RID_SVXSTR_EVENT_MODIFYCHANGED ) );
     aDisplayNames.push_back( EventDisplayName( "OnTitleChanged",        RID_SVXSTR_EVENT_TITLECHANGED ) );
 
-    // application specific events
+    
     aDisplayNames.push_back( EventDisplayName( "OnMailMerge",           RID_SVXSTR_EVENT_MAILMERGE ) );
     aDisplayNames.push_back( EventDisplayName( "OnMailMergeFinished",           RID_SVXSTR_EVENT_MAILMERGE_END ) );
     aDisplayNames.push_back( EventDisplayName( "OnFieldMerge",           RID_SVXSTR_EVENT_FIELDMERGE ) );
@@ -299,7 +299,7 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnCalculate",           RID_SVXSTR_EVENT_CALCULATE ) );
     aDisplayNames.push_back( EventDisplayName( "OnChange",              RID_SVXSTR_EVENT_CONTENTCHANGED ) );
 
-    // the event name to UI string mappings for forms & dialogs
+    
     //
     aDisplayNames.push_back( EventDisplayName( "approveAction",         RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED ) );
     aDisplayNames.push_back( EventDisplayName( "actionPerformed",       RID_SVXSTR_EVENT_ACTIONPERFORMED ) );
@@ -336,8 +336,8 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "adjustmentValueChanged",   RID_SVXSTR_EVENT_ADJUSTMENTVALUECHANGED ) );
 }
 
-// the following method is called when the user clicks OK
-// We use the contents of the hashes to replace the settings
+
+
 sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
 {
     try
@@ -376,9 +376,9 @@ sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
                     DBG_UNHANDLED_EXCEPTION();
                 }
             }
-            // if we have a valid XModifiable (in the case of doc events)
-            // call setModified(true)
-            // in principle this should not be necessary (see issue ??)
+            
+            
+            
             if(m_xModifiable.is())
             {
                 m_xModifiable->setModified( sal_True );
@@ -388,14 +388,14 @@ sal_Bool _SvxMacroTabPage::FillItemSet( SfxItemSet& /*rSet*/ )
     catch (const Exception&)
     {
     }
-    // what is the return value about??
+    
     return sal_False;
 }
 
-// the following method clears the bindings in the hashes for both doc & app
+
 void _SvxMacroTabPage::Reset( const SfxItemSet& )
 {
-    // called once in creation - don't reset the data this time
+    
     if(!bInitialized)
     {
         bInitialized = true;
@@ -422,8 +422,8 @@ void _SvxMacroTabPage::Reset( const SfxItemSet& )
                 {
                     h_it->second.second = sEmpty;
                 }
-                // if we have a valid XModifiable (in the case of doc events)
-                // call setModified(true)
+                
+                
                 if(m_xModifiable.is())
                 {
                     m_xModifiable->setModified( sal_True );
@@ -470,7 +470,7 @@ IconLBoxString::IconLBoxString( SvTreeListEntry* pEntry, sal_uInt16 nFlags, cons
     m_nxImageOffset = 20;
 }
 
-//===============================================
+
 void IconLBoxString::Paint(
     const Point& aPos, SvTreeListBox& aDevice, const SvViewDataEntry* /*pView*/,
     const SvTreeListEntry* /*pEntry*/)
@@ -505,7 +505,7 @@ void IconLBoxString::Paint(
 }
 
 
-// displays the app events if appEvents=true, otherwise displays the doc events
+
 void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
 {
     bAppEvents = appEvents;
@@ -525,8 +525,8 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         eventsHash = &m_docEventsHash;
         nameReplace = m_xDocEvents;
     }
-    // have to use the original XNameReplace since the hash iterators do
-    // not guarantee the order in which the elements are returned
+    
+    
     if(!nameReplace.is())
         return;
 
@@ -581,7 +581,7 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
     EnableButtons();
 }
 
-// select event handler on the listbox
+
 IMPL_STATIC_LINK( _SvxMacroTabPage, SelectEvent_Impl, SvTabListBox*, EMPTYARG )
 {
     _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
@@ -610,7 +610,7 @@ IMPL_STATIC_LINK( _SvxMacroTabPage, DoubleClickHdl_Impl, SvTabListBox *, EMPTYAR
     return GenericHandler_Impl( pThis, NULL );
 }
 
-// handler for double click on the listbox, and for the assign/delete buttons
+
 long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton* pBtn )
 {
     _SvxMacroTabPage_Impl*    pImpl = pThis->mpImpl;
@@ -653,7 +653,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     bool bUNOAssigned = sEventURL.startsWith( aVndSunStarUNO );
     if( pBtn == pImpl->pDeletePB )
     {
-        // delete pressed
+        
         sEventType =  "Script" ;
         sEventURL = "";
         if(!pThis->bAppEvents)
@@ -681,7 +681,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     }
     else if( bAssEnabled )
     {
-        // assign pressed
+        
         SvxScriptSelectorDialog* pDlg = new SvxScriptSelectorDialog( pThis, sal_False, pThis->GetFrame() );
         if( pDlg )
         {
@@ -696,7 +696,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         }
     }
 
-    // update the hashes
+    
     if(pThis->bAppEvents)
     {
         EventsHash::iterator h_it = pThis->m_appEventsHash.find( *pEventName );
@@ -710,7 +710,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         h_it->second.second = sEventURL;
     }
 
-    // update the listbox entry
+    
     pImpl->pEventLB->SetUpdateMode( false );
     pE->ReplaceItem( new IconLBoxString( pE, 0, sEventURL,
             &pImpl->aMacroImg, &pImpl->aComponentImg ), LB_MACROS_ITEMPOS );
@@ -724,8 +724,8 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     return 0;
 }
 
-// pass in the XNameReplace.
-// can remove the 3rd arg once issue ?? is fixed
+
+
 void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xAppEvents, Reference< container::XNameReplace> xDocEvents, Reference< util::XModifiable > xModifiable )
 {
     m_xAppEvents = xAppEvents;
@@ -746,7 +746,7 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     rListBox.SetTabs( &nTabs[0], MAP_APPFONT );
     Size aSize( nTabs[ 2 ], 0 );
     rHeaderBar.InsertItem( ITEMID_EVENT, mpImpl->sStrEvent, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
-    aSize.Width() = 1764;        // don't know what, so 42^2 is best to use...
+    aSize.Width() = 1764;        
     rHeaderBar.InsertItem( ITMEID_ASSMACRO, mpImpl->sAssignedMacro, LogicToPixel( aSize, MapMode( MAP_APPFONT ) ).Width() );
     rListBox.SetSpaceBetweenEntries( 0 );
 
@@ -768,7 +768,7 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     sal_Int32 nEventCount = eventNames.getLength();
     for(sal_Int32 nEvent = 0; nEvent < nEventCount; ++nEvent )
     {
-        //need exception handling here
+        
         try
         {
             m_appEventsHash[ eventNames[nEvent] ] = GetPairFromAny( m_xAppEvents->getByName( eventNames[nEvent] ) );
@@ -794,7 +794,7 @@ void _SvxMacroTabPage::InitAndSetHandler( Reference< container::XNameReplace> xA
     }
 }
 
-// returns the two props EventType & Script for a given event name
+
 Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eventsHash )
 {
     const ::std::pair< OUString, OUString >& rAssignedEvent( eventsHash[ eventName ] );
@@ -811,8 +811,8 @@ Any _SvxMacroTabPage::GetPropsByName( const OUString& eventName, EventsHash& eve
     return aReturn;
 }
 
-// converts the Any returned by GetByName into a pair which can be stored in
-// the EventHash
+
+
 ::std::pair< OUString, OUString  > _SvxMacroTabPage::GetPairFromAny( Any aAny )
 {
     Sequence< beans::PropertyValue > props;
@@ -867,7 +867,7 @@ SvxMacroAssignDlg::SvxMacroAssignDlg( Window* pParent, const Reference< frame::X
     SetTabPage(new SvxMacroTabPage(get_content_area(), _rxDocumentFrame, rSet, xNameReplace, nSelectedIndex));
 }
 
-//===============================================
+
 
 IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
 {
@@ -907,17 +907,17 @@ AssignComponentDialog::~AssignComponentDialog()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxMacroAssignSingleTabDialog, OKHdl_Impl, Button *, pButton )
 {
-    (void)pButton; //unused
+    (void)pButton; 
     GetTabPage()->FillItemSet( *(SfxItemSet*)0 );
     EndDialog( RET_OK );
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMacroAssignSingleTabDialog::SvxMacroAssignSingleTabDialog(Window *pParent,
     const SfxItemSet& rSet)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbafind.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -121,7 +121,7 @@ sal_Bool SwVbaFind::SearchReplace() throw (uno::RuntimeException)
 {
     sal_Bool result = sal_False;
 
-    // TODO: map wildcards in area to OOo wildcards
+    
 
     if( mbReplace )
     {
@@ -210,13 +210,13 @@ void SAL_CALL SwVbaFind::setForward( ::sal_Bool _forward ) throw (uno::RuntimeEx
 
 ::sal_Int32 SAL_CALL SwVbaFind::getWrap() throw (uno::RuntimeException)
 {
-    // seems not supported in Writer
+    
     return mnWrap;
 }
 
 void SAL_CALL SwVbaFind::setWrap( ::sal_Int32 _wrap ) throw (uno::RuntimeException)
 {
-    // seems not supported in Writer
+    
     mnWrap = _wrap;
 }
 
@@ -275,7 +275,7 @@ void SAL_CALL SwVbaFind::setMatchWildcards( ::sal_Bool _matchwildcards ) throw (
 
 void SAL_CALL SwVbaFind::setMatchSoundsLike( ::sal_Bool _matchsoundslike ) throw (uno::RuntimeException)
 {
-    // seems not accurate
+    
     mxPropertyReplace->setPropertyValue("SearchSimilarity", uno::makeAny( _matchsoundslike ) );
 }
 
@@ -290,7 +290,7 @@ void SAL_CALL SwVbaFind::setMatchSoundsLike( ::sal_Bool _matchsoundslike ) throw
 
 void SAL_CALL SwVbaFind::setMatchAllWordForms( ::sal_Bool _matchallwordforms ) throw (uno::RuntimeException)
 {
-    // seems not accurate
+    
     mxPropertyReplace->setPropertyValue("SearchSimilarity", uno::makeAny( _matchallwordforms ) );
     mxPropertyReplace->setPropertyValue("SearchSimilarityRelax", uno::makeAny( _matchallwordforms ) );
 }

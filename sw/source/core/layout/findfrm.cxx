@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "pagefrm.hxx"
@@ -32,7 +32,7 @@
 #include <txtfrm.hxx>
 #include <switerator.hxx>
 
-/// Searches the first CntntFrm in BodyText below the page.
+
 SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
 {
     SwFrm *pLay = Lower();
@@ -41,7 +41,7 @@ SwLayoutFrm *SwFtnBossFrm::FindBodyCont()
     return (SwLayoutFrm*)pLay;
 }
 
-/// Searches the last CntntFrm in BodyText below the page.
+
 SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
 {
     SwCntntFrm *pRet = FindFirstBodyCntnt();
@@ -59,11 +59,11 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
  */
 const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 {
-    //Search downwards the layout leaf and if there is no content, jump to the
-    //next leaf until content is found or we leave "this".
-    //Sections: Cntnt next to sections would not be found this way (empty
-    //sections directly next to CntntFrm) therefore we need to recursively
-    //search for them even if it's more complex.
+    
+    
+    
+    
+    
 
     const SwLayoutFrm *pLayLeaf = this;
     do
@@ -118,12 +118,12 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
  */
 const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) const
 {
-    //Search downwards the layout leaf and if there is no content, jump to the
-    //next leaf until content is found, we leave "this" or until we found
-    //a SectionFrm or a TabFrm.
+    
+    
+    
 
     const SwLayoutFrm *pLayLeaf = this;
-    // #130797#
+    
     const bool bNoFtn = IsSctFrm() && !_bInvestigateFtnForSections;
     do
     {
@@ -135,8 +135,8 @@ const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) 
         if( ( pLayLeaf->IsTabFrm() || pLayLeaf->IsSctFrm() )
             && pLayLeaf != this )
         {
-            // Now we also return "deleted" SectionFrms so they can be
-            // maintained on SaveCntnt and RestoreCntnt
+            
+            
             return pLayLeaf;
         }
         else if ( pLayLeaf->Lower() )
@@ -200,18 +200,18 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
 
     bool bReturn;
 
-    // check, if on different pages
+    
     const SwPageFrm *pMyPage = FindPageFrm();
     const SwPageFrm *pCheckRefPage = _pCheckRefLayFrm->FindPageFrm();
     if( pMyPage != pCheckRefPage )
     {
-        // being on different page as check reference
+        
         bReturn = pMyPage->GetPhyPageNum() < pCheckRefPage->GetPhyPageNum();
     }
     else
     {
-        // being on same page as check reference
-        // --> search my supreme parent <pUp>, which doesn't contain check reference.
+        
+        
         const SwLayoutFrm* pUp = this;
         while ( pUp->GetUpper() &&
                 !pUp->GetUpper()->IsAnLower( _pCheckRefLayFrm )
@@ -219,13 +219,13 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
             pUp = pUp->GetUpper();
         if( !pUp->GetUpper() )
         {
-            // can occur, if <this> is a fly frm
+            
             bReturn = false;
         }
         else
         {
-            // travel through the next's of <pUp> and check if one of these
-            // contain the check reference.
+            
+            
             SwLayoutFrm* pUpNext = (SwLayoutFrm*)pUp->GetNext();
             while ( pUpNext &&
                     !pUpNext->IsAnLower( _pCheckRefLayFrm ) )
@@ -239,7 +239,7 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
     return bReturn;
 }
 
-// Local helper functions for GetNextLayoutLeaf
+
 
 static const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext )
 {
@@ -274,7 +274,7 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
     const SwFrm       *pFrm = this;
     const SwLayoutFrm *pLayoutFrm = 0;
     const SwFrm       *p = 0;
-    bool bGoingUp = !bFwd;          // false for forward, true for backward
+    bool bGoingUp = !bFwd;          
     do {
 
          bool bGoingFwdOrBwd = false;
@@ -282,24 +282,24 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
          bool bGoingDown = ( !bGoingUp && ( 0 != (p = lcl_GetLower( pFrm, bFwd ) ) ) );
          if ( !bGoingDown )
          {
-             // I cannot go down, because either I'm currently going up or
-             // because the is no lower.
-             // I'll try to go forward:
+             
+             
+             
              bGoingFwdOrBwd = (0 != (p = lcl_FindLayoutFrame( pFrm, bFwd ) ) );
              if ( !bGoingFwdOrBwd )
              {
-                 // I cannot go forward, because there is no next frame.
-                 // I'll try to go up:
+                 
+                 
                  bGoingUp = (0 != (p = pFrm->GetUpper() ) );
                  if ( !bGoingUp )
                  {
-                    // I cannot go up, because there is no upper frame.
+                    
                     return 0;
                  }
              }
          }
 
-        // If I could not go down or forward, I'll have to go up
+        
         bGoingUp = !bGoingFwdOrBwd && !bGoingDown;
 
         pFrm = p;
@@ -326,7 +326,7 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
 {
     const SwFrm *pFrm = this;
-    // #100926#
+    
     SwCntntFrm *pCntntFrm = 0;
     bool bGoingUp = false;
     do {
@@ -371,7 +371,7 @@ SwPageFrm* SwFrm::FindPageFrm()
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrm() )
         {
-            // #i28701# - use new method <GetPageFrm()>
+            
             if ( static_cast<SwFlyFrm*>(pRet)->GetPageFrm() )
                 pRet = static_cast<SwFlyFrm*>(pRet)->GetPageFrm();
             else
@@ -386,8 +386,8 @@ SwPageFrm* SwFrm::FindPageFrm()
 SwFtnBossFrm* SwFrm::FindFtnBossFrm( sal_Bool bFootnotes )
 {
     SwFrm *pRet = this;
-    // Footnote bosses can't exist inside a table; also sections with columns
-    // don't contain footnote texts there
+    
+    
     if( pRet->IsInTab() )
         pRet = pRet->FindTabFrm();
     while ( pRet && !pRet->IsFtnBossFrm() )
@@ -396,7 +396,7 @@ SwFtnBossFrm* SwFrm::FindFtnBossFrm( sal_Bool bFootnotes )
             pRet = pRet->GetUpper();
         else if ( pRet->IsFlyFrm() )
         {
-            // #i28701# - use new method <GetPageFrm()>
+            
             if ( static_cast<SwFlyFrm*>(pRet)->GetPageFrm() )
                 pRet = static_cast<SwFlyFrm*>(pRet)->GetPageFrm();
             else
@@ -487,7 +487,7 @@ SwFrm* SwFrm::FindFooterOrHeader()
 {
     SwFrm* pRet = this;
     do
-    {   if ( pRet->GetType() & 0x0018 ) //header and footer
+    {   if ( pRet->GetType() & 0x0018 ) 
             return pRet;
         else if ( pRet->GetUpper() )
             pRet = pRet->GetUpper();
@@ -525,7 +525,7 @@ const SwPageFrm* SwRootFrm::GetPageAtPos( const Point& rPt, const Size* pSize, b
         if( !Frm().IsInside( rPt ) )
             return 0;
 
-        // skip pages above point:
+        
         while( pPage && rPt.Y() > pPage->Frm().Bottom() )
             pPage = pPage->GetNext();
     }
@@ -575,8 +575,8 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 |*      - sections also
 |*************************************************************************/
 
-// This helper function is an equivalent to the ImplGetNextCntntFrm() method,
-// besides ContentFrames this function also returns TabFrms and SectionFrms.
+
+
 static SwFrm* lcl_NextFrm( SwFrm* pFrm )
 {
     SwFrm *pRet = 0;
@@ -613,9 +613,9 @@ SwFrm *SwFrm::_FindNext()
 
     if ( IsTabFrm() )
     {
-        //The last Cntnt of the table gets picked up and his follower is
-        //returned. To be able to deactivate the special case for tables
-        //(see below) bIgnoreTab will be set.
+        
+        
+        
         if ( ((SwTabFrm*)this)->GetFollow() )
             return ((SwTabFrm*)this)->GetFollow();
 
@@ -626,7 +626,7 @@ SwFrm *SwFrm::_FindNext()
     }
     else if ( IsSctFrm() )
     {
-        //The last Cntnt of the section gets picked and his follower is returned.
+        
         if ( ((SwSectionFrm*)this)->GetFollow() )
             return ((SwSectionFrm*)this)->GetFollow();
 
@@ -679,9 +679,9 @@ SwFrm *SwFrm::_FindNext()
             {
                 while ( pNxtCnt )
                 {
-                    // OD 02.04.2003 #108446# - check for endnote, only if found
-                    // next content isn't contained in a section, that collect its
-                    // endnotes at its end.
+                    
+                    
+                    
                     bool bEndn = IsInSct() && !IsSctFrm() &&
                                  ( !pNxtCnt->IsInSct() ||
                                    !pNxtCnt->FindSctFrm()->IsEndnAtEnd()
@@ -706,7 +706,7 @@ SwFrm *SwFrm::_FindNext()
                 pRet = pNxtCnt->IsInTab() ? pNxtCnt->FindTabFrm()
                                             : (SwFrm*)pNxtCnt;
             }
-            else    //footer-/or header section
+            else    
             {
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pNxtCnt->GetUpper();
@@ -727,8 +727,8 @@ SwFrm *SwFrm::_FindNext()
     if( pRet && pRet->IsInSct() )
     {
         SwSectionFrm* pSct = pRet->FindSctFrm();
-        //Footnotes in frames with columns must not return the section which
-        //contains the footnote
+        
+        
         if( !pSct->IsAnLower( this ) &&
             (!bFtn || pSct->IsInFtn() ) )
             return pSct;
@@ -736,7 +736,7 @@ SwFrm *SwFrm::_FindNext()
     return pRet;
 }
 
-// #i27138# - add parameter <_bInSameFtn>
+
 SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
 {
     SwFrm *pThis = this;
@@ -775,10 +775,10 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
         SwCntntFrm *pNxtCnt = ((SwCntntFrm*)pThis)->GetNextCntntFrm();
         if ( pNxtCnt )
         {
-            // #i27138#
+            
             if ( bBody || ( bFtn && !_bInSameFtn ) )
             {
-                // handling for environments 'footnotes' and 'document body frames':
+                
                 while ( pNxtCnt )
                 {
                     if ( (bBody && pNxtCnt->IsInDocBody()) ||
@@ -787,11 +787,11 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
                     pNxtCnt = pNxtCnt->GetNextCntntFrm();
                 }
             }
-            // #i27138#
+            
             else if ( bFtn && _bInSameFtn )
             {
-                // handling for environments 'each footnote':
-                // Assure that found next content frame belongs to the same footnotes
+                
+                
                 const SwFtnFrm* pFtnFrmOfNext( pNxtCnt->FindFtnFrm() );
                 const SwFtnFrm* pFtnFrmOfCurr( pThis->FindFtnFrm() );
                 OSL_ENSURE( pFtnFrmOfCurr,
@@ -802,8 +802,8 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
                 }
                 else if ( pFtnFrmOfCurr->GetFollow() )
                 {
-                    // next content frame has to be the first content frame
-                    // in the follow footnote, which contains a content frame.
+                    
+                    
                     SwFtnFrm* pFollowFtnFrmOfCurr(
                                         const_cast<SwFtnFrm*>(pFtnFrmOfCurr) );
                     pNxtCnt = 0L;
@@ -815,18 +815,18 @@ SwCntntFrm *SwFrm::_FindNextCnt( const bool _bInSameFtn )
                 }
                 else
                 {
-                    // current content frame is the last content frame in the
-                    // footnote - no next content frame exists.
+                    
+                    
                     return 0L;
                 }
             }
             else if ( pThis->IsInFly() )
-                // handling for environments 'unlinked fly frame' and
-                // 'group of linked fly frames':
+                
+                
                 return pNxtCnt;
             else
             {
-                // handling for environments 'page header' and 'page footer':
+                
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pNxtCnt->GetUpper();
                 while ( pUp && pUp->GetUpper() &&
@@ -852,21 +852,21 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
 {
     if ( !IsFlowFrm() )
     {
-        // nothing to do, if current frame isn't a flow frame.
+        
         return 0L;
     }
 
     SwCntntFrm* pPrevCntntFrm( 0L );
 
-    // Because method <SwCntntFrm::GetPrevCntntFrm()> is used to travel
-    // through the layout, a content frame, at which the travel starts, is needed.
+    
+    
     SwCntntFrm* pCurrCntntFrm = dynamic_cast<SwCntntFrm*>(this);
 
-    // perform shortcut, if current frame is a follow, and
-    // determine <pCurrCntntFrm>, if current frame is a table or section frame
+    
+    
     if ( pCurrCntntFrm && pCurrCntntFrm->IsFollow() )
     {
-        // previous content frame is its master content frame
+        
         pPrevCntntFrm = pCurrCntntFrm->FindMaster();
     }
     else if ( IsTabFrm() )
@@ -874,13 +874,13 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
         SwTabFrm* pTabFrm( static_cast<SwTabFrm*>(this) );
         if ( pTabFrm->IsFollow() )
         {
-            // previous content frame is the last content of its master table frame
+            
             pPrevCntntFrm = pTabFrm->FindMaster()->FindLastCntnt();
         }
         else
         {
-            // start content frame for the search is the first content frame of
-            // the table frame.
+            
+            
             pCurrCntntFrm = pTabFrm->ContainsCntnt();
         }
     }
@@ -889,19 +889,19 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
         SwSectionFrm* pSectFrm( static_cast<SwSectionFrm*>(this) );
         if ( pSectFrm->IsFollow() )
         {
-            // previous content frame is the last content of its master section frame
+            
             pPrevCntntFrm = pSectFrm->FindMaster()->FindLastCntnt();
         }
         else
         {
-            // start content frame for the search is the first content frame of
-            // the section frame.
+            
+            
             pCurrCntntFrm = pSectFrm->ContainsCntnt();
         }
     }
 
-    // search for next content frame, depending on the environment, in which
-    // the current frame is in.
+    
+    
     if ( !pPrevCntntFrm && pCurrCntntFrm )
     {
         pPrevCntntFrm = pCurrCntntFrm->GetPrevCntntFrm();
@@ -909,9 +909,9 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
         {
             if ( pCurrCntntFrm->IsInFly() )
             {
-                // handling for environments 'unlinked fly frame' and
-                // 'group of linked fly frames':
-                // Nothing to do, <pPrevCntntFrm> is the one
+                
+                
+                
             }
             else
             {
@@ -919,9 +919,9 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
                 const bool bInFtn  = pCurrCntntFrm->IsInFtn();
                 if ( bInDocBody || ( bInFtn && !_bInSameFtn ) )
                 {
-                    // handling for environments 'footnotes' and 'document body frames':
-                    // Assure that found previous frame is also in one of these
-                    // environments. Otherwise, travel further
+                    
+                    
+                    
                     while ( pPrevCntntFrm )
                     {
                         if ( ( bInDocBody && pPrevCntntFrm->IsInDocBody() ) ||
@@ -934,8 +934,8 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
                 }
                 else if ( bInFtn && _bInSameFtn )
                 {
-                    // handling for environments 'each footnote':
-                    // Assure that found next content frame belongs to the same footnotes
+                    
+                    
                     const SwFtnFrm* pFtnFrmOfPrev( pPrevCntntFrm->FindFtnFrm() );
                     const SwFtnFrm* pFtnFrmOfCurr( pCurrCntntFrm->FindFtnFrm() );
                     if ( pFtnFrmOfPrev != pFtnFrmOfCurr )
@@ -945,8 +945,8 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
                             SwFtnFrm* pMasterFtnFrmOfCurr(
                                         const_cast<SwFtnFrm*>(pFtnFrmOfCurr) );
                             pPrevCntntFrm = 0L;
-                            // #146872#
-                            // correct wrong loop-condition
+                            
+                            
                             do {
                                 pMasterFtnFrmOfCurr = pMasterFtnFrmOfCurr->GetMaster();
                                 pPrevCntntFrm = pMasterFtnFrmOfCurr->FindLastCntnt();
@@ -955,22 +955,22 @@ SwCntntFrm* SwFrm::_FindPrevCnt( const bool _bInSameFtn )
                         }
                         else
                         {
-                            // current content frame is the first content in the
-                            // footnote - no previous content exists.
+                            
+                            
                             pPrevCntntFrm = 0L;;
                         }
                     }
                 }
                 else
                 {
-                    // handling for environments 'page header' and 'page footer':
-                    // Assure that found previous frame is also in the same
-                    // page header respectively page footer as <pCurrCntntFrm>
-                    // Note: At this point its clear, that <pCurrCntntFrm> has
-                    //       to be inside a page header or page footer and that
-                    //       neither <pCurrCntntFrm> nor <pPrevCntntFrm> are
-                    //       inside a fly frame.
-                    //       Thus, method <FindFooterOrHeader()> can be used.
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     OSL_ENSURE( pCurrCntntFrm->FindFooterOrHeader(),
                             "<SwFrm::_FindPrevCnt()> - unknown layout situation: current frame should be in page header or page footer" );
                     OSL_ENSURE( !pPrevCntntFrm->IsInFly(),
@@ -995,9 +995,9 @@ SwFrm *SwFrm::_FindPrev()
 
     if ( IsTabFrm() )
     {
-        //The first Cntnt of the table gets picked up and his predecessor is
-        //returnd. To be able to deactivate the special case for tables
-        //(see below) bIgnoreTab will be set.
+        
+        
+        
         if ( ((SwTabFrm*)this)->IsFollow() )
             return ((SwTabFrm*)this)->FindMaster();
         else
@@ -1044,7 +1044,7 @@ SwFrm *SwFrm::_FindPrev()
                                             : (SwFrm*)pPrvCnt;
                 return pRet;
             }
-            else // footer or header or Fly
+            else 
             {
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pPrvCnt->GetUpper();
@@ -1091,8 +1091,8 @@ void SwFrm::ImplInvalidateNextPos( sal_Bool bNoFtn )
             {
                 if ( pFrm->IsSctFrm())
                 {
-                    // We need to invalidate the section's content so it gets
-                    // the chance to flow to a different page.
+                    
+                    
                     SwFrm* pTmp = ((SwSectionFrm*)pFrm)->ContainsAny();
                     if( pTmp )
                         pTmp->InvalidatePos();
@@ -1116,9 +1116,9 @@ void SwFrm::ImplInvalidateNextPos( sal_Bool bNoFtn )
 */
 void SwFrm::InvalidateNextPrtArea()
 {
-    // determine next frame
+    
     SwFrm* pNextFrm = FindNext();
-    // skip empty section frames and hidden text frames
+    
     {
         while ( pNextFrm &&
                 ( ( pNextFrm->IsSctFrm() &&
@@ -1130,21 +1130,21 @@ void SwFrm::InvalidateNextPrtArea()
         }
     }
 
-    // Invalidate printing area of found next frame
+    
     if ( pNextFrm )
     {
         if ( pNextFrm->IsSctFrm() )
         {
-            // Invalidate printing area of found section frame, if
-            // (1) this text frame isn't in a section OR
-            // (2) found section frame isn't a follow of the section frame this
-            //     text frame is in.
+            
+            
+            
+            
             if ( !IsInSct() || FindSctFrm()->GetFollow() != pNextFrm )
             {
                 pNextFrm->InvalidatePrt();
             }
 
-            // Invalidate printing area of first content in found section.
+            
             SwFrm* pFstCntntOfSctFrm =
                     static_cast<SwSectionFrm*>(pNextFrm)->ContainsAny();
             if ( pFstCntntOfSctFrm )
@@ -1159,8 +1159,8 @@ void SwFrm::InvalidateNextPrtArea()
     }
 }
 
-/// @returns true if the frame _directly_ sits in a section with columns
-///     but not if it sits in a table which itself sits in a section with columns.
+
+
 static bool lcl_IsInColSct( const SwFrm *pUp )
 {
     bool bRet = false;
@@ -1213,23 +1213,23 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
             {
                 if ( _pLayoutFrm->IsInFly() )
                 {
-                    // if fly frame has a follow (next linked fly frame),
-                    // frame is moveable.
+                    
+                    
                     if ( const_cast<SwLayoutFrm*>(_pLayoutFrm)->FindFlyFrm()->GetNextLink() )
                     {
                         bRetVal = true;
                     }
                     else
                     {
-                        // if environment is columned, frame is moveable, if
-                        // it isn't in last column.
-                        // search for column frame
+                        
+                        
+                        
                         const SwFrm* pCol = _pLayoutFrm;
                         while ( pCol && !pCol->IsColumnFrm() )
                         {
                             pCol = pCol->GetUpper();
                         }
-                        // frame is moveable, if found column frame isn't last one.
+                        
                         if ( pCol && pCol->GetNext() )
                         {
                             bRetVal = true;
@@ -1249,7 +1249,7 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 
 void SwFrm::SetInfFlags()
 {
-    if ( !IsFlyFrm() && !GetUpper() ) //not yet pasted, no information available
+    if ( !IsFlyFrm() && !GetUpper() ) 
         return;
 
     mbInfInvalid = mbInfBody = mbInfTab = mbInfFly = mbInfFtn = mbInfSct = sal_False;
@@ -1259,7 +1259,7 @@ void SwFrm::SetInfFlags()
         mbInfFtn = sal_True;
     do
     {
-        // mbInfBody is only set in the page body, but not in the column body
+        
         if ( pFrm->IsBodyFrm() && !mbInfFtn && pFrm->GetUpper()
              && pFrm->GetUpper()->IsPageFrm() )
             mbInfBody = sal_True;
@@ -1276,7 +1276,7 @@ void SwFrm::SetInfFlags()
 
         pFrm = pFrm->GetUpper();
 
-    } while ( pFrm && !pFrm->IsPageFrm() ); //there is nothing above the page
+    } while ( pFrm && !pFrm->IsPageFrm() ); 
 }
 
 /** Updates the vertical or the righttoleft-flags.
@@ -1288,8 +1288,8 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
 {
     if( bVert )
     {
-        // OD 2004-01-21 #114969# - if derived, valid vertical flag only if
-        // vertical flag of upper/anchor is valid.
+        
+        
         if( mbDerivedVert )
         {
             const SwFrm* pAsk = IsFlyFrm() ?
@@ -1303,7 +1303,7 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
                 mbReverse  = pAsk->IsReverse()  ? 1 : 0;
 
                 mbVertLR  = pAsk->IsVertLR() ? 1 : 0;
-                //Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+                
                 if ( !pAsk->mbInvalidVert )
                     mbInvalidVert = sal_False;
             }
@@ -1314,7 +1314,7 @@ void SwFrm::SetDirFlags( sal_Bool bVert )
     else
     {
         sal_Bool bInv = 0;
-        if( !mbDerivedR2L ) // CheckDirection is able to set bDerivedR2L!
+        if( !mbDerivedR2L ) 
             CheckDirection( bVert );
         if( mbDerivedR2L )
         {
@@ -1371,7 +1371,7 @@ static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
 
     if ( pCell != &rOrigCell )
     {
-        // rOrigCell must be a lower of pCell. We need to recurse into the rows:
+        
         OSL_ENSURE( pCell->Lower() && pCell->Lower()->IsRowFrm(),
                 "lcl_FindCorrespondingCellFrm does not work" );
 
@@ -1399,18 +1399,18 @@ static SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
     return pRet;
 }
 
-// VERSION OF GetFollowCell() that assumes that we always have a follow flow line:
+
 SwCellFrm* SwCellFrm::GetFollowCell() const
 {
     SwCellFrm* pRet = NULL;
 
-    // NEW TABLES
-    // Covered cells do not have follow cells!
+    
+    
     const long nRowSpan = GetLayoutRowSpan();
     if ( nRowSpan < 1 )
         return NULL;
 
-    // find most upper row frame
+    
     const SwFrm* pRow = GetUpper();
     while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
         pRow = pRow->GetUpper();
@@ -1424,10 +1424,10 @@ SwCellFrm* SwCellFrm::GetFollowCell() const
 
     const SwCellFrm* pThisCell = this;
 
-    // Get last cell of the current table frame that belongs to the rowspan:
+    
     if ( nRowSpan > 1 )
     {
-        // optimization: Will end of row span be in last row or exceed row?
+        
         long nMax = 0;
         while ( pRow->GetNext() && ++nMax < nRowSpan )
             pRow = pRow->GetNext();
@@ -1448,17 +1448,17 @@ SwCellFrm* SwCellFrm::GetFollowCell() const
     return pRet;
 }
 
-// VERSION OF GetPreviousCell() THAT ASSUMES THAT WE ALWAYS HAVE A FFL
+
 SwCellFrm* SwCellFrm::GetPreviousCell() const
 {
     SwCellFrm* pRet = NULL;
 
-    // NEW TABLES
-    // Covered cells do not have previous cells!
+    
+    
     if ( GetLayoutRowSpan() < 1 )
         return NULL;
 
-    // find most upper row frame
+    
     const SwFrm* pRow = GetUpper();
     while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
         pRow = pRow->GetUpper();
@@ -1489,7 +1489,7 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
     return pRet;
 }
 
-// --> NEW TABLES
+
 const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurrentTableOnly ) const
 {
     const SwCellFrm* pRet = 0;
@@ -1515,14 +1515,14 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
             const bool bDoNotEnterHeadline = bStart && pTableFrm->IsFollow() &&
                                         !pTableFrm->IsInHeadline( *pCurrentRow );
 
-            // check how many rows we are allowed to go up or down until we reach the end of
-            // the current table frame:
+            
+            
             nMax = 0;
             while ( bStart ? pCurrentRow->GetPrev() : pCurrentRow->GetNext() )
             {
                 if ( bStart )
                 {
-                    // do not enter a repeated headline:
+                    
                     if ( bDoNotEnterHeadline && pTableFrm->IsFollow() &&
                          pTableFrm->IsInHeadline( *pCurrentRow->GetPrev() ) )
                         break;
@@ -1536,9 +1536,9 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
             }
         }
 
-        // By passing the nMax value for Find*OfRowSpan (in case of bCurrentTableOnly
-        // is set) we assure that we find a rMasterBox that has a SwCellFrm in
-        // the current table frame:
+        
+        
+        
         const SwTableBox& rMasterBox = bStart ?
                                        GetTabBox()->FindStartOfRowSpan( *pTable, nMax ) :
                                        GetTabBox()->FindEndOfRowSpan( *pTable, nMax );
@@ -1577,7 +1577,7 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
 
     return *pRet;
 }
-// <-- NEW TABLES
+
 
 const SwRowFrm* SwFrm::IsInSplitTableRow() const
 {
@@ -1585,7 +1585,7 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
 
     const SwFrm* pRow = this;
 
-    // find most upper row frame
+    
     while( pRow && ( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() ) )
         pRow = pRow->GetUpper();
 
@@ -1595,8 +1595,8 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
 
     const SwTabFrm* pTab = (SwTabFrm*)pRow->GetUpper();
     //
-    // If most upper row frame is a headline row, the current frame
-    // can't be in a splitted table row. Thus, add corresponding condition.
+    
+    
     if ( pRow->GetNext() ||
          pTab->GetTable()->IsHeadline(
                     *(static_cast<const SwRowFrm*>(pRow)->GetTabLine()) ) ||
@@ -1604,7 +1604,7 @@ const SwRowFrm* SwFrm::IsInSplitTableRow() const
          !pTab->GetFollow() )
         return NULL;
 
-    // skip headline
+    
     const SwRowFrm* pFollowRow = pTab->GetFollow()->GetFirstNonHeadlineRow();
 
     OSL_ENSURE( pFollowRow, "SwFrm::IsInSplitTableRow() does not work" );
@@ -1616,7 +1616,7 @@ const SwRowFrm* SwFrm::IsInFollowFlowRow() const
 {
     OSL_ENSURE( IsInTab(), "IsInSplitTableRow should only be called for frames in tables" );
 
-    // find most upper row frame
+    
     const SwFrm* pRow = this;
     while( pRow && ( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() ) )
         pRow = pRow->GetUpper();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "res_LegendPosition.hxx"
@@ -27,7 +27,7 @@
 #include <com/sun/star/chart2/LegendPosition.hpp>
 #include <com/sun/star/chart/ChartLegendExpansion.hpp>
 
-//itemset stuff
+
 #include "chartview/ChartSfxItemIds.hxx"
 #include <svl/intitem.hxx>
 #include <svl/eitem.hxx>
@@ -39,8 +39,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
 LegendPositionResources::LegendPositionResources(VclBuilderContainer& rParent)
-    : m_xCC() //unused in this scenario
-    , m_pCbxShow( NULL ) //unused in this scenario, assumed to be visible
+    : m_xCC() 
+    , m_pCbxShow( NULL ) 
 {
     rParent.get(m_pRbtLeft, "left");
     rParent.get(m_pRbtRight, "right");
@@ -83,14 +83,14 @@ void LegendPositionResources::writeToResources( const uno::Reference< frame::XMo
         uno::Reference< beans::XPropertySet > xProp( xDiagram->getLegend(), uno::UNO_QUERY );
         if( xProp.is() )
         {
-            //show
+            
             sal_Bool bShowLegend = sal_False;
             xProp->getPropertyValue( "Show" ) >>= bShowLegend;
             if (m_pCbxShow)
                 m_pCbxShow->Check( bShowLegend );
             PositionEnableHdl(0);
 
-            //position
+            
             chart2::LegendPosition ePos;
             xProp->getPropertyValue( "AnchorPosition" )  >>= ePos;
             switch( ePos )
@@ -130,10 +130,10 @@ void LegendPositionResources::writeToModel( const ::com::sun::star::uno::Referen
         uno::Reference< beans::XPropertySet > xProp( LegendHelper::getLegend( *pModel,m_xCC,bShowLegend ), uno::UNO_QUERY );
         if( xProp.is() )
         {
-            //show
+            
             xProp->setPropertyValue( "Show" , uno::makeAny( bShowLegend ));
 
-            //position
+            
             chart2::LegendPosition eNewPos;
             ::com::sun::star::chart::ChartLegendExpansion eExp = ::com::sun::star::chart::ChartLegendExpansion_HIGH;
 
@@ -229,9 +229,9 @@ void LegendPositionResources::writeToItemSet( SfxItemSet& rOutAttrs ) const
 
 IMPL_LINK( LegendPositionResources, PositionChangeHdl, RadioButton*, pRadio )
 {
-    //for each radio click ther are coming two change events
-    //first uncheck of previous button -> ignore that call
-    //the second call gives the check of the new button
+    
+    
+    
     if( pRadio && pRadio->IsChecked() )
         m_aChangeLink.Call(NULL);
     return 0;
@@ -242,6 +242,6 @@ void LegendPositionResources::SetChangeHdl( const Link& rLink )
     m_aChangeLink = rLink;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

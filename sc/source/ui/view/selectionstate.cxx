@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "selectionstate.hxx"
@@ -23,7 +23,7 @@
 #include "viewdata.hxx"
 #include "markdata.hxx"
 
-// ============================================================================
+
 
 ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
     meType( SC_SELECTTYPE_NONE )
@@ -50,7 +50,7 @@ ScSelectionState::ScSelectionState( ScViewData& rViewData ) :
             meType = SC_SELECTTYPE_SHEET;
             rMarkData.FillRangeListWithMarks( &maSheetSel, false );
         }
-        // else type is SC_SELECTTYPE_NONE - already initialized
+        
     }
 }
 
@@ -61,21 +61,21 @@ bool operator==( const ScSelectionState& rL, const ScSelectionState& rR )
     {
         case SC_SELECTTYPE_EDITCELL:
             bEqual &= rL.GetEditSelection().IsEqual( rR.GetEditSelection() );
-        // run through!
+        
         case SC_SELECTTYPE_SHEET:
             bEqual &= rL.GetSheetSelection() == rR.GetSheetSelection();
-        // run through!
+        
         case SC_SELECTTYPE_NONE:
             bEqual &= rL.GetCellCursor() == rR.GetCellCursor();
         break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     return bEqual;
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

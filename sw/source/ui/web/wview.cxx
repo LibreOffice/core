@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/msg.hxx>
@@ -47,7 +47,7 @@
 #include <barcfg.hxx>
 #include <doc.hxx>
 
-// TECHNICALLY not possible !!
+
 #include <beziersh.hxx>
 #include <drawsh.hxx>
 #include <drwtxtsh.hxx>
@@ -94,15 +94,15 @@ SwWebView::~SwWebView()
 
 void SwWebView::SelectShell()
 {
-    // Decision whether UpdateTable must be called
+    
     bool bUpdateTable = false;
     const SwFrmFmt* pCurTableFmt = GetWrtShell().GetTableFmt();
     if(pCurTableFmt && pCurTableFmt != GetLastTblFrmFmt())
     {
-        bUpdateTable = true; // can only be executed later
+        bUpdateTable = true; 
     }
     SetLastTblFrmFmt(pCurTableFmt);
-    //SEL_TBL and SEL_TBL_CELLS can be ored!
+    
     int nNewSelectionType = (GetWrtShell().GetSelectionType()
                                 & ~nsSelectionType::SEL_TBL_CELLS);
 
@@ -112,7 +112,7 @@ void SwWebView::SelectShell()
         GetViewFrame()->GetBindings().InvalidateAll( sal_False );
         if ( _nSelectionType & nsSelectionType::SEL_OLE ||
              _nSelectionType & nsSelectionType::SEL_GRF )
-            //The verb may of course change for graphics and OLE!
+            
             ImpSetVerb( nNewSelectionType );
     }
     else
@@ -122,9 +122,9 @@ void SwWebView::SelectShell()
 
         if( GetCurShell() )
         {
-            rDispatcher.Flush();        // really delete all cached shells
+            rDispatcher.Flush();        
 
-            //Additional to the old selection remember which toolbar was visible.
+            
             sal_Int32 nId = rDispatcher.GetObjectBarId( SFX_OBJECTBAR_OBJECT );
             if ( nId )
                 pBarCfg->SetTopToolbar( _nSelectionType, nId );
@@ -259,11 +259,11 @@ void SwWebView::SelectShell()
             GetEditWin().SetInputContext( aCntxt );
         }
 
-        //Additional to the selection enable the toolbar, which was
-        //activated last time
-        //Before must be a Flush(), but concerns according to MBA not the
-        //user interface and is not a performance issue.
-        // TODO/LATER: maybe now the Flush() command is superfluous?!
+        
+        
+        
+        
+        
         rDispatcher.Flush();
 
         Point aPnt = GetEditWin().GetPointerPosPixel();
@@ -278,11 +278,11 @@ void SwWebView::SelectShell()
     }
     GetViewImpl()->GetUNOObject_Impl()->NotifySelChanged();
 
-    //Opportune time for the communication with OLE objects?
+    
     if ( GetDocShell()->GetDoc()->IsOLEPrtNotifyPending() )
         GetDocShell()->GetDoc()->PrtOLENotify( sal_False );
 
-    //now the table update
+    
     if(bUpdateTable)
         GetWrtShell().UpdateTable();
 }

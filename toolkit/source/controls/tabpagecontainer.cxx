@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,9 +41,9 @@ using namespace ::com::sun::star::view;
 using ::com::sun::star::awt::tab::XTabPageModel;
 
 #define WRONG_TYPE_EXCEPTION "Type must be ::com::sun::star::awt::tab::XTabPageModel!"
-//  ----------------------------------------------------
-//  class UnoControlTabPageContainerModel
-//  ----------------------------------------------------
+
+
+
 UnoControlTabPageContainerModel::UnoControlTabPageContainerModel( const Reference< XComponentContext >& i_factory )
     :UnoControlTabPageContainerModel_Base( i_factory )
     ,maContainerListeners( *this )
@@ -71,7 +71,7 @@ uno::Any UnoControlTabPageContainerModel::ImplGetDefaultValue( sal_uInt16 nPropI
         case BASEPROPERTY_DEFAULTCONTROL:
             return uno::makeAny( OUString("com.sun.star.awt.tab.UnoControlTabPageContainer") );
         case BASEPROPERTY_BORDER:
-            return uno::makeAny((sal_Int16) 0);              // No Border
+            return uno::makeAny((sal_Int16) 0);              
         default:
             return UnoControlModel::ImplGetDefaultValue( nPropId );
     }
@@ -168,22 +168,22 @@ void SAL_CALL UnoControlTabPageContainerModel::insertByIndex( ::sal_Int32 nIndex
         throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
             (OWeakObject *)this, 2 );
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL UnoControlTabPageContainerModel::removeByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-// XIndexReplace
+
 void SAL_CALL UnoControlTabPageContainerModel::replaceByIndex( ::sal_Int32 /*Index*/, const uno::Any& /*Element*/ ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
 }
-// -----------------------------------------------------------------------------
-// XIndexAccess
+
+
 ::sal_Int32 SAL_CALL UnoControlTabPageContainerModel::getCount(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return sal_Int32( m_aTabPageVector.size());
 }
-// -----------------------------------------------------------------------------
+
 uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -191,19 +191,19 @@ uno::Any SAL_CALL UnoControlTabPageContainerModel::getByIndex( ::sal_Int32 nInde
         throw lang::IndexOutOfBoundsException();
     return uno::makeAny(m_aTabPageVector[nIndex]);
 }
-// -----------------------------------------------------------------------------
-// XElementAccess
+
+
 uno::Type SAL_CALL UnoControlTabPageContainerModel::getElementType(  ) throw (uno::RuntimeException)
 {
     return ::getCppuType(static_cast<  Reference< com::sun::star::awt::XControlModel>* >(NULL));
 }
-// -----------------------------------------------------------------------------
+
 ::sal_Bool SAL_CALL UnoControlTabPageContainerModel::hasElements(  ) throw (uno::RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     return !m_aTabPageVector.empty();
 }
-// XContainer
+
 void UnoControlTabPageContainerModel::addContainerListener( const Reference< XContainerListener >& l ) throw(RuntimeException)
 {
     maContainerListeners.addInterface( l );
@@ -214,9 +214,9 @@ void UnoControlTabPageContainerModel::removeContainerListener( const Reference< 
     maContainerListeners.removeInterface( l );
 }
 
-//  ----------------------------------------------------
-//  class UnoControlTabPageContainer
-//  ----------------------------------------------------
+
+
+
 UnoControlTabPageContainer::UnoControlTabPageContainer( const uno::Reference< uno::XComponentContext >& rxContext )
     :UnoControlTabPageContainer_Base(rxContext)
     ,m_aTabPageListeners( *this )
@@ -245,8 +245,8 @@ void UnoControlTabPageContainer::createPeer( const uno::Reference< awt::XToolkit
         xTPContainer->addTabPageContainerListener(&m_aTabPageListeners);
 }
 
-// -------------------------------------------------------------------
-// XTabPageContainer
+
+
 
 ::sal_Int16 SAL_CALL UnoControlTabPageContainer::getActiveTabPageID() throw (RuntimeException)
 {

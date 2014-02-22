@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/xmlnmspe.hxx>
@@ -96,7 +96,7 @@ namespace xmloff
     void implSortMap(XMLPropertyMapEntry* _pMap)
     {
         XMLPropertyMapEntry* pEnd;
-        // determine the last element
+        
         for ( pEnd = _pMap; pEnd->msApiName; ++pEnd)
             ;
         ::std::sort(_pMap, pEnd, XMLPropertyMapEntryLess());
@@ -112,7 +112,7 @@ namespace xmloff
         }
     }
 
-    //= OFormComponentStyleExportMapper
+    
     OFormComponentStyleExportMapper::OFormComponentStyleExportMapper( const UniReference< XMLPropertySetMapper >& _rMapper )
         :SvXMLExportPropertyMapper( _rMapper )
     {
@@ -122,11 +122,11 @@ namespace xmloff
         const SvXMLNamespaceMap& _rNamespaceMap, const ::std::vector< XMLPropertyState >* _pProperties,
         sal_uInt32 _nIdx ) const
     {
-        // ignore the number style of grid columns - this is formatted elsewhere
+        
         if ( CTF_FORMS_DATA_STYLE != getPropertySetMapper()->GetEntryContextId( _rProperty.mnIndex ) )
             SvXMLExportPropertyMapper::handleSpecialItem( _rAttrList, _rProperty, _rUnitConverter, _rNamespaceMap, _pProperties, _nIdx );
     }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/primitive2d/sdrattributecreator.hxx>
@@ -76,7 +76,7 @@
 #include <svx/sdr/attribute/sdrfilltextattribute.hxx>
 #include <com/sun/star/drawing/LineCap.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -108,7 +108,7 @@ namespace drawinglayer
                 }
                 default :
                 {
-                    return attribute::GRADIENTSTYLE_RECT; // XGRAD_RECT
+                    return attribute::GRADIENTSTYLE_RECT; 
                 }
             }
         }
@@ -127,7 +127,7 @@ namespace drawinglayer
                 }
                 default :
                 {
-                    return attribute::HATCHSTYLE_TRIPLE; // XHATCH_TRIPLE
+                    return attribute::HATCHSTYLE_TRIPLE; 
                 }
             }
         }
@@ -152,7 +152,7 @@ namespace drawinglayer
                 {
                     return basegfx::B2DLINEJOIN_ROUND;
                 }
-                default : // com::sun::star::drawing::LineJoint_NONE
+                default : 
                 {
                     return basegfx::B2DLINEJOIN_NONE;
                 }
@@ -163,7 +163,7 @@ namespace drawinglayer
         {
             basegfx::B2DVector aRetval(0.0, 0.0);
 
-            // position changes X
+            
             switch(eRectPoint)
             {
                 case RP_LT: case RP_LM: case RP_LB:
@@ -184,7 +184,7 @@ namespace drawinglayer
                 }
             }
 
-            // position changes Y
+            
             switch(eRectPoint)
             {
                 case RP_LT: case RP_MT: case RP_RT:
@@ -207,10 +207,10 @@ namespace drawinglayer
 
             return aRetval;
         }
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -357,10 +357,10 @@ namespace drawinglayer
 
                     if(nTransparence == nFillTransparence)
                     {
-                        // shadow does not really have an own transparence, but the application
-                        // sets the shadow transparence equal to the object transparence for
-                        // convenience. This is not useful for primitive creation, so take
-                        // this as no shadow transparence
+                        
+                        
+                        
+                        
                         nTransparence = 0;
                     }
                 }
@@ -394,7 +394,7 @@ namespace drawinglayer
 
                 if(100 != nTransparence)
                 {
-                    // need to check XFillFloatTransparence, object fill may still be completely transparent
+                    
                     const SfxPoolItem* pGradientItem;
 
                     if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem)
@@ -421,10 +421,10 @@ namespace drawinglayer
 
                     switch(eStyle)
                     {
-                        case XFILL_NONE : // for warnings
+                        case XFILL_NONE : 
                         case XFILL_SOLID :
                         {
-                            // nothing to do, color is defined
+                            
                             break;
                         }
                         case XFILL_GRADIENT :
@@ -473,7 +473,7 @@ namespace drawinglayer
                                 (double)rHatch.GetDistance(),
                                 (double)rHatch.GetAngle() * F_PI1800,
                                 aColorB.getBColor(),
-                                3, // same default as VCL, a minimum of three discrete units (pixels) offset
+                                3, 
                                 ((const XFillBackgroundItem&)(rSet.Get(XATTR_FILLBACKGROUND))).GetValue());
 
                             break;
@@ -497,7 +497,7 @@ namespace drawinglayer
             return attribute::SdrFillAttribute();
         }
 
-        // #i101508# Support handing over given text-to-border distances
+        
         attribute::SdrTextAttribute createNewSdrTextAttribute(
             const SfxItemSet& rSet,
             const SdrText& rText,
@@ -510,7 +510,7 @@ namespace drawinglayer
 
             if(rText.GetOutlinerParaObject() && rText.GetModel())
             {
-                // added TextEdit text suppression
+                
                 bool bInEditMode(false);
 
                 if(rText.GetObject().getTextCount() > 1)
@@ -535,16 +535,16 @@ namespace drawinglayer
                     }
                     else
                     {
-                        // #i100537#
-                        // GetEditOutlinerParaObject() returning no object does not mean that
-                        // text edit mode is not active. Do not reset the flag here
-                        // bInEditMode = false;
+                        
+                        
+                        
+                        
                     }
                 }
 
                 const SdrTextAniKind eAniKind(rTextObj.GetTextAniKind());
 
-                // #i107346#
+                
                 const SdrOutliner& rDrawTextOutliner = rText.GetModel()->GetDrawOutliner(&rTextObj);
                 const bool bWrongSpell(rDrawTextOutliner.GetControlWord() & EE_CNTRL_ONLINESPELLING);
 
@@ -579,17 +579,17 @@ namespace drawinglayer
             if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLFLOATTRANSPARENCE, true, &pGradientItem)
                 && ((XFillFloatTransparenceItem*)pGradientItem)->IsEnabled())
             {
-                // test if float transparence is completely transparent
+                
                 const XGradient& rGradient = ((XFillFloatTransparenceItem*)pGradientItem)->GetGradientValue();
                 const sal_uInt8 nStartLuminance(rGradient.GetStartColor().GetLuminance());
                 const sal_uInt8 nEndLuminance(rGradient.GetEndColor().GetLuminance());
                 const bool bCompletelyTransparent(0xff == nStartLuminance && 0xff == nEndLuminance);
                 const bool bNotTransparent(0x00 == nStartLuminance && 0x00 == nEndLuminance);
 
-                // create nothing when completely transparent: This case is already checked for the
-                // normal fill attributes, XFILL_NONE will be used.
-                // create nothing when not transparent: use normal fill, no need t create a FillGradientAttribute.
-                // Both cases are optimizations, always creating FillGradientAttribute will work, too
+                
+                
+                
+                
                 if(!bNotTransparent && !bCompletelyTransparent)
                 {
                     const double fStartLum(nStartLuminance / 255.0);
@@ -616,7 +616,7 @@ namespace drawinglayer
 
             if(!(GRAPHIC_BITMAP == aGraphic.GetType() || GRAPHIC_GDIMETAFILE == aGraphic.GetType()))
             {
-                // no content if not bitmap or metafile
+                
                 OSL_ENSURE(false, "No fill graphic in SfxItemSet (!)");
                 return attribute::SdrFillGraphicAttribute();
             }
@@ -625,7 +625,7 @@ namespace drawinglayer
 
             if(!aPrefSize.Width() || !aPrefSize.Height())
             {
-                // if there is no logical size, create a size from pixel size and set MapMode accordingly
+                
                 if(GRAPHIC_BITMAP == aGraphic.GetType())
                 {
                     aGraphic.SetPrefSize(aGraphic.GetBitmapEx().GetSizePixel());
@@ -635,19 +635,19 @@ namespace drawinglayer
 
             if(!aPrefSize.Width() || !aPrefSize.Height())
             {
-                // no content if no size
+                
                 OSL_ENSURE(false, "Graphic has no size in SfxItemSet (!)");
                 return attribute::SdrFillGraphicAttribute();
             }
 
-            // convert size and MapMode to destination logical size and MapMode
+            
             const MapUnit aDestinationMapUnit((MapUnit)rSet.GetPool()->GetMetric(0));
             basegfx::B2DVector aGraphicLogicSize(aGraphic.GetPrefSize().Width(), aGraphic.GetPrefSize().Height());
 
             if(aGraphic.GetPrefMapMode() != aDestinationMapUnit)
             {
-                // #i100360# for MAP_PIXEL, LogicToLogic will not work properly,
-                // so fallback to Application::GetDefaultDevice()
+                
+                
                 Size aNewSize(0, 0);
 
                 if(MAP_PIXEL == aGraphic.GetPrefMapMode().GetMapUnit())
@@ -664,12 +664,12 @@ namespace drawinglayer
                         aDestinationMapUnit);
                 }
 
-                // #i124002# do not set new size using SetPrefSize at the graphic, this will lead to problems.
-                // Instead, adapt the GraphicLogicSize which will be used for further decompositions
+                
+                
                 aGraphicLogicSize = basegfx::B2DVector(aNewSize.Width(), aNewSize.Height());
             }
 
-            // get size
+            
             const basegfx::B2DVector aSize(
                 (double)((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEX))).GetValue(),
                 (double)((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEY))).GetValue());
@@ -699,14 +699,14 @@ namespace drawinglayer
         {
             attribute::SdrTextAttribute aText;
 
-            // #i98072# added option to suppress text
-            // look for text first
+            
+            
             if(!bSuppressText && pText)
             {
                 aText = createNewSdrTextAttribute(rSet, *pText);
             }
 
-            // try shadow
+            
             const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
 
             return attribute::SdrShadowTextAttribute(aShadow, aText);
@@ -721,13 +721,13 @@ namespace drawinglayer
             attribute::SdrTextAttribute aText;
             bool bFontworkHideContour(false);
 
-            // look for text first
+            
             if(pText)
             {
                 aText = createNewSdrTextAttribute(rSet, *pText);
 
-                // when object has text and text is fontwork and hide contour is set for fontwork, force
-                // line and fill style to empty
+                
+                
                 if(!aText.isDefault()
                     && !aText.getSdrFormTextAttribute().isDefault()
                     && aText.isHideContour())
@@ -736,21 +736,21 @@ namespace drawinglayer
                 }
             }
 
-            // try line style
+            
             if(!bFontworkHideContour)
             {
                 aLine = createNewSdrLineAttribute(rSet);
 
                 if(!aLine.isDefault())
                 {
-                    // try LineStartEnd
+                    
                     aLineStartEnd = createNewSdrLineStartEndAttribute(rSet, aLine.getWidth());
                 }
             }
 
             if(!aLine.isDefault() || !aText.isDefault())
             {
-                // try shadow
+                
                 const attribute::SdrShadowAttribute aShadow(createNewSdrShadowAttribute(rSet));
 
                 return attribute::SdrLineShadowTextAttribute(aLine, aLineStartEnd, aShadow, aText);
@@ -772,13 +772,13 @@ namespace drawinglayer
             attribute::SdrTextAttribute aText;
             bool bFontworkHideContour(false);
 
-            // look for text first
+            
             if(pText)
             {
                 aText = createNewSdrTextAttribute(rSet, *pText);
 
-                // when object has text and text is fontwork and hide contour is set for fontwork, force
-                // line and fill style to empty
+                
+                
                 if(!aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour())
                 {
                     bFontworkHideContour = true;
@@ -787,32 +787,32 @@ namespace drawinglayer
 
             if(!bFontworkHideContour)
             {
-                // try line style
+                
                 aLine = createNewSdrLineAttribute(rSet);
 
                 if(!aLine.isDefault())
                 {
-                    // try LineStartEnd
+                    
                     aLineStartEnd = createNewSdrLineStartEndAttribute(rSet, aLine.getWidth());
                 }
 
-                // try fill style
+                
                 aFill = createNewSdrFillAttribute(rSet);
 
                 if(!aFill.isDefault())
                 {
-                    // try fillfloattransparence
+                    
                     aFillFloatTransGradient = createNewTransparenceGradientAttribute(rSet);
                 }
             }
 
-            // bHasContent is used from OLE and graphic objects. Normally a possible shadow
-            // depends on line, fill or text to be set, but for these objects it is possible
-            // to have none of these, but still content which needs to have a shadow (if set),
-            // so shadow needs to be tried
+            
+            
+            
+            
             if(bHasContent || !aLine.isDefault() || !aFill.isDefault() || !aText.isDefault())
             {
-                // try shadow
+                
                 aShadow = createNewSdrShadowAttribute(rSet);
 
                 return attribute::SdrLineFillShadowTextAttribute(
@@ -829,30 +829,30 @@ namespace drawinglayer
             attribute::SdrShadowAttribute aShadow;
             attribute::FillGradientAttribute aFillFloatTransGradient;
 
-            // try line style
+            
             const attribute::SdrLineAttribute aLine(createNewSdrLineAttribute(rSet));
 
             if(!aLine.isDefault())
             {
-                // try LineStartEnd
+                
                 aLineStartEnd = createNewSdrLineStartEndAttribute(rSet, aLine.getWidth());
             }
 
-            // try fill style
+            
             if(!bSuppressFill)
             {
                 aFill = createNewSdrFillAttribute(rSet);
 
                 if(!aFill.isDefault())
                 {
-                    // try fillfloattransparence
+                    
                     aFillFloatTransGradient = createNewTransparenceGradientAttribute(rSet);
                 }
             }
 
             if(!aLine.isDefault() || !aFill.isDefault())
             {
-                // try shadow
+                
                 aShadow = createNewSdrShadowAttribute(rSet);
 
                 return attribute::SdrLineFillShadowAttribute3D(
@@ -864,7 +864,7 @@ namespace drawinglayer
 
         attribute::SdrSceneAttribute createNewSdrSceneAttribute(const SfxItemSet& rSet)
         {
-            // get perspective
+            
             ::com::sun::star::drawing::ProjectionMode aProjectionMode(::com::sun::star::drawing::ProjectionMode_PARALLEL);
             const sal_uInt16 nProjectionValue(((const Svx3DPerspectiveItem&)rSet.Get(SDRATTR_3DSCENE_PERSPECTIVE)).GetValue());
 
@@ -873,13 +873,13 @@ namespace drawinglayer
                 aProjectionMode = ::com::sun::star::drawing::ProjectionMode_PERSPECTIVE;
             }
 
-            // get distance
+            
             const double fDistance(((const Svx3DDistanceItem&)rSet.Get(SDRATTR_3DSCENE_DISTANCE)).GetValue());
 
-            // get shadow slant
+            
             const double fShadowSlant(F_PI180 * ((const Svx3DShadowSlantItem&)rSet.Get(SDRATTR_3DSCENE_SHADOW_SLANT)).GetValue());
 
-            // get shade mode
+            
             ::com::sun::star::drawing::ShadeMode aShadeMode(::com::sun::star::drawing::ShadeMode_FLAT);
             const sal_uInt16 nShadeValue(((const Svx3DShadeModeItem&)rSet.Get(SDRATTR_3DSCENE_SHADE_MODE)).GetValue());
 
@@ -896,7 +896,7 @@ namespace drawinglayer
                 aShadeMode = ::com::sun::star::drawing::ShadeMode_DRAFT;
             }
 
-            // get two sided lighting
+            
             const bool bTwoSidedLighting(((const Svx3DTwoSidedLightingItem&)rSet.Get(SDRATTR_3DSCENE_TWO_SIDED_LIGHTING)).GetValue());
 
             return attribute::SdrSceneAttribute(fDistance, fShadowSlant, aProjectionMode, aShadeMode, bTwoSidedLighting);
@@ -904,7 +904,7 @@ namespace drawinglayer
 
         attribute::SdrLightingAttribute createNewSdrLightingAttribute(const SfxItemSet& rSet)
         {
-            // extract lights from given SfxItemSet (from scene)
+            
             ::std::vector< attribute::Sdr3DLightAttribute > aLightVector;
 
             if(((const Svx3DLightOnOff1Item&)rSet.Get(SDRATTR_3DSCENE_LIGHTON_1)).GetValue())
@@ -963,7 +963,7 @@ namespace drawinglayer
                 aLightVector.push_back(attribute::Sdr3DLightAttribute(aColor, aDirection, false));
             }
 
-            // get ambient color
+            
             const Color aAmbientValue(((const Svx3DAmbientcolorItem&)rSet.Get(SDRATTR_3DSCENE_AMBIENTCOLOR)).GetValue());
             const basegfx::BColor aAmbientLight(aAmbientValue.getBColor());
 
@@ -1023,7 +1023,7 @@ namespace drawinglayer
             }
         }
 
-        // #i101508# Support handing over given text-to-border distances
+        
         attribute::SdrFillTextAttribute createNewSdrFillTextAttribute(
             const SfxItemSet& rSet,
             const SdrText* pText,
@@ -1037,13 +1037,13 @@ namespace drawinglayer
             attribute::SdrTextAttribute aText;
             bool bFontworkHideContour(false);
 
-            // look for text first
+            
             if(pText)
             {
                 aText = createNewSdrTextAttribute(rSet, *pText, pLeft, pUpper, pRight, pLower);
 
-                // when object has text and text is fontwork and hide contour is set for fontwork, force
-                // fill style to empty
+                
+                
                 if(!aText.getSdrFormTextAttribute().isDefault() && aText.isHideContour())
                 {
                     bFontworkHideContour = true;
@@ -1052,12 +1052,12 @@ namespace drawinglayer
 
             if(!bFontworkHideContour)
             {
-                // try fill style
+                
                 aFill = createNewSdrFillAttribute(rSet);
 
                 if(!aFill.isDefault())
                 {
-                    // try fillfloattransparence
+                    
                     aFillFloatTransGradient = createNewTransparenceGradientAttribute(rSet);
                 }
             }
@@ -1070,7 +1070,7 @@ namespace drawinglayer
             return attribute::SdrFillTextAttribute();
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

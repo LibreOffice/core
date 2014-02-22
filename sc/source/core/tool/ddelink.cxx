@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -55,9 +55,9 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const OUString& rA, const OUString& rT, co
 
 ScDdeLink::~ScDdeLink()
 {
-    // Verbindung aufheben
+    
 
-    // pResult is refcounted
+    
 }
 
 ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
@@ -92,7 +92,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     if ( bHasValue )
         pResult = new ScMatrix(0, 0);
 
-    if (rHdr.BytesLeft())       // neu in 388b und der 364w (RealTime-Client) Version
+    if (rHdr.BytesLeft())       
         rStream.ReadUChar( nMode );
     else
         nMode = SC_DDE_DEFAULT;
@@ -112,11 +112,11 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     sal_Bool bHasValue = ( pResult != 0 );
     rStream.WriteUChar( bHasValue );
 
-    if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export
-        rStream.WriteUChar( nMode );                                   // seit 388b
+    if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      
+        rStream.WriteUChar( nMode );                                   
 
-    //  Links mit Mode != SC_DDE_DEFAULT werden bei 4.0 Export komplett weggelassen
-    //  (aus ScDocument::SaveDdeLinks)
+    
+    
 
     rHdr.EndEntry();
 }
@@ -124,7 +124,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     const OUString& rMimeType, const ::com::sun::star::uno::Any & rValue )
 {
-    //  wir koennen nur Strings...
+    
     if ( FORMAT_STRING != SotExchange::GetFormatIdFromMimeType( rMimeType ))
         return SUCCESS;
 
@@ -132,14 +132,14 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
     ScByteSequenceToString::GetString( aLinkStr, rValue, DDE_TXT_ENCODING );
     aLinkStr = convertLineEnd(aLinkStr, LINEEND_LF);
 
-    //  wenn String mit Zeilenende aufhoert, streichen:
+    
 
     sal_Int32 nLen = aLinkStr.getLength();
     if (nLen && aLinkStr[nLen-1] == '\n')
         aLinkStr = aLinkStr.copy(0, nLen-1);
 
     OUString aLine;
-    SCSIZE nCols = 1;       // Leerstring -> eine leere Zelle
+    SCSIZE nCols = 1;       
     SCSIZE nRows = 1;
     if (!aLinkStr.isEmpty())
     {
@@ -149,26 +149,26 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
             nCols = static_cast<SCSIZE>(comphelper::string::getTokenCount(aLine, '\t'));
     }
 
-    if (!nRows || !nCols)               // keine Daten
+    if (!nRows || !nCols)               
     {
         pResult.reset();
     }
-    else                                // Daten aufteilen
+    else                                
     {
-        //  Matrix immer neu anlegen, damit bIsString nicht durcheinanderkommt
+        
         pResult = new ScMatrix(nCols, nRows, 0.0);
 
         SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
         svl::SharedStringPool& rPool = pDoc->GetSharedStringPool();
 
-        //  nMode bestimmt, wie der Text interpretiert wird (#44455#/#49783#):
-        //  SC_DDE_DEFAULT - Zahlformat aus Zellvorlage "Standard"
-        //  SC_DDE_ENGLISH - Standard-Zahlformat fuer English/US
-        //  SC_DDE_TEXT    - ohne NumberFormatter direkt als String
+        
+        
+        
+        
         sal_uLong nStdFormat = 0;
         if ( nMode == SC_DDE_DEFAULT )
         {
-            ScPatternAttr* pDefPattern = pDoc->GetDefPattern();     // enthaelt Standard-Vorlage
+            ScPatternAttr* pDefPattern = pDoc->GetDefPattern();     
             if ( pDefPattern )
                 nStdFormat = pDefPattern->GetNumberFormat( pFormatter );
         }
@@ -187,7 +187,7 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
                 if ( nMode != SC_DDE_TEXT && pFormatter->IsNumberFormat( aEntry, nIndex, fVal ) )
                     pResult->PutDouble( fVal, nC, nR );
                 else if (aEntry.isEmpty())
-                    // empty cell
+                    
                     pResult->PutEmpty(nC, nR);
                 else
                     pResult->PutString(rPool.intern(aEntry), nC, nR);
@@ -195,22 +195,22 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
         }
     }
 
-    //  Es hat sich was getan...
+    
 
     if (HasListeners())
     {
         Broadcast(ScHint(SC_HINT_DATACHANGED, ScAddress()));
-        pDoc->TrackFormulas();      // muss sofort passieren
+        pDoc->TrackFormulas();      
         pDoc->StartTrackTimer();
 
-        //  StartTrackTimer ruft asynchron TrackFormulas, Broadcast(FID_DATACHANGED),
-        //  ResetChanged, SetModified und Invalidate(SID_SAVEDOC/SID_DOC_MODIFIED)
-        //  TrackFormulas zusaetzlich nochmal sofort, damit nicht z.B. durch IdleCalc
-        //  eine Formel berechnet wird, die noch im FormulaTrack steht (#61676#)
+        
+        
+        
+        
 
-        //  notify Uno objects (for XRefreshListener)
-        //  must be after TrackFormulas
-        //! do this asynchronously?
+        
+        
+        
         ScLinkRefreshedHint aHint;
         aHint.SetDdeLink( aAppl, aTopic, aItem, nMode );
         pDoc->BroadcastUno( aHint );
@@ -222,16 +222,16 @@ sfx2::SvBaseLink::UpdateResult ScDdeLink::DataChanged(
 void ScDdeLink::ListenersGone()
 {
     bool bWas = bIsInUpdate;
-    bIsInUpdate = true;             // Remove() kann Reschedule ausloesen??!?
+    bIsInUpdate = true;             
 
-    ScDocument* pStackDoc = pDoc;   // member pDoc can't be used after removing the link
+    ScDocument* pStackDoc = pDoc;   
 
     sfx2::LinkManager* pLinkMgr = pDoc->GetLinkManager();
-    pLinkMgr->Remove( this);        // deletes this
+    pLinkMgr->Remove( this);        
 
-    if ( pLinkMgr->GetLinks().empty() )            // letzten geloescht ?
+    if ( pLinkMgr->GetLinks().empty() )            
     {
-        SfxBindings* pBindings = pStackDoc->GetViewBindings();      // don't use member pDoc!
+        SfxBindings* pBindings = pStackDoc->GetViewBindings();      
         if (pBindings)
             pBindings->Invalidate( SID_LINKS );
     }
@@ -252,7 +252,7 @@ void ScDdeLink::SetResult( const ScMatrixRef& pRes )
 void ScDdeLink::TryUpdate()
 {
     if (bIsInUpdate)
-        bNeedUpdate = true;         // kann jetzt nicht ausgefuehrt werden
+        bNeedUpdate = true;         
     else
     {
         bIsInUpdate = true;

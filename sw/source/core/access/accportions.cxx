@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "accportions.hxx"
@@ -22,30 +22,30 @@
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <txttypes.hxx>
 
-// for portion replacement in Special()
+
 #include "access.hrc"
 #include <tools/resid.hxx>
 #include "viewopt.hxx"
 
-// for GetWordBoundary(...), GetSentenceBoundary(...):
+
 #include <breakit.hxx>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <ndtxt.hxx>
 
-// for FillSpecialPos(...)
+
 #include "crstate.hxx"
 
-// for SwAccessibleContext::GetResource()
+
 #include "acccontext.hxx"
 
-// for Post-It replacement text:
+
 #include "txatbase.hxx"
 #include "fmtfld.hxx"
 #include "fldbas.hxx"
 #include "docufld.hxx"
 
-// for in-line graphics replacement:
+
 #include "ndindex.hxx"
 #include "ndnotxt.hxx"
 #include "fmtflcnt.hxx"
@@ -56,10 +56,10 @@ using namespace ::com::sun::star;
 
 using i18n::Boundary;
 
-// 'portion type' for terminating portions
+
 #define POR_TERMINATE 0
 
-// portion attributes
+
 #define PORATTR_SPECIAL     1
 #define PORATTR_READONLY    2
 #define PORATTR_GRAY        4
@@ -84,12 +84,12 @@ SwAccessiblePortionData::SwAccessiblePortionData(
 {
     OSL_ENSURE( pTxtNode != NULL, "Text node is needed!" );
 
-    // reserve some space to reduce memory allocations
+    
     aLineBreaks.reserve( 5 );
     aModelPositions.reserve( 10 );
     aAccessiblePositions.reserve( 10 );
 
-    // always include 'first' line-break position
+    
     aLineBreaks.push_back( 0 );
 }
 
@@ -105,19 +105,19 @@ void SwAccessiblePortionData::Text(sal_uInt16 nLength, sal_uInt16 nType, sal_Int
 
     OSL_ENSURE( !bFinished, "We are already done!" );
 
-    // ignore zero-length portions
+    
     if( nLength == 0 )
         return;
 
-    // store 'old' positions
+    
     aModelPositions.push_back( nModelPosition );
     aAccessiblePositions.push_back( aBuffer.getLength() );
 
-    // store portion attributes
+    
     sal_uInt8 nAttr = IsGrayPortionType(nType) ? PORATTR_GRAY : 0;
     aPortionAttrs.push_back( nAttr );
 
-    // update buffer + nModelPosition
+    
     aBuffer.append( OUString(
         pTxtNode->GetTxt().copy(nModelPosition, nLength)) );
     nModelPosition += nLength;
@@ -140,8 +140,8 @@ void SwAccessiblePortionData::Special(
 
     OSL_ENSURE( !bFinished, "We are already done!" );
 
-    // construct string with representation; either directly from
-    // rText, or use resources for special case portions
+    
+    
     OUString sDisplay;
     switch( nType )
     {
@@ -159,7 +159,7 @@ void SwAccessiblePortionData::Special(
         case POR_COMBINED:
         case POR_ISOREF:
             {
-                //When the filed content is empty, input a special character.
+                
                 if (rText.isEmpty())
                     sDisplay = OUString(sal_Unicode(0xfffc));
                 else
@@ -186,8 +186,8 @@ void SwAccessiblePortionData::Special(
             sDisplay = OUString( rText ) + " ";
             break;
         }
-        // #i111768# - apply patch from kstribley:
-        // Include the control characters.
+        
+        
         case POR_CONTROLCHAR:
         {
             sDisplay = OUString( rText ) + OUString( pTxtNode->GetTxt()[nModelPosition] );
@@ -198,32 +198,32 @@ void SwAccessiblePortionData::Special(
             break;
     }
 
-    // ignore zero/zero portions (except for terminators)
+    
     if( (nLength == 0) && (sDisplay.getLength() == 0) && (nType != POR_TERMINATE) )
         return;
 
-    // special treatment for zero length portion at the beginning:
-    // count as 'before' portion
+    
+    
     if( ( nLength == 0 ) && ( nModelPosition == 0 ) )
         nBeforePortions++;
 
-    // store the 'old' positions
+    
     aModelPositions.push_back( nModelPosition );
     aAccessiblePositions.push_back( aBuffer.getLength() );
 
-    // store portion attributes
+    
     sal_uInt8 nAttr = PORATTR_SPECIAL;
     if( IsGrayPortionType(nType) )      nAttr |= PORATTR_GRAY;
     if( nLength == 0 )                  nAttr |= PORATTR_READONLY;
     if( nType == POR_TERMINATE )        nAttr |= PORATTR_TERM;
     aPortionAttrs.push_back( nAttr );
 
-    // update buffer + nModelPosition
+    
     aBuffer.append( sDisplay );
     nModelPosition += nLength;
 
-    // remember 'last' special portion (unless it's our own 'closing'
-    // portions from 'Finish()'
+    
+    
     if( nType != POR_TERMINATE )
         bLastIsSpecial = sal_True;
 }
@@ -249,9 +249,9 @@ void SwAccessiblePortionData::Finish()
 {
     OSL_ENSURE( !bFinished, "We are already done!" );
 
-    // include terminator values: always include two 'last character'
-    // markers in the position arrays to make sure we always find one
-    // position before the end
+    
+    
+    
     Special( 0, OUString(), POR_TERMINATE );
     Special( 0, OUString(), POR_TERMINATE );
     LineBreak(0);
@@ -281,8 +281,8 @@ sal_Bool SwAccessiblePortionData::IsReadOnlyPortion( size_t nPortionNo ) const
 
 sal_Bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
 {
-    // gray portions?
-    // Compare with: inftxt.cxx, SwTxtPaintInfo::DrawViewOpt(...)
+    
+    
     sal_Bool bGray = sal_False;
     switch( nType )
     {
@@ -304,7 +304,7 @@ sal_Bool SwAccessiblePortionData::IsGrayPortionType( sal_uInt16 nType ) const
         case POR_SOFTHYPH:  bGray = pViewOptions->IsSoftHyph();     break;
         case POR_BLANK:     bGray = pViewOptions->IsHardBlank();    break;
         default:
-            break; // bGray is false
+            break; 
     }
     return bGray;
 }
@@ -324,14 +324,14 @@ void SwAccessiblePortionData::GetLineBoundary(
                   FindBreak( aLineBreaks, nPos ) );
 }
 
-// #i89175#
+
 sal_Int32 SwAccessiblePortionData::GetLineCount() const
 {
     size_t nBreaks = aLineBreaks.size();
-    // A non-empty paragraph has at least 4 breaks: one for each line3 and
-    // 3 additional ones.
-    // An empty paragraph has 3 breaks.
-    // Less than 3 breaks is an error case.
+    
+    
+    
+    
     sal_Int32 nLineCount = ( nBreaks > 3 )
                            ? nBreaks - 3
                            : ( ( nBreaks == 3 ) ? 1 : 0 );
@@ -342,7 +342,7 @@ sal_Int32 SwAccessiblePortionData::GetLineNo( const sal_Int32 nPos ) const
 {
     sal_Int32 nLineNo = FindBreak( aLineBreaks, nPos );
 
-    // handling of position after last character
+    
     const sal_Int32 nLineCount( GetLineCount() );
     if ( nLineNo >= nLineCount )
     {
@@ -363,8 +363,8 @@ void SwAccessiblePortionData::GetLastLineBoundary(
 {
     OSL_ENSURE( aLineBreaks.size() >= 2, "need min + max value" );
 
-    // The last two positions except the two delimiters are the ones
-    // we are looking for, except for empty paragraphs (nBreaks==3)
+    
+    
     size_t nBreaks = aLineBreaks.size();
     FillBoundary( rBound, aLineBreaks, nBreaks <= 3 ? 0 : nBreaks-4 );
 }
@@ -374,17 +374,17 @@ sal_Int32 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
     OSL_ENSURE( nPos >= 0, "illegal position" );
     OSL_ENSURE( nPos <= sAccessibleString.getLength(), "illegal position" );
 
-    // find the portion number
+    
     size_t nPortionNo = FindBreak( aAccessiblePositions, nPos );
 
-    // get model portion size
+    
     sal_Int32 nStartPos = aModelPositions[nPortionNo];
 
-    // if it's a non-special portion, move into the portion, else
-    // return the portion start
+    
+    
     if( ! IsSpecialPortion( nPortionNo ) )
     {
-        // 'wide' portions have to be of the same width
+        
         OSL_ENSURE( ( aModelPositions[nPortionNo+1] - nStartPos ) ==
                     ( aAccessiblePositions[nPortionNo+1] -
                       aAccessiblePositions[nPortionNo] ),
@@ -392,7 +392,7 @@ sal_Int32 SwAccessiblePortionData::GetModelPosition( sal_Int32 nPos ) const
 
         nStartPos += nPos - aAccessiblePositions[nPortionNo];
     }
-    // else: return nStartPos unmodified
+    
 
     OSL_ENSURE( nStartPos >= 0, "There's something weird in number of characters of SwTxtNode" );
     return nStartPos;
@@ -421,21 +421,21 @@ size_t SwAccessiblePortionData::FindBreak(
     size_t nMin = 0;
     size_t nMax = rPositions.size()-2;
 
-    // loop until no more than two candidates are left
+    
     while( nMin+1 < nMax )
     {
-        // check loop invariants
+        
         OSL_ENSURE( ( (nMin == 0) && (rPositions[nMin] <= nValue) ) ||
                     ( (nMin != 0) && (rPositions[nMin] < nValue) ),
                     "minvalue not minimal" );
         OSL_ENSURE( nValue <= rPositions[nMax], "max value not maximal" );
 
-        // get middle (and ensure progress)
+        
         size_t nMiddle = (nMin + nMax)/2;
         OSL_ENSURE( nMin < nMiddle, "progress?" );
         OSL_ENSURE( nMiddle < nMax, "progress?" );
 
-        // check array
+        
         OSL_ENSURE( rPositions[nMin] <= rPositions[nMiddle],
                     "garbled positions array" );
         OSL_ENSURE( rPositions[nMiddle] <= rPositions[nMax],
@@ -447,12 +447,12 @@ size_t SwAccessiblePortionData::FindBreak(
             nMax = nMiddle;
     }
 
-    // only two are left; we only need to check which one is the winner
+    
     OSL_ENSURE( (nMax == nMin) || (nMax == nMin+1), "only two left" );
     if( (rPositions[nMin] < nValue) && (rPositions[nMin+1] <= nValue) )
         nMin = nMin+1;
 
-    // finally, check to see whether the returned value is the 'right' position
+    
     OSL_ENSURE( rPositions[nMin] <= nValue, "not smaller or equal" );
     OSL_ENSURE( nValue <= rPositions[nMin+1], "not equal or larger" );
     OSL_ENSURE( (nMin == 0) || (rPositions[nMin-1] <= nValue),
@@ -470,8 +470,8 @@ size_t SwAccessiblePortionData::FindLastBreak(
 {
     size_t nResult = FindBreak( rPositions, nValue );
 
-    // skip 'zero-length' portions
-    // #i70538# consider size of <rPosition> and ignore last entry
+    
+    
     while ( nResult < rPositions.size() - 2 &&
             rPositions[nResult+1] <= nValue )
     {
@@ -497,8 +497,8 @@ void SwAccessiblePortionData::GetSentenceBoundary(
              pSentences = new Positions_t();
              pSentences->reserve(10);
 
-             // use xBreak->endOfSentence to iterate over all words; store
-             // positions in pSentences
+             
+             
              sal_Int32 nCurrent = 0;
              sal_Int32 nLength = sAccessibleString.getLength();
              do
@@ -514,19 +514,19 @@ void SwAccessiblePortionData::GetSentenceBoundary(
                  if( (nNew < 0) && (nNew > nLength) )
                      nNew = nLength;
                  else if (nNew <= nCurrent)
-                     nNew = nCurrent + 1;   // ensure forward progress
+                     nNew = nCurrent + 1;   
 
                  nCurrent = nNew;
              }
              while (nCurrent < nLength);
 
-             // finish with two terminators
+             
              pSentences->push_back( nLength );
              pSentences->push_back( nLength );
          }
          else
          {
-             // no break iterator -> empty word
+             
              rBound.startPos = 0;
              rBound.endPos = 0;
              return;
@@ -542,7 +542,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
 {
     OSL_ENSURE( pTxtNode != NULL, "Need SwTxtNode!" );
 
-    // attribute boundaries can only occur on portion boundaries
+    
     FillBoundary( rBound, aAccessiblePositions,
                   FindBreak( aAccessiblePositions, nPos ) );
 }
@@ -551,19 +551,19 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_Int32 nPos ) const
 {
     OSL_ENSURE( nPos <= pTxtNode->GetTxt().getLength(), "illegal position" );
 
-    // find the portion number
-    // #i70538# - consider "empty" model portions - e.g. number portion
+    
+    
     size_t nPortionNo = FindLastBreak( aModelPositions, nPos );
 
     sal_Int32 nRet = aAccessiblePositions[nPortionNo];
 
-    // if the model portion has more than one position, go into it;
-    // else return that position
+    
+    
     sal_Int32 nStartPos = aModelPositions[nPortionNo];
     sal_Int32 nEndPos = aModelPositions[nPortionNo+1];
     if( (nEndPos - nStartPos) > 1 )
     {
-        // 'wide' portions have to be of the same width
+        
         OSL_ENSURE( ( nEndPos - nStartPos ) ==
                     ( aAccessiblePositions[nPortionNo+1] -
                       aAccessiblePositions[nPortionNo] ),
@@ -572,7 +572,7 @@ sal_Int32 SwAccessiblePortionData::GetAccessiblePosition( sal_Int32 nPos ) const
         sal_Int32 nWithinPortion = nPos - aModelPositions[nPortionNo];
         nRet += nWithinPortion;
     }
-    // else: return nRet unmodified
+    
 
     OSL_ENSURE( (nRet >= 0) && (nRet <= sAccessibleString.getLength()),
                 "too long!" );
@@ -600,9 +600,9 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
         sal_Int32 nModelEndPos = aModelPositions[nPortionNo+1];
         nModelPos = aModelPositions[nPortionNo];
 
-        // skip backwards over zero-length portions, since GetCharRect()
-        // counts all model-zero-length portions as belonging to the
-        // previus portion
+        
+        
+        
         size_t nCorePortionNo = nPortionNo;
         while( nModelPos == nModelEndPos )
         {
@@ -616,30 +616,30 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
         OSL_ENSURE( nModelPos != nModelEndPos,
                     "portion with core-representation expected" );
 
-        // if we have anything except plain text, compute nExtend + nRefPos
+        
         if( (nModelEndPos - nModelPos == 1) &&
             (pTxtNode->GetTxt()[nModelPos] != sAccessibleString[nPos]))
         {
-            // case 1: a one-character, non-text portion
-            // reference position is the first accessibilty for our
-            // core portion
+            
+            
+            
             nRefPos = aAccessiblePositions[ nCorePortionNo ];
             nExtend = SP_EXTEND_RANGE_NONE;
             rpPos = &rPos;
         }
         else if(nPortionNo != nCorePortionNo)
         {
-            // case 2: a multi-character (text!) portion, followed by
-            // zero-length portions
-            // reference position is the first character of the next
-            // portion, and we are 'behind'
+            
+            
+            
+            
             nRefPos = aAccessiblePositions[ nCorePortionNo+1 ];
             nExtend = SP_EXTEND_RANGE_BEHIND;
             rpPos = &rPos;
         }
         else
         {
-            // case 3: regular text portion
+            
             OSL_ENSURE( ( nModelEndPos - nModelPos ) ==
                         ( aAccessiblePositions[nPortionNo+1] -
                           aAccessiblePositions[nPortionNo] ),
@@ -657,15 +657,15 @@ sal_uInt16 SwAccessiblePortionData::FillSpecialPos(
                     (nExtend == SP_EXTEND_RANGE_BEFORE) ||
                     (nExtend == SP_EXTEND_RANGE_BEHIND), "need extend" );
 
-        // get the line number, and adjust nRefPos for the line
-        // (if necessary)
+        
+        
         size_t nRefLine = FindBreak( aLineBreaks, nRefPos );
         size_t nMyLine  = FindBreak( aLineBreaks, nPos );
         sal_uInt16 nLineOffset = static_cast<sal_uInt16>( nMyLine - nRefLine );
         if( nLineOffset != 0 )
             nRefPos = aLineBreaks[ nMyLine ];
 
-        // fill char offset and 'special position'
+        
         rPos.nCharOfst = nPos - nRefPos;
         rPos.nExtendRange = nExtend;
         rPos.nLineOfst = nLineOffset;
@@ -710,12 +710,12 @@ void SwAccessiblePortionData::AdjustAndCheck(
     sal_Int32& nCorePos,
     bool& bEdit) const
 {
-    // find portion and get mode position
+    
     nPortionNo = FindBreak( aAccessiblePositions, nPos );
     nCorePos = aModelPositions[ nPortionNo ];
 
-    // for special portions, make sure we're on a portion boundary
-    // for text portions, add the in-portion offset
+    
+    
     if( IsSpecialPortion( nPortionNo ) )
         bEdit &= nPos == aAccessiblePositions[nPortionNo];
     else
@@ -728,26 +728,26 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
 {
     bool bIsEditable = true;
 
-    // get start and end portions
+    
     size_t nStartPortion, nEndPortion;
     AdjustAndCheck( nStart, nStartPortion, nCoreStart, bIsEditable );
     AdjustAndCheck( nEnd,   nEndPortion,   nCoreEnd,   bIsEditable );
 
-    // iterate over portions, and make sure there is no read-only portion
-    // in-between
+    
+    
     size_t nLastPortion = nEndPortion;
 
-    // don't count last portion if we're in front of a special portion
+    
     if( IsSpecialPortion(nLastPortion) )
     {
         if (nLastPortion > 0)
             nLastPortion--;
         else
-            // special case: because size_t is usually unsigned, we can't just
-            // decrease nLastPortion to -1 (which would normally do the job, so
-            // this whole if wouldn't be needed). Instead, we'll do this
-            // special case and just increae the start portion beyond the last
-            // portion to make sure the loop below will have zero iteration.
+            
+            
+            
+            
+            
             nStartPortion = nLastPortion + 1;
     }
 
@@ -761,7 +761,7 @@ sal_Bool SwAccessiblePortionData::GetEditableRange(
 
 sal_Bool SwAccessiblePortionData::IsValidCorePosition( sal_Int32 nPos ) const
 {
-    // a position is valid its within the model positions that we know
+    
     return ( aModelPositions[0] <= nPos ) &&
            ( nPos <= aModelPositions[ aModelPositions.size()-1 ] );
 }
@@ -788,7 +788,7 @@ sal_Bool SwAccessiblePortionData::IsIndexInFootnode(sal_Int32 nIndex)
 
 sal_Bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
 {
-//    return IsGrayPortion( FindBreak( aAccessiblePositions, nPos ) );
+
     return IsPortionAttrSet( FindBreak( aAccessiblePositions, nPos ),
                              PORATTR_GRAY );
 }

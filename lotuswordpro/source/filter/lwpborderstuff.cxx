@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -174,8 +174,8 @@ sal_uInt16  LwpBorderStuff::GetSideType(sal_uInt16 side)
     case BOTTOM:
         return m_nBoderGroupIDBottom;
     }
-    // FIXME: this is needed to avoid warning: control reaches end of non-void function
-    //        a better solution would be to enum value for the parameter side
+    
+    
     return 0;
 }
 
@@ -192,8 +192,8 @@ LwpColor    LwpBorderStuff::GetSideColor(sal_uInt16 side)
     case BOTTOM:
         return m_aColorBottom;
     }
-    // FIXME: this is needed to avoid warning: control reaches end of non-void function
-    //        a better solution would be to enum value for the parameter side
+    
+    
     return LwpColor();
 }
 
@@ -210,8 +210,8 @@ float   LwpBorderStuff::GetSideWidth(sal_uInt16 side)
     case BOTTOM:
         return LwpTools::ConvertToMetric(LwpTools::ConvertFromUnits(m_nWidthBottom));
     }
-    // FIXME: this is needed to avoid warning: control reaches end of non-void function
-    //        a better solution would be to enum value for the parameter side
+    
+    
     return 0;
 }
 

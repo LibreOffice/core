@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <doc.hxx>
@@ -34,11 +34,11 @@
 #include <switerator.hxx>
 
 namespace {
-    /// Get a sorted list of the used footnote reference numbers.
-    /// @param[in]  rDoc     The active document.
-    /// @param[in]  pExclude A footnote whose reference number should be excluded from the set.
-    /// @param[out] rInvalid  A returned list of all items that had an invalid reference number.
-    /// @returns The set of used reference numbers.
+    
+    
+    
+    
+    
     static std::set<sal_uInt16> lcl_GetUsedFtnRefNumbers(SwDoc &rDoc,
                                                          SwTxtFtn *pExclude,
                                                          std::vector<SwTxtFtn*> &rInvalid)
@@ -66,31 +66,31 @@ namespace {
         return aArr;
     }
 
-    /// Check whether a requested reference number is available.
-    /// @param[in] rUsedNums Set of used reference numbers.
-    /// @param[in] requested The requested reference number.
-    /// @returns true if the number is available, false if not.
+    
+    
+    
+    
     static bool lcl_IsRefNumAvailable(std::set<sal_uInt16> &rUsedNums,
                                          sal_uInt16 requested)
     {
         if ( USHRT_MAX == requested )
-            return false;  // Invalid sequence number.
+            return false;  
         if ( rUsedNums.count(requested) )
-            return false;  // Number already used.
+            return false;  
         return true;
     }
 
-    /// Get the first few unused sequential reference numbers.
-    /// @param[in] rUsedNums   The set of used sequential reference numbers.
-    /// @param[in] numRequired The number of reference number required.
-    /// @returns The lowest unused sequential reference numbers.
+    
+    
+    
+    
     static std::vector<sal_uInt16> lcl_GetUnusedSeqRefNums(std::set<sal_uInt16> &rUsedNums,
                                                            size_t numRequired)
     {
         std::vector<sal_uInt16> unusedNums;
         sal_uInt16 newNum = 0;
         std::set<sal_uInt16>::iterator it;
-        //Start by using numbers from gaps in rUsedNums
+        
         for( it = rUsedNums.begin(); it != rUsedNums.end(); ++it )
         {
             while ( newNum < *it )
@@ -101,7 +101,7 @@ namespace {
             }
             newNum++;
         }
-        //Filled in all gaps. Fill the rest of the list with new numbers.
+        
         while ( unusedNums.size() < numRequired )
         {
             unusedNums.push_back( newNum++ );
@@ -185,14 +185,14 @@ void SwFmtFtn::GetFtnText( OUString& rStr ) const
     }
 }
 
-    // returnt den anzuzeigenden String der Fuss-/Endnote
+    
 OUString SwFmtFtn::GetViewNumStr( const SwDoc& rDoc, sal_Bool bInclStrings ) const
 {
     OUString sRet( GetNumStr() );
     if( sRet.isEmpty() )
     {
-        // dann ist die Nummer von Interesse, also ueber die Info diese
-        // besorgen.
+        
+        
         bool bMakeNum = true;
         const SwSectionNode* pSectNd = m_pTxtAttr
                     ? SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *m_pTxtAttr )
@@ -271,9 +271,9 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, sal_Bool bDelNode )
     }
     else if ( m_pStartNode )
     {
-        // Zwei Dinge muessen erledigt werden:
-        // 1) Die Fussnoten muessen bei ihren Seiten abgemeldet werden
-        // 2) Die Fussnoten-Sektion in den Inserts muss geloescht werden.
+        
+        
+        
         SwDoc* pDoc;
         if ( m_pTxtNode )
         {
@@ -281,39 +281,39 @@ void SwTxtFtn::SetStartNode( const SwNodeIndex *pNewNode, sal_Bool bDelNode )
         }
         else
         {
-            //JP 27.01.97: der sw3-Reader setzt einen StartNode aber das
-            //              Attribut ist noch nicht im TextNode verankert.
-            //              Wird es geloescht (z.B. bei Datei einfuegen mit
-            //              Ftn in einen Rahmen), muss auch der Inhalt
-            //              geloescht werden
+            
+            
+            
+            
+            
             pDoc = m_pStartNode->GetNodes().GetDoc();
         }
 
-        // Wir duerfen die Fussnotennodes nicht loeschen
-        // und brauchen die Fussnotenframes nicht loeschen, wenn
-        // wir im ~SwDoc() stehen.
+        
+        
+        
         if( !pDoc->IsInDtor() )
         {
             if( bDelNode )
             {
-                // 1) Die Section fuer die Fussnote wird beseitigt
-                // Es kann sein, dass die Inserts schon geloescht wurden.
+                
+                
                 pDoc->DeleteSection( &m_pStartNode->GetNode() );
             }
             else
-                // Werden die Nodes nicht geloescht mussen sie bei den Seiten
-                // abmeldet (Frms loeschen) werden, denn sonst bleiben sie
-                // stehen (Undo loescht sie nicht!)
+                
+                
+                
                 DelFrms( 0 );
         }
         DELETEZ( m_pStartNode );
 
-        // loesche die Fussnote noch aus dem Array am Dokument
+        
         for( sal_uInt16 n = 0; n < pDoc->GetFtnIdxs().size(); ++n )
             if( this == pDoc->GetFtnIdxs()[n] )
             {
                 pDoc->GetFtnIdxs().erase( pDoc->GetFtnIdxs().begin() + n );
-                // gibt noch weitere Fussnoten
+                
                 if( !pDoc->IsInDtor() && n < pDoc->GetFtnIdxs().size() )
                 {
                     SwNodeIndex aTmp( pDoc->GetFtnIdxs()[n]->GetTxtNode() );
@@ -340,57 +340,57 @@ void SwTxtFtn::SetNumber( const sal_uInt16 nNewNum, const OUString &sNumStr )
     m_pTxtNode->ModifyNotification( 0, &rFtn );
     if ( m_pStartNode )
     {
-        // must iterate over all TxtNodes because of footnotes on other pages
+        
         SwNode* pNd;
         sal_uLong nSttIdx = m_pStartNode->GetIndex() + 1;
         sal_uLong nEndIdx = m_pStartNode->GetNode().EndOfSectionIndex();
         for( ; nSttIdx < nEndIdx; ++nSttIdx )
         {
-            // Es koennen ja auch Grafiken in der Fussnote stehen ...
+            
             if( ( pNd = rNodes[ nSttIdx ] )->IsTxtNode() )
                 ((SwTxtNode*)pNd)->ModifyNotification( 0, &rFtn );
         }
     }
 }
 
-// Die Fussnoten duplizieren
+
 void SwTxtFtn::CopyFtn(
     SwTxtFtn & rDest,
     SwTxtNode & rDestNode ) const
 {
     if (m_pStartNode && !rDest.GetStartNode())
     {
-        // dest missing node section? create it here!
-        // (happens in SwTxtNode::CopyText if pDest == this)
+        
+        
         rDest.MakeNewTextSection( rDestNode.GetNodes() );
     }
     if (m_pStartNode && rDest.GetStartNode())
     {
-        // footnotes not necessarily in same document!
+        
         SwDoc *const pDstDoc = rDestNode.GetDoc();
         SwNodes &rDstNodes = pDstDoc->GetNodes();
 
-        // copy only the content of the section
+        
         SwNodeRange aRg( *m_pStartNode, 1,
                     *m_pStartNode->GetNode().EndOfSectionNode() );
 
-        // insert at the end of rDest, i.e., the nodes are appended.
-        // nDestLen contains number of CntntNodes in rDest _before_ copy.
+        
+        
         SwNodeIndex aStart( *(rDest.GetStartNode()) );
         SwNodeIndex aEnd( *aStart.GetNode().EndOfSectionNode() );
         sal_uLong  nDestLen = aEnd.GetIndex() - aStart.GetIndex() - 1;
 
         m_pTxtNode->GetDoc()->CopyWithFlyInFly( aRg, 0, aEnd, NULL, sal_True );
 
-        // in case the destination section was not empty, delete the old nodes
-        // before:   Src: SxxxE,  Dst: SnE
-        // now:      Src: SxxxE,  Dst: SnxxxE
-        // after:    Src: SxxxE,  Dst: SxxxE
+        
+        
+        
+        
         ++aStart;
         rDstNodes.Delete( aStart, nDestLen );
     }
 
-    // also copy user defined number string
+    
     if( !GetFtn().m_aNumber.isEmpty() )
     {
         const_cast<SwFmtFtn &>(rDest.GetFtn()).m_aNumber = GetFtn().m_aNumber;
@@ -398,13 +398,13 @@ void SwTxtFtn::CopyFtn(
 }
 
 
-    // lege eine neue leere TextSection fuer diese Fussnote an
+    
 void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 {
     if ( m_pStartNode )
         return;
 
-    // Nun verpassen wir dem TxtNode noch die Fussnotenvorlage.
+    
     SwTxtFmtColl *pFmtColl;
     const SwEndNoteInfo* pInfo;
     sal_uInt16 nPoolId;
@@ -431,7 +431,7 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 
 void SwTxtFtn::DelFrms( const SwFrm* pSib )
 {
-    // delete the FtnFrames from the pages
+    
     OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     if ( !m_pTxtNode )
         return;
@@ -452,8 +452,8 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
             }
         }
     }
-    //JP 13.05.97: falls das Layout vorm loeschen der Fussnoten entfernt
-    //              wird, sollte man das ueber die Fussnote selbst tun
+    
+    
     if ( !bFrmFnd && m_pStartNode )
     {
         SwNodeIndex aIdx( *m_pStartNode );
@@ -484,8 +484,8 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
                     pFtn = pFoll;
                 }
 
-                // #i20556# During hiding of a section, the connection
-                // to the layout is already lost. pPage may be 0:
+                
+                
                 if ( pPage )
                     pPage->UpdateFtnNum();
             }
@@ -493,8 +493,8 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
     }
 }
 
-/// Set the sequence number for the current footnote.
-/// @returns The new sequence number or USHRT_MAX if invalid.
+
+
 sal_uInt16 SwTxtFtn::SetSeqRefNo()
 {
     if( !m_pTxtNode )
@@ -512,8 +512,8 @@ sal_uInt16 SwTxtFtn::SetSeqRefNo()
     return m_nSeqNo = unused[0];
 }
 
-/// Set a unique sequential reference number for every footnote in the document.
-/// @param[in] rDoc The document to be processed.
+
+
 void SwTxtFtn::SetUniqueSeqRefNo( SwDoc& rDoc )
 {
     std::vector<SwTxtFtn*> badRefNums;
@@ -528,10 +528,10 @@ void SwTxtFtn::SetUniqueSeqRefNo( SwDoc& rDoc )
 
 void SwTxtFtn::CheckCondColl()
 {
-//FEATURE::CONDCOLL
+
     if( GetStartNode() )
         ((SwStartNode&)GetStartNode()->GetNode()).CheckSectionCondColl();
-//FEATURE::CONDCOLL
+
 }
 
 

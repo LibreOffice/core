@@ -83,7 +83,7 @@ OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, 
         if (useOffset)
             offset[i] = startPos + i;
     }
-    return OUString(newStr, SAL_NO_ACQUIRE); // take ownership
+    return OUString(newStr, SAL_NO_ACQUIRE); 
 }
 
 sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin, sal_Int32 len,
@@ -133,7 +133,7 @@ sal_Bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 be
         return str[begin] != NUMBER_ZERO;
     } else {
         sal_Bool printPower = sal_False;
-        // sal_Int16 last = 0;
+        
         for (sal_Int16 i = 1; i <= number->exponentCount; i++) {
             sal_Int32 tmp = len - (i == number->exponentCount ? 0 : number->multiplierExponent[i]);
             if (tmp > 0) {
@@ -173,7 +173,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
     {
         const sal_Unicode *str = inStr.getStr() + startPos;
         sal_Unicode *newStr = new sal_Unicode[nCount * 2 + 1];
-        sal_Unicode *srcStr = new sal_Unicode[nCount + 1]; // for keeping number without comma
+        sal_Unicode *srcStr = new sal_Unicode[nCount + 1]; 
         sal_Int32 i, len = 0, count = 0;
 
         if (useOffset)
@@ -194,7 +194,7 @@ OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_
             } else {
                 if (len > 0) {
                     if (i < nCount-1 && isSeparator(str[i]) && isNumber(str[i+1]))
-                        continue; // skip comma inside number string
+                        continue; 
                     sal_Bool notZero = sal_False;
                     for (sal_Int32 begin = 0, end = len % number->multiplierExponent[0];
                             end <= len; begin = end, end += number->multiplierExponent[0]) {
@@ -259,7 +259,7 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
             num = curr % 10;
         } else if ((curr = sal::static_int_cast<sal_Int16>( multiplierChar.indexOf(str[i]) )) >= 0) {
             curr = MultiplierExponent_7_CJK[curr % ExponentCount_7_CJK];
-            if (prev > curr && num == 0) num = 1; // One may be omitted in informal format
+            if (prev > curr && num == 0) num = 1; 
             shift = end = 0;
             if (curr >= max)
                 max = curr;
@@ -323,7 +323,7 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
 
         for ( i = 0; i < nCount; i++) {
             if ((index = multiplierChar.indexOf(str[i])) >= 0) {
-                if (count == 0 || !isNumber(newStr[count-1])) { // add 1 in front of multiplier
+                if (count == 0 || !isNumber(newStr[count-1])) { 
                     newStr[count] = NUMBER_ONE;
                     if (useOffset)
                         offset[count] = i;
@@ -344,14 +344,14 @@ static OUString SAL_CALL NativeToAscii(const OUString& inStr,
                 else if ((index = decimalChar.indexOf(str[i])) >= 0 &&
                         (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                           multiplierChar.indexOf(str[i+1]) >= 0)))
-                    // Only when decimal point is followed by numbers,
-                    // it will be convert to ASCII decimal point
+                    
+                    
                     newStr[count] = DecimalChar[NumberChar_HalfWidth];
                 else if ((index = minusChar.indexOf(str[i])) >= 0 &&
                         (i < nCount-1 && (numberChar.indexOf(str[i+1]) >= 0 ||
                                           multiplierChar.indexOf(str[i+1]) >= 0)))
-                    // Only when minus is followed by numbers,
-                    // it will be convert to ASCII minus sign
+                    
+                    
                     newStr[count] = MinusChar[NumberChar_HalfWidth];
                 else
                     newStr[count] = str[i];
@@ -509,7 +509,7 @@ static const sal_Int16 sizeof_natnum2 = SAL_N_ELEMENTS(natnum2);
 
 static sal_Int16 SAL_CALL getLanguageNumber( const Locale& rLocale)
 {
-    // return zh_TW for TW, HK and MO, return zh_CN for other zh locales.
+    
     if (isLang("zh")) return MsLangId::isTraditionalChinese(rLocale) ? 1 : 0;
 
     for (sal_Int16 i = 2; i < nbOfLocale; i++)
@@ -528,39 +528,39 @@ OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aN
     if (isValidNatNum(rLocale, nNativeNumberMode)) {
         sal_Int16 langnum = getLanguageNumber(rLocale);
         switch (nNativeNumberMode) {
-            case NativeNumberMode::NATNUM0: // Ascii
+            case NativeNumberMode::NATNUM0: 
                 return NativeToAscii(aNumberString,  0, aNumberString.getLength(), offset, useOffset);
-            case NativeNumberMode::NATNUM1: // Char, Lower
+            case NativeNumberMode::NATNUM1: 
                 num = natnum1[langnum];
                 break;
-            case NativeNumberMode::NATNUM2: // Char, Upper
+            case NativeNumberMode::NATNUM2: 
                 num = natnum2[langnum];
                 break;
-            case NativeNumberMode::NATNUM3: // Char, FullWidth
+            case NativeNumberMode::NATNUM3: 
                 num = NumberChar_FullWidth;
                 break;
-            case NativeNumberMode::NATNUM4: // Text, Lower, Long
+            case NativeNumberMode::NATNUM4: 
                 number = &natnum4[langnum];
                 break;
-            case NativeNumberMode::NATNUM5: // Text, Upper, Long
+            case NativeNumberMode::NATNUM5: 
                 number = &natnum5[langnum];
                 break;
-            case NativeNumberMode::NATNUM6: // Text, FullWidth
+            case NativeNumberMode::NATNUM6: 
                 number = &natnum6[langnum];
                 break;
-            case NativeNumberMode::NATNUM7: // Text. Lower, Short
+            case NativeNumberMode::NATNUM7: 
                 number = &natnum7[langnum];
                 break;
-            case NativeNumberMode::NATNUM8: // Text, Upper, Short
+            case NativeNumberMode::NATNUM8: 
                 number = &natnum8[langnum];
                 break;
-            case NativeNumberMode::NATNUM9: // Char, Hangul
+            case NativeNumberMode::NATNUM9: 
                 num = NumberChar_Hangul_ko;
                 break;
-            case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
+            case NativeNumberMode::NATNUM10:        
                 number = &natnum10;
                 break;
-            case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
+            case NativeNumberMode::NATNUM11:        
                 number = &natnum11;
                 break;
             default:
@@ -606,7 +606,7 @@ OUString SAL_CALL NativeNumberSupplier::getNativeNumberString(const OUString& aN
 
 sal_Unicode SAL_CALL NativeNumberSupplier::getNativeNumberChar( const sal_Unicode inChar, const Locale& rLocale, sal_Int16 nNativeNumberMode ) throw(com::sun::star::uno::RuntimeException)
 {
-    if (nNativeNumberMode == NativeNumberMode::NATNUM0) { // Ascii
+    if (nNativeNumberMode == NativeNumberMode::NATNUM0) { 
         for (sal_Int16 i = 0; i < NumberChar_Count; i++)
             for (sal_Int16 j = 0; j < 10; j++)
                 if (inChar == NumberChar[i][j])
@@ -616,20 +616,20 @@ sal_Unicode SAL_CALL NativeNumberSupplier::getNativeNumberChar( const sal_Unicod
     else if (isNumber(inChar) && isValidNatNum(rLocale, nNativeNumberMode)) {
         sal_Int16 langnum = getLanguageNumber(rLocale);
         switch (nNativeNumberMode) {
-            case NativeNumberMode::NATNUM1: // Char, Lower
-            case NativeNumberMode::NATNUM4: // Text, Lower, Long
-            case NativeNumberMode::NATNUM7: // Text. Lower, Short
+            case NativeNumberMode::NATNUM1: 
+            case NativeNumberMode::NATNUM4: 
+            case NativeNumberMode::NATNUM7: 
                 return NumberChar[natnum1[langnum]][inChar - NUMBER_ZERO];
-            case NativeNumberMode::NATNUM2: // Char, Upper
-            case NativeNumberMode::NATNUM5: // Text, Upper, Long
-            case NativeNumberMode::NATNUM8: // Text, Upper, Short
+            case NativeNumberMode::NATNUM2: 
+            case NativeNumberMode::NATNUM5: 
+            case NativeNumberMode::NATNUM8: 
                 return NumberChar[natnum2[langnum]][inChar - NUMBER_ZERO];
-            case NativeNumberMode::NATNUM3: // Char, FullWidth
-            case NativeNumberMode::NATNUM6: // Text, FullWidth
+            case NativeNumberMode::NATNUM3: 
+            case NativeNumberMode::NATNUM6: 
                 return NumberChar[NumberChar_FullWidth][inChar - NUMBER_ZERO];
-            case NativeNumberMode::NATNUM9: // Char, Hangul
-            case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
-            case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
+            case NativeNumberMode::NATNUM9: 
+            case NativeNumberMode::NATNUM10:        
+            case NativeNumberMode::NATNUM11:        
                 return NumberChar[NumberChar_Hangul_ko][inChar - NUMBER_ZERO];
             default:
                 break;
@@ -643,24 +643,24 @@ sal_Bool SAL_CALL NativeNumberSupplier::isValidNatNum( const Locale& rLocale, sa
     sal_Int16 langnum = getLanguageNumber(rLocale);
 
     switch (nNativeNumberMode) {
-        case NativeNumberMode::NATNUM0:     // Ascii
-        case NativeNumberMode::NATNUM3:     // Char, FullWidth
+        case NativeNumberMode::NATNUM0:     
+        case NativeNumberMode::NATNUM3:     
             return sal_True;
-        case NativeNumberMode::NATNUM1:     // Char, Lower
+        case NativeNumberMode::NATNUM1:     
             return (langnum >= 0);
-        case NativeNumberMode::NATNUM2:     // Char, Upper
-            if (langnum == 4) // Hebrew numbering
+        case NativeNumberMode::NATNUM2:     
+            if (langnum == 4) 
                 return sal_True;
-        case NativeNumberMode::NATNUM4:     // Text, Lower, Long
-        case NativeNumberMode::NATNUM5:     // Text, Upper, Long
-        case NativeNumberMode::NATNUM6:     // Text, FullWidth
-        case NativeNumberMode::NATNUM7:     // Text. Lower, Short
-        case NativeNumberMode::NATNUM8:     // Text, Upper, Short
-            return (langnum >= 0 && langnum < 4); // CJK numbering
-        case NativeNumberMode::NATNUM9:     // Char, Hangul
-        case NativeNumberMode::NATNUM10:    // Text, Hangul, Long
-        case NativeNumberMode::NATNUM11:    // Text, Hangul, Short
-            return (langnum == 3); // Korean numbering
+        case NativeNumberMode::NATNUM4:     
+        case NativeNumberMode::NATNUM5:     
+        case NativeNumberMode::NATNUM6:     
+        case NativeNumberMode::NATNUM7:     
+        case NativeNumberMode::NATNUM8:     
+            return (langnum >= 0 && langnum < 4); 
+        case NativeNumberMode::NATNUM9:     
+        case NativeNumberMode::NATNUM10:    
+        case NativeNumberMode::NATNUM11:    
+            return (langnum == 3); 
     }
     return sal_False;
 }
@@ -677,51 +677,51 @@ NativeNumberXmlAttributes SAL_CALL NativeNumberSupplier::convertToXmlAttributes(
     if (isValidNatNum(rLocale, nNativeNumberMode)) {
         sal_Int16 langnum = getLanguageNumber(rLocale);
         switch (nNativeNumberMode) {
-            case NativeNumberMode::NATNUM0: // Ascii
+            case NativeNumberMode::NATNUM0: 
                 number = NumberChar_HalfWidth;
                 type = attShort;
                 break;
-            case NativeNumberMode::NATNUM1: // Char, Lower
+            case NativeNumberMode::NATNUM1: 
                 number = natnum1[langnum];
                 type = attShort;
                 break;
-            case NativeNumberMode::NATNUM2: // Char, Upper
+            case NativeNumberMode::NATNUM2: 
                 number = natnum2[langnum];
                 type = number == NumberChar_he ? attMedium : attShort;
                 break;
-            case NativeNumberMode::NATNUM3: // Char, FullWidth
+            case NativeNumberMode::NATNUM3: 
                 number = NumberChar_FullWidth;
                 type = attShort;
                 break;
-            case NativeNumberMode::NATNUM4: // Text, Lower, Long
+            case NativeNumberMode::NATNUM4: 
                 number = natnum1[langnum];
                 type = attLong;
                 break;
-            case NativeNumberMode::NATNUM5: // Text, Upper, Long
+            case NativeNumberMode::NATNUM5: 
                 number = natnum2[langnum];
                 type = attLong;
                 break;
-            case NativeNumberMode::NATNUM6: // Text, FullWidth
+            case NativeNumberMode::NATNUM6: 
                 number = NumberChar_FullWidth;
                 type = attLong;
                 break;
-            case NativeNumberMode::NATNUM7: // Text. Lower, Short
+            case NativeNumberMode::NATNUM7: 
                 number = natnum1[langnum];
                 type = attMedium;
                 break;
-            case NativeNumberMode::NATNUM8: // Text, Upper, Short
+            case NativeNumberMode::NATNUM8: 
                 number = natnum2[langnum];
                 type = attMedium;
                 break;
-            case NativeNumberMode::NATNUM9: // Char, Hangul
+            case NativeNumberMode::NATNUM9: 
                 number = NumberChar_Hangul_ko;
                 type = attShort;
                 break;
-            case NativeNumberMode::NATNUM10:        // Text, Hangul, Long
+            case NativeNumberMode::NATNUM10:        
                 number = NumberChar_Hangul_ko;
                 type = attLong;
                 break;
-            case NativeNumberMode::NATNUM11:        // Text, Hangul, Short
+            case NativeNumberMode::NATNUM11:        
                 number = NumberChar_Hangul_ko;
                 type = attMedium;
                 break;
@@ -784,9 +784,9 @@ sal_Int16 SAL_CALL NativeNumberSupplier::convertFromXmlAttributes( const NativeN
 }
 
 
-// Following code generates Hebrew Number,
-// see numerical system in the Hebrew Numbering System in following link for details,
-// http://smontagu.org/writings/HebrewNumbers.html
+
+
+
 
 struct HebrewNumberChar {
     sal_Unicode code;
@@ -840,16 +840,16 @@ void makeHebrewNumber(sal_Int64 value, OUStringBuffer& output, sal_Bool isLast, 
         for (sal_Int32 j = 0; num > 0 && j < nbOfHebrewNumberChar; j++) {
             if (num - HebrewNumberCharArray[j].value >= 0) {
                 nbOfChar++;
-                if (num == 15 || num == 16) // substitution for 15 and 16
+                if (num == 15 || num == 16) 
                     j++;
                 num = sal::static_int_cast<sal_Int16>( num - HebrewNumberCharArray[j].value );
                 output.append(HebrewNumberCharArray[j].code);
             }
         }
         if (useGeresh) {
-            if (nbOfChar > 1)   // a number is written as more than one character
+            if (nbOfChar > 1)   
                 output.insert(output.getLength() - 1, gershayim);
-            else if (nbOfChar == 1) // a number is written as a single character
+            else if (nbOfChar == 1) 
                 output.append(geresh);
         }
     }
@@ -864,7 +864,7 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, sal
     for (i = 0; i < len; i++) {
         sal_Unicode ch = src[i];
         if (isNumber(ch)) {
-            if (++count >= 20) // Number is too long, could not be handled.
+            if (++count >= 20) 
                 return aNumberString;
             value = value * 10 + (ch - NUMBER_ZERO);
         }

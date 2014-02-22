@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,10 +14,10 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// FIXME? This file is nearly identical to xmloff/source/chart/ColorPropertySet.cxx
+
 
 #include "ColorPropertySet.hxx"
 
@@ -31,7 +31,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::RuntimeException;
 
-// ================================================================================
+
 
 namespace
 {
@@ -42,7 +42,7 @@ public:
     lcl_ColorPropertySetInfo( bool bFillColor );
 
 protected:
-    // ____ XPropertySetInfo ____
+    
     virtual Sequence< Property > SAL_CALL getProperties()                throw (RuntimeException);
     virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException);
     virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name )  throw (RuntimeException);
@@ -53,7 +53,7 @@ private:
 };
 
 lcl_ColorPropertySetInfo::lcl_ColorPropertySetInfo( bool bFillColor ) :
-        // note: length of FillColor and LineColor is 9
+        
         m_aColorPropName( (bFillColor ? "FillColor" : "LineColor"), 9, RTL_TEXTENCODING_ASCII_US ),
         m_aColorProp( m_aColorPropName, -1,
                       ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)), 0)
@@ -80,9 +80,9 @@ sal_Bool SAL_CALL lcl_ColorPropertySetInfo::hasPropertyByName( const OUString& N
     return Name.equals( m_aColorPropName );
 }
 
-} // anonymous namespace
+} 
 
-// ================================================================================
+
 
 namespace oox
 {
@@ -90,17 +90,17 @@ namespace drawingml
 {
 
 ColorPropertySet::ColorPropertySet( sal_Int32 nColor, bool bFillColor /* = true */ ) :
-        // note: length of FillColor and LineColor is 9
+        
         m_aColorPropName( (bFillColor ? "FillColor" : "LineColor"), 9, RTL_TEXTENCODING_ASCII_US ),
         m_nColor( nColor ),
         m_bIsFillColor( bFillColor ),
-        m_nDefaultColor( 0x0099ccff )  // blue 8
+        m_nDefaultColor( 0x0099ccff )  
 {}
 
 ColorPropertySet::~ColorPropertySet()
 {}
 
-// ____ XPropertySet ____
+
 
 Reference< XPropertySetInfo > SAL_CALL ColorPropertySet::getPropertySetInfo()
     throw (uno::RuntimeException)
@@ -170,7 +170,7 @@ void SAL_CALL ColorPropertySet::removeVetoableChangeListener( const OUString& /*
     return;
 }
 
-// ____ XPropertyState ____
+
 
 PropertyState SAL_CALL ColorPropertySet::getPropertyState( const OUString& /* PropertyName */ )
     throw (UnknownPropertyException,
@@ -205,7 +205,7 @@ uno::Any SAL_CALL ColorPropertySet::getPropertyDefault( const OUString& aPropert
     return uno::Any();
 }
 
-} //  namespace chart
-} //  namespace xmloff
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

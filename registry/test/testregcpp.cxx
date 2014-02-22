@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -365,7 +365,7 @@ void test_coreReflection()
         REG_ENSURE(!key8.setValue(OUString(), RG_VALUETYPE_BINARY, (void*)pBlop, aBlopSize), "testCoreReflection error 9f");
     }
 
-//  REG_ENSURE(!myRegistry->destroy(NULL), "testCoreReflection error 10");
+
     delete myRegistry;
 
     cout << "test_coreReflection() Ok!\n";
@@ -396,7 +396,7 @@ void test_registry_CppApi()
     REG_ENSURE(!rootKey.createKey(OUString("myFifthKey"), key6), "test_registry_CppApi error 7a");
     REG_ENSURE(!rootKey.createKey(OUString("mySixthKey"), key6), "test_registry_CppApi error 7b");
 
-    // Link Test
+    
     //
 
     REG_ENSURE(!rootKey.createKey(OUString("/myFourthKey/X"), key7), "test_registry_CppApi error 7c)");;
@@ -427,22 +427,22 @@ void test_registry_CppApi()
     delete pSubKeyNames;
 
     REG_ENSURE(!rootKey.openKey("/mySixthKey/myFirstLink", key6), "test_registry_CppApi error 7l");
-//    REG_ENSURE(key6.getName() == "/myFourthKey/X", "test_registry_CppApi error 7m");
+
 
     REG_ENSURE(!rootKey.openKey("myFifthKey", key6), "test_registry_CppApi error 7m1");
     REG_ENSURE(!key6.createLink(OUString("mySecondLink"),
                                  OUString("/mySixthKey/myFirstLink")), "test_registry_CppApi error 7m2");
 
     REG_ENSURE(!rootKey.openKey("/myFifthKey/mySecondLink", key6), "test_registry_CppApi error 7m3");
-//    REG_ENSURE(key6.getName() == "/myFourthKey/X", "test_registry_CppApi error 7m4");
+
 
     REG_ENSURE(!rootKey.createKey(OUString("/myFifthKey/mySecondLink/myFirstLinkSubKey"), key7), "test_registry_CppApi error 7m5");
     REG_ENSURE(key7.getName() == "/myFourthKey/X/myFirstLinkSubKey", "test_registry_CppApi error 7m6");
 
     REG_ENSURE(!key7.createLink(OUString("myThirdLink"), OUString("/myFifthKey/mySecondLink")), "test_registry_CppApi error 7m7");
     REG_ENSURE(!rootKey.openKey("/myFourthKey/X/myFirstLinkSubKey/myThirdLink", key7), "test_registry_CppApi error 7m8");
-//    REG_ENSURE(!key7.openKey("/myFirstLinkSubKey/myThirdLink/myFirstLinkSubKey/myThirdLink", key6), "test_registry_CppApi error 7m9");
-//    REG_ENSURE(key7.getName() == "/myFourthKey/X", "test_registry_CppApi error 7m10");
+
+
     REG_ENSURE(!key7.closeKey(), "test_registry_CppApi error 7m11");
 
     REG_ENSURE(!rootKey.deleteLink(OUString("/myFifthKey/mySecondLink")), "test_registry_CppApi error 7m12");
@@ -451,10 +451,10 @@ void test_registry_CppApi()
                                     OUString("/myFourthKey/X/myFirstLinkSubKey/myThirdLink")),
                                     "test_registry_CppApi error 7m13");
 
-//    REG_ENSURE(rootKey.openKey("/myFourthKey/X/myFirstLinkSubKey/myThirdLink", key7) == REG_DETECT_RECURSION,
-//                "test_registry_CppApi error 7m14");
 
-//    REG_ENSURE(key7.closeKey() == REG_INVALID_KEY, "test_registry_CppApi error 7m11");
+
+
+
 
     RegistryKeyNames subKeyNames;
     nSubKeys=0;
@@ -595,7 +595,7 @@ void test_registry_CppApi()
 
     REG_ENSURE(!myRegistry->close(), "test_registry_CppApi error 22");
 
-    // Test loadkey
+    
     RegistryKey rootKey2, key21, key22, key23, key24 , key25;
 
     REG_ENSURE(!myRegistry->create(OUString("test2.rdb")), "test_registry_CppApi error 23");
@@ -636,8 +636,8 @@ void test_registry_CppApi()
     REG_ENSURE(!myRegistry->mergeKey(rootKey, OUString("allFromTest3"),
                     OUString("ucrtest.rdb"), sal_True), "test_registry_CppApi error 40.a)");
 
-//     REG_ENSURE(myRegistry->mergeKey(rootKey, OUString("allFromTest3"), OUString("ucrtest.rdb"), sal_True)
-//                  == REG_NO_ERROR/*REG_MERGE_CONFLICT*/, "test_registry_CppApi error 40.b)");
+
+
 
     REG_ENSURE(!key1.closeKey() &&
                 !key2.closeKey(), "test_registry_CppApi error 41");
@@ -662,7 +662,7 @@ void test_registry_CppApi()
     REG_ENSURE(!myRegistry->open(OUString("test.rdb"), REG_READWRITE), "test_registry_CppApi error 47");
 
     REG_ENSURE(!myRegistry->destroy(OUString("test2.rdb")), "test_registry_CppApi error 48");
-//  REG_ENSURE(!myRegistry->destroy("test3.rdb"), "test_registry_CppApi error 49");
+
 
     Registry *myRegistry2 = new Registry(*myRegistry);
 

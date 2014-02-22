@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLIndexMarkExport.hxx"
@@ -75,26 +75,26 @@ void XMLIndexMarkExport::ExportIndexMark(
     const Reference<XPropertySet> & rPropSet,
     sal_Bool bAutoStyles)
 {
-    /// index marks have no styles!
+    
     if (!bAutoStyles)
     {
         const enum XMLTokenEnum * pElements = NULL;
         sal_Int8 nElementNo = -1;
 
-        // get index mark
+        
         Any aAny;
         aAny = rPropSet->getPropertyValue(sDocumentIndexMark);
         Reference<XPropertySet> xIndexMarkPropSet;
         aAny >>= xIndexMarkPropSet;
 
-        // common: handling of start, end, collapsed entries and
-        // alternative text
+        
+        
 
-        // collapsed/alternative text entry?
+        
         aAny = rPropSet->getPropertyValue(sIsCollapsed);
         if (*(sal_Bool *)aAny.getValue())
         {
-            // collapsed entry: needs alternative text
+            
             nElementNo = 0;
 
             aAny = xIndexMarkPropSet->getPropertyValue(sAlternativeText);
@@ -106,26 +106,26 @@ void XMLIndexMarkExport::ExportIndexMark(
         }
         else
         {
-            // start and end entries: has ID
+            
             aAny = rPropSet->getPropertyValue(sIsStart);
             nElementNo = *(sal_Bool *)aAny.getValue() ? 1 : 2;
 
-            // generate ID
+            
             OUStringBuffer sBuf;
             GetID(sBuf, xIndexMarkPropSet);
             rExport.AddAttribute(XML_NAMESPACE_TEXT, XML_ID,
                                  sBuf.makeStringAndClear());
         }
 
-        // distinguish between TOC, user, alphab. index marks by
-        // asking for specific properties
-        // Export attributes for -mark-start and -mark elements,
-        // but not for -mark-end
+        
+        
+        
+        
         Reference<XPropertySetInfo> xPropertySetInfo =
             xIndexMarkPropSet->getPropertySetInfo();
         if (xPropertySetInfo->hasPropertyByName(sUserIndexName))
         {
-            // user index mark
+            
             pElements = lcl_pUserIndexMarkName;
             if (nElementNo != 2)
             {
@@ -134,7 +134,7 @@ void XMLIndexMarkExport::ExportIndexMark(
         }
         else if (xPropertySetInfo->hasPropertyByName(sPrimaryKey))
         {
-            // alphabetical index mark
+            
             pElements = lcl_pAlphaIndexMarkName;
             if (nElementNo != 2)
             {
@@ -143,7 +143,7 @@ void XMLIndexMarkExport::ExportIndexMark(
         }
         else
         {
-            // table of content:
+            
             pElements = lcl_pTocMarkNames;
             if (nElementNo != 2)
             {
@@ -151,7 +151,7 @@ void XMLIndexMarkExport::ExportIndexMark(
             }
         }
 
-        // export element
+        
         DBG_ASSERT(pElements != NULL, "illegal element array");
         DBG_ASSERT(nElementNo >= 0, "illegal name array index");
         DBG_ASSERT(nElementNo <= 2, "illegal name array index");
@@ -169,7 +169,7 @@ void XMLIndexMarkExport::ExportIndexMark(
 void XMLIndexMarkExport::ExportTOCMarkAttributes(
     const Reference<XPropertySet> & rPropSet)
 {
-    // outline level
+    
     sal_Int16 nLevel = 0;
     Any aAny = rPropSet->getPropertyValue(sLevel);
     aAny >>= nLevel;
@@ -218,19 +218,19 @@ static void lcl_ExportPropertyBool( SvXMLExport& rExport,
 void XMLIndexMarkExport::ExportUserIndexMarkAttributes(
     const Reference<XPropertySet> & rPropSet)
 {
-    // name of user index
-    // (unless it's the default index; then it has no name)
+    
+    
     Any aAny;
     lcl_ExportPropertyString( rExport, rPropSet, sUserIndexName, XML_INDEX_NAME, aAny );
 
-    // additionally export outline level; just reuse ExportTOCMarkAttributes
+    
     ExportTOCMarkAttributes( rPropSet );
 }
 
 void XMLIndexMarkExport::ExportAlphabeticalIndexMarkAttributes(
     const Reference<XPropertySet> & rPropSet)
 {
-    // primary and secondary keys (if available)
+    
     Any aAny;
     lcl_ExportPropertyString( rExport, rPropSet, sTextReading, XML_STRING_VALUE_PHONETIC, aAny );
     lcl_ExportPropertyString( rExport, rPropSet, sPrimaryKey, XML_KEY1, aAny );
@@ -246,7 +246,7 @@ void XMLIndexMarkExport::GetID(
 {
     static const sal_Char sPrefix[] = "IMark";
 
-    // HACK: use address of object to form identifier
+    
     sal_Int64 nId = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(rPropSet.get()));
     sBuf.appendAscii(sPrefix, sizeof(sPrefix)-1);
     sBuf.append(nId);

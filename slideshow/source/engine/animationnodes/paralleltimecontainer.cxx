@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,22 +28,22 @@ namespace internal {
 
 void ParallelTimeContainer::activate_st()
 {
-    // resolve all children:
+    
     std::size_t const nResolvedNodes =
         static_cast<std::size_t>(std::count_if(
                                      maChildren.begin(), maChildren.end(),
                                      boost::mem_fn(&AnimationNode::resolve) ));
-    (void) nResolvedNodes; // avoid warning
+    (void) nResolvedNodes; 
     OSL_ENSURE( nResolvedNodes == maChildren.size(),
                 "### resolving all children failed!" );
 
     if (isDurationIndefinite() && maChildren.empty()) {
-        // deactivate ASAP:
+        
         scheduleDeactivationEvent(
             makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
                        "ParallelTimeContainer::deactivate") );
     }
-    else { // use default
+    else { 
         scheduleDeactivationEvent();
     }
 }
@@ -54,7 +54,7 @@ void ParallelTimeContainer::notifyDeactivating(
     notifyDeactivatedChild( pChildNode );
 }
 
-} // namespace internal
-} // namespace slideshow
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

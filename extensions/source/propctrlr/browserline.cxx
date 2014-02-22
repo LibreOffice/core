@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "browserline.hxx"
@@ -32,10 +32,10 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XComponentContext;
@@ -51,11 +51,11 @@ namespace pcr
 
     namespace PropertyLineElement = ::com::sun::star::inspection::PropertyLineElement;
 
-    //==================================================================
-    //= OBrowserLine
-    //==================================================================
+    
+    
+    
     DBG_NAME(OBrowserLine)
-    //------------------------------------------------------------------
+    
 
     OBrowserLine::OBrowserLine( const OUString& _rEntryName, Window* pParent )
             :m_sEntryName( _rEntryName )
@@ -74,7 +74,7 @@ namespace pcr
         m_aFtTitle.Show();
     }
 
-    //------------------------------------------------------------------
+    
     OBrowserLine::~OBrowserLine()
     {
         implHideBrowseButton( true, false );
@@ -83,7 +83,7 @@ namespace pcr
         DBG_DTOR(OBrowserLine,NULL);
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::IndentTitle( bool _bIndent )
     {
         if ( m_bIndentTitle != _bIndent )
@@ -93,7 +93,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::SetComponentHelpIds( const OString& _rHelpId, const OString& _sPrimaryButtonId, const OString& _sSecondaryButtonId )
     {
         if ( m_pControlWindow )
@@ -112,7 +112,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::setControl( const Reference< XPropertyControl >& _rxControl )
     {
         m_xControl = _rxControl;
@@ -127,7 +127,7 @@ namespace pcr
         impl_layoutComponents();
     }
 
-    //------------------------------------------------------------------
+    
     Window* OBrowserLine::GetRefWindow()
     {
         Window* pRefWindow=&m_aFtTitle;
@@ -143,7 +143,7 @@ namespace pcr
         return pRefWindow;
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags )
     {
         m_aFtTitle.SetZOrder(pRefWindow,nFlags);
@@ -157,7 +157,7 @@ namespace pcr
             m_pAdditionalBrowseButton->SetZOrder( m_pBrowseButton, WINDOW_ZORDER_BEHIND );
     }
 
-    //------------------------------------------------------------------
+    
     sal_Bool OBrowserLine::GrabFocus()
     {
         sal_Bool bRes=sal_False;
@@ -180,7 +180,7 @@ namespace pcr
         return bRes;
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::SetPosSizePixel( Point _rPos, Size _rSize )
     {
         m_aLinePos = _rPos;
@@ -189,7 +189,7 @@ namespace pcr
         impl_layoutComponents();
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::Show(sal_Bool bFlag)
     {
         m_aFtTitle.Show(bFlag);
@@ -201,19 +201,19 @@ namespace pcr
             m_pAdditionalBrowseButton->Show( bFlag );
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::Hide()
     {
         Show(sal_False);
     }
 
-    //------------------------------------------------------------------
+    
     sal_Bool OBrowserLine::IsVisible()
     {
         return m_aFtTitle.IsVisible();
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::impl_layoutComponents()
     {
         {
@@ -256,12 +256,12 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::SetTitle(const OUString& _rNewTtile )
     {
         if ( GetTitle() == _rNewTtile )
             return;
-        // #99102# --------------
+        
         m_aFtTitle.SetText( _rNewTtile );
         if ( m_pControlWindow )
             m_pControlWindow->SetAccessibleName( _rNewTtile );
@@ -270,7 +270,7 @@ namespace pcr
         FullFillTitleString();
     }
 
-    // #99102# ---------------------------------------------------------
+    
     void OBrowserLine::FullFillTitleString()
     {
         if( m_pTheParent )
@@ -280,7 +280,7 @@ namespace pcr
             while( m_pTheParent->GetTextWidth( aText.toString() ) < m_nNameWidth )
                         aText.append("...........");
 
-            // for Issue 69452
+            
             if (Application::GetSettings().GetLayoutRTL())
             {
                 sal_Unicode cRTL_mark = 0x200F;
@@ -291,12 +291,12 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     OUString OBrowserLine::GetTitle() const
     {
         OUString sDisplayName = m_aFtTitle.GetText();
 
-        // for Issue 69452
+        
         if (Application::GetSettings().GetLayoutRTL())
         {
             sal_Unicode cRTL_mark = 0x200F;
@@ -308,7 +308,7 @@ namespace pcr
         return sDisplayName;
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::SetReadOnly( bool _bReadOnly )
     {
         if ( m_bReadOnly != _bReadOnly )
@@ -318,7 +318,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     namespace
     {
         void implSetBitIfAffected( sal_uInt16& _nEnabledBits, sal_Int16 _nAffectedMask, sal_Int16 _nTestBit, bool _bSet )
@@ -345,7 +345,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::implUpdateEnabledDisabled()
     {
         implEnable( &m_aFtTitle,                m_nEnableFlags, PropertyLineElement::CompleteLine );
@@ -364,14 +364,14 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::EnablePropertyLine( bool _bEnable )
     {
         implSetBitIfAffected( m_nEnableFlags, PropertyLineElement::CompleteLine, PropertyLineElement::CompleteLine, _bEnable );
         implUpdateEnabledDisabled();
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::EnablePropertyControls( sal_Int16 _nControls, bool _bEnable )
     {
         implSetBitIfAffected( m_nEnableFlags, _nControls, PropertyLineElement::InputControl, _bEnable );
@@ -380,7 +380,7 @@ namespace pcr
         implUpdateEnabledDisabled();
     }
 
-    //------------------------------------------------------------------
+    
     PushButton& OBrowserLine::impl_ensureButton( bool _bPrimary )
     {
         PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
@@ -400,7 +400,7 @@ namespace pcr
         return *rpButton;
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::impl_getImagesFromURL_nothrow( const OUString& _rImageURL, Image& _out_rImage )
     {
         try
@@ -421,7 +421,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::ShowBrowseButton( const OUString& _rImageURL, sal_Bool _bPrimary )
     {
         PushButton& rButton( impl_ensureButton( _bPrimary ) );
@@ -433,7 +433,7 @@ namespace pcr
         rButton.SetModeImage( aImage );
    }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::ShowBrowseButton( const Image& _rImage, sal_Bool _bPrimary )
     {
         PushButton& rButton( impl_ensureButton( _bPrimary ) );
@@ -441,13 +441,13 @@ namespace pcr
             rButton.SetModeImage( _rImage );
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::ShowBrowseButton( sal_Bool _bPrimary )
     {
         impl_ensureButton( _bPrimary );
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::implHideBrowseButton( sal_Bool _bPrimary, bool _bReLayout )
     {
         PushButton*& rpButton = _bPrimary ? m_pBrowseButton : m_pAdditionalBrowseButton;
@@ -463,13 +463,13 @@ namespace pcr
             impl_layoutComponents();
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::HideBrowseButton( sal_Bool _bPrimary )
     {
         implHideBrowseButton( _bPrimary, true );
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::SetTitleWidth(sal_uInt16 nWidth)
     {
         if (m_nNameWidth != nWidth+10)
@@ -477,17 +477,17 @@ namespace pcr
             m_nNameWidth = nWidth+10;
             impl_layoutComponents();
         }
-        // #99102# ---------
+        
         FullFillTitleString();
     }
 
-    //------------------------------------------------------------------
+    
     void OBrowserLine::SetClickListener( IButtonClickListener* _pListener )
     {
         m_pClickListener = _pListener;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK( OBrowserLine, OnButtonClicked, PushButton*, _pButton )
     {
         if ( m_pClickListener )
@@ -496,7 +496,7 @@ namespace pcr
         return 0L;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK( OBrowserLine, OnButtonFocus, PushButton*, /*pPB*/ )
     {
         if ( m_xControl.is() )
@@ -513,8 +513,8 @@ namespace pcr
         }
         return 0;
     }
-//............................................................................
-} // namespace pcr
-//............................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,12 +91,12 @@ namespace slideshow
                                         pAttr->getRotationAngle()*M_PI/180.0 :
                                         0.0 );
 
-                // scale, shear and rotation pivot point is the shape
-                // center - adapt origin accordingly
+                
+                
                 aTransform.translate( -0.5, -0.5 );
 
-                // ensure valid size (zero size will inevitably lead
-                // to a singular transformation matrix)
+                
+                
                 aTransform.scale( ::basegfx::pruneScaleValue(
                                       rSize.getX() ),
                                   ::basegfx::pruneScaleValue(
@@ -118,11 +118,11 @@ namespace slideshow
                         aTransform.rotate( nRotation );
                 }
 
-                // move left, top corner back to position of the
-                // shape. Since we've already translated the
-                // center of the shape to the origin (the
-                // translate( -0.5, -0.5 ) above), translate to
-                // center of final shape position here.
+                
+                
+                
+                
+                
                 aTransform.translate( rShapeBounds.getCenterX(),
                                       rShapeBounds.getCenterY() );
 
@@ -130,31 +130,31 @@ namespace slideshow
             }
         }
 
-        // Value extraction from Any
-        // =========================
+        
+        
 
-        /// extract unary double value from Any
+        
         bool extractValue( double&                      o_rValue,
                            const uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        rShape,
                            const ::basegfx::B2DVector&  rSlideBounds )
         {
-            // try to extract numeric value (double, or smaller POD, like float or int)
+            
             if( (rSourceAny >>= o_rValue) )
             {
-                // succeeded
+                
                 return true;
             }
 
-            // try to extract string
+            
             OUString aString;
             if( !(rSourceAny >>= aString) )
-                return false; // nothing left to try
+                return false; 
 
-            // parse the string into an ExpressionNode
+            
             try
             {
-                // Parse string into ExpressionNode, eval node at time 0.0
+                
                 o_rValue = (*SmilFunctionParser::parseSmilValue(
                                 aString,
                                 calcRelativeShapeBounds(rSlideBounds,
@@ -168,26 +168,26 @@ namespace slideshow
             return true;
         }
 
-        /// extract enum/constant group value from Any
+        
         bool extractValue( sal_Int32&                       o_rValue,
                            const uno::Any&                  rSourceAny,
                            const ShapeSharedPtr&            /*rShape*/,
                            const ::basegfx::B2DVector&      /*rSlideBounds*/ )
         {
-            // try to extract numeric value (int, or smaller POD, like byte)
+            
             if( (rSourceAny >>= o_rValue) )
             {
-                // succeeded
+                
                 return true;
             }
 
-            // okay, no plain int. Maybe one of the domain-specific enums?
+            
             drawing::FillStyle eFillStyle;
             if( (rSourceAny >>= eFillStyle) )
             {
                 o_rValue = sal::static_int_cast<sal_Int16>(eFillStyle);
 
-                // succeeded
+                
                 return true;
             }
 
@@ -196,7 +196,7 @@ namespace slideshow
             {
                 o_rValue = sal::static_int_cast<sal_Int16>(eLineStyle);
 
-                // succeeded
+                
                 return true;
             }
 
@@ -205,15 +205,15 @@ namespace slideshow
             {
                 o_rValue = sal::static_int_cast<sal_Int16>(eFontSlant);
 
-                // succeeded
+                
                 return true;
             }
 
-            // nothing left to try. Failure
+            
             return false;
         }
 
-        /// extract enum/constant group value from Any
+        
         bool extractValue( sal_Int16&                       o_rValue,
                            const uno::Any&                  rSourceAny,
                            const ShapeSharedPtr&            rShape,
@@ -234,28 +234,28 @@ namespace slideshow
             return true;
         }
 
-        /// extract color value from Any
+        
         bool extractValue( RGBColor&                    o_rValue,
                            const uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
-            // try to extract numeric value (double, or smaller POD, like float or int)
+            
             {
                 double nTmp = 0;
                 if( (rSourceAny >>= nTmp) )
                 {
                     sal_uInt32 aIntColor( static_cast< sal_uInt32 >(nTmp) );
 
-                    // TODO(F2): Handle color values correctly, here
+                    
                     o_rValue = unoColor2RGBColor( aIntColor );
 
-                    // succeeded
+                    
                     return true;
                 }
             }
 
-            // try double sequence
+            
             {
                 uno::Sequence< double > aTmp;
                 if( (rSourceAny >>= aTmp) )
@@ -265,12 +265,12 @@ namespace slideshow
 
                     o_rValue = RGBColor( aTmp[0], aTmp[1], aTmp[2] );
 
-                    // succeeded
+                    
                     return true;
                 }
             }
 
-            // try sal_Int32 sequence
+            
             {
                 uno::Sequence< sal_Int32 > aTmp;
                 if( (rSourceAny >>= aTmp) )
@@ -278,19 +278,19 @@ namespace slideshow
                     ENSURE_OR_THROW( aTmp.getLength() == 3,
                                       "extractValue(): inappropriate length for RGB color value" );
 
-                    // truncate to byte
+                    
                     o_rValue = RGBColor( ::cppcanvas::makeColor(
                                              static_cast<sal_uInt8>(aTmp[0]),
                                              static_cast<sal_uInt8>(aTmp[1]),
                                              static_cast<sal_uInt8>(aTmp[2]),
                                              255 ) );
 
-                    // succeeded
+                    
                     return true;
                 }
             }
 
-            // try sal_Int8 sequence
+            
             {
                 uno::Sequence< sal_Int8 > aTmp;
                 if( (rSourceAny >>= aTmp) )
@@ -300,29 +300,29 @@ namespace slideshow
 
                     o_rValue = RGBColor( ::cppcanvas::makeColor( aTmp[0], aTmp[1], aTmp[2], 255 ) );
 
-                    // succeeded
+                    
                     return true;
                 }
             }
 
-            // try to extract string
+            
             OUString aString;
             if( !(rSourceAny >>= aString) )
-                return false; // nothing left to try
+                return false; 
 
-            // TODO(F2): Provide symbolic color values here
+            
             o_rValue = RGBColor( 0.5, 0.5, 0.5 );
 
             return true;
         }
 
-        /// extract color value from Any
+        
         bool extractValue( HSLColor&                    o_rValue,
                            const uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
-            // try double sequence
+            
             {
                 uno::Sequence< double > aTmp;
                 if( (rSourceAny >>= aTmp) )
@@ -332,12 +332,12 @@ namespace slideshow
 
                     o_rValue = HSLColor( aTmp[0], aTmp[1], aTmp[2] );
 
-                    // succeeded
+                    
                     return true;
                 }
             }
 
-            // try sal_Int8 sequence
+            
             {
                 uno::Sequence< sal_Int8 > aTmp;
                 if( (rSourceAny >>= aTmp) )
@@ -347,50 +347,50 @@ namespace slideshow
 
                     o_rValue = HSLColor( aTmp[0]*360.0/255.0, aTmp[1]/255.0, aTmp[2]/255.0 );
 
-                    // succeeded
+                    
                     return true;
                 }
             }
 
-            return false; // nothing left to try
+            return false; 
         }
 
-        /// extract plain string from Any
+        
         bool extractValue( OUString&             o_rValue,
                            const uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
-            // try to extract string
+            
             if( !(rSourceAny >>= o_rValue) )
-                return false; // nothing left to try
+                return false; 
 
             return true;
         }
 
-        /// extract bool value from Any
+        
         bool extractValue( bool&                        o_rValue,
                            const uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        /*rShape*/,
                            const ::basegfx::B2DVector&  /*rSlideBounds*/ )
         {
             sal_Bool nTmp = sal_Bool();
-            // try to extract bool value
+            
             if( (rSourceAny >>= nTmp) )
             {
                 o_rValue = nTmp;
 
-                // succeeded
+                
                 return true;
             }
 
-            // try to extract string
+            
             OUString aString;
             if( !(rSourceAny >>= aString) )
-                return false; // nothing left to try
+                return false; 
 
-            // we also take the strings "true" and "false",
-            // as well as "on" and "off" here
+            
+            
             if( aString.equalsIgnoreAsciiCase("true") ||
                 aString.equalsIgnoreAsciiCase("on") )
             {
@@ -404,11 +404,11 @@ namespace slideshow
                 return true;
             }
 
-            // ultimately failed.
+            
             return false;
         }
 
-        /// extract double 2-tuple from Any
+        
         bool extractValue( ::basegfx::B2DTuple&         o_rPair,
                            const uno::Any&              rSourceAny,
                            const ShapeSharedPtr&        rShape,
@@ -461,12 +461,12 @@ namespace slideshow
                                       rShapeBounds.getMaxY() / rPageSize.getY() );
         }
 
-        // TODO(F2): Currently, the positional attributes DO NOT mirror the XShape properties.
-        // First and foremost, this is because we must operate with the shape boundrect,
-        // not position and size (the conversion between logic rect, snap rect and boundrect
-        // are non-trivial for draw shapes, and I won't duplicate them here). Thus, shapes
-        // rotated on the page will still have 0.0 rotation angle, as the metafile
-        // representation fetched over the API is our default zero case.
+        
+        
+        
+        
+        
+        
 
         ::basegfx::B2DHomMatrix getShapeTransformation( const ::basegfx::B2DRectangle&      rShapeBounds,
                                                         const ShapeAttributeLayerSharedPtr& pAttr )
@@ -504,8 +504,8 @@ namespace slideshow
                                         pAttr->getRotationAngle()*M_PI/180.0 :
                                         0.0 );
 
-                // scale, shear and rotation pivot point is the
-                // sprite's pixel center - adapt origin accordingly
+                
+                
                 aTransform.translate( -0.5*rPixelSize.getX(),
                                       -0.5*rPixelSize.getY() );
 
@@ -513,8 +513,8 @@ namespace slideshow
                     pAttr->isWidthValid() ? pAttr->getWidth() : rOrigSize.getX(),
                     pAttr->isHeightValid() ? pAttr->getHeight() : rOrigSize.getY() );
 
-                // ensure valid size (zero size will inevitably lead
-                // to a singular transformation matrix).
+                
+                
                 aTransform.scale( ::basegfx::pruneScaleValue(
                                       aSize.getX() /
                                       ::basegfx::pruneScaleValue(
@@ -540,16 +540,16 @@ namespace slideshow
                         aTransform.rotate( nRotation );
                 }
 
-                // move left, top corner back to original position of
-                // the sprite (we've translated the center of the
-                // sprite to the origin above).
+                
+                
+                
                 aTransform.translate( 0.5*rPixelSize.getX(),
                                       0.5*rPixelSize.getY() );
             }
 
-            // return identity transform for un-attributed
-            // shapes. This renders the sprite as-is, in it's
-            // document-supplied size.
+            
+            
+            
             return aTransform;
         }
 
@@ -563,12 +563,12 @@ namespace slideshow
                 pAttr->isCharScaleValid() &&
                 fabs(pAttr->getCharScale()) > 1.0 )
             {
-                // enlarge shape bounds. Have to consider the worst
-                // case here (the text fully fills the shape)
+                
+                
 
                 const double nCharScale( pAttr->getCharScale() );
 
-                // center of scaling is the middle of the shape
+                
                 aTransform.translate( -0.5, -0.5 );
                 aTransform.scale( nCharScale, nCharScale );
                 aTransform.translate( 0.5, 0.5 );
@@ -578,7 +578,7 @@ namespace slideshow
 
             ::basegfx::B2DRectangle aRes;
 
-            // apply shape transformation to unit rect
+            
             return ::canvas::tools::calcTransformedRectBounds(
                 aRes,
                 rUnitBounds,
@@ -606,10 +606,10 @@ namespace slideshow
         ::basegfx::B2DRectangle getShapePosSize( const ::basegfx::B2DRectangle&         rOrigBounds,
                                                  const ShapeAttributeLayerSharedPtr&    pAttr )
         {
-            // an already empty shape bound need no further
-            // treatment. In fact, any changes applied below would
-            // actually remove the special empty state, thus, don't
-            // change!
+            
+            
+            
+            
             if( !pAttr ||
                 rOrigBounds.isEmpty() )
             {
@@ -617,11 +617,11 @@ namespace slideshow
             }
             else
             {
-                // cannot use maBounds anymore, attributes might have been
-                // changed by now.
-                // Have to use absolute values here, as negative sizes
-                // (aka mirrored shapes) _still_ have the same bounds,
-                // only with mirrored content.
+                
+                
+                
+                
+                
                 ::basegfx::B2DSize aSize;
                 aSize.setX( fabs( pAttr->isWidthValid() ?
                                   pAttr->getWidth() :
@@ -638,9 +638,9 @@ namespace slideshow
                            pAttr->getPosY() :
                            rOrigBounds.getCenterY() );
 
-                // the positional attribute retrieved from the
-                // ShapeAttributeLayer actually denotes the _middle_
-                // of the shape (do it as the PPTs do...)
+                
+                
+                
                 return ::basegfx::B2DRectangle( aPos - 0.5*aSize,
                                                 aPos + 0.5*aSize );
             }
@@ -650,8 +650,8 @@ namespace slideshow
         {
             return RGBColor(
                 ::cppcanvas::makeColor(
-                    // convert from API color to IntSRGBA color
-                    // (0xAARRGGBB -> 0xRRGGBBAA)
+                    
+                    
                     static_cast< sal_uInt8 >( nColor >> 16U ),
                     static_cast< sal_uInt8 >( nColor >> 8U ),
                     static_cast< sal_uInt8 >( nColor ),
@@ -661,8 +661,8 @@ namespace slideshow
         sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
         {
             return ::cppcanvas::makeColorARGB(
-                // convert from IntSRGBA color to API color
-                // (0xRRGGBBAA -> 0xAARRGGBB)
+                
+                
                 static_cast< sal_uInt8 >(0),
                 ::cppcanvas::getRed(aColor),
                 ::cppcanvas::getGreen(aColor),
@@ -692,28 +692,28 @@ namespace slideshow
         {
             ::cppcanvas::CanvasSharedPtr pCanvas( rCanvas->clone() );
 
-            // set transformation to identitiy (->device pixel)
+            
             pCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
-            // #i42440# Fill the _full_ background in
-            // black. Since we had to extend the bitmap by one
-            // pixel, and the bitmap is initialized white,
-            // depending on the slide content a one pixel wide
-            // line will show to the bottom and the right.
+            
+            
+            
+            
+            
             fillRect( pCanvas,
                       ::basegfx::B2DRectangle( 0.0, 0.0,
                                                rSize.getX(),
                                                rSize.getY() ),
                       0x000000FFU );
 
-            // fill the bounds rectangle in white. Subtract one pixel
-            // from both width and height, because the slide size is
-            // chosen one pixel larger than given by the drawing
-            // layer. This is because shapes with line style, that
-            // have the size of the slide would otherwise be cut
-            // off. OTOH, every other slide background (solid fill,
-            // gradient, bitmap) render one pixel less, thus revealing
-            // ugly white pixel to the right and the bottom.
+            
+            
+            
+            
+            
+            
+            
+            
             fillRect( pCanvas,
                       ::basegfx::B2DRectangle( 0.0, 0.0,
                                                rSize.getX()-1,
@@ -725,7 +725,7 @@ namespace slideshow
         {
             uno::Reference< beans::XPropertySet > xPropSet( xShape,
                                                             uno::UNO_QUERY_THROW );
-            // read bound rect
+            
             awt::Rectangle aTmpRect;
             if( !(xPropSet->getPropertyValue(
                       OUString("BoundRect") ) >>= aTmpRect) )
@@ -747,7 +747,7 @@ namespace slideshow
         {
             uno::Reference< beans::XPropertySet > xPropSet( xShape,
                                                             uno::UNO_QUERY_THROW );
-            // read prio
+            
             sal_Int32 nPrio(0);
             if( !(xPropSet->getPropertyValue(
                       OUString("ZOrder") ) >>= nPrio) )
@@ -756,8 +756,8 @@ namespace slideshow
                                   "getAPIShapePrio(): Could not get \"ZOrder\" property from shape" );
             }
 
-            // TODO(F2): Check and adapt the range of possible values here.
-            // Maybe we can also take the total number of shapes here
+            
+            
             return nPrio / 65535.0;
         }
 */
@@ -767,7 +767,7 @@ namespace slideshow
         {
             ENSURE_OR_THROW(pView, "getSlideSizePixel(): invalid view");
 
-            // determine transformed page bounds
+            
             const basegfx::B2DRange aRect( 0,0,
                                            rSlideSize.getX(),
                                            rSlideSize.getY() );
@@ -776,9 +776,9 @@ namespace slideshow
                                                       aRect,
                                                       pView->getTransformation() );
 
-            // #i42440# Returned slide size is one pixel too small, as
-            // rendering happens one pixel to the right and below the
-            // actual bound rect.
+            
+            
+            
             return basegfx::B2IVector(
                 basegfx::fround( aTmpRect.getRange().getX() ) + 1,
                 basegfx::fround( aTmpRect.getRange().getY() ) + 1 );

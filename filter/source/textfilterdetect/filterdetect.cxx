@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "filterdetect.hxx"
@@ -65,7 +65,7 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
         {
             lDescriptor[i].Value >>= aUrl;
 
-            // Get the file name extension.
+            
             INetURLObject aParser(aUrl);
             aExt = aParser.getExtension(
                 INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET);
@@ -75,16 +75,16 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
 
     if (aType == "generic_Text")
     {
-        // Generic text type.
+        
 
-        // Decide which filter to use based on the document service first,
-        // then on extension if that's not available.
+        
+        
 
         if (aDocService == "com.sun.star.sheet.SpreadsheetDocument")
-            // Open it in Calc.
+            
             setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
         else if (aDocService == "com.sun.star.text.TextDocument")
-            // Open it in Writer.
+            
             setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
         else if (aExt == "csv")
             setPropValue(lDescriptor, nFilter, "FilterName", OUString(CALC_TEXT_FILTER));
@@ -97,17 +97,17 @@ OUString SAL_CALL PlainTextFilterDetect::detect(uno::Sequence<beans::PropertyVal
         else if (aExt == "txt")
             setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
         else
-            // No clue.  Open it in Writer by default.
+            
             setPropValue(lDescriptor, nFilter, "FilterName", OUString(WRITER_TEXT_FILTER));
 
         return aType;
     }
 
-    // failed!
+    
     return OUString();
 }
 
-// XInitialization
+
 
 void SAL_CALL PlainTextFilterDetect::initialize(const uno::Sequence<uno::Any>& /*aArguments*/)
     throw (uno::Exception, uno::RuntimeException)
@@ -134,7 +134,7 @@ uno::Reference<uno::XInterface> PlainTextFilterDetect_createInstance(
     return (cppu::OWeakObject*) new PlainTextFilterDetect(rCxt);
 }
 
-// XServiceInfo
+
 OUString SAL_CALL PlainTextFilterDetect::getImplementationName()
     throw (uno::RuntimeException)
 {

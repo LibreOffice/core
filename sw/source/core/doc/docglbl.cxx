@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -78,7 +78,7 @@ sal_Bool SwDoc::GenerateHTMLDoc( const OUString& rPath,
     return SplitDoc( SPLITDOC_TO_HTML, rPath, false, pSplitColl, 0 );
 }
 
-// two helpers for outline mode
+
 SwNodePtr GetStartNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* nOutl )
 {
     SwNodePtr pNd;
@@ -111,7 +111,7 @@ SwNodePtr GetEndNode( SwOutlineNodes* pOutlNds, int nOutlineLevel, sal_uInt16* n
     return 0;
 }
 
-// two helpers for collection mode
+
 SwNodePtr GetStartNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplitColl, sal_uInt16* nOutl )
 {
     SwNodePtr pNd;
@@ -149,9 +149,9 @@ SwNodePtr GetEndNode( const SwOutlineNodes* pOutlNds, const SwTxtFmtColl* pSplit
 
 bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline, const SwTxtFmtColl* pSplitColl, int nOutlineLevel )
 {
-    // Iterate over all the template's Nodes, creating an own
-    // document for every single one and replace linked sections (GlobalDoc) for links (HTML).
-    // Finally, we save this document as a GlobalDoc/HTMLDoc.
+    
+    
+    
     if( !mpDocShell || !mpDocShell->GetMedium() ||
         ( SPLITDOC_TO_GLOBALDOC == eDocType && get(IDocumentSettingAccess::GLOBAL_DOCUMENT) ) )
         return false;
@@ -164,7 +164,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     if ( !bOutline) {
         if( pSplitColl )
         {
-            // If it isn't a OutlineNumbering, then use an own array and collect the Nodes.
+            
             if( pSplitColl->GetAttrOutlineLevel() == 0 )
             {
                 xTmpOutlNds.reset(new SwOutlineNodes);
@@ -180,7 +180,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         }
         else
         {
-            // Look for the 1st level OutlineTemplate
+            
             const SwTxtFmtColls& rFmtColls =*GetTxtFmtColls();
             for( sal_uInt16 n = rFmtColls.size(); n; )
                 if ( rFmtColls[ --n ]->GetAttrOutlineLevel() == 1 )
@@ -210,7 +210,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     if( !pFilter )
         return false;
 
-    // Deactivate Undo/Redline in any case
+    
     GetIDocumentUndoRedo().DoUndo(false);
     SetRedlineMode_intern( (RedlineMode_t)(GetRedlineMode() & ~nsRedlineMode_t::REDLINE_ON));
 
@@ -240,7 +240,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         aTmplDate += a2Min;
     }
 
-    // Skip all invalid ones
+    
     while( nOutl < pOutlNds->size() &&
         (*pOutlNds)[ nOutl ]->GetIndex() < GetNodes().GetEndOfExtras().GetIndex() )
         ++nOutl;
@@ -261,7 +261,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
             SwNodeIndex aEndIdx( pEndNd ? *pEndNd
                                         : GetNodes().GetEndOfContent() );
 
-            // Write out the Nodes completely
+            
             OUString sFileName;
             if( pStartNd->GetIndex() + 1 < aEndIdx.GetIndex() )
             {
@@ -276,7 +276,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     uno::Reference<document::XDocumentProperties> xDocProps(
                         xDPS->getDocumentProperties());
                     OSL_ENSURE(xDocProps.is(), "Doc has no DocumentProperties");
-                    // the GlobalDoc is the template
+                    
                     xDocProps->setTemplateName(OUString());
                     ::util::DateTime uDT(aTmplDate.GetNanoSec(),
                         aTmplDate.GetSec(), aTmplDate.GetMin(),
@@ -285,18 +285,18 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         false );
                     xDocProps->setTemplateDate(uDT);
                     xDocProps->setTemplateURL(rPath);
-                    // Set the new doc's title to the text of the "split para".
-                    // If the current doc has a title, insert it at the begin.
+                    
+                    
                     OUString sTitle( xDocProps->getTitle() );
                     if (!sTitle.isEmpty())
                         sTitle += ": ";
                     sTitle += ((SwTxtNode*)pStartNd)->GetExpandTxt();
                     xDocProps->setTitle( sTitle );
 
-                    // Replace template
+                    
                     pDoc->ReplaceStyles( *this );
 
-                    // Take over chapter numbering
+                    
                     if( mpOutlineRule )
                         pDoc->SetOutlineNumRule( *mpOutlineRule );
 
@@ -304,17 +304,17 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     SwNodeIndex aTmpIdx( pDoc->GetNodes().GetEndOfContent() );
                     GetNodes()._Copy( aRg, aTmpIdx, sal_False );
 
-                    // Delete the initial TextNode
+                    
                     SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
                     if( aIdx.GetIndex() + 1 !=
                         pDoc->GetNodes().GetEndOfContent().GetIndex() )
                         pDoc->GetNodes().Delete( aIdx, 1 );
 
-                    // All Flys in the section
+                    
                     CopyFlyInFlyImpl( aRg, 0, aIdx );
 
-                    // And what's with all the Bookmarks?
-                    // ?????
+                    
+                    
 
                     utl::TempFile aTempFile2(sLeading,&sExt,&sPath );
                     sFileName = aTempFile2.GetURL();
@@ -322,8 +322,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                                                 STREAM_STD_READWRITE );
                     pTmpMed->SetFilter( pFilter );
 
-                    // We need to have a Layout for the HTMLFilter, so that
-                    // TextFrames/Controls/OLE objects can be exported correctly as graphics.
+                    
+                    
                     if( SPLITDOC_TO_HTML == eDocType &&
                         !pDoc->GetSpzFrmFmts()->empty() )
                     {
@@ -332,22 +332,22 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                     xDocSh->DoSaveAs( *pTmpMed );
                     xDocSh->DoSaveCompleted( pTmpMed );
 
-                    // do not insert a FileLinkSection in case of error
+                    
                     if( xDocSh->GetError() )
                         sFileName = "";
                 }
                 xDocSh->DoClose();
             }
 
-            // We can now insert the section
+            
             if( !sFileName.isEmpty() )
             {
                 switch( eDocType )
                 {
                 case SPLITDOC_TO_HTML:
                     {
-                        // Delete all nodes in the section and, in the "start node",
-                        // set the Link to the saved document.
+                        
+                        
                         sal_uLong nNodeDiff = aEndIdx.GetIndex() -
                                             pStartNd->GetIndex() - 1;
                         if( nNodeDiff )
@@ -358,20 +358,20 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             SwNodeIndex aSIdx( aTmp.GetMark()->nNode );
                             SwNodeIndex aEIdx( aTmp.GetPoint()->nNode );
 
-                            // Try to move past the end
+                            
                             if( !aTmp.Move( fnMoveForward, fnGoNode ) )
                             {
-                                // well then, back to the beginning
+                                
                                 aTmp.Exchange();
                                 if( !aTmp.Move( fnMoveBackward, fnGoNode ))
                                 {
                                     OSL_FAIL( "no more Nodes!" );
                                 }
                             }
-                            // Move Bookmarks and so forth
+                            
                             CorrAbs( aSIdx, aEIdx, *aTmp.GetPoint(), sal_True);
 
-                            // If FlyFrames are still around, delete these too
+                            
                             for( sal_uInt16 n = 0; n < GetSpzFrmFmts()->size(); ++n )
                             {
                                 SwFrmFmt* pFly = (*GetSpzFrmFmts())[n];
@@ -392,13 +392,13 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             GetNodes().Delete( aSIdx, nNodeDiff );
                         }
 
-                        // set the link in the StartNode
+                        
                         SwFmtINetFmt aINet( sFileName , OUString() );
                         SwTxtNode* pTNd = (SwTxtNode*)pStartNd;
                         pTNd->InsertItem(aINet, 0, pTNd->GetTxt().getLength());
 
-                        // If the link cannot be found anymore,
-                        // it has to be a bug!
+                        
+                        
                         if( !pOutlNds->Seek_Entry( pStartNd, &nOutl ))
                             pStartNd = 0;
                         ++nOutl;
@@ -414,12 +414,12 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         aSectData.SetLinkFileName(sFileName);
                         aSectData.SetProtectFlag(true);
 
-                        aEndIdx--;  // in the InsertSection the end is inclusive
+                        aEndIdx--;  
                         while( aEndIdx.GetNode().IsStartNode() )
                             aEndIdx--;
 
-                        // If any Section ends or starts in the new sectionrange,
-                        // they must end or start before or after the range!
+                        
+                        
                         SwSectionNode* pSectNd = pStartNd->FindSectionNode();
                         while( pSectNd && pSectNd->EndOfSectionIndex()
                                 <= aEndIdx.GetIndex() )
@@ -446,8 +446,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                         while( pSectNd && pSectNd->GetIndex() >
                                 pStartNd->GetIndex() )
                         {
-                            // #i15712# don't attempt to split sections if
-                            // they are fully enclosed in [pSectNd,aEndIdx].
+                            
+                            
                             if( aEndIdx < pSectNd->EndOfSectionIndex() )
                             {
                                 SwNodeRange aRg( *pSectNd, 1, aEndIdx, 1 );
@@ -458,8 +458,8 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             pSectNd = pStartNd->FindSectionNode();
                         }
 
-                        // -> #i26762#
-                        // Ensure order of start and end of section is sane.
+                        
+                        
                         SwNodeIndex aStartIdx(*pStartNd);
 
                         if (aEndIdx >= aStartIdx)
@@ -472,7 +472,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
                             pSectNd = GetNodes().InsertTextSection(aEndIdx,
                                 *pFmt, aSectData, 0, &aStartIdx, false);
                         }
-                        // <- #i26762#
+                        
 
                         pSectNd->GetSection().CreateLink( CREATE_CONNECT );
                     }
@@ -489,7 +489,7 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
     case SPLITDOC_TO_HTML:
         if( get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         {
-            // save all remaining sections
+            
             while( !GetSections().empty() )
                 DelSectionFmt( GetSections().front() );
 
@@ -499,12 +499,12 @@ bool SwDoc::SplitDoc( sal_uInt16 eDocType, const OUString& rPath, bool bOutline,
         break;
 
     default:
-        // save the Globaldoc
+        
         set(IDocumentSettingAccess::GLOBAL_DOCUMENT, true);
         set(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS, false);
     }
 
-    // The medium isn't locked after reopening the document.
+    
     SfxRequest aReq( SID_SAVEASDOC, SFX_CALLMODE_SYNCHRON, GetAttrPool() );
     aReq.AppendItem( SfxStringItem( SID_FILE_NAME, rPath ) );
     aReq.AppendItem( SfxBoolItem( SID_SAVETO, true ) );

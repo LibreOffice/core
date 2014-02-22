@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@
 using namespace ::formula;
 using namespace ::com::sun::star;
 
-// ============================================================================
+
 
 static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
 {
@@ -63,7 +63,7 @@ static const SfxItemPropertyMapEntry* lcl_GetFormulaParserMap()
 
 SC_SIMPLE_SERVICE_INFO( ScFormulaParserObj, "ScFormulaParserObj", SC_SERVICENAME_FORMULAPARS )
 
-// ============================================================================
+
 
 ScFormulaParserObj::ScFormulaParserObj(ScDocShell* pDocSh) :
     mpDocShell( pDocSh ),
@@ -87,21 +87,21 @@ void ScFormulaParserObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
         mpDocShell = NULL;
 }
 
-// XFormulaParser
+
 
 void ScFormulaParserObj::SetCompilerFlags( ScCompiler& rCompiler ) const
 {
     static const formula::FormulaGrammar::AddressConvention aConvMap[] = {
-        formula::FormulaGrammar::CONV_OOO,        // <- AddressConvention::OOO
-        formula::FormulaGrammar::CONV_XL_A1,      // <- AddressConvention::XL_A1
-        formula::FormulaGrammar::CONV_XL_R1C1,    // <- AddressConvention::XL_R1C1
-        formula::FormulaGrammar::CONV_XL_OOX,     // <- AddressConvention::XL_OOX
-        formula::FormulaGrammar::CONV_LOTUS_A1    // <- AddressConvention::LOTUS_A1
+        formula::FormulaGrammar::CONV_OOO,        
+        formula::FormulaGrammar::CONV_XL_A1,      
+        formula::FormulaGrammar::CONV_XL_R1C1,    
+        formula::FormulaGrammar::CONV_XL_OOX,     
+        formula::FormulaGrammar::CONV_LOTUS_A1    
     };
     static const sal_Int16 nConvMapCount = sizeof(aConvMap)/sizeof(aConvMap[0]);
 
-    // If mxOpCodeMap is not empty it overrides mbEnglish, and vice versa. We
-    // don't need to initialize things twice.
+    
+    
     if (mxOpCodeMap.get())
         rCompiler.SetFormulaLanguage( mxOpCodeMap );
     else
@@ -176,7 +176,7 @@ OUString SAL_CALL ScFormulaParserObj::printFormula(
     return aRet;
 }
 
-// XPropertySet
+
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFormulaParserObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -203,9 +203,9 @@ void SAL_CALL ScFormulaParserObj::setPropertyValue(
         bool bOldEnglish = mbEnglish;
         if (aValue >>= mbEnglish)
         {
-            // Need to recreate the symbol map to change English property
-            // because the map is const. So for performance reasons set
-            // CompileEnglish _before_ OpCodeMap!
+            
+            
+            
             if (mxOpCodeMap.get() && mbEnglish != bOldEnglish)
             {
                 ScDocument* pDoc = mpDocShell->GetDocument();
@@ -284,7 +284,7 @@ uno::Any SAL_CALL ScFormulaParserObj::getPropertyValue( const OUString& aPropert
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFormulaParserObj )
 
-// ============================================================================
+
 
 static void lcl_ExternalRefToApi( sheet::SingleReference& rAPI, const ScSingleRefData& rRef )
 {
@@ -388,15 +388,15 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
             sheet::FormulaToken& rAPI = rSequence[nPos];
 
             OpCode eOpCode = rToken.GetOpCode();
-            // eOpCode may be changed in the following switch/case
+            
             switch ( rToken.GetType() )
             {
                 case svByte:
-                    // Only the count of spaces is stored as "long". Parameter count is ignored.
+                    
                     if ( eOpCode == ocSpaces )
                         rAPI.Data <<= (sal_Int32) rToken.GetByte();
                     else
-                        rAPI.Data.clear();      // no data
+                        rAPI.Data.clear();      
                     break;
                 case formula::svDouble:
                     rAPI.Data <<= rToken.GetDouble();
@@ -405,8 +405,8 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     rAPI.Data <<= rToken.GetString().getString();
                     break;
                 case svExternal:
-                    // Function name is stored as string.
-                    // Byte (parameter count) is ignored.
+                    
+                    
                     rAPI.Data <<= OUString( rToken.GetExternal() );
                     break;
                 case svSingleRef:
@@ -460,7 +460,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                         rDoc.GetExternalRefManager()->getCacheTable(
                             rToken.GetIndex(), rToken.GetString().getString(), false, &nCacheId);
                         aComplRef.Reference1.Sheet = static_cast< sal_Int32 >( nCacheId );
-                        // NOTE: This assumes that cached sheets are in consecutive order!
+                        
                         aComplRef.Reference2.Sheet =
                             aComplRef.Reference1.Sheet +
                             (static_cast<const ScToken&>(rToken).GetSingleRef2().Tab() - static_cast<const ScToken&>(rToken).GetSingleRef().Tab());
@@ -482,12 +482,12 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
                     break;
                 default:
                     OSL_TRACE( "ScTokenConversion::ConvertToTokenSequence: unhandled token type SvStackVar %d", rToken.GetType());
-                case svSep:     // occurs with ocSep, ocOpen, ocClose, ocArray*
-                case svJump:    // occurs with ocIf, ocChose
-                case svMissing: // occurs with ocMissing
-                    rAPI.Data.clear();      // no data
+                case svSep:     
+                case svJump:    
+                case svMissing: 
+                    rAPI.Data.clear();      
             }
-            rAPI.OpCode = static_cast<sal_Int32>(eOpCode);      //! assuming equal values for the moment
+            rAPI.OpCode = static_cast<sal_Int32>(eOpCode);      
         }
     }
     else
@@ -496,7 +496,7 @@ bool ScTokenConversion::ConvertToTokenSequence( const ScDocument& rDoc,
     return !bError;
 }
 
-// ============================================================================
+
 
 SAL_WNODEPRECATED_DECLARATIONS_PUSH
 ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> _pCompiler)
@@ -505,6 +505,6 @@ ScFormulaOpCodeMapperObj::ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::Form
 }
 SAL_WNODEPRECATED_DECLARATIONS_POP
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

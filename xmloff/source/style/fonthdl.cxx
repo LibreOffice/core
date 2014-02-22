@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <fonthdl.hxx>
@@ -53,11 +53,11 @@ static SvXMLEnumMapEntry const aFontPitchMapping[] =
     { XML_TOKEN_INVALID,    0               }
 };
 
-// class XMLFontFamilyNamePropHdl
+
 
 XMLFontFamilyNamePropHdl::~XMLFontFamilyNamePropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -72,15 +72,15 @@ bool XMLFontFamilyNamePropHdl::importXML( const OUString& rStrImpValue, uno::Any
         nPos = ::sax::Converter::indexOfComma( rStrImpValue, nPos );
         sal_Int32 nLast = (-1 == nPos ? rStrImpValue.getLength() - 1 : nPos - 1);
 
-        // skip trailing blanks
+        
         while( nLast > nFirst && ' ' == rStrImpValue[nLast] )
             nLast--;
 
-        // skip leading blanks
+        
         while(nFirst <= nLast && ' ' == rStrImpValue[nFirst])
             nFirst++;
 
-        // remove quotes
+        
         sal_Unicode c = nFirst > nLast ? 0 : rStrImpValue[nFirst];
         if( nFirst < nLast && ('\'' == c || '\"' == c) && rStrImpValue[nLast] == c )
         {
@@ -125,26 +125,26 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
             nPos = aStrFamilyName.indexOf( ';', nPos );
             sal_Int32 nLast = (-1 == nPos ? aStrFamilyName.getLength() : nPos);
 
-            // Set position to the character behind the ';', so we won't
-            // forget this.
+            
+            
             if( -1L != nPos )
                 nPos++;
 
-            // If the property value was empty, we stop now.
-            // If there is a ';' at the first position, the empty name
-            // at the start will be removed.
+            
+            
+            
             if( 0L == nLast )
                 continue;
 
-            // nFirst and nLast now denote the first and last character of
-            // one font name.
+            
+            
             nLast--;
 
-            // skip trailing blanks
+            
             while(  nLast > nFirst && ' ' == aStrFamilyName[nLast] )
                 nLast--;
 
-            // skip leading blanks
+            
             while( nFirst <= nLast && ' ' == aStrFamilyName[nFirst] )
                 nFirst++;
 
@@ -184,11 +184,11 @@ bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
     return bRet;
 }
 
-// class XMLFontFamilyPropHdl
+
 
 XMLFontFamilyPropHdl::~XMLFontFamilyPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLFontFamilyPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -219,11 +219,11 @@ bool XMLFontFamilyPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
     return bRet;
 }
 
-// class XMLFontEncodingPropHdl
+
 
 XMLFontEncodingPropHdl::~XMLFontEncodingPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLFontEncodingPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -255,11 +255,11 @@ bool XMLFontEncodingPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& 
     return bRet;
 }
 
-// class XMLFontPitchPropHdl
+
 
 XMLFontPitchPropHdl::~XMLFontPitchPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLFontPitchPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const

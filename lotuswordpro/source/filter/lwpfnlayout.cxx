@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -117,7 +117,7 @@ void LwpFnRowLayout::Read()
  */
 void LwpFnRowLayout::RegisterStyle()
 {
-    // register cells' style
+    
     LwpObjectID *pCellID= GetChildHead();
     LwpCellLayout * pCellLayout = static_cast<LwpCellLayout *>(pCellID->obj());
 
@@ -159,7 +159,7 @@ void LwpFnCellLayout::Read()
  */
 void LwpFnCellLayout::RegisterStyle()
 {
-    // content object register styles
+    
     LwpObject * pObj = m_Content.obj();
     if (pObj)
     {
@@ -197,7 +197,7 @@ void LwpEndnoteLayout::Read()
  */
 void LwpEndnoteLayout::RegisterStyle()
 {
-    // register style of rows
+    
     LwpObjectID *pRowID = GetChildHead();
     LwpRowLayout * pRowLayout = static_cast<LwpRowLayout *>(pRowID->obj());
     while (pRowLayout)
@@ -236,7 +236,7 @@ void LwpEnSuperTableLayout::Read()
 
 void LwpEnSuperTableLayout::RegisterStyle()
 {
-    // if this layout is style of real table entry
+    
     LwpVirtualLayout* pTableLayout = GetMainTableLayout();
     if (pTableLayout != NULL)
     {

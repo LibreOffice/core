@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -74,7 +74,7 @@
 namespace vigra
 {
 
-/// componentwise xor of an RGBValue (missing from rgbvalue.hxx)
+
 template< class Value, unsigned int RedIndex, unsigned int BlueIndex, unsigned int GreenIndex >
 inline RGBValue<Value, RedIndex, GreenIndex, BlueIndex>
 operator^( RGBValue<Value, RedIndex, GreenIndex, BlueIndex> const& lhs,
@@ -93,24 +93,24 @@ namespace basebmp
 
 static const sal_uInt8 bitsPerPixel[] =
 {
-    0,  // NONE
-    1,  // ONE_BIT_MSB_GREY
-    1,  // ONE_BIT_LSB_GREY
-    1,  // ONE_BIT_MSB_PAL
-    1,  // ONE_BIT_LSB_PAL
-    4,  // FOUR_BIT_MSB_GREY
-    4,  // FOUR_BIT_LSB_GREY
-    4,  // FOUR_BIT_MSB_PAL
-    4,  // FOUR_BIT_LSB_PAL
-    8,  // EIGHT_BIT_PAL
-    8,  // EIGHT_BIT_GREY
-    16, // SIXTEEN_BIT_LSB_TC_MASK
-    16, // SIXTEEN_BIT_MSB_TC_MASK
-    24, // TWENTYFOUR_BIT_TC_MASK
-    32, // THIRTYTWO_BIT_TC_MASK_BGRA
-    32, // THIRTYTWO_BIT_TC_MASK_ARGB
-    32, // THIRTYTWO_BIT_TC_MASK_ABGR
-    32, // THIRTYTWO_BIT_TC_MASK_RGBA
+    0,  
+    1,  
+    1,  
+    1,  
+    1,  
+    4,  
+    4,  
+    4,  
+    4,  
+    8,  
+    8,  
+    16, 
+    16, 
+    24, 
+    32, 
+    32, 
+    32, 
+    32, 
 };
 
 namespace
@@ -147,7 +147,7 @@ namespace
 
 
 
-    // Actual BitmapDevice implementation (templatized by accessor and iterator)
+    
 
     /** Implementation of the BitmapDevice interface
 
@@ -207,13 +207,13 @@ namespace
                                alphamask_accessorselector_type,
                                Masks>                                      alphamask_bitmap_type;
 
-        // -------------------------------------------------------
+        
 
         typedef AccessorTraits< raw_accessor_type >                        raw_accessor_traits;
         typedef typename uInt32Converter<
             typename raw_accessor_type::value_type>::to                    to_uint32_functor;
 
-        // -------------------------------------------------------
+        
 
         typedef typename raw_accessor_traits::xor_accessor                 raw_xor_accessor_type;
         typedef AccessorTraits<raw_xor_accessor_type>                      raw_xor_accessor_traits;
@@ -221,7 +221,7 @@ namespace
             raw_xor_accessor_type >::type                                  xor_accessor_type;
         typedef AccessorTraits<xor_accessor_type>                          xor_accessor_traits;
 
-        // -------------------------------------------------------
+        
 
         typedef typename raw_accessor_traits::template masked_accessor<
             mask_rawaccessor_type,
@@ -235,10 +235,10 @@ namespace
         typedef typename accessor_selector::template wrap_accessor<
             raw_maskedxor_accessor_type >::type                            masked_xoraccessor_type;
 
-        // -------------------------------------------------------
+        
 
-        // ((iter,mask),mask) special case (e.g. for clipped
-        // drawMaskedColor())
+        
+        
         typedef AccessorTraits< raw_maskedaccessor_type >                  raw_maskedaccessor_traits;
         typedef typename raw_maskedaccessor_traits::template masked_accessor<
             mask_rawaccessor_type,
@@ -250,7 +250,7 @@ namespace
             composite_iterator_type,
             mask_iterator_type>                                            composite_composite_mask_iterator_type;
 
-        // -------------------------------------------------------
+        
 
         typedef ConstantColorBlendSetterAccessorAdapter<
             dest_accessor_type,
@@ -263,7 +263,7 @@ namespace
             mask_iterator_type,
             Masks::clipmask_polarity>::type                                masked_colorblend_accessor_type;
 
-        // -------------------------------------------------------
+        
 
         typedef ConstantColorBlendSetterAccessorAdapter<
             dest_accessor_type,
@@ -276,14 +276,14 @@ namespace
             mask_iterator_type,
             Masks::clipmask_polarity>::type                                masked_colorblend_generic_accessor_type;
 
-        // -------------------------------------------------------
+        
 
         typedef JoinImageAccessorAdapter< dest_accessor_type,
                                           mask_rawaccessor_type >          joined_image_accessor_type;
         typedef JoinImageAccessorAdapter< GenericColorImageAccessor,
                                           GenericColorImageAccessor >      joined_generic_image_accessor_type;
 
-        // -------------------------------------------------------
+        
 
         dest_iterator_type                      maBegin;
         typename accessor_traits::color_lookup  maColorLookup;
@@ -304,7 +304,7 @@ namespace
         raw_maskedmask_accessor_type            maRawMaskedMaskAccessor;
 
 
-        // -------------------------------------------------------
+        
 
         BitmapRenderer( const basegfx::B2IBox&                     rBounds,
                         const basegfx::B2IVector&                  rBufferSize,
@@ -379,8 +379,8 @@ namespace
 
         virtual bool isCompatibleBitmap( const BitmapDeviceSharedPtr& bmp ) const
         {
-            // TODO(P1): dynamic_cast usually called twice for
-            // compatible formats
+            
+            
             return getCompatibleBitmap(bmp).get() != NULL;
         }
 
@@ -399,8 +399,8 @@ namespace
 
         virtual bool isCompatibleClipMask( const BitmapDeviceSharedPtr& bmp ) const
         {
-            // TODO(P1): dynamic_cast usually called twice for
-            // compatible formats
+            
+            
             return boost::dynamic_pointer_cast<mask_bitmap_type>( bmp ).get() != NULL;
         }
 
@@ -411,8 +411,8 @@ namespace
 
         virtual bool isCompatibleAlphaMask( const BitmapDeviceSharedPtr& bmp ) const
         {
-            // TODO(P1): dynamic_cast usually called twice for
-            // compatible formats
+            
+            
             return getCompatibleAlphaMask( bmp ).get() != NULL;
         }
 
@@ -498,8 +498,8 @@ namespace
                                col,
                                begin,
                                rawAcc );
-            // TODO(P2): perhaps this needs pushing up the stack a bit
-            // to make more complex polygons more efficient ...
+            
+            
             damaged( basegfx::B2IBox( rPt1, rPt2 ) );
         }
 
@@ -749,11 +749,11 @@ namespace
             char* srcBuf =  (char*)rSrcBitmap->getBuffer().get();
             sal_Int32 dstStride =  getScanlineStride();
             sal_Int32 srcStride =  rSrcBitmap->getScanlineStride();
-            sal_Int32 bytesPerPixel = (bitsPerPixel[getScanlineFormat()] + 7) >> 3; // round up to bytes
+            sal_Int32 bytesPerPixel = (bitsPerPixel[getScanlineFormat()] + 7) >> 3; 
             bool dstTopDown = isTopDown();
             bool srcTopDown = rSrcBitmap->isTopDown();
 
-            if (dstBuf == srcBuf && nSrcY < nDestY) // reverse copy order to avoid overlapping
+            if (dstBuf == srcBuf && nSrcY < nDestY) 
             {
                 nSrcY = getBufferSize().getY() - nSrcY - nSrcHeight;
                 nDestY = getBufferSize().getY() - nDestY - nSrcHeight;
@@ -926,9 +926,9 @@ namespace
                 boost::shared_ptr<mask_bitmap_type> pClipMask( getCompatibleClipMask(rClip) );
                 OSL_ASSERT( pClipMask );
 
-                // setup a ((iter,mask),clipMask) composite composite
-                // iterator, to pass both masks (clip and alpha mask)
-                // to the algorithm
+                
+                
+                
                 const composite_composite_mask_iterator_type aBegin(
                     composite_iterator_type(
                         maBegin + vigra::Diff2D(rDstPoint.getX(),
@@ -1109,7 +1109,7 @@ namespace
             mpDamage = rDamage;
         }
     };
-} // namespace
+} 
 
 struct ImplBitmapDevice
 {
@@ -1119,7 +1119,7 @@ struct ImplBitmapDevice
      */
     RawMemorySharedArray      mpMem;
 
-    /// Palette memory plus deleter (might be NULL)
+    
     PaletteMemorySharedVector mpPalette;
 
     /** Bounds of the device.
@@ -1131,16 +1131,16 @@ struct ImplBitmapDevice
      */
     basegfx::B2IBox           maBounds;
 
-    //// Size of the actual frame buffer
+    
     basegfx::B2IVector        maBufferSize;
 
-    /// Scanline format, as provided at the constructor
+    
     Format                    mnScanlineFormat;
 
-    /// Scanline stride. Negative for bottom-to-top formats
+    
     sal_Int32                 mnScanlineStride;
 
-    /// raw ptr to 0th scanline. used for cloning a generic renderer
+    
     sal_uInt8*                mpFirstScanline;
 
     /** (Optional) device sharing the same memory, and used for input
@@ -1181,7 +1181,7 @@ BitmapDevice::BitmapDevice( const basegfx::B2IBox&           rBounds,
 
 BitmapDevice::~BitmapDevice()
 {
-    // outline, because of internal ImplBitmapDevice
+    
     SAL_INFO( "basebmp.bitmapdevice", "~BitmapDevice(" << this << ")" );
 }
 
@@ -1406,8 +1406,8 @@ namespace
 #endif
     }
 
-    // TODO(Q3): Move canvas/canvastools.hxx clipBlit() down
-    // to basegfx, and use here!
+    
+    
     bool clipAreaImpl( ::basegfx::B2IBox&       io_rSourceArea,
                        ::basegfx::B2IPoint&     io_rDestPoint,
                        const ::basegfx::B2IBox& rSourceBounds,
@@ -1418,14 +1418,14 @@ namespace
 
         ::basegfx::B2IBox aLocalSourceArea( io_rSourceArea );
 
-        // clip source area (which must be inside rSourceBounds)
+        
         aLocalSourceArea.intersect( rSourceBounds );
 
         if( aLocalSourceArea.isEmpty() )
             return false;
 
-        // calc relative new source area points (relative to orig
-        // source area)
+        
+        
         const ::basegfx::B2IVector aUpperLeftOffset(
             aLocalSourceArea.getMinimum()-aSourceTopLeft );
         const ::basegfx::B2IVector aLowerRightOffset(
@@ -1434,14 +1434,14 @@ namespace
         ::basegfx::B2IBox aLocalDestArea( io_rDestPoint + aUpperLeftOffset,
                                           io_rDestPoint + aLowerRightOffset );
 
-        // clip dest area (which must be inside rDestBounds)
+        
         aLocalDestArea.intersect( rDestBounds );
 
         if( aLocalDestArea.isEmpty() )
             return false;
 
-        // calc relative new dest area points (relative to orig
-        // source area)
+        
+        
         const ::basegfx::B2IVector aDestUpperLeftOffset(
             aLocalDestArea.getMinimum()-io_rDestPoint );
         const ::basegfx::B2IVector aDestLowerRightOffset(
@@ -1454,14 +1454,14 @@ namespace
         return true;
     }
 
-    // TODO(Q3): Move canvas/canvastools.hxx clipBlit() down
-    // to basegfx, and use here!
+    
+    
     bool clipAreaImpl( ::basegfx::B2IBox&       io_rDestArea,
                        ::basegfx::B2IBox&       io_rSourceArea,
                        const ::basegfx::B2IBox& rDestBounds,
                        const ::basegfx::B2IBox& rSourceBounds )
     {
-        // extract inherent scale
+        
         double fWidth = io_rSourceArea.getWidth();
         if (fWidth == 0.0)
             return false;
@@ -1473,7 +1473,7 @@ namespace
         const double nScaleX( io_rDestArea.getWidth() / fWidth );
         const double nScaleY( io_rDestArea.getHeight() / fHeight );
 
-        // extract range origins
+        
         const basegfx::B2IPoint   aDestTopLeft(
             io_rDestArea.getMinimum() );
         const ::basegfx::B2IPoint aSourceTopLeft(
@@ -1481,14 +1481,14 @@ namespace
 
         ::basegfx::B2IBox aLocalSourceArea( io_rSourceArea );
 
-        // clip source area (which must be inside rSourceBounds)
+        
         aLocalSourceArea.intersect( rSourceBounds );
 
         if( aLocalSourceArea.isEmpty() )
             return false;
 
-        // calc relative new source area points (relative to orig
-        // source area)
+        
+        
         const ::basegfx::B2IVector aUpperLeftOffset(
             aLocalSourceArea.getMinimum()-aSourceTopLeft );
         const ::basegfx::B2IVector aLowerRightOffset(
@@ -1499,14 +1499,14 @@ namespace
                                           basegfx::fround(aDestTopLeft.getX() + nScaleX*aLowerRightOffset.getX()),
                                           basegfx::fround(aDestTopLeft.getY() + nScaleY*aLowerRightOffset.getY()) );
 
-        // clip dest area (which must be inside rDestBounds)
+        
         aLocalDestArea.intersect( rDestBounds );
 
         if( aLocalDestArea.isEmpty() )
             return false;
 
-        // calc relative new dest area points (relative to orig
-        // source area)
+        
+        
         const ::basegfx::B2IVector aDestUpperLeftOffset(
             aLocalDestArea.getMinimum()-aDestTopLeft );
         const ::basegfx::B2IVector aDestLowerRightOffset(
@@ -1518,7 +1518,7 @@ namespace
                                             basegfx::fround(aSourceTopLeft.getY() + aDestLowerRightOffset.getY()/nScaleY) );
         io_rDestArea   = aLocalDestArea;
 
-        // final source area clip (chopping round-offs)
+        
         io_rSourceArea.intersect( rSourceBounds );
 
         if( io_rSourceArea.isEmpty() )
@@ -1608,8 +1608,8 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
 
         if( isSharedBuffer(rAlphaMask) )
         {
-            // src == dest, copy rAlphaMask beforehand
-            // ---------------------------------------------------
+            
+            
 
             const basegfx::B2ITuple aSize( aSrcRange.getWidth(),
                                            aSrcRange.getHeight() );
@@ -1661,8 +1661,8 @@ void BitmapDevice::drawMaskedColor( Color                        aSrcColor,
         {
             if( isSharedBuffer(rAlphaMask) )
             {
-                // src == dest, copy rAlphaMask beforehand
-                // ---------------------------------------------------
+                
+                
 
                 const basegfx::B2ITuple aSize( aSrcRange.getWidth(),
                                                aSrcRange.getHeight() );
@@ -1765,20 +1765,20 @@ struct StdMasks
     typedef PixelFormatTraits_GREY1_MSB   clipmask_format_traits;
     typedef PixelFormatTraits_GREY8       alphamask_format_traits;
 
-    /// Clipmask: 0 means opaque
+    
     static const bool clipmask_polarity  = false;
 
-    /// Alpha mask: 0 means fully transparent
+    
     static const bool alphamask_polarity = true;
 };
 
 
-// Some compilers don't like the nested template wrap_accessor
-// reference in the parameter list - being slightly less type safe,
-// then.
+
+
+
 #ifndef BASEBMP_NO_NESTED_TEMPLATE_PARAMETER
 
-/// Produces a specialized renderer for the given pixel format
+
 template< class FormatTraits, class MaskTraits >
 BitmapDeviceSharedPtr createRenderer(
     const basegfx::B2IBox&                                       rBounds,
@@ -1832,7 +1832,7 @@ BitmapDeviceSharedPtr createRenderer(
                       pDamage ));
 }
 
-/// Create standard grey level palette
+
 PaletteMemorySharedVector createStandardPalette(
     const PaletteMemorySharedVector& pPal,
     sal_Int32                        nNumEntries )
@@ -1913,8 +1913,8 @@ BitmapDeviceSharedPtr createRenderer(
 }
 
 
-// TODO(Q3): consolidate with canvas/canvastools.hxx! Best move this
-// to o3tl or sal/bithacks.hxx ...
+
+
 
 /** Compute the next highest power of 2 of a 32-bit value
 
@@ -1958,17 +1958,17 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
 
     sal_Int32  nScanlineStride(0);
 
-    // round up to full 8 bit, divide by 8
+    
     nScanlineStride = (rSize.getX()*bitsPerPixel[nScanlineFormat] + 7) >> 3;
 
-    // rounded up to next full power-of-two number of bytes
+    
     const sal_uInt32 bytesPerPixel = nextPow2(
         (bitsPerPixel[nScanlineFormat] + 7) >> 3);
 
-    // now make nScanlineStride a multiple of bytesPerPixel
+    
     nScanlineStride = (nScanlineStride + bytesPerPixel - 1) / bytesPerPixel * bytesPerPixel;
 
-    // factor in bottom-up scanline order case
+    
     nScanlineStride *= bTopDown ? 1 : -1;
 
     const sal_uInt32 nWidth(nScanlineStride < 0 ? -nScanlineStride : nScanlineStride);
@@ -1995,15 +1995,15 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
     sal_uInt8* pFirstScanline = nScanlineStride < 0 ?
         pMem.get() + nMemSize + nScanlineStride : pMem.get();
 
-    // shrink render area to given subset, if given
+    
     basegfx::B2IBox aBounds(0,0,rSize.getX(),rSize.getY());
     if( pSubset )
         aBounds.intersect( *pSubset );
 
     switch( nScanlineFormat )
     {
-        // ----------------------------------------------------------------------
-        // one bit formats
+        
+        
 
         case FORMAT_ONE_BIT_MSB_GREY:
             return createRenderer<PixelFormatTraits_GREY1_MSB,StdMasks>(
@@ -2028,8 +2028,8 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 bitsPerPixel[nScanlineFormat], rDamage );
 
 
-        // ----------------------------------------------------------------------
-        // four bit formats
+        
+        
 
         case FORMAT_FOUR_BIT_MSB_GREY:
             return createRenderer<PixelFormatTraits_GREY4_MSB,StdMasks>(
@@ -2054,8 +2054,8 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 bitsPerPixel[nScanlineFormat], rDamage );
 
 
-        // ----------------------------------------------------------------------
-        // eight bit formats
+        
+        
 
         case FORMAT_EIGHT_BIT_GREY:
             return createRenderer<PixelFormatTraits_GREY8,StdMasks>(
@@ -2069,8 +2069,8 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 bitsPerPixel[nScanlineFormat], rDamage );
 
 
-        // ----------------------------------------------------------------------
-        // sixteen bit formats
+        
+        
 
         case FORMAT_SIXTEEN_BIT_LSB_TC_MASK:
             return createRenderer<PixelFormatTraits_RGB16_565_LSB,StdMasks>(
@@ -2083,16 +2083,16 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 pFirstScanline, pMem, pPal, rDamage );
 
 
-        // ----------------------------------------------------------------------
-        // twentyfour bit formats
+        
+        
         case FORMAT_TWENTYFOUR_BIT_TC_MASK:
             return createRenderer<PixelFormatTraits_BGR24,StdMasks>(
                 aBounds, rSize, nScanlineFormat, nScanlineStride,
                 pFirstScanline, pMem, pPal, rDamage );
 
 
-        // ----------------------------------------------------------------------
-        // thirtytwo bit formats
+        
+        
 
         case FORMAT_THIRTYTWO_BIT_TC_MASK_BGRA:
             return createRenderer<PixelFormatTraits_BGRX32_8888,StdMasks>(
@@ -2115,10 +2115,10 @@ BitmapDeviceSharedPtr createBitmapDeviceImplInner( const basegfx::B2IVector&    
                 pFirstScanline, pMem, pPal, rDamage );
 
         default:
-            assert(false); // this cannot happen
+            assert(false); 
     }
 
-    // TODO(F3): other formats not yet implemented
+    
     return BitmapDeviceSharedPtr();
 }
 
@@ -2148,7 +2148,7 @@ BitmapDeviceSharedPtr createBitmapDeviceImpl( const basegfx::B2IVector&         
 #endif
     return result;
 }
-} // namespace
+} 
 
 
 BitmapDeviceSharedPtr createBitmapDevice( const basegfx::B2IVector& rSize,
@@ -2219,12 +2219,12 @@ BitmapDeviceSharedPtr cloneBitmapDevice( const basegfx::B2IVector&    rSize,
 }
 
 
-/// Clone our device, with GenericImageAccessor to handle all formats
+
 BitmapDeviceSharedPtr BitmapDevice::getGenericRenderer() const
 {
     return mpImpl->mpGenericRenderer;
 }
 
-} // namespace basebmp
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

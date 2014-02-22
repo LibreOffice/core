@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -57,7 +57,7 @@ void SimpleReferenceComponent::release()
 #if OSL_DEBUG_LEVEL > 0
             exc
 #endif
-            ) // don't break throw ()
+            ) 
         {
 #if OSL_DEBUG_LEVEL > 0
             OString msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
@@ -98,10 +98,10 @@ void * SimpleReferenceComponent::operator new(std::size_t nSize,
 {
 #if defined WNT
     return ::operator new(nSize);
-        // WNT lacks a global nothrow operator new...
-#else // WNT
+        
+#else 
     return ::operator new(nSize, rNothrow);
-#endif // WNT
+#endif 
 }
 
 void SimpleReferenceComponent::operator delete(void * pPtr) SAL_THROW(())
@@ -118,10 +118,10 @@ void SimpleReferenceComponent::operator delete(void * pPtr,
     SAL_THROW(())
 {
 #if defined WNT
-    ::operator delete(pPtr); // WNT lacks a global nothrow operator delete...
-#else // WNT
+    ::operator delete(pPtr); 
+#else 
     ::operator delete(pPtr, rNothrow);
-#endif // WNT
+#endif 
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

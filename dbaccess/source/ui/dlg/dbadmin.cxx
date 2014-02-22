@@ -47,7 +47,7 @@ using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
 
-// ODbAdminDialog
+
 ODbAdminDialog::ODbAdminDialog(Window* _pParent
                                , SfxItemSet* _pItems
                                , const Reference< XComponentContext >& _rxContext)
@@ -58,10 +58,10 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent
 {
     m_pImpl.reset(new ODbDataSourceAdministrationHelper(_rxContext,this,this));
 
-    // add the initial tab page
+    
     m_nMainPageID = AddTabPage("advanced", OConnectionTabPage::Create, NULL);
 
-    // remove the reset button - it's meaning is much too ambiguous in this dialog
+    
     RemoveResetButton();
 }
 
@@ -77,12 +77,12 @@ short ODbAdminDialog::Ok()
     SfxTabDialog::Ok();
     disabledUI();
     return ( AR_LEAVE_MODIFIED == implApplyChanges() ) ? RET_OK : RET_CANCEL;
-        // TODO : AR_ERROR is not handled correctly, we always close the dialog here
+        
 }
 
 void ODbAdminDialog::PageCreated(sal_uInt16 _nId, SfxTabPage& _rPage)
 {
-    // register ourself as modified listener
+    
     static_cast<OGenericAdministrationPage&>(_rPage).SetServiceFactory( getORB() );
     static_cast<OGenericAdministrationPage&>(_rPage).SetAdminDialog(this,this);
 
@@ -109,7 +109,7 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
     ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
     ::dbaccess::DATASOURCE_TYPE eType = pCollection->determineType(getDatasourceType(*getOutputSet()));
 
-    // and insert the new ones
+    
     switch ( eType )
     {
         case  ::dbaccess::DST_DBASE:
@@ -143,7 +143,7 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
         case  ::dbaccess::DST_LDAP:
             addDetailPage(PAGE_LDAP,STR_PAGETITLE_ADVANCED,ODriversSettings::CreateLDAP);
             break;
-        case  ::dbaccess::DST_USERDEFINE1:  /// first user defined driver
+        case  ::dbaccess::DST_USERDEFINE1:  /
         case  ::dbaccess::DST_USERDEFINE2:
         case  ::dbaccess::DST_USERDEFINE3:
         case  ::dbaccess::DST_USERDEFINE4:
@@ -166,20 +166,20 @@ void ODbAdminDialog::impl_selectDataSource(const ::com::sun::star::uno::Any& _aD
 
 void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasource)
 {
-    // the selection is valid if and only if we have a datasource now
+    
     GetInputSetImpl()->Put(SfxBoolItem(DSID_INVALID_SELECTION, !_rxDatasource.is()));
-        // (sal_False tells the tab pages to disable and reset all their controls, which is different
-        // from "just set them to readonly")
+        
+        
 
-    // reset the pages
+    
 
-    // prevent flicker
+    
     SetUpdateMode(false);
 
-    // remove all items which relate to indirect properties from the input set
-    // (without this, the following may happen: select an arbitrary data source where some indirect properties
-    // are set. Select another data source of the same type, where the indirect props are not set (yet). Then,
-    // the indirect property values of the first ds are shown in the second ds ...)
+    
+    
+    
+    
     const ODbDataSourceAdministrationHelper::MapInt2String& rMap = m_pImpl->getIndirectProperties();
     for (   ODbDataSourceAdministrationHelper::MapInt2String::const_iterator aIndirect = rMap.begin();
             aIndirect != rMap.end();
@@ -187,15 +187,15 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
         )
         GetInputSetImpl()->ClearItem( (sal_uInt16)aIndirect->first );
 
-    // extract all relevant data from the property set of the data source
+    
     m_pImpl->translateProperties(_rxDatasource, *GetInputSetImpl());
 
-    // propagate this set as our new input set and reset the example set
+    
     SetInputSet(GetInputSetImpl());
     delete pExampleSet;
     pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
-    // special case: MySQL Native does not have the generic "advanced" page
+    
 
     DbuTypeCollectionItem* pCollectionItem = PTR_CAST(DbuTypeCollectionItem, getOutputSet()->GetItem(DSID_TYPECOLLECTION));
     ::dbaccess::ODsnTypeCollection* pCollection = pCollectionItem->getCollection();
@@ -210,8 +210,8 @@ void ODbAdminDialog::impl_resetPages(const Reference< XPropertySet >& _rxDatasou
     SfxTabPage* pConnectionPage = GetTabPage( m_nMainPageID );
     if ( pConnectionPage )
         pConnectionPage->Reset(*GetInputSetImpl());
-    // if this is NULL, the page has not been created yet, which means we're called before the
-    // dialog was displayed (probably from inside the ctor)
+    
+    
 
     SetUpdateMode(true);
 }
@@ -234,7 +234,7 @@ sal_Bool ODbAdminDialog::saveDatasource()
 ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 {
     if (!PrepareLeaveCurrentPage())
-    {   // the page did not allow us to leave
+    {   
         return AR_KEEP;
     }
 
@@ -243,9 +243,9 @@ ODbAdminDialog::ApplyResult ODbAdminDialog::implApplyChanges()
 
     if ( isUIEnabled() )
         ShowPage(GetCurPageId());
-        // This does the usual ActivatePage, so the pages can save their current status.
-        // This way, next time they're asked what has changed since now and here, they really
-        // can compare with the status they have _now_ (not the one they had before this apply call).
+        
+        
+        
 
     m_bApplied = sal_True;
 
@@ -294,15 +294,15 @@ void ODbAdminDialog::clearPassword()
 
 SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults, ::dbaccess::ODsnTypeCollection* _pTypeCollection)
 {
-    // just to be sure ....
+    
     _rpSet = NULL;
     _rpPool = NULL;
     _rppDefaults = NULL;
 
     const OUString sFilterAll( "%", 1, RTL_TEXTENCODING_ASCII_US );
-    // create and initialize the defaults
+    
     _rppDefaults = new SfxPoolItem*[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1];
-    SfxPoolItem** pCounter = _rppDefaults;  // want to modify this without affecting the out param _rppDefaults
+    SfxPoolItem** pCounter = _rppDefaults;  
     *pCounter++ = new SfxStringItem(DSID_NAME, OUString());
     *pCounter++ = new SfxStringItem(DSID_ORIGINALNAME, OUString());
     *pCounter++ = new SfxStringItem(DSID_CONNECTURL, OUString());
@@ -365,7 +365,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     *pCounter++ = new SfxInt32Item(DSID_MAX_ROW_SCAN, 100);
     *pCounter++ = new SfxBoolItem( DSID_RESPECTRESULTSETTYPE,false );
 
-    // create the pool
+    
     static SfxItemInfo const aItemInfos[DSID_LAST_ITEM_ID - DSID_FIRST_ITEM_ID + 1] =
     {
         {0,0},
@@ -436,7 +436,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
         aItemInfos, _rppDefaults);
     _rpPool->FreezeIdRanges();
 
-    // and, finally, the set
+    
     _rpSet = new SfxItemSet(*_rpPool, true);
 
     return _rpSet;
@@ -444,27 +444,27 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
 
 void ODbAdminDialog::destroyItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rpPool, SfxPoolItem**& _rppDefaults)
 {
-    // _first_ delete the set (refering the pool)
+    
     if (_rpSet)
     {
         delete _rpSet;
         _rpSet = NULL;
     }
 
-    // delete the pool
+    
     if (_rpPool)
     {
         _rpPool->ReleaseDefaults(true);
-            // the "true" means delete the items, too
+            
         SfxItemPool::Free(_rpPool);
         _rpPool = NULL;
     }
 
-    // reset the defaults ptr
+    
     _rppDefaults = NULL;
-        // no need to explicitly delete the defaults, this has been done by the ReleaseDefaults
+        
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

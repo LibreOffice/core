@@ -45,9 +45,9 @@
 #include <my_module/XSomething.hpp>
 
 
-using namespace ::rtl; // for OUString
-using namespace ::com::sun::star; // for odk interfaces
-using namespace ::com::sun::star::uno; // for basic types
+using namespace ::rtl; 
+using namespace ::com::sun::star; 
+using namespace ::com::sun::star::uno; 
 
 namespace my_sc_impl
 {
@@ -72,8 +72,8 @@ class MyService1Impl
 {
     oslInterlockedCount m_refcount;
     OUString m_sData;
-    // it's good practise to store the context for further use when you use
-    // other UNO API's in your implementation
+    
+    
     Reference< XComponentContext > m_xContext;
 public:
     inline MyService1Impl(Reference< XComponentContext > const & xContext) throw ()
@@ -83,24 +83,24 @@ public:
 
     virtual ~MyService1Impl() {}
 
-    // XInterface
+    
     virtual Any SAL_CALL queryInterface( Type const & type )
         throw (RuntimeException);
     virtual void SAL_CALL acquire()
         throw ();
     virtual void SAL_CALL release()
         throw ();
-    // XTypeProvider
+    
     virtual Sequence< Type > SAL_CALL getTypes()
         throw (RuntimeException);
     virtual Sequence< sal_Int8 > SAL_CALL getImplementationId()
         throw (RuntimeException);
-    // XSomething
+    
     virtual OUString SAL_CALL methodOne( OUString const & str )
         throw (RuntimeException);
     virtual OUString SAL_CALL methodTwo( )
         throw (RuntimeException);
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
@@ -109,61 +109,61 @@ public:
         throw (RuntimeException);
 };
 
-// XInterface implementation
+
 Any MyService1Impl::queryInterface( Type const & type )
     throw (RuntimeException)
 {
     if (type.equals(::cppu::UnoType< Reference< XInterface > >::get()))
     {
-        // return XInterface interface
-        // (resolve ambiguity by casting to lang::XTypeProvider)
+        
+        
         Reference< XInterface > x(
             static_cast< lang::XTypeProvider * >( this ) );
         return makeAny( x );
     }
     if (type.equals(::cppu::UnoType< Reference< lang::XTypeProvider > >::get()))
     {
-        // return XInterface interface
+        
         Reference< XInterface > x(
             static_cast< lang::XTypeProvider * >( this ) );
         return makeAny( x );
     }
     if (type.equals(::cppu::UnoType< Reference< lang::XServiceInfo > >::get()))
     {
-        // return XServiceInfo interface
+        
         Reference< lang::XServiceInfo > x(
             static_cast< lang::XServiceInfo * >( this ) );
         return makeAny( x );
     }
     if (type.equals(::cppu::UnoType< Reference< ::my_module::XSomething > >::get()))
     {
-        // return sample interface
+        
         Reference< ::my_module::XSomething > x(
             static_cast< ::my_module::XSomething * >( this ) );
         return makeAny( x );
     }
-    // querying for unsupported type
+    
     return Any();
 }
 
 void MyService1Impl::acquire()
     throw ()
 {
-    // thread-safe incrementation of reference count
+    
     ::osl_atomic_increment( &m_refcount );
 }
 
 void MyService1Impl::release()
     throw ()
 {
-    // thread-safe decrementation of reference count
+    
     if (0 == ::osl_atomic_decrement( &m_refcount ))
     {
-        delete this; // shutdown this object
+        delete this; 
     }
 }
 
-// XTypeProvider implementation
+
 Sequence< Type > MyService1Impl::getTypes()
     throw (RuntimeException)
 {
@@ -175,7 +175,7 @@ Sequence< Type > MyService1Impl::getTypes()
 }
 namespace
 {
-    // class to create an unique id
+    
     class UniqueIdInit
     {
     private:
@@ -187,7 +187,7 @@ namespace
         }
         const ::com::sun::star::uno::Sequence< sal_Int8 >& getSeq() const { return m_aSeq; }
     };
-    //A multi-thread safe UniqueIdInit singleton wrapper
+    
     class theService1ImplImplementationId
         : public rtl::Static< UniqueIdInit,
           theService1ImplImplementationId >
@@ -197,13 +197,13 @@ namespace
 Sequence< sal_Int8 > MyService1Impl::getImplementationId()
     throw (RuntimeException)
 {
-    //create a singleton that generates a unique id on
-    //first initialization and returns the same one
-    //on subsequent calls.
+    
+    
+    
     return theService1ImplImplementationId::get().getSeq();
 }
 
-// XSomething implementation
+
 OUString MyService1Impl::methodOne( OUString const & str )
     throw (RuntimeException)
 {
@@ -217,11 +217,11 @@ OUString MyService1Impl::methodTwo( )
     return OUString( "called methodTwo() of MyService1 implementation: " ) + m_sData;
 }
 
-// XServiceInfo implementation
+
 OUString MyService1Impl::getImplementationName()
     throw (RuntimeException)
 {
-    // unique implementation name
+    
     return OUString("my_module.my_sc_implementation.MyService1");
 }
 sal_Bool MyService1Impl::supportsService( OUString const & serviceName )
@@ -232,7 +232,7 @@ sal_Bool MyService1Impl::supportsService( OUString const & serviceName )
 Sequence< OUString > MyService1Impl::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    // this object only supports one service
+    
     OUString serviceName("my_module.MyService1");
     return Sequence< OUString >( &serviceName, 1 );
 }
@@ -244,7 +244,7 @@ Reference< XInterface > SAL_CALL create_MyService1Impl(
     return static_cast< lang::XTypeProvider * >( new MyService1Impl( xContext) );
 }
 
-// forward decl: implemented in service2_impl.cxx
+
 Reference< XInterface > SAL_CALL create_MyService2Impl(
     Reference< XComponentContext > const & ) SAL_THROW(());
 

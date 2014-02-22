@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,7 +35,7 @@
 
 using namespace sdr;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPolyEditView::ImpResetPolyPossibilityFlags()
 {
@@ -305,7 +305,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
         const bool bUndo = IsUndoEnabled();
         if( bUndo )
         {
-            // Description
+            
             BegUndo(ImpGetResStr(STR_EditDelete),GetDescriptionOfMarkedPoints(),SDRREPFUNC_OBJ_DELETE);
         }
 
@@ -390,7 +390,7 @@ void SdrPolyEditView::RipUpAtMarkedPoints()
 
                     if(nNewPt0Idx)
                     {
-                        // correction necessary?
+                        
                         DBG_ASSERT(bKorregFlag==false,"Multiple index corrections at SdrPolyEditView::RipUp().");
                         if(!bKorregFlag)
                         {
@@ -445,14 +445,14 @@ bool SdrPolyEditView::IsRipUpAtMarkedPointsPossible() const
 
                 if(1 == rPathPolyPolygon.count())
                 {
-                    // #i76617# Do not yet use basegfx::B2DPolygon since curve definitions
-                    // are different and methods need to be changed thoroughly with interaction rework
+                    
+                    
                     const Polygon aPathPolygon(rPathPolyPolygon.getB2DPolygon(0));
                     const sal_uInt16 nPointCount(aPathPolygon.GetSize());
 
                     if(nPointCount >= 3)
                     {
-                        bRetval = pMarkedPathObject->IsClosedObj(); // #i76617#
+                        bRetval = pMarkedPathObject->IsClosedObj(); 
 
                         for(SdrUShortCont::const_iterator it = pSelectedPoints->begin();
                             !bRetval && it != pSelectedPoints->end(); ++it)
@@ -482,8 +482,8 @@ bool SdrPolyEditView::IsOpenCloseMarkedObjectsPossible() const
 
         if(pMarkedPathObject)
         {
-            // #i76617# Do not yet use basegfx::B2DPolygon since curve definitions
-            // are different and methods need to be changed thoroughly with interaction rework
+            
+            
             const PolyPolygon aPathPolyPolygon(pMarkedPathObject->GetPathPoly());
             const sal_uInt16 nPolygonCount(aPathPolyPolygon.Count());
 
@@ -576,7 +576,7 @@ void SdrPolyEditView::CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* p1, const void* p2, const void* p3, const void* p4, const void* p5)
 {
@@ -604,9 +604,9 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
 
                 if(PolyPolygonEditor::GetRelativePolyPoint(aXPP, nPt, nPolyNum, nPointNum))
                 {
-                    //#i83671# used nLocalPointNum (which was the polygon point count)
-                    // instead of the point index (nPointNum). This of course leaded
-                    // to a wrong point access to the B2DPolygon.
+                    
+                    
+                    
                     basegfx::B2DPolygon aNewXP(aXPP.getB2DPolygon(nPolyNum));
                     Point aPos, aC1, aC2;
                     bool bC1(false);
@@ -651,7 +651,7 @@ void SdrPolyEditView::ImpTransformMarkedPoints(PPolyTrFunc pTrFunc, const void* 
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* /*p3*/, const void* /*p4*/, const void* /*p5*/)
 {
@@ -662,7 +662,7 @@ static void ImpMove(Point& rPt, Point* pC1, Point* pC2, const void* p1, const vo
 
 void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, bool bCopy)
 {
-    bCopy=false; // TODO: not yet implemented
+    bCopy=false; 
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditMove));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -672,7 +672,7 @@ void SdrPolyEditView::MoveMarkedPoints(const Size& rSiz, bool bCopy)
     AdjustMarkHdl();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* p2, const void* p3, const void* /*p4*/, const void* /*p5*/)
 {
@@ -683,7 +683,7 @@ static void ImpResize(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
 
 void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFact, const Fraction& yFact, bool bCopy)
 {
-    bCopy=false; // TODO: not yet implemented
+    bCopy=false; 
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);
@@ -693,7 +693,7 @@ void SdrPolyEditView::ResizeMarkedPoints(const Point& rRef, const Fraction& xFac
     AdjustMarkHdl();
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const void* /*p2*/, const void* p3, const void* p4, const void* /*p5*/)
 {
@@ -704,7 +704,7 @@ static void ImpRotate(Point& rPt, Point* pC1, Point* pC2, const void* p1, const 
 
 void SdrPolyEditView::RotateMarkedPoints(const Point& rRef, long nWink, bool bCopy)
 {
-    bCopy=false; // TODO: not yet implemented
+    bCopy=false; 
     ForceUndirtyMrkPnt();
     OUString aStr(ImpGetResStr(STR_EditResize));
     if (bCopy) aStr+=ImpGetResStr(STR_EditWithCopy);

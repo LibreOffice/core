@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "basiccharclass.hxx"
@@ -75,12 +75,12 @@ void SbiScanner::GenError( SbError code )
     if( !bError )
     {
         bool bRes = true;
-        // report only one error per statement
+        
         bError = true;
         if( pBasic )
         {
-            // in case of EXPECTED or UNEXPECTED it always refers
-            // to the last token, so take the Col1 over
+            
+            
             sal_Int32 nc = nColLock ? nSavedCol1 : nCol1;
             switch( code )
             {
@@ -100,7 +100,7 @@ void SbiScanner::GenError( SbError code )
 }
 
 
-// used by SbiTokenizer::MayBeLabel() to detect a label
+
 bool SbiScanner::DoesColonFollow()
 {
     if(nCol < aLine.getLength() && aLine[nCol] == ':')
@@ -112,7 +112,7 @@ bool SbiScanner::DoesColonFollow()
         return false;
 }
 
-// test for legal suffix
+
 static SbxDataType GetSuffixType( sal_Unicode c )
 {
     switch (c)
@@ -134,8 +134,8 @@ static SbxDataType GetSuffixType( sal_Unicode c )
     }
 }
 
-// reading the next symbol into the variables aSym, nVal and eType
-// return value is sal_False at EOF or errors
+
+
 #define BUF_SIZE 80
 
 void SbiScanner::scanAlphanumeric()
@@ -178,14 +178,14 @@ bool SbiScanner::readLine()
     while(n < nLen && aBuf[n] != '\r' && aBuf[n] != '\n')
         ++n;
 
-    // Trim trailing whitespace
+    
     sal_Int32 nEnd = n;
     while(nBufPos < nEnd && theBasicCharClass::get().isWhitespace(aBuf[nEnd - 1]))
         --nEnd;
 
     aLine = aBuf.copy(nBufPos, nEnd - nBufPos);
 
-    // Fast-forward past the line ending
+    
     if(n + 1 < nLen && aBuf[n] == '\r' && aBuf[n + 1] == '\n')
         n += 2;
     else if(n < nLen)
@@ -203,7 +203,7 @@ bool SbiScanner::readLine()
 
 bool SbiScanner::NextSym()
 {
-    // memorize for the EOLN-case
+    
     sal_Int32 nOldLine = nLine;
     sal_Int32 nOldCol1 = nCol1;
     sal_Int32 nOldCol2 = nCol2;
@@ -213,7 +213,7 @@ bool SbiScanner::NextSym()
     aSym = "";
     bHash = bSymbol = bNumber = bSpaces = false;
 
-    // read in line?
+    
     if( !pLine )
     {
         if(!readLine())
@@ -232,7 +232,7 @@ bool SbiScanner::NextSym()
 
     nCol1 = nCol;
 
-    // only blank line?
+    
     if(nCol >= aLine.getLength())
         goto eoln;
 
@@ -246,13 +246,13 @@ bool SbiScanner::NextSym()
         bHash = true;
     }
 
-    // copy character if symbol
+    
     if(nCol < aLine.getLength() && (theBasicCharClass::get().isAlpha(aLine[nCol], bCompatible) || aLine[nCol] == '_'))
     {
-        // if there's nothing behind '_' , it's the end of a line!
+        
         if(nCol + 1 == aLine.getLength() && aLine[nCol] == '_')
         {
-            // Note that nCol is not incremented here...
+            
             ++pLine;
             goto eoln;
         }
@@ -261,26 +261,26 @@ bool SbiScanner::NextSym()
 
         scanAlphanumeric();
 
-        // Special handling for "go to"
+        
         if(nCol < aLine.getLength() && bCompatible && aSym.equalsIgnoreAsciiCase("go"))
             scanGoto();
 
-        // replace closing '_' by space when end of line is following
-        // (wrong line continuation otherwise)
+        
+        
         if(nCol == aLine.getLength() && aLine[nCol - 1] == '_' )
         {
-            // We are going to modify a potentially shared string, so force
-            // a copy, so that aSym is not modified by the following operation
+            
+            
             OUString aSymCopy( aSym.getStr(), aSym.getLength() );
             aSym = aSymCopy;
 
-            // HACK: modifying a potentially shared string here!
+            
             *((sal_Unicode*)(pLine-1)) = ' ';
         }
 
-        // type recognition?
-        // don't test the exclamation mark
-        // if there's a symbol behind it
+        
+        
+        
         else if((nCol >= aLine.getLength() || aLine[nCol] != '!') ||
                 (nCol + 1 >= aLine.getLength() || !theBasicCharClass::get().isAlpha(aLine[nCol + 1], bCompatible)))
         {
@@ -297,7 +297,7 @@ bool SbiScanner::NextSym()
         }
     }
 
-    // read in and convert if number
+    
     else if((nCol < aLine.getLength() && theBasicCharClass::get().isDigit(aLine[nCol] & 0xFF)) ||
             (nCol + 1 < aLine.getLength() && aLine[nCol] == '.' && theBasicCharClass::get().isDigit(aLine[nCol + 1] & 0xFF)))
     {
@@ -306,17 +306,17 @@ bool SbiScanner::NextSym()
         eScanType = SbxDOUBLE;
         bool bScanError = false;
         bool bBufOverflow = false;
-        // All this because of 'D' or 'd' floating point type, sigh..
+        
         while(!bScanError && nCol < aLine.getLength() && strchr("0123456789.DEde", aLine[nCol]))
         {
-            // from 4.1.1996: buffer full? -> go on scanning empty
+            
             if( (p-buf) == (BUF_SIZE-1) )
             {
                 bBufOverflow = true;
                 ++pLine, ++nCol;
                 continue;
             }
-            // point or exponent?
+            
             if(aLine[nCol] == '.')
             {
                 if( ++dec > 1 )
@@ -352,7 +352,7 @@ bool SbiScanner::NextSym()
         *p = 0;
         aSym = p; bNumber = true;
 
-        // For bad characters, scan and parse errors generate only one error.
+        
         SbError nError = 0;
         if (bScanError)
         {
@@ -366,22 +366,22 @@ bool SbiScanner::NextSym()
         nVal = rtl_math_uStringToDouble( buf, buf+(p-buf), '.', ',', &eStatus, &pParseEnd );
         if (pParseEnd != buf+(p-buf))
         {
-            // e.g. "12e" or "12e+", or with bScanError "12d"+"E".
+            
             sal_Int32 nChars = buf+(p-buf) - pParseEnd;
             pLine -= nChars;
             nCol -= nChars;
-            // For bScanError, pLine and nCol were already decremented, just
-            // add that character to the parse end.
+            
+            
             if (bScanError)
                 ++nChars;
-            // Copy error position from original string, not the buffer
-            // replacement where "12dE" => "12EE".
+            
+            
             aError = aLine.copy( nCol, nChars);
             nError = SbERR_BAD_CHAR_IN_NUMBER;
         }
         else if (eStatus != rtl_math_ConversionStatus_Ok)
         {
-            // Keep the scan error and character at position, if any.
+            
             if (!nError)
                 nError = SbERR_MATH_OVERFLOW;
         }
@@ -400,7 +400,7 @@ bool SbiScanner::NextSym()
         if( bBufOverflow )
             GenError( SbERR_MATH_OVERFLOW );
 
-        // type recognition?
+        
         if( nCol < aLine.getLength() )
         {
             SbxDataType t(GetSuffixType(aLine[nCol]));
@@ -413,7 +413,7 @@ bool SbiScanner::NextSym()
        }
     }
 
-    // Hex/octal number? Read in and convert:
+    
     else if(nCol < aLine.getLength() && aLine[nCol] == '&')
     {
         ++pLine; ++nCol;
@@ -431,14 +431,14 @@ bool SbiScanner::NextSym()
             case 'H':
                 break;
             default :
-                // treated as an operator
+                
                 --pLine; --nCol; nCol1 = nCol-1;
                 aSym = "&";
                 return true;
         }
         bNumber = true;
-        // Hex literals are signed Integers ( as defined by basic
-        // e.g. -2,147,483,648 through 2,147,483,647 (signed)
+        
+        
         sal_Int32 l = 0;
         int i;
         bool bBufOverflow = false;
@@ -447,7 +447,7 @@ bool SbiScanner::NextSym()
             sal_Unicode ch = sal::static_int_cast< sal_Unicode >(
                 toupper(aLine[nCol] & 0xFF));
             ++pLine; ++nCol;
-            // from 4.1.1996: buffer full, go on scanning empty
+            
             if( (p-buf) == (BUF_SIZE-1) )
                 bBufOverflow = true;
             else if( OUString( cmp ).indexOf( ch ) != -1 )
@@ -476,7 +476,7 @@ bool SbiScanner::NextSym()
             GenError( SbERR_MATH_OVERFLOW );
     }
 
-    // Strings:
+    
     else if( *pLine == '"' || *pLine == '[' )
     {
         sal_Unicode cSep = *pLine;
@@ -493,12 +493,12 @@ bool SbiScanner::NextSym()
                 if( *pLine != cSep || cSep == ']' ) break;
             } else aError = OUString(cSep), GenError( SbERR_EXPECTED );
         }
-        // If VBA Interop then doen't eat the [] chars
+        
         if ( cSep == ']' && bVBASupportOn )
             aSym = aLine.copy( n - 1, nCol - n  + 1);
         else
             aSym = aLine.copy( n, nCol - n - 1 );
-        // get out duplicate string delimiters
+        
         OUStringBuffer aSymBuf;
         for ( sal_Int32 i = 0, len = aSym.getLength(); i < len; ++i )
         {
@@ -510,12 +510,12 @@ bool SbiScanner::NextSym()
         if( cSep != ']' )
             eScanType = ( cSep == '#' ) ? SbxDATE : SbxSTRING;
     }
-    // invalid characters:
+    
     else if( ( *pLine & 0xFF ) >= 0x7F )
     {
         GenError( SbERR_SYNTAX ); pLine++; nCol++;
     }
-    // other groups:
+    
     else
     {
         sal_Int32 n = 1;
@@ -554,9 +554,9 @@ eoln:
         bool bRes = NextSym();
         if( bVBASupportOn && aSym[0] == '.' )
         {
-            // object _
-            //    .Method
-            // ^^^  <- spaces is legal in MSO VBA
+            
+            
+            
             OSL_TRACE("*** resetting bSpaces***");
             bSpaces = false;
         }

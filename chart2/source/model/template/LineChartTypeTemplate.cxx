@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "LineChartTypeTemplate.hxx"
@@ -89,8 +89,8 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE, chart2::CurveStyle_LINES );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION, 20 );
 
-        // todo: check whether order 3 means polygons of order 3 or 2. (see
-        // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
+        
+        
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER, 3 );
     }
 };
@@ -139,7 +139,7 @@ struct StaticLineChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Refer
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -165,7 +165,7 @@ LineChartTypeTemplate::LineChartTypeTemplate(
 
 LineChartTypeTemplate::~LineChartTypeTemplate()
 {}
-// ____ OPropertySet ____
+
 uno::Any LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -181,7 +181,7 @@ uno::Any LineChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticLineChartTypeTemplateInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -198,7 +198,7 @@ StackMode LineChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ )
     return m_eStackMode;
 }
 
-// ____ XChartTypeTemplate ____
+
 sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
     const uno::Reference< chart2::XDiagram >& xDiagram,
     sal_Bool bAdaptProperties )
@@ -206,9 +206,9 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
 {
     sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
-    // check symbol-style and line-style
-    // for a template with symbols (or with lines) it is ok, if there is at least one series
-    // with symbols (or with lines)
+    
+    
+    
     if( bResult )
     {
         bool bSymbolFound = false;
@@ -267,7 +267,7 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
         }
     }
 
-    // adapt curve style, spline order and resolution
+    
     if( bResult && bAdaptProperties )
     {
         try
@@ -383,12 +383,12 @@ Sequence< OUString > LineChartTypeTemplate::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( LineChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( LineChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( LineChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

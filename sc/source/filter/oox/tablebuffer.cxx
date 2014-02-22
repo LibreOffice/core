@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tablebuffer.hxx"
@@ -30,14 +30,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
 using namespace ::com::sun::star::uno;
 
 
-// ============================================================================
+
 
 TableModel::TableModel() :
     mnId( -1 ),
@@ -47,7 +47,7 @@ TableModel::TableModel() :
 {
 }
 
-// ============================================================================
+
 
 Table::Table( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -82,10 +82,10 @@ void Table::importTable( SequenceInputStream& rStrm, sal_Int16 nSheet )
 
 void Table::finalizeImport()
 {
-    // Create database range.  Note that Excel 2007 and later names database
-    // ranges (or tables in their terminology) as Table1, Table2 etc.  We need
-    // to import them as named db ranges because they may be referenced by
-    // name in formula expressions.
+    
+    
+    
+    
     if( (maModel.mnId > 0) && !maModel.maDisplayName.isEmpty() ) try
     {
         maDBRangeName = maModel.maDisplayName;
@@ -93,7 +93,7 @@ void Table::finalizeImport()
             createDatabaseRangeObject( maDBRangeName, maModel.maRange ), UNO_SET_THROW);
         maDestRange = xDatabaseRange->getDataArea();
 
-        // get formula token index of the database range
+        
         PropertySet aPropSet( xDatabaseRange );
         if( !aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex ) )
             mnTokenIndex = -1;
@@ -110,7 +110,7 @@ void Table::applyAutoFilters()
     {
         try
         {
-            // get the range ( maybe we should cache the xDatabaseRange from finalizeImport )
+            
             PropertySet aDocProps( getDocument() );
             Reference< XDatabaseRanges > xDatabaseRanges( aDocProps.getAnyProperty( PROP_DatabaseRanges ), UNO_QUERY_THROW );
             Reference< XDatabaseRange > xDatabaseRange( xDatabaseRanges->getByName( maDBRangeName ), UNO_QUERY );
@@ -123,7 +123,7 @@ void Table::applyAutoFilters()
     }
 }
 
-// ============================================================================
+
 
 TableBuffer::TableBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -139,10 +139,10 @@ Table& TableBuffer::createTable()
 
 void TableBuffer::finalizeImport()
 {
-    // map all tables by identifier and display name
+    
     for( TableVector::iterator aIt = maTables.begin(), aEnd = maTables.end(); aIt != aEnd; ++aIt )
         insertTableToMaps( *aIt );
-    // finalize all valid tables
+    
     maIdTables.forEachMem( &Table::finalizeImport );
 }
 
@@ -161,7 +161,7 @@ TableRef TableBuffer::getTable( const OUString& rDispName ) const
     return maNameTables.get( rDispName );
 }
 
-// private --------------------------------------------------------------------
+
 
 void TableBuffer::insertTableToMaps( const TableRef& rxTable )
 {
@@ -176,9 +176,9 @@ void TableBuffer::insertTableToMaps( const TableRef& rxTable )
     }
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

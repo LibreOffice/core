@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rsc/rscsfx.hxx>
@@ -23,10 +23,10 @@
 #include "global.hxx"
 #include "globstr.hrc"
 
-//  conversion programmatic <-> display (visible) name
-//  currently, the core always has the visible names
-//  the api is required to use programmatic names for default styles
-//  these programmatic names must never change!
+
+
+
+
 
 #define SC_STYLE_PROG_STANDARD      "Default"
 #define SC_STYLE_PROG_RESULT        "Result"
@@ -64,7 +64,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
             aCellMap[4].aDispName = ScGlobal::GetRscString( STR_STYLENAME_HEADLINE1 );
             aCellMap[4].aProgName = OUString( SC_STYLE_PROG_HEADLINE1 );
 
-            //  last entry remains empty
+            
 
             bCellMapFilled = true;
         }
@@ -82,7 +82,7 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
             aPageMap[1].aDispName = ScGlobal::GetRscString( STR_STYLENAME_REPORT );
             aPageMap[1].aProgName = OUString( SC_STYLE_PROG_REPORT );
 
-            //  last entry remains empty
+            
 
             bPageMapFilled = true;
         }
@@ -92,8 +92,8 @@ static const ScDisplayNameMap* lcl_GetStyleNameMap( sal_uInt16 nType )
     return NULL;
 }
 
-//  programmatic name suffix for display names that match other programmatic names
-//  is " (user)" including a space
+
+
 
 #define SC_SUFFIX_USER      " (user)"
 #define SC_SUFFIX_USER_LEN  7
@@ -115,15 +115,15 @@ OUString ScStyleNameConversion::DisplayToProgrammaticName( const OUString& rDisp
             if (pNames->aDispName == rDispName)
                 return pNames->aProgName;
             else if (pNames->aProgName == rDispName)
-                bDisplayIsProgrammatic = true;          // display name matches any programmatic name
+                bDisplayIsProgrammatic = true;          
         }
         while( !(++pNames)->aDispName.isEmpty() );
     }
 
     if ( bDisplayIsProgrammatic || lcl_EndsWithUser( rDispName ) )
     {
-        //  add the (user) suffix if the display name matches any style's programmatic name
-        //  or if it already contains the suffix
+        
+        
         return rDispName + SC_SUFFIX_USER;
     }
 
@@ -134,7 +134,7 @@ OUString ScStyleNameConversion::ProgrammaticToDisplayName( const OUString& rProg
 {
     if ( lcl_EndsWithUser( rProgName ) )
     {
-        //  remove the (user) suffix, don't compare to map entries
+        
         return rProgName.copy( 0, rProgName.getLength() - SC_SUFFIX_USER_LEN );
     }
 

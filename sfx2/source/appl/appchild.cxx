@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,7 +34,7 @@
 #include <sfx2/module.hxx>
 #include <sfx2/sfxsids.hrc>
 
-//=========================================================================
+
 
 
 void SfxApplication::RegisterChildWindow_Impl( SfxModule *pMod, SfxChildWinFactory *pFact )
@@ -66,7 +66,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
     SfxChildWinFactory *pF = NULL;
     if ( pMod )
     {
-        // Abandon Module, search there for ChildwindowFactory
+        
         pFactories = pMod->GetChildWinFactories_Impl();
         if ( pFactories )
         {
@@ -76,7 +76,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
                 SfxChildWinFactory *pFac = (*pFactories)[nFactory];
                 if ( nId == pFac->nId )
                 {
-                    // Factory found, registrer Context here.
+                    
                     pF = pFac;
                     break;
                 }
@@ -86,7 +86,7 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
 
     if ( !pF )
     {
-        // Search for Factory in the Application
+        
         DBG_ASSERT( pAppData_Impl, "No AppData!" );
         DBG_ASSERT( pAppData_Impl->pFactArr, "No Factories!" );
 
@@ -99,10 +99,10 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
             {
                 if ( pMod )
                 {
-                    // If the context of a module has been registered, then the
-                    // ChildWindowFactory must also be available there,
-                    // else the ContextFactory would have be unsubscribed on
-                    // DLL-exit
+                    
+                    
+                    
+                    
                     pF = new SfxChildWinFactory( pFac->pCtor, pFac->nId,
                             pFac->nPos );
                     pMod->RegisterChildWindow( pF );
@@ -125,14 +125,14 @@ void SfxApplication::RegisterChildWindowContext_Impl( SfxModule *pMod, sal_uInt1
     OSL_FAIL( "No ChildWindow for this Context!" );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxChildWinFactArr_Impl& SfxApplication::GetChildWinFactories_Impl() const
 {
     return ( *(pAppData_Impl->pFactArr));
 }
 
-//--------------------------------------------------------------------
+
 
 SfxTemplateDialog* SfxApplication::GetTemplateDialog()
 {
@@ -145,7 +145,7 @@ SfxTemplateDialog* SfxApplication::GetTemplateDialog()
     return NULL;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxWorkWindow* SfxApplication::GetWorkWindow_Impl(const SfxViewFrame *pFrame) const
 {

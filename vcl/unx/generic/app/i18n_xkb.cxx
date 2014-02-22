@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -29,11 +29,11 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
 {
     mpDisplay = pDisplay;
 
-    // allow user to set the default keyboard group idx or to disable the usage
-    // of x keyboard extension at all:
-    //      setenv SAL_XKEYBOARDGROUP       disables keyboard extension
-    //      setenv SAL_XKEYBOARDGROUP 2     sets the keyboard group index to 2
-    // keyboard group index must be in [1,4], may be specified in hex or decimal
+    
+    
+    
+    
+    
     static char *pUseKeyboardExtension = getenv( "SAL_XKEYBOARDGROUP" );
     if ( pUseKeyboardExtension != NULL )
     {
@@ -44,9 +44,9 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
             mnDefaultGroup = 0;
     }
 
-    // query XServer support for XKB Extension,
-    // do not call XQueryExtension() / XInitExtension() due to possible version
-    // clashes !
+    
+    
+    
     if ( mbUseExtension )
     {
         int nMajorExtOpcode;
@@ -58,7 +58,7 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
             &nExtMajorVersion, &nExtMinorVersion ) != 0;
     }
 
-    // query notification for changes of the keyboard group
+    
     if ( mbUseExtension )
     {
         #define XkbGroupMask (  XkbGroupStateMask | XkbGroupBaseMask \
@@ -68,7 +68,7 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
             XkbUseCoreKbd, XkbStateNotify, XkbGroupMask, XkbGroupMask );
     }
 
-    // query initial keyboard group
+    
     if ( mbUseExtension )
     {
         XkbStateRec aStateRecord;
@@ -80,13 +80,13 @@ SalI18N_KeyboardExtension::SalI18N_KeyboardExtension( Display* pDisplay )
 void
 SalI18N_KeyboardExtension::Dispatch( XEvent* pEvent )
 {
-    // must the event be handled?
+    
     if (   !mbUseExtension
         || (pEvent->type != mnEventBase) )
         return;
 
-    // only handle state notify events for now, and only interested
-    // in group details
+    
+    
     sal_uInt32 nXKBType = ((XkbAnyEvent*)pEvent)->xkb_type;
     switch ( nXKBType )
     {

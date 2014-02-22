@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmlsecurity/certificateviewer.hxx>
@@ -103,7 +103,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     ,maKeyImg               ( this, XMLSEC_RES( IMG_KEY ) )
     ,maHintCorrespPrivKeyFI ( this, XMLSEC_RES( FI_CORRPRIVKEY ) )
 {
-    //Verify the certificate
+    
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert,
          Sequence<Reference<css::security::XCertificate> >());
 
@@ -133,7 +133,7 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     maKeyImg.SetBackground( aBack );
     maHintCorrespPrivKeyFI.SetBackground( aBack );
 
-    // make some bold
+    
     Font    aFnt( maCertInfoFI.GetFont() );
     aFnt.SetWeight( WEIGHT_BOLD );
     maCertInfoFI.SetFont( aFnt );
@@ -142,13 +142,13 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
     maIssuedByLabelFI.SetFont( aFnt );
     maValidDateFI.SetFont( aFnt );
 
-    // insert data
+    
     css::uno::Reference< css::security::XCertificate > xCert = mpDlg->mxCert;
 
     maIssuedToFI.SetText( XmlSec::GetContentPart( xCert->getSubjectName() ) );
     maIssuedByFI.SetText( XmlSec::GetContentPart( xCert->getIssuerName() ) );
 
-    // dynamic length because of the different languages
+    
     long nWidth1 = maIssuedToLabelFI.GetTextWidth( maIssuedToLabelFI.GetText() );
     long nWidth2 = maIssuedByLabelFI.GetTextWidth( maIssuedByLabelFI.GetText() );
     long nNewWidth = std::max( nWidth1, nWidth2 ) + 5;
@@ -180,15 +180,15 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
         GetSettings().GetUILocaleDataWrapper().getDate( aDateTimeEnd.GetDate() ) );
     maValidDateFI.SetText( sText );
 
-    // adjust position of fixed text depending on image sizes
+    
     ShrinkToFit( maCertImg );
     ShrinkToFit( maKeyImg );
     XmlSec::AlignAfterImage( maCertImg, maCertInfoFI, 12 );
     XmlSec::AlignAfterImage( maKeyImg, maHintCorrespPrivKeyFI, 12 );
 
-    // Check if we have the private key...
+    
     sal_Bool bHasPrivateKey = sal_False;
-    // #i41270# Check only if we have that certificate in our security environment
+    
     if ( _pDlg->mbCheckForPrivateKey )
     {
         long nCertificateCharacters = _pDlg->mxSecurityEnvironment->getCertificateCharacters( xCert );
@@ -263,13 +263,13 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     maElementsLB.SetTabs( &nTabs[ 0 ] );
     maElementsLB.InsertHeaderEntry( XMLSEC_RES( STR_HEADERBAR ) );
 
-    // fill list box
+    
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
     sal_uInt16                  nLineBreak = 16;
     const char*             pHexSep = " ";
     OUString                aLBEntry;
     OUString                aDetails;
-    // Certificate Versions are reported wrong (#i35107#) - 0 == "V1", 1 == "V2", ..., n = "V(n+1)"
+    
     aLBEntry = "V" + OUString::number( xCert->getVersion() + 1 );
     InsertElement( XMLSEC_RES( STR_VERSION ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
@@ -416,7 +416,7 @@ void CertificateViewerCertPathTP::ActivatePage()
         {
             const Reference< security::XCertificate > rCert = pCertPath[ --i ];
             OUString sName = XmlSec::GetContentPart( rCert->getSubjectName() );
-            //Verify the certificate
+            
             sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(rCert,
                  Sequence<Reference<css::security::XCertificate> >());
             bool bCertValid = certStatus == css::security::CertificateValidity::VALID ? true : false;
@@ -424,7 +424,7 @@ void CertificateViewerCertPathTP::ActivatePage()
         }
 
         mpCertPathLB->Select( pParent );
-        mpViewCertPB->Disable(); // Own certificate selected
+        mpViewCertPB->Disable(); 
 
         while( pParent )
         {

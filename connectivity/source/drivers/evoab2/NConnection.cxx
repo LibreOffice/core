@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "NConnection.hxx"
@@ -33,7 +33,7 @@
 using namespace connectivity::evoab;
 using namespace dbtools;
 
-//------------------------------------------------------------------------------
+
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -57,21 +57,21 @@ OUString implGetExceptionMsg( Exception& e, const OUString& aExceptionType_ )
      return aMsg;
 }
 
- // Exception type unknown
+ 
 OUString implGetExceptionMsg( Exception& e )
 {
          OUString aMsg = implGetExceptionMsg( e, OUString() );
          return aMsg;
 }
 
-// --------------------------------------------------------------------------------
+
 OEvoabConnection::OEvoabConnection( OEvoabDriver& _rDriver )
     :OSubComponent<OEvoabConnection, OConnection_BASE>( (::cppu::OWeakObject*)(&_rDriver), this )
     ,m_rDriver(_rDriver)
     ,m_xCatalog(NULL)
 {
 }
-//-----------------------------------------------------------------------------
+
 OEvoabConnection::~OEvoabConnection()
 {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -82,17 +82,17 @@ OEvoabConnection::~OEvoabConnection()
     }
 }
 
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OEvoabConnection::release() throw()
 {
     relase_ChildImpl();
 }
 
-// XServiceInfo
-// --------------------------------------------------------------------------------
+
+
 IMPLEMENT_SERVICE_INFO(OEvoabConnection, "com.sun.star.sdbc.drivers.evoab.Connection", "com.sun.star.sdbc.Connection")
 
-//-----------------------------------------------------------------------------
+
 void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     osl_atomic_increment( &m_refCount );
@@ -123,13 +123,13 @@ void OEvoabConnection::construct(const OUString& url, const Sequence< PropertyVa
     osl_atomic_decrement( &m_refCount );
 }
 
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
-    // when you need to transform SQL92 to you driver specific you can do it here
+    
     return _sSql;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -144,7 +144,7 @@ Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(
 
     return xMetaData;
 }
-//------------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< XTablesSupplier > OEvoabConnection::createCatalog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -157,7 +157,7 @@ Reference< XDatabaseMetaData > SAL_CALL OEvoabConnection::getMetaData(  ) throw(
      }
      return xTab;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -169,7 +169,7 @@ Reference< XStatement > SAL_CALL OEvoabConnection::createStatement(  ) throw(SQL
     m_aStatements.push_back(WeakReferenceHelper(*pStmt));
     return xStmt;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OEvoabConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -194,19 +194,19 @@ sal_Bool SAL_CALL OEvoabConnection::isClosed(  ) throw(SQLException, RuntimeExce
     return OConnection_BASE::rBHelper.bDisposed;
 }
 
-// --------------------------------------------------------------------------------
-// XCloseable
+
+
 void SAL_CALL OEvoabConnection::close(  ) throw(SQLException, RuntimeException)
 {
-    {  // we just dispose us
+    {  
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OConnection_BASE::rBHelper.bDisposed);
     }
     dispose();
 }
 
-// --------------------------------------------------------------------------------
-// XWarningsSupplier
+
+
 Any SAL_CALL OEvoabConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     return m_aWarnings.getWarnings();
@@ -215,17 +215,17 @@ void SAL_CALL OEvoabConnection::clearWarnings(  ) throw(SQLException, RuntimeExc
 {
     m_aWarnings.clearWarnings();
 }
-//------------------------------------------------------------------------------
+
 
 void OEvoabConnection::disposing()
 {
-    // we noticed that we should be destroyed in near future so we have to dispose our statements
+    
     ::osl::MutexGuard aGuard(m_aMutex);
     OConnection_BASE::disposing();
     dispose_ChildImpl();
 }
 
-// -------------------------------- stubbed methods ------------------------------------------------
+
 void SAL_CALL OEvoabConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setAutoCommit", *this );

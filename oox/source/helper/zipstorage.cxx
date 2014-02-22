@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/zipstorage.hxx"
@@ -31,7 +31,7 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::embed;
@@ -39,13 +39,13 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const Reference< XInputStream >& rxInStream ) :
     StorageBase( rxInStream, false )
 {
     OSL_ENSURE( rxContext.is(), "ZipStorage::ZipStorage - missing component context" );
-    // create base storage object
+    
     if( rxContext.is() ) try
     {
         /*  #i105325# ::comphelper::OStorageHelper::GetStorageFromInputStream()
@@ -62,7 +62,7 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
          */
         mxStorage = ::comphelper::OStorageHelper::GetStorageOfFormatFromInputStream(
             ZIP_STORAGE_FORMAT_STRING, rxInStream, rxContext,
-            false );    // DEV300_m80: Was sal_True, but DOCX and others did not load
+            false );    
     }
     catch (Exception const& e)
     {
@@ -75,7 +75,7 @@ ZipStorage::ZipStorage( const Reference< XComponentContext >& rxContext, const R
     StorageBase( rxStream, false )
 {
     OSL_ENSURE( rxContext.is(), "ZipStorage::ZipStorage - missing component context" );
-    // create base storage object
+    
     if( rxContext.is() ) try
     {
         const sal_Int32 nOpenMode = ElementModes::READWRITE | ElementModes::TRUNCATE;
@@ -132,7 +132,7 @@ StorageRef ZipStorage::implOpenSubStorage( const OUString& rElementName, bool bC
     bool bMissing = false;
     if( mxStorage.is() ) try
     {
-        // XStorage::isStorageElement may throw various exceptions...
+        
         if( mxStorage->isStorageElement( rElementName ) )
             xSubXStorage = mxStorage->openStorageElement(
                 rElementName, ::com::sun::star::embed::ElementModes::READ );
@@ -202,8 +202,8 @@ void ZipStorage::implCommit() const
     }
 }
 
-// ============================================================================
 
-} // namespace oox
+
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "layerimport.hxx"
@@ -69,13 +69,13 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::sdb;
 
-//= OFormLayerXMLImport_Impl
+
 OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     :m_rImporter(_rImporter)
     ,m_pAutoStyles(NULL)
 {
-    // build the attribute2property map
-    // string properties which are exported as attributes
+    
+    
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_NAME), PROPERTY_NAME);
     m_aAttributeMetaData.addStringProperty(
@@ -101,22 +101,22 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addStringProperty(
         OAttributeMetaData::getFormAttributeName(faOrder), PROPERTY_ORDER);
 
-    // properties not added because they're already present in another form
+    
     OSL_ENSURE(
         OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_TARGET_LOCATION)).equalsAscii(
             OAttributeMetaData::getFormAttributeName(faAction)),
         "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (1)!");
-        // if this fails, we would have to add a translation from faAction->PROPERTY_TARGETURL
-        // We did not because we already have one CCA_TARGET_LOCATION->PROPERTY_TARGETURL,
-        // and CCA_TARGET_LOCATION and faAction should be represented by the same attribute
+        
+        
+        
 
     OSL_ENSURE(
         OUString::createFromAscii(OAttributeMetaData::getCommonControlAttributeName(CCA_NAME)).equalsAscii(
             OAttributeMetaData::getFormAttributeName(faName)),
         "OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl: invalid attribute names (2)!");
-        // the same for faName, CCA_NAME and PROPERTY_NAME
+        
 
-    // boolean properties which are exported as attributes
+    
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getCommonControlAttributeName(CCA_CURRENT_SELECTED), PROPERTY_STATE, sal_False);
     m_aAttributeMetaData.addBooleanProperty(
@@ -164,7 +164,7 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addBooleanProperty(
         OAttributeMetaData::getDatabaseAttributeName( DA_INPUT_REQUIRED ), PROPERTY_INPUT_REQUIRED, sal_False );
 
-    // the int16 attributes
+    
     m_aAttributeMetaData.addInt16Property(
         OAttributeMetaData::getCommonControlAttributeName(CCA_MAX_LENGTH), PROPERTY_MAXTEXTLENGTH, 0);
     m_aAttributeMetaData.addInt16Property(
@@ -174,11 +174,11 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
     m_aAttributeMetaData.addInt16Property(
         OAttributeMetaData::getDatabaseAttributeName(DA_BOUND_COLUMN), PROPERTY_BOUNDCOLUMN, 0);
 
-    // the int32 attributes
+    
     m_aAttributeMetaData.addInt32Property(
         OAttributeMetaData::getSpecialAttributeName( SCA_PAGE_STEP_SIZE ), PROPERTY_BLOCK_INCREMENT, 10 );
 
-    // the enum attributes
+    
     m_aAttributeMetaData.addEnumProperty(
         OAttributeMetaData::getCommonControlAttributeName( CCA_VISUAL_EFFECT ), PROPERTY_VISUAL_EFFECT,
         VisualEffect::LOOK3D, OEnumMapper::getEnumMap( OEnumMapper::epVisualEffect ),
@@ -223,13 +223,13 @@ OFormLayerXMLImport_Impl::OFormLayerXMLImport_Impl(SvXMLImport& _rImporter)
         TabulatorCycle_RECORDS, OEnumMapper::getEnumMap(OEnumMapper::epTabCyle),
         &::getCppuType( static_cast<TabulatorCycle*>(NULL) ));
 
-    // 'initialize'
+    
     m_aCurrentPageIds = m_aControlIds.end();
 }
 
 OFormLayerXMLImport_Impl::~OFormLayerXMLImport_Impl()
 {
-    // outlined to allow forward declaration of OAttribute2Property in the header
+    
 
     if (m_pAutoStyles)
         m_pAutoStyles->ReleaseRef();
@@ -263,10 +263,10 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
         {
             const SvXMLNumFormatContext* pDataStyle = static_cast<const SvXMLNumFormatContext*>(pStyle);
 
-            // set this format at the control model
+            
             try
             {
-                // the models number format supplier and formats
+                
                 Reference< XNumberFormatsSupplier > xFormatsSupplier;
                 _rxControlModel->getPropertyValue(PROPERTY_FORMATSSUPPLIER) >>= xFormatsSupplier;
                 Reference< XNumberFormats > xFormats;
@@ -274,13 +274,13 @@ void OFormLayerXMLImport_Impl::applyControlNumberStyle(const Reference< XPropert
                     xFormats = xFormatsSupplier->getNumberFormats();
                 OSL_ENSURE(xFormats.is(), "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain the controls number formats!");
 
-                // obtain a key
+                
                 if (xFormats.is())
                 {
                     sal_Int32 nFormatKey = const_cast<SvXMLNumFormatContext*>(pDataStyle)->CreateAndInsert( xFormatsSupplier );
                     OSL_ENSURE(-1 != nFormatKey, "OFormLayerXMLImport_Impl::applyControlNumberStyle: could not obtain a format key!");
 
-                    // set the format on the control model
+                    
                     _rxControlModel->setPropertyValue(PROPERTY_FORMATKEY, makeAny(nFormatKey));
                 }
             }
@@ -305,7 +305,7 @@ void OFormLayerXMLImport_Impl::registerXFormsValueBinding(
     const Reference< XPropertySet >& _rxControlModel,
     const OUString& _rBindingID )
 {
-    // TODO: is an empty binding name allowed?
+    
     OSL_ENSURE( _rxControlModel.is(), "need  model" );
 
     m_aXFormsValueBindings.push_back(
@@ -316,7 +316,7 @@ void OFormLayerXMLImport_Impl::registerXFormsListBinding(
     const Reference< XPropertySet >& _rxControlModel,
     const OUString& _rBindingID )
 {
-    // TODO: is an empty binding name allowed?
+    
     OSL_ENSURE( _rxControlModel.is(), "need  model" );
 
     m_aXFormsListBindings.push_back(
@@ -327,7 +327,7 @@ void OFormLayerXMLImport_Impl::registerXFormsSubmission(
     const Reference< XPropertySet >& _rxControlModel,
     const OUString& _rSubmissionID )
 {
-    // TODO: is an empty binding name allowed?
+    
     OSL_ENSURE( _rxControlModel.is(), "need  model" );
 
     m_aXFormsSubmissions.push_back(
@@ -343,7 +343,7 @@ void OFormLayerXMLImport_Impl::registerCellRangeListSource( const Reference< XPr
 const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const OUString& _rStyleName) const
 {
     OSL_ENSURE( m_pAutoStyles, "OFormLayerXMLImport_Impl::getStyleElement: have no auto style context!" );
-        // did you use setAutoStyleContext?
+        
 
     const SvXMLStyleContext* pControlStyle =
         m_pAutoStyles ? m_pAutoStyles->FindStyleChildContext( XML_STYLE_FAMILY_TEXT_PARAGRAPH, _rStyleName ) : NULL;
@@ -354,14 +354,14 @@ const SvXMLStyleContext* OFormLayerXMLImport_Impl::getStyleElement(const OUStrin
 
 void OFormLayerXMLImport_Impl::enterEventContext()
 {
-    // install our own translation table. We need to disable the other tables because of name conflicts.
+    
     m_rImporter.GetEventImport().PushTranslationTable();
     m_rImporter.GetEventImport().AddTranslationTable(g_pFormsEventTranslation);
 }
 
 void OFormLayerXMLImport_Impl::leaveEventContext()
 {
-    // install the original event tables.
+    
     m_rImporter.GetEventImport().PopTranslationTable();
 }
 
@@ -391,7 +391,7 @@ void OFormLayerXMLImport_Impl::startPage(const Reference< XDrawPage >& _rxDrawPa
     if ( !m_xCurrentPageFormsSupp.is() )
         return;
 
-    // add a new entry to our page map
+    
     ::std::pair< MapDrawPage2Map::iterator, bool > aPagePosition;
     aPagePosition =
         m_aControlIds.insert(MapDrawPage2Map::value_type(_rxDrawPage, MapString2PropertySet()));
@@ -403,7 +403,7 @@ void OFormLayerXMLImport_Impl::endPage()
 {
     OSL_ENSURE( m_xCurrentPageFormsSupp.is(), "OFormLayerXMLImport_Impl::endPage: sure you called startPage before?" );
 
-    // do some knittings for the controls which are referring to each other
+    
     try
     {
         static const sal_Unicode s_nSeparator = ',';
@@ -418,10 +418,10 @@ void OFormLayerXMLImport_Impl::endPage()
                 ++aReferences
             )
         {
-            // the list of control ids is comma separated
+            
 
-            // in a list of n ids there are only n-1 separators ... have to catch this last id
-            // -> normalize the list
+            
+            
             sReferring = aReferences->second;
             sReferring += sSeparator;
 
@@ -431,7 +431,7 @@ void OFormLayerXMLImport_Impl::endPage()
                 sCurrentReferring = sReferring.copy(nPrevSep + 1, nSeparator - nPrevSep - 1);
                 xCurrentReferring = lookupControlId(sCurrentReferring);
                 if (xCurrentReferring.is())
-                    // if this condition fails, this is an error, but lookupControlId should have asserted this ...
+                    
                     xCurrentReferring->setPropertyValue( PROPERTY_CONTROLLABEL, makeAny( aReferences->first ) );
 
                 nPrevSep = nSeparator;
@@ -443,17 +443,17 @@ void OFormLayerXMLImport_Impl::endPage()
         OSL_FAIL("OFormLayerXMLImport_Impl::endPage: unable to knit the control references (caught an exception)!");
     }
 
-    // now that we have all children of the forms collection, attach the events
+    
     Reference< XIndexAccess > xIndexContainer;
     if ( m_xCurrentPageFormsSupp.is() && m_xCurrentPageFormsSupp->hasForms() )
         xIndexContainer = xIndexContainer.query( m_xCurrentPageFormsSupp->getForms() );
     if ( xIndexContainer.is() )
         ODefaultEventAttacherManager::setEvents( xIndexContainer );
 
-    // clear the structures for the control references.
+    
     m_aControlReferences.clear();
 
-    // and no we have no current page anymore
+    
     m_aCurrentPageIds = m_aControlIds.end();
 }
 
@@ -512,7 +512,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
     if ( ( rImport.getImportFlags() & IMPORT_CONTENT ) == 0 )
         return;
 
-    // create (and bind) the spreadsheet cell bindings
+    
     if  (   !m_aCellValueBindings.empty()
         &&  FormCellBindingHelper::isCellBindingAllowed( rImport.GetModel() )
         )
@@ -530,8 +530,8 @@ void OFormLayerXMLImport_Impl::documentDone( )
                 OSL_ENSURE( aHelper.isCellBindingAllowed(), "OFormLayerXMLImport_Impl::documentDone: can't bind this control model!" );
                 if ( aHelper.isCellBindingAllowed() )
                 {
-                    // There are special bindings for listboxes. See
-                    // OListAndComboImport::doRegisterCellValueBinding for a comment on this HACK.
+                    
+                    
                     OUString sBoundCellAddress( aCellBindings->second );
                     sal_Int32 nIndicator = sBoundCellAddress.lastIndexOf( s_sIndex );
 
@@ -553,7 +553,7 @@ void OFormLayerXMLImport_Impl::documentDone( )
         m_aCellValueBindings.clear();
     }
 
-    // the same for the spreadsheet cell range list sources
+    
     if  (   !m_aCellRangeListSources.empty()
         &&  FormCellBindingHelper::isListCellRangeAllowed( rImport.GetModel() )
         )
@@ -580,23 +580,23 @@ void OFormLayerXMLImport_Impl::documentDone( )
         m_aCellRangeListSources.clear();
     }
 
-    // process XForms-bindings; call registerXFormsValueBinding for each
+    
     std::for_each( m_aXFormsValueBindings.begin(),
                    m_aXFormsValueBindings.end(),
                    bind1st( ptr_fun( bindXFormsValueBinding ),
                             rImport.GetModel() ) );
-    // same for list bindings
+    
     std::for_each( m_aXFormsListBindings.begin(),
                    m_aXFormsListBindings.end(),
                    bind1st( ptr_fun( bindXFormsListBinding ),
                             rImport.GetModel() ) );
-    // same for submissions
+    
     std::for_each( m_aXFormsSubmissions.begin(),
                    m_aXFormsSubmissions.end(),
                    bind1st( ptr_fun( bindXFormsSubmission ),
                             rImport.GetModel() ) );
 }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

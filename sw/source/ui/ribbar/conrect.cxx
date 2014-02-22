@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/bindings.hxx>
@@ -40,7 +40,7 @@ ConstRectangle::ConstRectangle( SwWrtShell* pWrtShell, SwEditWin* pEditWin,
                                 SwView* pSwView )
     : SwDrawBase( pWrtShell, pEditWin, pSwView ),
     bMarquee(false),
-    // #93382#
+    
     mbVertical(false)
 {
 }
@@ -80,7 +80,7 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 
                 if( pObj )
                 {
-                    // Set the attributes needed for scrolling
+                    
                     SfxItemSet aItemSet( pSdrView->GetModel()->GetItemPool(),
                                         SDRATTR_MISC_FIRST, SDRATTR_MISC_LAST);
 
@@ -114,7 +114,7 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrPageView* pPV = pSdrView->GetSdrPageView();
                 m_pView->BeginTextEdit( pObj, pPV, m_pWin, true );
             }
-            m_pView->LeaveDrawCreate();  // Switch to selection mode
+            m_pView->LeaveDrawCreate();  
             m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
             break;
 
@@ -130,7 +130,7 @@ sal_Bool ConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
             }
         }
         break;
-        default:; //prevent warning
+        default:; 
         }
     }
     return bRet;
@@ -171,7 +171,7 @@ void ConstRectangle::Activate(const sal_uInt16 nSlotId)
 
     case SID_DRAW_CAPTION_VERTICAL:
         bCapVertical = true;
-        // no break
+        
     case SID_DRAW_CAPTION:
         m_pWin->SetSdrDrawMode(OBJ_CAPTION);
         break;

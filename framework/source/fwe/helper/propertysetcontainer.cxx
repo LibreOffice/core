@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <helper/propertysetcontainer.hxx>
@@ -46,7 +46,7 @@ PropertySetContainer::~PropertySetContainer()
 }
 
 
-// XInterface
+
 void SAL_CALL PropertySetContainer::acquire() throw ()
 {
     OWeakObject::acquire();
@@ -75,7 +75,7 @@ throw ( RuntimeException )
     return OWeakObject::queryInterface( rType );
 }
 
-// XIndexContainer
+
 void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
     throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
@@ -122,7 +122,7 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
         throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
-// XIndexReplace
+
 void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const ::com::sun::star::uno::Any& Element )
     throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
@@ -145,7 +145,7 @@ void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const ::com
         throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL PropertySetContainer::getCount()
     throw ( RuntimeException )
 {
@@ -170,7 +170,7 @@ Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
         throw IndexOutOfBoundsException( OUString(), (OWeakObject *)this );
 }
 
-// XElementAccess
+
 sal_Bool SAL_CALL PropertySetContainer::hasElements()
     throw (::com::sun::star::uno::RuntimeException)
 {

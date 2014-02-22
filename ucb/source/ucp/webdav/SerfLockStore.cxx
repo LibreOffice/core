@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ne_locks.h>
@@ -46,14 +46,14 @@ protected:
     virtual void SAL_CALL run();
 };
 
-} // namespace http_dav_ucp
+} 
 
-// -------------------------------------------------------------------
+
 void TickerThread::run()
 {
     OSL_TRACE( "TickerThread: start." );
 
-    // we have to go through the loop more often to be able to finish ~quickly
+    
     const int nNth = 25;
 
     int nCount = nNth;
@@ -74,7 +74,7 @@ void TickerThread::run()
     OSL_TRACE( "TickerThread: stop." );
 }
 
-// -------------------------------------------------------------------
+
 SerfLockStore::SerfLockStore()
     : m_pSerfLockStore( ne_lockstore_create() ),
       m_pTickerThread( 0 )
@@ -82,12 +82,12 @@ SerfLockStore::SerfLockStore()
     OSL_ENSURE( m_pSerfLockStore, "Unable to create neon lock store!" );
 }
 
-// -------------------------------------------------------------------
+
 SerfLockStore::~SerfLockStore()
 {
     stopTicker();
 
-    // release active locks, if any.
+    
     OSL_ENSURE( m_aLockInfoMap.size() == 0,
                 "SerfLockStore::~SerfLockStore - Releasing active locks!" );
 
@@ -107,7 +107,7 @@ SerfLockStore::~SerfLockStore()
     ne_lockstore_destroy( m_pSerfLockStore );
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::startTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -119,7 +119,7 @@ void SerfLockStore::startTicker()
     }
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::stopTicker()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -133,7 +133,7 @@ void SerfLockStore::stopTicker()
     }
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::registerSession( HttpSession * pHttpSession )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -141,7 +141,7 @@ void SerfLockStore::registerSession( HttpSession * pHttpSession )
     ne_lockstore_register( m_pSerfLockStore, pHttpSession );
 }
 
-// -------------------------------------------------------------------
+
 SerfLock * SerfLockStore::findByUri( OUString const & rUri )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -152,7 +152,7 @@ SerfLock * SerfLockStore::findByUri( OUString const & rUri )
     return ne_lockstore_findbyuri( m_pSerfLockStore, &aUri );
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::addLock( SerfLock * pLock,
                              rtl::Reference< SerfSession > const & xSession,
                              sal_Int32 nLastChanceToSendRefreshRequest )
@@ -166,7 +166,7 @@ void SerfLockStore::addLock( SerfLock * pLock,
     startTicker();
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::updateLock( SerfLock * pLock,
                                 sal_Int32 nLastChanceToSendRefreshRequest )
 {
@@ -183,7 +183,7 @@ void SerfLockStore::updateLock( SerfLock * pLock,
     }
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::removeLock( SerfLock * pLock )
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -195,7 +195,7 @@ void SerfLockStore::removeLock( SerfLock * pLock )
         stopTicker();
 }
 
-// -------------------------------------------------------------------
+
 void SerfLockStore::refreshLocks()
 {
     osl::MutexGuard aGuard( m_aMutex );
@@ -207,13 +207,13 @@ void SerfLockStore::refreshLocks()
         LockInfo & rInfo = (*it).second;
         if ( rInfo.nLastChanceToSendRefreshRequest != -1 )
         {
-            // 30 seconds or less remaining until lock expires?
+            
             TimeValue t1;
             osl_getSystemTime( &t1 );
             if ( rInfo.nLastChanceToSendRefreshRequest - 30
                      <= sal_Int32( t1.Seconds ) )
             {
-                // refresh the lock.
+                
                 sal_Int32 nlastChanceToSendRefreshRequest = -1;
                 if ( rInfo.xSession->LOCK(
                          (*it).first,
@@ -224,7 +224,7 @@ void SerfLockStore::refreshLocks()
                 }
                 else
                 {
-                    // refresh failed. stop auto-refresh.
+                    
                     rInfo.nLastChanceToSendRefreshRequest = -1;
                 }
             }

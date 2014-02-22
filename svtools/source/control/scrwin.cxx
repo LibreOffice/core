@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/scrwin.hxx>
 #include <vcl/settings.hxx>
 
-//===================================================================
+
 
 void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
 {
@@ -29,7 +29,7 @@ void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
     bHCenter = (nFlags & SCRWIN_HCENTER) == SCRWIN_HCENTER;
     bScrolling = sal_False;
 
-    // set the handlers for the scrollbars
+    
     aVScroll.SetScrollHdl( LINK(this, ScrollableWindow, ScrollHdl) );
     aHScroll.SetScrollHdl( LINK(this, ScrollableWindow, ScrollHdl) );
     aVScroll.SetEndScrollHdl( LINK(this, ScrollableWindow, EndScrollHdl) );
@@ -38,7 +38,7 @@ void ScrollableWindow::ImpInitialize( ScrollableWindowFlags nFlags )
     nColumnPixW = nLinePixH = GetSettings().GetStyleSettings().GetScrollBarSize();
 }
 
-//-------------------------------------------------------------------
+
 
 ScrollableWindow::ScrollableWindow( Window* pParent, WinBits nBits,
                                     ScrollableWindowFlags nFlags ) :
@@ -50,7 +50,7 @@ ScrollableWindow::ScrollableWindow( Window* pParent, WinBits nBits,
     ImpInitialize( nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScrollableWindow::Command( const CommandEvent& rCEvt )
 {
@@ -75,7 +75,7 @@ void ScrollableWindow::Command( const CommandEvent& rCEvt )
     Window::Command( rCEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -89,7 +89,7 @@ void ScrollableWindow::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 }
 
-//-------------------------------------------------------------------
+
 
 Size ScrollableWindow::GetOutputSizePixel() const
 {
@@ -103,18 +103,18 @@ Size ScrollableWindow::GetOutputSizePixel() const
     return aSz;
 }
 
-//-------------------------------------------------------------------
+
 
 IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
 {
-    // notify the start of scrolling, if not already scrolling
+    
     if ( !bScrolling )
         StartScroll(), bScrolling = sal_True;
 
-    // get the delta in logic coordinates
+    
     Size aDelta( PixelToLogic( Size( aHScroll.GetDelta(), aVScroll.GetDelta() ) ) );
 
-    // scroll the window, if this is not already done
+    
     if ( !bHandleDragging )
     {
         if ( pScroll == &aHScroll )
@@ -123,23 +123,23 @@ IMPL_LINK( ScrollableWindow, EndScrollHdl, ScrollBar *, pScroll )
             Scroll( 0, aDelta.Height() );
     }
 
-    // notify the end of scrolling
+    
     bScrolling = sal_False;
     EndScroll( aDelta.Width(), aDelta.Height() );
     return 0;
 }
 
-//-------------------------------------------------------------------
+
 
 IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
 {
-    // notify the start of scrolling, if not already scrolling
+    
     if ( !bScrolling )
         StartScroll(), bScrolling = sal_True;
 
     if ( bHandleDragging )
     {
-        // get the delta in logic coordinates
+        
         Size aDelta( PixelToLogic(
             Size( aHScroll.GetDelta(), aVScroll.GetDelta() ) ) );
         if ( pScroll == &aHScroll )
@@ -150,30 +150,30 @@ IMPL_LINK( ScrollableWindow, ScrollHdl, ScrollBar *, pScroll )
     return 0;
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::Resize()
 {
-    // get the new output-size in pixel
+    
     Size aOutPixSz = Window::GetOutputSizePixel();
 
-    // determine the size of the output-area and if we need scrollbars
+    
     const long nScrSize = GetSettings().GetStyleSettings().GetScrollBarSize();
-    sal_Bool bVVisible = sal_False; // by default no vertical-ScrollBar
-    sal_Bool bHVisible = sal_False; // by default no horizontal-ScrollBar
-    sal_Bool bChanged;          // determines if a visiblility was changed
+    sal_Bool bVVisible = sal_False; 
+    sal_Bool bHVisible = sal_False; 
+    sal_Bool bChanged;          
     do
     {
         bChanged = sal_False;
 
-        // does we need a vertical ScrollBar
+        
         if ( aOutPixSz.Width() < aTotPixSz.Width() && !bHVisible )
         {   bHVisible = sal_True;
             aOutPixSz.Height() -= nScrSize;
             bChanged = sal_True;
         }
 
-        // does we need a horizontal ScrollBar
+        
         if ( aOutPixSz.Height() < aTotPixSz.Height() && !bVVisible )
         {   bVVisible = sal_True;
             aOutPixSz.Width() -= nScrSize;
@@ -181,13 +181,13 @@ void ScrollableWindow::Resize()
         }
 
     }
-    while ( bChanged );   // until no visibility has changed
+    while ( bChanged );   
 
-    // store the old offset and map-mode
+    
     MapMode aMap( GetMapMode() );
     Point aOldPixOffset( aPixOffset );
 
-    // justify (right/bottom borders should never exceed the virtual window)
+    
     Size aPixDelta;
     if ( aPixOffset.X() < 0 &&
          aPixOffset.X() + aTotPixSz.Width() < aOutPixSz.Width() )
@@ -203,7 +203,7 @@ void ScrollableWindow::Resize()
         aPixOffset.Y() += aPixDelta.Height();
     }
 
-    // for axis without scrollbar restore the origin
+    
     if ( !bVVisible || !bHVisible )
     {
         aPixOffset = Point(
@@ -223,7 +223,7 @@ void ScrollableWindow::Resize()
     if ( bVVisible && !aVScroll.IsVisible() )
         aPixOffset.Y() = 0;
 
-    // select the shifted map-mode
+    
     if ( aPixOffset != aOldPixOffset )
     {
         Window::SetMapMode( MapMode( MAP_PIXEL ) );
@@ -233,11 +233,11 @@ void ScrollableWindow::Resize()
         SetMapMode( aMap );
     }
 
-    // show or hide scrollbars
+    
     aVScroll.Show( bVVisible );
     aHScroll.Show( bHVisible );
 
-    // disable painting in the corner between the scrollbars
+    
     if ( bVVisible && bHVisible )
     {
         aCornerWin.SetPosSizePixel(Point(aOutPixSz.Width(), aOutPixSz.Height()),
@@ -247,7 +247,7 @@ void ScrollableWindow::Resize()
     else
         aCornerWin.Hide();
 
-    // resize scrollbars and set their ranges
+    
     if ( bHVisible )
     {
         aHScroll.SetPosSizePixel(
@@ -272,19 +272,19 @@ void ScrollableWindow::Resize()
     }
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::StartScroll()
 {
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::EndScroll( long, long )
 {
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::SetMapMode( const MapMode& rNewMapMode )
 {
@@ -293,7 +293,7 @@ void ScrollableWindow::SetMapMode( const MapMode& rNewMapMode )
     Window::SetMapMode( aMap );
 }
 
-//-------------------------------------------------------------------
+
 
 MapMode ScrollableWindow::GetMapMode() const
 {
@@ -302,7 +302,7 @@ MapMode ScrollableWindow::GetMapMode() const
     return aMap;
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::SetTotalSize( const Size& rNewSize )
 {
@@ -310,20 +310,20 @@ void ScrollableWindow::SetTotalSize( const Size& rNewSize )
     ScrollableWindow::Resize();
 }
 
-//-------------------------------------------------------------------
+
 
 void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
 {
     if ( !bScrolling )
         StartScroll();
 
-    // get the delta in pixel
+    
     Size aDeltaPix( LogicToPixel( Size(nDeltaX, nDeltaY) ) );
     Size aOutPixSz( GetOutputSizePixel() );
     MapMode aMap( GetMapMode() );
     Point aNewPixOffset( aPixOffset );
 
-    // scrolling horizontally?
+    
     if ( nDeltaX != 0 )
     {
         aNewPixOffset.X() -= aDeltaPix.Width();
@@ -333,7 +333,7 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
             aNewPixOffset.X() = 0;
     }
 
-    // scrolling vertically?
+    
     if ( nDeltaY != 0 )
     {
         aNewPixOffset.Y() -= aDeltaPix.Height();
@@ -343,7 +343,7 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
             aNewPixOffset.Y() = 0;
     }
 
-    // recompute the logical scroll units
+    
     aDeltaPix.Width() = aPixOffset.X() - aNewPixOffset.X();
     aDeltaPix.Height() = aPixOffset.Y() - aNewPixOffset.Y();
     Size aDelta( PixelToLogic(aDeltaPix) );
@@ -351,25 +351,25 @@ void ScrollableWindow::Scroll( long nDeltaX, long nDeltaY, sal_uInt16 )
     nDeltaY = aDelta.Height();
     aPixOffset = aNewPixOffset;
 
-    // scrolling?
+    
     if ( nDeltaX != 0 || nDeltaY != 0 )
     {
         Update();
 
-        // does the new area overlap the old one?
+        
         if ( std::abs( (int)aDeltaPix.Height() ) < aOutPixSz.Height() ||
              std::abs( (int)aDeltaPix.Width() ) < aOutPixSz.Width() )
         {
-            // scroll the overlapping area
+            
             SetMapMode( aMap );
 
-            // never scroll the scrollbars itself!
+            
             Window::Scroll(-nDeltaX, -nDeltaY,
                 PixelToLogic( Rectangle( Point(0, 0), aOutPixSz ) ) );
         }
         else
         {
-            // repaint all
+            
             SetMapMode( aMap );
             Invalidate();
         }

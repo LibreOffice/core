@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "documentcontainer.hxx"
@@ -59,7 +59,7 @@ using namespace ::cppu;
 namespace dbaccess
 {
 
-// LocalNameApproval
+
 class LocalNameApproval : public IContainerApprove
 {
     ::connectivity::SQLError    m_aErrors;
@@ -86,7 +86,7 @@ void SAL_CALL LocalNameApproval::approveElement( const OUString& _rName, const R
         );
 }
 
-// ODocumentContainer
+
 
 ODocumentContainer::ODocumentContainer(const Reference< XComponentContext >& _xORB
                                     ,const Reference< XInterface >& _xParentContainer
@@ -167,7 +167,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     {
         MutexGuard aGuard(m_aMutex);
 
-        // extract known arguments
+        
         OUString sName, sPersistentName, sURL, sMediaType, sDocServiceName;
         Reference< XCommandProcessor > xCopyFrom;
         Reference< XConnection > xConnection;
@@ -184,13 +184,13 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         lcl_extractAndRemove( aArgs, INFO_MEDIATYPE, sMediaType );
         lcl_extractAndRemove( aArgs, "DocumentServiceName" , sDocServiceName );
 
-        // ClassID has two allowed types, so a special treatment here
+        
         Any aClassIDArg = aArgs.get( "ClassID" );
         if ( aClassIDArg.hasValue() )
         {
             if ( !( aClassIDArg >>= aClassID ) )
             {
-                // Extended for usage also with a string
+                
                 OUString sClassIDString;
                 if ( !( aClassIDArg >>= sClassIDString ) )
                     throw IllegalArgumentException( OUString(), *this, 2 );
@@ -204,7 +204,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
 #endif
             aArgs.remove( "ClassID" );
         }
-        // Everything which now is still present in the arguments is passed to the embedded object
+        
         const Sequence< PropertyValue > aCreationArgs( aArgs.getPropertyValues() );
 
         const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
@@ -234,7 +234,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                 if ( xProp.is() && xProp->getPropertySetInfo().is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_AS_TEMPLATE) )
                     xProp->getPropertyValue(PROPERTY_AS_TEMPLATE) >>= bAsTemplate;
 
-                // if we do not have an own class ID, see if we can determine one from the copy we just created
+                
                 if ( bNeedClassID )
                     ODocumentDefinition::GetDocumentServiceFromMediaType( getContainerStorage(), sPersistentName, m_aContext, aClassID );
             }
@@ -329,7 +329,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         OSL_ENSURE( pElementImpl ," Invalid entry in map!");
         xContent = new ODocumentContainer( m_aContext, *this, pElementImpl, ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION );
 
-        // copy children
+        
         if ( xCopyFrom.is() )
         {
             Sequence< OUString> aSeq = xCopyFrom->getElementNames();
@@ -346,11 +346,11 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
                     xCopyFrom->getByName(*elements) >>= xObjectToCopy;
                     Sequence< Any > aArguments(3);
                     PropertyValue aArgument;
-                    // set as folder
+                    
                     aArgument.Name = "Name";
                     aArgument.Value <<= *elements;
                     aArguments[0] <<= aArgument;
-                    //parent
+                    
                     aArgument.Name = "Parent";
                     aArgument.Value <<= xContent;
                     aArguments[1] <<= aArgument;
@@ -396,7 +396,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
     Any aRet;
     if ( aCommand.Name.equalsAscii( "open" ) )
     {
-        // open command for a folder content
+        
         OpenCommandArgument2 aOpenCommand;
           if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
@@ -407,7 +407,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
-            // Unreachable
+            
         }
         sal_Bool bOpenFolder =
             ( ( aOpenCommand.Mode == OpenMode::ALL ) ||
@@ -416,7 +416,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
 
         if ( bOpenFolder )
         {
-            // open as folder - return result set
+            
 
             Reference< XDynamicResultSet > xSet
                             = new DynamicResultSet( m_aContext,
@@ -427,19 +427,19 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
           }
         else
         {
-            // Unsupported.
+            
             ucbhelper::cancelCommandExecution(
                 makeAny( UnsupportedOpenModeException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 sal_Int16( aOpenCommand.Mode ) ) ),
                 Environment );
-                // Unreachable
+                
         }
     }
     else if ( aCommand.Name == "insert" )
     {
-        // insert
+        
 
         InsertCommandArgument arg;
           if ( !( aCommand.Argument >>= arg ) )
@@ -451,12 +451,12 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
-            // Unreachable
+            
         }
     }
     else if ( aCommand.Name == "delete" )
     {
-        // delete
+        
         Sequence< OUString> aSeq = getElementNames();
         const OUString* pIter = aSeq.getConstArray();
         const OUString* pEnd   = pIter + aSeq.getLength();
@@ -495,9 +495,9 @@ namespace
             }
         }
         if ( nIndex == -1 )
-            _sSimpleName = sName; // a content
+            _sSimpleName = sName; 
         else
-            _xNameContainer.clear(); // a sub folder doesn't exist
+            _xNameContainer.clear(); 
         return bRet;
     }
 }
@@ -571,7 +571,7 @@ sal_Bool SAL_CALL ODocumentContainer::hasByHierarchicalName( const OUString& _sN
     return lcl_queryContent(_sName,xNameContainer,aContent,sName);
 }
 
-// XHierarchicalNameContainer
+
 void SAL_CALL ODocumentContainer::insertByHierarchicalName( const OUString& _sName, const Any& _aElement ) throw (IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     Reference< XContent > xContent(_aElement,UNO_QUERY);
@@ -612,7 +612,7 @@ void SAL_CALL ODocumentContainer::removeByHierarchicalName( const OUString& _sNa
     xNameContainer->removeByName(sName);
 }
 
-// XHierarchicalNameReplace
+
 void SAL_CALL ODocumentContainer::replaceByHierarchicalName( const OUString& _sName, const Any& _aElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     Reference< XContent > xContent(_aElement,UNO_QUERY);
@@ -707,7 +707,7 @@ void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName ) throw(N
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
-    // check the arguments
+    
     if (_rName.isEmpty())
         throw IllegalArgumentException();
 
@@ -723,7 +723,7 @@ void SAL_CALL ODocumentContainer::removeByName( const OUString& _rName ) throw(N
         xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >());
     }
 
-    // do the removal
+    
     implRemove(_rName);
 
     notifyByName( aGuard, _rName, NULL, NULL, E_REMOVED, ContainerListemers );
@@ -752,6 +752,6 @@ void SAL_CALL ODocumentContainer::rename( const OUString& newName ) throw (SQLEx
     }
 }
 
-}   // namespace dbaccess
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/localedatawrapper.hxx>
@@ -49,7 +49,7 @@
 using namespace com::sun::star;
 using ::std::vector;
 
-// **************************************************************************
+
 struct SfxVersionInfo
 {
     OUString                aName;
@@ -151,7 +151,7 @@ SfxVersionTableDtor& SfxVersionTableDtor::operator=( const SfxVersionTableDtor& 
     return *this;
 }
 
-//----------------------------------------------------------------
+
 SfxVersionInfo::SfxVersionInfo()
     : aCreationDate( DateTime::EMPTY )
 {
@@ -192,11 +192,11 @@ void SfxVersionsTabListBox_Impl::setColSizes()
     if (rBar.GetItemCount() < 3)
         return;
 
-    // recalculate the datetime column width
+    
     long nWidestTime(GetTextWidth(getWidestTime(Application::GetSettings().GetLocaleDataWrapper())));
     long nW1 = rBar.GetTextWidth(rBar.GetItemText(1));
 
-    long nMax = std::max(nWidestTime, nW1) + 12; // max width + a little offset
+    long nMax = std::max(nWidestTime, nW1) + 12; 
     const long nRest = GetSizePixel().Width() - nMax;
 
     std::set<OUString> aAuthors;
@@ -282,10 +282,10 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVer
     rBar.SetItemBits(2, nBits);
     rBar.SetItemBits(3, nBits);
 
-    m_pVersionBox->Resize();       // OS: Hack for correct selection
+    m_pVersionBox->Resize();       
 
 
-    // set dialog title (filename or docinfo title)
+    
     OUString sText = GetText();
     sText = sText + " " + pViewFrame->GetObjectShell()->GetTitle();
     SetText( sText );
@@ -297,7 +297,7 @@ SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, sal_Bool bIsSaveVer
 
 OUString ConvertWhiteSpaces_Impl( const OUString& rText )
 {
-    // converted linebreaks and tabs to blanks; it's necessary for the display
+    
     OUStringBuffer sConverted;
     const sal_Unicode* pChars = rText.getStr();
     while ( *pChars )
@@ -379,7 +379,7 @@ void SfxVersionDialog::Open_Impl()
     uno::Sequence< beans::NamedValue > aEncryptionData;
     if ( GetEncryptionData_Impl( pObjShell->GetMedium()->GetItemSet(), aEncryptionData ) )
     {
-        // there is a password, it should be used during the opening
+        
         SfxUnoAnyItem aEncryptionDataItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) );
         pViewFrame->GetDispatcher()->Execute(
             SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, &aEncryptionDataItem, 0L );

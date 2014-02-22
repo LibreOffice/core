@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basidesh.hrc>
@@ -59,7 +59,7 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
     if ( aDlgName.isEmpty() )
         aDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
 
-    // maybe there's a suspended one?
+    
     pWin = FindDlgWin( rDocument, aLibName, aDlgName, false, true );
 
     if ( !pWin )
@@ -74,7 +74,7 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
 
             if ( xISP.is() )
             {
-                // create dialog model
+                
                 Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
                 Reference< container::XNameContainer > xDialogModel( xContext->getServiceManager()->createInstanceWithContext
                     ( "com.sun.star.awt.UnoControlDialogModel", xContext ), UNO_QUERY );
@@ -82,7 +82,7 @@ DialogWindow* Shell::CreateDlgWin( const ScriptDocument& rDocument, const OUStri
                 ::xmlscript::importDialogModel( xInput, xDialogModel, xContext, rDocument.isDocument() ? rDocument.getDocument() : Reference< frame::XModel >() );
                 LocalizationMgr::setStringResourceAtDialog( rDocument, rLibName, aDlgName, xDialogModel );
 
-                // new dialog window
+                
                 if (!pDialogLayout)
                     pDialogLayout.reset(new DialogWindowLayout(&GetViewFrame()->GetWindow(), aObjectCatalog));
                 pWin = new DialogWindow(pDialogLayout.get(), rDocument, aLibName, aDlgName, xDialogModel);
@@ -141,13 +141,13 @@ SdrView* Shell::GetCurDlgView() const
         return 0;
 }
 
-// only if dialogue window above:
+
 void Shell::ExecuteDialog( SfxRequest& rReq )
 {
     if (pCurWin && (dynamic_cast<DialogWindow*>(pCurWin) || rReq.GetSlot() == SID_IMPORT_DIALOG))
         pCurWin->ExecuteCommand(rReq);
 }
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

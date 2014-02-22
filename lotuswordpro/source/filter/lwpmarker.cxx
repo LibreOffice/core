@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -248,8 +248,8 @@ void LwpCHBlkMarker::ProcessOtherCHB(XFContentContainer* pXFPara,sal_uInt8 nType
 
 }
 
-//note: there will be a blank to mark the list
-//all input content of key list processed as normal text
+
+
 void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
 {
     sal_Bool bFillFlag = IsHasFilled();
@@ -258,13 +258,13 @@ void LwpCHBlkMarker::ProcessKeylist(XFContentContainer* pXFPara,sal_uInt8 nType)
     {
         if (nType == MARKER_START)
         {
-            EnumAllKeywords();//traverse the proplist to find all keywords
+            EnumAllKeywords();
             XFInputList* pList = new XFInputList;
             pList->SetName(LwpDLNFPVList::m_Name.str());
             pList->SetLabels(m_Keylist);
             pXFPara->Add(pList);
         }
-        else if (nType == MARKER_END)//skip
+        else if (nType == MARKER_END)
         {
         }
     }
@@ -386,7 +386,7 @@ void LwpFieldMark::ParseIndex(OUString& sKey1,OUString& sKey2)
 {
     OUString sFormula = m_Formula.str();
     sal_Int32 index[4];
-    sal_Unicode ch(0x0022);//"
+    sal_Unicode ch(0x0022);
     index[0] = sFormula.indexOf(ch,0);
     index[1] = sFormula.indexOf(ch,index[0]+1);
 
@@ -406,8 +406,8 @@ void LwpFieldMark::ParseTOC(OUString& sLevel,OUString& sText)
 {
     OUString sFormula = m_Formula.str();
     sal_Int32 index[4];
-    sal_Unicode ch1(0x0020);//space
-    sal_Unicode ch2(0x0022);//"
+    sal_Unicode ch1(0x0020);
+    sal_Unicode ch2(0x0022);
 
     index[0] = sFormula.indexOf(ch1,0);
     index[1] = sFormula.indexOf(ch1,index[0]+1);
@@ -435,7 +435,7 @@ sal_Bool LwpFieldMark::IsDateTimeField(sal_uInt8& type,OUString& formula)
 {
     OUString sFormula = m_Formula.str();
     sal_Int32 index;
-    sal_Unicode ch1(0x0020);//space
+    sal_Unicode ch1(0x0020);
     OUString tag;
 
     index = sFormula.indexOf(ch1,0);
@@ -482,7 +482,7 @@ sal_Bool LwpFieldMark::IsCrossRefField(sal_uInt8& nType, OUString& sMarkName)
 {
     OUString sFormula = m_Formula.str();
     sal_Int32 index;
-    sal_Unicode ch1(0x0020);//space
+    sal_Unicode ch1(0x0020);
     OUString tag;
 
     index = sFormula.indexOf(ch1,0);

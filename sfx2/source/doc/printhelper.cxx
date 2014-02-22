@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -138,7 +138,7 @@ Reference< ::com::sun::star::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPr
 
 void SAL_CALL SfxPrintJob_Impl::cancelJob() throw (RuntimeException)
 {
-    // FIXME: how to cancel PrintJob via API?!
+    
     if( m_pData->m_pObjectShell.Is() )
         m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( SFX_PRINTABLESTATE_CANCELJOB ) );
 }
@@ -243,22 +243,22 @@ namespace
                 break;
             case view::PaperFormat_MAKE_FIXED_SIZE:
                 break;
-            //deliberate no default to force warn on a new papersize
+            
         }
         return eRet;
     }
 }
 
-//________________________________________________________________________________________________________
-//  XPrintable
-//________________________________________________________________________________________________________
+
+
+
 
 uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() throw(::com::sun::star::uno::RuntimeException)
 {
-    // object already disposed?
+    
     SolarMutexGuard aGuard;
 
-    // search for any view of this document that is currently printing
+    
     const Printer *pPrinter = NULL;
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
     SfxViewFrame* pFirst = pViewFrm;
@@ -268,7 +268,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
         pViewFrm = SfxViewFrame::GetNext( *pViewFrm, m_pData->m_pObjectShell, sal_False );
     }
 
-    // if no view is printing currently, use the permanent SfxPrinter instance
+    
     if ( !pPrinter && pFirst )
         pPrinter = pFirst->GetViewShell()->GetPrinter(sal_True);
 
@@ -308,14 +308,14 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter() thro
     return aPrinter;
 }
 
-//________________________________________________________________________________________________________
-//  XPrintable
-//________________________________________________________________________________________________________
+
+
+
 
 void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter,SfxPrinter*& pPrinter,sal_uInt16& nChangeFlags,SfxViewShell*& pViewSh)
 
 {
-    // Get old Printer
+    
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
     if ( !pViewFrm )
@@ -326,15 +326,15 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
     if ( !pPrinter )
         return;
 
-    // new Printer-Name available?
+    
     nChangeFlags = 0;
     sal_Int32 lDummy = 0;
     for ( int n = 0; n < rPrinter.getLength(); ++n )
     {
-        // get Property-Value from printer description
+        
         const beans::PropertyValue &rProp = rPrinter.getConstArray()[n];
 
-        // Name-Property?
+        
         if ( rProp.Name.equalsAscii( "Name" ) )
         {
             OUString aPrinterName;
@@ -353,13 +353,13 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
     Size aSetPaperSize( 0, 0);
     view::PaperFormat nPaperFormat = view::PaperFormat_USER;
 
-    // other properties
+    
     for ( int i = 0; i < rPrinter.getLength(); ++i )
     {
-        // get Property-Value from printer description
+        
         const beans::PropertyValue &rProp = rPrinter.getConstArray()[i];
 
-        // PaperOrientation-Property?
+        
         if ( rProp.Name.equalsAscii( "PaperOrientation" ) )
         {
             view::PaperOrientation eOrient;
@@ -377,7 +377,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             }
         }
 
-        // PaperFormat-Property?
+        
         else if ( rProp.Name.equalsAscii( "PaperFormat" ) )
         {
             if ( !( rProp.Value >>= nPaperFormat ) )
@@ -394,7 +394,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             }
         }
 
-        // PaperSize-Property?
+        
         else if ( rProp.Name.equalsAscii( "PaperSize" ) )
         {
             awt::Size aTempSize ;
@@ -408,7 +408,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
             }
         }
 
-        // PrinterTray-Property
+        
         else if ( rProp.Name.equalsAscii( "PrinterPaperTray" ) )
         {
             OUString aTmp;
@@ -427,12 +427,12 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
     }
 
-    // The PaperSize may be set only when actually PAPER_USER
-    // applies, otherwise the driver could choose a invalid format.
+    
+    
     if(nPaperFormat == view::PaperFormat_USER && aSetPaperSize.Width())
     {
-        // Bug 56929 - MapMode of 100mm which recalculated when
-        // the device is set. Additionally only set if they were really changed.
+        
+        
         aSetPaperSize = pPrinter->LogicToPixel( aSetPaperSize, MAP_100TH_MM );
         if( aSetPaperSize != pPrinter->GetPaperSizePixel() )
         {
@@ -441,7 +441,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
         }
     }
 
-    //wait until printing is done
+    
     SfxPrinter* pDocPrinter = pViewSh->GetPrinter();
     while ( pDocPrinter->IsPrinting() )
         Application::Yield();
@@ -450,21 +450,21 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyValue >& rPrinter)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    // object already disposed?
+    
     SolarMutexGuard aGuard;
 
     SfxViewShell* pViewSh = NULL;
     SfxPrinter* pPrinter = NULL;
     sal_uInt16 nChangeFlags = 0;
     impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
-    // set new printer
+    
     if ( pViewSh && pPrinter )
         pViewSh->SetPrinter( pPrinter, nChangeFlags, false );
 }
 
-//________________________________________________________________________________________________________
-//  ImplPrintWatch thread for asynchronous printing with moving temp. file to ucb location
-//________________________________________________________________________________________________________
+
+
+
 
 /* This implements a thread which will be started to wait for asynchronous
    print jobs to temp. localy files. If they finish we move the temp. files
@@ -473,11 +473,11 @@ void SAL_CALL SfxPrintHelper::setPrinter(const uno::Sequence< beans::PropertyVal
 class ImplUCBPrintWatcher : public ::osl::Thread
 {
     private:
-        /// of course we must know the printer which execute the job
+        
         SfxPrinter* m_pPrinter;
-        /// this describes the target location for the printed temp file
+        
         OUString m_sTargetURL;
-        /// it holds the temp file alive, till the print job will finish and remove it from disk automaticly if the object die
+        
         ::utl::TempFile* m_pTempFile;
 
     public:
@@ -499,16 +499,16 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 SolarMutexGuard aGuard;
                 while( m_pPrinter->IsPrinting() )
                     Application::Yield();
-                m_pPrinter = NULL; // don't delete it! It's borrowed only :-)
+                m_pPrinter = NULL; 
             }
             /* } SAFE */
 
-            // lock for further using of our member isn't necessary - because
-            // we truns alone by defenition. Nobody join for us nor use us ...
+            
+            
             moveAndDeleteTemp(&m_pTempFile,m_sTargetURL);
 
-            // finishing of this run() method will call onTerminate() automaticly
-            // kill this thread there!
+            
+            
         }
 
         /* nobody wait for this thread. We must kill ourself ...
@@ -525,7 +525,7 @@ class ImplUCBPrintWatcher : public ::osl::Thread
          */
         static void moveAndDeleteTemp( ::utl::TempFile** ppTempFile, const OUString& sTargetURL )
         {
-            // move the file
+            
             try
             {
                 INetURLObject aSplitter(sTargetURL);
@@ -569,28 +569,28 @@ class ImplUCBPrintWatcher : public ::osl::Thread
                 OSL_FAIL("unknown exception");
             }
 
-            // kill the temp file!
+            
             delete *ppTempFile;
             *ppTempFile = NULL;
         }
 };
 
-//------------------------------------------------
 
-//________________________________________________________________________________________________________
-//  XPrintable
-//________________________________________________________________________________________________________
+
+
+
+
 void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >& rOptions)
         throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
 
-    // object already disposed?
-    // object already disposed?
+    
+    
     SolarMutexGuard aGuard;
 
-    // get view for sfx printing capabilities
+    
     SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell, sal_False ) : 0;
     if ( !pViewFrm )
@@ -599,12 +599,12 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     if ( !pView )
         return;
     sal_Bool bMonitor = sal_False;
-    // We need this information at the end of this method, if we start the vcl printer
-    // by executing the slot. Because if it is a ucb relevant URL we must wait for
-    // finishing the print job and move the temporary local file by using the ucb
-    // to the right location. But in case of no file name is given or it is already
-    // a local one we can supress this special handling. Because then vcl makes all
-    // right for us.
+    
+    
+    
+    
+    
+    
     OUString sUcbUrl;
     ::utl::TempFile* pUCBPrintTempFile = NULL;
 
@@ -614,13 +614,13 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     sal_Int16 nDuplexMode = ::com::sun::star::view::DuplexMode::UNKNOWN;
     for ( int n = 0; n < rOptions.getLength(); ++n )
     {
-        // get Property-Value from options
+        
         const beans::PropertyValue &rProp = rOptions.getConstArray()[n];
 
-        // FileName-Property?
+        
         if ( rProp.Name.equalsAscii( "FileName" ) )
         {
-            // unpack th URL and check for a valid and well known protocol
+            
             OUString sTemp;
             if (
                 ( rProp.Value.getValueType()!=::getCppuType((const OUString*)0))  ||
@@ -635,64 +635,64 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             INetURLObject aCheck(sURL );
             if (aCheck.GetProtocol()==INET_PROT_NOT_VALID)
             {
-                // OK - it's not a valid URL. But may it's a simple
-                // system path directly. It will be supported for historical
-                // reasons. Otherwhise we break to much external code ...
-                // We try to convert it to a file URL. If its possible
-                // we put the system path to the item set and let vcl work with it.
-                // No ucb or thread will be necessary then. In case it couldnt be
-                // converted its not an URL nor a system path. Then we can't accept
-                // this parameter and have to throw an exception.
+                
+                
+                
+                
+                
+                
+                
+                
                 OUString sSystemPath(sTemp);
                 OUString sFileURL;
                 if (::osl::FileBase::getFileURLFromSystemPath(sSystemPath,sFileURL)!=::osl::FileBase::E_None)
                     throw ::com::sun::star::lang::IllegalArgumentException();
                 aCheckedArgs[nProps].Name = rProp.Name;
                 aCheckedArgs[nProps++].Value <<= sFileURL;
-                // and append the local filename
+                
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
                 aCheckedArgs[nProps].Name = "LocalFileName";
                 aCheckedArgs[nProps++].Value <<= OUString( sTemp );
             }
             else
-            // It's a valid URL. but now we must know, if it is a local one or not.
-            // It's a question of using ucb or not!
+            
+            
             if (::utl::LocalFileHelper::ConvertURLToSystemPath(sURL,sPath))
             {
-                // it's a local file, we can use vcl without special handling
-                // And we have to use the system notation of the incoming URL.
-                // But it into the descriptor and let the slot be executed at
-                // the end of this method.
+                
+                
+                
+                
                 aCheckedArgs[nProps].Name = rProp.Name;
                 aCheckedArgs[nProps++].Value <<= sTemp;
-                // and append the local filename
+                
                 aCheckedArgs.realloc( aCheckedArgs.getLength()+1 );
                 aCheckedArgs[nProps].Name = "LocalFileName";
                 aCheckedArgs[nProps++].Value <<= sPath;
             }
             else
             {
-                // it's an ucb target. So we must use a temp. file for vcl
-                // and move it after printing by using the ucb.
-                // Create a temp file on the heap (because it must delete the
-                // real file on disk automaticly if it die - bt we have to share it with
-                // some other sources ... e.g. the ImplUCBPrintWatcher).
-                // And we put the name of this temp file to the descriptor instead
-                // of the URL. The URL we save for later using separately.
-                // Execution of the print job will be done later by executing
-                // a slot ...
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 if(!pUCBPrintTempFile)
                     pUCBPrintTempFile = new ::utl::TempFile();
                 pUCBPrintTempFile->EnableKillingFile();
 
-                //FIXME: does it work?
+                
                 aCheckedArgs[nProps].Name = "LocalFileName";
                 aCheckedArgs[nProps++].Value <<= OUString( pUCBPrintTempFile->GetFileName() );
                 sUcbUrl = sURL;
             }
         }
 
-        // CopyCount-Property
+        
         else if ( rProp.Name.equalsAscii( "CopyCount" ) )
         {
             sal_Int32 nCopies = 0;
@@ -703,8 +703,8 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             aCheckedArgs[nProps++].Value <<= nCopies;
         }
 
-        // Collate-Property
-        // Sort-Property (deprecated)
+        
+        
         else if ( rProp.Name.equalsAscii( "Collate" ) ||
                   rProp.Name.equalsAscii( "Sort" ) )
         {
@@ -718,7 +718,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 throw ::com::sun::star::lang::IllegalArgumentException();
         }
 
-        // Pages-Property
+        
         else if ( rProp.Name.equalsAscii( "Pages" ) )
         {
             OUString sTemp;
@@ -731,7 +731,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
                 throw ::com::sun::star::lang::IllegalArgumentException();
         }
 
-        // MonitorVisible
+        
         else if ( rProp.Name.equalsAscii( "MonitorVisible" ) )
         {
             if( !(rProp.Value >>= bMonitor) )
@@ -740,7 +740,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
             aCheckedArgs[nProps++].Value <<= bMonitor;
         }
 
-        // Wait
+        
         else if ( rProp.Name.equalsAscii( "Wait" ) )
         {
             if ( !(rProp.Value >>= bWaitUntilEnd) )
@@ -761,30 +761,30 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     if ( nProps != aCheckedArgs.getLength() )
         aCheckedArgs.realloc(nProps);
 
-    // Execute the print request every time.
-    // It doesn'tmatter if it is a real printer used or we print to a local file
-    // nor if we print to a temp file and move it afterwards by using the ucb.
-    // That will be handled later. see pUCBPrintFile below!
+    
+    
+    
+    
     pView->ExecPrint( aCheckedArgs, sal_True, sal_False );
 
-    // Ok - may be execution before has finished (or started!) printing.
-    // And may it was a printing to a file.
-    // Now we have to check if we can move the file (if necessary) via ucb to his right location.
-    // Cases:
-    //  a) printing finished                        => move the file directly and forget the watcher thread
-    //  b) printing is asynchron and runs currently => start watcher thread and exit this method
-    //                                                 This thread make all necessary things by itself.
+    
+    
+    
+    
+    
+    
+    
     if (pUCBPrintTempFile)
     {
-        // a)
+        
         SfxPrinter* pPrinter = pView->GetPrinter();
         if ( ! pPrinter->IsPrinting() )
             ImplUCBPrintWatcher::moveAndDeleteTemp(&pUCBPrintTempFile,sUcbUrl);
-        // b)
+        
         else
         {
-            // Note: we create(d) some resource on the heap. (thread and tep file)
-            // They will be deleted by the thread automaticly if he finish his run() method.
+            
+            
             ImplUCBPrintWatcher* pWatcher = new ImplUCBPrintWatcher( pPrinter, pUCBPrintTempFile, sUcbUrl );
             pWatcher->create();
         }

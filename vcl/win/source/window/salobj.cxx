@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@
 #include <win/salframe.h>
 #include <win/salobj.h>
 
-// =======================================================================
+
 
 static sal_Bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
 {
@@ -41,7 +41,7 @@ static sal_Bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
     HWND hTempWnd = ::GetParent( hWndChild );
     while ( hTempWnd )
     {
-        // stop searching if not a child window
+        
         if ( !(GetWindowStyle( hTempWnd ) & WS_CHILD) )
             return FALSE;
         if ( hTempWnd == hWndParent )
@@ -52,7 +52,7 @@ static sal_Bool ImplIsSysWindowOrChild( HWND hWndParent, HWND hWndChild )
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalObject* ImplFindSalObject( HWND hWndChild )
 {
@@ -69,7 +69,7 @@ WinSalObject* ImplFindSalObject( HWND hWndChild )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
 {
@@ -77,7 +77,7 @@ WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
     WinSalObject* pObject = ImplFindSalObject( hWnd );
     if ( pObject )
     {
-        // Dazugehoerenden Frame suchen
+        
         HWND hWnd2 = ::GetParent( pObject->mhWnd );
         pFrame = GetSalData()->mpFirstFrame;
         while ( pFrame )
@@ -92,11 +92,11 @@ WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
     return pFrame;
 }
 
-// -----------------------------------------------------------------------
+
 
 LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
 {
-    // Used for Unicode and none Unicode
+    
     SalData* pSalData = GetSalData();
 
     if ( (nCode >= 0) && lParam )
@@ -106,8 +106,8 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
              (pData->message != WM_KEYUP) )
             pSalData->mnSalObjWantKeyEvt = 0;
 
-        // Testen, ob wir Daten fuer ein SalObject-Fenster behandeln
-        // muessen
+        
+        
         WinSalObject* pObject;
         if ( pData->message == WM_SETFOCUS )
         {
@@ -129,7 +129,7 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
             pObject = ImplFindSalObject( pData->hwnd );
             if ( pObject && !ImplFindSalObject( (HWND)pData->wParam ) )
             {
-                // only call LoseFocus, if truly no child window gets the focus
+                
                 if ( !pData->wParam || !ImplFindSalObject( (HWND)pData->wParam ) )
                 {
                     if ( ImplSalYieldMutexTryToAcquire() )
@@ -149,11 +149,11 @@ LRESULT CALLBACK SalSysMsgProc( int nCode, WPARAM wParam, LPARAM lParam )
     return CallNextHookEx( pSalData->mhSalObjMsgHook, nCode, wParam, lParam );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
 {
-    // Used for Unicode and none Unicode
+    
     SalData*        pSalData = GetSalData();
     WinSalObject*   pObject;
 
@@ -171,11 +171,11 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
     if ( (pMsg->message == WM_KEYDOWN) ||
          (pMsg->message == WM_KEYUP) )
     {
-        // process KeyEvents even if the control does not process them itself
-        // SysKeys are processed as WM_SYSCOMMAND
-        // Char-Events are not processed, as they are not accelerator-relevant
+        
+        
+        
         sal_Bool bWantedKeyCode = FALSE;
-        // A-Z, 0-9 nur in Verbindung mit Control-Taste
+        
         if ( ((pMsg->wParam >= 65) && (pMsg->wParam <= 90)) ||
              ((pMsg->wParam >= 48) && (pMsg->wParam <= 57)) )
         {
@@ -197,13 +197,13 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
             ImplSalYieldMutexRelease();
         }
     }
-    // check WM_SYSCHAR, to activate menu with Alt key
+    
     else if ( pMsg->message == WM_SYSCHAR )
     {
         pSalData->mnSalObjWantKeyEvt = 0;
 
         sal_uInt16 nKeyCode = LOWORD( pMsg->wParam );
-        // Nur 0-9 und A-Z
+        
         if ( ((nKeyCode >= 48) && (nKeyCode <= 57)) ||
              ((nKeyCode >= 65) && (nKeyCode <= 90)) ||
              ((nKeyCode >= 97) && (nKeyCode <= 122)) )
@@ -234,11 +234,11 @@ sal_Bool ImplSalPreDispatchMsg( MSG* pMsg )
     return FALSE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
 {
-    // Used for Unicode and none Unicode
+    
     SalData*        pSalData = GetSalData();
 
     if ( (pMsg->message == WM_KEYDOWN) || (pMsg->message == WM_KEYUP) )
@@ -260,7 +260,7 @@ void ImplSalPostDispatchMsg( MSG* pMsg, LRESULT /* nDispatchResult */ )
     pSalData->mnSalObjWantKeyEvt = 0;
 }
 
-// =======================================================================
+
 
 LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
@@ -353,14 +353,14 @@ LRESULT CALLBACK SalSysObjWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 
         case WM_CREATE:
             {
-            // Window-Instanz am Windowhandle speichern
-            // Can also be used for the W-Version, because the struct
-            // to access lpCreateParams is the same structure
+            
+            
+            
             CREATESTRUCTA* pStruct = (CREATESTRUCTA*)lParam;
             pSysObj = (WinSalObject*)pStruct->lpCreateParams;
             SetSalObjWindowPtr( hWnd, pSysObj );
-            // set HWND already here,
-            // as instance data might be used during CreateWindow() events
+            
+            
             pSysObj->mhWnd = hWnd;
             rDef = FALSE;
             }
@@ -388,7 +388,7 @@ LRESULT CALLBACK SalSysObjWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM 
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam, int& rDef )
 {
@@ -396,14 +396,14 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
 
     switch( nMsg )
     {
-        // clear background for plugins
+        
         case WM_ERASEBKGND:
             {
                 WinSalObject* pSysObj = GetSalObjWindowPtr( ::GetParent( hWnd ) );
 
                 if( pSysObj && !pSysObj->IsEraseBackgroundEnabled() )
                 {
-                    // do not erase background
+                    
                     nRet = 1;
                     rDef = FALSE;
                 }
@@ -432,10 +432,10 @@ LRESULT CALLBACK SalSysObjChildWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPA
 
                 if( pSysObj && pSysObj->IsMouseTransparent() )
                 {
-                    // forward mouse events to parent frame
+                    
                     HWND hWndParent = ::GetParent( pSysObj->mhWnd );
 
-                    // transform coordinates
+                    
                     POINT pt;
                     pt.x = (long) LOWORD( lParam );
                     pt.y = (long) HIWORD( lParam );
@@ -470,13 +470,13 @@ LRESULT CALLBACK SalSysObjChildWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LP
     return nRet;
 }
 
-// =======================================================================
+
 
 SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
 {
     SalData* pSalData = GetSalData();
 
-    // install hook, if it is the first SalObject
+    
     if ( !pSalData->mpFirstObject )
     {
         pSalData->mhSalObjMsgHook = SetWindowsHookExW( WH_CALLWNDPROC,
@@ -502,7 +502,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
         aWndClassEx.lpszClassName   = SAL_OBJECT_CLASSNAMEA;
         if ( RegisterClassExA( &aWndClassEx ) )
         {
-            // Clean background first because of plugins.
+            
             aWndClassEx.cbWndExtra      = 0;
             aWndClassEx.hbrBackground   = (HBRUSH)(COLOR_WINDOW+1);
             aWndClassEx.lpfnWndProc     = SalSysObjChildWndProcA;
@@ -516,10 +516,10 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
     {
         WinSalObject* pObject = new WinSalObject;
 
-        // #135235# Clip siblings of this
-        // SystemChildWindow. Otherwise, DXCanvas (using a hidden
-        // SystemChildWindow) clobbers applets/plugins during
-        // animations .
+        
+        
+        
+        
         HWND hWnd = CreateWindowExA( 0, SAL_OBJECT_CLASSNAMEA, "",
                                      WS_CHILD | WS_CLIPSIBLINGS, 0, 0, 0, 0,
                                      pParent->mhWnd, 0,
@@ -528,9 +528,9 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
         HWND hWndChild = 0;
         if ( hWnd )
         {
-            // #135235# Explicitely stack SystemChildWindows in
-            // the order they're created - since there's no notion
-            // of zorder.
+            
+            
+            
             SetWindowPos(hWnd,HWND_TOP,0,0,0,0,
                          SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOREDRAW|SWP_NOSIZE);
             hWndChild = CreateWindowExA( 0, SAL_OBJECT_CHILDCLASSNAMEA, "",
@@ -567,7 +567,7 @@ SalObject* ImplSalCreateObject( WinSalInstance* pInst, WinSalFrame* pParent )
     return NULL;
 }
 
-// =======================================================================
+
 
 WinSalObject::WinSalObject()
 {
@@ -579,23 +579,23 @@ WinSalObject::WinSalObject()
     maSysData.nSize = sizeof( SystemEnvData );
     mpStdClipRgnData    = NULL;
 
-    // Insert object in objectlist
+    
     mpNextObject = pSalData->mpFirstObject;
     pSalData->mpFirstObject = this;
 }
 
-// -----------------------------------------------------------------------
+
 
 WinSalObject::~WinSalObject()
 {
     SalData* pSalData = GetSalData();
 
-    // remove frame from framelist
+    
     if ( this == pSalData->mpFirstObject )
     {
         pSalData->mpFirstObject = mpNextObject;
 
-        // remove hook, if it is the last SalObject
+        
         if ( !pSalData->mpFirstObject )
             UnhookWindowsHookEx( pSalData->mhSalObjMsgHook );
     }
@@ -608,7 +608,7 @@ WinSalObject::~WinSalObject()
         pTempObject->mpNextObject = mpNextObject;
     }
 
-    // Cache-Daten zerstoeren
+    
     delete mpStdClipRgnData;
 
     HWND hWndParent = ::GetParent( mhWnd );
@@ -618,29 +618,29 @@ WinSalObject::~WinSalObject()
     if ( mhWnd )
         DestroyWindow( mhWnd );
 
-    // reset palette, if no external child window is left,
-    // as they might have overwritten our palette
+    
+    
     if ( hWndParent &&
          ::GetActiveWindow() == hWndParent &&
          !GetWindow( hWndParent, GW_CHILD ) )
         ImplSendMessage( hWndParent, SAL_MSG_FORCEPALETTE, 0, 0 );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::ResetClipRegion()
 {
     SetWindowRgn( mhWnd, 0, TRUE );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 WinSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
 {
@@ -662,7 +662,7 @@ void WinSalObject::BeginSetClipRegion( sal_uLong nRectCount )
     mbFirstClipRect       = TRUE;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
@@ -701,13 +701,13 @@ void WinSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight 
     mpNextClipRect++;
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::EndSetClipRegion()
 {
     HRGN hRegion;
 
-    // create a ClipRegion from the Region data
+    
     if ( mpClipRgnData->rdh.nCount == 1 )
     {
         RECT* pRect = &(mpClipRgnData->rdh.rcBound);
@@ -726,7 +726,7 @@ void WinSalObject::EndSetClipRegion()
     SetWindowRgn( mhWnd, hRegion, TRUE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
@@ -742,7 +742,7 @@ void WinSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
                   SWP_NOZORDER | SWP_NOACTIVATE | nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::Show( sal_Bool bVisible )
 {
@@ -752,14 +752,14 @@ void WinSalObject::Show( sal_Bool bVisible )
         ShowWindow( mhWnd, SW_HIDE );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::Enable( sal_Bool bEnable )
 {
     EnableWindow( mhWnd, bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 
 void WinSalObject::GrabFocus()
 {

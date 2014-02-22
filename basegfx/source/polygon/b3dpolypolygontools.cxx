@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/instance.hxx>
@@ -28,18 +28,18 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <com/sun/star/drawing/DoubleSequence.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
-// predefines
+
+
 #define nMinSegments sal_uInt32(1)
 #define nMaxSegments sal_uInt32(512)
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
     namespace tools
     {
-        // B3DPolyPolygon tools
+        
         B3DRange getRange(const B3DPolyPolygon& rCandidate)
         {
             B3DRange aRetval;
@@ -117,7 +117,7 @@ namespace basegfx
                     B3DPolyPolygon aRetval;
                     B3DPolygon aTemp;
 
-                    // all points
+                    
                     const B3DPoint A(0.0, 0.0, 0.0);
                     const B3DPoint B(0.0, 1.0, 0.0);
                     const B3DPoint C(1.0, 1.0, 0.0);
@@ -127,7 +127,7 @@ namespace basegfx
                     const B3DPoint G(1.0, 1.0, 1.0);
                     const B3DPoint H(1.0, 0.0, 1.0);
 
-                    // create bottom
+                    
                     aTemp.append(D);
                     aTemp.append(A);
                     aTemp.append(E);
@@ -135,7 +135,7 @@ namespace basegfx
                     aTemp.setClosed(true);
                     aRetval.append(aTemp);
 
-                    // create front
+                    
                     aTemp.clear();
                     aTemp.append(B);
                     aTemp.append(A);
@@ -144,7 +144,7 @@ namespace basegfx
                     aTemp.setClosed(true);
                     aRetval.append(aTemp);
 
-                    // create left
+                    
                     aTemp.clear();
                     aTemp.append(E);
                     aTemp.append(A);
@@ -153,7 +153,7 @@ namespace basegfx
                     aTemp.setClosed(true);
                     aRetval.append(aTemp);
 
-                    // create top
+                    
                     aTemp.clear();
                     aTemp.append(C);
                     aTemp.append(G);
@@ -162,7 +162,7 @@ namespace basegfx
                     aTemp.setClosed(true);
                     aRetval.append(aTemp);
 
-                    // create right
+                    
                     aTemp.clear();
                     aTemp.append(H);
                     aTemp.append(G);
@@ -171,7 +171,7 @@ namespace basegfx
                     aTemp.setClosed(true);
                     aRetval.append(aTemp);
 
-                    // create back
+                    
                     aTemp.clear();
                     aTemp.append(F);
                     aTemp.append(G);
@@ -223,8 +223,8 @@ namespace basegfx
             return aRetval;
         }
 
-        // helper for getting the 3D Point from given cartesian coordiantes. fVer is defined from
-        // [F_PI2 .. -F_PI2], fHor from [0.0 .. F_2PI]
+        
+        
         inline B3DPoint getPointFromCartesian(double fVer, double fHor)
         {
             const double fCosHor(cos(fHor));
@@ -244,7 +244,7 @@ namespace basegfx
                 nHorSeg = fround(fabs(fHorStop - fHorStart) / (F_2PI / 24.0));
             }
 
-            // min/max limitations
+            
             nHorSeg = ::std::min(nMaxSegments, ::std::max(nMinSegments, nHorSeg));
 
             if(!nVerSeg)
@@ -252,17 +252,17 @@ namespace basegfx
                 nVerSeg = fround(fabs(fVerStop - fVerStart) / (F_2PI / 24.0));
             }
 
-            // min/max limitations
+            
             nVerSeg = ::std::min(nMaxSegments, ::std::max(nMinSegments, nVerSeg));
 
-            // create constants
+            
             const double fVerDiffPerStep((fVerStop - fVerStart) / (double)nVerSeg);
             const double fHorDiffPerStep((fHorStop - fHorStart) / (double)nHorSeg);
             bool bHorClosed(fTools::equal(fHorStop - fHorStart, F_2PI));
             bool bVerFromTop(fTools::equal(fVerStart, F_PI2));
             bool bVerToBottom(fTools::equal(fVerStop, -F_PI2));
 
-            // create horizontal rings
+            
             const sal_uInt32 nLoopVerInit(bVerFromTop ? 1L : 0L);
             const sal_uInt32 nLoopVerLimit(bVerToBottom ? nVerSeg : nVerSeg + 1L);
             const sal_uInt32 nLoopHorLimit(bHorClosed ? nHorSeg : nHorSeg + 1L);
@@ -282,7 +282,7 @@ namespace basegfx
                 aRetval.append(aNew);
             }
 
-            // create vertical half-rings
+            
             for(a = 0L; a < nLoopHorLimit; a++)
             {
                 const double fHor(fHorStart + ((double)(a) * fHorDiffPerStep));
@@ -319,7 +319,7 @@ namespace basegfx
 
             if(aRetval.count())
             {
-                // move and scale whole construct which is now in [-1.0 .. 1.0] in all directions
+                
                 B3DHomMatrix aTrans;
                 aTrans.translate(1.0, 1.0, 1.0);
                 aTrans.scale(rRange.getWidth() / 2.0, rRange.getHeight() / 2.0, rRange.getDepth() / 2.0);
@@ -343,7 +343,7 @@ namespace basegfx
                 nHorSeg = fround(fabs(fHorStop - fHorStart) / (F_2PI / 24.0));
             }
 
-            // min/max limitations
+            
             nHorSeg = ::std::min(nMaxSegments, ::std::max(nMinSegments, nHorSeg));
 
             if(!nVerSeg)
@@ -351,16 +351,16 @@ namespace basegfx
                 nVerSeg = fround(fabs(fVerStop - fVerStart) / (F_2PI / 24.0));
             }
 
-            // min/max limitations
+            
             nVerSeg = ::std::min(nMaxSegments, ::std::max(nMinSegments, nVerSeg));
 
-            // vertical loop
+            
             for(sal_uInt32 a(0L); a < nVerSeg; a++)
             {
                 const double fVer(fVerStart + (((fVerStop - fVerStart) * a) / nVerSeg));
                 const double fVer2(fVerStart + (((fVerStop - fVerStart) * (a + 1)) / nVerSeg));
 
-                // horizontal loop
+                
                 for(sal_uInt32 b(0L); b < nHorSeg; b++)
                 {
                     const double fHor(fHorStart + (((fHorStop - fHorStart) * b) / nHorSeg));
@@ -398,7 +398,7 @@ namespace basegfx
 
             if(aRetval.count())
             {
-                // move and scale whole construct which is now in [-1.0 .. 1.0] in all directions
+                
                 B3DHomMatrix aTrans;
                 aTrans.translate(1.0, 1.0, 1.0);
                 aTrans.scale(rRange.getWidth() / 2.0, rRange.getHeight() / 2.0, rRange.getDepth() / 2.0);
@@ -484,8 +484,8 @@ namespace basegfx
             }
         }
 
-        //////////////////////////////////////////////////////////////////////
-        // comparators with tolerance for 3D PolyPolygons
+        
+        
 
         bool equal(const B3DPolyPolygon& rCandidateA, const B3DPolyPolygon& rCandidateB, const double& rfSmallValue)
         {
@@ -512,7 +512,7 @@ namespace basegfx
             return equal(rCandidateA, rCandidateB, fSmallValue);
         }
 
-/// converters for com::sun::star::drawing::PolyPolygonShape3D
+
         B3DPolyPolygon UnoPolyPolygonShape3DToB3DPolyPolygon(
             const com::sun::star::drawing::PolyPolygonShape3D& rPolyPolygonShape3DSource,
             bool bCheckClosed)
@@ -551,8 +551,8 @@ namespace basegfx
                     pInnerSequenceY++;
                     pInnerSequenceZ++;
 
-                    // #i101520# correction is needed for imported polygons of old format,
-                    // see callers
+                    
+                    
                     if(bCheckClosed)
                     {
                         basegfx::tools::checkClosed(aNewPolygon);
@@ -636,7 +636,7 @@ namespace basegfx
             }
         }
 
-    } // end of namespace tools
-} // end of namespace basegfx
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

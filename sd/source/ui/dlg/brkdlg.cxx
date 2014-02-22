@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "BreakDlg.hxx"
@@ -58,7 +58,7 @@ BreakDlg::BreakDlg(
     mpProgress = new SfxProgress( pShell, SD_RESSTR(STR_BREAK_METAFILE), nSumActionCount*3 );
 
     pProgrInfo = new SvdProgressInfo( &aLink );
-    // every action is editedt 3 times in DoImport()
+    
     pProgrInfo->Init( nSumActionCount*3, nObjCount );
 
     pDrView = _pDrView;
@@ -71,7 +71,7 @@ BreakDlg::~BreakDlg()
     delete pProgrInfo;
 }
 
-// Control-Handler for cancel button
+
 IMPL_LINK_NOARG(BreakDlg, CancelButtonHdl)
 {
   bCancel = sal_True;
@@ -90,7 +90,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
     if(pProgrInfo == NULL)
       return 1L;
 
-    // update status bar or show a error message?
+    
     if(nInit == (void*)1L)
     {
         ErrorBox aErrBox( this, WB_OK, SD_RESSTR( STR_BREAK_FAIL ) );
@@ -102,13 +102,13 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
             mpProgress->SetState( pProgrInfo->GetSumCurAction() );
     }
 
-    // which object is shown at the moment?
+    
     OUString info = OUString::number( pProgrInfo->GetCurObj() )
             + "/"
             + OUString::number( pProgrInfo->GetObjCount() );
     m_pFiObjInfo->SetText(info);
 
-    // how many actions are started?
+    
     if(pProgrInfo->GetActionCount() == 0)
     {
         m_pFiActInfo->SetText( OUString() );
@@ -121,7 +121,7 @@ IMPL_LINK( BreakDlg, UpDate, void*, nInit )
         m_pFiActInfo->SetText(info);
     }
 
-    // and inserted????
+    
     if(pProgrInfo->GetInsertCount() == 0)
     {
         m_pFiInsInfo->SetText( OUString() );
@@ -161,6 +161,6 @@ IMPL_LINK_NOARG(BreakDlg, InitialUpdate)
     return 0L;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

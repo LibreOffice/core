@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -74,17 +74,17 @@ void SvBaseEventDescriptor::replaceByName(
 {
     sal_uInt16 nMacroID = getMacroID(rName);
 
-    // error checking
+    
     if (0 == nMacroID)
         throw NoSuchElementException();
     if (rElement.getValueType() != getElementType())
         throw IllegalArgumentException();
 
-    // get sequence
+    
     Sequence<PropertyValue> aSequence;
     rElement >>= aSequence;
 
-    // perform replace (in subclass)
+    
     SvxMacro aMacro(sEmpty,sEmpty);
     getMacroFromAny(aMacro, rElement);
     replaceByName(nMacroID, aMacro);
@@ -99,11 +99,11 @@ Any SvBaseEventDescriptor::getByName(
 {
     sal_uInt16 nMacroID = getMacroID(rName);
 
-    // error checking
+    
     if (0 == nMacroID)
         throw NoSuchElementException();
 
-    // perform get (in subclass)
+    
     Any aAny;
     SvxMacro aMacro( sEmpty, sEmpty );
     getByName(aMacro, nMacroID);
@@ -114,7 +114,7 @@ Any SvBaseEventDescriptor::getByName(
 Sequence<OUString> SvBaseEventDescriptor::getElementNames()
     throw(RuntimeException)
 {
-    // create and fill sequence
+    
     Sequence<OUString> aSequence(mnMacroItems);
     for( sal_Int16 i = 0; i < mnMacroItems; i++)
     {
@@ -161,7 +161,7 @@ Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames(void)
 
 sal_uInt16 SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) const
 {
-    // iterate over known event names
+    
     for(sal_Int16 i = 0; i < mnMacroItems; i++)
     {
         if( rName.equalsAscii(mpSupportedMacroItems[i].mpEventName))
@@ -170,7 +170,7 @@ sal_uInt16 SvBaseEventDescriptor::mapNameToEventID(const OUString& rName) const
         }
     }
 
-    // not found -> return zero
+    
     return 0;
 }
 
@@ -182,7 +182,7 @@ sal_uInt16 SvBaseEventDescriptor::getMacroID(const OUString& rName) const
 void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                                        const SvxMacro& rMacro)
 {
-    sal_Bool bRetValueOK = sal_False;   // do we have a ret value?
+    sal_Bool bRetValueOK = sal_False;   
 
     if (rMacro.HasMacro())
     {
@@ -190,18 +190,18 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
         {
             case STARBASIC:
             {
-                // create sequence
+                
                 Sequence<PropertyValue> aSequence(3);
                 Any aTmp;
 
-                // create type
+                
                 PropertyValue aTypeValue;
                 aTypeValue.Name = sEventType;
                 aTmp <<= sStarBasic;
                 aTypeValue.Value = aTmp;
                 aSequence[0] = aTypeValue;
 
-                // macro name
+                
                 PropertyValue aNameValue;
                 aNameValue.Name = sMacroName;
                 OUString sNameTmp(rMacro.GetMacName());
@@ -209,7 +209,7 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                 aNameValue.Value = aTmp;
                 aSequence[1] = aNameValue;
 
-                // library name
+                
                 PropertyValue aLibValue;
                 aLibValue.Name = sLibrary;
                 OUString sLibTmp(rMacro.GetLibName());
@@ -223,18 +223,18 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
             }
             case EXTENDED_STYPE:
             {
-                // create sequence
+                
                 Sequence<PropertyValue> aSequence(2);
                 Any aTmp;
 
-                // create type
+                
                 PropertyValue aTypeValue;
                 aTypeValue.Name = sEventType;
                 aTmp <<= sScript;
                 aTypeValue.Value = aTmp;
                 aSequence[0] = aTypeValue;
 
-                // macro name
+                
                 PropertyValue aNameValue;
                 aNameValue.Name = sScript;
                 OUString sNameTmp(rMacro.GetMacName());
@@ -251,12 +251,12 @@ void SvBaseEventDescriptor::getAnyFromMacro(Any& rAny,
                 OSL_FAIL("not implemented");
         }
     }
-    // else: bRetValueOK not set
+    
 
-    // if we don't have a return value, make an empty one
+    
     if (! bRetValueOK)
     {
-        // create "None" macro
+        
         Sequence<PropertyValue> aSequence(1);
 
         PropertyValue aKindValue;
@@ -277,13 +277,13 @@ void SvBaseEventDescriptor::getMacroFromAny(
     const Any& rAny)
         throw ( IllegalArgumentException )
 {
-    // get sequence
+    
     Sequence<PropertyValue> aSequence;
     rAny >>= aSequence;
 
-    // process ...
+    
     sal_Bool bTypeOK = sal_False;
-    sal_Bool bNone = sal_False;     // true if EventType=="None"
+    sal_Bool bNone = sal_False;     
     enum ScriptType eType = EXTENDED_STYPE;
     OUString sScriptVal;
     OUString sMacroVal;
@@ -316,7 +316,7 @@ void SvBaseEventDescriptor::getMacroFromAny(
                 bNone = sal_True;
                 bTypeOK = sal_True;
             }
-            // else: unknown script type
+            
         }
         else if (aValue.Name.equals(sMacroName))
         {
@@ -330,21 +330,21 @@ void SvBaseEventDescriptor::getMacroFromAny(
         {
             aValue.Value >>= sScriptVal;
         }
-        // else: unknown PropertyValue -> ignore
+        
     }
 
     if (bTypeOK)
     {
         if (bNone)
         {
-            // return empty macro
+            
             rMacro = SvxMacro( sEmpty, sEmpty );
         }
         else
         {
             if (eType == STARBASIC)
             {
-                // create macro and return
+                
                 SvxMacro aMacro(sMacroVal, sLibVal, eType);
                 rMacro = aMacro;
             }
@@ -355,15 +355,15 @@ void SvBaseEventDescriptor::getMacroFromAny(
             }
             else
             {
-                // we can't process type: abort
-                // TODO: JavaScript macros
+                
+                
                 throw IllegalArgumentException();
             }
         }
     }
     else
     {
-        // no valid type: abort
+        
         throw IllegalArgumentException();
     }
 }
@@ -380,7 +380,7 @@ SvEventDescriptor::SvEventDescriptor(
 
 SvEventDescriptor::~SvEventDescriptor()
 {
-    // automatically release xParentRef !
+    
 }
 
 void SvEventDescriptor::replaceByName(
@@ -422,10 +422,10 @@ SvDetachedEventDescriptor::SvDetachedEventDescriptor(
     SvBaseEventDescriptor(pSupportedMacroItems),
     sImplName(sAPI_SvDetachedEventDescriptor)
 {
-    // allocate aMacros
+    
     aMacros = new SvxMacro*[mnMacroItems];
 
-    // ... and initialize
+    
     for(sal_Int16 i = 0; i < mnMacroItems; i++)
     {
         aMacros[i] = NULL;
@@ -434,7 +434,7 @@ SvDetachedEventDescriptor::SvDetachedEventDescriptor(
 
 SvDetachedEventDescriptor::~SvDetachedEventDescriptor()
 {
-    // delete contents of aMacros
+    
     for(sal_Int16 i = 0; i < mnMacroItems; i++)
     {
         if (NULL != aMacros[i])
@@ -446,7 +446,7 @@ SvDetachedEventDescriptor::~SvDetachedEventDescriptor()
 
 sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const
 {
-    // iterate over supported events
+    
     sal_Int16 nIndex = 0;
     while ( (mpSupportedMacroItems[nIndex].mnEvent != nID) &&
             (mpSupportedMacroItems[nIndex].mnEvent != 0)      )
@@ -498,7 +498,7 @@ void SvDetachedEventDescriptor::getByName(
 }
 
 sal_Bool SvDetachedEventDescriptor::hasByName(
-    const sal_uInt16 nEvent ) const     /// item ID of event
+    const sal_uInt16 nEvent ) const     
         throw(IllegalArgumentException)
 {
     sal_Int16 nIndex = getIndex(nEvent);

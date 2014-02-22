@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@ void TraceRequest (const Reference<XConfigurationChangeRequest>& rxRequest)
 
 #endif
 
-} // end of anonymous namespace
+} 
 
 
 namespace sd { namespace framework {
@@ -140,7 +140,7 @@ IMPL_LINK(ChangeRequestQueueProcessor, ProcessEvent, void*, pUnused)
 
     if ( ! maQueue.empty())
     {
-        // Schedule the processing of the next event.
+        
         StartProcessing();
     }
 
@@ -159,11 +159,11 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
     if (mxConfiguration.is()
         && ! maQueue.empty())
     {
-        // Get and remove the first entry from the queue.
+        
         Reference<XConfigurationChangeRequest> xRequest (maQueue.front());
         maQueue.pop_front();
 
-        // Execute the change request.
+        
         if (xRequest.is())
         {
 #if OSL_DEBUG_LEVEL >= 2
@@ -175,8 +175,8 @@ void ChangeRequestQueueProcessor::ProcessOneEvent (void)
         if (maQueue.empty())
         {
             SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": All requests are processed");
-            // The queue is empty so tell the ConfigurationManager to update
-            // its state.
+            
+            
             if (mpConfigurationUpdater.get() != NULL)
             {
 #if OSL_DEBUG_LEVEL >= 2
@@ -216,6 +216,6 @@ void ChangeRequestQueueProcessor::Clear (void)
 }
 
 
-} } // end of namespace sd::framework::configuration
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

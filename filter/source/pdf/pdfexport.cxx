@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -84,9 +84,9 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::view;
 using namespace ::com::sun::star::graphic;
 
-// -------------
-// - PDFExport -
-// -------------
+
+
+
 
 PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
                       const Reference< task::XStatusIndicator >& rxStatusIndicator,
@@ -139,7 +139,7 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
     mbCanCopyOrExtract          ( sal_True ),
     mbCanExtractForAccessibility( sal_True ),
 
-//--->i56629
+
     mbExportRelativeFsysLinks       ( sal_False ),
     mnDefaultLinkAction         ( 0 ),
     mbConvertOOoTargetToPDFTarget( sal_False ),
@@ -148,13 +148,13 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc,
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 PDFExport::~PDFExport()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
     Reference< com::sun::star::view::XRenderable >& rRenderable,
@@ -218,8 +218,8 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
                     aMtf.SetPrefMapMode( aMapMode );
                     aMtf.Record( pOut );
 
-                    // #i35176#
-                    // IsLastPage property.
+                    
+                    
                     const sal_Int32 nCurrentRenderer = *aIter;
                     ++aIter;
                     if ( pLastPage && aIter == aEnd )
@@ -247,8 +247,8 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter,
             }
             else
             {
-                bRet = sal_True;                        // #i18334# SJ: nPageCount == 0,
-                rPDFWriter.NewPage( 10000, 10000 );     // creating dummy page
+                bRet = sal_True;                        
+                rPDFWriter.NewPage( 10000, 10000 );     
                 rPDFWriter.SetMapMode( MAP_100TH_MM );  //
             }
         }
@@ -308,7 +308,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
     OUString aDocMimetype;
     try
     {
-        // get document service name
+        
         Reference< com::sun::star::frame::XStorable > xStore( xDoc, UNO_QUERY );
         Reference< frame::XModuleManager2 > xModuleManager = frame::ModuleManager::create(xContext);
         if( xStore.is() )
@@ -316,7 +316,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
             OUString aDocServiceName = xModuleManager->identify( Reference< XInterface >( xStore, uno::UNO_QUERY ) );
             if ( !aDocServiceName.isEmpty() )
             {
-                // get the actual filter name
+                
                 OUString aFilterName;
                 Reference< lang::XMultiServiceFactory > xConfigProvider =
                     configuration::theDefaultProvider::get( xContext );
@@ -338,7 +338,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
                     xApplConfig->getByName( "ooSetupFactoryActualFilter" ) >>= aFilterName;
                     if( !aFilterName.isEmpty() )
                     {
-                        // find the related type name
+                        
                         OUString aTypeName;
                         Reference< container::XNameAccess > xFilterFactory(
                             xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.FilterFactory", xContext),
@@ -352,7 +352,7 @@ static OUString getMimetypeForDocument( const Reference< XComponentContext >& xC
 
                         if ( !aTypeName.isEmpty() )
                         {
-                            // find the mediatype
+                            
                             Reference< container::XNameAccess > xTypeDetection(
                                 xContext->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", xContext),
                                 UNO_QUERY );
@@ -404,7 +404,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             Sequence< beans::NamedValue > aPreparedPermissionPassword;
 
 
-            // getting the string for the creator
+            
             OUString aCreator;
             Reference< XServiceInfo > xInfo( mxSrcDoc, UNO_QUERY );
             if ( xInfo.is() )
@@ -433,7 +433,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     aContext.DocumentInfo.Keywords = ::comphelper::string::convertCommaSeparated(xDocumentProps->getKeywords());
                 }
             }
-            // getting the string for the producer
+            
             aContext.DocumentInfo.Producer =
                 utl::ConfigManager::getProductName() +
                 " " +
@@ -474,7 +474,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mnFormsFormat;
                 else if ( rFilterData[ nData ].Name == "AllowDuplicateFieldNames" )
                     rFilterData[ nData ].Value >>= mbAllowDuplicateFieldNames;
-//viewer properties
+
                 else if ( rFilterData[ nData ].Name == "HideViewerToolbar" )
                     rFilterData[ nData ].Value >>= mbHideViewerToolbar;
                 else if ( rFilterData[ nData ].Name == "HideViewerMenubar" )
@@ -508,7 +508,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     maWatermark = rFilterData[ nData ].Value;
                     mbWatermark = sal_True;
                 }
-//now all the security related properties...
+
                 else if ( rFilterData[ nData ].Name == "EncryptFile" )
                     rFilterData[ nData ].Value >>= mbEncrypt;
                 else if ( rFilterData[ nData ].Name == "DocumentOpenPassword" )
@@ -529,7 +529,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbCanCopyOrExtract;
                 else if ( rFilterData[ nData ].Name == "EnableTextAccessForAccessibilityTools" )
                     rFilterData[ nData ].Value >>= mbCanExtractForAccessibility;
-//--->i56629 links extra (relative links and other related stuff)
+
                  else if ( rFilterData[ nData ].Name == "ExportLinksRelativeFsys" )
                      rFilterData[ nData ].Value >>= mbExportRelativeFsysLinks;
                  else if ( rFilterData[ nData ].Name == "PDFViewSelection" )
@@ -559,7 +559,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             }
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
 
-//set the correct version, depending on user request
+
             switch( mnPDFTypeSelection )
             {
             default:
@@ -568,22 +568,22 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 break;
             case 1:
                 aContext.Version    = PDFWriter::PDF_A_1;
-                //force the tagged PDF as well
+                
                 mbUseTaggedPDF = sal_True;
-                //force disabling of form conversion
+                
                 mbExportFormFields = sal_False;
-                // PDF/A does not allow transparencies
+                
                 mbRemoveTransparencies = sal_True;
-                // no encryption
+                
                 mbEncrypt = sal_False;
                 xEnc.clear();
                 break;
             }
 
-//copy in context the values default in the contructor or set by the FilterData sequence of properties
+
             aContext.Tagged     = mbUseTaggedPDF;
 
-//values used in viewer
+
             aContext.HideViewerToolbar          = mbHideViewerToolbar;
             aContext.HideViewerMenubar          = mbHideViewerMenubar;
             aContext.HideViewerWindowControls   = mbHideViewerWindowControls;
@@ -647,26 +647,26 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
             aContext.FirstPageLeft = mbFirstPageLeft;
 
-//check if PDF/A, which does not allow encryption
+
             if( aContext.Version != PDFWriter::PDF_A_1 )
             {
-//set values needed in encryption
-//set encryption level, fixed, but here it can set by the UI if needed.
-// true is 128 bit, false 40
-//note that in 40 bit mode the UI needs reworking, since the current UI is meaningfull only for
-//128bit security mode
+
+
+
+
+
                 aContext.Encryption.Security128bit = true;
 
-//set check for permission change password
-// if not enabled and no permission password, force permissions to default as if PDF where without encryption
+
+
                 if( mbRestrictPermissions && (xEnc.is() || !aPermissionPassword.isEmpty()) )
                 {
                     mbEncrypt = sal_True;
-//permission set as desired, done after
+
                 }
                 else
                 {
-//force permission to default
+
                     mnPrintAllowed                  = 2 ;
                     mnChangesAllowed                = 4 ;
                     mbCanCopyOrExtract              = sal_True;
@@ -675,7 +675,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 switch( mnPrintAllowed )
                 {
-                case 0: //initialized when aContext is build, means no printing
+                case 0: 
                     break;
                 default:
                 case 2:
@@ -687,7 +687,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 switch( mnChangesAllowed )
                 {
-                case 0: //already in struct PDFSecPermissions CTOR
+                case 0: 
                     break;
                 case 1:
                     aContext.Encryption.CanAssemble             = true;
@@ -714,9 +714,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 if( mbEncrypt && !aPermissionPassword.isEmpty() && ! aPreparedPermissionPassword.getLength() )
                     aPreparedPermissionPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aPermissionPassword );
             }
-            // after this point we don't need the legacy clear passwords anymore
-            // however they are still inside the passed filter data sequence
-            // which is sadly out out our control
+            
+            
+            
             aPermissionPassword = OUString();
             aOpenPassword = OUString();
 
@@ -742,41 +742,41 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             }
             aContext.AllowDuplicateFieldNames = mbAllowDuplicateFieldNames;
 
-            //get model
+            
             Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
             {
-//---> i56629 Relative link stuff
-//set the base URL of the file:
-//then base URL
+
+
+
                 aContext.BaseURL = xModel->getURL();
-//relative link option is private to PDF Export filter and limited to local filesystem only
+
                 aContext.RelFsys = mbExportRelativeFsysLinks;
-//determine the default acton for PDF links
+
                 switch( mnDefaultLinkAction )
                 {
                 default:
-//default: URI, without fragment conversion (the bookmark in PDF may not work)
+
                 case 0:
                     aContext.DefaultLinkAction = PDFWriter::URIAction;
                     break;
-//view PDF through the reader application
+
                 case 1:
                     aContext.ForcePDFAction = true;
                     aContext.DefaultLinkAction = PDFWriter::LaunchAction;
                     break;
-//view PDF through an Internet browser
+
                 case 2:
                     aContext.DefaultLinkAction = PDFWriter::URIActionDestination;
                     break;
                 }
                 aContext.ConvertOOoTargetToPDFTarget = mbConvertOOoTargetToPDFTarget;
-// check for Link Launch action, not allowed on PDF/A-1
-// this code chunk checks when the filter is called from scripting
+
+
                 if( aContext.Version == PDFWriter::PDF_A_1 &&
                     aContext.DefaultLinkAction == PDFWriter::LaunchAction )
-                {   //force the similar allowed URI action
+                {   
                     aContext.DefaultLinkAction = PDFWriter::URIActionDestination;
-                    //and remove the remote goto action forced on PDF file
+                    
                     aContext.ForcePDFAction = false;
                 }
             }
@@ -788,7 +788,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             aContext.SignPassword = msSignPassword;
             aContext.SignCertificate = maSignCertificate;
 
-// all context data set, time to create the printing device
+
             PDFWriter*          pPDFWriter = new PDFWriter( aContext, xEnc );
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
             vcl::PDFExtOutDevData* pPDFExtOutDevData = NULL;
@@ -798,8 +798,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
             if( mbAddStream )
             {
-                // export stream
-                // get mimetype
+                
+                
                 OUString aSrcMimetype = getMimetypeForDocument( mxContext, mxSrcDoc );
                 pPDFWriter->AddStream( aSrcMimetype,
                                        new PDFExportStreamDoc( mxSrcDoc, aPreparedPermissionPassword ),
@@ -850,7 +850,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 if ( aCreator.equalsAscii( "Writer" ) )
                 {
-                    //i92835 if Writer is in web layout mode this has to be switched to normal view and back to web view in the end
+                    
                     try
                     {
                         Reference< view::XViewSettingsSupplier > xVSettingsSupplier( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
@@ -871,9 +871,9 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
                 if ( mbExportNotesPages && aCreator.equalsAscii( "Impress" ) )
                 {
-                    uno::Reference< drawing::XShapes > xShapes;     // sj: do not allow to export notes when
-                    if ( ! ( aSelection >>= xShapes ) )             // exporting a selection -> todo: in the dialog
-                        bSecondPassForImpressNotes = sal_True;      // the export notes checkbox needs to be disabled
+                    uno::Reference< drawing::XShapes > xShapes;     
+                    if ( ! ( aSelection >>= xShapes ) )             
+                        bSecondPassForImpressNotes = sal_True;      
                 }
 
                 if( aPageRange.isEmpty() )
@@ -908,7 +908,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 if ( mxStatusIndicator.is() )
                     mxStatusIndicator->end();
 
-                // if during the export the doc locale was set copy it to PDF writer
+                
                 const com::sun::star::lang::Locale& rLoc( pPDFExtOutDevData->GetDocumentLocale() );
                 if( !rLoc.Language.isEmpty() )
                     pPDFWriter->SetDocumentLocale( rLoc );
@@ -937,7 +937,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
         }
     }
 
-    // show eventual errors during export
+    
     showErrors( aErrors );
 
     return bRet;
@@ -955,7 +955,7 @@ class PDFErrorRequest : private cppu::BaseMutex,
 public:
     PDFErrorRequest( const task::PDFExportException& i_rExc );
 
-    // XInteractionRequest
+    
     virtual uno::Any SAL_CALL getRequest() throw (uno::RuntimeException);
     virtual uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL getContinuations() throw (uno::RuntimeException);
 };
@@ -980,7 +980,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > > SAL_CALL PDFEr
     return uno::Sequence< uno::Reference< task::XInteractionContinuation > >();
 }
 
-} // namespace
+} 
 
 void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
 {
@@ -999,7 +999,7 @@ void PDFExport::showErrors( const std::set< PDFWriter::ErrorCode >& rErrors )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFExtOutDevData, const GDIMetaFile& rMtf )
 {
@@ -1041,7 +1041,7 @@ sal_Bool PDFExport::ImplExportPage( PDFWriter& rWriter, PDFExtOutDevData& rPDFEx
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
 {
@@ -1060,10 +1060,10 @@ void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
 
     if( ! ( maWatermark >>= aText ) )
     {
-        // more complicated watermark ?
+        
     }
 
-    // adjust font height for text to fit
+    
     OutputDevice* pDev = rWriter.GetReferenceDevice();
     pDev->Push( PUSH_ALL );
     pDev->SetFont( aFont );
@@ -1082,8 +1082,8 @@ void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
         pDev->SetFont( aFont );
     }
     long nTextHeight = pDev->GetTextHeight();
-    // leave some maneuvering room for rounding issues, also
-    // some fonts go a little outside ascent/descent
+    
+    
     nTextHeight += nTextHeight/20;
     pDev->Pop();
 

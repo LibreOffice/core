@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "sal/config.h"
 
@@ -44,7 +44,7 @@ using namespace osl;
 #define OLDREF      "oldref"
 
 //
-// class XMLChildNode
+
 //
 
 XMLChildNode::XMLChildNode( XMLParentNode *pPar )
@@ -71,7 +71,7 @@ XMLChildNode& XMLChildNode::operator=(const XMLChildNode& rObj)
 }
 
 //
-// class XMLParentNode
+
 //
 
 XMLParentNode::~XMLParentNode()
@@ -154,7 +154,7 @@ void XMLParentNode::RemoveAndDeleteAllChildren()
 }
 
 //
-// class XMLFile
+
 //
 
 void XMLFile::Write( OString const &aFilename )
@@ -312,13 +312,13 @@ XMLFile::~XMLFile()
         XMLHashMap::iterator pos = m_pXMLStrings->begin();
         for( ; pos != m_pXMLStrings->end() ; ++pos )
         {
-            delete pos->second;             // Check and delete content also ?
+            delete pos->second;             
         }
         delete m_pXMLStrings;
         m_pXMLStrings = NULL;
     }
 }
-XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created from memory stream
+XMLFile::XMLFile( const OString &rFileName ) 
     : XMLParentNode( NULL )
     , m_sFileName( rFileName )
     , m_pXMLStrings( NULL )
@@ -335,7 +335,7 @@ XMLFile::XMLFile( const OString &rFileName ) // the file name, empty if created 
 void XMLFile::Extract( XMLFile *pCur )
 {
     if( m_pXMLStrings )
-        delete m_pXMLStrings; // Elements ?
+        delete m_pXMLStrings; 
 
     m_pXMLStrings = new XMLHashMap();
     if ( !pCur )
@@ -359,12 +359,12 @@ void XMLFile::InsertL10NElement( XMLElement* pElement )
         for ( size_t j = 0; j < pElement->GetAttributeList()->size(); j++ )
         {
             const OString sTempStr((*pElement->GetAttributeList())[ j ]->GetName());
-            // Get the "id" Attribute
+            
             if (sTempStr == ID)
             {
                 sId = (*pElement->GetAttributeList())[ j ]->GetValue();
             }
-            // Get the "xml-lang" Attribute
+            
             if (sTempStr == XML_LANG)
             {
                 sLanguage = (*pElement->GetAttributeList())[j]->GetValue();
@@ -381,14 +381,14 @@ void XMLFile::InsertL10NElement( XMLElement* pElement )
     }
 
     XMLHashMap::iterator pos = m_pXMLStrings->find( sId );
-    if( pos == m_pXMLStrings->end() ) // No instanze , create new one
+    if( pos == m_pXMLStrings->end() ) 
     {
         pElem = new LangHashMap();
         (*pElem)[ sLanguage ]=pElement;
         m_pXMLStrings->insert( XMLHashMap::value_type( sId , pElem ) );
         m_vOrder.push_back( sId );
     }
-    else        // Already there
+    else        
     {
         pElem=pos->second;
         if ( (*pElem)[ sLanguage ] )
@@ -483,11 +483,11 @@ void XMLFile::SearchL10NElements( XMLParentNode *pCur, int nPos )
                         {
                             bInsert=false;
                         }
-                        if (sTmpStr == XML_LANG) // Get the "xml-lang" Attribute
+                        if (sTmpStr == XML_LANG) 
                         {
                             sLanguage=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
-                        if (sTmpStr == OLDREF) // Get the "oldref" Attribute
+                        if (sTmpStr == OLDREF) 
                         {
                             sOldref=(*pElement->GetAttributeList())[ j ]->GetValue();
                         }
@@ -535,7 +535,7 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
                     for ( size_t i = 0; i < GetChildList()->size(); i++ )
                     {
                         pElement = (XMLParentNode*)(*GetChildList())[ i ];
-                        if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) CheckExportStatus( pElement );//, i);
+                        if( pElement->GetNodeType() ==  XML_NODE_TYPE_ELEMENT ) CheckExportStatus( pElement );
                     }
                 }
             }
@@ -576,8 +576,8 @@ bool XMLFile::CheckExportStatus( XMLParentNode *pCur )
 }
 
 XMLElement::XMLElement(
-    const OString &rName,    // the element name
-    XMLParentNode *pParent   // parent node of this element
+    const OString &rName,    
+    XMLParentNode *pParent   
 )
     : XMLParentNode( pParent )
     , m_sElementName( rName )
@@ -791,7 +791,7 @@ void XMLElement::Print(XMLNode *pCur, OStringBuffer& rBuffer, bool bRootelement 
 }
 
 //
-// class SimpleXMLParser
+
 //
 
 namespace
@@ -1122,7 +1122,7 @@ static bool lcl_isTag( const icu::UnicodeString& rString )
     return rString == "<br/>" || rString =="<help-id-missing/>";
 }
 
-} /// anonymous namespace
+} 
 
 OString XMLUtil::QuotHTML( const OString &rString )
 {

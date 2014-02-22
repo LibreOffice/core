@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -71,7 +71,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     m_pFilterLb->setMaxWidthChars(nMaxWidth);
     get(m_pDescFt, "desc");
 
-    // this Page needs ExchangeSupport
+    
     SetExchangeSupport();
 
     ResMgr* pResMgr = SFX_APP()->GetModule_Impl()->GetResMgr();
@@ -88,12 +88,12 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     if ( pPool )
     {
         pPool->SetSearchMask( pStyle->GetFamily() );
-        pPool->First();     // for SW - update internal list
+        pPool->First();     
     }
 
     if ( pStyle->GetName().isEmpty() && pPool )
     {
-        // NullString as Name -> generate Name
+        
         OUString aNoName( SfxResId(STR_NONAME).toString() );
         sal_uInt16 nNo = 1;
         OUString aNo( aNoName );
@@ -111,8 +111,8 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     }
     m_pNameRw->SetText(pStyle->GetName());
 
-    // Set the field read-only if it is NOT an user-defined style
-    // but allow selecting and copying
+    
+    
     if (!pStyle->IsUserDefined())
     {
         m_pNameRo->SetText(m_pNameRw->GetText());
@@ -132,7 +132,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
             pPoolStyle = pPool->Next();
         }
 
-        // A new Template is not yet in the Pool
+        
         if ( LISTBOX_ENTRY_NOTFOUND == m_pFollowLb->GetEntryPos( pStyle->GetName() ) )
             m_pFollowLb->InsertEntry( pStyle->GetName() );
     }
@@ -145,7 +145,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     if ( pStyle->HasParentSupport() && pPool )
     {
         if ( pStyle->HasClearParentSupport() )
-            // the base template can be set to NULL
+            
             m_pBaseLb->InsertEntry( SfxResId(STR_NONE).toString() );
 
         SfxStyleSheetBase* pPoolStyle = pPool->First();
@@ -153,7 +153,7 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
         while ( pPoolStyle )
         {
             const OUString aStr( pPoolStyle->GetName() );
-            // own name as base template
+            
             if ( aStr != aName )
                 m_pBaseLb->InsertEntry( aStr );
             pPoolStyle = pPool->Next();
@@ -178,13 +178,13 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
     if ( i < nCount )
     {
         sal_uInt16 nStyleFilterIdx = 0xffff;
-        // Filter flags
+        
         const SfxStyleFilter& rList = pItem->GetFilterList();
         nCount = rList.size();
         sal_uInt16 nIdx = 0;
         sal_uInt16 nMask = pStyle->GetMask() & ~SFXSTYLEBIT_USERDEF;
 
-        if ( !nMask )   // User Template?
+        if ( !nMask )   
             nMask = pStyle->GetMask();
 
         for ( i = 0; i < nCount; ++i )
@@ -225,12 +225,12 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage(Window* pParent, const SfxItemS
         m_pNameRw->SetLoseFocusHdl(
             LINK( this, SfxManageStyleSheetPage, LoseFocusHdl ) );
     }
-    // It is a style with auto update? (SW only)
+    
     if(SFX_ITEM_SET == rAttrSet.GetItemState(SID_ATTR_AUTO_STYLE_UPDATE))
         m_pAutoCB->Show();
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 
@@ -248,7 +248,7 @@ SfxManageStyleSheetPage::~SfxManageStyleSheetPage()
 
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
                                                const OUString& rNew )
@@ -266,7 +266,7 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
 {
     if ( pBox->IsEnabled() )
     {
-        // it is the current entry, which name was modified
+        
         const sal_Bool bSelect = pBox->GetSelectEntry() == aBuf;
         pBox->RemoveEntry( aBuf );
         pBox->InsertEntry( rNew );
@@ -276,7 +276,7 @@ void SfxManageStyleSheetPage::UpdateName_Impl( ListBox* pBox,
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxManageStyleSheetPage::SetDescriptionText_Impl()
 
@@ -314,7 +314,7 @@ void SfxManageStyleSheetPage::SetDescriptionText_Impl()
     m_pDescFt->SetText( pStyle->GetDescription( eUnit ) );
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
@@ -329,7 +329,7 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 }
 IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, GetFocusHdl, Edit *, pEdit )
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
@@ -343,14 +343,14 @@ IMPL_LINK_INLINE_START( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 {
     const OUString aStr(comphelper::string::stripStart(pEdit->GetText(), ' '));
     pEdit->SetText( aStr );
-    // Update the Listbox of the base template if possible
+    
     if ( aStr != aBuf )
         UpdateName_Impl(m_pFollowLb, aStr);
     return 0;
 }
 IMPL_LINK_INLINE_END( SfxManageStyleSheetPage, LoseFocusHdl, Edit *, pEdit )
 
-//-------------------------------------------------------------------------
+
 
 sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 
@@ -376,7 +376,7 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
 {
     const sal_uInt16 nFilterIdx = m_pFilterLb->GetSelectEntryPos();
 
-    // Set Filter
+    
 
     if ( LISTBOX_ENTRY_NOTFOUND  != nFilterIdx      &&
          nFilterIdx != m_pFilterLb->GetSavedValue()    &&
@@ -384,7 +384,7 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
     {
         bModified = sal_True;
         OSL_ENSURE( pItem, "No Item" );
-        // is only possibly for user templates
+        
         sal_uInt16 nMask = pItem->GetFilterList()[ (size_t)m_pFilterLb->GetEntryData( nFilterIdx ) ]->nFlags | SFXSTYLEBIT_USERDEF;
         pStyle->SetMask( nMask );
     }
@@ -397,7 +397,7 @@ sal_Bool SfxManageStyleSheetPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
@@ -450,7 +450,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
 
         if ( SfxResId(STR_STANDARD).toString().equals(aName) )
         {
-            // the default template can not be linked
+            
             m_pBaseFt->Disable();
             m_pBaseLb->Disable();
         }
@@ -466,7 +466,7 @@ void SfxManageStyleSheetPage::Reset( const SfxItemSet& /*rAttrSet*/ )
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
                                              const SfxItemSet &rAttrSet )
@@ -484,7 +484,7 @@ SfxTabPage* SfxManageStyleSheetPage::Create( Window* pParent,
     return new SfxManageStyleSheetPage( pParent, rAttrSet );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 
@@ -506,7 +506,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
 {
     SetDescriptionText_Impl();
 
-    // It is a style with auto update? (SW only)
+    
     const SfxPoolItem* pPoolItem;
 
     if ( SFX_ITEM_SET ==
@@ -515,7 +515,7 @@ void SfxManageStyleSheetPage::ActivatePage( const SfxItemSet& rSet)
     m_pAutoCB->SaveValue();
 }
 
-//-------------------------------------------------------------------------
+
 
 int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
@@ -538,7 +538,7 @@ int SfxManageStyleSheetPage::DeactivatePage( SfxItemSet* pItemSet )
 
     if ( m_pNameRw->IsModified() )
     {
-        // By pressing <Enter> LoseFocus() is not trigged through StarView
+        
         if ( m_pNameRw->HasFocus() )
             LoseFocusHdl( m_pNameRw );
 

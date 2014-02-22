@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/alloca.h>
@@ -43,7 +43,7 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
                       array<System::Object^>^ args, array<System::Type^>^ argTypes,
                       System::Object^* ppExc) const
 {
-    // return mem
+    
     sal_Int32 return_size = sizeof (largest);
     if ((0 != return_type) &&
         (typelib_TypeClass_STRUCT == return_type->eTypeClass ||
@@ -53,24 +53,24 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
         if (return_td.get()->nSize > sizeof (largest))
             return_size = return_td.get()->nSize;
     }
-    //Prepare memory that contains all converted arguments and return valuse
-    //The memory block contains first pointers to the arguments which are in the same block
-    // For example, 2 arguments, 1 ret.
+    
+    
+    
     //
-    //      | Pointer
-    //      | Pointer
-    //      | Return value
-    //      | Arg 1
-    //      | Arg 2
+    
+    
+    
+    
+    
     //
-    // If an argument is larger then union largest, such as some structures, then the pointer
-    // points to an extra block of memory. The same goes for a big return value.
+    
+    
 
     char * mem = (char *)alloca(
         (nParams * sizeof (void *)) + return_size + (nParams * sizeof (largest)) );
-    //array of pointers to args
+    
     void ** uno_args = (void **)mem;
-    //If an attribute is set, then uno_ret must be null, e.g void setAttribute(int )
+    
     void * uno_ret= NULL;
     if ( !(member_td->eTypeClass == typelib_TypeClass_INTERFACE_ATTRIBUTE && nParams == 1))
         uno_ret = (mem + (nParams * sizeof (void *)));
@@ -95,13 +95,13 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
         {
             try
             {
-                // in, in/out params
+                
                 map_to_uno(
                     uno_args[ nPos ],args[nPos] , type, false /* no assign */);
             }
             catch (...)
             {
-                // cleanup uno in args
+                
                 for (sal_Int32 n = 0; n < nPos; ++n)
                 {
                     typelib_MethodParameter const & param = pParams[n];
@@ -116,13 +116,13 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
     }
     uno_Any uno_exc_holder;
     uno_Any * uno_exc = &uno_exc_holder;
-    // call binary uno
+    
 
     (*pUnoI->pDispatcher)( pUnoI, member_td, uno_ret, uno_args, &uno_exc );
 
     if (0 == uno_exc)
     {
-        // convert out args; destruct uno args
+        
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
         {
             typelib_MethodParameter const & param = pParams[ nPos ];
@@ -138,19 +138,19 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
                 }
                 catch (...)
                 {
-                    // cleanup further uno args
+                    
                     for ( sal_Int32 n = nPos; n < nParams; ++n )
                     {
                         uno_type_destructData( uno_args[n], pParams[n].pTypeRef, 0 );
                     }
-                    // cleanup uno return value
+                    
                     uno_type_destructData( uno_ret, return_type, 0 );
                     throw;
                 }
             }
-            //cleanup args
+            
             if (typelib_TypeClass_DOUBLE < type->eTypeClass &&
-                typelib_TypeClass_ENUM != type->eTypeClass) // opt
+                typelib_TypeClass_ENUM != type->eTypeClass) 
             {
                 uno_type_destructData(uno_args[nPos], type, 0);
             }
@@ -159,7 +159,7 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
         if ((0 != return_type) &&
             (typelib_TypeClass_VOID != return_type->eTypeClass))
         {
-            // convert uno return value
+            
             try
             {
                 System::Object^ cli_ret;
@@ -174,11 +174,11 @@ System::Object^ Bridge::call_uno(uno_Interface * pUnoI,
                 throw;
             }
         }
-        return nullptr; // void return
+        return nullptr; 
     }
-    else // exception occurred
+    else 
     {
-        // destruct uno in args
+        
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
         {
             typelib_MethodParameter const & param = pParams[ nPos ];
@@ -220,7 +220,7 @@ void Bridge::call_cli(
     {
         System::Exception^ exc= e->InnerException;
         css::uno::TypeDescription td(mapCliType(exc->GetType()));
-        // memory for exception
+        
         std::auto_ptr< rtl_mem > memExc(rtl_mem::allocate(td.get()->nSize));
         map_to_uno(memExc.get(), exc, td.get()->pWeakRef, false);
         (*uno_exc)->pType= td.get()->pWeakRef;
@@ -236,7 +236,7 @@ void Bridge::call_cli(
         throw BridgeRuntimeError( buf.makeStringAndClear() );
     }
 
-    //convert out, in/out params
+    
     for (int nPos = 0; nPos < nParams; ++nPos )
     {
         typelib_MethodParameter const & param = params[ nPos ];
@@ -248,11 +248,11 @@ void Bridge::call_cli(
                 map_to_uno(
                     uno_args[ nPos ], args[ nPos ], param.pTypeRef,
                          sal_True == param.bIn /* assign if inout */);
-                     // out array
+                     
             }
             catch (...)
             {
-                // cleanup uno pure out
+                
                 for ( sal_Int32 n = 0; n < nPos; ++n )
                 {
                     typelib_MethodParameter const & param = params[ n ];
@@ -263,13 +263,13 @@ void Bridge::call_cli(
             }
         }
     }
-    // return value
+    
     if (0 != return_type)
     {
         map_to_uno(
             uno_ret, retInvoke, return_type, false /* no assign */);
     }
-    // no exception occurred
+    
     *uno_exc = 0;
 }
 

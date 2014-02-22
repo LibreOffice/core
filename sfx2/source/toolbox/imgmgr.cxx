@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@
 
 #include <comphelper/processfactory.hxx>
 
-const sal_uInt32 IMAGELIST_COUNT = 4; // small, small-hi, large, large-hi
+const sal_uInt32 IMAGELIST_COUNT = 4; 
 
 struct ToolBoxInf_Impl
 {
@@ -107,7 +107,7 @@ static SfxImageManager_Impl* GetImageManager( SfxModule* pModule )
     }
 }
 
-// Global image list
+
 static ImageList* GetImageList( bool bBig )
 {
     SolarMutexGuard aGuard;
@@ -137,7 +137,7 @@ static sal_Int16 impl_convertBools( sal_Bool bLarge )
     return nIndex;
 }
 
-//=========================================================================
+
 
 SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule )
     : m_pModule(pModule)
@@ -153,7 +153,7 @@ SfxImageManager_Impl::SfxImageManager_Impl( SfxModule* pModule )
     m_bAppEventListener = true;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxImageManager_Impl::~SfxImageManager_Impl()
 {
@@ -164,7 +164,7 @@ SfxImageManager_Impl::~SfxImageManager_Impl()
         delete m_aToolBoxes[i];
 }
 
-//-------------------------------------------------------------------------
+
 
 ImageList* SfxImageManager_Impl::GetImageList( bool bBig )
 {
@@ -180,7 +180,7 @@ ImageList* SfxImageManager_Impl::GetImageList( bool bBig )
     return m_pImageList[nIndex];
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager_Impl::GetImage( sal_uInt16 nId, bool bBig )
 {
@@ -190,7 +190,7 @@ Image SfxImageManager_Impl::GetImage( sal_uInt16 nId, bool bBig )
     return Image();
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 {
@@ -236,7 +236,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SfxImageManager_Impl, OptionsChanged_Impl)
 {
@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(SfxImageManager_Impl, OptionsChanged_Impl)
     return 0L;
 }
 
-//-------------------------------------------------------------------------
+
 
 IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclWindowEvent*, pEvent)
 {
@@ -260,7 +260,7 @@ IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclWindowEvent*, pEvent)
                 }
                 break;
             case VCLEVENT_APPLICATION_DATACHANGED:
-                // Check if toolbar button size have changed and we have to use system settings
+                
                 {
                     sal_Int16 nSymbolsSize = m_aOpt.GetCurrentSymbolsSize();
                     if (m_nSymbolsSize != nSymbolsSize)
@@ -274,22 +274,22 @@ IMPL_LINK( SfxImageManager_Impl, SettingsChanged_Impl, VclWindowEvent*, pEvent)
     return 0L;
 }
 
-//-------------------------------------------------------------------------
 
-//=========================================================================
+
+
 
 SfxImageManager::SfxImageManager( SfxModule* pModule )
 {
     pImp = ::GetImageManager( pModule );
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxImageManager::~SfxImageManager()
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 namespace
 {
@@ -317,7 +317,7 @@ SfxImageManager* SfxImageManager::GetImageManager( SfxModule* pModule )
     return pSfxImageManager;
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
 {
@@ -327,7 +327,7 @@ Image SfxImageManager::GetImage( sal_uInt16 nId, bool bBig ) const
     return Image();
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager::GetImage( sal_uInt16 nId ) const
 {
@@ -335,7 +335,7 @@ Image SfxImageManager::GetImage( sal_uInt16 nId ) const
     return GetImage( nId, bLarge );
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
 {
@@ -352,7 +352,7 @@ Image SfxImageManager::SeekImage( sal_uInt16 nId, bool bBig ) const
     return Image();
 }
 
-//-------------------------------------------------------------------------
+
 
 Image SfxImageManager::SeekImage( sal_uInt16 nId ) const
 {
@@ -360,7 +360,7 @@ Image SfxImageManager::SeekImage( sal_uInt16 nId ) const
     return SeekImage( nId, bLarge );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxImageManager::RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags )
 {
@@ -372,7 +372,7 @@ void SfxImageManager::RegisterToolBox( ToolBox *pBox, sal_uInt16 nFlags )
     pImp->m_aToolBoxes.push_back( pInf );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxImageManager::ReleaseToolBox( ToolBox *pBox )
 {

@@ -73,31 +73,31 @@ static const ChildIndexToPointData* IndexToPoint( long nIndex, bool bAngleContro
 {
     DBG_ASSERT( nIndex < ( bAngleControl? 8 : 9 ) && nIndex >= 0, "-IndexToPoint(): invalid child index! You have been warned..." );
 
-    // angles are counted reverse counter clock wise
+    
     static const ChildIndexToPointData  pAngleData[] =
-    {                                                   // index
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A000,   RID_SVXSTR_RECTCTL_ACC_CHLD_A000,   RP_RM },    //  0
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A045,   RID_SVXSTR_RECTCTL_ACC_CHLD_A045,   RP_RT },    //  1
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A090,   RID_SVXSTR_RECTCTL_ACC_CHLD_A090,   RP_MT },    //  2
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A135,   RID_SVXSTR_RECTCTL_ACC_CHLD_A135,   RP_LT },    //  3
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A180,   RID_SVXSTR_RECTCTL_ACC_CHLD_A180,   RP_LM },    //  4
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A225,   RID_SVXSTR_RECTCTL_ACC_CHLD_A225,   RP_LB },    //  5
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A270,   RID_SVXSTR_RECTCTL_ACC_CHLD_A270,   RP_MB },    //  6
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A315,   RID_SVXSTR_RECTCTL_ACC_CHLD_A315,   RP_RB }     //  7
+    {                                                   
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A000,   RID_SVXSTR_RECTCTL_ACC_CHLD_A000,   RP_RM },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A045,   RID_SVXSTR_RECTCTL_ACC_CHLD_A045,   RP_RT },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A090,   RID_SVXSTR_RECTCTL_ACC_CHLD_A090,   RP_MT },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A135,   RID_SVXSTR_RECTCTL_ACC_CHLD_A135,   RP_LT },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A180,   RID_SVXSTR_RECTCTL_ACC_CHLD_A180,   RP_LM },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A225,   RID_SVXSTR_RECTCTL_ACC_CHLD_A225,   RP_LB },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A270,   RID_SVXSTR_RECTCTL_ACC_CHLD_A270,   RP_MB },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_A315,   RID_SVXSTR_RECTCTL_ACC_CHLD_A315,   RP_RB }     
     };
 
-    // corners are counted from left to right and top to bottom
+    
     static const ChildIndexToPointData  pCornerData[] =
-    {                                                                   // index
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_LT, RID_SVXSTR_RECTCTL_ACC_CHLD_LT, RP_LT },    //  0
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_MT, RID_SVXSTR_RECTCTL_ACC_CHLD_MT, RP_MT },    //  1
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_RT, RID_SVXSTR_RECTCTL_ACC_CHLD_RT, RP_RT },    //  2
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_LM, RID_SVXSTR_RECTCTL_ACC_CHLD_LM, RP_LM },    //  3
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_MM, RID_SVXSTR_RECTCTL_ACC_CHLD_MM, RP_MM },    //  4
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_RM, RID_SVXSTR_RECTCTL_ACC_CHLD_RM, RP_RM },    //  5
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_LB, RID_SVXSTR_RECTCTL_ACC_CHLD_LB, RP_LB },    //  6
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_MB, RID_SVXSTR_RECTCTL_ACC_CHLD_MB, RP_MB },    //  7
-        {   RID_SVXSTR_RECTCTL_ACC_CHLD_RB, RID_SVXSTR_RECTCTL_ACC_CHLD_RB, RP_RB }     //  8
+    {                                                                   
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_LT, RID_SVXSTR_RECTCTL_ACC_CHLD_LT, RP_LT },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_MT, RID_SVXSTR_RECTCTL_ACC_CHLD_MT, RP_MT },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_RT, RID_SVXSTR_RECTCTL_ACC_CHLD_RT, RP_RT },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_LM, RID_SVXSTR_RECTCTL_ACC_CHLD_LM, RP_LM },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_MM, RID_SVXSTR_RECTCTL_ACC_CHLD_MM, RP_MM },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_RM, RID_SVXSTR_RECTCTL_ACC_CHLD_RM, RP_RM },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_LB, RID_SVXSTR_RECTCTL_ACC_CHLD_LB, RP_LB },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_MB, RID_SVXSTR_RECTCTL_ACC_CHLD_MB, RP_MB },    
+        {   RID_SVXSTR_RECTCTL_ACC_CHLD_RB, RID_SVXSTR_RECTCTL_ACC_CHLD_RB, RP_RB }     
     };
 
     return ( bAngleControl? pAngleData : pCornerData ) + nIndex;
@@ -108,8 +108,8 @@ static long PointToIndex( RECT_POINT ePoint, bool bAngleControl )
 {
     long    nRet( (long) ePoint );
     if( bAngleControl )
-    {   // angle control
-        // angles are counted reverse counter clock wise
+    {   
+        
         switch( ePoint )
         {
             case RP_LT: nRet = 3;               break;
@@ -124,8 +124,8 @@ static long PointToIndex( RECT_POINT ePoint, bool bAngleControl )
         }
     }
     else
-    {   // corner control
-        // corners are counted from left to right and top to bottom
+    {   
+        
         DBG_ASSERT( RP_LT == 0 && RP_MT == 1 && RP_RT == 2 && RP_LM == 3 && RP_MM == 4 && RP_RM == 5 &&
                     RP_LB == 6 && RP_MB == 7 && RP_RB == 8, "*PointToIndex(): unexpected enum value!" );
 
@@ -183,7 +183,7 @@ SvxRectCtlAccessibleContext::~SvxRectCtlAccessibleContext()
     if( IsAlive() )
     {
         osl_atomic_increment( &m_refCount );
-        dispose();      // set mpRepr = NULL & release all children
+        dispose();      
     }
 }
 
@@ -198,8 +198,8 @@ Reference< XAccessibleContext > SAL_CALL SvxRectCtlAccessibleContext::getAccessi
 
 sal_Bool SAL_CALL SvxRectCtlAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
-    // no guard -> done in getBounds()
-//  return GetBoundingBox().IsInside( VCLPoint( rPoint ) );
+    
+
     return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
@@ -221,25 +221,25 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleAtPo
 
 awt::Rectangle SAL_CALL SvxRectCtlAccessibleContext::getBounds() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBox()
+    
     return AWTRectangle( GetBoundingBox() );
 }
 
 awt::Point SAL_CALL SvxRectCtlAccessibleContext::getLocation() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBox()
+    
     return AWTPoint( GetBoundingBox().TopLeft() );
 }
 
 awt::Point SAL_CALL SvxRectCtlAccessibleContext::getLocationOnScreen() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBoxOnScreen()
+    
     return AWTPoint( GetBoundingBoxOnScreen().TopLeft() );
 }
 
 awt::Size SAL_CALL SvxRectCtlAccessibleContext::getSize() throw( RuntimeException )
 {
-    // no guard -> done in GetBoundingBox()
+    
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
@@ -302,7 +302,7 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
             xChild = mpChildren[ nIndex ] = pChild;
             pChild->acquire();
 
-            // set actual state
+            
             if( mnSelectedChild == nIndex )
                 pChild->setStateChecked( true );
         }
@@ -319,9 +319,9 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessiblePare
 sal_Int32 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleIndexInParent( void ) throw( RuntimeException )
 {
     ::osl::MutexGuard   aGuard( m_aMutex );
-    //  Use a simple but slow solution for now.  Optimize later.
+    
 
-    //  Iterate over all the parent's children and search for this object.
+    
     if( mxParent.is() )
     {
         Reference< XAccessibleContext >     xParentContext( mxParent->getAccessibleContext() );
@@ -337,8 +337,8 @@ sal_Int32 SAL_CALL SvxRectCtlAccessibleContext::getAccessibleIndexInParent( void
         }
    }
 
-   //   Return -1 to indicate that this object's parent does not know about the
-   //   object.
+   
+   
    return -1;
 }
 
@@ -370,7 +370,7 @@ Reference< XAccessibleRelationSet > SAL_CALL SvxRectCtlAccessibleContext::getAcc
     Window* pWindow = mpRepr;
     if ( pWindow )
     {
-        // Window *pLabeledBy = pWindow->GetAccRelationLabeledBy();
+        
         Window *pLabeledBy = pWindow->GetAccessibleRelationLabeledBy();
         if ( pLabeledBy && pLabeledBy != pWindow )
         {
@@ -431,7 +431,7 @@ lang::Locale SAL_CALL SvxRectCtlAccessibleContext::getLocale( void ) throw( Ille
             return xParentContext->getLocale();
     }
 
-    //  No parent.  Therefore throw exception to indicate this cluelessness.
+    
     throw IllegalAccessibleComponentStateException();
 }
 
@@ -457,10 +457,10 @@ void SAL_CALL SvxRectCtlAccessibleContext::removeAccessibleEventListener( const 
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+            
+            
+            
+            
             comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
             mnClientId = 0;
         }
@@ -509,7 +509,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::grabFocus() throw( RuntimeException )
 
 Any SAL_CALL SvxRectCtlAccessibleContext::getAccessibleKeyBinding() throw( RuntimeException )
 {
-    // here is no implementation, because here are no KeyBindings for every object
+    
     return Any();
 }
 
@@ -573,7 +573,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::selectAccessibleChild( sal_Int32 nInd
     DBG_ASSERT( pData,
         "SvxRectCtlAccessibleContext::selectAccessibleChild(): this is an impossible state! Or at least should be..." );
 
-    // this does all what is needed, including the change of the child's state!
+    
     mpRepr->SetActualRP( pData->ePoint );
 }
 
@@ -593,9 +593,9 @@ void SAL_CALL SvxRectCtlAccessibleContext::clearAccessibleSelection() throw( Run
 
 void SAL_CALL SvxRectCtlAccessibleContext::selectAllAccessibleChildren() throw( RuntimeException )
 {
-    // guard in selectAccessibleChild()!
+    
 
-    selectAccessibleChild( 0 );     // default per definition
+    selectAccessibleChild( 0 );     
 }
 
 sal_Int32 SAL_CALL SvxRectCtlAccessibleContext::getSelectedAccessibleChildCount() throw( RuntimeException )
@@ -621,7 +621,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::deselectAccessibleChild( sal_Int32 /*
 
     DBG_ASSERT( false, "SvxRectCtlAccessibleContext::deselectAccessibleChild() is not possible!" );
 
-    throw lang::IndexOutOfBoundsException( aMessage, *this );   // never possible
+    throw lang::IndexOutOfBoundsException( aMessage, *this );   
 }
 
 //=====  internals ========================================================
@@ -635,7 +635,7 @@ void SvxRectCtlAccessibleContext::checkChildIndex( long nIndex ) throw( lang::In
 void SvxRectCtlAccessibleContext::checkChildIndexOnSelection( long nIndex ) throw( lang::IndexOutOfBoundsException )
 {
     if( nIndex || mnSelectedChild == NOCHILDSELECTED )
-        // in our case only for the first (0) _selected_ child this is a valid request
+        
         throw lang::IndexOutOfBoundsException();
 }
 
@@ -646,7 +646,7 @@ void SvxRectCtlAccessibleContext::FireChildFocus( RECT_POINT eButton )
     long nNumOfChildren = getAccessibleChildCount();
     if( nNew < nNumOfChildren )
     {
-        // select new child
+        
         SvxRectCtlChildAccessibleContext*   pChild;
         mnSelectedChild = nNew;
         if( nNew != NOCHILDSELECTED )
@@ -676,16 +676,16 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew, sal_Bool bFireFocus )
     {
         long    nNumOfChildren = getAccessibleChildCount();
         if( nNew < nNumOfChildren )
-        {   // valid index
+        {   
             SvxRectCtlChildAccessibleContext*   pChild;
             if( mnSelectedChild != NOCHILDSELECTED )
-            {   // deselect old selected child if one is selected
+            {   
                 pChild = mpChildren[ mnSelectedChild ];
                 if( pChild )
                     pChild->setStateChecked( false, bFireFocus );
             }
 
-            // select new child
+            
             mnSelectedChild = nNew;
 
             if( nNew != NOCHILDSELECTED )
@@ -702,7 +702,7 @@ void SvxRectCtlAccessibleContext::selectChild( long nNew, sal_Bool bFireFocus )
 
 void SvxRectCtlAccessibleContext::selectChild(RECT_POINT eButton, sal_Bool bFireFocus )
 {
-    // no guard -> is done in next selectChild
+    
     selectChild(PointToIndex( eButton, mbAngleMode ), bFireFocus);
 }
 
@@ -718,7 +718,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
     {
         {
             ::osl::MutexGuard   aGuard( m_aMutex );
-            mpRepr = NULL;      // object dies with representation
+            mpRepr = NULL;      
 
             SvxRectCtlChildAccessibleContext**  p = mpChildren;
             for( int i = MAX_NUM_OF_CHILDREN ; i ; --i, ++p )
@@ -739,7 +739,7 @@ void SAL_CALL SvxRectCtlAccessibleContext::disposing()
         {
             ::osl::MutexGuard   aGuard( m_aMutex );
 
-            // Send a disposing to all listeners.
+            
             if ( mnClientId )
             {
                 comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
@@ -792,7 +792,7 @@ void SvxRectCtlAccessibleContext::ThrowExceptionIfNotAlive( void ) throw( lang::
         throw lang::DisposedException();
 }
 
-// -------------------------------------------------------------------------------------------------
+
 
 
 DBG_NAME( SvxRectCtlChildAccessibleContext )
@@ -827,7 +827,7 @@ SvxRectCtlChildAccessibleContext::~SvxRectCtlChildAccessibleContext()
     if( IsAlive() )
     {
         osl_atomic_increment( &m_refCount );
-        dispose();      // set mpRepr = NULL & release all children
+        dispose();      
     }
 }
 
@@ -842,7 +842,7 @@ Reference< XAccessibleContext> SAL_CALL SvxRectCtlChildAccessibleContext::getAcc
 
 sal_Bool SAL_CALL SvxRectCtlChildAccessibleContext::containsPoint( const awt::Point& rPoint ) throw( RuntimeException )
 {
-    // no guard -> done in getBounds()
+    
     return Rectangle( Point( 0, 0 ), GetBoundingBox().GetSize() ).IsInside( VCLPoint( rPoint ) );
 }
 
@@ -853,25 +853,25 @@ Reference< XAccessible > SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibl
 
 awt::Rectangle SAL_CALL SvxRectCtlChildAccessibleContext::getBounds() throw( RuntimeException )
 {
-    // no guard -> done in getBoundingBox()
+    
     return AWTRectangle( GetBoundingBox() );
 }
 
 awt::Point SAL_CALL SvxRectCtlChildAccessibleContext::getLocation() throw( RuntimeException )
 {
-    // no guard -> done in getBoundingBox()
+    
     return AWTPoint( GetBoundingBox().TopLeft() );
 }
 
 awt::Point SAL_CALL SvxRectCtlChildAccessibleContext::getLocationOnScreen() throw( RuntimeException )
 {
-    // no guard -> done in getBoundingBoxOnScreen()
+    
     return AWTPoint( GetBoundingBoxOnScreen().TopLeft() );
 }
 
 awt::Size SAL_CALL SvxRectCtlChildAccessibleContext::getSize() throw( RuntimeException )
 {
-    // no guard -> done in getBoundingBox()
+    
     return AWTSize( GetBoundingBox().GetSize() );
 }
 
@@ -912,7 +912,7 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::grabFocus() throw( RuntimeExcept
 
 Any SAL_CALL SvxRectCtlChildAccessibleContext::getAccessibleKeyBinding() throw( RuntimeException )
 {
-    // here is no implementation, because here are no KeyBindings for every object
+    
     return Any();
 }
 sal_Int32 SvxRectCtlChildAccessibleContext::getForeground(  )
@@ -1000,7 +1000,7 @@ Reference< XAccessibleStateSet > SAL_CALL SvxRectCtlChildAccessibleContext::getA
         if( mbIsChecked )
         {
             pStateSetHelper->AddState( AccessibleStateType::CHECKED );
-//          pStateSetHelper->AddState( AccessibleStateType::SELECTED );
+
         }
 
         pStateSetHelper->AddState( AccessibleStateType::ENABLED );
@@ -1026,8 +1026,8 @@ lang::Locale SAL_CALL SvxRectCtlChildAccessibleContext::getLocale( void ) throw(
             return xParentContext->getLocale();
     }
 
-    //  No locale and no parent.  Therefore throw exception to indicate this
-    //  cluelessness.
+    
+    
     throw IllegalAccessibleComponentStateException();
 }
 
@@ -1056,10 +1056,10 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::removeAccessibleEventListener( c
         sal_Int32 nListenerCount = comphelper::AccessibleEventNotifier::removeEventListener( mnClientId, xListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+            
+            
+            
+            
             comphelper::AccessibleEventNotifier::revokeClient( mnClientId );
             mnClientId = 0;
         }
@@ -1096,9 +1096,9 @@ Any SAL_CALL SvxRectCtlChildAccessibleContext::getMinimumValue() throw( RuntimeE
     return aRet;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleAction
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 SvxRectCtlChildAccessibleContext::getAccessibleActionCount( ) throw (RuntimeException)
 {
@@ -1107,7 +1107,7 @@ sal_Int32 SvxRectCtlChildAccessibleContext::getAccessibleActionCount( ) throw (R
     return 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -1123,7 +1123,7 @@ sal_Bool SvxRectCtlChildAccessibleContext::doAccessibleAction ( sal_Int32 nIndex
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString SvxRectCtlChildAccessibleContext::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -1135,7 +1135,7 @@ OUString SvxRectCtlChildAccessibleContext::getAccessibleActionDescription ( sal_
     return OUString("select");
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleKeyBinding > SvxRectCtlChildAccessibleContext::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -1194,7 +1194,7 @@ void SAL_CALL SvxRectCtlChildAccessibleContext::disposing()
     {
         ::osl::MutexGuard   aGuard( maMutex );
 
-        // Send a disposing to all listeners.
+        
         if ( mnClientId )
         {
             comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( mnClientId, *this );
@@ -1217,7 +1217,7 @@ Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBoxOnScreen( void ) throw
 {
     ::osl::MutexGuard   aGuard( maMutex );
 
-    // no ThrowExceptionIfNotAlive() because its done in GetBoundingBox()
+    
     Rectangle           aRect( GetBoundingBox() );
 
     return Rectangle( mrParentWindow.OutputToScreenPixel( aRect.TopLeft() ), aRect.GetSize() );
@@ -1225,7 +1225,7 @@ Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBoxOnScreen( void ) throw
 
 Rectangle SvxRectCtlChildAccessibleContext::GetBoundingBox( void ) throw( RuntimeException )
 {
-    // no guard necessary, because no one changes mpBoundingBox after creating it
+    
     ThrowExceptionIfNotAlive();
 
     return *mpBoundingBox;

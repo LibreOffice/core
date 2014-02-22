@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
@@ -91,7 +91,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         ViewMediaShape::~ViewMediaShape()
         {
@@ -108,14 +108,14 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         ViewLayerSharedPtr ViewMediaShape::getViewLayer() const
         {
             return mpViewLayer;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ViewMediaShape::startMedia()
         {
@@ -128,11 +128,11 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ViewMediaShape::endMedia()
         {
-            // shutdown player window
+            
             if( mxPlayerWindow.is() )
             {
                 uno::Reference< lang::XComponent > xComponent( mxPlayerWindow, uno::UNO_QUERY );
@@ -145,7 +145,7 @@ namespace slideshow
 
             mpMediaWindow.reset();
 
-            // shutdown player
+            
             if( mxPlayer.is() )
             {
                 mxPlayer->stop();
@@ -159,7 +159,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ViewMediaShape::pauseMedia()
         {
@@ -167,7 +167,7 @@ namespace slideshow
                 mxPlayer->stop();
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ViewMediaShape::setMediaTime(double fTime)
         {
@@ -175,7 +175,7 @@ namespace slideshow
                 mxPlayer->setMediaTime(fTime);
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ViewMediaShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
@@ -186,9 +186,9 @@ namespace slideshow
 
             if( !mpMediaWindow.get() && !mxPlayerWindow.is() )
             {
-                // draw placeholder for no-video (no window) case
-                // no window and player == audio icon
-                // no window and no player == broken icon
+                
+                
+                
                 BitmapEx aAudioLogo(mxPlayer.is() ?
                     avmedia::MediaWindow::getAudioLogo() : avmedia::MediaWindow::getEmptyLogo() );
 
@@ -278,7 +278,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ViewMediaShape::implInitialize( const ::basegfx::B2DRectangle& rBounds )
         {
@@ -298,7 +298,7 @@ namespace slideshow
                     {
                         xPropSet.set( mxShape, uno::UNO_QUERY );
 
-                        // create Player
+                        
                         if (xPropSet.is())
                         {
                             if ((xPropSet->getPropertyValue(
@@ -314,7 +314,7 @@ namespace slideshow
                             }
                         }
 
-                        // create visible object
+                        
                         uno::Sequence< uno::Any > aDeviceParams;
 
                         if( ::canvas::tools::getDeviceInfo( xCanvas, aDeviceParams ).getLength() > 1 )
@@ -335,7 +335,7 @@ namespace slideshow
                             }
                         }
 
-                        // set player properties
+                        
                         implSetMediaProperties( xPropSet );
                     }
                     catch( uno::RuntimeException& )
@@ -354,7 +354,7 @@ namespace slideshow
             return mxPlayer.is() || mxPlayerWindow.is();
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ViewMediaShape::implSetMediaProperties( const uno::Reference< beans::XPropertySet >& rxProps )
         {
@@ -394,7 +394,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ViewMediaShape::implInitializeMediaPlayer( const OUString& rMediaURL )
         {
@@ -421,7 +421,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ViewMediaShape::implInitializeVCLBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                  const uno::Sequence< uno::Any >& rVCLDeviceParams)
@@ -487,8 +487,8 @@ namespace slideshow
 
                             if( !mxPlayerWindow.is() )
                             {
-                                //if there was no playerwindow, then clear the mpMediaWindow too
-                                //so that we can draw a placeholder instead in that space
+                                
+                                
                                 mpMediaWindow.reset();
                             }
                         }
@@ -509,7 +509,7 @@ namespace slideshow
             return mxPlayerWindow.is();
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ViewMediaShape::implInitializeDXBasedPlayerWindow( const ::basegfx::B2DRectangle&   rBounds,
                                                                 const uno::Sequence< uno::Any >& rDXDeviceParams )

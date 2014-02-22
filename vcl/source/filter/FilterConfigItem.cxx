@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/FilterConfigItem.hxx>
@@ -29,14 +29,14 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
 
-using namespace ::com::sun::star::lang      ;   // XMultiServiceFactory
-using namespace ::com::sun::star::beans     ;   // PropertyValue
-using namespace ::com::sun::star::uno       ;   // Reference
-using namespace ::com::sun::star::util      ;   // XChangesBatch
-using namespace ::com::sun::star::awt       ;   // Size
+using namespace ::com::sun::star::lang      ;   
+using namespace ::com::sun::star::beans     ;   
+using namespace ::com::sun::star::uno       ;   
+using namespace ::com::sun::star::util      ;   
+using namespace ::com::sun::star::awt       ;   
 using namespace ::com::sun::star::container ;   //
 using namespace ::com::sun::star::configuration;   //
-using namespace ::com::sun::star::task      ;   // XStatusIndicator
+using namespace ::com::sun::star::task      ;   
 
 static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, const OUString& rTree )
 {
@@ -57,7 +57,7 @@ static bool ImpIsTreeAvailable( Reference< XMultiServiceFactory >& rXCfgProv, co
         Any aAny;
         aAny <<= getToken(rTree, i++, '/');
 
-        // creation arguments: nodepath
+        
         PropertyValue aPathArgument;
         aPathArgument.Name = "nodepath";
         aPathArgument.Value = aAny;
@@ -114,13 +114,13 @@ void FilterConfigItem::ImpInitTree( const OUString& rSubTree )
     if ( ImpIsTreeAvailable(xCfgProv, sTree) )
     {
         Any aAny;
-        // creation arguments: nodepath
+        
         PropertyValue aPathArgument;
         aAny <<= sTree;
         aPathArgument.Name = "nodepath";
         aPathArgument.Value = aAny;
 
-        // creation arguments: commit mode
+        
         PropertyValue aModeArgument;
         bool bAsyncron = true;
         aAny <<= bAsyncron;
@@ -230,8 +230,8 @@ bool FilterConfigItem::ImplGetPropertyValue( Any& rAny, const Reference< XProper
 }
 
 
-// if property is available it returns a pointer,
-// otherwise the result is null
+
+
 PropertyValue* FilterConfigItem::GetPropertyValue( Sequence< PropertyValue >& rPropSeq, const OUString& rName )
 {
     PropertyValue* pPropValue = NULL;
@@ -400,14 +400,14 @@ void FilterConfigItem::WriteInt32( const OUString& rKey, sal_Int32 nNewValue )
     }
 }
 
-// ------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > FilterConfigItem::GetFilterData() const
 {
     return aFilterData;
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XStatusIndicator > FilterConfigItem::GetStatusIndicator() const
 {

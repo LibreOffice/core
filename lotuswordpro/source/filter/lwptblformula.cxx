@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -76,7 +76,7 @@ LwpFormulaArg::~LwpFormulaArg()
 {
 }
 
-//////////////////////////////////////////////////////////////////
+
  LwpFormulaInfo::LwpFormulaInfo(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
     : LwpCellList(objHdr, pStrm)
     , m_bSupported(sal_True)
@@ -122,7 +122,7 @@ sal_Bool LwpFormulaInfo::ReadConst()
 */
 sal_Bool LwpFormulaInfo::ReadText()
 {
-    m_pObjStrm->QuickReadInt16(); //Disk Size
+    m_pObjStrm->QuickReadInt16(); 
     sal_uInt16 nStrLen = m_pObjStrm->QuickReadInt16();
 
     boost::scoped_array<char> pBuf(new char[nStrLen+1]);
@@ -166,12 +166,12 @@ sal_Bool LwpFormulaInfo::ReadCellID()
 sal_Bool LwpFormulaInfo::ReadCellRange()
 {
     sal_Bool readSucceeded = sal_True;
-    if (!ReadCellID( )) // start
+    if (!ReadCellID( )) 
         readSucceeded = false;
     LwpFormulaCellAddr* pStartCellAddr = (LwpFormulaCellAddr*)m_aStack.back();
     m_aStack.pop_back();
 
-    if (!ReadCellID()) // end
+    if (!ReadCellID()) 
         readSucceeded = false;
     LwpFormulaCellAddr* pEndCellAddr = (LwpFormulaCellAddr*)m_aStack.back();
     m_aStack.pop_back();
@@ -199,12 +199,12 @@ sal_Bool LwpFormulaInfo::ReadExpression()
     sal_Bool readSucceeded = sal_True;
 
     /* Read the compiled expression length */
-//  Len = m_pObjStrm->QuickReaduInt16();
+
     m_pObjStrm->SeekRel(2);
 
     while ((TokenType = m_pObjStrm->QuickReaduInt16()) != TK_END)
     {
-        // Get the disk length of this token
+        
         DiskLength = m_pObjStrm->QuickReaduInt16();
 
         switch (TokenType)
@@ -238,7 +238,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
                 }
                 break;
 
-            case TK_ADD://7
+            case TK_ADD:
             case TK_SUBTRACT:
             case TK_MULTIPLY:
             case TK_DIVIDE:
@@ -251,9 +251,9 @@ sal_Bool LwpFormulaInfo::ReadExpression()
             case TK_AND:
             case TK_OR:
             case TK_NOT:
-                m_pObjStrm->SeekRel(DiskLength); // extensible for future
+                m_pObjStrm->SeekRel(DiskLength); 
 
-                {//binary operator
+                {
                     LwpFormulaOp* pOp = new LwpFormulaOp(TokenType);
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
                     pOp->AddArg(m_aStack.back()); m_aStack.pop_back();
@@ -268,7 +268,7 @@ sal_Bool LwpFormulaInfo::ReadExpression()
                 }
                 break;
             default:
-                // We don't know what to do with this token, so eat it.
+                
                 m_pObjStrm->SeekRel(DiskLength);
                 readSucceeded = sal_False;
                 break;
@@ -293,7 +293,7 @@ void LwpFormulaInfo::MarkUnsupported(sal_uInt16 TokenType)
     case TK_COUNT:
     case TK_NOT:
         {
-            m_bSupported = sal_False;//Not supported formulas
+            m_bSupported = sal_False;
         }
         break;
     default:
@@ -316,7 +316,7 @@ sal_Bool LwpFormulaInfo::ReadArguments(LwpFormulaFunc& aFunc)
 
     for (Count = 0; Count < NumberOfArguments; Count++)
     {
-        ArgumentType = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as lushort
+        ArgumentType = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); 
         ArgumentDiskLength = m_pObjStrm->QuickReaduInt16();
         bArgument = sal_True;
 
@@ -379,8 +379,8 @@ void LwpFormulaInfo::Read()
             assert(false);
         }
     }
-//  sal_uInt8 cFlags = (sal_uInt8) m_pObjStrm->QuickReaduInt16(); // written as a sal_uInt16
-    m_pObjStrm->SeekRel(2);//flags, size in file: sal_uInt16
+
+    m_pObjStrm->SeekRel(2);
 
     LwpNotifyListPersistent cNotifyList;
     cNotifyList.Read(m_pObjStrm);
@@ -433,7 +433,7 @@ void LwpFormulaInfo::Convert(XFCell * pCell,LwpTableLayout* pCellsMap)
     LwpCellList::Convert(pCell);
 }
 
-//////////////////////////////////////////////////////////////////
+
 
 /**
 *
@@ -597,16 +597,16 @@ OUString LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 
     OUString aFuncName = LwpFormulaTools::GetName(m_nTokenType);
     aFormula += aFuncName;
-    aFormula += " ";//Append a blank space
+    aFormula += " ";
 
-    //Append args
+    
     vector<LwpFormulaArg*>::iterator aItr;
     for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();++aItr)
     {
-        aFormula += (*aItr)->ToArgString(pCellsMap) + "|"; //separator
+        aFormula += (*aItr)->ToArgString(pCellsMap) + "|"; 
     }
 
-    //erase the last "|"
+    
     if (!m_aArgs.empty())
     {
         aFormula = aFormula.replaceAt(aFormula.getLength()-1,1,"");
@@ -689,10 +689,10 @@ OUString LwpFormulaTools::GetName(sal_uInt16 nTokenType)
         aName = "SUM";
         break;
     case TK_IF:
-        aName = "IF";//Not supported by SODC
+        aName = "IF";
         break;
     case TK_COUNT:
-        aName = "COUNT";//Not supported by SODC
+        aName = "COUNT";
         break;
     case TK_MINIMUM:
         aName = "MIN";

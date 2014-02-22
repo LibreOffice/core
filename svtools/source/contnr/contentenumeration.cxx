@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "contentenumeration.hxx"
@@ -36,10 +36,10 @@
 
 #include <memory>
 
-//........................................................................
+
 namespace svt
 {
-//........................................................................
+
 
 #define ROW_TITLE           1
 #define ROW_SIZE            2
@@ -76,10 +76,10 @@ namespace svt
     using ::ucbhelper::ResultSetInclude;
     using ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS;
 
-    //====================================================================
-    //= FileViewContentEnumerator
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     FileViewContentEnumerator::FileViewContentEnumerator(
             const Reference< XCommandEnvironment >& _rxCommandEnv,
             ContentData& _rContentToFill, ::osl::Mutex& _rContentMutex,
@@ -94,12 +94,12 @@ namespace svt
     {
     }
 
-    //--------------------------------------------------------------------
+    
     FileViewContentEnumerator::~FileViewContentEnumerator()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void FileViewContentEnumerator::cancel()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -110,7 +110,7 @@ namespace svt
         m_aFolder.sURL = "";
     }
 
-    //--------------------------------------------------------------------
+    
     EnumerationResult FileViewContentEnumerator::enumerateFolderContentSync(
         const FolderDescriptor& _rFolder,
         const ::com::sun::star::uno::Sequence< OUString >& rBlackList )
@@ -124,7 +124,7 @@ namespace svt
         return enumerateFolderContent();
     }
 
-    //--------------------------------------------------------------------
+    
     void FileViewContentEnumerator::enumerateFolderContent(
         const FolderDescriptor& _rFolder, IEnumerationResultHandler* _pResultHandler )
     {
@@ -136,13 +136,13 @@ namespace svt
             "FileViewContentEnumerator::enumerateFolderContent: invalid folder descriptor!" );
 
         launch();
-            //TODO: a protocol is missing how to join with the launched thread
-            // before exit(3), to ensure the thread is no longer relying on any
-            // infrastructure while that infrastructure is being shut down in
-            // atexit handlers
+            
+            
+            
+            
     }
 
-    //--------------------------------------------------------------------
+    
     EnumerationResult FileViewContentEnumerator::enumerateFolderContent()
     {
         EnumerationResult eResult = ERROR;
@@ -212,7 +212,7 @@ namespace svt
                     while ( !bCancelled && xResultSet->next() )
                     {
                         sal_Bool bIsHidden = xRow->getBoolean( ROW_IS_HIDDEN );
-                        // don't show hidden files
+                        
                         if ( !bIsHidden || xRow->wasNull() )
                         {
                             pData = NULL;
@@ -231,7 +231,7 @@ namespace svt
 
                             OUString sRealURL = bHasTargetURL ? aTargetURL : aContentURL;
 
-                            // check for restrictions
+                            
                             {
                                 ::osl::MutexGuard aGuard( m_aMutex );
                                 if ( /* m_rBlackList.hasElements() && */ URLOnBlackList ( sRealURL ) )
@@ -279,7 +279,7 @@ namespace svt
                                 pData->maType = SvFileInformationManager::GetFileDescription(
                                     INetURLObject( pData->maTargetURL ) );
 
-                            // replace names on demand
+                            
                             {
                                 ::osl::MutexGuard aGuard( m_aMutex );
                                 if( m_pTranslator )
@@ -340,7 +340,7 @@ namespace svt
         {
             ::osl::MutexGuard aGuard( m_rContentMutex );
             if ( eResult != SUCCESS )
-                // clear any "intermediate" and unfinished result
+                
                 m_rContent.clear();
         }
 
@@ -349,7 +349,7 @@ namespace svt
         return eResult;
     }
 
-    //--------------------------------------------------------------------
+    
 
     sal_Bool FileViewContentEnumerator::URLOnBlackList ( const OUString& sRealURL )
     {
@@ -364,7 +364,7 @@ namespace svt
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool FileViewContentEnumerator::implGetDocTitle( const OUString& _rTargetURL, OUString& _rRet ) const
     {
         sal_Bool bRet = sal_False;
@@ -398,14 +398,14 @@ namespace svt
         return bRet;
     }
 
-    //--------------------------------------------------------------------
+    
     void FileViewContentEnumerator::execute()
     {
         enumerateFolderContent();
     }
 
-//........................................................................
-} // namespace svt
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

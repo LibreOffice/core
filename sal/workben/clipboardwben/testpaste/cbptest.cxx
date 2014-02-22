@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// TestWin32.cpp : Defines the entry point for the application
+
 //
 
 #define _WIN32_DCOM
@@ -40,10 +40,10 @@
 
 #define MAX_LOADSTRING 100
 
-// Global variables:
-HINSTANCE           hInst;                      // current instance
-WCHAR               szTitle[MAX_LOADSTRING];            // Text for title
-WCHAR               szWindowClass[MAX_LOADSTRING];  // Text for title
+
+HINSTANCE           hInst;                      
+WCHAR               szTitle[MAX_LOADSTRING];            
+WCHAR               szWindowClass[MAX_LOADSTRING];  
 ATOM                MyRegisterClass( HINSTANCE hInstance );
 BOOL                InitInstance( HINSTANCE, int );
 LRESULT CALLBACK    WndProc( HWND, UINT, WPARAM, LPARAM );
@@ -55,9 +55,9 @@ LPSTREAM            g_pStm    = NULL;
 char*               pTextBuff = NULL;
 DWORD               lData     = 0;
 
-//----------------------------------------------------
-// a thread function
-//----------------------------------------------------
+
+
+
 
 unsigned int _stdcall ThreadProc(LPVOID pParam)
 {
@@ -112,39 +112,39 @@ unsigned int _stdcall ThreadProc(LPVOID pParam)
 
     pIDataObj->Release();
 
-    //CoUninitialize( );
+    
 
     OleUninitialize( );
 
     return 0;
 }
 
-//----------------------------------------------------
-// WinMain
-//----------------------------------------------------
+
+
+
 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR     lpCmdLine,
                      int       nCmdShow )
 {
-    // TODO: Add code here.
+    
     MSG     msg;
     HACCEL  hAccelTable;
     HRESULT hr = E_FAIL;
 
-    // it's important to initialize ole
-    // in order to use the clipboard
-    //hr = OleInitialize( NULL );
+    
+    
+    
     hr = CoInitializeEx( NULL, COINIT_MULTITHREADED );
-    //hr = CoInitializeEx( NULL, COINIT_APARTMENTTHREADED );
+    
 
-    // Initialize global strings
+    
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_TESTWIN32, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
-    // Initialization of the application to perform:
+    
     if( !InitInstance( hInstance, nCmdShow ) )
     {
         return FALSE;
@@ -152,7 +152,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
     hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_TESTWIN32);
 
-    // Main message loop:
+    
     while( GetMessage(&msg, NULL, 0, 0) )
     {
         if( !TranslateAccelerator (msg.hwnd, hAccelTable, &msg) )
@@ -162,8 +162,8 @@ int APIENTRY WinMain(HINSTANCE hInstance,
         }
     }
 
-    // uninitializing the ole libraries
-    //OleUninitialize( );
+    
+    
     CoUninitialize( );
 
     return msg.wParam;
@@ -172,15 +172,15 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 
 
 //
-//  FUNCTION: MyRegisterClass()
+
 //
-//  PURPOSE: Registers the window class
+
 //
-//  COMMENTS:
-//    This function and its usage are only necessary if this code
-//    needs to be compatible with Win32 systems prior to 'RegisterClassEx'
-//    function, which was added to Windows 95. If it important to call
-//    this function to allow the use of small icons in the correct proportions.
+
+
+
+
+
 
 ATOM MyRegisterClass( HINSTANCE hInstance )
 {
@@ -204,19 +204,19 @@ ATOM MyRegisterClass( HINSTANCE hInstance )
 }
 
 //
-//   FUNCTION: InitInstance(HANDLE, int)
+
 //
-//   PURPOSE: Saves instance handle and creates main window
+
 //
-//   COMMENTS:
-//        In this function, the instance access number is stored in a global variable
-//        and the main program window is displayed.
+
+
+
 //
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 {
    HWND hWnd;
 
-   hInst = hInstance; // Store instance access number in our global variable
+   hInst = hInstance; 
 
    hWnd = CreateWindowExW(0, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
@@ -233,13 +233,13 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 }
 
 //
-//  FUNCTION: WndProc(HWND, unsigned, WORD, LONG)
+
 //
-//  PURPOSE: Processes messages for the main window.
+
 //
-//  WM_COMMAND  - Handle application menu
-//  WM_PAINT    - Display main windows
-//  WM_DESTROY  - Output completion message and return
+
+
+
 //
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -256,11 +256,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         case WM_COMMAND:
             wmId    = LOWORD(wParam);
-            // Analyze menu selections
+            
             switch( wmId )
             {
                 case IDD_PASTE:
-                    //PasteClipboardData(hWnd);
+                    
                     PasteClipboardData2(hWnd);
                     break;
 
@@ -275,7 +275,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case WM_PAINT:
             hdc = BeginPaint (hWnd, &ps);
-            // TODO: Add any code for drawing
+            
             RECT rt;
             GetClientRect( hWnd, &rt );
 
@@ -348,9 +348,9 @@ void PasteClipboardData2(HWND hwndParent)
     }
 }
 
-//----------------------------------------------------
-// clipboard handling
-//----------------------------------------------------
+
+
+
 
 /*
 void PasteClipboardData(HWND hwndParent)
@@ -363,45 +363,45 @@ void PasteClipboardData(HWND hwndParent)
     if ( SUCCEEDED( hr ) )
     {
         HRESULT hr = CoMarshalInterThreadInterfaceInStream(
-            __uuidof(IDataObject), //The IID of inteface to be marshaled
-            pIDataObj,       //The interface pointer
-            &g_pStm          //IStream pointer
+            __uuidof(IDataObject), 
+            pIDataObj,       
+            &g_pStm          
             );
 
         HANDLE hThread = (HANDLE)_beginthreadex(
-                NULL,       //Security
-                0,          //Stack Size
-                ThreadProc, //Start Address
-                NULL,       //Parmeter
-                (unsigned int)hwndParent,   //Creation Flag
-                &dwId       //Thread Id
+                NULL,       
+                0,          
+                ThreadProc, 
+                NULL,       
+                (unsigned int)hwndParent,   
+                &dwId       
                 );
 
-        //Wait for the thread to finish execution
-        //A thread handle is signaled is thread execution
-        //is complete
+        
+        
+        
         for(;;)
         {
             DWORD dwRet = ::MsgWaitForMultipleObjects(
-                                    1,          //Count of objects
-                                    &hThread,   //pointer to the array of objects
-                                    FALSE,      //Wait for all objects?
-                                    INFINITE,   //Wait How Long?
-                                    QS_ALLINPUT //Wait for all messges
+                                    1,          
+                                    &hThread,   
+                                    FALSE,      
+                                    INFINITE,   
+                                    QS_ALLINPUT 
                                     );
 
-            //This means that the object is signaled
+            
             if ( dwRet != WAIT_OBJECT_0 + 1 )
                 break;
 
-            //Remove the messages from the queue
+            
             MSG msg;
 
             while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) > 0)
             {
-                //Not essential
+                
                 TranslateMessage(&msg);
-                //Let the windowproc handle the message
+                
                 DispatchMessage(&msg);
             }
         }

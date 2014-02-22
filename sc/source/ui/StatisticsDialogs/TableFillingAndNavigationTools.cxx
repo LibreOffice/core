@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -201,7 +201,7 @@ void AddressWalkerWriter::writeValue(double aValue)
     mpDocShell->GetDocFunc().SetValueCell(mCurrentAddress, aValue, true);
 }
 
-// DataCellIterator
+
 
 DataCellIterator::DataCellIterator(ScRange aInputRange, bool aByColumn)
     : mInputRange(aInputRange)
@@ -265,7 +265,7 @@ ScAddress DataCellIterator::getRelative(int aDelta)
     }
 }
 
-// DataRangeIterator
+
 
 DataRangeIterator::DataRangeIterator(ScRange aInputRange) :
     mInputRange(aInputRange),
@@ -280,7 +280,7 @@ sal_Int32 DataRangeIterator::index()
     return mIndex;
 }
 
-// DataRangeByColumnIterator
+
 
 DataRangeByColumnIterator::DataRangeByColumnIterator(ScRange aInputRange) :
     DataRangeIterator(aInputRange),
@@ -316,7 +316,7 @@ DataCellIterator DataRangeByColumnIterator::iterateCells()
     return DataCellIterator(get(), false);
 }
 
-// DataRangeByRowIterator
+
 
 DataRangeByRowIterator::DataRangeByRowIterator(ScRange aInputRange) :
     DataRangeIterator(aInputRange),

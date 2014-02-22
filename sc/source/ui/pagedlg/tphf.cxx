@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #define _TPHF_CXX
 #include "scitems.hxx"
@@ -46,9 +46,9 @@
 
 
 
-//==================================================================
-// class ScHFPage
-//==================================================================
+
+
+
 
 ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
 
@@ -86,13 +86,13 @@ ScHFPage::ScHFPage( Window* pParent, const SfxItemSet& rSet, sal_uInt16 nSetId )
         m_pBtnEdit->SetHelpId( HID_SC_FOOTER_EDIT );
 }
 
-//------------------------------------------------------------------
+
 
 ScHFPage::~ScHFPage()
 {
 }
 
-//------------------------------------------------------------------
+
 
 void ScHFPage::Reset( const SfxItemSet& rSet )
 {
@@ -100,7 +100,7 @@ void ScHFPage::Reset( const SfxItemSet& rSet )
     TurnOnHdl( 0 );
 }
 
-//------------------------------------------------------------------
+
 
 sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 {
@@ -120,7 +120,7 @@ sal_Bool ScHFPage::FillItemSet( SfxItemSet& rOutSet )
     return bResult;
 }
 
-//------------------------------------------------------------------
+
 
 void ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
@@ -138,7 +138,7 @@ void ScHFPage::ActivatePage( const SfxItemSet& rSet )
     SvxHFPage::ActivatePage( rSet );
 }
 
-//------------------------------------------------------------------
+
 
 int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -149,7 +149,7 @@ int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
     return LEAVE_PAGE;
 }
 
-//------------------------------------------------------------------
+
 
 void ScHFPage::ActivatePage()
 {
@@ -159,9 +159,9 @@ void ScHFPage::DeactivatePage()
 {
 }
 
-//------------------------------------------------------------------
-// Handler:
-//------------------------------------------------------------------
+
+
+
 
 IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 {
@@ -176,13 +176,13 @@ IMPL_LINK_NOARG(ScHFPage, TurnOnHdl)
 }
 
 
-//------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScHFPage, BtnHdl)
 {
-    // When the Edit-Dialog is directly called from the Button's Click-Handler,
-    // the GrabFocus from the Edit-Dialog under OS/2 doesn't work.(Bug #41805#).
-    // With the new StarView, this workaround should be again considered!
+    
+    
+    
 
     Application::PostUserEvent( LINK( this, ScHFPage, HFEditHdl ) );
     return 0;
@@ -264,46 +264,46 @@ IMPL_LINK_NOARG(ScHFPage, HFEditHdl)
     return 0;
 }
 
-//==================================================================
-// class ScHeaderPage
-//==================================================================
+
+
+
 
 ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
     : ScHFPage( pParent, rSet, SID_ATTR_PAGE_HEADERSET )
 {
 }
 
-//------------------------------------------------------------------
+
 
 SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScHeaderPage( pParent, rCoreSet ) );
 }
 
-//------------------------------------------------------------------
+
 
 sal_uInt16* ScHeaderPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
 
-//==================================================================
-// class ScFooterPage
-//==================================================================
+
+
+
 
 ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
     : ScHFPage( pParent, rSet, SID_ATTR_PAGE_FOOTERSET )
 {
 }
 
-//------------------------------------------------------------------
+
 
 SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScFooterPage( pParent, rCoreSet ) );
 }
 
-//------------------------------------------------------------------
+
 
 sal_uInt16* ScFooterPage::GetRanges()
 {

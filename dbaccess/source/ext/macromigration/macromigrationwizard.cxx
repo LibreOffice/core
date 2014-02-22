@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbmm_module.hxx"
@@ -48,7 +48,7 @@ namespace dbmm
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::frame::XStorable;
 
-    // MacroMigrationDialogService
+    
     class MacroMigrationDialogService;
     typedef ::svt::OGenericUnoDialog                                                MacroMigrationDialogService_Base;
     typedef ::comphelper::OPropertyArrayUsageHelper< MacroMigrationDialogService >  MacroMigrationDialogService_PBase;
@@ -61,24 +61,24 @@ namespace dbmm
     public:
         MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext );
 
-        // XTypeProvider
+        
         virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-        // XInitialization
+        
         virtual void SAL_CALL initialize( const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArguments ) throw(com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException);
 
-        // XPropertySet
+        
         virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw(RuntimeException);
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
-        // OPropertyArrayUsageHelper
+        
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
 
-        // helper for factories
+        
         static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& _rxContext );
         static OUString SAL_CALL getImplementationName_static() throw(RuntimeException);
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static() throw(RuntimeException);
@@ -95,7 +95,7 @@ namespace dbmm
         Reference< XOfficeDatabaseDocument >    m_xDocument;
     };
 
-    // MacroMigrationDialogService
+    
     MacroMigrationDialogService::MacroMigrationDialogService( const Reference< XComponentContext >& _rxContext )
         :MacroMigrationDialogService_Base( _rxContext )
         ,m_aContext( _rxContext )
@@ -105,8 +105,8 @@ namespace dbmm
 
     MacroMigrationDialogService::~MacroMigrationDialogService()
     {
-        // we do this here cause the base class' call to destroyDialog won't reach us anymore : we're within an dtor,
-        // so this virtual-method-call the base class does does not work, we're already dead then ...
+        
+        
         if ( m_pDialog )
         {
             ::osl::MutexGuard aGuard( m_aMutex );
@@ -221,6 +221,6 @@ namespace dbmm
         static OAutoRegistration< MacroMigrationDialogService > aAutoRegistration;
     }
 
-} // namespace dbmm
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

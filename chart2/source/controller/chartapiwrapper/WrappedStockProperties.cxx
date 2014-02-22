@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrappedStockProperties.hxx"
@@ -97,7 +97,7 @@ void WrappedStockProperty::setPropertyValue( const ::com::sun::star::uno::Any& r
         {
             try
             {
-                // locked controllers
+                
                 ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
                 xTemplate->changeDiagram( xDiagram );
             }
@@ -169,14 +169,14 @@ uno::Reference< chart2::XChartTypeTemplate > WrappedVolumeProperty::getNewTempla
     if(!xFactory.is())
         return xTemplate;
 
-    if( bNewValue ) //add volume
+    if( bNewValue ) 
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockLowHighClose" )
             xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeLowHighClose" ), uno::UNO_QUERY );
         else if( rCurrentTemplate == "com.sun.star.chart2.template.StockOpenLowHighClose" )
             xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ), uno::UNO_QUERY );
     }
-    else //remove volume
+    else 
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeLowHighClose" )
             xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockLowHighClose" ), uno::UNO_QUERY );
@@ -233,14 +233,14 @@ WrappedUpDownProperty::~WrappedUpDownProperty()
 uno::Reference< chart2::XChartTypeTemplate > WrappedUpDownProperty::getNewTemplate( sal_Bool bNewValue, const OUString& rCurrentTemplate, const Reference< lang::XMultiServiceFactory >& xFactory ) const
 {
     uno::Reference< chart2::XChartTypeTemplate > xTemplate(0);
-    if( bNewValue ) //add open series
+    if( bNewValue ) 
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockLowHighClose" )
             xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockOpenLowHighClose" ), uno::UNO_QUERY );
         else if( rCurrentTemplate == "com.sun.star.chart2.template.StockVolumeLowHighClose" )
             xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockVolumeOpenLowHighClose" ), uno::UNO_QUERY );
     }
-    else //remove open series
+    else 
     {
         if( rCurrentTemplate == "com.sun.star.chart2.template.StockOpenLowHighClose" )
             xTemplate.set( xFactory->createInstance( "com.sun.star.chart2.template.StockLowHighClose" ), uno::UNO_QUERY );
@@ -254,12 +254,12 @@ namespace
 {
 enum
 {
-    //spline properties
+    
       PROP_CHART_STOCK_VOLUME = FAST_PROPERTY_ID_START_CHART_STOCK_PROP
     , PROP_CHART_STOCK_UPDOWN
 };
 
-}//anonymous namespace
+}
 
 void WrappedStockProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -286,7 +286,7 @@ void WrappedStockProperties::addWrappedProperties( std::vector< WrappedProperty*
     rList.push_back( new WrappedUpDownProperty( spChart2ModelContact ) );
 }
 
-} //namespace wrapper
-} //namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/core/filterdetect.hxx"
@@ -82,7 +82,7 @@ void SAL_CALL FilterDetectDocHandler::startFastElement(
     AttributeList aAttribs( rAttribs );
     switch ( nElement )
     {
-        // cases for _rels/.rels
+        
         case PR_TOKEN( Relationships ):
         break;
         case PR_TOKEN( Relationship ):
@@ -90,7 +90,7 @@ void SAL_CALL FilterDetectDocHandler::startFastElement(
                 parseRelationship( aAttribs );
         break;
 
-        // cases for [Content_Types].xml
+        
         case PC_TOKEN( Types ):
         break;
         case PC_TOKEN( Default ):
@@ -155,14 +155,14 @@ void SAL_CALL FilterDetectDocHandler::processingInstruction(
 void FilterDetectDocHandler::parseRelationship( const AttributeList& rAttribs )
 {
     OUString aType = rAttribs.getString( XML_Type, OUString() );
-    if ( aType == "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" )
+    if ( aType == "http:
     {
         Reference<XUriReferenceFactory> xFactory = UriReferenceFactory::create( mxContext );
         try
         {
-             // use '/' to representent the root of the zip package ( and provide a 'file' scheme to
-             // keep the XUriReference implementation happy )
-             Reference< XUriReference > xBase = xFactory->parse( OUString("file:///") );
+             
+             
+             Reference< XUriReference > xBase = xFactory->parse( OUString("file:
 
              Reference< XUriReference > xPart = xFactory->parse(  rAttribs.getString( XML_Target, OUString() ) );
              Reference< XUriReference > xAbs = xFactory->makeAbsolute(  xBase, xPart, sal_True, RelativeUriExcessParentSegments_RETAIN );
@@ -214,10 +214,10 @@ OUString FilterDetectDocHandler::getFilterNameFromContentType( const OUString& r
 
 void FilterDetectDocHandler::parseContentTypesDefault( const AttributeList& rAttribs )
 {
-    // only if no overridden part name found
+    
     if( mrFilterName.isEmpty() )
     {
-        // check if target path ends with extension
+        
         OUString aExtension = rAttribs.getString( XML_Extension, OUString() );
         sal_Int32 nExtPos = maTargetPath.getLength() - aExtension.getLength();
         if( (nExtPos > 0) && (maTargetPath[ nExtPos - 1 ] == '.') && maTargetPath.match( aExtension, nExtPos ) )
@@ -301,17 +301,17 @@ comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( co
     return aResult;
 }
 
-} // namespace
+} 
 
 
 Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescriptor& rMediaDescriptor ) const
 {
-    // try the plain input stream
+    
     Reference<XInputStream> xInputStream( rMediaDescriptor[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY );
     if( !xInputStream.is() || lclIsZipPackage( mxContext, xInputStream ) )
         return xInputStream;
 
-    // check if a temporary file is passed in the 'ComponentData' property
+    
     Reference<XStream> xDecrypted( rMediaDescriptor.getComponentDataEntry( "DecryptedPackage" ), UNO_QUERY );
     if( xDecrypted.is() )
     {
@@ -320,7 +320,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
             return xDecryptedInputStream;
     }
 
-    // try to decrypt an encrypted OLE package
+    
     oox::ole::OleStorage aOleStorage( mxContext, xInputStream, false );
     if( aOleStorage.isStorage() )
     {
@@ -354,11 +354,11 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                 }
                 else
                 {
-                    // create temporary file for unencrypted package
+                    
                     Reference<XStream> xTempFile( TempFile::create(mxContext), UNO_QUERY_THROW );
                     aDecryptor.decrypt( xTempFile );
 
-                    // store temp file in media descriptor to keep it alive
+                    
                     rMediaDescriptor.setComponentDataEntry( "DecryptedPackage", Any( xTempFile ) );
 
                     Reference<XInputStream> xDecryptedInputStream = xTempFile->getInputStream();
@@ -374,7 +374,7 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
     return Reference<XInputStream>();
 }
 
-// com.sun.star.lang.XServiceInfo interface -----------------------------------
+
 
 OUString SAL_CALL FilterDetect::getImplementationName() throw( RuntimeException )
 {
@@ -391,7 +391,7 @@ Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames() throw( Ru
     return FilterDetect_getSupportedServiceNames();
 }
 
-// com.sun.star.document.XExtendedFilterDetection interface -------------------
+
 
 OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq ) throw( RuntimeException )
 {
@@ -412,11 +412,11 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
             descriptor. */
         Reference< XInputStream > xInputStream( extractUnencryptedPackage( aMediaDescriptor ), UNO_SET_THROW );
 
-        // stream must be a ZIP package
+        
         ZipStorage aZipStorage( mxContext, xInputStream );
         if( aZipStorage.isStorage() )
         {
-            // create the fast parser, register the XML namespaces, set document handler
+            
             FastParser aParser( mxContext );
             aParser.registerNamespace( NMSP_packageRel );
             aParser.registerNamespace( NMSP_officeRel );
@@ -433,14 +433,14 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
     {
     }
 
-    // write back changed media descriptor members
+    
     aMediaDescriptor >> rMediaDescSeq;
     return aFilterName;
 }
 
-// ============================================================================
 
-} // namespace core
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

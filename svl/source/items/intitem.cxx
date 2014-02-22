@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,12 +25,12 @@
 #include <svl/metitem.hxx>
 
 //
-//  class SfxByteItem
+
 //
 
 TYPEINIT1_AUTOFACTORY(SfxByteItem, CntByteItem);
 
-// virtual
+
 SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
 {
     short nValue = 0;
@@ -39,7 +39,7 @@ SfxPoolItem * SfxByteItem::Create(SvStream & rStream, sal_uInt16) const
 }
 
 //
-//  class SfxInt16Item
+
 //
 
 DBG_NAME(SfxInt16Item);
@@ -55,7 +55,7 @@ SfxInt16Item::SfxInt16Item(sal_uInt16 which, SvStream & rStream):
     m_nValue = nTheValue;
 }
 
-// virtual
+
 bool SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
@@ -64,7 +64,7 @@ bool SfxInt16Item::operator ==(const SfxPoolItem & rItem) const
                         m_nValue;
 }
 
-// virtual
+
 int SfxInt16Item::Compare(const SfxPoolItem & rWith) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
@@ -77,7 +77,7 @@ int SfxInt16Item::Compare(const SfxPoolItem & rWith) const
             0 : 1;
 }
 
-// virtual
+
 SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
                                                   SfxMapUnit, SfxMapUnit,
                                                   OUString & rText,
@@ -89,7 +89,7 @@ SfxItemPresentation SfxInt16Item::GetPresentation(SfxItemPresentation,
 }
 
 
-// virtual
+
 bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     sal_Int16 nValue = m_nValue;
@@ -97,7 +97,7 @@ bool SfxInt16Item::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8) const
     return true;
 }
 
-// virtual
+
 bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
     sal_Int16 nValue = sal_Int16();
@@ -111,14 +111,14 @@ bool SfxInt16Item::PutValue(const com::sun::star::uno::Any& rVal, sal_uInt8 )
     return false;
 }
 
-// virtual
+
 SfxPoolItem * SfxInt16Item::Create(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
     return new SfxInt16Item(Which(), rStream);
 }
 
-// virtual
+
 SvStream & SfxInt16Item::Store(SvStream & rStream, sal_uInt16) const
 {
     DBG_CHKTHIS(SfxInt16Item, 0);
@@ -151,28 +151,28 @@ SfxFieldUnit SfxInt16Item::GetUnit() const
 }
 
 //
-//  class SfxUInt16Item
+
 //
 
 TYPEINIT1_AUTOFACTORY(SfxUInt16Item, CntUInt16Item);
 
 
 //
-//  class SfxInt32Item
+
 //
 
 TYPEINIT1_AUTOFACTORY(SfxInt32Item, CntInt32Item);
 
 
 //
-//  class SfxUInt32Item
+
 //
 
 TYPEINIT1_AUTOFACTORY(SfxUInt32Item, CntUInt32Item);
 
 
 //
-//  class SfxMetricItem
+
 //
 
 DBG_NAME(SfxMetricItem);
@@ -197,7 +197,7 @@ SfxMetricItem::SfxMetricItem(const SfxMetricItem & rItem):
     DBG_CTOR(SfxMetricItem, 0);
 }
 
-// virtual
+
 bool SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
 {
     BigInt aTheValue(GetValue());
@@ -208,7 +208,7 @@ bool SfxMetricItem::ScaleMetrics(long nMult, long nDiv)
     return true;
 }
 
-// virtual
+
 bool SfxMetricItem::HasMetrics() const
 {
     return true;

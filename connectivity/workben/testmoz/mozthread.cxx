@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <connectivity/sqlparse.hxx>
@@ -157,7 +157,7 @@ void printXResultSets( Reference<XResultSet> &xRes )
 
 int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
 {
-    // Test some metadata
+    
     Reference< XDatabaseMetaData > xDmd = pConnection->getMetaData();
     if ( xDmd.is() )
      {
@@ -172,9 +172,9 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
         OSL_TRACE("Testing getColumns() : START");
         {
             Reference<XResultSet> xRes = xDmd->getColumns(
-                                makeAny(OUString("")), // Catalog
-                                OUString("%"),          // Schema
-                                OUString("%"),          // TabName
+                                makeAny(OUString("")), 
+                                OUString("%"),          
+                                OUString("%"),          
                                 OUString("%")
                                 );
             printXResultSets( xRes );
@@ -191,9 +191,9 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
         OSL_TRACE("Testing getTables() : START");
          {
             Reference<XResultSet> xRes = xDmd->getTables(
-                    makeAny(OUString("")), // Catalog
-                    OUString("%"),          // Schema
-                    OUString("%"),          // TabName
+                    makeAny(OUString("")), 
+                    OUString("%"),          
+                    OUString("%"),          
                     Sequence<OUString>() );
             printXResultSets( xRes );
         }
@@ -207,7 +207,7 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
 
 void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
 {
-    // Try a query
+    
     OSL_TRACE("Testing createStatement() & executeQuery() : START");
     Reference<XStatement> xStmt = pConnection->createStatement();
     Reference<XResultSet> xRes;
@@ -215,7 +215,7 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
     {
         OSL_TRACE(": got statement");
         OSL_TRACE(":   excuteQuery() : START \n");
-//      SELECT "First Name", "Display Name", "E-mail" FROM tablename
+
         OUString sqlPrefix("SELECT  \"First Name\", \"Display Name\", \"E-mail\" FROM ");
         try
         {
@@ -227,9 +227,9 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                 OUString qut      = xDmd->getIdentifierQuoteString();
 
                 Reference<XResultSet> xRes = xDmd->getTables(
-                    makeAny(OUString("")), // Catalog
-                    OUString("%"),          // Schema
-                    OUString("%"),          // TabName
+                    makeAny(OUString("")), 
+                    OUString("%"),          
+                    OUString("%"),          
                         Sequence<OUString>() );
                 sal_Int32 nTables = 0;
                 while( xRes.is() && xRes->next())
@@ -250,9 +250,9 @@ void TestQuery(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
         } catch ( Exception &e ) {
             OSL_TRACE( "Exception caught : %s", OUtoCStr( e.Message) );
         }
-//      catch (...) {
-//          OSL_TRACE( "Non-UNO Exception caught\n" );
-//      }
+
+
+
         OSL_TRACE("excuteQuery() : END");
     }
     else
@@ -282,7 +282,7 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
     switch( nIndex)
     {
     case testLDAP:
-        url = "sdbc:address:ldap://";
+        url = "sdbc:address:ldap:
         aValue.realloc(2);
         aValue[0].Name = "HostName";
         aValue[0].Value <<= OUString("sun-ds");
@@ -290,16 +290,16 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
         aValue[1].Value <<= OUString("dc=sun,dc=com");
         break;
     case testMozilla:
-        url = "sdbc:address:mozilla://";
+        url = "sdbc:address:mozilla:
         break;
     case testOp:
-        url = "sdbc:address:outlook://";
+        url = "sdbc:address:outlook:
         break;
     case testOe:
-        url = "sdbc:address:outlookexp://";
+        url = "sdbc:address:outlookexp:
         break;
     default:
-        url = "sdbc:address:mozilla://";
+        url = "sdbc:address:mozilla:
         break;
     }
     pConnection =
@@ -335,7 +335,7 @@ int autoTest(Reference<XResultSet> &xRes)
     {
         OSL_TRACE(": FAILED to get a ResultSet");
     }
-    TimeValue               timeValue = { 1, 0 };  //sleep 1  Seconds to give time to other threads
+    TimeValue               timeValue = { 1, 0 };  
     osl_waitThread(&timeValue);
    return 0;
 }
@@ -370,9 +370,9 @@ void SAL_CALL mozThread(void*)
     } catch ( Exception &e ) {
         OSL_TRACE( "Exception caught : %s", OUtoCStr( e.Message) );
     }
-//  catch (...) {
-//         OSL_TRACE( "Non-UNO Exception caught\n" );
-//    }
+
+
+
 }
 const int THREAD_COUNT=100;
 
@@ -442,7 +442,7 @@ int main( int argc, char * argv[] )
     for(index=0;index < threadCount; index++)
     {
         xThreads[index] = osl_createThread(mozThread,(void*)NULL);
-        TimeValue               timeValue = { 1, 0 };  //sleep 1  Seconds to give time to other threads
+        TimeValue               timeValue = { 1, 0 };  
         osl_waitThread(&timeValue);
     }
     for(index=0;index < threadCount; index++)

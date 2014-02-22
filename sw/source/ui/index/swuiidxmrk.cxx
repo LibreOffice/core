@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swuiidxmrk.hxx"
@@ -66,7 +66,7 @@
 #define POS_CONTENT 0
 #define POS_INDEX   1
 
-static sal_uInt16 nTypePos = 1; // TOX_INDEX as standard
+static sal_uInt16 nTypePos = 1; 
 static sal_uInt16 nKey1Pos = USHRT_MAX;
 
 static sal_uInt16 nKey2Pos = USHRT_MAX;
@@ -179,7 +179,7 @@ SwIndexMarkPane::SwIndexMarkPane(Dialog &rDialog, sal_Bool bNewDlg,
 void SwIndexMarkPane::InitControls()
 {
     OSL_ENSURE(pSh && pTOXMgr, "no shell?");
-    // contents index
+    
     const SwTOXType* pType = pTOXMgr->GetTOXType(TOX_CONTENT, 0);
     OSL_ENSURE(pType, "Kein Verzeichnistyp !!");
     OUString sTmpTypeSelection;
@@ -188,25 +188,25 @@ void SwIndexMarkPane::InitControls()
     m_pTypeDCB->Clear();
     m_pTypeDCB->InsertEntry(pType->GetTypeName());
 
-    // keyword index
+    
     pType = pTOXMgr->GetTOXType(TOX_INDEX, 0);
     OSL_ENSURE(pType, "Kein Verzeichnistyp !!");
     m_pTypeDCB->InsertEntry(pType->GetTypeName());
 
-    // user index
+    
     sal_uInt16 nCount = pSh->GetTOXTypeCount(TOX_USER);
     sal_uInt16 i;
     for( i = 0; i < nCount; ++i )
         m_pTypeDCB->InsertEntry( pSh->GetTOXType(TOX_USER, i)->GetTypeName() );
 
-    // read keywords primary
+    
     std::vector<OUString> aArr;
     nCount = pSh->GetTOIKeys( TOI_PRIMARY, aArr );
     std::sort(aArr.begin(), aArr.end());
     for (std::vector<OUString>::iterator it = aArr.begin(); it != aArr.end(); ++it)
         m_pKey1DCB->InsertEntry( *it );
 
-    // read keywords secondary
+    
     nCount = pSh->GetTOIKeys( TOI_SECONDARY, aArr );
     std::sort(aArr.begin(), aArr.end());
     for (std::vector<OUString>::iterator it = aArr.begin(); it != aArr.end(); ++it)
@@ -214,14 +214,14 @@ void SwIndexMarkPane::InitControls()
 
     UpdateLanguageDependenciesForPhoneticReading();
 
-    // current entry
+    
     const SwTOXMark* pMark = pTOXMgr->GetCurTOXMark();
     if( pMark && !bNewMark)
     {
-        // Controls-Handling
+        
 
-        // only if there are more than one
-        // if equal it lands at the same entry
+        
+        
         pSh->SttCrsrMove();
 
         const SwTOXMark* pMoveMark;
@@ -265,7 +265,7 @@ void SwIndexMarkPane::InitControls()
         UpdateDialog();
     }
     else
-    {   // display current selection (first element) ????
+    {   
         sal_uInt16 nCnt = pSh->GetCrsrCnt();
         if (nCnt < 2)
         {
@@ -273,8 +273,8 @@ void SwIndexMarkPane::InitControls()
             aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
             m_pEntryED->SetText(aOrgStr);
 
-            //to include all equal entries may only be allowed in the body and even there
-            //only when a simple selection exists
+            
+            
             const sal_uInt16 nFrmType = pSh->GetFrmType(0,sal_True);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
@@ -284,7 +284,7 @@ void SwIndexMarkPane::InitControls()
             SearchTypeHdl(m_pApplyToAllCB);
         }
 
-        // index type is default
+        
         if( !sTmpTypeSelection.isEmpty() &&
             LISTBOX_ENTRY_NOTFOUND != m_pTypeDCB->GetEntryPos( sTmpTypeSelection ) )
             m_pTypeDCB->SelectEntry(sTmpTypeSelection);
@@ -296,7 +296,7 @@ void SwIndexMarkPane::InitControls()
 
 void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
 {
-    //no phonetic reading if no global cjk support
+    
     if( !xExtendedIndexEntrySupplier.is() )
     {
         bIsPhoneticReadingEnabled = sal_False;
@@ -304,8 +304,8 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
     }
     bIsPhoneticReadingEnabled = sal_True;
 
-    //get the current language
-    if(!bNewMark) //if dialog is opened to iterate existing marks
+    
+    if(!bNewMark) 
     {
         OSL_ENSURE(pTOXMgr, "need TOXMgr");
         if(!pTOXMgr)
@@ -325,7 +325,7 @@ void    SwIndexMarkPane::UpdateLanguageDependenciesForPhoneticReading()
         sal_Int32 nTextIndex = *pTxtTOXMark->GetStart();
         nLangForPhoneticReading = pTxtNode->GetLang( nTextIndex );
     }
-    else //if dialog is opened to create a new mark
+    else 
     {
         sal_uInt16 nScriptType = pSh->GetScriptType();
         sal_uInt16 nWhich;
@@ -355,7 +355,7 @@ OUString SwIndexMarkPane::GetDefaultPhoneticReading( const OUString& rText )
  --------------------------------------------------*/
 void    SwIndexMarkPane::Activate()
 {
-    // display current selection (first element) ????
+    
     if(bNewMark)
     {
         sal_uInt16 nCnt = pSh->GetCrsrCnt();
@@ -365,8 +365,8 @@ void    SwIndexMarkPane::Activate()
             aOrgStr = pSh->GetView().GetSelectionTextParam(true, false);
             m_pEntryED->SetText(aOrgStr);
 
-            //to include all equal entries may only be allowed in the body and even there
-            //only when a simple selection exists
+            
+            
             const sal_uInt16 nFrmType = pSh->GetFrmType(0,sal_True);
             m_pApplyToAllCB->Show();
             m_pSearchCaseSensitiveCB->Show();
@@ -448,7 +448,7 @@ static void lcl_SelectSameStrings(SwWrtShell& rSh, sal_Bool bWordOnly, sal_Bool 
     rSh.ClearMark();
     sal_Bool bCancel;
 
-    //todo/mba: assuming that notes should not be searched
+    
     sal_Bool bSearchInNotes = sal_False;
     rSh.Find( aSearchOpt,  bSearchInNotes, DOCPOS_START, DOCPOS_END, bCancel,
                         (FindRanges)(FND_IN_SELALL|FND_IN_BODYONLY), sal_False );
@@ -467,7 +467,7 @@ void SwIndexMarkPane::InsertMark()
     switch(nPos)
     {
         case POS_CONTENT : break;
-        case POS_INDEX:     // keyword index mark
+        case POS_INDEX:     
         {
             UpdateKeyBoxes();
             OUString  aPrim(m_pKey1DCB->GetText());
@@ -480,7 +480,7 @@ void SwIndexMarkPane::InsertMark()
             aDesc.SetPhoneticReadingOfSecKey(m_pPhoneticED2->GetText());
         }
         break;
-        default:            // Userdefined index mark
+        default:            
         {
             OUString aName(m_pTypeDCB->GetSelectEntry());
             aDesc.SetTOUName(aName);
@@ -493,8 +493,8 @@ void SwIndexMarkPane::InsertMark()
     sal_Bool bCaseSensitive = m_pSearchCaseSensitiveCB->IsChecked();
 
     pSh->StartAllAction();
-    // all equal strings have to be selected here so that the
-    // entry is apllied to all equal strings
+    
+    
     if(bApplyAll)
     {
         lcl_SelectSameStrings(*pSh, bWordOnly, bCaseSensitive);
@@ -515,7 +515,7 @@ void SwIndexMarkPane::UpdateMark()
 {
     OUString  aAltText(m_pEntryED->GetText());
     OUString* pAltText = aOrgStr != m_pEntryED->GetText() ? &aAltText : 0;
-    //empty alternative texts are not allowed
+    
     if(pAltText && pAltText->isEmpty())
         return;
 
@@ -559,7 +559,7 @@ void SwIndexMarkPane::UpdateKeyBoxes()
     sal_uInt16 nPos = m_pKey1DCB->GetEntryPos(aKey);
 
     if(nPos == LISTBOX_ENTRY_NOTFOUND && !aKey.isEmpty())
-    {   // create new key
+    {   
         m_pKey1DCB->InsertEntry(aKey);
     }
 
@@ -567,7 +567,7 @@ void SwIndexMarkPane::UpdateKeyBoxes()
     nPos = m_pKey2DCB->GetEntryPos(aKey);
 
     if(nPos == LISTBOX_ENTRY_NOTFOUND && !aKey.isEmpty())
-    {   // create new key
+    {   
         m_pKey2DCB->InsertEntry(aKey);
     }
 }
@@ -631,7 +631,7 @@ IMPL_LINK( SwIndexMarkPane, SearchTypeHdl, CheckBox*, pBox)
 IMPL_LINK( SwIndexMarkPane, InsertHdl, Button *, pButton )
 {
     Apply();
-    //close the dialog if only one entry is available
+    
     if(!bNewMark && !m_pPrevBT->IsVisible() && !m_pNextBT->IsVisible())
         CloseHdl(pButton);
     return 0;
@@ -659,7 +659,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
 {
     if (m_pTypeDCB == pBox)
     {
-        // set index type
+        
         sal_uInt16 nPos = m_pTypeDCB->GetEntryPos(m_pTypeDCB->GetSelectEntry());
         sal_Bool bLevelEnable = sal_False,
              bKeyEnable   = sal_False,
@@ -711,7 +711,7 @@ IMPL_LINK( SwIndexMarkPane, ModifyHdl, ListBox *, pBox )
         m_pPhoneticFT2->Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
         m_pPhoneticED2->Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
     }
-    else //m_pEntryED  !!m_pEntryED is not a ListBox but a Edit
+    else 
     {
         bool bHasText = (!m_pEntryED->GetText().isEmpty());
         if(!bHasText)
@@ -799,7 +799,7 @@ void SwIndexMarkPane::UpdateDialog()
     aOrgStr = pMark->GetText();
     m_pEntryED->SetText(aOrgStr);
 
-    // set index type
+    
     sal_Bool bLevelEnable = sal_True,
          bKeyEnable   = sal_False,
          bKey2Enable  = sal_False,
@@ -843,10 +843,10 @@ void SwIndexMarkPane::UpdateDialog()
     m_pPhoneticFT2->Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
     m_pPhoneticED2->Enable(bKeyEnable&&bKey2HasText&&bIsPhoneticReadingEnabled);
 
-    // set index type
+    
     m_pTypeDCB->SelectEntry(pMark->GetTOXType()->GetTypeName());
 
-    // set Next - Prev - Buttons
+    
     pSh->SttCrsrMove();
     if( m_pPrevBT->IsVisible() )
     {
@@ -881,7 +881,7 @@ void SwIndexMarkPane::UpdateDialog()
     m_pKey2DCB->SetReadOnly( !bEnable );
 
     pSh->SelectTxtAttr( RES_TXTATR_TOXMARK, pMark->GetTxtTOXMark() );
-    // we need the point at the start of the attribut
+    
     pSh->SwapPam();
 
     pSh->EndCrsrMove();
@@ -927,7 +927,7 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
         {
             if(pBox->IsInDropDown())
             {
-                //reset bPhoneticED1_ChangedByUser if a completely new string is selected
+                
                 bPhoneticED1_ChangedByUser = sal_False;
             }
             if(!bPhoneticED1_ChangedByUser)
@@ -947,7 +947,7 @@ IMPL_LINK( SwIndexMarkPane, KeyDCBModifyHdl, ComboBox *, pBox )
         {
             if(pBox->IsInDropDown())
             {
-                //reset bPhoneticED1_ChangedByUser if a completely new string is selected
+                
                 bPhoneticED2_ChangedByUser = sal_False;
             }
             if(!bPhoneticED2_ChangedByUser)
@@ -1230,13 +1230,13 @@ IMPL_LINK( SwAuthorMarkPane, CompEntryHdl, ListBox*, pBox)
 
 IMPL_LINK_NOARG(SwAuthorMarkPane, InsertHdl)
 {
-    //insert or update the SwAuthorityField...
+    
     if(pSh)
     {
         bool bDifferent = false;
         OSL_ENSURE(!m_sFields[AUTH_FIELD_IDENTIFIER].isEmpty() , "No Id is set!");
         OSL_ENSURE(!m_sFields[AUTH_FIELD_AUTHORITY_TYPE].isEmpty() , "No authority type is set!");
-        //check if the entry already exists with different content
+        
         const SwAuthorityFieldType* pFType = (const SwAuthorityFieldType*)
                                         pSh->GetFldType(RES_AUTHORITY, OUString());
         const SwAuthEntry*  pEntry = pFType ?

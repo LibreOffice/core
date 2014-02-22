@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -135,13 +135,13 @@ void SAL_CALL SwXFlatParagraph::commitStringMarkup(::sal_Int32 nType, const OUSt
     SwXTextMarkup::commitStringMarkup( nType, rIdentifier, nStart, nLength,  rxMarkupInfoContainer );
 }
 
-// text::XFlatParagraph:
+
 OUString SAL_CALL SwXFlatParagraph::getText() throw (uno::RuntimeException)
 {
     return maExpandText;
 }
 
-// text::XFlatParagraph:
+
 void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal ) throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -161,7 +161,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
     }
 }
 
-// text::XFlatParagraph:
+
 ::sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -178,14 +178,14 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, ::sal_Bool bVal )
     return sal_False;
 }
 
-// text::XFlatParagraph:
+
 ::sal_Bool SAL_CALL SwXFlatParagraph::isModified() throw (uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     return 0 == mpTxtNode;
 }
 
-// text::XFlatParagraph:
+
 lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
@@ -197,7 +197,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
     return aLocale;
 }
 
-// text::XFlatParagraph:
+
 lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
     throw (uno::RuntimeException, lang::IllegalArgumentException)
 {
@@ -210,7 +210,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
     return aLocale;
 }
 
-// text::XFlatParagraph:
+
 void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
     SolarMutexGuard aGuard;
@@ -234,7 +234,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
             xPropSet->setPropertyValue( aAttributes[i].Name, aAttributes[i].Value );
     }
 
-    mpTxtNode = pOldTxtNode; // setPropertyValue() modifies this. We restore the old state.
+    mpTxtNode = pOldTxtNode; 
 
     IDocumentContentOperations* pIDCO = mpTxtNode->getIDocumentContentOperations();
     pIDCO->ReplaceRange( aPaM, aNewText, false );
@@ -242,7 +242,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
     mpTxtNode = 0;
 }
 
-// text::XFlatParagraph:
+
 void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException)
 {
     SolarMutexGuard aGuard;
@@ -267,7 +267,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
     mpTxtNode = 0;
 }
 
-// text::XFlatParagraph:
+
 css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions() throw (css::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -307,9 +307,9 @@ SwXFlatParagraphIterator::SwXFlatParagraphIterator( SwDoc& rDoc, sal_Int32 nType
       mnEndNode( rDoc.GetNodes().Count() ),
       mbWrapped( sal_False )
 {
-    //mnStartNode = mnCurrentNode = get node from current cursor TODO!
+    
 
-    // register as listener and get notified when document is closed
+    
     mpDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD )->Add(this);
 }
 
@@ -321,7 +321,7 @@ SwXFlatParagraphIterator::~SwXFlatParagraphIterator()
 void SwXFlatParagraphIterator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     ClientModify( this, pOld, pNew );
-    // check if document gets closed...
+    
     if(!GetRegisteredIn())
     {
         SolarMutexGuard aGuard;
@@ -333,7 +333,7 @@ void SwXFlatParagraphIterator::Modify( const SfxPoolItem* pOld, const SfxPoolIte
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getFirstPara()
     throw( uno::RuntimeException )
 {
-    return getNextPara();   // TODO
+    return getNextPara();   
 }
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
@@ -359,12 +359,12 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
         {
             if (mnType != text::TextMarkupType::SPELLCHECK || pCurrentPage->IsInvalidSpelling() )
             {
-                // this method is supposed to return an empty paragraph in case Online Checking is disabled
+                
                 if ( ( mnType == text::TextMarkupType::PROOFREADING || mnType == text::TextMarkupType::SPELLCHECK )
                     && !pViewShell->GetViewOptions()->IsOnlineSpell() )
                     return xRet;
 
-                // search for invalid content:
+                
                 SwCntntFrm* pCnt = pCurrentPage->ContainsCntnt();
 
                 while( pCnt && pCurrentPage->IsAnLower( pCnt ) )
@@ -388,11 +388,11 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
             if ( pRet )
                 break;
 
-            // if there is no invalid text node on the current page,
-            // we validate the page
+            
+            
             pCurrentPage->ValidateSpelling();
 
-            // proceed with next page, wrap at end of document if required:
+            
             pCurrentPage = static_cast<SwPageFrm*>(pCurrentPage->GetNext());
 
             if ( !pCurrentPage && !pStopPage )
@@ -402,7 +402,7 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
             }
         }
     }
-    else    // non-automatic checking
+    else    
     {
         const SwNodes& rNodes = mpDoc->GetNodes();
         const sal_uLong nMaxNodes = rNodes.Count();
@@ -427,12 +427,12 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 
     if ( pRet )
     {
-        // Expand the string:
+        
         const ModelToViewHelper aConversionMap(*pRet);
         OUString aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pRet, aExpandText, aConversionMap );
-        // keep hard references...
+        
         m_aFlatParaList.insert( xRet );
     }
 
@@ -479,12 +479,12 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
 
     if ( pNextTxtNode )
     {
-        // Expand the string:
+        
         const ModelToViewHelper aConversionMap(*pNextTxtNode);
         OUString aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pNextTxtNode, aExpandText, aConversionMap );
-        // keep hard references...
+        
         m_aFlatParaList.insert( xRet );
     }
 
@@ -525,12 +525,12 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(c
 
     if ( pPrevTxtNode )
     {
-        // Expand the string:
+        
         const ModelToViewHelper aConversionMap(*pPrevTxtNode);
         OUString aExpandText = aConversionMap.getViewText();
 
         xRet = new SwXFlatParagraph( *pPrevTxtNode, aExpandText, aConversionMap );
-        // keep hard references...
+        
         m_aFlatParaList.insert( xRet );
     }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,15 +47,15 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::text;
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
+
 
 static SvxBorderLine gEmptyBorder;
 
-// -----------------------------------------------------------------------------
+
 
 TableLayouter::TableLayouter( const TableModelRef& xTableModel )
 : mxTable( xTableModel )
@@ -63,14 +63,14 @@ TableLayouter::TableLayouter( const TableModelRef& xTableModel )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableLayouter::~TableLayouter()
 {
     ClearBorderLayout();
 }
 
-// -----------------------------------------------------------------------------
+
 
 basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
 {
@@ -115,7 +115,7 @@ basegfx::B2ITuple TableLayouter::getCellSize( const CellPos& rPos  ) const
     return basegfx::B2ITuple( width, height );
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rArea ) const
 {
@@ -133,7 +133,7 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
 
                 if(bRTL)
                 {
-                    ///For RTL Table Calculate the Right End of cell instead of Left
+                    
                     const sal_Int32 x = maColumns[rPos.mnCol].mnPos + maColumns[rPos.mnCol].mnSize;
                     rArea = basegfx::B2IRectangle( x-aCellSize.getX(), y, x, y + aCellSize.getY()  );
                 }
@@ -153,7 +153,7 @@ bool TableLayouter::getCellArea( const CellPos& rPos, basegfx::B2IRectangle& rAr
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Int32 TableLayouter::getRowHeight( sal_Int32 nRow ) const
 {
     if( isValidRow(nRow) )
@@ -162,7 +162,7 @@ sal_Int32 TableLayouter::getRowHeight( sal_Int32 nRow ) const
         return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn ) const
 {
     if( isValidColumn(nColumn) )
@@ -171,7 +171,7 @@ sal_Int32 TableLayouter::getColumnWidth( sal_Int32 nColumn ) const
         return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal ) const
 {
@@ -190,7 +190,7 @@ bool TableLayouter::isEdgeVisible( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHor
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** returns the requested borderline in rpBorderLine or a null pointer if there is no border at this edge */
 SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY, bool bHorizontal )const
@@ -214,7 +214,7 @@ SvxBorderLine* TableLayouter::getBorderLine( sal_Int32 nEdgeX, sal_Int32 nEdgeY,
     return pLine;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 TableLayouter::getHorizontalEdge( int nEdgeY, sal_Int32* pnMin /*= 0*/, sal_Int32* pnMax /*= 0*/ )
 {
@@ -230,7 +230,7 @@ sal_Int32 TableLayouter::getHorizontalEdge( int nEdgeY, sal_Int32* pnMin /*= 0*/
     {
         if( (nEdgeY > 0) && (nEdgeY <= nRowCount ) )
         {
-            *pnMin = maRows[nEdgeY-1].mnPos + 600; // todo
+            *pnMin = maRows[nEdgeY-1].mnPos + 600; 
         }
         else
         {
@@ -245,7 +245,7 @@ sal_Int32 TableLayouter::getHorizontalEdge( int nEdgeY, sal_Int32* pnMin /*= 0*/
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 TableLayouter::getVerticalEdge( int nEdgeX, sal_Int32* pnMin /*= 0*/, sal_Int32* pnMax /*= 0*/ )
 {
@@ -284,7 +284,7 @@ sal_Int32 TableLayouter::getVerticalEdge( int nEdgeX, sal_Int32* pnMin /*= 0*/, 
 
     if( pnMax )
     {
-        *pnMax = 0x0fffffff; // todo
+        *pnMax = 0x0fffffff; 
         if( bRTL )
         {
             if( nEdgeX > 0 )
@@ -300,7 +300,7 @@ sal_Int32 TableLayouter::getVerticalEdge( int nEdgeX, sal_Int32* pnMin /*= 0*/, 
     return nRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 static bool checkMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32 nMergedY, sal_Int32 nCellX, sal_Int32 nCellY, bool& bRunning )
 {
@@ -327,7 +327,7 @@ bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32
 
     if( xTable.is() ) try
     {
-        // check if this cell already the origin or not merged at all
+        
         Reference< XMergeableCell > xCell( xTable->getCellByPosition( nMergedX, nMergedY ), UNO_QUERY_THROW );
         if( !xCell.is() || !xCell->isMerged() )
             return true;
@@ -421,7 +421,7 @@ bool findMergeOrigin( const TableModelRef& xTable, sal_Int32 nMergedX, sal_Int32
     return false;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 TableLayouter::getMinimumColumnWidth( sal_Int32 nColumn )
 {
@@ -436,11 +436,11 @@ sal_Int32 TableLayouter::getMinimumColumnWidth( sal_Int32 nColumn )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribute )
 {
-    // break loops after 100 runs to avoid freezing office due to developer error
+    
     sal_Int32 nSafe = 100;
 
     const sal_Size nCount = rLayouts.size();
@@ -450,7 +450,7 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
 
     do
     {
-        // first enforce minimum size constrains on all entities
+        
         for( nIndex = 0; nIndex < nCount; ++nIndex )
         {
             Layout& rLayout = rLayouts[nIndex];
@@ -461,9 +461,9 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
             }
         }
 
-        // calculate current width
-        // if nDistribute is < 0 (shrinking), entities that are already
-        // at minimum width are not counted
+        
+        
+        
         sal_Int32 nCurrentWidth = 0;
         for( nIndex = 0; nIndex < nCount; ++nIndex )
         {
@@ -474,7 +474,7 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
 
         bConstrainsBroken = false;
 
-        // now distribute over entities
+        
         if( (nCurrentWidth != 0) && (nDistribute != 0) )
         {
             sal_Int32 nDistributed = nDistribute;
@@ -485,7 +485,7 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
                 {
                     sal_Int32 n;
                     if( nIndex == (nCount-1) )
-                        n = nDistributed; // for last entitie, use up rest
+                        n = nDistributed; 
                     else
                         n  = (nDistribute * rLayout.mnSize) / nCurrentWidth; //
 
@@ -506,13 +506,13 @@ sal_Int32 TableLayouter::distribute( LayoutVector& rLayouts, sal_Int32 nDistribu
     return nSize;
 }
 
-// -----------------------------------------------------------------------------
+
 
 typedef std::vector< CellRef > MergeableCellVector;
 typedef std::vector< MergeableCellVector > MergeVector;
 typedef std::vector< sal_Int32 > Int32Vector;
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
 {
@@ -531,15 +531,15 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
 
     Reference< XTableColumns > xCols( mxTable->getColumns(), UNO_QUERY_THROW );
 
-    // first calculate current width and initial minimum width per column,
-    // merged cells will be counted later
+    
+    
     sal_Int32 nCurrentWidth = 0;
     sal_Int32 nCol = 0, nRow = 0;
     for( nCol = 0; nCol < nColCount; nCol++ )
     {
         sal_Int32 nMinWidth = 0;
 
-        bool bIsEmpty = true; // check if all cells in this column are merged
+        bool bIsEmpty = true; 
 
         for( nRow = 0; nRow < nRowCount; ++nRow )
         {
@@ -551,7 +551,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
                 sal_Int32 nColSpan = xCell->getColumnSpan();
                 if( nColSpan > 1 )
                 {
-                    // merged cells will be evaluated later
+                    
                     aMergedCells[nCol+nColSpan-1].push_back( xCell );
                 }
                 else
@@ -591,7 +591,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
         }
     }
 
-    // if we have optimal sized rows, distribute what is given (left)
+    
     if( !bFit && !aOptimalColumns.empty() && (nCurrentWidth < rArea.getWidth()) )
     {
         sal_Int32 nLeft = rArea.getWidth() - nCurrentWidth;
@@ -611,7 +611,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
         DBG_ASSERT( nLeft == 0, "svx::TableLayouter::LayoutTableWidtht(), layouting failed!" );
     }
 
-    // now check if merged cells fit
+    
     for( nCol = 1; nCol < nColCount; ++nCol )
     {
         bool bChanges = false;
@@ -641,11 +641,11 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
             nCurrentWidth += maColumns[nCol].mnSize - nOldSize;
     }
 
-    // now scale if wanted and needed
+    
     if( bFit && (nCurrentWidth != rArea.getWidth()) )
         distribute( maColumns, rArea.getWidth() - nCurrentWidth );
 
-    // last step, update left edges
+    
     sal_Int32 nNewWidth = 0;
 
     const bool bRTL = (mxTable->getSdrTableObj()->GetWritingMode() == WritingMode_RL_TB);
@@ -665,7 +665,7 @@ void TableLayouter::LayoutTableWidth( Rectangle& rArea, bool bFit )
     updateCells( rArea );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
 {
@@ -681,15 +681,15 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
 
     const OUString sOptimalSize("OptimalSize");
 
-    // first calculate current height and initial minimum size per column,
-    // merged cells will be counted later
+    
+    
     sal_Int32 nCurrentHeight = 0;
     sal_Int32 nCol, nRow;
     for( nRow = 0; nRow < nRowCount; ++nRow )
     {
         sal_Int32 nMinHeight = 0;
 
-        bool bIsEmpty = true; // check if all cells in this row are merged
+        bool bIsEmpty = true; 
 
         for( nCol = 0; nCol < nColCount; ++nCol )
         {
@@ -701,7 +701,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
                 sal_Int32 nRowSpan = xCell->getRowSpan();
                 if( nRowSpan > 1 )
                 {
-                    // merged cells will be evaluated later
+                    
                     aMergedCells[nRow+nRowSpan-1].push_back( xCell );
                 }
                 else
@@ -742,7 +742,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
         }
     }
 
-    // if we have optimal sized rows, distribute what is given (left)
+    
     if( !bFit && !aOptimalRows.empty() && (nCurrentHeight < rArea.getHeight()) )
     {
         sal_Int32 nLeft = rArea.getHeight() - nCurrentHeight;
@@ -763,7 +763,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
         DBG_ASSERT( nLeft == 0, "svx::TableLayouter::LayoutTableHeight(), layouting failed!" );
     }
 
-    // now check if merged cells fit
+    
     for( nRow = 1; nRow < nRowCount; ++nRow )
     {
         bool bChanges = false;
@@ -791,11 +791,11 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
             nCurrentHeight += maRows[nRow].mnSize - nOldSize;
     }
 
-    // now scale if wanted and needed
+    
     if( bFit && nCurrentHeight != rArea.getHeight() )
         distribute( maRows, rArea.getHeight() - nCurrentHeight );
 
-    // last step, update left edges
+    
     sal_Int32 nNewHeight = 0;
     for( nRow = 0; nRow < nRowCount; ++nRow )
     {
@@ -813,7 +813,7 @@ void TableLayouter::LayoutTableHeight( Rectangle& rArea, bool bFit )
     updateCells( rArea );
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** try to fit the table into the given rectangle.
     If the rectangle is to small, it will be grown to fit the table. */
@@ -846,7 +846,7 @@ void TableLayouter::LayoutTable( Rectangle& rRectangle, bool bFitWidth, bool bFi
     UpdateBorderLayout();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::updateCells( Rectangle& rRectangle )
 {
@@ -876,7 +876,7 @@ void TableLayouter::updateCells( Rectangle& rRectangle )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 CellRef TableLayouter::getCell( const CellPos& rPos ) const
 {
@@ -892,7 +892,7 @@ CellRef TableLayouter::getCell( const CellPos& rPos ) const
     return xCell;
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine* pOther )
 {
@@ -923,12 +923,12 @@ bool TableLayouter::HasPriority( const SvxBorderLine* pThis, const SvxBorderLine
         }
         else
         {
-            return true;            //! ???
+            return true;            
         }
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal, const SvxBorderLine* pLine )
 {
@@ -951,7 +951,7 @@ void TableLayouter::SetBorder( sal_Int32 nCol, sal_Int32 nRow, bool bHorizontal,
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::ClearBorderLayout()
 {
@@ -959,7 +959,7 @@ void TableLayouter::ClearBorderLayout()
     ClearBorderLayout(maVerticalBorders);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::ClearBorderLayout(BorderLineMap& rMap)
 {
@@ -982,7 +982,7 @@ void TableLayouter::ClearBorderLayout(BorderLineMap& rMap)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::ResizeBorderLayout()
 {
@@ -991,7 +991,7 @@ void TableLayouter::ResizeBorderLayout()
     ResizeBorderLayout(maVerticalBorders);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::ResizeBorderLayout( BorderLineMap& rMap )
 {
@@ -1008,11 +1008,11 @@ void TableLayouter::ResizeBorderLayout( BorderLineMap& rMap )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::UpdateBorderLayout()
 {
-    // make sure old border layout is cleared and border maps have correct size
+    
     ResizeBorderLayout();
 
     const sal_Int32 nColCount = getColumnCount();
@@ -1051,7 +1051,7 @@ void TableLayouter::UpdateBorderLayout()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, sal_Int32 nLastCol )
 {
@@ -1073,7 +1073,7 @@ void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, 
         for( sal_Int32 nCol = nFirstCol; nCol <= nLastCol; ++nCol )
         {
             if( nCol == nLastCol )
-                nWidth = nAllWidth; // last column get round errors
+                nWidth = nAllWidth; 
 
             Reference< XPropertySet > xColSet( xCols->getByIndex( nCol ), UNO_QUERY_THROW );
             xColSet->setPropertyValue( msSize, Any( nWidth ) );
@@ -1090,7 +1090,7 @@ void TableLayouter::DistributeColumns( ::Rectangle& rArea, sal_Int32 nFirstCol, 
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal_Int32 nLastRow )
 {
@@ -1125,7 +1125,7 @@ void TableLayouter::DistributeRows( ::Rectangle& rArea, sal_Int32 nFirstRow, sal
         for( sal_Int32 nRow = nFirstRow; nRow <= nLastRow; ++nRow )
         {
             if( nRow == nLastRow )
-                nHeight = nAllHeight; // last row get round errors
+                nHeight = nAllHeight; 
 
             Reference< XPropertySet > xRowSet( xRows->getByIndex( nRow ), UNO_QUERY_THROW );
             xRowSet->setPropertyValue( msSize, Any( nHeight ) );

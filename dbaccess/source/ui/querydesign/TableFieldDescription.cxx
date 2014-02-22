@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableFieldDescription.hxx"
@@ -77,10 +77,10 @@ OTableFieldDesc& OTableFieldDesc::operator=( const OTableFieldDesc& rRS )
 
     m_aCriteria = rRS.GetCriteria();
     m_aTableName = rRS.GetTable();
-    m_aAliasName = rRS.GetAlias();      // table range
-    m_aFieldName = rRS.GetField();      // column
-    m_aFieldAlias = rRS.GetFieldAlias();    // column alias
-    m_aFunctionName = rRS.GetFunction();    // Funktionsname
+    m_aAliasName = rRS.GetAlias();      
+    m_aFieldName = rRS.GetField();      
+    m_aFieldAlias = rRS.GetFieldAlias();    
+    m_aFunctionName = rRS.GetFunction();    
     m_pTabWindow = rRS.GetTabWindow();
     m_eDataType = rRS.GetDataType();
     m_eFunctionType = rRS.GetFunctionType();

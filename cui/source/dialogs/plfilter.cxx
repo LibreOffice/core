@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <set>
@@ -46,7 +46,7 @@ typedef set< OUString, ltstr > StrSet;
 typedef map< OUString, StrSet, ltstr > FilterMap;
 
 
-//==================================================================================================
+
 void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OUString >& rPluginTypes )
 {
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
@@ -54,7 +54,7 @@ void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OU
 
     FilterMap aMap;
 
-    // sum up the mimetypes: one description, multiple extensions
+    
 
     Sequence<PluginDescription > aDescriptions( xPMgr->getPluginDescriptions() );
     const PluginDescription * pDescriptions = aDescriptions.getConstArray();
@@ -67,7 +67,7 @@ void fillNetscapePluginFilters( Sequence< OUString >& rPluginNames, Sequence< OU
 
         for ( sal_uInt16 nCnt = comphelper::string::getTokenCount(aExtension,  ';'); nCnt--; )
         {
-            // no default plugins anymore
+            
             OUString aExt( aExtension.getToken( nCnt, ';' ) );
             if ( aExt == "*.*" )
                 rTypes.insert( aExt );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -125,15 +125,15 @@ void AccContainerEventListener::HandleChildChangedEvent(Any oldValue, Any newVal
     Reference< XAccessible > xChild;
     if( newValue >>= xChild)
     {
-        //create a new child
+        
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
-            //add this child
+            
 
             if (pAgent->InsertAccObj(pAcc, m_xAccessible.get()))
             {
-                //add all oldValue's existing children
+                
                 pAgent->InsertChildrenAccObj(pAcc);
                 pAgent->NotifyAccEvent(UM_EVENT_CHILD_ADDED, pAcc);
             }
@@ -143,14 +143,14 @@ void AccContainerEventListener::HandleChildChangedEvent(Any oldValue, Any newVal
     }
     else if (oldValue >>= xChild)
     {
-        //delete a existing child
+        
         if(xChild.is())
         {
             XAccessible* pAcc = xChild.get();
             pAgent->NotifyAccEvent(UM_EVENT_CHILD_REMOVED, pAcc);
-            //delete all oldValue's existing children
+            
             pAgent->DeleteChildrenAccObj( pAcc );
-            //delete this child
+            
             pAgent->DeleteAccObj( pAcc );
 
         }
@@ -172,7 +172,7 @@ void AccContainerEventListener::HandleSelectionChangedEvent(const Any& /*oldValu
         return ;
     }
 
-    //menu bar does not process selection change event,just same as word behavior
+    
     if (GetRole()!=AccessibleRole::MENU_BAR)
         pAgent->NotifyAccEvent(UM_EVENT_SELECTION_CHANGED, m_xAccessible.get());
 }
@@ -182,12 +182,12 @@ void AccContainerEventListener::HandleSelectionChangedEvent(const Any& /*oldValu
  */
 void AccContainerEventListener::HandleAllChildrenChangedEvent()
 {
-    //TODO: update all the children
+    
     if (m_xAccessible.is())
     {
-        //delete all oldValue's existing children
+        
         pAgent->DeleteChildrenAccObj(m_xAccessible.get());
-        //add all oldValue's existing children
+        
         pAgent->InsertChildrenAccObj(m_xAccessible.get());
         pAgent->NotifyAccEvent(UM_EVENT_OBJECT_REORDER , m_xAccessible.get());
     }
@@ -209,7 +209,7 @@ void AccContainerEventListener::HandleTextChangedEvent(Any oldValue, Any newValu
  */
 void AccContainerEventListener::SetComponentState(short state, bool enable )
 {
-    // only the following state can be fired state event.
+    
 
     switch (state)
     {
@@ -244,9 +244,9 @@ void AccContainerEventListener::SetComponentState(short state, bool enable )
         }
         break;
     case AccessibleStateType::ACTIVE:
-        // Only frames should be active
-        // no msaa state mapping
-        //for PAGE_TAB_LIST, there will be ACTIVE state, then it should be converted to FOCUSED event.
+        
+        
+        
         if (GetRole() == AccessibleRole::PAGE_TAB_LIST)
         {
             if (!enable) /* get the active state */
@@ -284,7 +284,7 @@ void AccContainerEventListener::FireStatePropertyChange(short state, bool set)
 {
     if( set )
     {
-        // new value
+        
         switch(state)
         {
         case AccessibleStateType::SELECTED:
@@ -298,11 +298,11 @@ void AccContainerEventListener::FireStatePropertyChange(short state, bool set)
             pAgent->NotifyAccEvent(UM_EVENT_STATE_BUSY, m_xAccessible.get());
             break;
         case AccessibleStateType::SHOWING:
-            // UNO !SHOWING == MSAA OFFSCREEN
+            
             pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
             break;
         case AccessibleStateType::VISIBLE:
-            // UNO !VISIBLE == MSAA INVISIBLE
+            
             pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
             break;
         default:
@@ -311,7 +311,7 @@ void AccContainerEventListener::FireStatePropertyChange(short state, bool set)
     }
     else
     {
-        // old value
+        
         switch(state)
         {
         case AccessibleStateType::SELECTED:
@@ -325,11 +325,11 @@ void AccContainerEventListener::FireStatePropertyChange(short state, bool set)
             pAgent->NotifyAccEvent(UM_EVENT_STATE_BUSY, m_xAccessible.get());
             break;
         case AccessibleStateType::SHOWING:
-            // UNO !SHOWING == MSAA OFFSCREEN
+            
             pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::SHOWING);
             break;
         case AccessibleStateType::VISIBLE:
-            // UNO !VISIBLE == MSAA INVISIBLE
+            
             pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::VISIBLE);
             break;
         default:
@@ -347,8 +347,8 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
     if(enable)
     {
         pAgent->IncreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
-        //if the acc role is MENU_BAR, MSAA UM_EVENT_MENU_START event should be sent
-        //if the acc role is POPUP_MENU, MSAA UM_EVENT_MENUPOPUPSTART event should be sent
+        
+        
         short role = GetRole();
         if(role == AccessibleRole::MENU_BAR)
         {
@@ -356,24 +356,24 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
         }
         else if (role == AccessibleRole::POPUP_MENU)
             pAgent->NotifyAccEvent(UM_EVENT_MENUPOPUPSTART, m_xAccessible.get());
-        //Disable the focused event on option_pane and Panel.
-        //only disable option_pane for toolbar has panel to get focus
+        
+        
         else if (role == AccessibleRole::PANEL || role == AccessibleRole::OPTION_PANE )
         {
-            //don't send focused event on PANEL & OPTION_PANE if the parent is not toolbar
+            
             short parentRole = GetParentRole();
             if (parentRole == AccessibleRole::TOOL_BAR
-                || parentRole == AccessibleRole::SCROLL_PANE // sidebar
-                || parentRole == AccessibleRole::PANEL) // sidebar
+                || parentRole == AccessibleRole::SCROLL_PANE 
+                || parentRole == AccessibleRole::PANEL) 
                 pAgent->NotifyAccEvent(UM_EVENT_STATE_FOCUSED, m_xAccessible.get());
         }
-        //to update ComboBox's description
+        
         else if (role == AccessibleRole::COMBO_BOX )
         {
             pAgent->UpdateDescription(m_xAccessible.get());
-            //for editable combobox, send focus event on only edit control,
+            
             bool bSendFocusOnCombobox = true;
-            //send focused event to the first text child
+            
             Reference<XAccessibleContext> mxContext(m_xAccessible.get()->getAccessibleContext(), UNO_QUERY);
             if(mxContext.is())
             {
@@ -403,8 +403,8 @@ void AccContainerEventListener::FireStateFocusedChange(bool enable)
     else
     {
         pAgent->DecreaseState(m_xAccessible.get(), AccessibleStateType::FOCUSED);
-        //if the acc role is MENU_BAR, MSAA UM_EVENT_MENU_END event should be sent
-        //if the acc role is POPUP_MENU, MSAA UM_EVENT_MENUPOPUPEND event should be sent
+        
+        
         if (GetRole() == AccessibleRole::MENU_BAR)
         {
             pAgent->NotifyAccEvent(UM_EVENT_MENU_END, m_xAccessible.get());

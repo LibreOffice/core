@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TitleDialogData.hxx"
@@ -44,17 +44,17 @@ void TitleDialogData::readFromModel( const uno::Reference< frame::XModel>& xChar
 {
     uno::Reference< XDiagram > xDiagram = ChartModelHelper::findDiagram(xChartModel);
 
-    //get possibilities
+    
     uno::Sequence< sal_Bool > aAxisPossibilityList;
     AxisHelper::getAxisOrGridPossibilities( aAxisPossibilityList, xDiagram );
-    this->aPossibilityList[2]=aAxisPossibilityList[0];//x axis title
-    this->aPossibilityList[3]=aAxisPossibilityList[1];//y axis title
-    this->aPossibilityList[4]=aAxisPossibilityList[2];//z axis title
-    this->aPossibilityList[5]=aAxisPossibilityList[3];//secondary x axis title
-    this->aPossibilityList[6]=aAxisPossibilityList[4];//secondary y axis title
+    this->aPossibilityList[2]=aAxisPossibilityList[0];
+    this->aPossibilityList[3]=aAxisPossibilityList[1];
+    this->aPossibilityList[4]=aAxisPossibilityList[2];
+    this->aPossibilityList[5]=aAxisPossibilityList[3];
+    this->aPossibilityList[6]=aAxisPossibilityList[4];
 
-    //find out which title exsist and get their text
-    //main title:
+    
+    
     for( sal_Int32 nTitleIndex = static_cast< sal_Int32 >( TitleHelper::TITLE_BEGIN);
          nTitleIndex < static_cast< sal_Int32 >( TitleHelper::NORMAL_TITLE_END );
          nTitleIndex++)
@@ -93,7 +93,7 @@ bool TitleDialogData::writeDifferenceToModel(
         }
         else if( !pOldState || ( pOldState->aTextList[nN] != this->aTextList[nN] ) )
         {
-            //change content
+            
             uno::Reference< XTitle > xTitle(
                 TitleHelper::getTitle( static_cast< TitleHelper::eTitleType >( nN ), xChartModel ) );
             if(xTitle.is())
@@ -106,6 +106,6 @@ bool TitleDialogData::writeDifferenceToModel(
     return bChanged;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

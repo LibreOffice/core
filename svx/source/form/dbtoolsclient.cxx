@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/sdbc/XConnection.hpp>
@@ -26,10 +26,10 @@
 #include <rtl/instance.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using namespace ::connectivity::simple;
     using namespace ::com::sun::star::sdbc;
@@ -40,9 +40,9 @@ namespace svxform
     using namespace ::com::sun::star::sdb;
     using namespace ::com::sun::star::container;
 
-    //====================================================================
-    //= ODbtoolsClient
-    //====================================================================
+    
+    
+    
 
     namespace
     {
@@ -54,13 +54,13 @@ namespace svxform
     createDataAccessToolsFactoryFunction
                     ODbtoolsClient::s_pFactoryCreationFunc = NULL;
 
-    //--------------------------------------------------------------------
+    
     ODbtoolsClient::ODbtoolsClient()
     {
         m_bCreateAlready = sal_False;
     }
 
-    //--------------------------------------------------------------------
+    
     bool ODbtoolsClient::ensureLoaded() const
     {
         if ( !m_bCreateAlready )
@@ -69,14 +69,14 @@ namespace svxform
 
             registerClient();
             if ( s_pFactoryCreationFunc )
-            {   // loading the lib succeeded
+            {   
                 void* pUntypedFactory = (*s_pFactoryCreationFunc)();
                 IDataAccessToolsFactory* pDBTFactory = static_cast< IDataAccessToolsFactory* >( pUntypedFactory );
                 OSL_ENSURE( pDBTFactory, "ODbtoolsClient::ODbtoolsClient: no factory returned!" );
                 if ( pDBTFactory )
                 {
                     m_xDataAccessFactory = pDBTFactory;
-                    // by definition, the factory was aquired once
+                    
                     m_xDataAccessFactory->release();
                 }
             }
@@ -84,18 +84,18 @@ namespace svxform
         return m_xDataAccessFactory.is();
     }
 
-    //--------------------------------------------------------------------
+    
     ODbtoolsClient::~ODbtoolsClient()
     {
-        // clear the factory _before_ revoking the client
-        // (the revocation may unload the DBT lib)
+        
+        
         m_xDataAccessFactory = NULL;
-        // revoke the client
+        
         if ( m_bCreateAlready )
             revokeClient();
     }
 
-    //--------------------------------------------------------------------
+    
 
 #ifndef DISABLE_DYNLOADING
 
@@ -119,20 +119,20 @@ namespace svxform
             const OUString sModuleName( SVLIBRARY( "dbtools" )
             );
 
-            // load the dbtools library
+            
             s_hDbtoolsModule = osl_loadModuleRelative(
                 &thisModule, sModuleName.pData, 0);
             OSL_ENSURE(NULL != s_hDbtoolsModule, "ODbtoolsClient::registerClient: could not load the dbtools library!");
             if (NULL != s_hDbtoolsModule)
             {
-                // get the symbol for the method creating the factory
+                
                 const OUString sFactoryCreationFunc( "createDataAccessToolsFactory" );
-                //  reinterpret_cast<createDataAccessToolsFactoryFunction>
+                
                 s_pFactoryCreationFunc = (createDataAccessToolsFactoryFunction)(
                     osl_getFunctionSymbol(s_hDbtoolsModule, sFactoryCreationFunc.pData));
 
                 if (NULL == s_pFactoryCreationFunc)
-                {   // did not find the symbol
+                {   
                     OSL_FAIL("ODbtoolsClient::registerClient: could not find the symbol for creating the factory!");
                     osl_unloadModule(s_hDbtoolsModule);
                     s_hDbtoolsModule = NULL;
@@ -144,7 +144,7 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ODbtoolsClient::revokeClient()
     {
         ::osl::MutexGuard aGuard(theODbtoolsClientMutex::get());
@@ -161,15 +161,15 @@ namespace svxform
         OSL_ENSURE(s_nClients >= 0,"Illegall call of revokeClient()");
     }
 
-    //====================================================================
-    //= OStaticDataAccessTools
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OStaticDataAccessTools::OStaticDataAccessTools()
     {
     }
 
-    //--------------------------------------------------------------------
+    
 
     bool OStaticDataAccessTools::ensureLoaded() const
     {
@@ -179,7 +179,7 @@ namespace svxform
         return m_xDataAccessTools.is();
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XNumberFormatsSupplier > OStaticDataAccessTools::getNumberFormats(const Reference< XConnection>& _rxConn, sal_Bool _bAllowDefault) const
     {
         Reference< XNumberFormatsSupplier > xReturn;
@@ -188,7 +188,7 @@ namespace svxform
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Int32 OStaticDataAccessTools::getDefaultNumberFormat( const Reference< XPropertySet >& _xColumn, const Reference< XNumberFormatTypes >& _xTypes, const Locale& _rLocale )
     {
         sal_Int32 nReturn = 0;
@@ -197,7 +197,7 @@ namespace svxform
         return nReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XConnection> OStaticDataAccessTools::getConnection_withFeedback(const OUString& _rDataSourceName,
         const OUString& _rUser, const OUString& _rPwd, const Reference<XComponentContext>& _rxContext) const
             SAL_THROW ( (SQLException) )
@@ -208,7 +208,7 @@ namespace svxform
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XConnection > OStaticDataAccessTools::connectRowset( const Reference< XRowSet >& _rxRowSet,
         const Reference< XComponentContext >& _rxContext, sal_Bool _bSetAsActiveConnection ) const
         SAL_THROW ( ( SQLException, WrappedTargetException, RuntimeException ) )
@@ -219,7 +219,7 @@ namespace svxform
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XConnection > OStaticDataAccessTools::getRowSetConnection(const Reference< XRowSet >& _rxRowSet) const SAL_THROW ( (RuntimeException) )
     {
         Reference< XConnection > xReturn;
@@ -228,7 +228,7 @@ namespace svxform
         return xReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void OStaticDataAccessTools::TransferFormComponentProperties(const Reference< XPropertySet>& _rxOld,
         const Reference< XPropertySet>& _rxNew, const Locale& _rLocale) const
     {
@@ -236,7 +236,7 @@ namespace svxform
             m_xDataAccessTools->TransferFormComponentProperties(_rxOld, _rxNew, _rLocale);
     }
 
-    //--------------------------------------------------------------------
+    
     OUString OStaticDataAccessTools::quoteName(const OUString& _rQuote, const OUString& _rName) const
     {
         OUString sReturn;
@@ -245,7 +245,7 @@ namespace svxform
         return sReturn;
     }
 
-    // ------------------------------------------------
+    
     OUString OStaticDataAccessTools::composeTableNameForSelect( const Reference< XConnection >& _rxConnection, const Reference< XPropertySet>& _xTable ) const
     {
         OUString sReturn;
@@ -254,7 +254,7 @@ namespace svxform
         return sReturn;
     }
 
-    //----------------------------------------------------------------
+    
     Reference< XDataSource > OStaticDataAccessTools::getDataSource( const OUString& _rsRegisteredName, const Reference< XComponentContext>& _rxContext ) const
     {
         Reference< XDataSource > xReturn;
@@ -263,7 +263,7 @@ namespace svxform
         return xReturn;
     }
 
-    //----------------------------------------------------------------
+    
     sal_Bool OStaticDataAccessTools::canInsert(const Reference< XPropertySet>& _rxCursorSet) const
     {
         sal_Bool bRet = sal_False;
@@ -272,7 +272,7 @@ namespace svxform
         return bRet;
     }
 
-    //----------------------------------------------------------------
+    
     sal_Bool OStaticDataAccessTools::canUpdate(const Reference< XPropertySet>& _rxCursorSet) const
     {
         sal_Bool bRet = sal_False;
@@ -281,7 +281,7 @@ namespace svxform
         return bRet;
     }
 
-    //----------------------------------------------------------------
+    
     Reference< XNameAccess > OStaticDataAccessTools::getFieldsByCommandDescriptor( const Reference< XConnection >& _rxConnection,
         const sal_Int32 _nCommandType, const OUString& _rCommand,
             Reference< XComponent >& _rxKeepFieldsAlive, ::dbtools::SQLExceptionInfo* _pErrorInfo ) SAL_THROW( ( ) )
@@ -294,7 +294,7 @@ namespace svxform
         return aFields;
     }
 
-    //----------------------------------------------------------------
+    
     bool OStaticDataAccessTools::isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent, Reference< XConnection >& _rxActualConnection )
     {
         bool bReturn = false;
@@ -303,7 +303,7 @@ namespace svxform
         return bReturn;
     }
 
-    //----------------------------------------------------------------
+    
     bool OStaticDataAccessTools::isEmbeddedInDatabase( const Reference< XInterface >& _rxComponent )
     {
         bool bReturn = false;
@@ -315,20 +315,20 @@ namespace svxform
         return bReturn;
     }
 
-    //====================================================================
-    //= DBToolsObjectFactory
-    //====================================================================
-    //----------------------------------------------------------------
+    
+    
+    
+    
     DBToolsObjectFactory::DBToolsObjectFactory()
     {
     }
 
-    //----------------------------------------------------------------
+    
     DBToolsObjectFactory::~DBToolsObjectFactory()
     {
     }
 
-    //----------------------------------------------------------------
+    
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr< ::dbtools::FormattedColumnValue > DBToolsObjectFactory::createFormattedColumnValue(
         const Reference<XComponentContext>& _rContext, const Reference< XRowSet >& _rxRowSet, const Reference< XPropertySet >& _rxColumn )
@@ -340,9 +340,9 @@ namespace svxform
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-//........................................................................
-}   // namespace svxform
-//........................................................................
+
+}   
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

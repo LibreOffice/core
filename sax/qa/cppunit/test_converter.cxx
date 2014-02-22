@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <limits>
@@ -139,17 +139,17 @@ void ConverterTest::testDuration()
             "-P7Y6M5DT4H3M2.01000S", "-P7Y6M5DT4H3M2.010000000S" );
     doTest( util::Duration(false, 0, 6, 0, 0, 3, 0, 0), "P6MT3M" );
     doTest( util::Duration(false, 0, 0, 0, 0, 0, 0, 0), "P0D" );
-    doTestDurationF("1Y1M");        // invalid: no ^P
-    doTestDurationF("P-1Y1M");      // invalid: - after P
-    doTestDurationF("P1M1Y");       // invalid: Y after M
-    doTestDurationF("PT1Y");        // invalid: Y after T
-    doTestDurationF("P1Y1M1M");     // invalid: M twice, no T
-    doTestDurationF("P1YT1MT1M");   // invalid: T twice
-    doTestDurationF("P1YT");        // invalid: T but no H,M,S
-    doTestDurationF("P99999999999Y");   // cannot parse so many Ys
-    doTestDurationF("PT.1S");       // invalid: no 0 preceding .
-    doTestDurationF("PT5M.134S");   // invalid: no 0 preceding .
-    doTestDurationF("PT1.S");       // invalid: no digit following .
+    doTestDurationF("1Y1M");        
+    doTestDurationF("P-1Y1M");      
+    doTestDurationF("P1M1Y");       
+    doTestDurationF("PT1Y");        
+    doTestDurationF("P1Y1M1M");     
+    doTestDurationF("P1YT1MT1M");   
+    doTestDurationF("P1YT");        
+    doTestDurationF("P99999999999Y");   
+    doTestDurationF("PT.1S");       
+    doTestDurationF("PT5M.134S");   
+    doTestDurationF("PT1.S");       
     SAL_INFO("sax.cppunit","\nSAX CONVERTER TEST END");
 }
 
@@ -218,42 +218,42 @@ void ConverterTest::testDateTime()
     doTest( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999, true),
             "9999-12-31T23:59:59.9999999999999999999999999999999999999Z",
             "9999-12-31T23:59:59.999999999Z" );
-    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 2000, true), // leap year
+    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 2000, true), 
             "2000-02-29T00:00:00-00:00", "2000-02-29T00:00:00Z" );
-    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 1600, true), // leap year
+    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 1600, true), 
             "1600-02-29T00:00:00-00:00", "1600-02-29T00:00:00Z" );
     doTest( util::DateTime(0, 0, 0, 24, 1, 1, 333, false)
                 /*(0, 0, 0, 0, 2, 1, 333)*/,
             "0333-01-01T24:00:00"/*, "0333-01-02T00:00:00"*/ );
-    // While W3C XMLSchema specifies a minimum of 4 year digits we are lenient
-    // in what we accept.
+    
+    
     doTest( util::DateTime(0, 0, 0, 0, 1, 1, 1, false),
             "1-01-01T00:00:00", "0001-01-01T00:00:00" );
-    doTestDateTimeF( "+0001-01-01T00:00:00" ); // invalid: ^+
-    doTestDateTimeF( "0001-1-01T00:00:00" ); // invalid: < 2 M
-    doTestDateTimeF( "0001-01-1T00:00:00" ); // invalid: < 2 D
-    doTestDateTimeF( "0001-01-01T0:00:00" ); // invalid: < 2 H
-    doTestDateTimeF( "0001-01-01T00:0:00" ); // invalid: < 2 M
-    doTestDateTimeF( "0001-01-01T00:00:0" ); // invalid: < 2 S
-    doTestDateTimeF( "0001-01-01T00:00:00." ); // invalid: .$
-    doTestDateTimeF( "0001-01-01T00:00:00+1:00" ); // invalid: < 2 TZ H
-    doTestDateTimeF( "0001-01-01T00:00:00+00:1" ); // invalid: < 2 TZ M
-    doTestDateTimeF( "0001-13-01T00:00:00" ); // invalid: M > 12
-    doTestDateTimeF( "0001-01-32T00:00:00" ); // invalid: D > 31
-    doTestDateTimeF( "0001-01-01T25:00:00" ); // invalid: H > 24
-    doTestDateTimeF( "0001-01-01T00:60:00" ); // invalid: M > 59
-    doTestDateTimeF( "0001-01-01T00:00:60" ); // invalid: S > 59
-    doTestDateTimeF( "0001-01-01T24:01:00" ); // invalid: H=24, but M != 0
-    doTestDateTimeF( "0001-01-01T24:00:01" ); // invalid: H=24, but S != 0
-    doTestDateTimeF( "0001-01-01T24:00:00.1" ); // invalid: H=24, but H != 0
-    doTestDateTimeF( "0001-01-02T00:00:00+15:00" ); // invalid: TZ > +14:00
-    doTestDateTimeF( "0001-01-02T00:00:00+14:01" ); // invalid: TZ > +14:00
-    doTestDateTimeF( "0001-01-02T00:00:00-15:00" ); // invalid: TZ < -14:00
-    doTestDateTimeF( "0001-01-02T00:00:00-14:01" ); // invalid: TZ < -14:00
-    doTestDateTimeF( "2100-02-29T00:00:00-00:00" ); // invalid: no leap year
-    doTestDateTimeF( "1900-02-29T00:00:00-00:00" ); // invalid: no leap year
-    doTestDateTimeF( "00:00:00" ); // invalid: no date
-    doTestDateTimeF( "T00:00:00" ); // invalid: no date
+    doTestDateTimeF( "+0001-01-01T00:00:00" ); 
+    doTestDateTimeF( "0001-1-01T00:00:00" ); 
+    doTestDateTimeF( "0001-01-1T00:00:00" ); 
+    doTestDateTimeF( "0001-01-01T0:00:00" ); 
+    doTestDateTimeF( "0001-01-01T00:0:00" ); 
+    doTestDateTimeF( "0001-01-01T00:00:0" ); 
+    doTestDateTimeF( "0001-01-01T00:00:00." ); 
+    doTestDateTimeF( "0001-01-01T00:00:00+1:00" ); 
+    doTestDateTimeF( "0001-01-01T00:00:00+00:1" ); 
+    doTestDateTimeF( "0001-13-01T00:00:00" ); 
+    doTestDateTimeF( "0001-01-32T00:00:00" ); 
+    doTestDateTimeF( "0001-01-01T25:00:00" ); 
+    doTestDateTimeF( "0001-01-01T00:60:00" ); 
+    doTestDateTimeF( "0001-01-01T00:00:60" ); 
+    doTestDateTimeF( "0001-01-01T24:01:00" ); 
+    doTestDateTimeF( "0001-01-01T24:00:01" ); 
+    doTestDateTimeF( "0001-01-01T24:00:00.1" ); 
+    doTestDateTimeF( "0001-01-02T00:00:00+15:00" ); 
+    doTestDateTimeF( "0001-01-02T00:00:00+14:01" ); 
+    doTestDateTimeF( "0001-01-02T00:00:00-15:00" ); 
+    doTestDateTimeF( "0001-01-02T00:00:00-14:01" ); 
+    doTestDateTimeF( "2100-02-29T00:00:00-00:00" ); 
+    doTestDateTimeF( "1900-02-29T00:00:00-00:00" ); 
+    doTestDateTimeF( "00:00:00" ); 
+    doTestDateTimeF( "T00:00:00" ); 
     SAL_INFO("sax.cppunit","\nSAX CONVERTER TEST END");
 }
 
@@ -284,7 +284,7 @@ static void doTestTimeF(char const*const pis)
     CPPUNIT_ASSERT_MESSAGE(pis, !bSuccess);
 }
 
-void ConverterTest::testTime() // time or dateTime + horrible backcompat mess
+void ConverterTest::testTime() 
 {
     doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, 1, false),
             "0001-01-01T00:00:00" );
@@ -316,15 +316,15 @@ void ConverterTest::testTime() // time or dateTime + horrible backcompat mess
     doTestTime( util::DateTime(999999999, 59, 59, 23, 31, 12, 9999, true),
             "9999-12-31T23:59:59.9999999999999999999999999999999999999Z",
             "9999-12-31T23:59:59.999999999Z" );
-    doTestTime( util::DateTime(0, 0, 0, 0, 29, 2, 2000, true), // leap year
+    doTestTime( util::DateTime(0, 0, 0, 0, 29, 2, 2000, true), 
             "2000-02-29T00:00:00-00:00", "2000-02-29T00:00:00Z" );
-    doTestTime( util::DateTime(0, 0, 0, 0, 29, 2, 1600, true), // leap year
+    doTestTime( util::DateTime(0, 0, 0, 0, 29, 2, 1600, true), 
             "1600-02-29T00:00:00-00:00", "1600-02-29T00:00:00Z" );
     doTestTime( util::DateTime(0, 0, 0, 24, 1, 1, 333, false)
                 /*(0, 0, 0, 0, 2, 1, 333)*/,
             "0333-01-01T24:00:00"/*, "0333-01-02T00:00:00"*/ );
-    // While W3C XMLSchema specifies a minimum of 4 year digits we are lenient
-    // in what we accept.
+    
+    
     doTestTime( util::DateTime(0, 0, 0, 0, 1, 1, 1, false),
             "1-01-01T00:00:00", "0001-01-01T00:00:00" );
 
@@ -340,53 +340,53 @@ void ConverterTest::testTime() // time or dateTime + horrible backcompat mess
             "23:59:59.99",  "23:59:59.990000000" );
     doTestTime( util::DateTime(990000000, 59, 59, 23, 0, 0, 0, true),
             "23:59:59.99Z",  "23:59:59.990000000Z" );
-    // backwards compatible: recognize invalid 0000-00-00 date (LO 3.5)
+    
     doTestTime( util::DateTime(0, 1, 0, 0, 0, 0, 0, false),
             "0000-00-00T00:00:01", "00:00:01" );
-    // backwards compatible: recognize invalid 0-00-00 date (OOo)
+    
     doTestTime( util::DateTime(0, 0, 1, 0, 0, 0, 0, false),
             "0-00-00T00:01:00", "00:01:00" );
 
-    doTestTimeF( "+0001-01-01T00:00:00" ); // invalid: ^+
-    doTestTimeF( "0001-1-01T00:00:00" ); // invalid: < 2 M
-    doTestTimeF( "0001-01-1T00:00:00" ); // invalid: < 2 D
-    doTestTimeF( "0001-01-01T0:00:00" ); // invalid: < 2 H
-    doTestTimeF( "0001-01-01T00:0:00" ); // invalid: < 2 M
-    doTestTimeF( "0001-01-01T00:00:0" ); // invalid: < 2 S
-    doTestTimeF( "0001-01-01T00:00:00." ); // invalid: .$
-    doTestTimeF( "0001-01-01T00:00:00+1:00" ); // invalid: < 2 TZ H
-    doTestTimeF( "0001-01-01T00:00:00+00:1" ); // invalid: < 2 TZ M
-    doTestTimeF( "0001-13-01T00:00:00" ); // invalid: M > 12
-    doTestTimeF( "0001-01-32T00:00:00" ); // invalid: D > 31
-    doTestTimeF( "0001-01-01T25:00:00" ); // invalid: H > 24
-    doTestTimeF( "0001-01-01T00:60:00" ); // invalid: M > 59
-    doTestTimeF( "0001-01-01T00:00:60" ); // invalid: S > 59
-    doTestTimeF( "0001-01-01T24:01:00" ); // invalid: H=24, but M != 0
-    doTestTimeF( "0001-01-01T24:00:01" ); // invalid: H=24, but S != 0
-    doTestTimeF( "0001-01-01T24:00:00.1" ); // invalid: H=24, but H != 0
-    doTestTimeF( "0001-01-02T00:00:00+15:00" ); // invalid: TZ > +14:00
-    doTestTimeF( "0001-01-02T00:00:00+14:01" ); // invalid: TZ > +14:00
-    doTestTimeF( "0001-01-02T00:00:00-15:00" ); // invalid: TZ < -14:00
-    doTestTimeF( "0001-01-02T00:00:00-14:01" ); // invalid: TZ < -14:00
-    doTestTimeF( "2100-02-29T00:00:00-00:00" ); // invalid: no leap year
-    doTestTimeF( "1900-02-29T00:00:00-00:00" ); // invalid: no leap year
-    doTestTimeF( "T00:00:00" ); // invalid: T
-    doTestTimeF( "0:00:00" ); // invalid: < 2 H
-    doTestTimeF( "00:0:00" ); // invalid: < 2 M
-    doTestTimeF( "00:00:0" ); // invalid: < 2 S
-    doTestTimeF( "00:00:00." ); // invalid: .$
-    doTestTimeF( "00:00:00+1:00" ); // invalid: < 2 TZ H
-    doTestTimeF( "00:00:00+00:1" ); // invalid: < 2 TZ M
-    doTestTimeF( "25:00:00" ); // invalid: H > 24
-    doTestTimeF( "00:60:00" ); // invalid: M > 59
-    doTestTimeF( "00:00:60" ); // invalid: S > 59
-    doTestTimeF( "24:01:00" ); // invalid: H=24, but M != 0
-    doTestTimeF( "24:00:01" ); // invalid: H=24, but S != 0
-    doTestTimeF( "24:00:00.1" ); // invalid: H=24, but H != 0
-    doTestTimeF( "00:00:00+15:00" ); // invalid: TZ > +14:00
-    doTestTimeF( "00:00:00+14:01" ); // invalid: TZ > +14:00
-    doTestTimeF( "00:00:00-15:00" ); // invalid: TZ < -14:00
-    doTestTimeF( "00:00:00-14:01" ); // invalid: TZ < -14:00
+    doTestTimeF( "+0001-01-01T00:00:00" ); 
+    doTestTimeF( "0001-1-01T00:00:00" ); 
+    doTestTimeF( "0001-01-1T00:00:00" ); 
+    doTestTimeF( "0001-01-01T0:00:00" ); 
+    doTestTimeF( "0001-01-01T00:0:00" ); 
+    doTestTimeF( "0001-01-01T00:00:0" ); 
+    doTestTimeF( "0001-01-01T00:00:00." ); 
+    doTestTimeF( "0001-01-01T00:00:00+1:00" ); 
+    doTestTimeF( "0001-01-01T00:00:00+00:1" ); 
+    doTestTimeF( "0001-13-01T00:00:00" ); 
+    doTestTimeF( "0001-01-32T00:00:00" ); 
+    doTestTimeF( "0001-01-01T25:00:00" ); 
+    doTestTimeF( "0001-01-01T00:60:00" ); 
+    doTestTimeF( "0001-01-01T00:00:60" ); 
+    doTestTimeF( "0001-01-01T24:01:00" ); 
+    doTestTimeF( "0001-01-01T24:00:01" ); 
+    doTestTimeF( "0001-01-01T24:00:00.1" ); 
+    doTestTimeF( "0001-01-02T00:00:00+15:00" ); 
+    doTestTimeF( "0001-01-02T00:00:00+14:01" ); 
+    doTestTimeF( "0001-01-02T00:00:00-15:00" ); 
+    doTestTimeF( "0001-01-02T00:00:00-14:01" ); 
+    doTestTimeF( "2100-02-29T00:00:00-00:00" ); 
+    doTestTimeF( "1900-02-29T00:00:00-00:00" ); 
+    doTestTimeF( "T00:00:00" ); 
+    doTestTimeF( "0:00:00" ); 
+    doTestTimeF( "00:0:00" ); 
+    doTestTimeF( "00:00:0" ); 
+    doTestTimeF( "00:00:00." ); 
+    doTestTimeF( "00:00:00+1:00" ); 
+    doTestTimeF( "00:00:00+00:1" ); 
+    doTestTimeF( "25:00:00" ); 
+    doTestTimeF( "00:60:00" ); 
+    doTestTimeF( "00:00:60" ); 
+    doTestTimeF( "24:01:00" ); 
+    doTestTimeF( "24:00:01" ); 
+    doTestTimeF( "24:00:00.1" ); 
+    doTestTimeF( "00:00:00+15:00" ); 
+    doTestTimeF( "00:00:00+14:01" ); 
+    doTestTimeF( "00:00:00-15:00" ); 
+    doTestTimeF( "00:00:00-14:01" ); 
 }
 
 void doTestDouble(char const*const pis, double const rd,
@@ -410,7 +410,7 @@ void ConverterTest::testDouble()
     doTestDouble("42", 42.0, MeasureUnit::POINT, MeasureUnit::POINT);
     doTestDouble("42", 42.0, MeasureUnit::MM_100TH, MeasureUnit::MM_100TH);
     doTestDouble("42", 42.0, MeasureUnit::MM_10TH, MeasureUnit::MM_10TH);
-    doTestDouble("42", 42.0, MeasureUnit::MM, MeasureUnit::MM); // identity don't seem to add unit?
+    doTestDouble("42", 42.0, MeasureUnit::MM, MeasureUnit::MM); 
     doTestDouble("42", 42.0, MeasureUnit::CM, MeasureUnit::CM);
     doTestDouble("42", 42.0, MeasureUnit::INCH, MeasureUnit::INCH);
     doTestDouble("2pt", 40.0, MeasureUnit::POINT, MeasureUnit::TWIP);
@@ -477,7 +477,7 @@ void doTestMeasureToString(char const*const pis, sal_Int32 nMeasure, sal_Int16 c
 
 void ConverterTest::testMeasure()
 {
-    //check all the measure units
+    
     doTestStringToMeasure(1000, "10mm", MeasureUnit::MM_100TH, -1, 4321);
     doTestStringToMeasure(200, "20mm", MeasureUnit::MM_10TH, 12, 4567);
     doTestStringToMeasure(300, "300", MeasureUnit::MM, 31, 555);
@@ -498,20 +498,20 @@ void ConverterTest::testMeasure()
     doTestStringToMeasure(600, "600px", MeasureUnit::PIXEL, 10, 4321);
     doTestStringToMeasure(777, "777", MeasureUnit::APPFONT, 10, 4321);
     doTestStringToMeasure(80000, "80000", MeasureUnit::SYSFONT, 10, 432100);
-    //strange values (negative, too large etc.)
+    
     doTestStringToMeasure(555, "666", MeasureUnit::MM, -1000, 555);
     doTestStringToMeasure(-1000, "-1001", MeasureUnit::MM, -1000, 555);
     doTestStringToMeasure(0, "-0", MeasureUnit::MM, -1, 0);
     doTestStringToMeasure(::std::numeric_limits<sal_Int32>::max(), "1234567890mm", MeasureUnit::MM_10TH, 12, ::std::numeric_limits<sal_Int32>::max());
     doTestStringToMeasure(-300, "-300", MeasureUnit::MM, -1000, 555);
-    doTestStringToMeasure(::std::numeric_limits<sal_Int32>::min(), "-999999999999999px", MeasureUnit::PIXEL, ::std::numeric_limits<sal_Int32>::min(), 555);   //really crazy numbers...
+    doTestStringToMeasure(::std::numeric_limits<sal_Int32>::min(), "-999999999999999px", MeasureUnit::PIXEL, ::std::numeric_limits<sal_Int32>::min(), 555);   
 
     doTestMeasureToString("6mm", 600, MeasureUnit::MM_100TH, MeasureUnit::MM);
-    doTestMeasureToString("0.005cm", 000000005, MeasureUnit::MM_100TH, MeasureUnit::CM);    // zeros in the front doesn't count
+    doTestMeasureToString("0.005cm", 000000005, MeasureUnit::MM_100TH, MeasureUnit::CM);    
     doTestMeasureToString("3mm", 30, MeasureUnit::MM_10TH, MeasureUnit::MM);
     doTestMeasureToString("6.66cm", 666, MeasureUnit::MM_10TH, MeasureUnit::CM);
     doTestMeasureToString("-157.3pt", -555, MeasureUnit::MM_10TH, MeasureUnit::POINT);
-    doTestMeasureToString("174976.378in", 44444000, MeasureUnit::MM_10TH, MeasureUnit::INCH);    //let's check accuracy
+    doTestMeasureToString("174976.378in", 44444000, MeasureUnit::MM_10TH, MeasureUnit::INCH);    
     doTestMeasureToString("40%", 40, MeasureUnit::PERCENT, MeasureUnit::PERCENT);
     doTestMeasureToString("70.56mm", 4000, MeasureUnit::TWIP, MeasureUnit::MM);
     doTestMeasureToString("979.928cm", 555550, MeasureUnit::TWIP, MeasureUnit::CM);

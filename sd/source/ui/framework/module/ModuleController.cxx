@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -92,7 +92,7 @@ Sequence<OUString> SAL_CALL ModuleController_getSupportedServiceNames (void)
 
 
 
-//===== ModuleController ======================================================
+
 
 Reference<XModuleController> ModuleController::CreateInstance (
     const Reference<XComponentContext>& rxContext)
@@ -125,7 +125,7 @@ ModuleController::~ModuleController (void) throw()
 
 void SAL_CALL ModuleController::disposing (void)
 {
-    // Break the cyclic reference back to DrawController object
+    
     mpLoadedFactories.reset();
     mpResourceToFactoryMap.reset();
     mxController.clear();
@@ -166,11 +166,11 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
 {
     OSL_ASSERT(rValues.size() == snFactoryPropertyCount);
 
-    // Get the service name of the factory.
+    
     OUString sServiceName;
     rValues[0] >>= sServiceName;
 
-    // Get all resource URLs that are created by the factory.
+    
     Reference<container::XNameAccess> xResources (rValues[1], UNO_QUERY);
     ::std::vector<OUString> aURLs;
     tools::ConfigurationAccess::FillList(
@@ -181,7 +181,7 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::adding factory " <<
         OUStringToOString(sServiceName, RTL_TEXTENCODING_UTF8).getStr());
 
-    // Add the resource URLs to the map.
+    
     ::std::vector<OUString>::const_iterator iResource;
     for (iResource=aURLs.begin(); iResource!=aURLs.end(); ++iResource)
     {
@@ -226,21 +226,21 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
 
     try
     {
-        // Get the service name of the startup service.
+        
         OUString sServiceName;
         rValues[0] >>= sServiceName;
 
-        // Instantiate service.
+        
         Reference<uno::XComponentContext> xContext =
             ::comphelper::getProcessComponentContext();
 
-        // Create the startup service.
+        
         Sequence<Any> aArguments(1);
         aArguments[0] <<= mxController;
-        // Note that when the new object will be destroyed at the end of
-        // this scope when it does not register itself anywhere.
-        // Typically it will add itself as ConfigurationChangeListener
-        // at the configuration controller.
+        
+        
+        
+        
         xContext->getServiceManager()->createInstanceWithArgumentsAndContext(sServiceName, aArguments, xContext);
 
         SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": ModuleController::created startup service " <<
@@ -255,7 +255,7 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
 
 
 
-//----- XModuleController -----------------------------------------------------
+
 
 void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
     throw (RuntimeException)
@@ -263,8 +263,8 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
     ResourceToFactoryMap::const_iterator iFactory (mpResourceToFactoryMap->find(rsResourceURL));
     if (iFactory != mpResourceToFactoryMap->end())
     {
-        // Check that the factory has already been loaded and not been
-        // destroyed in the meantime.
+        
+        
         Reference<XInterface> xFactory;
         LoadedFactoryContainer::const_iterator iLoadedFactory (
             mpLoadedFactories->find(iFactory->second));
@@ -272,11 +272,11 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
             xFactory = Reference<XInterface>(iLoadedFactory->second, UNO_QUERY);
         if ( ! xFactory.is())
         {
-            // Create a new instance of the factory.
+            
             Reference<uno::XComponentContext> xContext =
                 ::comphelper::getProcessComponentContext();
 
-            // Create the factory service.
+            
             Sequence<Any> aArguments(1);
             aArguments[0] <<= mxController;
             OSL_TRACE("creating resource %s",
@@ -293,7 +293,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
                 OSL_TRACE("caught exception while creating factory.");
             }
 
-            // Remember that this factory has been instanced.
+            
             (*mpLoadedFactories)[iFactory->second] = xFactory;
         }
     }
@@ -302,7 +302,7 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
 
 
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
     throw (Exception, RuntimeException)
@@ -311,7 +311,7 @@ void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
     {
         try
         {
-            // Get the XController from the first argument.
+            
             mxController = Reference<frame::XController>(aArguments[0], UNO_QUERY_THROW);
 
             InstantiateStartupServices();
@@ -322,6 +322,6 @@ void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
 }
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "detdata.hxx"
@@ -34,7 +34,7 @@ void ScDetOpList::DeleteOnTab( SCTAB nTab )
 {
     for (ScDetOpDataVector::iterator it = aDetOpDataVector.begin(); it != aDetOpDataVector.end(); /*noop*/ )
     {
-        // look for operations on the deleted sheet
+        
         if (it->GetPos().Tab() == nTab)
             it = aDetOpDataVector.erase( it);
         else
@@ -75,12 +75,12 @@ void ScDetOpList::Append( ScDetOpData* pDetOpData )
 
 bool ScDetOpList::operator==( const ScDetOpList& r ) const
 {
-    // for Ref-Undo
+    
 
     size_t nCount = Count();
     bool bEqual = ( nCount == r.Count() );
-    for (size_t i=0; i<nCount && bEqual; i++)       // order has to be the same
-        if ( !(aDetOpDataVector[i] == r.aDetOpDataVector[i]) )    // entries are different ?
+    for (size_t i=0; i<nCount && bEqual; i++)       
+        if ( !(aDetOpDataVector[i] == r.aDetOpDataVector[i]) )    
             bEqual = false;
 
     return bEqual;

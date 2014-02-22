@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,10 +14,10 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// Use UNICODE Windows and C API.
+
 #define _UNICODE
 #define UNICODE
 
@@ -112,7 +112,7 @@ WCHAR* getPathFromRegistryKey( HKEY hroot, LPCWSTR subKeyName )
 void oneDirUp(LPTSTR io_path)
 {
     WCHAR * pEnd = io_path + lstrlen(io_path) - 1;
-    while (pEnd > io_path //prevent crashing if provided string does not contain a backslash
+    while (pEnd > io_path 
         && *pEnd != L'\\')
         pEnd --;
     *pEnd = L'\0';
@@ -136,7 +136,7 @@ WCHAR * getInstallPath()
     {
         szInstallPath = new WCHAR[cChars];
         cChars = GetEnvironmentVariable(UNO_PATH, szInstallPath, cChars);
-        //If PATH is not set then it is no error
+        
         if (cChars == 0)
         {
             delete[] szInstallPath;
@@ -163,23 +163,23 @@ WCHAR* getUnoPath()
 {
     WCHAR * szLinkPath = NULL;
     WCHAR * szUrePath = NULL;
-    WCHAR * szUreBin = NULL; //the return value
+    WCHAR * szUreBin = NULL; 
 
     WCHAR * szInstallPath = getInstallPath();
     if (szInstallPath)
     {
         oneDirUp(szInstallPath);
 
-        //build the path to the ure-link file
+        
         szUrePath = new WCHAR[MAX_PATH];
         szUrePath[0] = L'\0';
         lstrcat(szUrePath, szInstallPath);
         lstrcat(szUrePath, URE_LINK);
 
-        //get the path to the actual Ure folder
+        
         if (cli_ure::resolveLink(szUrePath))
         {
-            //build the path to the URE/bin directory
+            
             szUreBin = new WCHAR[lstrlen(szUrePath) + lstrlen(URE_BIN) + 1];
             szUreBin[0] = L'\0';
             lstrcat(szUreBin, szUrePath);
@@ -218,15 +218,15 @@ void extendPath(LPCWSTR szUreBinPath)
     {
         sEnvPath = new WCHAR[cChars];
         cChars = GetEnvironmentVariable(L"PATH", sEnvPath, cChars);
-        //If PATH is not set then it is no error
+        
         if (cChars == 0 && GetLastError() != ERROR_ENVVAR_NOT_FOUND)
         {
             delete[] sEnvPath;
             return;
         }
     }
-    //prepare the new PATH. Add the Ure/bin directory at the front.
-    //note also adding ';'
+    
+    
     WCHAR * sNewPath = new WCHAR[lstrlen(sEnvPath) + lstrlen(szUreBinPath) + 2];
     sNewPath[0] = L'\0';
     lstrcat(sNewPath, szUreBinPath);
@@ -280,7 +280,7 @@ extern "C" FARPROC WINAPI delayLoadHook(
     if (dliNotify == dliFailLoadLib)
     {
         LPWSTR szLibName = NULL;
-         //Convert the ansi file name to wchar_t*
+         
         int size = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pdli->szDll, -1, NULL, 0);
         if (size > 0)
         {
@@ -352,7 +352,7 @@ public:
     bootstrap();
 };
 
-//______________________________________________________________________________
+
 ::unoidl::com::sun::star::uno::XComponentContext ^
 Bootstrap::defaultBootstrap_InitialComponentContext(
     ::System::String ^ ini_file,
@@ -374,7 +374,7 @@ Bootstrap::defaultBootstrap_InitialComponentContext(
         }
     }
 
-    // bootstrap native uno
+    
     Reference< XComponentContext > xContext;
     if (nullptr == ini_file)
     {
@@ -390,7 +390,7 @@ Bootstrap::defaultBootstrap_InitialComponentContext(
         to_cli( xContext ) );
 }
 
-//______________________________________________________________________________
+
 ::unoidl::com::sun::star::uno::XComponentContext ^
 Bootstrap::defaultBootstrap_InitialComponentContext()
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AreaWrapper.hxx"
@@ -69,7 +69,7 @@ struct StaticAreaWrapperPropertyArray : public rtl::StaticAggregate< Sequence< P
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -85,7 +85,7 @@ AreaWrapper::AreaWrapper( ::boost::shared_ptr< Chart2ModelContact > spChart2Mode
 AreaWrapper::~AreaWrapper()
 {}
 
-// ____ XShape ____
+
 awt::Point SAL_CALL AreaWrapper::getPosition()
     throw (uno::RuntimeException)
 {
@@ -111,14 +111,14 @@ void SAL_CALL AreaWrapper::setSize( const awt::Size& /*aSize*/ )
     OSL_FAIL( "trying to set size of chart area" );
 }
 
-// ____ XShapeDescriptor (base of XShape) ____
+
 OUString SAL_CALL AreaWrapper::getShapeType()
     throw (uno::RuntimeException)
 {
     return OUString( "com.sun.star.chart.ChartArea" );
 }
 
-// ____ XComponent ____
+
 void SAL_CALL AreaWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -143,7 +143,7 @@ void SAL_CALL AreaWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// WrappedPropertySet
+
 Reference< beans::XPropertySet > AreaWrapper::getInnerPropertySet()
 {
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
@@ -178,10 +178,10 @@ Sequence< OUString > AreaWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( AreaWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

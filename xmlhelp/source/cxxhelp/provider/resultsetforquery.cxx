@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/processfactory.hxx>
@@ -191,7 +191,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                         aSet.insert(aPathVector[j]);
                 }
 
-                // intersect
+                
                 if( nQueryListSize > 1 )
                 {
                     if( i == 0 )
@@ -209,7 +209,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                 }
             }
 
-            // Combine results in aIndexFolderResultVector
+            
             if( nQueryListSize > 1 )
             {
                 for( int n = 0 ; n < nQueryListSize ; ++n )
@@ -224,15 +224,15 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
                         if( (aResultSet.find( rItem.m_aURL )) != aResultSet.end() )
                         {
                             HitItem aItemCopy( rItem );
-                            aItemCopy.m_fScore /= nQueryListSize;   // To get average score
+                            aItemCopy.m_fScore /= nQueryListSize;   
                             if( n == 0 )
                             {
-                                // Use first pass to create entry
+                                
                                 aIndexFolderResultVector.push_back( aItemCopy );
                             }
                             else
                             {
-                                // Find entry in vector
+                                
                                 int nCount = aIndexFolderResultVector.size();
                                 for( int j = 0 ; j < nCount ; ++j )
                                 {
@@ -267,7 +267,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         if( bTemporary )
             aIndexFolderIt.deleteTempIndexFolder( idxDir );
 
-    }   // Iterator
+    }   
 
 
     int nVectorCount = aIndexFolderResultVectorVector.size();
@@ -296,7 +296,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
             }
         }
 
-        if( iVectorWithBestScore == -1 )    // No item left at all
+        if( iVectorWithBestScore == -1 )    
             break;
 
         vector<HitItem>& rIndexFolderVector = *aIndexFolderResultVectorVector[iVectorWithBestScore];
@@ -316,7 +316,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
     }
 
     sal_Int32 replIdx = OUString( "#HLP#" ).getLength();
-    OUString replWith = "vnd.sun.star.help://";
+    OUString replWith = "vnd.sun.star.help:
 
     int nResultCount = aCompleteResultVector.size();
     for( int r = 0 ; r < nResultCount ; ++r )
@@ -346,7 +346,7 @@ ResultSetForQuery::ResultSetForQuery( const uno::Reference< uno::XComponentConte
         if( content.is() )
         {
             uno::Reference< XCommandProcessor > cmd( content,uno::UNO_QUERY );
-            cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[m_nRow]; //TODO: check return value of operator >>=
+            cmd->execute( aCommand,0,uno::Reference< XCommandEnvironment >( 0 ) ) >>= m_aItems[m_nRow]; 
         }
     }
     m_nRow = 0xffffffff;

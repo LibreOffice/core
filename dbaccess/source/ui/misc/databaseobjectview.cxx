@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "databaseobjectview.hxx"
@@ -53,7 +53,7 @@ namespace dbaui
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::awt;
 
-    // DatabaseObjectView
+    
     DatabaseObjectView::DatabaseObjectView( const Reference< XComponentContext >& _rxORB,
             const Reference< XDatabaseDocumentUI >& _rxApplication,
             const Reference< XFrame >& _rxParentFrame,
@@ -92,9 +92,9 @@ namespace dbaui
     {
         ::comphelper::NamedValueCollection aDispatchArgs;
 
-        aDispatchArgs.merge( i_rCreationArgs, false );    // false => do not overwrite
+        aDispatchArgs.merge( i_rCreationArgs, false );    
         fillDispatchArgs( aDispatchArgs, _rDataSource, _rObjectName );
-        aDispatchArgs.merge( i_rCreationArgs, true );    // true => do overwrite
+        aDispatchArgs.merge( i_rCreationArgs, true );    
 
         return doDispatch( aDispatchArgs );
     }
@@ -106,7 +106,7 @@ namespace dbaui
         {
             try
             {
-                // if we have no externally provided frame, create one
+                
                 if ( !m_xFrameLoader.is() )
                 {
                     Reference< XSingleServiceFactory > xFact = TaskCreator::create(m_xORB);
@@ -128,9 +128,9 @@ namespace dbaui
 
                     m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
 
-                    // everything we load can be considered a "top level document", so set the respective bit at the window.
-                    // This, amongst other things, triggers that the component in this task participates in the
-                    // "ThisComponent"-game for the global application Basic.
+                    
+                    
+                    
                     const Reference< XFrame > xFrame( m_xFrameLoader, UNO_QUERY_THROW );
                     const Reference< XWindow > xFrameWindow( xFrame->getContainerWindow(), UNO_SET_THROW );
                     Window* pContainerWindow = VCLUnoHelper::GetWindow( xFrameWindow );
@@ -174,7 +174,7 @@ namespace dbaui
         i_rDispatchArgs.put( (OUString)PROPERTY_ACTIVE_CONNECTION, getConnection() );
     }
 
-    // QueryDesigner
+    
     QueryDesigner::QueryDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
         const Reference< XFrame >& _rxParentFrame, bool _bCreateView )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, _bCreateView ? OUString(URL_COMPONENT_VIEWDESIGN) : OUString(URL_COMPONENT_QUERYDESIGN) )
@@ -204,7 +204,7 @@ namespace dbaui
         }
     }
 
-    // TableDesigner
+    
     TableDesigner::TableDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< OUString >( URL_COMPONENT_TABLEDESIGN ) )
     {
@@ -226,7 +226,7 @@ namespace dbaui
     {
         bool bIsNewDesign =  _rObjectName.isEmpty();
 
-        // let's see whether the connection can provide a dedicated table desginer
+        
         Reference< XInterface > xDesigner;
         if ( !bIsNewDesign )
             xDesigner = impl_getConnectionProvidedDesigner_nothrow( _rObjectName );
@@ -234,7 +234,7 @@ namespace dbaui
         if ( !xDesigner.is() )
             return DatabaseObjectView::doCreateView( _rDataSource, _rObjectName, i_rCreationArgs );
 
-        // try whether the designer is a dialog
+        
         Reference< XExecutableDialog > xDialog( xDesigner, UNO_QUERY_THROW );
         if ( xDialog.is() )
         {
@@ -264,7 +264,7 @@ namespace dbaui
         return xDesigner;
     }
 
-    // ResultSetBrowser
+    
     ResultSetBrowser::ResultSetBrowser( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame,
             sal_Bool _bTable )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast < OUString >( URL_COMPONENT_DATASOURCEBROWSER ) )
@@ -295,11 +295,11 @@ namespace dbaui
         }
     }
 
-    // RelationDesigner
+    
     RelationDesigner::RelationDesigner( const Reference< XComponentContext >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< OUString >( URL_COMPONENT_RELATIONDESIGN ) )
     {
     }
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

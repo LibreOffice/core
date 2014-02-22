@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svx/EnhancedCustomShapeTypeNames.hxx"
@@ -243,37 +243,37 @@ static const NameTypeTable pNameTypeTableArray[] =
     { "teardrop",   mso_sptTearDrop }
 };
 
-    // gallery: quadrat
-    // gallery: round-quadrat
-    // gallery: circle
-    // gallery: circle-pie
-    // gallery: frame
-    // gallery: flower
-    // gallery: cloud
-    // gallery: puzzle
-    // gallery: octagon-bevel
-    // gallery: diamond-bevel
-    // gallery: up-right-arrow
-    // gallery: up-right-down-arrow
-    // gallery: corner-right-arrow
-    // gallery: split-arrow
-    // gallery: up-right-arrow-callout
-    // gallery: split-round-arrow
-    // gallery: s-sharped-arrow
-    // Gallery: star6
-    // Gallery: star12
-    // Gallery: concave-star6
-    // Gallery: signet
-    // Gallery: doorplate
-    // gallery: fontwork-arch-left-curve
-    // gallery: fontwork-arch-right-curve
-    // gallery: fontwork-arch-left-pour
-    // gallery: fontwork-arch-right-pour
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 MSO_SPT EnhancedCustomShapeTypeNames::Get( const OUString& rShapeType )
 {
     if ( !pHashMap )
-    {   // init hash map
+    {   
         ::osl::MutexGuard aGuard( getHashMapMutex() );
         if ( !pHashMap )
         {
@@ -330,7 +330,7 @@ static const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "cross", "Cross" },
     { "star5", "5-Point Star" },
     { "right-arrow", "Right Arrow" },
-    //{ "mso-spt14", mso_sptThickArrow },
+    
     { "pentagon-right", "Pentagon" },
     { "cube", "Cube" },
     { "mso-spt21", "Doorplate" },
@@ -381,18 +381,18 @@ static const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "rectangular-callout", "Rectangular Callout" },
     { "round-rectangular-callout", "Rounded Rectangular Callout" },
     { "round-callout", "Round Callout" },
-    //{ "mso-spt64", mso_sptWave },
+    
     { "paper", "Folded Corner" },
     { "left-arrow", "Left Arrow" },
     { "down-arrow", "Down Arrow" },
     { "up-arrow", "Up Arrow" },
     { "left-right-arrow", "Left and Right Arrow" },
     { "up-down-arrow", "Up and Down Arrow" },
-    //{ "mso-spt71", mso_sptIrregularSeal1 },
+    
     { "bang", "Explosion" },
     { "lightning", "Lighting Bolt" },
     { "heart", "Heart" },
-    //{ "mso-spt75", mso_sptPictureFrame },
+    
     { "quad-arrow", "4-Way Arrow" },
     { "left-arrow-callout", "Left Arrow Callout" },
     { "right-arrow-callout", "Right Arrow Callout" },
@@ -407,8 +407,8 @@ static const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "left-brace", "Left Brace" },
     { "right-brace", "Right Brace" },
     { "mso-spt89", "Up and Left Arrow" },
-    //{ "mso-spt90", mso_sptBentUpArrow },
-    //{ "mso-spt91", mso_sptBentArrow },
+    
+    
     { "star24", "24-Point Star" },
     { "striped-right-arrow", "Striped Right Arrow" },
     { "notched-right-arrow", "Notched Right Arrow" },
@@ -447,7 +447,7 @@ static const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "flowchart-sort", "Flowchart:Sort" },
     { "flowchart-extract", "Flowchart:Extract" },
     { "flowchart-merge", "Flowchart:Merge" },
-    //{ "mso-spt129", mso_sptFlowChartOfflineStorage },
+    
     { "flowchart-stored-data", "Flowchart:Stored Data" },
     { "flowchart-sequential-access", "drawingbar.fc.25=Flowchart:Sequential Access" },
     { "flowchart-magnetic-disk", "Flowchart:Magnetic Disk" },
@@ -500,7 +500,7 @@ static const ACCNameTypeTable pACCNameTypeTableArray[] =
     { "mso-spt179", mso_sptAccentCallout90 },
     { "mso-spt180", mso_sptBorderCallout90 },*/
     { "line-callout-3", "Line Callout 3" },
-    //{ "mso-spt182", mso_sptLeftRightUpArrow },
+    
     { "sun", "Sun" },
     { "moon", "Moon" },
     { "bracket-pair", "Double Bracket" },
@@ -529,7 +529,7 @@ static const ACCNameTypeTable pACCNameTypeTableArray[] =
 OUString EnhancedCustomShapeTypeNames::GetAccName( const OUString& rShapeType )
 {
     if ( !pACCHashMap )
-    {   // init hash map
+    {   
         ::osl::MutexGuard aGuard( getHashMapMutex() );
         if ( !pACCHashMap )
         {

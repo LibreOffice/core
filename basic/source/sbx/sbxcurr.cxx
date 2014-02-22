@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,10 +43,10 @@ static OUString ImpCurrencyToString( const sal_Int64 &rVal )
     sal_Int32 initialLen = aAbsStr.getLength();
 
     bool bLessThanOne = false;
-    if ( initialLen  <= 4 )  // if less the 1
+    if ( initialLen  <= 4 )  
         bLessThanOne = true;
 
-    sal_Int32 nCapacity = 6; // minimum e.g. 0.0000
+    sal_Int32 nCapacity = 6; 
 
     if ( !bLessThanOne )
     {
@@ -81,16 +81,16 @@ static OUString ImpCurrencyToString( const sal_Int64 &rVal )
         if ( nDigitCount < initialLen )
             aBuf[nInsertIndex--] = aAbsStr[ charCpyIndex-- ];
         else
-        // Handle leading 0's to right of decimal point
-        // Note: in VBA the stringification is a little more complex
-        // but more natural as only the necessary digits
-        // to the right of the decimal places are displayed
-        // It would be great to conditionally be able to display like that too
+        
+        
+        
+        
+        
         //
-        // Val   OOo (Cur)  VBA (Cur)
-        // ---   ---------  ---------
-        // 0     0.0000     0
-        // 0.1   0.1000     0.1
+        
+        
+        
+        
 
             aBuf[nInsertIndex--] = '0';
     }
@@ -114,10 +114,10 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
     sal_Unicode cLocaleDeciPnt, cLocale1000Sep;
     ImpGetIntntlSep( cLocaleDeciPnt, cLocale1000Sep );
 
-        // score each set of separators (Locale and Basic) on total number of matches
-        // if one set has more matches use that set
-        // if tied use the set with the only or rightmost decimal separator match
-        // currency is fixed pt system: usually expect the decimal pt, 1000sep may occur
+        
+        
+        
+        
     sal_Int32 LocaleScore = 0;
     sal_Int32 LocaleLastDeci = -1;
     sal_Int32 LOBasicScore = 0;
@@ -149,16 +149,16 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
     }
 #endif
 
-    // lets use the existing string number conversions
-    // there is a performance impact here ( multiple string copies )
-    // but better I think than a home brewed string parser, if we need a parser
-    // we should share some existing ( possibly from calc is there a currency
-    // conversion there ? #TODO check )
+    
+    
+    
+    
+    
 
     OUString sTmp( rStr.trim() );
     const sal_Unicode* p =  sTmp.getStr();
 
-    // normalise string number by removeing thousands & decimal point separators
+    
     OUStringBuffer sNormalisedNumString( sTmp.getLength() +  nFractDigit );
 
     if ( *p == '-'  || *p == '+' )
@@ -167,8 +167,8 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
     while ( ( *p >= '0' && *p <= '9' ) )
     {
         sNormalisedNumString.append( *p++ );
-        // #TODO in vba mode set runtime error when a space ( or other )
-        // illegal character is found
+        
+        
         if( *p == c1000Sep )
             p++;
     }
@@ -183,10 +183,10 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
             sNormalisedNumString.append( *p++ );
             nFractDigit--;
         }
-        // Consume trailing content
+        
         if ( p != NULL )
         {
-            // Round up if necessary
+            
             if( *p >= '5' && *p <= '9' )
                 bRoundUp = true;
             while( *p >= '0' && *p <= '9' )
@@ -194,9 +194,9 @@ static sal_Int64 ImpStringToCurrency( const OUString &rStr )
         }
 
     }
-    // can we raise error here ? ( previous behaviour was more forgiving )
-    // so... not sure that could bread existing code, lets see if anyone
-    // complains.
+    
+    
+    
 
     if ( p != sTmp.getStr() + sTmp.getLength() )
         SbxBase::SetError( SbxERR_CONVERSION );
@@ -253,10 +253,10 @@ start:
         {
             nRes = p->nInt64 * CURRENCY_FACTOR; break;
 #if 0
-            // Huh, is the 'break' above intentional? That means this
-            // is unreachable, obviously. Avoid warning by ifdeffing
-            // this out for now. Do not delete this #if 0 block unless
-            // you know for sure the 'break' above is intentional.
+            
+            
+            
+            
             if ( nRes > SbxMAXSALINT64 )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXSALINT64;
@@ -266,7 +266,7 @@ start:
         case SbxSALUINT64:
             nRes = p->nInt64 * CURRENCY_FACTOR; break;
 #if 0
-            // As above
+            
             if ( nRes > SbxMAXSALINT64 )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXSALINT64;
@@ -277,7 +277,7 @@ start:
             }
             break;
 #endif
-//TODO: bring back SbxINT64 types here for limits -1 with flag value at SAL_MAX/MIN
+
         case SbxSINGLE:
             if( p->nSingle * CURRENCY_FACTOR + 0.5 > (float)SAL_MAX_INT64
              || p->nSingle * CURRENCY_FACTOR - 0.5 < (float)SAL_MIN_INT64 )
@@ -352,7 +352,7 @@ start:
             nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(*p->pUShort);
             break;
 
-        // from here on had to be tested
+        
         case SbxBYREF | SbxLONG:
             aTmp.nLong = *p->pLong; goto ref;
         case SbxBYREF | SbxULONG:
@@ -385,7 +385,7 @@ void ImpPutCurrency( SbxValues* p, const sal_Int64 r )
 start:
     switch( +p->eType )
     {
-        // Here are tests necessary
+        
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:
@@ -404,7 +404,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // from here no longer
+        
         case SbxSINGLE:
             p->nSingle = (float)( r / CURRENCY_FACTOR ); break;
         case SbxDATE:

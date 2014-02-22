@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/XMLFontStylesContext.hxx>
@@ -268,8 +268,8 @@ void XMLFontStyleContextFontFaceUri::SetFormat( const OUString& rFormat )
     format = rFormat;
 }
 
-// the CSS2 standard ( http://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#referencing )
-// defines these format strings.
+
+
 const char* OPENTYPE_FORMAT = "opentype";
 const char* TRUETYPE_FORMAT = "truetype";
 const char* EOT_FORMAT      = "embedded-opentype";
@@ -282,7 +282,7 @@ void XMLFontStyleContextFontFaceUri::EndElement()
         return;
     }
     bool eot;
-    // Assume by default that the font is not compressed.
+    
     if( format.getLength() == 0
         || format.equalsAscii( OPENTYPE_FORMAT )
         || format.equalsAscii( TRUETYPE_FORMAT ))
@@ -309,12 +309,12 @@ void XMLFontStyleContextFontFaceUri::handleEmbeddedFont( const OUString& url, bo
         return;
     }
     OUString fontName = font.familyName();
-    // If there's any giveMeStreamForThisURL(), then it's well-hidden for me to find it.
+    
     if( GetImport().IsPackageURL( url ))
     {
         uno::Reference< embed::XStorage > storage;
         storage.set( GetImport().GetSourceStorage(), UNO_QUERY_THROW );
-        if( url.indexOf( '/' ) > -1 ) // TODO what if more levels?
+        if( url.indexOf( '/' ) > -1 ) 
             storage.set( storage->openStorageElement( url.copy( 0, url.indexOf( '/' )),
                 ::embed::ElementModes::READ ), uno::UNO_QUERY_THROW );
         uno::Reference< io::XInputStream > inputStream;
@@ -384,7 +384,7 @@ sal_Bool XMLFontStylesContext::FillProperties( const OUString& rName,
                          sal_Int32 nCharsetIdx ) const
 {
     const SvXMLStyleContext* pStyle = FindStyleChildContext( XML_STYLE_FAMILY_FONT, rName, sal_True );
-    const XMLFontStyleContextFontFace *pFontStyle = PTR_CAST( XMLFontStyleContextFontFace,pStyle);// use temp var, PTR_CAST is a bad macro, FindStyleChildContext will be called twice
+    const XMLFontStyleContextFontFace *pFontStyle = PTR_CAST( XMLFontStyleContextFontFace,pStyle);
     if( pFontStyle )
         pFontStyle->FillProperties( rProps, nFamilyNameIdx, nStyleNameIdx,
                                     nFamilyIdx, nPitchIdx, nCharsetIdx );

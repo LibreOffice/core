@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dlg_CreationWizard.hxx"
@@ -67,8 +67,8 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
                 , m_bCanTravel( true )
 {
     m_apDialogModel.reset( new DialogModel( m_xChartModel, m_xCC ));
-    // Do not call FreeResource(), because there are no sub-elements defined in
-    // the dialog resource
+    
+    
     ShowButtonFixedLine( sal_True );
     defaultButton( WZB_FINISH );
 
@@ -103,7 +103,7 @@ CreationWizard::CreationWizard( Window* pParent, const uno::Reference< frame::XM
         this->enableState( STATE_DATA_SERIES, false );
     }
 
-    // Call ActivatePage, to create and activate the first page
+    
     ActivatePage();
 }
 CreationWizard::~CreationWizard()
@@ -151,7 +151,7 @@ svt::OWizardPage* CreationWizard::createPage(WizardState nState)
         break;
     }
     if(pRet)
-        pRet->SetText(OUString());//remove title of pages to not get them in the wizard title
+        pRet->SetText(OUString());
     return pRet;
 }
 
@@ -182,7 +182,7 @@ void CreationWizard::enterState(WizardState nState)
 
 bool CreationWizard::isClosable()
 {
-    //@todo
+    
     return m_bIsClosable;
 }
 
@@ -219,6 +219,6 @@ OUString CreationWizard::getStateDisplayName( WizardState nState ) const
     return SCH_RESSTR(nResId);
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,8 +91,8 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
     const ListenerList& rList,
     const ConfigurationChangeEvent& rEvent)
 {
-    // Create a local copy of the event in which the user data is modified
-    // for every listener.
+    
+    
     ConfigurationChangeEvent aEvent (rEvent);
 
     ListenerList::const_iterator iListener;
@@ -105,8 +105,8 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
         }
         catch (const lang::DisposedException& rException)
         {
-            // When the exception comes from the listener itself then
-            // unregister it.
+            
+            
             if (rException.Context == iListener->mxListener)
                 RemoveListener(iListener->mxListener);
         }
@@ -122,22 +122,22 @@ void ConfigurationControllerBroadcaster::NotifyListeners (
 
 void ConfigurationControllerBroadcaster::NotifyListeners (const ConfigurationChangeEvent& rEvent)
 {
-    // Notify the specialized listeners.
+    
     ListenerMap::const_iterator iMap (maListenerMap.find(rEvent.Type));
     if (iMap != maListenerMap.end())
     {
-        // Create a local list of the listeners to avoid problems with
-        // concurrent changes and to be able to remove disposed listeners.
+        
+        
         ListenerList aList (iMap->second.begin(), iMap->second.end());
         NotifyListeners(aList,rEvent);
     }
 
-    // Notify the universal listeners.
+    
     iMap = maListenerMap.find(OUString());
     if (iMap != maListenerMap.end())
     {
-        // Create a local list of the listeners to avoid problems with
-        // concurrent changes and to be able to remove disposed listeners.
+        
+        
         ListenerList aList (iMap->second.begin(), iMap->second.end());
         NotifyListeners(aList,rEvent);
     }
@@ -178,7 +178,7 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
         if (iMap == maListenerMap.end())
             break;
 
-        // When the first vector is empty then remove it from the map.
+        
         if (iMap->second.empty())
         {
             maListenerMap.erase(iMap);
@@ -190,9 +190,9 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
                 iMap->second.front().mxListener, UNO_QUERY);
             if (xListener.is())
             {
-                // Tell the listener that the configuration controller is
-                // being disposed and remove the listener (for all event
-                // types).
+                
+                
+                
                 try
                 {
                     RemoveListener(iMap->second.front().mxListener);
@@ -205,7 +205,7 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
             }
             else
             {
-                // Remove just this reference to the listener.
+                
                 iMap->second.erase(iMap->second.begin());
             }
         }
@@ -215,6 +215,6 @@ void ConfigurationControllerBroadcaster::DisposeAndClear (void)
 
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

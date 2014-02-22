@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
@@ -95,7 +95,7 @@ void SvXMLStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                       const OUString& rLocalName,
                                       const OUString& rValue )
 {
-    // TODO: use a map here
+    
     if( XML_NAMESPACE_STYLE == nPrefixKey )
     {
         if( IsXMLToken( rLocalName, XML_FAMILY ) )
@@ -435,7 +435,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
             case XML_TOK_STYLE_PAGE_MASTER:
             case XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT:
             {
-                //there is not page family in ODF now, so I specify one for it
+                
                 sal_Bool bDefaultStyle  = XML_TOK_STYLE_DEFAULT_PAGE_LAYOUT == nToken
                     ? sal_True: sal_False;
                 pStyle = new PageStyleContext( GetImport(), p_nPrefix,
@@ -468,7 +468,7 @@ SvXMLStyleContext *SvXMLStylesContext::CreateStyleChildContext( sal_uInt16 p_nPr
                 break;
 
             //
-            // FillStyles
+            
             //
             case XML_TOK_STYLES_GRADIENTSTYLES:
             {
@@ -638,17 +638,17 @@ UniReference < SvXMLImportPropertyMapper > SvXMLStylesContext::GetImportProperty
         break;
 
     case XML_STYLE_FAMILY_TEXT_SECTION:
-        // don't cache section mapper, as it's rarely used
-        // *sigh*, cast to non-const, because this is a const method,
-        // but SvXMLImport::GetTextImport() isn't.
+        
+        
+        
         xMapper = ((SvXMLStylesContext*)this)->GetImport().GetTextImport()->
             GetSectionImportPropertySetMapper();
         break;
 
     case XML_STYLE_FAMILY_TEXT_RUBY:
-        // don't cache section mapper, as it's rarely used
-        // *sigh*, cast to non-const, because this is a const method,
-        // but SvXMLImport::GetTextImport() isn't.
+        
+        
+        
         xMapper = ((SvXMLStylesContext*)this)->GetImport().GetTextImport()->
             GetRubyImportPropertySetMapper();
         break;
@@ -855,7 +855,7 @@ void SvXMLStylesContext::CopyAutoStylesToDoc()
 void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
                                           sal_Bool bFinish )
 {
-    // pass 1: create text, paragraph and frame styles
+    
     sal_uInt32 nCount = GetStyleCount();
     sal_uInt32 i;
 
@@ -871,7 +871,7 @@ void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
             pStyle->CreateAndInsert( bOverwrite );
     }
 
-    // pass 2: create list styles (they require char styles)
+    
     for( i=0; i<nCount; i++ )
     {
         SvXMLStyleContext *pStyle = GetStyle( i );
@@ -882,7 +882,7 @@ void SvXMLStylesContext::CopyStylesToDoc( sal_Bool bOverwrite,
             pStyle->CreateAndInsertLate( bOverwrite );
     }
 
-    // pass3: finish creation of styles
+    
     if( bFinish )
         FinishStyles( bOverwrite );
 }

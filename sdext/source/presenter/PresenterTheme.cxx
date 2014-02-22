@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterTheme.hxx"
@@ -219,7 +219,7 @@ private:
         const ::std::vector<css::uno::Any>& rValues);
 };
 
-} // end of anonymous namespace
+} 
 
 class PresenterTheme::Theme
 {
@@ -257,7 +257,7 @@ private:
         const Reference<beans::XPropertySet>& rxProperties);
 };
 
-//===== PresenterTheme ========================================================
+
 
 PresenterTheme::PresenterTheme (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -366,15 +366,15 @@ bool PresenterTheme::ConvertToColor (
     if (mpTheme.get() == NULL)
         return ::boost::shared_ptr<PresenterConfigurationAccess>();
 
-    // Open configuration for writing.
+    
     ::boost::shared_ptr<PresenterConfigurationAccess> pConfiguration (
         new PresenterConfigurationAccess(
             mxContext,
             OUString("/org.openoffice.Office.PresenterScreen/"),
             PresenterConfigurationAccess::READ_WRITE));
 
-    // Get configuration node for the view style container of the current
-    // theme.
+    
+    
     if (pConfiguration->GoToChild( OUString(
         "Presenter/Themes/" + mpTheme->msConfigurationNodeName + "/ViewStyles")))
     {
@@ -489,7 +489,7 @@ PresenterTheme::SharedFontDescriptor PresenterTheme::GetFont (
     return SharedFontDescriptor();
 }
 
-//===== FontDescriptor ========================================================
+
 
 PresenterTheme::FontDescriptor::FontDescriptor (
     const ::boost::shared_ptr<FontDescriptor>& rpDescriptor)
@@ -539,8 +539,8 @@ Reference<rendering::XCanvasFont> PresenterTheme::FontDescriptor::CreateFont (
     aFontRequest.FontDescription.StyleName = msStyleName;
     aFontRequest.CellSize = nCellSize;
 
-    // Make an attempt at translating the style name(s)into a corresponding
-    // font description.
+    
+    
     if (msStyleName == "Bold")
         aFontRequest.FontDescription.FontDescription.Weight = rendering::PanoseWeight::HEAVY;
 
@@ -554,14 +554,14 @@ double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
     const Reference<rendering::XCanvas>& rxCanvas,
     const double nDesignSize) const
 {
-    // Use the given design size as initial value in calculating the cell
-    // size.
+    
+    
     double nCellSize (nDesignSize);
 
     if ( ! rxCanvas.is())
     {
-        // We need the canvas to do the conversion.  Return the design size,
-        // it is the our best guess in this circumstance.
+        
+        
         return nDesignSize;
     }
 
@@ -577,7 +577,7 @@ double PresenterTheme::FontDescriptor::GetCellSizeForDesignSize (
     return nDesignSize * nScale;
 }
 
-//===== Theme =================================================================
+
 
 PresenterTheme::Theme::Theme (
     const OUString& rsName,
@@ -605,7 +605,7 @@ void PresenterTheme::Theme::Read (
     PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "ThemeName")
         >>= msThemeName;
 
-    // Parent theme name.
+    
     OUString sParentThemeName;
     if ((PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "ParentTheme")
             >>= sParentThemeName)
@@ -614,7 +614,7 @@ void PresenterTheme::Theme::Read (
         mpParentTheme = rReadContext.ReadTheme(rConfiguration, sParentThemeName);
     }
 
-    // Background.
+    
     mpBackground = PresenterBitmapContainer::LoadBitmap(
         mxThemeRoot,
         "Background",
@@ -622,16 +622,16 @@ void PresenterTheme::Theme::Read (
         rReadContext.mxCanvas,
         SharedBitmapDescriptor());
 
-    // Style associations.
+    
     maStyleAssociations.Read(rReadContext, mxThemeRoot);
 
-    // Pane styles.
+    
     maPaneStyles.Read(rReadContext, mxThemeRoot);
 
-    // View styles.
+    
     maViewStyles.Read(rReadContext, mxThemeRoot);
 
-    // Read bitmaps.
+    
     mpIconContainer.reset(
         new PresenterBitmapContainer(
             Reference<container::XNameAccess>(
@@ -643,7 +643,7 @@ void PresenterTheme::Theme::Read (
             rReadContext.mxComponentContext,
             rReadContext.mxCanvas));
 
-    // Read fonts.
+    
     Reference<container::XNameAccess> xFontNode(
         PresenterConfigurationAccess::GetConfigurationNode(mxThemeRoot, "Fonts"),
         UNO_QUERY);
@@ -686,7 +686,7 @@ void PresenterTheme::Theme::ProcessFont(
 
 namespace {
 
-//===== ReadContext ===========================================================
+
 
 ReadContext::ReadContext (
     const css::uno::Reference<css::uno::XComponentContext>& rxContext,
@@ -777,11 +777,11 @@ Any ReadContext::GetByName (
     OUString sCurrentThemeName (rsThemeName);
      if (sCurrentThemeName.isEmpty())
      {
-         // No theme name given.  Look up the CurrentTheme property.
+         
          rConfiguration.GetConfigurationNode("Presenter/CurrentTheme") >>= sCurrentThemeName;
          if (sCurrentThemeName.isEmpty())
          {
-             // Still no name.  Use "DefaultTheme".
+             
              sCurrentThemeName = "DefaultTheme";
          }
      }
@@ -791,7 +791,7 @@ Any ReadContext::GetByName (
         UNO_QUERY);
     if (xThemes.is())
     {
-        // Iterate over all themes and search the one with the given name.
+        
         Sequence<OUString> aKeys (xThemes->getElementNames());
         for (sal_Int32 nItemIndex=0; nItemIndex < aKeys.getLength(); ++nItemIndex)
         {
@@ -835,7 +835,7 @@ BorderSize ReadContext::ReadBorderSize (const Reference<container::XNameAccess>&
     return aBorderSize;
 }
 
-//===== PaneStyleContainer ====================================================
+
 
 void PaneStyleContainer::Read (
     ReadContext& rReadContext,
@@ -881,7 +881,7 @@ void PaneStyleContainer::ProcessPaneStyle(
     OUString sParentStyleName;
     if (rValues[1] >>= sParentStyleName)
     {
-        // Find parent style.
+        
         PaneStyleContainer::const_iterator iStyle;
         for (iStyle=begin(); iStyle!=end(); ++iStyle)
             if ((*iStyle)->msStyleName.equals(sParentStyleName))
@@ -931,7 +931,7 @@ SharedPaneStyle PaneStyleContainer::GetPaneStyle (const OUString& rsStyleName) c
     return SharedPaneStyle();
 }
 
-//===== PaneStyle =============================================================
+
 
 PaneStyle::PaneStyle (void)
     : msStyleName(),
@@ -972,7 +972,7 @@ PresenterTheme::SharedFontDescriptor PaneStyle::GetFont (void) const
         return PresenterTheme::SharedFontDescriptor();
 }
 
-//===== ViewStyleContainer ====================================================
+
 
 void ViewStyleContainer::Read (
     ReadContext& rReadContext,
@@ -1007,7 +1007,7 @@ void ViewStyleContainer::ProcessViewStyle(
     if (PresenterConfigurationAccess::GetProperty(rxProperties, "ParentStyle")
         >>= sParentStyleName)
     {
-        // Find parent style.
+        
         ViewStyleContainer::const_iterator iStyle;
         for (iStyle=begin(); iStyle!=end(); ++iStyle)
             if ((*iStyle)->msStyleName.equals(sParentStyleName))
@@ -1019,7 +1019,7 @@ void ViewStyleContainer::ProcessViewStyle(
             }
     }
 
-    const OUString sPathToFont; // empty string
+    const OUString sPathToFont; 
     Reference<container::XHierarchicalNameAccess> xFontNode (
         PresenterConfigurationAccess::GetProperty(rxProperties, "Font"), UNO_QUERY);
     PresenterTheme::SharedFontDescriptor pFont (
@@ -1051,7 +1051,7 @@ SharedViewStyle ViewStyleContainer::GetViewStyle (const OUString& rsStyleName) c
     return SharedViewStyle();
 }
 
-//===== ViewStyle =============================================================
+
 
 ViewStyle::ViewStyle (void)
     : msStyleName(),
@@ -1083,7 +1083,7 @@ PresenterTheme::SharedFontDescriptor ViewStyle::GetFont (void) const
         return PresenterTheme::SharedFontDescriptor();
 }
 
-//===== StyleAssociationContainer =============================================
+
 
 void StyleAssociationContainer::Read (
     ReadContext& rReadContext,
@@ -1136,8 +1136,8 @@ void StyleAssociationContainer::ProcessStyleAssociation(
     }
 }
 
-} // end of anonymous namespace
+} 
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

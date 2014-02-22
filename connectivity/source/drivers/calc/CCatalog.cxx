@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "calc/CCatalog.hxx"
@@ -29,14 +29,14 @@ using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 
-// -------------------------------------------------------------------------
+
 using namespace connectivity::calc;
-// -------------------------------------------------------------------------
+
 OCalcCatalog::OCalcCatalog(OCalcConnection* _pCon) : file::OFileCatalog(_pCon)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcCatalog::OCalcCatalog" );
 }
-// -------------------------------------------------------------------------
+
 void OCalcCatalog::refreshTables()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcCatalog::refreshTables" );
@@ -57,11 +57,11 @@ void OCalcCatalog::refreshTables()
     else
         m_pTables = new OCalcTables(m_xMetaData,*this,m_aMutex,aVector);
 
-    // this avoids that the document will be loaded a 2nd time when one table will be accessed.
-    //if ( m_pTables && m_pTables->hasElements() )
-    //    m_pTables->getByIndex(0);
+    
+    
+    
 }
-// -----------------------------------------------------------------------------
+
 
 
 

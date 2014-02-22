@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fulinend.hxx"
@@ -73,21 +73,21 @@ void FuLineEnd::DoExecute( SfxRequest& )
             if( aInfoRec.bCanConvToPath &&
                 pObj->GetObjInventor() == SdrInventor &&
                 pObj->GetObjIdentifier() != OBJ_GRUP )
-                // bCanConvToPath is sal_True for group objects,
-                // but it crashes on ConvertToPathObj()!
+                
+                
             {
                 pNewObj = pConvPolyObj = pObj->ConvertToPolyObj( true, false );
 
                 if( !pNewObj || !pNewObj->ISA( SdrPathObj ) )
-                    return; // Cancel, additional security, but it does not help
-                            // for group objects
+                    return; 
+                            
             }
-            else return; // Cancel
+            else return; 
         }
 
         const ::basegfx::B2DPolyPolygon aPolyPolygon = ( (SdrPathObj*) pNewObj )->GetPathPoly();
 
-        // Delete the created poly-object
+        
         SdrObject::Free( pConvPolyObj );
 
         XLineEndListRef pLineEndList = mpDoc->GetLineEndList();
@@ -156,6 +156,6 @@ void FuLineEnd::Deactivate()
 {
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

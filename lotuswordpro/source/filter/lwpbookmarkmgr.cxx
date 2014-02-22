@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -59,11 +59,11 @@ void LwpBookmarkMgr::AddXFBookmarkStart(OUString sName,XFBookmarkStart* pMark)
 {
     std::map<OUString,XFBookmarkStart*>::iterator iter;
     iter = m_MapStart.find(sName);
-    if (iter == m_MapStart.end())//not find
+    if (iter == m_MapStart.end())
     {
         m_MapStart[sName] = pMark;
     }
-    else //have exist the same bookmark name
+    else 
     {
         XFBookmarkStart* pFind = iter->second;
         OUString totalName = pFind->GetDivision() + A2OUSTR(":");
@@ -77,11 +77,11 @@ void LwpBookmarkMgr::AddXFBookmarkEnd(OUString sName,XFBookmarkEnd* pMark)
 {
     std::map<OUString,XFBookmarkEnd*>::iterator iter;
     iter = m_MapEnd.find(sName);
-    if (iter == m_MapEnd.end())//not find
+    if (iter == m_MapEnd.end())
     {
         m_MapEnd[sName] = pMark;
     }
-    else //have exist the same bookmark name
+    else 
     {
         XFBookmarkEnd* pFind = iter->second;
         OUString totalName = pFind->GetDivision() + A2OUSTR(":");

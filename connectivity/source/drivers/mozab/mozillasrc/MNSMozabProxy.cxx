@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MNSMozabProxy.hxx"
@@ -28,7 +28,7 @@
 
 #include "pre_include_mozilla.h"
 #include <nsIProxyObjectManager.h>
-// More Mozilla includes for LDAP Connection Test
+
 #include "prprf.h"
 #include "nsILDAPURL.h"
 #include "nsILDAPMessage.h"
@@ -162,26 +162,26 @@ nsresult MNSMozabProxy::QueryHelperStub()
     switch(m_Args->funcIndex)
     {
     case ProxiedFunc::FUNC_QUERYHELPER_CREATE_NEW_CARD:
-        if (m_Args->arg2 )  //m_Args->arg2 used to return cord number
+        if (m_Args->arg2 )  
         {
             *((sal_Int32*)m_Args->arg2) = mHelper->createNewCard();
             rv = NS_OK;
         }
         break;
     case ProxiedFunc::FUNC_QUERYHELPER_DELETE_CARD:
-        if (m_Args->arg2 && m_Args->arg3 )  //m_Args->arg2 used to get the cord number
+        if (m_Args->arg2 && m_Args->arg3 )  
         {
             rv = mHelper->deleteCard(*((sal_uInt32*)m_Args->arg2),(nsIAbDirectory*)m_Args->arg3);
         }
         break;
     case ProxiedFunc::FUNC_QUERYHELPER_COMMIT_CARD:
-        if (m_Args->arg2 && m_Args->arg3 )  //m_Args->arg2 used to get the cord number
+        if (m_Args->arg2 && m_Args->arg3 )  
         {
             rv = mHelper->commitCard(*((sal_uInt32*)m_Args->arg2),(nsIAbDirectory*)m_Args->arg3);
         }
         break;
     case ProxiedFunc::FUNC_QUERYHELPER_RESYNC_CARD:
-        if (m_Args->arg2)  //m_Args->arg2 used to get the cord number
+        if (m_Args->arg2)  
         {
             rv = mHelper->resyncRow(*((sal_uInt32*)m_Args->arg2));
         }
@@ -191,7 +191,7 @@ nsresult MNSMozabProxy::QueryHelperStub()
     }
     return rv;
 }
-//-------------------------------------------------------------------
+
 
 #define NS_LDAPCONNECTION_CONTRACTID     "@mozilla.org/network/ldap-connection;1"
 #define NS_LDAPOPERATION_CONTRACTID      "@mozilla.org/network/ldap-operation;1"
@@ -270,7 +270,7 @@ NS_IMETHODIMP MLDAPMessageListener::OnLDAPMessage( nsILDAPMessage* aMessage )
     {
     case nsILDAPMessage::RES_BIND:
         rv = aMessage->GetErrorCode(&errCode);
-        // if the login failed
+        
         if (errCode != (PRInt32)nsILDAPErrors::SUCCESS) {
             setConnectionStatus( sal_False );
         }
@@ -287,7 +287,7 @@ NS_IMETHODIMP MLDAPMessageListener::OnLDAPMessage( nsILDAPMessage* aMessage )
     return NS_OK;
 }
 
-//-------------------------------------------------------------------
+
 
 nsresult
 MNSMozabProxy::testLDAPConnection( )
@@ -353,7 +353,7 @@ MNSMozabProxy::InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* pPass
 
 
 
-    // Get the ldap connection
+    
     nsCOMPtr<nsILDAPConnection> ldapConnection;
     ldapConnection = do_CreateInstance(NS_LDAPCONNECTION_CONTRACTID, &rv);
     NS_ENSURE_SUCCESS(rv, rv);
@@ -366,24 +366,24 @@ MNSMozabProxy::InitLDAP(sal_Char* sUri, sal_Unicode* sBindDN, sal_Unicode* pPass
     messageListener->AddRef();
 
     nsCAutoString nsBind;
-    // PRUnichar != sal_Unicode in mingw
+    
     nsBind.AssignWithConversion(reinterpret_cast_mingw_only<const PRUnichar *>(sBindDN));
 
-    // Now lets initialize the LDAP connection properly.
+    
     rv = ldapConnection->Init(host.get(), port, useSSL, nsBind,
                               messageListener,NULL,nsILDAPConnection::VERSION3);
-    // Initiate the LDAP operation
+    
     nsCOMPtr<nsILDAPOperation> ldapOperation =
     do_CreateInstance(NS_LDAPOPERATION_CONTRACTID, &rv);
 
     rv = ldapOperation->Init(ldapConnection, messageListener, nsnull);
     if (NS_FAILED(rv))
-    return NS_ERROR_UNEXPECTED; // this should never happen
+    return NS_ERROR_UNEXPECTED; 
 
     if ( pPasswd && *pPasswd )
     {
         nsCAutoString nsPassword;
-        // PRUnichar != sal_Unicode in mingw
+        
         nsPassword.AssignWithConversion(reinterpret_cast_mingw_only<const PRUnichar *>(pPasswd));
         rv = ldapOperation->SimpleBind(nsPassword);
     }

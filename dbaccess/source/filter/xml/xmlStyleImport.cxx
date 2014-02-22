@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlStyleImport.hxx"
@@ -118,14 +118,14 @@ void OTableStyleContext::AddProperty(const sal_Int16 nContextID, const uno::Any&
     sal_Int32 nIndex(static_cast<OTableStylesContext *>(pStyles)->GetIndex(nContextID));
     OSL_ENSURE(nIndex != -1, "Property not found in Map");
     XMLPropertyState aPropState(nIndex, rValue);
-    GetProperties().push_back(aPropState); // has to be insertes in a sort order later
+    GetProperties().push_back(aPropState); 
 }
 
 void OTableStyleContext::SetAttribute( sal_uInt16 nPrefixKey,
                                         const OUString& rLocalName,
                                         const OUString& rValue )
 {
-    // TODO: use a map here
+    
     if( IsXMLToken(rLocalName, XML_DATA_STYLE_NAME ) )
         m_sDataStyleName = rValue;
     else if ( IsXMLToken(rLocalName, XML_MASTER_PAGE_NAME ) )
@@ -284,6 +284,6 @@ ODBFilter& OTableStylesContext::GetOwnImport()
     return static_cast<ODBFilter&>(GetImport());
 }
 
-} // dbaxml
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

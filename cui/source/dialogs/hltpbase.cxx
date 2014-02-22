@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/frame.hxx>
@@ -34,7 +34,7 @@
 
 using namespace ::ucbhelper;
 
-//# ComboBox-Control, which is filled with all current framenames        #
+
 
 /*************************************************************************
 |*
@@ -68,7 +68,7 @@ SvxFramesComboBox::~SvxFramesComboBox ()
 {
 }
 
-//# ComboBox-Control for URL's with History and Autocompletion           #
+
 
 SvxHyperURLBox::SvxHyperURLBox( Window* pParent, INetProtocol eSmart )
 : SvtURLBox         ( pParent, eSmart ),
@@ -113,7 +113,7 @@ bool SvxHyperURLBox::PreNotify( NotifyEvent& rNEvt )
     return SvtURLBox::PreNotify( rNEvt );
 }
 
-//# Hyperlink-Dialog: Tabpages-Baseclass                                 #
+
 
 SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
                                                    const ResId &rResId,
@@ -134,7 +134,7 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase ( Window *pParent,
     mbStdControlsInit       ( sal_False ),
     aEmptyStr()
 {
-    // create bookmark-window
+    
     mpMarkWnd = new SvxHlinkDlgMarkWnd ( this );
 }
 
@@ -199,7 +199,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
     mbStdControlsInit = sal_True;
 }
 
-// Move Extra-Window
+
 sal_Bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, sal_Bool bDisConnectDlg )
 {
     sal_Bool bReturn =  mpMarkWnd->MoveTo ( aNewPos );
@@ -210,56 +210,56 @@ sal_Bool SvxHyperlinkTabPageBase::MoveToExtraWnd( Point aNewPos, sal_Bool bDisCo
     return ( !bReturn && IsMarkWndVisible() );
 }
 
-// Show Extra-Window
+
 void SvxHyperlinkTabPageBase::ShowMarkWnd ()
 {
     ( ( Window* ) mpMarkWnd )->Show();
 
-    // Size of dialog-window in screen pixels
+    
     Rectangle aDlgRect( mpDialog->GetWindowExtentsRelative( NULL ) );
     Point aDlgPos ( aDlgRect.TopLeft() );
     Size aDlgSize ( mpDialog->GetSizePixel () );
 
-    // Absolute size of the screen
+    
     Rectangle aScreen( mpDialog->GetDesktopRectPixel() );
 
-    // Size of Extrawindow
+    
     Size aExtraWndSize( mpMarkWnd->GetSizePixel () );
 
-    // mpMarkWnd is a child of mpDialog, so coordinates for positioning must be relative to mpDialog
+    
     if( aDlgPos.X()+(1.05*aDlgSize.Width())+aExtraWndSize.Width() > aScreen.Right() )
     {
         if( aDlgPos.X() - ( 0.05*aDlgSize.Width() ) - aExtraWndSize.Width() < 0 )
         {
-            // Pos Extrawindow anywhere
-            MoveToExtraWnd( Point(10,10) );  // very unlikely
+            
+            MoveToExtraWnd( Point(10,10) );  
             mpMarkWnd->ConnectToDialog( sal_False );
         }
         else
         {
-            // Pos Extrawindow on the left side of Dialog
+            
             MoveToExtraWnd( Point(0,0) - Point( long(0.05*aDlgSize.Width()), 0 ) - Point( aExtraWndSize.Width(), 0 ) );
         }
     }
     else
     {
-        // Pos Extrawindow on the right side of Dialog
+        
         MoveToExtraWnd ( Point( long(1.05*aDlgSize.getWidth()), 0 ) );
     }
 
-    // Set size of Extra-Window
+    
     mpMarkWnd->SetSizePixel( Size( aExtraWndSize.Width(), aDlgSize.Height() ) );
 }
 
-// Fill Dialogfields
+
 void SvxHyperlinkTabPageBase::FillStandardDlgFields ( SvxHyperlinkItem* pHyperlinkItem )
 {
-    // Frame
+    
     sal_uInt16 nPos = mpCbbFrame->GetEntryPos ( pHyperlinkItem->GetTargetFrame() );
     if ( nPos != LISTBOX_ENTRY_NOTFOUND)
         mpCbbFrame->SetText ( pHyperlinkItem->GetTargetFrame() );
 
-    // Form
+    
     OUString aStrFormText = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FROM_TEXT );
     OUString aStrFormButton = CUI_RESSTR( RID_SVXSTR_HYPERDLG_FORM_BUTTON );
 
@@ -277,57 +277,57 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( SvxHyperlinkItem* pHyperli
         mpLbForm->SelectEntryPos ( pHyperlinkItem->GetInsertMode() == HLINK_BUTTON ? 1 : 0 );
     }
 
-    // URL
+    
     mpEdIndication->SetText ( pHyperlinkItem->GetName() );
 
-    // Name
+    
     mpEdText->SetText ( pHyperlinkItem->GetIntName() );
 
-    // Script-button
+    
     if ( !pHyperlinkItem->GetMacroEvents() )
         mpBtScript->Disable();
     else
         mpBtScript->Enable();
 }
 
-// Any action to do after apply-button is pressed
+
 void SvxHyperlinkTabPageBase::DoApply ()
 {
-    // default-implemtation : do nothing
+    
 }
 
-// Ask page whether an insert is possible
+
 sal_Bool SvxHyperlinkTabPageBase::AskApply ()
 {
-    // default-implementation
+    
     return sal_True;
 }
 
-// This method would be called from bookmark-window to set new mark-string
+
 void SvxHyperlinkTabPageBase::SetMarkStr ( const OUString& /*aStrMark*/ )
 {
-    // default-implemtation : do nothing
+    
 }
 
-// Set initial focus
+
 void SvxHyperlinkTabPageBase::SetInitFocus()
 {
     GrabFocus();
 }
 
-// Ask dialog whether the curretn doc is a HTML-doc
+
 sal_Bool SvxHyperlinkTabPageBase::IsHTMLDoc() const
 {
     return ((SvxHpLinkDlg*)mpDialog)->IsHTMLDoc();
 }
 
-// retrieve dispatcher
+
 SfxDispatcher* SvxHyperlinkTabPageBase::GetDispatcher() const
 {
     return ((SvxHpLinkDlg*)mpDialog)->GetDispatcher();
 }
 
-// Click on imagebutton : Script
+
 IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
 {
     SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
@@ -335,13 +335,13 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
 
     if ( pHyperlinkItem->GetMacroEvents() )
     {
-        // get macros from itemset
+        
         const SvxMacroTableDtor* pMacroTbl = pHyperlinkItem->GetMacroTbl();
         SvxMacroItem aItem ( GetWhich(SID_ATTR_MACROITEM) );
         if( pMacroTbl )
             aItem.SetMacroTable( *pMacroTbl );
 
-        // create empty itemset for macro-dlg
+        
         SfxItemSet* pItemSet = new SfxItemSet(SFX_APP()->GetPool(),
                                               SID_ATTR_MACROITEM,
                                               SID_ATTR_MACROITEM );
@@ -356,7 +356,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
             GetParent()->EnableInput( false );
         SfxMacroAssignDlg aDlg( this, mxDocumentFrame, *pItemSet );
 
-        // add events
+        
         SfxMacroTabPage *pMacroPage = (SfxMacroTabPage*) aDlg.GetTabPage();
 
         if ( pHyperlinkItem->GetMacroEvents() & HYPERDLG_EVENT_MOUSEOVER_OBJECT )
@@ -371,7 +371,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
 
         if ( bIsInputEnabled )
             GetParent()->EnableInput( true );
-        // execute dlg
+        
         DisableClose( sal_True );
         short nRet = aDlg.Execute();
         DisableClose( sal_False );
@@ -390,7 +390,7 @@ IMPL_LINK_NOARG(SvxHyperlinkTabPageBase, ClickScriptHdl_Impl)
     return( 0L );
 }
 
-// Get Macro-Infos
+
 sal_uInt16 SvxHyperlinkTabPageBase::GetMacroEvents()
 {
     SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
@@ -407,7 +407,7 @@ SvxMacroTableDtor* SvxHyperlinkTabPageBase::GetMacroTable()
     return ( (SvxMacroTableDtor*)pHyperlinkItem->GetMacroTbl() );
 }
 
-// try to detect the current protocol that is used in rStrURL
+
 OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
 {
     OUString aStrScheme;
@@ -415,9 +415,9 @@ OUString SvxHyperlinkTabPageBase::GetSchemeFromURL( const OUString& rStrURL )
     INetURLObject aURL( rStrURL );
     INetProtocol aProtocol = aURL.GetProtocol();
 
-    // #77696#
-    // our new INetUrlObject now has the ability
-    // to detect if an Url is valid or not :-(
+    
+    
+    
     if ( aProtocol == INET_PROT_NOT_VALID )
     {
         if ( rStrURL.startsWithIgnoreAsciiCase( INET_HTTP_SCHEME ) )
@@ -459,11 +459,11 @@ void SvxHyperlinkTabPageBase::GetDataFromCommonFields( OUString& aStrName,
         eMode = (SvxLinkInsertMode) ( sal_uInt16(eMode) | HLINK_HTMLMODE );
 }
 
-// reset dialog-fields
+
 void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 {
-    ///////////////////////////////////////
-    // Set dialog-fields from create-itemset
+    
+    
     maStrInitURL = aEmptyStr;
 
     SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
@@ -471,25 +471,25 @@ void SvxHyperlinkTabPageBase::Reset( const SfxItemSet& rItemSet)
 
     if ( pHyperlinkItem )
     {
-        // set dialog-fields
+        
         FillStandardDlgFields (pHyperlinkItem);
 
-        // set all other fields
+        
         FillDlgFields ( (OUString&)pHyperlinkItem->GetURL() );
 
-        // Store initial URL
+        
         maStrInitURL = pHyperlinkItem->GetURL();
     }
 }
 
-// Fill output-ItemSet
+
 sal_Bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet& rOut)
 {
     OUString aStrURL, aStrName, aStrIntName, aStrFrame;
     SvxLinkInsertMode eMode;
 
     GetCurentItemData ( aStrURL, aStrName, aStrIntName, aStrFrame, eMode);
-    if ( aStrName.isEmpty() ) //automatically create a visible name if the link is created without name
+    if ( aStrName.isEmpty() ) 
         aStrName = CreateUiNameFromURL(aStrURL);
 
     sal_uInt16 nEvents = GetMacroEvents();
@@ -514,7 +514,7 @@ OUString SvxHyperlinkTabPageBase::CreateUiNameFromURL( const OUString& aStrURL )
             break;
         case INET_PROT_FTP :
             {
-                //remove password from name
+                
                 INetURLObject   aTmpURL(aURLObj);
                 aTmpURL.SetPass(aEmptyStr);
                 aStrUiURL = aTmpURL.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
@@ -530,32 +530,32 @@ OUString SvxHyperlinkTabPageBase::CreateUiNameFromURL( const OUString& aStrURL )
     return aStrUiURL;
 }
 
-// Activate / Deactivate Tabpage
+
 void SvxHyperlinkTabPageBase::ActivatePage( const SfxItemSet& rItemSet )
 {
-    ///////////////////////////////////////
-    // Set dialog-fields from input-itemset
+    
+    
     SvxHyperlinkItem *pHyperlinkItem = (SvxHyperlinkItem *)
                                        rItemSet.GetItem (SID_HYPERLINK_GETLINK);
 
     if ( pHyperlinkItem )
     {
-        // standard-fields
+        
         FillStandardDlgFields (pHyperlinkItem);
     }
 
-    // show mark-window if it was open before
+    
     if ( ShouldOpenMarkWnd () )
         ShowMarkWnd ();
 }
 
 int SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
 {
-    // hide mark-wnd
+    
     SetMarkWndShouldOpen( IsMarkWndVisible () );
     HideMarkWnd ();
 
-    // retrieve data of dialog
+    
     OUString aStrURL, aStrName, aStrIntName, aStrFrame;
     SvxLinkInsertMode eMode;
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,8 +42,8 @@ GenericPageCache::GenericPageCache (
       maPreviewSize(rPreviewSize),
       mbDoSuperSampling(bDoSuperSampling)
 {
-    // A large size may indicate an error of the caller.  After all we
-    // are creating previews.
+    
+    
         DBG_ASSERT (maPreviewSize.Width()<1000 && maPreviewSize.Height()<1000,
         "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width. "
         "This may indicate an error.");
@@ -94,8 +94,8 @@ void GenericPageCache::ChangePreviewSize (
 {
     if (rPreviewSize!=maPreviewSize || bDoSuperSampling!=mbDoSuperSampling)
     {
-        // A large size may indicate an error of the caller.  After all we
-        // are creating previews.
+        
+        
         DBG_ASSERT (maPreviewSize.Width()<1000 && maPreviewSize.Height()<1000,
             "GenericPageCache<>::GetPreviewBitmap(): bitmap requested with large width. "
             "This may indicate an error.");
@@ -134,8 +134,8 @@ Bitmap GenericPageCache::GetPreviewBitmap (
         const Size aBitmapSize (aPreview.GetSizePixel());
         if (aBitmapSize != maPreviewSize)
         {
-            // Scale the bitmap to the desired size when that is possible,
-            // i.e. the bitmap is not empty.
+            
+            
             if (bResize && aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
             {
                 aPreview.Scale(maPreviewSize);
@@ -148,9 +148,9 @@ Bitmap GenericPageCache::GetPreviewBitmap (
     else
         bMayBeUpToDate = false;
 
-    // Request the creation of a correctly sized preview bitmap.  We do this
-    // even when the size of the bitmap in the cache is correct because its
-    // content may be not up-to-date anymore.
+    
+    
+    
     RequestPreviewBitmap(aKey, bMayBeUpToDate);
 
     return aPreview;
@@ -171,8 +171,8 @@ Bitmap GenericPageCache::GetMarkedPreviewBitmap (
     const Size aBitmapSize (aMarkedPreview.GetSizePixel());
     if (bResize && aBitmapSize != maPreviewSize)
     {
-        // Scale the bitmap to the desired size when that is possible,
-        // i.e. the bitmap is not empty.
+        
+        
         if (aBitmapSize.Width()>0 && aBitmapSize.Height()>0)
         {
             aMarkedPreview.Scale(maPreviewSize);
@@ -209,7 +209,7 @@ void GenericPageCache::RequestPreviewBitmap (
 
     ProvideCacheAndProcessor();
 
-    // Determine if the available bitmap is up to date.
+    
     bool bIsUpToDate = false;
     if (bMayBeUpToDate)
         bIsUpToDate = mpBitmapCache->BitmapIsUpToDate (pPage);
@@ -222,7 +222,7 @@ void GenericPageCache::RequestPreviewBitmap (
 
     if ( ! bIsUpToDate)
     {
-        // No, the bitmap is not up-to-date.  Request a new one.
+        
         RequestPriorityClass ePriorityClass (NOT_VISIBLE);
         if (mpCacheContext->IsVisible(aKey))
         {
@@ -241,7 +241,7 @@ void GenericPageCache::RequestPreviewBitmap (
 
 bool GenericPageCache::InvalidatePreviewBitmap (const CacheKey aKey)
 {
-    // Invalidate the page in all caches that reference it, not just this one.
+    
     ::boost::shared_ptr<cache::PageCacheManager> pCacheManager (
         cache::PageCacheManager::Instance());
     if (pCacheManager)
@@ -258,15 +258,15 @@ void GenericPageCache::InvalidateCache (const bool bUpdateCache)
 {
     if (mpBitmapCache)
     {
-        // When the cache is being invalidated then it makes no sense to
-        // continue creating preview bitmaps.  However, this may be
-        // re-started below.
+        
+        
+        
         mpQueueProcessor->Stop();
         maRequestQueue.Clear();
 
-        // Mark the previews in the cache as not being up-to-date anymore.
-        // Depending on the given bUpdateCache flag we start to create new
-        // preview bitmaps.
+        
+        
+        
         mpBitmapCache->InvalidateCache();
         if (bUpdateCache)
             RequestFactory()(maRequestQueue, mpCacheContext);
@@ -282,7 +282,7 @@ void GenericPageCache::SetPreciousFlag (
 {
     ProvideCacheAndProcessor();
 
-    // Change the request priority class according to the new precious flag.
+    
     if (bIsPrecious)
     {
         if (mpBitmapCache->HasBitmap(mpCacheContext->GetPage(aKey)))
@@ -294,8 +294,8 @@ void GenericPageCache::SetPreciousFlag (
     {
         if (mpBitmapCache->IsFull())
         {
-            // When the bitmap cache is full then requests for slides that
-            // are not visible are removed.
+            
+            
             maRequestQueue.RemoveRequest(aKey);
         }
         else
@@ -327,7 +327,7 @@ void GenericPageCache::Resume (void)
 
 
 
-} } } // end of namespace ::sd::slidesorter::cache
+} } } 
 
 
 

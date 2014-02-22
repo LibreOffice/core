@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,56 +27,56 @@
 #include <vcl/help.hxx>
 #include <vcl/settings.hxx>
 
-//......................................................................................................................
+
 namespace svt { namespace table
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Any;
 
-    //==================================================================================================================
-    //= TableDataWindow
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     TableDataWindow::TableDataWindow( TableControl_Impl& _rTableControl )
         :Window( &_rTableControl.getAntiImpl() )
         ,m_rTableControl( _rTableControl )
         ,m_nTipWindowHandle( 0 )
     {
-        // by default, use the background as determined by the style settings
+        
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
         SetBackground( Wallpaper( aWindowColor ) );
         SetFillColor( aWindowColor );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TableDataWindow::~TableDataWindow()
     {
         impl_hideTipWindow();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableDataWindow::Paint( const Rectangle& rUpdateRect )
     {
         m_rTableControl.doPaintContent( rUpdateRect );
     }
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableDataWindow::SetBackground( const Wallpaper& rColor )
     {
         Window::SetBackground( rColor );
     }
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableDataWindow::SetControlBackground( const Color& rColor )
     {
         Window::SetControlBackground( rColor );
     }
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableDataWindow::SetControlBackground()
     {
         Window::SetControlBackground();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableDataWindow::RequestHelp( const HelpEvent& rHEvt )
     {
         sal_uInt16 const nHelpMode = rHEvt.GetMode();
@@ -108,10 +108,10 @@ namespace svt { namespace table
                 pTableModel->getCellToolTip( hitCol, hitRow, aCellToolTip );
                 if ( !aCellToolTip.hasValue() )
                 {
-                    // use the cell content
+                    
                     pTableModel->getCellContent( hitCol, hitRow, aCellToolTip );
 
-                    // use the cell content as tool tip only if it doesn't fit into the cell.
+                    
                     bool const activeCell = ( hitRow == m_rTableControl.getCurrentRow() ) && ( hitCol == m_rTableControl.getCurrentColumn() );
                     bool const selectedCell = m_rTableControl.isRowSelected( hitRow );
 
@@ -133,7 +133,7 @@ namespace svt { namespace table
 
         if ( !sHelpText.isEmpty() )
         {
-            // hide the standard (singleton) help window, so we do not have two help windows open at the same time
+            
             Help::HideBalloonAndQuickHelp();
 
             Rectangle const aControlScreenRect(
@@ -155,7 +155,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableDataWindow::impl_hideTipWindow()
     {
         if ( m_nTipWindowHandle != 0 )
@@ -165,7 +165,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableDataWindow::MouseMove( const MouseEvent& rMEvt )
     {
         if ( rMEvt.IsLeaveWindow() )
@@ -176,7 +176,7 @@ namespace svt { namespace table
             Window::MouseMove( rMEvt );
         }
     }
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableDataWindow::MouseButtonDown( const MouseEvent& rMEvt )
     {
         impl_hideTipWindow();
@@ -200,7 +200,7 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableDataWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( !m_rTableControl.getInputHandler()->MouseButtonUp( m_rTableControl, rMEvt ) )
@@ -209,7 +209,7 @@ namespace svt { namespace table
         m_rTableControl.getAntiImpl().GrabFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool TableDataWindow::Notify(NotifyEvent& rNEvt )
     {
         bool nDone = false;
@@ -227,8 +227,8 @@ namespace svt { namespace table
         }
         return nDone || Window::Notify( rNEvt );
     }
-//......................................................................................................................
-} } // namespace svt::table
-//......................................................................................................................
+
+} } 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

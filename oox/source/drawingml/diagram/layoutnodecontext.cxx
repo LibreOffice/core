@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "layoutnodecontext.hxx"
@@ -104,13 +104,13 @@ public:
             {
             case DGM_TOKEN( if ):
             {
-                // CT_When
+                
                 mpConditionNode.reset( new ConditionAtom(rAttribs.getFastAttributeList()) );
                 mpNode->addChild( mpConditionNode );
                 return new IfContext( *this, rAttribs, mpConditionNode );
             }
             case DGM_TOKEN( else ):
-                // CT_Otherwise
+                
                 if( mpConditionNode )
                 {
                     mpConditionNode->readElseBranch();
@@ -151,7 +151,7 @@ public:
 };
 
 
-// CT_LayoutVariablePropertySet
+
 class LayoutVariablePropertySetContext
     : public ContextHandler2
 {
@@ -182,7 +182,7 @@ private:
 };
 
 
-// CT_LayoutNode
+
 LayoutNodeContext::LayoutNodeContext( ContextHandler2Helper& rParent,
                                       const AttributeList& rAttribs,
                                       const LayoutAtomPtr& pAtom )
@@ -288,32 +288,32 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         return 0;
     case DGM_TOKEN( alg ):
     {
-        // CT_Algorithm
+        
         AlgAtomPtr pAtom( new AlgAtom );
         mpNode->addChild( pAtom );
         return new AlgorithmContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( choose ):
     {
-        // CT_Choose
+        
         LayoutAtomPtr pAtom( new ChooseAtom );
         mpNode->addChild( pAtom );
         return new ChooseContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( forEach ):
     {
-        // CT_ForEach
+        
         ForEachAtomPtr pAtom( new ForEachAtom(rAttribs.getFastAttributeList()) );
         mpNode->addChild( pAtom );
         return new ForEachContext( *this, rAttribs, pAtom );
     }
     case DGM_TOKEN( constrLst ):
-        // CT_Constraints
+        
         return new ConstraintListContext( *this, rAttribs, mpNode );
     case DGM_TOKEN( presOf ):
     {
-        // CT_PresentationOf
-        // TODO
+        
+        
         rAttribs.getString( XML_axis );
         rAttribs.getString( XML_cnt );
         rAttribs.getString( XML_hideLastTrans );
@@ -323,8 +323,8 @@ LayoutNodeContext::onCreateContext( ::sal_Int32 aElement,
         break;
     }
     case DGM_TOKEN( ruleLst ):
-        // CT_Rules
-        // TODO
+        
+        
         break;
     case DGM_TOKEN( varLst ):
     {

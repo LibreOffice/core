@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <services.h>
@@ -76,7 +76,7 @@ namespace
 {
     void lcl_ParserHelper(INetURLObject& _rParser, css::util::URL& _rURL,bool _bUseIntern)
     {
-        // Get all information about this URL.
+        
         _rURL.Protocol  = INetURLObject::GetScheme( _rParser.GetProtocol() );
         _rURL.User      = _rParser.GetUser  ( INetURLObject::DECODE_WITH_CHARSET );
         _rURL.Password  = _rParser.GetPass  ( INetURLObject::DECODE_WITH_CHARSET );
@@ -86,7 +86,7 @@ namespace
         sal_Int32 nCount = _rParser.getSegmentCount( false );
         if ( nCount > 0 )
         {
-            // Don't add last segment as it is the name!
+            
             --nCount;
 
             OUStringBuffer aPath;
@@ -97,7 +97,7 @@ namespace
             }
 
             if ( nCount > 0 )
-                aPath.append( '/' ); // final slash!
+                aPath.append( '/' ); 
 
             _rURL.Path = aPath.makeStringAndClear();
             _rURL.Name = _rParser.getName( INetURLObject::LAST_SEGMENT, false, INetURLObject::NO_DECODE );
@@ -111,8 +111,8 @@ namespace
         _rURL.Arguments  = _rParser.GetParam  ( INetURLObject::NO_DECODE           );
         _rURL.Mark      = _rParser.GetMark  ( INetURLObject::DECODE_WITH_CHARSET );
 
-        // INetURLObject supports only an intelligent method of parsing URL's. So write
-        // back Complete to have a valid encoded URL in all cases!
+        
+        
         _rURL.Complete  = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
         if ( _bUseIntern )
             _rURL.Complete   = _rURL.Complete.intern();
@@ -123,31 +123,31 @@ namespace
         _rURL.Main       = _rParser.GetMainURL( INetURLObject::NO_DECODE           );
     }
 }
-//*****************************************************************************************************************
-//  XURLTransformer
-//*****************************************************************************************************************
+
+
+
 sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException )
 {
-    // Safe impossible cases.
+    
     if  (( &aURL                        ==  NULL    )   ||
          ( aURL.Complete.isEmpty() ) )
     {
         return sal_False;
     }
-    // Try to extract the protocol
+    
     sal_Int32 nURLIndex = aURL.Complete.indexOf( ':' );
     OUString aProtocol;
     if ( nURLIndex > 1 )
     {
         aProtocol = aURL.Complete.copy( 0, nURLIndex+1 );
 
-        // If INetURLObject knows this protocol let it parse
+        
         if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INET_PROT_NOT_VALID )
         {
-            // Initialize parser with given URL.
+            
             INetURLObject aParser( aURL.Complete );
 
-            // Get all information about this URL.
+            
             INetProtocol eINetProt = aParser.GetProtocol();
             if ( eINetProt == INET_PROT_NOT_VALID )
             {
@@ -156,19 +156,19 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
             else if ( !aParser.HasError() )
             {
                 lcl_ParserHelper(aParser,aURL,false);
-                // Return "URL is parsed".
+                
                 return sal_True;
             }
         }
         else
         {
-            // Minmal support for unknown protocols. This is mandatory to support the "Protocol Handlers" implemented
-            // in framework!
+            
+            
             aURL.Protocol   = aProtocol;
             aURL.Main       = aURL.Complete;
             aURL.Path       = aURL.Complete.copy( nURLIndex+1 );;
 
-            // Return "URL is parsed".
+            
             return sal_True;
         }
     }
@@ -176,20 +176,20 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
     return sal_False;
 }
 
-//*****************************************************************************************************************
-//  XURLTransformer
-//*****************************************************************************************************************
+
+
+
 sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
                                                 const   OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException )
 {
-    // Safe impossible cases.
+    
     if  (( &aURL                            ==  NULL    ) ||
          ( aURL.Complete.isEmpty() ) )
     {
         return sal_False;
     }
 
-    // Initialize parser with given URL.
+    
     INetURLObject aParser;
 
     aParser.SetSmartProtocol( INetURLObject::CompareProtocolScheme( sSmartProtocol ));
@@ -197,24 +197,24 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
     if ( bOk )
     {
         lcl_ParserHelper(aParser,aURL,true);
-        // Return "URL is parsed".
+        
         return sal_True;
     }
     else
     {
-        // Minmal support for unknown protocols. This is mandatory to support the "Protocol Handlers" implemented
-        // in framework!
+        
+        
         if ( INetURLObject::CompareProtocolScheme( sSmartProtocol ) == INET_PROT_NOT_VALID )
         {
-            // Try to extract the protocol
+            
             sal_Int32 nIndex = aURL.Complete.indexOf( ':' );
             OUString aProtocol;
             if ( nIndex > 1 )
             {
                 aProtocol = aURL.Complete.copy( 0, nIndex+1 );
 
-                // If INetURLObject knows this protocol something is wrong as detected before =>
-                // give up and return false!
+                
+                
                 if ( INetURLObject::CompareProtocolScheme( aProtocol ) != INET_PROT_NOT_VALID )
                     return sal_False;
                 else
@@ -232,23 +232,23 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
     }
 }
 
-//*****************************************************************************************************************
-//  XURLTransformer
-//*****************************************************************************************************************
+
+
+
 sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException )
 {
-    // Safe impossible cases.
+    
     if  ( &aURL == NULL )
         return sal_False ;
 
-    // Initialize parser.
+    
     INetURLObject aParser;
 
     if ( INetURLObject::CompareProtocolScheme( aURL.Protocol ) != INET_PROT_NOT_VALID )
     {
         OUStringBuffer aCompletePath( aURL.Path );
 
-        // Concat the name if it is provided, just support a final slash
+        
         if ( !aURL.Name.isEmpty() )
         {
             sal_Int32 nIndex = aURL.Path.lastIndexOf( '/' );
@@ -272,19 +272,19 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
         if ( !bResult )
             return sal_False;
 
-        // First parse URL WITHOUT ...
+        
         aURL.Main = aParser.GetMainURL( INetURLObject::NO_DECODE );
-        // ...and then WITH parameter and mark.
+        
         aParser.SetParam( aURL.Arguments);
         aParser.SetMark ( aURL.Mark, INetURLObject::ENCODE_ALL );
         aURL.Complete = aParser.GetMainURL( INetURLObject::NO_DECODE );
 
-        // Return "URL is assembled".
+        
         return sal_True;
     }
     else if ( !aURL.Protocol.isEmpty() )
     {
-        // Minimal support for unknown protocols
+        
         OUStringBuffer aBuffer( aURL.Protocol );
         aBuffer.append( aURL.Path );
         aURL.Complete   = aBuffer.makeStringAndClear();
@@ -295,13 +295,13 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
     return sal_False;
 }
 
-//*****************************************************************************************************************
-//  XURLTransformer
-//*****************************************************************************************************************
+
+
+
 OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
                                                             sal_Bool    bWithPassword   ) throw( css::uno::RuntimeException )
 {
-    // Safe impossible cases.
+    
     if  (( &aURL                        ==  NULL        )   ||
          ( aURL.Complete.isEmpty()                      )   ||
             (( bWithPassword            !=  sal_True    )   &&
@@ -310,19 +310,19 @@ OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
         return OUString();
     }
 
-    // Check given URL
+    
     css::util::URL aTestURL = aURL;
     sal_Bool bParseResult = parseSmart( aTestURL, aTestURL.Protocol );
     if ( bParseResult )
     {
         if ( !bWithPassword && !aTestURL.Password.isEmpty() )
         {
-            // Exchange password text with other placeholder string
+            
             aTestURL.Password = "<******>";
             assemble( aTestURL );
         }
 
-        // Convert internal URLs to "praesentation"-URLs!
+        
         OUString sPraesentationURL;
         INetURLObject::translateToExternal( aTestURL.Complete, sPraesentationURL, INetURLObject::DECODE_UNAMBIGUOUS );
 

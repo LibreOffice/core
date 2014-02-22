@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "cppunit/TestAssert.h"
@@ -16,7 +16,7 @@
 using namespace ::o3tl;
 
 
-// helper class
+
 class SwContent
 {
 public:
@@ -246,9 +246,9 @@ public:
 
 
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(sorted_vector_test);
     CPPUNIT_TEST(testBasics);
@@ -260,7 +260,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(sorted_vector_test);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

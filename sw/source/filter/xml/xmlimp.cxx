@@ -55,7 +55,7 @@
 #include <tools/diagnose_ex.h>
 #include <boost/unordered_set.hpp>
 
-// for locking SolarMutex: svapp + mutex
+
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <unotxdoc.hxx>
@@ -146,14 +146,14 @@ SvXMLImportContext *SwXMLBodyContext_Impl::CreateChildContext(
     return GetSwImport().CreateBodyContentContext( rLocalName );
 }
 
-// #i69629#
-// enhance class <SwXMLDocContext_Impl> in order to be able to create subclasses
-// NB: virtually inherit so we can multiply inherit properly
-//     in SwXMLOfficeDocContext_Impl
+
+
+
+
 class SwXMLDocContext_Impl : public virtual SvXMLImportContext
 {
 
-protected: // #i69629#
+protected: 
     const SwXMLImport& GetSwImport() const
         { return (const SwXMLImport&)GetImport(); }
     SwXMLImport& GetSwImport() { return (SwXMLImport&)GetImport(); }
@@ -205,7 +205,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
                                                       sal_False );
         break;
     case XML_TOK_DOC_AUTOSTYLES:
-        // don't use the autostyles from the styles-document for the progress
+        
         if ( ! IsXMLToken( GetLocalName(), XML_DOCUMENT_STYLES ) )
             GetSwImport().GetProgressBarHelper()->Increment
                 ( PROGRESS_BAR_STEP );
@@ -243,7 +243,7 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
     return pContext;
 }
 
-// #i69629# - new subclass <SwXMLOfficeDocContext_Impl> of class <SwXMLDocContext_Impl>
+
 class SwXMLOfficeDocContext_Impl :
          public SwXMLDocContext_Impl, public SvXMLMetaDocumentContext
 {
@@ -289,9 +289,9 @@ SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
 {
     const SvXMLTokenMap& rTokenMap = GetSwImport().GetDocElemTokenMap();
 
-    // assign paragraph styles to list levels of outline style after all styles
-    // are imported and finished. This is the case, when <office:body> starts
-    // in flat OpenDocument file format.
+    
+    
+    
     {
         if ( rTokenMap.Get( nPrefix, rLocalName ) == XML_TOK_DOC_BODY )
         {
@@ -299,7 +299,7 @@ SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
         }
     }
 
-    // behave like meta base class iff we encounter office:meta
+    
     if ( XML_TOK_DOC_META == rTokenMap.Get( nPrefix, rLocalName ) ) {
         return SvXMLMetaDocumentContext::CreateChildContext(
                     nPrefix, rLocalName, xAttrList );
@@ -309,7 +309,7 @@ SvXMLImportContext* SwXMLOfficeDocContext_Impl::CreateChildContext(
     }
 }
 
-// #i69629# - new subclass <SwXMLDocStylesContext_Impl> of class <SwXMLDocContext_Impl>
+
 class SwXMLDocStylesContext_Impl : public SwXMLDocContext_Impl
 {
 public:
@@ -343,8 +343,8 @@ TYPEINIT1( SwXMLDocStylesContext_Impl, SwXMLDocContext_Impl );
 
 void SwXMLDocStylesContext_Impl::EndElement()
 {
-    // assign paragraph styles to list levels of outline style after all styles
-    // are imported and finished.
+    
+    
     SwXMLImport& rSwImport = dynamic_cast<SwXMLImport&>( GetImport());
     GetImport().GetTextImport()->SetOutlineStyles(
             (rSwImport.GetStyleFamilyMask() & SFX_STYLE_FAMILY_PARA ) ? sal_True : sal_False);
@@ -365,7 +365,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    // #i69629# - own subclasses for <office:document> and <office:document-styles>
+    
     if( XML_NAMESPACE_OFFICE==nPrefix &&
         ( IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
@@ -387,7 +387,7 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     {
         uno::Reference<document::XDocumentProperties> const xDocProps(
             GetDocumentProperties());
-        // flat OpenDocument file format
+        
         pContext = new SwXMLOfficeDocContext_Impl( *this, nPrefix, rLocalName,
                         xAttrList, xDocProps);
     }
@@ -496,14 +496,14 @@ static OTextCursorHelper *lcl_xml_GetSwXTextCursor( const Reference < XTextCurso
 void SwXMLImport::startDocument( void )
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    // delegate to parent
+    
     SvXMLImport::startDocument();
 
     OSL_ENSURE( GetModel().is(), "model is missing" );
     if( !GetModel().is() )
         return;
 
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
 
@@ -514,7 +514,7 @@ void SwXMLImport::startDocument( void )
     if( xPropertySetInfo.is() )
     {
         Any aAny;
-        // insert style mode?
+        
         OUString sStyleInsertModeFamilies("StyleInsertModeFamilies");
         if( xPropertySetInfo->hasPropertyByName(sStyleInsertModeFamilies) )
         {
@@ -559,7 +559,7 @@ void SwXMLImport::startDocument( void )
             }
         }
 
-        // text insert mode?
+        
         OUString sTextInsertModeRange("TextInsertModeRange");
         if( xPropertySetInfo->hasPropertyByName(sTextInsertModeRange) )
         {
@@ -569,7 +569,7 @@ void SwXMLImport::startDocument( void )
                 setTextInsertMode( xInsertTextRange );
         }
 
-        // auto text mode
+        
         OUString sAutoTextMode("AutoTextMode");
         if( xPropertySetInfo->hasPropertyByName(sAutoTextMode) )
         {
@@ -579,7 +579,7 @@ void SwXMLImport::startDocument( void )
                     setBlockMode();
         }
 
-        // organizer mode
+        
         OUString sOrganizerMode("OrganizerMode");
         if( xPropertySetInfo->hasPropertyByName(sOrganizerMode) )
         {
@@ -590,11 +590,11 @@ void SwXMLImport::startDocument( void )
         }
     }
 
-    // There only is a text cursor by now if we are in insert mode. In any
-    // other case we have to create one at the start of the document.
-    // We also might change into the insert mode later, so we have to make
-    // sure to first set the insert mode and then create the text import
-    // helper. Otherwise it won't have the insert flag set!
+    
+    
+    
+    
+    
     OTextCursorHelper *pTxtCrsr = 0;
     Reference < XTextCursor > xTextCursor;
     if( HasTextImport() )
@@ -618,10 +618,10 @@ void SwXMLImport::startDocument( void )
             if( !pDoc )
                 return;
 
-            // Is there a edit shell. If yes, then we are currently inserting
-            // a document. We then have to insert at the current edit shell's
-            // cursor position. That not quite clean code, but there is no other
-            // way currently.
+            
+            
+            
+            
             pCrsrSh = pDoc->GetEditShell();
         }
         if( pCrsrSh )
@@ -659,24 +659,24 @@ void SwXMLImport::startDocument( void )
             SwPaM *pPaM = pTxtCrsr->GetPaM();
             const SwPosition* pPos = pPaM->GetPoint();
 
-            // Split once and remember the node that has been splitted.
+            
             pDoc->SplitNode( *pPos, false );
             *pSttNdIdx = pPos->nNode.GetIndex()-1;
 
-            // Split again.
+            
             pDoc->SplitNode( *pPos, false );
 
-            // Insert all content into the new node
+            
             pPaM->Move( fnMoveBackward );
             pDoc->SetTxtFmtColl
                 ( *pPaM, pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false ) );
         }
     }
 
-    // We need a draw model to be able to set the z order
-    pDoc->GetOrCreateDrawModel(); // #i52858# - method name changed
+    
+    pDoc->GetOrCreateDrawModel(); 
 
-    // SJ: #i49801# locking the modell to disable repaints
+    
     SdrModel* pDrawModel = pDoc->GetDrawModel();
     if ( pDrawModel )
         pDrawModel->setLock(true);
@@ -709,16 +709,16 @@ void SwXMLImport::endDocument( void )
     if( !GetModel().is() )
         return;
 
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
     if( pGraphicResolver )
         SvXMLGraphicHelper::Destroy( pGraphicResolver );
     if( pEmbeddedResolver )
         SvXMLEmbeddedObjectHelper::Destroy( pEmbeddedResolver );
-    // Clear the shape import to sort the shapes  (and not in the
-    // destructor that might be called after the import has finished
-    // for Java filters.
+    
+    
+    
     if( HasShapeImport() )
         ClearShapeImport();
 
@@ -735,16 +735,16 @@ void SwXMLImport::endDocument( void )
         SwPaM *pPaM = pTxtCrsr->GetPaM();
         if( IsInsertMode() && pSttNdIdx->GetIndex() )
         {
-            // If we are in insert mode, join the splitted node that is in front
-            // of the new content with the first new node. Or in other words:
-            // Revert the first split node.
+            
+            
+            
             SwTxtNode* pTxtNode = pSttNdIdx->GetNode().GetTxtNode();
             SwNodeIndex aNxtIdx( *pSttNdIdx );
             if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ) &&
                 pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
             {
-                // If the PaM points to the first new node, move the PaM to the
-                // end of the previous node.
+                
+                
                 if( pPaM && pPaM->GetPoint()->nNode == aNxtIdx )
                 {
                     pPaM->GetPoint()->nNode = *pSttNdIdx;
@@ -753,7 +753,7 @@ void SwXMLImport::endDocument( void )
                 }
 
 #if OSL_DEBUG_LEVEL > 0
-                // !!! This should be impossible !!!!
+                
                 OSL_ENSURE( pSttNdIdx->GetIndex()+1 !=
                                         pPaM->GetBound( true ).nNode.GetIndex(),
                         "PaM.Bound1 point to new node " );
@@ -778,9 +778,9 @@ void SwXMLImport::endDocument( void )
                             pTxtNode->GetTxt().getLength() + nCntPos );
                 }
 #endif
-                // If the first new node isn't empty, convert  the node's text
-                // attributes into hints. Otherwise, set the new node's
-                // paragraph style at the previous (empty) node.
+                
+                
+                
                 SwTxtNode* pDelNd = aNxtIdx.GetNode().GetTxtNode();
                 if (!pTxtNode->GetTxt().isEmpty())
                     pDelNd->FmtToTxtAttr( pTxtNode );
@@ -802,7 +802,7 @@ void SwXMLImport::endDocument( void )
                         "insert position is not a content node" );
             if( !IsInsertMode() )
             {
-                // If we're not in insert mode, the last node is deleted.
+                
                 const SwNode *pPrev = pDoc->GetNodes()[nNodeIdx -1];
                 if( pPrev->IsCntntNode() ||
                      ( pPrev->IsEndNode() &&
@@ -820,8 +820,8 @@ void SwXMLImport::endDocument( void )
             }
             else if( 0 != (pCurrNd = pDoc->GetNodes()[nNodeIdx]->GetTxtNode()) )
             {
-                // Id we're in insert mode, the empty node is joined with
-                // the next and the previous one.
+                
+                
                 if( pCurrNd->CanJoinNext( &pPos->nNode ))
                 {
                     SwTxtNode* pNextNd = pPos->nNode.GetNode().GetTxtNode();
@@ -829,8 +829,8 @@ void SwXMLImport::endDocument( void )
                     pPaM->SetMark(); pPaM->DeleteMark();
                     pNextNd->JoinPrev();
 
-                    // Remove line break that has been inserted by the import,
-                    // but only if one has been inserted!
+                    
+                    
                     if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) &&
                          *pSttNdIdx != pPos->nNode )
                     {
@@ -855,8 +855,8 @@ void SwXMLImport::endDocument( void )
     if( (getImportFlags() & IMPORT_CONTENT) != 0 ||
         ((getImportFlags() & IMPORT_MASTERSTYLES) != 0 && IsStylesOnlyMode()) )
     {
-        // pDoc might be 0. In this case UpdateTxtCollCondition is looking
-        // for it itself.
+        
+        
         UpdateTxtCollConditions( pDoc );
     }
 
@@ -867,15 +867,15 @@ void SwXMLImport::endDocument( void )
 
     if( (getImportFlags() == IMPORT_ALL ) )
     {
-        // Notify math objects. If we are in the package filter this will
-        // be done by the filter object itself
+        
+        
         if( IsInsertMode() )
             pDoc->PrtOLENotify( sal_False );
         else if ( pDoc->IsOLEPrtNotifyPending() )
             pDoc->PrtOLENotify( sal_True );
     }
 
-    // SJ: #i49801# -> now permitting repaints
+    
     if ( pDoc )
     {
         SdrModel* pDrawModel = pDoc->GetDrawModel();
@@ -883,7 +883,7 @@ void SwXMLImport::endDocument( void )
             pDrawModel->setLock(false);
     }
 
-    // #i90243#
+    
     if ( bInititedXForms )
     {
         Reference< xforms::XFormsSupplier > xFormsSupp( GetModel(), UNO_QUERY );
@@ -910,25 +910,25 @@ void SwXMLImport::endDocument( void )
         }
     }
 
-    // delegate to parent: takes care of error handling
+    
     SvXMLImport::endDocument();
     ClearTextImport();
 }
 
-// Locally derive XMLTextShapeImportHelper, so we can take care of the
-// form import This is Writer, but not text specific, so it should go
-// here!
+
+
+
 class SvTextShapeImportHelper : public XMLTextShapeImportHelper
 {
-    // hold own reference form import helper, because the SvxImport
-    // stored in the superclass, from whom we originally got the
-    // reference, is already destroyed when we want to use it in the
-    // destructor
+    
+    
+    
+    
     UniReference< ::xmloff::OFormLayerXMLImport > rFormImport;
 
-    // hold reference to the one page (if it exists) for calling startPage()
-    // and endPage. If !xPage.is(), then this document doesn't have a
-    // XDrawPage.
+    
+    
+    
     Reference<drawing::XDrawPage> xPage;
 
 public:
@@ -995,7 +995,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     if (IsInsertMode() || IsStylesOnlyMode() || IsBlockMode() || IsOrganizerMode() || !GetModel().is() )
         return;
 
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
     SwDoc *pDoc = getDoc();
@@ -1047,7 +1047,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
             bShowRedlineChanges = *(sal_Bool *)(pValue->Value.getValue());
             bChangeShowRedline = sal_True;
         }
-// Headers and footers are not displayed in BrowseView anymore
+
         else if ( pValue->Name == "InBrowseMode" )
         {
             bBrowseMode = *(sal_Bool *)(pValue->Value.getValue());
@@ -1067,7 +1067,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
 
 void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aConfigProps)
 {
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
     Reference< lang::XMultiServiceFactory > xFac( GetModel(), UNO_QUERY );
@@ -1122,9 +1122,9 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     sal_Bool bIsUserSetting = aSaveOpt.IsLoadUserSettings(),
          bSet = bIsUserSetting;
 
-    // for some properties we don't want to use the application
-    // default if they're missing. So we watch for them in the loop
-    // below, and set them if not found
+    
+    
+    
     bool bPrinterIndependentLayout = false;
     bool bUseOldNumbering = false;
     bool bOutlineLevelYieldsOutlineRule = false;
@@ -1162,7 +1162,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     {
         if( !bIsUserSetting )
         {
-            // test over the hash value if the entry is in the table.
+            
             OUString aStr(pValues->Name);
 
             bSet = aSet.find(aStr) == aSet.end();
@@ -1182,7 +1182,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     }
                     else
                     {
-                        // HACK: Setting these out of order does not work.
+                        
                         if( pValues->Name.equals( currentDatabaseDataSourceKey ))
                             currentDatabaseDataSource = pValues;
                         else if( pValues->Name.equals( currentDatabaseCommandKey ))
@@ -1195,7 +1195,7 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     }
                 }
 
-                // did we find any of the non-default cases?
+                
                 if ( pValues->Name == "PrinterIndependentLayout" )
                     bPrinterIndependentLayout = true;
                 else if ( pValues->Name == "AddExternalLeading" )
@@ -1264,8 +1264,8 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
         OSL_FAIL( "SwXMLImport::SetConfigurationSettings: Exception!" );
     }
 
-    // finally, treat the non-default cases
-    // introduce boolean, that indicates a document, written by version prior SO8.
+    
+    
     const bool bDocumentPriorSO8 = !bConsiderWrapOnObjPos;
 
     if( ! bPrinterIndependentLayout )
@@ -1334,31 +1334,31 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString("ConsiderTextWrapOnObjPos"), makeAny( false ) );
     }
 
-    // #i47448#
-    // For SO7pp4, part of the 'new numbering' stuff has been backported from
-    // SO8. Unfortunately, only part of it and by using the same compatibility option
-    // like in SO8. Therefore documents generated with SO7pp4, containing
-    // numbered paragraphs with first line indent differ between SO7pp4 and
-    // SO8. In order to fix this for SO8pp1, I introduce a new compatiblity
-    // flag 'bIgnoreFirstLineIndentInNumbering'. This flag has to be set for all
-    // documents < SO8, but not for SO8. So if the property is not present, the
-    // flag will be set to 'true'. SO8 documents surely have the
-    // 'ConsiderWrapOnObjPos' property set (no matter if 'true' or 'false'),
-    // therefore the correct condition to set this flag is this:
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if( !bIgnoreFirstLineIndentInNumbering && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString("IgnoreFirstLineIndentInNumbering"), makeAny( true ) );
     }
 
-    // This flag has to be set for all documents < SO8
+    
     if ( !bDoNotJustifyLinesWithManualBreak && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString("DoNotJustifyLinesWithManualBreak"), makeAny( true ) );
     }
 
-    // This flag has to be set for all documents < SO8
+    
     if ( !bDoNotResetParaAttrsForNumFont && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
@@ -1371,14 +1371,14 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString("LoadReadonly"), makeAny( false ) );
     }
 
-    // This flag has to be set for all documents < SO8
+    
     if ( !bDoNotCaptureDrawObjsOnPage && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
             OUString("DoNotCaptureDrawObjsOnPage"), makeAny( true ) );
     }
 
-    // This flag has to be set for all documents < SO8
+    
     if ( !bClipAsCharacterAnchoredWriterFlyFrames && bDocumentPriorSO8 )
     {
         xProps->setPropertyValue(
@@ -1397,10 +1397,10 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
             OUString("UseOldPrinterMetrics"), makeAny( true ) );
     }
 
-    // Old LO versions had 66 as the value for small caps percentage, later changed to 80.
-    // In order to keep backwards compatibility, SmallCapsPercentage66 option is written to .odt
-    // files, and the default for new documents is 'false'. Files without this option
-    // are considered to be old files, so set the compatibility option too.
+    
+    
+    
+    
     if ( !bSmallCapsPercentage66 )
     {
         xProps->setPropertyValue(
@@ -1435,11 +1435,11 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     SfxPrinter *pPrinter = pDoc->getPrinter( false );
     if( pPrinter )
     {
-        // If the printer is known, then the OLE objects will
-        // already have correct sizes, and we don't have to call
-        // PrtOLENotify again. Otherwise we have to call it.
-        // The flag might be set from setting the printer, so it
-        // it is required to clear it.
+        
+        
+        
+        
+        
         pDoc->SetOLEPrtNotifyPending( !pPrinter->IsKnown() );
     }
 }
@@ -1449,12 +1449,12 @@ void SwXMLImport::SetDocumentSpecificSettings(
     const OUString& _rSettingsGroupName,
     const Sequence< PropertyValue>& _rSettings )
 {
-    // the only doc-specific settings group we know so far are the XForms settings
+    
     if ( !IsXMLToken( _rSettingsGroupName, XML_XFORM_MODEL_SETTINGS ) )
         return;
 
-    // preserve the settings for a later iteration - we are currently reading the settings.xml,
-    // the content.xml will be read later, by another instance of SwXMLImport
+    
+    
     OSL_ENSURE( xLateInitSettings.is(), "SwXMLImport::SetDocumentSpecificSettings: no storage for those settings!" );
     if ( !xLateInitSettings.is() )
         return;
@@ -1478,10 +1478,10 @@ void SwXMLImport::initialize(
     const Sequence<Any>& aArguments )
     throw( uno::Exception, uno::RuntimeException)
 {
-    // delegate to super class
+    
     SvXMLImport::initialize(aArguments);
 
-    // we are only looking for a PropertyValue "PreserveRedlineMode"
+    
     sal_Int32 nLength = aArguments.getLength();
     for(sal_Int32 i = 0; i < nLength; i++)
     {
@@ -1506,7 +1506,7 @@ void SwXMLImport::initialize(
     }
 }
 
-// UNO component registration helper functions
+
 OUString SAL_CALL SwXMLImport_getImplementationName() throw()
 {
     return OUString(
@@ -1634,7 +1634,7 @@ SwDoc* SwImport::GetDocFromXMLImport( SvXMLImport& rImport )
 
 void SwXMLImport::initXForms()
 {
-    // obtain SwDoc
+    
     Reference<XUnoTunnel> xDocTunnel( GetModel(), UNO_QUERY );
     if( ! xDocTunnel.is() )
         return;
@@ -1645,8 +1645,8 @@ void SwXMLImport::initXForms()
 
     SwDoc *pDoc = pXTextDocument->GetDocShell()->GetDoc();
 
-    // init XForms (if not already done)
-    // (no default model, since we'll load the models)
+    
+    
     if( ! pDoc->isXForms() )
         pDoc->initXForms( false );
 

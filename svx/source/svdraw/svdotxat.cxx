@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -100,7 +100,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
 
             if(!bInEditMode)
             {
-                if (bHScroll) aSiz.Width()=0x0FFFFFFF; // don't break ticker text
+                if (bHScroll) aSiz.Width()=0x0FFFFFFF; 
                 if (bVScroll) aSiz.Height()=0x0FFFFFFF;
             }
 
@@ -109,16 +109,16 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
                 pEdtOutl->SetMaxAutoPaperSize(aSiz);
                 if (bWdtGrow) {
                     Size aSiz2(pEdtOutl->CalcTextSize());
-                    nWdt=aSiz2.Width()+1; // a little tolerance
-                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little tolerance
+                    nWdt=aSiz2.Width()+1; 
+                    if (bHgtGrow) nHgt=aSiz2.Height()+1; 
                 } else {
-                    nHgt=pEdtOutl->GetTextHeight()+1; // a little tolerance
+                    nHgt=pEdtOutl->GetTextHeight()+1; 
                 }
             } else {
                 Outliner& rOutliner=ImpGetDrawOutliner();
                 rOutliner.SetPaperSize(aSiz);
                 rOutliner.SetUpdateMode(sal_True);
-                // TODO: add the optimization with bPortionInfoChecked etc. here
+                
                 OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
                 if ( pOutlinerParaObject != NULL )
                 {
@@ -128,21 +128,21 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, bool bW
                 if (bWdtGrow)
                 {
                     Size aSiz2(rOutliner.CalcTextSize());
-                    nWdt=aSiz2.Width()+1; // a little tolerance
-                    if (bHgtGrow) nHgt=aSiz2.Height()+1; // a little tolerance
+                    nWdt=aSiz2.Width()+1; 
+                    if (bHgtGrow) nHgt=aSiz2.Height()+1; 
                 } else {
-                    nHgt=rOutliner.GetTextHeight()+1; // a little tolerance
+                    nHgt=rOutliner.GetTextHeight()+1; 
                 }
                 rOutliner.Clear();
             }
             if (nWdt<nMinWdt) nWdt=nMinWdt;
             if (nWdt>nMaxWdt) nWdt=nMaxWdt;
             nWdt+=nHDist;
-            if (nWdt<1) nWdt=1; // nHDist may be negative
+            if (nWdt<1) nWdt=1; 
             if (nHgt<nMinHgt) nHgt=nMinHgt;
             if (nHgt>nMaxHgt) nHgt=nMaxHgt;
             nHgt+=nVDist;
-            if (nHgt<1) nHgt=1; // nVDist may be negative
+            if (nHgt<1) nHgt=1; 
             long nWdtGrow=nWdt-(rR.Right()-rR.Left());
             long nHgtGrow=nHgt-(rR.Bottom()-rR.Top());
             if (nWdtGrow==0) bWdtGrow=false;
@@ -188,10 +188,10 @@ bool SdrTextObj::NbcAdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
     bool bRet=AdjustTextFrameWidthAndHeight(aRect,bHgt,bWdt);
     if (bRet) {
         SetRectsDirty();
-        if (HAS_BASE(SdrRectObj,this)) { // this is a hack
+        if (HAS_BASE(SdrRectObj,this)) { 
             ((SdrRectObj*)this)->SetXPolyDirty();
         }
-        if (HAS_BASE(SdrCaptionObj,this)) { // this is a hack
+        if (HAS_BASE(SdrCaptionObj,this)) { 
             ((SdrCaptionObj*)this)->ImpRecalcTail();
         }
     }
@@ -206,10 +206,10 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight(bool bHgt, bool bWdt)
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
         aRect=aNeuRect;
         SetRectsDirty();
-        if (HAS_BASE(SdrRectObj,this)) { // this is a hack
+        if (HAS_BASE(SdrRectObj,this)) { 
             ((SdrRectObj*)this)->SetXPolyDirty();
         }
-        if (HAS_BASE(SdrCaptionObj,this)) { // this is a hack
+        if (HAS_BASE(SdrCaptionObj,this)) { 
             ((SdrCaptionObj*)this)->ImpRecalcTail();
         }
         SetChanged();
@@ -228,9 +228,9 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
         OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
         if (pOutlinerParaObject!=NULL)
         {
-            // First, we collect all stylesheets contained in the ParaObject in
-            // the container aStyles. The Family is always appended to the name
-            // of the stylesheet.
+            
+            
+            
             const EditTextObject& rTextObj=pOutlinerParaObject->GetTextObject();
             OUString aStyleName;
             SfxStyleFamily eStyleFam;
@@ -254,7 +254,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
 
                     while(!bFnd && nNum > 0)
                     {
-                        // we don't want duplicate stylesheets
+                        
                         nNum--;
                         bFnd = aStyleName == aStyleNames[nNum];
                     }
@@ -267,7 +267,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
             }
         }
 
-        // now convert the strings in the vector from names to StyleSheet*
+        
         std::set<SfxStyleSheet*> aStyleSheets;
         while (!aStyleNames.empty()) {
             OUString aName = aStyleNames.back();
@@ -287,22 +287,22 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
                 aStyleSheets.insert(pStyle);
             }
         }
-        // now remove all superfluous stylesheets
+        
         sal_uIntPtr nNum=GetBroadcasterCount();
         while (nNum>0) {
             nNum--;
             SfxBroadcaster* pBroadcast=GetBroadcasterJOE((sal_uInt16)nNum);
             SfxStyleSheet* pStyle=PTR_CAST(SfxStyleSheet,pBroadcast);
-            if (pStyle!=NULL && pStyle!=GetStyleSheet()) { // special case for stylesheet of the object
+            if (pStyle!=NULL && pStyle!=GetStyleSheet()) { 
                 if (aStyleSheets.find(pStyle)==aStyleSheets.end()) {
                     EndListening(*pStyle);
                 }
             }
         }
-        // and finally, merge all stylesheets that are contained in aStyles with previous broadcasters
+        
         for(std::set<SfxStyleSheet*>::const_iterator it = aStyleSheets.begin(); it != aStyleSheets.end(); ++it) {
             SfxStyleSheet* pStyle=*it;
-            // let StartListening see for itself if there's already a listener registered
+            
             StartListening(*pStyle,true);
         }
     }

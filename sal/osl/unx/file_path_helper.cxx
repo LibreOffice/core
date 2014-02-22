@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "file_path_helper.h"
@@ -42,8 +42,8 @@ void SAL_CALL osl_systemPathRemoveSeparator(rtl_uString* pustrPath)
     OSL_PRECOND(0 != pustrPath, "osl_systemPathRemoveSeparator: Invalid parameter");
     if (0 != pustrPath)
     {
-        // maybe there are more than one separator at end
-        // so we run in a loop
+        
+        
         while ((pustrPath->length > 1) && (FPH_CHAR_PATH_SEPARATOR == pustrPath->buffer[pustrPath->length - 1]))
         {
             pustrPath->length--;
@@ -115,7 +115,7 @@ void SAL_CALL osl_systemPathGetFileNameOrLastDirectoryPart(
     if (path.getLength() > 1 || (1 == path.getLength() && *path.getStr() != FPH_CHAR_PATH_SEPARATOR))
     {
         sal_Int32 idx_ps = path.lastIndexOf(FPH_CHAR_PATH_SEPARATOR);
-        idx_ps++; // always right to increment by one even if idx_ps == -1!
+        idx_ps++; 
         last_part = rtl::OUString(path.getStr() + idx_ps);
     }
     rtl_uString_assign(ppustrFileNameOrLastDirPart, last_part.pData);
@@ -215,7 +215,7 @@ private:
     const sal_Unicode*  m_path_segment_begin;
     const sal_Unicode*  m_path_segment_end;
 
-// prevent copy and assignment
+
 private:
     /******************************************
      copy constructor

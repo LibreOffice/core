@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VTitle.hxx"
@@ -65,7 +65,7 @@ double VTitle::getRotationAnglePi() const
     return m_fRotationAngleDegree*F_PI/180.0;
 }
 
-awt::Size VTitle::getUnrotatedSize() const //size before rotation
+awt::Size VTitle::getUnrotatedSize() const 
 {
     awt::Size aRet;
     if(m_xShape.is())
@@ -73,7 +73,7 @@ awt::Size VTitle::getUnrotatedSize() const //size before rotation
     return aRet;
 }
 
-awt::Size VTitle::getFinalSize() const //size after rotation
+awt::Size VTitle::getFinalSize() const 
 {
     return AbstractShapeFactory::getSizeAfterRotation(
          m_xShape, m_fRotationAngleDegree );
@@ -91,10 +91,10 @@ void VTitle::changePosition( const awt::Point& rPos )
         m_nXPos = rPos.X;
         m_nYPos = rPos.Y;
 
-        //set position matrix
-        //the matrix needs to be set at the end behind autogrow and such position influencing properties
+        
+        
         ::basegfx::B2DHomMatrix aM;
-        aM.rotate( -m_fRotationAngleDegree*F_PI/180.0 );//#i78696#->#i80521#
+        aM.rotate( -m_fRotationAngleDegree*F_PI/180.0 );
         aM.translate( m_nXPos, m_nYPos);
         xShapeProp->setPropertyValue( "Transformation", uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) ) );
     }
@@ -136,6 +136,6 @@ void VTitle::createShapes(
             xTitleProperties, m_fRotationAngleDegree, m_aCID );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

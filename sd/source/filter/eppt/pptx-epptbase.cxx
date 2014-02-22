@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -165,19 +165,19 @@ PPTWriterBase::PPTWriterBase( const Reference< XModel > & rXModel,
 {
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 PPTWriterBase::~PPTWriterBase()
 {
-    // Possibly unnecessary sanity check for mXStatusIndicator.is().
-    // In 3.3 we had a bug report of a crash where it was null,
-    // https://bugzilla.novell.com/show_bug.cgi?id=694119 (non-public,
-    // bug report, sorry).
+    
+    
+    
+    
     if ( mbStatusIndicator && mXStatusIndicator.is() )
         mXStatusIndicator->end();
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::PropertyValue >& rMediaData )
 {
@@ -188,7 +188,7 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
                                           ROMAN,
                                           awt::FontPitch::VARIABLE,
                                                     RTL_TEXTENCODING_MS_1252 );
-    maFontCollection.GetId( aDefaultFontDesc ); // default is always times new roman
+    maFontCollection.GetId( aDefaultFontDesc ); 
 
     if ( !GetPageByIndex( 0, NOTICE ) )
         return;
@@ -258,7 +258,7 @@ void PPTWriterBase::exportPPT( const std::vector< com::sun::star::beans::Propert
     exportPPTPost();
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::InitSOIface()
 {
@@ -287,7 +287,7 @@ sal_Bool PPTWriterBase::InitSOIface()
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
 {
@@ -372,7 +372,7 @@ sal_Bool PPTWriterBase::GetPageByIndex( sal_uInt32 nIndex, PageType ePageType )
     return sal_False;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
 {
@@ -389,7 +389,7 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
     if ( bHasBackground )
         bHasBackground = ( aAny >>= aXBackgroundPropSet );
 
-    sal_uInt16 nMode = 7;   // Bit 1: Follow master objects, Bit 2: Follow master scheme, Bit 3: Follow master background
+    sal_uInt16 nMode = 7;   
     if ( bHasBackground )
         nMode &=~4;
 
@@ -419,7 +419,7 @@ sal_Bool PPTWriterBase::CreateSlide( sal_uInt32 nPageNum )
     return sal_True;
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::CreateNotes( sal_uInt32 nPageNum )
 {
@@ -432,7 +432,7 @@ sal_Bool PPTWriterBase::CreateNotes( sal_uInt32 nPageNum )
     return sal_True;
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
 {
@@ -440,7 +440,7 @@ sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
         return sal_False;
     SetCurrentStyleSheet( nPageNum );
 
-    if ( !ImplGetPropertyValue( mXPagePropSet, OUString( "Background" ) ) )                // load background shape
+    if ( !ImplGetPropertyValue( mXPagePropSet, OUString( "Background" ) ) )                
         return sal_False;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet;
     if ( !( mAny >>= aXBackgroundPropSet ) )
@@ -451,7 +451,7 @@ sal_Bool PPTWriterBase::CreateSlideMaster( sal_uInt32 nPageNum )
     return sal_True;
 };
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
 {
@@ -469,9 +469,9 @@ sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const ::com::sun::star::uno::Refe
 {
     sal_Int32 nLayout = GetLayoutOffset( rXPropSet );
 
-    if ( ( nLayout >= 21 ) && ( nLayout <= 26 ) )   // NOTES _> HANDOUT6
+    if ( ( nLayout >= 21 ) && ( nLayout <= 26 ) )   
         nLayout = 20;
-    if ( ( nLayout >= 27 ) && ( nLayout <= 30 ) )   // VERTICAL LAYOUT
+    if ( ( nLayout >= 27 ) && ( nLayout <= 30 ) )   
         nLayout -= 6;
     else if ( nLayout > 30 )
         nLayout = 20;
@@ -484,7 +484,7 @@ PHLayout& PPTWriterBase::GetLayout(  const ::com::sun::star::uno::Reference< ::c
     return pPHLayout[ GetLayoutOffsetFixed( rXPropSet ) ];
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset ) const
 {
@@ -496,7 +496,7 @@ PHLayout& PPTWriterBase::GetLayout( sal_Int32 nOffset ) const
     return pPHLayout[ 0 ];
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
 {
@@ -517,7 +517,7 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
             {
                 if ( ImplGetPropertyValue( aXPropertySet, OUString( "Number" ) ) )
                     nRetValue |= *(sal_Int16*)mAny.getValue();
-                if ( nRetValue & 0xffff )           // avoid overflow
+                if ( nRetValue & 0xffff )           
                     nRetValue--;
             }
         }
@@ -527,7 +527,7 @@ sal_uInt32 PPTWriterBase::GetMasterIndex( PageType ePageType )
     return nRetValue;
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
 {
@@ -540,7 +540,7 @@ sal_Bool PPTWriterBase::SetCurrentStyleSheet( sal_uInt32 nPageNum )
     return bRet;
 }
 
-// ---------------------------------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::GetStyleSheets()
 {
@@ -593,7 +593,7 @@ sal_Bool PPTWriterBase::GetStyleSheets()
                     break;
                     case EPP_TEXTTYPE_Body :
                     {
-                        aStyle = "outline1";      // SD_LT_SEPARATOR
+                        aStyle = "outline1";      
                         aFamily = aXNamed->getName();
                     }
                     break;
@@ -677,7 +677,7 @@ sal_Bool PPTWriterBase::GetStyleSheets()
     return bRetValue;
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::CreateMainNotes()
 {
@@ -710,7 +710,7 @@ sal_Bool PPTWriterBase::CreateMainNotes()
     return ImplCreateMainNotes();
 }
 
-//  -----------------------------------------------------------------------
+
 
 awt::Size PPTWriterBase::MapSize( const awt::Size& rSize )
 {
@@ -723,7 +723,7 @@ awt::Size PPTWriterBase::MapSize( const awt::Size& rSize )
     return awt::Size( aRetSize.Width(), aRetSize.Height() );
 }
 
-//  -----------------------------------------------------------------------
+
 
 awt::Point PPTWriterBase::MapPoint( const awt::Point& rPoint )
 {
@@ -731,7 +731,7 @@ awt::Point PPTWriterBase::MapPoint( const awt::Point& rPoint )
     return awt::Point( aRet.X(), aRet.Y() );
 }
 
-//  -----------------------------------------------------------------------
+
 
 Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
 {
@@ -742,7 +742,7 @@ Rectangle PPTWriterBase::MapRectangle( const awt::Rectangle& rRect )
     return Rectangle( Point( aP.X, aP.Y ), Size( aS.Width, aS.Height ) );
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
 {
@@ -772,7 +772,7 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
 
         OStringBuffer aTypeBuffer(OUStringToOString(
             mXShape->getShapeType(), RTL_TEXTENCODING_UTF8));
-        // remove "com.sun.star."
+        
         aTypeBuffer.remove(0, RTL_CONSTASCII_LENGTH("com.sun.star."));
 
         sal_Int32 nPos = aTypeBuffer.toString().indexOf("Shape");
@@ -796,7 +796,7 @@ sal_Bool PPTWriterBase::GetShapeByIndex( sal_uInt32 nIndex, sal_Bool bGroup )
     return sal_False;
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Int8 PPTWriterBase::GetTransition( sal_Int16 nTransitionType, sal_Int16 nTransitionSubtype, FadeEffect eEffect, sal_uInt8& nDirection )
 {
@@ -1002,7 +1002,7 @@ sal_Int8 PPTWriterBase::GetTransition( FadeEffect eEffect, sal_uInt8& nDirection
     return nPPTTransitionType;
 }
 
-//  -----------------------------------------------------------------------
+
 
 sal_Bool PPTWriterBase::ContainsOtherShapeThanPlaceholders( sal_Bool bForOOMLX )
 {

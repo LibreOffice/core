@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
@@ -26,7 +26,7 @@
 #include <basegfx/polygon/b2dpolypolygoncutter.hxx>
 #include <numeric>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -100,12 +100,12 @@ namespace basegfx
 
                         if(a != 0L)
                         {
-                            // exchange polygon a and polygon 0L
+                            
                             aRetval.setB2DPolygon(0L, aCandidate);
                             aRetval.setB2DPolygon(a, rCandidate.getB2DPolygon(0L));
                         }
 
-                        // exit
+                        
                         return aRetval;
                     }
                 }
@@ -266,7 +266,7 @@ namespace basegfx
         {
             if(0.0 == fFullDashDotLen && rDotDashArray.size())
             {
-                // calculate fFullDashDotLen from rDotDashArray
+                
                 fFullDashDotLen = ::std::accumulate(rDotDashArray.begin(), rDotDashArray.end(), 0.0);
             }
 
@@ -367,7 +367,7 @@ namespace basegfx
 
                     if(fTools::equal(fRetval, fZero))
                     {
-                        // already found zero distance, cannot get better. Ensure numerical zero value and end loop.
+                        
                         fRetval = 0.0;
                         break;
                     }
@@ -428,7 +428,7 @@ namespace basegfx
 
         void correctGrowShrinkPolygonPair(SAL_UNUSED_PARAMETER B2DPolyPolygon& /*rOriginal*/, SAL_UNUSED_PARAMETER B2DPolyPolygon& /*rGrown*/)
         {
-            //TODO!
+            
         }
 
         B2DPolyPolygon reSegmentPolyPolygon(const B2DPolyPolygon& rCandidate, sal_uInt32 nSegments)
@@ -458,14 +458,14 @@ namespace basegfx
 
         bool isRectangle( const B2DPolyPolygon& rPoly )
         {
-            // exclude some cheap cases first
+            
             if( rPoly.count() != 1 )
                 return false;
 
             return isRectangle( rPoly.getB2DPolygon(0) );
         }
 
-        // #i76891#
+        
         B2DPolyPolygon simplifyCurveSegments(const B2DPolyPolygon& rCandidate)
         {
             if(rCandidate.areControlPointsUsed())
@@ -517,14 +517,14 @@ namespace basegfx
 
         B2DPolyPolygon createSevenSegmentPolyPolygon(sal_Char nNumber, bool bLitSegments)
         {
-            // config here
-            // {
+            
+            
             const double fTotalSize=1.0;
             const double fPosMiddleSegment=0.6;
             const double fSegmentEndChopHoriz=0.08;
             const double fSegmentEndChopVert =0.04;
-            // }
-            // config here
+            
+            
 
             const double fLeft=0.0;
             const double fRight=fTotalSize;
@@ -532,15 +532,15 @@ namespace basegfx
             const double fMiddle=fPosMiddleSegment;
             const double fBottom=fTotalSize;
 
-            // from 0 to 5: pair of segment corner coordinates
+            
             //
-            // segment corner indices are these:
+            
             //
-            //   0 - 1
-            //   |   |
-            //   2 - 3
-            //   |   |
-            //   4 - 5
+            
+            
+            
+            
+            
             //
             static const double corners[] =
             {
@@ -552,44 +552,44 @@ namespace basegfx
                 fRight, fBottom
             };
 
-            // from 0 to 9: which segments are 'lit' for this number?
+            
             //
-            // array denotes graph edges to traverse, with -1 means
-            // stop (the vertices are the corner indices from above):
-            //     0
-            //     -
-            // 1 |   | 2
-            //     - 3
-            // 4 |   | 5
-            //     -
-            //     6
+            
+            
+            
+            
+            
+            
+            
+            
+            
             //
             static const int numbers[] =
             {
-                1, 1, 1, 0, 1, 1, 1, // 0
-                0, 0, 1, 0, 0, 1, 0, // 1
-                1, 0, 1, 1, 1, 0, 1, // 2
-                1, 0, 1, 1, 0, 1, 1, // 3
-                0, 1, 1, 1, 0, 1, 0, // 4
-                1, 1, 0, 1, 0, 1, 1, // 5
-                1, 1, 0, 1, 1, 1, 1, // 6
-                1, 0, 1, 0, 0, 1, 0, // 1
-                1, 1, 1, 1, 1, 1, 1, // 8
-                1, 1, 1, 1, 0, 1, 1, // 9
-                0, 0, 0, 1, 0, 0, 0, // '-'
-                1, 1, 0, 1, 1, 0, 1, // 'E'
+                1, 1, 1, 0, 1, 1, 1, 
+                0, 0, 1, 0, 0, 1, 0, 
+                1, 0, 1, 1, 1, 0, 1, 
+                1, 0, 1, 1, 0, 1, 1, 
+                0, 1, 1, 1, 0, 1, 0, 
+                1, 1, 0, 1, 0, 1, 1, 
+                1, 1, 0, 1, 1, 1, 1, 
+                1, 0, 1, 0, 0, 1, 0, 
+                1, 1, 1, 1, 1, 1, 1, 
+                1, 1, 1, 1, 0, 1, 1, 
+                0, 0, 0, 1, 0, 0, 0, 
+                1, 1, 0, 1, 1, 0, 1, 
             };
 
-            // maps segment index to two corner ids:
+            
             static const int index2corner[] =
             {
-                0, 2,  // 0
-                0, 4,  // 1
-                2, 6,  // 2
-                4, 6,  // 3
-                4, 8,  // 4
-                6, 10, // 5
-                8, 10, // 6
+                0, 2,  
+                0, 4,  
+                2, 6,  
+                4, 6,  
+                4, 8,  
+                6, 10, 
+                8, 10, 
             };
 
             B2DPolyPolygon aRes;
@@ -647,8 +647,8 @@ namespace basegfx
             return aRes;
         }
 
-        //////////////////////////////////////////////////////////////////////////////
-        // converters for com::sun::star::drawing::PointSequence
+        
+        
 
         B2DPolyPolygon UnoPointSequenceSequenceToB2DPolyPolygon(
             const com::sun::star::drawing::PointSequenceSequence& rPointSequenceSequenceSource,
@@ -692,8 +692,8 @@ namespace basegfx
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////
-        // converters for com::sun::star::drawing::PolyPolygonBezierCoords (curved polygons)
+        
+        
 
         B2DPolyPolygon UnoPolyPolygonBezierCoordsToB2DPolyPolygon(
             const com::sun::star::drawing::PolyPolygonBezierCoords& rPolyPolygonBezierCoordsSource,
@@ -733,11 +733,11 @@ namespace basegfx
 
             if(nCount)
             {
-                // prepare return value memory
+                
                 rPolyPolygonBezierCoordsRetval.Coordinates.realloc((sal_Int32)nCount);
                 rPolyPolygonBezierCoordsRetval.Flags.realloc((sal_Int32)nCount);
 
-                // get pointers to arrays
+                
                 com::sun::star::drawing::PointSequence* pPointSequence = rPolyPolygonBezierCoordsRetval.Coordinates.getArray();
                 com::sun::star::drawing::FlagSequence*  pFlagSequence = rPolyPolygonBezierCoordsRetval.Flags.getArray();
 
@@ -760,7 +760,7 @@ namespace basegfx
             }
         }
 
-    } // end of namespace tools
-} // end of namespace basegfx
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

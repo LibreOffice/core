@@ -86,7 +86,7 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Common::compareIndexEntry(
 {
     return sal::static_int_cast< sal_Int16 >(
         collator->compareString(rIndexEntry1, rIndexEntry2));
-        // return value of compareString in { -1, 0, 1 }
+        
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexCharacter( const OUString& rIndexEntry,
@@ -105,11 +105,11 @@ const OUString& SAL_CALL
 IndexEntrySupplier_Common::getEntry( const OUString& IndexEntry,
     const OUString& PhoneticEntry, const lang::Locale& rLocale ) throw (RuntimeException)
 {
-    // The condition for using phonetic entry is:
-    // usePhonetic is set for the algorithm;
-    // rLocale for phonetic entry is same as aLocale for algorithm,
-    // which means Chinese phonetic will not be used for Japanese algorithm;
-    // phonetic entry is not blank.
+    
+    
+    
+    
+    
     if (usePhonetic && !PhoneticEntry.isEmpty() && rLocale.Language == aLocale.Language &&
             rLocale.Country == aLocale.Country && rLocale.Variant == aLocale.Variant)
         return PhoneticEntry;

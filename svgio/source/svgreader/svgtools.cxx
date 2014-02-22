@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgtools.hxx>
@@ -25,7 +25,7 @@
 #include <svgio/svgreader/svgtoken.hxx>
 #include <boost/unordered_map.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -41,7 +41,7 @@ namespace svgio
         }
 #endif
 
-        // common non-token strings
+        
         const OUString commonStrings::aStrUserSpaceOnUse("userSpaceOnUse");
         const OUString commonStrings::aStrObjectBoundingBox("objectBoundingBox");
         const OUString commonStrings::aStrNonzero("nonzero");
@@ -55,13 +55,13 @@ namespace svgio
             const bool bNoSWidth(basegfx::fTools::equalZero(fSWidth));
             const bool bNoSHeight(basegfx::fTools::equalZero(fSHeight));
 
-            // transform from source state to unit range
+            
             aRetval.translate(-rSource.getMinX(), -rSource.getMinY());
             aRetval.scale(
                 (bNoSWidth ? 1.0 : 1.0 / fSWidth) * rTarget.getWidth(),
                 (bNoSHeight ? 1.0 : 1.0 / fSHeight) * rTarget.getHeight());
 
-            // transform from unit rage to target range
+            
             aRetval.translate(rTarget.getMinX(), rTarget.getMinY());
 
             return aRetval;
@@ -71,7 +71,7 @@ namespace svgio
         {
             if(!isSet() || Align_none == getSvgAlign())
             {
-                // create linear mapping (default)
+                
                 return createLinearMapping(rTarget, rSource);
             }
 
@@ -85,11 +85,11 @@ namespace svgio
             const double fScaleY((bNoSHeight ? 1.0 : 1.0 / fSHeight) * rTarget.getHeight());
             const double fScale(isMeetOrSlice() ? std::min(fScaleX, fScaleY) : std::max(fScaleX, fScaleY));
 
-            // remove source translation, apply scale
+            
             aRetval.translate(-rSource.getMinX(), -rSource.getMinY());
             aRetval.scale(fScale, fScale);
 
-            // evaluate horizontal alignment
+            
             const double fNewWidth(fSWidth * fScale);
             double fTransX(0.0);
 
@@ -99,7 +99,7 @@ namespace svgio
                 case Align_xMidYMid:
                 case Align_xMidYMax:
                 {
-                    // centerX
+                    
                     const double fFreeSpace(rTarget.getWidth() - fNewWidth);
                     fTransX = fFreeSpace * 0.5;
                     break;
@@ -108,7 +108,7 @@ namespace svgio
                 case Align_xMaxYMid:
                 case Align_xMaxYMax:
                 {
-                    // Right align
+                    
                     const double fFreeSpace(rTarget.getWidth() - fNewWidth);
                     fTransX = fFreeSpace;
                     break;
@@ -116,7 +116,7 @@ namespace svgio
                 default: break;
             }
 
-            // evaluate vertical alignment
+            
             const double fNewHeight(fSHeight * fScale);
             double fTransY(0.0);
 
@@ -126,7 +126,7 @@ namespace svgio
                 case Align_xMidYMid:
                 case Align_xMaxYMid:
                 {
-                    // centerY
+                    
                     const double fFreeSpace(rTarget.getHeight() - fNewHeight);
                     fTransY = fFreeSpace * 0.5;
                     break;
@@ -135,7 +135,7 @@ namespace svgio
                 case Align_xMidYMax:
                 case Align_xMaxYMax:
                 {
-                    // Bottom align
+                    
                     const double fFreeSpace(rTarget.getHeight() - fNewHeight);
                     fTransY = fFreeSpace;
                     break;
@@ -143,7 +143,7 @@ namespace svgio
                 default: break;
             }
 
-            // add target translation
+            
             aRetval.translate(
                 rTarget.getMinX() + fTransX,
                 rTarget.getMinY() + fTransY);
@@ -198,7 +198,7 @@ namespace svgio
                 }
             }
 
-            /// not set
+            
             OSL_ENSURE(false, "SvgNumber not set (!)");
             return 0.0;
         }
@@ -233,7 +233,7 @@ namespace svgio
 #ifdef DBG_UTIL
                             myAssert(OUString("Design error, this case should have been handled in the caller"));
 #endif
-                            // no viewPort, assume a normal page size (A4)
+                            
                             aViewPort = basegfx::B2DRange(
                                 0.0,
                                 0.0,
@@ -246,17 +246,17 @@ namespace svgio
                         {
                             if(xcoordinate == aNumberType)
                             {
-                                // it's a x-coordinate, relative to current width (w)
+                                
                                 fRetval *= aViewPort.getWidth();
                             }
                             else if(ycoordinate == aNumberType)
                             {
-                                // it's a y-coordinate, relative to current height (h)
+                                
                                 fRetval *= aViewPort.getHeight();
                             }
-                            else // length
+                            else 
                             {
-                                // it's a length, relative to sqrt(w*w + h*h)/sqrt(2)
+                                
                                 const double fCurrentWidth(aViewPort.getWidth());
                                 const double fCurrentHeight(aViewPort.getHeight());
                                 const double fCurrentLength(
@@ -275,7 +275,7 @@ namespace svgio
                 }
             }
 
-            /// not set
+            
             OSL_ENSURE(false, "SvgNumber not set (!)");
             return 0.0;
         }
@@ -397,10 +397,10 @@ namespace svgio
 
                     if('e' == aChar || 'E' == aChar)
                     {
-                        // try to read exponential number, but be careful. I had
-                        // a case where dx="2em" was used, thus the 'e' was consumed
-                        // by error. First try if there are numbers after the 'e',
-                        // safe current state
+                        
+                        
+                        
+                        
                         nPos++;
                         const OUStringBuffer aNum2(aNum);
                         const sal_Int32 nPosAfterE(nPos);
@@ -411,8 +411,8 @@ namespace svgio
 
                         if(nPosAfterE == nPos)
                         {
-                            // no number after 'e', go back. Do not
-                            // return false, it's still a valid integer number
+                            
+                            
                             aNum = aNum2;
                             nPos--;
                         }
@@ -453,13 +453,13 @@ namespace svgio
                         {
                             if('m' == aCharB)
                             {
-                                // 'em' Relative to current font size
+                                
                                 aRetval = Unit_em;
                                 bTwoCharValid = true;
                             }
                             else if('x' == aCharB)
                             {
-                                // 'ex' Relative to current font x-height
+                                
                                 aRetval = Unit_ex;
                                 bTwoCharValid = true;
                             }
@@ -469,18 +469,18 @@ namespace svgio
                         {
                             if('x' == aCharB)
                             {
-                                // 'px' UserUnit (default)
+                                
                                 bTwoCharValid = true;
                             }
                             else if('t' == aCharB)
                             {
-                                // 'pt' == 1.25 px
+                                
                                 aRetval = Unit_pt;
                                 bTwoCharValid = true;
                             }
                             else if('c' == aCharB)
                             {
-                                // 'pc' == 15 px
+                                
                                 aRetval = Unit_pc;
                                 bTwoCharValid = true;
                             }
@@ -490,7 +490,7 @@ namespace svgio
                         {
                             if('n' == aCharB)
                             {
-                                // 'in' == 90 px
+                                
                                 aRetval = Unit_in;
                                 bTwoCharValid = true;
                             }
@@ -500,7 +500,7 @@ namespace svgio
                         {
                             if('m' == aCharB)
                             {
-                                // 'cm' == 35.43307 px
+                                
                                 aRetval = Unit_cm;
                                 bTwoCharValid = true;
                             }
@@ -510,7 +510,7 @@ namespace svgio
                         {
                             if('m' == aCharB)
                             {
-                                // 'mm' == 3.543307 px
+                                
                                 aRetval = Unit_mm;
                                 bTwoCharValid = true;
                             }
@@ -527,7 +527,7 @@ namespace svgio
                 {
                     if('%' == aCharA)
                     {
-                        // percent used, relative to current
+                        
                         nPos++;
                         aRetval = Unit_percent;
                     }
@@ -563,7 +563,7 @@ namespace svgio
                     deg,
                     grad,
                     rad
-                } aType(deg); // degrees is default
+                } aType(deg); 
 
                 if(nPos < nLen)
                 {
@@ -578,7 +578,7 @@ namespace svgio
                         {
                             if(rCandidate.matchIgnoreAsciiCase(aStrGrad, nPos))
                             {
-                                // angle in grad
+                                
                                 nPos += aStrGrad.getLength();
                                 aType = grad;
                             }
@@ -589,7 +589,7 @@ namespace svgio
                         {
                             if(rCandidate.matchIgnoreAsciiCase(aStrRad, nPos))
                             {
-                                // angle in radians
+                                
                                 nPos += aStrRad.getLength();
                                 aType = rad;
                             }
@@ -598,14 +598,14 @@ namespace svgio
                     }
                 }
 
-                // convert to radians
+                
                 if(deg == aType)
                 {
                     fAngle *= F_PI / 180.0;
                 }
                 else if(grad == aType)
                 {
-                    // looks like 100 grad is 90 degrees
+                    
                     fAngle *= F_PI / 200.0;
                 }
 
@@ -631,7 +631,7 @@ namespace svgio
             }
             else
             {
-                // error
+                
                 return 0;
             }
         }
@@ -820,7 +820,7 @@ namespace svgio
 
                 if(aChar == '#')
                 {
-                    // hex definition
+                    
                     OUStringBuffer aNum;
                     sal_Int32 nPos(1);
 
@@ -861,7 +861,7 @@ namespace svgio
 
                     if(rCandidate.matchIgnoreAsciiCase(aStrRgb, 0))
                     {
-                        // rgb definition
+                        
                         sal_Int32 nPos(aStrRgb.getLength());
                         skip_char(rCandidate, ' ', '(', nPos, nLen);
                         double fR(0.0);
@@ -916,7 +916,7 @@ namespace svgio
                     }
                     else
                     {
-                        // color keyword
+                        
                         if(match_colorKeyword(rColor, rCandidate))
                         {
                             return true;
@@ -996,7 +996,7 @@ namespace svgio
                         {
                             if(rCandidate.match(aStrMatrix, nPos))
                             {
-                                // matrix element
+                                
                                 nPos += aStrMatrix.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aVal;
@@ -1004,38 +1004,38 @@ namespace svgio
 
                                 if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                 {
-                                    aNew.set(0, 0, aVal.solve(rInfoProvider)); // Element A
+                                    aNew.set(0, 0, aVal.solve(rInfoProvider)); 
                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                     if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                     {
-                                        aNew.set(1, 0, aVal.solve(rInfoProvider)); // Element B
+                                        aNew.set(1, 0, aVal.solve(rInfoProvider)); 
                                         skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                         if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                         {
-                                            aNew.set(0, 1, aVal.solve(rInfoProvider)); // Element C
+                                            aNew.set(0, 1, aVal.solve(rInfoProvider)); 
                                             skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                             if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                             {
-                                                aNew.set(1, 1, aVal.solve(rInfoProvider)); // Element D
+                                                aNew.set(1, 1, aVal.solve(rInfoProvider)); 
                                                 skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                                 if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                                 {
-                                                    aNew.set(0, 2, aVal.solve(rInfoProvider, xcoordinate)); // Element E
+                                                    aNew.set(0, 2, aVal.solve(rInfoProvider, xcoordinate)); 
                                                     skip_char(rCandidate, ' ', ',', nPos, nLen);
 
                                                     if(readNumberAndUnit(rCandidate, nPos, aVal, nLen))
                                                     {
-                                                        aNew.set(1, 2, aVal.solve(rInfoProvider, ycoordinate)); // Element F
+                                                        aNew.set(1, 2, aVal.solve(rInfoProvider, ycoordinate)); 
                                                         skip_char(rCandidate, ' ', ')', nPos, nLen);
                                                         skip_char(rCandidate, ' ', ',', nPos, nLen);
 
-                                                        // caution: String is evaluated from left to right, but matrix multiplication
-                                                        // in SVG is right to left, so put the new transformation before the current
-                                                        // one by multiplicating from the right side
+                                                        
+                                                        
+                                                        
                                                         aMatrix = aMatrix * aNew;
                                                     }
                                                 }
@@ -1050,7 +1050,7 @@ namespace svgio
                         {
                             if(rCandidate.match(aStrTranslate, nPos))
                             {
-                                // translate element
+                                
                                 nPos += aStrTranslate.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aTransX;
@@ -1074,7 +1074,7 @@ namespace svgio
                         {
                             if(rCandidate.match(aStrScale, nPos))
                             {
-                                // scale element
+                                
                                 nPos += aStrScale.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 SvgNumber aScaleX;
@@ -1094,7 +1094,7 @@ namespace svgio
                             }
                             else if(rCandidate.match(aStrSkewX, nPos))
                             {
-                                // skewx element
+                                
                                 nPos += aStrSkewX.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewX(0.0);
@@ -1109,7 +1109,7 @@ namespace svgio
                             }
                             else if(rCandidate.match(aStrSkewY, nPos))
                             {
-                                // skewy element
+                                
                                 nPos += aStrSkewY.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fSkewY(0.0);
@@ -1128,7 +1128,7 @@ namespace svgio
                         {
                             if(rCandidate.match(aStrRotate, nPos))
                             {
-                                // rotate element
+                                
                                 nPos += aStrRotate.getLength();
                                 skip_char(rCandidate, ' ', '(', nPos, nLen);
                                 double fAngle(0.0);
@@ -1149,12 +1149,12 @@ namespace svgio
 
                                     if(!basegfx::fTools::equalZero(fX) || !basegfx::fTools::equalZero(fY))
                                     {
-                                        // rotate around point
+                                        
                                         aMatrix = aMatrix * basegfx::tools::createRotateAroundPoint(fX, fY, fAngle);
                                     }
                                     else
                                     {
-                                        // rotate
+                                        
                                         aMatrix = aMatrix * basegfx::tools::createRotateB2DHomMatrix(fAngle);
                                     }
                                 }
@@ -1222,7 +1222,7 @@ namespace svgio
                     }
                     else if(readLocalUrl(rCandidate, rURL))
                     {
-                        /// Url is copied to rURL, but needs to be solved outside this helper
+                        
                         return false;
                     }
                     else if(rCandidate.startsWith("currentColor"))
@@ -1416,7 +1416,7 @@ namespace svgio
 
             if('#' == rCandidate[0])
             {
-                // local link
+                
                 rXLink = rCandidate.copy(1);
             }
             else
@@ -1425,12 +1425,12 @@ namespace svgio
 
                 if(rCandidate.match(aStrData, 0))
                 {
-                    // embedded data
+                    
                     sal_Int32 nPos(aStrData.getLength());
                     sal_Int32 nLen(rCandidate.getLength());
                     OUStringBuffer aBuffer;
 
-                    // read mime type
+                    
                     skip_char(rCandidate, ' ', nPos, nLen);
                     copyToLimiter(rCandidate, ';', nPos, aBuffer, nLen);
                     skip_char(rCandidate, ' ', ';', nPos, nLen);
@@ -1442,13 +1442,13 @@ namespace svgio
 
                         if(rMimeType.match(aStrImage, 0))
                         {
-                            // image data
+                            
                             OUString aData(rCandidate.copy(nPos));
                             static OUString aStrBase64("base64");
 
                             if(aData.match(aStrBase64, 0))
                             {
-                                // base64 encoded
+                                
                                 nPos = aStrBase64.getLength();
                                 nLen = aData.getLength();
 
@@ -1464,7 +1464,7 @@ namespace svgio
                 }
                 else
                 {
-                    // Url (path and filename)
+                    
                     rUrl = rCandidate;
                 }
             }
@@ -1563,16 +1563,16 @@ namespace svgio
             const sal_Unicode aTab('\t');
             const sal_Unicode aSpace(' ');
 
-            // remove all newline characters
+            
             OUString aRetval(convert(rCandidate, aNewline, aNewline, true));
 
-            // convert tab to space
+            
             aRetval = convert(aRetval, aTab, aSpace, false);
 
-            // strip of all leading and trailing spaces
+            
             aRetval = aRetval.trim();
 
-            // consolidate contiguos space
+            
             aRetval = consolidateContiguosSpace(aRetval);
 
             return aRetval;
@@ -1584,10 +1584,10 @@ namespace svgio
             const sal_Unicode aTab('\t');
             const sal_Unicode aSpace(' ');
 
-            // convert newline to space
+            
             OUString aRetval(convert(rCandidate, aNewline, aSpace, false));
 
-            // convert tab to space
+            
             aRetval = convert(rCandidate, aTab, aSpace, false);
 
             return rCandidate;
@@ -1611,10 +1611,10 @@ namespace svgio
             return aRetval;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

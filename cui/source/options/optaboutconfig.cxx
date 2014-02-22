@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "optaboutconfig.hxx"
@@ -108,7 +108,7 @@ void CuiCustomMultilineEdit::KeyInput( const KeyEvent& rKeyEvent )
             }
         }
 
-        //Select all, Copy, Paste, Cut, Undo Keys
+        
         if ( !bValid && ( rKeyCode.IsMod1() && (
              KEY_A == nKey || KEY_C == nKey || KEY_V == nKey || KEY_X == nKey || KEY_Z == nKey ) ) )
             bValid = true;
@@ -152,11 +152,11 @@ CuiAboutConfigTabPage::CuiAboutConfigTabPage( Window* pParent/*, const SfxItemSe
     rBar.InsertItem( ITEMID_TYPE, get<FixedText>("type")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
     rBar.InsertItem( ITEMID_VALUE, get<FixedText>("value")->GetText(), 0,  HIB_LEFT | HIB_VCENTER );
 
-    long aTabs[] = {4,900,50,50,50};//TODO: Not works correctly hardcoded for now.
+    long aTabs[] = {4,900,50,50,50};
 
     aTabs[2] += aTabs[1] + rBar.GetTextWidth(rBar.GetItemText(1));
-    aTabs[3] += aTabs[2] + 160; //rBar.GetTextWidth(rBar.GetItemText(2));
-    aTabs[4] += aTabs[3] + 40; //rBar.GetTextWidth(rBar.GetItemText(3));
+    aTabs[3] += aTabs[2] + 160; 
+    aTabs[4] += aTabs[3] + 40; 
 
     m_pPrefBox->SetTabs(aTabs, MAP_PIXEL);
 }
@@ -165,7 +165,7 @@ void CuiAboutConfigTabPage::InsertEntry(const OUString& rProp, const OUString& r
 {
     SvTreeListEntry* pEntry = new SvTreeListEntry;
 
-    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false)); //It is needed, otherwise causes crash
+    pEntry->AddItem( new SvLBoxContextBmp( pEntry, 0, Image(), Image(), false)); 
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rProp));
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rStatus));
     pEntry->AddItem( new SvLBoxString( pEntry, 0, rType));
@@ -219,12 +219,12 @@ void CuiAboutConfigTabPage::FillItems(const Reference< XNameAccess >& xNameAcces
         Reference< XNameAccess > xNextNameAccess( aNode, uno::UNO_QUERY );
         if( xNextNameAccess.is() )
         {
-            // not leaf node
+            
             FillItems( xNextNameAccess );
         }
         else
         {
-            // leaf node
+            
             OUString sType = aNode.getValueTypeName();
 
             OUString sValue;
@@ -413,13 +413,13 @@ Reference< XNameAccess > CuiAboutConfigTabPage::getConfigAccess( OUString sNodeP
 void CuiAboutConfigTabPage::AddToModifiedVector( const boost::shared_ptr< Prop_Impl >& rProp )
 {
     bool isModifiedBefore = false;
-    //Check if value modified before
+    
     for( size_t nInd = 0; nInd < m_vectorOfModified.size() ; ++nInd )
     {
         if( rProp->Name == m_vectorOfModified[nInd]->Name && rProp->Property == m_vectorOfModified[nInd]->Property )
         {
-            //property modified before. assing reference to the modified value
-            //do your changes on this object. They will be saved later.
+            
+            
             m_vectorOfModified[nInd] = rProp;
             isModifiedBefore = true;
             break;
@@ -428,7 +428,7 @@ void CuiAboutConfigTabPage::AddToModifiedVector( const boost::shared_ptr< Prop_I
 
     if( !isModifiedBefore )
         m_vectorOfModified.push_back( rProp );
-    //property is not modified before
+    
 }
 
 std::vector< OUString > CuiAboutConfigTabPage::commaStringToSequence( const OUString& rCommaSepString )
@@ -515,7 +515,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
     {
         if( bOpenDialog )
         {
-            //Cosmetic length limit for integer values.
+            
             int limit=0;
             if( sPropertyType == "short" )
                 limit = SHORT_LEN_LIMIT;
@@ -534,7 +534,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                     sal_Int16 nShort;
                     sal_Int32 nNumb = sNewValue.toInt32();
 
-                    //if the value is 0 and length is not 1, there is something wrong
+                    
                     if( !( nNumb==0 && sNewValue.getLength()!=1 ) && nNumb < SAL_MAX_INT16 && nNumb > SAL_MIN_INT16)
                         nShort = (sal_Int16) nNumb;
                     else
@@ -580,14 +580,14 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                     }
                     else if( sPropertyType == "[]short" )
                     {
-                        //create string sequence from comma seperated string
-                        //uno::Sequence< OUString > seqStr;
+                        
+                        
                         std::vector< OUString > seqStr;
                         seqStr = commaStringToSequence( sNewValue );
 
-                        //create appropriate sequence with same size as string sequence
+                        
                         uno::Sequence< sal_Int16 > seqShort( seqStr.size() );
-                        //convert all strings to appropriate type
+                        
                         for( size_t i = 0; i < seqStr.size(); ++i )
                         {
                             seqShort[i] = (sal_Int16) seqStr[i].toInt32();
@@ -643,7 +643,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
                     {
                         pProperty->Value = uno::makeAny( comphelper::containerToSequence( commaStringToSequence( sNewValue )));
                     }
-                    else //unknown
+                    else 
                         throw uno::Exception();
 
 
@@ -652,7 +652,7 @@ IMPL_LINK_NOARG( CuiAboutConfigTabPage, StandardHdl_Impl )
         }
         AddToModifiedVector( pProperty );
 
-        //update listbox value.
+        
         m_pPrefBox->SetEntryText( sDialogValue,  pEntry, 3 );
     }
     catch( uno::Exception& )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -72,7 +72,7 @@
 
 SFX_IMPL_MODELESSDIALOG_WITHID( SvxIMapDlgChildWindow, SID_IMAP );
 
-// ControllerItem
+
 
 SvxIMapDlgItem::SvxIMapDlgItem( sal_uInt16 _nId, SvxIMapDlg& rIMapDlg, SfxBindings& rBindings ) :
             SfxControllerItem   ( _nId, rBindings ),
@@ -89,7 +89,7 @@ void SvxIMapDlgItem::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
 
         DBG_ASSERT( pStateItem || pItem == 0, "SfxBoolItem expected");
 
-        // Disable Float if possible
+        
         rIMap.SetExecState( !pStateItem->GetValue() );
     }
 }
@@ -188,7 +188,7 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *_pBindings, SfxChildWindow *pCW,
 
 SvxIMapDlg::~SvxIMapDlg()
 {
-    // Delete URL-List
+    
     delete pIMapWnd;
     delete pOwnData;
 }
@@ -205,11 +205,11 @@ void SvxIMapDlg::Resize()
         Size    _aSize( aStbStatus.GetSizePixel() );
         Point   aPoint( 0, aNewSize.Height() - _aSize.Height() );
 
-        // Position the StatusBar
+        
         aStbStatus.SetPosSizePixel( aPoint, Size( aNewSize.Width(), _aSize.Height() ) );
         aStbStatus.Show();
 
-        // Position the EditWindow
+        
         _aSize.Width() = aNewSize.Width() - 18;
         _aSize.Height() = aPoint.Y() - pIMapWnd->GetPosPixel().Y() - 6;
         pIMapWnd->SetSizePixel( _aSize );
@@ -250,7 +250,7 @@ bool SvxIMapDlg::Close()
     return( bRet ? SfxModelessDialog::Close() : sal_False );
 }
 
-// Enabled or disable all Controls
+
 
 void SvxIMapDlg::SetExecState( sal_Bool bEnable )
 {
@@ -296,13 +296,13 @@ void SvxIMapDlg::UpdateLink( const Graphic& rGraphic, const ImageMap* pImageMap,
 
     pOwnData->pUpdateEditingObject = pEditingObj;
 
-    // Delete UpdateTargetList, because this method can still be called several
-    // times before the update timer is turned on
+    
+    
     pOwnData->aUpdateTargetList.clear();
 
-    // TargetList must be copied, since it is owned by the caller and can be
-    // deleted immediately after this call the copied list will be deleted
-    // again in the handler
+    
+    
+    
     if( pTargetList )
     {
         TargetList aTargetList( *pTargetList );
@@ -320,7 +320,7 @@ void SvxIMapDlg::KeyInput( const KeyEvent& rKEvt )
         SfxModelessDialog::KeyInput( rKEvt );
 }
 
-// Click-handler for ToolBox
+
 
 IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 {
@@ -735,12 +735,12 @@ IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl)
         SetTargetList( pOwnData->aUpdateTargetList );
         SetEditingObject( pOwnData->pUpdateEditingObject );
 
-        // After changes => default selection
+        
         aTbxIMapDlg1.CheckItem( TBI_SELECT, true );
         pIMapWnd->SetEditMode( sal_True );
     }
 
-    // Delete the copied list again in the Update method
+    
     pOwnData->aUpdateTargetList.clear();
 
     GetBindings().Invalidate( SID_IMAP_EXEC );
@@ -764,13 +764,13 @@ IMPL_LINK( SvxIMapDlg, StateHdl, IMapWindow*, pWnd )
     aTbxIMapDlg1.EnableItem( TBI_POLY, bDrawEnabled );
     aTbxIMapDlg1.EnableItem( TBI_FREEPOLY, bDrawEnabled );
 
-    // BezierEditor State
+    
     aTbxIMapDlg1.EnableItem( TBI_POLYEDIT, bPolyEdit );
     aTbxIMapDlg1.EnableItem( TBI_POLYMOVE, !bDrawEnabled );
     aTbxIMapDlg1.EnableItem( TBI_POLYINSERT, !bDrawEnabled );
     aTbxIMapDlg1.EnableItem( TBI_POLYDELETE, !bDrawEnabled && pView->IsDeleteMarkedPointsPossible() );
 
-    // Undo/Redo
+    
     aTbxIMapDlg1.EnableItem( TBI_UNDO, pModel->HasUndoActions() );
     aTbxIMapDlg1.EnableItem( TBI_REDO, pModel->HasRedoActions() );
 

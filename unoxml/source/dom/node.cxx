@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <node.hxx>
@@ -56,9 +56,9 @@ namespace DOM
 {
     void pushContext(Context& io_rContext)
     {
-        // Explicitly use a temp. variable.
-        // Windows/VC++ seems to mess up if .back() is directly passed as
-        // parameter. i.e. Don't use push_back( .back() );
+        
+        
+        
         Context::NamespaceVectorType::value_type aVal = io_rContext.maNamespaces.back();
         io_rContext.maNamespaces.push_back( aVal );
     }
@@ -70,10 +70,10 @@ namespace DOM
 
     void addNamespaces(Context& io_rContext, xmlNodePtr pNode)
     {
-        // add node's namespaces to current context
+        
         for (xmlNsPtr pNs = pNode->nsDef; pNs != 0; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix;
-            // prefix can be NULL when xmlns attribute is empty (xmlns="")
+            
             OString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
                            pPrefix ? strlen(reinterpret_cast<const char*>(pPrefix)) : 0);
             const xmlChar *pHref = pNs->href;
@@ -138,8 +138,8 @@ namespace DOM
         :   m_bUnlinked(false)
         ,   m_aNodeType(reNodeType)
         ,   m_aNodePtr(rpNode)
-        // keep containing document alive
-        // (but not if this is a document; that would create a leak!)
+        
+        
         ,   m_xDocument( (m_aNodePtr->type != XML_DOCUMENT_NODE)
                 ? &const_cast<CDocument&>(rDocument) : 0 )
         ,   m_rMutex(const_cast< ::osl::Mutex & >(rMutex))
@@ -149,11 +149,11 @@ namespace DOM
 
     void CNode::invalidate()
     {
-        //remove from list if this wrapper goes away
+        
         if (m_aNodePtr != 0 && m_xDocument.is()) {
             m_xDocument->RemoveCNode(m_aNodePtr, this);
         }
-        // #i113663#: unlinked nodes will not be freed by xmlFreeDoc
+        
         if (m_bUnlinked) {
             xmlFreeNode(m_aNodePtr);
         }
@@ -162,12 +162,12 @@ namespace DOM
 
     CNode::~CNode()
     {
-        // if this is the document itself, the mutex is already freed!
+        
         if (NodeType_DOCUMENT_NODE == m_aNodeType) {
             invalidate();
         } else {
             ::osl::MutexGuard const g(m_rMutex);
-            invalidate(); // other nodes are still alive so must lock mutex
+            invalidate(); 
         }
     }
 
@@ -185,14 +185,14 @@ namespace DOM
     CDocument & CNode::GetOwnerDocument()
     {
         OSL_ASSERT(m_xDocument.is());
-        return *m_xDocument; // needs overriding in CDocument!
+        return *m_xDocument; 
     }
 
 
     static void lcl_nsexchange(
             xmlNodePtr const aNode, xmlNsPtr const oldNs, xmlNsPtr const newNs)
     {
-        // recursively exchange any references to oldNs with references to newNs
+        
         xmlNodePtr cur = aNode;
         while (cur != 0)
         {
@@ -217,7 +217,7 @@ namespace DOM
     {
         xmlNodePtr cur = aNode;
 
-        //handle attributes
+        
         if (cur != NULL && cur->type == XML_ELEMENT_NODE)
         {
             xmlAttrPtr curAttr = cur->properties;
@@ -242,14 +242,14 @@ namespace DOM
                 if (ns != NULL && ns != cur->ns && strcmp((char*)ns->href, (char*)cur->ns->href)==0)
                 {
                     xmlNsPtr curDef = cur->nsDef;
-                    xmlNsPtr *refp = &(cur->nsDef); // insert point
+                    xmlNsPtr *refp = &(cur->nsDef); 
                     while (curDef != NULL)
                     {
                         ns = xmlSearchNs(cur->doc, aParent, curDef->prefix);
                         if (ns != NULL && ns != curDef && strcmp((char*)ns->href, (char*)curDef->href)==0)
                         {
-                            // reconnect ns pointers in sub-tree to newly found ns before
-                            // removing redundant nsdecl to prevent dangling pointers.
+                            
+                            
                             lcl_nsexchange(cur, curDef, ns);
                             *refp = curDef->next;
                             xmlFreeNs(curDef);
@@ -268,18 +268,18 @@ namespace DOM
     void CNode::saxify(const Reference< XDocumentHandler >& i_xHandler)
     {
         if (!i_xHandler.is()) throw RuntimeException();
-        // default: do nothing
+        
     }
 
     void CNode::fastSaxify(Context& io_rContext)
     {
         if (!io_rContext.mxDocHandler.is()) throw RuntimeException();
-        // default: do nothing
+        
     }
 
     bool CNode::IsChildTypeAllowed(NodeType const /*nodeType*/)
     {
-        // default: no children allowed
+        
         return false;
     }
 
@@ -299,14 +299,14 @@ namespace DOM
         xmlNodePtr const cur = pNewChild->GetNodePtr();
         if (!cur) { throw RuntimeException(); }
 
-        // error checks:
-        // from other document
+        
+        
         if (cur->doc != m_aNodePtr->doc) {
             DOMException e;
             e.Code = DOMExceptionType_WRONG_DOCUMENT_ERR;
             throw e;
         }
-        // same node
+        
         if (cur == m_aNodePtr) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
@@ -323,7 +323,7 @@ namespace DOM
             throw e;
         }
 
-        // check whether this is an attribute node; it needs special handling
+        
         xmlNodePtr res = NULL;
         if (cur->type == XML_ATTRIBUTE_NODE)
         {
@@ -345,41 +345,41 @@ namespace DOM
         {
             res = xmlAddChild(m_aNodePtr, cur);
 
-            // libxml can do optimization when appending nodes.
-            // if res != cur, something was optimized and the newchild-wrapper
-            // should be updated
+            
+            
+            
             if (res && (cur != res)) {
-                pNewChild->invalidate(); // cur has been freed
+                pNewChild->invalidate(); 
             }
         }
 
         if (!res) { return 0; }
 
-        // use custom ns cleanup instead of
-        // xmlReconciliateNs(m_aNodePtr->doc, m_aNodePtr);
-        // because that will not remove unneeded ns decls
+        
+        
+        
         nscleanup(res, m_aNodePtr);
 
         ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(res);
 
         if (!pNode.is()) { return 0; }
 
-        // dispatch DOMNodeInserted event, target is the new node
-        // this node is the related node
-        // does bubble
-        pNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
+        
+        
+        
+        pNode->m_bUnlinked = false; 
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMNodeInserted"), UNO_QUERY);
         event->initMutationEvent("DOMNodeInserted", sal_True, sal_False, this,
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
 
-        // the following dispatch functions use only UNO interfaces
-        // and call event listeners, so release mutex to prevent deadlocks.
+        
+        
         guard.clear();
 
         dispatchEvent(event);
-        // dispatch subtree modified for this node
+        
         dispatchSubtreeModified();
 
         return pNode.get();
@@ -400,7 +400,7 @@ namespace DOM
         ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
             xmlCopyNode(m_aNodePtr, (bDeep) ? 1 : 0));
         if (!pNode.is()) { return 0; }
-        pNode->m_bUnlinked = true; // not linked yet
+        pNode->m_bUnlinked = true; 
         return pNode.get();
     }
 
@@ -411,7 +411,7 @@ namespace DOM
     Reference< XNamedNodeMap > SAL_CALL CNode::getAttributes()
         throw (RuntimeException)
     {
-        // return empty reference; only element node may override this impl
+        
         return Reference< XNamedNodeMap>();
     }
 
@@ -468,7 +468,7 @@ namespace DOM
     OUString SAL_CALL CNode::getLocalName()
         throw (RuntimeException)
     {
-        // see CElement/CAttr
+        
         return OUString();
     }
 
@@ -681,7 +681,7 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
-        // already has parent
+        
         if (pNewChild->parent != NULL)
         {
             DOMException e;
@@ -694,7 +694,7 @@ namespace DOM
             throw e;
         }
 
-        // attributes are unordered anyway, so just do appendChild
+        
         if (XML_ATTRIBUTE_NODE == pNewChild->type) {
             guard.clear();
             return appendChild(newChild);
@@ -702,11 +702,11 @@ namespace DOM
 
         xmlNodePtr cur = m_aNodePtr->children;
 
-        //search child before which to insert
+        
         while (cur != NULL)
         {
             if (cur == pRefChild) {
-                // insert before
+                
                 pNewChild->next = cur;
                 pNewChild->prev = cur->prev;
                 cur->prev = pNewChild;
@@ -717,8 +717,8 @@ namespace DOM
                 if (pNewChild->parent->children == cur) {
                     pNewChild->parent->children = pNewChild;
                 }
-                // do not update parent->last here!
-                pNewNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
+                
+                pNewNode->m_bUnlinked = false; 
                 break;
             }
             cur = cur->next;
@@ -747,7 +747,7 @@ namespace DOM
     void SAL_CALL CNode::normalize()
         throw (RuntimeException)
     {
-        //XXX combine adjacent text nodes and remove empty ones
+        
         OSL_ENSURE(false, "CNode::normalize: not implemented (#i113683#)");
     }
 
@@ -789,7 +789,7 @@ namespace DOM
         {
             xmlAttrPtr pAttr = reinterpret_cast<xmlAttrPtr>(old);
             xmlRemoveProp( pAttr );
-            pOld->invalidate(); // freed by xmlRemoveProp
+            pOld->invalidate(); 
             xReturn.clear();
         }
         else
@@ -815,12 +815,12 @@ namespace DOM
             this,
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
 
-        // the following dispatch functions use only UNO interfaces
-        // and call event listeners, so release mutex to prevent deadlocks.
+        
+        
         guard.clear();
 
         dispatchEvent(event);
-        // subtree modified for this node
+        
         dispatchSubtreeModified();
 
         return xReturn;
@@ -866,7 +866,7 @@ namespace DOM
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
             throw e;
         }
-        // already has parent
+        
         if (pNew->parent != NULL) {
             DOMException e;
             e.Code = DOMExceptionType_HIERARCHY_REQUEST_ERR;
@@ -880,7 +880,7 @@ namespace DOM
 
         if( pOld->type == XML_ATTRIBUTE_NODE )
         {
-            // can only replace attribute with attribute
+            
             if ( pOld->type != pNew->type )
             {
                 DOMException e;
@@ -890,19 +890,19 @@ namespace DOM
 
             xmlAttrPtr pAttr = (xmlAttrPtr)pOld;
             xmlRemoveProp( pAttr );
-            pOldNode->invalidate(); // freed by xmlRemoveProp
+            pOldNode->invalidate(); 
             appendChild(xNewChild);
         }
         else
         {
 
         xmlNodePtr cur = m_aNodePtr->children;
-        //find old node in child list
+        
         while (cur != NULL)
         {
             if(cur == pOld)
             {
-                // exchange nodes
+                
                 pNew->prev = pOld->prev;
                 if (pNew->prev != NULL)
                     pNew->prev->next = pNew;
@@ -918,13 +918,13 @@ namespace DOM
                 pOld->prev = NULL;
                 pOld->parent = NULL;
                 pOldNode->m_bUnlinked = true;
-                pNewNode->m_bUnlinked = false; // will be deleted by xmlFreeDoc
+                pNewNode->m_bUnlinked = false; 
             }
             cur = cur->next;
         }
         }
 
-        guard.clear(); // release for calling event handlers
+        guard.clear(); 
         dispatchSubtreeModified();
 
         return xOldChild;
@@ -932,10 +932,10 @@ namespace DOM
 
     void CNode::dispatchSubtreeModified()
     {
-        // only uses UNO interfaces => needs no mutex
+        
 
-        // dispatch DOMSubtreeModified
-        // target is _this_ node
+        
+        
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMSubtreeModified"), UNO_QUERY);
@@ -952,8 +952,8 @@ namespace DOM
     void SAL_CALL CNode::setNodeValue(const OUString& /*nodeValue*/)
         throw (RuntimeException, DOMException)
     {
-        // use specific node implememntation
-        // if we end up down here, something went wrong
+        
+        
         DOMException e;
         e.Code = DOMExceptionType_NO_MODIFICATION_ALLOWED_ERR;
         throw e;
@@ -985,7 +985,7 @@ namespace DOM
 
     }
 
-        // --- XEventTarget
+        
     void SAL_CALL CNode::addEventListener(const OUString& eventType,
         const Reference< com::sun::star::xml::dom::events::XEventListener >& listener,
         sal_Bool useCapture)
@@ -1023,7 +1023,7 @@ namespace DOM
             pDispatcher = & pDocument->GetEventDispatcher();
             pNode = m_aNodePtr;
         }
-        // this calls event listeners, do not call with locked mutex
+        
         pDispatcher->dispatchEvent(*pDocument, m_rMutex, pNode, this, evt);
         return sal_True;
     }

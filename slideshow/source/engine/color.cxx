@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,8 +33,8 @@ namespace slideshow
     {
         namespace
         {
-            // helper functions
-            // ================
+            
+            
 
             double getMagic( double nLuminance, double nSaturation )
             {
@@ -46,7 +46,7 @@ namespace slideshow
 
             HSLColor::HSLTriple rgb2hsl( double nRed, double nGreen, double nBlue )
             {
-                // r,g,b in [0,1], h in [0,360] and s,l in [0,1]
+                
                 HSLColor::HSLTriple aRes;
 
                 const double nMax( ::std::max(nRed,::std::max(nGreen, nBlue)) );
@@ -60,7 +60,7 @@ namespace slideshow
                 {
                     aRes.mnSaturation = 0.0;
 
-                    // hue undefined (achromatic case)
+                    
                     aRes.mnHue = 0.0;
                 }
                 else
@@ -87,10 +87,10 @@ namespace slideshow
 
             double hsl2rgbHelper( double nValue1, double nValue2, double nHue )
             {
-                // clamp hue to [0,360]
+                
                 nHue = fmod( nHue, 360.0 );
 
-                // cope with wrap-arounds
+                
                 if( nHue < 0.0 )
                     nHue += 360.0;
 
@@ -127,7 +127,7 @@ namespace slideshow
                 return aRes;
             }
 
-            /// Truncate range of value to [0,1]
+            
             double truncateRangeStd( double nVal )
             {
                 return ::std::max( 0.0,
@@ -135,7 +135,7 @@ namespace slideshow
                                                nVal ) );
             }
 
-            /// Truncate range of value to [0,360]
+            
             double truncateRangeHue( double nVal )
             {
                 return ::std::max( 0.0,
@@ -143,7 +143,7 @@ namespace slideshow
                                                nVal ) );
             }
 
-            /// convert RGB color to sal_uInt8, truncate range appropriately before
+            
             sal_uInt8 colorToInt( double nCol )
             {
                 return static_cast< sal_uInt8 >(
@@ -153,8 +153,8 @@ namespace slideshow
 
 
 
-        // HSLColor
-        // ===============================================
+        
+        
 
         HSLColor::HSLTriple::HSLTriple() :
             mnHue(),
@@ -251,30 +251,30 @@ namespace slideshow
 
             if( nFromHue <= nToHue && !bCCW )
             {
-                // interpolate hue clockwise. That is, hue starts at
-                // high values and ends at low ones. Therefore, we
-                // must 'cross' the 360 degrees and start at low
-                // values again (imagine the hues to lie on the
-                // circle, where values above 360 degrees are mapped
-                // back to [0,360)).
+                
+                
+                
+                
+                
+                
                 nHue = (1.0-t)*(nFromHue + 360.0) + t*nToHue;
             }
             else if( nFromHue > nToHue && bCCW )
             {
-                // interpolate hue counter-clockwise. That is, hue
-                // starts at high values and ends at low
-                // ones. Therefore, we must 'cross' the 360 degrees
-                // and start at low values again (imagine the hues to
-                // lie on the circle, where values above 360 degrees
-                // are mapped back to [0,360)).
+                
+                
+                
+                
+                
+                
                 nHue = (1.0-t)*nFromHue + t*(nToHue + 360.0);
             }
             else
             {
-                // interpolate hue counter-clockwise. That is, hue
-                // starts at low values and ends at high ones (imagine
-                // the hue value as degrees on a circle, with
-                // increasing values going counter-clockwise)
+                
+                
+                
+                
                 nHue = (1.0-t)*nFromHue + t*nToHue;
             }
 
@@ -285,8 +285,8 @@ namespace slideshow
 
 
 
-        // RGBColor
-        // ===============================================
+        
+        
 
 
         RGBColor::RGBTriple::RGBTriple() :

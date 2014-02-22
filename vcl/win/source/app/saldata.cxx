@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svsys.h>
@@ -23,7 +23,7 @@
 
 #include "win/saldata.hxx"
 
-// =======================================================================
+
 
 rtl_TextEncoding ImplSalGetSystemEncoding()
 {
@@ -42,7 +42,7 @@ rtl_TextEncoding ImplSalGetSystemEncoding()
     return eEncoding;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 const nLen)
 {
@@ -53,7 +53,7 @@ OUString ImplSalGetUniString(const sal_Char* pStr, sal_Int32 const nLen)
                       RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT );
 }
 
-// =======================================================================
+
 
 int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
 {
@@ -62,7 +62,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
     char       c2;
     do
     {
-        // change to LowerCase if the char is between 'A' and 'Z'
+        
         c1 = *pStr1;
         c2 = *pStr2;
         if ( (c1 >= 65) && (c1 <= 90) )
@@ -81,35 +81,35 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 )
     return nRet;
 }
 
-// =======================================================================
+
 
 BOOL ImplPostMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     return PostMessageW( hWnd, nMsg, wParam, lParam );
 }
 
-// -----------------------------------------------------------------------
+
 
 BOOL ImplSendMessage( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lParam )
 {
     return SendMessageW( hWnd, nMsg, wParam, lParam );
 }
 
-// -----------------------------------------------------------------------
+
 
 BOOL ImplGetMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax )
 {
     return GetMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax );
 }
 
-// -----------------------------------------------------------------------
+
 
 BOOL ImplPeekMessage( LPMSG lpMsg, HWND hWnd, UINT wMsgFilterMin, UINT wMsgFilterMax, UINT wRemoveMsg )
 {
     return PeekMessageW( lpMsg, hWnd, wMsgFilterMin, wMsgFilterMax, wRemoveMsg );
 }
 
-// -----------------------------------------------------------------------
+
 
 LONG ImplDispatchMessage( CONST MSG *lpMsg )
 {

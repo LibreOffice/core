@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,17 +24,17 @@
 #include "dialogcustomcontrols.hxx"
 #include <osl/diagnose.h>
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, HWND aParentHandle)
 {
     OSL_PRECOND(IsWindow(aControlHandle),"Invalid control handle");
     OSL_PRECOND(IsWindow(aControlHandle),"Invalid parent handle");
 
-    // get window class
-    // if static text create static text control etc.
+    
+    
 
     TCHAR aClsName[256];
     ZeroMemory(aClsName,sizeof(aClsName));
@@ -44,8 +44,8 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
 
     if (0 == _tcsicmp(aClsName,TEXT("button")))
     {
-        // button means many things so we have
-        // to find out what button it is
+        
+        
         LONG lBtnStyle = GetWindowLong(aControlHandle,GWL_STYLE);
 
         if (lBtnStyle & BS_CHECKBOX)
@@ -66,9 +66,9 @@ CCustomControl* CCustomControlFactory::CreateCustomControl(HWND aControlHandle, 
     return new CDummyCustomControl(aControlHandle,aParentHandle);
 }
 
-//-----------------------------------
+
 //
-//-----------------------------------
+
 
 CCustomControl* CCustomControlFactory::CreateCustomControlContainer()
 {

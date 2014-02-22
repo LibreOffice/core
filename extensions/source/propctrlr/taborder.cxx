@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "taborder.hxx"
@@ -31,10 +31,10 @@
 #include <svtools/treelistentry.hxx>
 #include <vcl/builder.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -43,9 +43,9 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::datatransfer;
 
-    //========================================================================
-    //= OSimpleTabModel
-    //========================================================================
+    
+    
+    
     class OSimpleTabModel : public ::cppu::WeakImplHelper1< XTabControllerModel>
     {
         Sequence< Reference< XControlModel > > m_aModels;
@@ -56,7 +56,7 @@ namespace pcr
         {
         }
 
-        // XTabControllerModel
+        
         virtual void SAL_CALL setControlModels(const Sequence< Reference< XControlModel > >& rModels) throw( RuntimeException ) {m_aModels = rModels;}
         virtual Sequence< Reference< XControlModel > > SAL_CALL getControlModels(void) throw( RuntimeException ) {return m_aModels;}
         virtual void SAL_CALL setGroup(const Sequence< Reference< XControlModel > >& /*Group*/, const OUString& /*GroupName*/) throw( RuntimeException ) {}
@@ -67,11 +67,11 @@ namespace pcr
         virtual void SAL_CALL setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException ){};
     };
 
-    //========================================================================
-    //= TabOrderDialog
-    //========================================================================
+    
+    
+    
     DBG_NAME(TabOrderDialog)
-    //------------------------------------------------------------------------
+    
     TabOrderDialog::TabOrderDialog( Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
                     const Reference< XControlContainer >& _rxControlCont, const Reference< XComponentContext >& _rxORB )
         :ModalDialog( _pParent, "TabOrderDialog", "modules/spropctrlr/ui/taborder.ui")
@@ -111,27 +111,27 @@ namespace pcr
 
     }
 
-    //------------------------------------------------------------------------
+    
     void TabOrderDialog::SetModified()
     {
         m_pPB_OK->Enable();
     }
 
-    //------------------------------------------------------------------------
+    
     TabOrderDialog::~TabOrderDialog()
     {
         m_pLB_Controls->Hide();
-        //  delete pLB_Controls;
+        
         delete pImageList;
 
         DBG_DTOR(TabOrderDialog,NULL);
     }
 
-    //------------------------------------------------------------------------
+    
     Image TabOrderDialog::GetImage( const Reference< XPropertySet >& _rxSet ) const
     {
         sal_uInt16 nImageId = RID_SVXIMG_CONTROL;
-        // TODO: classify controls also in Basic propbrw
+        
         if ( _rxSet.is() && ::comphelper::hasProperty( PROPERTY_CLASSID, _rxSet ) )
         {
             switch( ::comphelper::getINT16( _rxSet->getPropertyValue( PROPERTY_CLASSID ) ) )
@@ -165,7 +165,7 @@ namespace pcr
         return pImageList->GetImage( nImageId );
     }
 
-    //------------------------------------------------------------------------
+    
     void TabOrderDialog::FillList()
     {
         DBG_ASSERT( m_xTempModel.is() && m_xControlContainer.is(), "TabOrderDialog::FillList: invalid call!" );
@@ -194,14 +194,14 @@ namespace pcr
                     if ( xPI->hasPropertyByName( PROPERTY_TABSTOP ) )
                     {
                         aName = ::comphelper::getString( xControl->getPropertyValue( PROPERTY_NAME ) );
-                            // TODO: do Basic controls have a name?
+                            
                         aImage = GetImage( xControl );
                         m_pLB_Controls->InsertEntry( aName, aImage, aImage, 0, sal_False, LIST_APPEND, xControl.get() );
                     }
                 }
                 else
                 {
-                    // no property set -> no tab order
+                    
                     OSL_FAIL( "TabOrderDialog::FillList: invalid control encountered!" );
                     m_pLB_Controls->Clear();
                     break;
@@ -213,27 +213,27 @@ namespace pcr
             OSL_FAIL( "TabOrderDialog::FillList: caught an exception!" );
         }
 
-        // select first entry
+        
         SvTreeListEntry* pFirstEntry = m_pLB_Controls->GetEntry( 0 );
         if ( pFirstEntry )
             m_pLB_Controls->Select( pFirstEntry );
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK( TabOrderDialog, MoveUpClickHdl, Button*, /*pButton*/ )
     {
         m_pLB_Controls->MoveSelection( -1 );
         return 0;
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK( TabOrderDialog, MoveDownClickHdl, Button*, /*pButton*/ )
     {
         m_pLB_Controls->MoveSelection( 1 );
         return 0;
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK( TabOrderDialog, AutoOrderClickHdl, Button*, /*pButton*/ )
     {
         try
@@ -257,7 +257,7 @@ namespace pcr
         return 0;
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK( TabOrderDialog, OKClickHdl, Button*, /*pButton*/ )
     {
         sal_uLong nEntryCount = m_pLB_Controls->GetEntryCount();
@@ -281,24 +281,24 @@ namespace pcr
             }
         }
 
-        // TODO: UNO action (to bracket all the single actions which are being created)
+        
         m_xModel->setControlModels( aSortedControlModelSeq );
 
         EndDialog( sal_True );
         return 0;
     }
 
-    //========================================================================
-    //= TabOrderListBox
-    //========================================================================
+    
+    
+    
     DBG_NAME(TabOrderListBox);
-    //------------------------------------------------------------------------
+    
     TabOrderListBox::TabOrderListBox( Window* pParent, WinBits nBits  )
         :SvTreeListBox( pParent, nBits  )
     {
         DBG_CTOR(TabOrderListBox,NULL);
         SetDragDropMode(0xFFFF/*SV_DRAGDROP_CTRL_MOVE*/);
-            // Hmm. The flag alone is not enough, so to be on the safe side ...
+            
 
         SetSelectionMode( MULTIPLE_SELECTION );
     }
@@ -313,13 +313,13 @@ namespace pcr
          return new TabOrderListBox(pParent, nWinStyle);
     }
 
-    //------------------------------------------------------------------------
+    
     TabOrderListBox::~TabOrderListBox()
     {
         DBG_DTOR(TabOrderListBox,NULL);
     }
 
-    //------------------------------------------------------------------------
+    
     void TabOrderListBox::ModelHasMoved( SvTreeListEntry* _pSource )
     {
         SvTreeListBox::ModelHasMoved( _pSource );
@@ -327,7 +327,7 @@ namespace pcr
         ((TabOrderDialog*)GetParentDialog())->SetModified();
     }
 
-    //------------------------------------------------------------------------
+    
     void TabOrderListBox::MoveSelection( long nRelPos )
     {
         OUString aSelEntryPrevText, aSelEntryNextText;
@@ -336,8 +336,8 @@ namespace pcr
         {
             ((TabOrderDialog*)GetParentDialog())->SetModified();
 
-            //////////////////////////////////////////////////////////////////////
-            // move entries
+            
+            
             if( nRelPos < 0 )
             {
                 SvTreeListEntry* pFirstSelected = FirstSelected();
@@ -402,8 +402,8 @@ namespace pcr
         }
     }
 
-//............................................................................
-}  // namespace pcr
-//............................................................................
+
+}  
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

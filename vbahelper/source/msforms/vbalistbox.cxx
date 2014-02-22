@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbalistbox.hxx"
@@ -37,7 +37,7 @@ ScVbaListBox::ScVbaListBox( const uno::Reference< XHelperInterface >& xParent, c
     mpListHelper.reset( new ListControlHelper( m_xProps ) );
 }
 
-// Attributes
+
 void SAL_CALL
 ScVbaListBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeException)
 {
@@ -116,7 +116,7 @@ ScVbaListBox::getText() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaListBox::setText( const OUString& _text ) throw (uno::RuntimeException)
 {
-    setValue( uno::makeAny( _text ) ); // seems the same
+    setValue( uno::makeAny( _text ) ); 
 }
 
 sal_Int32 SAL_CALL
@@ -155,8 +155,8 @@ ScVbaListBox::Selected( sal_Int32 index ) throw (css::uno::RuntimeException)
     uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( ITEMS ) >>= sList;
     sal_Int16 nLength = static_cast< sal_Int16 >( sList.getLength() );
-    // no choice but to do a horror cast as internally
-    // the indices are but sal_Int16
+    
+    
     sal_Int16 nIndex = static_cast< sal_Int16 >( index );
     if( nIndex < 0 || nIndex >= nLength )
         throw uno::RuntimeException( "Error Number." , uno::Reference< uno::XInterface >() );
@@ -164,7 +164,7 @@ ScVbaListBox::Selected( sal_Int32 index ) throw (css::uno::RuntimeException)
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( this ) ) );
 }
 
-// Methods
+
 void SAL_CALL
 ScVbaListBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) throw (uno::RuntimeException)
 {
@@ -183,10 +183,10 @@ ScVbaListBox::Clear(  ) throw (uno::RuntimeException)
     mpListHelper->Clear();
 }
 
-// this is called when something like the following vba code is used
-// to set the selected state of particular entries in the Listbox
-// ListBox1.Selected( 3 ) = false
-//PropListener
+
+
+
+
 void
 ScVbaListBox::setValueEvent( const uno::Any& value )
 {
@@ -210,7 +210,7 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
                     nList[i] = nList[i + 1];
                 }
                 nList.realloc( nLength - 1 );
-                //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
+                
                 fireClickEvent();
         m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nList ) );
                 return;
@@ -229,15 +229,15 @@ ScVbaListBox::setValueEvent( const uno::Any& value )
             nList.realloc( 1 );
             nList[0] = nIndex;
         }
-        //m_xProps->setPropertyValue( sSourceName, uno::makeAny( nList ) );
+        
         fireClickEvent();
         m_xProps->setPropertyValue( SELECTEDITEMS, uno::makeAny( nList ) );
     }
 }
 
-// this is called when something like the following vba code is used
-// to determine the selected state of particular entries in the Listbox
-// msgbox ListBox1.Selected( 3 )
+
+
+
 
 css::uno::Any
 ScVbaListBox::getValueEvent()

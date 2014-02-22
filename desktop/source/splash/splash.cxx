@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -90,14 +90,14 @@ private:
 public:
     SplashScreen();
 
-    // XStatusIndicator
+    
     virtual void SAL_CALL end() throw ( RuntimeException );
     virtual void SAL_CALL reset() throw ( RuntimeException );
     virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException );
     virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException );
     virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException );
 
-    // XInitialize
+    
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
         throw ( RuntimeException );
 
@@ -113,7 +113,7 @@ public:
         throw (css::uno::RuntimeException)
     { return desktop::splash::getSupportedServiceNames(); }
 
-    // workwindow
+    
     virtual void Paint( const Rectangle& );
 
 };
@@ -237,7 +237,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     }
 }
 
-// XInitialize
+
 void SAL_CALL
 SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
     throw (RuntimeException)
@@ -249,7 +249,7 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
         if (aArguments.getLength() > 1 )
             aArguments[1] >>= _sAppName;
 
-        // start to determine bitmap and all other required value
+        
         if ( _bShowLogo )
             SetScreenBitmap (_aIntroBmp);
         Size aSize = _aIntroBmp.GetSizePixel();
@@ -262,8 +262,8 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
             Point xtopleft(212,216);
             if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
             {
-                _tlx = xtopleft.X();    // top-left x
-                _tly = xtopleft.Y();    // top-left y
+                _tlx = xtopleft.X();    
+                _tly = xtopleft.Y();    
             }
             if ( NOT_LOADED == _barwidth )
                 _barwidth = 263;
@@ -291,8 +291,8 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
                 _barheight = 6;
             if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
             {
-                _tlx = _xoffset;           // top-left x
-                _tly = _height - _yoffset; // top-left y
+                _tlx = _xoffset;           
+                _tly = _height - _yoffset; 
             }
         }
 
@@ -306,7 +306,7 @@ SplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::sta
         if ( sal::static_int_cast< ColorData >(NOT_LOADED) ==
              _cProgressBarColor.GetColor() )
         {
-            // progress bar: new color only for big bitmap format
+            
             if ( _width > 500 )
                 _cProgressBarColor = Color( 157, 202, 18 );
             else
@@ -330,7 +330,7 @@ void SplashScreen::updateStatus()
     Flush();
 }
 
-// internal private methods
+
 IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
 {
     if ( inEvent != 0 )
@@ -347,7 +347,7 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclWindowEvent *, inEvent )
     return 0;
 }
 
-// Read keys from soffice{.ini|rc}:
+
 OUString implReadBootstrapKey( const OUString& _rKey )
 {
     OUString sValue;
@@ -369,12 +369,12 @@ void SplashScreen::loadConfig()
     OUString sNativeProgress = implReadBootstrapKey( "NativeProgress" );
 
 
-    // Determine full screen splash mode
+    
     _bFullScreenSplash = (( !sFullScreenSplash.isEmpty() ) &&
                           ( !sFullScreenSplash.equals( "0" )));
 
-    // Try to retrieve the relative values for the progress bar. The current
-    // schema uses the screen ratio to retrieve the associated values.
+    
+    
     if ( _bFullScreenSplash )
         determineProgressRatioValues( _fXPos, _fYPos, _fWidth, _fHeight );
 
@@ -454,7 +454,7 @@ void SplashScreen::loadConfig()
     }
 
     if ( _barheight >= 10 )
-        _barspace = 3;  // more space between frame and bar
+        _barspace = 3;  
 
     if ( !sPosition.isEmpty() )
     {
@@ -473,17 +473,17 @@ void SplashScreen::SetScreenBitmap(BitmapEx &rBitmap)
     sal_Int32 nWidth( 0 );
     sal_Int32 nHeight( 0 );
 
-    // determine desktop resolution
+    
     sal_uInt32 nCount = Application::GetScreenCount();
     if ( nCount > 0 )
     {
-        // retrieve size from first screen
+        
         Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
         nWidth  = aScreenArea.GetWidth();
         nHeight = aScreenArea.GetHeight();
     }
 
-    // create file name from screen resolution information
+    
     OStringBuffer aStrBuf( 128 );
     OStringBuffer aResBuf( 32 );
     aStrBuf.append( "intro_" );
@@ -516,11 +516,11 @@ void SplashScreen::determineProgressRatioValues(
     sal_Int32 nHeight( 0 );
     sal_Int32 nScreenRatio( 0 );
 
-    // determine desktop resolution
+    
     sal_uInt32 nCount = Application::GetScreenCount();
     if ( nCount > 0 )
     {
-        // retrieve size from first screen
+        
         Rectangle aScreenArea = Application::GetScreenPosSizePixel((unsigned int)0);
         nWidth  = aScreenArea.GetWidth();
         nHeight = aScreenArea.GetHeight();
@@ -583,10 +583,10 @@ void SplashScreen::Paint( const Rectangle&)
 {
     if(!_bVisible) return;
 
-    //native drawing
+    
     sal_Bool bNativeOK = sal_False;
 
-    // in case of native controls we need to draw directly to the window
+    
     if( _bNativeProgress && IsNativeControlSupported( CTRL_INTROPROGRESS, PART_ENTIRE_CONTROL ) )
     {
         DrawBitmapEx( Point(), _aIntroBmp );
@@ -610,17 +610,17 @@ void SplashScreen::Paint( const Rectangle&)
             return;
         }
     }
-    //non native drawing
-    // draw bitmap
+    
+    
     if (_bPaintBitmap)
         _vdev.DrawBitmapEx( Point(), _aIntroBmp );
 
     if (_bPaintProgress) {
-        // draw progress...
+        
         long length = (_iProgress * _barwidth / _iMax) - (2 * _barspace);
         if (length < 0) length = 0;
 
-        // border
+        
         _vdev.SetFillColor();
         _vdev.SetLineColor( _cProgressFrameColor );
         _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth, _tly+_barheight));
@@ -638,7 +638,7 @@ void SplashScreen::Paint( const Rectangle&)
 }
 
 
-// get service instance...
+
 osl::Mutex SplashScreen::_aMutex;
 
 }

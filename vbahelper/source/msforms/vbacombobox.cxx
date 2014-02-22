@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbacombobox.hxx"
@@ -34,8 +34,8 @@ using namespace com::sun::star;
 using namespace ooo::vba;
 
 
-//SelectedItems list of integer indexes
-//StringItemList list of items
+
+
 
 const static OUString TEXT( "Text" );
 const static OUString ITEMS( "StringItemList" );
@@ -46,7 +46,7 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
     mpListHelper.reset( new ListControlHelper( m_xProps ) );
     try
     {
-       // grab the default value property name
+       
        m_xProps->getPropertyValue( CONTROLSOURCEPROP ) >>= sSourceName;
     }
     catch( uno::Exception& )
@@ -56,11 +56,11 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
         sSourceName = "Text";
 }
 
-// Attributes
 
 
-// Value, [read] e.g. getValue returns the value of ooo Text propery e.g. the value in
-// the drop down
+
+
+
 uno::Any SAL_CALL
 ScVbaComboBox::getValue() throw (uno::RuntimeException)
 {
@@ -82,7 +82,7 @@ ScVbaComboBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeExcepti
             OUString sText = sItems[ nIndex ];
             m_xProps->setPropertyValue( TEXT, uno::makeAny( sText ) );
 
-            // fire the _Change event
+            
             if( nOldIndex != nIndex )
                 fireClickEvent();
         }
@@ -94,8 +94,8 @@ ScVbaComboBox::getListIndex() throw (uno::RuntimeException)
 {
     uno::Sequence< OUString > sItems;
     m_xProps->getPropertyValue( ITEMS ) >>= sItems;
-    // should really return the item that has focus regardless of
-    // it been selected
+    
+    
     if ( sItems.getLength() > 0 )
     {
         OUString sText = getText();
@@ -114,12 +114,12 @@ ScVbaComboBox::getListIndex() throw (uno::RuntimeException)
     return uno::makeAny( sal_Int32( -1 ) );
 }
 
-// Value, [write]e.g. setValue sets the value in the drop down, and if the value is one
-// of the values in the list then the selection is also set
+
+
 void SAL_CALL
 ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
 {
-    // booleans are converted to uppercase strings
+    
     OUString oldValue = extractStringFromAny( getValue(), OUString(), true );
     m_xProps->setPropertyValue( sSourceName, uno::Any( extractStringFromAny( _value, OUString(), true ) ) );
     OUString newValue = extractStringFromAny( getValue(), OUString(), true );
@@ -135,7 +135,7 @@ ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException)
     }
 }
 
-// see Value
+
 
 OUString SAL_CALL
 ScVbaComboBox::getText() throw (uno::RuntimeException)
@@ -148,10 +148,10 @@ ScVbaComboBox::getText() throw (uno::RuntimeException)
 void SAL_CALL
 ScVbaComboBox::setText( const OUString& _text ) throw (uno::RuntimeException)
 {
-    setValue( uno::makeAny( _text ) ); // seems the same
+    setValue( uno::makeAny( _text ) ); 
 }
 
-// Methods
+
 void SAL_CALL
 ScVbaComboBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) throw (uno::RuntimeException)
 {

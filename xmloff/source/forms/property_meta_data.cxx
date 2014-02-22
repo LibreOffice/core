@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "property_description.hxx"
@@ -35,7 +35,7 @@ namespace xmloff { namespace metadata
 #define FORM_SINGLE_PROPERTY( id, att ) \
     PropertyDescription( PROPERTY_##id, XML_NAMESPACE_FORM, att, &FormHandlerFactory::getFormPropertyHandler, PID_##id, NO_GROUP )
 
-    //= property meta data
+    
     namespace
     {
         const PropertyDescription* lcl_getPropertyMetaData()
@@ -59,12 +59,12 @@ namespace xmloff { namespace metadata
 
     namespace
     {
-        // TODO: instead of having all of the below static, it should be some per-instance data. This way, the
-        // approach used here would scale much better.
-        // That is, if you have multiple "meta data instances", which manage a small, but closed set of properties,
-        // then looking looking through those multiple instances would probably be faster than searching within
-        // one big instance, since in this case, every instance can quickly decide whether it is responsible
-        // for some attribute or property, and otherwise delegate to the next instance.
+        
+        
+        
+        
+        
+        
 
         typedef ::boost::unordered_map< OUString, const PropertyDescription*, OUStringHash > DescriptionsByName;
 
@@ -201,8 +201,8 @@ namespace xmloff { namespace metadata
 
         if ( range.first == range.second )
         {
-            // the attribute is not used for any non-trivial group, which means it is mapped directly to
-            // a single property
+            
+            
             const AttributesWithoutGroup& attributesWithoutGroups( lcl_getAttributesWithoutGroups() );
             const AttributesWithoutGroup::const_iterator pos = attributesWithoutGroups.find( i_attribute );
             if ( pos != attributesWithoutGroups.end() )
@@ -239,6 +239,6 @@ namespace xmloff { namespace metadata
         return attribute;
     }
 
-} } // namespace xmloff::metadata
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

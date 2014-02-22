@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -97,7 +97,7 @@ static void lcl_html_outEvents( SvStream& rStrm,
     if( !xIndexAcc.is() || !xEventManager.is() )
         return;
 
-    // Und die Position des ControlModel darin suchen
+    
     sal_Int32 nCount = xIndexAcc->getCount(), nPos;
     for( nPos = 0 ; nPos < nCount; nPos++ )
     {
@@ -225,7 +225,7 @@ sal_Bool SwHTMLWriter::HasControls() const
     sal_uInt32 nStartIdx = pCurPam->GetPoint()->nNode.GetIndex();
     sal_uInt16 i;
 
-    // Skip all controls in front of the current paragraph
+    
     for( i = 0; i < aHTMLControls.size() &&
         aHTMLControls[i]->nNdIdx < nStartIdx; i++ )
         ;
@@ -235,12 +235,12 @@ sal_Bool SwHTMLWriter::HasControls() const
 
 void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
 {
-    if( bPreserveForm )     // wir sind in einer Tabelle oder einem Bereich
-        return;             // ueber dem eine Form aufgespannt wurde
+    if( bPreserveForm )     
+        return;             
 
     if( !bTag_On )
     {
-        // die Form beenden wenn alle Controls ausgegeben wurden
+        
         if( pxFormComps && pxFormComps->is() &&
             (*pxFormComps)->getCount() == nFormCntrlCnt )
         {
@@ -250,11 +250,11 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
         return;
     }
 
-    uno::Reference< container::XIndexContainer > xNewFormComps;  // die neue Form
+    uno::Reference< container::XIndexContainer > xNewFormComps;  
     sal_uInt32 nStartIdx = pStartNd ? pStartNd->GetIndex()
                                     : pCurPam->GetPoint()->nNode.GetIndex();
 
-    // Ueberspringen von Controls vor dem interesanten Bereich
+    
     sal_uInt16 i;
     for( i = 0; i < aHTMLControls.size() &&
         aHTMLControls[i]->nNdIdx < nStartIdx; i++ )
@@ -262,22 +262,22 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
 
     if( !pStartNd )
     {
-        // Check fuer einen einzelnen Node: da ist nur interessant, ob
-        // es zu dem Node ein Control gibt und zu welcher Form es gehoert
+        
+        
         if( i < aHTMLControls.size() &&
             aHTMLControls[i]->nNdIdx == nStartIdx )
             xNewFormComps = aHTMLControls[i]->xFormComps;
     }
     else
     {
-        // wir klappern eine Tabelle/einen Bereich ab: hier interessiert uns:
-        // - ob es Controls mit unterschiedlichen Start-Nodes gibt
-        // - ob es eine Form gibt, fuer die nicht alle Controls in der
-        //   Tabelle/dem Bereich liegen
+        
+        
+        
+        
 
-        uno::Reference< container::XIndexContainer > xCurrentFormComps;// die aktuelle Form in der Tabelle
-        const SwStartNode *pCurrentStNd = 0; // und der Start-Node eines Ctrls
-        sal_Int32 nCurrentCtrls = 0;   // und die in ihr gefundenen Controls
+        uno::Reference< container::XIndexContainer > xCurrentFormComps;
+        const SwStartNode *pCurrentStNd = 0; 
+        sal_Int32 nCurrentCtrls = 0;   
         sal_uInt32 nEndIdx =  pStartNd->EndOfSectionIndex();
         for( ; i < aHTMLControls.size() &&
             aHTMLControls[i]->nNdIdx <= nEndIdx; i++ )
@@ -287,15 +287,15 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
 
             if( xCurrentFormComps.is() )
             {
-                // Wir befinden uns bereits in einer Form ...
+                
                 if( xCurrentFormComps==aHTMLControls[i]->xFormComps )
                 {
-                    // ... und das Control befindet sich auch darin ...
+                    
                     if( pCurrentStNd!=pCntrlStNd )
                     {
-                        // ... aber es liegt in einer anderen Zelle:
-                        // Dann muessen eir eine Form ueber der Tabelle
-                        // aufmachen
+                        
+                        
+                        
                         xNewFormComps = xCurrentFormComps;
                         break;
                     }
@@ -303,9 +303,9 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
                 }
                 else
                 {
-                    // ... aber das Control liegt in einer anderen Zelle:
-                    // Da tun wir so, als ob wir eine neue Form aufmachen
-                    // und suchen weiter.
+                    
+                    
+                    
                     xCurrentFormComps = aHTMLControls[i]->xFormComps;
                     pCurrentStNd = pCntrlStNd;
                     nCurrentCtrls = aHTMLControls[i]->nCount;
@@ -313,8 +313,8 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
             }
             else
             {
-                // Wir befinden uns noch in keiner Form:
-                // Da tun wir mal so, als ob wie wir die Form aufmachen.
+                
+                
                 xCurrentFormComps = aHTMLControls[i]->xFormComps;
                 pCurrentStNd = pCntrlStNd;
                 nCurrentCtrls = aHTMLControls[i]->nCount;
@@ -323,9 +323,9 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
         if( !xNewFormComps.is() && xCurrentFormComps.is() &&
             nCurrentCtrls != xCurrentFormComps->getCount() )
         {
-            // In der Tablle/dem Bereich sollte eine Form aufgemacht werden,
-            // die nicht vollstaendig in der Tabelle liegt. Dan muessen
-            // wie die Form jetzt ebenfalls oeffen.
+            
+            
+            
             xNewFormComps = xCurrentFormComps;
         }
     }
@@ -333,15 +333,15 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
     if( xNewFormComps.is() &&
         (!pxFormComps || !(xNewFormComps == *pxFormComps)) )
     {
-        // Es soll eine Form aufgemacht werden ...
+        
         if( pxFormComps && pxFormComps->is() )
         {
-            // .. es ist aber noch eine Form offen: Das ist in
-            // jedem Fall eine Fehler, aber wir schliessen die alte
-            // Form trotzdem
+            
+            
+            
             OutForm( sal_False, *pxFormComps );
 
-            //!!!nWarn = 1; // Control wird falscher Form zugeordnet
+            
         }
 
         if( !pxFormComps )
@@ -356,9 +356,9 @@ void SwHTMLWriter::OutForm( sal_Bool bTag_On, const SwStartNode *pStartNd )
 
 void SwHTMLWriter::OutHiddenForms()
 {
-    // Ohne DrawModel kann es auch keine Controls geben. Dann darf man
-    // auch nicht per UNO auf das Dok zugreifen, weil sonst ein DrawModel
-    // angelegt wird.
+    
+    
+    
     if( !pDoc->GetDrawModel() )
         return;
 
@@ -457,7 +457,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
 
     if( !bOn )
     {
-        DecIndentLevel(); // Inhalt der Form einruecken
+        DecIndentLevel(); 
         if( bLFPossible )
             OutNewLine();
         HTMLOutFuncs::Out_AsciiTag( Strm(), OOO_STRING_SVTOOLS_HTML_form, sal_False );
@@ -466,7 +466,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
         return;
     }
 
-    // die neue Form wird geoeffnet
+    
     if( bLFPossible )
         OutNewLine();
     OStringBuffer sOut;
@@ -555,7 +555,7 @@ void SwHTMLWriter::OutForm( sal_Bool bOn,
     lcl_html_outEvents( Strm(), xFormComp, bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
     Strm().WriteChar( '>' );
 
-    IncIndentLevel(); // Inhalt der Form einruecken
+    IncIndentLevel(); 
     bLFPossible = sal_True;
 }
 
@@ -650,15 +650,15 @@ void SwHTMLWriter::OutHiddenControls(
 }
 
 
-// hier folgen die Ausgabe-Routinen, dadurch sind die form::Forms gebuendelt:
+
 
 const SdrObject *SwHTMLWriter::GetHTMLControl( const SwDrawFrmFmt& rFmt )
 {
-    // es muss ein Draw-Format sein
+    
     OSL_ENSURE( RES_DRAWFRMFMT == rFmt.Which(),
             "GetHTMLControl nuer fuer Draw-Formate erlaubt" );
 
-    // Schauen, ob es ein SdrObject dafuer gibt
+    
     const SdrObject *pObj = rFmt.FindSdrObject();
     if( !pObj || FmFormInventor != pObj->GetObjInventor() )
         return 0;
@@ -826,7 +826,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             Size aSz( 0, 0 );
             GetControlSize( rSdrObject, aSz, rWrt.pDoc );
 
-            // wieviele sind sichtbar ??
+            
             if( aSz.Height() )
             {
                 sOptions.append(' ').append(OOO_STRING_SVTOOLS_HTML_O_size).
@@ -948,7 +948,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     append("=\"").append(static_cast<sal_Int32>(aSz.Width())).append("\"");
             }
 
-            // VALUE vim form aus Sicherheitsgruenden nicht exportieren
+            
         }
         break;
 
@@ -958,8 +958,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         nFrmOpts = HTML_FRMOPTS_IMG_CONTROL;
         break;
 
-    default:                // kennt HTML nicht
-        eTag = TAG_NONE;        // also ueberspringen
+    default:                
+        eTag = TAG_NONE;        
         break;
     }
 
@@ -1069,8 +1069,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     OSL_ENSURE( !bInCntnr, "Container wird fuer Controls nicht unterstuertzt" );
     if( rHTMLWrt.IsHTMLMode( HTMLMODE_ABS_POS_DRAW ) && !bInCntnr )
     {
-        // Wenn Zeichen-Objekte nicht absolut positioniert werden duerfen,
-        // das entsprechende Flag loeschen.
+        
+        
         nFrmOpts |= (TYPE_IMAGE == eType
                             ? HTML_FRMOPTS_IMG_CONTROL_CSS1
                             : HTML_FRMOPTS_CONTROL_CSS1);
@@ -1210,8 +1210,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                     OUString("StringItemList") );
         if( aTmp.getValueType() == ::getCppuType((uno::Sequence<OUString>*)0) )
         {
-            rHTMLWrt.IncIndentLevel(); // der Inhalt von Select darf
-                                       // eingerueckt werden
+            rHTMLWrt.IncIndentLevel(); 
+                                       
             uno::Sequence<OUString> aList( *(uno::Sequence<OUString>*)aTmp.getValue() );
             sal_Int32 nCnt = aList.getLength();
             const OUString *pStrings = aList.getConstArray();
@@ -1258,7 +1258,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                 if( bSelected )
                     nSel++;
 
-                rHTMLWrt.OutNewLine(); // jede Option bekommt eine eigene Zeile
+                rHTMLWrt.OutNewLine(); 
                 sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_option);
                 if( !sVal.isEmpty() || bEmptyVal )
                 {
@@ -1281,14 +1281,14 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_option, sal_False );
 
             rHTMLWrt.DecIndentLevel();
-            rHTMLWrt.OutNewLine();// das </SELECT> bekommt eine eigene Zeile
+            rHTMLWrt.OutNewLine();
         }
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_select, sal_False );
     }
     else if( TAG_TEXTAREA == eTag )
     {
-        // In TextAreas duerfen keine zusaetzlichen Spaces oder LF exportiert
-        // werden!
+        
+        
         OUString sVal;
         aTmp = xPropSet->getPropertyValue(
         OUString("DefaultText") );
@@ -1327,7 +1327,7 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
     if( !aEndTags.isEmpty() )
         rWrt.Strm().WriteCharPtr( aEndTags.getStr() );
 
-    // Controls sind nicht absatz-gebunden, deshalb kein LF mehr ausgeben!
+    
     rHTMLWrt.bLFPossible = sal_False;
 
     if( rHTMLWrt.pxFormComps && rHTMLWrt.pxFormComps->is() )
@@ -1336,8 +1336,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
 }
 
 
-// Ermitteln, ob eine Format zu einem Control gehoert und wenn ja
-// dessen Form zurueckgeben
+
+
 static void AddControl( HTMLControls& rControls,
                         const SdrObject *pSdrObj,
                         sal_uInt32 nNodeIdx )
@@ -1373,15 +1373,15 @@ static void AddControl( HTMLControls& rControls,
 
 void SwHTMLWriter::GetControls()
 {
-    // Idee: die absatz- und zeichengebundenen Controls werden erst einmal
-    // eingesammelt. Dabei wird fuer jedes Control des Absatz-Position
-    // und VCForm in einem Array gemerkt.
-    // Ueber dieses Array laesst sich dann feststellen, wo form::Forms geoeffnet
-    // und geschlossen werden muessen.
+    
+    
+    
+    
+    
     sal_uInt16 i;
     if( pHTMLPosFlyFrms )
     {
-        // die absatz-gebundenen Controls einsammeln
+        
         for( i=0; i<pHTMLPosFlyFrms->size(); i++ )
         {
             const SwHTMLPosFlyFrm* pPosFlyFrm = (*pHTMLPosFlyFrms)[ i ];
@@ -1398,7 +1398,7 @@ void SwHTMLWriter::GetControls()
         }
     }
 
-    // und jetzt die in einem zeichengebundenen Rahmen
+    
     const SwFrmFmts* pSpzFrmFmts = pDoc->GetSpzFrmFmts();
     for( i=0; i<pSpzFrmFmts->size(); i++ )
     {

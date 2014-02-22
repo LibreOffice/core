@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unistd.h>
@@ -43,7 +43,7 @@
 #include <generic/gendata.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <vcl/solarmutex.hxx>
-// FIXME: remove when we re-work the svp mainloop
+
 #include <unx/salunxtime.h>
 
 bool SvpSalInstance::isFrameAlive( const SalFrame* pFrame ) const
@@ -71,10 +71,10 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
     m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
     if (pipe (m_pTimeoutFDS) != -1)
     {
-        // initialize 'wakeup' pipe.
+        
         int flags;
 
-        // set close-on-exec descriptor flag.
+        
         if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
@@ -86,7 +86,7 @@ SvpSalInstance::SvpSalInstance( SalYieldMutex *pMutex ) :
             fcntl (m_pTimeoutFDS[1], F_SETFD, flags);
         }
 
-        // set non-blocking I/O flag.
+        
         if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
@@ -108,7 +108,7 @@ SvpSalInstance::~SvpSalInstance()
     if( s_pDefaultInstance == this )
         s_pDefaultInstance = NULL;
 
-    // close 'wakeup' pipe.
+    
     close (m_pTimeoutFDS[0]);
     close (m_pTimeoutFDS[1]);
     osl_destroyMutex( m_aEventGuard );
@@ -141,7 +141,7 @@ void SvpSalInstance::deregisterFrame( SalFrame* pFrame )
 
     if( osl_acquireMutex( m_aEventGuard ) )
     {
-        // cancel outstanding events for this frame
+        
         if( ! m_aUserEvents.empty() )
         {
             std::list< SalUserEvent >::iterator it = m_aUserEvents.begin();
@@ -167,7 +167,7 @@ void SvpSalInstance::Wakeup()
 bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 {
     bool bRet = false;
-    if( m_aTimeout.tv_sec ) // timer is started
+    if( m_aTimeout.tv_sec ) 
     {
         timeval aTimeOfDay;
         gettimeofday( &aTimeOfDay, 0 );
@@ -176,13 +176,13 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
             bRet = true;
             if( bExecuteTimers )
             {
-                // timed out, update timeout
+                
                 m_aTimeout = aTimeOfDay;
                 m_aTimeout += m_nTimeoutMS;
 
                 osl::Guard< comphelper::SolarMutex > aGuard( mpSalYieldMutex );
 
-                // notify
+                
                 ImplSVData* pSVData = ImplGetSVData();
                 if( pSVData->mpSalTimer )
                     pSVData->mpSalTimer->CallCallback();
@@ -271,9 +271,9 @@ SalBitmap* SvpSalInstance::CreateSalBitmap()
 
 void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    // first, check for already queued events.
+    
 
-    // release yield mutex
+    
     std::list< SalUserEvent > aEvents;
     sal_uLong nAcquireCount = ReleaseYieldMutex();
     if( osl_acquireMutex( m_aEventGuard ) )
@@ -293,7 +293,7 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         }
         osl_releaseMutex( m_aEventGuard );
     }
-    // acquire yield mutex again
+    
     AcquireYieldMutex( nAcquireCount );
 
     bool bEvent = !aEvents.empty();
@@ -306,7 +306,7 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 it->m_pFrame->CallCallback( it->m_nEvent, it->m_pData );
                 if( it->m_nEvent == SALEVENT_RESIZE )
                 {
-                    // this would be a good time to post a paint
+                    
                     const SvpSalFrame* pSvpFrame = static_cast<const SvpSalFrame*>(it->m_pFrame);
                     pSvpFrame->PostPaint(false);
                 }
@@ -319,10 +319,10 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     if (bWait && ! bEvent )
     {
         int nTimeoutMS = 0;
-        if (m_aTimeout.tv_sec) // Timer is started.
+        if (m_aTimeout.tv_sec) 
         {
             timeval Timeout;
-            // determine remaining timeout.
+            
             gettimeofday (&Timeout, 0);
             nTimeoutMS = m_aTimeout.tv_sec*1000 + m_aTimeout.tv_usec/1000
                          - Timeout.tv_sec*1000 - Timeout.tv_usec/1000;
@@ -330,7 +330,7 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
                 nTimeoutMS = 0;
         }
         else
-            nTimeoutMS = -1; // wait until something happens
+            nTimeoutMS = -1; 
 
         DoReleaseYield(nTimeoutMS);
     }
@@ -338,21 +338,21 @@ void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
 void SvpSalInstance::DoReleaseYield( int nTimeoutMS )
 {
-    // poll
+    
     struct pollfd aPoll;
     aPoll.fd = m_pTimeoutFDS[0];
     aPoll.events = POLLIN;
     aPoll.revents = 0;
 
-    // release yield mutex
+    
     sal_uLong nAcquireCount = ReleaseYieldMutex();
 
     poll( &aPoll, 1, nTimeoutMS );
 
-    // acquire yield mutex again
+    
     AcquireYieldMutex( nAcquireCount );
 
-    // clean up pipe
+    
     if( (aPoll.revents & POLLIN) != 0 )
     {
         int buffer;
@@ -380,9 +380,9 @@ void* SvpSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
     return const_cast<char*>("");
 }
 
-// ---------------
-// - SalTimer -
-// ---------------
+
+
+
 
 void SvpSalInstance::StopTimer()
 {
@@ -401,7 +401,7 @@ void SvpSalInstance::StartTimer( sal_uLong nMS )
 
     if ((aPrevTimeout > m_aTimeout) || (aPrevTimeout.tv_sec == 0))
     {
-        // Wakeup from previous timeout (or stopped timer).
+        
         Wakeup();
     }
 }

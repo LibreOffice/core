@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/util/SearchOptions.hpp>
@@ -80,7 +80,7 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
         bNewSoftHyphen = false;
         sal_Int32 nStt = 0;
 
-        // Check if next stop is a hint.
+        
         if ( nHintStart>=0
             && (-1 == nSoftHyphen || nHintStart < nSoftHyphen)
             && nHintStart < nEnd )
@@ -88,7 +88,7 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
             nStt = nHintStart;
             bNewHint = true;
         }
-        // Check if next stop is a soft hyphen.
+        
         else if (   -1 != nSoftHyphen
                  && (-1 == nHintStart || nSoftHyphen < nHintStart)
                  && nSoftHyphen < nEnd)
@@ -96,7 +96,7 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
             nStt = nSoftHyphen;
             bNewSoftHyphen = true;
         }
-        // If nSoftHyphen == nHintStart, the current hint *must* be a hint with an end.
+        
         else if (-1 != nSoftHyphen && nSoftHyphen == nHintStart)
         {
             nStt = nSoftHyphen;
@@ -124,13 +124,13 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
                 case RES_TXTATR_META:
                 case RES_TXTATR_METAFIELD:
                     {
-                        // (1998) they are desired as separators and
-                        // belong not any longer to a word.
-                        // they should also be ignored at a
-                        // beginning/end of a sentence if blank. Those are
-                        // simply removed if first. If at the end, we keep the
-                        // replacement and remove afterwards all at a string's
-                        // end (might be normal 0x7f).
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         const bool bEmpty =
                             ( pHt->Which() != RES_TXTATR_FIELD
                               && pHt->Which() != RES_TXTATR_ANNOTATION )
@@ -181,7 +181,7 @@ lcl_CleanStr(const SwTxtNode& rNd, sal_Int32 const nStart, sal_Int32& rEnd,
     return buf.makeStringAndClear();
 }
 
-// skip all non SwPostIts inside the array
+
 sal_Int32 GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
 {
     sal_Int32 aIndex = 0;
@@ -199,7 +199,7 @@ sal_Int32 GetPostIt(sal_Int32 aCount,const SwpHints *pHts)
             }
         }
     }
-    // throw away all following non postits
+    
     for( sal_Int32 i = aIndex; i < pHts->Count(); i++ )
     {
         const SwTxtAttr* pTxtAttr = (*pHts)[i];
@@ -223,9 +223,9 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
     SwNodeIndex& rNdIdx = pPam->GetPoint()->nNode;
     SwIndex& rCntntIdx = pPam->GetPoint()->nContent;
 
-    // If bFound is true then the string was found and is between nStart and nEnd
+    
     bool bFound = false;
-    // start position in text or initial position
+    
     sal_Bool bFirst = sal_True;
     SwCntntNode * pNode;
 
@@ -235,7 +235,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                           rSearchOpt.searchString.equalsAscii( "$^" ) );
     const bool bChkParaEnd = bRegSearch && rSearchOpt.searchString.equalsAscii( "$" );
 
-    // LanguageType eLastLang = 0;
+    
     while( 0 != ( pNode = ::GetNode( *pPam, bFirst, fnMove, bInReadOnly ) ))
     {
         if( pNode->IsTxtNode() )
@@ -249,12 +249,12 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             sal_Int32 nStart = rCntntIdx.GetIndex();
 
             /* #i80135# */
-            // if there are SwPostItFields inside our current node text, we
-            // split the text into separate pieces and search for text inside
-            // the pieces as well as inside the fields
+            
+            
+            
             const SwpHints *pHts = ((SwTxtNode*)pNode)->GetpSwpHints();
 
-            // count PostItFields by looping over all fields
+            
             sal_Int32 aNumberPostits = 0;
             sal_Int32 aIgnore = 0;
             if (pHts && bSearchInNotes)
@@ -292,7 +292,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : 0;
 
             sal_Int32 aStart = 0;
-            // do we need to finish a note?
+            
             if (pPostItMgr && pPostItMgr->HasActiveSidebarWin())
             {
                 if (bSearchInNotes)
@@ -304,7 +304,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         if (aNumberPostits)
                             --aNumberPostits;
                     }
-                    //search inside and finsih and put focus back into the doc
+                    
                     if (pPostItMgr->FinishSearchReplace(rSearchOpt,bSrchForward))
                     {
                         bFound = true ;
@@ -319,7 +319,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
 
             if (aNumberPostits)
             {
-                // now we have to split
+                
                 sal_Int32 nStartInside = 0;
                 sal_Int32 nEndInside = 0;
                 sal_Int16 aLoop= bSrchForward ? aStart : aNumberPostits;
@@ -338,7 +338,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         nEndInside = aLoop==0 ? nEnd : *(*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)]->GetStart()+1;
                         nTxtLen = nStartInside - nEndInside;
                     }
-                    // search inside the text between a note
+                    
                     bFound = DoSearch( rSearchOpt, rSTxt, fnMove, bSrchForward,
                                        bRegSearch, bChkEmptyPara, bChkParaEnd,
                                        nStartInside, nEndInside, nTxtLen, pNode,
@@ -347,7 +347,7 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
                         break;
                     else
                     {
-                        // we should now be right in front of a note, search inside
+                        
                         if ( (bSrchForward && (GetPostIt(aLoop + aIgnore,pHts) < pHts->Count()) ) || ( !bSrchForward && (aLoop!=0) ))
                         {
                             const SwTxtAttr* pTxtAttr = bSrchForward ?  (*pHts)[GetPostIt(aLoop+aIgnore,pHts)] : (*pHts)[GetPostIt(aLoop+aIgnore-1,pHts)];
@@ -363,8 +363,8 @@ bool SwPaM::Find( const SearchOptions& rSearchOpt, bool bSearchInNotes , utl::Te
             }
             else
             {
-                // if there is no SwPostItField inside or searching inside notes
-                // is disabled, we search the whole length just like before
+                
+                
                 bFound = DoSearch( rSearchOpt, rSTxt, fnMove, bSrchForward,
                                    bRegSearch, bChkEmptyPara, bChkParaEnd,
                                    nStart, nEnd, nTxtLen, pNode, pPam );
@@ -389,8 +389,8 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     OUString sCleanStr;
     std::vector<sal_Int32> aFltArr;
     LanguageType eLastLang = 0;
-    // if the search string contains a soft hypen,
-    // we don't strip them from the text:
+    
+    
     bool bRemoveSoftHyphens = true;
 
     if ( bRegSearch )
@@ -430,13 +430,13 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     }
 
     const sal_Int32 nStringEnd = nEnd;
-    bool bZeroMatch = false;    // zero-length match, i.e. only $ anchor as regex
+    bool bZeroMatch = false;    
     while ( ((bSrchForward && nStart < nStringEnd) ||
             (! bSrchForward && nStart > nStringEnd)) && !bZeroMatch )
     {
-        // SearchAlgorithms_APPROXIMATE works on a per word base so we have to
-        // provide the text searcher with the correct locale, because it uses
-        // the break-iterator
+        
+        
+        
         if ( pScriptIter )
         {
             nEnd = pScriptIter->GetScriptChgPos();
@@ -466,14 +466,14 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
         {
             nStart = nProxyStart;
             nEnd = nProxyEnd;
-            // set section correctly
+            
             *GetPoint() = *pPam->GetPoint();
             SetMark();
 
-            // adjust start and end
+            
             if( !aFltArr.empty() )
             {
-                // if backward search, switch positions temporarily
+                
                 if( !bSrchForward ) { std::swap(nStart, nEnd); }
 
                 sal_Int32 nNew = nStart;
@@ -490,13 +490,13 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                 }
 
                 nEnd = nNew;
-                // if backward search, switch positions temporarily
+                
                 if( !bSrchForward ) { std::swap(nStart, nEnd); }
             }
             GetMark()->nContent = nStart;
             GetPoint()->nContent = nEnd;
 
-            // if backward search, switch point and mark
+            
             if( !bSrchForward )
                 Exchange();
             bFound = true;
@@ -528,7 +528,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
             1 == std::abs( (int)( GetPoint()->nNode.GetIndex() -
                              GetMark()->nNode.GetIndex()) ) )
         {
-            // if backward search, switch point and mark
+            
             if( !bSrchForward )
                 Exchange();
             return true;
@@ -537,7 +537,7 @@ bool SwPaM::DoSearch( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
     return bFound;
 }
 
-/// parameters for search and replace in text
+
 struct SwFindParaText : public SwFindParas
 {
     const SearchOptions& rSearchOpt;
@@ -566,13 +566,13 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
 
     const bool bFnd = pCrsr->Find( rSearchOpt, bSearchInNotes, aSTxt, fnMove, pRegion, bInReadOnly );
 
-    if( bFnd && bReplace ) // replace string
+    if( bFnd && bReplace ) 
     {
-        // use replace method in SwDoc
+        
         const bool bRegExp(SearchAlgorithms_REGEXP == rSearchOpt.algorithmType);
         SwIndex& rSttCntIdx = pCrsr->Start()->nContent;
         const sal_Int32 nSttCnt = rSttCntIdx.GetIndex();
-        // add to shell-cursor-ring so that the regions will be moved enventually
+        
         Ring *pPrev(0);
         if( bRegExp )
         {
@@ -589,7 +589,7 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
 
         if( bRegExp )
         {
-            // and remove region again
+            
             Ring *p, *pNext = (Ring*)pRegion;
             do {
                 p = pNext;
@@ -612,7 +612,7 @@ sal_uLong SwCursor::Find( const SearchOptions& rSearchOpt, sal_Bool bSearchInNot
                           SwDocPositions nStart, SwDocPositions nEnd,
                           sal_Bool& bCancel, FindRanges eFndRngs, int bReplace )
 {
-    // switch off OLE-notifications
+    
     SwDoc* pDoc = GetDoc();
     Link aLnk( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );

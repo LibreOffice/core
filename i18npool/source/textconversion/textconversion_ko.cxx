@@ -54,7 +54,7 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
 
     maxLeftLength = maxRightLength = 1;
 
-    // get maximum length of word in dictionary
+    
     if (xCDL.is()) {
         Locale loc(OUString("ko"),
                     OUString("KR"),
@@ -224,7 +224,7 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
     Sequence <OUString> candidates;
     result.Boundary.startPos = result.Boundary.endPos = 0;
 
-    // do conversion only when there are right conversion type and dictionary services.
+    
     if (nConversionType == TextConversionType::TO_HANGUL ||
             nConversionType == TextConversionType::TO_HANJA) {
         sal_Int32 start, end, length = aText.getLength() - nStartPos;
@@ -237,27 +237,27 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
         sal_Int16 scriptType = SCRIPT_OTHERS;
         sal_Int32 len = 1;
         sal_Bool toHanja = (nConversionType == TextConversionType::TO_HANJA);
-        // FROM_LEFT:  Hangul -> Hanja
-        // FROM_RIGHT: Hanja  -> Hangul
+        
+        
         ConversionDirection eDirection = toHanja ? ConversionDirection_FROM_LEFT : ConversionDirection_FROM_RIGHT;
         sal_Int32 maxLength = toHanja ? maxLeftLength : maxRightLength;
         if (maxLength == 0) maxLength = 1;
 
-        // search for a max length of convertible text
+        
         for (start = 0, end = 0; start < length; start++) {
             if (end <= start) {
                 scriptType = checkScriptType(aText[nStartPos + start]);
                 if (nConversionType == TextConversionType::TO_HANJA) {
-                    if (scriptType != SCRIPT_HANGUL) // skip non-Hangul characters
+                    if (scriptType != SCRIPT_HANGUL) 
                         continue;
                 } else {
-                    if (scriptType != SCRIPT_HANJA) // skip non-Hanja characters
+                    if (scriptType != SCRIPT_HANJA) 
                         continue;
                 }
                 end = start + 1;
             }
             if (nConversionOptions & TextConversionOption::CHARACTER_BY_CHARACTER) {
-                result.Candidates = getCharConversions(aText, nStartPos + start, len, toHanja); // char2char conversion
+                result.Candidates = getCharConversions(aText, nStartPos + start, len, toHanja); 
             } else {
                 for (; end < length && end - start < maxLength; end++)
                     if (checkScriptType(aText[nStartPos + end]) != scriptType)
@@ -268,23 +268,23 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
                         try {
                             if (xCDL.is())
                                 result.Candidates = xCDL->queryConversions(aText, start + nStartPos, len,
-                                    aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); // user dictionary
+                                    aLocale, ConversionDictionaryType::HANGUL_HANJA, eDirection, nConversionOptions); 
                         }
                         catch ( NoSupportException & ) {
-                            // clear reference (when there is no user dictionary) in order
-                            // to not always have to catch this exception again
-                            // in further calls. (save time)
+                            
+                            
+                            
                             xCDL = 0;
                         }
                         catch (...) {
-                            // catch all other exceptions to allow
-                            // querying the system dictionary in the next line
+                            
+                            
                         }
-                        if (xCD.is() && toHanja) { // System dictionary would not do Hanja_to_Hangul conversion.
+                        if (xCD.is() && toHanja) { 
                             candidates = xCD->getConversions(aText, start + nStartPos, len, eDirection, nConversionOptions);
                             result.Candidates += candidates;
                         }
-                    } else if (! toHanja) { // do whole word character 2 character conversion for Hanja to Hangul conversion
+                    } else if (! toHanja) { 
                         result.Candidates = getCharConversions(aText, nStartPos + start, length - start, toHanja);
                         if (result.Candidates.hasElements())
                             len = result.Candidates[0].getLength();
@@ -293,7 +293,7 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
                         break;
                 }
             }
-            // found match
+            
             if (result.Candidates.hasElements()) {
                 result.Boundary.startPos = start + nStartPos;;
                 result.Boundary.endPos = start + len + nStartPos;
@@ -301,7 +301,7 @@ TextConversion_ko::getConversions( const OUString& aText, sal_Int32 nStartPos, s
             }
         }
     } else
-        throw NoSupportException(); // Conversion type is not supported in this service.
+        throw NoSupportException(); 
     return result;
 }
 
@@ -327,11 +327,11 @@ TextConversion_ko::getConversion( const OUString& aText, sal_Int32 nStartPos, sa
 
         if (result.Boundary.endPos > 0) {
             if (result.Boundary.startPos > start)
-                aBuf.append(str + start, result.Boundary.startPos - start); // append skip portion
-            aBuf.append(result.Candidates[0]); // append converted portion
+                aBuf.append(str + start, result.Boundary.startPos - start); 
+            aBuf.append(result.Candidates[0]); 
         } else {
             if (length + nStartPos > start)
-                aBuf.append(str + start, length + nStartPos - start); // append last portion
+                aBuf.append(str + start, length + nStartPos - start); 
             break;
         }
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_AxisLabel.hxx"
@@ -23,10 +23,10 @@
 #include "TabPages.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 
-// header for SvxChartTextOrientItem / SvxChartTextOrderItem
+
 #include <svx/chrtitem.hxx>
 
-// header for SfxInt32Item
+
 #include <svl/intitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
@@ -142,7 +142,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
 {
    const SfxPoolItem* pPoolItem = NULL;
 
-    // show description
+    
     SfxItemState aState = rInAttrs.GetItemState( SCHATTR_AXIS_SHOWDESCR, false, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
@@ -161,9 +161,9 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
             m_pCbShowDescription->Hide();
     }
 
-    // Rotation as orient item or in degrees ----------
+    
 
-    // check new degree item
+    
     m_nInitialDegrees = 0;
     aState = rInAttrs.GetItemState( SCHATTR_TEXT_DEGREES, false, &pPoolItem );
     if( aState == SFX_ITEM_SET )
@@ -175,7 +175,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     else
         m_pCtrlDial->SetNoRotation();
 
-    // check stacked item
+    
     m_bInitialStacking = false;
     aState = rInAttrs.GetItemState( SCHATTR_TEXT_STACKED, false, &pPoolItem );
     if( aState == SFX_ITEM_SET )
@@ -190,7 +190,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
     if( rInAttrs.GetItemState( EE_PARA_WRITINGDIR, true, &pPoolItem ) == SFX_ITEM_SET )
         m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pPoolItem)->GetValue()) );
 
-    // Text overlap ----------
+    
     aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_OVERLAP, false, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
@@ -209,7 +209,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
             m_pCbTextOverlap->Hide();
     }
 
-    // text break ----------
+    
     aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_BREAK, false, &pPoolItem );
     if( aState == SFX_ITEM_DONTCARE )
     {
@@ -232,7 +232,7 @@ void SchAxisLabelTabPage::Reset( const SfxItemSet& rInAttrs )
         }
     }
 
-    // text order ----------
+    
     if( m_bShowStaggeringControls )
     {
         aState = rInAttrs.GetItemState( SCHATTR_AXIS_LABEL_ORDER, false, &pPoolItem );
@@ -280,7 +280,7 @@ void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
     m_bComplexCategories = bComplexCategories;
 }
 
-// event handling routines
+
 
 IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
 {
@@ -302,6 +302,6 @@ IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
 
     return 0L;
 }
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrappedSplineProperties.hxx"
@@ -35,7 +35,7 @@ namespace chart
 namespace wrapper
 {
 
-//PROPERTYTYPE is the type of the outer property
+
 
 template< typename PROPERTYTYPE >
 class WrappedSplineProperty : public WrappedProperty
@@ -84,9 +84,9 @@ public:
             }
             catch( uno::Exception & ex )
             {
-                //spline properties are not supported by all charttypes
-                //in that cases this exception is ok
-                ex.Context.is();//to have debug information without compilation warnings
+                
+                
+                ex.Context.is();
             }
         }
         return bHasDetectableInnerValue;
@@ -120,9 +120,9 @@ public:
                     }
                     catch( uno::Exception & ex )
                     {
-                        //spline properties are not supported by all charttypes
-                        //in that cases this exception is ok
-                        ex.Context.is();//to have debug information without compilation warnings
+                        
+                        
+                        ex.Context.is();
                     }
                 }
             }
@@ -151,7 +151,7 @@ protected:
     ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
     mutable ::com::sun::star::uno::Any     m_aOuterValue;
     ::com::sun::star::uno::Any             m_aDefaultValue;
-    // this inner name is not set as inner name at the base class
+    
     const OUString m_aOwnInnerName;
 };
 
@@ -169,13 +169,13 @@ namespace
 {
 enum
 {
-    //spline properties
+    
       PROP_CHART_SPLINE_TYPE = FAST_PROPERTY_ID_START_CHART_SPLINE_PROP
     , PROP_CHART_SPLINE_ORDER
     , PROP_CHART_SPLINE_RESOLUTION
 };
 
-}//anonymous namespace
+}
 
 void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -284,7 +284,7 @@ Any WrappedSplineTypeProperty::convertOuterToInnerValue( const Any& rOuterValue 
     return uno::makeAny(aInnerValue);
 }
 
-} //namespace wrapper
-} //namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

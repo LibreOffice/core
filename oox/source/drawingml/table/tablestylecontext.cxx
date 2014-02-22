@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -48,35 +48,35 @@ TableStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeLi
 {
     switch( aElementToken )
     {
-        case A_TOKEN( tblBg ):      // CT_TableBackgroundStyle
+        case A_TOKEN( tblBg ):      
             return new TableBackgroundStyleContext( *this, mrTableStyle );
-        case A_TOKEN( wholeTbl ):   // CT_TablePartStyle
+        case A_TOKEN( wholeTbl ):   
             return new TablePartStyleContext( *this, mrTableStyle.getWholeTbl() );
-        case A_TOKEN( band1H ):     // CT_TablePartStyle
+        case A_TOKEN( band1H ):     
             return new TablePartStyleContext( *this, mrTableStyle.getBand1H() );
-        case A_TOKEN( band2H ):     // CT_TablePartStyle
+        case A_TOKEN( band2H ):     
             return new TablePartStyleContext( *this, mrTableStyle.getBand2H() );
-        case A_TOKEN( band1V ):     // CT_TablePartStyle
+        case A_TOKEN( band1V ):     
             return new TablePartStyleContext( *this, mrTableStyle.getBand1V() );
-        case A_TOKEN( band2V ):     // CT_TablePartStyle
+        case A_TOKEN( band2V ):     
             return new TablePartStyleContext( *this, mrTableStyle.getBand2V() );
-        case A_TOKEN( lastCol ):    // CT_TablePartStyle
+        case A_TOKEN( lastCol ):    
             return new TablePartStyleContext( *this, mrTableStyle.getLastCol() );
-        case A_TOKEN( firstCol ):   // CT_TablePartStyle
+        case A_TOKEN( firstCol ):   
             return new TablePartStyleContext( *this, mrTableStyle.getFirstCol() );
-        case A_TOKEN( lastRow ):    // CT_TablePartStyle
+        case A_TOKEN( lastRow ):    
             return new TablePartStyleContext( *this, mrTableStyle.getLastRow() );
-        case A_TOKEN( seCell ):     // CT_TablePartStyle
+        case A_TOKEN( seCell ):     
             return new TablePartStyleContext( *this, mrTableStyle.getSeCell() );
-        case A_TOKEN( swCell ):     // CT_TablePartStyle
+        case A_TOKEN( swCell ):     
             return new TablePartStyleContext( *this, mrTableStyle.getSwCell() );
-        case A_TOKEN( firstRow ):   // CT_TablePartStyle
+        case A_TOKEN( firstRow ):   
             return new TablePartStyleContext( *this, mrTableStyle.getFirstRow() );
-        case A_TOKEN( neCell ):     // CT_TablePartStyle
+        case A_TOKEN( neCell ):     
             return new TablePartStyleContext( *this, mrTableStyle.getNeCell() );
-        case A_TOKEN( nwCell ):     // CT_TablePartStyle
+        case A_TOKEN( nwCell ):     
             return new TablePartStyleContext( *this, mrTableStyle.getNwCell() );
-        case A_TOKEN( extLst ):     // CT_OfficeArtExtensionList
+        case A_TOKEN( extLst ):     
             break;
     }
     return this;

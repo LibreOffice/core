@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sdattr.hxx"
@@ -46,8 +46,8 @@ RemoteDialog::RemoteDialog( Window *pWindow )
 
 IMPL_LINK_NOARG(RemoteDialog, HandleConnectButton)
 {
-//     setBusy( true );
-    // Fixme: Try and connect
+
+    
 #if defined(ENABLE_SDREMOTE) && defined(ENABLE_SDREMOTE_BLUETOOTH)
     long aSelected = m_pClientBox->GetActiveEntryIndex();
     if ( aSelected < 0 )

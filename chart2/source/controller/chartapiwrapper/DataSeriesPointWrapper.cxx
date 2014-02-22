@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DataSeriesPointWrapper.hxx"
@@ -67,7 +67,7 @@ static const OUString lcl_aServiceName( "com.sun.star.comp.chart.DataSeries" );
 
 enum
 {
-    //data point  properties
+    
     PROP_SERIES_DATAPOINT_SOLIDTYPE,
     PROP_SERIES_DATAPOINT_SEGMENT_OFFSET,
     PROP_SERIES_DATAPOINT_PERCENT_DIAGONAL,
@@ -76,7 +76,7 @@ enum
     PROP_SERIES_LINK_NUMBERFORMAT_TO_SOURCE,
     PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
     PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
-    //other series properties
+    
     PROP_SERIES_ATTACHED_AXIS,
     PROP_SERIES_DATAPOINT_TEXT_ROTATION
 };
@@ -84,7 +84,7 @@ enum
 void lcl_AddPropertiesToVector_PointProperties(
     ::std::vector< Property > & rOutProperties )
 {
-    //service chart::Chart3DBarProperties
+    
     rOutProperties.push_back(
         Property( "SolidType",
                   PROP_SERIES_DATAPOINT_SOLIDTYPE,
@@ -170,8 +170,8 @@ uno::Sequence< Property > lcl_GetPropertySequence( DataSeriesPointWrapper::eType
         lcl_AddPropertiesToVector_SeriesOnly( aProperties );
         WrappedStatisticProperties::addProperties( aProperties );
     }
-    WrappedSymbolProperties::addProperties( aProperties ); //for series and  points
-    WrappedDataCaptionProperties::addProperties( aProperties ); //for series and  points
+    WrappedSymbolProperties::addProperties( aProperties ); 
+    WrappedDataCaptionProperties::addProperties( aProperties ); 
 
     ::chart::FillProperties::AddPropertiesToVector( aProperties );
     ::chart::LinePropertiesHelper::AddPropertiesToVector( aProperties );
@@ -210,7 +210,7 @@ struct StaticPointWrapperPropertyArray : public rtl::StaticAggregate< Sequence< 
 {
 };
 
-//PROP_SERIES_ATTACHED_AXIS
+
 class WrappedAttachedAxisProperty : public ::chart::WrappedProperty
 {
 public:
@@ -303,7 +303,7 @@ WrappedSegmentOffsetProperty::~WrappedSegmentOffsetProperty()
 
 Any WrappedSegmentOffsetProperty::convertInnerToOuterValue( const Any& rInnerValue ) const
 {
-    // convert new double offset to former integer segment-offset
+    
     double fOffset = 0;
     Any aResult( rInnerValue );
 
@@ -315,7 +315,7 @@ Any WrappedSegmentOffsetProperty::convertInnerToOuterValue( const Any& rInnerVal
 
 Any WrappedSegmentOffsetProperty::convertOuterToInnerValue( const Any& rOuterValue ) const
 {
-    // convert former integer segment-offset to new double offset
+    
     sal_Int32 nOffset = 0;
     Any aResult( rOuterValue );
 
@@ -350,7 +350,7 @@ WrappedLineColorProperty::WrappedLineColorProperty(
                 DataSeriesPointWrapper* pDataSeriesPointWrapper )
                 : WrappedSeriesAreaOrLineProperty("LineColor","BorderColor","Color", pDataSeriesPointWrapper )
                 , m_pDataSeriesPointWrapper( pDataSeriesPointWrapper )
-                , m_aDefaultValue(uno::makeAny(sal_Int32( 0x0099ccff )))  // blue 8
+                , m_aDefaultValue(uno::makeAny(sal_Int32( 0x0099ccff )))  
                 , m_aOuterValue(m_aDefaultValue)
 {
 }
@@ -438,7 +438,7 @@ void WrappedLineStyleProperty::setPropertyToDefault( const Reference< beans::XPr
         WrappedSeriesAreaOrLineProperty::setPropertyToDefault( xInnerPropertyState );
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -455,7 +455,7 @@ DataSeriesPointWrapper::DataSeriesPointWrapper(
         , m_bLinesAllowed(sal_True)
         , m_xDataSeries(0)
 {
-    //need initialize call afterwards
+    
 }
 
 void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any >& aArguments )
@@ -463,7 +463,7 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
 {
     OSL_PRECOND(aArguments.getLength() >= 1,"need at least 1 argument to initialize the DataSeriesPointWrapper: series reference + optional datapoint index");
 
-    m_nSeriesIndexInNewAPI = -1;//ignored in this case
+    m_nSeriesIndexInNewAPI = -1;
     m_nPointIndex = -1;
     if( aArguments.getLength() >= 1 )
     {
@@ -476,7 +476,7 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
         throw uno::Exception(
             "DataSeries index invalid", static_cast< ::cppu::OWeakObject * >( this ));
 
-    //todo: check upper border of point index
+    
 
     if( m_nPointIndex >= 0 )
         m_eType = DATA_POINT;
@@ -486,7 +486,7 @@ void SAL_CALL DataSeriesPointWrapper::initialize( const uno::Sequence< uno::Any 
 
 DataSeriesPointWrapper::DataSeriesPointWrapper( eType _eType,
                                                 sal_Int32 nSeriesIndexInNewAPI ,
-                                                sal_Int32 nPointIndex, //ignored for series
+                                                sal_Int32 nPointIndex, 
                                                 ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
     : m_spChart2ModelContact( spChart2ModelContact )
     , m_aEventListenerContainer( m_aMutex )
@@ -502,7 +502,7 @@ DataSeriesPointWrapper::~DataSeriesPointWrapper()
 {
 }
 
-// ____ XComponent ____
+
 void SAL_CALL DataSeriesPointWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -527,7 +527,7 @@ void SAL_CALL DataSeriesPointWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// ____ XEventListener ____
+
 void SAL_CALL DataSeriesPointWrapper::disposing( const lang::EventObject& /*Source*/ )
     throw (uno::RuntimeException)
 {
@@ -570,14 +570,14 @@ Reference< beans::XPropertySet > DataSeriesPointWrapper::getDataPointProperties(
 
     Reference< chart2::XDataSeries > xSeries( this->getDataSeries() );
 
-    // may throw an IllegalArgumentException
+    
     if( xSeries.is() )
         xPointProp = xSeries->getDataPointByIndex( m_nPointIndex );
 
     return xPointProp;
 }
 
-//ReferenceSizePropertyProvider
+
 void DataSeriesPointWrapper::updateReferenceSize()
 {
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet(), uno::UNO_QUERY );
@@ -601,9 +601,9 @@ awt::Size DataSeriesPointWrapper::getCurrentSizeForReference()
     return m_spChart2ModelContact->GetPageSize();
 }
 
-// WrappedPropertySet
 
-//XPropertyState
+
+
 beans::PropertyState SAL_CALL DataSeriesPointWrapper::getPropertyState( const OUString& rPropertyName )
                                     throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
@@ -641,7 +641,7 @@ void SAL_CALL DataSeriesPointWrapper::setPropertyToDefault( const OUString& rPro
         WrappedPropertySet::setPropertyToDefault( rPropertyName );
     else
     {
-        //for data points the default is given by the series
+        
         setPropertyValue( rPropertyName, getPropertyDefault( rPropertyName ) );
     }
 }
@@ -654,7 +654,7 @@ Any SAL_CALL DataSeriesPointWrapper::getPropertyDefault( const OUString& rProper
         sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
         if( nHandle > 0 )
         {
-            //always take the series current value as default for points
+            
             Reference< beans::XPropertySet > xInnerPropertySet( getDataSeries(), uno::UNO_QUERY );
             if( xInnerPropertySet.is() )
             {
@@ -708,7 +708,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
-    //add unnamed line properties (different inner names here)
+    
 
     aWrappedProperties.push_back( new WrappedProperty("FillColor","Color") );
     aWrappedProperties.push_back( new WrappedLineStyleProperty( this ) );
@@ -727,7 +727,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     aWrappedProperties.push_back( new WrappedProperty("FillBitmapName","FillBitmapName") );
     aWrappedProperties.push_back( new WrappedProperty("FillBackground","FillBackground") );
 
-    //bitmap properties
+    
     aWrappedProperties.push_back( new WrappedProperty("FillBitmapMode","FillBitmapMode") );
     aWrappedProperties.push_back( new WrappedProperty("FillBitmapSizeX","FillBitmapSizeX") );
     aWrappedProperties.push_back( new WrappedProperty("FillBitmapSizeY","FillBitmapSizeY") );
@@ -851,10 +851,10 @@ uno::Sequence< OUString > DataSeriesPointWrapper::getSupportedServiceNames_Stati
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( DataSeriesPointWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

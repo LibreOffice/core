@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <algorithm>
@@ -36,7 +36,7 @@ bool isBool(Expr const * expr, bool allowTypedefs = true) {
     if (!allowTypedefs) {
         return false;
     }
-// css::uno::Sequence<sal_Bool> s(1);s[0]=false /*unotools/source/config/configitem.cxx*/:
+
 if(t1->isSpecificBuiltinType(BuiltinType::UChar))return true;
     TypedefType const * t2 = t1->getAs<TypedefType>();
     if (t2 == nullptr) {
@@ -70,16 +70,16 @@ bool isBoolExpr(Expr const * expr) {
     return false;
 }
 
-// It appears that, given a function declaration, there is no way to determine
-// the language linkage of the function's type, only of the function's name
-// (via FunctionDecl::isExternC); however, in a case like
+
+
+
 //
-//   extern "C" { static void f(); }
+
 //
-// the function's name does not have C language linkage while the function's
-// type does (as clarified in C++11 [decl.link]); cf. <http://clang-developers.
-// 42468.n3.nabble.com/Language-linkage-of-function-type-tt4037248.html>
-// "Language linkage of function type":
+
+
+
+
 bool hasCLanguageLinkageType(FunctionDecl const * decl) {
     assert(decl != nullptr);
     if (decl->isExternC()) {
@@ -370,10 +370,10 @@ bool ImplicitBoolConversion::TraverseBinNE(BinaryOperator * expr) {
     return ret;
 }
 
-// /usr/include/gtk-2.0/gtk/gtktogglebutton.h: struct _GtkToggleButton:
-//  guint GSEAL (active) : 1;
-// even though <http://www.gtk.org/api/2.6/gtk/GtkToggleButton.html>:
-//  "active"               gboolean              : Read / Write
+
+
+
+
 bool ImplicitBoolConversion::TraverseBinAssign(BinaryOperator * expr) {
     nested.push(std::vector<ImplicitCastExpr const *>());
     bool ret = RecursiveASTVisitor::TraverseBinAssign(expr);
@@ -507,7 +507,7 @@ bool ImplicitBoolConversion::TraverseFunctionDecl(FunctionDecl * decl) {
             ext = true;
         } else {
             TypedefType const * t2 = t->getAs<TypedefType>();
-            // cf. rtl_locale_equals (and sal_Int32 can be long):
+            
             if (t2 != nullptr
                 && t2->getDecl()->getNameAsString() == "sal_Int32")
             {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,7 +74,7 @@
 #   endif
 #endif
 
-// IID and CIDs of all the services needed
+
 static NS_DEFINE_CID(kCharsetConverterManagerCID, NS_ICHARSETCONVERTERMANAGER_CID);
 #endif
 
@@ -107,7 +107,7 @@ namespace connectivity
                 nsAutoString path;
                 nsresult rv = profilePath->GetPath(path);
                 NS_ENSURE_SUCCESS(rv, OUString());
-                // PRUnichar != sal_Unicode in mingw
+                
                 return OUString(reinterpret_cast_mingw_only<const sal_Unicode *>(path.get()));
             }
             else
@@ -125,18 +125,18 @@ namespace connectivity
 
         sal_Int32 ProfileAccess::LoadProductsInfo()
         {
-            //load SeaMonkey 2 profiles to m_ProductProfileList
+            
             sal_Int32 count = LoadXPToolkitProfiles(MozillaProductType_Mozilla);
 
-            //load thunderbird profiles to m_ProductProfileList
+            
             count += LoadXPToolkitProfiles(MozillaProductType_Thunderbird);
 
-            //load firefox profiles to m_ProductProfileList
-            //firefox profile does not containt address book, but maybe others need them
+            
+            
             count += LoadXPToolkitProfiles(MozillaProductType_Firefox);
             return count;
         }
-        //Thunderbird and firefox profiles are saved in profiles.ini
+        
         sal_Int32 ProfileAccess::LoadXPToolkitProfiles(MozillaProductType product)
         {
             sal_Int32 index=product;
@@ -200,7 +200,7 @@ namespace connectivity
                     nsCAutoString filePath(sPath.getStr());
 
                     if (isRelative) {
-                        // PRUnichar != sal_Unicode in mingw
+                        
                         nsAutoString registryDir( reinterpret_cast_mingw_only<const PRUnichar *>(regDir.getStr()) );
                         nsCOMPtr<nsILocalFile>     mAppData;
                         rv = NS_NewLocalFile(registryDir, PR_TRUE,
@@ -252,7 +252,7 @@ namespace connectivity
             ProductStruct &m_Product = m_ProductProfileList[index];
             if (!m_Product.mProfileList.size() || m_Product.mProfileList.find(profileName) == m_Product.mProfileList.end())
             {
-                //Profile not found
+                
                 return OUString();
             }
             else
@@ -289,12 +289,12 @@ namespace connectivity
             ProductStruct &m_Product = m_ProductProfileList[index];
             if (!m_Product.mCurrentProfileName.isEmpty())
             {
-                //default profile setted in mozilla registry
+                
                 return m_Product.mCurrentProfileName;
             }
             if (m_Product.mProfileList.empty())
             {
-                //there are not any profiles
+                
                 return OUString();
             }
             ProfileStruct * aProfile = (*m_Product.mProfileList.begin()).second;
@@ -345,7 +345,7 @@ namespace connectivity
             PRBool nExist=PR_FALSE;
             rv = isExistFileOrSymlink(lockFile,&nExist);
             NS_ENSURE_SUCCESS(rv, rv);
-            if (!nExist) // Check OLD_LOCKFILE_NAME
+            if (!nExist) 
             {
                 nsCOMPtr<nsILocalFile> oldlockFile;
                 rv = aFile->Clone((nsIFile **)((void **)getter_AddRefs(oldlockFile)));
@@ -371,7 +371,7 @@ namespace connectivity
             if (path.isEmpty())
                 return sal_True;
 
-            // PRUnichar != sal_Unicode in mingw
+            
             nsAutoString filePath(reinterpret_cast_mingw_only<const PRUnichar *>(path.getStr()));
 
             nsresult rv;
@@ -386,7 +386,7 @@ namespace connectivity
             if (!exists)
                 return sal_True;
 
-            // If the profile is locked, we return true
+            
             rv = isLockExist(localFile);
             if (rv)
                 return sal_True;

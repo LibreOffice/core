@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -121,9 +121,9 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     const double nPageAspectRatio (double(rPageSize.Width()) / double(rPageSize.Height()));
     if (rPageObjectSize.Height() == 0)
     {
-        // Calculate height so that the preview fills the available
-        // horizontal space completely while observing the aspect ratio of
-        // the preview.
+        
+        
+        
         nPreviewWidth = rPageObjectSize.Width()
             - nLeftAreaWidth - gnOuterBorderWidth - 2*nFocusIndicatorWidth - 1;
         nPreviewHeight = ::basegfx::fround(nPreviewWidth / nPageAspectRatio);
@@ -131,9 +131,9 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     }
     else if (rPageObjectSize.Width() == 0)
     {
-        // Calculate the width of the page object so that the preview fills
-        // the available vertical space completely while observing the
-        // aspect ratio of the preview.
+        
+        
+        
         nPreviewHeight = rPageObjectSize.Height() - 2*gnOuterBorderWidth - 2*nFocusIndicatorWidth - 1;
         nPreviewWidth = ::basegfx::fround(nPreviewHeight * nPageAspectRatio);
         rPageObjectSize.setWidth(nPreviewWidth
@@ -142,8 +142,8 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
     }
     else
     {
-        // The size of the page object is given.  Calculate the size of the
-        // preview.
+        
+        
         nPreviewWidth = rPageObjectSize.Width()
             - nLeftAreaWidth - gnOuterBorderWidth - 2*nFocusIndicatorWidth - 1;
         nPreviewHeight = rPageObjectSize.Height()
@@ -153,8 +153,8 @@ Rectangle PageObjectLayouter::CalculatePreviewBoundingBox (
         else
             nPreviewHeight = ::basegfx::fround(nPreviewWidth / nPageAspectRatio);
     }
-    // When the preview does not fill the available space completely then
-    // place it flush right and vertically centered.
+    
+    
     const int nLeft (rPageObjectSize.Width()
         - gnOuterBorderWidth - nPreviewWidth - nFocusIndicatorWidth - 1);
     const int nTop ((rPageObjectSize.Height() - nPreviewHeight)/2);
@@ -218,7 +218,7 @@ Rectangle PageObjectLayouter::GetBoundingBox (
             break;
     }
 
-    // Adapt coordinates to the requested coordinate system.
+    
     Point aLocation (rPageObjectLocation);
     if (eCoordinateSystem == WindowCoordinateSystem)
         aLocation += mpWindow->GetMapMode().GetOrigin();
@@ -245,7 +245,7 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
 {
     OSL_ASSERT(mpWindow);
 
-    // Set the correct font.
+    
     Font aOriginalFont (mpWindow->GetFont());
     if (mpPageNumberFont)
         mpWindow->SetFont(*mpPageNumberFont);
@@ -256,13 +256,13 @@ Size PageObjectLayouter::GetPageNumberAreaSize (const int nPageCount)
     else if (nPageCount < 100)
         sPageNumberTemplate = "99";
     else if (nPageCount < 200)
-        // Just for the case that 1 is narrower than 9.
+        
         sPageNumberTemplate = "199";
     else if (nPageCount < 1000)
         sPageNumberTemplate = "999";
     else
         sPageNumberTemplate = "9999";
-    // More then 9999 pages are not handled.
+    
 
     const Size aSize (
         mpWindow->GetTextWidth(sPageNumberTemplate),
@@ -287,6 +287,6 @@ Image PageObjectLayouter::GetCustomAnimationEffectIcon (void) const
 }
 
 
-} } } // end of namespace ::sd::slidesorter::view
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

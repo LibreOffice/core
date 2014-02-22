@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,9 +43,9 @@ using namespace ::oox;
 using ::std::set;
 using ::std::numeric_limits;
 
-// Page settings records ======================================================
 
-// Header/footer --------------------------------------------------------------
+
+
 
 XclExpHeaderFooter::XclExpHeaderFooter( sal_uInt16 nRecId, const OUString& rHdrString ) :
     XclExpRecord( nRecId ),
@@ -70,12 +70,12 @@ void XclExpHeaderFooter::WriteBody( XclExpStream& rStrm )
         if( rStrm.GetRoot().GetBiff() <= EXC_BIFF5 )
             aExString.AssignByte( maHdrString, rStrm.GetRoot().GetTextEncoding(), EXC_STR_8BITLENGTH );
         else
-            aExString.Assign( maHdrString, EXC_STR_DEFAULT, 255 );  // 16-bit length, but max 255 chars
+            aExString.Assign( maHdrString, EXC_STR_DEFAULT, 255 );  
         rStrm << aExString;
     }
 }
 
-// General page settings ------------------------------------------------------
+
 
 XclExpSetup::XclExpSetup( const XclPageData& rPageData ) :
     XclExpRecord( EXC_ID_SETUP, 34 ),
@@ -95,24 +95,24 @@ void XclExpSetup::SaveXml( XclExpXmlStream& rStrm )
     {
         pAttrList->add( XML_paperWidth,          OString::number(  mrData.mnPaperWidth ).concat(OString("mm")).getStr() );
         pAttrList->add( XML_paperHeight,         OString::number(  mrData.mnPaperHeight ).concat(OString("mm")).getStr() );
-        // pAttrList->add( XML_paperUnits,          "mm" );
+        
     }
     pAttrList->add( XML_scale,              OString::number(  mrData.mnScaling ).getStr() );
     pAttrList->add( XML_firstPageNumber,    OString::number(  mrData.mnStartPage ).getStr() );
     pAttrList->add( XML_fitToWidth,         OString::number(  mrData.mnFitToWidth ).getStr() );
     pAttrList->add( XML_fitToHeight,        OString::number(  mrData.mnFitToHeight ).getStr() );
     pAttrList->add( XML_pageOrder,          mrData.mbPrintInRows ? "overThenDown" : "downThenOver" );
-    pAttrList->add( XML_orientation,        mrData.mbPortrait ? "portrait" : "landscape" );   // OOXTODO: "default"?
+    pAttrList->add( XML_orientation,        mrData.mbPortrait ? "portrait" : "landscape" );   
     pAttrList->add( XML_usePrinterDefaults, XclXmlUtils::ToPsz( !mrData.mbValid ) );
     pAttrList->add( XML_blackAndWhite,      XclXmlUtils::ToPsz( mrData.mbBlackWhite ) );
     pAttrList->add( XML_draft,              XclXmlUtils::ToPsz( mrData.mbDraftQuality ) );
-    pAttrList->add( XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none" );         // OOXTODO: "asDisplayed"?
+    pAttrList->add( XML_cellComments,       mrData.mbPrintNotes ? "atEnd" : "none" );         
     pAttrList->add( XML_useFirstPageNumber, XclXmlUtils::ToPsz( mrData.mbManualStart ) );
-    // OOXTODO: XML_errors, // == displayed|blank|dash|NA
+    
     pAttrList->add( XML_horizontalDpi,      OString::number(  mrData.mnHorPrintRes ).getStr() );
     pAttrList->add( XML_verticalDpi,        OString::number(  mrData.mnVerPrintRes ).getStr() );
     pAttrList->add( XML_copies,             OString::number(  mrData.mnCopies ).getStr() );
-    // OOXTODO: devMode settings part RelationshipId: FSNS( XML_r, XML_id ),
+    
 
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList > aAttrs(pAttrList);
     rStrm.GetCurrentStream()->singleElement( XML_pageSetup, aAttrs );
@@ -147,7 +147,7 @@ void XclExpSetup::WriteBody( XclExpStream& rStrm )
     }
 }
 
-// Manual page breaks ---------------------------------------------------------
+
 
 XclExpPageBreaks::XclExpPageBreaks( sal_uInt16 nRecId, const ScfUInt16Vec& rPageBreaks, sal_uInt16 nMaxPos ) :
     XclExpRecord( nRecId ),
@@ -197,13 +197,13 @@ void XclExpPageBreaks::SaveXml( XclExpXmlStream& rStrm )
                 XML_man,    "true",
                 XML_max,    OString::number(  mnMaxPos ).getStr(),
                 XML_min,    "0",
-                // OOXTODO: XML_pt, "",
+                
                 FSEND );
     }
     pWorksheet->endElement( nElement );
 }
 
-// Page settings ==============================================================
+
 
 XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
@@ -216,7 +216,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
         const SfxItemSet& rItemSet = pStyleSheet->GetItemSet();
         maData.mbValid = true;
 
-        // *** page settings ***
+        
 
         maData.mbPrintInRows   = !GETITEMBOOL( rItemSet, ATTR_PAGE_TOPDOWN   );
         maData.mbHorCenter     =  GETITEMBOOL( rItemSet, ATTR_PAGE_HORCENTER );
@@ -264,46 +264,46 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
         maData.mxBrushItem.reset( new SvxBrushItem( GETITEM( rItemSet, SvxBrushItem, ATTR_BACKGROUND ) ) );
 
-        // *** header and footer ***
+        
 
         XclExpHFConverter aHFConv( GetRoot() );
 
-        // header
+        
         const SfxItemSet& rHdrItemSet = GETITEM( rItemSet, SvxSetItem, ATTR_PAGE_HEADERSET ).GetItemSet();
         if( GETITEMBOOL( rHdrItemSet, ATTR_PAGE_ON ) )
         {
             const ScPageHFItem& rHFItem = GETITEM( rItemSet, ScPageHFItem, ATTR_PAGE_HEADERRIGHT );
             aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
             maData.maHeader = aHFConv.GetHFString();
-            // header height (Excel excludes header from top margin)
+            
             sal_Int32 nHdrHeight = GETITEMBOOL( rHdrItemSet, ATTR_PAGE_DYNAMIC ) ?
-                // dynamic height: calculate header height, add header <-> sheet area distance
+                
                 (aHFConv.GetTotalHeight() + GETITEM( rHdrItemSet, SvxULSpaceItem, ATTR_ULSPACE ).GetLower()) :
-                // static height: ATTR_PAGE_SIZE already includes header <-> sheet area distance
+                
                 static_cast< sal_Int32 >( GETITEM( rHdrItemSet, SvxSizeItem, ATTR_PAGE_SIZE ).GetSize().Height() );
             maData.mfHeaderMargin = maData.mfTopMargin;
             maData.mfTopMargin += XclTools::GetInchFromTwips( nHdrHeight );
         }
 
-        // footer
+        
         const SfxItemSet& rFtrItemSet = GETITEM( rItemSet, SvxSetItem, ATTR_PAGE_FOOTERSET ).GetItemSet();
         if( GETITEMBOOL( rFtrItemSet, ATTR_PAGE_ON ) )
         {
             const ScPageHFItem& rHFItem = GETITEM( rItemSet, ScPageHFItem, ATTR_PAGE_FOOTERRIGHT );
             aHFConv.GenerateString( rHFItem.GetLeftArea(), rHFItem.GetCenterArea(), rHFItem.GetRightArea() );
             maData.maFooter = aHFConv.GetHFString();
-            // footer height (Excel excludes footer from bottom margin)
+            
             sal_Int32 nFtrHeight = GETITEMBOOL( rFtrItemSet, ATTR_PAGE_DYNAMIC ) ?
-                // dynamic height: calculate footer height, add sheet area <-> footer distance
+                
                 (aHFConv.GetTotalHeight() + GETITEM( rFtrItemSet, SvxULSpaceItem, ATTR_ULSPACE ).GetUpper()) :
-                // static height: ATTR_PAGE_SIZE already includes sheet area <-> footer distance
+                
                 static_cast< sal_Int32 >( GETITEM( rFtrItemSet, SvxSizeItem, ATTR_PAGE_SIZE ).GetSize().Height() );
             maData.mfFooterMargin = maData.mfBottomMargin;
             maData.mfBottomMargin += XclTools::GetInchFromTwips( nFtrHeight );
         }
     }
 
-    // *** page breaks ***
+    
 
     set<SCROW> aRowBreaks;
     rDoc.GetAllRowBreaks(aRowBreaks, nScTab, false, true);
@@ -320,7 +320,7 @@ XclExpPageSettings::XclExpPageSettings( const XclExpRoot& rRoot ) :
 
     if (maData.maHorPageBreaks.size() > 1026)
     {
-        // Excel allows only up to 1026 page breaks.  Trim any excess page breaks.
+        
         ScfUInt16Vec::iterator itr = maData.maHorPageBreaks.begin();
         ::std::advance(itr, 1026);
         maData.maHorPageBreaks.erase(itr, maData.maHorPageBreaks.end());
@@ -343,14 +343,14 @@ public:
 
 void XclExpXmlStartHeaderFooterElementRecord::SaveXml(XclExpXmlStream& rStrm)
 {
-    // OOXTODO: we currently only emit oddHeader/oddFooter elements, and
-    //          do not support the first/even/odd page distinction.
+    
+    
     sax_fastparser::FSHelperPtr& rStream = rStrm.GetCurrentStream();
     rStream->startElement( mnElement,
-            // OOXTODO: XML_alignWithMargins,
-            XML_differentFirst,     "false",    // OOXTODO
-            XML_differentOddEven,   "false",    // OOXTODO
-            // OOXTODO: XML_scaleWithDoc
+            
+            XML_differentFirst,     "false",    
+            XML_differentOddEven,   "false",    
+            
             FSEND );
 }
 
@@ -384,7 +384,7 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
     XclExpBoolRecord( EXC_ID_GRIDSET, true, XML_gridLinesSet ).SaveXml( rStrm );
     XclExpBoolRecord( EXC_ID_HCENTER, maData.mbHorCenter, XML_horizontalCentered ).SaveXml( rStrm );
     XclExpBoolRecord( EXC_ID_VCENTER, maData.mbVerCenter, XML_verticalCentered ).SaveXml( rStrm );
-    XclExpXmlEndSingleElementRecord().SaveXml( rStrm );    // XML_printOptions
+    XclExpXmlEndSingleElementRecord().SaveXml( rStrm );    
 
     XclExpXmlStartSingleElementRecord( XML_pageMargins ).SaveXml( rStrm );
     XclExpDoubleRecord( EXC_ID_LEFTMARGIN, maData.mfLeftMargin ).SetAttribute( XML_left )->SaveXml( rStrm );
@@ -393,7 +393,7 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
     XclExpDoubleRecord( EXC_ID_BOTTOMMARGIN, maData.mfBottomMargin ).SetAttribute( XML_bottom )->SaveXml( rStrm );
     XclExpDoubleRecord( 0, maData.mfHeaderMargin).SetAttribute( XML_header )->SaveXml( rStrm );
     XclExpDoubleRecord( 0, maData.mfFooterMargin).SetAttribute( XML_footer )->SaveXml( rStrm );
-    XclExpXmlEndSingleElementRecord().SaveXml( rStrm );    // XML_pageMargins
+    XclExpXmlEndSingleElementRecord().SaveXml( rStrm );    
 
     XclExpSetup( maData ).SaveXml( rStrm );
 
@@ -411,7 +411,7 @@ void XclExpPageSettings::SaveXml( XclExpXmlStream& rStrm )
         XclExpImgData( *pGraphic, EXC_ID8_IMGDATA ).SaveXml( rStrm );
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclExpChartPageSettings::XclExpChartPageSettings( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot )
@@ -428,6 +428,6 @@ void XclExpChartPageSettings::Save( XclExpStream& rStrm )
     XclExpUInt16Record( EXC_ID_PRINTSIZE, EXC_PRINTSIZE_FULL ).Save( rStrm );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

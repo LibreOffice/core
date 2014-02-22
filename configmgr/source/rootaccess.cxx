@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -102,7 +102,7 @@ void RootAccess::release() throw () {
 }
 
 OUString RootAccess::getAbsolutePathRepresentation() {
-    getNode(); // turn pathRepresentation_ into canonic form
+    getNode(); 
     return pathRepresentation_;
 }
 
@@ -187,7 +187,7 @@ sal_Bool RootAccess::hasPendingChanges() throw (css::uno::RuntimeException) {
     assert(thisIs(IS_UPDATE));
     osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
-    //TODO: Optimize:
+    
     std::vector< css::util::ElementChange > changes;
     reportChildChanges(&changes);
     return !changes.empty();
@@ -228,11 +228,11 @@ rtl::Reference< Node > RootAccess::getNode() {
         if (!node_.is()) {
             throw css::uno::RuntimeException(
                 "cannot find " + pathRepresentation_, 0);
-                // RootAccess::queryInterface indirectly calls
-                // RootAccess::getNode, so if this RootAccess were passed out in
-                // RuntimeException.Context, client code that called
-                // queryInterface on it would cause trouble; therefore,
-                // RuntimeException.Context is left null here
+                
+                
+                
+                
+                
         }
         pathRepresentation_ = canonic;
         assert(!path_.empty() || node_->kind() == Node::KIND_ROOT);

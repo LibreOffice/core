@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -88,7 +88,7 @@ class SwAutoCompleteString
 
         ~SwAutoCompleteString();
         void        AddDocument(const SwDoc& rDoc);
-        //returns true if last document reference has been removed
+        
         bool        RemoveDocument(const SwDoc& rDoc);
 #if OSL_DEBUG_LEVEL > 0
     static sal_uLong GetElementCount() {return nSwAutoCompleteStringCount;}
@@ -224,7 +224,7 @@ SwAutoCompleteWord::SwAutoCompleteWord( sal_uInt16 nWords, sal_uInt16 nMWrdLen )
 
 SwAutoCompleteWord::~SwAutoCompleteWord()
 {
-    m_WordList.DeleteAndDestroyAll(); // so the assertion below works
+    m_WordList.DeleteAndDestroyAll(); 
     delete pImpl;
 #if OSL_DEBUG_LEVEL > 0
     sal_uLong nStrings = SwAutoCompleteString::GetElementCount();
@@ -237,7 +237,7 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
 {
     SwDocShell* pDocShell = rDoc.GetDocShell();
     SfxMedium* pMedium = pDocShell ? pDocShell->GetMedium() : 0;
-    // strings from help module should not be added
+    
     if( pMedium )
     {
         const INetURLObject& rURL = pMedium->GetURLObject();
@@ -269,8 +269,8 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
             bRet = true;
             if (aLRULst.size() >= nMaxCount)
             {
-                // the last one needs to be removed
-                // so that there is space for the first one
+                
+                
                 SwAutoCompleteString* pDel = aLRULst.back();
                 aLRULst.pop_back();
                 m_WordList.erase(pDel);
@@ -281,13 +281,13 @@ bool SwAutoCompleteWord::InsertWord( const OUString& rWord, SwDoc& rDoc )
         else
         {
             delete pNew;
-            // then move "up"
+            
             pNew = (SwAutoCompleteString*)(*aInsPair.first);
 
-            // add the document to the already inserted string
+            
             pNew->AddDocument(rDoc);
 
-            // move pNew to the front of the LRU list
+            
             SwAutoCompleteStringPtrDeque::iterator it = std::find( aLRULst.begin(), aLRULst.end(), pNew );
             OSL_ENSURE( aLRULst.end() != it, "String not found" );
             if ( aLRULst.begin() != it && aLRULst.end() != it )
@@ -304,7 +304,7 @@ void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
 {
     if( nNewMax < nMaxCount && aLRULst.size() > nNewMax )
     {
-        // remove the trailing ones
+        
         sal_uInt16 nLRUIndex = nNewMax-1;
         while (nNewMax < m_WordList.size() && nLRUIndex < aLRULst.size())
         {
@@ -322,7 +322,7 @@ void SwAutoCompleteWord::SetMaxCount( sal_uInt16 nNewMax )
 
 void SwAutoCompleteWord::SetMinWordLen( sal_uInt16 n )
 {
-    // Do you really want to remove all words that are less than the minWrdLen?
+    
     if( n < nMinWrdLen )
     {
         for (size_t nPos = 0; nPos < m_WordList.size(); ++nPos)
@@ -390,10 +390,10 @@ void SwAutoCompleteWord::CheckChangedList(
                 break;
         }
     }
-    // remove the elements at the end of the array
+    
     if( nMyPos < nMyLen )
     {
-        // clear LRU array first then delete the string object
+        
         for( ; nNewPos < nMyLen; ++nNewPos )
         {
             SwAutoCompleteString *const pDel =
@@ -403,7 +403,7 @@ void SwAutoCompleteWord::CheckChangedList(
             aLRULst.erase( it );
             delete pDel;
         }
-        // remove from array
+        
         m_WordList.erase(m_WordList.begin() + nMyPos,
                          m_WordList.begin() + nMyLen);
     }

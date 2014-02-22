@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ppt/slidetransitioncontext.hxx"
@@ -46,14 +46,14 @@ SlideTransitionContext::SlideTransitionContext( FragmentHandler2& rParent, const
 , maSlideProperties( aProperties )
 , mbHasTransition( sal_False )
 {
-    // ST_TransitionSpeed
+    
     maTransition.setOoxTransitionSpeed( rAttribs.getToken( XML_spd, XML_fast ) );
 
-    // TODO
+    
     rAttribs.getBool( XML_advClick, true );
 
-    // careful. if missing, no auto advance... 0 looks like a valid value
-    // for auto advance
+    
+    
     if(rAttribs.hasAttribute( XML_advTm ))
         maTransition.setOoxAdvanceTime( rAttribs.getInteger( XML_advTm, -1 ) );
 }
@@ -120,7 +120,7 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         {
             mbHasTransition = true;
             maTransition.setOoxTransitionType( aElementToken, rAttribs.getUnsigned( XML_spokes, 4 ), 0 );
-            // unsignedInt
+            
         }
         return this;
     case PPT_TOKEN( circle ):
@@ -130,7 +130,7 @@ SlideTransitionContext::~SlideTransitionContext() throw()
     case PPT_TOKEN( plus ):
     case PPT_TOKEN( random ):
     case PPT_TOKEN( wedge ):
-        // CT_Empty
+        
         if (!mbHasTransition)
         {
             mbHasTransition = true;
@@ -138,10 +138,10 @@ SlideTransitionContext::~SlideTransitionContext() throw()
         }
         return this;
 
-    case PPT_TOKEN( sndAc ): // CT_TransitionSoundAction
-        //"Sound"
+    case PPT_TOKEN( sndAc ): 
+        
         return new SoundActionContext ( *this, maSlideProperties );
-    case PPT_TOKEN( extLst ): // CT_OfficeArtExtensionList
+    case PPT_TOKEN( extLst ): 
         return this;
     default:
         break;

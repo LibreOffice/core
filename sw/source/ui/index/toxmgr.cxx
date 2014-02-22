@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -72,7 +72,7 @@ void SwTOXMgr::DeleteTOXMark()
         pSh->DeleteTOXMark( pCurTOXMark );
         pSh->SetModified();
     }
-    // go to next one
+    
     pCurTOXMark = pNext;
 }
 
@@ -129,7 +129,7 @@ void    SwTOXMgr::InsertTOXMark(const SwTOXMarkDescription& rDesc)
                 pMark->SetAlternativeText(*rDesc.GetAltStr());
         }
         break;
-        default:; //prevent warning
+        default:; 
     }
     pSh->StartAllAction();
     pSh->SwEditShell::Insert(*pMark);
@@ -187,8 +187,8 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
 
     if(rDesc.GetAltStr())
     {
-        // JP 26.08.96: Bug 30344 - either the text of a Doc or an alternative test,
-        //                          not both!
+        
+        
         sal_Bool bReplace = pCurTOXMark->IsAlternativeText();
         if( bReplace )
             pCurTOXMark->SetAlternativeText( *rDesc.GetAltStr() );
@@ -204,7 +204,7 @@ void SwTOXMgr::UpdateTOXMark(const SwTOXMarkDescription& rDesc)
     }
     pSh->SetModified();
     pSh->EndAllAction();
-    // Bug 36207 pCurTOXMark points nowhere here!
+    
     if(!pCurTOXMark)
     {
         pSh->Left(CRSR_SKIP_CHARS, sal_False, 1, sal_False );
@@ -354,7 +354,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
         case TOX_AUTHORITIES:
         case TOX_ILLUSTRATIONS:
         {
-            //Special handling for TOX_AUTHORITY
+            
             if(TOX_AUTHORITIES == eCurTOXType)
             {
                 SwAuthorityFieldType* pFType = (SwAuthorityFieldType*)
@@ -379,7 +379,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
                 pFType->UpdateFlds();
             }
-            // TODO: consider properties of the current TOXType
+            
             if(!pCurTOX || (ppBase && !(*ppBase)))
             {
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
@@ -422,8 +422,8 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
 
     if(!pCurTOX || (ppBase && !(*ppBase)) )
     {
-        // when ppBase is passed over, TOXBase is only created here
-        // and then inserted in a global document by the dialog
+        
+        
         if(ppBase)
             (*ppBase) = pNewTOX;
         else
@@ -446,7 +446,7 @@ sal_Bool SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_TOXCHANGE, NULL);
         }
 
-        if (pNewTOX != NULL) // => pTOX != NULL
+        if (pNewTOX != NULL) 
             pDoc->ChgTOX(*pTOX, *pNewTOX);
 
         pTOX->DisableKeepExpression();

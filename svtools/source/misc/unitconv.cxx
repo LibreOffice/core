@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/unitconv.hxx>
 
-// -----------------------------------------------------------------------
+
 
 void SetFieldUnit( MetricField& rField, FieldUnit eUnit, sal_Bool bAll )
 {
@@ -41,13 +41,13 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, sal_Bool bAll )
             case FUNIT_MILE:
                 eUnit = FUNIT_INCH;
                 break;
-            default: ;//prevent warning
+            default: ;
         }
     }
     rField.SetUnit( eUnit );
     switch( eUnit )
     {
-        // _CHAR and _LINE sets the step of "char" and "line" unit, they are same as FUNIT_MM
+        
         case FUNIT_CHAR:
         case FUNIT_LINE:
         case FUNIT_MM:
@@ -79,7 +79,7 @@ void SetFieldUnit( MetricField& rField, FieldUnit eUnit, sal_Bool bAll )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, sal_Bool bAll )
 {
@@ -99,7 +99,7 @@ void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, sal_Bool bAll )
             case FUNIT_MILE:
                 eUnit = FUNIT_INCH;
                 break;
-            default: ;//prevent warning
+            default: ;
         }
     }
     rBox.SetUnit( eUnit );
@@ -116,7 +116,7 @@ void SetFieldUnit( MetricBox& rBox, FieldUnit eUnit, sal_Bool bAll )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SetMetricValue( MetricField& rField, long nCoreValue, SfxMapUnit eUnit )
 {
     sal_Int64 nVal = OutputDevice::LogicToLogic( nCoreValue, (MapUnit)eUnit, MAP_100TH_MM );
@@ -125,12 +125,12 @@ void SetMetricValue( MetricField& rField, long nCoreValue, SfxMapUnit eUnit )
 
 }
 
-// -----------------------------------------------------------------------
+
 
 long GetCoreValue( const MetricField& rField, SfxMapUnit eUnit )
 {
     sal_Int64 nVal = rField.GetValue( FUNIT_100TH_MM );
-    // avoid rounding issues
+    
     const sal_Int64 nSizeMask = 0xffffffffff000000LL;
     bool bRoundBefore = true;
     if( nVal >= 0 )
@@ -151,11 +151,11 @@ long GetCoreValue( const MetricField& rField, SfxMapUnit eUnit )
     return static_cast<long>(nUnitVal);
 }
 
-// -----------------------------------------------------------------------
+
 
 long CalcToUnit( float nIn, SfxMapUnit eUnit )
 {
-    // nIn ist in Points
+    
 
     DBG_ASSERT( eUnit == SFX_MAPUNIT_TWIP       ||
                 eUnit == SFX_MAPUNIT_100TH_MM   ||
@@ -174,16 +174,16 @@ long CalcToUnit( float nIn, SfxMapUnit eUnit )
         case SFX_MAPUNIT_10TH_MM:   nTmp *= 10;  break;
         case SFX_MAPUNIT_MM:                     break;
         case SFX_MAPUNIT_CM:        nTmp /= 10;  break;
-        default: ;//prevent warning
+        default: ;
     }
 
     nTmp *= 20;
     long nRet = (long)nTmp;
     return nRet;
-//! return (long)(nTmp * 20);
+
 }
 
-// -----------------------------------------------------------------------
+
 
 long ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl )
 {
@@ -235,19 +235,19 @@ long ItemToControl( long nIn, SfxMapUnit eItem, SfxFieldUnit eCtrl )
             nOut = TransformMetric( nIn, FUNIT_TWIP, (FieldUnit)eCtrl );
         }
         break;
-        default: ;//prevent warning
+        default: ;
     }
     return nOut;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ControlToItem( long nIn, SfxFieldUnit eCtrl, SfxMapUnit eItem )
 {
     return ItemToControl( nIn, eItem, eCtrl );
 }
 
-// -----------------------------------------------------------------------
+
 
 FieldUnit MapToFieldUnit( const SfxMapUnit eUnit )
 {
@@ -272,12 +272,12 @@ FieldUnit MapToFieldUnit( const SfxMapUnit eUnit )
 
         case SFX_MAPUNIT_TWIP:
             return FUNIT_TWIP;
-        default: ;//prevent warning
+        default: ;
     }
     return FUNIT_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 long CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFactor )
 {
@@ -300,10 +300,10 @@ long CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFactor )
         case SFX_MAPUNIT_10TH_MM:   nRet /= 10;  break;
         case SFX_MAPUNIT_MM:                     break;
         case SFX_MAPUNIT_CM:        nRet *= 10;  break;
-        default: ;//prevent warning
+        default: ;
     }
 
-    // ggf. aufrunden
+    
     if ( SFX_MAPUNIT_TWIP != eUnit )
     {
         long nMod = 10;
@@ -316,7 +316,7 @@ long CalcToPoint( long nIn, SfxMapUnit eUnit, sal_uInt16 nFactor )
     return nRet * nFactor / 20;
 }
 
-// -----------------------------------------------------------------------
+
 
 long CMToTwips( long nIn )
 {
@@ -327,7 +327,7 @@ long CMToTwips( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long MMToTwips( long nIn )
 {
@@ -338,7 +338,7 @@ long MMToTwips( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long InchToTwips( long nIn )
 {
@@ -349,7 +349,7 @@ long InchToTwips( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PointToTwips( long nIn )
 {
@@ -360,7 +360,7 @@ long PointToTwips( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PicaToTwips( long nIn )
 {
@@ -371,7 +371,7 @@ long PicaToTwips( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long TwipsToCM( long nIn )
 {
@@ -379,7 +379,7 @@ long TwipsToCM( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long InchToCM( long nIn )
 {
@@ -390,7 +390,7 @@ long InchToCM( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long MMToCM( long nIn )
 {
@@ -398,7 +398,7 @@ long MMToCM( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PointToCM( long nIn )
 {
@@ -409,7 +409,7 @@ long PointToCM( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PicaToCM( long nIn)
 {
@@ -420,7 +420,7 @@ long PicaToCM( long nIn)
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long TwipsToMM( long nIn )
 {
@@ -431,7 +431,7 @@ long TwipsToMM( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long CMToMM( long nIn )
 {
@@ -442,7 +442,7 @@ long CMToMM( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long InchToMM( long nIn )
 {
@@ -453,7 +453,7 @@ long InchToMM( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PointToMM( long nIn )
 {
@@ -464,7 +464,7 @@ long PointToMM( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PicaToMM( long nIn )
 {
@@ -475,7 +475,7 @@ long PicaToMM( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long TwipsToInch( long nIn )
 {
@@ -483,7 +483,7 @@ long TwipsToInch( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long CMToInch( long nIn )
 {
@@ -494,7 +494,7 @@ long CMToInch( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long MMToInch( long nIn )
 {
@@ -505,7 +505,7 @@ long MMToInch( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PointToInch( long nIn )
 {
@@ -513,7 +513,7 @@ long PointToInch( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PicaToInch( long nIn )
 {
@@ -521,7 +521,7 @@ long PicaToInch( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long TwipsToPoint( long nIn )
 {
@@ -529,7 +529,7 @@ long TwipsToPoint( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long InchToPoint( long nIn )
 {
@@ -540,7 +540,7 @@ long InchToPoint( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long CMToPoint( long nIn )
 {
@@ -551,7 +551,7 @@ long CMToPoint( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long MMToPoint( long nIn )
 {
@@ -562,7 +562,7 @@ long MMToPoint( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PicaToPoint( long nIn )
 {
@@ -570,7 +570,7 @@ long PicaToPoint( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long TwipsToPica( long nIn )
 {
@@ -578,7 +578,7 @@ long TwipsToPica( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long InchToPica( long nIn )
 {
@@ -589,7 +589,7 @@ long InchToPica( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long PointToPica( long nIn )
 {
@@ -600,7 +600,7 @@ long PointToPica( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long CMToPica( long nIn )
 {
@@ -611,7 +611,7 @@ long CMToPica( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long MMToPica( long nIn )
 {
@@ -622,7 +622,7 @@ long MMToPica( long nIn )
     return nRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Nothing( long nIn )
 {
@@ -632,7 +632,7 @@ long Nothing( long nIn )
 
 FUNC_CONVERT ConvertTable[6][6] =
 {
-//  CM,         MM          INCH         POINT        PICAS=32     TWIPS
+
     { Nothing,  CMToMM,     CMToInch,    CMToPoint,   CMToPica,    CMToTwips },
     { MMToCM,       Nothing,    MMToInch,    MMToPoint,   MMToPica,    MMToTwips },
     { InchToCM, InchToMM,   Nothing,     InchToPoint, InchToPica,  InchToTwips },
@@ -641,7 +641,7 @@ FUNC_CONVERT ConvertTable[6][6] =
     { TwipsToCM,    TwipsToMM,  TwipsToInch, TwipsToPoint,TwipsToPica, Nothing }
 };
 
-// -----------------------------------------------------------------------
+
 
 long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
 {
@@ -668,7 +668,7 @@ long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
             nOld = 4; break;
         case FUNIT_TWIP:
             nOld = 5; break;
-        default: ;//prevent warning
+        default: ;
     }
 
     switch ( aNew )
@@ -685,7 +685,7 @@ long TransformMetric( long nVal, FieldUnit aOld, FieldUnit aNew )
             nNew = 4; break;
         case FUNIT_TWIP:
             nNew = 5; break;
-        default: ;//prevent warning
+        default: ;
     }
     return ConvertTable[nOld][nNew]( nVal );
 }

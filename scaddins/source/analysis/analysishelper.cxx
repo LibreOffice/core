@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
@@ -32,19 +32,19 @@ using namespace                 ::com::sun::star;
 
 
 
-#define UNIQUE              sal_False   // function name does not exist in Calc
-#define DOUBLE              sal_True    // function name exists in Calc
+#define UNIQUE              sal_False   
+#define DOUBLE              sal_True    
 
-#define STDPAR              sal_False   // all parameters are described
-#define INTPAR              sal_True    // first parameter is internal
+#define STDPAR              sal_False   
+#define INTPAR              sal_True    
 
 #define FUNCDATA( FUNCNAME, DBL, OPT, NUMOFPAR, CAT ) \
     { "get" #FUNCNAME, ANALYSIS_FUNCNAME_##FUNCNAME, ANALYSIS_##FUNCNAME, DBL, OPT, ANALYSIS_DEFFUNCNAME_##FUNCNAME, NUMOFPAR, CAT }
 
 const FuncDataBase pFuncDatas[] =
 {
-    //                          UNIQUE or   INTPAR or
-    //         function name     DOUBLE      STDPAR     # of param  category
+    
+    
     FUNCDATA( Workday,          UNIQUE,     INTPAR,     3,          FDCat_DateTime ),
     FUNCDATA( Yearfrac,         UNIQUE,     INTPAR,     3,          FDCat_DateTime ),
     FUNCDATA( Edate,            UNIQUE,     INTPAR,     2,          FDCat_DateTime ),
@@ -263,7 +263,7 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOpt ) throw
         }
     }
 
-    // no null date available -> no calculations possible
+    
     throw uno::RuntimeException();
 }
 
@@ -348,8 +348,8 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
 
     switch( nMode )
     {
-        case 0:         // 0=USA (NASD) 30/360
-        case 4:         // 4=Europe 30/360
+        case 0:         
+        case 4:         
             {
             sal_uInt16      nD1, nM1, nY1, nD2, nM2, nY2;
 
@@ -375,7 +375,7 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
                 *pOptDaysIn1stYear = 360;
             }
             break;
-        case 1:         // 1=exact/exact
+        case 1:         
             if( pOptDaysIn1stYear )
             {
                 sal_uInt16      nD, nM, nY;
@@ -386,12 +386,12 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
             }
             nRet = nEndDate - nStartDate;
             break;
-        case 2:         // 2=exact/360
+        case 2:         
             nRet = nEndDate - nStartDate;
             if( pOptDaysIn1stYear )
                 *pOptDaysIn1stYear = 360;
             break;
-        case 3:         //3=exact/365
+        case 3:         
             nRet = nEndDate - nStartDate;
             if( pOptDaysIn1stYear )
                 *pOptDaysIn1stYear = 365;
@@ -417,18 +417,18 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
 {
     switch( nMode )
     {
-        case 0:         // 0=USA (NASD) 30/360
-        case 2:         // 2=exact/360
-        case 4:         // 4=Europe 30/360
+        case 0:         
+        case 2:         
+        case 4:         
             return 360;
-        case 1:         // 1=exact/exact
+        case 1:         
             {
             sal_uInt16  nD, nM, nY;
             nDate += nNullDate;
             DaysToDate( nDate, nD, nM, nY );
             return IsLeapYear( nY )? 366 : 365;
             }
-        case 3:         //3=exact/365
+        case 3:         
             return 365;
         default:
             throw lang::IllegalArgumentException();
@@ -436,8 +436,8 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
 }
 
 
-//fdo40100 toDo: make function fully compliant with ODFF1.2
-// LEM: I fixed case nMode==1; anything else to fix?
+
+
 /**
  * Function GetYearFrac implements YEARFRAC as defined in:
  *   Open Document Format for Office Applications version 1.2 Part 2, par. 6.10.24
@@ -447,7 +447,7 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
 double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nStartDate == nEndDate )
-        return 0.0;     // nothing to do...
+        return 0.0;     
 
     if( nStartDate > nEndDate )
     {
@@ -466,11 +466,11 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
     DaysToDate( nDate1, nDay1, nMonth1, nYear1 );
     DaysToDate( nDate2, nDay2, nMonth2, nYear2 );
 
-    // calculate days between nDate1 and nDate2
+    
     sal_Int32 nDayDiff;
     switch( nMode )
     {
-        case 0:         // 0=USA (NASD) 30/360
+        case 0:         
             if ( nDay1 == 31 )
             {
                 nDay1--;
@@ -492,12 +492,12 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
             }
             nDayDiff = ( nYear2 - nYear1 ) * 360 + ( nMonth2 - nMonth1 ) * 30 + ( nDay2 - nDay1 );
             break;
-        case 1:         // 1=exact/exact
-        case 2:         // 2=exact/360
-        case 3:         // 3=exact/365
+        case 1:         
+        case 2:         
+        case 3:         
             nDayDiff = nDate2 - nDate1;
             break;
-        case 4:         // 4=Europe 30/360
+        case 4:         
             if ( nDay1 == 31 )
             {
                 nDay1--;
@@ -512,34 +512,34 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
             throw lang::IllegalArgumentException();
     }
 
-    //calculate days in year
+    
     double nDaysInYear;
     switch( nMode )
     {
-        case 0:         // 0=USA (NASD) 30/360
-        case 2:         // 2=exact/360
-        case 4:         // 4=Europe 30/360
+        case 0:         
+        case 2:         
+        case 4:         
             nDaysInYear = 360;
             break;
-        case 1:         // 1=exact/exact
+        case 1:         
             {
                 const bool isYearDifferent = ( nYear1 != nYear2 );
-                // ODFv1.2 part 2 section 4.11.7.7.7
+                
                 if ( isYearDifferent &&
                      ( ( nYear2 != nYear1 + 1 ) ||
                        ( nMonth1 < nMonth2 ) ||
                        ( nMonth1 == nMonth2 && nDay1 < nDay2 ) ) )
                 {
-                    // return average of days in year between nDate1 and nDate2, inclusive
+                    
                     sal_Int32 nDayCount = 0;
                     for ( sal_Int16 i = nYear1; i <= nYear2; i++ )
                         nDayCount += ( IsLeapYear( i ) ? 366 : 365 );
 
                     nDaysInYear = ( double ) nDayCount / ( double ) ( nYear2 - nYear1 + 1 );
                 }
-                // we take advantage of the fact that (ODFv1.2 part 2) 4.11.7.7.9
-                // 4.11.7.7.10 can be permuted without changing the end result
-                // ODFv1.2 part 2 section 4.11.7.7.8 and 4.11.7.7.10
+                
+                
+                
                 else if ( ( isYearDifferent && IsLeapYear( nYear1 ) ) ||
                           ( nMonth2 == 2 && nDay2 == 29) )
                 {
@@ -547,41 +547,41 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
                 }
                 else
                 {
-                    // ODFv1.2 part 2 section 4.11.7.7.9:
-                    // we need to determine whether there is a 29 February
-                    // between nDate1 and nDate2
-                    // LEM FIXME: I have a doubt concerning nDate1 == "29 February YYYY"
-                    //            In this case, is the "29 February YYYY" between nDate1 and nDate2
-                    //            in the meaning of ODFv1.2 part 2, section 4.11.7.7.9?
-                    //            I assume "no", since if "between" is to be understood as "inclusive"
-                    //            then 4.11.7.7.10 has no point.
-                    //            OTOH, it could theoretically be possible that "between"
-                    //            is to be understood as "inclusive the lower bound, exclusive in upper bound".
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
 
                     assert(nYear1 == nYear2 || nYear1 + 1 == nYear2);
-                    // as a consequence, nYearDifferent iff nYear2 == nYear + 1, and
-                    // there are only two possible 29 Februaries to consider:
-                    // "29 February nYear1" and "29 February nYear2"
+                    
+                    
+                    
 
-                    // nDate2=="29 February YYYY" is handled above and the following conditions
-                    // rely on that for simplification.
+                    
+                    
                     assert( ! (nMonth2 == 2 && nDay2 == 29));
 
                     if( IsLeapYear( nYear1 ) )
                        assert(nYear1 == nYear2);
 
-                    // is 29/2/nYear1 between nDate1 and nDate2?
-                    // that is only possible if IsLeapYear( nYear1 ),
-                    // which implies nYear1 == nYear2
+                    
+                    
+                    
                     if( IsLeapYear( nYear1 ) &&
                         ( nMonth1 == 1 || ( nMonth1 == 2 && nDay1 <= 28 )) &&
                         nMonth2 > 2 )
                     {
                         nDaysInYear = 366;
                     }
-                    // is 29/2/nYear2 between nDate1 and nDate2?
-                    // if nYear1==nYear2, then that is adequately tested by the previous test,
-                    // so no need to retest it here.
+                    
+                    
+                    
                     else if(isYearDifferent && nMonth2 > 2 && IsLeapYear( nYear2 ))
                     {
                         nDaysInYear = 366;
@@ -597,7 +597,7 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
                 }
             }
             break;
-        case 3:         // 3=exact/365
+        case 3:         
             nDaysInYear = 365;
             break;
         default:
@@ -609,8 +609,8 @@ double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
 
 double BinomialCoefficient( double n, double k )
 {
-    // This method is a copy of BinomKoeff()
-    // found in sc/source/core/tool/interpr3.cxx
+    
+    
 
     double nVal = 0.0;
     k = ::rtl::math::approxFloor(k);
@@ -689,7 +689,7 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
             fVal = fVal * fBase + double( n );
         }
         else
-            // illegal char!
+            
             throw lang::IllegalArgumentException();
 
         p++;
@@ -697,8 +697,8 @@ double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim
     }
 
     if( nStrLen == nCharLim && !bFirstDig && (nFirstDig >= nBase / 2) )
-    {   // handling negativ values
-        fVal = ( pow( double( nBase ), double( nCharLim ) ) - fVal );   // complement
+    {   
+        fVal = ( pow( double( nBase ), double( nCharLim ) ) - fVal );   
         fVal *= -1.0;
     }
 
@@ -755,13 +755,13 @@ OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase
     return aRet;
 }
 
-// implementation moved to module sal, see #i97091#
+
 double Erf( double x )
 {
     return ::rtl::math::erf(x);
 }
 
-// implementation moved to module sal, see #i97091#
+
 double Erfc( double x )
 {
     return ::rtl::math::erfc(x);
@@ -801,10 +801,10 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
 {
     double              fInt = 0.0;
     double              fFrac = 0.0;
-    double              fMult = 0.1;    // multiplier to multiply digits with, when adding fractional ones
+    double              fMult = 0.1;    
     sal_Int32           nExp = 0;
     sal_Int32           nMaxExp = 307;
-    sal_uInt16          nDigCnt = 18;   // max. number of digits to read in, rest doesn't matter
+    sal_uInt16          nDigCnt = 18;   
 
     enum State  { S_End = 0, S_Sign, S_IntStart, S_Int, S_IgnoreIntDigs, S_Frac, S_IgnoreFracDigs, S_ExpSign, S_Exp };
 
@@ -875,7 +875,7 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 break;
             case S_IgnoreIntDigs:
                 if( IsNum( c ) )
-                    nExp++;         // just multiply num with 10... ;-)
+                    nExp++;         
                 else if( IsComma( c ) )
                     eS = S_Frac;
                 else if( IsExpStart( c ) )
@@ -929,14 +929,14 @@ sal_Bool ParseDouble( const sal_Unicode*& rp, double& rRet )
                 else
                     eS = S_End;
                 break;
-            case S_End:     // to avoid compiler warning
-                break;      // loop exits anyway
+            case S_End:     
+                break;      
         }
 
         p++;
     }
 
-    p--;        // set pointer back to last
+    p--;        
     rp = p;
 
     fInt += fFrac;
@@ -965,7 +965,7 @@ OUString GetString( double f, sal_Bool bLeadingSign, sal_uInt16 nMaxDig )
     sal_Char        aBuff[ nBuff + 1 ];
     const char*     pFormStr = bLeadingSign? "%+.*g" : "%.*g";
     int             nLen = snprintf( aBuff, nBuff, pFormStr, int( nMaxDig ), f );
-                    // you never know which underlying implementation you get ...
+                    
                     aBuff[nBuff] = 0;
                     if ( nLen < 0 || nLen > nBuff )
                         nLen = strlen( aBuff );
@@ -998,7 +998,7 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
     fRate *= fAmorCoeff;
     double      fNRate = ::rtl::math::round( GetYearFrac( nNullDate, nDate, nFirstPer, nBase ) * fRate * fCost, 0 );
     fCost -= fNRate;
-    double      fRest = fCost - fRestVal;   // Anschaffungskosten - Restwert - Summe aller Abschreibungen
+    double      fRest = fCost - fRestVal;   
 
     for( sal_uInt32 n = 0 ; n < nPer ; n++ )
     {
@@ -1054,7 +1054,7 @@ double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, doub
     double          fNumOfCoups = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
     double          fDur = 0.0;
     const double    f100 = 100.0;
-    fCoup *= f100 / double( nFreq );    // fCoup is used as cash flow
+    fCoup *= f100 / double( nFreq );    
     fYield /= nFreq;
     fYield += 1.0;
 
@@ -1100,10 +1100,10 @@ double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fYield*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
     sal_Int32 /*nBase*/ ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    // If you change this to not unconditionally throw, the
-    // SAL_WNOUNREACHABLE_CODE_PUSH/POP around the caller in
-    // financial.cxx can be removed.
-    throw uno::RuntimeException();  // #87380#
+    
+    
+    
+    throw uno::RuntimeException();  
 }
 
 
@@ -1153,7 +1153,7 @@ double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
     }
 
     if( fabs( fPrice - fPriceN ) > fPrice / 100.0 )
-        throw lang::IllegalArgumentException();      // result not precise enough
+        throw lang::IllegalArgumentException();      
 
     return fYieldN;
 }
@@ -1186,10 +1186,10 @@ double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
     sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fPrice*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
     sal_Int32 /*nBase*/ ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
-    // If you change this to not unconditionally throw, the
-    // SAL_WNOUNREACHABLE_CODE_PUSH/POP around the caller in
-    // financial.cxx can be removed.
-    throw uno::RuntimeException();  // #87380#
+    
+    
+    
+    throw uno::RuntimeException();  
 }
 
 
@@ -1262,12 +1262,12 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 }
 
 
-//-----------------------------------------------------------------------------
-// financial functions COUP***
 
 
-//-------
-// COUPPCD: find last coupon date before settlement (can be equal to settlement)
+
+
+
+
 static void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
     throw( lang::IllegalArgumentException )
 {
@@ -1291,8 +1291,8 @@ double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 }
 
 
-//-------
-// COUPNCD: find first coupon date after settlement (is never equal to settlement)
+
+
 static void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
     throw( lang::IllegalArgumentException )
 {
@@ -1316,8 +1316,8 @@ double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 }
 
 
-//-------
-// COUPDAYBS: get day count: coupon date before settlement <-> settlement
+
+
 double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1331,8 +1331,8 @@ double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 }
 
 
-//-------
-// COUPDAYSNC: get day count: settlement <-> coupon date after settlement
+
+
 double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1350,8 +1350,8 @@ double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sa
 }
 
 
-//-------
-// COUPDAYS: get day count: coupon date before settlement <-> coupon date after settlement
+
+
 double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1370,8 +1370,8 @@ double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
 }
 
 
-//-------
-// COUPNUM: get count of coupon dates
+
+
 double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
     throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1549,7 +1549,7 @@ sal_Bool SortedIndividualInt32List::Find( sal_Int32 nVal ) const
     if( !nE || nVal < Get( 0 ) || nVal > Get( nE - 1 ) )
         return sal_False;
 
-    // linear search
+    
 
     for( sal_uInt32 n = 0 ; n < nE ; n++ )
     {
@@ -1608,7 +1608,7 @@ void SortedIndividualInt32List::InsertHolidayList(
 
 
 
-//-----------------------------------------------------------------------------
+
 
 void ScaDoubleList::Append(
         const uno::Sequence< uno::Sequence< double > >& rValueSeq ) throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -1698,7 +1698,7 @@ sal_Bool ScaDoubleList::CheckInsert( double ) const throw( uno::RuntimeException
 
 
 
-//-----------------------------------------------------------------------------
+
 
 sal_Bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1709,7 +1709,7 @@ sal_Bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::Runtim
 
 
 
-//-----------------------------------------------------------------------------
+
 
 sal_Bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1720,7 +1720,7 @@ sal_Bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::Runtim
 
 
 
-//-----------------------------------------------------------------------------
+
 
 Complex::Complex( const OUString& rStr ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
@@ -1736,7 +1736,7 @@ inline sal_Bool Complex::IsImagUnit( sal_Unicode c )
 
 sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
 {
-    rCompl.c = '\0';    // do not force a symbol, if only real part present
+    rCompl.c = '\0';    
 
     const sal_Unicode* pStr = rStr.getStr();
 
@@ -1755,7 +1755,7 @@ sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
 
     switch( *pStr )
     {
-        case '-':   // imag part follows
+        case '-':   
         case '+':
             {
             double      r = f;
@@ -1793,7 +1793,7 @@ sal_Bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
                 return sal_True;
             }
             break;
-        case 0:     // only real-part
+        case 0:     
             rCompl.r = f;
             rCompl.i = 0.0;
             return sal_True;
@@ -1877,7 +1877,7 @@ void Complex::Power( double fPower ) throw( uno::RuntimeException, lang::Illegal
 
 void Complex::Sqrt( void )
 {
-    static const double fMultConst = 0.7071067811865475;    // ...2440084436210485 = 1/sqrt(2)
+    static const double fMultConst = 0.7071067811865475;    
     double  p = Abs();
     double  i_ = sqrt( p - r ) * fMultConst;
 
@@ -1969,14 +1969,14 @@ void Complex::Ln( void ) throw( uno::RuntimeException, lang::IllegalArgumentExce
 void Complex::Log10( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Ln();
-    Mult( 0.434294481903251828 );   // * log10( e )
+    Mult( 0.434294481903251828 );   
 }
 
 
 void Complex::Log2( void ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     Ln();
-    Mult( 1.442695040888963407 );   // * log2( e )
+    Mult( 1.442695040888963407 );   
 }
 
 
@@ -2259,8 +2259,8 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
             sal_Int16       n;
             switch( *p )
             {
-                case 'y':   n = -24;    break;      // yocto
-                case 'z':   n = -21;    break;      // zepto
+                case 'y':   n = -24;    break;      
+                case 'z':   n = -21;    break;      
                 case 'a':   n = -18;    break;
                 case 'f':   n = -15;    break;
                 case 'p':   n = -12;    break;
@@ -2271,9 +2271,9 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
                 case 'd':
                     {
                         if ( bOneChar )
-                            n = -1;                 // deci
+                            n = -1;                 
                         else
-                            n = 1;                  // deca
+                            n = 1;                  
                     }
                     break;
                 case 'e':   n = 1;      break;
@@ -2284,19 +2284,19 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
                 case 'T':   n = 12;     break;
                 case 'P':   n = 15;     break;
                 case 'E':   n = 18;     break;
-                case 'Z':   n = 21;     break;      // zetta
-                case 'Y':   n = 24;     break;      // yotta
+                case 'Z':   n = 21;     break;      
+                case 'Y':   n = 24;     break;      
                 default:
                             n = INV_MATCHLEV;
             }
 
-// We could weed some nonsense out, ODFF doesn't say so though.
+
 #if 0
             if (n < 0 && Class() == CDC_Information)
-                n = INV_MATCHLEV;   // milli-bits doesn't make sense
+                n = INV_MATCHLEV;   
 #endif
 
-//! <HACK> "cm3" is not 10^-2 m^3 but 10^-6 m^3 !!! ------------------
+
             if( n != INV_MATCHLEV )
             {
                 sal_Unicode cLast = p[ aStr.getLength() - 1 ];
@@ -2305,7 +2305,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
                 else if( cLast == '3' )
                     n *= 3;
             }
-//! </HACK> -------------------------------------------------------------------
+
 
             return n;
         }
@@ -2361,7 +2361,7 @@ double ConvertData::Convert(
         return f;
     }
 
-    nLevFrom = sal::static_int_cast<sal_Int16>( nLevFrom - nLevTo );    // effective level
+    nLevFrom = sal::static_int_cast<sal_Int16>( nLevFrom - nLevTo );    
 
     f *= r.fConst / fConst;
 
@@ -2431,176 +2431,176 @@ ConvertDataList::ConvertDataList( void )
 #define NEWL(str,unit,offs,cl)  maVector.push_back(new ConvertDataLinear(str,unit,offs,cl))
 #define NEWLP(str,unit,offs,cl) maVector.push_back(new ConvertDataLinear(str,unit,offs,cl,sal_True))
 
-    // *** are extra and not standard Excel Analysis Addin!
+    
 
-    // MASS: 1 Gram is...
-    NEWDP( "g",         1.0000000000000000E00,  CDC_Mass ); // Gram
-    NEWD( "sg",         6.8522050005347800E-05, CDC_Mass ); // Pieces
-    NEWD( "lbm",        2.2046229146913400E-03, CDC_Mass ); // Pound (commercial weight)
-    NEWDP( "u",         6.0221370000000000E23,  CDC_Mass ); // U (atomic mass)
-    NEWD( "ozm",        3.5273971800362700E-02, CDC_Mass ); // Ounce (commercial weight)
-    NEWD( "stone",      1.574730e-04,           CDC_Mass ); // *** Stone
-    NEWD( "ton",        1.102311e-06,           CDC_Mass ); // *** Ton
-    NEWD( "grain",      1.543236E01,            CDC_Mass ); // *** Grain
-    NEWD( "pweight",    7.054792E-01,           CDC_Mass ); // *** Pennyweight
-    NEWD( "hweight",    1.968413E-05,           CDC_Mass ); // *** Hundredweight
-    NEWD( "shweight",   2.204623E-05,           CDC_Mass ); // *** Shorthundredweight
-    NEWD( "brton",      9.842065E-07,           CDC_Mass ); // *** Gross Registered Ton
-    NEWD( "cwt",        2.2046226218487758E-05, CDC_Mass ); // U.S. (short) hundredweight
-    NEWD( "shweight",   2.2046226218487758E-05, CDC_Mass ); // U.S. (short) hundredweight also
-    NEWD( "uk_cwt",     1.9684130552221213E-05, CDC_Mass ); // Imperial hundredweight
-    NEWD( "lcwt",       1.9684130552221213E-05, CDC_Mass ); // Imperial hundredweight also
-    NEWD( "hweight",    1.9684130552221213E-05, CDC_Mass ); // Imperial hundredweight also
-    NEWD( "uk_ton",     9.8420652761106063E-07, CDC_Mass ); // Imperial ton
-    NEWD( "LTON",       9.8420652761106063E-07, CDC_Mass ); // Imperial ton also
+    
+    NEWDP( "g",         1.0000000000000000E00,  CDC_Mass ); 
+    NEWD( "sg",         6.8522050005347800E-05, CDC_Mass ); 
+    NEWD( "lbm",        2.2046229146913400E-03, CDC_Mass ); 
+    NEWDP( "u",         6.0221370000000000E23,  CDC_Mass ); 
+    NEWD( "ozm",        3.5273971800362700E-02, CDC_Mass ); 
+    NEWD( "stone",      1.574730e-04,           CDC_Mass ); 
+    NEWD( "ton",        1.102311e-06,           CDC_Mass ); 
+    NEWD( "grain",      1.543236E01,            CDC_Mass ); 
+    NEWD( "pweight",    7.054792E-01,           CDC_Mass ); 
+    NEWD( "hweight",    1.968413E-05,           CDC_Mass ); 
+    NEWD( "shweight",   2.204623E-05,           CDC_Mass ); 
+    NEWD( "brton",      9.842065E-07,           CDC_Mass ); 
+    NEWD( "cwt",        2.2046226218487758E-05, CDC_Mass ); 
+    NEWD( "shweight",   2.2046226218487758E-05, CDC_Mass ); 
+    NEWD( "uk_cwt",     1.9684130552221213E-05, CDC_Mass ); 
+    NEWD( "lcwt",       1.9684130552221213E-05, CDC_Mass ); 
+    NEWD( "hweight",    1.9684130552221213E-05, CDC_Mass ); 
+    NEWD( "uk_ton",     9.8420652761106063E-07, CDC_Mass ); 
+    NEWD( "LTON",       9.8420652761106063E-07, CDC_Mass ); 
 
-    // LENGTH: 1 Meter is...
-    NEWDP( "m",         1.0000000000000000E00,  CDC_Length ); // Meter
-    NEWD( "mi",         6.2137119223733397E-04, CDC_Length ); // Britsh Mile        6,21371192237333969617434184363e-4
-    NEWD( "Nmi",        5.3995680345572354E-04, CDC_Length ); // Nautical Mile      5,39956803455723542116630669546e-4
-    NEWD( "in",         3.9370078740157480E01,  CDC_Length ); // Inch               39,37007874015748031496062992126
-    NEWD( "ft",         3.2808398950131234E00,  CDC_Length ); // Foot               3,2808398950131233595800524934383
-    NEWD( "yd",         1.0936132983377078E00,  CDC_Length ); // Yard               1,0936132983377077865266841644794
-    NEWDP( "ang",       1.0000000000000000E10,  CDC_Length ); // Angstroem
-    NEWD( "Pica",       2.8346456692913386E03,  CDC_Length ); // Pica (1/72 Inch)   2834,6456692913385826771653543307
-    NEWD( "ell",        8.748906E-01,           CDC_Length ); // *** Ell
-    NEWDP( "parsec",    3.240779E-17,           CDC_Length ); // *** Parsec
-    NEWDP( "pc",        3.240779E-17,           CDC_Length ); // *** Parsec also
-    NEWDP( "lightyear", 1.0570234557732930E-16, CDC_Length ); // *** Light Year
-    NEWDP( "ly",        1.0570234557732930E-16, CDC_Length ); // *** Light Year also
-    NEWD( "survey_mi",  6.2136994949494949E-04, CDC_Length ); // U.S. survey mile
+    
+    NEWDP( "m",         1.0000000000000000E00,  CDC_Length ); 
+    NEWD( "mi",         6.2137119223733397E-04, CDC_Length ); 
+    NEWD( "Nmi",        5.3995680345572354E-04, CDC_Length ); 
+    NEWD( "in",         3.9370078740157480E01,  CDC_Length ); 
+    NEWD( "ft",         3.2808398950131234E00,  CDC_Length ); 
+    NEWD( "yd",         1.0936132983377078E00,  CDC_Length ); 
+    NEWDP( "ang",       1.0000000000000000E10,  CDC_Length ); 
+    NEWD( "Pica",       2.8346456692913386E03,  CDC_Length ); 
+    NEWD( "ell",        8.748906E-01,           CDC_Length ); 
+    NEWDP( "parsec",    3.240779E-17,           CDC_Length ); 
+    NEWDP( "pc",        3.240779E-17,           CDC_Length ); 
+    NEWDP( "lightyear", 1.0570234557732930E-16, CDC_Length ); 
+    NEWDP( "ly",        1.0570234557732930E-16, CDC_Length ); 
+    NEWD( "survey_mi",  6.2136994949494949E-04, CDC_Length ); 
 
-    // TIME: 1 Second is...
-    NEWD( "yr",     3.1688087814028950E-08, CDC_Time ); // Year
-    NEWD( "day",    1.1574074074074074E-05, CDC_Time ); // Day
-    NEWD( "d",      1.1574074074074074E-05, CDC_Time ); // Day also
-    NEWD( "hr",     2.7777777777777778E-04, CDC_Time ); // Hour
-    NEWD( "mn",     1.6666666666666667E-02, CDC_Time ); // Minute
-    NEWD( "min",    1.6666666666666667E-02, CDC_Time ); // Minute also
-    NEWDP( "sec",   1.0000000000000000E00,  CDC_Time ); // Second
-    NEWDP( "s",     1.0000000000000000E00,  CDC_Time ); // Second also
+    
+    NEWD( "yr",     3.1688087814028950E-08, CDC_Time ); 
+    NEWD( "day",    1.1574074074074074E-05, CDC_Time ); 
+    NEWD( "d",      1.1574074074074074E-05, CDC_Time ); 
+    NEWD( "hr",     2.7777777777777778E-04, CDC_Time ); 
+    NEWD( "mn",     1.6666666666666667E-02, CDC_Time ); 
+    NEWD( "min",    1.6666666666666667E-02, CDC_Time ); 
+    NEWDP( "sec",   1.0000000000000000E00,  CDC_Time ); 
+    NEWDP( "s",     1.0000000000000000E00,  CDC_Time ); 
 
-    // PRESSURE: 1 Pascal is...
-    NEWDP( "Pa",    1.0000000000000000E00,  CDC_Pressure ); // Pascal
-    NEWDP( "atm",   9.8692329999819300E-06, CDC_Pressure ); // Atmosphere
-    NEWDP( "at",    9.8692329999819300E-06, CDC_Pressure ); // Atmosphere also
-    NEWDP( "mmHg",  7.5006170799862700E-03, CDC_Pressure ); // mm Hg (Mercury)
-    NEWD( "Torr",   7.5006380000000000E-03, CDC_Pressure ); // *** Torr
-    NEWD( "psi",    1.4503770000000000E-04, CDC_Pressure ); // *** Psi
+    
+    NEWDP( "Pa",    1.0000000000000000E00,  CDC_Pressure ); 
+    NEWDP( "atm",   9.8692329999819300E-06, CDC_Pressure ); 
+    NEWDP( "at",    9.8692329999819300E-06, CDC_Pressure ); 
+    NEWDP( "mmHg",  7.5006170799862700E-03, CDC_Pressure ); 
+    NEWD( "Torr",   7.5006380000000000E-03, CDC_Pressure ); 
+    NEWD( "psi",    1.4503770000000000E-04, CDC_Pressure ); 
 
-    // FORCE: 1 Newton is...
-    NEWDP( "N",     1.0000000000000000E00,  CDC_Force ); // Newton
-    NEWDP( "dyn",   1.0000000000000000E05,  CDC_Force ); // Dyn
-    NEWDP( "dy",    1.0000000000000000E05,  CDC_Force ); // Dyn also
-    NEWD( "lbf",    2.24808923655339E-01,   CDC_Force ); // Pound-Force
-    NEWDP( "pond",  1.019716E02,            CDC_Force ); // *** Pond
+    
+    NEWDP( "N",     1.0000000000000000E00,  CDC_Force ); 
+    NEWDP( "dyn",   1.0000000000000000E05,  CDC_Force ); 
+    NEWDP( "dy",    1.0000000000000000E05,  CDC_Force ); 
+    NEWD( "lbf",    2.24808923655339E-01,   CDC_Force ); 
+    NEWDP( "pond",  1.019716E02,            CDC_Force ); 
 
-    // ENERGY: 1 Joule is...
-    NEWDP( "J",     1.0000000000000000E00,  CDC_Energy ); // Joule
-    NEWDP( "e",     1.0000000000000000E07,  CDC_Energy ); // Erg  -> http://www.chemie.fu-berlin.de/chemistry/general/si.html
-    NEWDP( "c",     2.3900624947346700E-01, CDC_Energy ); // Thermodynamical Calorie
-    NEWDP( "cal",   2.3884619064201700E-01, CDC_Energy ); // Calorie
-    NEWDP( "eV",    6.2414570000000000E18,  CDC_Energy ); // Electronvolt
-    NEWDP( "ev",    6.2414570000000000E18,  CDC_Energy ); // Electronvolt also
-    NEWD( "HPh",    3.7250611111111111E-07, CDC_Energy ); // Horsepower Hours
-    NEWD( "hh",     3.7250611111111111E-07, CDC_Energy ); // Horsepower Hours also
-    NEWDP( "Wh",    2.7777777777777778E-04, CDC_Energy ); // Watt Hours
-    NEWDP( "wh",    2.7777777777777778E-04, CDC_Energy ); // Watt Hours also
-    NEWD( "flb",    2.37304222192651E01,    CDC_Energy ); // Foot Pound
-    NEWD( "BTU",    9.4781506734901500E-04, CDC_Energy ); // British Thermal Unit
-    NEWD( "btu",    9.4781506734901500E-04, CDC_Energy ); // British Thermal Unit also
+    
+    NEWDP( "J",     1.0000000000000000E00,  CDC_Energy ); 
+    NEWDP( "e",     1.0000000000000000E07,  CDC_Energy ); 
+    NEWDP( "c",     2.3900624947346700E-01, CDC_Energy ); 
+    NEWDP( "cal",   2.3884619064201700E-01, CDC_Energy ); 
+    NEWDP( "eV",    6.2414570000000000E18,  CDC_Energy ); 
+    NEWDP( "ev",    6.2414570000000000E18,  CDC_Energy ); 
+    NEWD( "HPh",    3.7250611111111111E-07, CDC_Energy ); 
+    NEWD( "hh",     3.7250611111111111E-07, CDC_Energy ); 
+    NEWDP( "Wh",    2.7777777777777778E-04, CDC_Energy ); 
+    NEWDP( "wh",    2.7777777777777778E-04, CDC_Energy ); 
+    NEWD( "flb",    2.37304222192651E01,    CDC_Energy ); 
+    NEWD( "BTU",    9.4781506734901500E-04, CDC_Energy ); 
+    NEWD( "btu",    9.4781506734901500E-04, CDC_Energy ); 
 
-    // POWER: 1 Watt is...
-    NEWDP( "W",     1.0000000000000000E00,  CDC_Power ); // Watt
-    NEWDP( "w",     1.0000000000000000E00,  CDC_Power ); // Watt also
-    NEWD( "HP",     1.341022E-03,           CDC_Power ); // Horsepower
-    NEWD( "h",      1.341022E-03,           CDC_Power ); // Horsepower also
-    NEWD( "PS",     1.359622E-03,           CDC_Power ); // *** German Pferdestaerke
+    
+    NEWDP( "W",     1.0000000000000000E00,  CDC_Power ); 
+    NEWDP( "w",     1.0000000000000000E00,  CDC_Power ); 
+    NEWD( "HP",     1.341022E-03,           CDC_Power ); 
+    NEWD( "h",      1.341022E-03,           CDC_Power ); 
+    NEWD( "PS",     1.359622E-03,           CDC_Power ); 
 
-    // MAGNETISM: 1 Tesla is...
-    NEWDP( "T",     1.0000000000000000E00,  CDC_Magnetism ); // Tesla
-    NEWDP( "ga",    1.0000000000000000E04,  CDC_Magnetism ); // Gauss
+    
+    NEWDP( "T",     1.0000000000000000E00,  CDC_Magnetism ); 
+    NEWDP( "ga",    1.0000000000000000E04,  CDC_Magnetism ); 
 
-    // TEMERATURE: 1 Kelvin is...
-    NEWL( "C",      1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); // Celsius
-    NEWL( "cel",    1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); // Celsius also
-    NEWL( "F",      1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature ); // Fahrenheit
-    NEWL( "fah",    1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature ); // Fahrenheit also
-    NEWLP( "K",     1.0000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // Kelvin
-    NEWLP( "kel",   1.0000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // Kelvin also
-    NEWL( "Reau",   8.0000000000000000E-01, -2.7315000000000000E02, CDC_Temperature ); // *** Reaumur
-    NEWL( "Rank",   1.8000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); // *** Rankine
+    
+    NEWL( "C",      1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); 
+    NEWL( "cel",    1.0000000000000000E00,  -2.7315000000000000E02, CDC_Temperature ); 
+    NEWL( "F",      1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature ); 
+    NEWL( "fah",    1.8000000000000000E00,  -2.5537222222222222E02, CDC_Temperature ); 
+    NEWLP( "K",     1.0000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); 
+    NEWLP( "kel",   1.0000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); 
+    NEWL( "Reau",   8.0000000000000000E-01, -2.7315000000000000E02, CDC_Temperature ); 
+    NEWL( "Rank",   1.8000000000000000E00,  +0.0000000000000000E00, CDC_Temperature ); 
 
-    // VOLUMNE: 1 Liter is...
-    NEWD( "tsp",        2.0288413621105798E02,  CDC_Volume ); // US teaspoon            1/768 gallon
-    NEWD( "tbs",        6.7628045403685994E01,  CDC_Volume ); // US tablespoon          1/256 gallon
-    NEWD( "oz",         3.3814022701842997E01,  CDC_Volume ); // Ounce Liquid           1/128 gallon
-    NEWD( "cup",        4.2267528377303746E00,  CDC_Volume ); // Cup                    1/16 gallon
-    NEWD( "pt",         2.1133764188651873E00,  CDC_Volume ); // US Pint                1/8 gallon
-    NEWD( "us_pt",      2.1133764188651873E00,  CDC_Volume ); // US Pint also
-    NEWD( "uk_pt",      1.7597539863927023E00,  CDC_Volume ); // UK Pint                1/8 imperial gallon
-    NEWD( "qt",         1.0566882094325937E00,  CDC_Volume ); // Quart                  1/4 gallon
-    NEWD( "gal",        2.6417205235814842E-01, CDC_Volume ); // Gallon                 1/3.785411784
-    NEWDP( "l",         1.0000000000000000E00,  CDC_Volume ); // Liter
-    NEWDP( "L",         1.0000000000000000E00,  CDC_Volume ); // Liter also
-    NEWDP( "lt",        1.0000000000000000E00,  CDC_Volume ); // Liter also
-    NEWDP( "m3",        1.0000000000000000E-03, CDC_Volume ); // *** Cubic Meter
-    NEWD( "mi3",        2.3991275857892772E-13, CDC_Volume ); // *** Cubic Britsh Mile
-    NEWD( "Nmi3",       1.5742621468581148E-13, CDC_Volume ); // *** Cubic Nautical Mile
-    NEWD( "in3",        6.1023744094732284E01,  CDC_Volume ); // *** Cubic Inch
-    NEWD( "ft3",        3.5314666721488590E-02, CDC_Volume ); // *** Cubic Foot
-    NEWD( "yd3",        1.3079506193143922E-03, CDC_Volume ); // *** Cubic Yard
-    NEWDP( "ang3",      1.0000000000000000E27,  CDC_Volume ); // *** Cubic Angstroem
-    NEWD( "Pica3",      2.2776990435870636E07,  CDC_Volume ); // *** Cubic Pica
-    NEWD( "barrel",     6.2898107704321051E-03, CDC_Volume ); // *** Barrel (=42gal)
-    NEWD( "bushel",     2.837759E-02,           CDC_Volume ); // *** Bushel
-    NEWD( "regton",     3.531467E-04,           CDC_Volume ); // *** Register ton
-    NEWD( "GRT",        3.531467E-04,           CDC_Volume ); // *** Register ton also
-    NEWD( "Schooner",   2.3529411764705882E00,  CDC_Volume ); // *** austr. Schooner
-    NEWD( "Middy",      3.5087719298245614E00,  CDC_Volume ); // *** austr. Middy
-    NEWD( "Glass",      5.0000000000000000E00,  CDC_Volume ); // *** austr. Glass
-    NEWD( "Sixpack",    0.5,                    CDC_Volume ); // ***
-    NEWD( "Humpen",     2.0,                    CDC_Volume ); // ***
-    NEWD( "ly3",        1.1810108125623799E-51, CDC_Volume ); // *** Cubic light-year
-    NEWD( "MTON",       1.4125866688595436E00,  CDC_Volume ); // *** Measurement ton
-    NEWD( "tspm",       2.0000000000000000E02,  CDC_Volume ); // *** Modern teaspoon
-    NEWD( "uk_gal",     2.1996924829908779E-01,  CDC_Volume ); // U.K. / Imperial gallon        1/4.54609
-    NEWD( "uk_qt",      8.7987699319635115E-01,  CDC_Volume ); // U.K. / Imperial quart         1/4 imperial gallon
+    
+    NEWD( "tsp",        2.0288413621105798E02,  CDC_Volume ); 
+    NEWD( "tbs",        6.7628045403685994E01,  CDC_Volume ); 
+    NEWD( "oz",         3.3814022701842997E01,  CDC_Volume ); 
+    NEWD( "cup",        4.2267528377303746E00,  CDC_Volume ); 
+    NEWD( "pt",         2.1133764188651873E00,  CDC_Volume ); 
+    NEWD( "us_pt",      2.1133764188651873E00,  CDC_Volume ); 
+    NEWD( "uk_pt",      1.7597539863927023E00,  CDC_Volume ); 
+    NEWD( "qt",         1.0566882094325937E00,  CDC_Volume ); 
+    NEWD( "gal",        2.6417205235814842E-01, CDC_Volume ); 
+    NEWDP( "l",         1.0000000000000000E00,  CDC_Volume ); 
+    NEWDP( "L",         1.0000000000000000E00,  CDC_Volume ); 
+    NEWDP( "lt",        1.0000000000000000E00,  CDC_Volume ); 
+    NEWDP( "m3",        1.0000000000000000E-03, CDC_Volume ); 
+    NEWD( "mi3",        2.3991275857892772E-13, CDC_Volume ); 
+    NEWD( "Nmi3",       1.5742621468581148E-13, CDC_Volume ); 
+    NEWD( "in3",        6.1023744094732284E01,  CDC_Volume ); 
+    NEWD( "ft3",        3.5314666721488590E-02, CDC_Volume ); 
+    NEWD( "yd3",        1.3079506193143922E-03, CDC_Volume ); 
+    NEWDP( "ang3",      1.0000000000000000E27,  CDC_Volume ); 
+    NEWD( "Pica3",      2.2776990435870636E07,  CDC_Volume ); 
+    NEWD( "barrel",     6.2898107704321051E-03, CDC_Volume ); 
+    NEWD( "bushel",     2.837759E-02,           CDC_Volume ); 
+    NEWD( "regton",     3.531467E-04,           CDC_Volume ); 
+    NEWD( "GRT",        3.531467E-04,           CDC_Volume ); 
+    NEWD( "Schooner",   2.3529411764705882E00,  CDC_Volume ); 
+    NEWD( "Middy",      3.5087719298245614E00,  CDC_Volume ); 
+    NEWD( "Glass",      5.0000000000000000E00,  CDC_Volume ); 
+    NEWD( "Sixpack",    0.5,                    CDC_Volume ); 
+    NEWD( "Humpen",     2.0,                    CDC_Volume ); 
+    NEWD( "ly3",        1.1810108125623799E-51, CDC_Volume ); 
+    NEWD( "MTON",       1.4125866688595436E00,  CDC_Volume ); 
+    NEWD( "tspm",       2.0000000000000000E02,  CDC_Volume ); 
+    NEWD( "uk_gal",     2.1996924829908779E-01,  CDC_Volume ); 
+    NEWD( "uk_qt",      8.7987699319635115E-01,  CDC_Volume ); 
 
-    // 1 Square Meter is...
-    NEWDP( "m2",        1.0000000000000000E00,  CDC_Area ); // *** Square Meter
-    NEWD( "mi2",        3.8610215854244585E-07, CDC_Area ); // *** Square Britsh Mile
-    NEWD( "Nmi2",       2.9155334959812286E-07, CDC_Area ); // *** Square Nautical Mile
-    NEWD( "in2",        1.5500031000062000E03,  CDC_Area ); // *** Square Inch
-    NEWD( "ft2",        1.0763910416709722E01,  CDC_Area ); // *** Square Foot
-    NEWD( "yd2",        1.1959900463010803E00,  CDC_Area ); // *** Square Yard
-    NEWDP( "ang2",      1.0000000000000000E20,  CDC_Area ); // *** Square Angstroem
-    NEWD( "Pica2",      8.0352160704321409E06,  CDC_Area ); // *** Square Pica
-    NEWD( "Morgen",     4.0000000000000000E-04, CDC_Area ); // *** Morgen
-    NEWDP( "ar",        1.000000E-02,           CDC_Area ); // *** Ar
-    NEWD( "acre",       2.471053815E-04,        CDC_Area ); // *** Acre
-    NEWD( "uk_acre",    2.4710538146716534E-04, CDC_Area ); // *** International acre
-    NEWD( "us_acre",    2.4710439304662790E-04, CDC_Area ); // *** U.S. survey/statute acre
-    NEWD( "ly2",        1.1172985860549147E-32, CDC_Area ); // *** Square Light-year
-    NEWD( "ha",         1.000000E-04,           CDC_Area ); // *** Hectare
-    NEWD( "Quadratlatschen",5.6689342403628117914,CDC_Area ); // ***
+    
+    NEWDP( "m2",        1.0000000000000000E00,  CDC_Area ); 
+    NEWD( "mi2",        3.8610215854244585E-07, CDC_Area ); 
+    NEWD( "Nmi2",       2.9155334959812286E-07, CDC_Area ); 
+    NEWD( "in2",        1.5500031000062000E03,  CDC_Area ); 
+    NEWD( "ft2",        1.0763910416709722E01,  CDC_Area ); 
+    NEWD( "yd2",        1.1959900463010803E00,  CDC_Area ); 
+    NEWDP( "ang2",      1.0000000000000000E20,  CDC_Area ); 
+    NEWD( "Pica2",      8.0352160704321409E06,  CDC_Area ); 
+    NEWD( "Morgen",     4.0000000000000000E-04, CDC_Area ); 
+    NEWDP( "ar",        1.000000E-02,           CDC_Area ); 
+    NEWD( "acre",       2.471053815E-04,        CDC_Area ); 
+    NEWD( "uk_acre",    2.4710538146716534E-04, CDC_Area ); 
+    NEWD( "us_acre",    2.4710439304662790E-04, CDC_Area ); 
+    NEWD( "ly2",        1.1172985860549147E-32, CDC_Area ); 
+    NEWD( "ha",         1.000000E-04,           CDC_Area ); 
+    NEWD( "Quadratlatschen",5.6689342403628117914,CDC_Area ); 
 
-    // SPEED: 1 Meter per Second is...
-    NEWDP( "m/s",   1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second
-    NEWDP( "m/sec", 1.0000000000000000E00,  CDC_Speed ); // *** Meters per Second also
-    NEWDP( "m/h",   3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour
-    NEWDP( "m/hr",  3.6000000000000000E03,  CDC_Speed ); // *** Meters per Hour also
-    NEWD( "mph",    2.2369362920544023E00,  CDC_Speed ); // *** Britsh Miles per Hour
-    NEWD( "kn",     1.9438444924406048E00,  CDC_Speed ); // *** Knot = Nautical Miles per Hour
-    NEWD( "admkn",  1.9438446603753486E00,  CDC_Speed ); // *** Admiralty Knot
-    NEWD( "wahnsinnige Geschwindigkeit", 2.0494886343432328E-14, CDC_Speed ); // ***
-    NEWD( "ludicrous speed", 2.0494886343432328E-14, CDC_Speed ); // ***
-    NEWD( "laecherliche Geschwindigkeit", 4.0156958471424288E-06, CDC_Speed); // ***
-    NEWD( "ridiculous speed", 4.0156958471424288E-06, CDC_Speed); // ***
+    
+    NEWDP( "m/s",   1.0000000000000000E00,  CDC_Speed ); 
+    NEWDP( "m/sec", 1.0000000000000000E00,  CDC_Speed ); 
+    NEWDP( "m/h",   3.6000000000000000E03,  CDC_Speed ); 
+    NEWDP( "m/hr",  3.6000000000000000E03,  CDC_Speed ); 
+    NEWD( "mph",    2.2369362920544023E00,  CDC_Speed ); 
+    NEWD( "kn",     1.9438444924406048E00,  CDC_Speed ); 
+    NEWD( "admkn",  1.9438446603753486E00,  CDC_Speed ); 
+    NEWD( "wahnsinnige Geschwindigkeit", 2.0494886343432328E-14, CDC_Speed ); 
+    NEWD( "ludicrous speed", 2.0494886343432328E-14, CDC_Speed ); 
+    NEWD( "laecherliche Geschwindigkeit", 4.0156958471424288E-06, CDC_Speed); 
+    NEWD( "ridiculous speed", 4.0156958471424288E-06, CDC_Speed); 
 
-    // INFORMATION: 1 Bit is...
-    NEWDP( "bit",   1.00E00,  CDC_Information); // *** Bit
-    NEWDP( "byte",  1.25E-01, CDC_Information); // *** Byte
+    
+    NEWDP( "bit",   1.00E00,  CDC_Information); 
+    NEWDP( "byte",  1.25E-01, CDC_Information); 
 }
 
 
@@ -2630,12 +2630,12 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
             if( n != INV_MATCHLEV )
             {
                 if( n )
-                {   // only first match for partial equality rulz a little bit more
+                {   
                     pFrom = p;
                     nLevelFrom = n;
                 }
                 else
-                {   // ... but exact match rulz most
+                {   
                     pFrom = p;
                     bSearchFrom = sal_False;
                     nLevelFrom = n;
@@ -2649,12 +2649,12 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
             if( n != INV_MATCHLEV )
             {
                 if( n )
-                {   // only first match for partial equality rulz a little bit more
+                {   
                     pTo = p;
                     nLevelTo = n;
                 }
                 else
-                {   // ... but exact match rulz most
+                {   
                     pTo = p;
                     bSearchTo = sal_False;
                     nLevelTo = n;
@@ -2673,7 +2673,7 @@ double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUStr
 
 
 
-//-----------------------------------------------------------------------------
+
 
 ScaDate::ScaDate() :
     nOrigDay( 1 ),
@@ -2729,14 +2729,14 @@ void ScaDate::setDay()
 {
     if( b30Days )
     {
-        // 30-days-mode: set nDay to 30 if original was last day in month
+        
         nDay = std::min( nOrigDay, static_cast< sal_uInt16 >( 30 ) );
         if( bLastDay || (nDay >= ::DaysInMonth( nMonth, nYear )) )
             nDay = 30;
     }
     else
     {
-        // set nDay to last day in this month if original was last day
+        
         sal_uInt16 nLastDay = ::DaysInMonth( nMonth, nYear );
         nDay = bLastDay ? nLastDay : std::min( nOrigDay, nLastDay );
     }
@@ -2811,7 +2811,7 @@ sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( la
 
     if( rTo.b30Days )
     {
-        // corrections for base 0 (US NASD)
+        
         if( rTo.bUSMode )
         {
             if( ((rFrom.nMonth == 2) || (rFrom.nDay < 30)) && (aTo.nOrigDay == 31) )
@@ -2819,7 +2819,7 @@ sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( la
             else if( (aTo.nMonth == 2) && aTo.bLastDay )
                 aTo.nDay = ::DaysInMonth( 2, aTo.nYear );
         }
-        // corrections for base 4 (Europe)
+        
         else
         {
             if( (aFrom.nMonth == 2) && (aFrom.nDay == 30) )
@@ -2831,7 +2831,7 @@ sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( la
 
     if( (aFrom.nYear < aTo.nYear) || ((aFrom.nYear == aTo.nYear) && (aFrom.nMonth < aTo.nMonth)) )
     {
-        // move aFrom to 1st day of next month
+        
         nDiff = aFrom.getDaysInMonth() - aFrom.nDay + 1;
         aFrom.nOrigDay = aFrom.nDay = 1;
         aFrom.bLastDay = sal_False;
@@ -2839,20 +2839,20 @@ sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( la
 
         if( aFrom.nYear < aTo.nYear )
         {
-            // move aFrom to 1st day of next year
+            
             nDiff += aFrom.getDaysInMonthRange( aFrom.nMonth, 12 );
             aFrom.addMonths( 13 - aFrom.nMonth );
 
-            // move aFrom to 1st day of this year
+            
             nDiff += aFrom.getDaysInYearRange( aFrom.nYear, aTo.nYear - 1 );
             aFrom.addYears( aTo.nYear - aFrom.nYear );
         }
 
-        // move aFrom to 1st day of this month
+        
         nDiff += aFrom.getDaysInMonthRange( aFrom.nMonth, aTo.nMonth - 1 );
         aFrom.addMonths( aTo.nMonth - aFrom.nMonth );
     }
-    // finally add remaining days in this month
+    
     nDiff += aTo.nDay - aFrom.nDay;
     return nDiff > 0 ? nDiff : 0;
 }
@@ -2872,7 +2872,7 @@ sal_Bool ScaDate::operator<( const ScaDate& rCmp ) const
 
 
 
-//-----------------------------------------------------------------------------
+
 
 ScaAnyConverter::ScaAnyConverter( const uno::Reference< uno::XComponentContext >& xContext ) :
     bHasValidFormat( sal_False )
@@ -2886,15 +2886,15 @@ ScaAnyConverter::~ScaAnyConverter()
 
 void ScaAnyConverter::init( const uno::Reference< beans::XPropertySet >& xPropSet ) throw( uno::RuntimeException )
 {
-    // try to get default number format
+    
     bHasValidFormat = sal_False;
     if( xFormatter.is() )
     {
-        // get XFormatsSupplier from outer XPropertySet
+        
         uno::Reference< util::XNumberFormatsSupplier > xFormatsSupp( xPropSet, uno::UNO_QUERY );
         if( xFormatsSupp.is() )
         {
-            // get XNumberFormatTypes from XNumberFormatsSupplier to get standard index
+            
             uno::Reference< util::XNumberFormats > xFormats( xFormatsSupp->getNumberFormats() );
             uno::Reference< util::XNumberFormatTypes > xFormatTypes( xFormats, uno::UNO_QUERY );
             if( xFormatTypes.is() )
@@ -3009,7 +3009,7 @@ sal_Int32 ScaAnyConverter::getInt32(
 
 
 
-//-----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

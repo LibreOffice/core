@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/window.hxx>
@@ -68,8 +68,8 @@ using namespace ::com::sun::star::accessibility;
 
 using lang::IndexOutOfBoundsException;
 
-// SwAccessibleDocumentBase: base class for SwAccessibleDocument and
-// SwAccessiblePreview
+
+
 
 SwAccessibleDocumentBase::SwAccessibleDocumentBase ( SwAccessibleMap *_pMap ) :
     SwAccessibleContext( _pMap, AccessibleRole::DOCUMENT_TEXT,
@@ -92,9 +92,9 @@ void SwAccessibleDocumentBase::SetVisArea()
     if( aOldVisArea != rNewVisArea )
     {
         SwAccessibleFrame::SetVisArea( GetMap()->GetVisArea() );
-        // #i58139# - showing state of document view needs also be updated.
-        // Thus, call method <Scrolled(..)> instead of <ChildrenScrolled(..)>
-        // ChildrenScrolled( GetFrm(), aOldVisArea );
+        
+        
+        
         Scrolled( aOldVisArea );
     }
 }
@@ -139,7 +139,7 @@ sal_Int32 SAL_CALL SwAccessibleDocumentBase::getAccessibleChildCount( void )
 {
     SolarMutexGuard aGuard;
 
-    // CHECK_FOR_DEFUNC is called by parent
+    
 
     sal_Int32 nChildren = SwAccessibleContext::getAccessibleChildCount();
     if( !IsDisposing() && mpChildWin )
@@ -334,7 +334,7 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
         Window *pWin = GetWindow();
         CHECK_FOR_WINDOW( XAccessibleComponent, pWin )
 
-        Point aPixPoint( aPoint.X, aPoint.Y ); // px rel to window
+        Point aPixPoint( aPoint.X, aPoint.Y ); 
         if( mpChildWin->GetWindowExtentsRelative( pWin ).IsInside( aPixPoint ) )
             return mpChildWin->GetAccessible();
     }
@@ -342,14 +342,14 @@ uno::Reference< XAccessible > SAL_CALL SwAccessibleDocumentBase::getAccessibleAt
     return SwAccessibleContext::getAccessibleAtPoint( aPoint );
 }
 
-// SwAccessibeDocument
+
 
 void SwAccessibleDocument::GetStates(
         ::utl::AccessibleStateSetHelper& rStateSet )
 {
     SwAccessibleContext::GetStates( rStateSet );
 
-    // MULTISELECTABLE
+    
     rStateSet.AddState( AccessibleStateType::MULTI_SELECTABLE );
     rStateSet.AddState( AccessibleStateType::MANAGES_DESCENDANTS );
 }
@@ -400,7 +400,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
         OSL_ENSURE( pVclEvent->GetWindow(), "Window???" );
         switch ( pVclEvent->GetId() )
         {
-        case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
+        case VCLEVENT_WINDOW_SHOW:  
             {
                 Window* pChildWin = static_cast< Window* >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
@@ -409,7 +409,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
                 }
             }
             break;
-        case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
+        case VCLEVENT_WINDOW_HIDE:  
             {
                 Window* pChildWin = static_cast< Window* >( pVclEvent->GetData() );
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
@@ -418,7 +418,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
                 }
             }
             break;
-        case VCLEVENT_OBJECT_DYING:  // send destroy on hide for direct accessible children
+        case VCLEVENT_OBJECT_DYING:  
             {
                 Window* pChildWin = pVclEvent->GetWindow();
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
@@ -454,7 +454,7 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleDocument::getSupportedServiceName
     return aRet;
 }
 
-// XInterface
+
 
 uno::Any SwAccessibleDocument::queryInterface(
     const uno::Type& rType )
@@ -466,7 +466,7 @@ uno::Any SwAccessibleDocument::queryInterface(
         uno::Reference<XAccessibleSelection> aSelect = this;
         aRet <<= aSelect;
     }
-    //Add XEventListener interface support.
+    
     else if ( (rType == ::getCppuType((uno::Reference<com::sun::star::document::XEventListener> *)NULL)) )
     {
         uno::Reference<com::sun::star::document::XEventListener> aSelect = this;
@@ -487,20 +487,20 @@ uno::Any SwAccessibleDocument::queryInterface(
     return aRet;
 }
 
-// XTypeProvider
+
 uno::Sequence< uno::Type > SAL_CALL SwAccessibleDocument::getTypes()
     throw(uno::RuntimeException)
 {
     uno::Sequence< uno::Type > aTypes( SwAccessibleDocumentBase::getTypes() );
 
     sal_Int32 nIndex = aTypes.getLength();
-    //Reset types memory alloc
-    //aTypes.realloc( nIndex + 1 );
+    
+    
     aTypes.realloc( nIndex + 2 );
 
     uno::Type* pTypes = aTypes.getArray();
     pTypes[nIndex] = ::getCppuType( static_cast< uno::Reference< XAccessibleSelection > * >( 0 ) );
-    //Add XEventListener interface support.
+    
     pTypes[nIndex + 1 ] = ::getCppuType( static_cast< uno::Reference< com::sun::star::document::XEventListener > * >( 0 ) );
     return aTypes;
 }
@@ -516,7 +516,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleDocument::getImplementationId()
     return theSwAccessibleDocumentImplementationId::get().getSeq();
 }
 
-// XAccessibleSelection
+
 
 void SwAccessibleDocument::selectAccessibleChild(
     sal_Int32 nChildIndex )
@@ -560,7 +560,7 @@ uno::Reference<XAccessible> SwAccessibleDocument::getSelectedAccessibleChild(
     return maSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
-// index has to be treated as global child index.
+
 void SwAccessibleDocument::deselectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException,
@@ -569,7 +569,7 @@ void SwAccessibleDocument::deselectAccessibleChild(
     maSelectionHelper.deselectAccessibleChild( nChildIndex );
 }
 
-//Implement XEventListener interfaces
+
 void SAL_CALL SwAccessibleDocument::notifyEvent( const ::com::sun::star::document::EventObject& Event )
             throw (::com::sun::star::uno::RuntimeException)
 {
@@ -581,15 +581,15 @@ void SAL_CALL SwAccessibleDocument::notifyEvent( const ::com::sun::star::documen
     }
     else if ( Event.EventName.equalsAscii( "LoadFinished" ) )
     {
-        // IA2 CWS. MT: OFFSCREEN == !SHOWING, should stay consistent
-        // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,sal_True );
-        // MT: LoadFinished => Why not SHOWING == TRUE?
+        
+        
+        
         FireStateChangedEvent( AccessibleStateType::SHOWING,sal_False );
     }
     else if ( Event.EventName.equalsAscii( "FormatFinished" ) )
     {
         FireStateChangedEvent( AccessibleStateType::BUSY,sal_False );
-        // FireStateChangedEvent( AccessibleStateType::OFFSCREEN,sal_False );
+        
         FireStateChangedEvent( AccessibleStateType::SHOWING,sal_True );
     }
     else
@@ -653,7 +653,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         SwTxtFrm* pTxtFrm = NULL;
         SwTxtFrm* pCurrTxtFrm = NULL;
         pTxtFrm = static_cast< SwTxtFrm* >(static_cast< SwPageFrm* > (pCurrPage)->ContainsCntnt());
-        if (pCurrFrm->IsInFly())//such as, graphic,chart
+        if (pCurrFrm->IsInFly())
         {
             SwFlyFrm *pFlyFrm = pCurrFrm->FindFlyFrm();
             const SwFmtAnchor& rAnchor = pFlyFrm->GetFmt()->GetAnchor();
@@ -667,13 +667,13 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         }
         else
             pCurrTxtFrm = static_cast< SwTxtFrm* >(pCurrFrm);
-        //check whether the text frame where the Graph/OLE/Frame anchored is in the Header/Footer
+        
         SwFrm* pFrm = pCurrTxtFrm;
         while ( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
             pFrm = pFrm->GetUpper();
         if ( pFrm )
             pCurrTxtFrm = NULL;
-        //check shape
+        
         if(pCrsrShell->Imp()->GetDrawView())
         {
             const SdrMarkList &rMrkList = pCrsrShell->Imp()->GetDrawView()->GetMarkedObjectList();
@@ -686,14 +686,14 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                     pCurrTxtFrm = NULL;
             }
         }
-        //calculate line number
+        
         if (pCurrTxtFrm && pTxtFrm)
         {
             if (!(pCurrTxtFrm->IsInTab() || pCurrTxtFrm->IsInFtn()))
             {
                 while( pTxtFrm != pCurrTxtFrm )
                 {
-                    //check header/footer
+                    
                     pFrm = pTxtFrm;
                     while ( pFrm && !pFrm->IsHeaderFrm() && !pFrm->IsFooterFrm() )
                         pFrm = pFrm->GetUpper();
@@ -724,7 +724,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
                         nActPos = pPoint->nContent.GetIndex();
                         nLineNum += pCurrTxtFrm->GetLineCount( nActPos );
                     }
-                    else//graphic, form, shape, etc.
+                    else
                     {
                         SwPosition* pPoint =  pCaret->GetPoint();
                         Point aPt = pCrsrShell->_GetCrsr()->GetPtPos();
@@ -754,7 +754,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
         sal_uInt16 nCurrCol = 1;
         if(pCurrCol!=NULL)
         {
-            //SwLayoutFrm* pParent = pCurrCol->GetUpper();
+            
             SwFrm* pCurrPageCol=((SwFrm*)pCurrFrm)->FindColFrm();
             while(pCurrPageCol && pCurrPageCol->GetUpper() && pCurrPageCol->GetUpper()->IsPageFrm())
             {
@@ -804,7 +804,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
 
             sValue += ";";
 
-            //section-columns-number
+            
             sAttrName = "section-columns-number:";
 
             nCurrCol = 1;
@@ -826,7 +826,7 @@ uno::Any SAL_CALL SwAccessibleDocument::getExtendedAttributes()
             sValue += OUString::number( nCurrCol ) ;
             sValue += ";";
 
-            //section-total-columns
+            
             sAttrName = "section-total-columns:";
             const SwFmtCol &rFmtSctCol=pCurrSctFrm->GetAttrSet()->GetCol();
             sal_uInt16 nSctColCount=rFmtSctCol.GetNumCols();
@@ -887,7 +887,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
                                 uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
                                 if ( xSelContext.is() )
                                 {
-                                    //if in sw we find the selected paragraph here
+                                    
                                     if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
                                     {
                                         uno::Sequence<uno::Any> aRet( 1 );
@@ -902,7 +902,7 @@ sal_Int32 SAL_CALL SwAccessibleDocument::getBackground()
                     {
                         return uno::Sequence< uno::Any >();
                     }
-                    //end of try...catch
+                    
                 }
             }
         }

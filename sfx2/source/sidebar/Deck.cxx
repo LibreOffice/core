@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Deck.hxx"
@@ -83,9 +83,9 @@ Deck::~Deck (void)
 {
     Dispose();
 
-    // We have to explicitly trigger the destruction of panels.
-    // Otherwise that is done by one of our base class destructors
-    // without updating maPanels.
+    
+    
+    
     maPanels.clear();
 }
 
@@ -157,7 +157,7 @@ void Deck::Paint (const Rectangle& rUpdateArea)
             Theme::GetInteger(Theme::Int_DeckRightPadding),
             Theme::GetInteger(Theme::Int_DeckBottomPadding));
 
-    // Paint deck background outside the border.
+    
     Rectangle aBox(
         0,
         0,
@@ -170,7 +170,7 @@ void Deck::Paint (const Rectangle& rUpdateArea)
         Theme::GetPaint(Theme::Paint_DeckBackground),
         Theme::GetPaint(Theme::Paint_DeckBackground));
 
-    // Paint the border.
+    
     const int nBorderSize (Theme::GetInteger(Theme::Int_DeckBorderSize));
     aBox.Left() += aPadding.Left();
     aBox.Top() += aPadding.Top();
@@ -228,14 +228,14 @@ bool Deck::ProcessWheelEvent (
     if ( ! mpVerticalScrollBar->IsVisible())
         return false;
 
-    // Ignore all wheel commands from outside the vertical scroll bar.
-    // Otherwise after a scroll we might land on a spin field and
-    // subsequent wheel events would change the value of that control.
+    
+    
+    
     if (rEvent.GetWindow() != mpVerticalScrollBar.get())
         return true;
 
-    // Get the wheel data and check that it describes a valid vertical
-    // scroll.
+    
+    
     const CommandWheelData* pData = pCommandEvent->GetWheelData();
     if (pData==NULL
         || pData->GetModifier()
@@ -243,7 +243,7 @@ bool Deck::ProcessWheelEvent (
         || pData->IsHorz())
         return false;
 
-    // Execute the actual scroll action.
+    
     long nDelta = pData->GetDelta();
     mpVerticalScrollBar->DoScroll(
         mpVerticalScrollBar->GetThumbPos() - nDelta);
@@ -301,16 +301,16 @@ void Deck::ShowPanel (const Panel& rPanel)
 {
     if (mpVerticalScrollBar && mpVerticalScrollBar->IsVisible())
     {
-        // Get vertical extent of the panel.
+        
         sal_Int32 nPanelTop (rPanel.GetPosPixel().Y());
         const sal_Int32 nPanelBottom (nPanelTop + rPanel.GetSizePixel().Height() - 1);
-        // Add the title bar into the extent.
+        
         if (rPanel.GetTitleBar() != NULL && rPanel.GetTitleBar()->IsVisible())
             nPanelTop = rPanel.GetTitleBar()->GetPosPixel().Y();
 
-        // Determine what the new thumb position should be like.
-        // When the whole panel does not fit then make its top visible
-        // and it off at the bottom.
+        
+        
+        
         sal_Int32 nNewThumbPos (mpVerticalScrollBar->GetThumbPos());
         if (nPanelBottom >= nNewThumbPos+mpVerticalScrollBar->GetVisibleSize())
             nNewThumbPos = nPanelBottom - mpVerticalScrollBar->GetVisibleSize();
@@ -398,7 +398,7 @@ IMPL_LINK(Deck, HandleVerticalScrollBarChange,void*, EMPTYARG)
 
 
 
-//----- Deck::ScrollContainerWindow -------------------------------------------
+
 
 Deck::ScrollContainerWindow::ScrollContainerWindow (Window* pParentWindow)
     : Window(pParentWindow),
@@ -423,7 +423,7 @@ void Deck::ScrollContainerWindow::Paint (const Rectangle& rUpdateArea)
 {
     (void)rUpdateArea;
 
-    // Paint the separators.
+    
     const sal_Int32 nSeparatorHeight (Theme::GetInteger(Theme::Int_DeckSeparatorHeight));
     const sal_Int32 nLeft  (0);
     const sal_Int32 nRight (GetSizePixel().Width()-1);
@@ -451,6 +451,6 @@ void Deck::ScrollContainerWindow::SetSeparators (const ::std::vector<sal_Int32>&
 }
 
 
-} } // end of namespace sfx2::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

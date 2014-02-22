@@ -45,7 +45,7 @@ bool Plugin::ignoreLocation( SourceLocation loc )
         return true;
     if( strncmp( bufferName, BUILDDIR, strlen( BUILDDIR )) == 0
         || strncmp( bufferName, SRCDIR, strlen( SRCDIR )) == 0 )
-        return false; // ok
+        return false; 
     return true;
     }
 
@@ -87,12 +87,12 @@ class ParentBuilder
 
 bool ParentBuilder::VisitFunctionDecl( const FunctionDecl* function )
     {
-//    if( ignoreLocation( declaration ))
-//        return true; ???
+
+
     if( function->doesThisDeclarationHaveABody())
         {
         const Stmt* body = function->getBody();
-        (*parents)[ body ] = NULL; // no parent
+        (*parents)[ body ] = NULL; 
         walk( body );
         }
     if( const CXXConstructorDecl* ctor = dyn_cast< CXXConstructorDecl >( function ))
@@ -111,12 +111,12 @@ bool ParentBuilder::VisitFunctionDecl( const FunctionDecl* function )
 
 bool ParentBuilder::VisitObjCMethodDecl( const ObjCMethodDecl* method )
     {
-//    if( ignoreLocation( declaration ))
-//        return true; ???
+
+
     if( method->hasBody())
         {
         const Stmt* body = method->getBody();
-        (*parents)[ body ] = NULL; // no parent
+        (*parents)[ body ] = NULL; 
         walk( body );
         }
     return true;
@@ -136,7 +136,7 @@ void ParentBuilder::walk( const Stmt* stmt )
         }
     }
 
-} // namespace
+} 
 
 void Plugin::buildParents( CompilerInstance& compiler )
     {
@@ -151,7 +151,7 @@ SourceLocation Plugin::locationAfterToken( SourceLocation location )
     return Lexer::getLocForEndOfToken( location, 0, compiler.getSourceManager(), compiler.getLangOpts());
     }
 
-/////
+
 
 RewritePlugin::RewritePlugin( const InstantiationData& data )
     : Plugin( data )
@@ -247,7 +247,7 @@ bool RewritePlugin::adjustRangeForOptions( CharSourceRange* range, RewriteOption
     while( startPos >= fileBuf && ( *startPos == ' ' || *startPos == '\t' ))
         --startPos;
     if( startPos >= fileBuf && *startPos == '\n' )
-        startPos = startBuf - 1; // do not remove indentation whitespace (RemoveLineIfEmpty can do that)
+        startPos = startBuf - 1; 
     const char* endPos = endBuf;
     while( *endPos == ' ' || *endPos == '\t' )
         ++endPos;
@@ -312,6 +312,6 @@ bool RewritePlugin::reportEditFailure( SourceLocation loc )
     return false;
     }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

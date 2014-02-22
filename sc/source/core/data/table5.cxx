@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -51,7 +51,7 @@ using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::sheet::TablePageBreakData;
 using ::std::set;
 
-// STATIC DATA -----------------------------------------------------------
+
 
 #define GET_SCALEVALUE(set,id)  ((const SfxUInt16Item&)(set.Get( id ))).GetValue()
 
@@ -61,15 +61,15 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     if ( pDocument->IsImportingXML() )
         return;
 
-    // pUserArea != NULL -> print area is specified.  We need to force-update
-    // the page breaks.
+    
+    
 
     if (!pUserArea)
     {
         if (!bPageSizeValid)
             return;
 
-        // Always update breaks if force breaks option has changed
+        
         if (mbPageBreaksValid && mbForceBreaks == SC_MOD()->GetPrintOptions().GetForceBreaks())
             return;
     }
@@ -101,7 +101,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         sal_uInt16 nAreaCount = GetPrintRangeCount();
         if ( nAreaCount > 1 )
         {
-            //  bei mehreren Bereichen nichts anzeigen:
+            
 
             for (nX=0; nX<MAXCOL; nX++)
                 RemoveColBreak(nX, true, false);
@@ -120,12 +120,12 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
                 nEndCol = pArea->aEnd.Col();
                 nEndRow = pArea->aEnd.Row();
             }
-        }           // sonst alles
+        }           
     }
 
-    // get bSkipColBreaks/bSkipRowBreaks flags:
-    // fdo#40788 - print range scale settings can cause manual breaks to be
-    // ignored (see below). This behaviour may now be set by the user.
+    
+    
+    
     mbForceBreaks = SC_MOD()->GetPrintOptions().GetForceBreaks();
     bool bSkipColBreaks = false;
     bool bSkipRowBreaks = false;
@@ -140,7 +140,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
          if ( !bSkipColBreaks && pStyleSet->GetItemState(ATTR_PAGE_SCALETO, false, &pItem) == SFX_ITEM_SET )
          {
-              // #i54993# when fitting to width or height, ignore only manual breaks in that direction
+              
               const ScPageScaleToItem* pScaleToItem = static_cast<const ScPageScaleToItem*>(pItem);
               if ( pScaleToItem->GetWidth() > 0 )
                    bSkipColBreaks = true;
@@ -149,23 +149,23 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
          }
     }
 
-    //--------------------------------------------------------------------------
+    
 
     long nPageSizeX = aPageSizeTwips.Width();
     long nPageSizeY = aPageSizeTwips.Height();
 
-        //  Anfang: Breaks loeschen
+        
 
     for (nX=0; nX<nStartCol; nX++)
         RemoveColBreak(nX, true, false);
     RemoveRowPageBreaks(0, nStartRow-1);
 
     if (nStartCol > 0)
-        SetColBreak(nStartCol, true, false);  // AREABREAK
+        SetColBreak(nStartCol, true, false);  
     if (nStartRow > 0)
-        SetRowBreak(nStartRow, true, false);  // AREABREAK
+        SetRowBreak(nStartRow, true, false);  
 
-        //  Mittelteil: Breaks verteilen
+        
 
     bool bRepeatCol = ( nRepeatStartX != SCCOL_REPEAT_NONE );
     bool bColFound = false;
@@ -188,7 +188,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
         if ( bStartOfPage && bRepeatCol && nX>nRepeatStartX && !bColFound )
         {
-            // subtract size of repeat columns from page size
+            
             for (SCCOL i=nRepeatStartX; i<=nRepeatEndX; i++)
                 nPageSizeX -= ColHidden(i) ? 0 : pColWidth[i];
             while (nX<=nRepeatEndX)
@@ -199,16 +199,16 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         nSizeX += nThisX;
     }
 
-    // Remove all page breaks in range.
+    
     RemoveRowPageBreaks(nStartRow+1, nEndRow);
 
-    // And set new page breaks.
+    
     bool bRepeatRow = ( nRepeatStartY != SCROW_REPEAT_NONE );
     bool bRowFound = false;
     long nSizeY = 0;
     ScFlatBoolRowSegments::ForwardIterator aIterHidden(*mpHiddenRows);
     ScFlatUInt16RowSegments::ForwardIterator aIterHeights(*mpRowHeights);
-    SCROW nNextManualBreak = GetNextManualBreak(nStartRow); // -1 => no more manual breaks
+    SCROW nNextManualBreak = GetNextManualBreak(nStartRow); 
     for (SCROW nY = nStartRow; nY <= nEndRow; ++nY)
     {
         bool bStartOfPage = false;
@@ -227,7 +227,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         {
             bManualBreak = (nY == nNextManualBreak);
             if (nY >= nNextManualBreak)
-                // Query the next menual break position.
+                
                 nNextManualBreak = GetNextManualBreak(nY+1);
         }
 
@@ -238,13 +238,13 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             bStartOfPage = true;
         }
         else if (nY != nStartRow)
-            ; // page break already removed
+            ; 
         else
             bStartOfPage = true;
 
         if ( bStartOfPage && bRepeatRow && nY>nRepeatStartY && !bRowFound )
         {
-            // subtract size of repeat rows from page size
+            
             unsigned long nHeights = GetTotalRowHeight(nRepeatStartY, nRepeatEndY);
 #if OSL_DEBUG_LEVEL > 0
             if (nHeights == ::std::numeric_limits<unsigned long>::max())
@@ -258,7 +258,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
         if (bThisRowHidden)
         {
-            // Hidden row range.  Skip them unless there is a manual break.
+            
             SCROW nLastCommon = aIterHidden.getLastPos();
             if (nNextManualBreak >= 0)
                 nLastCommon = ::std::min(nLastCommon, nNextManualBreak-1);
@@ -266,7 +266,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         }
         else
         {
-            // Visible row range.
+            
 
             SCROW nLastHidden = aIterHidden.getLastPos();
             SCROW nLastHeight = aIterHeights.getLastPos();
@@ -291,21 +291,21 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
         nSizeY += nThisY;
     }
 
-        //  Ende: Breaks loeschen
+        
 
     if (nEndCol < MAXCOL)
     {
-        SetColBreak(nEndCol+1, true, false);  // AREABREAK
+        SetColBreak(nEndCol+1, true, false);  
         for (nX=nEndCol+2; nX<=MAXCOL; nX++)
             RemoveColBreak(nX, true, false);
     }
     if (nEndRow < MAXROW)
     {
-        SetRowBreak(nEndRow+1, true, false);  // AREABREAK
+        SetRowBreak(nEndRow+1, true, false);  
         if (nEndRow+2 <= MAXROW)
             RemoveRowPageBreaks(nEndRow+2, MAXROW);
     }
-    mbPageBreaksValid = !pUserArea;     // #i116881# the valid flag can only apply to the "no user area" case
+    mbPageBreaksValid = !pUserArea;     
 }
 
 void ScTable::RemoveManualBreaks()
@@ -510,7 +510,7 @@ bool ScTable::RowHidden(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
     ScFlatBoolRowSegments::RangeData aData;
     if (!mpHiddenRows->getRangeData(nRow, aData))
     {
-        // search failed.
+        
         if (pFirstRow)
             *pFirstRow = nRow;
         if (pLastRow)
@@ -540,7 +540,7 @@ bool ScTable::RowHiddenLeaf(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
     ScFlatBoolRowSegments::RangeData aData;
     if (!mpHiddenRows->getRangeDataLeaf(nRow, aData))
     {
-        // search failed.
+        
         if (pFirstRow)
             *pFirstRow = nRow;
         if (pLastRow)
@@ -658,7 +658,7 @@ void ScTable::CopyRowHeight(ScTable& rSrcTable, SCROW nStartRow, SCROW nEndRow, 
     while (nRow <= nEndRow)
     {
         if (!rSrcTable.mpRowHeights->getRangeData(nRow + nSrcOffset, aSrcData))
-            // Something is wrong !
+            
             return;
 
         SCROW nLastRow = aSrcData.mnRow2 - nSrcOffset;
@@ -680,11 +680,11 @@ SCROW ScTable::FirstVisibleRow(SCROW nStartRow, SCROW nEndRow) const
             break;
 
         if (!mpHiddenRows->getRangeData(nRow, aData))
-            // failed to get range data.
+            
             break;
 
         if (!aData.mbValue)
-            // visible row found
+            
             return nRow;
 
         nRow = aData.mnRow2 + 1;
@@ -703,11 +703,11 @@ SCROW ScTable::LastVisibleRow(SCROW nStartRow, SCROW nEndRow) const
             break;
 
         if (!mpHiddenRows->getRangeData(nRow, aData))
-            // failed to get range data.
+            
             break;
 
         if (!aData.mbValue)
-            // visible row found
+            
             return nRow;
 
         nRow = aData.mnRow1 - 1;
@@ -751,7 +751,7 @@ sal_uInt32 ScTable::GetTotalRowHeight(SCROW nStartRow, SCROW nEndRow, bool bHidd
             aData.mnRow2 = nEndRow;
 
         if ( !( bHiddenAsZero && aData.mbValue ) )
-            // visible row range.
+            
             nHeight += mpRowHeights->getSumValue(nRow, aData.mnRow2);
 
         nRow = aData.mnRow2 + 1;
@@ -791,7 +791,7 @@ bool ScTable::RowFiltered(SCROW nRow, SCROW* pFirstRow, SCROW* pLastRow) const
 
     ScFlatBoolRowSegments::RangeData aData;
     if (!mpFilteredRows->getRangeData(nRow, aData))
-        // search failed.
+        
         return false;
 
     if (pFirstRow)
@@ -809,7 +809,7 @@ bool ScTable::ColFiltered(SCCOL nCol, SCCOL* pFirstCol, SCCOL* pLastCol) const
 
     ScFlatBoolColSegments::RangeData aData;
     if (!mpFilteredCols->getRangeData(nCol, aData))
-        // search failed.
+        
         return false;
 
     if (pFirstCol)
@@ -890,11 +890,11 @@ SCROW ScTable::FirstNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const
             break;
 
         if (!mpFilteredRows->getRangeData(nRow, aData))
-            // failed to get range data.
+            
             break;
 
         if (!aData.mbValue)
-            // non-filtered row found
+            
             return nRow;
 
         nRow = aData.mnRow2 + 1;
@@ -913,11 +913,11 @@ SCROW ScTable::LastNonFilteredRow(SCROW nStartRow, SCROW nEndRow) const
             break;
 
         if (!mpFilteredRows->getRangeData(nRow, aData))
-            // failed to get range data.
+            
             break;
 
         if (!aData.mbValue)
-            // non-filtered row found
+            
             return nRow;
 
         nRow = aData.mnRow1 - 1;
@@ -966,7 +966,7 @@ void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& r
         pColFlags[i] &= nFlagMaskComplement;
 
     {
-        // row hidden flags.
+        
 
         SCROW nRow = 0;
         ScFlatBoolRowSegments::RangeData aData;
@@ -983,7 +983,7 @@ void lcl_syncFlags(ScFlatBoolColSegments& rColSegments, ScFlatBoolRowSegments& r
     }
 
     {
-        // column hidden flags.
+        
 
         SCCOL nCol = 0;
         ScFlatBoolColSegments::RangeData aData;
@@ -1011,7 +1011,7 @@ void ScTable::SyncColRowFlags()
 
     sal_uInt8 nManualBreakComplement = static_int_cast<sal_uInt8>(~CR_MANUALBREAK);
 
-    // Manual breaks.
+    
     pRowFlags->AndValue(0, MAXROW, nManualBreakComplement);
     for (SCCOL i = 0; i <= MAXCOL; ++i)
         pColFlags[i] &= nManualBreakComplement;
@@ -1030,7 +1030,7 @@ void ScTable::SyncColRowFlags()
             pColFlags[*itr] |= CR_MANUALBREAK;
     }
 
-    // Hidden flags.
+    
     lcl_syncFlags(*mpHiddenCols, *mpHiddenRows, pColFlags, pRowFlags, CR_HIDDEN);
     lcl_syncFlags(*mpFilteredCols, *mpFilteredRows, pColFlags, pRowFlags, CR_FILTERED);
 }
@@ -1075,12 +1075,12 @@ Size ScTable::GetPageSize() const
     if ( bPageSizeValid )
         return aPageSizeTwips;
     else
-        return Size();  // leer
+        return Size();  
 }
 
 void ScTable::SetRepeatArea( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCROW nEndRow )
 {
-    // #i117952# page break calculation uses these values (set from ScPrintFunc), not pRepeatColRange/pRepeatRowRange
+    
     if ( nStartCol != nRepeatStartX || nEndCol != nRepeatEndX || nStartRow != nRepeatStartY || nEndRow != nRepeatEndY )
         InvalidatePageBreaks();
 
@@ -1153,7 +1153,7 @@ void ScTable::SetPageStyle( const OUString& rName )
                     InvalidateTextWidth(NULL, NULL, false, false);
             }
 
-            if ( pNewStyle )            // auch ohne den alten (fuer UpdateStdNames)
+            if ( pNewStyle )            
                 aPageStyle = aStrNew;
 
             if (IsStreamValid())
@@ -1165,7 +1165,7 @@ void ScTable::SetPageStyle( const OUString& rName )
 void ScTable::PageStyleModified( const OUString& rNewName )
 {
     aPageStyle = rNewName;
-    InvalidateTextWidth(NULL, NULL, false, false);      // don't know what was in the style before
+    InvalidateTextWidth(NULL, NULL, false, false);      
 }
 
 void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* pAdrTo,
@@ -1173,7 +1173,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
 {
     if ( pAdrFrom && !pAdrTo )
     {
-        // Special case: only process the "from" cell.
+        
         SCCOL nCol = pAdrFrom->Col();
         SCROW nRow = pAdrFrom->Row();
         ScColumn& rCol = aCol[nCol];
@@ -1187,7 +1187,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
             rCol.SetScriptType(nRow, SC_SCRIPTTYPE_UNKNOWN);
 
         if ( bBroadcast )
-        {   // nur bei CalcAsShown
+        {   
             switch (aCell.meType)
             {
                 case CELLTYPE_VALUE :
@@ -1198,7 +1198,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                     break;
                 default:
                 {
-                    // added to avoid warnings
+                    
                 }
             }
         }
@@ -1227,7 +1227,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                 aCol[nCol].SetScriptType(nRow, SC_SCRIPTTYPE_UNKNOWN);
 
             if ( bBroadcast )
-            {   // nur bei CalcAsShown
+            {   
                 switch (aCell.meType)
                 {
                     case CELLTYPE_VALUE :
@@ -1238,7 +1238,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                         break;
                     default:
                     {
-                        // added to avoid warnings
+                        
                     }
                 }
             }

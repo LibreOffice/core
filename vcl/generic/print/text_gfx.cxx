@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -71,7 +71,7 @@ Font2::Font2(const PrinterGfx &rGfx)
                 rMgr.getFontEncoding(mpFont[0]) == RTL_TEXTENCODING_SYMBOL : false;
 }
 
-} // namespace psp
+} 
 
 static int getVerticalDeltaAngle( sal_Unicode nChar )
 {
@@ -87,13 +87,13 @@ void
 PrinterGfx::PSUploadPS1Font (sal_Int32 nFontID)
 {
     std::list< sal_Int32 >::iterator aFont;
-    // already in the document header ?
+    
     for (aFont = maPS1Font.begin(); aFont != maPS1Font.end(); ++aFont )
         if( nFontID == *aFont )
             return;
 
-    // no occurrenc yet, mark for download
-    // add the fontid to the list
+    
+    
     maPS1Font.push_back (nFontID);
 }
 
@@ -112,8 +112,8 @@ PrinterGfx::SetFont(
                     bool bArtBold
                     )
 {
-    // font and encoding will be set by drawText again immediately
-    // before PSShowText
+    
+    
     mnFontID                          = nFontID;
     maVirtualStatus.maFont            = OString();
     maVirtualStatus.maEncoding        = RTL_TEXTENCODING_DONTKNOW;
@@ -136,8 +136,8 @@ void PrinterGfx::drawGlyphs(
                             )
 {
 
-    // draw the string
-    // search for a glyph set matching the set font
+    
+    
     std::list< GlyphSet >::iterator aIter;
     for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
         if ( ((*aIter).GetFontID()  == mnFontID)
@@ -147,7 +147,7 @@ void PrinterGfx::drawGlyphs(
             break;
         }
 
-    // not found ? create a new one
+    
     if (aIter == maPS3Font.end())
     {
         maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
@@ -178,9 +178,9 @@ void PrinterGfx::DrawGlyphs(
         return;
     }
 
-    // move and rotate the user coordinate system
-    // avoid the gsave/grestore for the simple cases since it allows
-    // reuse of the current font if it hasn't changed
+    
+    
+    
     sal_Int32 nCurrentTextAngle = mnTextAngle;
     Point aPoint( rPoint );
 
@@ -195,9 +195,9 @@ void PrinterGfx::DrawGlyphs(
 
     if( mbTextVertical )
     {
-        // vertical glyphs can have an additional rotation ... sigh.
-        // so break up text in chunks of normal glyphs and print out
-        // specially rotated glyphs extra
+        
+        
+        
         sal_GlyphId* pTempGlyphIds = (sal_GlyphId*)alloca(sizeof(sal_Int32)*nLen);
         sal_Int32* pTempDelta = (sal_Int32*)alloca(sizeof(sal_Int32)*nLen);
         sal_Unicode* pTempUnicodes = (sal_Unicode*)alloca(sizeof(sal_Unicode)*nLen);
@@ -223,12 +223,12 @@ void PrinterGfx::DrawGlyphs(
                     pTempDelta[nTempLen-1]  = pDeltaArray[i-1]-nTempFirstDelta;
                 else
                 {
-                    // the first element in pDeltaArray shows
-                    // the offset of the second character
-                    // so if the first glyph is normal
-                    // then we do not need to move the delta indices
-                    // else we have to move them down by one and
-                    // recalculate aPoint and all deltas
+                    
+                    
+                    
+                    
+                    
+                    
                     if( i != 0 )
                         nTempFirstDelta = pDeltaArray[ i-1 ];
                 }
@@ -257,10 +257,10 @@ void PrinterGfx::DrawGlyphs(
                 sal_Unicode nRotUnicode     = pUnicodes[i];
                 sal_Int32 nRotDelta         = 0;
 
-                // transform matrix to new individual direction
+                
                 PSGSave ();
                 GraphicsStatus aSaveStatus = maVirtualStatus;
-                if( nRot != 2 ) // switch font aspect
+                if( nRot != 2 ) 
                 {
                     maVirtualStatus.mnTextWidth = nTextHeight;
                     maVirtualStatus.mnTextHeight = nTextWidth;
@@ -268,10 +268,10 @@ void PrinterGfx::DrawGlyphs(
                 if( aPoint.X() || aPoint.Y() )
                     PSTranslate( aPoint );
                 PSRotate (nRotAngle);
-                // draw the rotated glyph
+                
                 drawGlyphs( aRotPoint, &nRotGlyphId, &nRotUnicode, 1, &nRotDelta );
 
-                // restore previous state
+                
                 maVirtualStatus = aSaveStatus;
                 PSGRestore();
             }
@@ -288,7 +288,7 @@ void PrinterGfx::DrawGlyphs(
     if( nLen > 0 )
         drawGlyphs( aPoint, pGlyphIds, pUnicodes, nLen, pDeltaArray );
 
-    // restore the user coordinate system
+    
     if (nCurrentTextAngle != 0)
     {
         PSGRestore ();
@@ -306,8 +306,8 @@ PrinterGfx::DrawText (
 {
     fontID nRestoreFont = mnFontID;
 
-    // setup font[substitutes] and map the string into the symbol area in case of
-    // symbol font
+    
+    
     Font2 aFont(*this);
     sal_Unicode *pEffectiveStr;
     if ( aFont.IsSymbolFont() )
@@ -331,7 +331,7 @@ PrinterGfx::DrawText (
         pCharWidth[n] = getCharWidth  (mbTextVertical, pEffectiveStr[n], &aBBox);
     }
 
-    // setup a new delta array, use virtual resolution of 1000
+    
     sal_Int32* pNewDeltaArray = (sal_Int32*)alloca( sizeof( sal_Int32 )*nLen );
     if ( pDeltaArray != 0)
     {
@@ -346,9 +346,9 @@ PrinterGfx::DrawText (
             pNewDeltaArray[i] = pNewDeltaArray[i-1] + pCharWidth[i];
     }
 
-    // move and rotate the user coordinate system
-    // avoid the gsave/grestore for the simple cases since it allows
-    // reuse of the current font if it hasn't changed
+    
+    
+    
     sal_Int32 nCurrentTextAngle = mnTextAngle;
     sal_Int32 nCurrentPointX;
     sal_Int32 nCurrentPointY;
@@ -369,7 +369,7 @@ PrinterGfx::DrawText (
         nCurrentPointY = rPoint.Y();
     }
 
-    // draw the string
+    
     sal_Int32 nDelta = 0;
     for (int nTo = 0; nTo < nLen; )
     {
@@ -407,14 +407,14 @@ PrinterGfx::DrawText (
         nDelta += pNewDeltaArray[ nTo - 1 ];
     }
 
-    // restore the user coordinate system
+    
     if (nCurrentTextAngle != 0)
     {
         PSGRestore ();
         mnTextAngle = nCurrentTextAngle;
     }
 
-    // restore the original font settings
+    
     SetFont( nRestoreFont,
              maVirtualStatus.mnTextHeight, maVirtualStatus.mnTextWidth,
              mnTextAngle, mbTextVertical,
@@ -503,7 +503,7 @@ void PrinterGfx::drawVerticalizedText(
                 aPoint.Y() = (sal_Int32)(rPoint.Y() + ((double)pDeltaArray[i] * fSin));
             }
 
-            // swap text width/height again
+            
             SetFont( mnFontID,
                      nOldHeight,
                      nOldWidth,
@@ -522,12 +522,12 @@ void
 PrinterGfx::LicenseWarning(const Point& rPoint, const sal_Unicode* pStr,
                            sal_Int16 nLen, const sal_Int32* pDeltaArray)
 {
-    // treat it like a builtin font in case a user has that font also in the
-    // printer. This is not so unlikely as it may seem; no print embedding
-    // licensed fonts are often used (or so they say) in companies:
-    // they are installed on displays and printers, but get not embedded in
-    // print files or documents because they are not licensed for use outside
-    // the company.
+    
+    
+    
+    
+    
+    
     OString aMessage( "The font " );
     aMessage += OUStringToOString( mrFontMgr.getPSName(mnFontID),
             RTL_TEXTENCODING_ASCII_US );
@@ -579,7 +579,7 @@ PrinterGfx::drawText(
         return;
     }
 
-    // search for a glyph set matching the set font
+    
     std::list< GlyphSet >::iterator aIter;
     for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
         if (   ((*aIter).GetFontID()  == mnFontID)
@@ -589,7 +589,7 @@ PrinterGfx::drawText(
             break;
         }
 
-    // not found ? create a new one
+    
     if (aIter == maPS3Font.end())
     {
         maPS3Font.push_back (GlyphSet(mnFontID, mbTextVertical));
@@ -643,7 +643,7 @@ PrinterGfx::GetCharWidth (sal_Unicode nFrom, sal_Unicode nTo, long *pWidthArray)
         pWidthArray[n] = getCharWidth (mbTextVertical, n + nFrom, &aBBox);
     }
 
-    // returned metrics have postscript precision
+    
     return 1000;
 }
 
@@ -669,9 +669,9 @@ PrinterGfx::OnEndJob ()
 void
 PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFonts )
 {
-    // write all type 1 fonts
+    
     std::list< sal_Int32 >::iterator aFont;
-    // already in the document header ?
+    
     for (aFont = maPS1Font.begin(); aFont != maPS1Font.end(); ++aFont)
     {
         const OString& rSysPath (mrFontMgr.getFontFileSysPath(*aFont) );
@@ -679,7 +679,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFon
         osl::File::getFileURLFromSystemPath (OStringToOUString (rSysPath, osl_getThreadTextEncoding()), aUNCPath);
         osl::File aFontFile (aUNCPath);
 
-        // provide the pfb or pfa font as a (pfa-)font resource
+        
         OString aPostScriptName =
             OUStringToOString ( mrFontMgr.getPSName(*aFont),
                                      RTL_TEXTENCODING_ASCII_US );
@@ -709,7 +709,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< OString >& rSuppliedFon
         rSuppliedFonts.push_back( aPostScriptName );
     }
 
-    // write glyphsets and reencodings
+    
     std::list< GlyphSet >::iterator aIter;
     for (aIter = maPS3Font.begin(); aIter != maPS3Font.end(); ++aIter)
     {

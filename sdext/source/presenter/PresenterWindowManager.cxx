@@ -150,7 +150,7 @@ void PresenterWindowManager::SetParentPane (
         mxParentWindow->addMouseListener(this);
         mxParentWindow->addFocusListener(this);
 
-        // We paint our own background, make that of the parent window transparent.
+        
         Reference<awt::XWindowPeer> xPeer (mxParentWindow, UNO_QUERY);
         if (xPeer.is())
             xPeer->setBackground(util::Color(0xff000000));
@@ -161,7 +161,7 @@ void PresenterWindowManager::SetTheme (const ::boost::shared_ptr<PresenterTheme>
 {
     mpTheme = rpTheme;
 
-    // Get background bitmap or background color from the theme.
+    
 
     if (mpTheme.get() != NULL)
     {
@@ -237,7 +237,7 @@ void SAL_CALL PresenterWindowManager::windowResized (const awt::WindowEvent& rEv
         {
             UpdateWindowSize(xWindow);
 
-            // Make sure the background of a transparent window is painted.
+            
             mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
         }
     }
@@ -252,7 +252,7 @@ void SAL_CALL PresenterWindowManager::windowMoved (const awt::WindowEvent& rEven
         Reference<awt::XWindow> xWindow (rEvent.Source,UNO_QUERY);
         UpdateWindowSize(xWindow);
 
-        // Make sure the background of a transparent window is painted.
+        
         mpPresenterController->GetPaintManager()->Invalidate(xWindow);
     }
 }
@@ -291,8 +291,8 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
             if ( ! PaintChildren(rEvent))
             {
                 Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxParentCanvas, UNO_QUERY);
-                //                if (xSpriteCanvas.is())
-                //                    xSpriteCanvas->updateScreen(sal_False);
+                
+                
             }
         }
         catch (RuntimeException&)
@@ -370,21 +370,21 @@ void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
 {
     bool bChildInvalidated (false);
 
-    // Call windowPaint on all children that lie in or touch the
-    // update rectangle.
+    
+    
     PresenterPaneContainer::PaneList::const_iterator iPane;
     PresenterPaneContainer::PaneList::const_iterator iEnd (mpPaneContainer->maPanes.end());
     for (iPane=mpPaneContainer->maPanes.begin(); iPane!=iEnd; ++iPane)
     {
         try
         {
-            // Make sure that the pane shall and can be painted.
+            
             if ( ! (*iPane)->mbIsActive)
                 continue;
             if ((*iPane)->mbIsSprite)
@@ -397,7 +397,7 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
             if ( ! xBorderWindow.is())
                 continue;
 
-            // Get the area in which the border of the pane has to be painted.
+            
             const awt::Rectangle aBorderBox (xBorderWindow->getPosSize());
             const awt::Rectangle aBorderUpdateBox(
                 PresenterGeometryHelper::Intersection(
@@ -412,7 +412,7 @@ bool PresenterWindowManager::PaintChildren (const awt::PaintEvent& rEvent) const
                     -aBorderBox.X,
                     -aBorderBox.Y));
 
-            // Invalidate the area of the content window.
+            
             mpPresenterController->GetPaintManager()->Invalidate(
                 xBorderWindow,
                 aLocalBorderUpdateBox,
@@ -602,7 +602,7 @@ void PresenterWindowManager::RemoveLayoutListener (
         if (*iListener == rxListener)
         {
             maLayoutListeners.erase(iListener);
-            // Assume that there are no multiple entries.
+            
             break;
         }
     }
@@ -656,9 +656,9 @@ void PresenterWindowManager::LayoutStandardMode (void)
     double nSlidePreviewTop (0);
 
 
-    // For the current slide view calculate the outer height from the outer
-    // width.  This takes into acount the slide aspect ratio and thus has to
-    // go over the inner pane size.
+    
+    
+    
     PresenterPaneContainer::SharedPaneDescriptor pPane (
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
     if (pPane.get() != NULL)
@@ -668,7 +668,7 @@ void PresenterWindowManager::LayoutStandardMode (void)
             PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
         nSlidePreviewTop = (aBox.Height - aCurrentSlideOuterBox.Height) / 2;
         double Temp=nGap;
-        /// check whether RTL interface or not
+        /
         if(Application::GetSettings().GetLayoutRTL())
             Temp=aBox.Width - aCurrentSlideOuterBox.Width - nGap;
         SetPanePosSizeAbsolute (
@@ -679,9 +679,9 @@ void PresenterWindowManager::LayoutStandardMode (void)
             aCurrentSlideOuterBox.Height);
     }
 
-    // For the next slide view calculate the outer height from the outer
-    // width.  This takes into acount the slide aspect ratio and thus has to
-    // go over the inner pane size.
+    
+    
+    
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
     if (pPane.get() != NULL)
     {
@@ -689,7 +689,7 @@ void PresenterWindowManager::LayoutStandardMode (void)
             aBox.Width - nHorizontalSlideDivide - 1.5*nGap,
             PresenterPaneFactory::msNextSlidePreviewPaneURL));
         double Temp=aBox.Width - aNextSlideOuterBox.Width - nGap;
-        /// check whether RTL interface or not
+        /
         if(Application::GetSettings().GetLayoutRTL())
             Temp=nGap;
         SetPanePosSizeAbsolute (
@@ -716,10 +716,10 @@ void PresenterWindowManager::LayoutNotesMode (void)
     const double nTertiaryWidth (nSecondaryWidth / nGoldenRatio);
     double nSlidePreviewTop (0);
     double nNotesViewBottom (aToolBarBox.Y1 - nGap);
-     /// check whether RTL interface or not
+     /
 
 
-    // The notes view has no fixed aspect ratio.
+    
     PresenterPaneContainer::SharedPaneDescriptor pPane (
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNotesPaneURL));
     if (pPane.get() != NULL)
@@ -729,7 +729,7 @@ void PresenterWindowManager::LayoutNotesMode (void)
             nNotesViewBottom);
         nSlidePreviewTop = (aBox.Height
             - aToolBarBox.Y2 + aToolBarBox.Y1 - aNotesViewOuterSize.Height) / 2;
-        /// check whether RTL interface or not
+        /
         double Temp=aBox.Width - aNotesViewOuterSize.Width - nGap;
         if(Application::GetSettings().GetLayoutRTL())
             Temp=nGap;
@@ -742,16 +742,16 @@ void PresenterWindowManager::LayoutNotesMode (void)
         nNotesViewBottom = nSlidePreviewTop + aNotesViewOuterSize.Height;
     }
 
-    // For the current slide view calculate the outer height from the outer
-    // width.  This takes into acount the slide aspect ratio and thus has to
-    // go over the inner pane size.
+    
+    
+    
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msCurrentSlidePreviewPaneURL);
     if (pPane.get() != NULL)
     {
         const awt::Size aCurrentSlideOuterBox(CalculatePaneSize(
             nSecondaryWidth - 1.5*nGap,
             PresenterPaneFactory::msCurrentSlidePreviewPaneURL));
-        /// check whether RTL interface or not
+        /
         double Temp=nGap;
         if(Application::GetSettings().GetLayoutRTL())
             Temp=aBox.Width - aCurrentSlideOuterBox.Width - nGap;
@@ -763,16 +763,16 @@ void PresenterWindowManager::LayoutNotesMode (void)
             aCurrentSlideOuterBox.Height);
     }
 
-    // For the next slide view calculate the outer height from the outer
-    // width.  This takes into acount the slide aspect ratio and thus has to
-    // go over the inner pane size.
+    
+    
+    
     pPane = mpPaneContainer->FindPaneURL(PresenterPaneFactory::msNextSlidePreviewPaneURL);
     if (pPane.get() != NULL)
     {
         const awt::Size aNextSlideOuterBox (CalculatePaneSize(
             nTertiaryWidth,
             PresenterPaneFactory::msNextSlidePreviewPaneURL));
-        /// check whether RTL interface or not
+        /
         double Temp=nGap;
         if(Application::GetSettings().GetLayoutRTL())
             Temp=aBox.Width - aNextSlideOuterBox.Width - nGap;
@@ -823,7 +823,7 @@ geometry::RealRectangle2D PresenterWindowManager::LayoutToolBar (void)
     double nToolBarWidth (400);
     double nToolBarHeight (80);
 
-    // Get access to the tool bar.
+    
     PresenterPaneContainer::SharedPaneDescriptor pDescriptor(
         mpPaneContainer->FindPaneURL(PresenterPaneFactory::msToolBarPaneURL));
     if (pDescriptor.get() != NULL)
@@ -877,18 +877,18 @@ awt::Size PresenterWindowManager::CalculatePaneSize (
     const double nOuterWidth,
     const OUString& rsPaneURL)
 {
-    // Calculate the inner width by removing the pane border.
+    
     awt::Rectangle aInnerBox (mpPaneBorderPainter->RemoveBorder (
         rsPaneURL,
         awt::Rectangle(0,0,
             sal_Int32(nOuterWidth+0.5),sal_Int32(nOuterWidth)),
         drawing::framework::BorderType_TOTAL_BORDER));
 
-    // Calculate the inner height with the help of the slide aspect ratio.
+    
     const double nCurrentSlideInnerHeight (
         aInnerBox.Width / mpPresenterController->GetSlideAspectRatio());
 
-    // Add the pane border to get the outer box.
+    
     awt::Rectangle aOuterBox (mpPaneBorderPainter->AddBorder (
         rsPaneURL,
         awt::Rectangle(0,0,
@@ -974,12 +974,12 @@ void PresenterWindowManager::UpdateWindowSize (const Reference<awt::XWindow>& rx
         }
         else
         {
-            // This update of the window size was initiated by
-            // Layout(). Therefore the window size does not have to be
-            // updated.
+            
+            
+            
         }
 
-        // ToTop is called last because it may invalidate the iterator.
+        
         if ( ! mbIsLayouting)
             mpPaneContainer->ToTop(pDescriptor);
     }
@@ -995,13 +995,13 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
     if ( ! xDevice.is())
         return;
 
-    // Create a polygon for the background and for clipping.
+    
     Reference<rendering::XPolyPolygon2D> xBackgroundPolygon (
         PresenterGeometryHelper::CreatePolygon(mxParentWindow->getPosSize(), xDevice));
     if ( ! mxClipPolygon.is())
         mxClipPolygon = CreateClipPolyPolygon();
 
-    // Create View- and RenderState structs.
+    
     const rendering::ViewState aViewState(
         geometry::AffineMatrix2D(1,0,0, 0,1,0),
         PresenterGeometryHelper::CreatePolygon(rUpdateBox, xDevice));
@@ -1011,7 +1011,7 @@ void PresenterWindowManager::PaintBackground (const awt::Rectangle& rUpdateBox)
         Sequence<double>(4),
         rendering::CompositeOperation::SOURCE);
 
-    // Paint the background.
+    
     if (mpBackgroundBitmap.get() != NULL)
     {
         ProvideBackgroundBitmap();
@@ -1089,8 +1089,8 @@ void PresenterWindowManager::ProvideBackgroundBitmap (void)
 
 Reference<rendering::XPolyPolygon2D> PresenterWindowManager::CreateClipPolyPolygon (void) const
 {
-    // Create a clip polygon that includes the whole update area but has the
-    // content windows as holes.
+    
+    
     const sal_Int32 nPaneCount (mpPaneContainer->maPanes.size());
     ::std::vector<awt::Rectangle> aRectangles;
     aRectangles.reserve(1+nPaneCount);
@@ -1200,6 +1200,6 @@ void PresenterWindowManager::ThrowIfDisposed (void) const
     }
 }
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

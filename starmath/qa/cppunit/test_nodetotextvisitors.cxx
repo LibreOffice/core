@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -36,11 +36,11 @@ namespace {
 class Test : public test::BootstrapFixture {
 
 public:
-    // init
+    
     virtual void setUp();
     virtual void tearDown();
 
-    // tests
+    
     void SimpleUnaryOp();
     void SimpleBinaryOp();
     void SimpleRelationalOp();
@@ -104,7 +104,7 @@ void Test::tearDown()
 
 /*
  * Most of the formula commands in this file came from:
- * http://wiki.openoffice.org/wiki/Template:Math_commands_reference
+ * http:
  * which was licensed with a
  * Creative Common Attribution 3.0 license and written by:
  * Jeanweber, Weegreenblobbie, Jdpipe, TJFrazier, Ysangkok, B michaelsen, Spellbreaker
@@ -230,9 +230,9 @@ void Test::SimpleOperators()
     parseandparseagain("sum{a}", "Sum");
     parseandparseagain("prod{a}", "Product");
     parseandparseagain("coprod{a}", "Coproduct");
-//FIXME    parseandparseagain("int from {r_0} to {r_t} a", "Upper and lower bounds shown with integral (from & to)");
-//FIXME    ParseAndCheck("int csup {r_0} csub {r_t} a", "int csup { r rsub 0 } csub { r rsub t } a ", "Upper and lower bounds shown with integral (csub & csup)");
-//FIXME    ParseAndCheck("sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "sum csup { size 8 { x - 1 } } csub { size 8 a } b ", "Sum with sized upper and lower bounds");
+
+
+
     parseandparseagain("int{a}", "Integral");
     parseandparseagain("iint{a}", "Double integral");
     parseandparseagain("iiint{a}", "Triple integral");
@@ -435,18 +435,18 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
     OUString output1, output2;
     SmNode *pNode1, *pNode2;
 
-    // parse 1
+    
     OUString input = OUString::createFromAscii(formula);
     pNode1 = SmParser().ParseExpression(input);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef);
     SmNodeToTextVisitor(pNode1, output1);
 
-    // parse 2
+    
     pNode2 = SmParser().ParseExpression(output1);
     pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef);
     SmNodeToTextVisitor(pNode2, output2);
 
-    // compare
+    
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
         output1,
         output2);
@@ -460,13 +460,13 @@ void Test::ParseAndCheck(const char *formula, const char * expected, const char 
     OUString sOutput;
     SmNode *pNode;
 
-    // parse
+    
     OUString sInput = OUString::createFromAscii(formula);
     pNode = SmParser().ParseExpression(sInput);
     pNode->Prepare(xDocShRef->GetFormat(), *xDocShRef);
     SmNodeToTextVisitor(pNode, sOutput);
 
-    // compare
+    
     OUString sExpected = OUString::createFromAscii(expected);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(test_name,
         sExpected,
@@ -475,19 +475,19 @@ void Test::ParseAndCheck(const char *formula, const char * expected, const char 
     delete pNode;
 }
 
-// Parse two formula commands and verify that they give the same output
+
 void Test::ParseAndCompare(const char *formula1, const char *formula2, const char *test_name)
 {
     OUString sOutput1, sOutput2;
     SmNode *pNode1, *pNode2;
 
-    // parse formula1
+    
     OUString sInput1 = OUString::createFromAscii(formula1);
     pNode1 = SmParser().ParseExpression(sInput1);
     pNode1->Prepare(xDocShRef->GetFormat(), *xDocShRef);
     SmNodeToTextVisitor(pNode1, sOutput1);
 
-    // parse formula2
+    
     OUString sInput2 = OUString::createFromAscii(formula2);
     pNode2 = SmParser().ParseExpression(sInput2);
     pNode2->Prepare(xDocShRef->GetFormat(), *xDocShRef);
@@ -504,7 +504,7 @@ void Test::testBinomInBinHor()
     OUString sInput, sExpected;
     SmNode* pTree;
 
-    // set up a binom (table) node
+    
     sInput += "binom a b + c";
     pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
@@ -512,12 +512,12 @@ void Test::testBinomInBinHor()
     SmCursor aCursor(pTree, xDocShRef);
     TestOutputDevice aOutputDevice;
 
-    // move forward (more than) enough places to be at the end
+    
     int i;
     for (i = 0; i < 8; ++i)
         aCursor.Move(&aOutputDevice, MoveRight);
 
-    // tack +d on the end, which will put the binom into an SmBinHorNode
+    
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
@@ -532,7 +532,7 @@ void Test::testBinVerInUnary()
     OUString sInput, sExpected;
     SmNode* pTree;
 
-    // set up a unary operator with operand
+    
     sInput += "- 1";
     pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
@@ -540,14 +540,14 @@ void Test::testBinVerInUnary()
     SmCursor aCursor(pTree, xDocShRef);
     TestOutputDevice aOutputDevice;
 
-    // move forward (more than) enough places to be at the end
+    
     int i;
     for (i = 0; i < 3; ++i)
         aCursor.Move(&aOutputDevice, MoveRight);
 
-    // select the operand
+    
     aCursor.Move(&aOutputDevice, MoveLeft, false);
-    // set up a fraction
+    
     aCursor.InsertFraction();
     aCursor.Move(&aOutputDevice, MoveDown);
     aCursor.InsertText("2");
@@ -562,34 +562,34 @@ void Test::testBinHorInSubSup()
 {
     OUString sInput;
 
-    // set up a blank formula
+    
     SmNode* pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
 
     SmCursor aCursor(pTree, xDocShRef);
     TestOutputDevice aOutputDevice;
 
-    // Insert an RSup expression with a BinHor for the exponent
+    
     aCursor.InsertText("a");
     aCursor.InsertSubSup(RSUP);
     aCursor.InsertText("b");
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("c");
 
-    // Move to the end and add d to the expression
+    
     aCursor.Move(&aOutputDevice, MoveRight);
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("d");
 
-//FIXME    OUString sExpected = " { a rsup { b + c } + d } ";
-//FIXME    CPPUNIT_ASSERT_EQUAL_MESSAGE("BinHor in SubSup", sExpected, xDocShRef->GetText());
+
+
 
     delete pTree;
 }
 
 void Test::testUnaryInMixedNumberAsNumerator()
 {
-    // set up a unary operator
+    
     OUString sInput = "- 1";
     SmNode* pTree = SmParser().Parse(sInput);
     pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
@@ -597,30 +597,30 @@ void Test::testUnaryInMixedNumberAsNumerator()
     SmCursor aCursor(pTree, xDocShRef);
     TestOutputDevice aOutputDevice;
 
-    // move forward (more than) enough places to be at the end
+    
     for (size_t i = 0; i < 3; ++i)
         aCursor.Move(&aOutputDevice, MoveRight);
 
-    // Select the whole Unary Horizontal Node
+    
     aCursor.Move(&aOutputDevice, MoveLeft, false);
     aCursor.Move(&aOutputDevice, MoveLeft, false);
 
-    // Set up a fraction
+    
     aCursor.InsertFraction();
     aCursor.Move(&aOutputDevice, MoveDown);
     aCursor.InsertText("2");
 
-    // Move left and turn this into a mixed number
-    // (bad form, but this could happen right?)
+    
+    
     aCursor.Move(&aOutputDevice, MoveLeft);
     aCursor.Move(&aOutputDevice, MoveLeft);
     aCursor.InsertText("2");
 
-    // move forward (more than) enough places to be at the end
+    
     for (size_t i = 0; i < 8; ++i)
         aCursor.Move(&aOutputDevice, MoveRight);
 
-    // add 4 to the end
+    
     aCursor.InsertElement(PlusElement);
     aCursor.InsertText("4");
 
@@ -632,15 +632,15 @@ void Test::testUnaryInMixedNumberAsNumerator()
 
 void Test::testMiscEquivalent()
 {
-    // fdo#55853
+    
     ParseAndCompare("2x", "2 x", "Number times variable");
     ParseAndCompare("3x^2", "3 x^2", "Number times power");
 
-    // i#11752 and fdo#55853
+    
     ParseAndCompare("x_2n", "x_{2 n}", "Number times variable in subscript");
     ParseAndCompare("x^2n", "x^{2 n}", "Number times variable in supscript");
 
-    // fdo#66081
+    
     ParseAndCompare("{x}", "x", "Variable in brace");
     ParseAndCompare("{{x+{{y}}}}", "x+y", "Nested braces");
 }

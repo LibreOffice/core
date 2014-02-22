@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "precompile.h"
@@ -51,11 +51,11 @@ local uLong getLong(gz_stream * s);
 gz_stream *gz_open(HStream & _stream)
 {
     int err;
-    //int level = Z_DEFAULT_COMPRESSION;            /* compression level */
+    
 
-//  char        *p = (char*)mode;
-    //char fmode[80];                               /* copy of mode, without the compression level */
-    //char *m = fmode;
+
+    
+    
     gz_stream *s;
 
     s = (gz_stream *) ALLOC(sizeof(gz_stream));
@@ -67,7 +67,7 @@ gz_stream *gz_open(HStream & _stream)
     s->stream.next_in = s->inbuf = Z_NULL;
     s->stream.next_out = s->outbuf = Z_NULL;
     s->stream.avail_in = s->stream.avail_out = 0;
-//s->_inputstream = NULL;
+
     s->z_err = Z_OK;
     s->z_eof = 0;
     s->crc = crc32(0L, Z_NULL, 0);
@@ -76,7 +76,7 @@ gz_stream *gz_open(HStream & _stream)
 
     s->mode = 'r';
 
-//realking
+
     err = inflateInit2(&(s->stream), -MAX_WBITS);
     s->stream.next_in = s->inbuf = (Byte *) ALLOC(Z_BUFSIZE);
 
@@ -147,15 +147,15 @@ local int destroy(gz_stream * s)
 }
 
 
-// typedef unsigned char  Byte
-// typedef Byte  FAR Bytef;
+
+
 /* ===========================================================================
    Reads the given number of uncompressed bytes from the compressed file.
    gz_read returns the number of bytes actually read (0 for end of file).
 */
 int gz_read(gz_stream * file, voidp buf, unsigned len)
 {
-//printf("@@ gz_read : len : %d\t",len);
+
     gz_stream *s = (gz_stream *) file;
     Bytef *start = (Bytef *) buf;                 /* starting point for crc computation */
     Byte *next_out;                               /* == stream.next_out but not forced far (for MSDOS) */
@@ -303,7 +303,7 @@ local uLong getLong(gz_stream * s)
 */
 int gz_close(gz_stream * file)
 {
-//  int err;
+
     gz_stream *s = (gz_stream *) file;
 
     if (s == NULL)

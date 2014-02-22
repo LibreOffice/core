@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -23,7 +23,7 @@
 #include <swlbox.hxx>
 
 
-//     Description: ListboxElement
+
 SwBoxEntry::SwBoxEntry() :
     bModified(sal_False),
     bNew(sal_False),
@@ -55,7 +55,7 @@ SwComboBox::SwComboBox(Window* pParent, WinBits nStyle)
 
 void SwComboBox::Init()
 {
-    // create administration for the resource's Stringlist
+    
     sal_uInt16 nSize = GetEntryCount();
     for( sal_uInt16 i=0; i < nSize; ++i )
     {
@@ -64,7 +64,7 @@ void SwComboBox::Init()
     }
 }
 
-// Basic class Dtor
+
 SwComboBox::~SwComboBox()
 {
 }
@@ -85,18 +85,18 @@ void SwComboBox::RemoveEntryAt(sal_uInt16 const nPos)
     if(nPos >= aEntryLst.size())
         return;
 
-    // Remove old element
+    
     SwBoxEntry* pEntry = &aEntryLst[nPos];
     ComboBox::RemoveEntryAt(nPos);
 
-    // Don't add new entries to the list
+    
     if(pEntry->bNew)
     {
         aEntryLst.erase(aEntryLst.begin() + nPos);
     }
     else
     {
-        // add to DelEntryLst
+        
         aDelEntryLst.transfer(aDelEntryLst.end(),
                 aEntryLst.begin() + nPos, aEntryLst);
     }

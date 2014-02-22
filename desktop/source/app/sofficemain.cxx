@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -49,18 +49,18 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
 {
 #if defined ANDROID
     try {
-        rtl::Bootstrap::setIniFilename("file:///assets/program/lofficerc");
+        rtl::Bootstrap::setIniFilename("file:
 #endif
     tools::extendApplicationEnvironment();
 
     SAL_INFO("desktop.app", "PERFORMANCE - enter Main()" );
 
     desktop::Desktop aDesktop;
-    // This string is used during initialization of the Gtk+ VCL module
+    
     aDesktop.SetAppName( OUString("soffice") );
 #ifdef UNX
-    // handle --version and --help already here, otherwise they would be handled
-    // after VCL initialization that might fail if $DISPLAY is not set
+    
+    
     const desktop::CommandLineArgs& rCmdLineArgs = aDesktop.GetCommandLineArgs();
     OUString aUnknown( rCmdLineArgs.GetUnknown() );
     if ( !aUnknown.isEmpty() )
@@ -87,7 +87,7 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
     } catch (const ::com::sun::star::uno::Exception &e) {
         LOGI("Unhandled UNO exception: '%s'",
              OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8).getStr());
-        throw; // to get exception type printed
+        throw; 
     }
 #endif
 }
@@ -111,7 +111,7 @@ touch_lo_runMain()
         LOGI("soffice_main returned %d", nRet);
 #endif
     } while (nRet == EXITHELPER_NORMAL_RESTART ||
-             nRet == EXITHELPER_CRASH_WITH_RESTART); // pretend to re-start.
+             nRet == EXITHELPER_CRASH_WITH_RESTART); 
 
 }
 

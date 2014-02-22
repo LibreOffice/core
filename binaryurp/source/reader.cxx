@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -138,19 +138,19 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     bool newTid;
     bool forceSynchronous;
     sal_uInt16 functionId;
-    if ((flags1 & 0x80) != 0) { // bit 7: LONGHEADER
-        if ((flags1 & 0x40) == 0) { // bit 6: REQUEST
+    if ((flags1 & 0x80) != 0) { 
+        if ((flags1 & 0x40) == 0) { 
             readReplyMessage(unmarshal, flags1);
             return;
         }
-        newType = (flags1 & 0x20) != 0; // bit 5: NEWTYPE
-        newOid = (flags1 & 0x10) != 0; // bit 4: NEWOID
-        newTid = (flags1 & 0x08) != 0; // bit 3: NEWTID
-        if ((flags1 & 0x01) != 0) { // bit 0: MOREFLAGSS
+        newType = (flags1 & 0x20) != 0; 
+        newOid = (flags1 & 0x10) != 0; 
+        newTid = (flags1 & 0x08) != 0; 
+        if ((flags1 & 0x01) != 0) { 
             sal_uInt8 flags2 = unmarshal.read8();
-            forceSynchronous = (flags2 & 0x80) != 0; // bit 7: MUSTREPLY
+            forceSynchronous = (flags2 & 0x80) != 0; 
             if (((flags2 & 0x40) != 0) != forceSynchronous) {
-                    // bit 6: SYNCHRONOUS
+                    
                 throw css::uno::RuntimeException(
                     ("URP: request message with MUSTREPLY != SYNCHRONOUS"
                      " received"),
@@ -159,14 +159,14 @@ void Reader::readMessage(Unmarshal & unmarshal) {
         } else {
             forceSynchronous = false;
         }
-        functionId = ((flags1 & 0x04) != 0) // bit 2: FUNCTIONID16
+        functionId = ((flags1 & 0x04) != 0) 
             ? unmarshal.read16() : unmarshal.read8();
     } else {
         newType = false;
         newOid = false;
         newTid = false;
         forceSynchronous = false;
-        functionId = ((flags1 & 0x40) != 0) // bit 6: FUNCTIONID14
+        functionId = ((flags1 & 0x40) != 0) 
             ? ((flags1 & 0x3F) << 8) | unmarshal.read8() : flags1 & 0x3F;
     }
     css::uno::TypeDescription type;
@@ -246,8 +246,8 @@ void Reader::readMessage(Unmarshal & unmarshal) {
     switch (memberTd.get()->eTypeClass) {
     case typelib_TypeClass_INTERFACE_ATTRIBUTE:
         setter = itd->pMapMemberIndexToFunctionIndex[memberId] != functionId;
-            // pMapMemberIndexToFunctionIndex contains function index of
-            // attribute getter
+            
+            
         if (setter) {
             inArgs.push_back(
                 unmarshal.readValue(
@@ -274,7 +274,7 @@ void Reader::readMessage(Unmarshal & unmarshal) {
             break;
         }
     default:
-        assert(false); // this cannot happen
+        assert(false); 
         break;
     }
     bridge_->incrementCalls(
@@ -357,10 +357,10 @@ void Reader::readMessage(Unmarshal & unmarshal) {
 
 void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
     rtl::ByteSequence tid(getTid(unmarshal, (flags1 & 0x08) != 0));
-        // bit 3: NEWTID
+        
     lastTid_ = tid;
     OutgoingRequest req(bridge_->lastOutgoingRequest(tid));
-    bool exc = (flags1 & 0x20) != 0; // bit 5: EXCEPTION
+    bool exc = (flags1 & 0x20) != 0; 
     BinaryAny ret;
     std::vector< BinaryAny > outArgs;
     if (exc) {
@@ -397,7 +397,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
                     break;
                 }
             default:
-                assert(false); // this cannot happen
+                assert(false); 
                 break;
             }
             bool ok = false;
@@ -448,7 +448,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
                 break;
             }
         default:
-            assert(false); // this cannot happen
+            assert(false); 
             break;
         }
     }
@@ -472,7 +472,7 @@ void Reader::readReplyMessage(Unmarshal & unmarshal, sal_uInt8 flags1) {
         bridge_->handleCommitChangeReply(exc, ret);
         break;
     default:
-        assert(false); // this cannot happen
+        assert(false); 
         break;
     }
 }

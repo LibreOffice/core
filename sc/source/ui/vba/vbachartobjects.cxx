@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbachart.hxx"
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -46,7 +46,7 @@ public:
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         uno::Reference< table::XTableChart > xTableChart( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
-        // parent Object is sheet
+        
         return uno::makeAny(  uno::Reference< excel::XChartObject > ( new ScVbaChartObject(  m_xParent, m_xContext, xTableChart, xDrawPageSupplier ) ) );
     }
 };
@@ -69,7 +69,7 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
     uno::Sequence< OUString > sChartNames;
     try
     {
-        // c++ hackery
+        
         uno::Reference< uno::XInterface > xIf( xDrawPageSupplier, uno::UNO_QUERY_THROW );
         ScCellRangesBase* pUno= dynamic_cast< ScCellRangesBase* >( xIf.get() );
         ScDocShell* pDocShell = NULL;
@@ -106,7 +106,7 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
     return sChartNames;
 }
 
-// XChartObjects
+
 uno::Any SAL_CALL
 ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight ) throw (script::BasicErrorException)
 {
@@ -118,7 +118,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
         aRectangle.Y = Millimeter::getInHundredthsOfOneMillimeter(_nY);
         aRectangle.Width = Millimeter::getInHundredthsOfOneMillimeter(_nWidth);
         aRectangle.Height = Millimeter::getInHundredthsOfOneMillimeter(_nHeight);
-        // Note the space at the end of the stem ("Chart "). In ChartSheets only "Chart" is the stem
+        
         OUString sPersistChartName = ContainerUtilities::getUniqueName( getChartObjectNames(), OUString( "Chart " ) , OUString(), 1);
         xTableCharts->addNewByName(sPersistChartName, aRectangle, aCellRangeAddress, true, false );
         uno::Reference< excel::XChartObject > xChartObject( getItemByStringIndex( sPersistChartName ), uno::UNO_QUERY_THROW );
@@ -139,7 +139,7 @@ void SAL_CALL ScVbaChartObjects::Delete(  ) throw (script::BasicErrorException)
         removeByName(sChartNames[i]);
 }
 
-// XEnumerationAccess
+
 
 uno::Reference< container::XEnumeration >
 ScVbaChartObjects::createEnumeration() throw (uno::RuntimeException)
@@ -148,7 +148,7 @@ ScVbaChartObjects::createEnumeration() throw (uno::RuntimeException)
     return new ChartObjectEnumerationImpl( mxContext, xEnumAccess->createEnumeration(), xDrawPageSupplier, getParent() /* sheet */);
 }
 
-// XElementAccess
+
 
 uno::Type
 ScVbaChartObjects::getElementType() throw (uno::RuntimeException)
@@ -156,12 +156,12 @@ ScVbaChartObjects::getElementType() throw (uno::RuntimeException)
     return cppu::UnoType<excel::XChartObject>::get();
 }
 
-// ScVbaCollectionBaseImpl
+
 uno::Any
 ScVbaChartObjects::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< table::XTableChart > xTableChart( aSource, uno::UNO_QUERY_THROW );
-    // correct parent object is sheet
+    
     return uno::makeAny( uno::Reference< excel::XChartObject > ( new ScVbaChartObject( getParent(), mxContext, xTableChart, xDrawPageSupplier ) ) );
 }
 

@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "AreaTransparencyGradientControl.hxx"
 #include "AreaPropertyPanel.hxx"
@@ -28,7 +28,7 @@
 
 namespace svx { namespace sidebar {
 
-// positioning helpers
+
 #define APOS1_1 Point(LogicToPixel(Point(POPUPPANEL_MARGIN_HORIZONTAL,POPUPPANEL_MARGIN_VERTICAL), MAP_APPFONT))
 #define APOS2_1 Point(LogicToPixel(Point(POPUPPANEL_MARGIN_HORIZONTAL,POPUPPANEL_MARGIN_VERTICAL + FIXED_TEXT_HEIGHT + TEXT_CONTROL_SPACING_VERTICAL), MAP_APPFONT))
 #define APOS1_2 Point(LogicToPixel(Point(POPUPPANEL_MARGIN_HORIZONTAL+CONTROL_WIDTH+CONTROL_SPACING_HORIZONTAL,POPUPPANEL_MARGIN_VERTICAL), MAP_APPFONT))
@@ -88,12 +88,12 @@ AreaTransparencyGradientControl::AreaTransparencyGradientControl (
     maBtnLeft45.SetItemImage(1,maRotLeft);
     Size aTbxSize = maBtnLeft45.CalcWindowSizePixel();
     maBtnLeft45.SetOutputSizePixel( aTbxSize );
-    maBtnLeft45.SetQuickHelpText(1, SVX_RESSTR(STR_HELP_LEFT));    //acc wj
+    maBtnLeft45.SetQuickHelpText(1, SVX_RESSTR(STR_HELP_LEFT));    
 
     maBtnRight45.SetItemImage(1,maRotRight);
     aTbxSize = maBtnRight45.CalcWindowSizePixel();
     maBtnRight45.SetOutputSizePixel( aTbxSize );
-    maBtnRight45.SetQuickHelpText(1, SVX_RESSTR(STR_HELP_RIGHT));  //acc wj
+    maBtnRight45.SetQuickHelpText(1, SVX_RESSTR(STR_HELP_RIGHT));  
 
     maBtnLeft45.SetBackground(Wallpaper());
     maBtnLeft45.SetPaintTransparent(true);
@@ -256,14 +256,14 @@ void AreaTransparencyGradientControl::InitStatus(XFillFloatTransparenceItem* pGr
 
 void AreaTransparencyGradientControl::ExecuteValueModify( sal_uInt8 nStartCol, sal_uInt8 nEndCol )
 {
-    //Added
+    
     sal_Int16 aMtrValue = (sal_Int16)maMtrTrgrAngle.GetValue();
     while(aMtrValue<0)
         aMtrValue += 360;
     sal_uInt16 nVal = aMtrValue/360;
     nVal = aMtrValue - nVal*360;
     maMtrTrgrAngle.SetValue(nVal);
-    //End of new code
+    
     XGradient aTmpGradient(
         Color(nStartCol, nStartCol, nStartCol),
         Color(nEndCol, nEndCol, nEndCol),
@@ -326,6 +326,6 @@ IMPL_LINK_NOARG(AreaTransparencyGradientControl, Right_Click45_Impl)
     return( 0L );
 }
 
-} } // end of namespace svx::sidebar
+} } 
 
-// eof
+

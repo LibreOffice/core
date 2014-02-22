@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dpfilteredcache.hxx"
@@ -102,7 +102,7 @@ size_t ScDPFilteredCache::GroupFilter::getMatchItemCount() const
     return maItems.size();
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDPFilteredCache::Criterion::Criterion() :
     mnFieldIndex(-1),
@@ -110,7 +110,7 @@ ScDPFilteredCache::Criterion::Criterion() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScDPFilteredCache::ScDPFilteredCache(const ScDPCache& rCache) :
     maShowByFilter(0, MAXROW+1, false), maShowByPage(0, MAXROW+1, true), mrCache(rCache)
@@ -144,7 +144,7 @@ void ScDPFilteredCache::fillTable(
     maShowByPage.clear();
     maShowByPage.build_tree();
 
-    // Process the non-empty data rows.
+    
     for (SCROW nRow = 0; nRow < nDataSize; ++nRow)
     {
         if (!getCache()->ValidQuery(nRow, rQuery))
@@ -156,17 +156,17 @@ void ScDPFilteredCache::fillTable(
         maShowByFilter.insert_back(nRow, nRow+1, true);
     }
 
-    // Process the trailing empty rows.
+    
     if (!bIgnoreEmptyRows)
         maShowByFilter.insert_back(nDataSize, nRowCount, true);
 
     maShowByFilter.build_tree();
 
-    // Initialize field entries container.
+    
     maFieldEntries.clear();
     maFieldEntries.reserve(nColCount);
 
-    // Build unique field entries.
+    
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
         maFieldEntries.push_back( vector<SCROW>() );
@@ -186,7 +186,7 @@ void ScDPFilteredCache::fillTable(
                     OSL_FAIL("Tree search failed!");
                     continue;
                 }
-                --nEndSegment; // End position is not inclusive. Move back one.
+                --nEndSegment; 
             }
 
             if (!bShow)
@@ -221,11 +221,11 @@ void ScDPFilteredCache::fillTable()
     maShowByFilter.insert_front(0, nRowCount, true);
     maShowByFilter.build_tree();
 
-    // Initialize field entries container.
+    
     maFieldEntries.clear();
     maFieldEntries.reserve(nColCount);
 
-    // Data rows
+    
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
         maFieldEntries.push_back( vector<SCROW>() );
@@ -257,9 +257,9 @@ bool ScDPFilteredCache::isRowActive(sal_Int32 nRow, sal_Int32* pLastRow) const
     maShowByPage.search_tree(nRow, bPage, NULL, &nLastRowPage);
     if (pLastRow)
     {
-        // Return the last row of current segment.
+        
         *pLastRow = nLastRowFilter < nLastRowPage ? nLastRowFilter : nLastRowPage;
-        *pLastRow -= 1; // End position is not inclusive. Move back one.
+        *pLastRow -= 1; 
     }
 
     return bFilter && bPage;
@@ -308,7 +308,7 @@ const ::std::vector<SCROW>&  ScDPFilteredCache::getFieldEntries( sal_Int32 nColu
 {
     if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
     {
-        // index out of bound.  Hopefully this code will never be reached.
+        
         static const ::std::vector<SCROW> emptyEntries;
         return emptyEntries;
     }
@@ -322,14 +322,14 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
     sal_Int32 nColSize = getColSize();
 
     if (!nRowSize)
-        // no data to filter.
+        
         return;
 
-    // Row first, then column.
+    
     vector< Sequence<Any> > tableData;
     tableData.reserve(nRowSize+1);
 
-    // Header first.
+    
     Sequence<Any> headerRow(nColSize);
     for (SCCOL  nCol = 0; nCol < nColSize; ++nCol)
     {
@@ -346,7 +346,7 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
         sal_Int32 nLastRow;
         if (!isRowActive(nRow, &nLastRow))
         {
-            // This row is filtered out.
+            
             nRow = nLastRow;
             continue;
         }
@@ -354,7 +354,7 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
         if (!isRowQualified(nRow, rCriteria, rRepeatIfEmptyDims))
             continue;
 
-        // Insert this row into table.
+        
 
         Sequence<Any> row(nColSize);
         for (SCCOL nCol = 0; nCol < nColSize; ++nCol)
@@ -374,7 +374,7 @@ void ScDPFilteredCache::filterTable(const vector<Criterion>& rCriteria, Sequence
         tableData.push_back(row);
     }
 
-    // convert vector to Seqeunce
+    
     sal_Int32 nTabSize = static_cast<sal_Int32>(tableData.size());
     rTabData.realloc(nTabSize);
     for (sal_Int32 i = 0; i < nTabSize; ++i)
@@ -406,11 +406,11 @@ bool ScDPFilteredCache::isRowQualified(sal_Int32 nRow, const vector<Criterion>& 
     for (vector<Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
     {
         if (itr->mnFieldIndex >= nColSize)
-            // specified field is outside the source data columns.  Don't
-            // use this criterion.
+            
+            
             continue;
 
-        // Check if the 'repeat if empty' flag is set for this field.
+        
         bool bRepeatIfEmpty = rRepeatIfEmptyDims.count(itr->mnFieldIndex) > 0;
         const ScDPItemData* pCellData = getCell(static_cast<SCCOL>(itr->mnFieldIndex), nRow, bRepeatIfEmpty);
         if (!itr->mpFilter->match(*pCellData))

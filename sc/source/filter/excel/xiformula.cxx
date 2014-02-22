@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xiformula.hxx"
@@ -23,7 +23,7 @@
 
 #include "excform.hxx"
 
-// Formula compiler ===========================================================
+
 
 /** Implementation class of the export formula compiler. */
 class XclImpFmlaCompImpl : protected XclImpRoot, protected XclTokenArrayHelper
@@ -38,13 +38,13 @@ public:
 
     const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
 
-    // ------------------------------------------------------------------------
+    
 private:
-    XclFunctionProvider maFuncProv;     /// Excel function data provider.
-    const XclBiff       meBiff;         /// Cached BIFF version to save GetBiff() calls.
+    XclFunctionProvider maFuncProv;     
+    const XclBiff       meBiff;         
 };
 
-// ----------------------------------------------------------------------------
+
 
 XclImpFmlaCompImpl::XclImpFmlaCompImpl( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -59,7 +59,7 @@ void XclImpFmlaCompImpl::CreateRangeList(
 {
     rScRanges.RemoveAll();
 
-    //! evil hack, using old formula import :-)
+    
     if( !rXclTokArr.Empty() )
     {
         SvMemoryStream aMemStrm;
@@ -77,7 +77,7 @@ const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
     if (rXclTokArr.Empty())
         return NULL;
 
-    // evil hack!  are we trying to phase out the old style formula converter ?
+    
     SvMemoryStream aMemStrm;
     aMemStrm.WriteUInt16( EXC_ID_EOF ).WriteUInt16( rXclTokArr.GetSize() );
     aMemStrm.Write( rXclTokArr.GetData(), rXclTokArr.GetSize() );
@@ -89,7 +89,7 @@ const ScTokenArray* XclImpFmlaCompImpl::CreateFormula(
     return pArray;
 }
 
-// ----------------------------------------------------------------------------
+
 
 XclImpFormulaCompiler::XclImpFormulaCompiler( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot ),
@@ -114,6 +114,6 @@ const ScTokenArray* XclImpFormulaCompiler::CreateFormula(
     return mxImpl->CreateFormula(eType, rXclTokArr);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

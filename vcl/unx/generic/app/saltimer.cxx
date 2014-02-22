@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,7 +46,7 @@ void SalXLib::StopTimer()
 
 void SalXLib::StartTimer( sal_uLong nMS )
 {
-    timeval Timeout (m_aTimeout); // previous timeout.
+    timeval Timeout (m_aTimeout); 
     gettimeofday (&m_aTimeout, 0);
 
     m_nTimeoutMS  = nMS;
@@ -54,7 +54,7 @@ void SalXLib::StartTimer( sal_uLong nMS )
 
     if ((Timeout > m_aTimeout) || (Timeout.tv_sec == 0))
     {
-        // Wakeup from previous timeout (or stopped timer).
+        
         Wakeup();
     }
 }

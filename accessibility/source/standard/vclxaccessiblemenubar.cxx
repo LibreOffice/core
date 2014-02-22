@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/standard/vclxaccessiblemenubar.hxx>
@@ -31,9 +31,9 @@ using namespace ::com::sun::star;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
-// class VCLXAccessibleMenuBar
-// -----------------------------------------------------------------------------
+
+
+
 
 VCLXAccessibleMenuBar::VCLXAccessibleMenuBar( Menu* pMenu )
     :OAccessibleMenuComponent( pMenu )
@@ -51,7 +51,7 @@ VCLXAccessibleMenuBar::VCLXAccessibleMenuBar( Menu* pMenu )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleMenuBar::~VCLXAccessibleMenuBar()
 {
@@ -59,7 +59,7 @@ VCLXAccessibleMenuBar::~VCLXAccessibleMenuBar()
         m_pWindow->RemoveEventListener( LINK( this, VCLXAccessibleMenuBar, WindowEventListener ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleMenuBar::IsFocused()
 {
@@ -71,7 +71,7 @@ sal_Bool VCLXAccessibleMenuBar::IsFocused()
     return bFocused;
 }
 
-// -----------------------------------------------------------------------------
+
 
 IMPL_LINK( VCLXAccessibleMenuBar, WindowEventListener, VclSimpleEvent*, pEvent )
 {
@@ -87,7 +87,7 @@ IMPL_LINK( VCLXAccessibleMenuBar, WindowEventListener, VclSimpleEvent*, pEvent )
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleMenuBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -115,9 +115,9 @@ void VCLXAccessibleMenuBar::ProcessWindowEvent( const VclWindowEvent& rVclWindow
     }
 }
 
-// -----------------------------------------------------------------------------
-// XComponent
-// -----------------------------------------------------------------------------
+
+
+
 
 void VCLXAccessibleMenuBar::disposing()
 {
@@ -130,16 +130,16 @@ void VCLXAccessibleMenuBar::disposing()
     }
 }
 
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
+
+
+
 
 OUString VCLXAccessibleMenuBar::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleMenuBar" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -148,9 +148,9 @@ Sequence< OUString > VCLXAccessibleMenuBar::getSupportedServiceNames() throw (Ru
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleContext
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  ) throw (RuntimeException)
 {
@@ -182,7 +182,7 @@ sal_Int32 VCLXAccessibleMenuBar::getAccessibleIndexInParent(  ) throw (RuntimeEx
     return nIndexInParent;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int16 VCLXAccessibleMenuBar::getAccessibleRole(  ) throw (RuntimeException)
 {
@@ -191,9 +191,9 @@ sal_Int16 VCLXAccessibleMenuBar::getAccessibleRole(  ) throw (RuntimeException)
     return AccessibleRole::MENU_BAR;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleExtendedComponent
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 VCLXAccessibleMenuBar::getBackground(  ) throw (RuntimeException)
 {
@@ -202,6 +202,6 @@ sal_Int32 VCLXAccessibleMenuBar::getBackground(  ) throw (RuntimeException)
     return Application::GetSettings().GetStyleSettings().GetMenuBarColor().GetColor();
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

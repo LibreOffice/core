@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -133,14 +133,14 @@ void Keys::refresh()
         fillAttnum2attnameMap( mainMap, m_origin, m_schemaName, m_tableName );
 
         Reference< XPreparedStatement > stmt = m_origin->prepareStatement(
-                "SELECT  conname, "            // 1
-                        "contype, "            // 2
-                        "confupdtype, "        // 3
-                        "confdeltype, "        // 4
-                        "class2.relname, "     // 5
-                        "nmsp2.nspname, "      // 6
-                        "conkey,"              // 7
-                        "confkey "             // 8
+                "SELECT  conname, "            
+                        "contype, "            
+                        "confupdtype, "        
+                        "confdeltype, "        
+                        "class2.relname, "     
+                        "nmsp2.nspname, "      
+                        "conkey,"              
+                        "confkey "             
                 "FROM pg_constraint INNER JOIN pg_class ON conrelid = pg_class.oid "
                       "INNER JOIN pg_namespace ON pg_class.relnamespace = pg_namespace.oid "
                       "LEFT JOIN pg_class AS class2 ON confrelid = class2.oid "
@@ -285,7 +285,7 @@ Reference< com::sun::star::container::XIndexAccess > Keys::create(
 
     return ret;
 }
-//_________________________________________________________________________________________
+
 KeyDescriptors::KeyDescriptors(
         const ::rtl::Reference< RefCountedMutex > & refMutex,
         const ::com::sun::star::uno::Reference< com::sun::star::sdbc::XConnection >  & origin,

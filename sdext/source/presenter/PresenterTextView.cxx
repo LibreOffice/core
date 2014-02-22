@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterTextView.hxx"
@@ -43,7 +43,7 @@ using namespace ::com::sun::star::uno;
 
 const static sal_Int64 CaretBlinkIntervall = 500 * 1000 * 1000;
 
-//#define SHOW_CHARACTER_BOXES
+
 
 namespace {
     sal_Int32 Signum (const sal_Int32 nValue)
@@ -59,7 +59,7 @@ namespace {
 
 namespace sdext { namespace presenter {
 
-//===== PresenterTextView =====================================================
+
 
 PresenterTextView::PresenterTextView (
     const Reference<XComponentContext>& rxContext,
@@ -88,11 +88,11 @@ PresenterTextView::PresenterTextView (
     if ( ! xFactory.is())
         return;
 
-    // Create the break iterator that we use to break text into lines.
+    
     mxBreakIterator = i18n::BreakIterator::create(rxContext);
 
-    // Create the script type detector that is used to split paragraphs into
-    // portions of the same text direction.
+    
+    
     mxScriptTypeDetector = Reference<i18n::XScriptTypeDetector>(
         xFactory->createInstanceWithContext(
             "com.sun.star.i18n.ScriptTypeDetector",
@@ -202,7 +202,7 @@ void PresenterTextView::SetOffset(
     mnLeftOffset = nLeft;
     mnTopOffset = nTop;
 
-    // Trigger an update of the text origin stored at the individual paragraphs.
+    
     SetLocation(maLocation);
 }
 
@@ -213,8 +213,8 @@ void PresenterTextView::MoveCaret (
     if ( ! mpCaret)
         return;
 
-    // When the caret has not been visible yet then move it to the beginning
-    // of the text.
+    
+    
     if (mpCaret->GetParagraphIndex() < 0)
     {
         mpCaret->SetPosition(0,0);
@@ -242,7 +242,7 @@ void PresenterTextView::MoveCaret (
                     nCharacterIndex = pParagraph->GetWordBoundary(nCharacterIndex, nDelta);
                     if (nCharacterIndex < 0)
                     {
-                        // Go to previous or next paragraph.
+                        
                         nParagraphIndex += nDelta;
                         if (nParagraphIndex < 0)
                         {
@@ -262,8 +262,8 @@ void PresenterTextView::MoveCaret (
                         {
                             nRemainingDistance -= nDelta;
 
-                            // Move caret one character to the end of
-                            // the previous or the start of the next paragraph.
+                            
+                            
                             pParagraph = GetParagraph(nParagraphIndex);
                             if (pParagraph)
                             {
@@ -284,7 +284,7 @@ void PresenterTextView::MoveCaret (
         }
     }
 
-    // Move the caret to the new position.
+    
     mpCaret->SetPosition(nParagraphIndex, nCharacterIndex);
 }
 
@@ -301,10 +301,10 @@ void PresenterTextView::Paint (
     if (mbIsFormatPending)
         Format();
 
-    // Setup the clipping rectangle.  Horizontally we make it a little
-    // larger to allow characters (and the caret) to stick out of their
-    // bounding boxes.  This can happen on some characters (like the
-    // uppercase J) for typographical reasons.
+    
+    
+    
+    
     const sal_Int32 nAdditionalLeftBorder (10);
     const sal_Int32 nAdditionalRightBorder (5);
     double nX (maLocation.X - mnLeftOffset);
@@ -411,7 +411,7 @@ awt::Rectangle PresenterTextView::GetCaretBounds (
         return awt::Rectangle(0,0,0,0);
 }
 
-//----- private ---------------------------------------------------------------
+
 
 void PresenterTextView::RequestFormat (void)
 {
@@ -453,7 +453,7 @@ SharedPresenterTextParagraph PresenterTextView::GetParagraph (
         return maParagraphs[nParagraphIndex];
 }
 
-//===== PresenterTextParagraph ================================================
+
 
 PresenterTextParagraph::PresenterTextParagraph (
     const sal_Int32 nParagraphIndex,
@@ -489,7 +489,7 @@ PresenterTextParagraph::PresenterTextParagraph (
         }
         catch(beans::UnknownPropertyException&)
         {
-            // Ignore the exception.  Use the default value.
+            
         }
         try
         {
@@ -497,7 +497,7 @@ PresenterTextParagraph::PresenterTextParagraph (
         }
         catch(beans::UnknownPropertyException&)
         {
-            // Ignore the exception.  Use the default value.
+            
         }
         try
         {
@@ -505,7 +505,7 @@ PresenterTextParagraph::PresenterTextParagraph (
         }
         catch(beans::UnknownPropertyException&)
         {
-            // Ignore the exception.  Use the default value.
+            
         }
 
         msParagraphText = rxTextRange->getString();
@@ -548,7 +548,7 @@ void PresenterTextParagraph::Paint (
     {
         Line& rLine (maLines[nIndex]);
 
-        // Paint only visible lines.
+        
         const double nLineTop = rLine.mnBaseLine - mnAscent - nTopOffset;
         if (nLineTop + mnLineHeight< nClipTop)
             continue;
@@ -574,7 +574,7 @@ void PresenterTextParagraph::Format (
     const double nWidth,
     const PresenterTheme::SharedFontDescriptor& rpFont)
 {
-    // Make sure that the text view is in a valid and sane state.
+    
     if ( ! mxBreakIterator.is() || ! mxScriptTypeDetector.is())
         return;
     if (nWidth<=0)
@@ -608,8 +608,8 @@ void PresenterTextParagraph::Format (
             i18n::WordType::ANYWORD_IGNOREWHITESPACES);
         AddWord(nWidth, aCurrentLine, aWordBoundary.startPos, rpFont);
 
-        // Remember the new word boundary for caret travelling by words.
-        // Prevent duplicates.
+        
+        
         if (aWordBoundary.startPos > maWordBoundaries.back())
             maWordBoundaries.push_back(aWordBoundary.startPos);
 
@@ -636,7 +636,7 @@ sal_Int32 PresenterTextParagraph::GetWordBoundary(
 
     if (nLocalCharacterIndex < 0)
     {
-        // The caller asked for the start or end position of the paragraph.
+        
         if (nDistance < 0)
             return 0;
         else
@@ -648,9 +648,9 @@ sal_Int32 PresenterTextParagraph::GetWordBoundary(
     {
         if (maWordBoundaries[nIndex] >= nLocalCharacterIndex)
         {
-            // When inside the word (not at its start or end) then
-            // first move to the start or end before going the previous or
-            // next word.
+            
+            
+            
             if (maWordBoundaries[nIndex] > nLocalCharacterIndex)
                 if (nDistance > 0)
                     --nIndex;
@@ -724,7 +724,7 @@ void PresenterTextParagraph::AddWord (
 
     if (nLineWidth >= nWidth)
     {
-        // Add new line with a single word (so far).
+        
         AddLine(rCurrentLine);
     }
     rCurrentLine.endPos = nWordBoundary;
@@ -735,7 +735,7 @@ void PresenterTextParagraph::AddLine (
 {
     Line aLine (rCurrentLine.startPos, rCurrentLine.endPos);
 
-    // Find the start and end of the line with respect to cells.
+    
     if (maLines.size() > 0)
     {
         aLine.mnLineStartCellIndex = maLines.back().mnLineEndCellIndex;
@@ -851,8 +851,8 @@ TextSegment PresenterTextParagraph::GetTextSegment (
         }
         break;
 
-        // Handle GLYPH and ATTRIBUTE_RUN like CHARACTER because we can not
-        // do better at the moment.
+        
+        
         case AccessibleTextType::CHARACTER:
         case AccessibleTextType::GLYPH:
         case AccessibleTextType::ATTRIBUTE_RUN:
@@ -927,8 +927,8 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
     sal_Int32 nGlobalCharacterIndex,
     const bool bCaretBox)
 {
-    // Find the line that contains the requested character and accumulate
-    // the previous line heights.
+    
+    
     double nX (mnXOrigin);
     double nY (mnYOrigin + mnVerticalOffset + mnAscent);
     const sal_Int8 nTextDirection (GetTextDirection());
@@ -937,9 +937,9 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
          ++nLineIndex, nY+=mnLineHeight)
     {
         Line& rLine (maLines[nLineIndex]);
-        // Skip lines before the indexed character.
+        
         if (nGlobalCharacterIndex >= rLine.mnLineEndCharacterIndex)
-            // When in the last line then allow the index past the last char.
+            
             if (nLineIndex<nLineCount-1)
                 continue;
 
@@ -947,9 +947,9 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
 
         const sal_Int32 nCellIndex (nGlobalCharacterIndex - rLine.mnLineStartCharacterIndex);
 
-        // The cell bounding box is defined relative to the origin of
-        // the current line.  Therefore we have to add the absolute
-        // position of the line.
+        
+        
+        
         geometry::RealRectangle2D rCellBox (rLine.maCellBoxes[
             ::std::min(nCellIndex, rLine.maCellBoxes.getLength()-1)]);
 
@@ -986,9 +986,9 @@ awt::Rectangle PresenterTextParagraph::GetCharacterBounds (
         return awt::Rectangle(nX1,nY1,nX2-nX1+1,nY2-nY1+1);
     }
 
-    // We are still here.  That means that the given index lies past the
-    // last character in the paragraph.
-    // Return an empty box that lies past the last character.  Better than nothing.
+    
+    
+    
     return awt::Rectangle(sal_Int32(nX+0.5), sal_Int32(nY+0.5), 0, 0);
 }
 
@@ -1000,7 +1000,7 @@ sal_Int32 PresenterTextParagraph::GetIndexAtPoint (const awt::Point& rPoint) con
 
 sal_Int8 PresenterTextParagraph::GetTextDirection (void) const
 {
-    // Find first portion that has a non-neutral text direction.
+    
     sal_Int32 nPosition (0);
     sal_Int32 nTextLength (msParagraphText.getLength());
     while (nPosition < nTextLength)
@@ -1011,7 +1011,7 @@ sal_Int8 PresenterTextParagraph::GetTextDirection (void) const
         switch (nScriptDirection)
         {
             case i18n::ScriptDirection::NEUTRAL:
-                // continue looping.
+                
                 break;
             case i18n::ScriptDirection::LEFT_TO_RIGHT:
                 return rendering::TextDirection::WEAK_LEFT_TO_RIGHT;
@@ -1024,8 +1024,8 @@ sal_Int8 PresenterTextParagraph::GetTextDirection (void) const
             msParagraphText, nPosition, nScriptDirection);
     }
 
-    // All text in paragraph is neutral.  Fall back on writing mode taken
-    // from the XText (which may not be properly initialized.)
+    
+    
     sal_Int8 nTextDirection(rendering::TextDirection::WEAK_LEFT_TO_RIGHT);
     switch(mnWritingMode)
     {
@@ -1040,7 +1040,7 @@ sal_Int8 PresenterTextParagraph::GetTextDirection (void) const
         default:
         case text::WritingMode2::TB_RL:
         case text::WritingMode2::TB_LR:
-            // Can not handle this.  Use default and hope for the best.
+            
             break;
     }
     return nTextDirection;
@@ -1087,7 +1087,7 @@ void PresenterTextParagraph::SetupCellArray (
     }
 }
 
-//===== PresenterTextCaret ================================================----
+
 
 PresenterTextCaret::PresenterTextCaret (
     const ::boost::function<css::awt::Rectangle(const sal_Int32,const sal_Int32)>& rCharacterBoundsAccess,
@@ -1128,7 +1128,7 @@ void PresenterTextCaret::HideCaret (void)
         mnCaretBlinkTaskId = 0;
     }
     mbIsCaretVisible = false;
-    // Reset the caret position.
+    
     mnParagraphIndex = -1;
     mnCharacterIndex = -1;
 }
@@ -1199,7 +1199,7 @@ void PresenterTextCaret::InvertCaret (void)
         maInvalidator(maCaretBounds);
 }
 
-//===== PresenterTextParagraph::Cell ==========================================
+
 
 PresenterTextParagraph::Cell::Cell (
     const sal_Int32 nCharacterIndex,
@@ -1211,7 +1211,7 @@ PresenterTextParagraph::Cell::Cell (
 {
 }
 
-//===== PresenterTextParagraph::Line ==========================================
+
 
 PresenterTextParagraph::Line::Line (
     const sal_Int32 nLineStartCharacterIndex,
@@ -1262,6 +1262,6 @@ bool PresenterTextParagraph::Line::IsEmpty (void) const
     return mnLineStartCharacterIndex >= mnLineEndCharacterIndex;
 }
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

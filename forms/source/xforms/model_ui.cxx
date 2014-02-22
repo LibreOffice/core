@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
 
-// UNO classes
+
 #include <com/sun/star/xml/dom/XNode.hpp>
 #include <com/sun/star/xml/dom/XDocumentBuilder.hpp>
 #include <com/sun/star/xml/dom/XDocumentFragment.hpp>
@@ -70,16 +70,16 @@ using namespace com::sun::star::xml::xpath;
 
 
 //
-// implement XFormsUIHelper1
+
 //
 
 OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
     throw( RuntimeException )
 {
-    // determine service for control. string/text field is default.
+    
     OUString sService = "com.sun.star.form.component.TextField";
 
-    // query repository for suitable type
+    
     OSL_ENSURE( mxDataTypes.is(), "no type repository?" );
     OUString sTypeName = queryMIP( xNode ).getTypeName();
     if( mxDataTypes->hasByName( sTypeName ) )
@@ -114,7 +114,7 @@ OUString Model::getDefaultServiceNameForNode( const XNode_t& xNode )
         case com::sun::star::xsd::DataTypeClass::QName:
         case com::sun::star::xsd::DataTypeClass::NOTATION:
         default:
-            // keep default
+            
             break;
         }
     }
@@ -128,7 +128,7 @@ static void lcl_OutPosition( OUStringBuffer& rBuffer,
 {
     OSL_ENSURE( xNode->getParentNode().is(), "need parent" );
 
-    // count # of occurrences of this node
+    
     sal_Int32 nFound = 0;
     sal_Int32 nPosition = -1;
     if( xNode->getParentNode().is() )
@@ -149,7 +149,7 @@ static void lcl_OutPosition( OUStringBuffer& rBuffer,
     }
     OSL_ENSURE( nFound > 0  &&  nPosition > 0, "node not found???" );
 
-    // output position (if necessary)
+    
     if( nFound > 1 )
     {
         rBuffer.insert( 0, ']' );
@@ -180,7 +180,7 @@ static void lcl_OutInstance( OUStringBuffer& rBuffer,
     {
         rBuffer.insert( 0, "')" );
 
-        // iterate over instances, and find the right one
+        
         OUString sInstanceName;
         Reference<XEnumeration> xEnum =
             pModel->getInstances()->createEnumeration();
@@ -189,12 +189,12 @@ static void lcl_OutInstance( OUStringBuffer& rBuffer,
             Sequence<PropertyValue> aValues;
             xEnum->nextElement() >>= aValues;
 
-            // get ID and instance
+            
             OUString sId;
             Reference<XDocument> xInstance;
             getInstanceData( aValues, &sId, &xInstance, NULL, NULL );
 
-            // now check whether this was our instance:
+            
             if( xInstance == xDoc )
                 sInstanceName = sId;
         }
@@ -210,15 +210,15 @@ OUString Model::getDefaultBindingExpressionForNode(
 {
     OSL_ENSURE( xNode.is(), "need node" );
 
-    // iterate upwards and put sections into the expression buffer.
-    // Stop iteration either at context node (relative expression) or
-    // at document root, whichever occurs first.
+    
+    
+    
     OUStringBuffer aBuffer;
     for( Reference<XNode> xCurrent = xNode;
          xCurrent.is()  &&  xCurrent != rContext.mxContextNode;
          xCurrent = xCurrent->getParentNode() )
     {
-        // insert a '/' for every step except the first
+        
         if( !aBuffer.isEmpty() )
             aBuffer.insert( 0, '/' );
 
@@ -240,16 +240,16 @@ OUString Model::getDefaultBindingExpressionForNode(
             break;
 
         case NodeType_DOCUMENT_NODE:
-            // check for which instance we have
+            
             lcl_OutInstance( aBuffer, xCurrent, this );
             break;
 
         default:
-            // unknown type? fail!
+            
             OSL_FAIL( "unknown node type!" );
             xCurrent.set( NULL );
             aBuffer.makeStringAndClear();
-            // we'll remove the slash below
+            
             aBuffer.insert( 0, '/' );
             break;
         }
@@ -318,7 +318,7 @@ OUString Model::getNodeDisplayName( const XNode_t& xNode,
         break;
 
     default:
-        // unknown type? fail!
+        
         OSL_FAIL( "unknown node type!" );
         break;
     }
@@ -341,7 +341,7 @@ OUString Model::getNodeName( const XNode_t& xNode )
     case NodeType_TEXT_NODE:
     case NodeType_DOCUMENT_NODE:
     default:
-        // unknown type? fail!
+        
         OSL_FAIL( "no name for this node type!" );
         break;
     }
@@ -381,15 +381,15 @@ OUString Model::getSubmissionName( const XPropertySet_t& xSubmission,
 Model::XPropertySet_t Model::cloneBindingAsGhost( const XPropertySet_t &xBinding )
     throw( RuntimeException )
 {
-    // Create a new binding instance first...
+    
     Binding *pBinding = new Binding();
 
-    // ...and bump up the "defered notification counter"
-    // to prevent this binding from contributing to the
-    // MIPs table...
+    
+    
+    
     pBinding->deferNotifications(true);
 
-    // Copy the propertyset and return result...
+    
     XPropertySet_t xNewBinding(pBinding);
     copy( xBinding, xNewBinding );
     return xNewBinding;
@@ -411,7 +411,7 @@ Model::XDocument_t Model::newInstance( const OUString& sName,
                          sal_Bool bURLOnce )
     throw( RuntimeException )
 {
-    // create a default instance with <instanceData> element
+    
     XDocument_t xInstance = getDocumentBuilder()->newDocument();
     DBG_ASSERT( xInstance.is(), "failed to create DOM instance" );
 
@@ -420,7 +420,7 @@ Model::XDocument_t Model::newInstance( const OUString& sName,
                           UNO_QUERY_THROW ) );
 
     Sequence<PropertyValue> aSequence;
-    bool bOnce = bURLOnce; // bool, so we can take address in setInstanceData
+    bool bOnce = bURLOnce; 
     setInstanceData( aSequence, &sName, &xInstance, &sURL, &bOnce );
     sal_Int32 nInstance = mpInstances->addItem( aSequence );
     loadInstance( nInstance );
@@ -472,27 +472,27 @@ void Model::renameInstance( const OUString& sFrom,
         sal_Int32 nProp = lcl_findProp( pSeq, nLength, "ID" );
         if( nProp == -1 )
         {
-            // add name property
+            
             aSeq.realloc( nLength + 1 );
             pSeq = aSeq.getArray();
             pSeq[ nLength ].Name = "ID";
             nProp = nLength;
         }
 
-        // change name
+        
         pSeq[ nProp ].Value <<= sTo;
 
-        // change url
+        
         nProp = lcl_findProp( pSeq, nLength, "URL" );
         if(nProp != -1)
             pSeq[ nProp ].Value <<= sURL;
 
-        // change urlonce
+        
         nProp = lcl_findProp( pSeq, nLength, "URLOnce" );
         if(nProp != -1)
             pSeq[ nProp ].Value <<= bURLOnce;
 
-        // set instance
+        
         mpInstances->setItem( nPos, aSeq );
     }
 }
@@ -575,7 +575,7 @@ Model::XNode_t Model::createElement( const XNode_t& xParent,
     if( xParent.is()
         && isValidXMLName( sName ) )
     {
-        // TODO: implement proper namespace handling
+        
         xNode.set( xParent->getOwnerDocument()->createElement( sName ),
                    UNO_QUERY );
     }
@@ -592,7 +592,7 @@ Model::XNode_t Model::createAttribute( const XNode_t& xParent,
         && xElement.is()
         && isValidXMLName( sName ) )
     {
-        // handle case where attribute already exists
+        
         sal_Int32 nCount = 0;
         OUString sUniqueName = sName;
         while( xElement->hasAttribute( sUniqueName ) )
@@ -601,7 +601,7 @@ Model::XNode_t Model::createAttribute( const XNode_t& xParent,
             sUniqueName = sName + OUString::number( nCount );
         }
 
-        // TODO: implement proper namespace handling
+        
         xNode.set( xParent->getOwnerDocument()->createAttribute( sUniqueName ),
                    UNO_QUERY );
     }
@@ -612,17 +612,17 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
                                   const OUString& sName )
     throw( RuntimeException )
 {
-    // early out if we don't have to change the name
+    
     if( xNode->getNodeName() == sName )
         return xNode;
 
-    // refuse to change name if its an attribute, and the name is already used
+    
     if( xNode->getNodeType() == NodeType_ATTRIBUTE_NODE
         && xNode->getParentNode().is()
         && Reference<XElement>(xNode->getParentNode(), UNO_QUERY_THROW)->hasAttribute( sName ) )
         return xNode;
 
-    // note old binding expression so we can adjust bindings below
+    
     OUString sOldDefaultBindingExpression =
         getDefaultBindingExpressionForNode( xNode );
 
@@ -633,7 +633,7 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
         Reference<XElement> xElem = xDoc->createElement( sName );
         xNew.set( xElem, UNO_QUERY );
 
-        // iterate over all attributes and append them to the new element
+        
         Reference<XElement> xOldElem( xNode, UNO_QUERY );
         OSL_ENSURE( xNode.is(), "no element?" );
 
@@ -645,7 +645,7 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
             xElem->setAttributeNode( xOldElem->removeAttributeNode( xAttr ) );
         }
 
-        // iterate over all children and append them to the new element
+        
         for( Reference<XNode> xCurrent = xNode->getFirstChild();
              xCurrent.is();
              xCurrent = xNode->getFirstChild() )
@@ -657,11 +657,11 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
     }
     else if( xNode->getNodeType() == NodeType_ATTRIBUTE_NODE )
     {
-        // create new attribute
+        
         Reference<XAttr> xAttr = xDoc->createAttribute( sName );
         xAttr->setValue( xNode->getNodeValue() );
 
-        // replace node
+        
         Reference<XNode> xParent = xNode->getParentNode();
         xParent->removeChild( xNode );
         xNew = xParent->appendChild( xAttr );
@@ -671,10 +671,10 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
         OSL_FAIL( "can't rename this node type" );
     }
 
-    // adjust bindings (if necessary):
+    
     if( xNew.is() )
     {
-        // iterate over bindings and replace default expressions
+        
         OUString sNewDefaultBindingExpression =
             getDefaultBindingExpressionForNode( xNew );
         for( sal_Int32 n = 0; n < mpBindings->countItems(); n++ )
@@ -688,7 +688,7 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
         }
     }
 
-    // return node; return old node if renaming failed
+    
     return xNew.is() ? xNew : xNode;
 }
 
@@ -698,10 +698,10 @@ Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
 {
     OSL_ENSURE( xNode.is(), "no node?" );
 
-    // We will iterate over all bindings and determine the
-    // appropriateness of the respective binding for this node. The
-    // best one will be used. If we don't find any and bCreate is set,
-    // then we will create a suitable binding.
+    
+    
+    
+    
     Binding* pBestBinding = NULL;
     sal_Int32 nBestScore = 0;
 
@@ -716,17 +716,17 @@ Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
         sal_Int32 nNodes = xNodeList.is() ? xNodeList->getLength() : 0;
         if( nNodes > 0  &&  xNodeList->item( 0 ) == xNode )
         {
-            // allright, we found a suitable node. Let's determine how
-            // well it fits. Score:
-            // - bind to exactly this node is better than whole nodeset
-            // - simple binding expressions is better than complex ones
+            
+            
+            
+            
             sal_Int32 nScore = 0;
             if( nNodes == 1 )
                 nScore ++;
             if( pBinding->isSimpleBindingExpression() )
                 nScore ++;
 
-            // if we found a better binding, remember it
+            
             if( nScore > nBestScore )
             {
                 pBestBinding = pBinding;
@@ -735,7 +735,7 @@ Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
         }
     }
 
-    // create binding, if none was found and bCreate is set
+    
     OSL_ENSURE( ( nBestScore == 0 ) == ( pBestBinding == NULL ),
                 "score != binding?" );
     if( bCreate  &&  pBestBinding == NULL )
@@ -752,7 +752,7 @@ Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
 void Model::removeBindingForNode( const XNode_t& )
     throw( RuntimeException )
 {
-    // determine whether suitable binding is still used
+    
 }
 
 static OUString lcl_serializeForDisplay( const Reference< XAttr >& _rxAttrNode )
@@ -775,7 +775,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
 {
     OUString sResult;
 
-    // create document fragment
+    
     Reference<XDocument> xDocument( getDocumentBuilder()->newDocument() );
     Reference<XDocumentFragment> xFragment(
         xDocument->createDocumentFragment() );
@@ -783,7 +783,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
 
     sal_Int32 nAttributeNodes = 0;
 
-    // attach nodelist to fragment
+    
     sal_Int32 nLength = xNodes->getLength();
     for( sal_Int32 i = 0; i < nLength; i++ )
     {
@@ -792,7 +792,7 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
         switch ( xCurrent->getNodeType() )
         {
         case NodeType_DOCUMENT_NODE:
-            // special-case documents: use top-level element instead
+            
             xCurrent = xCurrent->getFirstChild();
             break;
         case NodeType_ATTRIBUTE_NODE:
@@ -810,21 +810,21 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
             break;
         }
 
-        // append node
+        
         xFragment->appendChild( xDocument->importNode( xCurrent, sal_True ) );
     }
     OSL_ENSURE( ( nAttributeNodes == 0 ) || ( nAttributeNodes == nLength ),
         "lcl_serializeForDisplay: mixed attribute and non-attribute nodes?" );
     if ( nAttributeNodes )
-        // had only attribute nodes
+        
         return sResult;
 
-    // serialize fragment
+    
     CSerializationAppXML aSerialization;
     aSerialization.setSource( xFragment );
     aSerialization.serialize();
 
-    // copy stream into buffer
+    
     Reference<XTextInputStream2> xTextInputStream = TextInputStream::create( comphelper::getProcessComponentContext() );
     xTextInputStream->setInputStream( aSerialization.getInputStream() );
 
@@ -836,8 +836,8 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
                                                      sal_True );
     */
 
-    // well, the serialization prepends XML header(s) that we need to
-    // remove first.
+    
+    
     OUStringBuffer aBuffer;
     while( ! xTextInputStream->isEOF() )
     {
@@ -856,12 +856,12 @@ static OUString lcl_serializeForDisplay( const Reference<XNodeList>& xNodes )
 
 static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult )
 {
-    // error handling first
+    
     if( ! xResult.is() )
         return getResource( RID_STR_XFORMS_CANT_EVALUATE );
 
 
-    // TODO: localize
+    
     OUStringBuffer aBuffer;
 
     switch( xResult->getObjectType() )
@@ -891,7 +891,7 @@ static OUString lcl_serializeForDisplay( const Reference<XXPathObject>& xResult 
     case XPathObjectType_XPATH_USERS:
     case XPathObjectType_XPATH_XSLT_TREE:
     default:
-        // TODO: localized error message?
+        
         break;
     }
 
@@ -908,19 +908,19 @@ OUString Model::getResultForExpression(
     if( pBinding == NULL )
         throw RuntimeException();
 
-    // prepare & evaluate expression
+    
     OUStringBuffer aBuffer;
     ComputedExpression aExpression;
     aExpression.setExpression( sExpression );
     if( bIsBindingExpression )
     {
-        // binding: use binding context and evaluation
+        
         aExpression.evaluate( pBinding->getEvaluationContext() );
         aBuffer.append( lcl_serializeForDisplay( aExpression.getXPath() ) );
     }
     else
     {
-        // MIP (not binding): iterate over bindings contexts
+        
         std::vector<EvaluationContext> aContext =
             pBinding->getMIPEvaluationContexts();
         for( std::vector<EvaluationContext>::iterator aIter = aContext.begin();
@@ -957,7 +957,7 @@ void Model::setNodeValue(
 
 
 //
-// helper functions from model_helper.hxx
+
 //
 
 void xforms::getInstanceData(
@@ -991,7 +991,7 @@ void xforms::setInstanceData(
     const OUString* _pURL,
     const bool* _pURLOnce )
 {
-    // get old instance data
+    
     OUString sID;
     Reference<XDocument> xInstance;
     OUString sURL;
@@ -1002,7 +1002,7 @@ void xforms::setInstanceData(
     const OUString* pURL = !sURL.isEmpty() ? &sURL : NULL;
     const bool* pURLOnce = ( bURLOnce && pURL != NULL ) ? &bURLOnce : NULL;
 
-    // determine new instance data
+    
 #define PROP(NAME) if( _p##NAME != NULL ) p##NAME = _p##NAME
     PROP(ID);
     PROP(Instance);
@@ -1010,7 +1010,7 @@ void xforms::setInstanceData(
     PROP(URLOnce);
 #undef PROP
 
-    // count # of values we want to set
+    
     sal_Int32 nCount = 0;
 #define PROP(NAME) if( p##NAME != NULL ) nCount++
     PROP(ID);
@@ -1019,7 +1019,7 @@ void xforms::setInstanceData(
     PROP(URLOnce);
 #undef PROP
 
-    // realloc sequence and enter values;
+    
     aSequence.realloc( nCount );
     PropertyValue* pSequence = aSequence.getArray();
     sal_Int32 nIndex = 0;

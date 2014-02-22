@@ -21,8 +21,8 @@
 #include <tools/debug.hxx>
 #include <comphelper/servicehelper.hxx>
 
-// defines how many states the bitfield can contain
-// it has the size of 64 because I use a uInt64
+
+
 #define BITFIELDSIZE 64
 
 using namespace ::utl;

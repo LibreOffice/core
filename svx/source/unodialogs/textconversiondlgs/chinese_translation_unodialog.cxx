@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,20 +14,20 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "chinese_translation_unodialog.hxx"
 #include "chinese_translationdialog.hxx"
 #include <osl/mutex.hxx>
-// header for class Application
+
 #include <vcl/svapp.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
-// header for define RET_CANCEL
+
 #include <vcl/msgbox.hxx>
 
-// header for class OImplementationId
+
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -67,7 +67,7 @@ void ChineseTranslation_UnoDialog::impl_DeleteDialog()
     }
 }
 
-// lang::XServiceInfo
+
 OUString SAL_CALL ChineseTranslation_UnoDialog::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -95,13 +95,13 @@ uno::Sequence< OUString > ChineseTranslation_UnoDialog::getSupportedServiceNames
     return aSNS;
 }
 
-// ui::dialogs::XExecutableDialog
+
 void SAL_CALL ChineseTranslation_UnoDialog::setTitle( const OUString& ) throw(uno::RuntimeException)
 {
-    //not implemented - fell free to do so, if you do need this
+    
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL ChineseTranslation_UnoDialog::initialize( const uno::Sequence< uno::Any >& aArguments ) throw(uno::Exception, uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -122,7 +122,7 @@ void SAL_CALL ChineseTranslation_UnoDialog::initialize( const uno::Sequence< uno
     }
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute() throw(uno::RuntimeException)
 {
     sal_Int16 nRet = ui::dialogs::ExecutableDialogResults::CANCEL;
@@ -152,8 +152,8 @@ sal_Int16 SAL_CALL ChineseTranslation_UnoDialog::execute() throw(uno::RuntimeExc
     return nRet;
 }
 
-//-------------------------------------------------------------------------
-// lang::XComponent
+
+
 
 void SAL_CALL ChineseTranslation_UnoDialog::dispose() throw (uno::RuntimeException)
 {
@@ -190,8 +190,8 @@ void SAL_CALL ChineseTranslation_UnoDialog::removeEventListener( const uno::Refe
     m_aDisposeEventListeners.removeInterface( xListener );
 }
 
-//-------------------------------------------------------------------------
-// XPropertySet
+
+
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ChineseTranslation_UnoDialog::getPropertySetInfo(  ) throw (uno::RuntimeException)
 {
@@ -199,7 +199,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL ChineseTranslation_UnoDialog:
 }
 void SAL_CALL ChineseTranslation_UnoDialog::setPropertyValue( const OUString&, const uno::Any& ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //only read only properties
+    
     throw beans::PropertyVetoException();
 }
 uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString& rPropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
@@ -238,23 +238,23 @@ uno::Any SAL_CALL ChineseTranslation_UnoDialog::getPropertyValue( const OUString
 }
 void SAL_CALL ChineseTranslation_UnoDialog::addPropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //only not bound properties -> ignore listener
+    
 }
 void SAL_CALL ChineseTranslation_UnoDialog::removePropertyChangeListener( const OUString& , const uno::Reference< beans::XPropertyChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //only not bound properties -> ignore listener
+    
 }
 void SAL_CALL ChineseTranslation_UnoDialog::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //only not bound properties -> ignore listener
+    
 }
 void SAL_CALL ChineseTranslation_UnoDialog::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //only not bound properties -> ignore listener
+    
 }
 
-//.............................................................................
-} //end namespace
-//.............................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

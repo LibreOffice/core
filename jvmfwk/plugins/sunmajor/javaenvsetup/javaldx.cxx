@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,7 +46,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     if( hasOption("--help",argc, argv) || hasOption("-h", argc, argv))
     {
-        fprintf(stdout, HELP_TEXT);// default
+        fprintf(stdout, HELP_TEXT);
         return 0;
     }
     javaFrameworkError errcode = JFW_E_NONE;
@@ -54,7 +54,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     errcode = jfw_getEnabled( & bEnabled);
     if (errcode == JFW_E_NONE && bEnabled == sal_False)
     {
-            //Do not do any preparation because that may only slow startup time.
+            
         return 0;
     }
     else if (errcode != JFW_E_NONE && errcode != JFW_E_DIRECT_MODE)
@@ -80,7 +80,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
     else
     {
-        //check if the JRE was not uninstalled
+        
         sal_Bool bExist = sal_False;
         errcode = jfw_existJRE(pInfo, &bExist);
         if (errcode == JFW_E_NONE)
@@ -96,7 +96,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
 
     OUString aVendor( pInfo->sVendor );
-    // Only do something if the sunjavaplugin created this JavaInfo
+    
     if ( aVendor != "Sun Microsystems Inc." &&
          aVendor != "Oracle Corporation" &&
          aVendor != "IBM Corporation" &&
@@ -123,7 +123,7 @@ OString getLD_LIBRARY_PATH(const rtl::ByteSequence & vendorData)
     const sal_Unicode* chars = (sal_Unicode*) vendorData.getConstArray();
     sal_Int32 len = vendorData.getLength();
     OUString sData(chars, len / 2);
-    //the runtime lib is on the first line
+    
     sal_Int32 index = 0;
     OUString aToken = sData.getToken( 1, '\n', index);
 

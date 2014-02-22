@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/app.hxx>
@@ -117,7 +117,7 @@ SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
         m_pColorLB->InsertEntry( aColor, sName );
     }
     m_pColorLB->SetUpdateMode( true );
-    //Get the default paper mode
+    
     SwView *pView   = ::GetActiveView();
     if( pView )
     {
@@ -179,7 +179,7 @@ sal_Bool    SwTextGridPage::FillItemSet(SfxItemSet &rSet)
         bRet = sal_True;
     }
 
-    // draw ticks of ruler
+    
     SwView * pView = ::GetActiveView();
     if ( m_bHRulerChanged )
         pView->GetHRuler().DrawTicks();
@@ -362,19 +362,19 @@ sal_uInt16* SwTextGridPage::GetRanges()
 
 IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
 {
-    //if in squared mode
+    
     if ( m_bSquaredMode )
     {
         if(m_pCharsPerLineNF == pField)
         {
             long nWidth = (long)(m_aPageSize.Width() / m_pCharsPerLineNF->GetValue());
             m_pTextSizeMF->SetValue(m_pTextSizeMF->Normalize(nWidth), FUNIT_TWIP);
-            //prevent rounding errors in the MetricField by saving the used value
+            
             m_nRubyUserValue = nWidth;
             m_bRubyUserValue = sal_True;
 
         }
-        //set maximum line per page
+        
         {
             sal_Int32 nMaxLines = static_cast< sal_Int32 >(m_aPageSize.Height() /
                 (   m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)) +
@@ -384,7 +384,7 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
         SetLinesOrCharsRanges( *m_pLinesRangeFT , m_pLinesPerPageNF->GetMax() );
     SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
     }
-    else//in normal mode
+    else
     {
         if(m_pLinesPerPageNF == pField)
         {
@@ -409,14 +409,14 @@ IMPL_LINK(SwTextGridPage, CharorLineChangedHdl, SpinField*, pField)
 
 IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
 {
-    //if in squared mode
+    
     if( m_bSquaredMode )
     {
         if (m_pTextSizeMF == pField)
         {
             m_bRubyUserValue = sal_False;
 
-            // fdo#50941: set maximum characters per line
+            
             sal_Int32 nTextSize = static_cast< sal_Int32 >(m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)));
             if (nTextSize > 0)
             {
@@ -426,7 +426,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
                 SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
             }
         }
-        //set maximum line per page
+        
         {
             sal_Int32 nMaxLines = static_cast< sal_Int32 >(m_aPageSize.Height() /
                 (   m_pTextSizeMF->Denormalize(m_pTextSizeMF->GetValue(FUNIT_TWIP)) +
@@ -453,7 +453,7 @@ IMPL_LINK(SwTextGridPage, TextSizeChangedHdl, SpinField*, pField)
             m_pCharsPerLineNF->SetValue( nMaxChar );
             SetLinesOrCharsRanges( *m_pCharsRangeFT , m_pCharsPerLineNF->GetMax() );
         }
-        //rubySize is disabled
+        
     }
     GridModifyHdl(0);
     return 0;
@@ -465,7 +465,7 @@ IMPL_LINK(SwTextGridPage, GridTypeHdl, RadioButton*, pButton)
     m_pLayoutFL->Enable(bEnable);
     m_pDisplayFL->Enable(bEnable);
 
-    //one special case
+    
     if(bEnable)
         DisplayGridHdl(m_pDisplayCB);
 

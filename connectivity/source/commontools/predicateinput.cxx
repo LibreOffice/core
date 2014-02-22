@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,10 +33,10 @@
 
 #include <boost/shared_ptr.hpp>
 
-//.........................................................................
+
 namespace dbtools
 {
-//.........................................................................
+
 
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::util::XNumberFormatsSupplier;
@@ -59,8 +59,8 @@ namespace dbtools
 
     using ::connectivity::OSQLParseNode;
 
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
     static sal_Unicode lcl_getSeparatorChar( const OUString& _rSeparator, sal_Unicode _nFallback )
     {
         OSL_ENSURE( !_rSeparator.isEmpty(), "::lcl_getSeparatorChar: invalid separator string!" );
@@ -71,10 +71,10 @@ namespace dbtools
         return nReturn;
     }
 
-    //=====================================================================
-    //= OPredicateInputController
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     sal_Bool OPredicateInputController::getSeparatorChars( const Locale& _rLocale, sal_Unicode& _rDecSep, sal_Unicode& _rThdSep ) const
     {
         _rDecSep = '.';
@@ -97,7 +97,7 @@ namespace dbtools
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
+    
     OPredicateInputController::OPredicateInputController(
         const Reference< XComponentContext >& rxContext, const Reference< XConnection >& _rxConnection, const IParseContext* _pParseContext )
         : m_xConnection( _rxConnection )
@@ -105,7 +105,7 @@ namespace dbtools
     {
         try
         {
-            // create a number formatter / number formats supplier pair
+            
             OSL_ENSURE( rxContext.is(), "OPredicateInputController::OPredicateInputController: need a service factory!" );
             if ( rxContext.is() )
             {
@@ -121,7 +121,7 @@ namespace dbtools
             else
                 m_xFormatter->attachNumberFormatsSupplier( xNumberFormats );
 
-            // create the locale data
+            
             if ( rxContext.is() )
             {
                 m_xLocaleData = LocaleData::create( rxContext );
@@ -133,12 +133,12 @@ namespace dbtools
         }
     }
 
-    //---------------------------------------------------------------------
+    
     OSQLParseNode* OPredicateInputController::implPredicateTree(OUString& _rErrorMessage, const OUString& _rStatement, const Reference< XPropertySet > & _rxField) const
     {
         OSQLParseNode* pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, _rStatement, m_xFormatter, _rxField );
         if ( !pReturn )
-        {   // is it a text field ?
+        {   
             sal_Int32 nType = DataType::OTHER;
             _rxField->getPropertyValue("Type") >>= nType;
 
@@ -147,7 +147,7 @@ namespace dbtools
                 ||  ( DataType::LONGVARCHAR == nType )
                 ||  ( DataType::CLOB        == nType )
                 )
-            {   // yes -> force a quoted text and try again
+            {   
                 OUString sQuoted( _rStatement );
                 if  (   !sQuoted.isEmpty()
                     &&  (   !sQuoted.startsWith("'")
@@ -173,13 +173,13 @@ namespace dbtools
                 pReturn = const_cast< OSQLParser& >( m_aParser ).predicateTree( _rErrorMessage, sQuoted, m_xFormatter, _rxField );
             }
 
-            // one more fallback: for numeric fields, and value strings containing a decimal/thousands separator
-            // problem which is to be solved with this:
-            // * a system locale "german"
-            // * a column formatted with an english number format
-            // => the output is german (as we use the system locale for this), i.e. "3,4"
-            // => the input does not recognize the german text, as predicateTree uses the number format
-            //    of the column to determine the main locale - the locale on the context is only a fallback
+            
+            
+            
+            
+            
+            
+            
             if  (   ( DataType::FLOAT == nType )
                 ||  ( DataType::REAL == nType )
                 ||  ( DataType::DOUBLE == nType )
@@ -188,12 +188,12 @@ namespace dbtools
                 )
             {
                 const IParseContext& rParseContext = m_aParser.getContext();
-                // get the separators for the locale of our parse context
+                
                 sal_Unicode nCtxDecSep;
                 sal_Unicode nCtxThdSep;
                 getSeparatorChars( rParseContext.getPreferredLocale(), nCtxDecSep, nCtxThdSep );
 
-                // determine the locale of the column we're building a predicate string for
+                
                 sal_Unicode nFmtDecSep( nCtxDecSep );
                 sal_Unicode nFmtThdSep( nCtxThdSep );
                 try
@@ -212,7 +212,7 @@ namespace dbtools
                                 OUString( "Locale" )
                             ) >>= aFormatLocale;
 
-                            // valid locale
+                            
                             if ( !aFormatLocale.Language.isEmpty() )
                             {
                                 getSeparatorChars( aFormatLocale, nFmtDecSep, nCtxThdSep );
@@ -228,8 +228,8 @@ namespace dbtools
                 sal_Bool bDecDiffers = ( nCtxDecSep != nFmtDecSep );
                 sal_Bool bFmtDiffers = ( nCtxThdSep != nFmtThdSep );
                 if ( bDecDiffers || bFmtDiffers )
-                {   // okay, at least one differs
-                    // "translate" the value into the "format locale"
+                {   
+                    
                     OUString sTranslated( _rStatement );
                     const sal_Unicode nIntermediate( '_' );
                     sTranslated = sTranslated.replace( nCtxDecSep,  nIntermediate );
@@ -243,7 +243,7 @@ namespace dbtools
         return pReturn;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OPredicateInputController::normalizePredicateString(
         OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField, OUString* _pErrorMessage ) const
     {
@@ -253,7 +253,7 @@ namespace dbtools
         sal_Bool bSuccess = sal_False;
         if ( m_xConnection.is() && m_xFormatter.is() && _rxField.is() )
         {
-            // parse the string
+            
             OUString sError;
             OUString sTransformedText( _rPredicateValue );
             OSQLParseNode* pParseNode = implPredicateTree( sError, sTransformedText, _rxField );
@@ -265,7 +265,7 @@ namespace dbtools
                 sal_Unicode nDecSeparator, nThousandSeparator;
                 getSeparatorChars( rParseContext.getPreferredLocale(), nDecSeparator, nThousandSeparator );
 
-                // translate it back into a string
+                
                 sTransformedText = OUString();
                 pParseNode->parseNodeToPredicateStr(
                     sTransformedText, m_xConnection, m_xFormatter, _rxField, OUString(),
@@ -281,7 +281,7 @@ namespace dbtools
         return bSuccess;
     }
 
-    //---------------------------------------------------------------------
+    
     OUString OPredicateInputController::getPredicateValue(
         const OUString& _rPredicateValue, const Reference< XPropertySet > & _rxField,
         sal_Bool _bForStatementUse, OUString* _pErrorMessage ) const
@@ -292,14 +292,14 @@ namespace dbtools
         {
             OUString sValue( _rPredicateValue );
 
-            // a little problem : if the field is a text field, the normalizePredicateString added two
-            // '-characters to the text. If we would give this to predicateTree this would add
-            // two  additional '-characters which we don't want. So check the field format.
-            // FS - 06.01.00 - 71532
+            
+            
+            
+            
             sal_Bool bValidQuotedText = sValue.startsWith("'") && sValue.endsWith("'");
-                // again : as normalizePredicateString always did a conversion on the value text,
-                // bValidQuotedText == sal_True implies that we have a text field, as no other field
-                // values will be formatted with the quote characters
+                
+                
+                
             if ( bValidQuotedText )
             {
                 sValue = sValue.copy( 1, sValue.getLength() - 2 );
@@ -315,8 +315,8 @@ namespace dbtools
                 }
             }
 
-            // The following is mostly stolen from the former implementation in the parameter dialog
-            // (dbaccess/source/ui/dlg/paramdialog.cxx). I do not fully understand this .....
+            
+            
 
             OUString sError;
             OSQLParseNode* pParseNode = implPredicateTree( sError, sValue, _rxField );
@@ -342,7 +342,7 @@ namespace dbtools
         sal_Int32 nType = ::connectivity::OSQLParser::getFunctionReturnType(sField,&m_aParser.getContext());
         if ( nType == DataType::OTHER || sField.isEmpty() )
         {
-            // first try the international version
+            
             OUString sSql = "SELECT * FROM x WHERE " + sField + _rPredicateValue;
             ::std::auto_ptr<OSQLParseNode> pParseNode( const_cast< OSQLParser& >( m_aParser ).parseTree( sError, sSql, sal_True ) );
             nType = DataType::DOUBLE;
@@ -431,9 +431,9 @@ namespace dbtools
         }
         return sReturn;
     }
-//.........................................................................
-}   // namespace dbtools
-//.........................................................................
+
+}   
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

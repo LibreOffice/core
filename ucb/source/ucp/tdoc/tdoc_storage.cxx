@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <memory>
@@ -34,13 +34,13 @@ using namespace com::sun::star;
 using namespace tdoc_ucp;
 
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// StorageElementFactory Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 StorageElementFactory::StorageElementFactory(
     const uno::Reference< uno::XComponentContext > & rxContext,
@@ -50,14 +50,14 @@ StorageElementFactory::StorageElementFactory(
 {
 }
 
-//=========================================================================
+
 StorageElementFactory::~StorageElementFactory()
 {
     OSL_ENSURE( m_aMap.empty(),
         "StorageElementFactory::~StorageElementFactory - Dangling storages!" );
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage >
 StorageElementFactory::createTemporaryStorage()
     throw ( uno::Exception,
@@ -82,7 +82,7 @@ StorageElementFactory::createTemporaryStorage()
     return xStorage;
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage >
 StorageElementFactory::createStorage( const OUString & rUri,
                                       StorageAccessMode eMode )
@@ -125,19 +125,19 @@ StorageElementFactory::createStorage( const OUString & rUri,
     {
         if ( (*aIt).first.first == aUriKey )
         {
-            // URI matches. Now, check open mode.
+            
             bool bMatch = true;
             switch ( eMode )
             {
                 case READ:
-                    // No need to check; storage is at least readable.
+                    
                     bMatch = true;
                     break;
 
                 case READ_WRITE_NOCREATE:
                 case READ_WRITE_CREATE:
-                    // If found storage is writable, it can be used.
-                    // If not, a new one must be created.
+                    
+                    
                     bMatch = (*aIt).first.second;
                     break;
             }
@@ -152,14 +152,14 @@ StorageElementFactory::createStorage( const OUString & rUri,
     {
         uno::Reference< embed::XStorage > xParentStorage;
 
-        // documents never have a parent storage.
+        
         if ( !aUri.isDocument() )
         {
             xParentStorage = queryParentStorage( aUriKey, eMode );
 
             if ( !xParentStorage.is() )
             {
-                // requested to create new storage, but failed?
+                
                 OSL_ENSURE( eMode != READ_WRITE_CREATE,
                             "Unable to create parent storage!" );
                 return xParentStorage;
@@ -171,7 +171,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
 
         if ( !xStorage.is() )
         {
-            // requested to create new storage, but failed?
+            
             OSL_ENSURE( eMode != READ_WRITE_CREATE,
                         "Unable to create storage!" );
             return xStorage;
@@ -205,14 +205,14 @@ StorageElementFactory::createStorage( const OUString & rUri,
 
         uno::Reference< embed::XStorage > xParentStorage;
 
-        // documents never have a parent storage.
+        
         if ( !aUri.isDocument() )
         {
             xParentStorage = queryParentStorage( aUriKey, eMode );
 
             if ( !xParentStorage.is() )
             {
-                // requested to create new storage, but failed?
+                
                 OSL_ENSURE( eMode != READ_WRITE_CREATE,
                             "Unable to create parent storage!" );
                 return xParentStorage;
@@ -224,7 +224,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
 
         if ( !xStorage.is() )
         {
-            // requested to create new storage, but failed?
+            
             OSL_ENSURE( eMode != READ_WRITE_CREATE,
                         "Unable to create storage!" );
             return xStorage;
@@ -236,7 +236,7 @@ StorageElementFactory::createStorage( const OUString & rUri,
     }
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream >
 StorageElementFactory::createInputStream( const OUString & rUri,
                                           const OUString & rPassword )
@@ -252,7 +252,7 @@ StorageElementFactory::createInputStream( const OUString & rUri,
     uno::Reference< embed::XStorage > xParentStorage
         = queryParentStorage( rUri, READ );
 
-    // Each stream must have a parent storage.
+    
     if ( !xParentStorage.is() )
         return uno::Reference< io::XInputStream >();
 
@@ -265,7 +265,7 @@ StorageElementFactory::createInputStream( const OUString & rUri,
     return xStream->getInputStream();
 }
 
-//=========================================================================
+
 uno::Reference< io::XOutputStream >
 StorageElementFactory::createOutputStream( const OUString & rUri,
                                            const OUString & rPassword,
@@ -282,7 +282,7 @@ StorageElementFactory::createOutputStream( const OUString & rUri,
     uno::Reference< embed::XStorage > xParentStorage
         = queryParentStorage( rUri, READ_WRITE_CREATE );
 
-    // Each stream must have a parent storage.
+    
     if ( !xParentStorage.is() )
     {
         OSL_FAIL( "StorageElementFactory::createOutputStream - "
@@ -301,16 +301,16 @@ StorageElementFactory::createOutputStream( const OUString & rUri,
         return uno::Reference< io::XOutputStream >();
     }
 
-    // Note: We need a wrapper to hold a reference to the parent storage to
-    //       ensure that nobody else owns it at the moment we want to commit
-    //       our changes. (There can be only one writable instance at a time
-    //       and even no writable instance if there is  already another
-    //       read-only instance!)
+    
+    
+    
+    
+    
     return uno::Reference< io::XOutputStream >(
         new OutputStream( m_xContext, rUri, xParentStorage, xStream->getOutputStream() ) );
 }
 
-//=========================================================================
+
 uno::Reference< io::XStream >
 StorageElementFactory::createStream( const OUString & rUri,
                                      const OUString & rPassword,
@@ -327,7 +327,7 @@ StorageElementFactory::createStream( const OUString & rUri,
     uno::Reference< embed::XStorage > xParentStorage
         = queryParentStorage( rUri, READ_WRITE_CREATE );
 
-    // Each stream must have a parent storage.
+    
     if ( !xParentStorage.is() )
     {
         OSL_FAIL( "StorageElementFactory::createStream - "
@@ -350,7 +350,7 @@ StorageElementFactory::createStream( const OUString & rUri,
         new Stream( m_xContext, rUri, xParentStorage, xStream ) );
 }
 
-//=========================================================================
+
 void StorageElementFactory::releaseElement( Storage * pElement ) SAL_THROW(())
 {
     OSL_ASSERT( pElement );
@@ -359,11 +359,11 @@ void StorageElementFactory::releaseElement( Storage * pElement ) SAL_THROW(())
         m_aMap.erase( pElement->m_aContainerIt );
 }
 
-//=========================================================================
+
 //
-// Non-UNO interface
+
 //
-//=========================================================================
+
 
 uno::Reference< embed::XStorage > StorageElementFactory::queryParentStorage(
         const OUString & rUri, StorageAccessMode eMode )
@@ -381,14 +381,14 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryParentStorage(
     {
         xParentStorage = createStorage( aUri.getParentUri(), eMode );
         OSL_ENSURE( xParentStorage.is()
-                    // requested to create new storage, but failed?
+                    
                     || ( eMode != READ_WRITE_CREATE ),
                     "StorageElementFactory::queryParentStorage - No storage!" );
     }
     return xParentStorage;
 }
 
-//=========================================================================
+
 uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         const uno::Reference< embed::XStorage > & xParentStorage,
         const OUString & rUri,
@@ -405,7 +405,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
 
     if ( !xParentStorage.is() )
     {
-        // document storage
+        
 
         xStorage = m_xDocsMgr->queryStorage( aUri.getDocumentId() );
 
@@ -424,7 +424,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                     uno::Reference< uno::XInterface >() );
         }
 
-        // match xStorage's open mode against requested open mode
+        
 
         uno::Reference< beans::XPropertySet > xPropSet(
             xStorage, uno::UNO_QUERY );
@@ -444,26 +444,26 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
                     case READ:
                         if ( !( nOpenMode & embed::ElementModes::READ ) )
                         {
-                            // document opened, but not readable.
+                            
                             throw embed::InvalidStorageException(
                                 OUString(
                                     "Storage is open, but not readable!" ),
                                 uno::Reference< uno::XInterface >() );
                         }
-                        // storage okay
+                        
                         break;
 
                     case READ_WRITE_NOCREATE:
                     case READ_WRITE_CREATE:
                         if ( !( nOpenMode & embed::ElementModes::WRITE ) )
                         {
-                            // document opened, but not writable.
+                            
                             throw embed::InvalidStorageException(
                                 OUString(
                                     "Storage is open, but not writable!" ),
                                 uno::Reference< uno::XInterface >() );
                         }
-                        // storage okay
+                        
                         break;
                 }
             }
@@ -501,7 +501,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
     }
     else
     {
-        // sub storage
+        
 
         const OUString & rName = aUri.getDecodedName();
 
@@ -516,7 +516,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
             }
             catch ( io::IOException const & )
             {
-                // Another chance: Try to clone storage.
+                
                 xStorage = createTemporaryStorage();
                 xParentStorage->copyStorageElementLastCommitTo( rName,
                                                                 xStorage );
@@ -537,7 +537,7 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
     return xStorage;
 }
 
-//=========================================================================
+
 uno::Reference< io::XStream >
 StorageElementFactory::queryStream(
                 const uno::Reference< embed::XStorage > & xParentStorage,
@@ -618,7 +618,7 @@ StorageElementFactory::queryStream(
                 uno::Reference< uno::XInterface >() );
     }
 
-    // No object re-usage mechanism; streams are seekable => not stateless.
+    
 
     uno::Reference< io::XStream > xStream;
     if ( !rPassword.isEmpty() )

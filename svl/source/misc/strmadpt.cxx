@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -132,19 +132,19 @@ inline sal_uInt32 SvDataPipe_Impl::getReadPosition() const
 }
 
 //
-//  SvOutputStreamOpenLockBytes
+
 //
 
 TYPEINIT1(SvOutputStreamOpenLockBytes, SvOpenLockBytes)
 
-// virtual
+
 ErrCode SvOutputStreamOpenLockBytes::ReadAt(sal_uLong, void *, sal_uLong, sal_uLong *)
     const
 {
     return ERRCODE_IO_CANTREAD;
 }
 
-// virtual
+
 ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uLong nPos, void const * pBuffer,
                                              sal_uLong nCount, sal_uLong * pWritten)
 {
@@ -153,7 +153,7 @@ ErrCode SvOutputStreamOpenLockBytes::WriteAt(sal_uLong nPos, void const * pBuffe
     return FillAppend(pBuffer, nCount, pWritten);
 }
 
-// virtual
+
 ErrCode SvOutputStreamOpenLockBytes::Flush() const
 {
     if (!m_xOutputStream.is())
@@ -169,13 +169,13 @@ ErrCode SvOutputStreamOpenLockBytes::Flush() const
     return ERRCODE_NONE;
 }
 
-// virtual
+
 ErrCode SvOutputStreamOpenLockBytes::SetSize(sal_uLong)
 {
     return ERRCODE_IO_NOTSUPPORTED;
 }
 
-// virtual
+
 ErrCode SvOutputStreamOpenLockBytes::Stat(SvLockBytesStat * pStat,
                                           SvLockBytesStatFlag) const
 {
@@ -184,7 +184,7 @@ ErrCode SvOutputStreamOpenLockBytes::Stat(SvLockBytesStat * pStat,
     return ERRCODE_NONE;
 }
 
-// virtual
+
 ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
                                                 sal_uLong nCount,
                                                 sal_uLong * pWritten)
@@ -214,19 +214,19 @@ ErrCode SvOutputStreamOpenLockBytes::FillAppend(void const * pBuffer,
     return ERRCODE_NONE;
 }
 
-// virtual
+
 sal_uLong SvOutputStreamOpenLockBytes::Tell() const
 {
     return m_nPosition;
 }
 
-// virtual
+
 sal_uLong SvOutputStreamOpenLockBytes::Seek(sal_uLong)
 {
     return m_nPosition;
 }
 
-// virtual
+
 void SvOutputStreamOpenLockBytes::Terminate()
 {
     if (m_xOutputStream.is())
@@ -242,10 +242,10 @@ void SvOutputStreamOpenLockBytes::Terminate()
 }
 
 //
-//  SvLockBytesInputStream
+
 //
 
-// virtual
+
 uno::Any SAL_CALL SvLockBytesInputStream::queryInterface(uno::Type const &
                                                              rType)
     throw (uno::RuntimeException)
@@ -257,19 +257,19 @@ uno::Any SAL_CALL SvLockBytesInputStream::queryInterface(uno::Type const &
     return aReturn.hasValue() ? aReturn : OWeakObject::queryInterface(rType);
 }
 
-// virtual
+
 void SAL_CALL SvLockBytesInputStream::acquire() throw ()
 {
     OWeakObject::acquire();
 }
 
-// virtual
+
 void SAL_CALL SvLockBytesInputStream::release() throw ()
 {
     OWeakObject::release();
 }
 
-// virtual
+
 sal_Int32 SAL_CALL
 SvLockBytesInputStream::readBytes(uno::Sequence< sal_Int8 > & rData,
                                   sal_Int32 nBytesToRead)
@@ -308,7 +308,7 @@ SvLockBytesInputStream::readBytes(uno::Sequence< sal_Int8 > & rData,
     return nSize;
 }
 
-// virtual
+
 sal_Int32 SAL_CALL
 SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
                                       sal_Int32 nMaxBytesToRead)
@@ -342,7 +342,7 @@ SvLockBytesInputStream::readSomeBytes(uno::Sequence< sal_Int8 > & rData,
     return sal_Int32(nCount);
 }
 
-// virtual
+
 void SAL_CALL SvLockBytesInputStream::skipBytes(sal_Int32 nBytesToSkip)
     throw (io::IOException, uno::RuntimeException)
 {
@@ -355,7 +355,7 @@ void SAL_CALL SvLockBytesInputStream::skipBytes(sal_Int32 nBytesToSkip)
     m_nPosition += nBytesToSkip;
 }
 
-// virtual
+
 sal_Int32 SAL_CALL SvLockBytesInputStream::available()
     throw (io::IOException, uno::RuntimeException)
 {
@@ -373,7 +373,7 @@ sal_Int32 SAL_CALL SvLockBytesInputStream::available()
                SAL_MAX_INT32;
 }
 
-// virtual
+
 void SAL_CALL SvLockBytesInputStream::closeInput()
     throw (io::IOException, uno::RuntimeException)
 {
@@ -382,7 +382,7 @@ void SAL_CALL SvLockBytesInputStream::closeInput()
     m_xLockBytes = 0;
 }
 
-// virtual
+
 void SAL_CALL SvLockBytesInputStream::seek(sal_Int64 nLocation)
     throw (lang::IllegalArgumentException, io::IOException,
            uno::RuntimeException)
@@ -394,7 +394,7 @@ void SAL_CALL SvLockBytesInputStream::seek(sal_Int64 nLocation)
     m_nPosition = nLocation;
 }
 
-// virtual
+
 sal_Int64 SAL_CALL SvLockBytesInputStream::getPosition()
     throw (io::IOException, uno::RuntimeException)
 {
@@ -403,7 +403,7 @@ sal_Int64 SAL_CALL SvLockBytesInputStream::getPosition()
     return m_nPosition;
 }
 
-// virtual
+
 sal_Int64 SAL_CALL SvLockBytesInputStream::getLength()
     throw (io::IOException, uno::RuntimeException)
 {
@@ -412,7 +412,7 @@ sal_Int64 SAL_CALL SvLockBytesInputStream::getLength()
     SvLockBytesStat aStat;
     if (m_xLockBytes->Stat(&aStat, SVSTATFLAG_DEFAULT) != ERRCODE_NONE)
         throw io::IOException();
-#if SAL_TYPES_SIZEOFPOINTER > 4 // avoid warnings if sal_Size < sal_Int64
+#if SAL_TYPES_SIZEOFPOINTER > 4 
     if (aStat.nSize > static_cast<sal_uInt64>(SAL_MAX_INT64))
         throw io::IOException();
 #endif
@@ -420,7 +420,7 @@ sal_Int64 SAL_CALL SvLockBytesInputStream::getLength()
 }
 
 //
-//  SvInputStream
+
 //
 
 bool SvInputStream::open()
@@ -442,7 +442,7 @@ bool SvInputStream::open()
     return true;
 }
 
-// virtual
+
 sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
 {
     if (!open())
@@ -536,18 +536,18 @@ sal_uLong SvInputStream::GetData(void * pData, sal_uLong nSize)
     return nRead;
 }
 
-// virtual
+
 sal_uLong SvInputStream::PutData(void const *, sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
 }
 
-// virtual
+
 void SvInputStream::FlushData()
 {}
 
-// virtual
+
 sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
 {
     if (open())
@@ -572,7 +572,7 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
                     {
                     }
                 else
-                    return Tell(); //@@@
+                    return Tell(); 
             }
             else
                 return Tell();
@@ -601,7 +601,7 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
         }
         else if ( nPos > Tell() )
         {
-            // Read out the bytes
+            
             sal_Int32 nRead = nPos - Tell();
             uno::Sequence< sal_Int8 > aBuffer;
             m_xStream->readBytes( aBuffer, nRead );
@@ -614,7 +614,7 @@ sal_uLong SvInputStream::SeekPos(sal_uLong nPos)
     return Tell();
 }
 
-// virtual
+
 void SvInputStream::SetSize(sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
@@ -631,7 +631,7 @@ SvInputStream::SvInputStream(
     SetBufferSize(0);
 }
 
-// virtual
+
 SvInputStream::~SvInputStream()
 {
     if (m_xStream.is())
@@ -647,20 +647,20 @@ SvInputStream::~SvInputStream()
     delete m_pPipe;
 }
 
-// virtual
+
 sal_uInt16 SvInputStream::IsA() const
 {
     return 0;
 }
 
-// virtual
+
 void SvInputStream::AddMark(sal_uLong nPos)
 {
     if (open() && m_pPipe)
         m_pPipe->addMark(nPos);
 }
 
-// virtual
+
 void SvInputStream::RemoveMark(sal_uLong nPos)
 {
     if (open() && m_pPipe)
@@ -668,17 +668,17 @@ void SvInputStream::RemoveMark(sal_uLong nPos)
 }
 
 //
-//  SvOutputStream
+
 //
 
-// virtual
+
 sal_uLong SvOutputStream::GetData(void *, sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
 }
 
-// virtual
+
 sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
 {
     if (!m_xStream.is())
@@ -712,14 +712,14 @@ sal_uLong SvOutputStream::PutData(void const * pData, sal_uLong nSize)
     return nWritten;
 }
 
-// virtual
+
 sal_uLong SvOutputStream::SeekPos(sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
     return 0;
 }
 
-// virtual
+
 void SvOutputStream::FlushData()
 {
     if (!m_xStream.is())
@@ -736,7 +736,7 @@ void SvOutputStream::FlushData()
     }
 }
 
-// virtual
+
 void SvOutputStream::SetSize(sal_uLong)
 {
     SetError(ERRCODE_IO_NOTSUPPORTED);
@@ -749,7 +749,7 @@ SvOutputStream::SvOutputStream(uno::Reference< io::XOutputStream > const &
     SetBufferSize(0);
 }
 
-// virtual
+
 SvOutputStream::~SvOutputStream()
 {
     if (m_xStream.is())
@@ -764,14 +764,14 @@ SvOutputStream::~SvOutputStream()
     }
 }
 
-// virtual
+
 sal_uInt16 SvOutputStream::IsA() const
 {
     return 0;
 }
 
 //
-//  SvDataPipe_Impl
+
 //
 
 bool SvDataPipe_Impl::remove(Page * pPage)

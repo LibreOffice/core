@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sax/tools/converter.hxx>
@@ -194,7 +194,7 @@ void RecentDocsView::loadRecentDocs()
     CalculateItemPositions();
     Invalidate();
 
-    // Set prefered width
+    
     if( mFilteredItemList.empty() )
     {
         Font aOldFont(GetFont());
@@ -240,7 +240,7 @@ void RecentDocsView::OpenItem( const ThumbnailViewItem *pItem )
     if (!pRecentItem)
         return;
 
-    // show busy mouse pointer
+    
     SetPointer(Pointer(POINTER_WAIT));
 
     Reference< XDispatch >            xDispatch;
@@ -266,7 +266,7 @@ void RecentDocsView::OpenItem( const ThumbnailViewItem *pItem )
     aArgsList[0].Name = "Referer";
     aArgsList[0].Value = makeAny( OUString( "private:user" ) );
 
-    // documents will never be opened as templates
+    
     aArgsList[1].Name = "AsTemplate";
     aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
 
@@ -274,9 +274,9 @@ void RecentDocsView::OpenItem( const ThumbnailViewItem *pItem )
 
     if ( xDispatch.is() )
     {
-        // Call dispatch asychronously as we can be destroyed while dispatch is
-        // executed. VCL is not able to survive this as it wants to call listeners
-        // after select!!!
+        
+        
+        
         LoadRecentFile* pLoadRecentFile = new LoadRecentFile;
         pLoadRecentFile->xDispatch  = xDispatch;
         pLoadRecentFile->aTargetURL = aTargetURL;
@@ -290,7 +290,7 @@ void RecentDocsView::Paint( const Rectangle &aRect )
 {
     if ( mItemList.size() == 0 )
     {
-        // No recent files to be shown yet. Show a welcome screen.
+        
         Font aOldFont(GetFont());
         Font aNewFont(aOldFont);
         aNewFont.SetHeight(20);
@@ -348,9 +348,9 @@ IMPL_STATIC_LINK_NOINSTANCE( RecentDocsView, ExecuteHdl_Impl, LoadRecentFile*, p
 {
     try
     {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
+        
+        
+        
         pLoadRecentFile->xDispatch->dispatch( pLoadRecentFile->aTargetURL, pLoadRecentFile->aArgSeq );
     }
     catch ( const Exception& )

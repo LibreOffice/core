@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleBase.hxx"
@@ -32,7 +32,7 @@
 #include <com/sun/star/drawing/LineStyle.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <rtl/ustrbuf.hxx>
-// for SolarMutex
+
 #include <vcl/svapp.hxx>
 #include <rtl/uuid.h>
 #include <cppuhelper/queryinterface.hxx>
@@ -86,7 +86,7 @@ AccessibleBase::AccessibleBase(
         m_bAlwaysTransparent( bAlwaysTransparent ),
         m_bStateSetInitialized( false )
 {
-    // initialize some states
+    
     OSL_ASSERT( m_pStateSetHelper );
     m_pStateSetHelper->AddState( AccessibleStateType::ENABLED );
     m_pStateSetHelper->AddState( AccessibleStateType::SHOWING );
@@ -116,7 +116,7 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
 {
     if( GetId() == rId )
     {
-        // event is addressed to this object
+        
 
         ::com::sun::star::uno::Any aEmpty;
         ::com::sun::star::uno::Any aSelected;
@@ -174,7 +174,7 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
 
             case PROPERTY_CHANGE:
                 {
-                    //not implemented --> rebuild all
+                    
                 }
                 break;
         }
@@ -185,7 +185,7 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
         bool bStop = false;
 
         ClearableMutexGuard aGuard( GetMutex() );
-        // make local copy for notification
+        
         ChildListVectorType aLocalChildList( m_aChildList );
         aGuard.clear();
 
@@ -194,8 +194,8 @@ bool AccessibleBase::NotifyEvent( EventType eEventType, const AccessibleUniqueId
              ( aIter != aEndIter ) && ( ! bStop ) ;
              ++aIter )
         {
-            // Note: at this place we must be sure to have an AccessibleBase
-            // object in the UNO reference to XAccessible !
+            
+            
             bStop = (*static_cast< AccessibleBase * >
                      ( (*aIter).get() )).NotifyEvent( eEventType, rId );
         }
@@ -234,7 +234,7 @@ bool AccessibleBase::UpdateChildren()
                                 ! m_bChildrenInitialized );
     }
 
-    // update unguarded
+    
     if( bMustUpdateChildren )
         m_bChildrenInitialized = ImplUpdateChildren();
 
@@ -304,7 +304,7 @@ void AccessibleBase::AddChild( AccessibleBase * pChild  )
 
         m_aChildOIDMap[ pChild->GetId() ] = xChild;
 
-        // inform listeners of new child
+        
         if( m_bChildrenInitialized )
         {
             Any aEmpty, aNew;
@@ -328,24 +328,24 @@ void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
     {
         Reference< XAccessible > xChild( aIt->second );
 
-        // remove from map
+        
         m_aChildOIDMap.erase( aIt );
 
-        // search child in vector
+        
         ChildListVectorType::iterator aVecIter =
             ::std::find( m_aChildList.begin(), m_aChildList.end(), xChild );
 
         OSL_ENSURE( aVecIter != m_aChildList.end(),
                     "Inconsistent ChildMap" );
 
-        // remove child from vector
+        
         m_aChildList.erase( aVecIter );
         bool bInitialized = m_bChildrenInitialized;
 
-        // call listeners unguarded
+        
         aGuard.clear();
 
-        // inform listeners of removed child
+        
         if( bInitialized )
         {
             Any aEmpty, aOld;
@@ -354,7 +354,7 @@ void AccessibleBase::RemoveChildByOId( const ObjectIdentifier& rOId )
             BroadcastAccEvent( AccessibleEventId::CHILD, aEmpty, aOld );
         }
 
-        // dispose the child
+        
         Reference< lang::XComponent > xComp( xChild, UNO_QUERY );
         if( xComp.is())
             xComp->dispose();
@@ -391,21 +391,21 @@ void AccessibleBase::BroadcastAccEvent(
 
     if ( !m_nEventNotifierId && !bSendGlobally )
         return;
-        // if we don't have a client id for the notifier, then we don't have listeners, then
-        // we don't need to notify anything
-        //except SendGlobally for focus handling?
+        
+        
+        
 
-    // the const cast is needed, because UNO parameters are never const
+    
     const AccessibleEventObject aEvent(
         const_cast< uno::XWeak * >( static_cast< const uno::XWeak * >( this )),
         nId, rNew, rOld );
 
-    if ( m_nEventNotifierId ) // let the notifier handle this event
+    if ( m_nEventNotifierId ) 
         ::comphelper::AccessibleEventNotifier::addEvent( m_nEventNotifierId, aEvent );
 
     aGuard.clear();
 
-    // send event to global message queue
+    
     if( bSendGlobally )
     {
         ::vcl::unohelper::NotifyAccessibleStateEventGlobally( aEvent );
@@ -416,17 +416,17 @@ void AccessibleBase::KillAllChildren()
 {
     ClearableMutexGuard aGuard( GetMutex() );
 
-    // make local copy for notification
+    
     ChildListVectorType aLocalChildList( m_aChildList );
 
-    // remove all children
+    
     m_aChildList.clear();
     m_aChildOIDMap.clear();
 
     aGuard.clear();
 
-    // call dispose for all children
-    // and notify listeners
+    
+    
     Reference< lang::XComponent > xComp;
     Any aEmpty, aOld;
     ChildListVectorType::const_iterator aEndIter = aLocalChildList.end();
@@ -464,36 +464,36 @@ AccessibleUniqueId AccessibleBase::GetId() const
     return m_aAccInfo.m_aOID;
 }
 
-// ________ (XComponent::dispose) ________
+
 void SAL_CALL AccessibleBase::disposing()
 {
     ClearableMutexGuard aGuard( GetMutex() );
     OSL_ENSURE( ! m_bIsDisposed, "dispose() called twice" );
 
-    // notify disposing to all AccessibleEvent listeners asynchron
+    
     if ( m_nEventNotifierId )
     {
         ::comphelper::AccessibleEventNotifier::revokeClientNotifyDisposing( m_nEventNotifierId, *this );
         m_nEventNotifierId = 0;
     }
 
-    // reset pointers
+    
     m_aAccInfo.m_pParent = NULL;
 
-    // invalidate implementation for helper, but keep UNO reference to still
-    // allow a tool to query the DEFUNC state.
-    // Note: The object will be deleted when the last reference is released
+    
+    
+    
     m_pStateSetHelper = NULL;
 
-    // attach new empty state set helper to member reference
+    
     ::utl::AccessibleStateSetHelper * pHelper = new ::utl::AccessibleStateSetHelper();
     pHelper->AddState( AccessibleStateType::DEFUNC );
-    // release old helper and attach new one
+    
     m_aStateSet.set( pHelper );
 
     m_bIsDisposed = true;
 
-    // call listeners unguarded
+    
     aGuard.clear();
 
     if( m_bMayHaveChildren )
@@ -504,14 +504,14 @@ void SAL_CALL AccessibleBase::disposing()
         OSL_ENSURE( m_aChildList.empty(), "Child list should be empty" );
 }
 
-// ________ XAccessible ________
+
 Reference< XAccessibleContext > SAL_CALL AccessibleBase::getAccessibleContext()
     throw (RuntimeException)
 {
     return this;
 }
 
-// ________ AccessibleBase::XAccessibleContext ________
+
 sal_Int32 SAL_CALL AccessibleBase::getAccessibleChildCount()
     throw (RuntimeException)
 {
@@ -525,7 +525,7 @@ sal_Int32 SAL_CALL AccessibleBase::getAccessibleChildCount()
 
     aGuard.clear();
 
-    // update unguarded
+    
     if( bMustUpdateChildren )
         UpdateChildren();
 
@@ -645,13 +645,13 @@ lang::Locale SAL_CALL AccessibleBase::getLocale()
     return Application::GetSettings().GetLanguageTag().getLocale();
 }
 
-// ________ AccessibleBase::XAccessibleComponent ________
+
 sal_Bool SAL_CALL AccessibleBase::containsPoint( const awt::Point& aPoint )
     throw (RuntimeException)
 {
     awt::Rectangle aRect( getBounds() );
 
-    // contains() works with relative coordinates
+    
     aRect.X = 0;
     aRect.Y = 0;
 
@@ -668,11 +668,11 @@ Reference< XAccessible > SAL_CALL AccessibleBase::getAccessibleAtPoint( const aw
     Reference< XAccessible > aResult;
     awt::Rectangle aRect( getBounds());
 
-    // children are positioned relative to this object, so translate bound rect
+    
     aRect.X = 0;
     aRect.Y = 0;
 
-    // children must be inside the own bound rect
+    
     if( ( aRect.X <= aPoint.X && aPoint.X <= (aRect.X + aRect.Width) ) &&
         ( aRect.Y <= aPoint.Y && aPoint.Y <= (aRect.Y + aRect.Height)))
     {
@@ -718,8 +718,8 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
             SolarMutexGuard aSolarGuard;
             aRect = pWindow->LogicToPixel( aRect );
 
-            // aLogicRect is relative to the page, but we need a value relative
-            // to the parent object
+            
+            
             awt::Point aParentLocOnScreen;
             uno::Reference< XAccessibleComponent > xParent( getAccessibleParent(), uno::UNO_QUERY );
             if( xParent.is() )
@@ -810,7 +810,7 @@ sal_Int32 AccessibleBase::getColor( eColorType eColType )
     OUString aObjectCID = aOID.getObjectCID();
     if( eType == OBJECTTYPE_LEGEND_ENTRY )
     {
-        // for colors get the data series/point properties
+        
         OUString aParentParticle( ObjectIdentifier::getFullParentParticle( aObjectCID ));
         aObjectCID = ObjectIdentifier::createClassifiedIdentifierForParticle( aParentParticle );
     }
@@ -890,7 +890,7 @@ sal_Int32 AccessibleBase::getColor( eColorType eColType )
     return nResult;
 }
 
-// ________ AccessibleBase::XServiceInfo ________
+
 OUString SAL_CALL AccessibleBase::getImplementationName()
     throw (RuntimeException)
 {
@@ -914,13 +914,13 @@ uno::Sequence< OUString > SAL_CALL AccessibleBase::getSupportedServiceNames()
     return aSeq;
 }
 
-// ________ AccessibleBase::XEventListener ________
+
 void SAL_CALL AccessibleBase::disposing( const lang::EventObject& /*Source*/ )
     throw (RuntimeException)
 {
 }
 
-// ________ XAccessibleEventBroadcasters ________
+
 void SAL_CALL AccessibleBase::addAccessibleEventListener( const Reference< XAccessibleEventListener >& xListener )
     throw (RuntimeException)
 {
@@ -945,13 +945,13 @@ void SAL_CALL AccessibleBase::removeAccessibleEventListener( const Reference< XA
         sal_Int32 nListenerCount = ::comphelper::AccessibleEventNotifier::removeEventListener( m_nEventNotifierId, xListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
+            
             ::comphelper::AccessibleEventNotifier::revokeClient( m_nEventNotifierId );
             m_nEventNotifierId = 0;
         }
     }
 }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

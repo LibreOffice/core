@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLDDELinksContext.hxx"
@@ -31,7 +31,7 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 
-//------------------------------------------------------------------
+
 
 ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
@@ -40,7 +40,7 @@ ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
-    // here are no attributes
+    
     rImport.LockSolarMutex();
 }
 
@@ -85,7 +85,7 @@ ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport,
     nRows(0),
     nMode(SC_DDE_DEFAULT)
 {
-    // here are no attributes
+    
 }
 
 ScXMLDDELinkContext::~ScXMLDDELinkContext()
@@ -148,11 +148,11 @@ void ScXMLDDELinkContext::EndElement()
     {
         bool bSizeMatch = (static_cast<size_t>(nColumns * nRows) == aDDELinkTable.size());
         OSL_ENSURE( bSizeMatch, "ScXMLDDELinkContext::EndElement: matrix dimension doesn't match cells count");
-        // Excel writes bad ODF in that it does not write the
-        // table:number-columns-repeated attribute of the
-        // <table:table-column> element, but apparently uses the number of
-        // <table:table-cell> elements within a <table:table-row> element to
-        // determine the column count instead. Be lenient ...
+        
+        
+        
+        
+        
         if (!bSizeMatch && nColumns == 1)
         {
             nColumns = aDDELinkTable.size() / nRows;
@@ -263,7 +263,7 @@ ScXMLDDETableContext::ScXMLDDETableContext( ScXMLImport& rImport,
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDDELink(pTempDDELink)
 {
-    // here are no attributes
+    
 }
 
 ScXMLDDETableContext::~ScXMLDDETableContext()

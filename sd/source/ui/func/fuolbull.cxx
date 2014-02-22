@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fuolbull.hxx"
@@ -72,7 +72,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
 
     if( !pArgs )
     {
-        // fill ItemSet for Dialog
+        
         SfxItemSet aEditAttr( mpDoc->GetPool() );
         mpView->GetAttributes( aEditAttr );
 
@@ -80,7 +80,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
                              EE_ITEMS_START, EE_ITEMS_END );
         aNewAttr.Put( aEditAttr, false );
 
-        // create and execute dialog
+        
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
         SfxAbstractTabDialog* pDlg = pFact ? pFact->CreateSdOutlineBulletTabDlg( NULL, &aNewAttr, mpView ) : 0;
         if( pDlg )
@@ -129,7 +129,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
     mpView->SetAttributes(*pArgs);
 
 /* #i35937#
-    // invalidate possible affected fields
+    
     mpViewShell->Invalidate( FN_NUM_BULLET_ON );
 */
 }
@@ -142,7 +142,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     const sal_uInt16 nSId = rReq.GetSlot();
     if ( nSId != FN_SVX_SET_BULLET && nSId != FN_SVX_SET_NUMBER )
     {
-        // unexpected SfxRequest
+        
         return;
     }
 
@@ -161,7 +161,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     }
 
     const DrawViewShell* pDrawViewShell = dynamic_cast< DrawViewShell* >(mpViewShell);
-    //Init bullet level in "Customize" tab page in bullet dialog in master page view
+    
     const bool bInMasterView = pDrawViewShell && pDrawViewShell->GetEditMode() == EM_MASTERPAGE;
     if ( bInMasterView )
     {
@@ -171,13 +171,13 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
             const sal_uInt16 nLevel = mpView->GetSelectionLevel();
             if( nLevel != 0xFFFF )
             {
-                //save the itemset value
+                
                 SfxItemSet aStoreSet( aNewAttr );
                 aNewAttr.ClearItem();
-                //extend range
+                
                 aNewAttr.MergeRange( SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL );
                 aNewAttr.Put( aStoreSet );
-                //put current level user selected
+                
                 aNewAttr.Put( SfxUInt16Item( SID_PARAM_CUR_NUM_LEVEL, nLevel ) );
             }
         }
@@ -188,7 +188,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     bool bSwitchOff = false;
     if( nIdx == (sal_uInt16)0xFFFF )
     {
-        // If the nIdx is (sal_uInt16)0xFFFF, means set bullet status to on/off
+        
         nIdx = 1;
         bToggle = true;
     }
@@ -205,7 +205,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     {
         pNumRule = new SvxNumRule(*((SvxNumBulletItem*)pTmpItem)->GetNumRule());
 
-        // get numbering rule corresponding to <nIdx> and apply the needed number formats to <pNumRule>
+        
         NBOTypeMgrBase* pNumRuleMgr =
             NBOutlineTypeMgrFact::CreateInstance(
                 nSId == FN_SVX_SET_BULLET ? eNBOType::MIXBULLETS : eNBOType::NUMBERING );
@@ -220,7 +220,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
             SvxNumRule aTmpRule( *pNumRule );
             if ( nSId == FN_SVX_SET_BULLET && bToggle && nIdx==0 )
             {
-                // for toggling bullets get default numbering rule
+                
                 pNumRuleMgr->ApplyNumRule( aTmpRule, nIdx, nActNumLvl, true );
             }
             else
@@ -304,7 +304,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
 
 const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_uInt32& nNumItemId)
 {
-    //SvxNumBulletItem* pRetItem = NULL;
+    
     const SfxPoolItem* pTmpItem = NULL;
 
     if(aNewAttr.GetItemState(nNumItemId, false, &pTmpItem) == SFX_ITEM_SET)
@@ -358,7 +358,7 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
             if( pItem == NULL )
                 pItem = (SvxNumBulletItem*) aNewAttr.GetPool()->GetSecondaryPool()->GetPoolDefaultItem(EE_PARA_NUMBULLET);
 
-            //DBG_ASSERT( pItem, "Kein EE_PARA_NUMBULLET im Pool! [CL]" );
+            
 
             aNewAttr.Put(*pItem, EE_PARA_NUMBULLET);
 
@@ -381,11 +381,11 @@ const SfxPoolItem* FuOutlineBullet::GetNumBulletItem(SfxItemSet& aNewAttr, sal_u
                 return pTmpItem;
 
         }
-        //DBG_ASSERT(eState == SFX_ITEM_SET, "kein Item gefunden!")
+        
     }
     return pTmpItem;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

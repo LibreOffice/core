@@ -52,7 +52,7 @@ bool UnusedCode::VisitFunctionDecl( const FunctionDecl* declaration )
     if( const CXXMethodDecl* cxxmethod = dyn_cast< CXXMethodDecl >( declaration ))
         {
         if( !isUsed && cxxmethod->isVirtual())
-            { // Virtual methods are used also if a method they override is used.
+            { 
             for( CXXMethodDecl::method_iterator it = cxxmethod->begin_overridden_methods();
                  it != cxxmethod->end_overridden_methods();
                  ++it )
@@ -65,14 +65,14 @@ bool UnusedCode::VisitFunctionDecl( const FunctionDecl* declaration )
                 }
             }
         }
-    // Fully qualified name: declaration->getQualifiedNameAsString()
-    // Is used: isUsed
-    // The main source file compiled: compiler.getSourceManager().getFileEntryForID( compiler.getSourceManager().getMainFileID())->getName()
+    
+    
+    
     return true;
     }
 
 static Plugin::Registration< UnusedCode > X( "unusedcode" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

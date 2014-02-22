@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -25,22 +25,22 @@
 #include <rtl/locale.h>
 #include <rtl/ustring.hxx>
 
-#else   // MACOSX
+#else   
 #include <rtl/string.hxx>
 
-#endif  // MACOSX
+#endif  
 #include <rtl/instance.hxx>
 #include "i18nlangtag/languagetag.hxx"
 #include "i18nlangtag/mslangid.hxx"
 
-// =======================================================================
+
 
 static LanguageType nImplSystemLanguage = LANGUAGE_DONTKNOW;
 static LanguageType nImplSystemUILanguage = LANGUAGE_DONTKNOW;
 
-// -----------------------------------------------------------------------
 
-// Get locale of category LC_CTYPE of environment variables
+
+
 static const sal_Char* getLangFromEnvironment()
 {
     static const sal_Char* pFallback = "C";
@@ -57,15 +57,15 @@ static const sal_Char* getLangFromEnvironment()
     return pLang;
 }
 
-// -----------------------------------------------------------------------
 
-// Get locale of category LC_MESSAGES of environment variables
+
+
 static const sal_Char* getUILangFromEnvironment()
 {
     static const sal_Char* pFallback = "C";
     const sal_Char *pLang = NULL;
 
-    pLang = getenv ( "LANGUAGE" );      // respect the GNU extension
+    pLang = getenv ( "LANGUAGE" );      
     if (! pLang || pLang[0] == 0)
         pLang = getenv ( "LC_ALL" );
     if (! pLang || pLang[0] == 0)
@@ -78,7 +78,7 @@ static const sal_Char* getUILangFromEnvironment()
     return pLang;
 }
 
-// -----------------------------------------------------------------------
+
 
 typedef const sal_Char * (*getLangFromEnv)();
 
@@ -120,7 +120,7 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType MsLangId::getPlatformSystemLanguage()
 {
@@ -128,7 +128,7 @@ LanguageType MsLangId::getPlatformSystemLanguage()
     return nImplSystemLanguage;
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType MsLangId::getPlatformSystemUILanguage()
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xml/acceleratorconfigurationwriter.hxx>
@@ -35,7 +35,7 @@
 namespace framework{
 
 
-//-----------------------------------------------
+
 AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const AcceleratorCache&                                       rContainer,
                                                                const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig   )
     : ThreadHelpBase(&Application::GetSolarMutex())
@@ -44,31 +44,31 @@ AcceleratorConfigurationWriter::AcceleratorConfigurationWriter(const Accelerator
 {
 }
 
-//-----------------------------------------------
+
 AcceleratorConfigurationWriter::~AcceleratorConfigurationWriter()
 {
 }
 
-//-----------------------------------------------
+
 void AcceleratorConfigurationWriter::flush()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
 
     css::uno::Reference< css::xml::sax::XDocumentHandler >         xCFG        = m_xConfig;
     css::uno::Reference< css::xml::sax::XExtendedDocumentHandler > xExtendedCFG(m_xConfig, css::uno::UNO_QUERY_THROW);
 
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
-    // prepare attribute list
+    
     ::comphelper::AttributeList* pAttribs = new ::comphelper::AttributeList;
     css::uno::Reference< css::xml::sax::XAttributeList > xAttribs(static_cast< css::xml::sax::XAttributeList* >(pAttribs), css::uno::UNO_QUERY);
 
     pAttribs->AddAttribute(AL_XMLNS_ACCEL, ATTRIBUTE_TYPE_CDATA, NS_XMLNS_ACCEL);
     pAttribs->AddAttribute(AL_XMLNS_XLINK, ATTRIBUTE_TYPE_CDATA, NS_XMLNS_XLINK);
 
-    // generate xml
+    
     xCFG->startDocument();
 
     xExtendedCFG->unknown(DOCTYPE_ACCELERATORS);
@@ -77,7 +77,7 @@ void AcceleratorConfigurationWriter::flush()
     xCFG->startElement(AL_ELEMENT_ACCELERATORLIST, xAttribs);
     xCFG->ignorableWhitespace(OUString());
 
-    // TODO think about threadsafe using of cache
+    
     AcceleratorCache::TKeyList                 lKeys = m_rContainer.getAllKeys();
     AcceleratorCache::TKeyList::const_iterator pKey  ;
     for (  pKey  = lKeys.begin();
@@ -101,7 +101,7 @@ void AcceleratorConfigurationWriter::flush()
     xCFG->endDocument();
 }
 
-//-----------------------------------------------
+
 void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt::KeyEvent&                                     aKey    ,
                                                                  const OUString&                                        sCommand,
                                                                  const css::uno::Reference< css::xml::sax::XDocumentHandler >& xConfig )
@@ -110,7 +110,7 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
     css::uno::Reference< css::xml::sax::XAttributeList > xAttribs (static_cast< css::xml::sax::XAttributeList* >(pAttribs) , css::uno::UNO_QUERY_THROW);
 
     OUString sKey = m_rKeyMapping->mapCodeToIdentifier(aKey.KeyCode);
-    // TODO check if key is empty!
+    
 
     pAttribs->AddAttribute(AL_ATTRIBUTE_KEYCODE, ATTRIBUTE_TYPE_CDATA, sKey    );
     pAttribs->AddAttribute(AL_ATTRIBUTE_URL    , ATTRIBUTE_TYPE_CDATA, sCommand);
@@ -134,6 +134,6 @@ void AcceleratorConfigurationWriter::impl_ts_writeKeyCommandPair(const css::awt:
     xConfig->ignorableWhitespace(OUString());
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

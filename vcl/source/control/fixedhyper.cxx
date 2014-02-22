@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/fixedhyper.hxx>
 
-// class FixedHyperlink --------------------------------------------------
+
 
 FixedHyperlink::FixedHyperlink(Window* pParent, const ResId& rResId)
     : FixedText(pParent, rResId)
@@ -41,22 +41,22 @@ FixedHyperlink::~FixedHyperlink()
 
 void FixedHyperlink::Initialize()
 {
-    // saves the old pointer
+    
     m_aOldPointer = GetPointer();
-    // changes the font
+    
     Font aFont = GetControlFont( );
-    // to underline
+    
     aFont.SetUnderline( UNDERLINE_SINGLE );
     SetControlFont( aFont );
-    // changes the color to light blue
+    
     SetControlForeground( Color( COL_LIGHTBLUE ) );
-    // calculates text len
+    
     m_nTextLen = GetCtrlTextWidth( GetText() );
 }
 
 void FixedHyperlink::MouseMove( const MouseEvent& rMEvt )
 {
-    // changes the pointer if the control is enabled and the mouse is over the text.
+    
     if ( !rMEvt.IsLeaveWindow() && IsEnabled() && GetPointerPosPixel().X() < m_nTextLen )
         SetPointer( POINTER_REFHAND );
     else
@@ -65,7 +65,7 @@ void FixedHyperlink::MouseMove( const MouseEvent& rMEvt )
 
 void FixedHyperlink::MouseButtonUp( const MouseEvent& )
 {
-    // calls the link if the control is enabled and the mouse is over the text.
+    
     if ( IsEnabled() && GetPointerPosPixel().X() < m_nTextLen )
         ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, m_aClickHdl, this );
 }

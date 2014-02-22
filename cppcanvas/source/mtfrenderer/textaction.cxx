@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -66,12 +66,12 @@ namespace cppcanvas
             {
                 tools::initRenderState(o_rRenderState,rState);
 
-                // #i36950# Offset clip back to origin (as it's also moved
-                // by rStartPoint)
-                // #i53964# Also take VCL font rotation into account,
-                // since this, opposed to the FontMatrix rotation
-                // elsewhere, _does_ get incorporated into the render
-                // state transform.
+                
+                
+                
+                
+                
+                
                 tools::modifyClip( o_rRenderState,
                                    rState,
                                    rCanvas,
@@ -96,13 +96,13 @@ namespace cppcanvas
             {
                 init( o_rRenderState, rStartPoint, rState, rCanvas );
 
-                // TODO(F2): Also inversely-transform clip with
-                // rTextTransform (which is actually rather hard, as the
-                // text transform is _prepended_ to the render state)!
+                
+                
+                
 
-                // prepend extra font transform to render state
-                // (prepend it, because it's interpreted in the unit
-                // rect coordinate space)
+                
+                
+                
                 ::canvas::tools::prependToRenderState( o_rRenderState,
                                                        rTextTransform );
             }
@@ -113,12 +113,12 @@ namespace cppcanvas
                        const OutDevState&                           rState,
                        const CanvasSharedPtr&                       rCanvas      )
             {
-                // ensure that o_rFont is valid. It is possible that
-                // text actions are generated without previously
-                // setting a font. Then, just take a default font
+                
+                
+                
                 if( !o_rFont.is() )
                 {
-                    // Use completely default FontRequest
+                    
                     const rendering::FontRequest aFontRequest;
 
                     geometry::Matrix2D aFontMatrix;
@@ -145,13 +145,13 @@ namespace cppcanvas
             {
                 init( o_rRenderState, o_rFont, rStartPoint, rState, rCanvas );
 
-                // TODO(F2): Also inversely-transform clip with
-                // rTextTransform (which is actually rather hard, as the
-                // text transform is _prepended_ to the render state)!
+                
+                
+                
 
-                // prepend extra font transform to render state
-                // (prepend it, because it's interpreted in the unit
-                // rect coordinate space)
+                
+                
+                
                 ::canvas::tools::prependToRenderState( o_rRenderState,
                                                        rTextTransform );
             }
@@ -161,7 +161,7 @@ namespace cppcanvas
             {
                 return tools::createTextLinesPolyPolygon(
                     0.0,
-                    // extract character cell furthest to the right
+                    
                     *(::std::max_element(
                           rOffsets.getConstArray(),
                           rOffsets.getConstArray() + rOffsets.getLength() )),
@@ -172,17 +172,17 @@ namespace cppcanvas
                                                   sal_Int32          nLen,
                                                   const OutDevState& rState )
             {
-                // convert character widths from logical units
+                
                 uno::Sequence< double > aCharWidthSeq( nLen );
                 double*                 pOutputWidths( aCharWidthSeq.getArray() );
 
-                // #143885# maintain (nearly) full precision of DX
-                // array, by circumventing integer-based
-                // OutDev-mapping
+                
+                
+                
                 const double nScale( rState.mapModeTransform.get(0,0) );
                 for( int i = 0; i < nLen; ++i )
                 {
-                    // TODO(F2): use correct scale direction
+                    
                     *pOutputWidths++ = *pCharWidths++ * nScale;
                 }
 
@@ -195,8 +195,8 @@ namespace cppcanvas
                                                   VirtualDevice&     rVDev,
                                                   const OutDevState& rState )
             {
-                // no external DX array given, create one from given
-                // string
+                
+                
                 ::boost::scoped_array< sal_Int32 > pCharWidths( new sal_Int32[nLen] );
 
                 rVDev.GetTextArray( rText, pCharWidths.get(),
@@ -213,14 +213,14 @@ namespace cppcanvas
 
                 if( rState.textAlignment )
                 {
-                    // text origin is right, not left. Modify start point
-                    // accordingly, because XCanvas::drawTextLayout()
-                    // always aligns left!
+                    
+                    
+                    
 
                     const double nOffset( rOffsets[ rOffsets.getLength()-1 ] );
 
-                    // correct start point for rotated text: rotate around
-                    // former start point
+                    
+                    
                     aLocalPoint.setX( aLocalPoint.getX() + cos( rState.fontRotation )*nOffset );
                     aLocalPoint.setY( aLocalPoint.getY() + sin( rState.fontRotation )*nOffset );
                 }
@@ -272,7 +272,7 @@ namespace cppcanvas
                                  const OutDevState&              rState,
                                  const rendering::StringContext& rStringContext )
             {
-                // TODO(F2): use correct scale direction
+                
                 const ::basegfx::B2DSize aSize( rVDev.GetTextWidth( rStringContext.Text,
                                                                     static_cast<sal_uInt16>(rStringContext.StartPosition),
                                                                     static_cast<sal_uInt16>(rStringContext.Length) ),
@@ -297,52 +297,52 @@ namespace cppcanvas
                 ENSURE_OR_THROW( aOrigOffsets.getLength() >= rSubset.mnSubsetEnd,
                                   "::cppcanvas::internal::calcSubsetOffsets(): invalid subset range range" );
 
-                // TODO(F3): It currently seems that for RTL text, the
-                // DX offsets are nevertheless increasing in logical
-                // text order (I'd expect they are decreasing,
-                // mimicking the fact that the text is output
-                // right-to-left). This breaks text effects for ALL
-                // RTL languages.
+                
+                
+                
+                
+                
+                
 
-                // determine leftmost position in given subset range -
-                // as the DX array contains the output positions
-                // starting with the second character (the first is
-                // assumed to have output position 0), correct begin
-                // iterator.
+                
+                
+                
+                
+                
                 const double nMinPos( rSubset.mnSubsetBegin <= 0 ? 0 :
                                       *(::std::min_element( pOffsets+rSubset.mnSubsetBegin-1,
                                                             pOffsets+rSubset.mnSubsetEnd )) );
 
-                // determine rightmost position in given subset range
-                // - as the DX array contains the output positions
-                // starting with the second character (the first is
-                // assumed to have output position 0), correct begin
-                // iterator.
+                
+                
+                
+                
+                
                 const double nMaxPos(
                     *(::std::max_element( pOffsets + (rSubset.mnSubsetBegin <= 0 ?
                                                       0 : rSubset.mnSubsetBegin-1),
                                           pOffsets + rSubset.mnSubsetEnd )) );
 
 
-                // adapt render state, to move text output to given offset
-                // -------------------------------------------------------
+                
+                
 
-                // TODO(F1): Strictly speaking, we also have to adapt
-                // the clip here, which normally should _not_ move
-                // with the output offset. Neglected for now, as it
-                // does not matter for drawing layer output
+                
+                
+                
+                
 
                 if( rSubset.mnSubsetBegin > 0 )
                 {
                     ::basegfx::B2DHomMatrix aTranslation;
                     if( rOrigTextLayout->getFont()->getFontRequest().FontDescription.IsVertical )
                     {
-                        // vertical text -> offset in y direction
+                        
                         aTranslation.translate( 0.0, nMinPos );
                     }
                     else
                     {
-                        // horizontal text -> offset in x direction
+                        
                         aTranslation.translate( nMinPos, 0.0 );
                     }
 
@@ -351,16 +351,16 @@ namespace cppcanvas
                 }
 
 
-                // reduce DX array to given substring
-                // ----------------------------------
+                
+                
 
                 const sal_Int32         nNewElements( rSubset.mnSubsetEnd - rSubset.mnSubsetBegin );
                 uno::Sequence< double > aAdaptedOffsets( nNewElements );
                 double*                 pAdaptedOffsets( aAdaptedOffsets.getArray() );
 
-                // move to new output position (subtract nMinPos,
-                // which is the new '0' position), copy only the range
-                // as given by rSubset.
+                
+                
+                
                 ::std::transform( pOffsets + rSubset.mnSubsetBegin,
                                   pOffsets + rSubset.mnSubsetEnd,
                                   pAdaptedOffsets,
@@ -379,8 +379,8 @@ namespace cppcanvas
                                     const ::cppcanvas::internal::Action::Subset&    rSubset,
                                     const uno::Reference< rendering::XTextLayout >& rOrigTextLayout )
             {
-                // create temporary new text layout with subset string
-                // ---------------------------------------------------
+                
+                
 
                 const sal_Int32 nNewStartPos( rOrigContext.StartPosition + ::std::min(
                                                   rSubset.mnSubsetBegin, rOrigContext.Length-1 ) );
@@ -433,7 +433,7 @@ namespace cppcanvas
 
                 if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
                 {
-                     // empty range, empty layout
+                     
                     io_rTextLayout.clear();
 
                     return;
@@ -447,7 +447,7 @@ namespace cppcanvas
                 if( rSubset.mnSubsetBegin == 0 &&
                     rSubset.mnSubsetEnd == rOrigContext.Length )
                 {
-                    // full range, no need for subsetting
+                    
                     return;
                 }
 
@@ -478,7 +478,7 @@ namespace cppcanvas
             public:
                 virtual ~TextRenderer() {}
 
-                /// Render text with given RenderState
+                
                 virtual bool operator()( const rendering::RenderState& rRenderState ) const = 0;
             };
 
@@ -502,7 +502,7 @@ namespace cppcanvas
                 uno::Reference<rendering::XColorSpace> xColorSpace(
                     xCanvas->getDevice()->getDeviceColorSpace() );
 
-                // draw shadow text, if enabled
+                
                 if( rShadowColor != aEmptyColor )
                 {
                     rendering::RenderState aShadowState( rRenderState );
@@ -520,7 +520,7 @@ namespace cppcanvas
                     rRenderer( aShadowState );
                 }
 
-                // draw relief text, if enabled
+                
                 if( rReliefColor != aEmptyColor )
                 {
                     rendering::RenderState aReliefState( rRenderState );
@@ -538,7 +538,7 @@ namespace cppcanvas
                     rRenderer( aReliefState );
                 }
 
-                // draw normal text
+                
                 rRenderer( rRenderState );
 
                 return true;
@@ -554,10 +554,10 @@ namespace cppcanvas
             {
                 ::basegfx::B2DRange aBounds( rTextBounds );
 
-                // add extends of text lines
+                
                 aBounds.expand( rLineBounds );
 
-                // TODO(Q3): Provide this functionality at the B2DRange
+                
                 ::basegfx::B2DRange aTotalBounds( aBounds );
                 aTotalBounds.expand(
                     ::basegfx::B2DRange( aBounds.getMinX() + rReliefOffset.getX(),
@@ -611,7 +611,7 @@ namespace cppcanvas
             }
 
 
-            // -------------------------------------------------------------------------
+            
 
             class TextAction : public Action, private ::boost::noncopyable
             {
@@ -642,12 +642,12 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
-                // TODO(P2): This is potentially a real mass object
-                // (every character might be a separate TextAction),
-                // thus, make it as lightweight as possible. For
-                // example, share common RenderState among several
-                // TextActions, maybe using maOffsets for the
-                // translation.
+                
+                
+                
+                
+                
+                
 
                 uno::Reference< rendering::XCanvasFont >    mxFont;
                 const rendering::StringContext              maStringContext;
@@ -716,17 +716,17 @@ namespace cppcanvas
             {
                 SAL_WARN( "cppcanvas.emf", "TextAction::renderSubset(): Subset not supported by this object" );
 
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // _subsettable_ text
+                
+                
+                
+                
                 return render( rTransformation );
             }
 
             ::basegfx::B2DRange TextAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                // create XTextLayout, to have the
-                // XTextLayout::queryTextBounds() method available
+                
+                
                 uno::Reference< rendering::XTextLayout > xTextLayout(
                     mxFont->createTextLayout(
                         maStringContext,
@@ -747,24 +747,24 @@ namespace cppcanvas
             {
                 SAL_WARN( "cppcanvas.emf", "TextAction::getBounds(): Subset not supported by this object" );
 
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // _subsettable_ text
+                
+                
+                
+                
                 return getBounds( rTransformation );
             }
 
             sal_Int32 TextAction::getActionCount() const
             {
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // _subsettable_ text
+                
+                
+                
+                
                 return 1;
             }
 
 
-            // -------------------------------------------------------------------------
+            
 
             class EffectTextAction :
                 public Action,
@@ -808,15 +808,15 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
-                /// Interface TextRenderer
+                
                 virtual bool operator()( const rendering::RenderState& rRenderState ) const;
 
-                // TODO(P2): This is potentially a real mass object
-                // (every character might be a separate TextAction),
-                // thus, make it as lightweight as possible. For
-                // example, share common RenderState among several
-                // TextActions, maybe using maOffsets for the
-                // translation.
+                
+                
+                
+                
+                
+                
 
                 uno::Reference< rendering::XCanvasFont >    mxFont;
                 const rendering::StringContext              maStringContext;
@@ -952,17 +952,17 @@ namespace cppcanvas
             {
                 SAL_WARN( "cppcanvas.emf", "EffectTextAction::renderSubset(): Subset not supported by this object" );
 
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // subsettable text
+                
+                
+                
+                
                 return render( rTransformation );
             }
 
             ::basegfx::B2DRange EffectTextAction::getBounds( const ::basegfx::B2DHomMatrix& rTransformation ) const
             {
-                // create XTextLayout, to have the
-                // XTextLayout::queryTextBounds() method available
+                
+                
                 uno::Reference< rendering::XTextLayout > xTextLayout(
                     mxFont->createTextLayout(
                         maStringContext,
@@ -988,24 +988,24 @@ namespace cppcanvas
             {
                 SAL_WARN( "cppcanvas.emf", "EffectTextAction::getBounds(): Subset not supported by this object" );
 
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // _subsettable_ text
+                
+                
+                
+                
                 return getBounds( rTransformation );
             }
 
             sal_Int32 EffectTextAction::getActionCount() const
             {
-                // TODO(P1): Retrieve necessary font metric info for
-                // TextAction from XCanvas. Currently, the
-                // TextActionFactory does not generate this object for
-                // subsettable text
+                
+                
+                
+                
                 return 1;
             }
 
 
-            // -------------------------------------------------------------------------
+            
 
             class TextArrayAction : public Action, private ::boost::noncopyable
             {
@@ -1038,12 +1038,12 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
-                // TODO(P2): This is potentially a real mass object
-                // (every character might be a separate TextAction),
-                // thus, make it as lightweight as possible. For
-                // example, share common RenderState among several
-                // TextActions, maybe using maOffsets for the
-                // translation.
+                
+                
+                
+                
+                
+                
 
                 uno::Reference< rendering::XTextLayout >    mxTextLayout;
                 const CanvasSharedPtr                       mpCanvas;
@@ -1129,7 +1129,7 @@ namespace cppcanvas
                                     rSubset );
 
                 if( !xTextLayout.is() )
-                    return true; // empty layout, render nothing
+                    return true; 
 
                 mpCanvas->getUNOCanvas()->drawTextLayout( xTextLayout,
                                                           mpCanvas->getViewState(),
@@ -1167,7 +1167,7 @@ namespace cppcanvas
                                     rSubset );
 
                 if( !xTextLayout.is() )
-                    return ::basegfx::B2DRange(); // empty layout, empty bounds
+                    return ::basegfx::B2DRange(); 
 
                 return tools::calcDevicePixelBounds( ::basegfx::unotools::b2DRectangleFromRealRectangle2D(
                                                          xTextLayout->queryTextBounds() ),
@@ -1183,7 +1183,7 @@ namespace cppcanvas
             }
 
 
-            // -------------------------------------------------------------------------
+            
 
             class EffectTextArrayAction :
                 public Action,
@@ -1228,15 +1228,15 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
-                // TextRenderer interface
+                
                 virtual bool operator()( const rendering::RenderState& rRenderState ) const;
 
-                // TODO(P2): This is potentially a real mass object
-                // (every character might be a separate TextAction),
-                // thus, make it as lightweight as possible. For
-                // example, share common RenderState among several
-                // TextActions, maybe using maOffsets for the
-                // translation.
+                
+                
+                
+                
+                
+                
 
                 uno::Reference< rendering::XTextLayout >        mxTextLayout;
                 const CanvasSharedPtr                           mpCanvas;
@@ -1380,7 +1380,7 @@ namespace cppcanvas
                 {
                 }
 
-                // TextRenderer interface
+                
                 virtual bool operator()( const rendering::RenderState& rRenderState ) const
                 {
                     mrCanvas->fillPolyPolygon( mrLinePolygon,
@@ -1422,11 +1422,11 @@ namespace cppcanvas
                                     rSubset );
 
                 if( !xTextLayout.is() )
-                    return true; // empty layout, render nothing
+                    return true; 
 
 
-                // create and setup local line polygon
-                // ===================================
+                
+                
 
                 uno::Reference< rendering::XCanvas > xCanvas( mpCanvas->getUNOCanvas() );
                 const rendering::ViewState&          rViewState( mpCanvas->getViewState() );
@@ -1439,8 +1439,8 @@ namespace cppcanvas
                             maTextLineInfo ) ) );
 
 
-                // render everything
-                // =================
+                
+                
 
                 return renderEffectText(
                     EffectTextArrayRenderHelper( xCanvas,
@@ -1493,11 +1493,11 @@ namespace cppcanvas
                                     rSubset );
 
                 if( !xTextLayout.is() )
-                    return ::basegfx::B2DRange(); // empty layout, empty bounds
+                    return ::basegfx::B2DRange(); 
 
 
-                // create and setup local line polygon
-                // ===================================
+                
+                
 
                 const ::basegfx::B2DPolyPolygon aPoly(
                     tools::createTextLinesPolyPolygon(
@@ -1521,7 +1521,7 @@ namespace cppcanvas
             }
 
 
-            // -------------------------------------------------------------------------
+            
 
             class OutlineAction :
                 public Action,
@@ -1566,15 +1566,15 @@ namespace cppcanvas
                 virtual sal_Int32 getActionCount() const;
 
             private:
-                // TextRenderer interface
+                
                 virtual bool operator()( const rendering::RenderState& rRenderState ) const;
 
-                // TODO(P2): This is potentially a real mass object
-                // (every character might be a separate TextAction),
-                // thus, make it as lightweight as possible. For
-                // example, share common RenderState among several
-                // TextActions, maybe using maOffsets for the
-                // translation.
+                
+                
+                
+                
+                
+                
 
                 uno::Reference< rendering::XPolyPolygon2D >         mxTextPoly;
 
@@ -1718,24 +1718,24 @@ namespace cppcanvas
                 rendering::RenderState aLocalState( rRenderState );
                 aLocalState.DeviceColor = maFillColor;
 
-                // TODO(P1): implement caching
+                
 
-                // background of text
+                
                 rCanvas->fillPolyPolygon( mxTextPoly,
                                           rViewState,
                                           aLocalState );
 
-                // border line of text
+                
                 rCanvas->strokePolyPolygon( mxTextPoly,
                                             rViewState,
                                             rRenderState,
                                             aStrokeAttributes );
 
-                // underlines/strikethrough - background
+                
                 rCanvas->fillPolyPolygon( mxTextLines,
                                           rViewState,
                                           aLocalState );
-                // underlines/strikethrough - border
+                
                 rCanvas->strokePolyPolygon( mxTextLines,
                                             rViewState,
                                             rRenderState,
@@ -1762,7 +1762,7 @@ namespace cppcanvas
                                          maReliefOffset );
             }
 
-#if 0 // see #if'ed out use in OutlineAction::renderSubset below:
+#if 0 
             class OutlineTextArrayRenderHelper : public TextRenderer
             {
             public:
@@ -1783,7 +1783,7 @@ namespace cppcanvas
                 {
                 }
 
-                // TextRenderer interface
+                
                 virtual bool operator()( const rendering::RenderState& rRenderState ) const
                 {
                     rendering::StrokeAttributes aStrokeAttributes;
@@ -1797,24 +1797,24 @@ namespace cppcanvas
                     rendering::RenderState aLocalState( rRenderState );
                     aLocalState.DeviceColor = maFillColor;
 
-                    // TODO(P1): implement caching
+                    
 
-                    // background of text
+                    
                     mrCanvas->fillPolyPolygon( mrTextPolygon,
                                                mrViewState,
                                                aLocalState );
 
-                    // border line of text
+                    
                     mrCanvas->strokePolyPolygon( mrTextPolygon,
                                                  mrViewState,
                                                  rRenderState,
                                                  aStrokeAttributes );
 
-                    // underlines/strikethrough - background
+                    
                     mrCanvas->fillPolyPolygon( mrLinePolygon,
                                                mrViewState,
                                                aLocalState );
-                    // underlines/strikethrough - border
+                    
                     mrCanvas->strokePolyPolygon( mrLinePolygon,
                                                  mrViewState,
                                                  rRenderState,
@@ -1840,10 +1840,10 @@ namespace cppcanvas
                 SAL_INFO( "cppcanvas.emf", "::cppcanvas::internal::OutlineAction: 0x" << std::hex << this );
 
                 if( rSubset.mnSubsetBegin == rSubset.mnSubsetEnd )
-                    return true; // empty range, render nothing
+                    return true; 
 
 #if 1
-                // TODO(F3): Subsetting NYI for outline text!
+                
                 return render( rTransformation );
 #else
                 const rendering::StringContext rOrigContext( mxTextLayout->getText() );
@@ -1851,7 +1851,7 @@ namespace cppcanvas
                 if( rSubset.mnSubsetBegin == 0 &&
                     rSubset.mnSubsetEnd == rOrigContext.Length )
                 {
-                    // full range, no need for subsetting
+                    
                     return render( rTransformation );
                 }
 
@@ -1859,18 +1859,18 @@ namespace cppcanvas
                 ::canvas::tools::prependToRenderState(aLocalState, rTransformation);
 
 
-                // create and setup local Text polygon
-                // ===================================
+                
+                
 
                 uno::Reference< rendering::XPolyPolygon2D > xTextPolygon();
 
-                // TODO(P3): Provide an API method for that!
+                
 
                 if( !xTextLayout.is() )
                     return false;
 
-                // render everything
-                // =================
+                
+                
 
                 return renderEffectText(
                     OutlineTextArrayRenderHelper(
@@ -1914,16 +1914,16 @@ namespace cppcanvas
 
             sal_Int32 OutlineAction::getActionCount() const
             {
-                // TODO(F3): Subsetting NYI for outline text!
+                
                 return maOffsets.getLength();
             }
 
 
-            // ======================================================================
+            
             //
-            // Action factory methods
+            
             //
-            // ======================================================================
+            
 
             /** Create an outline action
 
@@ -1945,22 +1945,22 @@ namespace cppcanvas
                                            const OutDevState&               rState,
                                            const Renderer::Parameters&      rParms  )
             {
-                // operate on raw DX array here (in logical coordinate
-                // system), to have a higher resolution
-                // PolyPolygon. That polygon is then converted to
-                // device coordinate system.
+                
+                
+                
+                
 
-                // #i68512# Temporarily switch off font rotation
-                // (which is already contained in the render state
-                // transformation matrix - otherwise, glyph polygons
-                // will be rotated twice)
+                
+                
+                
+                
                 const ::Font aOrigFont( rVDev.GetFont() );
                 ::Font       aUnrotatedFont( aOrigFont );
                 aUnrotatedFont.SetOrientation(0);
                 rVDev.SetFont( aUnrotatedFont );
 
-                // TODO(F3): Don't understand parameter semantics of
-                // GetTextOutlines()
+                
+                
                 ::basegfx::B2DPolyPolygon aResultingPolyPolygon;
                 PolyPolyVector aVCLPolyPolyVector;
                 const bool bHaveOutlines( rVDev.GetTextOutlines( aVCLPolyPolyVector, rText,
@@ -1975,12 +1975,12 @@ namespace cppcanvas
 
                 ::std::vector< sal_Int32 > aPolygonGlyphMap;
 
-                // first glyph starts at polygon index 0
+                
                 aPolygonGlyphMap.push_back( 0 );
 
-                // remove offsetting from mapmode transformation
-                // (outline polygons must stay at origin, only need to
-                // be scaled)
+                
+                
+                
                 ::basegfx::B2DHomMatrix aMapModeTransform(
                     rState.mapModeTransform );
                 aMapModeTransform.set(0,2, 0.0);
@@ -1995,19 +1995,19 @@ namespace cppcanvas
                     aPolyPolygon = aIter->getB2DPolyPolygon();
                     aPolyPolygon.transform( aMapModeTransform );
 
-                    // append result to collecting polypoly
+                    
                     for( sal_uInt32 i=0; i<aPolyPolygon.count(); ++i )
                     {
-                        // #i47795# Ensure closed polygons (since
-                        // FreeType returns the glyph outlines
-                        // open)
+                        
+                        
+                        
                         const ::basegfx::B2DPolygon& rPoly( aPolyPolygon.getB2DPolygon( i ) );
                         const sal_uInt32 nCount( rPoly.count() );
                         if( nCount<3 ||
                             rPoly.isClosed() )
                         {
-                            // polygon either degenerate, or
-                            // already closed.
+                            
+                            
                             aResultingPolyPolygon.append( rPoly );
                         }
                         else
@@ -2019,10 +2019,10 @@ namespace cppcanvas
                         }
                     }
 
-                    // TODO(F3): Depending on the semantics of
-                    // GetTextOutlines(), this here is wrong!
+                    
+                    
 
-                    // calc next glyph index
+                    
                     aPolygonGlyphMap.push_back( aResultingPolyPolygon.count() );
                 }
 
@@ -2076,10 +2076,10 @@ namespace cppcanvas
                 }
             }
 
-        } // namespace
+        } 
 
 
-        // ---------------------------------------------------------------------------------
+        
 
         ActionSharedPtr TextActionFactory::createTextAction( const ::Point&                 rStartPoint,
                                                              const ::Size&                  rReliefOffset,
@@ -2098,8 +2098,8 @@ namespace cppcanvas
         {
             const ::Size  aBaselineOffset( tools::getBaselineOffset( rState,
                                                                      rVDev ) );
-            // #143885# maintain (nearly) full precision positioning,
-            // by circumventing integer-based OutDev-mapping
+            
+            
             const ::basegfx::B2DPoint aStartPoint(
                 rState.mapModeTransform *
                 ::basegfx::B2DPoint(rStartPoint.X() + aBaselineOffset.Width(),
@@ -2128,8 +2128,8 @@ namespace cppcanvas
                             rParms );
             }
 
-            // convert DX array to device coordinate system (and
-            // create it in the first place, if pDXArray is NULL)
+            
+            
             const uno::Sequence< double > aCharWidths(
                 pDXArray ?
                 setupDXArray( pDXArray, nLen, rState ) :
@@ -2139,23 +2139,23 @@ namespace cppcanvas
                               rVDev,
                               rState ));
 
-            // determine type of text action to create
-            // =======================================
+            
+            
 
             const ::Color aEmptyColor( COL_AUTO );
 
-            // no DX array, and no need to subset - no need to store
-            // DX array, then.
+            
+            
             if( !pDXArray && !bSubsettable )
             {
-                // effects, or not?
+                
                 if( !rState.textOverlineStyle &&
                     !rState.textUnderlineStyle &&
                     !rState.textStrikeoutStyle &&
                     rReliefColor == aEmptyColor &&
                     rShadowColor == aEmptyColor )
                 {
-                    // nope
+                    
                     if( rParms.maTextTransformation.is_initialized() )
                     {
                         return ActionSharedPtr( new TextAction(
@@ -2180,7 +2180,7 @@ namespace cppcanvas
                 }
                 else
                 {
-                    // at least one of the effects requested
+                    
                     if( rParms.maTextTransformation.is_initialized() )
                         return ActionSharedPtr( new EffectTextAction(
                                                     aStartPoint,
@@ -2212,14 +2212,14 @@ namespace cppcanvas
             }
             else
             {
-                // DX array necessary - any effects?
+                
                 if( !rState.textOverlineStyle &&
                     !rState.textUnderlineStyle &&
                     !rState.textStrikeoutStyle &&
                     rReliefColor == aEmptyColor &&
                     rShadowColor == aEmptyColor )
                 {
-                    // nope
+                    
                     if( rParms.maTextTransformation.is_initialized() )
                         return ActionSharedPtr( new TextArrayAction(
                                                     aStartPoint,
@@ -2242,7 +2242,7 @@ namespace cppcanvas
                 }
                 else
                 {
-                    // at least one of the effects requested
+                    
                     if( rParms.maTextTransformation.is_initialized() )
                         return ActionSharedPtr( new EffectTextArrayAction(
                                                     aStartPoint,

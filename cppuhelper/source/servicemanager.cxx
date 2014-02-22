@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sal/config.h"
@@ -80,8 +80,8 @@ void removeFromImplementationMap(
     boost::shared_ptr< cppuhelper::ServiceManager::Data::Implementation >
         const & implementation)
 {
-    // The underlying data structures make this function somewhat inefficient,
-    // but the assumption is that it is rarely called:
+    
+    
     assert(map != 0);
     for (std::vector< rtl::OUString >::const_iterator i(elements.begin());
          i != elements.end(); ++i)
@@ -101,9 +101,9 @@ void removeFromImplementationMap(
     }
 }
 
-// For simplicity, this code keeps throwing
-// css::registry::InvalidRegistryException for invalid XML rdbs (even though
-// that does not fit the exception's name):
+
+
+
 class Parser: private boost::noncopyable {
 public:
     Parser(
@@ -143,7 +143,7 @@ Parser::Parser(
     int ucNsId = reader_.registerNamespaceIri(
         xmlreader::Span(
             RTL_CONSTASCII_STRINGPARAM(
-                "http://openoffice.org/2010/uno-components")));
+                "http:
     enum State {
         STATE_BEGIN, STATE_END, STATE_COMPONENTS, STATE_COMPONENT_INITIAL,
         STATE_COMPONENT, STATE_IMPLEMENTATION, STATE_SERVICE, STATE_SINGLETON };
@@ -190,7 +190,7 @@ Parser::Parser(
                 state = STATE_COMPONENTS;
                 break;
             }
-            // fall through
+            
         case STATE_COMPONENT_INITIAL:
             if (res == xmlreader::XmlReader::RESULT_BEGIN && nsId == ucNsId
                 && name.equals(RTL_CONSTASCII_STRINGPARAM("implementation")))
@@ -724,11 +724,11 @@ cppuhelper::ServiceManager::Data::Implementation::createInstanceWithArguments(
     css::uno::Reference<css::uno::XInterface> inst;
     if (constructor != 0) {
         inst.set((*constructor)(context.get(), arguments), SAL_NO_ACQUIRE);
-        //HACK: The constructor will either observe arguments and return inst
-        // that does not implement XInitialization (or null), or ignore
-        // arguments and return inst that implements XInitialization; this
-        // should be removed again once XInitialization-based implementations
-        // have become rare:
+        
+        
+        
+        
+        
         css::uno::Reference<css::lang::XInitialization> init(
             inst, css::uno::UNO_QUERY);
         if (init.is()) {
@@ -750,12 +750,12 @@ void cppuhelper::ServiceManager::Data::Implementation::updateDisposeSingleton(
     bool singletonRequest,
     css::uno::Reference<css::uno::XInterface> const & instance)
 {
-    // This is an optimization, to only call dispose once (from the component
-    // context) on a singleton that is obtained both via the component context
-    // and via the service manager; however, there is a harmless race here that
-    // may cause two calls to dispose nevertheless (also, this calls dispose on
-    // at most one of the instances obtained via the service manager, in case
-    // the implementation hands out different instances):
+    
+    
+    
+    
+    
+    
     if (singletonRequest) {
         osl::MutexGuard g(mutex);
         disposeSingleton.clear();
@@ -816,8 +816,8 @@ void cppuhelper::ServiceManager::loadImplementation(
     }
     cppuhelper::ImplementationConstructorFn * ctor = 0;
     css::uno::Reference< css::uno::XInterface > f0;
-    // Special handling of SharedLibrary loader, with support for environment,
-    // constructor, and prefix arguments:
+    
+    
     if (!implementation->info->alienContext.is()
         && implementation->info->loader == "com.sun.star.loader.SharedLibrary")
     {
@@ -838,7 +838,7 @@ void cppuhelper::ServiceManager::loadImplementation(
                     css::uno::Reference<css::uno::XInterface>());
             }
             if (curEnv.get() != env.get()) {
-                std::abort();//TODO
+                std::abort();
             }
         }
     } else {
@@ -888,9 +888,9 @@ void cppuhelper::ServiceManager::loadImplementation(
             }
         }
     }
-    //TODO: There is a race here, as the relevant service factory can be removed
-    // while the mutex is unlocked and loading can thus fail, as the entity from
-    // which to load can disappear once the service factory is removed.
+    
+    
+    
     osl::MutexGuard g(rBHelper.rMutex);
     if (!(isDisposed()
           || implementation->status == Data::Implementation::STATUS_LOADED))
@@ -1134,17 +1134,17 @@ void cppuhelper::ServiceManager::insert(css::uno::Any const & aElement)
         insertLegacyFactory(info);
         return;
     }
-// At least revisions up to 1.7 of LanguageTool.oxt (incl. the bundled 1.4.0 in
-// module languagetool) contain an (actively registered) factory that does not
-// implement XServiceInfo (see <http://sourceforge.net/tracker/?
-// func=detail&aid=3526635&group_id=110216&atid=655717> "SingletonFactory should
-// implement XServiceInfo"); the old OServiceManager::insert
-// (stoc/source/servicemanager/servicemanager.cxx) silently did not add such
-// broken factories to its m_ImplementationNameMap, so ignore them here for
-// backwards compatibility of live-insertion of extensions, too.
 
-// (The plan was that this warning would go away (and we would do the
-// throw instead) for the incompatible LO 4, but we changed our mind):
+
+
+
+
+
+
+
+
+
+
     css::uno::Reference< css::lang::XSingleComponentFactory > legacy;
     if ((aElement >>= legacy) && legacy.is()) {
         SAL_WARN(
@@ -1194,7 +1194,7 @@ void cppuhelper::ServiceManager::remove(css::uno::Any const & aElement)
     }
     rtl::OUString impl;
     if (aElement >>= impl) {
-        // For live-removal of extensions:
+        
         removeImplementation(impl);
         return;
     }
@@ -1231,12 +1231,12 @@ cppuhelper::ServiceManager::createContentEnumeration(
                 break;
             }
             if (impl->status == Data::Implementation::STATUS_NEW) {
-                // Postpone actual implementation instantiation as long as
-                // possible (so that e.g. opening LO's "Tools - Macros" menu
-                // does not try to instantiate a JVM, which can lead to a
-                // synchronous error dialog when no JVM is specified, and
-                // showing the dialog while hovering over a menu can cause
-                // trouble):
+                
+                
+                
+                
+                
+                
                 impl->factory1 = new ImplementationWrapper(this, *i);
                 impl->status = Data::Implementation::STATUS_WRAPPER;
             }
@@ -1304,7 +1304,7 @@ void cppuhelper::ServiceManager::addPropertyChangeListener(
         throw css::beans::UnknownPropertyException(
             aPropertyName, static_cast< cppu::OWeakObject * >(this));
     }
-    // DefaultContext does not change, so just treat it as an event listener:
+    
     return addEventListener(xListener);
 }
 
@@ -1320,7 +1320,7 @@ void cppuhelper::ServiceManager::removePropertyChangeListener(
         throw css::beans::UnknownPropertyException(
             aPropertyName, static_cast< cppu::OWeakObject * >(this));
     }
-    // DefaultContext does not change, so just treat it as an event listener:
+    
     return removeEventListener(aListener);
 }
 
@@ -1336,7 +1336,7 @@ void cppuhelper::ServiceManager::addVetoableChangeListener(
         throw css::beans::UnknownPropertyException(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
-    // DefaultContext does not change, so just treat it as an event listener:
+    
     return addEventListener(aListener);
 }
 
@@ -1352,7 +1352,7 @@ void cppuhelper::ServiceManager::removeVetoableChangeListener(
         throw css::beans::UnknownPropertyException(
             PropertyName, static_cast< cppu::OWeakObject * >(this));
     }
-    // DefaultContext does not change, so just treat it as an event listener:
+    
     return removeEventListener(aListener);
 }
 
@@ -1433,7 +1433,7 @@ void cppuhelper::ServiceManager::readRdbDirectory(
             SAL_INFO("cppuhelper", "Ignored optional " << uri);
             return;
         }
-        // fall through
+        
     default:
         throw css::uno::DeploymentException(
             "Cannot open directory " + uri,
@@ -1482,9 +1482,9 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
     case REG_REGISTRY_NOT_EXISTS:
     case REG_INVALID_REGISTRY:
         {
-            // Ignore empty rdb files (which are at least seen by subordinate
-            // uno processes during extension registration; Registry::open can
-            // fail on them if mmap(2) returns EINVAL for a zero length):
+            
+            
+            
             osl::DirectoryItem item;
             if (osl::DirectoryItem::get(uri, item) == osl::FileBase::E_None) {
                 osl::FileStatus status(osl_FileStatus_Mask_FileSize);
@@ -1495,7 +1495,7 @@ bool cppuhelper::ServiceManager::readLegacyRdbFile(rtl::OUString const & uri) {
                 }
             }
         }
-        // fall through
+        
     default:
         return false;
     }
@@ -1570,7 +1570,7 @@ rtl::OUString cppuhelper::ServiceManager::readLegacyRdbString(
             static_cast< cppu::OWeakObject * >(this));
     }
     rtl::OUString val;
-    std::vector< char > v(s); // assuming sal_uInt32 fits into vector::size_type
+    std::vector< char > v(s); 
     if (subkey.getValue(rtl::OUString(), &v[0]) != REG_NO_ERROR
         || v.back() != '\0'
         || !rtl_convertStringToUString(
@@ -1709,7 +1709,7 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
                     static_cast< cppu::OWeakObject * >(this), 0);
             }
         }
-        //TODO: The below leaves data_ in an inconsistent state upon exceptions:
+        
         data_.namedImplementations.insert(
             extra.namedImplementations.begin(),
             extra.namedImplementations.end());
@@ -1719,8 +1719,8 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
         insertImplementationMap(&data_.services, extra.services);
         insertImplementationMap(&data_.singletons, extra.singletons);
     }
-    //TODO: Updating the component context singleton data should be part of the
-    // atomic service manager update:
+    
+    
     if (!extra.singletons.empty()) {
         assert(context_.is());
         css::uno::Reference< css::container::XNameContainer > cont(
@@ -1730,7 +1730,7 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
              i != extra.singletons.end(); ++i)
         {
             rtl::OUString name("/singletons/" + i->first);
-            //TODO: Update should be atomic:
+            
             try {
                 cont->removeByName(name + "/arguments");
             } catch (const css::container::NoSuchElementException &) {}
@@ -1762,9 +1762,9 @@ bool cppuhelper::ServiceManager::insertExtraData(Data const & extra) {
 void cppuhelper::ServiceManager::removeRdbFiles(
     std::vector< rtl::OUString > const & uris)
 {
-    // The underlying data structures make this function somewhat inefficient,
-    // but the assumption is that it is rarely called (and that if it is called,
-    // it is called with a uris vector of size one):
+    
+    
+    
     std::vector< boost::shared_ptr< Data::Implementation > > clear;
     {
         osl::MutexGuard g(rBHelper.rMutex);
@@ -1778,8 +1778,8 @@ void cppuhelper::ServiceManager::removeRdbFiles(
                 assert(j->second.get() != 0);
                 if (j->second->info->rdbFile == *i) {
                     clear.push_back(j->second);
-                    //TODO: The below leaves data_ in an inconsistent state upon
-                    // exceptions:
+                    
+                    
                     removeFromImplementationMap(
                         &data_.services, j->second->info->services, j->second);
                     removeFromImplementationMap(
@@ -1792,7 +1792,7 @@ void cppuhelper::ServiceManager::removeRdbFiles(
             }
         }
     }
-    //TODO: Update the component context singleton data
+    
 }
 
 bool cppuhelper::ServiceManager::removeLegacyFactory(
@@ -1814,7 +1814,7 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
         if (removeListener) {
             comp = i->second->component;
         }
-        //TODO: The below leaves data_ in an inconsistent state upon exceptions:
+        
         removeFromImplementationMap(
             &data_.services, i->second->info->services, i->second);
         removeFromImplementationMap(
@@ -1831,8 +1831,8 @@ bool cppuhelper::ServiceManager::removeLegacyFactory(
 }
 
 void cppuhelper::ServiceManager::removeImplementation(rtl::OUString name) {
-    // The underlying data structures make this function somewhat inefficient,
-    // but the assumption is that it is rarely called:
+    
+    
     boost::shared_ptr< Data::Implementation > clear;
     {
         osl::MutexGuard g(rBHelper.rMutex);
@@ -1848,7 +1848,7 @@ void cppuhelper::ServiceManager::removeImplementation(rtl::OUString name) {
         }
         assert(i->second.get() != 0);
         clear = i->second;
-        //TODO: The below leaves data_ in an inconsistent state upon exceptions:
+        
         removeFromImplementationMap(
             &data_.services, i->second->info->services, i->second);
         removeFromImplementationMap(

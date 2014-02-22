@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,10 +38,10 @@ using namespace com::sun::star::sdb;
 using namespace com::sun::star::frame;
 using namespace connectivity::macab;
 
-// =======================================================================
-// = MacabImplModule
-// =======================================================================
-// --------------------------------------------------------------------------------
+
+
+
+
 MacabImplModule::MacabImplModule()
     :m_bAttemptedLoadModule(false)
     ,m_hConnectorModule(NULL)
@@ -49,13 +49,13 @@ MacabImplModule::MacabImplModule()
 {
 }
 
-// --------------------------------------------------------------------------------
+
 bool MacabImplModule::isMacOSPresent()
 {
     return impl_loadModule();
 }
 
-// --------------------------------------------------------------------------------
+
 namespace
 {
     template< typename FUNCTION >
@@ -69,7 +69,7 @@ namespace
             _rFunction = (FUNCTION)( osl_getSymbol( _rModule, sSymbolName.pData ) );
 
             if ( !_rFunction )
-            {   // did not find the symbol
+            {   
                 OSL_FAIL( OString( OString( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " ) + OString( _pAsciiSymbolName ) ).getStr() );
                 osl_unloadModule( _rModule );
                 _rModule = NULL;
@@ -78,7 +78,7 @@ namespace
     }
 }
 
-// --------------------------------------------------------------------------------
+
 extern "C" { static void SAL_CALL thisModule() {} }
 
 bool MacabImplModule::impl_loadModule()
@@ -91,7 +91,7 @@ bool MacabImplModule::impl_loadModule()
         "MacabImplModule::impl_loadModule: inconsistence: inconsistency (never attempted load before, but some values already set)!");
 
     const OUString sModuleName( SAL_MODULENAME( "macabdrv1" ) );
-    m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   // LAZY! #i61335#
+    m_hConnectorModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, SAL_LOADMODULE_NOW );   
     OSL_ENSURE( m_hConnectorModule, "MacabImplModule::impl_loadModule: could not load the implementation library!" );
     if ( !m_hConnectorModule )
         return false;
@@ -99,13 +99,13 @@ bool MacabImplModule::impl_loadModule()
     lcl_getFunctionFromModuleOrUnload( m_hConnectorModule, "createMacabConnection",   m_pConnectionFactoryFunc );
 
     if ( !m_hConnectorModule )
-        // one of the symbols did not exist
+        
         throw RuntimeException();
 
     return true;
 }
 
-// --------------------------------------------------------------------------------
+
 void MacabImplModule::impl_unloadModule()
 {
     OSL_PRECOND( m_hConnectorModule != NULL, "MacabImplModule::impl_unloadModule: no module!" );
@@ -118,7 +118,7 @@ void MacabImplModule::impl_unloadModule()
     m_bAttemptedLoadModule = false;
 }
 
-// --------------------------------------------------------------------------------
+
 void MacabImplModule::init()
 {
     if ( !impl_loadModule() )
@@ -126,7 +126,7 @@ void MacabImplModule::init()
 
 }
 
-// --------------------------------------------------------------------------------
+
 void MacabImplModule::impl_throwNoMacOSException()
 {
     ::connectivity::SharedResources aResources;
@@ -136,7 +136,7 @@ void MacabImplModule::impl_throwNoMacOSException()
     impl_throwGenericSQLException( sError );
 }
 
-// --------------------------------------------------------------------------------
+
 void MacabImplModule::impl_throwGenericSQLException( const OUString& _rMessage )
 {
     SQLException aError;
@@ -146,7 +146,7 @@ void MacabImplModule::impl_throwGenericSQLException( const OUString& _rMessage )
     throw aError;
 }
 
-// --------------------------------------------------------------------------------
+
 MacabConnection* MacabImplModule::createConnection( MacabDriver* _pDriver ) const
 {
     OSL_PRECOND( m_hConnectorModule, "MacabImplModule::createConnection: not initialized!" );
@@ -158,7 +158,7 @@ MacabConnection* MacabImplModule::createConnection( MacabDriver* _pDriver ) cons
     return static_cast< MacabConnection* >( pUntypedConnection );
 }
 
-// --------------------------------------------------------------------------------
+
 void MacabImplModule::shutdown()
 {
     if ( !m_hConnectorModule )
@@ -167,9 +167,9 @@ void MacabImplModule::shutdown()
     impl_unloadModule();
 }
 
-// =======================================================================
-// = MacabDriver
-// =======================================================================
+
+
+
 MacabDriver::MacabDriver(
     const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext)
     : MacabDriver_BASE(m_aMutex),
@@ -191,12 +191,12 @@ MacabDriver::MacabDriver(
     }
     osl_atomic_decrement( &m_refCount );
 }
-// --------------------------------------------------------------------------------
+
 void MacabDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // when driver will be destroied so all our connections have to be destroied as well
+    
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
@@ -207,23 +207,23 @@ void MacabDriver::disposing()
 
     WeakComponentImplHelperBase::disposing();
 }
-// static ServiceInfo
-//------------------------------------------------------------------------------
+
+
 OUString MacabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString::createFromAscii( impl_getAsciiImplementationName() );
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported
-    // for more information @see com.sun.star.sdbc.Driver
+    
+    
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.sdbc.Driver";
 
     return aSNS;
 }
-//------------------------------------------------------------------
+
 OUString SAL_CALL MacabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -233,35 +233,35 @@ sal_Bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName ) 
 {
     return cppu::supportsService(this, _rServiceName);
 }
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL MacabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-// --------------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_aImplModule.init();
 
-    // create a new connection with the given properties and append it to our vector
+    
     MacabConnection* pConnection = m_aImplModule.createConnection( this );
     OSL_POSTCOND( pConnection, "MacabDriver::connect: no connection has been created by the factory!" );
 
-    // by definition, the factory function returned an object which was acquired once
+    
     Reference< XConnection > xConnection = pConnection;
     pConnection->release();
 
-    // late constructor call which can throw exception and allows a correct dtor call when so
+    
     pConnection->construct( url, info );
 
-    // remember it
+    
     m_xConnections.push_back( WeakReferenceHelper( *pConnection ) );
 
     return xConnection;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
         throw(SQLException, RuntimeException)
 {
@@ -270,48 +270,48 @@ sal_Bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
     if ( !m_aImplModule.isMacOSPresent() )
         return sal_False;
 
-    // here we have to look whether we support this URL format
+    
     return url.equals("sdbc:address:macab");
 }
-// --------------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
 {
-    // if you have something special to say, return it here :-)
+    
     return Sequence< DriverPropertyInfo >();
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MacabDriver::getMajorVersion(  ) throw(RuntimeException)
 {
     return MACAB_DRIVER_VERSION_MAJOR;
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MacabDriver::getMinorVersion(  ) throw(RuntimeException)
 {
     return MACAB_DRIVER_VERSION_MINOR;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL MacabDriver::queryTermination( const EventObject& ) throw (TerminationVetoException, RuntimeException)
 {
-    // nothing to do, nothing to veto
+    
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL MacabDriver::notifyTermination( const EventObject& ) throw (RuntimeException)
 {
     m_aImplModule.shutdown();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL MacabDriver::disposing( const EventObject& ) throw (RuntimeException)
 {
-    // not interested in (this is the disposing of the desktop, if any)
+    
 }
-// --------------------------------------------------------------------------------
+
 const sal_Char* MacabDriver::impl_getAsciiImplementationName()
 {
     return "com.sun.star.comp.sdbc.macab.Driver";
-        // this name is referenced in the configuration and in the macab.xml
-        // Please be careful when changing it.
+        
+        
 }
-// --------------------------------------------------------------------------------
+
 OUString MacabDriver::impl_getConfigurationSettingsPath()
 {
     OUStringBuffer aPath;
@@ -319,7 +319,7 @@ OUString MacabDriver::impl_getConfigurationSettingsPath()
     aPath.appendAscii( "com.sun.star.comp.sdbc.macab.Driver" );
     return aPath.makeStringAndClear();
 }
-// --------------------------------------------------------------------------------
+
 Reference< XInterface >  SAL_CALL MacabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory ) throw( Exception )
 {
     return *(new MacabDriver(comphelper::getComponentContext(_rxFactory)));

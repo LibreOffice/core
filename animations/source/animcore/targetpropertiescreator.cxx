@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -63,25 +63,25 @@ namespace animcore
             return uno::Reference< uno::XInterface >( static_cast<cppu::OWeakObject*>(new TargetPropertiesCreator( xContext )) );
         }
 
-        /// Dispose all internal references
+        
         virtual void SAL_CALL disposing();
 
-        // XTargetPropertiesCreator
+        
         virtual uno::Sequence< animations::TargetProperties > SAL_CALL createInitialTargetProperties( const uno::Reference< animations::XAnimationNode >& rootNode ) throw (uno::RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw( uno::RuntimeException );
         virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( uno::RuntimeException );
         virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw( uno::RuntimeException );
 
-        // XServiceName
+        
         virtual OUString SAL_CALL getServiceName(  ) throw (uno::RuntimeException);
 
     protected:
-        ~TargetPropertiesCreator(); // we're a ref-counted UNO class. _We_ destroy ourselves.
+        ~TargetPropertiesCreator(); 
 
     private:
-        // default: disabled copy/assignment
+        
         TargetPropertiesCreator(const TargetPropertiesCreator&);
         TargetPropertiesCreator& operator=( const TargetPropertiesCreator& );
 
@@ -107,7 +107,7 @@ namespace animcore
 
     namespace
     {
-        // Vector containing all properties for a given shape
+        
         typedef ::std::vector< beans::NamedValue > VectorOfNamedValues;
 
         /** The hash map key
@@ -118,7 +118,7 @@ namespace animcore
          */
         struct ShapeHashKey
         {
-            /// Shape target
+            
             uno::Reference< drawing::XShape >   mxRef;
 
             /** Paragraph index.
@@ -128,36 +128,36 @@ namespace animcore
              */
             sal_Int16                           mnParagraphIndex;
 
-            /// Comparison needed for boost::unordered_map
+            
             bool operator==( const ShapeHashKey& rRHS ) const
             {
                 return mxRef == rRHS.mxRef && mnParagraphIndex == rRHS.mnParagraphIndex;
             }
         };
 
-        // A hash functor for ShapeHashKey objects
+        
         struct ShapeKeyHasher
         {
             ::std::size_t operator()( const ShapeHashKey& rKey ) const
             {
-                // TODO(P2): Maybe a better hash function would be to
-                // spread mnParagraphIndex to 32 bit: a0b0c0d0e0... Hakmem
-                // should have a formula.
+                
+                
+                
                 //
-                // Yes it has:
-                // x = (x & 0x0000FF00) << 8) | (x >> 8) & 0x0000FF00 | x & 0xFF0000FF;
-                // x = (x & 0x00F000F0) << 4) | (x >> 4) & 0x00F000F0 | x & 0xF00FF00F;
-                // x = (x & 0x0C0C0C0C) << 2) | (x >> 2) & 0x0C0C0C0C | x & 0xC3C3C3C3;
-                // x = (x & 0x22222222) << 1) | (x >> 1) & 0x22222222 | x & 0x99999999;
+                
+                
+                
+                
+                
                 //
-                // Costs about 17 cycles on a RISC machine with infinite
-                // instruction level parallelism (~42 basic
-                // instructions). Thus I truly doubt this pays off...
+                
+                
+                
                 return reinterpret_cast< ::std::size_t >(rKey.mxRef.get()) ^ (rKey.mnParagraphIndex << 16L);
             }
         };
 
-        // A hash map which maps a XShape to the corresponding vector of initial properties
+        
         typedef ::boost::unordered_map< ShapeHashKey, VectorOfNamedValues, ShapeKeyHasher > XShapeHash;
 
 
@@ -195,13 +195,13 @@ namespace animcore
                 {
                     case animations::AnimationNodeType::ITERATE:
                     {
-                        // extract target shape from iterate node
-                        // (will override the target for all children)
+                        
+                        
 
                         uno::Reference< animations::XIterateContainer > xIterNode( xNode,
                                                                                    uno::UNO_QUERY );
 
-                        // TODO(E1): I'm not too sure what to expect here...
+                        
                         if( !xIterNode->getTarget().hasValue() )
                         {
                             OSL_FAIL( "animcore: NodeFunctor::operator(): no target on ITERATE node" );
@@ -215,7 +215,7 @@ namespace animcore
                         {
                             ::com::sun::star::presentation::ParagraphTarget aTarget;
 
-                            // no shape provided. Maybe a ParagraphTarget?
+                            
                             if( !(xIterNode->getTarget() >>= aTarget) )
                             {
                                 OSL_FAIL( "animcore: NodeFunctor::operator(): could not extract any "
@@ -233,9 +233,9 @@ namespace animcore
                             }
                         }
                     }
-                        // FALLTHROUGH intended
+                        
                     case animations::AnimationNodeType::PAR:
-                        // FALLTHROUGH intended
+                        
                     case animations::AnimationNodeType::SEQ:
                     {
                         NodeFunctor aFunctor( mrShapeHash,
@@ -251,54 +251,54 @@ namespace animcore
                     break;
 
                     case animations::AnimationNodeType::CUSTOM:
-                        // FALLTHROUGH intended
+                        
                     case animations::AnimationNodeType::ANIMATE:
-                        // FALLTHROUGH intended
+                        
                     case animations::AnimationNodeType::ANIMATEMOTION:
-                        // FALLTHROUGH intended
+                        
                     case animations::AnimationNodeType::ANIMATECOLOR:
-                        // FALLTHROUGH intended
+                        
                     case animations::AnimationNodeType::ANIMATETRANSFORM:
-                        // FALLTHROUGH intended
+                        
                     case animations::AnimationNodeType::TRANSITIONFILTER:
-                        // FALLTHROUGH intended
+                        
                     case animations::AnimationNodeType::AUDIO:
-                        // FALLTHROUGH intended
+                        
                     /*default:
-                        // ignore this node, no valuable content for now.
+                        
                         break;*/
 
                     case animations::AnimationNodeType::SET:
                     {
-                        // evaluate set node content
+                        
                         uno::Reference< animations::XAnimate > xAnimateNode( xNode,
                                                                              uno::UNO_QUERY );
 
                         if( !xAnimateNode.is() )
-                            break; // invalid node
+                            break; 
 
-                        // determine target shape (if any)
+                        
                         ShapeHashKey aTarget;
                         if( xTargetShape.is() )
                         {
-                            // override target shape with parent-supplied
+                            
                             aTarget.mxRef = xTargetShape;
                             aTarget.mnParagraphIndex = nParagraphIndex;
                         }
                         else
                         {
-                            // no parent-supplied target, retrieve
-                            // node target
+                            
+                            
                             if( (xAnimateNode->getTarget() >>= aTarget.mxRef) )
                             {
-                                // pure shape target - set paragraph
-                                // index to magic
+                                
+                                
                                 aTarget.mnParagraphIndex = -1;
                             }
                             else
                             {
-                                // not a pure shape target - maybe a
-                                // ParagraphTarget?
+                                
+                                
                                 presentation::ParagraphTarget aUnoTarget;
 
                                 if( !(xAnimateNode->getTarget() >>= aUnoTarget) )
@@ -315,35 +315,35 @@ namespace animcore
                         if( !aTarget.mxRef.is() )
                         {
                             OSL_FAIL( "AnimCore: NodeFunctor::operator(): Found target, but XShape is NULL" );
-                            break; // invalid target XShape
+                            break; 
                         }
 
-                        // check whether we already have an entry for
-                        // this target (we only take the first set
-                        // effect for every shape)
+                        
+                        
+                        
                         XShapeHash::const_iterator aIter;
                         if( (aIter=mrShapeHash.find( aTarget )) != mrShapeHash.end() )
-                            break; // already an entry in existence for given XShape
+                            break; 
 
-                        // if this is an appear effect, hide shape
-                        // initially. This is currently the only place
-                        // where a shape effect influences shape
-                        // attributes outside it's effective duration.
+                        
+                        
+                        
+                        
                         sal_Bool bVisible( sal_False );
                         if( xAnimateNode->getAttributeName().equalsIgnoreAsciiCase("visibility") )
                         {
 
                             uno::Any aAny( xAnimateNode->getTo() );
 
-                            // try to extract bool value
+                            
                             if( !(aAny >>= bVisible) )
                             {
-                                // try to extract string
+                                
                                 OUString aString;
                                 if( (aAny >>= aString) )
                                 {
-                                    // we also take the strings "true" and "false",
-                                    // as well as "on" and "off" here
+                                    
+                                    
                                     if( aString.equalsIgnoreAsciiCase("true") ||
                                         aString.equalsIgnoreAsciiCase("on") )
                                     {
@@ -359,25 +359,25 @@ namespace animcore
 
                             /*if( bVisible )
                             {
-                                // target is set to 'visible' at the
-                                // first relevant effect. Thus, target
-                                // must be initially _hidden_, for the
-                                // effect to have visible impact.
+                                
+                                
+                                
+                                
                                 */
                 }
-                            // target is set the 'visible' value,
-                            // so we should record the opposite value
+                            
+                            
                 mrShapeHash.insert(
                                     XShapeHash::value_type(
                                         aTarget,
                                         VectorOfNamedValues(
                                             1,
                                             beans::NamedValue(
-                                                //xAnimateNode->getAttributeName(),
+                                                
                                                 OUString("visibility"),
                                                 uno::makeAny( !bVisible ) ) ) ) );
-                            //}
-                        //}
+                            
+                        
                     }
                     break;
                 }
@@ -404,7 +404,7 @@ namespace animcore
         ::osl::MutexGuard aGuard( m_aMutex );
     }
 
-    // XTargetPropertiesCreator
+    
     uno::Sequence< animations::TargetProperties > SAL_CALL TargetPropertiesCreator::createInitialTargetProperties
         (
             const uno::Reference< animations::XAnimationNode >& xRootNode
@@ -412,21 +412,21 @@ namespace animcore
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // scan all nodes for visibility changes, and record first
-        // 'visibility=true' for each shape
+        
+        
         XShapeHash aShapeHash( 101 );
 
         NodeFunctor aFunctor( aShapeHash );
 
-        // TODO(F1): Maybe limit functor application to main sequence
-        // alone (CL said something that shape visibility is only
-        // affected by effects in the main sequence for PPT).
+        
+        
+        
         //
-        // OTOH, client code can pass us only the main sequence (which
-        // it actually does right now, for the slideshow implementation).
+        
+        
         aFunctor( xRootNode );
 
-        // output to result sequence
+        
         uno::Sequence< animations::TargetProperties > aRes( aShapeHash.size() );
 
         ::std::size_t                       nCurrIndex(0);
@@ -456,7 +456,7 @@ namespace animcore
         return aRes;
     }
 
-    // XServiceInfo
+    
     OUString SAL_CALL TargetPropertiesCreator::getImplementationName() throw( uno::RuntimeException )
     {
         return OUString( IMPLEMENTATION_NAME );
@@ -475,12 +475,12 @@ namespace animcore
         return aRet;
     }
 
-    // XServiceName
+    
     OUString SAL_CALL TargetPropertiesCreator::getServiceName(  ) throw (uno::RuntimeException)
     {
         return OUString( SERVICE_NAME );
     }
 
-} // namespace animcore
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,9 +43,9 @@ namespace cppcanvas
             mxAnimatedSprite(),
             mpTransformArbiter( rTransformArbiter )
         {
-            // Avoiding ternary operator in initializer list (Solaris
-            // compiler bug, when function call and temporary is
-            // involved)
+            
+            
+            
             if( rParentCanvas.is() )
                 mxGraphicDevice = rParentCanvas->getDevice();
 
@@ -57,11 +57,11 @@ namespace cppcanvas
 
         ImplSprite::~ImplSprite()
         {
-            // hide the sprite on the canvas. If we don't hide the
-            // sprite, it will stay on the canvas forever, since the
-            // canvas naturally keeps a list of visible sprites
-            // (otherwise, it wouldn't be able to paint them
-            // autonomously)
+            
+            
+            
+            
+            
             if( mxSprite.is() )
                 mxSprite->hide();
         }
@@ -145,13 +145,13 @@ namespace cppcanvas
             {
                 ::basegfx::B2DPolyPolygon   aTransformedClipPoly( rClipPoly );
 
-                // extract linear part of canvas view transformation (linear means:
-                // without translational components)
+                
+                
                 ::basegfx::B2DHomMatrix     aViewTransform( mpTransformArbiter->getTransformation() );
                 aViewTransform.set( 0, 2, 0.0 );
                 aViewTransform.set( 1, 2, 0.0 );
 
-                // transform polygon from view to device coordinate space
+                
                 aTransformedClipPoly.transform( aViewTransform );
 
                 mxSprite->clip( ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon( mxGraphicDevice,

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "formulagroup.hxx"
@@ -28,11 +28,11 @@
 #include "op_array.hxx"
 #include "op_spreadsheet.hxx"
 #include "op_addin.hxx"
-/// CONFIGURATIONS
-// Comment out this to turn off FMIN and FMAX intrinsics
+
+
 #define USE_FMIN_FMAX 1
-#define REDUCE_THRESHOLD 4  // set to 4 for correctness testing. priority 1
-#define UNROLLING_FACTOR 16  // set to 4 for correctness testing (if no reduce)
+#define REDUCE_THRESHOLD 4  
+#define UNROLLING_FACTOR 16  
 #include "formulagroupcl_public.hxx"
 #ifdef WIN32
 #ifndef NAN
@@ -63,7 +63,7 @@ using namespace formula;
 namespace sc { namespace opencl {
 
 
-/// Map the buffer used by an argument and do necessary argument setting
+
 size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
 {
     FormulaToken *ref = mFormulaTree->GetFormulaToken();
@@ -87,7 +87,7 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
     } else {
         throw Unhandled();
     }
-    // Obtain cl context
+    
     KernelEnv kEnv;
     OpenclDevice::setKernelEnv(&kEnv);
     cl_int err;
@@ -103,8 +103,8 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
     else
     {
         if (szHostBuffer == 0)
-            szHostBuffer = sizeof(double); // a dummy small value
-        // Marshal as a buffer of NANs
+            szHostBuffer = sizeof(double); 
+        
         mpClmem = clCreateBuffer(kEnv.mpkContext,
                 (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
                 szHostBuffer, NULL, &err);
@@ -127,17 +127,17 @@ size_t VectorRef::Marshal(cl_kernel k, int argno, int, cl_program)
     return 1;
 }
 
-/// Arguments that are actually compile-time constant string
-/// Currently, only the hash is passed.
-/// TBD(IJSUNG): pass also length and the actual string if there is a
-/// hash function collision
+
+
+
+
 class ConstStringArgument: public DynamicKernelArgument
 {
 public:
     ConstStringArgument(const std::string &s,
         FormulaTreeNodeRef ft):
             DynamicKernelArgument(s, ft) {}
-    /// Generate declaration
+    
     virtual void GenDecl(std::stringstream &ss) const
     {
         ss << "unsigned " << mSymName;
@@ -163,7 +163,7 @@ public:
     {
         return 1;
     }
-    /// Pass the 32-bit hash of the string to the kernel
+    
     virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
         FormulaToken *ref = mFormulaTree->GetFormulaToken();
@@ -175,11 +175,11 @@ public:
         } else {
             throw Unhandled();
         }
-        // marshaling
-        // Obtain cl context
+        
+        
         KernelEnv kEnv;
         OpenclDevice::setKernelEnv(&kEnv);
-        // Pass the scalar result back to the rest of the formula kernel
+        
         cl_int err = clSetKernelArg(k, argno, sizeof(cl_uint), (void*)&hashCode);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -187,14 +187,14 @@ public:
     }
 };
 
-/// Arguments that are actually compile-time constants
+
 class DynamicKernelConstantArgument: public DynamicKernelArgument
 {
 public:
     DynamicKernelConstantArgument(const std::string &s,
         FormulaTreeNodeRef ft):
             DynamicKernelArgument(s, ft) {}
-    /// Generate declaration
+    
     virtual void GenDecl(std::stringstream &ss) const
     {
         ss << "double " << mSymName;
@@ -224,11 +224,11 @@ public:
             throw Unhandled();
         return Tok->GetDouble();
     }
-    /// Create buffer and pass the buffer to a given kernel
+    
     virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
         double tmp = GetDouble();
-        // Pass the scalar result back to the rest of the formula kernel
+        
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -243,7 +243,7 @@ public:
     DynamicKernelPiArgument(const std::string &s,
         FormulaTreeNodeRef ft):
             DynamicKernelArgument(s, ft) {}
-    /// Generate declaration
+    
     virtual void GenDecl(std::stringstream &ss) const
     {
         ss << "double " << mSymName;
@@ -264,11 +264,11 @@ public:
     {
         return 1;
     }
-    /// Create buffer and pass the buffer to a given kernel
+    
     virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
         double tmp = 0.0;
-        // Pass the scalar result back to the rest of the formula kernel
+        
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -282,7 +282,7 @@ public:
     DynamicKernelRandomArgument(const std::string &s,
         FormulaTreeNodeRef ft):
             DynamicKernelArgument(s, ft) {}
-    /// Generate declaration
+    
     virtual void GenDecl(std::stringstream &ss) const
     {
         ss << "double " << mSymName;
@@ -323,11 +323,11 @@ public:
     {
         return 1;
     }
-    /// Create buffer and pass the buffer to a given kernel
+    
     virtual size_t Marshal(cl_kernel k, int argno, int, cl_program)
     {
         double tmp = 0.0;
-        // Pass the scalar result back to the rest of the formula kernel
+        
         cl_int err = clSetKernelArg(k, argno, sizeof(double), (void*)&tmp);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -335,7 +335,7 @@ public:
     }
 };
 
-/// A vector of strings
+
 class DynamicKernelStringArgument: public VectorRef
 {
 public:
@@ -344,7 +344,7 @@ public:
         VectorRef(s, ft, index) {}
 
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
-    /// Generate declaration
+    
     virtual void GenDecl(std::stringstream &ss) const
     {
         ss << "__global unsigned int *"<<mSymName;
@@ -356,11 +356,11 @@ public:
     virtual size_t Marshal(cl_kernel, int, int, cl_program);
 };
 
-/// Marshal a string vector reference
+
 size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_program)
 {
     FormulaToken *ref = mFormulaTree->GetFormulaToken();
-    // Obtain cl context
+    
     KernelEnv kEnv;
     OpenclDevice::setKernelEnv(&kEnv);
     cl_int err;
@@ -378,7 +378,7 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
         vRef = pDVR->GetArrays()[mnIndex];
     }
     size_t szHostBuffer = nStrings * sizeof(cl_int);
-    // Marshal strings. Right now we pass hashes of these string
+    
     mpClmem = clCreateBuffer(kEnv.mpkContext,
             (cl_mem_flags) CL_MEM_READ_ONLY|CL_MEM_ALLOC_HOST_PTR,
             szHostBuffer, NULL, &err);
@@ -412,7 +412,7 @@ size_t DynamicKernelStringArgument::Marshal(cl_kernel k, int argno, int, cl_prog
     return 1;
 }
 
-/// A mixed string/numberic vector
+
 class DynamicKernelMixedArgument: public VectorRef
 {
 public:
@@ -426,7 +426,7 @@ public:
         mStringArgument.GenSlidingWindowDecl(ss);
     }
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
-    /// Generate declaration
+    
     virtual void GenDecl(std::stringstream &ss) const
     {
         VectorRef::GenDecl(ss);
@@ -470,14 +470,14 @@ protected:
     DynamicKernelStringArgument mStringArgument;
 };
 
-/// Handling a Double Vector that is used as a sliding window input
-/// to either a sliding window average or sum-of-products
-/// Generate a sequential loop for reductions
-class OpSum; // Forward Declaration
-class OpAverage; // Forward Declaration
-class OpMin; // Forward Declaration
-class OpMax; // Forward Declaration
-class OpCount; // Forward Declaration
+
+
+
+class OpSum; 
+class OpAverage; 
+class OpMin; 
+class OpMax; 
+class OpCount; 
 template<class Base>
 class DynamicKernelSlidingArgument: public Base
 {
@@ -494,7 +494,7 @@ public:
         bIsStartFixed = mpDVR->IsStartFixed();
         bIsEndFixed = mpDVR->IsEndFixed();
     }
-    // Should only be called by SumIfs. Yikes!
+    
     virtual bool NeedParallelReduction(void) const
     {
         assert(dynamic_cast<OpSumIfs*>(mpCodeGen.get()));
@@ -526,16 +526,16 @@ public:
         }
         return ss.str();
     }
-    /// Controls how the elements in the DoubleVectorRef are traversed
+    
     virtual size_t GenReductionLoopHeader(
         std::stringstream &ss, bool &needBody)
     {
         assert(mpDVR);
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
-        // original for loop
+        
 #ifndef UNROLLING_FACTOR
         needBody = true;
-        // No need to generate a for-loop for degenerated cases
+        
         if (nCurWindowSize == 1)
         {
             ss << "if (gid0 <" << mpDVR->GetArrayLength();
@@ -615,7 +615,7 @@ return nCurWindowSize;
                     }
                     ss << "}\n\t";
                 }
-                // The residual of mod outLoopSize
+                
                 for(unsigned int count=nCurWindowSize/outLoopSize*outLoopSize; count < nCurWindowSize; count++){
                     ss << "i = "<<count<<";\n\t";
                     if(count==nCurWindowSize/outLoopSize*outLoopSize){
@@ -628,13 +628,13 @@ return nCurWindowSize;
                     }
                     ss << temp2.str();
                 }
-                ss << "} // to scope the int i declaration\n";
+                ss << "} 
                 needBody = false;
                 return nCurWindowSize;
             }
-            // (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
+            
             else {
-                ss << "//else situation \n\t";
+                ss << "
                 ss << "tmpBottom = " << mpCodeGen->GetBottom() << ";\n\t";
                 ss << "{int i;\n\t";
                 std::stringstream temp1,temp2;
@@ -652,7 +652,7 @@ return nCurWindowSize;
                     }
                     ss << "}\n\t";
                 }
-                // The residual of mod outLoopSize
+                
                 for(unsigned int count=nCurWindowSize/outLoopSize*outLoopSize; count < nCurWindowSize; count++){
                     ss << "i = "<<count<<";\n\t";
                     if(count==nCurWindowSize/outLoopSize*outLoopSize){
@@ -662,7 +662,7 @@ return nCurWindowSize;
                     }
                     ss << temp2.str();
                 }
-                ss << "} // to scope the int i declaration\n";
+                ss << "} 
                 needBody = false;
                 return nCurWindowSize;
             }
@@ -689,13 +689,13 @@ return nCurWindowSize;
 protected:
     bool bIsStartFixed, bIsEndFixed;
     const formula::DoubleVectorRefToken *mpDVR;
-    // from parent nodes
+    
     boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
-    // controls whether to invoke the reduction kernel during marshaling or not
+    
     cl_mem mpClmem2;
 };
 
-/// A mixed string/numberic vector
+
 class DynamicKernelMixedSlidingArgument : public VectorRef
 {
 public:
@@ -712,7 +712,7 @@ public:
         mStringArgument.GenSlidingWindowDecl(ss);
     }
     virtual void GenSlidingWindowFunction(std::stringstream &) {}
-    /// Generate declaration
+    
     virtual void GenDecl(std::stringstream &ss) const
     {
         mDoubleArgument.GenDecl(ss);
@@ -756,17 +756,17 @@ protected:
     DynamicKernelSlidingArgument<VectorRef> mDoubleArgument;
     DynamicKernelSlidingArgument<DynamicKernelStringArgument> mStringArgument;
 };
-/// Holds the symbol table for a given dynamic kernel
+
 class SymbolTable {
 public:
     typedef std::map<const formula::FormulaToken *,
         boost::shared_ptr<DynamicKernelArgument> > ArgumentMap;
-    // This avoids instability caused by using pointer as the key type
+    
     typedef std::list< boost::shared_ptr<DynamicKernelArgument> > ArgumentList;
     SymbolTable(void):mCurId(0) {}
     template <class T>
     const DynamicKernelArgument *DeclRefArg(FormulaTreeNodeRef, SlidingFunctionBase* pCodeGen);
-    /// Used to generate sliding window helpers
+    
     void DumpSlidingWindowFunctions(std::stringstream &ss)
     {
         for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
@@ -775,10 +775,10 @@ public:
             ss << "\n";
         }
     }
-    /// Memory mapping from host to device and pass buffers to the given kernel as
-    /// arguments
+    
+    
     void Marshal(cl_kernel, int, cl_program);
-    // number of result items.
+    
     static int nR;
 private:
     unsigned int mCurId;
@@ -789,15 +789,15 @@ int SymbolTable::nR = 0;
 
 void SymbolTable::Marshal(cl_kernel k, int nVectorWidth, cl_program pProgram)
 {
-    int i = 1; //The first argument is reserved for results
+    int i = 1; 
     for(ArgumentList::iterator it = mParams.begin(), e= mParams.end(); it!=e;
             ++it) {
         i+=(*it)->Marshal(k, i, nVectorWidth, pProgram);
     }
 }
 
-/// Handling a Double Vector that is used as a sliding window input
-/// Performs parallel reduction based on given operator
+
+
 template<class Base>
 class ParallelReductionVectorRef: public Base
 {
@@ -814,7 +814,7 @@ public:
         bIsStartFixed = mpDVR->IsStartFixed();
         bIsEndFixed = mpDVR->IsEndFixed();
     }
-    /// Emit the definition for the auxiliary reduction kernel
+    
     virtual void GenSlidingWindowFunction(std::stringstream &ss) {
       if ( !dynamic_cast<OpAverage*>(mpCodeGen.get()))
       {
@@ -830,7 +830,7 @@ public:
         ss << "    __local double shm_buf[256];\n";
         if (mpDVR->IsStartFixed())
             ss << "    int offset = 0;\n";
-        else // if (!mpDVR->IsStartFixed())
+        else 
             ss << "    int offset = get_group_id(1);\n";
         if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
             ss << "    int end = windowSize;\n";
@@ -860,7 +860,7 @@ public:
         ss << "    for (int i = 128; i >0; i/=2) {\n";
         ss << "        if (lidx < i)\n";
         ss << "            shm_buf[lidx] = ";
-        // Special case count
+        
         if (dynamic_cast<OpCount*>(mpCodeGen.get()))
             ss << "shm_buf[lidx] + shm_buf[lidx + i];\n";
         else
@@ -894,7 +894,7 @@ public:
         ss << "    __local double shm_buf[256];\n";
         if (mpDVR->IsStartFixed())
             ss << "    int offset = 0;\n";
-        else // if (!mpDVR->IsStartFixed())
+        else 
             ss << "    int offset = get_group_id(1);\n";
         if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
             ss << "    int end = windowSize;\n";
@@ -948,7 +948,7 @@ public:
         ss << "    __local double shm_buf[256];\n";
         if (mpDVR->IsStartFixed())
             ss << "    int offset = 0;\n";
-        else // if (!mpDVR->IsStartFixed())
+        else 
             ss << "    int offset = get_group_id(1);\n";
         if (mpDVR->IsStartFixed() && mpDVR->IsEndFixed())
             ss << "    int end = windowSize;\n";
@@ -1001,7 +1001,7 @@ public:
             ss << Base::GetName() << "[i]";
         return ss.str();
     }
-    /// Controls how the elements in the DoubleVectorRef are traversed
+    
     virtual size_t GenReductionLoopHeader(
         std::stringstream &ss, bool &needBody)
     {
@@ -1009,7 +1009,7 @@ public:
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
         std::string temp = Base::GetName() + "[gid0]";
         ss << "tmp = ";
-        // Special case count
+        
         if ( dynamic_cast<OpAverage*>(mpCodeGen.get()))
         {
             ss << mpCodeGen->Gen2(temp, "tmp")<<";\n";
@@ -1029,13 +1029,13 @@ public:
     virtual size_t Marshal(cl_kernel k, int argno, int w, cl_program mpProgram)
     {
         assert(Base::mpClmem == NULL);
-        // Obtain cl context
+        
         KernelEnv kEnv;
         OpenclDevice::setKernelEnv(&kEnv);
         cl_int err;
         size_t nInput = mpDVR->GetArrayLength();
         size_t nCurWindowSize = mpDVR->GetRefRowSize();
-        // create clmem buffer
+        
         if (mpDVR->GetArrays()[Base::mnIndex].mpNumericArray == NULL)
             throw Unhandled();
         double *pHostBuffer = const_cast<double*>(
@@ -1050,7 +1050,7 @@ public:
                 sizeof(double)*w, NULL, NULL);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
-        // reproduce the reduction function name
+        
         std::string kernelName;
         if ( !dynamic_cast<OpAverage*>(mpCodeGen.get()))
            kernelName = Base::GetName() + "_reduction";
@@ -1059,8 +1059,8 @@ public:
         cl_kernel redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
         if (err != CL_SUCCESS)
             throw OpenCLError(err, __FILE__, __LINE__);
-        // set kernel arg of reduction kernel
-        // TODO(Wei Wei): use unique name for kernel
+        
+        
         cl_mem buf = Base::GetCLBuffer();
         err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
                 (void *)&buf);
@@ -1079,7 +1079,7 @@ public:
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
 
-        // set work group size and execute
+        
         size_t global_work_size[] = {256, (size_t)w };
         size_t local_work_size[] = {256, 1};
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
@@ -1111,7 +1111,7 @@ public:
             redKernel = clCreateKernel(mpProgram, kernelName.c_str(), &err);
             if (err != CL_SUCCESS)
                 throw OpenCLError(err, __FILE__, __LINE__);
-            // set kernel arg of reduction kernel
+            
             buf = Base::GetCLBuffer();
             err = clSetKernelArg(redKernel, 0, sizeof(cl_mem),
                     (void *)&buf);
@@ -1130,7 +1130,7 @@ public:
             if (CL_SUCCESS != err)
                 throw OpenCLError(err, __FILE__, __LINE__);
 
-            // set work group size and execute
+            
             size_t global_work_size1[] = {256, (size_t)w };
             size_t local_work_size1[] = {256, 1};
             err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
@@ -1161,7 +1161,7 @@ public:
             if (CL_SUCCESS != err)
                 throw OpenCLError(err, __FILE__, __LINE__);
         }
-        // set kernel arg
+        
         err = clSetKernelArg(k, argno, sizeof(cl_mem), (void*)&(mpClmem2));
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
@@ -1187,9 +1187,9 @@ public:
 protected:
     bool bIsStartFixed, bIsEndFixed;
     const formula::DoubleVectorRefToken *mpDVR;
-    // from parent nodes
+    
     boost::shared_ptr<SlidingFunctionBase> mpCodeGen;
-    // controls whether to invoke the reduction kernel during marshaling or not
+    
     cl_mem mpClmem2;
 };
 
@@ -1231,7 +1231,7 @@ public:
             else if (ParallelNumericRange *PNR =
                     dynamic_cast<ParallelNumericRange *> (vSubArguments[i].get()))
             {
-                //did not handle yet
+                
                 bool needBody;
                 nItems += PNR->GenReductionLoopHeader(ss, needBody);
                 if (needBody == false) continue;
@@ -1239,7 +1239,7 @@ public:
             else if (StringRange *SR =
                     dynamic_cast<StringRange *> (vSubArguments[i].get()))
             {
-                //did not handle yet
+                
                 bool needBody;
                 nItems += SR->GenReductionLoopHeader(ss, needBody);
                 if (needBody == false) continue;
@@ -1296,7 +1296,7 @@ public:
             }
 #else
             ss << "tmp = ";
-            // Generate the operation in binary form
+            
             ss << Gen2(vSubArguments[i]->GenSlidingWindowDeclRef(), "tmp");
             ss << ";\n\t";
 #endif
@@ -1316,7 +1316,7 @@ public:
     virtual bool takeNumeric() const { return true; }
 };
 
-// Strictly binary operators
+
 class Binary: public SlidingFunctionBase
 {
 public:
@@ -1519,7 +1519,7 @@ public:
             }
             ss << "}\n\t";
         }
-        //The residual of mod outLoopSize
+        
         for(unsigned int count=nCurWindowSize/outLoopSize*outLoopSize;
         count < nCurWindowSize; count++)
         {
@@ -1599,7 +1599,7 @@ public:
     virtual bool takeNumeric() const { return true; }
 };
 
-/// operator traits
+
 class OpNop: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "0"; }
@@ -1703,7 +1703,7 @@ public:
     virtual std::string BinFuncName(void) const { return "fmul"; }
 };
 
-/// Technically not a reduction, but fits the framework.
+
 class OpDiv: public Reduction {
 public:
     virtual std::string GetBottom(void) { return "1.0"; }
@@ -1750,7 +1750,7 @@ struct SumIfsArgs {
     double mConst;
 };
 }
-/// Helper functions that have multiple buffers
+
 class DynamicKernelSoPArguments: public DynamicKernelArgument
 {
 public:
@@ -1760,7 +1760,7 @@ public:
     DynamicKernelSoPArguments(
         const std::string &s, const FormulaTreeNodeRef& ft, SlidingFunctionBase* pCodeGen);
 
-    /// Create buffer and pass the buffer to a given kernel
+    
     virtual size_t Marshal(cl_kernel k, int argno, int nVectorWidth, cl_program pProgram)
     {
         unsigned i = 0;
@@ -1771,7 +1771,7 @@ public:
         }
         if (OpGeoMean *OpSumCodeGen = dynamic_cast<OpGeoMean*>(mpCodeGen.get()))
         {
-            // Obtain cl context
+            
             KernelEnv kEnv;
             OpenclDevice::setKernelEnv(&kEnv);
             cl_int err;
@@ -1797,7 +1797,7 @@ public:
                 cl_kernel redKernel = clCreateKernel(pProgram, kernelName.c_str(), &err);
                 if (err != CL_SUCCESS)
                     throw OpenCLError(err, __FILE__, __LINE__);
-                    // set kernel arg of reduction kernel
+                    
                 for (size_t j=0; j< vclmem.size(); j++){
                     err = clSetKernelArg(redKernel, j,
                             vclmem[j]?sizeof(cl_mem):sizeof(double),
@@ -1809,7 +1809,7 @@ public:
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
 
-                // set work group size and execute
+                
                 size_t global_work_size[] = {256, (size_t)nVectorWidth };
                 size_t local_work_size[] = {256, 1};
                 err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
@@ -1820,7 +1820,7 @@ public:
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
 
-                 // Pass pClmem2 to the "real" kernel
+                 
                 err = clSetKernelArg(k, argno, sizeof(cl_mem), (void *)&pClmem2);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
@@ -1828,7 +1828,7 @@ public:
          }
         if (OpSumIfs *OpSumCodeGen = dynamic_cast<OpSumIfs*>(mpCodeGen.get()))
         {
-            // Obtain cl context
+            
             KernelEnv kEnv;
             OpenclDevice::setKernelEnv(&kEnv);
             cl_int err;
@@ -1865,7 +1865,7 @@ public:
                 if (err != CL_SUCCESS)
                     throw OpenCLError(err, __FILE__, __LINE__);
 
-                    // set kernel arg of reduction kernel
+                    
                 for (size_t j=0; j< vclmem.size(); j++){
                     err = clSetKernelArg(redKernel, j,
                             vclmem[j].mCLMem?sizeof(cl_mem):sizeof(double),
@@ -1885,7 +1885,7 @@ public:
                 err = clSetKernelArg(redKernel, vclmem.size()+2, sizeof(cl_int), (void*)&nCurWindowSize);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
-                // set work group size and execute
+                
                 size_t global_work_size[] = {256, (size_t)nVectorWidth };
                 size_t local_work_size[] = {256, 1};
                 err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, redKernel, 2, NULL,
@@ -1896,7 +1896,7 @@ public:
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
                 clReleaseKernel(redKernel);
-                 // Pass mpClmem2 to the "real" kernel
+                 
                 err = clSetKernelArg(k, argno, sizeof(cl_mem), (void *)&mpClmem2);
                 if (CL_SUCCESS != err)
                     throw OpenCLError(err, __FILE__, __LINE__);
@@ -1941,7 +1941,7 @@ public:
         return nCurWindowSize;
     }
 
-    /// When declared as input to a sliding window function
+    
     virtual void GenSlidingWindowDecl(std::stringstream &ss) const
     {
         for (SubArgumentsType::const_iterator it = mvSubArguments.begin(), e= mvSubArguments.end(); it!=e;
@@ -1952,8 +1952,8 @@ public:
             (*it)->GenSlidingWindowDecl(ss);
         }
     }
-    /// Generate either a function call to each children
-    /// or direclty inline it if we are already inside a loop
+    
+    
     virtual std::string GenSlidingWindowDeclRef(bool nested=false) const
     {
         std::stringstream ss;
@@ -2018,30 +2018,30 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
         boost::shared_ptr<SlidingFunctionBase> &pCodeGen,
         int index)
 {
-    //Black lists ineligible classes here ..
-    // SUMIFS does not perform parallel reduction at DoubleVectorRef level
+    
+    
     if (dynamic_cast<OpSumIfs*>(pCodeGen.get())) {
-        if (index == 0) // the first argument of OpSumIfs cannot be strings anyway
+        if (index == 0) 
             return new DynamicKernelSlidingArgument<VectorRef>(s, ft, pCodeGen, index);
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }
-    // AVERAGE is not supported yet
-    //Average has been supported by reduction kernel
+    
+    
     /*else if (dynamic_cast<OpAverage*>(pCodeGen.get()))
     {
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }*/
-    // MUL is not supported yet
+    
     else if (dynamic_cast<OpMul*>(pCodeGen.get()))
     {
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }
-    // Sub is not a reduction per se
+    
     else if (dynamic_cast<OpSub*>(pCodeGen.get()))
     {
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     }
-    // Only child class of Reduction is supported
+    
     else if (!dynamic_cast<Reduction*>(pCodeGen.get()))
     {
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
@@ -2050,13 +2050,13 @@ DynamicKernelArgument *VectorRefFactory(const std::string &s,
     const formula::DoubleVectorRefToken* pDVR =
         static_cast< const formula::DoubleVectorRefToken* >(
                 ft->GetFormulaToken());
-    // Window being too small to justify a parallel reduction
+    
     if (pDVR->GetRefRowSize() < REDUCE_THRESHOLD)
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
     if ((pDVR->IsStartFixed() && pDVR->IsEndFixed()) ||
             (!pDVR->IsStartFixed() && !pDVR->IsEndFixed()))
         return new ParallelReductionVectorRef<Base>(s, ft, pCodeGen, index);
-    else // Other cases are not supported as well
+    else 
         return new DynamicKernelSlidingArgument<Base>(s, ft, pCodeGen, index);
 }
 
@@ -2139,7 +2139,7 @@ DynamicKernelSoPArguments::DynamicKernelSoPArguments(
                     else if (pSVR->GetArray().mpStringArray == NULL &&
                         pSVR->GetArray().mpNumericArray == NULL)
                     {
-                        // Push as an array of NANs
+                        
                         mvSubArguments.push_back(
                                 SubArgument(new VectorRef(ts,
                                         ft->Children[i])));
@@ -3092,9 +3092,9 @@ public:
     static DynamicKernel *create(ScDocument& rDoc,
                                  const ScAddress& rTopPos,
                                  ScTokenArray& rCode);
-    /// OpenCL code generation
+    
     void CodeGen() {
-        // Travese the tree of expression and declare symbols used
+        
         const DynamicKernelArgument *DK= mSyms.DeclRefArg<
             DynamicKernelSoPArguments>(mpRoot, new OpNop);
 
@@ -3104,7 +3104,7 @@ public:
         } else if (OpenclDevice::gpuEnv.mnAmdFp64Flag) {
             decl << "#pragma OPENCL EXTENSION cl_amd_fp64: enable\n";
         }
-        // preambles
+        
         decl << publicFunc;
         DK->DumpInlineFun(inlineDecl,inlineFun);
         for(std::set<std::string>::iterator set_iter=inlineDecl.begin();
@@ -3128,13 +3128,13 @@ public:
         mFullProgramSrc = decl.str();
         SAL_INFO("sc.opencl.source", "Program to be compiled:\n" << mFullProgramSrc);
     }
-    /// Produce kernel hash
+    
     std::string GetMD5(void)
     {
 #ifdef MD5_KERNEL
         if (mKernelHash.empty()) {
             std::stringstream md5s;
-            // Compute MD5SUM of kernel body to obtain the name
+            
             sal_uInt8 result[RTL_DIGEST_LENGTH_MD5];
             rtl_digest_MD5(
                 mFullProgramSrc.c_str(),
@@ -3150,19 +3150,19 @@ public:
         return "";
 #endif
     }
-    /// Create program, build, and create kerenl
-    /// TODO cache results based on kernel body hash
-    /// TODO: abstract OpenCL part out into OpenCL wrapper.
+    
+    
+    
     void CreateKernel(void);
-    /// Prepare buffers, marshal them to GPU, and launch the kernel
-    /// TODO: abstract OpenCL part out into OpenCL wrapper.
+    
+    
     void Launch(size_t nr)
     {
-        // Obtain cl context
+        
         KernelEnv kEnv;
         OpenclDevice::setKernelEnv(&kEnv);
         cl_int err;
-        // The results
+        
         mpResClmem = clCreateBuffer(kEnv.mpkContext,
                 (cl_mem_flags) CL_MEM_READ_WRITE|CL_MEM_ALLOC_HOST_PTR,
                 nr*sizeof(double), NULL, &err);
@@ -3171,7 +3171,7 @@ public:
         err = clSetKernelArg(mpKernel, 0, sizeof(cl_mem), (void*)&mpResClmem);
         if (CL_SUCCESS != err)
             throw OpenCLError(err, __FILE__, __LINE__);
-        // The rest of buffers
+        
         mSyms.Marshal(mpKernel, nr, mpProgram);
         size_t global_work_size[] = {nr};
         err = clEnqueueNDRangeKernel(kEnv.mpkCmdQueue, mpKernel, 1, NULL,
@@ -3191,7 +3191,7 @@ private:
     std::string mFullProgramSrc;
     cl_program mpProgram;
     cl_kernel mpKernel;
-    cl_mem mpResClmem; // Results
+    cl_mem mpResClmem; 
     std::set<std::string> inlineDecl;
     std::set<std::string> inlineFun;
     ScTokenArray *mpCode;
@@ -3205,17 +3205,17 @@ DynamicKernel::~DynamicKernel()
     if (mpKernel) {
         clReleaseKernel(mpKernel);
     }
-    // mpProgram is not going to be released here -- it's cached.
+    
     if (mpCode)
         delete mpCode;
 }
-/// Build code
+
 void DynamicKernel::CreateKernel(void)
 {
     cl_int err;
     std::string kname = "DynamicKernel"+mKernelSignature;
-    // Compile kernel here!!!
-    // Obtain cl context
+    
+    
     KernelEnv kEnv;
     OpenclDevice::setKernelEnv(&kEnv);
     const char *src = mFullProgramSrc.c_str();
@@ -3233,7 +3233,7 @@ void DynamicKernel::CreateKernel(void)
         mpProgram = lastSecondProgram;
     }
     else
-    {   // doesn't match the last compiled formula.
+    {   
 
         if (lastSecondProgram) {
             clReleaseProgram(lastSecondProgram);
@@ -3297,7 +3297,7 @@ void DynamicKernel::CreateKernel(void)
 #endif
                 throw OpenCLError(err, __FILE__, __LINE__);
             }
-            // Generate binary out of compiled kernel.
+            
             OpenclDevice::generatBinFromKernelSource(mpProgram,
                     (mKernelSignature+GetMD5()).c_str());
         }
@@ -3310,9 +3310,9 @@ void DynamicKernel::CreateKernel(void)
     if (err != CL_SUCCESS)
         throw OpenCLError(err, __FILE__, __LINE__);
 }
-// Symbol lookup. If there is no such symbol created, allocate one
-// kernel with argument with unique name and return so.
-// The template argument T must be a subclass of DynamicKernelArgument
+
+
+
 template <typename T>
 const DynamicKernelArgument *SymbolTable::DeclRefArg(
                   FormulaTreeNodeRef t, SlidingFunctionBase* pCodeGen)
@@ -3320,7 +3320,7 @@ const DynamicKernelArgument *SymbolTable::DeclRefArg(
     FormulaToken *ref = t->GetFormulaToken();
     ArgumentMap::iterator it = mSymbols.find(ref);
     if (it == mSymbols.end()) {
-        // Allocate new symbols
+        
         std::stringstream ss;
         ss << "tmp"<< mCurId++;
         boost::shared_ptr<DynamicKernelArgument> new_arg(new T(ss.str(), t, pCodeGen));
@@ -3361,7 +3361,7 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
                                      const ScAddress& /* rTopPos */,
                                      ScTokenArray& rCode)
 {
-    // Constructing "AST"
+    
     FormulaTokenIterator aCode = rCode;
     std::list<FormulaToken *> list;
     std::map<FormulaToken *, FormulaTreeNodeRef> m_hash_map;
@@ -3407,7 +3407,7 @@ DynamicKernel* DynamicKernel::create(ScDocument& /* rDoc */,
     if (!pDynamicKernel)
         return NULL;
 
-    // OpenCL source code generation and kernel compilation
+    
     try {
         pDynamicKernel->CodeGen();
         pDynamicKernel->CreateKernel();
@@ -3477,12 +3477,12 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
         return false;
 
     try {
-        // Obtain cl context
+        
         KernelEnv kEnv;
         OpenclDevice::setKernelEnv(&kEnv);
-        // Run the kernel.
+        
         pKernel->Launch(xGroup->mnLength);
-        // Map results back
+        
         cl_mem res = pKernel->GetResultBuffer();
         cl_int err;
         double *resbuf = (double*)clEnqueueMapBuffer(kEnv.mpkCmdQueue,
@@ -3544,7 +3544,7 @@ bool FormulaGroupInterpreterOpenCL::interpret( ScDocument& rDoc,
     return true;
 }
 
-}} // namespace sc::opencl
+}} 
 
 extern "C" {
 
@@ -3581,6 +3581,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL getOpenCLDeviceInfo(size_t* pDeviceId, size_t
     sc::opencl::getOpenCLDeviceInfo(*pDeviceId, *pPlatformId);
 }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

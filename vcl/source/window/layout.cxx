@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
@@ -52,7 +52,7 @@ void VclContainer::setLayoutAllocation(Window &rChild, const Point &rAllocPos, c
     VclAlign eHalign = rChild.get_halign();
     VclAlign eValign = rChild.get_valign();
 
-    //typical case
+    
     if (eHalign == VCL_ALIGN_FILL && eValign == VCL_ALIGN_FILL)
     {
         setLayoutPosSize(rChild, rAllocPos, rChildAlloc);
@@ -229,7 +229,7 @@ void VclBox::setAllocation(const Size &rAllocation)
         nExtraSpace = (getPrimaryDimension(rAllocation) - getPrimaryDimension(aRequisition)) / nExpandChildren;
     }
 
-    //Split into those we pack from the start onwards, and those we pack from the end backwards
+    
     std::vector<Window*> aWindows[2];
     for (Window *pChild = GetWindow(WINDOW_FIRSTCHILD); pChild; pChild = pChild->GetWindow(WINDOW_NEXT))
     {
@@ -240,9 +240,9 @@ void VclBox::setAllocation(const Size &rAllocation)
         aWindows[ePacking].push_back(pChild);
     }
 
-    //See VclBuilder::sortIntoBestTabTraversalOrder for why they are in visual
-    //order under the parent which requires us to reverse them here to
-    //pack from the end back
+    
+    
+    
     std::reverse(aWindows[VCL_PACK_END].begin(),aWindows[VCL_PACK_END].end());
 
     for (sal_Int32 ePackType = VCL_PACK_START; ePackType <= VCL_PACK_END; ++ePackType)
@@ -324,8 +324,8 @@ bool VclBox::set_property(const OString &rKey, const OString &rValue)
 sal_uInt16 VclBox::getDefaultAccessibleRole() const
 {
 #if defined(WNT)
-    //fdo#74284 call Boxes Panels, keep then as "Filler" under
-    //at least Linux seeing as that's what Gtk does for GtkBoxes
+    
+    
     return com::sun::star::accessibility::AccessibleRole::PANEL;
 #else
     return com::sun::star::accessibility::AccessibleRole::FILLER;
@@ -388,8 +388,8 @@ static std::vector<long> setButtonSizes(const std::vector<long> &rG,
     long nAvgDimension, long nMaxNonOutlier, long nMinWidth)
 {
     std::vector<long> aVec;
-    //set everything < 1.5 times the average to the same width, leave the
-    //outliers un-touched
+    
+    
     std::vector<bool>::const_iterator aJ = rNonHomogeneous.begin();
     for (std::vector<long>::const_iterator aI = rG.begin(), aEnd = rG.end();
         aI != aEnd; ++aI, ++aJ)
@@ -412,8 +412,8 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
 {
     Requisition aReq;
 
-    Size aMainGroupSize(DEFAULT_CHILD_MIN_WIDTH, DEFAULT_CHILD_MIN_HEIGHT); //to-do, pull from theme
-    Size aSubGroupSize(DEFAULT_CHILD_MIN_WIDTH, DEFAULT_CHILD_MIN_HEIGHT); //to-do, pull from theme
+    Size aMainGroupSize(DEFAULT_CHILD_MIN_WIDTH, DEFAULT_CHILD_MIN_HEIGHT); 
+    Size aSubGroupSize(DEFAULT_CHILD_MIN_WIDTH, DEFAULT_CHILD_MIN_HEIGHT); 
 
     long nMinMainGroupPrimary = getPrimaryDimension(aMainGroupSize);
     long nMinSubGroupPrimary = getPrimaryDimension(aSubGroupSize);
@@ -434,9 +434,9 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
         Size aChildSize = getLayoutRequisition(*pChild);
         if (bIgnoreSecondaryPacking || !pChild->get_secondary())
         {
-            //set the max secondary dimension
+            
             nMainGroupSecondary = std::max(nMainGroupSecondary, getSecondaryDimension(aChildSize));
-            //collect the primary dimensions
+            
             aMainGroupSizes.push_back(getPrimaryDimension(aChildSize));
             aMainGroupNonHomogeneous.push_back(pChild->get_non_homogeneous());
         }
@@ -462,10 +462,10 @@ VclButtonBox::Requisition VclButtonBox::calculatePrimarySecondaryRequisitions() 
     }
     else
     {
-        //Ideally set everything to the same size, but find outlier widgets
-        //that are way wider than the average and leave them
-        //at their natural size and set the remainder to share the
-        //max size of the remaining members of the buttonbox
+        
+        
+        
+        
         long nAccDimension = std::accumulate(aMainGroupSizes.begin(),
             aMainGroupSizes.end(), 0);
         nAccDimension = std::accumulate(aSubGroupSizes.begin(),
@@ -568,7 +568,7 @@ void VclButtonBox::setAllocation(const Size &rAllocation)
     Point aMainGroupPos, aOtherGroupPos;
     int nSpacing = m_nSpacing;
 
-    //To-Do, other layout styles
+    
     switch (m_eLayoutStyle)
     {
         case VCL_BUTTONBOX_START:
@@ -702,7 +702,7 @@ public:
 
 bool sortButtons::operator()(const Window *pA, const Window *pB) const
 {
-    //sort into two groups of pack start and pack end
+    
     VclPackType ePackA = pA->get_pack_type();
     VclPackType ePackB = pB->get_pack_type();
     if (ePackA < ePackB)
@@ -713,7 +713,7 @@ bool sortButtons::operator()(const Window *pA, const Window *pB) const
     bool bPackB = pB->get_secondary();
     if (!m_bVerticalContainer)
     {
-        //for horizontal boxes group secondaries before primaries
+        
         if (bPackA > bPackB)
             return true;
         if (bPackA < bPackB)
@@ -721,14 +721,14 @@ bool sortButtons::operator()(const Window *pA, const Window *pB) const
     }
     else
     {
-        //for vertical boxes group secondaries after primaries
+        
         if (bPackA < bPackB)
             return true;
         if (bPackA > bPackB)
             return false;
     }
 
-    //now order within groups according to platform rules
+    
     return getButtonPriority(pA->GetHelpId()) < getButtonPriority(pB->GetHelpId());
 }
 
@@ -741,8 +741,8 @@ void VclButtonBox::sort_native_button_order()
         aChilds.push_back(pChild);
     }
 
-    //sort child order within parent so that we match the platform
-    //button order
+    
+    
     std::stable_sort(aChilds.begin(), aChilds.end(), sortButtons(m_bVerticalContainer));
     VclBuilder::reorderWithinParent(aChilds, true);
 }
@@ -789,7 +789,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
         }
     }
 
-    //see if we have any empty rows/cols
+    
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];
 
@@ -822,7 +822,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
 
     if (!get_column_homogeneous())
     {
-        //reduce the spans of elements that span empty columns
+        
         for (sal_Int32 x = 0; x < nMaxX; ++x)
         {
             std::set<ExtendedGridEntry*> candidates;
@@ -831,12 +831,12 @@ VclGrid::array_type VclGrid::assembleGrid() const
                 if (aNonEmptyCols[x])
                     continue;
                 ExtendedGridEntry &rSpan = A[x][y];
-                //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
-                //just points back to itself if there's no cell spanning
+                
+                
                 if ((rSpan.x == -1) || (rSpan.y == -1))
                 {
-                    //there is no entry for this cell, i.e. this is a cell
-                    //with no widget in it, or spanned by any other widget
+                    
+                    
                     continue;
                 }
                 ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
@@ -853,7 +853,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
 
     if (!get_row_homogeneous())
     {
-        //reduce the spans of elements that span empty rows
+        
         for (sal_Int32 y = 0; y < nMaxY; ++y)
         {
             std::set<ExtendedGridEntry*> candidates;
@@ -862,12 +862,12 @@ VclGrid::array_type VclGrid::assembleGrid() const
                 if (aNonEmptyRows[y])
                     continue;
                 ExtendedGridEntry &rSpan = A[x][y];
-                //cell x/y is spanned by the widget at cell rSpan.x/rSpan.y,
-                //just points back to itself if there's no cell spanning
+                
+                
                 if ((rSpan.x == -1) || (rSpan.y == -1))
                 {
-                    //there is no entry for this cell, i.e. this is a cell
-                    //with no widget in it, or spanned by any other widget
+                    
+                    
                     continue;
                 }
                 ExtendedGridEntry &rEntry = A[rSpan.x][rSpan.y];
@@ -885,7 +885,7 @@ VclGrid::array_type VclGrid::assembleGrid() const
     sal_Int32 nNonEmptyCols = std::count(aNonEmptyCols.begin(), aNonEmptyCols.end(), true);
     sal_Int32 nNonEmptyRows = std::count(aNonEmptyRows.begin(), aNonEmptyRows.end(), true);
 
-    //make new grid without empty rows and columns
+    
     array_type B(boost::extents[nNonEmptyCols][nNonEmptyRows]);
     for (sal_Int32 x = 0, x2 = 0; x < nMaxX; ++x)
     {
@@ -922,7 +922,7 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
     rWidths.resize(nMaxX);
     rHeights.resize(nMaxY);
 
-    //first use the non spanning entries to set default width/heights
+    
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
@@ -952,8 +952,8 @@ void VclGrid::calcMaxs(const array_type &A, std::vector<Value> &rWidths, std::ve
         }
     }
 
-    //now use the spanning entries and split any extra sizes across expanding rows/cols
-    //where possible
+    
+    
     for (sal_Int32 x = 0; x < nMaxX; ++x)
     {
         for (sal_Int32 y = 0; y < nMaxY; ++y)
@@ -1128,10 +1128,10 @@ void VclGrid::setAllocation(const Size& rAllocation)
                 ++nExpandables;
         long nExtraWidthForExpanders = nExpandables ? (rAllocation.Width() - aRequisition.Width()) / nExpandables : 0;
 
-        //We don't fit and there is no volunteer to be shrunk
+        
         if (!nExpandables && rAllocation.Width() < aRequisition.Width())
         {
-            //first reduce spacing
+            
             while (nColSpacing)
             {
                 nColSpacing /= 2;
@@ -1140,7 +1140,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
                     break;
             }
 
-            //share out the remaining pain to everyone
+            
             long nExtraWidth = (rAllocation.Width() - aRequisition.Width()) / nMaxX;
 
             for (sal_Int32 x = 0; x < nMaxX; ++x)
@@ -1171,10 +1171,10 @@ void VclGrid::setAllocation(const Size& rAllocation)
                 ++nExpandables;
         long nExtraHeightForExpanders = nExpandables ? (rAllocation.Height() - aRequisition.Height()) / nExpandables : 0;
 
-        //We don't fit and there is no volunteer to be shrunk
+        
         if (!nExpandables && rAllocation.Height() < aRequisition.Height())
         {
-            //first reduce spacing
+            
             while (nRowSpacing)
             {
                 nRowSpacing /= 2;
@@ -1183,7 +1183,7 @@ void VclGrid::setAllocation(const Size& rAllocation)
                     break;
             }
 
-            //share out the remaining pain to everyone
+            
             long nExtraHeight = (rAllocation.Height() - aRequisition.Height()) / nMaxY;
 
             for (sal_Int32 y = 0; y < nMaxY; ++y)
@@ -1285,7 +1285,7 @@ void VclBin::setAllocation(const Size &rAllocation)
         setLayoutAllocation(*pChild, Point(0, 0), rAllocation);
 }
 
-//To-Do, hook a DecorationView into VclFrame ?
+
 
 Size VclFrame::calculateRequisition() const
 {
@@ -1314,7 +1314,7 @@ Size VclFrame::calculateRequisition() const
 
 void VclFrame::setAllocation(const Size &rAllocation)
 {
-    //SetBackground( Color(0xFF, 0x00, 0xFF) );
+    
 
     const FrameStyle &rFrameStyle =
         GetSettings().GetStyleSettings().GetFrameStyle();
@@ -1350,9 +1350,9 @@ const Window *VclFrame::get_label_widget() const
     assert(GetChildCount() == 2);
     if (m_pLabel)
         return m_pLabel;
-    //The label widget is normally the first (of two) children
+    
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
-    if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) //no label exists
+    if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) 
         return NULL;
     return pWindowImpl->mpFirstChild;
 }
@@ -1365,11 +1365,11 @@ Window *VclFrame::get_label_widget()
 const Window *VclFrame::get_child() const
 {
     assert(GetChildCount() == 2);
-    //The child widget is the normally the last (of two) children
+    
     const WindowImpl* pWindowImpl = ImplGetWindowImpl();
     if (!m_pLabel)
         return pWindowImpl->mpLastChild;
-    if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) //only label exists
+    if (pWindowImpl->mpFirstChild == pWindowImpl->mpLastChild) 
         return NULL;
     return pWindowImpl->mpLastChild;
 }
@@ -1511,7 +1511,7 @@ void VclExpander::setAllocation(const Size &rAllocation)
 
     WindowImpl* pWindowImpl = ImplGetWindowImpl();
 
-    //The label widget is the last (of two) children
+    
     Window *pChild = get_child();
     Window *pLabel = pChild != pWindowImpl->mpLastChild ? pWindowImpl->mpLastChild : NULL;
 
@@ -1695,14 +1695,14 @@ void VclScrolledWindow::setAllocation(const Size &rAllocation)
 
     long nAvailHeight = rAllocation.Width();
     long nAvailWidth = rAllocation.Width();
-    // vert. ScrollBar
+    
     if (GetStyle() & WB_AUTOVSCROLL)
         m_aVScroll.Show(nAvailHeight < aChildReq.Height());
 
     if (m_aVScroll.IsVisible())
         nAvailWidth -= getLayoutRequisition(m_aVScroll).Width();
 
-    // horz. ScrollBar
+    
     if (GetStyle() & WB_AUTOHSCROLL)
     {
         m_aHScroll.Show(nAvailWidth < aChildReq.Width());
@@ -1843,12 +1843,12 @@ Size VclEventBox::calculateRequisition() const
 
 void VclEventBox::Command(const CommandEvent&)
 {
-    //discard events by default to block them reaching children
+    
 }
 
 void VclSizeGroup::trigger_queue_resize()
 {
-    //sufficient to trigger one widget to trigger all of them
+    
     if (!m_aWindows.empty())
     {
         Window *pWindow = *m_aWindows.begin();
@@ -2004,8 +2004,8 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
                 pButton->SetClickHdl(LINK(this, MessageDialog, ButtonHdl));
                 break;
             }
-            //insist that the response ids match the default actions for those
-            //widgets, and leave their default handlers in place
+            
+            
             case WINDOW_OKBUTTON:
                 assert(get_response(pChild) == RET_OK);
                 break;
@@ -2020,10 +2020,10 @@ void MessageDialog::setButtonHandlers(VclButtonBox *pButtonBox)
                     pChild->GetHelpId() << " is currently not handled");
                 break;
         }
-        //The default is to stick the focus into the first widget
-        //that accepts it, and if that happens and it's a button
-        //then that becomes the new default button, so explicitly
-        //put the focus into the default button
+        
+        
+        
+        
         if (pChild->GetStyle() & WB_DEFBUTTON)
             pChild->GrabFocus();
     }
@@ -2327,7 +2327,7 @@ bool isEnabledInLayout(const Window *pWindow)
 
 bool isLayoutEnabled(const Window *pWindow)
 {
-    //Child is a container => we're layout enabled
+    
     const Window *pChild = pWindow ? pWindow->GetWindow(WINDOW_FIRSTCHILD) : NULL;
     return pChild && isContainerWindow(*pChild) && !pChild->GetWindow(WINDOW_NEXT);
 }

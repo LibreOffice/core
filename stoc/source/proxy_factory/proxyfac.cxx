@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -61,7 +61,7 @@ static Sequence< OUString > proxyfac_getSupportedServiceNames()
     return Sequence< OUString >( &str_name, 1 );
 }
 
-//==============================================================================
+
 struct FactoryImpl : public ::cppu::WeakImplHelper2< lang::XServiceInfo,
                                                      reflection::XProxyFactory >
 {
@@ -77,7 +77,7 @@ struct FactoryImpl : public ::cppu::WeakImplHelper2< lang::XServiceInfo,
     FactoryImpl();
     virtual ~FactoryImpl();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName )
@@ -85,18 +85,18 @@ struct FactoryImpl : public ::cppu::WeakImplHelper2< lang::XServiceInfo,
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (RuntimeException);
 
-    // XProxyFactory
+    
     virtual Reference< XAggregation > SAL_CALL createProxy(
         Reference< XInterface > const & xTarget )
         throw (RuntimeException);
 };
 
-//______________________________________________________________________________
+
 UnoInterfaceReference FactoryImpl::binuno_queryInterface(
     UnoInterfaceReference const & unoI,
     typelib_InterfaceTypeDescription * pTypeDescr )
 {
-    // init queryInterface() td
+    
     static typelib_TypeDescription * s_pQITD = 0;
     if (s_pQITD == 0)
     {
@@ -147,7 +147,7 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
     }
     else
     {
-        // exception occurred:
+        
         OSL_ENSURE(
             typelib_typedescriptionreference_isAssignableFrom(
                 ::getCppuType( reinterpret_cast<
@@ -160,15 +160,15 @@ UnoInterfaceReference FactoryImpl::binuno_queryInterface(
             m_uno2cpp.get() );
         uno_any_destruct( exc, 0 );
         ::cppu::throwException( cpp_exc );
-        OSL_ASSERT( false ); // way of no return
-        return UnoInterfaceReference(); // for dummy
+        OSL_ASSERT( false ); 
+        return UnoInterfaceReference(); 
     }
 }
 
-//==============================================================================
+
 struct ProxyRoot : public ::cppu::OWeakAggObject
 {
-    // XAggregation
+    
     virtual Any SAL_CALL queryAggregation( Type const & rType )
         throw (RuntimeException);
 
@@ -182,7 +182,7 @@ private:
     UnoInterfaceReference m_target;
 };
 
-//==============================================================================
+
 struct binuno_Proxy : public uno_Interface
 {
     oslInterlockedCount m_nRefCount;
@@ -200,24 +200,24 @@ struct binuno_Proxy : public uno_Interface
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL binuno_proxy_free(
     uno_ExtEnvironment * pEnv, void * pProxy )
 {
-    (void) pEnv; // avoid warning about unused parameter
+    (void) pEnv; 
     binuno_Proxy * proxy = static_cast< binuno_Proxy * >(
         reinterpret_cast< uno_Interface * >( pProxy ) );
     OSL_ASSERT( proxy->m_root->m_factory->m_uno_env.get()->pExtEnv == pEnv );
     delete proxy;
 }
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
     if (osl_atomic_increment( &that->m_nRefCount ) == 1)
     {
-        // rebirth of zombie
+        
         uno_ExtEnvironment * uno_env =
             that->m_root->m_factory->m_uno_env.get()->pExtEnv;
         OSL_ASSERT( uno_env != 0 );
@@ -230,7 +230,7 @@ static void SAL_CALL binuno_proxy_acquire( uno_Interface * pUnoI )
     }
 }
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
 {
     binuno_Proxy * that = static_cast< binuno_Proxy * >( pUnoI );
@@ -243,7 +243,7 @@ static void SAL_CALL binuno_proxy_release( uno_Interface * pUnoI )
     }
 }
 
-//------------------------------------------------------------------------------
+
 static void SAL_CALL binuno_proxy_dispatch(
     uno_Interface * pUnoI, const typelib_TypeDescription * pMemberType,
     void * pReturn, void * pArgs [], uno_Any ** ppException )
@@ -252,7 +252,7 @@ static void SAL_CALL binuno_proxy_dispatch(
     switch (reinterpret_cast< typelib_InterfaceMemberTypeDescription const * >(
                 pMemberType )->nPosition)
     {
-    case 0: // queryInterface()
+    case 0: 
     {
         try
         {
@@ -262,7 +262,7 @@ static void SAL_CALL binuno_proxy_dispatch(
             uno_type_copyAndConvertData(
                 pReturn, &ret, ::getCppuType( &ret ).getTypeLibType(),
                 that->m_root->m_factory->m_cpp2uno.get() );
-            *ppException = 0; // no exc
+            *ppException = 0; 
         }
         catch (RuntimeException &)
         {
@@ -274,13 +274,13 @@ static void SAL_CALL binuno_proxy_dispatch(
         }
         break;
     }
-    case 1: // acquire()
+    case 1: 
         binuno_proxy_acquire( pUnoI );
-        *ppException = 0; // no exc
+        *ppException = 0; 
         break;
-    case 2: // release()
+    case 2: 
         binuno_proxy_release( pUnoI );
-        *ppException = 0; // no exc
+        *ppException = 0; 
         break;
     default:
         that->m_target.dispatch( pMemberType, pReturn, pArgs, ppException );
@@ -290,7 +290,7 @@ static void SAL_CALL binuno_proxy_dispatch(
 
 }
 
-//______________________________________________________________________________
+
 inline binuno_Proxy::binuno_Proxy(
     ::rtl::Reference< ProxyRoot > const & root,
     UnoInterfaceReference const & target,
@@ -306,12 +306,12 @@ inline binuno_Proxy::binuno_Proxy(
     uno_Interface::pDispatcher = binuno_proxy_dispatch;
 }
 
-//______________________________________________________________________________
+
 ProxyRoot::~ProxyRoot()
 {
 }
 
-//______________________________________________________________________________
+
 inline ProxyRoot::ProxyRoot(
     ::rtl::Reference< FactoryImpl > const & factory,
     Reference< XInterface > const & xTarget )
@@ -323,7 +323,7 @@ inline ProxyRoot::ProxyRoot(
     OSL_ENSURE( m_target.is(), "### mapping interface failed!" );
 }
 
-//______________________________________________________________________________
+
 Any ProxyRoot::queryAggregation( Type const & rType )
     throw (RuntimeException)
 {
@@ -338,7 +338,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
             uno_ExtEnvironment * cpp_env = m_factory->m_cpp_env.get()->pExtEnv;
             OSL_ASSERT( cpp_env != 0 );
 
-            // mind a new delegator, calculate current root:
+            
             Reference< XInterface > xRoot(
                 static_cast< OWeakObject * >(this), UNO_QUERY_THROW );
             OUString oid;
@@ -351,21 +351,21 @@ Any ProxyRoot::queryAggregation( Type const & rType )
                 typelib_InterfaceTypeDescription * >(pTypeDescr) );
             if (! xProxy.is())
             {
-                // perform query on target:
+                
                 UnoInterfaceReference proxy_target(
                     m_factory->binuno_queryInterface(
                         m_target, reinterpret_cast<
                         typelib_InterfaceTypeDescription * >(pTypeDescr) ) );
                 if (proxy_target.is())
                 {
-                    // ensure root's object entries:
+                    
                     UnoInterfaceReference root;
                     m_factory->m_cpp2uno.mapInterface(
                         reinterpret_cast< void ** >( &root.m_pUnoI ),
                         xRoot.get(), ::getCppuType( &xRoot ) );
 
                     UnoInterfaceReference proxy(
-                        // ref count initially 1:
+                        
                         new binuno_Proxy( this, proxy_target, oid, pTypeDescr ),
                         SAL_NO_ACQUIRE );
                     uno_ExtEnvironment * uno_env =
@@ -385,7 +385,7 @@ Any ProxyRoot::queryAggregation( Type const & rType )
             if (xProxy.is())
                 ret.setValue( &xProxy, pTypeDescr );
         }
-        catch (...) // finally
+        catch (...) 
         {
             TYPELIB_DANGER_RELEASE( pTypeDescr );
             throw;
@@ -395,9 +395,9 @@ Any ProxyRoot::queryAggregation( Type const & rType )
     return ret;
 }
 
-//##############################################################################
 
-//______________________________________________________________________________
+
+
 FactoryImpl::FactoryImpl()
 {
     OUString uno = UNO_LB_UNO;
@@ -422,11 +422,11 @@ FactoryImpl::FactoryImpl()
     OSL_ENSURE( m_cpp2uno.is(), "### cannot get bridge C++ <-> uno!" );
 }
 
-//______________________________________________________________________________
+
 FactoryImpl::~FactoryImpl() {}
 
-// XProxyFactory
-//______________________________________________________________________________
+
+
 Reference< XAggregation > FactoryImpl::createProxy(
     Reference< XInterface > const & xTarget )
     throw (RuntimeException)
@@ -434,8 +434,8 @@ Reference< XAggregation > FactoryImpl::createProxy(
     return new ProxyRoot( this, xTarget );
 }
 
-// XServiceInfo
-//______________________________________________________________________________
+
+
 OUString FactoryImpl::getImplementationName()
     throw (RuntimeException)
 {
@@ -454,7 +454,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     return proxyfac_getSupportedServiceNames();
 }
 
-//==============================================================================
+
 static Reference< XInterface > SAL_CALL proxyfac_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     throw (Exception)

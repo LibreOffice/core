@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,7 +41,7 @@ SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlDraw, SfxAllEnumItem);
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
 
-// -----------------------------------------------------------------------
+
 
 SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx ) :
 
@@ -54,7 +54,7 @@ SvxTbxCtlDraw::SvxTbxCtlDraw( sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx 
     rTbx.Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                   const SfxPoolItem* pState )
@@ -68,14 +68,14 @@ void SvxTbxCtlDraw::StateChanged( sal_uInt16 nSID, SfxItemState eState,
             GetId(), xLayoutMgr->isElementVisible( m_sToolboxName ) != sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType SvxTbxCtlDraw::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTbxCtlDraw::toggleToolbox()
 {
@@ -99,7 +99,7 @@ void SvxTbxCtlDraw::toggleToolbox()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxTbxCtlDraw::Select( sal_Bool )
 {

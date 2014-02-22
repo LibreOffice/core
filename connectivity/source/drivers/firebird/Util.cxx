@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "Util.hxx"
@@ -22,7 +22,7 @@ using namespace ::com::sun::star::uno;
 OUString firebird::sanitizeIdentifier(const OUString& rIdentifier)
 {
     OUString sRet = rIdentifier.trim();
-    assert(sRet.getLength() <= 31); // Firebird identifiers cannot be longer than this.
+    assert(sRet.getLength() <= 31); 
 
     return sRet;
 }
@@ -32,16 +32,16 @@ void firebird::evaluateStatusVector(ISC_STATUS_ARRAY& aStatusVector,
                                     const uno::Reference< XInterface >& _rxContext)
     throw(SQLException)
 {
-    if (aStatusVector[0]==1 && aStatusVector[1]) // indicates error
+    if (aStatusVector[0]==1 && aStatusVector[1]) 
     {
         OUStringBuffer buf;
-        char msg[512]; // Size is based on suggestion in docs.
+        char msg[512]; 
         const ISC_STATUS* pStatus = (const ISC_STATUS*) &aStatusVector;
 
         buf.appendAscii("firebird_sdbc error:");
         while(fb_interpret(msg, sizeof(msg), &pStatus))
         {
-            // TODO: verify encoding
+            
             buf.appendAscii("\n*");
             buf.append(OUString(msg, strlen(msg), RTL_TEXTENCODING_UTF8));
         }
@@ -56,8 +56,8 @@ void firebird::evaluateStatusVector(ISC_STATUS_ARRAY& aStatusVector,
 
 sal_Int32 firebird::getColumnTypeFromFBType(short aType)
 {
-    aType &= ~1; // Remove last bit -- it is used to denote whether column
-                 // can store Null, not needed for type determination
+    aType &= ~1; 
+                 
     switch (aType)
     {
     case SQL_TEXT:
@@ -88,18 +88,18 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType)
         return DataType::BIGINT;
     case SQL_NULL:
         return DataType::SQLNULL;
-    case SQL_QUAD:      // Is a "Blob ID" according to the docs
-        return 0;       // TODO: verify
+    case SQL_QUAD:      
+        return 0;       
     default:
-        assert(false); // Should never happen
+        assert(false); 
         return 0;
     }
 }
 
 OUString firebird::getColumnTypeNameFromFBType(short aType)
 {
-    aType &= ~1; // Remove last bit -- it is used to denote whether column
-                // can store Null, not needed for type determination
+    aType &= ~1; 
+                
     switch (aType)
     {
     case SQL_TEXT:
@@ -133,7 +133,7 @@ OUString firebird::getColumnTypeNameFromFBType(short aType)
     case SQL_QUAD:
         return OUString("SQL_QUAD");
     default:
-        assert(false); // Should never happen
+        assert(false); 
         return OUString();
     }
 }
@@ -146,12 +146,12 @@ short firebird::getFBTypeFromBlrType(short blrType)
         return SQL_TEXT;
     case blr_text2:
         assert(false);
-        return 0; // No idea if this should be supported
+        return 0; 
     case blr_varying:
         return SQL_VARYING;
     case blr_varying2:
         assert(false);
-        return 0; // No idea if this should be supported
+        return 0; 
     case blr_short:
         return SQL_SHORT;
     case blr_long:
@@ -166,21 +166,21 @@ short firebird::getFBTypeFromBlrType(short blrType)
         return SQL_TIMESTAMP;
     case blr_blob:
         return SQL_BLOB;
-//     case blr_SQL_ARRAY:
-//         return OUString("SQL_ARRAY");
+
+
     case blr_sql_time:
         return SQL_TYPE_TIME;
     case blr_sql_date:
         return SQL_TYPE_DATE;
     case blr_int64:
         return SQL_INT64;
-//     case SQL_NULL:
-//         return OUString("SQL_NULL");
+
+
     case blr_quad:
         return SQL_QUAD;
     default:
-        // If this happens we have hit one of the extra types in ibase.h
-        // look up blr_* for a list, e.g. blr_domain_name, blr_not_nullable etc.
+        
+        
         assert(false);
         return 0;
     }
@@ -188,7 +188,7 @@ short firebird::getFBTypeFromBlrType(short blrType)
 
 void firebird::mallocSQLVAR(XSQLDA* pSqlda)
 {
-    // TODO: confirm the sizings below.
+    
     XSQLVAR* pVar = pSqlda->sqlvar;
     for (int i=0; i < pSqlda->sqld; i++, pVar++)
     {
@@ -222,7 +222,7 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
             pVar->sqldata = (char*) malloc(sizeof(ISC_QUAD));
             break;
         case SQL_ARRAY:
-            assert(false); // TODO: implement
+            assert(false); 
             break;
         case SQL_TYPE_TIME:
             pVar->sqldata = (char*) malloc(sizeof(ISC_TIME));
@@ -234,10 +234,10 @@ void firebird::mallocSQLVAR(XSQLDA* pSqlda)
             pVar->sqldata = (char *)malloc(sizeof(sal_Int64));
             break;
         case SQL_NULL:
-            assert(false); // TODO: implement
+            assert(false); 
             break;
         case SQL_QUAD:
-            assert(false); // TODO: implement
+            assert(false); 
             break;
         default:
             SAL_WARN("connectivity.firebird", "Unknown type: " << dtype);
@@ -274,13 +274,13 @@ void firebird::freeSQLVAR(XSQLDA* pSqlda)
             free(pVar->sqldata);
             break;
         case SQL_ARRAY:
-            assert(false); // TODO: implement
+            assert(false); 
             break;
         case SQL_NULL:
-            assert(false); // TODO: implement
+            assert(false); 
             break;
         case SQL_QUAD:
-            assert(false); // TODO: implement
+            assert(false); 
             break;
         default:
             SAL_WARN("connectivity.firebird", "Unknown type: " << dtype);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -131,11 +131,11 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const &)
             args, m_context),
         css::uno::UNO_QUERY_THROW);
 
-    // The following assumes that interface members are sorted by increasing
-    // values of XInterfaceMemberTypeDescription.getPosition, the exceptions
-    // of interface attributes and interface methods, the constructors of
-    // services, and the exceptions of service constructors are sorted as given
-    // in the UNOIDL source code:
+    
+    
+    
+    
+    
 
     assertEqual< bool >(
         false,
@@ -683,10 +683,10 @@ sal_Int32 Service::run(css::uno::Sequence< OUString > const &)
         css::uno::UNO_QUERY);
     assertTrue(published.is());
     assertFalse(published->isPublished());
-    //TODO: check constants test.registrytdprovider.Const1 (published),
-    // test.registrytdprovider.Const2 (unpublished), and
-    // test.registrytdprovider.Consts1.C (no XPublished), which are not
-    // accessible via provider->getByHierarchicalName (see #i31428)
+    
+    
+    
+    
     published = css::uno::Reference< css::reflection::XPublished >(
         css::uno::Reference< css::reflection::XTypeDescription >(
             provider->getByHierarchicalName(

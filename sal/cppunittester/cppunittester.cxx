@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef WNT
@@ -68,12 +68,12 @@ rtl::OUString getArgument(sal_Int32 index) {
 std::string convertLazy(rtl::OUString const & s16) {
     rtl::OString s8(rtl::OUStringToOString(s16, osl_getThreadTextEncoding()));
     BOOST_STATIC_ASSERT(sizeof (sal_Int32) <= sizeof (std::string::size_type));
-        // ensure following cast is legitimate
+        
     return std::string(
         s8.getStr(), static_cast< std::string::size_type >(s8.getLength()));
 }
 
-//Output how long each test took
+
 class TimingListener
     : public CppUnit::TestListener
     , private boost::noncopyable
@@ -95,9 +95,9 @@ private:
     sal_uInt32 m_nStartTime;
 };
 
-//Allow the whole uniting testing framework to be run inside a "Protector"
-//which knows about uno exceptions, so it can print the content of the
-//exception before falling over and dying
+
+
+
 class CPPUNIT_API ProtectedFixtureFunctor
     : public CppUnit::Functor
     , private boost::noncopyable
@@ -118,12 +118,12 @@ public:
     bool run() const
     {
 #ifdef DISABLE_DYNLOADING
-        // For iOS cppunit plugins aren't really "plugins" (shared
-        // libraries), but just static archives. In the real main
-        // program of a cppunit app, which calls the lo_main() that
-        // the SAL_IMPLEMENT_MAIN() below expands to, we specifically
-        // call the initialize methods of the CppUnitTestPlugIns that
-        // we statically link to the app executable.
+        
+        
+        
+        
+        
+        
 #else
         CppUnit::PlugInManager manager;
         try {
@@ -165,11 +165,11 @@ public:
 
 SAL_IMPLEMENT_MAIN() {
 #ifdef WNT
-    //Disable Dr-Watson in order to crash simply without popup dialogs under
-    //windows
+    
+    
     DWORD dwMode = SetErrorMode(SEM_NOGPFAULTERRORBOX);
     SetErrorMode(SEM_NOGPFAULTERRORBOX|dwMode);
-#ifdef _DEBUG // These functions are present only in the debgging runtime
+#ifdef _DEBUG 
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);
     _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);
     _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE);

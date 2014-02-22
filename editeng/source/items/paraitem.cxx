@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/style/TabStop.hpp>
@@ -53,17 +53,17 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-// Konvertierung fuer UNO
+
 #define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 #define TWIP_TO_MM100_UNSIGNED(TWIP)     ((((TWIP)*127L+36L)/72L))
 #define MM100_TO_TWIP(MM100)    ((MM100) >= 0 ? (((MM100)*72L+63L)/127L) : (((MM100)*72L-63L)/127L))
 #define MM100_TO_TWIP_UNSIGNED(MM100)    ((((MM100)*72L+63L)/127L))
 
 
-// STATIC DATA -----------------------------------------------------------
 
 
-// -----------------------------------------------------------------------
+
+
 
 
 TYPEINIT1_FACTORY(SvxLineSpacingItem, SfxPoolItem , new SvxLineSpacingItem(LINE_SPACE_DEFAULT_HEIGHT, 0));
@@ -80,7 +80,7 @@ TYPEINIT1_FACTORY(SvxForbiddenRuleItem, SfxBoolItem, new SvxForbiddenRuleItem(sa
 TYPEINIT1_FACTORY(SvxParaVertAlignItem, SfxUInt16Item, new SvxParaVertAlignItem(0, 0));
 TYPEINIT1_FACTORY(SvxParaGridItem, SfxBoolItem, new SvxParaGridItem(sal_True, 0));
 
-// -----------------------------------------------------------------------
+
 
 SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId )
@@ -92,7 +92,7 @@ SvxLineSpacingItem::SvxLineSpacingItem( sal_uInt16 nHeight, const sal_uInt16 nId
     eInterLineSpace = SVX_INTER_LINE_SPACE_OFF;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -100,14 +100,14 @@ bool SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxLineSpacingItem& rLineSpace = (const SvxLineSpacingItem&)rAttr;
     return (
-        // Same Linespacing Rule?
+        
         (eLineSpace == rLineSpace.eLineSpace)
-        // For maximum and minimum Linespacing be the size must coincide.
+        
         && (eLineSpace == SVX_LINE_SPACE_AUTO ||
             nLineHeight == rLineSpace.nLineHeight)
-        // Same Linespacing Rule?
+        
         && ( eInterLineSpace == rLineSpace.eInterLineSpace )
-        // Either set proportional or additive.
+        
         && (( eInterLineSpace == SVX_INTER_LINE_SPACE_OFF)
             || (eInterLineSpace == SVX_INTER_LINE_SPACE_PROP
                 && nPropLineSpace == rLineSpace.nPropLineSpace)
@@ -152,7 +152,7 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             aLSp.Height = ( bConvert ? (short)TWIP_TO_MM100_UNSIGNED(nLineHeight) : nLineHeight );
         break;
         default:
-            ;//prevent warning about SVX_LINE_SPACE_END
+            ;
     }
 
     switch ( nMemberId )
@@ -171,12 +171,12 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
 
-    // fill with current data
+    
     style::LineSpacing aLSp;
     uno::Any aAny;
     sal_Bool bRet = QueryValue( aAny, bConvert ? CONVERT_TWIPS : 0 ) && ( aAny >>= aLSp );
 
-    // get new data
+    
     switch ( nMemberId )
     {
         case 0 :                bRet = (rVal >>= aLSp); break;
@@ -226,14 +226,14 @@ bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxLineSpacingItem::Clone( SfxItemPool * ) const
 {
     return new SvxLineSpacingItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxLineSpacingItem::GetPresentation
 (
@@ -251,7 +251,7 @@ SfxItemPresentation SvxLineSpacingItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxLineSpacingItem::Create(SvStream& rStrm, sal_uInt16) const
 {
@@ -274,7 +274,7 @@ SfxPoolItem* SvxLineSpacingItem::Create(SvStream& rStrm, sal_uInt16) const
     return pAttr;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
@@ -286,18 +286,18 @@ SvStream& SvxLineSpacingItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*
     return rStrm;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxLineSpacingItem::GetValueCount() const
 {
-    return SVX_LINESPACE_END;   // SVX_LINESPACE_TWO_LINES + 1
+    return SVX_LINESPACE_END;   
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
-    //! load strings from resource
+    
     OUString aText;
     switch ( nPos )
     {
@@ -317,7 +317,7 @@ OUString SvxLineSpacingItem::GetValueTextByPos( sal_uInt16 nPos ) const
     return aText;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxLineSpacingItem::GetEnumValue() const
 {
@@ -332,7 +332,7 @@ sal_uInt16 SvxLineSpacingItem::GetEnumValue() const
     return nVal;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
 {
@@ -344,7 +344,7 @@ void SvxLineSpacingItem::SetEnumValue( sal_uInt16 nVal )
     }
 }
 
-// class SvxAdjustItem ---------------------------------------------------
+
 
 SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     : SfxEnumItemInterface( nId ),
@@ -353,7 +353,7 @@ SvxAdjustItem::SvxAdjustItem(const SvxAdjust eAdjst, const sal_uInt16 nId )
     SetAdjust( eAdjst );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -379,7 +379,7 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
             rVal.setValue( &bValue, ::getCppuBooleanType() );
             break;
         }
-        default: ;//prevent warning
+        default: ;
     }
     return true;
 }
@@ -419,14 +419,14 @@ bool SvxAdjustItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId  )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxAdjustItem::Clone( SfxItemPool * ) const
 {
     return new SvxAdjustItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxAdjustItem::GetPresentation
 (
@@ -445,19 +445,19 @@ SfxItemPresentation SvxAdjustItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText = GetValueTextByPos( (sal_uInt16)GetAdjust() );
             return ePres;
-        default: ;//prevent warning
+        default: ;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxAdjustItem::GetValueCount() const
 {
-    return SVX_ADJUST_END;  // SVX_ADJUST_BLOCKLINE + 1
+    return SVX_ADJUST_END;  
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
 {
@@ -465,21 +465,21 @@ OUString SvxAdjustItem::GetValueTextByPos( sal_uInt16 nPos ) const
     return EE_RESSTR(RID_SVXITEMS_ADJUST_BEGIN + nPos);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxAdjustItem::GetEnumValue() const
 {
     return (sal_uInt16)GetAdjust();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxAdjustItem::SetEnumValue( sal_uInt16 nVal )
 {
     SetAdjust( (const SvxAdjust)nVal );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxAdjustItem::GetVersion( sal_uInt16 nFileVersion ) const
 {
@@ -487,7 +487,7 @@ sal_uInt16 SvxAdjustItem::GetVersion( sal_uInt16 nFileVersion ) const
                ? 0 : ADJUST_LASTBLOCK_VERSION;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxAdjustItem::Create(SvStream& rStrm, sal_uInt16 nVersion) const
 {
@@ -505,7 +505,7 @@ SfxPoolItem* SvxAdjustItem::Create(SvStream& rStrm, sal_uInt16 nVersion) const
     return pRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxAdjustItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
 {
@@ -524,21 +524,21 @@ SvStream& SvxAdjustItem::Store( SvStream& rStrm, sal_uInt16 nItemVersion ) const
     return rStrm;
 }
 
-// class SvxWidowsItem ---------------------------------------------------
+
 
 SvxWidowsItem::SvxWidowsItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
     SfxByteItem( nId, nL )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxWidowsItem::Clone( SfxItemPool * ) const
 {
     return new SvxWidowsItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxWidowsItem::Create(SvStream& rStrm, sal_uInt16) const
 {
@@ -547,7 +547,7 @@ SfxPoolItem* SvxWidowsItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxWidowsItem( nLines, Which() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
@@ -555,7 +555,7 @@ SvStream& SvxWidowsItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) c
     return rStrm;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxWidowsItem::GetPresentation
 (
@@ -595,21 +595,21 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
     return ePres;
 }
 
-// class SvxOrphansItem --------------------------------------------------
+
 
 SvxOrphansItem::SvxOrphansItem(const sal_uInt8 nL, const sal_uInt16 nId ) :
     SfxByteItem( nId, nL )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxOrphansItem::Clone( SfxItemPool * ) const
 {
     return new SvxOrphansItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxOrphansItem::Create(SvStream& rStrm, sal_uInt16) const
 {
@@ -618,7 +618,7 @@ SfxPoolItem* SvxOrphansItem::Create(SvStream& rStrm, sal_uInt16) const
     return new SvxOrphansItem( nLines, Which() );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
@@ -626,7 +626,7 @@ SvStream& SvxOrphansItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     return rStrm;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxOrphansItem::GetPresentation
 (
@@ -666,7 +666,7 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
     return ePres;
 }
 
-// class SvxHyphenZoneItem -----------------------------------------------
+
 
 SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
@@ -677,7 +677,7 @@ SvxHyphenZoneItem::SvxHyphenZoneItem( const bool bHyph, const sal_uInt16 nId ) :
     nMaxHyphens = 255;
 }
 
-// -----------------------------------------------------------------------
+
 bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -698,7 +698,7 @@ bool    SvxHyphenZoneItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) con
     }
     return true;
 }
-// -----------------------------------------------------------------------
+
 bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
 {
     nMemberId &= ~CONVERT_TWIPS;
@@ -726,7 +726,7 @@ bool SvxHyphenZoneItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -739,14 +739,14 @@ bool SvxHyphenZoneItem::operator==( const SfxPoolItem& rAttr ) const
             && (((SvxHyphenZoneItem&)rAttr).nMaxHyphens == nMaxHyphens) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxHyphenZoneItem::Clone( SfxItemPool * ) const
 {
     return new SvxHyphenZoneItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxHyphenZoneItem::GetPresentation
 (
@@ -800,12 +800,12 @@ SfxItemPresentation SvxHyphenZoneItem::GetPresentation
                     EE_RESSTR(RID_SVXITEMS_HYPHEN_MAX).replaceAll("%1", OUString::number(nMaxHyphens));
             return SFX_ITEM_PRESENTATION_COMPLETE;
         }
-        default: ;//prevent warning
+        default: ;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxHyphenZoneItem::Create(SvStream& rStrm, sal_uInt16) const
 {
@@ -821,7 +821,7 @@ SfxPoolItem* SvxHyphenZoneItem::Create(SvStream& rStrm, sal_uInt16) const
     return pAttr;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxHyphenZoneItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
@@ -833,7 +833,7 @@ SvStream& SvxHyphenZoneItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/
     return rStrm;
 }
 
-// class SvxTabStop ------------------------------------------------------
+
 
 SvxTabStop::SvxTabStop()
 {
@@ -843,7 +843,7 @@ SvxTabStop::SvxTabStop()
     cFill = cDfltFillChar;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxTabStop::SvxTabStop( const sal_Int32 nPos, const SvxTabAdjust eAdjst,
                         const sal_Unicode cDec, const sal_Unicode cFil )
@@ -853,13 +853,13 @@ SvxTabStop::SvxTabStop( const sal_Int32 nPos, const SvxTabAdjust eAdjst,
     m_cDecimal = cDec;
     cFill = cFil;
 }
-// -----------------------------------------------------------------------------
+
 void SvxTabStop::fillDecimal() const
 {
     if ( cDfltDecimalChar == m_cDecimal )
         m_cDecimal = SvtSysLocale().GetLocaleData().getNumDecimalSep()[0];
 }
-// -----------------------------------------------------------------------
+
 
 OUString SvxTabStop::GetValueString() const
 {
@@ -878,7 +878,7 @@ OUString SvxTabStop::GetValueString() const
     return aStr;
 }
 
-// class SvxTabStopItem --------------------------------------------------
+
 
 SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
     SfxPoolItem( _nWhich ),
@@ -894,7 +894,7 @@ SvxTabStopItem::SvxTabStopItem( sal_uInt16 _nWhich ) :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
                                 const sal_uInt16 nDist,
@@ -910,7 +910,7 @@ SvxTabStopItem::SvxTabStopItem( const sal_uInt16 nTabs,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxTabStopItem::SvxTabStopItem( const SvxTabStopItem& rTSI ) :
     SfxPoolItem( rTSI.Which() ),
@@ -918,7 +918,7 @@ SvxTabStopItem::SvxTabStopItem( const SvxTabStopItem& rTSI ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxTabStopItem::GetPos( const SvxTabStop& rTab ) const
 {
@@ -926,7 +926,7 @@ sal_uInt16 SvxTabStopItem::GetPos( const SvxTabStop& rTab ) const
     return it != maTabStops.end() ? it - maTabStops.begin() : SVX_TAB_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxTabStopItem::GetPos( const sal_Int32 nPos ) const
 {
@@ -934,7 +934,7 @@ sal_uInt16 SvxTabStopItem::GetPos( const sal_Int32 nPos ) const
     return it != maTabStops.end() ? it - maTabStops.begin() : SVX_TAB_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxTabStopItem& SvxTabStopItem::operator=( const SvxTabStopItem& rTSI )
 {
@@ -963,7 +963,7 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
                 case  SVX_TAB_ADJUST_RIGHT  : pArr[i].Alignment = style::TabAlign_RIGHT; break;
                 case  SVX_TAB_ADJUST_DECIMAL: pArr[i].Alignment = style::TabAlign_DECIMAL; break;
                 case  SVX_TAB_ADJUST_CENTER : pArr[i].Alignment = style::TabAlign_CENTER; break;
-                    default: //SVX_TAB_ADJUST_DEFAULT
+                    default: 
                         pArr[i].Alignment = style::TabAlign_DEFAULT;
 
                 }
@@ -1047,7 +1047,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 case style::TabAlign_CENTER : eAdjust = SVX_TAB_ADJUST_CENTER; break;
                 case style::TabAlign_RIGHT  : eAdjust = SVX_TAB_ADJUST_RIGHT; break;
                 case style::TabAlign_DECIMAL: eAdjust = SVX_TAB_ADJUST_DECIMAL; break;
-                default: ;//prevent warning
+                default: ;
                 }
                 sal_Unicode cFill = pArr[i].FillChar;
                 sal_Unicode cDecimal = pArr[i].DecimalChar;
@@ -1077,7 +1077,7 @@ bool SvxTabStopItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     }
     return true;
 }
-// -----------------------------------------------------------------------
+
 
 bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -1094,14 +1094,14 @@ bool SvxTabStopItem::operator==( const SfxPoolItem& rAttr ) const
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxTabStopItem::Clone( SfxItemPool * ) const
 {
     return new SvxTabStopItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxTabStopItem::GetPresentation
 (
@@ -1136,7 +1136,7 @@ SfxItemPresentation SvxTabStopItem::GetPresentation
     return ePres;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxTabStopItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
@@ -1158,13 +1158,13 @@ SfxPoolItem* SvxTabStopItem::Create( SvStream& rStrm, sal_uInt16 ) const
     return pAttr;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    // Default-Tabs are only expanded for the default Attribute. For complete
-    // backward compabillity (<=304) all tabs have to be expanded, this makes
-    // the files grow large in size. All only SWG!
+    
+    
+    
 
     const SfxItemPool *pPool = SfxItemPool::GetStoringPool();
     const bool bStoreDefTabs = pPool
@@ -1215,7 +1215,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
     return rStrm;
 }
 
-// -----------------------------------------------------------------------
+
 bool SvxTabStopItem::Insert( const SvxTabStop& rTab )
 {
     sal_uInt16 nTabPos = GetPos(rTab);
@@ -1223,7 +1223,7 @@ bool SvxTabStopItem::Insert( const SvxTabStop& rTab )
         Remove(nTabPos);
     return maTabStops.insert( rTab ).second;
 }
-// -----------------------------------------------------------------------
+
 void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart,
                             sal_uInt16 nEnd )
 {
@@ -1242,17 +1242,17 @@ void SvxTabStopItem::Insert( const SvxTabStopItem* pTabs, sal_uInt16 nStart,
 
 
 
-// class SvxFmtSplitItem -------------------------------------------------
+
 SvxFmtSplitItem::~SvxFmtSplitItem()
 {
 }
-// -----------------------------------------------------------------------
+
 SfxPoolItem* SvxFmtSplitItem::Clone( SfxItemPool * ) const
 {
     return new SvxFmtSplitItem( *this );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxFmtSplitItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
@@ -1260,7 +1260,7 @@ SvStream& SvxFmtSplitItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ )
     return rStrm;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxFmtSplitItem::Create( SvStream& rStrm, sal_uInt16 ) const
 {
@@ -1269,7 +1269,7 @@ SfxPoolItem* SvxFmtSplitItem::Create( SvStream& rStrm, sal_uInt16 ) const
     return new SvxFmtSplitItem( sal_Bool( bIsSplit != 0 ), Which() );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxItemPresentation SvxFmtSplitItem::GetPresentation
 (
@@ -1294,19 +1294,19 @@ SfxItemPresentation SvxFmtSplitItem::GetPresentation
             rText = EE_RESSTR(nId);
             return ePres;
         }
-        default: ;//prevent warning
+        default: ;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// --------------------------------------------------------------------
+
 
 SfxPoolItem* SvxPageModelItem::Clone( SfxItemPool* ) const
 {
     return new SvxPageModelItem( *this );
 }
 
-//------------------------------------------------------------------------
+
 
 bool SvxPageModelItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId ) const
 {
@@ -1364,12 +1364,12 @@ SfxItemPresentation SvxPageModelItem::GetPresentation
                 rText = EE_RESSTR(RID_SVXITEMS_PAGEMODEL_COMPLETE) + GetValue();
             }
             return SFX_ITEM_PRESENTATION_COMPLETE;
-        default: ;//prevent warning
+        default: ;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxScriptSpaceItem::SvxScriptSpaceItem( sal_Bool bOn, const sal_uInt16 nId )
     : SfxBoolItem( nId, bOn )
@@ -1416,12 +1416,12 @@ SfxItemPresentation SvxScriptSpaceItem::GetPresentation(
                                     : RID_SVXITEMS_SCRPTSPC_ON );
             return ePres;
         }
-    default: ;//prevent warning
+    default: ;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-//------------------------------------------------------------------------
+
 
 SvxHangingPunctuationItem::SvxHangingPunctuationItem(
                                     bool bOn, const sal_uInt16 nId )
@@ -1469,12 +1469,12 @@ SfxItemPresentation SvxHangingPunctuationItem::GetPresentation(
                                         : RID_SVXITEMS_HNGPNCT_ON );
                 return ePres;
             }
-        default: ;//prevent warning
+        default: ;
             break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
-//------------------------------------------------------------------------
+
 
 SvxForbiddenRuleItem::SvxForbiddenRuleItem(
                                     sal_Bool bOn, const sal_uInt16 nId )
@@ -1522,7 +1522,7 @@ SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
                                         : RID_SVXITEMS_FORBIDDEN_RULE_ON );
                 return ePres;
             }
-        default: ;//prevent warning
+        default: ;
             break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
@@ -1586,7 +1586,7 @@ SfxItemPresentation SvxParaVertAlignItem::GetPresentation(
                 rText = EE_RESSTR( nTmp );
                 return ePres;
             }
-        default: ;//prevent warning
+        default: ;
             break;
     }
     return SFX_ITEM_PRESENTATION_NONE;
@@ -1665,7 +1665,7 @@ SfxItemPresentation SvxParaGridItem::GetPresentation(
 
                 return ePres;
             }
-        default: ;//prevent warning
+        default: ;
             break;
     }
     return SFX_ITEM_PRESENTATION_NONE;

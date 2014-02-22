@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/alloc.h>
@@ -67,11 +67,11 @@ AstScope* AstStack::nextToTop()
     if (depth() < 2)
         return NULL;
 
-    tmp = top();        // Save top
-    (void) pop();       // Pop it
-    retval = top();     // Get next one down
-    (void) push(tmp);   // Push top back
-    return retval;      // Return next one down
+    tmp = top();        
+    (void) pop();       
+    retval = top();     
+    (void) push(tmp);   
+    return retval;      
 }
 
 AstScope* AstStack::topNonNull()
@@ -87,11 +87,11 @@ AstScope* AstStack::topNonNull()
 AstStack* AstStack::push(AstScope* pScope)
 {
     AstScope        **tmp;
-//  AstDeclaration  *pDecl = ScopeAsDecl(pScope);
+
     sal_uInt32  newSize;
     sal_uInt32  i;
 
-    // Make sure there's space for one more
+    
     if (m_size == m_top)
     {
         newSize = m_size;
@@ -105,7 +105,7 @@ AstStack* AstStack::push(AstScope* pScope)
         m_stack = tmp;
     }
 
-    // Insert new scope
+    
     m_stack[m_top++] = pScope;
 
     return this;

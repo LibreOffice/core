@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustring.hxx>
@@ -25,7 +25,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
-// the table is still to be sorted
+
 struct RTF_TokenEntry
 {
     union{
@@ -35,7 +35,7 @@ struct RTF_TokenEntry
     int nToken;
 };
 
-// Flag: RTF-token table has been sorted
+
 static int bSortKeyWords = sal_False;
 
 static RTF_TokenEntry aRTFTokenTab[] = {
@@ -1047,7 +1047,7 @@ static RTF_TokenEntry aRTFTokenTab[] = {
 {{OOO_STRING_SVTOOLS_RTF_FRMTXLRTBV},   RTF_FRMTXLRTBV},
 {{OOO_STRING_SVTOOLS_RTF_FRMTXTBRLV},   RTF_FRMTXTBRLV},
 
-// MS-2000 Tokens
+
         {{OOO_STRING_SVTOOLS_RTF_ULTHD},         RTF_ULTHD},
         {{OOO_STRING_SVTOOLS_RTF_ULTHDASH},      RTF_ULTHDASH},
         {{OOO_STRING_SVTOOLS_RTF_ULLDASH},       RTF_ULLDASH},
@@ -1077,7 +1077,7 @@ static RTF_TokenEntry aRTFTokenTab[] = {
         {{OOO_STRING_SVTOOLS_RTF_NOOVERFLOW},    RTF_NOOVERFLOW},
         {{OOO_STRING_SVTOOLS_RTF_ASPALPHA},      RTF_ASPALPHA},
 
-// SWG specific attributes
+
         {{OOO_STRING_SVTOOLS_RTF_GRFALIGNV},     RTF_GRF_ALIGNV},
         {{OOO_STRING_SVTOOLS_RTF_GRFALIGNH},     RTF_GRF_ALIGNH},
         {{OOO_STRING_SVTOOLS_RTF_GRFMIRROR},     RTF_GRF_MIRROR},
@@ -1094,7 +1094,7 @@ static RTF_TokenEntry aRTFTokenTab[] = {
         {{OOO_STRING_SVTOOLS_RTF_PRTDATA},       RTF_SWG_PRTDATA},
         {{OOO_STRING_SVTOOLS_RTF_BKMKKEY},       RTF_BKMK_KEY},
 
-// Attributes for fly frames
+
         {{OOO_STRING_SVTOOLS_RTF_FLYPRINT},      RTF_FLYPRINT},
         {{OOO_STRING_SVTOOLS_RTF_FLYOPAQUE},     RTF_FLYOPAQUE},
         {{OOO_STRING_SVTOOLS_RTF_FLYPRTCTD},     RTF_FLYPRTCTD},
@@ -1151,7 +1151,7 @@ static RTF_TokenEntry aRTFTokenTab[] = {
         {{OOO_STRING_SVTOOLS_RTF_SV},       RTF_SV},
         {{OOO_STRING_SVTOOLS_RTF_SP},       RTF_SP},
 
-// Support for overline attributes
+
         {{OOO_STRING_SVTOOLS_RTF_OL},           RTF_OL},
         {{OOO_STRING_SVTOOLS_RTF_OLW},          RTF_OLW},
         {{OOO_STRING_SVTOOLS_RTF_OLD},          RTF_OLD},

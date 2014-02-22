@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /** Osnola:
@@ -50,7 +50,7 @@ namespace PictReaderShapePrivate {
 }
 
 namespace PictReaderShape {
-  //--------- draws a horizontal/vertical/small line (by creating a "rectangle/polygon")  ---------
+  
   bool drawLineHQ(VirtualDevice *dev, Point const &orig, Point const &dest, Size const &pSize) {
     long dir[2] = { dest.X()-orig.X(), dest.Y()-orig.Y() };
     bool vertic = dir[0] == 0;
@@ -95,9 +95,9 @@ namespace PictReaderShape {
       poly.append(B2DPoint(origPt[wh][0], origPt[wh][1]));
     }
 
-    // HACK: here we use the line coloring when drawing the shape
-    //       must be changed if other parameter are changed to draw
-    //       a line/fill shape
+    
+    
+    
     Color oldFColor = dev->GetFillColor(), oldLColor = dev->GetLineColor();
     dev->SetFillColor(oldLColor); dev->SetLineColor(Color(COL_TRANSPARENT));
     dev->DrawPolygon(poly);
@@ -106,7 +106,7 @@ namespace PictReaderShape {
   }
 
   //
-  //-------------------- draws a line --------------------
+  
   //
   void drawLine(VirtualDevice *dev, Point const &orig, Point const &dest, Size const &pSize) {
     if (drawLineHQ(dev,orig,dest,pSize)) return;
@@ -121,7 +121,7 @@ namespace PictReaderShape {
     dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLINEJOIN_NONE);
   }
 
-  //--------------------  draws a rectangle --------------------
+  
   /* Note(checkme): contradically with the QuickDraw's reference 3-23, it seems better to consider
      that the frame/content of a rectangle appears inside the given rectangle. Does a conversion
      appear between the pascal functions and the data stored in the file ? */
@@ -143,7 +143,7 @@ namespace PictReaderShape {
       dev->DrawPolygon(poly);
   }
 
-  //--------------------  draws an ellipse --------------------
+  
   void drawEllipse(VirtualDevice *dev, bool drawFrame, Rectangle const &orig, Size const &pSize) {
     int penSize=(pSize.Width()+pSize.Height())/2;
     Rectangle oval = PictReaderShapePrivate::contractRectangle(drawFrame, orig, pSize);
@@ -158,29 +158,29 @@ namespace PictReaderShape {
       dev->DrawPolygon(poly);
   }
 
-  //--------------------  draws an arc/pie --------------------
+  
   void drawArc(VirtualDevice *dev, bool drawFrame, Rectangle const &orig, const double& angle1, const double& angle2, Size const &pSize) {
     int penSize=(pSize.Width()+pSize.Height())/2;
     Rectangle arc = PictReaderShapePrivate::contractRectangle(drawFrame, orig, pSize);
     using namespace basegfx;
 
     double const PI2 = M_PI/2.0;
-    // pict angle are CW with 0 at twelve oclock ( with Y-axis inverted)...
+    
     double angl1 = angle1-PI2;
     double angl2 = angle2-PI2;
     long const X[2] = { arc.Left(), arc.Right() };
     long const Y[2] = { arc.Top(), arc.Bottom() };
     B2DPoint center(0.5*(X[1]+X[0]), 0.5*(Y[1]+Y[0]));
 
-    // We must have angl1 between 0 and F_2PI
+    
     while (angl1 < 0.0) { angl1 += F_2PI; angl2 += F_2PI; }
     while (angl1 >= F_2PI) { angl1  -= F_2PI; angl2 -= F_2PI; }
 
-    // if this happen, we want a complete circle
-    // so we set angl2 slightly less than angl1
+    
+    
     if (angl2 >= angl1+F_2PI) angl2 = angl1-0.001;
 
-    // We must have angl2 between 0 and F_2PI
+    
     while (angl2 < 0.0) angl2 += F_2PI;
     while (angl2 >= F_2PI) angl2 -= F_2PI;
 
@@ -188,12 +188,12 @@ namespace PictReaderShape {
     if (drawFrame)
       dev->DrawPolyLine(poly, double(penSize), basegfx::B2DLINEJOIN_NONE);
     else {
-      // adds circle's center
+      
       poly.append(center);
       dev->DrawPolygon(poly);
     }
   }
-  //--------------------  draws a rectangle with round corner --------------------
+  
   void drawRoundRectangle(VirtualDevice *dev, bool drawFrame, Rectangle const &orig, Size const &ovalSize, Size const &pSize) {
     int penSize=(pSize.Width()+pSize.Height())/2;
     Rectangle oval = PictReaderShapePrivate::contractRectangle(drawFrame, orig, pSize);
@@ -215,7 +215,7 @@ namespace PictReaderShape {
       dev->DrawPolygon(poly);
   }
 
-  //--------------------  draws a polygon --------------------
+  
   void drawPolygon(VirtualDevice *dev, bool drawFrame, Polygon const &orig, Size const &pSize) {
     int penSize=(pSize.Width()+pSize.Height())/2;
     long decalTL[2] = {0, 0}, decalBR[2] = { pSize.Width(), pSize.Height()};
@@ -223,14 +223,14 @@ namespace PictReaderShape {
       decalTL[0] += penSize/2; decalTL[1] += penSize/2;
       decalBR[0] -= (penSize+1)/2; decalBR[1] -= (penSize+1)/2;
     }
-    // Quickdraw Drawing Reference 3-82: the pen size is only used for frame
+    
     else decalBR[0] = decalBR[1] = 0;
 
 
     int numPt = orig.GetSize();
     if (numPt <= 1) return;
 
-    // we compute a barycenter of the point to define the extended direction of each point
+    
     double bary[2] = { 0.0, 0.0 };
     for (int i = 0; i < numPt; i++) {
       Point const &pt = orig.GetPoint(i);
@@ -240,7 +240,7 @@ namespace PictReaderShape {
 
     using namespace basegfx;
     B2DPolygon poly;
-    // Note: a polygon can be open, so we must not close it when we draw the frame
+    
     for (int i = 0; i < numPt; i++) {
       Point const &pt = orig.GetPoint(i);
       double x = (double(pt.X()) < bary[0]) ? pt.X()+decalTL[0] : pt.X()+decalBR[0];

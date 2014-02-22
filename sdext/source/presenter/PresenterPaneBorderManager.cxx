@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// The body of this file is only used when PresenterWindowManager defines
-// the preprocessor symbol ENABLE_PANE_RESIZING, which by default is not the
-// case.
+
+
+
 #ifdef ENABLE_PANE_RESIZING
 
 #include "PresenterPaneBorderManager.hxx"
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sdext { namespace presenter {
 
-//===== Service ===============================================================
+
 
 OUString PresenterPaneBorderManager::getImplementationName_static (void)
 {
@@ -62,7 +62,7 @@ Reference<XInterface> PresenterPaneBorderManager::Create (const Reference<uno::X
         new PresenterPaneBorderManager(rxContext, NULL)));
 }
 
-//===== PresenterPaneBorderManager ============================================
+
 
 PresenterPaneBorderManager::PresenterPaneBorderManager (
     const Reference<XComponentContext>& rxContext,
@@ -129,15 +129,15 @@ PresenterPaneBorderManager::BorderElement
     awt::Rectangle aOuterBox (rxOuterWindow->getPosSize());
     const awt::Rectangle aInnerBox (rxInnerWindow->getPosSize());
 
-    // Coordinates of the pointer position are given in the window
-    // coordinate system.  Therefore the upper left corner of the outer box
-    // is the origin.
+    
+    
+    
     aOuterBox.X = 0;
     aOuterBox.Y = 0;
 
     sal_Int32 nCode = 0;
 
-    // Add horizontal classification to nCode.
+    
     if (aPosition.X < aInnerBox.X)
         if (aPosition.X < aOuterBox.X)
             nCode = mnOutside;
@@ -151,7 +151,7 @@ PresenterPaneBorderManager::BorderElement
     else
         nCode = mnHorizontalCenter;
 
-    // Add vertical classification to nCode.
+    
     if (aPosition.Y < aInnerBox.Y)
         if (aPosition.Y < aOuterBox.Y)
             nCode |= mnOutside;
@@ -165,7 +165,7 @@ PresenterPaneBorderManager::BorderElement
     else
         nCode |= mnVerticalCenter;
 
-    // Translate bits in nCode into BorderElement value.
+    
     switch (nCode)
     {
         case mnOutside:
@@ -207,7 +207,7 @@ PresenterPaneBorderManager::BorderElement
     }
 }
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArguments)
     throw (Exception, RuntimeException)
@@ -220,8 +220,8 @@ void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArgu
         {
             mxParentWindow = Reference<awt::XWindow>(rArguments[0], UNO_QUERY_THROW);
 
-            // Get the outer and inner windows from the argument list and
-            // build a window list of it.
+            
+            
             for (sal_Int32 nIndex=1; nIndex<rArguments.getLength(); nIndex+=2)
             {
                 Reference<awt::XWindow> xOuterWindow (rArguments[nIndex], UNO_QUERY_THROW);
@@ -247,7 +247,7 @@ void SAL_CALL PresenterPaneBorderManager::initialize (const Sequence<Any>& rArgu
     }
 }
 
-//----- XMouseListener --------------------------------------------------------
+
 
 void SAL_CALL PresenterPaneBorderManager::mousePressed (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -255,7 +255,7 @@ void SAL_CALL PresenterPaneBorderManager::mousePressed (const css::awt::MouseEve
     ThrowIfDisposed();
     ::osl::MutexGuard aGuard (::osl::Mutex::getGlobalMutex());
 
-    // Find window descriptor of the window that has been clicked.
+    
     WindowList::const_iterator iDescriptor;
     for (iDescriptor=maWindowList.begin(); iDescriptor!=maWindowList.end(); ++iDescriptor)
         if (iDescriptor->first == rEvent.Source)
@@ -263,7 +263,7 @@ void SAL_CALL PresenterPaneBorderManager::mousePressed (const css::awt::MouseEve
 
     if (iDescriptor != maWindowList.end())
     {
-        // Prepare dragging.
+        
         mxOuterDragWindow = iDescriptor->first;
         mxInnerDragWindow = iDescriptor->second;
         OSL_ASSERT(mxOuterDragWindow.is() && mxInnerDragWindow.is());
@@ -309,7 +309,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseExited (const css::awt::MouseEven
     mxInnerDragWindow = NULL;
 }
 
-//----- XMouseMotionListener --------------------------------------------------
+
 
 void SAL_CALL PresenterPaneBorderManager::mouseMoved (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
@@ -323,7 +323,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseMoved (const css::awt::MouseEvent
             break;
     if (iDescriptor != maWindowList.end())
     {
-        // Choose pointer shape according to position in the window border.
+        
         switch (ClassifyBorderElementUnderMouse(
             iDescriptor->first,
             iDescriptor->second,
@@ -361,7 +361,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseMoved (const css::awt::MouseEvent
                 break;
         }
 
-        // Make the pointer shape visible.
+        
         Reference<awt::XWindowPeer> xPeer (iDescriptor->first, UNO_QUERY);
         if (xPeer.is())
         {
@@ -398,8 +398,8 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
     sal_Int32 nRight = aBox.X + aBox.Width;
     sal_Int32 nBottom = aBox.Y + aBox.Height;
 
-    // Update position and/or size according to initial pointer position
-    // inside the window border.
+    
+    
     switch (meDragType)
     {
         case PresenterPaneBorderManager::Top:
@@ -435,7 +435,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
     if (aBox.Width > 20
         && aBox.Height > 20)
     {
-        // Set position and/or size of the border window to the new values.
+        
         sal_Int16 nFlags (0);
         if (aBox.X != aOldBox.X)
             nFlags |= awt::PosSize::X;
@@ -447,8 +447,8 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
             nFlags |= awt::PosSize::HEIGHT;
         mxOuterDragWindow->setPosSize(aBox.X, aBox.Y, aBox.Width, aBox.Height, nFlags);
 
-        // Invalidate that is or was covered by the border window before and
-        // after the move/resize.
+        
+        
         if (mpPresenterController.get() != NULL)
         {
             const sal_Int32 nLeft = ::std::min(aOldBox.X,aBox.X);
@@ -464,7 +464,7 @@ void SAL_CALL PresenterPaneBorderManager::mouseDragged (const css::awt::MouseEve
     }
 }
 
-//----- lang::XEventListener --------------------------------------------------
+
 
 void SAL_CALL PresenterPaneBorderManager::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -478,7 +478,7 @@ void SAL_CALL PresenterPaneBorderManager::disposing (const lang::EventObject& rE
         }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterPaneBorderManager::CaptureMouse (const Reference<awt::XWindow>& rxWindow)
 {
@@ -503,8 +503,8 @@ void PresenterPaneBorderManager::ThrowIfDisposed (void)
     }
 }
 
-} } // end of namespace ::sd::presenter
+} } 
 
-#endif // ENABLE_PANE_RESIZING
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

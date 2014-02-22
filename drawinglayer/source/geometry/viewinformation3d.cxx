@@ -40,43 +40,43 @@ namespace drawinglayer
         class ImpViewInformation3D
         {
         private:
-            // ViewInformation3D implementation can change refcount, so we have only
-            // two memory regions for pairs of ViewInformation3D/ImpViewInformation3D
+            
+            
             friend class ::drawinglayer::geometry::ViewInformation3D;
 
-            // the 3D transformations
-            // Object to World. This may change and being adapted when entering 3D transformation
-            // groups
+            
+            
+            
             basegfx::B3DHomMatrix                       maObjectTransformation;
 
-            // World to Camera. This includes VRP, VPN and VUV camera coordinate system
+            
             basegfx::B3DHomMatrix                       maOrientation;
 
-            // Camera to Device with X,Y and Z [-1.0 .. 1.0]. This is the
-            // 3D to 2D projection which may be parallell or perspective. When it is perspective,
-            // the last line of the homogen matrix will NOT be unused
+            
+            
+            
             basegfx::B3DHomMatrix                       maProjection;
 
-            // Device to View with X,Y and Z [0.0 .. 1.0]. This converts from -1 to 1 coordinates
-            // in camera coordinate system to 0 to 1 in unit 2D coordinates. This way it stays
-            // view-independent. To get discrete coordinates, the 2D transformation of a scene
-            // as 2D object needs to be involved
+            
+            
+            
+            
             basegfx::B3DHomMatrix                       maDeviceToView;
 
-            // Object to View is the linear combination of all four transformations. It's
-            // buffered to avoid too much matrix multiplying and created on demand
+            
+            
             basegfx::B3DHomMatrix                       maObjectToView;
 
-            // the point in time
+            
             double                                      mfViewTime;
 
-            // the complete PropertyValue representation (if already created)
+            
             uno::Sequence< beans::PropertyValue >       mxViewInformation;
 
-            // the extra PropertyValues; does not contain the transformations
+            
             uno::Sequence< beans::PropertyValue >       mxExtendedInformation;
 
-            // the local UNO API strings
+            
             const OUString& getNamePropertyObjectTransformation()
             {
                 static OUString s_sNameProperty("ObjectTransformation");
@@ -131,8 +131,8 @@ namespace drawinglayer
                 return s_sNamePropertyTime;
             }
 
-            // a central PropertyValue parsing method to allow transportatin of
-            // all ViewParameters using UNO API
+            
+            
             void impInterpretPropertyValues(const uno::Sequence< beans::PropertyValue >& rViewParameters)
             {
                 if(rViewParameters.hasElements())
@@ -140,7 +140,7 @@ namespace drawinglayer
                     const sal_Int32 nCount(rViewParameters.getLength());
                     sal_Int32 nExtendedInsert(0);
 
-                    // prepare extended information for filtering. Maximum size is nCount
+                    
                     mxExtendedInformation.realloc(nCount);
 
                     for(sal_Int32 a(0); a < nCount; a++)
@@ -161,9 +161,9 @@ namespace drawinglayer
                         }
                         else if(rProp.Name == getNamePropertyProjection())
                         {
-                            // projection may be defined using a frustum in which case the last line of
-                            // the 4x4 matrix is not (0,0,0,1). Since AffineMatrix3D does not support that,
-                            // these four values need to be treated extra
+                            
+                            
+                            
                             const double f_30(maProjection.get(3, 0));
                             const double f_31(maProjection.get(3, 1));
                             const double f_32(maProjection.get(3, 2));
@@ -214,18 +214,18 @@ namespace drawinglayer
                         }
                         else
                         {
-                            // extra information; add to filtered information
+                            
                             mxExtendedInformation[nExtendedInsert++] = rProp;
                         }
                     }
 
-                    // extra information size is now known; realloc to final size
+                    
                     mxExtendedInformation.realloc(nExtendedInsert);
                 }
             }
 
-            // central method to create a Sequence of PropertyValues containing he complete
-            // data set
+            
+            
             void impFillViewInformationFromContent()
             {
                 const bool bObjectTransformationUsed(!maObjectTransformation.isIdentity());
@@ -235,9 +235,9 @@ namespace drawinglayer
                 const bool bTimeUsed(0.0 < mfViewTime);
                 const bool bExtraInformation(mxExtendedInformation.hasElements());
 
-                // projection may be defined using a frustum in which case the last line of
-                // the 4x4 matrix is not (0,0,0,1). Since AffineMatrix3D does not support that,
-                // these four values need to be treated extra
+                
+                
+                
                 const bool bProjectionUsed_30(bProjectionUsed && !basegfx::fTools::equalZero(maProjection.get(3, 0)));
                 const bool bProjectionUsed_31(bProjectionUsed && !basegfx::fTools::equalZero(maProjection.get(3, 1)));
                 const bool bProjectionUsed_32(bProjectionUsed && !basegfx::fTools::equalZero(maProjection.get(3, 2)));
@@ -390,7 +390,7 @@ namespace drawinglayer
 
             const basegfx::B3DHomMatrix& getObjectToView() const
             {
-                // on demand WorldToView creation
+                
 
                 if(maObjectToView.isIdentity())
                 {
@@ -425,8 +425,8 @@ namespace drawinglayer
                     && mxExtendedInformation == rCandidate.mxExtendedInformation);
             }
         };
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -527,7 +527,7 @@ namespace drawinglayer
         {
             return mpViewInformation3D->getExtendedInformationSequence();
         }
-    } // end of namespace geometry
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

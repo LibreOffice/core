@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
-// so_activex.cpp : Implementation of DLL Exports.
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f so_activexps.mk in the project directory.
+
+
+
+
 
 #include "stdio.h"
 #include "stdafx2.h"
@@ -44,10 +44,10 @@ END_OBJECT_MAP()
 #define X64_LIB_NAME "so_activex_x64.dll"
 #define X32_LIB_NAME "so_activex.dll"
 
-// to provide windows xp as build systems for mingw we need to define KEY_WOW64_64KEY
-// in mingw 3.13 KEY_WOW64_64KEY isn't available < Win2003 systems.
-// Also defined in setup_native\source\win32\customactions\reg64\reg64.cxx,source\win32\customactions\shellextensions\shellextensions.cxx and
-// extensions\source\activex\main\so_activex.cpp
+
+
+
+
 #ifndef KEY_WOW64_64KEY
     #define KEY_WOW64_64KEY (0x0100)
 #endif
@@ -66,13 +66,13 @@ const BOOL bX64 = FALSE;
 #define REG_DELETE_KEY_A( key, aPath, nKeyAccess ) RegDeleteKeyA( key, aPath )
 #endif
 
-// MinGW doesn't know anything about RegDeleteKeyExA if WINVER < 0x0502.
+
 extern "C" {
 WINADVAPI LONG WINAPI RegDeleteKeyExA(HKEY,LPCSTR,REGSAM,DWORD);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+
+
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
@@ -84,29 +84,29 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
     }
     else if (dwReason == DLL_PROCESS_DETACH)
         _Module.Term();
-    return TRUE;    // ok
+    return TRUE;    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+
+
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+
+
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
 
-// for now database component and chart are always installed
+
+
+
 #define SUPPORTED_EXT_NUM 30
 const char* aFileExt[] = { ".vor",
                            ".sds", ".sda", ".sdd", ".sdp", ".sdc", ".sdw", ".smf",
@@ -161,19 +161,19 @@ const int nForModes[] = { 16,
 const char* aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
 const char* aTypeLib = "{61FA3F13-8061-4796-B055-3697ED28CB38}";
 
-// ISOComWindowPeer interface information
+
 const char* aInterIDWinPeer = "{BF5D10F3-8A10-4A0B-B150-2B6AA2D7E118}";
 const char* aProxyStubWinPeer = "{00020424-0000-0000-C000-000000000046}";
 
-// ISODispatchInterceptor interface information
+
 const char* aInterIDDispInt = "{9337694C-B27D-4384-95A4-9D8E0EABC9E5}";
 const char* aProxyStubDispInt = "{00020424-0000-0000-C000-000000000046}";
 
-// ISOActionsApproval interface information
+
 const char* aInterIDActApprove = "{029E9F1E-2B3F-4297-9160-8197DE7ED54F}";
 const char* aProxyStubActApprove = "{00020424-0000-0000-C000-000000000046}";
 
-// The following prefix is required for HKEY_LOCAL_MACHINE and HKEY_CURRENT_USER ( not for HKEY_CLASSES_ROOT )
+
 const char* aLocalPrefix = "Software\\Classes\\";
 
 BOOL createKey( HKEY hkey,
@@ -214,15 +214,15 @@ STDAPI DllRegisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAc
     HKEY        hkey4 = NULL;
     char aSubKey[513];
     int         ind;
-    const char* aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
+    const char* aPrefix = aLocalPrefix; 
 
     char pActiveXPath[1124];
     char pActiveXPath101[1124];
 
 
-    // In case SO7 is installed for this user he can have local registry entries that will prevent him from
-    // using SO8 ActiveX control. The fix is just to clean up the local entries related to ActiveX control.
-    // Unfortunately it can be done only for the user who installs the office.
+    
+    
+    
     if ( bForAllUsers )
         DllUnregisterServerNative( nMode, sal_False, sal_False );
 
@@ -349,14 +349,14 @@ STDAPI DllRegisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit, co
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+
+
 HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
 {
     HKEY hkey1 = NULL;
 
     char pSubKeyName[256];
-    // first delete the subkeys
+    
     while( ERROR_SUCCESS == RegOpenKeyExA( hkey, pPath, 0, nKeyAccess, &hkey1)
         && ERROR_SUCCESS == RegEnumKeyA( hkey1, 0, pSubKeyName, 256 )
         && ERROR_SUCCESS == DeleteKeyTree( hkey1, pSubKeyName, nKeyAccess ) )
@@ -367,7 +367,7 @@ HRESULT DeleteKeyTree( HKEY hkey, const char* pPath, REGSAM nKeyAccess )
     if ( hkey1 )
         RegCloseKey( hkey1 ),hkey1= NULL;
 
-    // delete the key itself
+    
     return REG_DELETE_KEY_A( hkey, pPath, nKeyAccess & ( KEY_WOW64_64KEY | KEY_WOW64_32KEY ) );
 }
 
@@ -376,7 +376,7 @@ STDAPI DllUnregisterServerNative_Impl( int nMode, BOOL bForAllUsers, REGSAM nKey
     HKEY        hkey = NULL;
     BOOL        fErr = FALSE;
     char aSubKey[513];
-    const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
+    const char*    aPrefix = aLocalPrefix; 
 
     for( int ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
     {
@@ -469,8 +469,8 @@ STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServerDoc - Adds entries to the system registry
+
+
 
 #define SUPPORTED_MSEXT_NUM 7
 const char* aMSFileExt[] = { ".dot", ".doc", ".xlt", ".xls", ".pot", ".ppt", ".pps" };
@@ -492,11 +492,11 @@ STDAPI DllRegisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAcces
     HKEY        hkey1 = NULL;
     char aSubKey[513];
     int         ind;
-    const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
+    const char*    aPrefix = aLocalPrefix; 
 
-    // In case SO7 is installed for this user he can have local registry entries that will prevent him from
-    // using SO8 ActiveX control. The fix is just to clean up the local entries related to ActiveX control.
-    // Unfortunately it can be done only for the user who installs the office.
+    
+    
+    
     if ( bForAllUsers )
         DllUnregisterServerDoc( nMode, sal_False, sal_False );
 
@@ -572,15 +572,15 @@ STDAPI DllRegisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServerDoc - Removes entries from the system registry
+
+
 
 STDAPI DllUnregisterServerDoc_Impl( int nMode, BOOL bForAllUsers, REGSAM nKeyAccess )
 {
     HKEY        hkey = NULL;
     BOOL        fErr = FALSE;
     char aSubKey[513];
-    const char*    aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
+    const char*    aPrefix = aLocalPrefix; 
 
       for( int ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++ )
        {
@@ -654,8 +654,8 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers, BOOL bFor64Bit )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - regsvr32 entry point
+
+
 
 STDAPI DllRegisterServer( void )
 {
@@ -687,8 +687,8 @@ STDAPI DllRegisterServer( void )
     return aResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - regsvr32 entry point
+
+
 
 STDAPI DllUnregisterServer( void )
 {

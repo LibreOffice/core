@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -99,9 +99,9 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
         {
             static Property aTable[] =
                 {
-                    // LEM TODO: this needs to be kept in sync with other, e.g. pq_statics.css:508
-                    // Should really share!
-                    // At least use for the handles the #define'd values in .hxx file...
+                    
+                    
+                    
                     Property(
                         OUString("CursorName"), 0,
                         ::getCppuType( (OUString *)0) , 0 ),
@@ -151,9 +151,9 @@ BaseResultSet::BaseResultSet(
     POSTGRE_TRACE( "ctor BaseResultSet" );
 }
 
-// LEM TODO: refMutex->mutex should live longer than OComponentHelper,
-// but calling OComponentHelper::dispose explicitly here calls
-// BaseResultSet::~BaseResultSet in an infinite loop :(
+
+
+
 BaseResultSet::~BaseResultSet()
 {
     POSTGRE_TRACE( "dtor BaseResultSet" );
@@ -177,21 +177,21 @@ Any BaseResultSet::queryInterface( const Type & reqType ) throw (RuntimeExceptio
     return ret;
 }
 
-// void BaseResultSet::close(  ) throw (SQLException, RuntimeException)
-// {
-//     Reference< XInterface > owner;
-//     {
-//         ResultSetGuard guard(*this);
-//         if( m_result )
-//         {
-//             PQclear(m_result );
-//             m_result = 0;
-//             m_row = -1;
-//         }
-//         owner = m_owner;
-//         m_owner.clear();
-//     }
-// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Sequence<Type > BaseResultSet::getTypes() throw( RuntimeException )
 {
@@ -232,12 +232,12 @@ Sequence< sal_Int8> BaseResultSet::getImplementationId() throw( RuntimeException
     return pId->getImplementationId();
 }
 
-// Reference< XResultSetMetaData > BaseResultSet::getMetaData(  ) throw (SQLException, RuntimeException)
-// {
-//     ResultSetGuard guard(*this);
-//     checkClosed();
-//     return new ResultSetMetaData( m_refMutex, this, &m_result );
-// }
+
+
+
+
+
+
 
 sal_Bool BaseResultSet::next(  ) throw (SQLException, RuntimeException)
 {
@@ -360,7 +360,7 @@ sal_Bool BaseResultSet::previous(  ) throw (SQLException, RuntimeException)
 
 void BaseResultSet::refreshRow(  ) throw (SQLException, RuntimeException)
 {
-    // TODO: not supported for now
+    
 }
 
 sal_Bool BaseResultSet::rowUpdated(  ) throw (SQLException, RuntimeException)
@@ -386,7 +386,7 @@ Reference< XInterface > BaseResultSet::getStatement() throw (SQLException, Runti
 }
 
 
-//----------------- XRow interface ----------------------------------------------------
+
 
 sal_Bool BaseResultSet::wasNull(  ) throw (SQLException, RuntimeException)
 {
@@ -464,7 +464,7 @@ OUString BaseResultSet::getString( sal_Int32 columnIndex ) throw (SQLException, 
     checkRowIndex( sal_True /* must be on row */ );
     OUString ret;
     convertTo( getValue(  columnIndex ), getCppuType( &ret ) ) >>= ret;
-//     printf( "BaseResultSet::getString() %s\n" , OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US ).getStr() );
+
     return ret;
 }
 
@@ -529,7 +529,7 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
         m_wasNull = true;
     else
     {
-        // if this is a binary, it must contain escaped data !
+        
         OString val = OUStringToOString( ustr, RTL_TEXTENCODING_ASCII_US );
 
         size_t length;
@@ -560,7 +560,7 @@ Sequence< sal_Int8 > BaseResultSet::getBytes( sal_Int32 columnIndex )
     return DBTypeConversion::toDateTime( getString( columnIndex ) );
 }
 
-  // LEM TODO: these look like they are missing an actual implementation
+  
 Reference< ::com::sun::star::io::XInputStream > BaseResultSet::getBinaryStream( sal_Int32 /* columnIndex */ )
         throw (SQLException, RuntimeException)
 {

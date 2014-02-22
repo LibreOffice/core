@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/plotareacontext.hxx"
@@ -30,12 +30,12 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 View3DContext::View3DContext( ContextHandler2Helper& rParent, View3DModel& rModel ) :
     ContextBase< View3DModel >( rParent, rModel )
@@ -63,15 +63,15 @@ ContextHandlerRef View3DContext::onCreateContext( sal_Int32 nElement, const Attr
                     mrModel.mnPerspective = rAttribs.getInteger( XML_val, 30 );
                     return 0;
                 case C_TOKEN( rAngAx ):
-                    // default is 'false', not 'true' as specified
+                    
                     mrModel.mbRightAngled = rAttribs.getBool( XML_val, false );
                     return 0;
                 case C_TOKEN( rotX ):
-                    // default value dependent on chart type
+                    
                     mrModel.monRotationX = rAttribs.getInteger( XML_val );
                     return 0;
                 case C_TOKEN( rotY ):
-                    // default value dependent on chart type
+                    
                     mrModel.monRotationY = rAttribs.getInteger( XML_val );
                     return 0;
             }
@@ -80,7 +80,7 @@ ContextHandlerRef View3DContext::onCreateContext( sal_Int32 nElement, const Attr
     return 0;
 }
 
-// ============================================================================
+
 
 WallFloorContext::WallFloorContext( ContextHandler2Helper& rParent, WallFloorModel& rModel ) :
     ContextBase< WallFloorModel >( rParent, rModel )
@@ -111,7 +111,7 @@ ContextHandlerRef WallFloorContext::onCreateContext( sal_Int32 nElement, const A
 }
 
 
-// ============================================================================
+
 
 DataTableContext::DataTableContext( ContextHandler2Helper& rParent, DataTableModel& rModel ) :
     ContextBase< DataTableModel >( rParent, rModel )
@@ -144,8 +144,8 @@ ContextHandlerRef DataTableContext::onCreateContext( sal_Int32 nElement, const A
     return 0;
 }
 
-// ============================================================================
-// ============================================================================
+
+
 
 PlotAreaContext::PlotAreaContext( ContextHandler2Helper& rParent, PlotAreaModel& rModel ) :
     ContextBase< PlotAreaModel >( rParent, rModel )
@@ -209,10 +209,10 @@ ContextHandlerRef PlotAreaContext::onCreateContext( sal_Int32 nElement, const At
     return 0;
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -42,7 +42,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::xml::sax;
 
-// test szenarios
+
 
 namespace sax_test {
 
@@ -82,7 +82,7 @@ private:
     Reference < XMultiServiceFactory > m_rFactory;
 };
 
-/// @note for external binding
+
 Reference < XInterface > SAL_CALL OSaxParserTest_CreateInstance( const Reference < XMultiServiceFactory > & rSMgr ) throw(Exception)
 {
     OSaxParserTest *p = new OSaxParserTest( rSMgr );
@@ -165,7 +165,7 @@ sal_Int32 OSaxParserTest::test(
         hTestHandle ++;
 
         if( hTestHandle >= 6) {
-            // all tests finished.
+            
             hTestHandle = -1;
         }
     }
@@ -246,7 +246,7 @@ public:
         m_bPrint = bPrint;
     }
 
-    // Error handler
+    
     virtual void SAL_CALL error(const Any& aSAXParseException) throw (SAXException, RuntimeException)
     {
         printf( "Error !\n" );
@@ -264,7 +264,7 @@ public:
         printf( "Warning !\n" );
     }
 
-    // ExtendedDocumentHandler
+    
     virtual void SAL_CALL startDocument(void) throw (SAXException, RuntimeException)
     {
          m_iLevel = 0;
@@ -504,10 +504,10 @@ void OSaxParserTest::testNamespaces( const Reference < XParser > &rParser )
     char TestString[] =
     "<?xml version='1.0'?>\n"
       "<!-- all elements here are explicitly in the HTML namespace -->\n"
-      "<html:html xmlns:html='http://www.w3.org/TR/REC-html40'>\n"
+      "<html:html xmlns:html='http:
         "<html:head><html:title>Frobnostication</html:title></html:head>\n"
         "<html:body><html:p>Moved to \n"
-          "<html:a href='http://frob.com'>here.</html:a></html:p></html:body>\n"
+          "<html:a href='http:
       "</html:html>\n";
 
     Sequence<sal_Int8> seqBytes( strlen( TestString ) );
@@ -557,10 +557,10 @@ void OSaxParserTest::testEncoding( const Reference < XParser > &rParser )
     char TestString[] =
     "<?xml version='1.0' encoding=\"iso-8859-1\"?>\n"
       "<!-- all elements here are explicitly in the HTML namespace -->\n"
-      "<html:html xmlns:html='http://www.w3.org/TR/REC-html40'>\n"
+      "<html:html xmlns:html='http:
         "<html:head><html:title>Frobnostication</html:title></html:head>\n"
         "<html:body><html:p>Moved to \337\n"
-          "<html:a href='http://frob.com'>here.</html:a></html:p></html:body>\n"
+          "<html:a href='http:
       "</html:html>\n";
 
     Sequence<sal_Int8> seqBytes( strlen( TestString ) );
@@ -719,7 +719,7 @@ void OSaxParserTest::testPerformance( const Reference < XParser > & rParser )
         }
     }
 }
-} // namespace
+} 
 
 using namespace sax_test;
 
@@ -796,6 +796,6 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
     return pRet;
 }
 
-} // extern C
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

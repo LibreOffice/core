@@ -58,7 +58,7 @@ OOXMLFastDocumentHandler::OOXMLFastDocumentHandler(
 #endif
 }
 
-// ::com::sun::star::xml::sax::XFastContextHandler:
+
 void SAL_CALL OOXMLFastDocumentHandler::startFastElement
 (::sal_Int32
 #ifdef DEBUG_CONTEXT_STACK
@@ -161,8 +161,8 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
     if ( mpStream == 0 && mpDocument == 0 )
     {
-        // document handler has been created as unknown child - see <OOXMLFastDocumentHandler::createUnknownChildContext(..)>
-        // --> do not provide a child context
+        
+        
         return NULL;
     }
 
@@ -200,7 +200,7 @@ void SAL_CALL OOXMLFastDocumentHandler::characters(const OUString & /*aChars*/)
 {
 }
 
-// ::com::sun::star::xml::sax::XFastDocumentHandler:
+
 void SAL_CALL OOXMLFastDocumentHandler::startDocument()
     throw (uno::RuntimeException, xml::sax::SAXException)
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #ifdef _WIN32
@@ -29,7 +29,7 @@
 #define OUTPUTSIZE 15360
 
 #define STRINGIFY(...) #__VA_ARGS__"\n"
-//#define LOG_PRINTF(x) (std::cout << x << std::endl)
+
 #define LOG_PRINTF(x)
 
 #define DS_CHECK_STATUS(status, name) \
@@ -46,8 +46,8 @@ ds_device selectedDevice;
 
 struct LibreOfficeDeviceScore
 {
-    double fTime;     // small time means faster device
-    bool bNoCLErrors; // were there any opencl errors
+    double fTime;     
+    bool bNoCLErrors; 
 };
 
 struct LibreOfficeDeviceEvaluationIO
@@ -202,7 +202,7 @@ ds_status serializeScore(ds_device* device, void** serializedScore, unsigned int
 /* Parses byte string and stores in score object */
 ds_status deserializeScore(ds_device* device, const unsigned char* serializedScore, unsigned int serializedScoreSize)
 {
-    // check that serializedScoreSize == sizeof(LibreOfficeDeviceScore);
+    
     device->score = new LibreOfficeDeviceScore;
     memcpy(device->score, serializedScore, serializedScoreSize);
     return DS_SUCCESS;
@@ -251,14 +251,14 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
         if ((std::string(aExtInfo)).find("cl_khr_fp64") != std::string::npos)
         {
             bKhrFp64Flag = true;
-            //buildOption = "-D KHR_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16";
+            
             tmpStr.append(" -DKHR_DP_EXTENSION");
             buildOption = tmpStr.c_str();
         }
         else if ((std::string(aExtInfo)).find("cl_amd_fp64") != std::string::npos)
         {
             bAmdFp64Flag = true;
-            //buildOption = "-D AMD_DP_EXTENSION -Dfp_t=double -Dfp_t4=double4 -Dfp_t16=double16";
+            
             tmpStr.append(" -DAMD_DP_EXTENSION");
             buildOption = tmpStr.c_str();
         }
@@ -376,10 +376,10 @@ ds_status evaluateScoreForDevice(ds_device* device, void* evalData)
             testData->output[j] = fAverage + (fMin * fSoP);
         }
 
-        // InterpretTail - the S/W fallback is nothing like as efficient
-        // as any good openCL implementation: no SIMD, tons of branching
-        // in the inner loops etc. Generously characterise it as only 10x
-        // slower than the above.
+        
+        
+        
+        
         float fInterpretTailFactor = 10.0;
 
         device->score = (void*)new LibreOfficeDeviceScore;
@@ -465,7 +465,7 @@ ds_device getDeviceSelection(const char* sProfilePath, bool bForceSelection)
 
         if (!profile)
         {
-            // failed to initialize profile.
+            
             selectedDevice.type = DS_DEVICE_NATIVE_CPU;
             return selectedDevice;
         }

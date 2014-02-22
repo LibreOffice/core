@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,7 +36,7 @@
 
 
 #if OSL_DEBUG_LEVEL > 1
-// Pure debug help function to have a quick look at the header/footer attributes.
+
 void DebugHeaderFooterContent( const SwPageDesc& rPageDesc )
 {
     sal_uLong nHeaderMaster = ULONG_MAX;
@@ -147,43 +147,43 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
         if( rNewHead.IsActive() )
         {
             SwFrmFmt* pFormat = new SwFrmFmt( *rNewHead.GetHeaderFmt() );
-            // The Ctor of this object will remove the duplicate!
+            
             SwFmtHeader aFmtHeader( pFormat );
             if( !rNewDesc.IsHeaderShared() )
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetLeft().GetHeader().GetHeaderFmt() );
-                // The Ctor of this object will remove the duplicate!
+                
                 SwFmtHeader aFormatHeader( pFormat );
             }
             if( !rNewDesc.IsFirstShared() )
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetFirstMaster().GetHeader().GetHeaderFmt() );
-                // The Ctor of this object will remove the duplicate!
+                
                 SwFmtHeader aFormatHeader( pFormat );
             }
         }
-        // Same procedure for footers...
+        
         if( rNewFoot.IsActive() )
         {
             SwFrmFmt* pFormat = new SwFrmFmt( *rNewFoot.GetFooterFmt() );
-            // The Ctor of this object will remove the duplicate!
+            
             SwFmtFooter aFmtFooter( pFormat );
             if( !rNewDesc.IsFooterShared() )
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetLeft().GetFooter().GetFooterFmt() );
-                // The Ctor of this object will remove the duplicate!
+                
                 SwFmtFooter aFormatFooter( pFormat );
             }
             if( !rNewDesc.IsFirstShared() )
             {
                 pFormat = new SwFrmFmt( *rNewDesc.GetFirstMaster().GetFooter().GetFooterFmt() );
-                // The Ctor of this object will remove the duplicate!
+                
                 SwFmtFooter aFormatFooter( pFormat );
             }
         }
 
-        // After this exchange method the old page description will point to zero,
-        // the new one will point to the node position of the original content nodes.
+        
+        
         ExchangeContentNodes( (SwPageDesc&)aOld, (SwPageDesc&)aNew );
 #if OSL_DEBUG_LEVEL > 1
         DebugHeaderFooterContent( (SwPageDesc&)aOld );
@@ -204,8 +204,8 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
     const SwFmtHeader& rSourceHead = rSource.GetMaster().GetHeader();
     if( rDestHead.IsActive() )
     {
-        // Let the destination page descrition point to the source node position,
-        // from now on this descriptor is responsible for the content nodes!
+        
+        
         const SfxPoolItem* pItem;
         rDest.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         SfxPoolItem *pNewItem = pItem->Clone();
@@ -219,8 +219,8 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         pNewFmt->SetFmtAttr( rSourceHead.GetHeaderFmt()->GetCntnt() );
         delete pNewItem;
 
-        // Let the source page description point to zero node position,
-        // it loses the responsible and can be destroyed without removing the content nodes.
+        
+        
         rSource.GetMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
         pNewItem = pItem->Clone();
         pNewFmt = ((SwFmtHeader*)pNewItem)->GetHeaderFmt();
@@ -229,7 +229,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 
         if( !rDest.IsHeaderShared() )
         {
-            // Same procedure for unshared header..
+            
             const SwFmtHeader& rSourceLeftHead = rSource.GetLeft().GetHeader();
             rDest.GetLeft().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
@@ -250,7 +250,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
         }
         if (!rDest.IsFirstShared())
         {
-            // Same procedure for unshared header..
+            
             const SwFmtHeader& rSourceFirstMasterHead = rSource.GetFirstMaster().GetHeader();
             rDest.GetFirstMaster().GetAttrSet().GetItemState( RES_HEADER, false, &pItem );
             pNewItem = pItem->Clone();
@@ -270,7 +270,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
             delete pNewItem;
         }
     }
-    // Same procedure for footers...
+    
     const SwFmtFooter& rDestFoot = rDest.GetMaster().GetFooter();
     const SwFmtFooter& rSourceFoot = rSource.GetMaster().GetFooter();
     if( rDestFoot.IsActive() )
@@ -341,7 +341,7 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 
 void SwUndoPageDesc::UndoImpl(::sw::UndoRedoContext &)
 {
-    // Move (header/footer)content node responsibility from new page descriptor to old one again.
+    
     if( bExchange )
         ExchangeContentNodes( (SwPageDesc&)aNew, (SwPageDesc&)aOld );
     pDoc->ChgPageDesc(aOld.GetName(), aOld);
@@ -349,7 +349,7 @@ void SwUndoPageDesc::UndoImpl(::sw::UndoRedoContext &)
 
 void SwUndoPageDesc::RedoImpl(::sw::UndoRedoContext &)
 {
-    // Move (header/footer)content node responsibility from old page descriptor to new one again.
+    
     if( bExchange )
         ExchangeContentNodes( (SwPageDesc&)aOld, (SwPageDesc&)aNew );
     pDoc->ChgPageDesc(aNew.GetName(), aNew);
@@ -366,7 +366,7 @@ SwRewriter SwUndoPageDesc::GetRewriter() const
     return aResult;
 }
 
-// #116530#
+
 SwUndoPageDescCreate::SwUndoPageDescCreate(const SwPageDesc * pNew,
                                            SwDoc * _pDoc)
     : SwUndo(UNDO_CREATE_PAGEDESC), pDesc(pNew), aNew(*pNew, _pDoc),
@@ -381,13 +381,13 @@ SwUndoPageDescCreate::~SwUndoPageDescCreate()
 
 void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
 {
-    // -> #116530#
+    
     if (pDesc)
     {
         aNew = *pDesc;
         pDesc = NULL;
     }
-    // <- #116530#
+    
 
     pDoc->DelPageDesc(aNew.GetName(), true);
 }
@@ -395,7 +395,7 @@ void SwUndoPageDescCreate::UndoImpl(::sw::UndoRedoContext &)
 void SwUndoPageDescCreate::DoImpl()
 {
     SwPageDesc aPageDesc = aNew;
-    pDoc->MakePageDesc(aNew.GetName(), &aPageDesc, false, true); // #116530#
+    pDoc->MakePageDesc(aNew.GetName(), &aPageDesc, false, true); 
 }
 
 void SwUndoPageDescCreate::RedoImpl(::sw::UndoRedoContext &)
@@ -436,12 +436,12 @@ SwUndoPageDescDelete::~SwUndoPageDescDelete()
 void SwUndoPageDescDelete::UndoImpl(::sw::UndoRedoContext &)
 {
     SwPageDesc aPageDesc = aOld;
-    pDoc->MakePageDesc(aOld.GetName(), &aPageDesc, false, true); // #116530#
+    pDoc->MakePageDesc(aOld.GetName(), &aPageDesc, false, true); 
 }
 
 void SwUndoPageDescDelete::DoImpl()
 {
-    pDoc->DelPageDesc(aOld.GetName(), true); // #116530#
+    pDoc->DelPageDesc(aOld.GetName(), true); 
 }
 
 void SwUndoPageDescDelete::RedoImpl(::sw::UndoRedoContext &)

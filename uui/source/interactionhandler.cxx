@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -39,8 +39,8 @@ class UUIInteractionHandler:
 private:
     UUIInteractionHelper * m_pImpl;
 
-    UUIInteractionHandler(UUIInteractionHandler &); // not implemented
-    void operator =(UUIInteractionHandler); // not implemented
+    UUIInteractionHandler(UUIInteractionHandler &); 
+    void operator =(UUIInteractionHandler); 
 
 public:
     UUIInteractionHandler(com::sun::star::uno::Reference<
@@ -111,10 +111,10 @@ UUIInteractionHandler::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aNames(3);
     aNames[0] = "com.sun.star.task.InteractionHandler";
-    // added to indicate support for configuration.backend.MergeRecoveryRequest
+    
     aNames[1] = "com.sun.star.configuration.backend.InteractionHandler";
     aNames[2] = "com.sun.star.uui.InteractionHandler";
-    // for backwards compatibility
+    
     return aNames;
 }
 
@@ -126,10 +126,10 @@ UUIInteractionHandler::initialize(
     uno::Reference<uno::XComponentContext> xContext = m_pImpl->getORB();
     delete m_pImpl;
 
-    // The old-style InteractionHandler service supported a sequence of
-    // PropertyValue, while the new-style service now uses constructors to pass
-    // in Parent and Context values; for backwards compatibility, keep support
-    // for a PropertyValue sequence, too:
+    
+    
+    
+    
     uno::Reference< awt::XWindow > xWindow;
     OUString aContext;
     if (!((rArguments.getLength() == 1 && (rArguments[0] >>= xWindow)) ||

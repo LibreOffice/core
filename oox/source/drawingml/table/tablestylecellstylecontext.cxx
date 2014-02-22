@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -42,15 +42,15 @@ TableStyleCellStyleContext::~TableStyleCellStyleContext()
 {
 }
 
-// CT_TableStyleCellStyle
+
 ContextHandlerRef
 TableStyleCellStyleContext::onCreateContext( ::sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )
     {
-        case A_TOKEN( tcBdr ):      // CT_TableCellBorderStyle
+        case A_TOKEN( tcBdr ):      
             break;
-        case A_TOKEN( left ):       // CT_ThemeableLineStyle
+        case A_TOKEN( left ):       
         case A_TOKEN( right ):
         case A_TOKEN( top ):
         case A_TOKEN( bottom ):
@@ -83,20 +83,20 @@ TableStyleCellStyleContext::onCreateContext( ::sal_Int32 aElementToken, const At
             }
             break;
 
-        // EG_ThemeableFillStyle (choice)
-        case A_TOKEN( fill ):       // CT_FillProperties
+        
+        case A_TOKEN( fill ):       
             {
                 FillPropertiesPtr& rxFillProperties = mrTableStylePart.getFillProperties();
                 rxFillProperties.reset( new FillProperties );
                 return new FillPropertiesContext( *this, *rxFillProperties );
             }
-        case A_TOKEN( fillRef ):    // CT_StyleMatrixReference
+        case A_TOKEN( fillRef ):    
             {
                 ShapeStyleRef& rStyleRef = mrTableStylePart.getStyleRefs()[ XML_fillRef ];
                 rStyleRef.mnThemedIdx = rAttribs.getInteger( XML_idx, 0 );
                 return new ColorContext( *this, rStyleRef.maPhClr );
             }
-        case A_TOKEN( cell3D ):     // CT_Cell3D
+        case A_TOKEN( cell3D ):     
             break;
     }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/TTableHelper.hxx"
@@ -49,7 +49,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 namespace
 {
-    /// helper class for column property change events which holds the OComponentDefinition weak
+    
 typedef ::cppu::WeakImplHelper1 < XContainerListener > OTableContainerListener_BASE;
 class OTableContainerListener : public OTableContainerListener_BASE
 {
@@ -80,7 +80,7 @@ public:
         if ( sOldComposedName != sNewComposedName && m_aRefNames.find(sOldComposedName) != m_aRefNames.end() )
             m_pComponent->refreshKeys();
     }
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException)
     {
     }
@@ -103,7 +103,7 @@ namespace connectivity
     struct OTableHelperImpl
     {
         TKeyMap  m_aKeys;
-        // helper services which can be provided by extensions
+        
         Reference< ::com::sun::star::sdb::tools::XTableRename>      m_xRename;
         Reference< ::com::sun::star::sdb::tools::XTableAlteration>  m_xAlter;
         Reference< ::com::sun::star::sdb::tools::XKeyAlteration>    m_xKeyAlter;
@@ -147,7 +147,7 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
     ,m_pImpl(new OTableHelperImpl(_xConnection))
 {
 }
-// -------------------------------------------------------------------------
+
 OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                             const Reference< XConnection >& _xConnection,
                             sal_Bool _bCase,
@@ -166,11 +166,11 @@ OTableHelper::OTableHelper( sdbcx::OCollection* _pTables,
                         ,m_pImpl(new OTableHelperImpl(_xConnection))
 {
 }
-// -----------------------------------------------------------------------------
+
 OTableHelper::~OTableHelper()
 {
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTableHelper::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -187,7 +187,7 @@ void SAL_CALL OTableHelper::disposing()
 
 }
 
-// -------------------------------------------------------------------------
+
 namespace
 {
     /** collects ColumnDesc's from a resultset produced by XDatabaseMetaData::getColumns
@@ -199,7 +199,7 @@ namespace
         OrdinalPosition nOrdinalPosition( 0 );
         while ( _rxResult->next() )
         {
-            sName = xRow->getString( 4 );           // COLUMN_NAME
+            sName = xRow->getString( 4 );           
             sal_Int32       nField5 = xRow->getInt(5);
             OUString aField6 = xRow->getString(6);
             sal_Int32       nField7 = xRow->getInt(7)
@@ -207,7 +207,7 @@ namespace
                         ,   nField11= xRow->getInt(11);
             OUString  sField12 = xRow->getString(12)
                             ,sField13 = xRow->getString(13);
-            nOrdinalPosition = xRow->getInt( 17 );  // ORDINAL_POSITION
+            nOrdinalPosition = xRow->getInt( 17 );  
             _out_rColumns.push_back( ColumnDesc( sName,nField5,aField6,nField7,nField9,nField11,sField12,sField13, nOrdinalPosition ) );
         }
     }
@@ -220,7 +220,7 @@ namespace
         if ( _rColumns.empty() )
             return;
 
-        // collect all used ordinals
+        
         ::std::set< OrdinalPosition > aUsedOrdinals;
         for (   ::std::vector< ColumnDesc >::iterator collect = _rColumns.begin();
                 collect != _rColumns.end();
@@ -228,13 +228,13 @@ namespace
             )
             aUsedOrdinals.insert( collect->nOrdinalPosition );
 
-        // we need to have as much different ordinals as we have different columns
+        
         bool bDuplicates = aUsedOrdinals.size() != _rColumns.size();
-        // and it needs to be a continuous range
+        
         size_t nOrdinalsRange = *aUsedOrdinals.rbegin() - *aUsedOrdinals.begin() + 1;
         bool bGaps = nOrdinalsRange != _rColumns.size();
 
-        // if that's not the case, normalize it
+        
         if ( bGaps || bDuplicates )
         {
             OSL_FAIL( "lcl_sanitizeColumnDescs: database did provide invalid ORDINAL_POSITION values!" );
@@ -248,8 +248,8 @@ namespace
             return;
         }
 
-        // what's left is that the range might not be from 1 to <column count>, but for instance
-        // 0 to <column count>-1.
+        
+        
         size_t nOffset = *aUsedOrdinals.begin() - 1;
         for (   ::std::vector< ColumnDesc >::iterator offset = _rColumns.begin();
                 offset != _rColumns.end();
@@ -259,7 +259,7 @@ namespace
     }
 }
 
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshColumns()
 {
     TStringVector aVector;
@@ -276,14 +276,14 @@ void OTableHelper::refreshColumns()
             OUString("%")
         ) );
 
-        // collect the column names, together with their ordinal position
+        
         m_pImpl->m_aColumnDesc.clear();
         lcl_collectColumnDescs_throw( xResult, m_pImpl->m_aColumnDesc );
 
-        // ensure that the ordinal positions as obtained from the meta data do make sense
+        
         lcl_sanitizeColumnDescs( m_pImpl->m_aColumnDesc );
 
-        // sort by ordinal position
+        
         ::std::map< OrdinalPosition, OUString > aSortedColumns;
         for (   ::std::vector< ColumnDesc >::const_iterator copy = m_pImpl->m_aColumnDesc.begin();
                 copy != m_pImpl->m_aColumnDesc.end();
@@ -291,7 +291,7 @@ void OTableHelper::refreshColumns()
             )
             aSortedColumns[ copy->nOrdinalPosition ] = copy->sName;
 
-        // copy them to aVector, now that we have the proper ordering
+        
         ::std::transform(
             aSortedColumns.begin(),
             aSortedColumns.end(),
@@ -305,7 +305,7 @@ void OTableHelper::refreshColumns()
     else
         m_pColumns  = createColumns(aVector);
 }
-// -----------------------------------------------------------------------------
+
 const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) const
 {
     const ColumnDesc* pRet = NULL;
@@ -317,10 +317,10 @@ const ColumnDesc* OTableHelper::getColumnDescription(const OUString& _sName) con
             pRet = &*aIter;
             break;
         }
-    } // for (::std::vector< ColumnDesc >::const_iterator aIter = m_pImpl->m_aColumnDesc.begin();aIter != aEnd;++aIter)
+    } 
     return pRet;
 }
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
 {
     Any aCatalog;
@@ -353,10 +353,10 @@ void OTableHelper::refreshPrimaryKeys(TStringVector& _rNames)
             m_pImpl->m_aKeys.insert(TKeyMap::value_type(aPkName,pKeyProps));
             _rNames.push_back(aPkName);
         }
-    } // if ( xResult.is() && xResult->next() )
+    } 
     ::comphelper::disposeComponent(xResult);
 }
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
 {
     Any aCatalog;
@@ -371,7 +371,7 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
         OUString aName,sCatalog,aSchema,sOldFKName;
         while( xResult->next() )
         {
-            // this must be outsid the "if" because we have to call in a right order
+            
             sCatalog    = xRow->getString(1);
             if ( xRow->wasNull() )
                 sCatalog = OUString();
@@ -405,21 +405,21 @@ void OTableHelper::refreshForeignKeys(TStringVector& _rNames)
                             m_pImpl->m_xTablePropertyListener = ::comphelper::ImplementationReference< OTableContainerListener,XContainerListener>( new OTableContainerListener(this) );
                         m_pTables->addContainerListener(m_pImpl->m_xTablePropertyListener.getRef());
                         m_pImpl->m_xTablePropertyListener->add(sReferencedName);
-                    } // if ( m_pTables->hasByName(sReferencedName) )
+                    } 
                     sOldFKName = sFkName;
-                } // if ( sOldFKName != sFkName )
+                } 
                 else if ( pKeyProps.get() )
                 {
                     pKeyProps->m_aKeyColumnNames.push_back(sForeignKeyColumn);
                 }
             }
-        } // while( xResult->next() )
+        } 
         if ( pKeyProps.get() )
             m_pImpl->m_aKeys.insert(TKeyMap::value_type(sOldFKName,pKeyProps));
         ::comphelper::disposeComponent(xResult);
     }
 }
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshKeys()
 {
     m_pImpl->m_aKeys.clear();
@@ -431,7 +431,7 @@ void OTableHelper::refreshKeys()
         refreshPrimaryKeys(aNames);
         refreshForeignKeys(aNames);
         m_pKeys = createKeys(aNames);
-    } // if(!isNew())
+    } 
     else if (!m_pKeys )
         m_pKeys = createKeys(aNames);
     /*if(m_pKeys)
@@ -439,13 +439,13 @@ void OTableHelper::refreshKeys()
     else*/
 
 }
-// -------------------------------------------------------------------------
+
 void OTableHelper::refreshIndexes()
 {
     TStringVector aVector;
     if(!isNew())
     {
-        // fill indexes
+        
         Any aCatalog;
         if ( !m_CatalogName.isEmpty() )
             aCatalog <<= m_CatalogName;
@@ -465,7 +465,7 @@ void OTableHelper::refreshIndexes()
                 aName += xRow->getString(6);
                 if ( !aName.isEmpty() )
                 {
-                    // don't insert the name if the last one we inserted was the same
+                    
                     if (sPreviousRoundName != aName)
                         aVector.push_back(aName);
                 }
@@ -480,7 +480,7 @@ void OTableHelper::refreshIndexes()
     else
         m_pIndexes  = createIndexes(aVector);
 }
-// -----------------------------------------------------------------------------
+
 OUString OTableHelper::getRenameStart() const
 {
     OUString sSql("RENAME ");
@@ -491,8 +491,8 @@ OUString OTableHelper::getRenameStart() const
 
     return sSql;
 }
-// -------------------------------------------------------------------------
-// XRename
+
+
 void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -537,12 +537,12 @@ void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException
     else
         ::dbtools::qualifiedNameComponents(getMetaData(),newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
 }
-// -----------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData> OTableHelper::getMetaData() const
 {
     return m_pImpl->m_xMetaData;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -559,24 +559,24 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
         alterColumnByName(getString(xOld->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),descriptor);
 }
 
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OTableHelper::getName() throw(RuntimeException)
 {
     OUString sComposedName;
     sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_False,::dbtools::eInDataManipulation);
     return sComposedName;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTableHelper::acquire() throw()
 {
     OTable_TYPEDEF::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OTableHelper::release() throw()
 {
     OTable_TYPEDEF::release();
 }
-// -----------------------------------------------------------------------------
+
 sdbcx::TKeyProperties OTableHelper::getKeyProperties(const OUString& _sName) const
 {
     sdbcx::TKeyProperties pKeyProps;
@@ -585,7 +585,7 @@ sdbcx::TKeyProperties OTableHelper::getKeyProperties(const OUString& _sName) con
     {
         pKeyProps = aFind->second;
     }
-    else // only a fall back
+    else 
     {
         OSL_FAIL("No key with the given name found");
         pKeyProps.reset(new sdbcx::KeyProperties());
@@ -593,41 +593,41 @@ sdbcx::TKeyProperties OTableHelper::getKeyProperties(const OUString& _sName) con
 
     return pKeyProps;
 }
-// -----------------------------------------------------------------------------
+
 void OTableHelper::addKey(const OUString& _sName,const sdbcx::TKeyProperties& _aKeyProperties)
 {
     m_pImpl->m_aKeys.insert(TKeyMap::value_type(_sName,_aKeyProperties));
 }
-// -----------------------------------------------------------------------------
+
 OUString OTableHelper::getTypeCreatePattern() const
 {
     return OUString();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XConnection> OTableHelper::getConnection() const
 {
     return m_pImpl->m_xConnection;
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::sdb::tools::XTableRename>      OTableHelper::getRenameService() const
 {
     return m_pImpl->m_xRename;
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::sdb::tools::XTableAlteration>  OTableHelper::getAlterService() const
 {
     return m_pImpl->m_xAlter;
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::sdb::tools::XKeyAlteration>  OTableHelper::getKeyService() const
 {
     return m_pImpl->m_xKeyAlter;
 }
-// -----------------------------------------------------------------------------
+
 Reference< ::com::sun::star::sdb::tools::XIndexAlteration>  OTableHelper::getIndexService() const
 {
     return m_pImpl->m_xIndexAlter;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

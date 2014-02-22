@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "dbtest_base.cxx"
@@ -92,7 +92,7 @@ void FirebirdTest::testIntegerDatabase()
     CPPUNIT_ASSERT(OUString("5") ==
         xRow->getString(xColumnLocate->findColumn("_VARCHAR")));
 
-    CPPUNIT_ASSERT(!xResultSet->next()); // Should only be one row
+    CPPUNIT_ASSERT(!xResultSet->next()); 
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FirebirdTest);

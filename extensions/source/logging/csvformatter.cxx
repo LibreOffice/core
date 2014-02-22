@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,8 +48,8 @@ namespace logging
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::uno::XInterface;
 
-    //= CsvFormatter - declaration
-    //= formats for csv files as defined by RFC4180
+    
+    
     typedef ::cppu::WeakImplHelper2 <   XCsvLogFormatter
                                     ,   XServiceInfo
                                     >   CsvFormatter_Base;
@@ -58,7 +58,7 @@ namespace logging
     public:
         virtual OUString SAL_CALL formatMultiColumn(const Sequence< OUString>& column_data) throw (RuntimeException);
 
-        // XServiceInfo - static version
+        
         static OUString SAL_CALL getImplementationName_static();
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
         static Reference< XInterface > Create( const Reference< XComponentContext >& context );
@@ -67,7 +67,7 @@ namespace logging
         CsvFormatter();
         virtual ~CsvFormatter();
 
-        // XCsvLogFormatter
+        
         virtual ::sal_Bool SAL_CALL getLogEventNo() throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL getLogThread() throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL getLogTimestamp() throw (RuntimeException);
@@ -80,12 +80,12 @@ namespace logging
         virtual void SAL_CALL setLogSource( ::sal_Bool log_source ) throw (RuntimeException);
         virtual void SAL_CALL setColumnnames( const Sequence< OUString>& column_names) throw (RuntimeException);
 
-        // XLogFormatter
+        
         virtual OUString SAL_CALL getHead(  ) throw (RuntimeException);
         virtual OUString SAL_CALL format( const LogRecord& Record ) throw (RuntimeException);
         virtual OUString SAL_CALL getTail(  ) throw (RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual ::sal_Bool SAL_CALL supportsService( const OUString& service_name ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
@@ -98,9 +98,9 @@ namespace logging
         ::sal_Bool m_MultiColumn;
         ::com::sun::star::uno::Sequence< OUString > m_Columnnames;
     };
-} // namespace logging
+} 
 
-//= private helpers
+
 namespace
 {
     const sal_Unicode quote_char = '"';
@@ -121,16 +121,16 @@ namespace
     {
         if(needsQuoting(str))
         {
-            // each double-quote will get replaced by two double-quotes
+            
             buf.append(quote_char);
             const sal_Int32 buf_offset = buf.getLength();
             const sal_Int32 str_length = str.getLength();
             buf.append(str);
-            // special treatment for the last character
+            
             if(quote_char==str[str_length-1])
                 buf.append(quote_char);
-            // iterating backwards because the index at which we insert wont be shifted
-            // when moving that way.
+            
+            
             for(sal_Int32 i = str_length; i>=0; )
             {
                 i=str.lastIndexOf(quote_char, --i);
@@ -151,7 +151,7 @@ namespace
     };
 }
 
-//= CsvFormatter - implementation
+
 namespace logging
 {
     CsvFormatter::CsvFormatter()
@@ -257,7 +257,7 @@ namespace logging
 
         if(m_LogTimestamp)
         {
-            // ISO 8601
+            
             char buffer[ 30 ];
             const size_t buffer_size = sizeof( buffer );
             snprintf( buffer, buffer_size, "%04i-%02i-%02iT%02i:%02i:%02i.%09i",
@@ -281,10 +281,10 @@ namespace logging
             aLogEntry.append(comma_char);
         }
 
-        // if the CsvFormatter has multiple columns set via setColumnnames(), the
-        // message of the record is expected to be encoded with formatMultiColumn
-        // if the CsvFormatter has only one column set, the message is expected not
-        // to be encoded
+        
+        
+        
+        
         if(m_MultiColumn)
             aLogEntry.append(record.Message);
         else
@@ -348,6 +348,6 @@ namespace logging
     {
         static OAutoRegistration< CsvFormatter > aAutoRegistration;
     }
-} // namespace logging
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

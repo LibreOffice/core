@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DExport.hxx"
@@ -80,7 +80,7 @@ using namespace ::com::sun::star::awt;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-// ODatabaseExport
+
 ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const TPositions &_rColumnPositions,
                                  const Reference< XNumberFormatter >& _rxNumberF,
@@ -268,7 +268,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 aValue.fill(nPos,aTypes[nPos],xRow);
                 m_pTypeInfo->nNumPrecRadix  = aValue;
 
-                // check if values are less than zero like it happens in a oracle jdbc driver
+                
                 if( m_pTypeInfo->nPrecision < 0)
                     m_pTypeInfo->nPrecision = 0;
                 if( m_pTypeInfo->nMinimumScale < 0)
@@ -528,7 +528,7 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
                 case NumberFormat::TEXT:
                 case NumberFormat::UNDEFINED:
                 case NumberFormat::LOGICAL:
-                    nNumberFormat = NumberFormat::TEXT; // Text "uberschreibt alles
+                    nNumberFormat = NumberFormat::TEXT; 
                     break;
                 case NumberFormat::DATETIME:
                     switch(_nOldNumberFormat)
@@ -553,7 +553,7 @@ sal_Int16 ODatabaseExport::CheckString(const OUString& aCheckToken, sal_Int16 _n
     }
     catch(Exception&)
     {
-        nNumberFormat = NumberFormat::TEXT; // Text "uberschreibt alles
+        nNumberFormat = NumberFormat::TEXT; 
     }
 
     return nNumberFormat;
@@ -662,7 +662,7 @@ void ODatabaseExport::CreateDefaultColumn(const OUString& _rColumnName)
         }
     }
     aAlias = sName;
-    // now create a column
+    
     OFieldDescription* pField = new OFieldDescription();
     pField->SetType(m_pTypeInfo);
     pField->SetName(aAlias);
@@ -735,7 +735,7 @@ sal_Bool ODatabaseExport::executeWizard(const OUString& _rTableName,const Any& _
                     }
                     break;
                 default:
-                    bError = sal_True; // there is no error but I have nothing more to do
+                    bError = sal_True; 
             }
         }
         else
@@ -829,7 +829,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
 
     aSql += sComposedTableName;
     aSql += " ( ";
-    // set values and column names
+    
     OUString aValues(" VALUES ( ");
 
     OUString aQuote;
@@ -838,7 +838,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
 
     Reference<XColumnsSupplier> xDestColsSup(_xDestTable,UNO_QUERY_THROW);
 
-    // create sql string and set column types
+    
     Sequence< OUString> aDestColumnNames = xDestColsSup->getColumns()->getElementNames();
     if ( aDestColumnNames.getLength() == 0 )
     {
@@ -860,7 +860,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     }
 
     i = 1;
-    // create the sql string
+    
     ::std::vector< OUString>::iterator aInsertEnd = aInsertList.end();
     for (::std::vector< OUString>::iterator aInsertIter = aInsertList.begin(); aInsertIter != aInsertEnd; ++aInsertIter)
     {
@@ -876,7 +876,7 @@ Reference< XPreparedStatement > ODatabaseExport::createPreparedStatment( const R
     aValues = aValues.replaceAt(aValues.getLength()-1, 1, ")");
 
     aSql += aValues;
-    // now create,fill and execute the prepared statement
+    
     return Reference< XPreparedStatement >(_xMetaData->getConnection()->prepareStatement(aSql));
 }
 

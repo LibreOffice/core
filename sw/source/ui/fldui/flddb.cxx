@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <swmodule.hxx>
@@ -79,7 +79,7 @@ SwFldDBPage::~SwFldDBPage()
  --------------------------------------------------------------------*/
 void SwFldDBPage::Reset(const SfxItemSet&)
 {
-    Init(); // Allgemeine initialisierung
+    Init(); 
 
     m_pTypeLB->SetUpdateMode(false);
     sal_uInt16 nOldPos = m_pTypeLB->GetSelectEntryPos();
@@ -91,7 +91,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
 
     if (!IsFldEdit())
     {
-        // initialise TypeListBox
+        
         const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
         for(i = rRg.nStart; i < rRg.nEnd; ++i)
@@ -108,7 +108,7 @@ void SwFldDBPage::Reset(const SfxItemSet&)
         m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
     }
 
-    // select old Pos
+    
     if (GetTypeSel() != LISTBOX_ENTRY_NOTFOUND)
         m_pTypeLB->SelectEntryPos(GetTypeSel());
 
@@ -196,7 +196,7 @@ sal_Bool SwFldDBPage::FillItemSet(SfxItemSet& )
     if (aData.sDataSource.isEmpty())
         aData = pSh->GetDBData();
 
-    if(!aData.sDataSource.isEmpty())       // without database no new field command
+    if(!aData.sDataSource.isEmpty())       
     {
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
         sal_uLong nFormat = 0;
@@ -261,10 +261,10 @@ sal_uInt16 SwFldDBPage::GetGroup()
 
 IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 {
-    // save old ListBoxPos
+    
     const sal_uInt16 nOld = GetTypeSel();
 
-    // current ListBoxPos
+    
     SetTypeSel(m_pTypeLB->GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -307,7 +307,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
                 m_pNumFormatLB->Show();
                 m_pFormatLB->Hide();
 
-                if (pBox)   // type was changed by user
+                if (pBox)   
                     m_pDBFormatRB->Check();
 
                 if (IsFldEdit())
@@ -324,7 +324,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 
             case TYP_DBNUMSETFLD:
                 bSetNo = sal_True;
-                // no break!
+                
             case TYP_DBNEXTSETFLD:
                 bCond = sal_True;
                 if (IsFldEdit())

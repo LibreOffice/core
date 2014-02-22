@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -59,13 +59,13 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
     {
         mbEnabled = true;
 
-        // register this handler on EventMultiplexer.
-        // Higher prio (overrides other engine handlers)
+        
+        
         mrMultiplexer.addMouseMoveHandler( shared_from_this(), 2.0 );
         mrMultiplexer.addClickHandler( shared_from_this(), 2.0 );
         mrMultiplexer.addShapeListenerHandler( shared_from_this() );
 
-        // clone listener map
+        
         uno::Reference<presentation::XShapeEventListener> xDummyListener;
         std::for_each( mrGlobalListenersMap.begin(),
                        mrGlobalListenersMap.end(),
@@ -76,7 +76,7 @@ void ShapeManagerImpl::activate( bool bSlideBackgoundPainted )
                                         o3tl::select1st<ShapeEventListenerMap::value_type>(),
                                         _1 )));
 
-        // clone cursor map
+        
         std::for_each( mrGlobalCursorMap.begin(),
                        mrGlobalCursorMap.end(),
                        boost::bind( &ShapeManagerImpl::cursorChanged,
@@ -113,7 +113,7 @@ void ShapeManagerImpl::deactivate()
 
 void ShapeManagerImpl::dispose()
 {
-    // remove listeners (EventMultiplexer holds shared_ptr on us)
+    
     deactivate();
 
     maHyperlinkShapes.clear();
@@ -124,8 +124,8 @@ void ShapeManagerImpl::dispose()
 
 bool ShapeManagerImpl::handleMousePressed( awt::MouseEvent const& )
 {
-    // not used here
-    return false; // did not handle the event
+    
+    return false; 
 }
 
 bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
@@ -135,69 +135,69 @@ bool ShapeManagerImpl::handleMouseReleased( awt::MouseEvent const& e )
 
     basegfx::B2DPoint const aPosition( e.X, e.Y );
 
-    // first check for hyperlinks, because these have
-    // highest prio:
+    
+    
     OUString const hyperlink( checkForHyperlink(aPosition) );
     if( !hyperlink.isEmpty() )
     {
         mrMultiplexer.notifyHyperlinkClicked(hyperlink);
-        return true; // event consumed
+        return true; 
     }
 
-    // find matching shape (scan reversely, to coarsely match
-    // paint order)
+    
+    
     ShapeToListenersMap::reverse_iterator aCurrBroadcaster(
         maShapeListenerMap.rbegin() );
     ShapeToListenersMap::reverse_iterator const aEndBroadcasters(
         maShapeListenerMap.rend() );
     while( aCurrBroadcaster != aEndBroadcasters )
     {
-        // TODO(F2): Get proper geometry polygon from the
-        // shape, to avoid having areas outside the shape
-        // react on the mouse
+        
+        
+        
         if( aCurrBroadcaster->first->getBounds().isInside( aPosition ) &&
             aCurrBroadcaster->first->isVisible() )
         {
-            // shape hit, and shape is visible. Raise
-            // event.
+            
+            
 
             boost::shared_ptr<cppu::OInterfaceContainerHelper> const pCont(
                 aCurrBroadcaster->second );
             uno::Reference<drawing::XShape> const xShape(
                 aCurrBroadcaster->first->getXShape() );
 
-            // DON'T do anything with /this/ after this point!
+            
             pCont->forEach<presentation::XShapeEventListener>(
                 boost::bind( &presentation::XShapeEventListener::click,
                              _1,
                              boost::cref(xShape),
                              boost::cref(e) ));
 
-            return true; // handled this event
+            return true; 
         }
 
         ++aCurrBroadcaster;
     }
 
-    return false; // did not handle this event
+    return false; 
 }
 
 bool ShapeManagerImpl::handleMouseEntered( const awt::MouseEvent& )
 {
-    // not used here
-    return false; // did not handle the event
+    
+    return false; 
 }
 
 bool ShapeManagerImpl::handleMouseExited( const awt::MouseEvent& )
 {
-    // not used here
-    return false; // did not handle the event
+    
+    return false; 
 }
 
 bool ShapeManagerImpl::handleMouseDragged( const awt::MouseEvent& )
 {
-    // not used here
-    return false; // did not handle the event
+    
+    return false; 
 }
 
 bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
@@ -205,7 +205,7 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
     if( !mbEnabled )
         return false;
 
-    // find hit shape in map
+    
     const ::basegfx::B2DPoint aPosition( e.X, e.Y );
     sal_Int16                 nNewCursor(-1);
 
@@ -215,22 +215,22 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
     }
     else
     {
-        // find matching shape (scan reversely, to coarsely match
-        // paint order)
+        
+        
         ShapeToCursorMap::reverse_iterator aCurrCursor(
             maShapeCursorMap.rbegin() );
         ShapeToCursorMap::reverse_iterator const aEndCursors(
             maShapeCursorMap.rend() );
         while( aCurrCursor != aEndCursors )
         {
-            // TODO(F2): Get proper geometry polygon from the
-            // shape, to avoid having areas outside the shape
-            // react on the mouse
+            
+            
+            
             if( aCurrCursor->first->getBounds().isInside( aPosition ) &&
                 aCurrCursor->first->isVisible() )
             {
-                // shape found, and it's visible. set
-                // requested cursor to shape's
+                
+                
                 nNewCursor = aCurrCursor->second;
                 break;
             }
@@ -244,8 +244,8 @@ bool ShapeManagerImpl::handleMouseMoved( const awt::MouseEvent& e )
     else
         mrCursorManager.requestCursor( nNewCursor );
 
-    return false; // we don't /eat/ this event. Lower prio
-                  // handler should see it, too.
+    return false; 
+                  
 }
 
 bool ShapeManagerImpl::update()
@@ -258,7 +258,7 @@ bool ShapeManagerImpl::update()
 
 bool ShapeManagerImpl::update( ViewSharedPtr const& /*rView*/ )
 {
-    // am not doing view-specific updates here.
+    
     return false;
 }
 
@@ -335,7 +335,7 @@ bool ShapeManagerImpl::listenerAdded(
                           "shape listener map inconsistency!");
     }
 
-    // is this one of our shapes? other shapes are ignored.
+    
     ShapeSharedPtr pShape( lookupShape(xShape) );
     if( pShape )
     {
@@ -352,11 +352,11 @@ bool ShapeManagerImpl::listenerRemoved(
     const uno::Reference<presentation::XShapeEventListener>& /*xListener*/,
     const uno::Reference<drawing::XShape>&                   xShape )
 {
-    // shape really erased from map? maybe there are other listeners
-    // for the same shape pending...
+    
+    
     if( mrGlobalListenersMap.find(xShape) == mrGlobalListenersMap.end() )
     {
-        // is this one of our shapes? other shapes are ignored.
+        
         ShapeSharedPtr pShape( lookupShape(xShape) );
         if( pShape )
             maShapeListenerMap.erase(pShape);
@@ -370,18 +370,18 @@ bool ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   x
 {
     ShapeSharedPtr pShape( lookupShape(xShape) );
 
-    // is this one of our shapes? other shapes are ignored.
+    
     if( !pShape )
         return false;
 
     if( mrGlobalCursorMap.find(xShape) == mrGlobalCursorMap.end() )
     {
-        // erased from global map - erase locally, too
+        
         maShapeCursorMap.erase(pShape);
     }
     else
     {
-        // included in global map - update local one
+        
         ShapeToCursorMap::iterator aIter;
         if( (aIter = maShapeCursorMap.find(pShape))
             == maShapeCursorMap.end() )
@@ -402,8 +402,8 @@ bool ShapeManagerImpl::cursorChanged( const uno::Reference<drawing::XShape>&   x
 
 OUString ShapeManagerImpl::checkForHyperlink( basegfx::B2DPoint const& hitPos ) const
 {
-    // find matching region (scan reversely, to coarsely match
-    // paint order): set is ordered by priority
+    
+    
     AreaSet::const_reverse_iterator iPos( maHyperlinkShapes.rbegin() );
     AreaSet::const_reverse_iterator const iEnd( maHyperlinkShapes.rend() );
     for( ; iPos != iEnd; ++iPos )
@@ -448,7 +448,7 @@ bool ShapeManagerImpl::notifyIntrinsicAnimationsDisabled()
 
 
 
-} // namespace internal
-} // namespace presentation
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

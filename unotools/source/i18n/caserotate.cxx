@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 
@@ -12,8 +12,8 @@
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
-//TODO Use XCharacterClassification::getStringType to determine the current
-//(possibly mixed) case type and rotate to the next one
+
+
 
 sal_uInt32 RotateTransliteration::getNextMode()
 {

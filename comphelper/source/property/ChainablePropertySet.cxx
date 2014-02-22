@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/ChainablePropertySet.hxx>
@@ -44,7 +44,7 @@ ChainablePropertySet::~ChainablePropertySet()
 {
 }
 
-// XPropertySet
+
 Reference< XPropertySetInfo > SAL_CALL ChainablePropertySet::getPropertySetInfo(  )
     throw(RuntimeException)
 {
@@ -54,7 +54,7 @@ Reference< XPropertySetInfo > SAL_CALL ChainablePropertySet::getPropertySetInfo(
 void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
     throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
+    
     boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
@@ -72,7 +72,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyN
 Any SAL_CALL ChainablePropertySet::getPropertyValue( const OUString& rPropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
+    
     boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
@@ -93,32 +93,32 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const OUString& rPropertyNa
 void SAL_CALL ChainablePropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL ChainablePropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL ChainablePropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL ChainablePropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
-    // todo
+    
 }
 
-// XMultiPropertySet
+
 void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
     throw(PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
-    // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
+    
     boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
@@ -152,7 +152,7 @@ void SAL_CALL ChainablePropertySet::setPropertyValues( const Sequence< OUString 
 Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence< OUString >& aPropertyNames )
     throw(RuntimeException)
 {
-    // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
+    
     boost::scoped_ptr< osl::Guard< comphelper::SolarMutex > > pMutexGuard;
     if (mpMutex)
         pMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
@@ -186,22 +186,22 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues( const Sequence
 void SAL_CALL ChainablePropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL ChainablePropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
-    // todo
+    
 }
 
 void SAL_CALL ChainablePropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
     throw(RuntimeException)
 {
-    // todo
+    
 }
 
-// XPropertyState
+
 PropertyState SAL_CALL ChainablePropertySet::getPropertyState( const OUString& PropertyName )
     throw(UnknownPropertyException, RuntimeException)
 {

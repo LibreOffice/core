@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <main.hxx>
 #include <chart.hxx>
 
-// ---------------------------------------------------------------
+
 
 CGMChart::CGMChart( CGM& rCGM ) :
     mpCGM       ( &rCGM )
@@ -35,11 +35,11 @@ CGMChart::CGMChart( CGM& rCGM ) :
     }
 };
 
-// ---------------------------------------------------------------
+
 
 CGMChart::~CGMChart()
 {
-    // delete the whole textentry structure
+    
 
     while( !maTextEntryList.empty() )
     {
@@ -47,7 +47,7 @@ CGMChart::~CGMChart()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
 {
@@ -73,22 +73,22 @@ void CGMChart::DeleteTextEntry( TextEntry* pTextEntry )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMChart::InsertTextEntry( TextEntry* pTextEntry )
 {
     maTextEntryList.push_back( pTextEntry );
 };
 
-// ---------------------------------------------------------------
 
-// ---------------------------------------------------------------
+
+
 void CGMChart::ResetAnnotation()
 {
     mDataNode[ 0 ].nZoneEnum = 0;
 }
 
-// ---------------------------------------------------------------
+
 
 sal_Bool CGMChart::IsAnnotation()
 {

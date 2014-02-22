@@ -23,7 +23,7 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
     HANDLE hFind;
     hFind = FindFirstFile((dirPath + "\\*").c_str(), &FindFileData);
     if (hFind == INVALID_HANDLE_VALUE) {
-        // Invalid File Handle - no need to try it anymore
+        
         allIncludes.insert(EntriesPair(dirPath, DirContent()));
         return;
     };
@@ -35,9 +35,9 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
 #else
     DIR *pdir;
     dirent *pent;
-    pdir = opendir(dirPath.c_str()); //"." refers to the current dir
+    pdir = opendir(dirPath.c_str()); 
     if (!pdir) {
-        // Invalid File Handle - no need to try it anymore
+        
         allIncludes.insert(EntriesPair(dirPath, DirContent()));
         return;
     }
@@ -45,14 +45,14 @@ void IncludesCollection::add_to_collection(const string& dirPath) {
         dirContent.insert(pent->d_name);
     };
     closedir(pdir);
-#endif // defined( WNT )
+#endif 
     allIncludes.insert(EntriesPair(dirPath, dirContent));
 }
 
 bool IncludesCollection::exists(string filePath) {
 #if defined( WNT )
     transform(filePath.begin(), filePath.end(), filePath.begin(), ::tolower);
-#endif // defined( WNT )
+#endif 
     PathFilePair dirFile = split_path(filePath);
     string dirPath = dirFile.first;
     string fileName = dirFile.second;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "jvmaccess/javainfo.hxx"
@@ -72,9 +72,9 @@ bool test_constructor1()
     printf("\ntest JavaInfo::JavaInfo(const OUString& usJavaHome\n" \
            "!Check output for correctness\n\n");
     try{
-    JavaInfo info("file:///d:/java/j2sdk1.4.1_01");
-//    JavaInfo info("file:///local/jl/java/j2sdk1.4.0");
-//    JavaInfo info("file:///usr/local2/jl/java/j2sdk1.4.0");
+    JavaInfo info("file:
+
+
 
     printInfo(info);
     }catch( JavaInfo::InitException& )
@@ -92,11 +92,11 @@ bool test_constructor2()
     bool arRet[20];
     int i= 0;
 
-    JavaInfo a("file:///d:/java/j2sdk1.4.1_01");
-//    -----------------------------------------------------
-//    JavaInfo a("file:///usr/local2/jl/java/j2sdk1.4.0");
-//------------------------------------------------------------
-//    JavaInfo a("file:///local/jl/java/j2sdk1.4.0");
+    JavaInfo a("file:
+
+
+
+
     try{
         JavaInfo info= JavaInfo(OUString(), 0);
         arRet[i++]= true;
@@ -105,7 +105,7 @@ bool test_constructor2()
         arRet[i++]= false;
     }
     try{
-        // make sure it supports accessibility
+        
         JavaInfo info= JavaInfo(OUString(), JavaInfo::Accessibility);
         arRet[i++]= info.supportsAccessibility();
     }
@@ -203,33 +203,33 @@ bool test_compareVersions()
            "! Check output for correctness\n\n");
 
 
-    JavaInfo a("file:///C:/Program%20Files/JavaSoft/JRE/1.3.1");
-    JavaInfo b("file:///C:/Program%20Files/JavaSoft/JRE/1.3.1_04");
-    JavaInfo c("file:///C:/Program%20Files/Java/j2re1.4.0_03");
-    JavaInfo d("file:///C:/Program%20Files/Java/j2re1.4.2_04");
-//     JavaInfo e("file:///d:/java/j2sdk1.4.0_01");
-//     JavaInfo f("file:///d:/java/j2sdk1.4.0_02");
-//     JavaInfo g("file:///d:/java/j2sdk1.4.1");
-//     JavaInfo h("file:///d:/java/j2sdk1.4.1_01");
+    JavaInfo a("file:
+    JavaInfo b("file:
+    JavaInfo c("file:
+    JavaInfo d("file:
 
-//     JavaInfo a("file:///usr/local2/jl/java/j2re1_3_1_02");
-//     JavaInfo b("file:///usr/local2/jl/java/j2sdk1.4.0");
-//     JavaInfo c("file:///usr/local2/jl/java/j2sdk1.4.1");
-//     JavaInfo d("file:///usr/local2/jl/java/j2re1.4.1_01");
 
-//     JavaInfo a("file:///local/jl/java/jre1.3.1");
-//     JavaInfo b("file:///local/jl/java/jdk1.3.1_04");
-//     JavaInfo c("file:///local/jl/java/j2sdk1.4.0");
-//     JavaInfo d("file:///local/jl/java/j2sdk1.4.1");
-//     JavaInfo e("file:///local/jl/java/j2re1.4.1_01");
-//     fprintf(stderr,"###ok1");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     if( (a.compareVersions(a) == 0
          && a.compareVersions(b) < 0
          && a.compareVersions(c) < 0
-//         && a.compareVersions(d) < 0
-//         && a.compareVersions(e) < 0
-//         && a.compareVersions(h) < 0
+
+
+
             )
         &&
         (a.compareVersions(a)== 0))
@@ -241,8 +241,8 @@ bool test_compareVersions()
          && b.compareVersions(b) == 0
          && b.compareVersions(c) < 0
          && b.compareVersions(d) < 0
-//      && b.compareVersions(e) < 0
-//         && b.compareVersions(h) < 0))
+
+
          ))
         ret= true;
 
@@ -251,29 +251,29 @@ bool test_compareVersions()
            && d.compareVersions(b) > 0
            && d.compareVersions(c) > 0
            && d.compareVersions(d) == 0
-//           && d.compareVersions(e) < 0
-//        && d.compareVersions(f) < 0
-//        && d.compareVersions(g) < 0
-//        && d.compareVersions(h) < 0))
+
+
+
+
            ))
         ret= true;
 
-//     if(ret
-//        && e.compareVersions(a) > 0
-//        && e.compareVersions(b) > 0
-//        && e.compareVersions(c) > 0
-//        && e.compareVersions(d) > 0
-//        && e.compareVersions(e) == 0
-//         )
 
 
-//     if(ret &&
-//        (f.compareVersions(a) > 0
-//         && f.compareVersions(c) > 0
-//         && f.compareVersions(d) > 0
-//         && f.compareVersions(g) < 0
-//         && f.compareVersions(h) < 0))
-//         ret= true;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     if( ! ret)
         printf("failed\n");
@@ -295,27 +295,27 @@ bool test_createBestInfo()
 bool test_isEqual()
 {
     printf("\ntest JavaInfo::isEqual\n");
-    JavaInfo a(JAVA_VERSION); // accessible
+    JavaInfo a(JAVA_VERSION); 
     JavaInfo b(JAVA_VERSION);
 
-    JavaInfo c("file:///c:/local/r/j2sdk1.4.0");// not Accessible
-    JavaInfo d("file:///d:/java/copy_j2sdk1.4.0");
-//-------------------------------------------------------------------
-//     JavaInfo a("file:///usr/local2/jl/java/j2re1_3_1_02");
-//     JavaInfo b("file:///usr/local2/jl/java/j2re1_3_1_02");
+    JavaInfo c("file:
+    JavaInfo d("file:
 
-//     JavaInfo c("file:///usr/local2/jl/java/j2sdk1.4.1");
-//     JavaInfo d("file:///usr/local2/jl/java/copyj2sdk1.4.1");
 
-//     JavaInfo a("file:///local/jl/java/jre1.3.1");
-//     JavaInfo b("file:///local/jl/java/jre1.3.1");
-//     JavaInfo c("file:///local/jl/java/j2sdk1.4.1");
-//     JavaInfo d("file:///local/jl/java/copyj2sdk1.4.1");
+
+
+
+
+
+
+
+
+
 
     bool arRet[20];
     int i= 0;
     arRet[i++]= a.isEqual(b);
-    arRet[i++]= ! a.isEqual(c); //must fail
+    arRet[i++]= ! a.isEqual(c); 
     arRet[i++]= a.isEqual(d);
 
     bool err= true;

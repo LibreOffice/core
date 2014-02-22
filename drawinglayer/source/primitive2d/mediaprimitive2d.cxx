@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive2d/mediaprimitive2d.hxx>
@@ -28,7 +28,7 @@
 #include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -38,7 +38,7 @@ namespace drawinglayer
         {
             Primitive2DSequence xRetval(1);
 
-            // create background object
+            
             basegfx::B2DPolygon aBackgroundPolygon(basegfx::tools::createUnitPolygon());
             aBackgroundPolygon.transform(getTransform());
             const Primitive2DReference xRefBackground(
@@ -70,21 +70,21 @@ namespace drawinglayer
 
                 if(basegfx::fTools::equalZero(aDestRange.getWidth()) || basegfx::fTools::equalZero(aDestRange.getHeight()))
                 {
-                    // shrunk primitive has no content (zero size in X or Y), nothing to display. Still create
-                    // invisible content for HitTest and BoundRect
+                    
+                    
                     const Primitive2DReference xHiddenLines(new HiddenGeometryPrimitive2D(xRetval));
 
                     xRetval = Primitive2DSequence(&xHiddenLines, 1);
                 }
                 else
                 {
-                    // create transformation matrix from original range to shrunk range
+                    
                     basegfx::B2DHomMatrix aTransform;
                     aTransform.translate(-aSourceRange.getMinX(), -aSourceRange.getMinY());
                     aTransform.scale(aDestRange.getWidth() / aSourceRange.getWidth(), aDestRange.getHeight() / aSourceRange.getHeight());
                     aTransform.translate(aDestRange.getMinX(), aDestRange.getMinY());
 
-                    // add transform primitive
+                    
                     const Primitive2DReference aScaled(new TransformPrimitive2D(aTransform, xRetval));
                     xRetval = Primitive2DSequence(&aScaled, 1L);
                 }
@@ -140,10 +140,10 @@ namespace drawinglayer
             return aRetval;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(MediaPrimitive2D, PRIMITIVE2D_ID_MEDIAPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

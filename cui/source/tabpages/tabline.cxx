@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -64,7 +64,7 @@ SvxLineTabDialog::SvxLineTabDialog
     nLineEndListState( CT_NONE ),
     nDashListState( CT_NONE ),
     mnColorListState( CT_NONE ),
-    nPageType( 0 ), // We use it here primarily to get the right attributes with FillItemSet
+    nPageType( 0 ), 
     nPosDashLb( 0 ),
     nPosLineEndLb( 0 ),
     mbAreaTP( sal_False )
@@ -103,13 +103,13 @@ SvxLineTabDialog::SvxLineTabDialog
     rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdlImpl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxLineTabDialog::~SvxLineTabDialog()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineTabDialog::SavePalettes()
 {
@@ -136,7 +136,7 @@ void SvxLineTabDialog::SavePalettes()
         pLineEndList = pDrawModel->GetLineEndList();
     }
 
-    // Save the tables when they have been changed
+    
 
     const OUString aPath( SvtPathOptions().GetPalettePath() );
 
@@ -145,7 +145,7 @@ void SvxLineTabDialog::SavePalettes()
         pDashList->SetPath( aPath );
         pDashList->Save();
 
-        // Notify ToolBoxControls
+        
         if ( pShell )
             pShell->PutItem( SvxDashListItem( pDashList, SID_DASH_LIST ) );
     }
@@ -155,7 +155,7 @@ void SvxLineTabDialog::SavePalettes()
         pLineEndList->SetPath( aPath );
         pLineEndList->Save();
 
-        // Notify ToolBoxControls
+        
         if ( pShell )
             pShell->PutItem( SvxLineEndListItem( pLineEndList, SID_LINEEND_LIST ) );
     }
@@ -165,24 +165,24 @@ void SvxLineTabDialog::SavePalettes()
         pColorList->SetPath( aPath );
         pColorList->Save();
 
-        // Notify ToolBoxControls
+        
         if ( pShell )
             pShell->PutItem( SvxColorListItem( pColorList, SID_COLOR_TABLE ) );
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 short SvxLineTabDialog::Ok()
 {
     SavePalettes();
 
-    // We return RET_OK if at least one TabPage in FillItemSet() returns sal_True.
-    // We do this by default at the moment.
+    
+    
     return( SfxTabDialog::Ok() );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG_INLINE_START(SvxLineTabDialog, CancelHdlImpl)
 {
@@ -193,7 +193,7 @@ IMPL_LINK_NOARG_INLINE_START(SvxLineTabDialog, CancelHdlImpl)
 }
 IMPL_LINK_NOARG_INLINE_END(SvxLineTabDialog, CancelHdlImpl)
 
-// -----------------------------------------------------------------------
+
 
 void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
 {
@@ -211,7 +211,7 @@ void SvxLineTabDialog::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
         ( (SvxLineTabPage&) rPage ).SetObjSelected( bObjSelected );
         ( (SvxLineTabPage&) rPage ).Construct();
         ( (SvxLineTabPage&) rPage ).SetColorChgd( &mnColorListState );
-        // ActivatePage() is not called the first time
+        
         ( (SvxLineTabPage&) rPage ).ActivatePage( rOutAttrs );
     }
     else if(nId == m_nStyleTabPage)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -31,9 +31,9 @@
 
 using namespace ::com::sun::star;
 
-// TODO: do not create OLE objects that represent OOo documents
 
-//-------------------------------------------------------------------------
+
+
 uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
@@ -42,20 +42,20 @@ uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::impl_staticGetSuppo
     return aRet;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL OleEmbeddedObjectFactory::impl_staticGetImplementationName()
 {
     return OUString("com.sun.star.comp.embed.OLEEmbeddedObjectFactory");
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::impl_staticCreateSelfInstance(
             const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
 {
     return uno::Reference< uno::XInterface >( *new OleEmbeddedObjectFactory( xServiceManager ) );
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromEntry(
                                                                     const uno::Reference< embed::XStorage >& xStorage,
                                                                     const OUString& sEntName,
@@ -81,16 +81,16 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     uno::Reference< container::XNameAccess > xNameAccess( xStorage, uno::UNO_QUERY );
     if ( !xNameAccess.is() )
-        throw uno::RuntimeException(); //TODO
+        throw uno::RuntimeException(); 
 
-    // detect entry existence
+    
     if ( !xNameAccess->hasByName( sEntName ) )
         throw container::NoSuchElementException();
 
     if ( !xStorage->isStreamElement( sEntName ) )
     {
-        // if it is not an OLE object throw an exception
-        throw io::IOException(); // TODO:
+        
+        throw io::IOException(); 
     }
 
     uno::Reference< uno::XInterface > xResult(
@@ -100,7 +100,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
 
     if ( !xPersist.is() )
-        throw uno::RuntimeException(); // TODO: the interface must be supported by own document objects
+        throw uno::RuntimeException(); 
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
@@ -128,7 +128,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitFromMediaDescriptor(
         const uno::Reference< embed::XStorage >& xStorage,
         const OUString& sEntName,
@@ -158,7 +158,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
 
     if ( !xPersist.is() )
-        throw uno::RuntimeException(); // TODO: the interface must be supported ( what about applets? )
+        throw uno::RuntimeException(); 
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
@@ -169,7 +169,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceInitNew(
                                             const uno::Sequence< sal_Int8 >& aClassID,
                                             const OUString& aClassName,
@@ -200,7 +200,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
 
     if ( !xPersist.is() )
-        throw uno::RuntimeException(); // TODO: the interface must be supported by own document objects
+        throw uno::RuntimeException(); 
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
@@ -211,7 +211,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceLink(
                                             const uno::Reference< embed::XStorage >& xStorage,
                                             const OUString& sEntName,
@@ -243,7 +243,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     uno::Reference< embed::XEmbedPersist > xPersist( xResult, uno::UNO_QUERY );
 
     if ( !xPersist.is() )
-        throw uno::RuntimeException(); // TODO: the interface must be supported by own document objects
+        throw uno::RuntimeException(); 
 
     xPersist->setPersistentEntry( xStorage,
                                     sEntName,
@@ -254,7 +254,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInstanceUserInit(
             const uno::Sequence< sal_Int8 >& aClassID,
             const OUString& aClassName,
@@ -270,7 +270,7 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 {
     SAL_INFO( "embeddedobj.ole", "embeddedobj (mv76033) OleEmbeddedObjectFactory::createInstanceUserInit" );
 
-    // the initialization is completelly controlled by user
+    
     if ( !xStorage.is() )
         throw lang::IllegalArgumentException( OUString( "No parent storage is provided!\n" ),
                                             uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >(this) ),
@@ -296,12 +296,12 @@ uno::Reference< uno::XInterface > SAL_CALL OleEmbeddedObjectFactory::createInsta
 
     }
     else
-        throw uno::RuntimeException(); // TODO:
+        throw uno::RuntimeException(); 
 
     return xResult;
 }
 
-//-------------------------------------------------------------------------
+
 OUString SAL_CALL OleEmbeddedObjectFactory::getImplementationName()
     throw ( uno::RuntimeException )
 {
@@ -314,7 +314,7 @@ sal_Bool SAL_CALL OleEmbeddedObjectFactory::supportsService( const OUString& Ser
     return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OleEmbeddedObjectFactory::getSupportedServiceNames()
     throw ( uno::RuntimeException )
 {

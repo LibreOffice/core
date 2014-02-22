@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
@@ -40,7 +40,7 @@
 #include <drawinglayer/attribute/sdrshadowattribute.hxx>
 #include <drawinglayer/primitive3d/hiddengeometryprimitive3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -60,7 +60,7 @@ namespace drawinglayer
 
         void applyNormalsKindSphereTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill, const basegfx::B3DRange& rRange)
         {
-            // create sphere normals
+            
             const basegfx::B3DPoint aCenter(rRange.getCenter());
 
             for(sal_uInt32 a(0); a < rFill.size(); a++)
@@ -79,7 +79,7 @@ namespace drawinglayer
 
         void applyNormalsInvertTo3DGeometry(::std::vector< basegfx::B3DPolyPolygon >& rFill)
         {
-            // invert normals
+            
             for(sal_uInt32 a(0); a < rFill.size(); a++)
             {
                 rFill[a] = basegfx::tools::invertNormals(rFill[a]);
@@ -95,17 +95,17 @@ namespace drawinglayer
         {
             sal_uInt32 a;
 
-            // handle texture coordinates X
+            
             const bool bParallelX(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == eModeX);
             const bool bSphereX(!bParallelX && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == eModeX));
 
-            // handle texture coordinates Y
+            
             const bool bParallelY(::com::sun::star::drawing::TextureProjectionMode_PARALLEL == eModeY);
             const bool bSphereY(!bParallelY && (::com::sun::star::drawing::TextureProjectionMode_SPHERE == eModeY));
 
             if(bParallelX || bParallelY)
             {
-                // apply parallel texture coordinates in X and/or Y
+                
                 for(a = 0; a < rFill.size(); a++)
                 {
                     rFill[a] = basegfx::tools::applyDefaultTextureCoordinatesParallel(rFill[a], rRange, bParallelX, bParallelY);
@@ -114,7 +114,7 @@ namespace drawinglayer
 
             if(bSphereX || bSphereY)
             {
-                // apply spherical texture coordinates in X and/or Y
+                
                 const basegfx::B3DPoint aCenter(rRange.getCenter());
 
                 for(a = 0; a < rFill.size(); a++)
@@ -123,7 +123,7 @@ namespace drawinglayer
                 }
             }
 
-            // transform texture coordinates to texture size
+            
             basegfx::B2DHomMatrix aTexMatrix;
             aTexMatrix.scale(rTextureSize.getX(), rTextureSize.getY());
 
@@ -138,15 +138,15 @@ namespace drawinglayer
             const basegfx::B3DHomMatrix& rObjectTransform,
             const attribute::SdrLineAttribute& rLine)
         {
-            // prepare fully scaled polyPolygon
+            
             basegfx::B3DPolyPolygon aScaledPolyPolygon(rUnitPolyPolygon);
             aScaledPolyPolygon.transform(rObjectTransform);
 
-            // create line and stroke attribute
+            
             const attribute::LineAttribute aLineAttribute(rLine.getColor(), rLine.getWidth(), rLine.getJoin(), rLine.getCap());
             const attribute::StrokeAttribute aStrokeAttribute(rLine.getDotDashArray(), rLine.getFullDotDashLen());
 
-            // create primitives
+            
             Primitive3DSequence aRetval(aScaledPolyPolygon.count());
 
             for(sal_uInt32 a(0L); a < aScaledPolyPolygon.count(); a++)
@@ -157,7 +157,7 @@ namespace drawinglayer
 
             if(0.0 != rLine.getTransparence())
             {
-                // create UnifiedTransparenceTexturePrimitive3D, add created primitives and exchange
+                
                 const Primitive3DReference xRef(new UnifiedTransparenceTexturePrimitive3D(rLine.getTransparence(), aRetval));
                 aRetval = Primitive3DSequence(&xRef, 1L);
             }
@@ -177,12 +177,12 @@ namespace drawinglayer
 
             if(r3DPolyPolygonVector.size())
             {
-                // create list of simple fill primitives
+                
                 aRetval.realloc(r3DPolyPolygonVector.size());
 
                 for(sal_uInt32 a(0L); a < r3DPolyPolygonVector.size(); a++)
                 {
-                    // get scaled PolyPolygon
+                    
                     basegfx::B3DPolyPolygon aScaledPolyPolygon(r3DPolyPolygonVector[a]);
                     aScaledPolyPolygon.transform(rObjectTransform);
 
@@ -198,7 +198,7 @@ namespace drawinglayer
                     aRetval[a] = xRef;
                 }
 
-                // look for and evtl. build texture sub-group primitive
+                
                 if(!rFill.getGradient().isDefault()
                     || !rFill.getHatch().isDefault()
                     || !rFill.getFillGraphic().isDefault())
@@ -209,7 +209,7 @@ namespace drawinglayer
 
                     if(!rFill.getGradient().isDefault())
                     {
-                        // create gradientTexture3D with sublist, add to local aRetval
+                        
                         pNewTexturePrimitive3D = new GradientTexturePrimitive3D(
                             rFill.getGradient(),
                             aRetval,
@@ -219,7 +219,7 @@ namespace drawinglayer
                     }
                     else if(!rFill.getHatch().isDefault())
                     {
-                        // create hatchTexture3D with sublist, add to local aRetval
+                        
                         pNewTexturePrimitive3D = new HatchTexturePrimitive3D(
                             rFill.getHatch(),
                             aRetval,
@@ -227,9 +227,9 @@ namespace drawinglayer
                             bModulate,
                             bFilter);
                     }
-                    else // if(!rFill.getFillGraphic().isDefault())
+                    else 
                     {
-                        // create bitmapTexture3D with sublist, add to local aRetval
+                        
                         const basegfx::B2DRange aTexRange(0.0, 0.0, rTextureSize.getX(), rTextureSize.getY());
 
                         pNewTexturePrimitive3D = new BitmapTexturePrimitive3D(
@@ -240,13 +240,13 @@ namespace drawinglayer
                             bFilter);
                     }
 
-                    // exchange aRetval content with texture group
+                    
                     const Primitive3DReference xRef(pNewTexturePrimitive3D);
                     aRetval = Primitive3DSequence(&xRef, 1L);
 
                     if(::com::sun::star::drawing::TextureKind2_LUMINANCE == aSdr3DObjectAttribute.getTextureKind())
                     {
-                        // use modified color primitive to force textures to gray
+                        
                         const basegfx::BColorModifierSharedPtr aBColorModifier(
                             new basegfx::BColorModifier_gray());
                         const Primitive3DReference xRef2(
@@ -260,13 +260,13 @@ namespace drawinglayer
 
                 if(0.0 != rFill.getTransparence())
                 {
-                    // create UnifiedTransparenceTexturePrimitive3D with sublist and exchange
+                    
                     const Primitive3DReference xRef(new UnifiedTransparenceTexturePrimitive3D(rFill.getTransparence(), aRetval));
                     aRetval = Primitive3DSequence(&xRef, 1L);
                 }
                 else if(!rFillGradient.isDefault())
                 {
-                    // create TransparenceTexturePrimitive3D with sublist and exchange
+                    
                     const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(rFillGradient, aRetval, rTextureSize));
                     aRetval = Primitive3DSequence(&xRef, 1L);
                 }
@@ -280,15 +280,15 @@ namespace drawinglayer
             const attribute::SdrShadowAttribute& rShadow,
             bool bShadow3D)
         {
-            // create Shadow primitives. Uses already created primitives
+            
             if(rSource.hasElements() && !basegfx::fTools::moreOrEqual(rShadow.getTransparence(), 1.0))
             {
-                // prepare new list for shadow geometry
+                
                 basegfx::B2DHomMatrix aShadowOffset;
                 aShadowOffset.set(0, 2, rShadow.getOffset().getX());
                 aShadowOffset.set(1, 2, rShadow.getOffset().getY());
 
-                // create shadow primitive and add primitives
+                
                 const Primitive3DReference xRef(new ShadowPrimitive3D(aShadowOffset, rShadow.getColor(), rShadow.getTransparence(), bShadow3D, rSource));
                 return Primitive3DSequence(&xRef, 1L);
             }
@@ -304,8 +304,8 @@ namespace drawinglayer
             const basegfx::B2DVector& rTextureSize,
             const attribute::Sdr3DObjectAttribute& aSdr3DObjectAttribute)
         {
-            // create hidden sub-geometry which can be used for HitTest
-            // and BoundRect calculations, but will not be visualized
+            
+            
             const attribute::SdrFillAttribute aSimplifiedFillAttribute(
                 0.0,
                 basegfx::BColor(),
@@ -326,7 +326,7 @@ namespace drawinglayer
             return Primitive3DSequence(&aHidden, 1);
         }
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

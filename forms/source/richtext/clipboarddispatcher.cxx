@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "clipboarddispatcher.hxx"
@@ -24,10 +24,10 @@
 #include <svtools/cliplistener.hxx>
 #include <svtools/transfer.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::frame;
@@ -35,7 +35,7 @@ namespace frm
     using namespace ::com::sun::star::util;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
+    
     namespace
     {
         static URL createClipboardURL( OClipboardDispatcher::ClipboardFunc _eFunc )
@@ -57,10 +57,10 @@ namespace frm
         }
     }
 
-    //====================================================================
-    //= OClipboardDispatcher
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OClipboardDispatcher::OClipboardDispatcher( EditView& _rView, ClipboardFunc _eFunc )
         :ORichTextFeatureDispatcher( _rView, createClipboardURL( _eFunc ) )
         ,m_eFunc( _eFunc )
@@ -68,7 +68,7 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool OClipboardDispatcher::implIsEnabled( ) const
     {
         sal_Bool bEnabled = sal_False;
@@ -89,7 +89,7 @@ namespace frm
         return bEnabled;
     }
 
-    //--------------------------------------------------------------------
+    
     FeatureStateEvent OClipboardDispatcher::buildStatusEvent() const
     {
         FeatureStateEvent aEvent( ORichTextFeatureDispatcher::buildStatusEvent() );
@@ -97,19 +97,19 @@ namespace frm
         return aEvent;
     }
 
-    //--------------------------------------------------------------------
+    
     void OClipboardDispatcher::invalidateFeatureState_Broadcast()
     {
         sal_Bool bEnabled = implIsEnabled();
         if ( m_bLastKnownEnabled == bEnabled )
-            // nothing changed -> no notification
+            
             return;
         m_bLastKnownEnabled = bEnabled;
 
         ORichTextFeatureDispatcher::invalidateFeatureState_Broadcast();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OClipboardDispatcher::dispatch( const URL& /*_rURL*/, const Sequence< PropertyValue >& /*Arguments*/ ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -132,10 +132,10 @@ namespace frm
         }
     }
 
-    //====================================================================
-    //= OPasteClipboardDispatcher
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OPasteClipboardDispatcher::OPasteClipboardDispatcher( EditView& _rView )
         :OClipboardDispatcher( _rView, ePaste )
         ,m_pClipListener( NULL )
@@ -145,12 +145,12 @@ namespace frm
         m_pClipListener->acquire();
         m_pClipListener->AddRemoveListener( _rView.GetWindow(), sal_True );
 
-        // initial state
+        
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( _rView.GetWindow() ) );
         m_bPastePossible = ( aDataHelper.HasFormat( SOT_FORMAT_STRING ) || aDataHelper.HasFormat( SOT_FORMAT_RTF ) );
     }
 
-    //--------------------------------------------------------------------
+    
     OPasteClipboardDispatcher::~OPasteClipboardDispatcher()
     {
         if ( !isDisposed() )
@@ -160,7 +160,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     IMPL_LINK( OPasteClipboardDispatcher, OnClipboardChanged, TransferableDataHelper*, _pDataHelper )
     {
         OSL_ENSURE( _pDataHelper, "OPasteClipboardDispatcher::OnClipboardChanged: ooops!" );
@@ -172,7 +172,7 @@ namespace frm
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+    
     void OPasteClipboardDispatcher::disposing( ::osl::ClearableMutexGuard& _rClearBeforeNotify )
     {
         OSL_ENSURE( getEditView() && getEditView()->GetWindow(), "OPasteClipboardDispatcher::disposing: EditView should not (yet) be disfunctional here!" );
@@ -184,14 +184,14 @@ namespace frm
         OClipboardDispatcher::disposing( _rClearBeforeNotify );
     }
 
-    //--------------------------------------------------------------------
+    
     sal_Bool OPasteClipboardDispatcher::implIsEnabled( ) const
     {
         return m_bPastePossible && OClipboardDispatcher::implIsEnabled();
     }
 
-//........................................................................
-}   // namespace frm
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

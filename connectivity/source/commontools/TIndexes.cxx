@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/TIndexes.hxx"
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace cppu;
 
-// -----------------------------------------------------------------------------
+
 OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
                  ::osl::Mutex& _rMutex,
              const ::std::vector< OUString> &_rVector
@@ -46,7 +46,7 @@ OIndexesHelper::OIndexesHelper(OTableHelper* _pTable,
     ,m_pTable(_pTable)
 {
 }
-// -----------------------------------------------------------------------------
+
 
 sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
 {
@@ -90,7 +90,7 @@ sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
                     xResult = m_pTable->getMetaData()->getPrimaryKeys(aCatalog,aSchema,aTable);
                     xRow.set(xResult,UNO_QUERY);
 
-                    if ( xRow.is() && xResult->next() ) // there can be only one primary key
+                    if ( xRow.is() && xResult->next() ) 
                     {
                         bPrimarKeyIndex = xRow->getString(6) == aName;
                     }
@@ -109,18 +109,18 @@ sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OIndexesHelper::impl_refresh() throw(RuntimeException)
 {
     m_pTable->refreshIndexes();
 }
-// -------------------------------------------------------------------------
+
 Reference< XPropertySet > OIndexesHelper::createDescriptor()
 {
     return new OIndexHelper(m_pTable);
 }
-// -------------------------------------------------------------------------
-// XAppend
+
+
 sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
@@ -207,8 +207,8 @@ sdbcx::ObjectType OIndexesHelper::appendObject( const OUString& _rForName, const
 
     return createObject( _rForName );
 }
-// -------------------------------------------------------------------------
-// XDrop
+
+
 void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName)
 {
     Reference< XConnection> xConnection = m_pTable->getConnection();
@@ -243,7 +243,7 @@ void OIndexesHelper::dropObject(sal_Int32 /*_nPos*/,const OUString _sElementName
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 
 
 

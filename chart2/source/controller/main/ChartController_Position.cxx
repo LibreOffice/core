@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartController.hxx"
@@ -32,7 +32,7 @@
 #include "CommonConverters.hxx"
 #include <svx/ActionDescriptionProvider.hxx>
 
-// header for define RET_OK
+
 #include <vcl/msgbox.hxx>
 #include <svx/svxids.hrc>
 #include <svx/rectenum.hxx>
@@ -57,12 +57,12 @@ void lcl_getPositionAndSizeFromItemSet( const SfxItemSet& rItemSet, awt::Rectang
     RECT_POINT eRP = (RECT_POINT)RP_LT;
 
     const SfxPoolItem* pPoolItem=NULL;
-    //read position
+    
     if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_X,true,&pPoolItem))
         nPosX=((const SfxInt32Item*)pPoolItem)->GetValue();
     if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_POS_Y,true,&pPoolItem))
         nPosY=((const SfxInt32Item*)pPoolItem)->GetValue();
-    //read size
+    
     if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_WIDTH,true,&pPoolItem))
         nSizX=((const SfxUInt32Item*)pPoolItem)->GetValue();
     if (SFX_ITEM_SET==rItemSet.GetItemState(SID_ATTR_TRANSFORM_HEIGHT,true,&pPoolItem))
@@ -134,7 +134,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
     {
         SfxItemSet aItemSet = m_pDrawViewWrapper->getPositionAndSizeItemSetFromMarkedObject();
 
-        //prepare and open dialog
+        
         SdrView* pSdrView = m_pDrawViewWrapper;
         bool bResizePossible = m_aSelection.isResizeableObjectSelected();
 
@@ -151,7 +151,7 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
             if(pOutItemSet)
             {
                 awt::Rectangle aObjectRect;
-                aItemSet.Put(*pOutItemSet);//overwrite old values with new values (-> all items are set)
+                aItemSet.Put(*pOutItemSet);
                 lcl_getPositionAndSizeFromItemSet( aItemSet, aObjectRect, aSelectedSize );
                 awt::Size aPageSize( ChartModelHelper::getPageSize( getModel() ) );
                 awt::Rectangle aPageRect( 0,0,aPageSize.Width,aPageSize.Height );
@@ -178,6 +178,6 @@ void SAL_CALL ChartController::executeDispatch_PositionAndSize()
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

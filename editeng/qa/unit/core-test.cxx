@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "test/bootstrapfixture.hxx"
@@ -106,7 +106,7 @@ bool includes(const uno::Sequence<OUString>& rSeq, const OUString& rVal)
 void Test::testUnoTextFields()
 {
     {
-        // DATE
+        
         SvxUnoTextField aField(text::textfield::Type::DATE);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.DateTime");
@@ -114,7 +114,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // URL
+        
         SvxUnoTextField aField(text::textfield::Type::URL);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.URL");
@@ -122,7 +122,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // PAGE
+        
         SvxUnoTextField aField(text::textfield::Type::PAGE);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.PageNumber");
@@ -130,7 +130,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // PAGES
+        
         SvxUnoTextField aField(text::textfield::Type::PAGES);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.PageCount");
@@ -138,7 +138,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // TIME
+        
         SvxUnoTextField aField(text::textfield::Type::TIME);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.DateTime");
@@ -146,7 +146,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // FILE
+        
         SvxUnoTextField aField(text::textfield::Type::DOCINFO_TITLE);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.docinfo.Title");
@@ -154,7 +154,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // TABLE
+        
         SvxUnoTextField aField(text::textfield::Type::TABLE);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.SheetName");
@@ -162,7 +162,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // EXTENDED TIME
+        
         SvxUnoTextField aField(text::textfield::Type::EXTENDED_TIME);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.DateTime");
@@ -170,7 +170,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // EXTENDED FILE
+        
         SvxUnoTextField aField(text::textfield::Type::EXTENDED_FILE);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.FileName");
@@ -178,7 +178,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // AUTHOR
+        
         SvxUnoTextField aField(text::textfield::Type::AUTHOR);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.Author");
@@ -186,7 +186,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // MEASURE
+        
         SvxUnoTextField aField(text::textfield::Type::MEASURE);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.text.textfield.Measure");
@@ -194,7 +194,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // PRESENTATION HEADER
+        
         SvxUnoTextField aField(text::textfield::Type::PRESENTATION_HEADER);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.presentation.textfield.Header");
@@ -202,7 +202,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // PRESENTATION FOOTER
+        
         SvxUnoTextField aField(text::textfield::Type::PRESENTATION_FOOTER);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.presentation.textfield.Footer");
@@ -210,7 +210,7 @@ void Test::testUnoTextFields()
     }
 
     {
-        // PRESENTATION DATE TIME
+        
         SvxUnoTextField aField(text::textfield::Type::PRESENTATION_DATE_TIME);
         uno::Sequence<OUString> aSvcs = aField.getSupportedServiceNames();
         bool bGood = includes(aSvcs, "com.sun.star.presentation.textfield.DateTime");
@@ -221,7 +221,7 @@ void Test::testUnoTextFields()
 class TestAutoCorrDoc : public SvxAutoCorrDoc
 {
 public:
-    /// just like the real thing, this dummy modifies the rText parameter :(
+    /
     TestAutoCorrDoc(OUString &rText, LanguageType eLang)
         : m_rText(rText)
         , m_eLang(eLang)
@@ -236,47 +236,47 @@ private:
     LanguageType m_eLang;
     virtual sal_Bool Delete( sal_Int32 nStt, sal_Int32 nEnd )
     {
-        //fprintf(stderr, "TestAutoCorrDoc::Delete\n");
+        
         m_rText = m_rText.replaceAt(nStt, nEnd-nStt, "");
         return true;
     }
     virtual sal_Bool Insert( sal_Int32 nPos, const OUString& rTxt )
     {
-        //fprintf(stderr, "TestAutoCorrDoc::Insert\n");
+        
         m_rText = m_rText.replaceAt(nPos, 0, rTxt);
         return true;
     }
     virtual sal_Bool Replace( sal_Int32 nPos, const OUString& rTxt )
     {
-        //fprintf(stderr, "TestAutoCorrDoc::Replace\n");
+        
         return ReplaceRange( nPos, rTxt.getLength(), rTxt );
     }
     virtual sal_Bool ReplaceRange( sal_Int32 nPos, sal_Int32 nLen, const OUString& rTxt )
     {
-        //fprintf(stderr, "TestAutoCorrDoc::ReplaceRange %d %d %s\n", nPos, nLen, OUStringToOString(rTxt, RTL_TEXTENCODING_UTF8).getStr());
+        
         m_rText = m_rText.replaceAt(nPos, nLen, rTxt);
         return true;
     }
     virtual sal_Bool SetAttr( sal_Int32, sal_Int32, sal_uInt16, SfxPoolItem& )
     {
-        //fprintf(stderr, "TestAutoCorrDoc::SetAttr\n");
+        
         return true;
     }
     virtual sal_Bool SetINetAttr( sal_Int32, sal_Int32, const OUString& )
     {
-        //fprintf(stderr, "TestAutoCorrDoc::SetINetAttr\n");
+        
         return true;
     }
     virtual OUString const* GetPrevPara(bool)
     {
-        //fprintf(stderr, "TestAutoCorrDoc::GetPrevPara\n");
+        
         return 0;
     }
     virtual bool ChgAutoCorrWord( sal_Int32& rSttPos,
                 sal_Int32 nEndPos, SvxAutoCorrect& rACorrect,
                 OUString* pPara )
     {
-        //fprintf(stderr, "TestAutoCorrDoc::ChgAutoCorrWord\n");
+        
 
         if (m_rText.isEmpty())
             return false;
@@ -288,7 +288,7 @@ private:
         {
             m_rText = m_rText.replaceAt(rSttPos, nEndPos, pFnd->GetLong());
             if( pPara )
-                *pPara = "";//&pCurNode->GetString();
+                *pPara = "";
             return true;
         }
 
@@ -296,9 +296,9 @@ private:
     }
 };
 
-//https://bugs.libreoffice.org/show_bug.cgi?id=55693
-//Two capitalized letters are not corrected if dash or slash are directly
-//before the two letters
+
+
+
 void Test::testAutocorrect()
 {
     OUString sShareAutocorrFile;
@@ -328,7 +328,7 @@ void Test::testAutocorrect()
     }
 
     {
-        // test auto-bolding with '*'
+        
         OUString sInput("*foo");
         sal_Unicode cNextChar('*');
         OUString sExpected("foo");
@@ -387,21 +387,21 @@ void Test::testSectionAttributes()
         aEngine.SetText(aParaText);
         pSet->Put(aBold);
         CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
-        aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,6)); // 'aaabbb' - end point is not inclusive.
+        aEngine.QuickSetAttribs(*pSet, ESelection(0,0,0,6)); 
         pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
         pSet->Put(aItalic);
         CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
 
-        aEngine.QuickSetAttribs(*pSet, ESelection(0,3,0,9)); // 'bbbccc'
+        aEngine.QuickSetAttribs(*pSet, ESelection(0,3,0,9)); 
         boost::scoped_ptr<EditTextObject> pEditText(aEngine.CreateTextObject());
         CPPUNIT_ASSERT_MESSAGE("Failed to create text object.", pEditText.get());
         std::vector<editeng::Section> aAttrs;
         pEditText->GetAllSections(aAttrs);
 
-        // Now, we should have a total of 3 sections.
+        
         CPPUNIT_ASSERT_MESSAGE("There should be 3 sections.", aAttrs.size() == 3);
 
-        // First section should be 0-3 of paragraph 0, and it should only have boldness applied.
+        
         const editeng::Section* pSecAttr = &aAttrs[0];
         CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnParagraph);
         CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);
@@ -409,7 +409,7 @@ void Test::testSectionAttributes()
         CPPUNIT_ASSERT_EQUAL(1, (int)pSecAttr->maAttributes.size());
         CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
 
-        // Second section should be 3-6, and it should be both bold and italic.
+        
         pSecAttr = &aAttrs[1];
         CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnParagraph);
         CPPUNIT_ASSERT_EQUAL(3, (int)pSecAttr->mnStart);
@@ -417,7 +417,7 @@ void Test::testSectionAttributes()
         CPPUNIT_ASSERT_EQUAL(2, (int)pSecAttr->maAttributes.size());
         CPPUNIT_ASSERT_MESSAGE("This section must be bold and italic.", hasBold(*pSecAttr) && hasItalic(*pSecAttr));
 
-        // Third section should be 6-9, and it should be only italic.
+        
         pSecAttr = &aAttrs[2];
         CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnParagraph);
         CPPUNIT_ASSERT_EQUAL(6, (int)pSecAttr->mnStart);
@@ -427,15 +427,15 @@ void Test::testSectionAttributes()
     }
 
     {
-        // Set text consisting of 5 paragraphs with the 2nd and 4th paragraphs
-        // being empty.
+        
+        
         aEngine.Clear();
         aEngine.SetText("one\n\ntwo\n\nthree");
         sal_Int32 nParaCount = aEngine.GetParagraphCount();
         sal_Int32 nCheck = 5;
         CPPUNIT_ASSERT_EQUAL(nCheck, nParaCount);
 
-        // Apply boldness to paragraphs 1, 3, 5 only. Leave 2 and 4 unformatted.
+        
         pSet.reset(new SfxItemSet(aEngine.GetEmptyItemSet()));
         pSet->Put(aBold);
         CPPUNIT_ASSERT_MESSAGE("There should be exactly one item.", pSet->Count() == 1);
@@ -450,7 +450,7 @@ void Test::testSectionAttributes()
         size_t nSecCountCheck = 5;
         CPPUNIT_ASSERT_EQUAL(nSecCountCheck, aAttrs.size());
 
-        // 1st, 3rd and 5th sections should correspond with 1st, 3rd and 5th paragraphs.
+        
         const editeng::Section* pSecAttr = &aAttrs[0];
         CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnParagraph);
         CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);
@@ -472,7 +472,7 @@ void Test::testSectionAttributes()
         CPPUNIT_ASSERT_EQUAL(1, (int)pSecAttr->maAttributes.size());
         CPPUNIT_ASSERT_MESSAGE("This section must be bold.", hasBold(*pSecAttr));
 
-        // The 2nd and 4th paragraphs should be empty.
+        
         pSecAttr = &aAttrs[1];
         CPPUNIT_ASSERT_EQUAL(1, (int)pSecAttr->mnParagraph);
         CPPUNIT_ASSERT_EQUAL(0, (int)pSecAttr->mnStart);

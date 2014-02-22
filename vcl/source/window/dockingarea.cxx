@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,7 +27,7 @@
 
 #include <map>
 
-// =======================================================================
+
 
 class DockingAreaWindow::ImplData
 {
@@ -47,7 +47,7 @@ DockingAreaWindow::ImplData::~ImplData()
 {
 }
 
-// =======================================================================
+
 
 static void ImplInitBackground( DockingAreaWindow* pThis )
 {
@@ -58,8 +58,8 @@ static void ImplInitBackground( DockingAreaWindow* pThis )
         aWallpaper.SetStyle( WALLPAPER_TOPRIGHT );
         aWallpaper.SetColor( Application::GetSettings().GetStyleSettings().GetWorkspaceColor() );
 
-        // we need to shift the bitmap vertically so that it spans over the
-        // menubar conveniently
+        
+        
         long nMenubarHeight = 0;
         SystemWindow *pSysWin = pThis->GetSystemWindow();
         if ( pSysWin && pSysWin->GetMenuBar() )
@@ -96,7 +96,7 @@ DockingAreaWindow::~DockingAreaWindow()
     delete mpImplData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -109,12 +109,12 @@ void DockingAreaWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplInvalidateMenubar( DockingAreaWindow* pThis )
 {
-    // due to a possible comon gradient covering menubar and top dockingarea
-    // the menubar must be repainted if the top dockingarea changes size or visibility
+    
+    
     if( ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG &&
         (pThis->GetAlign() == WINDOWALIGN_TOP)
         && pThis->IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL )
@@ -138,7 +138,7 @@ void DockingAreaWindow::StateChanged( StateChangedType nType )
         ImplInvalidateMenubar( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool DockingAreaWindow::IsHorizontal() const
 {
@@ -160,19 +160,19 @@ WindowAlign DockingAreaWindow::GetAlign() const
     return mpImplData->meAlign;
 }
 
-// -----------------------------------------------------------------------
+
 
 void DockingAreaWindow::Paint( const Rectangle& )
 {
-    EnableNativeWidget( true ); // only required because the toolkit curently switches this flag off
+    EnableNativeWidget( true ); 
     if( IsNativeControlSupported( CTRL_TOOLBAR, PART_ENTIRE_CONTROL ) )
     {
         ToolbarValue        aControlValue;
 
         if( GetAlign() == WINDOWALIGN_TOP && ImplGetSVData()->maNWFData.mbMenuBarDockingAreaCommonBG )
         {
-            // give NWF a hint that this dockingarea is adjacent to the menubar
-            // useful for special gradient effects that should cover both windows
+            
+            
             aControlValue.mbIsTopDockingArea = true;
         }
         ControlState        nState = CTRL_STATE_ENABLED;
@@ -181,7 +181,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
             Erase();
         else if ( !ImplGetSVData()->maNWFData.mbDockingAreaSeparateTB )
         {
-            // draw a single toolbar background covering the whole docking area
+            
             Point tmp;
             Rectangle aCtrlRegion( tmp, GetOutputSizePixel() );
 
@@ -190,7 +190,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
 
             if( !ImplGetSVData()->maNWFData.mbDockingAreaAvoidTBFrames )
             {
-                // each toolbar gets a thin border to better recognize its borders on the homogeneous docking area
+                
                 sal_uInt16 nChildren = GetChildCount();
                 for( sal_uInt16 n = 0; n < nChildren; n++ )
                 {
@@ -214,7 +214,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
         }
         else
         {
-            // create map to find toolbar lines
+            
             Size aOutSz = GetOutputSizePixel();
             std::map< int, int > ranges;
             sal_uInt16 nChildren = GetChildCount();
@@ -230,7 +230,7 @@ void DockingAreaWindow::Paint( const Rectangle& )
             }
 
 
-            // draw multiple toolbar backgrounds, i.e., one for each toolbar line
+            
             for( std::map<int,int>::const_iterator it = ranges.begin(); it != ranges.end(); ++it )
             {
                 Rectangle aTBRect;
@@ -263,6 +263,6 @@ void DockingAreaWindow::Resize()
         Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,18 +14,18 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/stritem.hxx>
 
 //
-//  class SfxStringItem
+
 //
 
 TYPEINIT1_AUTOFACTORY(SfxStringItem, CntUnencodedStringItem)
 
-// virtual
+
 SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
     CntUnencodedStringItem(which)
 {
@@ -33,20 +33,20 @@ SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
 }
 
 
-// virtual
+
 SfxPoolItem * SfxStringItem::Create(SvStream & rStream, sal_uInt16) const
 {
     return new SfxStringItem(Which(), rStream);
 }
 
-// virtual
+
 SvStream & SfxStringItem::Store(SvStream & rStream, sal_uInt16) const
 {
     writeByteString(rStream, GetValue());
     return rStream;
 }
 
-// virtual
+
 SfxPoolItem * SfxStringItem::Clone(SfxItemPool *) const
 {
     return new SfxStringItem(*this);

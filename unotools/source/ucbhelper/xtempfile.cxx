@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/factory.hxx>
@@ -49,7 +49,7 @@ OTempFileService::~OTempFileService ()
 }
 
 
-// XInterface
+
 
 css::uno::Any SAL_CALL OTempFileService::queryInterface( css::uno::Type const & aType )
 throw ( css::uno::RuntimeException )
@@ -70,7 +70,7 @@ throw ()
     OTempFileBase::release();
 }
 
-//  XTypeProvider
+
 
 css::uno::Sequence< css::uno::Type > SAL_CALL OTempFileService::getTypes(  )
 throw ( css::uno::RuntimeException )
@@ -96,7 +96,7 @@ throw ( css::uno::RuntimeException )
     return OTempFileBase::getImplementationId();
 }
 
-//  XTempFile
+
 
 sal_Bool SAL_CALL OTempFileService::getRemoveFile()
 throw ( css::uno::RuntimeException )
@@ -105,7 +105,7 @@ throw ( css::uno::RuntimeException )
 
     if ( !mpTempFile )
     {
-        // the stream is already disconnected
+        
         throw css::uno::RuntimeException();
         }
 
@@ -118,7 +118,7 @@ throw ( css::uno::RuntimeException )
 
     if ( !mpTempFile )
     {
-        // the stream is already disconnected
+        
         throw css::uno::RuntimeException();
     }
 
@@ -153,7 +153,7 @@ throw ( css::uno::RuntimeException )
 
 
 
-// XInputStream
+
 
 sal_Int32 SAL_CALL OTempFileService::readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException )
@@ -176,8 +176,8 @@ throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css
 
     if ( sal::static_int_cast<sal_uInt32>(nBytesToRead) > nRead )
     {
-        // usually that means that the stream was read till the end
-        // TODO/LATER: it is better to get rid of this optimization by avoiding using of multiple temporary files ( there should be only one temporary file? )
+        
+        
         mnCachedPos = mpStream->Tell();
         mbHasCachedPos = true;
 
@@ -253,7 +253,7 @@ throw ( css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeE
 
     if ( mbOutClosed )
     {
-        // stream will be deleted by TempFile implementation
+        
         mpStream = NULL;
 
         if ( mpTempFile )
@@ -264,7 +264,7 @@ throw ( css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeE
     }
 }
 
-// XOutputStream
+
 
 void SAL_CALL OTempFileService::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
 throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException )
@@ -299,7 +299,7 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
 
     mbOutClosed = true;
 
-    // TODO/LATER: it is better to get rid of this optimization by avoiding using of multiple temporary files ( there should be only one temporary file? )
+    
     if ( mpStream )
     {
         mnCachedPos = mpStream->Tell();
@@ -312,7 +312,7 @@ throw ( css::io::NotConnectedException, css::io::BufferSizeExceededException, cs
 
     if ( mbInClosed )
     {
-        // stream will be deleted by TempFile implementation
+        
         mpStream = NULL;
 
         if ( mpTempFile )
@@ -354,7 +354,7 @@ void OTempFileService::checkConnected ()
         throw css::io::NotConnectedException ( OUString(), const_cast < css::uno::XWeak * > ( static_cast < const css::uno::XWeak * > (this ) ) );
 }
 
-// XSeekable
+
 
 void SAL_CALL OTempFileService::seek( sal_Int64 nLocation )
 throw ( css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException )
@@ -396,7 +396,7 @@ throw ( css::io::IOException, css::uno::RuntimeException )
 }
 
 
-// XStream
+
 
 css::uno::Reference< css::io::XInputStream > SAL_CALL OTempFileService::getInputStream()
 throw ( css::uno::RuntimeException )
@@ -410,20 +410,20 @@ throw ( css::uno::RuntimeException )
     return css::uno::Reference< css::io::XOutputStream >( *this, css::uno::UNO_QUERY );
     }
 
-// XTruncate
+
 
 void SAL_CALL OTempFileService::truncate()
 throw ( css::io::IOException, css::uno::RuntimeException )
 {
     ::osl::MutexGuard aGuard( maMutex );
     checkConnected();
-    // SetStreamSize() call does not change the position
+    
     mpStream->Seek( 0 );
     mpStream->SetStreamSize( 0 );
     checkError();
 }
 
-// XServiceInfo
+
 
 OUString SAL_CALL OTempFileService::getImplementationName()
 throw ( css::uno::RuntimeException )

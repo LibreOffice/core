@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <view.hxx>
@@ -57,7 +57,7 @@ class SwSequenceOptionDialog : public SvxStandardDialog
     ListBox*        m_pLbCharStyle;
     CheckBox*       m_pApplyBorderAndShadowCB;
 
-    //#i61007# order of captions
+    
     ListBox*        m_pLbCaptionOrder;
 
     SwView&         rView;
@@ -72,7 +72,7 @@ public:
     bool IsApplyBorderAndShadow( void ) { return m_pApplyBorderAndShadowCB->IsChecked(); }
     void SetApplyBorderAndShadow( bool bSet )  { m_pApplyBorderAndShadowCB->Check(bSet); }
 
-    //#i61007# order of captions
+    
     bool IsOrderNumberingFirst() const {return m_pLbCaptionOrder->GetSelectEntryPos() == 1;}
     void SetOrderNumberingFirst(bool bSet) { m_pLbCaptionOrder->SelectEntryPos( bSet ? 1 : 0 ); }
 
@@ -80,7 +80,7 @@ public:
     OUString  GetCharacterStyle() const;
 };
 
-OUString SwCaptionDialog::our_aSepTextSave(": "); // Caption separator text
+OUString SwCaptionDialog::our_aSepTextSave(": "); 
 
 SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     SvxStandardDialog( pParent, "InsertCaptionDialog", "modules/swriter/ui/insertcaption.ui" ),
@@ -105,7 +105,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     get(m_pAutoCaptionButton, "auto");
     get(m_pOptionButton, "options");
 
-    //#i61007# order of captions
+    
     ApplyCaptionOrder();
     SwWrtShell &rSh = rView.GetWrtShell();
      uno::Reference< frame::XModel >  xModel = rView.GetDocShell()->GetBaseModel();
@@ -148,7 +148,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
         sString = ::GetOldGrfCat();
         bCopyAttributes = true;
         sObjectName = rSh.GetFlyName();
-        //if not OLE
+        
         if(!xNameAccess.is())
         {
          uno::Reference< text::XTextGraphicObjectsSupplier >  xGraphics(xModel, uno::UNO_QUERY);
@@ -191,7 +191,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
                     SwStyleNameMapper::GetUIName( nPoolId, OUString() ));
     }
 
-    // aFormatBox
+    
     sal_uInt16 nSelFmt = SVX_NUM_ARABIC;
     nCount = pMgr->GetFldTypeCount();
     SwFieldType* pFldType;
@@ -215,7 +215,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
             m_pFormatBox->SelectEntryPos( i );
     }
 
-    // aPosBox
+    
     switch (eType)
     {
         case nsSelectionType::SEL_GRF:
@@ -281,7 +281,7 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
     aDlg.Execute();
     bCopyAttributes = aDlg.IsApplyBorderAndShadow();
     sCharacterStyle = aDlg.GetCharacterStyle();
-    //#i61007# order of captions
+    
     if( bOrderNumberingFirst != aDlg.IsOrderNumberingFirst() )
     {
         bOrderNumberingFirst = aDlg.IsOrderNumberingFirst();
@@ -337,7 +337,7 @@ void SwCaptionDialog::DrawSample()
     OUString aStr;
     OUString sCaption = m_pTextEdit->GetText();
 
-    // number
+    
     OUString sFldTypeName = m_pCategoryBox->GetText();
     bool bNone = sFldTypeName == m_sNone;
     if( !bNone )
@@ -346,8 +346,8 @@ void SwCaptionDialog::DrawSample()
                                         m_pFormatBox->GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
-            // category
-            //#i61007# order of captions
+            
+            
             if( !bOrderNumberingFirst )
             {
                 aStr += sFldTypeName;
@@ -381,7 +381,7 @@ void SwCaptionDialog::DrawSample()
             case SVX_NUM_ROMAN_LOWER:           aStr += "i"; break;
             default:                    aStr += "1"; break;
             }
-            //#i61007# order of captions
+            
             if( bOrderNumberingFirst )
             {
                 aStr += m_pNumberingSeparatorED->GetText();
@@ -395,7 +395,7 @@ void SwCaptionDialog::DrawSample()
         }
     }
     aStr += sCaption;
-    // do preview!
+    
     m_pPreview->SetPreviewText( aStr );
 }
 
@@ -464,7 +464,7 @@ void SwSequenceOptionDialog::Apply()
     }
     else if( !aFldTypeName.isEmpty() && nLvl < MAXLEVEL )
     {
-        // then we have to insert that
+        
         SwSetExpFieldType aFldType( rSh.GetDoc(), aFldTypeName, nsSwGetSetExpType::GSE_SEQ );
         aFldType.SetDelimiter( OUString(cDelim) );
         aFldType.SetOutlineLvl( nLvl );
@@ -529,7 +529,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeCategoryBox(Window* pParent
 }
 
 /*-------------------------------------------------------------------------
-    //#i61007# order of captions
+    
   -----------------------------------------------------------------------*/
 void SwCaptionDialog::ApplyCaptionOrder()
 {

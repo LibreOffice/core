@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -395,7 +395,7 @@ void ImpGraphic::ImplClear()
     mnDocFilePos = 0UL;
     maDocFileURLStr = OUString();
 
-    // cleanup
+    
     ImplClearGraphics( false );
     meType = GRAPHIC_NONE;
     mnSizeBytes = 0;
@@ -465,7 +465,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
     {
         if(maSvgData.get() && maEx.IsEmpty())
         {
-            // use maEx as local buffer for rendered svg
+            
             const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
         }
 
@@ -481,20 +481,20 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
     {
         if(maEx.IsEmpty())
         {
-            // calculate size
+            
             VirtualDevice aVDev;
             Size aDrawSize(aVDev.LogicToPixel(maMetaFile.GetPrefSize(), maMetaFile.GetPrefMapMode()));
 
             if(rParameters.getSizePixel().Width() && rParameters.getSizePixel().Height())
             {
-                // apply given size if exists
+                
                 aDrawSize = rParameters.getSizePixel();
             }
 
             if(aDrawSize.Width() && aDrawSize.Height() && !rParameters.getUnlimitedSize()
                 && (aDrawSize.Width() > GRAPHIC_MTFTOBMP_MAXEXT || aDrawSize.Height() > GRAPHIC_MTFTOBMP_MAXEXT))
             {
-                // limit bitmap size to a maximum of GRAPHIC_MTFTOBMP_MAXEXT x GRAPHIC_MTFTOBMP_MAXEXT
+                
                 double fWH((double)aDrawSize.Width() / (double)aDrawSize.Height());
 
                 if(fWH <= 1.0)
@@ -509,19 +509,19 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
                 }
             }
 
-            // calculate pixel size. Normally, it's the same as aDrawSize, but may
-            // need to be extended when hairlines are on the right or bottom edge
+            
+            
             Size aPixelSize(aDrawSize);
 
             if(GRAPHIC_GDIMETAFILE == ImplGetType())
             {
-                // get hairline and full bound rect
+                
                 Rectangle aHairlineRect;
                 const Rectangle aRect(maMetaFile.GetBoundRect(aVDev, &aHairlineRect));
 
                 if(!aRect.IsEmpty() && !aHairlineRect.IsEmpty())
                 {
-                    // expand if needed to allow bottom and right hairlines to be added
+                    
                     if(aRect.Right() == aHairlineRect.Right())
                     {
                         aPixelSize.setWidth(aPixelSize.getWidth() + 1);
@@ -548,7 +548,7 @@ Bitmap ImpGraphic::ImplGetBitmap(const GraphicConversionParameters& rParameters)
 
                 ImplDraw( &aVDev, Point(), aDrawSize );
 
-                // use maEx as local buffer for rendered metafile
+                
                 const_cast< ImpGraphic* >(this)->maEx = aVDev.GetBitmap( Point(), aVDev.GetOutputSizePixel() );
             }
         }
@@ -573,7 +573,7 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
     {
         if(maSvgData.get() && maEx.IsEmpty())
         {
-            // use maEx as local buffer for rendered svg
+            
             const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
         }
 
@@ -592,7 +592,7 @@ BitmapEx ImpGraphic::ImplGetBitmapEx(const GraphicConversionParameters& rParamet
         {
             const ImpGraphic aMonoMask( maMetaFile.GetMonochromeMtf( COL_BLACK ) );
 
-            // use maEx as local buffer for rendered metafile
+            
             const_cast< ImpGraphic* >(this)->maEx = BitmapEx(ImplGetBitmap(rParameters), aMonoMask.ImplGetBitmap(rParameters));
         }
 
@@ -616,22 +616,22 @@ const GDIMetaFile& ImpGraphic::ImplGetGDIMetaFile() const
 {
     if (GRAPHIC_BITMAP == meType && !maMetaFile.GetActionSize())
     {
-        // #i119735#
-        // Use the local maMetaFile as container for a metafile-representation
-        // of the bitmap graphic. This will be done only once, thus be buffered.
-        // I checked all usages of maMetaFile, it is only used when type is not
-        // GRAPHIC_BITMAP. In operator= it will get copied, thus buffering will
-        // survive copying (change this if not wanted)
+        
+        
+        
+        
+        
+        
         ImpGraphic* pThat = const_cast< ImpGraphic* >(this);
 
         if(maSvgData.get() && !maEx)
         {
-            // use maEx as local buffer for rendered svg
+            
             pThat->maEx = maSvgData->getReplacement();
         }
 
-        // #123983# directly create a metafile with the same PrefSize and PrefMapMode
-        // the bitmap has, this will be an always correct metafile
+        
+        
         if(maEx.IsTransparent())
         {
             pThat->maMetaFile.AddAction(new MetaBmpExScaleAction(Point(), maEx.GetPrefSize(), maEx));
@@ -668,7 +668,7 @@ Size ImpGraphic::ImplGetPrefSize() const
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
-                    // svg not yet buffered in maEx, return size derived from range
+                    
                     const basegfx::B2DRange& rRange = maSvgData->getRange();
 
                     aSize = Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()));
@@ -707,12 +707,12 @@ void ImpGraphic::ImplSetPrefSize( const Size& rPrefSize )
 
         case( GRAPHIC_BITMAP ):
         {
-            // #108077# Push through pref size to animation object,
-            // will be lost on copy otherwise
+            
+            
             if(maSvgData.get())
             {
-                // ignore for Svg. If this is really used (except the grfcache)
-                // it can be extended by using maEx as buffer for maSvgData->getReplacement()
+                
+                
             }
             else
             {
@@ -753,7 +753,7 @@ MapMode ImpGraphic::ImplGetPrefMapMode() const
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
-                    // svg not yet buffered in maEx, return default PrefMapMode
+                    
                     aMapMode = MapMode(MAP_100TH_MM);
                 }
                 else
@@ -790,13 +790,13 @@ void ImpGraphic::ImplSetPrefMapMode( const MapMode& rPrefMapMode )
         {
             if(maSvgData.get())
             {
-                // ignore for Svg. If this is really used (except the grfcache)
-                // it can be extended by using maEx as buffer for maSvgData->getReplacement()
+                
+                
             }
             else
             {
-                // #108077# Push through pref mapmode to animation object,
-                // will be lost on copy otherwise
+                
+                
                 if( ImplIsAnimated() )
                 {
                     const_cast< BitmapEx& >(mpAnimation->GetBitmapEx()).SetPrefMapMode( rPrefMapMode );
@@ -853,7 +853,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev, const Point& rDestPt ) const
             {
                 if(maSvgData.get() && !maEx)
                 {
-                    // use maEx as local buffer for rendered svg
+                    
                     const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
                 }
 
@@ -889,7 +889,7 @@ void ImpGraphic::ImplDraw( OutputDevice* pOutDev,
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
-                    // use maEx as local buffer for rendered svg
+                    
                     const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
                 }
 
@@ -987,7 +987,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
     const sal_uLong     nStartPos = rIStm.Tell();
     sal_uInt32      nId;
     sal_uLong           nHeaderLen;
-    //#fdo39428 SvStream no longer supports operator>>(long&)
+    
     sal_Int32       nType;
     sal_Int32       nLen;
     const sal_uInt16    nOldFormat = rIStm.GetNumberFormatInt();
@@ -1007,10 +1007,10 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
     rIStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rIStm.ReadUInt32( nId );
 
-    // check version
+    
     if( GRAPHIC_FORMAT_50 == nId )
     {
-        // read new style header
+        
         VersionCompat* pCompat = new VersionCompat( rIStm, STREAM_READ );
 
         rIStm.ReadInt32( nType );
@@ -1022,8 +1022,8 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
     }
     else
     {
-        // read old style header
-        //#fdo39428 SvStream no longer supports operator>>(long&)
+        
+        
         sal_Int32 nWidth, nHeight;
         sal_Int32 nMapMode, nScaleNumX, nScaleDenomX;
         sal_Int32 nScaleNumY, nScaleDenomY, nOffsX, nOffsY;
@@ -1034,7 +1034,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
         rIStm.ReadInt32( nMapMode ).ReadInt32( nScaleNumX ).ReadInt32( nScaleDenomX ).ReadInt32( nScaleNumY );
         rIStm.ReadInt32( nScaleDenomY ).ReadInt32( nOffsX ).ReadInt32( nOffsY );
 
-        // swapped
+        
         if( nType > 100L )
         {
             nType = OSL_SWAPDWORD( nType );
@@ -1065,7 +1065,7 @@ bool ImpGraphic::ImplReadEmbedded( SvStream& rIStm, bool bSwap )
         {
             if(maSvgData.get() && maEx.IsEmpty())
             {
-                // use maEx as local buffer for rendered svg
+                
                 maEx = maSvgData->getReplacement();
             }
 
@@ -1230,19 +1230,19 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
 
         rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-        // write correct version ( old style/new style header )
+        
         if( rOStm.GetVersion() >= SOFFICE_FILEFORMAT_50 )
         {
-            // write ID for new format (5.0)
+            
             rOStm.WriteUInt32( GRAPHIC_FORMAT_50 );
 
-            // write new style header
+            
             VersionCompat* pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
 
-            //#fdo39428 SvStream no longer supports operator<<(long)
+            
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(meType) );
 
-            // data size is updated later
+            
             nDataFieldPos = rOStm.Tell();
             rOStm.WriteInt32( (sal_Int32) 0 );
 
@@ -1253,13 +1253,13 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
         }
         else
         {
-            // write old style (<=4.0) header
+            
             rOStm.WriteInt32( (sal_Int32) meType );
 
-            // data size is updated later
+            
             nDataFieldPos = rOStm.Tell();
             rOStm.WriteInt32( (sal_Int32) 0 );
-            //#fdo39428 SvStream no longer supports operator<<(long)
+            
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Width()) );
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aSize.Height()) );
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetMapUnit()) );
@@ -1271,7 +1271,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(aMapMode.GetOrigin().Y()) );
         }
 
-        // write data block
+        
         if( !rOStm.GetError() )
         {
             const sal_uLong nDataStart = rOStm.Tell();
@@ -1283,7 +1283,7 @@ bool ImpGraphic::ImplWriteEmbedded( SvStream& rOStm )
             {
                 const sal_uLong nStmPos2 = rOStm.Tell();
                 rOStm.Seek( nDataFieldPos );
-                //fdo39428 SvStream no longer supports operator<<(long)
+                
                 rOStm.WriteInt32( sal::static_int_cast<sal_Int32>(nStmPos2 - nDataStart) );
                 rOStm.Seek( nStmPos2 );
                 bRet = true;
@@ -1535,7 +1535,7 @@ sal_uLong ImpGraphic::ImplGetChecksum() const
             {
                 if(maSvgData.get() && maEx.IsEmpty())
                 {
-                    // use maEx as local buffer for rendered svg
+                    
                     const_cast< ImpGraphic* >(this)->maEx = maSvgData->getReplacement();
                 }
 
@@ -1597,13 +1597,13 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
         if ( !rImpGraphic.mbSwapUnderway )
             rImpGraphic.ImplClear();
 
-        // read Id
+        
         rIStm.ReadUInt32( nTmp );
 
-        // if there is no more data, avoid further expensive
-        // reading which will create VDevs and other stuff, just to
-        // read nothing. CAUTION: Eof is only true AFTER reading another
-        // byte, a speciality of SvMemoryStream (!)
+        
+        
+        
+        
         if(!rIStm.GetError() && !rIStm.IsEof())
         {
             if( NATIVE_FORMAT_50 == nTmp )
@@ -1612,22 +1612,22 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                 GfxLink         aLink;
                 VersionCompat*  pCompat;
 
-                // read compat info
+                
                 pCompat = new VersionCompat( rIStm, STREAM_READ );
                 delete pCompat;
 
                 ReadGfxLink( rIStm, aLink );
 
-                // set dummy link to avoid creation of additional link after filtering;
-                // we set a default link to avoid unnecessary swapping of native data
+                
+                
                 aGraphic.SetLink( GfxLink() );
 
                 if( !rIStm.GetError() && aLink.LoadNative( aGraphic ) )
                 {
-                    // set link only, if no other link was set
+                    
                     const bool bSetLink = ( rImpGraphic.mpGfxLink == NULL );
 
-                    // assign graphic
+                    
                     rImpGraphic = *aGraphic.ImplGetImpGraphic();
 
                     if( aLink.IsPrefMapModeValid() )
@@ -1670,8 +1670,8 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                         rImpGraphic.mpAnimation = new Animation;
                         ReadAnimation( rIStm, *rImpGraphic.mpAnimation );
 
-                        // #108077# manually set loaded BmpEx to Animation
-                        // (which skips loading its BmpEx if already done)
+                        
+                        
                         rImpGraphic.mpAnimation->SetBitmapEx(aBmpEx);
                     }
                     else
@@ -1691,8 +1691,8 @@ SvStream& ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
                     }
                     else
                     {
-                        // try to stream in Svg defining data (length, byte array and evtl. path)
-                        // See below (operator<<) for more information
+                        
+                        
                         const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
                         sal_uInt32 nMagic;
                         rIStm.Seek(nStmPos1);
@@ -1749,10 +1749,10 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
             {
                 VersionCompat* pCompat;
 
-                // native format
+                
                 rOStm.WriteUInt32( NATIVE_FORMAT_50 );
 
-                // write compat info
+                
                 pCompat = new VersionCompat( rOStm, STREAM_WRITE, 1 );
                 delete pCompat;
 
@@ -1762,7 +1762,7 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
             }
             else
             {
-                // own format
+                
                 const sal_uInt16 nOldFormat = rOStm.GetNumberFormatInt();
                 rOStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
@@ -1776,10 +1776,10 @@ SvStream& WriteImpGraphic( SvStream& rOStm, const ImpGraphic& rImpGraphic )
                     {
                         if(rImpGraphic.getSvgData().get())
                         {
-                            // stream out Svg defining data (length, byte array and evtl. path)
-                            // this is used e.g. in swapping out graphic data and in transporting it over UNO API
-                            // as sequence of bytes, but AFAIK not written anywhere to any kind of file, so it should be
-                            // no problem to extend it; only used at runtime
+                            
+                            
+                            
+                            
                             const sal_uInt32 nSvgMagic((sal_uInt32('s') << 24) | (sal_uInt32('v') << 16) | (sal_uInt32('g') << 8) | sal_uInt32('0'));
 
                             rOStm.WriteUInt32( nSvgMagic );

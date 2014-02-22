@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbabutton.hxx"
@@ -29,7 +29,7 @@ VbaButton::VbaButton( const uno::Reference< XHelperInterface >& xParent, const u
 {
 }
 
-// Attributes
+
 OUString SAL_CALL
 VbaButton::getCaption() throw (css::uno::RuntimeException)
 {
@@ -71,18 +71,18 @@ sal_Bool SAL_CALL VbaButton::getCancel() throw (uno::RuntimeException)
 
 void SAL_CALL VbaButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 sal_Bool SAL_CALL VbaButton::getDefault() throw (uno::RuntimeException)
 {
-    // #STUB
+    
     return sal_False;
 }
 
 void SAL_CALL VbaButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 sal_Int32 SAL_CALL VbaButton::getBackColor() throw (uno::RuntimeException)
@@ -102,7 +102,7 @@ sal_Int32 SAL_CALL VbaButton::getForeColor() throw (uno::RuntimeException)
 
 void SAL_CALL VbaButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 uno::Reference< msforms::XNewFont > SAL_CALL VbaButton::getFont() throw (uno::RuntimeException)

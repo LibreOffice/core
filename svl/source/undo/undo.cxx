@@ -32,7 +32,7 @@
 
 using ::com::sun::star::uno::Exception;
 
-// STATIC DATA -----------------------------------------------------------
+
 
 DBG_NAME(SfxUndoAction)
 
@@ -109,7 +109,7 @@ OUString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 
 void SfxUndoAction::Undo()
 {
-    // die sind nur konzeptuell pure virtual
+    
     OSL_FAIL( "pure virtual function called: SfxUndoAction::Undo()" );
 }
 
@@ -123,7 +123,7 @@ void SfxUndoAction::UndoWithContext( SfxUndoContext& i_context )
 
 void SfxUndoAction::Redo()
 {
-    // die sind nur konzeptuell pure virtual
+    
     OSL_FAIL( "pure virtual function called: SfxUndoAction::Redo()" );
 }
 
@@ -137,7 +137,7 @@ void SfxUndoAction::RedoWithContext( SfxUndoContext& i_context )
 
 void SfxUndoAction::Repeat(SfxRepeatTarget&)
 {
-    // die sind nur konzeptuell pure virtual
+    
     OSL_FAIL( "pure virtual function called: SfxUndoAction::Repeat()" );
 }
 
@@ -290,7 +290,7 @@ namespace svl { namespace undo { namespace impl
         */
         void    markForDeletion( SfxUndoAction* i_action )
         {
-            // remember
+            
             if ( i_action )
                 m_aUndoActionsCleanup.push_back( i_action );
         }
@@ -319,13 +319,13 @@ namespace svl { namespace undo { namespace impl
 
     UndoManagerGuard::~UndoManagerGuard()
     {
-        // copy members
+        
         UndoListeners aListenersCopy( m_rManagerData.aListeners );
 
-        // release mutex
+        
         m_aGuard.clear();
 
-        // delete all actions
+        
         while ( !m_aUndoActionsCleanup.empty() )
         {
             SfxUndoAction* pAction = m_aUndoActionsCleanup.front();
@@ -340,7 +340,7 @@ namespace svl { namespace undo { namespace impl
             }
         }
 
-        // handle scheduled notification
+        
         for (   ::std::list< NotifyUndoListener >::const_iterator notifier = m_notifiers.begin();
                 notifier != m_notifiers.end();
                 ++notifier
@@ -407,10 +407,10 @@ void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    // Remove entries from the pActUndoArray when we have to reduce
-    // the number of entries due to a lower nMaxUndoActionCount.
-    // Both redo and undo action entries will be removed until we reached the
-    // new nMaxUndoActionCount.
+    
+    
+    
+    
 
     long nNumToDelete = m_pData->pActUndoArray->aUndoActions.size() - nMaxUndoActionCount;
     while ( nNumToDelete > 0 )
@@ -434,7 +434,7 @@ void SfxUndoManager::SetMaxUndoActionCount( size_t nMaxUndoActionCount )
         }
 
         if ( nPos == m_pData->pActUndoArray->aUndoActions.size() )
-            break; // Cannot delete more entries
+            break; 
     }
 
     m_pData->pActUndoArray->nMaxUndoActions = nMaxUndoActionCount;
@@ -450,7 +450,7 @@ size_t SfxUndoManager::GetMaxUndoActionCount() const
 
 void SfxUndoManager::ImplClearCurrentLevel_NoNotify( UndoManagerGuard& i_guard )
 {
-    // clear array
+    
     while ( !m_pData->pActUndoArray->aUndoActions.empty() )
     {
         size_t deletePos = m_pData->pActUndoArray->aUndoActions.size() - 1;
@@ -473,7 +473,7 @@ void SfxUndoManager::Clear()
     OSL_ENSURE( !ImplIsInListAction_Lock(), "SfxUndoManager::Clear: suspicious call - do you really wish to clear the current level?" );
     ImplClearCurrentLevel_NoNotify( aGuard );
 
-    // notify listeners
+    
     aGuard.scheduleNotification( &SfxUndoListener::cleared );
 }
 
@@ -512,22 +512,22 @@ void SfxUndoManager::Reset()
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    // clear all locks
+    
     while ( !ImplIsUndoEnabled_Lock() )
         ImplEnableUndo_Lock( true );
 
-    // cancel all list actions
+    
     while ( IsInListAction() )
         ImplLeaveListAction( false, aGuard );
 
-    // clear both stacks
+    
     ImplClearCurrentLevel_NoNotify( aGuard );
 
-    // cancel the notifications scheduled by ImplLeaveListAction,
-    // as we want to do an own, dedicated notification
+    
+    
     aGuard.cancelNotifications();
 
-    // schedule notification
+    
     aGuard.scheduleNotification( &SfxUndoListener::resetAll );
 }
 
@@ -541,7 +541,7 @@ void SfxUndoManager::ImplClearUndo( UndoManagerGuard& i_guard )
         i_guard.markForDeletion( pUndoAction );
         --m_pData->pActUndoArray->nCurUndoAction;
     }
-    // TODO: notifications? We don't have clearedUndo, only cleared and clearedRedo at the SfxUndoListener
+    
 }
 
 
@@ -549,7 +549,7 @@ void SfxUndoManager::ImplClearRedo( UndoManagerGuard& i_guard, bool const i_curr
 {
     SfxUndoArray* pUndoArray = ( i_currentLevel == IUndoManager::CurrentLevel ) ? m_pData->pActUndoArray : m_pData->pUndoArray;
 
-    // clearance
+    
     while ( pUndoArray->aUndoActions.size() > pUndoArray->nCurUndoAction )
     {
         size_t deletePos = pUndoArray->aUndoActions.size() - 1;
@@ -558,7 +558,7 @@ void SfxUndoManager::ImplClearRedo( UndoManagerGuard& i_guard, bool const i_curr
         i_guard.markForDeletion( pAction );
     }
 
-    // notification - only if the top level's stack was cleared
+    
     if ( i_currentLevel == IUndoManager::TopLevel )
         i_guard.scheduleNotification( &SfxUndoListener::clearedRedo );
 }
@@ -572,7 +572,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
         return false;
     }
 
-    // merge, if required
+    
     SfxUndoAction* pMergeWithAction = m_pData->pActUndoArray->nCurUndoAction ?
         m_pData->pActUndoArray->aUndoActions[m_pData->pActUndoArray->nCurUndoAction-1].pAction : NULL;
     if ( bTryMerge && pMergeWithAction )
@@ -585,11 +585,11 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
         }
     }
 
-    // clear redo stack, if requested
+    
     if ( bClearRedo && ( ImplGetRedoActionCount_Lock( CurrentLevel ) > 0 ) )
         ImplClearRedo( i_guard, IUndoManager::CurrentLevel );
 
-    // respect max number
+    
     if( m_pData->pActUndoArray == m_pData->pUndoArray )
     {
         while(m_pData->pActUndoArray->aUndoActions.size() >= m_pData->pActUndoArray->nMaxUndoActions)
@@ -600,12 +600,12 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
             {
                 --m_pData->pActUndoArray->nCurUndoAction;
             }
-            // fdo#66071 invalidate the current empty mark when removing
+            
             --m_pData->mnEmptyMark;
         }
     }
 
-    // append new action
+    
     m_pData->pActUndoArray->aUndoActions.Insert( pAction, m_pData->pActUndoArray->nCurUndoAction++ );
     return true;
 }
@@ -615,10 +615,10 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, bool bTryMerge )
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    // add
+    
     if ( ImplAddUndoAction_NoNotify( pAction, bTryMerge, true, aGuard ) )
     {
-        // notify listeners
+        
         aGuard.scheduleNotification( &SfxUndoListener::undoActionAdded, pAction->GetComment() );
     }
 }
@@ -676,7 +676,7 @@ void SfxUndoManager::RemoveLastUndoAction()
 
     m_pData->pActUndoArray->nCurUndoAction--;
 
-    // delete redo-actions and top action
+    
     for ( size_t nPos = m_pData->pActUndoArray->aUndoActions.size(); nPos > m_pData->pActUndoArray->nCurUndoAction; --nPos )
     {
         aGuard.markForDeletion( m_pData->pActUndoArray->aUndoActions[nPos-1].pAction );
@@ -731,8 +731,8 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
     const OUString sActionComment = pAction->GetComment();
     try
     {
-        // clear the guard/mutex before calling into the SfxUndoAction - this can be an extension-implemented UNO component
-        // nowadays ...
+        
+        
         aGuard.clear();
         if ( i_contextOrNull != NULL )
             pAction->UndoWithContext( *i_contextOrNull );
@@ -744,15 +744,15 @@ bool SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
     {
         aGuard.reset();
 
-        // in theory, somebody might have tampered with all of *m_pData while the mutex was unlocked. So, see if
-        // we still find pAction in our current Undo array
+        
+        
         size_t nCurAction = 0;
         while ( nCurAction < m_pData->pActUndoArray->aUndoActions.size() )
         {
             if ( m_pData->pActUndoArray->aUndoActions[ nCurAction++ ].pAction == pAction )
             {
-                // the Undo action is still there ...
-                // assume the error is a permanent failure, and clear the Undo stack
+                
+                
                 ImplClearUndo( aGuard );
                 throw;
             }
@@ -843,8 +843,8 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
     const OUString sActionComment = pAction->GetComment();
     try
     {
-        // clear the guard/mutex before calling into the SfxUndoAction - this can be a extension-implemented UNO component
-        // nowadays ...
+        
+        
         aGuard.clear();
         if ( i_contextOrNull != NULL )
             pAction->RedoWithContext( *i_contextOrNull );
@@ -856,15 +856,15 @@ bool SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
     {
         aGuard.reset();
 
-        // in theory, somebody might have tampered with all of *m_pData while the mutex was unlocked. So, see if
-        // we still find pAction in our current Undo array
+        
+        
         size_t nCurAction = 0;
         while ( nCurAction < m_pData->pActUndoArray->aUndoActions.size() )
         {
             if ( m_pData->pActUndoArray->aUndoActions[ nCurAction ].pAction == pAction )
             {
-                // the Undo action is still there ...
-                // assume the error is a permanent failure, and clear the Undo stack
+                
+                
                 ImplClearRedo( aGuard, IUndoManager::CurrentLevel );
                 throw;
             }
@@ -967,10 +967,10 @@ void SfxUndoManager::EnterListAction( const OUString& rComment,
     m_pData->pFatherUndoArray = m_pData->pActUndoArray;
     SfxListUndoAction* pAction = new SfxListUndoAction( rComment, rRepeatComment, nId, m_pData->pActUndoArray );
     OSL_VERIFY( ImplAddUndoAction_NoNotify( pAction, false, false, aGuard ) );
-        // expected to succeed: all conditions under which it could fail should have been checked already
+        
     m_pData->pActUndoArray = pAction;
 
-    // notification
+    
     aGuard.scheduleNotification( &SfxUndoListener::listActionEntered, rComment );
 }
 
@@ -1047,12 +1047,12 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
 
     DBG_ASSERT( m_pData->pActUndoArray->pFatherUndoArray, "SfxUndoManager::ImplLeaveListAction, no father undo array!?" );
 
-    // the array/level which we're about to leave
+    
     SfxUndoArray* pArrayToLeave = m_pData->pActUndoArray;
-    // one step up
+    
     m_pData->pActUndoArray = m_pData->pActUndoArray->pFatherUndoArray;
 
-    // If no undo actions were added to the list, delete the list action
+    
     const size_t nListActionElements = pArrayToLeave->nCurUndoAction;
     if ( nListActionElements == 0 )
     {
@@ -1064,8 +1064,8 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
         return 0;
     }
 
-    // now that it is finally clear the list action is non-trivial, and does participate in the Undo stack, clear
-    // the redo stack
+    
+    
     ImplClearRedo( i_guard, IUndoManager::CurrentLevel );
 
     SfxUndoAction* pCurrentAction= m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction-1 ].pAction;
@@ -1074,7 +1074,7 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
 
     if ( i_merge )
     {
-        // merge the list action with its predecessor on the same level
+        
         OSL_ENSURE( m_pData->pActUndoArray->nCurUndoAction > 1,
             "SfxUndoManager::ImplLeaveListAction: cannot merge the list action if there's no other action on the same level - check this beforehand!" );
         if ( m_pData->pActUndoArray->nCurUndoAction > 1 )
@@ -1089,7 +1089,7 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
         }
     }
 
-    // if the undo array has no comment, try to get it from its children
+    
     if ( pListAction->GetComment().isEmpty() )
     {
         for( size_t n = 0; n < pListAction->aUndoActions.size(); n++ )
@@ -1102,10 +1102,10 @@ size_t SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
         }
     }
 
-    // notify listeners
+    
     i_guard.scheduleNotification( &SfxUndoListener::listActionLeft, pListAction->GetComment() );
 
-    // outta here
+    
     return nListActionElements;
 }
 
@@ -1136,11 +1136,11 @@ void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
 
     if ((m_pData->mnEmptyMark < i_mark) || (MARK_INVALID == i_mark))
     {
-        return; // nothing to remove
+        return; 
     }
     else if (i_mark == m_pData->mnEmptyMark)
     {
-        --m_pData->mnEmptyMark; // never returned from MarkTop => invalid
+        --m_pData->mnEmptyMark; 
         return;
     }
 
@@ -1160,9 +1160,9 @@ void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
         }
     }
     OSL_ENSURE( false, "SfxUndoManager::RemoveMark: mark not found!" );
-        // TODO: this might be too offensive. There are situations where we implicitly remove marks
-        // without our clients, in particular the client which created the mark, having a chance to know
-        // about this.
+        
+        
+        
 }
 
 bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
@@ -1320,9 +1320,9 @@ SfxLinkUndoAction::SfxLinkUndoAction(::svl::IUndoManager *pManager)
     pUndoManager = pManager;
     SfxUndoManager* pUndoManagerImplementation = dynamic_cast< SfxUndoManager* >( pManager );
     ENSURE_OR_THROW( pUndoManagerImplementation != NULL, "unsupported undo manager implementation!" );
-        // yes, this cast is dirty. But reaching into the SfxUndoManager's implementation,
-        // directly accessing its internal stack, and tampering with an action on that stack
-        // is dirty, too.
+        
+        
+        
     if ( pManager->GetMaxUndoActionCount() )
     {
         size_t nPos = pManager->GetUndoActionCount()-1;

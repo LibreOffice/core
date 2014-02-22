@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -111,11 +111,11 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
     if ( error )
     {
         char *errstr = PQerrorMessage(settings->pConnection);
-        // As of PostgreSQL 9.1, the only possible errors "involve invalid multibyte encoding"
-        // According to https://www2.opengroup.org/ogsys/jsp/publications/PublicationDetails.jsp?publicationid=11216
-        // (X/Open SQL CLI, March 1995, ISBN: 1-85912-081-4, X/Open Document Number: C451)
-        // 22018 is for "Invalid character value" and seems to be the best match.
-        // We have no good XInterface Reference to pass here, so just give NULL
+        
+        
+        
+        
+        
         throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
                            NULL,
                            OUString("22018"),
@@ -123,8 +123,8 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
                            Any());
     }
     strbuf.setLength( len );
-    // Previously here RTL_TEXTENCODING_ASCII_US; as we set the PostgreSQL client_encoding to UTF8,
-    // we get UTF8 here, too. I'm not sure why it worked well before...
+    
+    
     buf.append( OStringToOUString( strbuf.makeStringAndClear(), RTL_TEXTENCODING_UTF8 ) );
 }
 
@@ -161,7 +161,7 @@ static inline void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString 
     if ( cstr == NULL )
     {
         char *errstr = PQerrorMessage(settings->pConnection);
-        // Implementation-defined SQLACCESS error
+        
         throw SQLException(OUString(errstr, strlen(errstr), settings->encoding),
                            NULL,
                            OUString("22018"),
@@ -240,7 +240,7 @@ void disposeNoThrow( const com::sun::star::uno::Reference< com::sun::star::uno::
     }
     catch( SQLException & )
     {
-        // ignore this
+        
     }
 
 }
@@ -303,7 +303,7 @@ TransactionGuard::~TransactionGuard()
     }
     catch( com::sun::star::uno::Exception & )
     {
-        // ignore, we are within a dtor
+        
     }
 
     disposeNoThrow( m_stmt );
@@ -343,14 +343,14 @@ OUString extractTableFromInsert( const OUString & sql )
                         while (i < sql.getLength() && isWhitespace(sql[i])) { i++; }
                         if( '"' == sql[i] )
                         {
-                            // the second part of the table name does not use quotes
-                            // parse on
+                            
+                            
                             quote = false;
                         }
                     }
                     else
                     {
-                        // end quoted name, ok
+                        
                         break;
                     }
                 }
@@ -358,14 +358,14 @@ OUString extractTableFromInsert( const OUString & sql )
                 {
                     if( isWhitespace( sql[i] ) )
                     {
-                        // found the end of an unquoted name
+                        
                         break;
                     }
                 }
             }
             ret = sql.copy(start, i - start ).trim();
-//             printf( "pq_statement: parsed table name %s from insert\n" ,
-//                     OUStringToOString( ret, RTL_TEXTENCODING_ASCII_US).getStr() );
+
+
         }
     }
     return ret;
@@ -427,14 +427,14 @@ void splitSQL( const OString & sql, OStringVector &vec )
         {
             if( '\'' == c && '\'' == sql[i+1] )
             {
-                // two subsequent single quotes within a quoted string
-                // mean a single quote within the string
+                
+                
                 i ++;
             }
             else if( '\'' == c )
             {
                 vec.push_back( OString( &sql.getStr()[start], i - start +1 ) );
-                start = i + 1; // leave single quotes !
+                start = i + 1; 
                 singleQuote = false;
             }
         }
@@ -457,9 +457,9 @@ void splitSQL( const OString & sql, OStringVector &vec )
     if( start < i )
         vec.push_back( OString( &sql.getStr()[start] , i - start ) );
 
-//     for( i = 0 ; i < vec.size() ; i ++ )
-//         printf( "%s!" , vec[i].getStr() );
-//     printf( "\n" );
+
+
+
 
 }
 
@@ -488,7 +488,7 @@ void tokenizeSQL( const OString & sql, OStringVector &vec  )
             if( '\'' == c )
             {
                 vec.push_back( OString( &sql.getStr()[start], i - start +1 ) );
-                start = i + 1; // leave single quotes !
+                start = i + 1; 
                 singleQuote = false;
             }
         }
@@ -497,17 +497,17 @@ void tokenizeSQL( const OString & sql, OStringVector &vec  )
             if( '"' == c )
             {
                 doubleQuote = true;
-                start = i +1; // skip double quotes !
+                start = i +1; 
             }
             else if( '\'' == c )
             {
                 singleQuote = true;
-                start = i; // leave single quotes
+                start = i; 
             }
             else if( isWhitespace( c ) )
             {
                 if( i == start )
-                    start ++;   // skip additional whitespace
+                    start ++;   
                 else
                 {
                     vec.push_back( OString( &sql.getStr()[start], i - start  ) );
@@ -526,7 +526,7 @@ void tokenizeSQL( const OString & sql, OStringVector &vec  )
                 if( ( i > start && sql[start] >= '0' && sql[start] <= '9' ) ||
                     ( i == start && i > 1 && isWhitespace( sql[i-1] ) ) )
                 {
-                    // ignore, is a literal
+                    
                 }
                 else
                 {
@@ -541,9 +541,9 @@ void tokenizeSQL( const OString & sql, OStringVector &vec  )
     if( start < i )
         vec.push_back( OString( &sql.getStr()[start] , i - start ) );
 
-//     for( i = 0 ; i < vec.size() ; i ++ )
-//         printf( "%s!" , vec[i].getStr() );
-//     printf( "\n" );
+
+
+
 }
 
 
@@ -631,7 +631,7 @@ com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( S
             else if( '"' == c )
             {
                 doubleQuote = false;
-                doubleQuotedValue = true; // signal, that there was an empty element
+                doubleQuotedValue = true; 
             }
             else
             {
@@ -670,22 +670,22 @@ com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( S
         }
         else if( '"' == c )
         {
-//                 if( current.getLength() != 0 )
-//                 {
-//                     OUStringBuffer buf;
-//                     buf.appendAscii( "error during array parsing, didn't expect a \" at position " );
-//                     buf.append( i );
-//                     buf.append( " ('" );
-//                     buf.append( str );
-//                     buf.append( "')" );
-//                     throw SDBCException(
-//                         buf.makeStringAndClear(),
-//                         Reference< XInterface > (), 1, Any() );
-//                 }
-//                 else
-//                 {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             doubleQuote = true;
-//                 }
+
         }
         else if( ',' == c && brackets == 1)
         {
@@ -694,7 +694,7 @@ com::sun::star::uno::Sequence< Any > parseArray( const OUString & str ) throw( S
         }
         else if( isWhitespace( c ) )
         {
-            // ignore whitespace without quotes
+            
         }
         else
         {
@@ -709,15 +709,15 @@ com::sun::star::uno::Sequence< sal_Int32 > parseIntArray( const OUString & str )
 {
     sal_Int32 start = 0;
     IntVector vec;
-//     printf( ">%s<\n" , OUStringToOString( str, RTL_TEXTENCODING_UTF8 ).getStr() );
+
     for( sal_Int32 i = str.indexOf( ' ' ) ; i != -1 ; i = str.indexOf( ' ', start) )
     {
         vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
-//         printf( "found %d\n" , rtl_ustr_toInt32( &str.pData->buffer[start], 10 ));
+
         start = i + 1;
     }
     vec.push_back( (sal_Int32)rtl_ustr_toInt32( &str.pData->buffer[start], 10 ) );
-//     printf( "found %d\n" , rtl_ustr_toInt32( &str.pData->buffer[start], 10 ));
+
     return sequence_of_vector(vec);
 }
 
@@ -760,7 +760,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
             if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
                     vec[token].getStr(), vec[token].getLength(), "from" , 4 , 4 ) )
             {
-                // found from
+                
                 break;
             }
         }
@@ -776,7 +776,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
                 vec[token].getStr(), vec[token].getLength(),
                 RTL_CONSTASCII_STRINGPARAM("(") ) )
         {
-            // it is a table or a function name
+            
             OStringBuffer buf(128);
             if( '"' == vec[token][0] )
                 buf.append( &(vec[token].getStr()[1]) , vec[token].getLength() -2 );
@@ -804,13 +804,13 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
             }
 
             ret = buf.makeStringAndClear();
-            // now got my table candidate
+            
 
             if( token < vec.size() && rtl_str_compare_WithLength(
                     vec[token].getStr(), vec[token].getLength(),
                     RTL_CONSTASCII_STRINGPARAM( "(" ) ) == 0 )
             {
-                // whoops, it is a function
+                
                 ret = OString();
             }
             else
@@ -820,7 +820,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
                     if( 0 == rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
                             vec[token].pData->buffer, vec[token].pData->length, "as" , 2, 2 ) )
                     {
-                        token += 2; // skip alias
+                        token += 2; 
                     }
                 }
 
@@ -830,7 +830,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
                             vec[token].getStr(), vec[token].getLength(),
                             RTL_CONSTASCII_STRINGPARAM( "," ) ) == 0 )
                     {
-                        // whoops, multiple tables are used
+                        
                         ret = OString();
                     }
                     else
@@ -844,7 +844,7 @@ OString extractSingleTableFromSelect( const OStringVector &vec )
                                  forbiddenKeywords[i], strlen(forbiddenKeywords[i]),
                                  strlen(forbiddenKeywords[i]) ) )
                             {
-                                // whoops, it is a join
+                                
                                 ret = OString();
                             }
                         }
@@ -897,7 +897,7 @@ com::sun::star::uno::Sequence< sal_Int32 > string2intarray( const OUString & str
             if ( start == strlen)
                 return ret;
         } while( true );
-        // vec is guaranteed non-empty
+        
         ret = com::sun::star::uno::Sequence< sal_Int32 > ( &vec[0] , vec.size() );
     }
     return ret;
@@ -975,7 +975,7 @@ static void keyType2String( OUStringBuffer & buf, sal_Int32 keyType )
     {
         buf.append( "SET NULL " );
     }
-    else //if( com::sun::star::sdbc::KeyRule::NO_ACTION == keyType )
+    else 
     {
         buf.append( "NO ACTION " );
     }
@@ -1076,15 +1076,15 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
     tokenizeSQL( lastQuery, vec  );
 
     int nSize = vec.size();
-//     printf( "1 %d\n", nSize );
+
     if( nSize > 6  &&
         vec[0].equalsIgnoreAsciiCase( "insert" ) &&
         vec[1].equalsIgnoreAsciiCase( "into" ) )
     {
         int n = 2;
 
-//         printf( "1a\n" );
-        // extract table name
+
+        
         OString tableName;
         if( vec[n+1].equalsIgnoreAsciiCase( "." ) )
         {
@@ -1102,8 +1102,8 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
         n ++;
         if( vec[n].equalsIgnoreAsciiCase( "(" ) )
         {
-//             printf( "2\n" );
-            // extract names
+
+            
             n++;
             while( nSize > n && ! vec[n].equalsIgnoreAsciiCase( ")" ) )
             {
@@ -1116,12 +1116,12 @@ void extractNameValuePairsFromInsert( String2StringMap & map, const OString & la
             }
             n++;
 
-            // now read the values
+            
             if( nSize > n +1 && vec[n].equalsIgnoreAsciiCase("VALUES") &&
                 vec[n+1].equalsIgnoreAsciiCase( "(" ) )
             {
                 n +=2;
-//                 printf( "3\n" );
+
                 for ( OStringVector::size_type i = 0 ; i < names.size() && nSize > n ; i ++ )
                 {
                     map[names[i]] = vec[n];
@@ -1151,7 +1151,7 @@ OUString querySingleValue(
 }
 
 
-// copied from connectivity/source/dbtools, can't use the function directly
+
 bool implSetObject(	const Reference< XParameters >& _rxParameters,
                         const sal_Int32 _nColumnIndex, const Any& _rValue)
 {
@@ -1232,7 +1232,7 @@ bool implSetObject(	const Reference< XParameters >& _rxParameters,
                 break;
             }
         }
-            // run through
+            
         default:
             bSuccessfullyReRouted = sal_False;
 

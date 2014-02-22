@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,9 +39,9 @@ namespace {
 
 inline bool isAlphanum(sal_Unicode c)
 {
-    return (c >= 0x30 && c <= 0x39) // '0'--'9'
-        || (c >= 0x41 && c <= 0x5A) // 'A'--'Z'
-        || (c >= 0x61 && c <= 0x7A); // 'a'--'z'
+    return (c >= 0x30 && c <= 0x39) 
+        || (c >= 0x41 && c <= 0x5A) 
+        || (c >= 0x61 && c <= 0x7A); 
 }
 
 }
@@ -84,7 +84,7 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
             break;
 
         case STATE_NAME:
-            if (bEnd || c == 0x2C) // ','
+            if (bEnd || c == 0x2C) 
             {
                 m_aName
                     = rDescriptor.copy(nStart, i - nStart).toAsciiLowerCase();
@@ -104,7 +104,7 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
             break;
 
         case STATE_KEY:
-            if (c == 0x3D) // '='
+            if (c == 0x3D) 
             {
                 aKey = rDescriptor.copy(nStart, i - nStart).toAsciiLowerCase();
                 nStart = i + 1;
@@ -116,7 +116,7 @@ inline UnoUrlDescriptor::Impl::Impl(rtl::OUString const & rDescriptor)
             break;
 
         case STATE_VALUE:
-            if (bEnd || c == 0x2C) // ','
+            if (bEnd || c == 0x2C) 
             {
                 if (!m_aParameters.insert(
                         Parameters::value_type(
@@ -222,7 +222,7 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
         xConnection(new UnoUrlDescriptor::Impl(rUrl.copy(i, j - i)));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     i = j + 1;
-    j = rUrl.indexOf(0x3B, i); // ';'
+    j = rUrl.indexOf(0x3B, i); 
     if (j < 0)
         throw rtl::MalformedUriException(
             rtl::OUString("UNO URL has too few semicolons"));
@@ -237,13 +237,13 @@ inline UnoUrl::Impl * UnoUrl::Impl::create(rtl::OUString const & rUrl)
     for (j = i; j < rUrl.getLength(); ++j)
     {
         sal_Unicode c = rUrl[j];
-        if (!isAlphanum(c) && c != 0x21 && c != 0x24 // '!', '$'
-            && c != 0x26 && c != 0x27 && c != 0x28 // '&', ''', '('
-            && c != 0x29 && c != 0x2A && c != 0x2B // ')', '*', '+'
-            && c != 0x2C && c != 0x2D && c != 0x2E // ',', '-', '.'
-            && c != 0x2F && c != 0x3A && c != 0x3D // '/', ':', '='
-            && c != 0x3F && c != 0x40 && c != 0x5F // '?', '@', '_'
-            && c != 0x7E) // '~'
+        if (!isAlphanum(c) && c != 0x21 && c != 0x24 
+            && c != 0x26 && c != 0x27 && c != 0x28 
+            && c != 0x29 && c != 0x2A && c != 0x2B 
+            && c != 0x2C && c != 0x2D && c != 0x2E 
+            && c != 0x2F && c != 0x3A && c != 0x3D 
+            && c != 0x3F && c != 0x40 && c != 0x5F 
+            && c != 0x7E) 
             throw rtl::MalformedUriException(
                 rtl::OUString("UNO URL contains invalid ObjectName"));
     }

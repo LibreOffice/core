@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -62,8 +62,8 @@ namespace cppcanvas
         {
             const ::FontMetric& aMetric = rVDev.GetFontMetric();
 
-            // calc offset for text output, the XCanvas always renders
-            // baseline offset.
+            
+            
             switch( outdevState.textReferencePoint )
             {
                 case ALIGN_TOP:
@@ -73,7 +73,7 @@ namespace cppcanvas
                 default:
                     ENSURE_OR_THROW( false,
                                       "tools::getBaselineOffset(): Unexpected TextAlign value" );
-                    // FALLTHROUGH intended (to calm compiler warning - case won't happen)
+                    
                 case ALIGN_BASELINE:
                     return ::Size( 0, 0 );
 
@@ -87,9 +87,9 @@ namespace cppcanvas
         ::basegfx::B2DHomMatrix& calcLogic2PixelLinearTransform( ::basegfx::B2DHomMatrix&   o_rMatrix,
                                                                  const VirtualDevice&       rVDev )
         {
-            // select size value in the middle of the available range,
-            // to have headroom both when map mode scales up, and when
-            // it scales down.
+            
+            
+            
             const ::Size aSizeLogic( 0x00010000L,
                                      0x00010000L );
 
@@ -105,10 +105,10 @@ namespace cppcanvas
         ::basegfx::B2DHomMatrix& calcLogic2PixelAffineTransform( ::basegfx::B2DHomMatrix&   o_rMatrix,
                                                                  const VirtualDevice&       rVDev )
         {
-            // retrieves scale
+            
             calcLogic2PixelLinearTransform(o_rMatrix, rVDev);
 
-            // translate according to curr map mode/pref map mode offset
+            
             const ::Point  aEmptyPoint;
             const ::Point& rTranslatedPoint(
                 rVDev.LogicToPixel( aEmptyPoint ));
@@ -134,11 +134,11 @@ namespace cppcanvas
                                   *pRotation != 0.0 );
 
             if( !bOffsetting && !bScaling && !bRotation )
-                return false; // nothing to do
+                return false; 
 
             if( rOutdevState.clip.count() )
             {
-                // general polygon case
+                
 
                 ::basegfx::B2DPolyPolygon aLocalClip( rOutdevState.clip );
                 ::basegfx::B2DHomMatrix   aTransform;
@@ -162,14 +162,14 @@ namespace cppcanvas
             }
             else if( !rOutdevState.clipRect.IsEmpty() )
             {
-                // simple rect case
+                
 
                 const ::Rectangle aLocalClipRect( rOutdevState.clipRect );
 
                 if( bRotation )
                 {
-                    // rotation involved - convert to polygon first,
-                    // then transform that
+                    
+                    
                     ::basegfx::B2DPolygon aLocalClip(
                         ::basegfx::tools::createPolygonFromRect(
                                 ::basegfx::B2DRectangle(
@@ -195,8 +195,8 @@ namespace cppcanvas
                 }
                 else if( bScaling )
                 {
-                    // scale and offset - do it on the fly, have to
-                    // convert to float anyway.
+                    
+                    
                     o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                         rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
@@ -209,8 +209,8 @@ namespace cppcanvas
                 }
                 else
                 {
-                    // offset only - do it on the fly, have to convert
-                    // to float anyway.
+                    
+                    
                     o_rRenderState.Clip = ::basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                         rCanvas->getUNOCanvas()->getDevice(),
                         ::basegfx::B2DPolyPolygon(
@@ -224,21 +224,21 @@ namespace cppcanvas
                 return true;
             }
 
-            // empty clip, nothing to do
+            
             return false;
         }
 
-        // create overline/underline/strikeout line info struct
+        
         TextLineInfo createTextLineInfo( const ::VirtualDevice&                     rVDev,
                                          const ::cppcanvas::internal::OutDevState&  rState )
         {
             const sal_Bool bOldMode( rVDev.IsMapModeEnabled() );
 
-            // #i68512# Force metric regeneration with mapmode enabled
-            // (prolly OutDev bug)
+            
+            
             rVDev.GetFontMetric();
 
-            // will restore map mode below
+            
             const_cast< ::VirtualDevice& >(rVDev).EnableMapMode( false );
 
             const ::FontMetric aMetric = rVDev.GetFontMetric();
@@ -311,26 +311,26 @@ namespace cppcanvas
             }
         }
 
-        // create line actions for text such as underline and
-        // strikeout
+        
+        
         ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const ::basegfx::B2DPoint rStartPos,
                                                               const double&             rLineWidth,
                                                               const TextLineInfo&       rTextLineInfo )
         {
-            // fill the polypolygon with all text lines
+            
             ::basegfx::B2DPolyPolygon aTextLinesPolyPoly;
 
             switch( rTextLineInfo.mnOverlineStyle )
             {
-                case UNDERLINE_NONE:          // nothing to do
-                    // FALLTHROUGH intended
+                case UNDERLINE_NONE:          
+                    
                 case UNDERLINE_DONTKNOW:
                     break;
 
-                case UNDERLINE_SMALLWAVE:     // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_WAVE:          // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_SMALLWAVE:     
+                    
+                case UNDERLINE_WAVE:          
+                    
                 case UNDERLINE_SINGLE:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -341,18 +341,18 @@ namespace cppcanvas
                         rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight );
                     break;
 
-                case UNDERLINE_BOLDDOTTED:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDDASH:      // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDLONGDASH:  // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDDASHDOT:   // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDDASHDOTDOT:// TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDWAVE:      // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_BOLDDOTTED:    
+                    
+                case UNDERLINE_BOLDDASH:      
+                    
+                case UNDERLINE_BOLDLONGDASH:  
+                    
+                case UNDERLINE_BOLDDASHDOT:   
+                    
+                case UNDERLINE_BOLDDASHDOTDOT:
+                    
+                case UNDERLINE_BOLDWAVE:      
+                    
                 case UNDERLINE_BOLD:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -363,8 +363,8 @@ namespace cppcanvas
                         rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight );
                     break;
 
-                case UNDERLINE_DOUBLEWAVE:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_DOUBLEWAVE:    
+                    
                 case UNDERLINE_DOUBLE:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -383,8 +383,8 @@ namespace cppcanvas
                         rTextLineInfo.mnOverlineOffset + rTextLineInfo.mnOverlineHeight * 2.0 );
                     break;
 
-                case UNDERLINE_DASHDOTDOT:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_DASHDOTDOT:    
+                    
                 case UNDERLINE_DOTTED:
                     appendDashes(
                         aTextLinesPolyPoly,
@@ -396,8 +396,8 @@ namespace cppcanvas
                         2*rTextLineInfo.mnOverlineHeight );
                     break;
 
-                case UNDERLINE_DASHDOT:       // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_DASHDOT:       
+                    
                 case UNDERLINE_DASH:
                     appendDashes(
                         aTextLinesPolyPoly,
@@ -427,15 +427,15 @@ namespace cppcanvas
 
             switch( rTextLineInfo.mnUnderlineStyle )
             {
-                case UNDERLINE_NONE:          // nothing to do
-                    // FALLTHROUGH intended
+                case UNDERLINE_NONE:          
+                    
                 case UNDERLINE_DONTKNOW:
                     break;
 
-                case UNDERLINE_SMALLWAVE:     // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_WAVE:          // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_SMALLWAVE:     
+                    
+                case UNDERLINE_WAVE:          
+                    
                 case UNDERLINE_SINGLE:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -446,18 +446,18 @@ namespace cppcanvas
                         rTextLineInfo.mnUnderlineOffset + rTextLineInfo.mnLineHeight );
                     break;
 
-                case UNDERLINE_BOLDDOTTED:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDDASH:      // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDLONGDASH:  // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDDASHDOT:   // TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDDASHDOTDOT:// TODO(F3): NYI
-                    // FALLTHROUGH intended
-                case UNDERLINE_BOLDWAVE:      // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_BOLDDOTTED:    
+                    
+                case UNDERLINE_BOLDDASH:      
+                    
+                case UNDERLINE_BOLDLONGDASH:  
+                    
+                case UNDERLINE_BOLDDASHDOT:   
+                    
+                case UNDERLINE_BOLDDASHDOTDOT:
+                    
+                case UNDERLINE_BOLDWAVE:      
+                    
                 case UNDERLINE_BOLD:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -468,8 +468,8 @@ namespace cppcanvas
                         rTextLineInfo.mnUnderlineOffset + 2*rTextLineInfo.mnLineHeight );
                     break;
 
-                case UNDERLINE_DOUBLEWAVE:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_DOUBLEWAVE:    
+                    
                 case UNDERLINE_DOUBLE:
                     appendRect(
                         aTextLinesPolyPoly,
@@ -488,8 +488,8 @@ namespace cppcanvas
                         rTextLineInfo.mnUnderlineOffset + 3*rTextLineInfo.mnLineHeight );
                     break;
 
-                case UNDERLINE_DASHDOTDOT:    // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_DASHDOTDOT:    
+                    
                 case UNDERLINE_DOTTED:
                     appendDashes(
                         aTextLinesPolyPoly,
@@ -501,8 +501,8 @@ namespace cppcanvas
                         2*rTextLineInfo.mnLineHeight );
                     break;
 
-                case UNDERLINE_DASHDOT:       // TODO(F3): NYI
-                    // FALLTHROUGH intended
+                case UNDERLINE_DASHDOT:       
+                    
                 case UNDERLINE_DASH:
                     appendDashes(
                         aTextLinesPolyPoly,
@@ -532,13 +532,13 @@ namespace cppcanvas
 
             switch( rTextLineInfo.mnStrikeoutStyle )
             {
-                case STRIKEOUT_NONE:    // nothing to do
-                    // FALLTHROUGH intended
+                case STRIKEOUT_NONE:    
+                    
                 case STRIKEOUT_DONTKNOW:
                     break;
 
-                case STRIKEOUT_SLASH:   // TODO(Q1): we should handle this in the text layer
-                    // FALLTHROUGH intended
+                case STRIKEOUT_SLASH:   
+                    
                 case STRIKEOUT_X:
                     break;
 
@@ -603,8 +603,8 @@ namespace cppcanvas
                                                                aTransform );
         }
 
-        // create line actions for text such as underline and
-        // strikeout
+        
+        
         ::basegfx::B2DPolyPolygon createTextLinesPolyPolygon( const double&         rStartOffset,
                                                               const double&         rLineWidth,
                                                               const TextLineInfo&   rTextLineInfo )

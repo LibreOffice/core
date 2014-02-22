@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -103,7 +103,7 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd {
 
-// --------------------------------------------------------------------
+
 
 void fillDurationComboBox( ListBox* pBox )
 {
@@ -147,7 +147,7 @@ void fillRepeatComboBox( ListBox* pBox )
     pBox->SetEntryData( pBox->InsertEntry( aEndOfSlide ), (void*)((sal_Int32)-2) );
 }
 
-// --------------------------------------------------------------------
+
 
 
 CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBase,
@@ -161,7 +161,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
     mxModel( rBase.GetDocShell()->GetDoc()->getUnoModel(), UNO_QUERY ),
     maLateInitTimer()
 {
-    // load resources
+    
     get(mpPBAddEffect, "add_effect");
     get(mpPBChangeEffect, "change_effect");
     get(mpPBRemoveEffect, "remove_effect");
@@ -205,7 +205,7 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
 
     maStrModify = mpFTEffect->GetText();
 
-    // get current controller and initialize listeners
+    
     try
     {
         mxView = Reference< XDrawView >::query(mrBase.GetController());
@@ -216,11 +216,11 @@ CustomAnimationPane::CustomAnimationPane( ::Window* pParent, ViewShellBase& rBas
         OSL_FAIL( "sd::CustomAnimationPane::CustomAnimationPane(), Exception caught!" );
     }
 
-    // get current page and update custom animation list
+    
     onChangeCurrentPage();
 
-    // Wait a short time before the presets list is created.  This gives the
-    // system time to paint the control.
+    
+    
     maLateInitTimer.SetTimeout(100);
     maLateInitTimer.SetTimeoutHdl(LINK(this, CustomAnimationPane, lateInitCallback));
     maLateInitTimer.Start();
@@ -300,9 +300,9 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
-            // At this moment the controller may not yet been set at model
-            // or ViewShellBase.  Take it from the view shell passed with
-            // the event.
+            
+            
+            
             if (mrBase.GetMainViewShell() != 0)
             {
                 if( mrBase.GetMainViewShell()->GetShellType() == ViewShell::ST_IMPRESS )
@@ -313,7 +313,7 @@ IMPL_LINK(CustomAnimationPane,EventMultiplexerListener,
                     break;
                 }
             }
-        // fall through intended
+        
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
             mxView = 0;
             mxCurrentPage = 0;
@@ -683,7 +683,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
         if( pEffect.get() && pEffect->getPresetClass() == ::com::sun::star::presentation::EffectPresetClass::MOTIONPATH )
         {
             rtl::Reference< MotionPathTag > xMotionPathTag;
-            // first try to find if there is already a tag for this
+            
             MotionPathTagVector::iterator aMIter( rOldTags.begin() );
             for( ; aMIter != rOldTags.end(); ++aMIter )
             {
@@ -699,7 +699,7 @@ static bool updateMotionPathImpl( CustomAnimationPane& rPane, ::sd::View& rView,
                 }
             }
 
-            // if not found, create new one
+            
             if( !xMotionPathTag.is() )
             {
                 xMotionPathTag.set( new MotionPathTag( rPane, rView, pEffect ) );
@@ -836,15 +836,15 @@ void addValue( STLPropertySet* pSet, sal_Int32 nHandle, const Any& rValue )
     switch( pSet->getPropertyState( nHandle ) )
     {
     case STLPropertyState_AMBIGUOUS:
-        // value is already ambiguous, do nothing
+        
         break;
     case STLPropertyState_DIRECT:
-        // set to ambiguous if existing value is different
+        
         if( rValue != pSet->getPropertyValue( nHandle ) )
             pSet->setPropertyState( nHandle, STLPropertyState_AMBIGUOUS );
         break;
     case STLPropertyState_DEFAULT:
-        // just set new value
+        
         pSet->setPropertyValue( nHandle, rValue );
         break;
     }
@@ -1047,7 +1047,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
 
     sal_Int32 nMaxParaDepth = 0;
 
-    // get options from selected effects
+    
     EffectSequence::iterator aIter( maListSelection.begin() );
     const EffectSequence::iterator aEnd( maListSelection.end() );
     const CustomAnimationPresets& rPresets (getPresets());
@@ -1071,8 +1071,8 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         addValue( pSet, nHandleDimColor, pEffect->getDimColor() );
         addValue( pSet, nHandleIterateType, makeAny( pEffect->getIterateType() ) );
 
-        // convert absolute time to percentage value
-        // This calculation is done in float to avoid some rounding artifacts.
+        
+        
         float fIterateInterval = (float)pEffect->getIterateInterval();
         if( pEffect->getDuration() )
             fIterateInterval = (float)(fIterateInterval / pEffect->getDuration() );
@@ -1097,8 +1097,8 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
         {
             aSoundSource = pEffect->getAudio()->getSource();
             addValue( pSet, nHandleSoundVolumne, makeAny( pEffect->getAudio()->getVolume() ) );
-// todo     addValue( pSet, nHandleSoundEndAfterSlide, makeAny( pEffect->getAudio()->getEndAfterSlide() ) );
-// this is now stored at the XCommand parameter sequence
+
+
         }
         else if( pEffect->getCommand() == EffectCommands::STOPAUDIO )
         {
@@ -1161,7 +1161,7 @@ STLPropertySet* CustomAnimationPane::createSelectionSet()
 
 void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLPropertySet* pOldSet )
 {
-    // change selected effect
+    
     bool bChanged = false;
 
     MainSequenceRebuildGuard aGuard( mpMainSequence );
@@ -1176,7 +1176,7 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
         if( !pEffect->getEffectSequence() )
             continue;
 
-        double fDuration = 0.0; // we might need this for iterate-interval
+        double fDuration = 0.0; 
         if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState_DIRECT )
         {
             pResultSet->getPropertyValue( nHandleDuration ) >>= fDuration;
@@ -1404,10 +1404,10 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
 
     if( bHasTextGrouping || bHasAnimateForm || bHasTextGroupingAuto || bHasTextReverse )
     {
-        // we need to do a second pass for text grouping options
-        // since changing them can cause effects to be removed
-        // or replaced, we do this after we aplied all other options
-        // above
+        
+        
+        
+        
 
         sal_Int32 nTextGrouping = 0;
         sal_Bool bAnimateForm = sal_True, bTextReverse = sal_False;
@@ -1440,17 +1440,17 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             CustomAnimationTextGroupPtr pTextGroup;
             if( (nGroupId != -1) )
             {
-                // use existing group
+                
                 pTextGroup = pEffectSequence->findGroup( nGroupId );
             }
             else
             {
-                // somethings changed so we need a group now
+                
                 pTextGroup = pEffectSequence->createTextGroup( pEffect, nTextGrouping, fTextGroupingAuto, bAnimateForm, bTextReverse );
                 bChanged = true;
             }
 
-            //#i119988#
+            
             /************************************************************************/
             /*
             Note, the setAnimateForm means set the animation from TextGroup to Object's Shape
@@ -1621,7 +1621,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
         {
             xParaEnum->nextElement() >>= xRange;
 
-            // break if start of selection is prior to end of current paragraph
+            
             if( xRange.is() && (xTextRangeCompare->compareRegionEnds( xStart, xRange ) >= 0 ) )
                 break;
 
@@ -1633,7 +1633,7 @@ bool getTextSelection( const Any& rSelection, Reference< XShape >& xShape, std::
             if( xRange.is() && !xRange->getString().isEmpty() )
                 rParaList.push_back( nPara );
 
-            // break if end of selection is before or at end of current paragraph
+            
             if( xRange.is() && xTextRangeCompare->compareRegionEnds( xEnd, xRange ) >= 0 )
                 break;
 
@@ -1659,14 +1659,14 @@ void CustomAnimationPane::onChange( bool bCreate )
 {
     bool bHasText = true;
 
-    // first create vector of targets for dialog preview
+    
     std::vector< Any > aTargets;
     OUString sPresetId;
     double fDuration = 2.0f;
 
     if( bCreate )
     {
-        // gather shapes from the selection
+        
         Reference< XSelectionSupplier >  xSel( mxView, UNO_QUERY_THROW );
         maViewSelection = xSel->getSelection();
 
@@ -1723,7 +1723,7 @@ void CustomAnimationPane::onChange( bool bCreate )
     }
     else
     {
-        // get selected effect
+        
         EffectSequence::iterator aIter( maListSelection.begin() );
         const EffectSequence::iterator aEnd( maListSelection.end() );
         while( aIter != aEnd )
@@ -1753,7 +1753,7 @@ void CustomAnimationPane::onChange( bool bCreate )
             {
                 mpCustomAnimationList->SelectAll( sal_False );
 
-                // gather shapes from the selection
+                
                 std::vector< Any >::iterator aIter( aTargets.begin() );
                 const std::vector< Any >::iterator aEnd( aTargets.end() );
                 bool bFirst = true;
@@ -1761,7 +1761,7 @@ void CustomAnimationPane::onChange( bool bCreate )
                 {
                     CustomAnimationEffectPtr pCreated = mpMainSequence->append( pDescriptor, (*aIter), fDuration );
 
-                    // if only one shape with text and no fill or outline is selected, animate only by first level paragraphs
+                    
                     if( bHasText && (aTargets.size() == 1) )
                     {
                         Reference< XShape > xShape( (*aIter), UNO_QUERY );
@@ -1786,7 +1786,7 @@ void CustomAnimationPane::onChange( bool bCreate )
             {
                 MainSequenceRebuildGuard aGuard( mpMainSequence );
 
-                // get selected effect
+                
                 EffectSequence::iterator aIter( maListSelection.begin() );
                 const EffectSequence::iterator aEnd( maListSelection.end() );
                 while( aIter != aEnd )
@@ -1814,7 +1814,7 @@ void CustomAnimationPane::onChange( bool bCreate )
 
     updateControls();
 
-    // stop running preview from dialog
+    
     SlideShow::Stop( mrBase );
 }
 
@@ -1943,7 +1943,7 @@ void CustomAnimationPane::onChangeProperty()
 
         bool bNeedUpdate = false;
 
-        // change selected effect
+        
         EffectSequence::iterator aIter( maListSelection.begin() );
         const EffectSequence::iterator aEnd( maListSelection.end() );
         while( aIter != aEnd )
@@ -1988,7 +1988,7 @@ void CustomAnimationPane::onChangeSpeed()
             return;
         }
 
-        // change selected effect
+        
         EffectSequence::iterator aIter( maListSelection.begin() );
         const EffectSequence::iterator aEnd( maListSelection.end() );
         while( aIter != aEnd )
@@ -2005,14 +2005,14 @@ void CustomAnimationPane::onChangeSpeed()
     }
 }
 
-/// this link is called when the property box is modified by the user
+
 IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl)
 {
     onChangeProperty();
     return 0;
 }
 
-/// this link is called when one of the controls is modified
+
 IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
 {
     if( pControl == mpPBAddEffect )
@@ -2046,11 +2046,11 @@ IMPL_LINK( CustomAnimationPane, implControlHdl, Control*, pControl )
 
 IMPL_LINK_NOARG(CustomAnimationPane, lateInitCallback)
 {
-    // Call getPresets() to initiate the (expensive) construction of the
-    // presets list.
+    
+    
     getPresets();
 
-    // update selection and control states
+    
     onSelectionChanged();
 
     return 0;
@@ -2204,7 +2204,7 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
 }
 
 
-// ICustomAnimationListController
+
 void CustomAnimationPane::onSelect()
 {
     maListSelection = mpCustomAnimationList->getSelection();
@@ -2274,7 +2274,7 @@ void CustomAnimationPane::updatePathFromMotionPathTag( const rtl::Reference< Mot
     }
 }
 
-// ====================================================================
+
 
 
 ::Window * createCustomAnimationPanel( ::Window* pParent, ViewShellBase& rBase, const cssu::Reference<css::frame::XFrame>& rxFrame )

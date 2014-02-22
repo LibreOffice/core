@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -138,7 +138,7 @@ void    XFCell::Add(IXFContent *pContent)
         XFTable *pTable = static_cast<XFTable*>(pContent);
         if( !pTable )
             return;
-        //the sub table will fill all the cell, there can't be other contents.
+        
         pTable->SetOwnerCell(this);
         m_pSubTable = pTable;
     }
@@ -218,8 +218,8 @@ void    XFCell::ToXml(IXFStream *pStrm)
     if( m_bProtect )
         pAttrList->AddAttribute( A2OUSTR("table:protected"), A2OUSTR("true") );
 
-    //for test only.
-//  pAttrList->AddAttribute( A2OUSTR("table:cell-name"), GetCellName() );
+    
+
 
     pStrm->StartElement( A2OUSTR("table:table-cell") );
 

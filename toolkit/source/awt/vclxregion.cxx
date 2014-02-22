@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/awt/vclxregion.hxx>
@@ -25,9 +25,9 @@
 #include <rtl/uuid.h>
 #include <vcl/svapp.hxx>
 
-//  ----------------------------------------------------
-//  class VCLXRegion
-//  ----------------------------------------------------
+
+
+
 VCLXRegion::VCLXRegion()
 {
 }
@@ -36,7 +36,7 @@ VCLXRegion::~VCLXRegion()
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXRegion::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -46,10 +46,10 @@ VCLXRegion::~VCLXRegion()
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XUnoTunnel
+
 IMPL_XUNOTUNNEL( VCLXRegion )
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXRegion )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XRegion>* ) NULL )
 IMPL_XTYPEPROVIDER_END
@@ -144,7 +144,7 @@ void VCLXRegion::xOrRegion( const ::com::sun::star::uno::Reference< ::com::sun::
     RectangleVector aRectangles;
     maRegion.GetRegionRectangles(aRectangles);
 
-//    sal_uLong nRects = maRegion.GetRectCount();
+
     ::com::sun::star::uno::Sequence< ::com::sun::star::awt::Rectangle > aRects(aRectangles.size());
     sal_uInt32 a(0);
 
@@ -153,12 +153,12 @@ void VCLXRegion::xOrRegion( const ::com::sun::star::uno::Reference< ::com::sun::
         aRects.getArray()[a++] = AWTRectangle(*aRectIter);
     }
 
-    //Rectangle aRect;
-    //sal_uInt32 nR = 0;
-    //RegionHandle h = maRegion.BeginEnumRects();
-    //while ( maRegion.GetEnumRects( h, aRect ) )
-    //  aRects.getArray()[nR++] = AWTRectangle( aRect );
-    //maRegion.EndEnumRects( h );
+    
+    
+    
+    
+    
+    
 
     return aRects;
 }

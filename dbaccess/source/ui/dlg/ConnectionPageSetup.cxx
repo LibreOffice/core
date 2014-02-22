@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ConnectionPageSetup.hxx"
@@ -101,7 +101,7 @@ namespace dbaui
         return oDBWizardPage;
     }
 
-    // OConnectionTabPageSetup
+    
     OConnectionTabPageSetup::OConnectionTabPageSetup(Window* pParent, sal_uInt16 _rId, const SfxItemSet& _rCoreAttrs, sal_uInt16 _nHelpTextResId, sal_uInt16 _nHeaderResId, sal_uInt16 _nUrlResId)
         :OConnectionHelper(pParent, ModuleRes(_rId), _rCoreAttrs)
         ,m_bUserGrabFocus(sal_True)
@@ -153,24 +153,24 @@ namespace dbaui
     void OConnectionTabPageSetup::implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue)
     {
         m_eType = m_pAdminDialog->getDatasourceType(_rSet);
-        // special handling for oracle, this can only happen
-        // if the user enters the same url as used for Oracle and we are on the JDBC path
-        //! TODO
-        //if (  ::dbaccess::DST_ORACLE_JDBC == m_eType )
-        //    m_eType =  ::dbaccess::DST_JDBC;
+        
+        
+        
+        
+        
 
         OConnectionHelper::implInitControls(_rSet, _bSaveValue);
 
-        //! TODO
-        //if ( m_eType >=  ::dbaccess::DST_USERDEFINE1 )
-        //{
-        //  OUString sDisplayName = m_pCollection->getTypeDisplayName(m_eType);
-        //  FixedText* ppTextControls[] ={&m_aFT_Connection};
-        //  for (size_t i = 0; i < sizeof(ppTextControls)/sizeof(ppTextControls[0]); ++i)
-        //  {
-        //      ppTextControls[i]->SetText(sDisplayName);
-        //  }
-        //}
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         callModifiedHdl();
     }
@@ -196,6 +196,6 @@ namespace dbaui
         callModifiedHdl();
         return 0L;
     }
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <slideshowviewimpl.hxx>
@@ -50,9 +50,9 @@ using namespace ::com::sun::star;
 namespace sd
 {
 
-///////////////////////////////////////////////////////////////////////
-// SlideShowViewListeners
-///////////////////////////////////////////////////////////////////////
+
+
+
 
 SlideShowViewListeners::SlideShowViewListeners( ::osl::Mutex& rMutex )
 :   mrMutex( rMutex )
@@ -114,9 +114,9 @@ void SlideShowViewListeners::disposing( const lang::EventObject& _rEventSource )
     maListeners.clear();
 }
 
-///////////////////////////////////////////////////////////////////////
-// SlideShowViewPaintListeners
-///////////////////////////////////////////////////////////////////////
+
+
+
 
 SlideShowViewPaintListeners::SlideShowViewPaintListeners( ::osl::Mutex& rMutex )
 :   SlideShowViewPaintListeners_Base( rMutex )
@@ -127,12 +127,12 @@ bool SlideShowViewPaintListeners::implTypedNotify( const Reference< awt::XPaintL
                                               const awt::PaintEvent&                  rEvent ) throw( uno::Exception )
 {
     rListener->windowPaint( rEvent );
-    return true; // continue calling listeners
+    return true; 
 }
 
-///////////////////////////////////////////////////////////////////////
-// SlideShowViewMouseListeners
-///////////////////////////////////////////////////////////////////////
+
+
+
 
 SlideShowViewMouseListeners::SlideShowViewMouseListeners( ::osl::Mutex& rMutex ) :
     SlideShowViewMouseListeners_Base( rMutex )
@@ -161,12 +161,12 @@ bool SlideShowViewMouseListeners::implTypedNotify( const Reference< awt::XMouseL
             break;
     }
 
-    return true; // continue calling listeners
+    return true; 
 }
 
-///////////////////////////////////////////////////////////////////////
-// SlideShowViewMouseMotionListeners
-///////////////////////////////////////////////////////////////////////
+
+
+
 
 SlideShowViewMouseMotionListeners::SlideShowViewMouseMotionListeners( ::osl::Mutex& rMutex ) :
     SlideShowViewMouseMotionListeners_Base( rMutex )
@@ -187,12 +187,12 @@ bool SlideShowViewMouseMotionListeners::implTypedNotify( const Reference< awt::X
             break;
     }
 
-    return true; // continue calling listeners
+    return true; 
 }
 
-///////////////////////////////////////////////////////////////////////
-// SlideShowView
-///////////////////////////////////////////////////////////////////////
+
+
+
 
 SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
                               SdDrawDocument* pDoc,
@@ -223,14 +223,14 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
     mTranslationOffset.Height = 0;
 }
 
-/// Dispose all internal references
+
 void SAL_CALL SlideShowView::dispose() throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     mpSlideShow = 0;
 
-    // deregister listeners
+    
     if( mxWindow.is() )
     {
         mxWindow->removeWindowListener( this );
@@ -243,20 +243,20 @@ void SAL_CALL SlideShowView::dispose() throw (RuntimeException)
     mpCanvas.reset();
     mxWindow.clear();
 
-    // clear all listener containers
+    
     disposing( lang::EventObject() );
 
-    // call base
+    
     WeakComponentImplHelperBase::dispose();
 }
 
-/// Disposing our broadcaster
+
 void SAL_CALL SlideShowView::disposing( const lang::EventObject& ) throw(RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // notify all listeners that _we_ are going down (send a disposing()),
-    // then delete listener containers:
+    
+    
     lang::EventObject const evt( static_cast<OWeakObject *>(this) );
     if (mpViewListeners.get() != 0) {
         mpViewListeners->disposing( evt );
@@ -290,16 +290,16 @@ void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e ) throw (RuntimeExc
     }
     else
     {
-        // Change event source, to enable listeners to match event
-        // with view
+        
+        
         awt::PaintEvent aEvent( e );
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
         mpPaintListeners->notify( aEvent );
-        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+        updateimpl( aGuard, mpSlideShow ); 
     }
 }
 
-// XSlideShowView methods
+
 Reference< rendering::XSpriteCanvas > SAL_CALL SlideShowView::getCanvas(  ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -309,12 +309,12 @@ Reference< rendering::XSpriteCanvas > SAL_CALL SlideShowView::getCanvas(  ) thro
 
 void SAL_CALL SlideShowView::clear() throw (::com::sun::star::uno::RuntimeException)
 {
-    // paint background in black
+    
     ::osl::MutexGuard aGuard( m_aMutex );
     SolarMutexGuard aSolarGuard;
 
-    // fill the bounds rectangle in black
-    // ----------------------------------
+    
+    
 
     const Size aWindowSize( mrOutputWindow.GetSizePixel() );
 
@@ -376,20 +376,20 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     Point aOutputOffset( ( aWindowSize.Width() - aOutputSize.Width() ) >> 1,
                             ( aWindowSize.Height() - aOutputSize.Height() ) >> 1 );
 
-    // Reduce available width by one, as the slides might actually
-    // render one pixel wider and higher as aPageSize below specifies
-    // (when shapes of page size have visible border lines)
+    
+    
+    
     aOutputSize.Width() --;
     aOutputSize.Height() --;
 
-    // Record mTranslationOffset
+    
     mTranslationOffset.Height = aOutputOffset.Y();
     mTranslationOffset.Width = aOutputOffset.X();
 
     maPresentationArea = Rectangle( aOutputOffset, aOutputSize );
     mrOutputWindow.SetPresentationArea( maPresentationArea );
 
-    // scale presentation into available window rect (minus 10%); center in the window
+    
     const basegfx::B2DHomMatrix aMatrix(basegfx::tools::createScaleTranslateB2DHomMatrix(
         aOutputSize.Width(), aOutputSize.Height(), aOutputOffset.X(), aOutputOffset.Y()));
 
@@ -452,8 +452,8 @@ void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMous
 
     if( !mbIsMouseMotionListener && mxWindow.is() )
     {
-        // delay motion event registration, until we really
-        // need it
+        
+        
         mbIsMouseMotionListener = true;
         mxWindow->addMouseMotionListener( this );
     }
@@ -469,15 +469,15 @@ void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XM
     if( mpMouseMotionListeners.get() )
         mpMouseMotionListeners->removeTypedListener( xListener );
 
-    // TODO(P1): Might be nice to deregister for mouse motion
-    // events, when the last listener is gone.
+    
+    
 }
 
 void SAL_CALL SlideShowView::setMouseCursor( sal_Int16 nPointerShape ) throw (RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // forward to window
+    
     if( mxPointer.is() )
         mxPointer->setType( nPointerShape );
 
@@ -517,39 +517,39 @@ void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImp
     }
 }
 
-// XWindowListener methods
+
 void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e ) throw (RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
     if( mpViewListeners.get() )
     {
-        // Change event source, to enable listeners to match event
-        // with view
+        
+        
         awt::WindowEvent aEvent( e );
         aEvent.Source = static_cast< ::cppu::OWeakObject* >( this );
 
         mpViewListeners->notify( aEvent );
-        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+        updateimpl( aGuard, mpSlideShow ); 
     }
 }
 
 void SAL_CALL SlideShowView::windowMoved( const awt::WindowEvent& ) throw (RuntimeException)
 {
-    // ignored
+    
 }
 
 void SAL_CALL SlideShowView::windowShown( const lang::EventObject& ) throw (RuntimeException)
 {
-    // ignored
+    
 }
 
 void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& ) throw (RuntimeException)
 {
-    // ignored
+    
 }
 
-// XMouseListener implementation
+
 void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
@@ -561,8 +561,8 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno
     {
         mbMousePressedEaten = false;
 
-        // Change event source, to enable listeners to match event
-        // with view
+        
+        
         WrappedMouseEvent aEvent;
         aEvent.meType = WrappedMouseEvent::PRESSED;
         aEvent.maEvent = e;
@@ -570,7 +570,7 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno
 
         if( mpMouseListeners.get() )
             mpMouseListeners->notify( aEvent );
-        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+        updateimpl( aGuard, mpSlideShow ); 
     }
 }
 
@@ -579,13 +579,13 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e ) throw (un
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if( mbMousePressedEaten )
     {
-        // if mouse button down was ignored, also ignore mouse button up
+        
         mbMousePressedEaten = false;
     }
     else if( mpSlideShow && !mpSlideShow->isInputFreezed() )
     {
-        // Change event source, to enable listeners to match event
-        // with view
+        
+        
         WrappedMouseEvent aEvent;
         aEvent.meType = WrappedMouseEvent::RELEASED;
         aEvent.maEvent = e;
@@ -593,7 +593,7 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e ) throw (un
 
         if( mpMouseListeners.get() )
             mpMouseListeners->notify( aEvent );
-        updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+        updateimpl( aGuard, mpSlideShow ); 
     }
 }
 
@@ -601,8 +601,8 @@ void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e ) throw (uno
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    // Change event source, to enable listeners to match event
-    // with view
+    
+    
     WrappedMouseEvent aEvent;
     aEvent.meType = WrappedMouseEvent::ENTERED;
     aEvent.maEvent = e;
@@ -610,15 +610,15 @@ void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e ) throw (uno
 
     if( mpMouseListeners.get() )
         mpMouseListeners->notify( aEvent );
-    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+    updateimpl( aGuard, mpSlideShow ); 
 }
 
 void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    // Change event source, to enable listeners to match event
-    // with view
+    
+    
     WrappedMouseEvent aEvent;
     aEvent.meType = WrappedMouseEvent::EXITED;
     aEvent.maEvent = e;
@@ -626,16 +626,16 @@ void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e ) throw (uno:
 
     if( mpMouseListeners.get() )
         mpMouseListeners->notify( aEvent );
-    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+    updateimpl( aGuard, mpSlideShow ); 
 }
 
-// XMouseMotionListener implementation
+
 void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    // Change event source, to enable listeners to match event
-    // with view
+    
+    
     WrappedMouseMotionEvent aEvent;
     aEvent.meType = WrappedMouseMotionEvent::DRAGGED;
     aEvent.maEvent = e;
@@ -643,15 +643,15 @@ void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e ) throw (uno
 
     if( mpMouseMotionListeners.get() )
         mpMouseMotionListeners->notify( aEvent );
-    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+    updateimpl( aGuard, mpSlideShow ); 
 }
 
 void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e ) throw (uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
-    // Change event source, to enable listeners to match event
-    // with view
+    
+    
     WrappedMouseMotionEvent aEvent;
     aEvent.meType = WrappedMouseMotionEvent::MOVED;
     aEvent.maEvent = e;
@@ -659,7 +659,7 @@ void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e ) throw (uno::
 
     if( mpMouseMotionListeners.get() )
         mpMouseMotionListeners->notify( aEvent );
-    updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
+    updateimpl( aGuard, mpSlideShow ); 
 }
 
 void SlideShowView::init()
@@ -671,9 +671,9 @@ void SlideShowView::init()
 
     getTransformation();
 
-    // #i48939# only switch on kind of hacky scroll optimisation, when
-    // running fullscreen. this minimizes the probability that other
-    // windows partially cover the show.
+    
+    
+    
     if( mbFullScreen )
     {
         try
@@ -689,6 +689,6 @@ void SlideShowView::init()
     }
 }
 
-} // namespace ::sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

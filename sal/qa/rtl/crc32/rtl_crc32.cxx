@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -30,7 +30,7 @@ namespace rtl_CRC32
 class test : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -40,11 +40,11 @@ public:
     }
 
 
-    // insert your test code here.
+    
     void rtl_crc32_001()
     {
-        // this is demonstration code
-        // CPPUNIT_ASSERT_MESSAGE("a message", 1 == 1);
+        
+        
 
         sal_uInt32 nCRC = 0;
 
@@ -145,9 +145,9 @@ public:
 
 
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(test);
     CPPUNIT_TEST(rtl_crc32_001);
@@ -157,17 +157,17 @@ public:
     CPPUNIT_TEST(rtl_crc32_003_1);
     CPPUNIT_TEST(rtl_crc32_003_2);
     CPPUNIT_TEST_SUITE_END();
-}; // class test
+}; 
 
-// -----------------------------------------------------------------------------
+
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_CRC32::test);
-} // namespace rtl_CRC32
+} 
 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

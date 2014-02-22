@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "sccollaboration.hxx"
@@ -51,7 +51,7 @@ void ScCollaboration::SaveAndSendFile( TpContact* pContact ) const
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
 
     utl::MediaDescriptor aDescriptor;
-    // some issue with hyperlinks:
+    
     aDescriptor[utl::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= OUString();
     try {
         css::uno::Reference< css::document::XDocumentRecovery > xDocRecovery(
@@ -64,7 +64,7 @@ void ScCollaboration::SaveAndSendFile( TpContact* pContact ) const
 
     SendFile( pContact, aFileURL );
 
-    // FIXME: unlink the file after send ...
+    
 }
 
 void ScCollaboration::StartCollaboration( TeleConference* pConference )
@@ -74,13 +74,13 @@ void ScCollaboration::StartCollaboration( TeleConference* pConference )
     ScDocFuncSend* pSender = dynamic_cast<ScDocFuncSend*> (pDocFunc);
     if (!pSender)
     {
-        // This means pDocFunc has to be ScDocFuncDirect* and we are not collaborating yet.
+        
         pSender = new ScDocFuncSend( *mpScDocShell, dynamic_cast<ScDocFuncDirect*> (pDocFunc), this );
         mpScDocShell->SetDocFunc( pSender );
     }
 }
 
-// --- private ---
+
 
 ScDocFuncSend* ScCollaboration::GetScDocFuncSend() const
 {

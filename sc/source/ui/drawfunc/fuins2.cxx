@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/NoVisualAreaSizeException.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//------------------------------------------------------------------------
+
 
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sot/exchange.hxx>
@@ -46,7 +46,7 @@
 #include <svx/charthelper.hxx>
 #include <scmod.hxx>
 
-// BM/IHA --
+
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -63,11 +63,11 @@
 #include <cppuhelper/bootstrap.hxx>
 
 using namespace ::com::sun::star;
-// BM/IHA --
 
-// erAck
+
+
 #include "chart2uno.hxx"
-// erAck
+
 
 #include "fuinsert.hxx"
 #include "tabvwsh.hxx"
@@ -121,7 +121,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
 
     if ( !aRangeString.isEmpty() )
     {
-        // connect to Calc data (if no range string, leave chart alone, with its own data)
+        
 
         uno::Reference< ::com::sun::star::chart2::data::XDataReceiver > xReceiver;
         uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
@@ -136,19 +136,19 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
             uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pDocShell->GetModel(), uno::UNO_QUERY );
             xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
 
-            // Same behavior as with old chart: Always assume data series in columns
+            
             chart::ChartDataRowSource eDataRowSource = chart::ChartDataRowSource_COLUMNS;
             bool bHasCategories = false;
             bool bFirstCellAsLabel = false;
 
-            // use ScChartPositioner to auto-detect column/row headers (like ScChartArray in old version)
+            
             ScRangeListRef aRangeListRef( new ScRangeList );
             aRangeListRef->Parse( aRangeString, pScDoc, SCA_VALID, pScDoc->GetAddressConvention() );
             if ( !aRangeListRef->empty() )
             {
-                pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
+                pScDoc->LimitChartIfAll( aRangeListRef );               
 
-                // update string from modified ranges.  The ranges must be in the current formula syntax.
+                
                 OUString aTmpStr;
                 aRangeListRef->Format( aTmpStr, SCR_ABS_3D, pScDoc, pScDoc->GetAddressConvention() );
                 aRangeString = aTmpStr;
@@ -166,7 +166,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
                     bHasCategories = aChartPositioner.HasRowHeaders();
                     bFirstCellAsLabel = aChartPositioner.HasColHeaders();
                 }
-                else    // in case the default is changed
+                else    
                 {
                     bHasCategories = aChartPositioner.HasColHeaders();
                     bFirstCellAsLabel = aChartPositioner.HasRowHeaders();
@@ -188,7 +188,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
                 uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
             xReceiver->setArguments( aArgs );
 
-            // don't create chart listener here (range may be modified in chart dialog)
+            
         }
     }
 }
@@ -202,7 +202,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
     if( ! rReq.IsAPI() )
         rReq.Done();
 
-    //! hier DLL's initalisieren, damit die Factories existieren?
+    
 
     uno::Reference < embed::XEmbeddedObject > xObj;
     uno::Reference < embed::XStorage > xStorage = comphelper::OStorageHelper::GetTemporaryStorage();
@@ -237,8 +237,8 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
         {
             case SID_INSERT_OBJECT :
                 aServerLst.FillInsertObjects();
-                aServerLst.Remove( ScDocShell::Factory().GetClassId() );   // Starcalc nicht anzeigen
-                //TODO/LATER: currently no inserting of ClassId into SfxRequest!
+                aServerLst.Remove( ScDocShell::Factory().GetClassId() );   
+                
             case SID_INSERT_PLUGIN :
             case SID_INSERT_FLOATINGFRAME :
             {
@@ -257,7 +257,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
                     if ( xObj.is() )
                         pViewSh->GetObjectShell()->GetEmbeddedObjectContainer().InsertEmbeddedObject( xObj, aName );
-                    // damit DrawShell eingeschaltet wird (Objekt aktivieren ist unnoetig):
+                    
                     bIsFromFile = !pDlg->IsCreateNew();
                     DELETEZ( pDlg );
                 }
@@ -267,25 +267,25 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
             case SID_INSERT_SOUND :
             case SID_INSERT_VIDEO :
             {
-                // create special filedialog for plugins
+                
                 SvxPluginFileDlg aPluginFileDialog(pWin, nSlot);
 
-                // open filedlg
+                
                 if ( ERRCODE_NONE == aPluginFileDialog.Execute() )
                 {
-                    // get URL
+                    
                     INetURLObject aURL;
                     aURL.SetSmartProtocol( INET_PROT_FILE );
                     if ( aURL.SetURL( aPluginFileDialog.GetPath() ) )
                     {
-                        // create a plugin object
+                        
                         OUString aObjName;
                         SvGlobalName aClassId( SO3_PLUGIN_CLASSID );
                         comphelper::EmbeddedObjectContainer aCnt( xStorage );
                         xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aObjName );
                         if ( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                         {
-                            // set properties from dialog
+                            
                             uno::Reference < beans::XPropertySet > xSet( xObj->getComponent(), uno::UNO_QUERY );
                             if ( xSet.is() )
                             {
@@ -297,15 +297,15 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                     else
                     {
                         OSL_FAIL("Invalid URL!");
-                        //! error message
-                        //! can this happen???
+                        
+                        
                     }
                 }
             }
         }
     }
 
-    //  SvInsertObjectDialog (alles in einem Dialog) wird nicht mehr benutzt
+    
     if (xObj.is())
     {
         pView->UnmarkAll();
@@ -331,7 +331,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 }
                 catch( embed::NoVisualAreaSizeException& )
                 {
-                    // the default size will be set later
+                    
                 }
 
                 aSize = Size( aSz.Width, aSz.Height );
@@ -339,7 +339,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                 aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
                 if (aSize.Height() == 0 || aSize.Width() == 0)
                 {
-                    // Rechteck mit ausgewogenem Kantenverhaeltnis
+                    
                     aSize.Width() = 5000;
                     aSize.Height() = 5000;
                     Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
@@ -347,7 +347,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                     aSz.Height = aTmp.Height();
                     xObj->setVisualAreaSize( nAspect, aSz );
 
-                    //  re-convert aSize to 1/100th mm to avoid rounding errors in comparison below
+                    
                     aSize = Window::LogicToLogic( aTmp,
                                     MapMode( aMapUnit ), aMap100 );
                 }
@@ -356,7 +356,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
                                     MapMode( aMapUnit ), aMap100 );
             }
 
-            //  Chart initialisieren ?
+            
             if ( SvtModuleOptions().IsChart() && SotExchange::IsChart( SvGlobalName( xObj->getClassID() ) ) )
                 lcl_ChartInit( xObj, pViewSh->GetViewData(), OUString() );
 
@@ -364,7 +364,7 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             Point aPnt = pViewSh->GetInsertPos();
             if ( pData->GetDocument()->IsNegativePage( pData->GetTabNo() ) )
-                aPnt.X() -= aSize.Width();      // move position to left edge
+                aPnt.X() -= aSize.Width();      
             Rectangle aRect (aPnt, aSize);
             SdrOle2Obj* pObj = new SdrOle2Obj( aObjRef, aName, aRect);
             SdrPageView* pPV = pView->GetSdrPageView();
@@ -372,9 +372,9 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             if ( nAspect != embed::Aspects::MSOLE_ICON )
             {
-                //  Math objects change their object size during InsertObject.
-                //  New size must be set in SdrObject, or a wrong scale will be set at
-                //  ActivateObject.
+                
+                
+                
 
                 try
                 {
@@ -395,10 +395,10 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* pVie
 
             if ( !rReq.IsAPI() )
             {
-                // XXX Activate aus Makro ist toedlich !!! ???
+                
                 if (bIsFromFile)
                 {
-                    // Objekt ist selektiert, also Draw-Shell aktivieren
+                    
                     pViewShell->SetDrawShell( true );
                 }
                 else
@@ -439,12 +439,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
     if( SvtModuleOptions().IsChart() )
     {
-        // ----------------------------------------
-        // BM/IHA --
+        
+        
 
-        // get range
+        
         OUString aRangeString;
-        ScRange aPositionRange;             // cell range for chart positioning
+        ScRange aPositionRange;             
         if( pReqArgs )
         {
             const SfxPoolItem* pItem;
@@ -473,7 +473,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             aRanges.Format( aStr, SCR_ABS_3D, pDocument, pDocument->GetAddressConvention() );
             aRangeString = aStr;
 
-            // get "total" range for positioning
+            
             if ( !aRanges.empty() )
             {
                 aPositionRange = *aRanges[ 0 ];
@@ -487,8 +487,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 pViewSh->GetViewData()->GetView()->Unmark();
         }
 
-        // ----------------------------------------
-        // adapted old code
+        
+        
         pView->UnmarkAll();
 
         OUString aName;
@@ -502,7 +502,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         if( xCompSupp.is())
             xReceiver.set( xCompSupp->getComponent(), uno::UNO_QUERY );
 
-        // lock the model to suppress any internal updates
+        
         uno::Reference< frame::XModel > xChartModel( xReceiver, uno::UNO_QUERY );
         if( xChartModel.is() )
             xChartModel->lockControllers();
@@ -512,7 +512,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         SCTAB nMarkTab;
         sal_Bool bDrawRect = pViewShell->GetChartArea( aDummy, aMarkDest, nMarkTab );
 
-        //  Objekt-Groesse
+        
         awt::Size aSz = xObj->getVisualAreaSize( nAspect );
         Size aSize( aSz.Width, aSz.Height );
 
@@ -554,8 +554,8 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     nToTable = ((const SfxUInt16Item*)pItem)->GetValue();
                 else if ( pItem->ISA( SfxBoolItem ) )
                 {
-                    //  in der idl fuer Basic steht FN_PARAM_4 als SfxBoolItem
-                    //  -> wenn gesetzt, neue Tabelle, sonst aktuelle Tabelle
+                    
+                    
 
                     if ( ((const SfxBoolItem*)pItem)->GetValue() )
                         nToTable = static_cast<sal_uInt16>(pScDoc->GetTableCount());
@@ -570,10 +570,10 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                 rReq.AppendItem( SfxUInt16Item( FN_PARAM_4, nToTable ) );
             }
 
-            // auf neue Tabelle ausgeben?
+            
             if ( nToTable == pScDoc->GetTableCount() )
             {
-                // dann los...
+                
                 OUString      aTabName;
                 SCTAB       nNewTab = pScDoc->GetTableCount();
 
@@ -592,7 +592,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
                     pScDocSh->Broadcast( ScTablesHint( SC_TAB_INSERTED, nNewTab ) );
                     pViewSh->SetTabNo( nNewTab, true );
-                    pScDocSh->PostPaintExtras();            //! erst hinterher ???
+                    pScDocSh->PostPaintExtras();            
                 }
                 else
                 {
@@ -605,16 +605,16 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             }
         }
 
-        lcl_ChartInit( xObj, pData, aRangeString );         // set source range, auto-detect column/row headers
+        lcl_ChartInit( xObj, pData, aRangeString );         
 
-        //  Objekt-Position
+        
 
         Point aStart;
         if ( bDrawRect )
-            aStart = aMarkDest.TopLeft();                       // marked by hand
+            aStart = aMarkDest.TopLeft();                       
         else
         {
-            // get chart position (from window size and data range)
+            
             aStart = pViewSh->GetChartInsertPos( aSize, aPositionRange );
         }
 
@@ -622,18 +622,18 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         SdrOle2Obj* pObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aName, aRect);
         SdrPageView* pPV = pView->GetSdrPageView();
 
-        // #i121334# This call will change the chart's default background fill from white to transparent.
-        // Add here again if this is wanted (see task description for details)
-        // ChartHelper::AdaptDefaultsForChart( xObj );
+        
+        
+        
 
-//        pView->InsertObjectAtView(pObj, *pPV);//this call leads to an immidiate redraw and asks the chart for a visual representation
 
-        // use the page instead of the view to insert, so no undo action is created yet
+
+        
         SdrPage* pInsPage = pPV->GetPage();
         pInsPage->InsertObject( pObj );
         pView->UnmarkAllObj();
         pView->MarkObj( pObj, pPV );
-        bool bAddUndo = true;               // add undo action later, unless the dialog is canceled
+        bool bAddUndo = true;               
 
         if (rReq.IsAPI())
         {
@@ -642,13 +642,13 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
         }
         else
         {
-            //the controller will be unlocked by the dialog when the dialog is told to do so
+            
 
-            // only activate object if not called via API (e.g. macro)
+            
             pViewShell->ActivateObject( (SdrOle2Obj*) pObj, SVVERB_SHOW );
 
-            //open wizard
-            //@todo get context from calc if that has one
+            
+            
             uno::Reference< uno::XComponentContext > xContext(
                 ::cppu::defaultBootstrap_InitialComponentContext() );
             if(xContext.is())
@@ -664,7 +664,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                     if( xChartModel.is() && xInit.is() )
                     {
                         uno::Reference< awt::XWindow > xDialogParentWindow(0);
-                        //  initialize dialog
+                        
                         uno::Sequence<uno::Any> aSeq(2);
                         uno::Any* pArray = aSeq.getArray();
                         beans::PropertyValue aParam1;
@@ -677,13 +677,13 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                         pArray[1] <<= uno::makeAny(aParam2);
                         xInit->initialize( aSeq );
 
-                        // try to set the dialog's position so it doesn't hide the chart
+                        
                         uno::Reference < beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY );
                         if ( xDialogProps.is() )
                         {
                             try
                             {
-                                //get dialog size:
+                                
                                 awt::Size aDialogAWTSize;
                                 if( xDialogProps->getPropertyValue("Size")
                                     >>= aDialogAWTSize )
@@ -691,13 +691,13 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                                     Size aDialogSize( aDialogAWTSize.Width, aDialogAWTSize.Height );
                                     if ( aDialogSize.Width() > 0 && aDialogSize.Height() > 0 )
                                     {
-                                        //calculate and set new position
+                                        
                                         Point aDialogPos = pViewShell->GetChartDialogPos( aDialogSize, aRect );
                                         xDialogProps->setPropertyValue("Position",
                                             uno::makeAny( awt::Point(aDialogPos.getX(),aDialogPos.getY()) ) );
                                     }
                                 }
-                                //tell the dialog to unlock controller
+                                
                                 xDialogProps->setPropertyValue("UnlockControllersOnExecute",
                                             uno::makeAny( sal_True ) );
 
@@ -711,16 +711,16 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                         sal_Int16 nDialogRet = xDialog->execute();
                         if( nDialogRet == ui::dialogs::ExecutableDialogResults::CANCEL )
                         {
-                            // leave OLE inplace mode and unmark
+                            
                             OSL_ASSERT( pViewShell );
                             OSL_ASSERT( pView );
                             pViewShell->DeactivateOle();
                             pView->UnmarkAll();
 
-                            // old page view pointer is invalid after switching sheets
+                            
                             pPV = pView->GetSdrPageView();
 
-                            // remove the chart
+                            
                             OSL_ASSERT( pPV );
                             SdrPage * pPage( pPV->GetPage());
                             OSL_ASSERT( pPage );
@@ -728,15 +728,15 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
                             if( pPage )
                                 pPage->RemoveObject( pObj->GetOrdNum());
 
-                            bAddUndo = false;       // don't create the undo action for inserting
+                            bAddUndo = false;       
 
-                            // leave the draw shell
+                            
                             pViewShell->SetDrawShell( false );
                         }
                         else
                         {
                             OSL_ASSERT( nDialogRet == ui::dialogs::ExecutableDialogResults::OK );
-                            //@todo maybe move chart to different table
+                            
                         }
                     }
                     uno::Reference< lang::XComponent > xComponent( xDialog, uno::UNO_QUERY );
@@ -748,12 +748,12 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
 
         if ( bAddUndo )
         {
-            // add undo action the same way as in SdrEditView::InsertObjectAtView
-            // (using UndoActionHdl etc.)
+            
+            
             pView->AddUndo(pDoc->GetSdrUndoFactory().CreateUndoNewObject(*pObj));
         }
 
-        // BM/IHA --
+        
     }
 }
 
@@ -791,7 +791,7 @@ FuInsertChartFromFile::FuInsertChartFromFile( ScTabViewShell* pViewSh, Window* p
 
     SdrPageView* pPV = pView->GetSdrPageView();
 
-    // use the page instead of the view to insert, so no undo action is created yet
+    
     SdrPage* pInsPage = pPV->GetPage();
     pInsPage->InsertObject( pObj );
     pView->UnmarkAllObj();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vbahelper/helperdecl.hxx>
@@ -47,8 +47,8 @@
 #include "docoptio.hxx"
 #include "unonames.hxx"
 
-// Much of the impl. for the equivalend UNO module is
-// sc/source/ui/unoobj/docuno.cxx, viewuno.cxx
+
+
 
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
@@ -143,8 +143,8 @@ ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
         OUString aFilterName;
         uno::Sequence< beans::PropertyValue > aArgs = getModel()->getArgs();
 
-        // #FIXME - seems suspect should we not walk through the properties
-        // to find the FilterName
+        
+        
         if ( aArgs[0].Name == "FilterName" ) {
             aArgs[0].Value >>= aFilterName;
         } else {
@@ -152,7 +152,7 @@ ScVbaWorkbook::getFileFormat(  ) throw (::uno::RuntimeException)
         }
 
         if (aFilterName == "Text - txt - csv (StarCalc)") {
-            aFileFormat = excel::XlFileFormat::xlCSV; //xlFileFormat.
+            aFileFormat = excel::XlFileFormat::xlCSV; 
         }
 
         if ( aFilterName == "DBF" ) {
@@ -221,10 +221,10 @@ ScVbaWorkbook::getActiveSheet() throw (uno::RuntimeException)
     uno::Reference< frame::XModel > xModel( getCurrentExcelDoc( mxContext ), uno::UNO_SET_THROW );
 	uno::Reference< sheet::XSpreadsheetView > xView( xModel->getCurrentController(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSpreadsheet > xSheet( xView->getActiveSheet(), uno::UNO_SET_THROW );
-    // #162503# return the original sheet module wrapper object, instead of a new instance
+    
     uno::Reference< excel::XWorksheet > xWorksheet( excel::getUnoSheetModuleObj( xSheet ), uno::UNO_QUERY );
     if( xWorksheet.is() ) return xWorksheet;
-    // #i116936# excel::getUnoSheetModuleObj() may return null in documents without global VBA mode enabled
+    
     return new ScVbaWorksheet( this, mxContext, xSheet, xModel );
 }
 
@@ -245,7 +245,7 @@ ScVbaWorkbook::Worksheets( const uno::Any& aIndex ) throw (uno::RuntimeException
     {
         return uno::Any( xWorkSheets );
     }
-    // pass on to collection
+    
     return uno::Any( xWorkSheets->Item( aIndex, uno::Any() ) );
 }
 uno::Any SAL_CALL
@@ -312,19 +312,19 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
     FileName >>= sFileName;
     OUString sURL;
     osl::FileBase::getFileURLFromSystemPath( sFileName, sURL );
-    // detect if there is no path if there is no path then we need
-    // to use the current current folder
+    
+    
     INetURLObject aURL( sURL );
     sURL = aURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
     if( sURL.isEmpty() )
     {
-        // need to add cur dir ( of this workbook ) or else the 'Work' dir
+        
         sURL = getModel()->getURL();
 
         if ( sURL.isEmpty() )
         {
-            // not path available from 'this' document
-            // need to add the 'document'/work directory then
+            
+            
             uno::Reference< excel::XApplication > xApplication ( Application(),uno::UNO_QUERY_THROW );
             OUString sWorkPath = xApplication->getDefaultFilePath();
             OUString sWorkURL;
@@ -357,9 +357,9 @@ ScVbaWorkbook::SaveAs( const uno::Any& FileName, const uno::Any& FileFormat, con
 css::uno::Any SAL_CALL
 ScVbaWorkbook::Styles( const uno::Any& Item ) throw (uno::RuntimeException)
 {
-    // quick look and Styles object doesn't seem to have a valid parent
-    // or a least the object browser just shows an object that has no
-    // variables ( therefore... leave as NULL for now )
+    
+    
+    
     uno::Reference< XCollection > dStyles = new ScVbaStyles( uno::Reference< XHelperInterface >(), mxContext, getModel() );
     if ( Item.hasValue() )
         return dStyles->Item( Item, uno::Any() );

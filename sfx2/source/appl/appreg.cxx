@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,18 +40,18 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/mnuitem.hxx>
 
-//===================================================================
+
 
 void SfxApplication::Registrations_Impl()
 {
-    // Interfaces
+    
     SfxApplication::RegisterInterface();
     SfxModule::RegisterInterface();
     SfxViewFrame::RegisterInterface();
     SfxObjectShell::RegisterInterface();
     SfxViewShell::RegisterInterface();
 
-    // ChildWindows
+    
     SfxRecordingFloatWrapper_Impl::RegisterChildWindow();
     SfxNavigatorWrapper::RegisterChildWindow( sal_False, NULL, SFX_CHILDWIN_NEVERHIDE );
     SfxPartChildWnd_Impl::RegisterChildWindow();
@@ -59,13 +59,13 @@ void SfxApplication::Registrations_Impl()
     SfxDockingWrapper::RegisterChildWindow();
     SfxInfoBarContainerChild::RegisterChildWindow( sal_True, NULL, SFX_CHILDWIN_NEVERHIDE );
 
-    // Controller
+    
     SfxToolBoxControl::RegisterControl(SID_REPEAT);
     SfxURLToolBoxControl_Impl::RegisterControl(SID_OPENURL);
     SfxRecentFilesToolBoxControl::RegisterControl( SID_OPENDOC );
 };
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFactory *pFact )
 {
@@ -90,7 +90,7 @@ void SfxApplication::RegisterToolBoxControl_Impl( SfxModule *pMod, SfxTbxCtrlFac
     pAppData_Impl->pTbxCtrlFac->push_back( pFact );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlFactory *pFact )
 {
@@ -115,7 +115,7 @@ void SfxApplication::RegisterStatusBarControl_Impl( SfxModule *pMod, SfxStbCtrlF
     pAppData_Impl->pStbCtrlFac->push_back( pFact );
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxApplication::RegisterMenuControl_Impl( SfxModule *pMod, SfxMenuCtrlFactory *pFact )
 {

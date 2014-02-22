@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -66,7 +66,7 @@ using namespace ::com::sun::star::text;
 namespace oox {
 namespace vml {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::drawing;
@@ -76,14 +76,14 @@ using namespace ::com::sun::star::io;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 namespace {
 
 const sal_Int32 VML_SHAPETYPE_PICTUREFRAME  = 75;
 const sal_Int32 VML_SHAPETYPE_HOSTCONTROL   = 201;
 
-// ----------------------------------------------------------------------------
+
 
 awt::Point lclGetAbsPoint( const awt::Point& rRelPoint, const awt::Rectangle& rShapeRect, const awt::Rectangle& rCoordSys )
 {
@@ -107,9 +107,9 @@ awt::Rectangle lclGetAbsRect( const awt::Rectangle& rRelRect, const awt::Rectang
     return aAbsRect;
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 ShapeTypeModel::ShapeTypeModel():
     mbAutoHeight( sal_False ),
@@ -130,7 +130,7 @@ void ShapeTypeModel::assignUsed( const ShapeTypeModel& rSource )
     moGraphicTitle.assignIfUsed( rSource.moGraphicTitle );
 }
 
-// ----------------------------------------------------------------------------
+
 
 ShapeType::ShapeType( Drawing& rDrawing ) :
     mrDrawing( rDrawing )
@@ -208,7 +208,7 @@ awt::Rectangle ShapeType::getRelRectangle() const
         nWidth, nHeight );
 }
 
-// ============================================================================
+
 
 ClientData::ClientData() :
     mnObjType( XML_TOKEN_INVALID ),
@@ -237,7 +237,7 @@ ClientData::ClientData() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ShapeModel::ShapeModel()
 {
@@ -259,7 +259,7 @@ ClientData& ShapeModel::createClientData()
     return *mxClientData;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ShapeBase::ShapeBase( Drawing& rDrawing ) :
     ShapeType( rDrawing )
@@ -318,7 +318,7 @@ Reference< XShape > ShapeBase::convertAndInsert( const Reference< XShapes >& rxS
             xShape = implConvertAndInsert( rxShapes, aShapeRect );
             if( xShape.is() )
             {
-                // set imported or generated shape name (not supported by form controls)
+                
                 PropertySet aShapeProp( xShape );
                 if( aShapeProp.hasProperty( PROP_Name ) )
                     aShapeProp.setProperty( PROP_Name, getShapeName() );
@@ -349,7 +349,7 @@ void ShapeBase::convertFormatting( const Reference< XShape >& rxShape, const Sha
             according to some imported shape client data (e.g. Excel cell anchor). */
         awt::Rectangle aShapeRect = calcShapeRectangle( pParentAnchor );
 
-        // convert the shape, if the calculated rectangle is not empty
+        
         if( (aShapeRect.Width > 0) || (aShapeRect.Height > 0) )
         {
             rxShape->setPosition( awt::Point( aShapeRect.X, aShapeRect.Y ) );
@@ -359,7 +359,7 @@ void ShapeBase::convertFormatting( const Reference< XShape >& rxShape, const Sha
     }
 }
 
-// protected ------------------------------------------------------------------
+
 
 awt::Rectangle ShapeBase::calcShapeRectangle( const ShapeParentAnchor* pParentAnchor ) const
 {
@@ -382,21 +382,21 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
     uno::Reference<lang::XServiceInfo> xSInfo(rxShape, uno::UNO_QUERY_THROW);
     if (xSInfo->supportsService("com.sun.star.text.TextFrame"))
     {
-        // Any other service supporting the ShadowFormat property?
+        
         maTypeModel.maShadowModel.pushToPropMap(aPropMap, rGraphicHelper);
-        // TextFrames have BackColor, not FillColor
+        
         if (aPropMap.hasProperty(PROP_FillColor))
         {
             aPropMap.setProperty(PROP_BackColor, aPropMap[PROP_FillColor]);
             aPropMap.erase(PROP_FillColor);
         }
-        // TextFrames have BackColorTransparency, not FillTransparence
+        
         if (aPropMap.hasProperty(PROP_FillTransparence))
         {
             aPropMap.setProperty(PROP_BackColorTransparency, aPropMap[PROP_FillTransparence]);
             aPropMap.erase(PROP_FillTransparence);
         }
-        // And no LineColor property; individual borders can have colors and widths
+        
         boost::optional<sal_Int32> oLineWidth;
         if (maTypeModel.maStrokeModel.moWeight.has())
             oLineWidth.reset(ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maTypeModel.maStrokeModel.moWeight.get(), 0, false, false));
@@ -423,7 +423,7 @@ void ShapeBase::convertShapeProperties( const Reference< XShape >& rxShape ) con
     PropertySet( rxShape ).setProperties( aPropMap );
 }
 
-// ============================================================================
+
 
 SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
     ShapeBase( rDrawing ),
@@ -462,7 +462,7 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 
     if ( rTypeModel.maPosition == "absolute" )
     {
-        // Word supports as-character (inline) and at-character only, absolute can't be inline.
+        
         rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_CHARACTER);
 
         if ( rTypeModel.maPositionVerticalRelative == "page" )
@@ -475,15 +475,15 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
         }
         else
         {
-            // Vertical placement relative to margin, because parent style must not modify vertical position
+            
             rPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::FRAME);
         }
     }
     else if( rTypeModel.maPosition == "relative" )
-    {   // I'm not very sure this is correct either.
+    {   
         rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AT_PARAGRAPH);
     }
-    else // static (is the default) means anchored inline
+    else 
     {
         rPropSet.setProperty(PROP_AnchorType, text::TextContentAnchorType_AS_CHARACTER);
     }
@@ -492,8 +492,8 @@ void lcl_SetAnchorType(PropertySet& rPropSet, const ShapeTypeModel& rTypeModel)
 
 void lcl_SetRotation(PropertySet& rPropSet, const sal_Int32 nRotation)
 {
-    // See DffPropertyReader::Fix16ToAngle(): in VML, positive rotation angles are clockwise, we have them as counter-clockwise.
-    // Additionally, VML type is 0..360, our is 0..36000.
+    
+    
     rPropSet.setAnyProperty(PROP_RotateAngle, makeAny(sal_Int32(NormAngle360(nRotation * -100))));
 }
 
@@ -519,10 +519,10 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, aShapeRect );
     convertShapeProperties( xShape );
 
-    // Handle left/right/top/bottom wrap distance.
-    // Default value of mso-wrap-distance-left/right is supposed to be 0 (see
-    // 19.1.2.19 of the VML spec), but Word implements a non-zero value.
-    // [MS-ODRAW] says the below default value in 2.3.4.9.
+    
+    
+    
+    
     const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
     OUString aWrapDistanceLeft = OUString::number(0x0001BE7C);
     if (!maTypeModel.maWrapDistanceLeft.isEmpty())
@@ -556,7 +556,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         }
         if (!maTypeModel.maLayoutFlowAlt.isEmpty())
         {
-            // Can't handle this property here, as the frame is not attached yet: pass it to writerfilter.
+            
             uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
             uno::Sequence<beans::PropertyValue> aGrabBag;
             xPropertySet->getPropertyValue("FrameInteropGrabBag") >>= aGrabBag;
@@ -579,35 +579,35 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     }
     else
     {
-        // FIXME Setting the relative width/heigh only for everything but text frames as
-        // TextFrames already have relative width/height feature... but currently not working
-        // in the way we need.
+        
+        
+        
 
-        // Set the relative width / height if any
+        
         if ( !maTypeModel.maWidthPercent.isEmpty( ) )
         {
-            // Only page-relative width is supported ATM
+            
             if ( maTypeModel.maWidthRelative.isEmpty() || maTypeModel.maWidthRelative == "page" )
             {
                 sal_Int16 nWidth = maTypeModel.maWidthPercent.toInt32() / 10;
-                // Only apply if nWidth != 0
+                
                 if ( nWidth )
                     PropertySet( xShape ).setAnyProperty(PROP_RelativeWidth, makeAny( nWidth ) );
             }
         }
         if ( !maTypeModel.maHeightPercent.isEmpty( ) )
         {
-            // Only page-relative height is supported ATM
+            
             if ( maTypeModel.maHeightRelative.isEmpty() || maTypeModel.maHeightRelative == "page" )
             {
                 sal_Int16 nHeight = maTypeModel.maHeightPercent.toInt32() / 10;
-                // Only apply if nHeight != 0
+                
                 if ( nHeight )
                     PropertySet( xShape ).setAnyProperty(PROP_RelativeHeight, makeAny( nHeight ) );
             }
         }
 
-        // drawinglayer default is center, MSO default is top.
+        
         drawing::TextVerticalAdjust eTextVerticalAdjust = drawing::TextVerticalAdjust_TOP;
         if (maTypeModel.maVTextAnchor == "middle")
             eTextVerticalAdjust = drawing::TextVerticalAdjust_CENTER;
@@ -630,7 +630,7 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         }
     }
 
-    // Import Legacy Fragments (if any)
+    
     if( xShape.is() && !maShapeModel.maLegacyDiagramPath.isEmpty() )
     {
         Reference< XInputStream > xInStrm( mrDrawing.getFilter().openInputStream( maShapeModel.maLegacyDiagramPath ), UNO_SET_THROW );
@@ -647,15 +647,15 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
             uno::Reference<lang::XServiceInfo> xServiceInfo(rxShapes, uno::UNO_QUERY);
             if (!xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
             {
-                // If rotation is used, simple setPosition() is not enough.
+                
                 aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny(aShapeRect.X));
                 aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny(aShapeRect.Y));
             }
         }
 
-        // When flip has 'x' or 'y', the associated ShapeRect will be changed but direction change doesn't occur.
-        // It might occur internally in SdrObject of "sw" module, not here.
-        // The associated properties "PROP_MirroredX" and "PROP_MirroredY" have to be set here so that direction change will occur internally.
+        
+        
+        
         if (bFlipX || bFlipY)
         {
             com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aPropSequence (2);
@@ -694,14 +694,14 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
             aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
         }
         uno::Reference< lang::XServiceInfo > xServiceInfo(rxShapes, uno::UNO_QUERY);
-        // If the shape has an absolute position, set the properties accordingly, unless we're inside a group shape.
+        
         if ( maTypeModel.maPosition == "absolute" && !xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
         {
             aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
             aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
             aPropSet.setProperty(PROP_Opaque, sal_False);
         }
-        // fdo#70457: preserve rotation information
+        
         if ( !maTypeModel.maRotation.isEmpty() )
             lcl_SetRotation( aPropSet, maTypeModel.maRotation.toInt32() );
 
@@ -710,7 +710,7 @@ Reference< XShape > SimpleShape::createPictureObject( const Reference< XShapes >
     return xShape;
 }
 
-// ============================================================================
+
 
 RectangleShape::RectangleShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.RectangleShape" )
@@ -721,18 +721,18 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
 {
     OUString aGraphicPath = getGraphicPath();
 
-    // try to create a picture object
+    
     if(!aGraphicPath.isEmpty())
         return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
 
-    // default: try to create a rectangle shape
+    
     Reference<XShape> xShape = SimpleShape::implConvertAndInsert(rxShapes, rShapeRect);
     OUString sArcsize = maTypeModel.maArcsize;
     if ( !sArcsize.isEmpty( ) )
     {
         sal_Unicode cLastChar = sArcsize[sArcsize.getLength() - 1];
         sal_Int32 nValue = sArcsize.copy( 0, sArcsize.getLength() - 1 ).toInt32( );
-        // Get the smallest half-side
+        
         double size = std::min( rShapeRect.Height, rShapeRect.Width ) / 2.0;
         sal_Int32 nRadius = 0;
         if ( cLastChar == 'f' )
@@ -744,14 +744,14 @@ Reference<XShape> RectangleShape::implConvertAndInsert(const Reference<XShapes>&
     return xShape;
 }
 
-// ============================================================================
+
 
 EllipseShape::EllipseShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.EllipseShape" )
 {
 }
 
-// ============================================================================
+
 
 PolyLineShape::PolyLineShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.PolyLineShape" )
@@ -761,7 +761,7 @@ PolyLineShape::PolyLineShape( Drawing& rDrawing ) :
 Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
-    // polygon path
+    
     awt::Rectangle aCoordSys = getCoordSystem();
     if( !maShapeModel.maPoints.empty() && (aCoordSys.Width > 0) && (aCoordSys.Height > 0) )
     {
@@ -808,7 +808,7 @@ awt::Rectangle LineShape::getRelRectangle() const
     return aShapeRect;
 }
 
-// ============================================================================
+
 
 BezierShape::BezierShape(Drawing& rDrawing)
     : SimpleShape(rDrawing, "com.sun.star.drawing.OpenBezierShape")
@@ -817,7 +817,7 @@ BezierShape::BezierShape(Drawing& rDrawing)
 
 Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
-    // If we have an 'x' in the last part of the path it means it is closed...
+    
     sal_Int32 nPos = maShapeModel.maVmlPath.lastIndexOf(',');
     if ( nPos != -1 && maShapeModel.maVmlPath.copy(nPos).indexOf('x') != -1 )
     {
@@ -831,45 +831,45 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
     {
         const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
 
-        // Bezier paths may consist of one or more sub-paths
+        
         typedef ::std::vector< ::std::vector< awt::Point > > SubPathList;
         typedef ::std::vector< ::std::vector< PolygonFlags > > FlagsList;
         SubPathList aCoordLists;
         FlagsList aFlagLists;
         sal_Int32 nIndex = 0;
 
-        // Curve defined by to, from, control1 and control2 attributes
+        
         if ( maShapeModel.maVmlPath.isEmpty() )
         {
             aCoordLists.push_back( ::std::vector< awt::Point >() );
             aFlagLists.push_back( ::std::vector< PolygonFlags >() );
 
-            // Start point
+            
             aCoordLists[ 0 ].push_back(
                 awt::Point(ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maFrom.getToken( 0, ',', nIndex ), 0, true, true ),
                   ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maFrom.getToken( 0, ',', nIndex ), 0, false, true ) ) );
-            // Control point 1
+            
             aCoordLists[ 0 ].push_back(
                 awt::Point( ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl1.getToken( 0, ',', nIndex ), 0, true, true ),
                       ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl1.getToken( 0, ',', nIndex ), 0, false, true ) ) );
-            // Control point 2
+            
             aCoordLists[ 0 ].push_back(
                 awt::Point( ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl2.getToken( 0, ',', nIndex ), 0, true, true ),
                       ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maControl2.getToken( 0, ',', nIndex ), 0, false, true ) ) );
-            // End point
+            
             aCoordLists[ 0 ].push_back(
                 awt::Point( ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maTo.getToken( 0, ',', nIndex ), 0, true, true ),
                       ConversionHelper::decodeMeasureToHmm( rGraphicHelper, maShapeModel.maTo.getToken( 0, ',', nIndex ), 0, false, true ) ) );
 
-            // First and last points are normals, points 2 and 4 are controls
+            
             aFlagLists[ 0 ].resize( aCoordLists[ 0 ].size(), PolygonFlags_CONTROL );
             aFlagLists[ 0 ][ 0 ] = PolygonFlags_NORMAL;
             aFlagLists[ 0 ].back() = PolygonFlags_NORMAL;
         }
-        // Curve defined by path attribute
+        
         else
         {
-            // Parse VML path string and convert to absolute coordinates
+            
             ConversionHelper::decodeVmlPath( aCoordLists, aFlagLists, maShapeModel.maVmlPath );
 
             for ( SubPathList::iterator aListIt = aCoordLists.begin(); aListIt != aCoordLists.end(); ++aListIt )
@@ -890,8 +890,8 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         if( !aCoordLists.front().empty() && !aCoordLists.back().empty()
             && aCoordLists.front().front().X == aCoordLists.back().back().X
             && aCoordLists.front().front().Y == aCoordLists.back().back().Y )
-        { // HACK: If the shape is in fact closed, which can be found out only when the path is known,
-          // force to closed bezier shape (otherwise e.g. fill won't work).
+        { 
+          
             const_cast< BezierShape* >( this )->setService( "com.sun.star.drawing.ClosedBezierShape" );
         }
     }
@@ -904,13 +904,13 @@ Reference< XShape > BezierShape::implConvertAndInsert( const Reference< XShapes 
         aPropSet.setProperty( PROP_PolyPolygonBezier, aBezierCoords );
     }
 
-    // Hacky way of ensuring the shape is correctly sized/positioned
+    
     xShape->setSize( awt::Size( rShapeRect.Width, rShapeRect.Height ) );
     xShape->setPosition( awt::Point( rShapeRect.X, rShapeRect.Y ) );
     return xShape;
 }
 
-// ============================================================================
+
 
 CustomShape::CustomShape( Drawing& rDrawing ) :
     SimpleShape( rDrawing, "com.sun.star.drawing.CustomShape" )
@@ -919,14 +919,14 @@ CustomShape::CustomShape( Drawing& rDrawing ) :
 
 Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
-    // try to create a custom shape
+    
     Reference< XShape > xShape = SimpleShape::implConvertAndInsert( rxShapes, rShapeRect );
     if( xShape.is() ) try
     {
-        // create the custom shape geometry
+        
         Reference< XEnhancedCustomShapeDefaulter > xDefaulter( xShape, UNO_QUERY_THROW );
         xDefaulter->createCustomShapeDefaults( OUString::number( getShapeType() ) );
-        // convert common properties
+        
         convertShapeProperties( xShape );
     }
     catch( Exception& )
@@ -935,7 +935,7 @@ Reference< XShape > CustomShape::implConvertAndInsert( const Reference< XShapes 
     return xShape;
 }
 
-// ============================================================================
+
 
 ComplexShape::ComplexShape( Drawing& rDrawing ) :
     CustomShape( rDrawing )
@@ -948,14 +948,14 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
     sal_Int32 nShapeType = getShapeType();
     OUString aGraphicPath = getGraphicPath();
 
-    // try to find registered OLE object info
+    
     if( const OleObjectInfo* pOleObjectInfo = mrDrawing.getOleObjectInfo( maTypeModel.maShapeId ) )
     {
         SAL_WARN_IF(
             nShapeType != VML_SHAPETYPE_PICTUREFRAME, "oox",
             "ComplexShape::implConvertAndInsert - unexpected shape type");
 
-        // if OLE object is embedded into a DrawingML shape (PPTX), do not create it here
+        
         if( pOleObjectInfo->mbDmlShape )
             return Reference< XShape >();
 
@@ -966,7 +966,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             Reference< XShape > xShape = mrDrawing.createAndInsertXShape( "com.sun.star.drawing.OLE2Shape", rxShapes, rShapeRect );
             if( xShape.is() )
             {
-                // set the replacement graphic
+                
                 if( !aGraphicPath.isEmpty() )
                 {
                     Reference< XGraphic > xGraphic = rFilter.getGraphicHelper().importEmbeddedGraphic( aGraphicPath );
@@ -982,7 +982,7 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         }
     }
 
-    // try to find registered form control info
+    
     const ControlInfo* pControlInfo = mrDrawing.getControlInfo( maTypeModel.maShapeId );
     if( pControlInfo && !pControlInfo->maFragmentPath.isEmpty() )
     {
@@ -991,21 +991,21 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         if( !aShapeName.isEmpty() )
         {
             OSL_ENSURE( aShapeName == pControlInfo->maName, "ComplexShape::implConvertAndInsert - control name mismatch" );
-            // load the control properties from fragment
+            
             ::oox::ole::EmbeddedControl aControl( aShapeName );
             if( rFilter.importFragment( new ::oox::ole::AxControlFragment( rFilter, pControlInfo->maFragmentPath, aControl ) ) )
             {
-                // create and return the control shape (including control model)
+                
                 sal_Int32 nCtrlIndex = -1;
                 Reference< XShape > xShape = mrDrawing.createAndInsertXControlShape( aControl, rxShapes, rShapeRect, nCtrlIndex );
-                // on error, proceed and try to create picture from replacement image
+                
                 if( xShape.is() )
                     return xShape;
             }
         }
     }
 
-    // host application wants to create the shape (do not try failed OLE controls again)
+    
     if( (nShapeType == VML_SHAPETYPE_HOSTCONTROL) && !pControlInfo )
     {
         OSL_ENSURE( getClientData(), "ComplexShape::implConvertAndInsert - missing client data" );
@@ -1014,15 +1014,15 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
             return xShape;
     }
 
-    // try to create a picture object
+    
     if( !aGraphicPath.isEmpty() )
         return SimpleShape::createPictureObject(rxShapes, rShapeRect, aGraphicPath);
 
-    // default: try to create a custom shape
+    
     return CustomShape::implConvertAndInsert( rxShapes, rShapeRect );
 }
 
-// ============================================================================
+
 
 GroupShape::GroupShape( Drawing& rDrawing ) :
     ShapeBase( rDrawing ),
@@ -1036,9 +1036,9 @@ GroupShape::~GroupShape()
 
 void GroupShape::finalizeFragmentImport()
 {
-    // basic shape processing
+    
     ShapeBase::finalizeFragmentImport();
-    // finalize all child shapes
+    
     mxChildren->finalizeFragmentImport();
 }
 
@@ -1055,7 +1055,7 @@ const ShapeBase* GroupShape::getChildById( const OUString& rShapeId ) const
 Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const awt::Rectangle& rShapeRect ) const
 {
     Reference< XShape > xGroupShape;
-    // check that this shape contains children and a valid coordinate system
+    
     ShapeParentAnchor aParentAnchor;
     aParentAnchor.maShapeRect = rShapeRect;
     aParentAnchor.maCoordSys = getCoordSystem();
@@ -1096,7 +1096,7 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
        }
        xPropertySet->setPropertyValue("InteropGrabBag", uno::makeAny(aGrabBag));
     }
-    // Make sure group shapes are inline as well, unless there is an explicit different style.
+    
     PropertySet aPropertySet(xGroupShape);
     lcl_SetAnchorType(aPropertySet, maTypeModel);
     if (!maTypeModel.maRotation.isEmpty())
@@ -1104,9 +1104,9 @@ Reference< XShape > GroupShape::implConvertAndInsert( const Reference< XShapes >
     return xGroupShape;
 }
 
-// ============================================================================
 
-} // namespace vml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

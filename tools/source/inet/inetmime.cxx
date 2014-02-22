@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstddef>
@@ -27,7 +27,7 @@
 #include <rtl/character.hxx>
 
 namespace unnamed_tools_inetmime {} using namespace unnamed_tools_inetmime;
-    // unnamed namespaces don't work well yet
+    
 
 namespace unnamed_tools_inetmime {
 
@@ -158,7 +158,7 @@ bool parseParameters(ParameterList const & rInput,
 
 }
 
-//  Charset
+
 
 bool Charset::contains(sal_uInt32 nChar) const
 {
@@ -171,7 +171,7 @@ bool Charset::contains(sal_uInt32 nChar) const
     }
 }
 
-//  appendISO88591
+
 
 namespace unnamed_tools_inetmime {
 
@@ -188,7 +188,7 @@ void appendISO88591(OUString & rText, sal_Char const * pBegin,
 
 }
 
-//  INetMIMECharsetList_Impl
+
 
 INetMIMECharsetList_Impl::~INetMIMECharsetList_Impl()
 {
@@ -222,7 +222,7 @@ void INetMIMECharsetList_Impl::reset()
         p->m_bDisabled = false;
 }
 
-//  ParameterList
+
 
 Parameter ** ParameterList::find(const OString& rAttribute,
                                  sal_uInt32 nSection, bool & rPresent)
@@ -248,7 +248,7 @@ Parameter ** ParameterList::find(const OString& rAttribute,
     return p;
 }
 
-//  parseParameters
+
 
 namespace unnamed_tools_inetmime {
 
@@ -346,9 +346,9 @@ bool parseParameters(ParameterList const & rInput,
 
 }
 
-//  INetMIME
 
-// static
+
+
 bool INetMIME::isAtomChar(sal_uInt32 nChar)
 {
     static const bool aMap[128]
@@ -356,23 +356,23 @@ bool INetMIME::isAtomChar(sal_uInt32 nChar)
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
-            false,  true, false,  true,  true,  true,  true,  true, // !"#$%&'
-            false, false,  true,  true, false,  true, false,  true, //()*+,-./
-             true,  true,  true,  true,  true,  true,  true,  true, //01234567
-             true,  true, false, false, false,  true, false,  true, //89:;<=>?
-            false,  true,  true,  true,  true,  true,  true,  true, //@ABCDEFG
-             true,  true,  true,  true,  true,  true,  true,  true, //HIJKLMNO
-             true,  true,  true,  true,  true,  true,  true,  true, //PQRSTUVW
-             true,  true,  true, false, false, false,  true,  true, //XYZ[\]^_
-             true,  true,  true,  true,  true,  true,  true,  true, //`abcdefg
-             true,  true,  true,  true,  true,  true,  true,  true, //hijklmno
-             true,  true,  true,  true,  true,  true,  true,  true, //pqrstuvw
-             true,  true,  true,  true,  true,  true,  true, false  //xyz{|}~
+            false,  true, false,  true,  true,  true,  true,  true, 
+            false, false,  true,  true, false,  true, false,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true, false, false, false,  true, false,  true, 
+            false,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true, false, false, false,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true, false  
           };
     return rtl::isAscii(nChar) && aMap[nChar];
 }
 
-// static
+
 bool INetMIME::isTokenChar(sal_uInt32 nChar)
 {
     static const bool aMap[128]
@@ -380,23 +380,23 @@ bool INetMIME::isTokenChar(sal_uInt32 nChar)
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
-            false,  true, false,  true,  true,  true,  true,  true, // !"#$%&'
-            false, false,  true,  true, false,  true,  true, false, //()*+,-./
-             true,  true,  true,  true,  true,  true,  true,  true, //01234567
-             true,  true, false, false, false, false, false, false, //89:;<=>?
-            false,  true,  true,  true,  true,  true,  true,  true, //@ABCDEFG
-             true,  true,  true,  true,  true,  true,  true,  true, //HIJKLMNO
-             true,  true,  true,  true,  true,  true,  true,  true, //PQRSTUVW
-             true,  true,  true, false, false, false,  true,  true, //XYZ[\]^_
-             true,  true,  true,  true,  true,  true,  true,  true, //`abcdefg
-             true,  true,  true,  true,  true,  true,  true,  true, //hijklmno
-             true,  true,  true,  true,  true,  true,  true,  true, //pqrstuvw
-             true,  true,  true,  true,  true,  true,  true, false  //xyz{|}~
+            false,  true, false,  true,  true,  true,  true,  true, 
+            false, false,  true,  true, false,  true,  true, false, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true, false, false, false, false, false, false, 
+            false,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true, false, false, false,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true, false  
           };
     return rtl::isAscii(nChar) && aMap[nChar];
 }
 
-// static
+
 bool INetMIME::isEncodedWordTokenChar(sal_uInt32 nChar)
 {
     static const bool aMap[128]
@@ -404,23 +404,23 @@ bool INetMIME::isEncodedWordTokenChar(sal_uInt32 nChar)
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
-            false,  true, false,  true,  true,  true,  true,  true, // !"#$%&'
-            false, false,  true,  true, false,  true, false, false, //()*+,-./
-             true,  true,  true,  true,  true,  true,  true,  true, //01234567
-             true,  true, false, false, false, false, false, false, //89:;<=>?
-            false,  true,  true,  true,  true,  true,  true,  true, //@ABCDEFG
-             true,  true,  true,  true,  true,  true,  true,  true, //HIJKLMNO
-             true,  true,  true,  true,  true,  true,  true,  true, //PQRSTUVW
-             true,  true,  true, false, false, false,  true,  true, //XYZ[\]^_
-             true,  true,  true,  true,  true,  true,  true,  true, //`abcdefg
-             true,  true,  true,  true,  true,  true,  true,  true, //hijklmno
-             true,  true,  true,  true,  true,  true,  true,  true, //pqrstuvw
-             true,  true,  true,  true,  true,  true,  true, false  //xyz{|}~
+            false,  true, false,  true,  true,  true,  true,  true, 
+            false, false,  true,  true, false,  true, false, false, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true, false, false, false, false, false, false, 
+            false,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true, false, false, false,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true, false  
           };
     return rtl::isAscii(nChar) && aMap[nChar];
 }
 
-// static
+
 bool INetMIME::isIMAPAtomChar(sal_uInt32 nChar)
 {
     static const bool aMap[128]
@@ -428,23 +428,23 @@ bool INetMIME::isIMAPAtomChar(sal_uInt32 nChar)
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
             false, false, false, false, false, false, false, false,
-            false,  true, false,  true,  true, false,  true,  true, // !"#$%&'
-            false, false, false,  true,  true,  true,  true,  true, //()*+,-./
-             true,  true,  true,  true,  true,  true,  true,  true, //01234567
-             true,  true,  true,  true,  true,  true,  true,  true, //89:;<=>?
-             true,  true,  true,  true,  true,  true,  true,  true, //@ABCDEFG
-             true,  true,  true,  true,  true,  true,  true,  true, //HIJKLMNO
-             true,  true,  true,  true,  true,  true,  true,  true, //PQRSTUVW
-             true,  true,  true,  true, false,  true,  true,  true, //XYZ[\]^_
-             true,  true,  true,  true,  true,  true,  true,  true, //`abcdefg
-             true,  true,  true,  true,  true,  true,  true,  true, //hijklmno
-             true,  true,  true,  true,  true,  true,  true,  true, //pqrstuvw
-             true,  true,  true, false,  true,  true,  true, false  //xyz{|}~
+            false,  true, false,  true,  true, false,  true,  true, 
+            false, false, false,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true, false,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true,  true,  true,  true,  true,  true, 
+             true,  true,  true, false,  true,  true,  true, false  
           };
     return rtl::isAscii(nChar) && aMap[nChar];
 }
 
-// static
+
 sal_uInt32 INetMIME::getHexDigit(int nWeight)
 {
     DBG_ASSERT(nWeight >= 0 && nWeight < 16,
@@ -456,7 +456,7 @@ sal_uInt32 INetMIME::getHexDigit(int nWeight)
     return aDigits[nWeight];
 }
 
-// static
+
 bool INetMIME::equalIgnoreCase(const sal_Char * pBegin1,
                                const sal_Char * pEnd1,
                                const sal_Char * pString2)
@@ -471,7 +471,7 @@ bool INetMIME::equalIgnoreCase(const sal_Char * pBegin1,
     return pBegin1 == pEnd1;
 }
 
-// static
+
 bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
                                const sal_Unicode * pEnd1,
                                const sal_Char * pString2)
@@ -486,7 +486,7 @@ bool INetMIME::equalIgnoreCase(const sal_Unicode * pBegin1,
     return pBegin1 == pEnd1;
 }
 
-// static
+
 const sal_Unicode * INetMIME::skipLinearWhiteSpace(const sal_Unicode * pBegin,
                                                    const sal_Unicode * pEnd)
 {
@@ -501,7 +501,7 @@ const sal_Unicode * INetMIME::skipLinearWhiteSpace(const sal_Unicode * pBegin,
                 ++pBegin;
                 break;
 
-            case 0x0D: // CR
+            case 0x0D: 
                 if (startsWithLineFolding(pBegin, pEnd))
                     pBegin += 3;
                 else
@@ -514,7 +514,7 @@ const sal_Unicode * INetMIME::skipLinearWhiteSpace(const sal_Unicode * pBegin,
     return pBegin;
 }
 
-// static
+
 const sal_Unicode * INetMIME::skipComment(const sal_Unicode * pBegin,
                                           const sal_Unicode * pEnd)
 {
@@ -545,7 +545,7 @@ const sal_Unicode * INetMIME::skipComment(const sal_Unicode * pBegin,
     return pBegin;
 }
 
-// static
+
 const sal_Unicode * INetMIME::skipLinearWhiteSpaceComment(const sal_Unicode *
                                                               pBegin,
                                                           const sal_Unicode *
@@ -562,7 +562,7 @@ const sal_Unicode * INetMIME::skipLinearWhiteSpaceComment(const sal_Unicode *
                 ++pBegin;
                 break;
 
-            case 0x0D: // CR
+            case 0x0D: 
                 if (startsWithLineFolding(pBegin, pEnd))
                     pBegin += 3;
                 else
@@ -584,7 +584,7 @@ const sal_Unicode * INetMIME::skipLinearWhiteSpaceComment(const sal_Unicode *
     return pBegin;
 }
 
-// static
+
 const sal_Char * INetMIME::skipQuotedString(const sal_Char * pBegin,
                                             const sal_Char * pEnd)
 {
@@ -595,8 +595,8 @@ const sal_Char * INetMIME::skipQuotedString(const sal_Char * pBegin,
         for (const sal_Char * p = pBegin + 1; p != pEnd;)
             switch (*p++)
             {
-                case 0x0D: // CR
-                    if (pEnd - p < 2 || *p++ != 0x0A // LF
+                case 0x0D: 
+                    if (pEnd - p < 2 || *p++ != 0x0A 
                         || !isWhiteSpace(*p++))
                         return pBegin;
                     break;
@@ -612,7 +612,7 @@ const sal_Char * INetMIME::skipQuotedString(const sal_Char * pBegin,
     return pBegin;
 }
 
-// static
+
 const sal_Unicode * INetMIME::skipQuotedString(const sal_Unicode * pBegin,
                                                const sal_Unicode * pEnd)
 {
@@ -623,8 +623,8 @@ const sal_Unicode * INetMIME::skipQuotedString(const sal_Unicode * pBegin,
         for (const sal_Unicode * p = pBegin + 1; p != pEnd;)
             switch (*p++)
             {
-                case 0x0D: // CR
-                    if (pEnd - p < 2 || *p++ != 0x0A // LF
+                case 0x0D: 
+                    if (pEnd - p < 2 || *p++ != 0x0A 
                         || !isWhiteSpace(*p++))
                         return pBegin;
                     break;
@@ -640,7 +640,7 @@ const sal_Unicode * INetMIME::skipQuotedString(const sal_Unicode * pBegin,
     return pBegin;
 }
 
-// static
+
 bool INetMIME::scanUnsigned(const sal_Unicode *& rBegin,
                             const sal_Unicode * pEnd, bool bLeadingZeroes,
                             sal_uInt32 & rValue)
@@ -663,7 +663,7 @@ bool INetMIME::scanUnsigned(const sal_Unicode *& rBegin,
     return true;
 }
 
-// static
+
 const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
                                               const sal_Unicode * pEnd,
                                               sal_uInt32 nOpening,
@@ -689,8 +689,8 @@ const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
                 sal_uInt32 c = *pBegin++;
                 switch (c)
                 {
-                    case 0x0D: // CR
-                        if (pBegin != pEnd && *pBegin == 0x0A) // LF
+                    case 0x0D: 
+                        if (pBegin != pEnd && *pBegin == 0x0A) 
                             if (pEnd - pBegin >= 2 && isWhiteSpace(pBegin[1]))
                             {
                                 ++rLength;
@@ -735,7 +735,7 @@ const sal_Unicode * INetMIME::scanQuotedBlock(const sal_Unicode * pBegin,
     return pBegin;
 }
 
-// static
+
 sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                                              sal_Unicode const * pEnd,
                                              INetContentTypeParameterList *
@@ -904,9 +904,9 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
                     sal_uInt32 nChar = INetMIME::getUTF32Character(p, pEnd);
                     if (nChar == '"')
                         break;
-                    else if (nChar == 0x0D) // CR
+                    else if (nChar == 0x0D) 
                     {
-                        if (pEnd - p < 2 || *p++ != 0x0A // LF
+                        if (pEnd - p < 2 || *p++ != 0x0A 
                             || !isWhiteSpace(*p))
                         {
                             bInvalid = true;
@@ -955,7 +955,7 @@ sal_Unicode const * INetMIME::scanParameters(sal_Unicode const * pBegin,
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
 }
 
-// static
+
 const sal_Char * INetMIME::getCharsetName(rtl_TextEncoding eEncoding)
 {
     if (rtl_isOctetTextEncoding(eEncoding))
@@ -987,9 +987,9 @@ struct EncodingEntry
     rtl_TextEncoding m_eEncoding;
 };
 
-// The source for the following table is <ftp://ftp.iana.org/in-notes/iana/
-// assignments/character-sets> as of Jan, 21 2000 12:46:00, unless  otherwise
-// noted:
+
+
+
 EncodingEntry const aEncodingMap[]
     = { { "US-ASCII", RTL_TEXTENCODING_ASCII_US },
         { "ANSI_X3.4-1968", RTL_TEXTENCODING_ASCII_US },
@@ -1068,9 +1068,9 @@ EncodingEntry const aEncodingMap[]
         { "LATIN5", RTL_TEXTENCODING_ISO_8859_9 },
         { "L5", RTL_TEXTENCODING_ISO_8859_9 },
         { "CSISOLATIN5", RTL_TEXTENCODING_ISO_8859_9 },
-        { "ISO-8859-14", RTL_TEXTENCODING_ISO_8859_14 }, // RFC 2047
+        { "ISO-8859-14", RTL_TEXTENCODING_ISO_8859_14 }, 
         { "ISO_8859-15", RTL_TEXTENCODING_ISO_8859_15 },
-        { "ISO-8859-15", RTL_TEXTENCODING_ISO_8859_15 }, // RFC 2047
+        { "ISO-8859-15", RTL_TEXTENCODING_ISO_8859_15 }, 
         { "MACINTOSH", RTL_TEXTENCODING_APPLE_ROMAN },
         { "MAC", RTL_TEXTENCODING_APPLE_ROMAN },
         { "CSMACINTOSH", RTL_TEXTENCODING_APPLE_ROMAN },
@@ -1156,8 +1156,8 @@ EncodingEntry const aEncodingMap[]
         { "CSKOI8R", RTL_TEXTENCODING_KOI8_R },
         { "UTF-7", RTL_TEXTENCODING_UTF7 },
         { "UTF-8", RTL_TEXTENCODING_UTF8 },
-        { "ISO-8859-10", RTL_TEXTENCODING_ISO_8859_10 }, // RFC 2047
-        { "ISO-8859-13", RTL_TEXTENCODING_ISO_8859_13 }, // RFC 2047
+        { "ISO-8859-10", RTL_TEXTENCODING_ISO_8859_10 }, 
+        { "ISO-8859-13", RTL_TEXTENCODING_ISO_8859_13 }, 
         { "EUC-KR", RTL_TEXTENCODING_EUC_KR },
         { "CSEUCKR", RTL_TEXTENCODING_EUC_KR },
         { "ISO-2022-KR", RTL_TEXTENCODING_ISO_2022_KR },
@@ -1180,22 +1180,22 @@ inline rtl_TextEncoding getCharsetEncoding_Impl(T const * pBegin,
 
 }
 
-// static
+
 rtl_TextEncoding INetMIME::getCharsetEncoding(sal_Char const * pBegin,
                                               sal_Char const * pEnd)
 {
     return getCharsetEncoding_Impl(pBegin, pEnd);
 }
 
-// static
+
 INetMIMECharsetList_Impl *
 INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
 {
     static const sal_uInt32 aUSASCIIRanges[] = { 0, 0x7F, sal_uInt32(-1) };
 
     static const sal_uInt32 aISO88591Ranges[] = { 0, 0xFF, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-1.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO88592Ranges[]
         = { 0, 0xA0, 0xA4, 0xA4, 0xA7, 0xA8, 0xAD, 0xAD, 0xB0, 0xB0,
@@ -1208,8 +1208,8 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             0x147, 0x148, 0x150, 0x151, 0x154, 0x155, 0x158, 0x15B,
             0x15E, 0x165, 0x16E, 0x171, 0x179, 0x17E, 0x2C7, 0x2C7,
             0x2D8, 0x2D9, 0x2DB, 0x2DB, 0x2DD, 0x2DD, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-2.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO88593Ranges[]
         = { 0, 0xA0, 0xA3, 0xA4, 0xA7, 0xA8, 0xAD, 0xAD, 0xB0, 0xB0,
@@ -1219,8 +1219,8 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             0x108, 0x10B, 0x11C, 0x121, 0x124, 0x127, 0x130, 0x131,
             0x134, 0x135, 0x15C, 0x15F, 0x16C, 0x16D, 0x17B, 0x17C,
             0x2D8, 0x2D9, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-3.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO88594Ranges[]
         = { 0, 0xA0, 0xA4, 0xA4, 0xA7, 0xA8, 0xAD, 0xAD, 0xAF, 0xB0,
@@ -1233,41 +1233,41 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             0x156, 0x157, 0x160, 0x161, 0x166, 0x16B, 0x172, 0x173,
             0x17D, 0x17E, 0x2C7, 0x2C7, 0x2D9, 0x2D9, 0x2DB, 0x2DB,
             sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-4.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO88595Ranges[]
         = { 0, 0xA0, 0xA7, 0xA7, 0xAD, 0xAD, 0x401, 0x40C, 0x40E, 0x44F,
             0x451, 0x45C, 0x45E, 0x45F, 0x2116, 0x2116, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-5.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO88596Ranges[]
         = { 0, 0xA0, 0xA4, 0xA4, 0xAD, 0xAD, 0x60C, 0x60C, 0x61B, 0x61B,
             0x61F, 0x61F, 0x621, 0x63A, 0x640, 0x652, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-6.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO88597Ranges[]
         = { 0, 0xA0, 0xA3, 0xA3, 0xA6, 0xA9, 0xAB, 0xAD, 0xB0, 0xB3,
             0xB7, 0xB7, 0xBB, 0xBB, 0xBD, 0xBD, 0x384, 0x386, 0x388, 0x38A,
             0x38C, 0x38C, 0x38E, 0x3A1, 0x3A3, 0x3CE, 0x2015, 0x2015,
             0x2018, 0x2019, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-7.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO88598Ranges[]
         = { 0, 0xA0, 0xA2, 0xA9, 0xAB, 0xB9, 0xBB, 0xBE, 0xD7, 0xD7,
             0xF7, 0xF7, 0x5D0, 0x5EA, 0x200E, 0x200F, 0x2017, 0x2017,
             sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-8.TXT> version
-        // 1.1 of 2000-Jan-03
+        
+        
 
     static const sal_uInt32 aISO88599Ranges[]
         = { 0, 0xCF, 0xD1, 0xDC, 0xDF, 0xEF, 0xF1, 0xFC, 0xFF, 0xFF,
             0x11E, 0x11F, 0x130, 0x131, 0x15E, 0x15F, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-9.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO885910Ranges[]
         = { 0, 0xA0, 0xA7, 0xA7, 0xAD, 0xAD, 0xB0, 0xB0, 0xB7, 0xB7,
@@ -1279,8 +1279,8 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             0x13B, 0x13C, 0x145, 0x146, 0x14A, 0x14D, 0x160, 0x161,
             0x166, 0x16B, 0x172, 0x173, 0x17D, 0x17E, 0x2015, 0x2015,
             sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-10.TXT> version
-        // 1.1 of 1999 October 11
+        
+        
 
     static const sal_uInt32 aISO885913Ranges[]
         = { 0, 0xA0, 0xA2, 0xA4, 0xA6, 0xA7, 0xA9, 0xA9, 0xAB, 0xAE,
@@ -1293,8 +1293,8 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             0x156, 0x157, 0x15A, 0x15B, 0x160, 0x161, 0x16A, 0x16B,
             0x172, 0x173, 0x179, 0x17E, 0x2019, 0x2019, 0x201C, 0x201E,
             sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-13.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO885914Ranges[]
         = { 0, 0xA0, 0xA3, 0xA3, 0xA7, 0xA7, 0xA9, 0xA9, 0xAD, 0xAE,
@@ -1303,15 +1303,15 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             0x174, 0x178, 0x1E02, 0x1E03, 0x1E0A, 0x1E0B, 0x1E1E, 0x1E1F,
             0x1E40, 0x1E41, 0x1E56, 0x1E57, 0x1E60, 0x1E61, 0x1E6A, 0x1E6B,
             0x1E80, 0x1E85, 0x1EF2, 0x1EF3, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-14.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aISO885915Ranges[]
         = { 0, 0xA3, 0xA5, 0xA5, 0xA7, 0xA7, 0xA9, 0xB3, 0xB5, 0xB7,
             0xB9, 0xBB, 0xBF, 0xFF, 0x152, 0x153, 0x160, 0x161, 0x178, 0x178,
             0x17D, 0x17E, 0x20AC, 0x20AC, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/ISO8859/8859-15.TXT> version
-        // 1.0 of 1999 July 27
+        
+        
 
     static const sal_uInt32 aKOI8RRanges[]
         = { 0, 0x7F, 0xA0, 0xA0, 0xA9, 0xA9, 0xB0, 0xB0, 0xB2, 0xB2,
@@ -1322,8 +1322,8 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             0x252C, 0x252C, 0x2534, 0x2534, 0x253C, 0x253C, 0x2550, 0x256C,
             0x2580, 0x2580, 0x2584, 0x2584, 0x2588, 0x2588, 0x258C, 0x258C,
             0x2590, 0x2593, 0x25A0, 0x25A0, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MISC/KOI8-R.TXT>
-        // version 1.0 of 18 August 1999
+        
+        
 
 #if defined WNT
     static const sal_uInt32 aWindows1252Ranges[]
@@ -1332,9 +1332,9 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             0x2013, 0x2014, 0x2018, 0x201A, 0x201C, 0x201E, 0x2020, 0x2022,
             0x2026, 0x2026, 0x2030, 0x2030, 0x2039, 0x203A, 0x20AC, 0x20AC,
             0x2122, 0x2122, sal_uInt32(-1) };
-        // <ftp://ftp.unicode.org/Public/MAPPINGS/VENDORS/MICSFT/WINDOWS/
-        // CP1252.TXT> version 2.01 of 04/15/98
-#endif // WNT
+        
+        
+#endif 
 
     INetMIMECharsetList_Impl * pList = new INetMIMECharsetList_Impl;
     switch (eEncoding)
@@ -1343,7 +1343,7 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
 #if defined WNT
             pList->prepend(Charset(RTL_TEXTENCODING_MS_1252,
                                    aWindows1252Ranges));
-#endif // WNT
+#endif 
         case RTL_TEXTENCODING_ISO_8859_1:
         case RTL_TEXTENCODING_UTF7:
         case RTL_TEXTENCODING_UTF8:
@@ -1450,7 +1450,7 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
             pList->prepend(Charset(RTL_TEXTENCODING_KOI8_R, aKOI8RRanges));
             break;
 
-        default: //@@@ more cases are missing!
+        default: 
             OSL_FAIL("INetMIME::createPreferredCharsetList():"
                           " Unsupported encoding");
             break;
@@ -1460,7 +1460,7 @@ INetMIME::createPreferredCharsetList(rtl_TextEncoding eEncoding)
     return pList;
 }
 
-// static
+
 sal_Unicode * INetMIME::convertToUnicode(const sal_Char * pBegin,
                                          const sal_Char * pEnd,
                                          rtl_TextEncoding eEncoding,
@@ -1501,7 +1501,7 @@ sal_Unicode * INetMIME::convertToUnicode(const sal_Char * pBegin,
     return pBuffer;
 }
 
-// static
+
 sal_Char * INetMIME::convertFromUnicode(const sal_Unicode * pBegin,
                                         const sal_Unicode * pEnd,
                                         rtl_TextEncoding eEncoding,
@@ -1543,10 +1543,10 @@ sal_Char * INetMIME::convertFromUnicode(const sal_Unicode * pBegin,
     return pBuffer;
 }
 
-// static
+
 void INetMIME::writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar)
 {
-    // See RFC 2279 for a discussion of UTF-8.
+    
     DBG_ASSERT(nChar < 0x80000000, "INetMIME::writeUTF8(): Bad char");
 
     if (nChar < 0x80)
@@ -1578,7 +1578,7 @@ void INetMIME::writeUTF8(INetMIMEOutputSink & rSink, sal_uInt32 nChar)
               << sal_Char((nChar & 0x3F) | 0x80);
 }
 
-// static
+
 void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     HeaderFieldType eType,
                                     const OUString& rBody,
@@ -1608,14 +1608,14 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
             {
                 case '\t':
                 case ' ':
-                    // A WSP adds to accumulated space:
+                    
                     bInitialSpace = true;
                     ++pBodyPtr;
                     break;
 
                 case '(':
                 {
-                    // Write a pending '<' if necessary:
+                    
                     if (eBrackets == BRACKETS_OPENING)
                     {
                         if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
@@ -1628,8 +1628,8 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                         eBrackets = BRACKETS_INSIDE;
                     }
 
-                    // Write the comment, introducing encoded-words where
-                    // necessary:
+                    
+                    
                     int nLevel = 0;
                     INetMIMEEncodedWordOutputSink
                         aOutput(
@@ -1677,7 +1677,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                 }
 
                 case '<':
-                    // Write an already pending '<' if necessary:
+                    
                     if (eBrackets == BRACKETS_OPENING)
                     {
                         if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
@@ -1689,14 +1689,14 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                         bInitialSpace = false;
                     }
 
-                    // Remember this '<' as pending, and open a bracketed
-                    // block:
+                    
+                    
                     eBrackets = BRACKETS_OPENING;
                     ++pBodyPtr;
                     break;
 
                 case '>':
-                    // Write a pending '<' if necessary:
+                    
                     if (eBrackets == BRACKETS_OPENING)
                     {
                         if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
@@ -1708,7 +1708,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                         bInitialSpace = false;
                     }
 
-                    // Write this '>', and close any bracketed block:
+                    
                     if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
                             >= rSink.getLineLengthLimit())
                         rSink << INetMIMEOutputSink::endl << ' ';
@@ -1725,7 +1725,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                 case ';':
                 case '\\':
                 case ']':
-                    // Write a pending '<' if necessary:
+                    
                     if (eBrackets == BRACKETS_OPENING)
                     {
                         if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
@@ -1738,7 +1738,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                         eBrackets = BRACKETS_INSIDE;
                     }
 
-                    // Write this specials:
+                    
                     if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
                             >= rSink.getLineLengthLimit())
                         rSink << INetMIMEOutputSink::endl << ' ';
@@ -1748,9 +1748,9 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                     bInitialSpace = false;
                     break;
 
-                case '\x0D': // CR
-                    // A <CRLF WSP> adds to accumulated space, a <CR> not
-                    // followed by <LF WSP> starts 'junk':
+                case '\x0D': 
+                    
+                    
                     if (startsWithLineFolding(pBodyPtr, pBodyEnd))
                     {
                         bInitialSpace = true;
@@ -1759,11 +1759,11 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                     }
                 default:
                 {
-                    // The next token is either one of <"." / "@" / atom /
-                    // quoted-string / domain-literal>, or it's 'junk'; if it
-                    // is not 'junk', it is either a 'phrase' (i.e., it may
-                    // contain encoded-words) or a 'non-phrase' (i.e., it may
-                    // not contain encoded-words):
+                    
+                    
+                    
+                    
+                    
                     enum Entity { ENTITY_JUNK, ENTITY_NON_PHRASE,
                                   ENTITY_PHRASE };
                     Entity eEntity = ENTITY_JUNK;
@@ -1772,8 +1772,8 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                         case '.':
                         case '@':
                         case '[':
-                            // A token of <"." / "@" / domain-literal> always
-                            // starts a 'non-phrase':
+                            
+                            
                             eEntity = ENTITY_NON_PHRASE;
                             break;
 
@@ -1785,8 +1785,8 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 break;
                             }
                         case '"':
-                            // A token of <atom / quoted-string> can either be
-                            // a 'phrase' or a 'non-phrase':
+                            
+                            
                             switch (eType)
                             {
                                 case HEADER_FIELD_STRUCTURED:
@@ -1798,8 +1798,8 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     break;
 
                                 case HEADER_FIELD_MESSAGE_ID:
-                                    // A 'phrase' if and only if outside any
-                                    // bracketed block:
+                                    
+                                    
                                     eEntity
                                         = eBrackets == BRACKETS_OUTSIDE ?
                                               ENTITY_PHRASE :
@@ -1808,13 +1808,13 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
 
                                 case HEADER_FIELD_ADDRESS:
                                 {
-                                    // A 'non-phrase' if and only if, after
-                                    // skipping this token and any following
-                                    // <linear-white-space> and <comment>s,
-                                    // there is no token left, or the next
-                                    // token is any of <"." / "@" / ">" / ","
-                                    // / ";">, or the next token is <":"> and
-                                    // is within a bracketed block:
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
                                     const sal_Unicode * pLookAhead = pBodyPtr;
                                     if (*pLookAhead == '"')
                                     {
@@ -1865,7 +1865,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                                           ENTITY_NON_PHRASE;
                                                 goto entity_determined;
 
-                                            case '\x0D': // CR
+                                            case '\x0D': 
                                                 if (startsWithLineFolding(
                                                         pLookAhead, pBodyEnd))
                                                 {
@@ -1886,10 +1886,10 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                     break;
                             }
 
-                            // In a 'non-phrase', a non-US-ASCII character
-                            // cannot be part of an <atom>, but instead the
-                            // whole entity is 'junk' rather than 'non-
-                            // phrase':
+                            
+                            
+                            
+                            
                             if (eEntity == ENTITY_NON_PHRASE
                                 && !rtl::isAscii(*pBodyPtr))
                                 eEntity = ENTITY_JUNK;
@@ -1900,7 +1900,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                     {
                         case ENTITY_JUNK:
                         {
-                            // Write a pending '<' if necessary:
+                            
                             if (eBrackets == BRACKETS_OPENING)
                             {
                                 if (rSink.getColumn()
@@ -1914,7 +1914,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 eBrackets = BRACKETS_INSIDE;
                             }
 
-                            // Calculate the length of in- and output:
+                            
                             const sal_Unicode * pStart = pBodyPtr;
                             sal_Size nLength = 0;
                             bool bModify = false;
@@ -1922,7 +1922,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                             while (pBodyPtr != pBodyEnd && !bEnd)
                                 switch (*pBodyPtr)
                                 {
-                                    case '\x0D': // CR
+                                    case '\x0D': 
                                         if (startsWithLineFolding(pBodyPtr,
                                                                   pBodyEnd))
                                             bEnd = true;
@@ -1962,7 +1962,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                         break;
                                 }
 
-                            // Write the output:
+                            
                             if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
                                         + nLength
                                     > rSink.getLineLengthLimit())
@@ -1974,7 +1974,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 while (pStart != pBodyPtr)
                                     if (startsWithLineBreak(pStart, pBodyPtr))
                                     {
-                                        rSink << "\x0D\\\x0A"; // CR, '\', LF
+                                        rSink << "\x0D\\\x0A"; 
                                         pStart += 2;
                                     }
                                     else
@@ -1986,7 +1986,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
 
                         case ENTITY_NON_PHRASE:
                         {
-                            // Calculate the length of in- and output:
+                            
                             const sal_Unicode * pStart = pBodyPtr;
                             sal_Size nLength = 0;
                             bool bBracketedBlock = false;
@@ -1998,7 +1998,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 {
                                     case '\t':
                                     case ' ':
-                                    case '\x0D': // CR
+                                    case '\x0D': 
                                     {
                                         const sal_Unicode * pLookAhead
                                             = skipLinearWhiteSpace(pBodyPtr,
@@ -2098,7 +2098,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                         break;
                                 }
 
-                            // Write a pending '<' if necessary:
+                            
                             if (eBrackets == BRACKETS_OPENING
                                 && !bBracketedBlock)
                             {
@@ -2113,7 +2113,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 eBrackets = BRACKETS_INSIDE;
                             }
 
-                            // Write the output:
+                            
                             if (rSink.getColumn() + (bInitialSpace ? 1 : 0)
                                         + nLength
                                     > rSink.getLineLengthLimit())
@@ -2134,7 +2134,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 while (pStart != pBodyPtr)
                                     switch (*pStart)
                                     {
-                                        case '\x0D': // CR
+                                        case '\x0D': 
                                             if (startsWithLineFolding(
                                                     pStart, pBodyPtr))
                                             {
@@ -2147,12 +2147,12 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                                          pStart, pBodyPtr))
                                             {
                                                 rSink << "\x0D\\\x0A";
-                                                    // CR, '\', LF
+                                                    
                                                 pStart += 2;
                                             }
                                             else
                                             {
-                                                rSink << '\x0D'; // CR
+                                                rSink << '\x0D'; 
                                                 ++pStart;
                                             }
                                             break;
@@ -2206,7 +2206,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
 
                         case ENTITY_PHRASE:
                         {
-                            // Write a pending '<' if necessary:
+                            
                             if (eBrackets == BRACKETS_OPENING)
                             {
                                 if (rSink.getColumn()
@@ -2220,7 +2220,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 eBrackets = BRACKETS_INSIDE;
                             }
 
-                            // Calculate the length of in- and output:
+                            
                             const sal_Unicode * pStart = pBodyPtr;
                             bool bQuotedString = false;
                             bool bEnd = false;
@@ -2229,7 +2229,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                 {
                                     case '\t':
                                     case ' ':
-                                    case '\x0D': // CR
+                                    case '\x0D': 
                                         if (bQuotedString)
                                             ++pBodyPtr;
                                         else
@@ -2272,8 +2272,8 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                         break;
                                 }
 
-                            // Write the phrase, introducing encoded-words
-                            // where necessary:
+                            
+                            
                             INetMIMEEncodedWordOutputSink
                                 aOutput(
                                     rSink,
@@ -2294,7 +2294,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                             aOutput << *pStart++;
                                         break;
 
-                                    case '\x0D': // CR
+                                    case '\x0D': 
                                         pStart += 2;
                                         aOutput << *pStart++;
                                         break;
@@ -2313,7 +2313,7 @@ void INetMIME::writeHeaderFieldBody(INetMIMEOutputSink & rSink,
     }
 }
 
-// static
+
 bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
                                  const sal_Char * pEnd,
                                  rtl_TextEncoding eEncoding,
@@ -2388,29 +2388,29 @@ bool INetMIME::translateUTF8Char(const sal_Char *& rBegin,
     return true;
 }
 
-// static
+
 OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
                                           const OString& rBody)
 {
-    // Due to a bug in INetCoreRFC822MessageStream::ConvertTo7Bit(), old
-    // versions of StarOffice send mails with header fields where encoded
-    // words can be preceded by '=', ',', '.', '"', or '(', and followed by
-    // '=', ',', '.', '"', ')', without any required white space in between.
-    // And there appear to exist some broken mailers that only encode single
-    // letters within words, like "Appel
-    // =?iso-8859-1?Q?=E0?=t=?iso-8859-1?Q?=E9?=moin", so it seems best to
-    // detect encoded words even when not propperly surrounded by white space.
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    // Non US-ASCII characters in rBody are treated as ISO-8859-1.
+    
     //
-    // encoded-word = "=?"
-    //     1*(%x21 / %x23-27 / %x2A-2B / %x2D / %30-39 / %x41-5A / %x5E-7E)
-    //     ["*" 1*8ALPHA *("-" 1*8ALPHA)] "?"
-    //     ("B?" *(4base64) (4base64 / 3base64 "=" / 2base64 "==")
-    //      / "Q?" 1*(%x21-3C / %x3E / %x40-7E / "=" 2HEXDIG))
-    //     "?="
+    
+    
+    
+    
+    
+    
     //
-    // base64 = ALPHA / DIGIT / "+" / "/"
+    
 
     const sal_Char * pBegin = rBody.getStr();
     const sal_Char * pEnd = pBegin + rBody.getLength();
@@ -2797,9 +2797,9 @@ OUString INetMIME::decodeHeaderFieldBody(HeaderFieldType eType,
     return sDecoded;
 }
 
-//  INetMIMEOutputSink
 
-// virtual
+
+
 sal_Size INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
 {
     sal_Size nLength = rtl_str_getLength(pSequence);
@@ -2807,7 +2807,7 @@ sal_Size INetMIMEOutputSink::writeSequence(const sal_Char * pSequence)
     return nLength;
 }
 
-// virtual
+
 void INetMIMEOutputSink::writeSequence(const sal_uInt32 * pBegin,
                                        const sal_uInt32 * pEnd)
 {
@@ -2826,7 +2826,7 @@ void INetMIMEOutputSink::writeSequence(const sal_uInt32 * pBegin,
     delete[] pBufferBegin;
 }
 
-// virtual
+
 void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
                                        const sal_Unicode * pEnd)
 {
@@ -2845,7 +2845,7 @@ void INetMIMEOutputSink::writeSequence(const sal_Unicode * pBegin,
     delete[] pBufferBegin;
 }
 
-// virtual
+
 ErrCode INetMIMEOutputSink::getError() const
 {
     return ERRCODE_NONE;
@@ -2858,9 +2858,9 @@ void INetMIMEOutputSink::writeLineEnd()
     m_nColumn = 0;
 }
 
-//  INetMIMEStringOutputSink
 
-// virtual
+
+
 void INetMIMEStringOutputSink::writeSequence(const sal_Char * pBegin,
                                              const sal_Char * pEnd)
 {
@@ -2870,143 +2870,143 @@ void INetMIMEStringOutputSink::writeSequence(const sal_Char * pBegin,
     m_aBuffer.append(pBegin, pEnd - pBegin);
 }
 
-// virtual
+
 ErrCode INetMIMEStringOutputSink::getError() const
 {
     return ERRCODE_NONE;
 }
 
-//  INetMIMEEncodedWordOutputSink
+
 
 static const sal_Char aEscape[128]
-    = { INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x00
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x01
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x02
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x03
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x04
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x05
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x06
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x07
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x08
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x09
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0A
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0B
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0C
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0D
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0E
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x0F
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x10
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x11
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x12
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x13
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x14
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x15
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x16
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x17
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x18
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x19
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1A
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1B
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1C
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1D
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1E
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // 0x1F
-        0,   // ' '
-        0,   // '!'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '"'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '#'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '$'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '%'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '&'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '''
-        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '('
-        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ')'
-        0,   // '*'
-        0,   // '+'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ','
-        0,   // '-'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '.'
-        0,   // '/'
-        0,   // '0'
-        0,   // '1'
-        0,   // '2'
-        0,   // '3'
-        0,   // '4'
-        0,   // '5'
-        0,   // '6'
-        0,   // '7'
-        0,   // '8'
-        0,   // '9'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ':'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ';'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '<'
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '='
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '>'
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '?'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '@'
-        0,   // 'A'
-        0,   // 'B'
-        0,   // 'C'
-        0,   // 'D'
-        0,   // 'E'
-        0,   // 'F'
-        0,   // 'G'
-        0,   // 'H'
-        0,   // 'I'
-        0,   // 'J'
-        0,   // 'K'
-        0,   // 'L'
-        0,   // 'M'
-        0,   // 'N'
-        0,   // 'O'
-        0,   // 'P'
-        0,   // 'Q'
-        0,   // 'R'
-        0,   // 'S'
-        0,   // 'T'
-        0,   // 'U'
-        0,   // 'V'
-        0,   // 'W'
-        0,   // 'X'
-        0,   // 'Y'
-        0,   // 'Z'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '['
-        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '\'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // ']'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '^'
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '_'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '`'
-        0,   // 'a'
-        0,   // 'b'
-        0,   // 'c'
-        0,   // 'd'
-        0,   // 'e'
-        0,   // 'f'
-        0,   // 'g'
-        0,   // 'h'
-        0,   // 'i'
-        0,   // 'j'
-        0,   // 'k'
-        0,   // 'l'
-        0,   // 'm'
-        0,   // 'n'
-        0,   // 'o'
-        0,   // 'p'
-        0,   // 'q'
-        0,   // 'r'
-        0,   // 's'
-        0,   // 't'
-        0,   // 'u'
-        0,   // 'v'
-        0,   // 'w'
-        0,   // 'x'
-        0,   // 'y'
-        0,   // 'z'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '{'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '|'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '}'
-        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   // '~'
-        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE }; // DEL
+    = { INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        0,   
+        0,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        0,   
+        0,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        0,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        0,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE,   
+        INetMIMEEncodedWordOutputSink::CONTEXT_TEXT | INetMIMEEncodedWordOutputSink::CONTEXT_COMMENT | INetMIMEEncodedWordOutputSink::CONTEXT_PHRASE }; 
 
 inline bool
 INetMIMEEncodedWordOutputSink::needsEncodedWordEscape(sal_uInt32 nChar) const
@@ -3021,7 +3021,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
 
     if (m_eEncodedWordState == STATE_SECOND_EQUALS)
     {
-        // If the text is already an encoded word, copy it verbatim:
+        
         sal_uInt32 nSize = m_pBufferEnd - m_pBuffer;
         switch (m_ePrevCoding)
         {
@@ -3071,8 +3071,8 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
     }
     else
     {
-        // If the text itself is too long to fit into a single line, make it
-        // into multiple encoded words:
+        
+        
         switch (m_eCoding)
         {
             case CODING_NONE:
@@ -3222,8 +3222,8 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 rtl_TextEncoding eMIMEEncoding
                     = INetMIME::translateToMIME(eCharsetEncoding);
 
-                // The non UTF-8 code will only work for stateless single byte
-                // character encodings (see also below):
+                
+                
                 sal_Char * pTargetBuffer = NULL;
                 sal_Size nTargetSize = 0;
                 sal_uInt32 nSize;
@@ -3238,9 +3238,9 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                         nSize += needsEncodedWordEscape(nUTF32) ?
                                      3 * INetMIME::getUTF8OctetCount(nUTF32) :
                                      1;
-                            // only US-ASCII characters (that are converted to
-                            // a single byte by UTF-8) need no encoded word
-                            // escapes...
+                            
+                            
+                            
                     }
                 }
                 else
@@ -3283,7 +3283,7 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                 const sal_Char * pCharsetName
                     = INetMIME::getCharsetName(eMIMEEncoding);
                 sal_uInt32 nWrapperSize = rtl_str_getLength(pCharsetName) + 7;
-                    // '=?', '?Q?', '?='
+                    
 
                 switch (m_ePrevCoding)
                 {
@@ -3348,8 +3348,8 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                         break;
                 }
 
-                // The non UTF-8 code will only work for stateless single byte
-                // character encodings (see also above):
+                
+                
                 if (eMIMEEncoding == RTL_TEXTENCODING_UTF8)
                 {
                     bool bInitial = true;
@@ -3362,9 +3362,9 @@ void INetMIMEEncodedWordOutputSink::finish(bool bWriteTrailer)
                         sal_uInt32 nWidth
                             = bEscape ?
                                   3 * INetMIME::getUTF8OctetCount(nUTF32) : 1;
-                            // only US-ASCII characters (that are converted to
-                            // a single byte by UTF-8) need no encoded word
-                            // escapes...
+                            
+                            
+                            
                         if (!bInitial
                             && m_rSink.getColumn() + nWidth + 2
                                    > m_rSink.getLineLengthLimit())
@@ -3486,7 +3486,7 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
     }
     else
     {
-        // Check for an already encoded word:
+        
         switch (m_eEncodedWordState)
         {
             case STATE_INITIAL:
@@ -3561,143 +3561,143 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
                 break;
         }
 
-        // Update encoding:
+        
         m_pEncodingList->includes(nChar);
 
-        // Update coding:
-        enum { TENQ = 1,   // CONTEXT_TEXT, CODING_ENCODED
-               CENQ = 2,   // CONTEXT_COMMENT, CODING_ENCODED
-               PQTD = 4,   // CONTEXT_PHRASE, CODING_QUOTED
-               PENQ = 8 }; // CONTEXT_PHRASE, CODING_ENCODED
+        
+        enum { TENQ = 1,   
+               CENQ = 2,   
+               PQTD = 4,   
+               PENQ = 8 }; 
         static const sal_Char aMinimal[128]
-            = { TENQ | CENQ        | PENQ,   // 0x00
-                TENQ | CENQ        | PENQ,   // 0x01
-                TENQ | CENQ        | PENQ,   // 0x02
-                TENQ | CENQ        | PENQ,   // 0x03
-                TENQ | CENQ        | PENQ,   // 0x04
-                TENQ | CENQ        | PENQ,   // 0x05
-                TENQ | CENQ        | PENQ,   // 0x06
-                TENQ | CENQ        | PENQ,   // 0x07
-                TENQ | CENQ        | PENQ,   // 0x08
-                TENQ | CENQ        | PENQ,   // 0x09
-                TENQ | CENQ        | PENQ,   // 0x0A
-                TENQ | CENQ        | PENQ,   // 0x0B
-                TENQ | CENQ        | PENQ,   // 0x0C
-                TENQ | CENQ        | PENQ,   // 0x0D
-                TENQ | CENQ        | PENQ,   // 0x0E
-                TENQ | CENQ        | PENQ,   // 0x0F
-                TENQ | CENQ        | PENQ,   // 0x10
-                TENQ | CENQ        | PENQ,   // 0x11
-                TENQ | CENQ        | PENQ,   // 0x12
-                TENQ | CENQ        | PENQ,   // 0x13
-                TENQ | CENQ        | PENQ,   // 0x14
-                TENQ | CENQ        | PENQ,   // 0x15
-                TENQ | CENQ        | PENQ,   // 0x16
-                TENQ | CENQ        | PENQ,   // 0x17
-                TENQ | CENQ        | PENQ,   // 0x18
-                TENQ | CENQ        | PENQ,   // 0x19
-                TENQ | CENQ        | PENQ,   // 0x1A
-                TENQ | CENQ        | PENQ,   // 0x1B
-                TENQ | CENQ        | PENQ,   // 0x1C
-                TENQ | CENQ        | PENQ,   // 0x1D
-                TENQ | CENQ        | PENQ,   // 0x1E
-                TENQ | CENQ        | PENQ,   // 0x1F
-                                        0,   // ' '
-                                        0,   // '!'
-                              PQTD       ,   // '"'
-                                        0,   // '#'
-                                        0,   // '$'
-                                        0,   // '%'
-                                        0,   // '&'
-                                        0,   // '''
-                       CENQ | PQTD       ,   // '('
-                       CENQ | PQTD       ,   // ')'
-                                        0,   // '*'
-                                        0,   // '+'
-                              PQTD       ,   // ','
-                                        0,   // '-'
-                              PQTD       ,   // '.'
-                                        0,   // '/'
-                                        0,   // '0'
-                                        0,   // '1'
-                                        0,   // '2'
-                                        0,   // '3'
-                                        0,   // '4'
-                                        0,   // '5'
-                                        0,   // '6'
-                                        0,   // '7'
-                                        0,   // '8'
-                                        0,   // '9'
-                              PQTD       ,   // ':'
-                              PQTD       ,   // ';'
-                              PQTD       ,   // '<'
-                                        0,   // '='
-                              PQTD       ,   // '>'
-                                        0,   // '?'
-                              PQTD       ,   // '@'
-                                        0,   // 'A'
-                                        0,   // 'B'
-                                        0,   // 'C'
-                                        0,   // 'D'
-                                        0,   // 'E'
-                                        0,   // 'F'
-                                        0,   // 'G'
-                                        0,   // 'H'
-                                        0,   // 'I'
-                                        0,   // 'J'
-                                        0,   // 'K'
-                                        0,   // 'L'
-                                        0,   // 'M'
-                                        0,   // 'N'
-                                        0,   // 'O'
-                                        0,   // 'P'
-                                        0,   // 'Q'
-                                        0,   // 'R'
-                                        0,   // 'S'
-                                        0,   // 'T'
-                                        0,   // 'U'
-                                        0,   // 'V'
-                                        0,   // 'W'
-                                        0,   // 'X'
-                                        0,   // 'Y'
-                                        0,   // 'Z'
-                              PQTD       ,   // '['
-                       CENQ | PQTD       ,   // '\'
-                              PQTD       ,   // ']'
-                                        0,   // '^'
-                                        0,   // '_'
-                                        0,   // '`'
-                                        0,   // 'a'
-                                        0,   // 'b'
-                                        0,   // 'c'
-                                        0,   // 'd'
-                                        0,   // 'e'
-                                        0,   // 'f'
-                                        0,   // 'g'
-                                        0,   // 'h'
-                                        0,   // 'i'
-                                        0,   // 'j'
-                                        0,   // 'k'
-                                        0,   // 'l'
-                                        0,   // 'm'
-                                        0,   // 'n'
-                                        0,   // 'o'
-                                        0,   // 'p'
-                                        0,   // 'q'
-                                        0,   // 'r'
-                                        0,   // 's'
-                                        0,   // 't'
-                                        0,   // 'u'
-                                        0,   // 'v'
-                                        0,   // 'w'
-                                        0,   // 'x'
-                                        0,   // 'y'
-                                        0,   // 'z'
-                                        0,   // '{'
-                                        0,   // '|'
-                                        0,   // '}'
-                                        0,   // '~'
-                TENQ | CENQ        | PENQ }; // DEL
+            = { TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                TENQ | CENQ        | PENQ,   
+                                        0,   
+                                        0,   
+                              PQTD       ,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                       CENQ | PQTD       ,   
+                       CENQ | PQTD       ,   
+                                        0,   
+                                        0,   
+                              PQTD       ,   
+                                        0,   
+                              PQTD       ,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                              PQTD       ,   
+                              PQTD       ,   
+                              PQTD       ,   
+                                        0,   
+                              PQTD       ,   
+                                        0,   
+                              PQTD       ,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                              PQTD       ,   
+                       CENQ | PQTD       ,   
+                              PQTD       ,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                                        0,   
+                TENQ | CENQ        | PENQ }; 
         Coding eNewCoding = !rtl::isAscii(nChar) ? CODING_ENCODED :
                             m_eContext == CONTEXT_PHRASE ?
                                 Coding(aMinimal[nChar] >> 2) :
@@ -3709,7 +3709,7 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
             && INetMIME::needsQuotedStringEscape(nChar))
             ++m_nQuotedEscaped;
 
-        // Append to buffer:
+        
         if (sal_uInt32(m_pBufferEnd - m_pBuffer) == m_nBufferSize)
         {
             m_pBuffer
@@ -3725,7 +3725,7 @@ INetMIMEEncodedWordOutputSink::operator <<(sal_uInt32 nChar)
     return *this;
 }
 
-//  INetContentTypeParameterList
+
 
 void INetContentTypeParameterList::Clear()
 {

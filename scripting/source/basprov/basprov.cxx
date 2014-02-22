@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "basprov.hxx"
@@ -58,14 +58,14 @@ using namespace ::com::sun::star::script;
 using namespace ::com::sun::star::document;
 using namespace ::sf_misc;
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
 
-    // =============================================================================
-    // component operations
-    // =============================================================================
+
+    
+    
+    
 
     static OUString getImplementationName_BasicProviderImpl()
     {
@@ -82,7 +82,7 @@ namespace basprov
         return *pImplName;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     static Sequence< OUString > getSupportedServiceNames_BasicProviderImpl()
     {
@@ -103,9 +103,9 @@ namespace basprov
         return *pNames;
     }
 
-    // =============================================================================
-    // BasicProviderImpl
-    // =============================================================================
+    
+    
+    
 
     BasicProviderImpl::BasicProviderImpl( const Reference< XComponentContext >& xContext )
         :m_pAppBasicManager( 0 )
@@ -118,13 +118,13 @@ namespace basprov
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     BasicProviderImpl::~BasicProviderImpl()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     bool BasicProviderImpl::isLibraryShared( const Reference< script::XLibraryContainer >& rxLibContainer, const OUString& rLibName )
     {
@@ -181,7 +181,7 @@ namespace basprov
         return bIsShared;
     }
 
-    // XServiceInfo
+    
     OUString BasicProviderImpl::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_BasicProviderImpl();
@@ -197,13 +197,13 @@ namespace basprov
         return getSupportedServiceNames_BasicProviderImpl();
     }
 
-    // -----------------------------------------------------------------------------
-    // XInitialization
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     void BasicProviderImpl::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
-        // TODO
+        
 
         SolarMutexGuard aGuard;
 
@@ -246,7 +246,7 @@ namespace basprov
             if ( m_sScriptingContext.startsWith( sDoc  ) )
             {
                 xModel = MiscUtils::tDocUrlToModel(  m_sScriptingContext );
-                // TODO: use ScriptingContantsPool for SCRIPTING_DOC_REF
+                
             }
         }
 
@@ -264,8 +264,8 @@ namespace basprov
         }
         else
         {
-            // Provider has been created with application context for user
-            // or share
+            
+            
             if ( m_sScriptingContext != "user" )
             {
                 m_bIsUserCtx = false;
@@ -280,7 +280,7 @@ namespace basprov
             }
         }
 
-        // TODO
+        
         if ( !m_pAppBasicManager )
             m_pAppBasicManager = SFX_APP()->GetBasicManager();
 
@@ -288,15 +288,15 @@ namespace basprov
             m_xLibContainerApp = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
-    // XScriptProvider
-    // -----------------------------------------------------------------------------
+    
+    
 
     Reference < provider::XScript > BasicProviderImpl::getScript( const OUString& scriptURI )
         throw ( provider::ScriptFrameworkErrorException, RuntimeException)
     {
-        // TODO
+        
 
         SolarMutexGuard aGuard;
 
@@ -324,8 +324,8 @@ namespace basprov
             OUString("location") );
 
         sal_Int32 nIndex = 0;
-        // In some strange circumstances the Library name can have an
-        // apparantly illegal '.' in it ( in imported VBA )
+        
+        
 
         BasicManager* pBasicMgr =  NULL;
         if ( aLocation == "document" )
@@ -413,20 +413,20 @@ namespace basprov
         return xScript;
     }
 
-    // -----------------------------------------------------------------------------
-    // XBrowseNode
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     OUString BasicProviderImpl::getName(  ) throw (RuntimeException)
     {
-        // TODO
+        
 
         SolarMutexGuard aGuard;
 
         return OUString("Basic");
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Sequence< Reference< browse::XBrowseNode > > BasicProviderImpl::getChildNodes(  ) throw (RuntimeException)
     {
@@ -484,7 +484,7 @@ namespace basprov
         return aChildNodes;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Bool BasicProviderImpl::hasChildNodes(  ) throw (RuntimeException)
     {
@@ -506,7 +506,7 @@ namespace basprov
         return bReturn;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Int16 BasicProviderImpl::getType(  ) throw (RuntimeException)
     {
@@ -515,9 +515,9 @@ namespace basprov
         return browse::BrowseNodeTypes::CONTAINER;
     }
 
-    // =============================================================================
-    // component operations
-    // =============================================================================
+    
+    
+    
 
     static Reference< XInterface > SAL_CALL create_BasicProviderImpl(
         Reference< XComponentContext > const & xContext )
@@ -526,7 +526,7 @@ namespace basprov
         return static_cast< lang::XTypeProvider * >( new BasicProviderImpl( xContext ) );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     static struct ::cppu::ImplementationEntry s_component_entries [] =
     {
@@ -538,16 +538,16 @@ namespace basprov
         { 0, 0, 0, 0, 0, 0 }
     };
 
-    // -----------------------------------------------------------------------------
-
-//.........................................................................
-}   // namespace basprov
-//.........................................................................
+    
 
 
-// =============================================================================
-// component exports
-// =============================================================================
+}   
+
+
+
+
+
+
 
 extern "C"
 {

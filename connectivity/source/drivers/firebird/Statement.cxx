@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Connection.hxx"
@@ -50,7 +50,7 @@ using namespace ::osl;
 using namespace ::rtl;
 using namespace ::std;
 
-// ---- XBatchExecution - UNSUPPORTED ----------------------------------------
+
 void SAL_CALL OStatement::addBatch(const OUString& sql)
     throw(SQLException, RuntimeException)
 {
@@ -93,7 +93,7 @@ void OStatement::disposeResultSet()
     }
 }
 
-// ---- XStatement -----------------------------------------------------------
+
 sal_Int32 SAL_CALL OStatement::executeUpdate(const OUString& sql)
     throw(SQLException, RuntimeException)
 {
@@ -131,7 +131,7 @@ uno::Reference< XResultSet > SAL_CALL OStatement::executeQuery(const OUString& s
                                   m_aStatementHandle,
                                   m_pSqlda);
 
-    // TODO: deal with cleanup
+    
 
     evaluateStatusVector(m_statusVector, sql, *this);
 
@@ -153,7 +153,7 @@ sal_Bool SAL_CALL OStatement::execute(const OUString& sql)
 {
     uno::Reference< XResultSet > xResults = executeQuery(sql);
     return xResults.is();
-    // TODO: what if we have multiple results?
+    
 }
 
 uno::Reference< XConnection > SAL_CALL OStatement::getConnection()

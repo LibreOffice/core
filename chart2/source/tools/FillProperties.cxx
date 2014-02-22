@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "FillProperties.hxx"
@@ -48,7 +48,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   FillProperties::PROP_FILL_COLOR,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
-                  | beans::PropertyAttribute::MAYBEVOID         // "maybe auto"
+                  | beans::PropertyAttribute::MAYBEVOID         
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
     rOutProperties.push_back(
@@ -89,7 +89,7 @@ void lcl_AddPropertiesToVector_without_BitmapProperties( ::std::vector< ::com::s
                   | beans::PropertyAttribute::MAYBEVOID
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //bitmap properties see lcl_AddPropertiesToVector_only_BitmapProperties()
+    
 
     rOutProperties.push_back(
         Property( "FillBackground",
@@ -177,7 +177,7 @@ void lcl_AddDefaultsToMap_without_BitmapProperties(
     ::chart::tPropertyValueMap & rOutMap )
 {
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_STYLE, drawing::FillStyle_SOLID );
-    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, FillProperties::PROP_FILL_COLOR, 0xd9d9d9 ); // gray85
+    ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, FillProperties::PROP_FILL_COLOR, 0xd9d9d9 ); 
     ::chart::PropertyHelper::setPropertyValueDefault< sal_Int16 >( rOutMap, FillProperties::PROP_FILL_TRANSPARENCE, 0 );
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BACKGROUND, false );
 }
@@ -197,12 +197,12 @@ void lcl_AddDefaultsToMap_only_BitmapProperties(
     ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, FillProperties::PROP_FILL_BITMAP_MODE, drawing::BitmapMode_REPEAT );
 }
 
-}//end anonymous namespace
+}
 
 void FillProperties::AddPropertiesToVector(
     ::std::vector< Property > & rOutProperties )
 {
-    // Fill Properties see service drawing::FillProperties
+    
     lcl_AddPropertiesToVector_without_BitmapProperties( rOutProperties );
     lcl_AddPropertiesToVector_only_BitmapProperties( rOutProperties );
 }
@@ -214,6 +214,6 @@ void FillProperties::AddDefaultsToMap(
     lcl_AddDefaultsToMap_only_BitmapProperties( rOutMap );
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

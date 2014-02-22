@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -62,7 +62,7 @@ using namespace beans;
 using namespace document;
 using namespace ::sf_misc;
 
-// component helper namespace
+
 namespace comp_DialogModelProvider
 {
 
@@ -82,11 +82,11 @@ namespace comp_DialogModelProvider
     {
         return static_cast< ::cppu::OWeakObject * >(new dlgprov::DialogModelProvider(context));
     }
-} // closing component helper namespace
-//.........................................................................
+} 
+
 namespace dlgprov
 {
-//.........................................................................
+
 
 static OUString aResourceResolverPropName("ResourceResolver");
 
@@ -110,7 +110,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         Reference< task::XInteractionHandler > xDummyHandler;
         aArgs[5] <<= xDummyHandler;
         Reference< XMultiComponentFactory > xSMgr_( i_xContext->getServiceManager(), UNO_QUERY_THROW );
-        // TODO: Ctor
+        
         Reference< resource::XStringResourceManager > xStringResourceManager( xSMgr_->createInstanceWithContext
             ( OUString("com.sun.star.resource.StringResourceWithLocation"),
                 i_xContext ), UNO_QUERY );
@@ -140,16 +140,16 @@ static OUString aResourceResolverPropName("ResourceResolver");
         Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
         xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURL );
 
-        // #TODO we really need to detect the source of the Dialog, is it
-        // the dialog. E.g. if the dialog was created from basic ( then we just
-        // can't tell  where its from )
-        // If we are happy to always substitute the form model for the awt
-        // one then maybe the presence of a document model is enough to trigger
-        // swapping out the models ( or perhaps we only want to do this
-        // for vba mode ) there are a number of feasible and valid possibilities
+        
+        
+        
+        
+        
+        
+        
         ::xmlscript::importDialogModel( xInput, xDialogModel, i_xContext, xModel );
 
-        // Set resource property
+        
         if( xStringResourceManager.is() )
         {
             Reference< beans::XPropertySet > xDlgPSet( xDialogModel, UNO_QUERY );
@@ -160,9 +160,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
         return xDialogModel;
     }
-    // =============================================================================
-    // component operations
-    // =============================================================================
+    
+    
+    
 
     static OUString getImplementationName_DialogProviderImpl()
     {
@@ -179,7 +179,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return *pImplName;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     static Sequence< OUString > getSupportedServiceNames_DialogProviderImpl()
     {
@@ -200,9 +200,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
     }
 
 
-    // =============================================================================
-    // mutex
-    // =============================================================================
+    
+    
+    
 
     ::osl::Mutex& getMutex()
     {
@@ -220,9 +220,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
     }
 
 
-    // =============================================================================
-    // DialogProviderImpl
-    // =============================================================================
+    
+    
+    
 
     DialogProviderImpl::DialogProviderImpl( const Reference< XComponentContext >& rxContext )
         :m_xContext( rxContext )
@@ -230,13 +230,13 @@ static OUString aResourceResolverPropName("ResourceResolver");
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     DialogProviderImpl::~DialogProviderImpl()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Reference< resource::XStringResourceManager > getStringResourceFromDialogLibrary
         ( Reference< container::XNameContainer > xDialogLib )
@@ -268,7 +268,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
     Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic() throw ( Exception )
     {
         if ( !m_BasicInfo.get() )
-            // shouln't get here
+            
             throw RuntimeException("No information to create dialog", Reference< XInterface >() );
         Reference< resource::XStringResourceManager > xStringResourceManager = getStringResourceFromDialogLibrary( m_BasicInfo->mxDlgLib );
 
@@ -284,17 +284,17 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
         OUString aURL( sURL );
 
-        // parse URL
-        // TODO: use URL parsing class
-        // TODO: decoding of location
+        
+        
+        
 
         Reference< uri::XUriReferenceFactory > xFac ( uri::UriReferenceFactory::create( m_xContext )  );
 
-        // i75778: Support non-script URLs
+        
         Reference< io::XInputStream > xInput;
         Reference< container::XNameContainer > xDialogLib;
 
-        // Accept file URL to single dialog
+        
         bool bSingleDialog = false;
 
         Reference< util::XMacroExpander > xMacroExpander =
@@ -323,7 +323,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         {
             bSingleDialog = true;
 
-            // Try any other URL with SimpleFileAccess
+            
             Reference< ucb::XSimpleFileAccess3 > xSFI = ucb::SimpleFileAccess::create(m_xContext);
 
             try
@@ -348,8 +348,8 @@ static OUString aResourceResolverPropName("ResourceResolver");
                 OUString("location") );
 
 
-            // get dialog library container
-            // TODO: dialogs in packages
+            
+            
             Reference< XLibraryContainer > xLibContainer;
 
             if ( sLocation == "application" )
@@ -398,15 +398,15 @@ static OUString aResourceResolverPropName("ResourceResolver");
                 }
             }
 
-            // get input stream provider
+            
             Reference< io::XInputStreamProvider > xISP;
             if ( xLibContainer.is() )
             {
-                // load dialog library
+                
                 if ( !xLibContainer->isLibraryLoaded( sLibName ) )
                     xLibContainer->loadLibrary( sLibName );
 
-                // get dialog library
+                
                 if ( xLibContainer->hasByName( sLibName ) )
                 {
                     Any aElement = xLibContainer->getByName( sLibName );
@@ -415,7 +415,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
                 if ( xDialogLib.is() )
                 {
-                    // get input stream provider
+                    
                     if ( xDialogLib->hasByName( sDlgName ) )
                     {
                         Any aElement = xDialogLib->getByName( sDlgName );
@@ -448,7 +448,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
             msDialogLibName = sLibName;
         }
 
-        // import dialog model
+        
         Reference< XControlModel > xCtrlModel;
         if ( xInput.is() && m_xContext.is() )
         {
@@ -472,7 +472,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return xCtrlModel;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Reference< XUnoControlDialog > DialogProviderImpl::createDialogControl
         ( const Reference< XControlModel >& rxDialogModel, const Reference< XWindowPeer >& xParent )
@@ -485,14 +485,14 @@ static OUString aResourceResolverPropName("ResourceResolver");
         {
             xDialogControl = UnoControlDialog::create( m_xContext );
 
-            // set the model
+            
             if ( rxDialogModel.is() )
                 xDialogControl->setModel( rxDialogModel );
 
-            // set visible
+            
             xDialogControl->setVisible( sal_False );
 
-            // get the parent of the dialog control
+            
             Reference< XWindowPeer > xPeer;
             if( xParent.is() )
             {
@@ -509,7 +509,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
                 }
             }
 
-            // create a peer
+            
             Reference< XToolkit> xToolkit( Toolkit::create( m_xContext ), UNO_QUERY_THROW );
             xDialogControl->createPeer( xToolkit, xPeer );
         }
@@ -517,7 +517,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return xDialogControl;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void DialogProviderImpl::attachControlEvents(
         const Reference< XControl >& rxControl,
@@ -542,7 +542,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
                     pObjects[i] = pControls[i];
                 }
 
-                // also add the dialog control itself to the sequence
+                
                 pObjects[nControlCount] = rxControl;
 
                 Reference< XScriptEventsAttacher > xScriptEventsAttacher = new DialogEventsAttacherImpl
@@ -565,11 +565,11 @@ static OUString aResourceResolverPropName("ResourceResolver");
 
         if( !xIntrospection.is() )
         {
-            // Get introspection service
+            
             xIntrospection = Introspection::create( m_xContext );
         }
 
-        // Do introspection
+        
         try
         {
             Any aHandlerAny;
@@ -584,9 +584,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
     }
 
 
-    // -----------------------------------------------------------------------------
-    // XServiceInfo
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     OUString DialogProviderImpl::getImplementationName(  ) throw (RuntimeException)
     {
@@ -603,9 +603,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return getSupportedServiceNames_DialogProviderImpl();
     }
 
-    // -----------------------------------------------------------------------------
-    // XInitialization
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     void DialogProviderImpl::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
@@ -624,17 +624,17 @@ static OUString aResourceResolverPropName("ResourceResolver");
         }
         else if ( aArguments.getLength() == 4 )
         {
-            // call from RTL_Impl_CreateUnoDialog
+            
             aArguments[0] >>= m_xModel;
             m_BasicInfo.reset( new BasicRTLParams() );
             m_BasicInfo->mxInput.set( aArguments[ 1 ], UNO_QUERY_THROW );
-            // allow null mxDlgLib, a document dialog instantiated from
-            // from application basic is unable to provide ( or find ) it's
-            // Library
+            
+            
+            
             aArguments[ 2 ] >>= m_BasicInfo->mxDlgLib;
-            // leave the possibility to optionally allow the old dialog creation
-            // to use the new XScriptListener ( which converts the old style macro
-            // to a SF url )
+            
+            
+            
             m_BasicInfo->mxBasicRTLListener.set( aArguments[ 3 ], UNO_QUERY);
         }
         else if ( aArguments.getLength() > 4 )
@@ -645,9 +645,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // XDialogProvider
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     static OUString aDecorationPropName("Decoration");
     static OUString aTitlePropName("Title");
@@ -657,19 +657,19 @@ static OUString aResourceResolverPropName("ResourceResolver");
         const Reference< XWindowPeer >& xParent, bool bDialogProviderMode )
             throw (IllegalArgumentException, RuntimeException)
     {
-        // if the dialog is located in a document, the document must already be open!
+        
 
         ::osl::MutexGuard aGuard( getMutex() );
 
 
-        // m_xHandler = xHandler;
+        
 
-        //Reference< XDialog > xDialog;
+        
         Reference< XControl > xCtrl;
         Reference< XControlModel > xCtrlMod;
         try
         {
-            // add support for basic RTL_FUNCTION
+            
             if ( m_BasicInfo.get() )
                 xCtrlMod = createDialogModelForBasic();
             else
@@ -686,7 +686,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         }
         if ( xCtrlMod.is() )
         {
-            // i83963 Force decoration
+            
             if( bDialogProviderMode )
             {
                 uno::Reference< beans::XPropertySet > xDlgModPropSet( xCtrlMod, uno::UNO_QUERY );
@@ -711,7 +711,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
             xCtrl = Reference< XControl >( createDialogControl( xCtrlMod, xParent ) );
             if ( xCtrl.is() )
             {
-                //xDialog = Reference< XDialog >( xCtrl, UNO_QUERY );
+                
                 Reference< XIntrospectionAccess > xIntrospectionAccess = inspectHandler( xHandler );
                 attachControlEvents( xCtrl, xHandler, xIntrospectionAccess, bDialogProviderMode );
             }
@@ -776,7 +776,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         const Reference< XWindowPeer >& xParent, const Reference< XInterface >& xHandler )
             throw (lang::IllegalArgumentException, RuntimeException)
     {
-        (void)WindowType;   // for future use
+        (void)WindowType;   
         if( !xParent.is() )
         {
             throw IllegalArgumentException(
@@ -789,9 +789,9 @@ static OUString aResourceResolverPropName("ResourceResolver");
     }
 
 
-    // =============================================================================
-    // component operations
-    // =============================================================================
+    
+    
+    
 
     static Reference< XInterface > SAL_CALL create_DialogProviderImpl(
         Reference< XComponentContext > const & xContext )
@@ -800,7 +800,7 @@ static OUString aResourceResolverPropName("ResourceResolver");
         return static_cast< lang::XTypeProvider * >( new DialogProviderImpl( xContext ) );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     static struct ::cppu::ImplementationEntry s_component_entries [] =
     {
@@ -809,16 +809,16 @@ static OUString aResourceResolverPropName("ResourceResolver");
         { 0, 0, 0, 0, 0, 0 }
     };
 
-    // -----------------------------------------------------------------------------
-
-//.........................................................................
-}   // namespace dlgprov
-//.........................................................................
+    
 
 
-// =============================================================================
-// component exports
-// =============================================================================
+}   
+
+
+
+
+
+
 
 extern "C"
 {

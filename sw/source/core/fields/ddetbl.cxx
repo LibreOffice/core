@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -32,17 +32,17 @@
 
 TYPEINIT1( SwDDETable, SwTable );
 
-/// Ctor moves all lines/boxes from a SwTable into itself.
-/// Afterwards the SwTable is empty and must be deleted.
+
+
 SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, sal_Bool bUpdate )
     : SwTable( rTable ), aDepend( this, pDDEType )
 {
-    // copy the table data
+    
     m_TabSortContentBoxes.insert(rTable.GetTabSortBoxes());
     rTable.GetTabSortBoxes().clear();
 
     aLines.insert( aLines.begin(),
-                   rTable.GetTabLines().begin(), rTable.GetTabLines().end() ); // move lines
+                   rTable.GetTabLines().begin(), rTable.GetTabLines().end() ); 
     rTable.GetTabLines().clear();
 
     if( !aLines.empty() )
@@ -52,7 +52,7 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType, sal_Bool bUpd
         {
             pDDEType->IncRefCnt();
 
-            // update box content only if update flag is set (false in import)
+            
             if (bUpdate)
                 ChangeContent();
         }
@@ -67,7 +67,7 @@ SwDDETable::~SwDDETable()
         GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         pFldTyp->DecRefCnt();
 
-    // If it is the last dependent of the "deleted field" than delete it finally
+    
     if( pFldTyp->IsDeleted() && pFldTyp->IsLastDepend() )
     {
         pFldTyp->Remove( &aDepend );
@@ -87,7 +87,7 @@ void SwDDETable::SwClientNotify( const SwModify&, const SfxHint& rHint )
 {
     const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
     if ( pHint )
-        // replace DDETable by real table
+        
         NoDDETable();
 }
 
@@ -95,14 +95,14 @@ void SwDDETable::ChangeContent()
 {
     OSL_ENSURE( GetFrmFmt(), "No FrameFormat" );
 
-    // Is this the correct NodesArray? (because of UNDO)
+    
     if( aLines.empty() )
         return;
     OSL_ENSURE( !GetTabSortBoxes().empty(), "Table without content?" );
     if( !GetTabSortBoxes()[0]->GetSttNd()->GetNodes().IsDocNodes() )
         return;
 
-    // access to DDEFldType
+    
     SwDDEFieldType* pDDEType = (SwDDEFieldType*)aDepend.GetRegisteredIn();
 
     OUString aExpand = comphelper::string::remove(pDDEType->GetExpansion(), '\r');
@@ -142,11 +142,11 @@ SwDDEFieldType* SwDDETable::GetDDEFldType()
 
 sal_Bool SwDDETable::NoDDETable()
 {
-    // search table node
+    
     OSL_ENSURE( GetFrmFmt(), "No FrameFormat" );
     SwDoc* pDoc = GetFrmFmt()->GetDoc();
 
-    // Is this the correct NodesArray? (because of UNDO)
+    
     if( aLines.empty() )
         return sal_False;
     OSL_ENSURE( !GetTabSortBoxes().empty(), "Table without content?" );
@@ -159,18 +159,18 @@ sal_Bool SwDDETable::NoDDETable()
 
     SwTable* pNewTbl = new SwTable( *this );
 
-    // copy the table data
-    pNewTbl->GetTabSortBoxes().insert( GetTabSortBoxes() ); // move content boxes
+    
+    pNewTbl->GetTabSortBoxes().insert( GetTabSortBoxes() ); 
     GetTabSortBoxes().clear();
 
     pNewTbl->GetTabLines().insert( pNewTbl->GetTabLines().begin(),
-                                   GetTabLines().begin(), GetTabLines().end() ); // move lines
+                                   GetTabLines().begin(), GetTabLines().end() ); 
     GetTabLines().clear();
 
     if( pDoc->GetCurrentViewShell() )
         ((SwDDEFieldType*)aDepend.GetRegisteredIn())->DecRefCnt();
 
-    pTblNd->SetNewTable( pNewTbl );       // replace table
+    pTblNd->SetNewTable( pNewTbl );       
 
     return sal_True;
 }

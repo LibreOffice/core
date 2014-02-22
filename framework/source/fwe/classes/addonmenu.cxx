@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "framework/addonmenu.hxx"
@@ -38,8 +38,8 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 
-// Please look at sfx2/inc/sfxsids.hrc the values are defined there. Due to build dependencies
-// we cannot include the header file.
+
+
 const sal_uInt16 SID_HELPMENU            = (SID_SFX_START + 410);
 
 namespace framework
@@ -56,7 +56,7 @@ AddonMenu::~AddonMenu()
     {
         if ( GetItemType( i ) != MENUITEM_SEPARATOR )
         {
-            // delete user attributes created with new!
+            
             sal_uInt16 nId = GetItemId( i );
             MenuConfiguration::Attributes* pUserAttributes = (MenuConfiguration::Attributes*)GetUserValue( nId );
             delete pUserAttributes;
@@ -65,10 +65,10 @@ AddonMenu::~AddonMenu()
     }
 }
 
-// ------------------------------------------------------------------------
 
-// ------------------------------------------------------------------------
-// Check if command URL string has the unique prefix to identify addon popup menus
+
+
+
 sal_Bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
 {
     const char aPrefixCharBuf[] = ADDONSPOPUPMENU_URL_PREFIX_STR;
@@ -85,11 +85,11 @@ AddonPopupMenu::~AddonPopupMenu()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 static Reference< XModel > GetModelFromFrame( const Reference< XFrame >& rFrame )
 {
-    // Query for the model to get check the context information
+    
     Reference< XModel > xModel;
     if ( rFrame.is() )
     {
@@ -101,14 +101,14 @@ static Reference< XModel > GetModelFromFrame( const Reference< XFrame >& rFrame 
     return xModel;
 }
 
-// ------------------------------------------------------------------------
+
 
 sal_Bool AddonMenuManager::HasAddonMenuElements()
 {
     return AddonsOptions().HasAddonsMenu();
 }
 
-// Factory method to create different Add-On menu types
+
 PopupMenu* AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, const Reference< XFrame >& rFrame )
 {
     if ( eMenuType == ADDON_MENU )
@@ -119,7 +119,7 @@ PopupMenu* AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, const Refe
         return NULL;
 }
 
-// Create the Add-Ons menu
+
 AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame )
 {
     AddonsOptions aOptions;
@@ -133,7 +133,7 @@ AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame 
         Reference< XModel > xModel = GetModelFromFrame( rFrame );
         AddonMenuManager::BuildMenu( pAddonMenu, ADDON_MENU, MENU_APPEND, nUniqueMenuId, rAddonMenuEntries, rFrame, xModel );
 
-        // Don't return an empty Add-On menu
+        
         if ( pAddonMenu->GetItemCount() == 0 )
         {
             delete pAddonMenu;
@@ -144,7 +144,7 @@ AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame 
     return pAddonMenu;
 }
 
-// Returns the next insert position from nPos.
+
 sal_uInt16 AddonMenuManager::GetNextPos( sal_uInt16 nPos )
 {
     return ( nPos == MENU_APPEND ) ? MENU_APPEND : ( nPos+1 );
@@ -167,7 +167,7 @@ static sal_uInt16 FindMenuId( Menu* pMenu, const OUString aCommand )
 }
 
 
-// Merge the Add-Ons help menu items into the given menu bar at a defined pos
+
 void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, MenuBar* pMergeMenuBar )
 {
     if ( pMergeMenuBar )
@@ -182,13 +182,13 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
 
         if ( pHelpMenu )
         {
-            // Add-Ons help menu items should be inserted after the "registration" menu item
+            
             sal_uInt16 nItemCount       = pHelpMenu->GetItemCount();
             sal_uInt16 nInsSepAfterPos  = MENU_APPEND;
             sal_uInt16 nUniqueMenuId    = ADDONMENU_ITEMID_START;
             AddonsOptions aOptions;
 
-            // try to detect the about menu item with the command URL
+            
             sal_uInt16 nId = FindMenuId(pHelpMenu, OUString(".uno:About"));
             sal_uInt16 nInsPos = pHelpMenu->GetItemPos( nId );
 
@@ -214,7 +214,7 @@ void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, Me
     }
 }
 
-// Merge the addon popup menus into the given menu bar at the provided pos.
+
 void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                                              const Reference< XModel >& rModel,
                                              sal_uInt16               nMergeAtPos,
@@ -259,7 +259,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
                     pMergeMenuBar->InsertItem( nId, aTitle, 0, OString(), nInsertPos++ );
                     pMergeMenuBar->SetPopupMenu( nId, pAddonPopupMenu );
 
-                    // Store the command URL into the VCL menu bar for later identification
+                    
                     pMergeMenuBar->SetItemCommand( nId, aURL );
                 }
                 else
@@ -269,7 +269,7 @@ void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
     }
 }
 
-// Insert the menu and sub menu entries into pCurrentMenu with the aAddonMenuDefinition provided
+
 void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrentMenu,
                                   MenuType                              nSubMenuType,
                                   sal_uInt16                                nInsPos,
@@ -308,7 +308,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                 pSubMenu = AddonMenuManager::CreatePopupMenuType( nSubMenuType, rFrame );
                 AddonMenuManager::BuildMenu( pSubMenu, nSubMenuType, MENU_APPEND, nUniqueMenuId, aAddonSubMenu, rFrame, rModel );
 
-                // Don't create a menu item for an empty sub menu
+                
                 if ( pSubMenu->GetItemCount() == 0 )
                 {
                     delete pSubMenu;
@@ -319,8 +319,8 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
 
             if ( bInsertSeparator && nElements > 0 )
             {
-                // Insert a separator only when we insert a new element afterwards and we
-                // have already one before us
+                
+                
                 nElements = 0;
                 bInsertSeparator = sal_False;
                 pCurrentMenu->InsertSeparator(OString(), nInsPos);
@@ -333,8 +333,8 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
 
             ++nElements;
 
-            // Store values from configuration to the New and Wizard menu entries to enable
-            // sfx2 based code to support high contrast mode correctly!
+            
+            
             pCurrentMenu->SetUserValue( nId, sal_uIntPtr( new MenuConfiguration::Attributes( aTarget, aImageId )) );
             pCurrentMenu->SetItemCommand( nId, aURL );
 
@@ -344,7 +344,7 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
     }
 }
 
-// Retrieve the menu entry property values from a sequence
+
 void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenuEntry,
                                      OUString& rTitle,
                                      OUString& rURL,
@@ -353,7 +353,7 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
                                      OUString& rContext,
                                      Sequence< Sequence< PropertyValue > >& rAddonSubMenu )
 {
-    // Reset submenu parameter
+    
     rAddonSubMenu   = Sequence< Sequence< PropertyValue > >();
 
     for ( int i = 0; i < rAddonMenuEntry.getLength(); i++ )
@@ -374,7 +374,7 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
     }
 }
 
-// Check if the context string matches the provided xModel context
+
 sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, const OUString& aContext )
 {
     if ( rModel.is() )

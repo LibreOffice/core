@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "CharacterPropertyItemConverter.hxx"
@@ -62,7 +62,7 @@ namespace
 
     return aCharacterPropertyMap;
 }
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -273,7 +273,7 @@ void CharacterPropertyItemConverter::FillSpecialItem(
                         awt::Size aOldRefSize;
                         if( GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ) >>= aOldRefSize )
                         {
-                            // calculate font height in view
+                            
                             fHeight = static_cast< float >(
                                 RelativeSizeHelper::calculate( fHeight, aOldRefSize, *m_pRefSize ));
                             aValue <<= fHeight;
@@ -532,7 +532,7 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                     }
                     if( bSetValue )
                     {
-                        // set new reference size only if there was a reference size before (auto-scaling on)
+                        
                         if( m_pRefSize.get() &&
                             GetRefSizePropertySet()->getPropertyValue( m_aRefSizePropertyName ).hasValue())
                         {
@@ -562,7 +562,7 @@ uno::Reference< beans::XPropertySet >
     return m_xRefSizePropSet;
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

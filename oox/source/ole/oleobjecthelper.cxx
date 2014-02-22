@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ole/oleobjecthelper.hxx"
@@ -32,7 +32,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::container;
@@ -41,7 +41,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 OleObjectInfo::OleObjectInfo() :
     mbLinked( false ),
@@ -50,7 +50,7 @@ OleObjectInfo::OleObjectInfo() :
 {
 }
 
-// ============================================================================
+
 
 OleObjectHelper::OleObjectHelper( const Reference< XMultiServiceFactory >& rxModelFactory ) :
     maEmbeddedObjScheme( "vnd.sun.star.EmbeddedObject:" ),
@@ -83,7 +83,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
 
     if( rOleObject.mbLinked )
     {
-        // linked OLE object - set target URL
+        
         if( !rOleObject.maTargetLink.isEmpty() )
         {
             rPropMap[ PROP_LinkURL ] <<= rOleObject.maTargetLink;
@@ -92,7 +92,7 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
     }
     else
     {
-        // embedded OLE object - import the embedded data
+        
         if( rOleObject.maEmbeddedData.hasElements() && mxResolver.is() ) try
         {
             OUString aObjectId = "Obj" + OUString::number( mnObjectId++ );
@@ -124,9 +124,9 @@ bool OleObjectHelper::importOleObject( PropertyMap& rPropMap, const OleObjectInf
     return bRet;
 }
 
-// ============================================================================
 
-} // namespace ole
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

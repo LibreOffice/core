@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/urlobj.hxx>
@@ -36,13 +36,13 @@ using namespace com::sun::star;
 #include "globstr.hrc"
 #include <avmedia/mediawindow.hxx>
 
-//------------------------------------------------------------------------
+
 
 void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rURL,
                                         const OUString& rTarget,
                                         const Point* pInsPos )
 {
-    //  Tabelle geschuetzt ?
+    
 
     ScViewData* pViewData = GetViewData();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -100,7 +100,7 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
     else
         aPos = GetInsertPos();
 
-    // Groesse wie in 3.1:
+    
     Size aSize = GetActiveWin()->PixelToLogic(Size(140, 20));
 
     if ( pDoc->IsNegativePage(nTab) )
@@ -108,10 +108,10 @@ void ScTabViewShell::InsertURLButton( const OUString& rName, const OUString& rUR
 
     pObj->SetLogicRect(Rectangle(aPos, aSize));
 
-    //  am alten VC-Button musste die Position/Groesse nochmal explizit
-    //  gesetzt werden - das scheint mit UnoControls nicht noetig zu sein
+    
+    
 
-    //  nicht markieren wenn Ole
+    
     pDrView->InsertObjectSafe( pObj, *pDrView->GetSdrPageView() );
 }
 

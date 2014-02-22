@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -46,8 +46,8 @@ using namespace webdav_ucp;
 
 namespace
 {
-    // strip "DAV:" namespace from XML snippets to avoid
-    // parser error (undeclared namespace) later on.
+    
+    
     OString stripDavNamespace( const OString & in )
     {
         const OString inXML( in.toAsciiLowerCase() );
@@ -60,12 +60,12 @@ namespace
             if ( inXML[ end - 1 ] == '<' ||
                  inXML[ end - 1 ] == '/' )
             {
-                // copy from original buffer - preserve case.
+                
                 buf.append( in.copy( start, end - start ) );
             }
             else
             {
-                // copy from original buffer - preserve case.
+                
                 buf.append( in.copy( start, end - start + 4 ) );
             }
             start = end + 4;
@@ -101,9 +101,9 @@ extern "C" int NPFR_propfind_iter( void* userdata,
     */
 
     if ( status->klass > 2 )
-        return 0; // Error getting this property. Go on.
+        return 0; 
 
-    // Create & set the PropertyValue
+    
     DAVPropertyValue thePropertyValue;
     thePropertyValue.IsCaseSensitive = true;
 
@@ -115,7 +115,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
     bool bHasValue = false;
     if ( DAVProperties::isUCBDeadProperty( *pname ) )
     {
-        // DAV dead property added by WebDAV UCP?
+        
         if ( UCBDeadPropertyValue::createFromXML(
                  value, thePropertyValue.Value ) )
         {
@@ -131,7 +131,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
                                     pname->name, "resourcetype" ) == 0 )
         {
             OString aValue( value );
-            aValue = aValue.trim(); // #107358# remove leading/trailing spaces
+            aValue = aValue.trim(); 
             if ( !aValue.isEmpty() )
             {
                 aValue = stripDavNamespace( aValue ).toAsciiLowerCase();
@@ -144,7 +144,7 @@ extern "C" int NPFR_propfind_iter( void* userdata,
 
             if ( !thePropertyValue.Value.hasValue() )
             {
-                // Take over the value exactly as supplied by the server.
+                
                 thePropertyValue.Value <<= OUString::createFromAscii( value );
             }
         }
@@ -178,25 +178,25 @@ extern "C" int NPFR_propfind_iter( void* userdata,
         }
     }
 
-    // Add the newly created PropertyValue
+    
     DAVResource* theResource = static_cast< DAVResource * >( userdata );
     theResource->properties.push_back( thePropertyValue );
 
-    return 0; // Go on.
+    return 0; 
 }
 
 extern "C" void NPFR_propfind_results( void* userdata,
                                        const ne_uri* uri,
                                        const NeonPropFindResultSet* set )
 {
-    // @@@ href is not the uri! DAVResource ctor wants uri!
+    
 
     DAVResource theResource(
         OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
 
     ne_propset_iterate( set, NPFR_propfind_iter, &theResource );
 
-    // Add entry to resources list.
+    
     vector< DAVResource > * theResources
         = static_cast< vector< DAVResource > * >( userdata );
     theResources->push_back( theResource );
@@ -221,15 +221,15 @@ extern "C" void NPFR_propnames_results( void* userdata,
                                         const ne_uri* uri,
                                         const NeonPropFindResultSet* results )
 {
-    // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
-    // Create entry for the resource.
+    
+    
     DAVResourceInfo theResource(
         OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
 
-    // Fill entry.
+    
     ne_propset_iterate( results, NPFR_propnames_iter, &theResource );
 
-    // Add entry to resources list.
+    
     vector< DAVResourceInfo > * theResources
         = static_cast< vector< DAVResourceInfo > * >( userdata );
     theResources->push_back( theResource );
@@ -244,7 +244,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
                                           vector< DAVResource >& ioResources,
                                           int & nError )
 {
-    // Generate the list of properties we're looking for
+    
     int thePropCount = inPropNames.size();
     if ( thePropCount > 0 )
     {
@@ -253,7 +253,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
 
         for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
         {
-            // Split fullname into namespace and name!
+            
             DAVProperties::createNeonPropName(
                 inPropNames[ theIndex ], thePropNames[ theIndex ] );
         }
@@ -277,17 +277,17 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
     }
     else
     {
-        // ALLPROP
+        
         osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
         nError = ne_simple_propfind( inSession,
                                      inPath,
                                      inDepth,
-                                     NULL, // 0 == allprop
+                                     NULL, 
                                      NPFR_propfind_results,
                                      &ioResources );
     }
 
-    // #87585# - Sometimes neon lies (because some servers lie).
+    
     if ( ( nError == NE_OK ) && ioResources.empty() )
         nError = NE_ERROR;
 }
@@ -308,7 +308,7 @@ NeonPropFindRequest::NeonPropFindRequest(
                             &ioResInfo );
     }
 
-    // #87585# - Sometimes neon lies (because some servers lie).
+    
     if ( ( nError == NE_OK ) && ioResInfo.empty() )
         nError = NE_ERROR;
 }

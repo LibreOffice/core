@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -41,8 +41,8 @@ public:
     void testMSP();
     CPPUNIT_TEST_SUITE(ScMacrosTest);
 #if !defined(MACOSX)
-    //enable this test if you want to play with star basic macros in unit tests
-    //works but does nothing useful yet
+    
+    
     CPPUNIT_TEST(testStarBasic);
     CPPUNIT_TEST(testMSP);
     CPPUNIT_TEST(testVba);
@@ -54,12 +54,12 @@ private:
     uno::Reference<uno::XInterface> m_xCalcComponent;
 };
 
-// I suppose you could say this test doesn't really belong here, OTOH
-// we need a full document to run the test ( it related originally to an
-// imported Excel VBA macro ) It's convenient and fast to unit test
-// this the problem this way. Perhaps in the future there will be some sort
-// of slowcheck tests ( requiring a full document environment in the scripting
-// module, we could move the test there then ) - relates to fdo#67547
+
+
+
+
+
+
 void ScMacrosTest::testMSP()
 {
     const OUString aFileNameBase("MasterScriptProviderProblem.ods");

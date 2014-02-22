@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -58,7 +58,7 @@ using namespace ::com::sun::star;
 uno::Reference< uno::XInterface > SAL_CALL SwXAutoTextContainer_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
 {
-    //the module may not be loaded
+    
     SolarMutexGuard aGuard;
     SwGlobals::ensure();
     static uno::Reference< uno::XInterface > xAText = (cppu::OWeakObject*)new SwXAutoTextContainer();
@@ -114,7 +114,7 @@ uno::Type SwXAutoTextContainer::getElementType(void) throw( uno::RuntimeExceptio
 
 sal_Bool SwXAutoTextContainer::hasElements(void) throw( uno::RuntimeException )
 {
-    // At least standard should always exists!
+    
     return sal_True;
 }
 
@@ -124,8 +124,8 @@ uno::Any SwXAutoTextContainer::getByName(const OUString& GroupName)
     SolarMutexGuard aGuard;
 
     uno::Reference< text::XAutoTextGroup > xGroup;
-    if ( pGlossaries && hasByName( GroupName ) )    // group name already known?
-        // sal_True = create group if not already available
+    if ( pGlossaries && hasByName( GroupName ) )    
+        
         xGroup = pGlossaries->GetAutoTextGroup( GroupName, true );
 
     if ( !xGroup.is() )
@@ -144,13 +144,13 @@ uno::Sequence< OUString > SwXAutoTextContainer::getElementNames(void) throw( uno
 
     for ( sal_uInt16 i = 0; i < nCount; i++ )
     {
-        // The names will be passed without a path extension.
+        
         OUString sGroupName(pGlossaries->GetGroupName(i));
         pArr[i] = sGroupName.getToken(0, GLOS_DELIM);
     }
     return aGroupNames;
 }
-// Finds group names with or without path index.
+
 sal_Bool SwXAutoTextContainer::hasByName(const OUString& Name)
     throw( uno::RuntimeException )
 {
@@ -168,7 +168,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
     SolarMutexGuard aGuard;
     if(hasByName(aGroupName))
         throw container::ElementExistException();
-    //check for non-ASCII characters
+    
     if(aGroupName.isEmpty())
     {
         lang::IllegalArgumentException aIllegal;
@@ -198,7 +198,7 @@ uno::Reference< text::XAutoTextGroup >  SwXAutoTextContainer::insertNewByName(
 
     uno::Reference< text::XAutoTextGroup > xGroup = pGlossaries->GetAutoTextGroup( sGroup, true );
     OSL_ENSURE( xGroup.is(), "SwXAutoTextContainer::insertNewByName: no UNO object created? How this?" );
-        // We just inserted the group into the glossaries, so why doesn't it exist?
+        
 
     return xGroup;
 }
@@ -207,7 +207,7 @@ void SwXAutoTextContainer::removeByName(const OUString& aGroupName)
     throw( container::NoSuchElementException, uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-    // At first find the name with path extension
+    
     OUString sGroupName = pGlossaries->GetCompleteGroupName( aGroupName );
     if(sGroupName.isEmpty())
         throw container::NoSuchElementException();
@@ -291,7 +291,7 @@ void SwXAutoTextGroup::renameByName(const OUString& aElementName,
                                                      uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    // throw exception only if the programmatic name is to be changed into an existing name
+    
     if(aNewElementName != aElementName && hasByName(aNewElementName))
         throw container::ElementExistException();
     SwTextBlocks* pGlosGroup = pGlossaries ? pGlossaries->GetGroupDoc(m_sGroupName, sal_False) : 0;
@@ -396,7 +396,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
 
         SwDoc* pGDoc = pGlosGroup->GetDoc();
 
-        // Until there is an option for that, delete base util::URL
+        
         if(rCfg.IsSaveRelFile())
         {
             INetURLObject aTemp(pGlosGroup->GetFileName());
@@ -431,7 +431,7 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
 
     uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, sShortName, true );
     OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::insertNewByName: no UNO object created? How this?" );
-        // we just inserted the entry into the group, so why doesn't it exist?
+        
 
     return xEntry;
 }
@@ -488,7 +488,7 @@ void SwXAutoTextGroup::setName(const OUString& rName) throw( uno::RuntimeExcepti
         sNewGroup += OUString(GLOS_DELIM) + "0";
     }
 
-    //the name must be saved, the group may be invalidated while in RenameGroupDoc()
+    
     SwGlossaries* pTempGlossaries = pGlossaries;
 
     OUString sPreserveTitle( pGlossaries->GetGroupTitle( sName ) );
@@ -560,7 +560,7 @@ uno::Any SwXAutoTextGroup::getByName(const OUString& _rName)
     SolarMutexGuard aGuard;
     uno::Reference< text::XAutoTextEntry > xEntry = pGlossaries->GetAutoTextEntry( m_sGroupName, sName, _rName, true );
     OSL_ENSURE( xEntry.is(), "SwXAutoTextGroup::getByName: GetAutoTextEntry is fractious!" );
-        // we told it to create the object, so why didn't it?
+        
     return makeAny( xEntry );
 }
 
@@ -759,13 +759,13 @@ SwXAutoTextEntry::~SwXAutoTextEntry()
     {
         SolarMutexGuard aGuard;
 
-        // ensure that any pending modifications are written
+        
         implFlushDocument( true );
 
-        //! Bug #96559
-        // DocShell must be cleared before mutex is lost.
-        // Needs to be done explicitly since xDocSh is a class member.
-        // Thus, an own block here, guarded by the SolarMutex
+        
+        
+        
+        
     }
 }
 
@@ -778,7 +778,7 @@ void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
 
         if ( _bCloseDoc )
         {
-            // stop listening at the document
+            
             EndListening( *&xDocSh );
 
             xDocSh->DoClose();
@@ -790,16 +790,16 @@ void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
 void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
 {
     if ( &_rBC == &xDocSh )
-    {   // it's our document
+    {   
         if ( _rHint.ISA( SfxSimpleHint ) )
         {
             if ( SFX_HINT_DEINITIALIZING == static_cast< const SfxSimpleHint& >( _rHint ).GetId() )
             {
-                // our document is dying (possibly because we're shuting down, and the document was notified
-                // earlier than we are?)
-                // stop listening at the docu
+                
+                
+                
                 EndListening( *&xDocSh );
-                // and release our reference
+                
                 xDocSh.Clear();
             }
         }
@@ -822,7 +822,7 @@ void SwXAutoTextEntry::GetBodyText ()
     xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, sal_False );
     OSL_ENSURE( xDocSh.Is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
 
-    // start listening at the document
+    
     StartListening( *&xDocSh );
 
     pBodyText = new SwXBodyText ( xDocSh->GetDoc() );
@@ -918,17 +918,17 @@ void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextR
 {
     SolarMutexGuard aGuard;
 
-    // ensure that any pending modifications are written
-    // reason is that we're holding the _copy_ of the auto text, while the real auto text
-    // is stored somewhere. And below, we're not working with our copy, but only tell the target
-    // TextRange to work with the stored version.
-    // #96380# - 2003-03-03 - fs@openoffice.org
+    
+    
+    
+    
+    
     implFlushDocument( false );
-        // TODO: think about if we should pass "true" here
-        // The difference would be that when the next modification is made to this instance here, then
-        // we would be forced to open the document again, instead of working on our current copy.
-        // This means that we would reflect any changes which were done to the AutoText by foreign instances
-        // in the meantime
+        
+        
+        
+        
+        
 
     uno::Reference<lang::XUnoTunnel> xTunnel( xTextRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
@@ -1073,7 +1073,7 @@ void SwAutoTextEventDescriptor::replaceByName(
 
         delete pBlocks;
     }
-    // else: ignore
+    
 }
 
 void SwAutoTextEventDescriptor::getByName(
@@ -1096,7 +1096,7 @@ void SwAutoTextEventDescriptor::getByName(
     OSL_ENSURE( NULL != pBlocks,
                 "can't get autotext group; SwAutoTextEntry has illegal name?");
 
-    // return empty macro, unless macro is found
+    
     OUString sEmptyStr;
     SvxMacro aEmptyMacro(sEmptyStr, sEmptyStr);
     rMacro = aEmptyMacro;

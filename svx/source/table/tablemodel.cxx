@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,13 +46,13 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 
-// -----------------------------------------------------------------------------
+
 
 namespace sdr { namespace table {
 
-// -----------------------------------------------------------------------------
 
-// removes the given range from a vector
+
+
 template< class Vec, class Iter > void remove_range( Vec& rVector, sal_Int32 nIndex, sal_Int32 nCount )
 {
     const sal_Int32 nSize = static_cast<sal_Int32>(rVector.size());
@@ -60,7 +60,7 @@ template< class Vec, class Iter > void remove_range( Vec& rVector, sal_Int32 nIn
     {
         if( (nIndex + nCount) >= nSize )
         {
-            // remove at end
+            
             rVector.resize( nIndex );
         }
         else
@@ -84,7 +84,7 @@ template< class Vec, class Iter > void remove_range( Vec& rVector, sal_Int32 nIn
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** inserts a range into a vector */
 template< class Vec, class Iter, class Entry > sal_Int32 insert_range( Vec& rVector, sal_Int32 nIndex, sal_Int32 nCount )
@@ -93,13 +93,13 @@ template< class Vec, class Iter, class Entry > sal_Int32 insert_range( Vec& rVec
     {
         if( nIndex >= static_cast< sal_Int32 >( rVector.size() ) )
         {
-            // append at end
-            nIndex = static_cast< sal_Int32 >( rVector.size() ); // cap to end
+            
+            nIndex = static_cast< sal_Int32 >( rVector.size() ); 
             rVector.resize( nIndex + nCount );
         }
         else
         {
-            // insert
+            
             sal_Int32 nFind = nIndex;
             Iter aIter( rVector.begin() );
             while( nFind-- )
@@ -112,7 +112,7 @@ template< class Vec, class Iter, class Entry > sal_Int32 insert_range( Vec& rVec
     return nIndex;
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableModel::TableModel( SdrTableObj* pTableObj )
 : TableModelBase( m_aMutex  )
@@ -145,7 +145,7 @@ TableModel::TableModel( SdrTableObj* pTableObj, const TableModelRef& xSourceTabl
         while( nColumns-- )
             (*maColumns[nColumns]) = (*xSourceTable->maColumns[nColumns]);
 
-        // copy cells
+        
         for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
         {
             for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow )
@@ -158,13 +158,13 @@ TableModel::TableModel( SdrTableObj* pTableObj, const TableModelRef& xSourceTabl
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableModel::~TableModel()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::init( sal_Int32 nColumns, sal_Int32 nRows )
 {
@@ -187,56 +187,56 @@ void TableModel::init( sal_Int32 nColumns, sal_Int32 nRows )
     }
 }
 
-// -----------------------------------------------------------------------------
-// ICellRange
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 TableModel::getLeft()
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 TableModel::getTop()
 {
     return 0;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 TableModel::getRight()
 {
     return getColumnCount();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 TableModel::getBottom()
 {
     return getRowCount();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XTable > TableModel::getTable()
 {
     return this;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::UndoInsertRows( sal_Int32 nIndex, sal_Int32 nCount )
 {
     TableModelNotifyGuard aGuard( this );
 
-    // remove the rows
+    
     remove_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
     updateRows();
     setModified(sal_True);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::UndoRemoveRows( sal_Int32 nIndex, RowVector& aRows )
 {
@@ -253,13 +253,13 @@ void TableModel::UndoRemoveRows( sal_Int32 nIndex, RowVector& aRows )
     setModified(sal_True);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::UndoInsertColumns( sal_Int32 nIndex, sal_Int32 nCount )
 {
     TableModelNotifyGuard aGuard( this );
 
-    // now remove the columns
+    
     remove_range<ColumnVector,ColumnVector::iterator>( maColumns, nIndex, nCount );
     sal_Int32 nRows = getRowCountImpl();
     while( nRows-- )
@@ -269,7 +269,7 @@ void TableModel::UndoInsertColumns( sal_Int32 nIndex, sal_Int32 nCount )
     setModified(sal_True);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellVector& aCells )
 {
@@ -277,7 +277,7 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
 
     const sal_Int32 nCount = sal::static_int_cast< sal_Int32 >( aCols.size() );
 
-    // assert if there are not enough cells saved
+    
     DBG_ASSERT( (aCols.size() * maRows.size()) == aCells.size(), "sdr::table::TableModel::UndoRemoveColumns(), invalid undo data!" );
 
     nIndex = insert_range<ColumnVector,ColumnVector::iterator,TableColumnRef>( maColumns, nIndex, nCount );
@@ -298,9 +298,9 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
     setModified(sal_True);
 }
 
-// -----------------------------------------------------------------------------
-// XTable
-// -----------------------------------------------------------------------------
+
+
+
 
 Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeException)
 {
@@ -308,7 +308,7 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursor() throw (RuntimeExcep
     return createCursorByRange( Reference< XCellRange >( this ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Reference< XCellRange >& rRange ) throw (IllegalArgumentException, RuntimeException)
 {
@@ -322,7 +322,7 @@ Reference< XCellCursor > SAL_CALL TableModel::createCursorByRange( const Referen
     return new CellCursor( xModel, pRange->getLeft(), pRange->getTop(), pRange->getRight(), pRange->getBottom() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException)
 {
@@ -330,7 +330,7 @@ sal_Int32 SAL_CALL TableModel::getRowCount() throw (RuntimeException)
     return getRowCountImpl();
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException)
 {
@@ -338,9 +338,9 @@ sal_Int32 SAL_CALL TableModel::getColumnCount() throw (RuntimeException)
     return getColumnCountImpl();
 }
 
-// -----------------------------------------------------------------------------
-// XComponent
-// -----------------------------------------------------------------------------
+
+
+
 
 void TableModel::dispose() throw (RuntimeException)
 {
@@ -348,23 +348,23 @@ void TableModel::dispose() throw (RuntimeException)
     TableModelBase::dispose();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableModel::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
 {
     TableModelBase::addEventListener( xListener );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableModel::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
 {
     TableModelBase::removeEventListener( xListener );
 }
 
-// -----------------------------------------------------------------------------
-// XModifiable
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException)
 {
@@ -372,7 +372,7 @@ sal_Bool SAL_CALL TableModel::isModified(  ) throw (RuntimeException)
     return mbModified;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableModel::setModified( sal_Bool bModified ) throw (PropertyVetoException, RuntimeException)
 {
@@ -384,25 +384,25 @@ void SAL_CALL TableModel::setModified( sal_Bool bModified ) throw (PropertyVetoE
         notifyModification();
 }
 
-// -----------------------------------------------------------------------------
-// XModifyBroadcaster
-// -----------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL TableModel::addModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
     rBHelper.addListener( cppu::UnoType<XModifyListener>::get() , xListener );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableModel::removeModifyListener( const Reference< XModifyListener >& xListener ) throw (RuntimeException)
 {
     rBHelper.removeListener( cppu::UnoType<XModifyListener>::get() , xListener );
 }
 
-// -----------------------------------------------------------------------------
-// XColumnRowRange
-// -----------------------------------------------------------------------------
+
+
+
 
 Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeException)
 {
@@ -413,7 +413,7 @@ Reference< XTableColumns > SAL_CALL TableModel::getColumns() throw (RuntimeExcep
     return mxTableColumns.get();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException)
 {
@@ -424,9 +424,9 @@ Reference< XTableRows > SAL_CALL TableModel::getRows() throw (RuntimeException)
     return mxTableRows.get();
 }
 
-// -----------------------------------------------------------------------------
-// XCellRange
-// -----------------------------------------------------------------------------
+
+
+
 
 Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw ( IndexOutOfBoundsException, RuntimeException)
 {
@@ -439,7 +439,7 @@ Reference< XCell > SAL_CALL TableModel::getCellByPosition( sal_Int32 nColumn, sa
     throw IndexOutOfBoundsException();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -454,16 +454,16 @@ Reference< XCellRange > SAL_CALL TableModel::getCellRangeByPosition( sal_Int32 n
     throw IndexOutOfBoundsException();
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XCellRange > SAL_CALL TableModel::getCellRangeByName( const OUString& /*aRange*/ ) throw (RuntimeException)
 {
     return Reference< XCellRange >();
 }
 
-// -----------------------------------------------------------------------------
-// XPropertySet
-// -----------------------------------------------------------------------------
+
+
+
 
 Reference< XPropertySetInfo > SAL_CALL TableModel::getPropertySetInfo(  ) throw (RuntimeException)
 {
@@ -471,52 +471,52 @@ Reference< XPropertySetInfo > SAL_CALL TableModel::getPropertySetInfo(  ) throw 
     return xInfo;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableModel::setPropertyValue( const OUString& /*aPropertyName*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL TableModel::getPropertyValue( const OUString& /*PropertyName*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     return Any();
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableModel::addPropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableModel::removePropertyChangeListener( const OUString& /*aPropertyName*/, const Reference< XPropertyChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableModel::addVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL TableModel::removeVetoableChangeListener( const OUString& /*aPropertyName*/, const Reference< XVetoableChangeListener >& /*xListener*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
-// XFastPropertySet
-// -----------------------------------------------------------------------------
+
+
+
 
 void SAL_CALL TableModel::setFastPropertyValue( ::sal_Int32 /*nHandle*/, const Any& /*aValue*/ ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
@@ -524,23 +524,23 @@ Any SAL_CALL TableModel::getFastPropertyValue( ::sal_Int32 /*nHandle*/ ) throw (
     return aAny;
 }
 
-// -----------------------------------------------------------------------------
-// internals
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 TableModel::getRowCountImpl() const
 {
     return static_cast< sal_Int32 >( maRows.size() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Int32 TableModel::getColumnCountImpl() const
 {
     return static_cast< sal_Int32 >( maColumns.size() );
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::disposing()
 {
@@ -575,16 +575,16 @@ void TableModel::disposing()
     mpTableObj = 0;
 }
 
-// -----------------------------------------------------------------------------
-// XBroadcaster
-// -----------------------------------------------------------------------------
+
+
+
 
 void TableModel::lockBroadcasts() throw (RuntimeException)
 {
     ::SolarMutexGuard aGuard;
     ++mnNotifyLock;
 }
-// -----------------------------------------------------------------------------
+
 
 void TableModel::unlockBroadcasts() throw (RuntimeException)
 {
@@ -598,7 +598,7 @@ void TableModel::unlockBroadcasts() throw (RuntimeException)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 void TableModel::notifyModification()
 {
     ::osl::MutexGuard guard( m_aMutex );
@@ -620,7 +620,7 @@ void TableModel::notifyModification()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 CellRef TableModel::getCell( sal_Int32 nCol, sal_Int32 nRow ) const
 {
@@ -635,7 +635,7 @@ CellRef TableModel::getCell( sal_Int32 nCol, sal_Int32 nRow ) const
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 CellRef TableModel::createCell()
 {
@@ -645,7 +645,7 @@ CellRef TableModel::createCell()
     return xCell;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
 {
@@ -693,7 +693,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
             }
 
             const sal_Int32 nRowCount = getRowCountImpl();
-            // check if cells merge over new columns
+            
             for( sal_Int32 nCol = 0; nCol < nIndex; ++nCol )
             {
                 for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow )
@@ -702,7 +702,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
                     sal_Int32 nColSpan = (xCell.is() && !xCell->isMerged()) ? xCell->getColumnSpan() : 1;
                     if( (nColSpan != 1) && ((nColSpan + nCol ) > nIndex) )
                     {
-                        // cell merges over newly created columns, so add the new columns to the merged cell
+                        
                         const sal_Int32 nRowSpan = xCell->getRowSpan();
                         nColSpan += nCount;
                         merge( nCol, nRow, nColSpan, nRowSpan );
@@ -726,7 +726,7 @@ void TableModel::insertColumns( sal_Int32 nIndex, sal_Int32 nCount )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 {
@@ -738,7 +738,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
         {
             TableModelNotifyGuard aGuard( this );
 
-            // clip removed columns to columns actually avalaible
+            
             if( (nIndex + nCount) > nColCount )
                 nCount = nColCount - nIndex;
 
@@ -771,12 +771,12 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 pModel->AddUndo( new RemoveColUndo( xThis, nIndex, aRemovedCols, aRemovedCells ) );
             }
 
-            // only rows before and inside the removed rows are considered
+            
             nColCount = nIndex + nCount + 1;
 
             const sal_Int32 nRowCount = getRowCountImpl();
 
-            // first check merged cells before and inside the removed rows
+            
             for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
             {
                 for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow )
@@ -788,10 +788,10 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
 
                     if( nCol >= nIndex )
                     {
-                        // current cell is inside the removed columns
+                        
                         if( (nCol + nColSpan) > ( nIndex + nCount ) )
                         {
-                            // current cells merges with columns after the removed columns
+                            
                             const sal_Int32 nRemove = nCount - nCol + nIndex;
 
                             CellRef xTargetCell( getCell( nIndex + nCount, nRow ) );
@@ -806,7 +806,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                     }
                     else if( nColSpan > (nIndex - nCol) )
                     {
-                        // current cells spans inside the removed columns, so adjust
+                        
                         const sal_Int32 nRemove = ::std::min( nCount, nCol + nColSpan - nIndex );
                         if( bUndo )
                             xCell->AddUndo();
@@ -815,7 +815,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
                 }
             }
 
-            // now remove the columns
+            
             remove_range<ColumnVector,ColumnVector::iterator>( maColumns, nIndex, nCount );
             while( nRows-- )
                 maRows[nRows]->removeColumns( nIndex, nCount );
@@ -836,7 +836,7 @@ void TableModel::removeColumns( sal_Int32 nIndex, sal_Int32 nCount )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
 {
@@ -867,7 +867,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
                 pModel->AddUndo( new InsertRowUndo( xThis, nIndex, aNewRows ) );
             }
 
-            // check if cells merge over new columns
+            
             for( sal_Int32 nRow = 0; nRow < nIndex; ++nRow )
             {
                 for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
@@ -876,7 +876,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
                     sal_Int32 nRowSpan = (xCell.is() && !xCell->isMerged()) ? xCell->getRowSpan() : 1;
                     if( (nRowSpan > 1) && ((nRowSpan + nRow) > nIndex) )
                     {
-                        // cell merges over newly created columns, so add the new columns to the merged cell
+                        
                         const sal_Int32 nColSpan = xCell->getColumnSpan();
                         nRowSpan += nCount;
                         merge( nCol, nRow, nColSpan, nRowSpan );
@@ -899,7 +899,7 @@ void TableModel::insertRows( sal_Int32 nIndex, sal_Int32 nCount )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 {
@@ -914,7 +914,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
         {
             TableModelNotifyGuard aGuard( this );
 
-            // clip removed rows to rows actually avalaible
+            
             if( (nIndex + nCount) > nRowCount )
                 nCount = nRowCount - nIndex;
 
@@ -932,12 +932,12 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                 pModel->AddUndo( new RemoveRowUndo( xThis, nIndex, aRemovedRows ) );
             }
 
-            // only rows before and inside the removed rows are considered
+            
             nRowCount = nIndex + nCount + 1;
 
             const sal_Int32 nColCount = getColumnCountImpl();
 
-            // first check merged cells before and inside the removed rows
+            
             for( sal_Int32 nRow = 0; nRow < nRowCount; ++nRow )
             {
                 for( sal_Int32 nCol = 0; nCol < nColCount; ++nCol )
@@ -949,10 +949,10 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
 
                     if( nRow >= nIndex )
                     {
-                        // current cell is inside the removed rows
+                        
                         if( (nRow + nRowSpan) > (nIndex + nCount) )
                         {
-                            // current cells merges with rows after the removed rows
+                            
                             const sal_Int32 nRemove = nCount - nRow + nIndex;
 
                             CellRef xTargetCell( getCell( nCol, nIndex + nCount ) );
@@ -967,7 +967,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                     }
                     else if( nRowSpan > (nIndex - nRow) )
                     {
-                        // current cells spans inside the removed rows, so adjust
+                        
                         const sal_Int32 nRemove = ::std::min( nCount, nRow + nRowSpan - nIndex );
                         if( bUndo )
                             xCell->AddUndo();
@@ -976,7 +976,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
                 }
             }
 
-            // now remove the rows
+            
             remove_range<RowVector,RowVector::iterator>( maRows, nIndex, nCount );
 
             if( bUndo )
@@ -995,7 +995,7 @@ void TableModel::removeRows( sal_Int32 nIndex, sal_Int32 nCount )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableRowRef TableModel::getRow( sal_Int32 nRow ) const throw (IndexOutOfBoundsException)
 {
@@ -1005,7 +1005,7 @@ TableRowRef TableModel::getRow( sal_Int32 nRow ) const throw (IndexOutOfBoundsEx
     throw IndexOutOfBoundsException();
 }
 
-// -----------------------------------------------------------------------------
+
 
 TableColumnRef TableModel::getColumn( sal_Int32 nColumn ) const throw (IndexOutOfBoundsException)
 {
@@ -1015,7 +1015,7 @@ TableColumnRef TableModel::getColumn( sal_Int32 nColumn ) const throw (IndexOutO
     throw IndexOutOfBoundsException();
 }
 
-// -----------------------------------------------------------------------------
+
 
 /** deletes rows and columns that are completely merged. Must be called between BegUndo/EndUndo! */
 void TableModel::optimize()
@@ -1106,7 +1106,7 @@ void TableModel::optimize()
         setModified(sal_True);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_Int32 nRowSpan )
 {
@@ -1122,7 +1122,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
         OSL_FAIL("TableModel::merge(), merge beyound the table!");
     }
 
-    // merge first cell
+    
     CellRef xOriginCell( dynamic_cast< Cell* >( getCellByPosition( nCol, nRow ).get() ) );
     if( xOriginCell.is() )
     {
@@ -1133,7 +1133,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
 
     sal_Int32 nTempCol = nCol + 1;
 
-    // merge remaining cells
+    
     for( ; nRow < nLastRow; nRow++ )
     {
         for( ; nTempCol < nLastCol; nTempCol++ )
@@ -1152,7 +1152,7 @@ void TableModel::merge( sal_Int32 nCol, sal_Int32 nRow, sal_Int32 nColSpan, sal_
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::updateRows()
 {
@@ -1164,7 +1164,7 @@ void TableModel::updateRows()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void TableModel::updateColumns()
 {
@@ -1176,7 +1176,7 @@ void TableModel::updateColumns()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 } }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <pam.hxx>
@@ -62,7 +62,7 @@ SwWhichSection fnSectionNext    = &GoNextSection;
 SwPosSection fnSectionStart     = &aFwrd;
 SwPosSection fnSectionEnd       = &aBwrd;
 
-// Travelling in tables
+
 sal_Bool GotoPrevTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
 sal_Bool GotoCurrTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
 sal_Bool GotoNextTable( SwPaM&, SwPosTable, sal_Bool bInReadOnly );
@@ -73,7 +73,7 @@ SwWhichTable fnTableNext = &GotoNextTable;
 SwPosTable fnTableStart = &aFwrd;
 SwPosTable fnTableEnd = &aBwrd;
 
-// Travelling in regions
+
 sal_Bool GotoPrevRegion( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
 sal_Bool GotoCurrRegion( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );
 sal_Bool GotoCurrRegionAndSkip( SwPaM&, SwPosRegion, sal_Bool bInReadOnly );

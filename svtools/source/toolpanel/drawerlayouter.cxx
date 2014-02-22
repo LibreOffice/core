@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,18 +26,18 @@
 #include <comphelper/accimplaccess.hxx>
 #include <tools/diagnose_ex.h>
 
-//......................................................................................................................
+
 namespace svt
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::accessibility::XAccessible;
 
-    //==================================================================================================================
-    //= DrawerDeckLayouter
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     DrawerDeckLayouter::DrawerDeckLayouter( ::Window& i_rParentWindow, IToolPanelDeck& i_rPanels )
         :m_rParentWindow( i_rParentWindow )
         ,m_rPanelDeck( i_rPanels )
@@ -46,20 +46,20 @@ namespace svt
     {
         m_rPanelDeck.AddListener( *this );
 
-        // simulate PanelInserted events for the panels which are already there
+        
         for ( size_t i=0; i<m_rPanelDeck.GetPanelCount(); ++i )
             PanelInserted( m_rPanelDeck.GetPanel( i ), i );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     DrawerDeckLayouter::~DrawerDeckLayouter()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     IMPLEMENT_IREFERENCE( DrawerDeckLayouter )
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Rectangle DrawerDeckLayouter::Layout( const Rectangle& i_rDeckPlayground )
     {
         const size_t nPanelCount( m_rPanelDeck.GetPanelCount() );
@@ -71,8 +71,8 @@ namespace svt
         if ( !aActivePanel )
             aActivePanel = m_aLastKnownActivePanel;
 
-        // arrange the title bars which are *above* the active panel (or *all* if there is no active panel), plus
-        // the title bar of the active panel itself
+        
+        
         Point aUpperDrawerPos( i_rDeckPlayground.TopLeft() );
         const size_t nUpperBound = !!aActivePanel ? *aActivePanel : nPanelCount - 1;
         for ( size_t i=0; i<=nUpperBound; ++i )
@@ -83,7 +83,7 @@ namespace svt
             aUpperDrawerPos.Move( 0, nDrawerHeight );
         }
 
-        // arrange title bars which are below the active panel (or *none* if there is no active panel)
+        
         Point aLowerDrawerPos( i_rDeckPlayground.BottomLeft() );
         for ( size_t j = nPanelCount - 1; j > nUpperBound; --j )
         {
@@ -95,14 +95,14 @@ namespace svt
             aLowerDrawerPos.Move( 0, -nDrawerHeight );
         }
 
-        // fincally calculate the rectangle for the active panel
+        
         return Rectangle(
             aUpperDrawerPos,
             Size( nWidth, aLowerDrawerPos.Y() - aUpperDrawerPos.Y() + 1 )
         );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DrawerDeckLayouter::Destroy()
     {
         while ( !m_aDrawers.empty() )
@@ -110,12 +110,12 @@ namespace svt
         m_rPanelDeck.RemoveListener( *this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DrawerDeckLayouter::SetFocusToPanelSelector()
     {
         const size_t nPanelCount( m_rPanelDeck.GetPanelCount() );
         if ( !nPanelCount )
-            // nothing to focus
+            
             return;
         ::boost::optional< size_t > aActivePanel( m_rPanelDeck.GetActivePanel() );
         if ( !aActivePanel )
@@ -124,13 +124,13 @@ namespace svt
         m_aDrawers[ *aActivePanel ]->GrabFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     size_t DrawerDeckLayouter::GetAccessibleChildCount() const
     {
         return m_aDrawers.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XAccessible > DrawerDeckLayouter::GetAccessibleChild( const size_t i_nChildIndex, const Reference< XAccessible >& i_rParentAccessible )
     {
         ENSURE_OR_RETURN( i_nChildIndex < m_aDrawers.size(), "illegal index", NULL );
@@ -149,14 +149,14 @@ namespace svt
         return xItemAccessible;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DrawerDeckLayouter::PanelInserted( const PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "DrawerDeckLayouter::PanelInserted: inconsistency!" );
 
         PToolPanelDrawer pDrawer( new ToolPanelDrawer( m_rParentWindow, i_pPanel->GetDisplayName() ) );
         pDrawer->SetHelpId( i_pPanel->GetHelpID() );
-        // proper Z-Order
+        
         if ( i_nPosition == 0 )
         {
             pDrawer->SetZOrder( NULL, WINDOW_ZORDER_FIRST );
@@ -173,22 +173,22 @@ namespace svt
         impl_triggerRearrange();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DrawerDeckLayouter::PanelRemoved( const size_t i_nPosition )
     {
         impl_removeDrawer( i_nPosition );
         impl_triggerRearrange();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DrawerDeckLayouter::impl_triggerRearrange() const
     {
-        // this is somewhat hacky, it assumes that the parent of our panels is a tool panel deck, which, in its
-        // Resize implementation, rearrances all elements.
+        
+        
         m_rParentWindow.Resize();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DrawerDeckLayouter::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
         if ( !!i_rOldActive )
@@ -206,14 +206,14 @@ namespace svt
         impl_triggerRearrange();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DrawerDeckLayouter::LayouterChanged( const PDeckLayouter& i_rNewLayouter )
     {
-        // not interested in
+        
         (void)i_rNewLayouter;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     size_t DrawerDeckLayouter::impl_getPanelPositionFromWindow( const Window* i_pDrawerWindow ) const
     {
         for (   ::std::vector< PToolPanelDrawer >::const_iterator drawerPos = m_aDrawers.begin();
@@ -227,7 +227,7 @@ namespace svt
         return m_aDrawers.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DrawerDeckLayouter::impl_removeDrawer( const size_t i_nPosition )
     {
         OSL_PRECOND( i_nPosition < m_aDrawers.size(), "DrawerDeckLayouter::impl_removeDrawer: invalid panel position!" );
@@ -236,7 +236,7 @@ namespace svt
         m_aDrawers.erase( m_aDrawers.begin() + i_nPosition );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     IMPL_LINK( DrawerDeckLayouter, OnWindowEvent, VclSimpleEvent*, i_pEvent )
     {
         const VclWindowEvent* pWindowEvent = PTR_CAST( VclWindowEvent, i_pEvent );
@@ -284,14 +284,14 @@ namespace svt
         return 0L;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DrawerDeckLayouter::Dying()
     {
         Destroy();
     }
 
-//......................................................................................................................
-} // namespace svt
-//......................................................................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

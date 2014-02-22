@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, SbiToken t, SbiExprNode*
     pRight    = r;
     eTok      = t;
     nVal      = 0;
-    eType     = SbxVARIANT;     // Nodes are always Variant
+    eType     = SbxVARIANT;     
     eNodeType = SbxNODE;
 }
 
@@ -79,7 +79,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiEx
     aVar.pNext= NULL;
 }
 
-// #120061 TypeOf
+
 SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, sal_uInt16 nId )
 {
     BaseInit( p );
@@ -90,7 +90,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, sal_uInt16 nId )
     nTypeStrId = nId;
 }
 
-// new <type>
+
 SbiExprNode::SbiExprNode( SbiParser* p, sal_uInt16 nId )
 {
     BaseInit( p );
@@ -100,7 +100,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, sal_uInt16 nId )
     nTypeStrId = nId;
 }
 
-// From 1995-12-17, auxiliary function for Ctor for the uniform initialisation
+
 void SbiExprNode::BaseInit( SbiParser* p )
 {
     pGen = &p->aGen;
@@ -147,7 +147,7 @@ SbiSymDef* SbiExprNode::GetRealVar()
         return NULL;
 }
 
-// From 1995-12-18
+
 SbiExprNode* SbiExprNode::GetRealNode()
 {
     if( eNodeType == SbxVARVAL )
@@ -161,7 +161,7 @@ SbiExprNode* SbiExprNode::GetRealNode()
         return NULL;
 }
 
-// This method transform the type, if it fits into the Integer range
+
 
 bool SbiExprNode::IsIntConst()
 {
@@ -196,7 +196,7 @@ bool SbiExprNode::IsLvalue()
     return IsVariable();
 }
 
-// Identify of the depth of a tree
+
 
 short SbiExprNode::GetDepth()
 {
@@ -210,11 +210,11 @@ short SbiExprNode::GetDepth()
 }
 
 
-// Adjustment of a tree:
-// 1. Constant Folding
-// 2. Type-Adjustment
-// 3. Conversion of the operans into Strings
-// 4. Lifting of the composite- and error-bits
+
+
+
+
+
 
 void SbiExprNode::Optimize()
 {
@@ -222,7 +222,7 @@ void SbiExprNode::Optimize()
     CollectBits();
 }
 
-// Lifting of the error-bits
+
 
 void SbiExprNode::CollectBits()
 {
@@ -238,8 +238,8 @@ void SbiExprNode::CollectBits()
     }
 }
 
-// If a twig can be converted, True will be returned. In this case
-// the result is in the left twig.
+
+
 
 void SbiExprNode::FoldConstants()
 {
@@ -254,10 +254,10 @@ void SbiExprNode::FoldConstants()
         {
             CollectBits();
             if( eTok == CAT )
-                // CAT affiliate also two numbers!
+                
                 eType = SbxSTRING;
             if( pLeft->eType == SbxSTRING )
-                // No Type Mismatch!
+                
                 eType = SbxSTRING;
             if( eType == SbxSTRING )
             {
@@ -268,7 +268,7 @@ void SbiExprNode::FoldConstants()
                 if( eTok == PLUS || eTok == CAT )
                 {
                     eTok = CAT;
-                    // Linking:
+                    
                     aStrVal = rl;
                     aStrVal += rr;
                     eType = SbxSTRING;
@@ -315,7 +315,7 @@ void SbiExprNode::FoldConstants()
                 if( ( eTok >= AND && eTok <= IMP )
                    || eTok == IDIV || eTok == MOD )
                 {
-                    // Integer operations
+                    
                     bool err = false;
                     if( nl > SbxMAXLNG ) err = true, nl = SbxMAXLNG;
                     else if( nl < SbxMINLNG ) err = true, nl = SbxMINLNG;
@@ -406,11 +406,11 @@ void SbiExprNode::FoldConstants()
                 if( !::rtl::math::isFinite( nVal ) )
                     pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
 
-                // Recover the data type to kill rounding error
+                
                 if( bCheckType && bBothInt
                  && nVal >= SbxMINLNG && nVal <= SbxMAXLNG )
                 {
-                    // Decimal place away
+                    
                     long n = (long) nVal;
                     nVal = n;
                     eType = ( n >= SbxMININT && n <= SbxMAXINT )
@@ -431,7 +431,7 @@ void SbiExprNode::FoldConstants()
             case NEG:
                 nVal = -nVal; break;
             case NOT: {
-                // Integer operation!
+                
                 bool err = false;
                 if( nVal > SbxMAXLNG ) err = true, nVal = SbxMAXLNG;
                 else if( nVal < SbxMINLNG ) err = true, nVal = SbxMINLNG;
@@ -448,7 +448,7 @@ void SbiExprNode::FoldConstants()
     }
     if( eNodeType == SbxNUMVAL )
     {
-        // Potentially convolve in INTEGER (because of better opcode)?
+        
         if( eType == SbxSINGLE || eType == SbxDOUBLE )
         {
             double x;

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -101,7 +101,7 @@ LwpFrib::~LwpFrib()
 
 LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt8 fribtag,sal_uInt8 editID)
 {
-    //Read Modifier
+    
     ModifierInfo* pModInfo = NULL;
     if(fribtag & FRIB_TAG_MODIFIER)
     {
@@ -115,14 +115,14 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         ReadModifiers( pObjStrm, pModInfo );
     }
 
-    //Read frib data
+    
     LwpFrib* newFrib = NULL;
     sal_uInt16 friblen = pObjStrm->QuickReaduInt16();
     sal_uInt8 fribtype = fribtag&~FRIB_TAG_TYPEMASK;
     switch(fribtype)
     {
-        case FRIB_TAG_INVALID:  //fall through
-        case FRIB_TAG_EOP:      //fall through
+        case FRIB_TAG_INVALID:  
+        case FRIB_TAG_EOP:      
         default:
             newFrib = new LwpFrib(pPara);
             break;
@@ -161,9 +161,9 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
         case FRIB_TAG_PARANUMBER:
             newFrib = new LwpFribParaNumber(pPara);
             break;
-        case FRIB_TAG_UNICODE: //fall through
-        case FRIB_TAG_UNICODE2: //fall through
-        case FRIB_TAG_UNICODE3: //fall through
+        case FRIB_TAG_UNICODE: 
+        case FRIB_TAG_UNICODE2: 
+        case FRIB_TAG_UNICODE3: 
             newFrib = new LwpFribUnicode(pPara);
             break;
         case FRIB_TAG_NOTE:
@@ -195,7 +195,7 @@ LwpFrib* LwpFrib::CreateFrib(LwpPara* pPara, LwpObjectStream* pObjStrm, sal_uInt
             break;
     }
 
-    //Do not know why the fribTag judgement is necessary, to be checked with
+    
     if ( fribtag & FRIB_TAG_MODIFIER )
     {
         newFrib->SetModifiers(pModInfo);
@@ -235,9 +235,9 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
         m_ModFlag = sal_False;
         return;
     }
-    //we only read four modifiers, in these modifiers,CodePage and LangOverride are not styles,
-    //so we can only handle fontid and characstyle, if others ,we should not reg style
-    //note by ,1-27
+    
+    
+    
     XFFont* pFont;
     XFTextStyle* pStyle = NULL;
     m_StyleName = A2OUSTR("");
@@ -279,10 +279,10 @@ void LwpFrib::RegisterStyle(LwpFoundry* pFoundry)
 
     if (m_pModifiers->HasHighlight)
     {
-        XFColor  aColor = GetHighlightColor();//right yellow
-        if (pStyle)//change the style directly
+        XFColor  aColor = GetHighlightColor();
+        if (pStyle)
             pStyle->GetFont()->SetBackColor(aColor);
-        else //register a new style
+        else 
         {
             pStyle = new XFTextStyle();
 
@@ -309,16 +309,16 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
     {
         bool bFailure;
 
-        // Get the modifier type
+        
         sal_uInt8 Modifier = pObjStrm->QuickReaduInt8(&bFailure);
         if (bFailure)
             break;
 
-        // Stop when we hit the last modifier
+        
         if (Modifier == FRIB_MTAG_NONE)
             break;
 
-        // Get the modifier length
+        
         sal_uInt8 len = pObjStrm->QuickReaduInt8(&bFailure);
         if (bFailure)
             break;
@@ -364,7 +364,7 @@ void LwpFrib::ReadModifiers(LwpObjectStream* pObjStrm,ModifierInfo* pModInfo)
                 pObjStrm->SeekRel(len);
                 break;
         }
-        // TODO: read the modifier data
+        
     }
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,10 +40,10 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 
-//........................................................................
+
 namespace comphelper
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -80,9 +80,9 @@ namespace comphelper
     using ::com::sun::star::lang::WrappedTargetException;
     using ::com::sun::star::lang::DisposedException;
 
-    //====================================================================
-    //= MapData
-    //====================================================================
+    
+    
+    
     class IMapModificationListener;
     typedef ::std::vector< IMapModificationListener* > MapListeners;
 
@@ -111,28 +111,28 @@ namespace comphelper
         {
         }
     private:
-        MapData& operator=( const MapData& _source );   // not implemented
+        MapData& operator=( const MapData& _source );   
     };
 
-    //====================================================================
-    //= IMapModificationListener
-    //====================================================================
+    
+    
+    
     /** implemented by components who want to be notified of modifications in the MapData they work with
     */
     class SAL_NO_VTABLE IMapModificationListener
     {
     public:
-        /// called when the map was modified
+        
         virtual void mapModified() = 0;
         virtual ~IMapModificationListener()
         {
         }
     };
 
-    //====================================================================
-    //= MapData helpers
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     static void lcl_registerMapModificationListener( MapData& _mapData, IMapModificationListener& _listener )
     {
     #if OSL_DEBUG_LEVEL > 0
@@ -147,7 +147,7 @@ namespace comphelper
         _mapData.m_aModListeners.push_back( &_listener );
     }
 
-    //--------------------------------------------------------------------
+    
     static void lcl_revokeMapModificationListener( MapData& _mapData, IMapModificationListener& _listener )
     {
         for (   MapListeners::iterator lookup = _mapData.m_aModListeners.begin();
@@ -164,7 +164,7 @@ namespace comphelper
         OSL_FAIL( "lcl_revokeMapModificationListener: the listener is not registered!" );
     }
 
-    //--------------------------------------------------------------------
+    
     static void lcl_notifyMapDataListeners_nothrow( const MapData& _mapData )
     {
         for (   MapListeners::const_iterator loop = _mapData.m_aModListeners.begin();
@@ -176,9 +176,9 @@ namespace comphelper
         }
     }
 
-    //====================================================================
-    //= EnumerableMap
-    //====================================================================
+    
+    
+    
     typedef ::cppu::WeakAggComponentImplHelper3 <   XInitialization
                                                 ,   XEnumerableMap
                                                 ,   XServiceInfo
@@ -191,15 +191,15 @@ namespace comphelper
         EnumerableMap();
         virtual ~EnumerableMap();
 
-        // XInitialization
+        
         virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException);
 
-        // XEnumerableMap
+        
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createKeyEnumeration( ::sal_Bool _Isolated ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createValueEnumeration( ::sal_Bool _Isolated ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createElementEnumeration( ::sal_Bool _Isolated ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-        // XMap
+        
         virtual Type SAL_CALL getKeyType() throw (RuntimeException);
         virtual Type SAL_CALL getValueType() throw (RuntimeException);
         virtual void SAL_CALL clear(  ) throw (NoSupportException, RuntimeException);
@@ -209,17 +209,17 @@ namespace comphelper
         virtual Any SAL_CALL put( const Any& _key, const Any& _value ) throw (NoSupportException, IllegalTypeException, IllegalArgumentException, RuntimeException);
         virtual Any SAL_CALL remove( const Any& _key ) throw (NoSupportException, IllegalTypeException, IllegalArgumentException, NoSuchElementException, RuntimeException);
 
-        // XElementAccess (base of XMap)
+        
         virtual Type SAL_CALL getElementType() throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL hasElements() throw (RuntimeException);
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException);
         virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException);
 
     public:
-        // XServiceInfo, static version (used for component registration)
+        
         static OUString SAL_CALL getImplementationName_static(  );
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  );
         static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& );
@@ -227,7 +227,7 @@ namespace comphelper
     private:
         void    impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues );
 
-        /// throws a IllegalTypeException if the given value is not compatible with our ValueType
+        
         void    impl_checkValue_throw( const Any& _value ) const;
         void    impl_checkKey_throw( const Any& _key ) const;
         void    impl_checkNaN_throw( const Any& _keyOrValue, const Type& _keyOrValueType ) const;
@@ -241,17 +241,17 @@ namespace comphelper
                             m_aDependentComponents;
     };
 
-    //====================================================================
-    //= EnumerationType
-    //====================================================================
+    
+    
+    
     enum EnumerationType
     {
         eKeys, eValues, eBoth
     };
 
-    //====================================================================
-    //= MapEnumerator
-    //====================================================================
+    
+    
+    
     class MapEnumerator : public IMapModificationListener
     {
     public:
@@ -279,11 +279,11 @@ namespace comphelper
             }
         }
 
-        // XEnumeration equivalents
+        
         bool hasMoreElements();
         Any nextElement();
 
-        // IMapModificationListener
+        
         virtual void mapModified();
 
     private:
@@ -294,14 +294,14 @@ namespace comphelper
         bool                        m_disposed;
 
     private:
-        MapEnumerator();                                    // not implemented
-        MapEnumerator( const MapEnumerator& );              // not implemented
-        MapEnumerator& operator=( const MapEnumerator& );   // not implemented
+        MapEnumerator();                                    
+        MapEnumerator( const MapEnumerator& );              
+        MapEnumerator& operator=( const MapEnumerator& );   
     };
 
-    //====================================================================
-    //= MapEnumeration
-    //====================================================================
+    
+    
+    
     typedef ::cppu::WeakImplHelper1 <   XEnumeration
                                     >   MapEnumeration_Base;
     class MapEnumeration :public ComponentBase
@@ -317,7 +317,7 @@ namespace comphelper
         {
         }
 
-        // XEnumeration
+        
         virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (RuntimeException);
         virtual Any SAL_CALL nextElement(  ) throw (NoSuchElementException, WrappedTargetException, RuntimeException);
 
@@ -333,23 +333,23 @@ namespace comphelper
         }
 
     private:
-        // sicne we share our mutex with the main map, we need to keep it alive as long as we live
+        
         Reference< XInterface >     m_xKeepMapAlive;
         ::std::auto_ptr< MapData >  m_pMapDataCopy;
         MapEnumerator               m_aEnumerator;
     };
 
-    //====================================================================
-    //= EnumerableMap
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     EnumerableMap::EnumerableMap()
         :Map_IFace( m_aMutex )
         ,ComponentBase( Map_IFace::rBHelper )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     EnumerableMap::~EnumerableMap()
     {
         if ( !impl_isDisposed() )
@@ -359,7 +359,7 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL EnumerableMap::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this, ComponentMethodGuard::WithoutInit );
@@ -385,16 +385,16 @@ namespace comphelper
             bMutable = false;
         }
 
-        // for the value, anything is allowed, except VOID
+        
         if ( ( aValueType.getTypeClass() == TypeClass_VOID ) || ( aValueType.getTypeClass() == TypeClass_UNKNOWN ) )
             throw IllegalTypeException("Unsupported value type.", *this );
 
-        // create the comparator for the KeyType, and throw if the type is not supported
+        
         ::std::auto_ptr< IKeyPredicateLess > pComparator( getStandardLessPredicate( aKeyType, NULL ) );
         if ( !pComparator.get() )
             throw IllegalTypeException("Unsupported key type.", *this );
 
-        // init members
+        
         m_aData.m_aKeyType = aKeyType;
         m_aData.m_aValueType = aValueType;
         m_aData.m_pKeyCompare = pComparator;
@@ -407,7 +407,7 @@ namespace comphelper
         setInitialized();
     }
 
-    //--------------------------------------------------------------------
+    
     void EnumerableMap::impl_initValues_throw( const Sequence< Pair< Any, Any > >& _initialValues )
     {
         OSL_PRECOND( m_aData.m_pValues.get() && m_aData.m_pValues->empty(), "EnumerableMap::impl_initValues_throw: illegal call!" );
@@ -423,11 +423,11 @@ namespace comphelper
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void EnumerableMap::impl_checkValue_throw( const Any& _value ) const
     {
         if ( !_value.hasValue() )
-            // nothing to do, NULL values are always allowed, regardless of the ValueType
+            
             return;
 
         TypeClass eAllowedTypeClass = m_aData.m_aValueType.getTypeClass();
@@ -443,17 +443,17 @@ namespace comphelper
             break;
         case TypeClass_INTERFACE:
         {
-            // special treatment: _value might contain the proper type, but the interface
-            // might actually be NULL. Which is still valid ...
+            
+            
             if ( m_aData.m_aValueType.isAssignableFrom( _value.getValueType() ) )
-                // this also catches the special case where XFoo is our value type,
-                // and _value contains a NULL-reference to XFoo, or a derived type
+                
+                
                 bValid = true;
             else
             {
                 Reference< XInterface > xValue( _value, UNO_QUERY );
                 if ( xValue.is() )
-                    // XInterface is not-NULL, but is X(ValueType) not-NULL, too?
+                    
                     xValue.set( xValue->queryInterface( m_aData.m_aValueType ), UNO_QUERY );
                 bValid = xValue.is();
             }
@@ -462,7 +462,7 @@ namespace comphelper
         case TypeClass_EXCEPTION:
         case TypeClass_STRUCT:
         {
-            // values are accepted if and only if their type equals, or is derived from, our value type
+            
 
             if ( _value.getValueTypeClass() != eAllowedTypeClass )
                 bValid = false;
@@ -500,7 +500,7 @@ namespace comphelper
         impl_checkNaN_throw( _value, m_aData.m_aValueType );
     }
 
-    //--------------------------------------------------------------------
+    
     void EnumerableMap::impl_checkNaN_throw( const Any& _keyOrValue, const Type& _keyOrValueType ) const
     {
         if  (   ( _keyOrValueType.getTypeClass() == TypeClass_DOUBLE )
@@ -513,12 +513,12 @@ namespace comphelper
                     throw IllegalArgumentException(
                         OUString( "NaN (not-a-number) not supported by this implementation." ),
                         *const_cast< EnumerableMap* >( this ), 0 );
-            // (note that the case of _key not containing a float/double value is handled in the
-            // respective IKeyPredicateLess implementation, so there's no need to handle this here.)
+            
+            
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void EnumerableMap::impl_checkKey_throw( const Any& _key ) const
     {
         if ( !_key.hasValue() )
@@ -529,7 +529,7 @@ namespace comphelper
         impl_checkNaN_throw( _key, m_aData.m_aKeyType );
     }
 
-    //--------------------------------------------------------------------
+    
     void EnumerableMap::impl_checkMutable_throw() const
     {
         if ( !m_aData.m_bMutable )
@@ -538,42 +538,42 @@ namespace comphelper
                     *const_cast< EnumerableMap* >( this ) );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XEnumeration > SAL_CALL EnumerableMap::createKeyEnumeration( ::sal_Bool _Isolated ) throw (NoSupportException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eKeys, _Isolated );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XEnumeration > SAL_CALL EnumerableMap::createValueEnumeration( ::sal_Bool _Isolated ) throw (NoSupportException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eValues, _Isolated );
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XEnumeration > SAL_CALL EnumerableMap::createElementEnumeration( ::sal_Bool _Isolated ) throw (NoSupportException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return new MapEnumeration( *this, m_aData, getBroadcastHelper(), eBoth, _Isolated );
     }
 
-    //--------------------------------------------------------------------
+    
     Type SAL_CALL EnumerableMap::getKeyType() throw (RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return m_aData.m_aKeyType;
     }
 
-    //--------------------------------------------------------------------
+    
     Type SAL_CALL EnumerableMap::getValueType() throw (RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return m_aData.m_aValueType;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL EnumerableMap::clear(  ) throw (NoSupportException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
@@ -584,7 +584,7 @@ namespace comphelper
         lcl_notifyMapDataListeners_nothrow( m_aData );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL EnumerableMap::containsKey( const Any& _key ) throw (IllegalTypeException, IllegalArgumentException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
@@ -594,7 +594,7 @@ namespace comphelper
         return ( pos != m_aData.m_pValues->end() );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL EnumerableMap::containsValue( const Any& _value ) throw (IllegalTypeException, IllegalArgumentException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
@@ -611,7 +611,7 @@ namespace comphelper
         return sal_False;
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL EnumerableMap::get( const Any& _key ) throw (IllegalTypeException, IllegalArgumentException, NoSuchElementException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
@@ -624,7 +624,7 @@ namespace comphelper
         return pos->second;
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL EnumerableMap::put( const Any& _key, const Any& _value ) throw (NoSupportException, IllegalTypeException, IllegalArgumentException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
@@ -650,7 +650,7 @@ namespace comphelper
         return previousValue;
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL EnumerableMap::remove( const Any& _key ) throw (NoSupportException, IllegalTypeException, IllegalArgumentException, NoSuchElementException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
@@ -671,20 +671,20 @@ namespace comphelper
         return previousValue;
     }
 
-    //--------------------------------------------------------------------
+    
     Type SAL_CALL EnumerableMap::getElementType() throw (RuntimeException)
     {
         return ::cppu::UnoType< Pair< Any, Any > >::get();
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL EnumerableMap::hasElements() throw (RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return m_aData.m_pValues->empty();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL EnumerableMap::getImplementationName(  ) throw (RuntimeException)
     {
         return getImplementationName_static();
@@ -695,19 +695,19 @@ namespace comphelper
         return cppu::supportsService(this, _serviceName);
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL EnumerableMap::getSupportedServiceNames(  ) throw (RuntimeException)
     {
         return getSupportedServiceNames_static();
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL EnumerableMap::getImplementationName_static(  )
     {
         return OUString( "org.openoffice.comp.comphelper.EnumerableMap" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL EnumerableMap::getSupportedServiceNames_static(  )
     {
         Sequence< OUString > aServiceNames(1);
@@ -715,16 +715,16 @@ namespace comphelper
         return aServiceNames;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL EnumerableMap::Create( SAL_UNUSED_PARAMETER const Reference< XComponentContext >& )
     {
         return *new EnumerableMap;
     }
 
-    //====================================================================
-    //= MapEnumerator
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     bool MapEnumerator::hasMoreElements()
     {
         if ( m_disposed )
@@ -732,7 +732,7 @@ namespace comphelper
         return m_mapPos != m_rMapData.m_pValues->end();
     }
 
-    //--------------------------------------------------------------------
+    
     Any MapEnumerator::nextElement()
     {
         if ( m_disposed )
@@ -751,32 +751,32 @@ namespace comphelper
         return aNextElement;
     }
 
-    //--------------------------------------------------------------------
+    
     void MapEnumerator::mapModified()
     {
         m_disposed = true;
     }
 
-    //====================================================================
-    //= MapEnumeration - implementation
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ::sal_Bool SAL_CALL MapEnumeration::hasMoreElements(  ) throw (RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return m_aEnumerator.hasMoreElements();
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL MapEnumeration::nextElement(  ) throw (NoSuchElementException, WrappedTargetException, RuntimeException)
     {
         ComponentMethodGuard aGuard( *this );
         return m_aEnumerator.nextElement();
     }
 
-//........................................................................
-} // namespace comphelper
-//........................................................................
+
+} 
+
 
 void createRegistryInfo_Map()
 {

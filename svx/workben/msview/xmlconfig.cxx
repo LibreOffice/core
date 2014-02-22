@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,16 +45,16 @@ using ::com::sun::star::io::IOException;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-///////////////////////////////////////////////////////////////////////
+
 
 AtomConfigMap gAtomConfigMap;
 
-///////////////////////////////////////////////////////////////////////
+
 
 class ConfigHandler : public ::cppu::WeakAggImplHelper1<XDocumentHandler>
 {
 public:
-    // XDocumentHandler
+    
     virtual void SAL_CALL startDocument(void) throw( SAXException, RuntimeException );
     virtual void SAL_CALL endDocument(void) throw( SAXException, RuntimeException );
     virtual void SAL_CALL startElement(const OUString& aName, const Reference< XAttributeList > & xAttribs) throw( SAXException, RuntimeException );
@@ -303,26 +303,26 @@ void load_config( const OUString& rPath )
 {
     try
     {
-        // create stream
+        
         SvStream*   pIStm = ::utl::UcbStreamHelper::CreateStream( rPath, STREAM_READ );
         Reference<XInputStream> xInputStream( new utl::OInputStreamWrapper( pIStm, sal_True ) );
 
-        // prepare ParserInputSrouce
+        
         InputSource aParserInput;
         aParserInput.sSystemId = rPath;
         aParserInput.aInputStream = xInputStream;
 
-        // get parser
+        
         Reference< XParser > xParser = Parser::create(comphelper::getProcessComponentContext());
 
-        // get filter
+        
         ConfigHandler* pConfigHandler = new ConfigHandler();
         Reference< XDocumentHandler > xFilter( pConfigHandler );
 
-        // connect parser and filter
+        
         xParser->setDocumentHandler( xFilter );
 
-        // finally, parser the stream
+        
         xParser->parseStream( aParserInput );
     }
     catch( Exception& )
@@ -336,7 +336,7 @@ void load_config( const OUString& rPath )
     }
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 OUString ElementConfig::format( SvStream& rStream, sal_Size& nLength ) const
 {
@@ -459,7 +459,7 @@ OUString ElementConfig::dump_float( SvStream& rStream, sal_Size& nLength )
     return aRet;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLength ) const
 {
@@ -525,7 +525,7 @@ OUString ElementConfigContainer::format( SvStream& rStream, sal_Size& nLength ) 
     return aRet;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 OUString SwitchElementConfig::format( SvStream& rStream, sal_Size& nLength ) const
 {

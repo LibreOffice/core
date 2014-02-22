@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <comphelper/processfactory.hxx>
@@ -63,7 +63,7 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
     }
 }
 
-//----- XAnimationListener ----------------------------------------------------
+
 
 void SAL_CALL Listener::beginEvent(const css::uno::Reference<
     css::animations::XAnimationNode >&  rNode ) throw (css::uno::RuntimeException)
@@ -85,7 +85,7 @@ void SAL_CALL Listener::repeat( const css::uno::Reference<
     (void) aRepeat;
 }
 
-//----- XSlideShowListener ----------------------------------------------------
+
 
 void SAL_CALL Listener::paused (void)
     throw (com::sun::star::uno::RuntimeException)

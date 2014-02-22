@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DateScaling.hxx"
@@ -28,7 +28,7 @@ namespace
 static const OUString lcl_aServiceName_DateScaling( "com.sun.star.chart2.DateScaling" );
 static const OUString lcl_aServiceName_InverseDateScaling( "com.sun.star.chart2.InverseDateScaling" );
 
-static const double lcl_fNumberOfMonths = 12.0;//todo: this needs to be offered by basic tools Date class if it should be more generic
+static const double lcl_fNumberOfMonths = 12.0;
 }
 
 namespace chart
@@ -71,7 +71,7 @@ double SAL_CALL DateScaling::doScaling( double value )
             case MONTH:
             default:
                 fResult = aDate.GetYear();
-                fResult *= lcl_fNumberOfMonths;//asssuming equal count of months in each year
+                fResult *= lcl_fNumberOfMonths;
                 fResult += aDate.GetMonth();
 
                 double fDayOfMonth = aDate.GetDay();
@@ -108,7 +108,7 @@ uno::Sequence< OUString > DateScaling::getSupportedServiceNames_Static()
     return uno::Sequence< OUString >( & lcl_aServiceName_DateScaling, 1 );
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( DateScaling, lcl_aServiceName_DateScaling )
 
 InverseDateScaling::InverseDateScaling( const Date& rNullDate, sal_Int32 nTimeUnit, bool bShifted )
@@ -140,7 +140,7 @@ double SAL_CALL InverseDateScaling::doScaling( double value )
             case YEAR:
             case MONTH:
             default:
-                //Date aDate(m_aNullDate);
+                
                 if(m_bShifted)
                 {
                     if( YEAR==m_nTimeUnit )
@@ -187,9 +187,9 @@ uno::Sequence< OUString > InverseDateScaling::getSupportedServiceNames_Static()
     return uno::Sequence< OUString >( & lcl_aServiceName_InverseDateScaling, 1 );
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( InverseDateScaling, lcl_aServiceName_InverseDateScaling )
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

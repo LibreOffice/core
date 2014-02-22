@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/linepropertiescontext.hxx"
@@ -27,10 +27,10 @@ using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
-// CT_LineProperties
+
 
 namespace oox { namespace drawingml {
-// ---------------------------------------------------------------------
+
 
 LinePropertiesContext::LinePropertiesContext( ContextHandler2Helper& rParent, const AttributeList& rAttribs,
     LineProperties& rLineProperties ) throw()
@@ -50,7 +50,7 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
 {
     switch( nElement )
     {
-        // LineFillPropertiesGroup
+        
         case A_TOKEN( noFill ):
         case A_TOKEN( solidFill ):
         case A_TOKEN( gradFill ):
@@ -58,11 +58,11 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
             return FillPropertiesContext::createFillContext( *this, nElement, rAttribs, mrLineProperties.maLineFill );
         break;
 
-        // LineDashPropertiesGroup
-        case A_TOKEN( prstDash ):  // CT_PresetLineDashProperties
+        
+        case A_TOKEN( prstDash ):  
             mrLineProperties.moPresetDash = rAttribs.getToken( XML_val );
         break;
-        case A_TOKEN( custDash ):  // CT_DashStopList
+        case A_TOKEN( custDash ):  
             return this;
         break;
         case A_TOKEN( ds ):
@@ -70,16 +70,16 @@ ContextHandlerRef LinePropertiesContext::onCreateContext( sal_Int32 nElement, co
                 rAttribs.getInteger( XML_d, 0 ), rAttribs.getInteger( XML_sp, 0 ) ) );
         break;
 
-        // LineJoinPropertiesGroup
+        
         case A_TOKEN( round ):
         case A_TOKEN( bevel ):
         case A_TOKEN( miter ):
             mrLineProperties.moLineJoint = getBaseToken( nElement );
         break;
 
-        case A_TOKEN( headEnd ):  // CT_LineEndProperties
-        case A_TOKEN( tailEnd ):  // CT_LineEndProperties
-        {                         // ST_LineEndType
+        case A_TOKEN( headEnd ):  
+        case A_TOKEN( tailEnd ):  
+        {                         
             bool bTailEnd = nElement == A_TOKEN( tailEnd );
             LineArrowProperties& rArrowProps = bTailEnd ? mrLineProperties.maEndArrow : mrLineProperties.maStartArrow;
             rArrowProps.moArrowType = rAttribs.getToken( XML_type );

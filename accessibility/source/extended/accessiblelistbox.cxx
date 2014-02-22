@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/extended/accessiblelistbox.hxx>
@@ -33,45 +33,45 @@
 #include <toolkit/helper/convert.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
 
-//........................................................................
+
 namespace accessibility
 {
-//........................................................................
 
-    // class AccessibleListBox -----------------------------------------------------
+
+    
 
     using namespace ::com::sun::star::accessibility;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star;
 
-    // -----------------------------------------------------------------------------
-    // Ctor() and Dtor()
-    // -----------------------------------------------------------------------------
+    
+    
+    
     AccessibleListBox::AccessibleListBox( SvTreeListBox& _rListBox, const Reference< XAccessible >& _xParent ) :
 
         VCLXAccessibleComponent( _rListBox.GetWindowPeer() ),
         m_xParent( _xParent )
     {
     }
-    // -----------------------------------------------------------------------------
+    
     AccessibleListBox::~AccessibleListBox()
     {
         if ( isAlive() )
         {
-            // increment ref count to prevent double call of Dtor
+            
             osl_atomic_increment( &m_refCount );
             dispose();
         }
     }
     IMPLEMENT_FORWARD_XINTERFACE2(AccessibleListBox, VCLXAccessibleComponent, AccessibleListBox_BASE)
     IMPLEMENT_FORWARD_XTYPEPROVIDER2(AccessibleListBox, VCLXAccessibleComponent, AccessibleListBox_BASE)
-    // -----------------------------------------------------------------------------
+    
     SvTreeListBox* AccessibleListBox::getListBox() const
     {
         return  static_cast< SvTreeListBox* >( const_cast<AccessibleListBox*>(this)->GetWindow() );
     }
-    // -----------------------------------------------------------------------------
+    
     void AccessibleListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
     {
         if ( isAlive() )
@@ -130,9 +130,9 @@ namespace accessibility
                         Window* pParent = ((Window*)pBox)->GetParent();
                         if (pParent && pParent->GetType() == WINDOW_FLOATINGWINDOW)
                         {
-                            // MT: ImplGetAppSVData shouldn't be exported from VCL.
-                            // In which scenario is this needed?
-                            // If needed, we need to find an other solution
+                            
+                            
+                            
                             /*
                               ImplSVData* pSVData = ImplGetAppSVData();
                               if (pSVData && pSVData->maWinData.mpFirstFloat == (FloatingWindow*)pParent)
@@ -191,7 +191,7 @@ namespace accessibility
                     }
                     else
                     {
-                        // NULL means Clear()
+                        
                         MAP_ENTRY::iterator mi = m_mapEntry.begin();
                         for ( ; mi != m_mapEntry.end() ; ++mi)
                         {
@@ -205,7 +205,7 @@ namespace accessibility
                 }
                 break;
 
-                // #i92103#
+                
             case VCLEVENT_ITEM_EXPANDED :
             case VCLEVENT_ITEM_COLLAPSED :
                 {
@@ -258,8 +258,8 @@ namespace accessibility
             }
 
             uno::Any aNewValue;
-            aNewValue <<= mi->second;//xAcc
-            NotifyAccessibleEvent( AccessibleEventId::CHILD, uno::Any(), aNewValue );//Add
+            aNewValue <<= mi->second;
+            NotifyAccessibleEvent( AccessibleEventId::CHILD, uno::Any(), aNewValue );
 
             return pAccCurOptionEntry;
         }
@@ -291,7 +291,7 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
     void AccessibleListBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
     {
         switch ( rVclWindowEvent.GetId() )
@@ -309,9 +309,9 @@ namespace accessibility
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // XComponent
-    // -----------------------------------------------------------------------------
+    
+    
+    
     void SAL_CALL AccessibleListBox::disposing()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -320,26 +320,26 @@ namespace accessibility
         VCLXAccessibleComponent::disposing();
         m_xParent = NULL;
     }
-    // -----------------------------------------------------------------------------
-    // XServiceInfo
-    // -----------------------------------------------------------------------------
+    
+    
+    
     OUString SAL_CALL AccessibleListBox::getImplementationName() throw(RuntimeException)
     {
         return getImplementationName_Static();
     }
-    // -----------------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL AccessibleListBox::getSupportedServiceNames() throw(RuntimeException)
     {
         return getSupportedServiceNames_Static();
     }
-    // -----------------------------------------------------------------------------
+    
     sal_Bool SAL_CALL AccessibleListBox::supportsService( const OUString& _rServiceName ) throw (RuntimeException)
     {
         return cppu::supportsService(this, _rServiceName);
     }
-    // -----------------------------------------------------------------------------
-    // XServiceInfo - static methods
-    // -----------------------------------------------------------------------------
+    
+    
+    
     Sequence< OUString > AccessibleListBox::getSupportedServiceNames_Static(void) throw( RuntimeException )
     {
         Sequence< OUString > aSupported(3);
@@ -348,22 +348,22 @@ namespace accessibility
         aSupported[2] = "com.sun.star.awt.AccessibleTreeListBox";
         return aSupported;
     }
-    // -----------------------------------------------------------------------------
+    
     OUString AccessibleListBox::getImplementationName_Static(void) throw( RuntimeException )
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTreeListBox" );
     }
-    // -----------------------------------------------------------------------------
-    // XAccessible
-    // -----------------------------------------------------------------------------
+    
+    
+    
     Reference< XAccessibleContext > SAL_CALL AccessibleListBox::getAccessibleContext(  ) throw (RuntimeException)
     {
         ensureAlive();
         return this;
     }
-    // -----------------------------------------------------------------------------
-    // XAccessibleContext
-    // -----------------------------------------------------------------------------
+    
+    
+    
     sal_Int32 SAL_CALL AccessibleListBox::getAccessibleChildCount(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -377,7 +377,7 @@ namespace accessibility
 
         return nCount;
     }
-    // -----------------------------------------------------------------------------
+    
     Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -387,11 +387,11 @@ namespace accessibility
         if ( !pEntry )
             throw IndexOutOfBoundsException();
 
-        // Solution: Set the parameter of the parent to null to let entry determine the parent by itself
-        //return new AccessibleListBoxEntry( *getListBox(), pEntry, this );
+        
+        
         return new AccessibleListBoxEntry( *getListBox(), pEntry, NULL );
     }
-    // -----------------------------------------------------------------------------
+    
     Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleParent(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -399,7 +399,7 @@ namespace accessibility
         ensureAlive();
         return m_xParent;
     }
-    // -----------------------------------------------------------------------------
+    
     sal_Int32 AccessibleListBox::GetRoleType()
     {
         sal_Int32 nCase = 0;
@@ -443,7 +443,7 @@ namespace accessibility
                     return AccessibleRole::LIST;
         }
 
-        //o is: return AccessibleRole::TREE;
+        
         sal_Bool bHasButtons = (getListBox()->GetStyle() & WB_HASBUTTONS)!=0;
         if(!bHasButtons && (getListBox()->GetTreeFlags() & TREEFLAG_CHKBTN))
             return AccessibleRole::LIST;
@@ -453,7 +453,7 @@ namespace accessibility
             else
             return AccessibleRole::TREE;
     }
-    // -----------------------------------------------------------------------------
+    
     OUString SAL_CALL AccessibleListBox::getAccessibleDescription(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -461,7 +461,7 @@ namespace accessibility
         ensureAlive();
         return getListBox()->GetAccessibleDescription();
     }
-    // -----------------------------------------------------------------------------
+    
     OUString SAL_CALL AccessibleListBox::getAccessibleName(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -469,9 +469,9 @@ namespace accessibility
         ensureAlive();
         return getListBox()->GetAccessibleName();
     }
-    // -----------------------------------------------------------------------------
-    // XAccessibleSelection
-    // -----------------------------------------------------------------------------
+    
+    
+    
     void SAL_CALL AccessibleListBox::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -484,7 +484,7 @@ namespace accessibility
 
         getListBox()->Select( pEntry, sal_True );
     }
-    // -----------------------------------------------------------------------------
+    
     sal_Bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -497,7 +497,7 @@ namespace accessibility
 
         return getListBox()->IsSelected( pEntry );
     }
-    // -----------------------------------------------------------------------------
+    
     void SAL_CALL AccessibleListBox::clearAccessibleSelection(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -512,7 +512,7 @@ namespace accessibility
                 getListBox()->Select( pEntry, sal_False );
         }
     }
-    // -----------------------------------------------------------------------------
+    
     void SAL_CALL AccessibleListBox::selectAllAccessibleChildren(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -527,7 +527,7 @@ namespace accessibility
                 getListBox()->Select( pEntry, sal_True );
         }
     }
-    // -----------------------------------------------------------------------------
+    
     sal_Int32 SAL_CALL AccessibleListBox::getSelectedAccessibleChildCount(  ) throw (RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -536,7 +536,7 @@ namespace accessibility
 
         return getListBox()->GetSelectionCount();
     }
-    // -----------------------------------------------------------------------------
+    
     Reference< XAccessible > SAL_CALL AccessibleListBox::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -557,8 +557,8 @@ namespace accessibility
 
             if ( nSelCount == ( nSelectedChildIndex + 1 ) )
             {
-                // Solution: Set the parameter of the parent to null to let entry determine the parent by itself
-                //xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, this );
+                
+                
                 xChild = new AccessibleListBoxEntry( *getListBox(), pEntry, NULL );
                 break;
             }
@@ -566,7 +566,7 @@ namespace accessibility
 
         return xChild;
     }
-    // -----------------------------------------------------------------------------
+    
     void SAL_CALL AccessibleListBox::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
@@ -579,7 +579,7 @@ namespace accessibility
 
         getListBox()->Select( pEntry, sal_False );
     }
-    // -----------------------------------------------------------------------------
+    
     void AccessibleListBox::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
     {
         VCLXAccessibleComponent::FillAccessibleStateSet( rStateSet );
@@ -593,8 +593,8 @@ namespace accessibility
     }
 
 
-//........................................................................
-}// namespace accessibility
-//........................................................................
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <idlc/idlc.hxx>
@@ -60,7 +60,7 @@ static sal_Char tmpFilePattern[512];
 
 bool isFileUrl(const OString& fileName)
 {
-    if (fileName.startsWith("file://") )
+    if (fileName.startsWith("file:
         return true;
     return false;
 }
@@ -164,7 +164,7 @@ OString makeTempName(const OString& prefix)
         fprintf(stderr, "idlc: mkstemp(\"%s\") failed: %s\n", tmpFilePattern, strerror(errno));
         exit( 1 );
     }
-    // the file shall later be reopened by stdio functions
+    
     close( nDescriptor );
 #else
     (void) mktemp(tmpFilePattern);
@@ -220,7 +220,7 @@ bool copyFile(const OString* source, const OString& target)
 
 sal_Int32 compileFile(const OString * pathname)
 {
-    // preprocess input file
+    
     OString tmpFile = makeTempName(OString("idli_"));
     OString preprocFile = makeTempName(OString("idlf_"));
 
@@ -316,7 +316,7 @@ sal_Int32 compileFile(const OString * pathname)
 #else
     cpp += "ucpp";
 #endif
-#else // SYSTEM_UCPP
+#else 
     cpp = OUString(UCPP);
 #endif
     oslProcess      hProcess = NULL;
@@ -379,7 +379,7 @@ sal_Int32 compileFile(const OString * pathname)
         exit(0);
     }
 
-    // parse file
+    
     yyin = fopen(preprocFile.getStr(), "r");
     if (yyin == NULL)
     {
@@ -388,8 +388,8 @@ sal_Int32 compileFile(const OString * pathname)
         exit(99);
     }
 
-    //yydebug = 0 no trace information
-    //yydebug = 1 parser produce trace information
+    
+    
     yydebug = 0;
 
     sal_Int32 nErrors = yyparse();

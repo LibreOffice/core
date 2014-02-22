@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/helper/propertyset.hxx"
@@ -25,12 +25,12 @@
 
 namespace oox {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 void PropertySet::set( const Reference< XPropertySet >& rxPropSet )
 {
@@ -58,7 +58,7 @@ bool PropertySet::hasProperty( sal_Int32 nPropId ) const
     return false;
 }
 
-// Get properties -------------------------------------------------------------
+
 
 Any PropertySet::getAnyProperty( sal_Int32 nPropId ) const
 {
@@ -66,7 +66,7 @@ Any PropertySet::getAnyProperty( sal_Int32 nPropId ) const
     return implGetPropertyValue( aValue, PropertyMap::getPropertyName( nPropId ) ) ? aValue : Any();
 }
 
-// Set properties -------------------------------------------------------------
+
 
 bool PropertySet::setAnyProperty( sal_Int32 nPropId, const Any& rValue )
 {
@@ -109,7 +109,7 @@ void PropertySet::setProperties( const PropertyMap& rPropertyMap )
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 bool PropertySet::implGetPropertyValue( Any& orValue, const OUString& rPropName ) const
 {
@@ -148,6 +148,6 @@ void PropertySet::dump()
 }
 #endif
 
-} // namespace oox
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

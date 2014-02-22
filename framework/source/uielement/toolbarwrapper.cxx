@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/toolbarwrapper.hxx>
@@ -63,7 +63,7 @@ ToolBarWrapper::~ToolBarWrapper()
 {
 }
 
-// XInterface
+
 void SAL_CALL ToolBarWrapper::acquire() throw()
 {
     UIConfigElementWrapperBase::acquire();
@@ -87,7 +87,7 @@ throw( ::com::sun::star::uno::RuntimeException )
     return UIConfigElementWrapperBase::queryInterface( rType );
 }
 
-// XComponent
+
 void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException )
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
@@ -112,7 +112,7 @@ void SAL_CALL ToolBarWrapper::dispose() throw ( RuntimeException )
     m_bDisposed = true;
 }
 
-// XInitialization
+
 void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     ResetableGuard aLock( m_aLock );
@@ -141,7 +141,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
         Reference< XFrame > xFrame( m_xWeakFrame );
         if ( xFrame.is() && m_xConfigSource.is() )
         {
-            // Create VCL based toolbar which will be filled with settings data
+            
             ToolBox* pToolBar = 0;
             ToolBarManager* pToolBarManager = 0;
             {
@@ -163,7 +163,7 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 m_xConfigData = m_xConfigSource->getSettings( m_aResourceURL, sal_False );
                 if ( m_xConfigData.is() && pToolBar && pToolBarManager )
                 {
-                    // Fill toolbar with container contents
+                    
                     pToolBarManager->FillToolbar( m_xConfigData );
                     pToolBar->SetOutStyle( SvtMiscOptions().GetToolboxStyle() );
                     pToolBar->EnableCustomize( true );
@@ -175,8 +175,8 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
             }
             catch ( const NoSuchElementException& )
             {
-                // No settings in our configuration manager. This means we are
-                // a transient toolbar which has no persistent settings.
+                
+                
                 m_bPersistent = false;
                 if ( pToolBar && pToolBarManager )
                 {
@@ -192,13 +192,13 @@ void SAL_CALL ToolBarWrapper::initialize( const Sequence< Any >& aArguments ) th
     }
 }
 
-// XEventListener
+
 void SAL_CALL ToolBarWrapper::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
 {
-    // nothing todo
+    
 }
 
-// XUpdatable
+
 void SAL_CALL ToolBarWrapper::update() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -211,7 +211,7 @@ void SAL_CALL ToolBarWrapper::update() throw (::com::sun::star::uno::RuntimeExce
         pToolBarManager->CheckAndUpdateImages();
 }
 
-// XUIElementSettings
+
 void SAL_CALL ToolBarWrapper::updateSettings() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -237,20 +237,20 @@ void SAL_CALL ToolBarWrapper::updateSettings() throw (::com::sun::star::uno::Run
         }
         else if ( !m_bPersistent )
         {
-            // Transient toolbar: do nothing
+            
         }
     }
 }
 
 void ToolBarWrapper::impl_fillNewData()
 {
-    // Transient toolbar => Fill toolbar with new data
+    
     ToolBarManager* pToolBarManager = static_cast< ToolBarManager *>( m_xToolBarManager.get() );
     if ( pToolBarManager )
         pToolBarManager->FillToolbar( m_xConfigData );
 }
 
-// XUIElement interface
+
 Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aLock( m_aLock );
@@ -268,7 +268,7 @@ Reference< XInterface > SAL_CALL ToolBarWrapper::getRealInterface(  ) throw (::c
     return Reference< XInterface >();
 }
 
-//XUIFunctionExecute
+
 void SAL_CALL ToolBarWrapper::functionExecute(
     const OUString& aUIElementName,
     const OUString& aCommand )
@@ -318,6 +318,6 @@ void SAL_CALL ToolBarWrapper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandl
     }
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

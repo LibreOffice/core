@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccessibleDrawDocumentView.hxx"
@@ -70,7 +70,7 @@ struct XShapePosCompareHelper
     bool operator() ( const uno::Reference<drawing::XShape>& xshape1,
         const uno::Reference<drawing::XShape>& xshape2 ) const
     {
-        // modify the compare method to return the Z-Order, not layout order
+        
         SdrObject* pObj1 = GetSdrObjectFromXShape(xshape1);
         SdrObject* pObj2 = GetSdrObjectFromXShape(xshape2);
         if(pObj1 && pObj2)
@@ -79,7 +79,7 @@ struct XShapePosCompareHelper
             return false;
     }
 };
-//=====  internal  ============================================================
+
 
 AccessibleDrawDocumentView::AccessibleDrawDocumentView (
     ::sd::Window* pSdWindow,
@@ -111,14 +111,14 @@ void AccessibleDrawDocumentView::Init (void)
 {
     AccessibleDocumentViewBase::Init ();
 
-    // Determine the list of shapes on the current page.
+    
     uno::Reference<drawing::XShapes> xShapeList;
     uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
     if (xView.is())
         xShapeList = uno::Reference<drawing::XShapes> (
             xView->getCurrentPage(), uno::UNO_QUERY);
 
-    // Create the children manager.
+    
     mpChildrenManager = new ChildrenManager(this, xShapeList, maShapeTreeInfo, *this);
     if (mpChildrenManager != NULL)
     {
@@ -154,7 +154,7 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
 {
     rtl::Reference<AccessiblePageShape> xShape;
 
-    // Create a shape that represents the actual draw page.
+    
     uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
     if (xView.is())
     {
@@ -162,22 +162,22 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
             uno::Reference<beans::XPropertySet> (xView->getCurrentPage(), uno::UNO_QUERY));
         if (xSet.is())
         {
-            // Create a rectangle shape that will represent the draw page.
+            
             uno::Reference<lang::XMultiServiceFactory> xFactory (mxModel, uno::UNO_QUERY);
             uno::Reference<drawing::XShape> xRectangle;
             if (xFactory.is())
                 xRectangle = uno::Reference<drawing::XShape>(xFactory->createInstance ("com.sun.star.drawing.RectangleShape"),
                     uno::UNO_QUERY);
 
-            // Set the shape's size and position.
+            
             if (xRectangle.is())
             {
                 uno::Any aValue;
                 awt::Point aPosition;
                 awt::Size aSize;
 
-                // Set size and position of the shape to those of the draw
-                // page.
+                
+                
                 aValue = xSet->getPropertyValue ("BorderLeft");
                 aValue >>= aPosition.X;
                 aValue = xSet->getPropertyValue ("BorderTop");
@@ -190,8 +190,8 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
                 aValue >>= aSize.Height;
                 xRectangle->setSize (aSize);
 
-                // Create the accessible object for the shape and
-                // initialize it.
+                
+                
                 xShape = new AccessiblePageShape (
                     xView->getCurrentPage(), this, maShapeTreeInfo);
             }
@@ -203,7 +203,7 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
 
 
 
-//=====  XAccessibleContext  ==================================================
+
 
 sal_Int32 SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChildCount (void)
@@ -213,7 +213,7 @@ sal_Int32 SAL_CALL
 
     long mpChildCount = AccessibleDocumentViewBase::getAccessibleChildCount();
 
-    // Forward request to children manager.
+    
     if (mpChildrenManager != NULL)
         mpChildCount += mpChildrenManager->GetChildCount ();
 
@@ -231,7 +231,7 @@ uno::Reference<XAccessible> SAL_CALL
 
     ::osl::ClearableMutexGuard aGuard (maMutex);
 
-    // Take care of children of the base class.
+    
     sal_Int32 nCount = AccessibleDocumentViewBase::getAccessibleChildCount();
     if (nCount > 0)
     {
@@ -241,12 +241,12 @@ uno::Reference<XAccessible> SAL_CALL
             nIndex -= nCount;
     }
 
-    // Create a copy of the pointer to the children manager and release the
-    // mutex before calling any of its methods.
+    
+    
     ChildrenManager* pChildrenManager = mpChildrenManager;
     aGuard.clear();
 
-    // Forward request to children manager.
+    
     if (pChildrenManager != NULL)
     {
         return pChildrenManager->GetChild (nIndex);
@@ -293,7 +293,7 @@ OUString SAL_CALL
     return sName;
 }
 
-//=====  XEventListener  ======================================================
+
 
 void SAL_CALL
     AccessibleDrawDocumentView::disposing (const lang::EventObject& rEventObject)
@@ -305,7 +305,7 @@ void SAL_CALL
     if (rEventObject.Source == mxModel)
     {
         ::osl::Guard< ::osl::Mutex> aGuard (::osl::Mutex::getGlobalMutex());
-        // maShapeTreeInfo has been modified in base class.
+        
         if (mpChildrenManager != NULL)
             mpChildrenManager->SetInfo (maShapeTreeInfo);
     }
@@ -314,7 +314,7 @@ void SAL_CALL
 
 
 
-//=====  XPropertyChangeListener  =============================================
+
 
 void SAL_CALL
     AccessibleDrawDocumentView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
@@ -325,21 +325,21 @@ void SAL_CALL
     AccessibleDocumentViewBase::propertyChange (rEventObject);
 
     OSL_TRACE ("AccessibleDrawDocumentView::propertyChange");
-    // add page switch event for slide show mode
+    
     if (rEventObject.PropertyName == "CurrentPage" ||
         rEventObject.PropertyName == "PageChange")
     {
         OSL_TRACE ("    current page changed");
 
-        // Update the accessible name to reflect the current slide.
+        
         UpdateAccessibleName();
 
-        // The current page changed.  Update the children manager accordingly.
+        
         uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
         if (xView.is() && mpChildrenManager!=NULL)
         {
-            // Inform the children manager to forget all children and give
-            // him the new ones.
+            
+            
             mpChildrenManager->ClearAccessibleShapeList ();
             mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
                 xView->getCurrentPage(), uno::UNO_QUERY));
@@ -372,22 +372,22 @@ void SAL_CALL
     {
         OSL_TRACE ("    acc on current page should be updated");
 
-        // The current page changed.  Update the children manager accordingly.
+        
         uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
         if (xView.is() && mpChildrenManager!=NULL)
         {
-            // Inform the children manager to forget all children and give
-            // him the new ones.
+            
+            
             mpChildrenManager->ClearAccessibleShapeList ();
-            // update the slide show page's accessible info
-            //mpChildrenManager->SetShapeList (uno::Reference<drawing::XShapes> (
-            //    xView->getCurrentPage(), uno::UNO_QUERY));
+            
+            
+            
             rtl::Reference< sd::SlideShow > xSlideshow( sd::SlideShow::GetSlideShow( mpSdViewSh->GetViewShellBase() ) );
             if( xSlideshow.is() && xSlideshow->isRunning() && xSlideshow->isFullScreen() )
             {
                 ::com::sun::star::uno::Reference< drawing::XDrawPage > xSlide;
-                // MT IA2: Not used...
-                // sal_Int32 currentPageIndex = xSlideshow->getCurrentPageIndex();
+                
+                
                 ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XSlideShowController > mpSlideController = xSlideshow->getController();
                 if( mpSlideController.is() )
                 {
@@ -417,7 +417,7 @@ void SAL_CALL
 
 
 
-//=====  XServiceInfo  ========================================================
+
 
 OUString SAL_CALL
     AccessibleDrawDocumentView::getImplementationName (void)
@@ -434,12 +434,12 @@ OUString SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     ThrowIfDisposed();
-    // Get list of supported service names from base class...
+    
     uno::Sequence<OUString> aServiceNames =
         AccessibleDocumentViewBase::getSupportedServiceNames();
     sal_Int32 nCount (aServiceNames.getLength());
 
-    // ...and add additional names.
+    
     aServiceNames.realloc (nCount + 1);
     static const OUString sAdditionalServiceName ("com.sun.star.drawing.AccessibleDrawDocumentView");
     aServiceNames[nCount] = sAdditionalServiceName;
@@ -447,7 +447,7 @@ OUString SAL_CALL
     return aServiceNames;
 }
 
-//=====  XInterface  ==========================================================
+
 
 uno::Any SAL_CALL
     AccessibleDrawDocumentView::queryInterface (const uno::Type & rType)
@@ -473,19 +473,19 @@ void SAL_CALL
 {
     AccessibleDocumentViewBase::release ();
 }
-//=====  XAccessibleGroupPosition  =========================================
+
 uno::Sequence< sal_Int32 > SAL_CALL
     AccessibleDrawDocumentView::getGroupPosition( const uno::Any& rAny )
     throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     SolarMutexGuard g;
 
-    // we will return the:
-    // [0] group level(always be 0 now)
-    // [1] similar items counts in the group
-    // [2] the position of the object in the group
+    
+    
+    
+    
     uno::Sequence< sal_Int32 > aRet( 3 );
-    //get the xShape of the current selected drawing object
+    
     uno::Reference<XAccessibleContext> xAccContent;
     rAny >>= xAccContent;
     if ( !xAccContent.is() )
@@ -502,14 +502,14 @@ uno::Sequence< sal_Int32 > SAL_CALL
     {
         return aRet;
     }
-    //find all the child in the page, insert them into a vector and sort
+    
     if ( mpChildrenManager == NULL )
     {
         return aRet;
     }
     std::vector< uno::Reference<drawing::XShape> > vXShapes;
     sal_Int32 nCount = mpChildrenManager->GetChildCount();
-    //get pointer of SdView & SdrPageView for further use.
+    
     SdrPageView* pPV = NULL;
     ::sd::View* pSdView = NULL;
     if ( mpSdViewSh )
@@ -522,7 +522,7 @@ uno::Sequence< sal_Int32 > SAL_CALL
         uno::Reference< drawing::XShape > xShape = mpChildrenManager->GetChildShape(i);
         if ( xShape.is() )
         {
-            //if the object is visable in the page, we add it into the group list.
+            
             SdrObject* pObj = GetSdrObjectFromXShape(xShape);
             if ( pObj && pPV && pSdView && pSdView->IsObjMarkable( pObj, pPV ) )
             {
@@ -531,16 +531,16 @@ uno::Sequence< sal_Int32 > SAL_CALL
         }
     }
     std::sort( vXShapes.begin(), vXShapes.end(), XShapePosCompareHelper() );
-    //get the the index of the selected object in the group
+    
     std::vector< uno::Reference<drawing::XShape> >::iterator aIter;
-    //we start counting position from 1
+    
     sal_Int32 nPos = 1;
     for ( aIter = vXShapes.begin(); aIter != vXShapes.end(); ++aIter, nPos++ )
     {
         if ( (*aIter).get() == xCurShape.get() )
         {
             sal_Int32* pArray = aRet.getArray();
-            pArray[0] = 1; //it should be 1 based, not 0 based.
+            pArray[0] = 1; 
             pArray[1] = vXShapes.size();
             pArray[2] = nPos;
             break;
@@ -555,7 +555,7 @@ OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
     SolarMutexGuard g;
 
     OUString aRet;
-    //get the xShape of the current selected drawing object
+    
     uno::Reference<XAccessibleContext> xAccContent;
     rAny >>= xAccContent;
     if ( !xAccContent.is() )
@@ -582,7 +582,7 @@ OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
     return aRet;
 }
 
-/// Create a name for this view.
+
 OUString AccessibleDrawDocumentView::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
@@ -751,7 +751,7 @@ void
 
         if( ACCESSIBLE_SELECTION_CHILD_ALL == nAccessibleChildIndex )
         {
-            // Select or deselect all children.
+            
 
             if( !bSelect )
                 xSel->select( aAny );
@@ -777,14 +777,14 @@ void
         }
         else if( nAccessibleChildIndex >= 0 )
         {
-            // Select or deselect only the child with index
-            // nAccessibleChildIndex.
+            
+            
 
             AccessibleShape* pAcc = AccessibleShape::getImplementation(
                 getAccessibleChild( nAccessibleChildIndex ));
 
-            // Add or remove the shape that is made accessible from the
-            // selection of the controller.
+            
+            
             if( pAcc )
             {
                 uno::Reference< drawing::XShape > xShape( pAcc->GetXShape() );
@@ -797,7 +797,7 @@ void
                     aAny = xSel->getSelection();
                     aAny >>= xShapes;
 
-                    // Search shape to be selected in current selection.
+                    
                     if (xShapes.is())
                     {
                         sal_Int32 nCount = xShapes->getCount();
@@ -806,11 +806,11 @@ void
                                 bFound = sal_True;
                     }
                     else
-                        // Create an empty selection to add the shape to.
+                        
                         xShapes = drawing::ShapeCollection::create(
                                 comphelper::getProcessComponentContext());
 
-                    // Update the selection.
+                    
                     if( !bFound && bSelect )
                         xShapes->add( xShape );
                     else if( bFound && !bSelect )
@@ -832,8 +832,8 @@ void AccessibleDrawDocumentView::Activated (void)
     if (mpChildrenManager != NULL)
     {
         sal_Bool bChange = sal_False;
-        // When none of the children has the focus then claim it for the
-        // view.
+        
+        
         if ( ! mpChildrenManager->HasFocus())
         {
             SetState (AccessibleStateType::FOCUSED);
@@ -842,7 +842,7 @@ void AccessibleDrawDocumentView::Activated (void)
         else
             ResetState (AccessibleStateType::FOCUSED);
     mpChildrenManager->UpdateSelection();
-    // if the child gets focus in UpdateSelection(), needs to reset the focus on document.
+    
     if (mpChildrenManager->HasFocus() && bChange)
         ResetState (AccessibleStateType::FOCUSED);
     }
@@ -880,14 +880,14 @@ void AccessibleDrawDocumentView::impl_dispose (void)
 void SAL_CALL AccessibleDrawDocumentView::disposing (void)
 {
 
-    // Release resources.
+    
     if (mpChildrenManager != NULL)
     {
         delete mpChildrenManager;
         mpChildrenManager = NULL;
     }
 
-    // Forward call to base classes.
+    
     AccessibleDocumentViewBase::disposing ();
 }
 
@@ -917,7 +917,7 @@ void SAL_CALL AccessibleDrawDocumentView::disposing (void)
                         uno::Reference < XAccessibleContext > xSelContext( xSel->getAccessibleContext() );
                         if ( xSelContext.is() )
                         {
-                            //if in sw we find the selected paragraph here
+                            
                             if ( xSelContext->getAccessibleRole() == AccessibleRole::PARAGRAPH )
                             {
                                 uno::Sequence<uno::Any> aRet( 1 );
@@ -1049,7 +1049,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
     OUString sNewName (CreateAccessibleName());
     sNewName += ": ";
 
-    // Add the number of the current slide.
+    
     uno::Reference<drawing::XDrawView> xView (mxController, uno::UNO_QUERY);
     if (xView.is())
     {
@@ -1068,7 +1068,7 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
             }
     }
 
-    // Add the number of pages/slides.
+    
     Reference<drawing::XDrawPagesSupplier> xPagesSupplier (mxModel, UNO_QUERY);
     if (xPagesSupplier.is())
     {
@@ -1083,6 +1083,6 @@ void AccessibleDrawDocumentView::UpdateAccessibleName (void)
     SetAccessibleName (sNewName, AutomaticallyCreated);
 }
 
-} // end of namespace accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

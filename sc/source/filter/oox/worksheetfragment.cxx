@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "worksheetfragment.hxx"
@@ -47,14 +47,14 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
 
-// ============================================================================
+
 
 namespace {
 
@@ -78,9 +78,9 @@ const sal_Int32 BIFF12_OLEOBJECT_ALWAYS     = 1;
 const sal_uInt16 BIFF12_OLEOBJECT_LINKED    = 0x0001;
 const sal_uInt16 BIFF12_OLEOBJECT_AUTOLOAD  = 0x0002;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 DataValidationsContext::DataValidationsContext( WorksheetFragmentBase& rFragment ) :
     WorksheetContextBase( rFragment )
@@ -103,7 +103,7 @@ ContextHandlerRef DataValidationsContext::onCreateContext( sal_Int32 nElement, c
             {
                 case XLS_TOKEN( formula1 ):
                 case XLS_TOKEN( formula2 ):
-                    return this;    // collect formulas in onCharacters()
+                    return this;    
             }
         break;
     }
@@ -116,7 +116,7 @@ void DataValidationsContext::onCharacters( const OUString& rChars )
     {
         case XLS_TOKEN( formula1 ):
             mxValModel->maTokens1 = getFormulaParser().importFormula( mxValModel->maRanges.getBaseAddress(), rChars );
-            // process string list of a list validation (convert to list of string tokens)
+            
             if( mxValModel->mnType == XML_list )
                 getFormulaParser().convertStringToStringList( mxValModel->maTokens1, ',', true );
         break;
@@ -172,7 +172,7 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
     BinRangeList aRanges;
     rStrm >> nFlags >> aRanges >> aModel.maErrorTitle >> aModel.maErrorMessage >> aModel.maInputTitle >> aModel.maInputMessage;
 
-    // equal flags in all BIFFs
+    
     aModel.setBiffType( extractValue< sal_uInt8 >( nFlags, 0, 4 ) );
     aModel.setBiffOperator( extractValue< sal_uInt8 >( nFlags, 20, 4 ) );
     aModel.setBiffErrorStyle( extractValue< sal_uInt8 >( nFlags, 4, 3 ) );
@@ -181,33 +181,33 @@ void DataValidationsContext::importDataValidation( SequenceInputStream& rStrm )
     aModel.mbShowInputMsg = getFlag( nFlags, BIFF_DATAVAL_SHOWINPUT );
     aModel.mbShowErrorMsg = getFlag( nFlags, BIFF_DATAVAL_SHOWERROR );
 
-    // cell range list
+    
     getAddressConverter().convertToCellRangeList( aModel.maRanges, aRanges, getSheetIndex(), true );
 
-    // condition formula(s)
+    
     FormulaParser& rParser = getFormulaParser();
     CellAddress aBaseAddr = aModel.maRanges.getBaseAddress();
     aModel.maTokens1 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
     aModel.maTokens2 = rParser.importFormula( aBaseAddr, FORMULATYPE_VALIDATION, rStrm );
-    // process string list of a list validation (convert to list of string tokens)
+    
     if( (aModel.mnType == XML_list) && getFlag( nFlags, BIFF_DATAVAL_STRINGLIST ) )
         rParser.convertStringToStringList( aModel.maTokens1, ',', true );
 
-    // set validation data
+    
     setValidation( aModel );
 }
 
-// ============================================================================
+
 
 WorksheetFragment::WorksheetFragment( const WorksheetHelper& rHelper, const OUString& rFragmentPath ) :
     WorksheetFragmentBase( rHelper, rFragmentPath )
 {
-    // import data tables related to this worksheet
+    
     RelationsRef xTableRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATION_TYPE( "table" ) );
     for( Relations::const_iterator aIt = xTableRels->begin(), aEnd = xTableRels->end(); aIt != aEnd; ++aIt )
         importOoxFragment( new TableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
 
-    // import comments related to this worksheet
+    
     OUString aCommentsFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "comments" ) );
     if( !aCommentsFragmentPath.isEmpty() )
         importOoxFragment( new CommentsFragment( *this, aCommentsFragmentPath ) );
@@ -311,12 +311,12 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                 case XLS_TOKEN( oddHeader ):
                 case XLS_TOKEN( oddFooter ):
                 case XLS_TOKEN( evenHeader ):
-                case XLS_TOKEN( evenFooter ):       return this;    // collect h/f contents in onCharacters()
+                case XLS_TOKEN( evenFooter ):       return this;    
             }
         break;
-        // Only process an oleObject or control if outside a mc:AlternateContent
-        // element OR if within a mc:Fallback. I suppose ideally we
-        // should process the stuff within 'mc:Choice'
+        
+        
+        
 	case XLS_TOKEN( controls ):
         case XLS_TOKEN( oleObjects ):
             if ( getCurrentElement() == XLS_TOKEN( controls ) )
@@ -329,8 +329,8 @@ ContextHandlerRef WorksheetFragment::onCreateContext( sal_Int32 nElement, const 
                 }
                 else if ( !aMceState.empty() && aMceState.back() == MCE_FOUND_CHOICE )
                 {
-                    // reset the handling within 'Choice'
-                    // this will force attempted handling in Fallback
+                    
+                    
                     aMceState.back() = MCE_STARTED;
                 }
             }
@@ -469,15 +469,15 @@ const RecordInfo* WorksheetFragment::getRecordInfos() const
 
 void WorksheetFragment::initializeImport()
 {
-    // initial processing in base class WorksheetHelper
+    
     initializeWorksheetImport();
 
-    // import query table fragments related to this worksheet
+    
     RelationsRef xQueryRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATION_TYPE( "queryTable" ) );
     for( Relations::const_iterator aIt = xQueryRels->begin(), aEnd = xQueryRels->end(); aIt != aEnd; ++aIt )
         importOoxFragment( new QueryTableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
 
-    // import pivot table fragments related to this worksheet
+    
     RelationsRef xPivotRels = getRelations().getRelationsFromType( CREATE_OFFICEDOC_RELATION_TYPE( "pivotTable" ) );
     for( Relations::const_iterator aIt = xPivotRels->begin(), aEnd = xPivotRels->end(); aIt != aEnd; ++aIt )
         importOoxFragment( new PivotTableFragment( *this, getFragmentPathFromRelation( aIt->second ) ) );
@@ -485,15 +485,15 @@ void WorksheetFragment::initializeImport()
 
 void WorksheetFragment::finalizeImport()
 {
-    // final processing in base class WorksheetHelper
+    
     finalizeWorksheetImport();
 }
 
-// private --------------------------------------------------------------------
+
 
 void WorksheetFragment::importPageSetUpPr( const AttributeList& rAttribs )
 {
-    // for whatever reason, this flag is still stored separated from the page settings
+    
     getPageSettings().setFitToPagesMode( rAttribs.getBool( XML_fitToPage, false ) );
 }
 
@@ -513,10 +513,10 @@ void WorksheetFragment::importDimension( const AttributeList& rAttribs )
 
 void WorksheetFragment::importSheetFormatPr( const AttributeList& rAttribs )
 {
-    // default column settings
+    
     setBaseColumnWidth( rAttribs.getInteger( XML_baseColWidth, 8 ) );
     setDefaultColumnWidth( rAttribs.getDouble( XML_defaultColWidth, 0.0 ) );
-    // default row settings
+    
     setDefaultRowSettings(
         rAttribs.getDouble( XML_defaultRowHeight, 0.0 ),
         rAttribs.getBool( XML_customHeight, false ),
@@ -536,7 +536,7 @@ void WorksheetFragment::importCol( const AttributeList& rAttribs )
     aModel.mbShowPhonetic  = rAttribs.getBool( XML_phonetic, false );
     aModel.mbHidden        = rAttribs.getBool( XML_hidden, false );
     aModel.mbCollapsed     = rAttribs.getBool( XML_collapsed, false );
-    // set column properties in the current sheet
+    
     setColumnModel( aModel );
 }
 
@@ -627,11 +627,11 @@ void WorksheetFragment::importSheetFormatPr( SequenceInputStream& rStrm )
     sal_uInt16 nBaseWidth, nDefaultHeight, nFlags;
     rStrm >> nDefaultWidth >> nBaseWidth >> nDefaultHeight >> nFlags;
 
-    // base column with
+    
     setBaseColumnWidth( nBaseWidth );
-    // default width is stored as 1/256th of a character in BIFF12, convert to entire character
+    
     setDefaultColumnWidth( static_cast< double >( nDefaultWidth ) / 256.0 );
-    // row height is in twips in BIFF12, convert to points; equal flags in all BIFFs
+    
     setDefaultRowSettings(
         nDefaultHeight / 20.0,
         getFlag( nFlags, BIFF_DEFROW_CUSTOMHEIGHT ),
@@ -648,17 +648,17 @@ void WorksheetFragment::importCol( SequenceInputStream& rStrm )
     sal_uInt16 nFlags;
     rStrm >> aModel.maRange.mnFirst >> aModel.maRange.mnLast >> nWidth >> aModel.mnXfId >> nFlags;
 
-    // column indexes are 0-based in BIFF12, but ColumnModel expects 1-based
+    
     ++aModel.maRange.mnFirst;
     ++aModel.maRange.mnLast;
-    // width is stored as 1/256th of a character in BIFF12, convert to entire character
+    
     aModel.mfWidth        = static_cast< double >( nWidth ) / 256.0;
-    // equal flags in all BIFFs
+    
     aModel.mnLevel        = extractValue< sal_Int32 >( nFlags, 8, 3 );
     aModel.mbShowPhonetic = getFlag( nFlags, BIFF_COLINFO_SHOWPHONETIC );
     aModel.mbHidden       = getFlag( nFlags, BIFF_COLINFO_HIDDEN );
     aModel.mbCollapsed    = getFlag( nFlags, BIFF_COLINFO_COLLAPSED );
-    // set column properties in the current sheet
+    
     setColumnModel( aModel );
 }
 
@@ -737,7 +737,7 @@ void WorksheetFragment::importEmbeddedOleData( StreamDataSequence& orEmbeddedDat
         getBaseFilter().importBinaryData( orEmbeddedData, aFragmentPath );
 }
 
-} // namespace xls
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

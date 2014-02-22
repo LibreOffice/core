@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/zforlist.hxx>
@@ -101,7 +101,7 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::utl;
 
-// class OfaMiscTabPage --------------------------------------------------
+
 
 int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet_ )
 {
@@ -154,7 +154,7 @@ namespace
             if( Application::hasNativeFileSelection() )
                 return true;
 
-            // Otherwise fall-back on querying services
+            
             bool bRet = false;
             Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
 
@@ -181,7 +181,7 @@ namespace
         }
 }
 
-// -----------------------------------------------------------------------
+
 
 OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptGeneralPage", "cui/ui/optgeneralpage.ui", rSet)
@@ -227,20 +227,20 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet)
     m_pToolTipsCB->SetClickHdl( aLink );
 }
 
-// -----------------------------------------------------------------------
+
 
 OfaMiscTabPage::~OfaMiscTabPage()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* OfaMiscTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new OfaMiscTabPage( pParent, rAttrSet );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
 {
@@ -294,7 +294,7 @@ sal_Bool OfaMiscTabPage::FillItemSet( SfxItemSet& rSet )
     return bModified;
 }
 
-// -----------------------------------------------------------------------
+
 
 void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -329,7 +329,7 @@ void OfaMiscTabPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
 {
@@ -353,7 +353,7 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureHdl, NumericField*, pEd )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 {
@@ -365,7 +365,7 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(OfaMiscTabPage, HelpCheckHdl_Impl)
 {
@@ -373,7 +373,7 @@ IMPL_LINK_NOARG(OfaMiscTabPage, HelpCheckHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 class CanvasSettings
 {
@@ -393,7 +393,7 @@ private:
     mutable sal_Bool           mbHWAccelChecked;
 };
 
-// -------------------------------------------------------------------
+
 CanvasSettings::CanvasSettings() :
     mxForceFlagNameAccess(),
     mbHWAccelAvailable(sal_False),
@@ -452,7 +452,7 @@ CanvasSettings::CanvasSettings() :
     }
 }
 
-// -------------------------------------------------------------------
+
 sal_Bool CanvasSettings::IsHardwareAccelerationAvailable() const
 {
     if( !mbHWAccelChecked )
@@ -461,8 +461,8 @@ sal_Bool CanvasSettings::IsHardwareAccelerationAvailable() const
 
         Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
 
-        // check whether any of the service lists has an
-        // implementation that presents the "HardwareAcceleration" property
+        
+        
         ServiceVector::const_iterator       aCurr=maAvailableImplementations.begin();
         const ServiceVector::const_iterator aEnd=maAvailableImplementations.end();
         while( aCurr != aEnd )
@@ -499,7 +499,7 @@ sal_Bool CanvasSettings::IsHardwareAccelerationAvailable() const
     return mbHWAccelAvailable;
 }
 
-// -------------------------------------------------------------------
+
 sal_Bool CanvasSettings::IsHardwareAccelerationEnabled() const
 {
     bool bForceLastEntry(false);
@@ -512,7 +512,7 @@ sal_Bool CanvasSettings::IsHardwareAccelerationEnabled() const
     return !bForceLastEntry;
 }
 
-// -------------------------------------------------------------------
+
 void CanvasSettings::EnabledHardwareAcceleration( sal_Bool _bEnabled ) const
 {
     Reference< XNameReplace > xNameReplace(
@@ -533,7 +533,7 @@ void CanvasSettings::EnabledHardwareAcceleration( sal_Bool _bEnabled ) const
     xChangesBatch->commitChanges();
 }
 
-// class OfaViewTabPage --------------------------------------------------
+
 
 OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptViewPage", "cui/ui/optviewpage.ui", rSet)
@@ -549,8 +549,8 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pSystemFont, "systemfont");
 
     VclContainer *pRef = get<VclContainer>("refgrid");
-    //fdo#65595, we need height-for-width support here, but for now we can
-    //bodge it
+    
+    
     Size aPrefSize(m_pSystemFont->get_preferred_size());
     Size aSize(pRef->get_preferred_size());
     if (aPrefSize.Width() > aSize.Width())
@@ -570,21 +570,21 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
     get(m_pUseAntiAliase, "useaa");
     get(m_pMousePosLB, "mousepos");
     get(m_pMouseMiddleLB, "mousemiddle");
-    // #i97672#
+    
     get(m_pSelectionCB, "trans");
     get(m_pSelectionMF, "transmf");
 
 #if defined( UNX )
     m_pFontAntiAliasing->SetToggleHdl( LINK( this, OfaViewTabPage, OnAntialiasingToggled ) );
 #else
-    // on this platform, we do not have the anti aliasing options
+    
     m_pFontAntiAliasing->Hide();
     m_pAAPointLimitLabel->Hide();
     m_pAAPointLimit->Hide();
 
 #endif
 
-    // #i97672#
+    
     m_pSelectionCB->SetToggleHdl( LINK( this, OfaViewTabPage, OnSelectionToggled ) );
 
     if( ! Application::ValidateSystemFont() )
@@ -593,13 +593,13 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
         m_pSystemFont->Enable(false);
     }
 
-    // Set known icon themes
+    
     OUString sAutoStr( m_pIconStyleLB->GetEntry( 0 ) );
     m_pIconStyleLB->Clear();
     StyleSettings aStyleSettings = Application::GetSettings().GetStyleSettings();
     mInstalledIconThemes = aStyleSettings.GetInstalledIconThemes();
 
-    // Start with the automatically chosen icon theme
+    
     OUString autoThemeId = aStyleSettings.GetAutomaticallyChosenIconTheme();
     const vcl::IconThemeInfo& autoIconTheme = vcl::IconThemeInfo::FindIconThemeById(mInstalledIconThemes, autoThemeId);
 
@@ -612,7 +612,7 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet)
         m_pIconStyleLB->InsertEntry(aI->GetDisplayName());
     }
 
-    // separate auto and other icon themes
+    
     m_pIconStyleLB->SetSeparatorPos( 0 );
     m_pIconStyleLB->SelectEntryPos(0);
 }
@@ -638,7 +638,7 @@ IMPL_LINK( OfaViewTabPage, OnAntialiasingToggled, void*, NOTINTERESTEDIN )
 }
 #endif
 
-// #i97672#
+
 IMPL_LINK( OfaViewTabPage, OnSelectionToggled, void*, NOTINTERESTEDIN )
 {
     (void)NOTINTERESTEDIN;
@@ -665,7 +665,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     sal_uInt16 nSizeLB_NewSelection = m_pIconSizeLB->GetSelectEntryPos();
     if( nSizeLB_InitialSelection != nSizeLB_NewSelection )
     {
-        // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
+        
         sal_Int16 eSet = SFX_SYMBOLS_SIZE_AUTO;
         switch( nSizeLB_NewSelection )
         {
@@ -681,7 +681,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     sal_uInt16 nStyleLB_NewSelection = m_pIconStyleLB->GetSelectEntryPos();
     if( nStyleLB_InitialSelection != nStyleLB_NewSelection )
     {
-        // 0 means choose style automatically
+        
         if (nStyleLB_NewSelection == 0) {
             aMiscOptions.SetIconThemeAutomatically();
         }
@@ -696,7 +696,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
     sal_Bool bAppearanceChanged = sal_False;
 
 
-    // Screen Scaling
+    
     sal_uInt16 nOldScale = pAppearanceCfg->GetScaleFactor();
     sal_uInt16 nNewScale = (sal_uInt16)m_pWindowSizeMF->GetValue();
 
@@ -706,7 +706,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         bAppearanceChanged = sal_True;
     }
 
-    // Mouse Snap Mode
+    
     short eOldSnap = pAppearanceCfg->GetSnapMode();
     short eNewSnap = m_pMousePosLB->GetSelectEntryPos();
     if(eNewSnap > 2)
@@ -718,7 +718,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         bAppearanceChanged = sal_True;
     }
 
-    // Middle Mouse Button
+    
     short eOldMiddleMouse = pAppearanceCfg->GetMiddleMouseButton();
     short eNewMiddleMouse = m_pMouseMiddleLB->GetSelectEntryPos();
     if(eNewMiddleMouse > 2)
@@ -764,7 +764,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         bModified = sal_True;
     }
 
-    // #i95644#  if disabled, do not use value, see in ::Reset()
+    
     if(m_pUseHardwareAccell->IsEnabled())
     {
         if(TriState(m_pUseHardwareAccell->IsChecked()) != m_pUseHardwareAccell->GetSavedValue())
@@ -774,7 +774,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         }
     }
 
-    // #i95644#  if disabled, do not use value, see in ::Reset()
+    
     if(m_pUseAntiAliase->IsEnabled())
     {
         if(m_pUseAntiAliase->IsChecked() != mpDrawinglayerOpt->IsAntiAliasing())
@@ -785,7 +785,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
         }
     }
 
-    // #i97672#
+    
     if(m_pSelectionCB->IsEnabled())
     {
         const bool bNewSelection(m_pSelectionCB->IsChecked());
@@ -798,8 +798,8 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
             bRepaintWindows = true;
         }
 
-        // #i104150# even read the value when m_pSelectionMF is disabled; it may have been
-        // modified by enabling-modify-disabling by the user
+        
+        
         if(nNewTransparence != mpDrawinglayerOpt->GetTransparentSelectionPercent())
         {
             mpDrawinglayerOpt->SetTransparentSelectionPercent(nNewTransparence);
@@ -819,7 +819,7 @@ sal_Bool OfaViewTabPage::FillItemSet( SfxItemSet& )
 
     if( bMenuOptModified )
     {
-        // Set changed settings to the application instance
+        
         AllSettings aAllSettings = Application::GetSettings();
         StyleSettings aStyleSettings = aAllSettings.GetStyleSettings();
         if( m_pSystemFont->IsEnabled() )
@@ -877,13 +877,13 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
         m_pSystemFont->Check( aAccessibilityOptions.GetIsSystemFont() );
     }
 
-    // Screen Scaling
+    
     m_pWindowSizeMF->SetValue ( pAppearanceCfg->GetScaleFactor() );
-    // Mouse Snap
+    
     m_pMousePosLB->SelectEntryPos(pAppearanceCfg->GetSnapMode());
     m_pMousePosLB->SaveValue();
 
-    // Mouse Snap
+    
     m_pMouseMiddleLB->SelectEntryPos(pAppearanceCfg->GetMiddleMouseButton());
     m_pMouseMiddleLB->SaveValue();
 
@@ -892,7 +892,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     m_pAAPointLimit->SetValue( pAppearanceCfg->GetFontAntialiasingMinPixelHeight() );
 #endif
 
-    // WorkingSet
+    
     SvtFontOptions aFontOpt;
     m_pFontShowCB->Check( aFontOpt.IsFontWYSIWYGEnabled() );
     SvtMenuOptions aMenuOpt;
@@ -900,7 +900,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     m_pMenuIconsLB->SaveValue();
     m_pFontHistoryCB->Check( aFontOpt.IsFontHistoryEnabled() );
 
-    { // #i95644# HW accel (unified to disable mechanism)
+    { 
         if(pCanvasSettings->IsHardwareAccelerationAvailable())
         {
             m_pUseHardwareAccell->Check(pCanvasSettings->IsHardwareAccelerationEnabled());
@@ -914,7 +914,7 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
         m_pUseHardwareAccell->SaveValue();
     }
 
-    { // #i95644# AntiAliasing
+    { 
         if(mpDrawinglayerOpt->IsAAPossibleOnThisSystem())
         {
             m_pUseAntiAliase->Check(mpDrawinglayerOpt->IsAntiAliasing());
@@ -929,13 +929,13 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     }
 
     {
-        // #i97672# Selection
-        // check if transparent selection is possible on this system
+        
+        
         const bool bTransparentSelectionPossible(
             !GetSettings().GetStyleSettings().GetHighContrastMode()
             && supportsOperation(OutDevSupport_TransparentRect));
 
-        // enter values
+        
         if(bTransparentSelectionPossible)
         {
             m_pSelectionCB->Check(mpDrawinglayerOpt->IsTransparentSelection());
@@ -970,12 +970,12 @@ struct LanguageConfig_Impl
 
 static sal_Bool bLanguageCurrentDoc_Impl = sal_False;
 
-// some things we'll need...
+
 static const OUString sAccessSrvc("com.sun.star.configuration.ConfigurationAccess");
 static const OUString sAccessUpdSrvc("com.sun.star.configuration.ConfigurationUpdateAccess");
 static const OUString sInstalledLocalesPath("org.openoffice.Setup/Office/InstalledLocales");
 static OUString sUserLocalePath("org.openoffice.Office.Linguistic/General");
-//static const OUString sUserLocalePath("org.openoffice.Office/Linguistic");
+
 static const OUString sUserLocaleKey("UILocale");
 static Sequence< OUString > seqInstalledLanguages;
 
@@ -983,7 +983,7 @@ static OUString lcl_getDatePatternsConfigString( const LocaleDataWrapper& rLocal
 {
     Sequence< OUString > aDateAcceptancePatterns = rLocaleWrapper.getDateAcceptancePatterns();
     sal_Int32 nPatterns = aDateAcceptancePatterns.getLength();
-    OUStringBuffer aBuf( nPatterns * 6 );   // 6 := length of Y-M-D;
+    OUStringBuffer aBuf( nPatterns * 6 );   
     SAL_WARN_IF( !nPatterns, "cui.options", "No date acceptance pattern");
     if (nPatterns)
     {
@@ -1023,7 +1023,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     get(m_pCTLSupportCB, "ctlsupport");
     get(m_pIgnoreLanguageChangeCB, "ignorelanguagechange");
 
-    // initialize user interface language selection
+    
     SvtLanguageTable* pLanguageTable = new SvtLanguageTable;
     m_sSystemDefaultString = pLanguageTable->GetString( LANGUAGE_SYSTEM );
 
@@ -1042,7 +1042,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
         Sequence< Any > theArgs(1);
         Reference< XNameAccess > theNameAccess;
 
-        // find out which locales are currently installed and add them to the listbox
+        
         theArgs[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(sInstalledLocalesPath)));
     theNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs ), UNO_QUERY_THROW );
@@ -1053,21 +1053,21 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
             aLang = LanguageTag::convertToLanguageTypeWithFallback(seqInstalledLanguages[i]);
             if (aLang != LANGUAGE_DONTKNOW)
             {
-                //sal_uInt16 p = m_pUserInterfaceLB->InsertLanguage(aLang);
+                
                 OUString aLangStr( pLanguageTable->GetString( aLang, true ) );
                 sal_uInt16 p = m_pUserInterfaceLB->InsertEntry(aLangStr);
                 m_pUserInterfaceLB->SetEntryData(p, (void*)(i+1));
             }
         }
 
-        // find out whether the user has a specific locale specified
+        
         Sequence< Any > theArgs2(1);
         theArgs2[0] = makeAny(NamedValue(OUString("nodepath"), makeAny(sUserLocalePath)));
         theNameAccess = Reference< XNameAccess > (
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs2 ), UNO_QUERY_THROW );
         if (theNameAccess->hasByName(sUserLocaleKey))
             theNameAccess->getByName(sUserLocaleKey) >>= m_sUserLocaleValue;
-        // select the user specified locale in the listbox
+        
         if (!m_sUserLocaleValue.isEmpty())
         {
             sal_Int32 d = 0;
@@ -1082,8 +1082,8 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     }
     catch (const Exception &e)
     {
-        // we'll just leave the box in it's default setting and won't
-        // even give it event handler...
+        
+        
         SAL_WARN("cui.options", "ignoring Exception \"" << e.Message << "\"");
     }
 
@@ -1099,13 +1099,13 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
 
     const NfCurrencyTable& rCurrTab = SvNumberFormatter::GetTheCurrencyTable();
     const NfCurrencyEntry& rCurr = SvNumberFormatter::GetCurrencyEntry( LANGUAGE_SYSTEM );
-    // insert SYSTEM entry
+    
     OUString aDefaultCurr = m_sSystemDefaultString + " - " + rCurr.GetBankSymbol();
     m_pCurrencyLB->InsertEntry( aDefaultCurr );
-    // all currencies
+    
     OUString aTwoSpace( "  " );
     sal_uInt16 nCurrCount = rCurrTab.size();
-    // first entry is SYSTEM, skip it
+    
     for ( sal_uInt16 j=1; j < nCurrCount; ++j )
     {
         const NfCurrencyEntry* pCurr = &rCurrTab[j];
@@ -1179,7 +1179,7 @@ static void lcl_UpdateAndDelete(SfxVoidItem* pInvalidItems[], SfxBoolItem* pBool
 
 sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
 {
-    // lock configuration broadcasters so that we can coordinate the notifications
+    
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( true );
     pLangConfig->aLanguageOptions.BlockBroadcasts( true );
     pLangConfig->aLinguConfig.BlockBroadcasts( true );
@@ -1197,7 +1197,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
          m_pComplexLanguageLB->GetSavedValue() != m_pComplexLanguageLB->GetSelectEntryPos())
        )
     {
-        //sequence checking has to be switched on depending on the selected CTL language
+        
         LanguageType eCTLLang = m_pComplexLanguageLB->GetSelectLanguage();
         sal_Bool bOn = MsLangId::needsSequenceChecking( eCTLLang);
         pLangConfig->aLanguageOptions.SetCTLSequenceCheckingRestricted(bOn);
@@ -1206,8 +1206,8 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     }
     try
     {
-        // handle settings for UI Language
-        // a change of setting needs to bring up a warning message
+        
+        
         OUString aLangString;
         sal_Int32 d = (sal_Int32)(sal_IntPtr)m_pUserInterfaceLB->GetEntryData(m_pUserInterfaceLB->GetSelectEntryPos());
         if( d > 0 && seqInstalledLanguages.getLength() > d-1)
@@ -1226,15 +1226,15 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
             theConfigProvider->createInstanceWithArguments(sAccessUpdSrvc, theArgs ), UNO_QUERY_THROW );
         if ( !m_sUserLocaleValue.equals(aLangString))
         {
-            // OSL_FAIL("UserInterface language was changed, restart.");
-            // write new value
+            
+            
             xProp->setPropertyValue(sUserLocaleKey, makeAny(aLangString));
             Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
-            // display info
+            
             InfoBox aBox(this, CUI_RES(RID_SVX_MSGBOX_LANGUAGE_RESTART));
             aBox.Execute();
 
-            // tell quickstarter to stop being a veto listener
+            
 
             Reference< XComponentContext > xContext(
                 comphelper::getProcessComponentContext());
@@ -1243,8 +1243,8 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     }
     catch (const Exception& e)
     {
-        // we'll just leave the box in it's default setting and won't
-        // even give it event handler...
+        
+        
         SAL_WARN("cui.options", "ignoring Exception \"" << e.Message << "\"");
     }
 
@@ -1253,22 +1253,22 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         LanguageTag::convertToLanguageTypeWithFallback( sLang ) : LANGUAGE_SYSTEM);
     LanguageType eNewLocale = m_pLocaleSettingLB->GetSelectLanguage();
 
-    // If the "Default ..." entry was selected that means SYSTEM, the actual
-    // eNewLocale value is temporary for the dialog only, do not resolve to
-    // what system currently is.
+    
+    
+    
     if (eNewLocale == LANGUAGE_USER_SYSTEM_CONFIG)
         eNewLocale = LANGUAGE_SYSTEM;
 
     if ( eOldLocale != eNewLocale )
     {
-        // an empty string denotes SYSTEM locale
+        
         OUString sNewLang;
         if ( eNewLocale != LANGUAGE_SYSTEM )
             sNewLang = LanguageTag::convertToBcp47( eNewLocale);
 
-        // locale nowadays get to AppSettings via notification
-        // this will happen after releasing the lock on the ConfigurationBroadcaster at
-        // the end of this method
+        
+        
+        
         pLangConfig->aSysLocaleOptions.SetLocaleConfigString( sNewLang );
         rSet.Put( SfxBoolItem( SID_OPT_LOCALE_CHANGED, true ) );
 
@@ -1284,7 +1284,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     if(m_pIgnoreLanguageChangeCB->GetSavedValue() != TriState(m_pIgnoreLanguageChangeCB->IsChecked()))
         pLangConfig->aSysLocaleOptions.SetIgnoreLanguageChange(m_pIgnoreLanguageChangeCB->IsChecked());
 
-    // Configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default.
+    
     OUString sOldCurr = pLangConfig->aSysLocaleOptions.GetCurrencyConfigString();
     sal_uInt16 nCurrPos = m_pCurrencyLB->GetSelectEntryPos();
     const NfCurrencyEntry* pCurr = (const NfCurrencyEntry*)
@@ -1296,8 +1296,8 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     if ( sOldCurr != sNewCurr )
         pLangConfig->aSysLocaleOptions.SetCurrencyConfigString( sNewCurr );
 
-    // Configured date acceptance patterns, for example Y-M-D;M-D or empty for
-    // locale default.
+    
+    
     if (m_pDatePatternsED->GetText() != m_pDatePatternsED->GetSavedValue())
         pLangConfig->aSysLocaleOptions.SetDatePatternsConfigString( m_pDatePatternsED->GetText());
 
@@ -1374,7 +1374,7 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
         sal_Bool bChecked = m_pAsianSupportCB->IsChecked();
         pLangConfig->aLanguageOptions.SetAll(bChecked);
 
-        //iterate over all bindings to invalidate vertical text direction
+        
         const sal_uInt16 STATE_COUNT = 2;
 
         SfxBoolItem* pBoolItems[STATE_COUNT];
@@ -1405,16 +1405,16 @@ sal_Bool OfaLanguagesTabPage::FillItemSet( SfxItemSet& rSet )
     if ( pLangConfig->aSysLocaleOptions.IsModified() )
         pLangConfig->aSysLocaleOptions.Commit();
 
-    // first release the lock on the ConfigurationBroadcaster for Locale changes
-    // it seems that our code relies on the fact that before other changes like e.g. currency
-    // are broadcasted locale changes have been done
+    
+    
+    
     pLangConfig->aSysLocaleOptions.BlockBroadcasts( false );
     pLangConfig->aLanguageOptions.BlockBroadcasts( false );
     pLangConfig->aLinguConfig.BlockBroadcasts( false );
 
     return sal_False;
 }
-//-----------------------------------------------------------------------------
+
 void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 {
     OUString sLang = pLangConfig->aSysLocaleOptions.GetLocaleConfigString();
@@ -1433,12 +1433,12 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     m_pIgnoreLanguageChangeCB->Check( pLangConfig->aSysLocaleOptions.IsIgnoreLanguageChange());
     m_pIgnoreLanguageChangeCB->SaveValue();
 
-    // let LocaleSettingHdl enable/disable checkboxes for CJK/CTL support
-    // #i15812# must be done *before* the configured currency is set
-    // and update the decimal separator used for the given locale
+    
+    
+    
     LocaleSettingHdl(m_pLocaleSettingLB);
 
-    // configured currency, for example, USD-en-US or EUR-de-DE, or empty for locale default
+    
     OUString aAbbrev;
     LanguageType eLang;
     const NfCurrencyEntry* pCurr = NULL;
@@ -1448,14 +1448,14 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
         SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( aAbbrev, eLang, sLang );
         pCurr = SvNumberFormatter::GetCurrencyEntry( aAbbrev, eLang );
     }
-    // if pCurr==NULL the SYSTEM entry is selected
+    
     sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( (void*) pCurr );
     m_pCurrencyLB->SelectEntryPos( nPos );
     bReadonly = pLangConfig->aSysLocaleOptions.IsReadOnly(SvtSysLocaleOptions::E_CURRENCY);
     m_pCurrencyLB->Enable(!bReadonly);
     m_pCurrencyFT->Enable(!bReadonly);
 
-    // date acceptance patterns
+    
     OUString aDatePatternsString = pLangConfig->aSysLocaleOptions.GetDatePatternsConfigString();
     if (aDatePatternsString.isEmpty())
     {
@@ -1468,12 +1468,12 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     m_pDatePatternsFT->Enable(!bReadonly);
     m_pDatePatternsED->SaveValue();
 
-    //western/CJK/CLK language
+    
     LanguageType eCurLang = LANGUAGE_NONE;
     LanguageType eCurLangCJK = LANGUAGE_NONE;
     LanguageType eCurLangCTL = LANGUAGE_NONE;
     SfxObjectShell* pCurrentDocShell = SfxObjectShell::Current();
-    //collect the configuration values first
+    
     m_pCurrentDocCB->Enable(false);
     //
     Any aWestLang;
@@ -1500,7 +1500,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     catch (const Exception&)
     {
     }
-    //overwrite them by the values provided by the DocShell
+    
     if(pCurrentDocShell)
     {
         m_pCurrentDocCB->Enable(true);
@@ -1554,7 +1554,7 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
 
 
 
-    // #i15812# controls for CJK/CTL already enabled/disabled from LocaleSettingHdl
+    
 #if 0
     bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CJK" ) && m_pAsianSupportCB->IsChecked() );
     m_pAsianLanguageLB->Enable( bEnable );
@@ -1562,8 +1562,8 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     bEnable = ( !pLangConfig->aLinguConfig.IsReadOnly( "DefaultLocale_CTL" ) && m_pCTLSupportCB->IsChecked() );
     m_pComplexLanguageLB->Enable( bEnable );
 #endif
-    // check the box "For the current document only"
-    // set the focus to the Western Language box
+    
+    
     const SfxPoolItem* pLang = 0;
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_SET_DOCUMENT_LANGUAGE, false, &pLang ) && ((const SfxBoolItem*)pLang)->GetValue() )
     {
@@ -1608,8 +1608,8 @@ namespace
             _rCB->Check(true);
         else
             _rCB->Check( _bOldValue );
-// #i15082# do not call SaveValue() in running dialog...
-//      _rCB.SaveValue();
+
+
         _rCB->Enable( !_bNewValue );
     }
 }
@@ -1618,16 +1618,16 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
 {
     LanguageType eLang = pBox->GetSelectLanguage();
     sal_uInt16 nType = SvtLanguageOptions::GetScriptTypeOfLanguage(eLang);
-    // first check if CTL must be enabled
-    // #103299# - if CTL font setting is not readonly
+    
+    
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_CTLFONT))
     {
         bool bIsCTLFixed = (nType & SCRIPTTYPE_COMPLEX) != 0;
         lcl_checkLanguageCheckBox(m_pCTLSupportCB, bIsCTLFixed, m_bOldCtl);
         SupportHdl( m_pCTLSupportCB );
     }
-    // second check if CJK must be enabled
-    // #103299# - if CJK support is not readonly
+    
+    
     if(!pLangConfig->aLanguageOptions.IsReadOnly(SvtLanguageOptions::E_ALLCJK))
     {
         bool bIsCJKFixed = (nType & SCRIPTTYPE_ASIAN) != 0;
@@ -1640,23 +1640,23 @@ IMPL_LINK( OfaLanguagesTabPage, LocaleSettingHdl, SvxLanguageBox*, pBox )
     sal_uInt16 nPos = m_pCurrencyLB->GetEntryPos( (void*) NULL );
     if (pCurr)
     {
-        // Update the "Default ..." currency.
+        
         m_pCurrencyLB->RemoveEntry( nPos );
         OUString aDefaultCurr = m_sSystemDefaultString + " - " + pCurr->GetBankSymbol();
         nPos = m_pCurrencyLB->InsertEntry( aDefaultCurr );
     }
     m_pCurrencyLB->SelectEntryPos( nPos );
 
-    // obtain corresponding locale data
+    
     LanguageTag aLanguageTag( eLang);
     LocaleDataWrapper aLocaleWrapper( aLanguageTag );
 
-    // update the decimal separator key of the related CheckBox
+    
     OUString sTempLabel(m_pDecimalSeparatorCB->GetText());
     sTempLabel = sTempLabel.replaceFirst("%1", aLocaleWrapper.getNumDecimalSep() );
     m_pDecimalSeparatorCB->SetText(sTempLabel);
 
-    // update the date acceptance patterns
+    
     OUString aDatePatternsString = lcl_getDatePatternsConfigString( aLocaleWrapper);
     m_pDatePatternsED->SetText( aDatePatternsString);
 
@@ -1674,10 +1674,10 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
             OUString aPat( aPatterns.getToken( 0, ';', nIndex));
             if (aPat.isEmpty() && nIndex < 0)
             {
-                // Indicating failure when about to append a pattern is too
-                // confusing. Empty patterns are ignored anyway when sequencing
-                // to SvtSysLocale.
-                continue;   // for
+                
+                
+                
+                continue;   
             }
             else if (aPat.getLength() < 2)
                 bValid = false;
@@ -1689,7 +1689,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
                 for (sal_Int32 i = 0; i < aPat.getLength() && bValid; /*nop*/)
                 {
                     sal_uInt32 c = aPat.iterateCodePoints( &i);
-                    // Only one Y,M,D per pattern, separated by any character(s).
+                    
                     switch (c)
                     {
                         case 'Y':
@@ -1714,7 +1714,7 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
                             bSep = true;
                     }
                 }
-                // At least one of Y,M,D
+                
                 bValid &= (bY || bM || bD);
             }
         }
@@ -1726,12 +1726,12 @@ IMPL_LINK( OfaLanguagesTabPage, DatePatternsHdl, Edit*, pEd )
     }
     else
     {
-        // color to use as background for an invalid pattern
+        
         #define INVALID_PATTERN_BACKGROUND_COLOR ::Color(0xff6563)
 #if 0
-        // color to use as foreground for an invalid pattern
+        
         #define INVALID_PATTERN_FOREGROUND_COLOR Color(COL_WHITE)
-        //! Gives white on white!?!
+        
         pEd->SetControlBackground( INVALID_PATTERN_BACKGROUND_COLOR);
         pEd->SetControlForeground( INVALID_PATTERN_FOREGROUND_COLOR);
 #else

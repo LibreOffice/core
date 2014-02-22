@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbahelper/vbaapplicationbase.hxx"
@@ -51,17 +51,17 @@ using namespace ::ooo::vba;
 
 #define OFFICEVERSION "11.0"
 
-// ====VbaTimerInfo==================================
+
 typedef ::std::pair< OUString, ::std::pair< double, double > > VbaTimerInfo;
 
-// ====VbaTimer==================================
+
 class VbaTimer
 {
     Timer m_aTimer;
     VbaTimerInfo m_aTimerInfo;
     ::rtl::Reference< VbaApplicationBase > m_xBase;
 
-    // the following declarations are here to prevent the usage of them
+    
     VbaTimer( const VbaTimer& );
     VbaTimer& operator=( const VbaTimer& );
 
@@ -80,7 +80,7 @@ public:
         Time aTimeNow( Time::SYSTEM );
          Date aRefDate( 1,1,1900 );
         long nDiffDays = (long)(aDateNow - aRefDate);
-        nDiffDays += 2; // Change VisualBasic: 1.Jan.1900 == 2
+        nDiffDays += 2; 
 
         long nDiffSeconds = aTimeNow.GetHour() * 3600 + aTimeNow.GetMin() * 60 + aTimeNow.GetSec();
         return (double)nDiffDays + ((double)nDiffSeconds)/(double)(24*3600);
@@ -125,7 +125,7 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl)
         {}
     }
 
-    // mast be the last call in the method since it deletes the timer
+    
     try
     {
         m_xBase->OnTime( uno::makeAny( m_aTimerInfo.second.first ), m_aTimerInfo.first, uno::makeAny( m_aTimerInfo.second.second ), uno::makeAny( sal_False ) );
@@ -135,7 +135,7 @@ IMPL_LINK_NOARG(VbaTimer, MacroCallHdl)
     return 0;
 }
 
-// ====VbaTimerInfoHash==================================
+
 struct VbaTimerInfoHash
 {
     size_t operator()( const VbaTimerInfo& rTimerInfo ) const
@@ -146,10 +146,10 @@ struct VbaTimerInfoHash
     }
 };
 
-// ====VbaTimerHashMap==================================
+
 typedef ::boost::unordered_map< VbaTimerInfo, VbaTimer*, VbaTimerInfoHash, ::std::equal_to< VbaTimerInfo > > VbaTimerHashMap;
 
-// ====VbaApplicationBase_Impl==================================
+
 struct VbaApplicationBase_Impl
 {
     VbaTimerHashMap m_aTimerHash;
@@ -159,7 +159,7 @@ struct VbaApplicationBase_Impl
 
     virtual ~VbaApplicationBase_Impl()
     {
-        // remove the remaining timers
+        
         for ( VbaTimerHashMap::iterator aIter = m_aTimerHash.begin();
               aIter != m_aTimerHash.end();
               ++aIter )
@@ -170,7 +170,7 @@ struct VbaApplicationBase_Impl
     }
 };
 
-// ====VbaApplicationBase==================================
+
 VbaApplicationBase::VbaApplicationBase( const uno::Reference< uno::XComponentContext >& xContext )
                     : ApplicationBase_BASE( uno::Reference< XHelperInterface >(), xContext )
                     , m_pImpl( new VbaApplicationBase_Impl )
@@ -193,7 +193,7 @@ void SAL_CALL
 VbaApplicationBase::setScreenUpdating(sal_Bool bUpdate) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    // #163808# use helper from module "basic" to lock all documents of this application
+    
     ::basic::vba::lockControllersOfAllDocuments( xModel, !bUpdate );
 }
 
@@ -253,25 +253,25 @@ void SAL_CALL VbaApplicationBase::setInteractive( ::sal_Bool bInteractive )
     throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
-    // #163808# use helper from module "basic" to enable/disable all container windows of all documents of this application
+    
     ::basic::vba::enableContainerWindowsOfAllDocuments( xModel, bInteractive );
 }
 
 sal_Bool SAL_CALL VbaApplicationBase::getVisible() throw (uno::RuntimeException)
 {
-    return m_pImpl->mbVisible;    // dummy implementation
+    return m_pImpl->mbVisible;    
 }
 
 void SAL_CALL VbaApplicationBase::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
 {
-    m_pImpl->mbVisible = bVisible;  // dummy implementation
+    m_pImpl->mbVisible = bVisible;  
 }
 
 
 void SAL_CALL
 VbaApplicationBase::OnKey( const OUString& Key, const uno::Any& Procedure ) throw (uno::RuntimeException)
 {
-    // parse the Key & modifiers
+    
     awt::KeyEvent aKeyEvent = parseKeyEvent( Key );
     OUString MacroName;
     Procedure >>= MacroName;
@@ -326,7 +326,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
     MacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( xModel ), aMacroName );
     if( aMacroInfo.mbFound )
     {
-        // handle the arguments
+        
         const uno::Any* aArgsPtrArray[] = { &varg1, &varg2, &varg3, &varg4, &varg5, &varg6, &varg7, &varg8, &varg9, &varg10, &varg11, &varg12, &varg13, &varg14, &varg15, &varg16, &varg17, &varg18, &varg19, &varg20, &varg21, &varg22, &varg23, &varg24, &varg25, &varg26, &varg27, &varg28, &varg29, &varg30 };
 
         int nArg = sizeof( aArgsPtrArray ) / sizeof( aArgsPtrArray[0] );
@@ -340,7 +340,7 @@ uno::Any SAL_CALL VbaApplicationBase::Run( const OUString& MacroName, const uno:
         for ( ; pArg != pArgEnd; ++pArg, ++nArgProcessed )
             aArgs[ nArgProcessed ] =  **pArg;
 
-        // resize array to position of last param with value
+        
         aArgs.realloc( nArgProcessed + 1 );
 
         uno::Any aRet;
@@ -390,16 +390,16 @@ void SAL_CALL VbaApplicationBase::OnTime( const uno::Any& aEarliestTime, const O
 
 float SAL_CALL VbaApplicationBase::CentimetersToPoints( float _Centimeters ) throw (uno::RuntimeException)
 {
-    // i cm = 28.35 points
+    
     static const float rate = 28.35f;
     return ( _Centimeters * rate );
 }
 
 uno::Any SAL_CALL VbaApplicationBase::getVBE() throw (uno::RuntimeException)
 {
-    try // return empty object on error
+    try 
     {
-        // "VBE" object does not have a parent, but pass document model to be able to determine application type
+        
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[ 0 ] <<= getCurrentDocument();
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
@@ -440,7 +440,7 @@ void SAL_CALL VbaApplicationBase::Undo()
 
 void VbaApplicationBase::Quit() throw (uno::RuntimeException)
 {
-    // need to stop basic
+    
     SbMethod* pMeth = StarBASIC::GetActiveMethod();
     if ( pMeth )
     {

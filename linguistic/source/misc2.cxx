@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/urlobj.hxx>
@@ -88,16 +88,16 @@ static uno::Sequence< OUString > GetMultiPaths_Impl(
     }
     if (bSuccess)
     {
-        // build resulting sequence by adding the paths in the following order:
-        // 1. writable path
-        // 2. all user paths
-        // 3. all internal paths
+        
+        
+        
+        
         sal_Int32 nMaxEntries = aInternalPaths.getLength() + aUserPaths.getLength();
         if (!aWritablePath.isEmpty())
             ++nMaxEntries;
         aRes.realloc( nMaxEntries );
         OUString *pRes = aRes.getArray();
-        sal_Int32 nCount = 0;   // number of actually added entries
+        sal_Int32 nCount = 0;   
         if ((nPathFlags & PATH_FLAG_WRITABLE) && !aWritablePath.isEmpty())
             pRes[ nCount++ ] = aWritablePath;
         for (int i = 0;  i < 2;  ++i)
@@ -135,10 +135,10 @@ uno::Sequence< OUString > GetDictionaryPaths( sal_Int16 nPathFlags )
 
 OUString  GetWritableDictionaryURL( const OUString &rDicName )
 {
-    // new user writable dictionaries should be created in the 'writable' path
+    
     OUString aDirName( GetDictionaryWriteablePath() );
 
-    // build URL to use for a new (persistent) dictionary
+    
     INetURLObject aURLObj;
     aURLObj.SetSmartProtocol( INET_PROT_FILE );
     aURLObj.SetSmartURL( aDirName );
@@ -146,12 +146,12 @@ OUString  GetWritableDictionaryURL( const OUString &rDicName )
     aURLObj.Append( rDicName, INetURLObject::ENCODE_ALL );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
 
-    // NO_DECODE preserves the escape sequences that might be included in aDirName
-    // depending on the characters used in the path string. (Needed when comparing
-    // the dictionary URL with GetDictionaryWriteablePath in DicList::createDictionary.)
+    
+    
+    
     return aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 }
 
-}   // namespace linguistic
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

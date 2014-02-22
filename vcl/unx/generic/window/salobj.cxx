@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,8 +39,8 @@
 #include <salwtype.hxx>
 
 
-// =======================================================================
-// SalInstance member to create and destroy a SalObject
+
+
 
 SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, sal_Bool bShow )
 {
@@ -67,20 +67,20 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     Display* pDisp              = pSalDisp->GetDisplay();
     XLIB_Window aObjectParent   = (XLIB_Window)pEnv->aWindow;
 
-    // find out on which screen that window is
+    
     XWindowAttributes aParentAttr;
     XGetWindowAttributes( pDisp, aObjectParent, &aParentAttr );
     SalX11Screen nXScreen( XScreenNumberOfScreen( aParentAttr.screen ) );
     Visual* pVisual = (pWindowData && pWindowData->pVisual) ?
                       (Visual*)pWindowData->pVisual :
                       pSalDisp->GetVisual( nXScreen ).GetVisual();
-    // get visual info
+    
     VisualID aVisID = XVisualIDFromVisual( pVisual );
     XVisualInfo aTemplate;
     aTemplate.visualid = aVisID;
     int nVisuals = 0;
     XVisualInfo* pInfos = XGetVisualInfo( pDisp, VisualIDMask, &aTemplate, &nVisuals );
-    // only one VisualInfo structure can match the visual id
+    
     DBG_ASSERT( nVisuals == 1, "match count for visual id is not 1" );
     unsigned int nDepth     = pInfos->depth;
     XFree( pInfos );
@@ -123,7 +123,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
         #endif
         GetGenericData()->ErrorTrapPush();
 
-        // create colormap for visual - there might not be one
+        
         pObject->maColormap = aAttribs.colormap = XCreateColormap(
             pDisp,
             pSalDisp->GetRootWindow( nXScreen ),
@@ -180,9 +180,9 @@ void X11SalInstance::DestroyObject( SalObject* pObject )
 }
 
 
-// ======================================================================
-// SalClipRegion is a member of SalObject
-// definition of SalClipRegion my be found in unx/inc/salobj.h
+
+
+
 
 
 SalClipRegion::SalClipRegion()
@@ -230,8 +230,8 @@ SalClipRegion::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 }
 
 
-// =======================================================================
-// SalObject Implementation
+
+
 
 
 X11SalObject::X11SalObject()
@@ -299,9 +299,9 @@ X11SalObject::ResetClipRegion()
     XShapeCombineRectangles ( (Display*)maSystemChildData.pDisplay,
                               aShapeWindow,
                               dest_kind,
-                              0, 0,             // x_off, y_off
-                              &win_size,        // list of rectangles
-                              1,                // number of rectangles
+                              0, 0,             
+                              &win_size,        
+                              1,                
                               op, ordering );
 }
 
@@ -351,7 +351,7 @@ X11SalObject::EndSetClipRegion()
     XShapeCombineRectangles ( (Display*)maSystemChildData.pDisplay,
                               aShapeWindow,
                               dest_kind,
-                              0, 0, // x_off, y_off
+                              0, 0, 
                               pRectangles,
                               nRectangles,
                               op, ordering );
@@ -364,7 +364,7 @@ X11SalObject::GetClipRegionType()
     return maClipRegion.GetClipRegionType();
 }
 
-// -----------------------------------------------------------------------
+
 
 void
 X11SalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
@@ -410,7 +410,7 @@ void X11SalObject::GrabFocus()
                          CurrentTime );
 }
 
-// -----------------------------------------------------------------------
+
 
 const SystemEnvData* X11SalObject::GetSystemData() const
 {

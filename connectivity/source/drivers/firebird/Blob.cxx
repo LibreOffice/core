@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "Blob.hxx"
@@ -114,7 +114,7 @@ void SAL_CALL Blob::disposing(void)
     }
     catch (SQLException e)
     {
-        // we cannot throw any exceptions here...
+        
         SAL_WARN("connectivity.firebird", "isc_close_blob failed\n" <<
                  e.Message);
         assert(false);
@@ -142,20 +142,20 @@ uno::Sequence< sal_Int8 > SAL_CALL  Blob::getBytes(sal_Int64 nPosition,
 
     if (nPosition > m_nBlobLength)
         throw lang::IllegalArgumentException("nPosition out of range", *this, 0);
-    // We only have to read as many bytes as are available, i.e. nPosition+nBytes
-    // can legally be greater than the total length, hence we don't bother to check.
+    
+    
 
     if (nPosition > m_nBlobPosition)
     {
-        // Resets to the beginning (we can't seek these blobs)
+        
         closeBlob();
         ensureBlobIsOpened();
     }
 
     skipBytes(nPosition - m_nBlobPosition);
 
-    // Don't bother preallocating: readBytes does the appropriate calculations
-    // and reallocates for us.
+    
+    
     uno::Sequence< sal_Int8 > aBytes;
     readBytes(aBytes, nBytes);
     return aBytes;
@@ -183,7 +183,7 @@ sal_Int64 SAL_CALL  Blob::positionOfBlob(const uno::Reference< XBlob >& /*rPatte
     return 0;
 }
 
-// ---- XInputStream ----------------------------------------------------------
+
 
 sal_Int32 SAL_CALL Blob::readBytes(uno::Sequence< sal_Int8 >& rDataOut,
                                    sal_Int32 nBytes)
@@ -193,7 +193,7 @@ sal_Int32 SAL_CALL Blob::readBytes(uno::Sequence< sal_Int8 >& rDataOut,
     checkDisposed(Blob_BASE::rBHelper.bDisposed);
     ensureBlobIsOpened();
 
-    // Ensure we have enough space for the amount of data we can actually read.
+    
     const sal_Int64 nBytesAvailable = m_nBlobLength - m_nBlobPosition;
     const sal_Int32 nBytesToRead = nBytes < nBytesAvailable ? nBytes : nBytesAvailable;
 
@@ -225,17 +225,17 @@ sal_Int32 SAL_CALL Blob::readSomeBytes(uno::Sequence< sal_Int8 >& rDataOut,
                                 sal_Int32 nMaximumBytes)
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    // We don't have any way of verifying how many bytes are immediately available,
-    // hence we just pass through direct to readBytes
-    // (Spec: "reads the available number of bytes, at maximum nMaxBytesToRead.")
+    
+    
+    
     return readBytes(rDataOut, nMaximumBytes);
 }
 
 void SAL_CALL Blob::skipBytes(sal_Int32 nBytesToSkip)
     throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
-    // There is no way of directly skipping, hence we have to pretend to skip
-    // by reading & discarding the data.
+    
+    
     uno::Sequence< sal_Int8 > aBytes;
     readBytes(aBytes, nBytesToSkip);
 }

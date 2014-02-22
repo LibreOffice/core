@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svtools/table/tablecontrol.hxx"
@@ -35,17 +35,17 @@ using ::com::sun::star::accessibility::XAccessible;
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::lang;
 using namespace utl;
-//......................................................................................................................
+
 namespace svt { namespace table
 {
-//......................................................................................................................
+
 
     namespace AccessibleEventId = ::com::sun::star::accessibility::AccessibleEventId;
 
-    //==================================================================================================================
-    //= TableControl
-    //==================================================================================================================
-    // -----------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     TableControl::TableControl( Window* _pParent, WinBits _nStyle )
         :Control( _pParent, _nStyle )
         ,m_pImpl( new TableControl_Impl( *this ) )
@@ -53,7 +53,7 @@ namespace svt { namespace table
         TableDataWindow& rDataWindow = m_pImpl->getDataWindow();
         rDataWindow.SetSelectHdl( LINK( this, TableControl, ImplSelectHdl ) );
 
-        // by default, use the background as determined by the style settings
+        
         const Color aWindowColor( GetSettings().GetStyleSettings().GetFieldColor() );
         SetBackground( Wallpaper( aWindowColor ) );
         SetFillColor( aWindowColor );
@@ -61,7 +61,7 @@ namespace svt { namespace table
         SetCompoundControl( true );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     TableControl::~TableControl()
     {
         ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
@@ -71,21 +71,21 @@ namespace svt { namespace table
         m_pImpl.reset();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     void TableControl::GetFocus()
     {
         if ( !m_pImpl->getInputHandler()->GetFocus( *m_pImpl ) )
             Control::GetFocus();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     void TableControl::LoseFocus()
     {
         if ( !m_pImpl->getInputHandler()->LoseFocus( *m_pImpl ) )
             Control::LoseFocus();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     void TableControl::KeyInput( const KeyEvent& rKEvt )
     {
         if ( !m_pImpl->getInputHandler()->KeyInput( *m_pImpl, rKEvt ) )
@@ -98,28 +98,28 @@ namespace svt { namespace table
                                           makeAny( AccessibleStateType::FOCUSED ),
                                           Any()
                                         );
-                    // Huh? What the heck? Why do we unconditionally notify a STATE_CHANGE/FOCUSED after each and every
-                    // (handled) key stroke?
+                    
+                    
 
                 m_pImpl->commitTableEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED,
                                            Any(),
                                            Any()
                                          );
-                    // ditto: Why do we notify this unconditionally? We should find the right place to notify the
-                    // ACTIVE_DESCENDANT_CHANGED event.
-                    // Also, we should check if STATE_CHANGED/FOCUSED is really necessary: finally, the children are
-                    // transient, aren't they?
+                    
+                    
+                    
+                    
             }
         }
     }
 
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     void TableControl::StateChanged( StateChangedType i_nStateChange )
     {
         Control::StateChanged( i_nStateChange );
 
-        // forward certain settings to the data window
+        
         switch ( i_nStateChange )
         {
         case STATE_CHANGE_CONTROL_FOCUS:
@@ -149,68 +149,68 @@ namespace svt { namespace table
         }
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     void TableControl::Resize()
     {
         Control::Resize();
         m_pImpl->onResize();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     void TableControl::SetModel( PTableModel _pModel )
     {
         m_pImpl->setModel( _pModel );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     PTableModel TableControl::GetModel() const
     {
         return m_pImpl->getModel();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     sal_Int32 TableControl::GetCurrentRow() const
     {
         return m_pImpl->getCurrentRow();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     sal_Int32 TableControl::GetCurrentColumn() const
     {
         return m_pImpl->getCurrentColumn();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     bool TableControl::GoTo( ColPos _nColumn, RowPos _nRow )
     {
         return m_pImpl->goTo( _nColumn, _nRow );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     sal_Bool TableControl::GoToCell(sal_Int32 _nColPos, sal_Int32 _nRowPos)
     {
         return m_pImpl->goTo( _nColPos, _nRowPos );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Int32 TableControl::GetSelectedRowCount() const
     {
         return sal_Int32( m_pImpl->getSelectedRowCount() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Int32 TableControl::GetSelectedRowIndex( sal_Int32 const i_selectionIndex ) const
     {
         return sal_Int32( m_pImpl->getSelectedRowIndex( i_selectionIndex ) );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool TableControl::IsRowSelected( sal_Int32 const i_rowIndex ) const
     {
         return m_pImpl->isRowSelected( i_rowIndex );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     void TableControl::SelectRow( RowPos const i_rowIndex, bool const i_select )
     {
         ENSURE_OR_RETURN_VOID( ( i_rowIndex >= 0 ) && ( i_rowIndex < m_pImpl->getModel()->getRowCount() ),
@@ -219,7 +219,7 @@ namespace svt { namespace table
         if ( i_select )
         {
             if ( !m_pImpl->markRowAsSelected( i_rowIndex ) )
-                // nothing to do
+                
                 return;
         }
         else
@@ -231,47 +231,47 @@ namespace svt { namespace table
         Select();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     void TableControl::SelectAllRows( bool const i_select )
     {
         if ( i_select )
         {
             if ( !m_pImpl->markAllRowsAsSelected() )
-                // nothing to do
+                
                 return;
         }
         else
         {
             if ( !m_pImpl->markAllRowsAsDeselected() )
-                // nothing to do
+                
                 return;
         }
 
 
         Invalidate();
-            // TODO: can't we do better than this, and invalidate only the rows which changed?
+            
         Select();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     ITableControl& TableControl::getTableControlInterface()
     {
         return *m_pImpl;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     SelectionEngine* TableControl::getSelEngine()
     {
         return m_pImpl->getSelEngine();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     Window& TableControl::getDataWindow()
     {
         return m_pImpl->getDataWindow();
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     Reference< XAccessible > TableControl::CreateAccessible()
     {
         Window* pParent = GetAccessibleParentWindow();
@@ -280,7 +280,7 @@ namespace svt { namespace table
         return m_pImpl->getAccessible( *pParent );
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     Reference<XAccessible> TableControl::CreateAccessibleControl( sal_Int32 _nIndex )
     {
         (void)_nIndex;
@@ -288,11 +288,11 @@ namespace svt { namespace table
         return NULL;
     }
 
-    // -----------------------------------------------------------------------------------------------------------------
+    
     OUString TableControl::GetAccessibleObjectName( AccessibleTableControlObjType eObjType, sal_Int32 _nRow, sal_Int32 _nCol) const
     {
         OUString aRetText;
-        //Window* pWin;
+        
         switch( eObjType )
         {
             case TCTYPE_GRIDCONTROL:
@@ -308,8 +308,8 @@ namespace svt { namespace table
                 aRetText = "ColumnHeaderBar";
                 break;
             case TCTYPE_TABLECELL:
-                //the name of the cell constists of column name and row name if defined
-                //if the name is equal to cell content, it'll be read twice
+                
+                
                 if(GetModel()->hasColumnHeaders())
                 {
                     aRetText = GetColumnName(_nCol) + " , ";
@@ -318,7 +318,7 @@ namespace svt { namespace table
                 {
                     aRetText += GetRowName(_nRow) + " , ";
                 }
-                //aRetText = GetAccessibleCellText(_nRow, _nCol);
+                
                 break;
             case TCTYPE_ROWHEADERCELL:
                 aRetText = GetRowName(_nRow);
@@ -332,7 +332,7 @@ namespace svt { namespace table
         return aRetText;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString TableControl::GetAccessibleObjectDescription( AccessibleTableControlObjType eObjType, sal_Int32 ) const
     {
         OUString aRetText;
@@ -351,8 +351,8 @@ namespace svt { namespace table
                     aRetText = "COLUMNHEADERBAR description";
                 break;
             case TCTYPE_TABLECELL:
-                // the description of the cell consists of column name and row name if defined
-                // if the name is equal to cell content, it'll be read twice
+                
+                
                 if ( GetModel()->hasColumnHeaders() )
                 {
                     aRetText = GetColumnName( GetCurrentColumn() ) + " , ";
@@ -372,14 +372,14 @@ namespace svt { namespace table
         return aRetText;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString TableControl::GetRowDescription( sal_Int32 _nRow) const
     {
         (void)_nRow;
         return OUString( "row description" );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString TableControl::GetRowName( sal_Int32 _nIndex) const
     {
         OUString sRowName;
@@ -387,20 +387,20 @@ namespace svt { namespace table
         return sRowName;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString TableControl::GetColumnDescription( sal_uInt16 _nColumn) const
     {
         (void)_nColumn;
         return OUString( "col description" );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString TableControl::GetColumnName( sal_Int32 _nIndex) const
     {
         return GetModel()->getColumnModel(_nIndex)->getName();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     ::com::sun::star::uno::Any TableControl::GetCellContent( sal_Int32 _nRowPos, sal_Int32 _nColPos ) const
     {
         Any aCellContent;
@@ -408,13 +408,13 @@ namespace svt { namespace table
         return aCellContent;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString TableControl::GetAccessibleCellText( sal_Int32 _nRowPos, sal_Int32 _nColPos) const
     {
         return m_pImpl->getCellContentAsString( _nRowPos, _nColPos );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableControl::FillAccessibleStateSet(
             ::utl::AccessibleStateSetHelper& rStateSet,
             AccessibleTableControlObjType eObjType ) const
@@ -469,7 +469,7 @@ namespace svt { namespace table
                     rStateSet.AddState( AccessibleStateType::VISIBLE );
                     rStateSet.AddState( AccessibleStateType::SHOWING );
                     if ( IsRowSelected( GetCurrentRow() ) )
-                        // Hmm? Wouldn't we expect the affected row to be a parameter to this function?
+                        
                         rStateSet.AddState( AccessibleStateType::SELECTED );
                 }
                 break;
@@ -485,66 +485,66 @@ namespace svt { namespace table
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableControl::commitCellEventIfAccessibleAlive( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
         if ( m_pImpl->isAccessibleAlive() )
             m_pImpl->commitCellEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableControl::commitTableEventIfAccessibleAlive( sal_Int16 const i_eventID, const Any& i_newValue, const Any& i_oldValue )
     {
         if ( m_pImpl->isAccessibleAlive() )
             m_pImpl->commitTableEvent( i_eventID, i_newValue, i_oldValue );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Rectangle TableControl::GetWindowExtentsRelative( Window *pRelativeWindow ) const
     {
         return Control::GetWindowExtentsRelative( pRelativeWindow );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableControl::GrabFocus()
     {
         Control::GrabFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XAccessible > TableControl::GetAccessible( sal_Bool bCreate )
     {
         return Control::GetAccessible( bCreate );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Window* TableControl::GetAccessibleParentWindow() const
     {
         return Control::GetAccessibleParentWindow();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Window* TableControl::GetWindowInstance()
     {
         return this;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool TableControl::HasRowHeader()
     {
         return GetModel()->hasRowHeaders();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool TableControl::HasColHeader()
     {
         return GetModel()->hasColumnHeaders();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Int32 TableControl::GetAccessibleControlCount() const
     {
-        // TC_TABLE is always defined, no matter whether empty or not
+        
         sal_Int32 count = 1;
         if ( GetModel()->hasRowHeaders() )
             ++count;
@@ -553,7 +553,7 @@ namespace svt { namespace table
         return count;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool TableControl::ConvertPointToControlIndex( sal_Int32& _rnIndex, const Point& _rPoint )
     {
         sal_Int32 nRow = m_pImpl->getRowAtPoint( _rPoint );
@@ -562,25 +562,25 @@ namespace svt { namespace table
         return nRow >= 0 ? sal_True : sal_False;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     long TableControl::GetRowCount() const
     {
         return GetModel()->getRowCount();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     long TableControl::GetColumnCount() const
     {
         return GetModel()->getColumnCount();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool TableControl::HasRowHeader() const
     {
         return GetModel()->hasRowHeaders();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool TableControl::ConvertPointToCellAddress( sal_Int32& _rnRow, sal_Int32& _rnColPos, const Point& _rPoint )
     {
         _rnRow = m_pImpl->getRowAtPoint( _rPoint );
@@ -588,14 +588,14 @@ namespace svt { namespace table
         return _rnRow >= 0 ? sal_True : sal_False;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableControl::FillAccessibleStateSetForCell( ::utl::AccessibleStateSetHelper& _rStateSet, sal_Int32 _nRow, sal_uInt16 _nColumnPos ) const
     {
         if ( IsRowSelected( _nRow ) )
             _rStateSet.AddState( AccessibleStateType::SELECTED );
         if ( HasChildPathFocus() )
             _rStateSet.AddState( AccessibleStateType::FOCUSED );
-        else // only transient when column is not focused
+        else 
             _rStateSet.AddState( AccessibleStateType::TRANSIENT );
 
         _rStateSet.AddState( AccessibleStateType::VISIBLE );
@@ -607,7 +607,7 @@ namespace svt { namespace table
         (void)_nColumnPos;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Rectangle TableControl::GetFieldCharacterBounds(sal_Int32 _nRow,sal_Int32 _nColumnPos,sal_Int32 nIndex)
     {
         (void)_nRow;
@@ -615,7 +615,7 @@ namespace svt { namespace table
         return GetCharacterBounds(nIndex);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Int32 TableControl::GetFieldIndexAtPoint(sal_Int32 _nRow,sal_Int32 _nColumnPos,const Point& _rPoint)
     {
         (void)_nRow;
@@ -623,40 +623,40 @@ namespace svt { namespace table
         return GetIndexForPoint(_rPoint);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Rectangle TableControl::calcHeaderRect(sal_Bool _bIsColumnBar,sal_Bool _bOnScreen)
     {
         (void)_bOnScreen;
         return m_pImpl->calcHeaderRect( _bIsColumnBar ? false : true );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Rectangle TableControl::calcHeaderCellRect( sal_Bool _bIsColumnBar, sal_Int32 nPos )
     {
         return m_pImpl->calcHeaderCellRect( _bIsColumnBar, nPos );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Rectangle TableControl::calcTableRect(sal_Bool _bOnScreen)
     {
         (void)_bOnScreen;
         return m_pImpl->calcTableRect();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Rectangle TableControl::calcCellRect( sal_Int32 _nRowPos, sal_Int32 _nColPos )
     {
         return m_pImpl->calcCellRect( _nRowPos, _nColPos );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(TableControl, ImplSelectHdl)
     {
         Select();
         return 1;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void TableControl::Select()
     {
         ImplCallEventListenersAndHandler( VCLEVENT_TABLEROW_SELECT, m_pImpl->getSelectHandler(), this );
@@ -666,12 +666,12 @@ namespace svt { namespace table
             m_pImpl->commitAccessibleEvent( AccessibleEventId::SELECTION_CHANGED, Any(), Any() );
 
             m_pImpl->commitTableEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), Any() );
-                // TODO: why do we notify this when the *selection* changed? Shouldn't we find a better place for this,
-                // actually, when the active descendant, i.e. the current cell, *really* changed?
+                
+                
         }
     }
 
-}} // namespace svt::table
+}} 
 
-//......................................................................................................................
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

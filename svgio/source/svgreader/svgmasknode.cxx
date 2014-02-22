@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgmasknode.hxx>
@@ -27,7 +27,7 @@
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -60,13 +60,13 @@ namespace svgio
 
         void SvgMaskNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
-            // call parent
+            
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
-            // read style attributes
+            
             maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent);
 
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenStyle:
@@ -171,14 +171,14 @@ namespace svgio
         {
             drawinglayer::primitive2d::Primitive2DSequence aNewTarget;
 
-            // decompose children
+            
             SvgNode::decomposeSvgNode(aNewTarget, bReferenced);
 
             if(aNewTarget.hasElements())
             {
                 if(getTransform())
                 {
-                    // create embedding group element with transformation
+                    
                     const drawinglayer::primitive2d::Primitive2DReference xRef(
                         new drawinglayer::primitive2d::TransformPrimitive2D(
                             *getTransform(),
@@ -187,7 +187,7 @@ namespace svgio
                     aNewTarget = drawinglayer::primitive2d::Primitive2DSequence(&xRef, 1);
                 }
 
-                // append to current target
+                
                 drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(rTarget, aNewTarget);
             }
         }
@@ -198,12 +198,12 @@ namespace svgio
             {
                 drawinglayer::primitive2d::Primitive2DSequence aMaskTarget;
 
-                // get mask definition as primitives
+                
                 decomposeSvgNode(aMaskTarget, true);
 
                 if(aMaskTarget.hasElements())
                 {
-                    // get range of content to be masked
+                    
                     const basegfx::B2DRange aContentRange(
                         drawinglayer::primitive2d::getB2DRangeFromPrimitive2DSequence(
                             rTarget,
@@ -213,12 +213,12 @@ namespace svgio
 
                     if(fContentWidth > 0.0 && fContentHeight > 0.0)
                     {
-                        // create OffscreenBufferRange
+                        
                         basegfx::B2DRange aOffscreenBufferRange;
 
                         if(objectBoundingBox == getMaskUnits())
                         {
-                            // fractions or percentages of the bounding box of the element to which the mask is applied
+                            
                             const double fX(Unit_percent == getX().getUnit() ? getX().getNumber() * 0.01 : getX().getNumber());
                             const double fY(Unit_percent == getY().getUnit() ? getY().getNumber() * 0.01 : getY().getNumber());
                             const double fW(Unit_percent == getWidth().getUnit() ? getWidth().getNumber() * 0.01 : getWidth().getNumber());
@@ -244,7 +244,7 @@ namespace svgio
 
                         if(objectBoundingBox == getMaskContentUnits())
                         {
-                            // mask is object-relative, embed in content transformation
+                            
                             const drawinglayer::primitive2d::Primitive2DReference xTransform(
                                 new drawinglayer::primitive2d::TransformPrimitive2D(
                                     basegfx::tools::createScaleTranslateB2DHomMatrix(
@@ -255,8 +255,8 @@ namespace svgio
                             aMaskTarget = drawinglayer::primitive2d::Primitive2DSequence(&xTransform, 1);
                         }
 
-                        // embed content to a ModifiedColorPrimitive2D since the definitions
-                        // how content is used as alpha is special for Svg
+                        
+                        
                         {
                             const drawinglayer::primitive2d::Primitive2DReference xInverseMask(
                                 new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
@@ -267,15 +267,15 @@ namespace svgio
                             aMaskTarget = drawinglayer::primitive2d::Primitive2DSequence(&xInverseMask, 1);
                         }
 
-                        // prepare new content
+                        
                         drawinglayer::primitive2d::Primitive2DReference xNewContent(
                             new drawinglayer::primitive2d::TransparencePrimitive2D(
                                 rTarget,
                                 aMaskTarget));
 
-                        // output up to now is defined by aContentRange and mask is oriented
-                        // relative to it. It is possible that aOffscreenBufferRange defines
-                        // a smaller area. In that case, embed to a mask primitive
+                        
+                        
+                        
                         if(!aOffscreenBufferRange.isInside(aContentRange))
                         {
                             xNewContent = new drawinglayer::primitive2d::MaskPrimitive2D(
@@ -285,29 +285,29 @@ namespace svgio
                                 drawinglayer::primitive2d::Primitive2DSequence(&xNewContent, 1));
                         }
 
-                        // redefine target. Use TransparencePrimitive2D with created mask
-                        // geometry
+                        
+                        
                         rTarget = drawinglayer::primitive2d::Primitive2DSequence(&xNewContent, 1);
                     }
                     else
                     {
-                        // content is geometrically empty
+                        
                         rTarget.realloc(0);
                     }
                 }
                 else
                 {
-                    // An empty clipping path will completely clip away the element that had
+                    
                     // the ‘clip-path’ property applied. (Svg spec)
                     rTarget.realloc(0);
                 }
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

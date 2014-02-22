@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "configinit.hxx"
@@ -29,21 +29,21 @@
 #include <stdio.h>
 #include <com/sun/star/task/InteractionHandler.hpp>
 
-// ----------------------------------------------------------------------------
+
 
 namespace uno           = ::com::sun::star::uno;
 namespace lang          = ::com::sun::star::lang;
 using uno::UNO_QUERY;
 
-// ----------------------------------------------------------------------------
 
-// must be aligned with configmgr/source/misc/configinteractionhandler
+
+
 static char const CONFIG_ERROR_HANDLER[] = "configuration.interaction-handler";
-// ----------------------------------------------------------------------------
 
-// ----------------------------------------------------------------------------
-// ConfigurationErrorHandler
-// ----------------------------------------------------------------------------
+
+
+
+
 
 namespace
 {
@@ -67,7 +67,7 @@ namespace
                             : uno::Any();
         }
 
-        // XCurrentContext
+        
         virtual uno::Any SAL_CALL
             getValueByName( OUString const & aName)
                 throw (uno::RuntimeException);
@@ -82,7 +82,7 @@ namespace
 
 }
 
-// ----------------------------------------------------------------------------
+
 class ConfigurationErrorHandler::Context : public SimpleCurrentContext
 {
 public:
@@ -95,7 +95,7 @@ public:
     {
     }
 
-    // XCurrentContext
+    
     virtual uno::Any SAL_CALL
         getValueByName( OUString const & aName)
             throw (uno::RuntimeException);
@@ -104,7 +104,7 @@ private:
     InteractionHandler  m_xHandler;
 };
 
-//------------------------------------------------------------------------------
+
 uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString const & aName)
         throw (uno::RuntimeException)
 {
@@ -117,14 +117,14 @@ uno::Any SAL_CALL ConfigurationErrorHandler::Context::getValueByName( OUString c
     return SimpleCurrentContext::getValueByName( aName );
 }
 
-//------------------------------------------------------------------------------
+
 ConfigurationErrorHandler::~ConfigurationErrorHandler()
 {
     deactivate();
 }
 
-//------------------------------------------------------------------------------
-/// installs the handler into the current context
+
+
 void ConfigurationErrorHandler::activate()
 {
     if (!m_pContext)
@@ -135,8 +135,8 @@ void ConfigurationErrorHandler::activate()
     m_pContext->install();
 }
 
-//------------------------------------------------------------------------------
-/// deinstalls the handler from the current context, restoring the previous context
+
+
 void ConfigurationErrorHandler::deactivate()
 {
     if (m_pContext)
@@ -146,7 +146,7 @@ void ConfigurationErrorHandler::deactivate()
         m_pContext = 0;
     }
 }
-//------------------------------------------------------------------------------
+
 
 ConfigurationErrorHandler::InteractionHandler ConfigurationErrorHandler::getDefaultInteractionHandler()
 {
@@ -154,7 +154,7 @@ ConfigurationErrorHandler::InteractionHandler ConfigurationErrorHandler::getDefa
     InteractionHandler xHandler( com::sun::star::task::InteractionHandler::createWithParent(xContext, 0), UNO_QUERY );
     return xHandler;
 }
-//------------------------------------------------------------------------------
+
 
 
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -151,13 +151,13 @@ void ScSamplingDialog::SetReference( const ScRange& rReferenceRange, ScDocument*
             aReferenceString = mOutputAddress.Format(nFormat, pDocument, pDocument->GetAddressConvention());
             mpOutputRangeEdit->SetRefString( aReferenceString );
 
-            // Change sampling size according to output range selection
+            
             sal_Int64 aSelectedSampleSize = rReferenceRange.aEnd.Row() - rReferenceRange.aStart.Row() + 1;
             if (aSelectedSampleSize > 1)
                 mpSampleSize->SetValue(aSelectedSampleSize);
             SamplingSizeValueModified(NULL);
 
-            // Enable OK, Cancel if output range is set
+            
             mpButtonOk->Enable(!mpOutputRangeEdit->GetText().isEmpty());
             mpButtonApply->Enable(!mpOutputRangeEdit->GetText().isEmpty());
         }
@@ -184,7 +184,7 @@ ScRange ScSamplingDialog::PerformPeriodicSampling(ScDocShell* pDocShell)
             outRow = mOutputAddress.Row();
             for (SCROW inRow = aStart.Row(); inRow <= aEnd.Row(); inRow++)
             {
-                if (i % aPeriod == aPeriod - 1 ) // Sample the last of period
+                if (i % aPeriod == aPeriod - 1 ) 
                 {
                     double aValue = mDocument->GetValue(ScAddress(inCol, inRow, inTab));
                     pDocShell->GetDocFunc().SetValueCell(ScAddress(outCol, outRow, outTab), aValue, true);

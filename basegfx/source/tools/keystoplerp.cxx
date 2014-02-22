@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/tools/keystoplerp.hxx>
@@ -29,7 +29,7 @@ static void validateInput(const std::vector<double>& rKeyStops)
     OSL_ENSURE( rKeyStops.size() > 1,
                 "KeyStopLerp::KeyStopLerp(): key stop vector must have two entries or more" );
 
-    // rKeyStops must be sorted in ascending order
+    
     for( ::std::size_t i=1, len=rKeyStops.size(); i<len; ++i )
     {
         if( rKeyStops[i-1] > rKeyStops[i] )
@@ -61,14 +61,14 @@ namespace basegfx
 
         KeyStopLerp::ResultType KeyStopLerp::lerp(double fAlpha) const
         {
-            // cached value still okay?
+            
             if( maKeyStops.at(mnLastIndex) < fAlpha ||
                 maKeyStops.at(mnLastIndex+1) >= fAlpha )
             {
-                // nope, find new index
+                
                 mnLastIndex = std::min<std::ptrdiff_t>(
                     maKeyStops.size()-2,
-                    // range is ensured by max below
+                    
                     std::max<std::ptrdiff_t>(
                         0,
                         std::distance( maKeyStops.begin(),
@@ -77,13 +77,13 @@ namespace basegfx
                                                          fAlpha )) - 1 ));
             }
 
-            // lerp between stop and stop+1
+            
             const double fRawLerp=
                 (fAlpha-maKeyStops.at(mnLastIndex)) /
                 (maKeyStops.at(mnLastIndex+1) - maKeyStops.at(mnLastIndex));
 
-            // clamp to permissible range (input fAlpha might be
-            // everything)
+            
+            
             return ResultType(
                 mnLastIndex,
                 clamp(fRawLerp,0.0,1.0));

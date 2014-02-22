@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,7 +54,7 @@ void DbgReportAssertion( const sal_Char* i_assertionMessage )
         return;
     }
 
-    // prevent infinite recursion
+    
     if ( bReportingAssertion )
     {
         return;
@@ -75,12 +75,12 @@ void DbgReportAssertion( const sal_Char* i_assertionMessage )
 
 #endif
 
-/// capture assertions, route them to the given given Basic function
+
 RTLFUNC(CaptureAssertions)
 {
     (void)bWrite;
 
-    // need exactly one argument
+    
     if ( rPar.Count() != 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -99,21 +99,21 @@ RTLFUNC(CaptureAssertions)
 
     if ( nAssertionChannelId == 0 )
     {
-        // TODO: should we register a named channel at the VCL API, instead of an unnamed channel at the tools API?
-        // A named channel would mean it would appear in the nonpro-debug-options dialog
+        
+        
         nAssertionChannelId = DbgRegisterUserChannel( &DbgReportAssertion );
     }
 
     DbgChannelId const nCurrentChannelId = (DbgChannelId)DbgGetErrorOut();
     if ( nCurrentChannelId != nAssertionChannelId )
     {
-        // remember the current channel
+        
         nRestoreChannelId = nCurrentChannelId;
 
-        // set the new channel
+        
         DBG_INSTOUTERROR( nAssertionChannelId );
 
-        // ensure OSL assertions are captured, too
+        
         DbgData aData( *DbgGetData() );
         aData.bHookOSLAssert = true;
         DbgUpdateOslHook( &aData );

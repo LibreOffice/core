@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -105,13 +105,13 @@ double ImpGetDate( const SbxValues* p )
             sal_Int32 nCheckPos = 0;
             short nType = 127;
 
-            // Default templates of the formatter have only two-digit
-            // date. Therefore register an own format.
+            
+            
 
-            // HACK, because the number formatter in PutandConvertEntry replace the wildcard
-            // for month, day, year not according to the configuration.
-            // Problem: Print Year(Date) under Engl. OS
-            // quod vide basic/source/runtime/runtime.cxx
+            
+            
+            
+            
 
             SvtSysLocale aSysLocale;
             DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
@@ -215,7 +215,7 @@ start:
     case SbxDOUBLE:
         p->nDouble = n;
         break;
-        // from here will be tested
+        
     case SbxCHAR:
         aTmp.pChar = &p->nChar;
         goto direct;
@@ -278,10 +278,10 @@ start:
             SvtSysLocale aSysLocale;
             DateFormat eDate = aSysLocale.GetLocaleData().getDateFormat();
             OUString aStr;
-            // if the whole-number part is 0, we want no year!
+            
             if( n <= -1.0 || n >= 1.0 )
             {
-                // Time only if != 00:00:00
+                
                 if( floor( n ) == n )
                 {
                     switch( eDate )

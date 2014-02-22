@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -101,7 +101,7 @@ protected:
     virtual ~OTestBIOS (void);
 };
 
-} // namespace store
+} 
 
 OTestBIOS::OTestBIOS (void)
 {
@@ -237,7 +237,7 @@ struct MyFindData
 
 static void __store_testUnicode (const sal_Char *pszFilename)
 {
-    // ...
+    
     rtl_TextToUnicodeConverter hConvert;
     hConvert = rtl_createTextToUnicodeConverter (RTL_TEXTENCODING_UTF8);
 
@@ -255,13 +255,13 @@ static void __store_testUnicode (const sal_Char *pszFilename)
 
     rtl_destroyTextToUnicodeConverter (hConvert);
 
-    // ...
+    
     rtl_String  *pszFileA = NULL;
     rtl_uString *pszFileW = NULL;
 
-    // rtl_uString_newFromAscii (&pszFileW, pszFilename);
+    
 
-    // ...
+    
     rtl_string_newFromStr (&pszFileA, pszFilename);
 
     rtl_string2UString (
@@ -272,11 +272,11 @@ static void __store_testUnicode (const sal_Char *pszFilename)
 
     rtl_string_release (pszFileA);
 
-    // ...
+    
     OStorePageKey aKey;
     __store_namei (pszFileW->buffer, pszFileW->buffer, aKey);
 
-    // ...
+    
     rtl_uString2String (
         &pszFileA,
         pszFileW->buffer, pszFileW->length,
@@ -285,7 +285,7 @@ static void __store_testUnicode (const sal_Char *pszFilename)
 
     rtl_uString_release (pszFileW);
 
-    // ...
+    
     rtl_string_release (pszFileA);
 }
 
@@ -328,11 +328,11 @@ int SAL_CALL main (int argc, char **argv)
     eErrCode = xBIOS->initialize (&*xLockBytes, store_AccessReadWrite, nPageSize);
     if (eErrCode != store_E_None)
     {
-        // Check reason.
+        
         if (eErrCode != store_E_NotExists)
             return eErrCode;
 
-        // Create.
+        
         eErrCode = xBIOS->initialize (&*xLockBytes, store_AccessReadCreate, nPageSize);
         if (eErrCode != store_E_None)
             return eErrCode;

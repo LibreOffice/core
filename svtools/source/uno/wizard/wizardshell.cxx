@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -27,10 +27,10 @@
 
 #include <vcl/msgbox.hxx>
 
-//......................................................................................................................
+
 namespace svt { namespace uno
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -49,10 +49,10 @@ namespace svt { namespace uno
 
     namespace WizardTravelType = ::com::sun::star::ui::dialogs::WizardTravelType;
 
-    //==================================================================================================================
+    
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+        
         sal_Int16 lcl_determineFirstPageID( const Sequence< Sequence< sal_Int16 > >& i_rPaths )
         {
             ENSURE_OR_THROW( ( i_rPaths.getLength() > 0 ) && ( i_rPaths[0].getLength() > 0 ), "illegal paths" );
@@ -60,10 +60,10 @@ namespace svt { namespace uno
         }
     }
 
-    //==================================================================================================================
-    //= WizardShell
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     WizardShell::WizardShell( Window* i_pParent, const Reference< XWizard >& i_rWizard, const Reference< XWizardController >& i_rController,
             const Sequence< Sequence< sal_Int16 > >& i_rPaths )
         :WizardShell_Base( i_pParent, WB_MOVEABLE | WB_CLOSEABLE )
@@ -73,7 +73,7 @@ namespace svt { namespace uno
     {
         ENSURE_OR_THROW( m_xWizard.is() && m_xController.is(), "invalid wizard/controller" );
 
-        // declare the paths
+        
         for ( sal_Int32 i=0; i<i_rPaths.getLength(); ++i )
         {
             const Sequence< sal_Int16 >& rPath( i_rPaths[i] );
@@ -83,29 +83,29 @@ namespace svt { namespace uno
             declarePath( i, aPath );
         }
 
-        // create the first page, to know the page size
+        
         TabPage* pStartPage = GetOrCreatePage( impl_pageIdToState( i_rPaths[0][0] ) );
         SetPageSizePixel( pStartPage->GetSizePixel() );
 
-        // some defaults
+        
         ShowButtonFixedLine( true );
         SetRoadmapInteractive( true );
         enableAutomaticNextButtonState();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     WizardShell::~WizardShell()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     short WizardShell::Execute()
     {
         ActivatePage();
         return WizardShell_Base::Execute();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Int16 WizardShell::convertCommitReasonToTravelType( const CommitPageReason i_eReason )
     {
         switch ( i_eReason )
@@ -126,7 +126,7 @@ namespace svt { namespace uno
         return WizardTravelType::FINISH;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void WizardShell::enterState( WizardState i_nState )
     {
         WizardShell_Base::enterState( i_nState );
@@ -144,7 +144,7 @@ namespace svt { namespace uno
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool WizardShell::leaveState( WizardState i_nState )
     {
         if ( !WizardShell_Base::leaveState( i_nState ) )
@@ -165,7 +165,7 @@ namespace svt { namespace uno
         return sal_True;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     PWizardPageController WizardShell::impl_getController( TabPage* i_pPage ) const
     {
         Page2ControllerMap::const_iterator pos = m_aPageControllers.find( i_pPage );
@@ -173,7 +173,7 @@ namespace svt { namespace uno
         return pos->second;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XWizardPage > WizardShell::getCurrentWizardPage() const
     {
         const WizardState eState = getCurrentState();
@@ -184,13 +184,13 @@ namespace svt { namespace uno
         return pController->getWizardPage();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void WizardShell::enablePage( const sal_Int16 i_nPageID, const sal_Bool i_bEnable )
     {
         enableState( impl_pageIdToState( i_nPageID ), i_bEnable );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     TabPage* WizardShell::createPage( WizardState i_nState )
     {
         ENSURE_OR_RETURN( m_xController.is(), "WizardShell::createPage: no WizardController!", NULL );
@@ -200,7 +200,7 @@ namespace svt { namespace uno
         OSL_ENSURE( pPage != NULL, "WizardShell::createPage: illegal tab page!" );
         if ( pPage == NULL )
         {
-            // fallback for ill-behaved clients: empty page
+            
             pPage = new TabPage( this, 0 );
             pPage->SetSizePixel( LogicToPixel( Size( 280, 185 ), MAP_APPFONT ) );
         }
@@ -209,13 +209,13 @@ namespace svt { namespace uno
         return pPage;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     IWizardPageController* WizardShell::getPageController( TabPage* i_pCurrentPage ) const
     {
         return impl_getController( i_pCurrentPage ).get();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString WizardShell::getStateDisplayName( WizardState i_nState ) const
     {
         try
@@ -227,11 +227,11 @@ namespace svt { namespace uno
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        // fallback for ill-behaved clients: the numeric state
+        
         return OUString::number(i_nState);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool WizardShell::canAdvance() const
     {
         try
@@ -247,7 +247,7 @@ namespace svt { namespace uno
         return WizardShell_Base::canAdvance();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_Bool WizardShell::onFinish()
     {
         try
@@ -263,8 +263,8 @@ namespace svt { namespace uno
         return WizardShell_Base::onFinish();
     }
 
-//......................................................................................................................
-} } // namespace svt::uno
-//......................................................................................................................
+
+} } 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -27,7 +27,7 @@
 #include <vector>
 #include <algorithm>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ImplB3DPolyPolygon
 {
@@ -47,11 +47,11 @@ public:
 
     bool operator==(const ImplB3DPolyPolygon& rPolygonList) const
     {
-        // same polygon count?
+        
         if(maPolygons.size() != rPolygonList.maPolygons.size())
             return false;
 
-        // compare polygon content
+        
         if(maPolygons != rPolygonList.maPolygons)
             return false;
 
@@ -72,7 +72,7 @@ public:
     {
         if(nCount)
         {
-            // add nCount copies of rPolygon
+            
             PolygonVector::iterator aIndex(maPolygons.begin());
             if( nIndex )
                 aIndex += nIndex;
@@ -82,7 +82,7 @@ public:
 
     void insert(sal_uInt32 nIndex, const ::basegfx::B3DPolyPolygon& rPolyPolygon)
     {
-        // add all polygons from rPolyPolygon
+        
         PolygonVector::iterator aIndex(maPolygons.begin());
         if( nIndex )
             aIndex += nIndex;
@@ -93,7 +93,7 @@ public:
     {
         if(nCount)
         {
-            // remove polygon data
+            
             PolygonVector::iterator aStart(maPolygons.begin());
             aStart += nIndex;
             const PolygonVector::iterator aEnd(aStart + nCount);
@@ -210,7 +210,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -422,6 +422,6 @@ namespace basegfx
     {
         return mpPolyPolygon->end();
     }
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

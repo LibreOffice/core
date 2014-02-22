@@ -83,13 +83,13 @@ OXMLFormattedField::OXMLFormattedField( ORptFilter& rImport,
         OSL_FAIL("Exception catched while filling the report definition props");
     }
 }
-// -----------------------------------------------------------------------------
+
 OXMLFormattedField::~OXMLFormattedField()
 {
 }
-// -----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
+
+
 } // namespace rptxml
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

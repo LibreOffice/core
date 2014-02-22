@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -51,13 +51,13 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
     maFtSubject     ( this, CUI_RES (FT_SUBJECT) ),
     maEdSubject     ( this, CUI_RES (ED_SUBJECT) )
 {
-    // Disable display of bitmap names.
+    
     maBtAdrBook.EnableTextDisplay (false);
 
     InitStdControls();
     FreeResource();
 
-    // Init URL-Box (pos&size, Open-Handler)
+    
     maCbbReceiver.SetPosSizePixel ( LogicToPixel( Point( COL_2, 25 ), MAP_APPFONT ),
                                     LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
 
@@ -66,10 +66,10 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( Window *pParent, const SfxItemSet& rIte
 
     SetExchangeSupport ();
 
-    // set defaults
+    
     maRbtMail.Check ();
 
-    // overload handlers
+    
     maRbtMail.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
     maRbtNews.SetClickHdl        ( LINK ( this, SvxHyperlinkMailTp, Click_SmartProtocol_Impl ) );
     maBtAdrBook.SetClickHdl      ( LINK ( this, SvxHyperlinkMailTp, ClickAdrBookHdl_Impl ) );
@@ -96,12 +96,12 @@ void SvxHyperlinkMailTp::FillDlgFields(const OUString& rStrURL)
 {
     OUString aStrScheme = GetSchemeFromURL(rStrURL);
 
-    // set URL-field and additional controls
+    
     OUString aStrURLc (rStrURL);
-    // set additional controls for EMail:
+    
     if ( aStrScheme.startsWith( INET_MAILTO_SCHEME ) )
     {
-        // Find mail-subject
+        
         OUString aStrSubject, aStrTmp( aStrURLc );
 
         sal_Int32 nPos = aStrTmp.toAsciiLowerCase().indexOf( "subject" );
@@ -154,7 +154,7 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
         aURL.SetSmartURL(aStrURL);
     }
 
-    // subject for EMail-url
+    
     if( aURL.GetProtocol() == INET_PROT_MAILTO )
     {
         if ( maEdSubject.GetText() != OUString(aEmptyStr) )
@@ -167,7 +167,7 @@ OUString SvxHyperlinkMailTp::CreateAbsoluteURL() const
 
     if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         return aURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
-    else //#105788# always create a URL even if it is not valid
+    else 
         return aStrURL;
 }
 
@@ -198,20 +198,20 @@ void SvxHyperlinkMailTp::SetInitFocus()
 
 void SvxHyperlinkMailTp::SetScheme(const OUString& rScheme)
 {
-    //if rScheme is empty or unknown the default beaviour is like it where MAIL
+    
     const sal_Char sNewsScheme[]   = INET_NEWS_SCHEME;
 
     bool bMail = !rScheme.startsWith(sNewsScheme);
 
-    //update protocol button selection:
+    
     maRbtMail.Check(bMail);
     maRbtNews.Check(!bMail);
 
-    //update target:
+    
     RemoveImproperProtocol(rScheme);
     maCbbReceiver.SetSmartProtocol( GetSmartProtocolFromButtons() );
 
-    //show/hide  special fields for MAIL:
+    
     maFtSubject.Enable(bMail);
     maEdSubject.Enable(bMail);
 }

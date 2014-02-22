@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -196,7 +196,7 @@ public:
     {}
 };
 
-} // namespace
+} 
 
 DocumentDecryption::DocumentDecryption(oox::ole::OleStorage& rOleStorage, Reference<XComponentContext> xContext) :
     mxContext(xContext),
@@ -235,17 +235,17 @@ bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInp
     aInputSource.aInputStream = xInputStream;
     xParser->parseStream( aInputSource );
 
-    // CHECK info data
+    
     if (2 > info.blockSize || info.blockSize > 4096)
         return false;
 
     if (0 > info.spinCount || info.spinCount > 10000000)
         return false;
 
-    if (1 > info.saltSize|| info.saltSize > 65536) // Check
+    if (1 > info.saltSize|| info.saltSize > 65536) 
         return false;
 
-    // AES 128 CBC with SHA1
+    
     if (info.keyBits         == 128 &&
         info.cipherAlgorithm == "AES" &&
         info.cipherChaining  == "ChainingModeCBC" &&
@@ -255,7 +255,7 @@ bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInp
         return true;
     }
 
-    // AES 256 CBC with SHA512
+    
     if (info.keyBits         == 256 &&
         info.cipherAlgorithm == "AES" &&
         info.cipherChaining  == "ChainingModeCBC" &&
@@ -307,18 +307,18 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
     if( info.verifier.saltSize != 16 )
         return false;
 
-    // check flags and algorithm IDs, required are AES128 and SHA-1
+    
     if( !getFlag( info.header.flags , ENCRYPTINFO_CRYPTOAPI ) )
         return false;
 
     if( !getFlag( info.header.flags, ENCRYPTINFO_AES ) )
         return false;
 
-    // algorithm ID 0 defaults to AES128 too, if ENCRYPTINFO_AES flag is set
+    
     if( info.header.algId != 0 && info.header.algId != ENCRYPT_ALGO_AES128 )
         return false;
 
-    // hash algorithm ID 0 defaults to SHA-1 too
+    
     if( info.header.algIdHash != 0 && info.header.algIdHash != ENCRYPT_HASH_SHA1 )
         return false;
 
@@ -345,11 +345,11 @@ bool DocumentDecryption::readEncryptionInfo()
     switch (aVersion)
     {
         case VERSION_INFO_2007_FORMAT:
-            mCryptoType = STANDARD_2007; // Set encryption info format
+            mCryptoType = STANDARD_2007; 
             bResult = readStandard2007EncryptionInfo( aBinaryInputStream );
             break;
         case VERSION_INFO_AGILE:
-            mCryptoType = AGILE; // Set encryption info format
+            mCryptoType = AGILE; 
             aBinaryInputStream.skip(4);
             bResult = readAgileEncryptionInfo( xEncryptionInfo );
             break;
@@ -384,10 +384,10 @@ bool DocumentDecryption::decrypt(Reference<XStream> xDocumentStream)
     if( !mrOleStorage.isStorage() )
         return false;
 
-    // open the required input streams in the encrypted package
+    
     Reference< XInputStream > xEncryptedPackage( mrOleStorage.openInputStream( "EncryptedPackage" ), UNO_SET_THROW );
 
-    // create temporary file for unencrypted package
+    
     Reference< XOutputStream > xDecryptedPackage( xDocumentStream->getOutputStream(), UNO_SET_THROW );
     BinaryXOutputStream aDecryptedPackage( xDecryptedPackage, true );
     BinaryXInputStream aEncryptedPackage( xEncryptedPackage, true );
@@ -400,7 +400,7 @@ bool DocumentDecryption::decrypt(Reference<XStream> xDocumentStream)
     return aResult;
 }
 
-} // namespace core
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

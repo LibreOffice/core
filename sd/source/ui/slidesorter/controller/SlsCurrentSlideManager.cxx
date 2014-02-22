@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -88,7 +88,7 @@ void CurrentSlideManager::NotifyCurrentSlideChange (const sal_Int32 nSlideIndex)
         ReleaseCurrentSlide();
         AcquireCurrentSlide(nSlideIndex);
 
-        // Update the selection.
+        
         if (mpCurrentSlide)
         {
             mrSlideSorter.GetController().GetPageSelector().SelectPage(mpCurrentSlide);
@@ -126,9 +126,9 @@ void CurrentSlideManager::AcquireCurrentSlide (const sal_Int32 nSlideIndex)
 
     if (IsCurrentSlideIsValid())
     {
-        // Get a descriptor for the XDrawPage reference.  Note that the
-        // given XDrawPage may or may not be member of the slide sorter
-        // document.
+        
+        
+        
         mpCurrentSlide = mrSlideSorter.GetModel().GetPageDescriptor(mnCurrentSlideIndex);
         if (mpCurrentSlide.get() != NULL)
             mrSlideSorter.GetView().SetState(mpCurrentSlide, PageDescriptor::ST_Current, true);
@@ -160,27 +160,27 @@ void CurrentSlideManager::SwitchCurrentSlide (
         ViewShell* pViewShell = mrSlideSorter.GetViewShell();
         if (pViewShell != NULL && pViewShell->IsMainViewShell())
         {
-            // The slide sorter is the main view.
+            
             FrameView* pFrameView = pViewShell->GetFrameView();
             if (pFrameView != NULL)
                 pFrameView->SetSelectedPage(sal::static_int_cast<sal_uInt16>(mnCurrentSlideIndex));
             mrSlideSorter.GetController().GetPageSelector().SetCoreSelection();
         }
 
-        // We do not tell the XController/ViewShellBase about the new
-        // slide right away.  This is done asynchronously after a short
-        // delay to allow for more slide switches in the slide sorter.
-        // This goes under the assumption that slide switching inside
-        // the slide sorter is fast (no expensive redraw of the new page
-        // (unless the preview of the new slide is not yet preset)) and
-        // that slide switching in the edit view is slow (all shapes of
-        // the new slide have to be repainted.)
+        
+        
+        
+        
+        
+        
+        
+        
         maSwitchPageDelayTimer.Start();
 
-        // We have to store the (index of the) new current slide at
-        // the tab control because there are other asynchronous
-        // notifications of the slide switching that otherwise
-        // overwrite the correct value.
+        
+        
+        
+        
         SetCurrentSlideAtTabControl(mpCurrentSlide);
 
         if (bUpdateSelection)
@@ -254,9 +254,9 @@ void CurrentSlideManager::SetCurrentSlideAtXController (const SharedPageDescript
     }
     catch (const Exception&)
     {
-        // We have not been able to set the current page at the main view.
-        // This is sad but still leaves us in a valid state.  Therefore,
-        // this exception is silently ignored.
+        
+        
+        
     }
 }
 
@@ -296,11 +296,11 @@ IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback)
 {
     if (mpCurrentSlide)
     {
-        // Set current page.  At the moment we have to do this in two
-        // different ways.  The UNO way is the preferable one but, alas,
-        // it does not work always correctly (after some kinds of model
-        // changes).  Therefore, we call DrawViewShell::SwitchPage(),
-        // too.
+        
+        
+        
+        
+        
         ViewShell* pViewShell = mrSlideSorter.GetViewShell();
         if (pViewShell==NULL || ! pViewShell->IsMainViewShell())
             SetCurrentSlideAtViewShellBase(mpCurrentSlide);
@@ -310,6 +310,6 @@ IMPL_LINK_NOARG(CurrentSlideManager, SwitchPageCallback)
     return 1;
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

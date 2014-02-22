@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -47,14 +47,14 @@ void DetailsContainer::show( bool bShow )
 
 INetURLObject DetailsContainer::getUrl( )
 {
-    // Don't use that class directly: make it smarter by subclassing it.
+    
     return INetURLObject( );
 }
 
 bool DetailsContainer::setUrl( const INetURLObject& )
 {
-    // That class doesn't contain any logic... it defers the dirty work
-    // to the sub classes.
+    
+    
     return false;
 }
 
@@ -102,7 +102,7 @@ INetURLObject HostDetailsContainer::getUrl( )
     OUString sUrl;
     if ( !sHost.isEmpty( ) )
     {
-        sUrl = m_sScheme + "://" + sHost;
+        sUrl = m_sScheme + ":
         if ( nPort != m_nDefaultPort )
             sUrl += ":" + OUString::number( nPort );
         if ( !sPath.isEmpty( ) )
@@ -130,7 +130,7 @@ bool HostDetailsContainer::setUrl( const INetURLObject& rUrl )
 
 bool HostDetailsContainer::verifyScheme( const OUString& sScheme )
 {
-    return sScheme.equals( m_sScheme + "://" );
+    return sScheme.equals( m_sScheme + ":
 }
 
 DavDetailsContainer::DavDetailsContainer( VclBuilderContainer* pBuilder ) :
@@ -155,12 +155,12 @@ void DavDetailsContainer::show( bool bShow )
 bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
 {
     bool bValid = false;
-    if ( rScheme.equals( "http://" ) )
+    if ( rScheme.equals( "http:
     {
         bValid = true;
         m_pCBDavs->Check( false );
     }
-    else if ( rScheme.equals( "https://" ) )
+    else if ( rScheme.equals( "https:
     {
         bValid = true;
         m_pCBDavs->Check( true );
@@ -170,7 +170,7 @@ bool DavDetailsContainer::verifyScheme( const OUString& rScheme )
 
 IMPL_LINK( DavDetailsContainer, ToggledDavsHdl, CheckBox*, pCheckBox )
 {
-    // Change default port if needed
+    
     sal_Bool bCheckedDavs = pCheckBox->IsChecked();
     if ( m_pEDPort->GetValue() == 80 && bCheckedDavs == sal_True)
         m_pEDPort->SetValue( 443 );
@@ -211,7 +211,7 @@ INetURLObject SmbDetailsContainer::getUrl( )
     OUString sUrl;
     if ( !sHost.isEmpty( ) )
     {
-        sUrl = "smb://" + sHost + "/";
+        sUrl = "smb:
         if ( !sShare.isEmpty( ) )
             sUrl += sShare;
         if ( !sPath.isEmpty( ) )
@@ -278,7 +278,7 @@ CmisDetailsContainer::CmisDetailsContainer( VclBuilderContainer* pBuilder ) :
 
     show( false );
 
-    // Load the ServerType entries
+    
     bool bSkipGDrive = OUString( GDRIVE_CLIENT_ID ).isEmpty() ||
                        OUString( GDRIVE_CLIENT_SECRET ).isEmpty();
     bool bSkipAlfresco = OUString( ALFRESCO_CLOUD_CLIENT_ID ).isEmpty() ||
@@ -311,7 +311,7 @@ INetURLObject CmisDetailsContainer::getUrl( )
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
-        sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
+        sUrl = "vnd.libreoffice.cmis:
     }
     sUrl += sPath;
 
@@ -345,7 +345,7 @@ void CmisDetailsContainer::setUsername( const OUString& rUsername )
 
 void CmisDetailsContainer::selectRepository( )
 {
-    // Get the repo ID and call the Change listener
+    
     sal_uInt16 nPos = m_pLBRepository->GetSelectEntryPos( );
     m_sRepoId = m_aRepoIds[nPos];
 
@@ -354,7 +354,7 @@ void CmisDetailsContainer::selectRepository( )
 
 IMPL_LINK( CmisDetailsContainer, SelectServerTypeHdl, void *, EMPTYARG  )
 {
-    // Set a sample URL for the server
+    
     sal_uInt16 nId = m_pLBServerType->GetSelectEntryPos( );
     m_pEDBinding->SetText( m_aServerTypesURLs[nId] );
     return 0;
@@ -364,11 +364,11 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
 {
     OUString sBindingUrl = m_pEDBinding->GetText().trim( );
 
-    // Clean the listbox
+    
     m_pLBRepository->Clear( );
     m_aRepoIds.clear( );
 
-    // Compute the URL
+    
     OUString sUrl;
     if ( !sBindingUrl.isEmpty( ) )
     {
@@ -377,10 +377,10 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
                 rtl_UriCharClassRelSegment,
                 rtl_UriEncodeKeepEscapes,
                 RTL_TEXTENCODING_UTF8 );
-        sUrl = "vnd.libreoffice.cmis://" + sEncodedBinding;
+        sUrl = "vnd.libreoffice.cmis:
     }
 
-    // Get the Content
+    
     ::ucbhelper::Content aCnt( sUrl, m_xCmdEnv, comphelper::getProcessComponentContext() );
     Sequence< OUString > aProps( 1 );
     aProps[0] = "Title";
@@ -406,7 +406,7 @@ IMPL_LINK( CmisDetailsContainer, RefreshReposHdl, void *, EMPTYARG  )
     {
     }
 
-    // Auto-select the first one
+    
     if ( m_pLBRepository->GetEntryCount( ) > 0 )
     {
         m_pLBRepository->SelectEntryPos( 0 );

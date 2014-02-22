@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,11 +34,11 @@
 
 using namespace com::sun::star;
 
-//  ----------------------------------------------------
-//  class VCLXGraphics
-//  ----------------------------------------------------
 
-// uno::XInterface
+
+
+
+
 uno::Any VCLXGraphics::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
@@ -48,10 +48,10 @@ uno::Any VCLXGraphics::queryInterface( const uno::Type & rType ) throw(uno::Runt
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
-// lang::XUnoTunnel
+
 IMPL_XUNOTUNNEL( VCLXGraphics )
 
-// lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXGraphics )
     getCppuType( ( uno::Reference< awt::XGraphics>* ) NULL )
 IMPL_XTYPEPROVIDER_END
@@ -95,7 +95,7 @@ void VCLXGraphics::Init( OutputDevice* pOutDev )
     initAttrs();
     mpClipRegion    = NULL;
 
-    // Register at OutputDevice
+    
     VCLXGraphicsList_impl* pLst = mpOutputDevice->GetUnoGraphicsList();
     if ( !pLst )
         pLst = mpOutputDevice->CreateUnoGraphicsList();

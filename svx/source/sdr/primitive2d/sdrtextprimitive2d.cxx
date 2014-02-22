@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/primitive2d/sdrtextprimitive2d.hxx>
@@ -32,11 +32,11 @@
 #include <svx/svdoutl.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace
 {
@@ -70,7 +70,7 @@ namespace
         {
             if( (pPage->GetPageNum() == 0) && !pPage->IsMasterPage() )
             {
-                // handout page!
+                
                 return pPage->GetModel()->getHandoutPageCount();
             }
             else
@@ -82,17 +82,17 @@ namespace
 
         return nRetval;
     }
-} // end of anonymous namespace
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        // support for XTEXT_PAINTSHAPE_BEGIN/XTEXT_PAINTSHAPE_END Metafile comments
-        // for slideshow. This uses TextHierarchyBlockPrimitive2D to mark a text block.
-        // ATM there is only one text block per SdrObject, this may get more in the future
+        
+        
+        
         Primitive2DSequence SdrTextPrimitive2D::encapsulateWithTextHierarchyBlockPrimitive2D(const Primitive2DSequence& rCandidate) const
         {
             Primitive2DReference xReference(new TextHierarchyBlockPrimitive2D(rCandidate));
@@ -133,10 +133,10 @@ namespace drawinglayer
 
                 return (
 
-                    // compare OPO and content, but not WrongList
+                    
                     getOutlinerParaObject() == rCompare.getOutlinerParaObject()
 
-                    // also compare WrongList (not-persistent data, but visualized)
+                    
                     && getOutlinerParaObject().isWrongListEqual(rCompare.getOutlinerParaObject()));
             }
 
@@ -156,10 +156,10 @@ namespace drawinglayer
             {
                 bool bDoDelete(false);
 
-                // check visualized page
+                
                 if(mbContainsPageField || mbContainsPageCountField || mbContainsOtherFields)
                 {
-                    // get visualized page and remember
+                    
                     xCurrentlyVisualizingPage = rViewInformation.getVisualizedPage();
                     bCurrentlyVisualizingPageIsSet = true;
 
@@ -168,7 +168,7 @@ namespace drawinglayer
                         bDoDelete = true;
                     }
 
-                    // #i98870# check visualized PageNumber
+                    
                     if(!bDoDelete && mbContainsPageField)
                     {
                         nCurrentlyValidPageNumber = getPageNumber(xCurrentlyVisualizingPage);
@@ -179,7 +179,7 @@ namespace drawinglayer
                         }
                     }
 
-                    // #i98870# check visualized PageCount, too
+                    
                     if(!bDoDelete && mbContainsPageCountField)
                     {
                         nCurrentlyValidPageCount = getPageCount(xCurrentlyVisualizingPage);
@@ -191,7 +191,7 @@ namespace drawinglayer
                     }
                 }
 
-                // #i101443#  check change of TextBackgroundolor
+                
                 if(!bDoDelete && getSdrText() && getSdrText()->GetModel())
                 {
                     SdrOutliner& rDrawOutliner = getSdrText()->GetModel()->GetDrawOutliner(0);
@@ -239,13 +239,13 @@ namespace drawinglayer
                 const_cast< SdrTextPrimitive2D* >(this)->maLastTextBackgroundColor = aNewTextBackgroundColor;
             }
 
-            // call parent
+            
             return BufferedDecompositionPrimitive2D::get2DDecomposition(rViewInformation);
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -292,13 +292,13 @@ namespace drawinglayer
                 rTransform * getObjectTransform());
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SdrContourTextPrimitive2D, PRIMITIVE2D_ID_SDRCONTOURTEXTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -348,13 +348,13 @@ namespace drawinglayer
                 getSdrFormTextAttribute());
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SdrPathTextPrimitive2D, PRIMITIVE2D_ID_SDRPATHTEXTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -425,13 +425,13 @@ namespace drawinglayer
                 getClipOnBounds());
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SdrBlockTextPrimitive2D, PRIMITIVE2D_ID_SDRBLOCKTEXTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -474,13 +474,13 @@ namespace drawinglayer
              return new SdrAutoFitTextPrimitive2D(getSdrText(), getOutlinerParaObject(), rTransform * getTextRangeTransform(), getWordWrap());
          }
 
-         // provide unique ID
+         
          ImplPrimitive2DIDBlock(SdrAutoFitTextPrimitive2D, PRIMITIVE2D_ID_SDRAUTOFITTEXTPRIMITIVE2D)
 
-     } // end of namespace primitive2d
- } // end of namespace drawinglayer
+     } 
+ } 
 
- //////////////////////////////////////////////////////////////////////////////
+ 
 
  namespace drawinglayer
  {
@@ -527,10 +527,10 @@ namespace drawinglayer
                 isFixedCellHeight());
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(SdrStretchTextPrimitive2D, PRIMITIVE2D_ID_SDRSTRETCHTEXTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

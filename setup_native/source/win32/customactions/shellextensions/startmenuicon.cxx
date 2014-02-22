@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef _MSC_VER
@@ -59,7 +59,7 @@ std::_tstring GetMsiProperty( MSIHANDLE handle, const std::_tstring& sProperty )
 
 /*
     Called during installation to customize the start menu folder icon.
-    See: http://msdn.microsoft.com/library/en-us/shellcc/platform/shell/programmersguide/shell_basics/shell_basics_extending/custom.asp
+    See: http:
 */
 extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
 {
@@ -85,13 +85,13 @@ extern "C" UINT __stdcall InstallStartmenuFolderIcon( MSIHANDLE handle )
             TEXT("0"),
             sDesktopFile.c_str() );
     }
-    // else
-    // {
-    //     // at the moment there exists no Vista Icon, so we use the default folder icon.
-    //     // add the icon into desktop/util/verinfo.rc
-    // }
+    
+    
+    
+    
+    
 
-    // The value '0' is to avoid a message like "You Are Deleting a System Folder" warning when deleting or moving the folder.
+    
     WritePrivateProfileString(
         TEXT(".ShellClassInfo"),
         TEXT("ConfirmFileOp"),

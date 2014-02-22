@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,7 +43,7 @@ namespace
             CPPUNIT_ASSERT_MESSAGE("rtl_getBestMimeCharsetFromTextEncoding && rtl_getTextEncodingFromMimeCharset differdiffer", eTextEnc == eOut);
         }
 
-        // the defines for the follows test could be found in file inc/rtl/textenc.h
+        
 
         void MimeCharsetFromTextEncoding_MS_1252()
         {
@@ -467,7 +467,7 @@ namespace
         CPPUNIT_TEST_SUITE_END( );
     };
 
-    // -----------------------------------------------------------------------------
+    
 
     class testBestUnix : public CppUnit::TestFixture
     {
@@ -1525,7 +1525,7 @@ namespace
     class testTextEncodingInfo: public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
+        
         void setUp()
             {
             }
@@ -1534,14 +1534,14 @@ namespace
             {
             }
 
-        // not implemented encoding test
+        
         void testTextEncodingInfo_001()
             {
                 rtl_TextEncodingInfo aInfo1, aInfo2, aInfo3, aInfo4, aInfo5;
                 aInfo1.StructSize = 4;
-                // not implemented
+                
                 bool bRes1 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo1 );
-                // implemented
+                
                 bool bRes11 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo1 );
                 CPPUNIT_ASSERT_MESSAGE("should return sal_False.", !bRes1 && !bRes11);
 
@@ -1554,13 +1554,13 @@ namespace
                 bool bRes3 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo3 );
                 bool bRes31 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo3 );
                 CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes3 && bRes31);
-//&& aInfo2.MinimumCharSize >=1 );
+
 
                 aInfo4.StructSize = 8;
                 bool bRes4 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo4 );
                 bool bRes41 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_CYRILLIC, &aInfo4);
                CPPUNIT_ASSERT_MESSAGE("StructSize<6 should return sal_True", bRes4 && bRes41);
-// && aInfo2.MinimumCharSize >=1 );
+
 
         aInfo5.StructSize = sizeof aInfo5;
                 bool bRes5 = rtl_getTextEncodingInfo( RTL_TEXTENCODING_APPLE_ARABIC, &aInfo5 );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/processfactory.hxx>
@@ -99,7 +99,7 @@ const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetC
 {
     if ( !bCompInitialized )
     {
-        //  read sequence of compatibility names on demand
+        
 
         uno::Reference<sheet::XAddIn> xAddIn;
         if ( aObject >>= xAddIn )
@@ -124,7 +124,7 @@ const ::std::vector<ScUnoAddInFuncData::LocalizedName>& ScUnoAddInFuncData::GetC
             }
         }
 
-        bCompInitialized = true;        // also if not successful
+        bCompInitialized = true;        
     }
     return maCompNames;
 }
@@ -146,7 +146,7 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
         LanguageTag aLanguageTag( eDestLang);
         const OUString aSearch( aLanguageTag.getBcp47());
 
-        // First, check exact match without fallback overhead.
+        
         ::std::vector<LocalizedName>::const_iterator itNames( rCompNames.begin());
         for ( ; itNames != rCompNames.end(); ++itNames)
         {
@@ -157,8 +157,8 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
             }
         }
 
-        // Second, try match of fallback search with fallback locales,
-        // appending also 'en-US' and 'en' to search if not queried.
+        
+        
         ::std::vector< OUString > aFallbackSearch( aLanguageTag.getFallbackStrings( true));
         if (aSearch != "en-US")
         {
@@ -174,7 +174,7 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
             itNames = rCompNames.begin();
             for ( ; itNames != rCompNames.end(); ++itNames)
             {
-                // We checked already the full tag, start with second.
+                
                 ::std::vector< OUString > aFallbackLocales( LanguageTag( (*itNames).maLocale).getFallbackStrings( false));
                 for (::std::vector< OUString >::const_iterator itLocales( aFallbackLocales.begin());
                         itLocales != aFallbackLocales.end(); ++itLocales)
@@ -188,7 +188,7 @@ bool ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, OUString& rRetExc
             }
         }
 
-        // Third, last resort, use first (default) entry.
+        
         rRetExcelName = rCompNames[0].maName;
         return true;
     }
@@ -265,7 +265,7 @@ void ScUnoAddInCollection::Initialize()
                         xEnAc->createContentEnumeration( "com.sun.star.sheet.AddIn" );
         if ( xEnum.is() )
         {
-            //  loop through all AddIns
+            
             while ( xEnum->hasMoreElements() )
             {
                 uno::Any aAddInAny = xEnum->nextElement();
@@ -276,8 +276,8 @@ void ScUnoAddInCollection::Initialize()
                     aAddInAny >>= xIntFac;
                     if ( xIntFac.is() )
                     {
-                        // #i59984# try XSingleComponentFactory in addition to (old) XSingleServiceFactory,
-                        // passing the context to the component
+                        
+                        
 
                         uno::Reference<uno::XInterface> xInterface;
                         uno::Reference<uno::XComponentContext> xCtx(
@@ -308,37 +308,37 @@ void ScUnoAddInCollection::Initialize()
         }
     }
 
-    // ReadConfiguration is called after looking at the AddIn implementations.
-    // Duplicated are skipped (by using the service information, they don't have to be updated again
-    // when argument information is needed).
+    
+    
+    
     ReadConfiguration();
 
-    bInitialized = true;        // with or without functions
+    bInitialized = true;        
 }
 
 static sal_uInt16 lcl_GetCategory( const OUString& rName )
 {
     static const sal_Char* aFuncNames[SC_FUNCGROUP_COUNT] =
     {
-        //  array index = ID - 1 (ID starts at 1)
-        //  all upper case
-        "Database",         // ID_FUNCTION_GRP_DATABASE
-        "Date&Time",        // ID_FUNCTION_GRP_DATETIME
-        "Financial",        // ID_FUNCTION_GRP_FINANZ
-        "Information",      // ID_FUNCTION_GRP_INFO
-        "Logical",          // ID_FUNCTION_GRP_LOGIC
-        "Mathematical",     // ID_FUNCTION_GRP_MATH
-        "Matrix",           // ID_FUNCTION_GRP_MATRIX
-        "Statistical",      // ID_FUNCTION_GRP_STATISTIC
-        "Spreadsheet",      // ID_FUNCTION_GRP_TABLE
-        "Text",             // ID_FUNCTION_GRP_TEXT
-        "Add-In"            // ID_FUNCTION_GRP_ADDINS
+        
+        
+        "Database",         
+        "Date&Time",        
+        "Financial",        
+        "Information",      
+        "Logical",          
+        "Mathematical",     
+        "Matrix",           
+        "Statistical",      
+        "Spreadsheet",      
+        "Text",             
+        "Add-In"            
     };
     for (sal_uInt16 i=0; i<SC_FUNCGROUP_COUNT; i++)
         if ( rName.equalsAscii( aFuncNames[i] ) )
-            return i+1;                             // IDs start at 1
+            return i+1;                             
 
-    return ID_FUNCTION_GRP_ADDINS;  // if not found, use Add-In group
+    return ID_FUNCTION_GRP_ADDINS;  
 }
 
 #define CFGPATH_ADDINS              "Office.CalcAddIns/AddInInfo"
@@ -351,24 +351,24 @@ static sal_uInt16 lcl_GetCategory( const OUString& rName )
 #define CFGSTR_DISPLAYNAME          "DisplayName"
 #define CFGSTR_DESCRIPTION          "Description"
 #define CFGSTR_CATEGORY             "Category"
-// CategoryDisplayName is ignored for now
+
 
 #define CFGSTR_COMPATIBILITYNAME    "CompatibilityName"
 #define CFGSTR_PARAMETERS           "Parameters"
 
 void ScUnoAddInCollection::ReadConfiguration()
 {
-    // called only from Initialize
+    
 
     ScAddInCfg& rAddInConfig = SC_MOD()->GetAddInCfg();
 
-    // additional, temporary config item for the compatibility names
+    
     ScLinkConfigItem aAllLocalesConfig( OUString(CFGPATH_ADDINS), CONFIG_MODE_ALL_LOCALES );
-    // CommitLink is not used (only reading values)
+    
 
     const OUString sSlash('/');
 
-    // get the list of add-ins (services)
+    
     OUString aEmptyString;
     uno::Sequence<OUString> aServiceNames = rAddInConfig.GetNodeNames( aEmptyString );
 
@@ -385,7 +385,7 @@ void ScUnoAddInCollection::ReadConfiguration()
         uno::Sequence<OUString> aFunctionNames = rAddInConfig.GetNodeNames( aFunctionsPath );
         sal_Int32 nNewCount = aFunctionNames.getLength();
 
-        // allocate pointers
+        
 
         long nOld = nFuncCount;
         nFuncCount = nNewCount+nOld;
@@ -400,7 +400,7 @@ void ScUnoAddInCollection::ReadConfiguration()
         else
             ppFuncData = new ScUnoAddInFuncData*[nFuncCount];
 
-        //! TODO: adjust bucket count?
+        
         if ( !pExactHashMap )
             pExactHashMap = new ScAddInHashMap;
         if ( !pNameHashMap )
@@ -408,21 +408,21 @@ void ScUnoAddInCollection::ReadConfiguration()
         if ( !pLocalHashMap )
             pLocalHashMap = new ScAddInHashMap;
 
-        //! get the function information in a single call for all functions?
+        
 
         const OUString* pFuncNameArray = aFunctionNames.getConstArray();
         for ( sal_Int32 nFuncPos = 0; nFuncPos < nNewCount; nFuncPos++ )
         {
             ppFuncData[nFuncPos+nOld] = NULL;
 
-            // stored function name: (service name).(function)
+            
             OUStringBuffer aFuncNameBuffer( aServiceName.getLength()+1+pFuncNameArray[nFuncPos].getLength());
             aFuncNameBuffer.append(aServiceName);
             aFuncNameBuffer.append('.');
             aFuncNameBuffer.append(pFuncNameArray[nFuncPos]);
             OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
 
-            // skip the function if already known (read from old AddIn service)
+            
 
             if ( pExactHashMap->find( aFuncName ) == pExactHashMap->end() )
             {
@@ -430,7 +430,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 OUString aDescription;
                 sal_uInt16 nCategory = ID_FUNCTION_GRP_ADDINS;
 
-                // get direct information on the function
+                
 
                 OUString aFuncPropPath = aFunctionsPath;
                 aFuncPropPath += sSlash;
@@ -457,7 +457,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     nCategory = lcl_GetCategory( aCategoryName );
                 }
 
-                // get compatibility names
+                
 
                 ::std::vector<ScUnoAddInFuncData::LocalizedName> aCompNames;
 
@@ -476,10 +476,10 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                         for ( sal_Int32 nLocale = 0; nLocale < nLocaleCount; nLocale++ )
                         {
-                            // PropertyValue name is the locale ("convert" from
-                            // string to string to canonicalize)
+                            
+                            
                             OUString aLocale( LanguageTag( pConfigArray[nLocale].Name, true).getBcp47( false));
-                            // PropertyValue value is the localized value (string in this case)
+                            
                             OUString aName;
                             pConfigArray[nLocale].Value >>= aName;
                             aCompNames.push_back( ScUnoAddInFuncData::LocalizedName( aLocale, aName));
@@ -487,7 +487,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                     }
                 }
 
-                // get argument info
+                
 
                 ScAddInArgDesc* pVisibleArgs = NULL;
                 long nVisibleCount = 0;
@@ -500,7 +500,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 sal_Int32 nArgumentCount = aArgumentNames.getLength();
                 if ( nArgumentCount )
                 {
-                    // get DisplayName and Description for each argument
+                    
                     uno::Sequence<OUString> aArgPropNames( nArgumentCount * 2 );
                     OUString* pPropNameArray = aArgPropNames.getArray();
 
@@ -528,7 +528,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                         OUString sDescription;
 
                         ScAddInArgDesc aDesc;
-                        aDesc.eType = SC_ADDINARG_NONE;     // arg type is not in configuration
+                        aDesc.eType = SC_ADDINARG_NONE;     
                         aDesc.bOptional = false;
 
                         nVisibleCount = nArgumentCount;
@@ -551,10 +551,10 @@ void ScUnoAddInCollection::ReadConfiguration()
 
                 OString sHelpId = aHelpIdGenerator.GetHelpId( pFuncNameArray[nFuncPos] );
 
-                uno::Reference<reflection::XIdlMethod> xFunc;       // remains empty
-                uno::Any aObject;                                   // also empty
+                uno::Reference<reflection::XIdlMethod> xFunc;       
+                uno::Any aObject;                                   
 
-                // create and insert into the array
+                
 
                 ScUnoAddInFuncData* pData = new ScUnoAddInFuncData(
                     aFuncName, aLocalName, aDescription,
@@ -630,9 +630,9 @@ bool ScUnoAddInCollection::GetCalcName( const OUString& rExcelName, OUString& rR
                 {
                     if ( ScGlobal::pCharClass->uppercase( (*it).maName ) == aUpperCmp )
                     {
-                        //! store upper case for comparing?
+                        
 
-                        //  use the first function that has this name for any language
+                        
                         rRetCalcName = pFuncData->GetOriginalName();
                         return true;
                     }
@@ -650,14 +650,14 @@ inline bool IsTypeName( const OUString& rName, const uno::Type& rType )
 
 static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xClass )
 {
-    //  this must match with ScUnoAddInCall::SetResult
+    
 
     if ( !xClass.is() ) return false;
 
     switch (xClass->getTypeClass())
     {
-        case uno::TypeClass_ANY:                // variable type
-        case uno::TypeClass_ENUM:               //! ???
+        case uno::TypeClass_ANY:                
+        case uno::TypeClass_ENUM:               
         case uno::TypeClass_BOOLEAN:
         case uno::TypeClass_CHAR:
         case uno::TypeClass_BYTE:
@@ -668,12 +668,12 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
         case uno::TypeClass_FLOAT:
         case uno::TypeClass_DOUBLE:
         case uno::TypeClass_STRING:
-            return true;                        // values or string
+            return true;                        
 
         case uno::TypeClass_INTERFACE:
             {
-                //  return type XInterface may contain a XVolatileResult
-                //! XIdlClass needs getType() method!
+                
+                
 
                 OUString sName = xClass->getName();
                 return (
@@ -683,8 +683,8 @@ static bool lcl_ValidReturnType( const uno::Reference<reflection::XIdlClass>& xC
 
         default:
             {
-                //  nested sequences for arrays
-                //! XIdlClass needs getType() method!
+                
+                
 
                 OUString sName = xClass->getName();
                 return (
@@ -703,7 +703,7 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
 
     uno::TypeClass eType = xClass->getTypeClass();
 
-    if ( eType == uno::TypeClass_LONG )             //! other integer types?
+    if ( eType == uno::TypeClass_LONG )             
         return SC_ADDINARG_INTEGER;
 
     if ( eType == uno::TypeClass_DOUBLE )
@@ -712,7 +712,7 @@ static ScAddInArgumentType lcl_GetArgType( const uno::Reference<reflection::XIdl
     if ( eType == uno::TypeClass_STRING )
         return SC_ADDINARG_STRING;
 
-    //! XIdlClass needs getType() method!
+    
     OUString sName = xClass->getName();
 
     if (IsTypeName( sName, getCppuType((uno::Sequence< uno::Sequence<sal_Int32> >*)0) ))
@@ -748,8 +748,8 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
     uno::Reference<lang::XServiceName> xName( xInterface, uno::UNO_QUERY );
     if ( xAddIn.is() && xName.is() )
     {
-        // fdo50118 when GetUseEnglishFunctionName() returns true, set the
-        // locale to en-US to get English function names
+        
+        
         if ( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName() )
             xAddIn->setLocale( lang::Locale( "en", "US", ""));
         else
@@ -758,7 +758,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         OUString aServiceName( xName->getServiceName() );
         ScUnoAddInHelpIdGenerator aHelpIdGenerator( aServiceName );
 
-        //! pass XIntrospection to ReadFromAddIn
+        
 
         uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
@@ -786,7 +786,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                 else
                     ppFuncData = new ScUnoAddInFuncData*[nFuncCount];
 
-                //! TODO: adjust bucket count?
+                
                 if ( !pExactHashMap )
                     pExactHashMap = new ScAddInHashMap;
                 if ( !pNameHashMap )
@@ -802,13 +802,13 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                     uno::Reference<reflection::XIdlMethod> xFunc = pArray[nFuncPos];
                     if (xFunc.is())
                     {
-                        //  leave out internal functions
+                        
                         uno::Reference<reflection::XIdlClass> xClass =
                                         xFunc->getDeclaringClass();
                         bool bSkip = true;
                         if ( xClass.is() )
                         {
-                            //! XIdlClass needs getType() method!
+                            
                             OUString sName = xClass->getName();
                             bSkip = (
                                 IsTypeName( sName,
@@ -831,7 +831,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                         {
                             OUString aFuncU = xFunc->getName();
 
-                            // stored function name: (service name).(function)
+                            
                             OUStringBuffer aFuncNameBuffer( aServiceName.getLength()+1+aFuncU.getLength());
                             aFuncNameBuffer.append(aServiceName);
                             aFuncNameBuffer.append('.');
@@ -932,7 +932,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                             aDesc.aName = aArgName;
                                             aDesc.aDescription = aArgDesc;
                                             aDesc.bOptional = bOptional;
-                                            //! initialize aInternalName only from config?
+                                            
                                             aDesc.aInternalName = pParArr[nParamPos].aName;
 
                                             pVisibleArgs[nDestPos++] = aDesc;
@@ -974,7 +974,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
 
 static void lcl_UpdateFunctionList( ScFunctionList& rFunctionList, const ScUnoAddInFuncData& rFuncData )
 {
-    OUString aCompare = rFuncData.GetUpperLocal();    // as used in FillFunctionDescFromData
+    OUString aCompare = rFuncData.GetUpperLocal();    
 
     sal_uLong nCount = rFunctionList.GetCount();
     for (sal_uLong nPos=0; nPos<nCount; nPos++)
@@ -1004,23 +1004,23 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
                                             const OUString& rServiceName )
 {
     uno::Reference<lang::XLocalizable> xLoc( xInterface, uno::UNO_QUERY );
-    if ( xLoc.is() )        // optional in new add-ins
+    if ( xLoc.is() )        
     {
-        // fdo50118 when GetUseEnglishFunctionName() returns true, set the
-        // locale to en-US to get English function names
+        
+        
         if ( SC_MOD()->GetFormulaOptions().GetUseEnglishFuncName() )
             xLoc->setLocale( lang::Locale( "en", "US", ""));
         else
             xLoc->setLocale( Application::GetSettings().GetUILanguageTag().getLocale());
     }
 
-    // if function list was already initialized, it must be updated
+    
 
     ScFunctionList* pFunctionList = NULL;
     if ( ScGlobal::HasStarCalcFunctionList() )
         pFunctionList = ScGlobal::GetStarCalcFunctionList();
 
-    // only get the function information from Introspection
+    
 
     uno::Reference<uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
 
@@ -1041,21 +1041,21 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
             {
                 OUString aFuncU = xFunc->getName();
 
-                // stored function name: (service name).(function)
+                
                 OUStringBuffer aFuncNameBuffer( rServiceName.getLength()+1+aFuncU.getLength());
                 aFuncNameBuffer.append(rServiceName);
                 aFuncNameBuffer.append('.');
                 aFuncNameBuffer.append(aFuncU);
                 OUString aFuncName = aFuncNameBuffer.makeStringAndClear();
 
-                // internal names are skipped because no FuncData exists
+                
                 ScUnoAddInFuncData* pOldData = const_cast<ScUnoAddInFuncData*>( GetFuncData( aFuncName ) );
                 if ( pOldData )
                 {
-                    // Create new (complete) argument info.
-                    // As in ReadFromAddIn, the reflection information is authoritative.
-                    // Local names and descriptions from pOldData are looked up using the
-                    // internal argument name.
+                    
+                    
+                    
+                    
 
                     bool bValid = true;
                     long nVisibleCount = 0;
@@ -1111,7 +1111,7 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
 
                                     aDesc.eType = eArgType;
                                     aDesc.bOptional = bOptional;
-                                    //! initialize aInternalName only from config?
+                                    
                                     aDesc.aInternalName = pParArr[nParamPos].aName;
 
                                     pVisibleArgs[nDestPos++] = aDesc;
@@ -1145,7 +1145,7 @@ OUString ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bL
 
     if ( bLocalFirst )
     {
-        //  first scan all local names (used for entering formulas)
+        
 
         ScAddInHashMap::const_iterator iLook( pLocalHashMap->find( rUpperName ) );
         if ( iLook != pLocalHashMap->end() )
@@ -1153,14 +1153,14 @@ OUString ScUnoAddInCollection::FindFunction( const OUString& rUpperName, bool bL
     }
     else
     {
-        //  first scan international names (used when calling a function)
-        //! before that, check for exact match???
+        
+        
 
         ScAddInHashMap::const_iterator iLook( pNameHashMap->find( rUpperName ) );
         if ( iLook != pNameHashMap->end() )
             return iLook->second->GetOriginalName();
 
-        //  after that, scan all local names (to allow replacing old AddIns with Uno)
+        
 
         iLook = pLocalHashMap->find( rUpperName );
         if ( iLook != pLocalHashMap->end() )
@@ -1175,14 +1175,14 @@ const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const OUString& rNa
     if (!bInitialized)
         Initialize();
 
-    //  rName must be the exact internal name
+    
 
     ScAddInHashMap::const_iterator iLook( pExactHashMap->find( rName ) );
     if ( iLook != pExactHashMap->end() )
     {
         const ScUnoAddInFuncData* pFuncData = iLook->second;
 
-        if ( bComplete && !pFuncData->GetFunction().is() )           //! extra flag?
+        if ( bComplete && !pFuncData->GetFunction().is() )           
             LoadComponent( *pFuncData );
 
         return pFuncData;
@@ -1206,11 +1206,11 @@ void ScUnoAddInCollection::LocalizeString( OUString& rName )
     if (!bInitialized)
         Initialize();
 
-    //  modify rName - input: exact name
+    
 
     ScAddInHashMap::const_iterator iLook( pExactHashMap->find( rName ) );
     if ( iLook != pExactHashMap->end() )
-        rName = iLook->second->GetUpperLocal();         //! upper?
+        rName = iLook->second->GetUpperLocal();         
 }
 
 long ScUnoAddInCollection::GetFuncCount()
@@ -1238,27 +1238,27 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 {
     rDesc.Clear();
 
-    bool bIncomplete = !rFuncData.GetFunction().is();       //! extra flag?
+    bool bIncomplete = !rFuncData.GetFunction().is();       
 
     long nArgCount = rFuncData.GetArgumentCount();
     if ( nArgCount > USHRT_MAX )
         return false;
 
     if ( bIncomplete )
-        nArgCount = 0;      // if incomplete, fill without argument info (no wrong order)
+        nArgCount = 0;      
 
-    // nFIndex is set from outside
+    
 
-    rDesc.pFuncName = new OUString( rFuncData.GetUpperLocal() );     //! upper?
+    rDesc.pFuncName = new OUString( rFuncData.GetUpperLocal() );     
     rDesc.nCategory = rFuncData.GetCategory();
     rDesc.sHelpId = rFuncData.GetHelpId();
 
     OUString aDesc = rFuncData.GetDescription();
     if (aDesc.isEmpty())
-        aDesc = rFuncData.GetLocalName();      // use name if no description is available
+        aDesc = rFuncData.GetLocalName();      
     rDesc.pFuncDesc = new OUString( aDesc );
 
-    // AddInArgumentType_CALLER is already left out in FuncData
+    
 
     rDesc.nArgCount = (sal_uInt16)nArgCount;
     if ( nArgCount )
@@ -1278,7 +1278,7 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
             rDesc.pDefArgFlags[nArg].bOptional = pArgs[nArg].bOptional;
             rDesc.pDefArgFlags[nArg].bSuppress = false;
 
-            // no empty names...
+            
             if ( rDesc.maDefArgNames[nArg].isEmpty() )
             {
                 OUString aDefName("arg");
@@ -1286,13 +1286,13 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
                 rDesc.maDefArgNames[nArg] = aDefName;
             }
 
-            //  last argument repeated?
+            
             if ( nArg+1 == nArgCount && ( pArgs[nArg].eType == SC_ADDINARG_VARARGS ) )
                 bMultiple = true;
         }
 
         if ( bMultiple )
-            rDesc.nArgCount += VAR_ARGS - 1;    // VAR_ARGS means just one repeated arg
+            rDesc.nArgCount += VAR_ARGS - 1;    
     }
 
     rDesc.bIncomplete = bIncomplete;
@@ -1303,44 +1303,44 @@ bool ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const OUString& rName,
                                 long nParamCount ) :
     bValidCount( false ),
-    nErrCode( errNoCode ),      // before function was called
+    nErrCode( errNoCode ),      
     bHasString( true ),
     fValue( 0.0 ),
     xMatrix( NULL )
 {
-    pFuncData = rColl.GetFuncData( rName, true );           // need fully initialized data
+    pFuncData = rColl.GetFuncData( rName, true );           
     OSL_ENSURE( pFuncData, "Function Data missing" );
     if ( pFuncData )
     {
         long nDescCount = pFuncData->GetArgumentCount();
         const ScAddInArgDesc* pArgs = pFuncData->GetArguments();
 
-        //  is aVarArg sequence needed?
+        
         if ( nParamCount >= nDescCount && nDescCount > 0 &&
              pArgs[nDescCount-1].eType == SC_ADDINARG_VARARGS )
         {
-            long nVarCount = nParamCount - ( nDescCount - 1 );  // size of last argument
+            long nVarCount = nParamCount - ( nDescCount - 1 );  
             aVarArg.realloc( nVarCount );
             bValidCount = true;
         }
         else if ( nParamCount <= nDescCount )
         {
-            //  all args behind nParamCount must be optional
+            
             bValidCount = true;
             for (long i=nParamCount; i<nDescCount; i++)
                 if ( !pArgs[i].bOptional )
                     bValidCount = false;
         }
-        // else invalid (too many arguments)
+        
 
         if ( bValidCount )
-            aArgs.realloc( nDescCount );    // sequence must always match function signature
+            aArgs.realloc( nDescCount );    
     }
 }
 
 ScUnoAddInCall::~ScUnoAddInCall()
 {
-    // pFuncData is deleted with ScUnoAddInCollection
+    
 }
 
 bool ScUnoAddInCall::ValidParamCount()
@@ -1355,14 +1355,14 @@ ScAddInArgumentType ScUnoAddInCall::GetArgType( long nPos )
         long nCount = pFuncData->GetArgumentCount();
         const ScAddInArgDesc* pArgs = pFuncData->GetArguments();
 
-        // if last arg is sequence, use "any" type
+        
         if ( nCount > 0 && nPos >= nCount-1 && pArgs[nCount-1].eType == SC_ADDINARG_VARARGS )
             return SC_ADDINARG_VALUE_OR_ARRAY;
 
         if ( nPos < nCount )
             return pArgs[nPos].eType;
     }
-    return SC_ADDINARG_VALUE_OR_ARRAY;      //! error code !!!!
+    return SC_ADDINARG_VALUE_OR_ARRAY;      
 }
 
 bool ScUnoAddInCall::NeedsCaller() const
@@ -1418,8 +1418,8 @@ void ScUnoAddInCall::ExecuteCall()
     const ScAddInArgDesc* pArgs = pFuncData->GetArguments();
     if ( nCount > 0 && pArgs[nCount-1].eType == SC_ADDINARG_VARARGS )
     {
-        //  insert aVarArg as last argument
-        //! after inserting caller (to prevent copying twice)?
+        
+        
 
         OSL_ENSURE( aArgs.getLength() == nCount, "wrong argument count" );
         aArgs.getArray()[nCount-1] <<= aVarArg;
@@ -1432,7 +1432,7 @@ void ScUnoAddInCall::ExecuteCall()
 
         long nUserLen = aArgs.getLength();
         long nCallPos = pFuncData->GetCallerPos();
-        if (nCallPos>nUserLen)                          // should not happen
+        if (nCallPos>nUserLen)                          
         {
             OSL_FAIL("wrong CallPos");
             nCallPos = nUserLen;
@@ -1461,7 +1461,7 @@ void ScUnoAddInCall::ExecuteCall()
 
 void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
 {
-    //  rCallArgs may not match argument descriptions (because of caller)
+    
 
     uno::Reference<reflection::XIdlMethod> xFunction;
     uno::Any aObject;
@@ -1503,7 +1503,7 @@ void ScUnoAddInCall::ExecuteCallWithArgs(uno::Sequence<uno::Any>& rCallArgs)
         }
 
         if (!nErrCode)
-            SetResult( aAny );      // convert result to Calc types
+            SetResult( aAny );      
     }
 }
 
@@ -1512,14 +1512,14 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
     nErrCode = 0;
     xVarRes = NULL;
 
-    // Reflection* pRefl = rNewRes.getReflection();
+    
 
     uno::TypeClass eClass = rNewRes.getValueTypeClass();
     uno::Type aType = rNewRes.getValueType();
     switch (eClass)
     {
         case uno::TypeClass_VOID:
-            nErrCode = NOTAVAILABLE;         // #NA
+            nErrCode = NOTAVAILABLE;         
             break;
 
         case uno::TypeClass_ENUM:
@@ -1548,14 +1548,14 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
         case uno::TypeClass_INTERFACE:
             {
-                //! directly extract XVolatileResult from any?
+                
                 uno::Reference<uno::XInterface> xInterface;
                 rNewRes >>= xInterface;
                 if ( xInterface.is() )
                     xVarRes = uno::Reference<sheet::XVolatileResult>( xInterface, uno::UNO_QUERY );
 
                 if (!xVarRes.is())
-                    nErrCode = errNoValue;          // unknown interface
+                    nErrCode = errNoValue;          
             }
             break;
 
@@ -1564,7 +1564,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             {
                 const uno::Sequence< uno::Sequence<sal_Int32> >* pRowSeq = NULL;
 
-                //! use pointer from any!
+                
                 uno::Sequence< uno::Sequence<sal_Int32> > aSequence;
                 if ( rNewRes >>= aSequence )
                     pRowSeq = &aSequence;
@@ -1606,7 +1606,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             {
                 const uno::Sequence< uno::Sequence<double> >* pRowSeq = NULL;
 
-                //! use pointer from any!
+                
                 uno::Sequence< uno::Sequence<double> > aSequence;
                 if ( rNewRes >>= aSequence )
                     pRowSeq = &aSequence;
@@ -1648,7 +1648,7 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             {
                 const uno::Sequence< uno::Sequence<OUString> >* pRowSeq = NULL;
 
-                //! use pointer from any!
+                
                 uno::Sequence< uno::Sequence<OUString> > aSequence;
                 if ( rNewRes >>= aSequence )
                     pRowSeq = &aSequence;
@@ -1695,8 +1695,8 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                 xMatrix = ScSequenceToMatrix::CreateMixedMatrix( rNewRes );
             }
 
-            if (!xMatrix)                       // no array found
-                nErrCode = errNoValue;          //! code for error in return type???
+            if (!xMatrix)                       
+                nErrCode = errNoValue;          
     }
 }
 

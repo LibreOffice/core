@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "printdlg.hxx"
@@ -88,7 +88,7 @@ const sal_Int32 PrintDialog::PrintPreviewWindow::PREVIEW_BITMAP_WIDTH = 1600;
 
 void PrintDialog::PrintPreviewWindow::DataChanged( const DataChangedEvent& i_rDCEvt )
 {
-    // react on settings changed
+    
     if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
     {
         maPageVDev.SetBackground( Color( COL_WHITE ) );
@@ -100,13 +100,13 @@ void PrintDialog::PrintPreviewWindow::Resize()
 {
     Size aNewSize( GetSizePixel() );
     long nTextHeight = maHorzDim.GetTextHeight();
-    // leave small space for decoration
+    
     aNewSize.Width() -= nTextHeight + 2;
     aNewSize.Height() -= nTextHeight + 2;
     Size aScaledSize;
     double fScale = 1.0;
 
-    // #i106435# catch corner case of Size(0,0)
+    
     Size aOrigSize( maOrigSize );
     if( aOrigSize.Width() < 1 )
         aOrigSize.Width() = aNewSize.Width();
@@ -129,11 +129,11 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
     maPreviewSize = aScaledSize;
 
-    // #i104784# if we render the page too small then rounding issues result in
-    // layout artifacts looking really bad. So scale the page unto a device that is not
-    // full page size but not too small either. This also results in much better visual
-    // quality of the preview, e.g. when its height approaches the number of text lines
-    // find a good scaling factor
+    
+    
+    
+    
+    
 
     double aAspectRatio = aScaledSize.Height() / (double) aScaledSize.Width();
 
@@ -142,7 +142,7 @@ void PrintDialog::PrintPreviewWindow::Resize()
 
     maPageVDev.SetOutputSizePixel( aScaledSize, false );
 
-    // position dimension lines
+    
     Point aRef( nTextHeight + (aNewSize.Width() - maPreviewSize.Width())/2,
                 nTextHeight + (aNewSize.Height() - maPreviewSize.Height())/2 );
     maHorzDim.SetPosSizePixel( Point( aRef.X(), aRef.Y() - nTextHeight ),
@@ -161,7 +161,7 @@ void PrintDialog::PrintPreviewWindow::Paint( const Rectangle& )
 
     if( !maReplacementString.isEmpty() )
     {
-        // replacement is active
+        
         Push();
         Font aFont( GetSettings().GetStyleSettings().GetLabelFont() );
         SetZoomedPointFont( aFont );
@@ -221,7 +221,7 @@ void PrintDialog::PrintPreviewWindow::setPreview( const GDIMetaFile& i_rNewPrevi
     maPageVDev.SetReferenceDevice( i_nDPIX, i_nDPIY );
     maPageVDev.EnableOutput( true );
 
-    // use correct measurements
+    
     const LocaleDataWrapper& rLocWrap( GetSettings().GetLocaleDataWrapper() );
     MapUnit eUnit = MAP_MM;
     int nDigits = 0;
@@ -332,7 +332,7 @@ void PrintDialog::ShowNupOrderWindow::Paint( const Rectangle& i_rRect )
 
     Size aOutSize( GetOutputSizePixel() );
     Size aSubSize( aOutSize.Width() / mnColumns, aOutSize.Height() / mnRows );
-    // calculate font size: shrink the sample text so it fits
+    
     double fX = double(aSubSize.Width())/double(aSampleTextSize.Width());
     double fY = double(aSubSize.Height())/double(aSampleTextSize.Height());
     double fScale = (fX < fY) ? fX : fY;
@@ -439,7 +439,7 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
     mpPagesBtn->Check( true );
     mpBrochureBtn->Show( false );
 
-    // setup field units for metric fields
+    
     const LocaleDataWrapper& rLocWrap( mpPageMarginEdt->GetLocaleDataWrapper() );
     FieldUnit eUnit = FUNIT_MM;
     sal_uInt16 nDigits = 0;
@@ -448,11 +448,11 @@ void PrintDialog::NUpTabPage::initFromMultiPageSetup( const vcl::PrinterControll
         eUnit = FUNIT_INCH;
         nDigits = 2;
     }
-    // set units
+    
     mpPageMarginEdt->SetUnit( eUnit );
     mpSheetMarginEdt->SetUnit( eUnit );
 
-    // set precision
+    
     mpPageMarginEdt->SetDecimalDigits( nDigits );
     mpSheetMarginEdt->SetDecimalDigits( nDigits );
 
@@ -494,8 +494,8 @@ PrintDialog::JobTabPage::JobTabPage( VclBuilder* pUIBuilder )
     pUIBuilder->get(mpCollateBox, "collate");
     pUIBuilder->get(mpCollateImage, "collateimage");
     pUIBuilder->get(mpReverseOrderBox, "reverseorder");
-    // HACK: this is not a dropdown box, but the dropdown line count
-    // sets the results of GetOptimalSize in a normal ListBox
+    
+    
     mpPrinters->SetDropDownLineCount( 4 );
 }
 
@@ -593,35 +593,35 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     get(mpTabCtrl, "tabcontrol");
     get(mpPreviewWindow, "preview");
 
-    // save printbutton text, gets exchanged occasionally with print to file
+    
     maPrintText = mpOKButton->GetText();
 
-    // setup preview controls
+    
     mpForwardBtn->SetStyle( mpForwardBtn->GetStyle() | WB_BEVELBUTTON );
     mpBackwardBtn->SetStyle( mpBackwardBtn->GetStyle() | WB_BEVELBUTTON );
 
     maPageStr = mpNumPagesText->GetText();
 
-    // init reverse print
+    
     maJobPage.mpReverseOrderBox->Check( maPController->getReversePrint() );
 
     Printer::updatePrinters();
 
-    // fill printer listbox
+    
     const std::vector< OUString >& rQueues( Printer::GetPrinterQueues() );
     for( std::vector< OUString >::const_iterator it = rQueues.begin();
          it != rQueues.end(); ++it )
     {
         maJobPage.mpPrinters->InsertEntry( *it );
     }
-    // select current printer
+    
     if( maJobPage.mpPrinters->GetEntryPos( maPController->getPrinter()->GetName() ) != LISTBOX_ENTRY_NOTFOUND )
     {
         maJobPage.mpPrinters->SelectEntry( maPController->getPrinter()->GetName() );
     }
     else
     {
-        // fall back to last printer
+        
         SettingsConfigItem* pItem = SettingsConfigItem::get();
         OUString aValue( pItem->getValue( OUString( "PrintDialog"  ),
                                         OUString( "LastPrinter"  ) ) );
@@ -632,24 +632,24 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
         }
         else
         {
-            // fall back to default printer
+            
             maJobPage.mpPrinters->SelectEntry( Printer::GetDefaultPrinterName() );
             maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( Printer::GetDefaultPrinterName() ) ) );
         }
     }
-    // not printing to file
+    
     maPController->resetPrinterOptions( false );
 
-    // get the first page
+    
     preparePreview( true, true );
 
-    // update the text fields for the printer
+    
     updatePrinterText();
 
-    // set a select handler
+    
     maJobPage.mpPrinters->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
-    // setup sizes for N-Up
+    
     Size aNupSize( maPController->getPrinter()->PixelToLogic(
                          maPController->getPrinter()->GetPaperSizePixel(), MapMode( MAP_100TH_MM ) ) );
     if( maPController->getPrinter()->GetOrientation() == ORIENTATION_LANDSCAPE )
@@ -664,7 +664,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     }
     maNUpPage.initFromMultiPageSetup( maPController->getMultipage() );
 
-    // setup click handler on the various buttons
+    
     mpOKButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
     #if OSL_DEBUG_LEVEL > 1
     mpCancelButton->SetClickHdl( LINK( this, PrintDialog, ClickHdl ) );
@@ -681,7 +681,7 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maJobPage.mpReverseOrderBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maOptionsPage.mpCollateSingleJobsBox->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
     maNUpPage.mpPagesBtn->SetToggleHdl( LINK( this, PrintDialog, ClickHdl ) );
-    // setup modify hdl
+    
     mpPageEdit->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maJobPage.mpCopyCountField->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.mpNupRowsEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
@@ -689,30 +689,30 @@ PrintDialog::PrintDialog( Window* i_pParent, const boost::shared_ptr<PrinterCont
     maNUpPage.mpPageMarginEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
     maNUpPage.mpSheetMarginEdt->SetModifyHdl( LINK( this, PrintDialog, ModifyHdl ) );
 
-    // setup select hdl
+    
     maNUpPage.mpNupPagesBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     maNUpPage.mpNupOrientationBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
     maNUpPage.mpNupOrderBox->SetSelectHdl( LINK( this, PrintDialog, SelectHdl ) );
 
-    // setup optional UI options set by application
+    
     setupOptionalUI();
 
-    // set change handler for UI options
+    
     maPController->setOptionChangeHdl( LINK( this, PrintDialog, UIOptionsChanged ) );
 
-    // remove layout page if unwanted
+    
     if (!mbShowLayoutPage)
         mpTabCtrl->RemovePage(mpTabCtrl->GetPageId(2));
 
-    // restore settings from last run
+    
     readFromSettings();
 
-    // setup dependencies
+    
     checkControlDependencies();
 
     if ( maPController->getBoolProperty( OUString( "HideHelpButton" ), false ) )
         mpHelpButton->Hide();
-    // set initial focus to "Number of copies"
+    
     maJobPage.mpCopyCountField->GrabFocus();
     maJobPage.mpCopyCountField->SetSelection( Selection(0, 0xFFFF) );
 
@@ -730,7 +730,7 @@ void PrintDialog::readFromSettings()
     maNUpPage.readFromSettings();
     maOptionsPage.readFromSettings();
 
-    // read last selected tab page; if it exists, activate it
+    
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     OUString aValue = pItem->getValue( OUString( "PrintDialog"  ),
                                             OUString( "LastPage"  ) );
@@ -746,7 +746,7 @@ void PrintDialog::readFromSettings()
     }
     mpOKButton->SetText( maOptionsPage.mpToFileBox->IsChecked() ? maPrintToFileText : maPrintText );
 
-    // persistent window state
+    
     OUString aWinState( pItem->getValue( OUString( "PrintDialog"  ),
                                               OUString( "WindowState"  ) ) );
     if( !aWinState.isEmpty() )
@@ -765,7 +765,7 @@ void PrintDialog::storeToSettings()
     maNUpPage.storeToSettings();
     maOptionsPage.storeToSettings();
 
-    // store last selected printer
+    
     SettingsConfigItem* pItem = SettingsConfigItem::get();
     pItem->setValue( OUString( "PrintDialog"  ),
                      OUString( "LastPrinter"  ),
@@ -804,8 +804,8 @@ void setHelpId( Window* i_pWindow, const Sequence< OUString >& i_rHelpIds, sal_I
 
 static void setHelpText( Window* i_pWindow, const Sequence< OUString >& i_rHelpTexts, sal_Int32 i_nIndex )
 {
-    // without a help text set and the correct smartID,
-    // help texts will be retrieved from the online help system
+    
+    
     if( i_nIndex >= 0 && i_nIndex < i_rHelpTexts.getLength() )
         i_pWindow->SetHelpText( i_rHelpTexts.getConstArray()[i_nIndex] );
 }
@@ -832,7 +832,7 @@ void PrintDialog::setupOptionalUI()
         Sequence< beans::PropertyValue > aOptProp;
         rOptions[i].Value >>= aOptProp;
 
-        // extract ui element
+        
         OUString aCtrlType;
         OString aID;
         OUString aText;
@@ -948,11 +948,11 @@ void PrintDialog::setupOptionalUI()
 
             mpTabCtrl->SetPageText(nPageId, aText);
 
-            // set help id
+            
             if (aHelpIds.getLength() > 0)
                 mpTabCtrl->SetHelpId(nPageId, OUStringToOString(aHelpIds.getConstArray()[0], RTL_TEXTENCODING_UTF8));
 
-            // set help text
+            
             if (aHelpTexts.getLength() > 0)
                 mpTabCtrl->SetHelpText(nPageId, aHelpTexts.getConstArray()[0]);
 
@@ -966,14 +966,14 @@ void PrintDialog::setupOptionalUI()
 
             pFrame->SetText(aText);
 
-            // set help id
+            
             setHelpId(pFrame, aHelpIds, 0);
-            // set help text
+            
             setHelpText(pFrame, aHelpTexts, 0);
 
             pFrame->Show();
         }
-        // EVIL
+        
         else if( aCtrlType == "Bool" && aGroupingHint == "LayoutPage" && aPropertyName == "PrintProspect" )
         {
             maNUpPage.mpBrochureBtn->SetText( aText );
@@ -990,14 +990,14 @@ void PrintDialog::setupOptionalUI()
             maPropertyToWindowMap[ aPropertyName ].push_back( maNUpPage.mpBrochureBtn );
             maControlToPropertyMap[maNUpPage.mpBrochureBtn] = aPropertyName;
 
-            // set help id
+            
             setHelpId( maNUpPage.mpBrochureBtn, aHelpIds, 0 );
-            // set help text
+            
             setHelpText( maNUpPage.mpBrochureBtn, aHelpTexts, 0 );
         }
         else if (aCtrlType == "Bool")
         {
-            // add a check box
+            
             CheckBox* pNewBox = get<CheckBox>(aID);
             if (!pNewBox && mpCustomOptionsUIBuilder)
                 pNewBox = mpCustomOptionsUIBuilder->get<CheckBox>(aID);
@@ -1015,16 +1015,16 @@ void PrintDialog::setupOptionalUI()
             maPropertyToWindowMap[ aPropertyName ].push_back( pNewBox );
             maControlToPropertyMap[pNewBox] = aPropertyName;
 
-            // set help id
+            
             setHelpId( pNewBox, aHelpIds, 0 );
-            // set help text
+            
             setHelpText( pNewBox, aHelpTexts, 0 );
         }
         else if (aCtrlType == "Radio")
         {
             sal_Int32 nCurHelpText = 0;
 
-            // iterate options
+            
             sal_Int32 nSelectVal = 0;
             PropertyValue* pVal = maPController->getValue( aPropertyName );
             if( pVal && pVal->Value.hasValue() )
@@ -1046,9 +1046,9 @@ void PrintDialog::setupOptionalUI()
                 maControlToPropertyMap[pBtn] = aPropertyName;
                 maControlToNumValMap[pBtn] = m;
 
-                // set help id
+                
                 setHelpId( pBtn, aHelpIds, nCurHelpText );
-                // set help text
+                
                 setHelpText( pBtn, aHelpTexts, nCurHelpText );
                 nCurHelpText++;
             }
@@ -1059,7 +1059,7 @@ void PrintDialog::setupOptionalUI()
             if (!pList && mpCustomOptionsUIBuilder)
                 pList = mpCustomOptionsUIBuilder->get<ListBox>(aID);
 
-            // iterate options
+            
             for( sal_Int32 m = 0; m < aChoices.getLength(); m++ )
             {
                 pList->InsertEntry( aChoices[m] );
@@ -1073,9 +1073,9 @@ void PrintDialog::setupOptionalUI()
             pList->SetDropDownLineCount( static_cast<sal_uInt16>(aChoices.getLength()) );
             pList->Show();
 
-            // set help id
+            
             setHelpId( pList, aHelpIds, 0 );
-            // set help text
+            
             setHelpText( pList, aHelpTexts, 0 );
 
             maPropertyToWindowMap[ aPropertyName ].push_back( pList );
@@ -1087,7 +1087,7 @@ void PrintDialog::setupOptionalUI()
             if (!pField && mpCustomOptionsUIBuilder)
                 pField = mpCustomOptionsUIBuilder->get<NumericField>(aID);
 
-            // set min/max and current value
+            
             if( nMinValue != nMaxValue )
             {
                 pField->SetMin( nMinValue );
@@ -1101,9 +1101,9 @@ void PrintDialog::setupOptionalUI()
             pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
             pField->Show();
 
-            // set help id
+            
             setHelpId( pField, aHelpIds, 0 );
-            // set help text
+            
             setHelpText( pField, aHelpTexts, 0 );
 
             maPropertyToWindowMap[ aPropertyName ].push_back( pField );
@@ -1123,9 +1123,9 @@ void PrintDialog::setupOptionalUI()
             pField->SetModifyHdl( LINK( this, PrintDialog, UIOption_ModifyHdl ) );
             pField->Show();
 
-            // set help id
+            
             setHelpId( pField, aHelpIds, 0 );
-            // set help text
+            
             setHelpText( pField, aHelpTexts, 0 );
 
             maPropertyToWindowMap[ aPropertyName ].push_back( pField );
@@ -1141,8 +1141,8 @@ void PrintDialog::setupOptionalUI()
         }
     }
 
-    // #i106506# if no brochure button, then the singular Pages radio button
-    // makes no sense, so replace it by a FixedText label
+    
+    
     if (!maNUpPage.mpBrochureBtn->IsVisible() && maNUpPage.mpPagesBtn->IsVisible())
     {
         maNUpPage.mpPagesBoxTitleTxt->SetText( maNUpPage.mpPagesBtn->GetText() );
@@ -1150,12 +1150,12 @@ void PrintDialog::setupOptionalUI()
         maNUpPage.mpPagesBtn->Show( false );
     }
 
-    // update enable states
+    
     checkOptionalControlDependencies();
 
     Window *pPageRange = get<Window>("pagerange");
 
-    // print range not shown (currently math only) -> hide spacer line and reverse order
+    
     if (!pPageRange || !pPageRange->IsVisible())
     {
         maJobPage.mpCopySpacer->Show( false );
@@ -1168,7 +1168,7 @@ void PrintDialog::setupOptionalUI()
 
 void PrintDialog::DataChanged( const DataChangedEvent& i_rDCEvt )
 {
-    // react on settings changed
+    
     if( i_rDCEvt.GetType() == DATACHANGED_SETTINGS )
         checkControlDependencies();
     ModalDialog::DataChanged( i_rDCEvt );
@@ -1185,11 +1185,11 @@ void PrintDialog::checkControlDependencies()
 
     Size aImgSize( aImg.GetSizePixel() );
 
-    // adjust size of image
+    
     maJobPage.mpCollateImage->SetSizePixel( aImgSize );
     maJobPage.mpCollateImage->SetImage( aImg );
 
-    // enable setup button only for printers that can be setup
+    
     bool bHaveSetup = maPController->getPrinter()->HasSupport( SUPPORT_SETUPDIALOG );
     maJobPage.mpSetupButton->Enable(bHaveSetup);
 }
@@ -1202,17 +1202,17 @@ void PrintDialog::checkOptionalControlDependencies()
         bool bShouldbeEnabled = maPController->isUIOptionEnabled( it->second );
         if( ! bShouldbeEnabled )
         {
-            // enable controls that are directly attached to a dependency anyway
-            // if the normally disabled controls get modified, change the dependency
-            // so the control would be enabled
-            // example: in print range "Print All" is selected, "Page Range" is then of course
-            // not selected and the Edit for the Page Range would be disabled
-            // as a convenience we should enable the Edit anyway and automatically select
-            // "Page Range" instead of "Print All" if the Edit gets modified
+            
+            
+            
+            
+            
+            
+            
             if( maReverseDependencySet.find( it->second ) != maReverseDependencySet.end() )
             {
                 OUString aDep( maPController->getDependency( it->second ) );
-                // if the dependency is at least enabled, then enable this control anyway
+                
                 if( !aDep.isEmpty() && maPController->isUIOptionEnabled( aDep ) )
                     bShouldbeEnabled = true;
             }
@@ -1229,7 +1229,7 @@ void PrintDialog::checkOptionalControlDependencies()
 
 
         bool bIsEnabled = it->first->IsEnabled();
-        // Enable does not do a change check first, so can be less cheap than expected
+        
         if( bShouldbeEnabled != bIsEnabled )
             it->first->Enable( bShouldbeEnabled );
     }
@@ -1258,7 +1258,7 @@ void PrintDialog::updatePrinterText()
     {
         maJobPage.mpLocationTxt->SetText( pInfo->GetLocation() );
         maJobPage.mpCommentTxt->SetText( pInfo->GetComment() );
-        // FIXME: status text
+        
         OUString aStatus;
         if( aDefPrt == pInfo->GetPrinterName() )
             aStatus = maDefPrtText;
@@ -1280,7 +1280,7 @@ void PrintDialog::setPreviewText( sal_Int32 )
 
 void PrintDialog::preparePreview( bool i_bNewPage, bool i_bMayUseCache )
 {
-    // page range may have changed depending on options
+    
     sal_Int32 nPages = maPController->getFilteredPageCount();
     mnCachedPages = nPages;
 
@@ -1386,10 +1386,10 @@ void PrintDialog::updateNupFromPages()
 
     if( nPages > 1 )
     {
-        // set upper limits for margins based on job page size and rows/columns
+        
         Size aSize( getJobPageSize() );
 
-        // maximum sheet distance: 1/2 sheet
+        
         long nHorzMax = aSize.Width()/2;
         long nVertMax = aSize.Height()/2;
         if( nSheetMargin > nHorzMax )
@@ -1401,7 +1401,7 @@ void PrintDialog::updateNupFromPages()
                   maNUpPage.mpSheetMarginEdt->Normalize(
                            nHorzMax > nVertMax ? nVertMax : nHorzMax ), FUNIT_100TH_MM );
 
-        // maximum page distance
+        
         nHorzMax = (aSize.Width() - 2*nSheetMargin);
         if( nCols > 1 )
             nHorzMax /= (nCols-1);
@@ -1465,14 +1465,14 @@ void PrintDialog::updateNup()
         aMPS.aPaperSize = maNupLandscapeSize;
     else if( nOrientationMode == SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT )
         aMPS.aPaperSize = maNupPortraitSize;
-    else // automatic mode
+    else 
     {
-        // get size of first real page to see if it is portrait or landscape
-        // we assume same page sizes for all the pages for this
+        
+        
         Size aPageSize = getJobPageSize();
 
         Size aMultiSize( aPageSize.Width() * nCols, aPageSize.Height() * nRows );
-        if( aMultiSize.Width() > aMultiSize.Height() ) // fits better on landscape
+        if( aMultiSize.Width() > aMultiSize.Height() ) 
             aMPS.aPaperSize = maNupLandscapeSize;
         else
             aMPS.aPaperSize = maNupPortraitSize;
@@ -1490,10 +1490,10 @@ IMPL_LINK( PrintDialog, SelectHdl, ListBox*, pBox )
     if(  pBox == maJobPage.mpPrinters )
     {
         OUString aNewPrinter( pBox->GetSelectEntry() );
-        // set new printer
+        
         maPController->setPrinter( boost::shared_ptr<Printer>( new Printer( aNewPrinter ) ) );
         maPController->resetPrinterOptions( maOptionsPage.mpToFileBox->IsChecked() );
-        // update text fields
+        
         updatePrinterText();
         preparePreview( true, false );
     }
@@ -1520,7 +1520,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
     }
     else if( pButton == mpHelpButton )
     {
-        // start help system
+        
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
@@ -1559,7 +1559,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
 
             checkOptionalControlDependencies();
 
-            // update preview and page settings
+            
             preparePreview();
         }
         if( maNUpPage.mpBrochureBtn->IsChecked() )
@@ -1664,7 +1664,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
             sal_Int32 nVal = -1;
             if( pValue->Value >>= bVal )
             {
-                // we should have a CheckBox for this one
+                
                 CheckBox* pBox = dynamic_cast< CheckBox* >( rWindows.front() );
                 if( pBox )
                 {
@@ -1672,7 +1672,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
                 }
                 else if ( i_rProperty == "PrintProspect" )
                 {
-                    // EVIL special case
+                    
                     if( bVal )
                         maNUpPage.mpBrochureBtn->Check();
                     else
@@ -1685,7 +1685,7 @@ void PrintDialog::updateWindowFromProperty( const OUString& i_rProperty )
             }
             else if( pValue->Value >>= nVal )
             {
-                // this could be a ListBox or a RadioButtonGroup
+                
                 ListBox* pList = dynamic_cast< ListBox* >( rWindows.front() );
                 if( pList )
                 {
@@ -1726,7 +1726,7 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
 
         checkOptionalControlDependencies();
 
-        // update preview and page settings
+        
         preparePreview();
     }
     return 0;
@@ -1734,9 +1734,9 @@ IMPL_LINK( PrintDialog, UIOption_CheckHdl, CheckBox*, i_pBox )
 
 IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
 {
-    // this handler gets called for all radiobuttons that get unchecked, too
-    // however we only want one notificaction for the new value (that is for
-    // the button that gets checked)
+    
+    
+    
     if( i_pBtn->IsChecked() )
     {
         PropertyValue* pVal = getValueForWindow( i_pBtn );
@@ -1750,7 +1750,7 @@ IMPL_LINK( PrintDialog, UIOption_RadioHdl, RadioButton*, i_pBtn )
 
             checkOptionalControlDependencies();
 
-            // update preview and page settings
+            
             preparePreview();
         }
     }
@@ -1769,7 +1769,7 @@ IMPL_LINK( PrintDialog, UIOption_SelectHdl, ListBox*, i_pBox )
 
         checkOptionalControlDependencies();
 
-        // update preview and page settings
+        
         preparePreview();
     }
     return 0;
@@ -1802,7 +1802,7 @@ IMPL_LINK( PrintDialog, UIOption_ModifyHdl, Edit*, i_pBox )
 
         checkOptionalControlDependencies();
 
-        // update preview and page settings
+        
         preparePreview();
     }
     return 0;
@@ -1822,8 +1822,8 @@ void PrintDialog::Command( const CommandEvent& rEvt )
 
 void PrintDialog::Resize()
 {
-    // maLayout.setManagedArea( Rectangle( Point( 0, 0 ), GetSizePixel() ) );
-    // and do the preview; however the metafile does not need to be gotten anew
+    
+    
     preparePreview( false );
 
     Dialog::Resize();
@@ -1839,11 +1839,11 @@ void PrintDialog::previewBackward()
     mpPageEdit->Down();
 }
 
-// -----------------------------------------------------------------------------
+
 //
-// PrintProgressDialog
+
 //
-// -----------------------------------------------------------------------------
+
 
 PrintProgressDialog::PrintProgressDialog(Window* i_pParent, int i_nMax)
     : ModelessDialog(i_pParent, "PrintProgressDialog",
@@ -1861,14 +1861,14 @@ PrintProgressDialog::PrintProgressDialog(Window* i_pParent, int i_nMax)
 
     maStr = mpText->GetText();
 
-    //just multiply largest value by 10 and take the width of that string as
-    //the max size we will want
+    
+    
     OUString aNewText( searchAndReplace( maStr, "%p", 2, OUString::number( mnMax * 10 ) ) );
     aNewText = searchAndReplace( aNewText, "%n", 2, OUString::number( mnMax * 10 ) );
     mpText->SetText( aNewText );
     mpText->set_width_request(mpText->get_preferred_size().Width());
 
-    //Pick a useful max width
+    
     mpProgress->set_width_request(mpProgress->LogicToPixel(Size(100, 0), MapMode(MAP_APPFONT)).Width());
 
     mpButton->SetClickHdl( LINK( this, PrintProgressDialog, ClickHdl ) );

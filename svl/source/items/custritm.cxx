@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Any.hxx>
@@ -24,14 +24,14 @@
 #include <svl/custritm.hxx>
 
 //
-//  class CntUnencodedStringItem
+
 //
 
 DBG_NAME(CntUnencodedStringItem)
 
 TYPEINIT1_AUTOFACTORY(CntUnencodedStringItem, SfxPoolItem)
 
-// virtual
+
 bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
 {
     DBG_CHKTHIS(CntUnencodedStringItem, 0);
@@ -42,7 +42,7 @@ bool CntUnencodedStringItem::operator ==(const SfxPoolItem & rItem) const
                 m_aValue;
 }
 
-// virtual
+
 int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
 {
     OSL_FAIL("CntUnencodedStringItem::Compare(): No international");
@@ -54,7 +54,7 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith) const
     return (nCmp == 0) ? 0 : (nCmp < 0) ? -1 : 1;
 }
 
-// virtual
+
 int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith,
                                     IntlWrapper const & rIntlWrapper)
     const
@@ -66,7 +66,7 @@ int CntUnencodedStringItem::Compare(SfxPoolItem const & rWith,
         static_cast< CntUnencodedStringItem const * >(&rWith)->m_aValue );
 }
 
-// virtual
+
 SfxItemPresentation
 CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
                                         SfxMapUnit, OUString & rText,
@@ -77,7 +77,7 @@ CntUnencodedStringItem::GetPresentation(SfxItemPresentation, SfxMapUnit,
     return SFX_ITEM_PRESENTATION_NAMELESS;
 }
 
-// virtual
+
 bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt8)
     const
 {
@@ -85,7 +85,7 @@ bool CntUnencodedStringItem::QueryValue(com::sun::star::uno::Any& rVal, sal_uInt
     return true;
 }
 
-// virtual
+
 bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
                                          sal_uInt8)
 {
@@ -99,7 +99,7 @@ bool CntUnencodedStringItem::PutValue(const com::sun::star::uno::Any& rVal,
     return false;
 }
 
-// virtual
+
 SfxPoolItem * CntUnencodedStringItem::Clone(SfxItemPool *) const
 {
     DBG_CHKTHIS(CntUnencodedStringItem, 0);

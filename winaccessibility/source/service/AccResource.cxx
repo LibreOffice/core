@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,41 +14,41 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "AccResource.hxx"
 
 #include <tools/simplerm.hxx>
 
-// ---- needed as long as we have no contexts for components ---
+
 #include <vcl/svapp.hxx>
 
-//2009.04. Comment the following code because the acc resource is not necessary now. Can open them if necessary
-//#ifndef _TOOLS_INTN_HXX
-//#include <tools/intn.hxx>
-//#endif
-//#ifndef _SOLAR_HRC
-//#include <svtools/solar.hrc>
-//#endif
 
-//.........................................................................
 
-//==================================================================
-//= ResourceManager
-//==================================================================
+
+
+
+
+
+
+
+
+
+
+
 SimpleResMgr* ResourceManager::m_pImpl = NULL;
 
-//------------------------------------------------------------------
+
 ResourceManager::EnsureDelete::~EnsureDelete()
 {
     delete ResourceManager::m_pImpl;
 }
 
-//------------------------------------------------------------------
+
 void ResourceManager::ensureImplExists()
 {
-    //Comment the following code because the acc resource is not necessary now. Can open them if necessary
+    
     /*
     if (m_pImpl)
         return;
@@ -62,13 +62,13 @@ void ResourceManager::ensureImplExists()
 
     if (m_pImpl)
     {
-        // no that we have a impl class make sure it's deleted on unloading the library
+        
         static ResourceManager::EnsureDelete    s_aDeleteTheImplClas;
     }
   */
 }
 
-//------------------------------------------------------------------
+
 ::rtl::OUString ResourceManager::loadString(sal_uInt16 _nResId)
 {
     ::rtl::OUString sReturn;

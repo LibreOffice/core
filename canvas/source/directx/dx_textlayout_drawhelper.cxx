@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,7 +49,7 @@ class ::com::sun::star::rendering::XCanvasFont;
 using namespace ::com::sun::star;
 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace dxcanvas
 {
@@ -77,7 +77,7 @@ namespace dxcanvas
     {
         HDC hdc = rGraphics->GetHDC();
 
-        // issue an ReleaseHDC() when leaving the scope
+        
         const ::comphelper::ScopeGuard aGuard(
             boost::bind( &Gdiplus::Graphics::ReleaseHDC,
                          rGraphics.get(),
@@ -88,8 +88,8 @@ namespace dxcanvas
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(hdc);
         VirtualDevice aVirtualDevice(&aSystemGraphicsData, 0);
 
-        // disable font antialiasing - GDI does not handle alpha
-        // surfaces properly.
+        
+        
         if( bAlphaSurface )
             aVirtualDevice.SetAntialiasing(ANTIALIASING_DISABLE_TEXT);
 
@@ -99,7 +99,7 @@ namespace dxcanvas
             ENSURE_OR_THROW( test,
                               "TextLayoutDrawHelper::drawText(): Invalid GraphicDevice" );
 
-            // set text color. Make sure to remove transparence part first.
+            
             Color aColor( COL_WHITE );
 
             if( rRenderState.DeviceColor.getLength() > 2 )
@@ -109,7 +109,7 @@ namespace dxcanvas
             aColor.SetTransparency(0);
             aVirtualDevice.SetTextColor(aColor);
 
-            // create the font
+            
             const ::com::sun::star::rendering::FontRequest& rFontRequest = rCanvasFont->getFontRequest();
             Font aFont(
                 rFontRequest.FontDescription.FamilyName,
@@ -127,11 +127,11 @@ namespace dxcanvas
 
             aFont.SetLanguage(LanguageTag::convertToLanguageType(rFontRequest.Locale));
 
-            // setup font color
+            
             aFont.SetColor( aColor );
             aFont.SetFillColor( aColor );
 
-            // adjust to stretched font
+            
             if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
             {
                 const Size aSize = aVirtualDevice.GetFontMetric( aFont ).GetSize();
@@ -146,10 +146,10 @@ namespace dxcanvas
                 aFont.SetWidth( nNewWidth );
             }
 
-            // set font
+            
             aVirtualDevice.SetFont(aFont);
 
-            // create world transformation matrix
+            
             ::basegfx::B2DHomMatrix aWorldTransform;
             ::canvas::tools::mergeViewAndRenderTransform(aWorldTransform, rViewState, rRenderState);
 
@@ -158,7 +158,7 @@ namespace dxcanvas
                 aWorldTransform.translate(rOutputOffset.getX(), rOutputOffset.getY());
             }
 
-            // set ViewState clipping
+            
             if(rViewState.Clip.is())
             {
                 ::basegfx::B2DPolyPolygon aClipPoly(dxcanvas::tools::polyPolygonFromXPolyPolygon2D(rViewState.Clip));
@@ -183,7 +183,7 @@ namespace dxcanvas
                 aVirtualDevice.IntersectClipRegion(rClipRegion);
             }
 
-            // set world transform
+            
             XFORM aXForm;
             aXForm.eM11 = (FLOAT)aWorldTransform.get(0, 0);
             aXForm.eM12 = (FLOAT)aWorldTransform.get(1, 0);
@@ -192,26 +192,26 @@ namespace dxcanvas
             aXForm.eDx = (FLOAT)aWorldTransform.get(0, 2);
             aXForm.eDy = (FLOAT)aWorldTransform.get(1, 2);
 
-            // TODO(F3): This is NOT supported on 95/98/ME!
+            
             SetGraphicsMode(hdc, GM_ADVANCED);
             SetTextAlign(hdc, TA_BASELINE);
             SetWorldTransform(hdc, &aXForm);
 
-            // use a empty StartPosition for text rendering
+            
             const Point aEmptyPoint(0, 0);
 
-            // create the String
+            
             const OUString aText(rText.Text);
 
             if( rLogicalAdvancements.getLength() )
             {
-                // create the DXArray
+                
                 const sal_Int32 nLen( rLogicalAdvancements.getLength() );
                 ::boost::scoped_array<sal_Int32> pDXArray( new sal_Int32[nLen] );
                 for( sal_Int32 i=0; i<nLen; ++i )
                     pDXArray[i] = basegfx::fround( rLogicalAdvancements[i] );
 
-                // draw the String
+                
                 aVirtualDevice.DrawTextArray( aEmptyPoint,
                                               aText,
                                               pDXArray.get(),
@@ -220,7 +220,7 @@ namespace dxcanvas
             }
             else
             {
-                // draw the String
+                
                 aVirtualDevice.DrawText( aEmptyPoint,
                                          aText,
                                          rText.StartPosition,
@@ -237,14 +237,14 @@ namespace dxcanvas
         if(!(rText.Length))
             return geometry::RealRectangle2D();
 
-        // TODO(F1): Fetching default screen DC here, will yield wrong
-        // metrics when e.g. formatting for a printer!
+        
+        
         SystemGraphicsData aSystemGraphicsData;
         aSystemGraphicsData.nSize = sizeof(SystemGraphicsData);
         aSystemGraphicsData.hDC = reinterpret_cast< ::HDC >(GetDC( NULL ));
         VirtualDevice aVirtualDevice(&aSystemGraphicsData, 0);
 
-        // create the font
+        
         const ::com::sun::star::rendering::FontRequest& rFontRequest = rCanvasFont->getFontRequest();
         Font aFont(
             rFontRequest.FontDescription.FamilyName,
@@ -260,7 +260,7 @@ namespace dxcanvas
                 rFontRequest.FontDescription.FontDescription.Proportion == rendering::PanoseProportion::MONO_SPACED
                 ? PITCH_FIXED : PITCH_VARIABLE);
 
-        // adjust to stretched font
+        
         if(!::rtl::math::approxEqual(rFontMatrix.m00, rFontMatrix.m11))
         {
             const Size aSize = aVirtualDevice.GetFontMetric( aFont ).GetSize();
@@ -275,11 +275,11 @@ namespace dxcanvas
             aFont.SetWidth( nNewWidth );
         }
 
-        // set font
+        
         aVirtualDevice.SetFont(aFont);
 
-        // need metrics for Y offset, the XCanvas always renders
-        // relative to baseline
+        
+        
         const ::FontMetric& aMetric( aVirtualDevice.GetFontMetric() );
 
         const sal_Int32 nAboveBaseline( -aMetric.GetIntLeading() - aMetric.GetAscent() );

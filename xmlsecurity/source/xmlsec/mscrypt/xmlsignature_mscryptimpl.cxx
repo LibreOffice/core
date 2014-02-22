@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -68,7 +68,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
     if( !aEnvironment.is() )
         throw RuntimeException() ;
 
-    //Get Keys Manager
+    
     Reference< XUnoTunnel > xSecTunnel( aEnvironment , UNO_QUERY ) ;
     if( !xSecTunnel.is() ) {
          throw RuntimeException() ;
@@ -78,7 +78,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
     if( pSecEnv == NULL )
         throw RuntimeException() ;
 
-    //Get the xml node
+    
     Reference< XXMLElementWrapper > xElement = aTemplate->getTemplate() ;
     if( !xElement.is() ) {
         throw RuntimeException() ;
@@ -96,32 +96,32 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
 
     pNode = pElement->getNativeElement() ;
 
-    //Get the stream/URI binding
+    
     Reference< XUriBinding > xUriBinding = aTemplate->getBinding() ;
     if( xUriBinding.is() ) {
-        //Register the stream input callbacks into libxml2
+        
         if( xmlRegisterStreamInputCallbacks( xUriBinding ) < 0 )
             throw RuntimeException() ;
     }
 
      setErrorRecorder( );
 
-    pMngr = pSecEnv->createKeysManager() ; //i39448
+    pMngr = pSecEnv->createKeysManager() ; 
     if( !pMngr ) {
         throw RuntimeException() ;
     }
 
-    //Create Signature context
+    
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
     {
-        //throw XMLSignatureException() ;
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        
+        pSecEnv->destroyKeysManager( pMngr ) ; 
         clearErrorRecorder();
         return aTemplate;
     }
 
-    //Sign the template
+    
     if( xmlSecDSigCtxSign( pDsigCtx , pNode ) == 0 )
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
@@ -136,9 +136,9 @@ SAL_CALL XMLSignature_MSCryptImpl :: generate(
 
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+    pSecEnv->destroyKeysManager( pMngr ) ; 
 
-    //Unregistered the stream/URI binding
+    
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
 
@@ -164,7 +164,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     if( !aSecurityCtx.is() )
         throw RuntimeException() ;
 
-    //Get Keys Manager
+    
     Reference< XSecurityEnvironment > xSecEnv
         = aSecurityCtx->getSecurityEnvironmentByIndex(
             aSecurityCtx->getDefaultSecurityEnvironmentIndex());
@@ -177,7 +177,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     if( pSecEnv == NULL )
         throw RuntimeException() ;
 
-    //Get the xml node
+    
     Reference< XXMLElementWrapper > xElement = aTemplate->getTemplate() ;
     if( !xElement.is() )
         throw RuntimeException() ;
@@ -193,37 +193,37 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
 
     pNode = pElement->getNativeElement() ;
 
-    //Get the stream/URI binding
+    
     Reference< XUriBinding > xUriBinding = aTemplate->getBinding() ;
     if( xUriBinding.is() ) {
-        //Register the stream input callbacks into libxml2
+        
         if( xmlRegisterStreamInputCallbacks( xUriBinding ) < 0 )
             throw RuntimeException() ;
     }
 
      setErrorRecorder( );
 
-    pMngr = pSecEnv->createKeysManager() ; //i39448
+    pMngr = pSecEnv->createKeysManager() ; 
     if( !pMngr ) {
         throw RuntimeException() ;
     }
 
-    //Create Signature context
+    
     pDsigCtx = xmlSecDSigCtxCreate( pMngr ) ;
     if( pDsigCtx == NULL )
     {
-        pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+        pSecEnv->destroyKeysManager( pMngr ) ; 
         clearErrorRecorder();
         return aTemplate;
     }
 
-    //Verify signature
-    //The documentation says that the signature is only valid if the return value is 0 (that is, not < 0)
-    //AND pDsigCtx->status == xmlSecDSigStatusSucceeded. That is, we must not make any assumptions, if
-    //the return value is < 0. Then we must regard the signature as INVALID. We cannot use the
-    //error recorder feature to get the ONE error that made the verification fail, because there is no
-    //documentation/specification as to how to interpret the number of recorded errors and what is the initial
-    //error.
+    
+    
+    
+    
+    
+    
+    
     if( xmlSecDSigCtxVerify( pDsigCtx , pNode ) == 0 )
     {
         if (pDsigCtx->status == xmlSecDSigStatusSucceeded)
@@ -237,9 +237,9 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
     }
 
     xmlSecDSigCtxDestroy( pDsigCtx ) ;
-    pSecEnv->destroyKeysManager( pMngr ) ; //i39448
+    pSecEnv->destroyKeysManager( pMngr ) ; 
 
-    //Unregistered the stream/URI binding
+    
     if( xUriBinding.is() )
         xmlUnregisterStreamInputCallbacks() ;
 
@@ -269,7 +269,7 @@ Sequence< OUString > SAL_CALL XMLSignature_MSCryptImpl :: getSupportedServiceNam
     return impl_getSupportedServiceNames() ;
 }
 
-//Helper for XServiceInfo
+
 Sequence< OUString > XMLSignature_MSCryptImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
@@ -281,7 +281,7 @@ OUString XMLSignature_MSCryptImpl :: impl_getImplementationName() throw( Runtime
     return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_MSCryptImpl") ;
 }
 
-//Helper for registry
+
 Reference< XInterface > SAL_CALL XMLSignature_MSCryptImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
     return Reference< XInterface >( *new XMLSignature_MSCryptImpl( aServiceManager ) ) ;
 }

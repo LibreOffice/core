@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/debug.hxx>
@@ -89,7 +89,7 @@ namespace slideshow
             uno::Reference< beans::XPropertySet > mxViewerPropSet( mxViewer,
                                                                    uno::UNO_QUERY_THROW );
 
-            // copy shape properties to applet viewer
+            
             OUString aPropName;
             for( sal_Size i=0; i<nNumPropEntries; ++i )
             {
@@ -100,7 +100,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         ViewAppletShape::~ViewAppletShape()
         {
@@ -117,14 +117,14 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         ViewLayerSharedPtr ViewAppletShape::getViewLayer() const
         {
             return mpViewLayer;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ViewAppletShape::startApplet( const ::basegfx::B2DRectangle& rBounds )
         {
@@ -147,8 +147,8 @@ namespace slideshow
 
                 if( xFactory.is() )
                 {
-                    // create an awt window to contain the applet
-                    // ==========================================
+                    
+                    
 
                     uno::Reference< awt::XToolkit2 > xToolkit = awt::Toolkit::create(mxComponentContext);
 
@@ -167,8 +167,8 @@ namespace slideshow
                                                                uno::UNO_QUERY_THROW );
 
 
-                    // create a frame, and load the applet into it
-                    // ===========================================
+                    
+                    
 
                     mxFrame = frame::Frame::create( mxComponentContext );
                     mxFrame->initialize( xOwnWindow );
@@ -179,8 +179,8 @@ namespace slideshow
                                    uno::Reference<frame::XFrame>(mxFrame, uno::UNO_QUERY_THROW) );
 
 
-                    // resize surrounding window and applet to current shape size
-                    // ==========================================================
+                    
+                    
 
                     ::basegfx::B2DRange aTmpRange;
                     ::canvas::tools::calcTransformedRectBounds( aTmpRange,
@@ -213,7 +213,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void ViewAppletShape::endApplet()
         {
@@ -228,7 +228,7 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool ViewAppletShape::render( const ::basegfx::B2DRectangle& rBounds ) const
         {
@@ -239,7 +239,7 @@ namespace slideshow
 
             if( !mxFrame.is() )
             {
-                // fill the shape background with black
+                
                 fillRect( pCanvas,
                           rBounds,
                           0xFFFFFFFFU );

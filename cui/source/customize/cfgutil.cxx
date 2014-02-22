@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cfgutil.hxx"
@@ -165,7 +165,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
 
 ::std::vector< SfxStyleInfo_Impl > SfxStylesInfo_Impl::getStyleFamilies()
 {
-    // Its an optional interface!
+    
     css::uno::Reference< css::style::XStyleFamiliesSupplier > xModel(m_xDoc, css::uno::UNO_QUERY);
     if (!xModel.is())
         return ::std::vector< SfxStyleInfo_Impl >();
@@ -186,7 +186,7 @@ void SfxStylesInfo_Impl::getLabel4Style(SfxStyleInfo_Impl& aStyle)
             xCont->getByName(aFamilyInfo.sFamily) >>= xFamilyInfo;
             if (!xFamilyInfo.is())
             {
-                // TODO_AS currently there is no support for an UIName property .. use internal family name instead
+                
                 aFamilyInfo.sLabel = aFamilyInfo.sFamily;
             }
             else
@@ -257,7 +257,7 @@ SfxConfigFunctionListBox::SfxConfigFunctionListBox(Window* pParent, const ResId&
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
 
-    // Timer for the BallonHelp
+    
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
         LINK( this, SfxConfigFunctionListBox, TimerHdl ) );
@@ -271,7 +271,7 @@ SfxConfigFunctionListBox::SfxConfigFunctionListBox(Window* pParent, WinBits nSty
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
 
-    // Timer for the BallonHelp
+    
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
         LINK( this, SfxConfigFunctionListBox, TimerHdl ) );
@@ -304,7 +304,7 @@ IMPL_LINK( SfxConfigFunctionListBox, TimerHdl, Timer*, pTimer)
     the entry's help-text is shown as a balloon-help.
 */
 {
-    (void)pTimer; // unused
+    (void)pTimer; 
     return 0L;
 }
 
@@ -481,7 +481,7 @@ void SfxConfigGroupListBox::SetStylesInfo(SfxStylesInfo_Impl* pStyles)
     pStylesInfo = pStyles;
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::InitModule()
 {
     try
@@ -517,20 +517,20 @@ void SfxConfigGroupListBox::InitModule()
         {}
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::InitBasic()
 {
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::InitStyles()
 {
 }
 
-//-----------------------------------------------
+
 namespace
 {
-    //...........................................
+    
     /** examines a component whether it supports XEmbeddedScripts, or provides access to such a
         component by implementing XScriptInvocationContext.
         @return
@@ -550,24 +550,24 @@ namespace
         return Reference< XModel >( xScripts, UNO_QUERY );
     }
 
-    //...........................................
+    
     static Reference< XModel > lcl_getScriptableDocument_nothrow( const Reference< XFrame >& _rxFrame )
     {
         Reference< XModel > xDocument;
 
-        // examine our associated frame
+        
         try
         {
             OSL_ENSURE( _rxFrame.is(), "lcl_getScriptableDocument_nothrow: you need to pass a frame to this dialog/tab page!" );
             if ( _rxFrame.is() )
             {
-                // first try the model in the frame
+                
                 Reference< XController > xController( _rxFrame->getController(), UNO_SET_THROW );
                 xDocument = lcl_getDocumentWithScripts_throw( xController->getModel() );
 
                 if ( !xDocument.is() )
                 {
-                    // if there is no suitable document in the frame, try the controller
+                    
                     xDocument = lcl_getDocumentWithScripts_throw( _rxFrame->getController() );
                 }
             }
@@ -580,14 +580,14 @@ namespace
     }
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponentContext >& xContext,
     const css::uno::Reference< css::frame::XFrame >& xFrame,
     const OUString& sModuleLongName,
     bool bEventMode)
 {
     SetUpdateMode(sal_False);
-    ClearAll(); // Remove all old entries from treelist box
+    ClearAll(); 
 
     m_xFrame = xFrame;
     if( xContext.is() )
@@ -605,7 +605,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     }
 
     OSL_TRACE("** ** About to initialise SF Scripts");
-    // Add Scripting Framework entries
+    
     Reference< browse::XBrowseNode > rootNode;
     Reference< XComponentContext > xCtx(
         comphelper::getProcessComponentContext() );
@@ -618,7 +618,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     {
         OSL_TRACE(" Caught some exception whilst retrieving browse nodes from factory... Exception: %s",
             OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-        // TODO exception handling
+        
     }
 
 
@@ -626,8 +626,8 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     {
         if ( bEventMode )
         {
-                //We call acquire on the XBrowseNode so that it does not
-                //get autodestructed and become invalid when accessed later.
+                
+                
             rootNode->acquire();
 
             SfxGroupInfo_Impl *pInfo =
@@ -642,8 +642,8 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
         }
         else
         {
-             //We are only showing scripts not slot APIs so skip
-             //Root node and show location nodes
+             
+             
             try {
                 if ( rootNode->hasChildNodes() )
                 {
@@ -658,12 +658,12 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                         bIsRootNode = sal_True;
                     }
 
-                    //To mimic current starbasic behaviour we
-                    //need to make sure that only the current document
-                    //is displayed in the config tree. Tests below
-                    //set the bDisplay flag to FALSE if the current
-                    //node is a first level child of the Root and is NOT
-                    //either the current document, user or share
+                    
+                    
+                    
+                    
+                    
+                    
                     OUString currentDocTitle;
                     Reference< XModel > xDocument( lcl_getScriptableDocument_nothrow( m_xFrame ) );
                     if ( xDocument.is() )
@@ -697,8 +697,8 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                         }
                         if (children[n]->getType() != browse::BrowseNodeTypes::SCRIPT  && bDisplay )
                         {
-//                              We call acquire on the XBrowseNode so that it does not
-//                              get autodestructed and become invalid when accessed later.
+
+
                             theChild->acquire();
 
                             SfxGroupInfo_Impl* pInfo =
@@ -733,17 +733,17 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                 }
             }
             catch (RuntimeException&) {
-                // do nothing, the entry will not be displayed in the UI
+                
             }
         }
     }
 
-    // add styles
+    
     if ( m_xContext.is() )
     {
         OUString sStyle( pImp->m_aStrGroupStyles );
         SvTreeListEntry *pEntry = InsertEntry( sStyle, 0 );
-        SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, 0 ); // TODO last parameter should contain user data
+        SfxGroupInfo_Impl *pInfo = new SfxGroupInfo_Impl( SFX_CFGGROUP_STYLES, 0, 0 ); 
         aArr.push_back( pInfo );
         pEntry->SetUserData( pInfo );
         pEntry->EnableChildrenOnDemand( true );
@@ -775,7 +775,7 @@ Image SfxConfigGroupListBox::GetImage(
             if ( xDocumentModel.is() )
             {
                 Reference< frame::XModuleManager2 > xModuleManager( frame::ModuleManager::create(xCtx) );
-                // get the long name of the document:
+                
                 OUString appModule( xModuleManager->identify(
                                     xDocumentModel ) );
                 Sequence<beans::PropertyValue> moduleDescr;
@@ -845,7 +845,7 @@ SfxConfigGroupListBox::getDocumentModel( Reference< XComponentContext >& xCtx, O
     return xModel;
 }
 
-//-----------------------------------------------
+
 OUString SfxConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
 {
     OUString sUIName;
@@ -864,7 +864,7 @@ OUString SfxConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
     catch(css::uno::Exception&)
         { sUIName = OUString(); }
 
-    // fallback for missing UINames !?
+    
     if (sUIName.isEmpty())
     {
         sUIName = sCommand;
@@ -873,7 +873,7 @@ OUString SfxConfigGroupListBox::MapCommand2UIName(const OUString& sCommand)
     return sUIName;
 }
 
-//-----------------------------------------------
+
 void SfxConfigGroupListBox::GroupSelected()
 /*  Description
     A function group or a basic module has been selected.
@@ -965,7 +965,7 @@ void SfxConfigGroupListBox::GroupSelected()
                     }
                 }
                 catch (RuntimeException&) {
-                    // do nothing, the entry will not be displayed in the UI
+                    
                 }
             }
             break;
@@ -1130,7 +1130,7 @@ void SfxConfigGroupListBox::RequestingChildren( SvTreeListEntry *pEntry )
                     }
                 }
                 catch (RuntimeException&) {
-                    // do nothing, the entry will not be displayed in the UI
+                    
                 }
             }
             break;

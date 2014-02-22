@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
@@ -56,7 +56,7 @@
 #include <svx/xpoly.hxx>
 #include <svx/xpool.hxx>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 enum EscDir {LKS,RTS,OBN,UNT};
 
@@ -93,7 +93,7 @@ public:
 
 void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Point& rPt, EscDir& rDir) const
 {
-    Point aTl(rTailPt); // copy locally for performance reasons
+    Point aTl(rTailPt); 
     long nX,nY;
     if (bEscRel) {
         nX=rRect.Right()-rRect.Left();
@@ -171,29 +171,29 @@ void ImpCaptParams::CalcEscPos(const Point& rTailPt, const Rectangle& rRect, Poi
     rDir=eBestDir;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// BaseProperties section
+
+
 
 sdr::properties::BaseProperties* SdrCaptionObj::CreateObjectSpecificProperties()
 {
     return new sdr::properties::CaptionProperties(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// DrawContact section
+
+
 
 sdr::contact::ViewContact* SdrCaptionObj::CreateObjectSpecificViewContact()
 {
     return new sdr::contact::ViewContactOfSdrCaptionObj(*this);
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrCaptionObj,SdrRectObj);
 
 SdrCaptionObj::SdrCaptionObj():
     SdrRectObj(OBJ_TEXT),
-    aTailPoly(3),  // default size: 3 points = 2 lines
+    aTailPoly(3),  
     mbSpecialTextBoxShadow(sal_False),
     mbFixedTail(sal_False)
 {
@@ -201,7 +201,7 @@ SdrCaptionObj::SdrCaptionObj():
 
 SdrCaptionObj::SdrCaptionObj(const Rectangle& rRect, const Point& rTail):
     SdrRectObj(OBJ_TEXT,rRect),
-    aTailPoly(3),  // default size: 3 points = 2 lines
+    aTailPoly(3),  
     mbSpecialTextBoxShadow(sal_False),
     mbFixedTail(sal_False)
 {
@@ -272,7 +272,7 @@ basegfx::B2DPolyPolygon SdrCaptionObj::TakeXorPoly() const
 sal_uInt32 SdrCaptionObj::GetHdlCount() const
 {
     sal_uInt32 nAnz1(SdrRectObj::GetHdlCount());
-    // Currently only dragging the tail's end is implemented.
+    
     return nAnz1 + 1L;
 }
 
@@ -303,7 +303,7 @@ SdrHdl* SdrCaptionObj::GetHdl(sal_uInt32 nHdlNum) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrCaptionObj::hasSpecialDrag() const
 {
@@ -415,7 +415,7 @@ OUString SdrCaptionObj::getSpecialDragComment(const SdrDragStat& rDrag) const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 void SdrCaptionObj::ImpGetCaptParams(ImpCaptParams& rPara) const
 {
@@ -441,16 +441,16 @@ void SdrCaptionObj::ImpRecalcTail()
     SetXPolyDirty();
 }
 
-// #i35971#
-// SdrCaptionObj::ImpCalcTail1 does move the object(!). What a hack.
-// I really wonder why this had not triggered problems before. I am
-// sure there are some places where SetTailPos() is called at least
-// twice or SetSnapRect after it again just to work around this.
-// Changed this method to not do that.
-// Also found why this has been done: For interactive dragging of the
-// tail end pos for SDRCAPT_TYPE1. This sure was the simplest method
-// to achieve this, at the cost of making a whole group of const methods
-// of this object implicitly change the object's position.
+
+
+
+
+
+
+
+
+
+
 void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const
 {
     Polygon aPol(2);
@@ -478,7 +478,7 @@ void SdrCaptionObj::ImpCalcTail1(const ImpCaptParams& rPara, Polygon& rPoly, Rec
 }
 
 void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const
-{ // Gap/EscDir/EscPos/Angle
+{ 
     Polygon aPol(2);
     Point aTl(rPoly[0]);
     aPol[0]=aTl;
@@ -489,13 +489,13 @@ void SdrCaptionObj::ImpCalcTail2(const ImpCaptParams& rPara, Polygon& rPoly, Rec
     aPol[1]=aEscPos;
 
     if (!rPara.bFixedAngle) {
-        // TODO: Implementation missing.
+        
     }
     rPoly=aPol;
 }
 
 void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, Polygon& rPoly, Rectangle& rRect) const
-{ // Gap/EscDir/EscPos/Angle/LineLen
+{ 
     Polygon aPol(3);
     Point aTl(rPoly[0]);
     aPol[0]=aTl;
@@ -522,7 +522,7 @@ void SdrCaptionObj::ImpCalcTail3(const ImpCaptParams& rPara, Polygon& rPoly, Rec
         }
     }
     if (!rPara.bFixedAngle) {
-        // TODO: Implementation missing.
+        
     }
     rPoly=aPol;
 }
@@ -544,7 +544,7 @@ void SdrCaptionObj::ImpCalcTail(const ImpCaptParams& rPara, Polygon& rPoly, Rect
 
 bool SdrCaptionObj::BegCreate(SdrDragStat& rStat)
 {
-    if (aRect.IsEmpty()) return false; // Create currently only works with the given Rect
+    if (aRect.IsEmpty()) return false; 
 
     ImpCaptParams aPara;
     ImpGetCaptParams(aPara);
@@ -621,7 +621,7 @@ void SdrCaptionObj::NbcSetRelativePos(const Point& rPnt)
 {
     Point aRelPos0(aTailPoly.GetPoint(0)-aAnchor);
     Size aSiz(rPnt.X()-aRelPos0.X(),rPnt.Y()-aRelPos0.Y());
-    NbcMove(aSiz); // This also calls SetRectsDirty()
+    NbcMove(aSiz); 
 }
 
 Point SdrCaptionObj::GetRelativePos() const
@@ -632,20 +632,20 @@ Point SdrCaptionObj::GetRelativePos() const
 void SdrCaptionObj::NbcSetAnchorPos(const Point& rPnt)
 {
     SdrRectObj::NbcSetAnchorPos(rPnt);
-    // TODO: Implementation missing.
+    
 }
 
 const Point& SdrCaptionObj::GetAnchorPos() const
 {
-    // TODO: Implementation missing.
+    
     return SdrRectObj::GetAnchorPos();
 }
 
 void SdrCaptionObj::RecalcSnapRect()
 {
     SdrRectObj::RecalcSnapRect();
-    // #i32599#
-    // TODO: Implementation missing.
+    
+    
 }
 
 const Rectangle& SdrCaptionObj::GetSnapRect() const
@@ -655,10 +655,10 @@ const Rectangle& SdrCaptionObj::GetSnapRect() const
 
 void SdrCaptionObj::NbcSetSnapRect(const Rectangle& rRect)
 {
-    // #i32599#
-    // Move back to see the rectangle of the underlying SdrRectObj
-    // as the SnapRect, without the TailPos. That simplifies SnapRect
-    // handling again, if not allows it at all...
+    
+    
+    
+    
     SdrRectObj::NbcSetSnapRect(rRect);
 }
 
@@ -697,13 +697,13 @@ void SdrCaptionObj::NbcSetTailPos(const Point& rPos)
 
 sal_uInt32 SdrCaptionObj::GetSnapPointCount() const
 {
-    // TODO: Implementation missing.
+    
     return 0L;
 }
 
 Point SdrCaptionObj::GetSnapPoint(sal_uInt32 /*i*/) const
 {
-    // TODO: Implementation missing.
+    
     return Point(0,0);
 }
 
@@ -761,18 +761,18 @@ SdrObject* SdrCaptionObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) co
     return pRet;
 }
 
-// #i32599#
-// Add own implementation for TRSetBaseGeometry to handle TailPos over changes.
+
+
 void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
 {
-    // break up matrix
+    
     basegfx::B2DTuple aScale;
     basegfx::B2DTuple aTranslate;
     double fRotate, fShearX;
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
-    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
-    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
+    
+    
     if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
     {
         aScale.setX(fabs(aScale.getX()));
@@ -780,7 +780,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
         fRotate = fmod(fRotate + F_PI, F_2PI);
     }
 
-    // force metric to pool metric
+    
     SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
@@ -788,11 +788,11 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
         {
             case SFX_MAPUNIT_TWIP :
             {
-                // position
+                
                 aTranslate.setX(ImplMMToTwips(aTranslate.getX()));
                 aTranslate.setY(ImplMMToTwips(aTranslate.getY()));
 
-                // size
+                
                 aScale.setX(ImplMMToTwips(aScale.getX()));
                 aScale.setY(ImplMMToTwips(aScale.getY()));
 
@@ -805,7 +805,7 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
         }
     }
 
-    // if anchor is used, make position relative to it
+    
     if( pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
@@ -814,18 +814,18 @@ void SdrCaptionObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
         }
     }
 
-    // build BaseRect
+    
     Point aPoint(FRound(aTranslate.getX()), FRound(aTranslate.getY()));
     Rectangle aBaseRect(aPoint, Size(FRound(aScale.getX()), FRound(aScale.getY())));
 
-    // set BaseRect, but rescue TailPos over this call
+    
     const Point aTailPoint = GetTailPos();
     SetSnapRect(aBaseRect);
     SetTailPos(aTailPoint);
     ImpRecalcTail();
 }
 
-// geometry access
+
 basegfx::B2DPolygon SdrCaptionObj::getTailPolygon() const
 {
     return aTailPoly.getB2DPolygon();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "editeng/fieldupdater.hxx"
@@ -37,17 +37,17 @@ public:
                 XEditAttribute& rAttr = rAttribs[j];
                 const SfxPoolItem* pItem = rAttr.GetItem();
                 if (pItem->Which() != EE_FEATURE_FIELD)
-                    // This is not a field item.
+                    
                     continue;
 
                 const SvxFieldItem* pFI = static_cast<const SvxFieldItem*>(pItem);
                 const SvxFieldData* pData = pFI->GetField();
                 if (pData->GetClassId() != text::textfield::Type::TABLE)
-                    // This is not a table field.
+                    
                     continue;
 
-                // Create a new table field with the new ID, and set it to the
-                // attribute object.
+                
+                
                 SvxFieldItem aNewItem(SvxTableField(nTab), EE_FEATURE_FIELD);
                 rAttr.SetItem(pPool->Put(aNewItem));
             }

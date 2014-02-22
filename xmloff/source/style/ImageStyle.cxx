@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/ImageStyle.hxx>
@@ -70,7 +70,7 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
     {
         if( rValue >>= sImageURL )
         {
-            // Name
+            
             sal_Bool bEncoded = sal_False;
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
                                   rExport.EncodeStyleName( rStrName,
@@ -79,7 +79,7 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
                                       rStrName );
 
-            // uri
+            
             const OUString aStr( rExport.AddEmbeddedGraphicObject( sImageURL ) );
             if( !aStr.isEmpty() )
             {
@@ -89,12 +89,12 @@ sal_Bool XMLImageStyle::ImpExportXML( const OUString& rStrName, const uno::Any& 
                 rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
 
-            // Do Write
+            
             SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_FILL_IMAGE, sal_True, sal_True );
 
             if( !sImageURL.isEmpty() )
             {
-                // optional office:binary-data
+                
                 rExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
             }
         }
@@ -160,13 +160,13 @@ sal_Bool XMLImageStyle::ImpImportXML( const uno::Reference< xml::sax::XAttribute
                 }
                 break;
             case XML_TOK_IMAGE_TYPE:
-                // ignore
+                
                 break;
             case XML_TOK_IMAGE_SHOW:
-                // ignore
+                
                 break;
             case XML_TOK_IMAGE_ACTUATE:
-                // ignore
+                
                 break;
             default:
                 DBG_WARNING( "Unknown token at import fill bitmap style" )

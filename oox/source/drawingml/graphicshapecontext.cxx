@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/io/TempFile.hpp>
@@ -49,8 +49,8 @@ using namespace ::oox::core;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
-// CT_Picture
+
+
 
 GraphicShapeContext::GraphicShapeContext( ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr )
 : ShapeContext( rParent, pMasterShapePtr, pShapePtr )
@@ -61,7 +61,7 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
 {
     switch( getBaseToken( aElementToken ) )
     {
-    // CT_ShapeProperties
+    
     case XML_xfrm:
         return new Transform2DContext( *this, rAttribs, *mpShapePtr );
     case XML_blipFill:
@@ -98,8 +98,8 @@ ContextHandlerRef GraphicShapeContext::onCreateContext( sal_Int32 aElementToken,
     return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
-// ============================================================================
-// CT_GraphicalObjectFrameContext
+
+
 
 GraphicalObjectFrameContext::GraphicalObjectFrameContext( ContextHandler2Helper& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr, bool bEmbedShapesInChart ) :
     ShapeContext( rParent, pMasterShapePtr, pShapePtr ),
@@ -111,24 +111,24 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
 {
     switch( getBaseToken( aElementToken ) )
     {
-    // CT_ShapeProperties
-    case XML_nvGraphicFramePr:      // CT_GraphicalObjectFrameNonVisual
+    
+    case XML_nvGraphicFramePr:      
         break;
-    case XML_xfrm:                  // CT_Transform2D
+    case XML_xfrm:                  
         return new Transform2DContext( *this, rAttribs, *mpShapePtr );
-    case XML_graphic:               // CT_GraphicalObject
+    case XML_graphic:               
         return this;
 
-        case XML_graphicData :          // CT_GraphicalObjectData
+        case XML_graphicData :          
         {
             OUString sUri( rAttribs.getString( XML_uri ).get() );
-            if ( sUri == "http://schemas.openxmlformats.org/presentationml/2006/ole" )
+            if ( sUri == "http:
                 return new OleObjectGraphicDataContext( *this, mpShapePtr );
-            else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/diagram" )
+            else if ( sUri == "http:
                 return new DiagramGraphicDataContext( *this, mpShapePtr );
-            else if ( sUri == "http://schemas.openxmlformats.org/drawingml/2006/chart" )
+            else if ( sUri == "http:
                 return new ChartGraphicDataContext( *this, mpShapePtr, mbEmbedShapesInChart );
-            else if ( sUri.equalsAscii( "http://schemas.openxmlformats.org/drawingml/2006/table" ) )
+            else if ( sUri.equalsAscii( "http:
                 return new table::TableContext( *this, mpShapePtr );
             else
             {
@@ -142,7 +142,7 @@ ContextHandlerRef GraphicalObjectFrameContext::onCreateContext( sal_Int32 aEleme
     return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
-// ============================================================================
+
 
 OleObjectGraphicDataContext::OleObjectGraphicDataContext( ContextHandler2Helper& rParent, ShapePtr xShape ) :
     ShapeContext( rParent, ShapePtr(), xShape ),
@@ -204,7 +204,7 @@ ContextHandlerRef OleObjectGraphicDataContext::onCreateContext( sal_Int32 nEleme
     return 0;
 }
 
-// ============================================================================
+
 
 DiagramGraphicDataContext::DiagramGraphicDataContext( ContextHandler2Helper& rParent, ShapePtr pShapePtr )
 : ShapeContext( rParent, ShapePtr(), pShapePtr )
@@ -249,7 +249,7 @@ ContextHandlerRef DiagramGraphicDataContext::onCreateContext( ::sal_Int32 aEleme
     return ShapeContext::onCreateContext( aElementToken, rAttribs );
 }
 
-// ============================================================================
+
 
 ChartGraphicDataContext::ChartGraphicDataContext( ContextHandler2Helper& rParent, const ShapePtr& rxShape, bool bEmbedShapes ) :
     ShapeContext( rParent, ShapePtr(), rxShape ),
@@ -266,9 +266,9 @@ ContextHandlerRef ChartGraphicDataContext::onCreateContext( ::sal_Int32 nElement
     return 0;
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

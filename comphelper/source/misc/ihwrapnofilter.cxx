@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,14 +22,14 @@
 #include <cppuhelper/supportsservice.hxx>
 #include <com/sun/star/document/NoSuchFilterRequest.hpp>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star;
 
-    //----------------------------------------------------------------------------------------------------
+    
     OIHWrapNoFilterDialog::OIHWrapNoFilterDialog( uno::Reference< task::XInteractionHandler > xInteraction )
         :m_xInter( xInteraction )
     {
@@ -39,7 +39,7 @@ namespace comphelper
     {
     }
 
-    //----------------------------------------------------------------------------------------------------
+    
     uno::Sequence< OUString > SAL_CALL OIHWrapNoFilterDialog::impl_staticGetSupportedServiceNames()
     {
         uno::Sequence< OUString > aRet(1);
@@ -52,9 +52,9 @@ namespace comphelper
         return OUString("com.sun.star.comp.task.InteractionHandlerWrapper");
     }
 
-    //----------------------------------------------------------------------------------------------------
-    // XInteractionHandler
-    //----------------------------------------------------------------------------------------------------
+    
+    
+    
     void SAL_CALL OIHWrapNoFilterDialog::handle( const uno::Reference< task::XInteractionRequest >& xRequest)
             throw( com::sun::star::uno::RuntimeException )
     {
@@ -69,9 +69,9 @@ namespace comphelper
             m_xInter->handle( xRequest );
     }
 
-    //----------------------------------------------------------------------------------------------------
-    // XInteractionHandler2
-    //----------------------------------------------------------------------------------------------------
+    
+    
+    
     sal_Bool SAL_CALL OIHWrapNoFilterDialog::handleInteractionRequest( const uno::Reference< task::XInteractionRequest >& xRequest)
             throw( com::sun::star::uno::RuntimeException )
     {
@@ -89,9 +89,9 @@ namespace comphelper
         }
     }
 
-    //----------------------------------------------------------------------------------------------------
-    // XInitialization
-    //----------------------------------------------------------------------------------------------------
+    
+    
+    
     void SAL_CALL OIHWrapNoFilterDialog::initialize( const uno::Sequence< uno::Any >& )
         throw ( uno::Exception,
         uno::RuntimeException,
@@ -99,7 +99,7 @@ namespace comphelper
     {
     }
 
-    // XServiceInfo
+    
     OUString SAL_CALL OIHWrapNoFilterDialog::getImplementationName()
         throw ( uno::RuntimeException )
     {

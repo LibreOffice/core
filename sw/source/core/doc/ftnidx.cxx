@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <txtftn.hxx>
@@ -40,7 +40,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     if( empty() )
         return;
 
-    // Get the NodesArray using the first foot note's StartIndex
+    
     SwDoc* pDoc = rStt.GetNode().GetDoc();
     if( pDoc->IsInReading() )
         return ;
@@ -49,8 +49,8 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
     const SwFtnInfo& rFtnInfo = pDoc->GetFtnInfo();
 
-    // For normal foot notes we treat per-chapter and per-document numbering
-    // separately. For Endnotes we only have per-document numbering.
+    
+    
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
@@ -58,19 +58,19 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         sal_uLong nCapEnd = pDoc->GetNodes().GetEndOfContent().GetIndex();
         if( !rOutlNds.empty() )
         {
-            // Find the Chapter's start, which contains rStt
+            
             sal_uInt16 n;
 
             for( n = 0; n < rOutlNds.size(); ++n )
                 if( rOutlNds[ n ]->GetIndex() > rStt.GetIndex() )
-                    break;      // found it!
+                    break;      
                 else if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
-                    pCapStt = rOutlNds[ n ];    // Beginning of a new Chapter
-            // now find the end of the range
+                    pCapStt = rOutlNds[ n ];    
+            
             for( ; n < rOutlNds.size(); ++n )
                 if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
                 {
-                    nCapEnd = rOutlNds[ n ]->GetIndex();    // End of the found Chapter
+                    nCapEnd = rOutlNds[ n ]->GetIndex();    
                     break;
                 }
         }
@@ -78,14 +78,14 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         sal_uInt16 nPos, nFtnNo = 1;
         if( SeekEntry( *pCapStt, &nPos ) && nPos )
         {
-            // Step forward until the Index is not the same anymore
+            
             const SwNode* pCmpNd = &rStt.GetNode();
             while( nPos && pCmpNd == &((*this)[ --nPos ]->GetTxtNode()) )
                 ;
             ++nPos;
         }
 
-        if( nPos == size() )       // nothing found
+        if( nPos == size() )       
             return;
 
         if( rOutlNds.empty() )
@@ -108,7 +108,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
 
     SwUpdFtnEndNtAtEnd aNumArr;
 
-    // unless we have per-document numbering, only look at endnotes here
+    
     const bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
 
     sal_uInt16 nPos, nFtnNo = 1, nEndNo = 1;
@@ -132,7 +132,7 @@ void SwFtnIdxs::UpdateFtn( const SwNodeIndex& rStt )
         }
     }
 
-    // Set the array number for all footnotes starting from nPos
+    
     for( ; nPos < size(); ++nPos )
     {
         pTxtFtn = (*this)[ nPos ];
@@ -158,7 +158,7 @@ void SwFtnIdxs::UpdateAllFtn()
     if( empty() )
         return;
 
-    // Get the NodesArray via the StartIndex of the first Footnote
+    
     SwDoc* pDoc = (SwDoc*) (*this)[ 0 ]->GetTxtNode().GetDoc();
     SwTxtFtn* pTxtFtn;
     const SwEndNoteInfo& rEndInfo = pDoc->GetEndNoteInfo();
@@ -168,25 +168,25 @@ void SwFtnIdxs::UpdateAllFtn()
 
     SwRootFrm* pTmpRoot = pDoc->GetCurrentLayout();
     std::set<SwRootFrm*> aAllLayouts = pDoc->GetAllLayouts();
-    // For normal Footnotes per-chapter and per-document numbering are treated separately.
-    // For Endnotes we only have document-wise numbering.
+    
+    
     if( FTNNUM_CHAPTER == rFtnInfo.eNum )
     {
         const SwOutlineNodes& rOutlNds = pDoc->GetNodes().GetOutLineNds();
-        sal_uInt16 nNo = 1,     // Number for the Footnotes
-               nFtnIdx = 0;     // Index into theFtnIdx array
+        sal_uInt16 nNo = 1,     
+               nFtnIdx = 0;     
         for( sal_uInt16 n = 0; n < rOutlNds.size(); ++n )
         {
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )
             {
-                sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  // Start of a new chapter
+                sal_uLong nCapStt = rOutlNds[ n ]->GetIndex();  
                 for( ; nFtnIdx < size(); ++nFtnIdx )
                 {
                     pTxtFtn = (*this)[ nFtnIdx ];
                     if( pTxtFtn->GetTxtNode().GetIndex() >= nCapStt )
                         break;
 
-                    // Endnotes are per-document only
+                    
                     const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
                     if( !rFtn.IsEndNote() && rFtn.GetNumStr().isEmpty() &&
                         !SwUpdFtnEndNtAtEnd::FindSectNdWithEndAttr( *pTxtFtn ))
@@ -195,14 +195,14 @@ void SwFtnIdxs::UpdateAllFtn()
                     }
                 }
                 if( nFtnIdx >= size() )
-                    break;          // ok, everything is updated
+                    break;          
                 nNo = 1;
             }
         }
 
         for( nNo = 1; nFtnIdx < size(); ++nFtnIdx )
         {
-            // Endnotes are per-document
+            
             pTxtFtn = (*this)[ nFtnIdx ];
             const SwFmtFtn &rFtn = pTxtFtn->GetFtn();
             if( !rFtn.IsEndNote() && rFtn.GetNumStr().isEmpty() &&
@@ -213,7 +213,7 @@ void SwFtnIdxs::UpdateAllFtn()
         }
     }
 
-    // We use bool here, so that we also iterate through the Endnotes with a chapter setting.
+    
     const bool bEndNoteOnly = FTNNUM_DOC != rFtnInfo.eNum;
     sal_uInt16 nFtnNo = 0, nEndNo = 0;
     for( sal_uInt16 nPos = 0; nPos < size(); ++nPos )

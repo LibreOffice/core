@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -24,23 +24,23 @@
 #include "docpool.hxx"
 #include "msgpool.hxx"
 
-//------------------------------------------------------------------------
+
 
 static SfxItemInfo const aMsgItemInfos[] =
 {
-    { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_STRING
-    { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_SEARCHDATA - nicht mehr benutzt !!!
-    { SID_SORT,                  SFX_ITEM_POOLABLE },   // SCITEM_SORTDATA
-    { SID_QUERY,                 SFX_ITEM_POOLABLE },   // SCITEM_QUERYDATA
-    { SID_SUBTOTALS,             SFX_ITEM_POOLABLE },   // SCITEM_SUBTDATA
-    { SID_CONSOLIDATE,           SFX_ITEM_POOLABLE },   // SCITEM_CONSOLIDATEDATA
-    { SID_PIVOT_TABLE,           SFX_ITEM_POOLABLE },   // SCITEM_PIVOTDATA
-    { SID_SOLVE,                 SFX_ITEM_POOLABLE },   // SCITEM_SOLVEDATA
-    { SID_SCUSERLISTS,           SFX_ITEM_POOLABLE },   // SCITEM_USERLIST
-    { SID_PRINTER_NOTFOUND_WARN, SFX_ITEM_POOLABLE }    // SCITEM_PRINTWARN
+    { 0,                         SFX_ITEM_POOLABLE },   
+    { 0,                         SFX_ITEM_POOLABLE },   
+    { SID_SORT,                  SFX_ITEM_POOLABLE },   
+    { SID_QUERY,                 SFX_ITEM_POOLABLE },   
+    { SID_SUBTOTALS,             SFX_ITEM_POOLABLE },   
+    { SID_CONSOLIDATE,           SFX_ITEM_POOLABLE },   
+    { SID_PIVOT_TABLE,           SFX_ITEM_POOLABLE },   
+    { SID_SOLVE,                 SFX_ITEM_POOLABLE },   
+    { SID_SCUSERLISTS,           SFX_ITEM_POOLABLE },   
+    { SID_PRINTER_NOTFOUND_WARN, SFX_ITEM_POOLABLE }    
 };
 
-//------------------------------------------------------------------------
+
 
 ScMessagePool::ScMessagePool()
     :   SfxItemPool         ( OUString("ScMessagePool"),
@@ -83,7 +83,7 @@ ScMessagePool::ScMessagePool()
 ScMessagePool::~ScMessagePool()
 {
     Delete();
-    SetSecondaryPool( NULL );       // before deleting defaults (accesses defaults)
+    SetSecondaryPool( NULL );       
 
     for ( sal_uInt16 i=0; i <= MSGPOOL_END-MSGPOOL_START; i++ )
         SetRefCount( *ppPoolDefaults[i], 0 );
@@ -96,7 +96,7 @@ ScMessagePool::~ScMessagePool()
 
 SfxMapUnit ScMessagePool::GetMetric( sal_uInt16 nWhich ) const
 {
-    //  eigene Attribute: Twips, alles andere 1/100 mm
+    
 
     if ( nWhich >= ATTR_STARTINDEX && nWhich <= ATTR_ENDINDEX )
         return SFX_MAPUNIT_TWIP;

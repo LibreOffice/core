@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrappedGapwidthProperty.hxx"
@@ -100,9 +100,9 @@ void WrappedBarPositionProperty_Base::setPropertyValue( const Any& rOuterValue, 
             }
             catch( uno::Exception& e )
             {
-                //the above properties are not supported by all charttypes (only by column and bar)
-                //in that cases this exception is ok
-                e.Context.is();//to have debug information without compilation warnings
+                
+                
+                e.Context.is();
             }
         }
     }
@@ -138,9 +138,9 @@ Any WrappedBarPositionProperty_Base::getPropertyValue( const Reference< beans::X
                 }
                 catch( uno::Exception& e )
                 {
-                    //the above properties are not supported by all charttypes (only by column and bar)
-                    //in that cases this exception is ok
-                    e.Context.is();//to have debug information without compilation warnings
+                    
+                    
+                    e.Context.is();
                 }
             }
         }
@@ -170,7 +170,7 @@ WrappedBarOverlapProperty::~WrappedBarOverlapProperty()
 {
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

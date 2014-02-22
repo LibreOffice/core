@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -62,7 +62,7 @@ XMLPropertySetMapperEntry_Impl::XMLPropertySetMapperEntry_Impl(
     DBG_ASSERT( pHdl, "Unknown XML property type handler!" );
 }
 
-// Ctor
+
 XMLPropertySetMapper::XMLPropertySetMapper(
         const XMLPropertyMapEntry* pEntries,
         const UniReference< XMLPropertyHandlerFactory >& rFactory,
@@ -124,7 +124,7 @@ void XMLPropertySetMapper::AddMapperEntry(
     }
 }
 
-// Export a Property
+
 sal_Bool XMLPropertySetMapper::exportXML(
         OUString& rStrExpValue,
         const XMLPropertyState& rProperty,
@@ -142,7 +142,7 @@ sal_Bool XMLPropertySetMapper::exportXML(
     return bRet;
 }
 
-// Import a Property
+
 sal_Bool XMLPropertySetMapper::importXML(
         const OUString& rStrImpValue,
         XMLPropertyState& rProperty,
@@ -159,9 +159,9 @@ sal_Bool XMLPropertySetMapper::importXML(
     return bRet;
 }
 
-// Search for the given name and the namespace in the list and return
-// the index of the entry
-// If there is no matching entry the method returns -1
+
+
+
 sal_Int32 XMLPropertySetMapper::GetEntryIndex(
         sal_uInt16 nNamespace,
         const OUString& rStrName,

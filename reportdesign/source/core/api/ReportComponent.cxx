@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "ReportComponent.hxx"
 
@@ -37,10 +37,10 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 
-// =============================================================================
+
 namespace reportdesign
 {
-// =============================================================================
+
     using namespace com::sun::star;
     using namespace comphelper;
 
@@ -48,9 +48,9 @@ void lcl_getDefaultFonts( Font& rLatinFont, Font& rCJKFont, Font& rCTLFont,Langu
 {
         LanguageType eLatin = _eLatin;
 
-        //      If the UI language is Korean, the default Latin font has to
-        //      be queried for Korean, too (the Latin language from the document can't be Korean).
-        //      This is the same logic as in SwDocShell::InitNew.
+        
+        
+        
         LanguageType eUiLanguage = Application::GetSettings().GetUILanguageTag().getLanguageType();
         if (MsLangId::isKorean(eUiLanguage))
             eLatin = eUiLanguage;
@@ -104,7 +104,7 @@ OFormatProperties::OFormatProperties()
     aFontDescriptor.Weight = awt::FontWeight::NORMAL;
     aFontDescriptor.CharacterWidth = awt::FontWidth::NORMAL;
 }
-// -----------------------------------------------------------------------------
+
 void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xShape,const uno::Reference< report::XReportComponent>& _xTunnel,oslInterlockedCount& _rRefCount)
 {
     osl_atomic_increment( &_rRefCount );
@@ -117,13 +117,13 @@ void OReportComponentProperties::setShape(uno::Reference< drawing::XShape >& _xS
         m_xUnoTunnel.set(m_xShape,uno::UNO_QUERY);
         m_xServiceInfo.set(m_xShape,uno::UNO_QUERY);
 
-        // set ourself as delegator
+        
         if ( m_xProxy.is() )
             m_xProxy->setDelegator( _xTunnel );
     }
     osl_atomic_decrement( &_rRefCount );
 }
-// -----------------------------------------------------------------------------
+
 OReportComponentProperties::~OReportComponentProperties()
 {
     if ( m_xProxy.is() )
@@ -132,9 +132,9 @@ OReportComponentProperties::~OReportComponentProperties()
         m_xProxy.clear();
     }
 }
-// =============================================================================
-} // namespace reportdesign
-// =============================================================================
+
+} 
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

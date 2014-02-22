@@ -30,12 +30,12 @@ using namespace ::com::sun::star;
 //============================================================================
 // OReportExchange
 //============================================================================
-//----------------------------------------------------------------------------
+
 OReportExchange::OReportExchange(const TSectionElements& _rCopyElements )
 : m_aCopyElements(_rCopyElements)
 {
 }
-//--------------------------------------------------------------------
+
 sal_uInt32 OReportExchange::getDescriptorFormatId()
 {
     static sal_uInt32 s_nFormat = (sal_uInt32)-1;
@@ -46,12 +46,12 @@ sal_uInt32 OReportExchange::getDescriptorFormatId()
     }
     return s_nFormat;
 }
-//--------------------------------------------------------------------
+
 void OReportExchange::AddSupportedFormats()
 {
     AddFormat(getDescriptorFormatId());
 }
-//--------------------------------------------------------------------
+
 sal_Bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor )
 {
     const sal_uInt32 nFormatId = SotExchange::GetFormat(_rFlavor);
@@ -59,12 +59,12 @@ sal_Bool OReportExchange::GetData( const datatransfer::DataFlavor& _rFlavor )
         SetAny( uno::Any(m_aCopyElements), _rFlavor )
         : sal_False;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool OReportExchange::canExtract(const DataFlavorExVector& _rFlavor)
 {
     return IsFormatSupported(_rFlavor,getDescriptorFormatId());
 }
-// -----------------------------------------------------------------------------
+
 OReportExchange::TSectionElements OReportExchange::extractCopies(const TransferableDataHelper& _rData)
 {
     sal_Int32 nKnownFormatId = getDescriptorFormatId();

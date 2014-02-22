@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "imoptdlg.hxx"
@@ -26,28 +26,28 @@
 
 static const sal_Char pStrFix[] = "FIX";
 
-//------------------------------------------------------------------------
-//  Der Options-String darf kein Semikolon mehr enthalten (wegen Pickliste)
-//  darum ab Version 336 Komma stattdessen
+
+
+
 
 
 ScImportOptions::ScImportOptions( const OUString& rStr )
 {
-    // Use the same string format as ScAsciiOptions,
-    // because the import options string is passed here when a CSV file is loaded and saved again.
-    // The old format is still supported because it might be used in macros.
+    
+    
+    
 
     bFixedWidth = false;
     nFieldSepCode = 0;
     nTextSepCode = 0;
     eCharSet = RTL_TEXTENCODING_DONTKNOW;
-    bSaveAsShown = true;    // "true" if not in string (after CSV import)
+    bSaveAsShown = true;    
     bQuoteAllText = false;
     bSaveFormulas = false;
     sal_Int32 nTokenCount = comphelper::string::getTokenCount(rStr, ',');
     if ( nTokenCount >= 3 )
     {
-        // first 3 tokens: common
+        
         OUString aToken( rStr.getToken( 0, ',' ) );
         if( aToken.equalsIgnoreAsciiCase( pStrFix ) )
             bFixedWidth = true;
@@ -59,13 +59,13 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
 
         if ( nTokenCount == 4 )
         {
-            // compatibility with old options string: "Save as shown" as 4th token, numeric
+            
             bSaveAsShown = (rStr.getToken( 3, ',' ).toInt32() ? sal_True : false);
-            bQuoteAllText = true;   // use old default then
+            bQuoteAllText = true;   
         }
         else
         {
-            // look at the same positions as in ScAsciiOptions
+            
             if ( nTokenCount >= 7 )
                 bQuoteAllText = rStr.getToken(6, ',').equalsAscii("true");
             if ( nTokenCount >= 9 )
@@ -76,7 +76,7 @@ ScImportOptions::ScImportOptions( const OUString& rStr )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScImportOptions::BuildString() const
 {
@@ -87,18 +87,18 @@ OUString ScImportOptions::BuildString() const
     else
         aResult += OUString::number(nFieldSepCode);
     aResult += "," + OUString::number(nTextSepCode) + "," + aStrFont +
-                                                 // use the same string format as ScAsciiOptions:
-            ",1,,0," +                           // first row, no column info, default language
-            OUString::boolean( bQuoteAllText ) + // same as "quoted field as text" in ScAsciiOptions
-            ",true," +                           // "detect special numbers"
-            OUString::boolean( bSaveAsShown ) +  // "save as shown": not in ScAsciiOptions
+                                                 
+            ",1,,0," +                           
+            OUString::boolean( bQuoteAllText ) + 
+            ",true," +                           
+            OUString::boolean( bSaveAsShown ) +  
             "," +
-            OUString::boolean( bSaveFormulas );  // "save formulas": not in ScAsciiOptions
+            OUString::boolean( bSaveFormulas );  
 
     return aResult;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScImportOptions::SetTextEncoding( rtl_TextEncoding nEnc )
 {

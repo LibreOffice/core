@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -83,9 +83,9 @@ void SwWrtShell::Insert(SwField &rFld)
     {
         if ( rFld.GetTyp()->Which() == RES_POSTITFLD )
         {
-            // for annotation fields:
-            // - keep the current selection in order to create a corresponding annotation mark
-            // - collapse cursor to its end
+            
+            
+            
             if ( IsTableMode() )
             {
                 GetTblCrs()->Normalize( false );
@@ -125,11 +125,11 @@ void SwWrtShell::Insert(SwField &rFld)
     EndAllAction();
 }
 
-// Start the field update
+
 
 void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
 {
-    // Go through the list of fields and updating
+    
     SwInputFieldList* pTmp = pLst;
     if( !pTmp )
         pTmp = new SwInputFieldList( this );
@@ -152,7 +152,7 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
 
             if (!bCancel)
             {
-                // Otherwise update error at multi-selection:
+                
                 pTmp->GetField( i )->GetTyp()->UpdateFlds();
             }
         }
@@ -163,11 +163,11 @@ void SwWrtShell::UpdateInputFlds( SwInputFieldList* pLst )
         delete pTmp;
 }
 
-// Listener class: will close InputField dialog if input field(s)
-// is(are) deleted (for instance, by an extension) after the dialog shows up.
-// Otherwise, the for loop in SwWrtShell::UpdateInputFlds will crash when doing:
-//         'pTmp->GetField( i )->GetTyp()->UpdateFlds();'
-// on a deleted field.
+
+
+
+
+
 class FieldDeletionModify : public SwModify
 {
     public:
@@ -175,7 +175,7 @@ class FieldDeletionModify : public SwModify
 
         void Modify( const SfxPoolItem* pOld, const SfxPoolItem *)
         {
-            // Input fields have been deleted: better to close the dialog
+            
             if (pOld->Which() == RES_FIELD_DELETED)
             {
                 mpInputFieldDlg->EndDialog(RET_CANCEL);
@@ -185,7 +185,7 @@ class FieldDeletionModify : public SwModify
         AbstractFldInputDlg* mpInputFieldDlg;
 };
 
-// Start input dialog for a specific field
+
 
 sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
                                     Window* pParentWin, OString* pWindowState )
@@ -198,13 +198,13 @@ sal_Bool SwWrtShell::StartInputFldDlg( SwField* pFld, sal_Bool bNextButton,
     if(pWindowState && !pWindowState->isEmpty())
         pDlg->SetWindowState(*pWindowState);
 
-    // Register for possible input field deletion while dialog is open
+    
     FieldDeletionModify aModify(pDlg);
     GetDoc()->GetUnoCallBack()->Add(&aModify);
 
     sal_Bool bRet = RET_CANCEL == pDlg->Execute();
 
-    // Dialog closed, remove modification listener
+    
     GetDoc()->GetUnoCallBack()->Remove(&aModify);
 
     if(pWindowState)
@@ -237,7 +237,7 @@ sal_Bool SwWrtShell::StartDropDownFldDlg(SwField* pFld, sal_Bool bNextButton, OS
     return bRet;
 }
 
-// Insert directory - remove selection
+
 
 void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
@@ -250,7 +250,7 @@ void SwWrtShell::InsertTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
     SwEditShell::InsertTableOf(rTOX, pSet);
 }
 
-// Update directory - remove selection
+
 
 sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet)
 {
@@ -273,17 +273,17 @@ sal_Bool SwWrtShell::UpdateTableOf(const SwTOXBase& rTOX, const SfxItemSet* pSet
     return bResult;
 }
 
-// handler for click on the field given as parameter.
-// the cursor is positioned on the field.
+
+
 
 
 void SwWrtShell::ClickToField( const SwField& rFld )
 {
-    // cross reference field must not be selected because it moves the cursor
+    
     if (RES_GETREFFLD != rFld.GetTyp()->Which())
     {
         StartAllAction();
-        Right( CRSR_SKIP_CHARS, true, 1, false ); // Select the field.
+        Right( CRSR_SKIP_CHARS, true, 1, false ); 
         NormalizePam();
         EndAllAction();
     }
@@ -312,7 +312,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             if( nSlotId )
             {
                 StartUndo( UNDO_START );
-                //#97295# immediately select the right shell
+                
                 GetView().StopShellTimer();
                 GetView().GetViewFrame()->GetDispatcher()->Execute( nSlotId,
                             SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_RECORD );
@@ -328,7 +328,7 @@ void SwWrtShell::ClickToField( const SwField& rFld )
             OUString sRet( sText );
             ExecMacro( pFld->GetSvxMacro(), &sRet );
 
-            // return value changed?
+            
             if( sRet != sText )
             {
                 StartAllAction();
@@ -378,7 +378,7 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
 
     bIsInClickToEdit = true;
 
-    // At first run the possibly set ObjectSelect Macro
+    
     const SvxMacro* pMac = rItem.GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
     if( pMac )
     {
@@ -387,7 +387,7 @@ void SwWrtShell::ClickToINetAttr( const SwFmtINetFmt& rItem, sal_uInt16 nFilter 
         GetDoc()->CallEvent( SFX_EVENT_MOUSECLICK_OBJECT, aCallEvent, false );
     }
 
-    // So that the implementation of templates is displayed immediately
+    
     ::LoadURL( *this, rItem.GetValue(), nFilter, rItem.GetTargetFrame() );
     const SwTxtINetFmt* pTxtAttr = rItem.GetTxtINetFmt();
     if( pTxtAttr )
@@ -408,7 +408,7 @@ bool SwWrtShell::ClickToINetGrf( const Point& rDocPt, sal_uInt16 nFilter )
     if( pFnd && !sURL.isEmpty() )
     {
         bRet = true;
-        // At first run the possibly set ObjectSelect Macro
+        
         const SvxMacro* pMac = &pFnd->GetMacro().GetMacro( SFX_EVENT_MOUSECLICK_OBJECT );
         if( pMac )
         {
@@ -430,11 +430,11 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
     if( rURL.isEmpty() )
         return ;
 
-    // The shell could be 0 also!!!!!
+    
     if ( !rVSh.ISA(SwCrsrShell) )
         return;
 
-    //A CrsrShell is always a WrtShell
+    
     SwWrtShell &rSh = (SwWrtShell&)rVSh;
 
     SwDocShell* pDShell = rSh.GetView().GetDocShell();
@@ -460,7 +460,7 @@ void LoadURL( SwViewShell& rVSh, const OUString& rURL, sal_uInt16 nFilter,
     SfxStringItem aReferer( SID_REFERER, sReferer );
 
     SfxBoolItem aNewView( SID_OPEN_NEW_VIEW, false );
-    //#39076# Silent can be removed accordingly to SFX.
+    
     SfxBoolItem aBrowse( SID_BROWSE, true );
 
     if( nFilter & URLLOAD_NEWVIEW )
@@ -484,9 +484,9 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
 {
     if( EXCHG_IN_ACTION_COPY == nAction )
     {
-        // Insert
+        
         OUString sURL = rBkmk.GetURL();
-        // Is this is a jump within the current Doc?
+        
         const SwDocShell* pDocShell = GetView().GetDocShell();
         if(pDocShell->HasName())
         {
@@ -524,9 +524,9 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             aSection.SetType( CONTENT_SECTION );
             aSection.SetProtectFlag( false );
 
-            // the update of content from linked section at time delete
-            // the undostack. Then the change of the section dont create
-            // any undoobject. -  BUG 69145
+            
+            
+            
             sal_Bool bDoesUndo = DoesUndo();
             SwUndoId nLastUndoId(UNDO_EMPTY);
             if (GetLastUndoInfo(0, & nLastUndoId))

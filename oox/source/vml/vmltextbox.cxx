@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/vml/vmltextbox.hxx"
@@ -96,9 +96,9 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
         if (rFont.monSpacing.has())
         {
             aPropertyValue.Name = "CharKerning";
-            // Value is not converted to mm100: SvxKerningItem::PutValue() gets
-            // called with nMemberId = 0, so no mm100 -> twips conversion will
-            // be done there.
+            
+            
+            
             aPropertyValue.Value = uno::makeAny(sal_Int16(rFont.monSpacing.get()));
             aPropVec.push_back(aPropertyValue);
         }
@@ -127,7 +127,7 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
         xTextAppend->appendTextPortion(aIt->maText, aPropSeq);
     }
 
-    // Remove the last character of the shape text, if it would be a newline.
+    
     uno::Reference< text::XTextCursor > xCursor = xTextAppend->createTextCursor();
     xCursor->gotoEnd(false);
     xCursor->goLeft(1, true);
@@ -138,20 +138,20 @@ void TextBox::convert(uno::Reference<drawing::XShape> xShape) const
     {
         uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
 
-        // VML has the text horizontally aligned to left (all the time),
-        // v-text-anchor for vertical alignment, and vertical mode to swap the
-        // two.  drawinglayer supports both horizontal and vertical alignment,
-        // but no vertical mode: we use T->B, R->L instead.
-        // As a result, we need to set horizontal adjustment here to 'right',
-        // that will result in vertical 'top' after writing mode is applied,
-        // which matches the VML behavior.
+        
+        
+        
+        
+        
+        
+        
         xProperties->setPropertyValue("TextHorizontalAdjust", uno::makeAny(drawing::TextHorizontalAdjust_RIGHT));
 
         xProperties->setPropertyValue( "TextWritingMode", uno::makeAny( text::WritingMode_TB_RL ) );
     }
 }
 
-} // namespace vml
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

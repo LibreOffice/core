@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/awt/vclxmenu.hxx>
@@ -90,7 +90,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
         DBG_ASSERT( ((VclMenuEvent*)pEvent)->GetMenu() && mpMenu, "Menu???" );
 
         VclMenuEvent* pMenuEvent = (VclMenuEvent*)pEvent;
-        if ( pMenuEvent->GetMenu() == mpMenu )  // Also called for the root menu
+        if ( pMenuEvent->GetMenu() == mpMenu )  
         {
             switch ( pMenuEvent->GetId() )
             {
@@ -144,7 +144,7 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 }
                 break;
 
-                // ignore accessibility events
+                
                 case VCLEVENT_MENU_ENABLE:
                 case VCLEVENT_MENU_INSERTITEM:
                 case VCLEVENT_MENU_REMOVEITEM:
@@ -467,7 +467,7 @@ throw(css::uno::RuntimeException)
 
     if ( mpMenu && pVCLMenu && pVCLMenu->GetMenu() && pVCLMenu->IsPopupMenu() )
     {
-        // Selbst eine Ref halten!
+        
         css::uno::Reference< css::awt::XPopupMenu > * pNewRef = new css::uno::Reference< css::awt::XPopupMenu > ;
         *pNewRef = rxPopupMenu;
         maPopupMenuRefs.push_back( pNewRef );
@@ -497,8 +497,8 @@ throw(css::uno::RuntimeException)
                 break;
             }
         }
-        // it seems the popup menu is not insert into maPopupMenuRefs
-        // if the popup men is not created by stardiv.Toolkit.VCLXPopupMenu
+        
+        
         if( !aRef.is() )
         {
             aRef = new VCLXPopupMenu( (PopupMenu*)pMenu );
@@ -507,7 +507,7 @@ throw(css::uno::RuntimeException)
     return aRef;
 }
 
-// css::awt::XPopupMenu
+
 void VCLXMenu::insertSeparator(
     sal_Int16 nPos )
 throw(css::uno::RuntimeException)

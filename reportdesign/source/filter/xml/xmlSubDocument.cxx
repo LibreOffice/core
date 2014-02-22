@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "xmlSubDocument.hxx"
 #include "xmlCell.hxx"
@@ -50,13 +50,13 @@ OXMLSubDocument::OXMLSubDocument( ORptFilter& rImport,
 {
 
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLSubDocument::~OXMLSubDocument()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
         sal_uInt16 _nPrefix,
         const OUString& _rLocalName,
@@ -85,7 +85,7 @@ SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
                 m_bContainsShape = true;
                 if (m_pCellParent)
                 {
-                    // #i94115 say to the parent Cell it contains shapes
+                    
                     m_pCellParent->setContainsShape(true);
                 }
             }
@@ -99,7 +99,7 @@ SvXMLImportContext* OXMLSubDocument::_CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLSubDocument::EndElement()
 {
     if ( m_bContainsShape )
@@ -138,14 +138,14 @@ void OXMLSubDocument::EndElement()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OXMLSubDocument::addMasterDetailPair(const ::std::pair< OUString,OUString >& _aPair)
 {
     m_aMasterFields.push_back(_aPair.first);
     m_aDetailFields.push_back(_aPair.second);
 }
-//----------------------------------------------------------------------------
-} // namespace rptxml
-// -----------------------------------------------------------------------------
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

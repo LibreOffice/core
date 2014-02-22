@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/awt/vclxtabpagemodel.hxx>
@@ -24,9 +24,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 #include <cppuhelper/typeprovider.hxx>
-//  ----------------------------------------------------
-//  class VCLXDialog
-//  ----------------------------------------------------
+
+
+
 
 VCLXTabPageModel::VCLXTabPageModel()
 {
@@ -57,7 +57,7 @@ void SAL_CALL VCLXTabPageModel::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::
 
 ::com::sun::star::awt::DeviceInfo VCLXTabPageModel::getInfo() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::com::sun::star::awt::DeviceInfo aInfo;// = VCLXDevice::getInfo();
+    ::com::sun::star::awt::DeviceInfo aInfo;
     return aInfo;
 }
 
@@ -75,7 +75,7 @@ throw(::com::sun::star::uno::RuntimeException)
         VCLXWindow::setProperty( PropertyName, Value );
     }*/
 }
-//XTabPageModel
+
 ::sal_Int16 SAL_CALL VCLXTabPageModel::getTabPageID() throw (::com::sun::star::uno::RuntimeException)
 {
     return 0;
@@ -86,23 +86,23 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 void SAL_CALL VCLXTabPageModel::setEnabled( ::sal_Bool _enabled ) throw (::com::sun::star::uno::RuntimeException)
 {
-    //TabControl* pTabControl = (TabControl*)GetWindow();
-    //if ( pTabControl )
-    //  pTabControl->EnablePage(0, true);
+    
+    
+    
 }
 OUString SAL_CALL VCLXTabPageModel::getTitle() throw (::com::sun::star::uno::RuntimeException)
 {
-    //TabControl* pTabControl = (TabControl*)GetWindow();
-    //if ( pTabControl )
-    //  return pTabControl->GetPageText(0);
-    //else
+    
+    
+    
+    
         return OUString();
 }
 void SAL_CALL VCLXTabPageModel::setTitle( const OUString& _title ) throw (::com::sun::star::uno::RuntimeException)
 {
-    //TabControl* pTabControl = (TabControl*)GetWindow();
-    //if ( pTabControl )
-    //  pTabControl->SetPageText(0, _title);
+    
+    
+    
 
 }
 OUString SAL_CALL VCLXTabPageModel::getImageURL() throw (::com::sun::star::uno::RuntimeException)
@@ -111,11 +111,11 @@ OUString SAL_CALL VCLXTabPageModel::getImageURL() throw (::com::sun::star::uno::
 }
 void SAL_CALL VCLXTabPageModel::setImageURL( const OUString& /*_imageurl*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
-    //m_sImageURL = _imageurl;
+    
 }
 OUString SAL_CALL VCLXTabPageModel::getToolTip() throw (::com::sun::star::uno::RuntimeException)
 {
-    //return m_sTooltip;
+    
     return OUString();
 }
 void SAL_CALL VCLXTabPageModel::setToolTip( const OUString& _tooltip ) throw (::com::sun::star::uno::RuntimeException)

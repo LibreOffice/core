@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ struct MutexHolder
 typedef ::cppu::WeakComponentImplHelper2<
     lang::XServiceInfo, ucb::XContentProvider > t_impl_helper;
 
-//==============================================================================
+
 class ExpandContentProviderImpl : protected MutexHolder, public t_impl_helper
 {
     uno::Reference< uno::XComponentContext > m_xComponentContext;
@@ -71,7 +71,7 @@ public:
         {}
     virtual ~ExpandContentProviderImpl() throw ();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
@@ -79,7 +79,7 @@ public:
     virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw (uno::RuntimeException);
 
-    // XContentProvider
+    
     virtual uno::Reference< ucb::XContent > SAL_CALL queryContent(
         uno::Reference< ucb::XContentIdentifier > const & xIdentifier )
         throw (ucb::IllegalIdentifierException, uno::RuntimeException);
@@ -89,11 +89,11 @@ public:
         throw (uno::RuntimeException);
 };
 
-//______________________________________________________________________________
+
 inline void ExpandContentProviderImpl::check() const
 {
-    // xxx todo guard?
-//     MutexGuard guard( m_mutex );
+    
+
     if (rBHelper.bInDispose || rBHelper.bDisposed)
     {
         throw lang::DisposedException(
@@ -104,17 +104,17 @@ inline void ExpandContentProviderImpl::check() const
     }
 }
 
-//______________________________________________________________________________
+
 ExpandContentProviderImpl::~ExpandContentProviderImpl() throw ()
 {
 }
 
-//______________________________________________________________________________
+
 void ExpandContentProviderImpl::disposing()
 {
 }
 
-//==============================================================================
+
 static uno::Reference< uno::XInterface > SAL_CALL create(
     uno::Reference< uno::XComponentContext > const & xComponentContext )
     SAL_THROW( (uno::Exception) )
@@ -123,13 +123,13 @@ static uno::Reference< uno::XInterface > SAL_CALL create(
         new ExpandContentProviderImpl( xComponentContext ) );
 }
 
-//==============================================================================
+
 static OUString SAL_CALL implName()
 {
     return OUString("com.sun.star.comp.ucb.ExpandContentProvider");
 }
 
-//==============================================================================
+
 static uno::Sequence< OUString > SAL_CALL supportedServices()
 {
     OUString names [] = {
@@ -139,8 +139,8 @@ static uno::Sequence< OUString > SAL_CALL supportedServices()
     return uno::Sequence< OUString >( names, ARLEN(names) );
 }
 
-// XServiceInfo
-//______________________________________________________________________________
+
+
 OUString ExpandContentProviderImpl::getImplementationName()
     throw (uno::RuntimeException)
 {
@@ -148,7 +148,7 @@ OUString ExpandContentProviderImpl::getImplementationName()
     return implName();
 }
 
-//______________________________________________________________________________
+
 uno::Sequence< OUString > ExpandContentProviderImpl::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
@@ -173,17 +173,17 @@ OUString ExpandContentProviderImpl::expandUri(
             static_cast< OWeakObject * >(
                 const_cast< ExpandContentProviderImpl * >(this) ) );
     }
-    // cut protocol
+    
     OUString str( uri.copy( sizeof (EXPAND_PROTOCOL ":") -1 ) );
-    // decode uric class chars
+    
     str = ::rtl::Uri::decode(
         str, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-    // expand macro string
+    
     return m_xMacroExpander->expandMacros( str );
 }
 
-// XContentProvider
-//______________________________________________________________________________
+
+
 uno::Reference< ucb::XContent > ExpandContentProviderImpl::queryContent(
     uno::Reference< ucb::XContentIdentifier > const & xIdentifier )
     throw (ucb::IllegalIdentifierException, uno::RuntimeException)
@@ -204,7 +204,7 @@ uno::Reference< ucb::XContent > ExpandContentProviderImpl::queryContent(
     }
 }
 
-//______________________________________________________________________________
+
 sal_Int32 ExpandContentProviderImpl::compareContentIds(
     uno::Reference< ucb::XContentIdentifier > const & xId1,
     uno::Reference< ucb::XContentIdentifier > const & xId2 )
@@ -219,7 +219,7 @@ sal_Int32 ExpandContentProviderImpl::compareContentIds(
     }
     catch (const ucb::IllegalIdentifierException & exc)
     {
-        (void) exc; // unused
+        (void) exc; 
         OSL_FAIL(
             OUStringToOString(
                 exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );

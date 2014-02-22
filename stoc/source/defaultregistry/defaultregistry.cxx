@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -55,16 +55,16 @@ public:
 
     ~NestedRegistryImpl();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException);
     virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException);
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
         throw(Exception, RuntimeException);
 
-    // XSimpleRegistry
+    
     virtual OUString SAL_CALL getURL() throw(RuntimeException);
     virtual void SAL_CALL open( const OUString& rURL, sal_Bool bReadOnly, sal_Bool bCreate ) throw(InvalidRegistryException, RuntimeException);
     virtual sal_Bool SAL_CALL isValid(  ) throw(RuntimeException);
@@ -74,7 +74,7 @@ public:
     virtual sal_Bool SAL_CALL isReadOnly(  ) throw(InvalidRegistryException, RuntimeException);
     virtual void SAL_CALL mergeKey( const OUString& aKeyName, const OUString& aUrl ) throw(InvalidRegistryException, MergeConflictException, RuntimeException);
 
-    // XEnumerationAccess
+    
     virtual Reference< XEnumeration > SAL_CALL createEnumeration(  ) throw (RuntimeException);
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException);
@@ -88,9 +88,9 @@ protected:
 
 };
 
-//*************************************************************************
-// class NestedKeyImpl the implenetation of interface XRegistryKey
-//*************************************************************************
+
+
+
 class NestedKeyImpl : public WeakImplHelper1< XRegistryKey >
 {
 public:
@@ -103,7 +103,7 @@ public:
 
     ~NestedKeyImpl();
 
-    // XRegistryKey
+    
     virtual OUString SAL_CALL getKeyName() throw(RuntimeException);
     virtual sal_Bool SAL_CALL isReadOnly(  ) throw(InvalidRegistryException, RuntimeException);
     virtual sal_Bool SAL_CALL isValid(  ) throw(RuntimeException);
@@ -146,7 +146,7 @@ protected:
 };
 
 
-//*************************************************************************
+
 NestedKeyImpl::NestedKeyImpl( NestedRegistryImpl* pDefaultRegistry,
                               Reference<XRegistryKey>& localKey,
                               Reference<XRegistryKey>& defaultKey )
@@ -169,7 +169,7 @@ NestedKeyImpl::NestedKeyImpl( NestedRegistryImpl* pDefaultRegistry,
     m_state = m_pRegistry->m_state;
 }
 
-//*************************************************************************
+
 NestedKeyImpl::NestedKeyImpl( const OUString& rKeyName,
                               NestedKeyImpl* pKey)
     : m_pRegistry(pKey->m_pRegistry)
@@ -197,14 +197,14 @@ NestedKeyImpl::NestedKeyImpl( const OUString& rKeyName,
     m_state = m_pRegistry->m_state;
 }
 
-//*************************************************************************
+
 NestedKeyImpl::~NestedKeyImpl()
 {
     if ( m_pRegistry )
         m_pRegistry->release();
 }
 
-//*************************************************************************
+
 void NestedKeyImpl::computeChanges()
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -223,8 +223,8 @@ void NestedKeyImpl::computeChanges()
     }
 }
 
-//*************************************************************************
-// NestedKey_Impl::computeName()
+
+
 //
 OUString NestedKeyImpl::computeName(const OUString& name)
 {
@@ -270,14 +270,14 @@ OUString NestedKeyImpl::computeName(const OUString& name)
     return resLocalName;
 }
 
-//*************************************************************************
+
 OUString SAL_CALL NestedKeyImpl::getKeyName() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
     return m_name;
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL NestedKeyImpl::isReadOnly(  )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -290,7 +290,7 @@ sal_Bool SAL_CALL NestedKeyImpl::isReadOnly(  )
         throw InvalidRegistryException();
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL NestedKeyImpl::isValid(  ) throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_pRegistry->m_mutex );
@@ -298,7 +298,7 @@ sal_Bool SAL_CALL NestedKeyImpl::isValid(  ) throw(RuntimeException)
             (m_defaultKey.is() && m_defaultKey->isValid()) );
 }
 
-//*************************************************************************
+
 RegistryKeyType SAL_CALL NestedKeyImpl::getKeyType( const OUString& rKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -317,7 +317,7 @@ RegistryKeyType SAL_CALL NestedKeyImpl::getKeyType( const OUString& rKeyName )
     return RegistryKeyType_KEY;
 }
 
-//*************************************************************************
+
 RegistryValueType SAL_CALL NestedKeyImpl::getValueType(  )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -336,7 +336,7 @@ RegistryValueType SAL_CALL NestedKeyImpl::getValueType(  )
     return RegistryValueType_NOT_DEFINED;
 }
 
-//*************************************************************************
+
 sal_Int32 SAL_CALL NestedKeyImpl::getLongValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
@@ -357,7 +357,7 @@ sal_Int32 SAL_CALL NestedKeyImpl::getLongValue(  )
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::setLongValue( sal_Int32 value )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -381,7 +381,7 @@ void SAL_CALL NestedKeyImpl::setLongValue( sal_Int32 value )
     }
 }
 
-//*************************************************************************
+
 Sequence< sal_Int32 > SAL_CALL NestedKeyImpl::getLongListValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
@@ -402,7 +402,7 @@ Sequence< sal_Int32 > SAL_CALL NestedKeyImpl::getLongListValue(  )
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::setLongListValue( const Sequence< sal_Int32 >& seqValue )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -426,7 +426,7 @@ void SAL_CALL NestedKeyImpl::setLongListValue( const Sequence< sal_Int32 >& seqV
     }
 }
 
-//*************************************************************************
+
 OUString SAL_CALL NestedKeyImpl::getAsciiValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
@@ -447,7 +447,7 @@ OUString SAL_CALL NestedKeyImpl::getAsciiValue(  )
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::setAsciiValue( const OUString& value )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -471,7 +471,7 @@ void SAL_CALL NestedKeyImpl::setAsciiValue( const OUString& value )
     }
 }
 
-//*************************************************************************
+
 Sequence< OUString > SAL_CALL NestedKeyImpl::getAsciiListValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
@@ -492,7 +492,7 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getAsciiListValue(  )
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::setAsciiListValue( const Sequence< OUString >& seqValue )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -516,7 +516,7 @@ void SAL_CALL NestedKeyImpl::setAsciiListValue( const Sequence< OUString >& seqV
     }
 }
 
-//*************************************************************************
+
 OUString SAL_CALL NestedKeyImpl::getStringValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
@@ -537,7 +537,7 @@ OUString SAL_CALL NestedKeyImpl::getStringValue(  )
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::setStringValue( const OUString& value )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -561,7 +561,7 @@ void SAL_CALL NestedKeyImpl::setStringValue( const OUString& value )
     }
 }
 
-//*************************************************************************
+
 Sequence< OUString > SAL_CALL NestedKeyImpl::getStringListValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
@@ -582,7 +582,7 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getStringListValue(  )
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::setStringListValue( const Sequence< OUString >& seqValue )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -606,7 +606,7 @@ void SAL_CALL NestedKeyImpl::setStringListValue( const Sequence< OUString >& seq
     }
 }
 
-//*************************************************************************
+
 Sequence< sal_Int8 > SAL_CALL NestedKeyImpl::getBinaryValue(  )
     throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
@@ -627,7 +627,7 @@ Sequence< sal_Int8 > SAL_CALL NestedKeyImpl::getBinaryValue(  )
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::setBinaryValue( const Sequence< sal_Int8 >& value )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -651,7 +651,7 @@ void SAL_CALL NestedKeyImpl::setBinaryValue( const Sequence< sal_Int8 >& value )
     }
 }
 
-//*************************************************************************
+
 Reference< XRegistryKey > SAL_CALL NestedKeyImpl::openKey( const OUString& aKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -687,7 +687,7 @@ Reference< XRegistryKey > SAL_CALL NestedKeyImpl::openKey( const OUString& aKeyN
     }
 }
 
-//*************************************************************************
+
 Reference< XRegistryKey > SAL_CALL NestedKeyImpl::createKey( const OUString& aKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -745,7 +745,7 @@ Reference< XRegistryKey > SAL_CALL NestedKeyImpl::createKey( const OUString& aKe
     return Reference<XRegistryKey>();
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::closeKey(  )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -760,7 +760,7 @@ void SAL_CALL NestedKeyImpl::closeKey(  )
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::deleteKey( const OUString& rKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -783,7 +783,7 @@ void SAL_CALL NestedKeyImpl::deleteKey( const OUString& rKeyName )
     }
 }
 
-//*************************************************************************
+
 Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -863,7 +863,7 @@ Sequence< Reference< XRegistryKey > > SAL_CALL NestedKeyImpl::openKeys(  )
     return retSeq;
 }
 
-//*************************************************************************
+
 Sequence< OUString > SAL_CALL NestedKeyImpl::getKeyNames(  )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -930,7 +930,7 @@ Sequence< OUString > SAL_CALL NestedKeyImpl::getKeyNames(  )
     return retSeq;
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OUString& aLinkTarget )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -988,7 +988,7 @@ sal_Bool SAL_CALL NestedKeyImpl::createLink( const OUString& aLinkName, const OU
     return isCreated;
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedKeyImpl::deleteLink( const OUString& rLinkName )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -1034,7 +1034,7 @@ void SAL_CALL NestedKeyImpl::deleteLink( const OUString& rLinkName )
     }
 }
 
-//*************************************************************************
+
 OUString SAL_CALL NestedKeyImpl::getLinkTarget( const OUString& rLinkName )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -1088,7 +1088,7 @@ OUString SAL_CALL NestedKeyImpl::getLinkTarget( const OUString& rLinkName )
     return linkTarget;
 }
 
-//*************************************************************************
+
 OUString SAL_CALL NestedKeyImpl::getResolvedName( const OUString& aKeyName )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -1108,16 +1108,16 @@ OUString SAL_CALL NestedKeyImpl::getResolvedName( const OUString& aKeyName )
     return resolvedName;
 }
 
-//*************************************************************************
+
 //
-// DefaultRegistry Implementation
+
 //
-//*************************************************************************
+
 NestedRegistryImpl::NestedRegistryImpl( )
     : m_state(0)
 {}
 
-//*************************************************************************
+
 NestedRegistryImpl::~NestedRegistryImpl() {}
 
 class RegistryEnumueration : public WeakImplHelper1< XEnumeration >
@@ -1184,7 +1184,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::hasElements(  ) throw (RuntimeException)
 
 
 
-//*************************************************************************
+
 OUString SAL_CALL NestedRegistryImpl::getImplementationName(  )
     throw(RuntimeException)
 {
@@ -1205,7 +1205,7 @@ Sequence<OUString> SAL_CALL NestedRegistryImpl::getSupportedServiceNames(  )
     return seqNames;
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedRegistryImpl::initialize( const Sequence< Any >& aArguments )
     throw( Exception, RuntimeException )
 {
@@ -1221,7 +1221,7 @@ void SAL_CALL NestedRegistryImpl::initialize( const Sequence< Any >& aArguments 
     }
 }
 
-//*************************************************************************
+
 OUString SAL_CALL NestedRegistryImpl::getURL() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
@@ -1237,7 +1237,7 @@ OUString SAL_CALL NestedRegistryImpl::getURL() throw(RuntimeException)
     return OUString();
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedRegistryImpl::open( const OUString&, sal_Bool, sal_Bool )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -1246,7 +1246,7 @@ void SAL_CALL NestedRegistryImpl::open( const OUString&, sal_Bool, sal_Bool )
             Reference< XInterface >() );
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL NestedRegistryImpl::isValid(  ) throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
@@ -1263,7 +1263,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::isValid(  ) throw(RuntimeException)
     return sal_False;
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedRegistryImpl::close(  )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -1278,7 +1278,7 @@ void SAL_CALL NestedRegistryImpl::close(  )
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedRegistryImpl::destroy(  )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -1287,7 +1287,7 @@ void SAL_CALL NestedRegistryImpl::destroy(  )
             Reference< XInterface >() );
 }
 
-//*************************************************************************
+
 Reference< XRegistryKey > SAL_CALL NestedRegistryImpl::getRootKey(  )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -1318,7 +1318,7 @@ Reference< XRegistryKey > SAL_CALL NestedRegistryImpl::getRootKey(  )
     return Reference<XRegistryKey>();
 }
 
-//*************************************************************************
+
 sal_Bool SAL_CALL NestedRegistryImpl::isReadOnly(  )
     throw(InvalidRegistryException, RuntimeException)
 {
@@ -1335,7 +1335,7 @@ sal_Bool SAL_CALL NestedRegistryImpl::isReadOnly(  )
     return sal_False;
 }
 
-//*************************************************************************
+
 void SAL_CALL NestedRegistryImpl::mergeKey( const OUString& aKeyName, const OUString& aUrl )
     throw(InvalidRegistryException, MergeConflictException, RuntimeException)
 {
@@ -1348,7 +1348,7 @@ void SAL_CALL NestedRegistryImpl::mergeKey( const OUString& aKeyName, const OUSt
     }
 }
 
-} // namespace
+} 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_stoc_NestedRegistry_get_implementation(

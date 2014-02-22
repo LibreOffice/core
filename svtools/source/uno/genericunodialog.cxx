@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,12 +40,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::ucb;
 
-//.........................................................................
+
 namespace svt
 {
-//.........................................................................
 
-//-------------------------------------------------------------------------
+
+
 OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxContext)
         :OPropertyContainer(GetBroadcastHelper())
         ,m_pDialog(NULL)
@@ -62,7 +62,7 @@ OGenericUnoDialog::OGenericUnoDialog(const Reference< XComponentContext >& _rxCo
         &m_xParent, getCppuType(&m_xParent));
 }
 
-//-------------------------------------------------------------------------
+
 OGenericUnoDialog::~OGenericUnoDialog()
 {
     if ( m_pDialog )
@@ -74,7 +74,7 @@ OGenericUnoDialog::~OGenericUnoDialog()
     }
 }
 
-//-------------------------------------------------------------------------
+
 Any SAL_CALL OGenericUnoDialog::queryInterface(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OGenericUnoDialogBase::queryInterface(_rType);
@@ -89,7 +89,7 @@ Any SAL_CALL OGenericUnoDialog::queryInterface(const Type& _rType) throw (Runtim
     return aReturn;
 }
 
-//-------------------------------------------------------------------------
+
 Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  ) throw(RuntimeException)
 {
     return ::comphelper::concatSequences(
@@ -103,16 +103,16 @@ sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const OUString& ServiceName
     return cppu::supportsService(this, ServiceName);
 }
 
-//-------------------------------------------------------------------------
+
 void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw(Exception)
 {
-    // TODO : need some handling if we're currently executing ...
+    
 
     OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, rValue);
 
     if (UNODIALOG_PROPERTY_ID_TITLE == nHandle)
     {
-        // from now on m_sTitle is valid
+        
         m_bTitleAmbiguous = sal_False;
 
         if (m_pDialog)
@@ -120,7 +120,7 @@ void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
     }
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw(IllegalArgumentException)
 {
     switch (nHandle)
@@ -141,7 +141,7 @@ sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any&
     return OPropertyContainer::convertFastPropertyValue(rConvertedValue, rOldValue, nHandle, rValue);
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle ) throw(RuntimeException)
 {
     UnoDialogEntryGuard aGuard( *this );
@@ -152,31 +152,31 @@ void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle ) throw(Runti
     }
     catch(RuntimeException&)
     {
-        // allowed to pass
+        
         throw;
     }
     catch( const Exception& )
     {
         DBG_UNHANDLED_EXCEPTION();
-        // not allowed to pass
+        
     }
 }
 
-//-------------------------------------------------------------------------
+
 bool OGenericUnoDialog::impl_ensureDialog_lck()
 {
     if ( m_pDialog )
         return true;
 
-    // get the parameters for the dialog from the current settings
+    
 
-    // the parent window
+    
     Window* pParent = NULL;
     VCLXWindow* pImplementation = VCLXWindow::GetImplementation(m_xParent);
     if (pImplementation)
         pParent = pImplementation->GetWindow();
 
-    // the title
+    
     OUString sTitle = m_sTitle;
 
     Dialog* pDialog = createDialog( pParent );
@@ -184,12 +184,12 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     if ( !pDialog )
         return false;
 
-    // do some initialisations
+    
     if ( !m_bTitleAmbiguous )
         pDialog->SetText( sTitle );
 
-    // be notified when the dialog is killed by somebody else
-    // #i65958# / 2006-07-07 / frank.schoenheit@sun.com
+    
+    
     pDialog->AddEventListener( LINK( this, OGenericUnoDialog, OnDialogDying ) );
 
     m_pDialog = pDialog;
@@ -197,14 +197,14 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
     return true;
 }
 
-//-------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
 {
-    // both creation and execution of the dialog must be guarded with the SolarMutex, so be generous here
+    
     SolarMutexGuard aSolarGuard;
 
     Dialog* pDialogToExecute = NULL;
-    // create the dialog, if necessary
+    
     {
         UnoDialogEntryGuard aGuard( *this );
 
@@ -223,7 +223,7 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
         pDialogToExecute = m_pDialog;
     }
 
-    // start execution
+    
     sal_Int16 nReturn(0);
     if ( pDialogToExecute )
         nReturn = pDialogToExecute->Execute();
@@ -237,18 +237,18 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
 
-        // get the settings of the dialog
+        
         executedDialog( nReturn );
 
         m_bExecuting = sal_False;
     }
 
-    // outta here
+    
     return nReturn;
 }
 
 #ifdef AWT_DIALOG
-//-------------------------------------------------------------------------
+
 void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
 {
     UnoDialogEntryGuard aGuard( *this );
@@ -258,15 +258,15 @@ void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
     {
         ::osl::MutexGuard aExecutionGuard(m_aExecutionMutex);
         OSL_ENSURE(m_pDialog, "OGenericUnoDialog::endExecute : executing which dialog ?");
-            // m_bExecuting is true but we have no dialog ?
+            
         if (!m_pDialog)
             throw RuntimeException();
 
         if (!m_pDialog->IsInExecute())
-            // we tighly missed it ... another thread finished the execution of the dialog,
-            // but did not manage it to reset m_bExecuting, it currently tries to acquire
-            // m_aMutex or m_aExecutionMutex
-            // => nothing to do
+            
+            
+            
+            
             return;
 
         m_pDialog->EndDialog(RET_CANCEL);
@@ -275,7 +275,7 @@ void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
 }
 #endif
 
-//-------------------------------------------------------------------------
+
 void OGenericUnoDialog::implInitialize(const Any& _rValue)
 {
     try
@@ -297,7 +297,7 @@ void OGenericUnoDialog::implInitialize(const Any& _rValue)
     }
 }
 
-//-------------------------------------------------------------------------
+
 void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -311,14 +311,14 @@ void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
     m_bInitialized = true;
 }
 
-//-------------------------------------------------------------------------
+
 void OGenericUnoDialog::destroyDialog()
 {
     delete m_pDialog;
     m_pDialog = NULL;
 }
 
-//-------------------------------------------------------------------------
+
 IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent*, _pEvent )
 {
     OSL_ENSURE( _pEvent->GetWindow() == m_pDialog, "OGenericUnoDialog::OnDialogDying: where does this come from?" );
@@ -327,8 +327,8 @@ IMPL_LINK( OGenericUnoDialog, OnDialogDying, VclWindowEvent*, _pEvent )
     return 0L;
 }
 
-//.........................................................................
-}   // namespace svt
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

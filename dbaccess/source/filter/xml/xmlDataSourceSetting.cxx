@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -69,7 +69,7 @@ OXMLDataSourceSetting::OXMLDataSourceSetting( ODBFilter& rImport
                 break;
             case XML_TOK_DATA_SOURCE_SETTING_TYPE:
                 {
-                    // needs to be translated into a ::com::sun::star::uno::Type
+                    
                     static std::map< OUString, css::uno::Type > s_aTypeNameMap;
                     if (s_aTypeNameMap.empty())
                     {
@@ -133,8 +133,8 @@ void OXMLDataSourceSetting::EndElement()
         if ( m_bIsList && m_aInfoSequence.getLength() )
             m_aSetting.Value <<= m_aInfoSequence;
 
-        // if our property is of type string, but was empty, ensure that
-        // we don't add a VOID value
+        
+        
         if ( !m_bIsList && ( m_aPropType.getTypeClass() == TypeClass_STRING ) && !m_aSetting.Value.hasValue() )
             m_aSetting.Value <<= OUString();
 
@@ -174,7 +174,7 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
     Any aReturn;
     switch (_rExpectedType.getTypeClass())
     {
-        case TypeClass_BOOLEAN:     // sal_Bool
+        case TypeClass_BOOLEAN:     
         {
             bool bValue(false);
             bool const bSuccess =
@@ -185,9 +185,9 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
             aReturn <<= bValue;
         }
         break;
-        case TypeClass_SHORT:       // sal_Int16
-        case TypeClass_LONG:        // sal_Int32
-            {   // it's a real int32/16 property
+        case TypeClass_SHORT:       
+        case TypeClass_LONG:        
+            {   
                 sal_Int32 nValue(0);
                 bool const bSuccess =
                     ::sax::Converter::convertNumber(nValue, _rReadCharacters);
@@ -227,6 +227,6 @@ Any OXMLDataSourceSetting::convertString(const ::com::sun::star::uno::Type& _rEx
     return aReturn;
 }
 
-} // namespace dbaxml
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

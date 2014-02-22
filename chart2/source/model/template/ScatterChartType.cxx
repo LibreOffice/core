@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ScatterChartType.hxx"
@@ -85,8 +85,8 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_SCATTERCHARTTYPE_CURVE_STYLE, chart2::CurveStyle_LINES );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCATTERCHARTTYPE_CURVE_RESOLUTION, 20 );
 
-        // todo: check whether order 3 means polygons of order 3 or 2. (see
-        // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
+        
+        
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_SCATTERCHARTTYPE_SPLINE_ORDER, 3 );
     }
 };
@@ -135,7 +135,7 @@ struct StaticScatterChartTypeInfo : public rtl::StaticAggregate< uno::Reference<
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -166,14 +166,14 @@ ScatterChartType::ScatterChartType( const ScatterChartType & rOther ) :
 ScatterChartType::~ScatterChartType()
 {}
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new ScatterChartType( *this ));
 }
 
-// ____ XChartType ____
+
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ScatterChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
     throw (lang::IllegalArgumentException,
@@ -229,7 +229,7 @@ uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedOptionalRoles()
     return uno::Sequence< OUString >();
 }
 
-// ____ OPropertySet ____
+
 uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -240,13 +240,13 @@ uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
     return (*aFound).second;
 }
 
-// ____ OPropertySet ____
+
 ::cppu::IPropertyArrayHelper & SAL_CALL ScatterChartType::getInfoHelper()
 {
     return *StaticScatterChartTypeInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -262,10 +262,10 @@ uno::Sequence< OUString > ScatterChartType::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( ScatterChartType,
                              OUString("com.sun.star.comp.chart.ScatterChartType") );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

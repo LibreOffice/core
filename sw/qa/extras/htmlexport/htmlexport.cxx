@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <swmodeltestbase.hxx>
@@ -40,7 +40,7 @@ private:
     {
         if (OString(filename) == "charborder.odt" && SW_MOD())
         {
-            // FIXME if padding-top gets exported as inches, not cms, we get rounding errors.
+            
             SwMasterUsrPref* pPref = const_cast<SwMasterUsrPref*>(SW_MOD()->GetUsrPref(false));
             m_eUnit = pPref->GetMetric();
             pPref->SetMetric(FUNIT_CM);
@@ -63,15 +63,15 @@ private:
 
 DECLARE_HTMLEXPORT_TEST(testFdo62336, "fdo62336.docx")
 {
-    // The problem was essentially a crash during table export as docx/rtf/html
-    // If either of no-calc-layout or no-test-import is enabled, the crash does not occur
+    
+    
 }
 
 DECLARE_HTMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
 
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
-    // Different Border
+    
     {
         CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x6666FF,12,12,12,3,37), getProperty<table::BorderLine2>(xRun,"CharTopBorder"));
         CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF9900,0,99,0,2,99), getProperty<table::BorderLine2>(xRun,"CharLeftBorder"));
@@ -79,7 +79,7 @@ DECLARE_HTMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
         CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0x0000FF,0,169,0,0,169), getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
     }
 
-    // Different Padding
+    
     {
         CPPUNIT_ASSERT_EQUAL(sal_Int32(450), getProperty<sal_Int32>(xRun,"CharTopBorderDistance"));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(550), getProperty<sal_Int32>(xRun,"CharLeftBorderDistance"));
@@ -87,7 +87,7 @@ DECLARE_HTMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
         CPPUNIT_ASSERT_EQUAL(sal_Int32(250), getProperty<sal_Int32>(xRun,"CharRightBorderDistance"));
     }
 
-    // No shadow
+    
 }
 
 #endif

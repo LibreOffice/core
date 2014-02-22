@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -85,12 +85,12 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-//===================================================================
+
 
 #define SfxApplication
 #include "sfxslots.hxx"
 
-//====================================================================
+
 
 #define SFX_ITEMTYPE_STATBAR             4
 
@@ -109,7 +109,7 @@ SFX_IMPL_INTERFACE(SfxApplication,SfxShell,SfxResId(RID_DESKTOP))
     SFX_CHILDWINDOW_REGISTRATION(SID_DOCKWIN_9);
 }
 
-//--------------------------------------------------------------------
+
 SfxProgress* SfxApplication::GetProgress() const
 
 /*  [Description]
@@ -158,8 +158,8 @@ SfxSlotPool& SfxApplication::GetAppSlotPool_Impl() const { return *pAppData_Impl
 
 bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWidth)
 {
-    // Load from disk
-    // ---------------------------------------------------------------------
+    
+    
     OUString aBaseName = OUString("/") + OUString::createFromAscii( pName );
 
     rtl_Locale *pLoc = NULL;
@@ -171,8 +171,8 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
     INetURLObject aObj( uri );
     SvgData aSvgData(aObj.PathToFileName());
 
-    // transform into [0,0,width,width*aspect] std dimensions
-    // ---------------------------------------------------------------------
+    
+    
     basegfx::B2DRange aRange(aSvgData.getRange());
     const double fAspectRatio(aRange.getWidth()/aRange.getHeight());
     basegfx::B2DHomMatrix aTransform(
@@ -187,8 +187,8 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
             aTransform,
             aSvgData.getPrimitive2DSequence()));
 
-    // UNO dance to render from drawinglayer
-    // ---------------------------------------------------------------------
+    
+    
     uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
 
     try
@@ -196,9 +196,9 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
         const uno::Reference< graphic::XPrimitive2DRenderer > xPrimitive2DRenderer =
             graphic::Primitive2DTools::create( xContext );
 
-        // cancel out rasterize's mm2pixel conversion
-        // see fFactor100th_mmToInch in
-        // drawinglayer/source/drawinglayeruno/xprimitive2drenderer.cxx
+        
+        
+        
         const double fFakeDPI=2.54 * 1000.0;
 
         geometry::RealRectangle2D aRealRect(

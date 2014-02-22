@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//########################################
 
 
-#if ( defined WNT )                     // Windows
+
+#if ( defined WNT )                     
 #   define UNICODE
 #   define _UNICODE
 #   define WIN32_LEAN_AND_MEAN
@@ -48,7 +48,7 @@
 # endif
 #endif
 
-//########################################
+
 
 
 #ifdef WNT
@@ -57,22 +57,22 @@
 #   define SLEEP(t) (sleep((t)))
 #endif
 
-//########################################
+
 void wait_for_seconds(char* time)
 {
     SLEEP(atoi(time));
 }
 
-//########################################
+
 
 #ifdef WNT
-//########################################
+
 void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
 {
     LPCWSTR strW = reinterpret_cast<LPCWSTR>(_strW);
     WideCharToMultiByte(CP_ACP, 0, strW, -1, strA, size, NULL, NULL);
 }
-//########################################
+
     void dump_env(char* file_path)
     {
         LPTSTR env = reinterpret_cast<LPTSTR>(
@@ -99,7 +99,7 @@ void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
     }
 #endif
 
-//########################################
+
 int main(int argc, char* argv[])
 {
     if (argc > 2)

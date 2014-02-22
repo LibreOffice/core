@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmlbahdl.hxx>
@@ -81,11 +81,11 @@ static bool lcl_xmloff_getAny( const Any& rValue, sal_Int32& nValue,
     return bRet;
 }
 
-// class XMLNumberPropHdl
+
 
 XMLNumberPropHdl::~XMLNumberPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLNumberPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -114,7 +114,7 @@ bool XMLNumberPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, con
     return bRet;
 }
 
-// class XMLNumberNonePropHdl
+
 
 XMLNumberNonePropHdl::XMLNumberNonePropHdl( sal_Int8 nB ) :
     sZeroStr( GetXMLToken(XML_NO_LIMIT) ),
@@ -130,7 +130,7 @@ XMLNumberNonePropHdl::XMLNumberNonePropHdl( enum XMLTokenEnum eZeroString, sal_I
 
 XMLNumberNonePropHdl::~XMLNumberNonePropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLNumberNonePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -177,11 +177,11 @@ bool XMLNumberNonePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
     return bRet;
 }
 
-// class XMLMeasurePropHdl
+
 
 XMLMeasurePropHdl::~XMLMeasurePropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLMeasurePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
@@ -212,11 +212,11 @@ bool XMLMeasurePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
     return bRet;
 }
 
-// class XMLBoolFalsePropHdl
+
 
 XMLBoolFalsePropHdl::~XMLBoolFalsePropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLBoolFalsePropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
@@ -229,11 +229,11 @@ bool XMLBoolFalsePropHdl::exportXML( OUString& rStrExpValue, const Any& /*rValue
     return XMLBoolPropHdl::exportXML( rStrExpValue, makeAny( sal_False ), rCnv );
 }
 
-// class XMLBoolPropHdl
+
 
 XMLBoolPropHdl::~XMLBoolPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -262,11 +262,11 @@ bool XMLBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const
     return bRet;
 }
 
-// class XMLNBoolPropHdl
+
 
 XMLNBoolPropHdl::~XMLNBoolPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLNBoolPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -295,11 +295,11 @@ bool XMLNBoolPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, cons
     return bRet;
 }
 
-// class XMLPercentPropHdl
+
 
 XMLPercentPropHdl::~XMLPercentPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -328,7 +328,7 @@ bool XMLPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, co
     return bRet;
 }
 
-// class XMLDoublePercentPropHdl
+
 
 bool XMLDoublePercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
@@ -373,11 +373,11 @@ bool XMLDoublePercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
     return bRet;
 }
 
-// class XMLNegPercentPropHdl
+
 
 XMLNegPercentPropHdl::~XMLNegPercentPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLNegPercentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -406,11 +406,11 @@ bool XMLNegPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue,
     return bRet;
 }
 
-// class XMLMeasurePxPropHdl
+
 
 XMLMeasurePxPropHdl::~XMLMeasurePxPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLMeasurePxPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -441,11 +441,11 @@ bool XMLMeasurePxPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
     return bRet;
 }
 
-// class XMLColorPropHdl
+
 
 XMLColorPropHdl::~XMLColorPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -510,11 +510,11 @@ bool XMLColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, cons
     return bRet;
 }
 
-// class XMLHexPropHdl
+
 
 XMLHexPropHdl::~XMLHexPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLHexPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -549,11 +549,11 @@ bool XMLHexPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const 
     return bRet;
 }
 
-// class XMLStringPropHdl
+
 
 XMLStringPropHdl::~XMLStringPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLStringPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -576,11 +576,11 @@ bool XMLStringPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, con
     return bRet;
 }
 
-// class XMLStyleNamePropHdl
+
 
 XMLStyleNamePropHdl::~XMLStyleNamePropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLStyleNamePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
@@ -596,11 +596,11 @@ bool XMLStyleNamePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
     return bRet;
 }
 
-// class XMLDoublePropHdl
+
 
 XMLDoublePropHdl::~XMLDoublePropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLDoublePropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -628,19 +628,19 @@ bool XMLDoublePropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, con
     return bRet;
 }
 
-// class XMLColorTransparentPropHdl
+
 
 XMLColorTransparentPropHdl::XMLColorTransparentPropHdl(
     enum XMLTokenEnum eTransparent ) :
     sTransparent( GetXMLToken(
         eTransparent != XML_TOKEN_INVALID ? eTransparent : XML_TRANSPARENT ) )
 {
-    // Nothing to do
+    
 }
 
 XMLColorTransparentPropHdl::~XMLColorTransparentPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLColorTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -676,7 +676,7 @@ bool XMLColorTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& r
     return bRet;
 }
 
-// class XMLIsTransparentPropHdl
+
 
 XMLIsTransparentPropHdl::XMLIsTransparentPropHdl(
     enum XMLTokenEnum eTransparent, bool bTransPropVal ) :
@@ -688,7 +688,7 @@ XMLIsTransparentPropHdl::XMLIsTransparentPropHdl(
 
 XMLIsTransparentPropHdl::~XMLIsTransparentPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLIsTransparentPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
@@ -703,9 +703,9 @@ bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
 {
     bool bRet = false;
 
-    // MIB: This looks a bit strange, because bTransPropValue == bValue should
-    // do the same, but this only applies if 'true' is represented by the same
-    // 8 bit value in bValue and bTransPropValue. Who will ensure this?
+    
+    
+    
     sal_Bool bValue = *(sal_Bool *)rValue.getValue();
     bool bIsTrans = bTransPropValue ? bValue : !bValue;
 
@@ -718,24 +718,24 @@ bool XMLIsTransparentPropHdl::exportXML( OUString& rStrExpValue, const Any& rVal
     return bRet;
 }
 
-// class XMLColorAutoPropHdl
+
 
 XMLColorAutoPropHdl::XMLColorAutoPropHdl()
 {
-    // Nothing to do
+    
 }
 
 XMLColorAutoPropHdl::~XMLColorAutoPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLColorAutoPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
     bool bRet = false;
 
-    // This is a multi property: the value might be set to AUTO_COLOR
-    // already by the XMLIsAutoColorPropHdl!
+    
+    
     sal_Int32 nColor = 0;
     if( !(rValue >>= nColor) || -1 != nColor )
     {
@@ -764,7 +764,7 @@ bool XMLColorAutoPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, 
     return bRet;
 }
 
-// class XMLIsAutoColorPropHdl
+
 
 XMLIsAutoColorPropHdl::XMLIsAutoColorPropHdl()
 {
@@ -772,12 +772,12 @@ XMLIsAutoColorPropHdl::XMLIsAutoColorPropHdl()
 
 XMLIsAutoColorPropHdl::~XMLIsAutoColorPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLIsAutoColorPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& ) const
 {
-    // An auto color overrides any other color set!
+    
     bool bValue;
     bool const bRet = ::sax::Converter::convertBool( bValue, rStrImpValue );
     if( bRet && bValue )
@@ -803,11 +803,11 @@ bool XMLIsAutoColorPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
     return bRet;
 }
 
-// class XMLCompareOnlyPropHdl
+
 
 XMLCompareOnlyPropHdl::~XMLCompareOnlyPropHdl()
 {
-    // Nothing to do
+    
 }
 
 bool XMLCompareOnlyPropHdl::importXML( const OUString&, Any&, const SvXMLUnitConverter& ) const
@@ -822,7 +822,7 @@ bool XMLCompareOnlyPropHdl::exportXML( OUString&, const Any&, const SvXMLUnitCon
     return false;
 }
 
-// class XMLNumberWithoutZeroPropHdl
+
 
 XMLNumberWithoutZeroPropHdl::XMLNumberWithoutZeroPropHdl( sal_Int8 nB ) :
     nBytes( nB )
@@ -862,7 +862,7 @@ bool XMLNumberWithoutZeroPropHdl::exportXML( OUString& rStrExpValue, const Any& 
     return bRet;
 }
 
-// class XMLNumberWithAutoInsteadZeroPropHdl
+
 
 XMLNumberWithAutoInsteadZeroPropHdl::~XMLNumberWithAutoInsteadZeroPropHdl()
 {
@@ -879,7 +879,7 @@ bool XMLNumberWithAutoInsteadZeroPropHdl::importXML(
         lcl_xmloff_setAny( rValue, nValue, 2 );
     else if( rStrImpValue == GetXMLToken( XML_AUTO ) )
     {
-        rValue.clear(); // void
+        rValue.clear(); 
         bRet = true;
     }
     return bRet;
@@ -891,7 +891,7 @@ bool XMLNumberWithAutoInsteadZeroPropHdl::exportXML( OUString& rStrExpValue, con
     sal_Int32 nValue = 0;
     lcl_xmloff_getAny( rValue, nValue, 2 );
 
-    // FIXME: 0 is not a valid value - write "auto" instead
+    
     if (0 == nValue || !rValue.hasValue())
         rStrExpValue = GetXMLToken( XML_AUTO );
     else

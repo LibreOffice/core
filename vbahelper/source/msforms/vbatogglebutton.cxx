@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbatogglebutton.hxx"
@@ -38,7 +38,7 @@ ScVbaToggleButton::~ScVbaToggleButton()
     SAL_INFO("vbahelper", "~ScVbaToggleButton(dtor)");
 }
 
-// Attributes
+
 OUString SAL_CALL
 ScVbaToggleButton::getCaption() throw (css::uno::RuntimeException)
 {
@@ -91,24 +91,24 @@ void SAL_CALL ScVbaToggleButton::setAutoSize( sal_Bool bAutoSize ) throw (uno::R
 
 sal_Bool SAL_CALL ScVbaToggleButton::getCancel() throw (uno::RuntimeException)
 {
-    // #STUB
+    
     return sal_False;
 }
 
 void SAL_CALL ScVbaToggleButton::setCancel( sal_Bool /*bCancel*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 sal_Bool SAL_CALL ScVbaToggleButton::getDefault() throw (uno::RuntimeException)
 {
-    // #STUB
+    
     return sal_False;
 }
 
 void SAL_CALL ScVbaToggleButton::setDefault( sal_Bool /*bDefault*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 sal_Int32 SAL_CALL ScVbaToggleButton::getBackColor() throw (uno::RuntimeException)
@@ -123,13 +123,13 @@ void SAL_CALL ScVbaToggleButton::setBackColor( sal_Int32 nBackColor ) throw (uno
 
 sal_Int32 SAL_CALL ScVbaToggleButton::getForeColor() throw (uno::RuntimeException)
 {
-    // #STUB
+    
     return 0;
 }
 
 void SAL_CALL ScVbaToggleButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaToggleButton::getFont() throw (uno::RuntimeException)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 #include "osx/salobj.h"
 #include "osx/salframe.h"
 
-// =======================================================================
+
 
 AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
     mpFrame( pFrame ),
@@ -56,7 +56,7 @@ AquaSalObject::AquaSalObject( AquaSalFrame* pFrame ) :
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalObject::~AquaSalObject()
 {
@@ -73,11 +73,11 @@ AquaSalObject::~AquaSalObject()
     }
 }
 
-// Please note that the talk about QTMovieView below presumably refers
-// to stuff in the QuickTime avmedia thingie, and that QuickTime is
-// deprecated, not available for 64-bit code, and won't thus be used
-// in a "modern" build of LO anyway. So the relevance of the comment
-// is unclear.
+
+
+
+
+
 
 /*
    sadly there seems to be no way to impose clipping on a child view,
@@ -93,7 +93,7 @@ AquaSalObject::~AquaSalObject()
    This is gives us an 80% solution only, though.
 */
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::ResetClipRegion()
 {
@@ -101,21 +101,21 @@ void AquaSalObject::ResetClipRegion()
     setClippedPosSize();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 AquaSalObject::GetClipRegionType()
 {
     return SAL_OBJECT_CLIP_INCLUDERECTS;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::BeginSetClipRegion( sal_uLong )
 {
     mbClip = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
@@ -146,14 +146,14 @@ void AquaSalObject::UnionClipRegion( long nX, long nY, long nWidth, long nHeight
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::EndSetClipRegion()
 {
     setClippedPosSize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
 {
@@ -164,7 +164,7 @@ void AquaSalObject::SetPosSize( long nX, long nY, long nWidth, long nHeight )
     setClippedPosSize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::setClippedPosSize()
 {
@@ -194,7 +194,7 @@ void AquaSalObject::setClippedPosSize()
     [mpClipView scrollToPoint: aClipPt];
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalObject::Show( sal_Bool bVisible )
 {
@@ -202,7 +202,7 @@ void AquaSalObject::Show( sal_Bool bVisible )
         [mpClipView setHidden: (bVisible ? NO : YES)];
 }
 
-// -----------------------------------------------------------------------
+
 
 const SystemEnvData* AquaSalObject::GetSystemData() const
 {

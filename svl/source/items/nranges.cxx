@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cassert>
 #include <vector>
-// compiled via include from itemset.cxx only!
+
 
 
 #ifdef DBG_UTIL
@@ -83,9 +83,9 @@ sal_uInt16 InitializeRanges_Impl( sal_uInt16 *&rpRanges, va_list pArgs,
         aNumArr.push_back( nIns );
     }
 
-    assert( bEndOfRange ); // odd number of Which-IDs
+    assert( bEndOfRange ); 
 
-    // so, jetzt sind alle Bereiche vorhanden und
+    
     rpRanges = new sal_uInt16[ aNumArr.size() + 1 ];
     std::copy( aNumArr.begin(), aNumArr.end(), rpRanges);
     *(rpRanges + aNumArr.size()) = 0;
@@ -194,24 +194,24 @@ SfxUShortRanges::SfxUShortRanges( const sal_uInt16* pArr )
 
 bool SfxUShortRanges::operator==( const SfxUShortRanges &rOther ) const
 {
-    // Object pointers equal?
+    
     if ( this == &rOther )
         return true;
 
-    // Ranges pointers equal?
+    
     if ( _pRanges == rOther._pRanges )
         return true;
 
-    // Counts equal?
+    
     sal_uInt16 nCount = Count();
     if ( nCount != rOther.Count() )
         return false;
 
-    // Check arrays.
+    
     sal_uInt16 n = 0;
     while( _pRanges[ n ] != 0 )
     {
-        // Elements at current position equal?
+        
         if ( _pRanges[ n ] != rOther._pRanges[ n ] )
             return false;
 
@@ -233,18 +233,18 @@ SfxUShortRanges& SfxUShortRanges::operator =
 */
 
 {
-    // special case: assign itself
+    
     if ( &rRanges == this )
         return *this;
 
     delete[] _pRanges;
 
-    // special case: 'rRanges' is empty
+    
     if ( rRanges.IsEmpty() )
         _pRanges = 0;
     else
     {
-        // copy ranges
+        
         sal_uInt16 nCount = Count_Impl( rRanges._pRanges ) + 1;
         _pRanges = new sal_uInt16[ nCount ];
         memcpy( _pRanges, rRanges._pRanges, sizeof(sal_uInt16) * nCount );
@@ -268,38 +268,38 @@ SfxUShortRanges& SfxUShortRanges::operator +=
 */
 
 {
-    // special cases: one is empty
+    
     if ( rRanges.IsEmpty() )
         return *this;
     if ( IsEmpty() )
         return *this = rRanges;
 
-    // First, run thru _pRanges and rRanges._pRanges and determine the size of
-    // the new, merged ranges:
+    
+    
     sal_uInt16 nCount = 0;
     const sal_uInt16 * pRA = _pRanges;
     const sal_uInt16 * pRB = rRanges._pRanges;
 
     for (;;)
     {
-        // The first pair of pRA has a lower lower bound than the first pair
-        // of pRB:
+        
+        
         if (pRA[0] > pRB[0])
             Swap_Impl(pRA, pRB);
 
-        // We are done with the merging if at least pRA is exhausted:
+        
         if (!pRA[0])
             break;
 
         for (;;)
         {
-            // Skip those pairs in pRB that completely lie in the first pair
-            // of pRA:
+            
+            
             while (pRB[1] <= pRA[1])
             {
                 pRB += 2;
 
-                // Watch out for exhaustion of pRB:
+                
                 if (!pRB[0])
                 {
                     Swap_Impl(pRA, pRB);
@@ -307,36 +307,36 @@ SfxUShortRanges& SfxUShortRanges::operator +=
                 }
             }
 
-            // If the next pair of pRA does not at least touch the current new
-            // pair, we are done with the current new pair:
+            
+            
             if (pRB[0] > pRA[1] + 1)
                 break;
 
-            // The next pair of pRB extends the current new pair; first,
-            // extend the current new pair (we are done if pRB is then
-            // exhausted); second, switch the roles of pRA and pRB in order to
-            // merge in those following pairs of the original pRA that will
-            // lie in the (now larger) current new pair or will even extend it
-            // further:
+            
+            
+            
+            
+            
+            
             pRA += 2;
             if (!pRA[0])
                 goto count_rest;
             Swap_Impl(pRA, pRB);
         }
 
-        // Done with the current new pair:
+        
         pRA += 2;
         nCount += 2;
     }
 
-    // Only pRB has more pairs available, pRA is already exhausted:
+    
 count_rest:
     for (; pRB[0]; pRB += 2)
         nCount += 2;
 
-    // Now, create new ranges of the correct size and, on a second run thru
-    // _pRanges and rRanges._pRanges, copy the merged pairs into the new
-    // ranges:
+    
+    
+    
     sal_uInt16 * pNew = new sal_uInt16[nCount + 1];
     pRA = _pRanges;
     pRB = rRanges._pRanges;
@@ -344,27 +344,27 @@ count_rest:
 
     for (;;)
     {
-        // The first pair of pRA has a lower lower bound than the first pair
-        // of pRB:
+        
+        
         if (pRA[0] > pRB[0])
             Swap_Impl(pRA, pRB);
 
-        // We are done with the merging if at least pRA is exhausted:
+        
         if (!pRA[0])
             break;
 
-        // Lower bound of current new pair is already known:
+        
         *pRN++ = pRA[0];
 
         for (;;)
         {
-            // Skip those pairs in pRB that completely lie in the first pair
-            // of pRA:
+            
+            
             while (pRB[1] <= pRA[1])
             {
                 pRB += 2;
 
-                // Watch out for exhaustion of pRB:
+                
                 if (!pRB[0])
                 {
                     Swap_Impl(pRA, pRB);
@@ -373,17 +373,17 @@ count_rest:
                 }
             }
 
-            // If the next pair of pRA does not at least touch the current new
-            // pair, we are done with the current new pair:
+            
+            
             if (pRB[0] > pRA[1] + 1)
                 break;
 
-            // The next pair of pRB extends the current new pair; first,
-            // extend the current new pair (we are done if pRB is then
-            // exhausted); second, switch the roles of pRA and pRB in order to
-            // merge in those following pairs of the original pRA that will
-            // lie in the (now larger) current new pair or will even extend it
-            // further:
+            
+            
+            
+            
+            
+            
             pRA += 2;
             if (!pRA[0])
             {
@@ -393,13 +393,13 @@ count_rest:
             Swap_Impl(pRA, pRB);
         }
 
-        // Done with the current new pair, now upper bound is also known:
+        
         *pRN++ = pRA[1];
         pRA += 2;
     }
 
-    // Only pRB has more pairs available (which are copied to the new ranges
-    // unchanged), pRA is already exhausted:
+    
+    
 copy_rest:
     for (; *pRB;)
         *pRN++ = *pRB++;
@@ -428,12 +428,12 @@ SfxUShortRanges& SfxUShortRanges::operator -=
 */
 
 {
-    // special cases: one is empty
+    
     if ( rRanges.IsEmpty() || IsEmpty() )
         return *this;
 
-    // differentiate 'rRanges' in a temporary copy of '*this'
-    // (size is computed for maximal possibly split-count plus terminating 0)
+    
+    
     sal_uInt16 nThisSize = Count_Impl(_pRanges);
     sal_uInt16 nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
     sal_uInt16 *pTarget = new sal_uInt16[ nTargetSize ];
@@ -443,13 +443,13 @@ SfxUShortRanges& SfxUShortRanges::operator -=
     sal_uInt16 nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] )
     {
-        sal_uInt16 l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
-        sal_uInt16 u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
-        sal_uInt16 l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
-        sal_uInt16 u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
+        sal_uInt16 l1 = _pRanges[ nPos1 ];      
+        sal_uInt16 u1 = _pRanges[ nPos1+1 ];    
+        sal_uInt16 l2 = rRanges._pRanges[ nPos2 ];      
+        sal_uInt16 u2 = rRanges._pRanges[ nPos2+1 ];    
 
-        // boundary cases
-        // * subtrahend is empty -> copy the minuend
+        
+        
         if( !l2 )
         {
             pTarget[ nTargetPos ] = l1;
@@ -458,7 +458,7 @@ SfxUShortRanges& SfxUShortRanges::operator -=
             nPos1 += 2;
             continue;
         }
-        // * next subtrahend interval is completely higher -> copy the minuend
+        
         if( u1 < l2 )
         {
             pTarget[ nTargetPos ] = l1;
@@ -468,76 +468,76 @@ SfxUShortRanges& SfxUShortRanges::operator -=
             continue;
         }
 
-        // * next subtrahend interval is completely lower -> try next
+        
         if( u2 < l1 )
         {
             nPos2 += 2;
             continue;
         }
 
-        // intersecting cases
-        // * subtrahend cuts out from the beginning of the minuend
+        
+        
         if( l2 <= l1 && u2 <= u1 )
         {
-            // reduce minuend interval, try again (minuend might be affected by other subtrahend intervals)
+            
             _pRanges[ nPos1 ] = u2 + 1;
-            nPos2 += 2; // this cannot hurt any longer
+            nPos2 += 2; 
             continue;
         }
 
-        // * subtrahend cuts out from the end of the minuend
+        
         if( l1 <= l2 && u1 <= u2 )
         {
-            // copy remaining part of minuend (cannot be affected by other intervals)
-            if( l1 < l2 ) // anything left at all?
+            
+            if( l1 < l2 ) 
             {
                 pTarget[ nTargetPos ] = l1;
                 pTarget[ nTargetPos+1 ] = l2 - 1;
                 nTargetPos += 2;
-                // do not increment nPos2, might affect next minuend interval, too
+                
             }
-            nPos1 += 2; // nothing left at all
+            nPos1 += 2; 
             continue;
         }
 
-        // * subtrahend completely deletes minuend (larger or same at both ends)
+        
         if( l1 >= l2 && u1 <= u2 )
         {
-            nPos1 += 2; // minuend deleted
-            // do not increment nPos2, might affect next minuend interval, too
+            nPos1 += 2; 
+            
             continue;
         }
 
-        // * subtrahend divides minuend into two pieces
-        if( l1 <= l2 && u1 >= u2 ) // >= and <= since they may be something left only at one side
+        
+        if( l1 <= l2 && u1 >= u2 ) 
         {
-            // left side
-            if( l1 < l2 ) // anything left at all
+            
+            if( l1 < l2 ) 
             {
                 pTarget[ nTargetPos ] = l1;
                 pTarget[ nTargetPos+1 ] = l2 - 1;
                 nTargetPos += 2;
             }
 
-            // right side
-            if( u1 > u2 ) // anything left at all
+            
+            if( u1 > u2 ) 
             {
-                // reduce minuend interval, try again (minuend might be affected by other subtrahend itnervals )
+                
                 _pRanges[ nPos1 ] = u2 + 1;
             }
 
-            // subtrahend is completely used
+            
             nPos2 += 2;
             continue;
         }
 
-        // we should never be here
+        
         OSL_FAIL( "SfxUShortRanges::operator-=: internal error" );
-    } // while
+    } 
 
     pTarget[ nTargetPos ] = 0;
 
-    // assign the differentiated ranges
+    
     delete[] _pRanges;
 
     sal_uInt16 nUShorts = Count_Impl(pTarget) + 1;
@@ -570,9 +570,9 @@ SfxUShortRanges& SfxUShortRanges::operator /=
 */
 
 {
-    // boundary cases
-    // * first set is empty -> nothing to be done
-    // * second set is empty -> delete first set
+    
+    
+    
     if( rRanges.IsEmpty() )
     {
         delete[] _pRanges;
@@ -583,8 +583,8 @@ SfxUShortRanges& SfxUShortRanges::operator /=
         return *this;
     }
 
-    // intersect 'rRanges' in a temporary copy of '*this'
-    // (size is computed for maximal possibly split-count plus terminating 0)
+    
+    
     sal_uInt16 nThisSize = Count_Impl(_pRanges);
     sal_uInt16 nTargetSize = 1 + (  nThisSize + Count_Impl(rRanges._pRanges) );
     sal_uInt16 *pTarget = new sal_uInt16[ nTargetSize ];
@@ -594,29 +594,29 @@ SfxUShortRanges& SfxUShortRanges::operator /=
     sal_uInt16 nPos1 = 0, nPos2 = 0, nTargetPos = 0;
     while( _pRanges[ nPos1 ] != 0 && rRanges._pRanges[ nPos2 ] != 0 )
     {
-        sal_uInt16 l1 = _pRanges[ nPos1 ];      // lower bound of interval 1
-        sal_uInt16 u1 = _pRanges[ nPos1+1 ];    // upper bound of interval 1
-        sal_uInt16 l2 = rRanges._pRanges[ nPos2 ];      // lower bound of interval 2
-        sal_uInt16 u2 = rRanges._pRanges[ nPos2+1 ];    // upper bound of interval 2
+        sal_uInt16 l1 = _pRanges[ nPos1 ];      
+        sal_uInt16 u1 = _pRanges[ nPos1+1 ];    
+        sal_uInt16 l2 = rRanges._pRanges[ nPos2 ];      
+        sal_uInt16 u2 = rRanges._pRanges[ nPos2+1 ];    
 
         if( u1 < l2 )
         {
-            // current interval in s1 is completely before ci in s2
+            
             nPos1 += 2;
             continue;
         }
         if( u2 < l1 )
         {
-            // ci in s2 is completely before ci in s1
+            
             nPos2 += 2;
             continue;
         }
 
-        // assert: there exists an intersection between ci1 and ci2
+        
 
         if( l1 <= l2 )
         {
-            // c1 "is more to the left" than c2
+            
 
             if( u1 <= u2 )
             {
@@ -636,7 +636,7 @@ SfxUShortRanges& SfxUShortRanges::operator /=
         }
         else
         {
-            // c2 "is more to the left" than c1"
+            
 
             if( u1 > u2 )
             {
@@ -653,10 +653,10 @@ SfxUShortRanges& SfxUShortRanges::operator /=
                 nPos1 += 2;
             }
         }
-    }; // while
+    }; 
     pTarget[ nTargetPos ] = 0;
 
-    // assign the intersected ranges
+    
     delete[] _pRanges;
 
     sal_uInt16 nUShorts = Count_Impl(pTarget) + 1;

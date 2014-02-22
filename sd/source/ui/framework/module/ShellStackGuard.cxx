@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -38,7 +38,7 @@ using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace framework {
 
-//===== CenterViewFocusModule ====================================================
+
 
 ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
     : ShellStackGuardInterfaceBase(m_aMutex),
@@ -52,7 +52,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
     {
         mxConfigurationController = xControllerManager->getConfigurationController();
 
-        // Tunnel through the controller to obtain a ViewShellBase.
+        
         Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY);
         if (xTunnel.is())
         {
@@ -65,14 +65,14 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
 
     if (mxConfigurationController.is())
     {
-        // Listen for update starts so that the following update can be
-        // prevented in case of a printing printer.
+        
+        
         mxConfigurationController->addConfigurationChangeListener(
             this,
             FrameworkHelper::msConfigurationUpdateStartEvent,
             Any());
 
-        // Prepare the printer polling.
+        
         maPrinterPollingTimer.SetTimeoutHdl(LINK(this,ShellStackGuard,TimeoutHandler));
         maPrinterPollingTimer.SetTimeout(300);
     }
@@ -108,10 +108,10 @@ void SAL_CALL ShellStackGuard::notifyConfigurationChange (
     {
         if (mpUpdateLock.get() == NULL && IsPrinting())
         {
-            // Prevent configuration updates while the printer is printing.
+            
             mpUpdateLock.reset(new ConfigurationController::Lock(mxConfigurationController));
 
-            // Start polling for the printer having finished printing.
+            
             maPrinterPollingTimer.Start();
         }
     }
@@ -146,12 +146,12 @@ IMPL_LINK(ShellStackGuard, TimeoutHandler, Timer*, pTimer)
     {
         if ( ! IsPrinting())
         {
-            // Printing finished.  Release the update lock.
+            
             mpUpdateLock.reset();
         }
         else
         {
-            // Wait long for the printing to finish.
+            
             maPrinterPollingTimer.Start();
         }
     }
@@ -179,6 +179,6 @@ bool ShellStackGuard::IsPrinting (void) const
 }
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -64,22 +64,22 @@ using namespace ::com::sun::star::ucb;
 namespace desktop
 {
 
-// -----------------------------------------------------------------------------
+
 
 static void configureUcb()
 {
     SAL_INFO( "desktop.app", "desktop (sb93797) ::configureUcb" );
 
-    // For backwards compatibility, in case some code still uses plain
-    // createInstance w/o args directly to obtain an instance:
+    
+    
     UniversalContentBroker::create(comphelper::getProcessComponentContext());
 
 #if ENABLE_GNOME_VFS
     try {
-        // Instantiate GNOME-VFS UCP in the thread that initialized GNOME in order
-        // to avoid a deadlock that may occur in case the UCP gets initialized from
-        // a different thread (which may happen when calling remotely via UNO); this
-        // is not a fix, just a workaround:
+        
+        
+        
+        
         Reference< XCurrentContext > xCurrentContext(getCurrentContext());
         Any aValue(xCurrentContext->getValueByName("system.desktop-environment"));
         OUString aDesktopEnvironment;
@@ -99,7 +99,7 @@ static void configureUcb()
     {
         SAL_WARN( "desktop.app", "missing gnome-vfs component to initialize thread workaround" );
     }
-#endif // ENABLE_GNOME_VFS
+#endif 
 }
 
 void Desktop::InitApplicationServiceManager()
@@ -107,7 +107,7 @@ void Desktop::InitApplicationServiceManager()
     SAL_INFO( "desktop.app", "desktop (cd100003) ::createApplicationServiceManager" );
     Reference<XMultiServiceFactory> sm;
 #ifdef ANDROID
-    OUString aUnoRc( "file:///assets/program/unorc" );
+    OUString aUnoRc( "file:
     sm.set(
         cppu::defaultBootstrap_InitialComponentContext( aUnoRc )->getServiceManager(),
         UNO_QUERY_THROW);
@@ -125,15 +125,15 @@ void Desktop::RegisterServices(Reference< XComponentContext > const & context)
     {
         SAL_INFO( "desktop.app", "desktop (cd100003) ::registerServices" );
 
-        // interpret command line arguments
+        
         CommandLineArgs& rCmdLine = GetCommandLineArgs();
 
-        // Headless mode for FAT Office
+        
         sal_Bool bHeadlessMode = rCmdLine.IsHeadless();
         if ( bHeadlessMode )
             Application::EnableHeadlessMode(false);
 
-        // read accept string from configuration
+        
         OUString conDcpCfg(
             officecfg::Setup::Office::ooSetupConnectionURL::get(context));
         if (!conDcpCfg.isEmpty()) {
@@ -164,7 +164,7 @@ static sal_Bool bAccept = sal_False;
 
 void Desktop::createAcceptor(const OUString& aAcceptString)
 {
-    // check whether the requested acceptor already exists
+    
     AcceptorMap &rMap = acceptorMap::get();
     AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);
     if (pIter == rMap.end() )
@@ -185,14 +185,14 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
             }
             catch (const com::sun::star::uno::Exception& e)
             {
-                // no error handling needed...
-                // acceptor just won't come up
+                
+                
                 SAL_WARN( "desktop.app", "Acceptor could not be created: " << e.Message);
             }
         }
         else
         {
-            // there is already an acceptor with this description
+            
             SAL_WARN( "desktop.app", "Acceptor already exists.");
         }
     }
@@ -218,10 +218,10 @@ void Desktop::enableAcceptors()
     SAL_INFO( "desktop.app", "desktop (lo119109) Desktop::enableAcceptors");
     if (!bAccept)
     {
-        // from now on, all new acceptors are enabled
+        
         bAccept = sal_True;
-        // enable existing acceptors by calling initialize(true)
-        // on all existing acceptors
+        
+        
         AcceptorMap &rMap = acceptorMap::get();
         std::for_each(rMap.begin(), rMap.end(), enable());
     }
@@ -229,17 +229,17 @@ void Desktop::enableAcceptors()
 
 void Desktop::destroyAcceptor(const OUString& aAcceptString)
 {
-    // special case stop all acceptors
+    
     AcceptorMap &rMap = acceptorMap::get();
     if (aAcceptString.equalsAscii("all")) {
         rMap.clear();
 
     } else {
-        // try to remove acceptor from map
+        
         AcceptorMap::const_iterator pIter = rMap.find(aAcceptString);
         if (pIter != rMap.end() ) {
-            // remove reference from map
-            // this is the last reference and the acceptor will be destructed
+            
+            
             rMap.erase(aAcceptString);
         } else {
             SAL_WARN( "desktop.app", "Found no acceptor to remove");
@@ -250,7 +250,7 @@ void Desktop::destroyAcceptor(const OUString& aAcceptString)
 
 void Desktop::DeregisterServices()
 {
-    // stop all acceptors by clearing the map
+    
     acceptorMap::get().clear();
 }
 
@@ -266,8 +266,8 @@ void Desktop::CreateTemporaryDirectory()
     }
     catch (RuntimeException& e)
     {
-        // Catch runtime exception here: We have to add language dependent info
-        // to the exception message. Fallback solution uses hard coded string.
+        
+        
         OUString aMsg;
         DesktopResId aResId( STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE );
         aResId.SetRT( RSC_STRING );
@@ -279,7 +279,7 @@ void Desktop::CreateTemporaryDirectory()
         throw;
     }
 
-    // set temp base directory
+    
     sal_Int32 nLength = aTempBaseURL.getLength();
     if ( aTempBaseURL.matchAsciiL( "/", 1, nLength-1 ) )
         aTempBaseURL = aTempBaseURL.copy( 0, nLength - 1 );
@@ -287,7 +287,7 @@ void Desktop::CreateTemporaryDirectory()
     OUString aRet;
     OUString aTempPath( aTempBaseURL );
 
-    // create new current temporary directory
+    
     ::utl::LocalFileHelper::ConvertURLToPhysicalName( aTempBaseURL, aRet );
     ::osl::FileBase::getFileURLFromSystemPath( aRet, aTempPath );
     aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
@@ -304,7 +304,7 @@ void Desktop::CreateTemporaryDirectory()
         aTempPath = ::utl::TempFile::SetTempNameBaseDirectory( aTempPath );
     }
 
-    // set new current temporary directory
+    
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTempPath, aRet );
     CurrentTempURL::get() = aRet;
 }
@@ -313,7 +313,7 @@ void Desktop::RemoveTemporaryDirectory()
 {
     SAL_INFO( "desktop.app", "desktop (cd100003) ::removeTemporaryDirectory" );
 
-    // remove current temporary directory
+    
     OUString &rCurrentTempURL = CurrentTempURL::get();
     if ( !rCurrentTempURL.isEmpty() )
     {
@@ -321,6 +321,6 @@ void Desktop::RemoveTemporaryDirectory()
     }
 }
 
-} // namespace desktop
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

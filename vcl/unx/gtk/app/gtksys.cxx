@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -105,7 +105,7 @@ GtkSalSystem::countScreenMonitors()
     }
 }
 
-// Including gdkx.h kills us with the Window / XWindow conflict
+
 extern "C" {
     GType gdk_x11_display_get_type (void);
     int   gdk_x11_screen_get_screen_number (GdkScreen *screen);
@@ -142,7 +142,7 @@ GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
     }
     nMonitor = nIdx;
 
-    // handle invalid monitor indexes as non-existent screens
+    
     if (nMonitor < 0 || (pScreen && nMonitor >= gdk_screen_get_n_monitors (pScreen)))
         pScreen = NULL;
 
@@ -166,10 +166,10 @@ GtkSalSystem::getScreenIdxFromPtr (GdkScreen *pScreen)
 int GtkSalSystem::getScreenMonitorIdx (GdkScreen *pScreen,
                                        int nX, int nY)
 {
-    // TODO: this will fail horribly for exotic combinations like two
-    // monitors in mirror mode and one extra. Hopefully such
-    // abominations are not used (or, even better, not possible) in
-    // practice .-)
+    
+    
+    
+    
     return getScreenIdxFromPtr (pScreen) +
         gdk_screen_get_monitor_at_point (pScreen, nX, nY);
 }
@@ -190,7 +190,7 @@ namespace {
 #if GTK_CHECK_VERSION(2,14,0)
 static int _fallback_get_primary_monitor (GdkScreen *pScreen)
 {
-    // Use monitor name as primacy heuristic
+    
     int max = gdk_screen_get_n_monitors (pScreen);
     for (int i = 0; i < max; ++i)
     {
@@ -210,7 +210,7 @@ static int _get_primary_monitor (GdkScreen *pScreen)
 #if GTK_CHECK_VERSION(3,0,0)
     get_fn = gdk_screen_get_primary_monitor;
 #endif
-    // Perhaps we have a newer gtk+ with this symbol:
+    
     if (!get_fn)
     {
         get_fn = (int(*)(GdkScreen*))osl_getAsciiFunctionSymbol(NULL,
@@ -225,7 +225,7 @@ static int _get_primary_monitor (GdkScreen *pScreen)
     else
         return 0;
 }
-} // end anonymous namespace
+} 
 
 unsigned int GtkSalSystem::GetDisplayBuiltInScreen()
 {
@@ -276,7 +276,7 @@ OUString GtkSalSystem::GetDisplayScreenName(unsigned int nScreen)
     return aRet;
 }
 
-// convert ~ to indicate mnemonic to '_'
+
 static OString MapToGtkAccelerator(const OUString &rStr)
 {
     return OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -57,24 +57,24 @@ extern "C" int SAL_CALL SbCompare_UString_Property_Impl( const void *arg1, const
     return pArg1->compareTo( pArg2->Name );
 }
 
-//----------------------------------------------------------------------------
+
 
 SbPropertyValues::SbPropertyValues()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 SbPropertyValues::~SbPropertyValues()
 {
     m_xInfo.clear();
 }
 
-//----------------------------------------------------------------------------
+
 
 Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( RuntimeException )
 {
-    // create on demand?
+    
     if (!m_xInfo.is())
     {
         SbPropertySetInfo *pInfo = new SbPropertySetInfo( m_aPropVals );
@@ -83,7 +83,7 @@ Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo(void) throw( 
     return m_xInfo;
 }
 
-//-------------------------------------------------------------------------
+
 
 size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
 {
@@ -99,7 +99,7 @@ size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
     return it - m_aPropVals.begin();
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::setPropertyValue(
                     const OUString& aPropertyName,
@@ -115,7 +115,7 @@ void SbPropertyValues::setPropertyValue(
     rPropVal.Value = aValue;
 }
 
-//----------------------------------------------------------------------------
+
 
 Any SbPropertyValues::getPropertyValue(
                     const OUString& aPropertyName)
@@ -127,7 +127,7 @@ Any SbPropertyValues::getPropertyValue(
     return m_aPropVals[nIndex].Value;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::addPropertyChangeListener(
                     const OUString& aPropertyName,
@@ -137,7 +137,7 @@ void SbPropertyValues::addPropertyChangeListener(
     (void)aPropertyName;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::removePropertyChangeListener(
                     const OUString& aPropertyName,
@@ -147,7 +147,7 @@ void SbPropertyValues::removePropertyChangeListener(
     (void)aPropertyName;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::addVetoableChangeListener(
                     const OUString& aPropertyName,
@@ -157,7 +157,7 @@ void SbPropertyValues::addVetoableChangeListener(
     (void)aPropertyName;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::removeVetoableChangeListener(
                     const OUString& aPropertyName,
@@ -167,7 +167,7 @@ void SbPropertyValues::removeVetoableChangeListener(
     (void)aPropertyName;
 }
 
-//----------------------------------------------------------------------------
+
 
 Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -177,7 +177,7 @@ Sequence< PropertyValue > SbPropertyValues::getPropertyValues(void) throw (::com
     return aRet;
 }
 
-//----------------------------------------------------------------------------
+
 
 void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPropertyValues )
                      throw (::com::sun::star::beans::UnknownPropertyException,
@@ -197,8 +197,8 @@ void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPrope
     }
 }
 
-//============================================================================
-//PropertySetInfoImpl
+
+
 
 PropertySetInfoImpl::PropertySetInfoImpl()
 {
@@ -234,7 +234,7 @@ sal_Bool PropertySetInfoImpl::hasPropertyByName(const OUString& Name) throw( Run
 }
 
 
-//----------------------------------------------------------------------------
+
 
 SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
 {
@@ -250,13 +250,13 @@ SbPropertySetInfo::SbPropertySetInfo( const SbPropertyValueArr_Impl &rPropVals )
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 SbPropertySetInfo::~SbPropertySetInfo()
 {
 }
 
-//-------------------------------------------------------------------------
+
 
 Sequence< Property > SbPropertySetInfo::getProperties(void) throw( RuntimeException )
 {
@@ -275,22 +275,22 @@ sal_Bool SbPropertySetInfo::hasPropertyByName(const OUString& Name)
     return aImpl.hasPropertyByName( Name );
 }
 
-//----------------------------------------------------------------------------
+
 
 void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 {
     (void)pBasic;
     (void)bWrite;
 
-    // We need at least one parameter
-    // TODO: In this case < 2 is not correct ;-)
+    
+    
     if ( rPar.Count() < 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
         return;
     }
 
-    // Get class names of struct
+    
     OUString aServiceName( "stardiv.uno.beans.PropertySet");
 
     Reference< XInterface > xInterface = (OWeakObject*) new SbPropertyValues();
@@ -298,7 +298,7 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
     SbxVariableRef refVar = rPar.Get(0);
     if( xInterface.is() )
     {
-        // Set PropertyValues
+        
         Any aArgAsAny = sbxToUnoValue( rPar.Get(1),
                 getCppuType( (Sequence<PropertyValue>*)0 ) );
         Sequence<PropertyValue> *pArg =
@@ -306,19 +306,19 @@ void RTL_Impl_CreatePropertySet( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWr
         Reference< XPropertyAccess > xPropAcc = Reference< XPropertyAccess >::query( xInterface );
         xPropAcc->setPropertyValues( *pArg );
 
-        // Build a SbUnoObject and return it
+        
         Any aAny;
         aAny <<= xInterface;
         SbUnoObjectRef xUnoObj = new SbUnoObject( aServiceName, aAny );
         if( xUnoObj->getUnoAny().getValueType().getTypeClass() != TypeClass_VOID )
         {
-            // Return object
+            
             refVar->PutObject( (SbUnoObject*)xUnoObj );
             return;
         }
     }
 
-    // Object could not be created
+    
     refVar->PutObject( NULL );
 }
 

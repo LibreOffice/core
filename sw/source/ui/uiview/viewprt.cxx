@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/NotePrintMode.hpp>
@@ -66,7 +66,7 @@
 
 using namespace ::com::sun::star;
 
-// Hand over the printer to Sfx
+
 
 SfxPrinter* SwView::GetPrinter( sal_Bool bCreate )
 {
@@ -81,7 +81,7 @@ SfxPrinter* SwView::GetPrinter( sal_Bool bCreate )
     return pPrt;
 }
 
-// Propagate printer change
+
 
 void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, sal_Bool bWeb )
 {
@@ -89,7 +89,7 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, sal_Bool bWeb )
     if( !pOpt)
         return;
 
-    // Reading Application own printing options from SfxPrinter
+    
     const SfxItemSet& rSet = pNew->GetOptions();
 
     const SwAddPrinterItem* pAddPrinterAttr;
@@ -144,7 +144,7 @@ bool SwView::HasPrintOptionsPage() const
     return true;
 }
 
-// TabPage for application-specific print options
+
 
 SfxTabPage* SwView::CreatePrintOptionsPage(Window* pParent,
                                                     const SfxItemSet& rSet)
@@ -152,7 +152,7 @@ SfxTabPage* SwView::CreatePrintOptionsPage(Window* pParent,
     return ::CreatePrintOptionsPage( pParent, rSet, sal_False );
 }
 
-// Print dispatcher
+
 
 void SwView::ExecutePrint(SfxRequest& rReq)
 {
@@ -226,7 +226,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
                 }
             }
 
-            //#i61455# if master documentes are printed silently without loaded links then update the links now
+            
             if( bSilent && pSh->IsGlobalDoc() && !pSh->IsGlblDocSaveLinks() )
             {
                 pSh->GetLinkManager().UpdateAllLinks( false, false, false, 0 );
@@ -243,7 +243,7 @@ void SwView::ExecutePrint(SfxRequest& rReq)
     }
 }
 
-// Create page printer/additions for SwView and SwPagePreview
+
 
 SfxTabPage* CreatePrintOptionsPage( Window *pParent,
                                 const SfxItemSet &rOptions, sal_Bool bPreview )
@@ -277,7 +277,7 @@ void SetAppPrintOptions( SwViewShell* pSh, sal_Bool bWeb )
 
     if( pIDDA->getPrinter( false ) )
     {
-        // Close application own printing options in SfxPrinter.
+        
         SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, aPrtData);
         SfxItemSet aSet( pSh->GetAttrPool(),
                     FN_PARAM_ADDPRINTER,        FN_PARAM_ADDPRINTER,

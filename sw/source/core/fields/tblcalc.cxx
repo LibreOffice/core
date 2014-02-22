@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <switerator.hxx>
@@ -41,14 +41,14 @@ SwFieldType* SwTblFieldType::Copy() const
 
 void SwTblField::CalcField( SwTblCalcPara& rCalcPara )
 {
-    if( rCalcPara.rCalc.IsCalcError() ) // stop if there is already an error set
+    if( rCalcPara.rCalc.IsCalcError() ) 
         return;
 
-    // create pointers from box name
+    
     BoxNmToPtr( rCalcPara.pTbl );
     OUString sFml( MakeFormula( rCalcPara ));
     SetValue( rCalcPara.rCalc.Calculate( sFml ).GetDouble() );
-    ChgValid( !rCalcPara.IsStackOverFlow() ); // is the value again valid?
+    ChgValid( !rCalcPara.IsStackOverFlow() ); 
 }
 
 SwTblField::SwTblField( SwTblFieldType* pInitType, const OUString& rFormel,
@@ -75,7 +75,7 @@ OUString SwTblField::GetFieldName() const
     return GetTyp()->GetName() + " " + const_cast<SwTblField *>(this)->GetCommand();
 }
 
-/// search TextNode containing this field
+
 const SwNode* SwTblField::GetNodeOfFormula() const
 {
     if( !GetTyp()->GetDepends() )
@@ -113,7 +113,7 @@ OUString SwTblField::Expand() const
 
     if(nSubType & nsSwGetSetExpType::GSE_STRING)
     {
-        // es ist ein String
+        
         return sExpand.copy(1, sExpand.getLength()-2);
     }
 

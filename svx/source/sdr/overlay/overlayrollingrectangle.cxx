@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
@@ -26,7 +26,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -45,7 +45,7 @@ namespace sdr
 
                 if(getShowBounds())
                 {
-                    // view-independent part, create directly
+                    
                     const basegfx::B2DPolygon aPolygon(basegfx::tools::createPolygonFromRect(aRollingRectangle));
 
                     aRetval.realloc(2);
@@ -69,7 +69,7 @@ namespace sdr
 
                 if(getExtendedLines())
                 {
-                    // view-dependent part, use helper primitive
+                    
                     const drawinglayer::primitive2d::Primitive2DReference aReference(
                         new drawinglayer::primitive2d::OverlayRollingRectanglePrimitive(
                             aRollingRectangle,
@@ -86,7 +86,7 @@ namespace sdr
 
         void OverlayRollingRectangleStriped::stripeDefinitionHasChanged()
         {
-            // react on OverlayManager's stripe definition change
+            
             objectChange();
         }
 
@@ -110,14 +110,14 @@ namespace sdr
         {
             if(rNew != maSecondPosition)
             {
-                // remember new value
+                
                 maSecondPosition = rNew;
 
-                // register change (after change)
+                
                 objectChange();
             }
         }
-    } // end of namespace overlay
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -63,12 +63,12 @@ namespace sd {
 
 class ImageButtonHdl;
 
-// --------------------------------------------------------------------
+
 
 static const sal_uInt16 gButtonSlots[] = { SID_INSERT_TABLE, SID_INSERT_DIAGRAM, SID_INSERT_GRAPHIC, SID_INSERT_AVMEDIA };
 static const sal_uInt16 gButtonToolTips[] = { STR_INSERT_TABLE, STR_INSERT_CHART, STR_INSERT_PICTURE, STR_INSERT_MOVIE };
 
-// --------------------------------------------------------------------
+
 
 static BitmapEx loadImageResource( sal_uInt16 nId )
 {
@@ -78,7 +78,7 @@ static BitmapEx loadImageResource( sal_uInt16 nId )
     return BitmapEx( aResId );
 }
 
-// --------------------------------------------------------------------
+
 
 static BitmapEx* getButtonImage( int index, bool large )
 {
@@ -104,7 +104,7 @@ static BitmapEx* getButtonImage( int index, bool large )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 const sal_uInt32 SMART_TAG_HDL_NUM = SAL_MAX_UINT32;
 
@@ -158,7 +158,7 @@ private:
     sal_uLong mnTip;
 };
 
-// --------------------------------------------------------------------
+
 
 ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSID, const Image& rImage, const Image& rImageMO*/, const Point& rPnt )
 : SmartHdl( xTag, rPnt )
@@ -169,14 +169,14 @@ ImageButtonHdl::ImageButtonHdl( const SmartTagReference& xTag /*, sal_uInt16 nSI
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ImageButtonHdl::~ImageButtonHdl()
 {
     HideTip();
 }
 
-// --------------------------------------------------------------------
+
 
 void ImageButtonHdl::HideTip()
 {
@@ -187,7 +187,7 @@ void ImageButtonHdl::HideTip()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 extern OUString ImplRetrieveLabelFromCommand( const Reference< XFrame >& xFrame, const OUString& aCmdURL );
 
@@ -227,7 +227,7 @@ void ImageButtonHdl::onMouseEnter(const MouseEvent& rMEvt)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void ImageButtonHdl::onMouseLeave()
 {
@@ -236,17 +236,17 @@ void ImageButtonHdl::onMouseLeave()
     Touch();
 }
 
-// --------------------------------------------------------------------
+
 
 void ImageButtonHdl::CreateB2dIAObject()
 {
-    // first throw away old one
+    
     GetRidOfIAObject();
 
     const Point aTagPos( GetPos() );
     basegfx::B2DPoint aPosition( aTagPos.X(), aTagPos.Y() );
 
-    BitmapEx aBitmapEx( mxTag->createOverlayImage( mnHighlightId ) ); // maImageMO.GetBitmapEx() : maImage.GetBitmapEx() );
+    BitmapEx aBitmapEx( mxTag->createOverlayImage( mnHighlightId ) ); 
     maImageSize = aBitmapEx.GetSizePixel();
     maImageSize.Width() >>= 1;
     maImageSize.Height() >>= 1;
@@ -281,28 +281,28 @@ void ImageButtonHdl::CreateB2dIAObject()
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Bool ImageButtonHdl::IsFocusHdl() const
 {
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 bool ImageButtonHdl::isMarkable() const
 {
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 Pointer ImageButtonHdl::GetPointer() const
 {
     return Pointer( POINTER_ARROW );
 }
 
-// ====================================================================
+
 
 ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlaceholderObj )
 : SmartTag( rView )
@@ -310,13 +310,13 @@ ChangePlaceholderTag::ChangePlaceholderTag( ::sd::View& rView, SdrObject& rPlace
 {
 }
 
-// --------------------------------------------------------------------
+
 
 ChangePlaceholderTag::~ChangePlaceholderTag()
 {
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the ChangePlaceholderTag handled the event. */
 bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHdl& rHdl )
@@ -328,7 +328,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
 
         if( mxPlaceholderObj.get() )
         {
-            // mark placeholder if it is not currently marked (or if also others are marked)
+            
             if( !mrView.IsObjMarked( mxPlaceholderObj.get() ) || (mrView.GetMarkedObjectList().GetMarkCount() != 1) )
             {
                 SdrPageView* pPV = mrView.GetSdrPageView();
@@ -342,7 +342,7 @@ bool ChangePlaceholderTag::MouseButtonDown( const MouseEvent& /*rMEvt*/, SmartHd
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 /** returns true if the SmartTag consumes this event. */
 bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
@@ -363,7 +363,7 @@ bool ChangePlaceholderTag::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 BitmapEx ChangePlaceholderTag::createOverlayImage( int nHighlight )
 {
@@ -442,28 +442,28 @@ void ChangePlaceholderTag::addCustomHandles( SdrHdlList& rHandlerList )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void ChangePlaceholderTag::disposing()
 {
     SmartTag::disposing();
 }
 
-// --------------------------------------------------------------------
+
 
 void ChangePlaceholderTag::select()
 {
     SmartTag::select();
 }
 
-// --------------------------------------------------------------------
+
 
 void ChangePlaceholderTag::deselect()
 {
     SmartTag::deselect();
 }
 
-// --------------------------------------------------------------------
+
 
 ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
 : mrBase( rViewShellBase )
@@ -479,7 +479,7 @@ ViewOverlayManager::ViewOverlayManager( ViewShellBase& rViewShellBase )
     StartListening( *mrBase.GetDocShell() );
 }
 
-// --------------------------------------------------------------------
+
 
 ViewOverlayManager::~ViewOverlayManager()
 {
@@ -495,7 +495,7 @@ ViewOverlayManager::~ViewOverlayManager()
     DisposeTags();
 }
 
-// --------------------------------------------------------------------
+
 
 void ViewOverlayManager::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
@@ -562,7 +562,7 @@ bool ViewOverlayManager::CreateTags()
     return bChanges;
 }
 
-// --------------------------------------------------------------------
+
 
 bool ViewOverlayManager::DisposeTags()
 {
@@ -583,7 +583,7 @@ bool ViewOverlayManager::DisposeTags()
     return false;
 }
 
-// --------------------------------------------------------------------
+
 
 IMPL_LINK(ViewOverlayManager,EventMultiplexerListener,
     tools::EventMultiplexerEvent*,pEvent)

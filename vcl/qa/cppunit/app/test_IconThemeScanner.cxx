@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <stdexcept>
@@ -31,13 +31,13 @@ class IconThemeScannerTest : public CppUnit::TestFixture
     void
     ExceptionIsThrownIfInvalidInfoIsRequested();
 
-    // Adds code needed to register the test suite
+    
     CPPUNIT_TEST_SUITE(IconThemeScannerTest);
     CPPUNIT_TEST(AddedThemeIsFoundById);
     CPPUNIT_TEST(AddedThemeInfoIsReturned);
     CPPUNIT_TEST(ExceptionIsThrownIfInvalidInfoIsRequested);
 
-    // End of test suite definition
+    
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -45,7 +45,7 @@ void
 IconThemeScannerTest::AddedThemeIsFoundById()
 {
     vcl::IconThemeScanner scanner;
-    OUString theme("file:://images_katze.zip");
+    OUString theme("file::
     scanner.AddIconThemeByPath(theme);
     OUString id = vcl::IconThemeInfo::FileNameToThemeId("images_katze.zip");
     bool found = false;
@@ -57,7 +57,7 @@ void
 IconThemeScannerTest::AddedThemeInfoIsReturned()
 {
     vcl::IconThemeScanner scanner;
-    OUString theme("file:://images_katze.zip");
+    OUString theme("file::
     scanner.AddIconThemeByPath(theme);
     OUString id = vcl::IconThemeInfo::FileNameToThemeId("images_katze.zip");
     const vcl::IconThemeInfo& info = scanner.GetIconThemeInfo(id);
@@ -68,7 +68,7 @@ void
 IconThemeScannerTest::ExceptionIsThrownIfInvalidInfoIsRequested()
 {
     vcl::IconThemeScanner scanner;
-    OUString theme("file:://images_katze.zip");
+    OUString theme("file::
     scanner.AddIconThemeByPath(theme);
     bool thrown = false;
     try
@@ -82,7 +82,7 @@ IconThemeScannerTest::ExceptionIsThrownIfInvalidInfoIsRequested()
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Exception is thrown if invalid theme info is requested", true, thrown);
 }
 
-// Put the test suite in the registry
+
 CPPUNIT_TEST_SUITE_REGISTRATION(IconThemeScannerTest);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

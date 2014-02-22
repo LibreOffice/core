@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/pathoptions.hxx>
@@ -83,7 +83,7 @@ SvxDefaultColorOptPage::SvxDefaultColorOptPage(Window* pParent, const SfxItemSet
 
 SvxDefaultColorOptPage::~SvxDefaultColorOptPage()
 {
-    // save changes
+    
     pChartOptions->SetDefaultColors( pColorConfig->GetColorList() );
     pChartOptions->Commit();
 
@@ -147,7 +147,7 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
         long nCount = pColorList->Count();
         XColorEntry* pColorEntry;
 
-        for( long i = nCount - 1; i >= 0; i-- )         // default chart colors are at the end of the table
+        for( long i = nCount - 1; i >= 0; i-- )         
         {
             pColorEntry = pColorList->GetColor( i );
             if( pColorEntry && pColorEntry->GetColor() == rCol )
@@ -159,12 +159,12 @@ long SvxDefaultColorOptPage::GetColorIndex( const Color& rCol )
 
 
 
-// --------------------
-// event handlers
-// --------------------
 
-// ResetToDefaults
-// ---------------
+
+
+
+
+
 
 IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults)
 {
@@ -182,8 +182,8 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, ResetToDefaults)
     return 0L;
 }
 
-// AddChartColor
-// ------------
+
+
 
 IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
 {
@@ -203,8 +203,8 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, AddChartColor)
     return 0L;
 }
 
-// RemoveChartColor
-// ----------------
+
+
 
 IMPL_LINK( SvxDefaultColorOptPage, RemoveChartColor, PushButton*, pButton )
 {
@@ -245,10 +245,10 @@ IMPL_LINK( SvxDefaultColorOptPage, ListClickedHdl, ColorLB*, _pColorList )
 
     long nIndex = GetColorIndex( aCol );
 
-    if( nIndex == -1 )      // not found
+    if( nIndex == -1 )      
         m_pValSetColorBox->SetNoSelection();
     else
-        m_pValSetColorBox->SelectItem( (sal_uInt16)nIndex + 1 );       // ValueSet is 1-based
+        m_pValSetColorBox->SelectItem( (sal_uInt16)nIndex + 1 );       
 
     return 0L;
 }
@@ -263,7 +263,7 @@ IMPL_LINK_NOARG(SvxDefaultColorOptPage, BoxClickedHdl)
         m_pLbChartColors->Modify( aEntry, nIdx );
         pColorConfig->ReplaceColorByIndex( nIdx, aEntry );
 
-        m_pLbChartColors->SelectEntryPos( nIdx );  // reselect entry
+        m_pLbChartColors->SelectEntryPos( nIdx );  
     }
 
     return 0L;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,7 +77,7 @@ void    SwSearchProperties_Impl::SetProperties(const uno::Sequence< beans::Prope
     const beans::PropertyValue* pProps = aSearchAttribs.getConstArray();
     sal_uInt32 i;
 
-    //delete all existing values
+    
     for( i = 0; i < nArrLen; i++)
     {
         delete pValueArr[i];
@@ -573,7 +573,7 @@ void SwXTextSearch::setPropertyValue(const OUString& rPropertyName, const uno::A
             case WID_BACKWARDS :            bBack       = bVal; break;
             case WID_REGULAR_EXPRESSION :   bExpr       = bVal; break;
             case WID_CASE_SENSITIVE  :      bCase       = bVal; break;
-            //case WID_IN_SELECTION  :      bInSel      = bVal; break;
+            
             case WID_STYLES          :      bStyles     = bVal; break;
             case WID_SIMILARITY      :      bSimilarity = bVal; break;
             case WID_SIMILARITY_RELAX:      bLevRelax   = bVal; break;
@@ -603,7 +603,7 @@ uno::Any SwXTextSearch::getPropertyValue(const OUString& rPropertyName) throw( b
             case WID_BACKWARDS :            bSet = bBack; goto SET_BOOL;
             case WID_REGULAR_EXPRESSION :   bSet = bExpr; goto SET_BOOL;
             case WID_CASE_SENSITIVE  :      bSet = bCase; goto SET_BOOL;
-            //case WID_IN_SELECTION  :      bSet = bInSel; goto SET_BOOL;
+            
             case WID_STYLES          :      bSet = bStyles; goto SET_BOOL;
             case WID_SIMILARITY      :      bSet = bSimilarity; goto SET_BOOL;
             case WID_SIMILARITY_RELAX:      bSet = bLevRelax;
@@ -742,10 +742,10 @@ void SwXTextSearch::FillSearchOptions( util::SearchOptions& rSearchOpt ) const
     if( bWord )
         rSearchOpt.searchFlag |= util::SearchFlags::NORM_WORD_ONLY;
 
-//  bInSel: 1;  // wie geht das?
-//  TODO: pSearch->bStyles!
-//      inSelection??
-//      aSrchParam.SetSrchInSelection(TypeConversion::toBOOL(aVal));
+
+
+
+
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

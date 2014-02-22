@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "doclinkdialog.hxx"
@@ -29,20 +29,20 @@
 #include <tools/urlobj.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sfx2/docfilt.hxx>
-//......................................................................
+
 namespace svx
 {
-//......................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::ucb;
     using namespace ::svt;
 
-    //==================================================================
-    //= ODocumentLinkDialog
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ODocumentLinkDialog::ODocumentLinkDialog( Window* _pParent, sal_Bool _bCreateNew )
         : ModalDialog(_pParent, "DatabaseLinkDialog",
             "cui/ui/databaselinkdialog.ui")
@@ -70,7 +70,7 @@ namespace svx
         m_pURL->SetDropDownLineCount( 5 );
     }
 
-    //------------------------------------------------------------------
+    
     void ODocumentLinkDialog::setLink( const OUString& _rName, const OUString& _rURL )
     {
         m_pName->SetText(_rName);
@@ -78,29 +78,29 @@ namespace svx
         validate();
     }
 
-    //------------------------------------------------------------------
+    
     void ODocumentLinkDialog::getLink( OUString& _rName, OUString& _rURL ) const
     {
         _rName = m_pName->GetText();
         _rURL = m_pURL->GetText();
     }
 
-    //------------------------------------------------------------------
+    
     void ODocumentLinkDialog::validate( )
     {
 
         m_pOK->Enable( ( !m_pName->GetText().isEmpty()) && ( !m_pURL->GetText().isEmpty() ) );
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnOk)
     {
-        // get the current URL
+        
         OUString sURL = m_pURL->GetText();
         OFileNotation aTransformer(sURL);
         sURL = aTransformer.get(OFileNotation::N_URL);
 
-        // check for the existence of the selected file
+        
         sal_Bool bFileExists = sal_False;
         try
         {
@@ -119,7 +119,7 @@ namespace svx
             ErrorBox aError(this, WB_OK , sMsg);
             aError.Execute();
             return 0L;
-        } // if (!bFileExists)
+        } 
         INetURLObject aURL( sURL );
         if ( aURL.GetProtocol() != INET_PROT_FILE )
         {
@@ -150,7 +150,7 @@ namespace svx
         return 0L;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnBrowseFile)
     {
         ::sfx2::FileDialogHelper aFileDlg(
@@ -173,7 +173,7 @@ namespace svx
             return 0L;
 
         if (m_pName->GetText().isEmpty())
-        {   // default the name to the base of the chosen URL
+        {   
             INetURLObject aParser;
 
             aParser.SetSmartProtocol(INET_PROT_FILE);
@@ -187,7 +187,7 @@ namespace svx
         else
             m_pURL->GrabFocus();
 
-        // get the path in system notation
+        
         OFileNotation aTransformer(aFileDlg.GetPath(), OFileNotation::N_URL);
         m_pURL->SetText(aTransformer.get(OFileNotation::N_SYSTEM));
 
@@ -195,15 +195,15 @@ namespace svx
         return 0L;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(ODocumentLinkDialog, OnTextModified)
     {
         validate( );
         return 0L;
     }
 
-//......................................................................
-}   // namespace svx
-//......................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

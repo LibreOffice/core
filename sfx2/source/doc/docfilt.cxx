@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef SOLARIS
@@ -36,7 +36,7 @@
 
 using namespace ::com::sun::star;
 
-// STATIC DATA -----------------------------------------------------------
+
 
 DBG_NAME(SfxFilter)
 
@@ -212,24 +212,24 @@ OUString SfxFilter::GetTypeFromStorage(
             {
                 SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
                 if ( bTemplate )
-                    // template filter was preselected, try to verify
+                    
                     nMust |= SFX_FILTER_TEMPLATEPATH;
                 else
-                    // template filters shouldn't be detected if not explicitly asked for
+                    
                     nDont |= SFX_FILTER_TEMPLATEPATH;
 
                 const SfxFilter* pFilter = 0;
                 if (!aName.isEmpty())
-                    // get preselected Filter if it matches the desired filter flags
+                    
                     pFilter = aMatcher.GetFilter4FilterName( aName, nMust, nDont );
 
                 if ( !pFilter || pFilter->GetFormat() != nClipId )
                 {
-                    // get filter from storage MediaType
+                    
                     pFilter = aMatcher.GetFilter4ClipBoardId( nClipId, nMust, nDont );
                     if ( !pFilter )
-                        // template filter is asked for , but there isn't one; so at least the "normal" format should be detected
-                        // or storage *is* a template, but bTemplate is not set
+                        
+                        
                         pFilter = aMatcher.GetFilter4ClipBoardId( nClipId );
                 }
 
@@ -243,8 +243,8 @@ OUString SfxFilter::GetTypeFromStorage(
         }
     }
 
-    //TODO: do it without SfxFilter
-    //TODO/LATER: don't yield FilterName, should be done in FWK!
+    
+    
     OUString aRet;
     if ( pType )
     {

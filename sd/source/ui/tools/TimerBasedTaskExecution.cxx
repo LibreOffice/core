@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -49,9 +49,9 @@ public:
     ::boost::shared_ptr<TimerBasedTaskExecution> pExecution(
         new TimerBasedTaskExecution(rpTask,nMillisecondsBetweenSteps,nMaxTimePerStep),
         Deleter());
-    // Let the new object have a shared_ptr to itself, so that it can
-    // release itself when the AsynchronousTask has been executed
-    // completely.
+    
+    
+    
     pExecution->SetSelf(pExecution);
     return pExecution;
 }
@@ -68,7 +68,7 @@ void TimerBasedTaskExecution::Release (void)
 
 
 
-//static
+
 void TimerBasedTaskExecution::ReleaseTask (
     const ::boost::weak_ptr<TimerBasedTaskExecution>& rpExecution)
 {
@@ -81,10 +81,10 @@ void TimerBasedTaskExecution::ReleaseTask (
         }
         catch (const ::boost::bad_weak_ptr&)
         {
-            // When a bad_weak_ptr has been thrown then the object pointed
-            // to by rpTask has been released right after we checked that it
-            // still existed.  Too bad, but that means, that we have nothing
-            // more do.
+            
+            
+            
+            
         }
     }
 }
@@ -134,9 +134,9 @@ IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback)
     {
         if (mpTask->HasNextStep())
         {
-            // Execute as many steps as fit into the time span of length
-            // mnMaxTimePerStep.  Note that the last step may take longer
-            // than allowed.
+            
+            
+            
             sal_uInt32 nStartTime (Time( Time::SYSTEM ).GetMSFromTime());
             SAL_INFO("sd.tools", OSL_THIS_FUNC << ": starting TimerBasedTaskExecution at " << nStartTime);
             do
@@ -159,6 +159,6 @@ IMPL_LINK_NOARG(TimerBasedTaskExecution, TimerCallback)
 }
 
 
-} } // end of namespace ::sd::tools
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

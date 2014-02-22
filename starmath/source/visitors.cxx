@@ -4,12 +4,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include "visitors.hxx"
 #include "cursor.hxx"
 
-///////////////////////////////////// SmVisitorTest /////////////////////////////////////
+
 
 void SmVisitorTest::Visit( SmTableNode* pNode )
 {
@@ -180,7 +180,7 @@ void SmVisitorTest::VisitChildren( SmNode* pNode )
         it->Accept( this );
 }
 
-/////////////////////////////// SmDefaultingVisitor ////////////////////////////////
+
 
 void SmDefaultingVisitor::Visit( SmTableNode* pNode )
 {
@@ -317,7 +317,7 @@ void SmDefaultingVisitor::Visit( SmVerticalBraceNode* pNode )
     DefaultVisit( pNode );
 }
 
-/////////////////////////////// SmCaretDrawingVisitor ////////////////////////////////
+
 
 SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
                                              SmCaretPos position,
@@ -332,11 +332,11 @@ SmCaretDrawingVisitor::SmCaretDrawingVisitor( OutputDevice& rDevice,
     if( !position.IsValid( ) )
         return;
 
-    //Save device state
+    
     rDev.Push( PUSH_FONT | PUSH_MAPMODE | PUSH_LINECOLOR | PUSH_FILLCOLOR | PUSH_TEXTCOLOR );
 
     pos.pSelectedNode->Accept( this );
-    //Restore device state
+    
     rDev.Pop( );
 }
 
@@ -346,27 +346,27 @@ void SmCaretDrawingVisitor::Visit( SmTextNode* pNode )
 
     rDev.SetFont( pNode->GetFont( ) );
 
-    //Find the line
+    
     SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
 
-    //Find coordinates
+    
     long left = pNode->GetLeft( ) + rDev.GetTextWidth( pNode->GetText( ), 0, i ) + Offset.X( );
     long top = pLine->GetTop( ) + Offset.Y( );
     long height = pLine->GetHeight( );
     long left_line = pLine->GetLeft( ) + Offset.X( );
     long right_line = pLine->GetRight( ) + Offset.X( );
 
-    //Set color
+    
     rDev.SetLineColor( Color( COL_BLACK ) );
 
     if ( isCaretVisible ) {
-        //Draw vertical line
+        
         Point p1( left, top );
         Point p2( left, top + height );
         rDev.DrawLine( p1, p2 );
     }
 
-    //Underline the line
+    
     Point pLeft( left_line, top + height );
     Point pRight( right_line, top + height );
     rDev.DrawLine( pLeft, pRight );
@@ -376,57 +376,57 @@ void SmCaretDrawingVisitor::DefaultVisit( SmNode* pNode )
 {
     rDev.SetLineColor( Color( COL_BLACK ) );
 
-    //Find the line
+    
     SmNode* pLine = SmCursor::FindTopMostNodeInLine( pNode );
 
-    //Find coordinates
+    
     long left = pNode->GetLeft( ) + Offset.X( ) + ( pos.Index == 1 ? pNode->GetWidth( ) : 0 );
     long top = pLine->GetTop( ) + Offset.Y( );
     long height = pLine->GetHeight( );
     long left_line = pLine->GetLeft( ) + Offset.X( );
     long right_line = pLine->GetRight( ) + Offset.X( );
 
-    //Set color
+    
     rDev.SetLineColor( Color( COL_BLACK ) );
 
     if ( isCaretVisible ) {
-        //Draw vertical line
+        
         Point p1( left, top );
         Point p2( left, top + height );
         rDev.DrawLine( p1, p2 );
     }
 
-    //Underline the line
+    
     Point pLeft( left_line, top + height );
     Point pRight( right_line, top + height );
     rDev.DrawLine( pLeft, pRight );
 }
 
-/////////////////////////////// SmCaretPos2LineVisitor ////////////////////////////////
+
 
 void SmCaretPos2LineVisitor::Visit( SmTextNode* pNode )
 {
-    //Save device state
+    
     pDev->Push( PUSH_FONT | PUSH_TEXTCOLOR );
 
     long i = pos.Index;
 
     pDev->SetFont( pNode->GetFont( ) );
 
-    //Find coordinates
+    
     long left = pNode->GetLeft( ) + pDev->GetTextWidth( pNode->GetText( ), 0, i );
     long top = pNode->GetTop( );
     long height = pNode->GetHeight( );
 
     line = SmCaretLine( left, top, height );
 
-    //Restore device state
+    
     pDev->Pop( );
 }
 
 void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
 {
-    //Vertical line ( code from SmCaretDrawingVisitor )
+    
     Point p1 = pNode->GetTopLeft( );
     if( pos.Index == 1 )
         p1.Move( pNode->GetWidth( ), 0 );
@@ -434,7 +434,7 @@ void SmCaretPos2LineVisitor::DefaultVisit( SmNode* pNode )
     line = SmCaretLine( p1.X( ), p1.Y( ), pNode->GetHeight( ) );
 }
 
-/////////////////////////////// Nasty temporary device!!! ////////////////////////////////
+
 
 #include <tools/gen.hxx>
 #include <tools/fract.hxx>
@@ -451,7 +451,7 @@ class SmTmpDevice2
 {
     OutputDevice  &rOutDev;
 
-    // disallow use of copy-constructor and assignment-operator
+    
     SmTmpDevice2( const SmTmpDevice2 &rTmpDev );
     SmTmpDevice2 & operator = ( const SmTmpDevice2 &rTmpDev );
 
@@ -478,7 +478,7 @@ SmTmpDevice2::SmTmpDevice2( OutputDevice &rTheDev, bool bUseMap100th_mm ) :
     if ( bUseMap100th_mm  &&  MAP_100TH_MM != rOutDev.GetMapMode( ).GetMapUnit( ) )
     {
         SAL_WARN("starmath", "incorrect MapMode?");
-        rOutDev.SetMapMode( MAP_100TH_MM );     //format for 100% always
+        rOutDev.SetMapMode( MAP_100TH_MM );     
     }
 }
 
@@ -513,7 +513,7 @@ void SmTmpDevice2::SetFont( const Font &rNewFont )
     rOutDev.SetTextColor( Impl_GetColor( rNewFont.GetColor( ) ) );
 }
 
-/////////////////////////////// SmDrawingVisitor ////////////////////////////////
+
 
 void SmDrawingVisitor::Visit( SmTableNode* pNode )
 {
@@ -640,7 +640,7 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     if ( pNode->IsPhantom( ) )
         return;
 
-    // draw root-sign itself
+    
     DrawSpecialNode( pNode );
 
     SmTmpDevice2  aTmpDev( ( OutputDevice & ) rDev, true );
@@ -648,20 +648,20 @@ void SmDrawingVisitor::Visit( SmRootSymbolNode* pNode )
     rDev.SetLineColor( );
     aTmpDev.SetFont( pNode->GetFont( ) );
 
-    // since the width is always unscaled it corresponds ot the _original_
-    // _unscaled_ font height to be used, we use that to calculate the
-    // bar height. Thus it is independent of the arguments height.
-    // ( see display of sqrt QQQ versus sqrt stack{Q#Q#Q#Q} )
+    
+    
+    
+    
     long nBarHeight = pNode->GetWidth( ) * 7L / 100L;
     long nBarWidth = pNode->GetBodyWidth( ) + pNode->GetBorderWidth( );
     Point aBarOffset( pNode->GetWidth( ), +pNode->GetBorderWidth( ) );
     Point aBarPos( Position + aBarOffset );
 
     Rectangle  aBar( aBarPos, Size( nBarWidth, nBarHeight ) );
-    //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
-    //! increasing zoomfactor.
-    //  This is done by shifting its output-position to a point that
-    //  corresponds exactly to a pixel on the output device.
+    
+    
+    
+    
     Point  aDrawPos( rDev.PixelToLogic( rDev.LogicToPixel( aBar.TopLeft( ) ) ) );
     aBar.SetPos( aDrawPos );
 
@@ -681,7 +681,7 @@ void SmDrawingVisitor::Visit( SmPolyLineNode* pNode )
     Point aOffset ( Point( ) - pNode->GetPolygon( ).GetBoundRect( ).TopLeft( )
                    + Point( nBorderwidth, nBorderwidth ) ),
           aPos ( Position + aOffset );
-    pNode->GetPolygon( ).Move( aPos.X( ), aPos.Y( ) );    //Works because Polygon wraps a pointer
+    pNode->GetPolygon( ).Move( aPos.X( ), aPos.Y( ) );    
 
     SmTmpDevice2  aTmpDev ( ( OutputDevice & ) rDev, false );
     aTmpDev.SetLineColor( pNode->GetFont( ).GetColor( ) );
@@ -701,7 +701,7 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
 
     sal_uLong  nTmpBorderWidth = pNode->GetFont( ).GetBorderWidth( );
 
-    // get rectangle and remove borderspace
+    
     Rectangle  aTmp ( pNode->AsRectangle( ) + Position - pNode->GetTopLeft( ) );
     aTmp.Left( )   += nTmpBorderWidth;
     aTmp.Right( )  -= nTmpBorderWidth;
@@ -711,10 +711,10 @@ void SmDrawingVisitor::Visit( SmRectangleNode* pNode )
     SAL_WARN_IF( aTmp.GetHeight() == 0 || aTmp.GetWidth() == 0,
                 "starmath", "Empty rectangle" );
 
-    //! avoid GROWING AND SHRINKING of drawn rectangle when constantly
-    //! increasing zoomfactor.
-    //  This is done by shifting its output-position to a point that
-    //  corresponds exactly to a pixel on the output device.
+    
+    
+    
+    
     Point  aPos ( rDev.PixelToLogic( rDev.LogicToPixel( aTmp.TopLeft( ) ) ) );
     aTmp.SetPos( aPos );
 
@@ -731,7 +731,7 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
 
     Point  aPos ( Position );
     aPos.Y( ) += pNode->GetBaselineOffset( );
-    // auf Pixelkoordinaten runden
+    
     aPos = rDev.PixelToLogic( rDev.LogicToPixel( aPos ) );
 
     rDev.DrawStretchText( aPos, pNode->GetWidth( ), pNode->GetText( ) );
@@ -739,8 +739,8 @@ void SmDrawingVisitor::DrawTextNode( SmTextNode* pNode )
 
 void SmDrawingVisitor::DrawSpecialNode( SmSpecialNode* pNode )
 {
-    //! since this chars might come from any font, that we may not have
-    //! set to ALIGN_BASELINE yet, we do it now.
+    
+    
     pNode->GetFont( ).SetAlign( ALIGN_BASELINE );
 
     DrawTextNode( pNode );
@@ -762,72 +762,72 @@ void SmDrawingVisitor::DrawChildren( SmNode* pNode )
     }
 }
 
-/////////////////////////////// SmSetSelectionVisitor ////////////////////////////////
+
 
 SmSetSelectionVisitor::SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pTree) {
     StartPos    = startPos;
     EndPos      = endPos;
     IsSelecting = false;
 
-    //Assume that pTree is a SmTableNode
+    
     SAL_WARN_IF(pTree->GetType() != NTABLE, "starmath", "pTree should be a SmTableNode!");
-    //Visit root node, this is special as this node cannot be selected, but its children can!
+    
     if(pTree->GetType() == NTABLE){
-        //Change state if StartPos is in front of this node
+        
         if( StartPos.pSelectedNode == pTree && StartPos.Index == 0 )
             IsSelecting = !IsSelecting;
-        //Change state if EndPos is in front of this node
+        
         if( EndPos.pSelectedNode == pTree && EndPos.Index == 0 )
             IsSelecting = !IsSelecting;
         SAL_WARN_IF(IsSelecting, "starmath", "Caret positions needed to set IsSelecting about, shouldn't be possible!");
 
-        //Visit lines
+        
         SmNodeIterator it( pTree );
         while( it.Next( ) ) {
             it->Accept( this );
-            //If we started a selection in this line and it haven't ended, we do that now!
+            
             if(IsSelecting) {
                 IsSelecting = false;
                 SetSelectedOnAll(it.Current(), true);
-                //Set StartPos and EndPos to invalid positions, this ensures that an unused
-                //start or end (because we forced end above), doesn't start a new selection.
+                
+                
                 StartPos = EndPos = SmCaretPos();
             }
         }
-        //Check if pTree isn't selected
+        
         SAL_WARN_IF(pTree->IsSelected(), "starmath", "pTree should never be selected!");
-        //Discard the selection if there's a bug (it's better than crashing)
+        
         if(pTree->IsSelected())
             SetSelectedOnAll(pTree, false);
-    }else //This shouldn't happen, but I don't see any reason to die if it does
+    }else 
         pTree->Accept(this);
 }
 
 void SmSetSelectionVisitor::SetSelectedOnAll( SmNode* pSubTree, bool IsSelected ) {
     pSubTree->SetSelected( IsSelected );
 
-    //Quick BFS to set all selections
+    
     SmNodeIterator it( pSubTree );
     while( it.Next( ) )
         SetSelectedOnAll( it.Current( ), IsSelected );
 }
 
 void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
-    //Change state if StartPos is in front of this node
+    
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
         IsSelecting = !IsSelecting;
-    //Change state if EndPos is in front of this node
+    
     if( EndPos.pSelectedNode == pNode && EndPos.Index == 0 )
         IsSelecting = !IsSelecting;
 
-    //Cache current state
+    
     bool WasSelecting = IsSelecting;
     bool ChangedState = false;
 
-    //Set selected
+    
     pNode->SetSelected( IsSelecting );
 
-    //Visit children
+    
     SmNodeIterator it( pNode );
     while( it.Next( ) )
     {
@@ -835,11 +835,11 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
         ChangedState = ( WasSelecting != IsSelecting ) || ChangedState;
     }
 
-    //If state changed
+    
     if( ChangedState )
     {
-        //Select this node and all of its children
-        //(Make exception for SmBracebodyNode)
+        
+        
         if( pNode->GetType() != NBRACEBODY ||
             !pNode->GetParent() ||
             pNode->GetParent()->GetType() != NBRACE )
@@ -855,12 +855,12 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
          */
     }
 
-    //Change state if StartPos is after this node
+    
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 1 )
     {
         IsSelecting = !IsSelecting;
     }
-    //Change state if EndPos is after of this node
+    
     if( EndPos.pSelectedNode == pNode && EndPos.Index == 1 )
     {
         IsSelecting = !IsSelecting;
@@ -868,28 +868,28 @@ void SmSetSelectionVisitor::DefaultVisit( SmNode* pNode ) {
 }
 
 void SmSetSelectionVisitor::VisitCompositionNode( SmNode* pNode ) {
-    //Change state if StartPos is in front of this node
+    
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 0 )
         IsSelecting = !IsSelecting;
-    //Change state if EndPos is in front of this node
+    
     if( EndPos.pSelectedNode == pNode && EndPos.Index == 0 )
         IsSelecting = !IsSelecting;
 
-    //Cache current state
+    
     bool WasSelecting = IsSelecting;
 
-    //Visit children
+    
     SmNodeIterator it( pNode );
     while( it.Next( ) )
         it->Accept( this );
 
-    //Set selected, if everything was selected
+    
     pNode->SetSelected( WasSelecting && IsSelecting );
 
-    //Change state if StartPos is after this node
+    
     if( StartPos.pSelectedNode == pNode && StartPos.Index == 1 )
         IsSelecting = !IsSelecting;
-    //Change state if EndPos is after of this node
+    
     if( EndPos.pSelectedNode == pNode && EndPos.Index == 1 )
         IsSelecting = !IsSelecting;
 }
@@ -905,8 +905,8 @@ void SmSetSelectionVisitor::Visit( SmTextNode* pNode ) {
     long start, end;
     pNode->SetSelected( true );
     if( i1 != -1 && i2 != -1 ) {
-        start = i1 < i2 ? i1 : i2; //MIN
-        end   = i1 > i2 ? i1 : i2; //MAX
+        start = i1 < i2 ? i1 : i2; 
+        end   = i1 > i2 ? i1 : i2; 
     } else if( IsSelecting && i1 != -1 ) {
         start = 0;
         end = i1;
@@ -960,29 +960,29 @@ void SmSetSelectionVisitor::Visit( SmFontNode* pNode ) {
     VisitCompositionNode( pNode );
 }
 
-/////////////////////////////// SmCaretPosGraphBuildingVisitor ////////////////////////////////
+
 
 SmCaretPosGraphBuildingVisitor::SmCaretPosGraphBuildingVisitor( SmNode* pRootNode ) {
     pRightMost  = NULL;
     pGraph = new SmCaretPosGraph( );
-    //pRootNode should always be a table
+    
     SAL_WARN_IF( pRootNode->GetType( ) != NTABLE, "starmath", "pRootNode must be a table node");
-    //Handle the special case where NTABLE is used a rootnode
+    
     if( pRootNode->GetType( ) == NTABLE ){
-        //Children are SmLineNodes
-        //Or so I thought... Aparently, the children can be instances of SmExpression
-        //especially if there's a error in the formula... So he we go, a simple work around.
+        
+        
+        
         SmNodeIterator it( pRootNode );
         while( it.Next( ) ){
-            //There's a special invariant between this method and the Visit( SmLineNode* )
-            //Usually pRightMost may not be NULL, to avoid this pRightMost should here be
-            //set to a new SmCaretPos in front of it.Current( ), however, if it.Current( ) is
-            //an instance of SmLineNode we let SmLineNode create this position in front of
-            //the visual line.
-            //The argument for doing this is that we now don't have to worry about SmLineNode
-            //being a visual line composition node. Thus, no need for yet another special case
-            //in SmCursor::IsLineCompositionNode and everywhere this method is used.
-            //if( it->GetType( ) != NLINE )
+            
+            
+            
+            
+            
+            
+            
+            
+            
                 pRightMost = pGraph->Add( SmCaretPos( it.Current( ), 0 ) );
             it->Accept( this );
         }
@@ -1065,15 +1065,15 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
     left = pRightMost;
     SAL_WARN_IF( !pRightMost, "starmath", "pRightMost shouldn't be NULL here!" );
 
-    //Create bodyLeft
+    
     SAL_WARN_IF( !pNode->GetBody(), "starmath", "SmSubSupNode Doesn't have a body!" );
     bodyLeft = pGraph->Add( SmCaretPos( pNode->GetBody( ), 0 ), left );
-    left->SetRight( bodyLeft ); //TODO: Don't make this if LSUP or LSUB are NULL ( not sure??? )
+    left->SetRight( bodyLeft ); 
 
-    //Create right
+    
     right = pGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    //Visit the body, to get bodyRight
+    
     pRightMost = bodyLeft;
     pNode->GetBody( )->Accept( this );
     bodyRight = pRightMost;
@@ -1081,9 +1081,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
     right->SetLeft( bodyRight );
 
     SmNode* pChild;
-    //If there's an LSUP
+    
     if( ( pChild = pNode->GetSubSup( LSUP ) ) ){
-        SmCaretPosGraphEntry *cLeft; //Child left
+        SmCaretPosGraphEntry *cLeft; 
         cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
 
         pRightMost = cLeft;
@@ -1091,9 +1091,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
 
         pRightMost->SetRight( bodyLeft );
     }
-    //If there's an LSUB
+    
     if( ( pChild = pNode->GetSubSup( LSUB ) ) ){
-        SmCaretPosGraphEntry *cLeft; //Child left
+        SmCaretPosGraphEntry *cLeft; 
         cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
 
         pRightMost = cLeft;
@@ -1101,9 +1101,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
 
         pRightMost->SetRight( bodyLeft );
     }
-    //If there's an CSUP
+    
     if( ( pChild = pNode->GetSubSup( CSUP ) ) ){
-        SmCaretPosGraphEntry *cLeft; //Child left
+        SmCaretPosGraphEntry *cLeft; 
         cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
 
         pRightMost = cLeft;
@@ -1111,9 +1111,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
 
         pRightMost->SetRight( right );
     }
-    //If there's an CSUB
+    
     if( ( pChild = pNode->GetSubSup( CSUB ) ) ){
-        SmCaretPosGraphEntry *cLeft; //Child left
+        SmCaretPosGraphEntry *cLeft; 
         cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
 
         pRightMost = cLeft;
@@ -1121,9 +1121,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
 
         pRightMost->SetRight( right );
     }
-    //If there's an RSUP
+    
     if( ( pChild = pNode->GetSubSup( RSUP ) ) ){
-        SmCaretPosGraphEntry *cLeft; //Child left
+        SmCaretPosGraphEntry *cLeft; 
         cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
 
         pRightMost = cLeft;
@@ -1131,9 +1131,9 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
 
         pRightMost->SetRight( right );
     }
-    //If there's an RSUB
+    
     if( ( pChild = pNode->GetSubSup( RSUB ) ) ){
-        SmCaretPosGraphEntry *cLeft; //Child left
+        SmCaretPosGraphEntry *cLeft; 
         cLeft = pGraph->Add( SmCaretPos( pChild, 0 ), bodyRight );
 
         pRightMost = cLeft;
@@ -1142,7 +1142,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmSubSupNode* pNode )
         pRightMost->SetRight( right );
     }
 
-    //Set return parameters
+    
     pRightMost = right;
 }
 
@@ -1192,80 +1192,80 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmOperNode* pNode )
                          *bodyLeft,
                          *bodyRight,
                          *right;
-    //Create body left
+    
     bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
     left->SetRight( bodyLeft );
 
-    //Visit body, get bodyRight
+    
     pRightMost = bodyLeft;
     pBody->Accept( this );
     bodyRight = pRightMost;
 
-    //Create right
+    
     right = pGraph->Add( SmCaretPos( pNode, 1 ), bodyRight );
     bodyRight->SetRight( right );
 
-    //Get subsup pNode if any
+    
     SmSubSupNode* pSubSup = pOper->GetType( ) == NSUBSUP ? ( SmSubSupNode* )pOper : NULL;
 
     SmNode* pChild;
     SmCaretPosGraphEntry *childLeft;
     if( pSubSup && ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
-        //Create position in front of pChild
+        
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
+        
         pRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
+        
         pRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
-        //Create position in front of pChild
+        
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
+        
         pRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
+        
         pRightMost->SetRight( bodyLeft );
     }
-    if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {//TO
-        //Create position in front of pChild
+    if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {
+        
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
+        
         pRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
+        
         pRightMost->SetRight( bodyLeft );
     }
-    if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUB ) ) ) { //FROM
-        //Create position in front of pChild
+    if( pSubSup && ( pChild = pSubSup->GetSubSup( CSUB ) ) ) { 
+        
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
+        
         pRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
+        
         pRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
-        //Create position in front of pChild
+        
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
+        
         pRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
+        
         pRightMost->SetRight( bodyLeft );
     }
     if( pSubSup && ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
-        //Create position in front of pChild
+        
         childLeft = pGraph->Add( SmCaretPos( pChild, 0 ), left );
-        //Visit pChild
+        
         pRightMost = childLeft;
         pChild->Accept( this );
-        //Set right on pRightMost from pChild
+        
         pRightMost->SetRight( bodyLeft );
     }
 
-    //Return right
+    
     pRightMost = right;
 }
 
@@ -1345,7 +1345,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmTextNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
 {
-    //None if these children can be NULL, see SmBinVerNode::Arrange
+    
     SmNode  *pNum   = pNode->GetSubNode( 0 ),
             *pDenom = pNode->GetSubNode( 2 );
 
@@ -1354,32 +1354,32 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinVerNode* pNode )
                          *numLeft,
                          *denomLeft;
 
-    //Set left
+    
     left = pRightMost;
     SAL_WARN_IF( !pRightMost, "starmath", "There must be a position in front of this" );
 
-    //Create right
+    
     right = pGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    //Create numLeft
+    
     numLeft = pGraph->Add( SmCaretPos( pNum, 0 ), left );
     left->SetRight( numLeft );
 
-    //Visit pNum
+    
     pRightMost = numLeft;
     pNum->Accept( this );
     pRightMost->SetRight( right );
     right->SetLeft( pRightMost );
 
-    //Create denomLeft
+    
     denomLeft = pGraph->Add( SmCaretPos( pDenom, 0 ), left );
 
-    //Visit pDenom
+    
     pRightMost = denomLeft;
     pDenom->Accept( this );
     pRightMost->SetRight( right );
 
-    //Set return parameter
+    
     pRightMost = right;
 }
 
@@ -1398,7 +1398,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmVerticalBraceNode* pNode )
 {
     SmNode  *pBody   = pNode->GetSubNode( 0 ),
             *pScript = pNode->GetSubNode( 2 );
-    //None of these children can be NULL
+    
 
     SmCaretPosGraphEntry  *left,
                         *bodyLeft,
@@ -1407,10 +1407,10 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmVerticalBraceNode* pNode )
 
     left = pRightMost;
 
-    //Create right
+    
     right = pGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    //Create bodyLeft
+    
     bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
     left->SetRight( bodyLeft );
     pRightMost = bodyLeft;
@@ -1418,13 +1418,13 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmVerticalBraceNode* pNode )
     pRightMost->SetRight( right );
     right->SetLeft( pRightMost );
 
-    //Create script
+    
     scriptLeft = pGraph->Add( SmCaretPos( pScript, 0 ), left );
     pRightMost = scriptLeft;
     pScript->Accept( this );
     pRightMost->SetRight( right );
 
-    //Set return value
+    
     pRightMost = right;
 }
 
@@ -1452,33 +1452,33 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinDiagonalNode* pNode )
                         *right;
     left = pRightMost;
 
-    //Create right
+    
     right = pGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    //Create left A
+    
     leftA = pGraph->Add( SmCaretPos( A, 0 ), left );
     left->SetRight( leftA );
 
-    //Visit A
+    
     pRightMost = leftA;
     A->Accept( this );
     rightA = pRightMost;
 
-    //Create left B
+    
     leftB = pGraph->Add( SmCaretPos( B, 0 ), rightA );
     rightA->SetRight( leftB );
 
-    //Visit B
+    
     pRightMost = leftB;
     B->Accept( this );
     pRightMost->SetRight( right );
     right->SetLeft( pRightMost );
 
-    //Set return value
+    
     pRightMost = right;
 }
 
-//Straigt forward ( I think )
+
 void SmCaretPosGraphBuildingVisitor::Visit( SmBinHorNode* pNode )
 {
     SmNodeIterator it( pNode );
@@ -1487,7 +1487,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmBinHorNode* pNode )
 }
 void SmCaretPosGraphBuildingVisitor::Visit( SmUnHorNode* pNode )
 {
-    // Unary operator node
+    
     SmNodeIterator it( pNode );
     while( it.Next( ) )
         it->Accept( this );
@@ -1503,7 +1503,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmExpressionNode* pNode )
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmFontNode* pNode )
 {
-    //Has only got one child, should act as an expression if possible
+    
     SmNodeIterator it( pNode );
     while( it.Next( ) )
         it->Accept( this );
@@ -1593,8 +1593,8 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmAlignNode* pNode )
  */
 void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
 {
-    SmNode  *pExtra = pNode->GetSubNode( 0 ), //Argument, NULL for sqrt, and SmTextNode if cubicroot
-            *pBody  = pNode->GetSubNode( 2 ); //Body of the root
+    SmNode  *pExtra = pNode->GetSubNode( 0 ), 
+            *pBody  = pNode->GetSubNode( 2 ); 
     SAL_WARN_IF( !pBody, "starmath", "pBody cannot be NULL" );
 
     SmCaretPosGraphEntry  *left,
@@ -1602,25 +1602,25 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmRootNode* pNode )
                         *bodyLeft,
                         *bodyRight;
 
-    //Get left and save it
+    
     SAL_WARN_IF( !pRightMost, "starmath", "There must be a position in front of this" );
     left = pRightMost;
 
-    //Create body left
+    
     bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
     left->SetRight( bodyLeft );
 
-    //Create right
+    
     right = pGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    //Visit body
+    
     pRightMost = bodyLeft;
     pBody->Accept( this );
     bodyRight = pRightMost;
     bodyRight->SetRight( right );
     right->SetLeft( bodyRight );
 
-    //Visit pExtra
+    
     if( pExtra ){
         pRightMost = pGraph->Add( SmCaretPos( pExtra, 0 ), left );
         pExtra->Accept( this );
@@ -1714,7 +1714,7 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmAttributNode* pNode )
 {
     SmNode  *pAttr = pNode->GetSubNode( 0 ),
             *pBody = pNode->GetSubNode( 1 );
-    //None of the children can be NULL
+    
 
     SmCaretPosGraphEntry  *left = pRightMost,
                         *attrLeft,
@@ -1722,33 +1722,33 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmAttributNode* pNode )
                         *bodyRight,
                         *right;
 
-    //Creating bodyleft
+    
     bodyLeft = pGraph->Add( SmCaretPos( pBody, 0 ), left );
     left->SetRight( bodyLeft );
 
-    //Creating right
+    
     right = pGraph->Add( SmCaretPos( pNode, 1 ) );
 
-    //Visit the body
+    
     pRightMost = bodyLeft;
     pBody->Accept( this );
     bodyRight = pRightMost;
     bodyRight->SetRight( right );
     right->SetLeft( bodyRight );
 
-    //Create attrLeft
+    
     attrLeft = pGraph->Add( SmCaretPos( pAttr, 0 ), left );
 
-    //Visit attribute
+    
     pRightMost = attrLeft;
     pAttr->Accept( this );
     pRightMost->SetRight( right );
 
-    //Set return value
+    
     pRightMost = right;
 }
 
-//Consider these single symboles
+
 void SmCaretPosGraphBuildingVisitor::Visit( SmSpecialNode* pNode )
 {
     SmCaretPosGraphEntry* right = pGraph->Add( SmCaretPos( pNode, 1 ), pRightMost );
@@ -1770,18 +1770,18 @@ void SmCaretPosGraphBuildingVisitor::Visit( SmMathSymbolNode* pNode )
 
 void SmCaretPosGraphBuildingVisitor::Visit( SmRootSymbolNode* )
 {
-    //Do nothing
+    
 }
 void SmCaretPosGraphBuildingVisitor::Visit( SmRectangleNode* )
 {
-    //Do nothing
+    
 }
 void SmCaretPosGraphBuildingVisitor::Visit( SmPolyLineNode* )
 {
-    //Do nothing
+    
 }
 
-/////////////////////////////// SmCloningVisitor ///////////////////////////////
+
 
 SmNode* SmCloningVisitor::Clone( SmNode* pNode )
 {
@@ -1795,20 +1795,20 @@ SmNode* SmCloningVisitor::Clone( SmNode* pNode )
 void SmCloningVisitor::CloneNodeAttr( SmNode* pSource, SmNode* pTarget )
 {
     pTarget->SetScaleMode( pSource->GetScaleMode( ) );
-    //Other attributes are set when prepare or arrange is executed
-    //and may depend on stuff not being cloned here.
+    
+    
 }
 
 void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTarget )
 {
-    //Cache current result
+    
     SmNode* pCurrResult = pResult;
 
-    //Create array for holding clones
+    
     sal_uInt16 nSize = pSource->GetNumSubNodes( );
     SmNodeArray aNodes( nSize );
 
-    //Clone children
+    
     SmNode* pKid;
     for( sal_uInt16 i = 0; i < nSize; i++ ){
         if( NULL != ( pKid = pSource->GetSubNode( i ) ) )
@@ -1818,10 +1818,10 @@ void SmCloningVisitor::CloneKids( SmStructureNode* pSource, SmStructureNode* pTa
         aNodes[i] = pResult;
     }
 
-    //Set subnodes of pTarget
+    
     pTarget->SetSubNodes( aNodes );
 
-    //Restore result as where prior to call
+    
     pResult = pCurrResult;
 }
 
@@ -1975,7 +1975,7 @@ void SmCloningVisitor::Visit( SmBlankNode* pNode )
 
 void SmCloningVisitor::Visit( SmErrorNode* pNode )
 {
-    //PE_NONE is used the information have been discarded and isn't used
+    
     pResult = new SmErrorNode( PE_NONE, pNode->GetToken( ) );
     CloneNodeAttr( pNode, pResult );
 }
@@ -2030,31 +2030,31 @@ void SmCloningVisitor::Visit( SmVerticalBraceNode* pNode )
     pResult = pClone;
 }
 
-/////////////////////////////// SmSelectionDrawingVisitor ///////////////////////////////
+
 
 SmSelectionDrawingVisitor::SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, Point Offset )
     : rDev( rDevice ) {
     bHasSelectionArea = false;
 
-    //Visit everything
+    
     SAL_WARN_IF( !pTree, "starmath", "pTree can't be null!" );
     if( pTree )
         pTree->Accept( this );
 
-    //Draw selection if there's any
+    
     if( bHasSelectionArea ){
         aSelectionArea.Move( Offset.X( ), Offset.Y( ) );
 
-        //Save device state
+        
         rDev.Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
-        //Change colors
+        
         rDev.SetLineColor( );
         rDev.SetFillColor( Color( COL_LIGHTGRAY ) );
 
-        //Draw rectangle
+        
         rDev.DrawRect( aSelectionArea );
 
-        //Restore device state
+        
         rDev.Pop( );
     }
 }
@@ -2101,7 +2101,7 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
     }
 }
 
-/////////////////////////////// SmNodeToTextVisitor ///////////////////////////////
+
 
 SmNodeToTextVisitor::SmNodeToTextVisitor( SmNode* pNode, OUString &rText )
 {
@@ -2130,7 +2130,7 @@ void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
         }
         Separate( );
         Append( "}" );
-    } else { //Assume it's a toplevel table, containing lines
+    } else { 
         SmNodeIterator it( pNode );
         it.Next( );
         while( true ) {
@@ -2150,7 +2150,7 @@ void SmNodeToTextVisitor::Visit( SmBraceNode* pNode )
     SmNode *pLeftBrace  = pNode->GetSubNode( 0 ),
            *pBody       = pNode->GetSubNode( 1 ),
            *pRightBrace = pNode->GetSubNode( 2 );
-    //Handle special case where it's absolute function
+    
     if( pNode->GetToken( ).eType == TABS ) {
         Append( "abs" );
         LineToText( pBody );
@@ -2181,7 +2181,7 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
     Append( pNode->GetToken( ).aText );
     Separate( );
     if( pNode->GetToken( ).eType == TOPER ){
-        //There's an SmGlyphSpecialNode if eType == TOPER
+        
         if( pNode->GetSubNode( 0 )->GetType( ) == NSUBSUP )
             Append( pNode->GetSubNode( 0 )->GetSubNode( 0 )->GetToken( ).aText );
         else
@@ -2448,7 +2448,7 @@ void SmNodeToTextVisitor::Visit( SmPlaceNode* )
 
 void SmNodeToTextVisitor::Visit( SmTextNode* pNode )
 {
-    //TODO: This method might need improvements, see SmTextNode::CreateTextFromNode
+    
     if( pNode->GetToken( ).eType == TTEXT )
         Append( "\"" );
     Append( pNode->GetText( ) );
@@ -2499,7 +2499,7 @@ void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
     if (!bracketsNeeded)
     {
         const SmNode *pParent = pNode->GetParent();
-        // nested subsups
+        
         bracketsNeeded =
             pParent && pParent->GetType() == NSUBSUP &&
             pNode->GetNumSubNodes() == 1 &&

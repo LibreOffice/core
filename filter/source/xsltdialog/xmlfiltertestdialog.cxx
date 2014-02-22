@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -73,10 +73,10 @@ class GlobalEventListenerImpl : public ::cppu::WeakImplHelper1< com::sun::star::
 public:
     GlobalEventListenerImpl( XMLFilterTestDialog* pDialog );
 
-    // XEventListener
+    
     virtual void SAL_CALL notifyEvent( const com::sun::star::document::EventObject& Event ) throw (RuntimeException);
 
-    // lang::XEventListener
+    
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw (RuntimeException);
 private:
     XMLFilterTestDialog* mpDialog;
@@ -111,10 +111,10 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
         {
             if( xInfo->supportsService( rServiceName ) )
             {
-                // special case for impress documents which supports same service as draw documents
+                
                 if ( rServiceName == "com.sun.star.drawing.DrawingDocument" )
                 {
-                    // so if we want a draw we need to check if its not an impress
+                    
                     if( !xInfo->supportsService("com.sun.star.presentation.PresentationDocument") )
                         return true;
                 }
@@ -273,7 +273,7 @@ void XMLFilterTestDialog::initDialog()
     m_pExport->Enable(bExport);
     m_pFTExportXSLTFile->SetText( getFileNameFromURL( m_pFilterInfo->maExportXSLT ) );
 
-    // ---
+    
 
     m_pImport->Enable(bImport);
     m_pFTImportTemplate->Enable(bImport && !m_pFilterInfo->maImportTemplate.isEmpty());
@@ -290,7 +290,7 @@ void XMLFilterTestDialog::onExportBrowse()
 {
     try
     {
-        // Open Fileopen-Dialog
+        
            ::sfx2::FileDialogHelper aDlg(
             com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
             0 );
@@ -344,7 +344,7 @@ void XMLFilterTestDialog::onExportBrowse()
 
                 if( (nFound == 15) && (!aType.isEmpty() && aService == m_pFilterInfo->maDocumentService) )
                 {
-                    // see if this filter is not supressed in dialog
+                    
                     if( (nFlags & 0x1000) == 0 )
                     {
                         aAny = xTypeDetection->getByName( aType );
@@ -439,7 +439,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                 File aOutputFile( aTempFileURL );
                 /* File::RC rc = */ aOutputFile.open( osl_File_OpenFlag_Write );
 
-                // create xslt exporter
+                
                 Reference< XOutputStream > xIS( new comphelper::OSLOutputStreamWrapper( aOutputFile ) );
                 int bUseDocType = m_pFilterInfo->maDocType.isEmpty()  ? 0 : 1;
                 Sequence< PropertyValue > aSourceData( 2 + bUseDocType );
@@ -487,7 +487,7 @@ void XMLFilterTestDialog::doExport( Reference< XComponent > xComp )
                     if( xGrfResolver.is() )         *pArgs++ <<= xGrfResolver;
                     if( xObjectResolver.is() )      *pArgs++ <<= xObjectResolver;
 
-    //              *pArgs++ <<= xInfoSet;
+    
                     *pArgs   <<= xHandler;
 
                     Reference< XFilter > xFilter( mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( pAppInfo->maXMLExporter, aArgs, mxContext ), UNO_QUERY );
@@ -525,7 +525,7 @@ void XMLFilterTestDialog::displayXMLFile( const OUString& rURL )
 
 void XMLFilterTestDialog::onImportBrowse()
 {
-    // Open Fileopen-Dialog
+    
        ::sfx2::FileDialogHelper aDlg(
         com::sun::star::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );
     OUString aFilterName( m_pFilterInfo->maInterfaceName );

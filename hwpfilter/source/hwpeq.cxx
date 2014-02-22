@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <assert.h>
@@ -22,7 +22,7 @@
 #include <string.h>
 #include <ctype.h>
 
-// DVO: always use standard headers:
+
 #include <istream>
 #include <sstream>
 using namespace std;
@@ -41,9 +41,9 @@ using namespace std;
 
 #define WS  " \t\r\n\v\f"
 
-#define EQ_CASE 0x01    // case sensitive cmd
-#define EQ_ENV  0x02    // equiv to latex environment
-#define EQ_ATOP 0x04    // must revert order
+#define EQ_CASE 0x01    
+#define EQ_ENV  0x02    
+#define EQ_ATOP 0x04    
 
 #define IS_WS(ch)   (strchr(WS, ch))
 #define IS_BINARY(ch)   (strchr("+-<=>", ch))
@@ -54,17 +54,17 @@ using namespace std;
 #define STRICMP strcasecmp
 #endif
 
-// sub and sup scipt script status
+
 enum { SCRIPT_NONE, SCRIPT_SUB, SCRIPT_SUP, SCRIPT_ALL};
 
 static int  eq_word(MzString& outs, istream *strm, int script = SCRIPT_NONE);
 static bool eq_sentence(MzString& outs, istream *strm, const char *end = 0);
 
 struct hwpeq {
-  const char    *key;       // hwp math keyword
-  const char    *latex;     // corresponding latex keywork
-  int       nargs;      // # of argument
-  unsigned char flag;       // case sensitive?
+  const char    *key;       
+  const char    *latex;     
+  int       nargs;      
+  unsigned char flag;       
 };
 
 static const hwpeq eq_tbl[] = {
@@ -121,7 +121,7 @@ static const hwpeq eq_tbl[] = {
   { "bold",     NULL,       0,  0   },
   { "bot",      NULL,       0,  0   },
   { "breve",        NULL,       1,  0   },
-  { "buildrel",     NULL,       0,  0   }, // LATER
+  { "buildrel",     NULL,       0,  0   }, 
   { "bullet",       NULL,       0,  0   },
   { "cap",      NULL,       0,  0   },
   { "cases",        NULL,       0,  EQ_ENV  },
@@ -132,7 +132,7 @@ static const hwpeq eq_tbl[] = {
   { "chi",      NULL,       0,  EQ_CASE },
   { "choose",       NULL,       0,  EQ_ATOP },
   { "circ",     NULL,       0,  0   },
-  { "col",      NULL,       0,  0   }, // LATER
+  { "col",      NULL,       0,  0   }, 
   { "cong",     NULL,       0,  0   },
   { "coprod",       NULL,       0,  0   },
   { "cos",      NULL,       0,  0   },
@@ -140,7 +140,7 @@ static const hwpeq eq_tbl[] = {
   { "cosh",     NULL,       0,  0   },
   { "cot",      NULL,       0,  0   },
   { "coth",     NULL,       0,  0   },
-  { "cpile",        NULL,       0,  0   }, // LATER
+  { "cpile",        NULL,       0,  0   }, 
   { "csc",      NULL,       0,  0   },
   { "cup",      NULL,       0,  0   },
   { "dagger",       NULL,       0,  0   },
@@ -166,7 +166,7 @@ static const hwpeq eq_tbl[] = {
   { "dotsvert",     "\\vdots",  0,  0   },
   { "downarrow",    NULL,       0,  EQ_CASE },
   { "dsum",     "+",        0,  0   },
-  { "dyad",     NULL,       0,  0   }, // LATER
+  { "dyad",     NULL,       0,  0   }, 
   { "ell",      NULL,       0,  0   },
   { "emptyset",     NULL,       0,  0   },
   { "epsilon",      NULL,       0,  EQ_CASE },
@@ -192,7 +192,7 @@ static const hwpeq eq_tbl[] = {
   { "hom",      NULL,       0,  0   },
   { "hookleft",     NULL,       0,  0   },
   { "hookright",    NULL,       0,  0   },
-  { "identical",    NULL,       0,  0   }, // LATER
+  { "identical",    NULL,       0,  0   }, 
   { "if",       NULL,       0,  0   },
   { "imag",     NULL,       0,  0   },
   { "image",        NULL,       0,  0   },
@@ -205,19 +205,19 @@ static const hwpeq eq_tbl[] = {
   { "integral",     "\\int",    0,  0   },
   { "inter",        "\\bigcap", 0,  0   },
   { "iota",     NULL,       0,  EQ_CASE },
-  { "iso",      NULL,       0,  0   }, // ams
+  { "iso",      NULL,       0,  0   }, 
   { "it",       NULL,       0,  0   },
   { "jmath",        NULL,       0,  0   },
   { "kappa",        NULL,       0,  EQ_CASE },
   { "ker",      NULL,       0,  0   },
   { "lambda",       NULL,       0,  EQ_CASE },
-  { "land",     NULL,       0,  0   }, // LATER
+  { "land",     NULL,       0,  0   }, 
   { "langle",       NULL,       0,  0   },
   { "larrow",       "\\leftarrow",  0,  EQ_CASE },
   { "lbrace",       NULL,       0,  0   },
   { "lbrack",       "[",        0,  0   },
   { "lceil",        NULL,       0,  0   },
-  { "lcol",     NULL,       0,  0   }, // LATER
+  { "lcol",     NULL,       0,  0   }, 
   { "ldots",        NULL,       0,  0   },
   { "le",       NULL,       0,  0   },
   { "left",     NULL,       0,  0   },
@@ -228,25 +228,25 @@ static const hwpeq eq_tbl[] = {
   { "lim",      NULL,       0,  EQ_CASE },
   { "line",     "\\vert",   0,  0   },
   { "liter",        "\\ell",    0,  0   },
-  { "lll",      NULL,       0,  0   }, // ams
+  { "lll",      NULL,       0,  0   }, 
   { "ln",       NULL,       0,  0   },
   { "log",      NULL,       0,  0   },
   { "lor",      "\\vee",    0,  0   },
   { "lparen",       "(",        0,  0   },
-  { "lpile",        NULL,       0,  0   }, // LATER
+  { "lpile",        NULL,       0,  0   }, 
   { "lrarrow",    "\\leftrightarrow",   0,  EQ_CASE },
   { "lrharpoons", "\\leftrightharpoons",0,  0   },
   { "mapsto",       NULL,       0,  0   },
   { "massert",      "\\dashv",  0,  0   },
   { "matrix",       NULL,       0,  EQ_ENV  },
   { "max",      NULL,       0,  0   },
-  { "mho",      NULL,       0,  0   }, // ams
+  { "mho",      NULL,       0,  0   }, 
   { "min",      NULL,       0,  0   },
   { "minusplus",    NULL,       0,  0   },
-  { "mit",      "",     0,  0   }, // font
+  { "mit",      "",     0,  0   }, 
   { "mod",      "\\bmod",   0,  0   },
   { "models",       NULL,       0,  0   },
-  { "msangle",      NULL,       0,  0   }, // LATER
+  { "msangle",      NULL,       0,  0   }, 
   { "mu",       NULL,       0,  EQ_CASE },
   { "nabla",        NULL,       0,  0   },
   { "ne",       NULL,       0,  0   },
@@ -277,7 +277,7 @@ static const hwpeq eq_tbl[] = {
   { "phantom",      NULL,       0,  0   },
   { "phi",      NULL,       0,  EQ_CASE },
   { "pi",       NULL,       0,  EQ_CASE },
-  { "pile",     NULL,       0,  0   }, // LATER
+  { "pile",     NULL,       0,  0   }, 
   { "plusminus",    "\\pm",     0,  0   },
   { "pmatrix",      NULL,       0,  EQ_ENV  },
   { "prec",     NULL,       0,  0   },
@@ -291,7 +291,7 @@ static const hwpeq eq_tbl[] = {
   { "rbrace",       "]",        0,  0   },
   { "rbrace",       NULL,       0,  0   },
   { "rceil",        NULL,       0,  0   },
-  { "rcol",     NULL,       0,  0   }, // LATER
+  { "rcol",     NULL,       0,  0   }, 
   { "real",     "\\Re",     0,  0   },
   { "reimage",      NULL,       0,  0   },
   { "rel",      NULL,       0,  0   },
@@ -303,7 +303,7 @@ static const hwpeq eq_tbl[] = {
   { "rm",       NULL,       0,  0   },
   { "root",     "\\sqrt",   1,  0   },
   { "rparen",       ")",        0,  0   },
-  { "rpile",        NULL,       0,  0   }, // LATER
+  { "rpile",        NULL,       0,  0   }, 
   { "rtangle",      NULL,       0,  0   },
   { "sangle",       NULL,       0,  0   },
   { "scale",        NULL,       0,  0   },
@@ -437,7 +437,7 @@ static char *make_keyword( char *keyword, const char *token)
   return keyword;
 }
 
-// token reading funtion
+
 struct eq_stack {
   MzString  white;
   MzString  token;
@@ -454,7 +454,7 @@ static eq_stack *stk = 0;
 
 void push_token(MzString &white, MzString &token, istream *strm)
 {
-  // one time stack
+  
   assert(stk->state(strm) == false);
 
   stk->white = white;
@@ -482,7 +482,7 @@ static int next_token(MzString &white, MzString &token, istream *strm)
   if( !strm->good() || (ch = strm->get()) == EOF )
     return 0;
 
-  // read preceeding ws
+  
   if( IS_WS(ch) ) {
     do white << (char) ch;
     while( IS_WS(ch = strm->get()) );
@@ -616,7 +616,7 @@ static int eq_word(MzString& outs, istream *strm, int status)
 
       if( !next_token(white, token, strm) )
     break;
-      // end loop and restart with this
+      
       if( (token[0] == '^' && status && !(status & SCRIPT_SUP)) ||
           (token[0] == '_' && status && !(status & SCRIPT_SUB)) ||
       strcmp("over", token) == 0 || strcmp("atop", token) == 0 ||
@@ -684,7 +684,7 @@ static char eq2ltxconv(MzString& sstr, istream *strm, const char *sentinel)
       token = key;
     }
 
-    if( token[0] == '{' ) { // grouping
+    if( token[0] == '{' ) { 
       sstr << white << token;
       eq2ltxconv(sstr, strm, "}");
       sstr << '}';

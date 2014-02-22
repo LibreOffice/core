@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "datastreamimport.hxx"
@@ -73,7 +73,7 @@ ScXMLDataStreamContext::~ScXMLDataStreamContext() {}
 void ScXMLDataStreamContext::EndElement()
 {
     if (!maRange.IsValid())
-        // Range must be valid.
+        
         return;
 
     sc::ImportPostProcessData* pData = GetScImport().GetPostProcessData();

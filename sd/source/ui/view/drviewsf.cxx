@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,7 +77,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
 {
     if (rSet.GetItemState(SID_RELOAD) != SFX_ITEM_UNKNOWN)
     {
-        // let "last version" of SFx en/disable
+        
         GetViewFrame()->GetSlotState (SID_RELOAD, NULL, &rSet);
     }
 
@@ -108,7 +108,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
             }
             if (!bField)
             {
-                // use selected text as name for urls
+                
                 OUString sReturn = pOLV->GetSelected();
                 if (sReturn.getLength() > 255)
                     sReturn = sReturn.copy(0, 255);
@@ -138,7 +138,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                         {
                             OUString aString;
 
-                            // Label
+                            
                             const OUString sLabel( "Label" );
                             if(xPropInfo->hasPropertyByName(sLabel))
                             {
@@ -146,7 +146,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                                     aHLinkItem.SetName(aString);
                             }
 
-                            // URL
+                            
                             const OUString sTargetURL( "TargetURL" );
                             if(xPropInfo->hasPropertyByName(sTargetURL))
                             {
@@ -154,7 +154,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                                     aHLinkItem.SetURL(aString);
                             }
 
-                            // Target
+                            
                             const OUString sTargetFrame( "TargetFrame" );
                             if(xPropInfo->hasPropertyByName(sTargetFrame) )
                             {
@@ -171,7 +171,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                     }
                 }
 
-                // try interaction link
+                
                 if( !bFound && pMarkedObj )
                 {
                     SdAnimationInfo* pInfo = SdDrawDocument::GetShapeUserData(*pMarkedObj);
@@ -186,7 +186,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
     }
     rSet.Put( SfxBoolItem( SID_READONLY_MODE, mbReadOnly ) );
 
-    // output quality
+    
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_COLOR ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_GRAYSCALE ) ||
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_OUTPUT_QUALITY_BLACKWHITE ) ||
@@ -433,7 +433,7 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_STYLE_FAMILY2:
             case SID_STYLE_FAMILY3:
             case SID_STYLE_FAMILY5:
-            case SID_STYLE_APPLY: // StyleControl
+            case SID_STYLE_APPLY: 
             {
                 SfxStyleSheet* pStyleSheet = mpDrawView->GetStyleSheet();
                 if( pStyleSheet )
@@ -514,8 +514,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
             case SID_STYLE_NEW_BY_EXAMPLE:
             {
-                // It is not possible to create PseudoStyleSheets 'by Example';
-                // normal style sheets need a selected object for that
+                
+                
                 ISfxTemplateCommon* pTemplCommon = SFX_APP()->GetCurrentTemplateCommon(GetViewFrame()->GetBindings());
                 if (pTemplCommon)
                 {
@@ -531,8 +531,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                         }
                     }
                 }
-                // if there is no (yet) a designer, we have to go back into the
-                // view state; an actual set family can not be considered
+                
+                
                 else
                 {
                     if (!mpDrawView->AreObjectsMarked())
@@ -630,8 +630,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 }
             }
             break;
-            //End
-            // Added by Li Hui for story 179.
+            
+            
             case FN_NUM_BULLET_ON:
             case FN_NUM_NUMBERING_ON:
             {
@@ -677,11 +677,11 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 
     rSet.Put( aAllSet, false );
 
-    // there were changes at area and/or line attributes
+    
     if( bAttr && pSet )
     {
-        // if the view owns selected objects, corresponding items have to be
-        // changed from SFX_ITEM_DEFAULT (_ON) to SFX_ITEM_DISABLED
+        
+        
         if( mpDrawView->AreObjectsMarked() )
         {
             SfxWhichIter aNewIter( *pSet, XATTR_LINE_FIRST, XATTR_FILL_LAST );
@@ -787,6 +787,6 @@ sal_Bool DrawViewShell::HasSelection(sal_Bool bText) const
     return bReturn;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

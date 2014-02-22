@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -41,26 +41,26 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
     if( aRg.nEnd < aRg.nStart )
     {   aRg.nStart = aRg.nEnd; aRg.nEnd = rIdx1.GetIndex(); }
 
-    _SwPamRanges::const_iterator it = lower_bound(aRg); //search Insert Position
+    _SwPamRanges::const_iterator it = lower_bound(aRg); 
     sal_uInt16 nPos = it - begin();
     if (!empty() && (it != end()) && (*it) == aRg)
     {
-        // is the one in the Array smaller?
+        
         SwPamRange const& rTmp = _SwPamRanges::operator[](nPos);
         if( rTmp.nEnd < aRg.nEnd )
         {
             aRg.nEnd = rTmp.nEnd;
-            erase(begin() + nPos); // combine
+            erase(begin() + nPos); 
         }
         else
-            return; // done, because by precondition everything is combined
+            return; 
     }
 
     bool bEnd;
     do {
         bEnd = true;
 
-        // combine with predecessor?
+        
         if( nPos > 0 )
         {
             SwPamRange const& rTmp = _SwPamRanges::operator[](nPos-1);
@@ -69,13 +69,13 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
             {
                 aRg.nStart = rTmp.nStart;
                 bEnd = false;
-                erase( begin() + --nPos ); // combine
+                erase( begin() + --nPos ); 
             }
-            // range contained in rTmp?
+            
             else if( rTmp.nStart <= aRg.nStart && aRg.nEnd <= rTmp.nEnd )
                 return;
         }
-        // combine with successor?
+        
         if( nPos < size() )
         {
             SwPamRange const& rTmp = _SwPamRanges::operator[](nPos);
@@ -84,10 +84,10 @@ void SwPamRanges::Insert( const SwNodeIndex& rIdx1, const SwNodeIndex& rIdx2 )
             {
                 aRg.nEnd = rTmp.nEnd;
                 bEnd = false;
-                erase( begin() + nPos ); // combine
+                erase( begin() + nPos ); 
             }
 
-            // range contained in rTmp?
+            
             else if( rTmp.nStart <= aRg.nStart && aRg.nEnd <= rTmp.nEnd )
                 return;
         }
@@ -108,11 +108,11 @@ SwPaM& SwPamRanges::SetPam( sal_uInt16 nArrPos, SwPaM& rPam )
     return rPam;
 }
 
-// Rule book for outline numbering
+
 
 void SwEditShell::SetOutlineNumRule(const SwNumRule& rRule)
 {
-    StartAllAction();       // bracketing for updating!
+    StartAllAction();       
     GetDoc()->SetOutlineNumRule(rRule);
     EndAllAction();
 }
@@ -122,17 +122,17 @@ const SwNumRule* SwEditShell::GetOutlineNumRule() const
     return GetDoc()->GetOutlineNumRule();
 }
 
-// Set if there is no numbering yet, else update.
-// Works with old and new rules. Update only differences.
 
-// paragraphs without numbering, with indentations
+
+
+
 bool SwEditShell::NoNum()
 {
     bool bRet = true;
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // Multiple selection?
+    if( pCrsr->GetNext() != pCrsr )         
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -173,7 +173,7 @@ sal_Bool SwEditShell::SelectionHasNumber() const
                     {
                         bResult = pTxtNd->HasNumber();
 
-                        // #b6340308# special case: outline numbered, not counted paragraph
+                        
                         if ( bResult &&
                             pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
                             !pTxtNd->IsCountedInList() )
@@ -193,7 +193,7 @@ sal_Bool SwEditShell::SelectionHasNumber() const
     return bResult;
 }
 
-// add a new function to determine number on/off status
+
 sal_Bool SwEditShell::SelectionHasBullet() const
 {
     sal_Bool bResult = HasBullet();
@@ -231,7 +231,7 @@ sal_Bool SwEditShell::SelectionHasBullet() const
     return bResult;
 }
 
-// -> #i29560#
+
 sal_Bool SwEditShell::HasNumber() const
 {
     sal_Bool bResult = sal_False;
@@ -243,7 +243,7 @@ sal_Bool SwEditShell::HasNumber() const
     {
         bResult = pTxtNd->HasNumber();
 
-        // special case: outline numbered, not counted paragraph
+        
         if ( bResult &&
              pTxtNd->GetNumRule() == GetDoc()->GetOutlineNumRule() &&
              !pTxtNd->IsCountedInList() )
@@ -269,15 +269,15 @@ sal_Bool SwEditShell::HasBullet() const
 
     return bResult;
 }
-// <- #i29560#
 
-// delete, split list
+
+
 void SwEditShell::DelNumRules()
 {
     StartAllAction();
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr ) // multi-selection?
+    if( pCrsr->GetNext() != pCrsr ) 
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -291,24 +291,24 @@ void SwEditShell::DelNumRules()
     else
         GetDoc()->DelNumRules( *pCrsr );
 
-    // Call AttrChangeNotify on the UI-side. Should actually be redundant but there was a bug once.
+    
     CallChgLnk();
 
-    // Cursor cannot be in front of a label anymore, because numbering/bullet is deleted.
+    
     SetInFrontOfLabel( false );
 
     GetDoc()->SetModified();
     EndAllAction();
 }
 
-// up- & downgrading
+
 bool SwEditShell::NumUpDown( bool bDown )
 {
     StartAllAction();
 
     bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr )         // no multiple selection ?
+    if( pCrsr->GetNext() == pCrsr )         
         bRet = GetDoc()->NumUpDown( *pCrsr, bDown );
     else
     {
@@ -321,7 +321,7 @@ bool SwEditShell::NumUpDown( bool bDown )
     }
     GetDoc()->SetModified();
 
-    // #i54693# Update marked numbering levels
+    
     if ( IsInFrontOfLabel() )
         UpdateMarkedListLevel();
 
@@ -331,7 +331,7 @@ bool SwEditShell::NumUpDown( bool bDown )
     return bRet;
 }
 
-// -> #i23726#
+
 bool SwEditShell::IsFirstOfNumRule() const
 {
     bool bResult = false;
@@ -350,32 +350,32 @@ bool SwEditShell::IsFirstOfNumRule(const SwPaM & rPaM) const
     SwPosition aPos(*rPaM.GetPoint());
     return (GetDoc()->IsFirstOfNumRule(aPos));
 }
-// <- #i23726#
 
-// -> #i23725#, #i90078#
+
+
 void SwEditShell::ChangeIndentOfAllListLevels( short nDiff )
 {
     StartAllAction();
 
     const SwNumRule *pCurNumRule = GetCurNumRule();
-    //#120911# check if numbering rule really exists
+    
     if (pCurNumRule)
     {
         SwNumRule aRule(*pCurNumRule);
         const SwNumFmt& aRootNumFmt(aRule.Get(0));
-        if( nDiff > 0 || aRootNumFmt.GetIndentAt() + nDiff > 0) // fdo#42708
+        if( nDiff > 0 || aRootNumFmt.GetIndentAt() + nDiff > 0) 
         {
-            // #i90078#
+            
             aRule.ChangeIndent( nDiff );
         }
-        // no start of new list
+        
         SetCurNumRule( aRule, false );
     }
 
     EndAllAction();
 }
 
-// #i90078#
+
 void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
 {
     StartAllAction();
@@ -399,15 +399,15 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
                              static_cast<sal_uInt16>(pTxtNode->GetActualListLevel()) );
         }
 
-        // #i42921# - 3rd parameter = false in order to
-        // suppress setting of num rule at <aPaM>.
-        // do not apply any list
+        
+        
+        
         GetDoc()->SetNumRule( aPaM, aRule, false, OUString(), false );
     }
 
     EndAllAction();
 }
-// <- #i23725#
+
 
 bool SwEditShell::MoveParagraph( long nOffset )
 {
@@ -416,7 +416,7 @@ bool SwEditShell::MoveParagraph( long nOffset )
     SwPaM *pCrsr = GetCrsr();
     if( !pCrsr->HasMark() )
     {
-        // Ensures that Bound1 and Bound2 are in the same Node
+        
         pCrsr->SetMark();
         pCrsr->DeleteMark();
     }
@@ -453,7 +453,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
 {
     StartAllAction();
 
-    // On all selections?
+    
     SwPaM* pCrsr = GetCrsr();
     SwPaM aCrsr( *pCrsr->Start() );
     aCrsr.SetMark();
@@ -468,11 +468,11 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
     {
         if( bUpperLower )
         {
-            // on top of the next numbering
+            
             long nOffset = 0;
             const SwNode* pNd;
 
-            if( bUpperLeft ) // move up
+            if( bUpperLeft ) 
             {
                 SwPosition aPos( *aCrsr.GetMark() );
                 if( GetDoc()->GotoPrevNum( aPos, false ) )
@@ -489,7 +489,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                         nOffset = nIdx - nStt;
                 }
             }
-            else             // move down
+            else             
             {
                 const SwNumRule* pOrig = aCrsr.GetNode(false)->GetTxtNode()->GetNumRule();
                 if( aCrsr.GetNode()->IsTxtNode() &&
@@ -508,7 +508,7 @@ bool SwEditShell::MoveNumParas( bool bUpperLower, bool bUpperLeft )
                         {
                             ++nIdx;
                         }
-                        // #i57856#
+                        
                         else
                         {
                             break;
@@ -548,7 +548,7 @@ bool SwEditShell::OutlineUpDown( short nOffset )
 
     bool bRet = true;
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() == pCrsr ) // no multi selection?
+    if( pCrsr->GetNext() == pCrsr ) 
         bRet = GetDoc()->OutlineUpDown( *pCrsr, nOffset );
     else
     {
@@ -573,7 +573,7 @@ bool SwEditShell::MoveOutlinePara( short nOffset )
     return bRet;
 }
 
-// Outlines and SubOutline are ReadOnly?
+
 sal_Bool SwEditShell::IsProtectedOutlinePara() const
 {
     sal_Bool bRet = sal_False;
@@ -632,9 +632,9 @@ static sal_Bool lcl_IsOutlineMoveAndCopyable( const SwDoc* pDoc, sal_uInt16 nIdx
 {
     const SwNodes& rNds = pDoc->GetNodes();
     const SwNode* pNd = rNds.GetOutLineNds()[ nIdx ];
-    return pNd->GetIndex() >= rNds.GetEndOfExtras().GetIndex() &&   // 1) body
-            !pNd->FindTableNode() &&                                // 2) table
-            ( bCopy || !pNd->IsProtect() );                         // 3) write
+    return pNd->GetIndex() >= rNds.GetEndOfExtras().GetIndex() &&   
+            !pNd->FindTableNode() &&                                
+            ( bCopy || !pNd->IsProtect() );                         
 }
 
 sal_Bool SwEditShell::IsOutlineMovable( sal_uInt16 nIdx ) const
@@ -654,8 +654,8 @@ bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, bool bChkStart )
     if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
         ( !bChkStart || !pCrsr->GetPoint()->nContent.GetIndex()) )
     {
-        StartAllAction();       // Klammern fuers Updaten !!
-        bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, !bNumOn ); // #i29560#
+        StartAllAction();       
+        bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, !bNumOn ); 
         EndAllAction();
     }
     return bRet;
@@ -663,7 +663,7 @@ bool SwEditShell::NumOrNoNum( sal_Bool bNumOn, bool bChkStart )
 
 sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
 {
-    // a Backspace in the paragraph without number becomes a Delete
+    
     sal_Bool bResult = sal_False;
     SwPaM* pCrsr = GetCrsr();
 
@@ -683,7 +683,7 @@ sal_Bool SwEditShell::IsNoNum( sal_Bool bChkStart ) const
 
 sal_uInt8 SwEditShell::GetNumLevel() const
 {
-    // return current level where the point of the cursor is
+    
     sal_uInt8 nLevel = MAXLEVEL;
 
     SwPaM* pCrsr = GetCrsr();
@@ -721,7 +721,7 @@ void SwEditShell::SetCurNumRule( const SwNumRule& rRule,
     GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
 
     SwPaM* pCrsr = GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // multiple selection ?
+    if( pCrsr->GetNext() != pCrsr )         
     {
         SwPamRanges aRangeArr( *pCrsr );
         SwPaM aPam( *pCrsr->GetPoint() );
@@ -770,7 +770,7 @@ void SwEditShell::SetNumRuleStart( sal_Bool bFlag, SwPaM* pPaM )
 {
     StartAllAction();
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // multiple selection ?
+    if( pCrsr->GetNext() != pCrsr )         
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -800,7 +800,7 @@ void SwEditShell::SetNodeNumStart( sal_uInt16 nStt, SwPaM* pPaM )
     StartAllAction();
 
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
-    if( pCrsr->GetNext() != pCrsr )         // multiple selection ?
+    if( pCrsr->GetNext() != pCrsr )         
     {
         GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
         SwPamRanges aRangeArr( *pCrsr );
@@ -819,9 +819,9 @@ sal_uInt16 SwEditShell::GetNodeNumStart( SwPaM* pPaM ) const
 {
     SwPaM* pCrsr = pPaM ? pPaM : GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
-    // correction: check, if list restart value is set at text node and
-    // use new method <SwTxtNode::GetAttrListRestartValue()>.
-    // return USHRT_MAX, if no list restart value is found.
+    
+    
+    
     if ( pTxtNd && pTxtNd->HasAttrListRestartValue() )
     {
         return static_cast<sal_uInt16>(pTxtNd->GetAttrListRestartValue());

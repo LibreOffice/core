@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "datefunc.hxx"
@@ -74,10 +74,10 @@ ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
 {
 }
 
-#define UNIQUE              sal_False   // function name does not exist in Calc
+#define UNIQUE              sal_False   
 
-#define STDPAR              sal_False   // all parameters are described
-#define INTPAR              sal_True    // first parameter is internal
+#define STDPAR              sal_False   
+#define INTPAR              sal_True    
 
 #define FUNCDATA( FuncName, ParamCount, Category, Double, IntPar )  \
     { "get" #FuncName, DATE_FUNCNAME_##FuncName, DATE_FUNCDESC_##FuncName, DATE_DEFFUNCNAME_##FuncName, ParamCount, Category, Double, IntPar }
@@ -163,7 +163,7 @@ ScaFuncRes::ScaFuncRes( ResId& rResId, ResMgr& rResMgr, sal_uInt16 nIndex, OUStr
     FreeResource();
 }
 
-//  entry points for service registration / instantiation
+
 uno::Reference< uno::XInterface > SAL_CALL ScaDateAddIn_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory >& )
 {
@@ -197,9 +197,9 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL date_component_getFactory(
     return pRet;
 }
 
-}   // extern C
+}   
 
-//  "normal" service implementation
+
 ScaDateAddIn::ScaDateAddIn() :
     pDefLocales( NULL ),
     pResMgr( NULL ),
@@ -214,7 +214,7 @@ ScaDateAddIn::~ScaDateAddIn()
     if( pDefLocales )
         delete[] pDefLocales;
 
-    // pResMgr already deleted (_all_ resource managers are deleted _before_ this dtor is called)
+    
 }
 
 static const sal_Char*  pLang[] = { "de", "en" };
@@ -244,7 +244,7 @@ ResMgr& ScaDateAddIn::GetResMgr() throw( uno::RuntimeException )
 {
     if( !pResMgr )
     {
-        InitData();     // try to get resource manager
+        InitData();     
         if( !pResMgr )
             throw uno::RuntimeException();
     }
@@ -305,14 +305,14 @@ uno::Sequence< OUString > ScaDateAddIn::getSupportedServiceNames_Static()
     return aRet;
 }
 
-// XServiceName
+
 OUString SAL_CALL ScaDateAddIn::getServiceName() throw( uno::RuntimeException )
 {
-    // name of specific AddIn service
+    
     return OUString( MY_SERVICE );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL ScaDateAddIn::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -328,11 +328,11 @@ uno::Sequence< OUString > SAL_CALL ScaDateAddIn::getSupportedServiceNames() thro
     return getSupportedServiceNames_Static();
 }
 
-// XLocalizable
+
 void SAL_CALL ScaDateAddIn::setLocale( const lang::Locale& eLocale ) throw( uno::RuntimeException )
 {
     aFuncLoc = eLocale;
-    InitData();     // change of locale invalidates resources!
+    InitData();     
 }
 
 lang::Locale SAL_CALL ScaDateAddIn::getLocale() throw( uno::RuntimeException )
@@ -342,8 +342,8 @@ lang::Locale SAL_CALL ScaDateAddIn::getLocale() throw( uno::RuntimeException )
 
 OUString SAL_CALL ScaDateAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException )
 {
-    //  not used by calc
-    //  (but should be implemented for other uses of the AddIn service)
+    
+    
     return OUString();
 }
 
@@ -430,7 +430,7 @@ OUString SAL_CALL ScaDateAddIn::getProgrammaticCategoryName(
             case ScaCat_Inf:        aRet = STR_FROM_ANSI( "Information" );  break;
             case ScaCat_Math:       aRet = STR_FROM_ANSI( "Mathematical" ); break;
             case ScaCat_Tech:       aRet = STR_FROM_ANSI( "Technical" );    break;
-            default:    // to prevent compiler warnings
+            default:    
                 break;
         }
     }
@@ -446,7 +446,7 @@ OUString SAL_CALL ScaDateAddIn::getDisplayCategoryName(
     return getProgrammaticCategoryName( aProgrammaticName );
 }
 
-// XCompatibilityNames
+
 uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNames(
         const OUString& aProgrammaticName ) throw( uno::RuntimeException )
 {
@@ -468,7 +468,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL ScaDateAddIn::getCompatibilityNam
 
 namespace {
 
-// auxiliary functions
+
 sal_Bool IsLeapYear( sal_uInt16 nYear )
 {
     return ((((nYear % 4) == 0) && ((nYear % 100) != 0)) || ((nYear % 400) == 0));
@@ -592,12 +592,12 @@ sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
         }
     }
 
-    // no null date available -> no calculations possible
+    
     throw uno::RuntimeException();
 }
 
 }
-// XDateFunctions
+
 
 /**
  * Get week difference between 2 dates

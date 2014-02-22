@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "cellvalueconversion.hxx"
@@ -38,10 +38,10 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/unordered_map.hpp>
 
-//......................................................................................................................
+
 namespace svt
 {
-//......................................................................................................................
+
 
     using namespace ::com::sun::star::uno;
     using ::com::sun::star::util::XNumberFormatter;
@@ -59,12 +59,12 @@ namespace svt
     typedef ::com::sun::star::util::Time UnoTime;
     typedef ::com::sun::star::util::Date UnoDate;
 
-    //==================================================================================================================
-    //= helper
-    //==================================================================================================================
+    
+    
+    
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+        
         double lcl_convertDateToDays( long const i_day, long const i_month, long const i_year )
         {
             long const nNullDateDays = ::Date::DateToDays( 1, 1, 1900 );
@@ -73,16 +73,16 @@ namespace svt
             return nValueDateDays - nNullDateDays;
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         double lcl_convertTimeToDays( long const i_hours, long const i_minutes, long const i_seconds, long const i_100thSeconds )
         {
             return Time( i_hours, i_minutes, i_seconds, i_100thSeconds ).GetTimeInDays();
         }
     }
 
-    //==================================================================================================================
-    //= IValueNormalization
-    //==================================================================================================================
+    
+    
+    
     class SAL_NO_VTABLE IValueNormalization
     {
     public:
@@ -100,9 +100,9 @@ namespace svt
     typedef ::boost::shared_ptr< IValueNormalization > PValueNormalization;
     typedef ::boost::unordered_map< OUString, PValueNormalization, OUStringHash >    NormalizerCache;
 
-    //==================================================================================================================
-    //= CellValueConversion_Data
-    //==================================================================================================================
+    
+    
+    
     struct CellValueConversion_Data
     {
         Reference< XNumberFormatter >           xNumberFormatter;
@@ -117,9 +117,9 @@ namespace svt
         }
     };
 
-    //==================================================================================================================
-    //= StandardFormatNormalizer
-    //==================================================================================================================
+    
+    
+    
     class StandardFormatNormalizer : public IValueNormalization
     {
     protected:
@@ -148,9 +148,9 @@ namespace svt
         ::sal_Int32 m_nFormatKey;
     };
 
-    //==================================================================================================================
-    //= DoubleNormalization
-    //==================================================================================================================
+    
+    
+    
     class DoubleNormalization : public StandardFormatNormalizer
     {
     public:
@@ -170,9 +170,9 @@ namespace svt
         virtual ~DoubleNormalization() { }
     };
 
-    //==================================================================================================================
-    //= IntegerNormalization
-    //==================================================================================================================
+    
+    
+    
     class IntegerNormalization : public StandardFormatNormalizer
     {
     public:
@@ -191,9 +191,9 @@ namespace svt
         }
     };
 
-    //==================================================================================================================
-    //= BooleanNormalization
-    //==================================================================================================================
+    
+    
+    
     class BooleanNormalization : public StandardFormatNormalizer
     {
     public:
@@ -212,9 +212,9 @@ namespace svt
         }
     };
 
-    //==================================================================================================================
-    //= DateTimeNormalization
-    //==================================================================================================================
+    
+    
+    
     class DateTimeNormalization : public StandardFormatNormalizer
     {
     public:
@@ -230,25 +230,25 @@ namespace svt
             double returnValue(0);
             ::rtl::math::setNan( &returnValue );
 
-            // extract actual UNO value
+            
             DateTime aDateTimeValue;
             ENSURE_OR_RETURN( i_value >>= aDateTimeValue, "allowed for DateTime values only", returnValue );
 
-            // date part
+            
             returnValue = lcl_convertDateToDays( aDateTimeValue.Day, aDateTimeValue.Month, aDateTimeValue.Year );
 
-            // time part
+            
             returnValue += lcl_convertTimeToDays(
                 aDateTimeValue.Hours, aDateTimeValue.Minutes, aDateTimeValue.Seconds, aDateTimeValue.NanoSeconds );
 
-            // done
+            
             return returnValue;
         }
     };
 
-    //==================================================================================================================
-    //= DateNormalization
-    //==================================================================================================================
+    
+    
+    
     class DateNormalization : public StandardFormatNormalizer
     {
     public:
@@ -264,21 +264,21 @@ namespace svt
             double returnValue(0);
             ::rtl::math::setNan( &returnValue );
 
-            // extract
+            
             UnoDate aDateValue;
             ENSURE_OR_RETURN( i_value >>= aDateValue, "allowed for Date values only", returnValue );
 
-            // convert
+            
             returnValue = lcl_convertDateToDays( aDateValue.Day, aDateValue.Month, aDateValue.Year );
 
-            // done
+            
             return returnValue;
         }
     };
 
-    //==================================================================================================================
-    //= TimeNormalization
-    //==================================================================================================================
+    
+    
+    
     class TimeNormalization : public StandardFormatNormalizer
     {
     public:
@@ -294,25 +294,25 @@ namespace svt
             double returnValue(0);
             ::rtl::math::setNan( &returnValue );
 
-            // extract
+            
             UnoTime aTimeValue;
             ENSURE_OR_RETURN( i_value >>= aTimeValue, "allowed for Time values only", returnValue );
 
-            // convert
+            
             returnValue += lcl_convertTimeToDays(
                 aTimeValue.Hours, aTimeValue.Minutes, aTimeValue.Seconds, aTimeValue.NanoSeconds );
 
-            // done
+            
             return returnValue;
         }
     };
 
-    //==================================================================================================================
-    //= operations
-    //==================================================================================================================
+    
+    
+    
     namespace
     {
-        //--------------------------------------------------------------------------------------------------------------
+        
         bool lcl_ensureNumberFormatter( CellValueConversion_Data & io_data )
         {
             if ( io_data.bAttemptedFormatterCreation )
@@ -322,24 +322,24 @@ namespace svt
             try
             {
                 Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-                // a number formatter
+                
                 Reference< XNumberFormatter > const xFormatter( NumberFormatter::create( xContext ), UNO_QUERY_THROW );
 
-                // a supplier of number formats
+                
                 Locale aLocale = SvtSysLocale().GetLanguageTag().getLocale();
 
                 Reference< XNumberFormatsSupplier > const xSupplier =
                     NumberFormatsSupplier::createWithLocale( xContext, aLocale );
 
-                // ensure a NullDate we will assume later on
+                
                 UnoDate const aNullDate( 1, 1, 1900 );
                 Reference< XPropertySet > const xFormatSettings( xSupplier->getNumberFormatSettings(), UNO_SET_THROW );
                 xFormatSettings->setPropertyValue( "NullDate", makeAny( aNullDate ) );
 
-                // knit
+                
                 xFormatter->attachNumberFormatsSupplier( xSupplier );
 
-                // done
+                
                 io_data.xNumberFormatter = xFormatter;
             }
             catch( const Exception& )
@@ -350,14 +350,14 @@ namespace svt
             return io_data.xNumberFormatter.is();
         }
 
-        //--------------------------------------------------------------------------------------------------------------
+        
         bool lcl_getValueNormalizer( CellValueConversion_Data & io_data, Type const & i_valueType,
             PValueNormalization & o_formatter )
         {
             NormalizerCache::const_iterator pos = io_data.aNormalizers.find( i_valueType.getTypeName() );
             if ( pos == io_data.aNormalizers.end() )
             {
-                // never encountered this type before
+                
                 o_formatter.reset();
 
                 OUString const sTypeName( i_valueType.getTypeName() );
@@ -408,21 +408,21 @@ namespace svt
         }
     }
 
-    //==================================================================================================================
-    //= CellValueConversion
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     CellValueConversion::CellValueConversion()
         :m_pData( new CellValueConversion_Data )
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     CellValueConversion::~CellValueConversion()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString CellValueConversion::convertToString( const Any& i_value )
     {
         OUString sStringValue;
@@ -454,8 +454,8 @@ namespace svt
         return sStringValue;
     }
 
-//......................................................................................................................
-} // namespace svt
-//......................................................................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

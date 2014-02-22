@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dlg_DataEditor.hxx"
@@ -28,7 +28,7 @@
 #include <svtools/miscopt.hxx>
 #include <unotools/pathoptions.hxx>
 
-// for SfxBoolItem
+
 #include <svl/eitem.hxx>
 
 #include <vcl/edit.hxx>
@@ -85,14 +85,14 @@ DataEditor::DataEditor(Window* pParent,
         bReadOnly = xStor->isReadonly();
     SetReadOnly( bReadOnly );
 
-    // change buttons to flat-look if set so by user
+    
     SvtMiscOptions aMiscOptions;
     const sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
-    // react on changes
+    
     aMiscOptions.AddListenerLink( LINK( this, DataEditor, MiscHdl ) );
     m_pTbxData->SetOutStyle( nStyle );
 
-    // allow travelling to toolbar with F6
+    
     notifySystemWindow( this, m_pTbxData, ::comphelper::mem_fun( & TaskPaneList::AddWindow ));
 }
 
@@ -106,7 +106,7 @@ DataEditor::~DataEditor()
     OSL_TRACE( "DataEditor: DTOR" );
 }
 
-// react on click (or keypress) on toolbar icon
+
 IMPL_LINK_NOARG(DataEditor, ToolboxHdl)
 {
     sal_uInt16 nId = m_pTbxData->GetCurItemId();
@@ -129,7 +129,7 @@ IMPL_LINK_NOARG(DataEditor, ToolboxHdl)
     return 0;
 }
 
-// refresh toolbar icons according to currently selected cell in brwose box
+
 IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl)
 {
     if( m_bReadOnly )
@@ -149,7 +149,7 @@ IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl)
     return 0;
 }
 
-// disable all modifying controls
+
 void DataEditor::SetReadOnly( bool bReadOnly )
 {
     m_bReadOnly = bReadOnly;
@@ -200,9 +200,9 @@ bool DataEditor::ApplyChangesToModel()
     return m_xBrwData->EndEditing();
 }
 
-// add/remove a window (the toolbar) to/from the global list, so that F6
-// travels/no longer travels over this window.  _rMemFunc may be
-// TaskPaneList::AddWindow or TaskPaneList::RemoveWindow
+
+
+
 void DataEditor::notifySystemWindow(
     Window* pWindow, Window* pToRegister,
     ::comphelper::mem_fun1_t< TaskPaneList, Window* > rMemFunc )
@@ -222,6 +222,6 @@ void DataEditor::notifySystemWindow(
     }
 }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

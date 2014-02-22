@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "basicmigration.hxx"
@@ -27,25 +27,25 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 
-//.........................................................................
+
 namespace migration
 {
-//.........................................................................
+
 
 
     #define sSourceUserBasic OUString( "/user/basic" )
     #define sTargetUserBasic OUString( "/user/__basic_80" )
 
-    // =============================================================================
-    // component operations
-    // =============================================================================
+    
+    
+    
 
     OUString BasicMigration_getImplementationName()
     {
         return OUString("com.sun.star.comp.desktop.migration.Basic");
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Sequence< OUString > BasicMigration_getSupportedServiceNames()
     {
@@ -54,21 +54,21 @@ namespace migration
         return aNames;
     }
 
-    // =============================================================================
-    // BasicMigration
-    // =============================================================================
+    
+    
+    
 
     BasicMigration::BasicMigration()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     BasicMigration::~BasicMigration()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     TStringVectorPtr BasicMigration::getFiles( const OUString& rBaseURL ) const
     {
@@ -77,7 +77,7 @@ namespace migration
 
         if ( aDir.open() == ::osl::FileBase::E_None )
         {
-            // iterate over directory content
+            
             TStringVector aSubDirs;
             ::osl::DirectoryItem aItem;
             while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
@@ -92,7 +92,7 @@ namespace migration
                 }
             }
 
-            // iterate recursive over subfolders
+            
             TStringVector::const_iterator aI = aSubDirs.begin();
             while ( aI != aSubDirs.end() )
             {
@@ -105,7 +105,7 @@ namespace migration
         return aResult;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     ::osl::FileBase::RC BasicMigration::checkAndCreateDirectory( INetURLObject& rDirURL )
     {
@@ -123,7 +123,7 @@ namespace migration
         }
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void BasicMigration::copyFiles()
     {
@@ -158,16 +158,16 @@ namespace migration
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // XServiceInfo
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     OUString BasicMigration::getImplementationName() throw (RuntimeException)
     {
         return BasicMigration_getImplementationName();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Bool BasicMigration::supportsService(OUString const & ServiceName)
         throw (css::uno::RuntimeException)
@@ -175,16 +175,16 @@ namespace migration
         return cppu::supportsService(this, ServiceName);
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Sequence< OUString > BasicMigration::getSupportedServiceNames() throw (RuntimeException)
     {
         return BasicMigration_getSupportedServiceNames();
     }
 
-    // -----------------------------------------------------------------------------
-    // XInitialization
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     void BasicMigration::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
@@ -208,9 +208,9 @@ namespace migration
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // XJob
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     Any BasicMigration::execute( const Sequence< beans::NamedValue >& )
         throw (lang::IllegalArgumentException, Exception, RuntimeException)
@@ -222,9 +222,9 @@ namespace migration
         return Any();
     }
 
-    // =============================================================================
-    // component operations
-    // =============================================================================
+    
+    
+    
 
     Reference< XInterface > SAL_CALL BasicMigration_create(
         Reference< XComponentContext > const & )
@@ -233,10 +233,10 @@ namespace migration
         return static_cast< lang::XTypeProvider * >( new BasicMigration() );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
-//.........................................................................
-}   // namespace migration
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

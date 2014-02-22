@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "unoDirectSql.hxx"
@@ -45,7 +45,7 @@ namespace dbaui
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::sdb;
 
-    // ODirectSQLDialog
+    
     ODirectSQLDialog::ODirectSQLDialog(const Reference< XComponentContext >& _rxORB)
         :ODirectSQLDialog_BASE( _rxORB )
     {
@@ -73,13 +73,13 @@ namespace dbaui
 
     Dialog* ODirectSQLDialog::createDialog(Window* _pParent)
     {
-        // obtain all the objects needed for the dialog
+        
         Reference< XConnection > xConnection = m_xActiveConnection;
         if ( !xConnection.is() )
         {
             try
             {
-                // the connection the row set is working with
+                
                 ODatasourceConnector aDSConnector(m_aContext, _pParent);
                 xConnection = aDSConnector.connect( m_sInitialSelection, NULL );
             }
@@ -89,7 +89,7 @@ namespace dbaui
             }
         }
         if ( !xConnection.is() )
-            // can't create the dialog if I have improper settings
+            
             return NULL;
 
         return new DirectSQLDialog( _pParent, xConnection);
@@ -113,6 +113,6 @@ namespace dbaui
         }
         ODirectSQLDialog_BASE::implInitialize(_rValue);
     }
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

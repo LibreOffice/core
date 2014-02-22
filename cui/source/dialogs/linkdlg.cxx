@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <linkdlg.hxx>
@@ -70,9 +70,9 @@ public:
     void push_back(SvBaseLink* p) { std::vector<SvBaseLink*>::push_back(p); p->AddRef(); }
 };
 
-// attention, this array is indexed directly (0, 1, ...) in the code
+
 static long nTabs[] =
-    {   4, // Number of Tabs
+    {   4, 
         0, 77, 144, 209
     };
 
@@ -115,13 +115,13 @@ SvBaseLinksDlg::SvBaseLinksDlg( Window * pParent, LinkManager* pMgr, sal_Bool bH
     aTbLinks.SetHelpId(HID_LINKDLG_TABLB);
     aTbLinks.SetSelectionMode( MULTIPLE_SELECTION );
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
-    aTbLinks.Resize();  // OS: hack for correct selection
+    aTbLinks.Resize();  
 
-    // UpdateTimer for DDE-/Grf-links, which are waited for
+    
     aUpdateTimer.SetTimeoutHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateTimer.SetTimeout( 1000 );
 
-    // Set the ZOrder, and accessible name to the dialog's title
+    
     aTbLinks.SetZOrder(0, WINDOW_ZORDER_FIRST);
     aTbLinks.SetAccessibleName(this->GetText());
     aTbLinks.SetAccessibleRelationLabeledBy(&aFtFiles);
@@ -155,7 +155,7 @@ IMPL_LINK( SvBaseLinksDlg, LinksSelectHdl, SvTabListBox *, pSvTabListBox )
         (sal_uInt16)pSvTabListBox->GetSelectionCount() : 0;
     if(nSelectionCount > 1)
     {
-        // possibly deselect old entries in case of multi-selection
+        
         SvTreeListEntry* pEntry = 0;
         SvBaseLink* pLink = 0;
         pEntry = pSvTabListBox->GetHdlEntry();
@@ -292,7 +292,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
         {
             SvBaseLinkRef xLink = aLnkArr[ n ];
 
-            // first look for the entry in the array
+            
             for( sal_uInt16 i = 0; i < pLinkMgr->GetLinks().size(); ++i )
                 if( &xLink == *pLinkMgr->GetLinks()[ i ] )
                 {
@@ -303,7 +303,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
                 }
         }
 
-        // if somebody is of the opinion to swap his links (SD)
+        
         LinkManager* pNewMgr = pLinkMgr;
         pLinkMgr = 0;
         SetManager( pNewMgr );
@@ -312,7 +312,7 @@ IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
         if( 0 == (pE = rListBox.GetEntry( aPosArr[ 0 ] )) ||
             pE->GetUserData() != aLnkArr[ 0 ] )
         {
-            // search the link
+            
             pE = rListBox.First();
             while( pE )
             {
@@ -425,13 +425,13 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
         {
             Links().GetModel()->Remove( Links().GetEntry( nPos ) );
 
-            // close object, if it's still existing
+            
             sal_Bool bNewLnkMgr = OBJECT_CLIENT_FILE == xLink->GetObjType();
 
-            // tell the link that it will be resolved!
+            
             xLink->Closed();
 
-            // if somebody has forgotten to deregister himself
+            
             if( xLink.Is() )
                 pLinkMgr->Remove( &xLink );
 
@@ -468,14 +468,14 @@ IMPL_LINK( SvBaseLinksDlg, BreakLinkClickHdl, PushButton *, pPushButton )
             for( sal_uLong i = 0; i < aLinkList.size(); i++ )
             {
                 SvBaseLinkRef xLink = aLinkList[i];
-                // tell the link that it will be resolved!
+                
                 xLink->Closed();
 
-                // if somebody has forgotten to deregister himself
+                
                 pLinkMgr->Remove( &xLink );
                 bModified = sal_True;
             }
-            // then remove all selected entries
+            
         }
     }
     if(bModified)
@@ -526,10 +526,10 @@ IMPL_LINK( SvBaseLinksDlg, EndEditHdl, sfx2::SvBaseLink*, _pLink )
 
     if( _pLink && _pLink->WasLastEditOK() )
     {
-        // StarImpress/Draw swap the LinkObjects themselves!
-        // So search for the link in the manager; if it does not exist
-        // anymore, fill the list completely new. Otherwise only the
-        // edited link needs to be refreshed.
+        
+        
+        
+        
         sal_Bool bLinkFnd = sal_False;
         for( sal_uInt16 n = pLinkMgr->GetLinks().size(); n;  )
             if( _pLink == &(*pLinkMgr->GetLinks()[ --n ]) )
@@ -584,7 +584,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
         return;
 
     if( pNewMgr )
-        // update has to be stopped before clear
+        
         Links().SetUpdateMode( sal_False );
 
     Links().Clear();
@@ -625,8 +625,8 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
 
     pLinkMgr->GetDisplayNames( (SvBaseLink*)&rLink, &sTypeNm, &sFileNm, &sLinkNm, &sFilter );
 
-    // GetTab(0) gives the position of the bitmap which is automatically inserted by the TabListBox.
-    // So the first text column's width is Tab(2)-Tab(1).
+    
+    
     long nWidthPixel = Links().GetLogicTab( 2 ) - Links().GetLogicTab( 1 );
     nWidthPixel -= SV_TAB_BORDER;
     OUString aTxt = Links().GetEllipsisString( sFileNm, nWidthPixel, TEXT_DRAW_PATHELLIPSIS );
@@ -637,7 +637,7 @@ void SvBaseLinksDlg::InsertEntry( const SvBaseLink& rLink, sal_uInt16 nPos, sal_
     if( aFileName.getLength() > aTxt.getLength() )
         aTxt = aFileName;
     else if( aTxt.indexOf( aFileName, aTxt.getLength() - aFileName.getLength() ) == -1 )
-        // filename not in string
+        
         aTxt = aFileName;
 
     aEntry = aTxt;
@@ -694,8 +694,8 @@ void SvBaseLinksDlg::SetActLink( SvBaseLink * pLink )
         for( sal_uInt16 n = 0; n < rLnks.size(); ++n )
         {
             SvBaseLinkRef* pLinkRef = rLnks[ n ];
-            // #109573# only visible links have been inserted into the TreeListBox,
-            // invisible ones have to be skipped here
+            
+            
             if( (*pLinkRef)->IsVisible() )
             {
                 if( pLink == *pLinkRef )

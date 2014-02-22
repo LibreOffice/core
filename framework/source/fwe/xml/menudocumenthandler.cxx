@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,13 +35,13 @@
 #include <comphelper/attributelist.hxx>
 
 
-#define XMLNS_MENU                  "http://openoffice.org/2001/menu"
+#define XMLNS_MENU                  "http:
 
-#define ELEMENT_MENUBAR             "http://openoffice.org/2001/menu^menubar"
-#define ELEMENT_MENU                "http://openoffice.org/2001/menu^menu"
-#define ELEMENT_MENUPOPUP           "http://openoffice.org/2001/menu^menupopup"
-#define ELEMENT_MENUITEM            "http://openoffice.org/2001/menu^menuitem"
-#define ELEMENT_MENUSEPARATOR       "http://openoffice.org/2001/menu^menuseparator"
+#define ELEMENT_MENUBAR             "http:
+#define ELEMENT_MENU                "http:
+#define ELEMENT_MENUPOPUP           "http:
+#define ELEMENT_MENUITEM            "http:
+#define ELEMENT_MENUSEPARATOR       "http:
 
 #define ELEMENT_NS_MENUBAR          "menu:menubar"
 #define ELEMENT_NS_MENU             "menu:menu"
@@ -49,10 +49,10 @@
 #define ELEMENT_NS_MENUITEM         "menu:menuitem"
 #define ELEMENT_NS_MENUSEPARATOR    "menu:menuseparator"
 
-#define ATTRIBUTE_ID                "http://openoffice.org/2001/menu^id"
-#define ATTRIBUTE_LABEL             "http://openoffice.org/2001/menu^label"
-#define ATTRIBUTE_HELPID            "http://openoffice.org/2001/menu^helpid"
-#define ATTRIBUTE_STYLE         "http://openoffice.org/2001/menu^style"
+#define ATTRIBUTE_ID                "http:
+#define ATTRIBUTE_LABEL             "http:
+#define ATTRIBUTE_HELPID            "http:
+#define ATTRIBUTE_STYLE         "http:
 
 #define ATTRIBUTE_NS_ID             "menu:id"
 #define ATTRIBUTE_NS_LABEL          "menu:label"
@@ -63,13 +63,13 @@
 
 #define ATTRIBUTE_TYPE_CDATA        "CDATA"
 
-#define MENUBAR_DOCTYPE             "<!DOCTYPE menu:menubar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"menubar.dtd\">"
+#define MENUBAR_DOCTYPE             "<!DOCTYPE menu:menubar PUBLIC \"-
 
 #define ATTRIBUTE_ITEMSTYLE_TEXT    "text"
 #define ATTRIBUTE_ITEMSTYLE_IMAGE    "image"
 #define ATTRIBUTE_ITEMSTYLE_RADIO    "radio"
 
-// Property names of a menu/menu item ItemDescriptor
+
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
 static const char ITEM_DESCRIPTOR_CONTAINER[]   = "ItemDescriptorContainer";
@@ -77,15 +77,15 @@ static const char ITEM_DESCRIPTOR_LABEL[]       = "Label";
 static const char ITEM_DESCRIPTOR_TYPE[]        = "Type";
 static const char ITEM_DESCRIPTOR_STYLE[]       = "Style";
 
-// special popup menus (filled during runtime) must be saved as an empty popup menu or menuitem!!!
+
 static const sal_Int32 CMD_PROTOCOL_SIZE        = 5;
 static const char CMD_PROTOCOL[]                = ".uno:";
 static const char ADDDIRECT_CMD[]               = ".uno:AddDirect" ;
 static const char AUTOPILOTMENU_CMD[]           = ".uno:AutoPilotMenu" ;
 
-//_________________________________________________________________________________________________________________
-//  using namespaces
-//_________________________________________________________________________________________________________________
+
+
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -151,8 +151,8 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
 }
 
 
-// -----------------------------------------------------------------------------
-// Base class implementation
+
+
 
 ReadMenuDocumentHandlerBase::ReadMenuDocumentHandlerBase() :
     m_xLocator( 0 ),
@@ -213,7 +213,7 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
     rProps[4].Name = m_aStyle;
     rProps[5].Name = m_aType;
 
-    // Common values
+    
     rProps[0].Value <<= rCommandURL.intern();
     rProps[1].Value <<= rHelpId;
     rProps[2].Value <<= Reference< XIndexContainer >();
@@ -222,7 +222,7 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
     rProps[5].Value <<= ::com::sun::star::ui::ItemType::DEFAULT;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OReadMenuDocumentHandler::OReadMenuDocumentHandler(
     const Reference< XIndexContainer >& rMenuBarContainer )
@@ -305,7 +305,7 @@ void SAL_CALL OReadMenuDocumentHandler::endElement( const OUString& aName )
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 OReadMenuBarHandler::OReadMenuBarHandler(
     const Reference< XIndexContainer >& rMenuBarContainer,
@@ -355,7 +355,7 @@ throw( SAXException, RuntimeException )
 
         m_bMenuMode = sal_True;
 
-        // Container must be factory to create sub container
+        
         Reference< XComponentContext > xComponentContext(
             comphelper::getProcessComponentContext() );
 
@@ -365,7 +365,7 @@ throw( SAXException, RuntimeException )
 
         if ( xSubItemContainer.is() )
         {
-            // read attributes for menu
+            
             for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
             {
                 OUString aName = xAttrList->getNameByIndex( i );
@@ -455,7 +455,7 @@ void OReadMenuBarHandler::endElement( const OUString& aName )
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 
 OReadMenuHandler::OReadMenuHandler(
@@ -541,7 +541,7 @@ void SAL_CALL OReadMenuHandler::endElement( const OUString& aName )
 }
 
 
-// -----------------------------------------------------------------------------
+
 
 
 OReadMenuPopupHandler::OReadMenuPopupHandler(
@@ -590,12 +590,12 @@ throw( SAXException, RuntimeException )
 
         m_bMenuMode = sal_True;
 
-        // Container must be factory to create sub container
+        
         Reference< XIndexContainer > xSubItemContainer;
         if ( m_xContainerFactory.is() )
             xSubItemContainer = Reference< XIndexContainer >( m_xContainerFactory->createInstanceWithContext( m_xComponentContext ), UNO_QUERY );
 
-        // read attributes for menu
+        
         for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
         {
             OUString aName = xAttrList->getNameByIndex( i );
@@ -652,7 +652,7 @@ throw( SAXException, RuntimeException )
         OUString aCommandId;
         OUString aLabel;
         sal_Int16 nItemBits(0);
-        // read attributes for menu item
+        
         for ( sal_Int16 i=0; i< xAttrList->getLength(); i++ )
         {
             OUString aName = xAttrList->getNameByIndex( i );
@@ -768,7 +768,7 @@ void SAL_CALL OReadMenuPopupHandler::endElement( const OUString& aName )
 }
 
 
-// --------------------------------- Write XML ---------------------------------
+
 
 
 OWriteMenuDocumentHandler::OWriteMenuDocumentHandler(
@@ -796,7 +796,7 @@ throw ( SAXException, RuntimeException )
 
     m_xWriteDocumentHandler->startDocument();
 
-    // write DOCTYPE line!
+    
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
@@ -895,7 +895,7 @@ throw ( SAXException, RuntimeException )
                 }
                 else if ( !bSeparator )
                 {
-                    // Don't write two separators together
+                    
                     WriteMenuSeparator();
                     bSeparator = sal_True;
                 }
@@ -961,6 +961,6 @@ void OWriteMenuDocumentHandler::WriteMenuSeparator()
     m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_MENUSEPARATOR ) );
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

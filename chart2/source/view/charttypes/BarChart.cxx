@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "BarChart.hxx"
@@ -324,7 +324,7 @@ bool lcl_hasGeometry3DVariableWidth( sal_Int32 nGeometry3D )
     }
     return bRet;
 }
-}// end anonymous namespace
+}
 
 void BarChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
@@ -332,8 +332,8 @@ void BarChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot
         return;
     if(m_nDimension==2)
     {
-        //2ND_AXIS_IN_BARS put series on second scales to different z slot as temporary workaround
-        //this needs to be redesigned if 3d bars are also able to display secondary axes
+        
+        
 
         sal_Int32 nAxisIndex = pSeries->getAttachedAxisIndex();
         zSlot = nAxisIndex;
@@ -346,7 +346,7 @@ void BarChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot
     VSeriesPlotter::addSeries( pSeries, zSlot, xSlot, ySlot );
 }
 
-//better performance for big data
+
 struct FormerBarPoint
 {
     FormerBarPoint( double fX, double fUpperY, double fLowerY, double fZ )
@@ -368,8 +368,8 @@ struct FormerBarPoint
 
 void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
 {
-    //adapt m_aOverlapSequence and m_aGapwidthSequence for the groupBarsPerAxis feature
-    //thus the different series use the same settings
+    
+    
 
     VDataSeries* pFirstSeries = getFirstSeries();
     if(pFirstSeries && !pFirstSeries->getGroupBarsPerAxis() )
@@ -398,19 +398,19 @@ void BarChart::adaptOverlapAndGapwidthForGroupBarsPerAxis()
 
 void BarChart::createShapes()
 {
-    if( m_aZSlots.begin() == m_aZSlots.end() ) //no series
+    if( m_aZSlots.begin() == m_aZSlots.end() ) 
         return;
 
     OSL_ENSURE(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is(),"BarChart is not proper initialized");
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
-    //the text labels should be always on top of the other series shapes
-    //therefore create an own group for the texts to move them to front
-    //(because the text group is created after the series group the texts are displayed on top)
+    
+    
+    
 
-    //the regression curves should always be on top of the bars but beneath the text labels
-    //to achieve this the regression curve target is created after the series target and before the text target
+    
+    
 
     uno::Reference< drawing::XShapes > xSeriesTarget(
         createGroupShape( m_xLogicTarget,OUString() ));
@@ -421,9 +421,9 @@ void BarChart::createShapes()
 
     uno::Reference< drawing::XShapes > xRegressionCurveEquationTarget(
         m_pShapeFactory->createGroup2D( m_xFinalTarget,OUString() ));
-    //check necessary here that different Y axis can not be stacked in the same group? ... hm?
+    
 
-    double fLogicZ        = 1.0;//as defined
+    double fLogicZ        = 1.0;
 
     bool bDrawConnectionLines = false;
     bool bDrawConnectionLinesInited = false;
@@ -431,7 +431,7 @@ void BarChart::createShapes()
 
     adaptOverlapAndGapwidthForGroupBarsPerAxis();
 
-    //better performance for big data
+    
     std::map< VDataSeries*, FormerBarPoint > aSeriesFormerPointMap;
     m_bPointsWereSkipped = false;
     sal_Int32 nSkippedPoints = 0;
@@ -440,13 +440,13 @@ void BarChart::createShapes()
 
     sal_Int32 nStartIndex = 0;
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
-    //iterate through all x values per indices
+    
     for( sal_Int32 nPointIndex = nStartIndex; nPointIndex < nEndIndex; nPointIndex++ )
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
         const ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator  aZSlotEnd = m_aZSlots.end();
 
-        //sum up the values for all series in a complete z zlot per attached axis
+        
         ::std::map< sal_Int32,  double > aLogicYSumMap;
         for( ; aZSlotIter != aZSlotEnd; ++aZSlotIter )
         {
@@ -476,7 +476,7 @@ void BarChart::createShapes()
             ::std::vector< VDataSeriesGroup >::iterator             aXSlotIter = aZSlotIter->begin();
             const ::std::vector< VDataSeriesGroup >::const_iterator aXSlotEnd = aZSlotIter->end();
 
-            //iterate through all x slots in this category
+            
             double fSlotX=0;
             for( aXSlotIter = aZSlotIter->begin(); aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
@@ -485,20 +485,20 @@ void BarChart::createShapes()
                 if( aXSlotIter != aXSlotEnd )
                 {
                     nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
-                    //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
+                    
                     pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                     if(!pPosHelper)
                         pPosHelper = m_pMainPosHelper;
                 }
                 PlotterBase::m_pPosHelper = pPosHelper;
 
-                //update/create information for current group
+                
                 pPosHelper->updateSeriesCount( aZSlotIter->size() );
                 double fLogicBaseWidth = pPosHelper->getScaledSlotWidth();
 
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
-                // get distance from base value to maximum and minimum
+                
 
                 double fMinimumY = 0.0, fMaximumY = 0.0;
                 aXSlotIter->calculateYMinAndMaxForCategory( nPointIndex
@@ -521,13 +521,13 @@ void BarChart::createShapes()
                         Afterwards, fLogicPositiveYSum will contain the maximum
                         (positive) value that is related to 100%. */
 
-                    // do nothing if there are positive values only
+                    
                     if( fLogicNegativeYSum < 0.0 )
                     {
-                        // fLogicPositiveYSum<0 => negative values only, use absolute of negative sum
+                        
                         if( fLogicPositiveYSum < 0.0 )
                             fLogicPositiveYSum = -fLogicNegativeYSum;
-                        // otherwise there are positive and negative values, calculate total distance
+                        
                         else
                             fLogicPositiveYSum -= fLogicNegativeYSum;
                     }
@@ -542,7 +542,7 @@ void BarChart::createShapes()
 
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-                //iterate through all series in this x slot
+                
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
@@ -553,7 +553,7 @@ void BarChart::createShapes()
 
                     bOnlyConnectionLinesForThisPoint = false;
 
-                    if(nPointIndex==nStartIndex)//do not create a regression line for each point
+                    if(nPointIndex==nStartIndex)
                         createRegressionCurvesShapes( **aSeriesIter, xRegressionCurveTarget, xRegressionCurveEquationTarget,
                                                       m_pPosHelper->maySkipPointsInRegressionCalculation());
 
@@ -564,7 +564,7 @@ void BarChart::createShapes()
                             bDrawConnectionLines = false;
                         if( bDrawConnectionLines && pSeriesList->size()==1 )
                         {
-                            //detect whether we have a stacked chart or not:
+                            
                             StackingDirection eDirection = pSeries->getStackingDirection();
                             if( eDirection  != StackingDirection_Y_STACKING )
                                 bDrawConnectionLines = false;
@@ -575,19 +575,19 @@ void BarChart::createShapes()
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
                         getSeriesGroupShape(*aSeriesIter, xSeriesTarget) );
 
-                    //collect data point information (logic coordinates, style ):
+                    
                     double fUnscaledLogicX = (*aSeriesIter)->getXValue( nPointIndex );
                     fUnscaledLogicX = DateHelper::RasterizeDateValue( fUnscaledLogicX, m_aNullDate, m_nTimeResolution );
                     if(fUnscaledLogicX<pPosHelper->getLogicMinX())
-                        continue;//point not visible
+                        continue;
                     if(fUnscaledLogicX>pPosHelper->getLogicMaxX())
-                        continue;//point not visible
+                        continue;
                     if(pPosHelper->isStrongLowerRequested(0) && fUnscaledLogicX==pPosHelper->getLogicMaxX())
-                        continue;//point not visible
+                        continue;
                     double fLogicX = pPosHelper->getScaledSlotPos( fUnscaledLogicX, fSlotX );
 
                     double fLogicBarHeight = (*aSeriesIter)->getYValue( nPointIndex );
-                    if( ::rtl::math::isNan( fLogicBarHeight )) //no value at this category
+                    if( ::rtl::math::isNan( fLogicBarHeight )) 
                         continue;
 
                     double fLogicValueForLabeDisplay = fLogicBarHeight;
@@ -601,7 +601,7 @@ void BarChart::createShapes()
                             fLogicBarHeight = 0.0;
                     }
 
-                    //sort negative and positive values, to display them on different sides of the x axis
+                    
                     bool bPositive = fLogicBarHeight >= 0.0;
                     double fLowerYValue = bPositive ? fPositiveLogicYForNextSeries : fNegativeLogicYForNextSeries;
                     double fUpperYValue = fLowerYValue+fLogicBarHeight;
@@ -615,13 +615,13 @@ void BarChart::createShapes()
 
                     drawing::Position3D aUnscaledLogicPosition( fUnscaledLogicX, fUpperYValue, fLogicZ );
 
-                    //@todo ... start an iteration over the different breaks of the axis
-                    //each subsystem may add an additional shape to form the whole point
-                    //create a group shape for this point and add to the series shape:
-    //              uno::Reference< drawing::XShapes > xPointGroupShape_Shapes( createGroupShape(xSeriesGroupShape_Shapes) );
-    //              uno::Reference<drawing::XShape> xPointGroupShape_Shape =
-    //                      uno::Reference<drawing::XShape>( xPointGroupShape_Shapes, uno::UNO_QUERY );
-                    //as long as we do not iterate we do not need to create an additional group for each point
+                    
+                    
+                    
+    
+    
+    
+                    
                     uno::Reference< drawing::XShapes > xPointGroupShape_Shapes = xSeriesGroupShape_Shapes;
                     uno::Reference< beans::XPropertySet > xDataPointProperties( (*aSeriesIter)->getPropertiesOfPoint( nPointIndex ) );
                     sal_Int32 nGeometry3D = DataPointGeometry3D::CUBOID;
@@ -634,14 +634,14 @@ void BarChart::createShapes()
                         ASSERT_EXCEPTION( e );
                     }
 
-                    //@todo iterate through all subsystems to create partial points
+                    
                     {
-                        //@todo select a suiteable PositionHelper for this subsystem
+                        
                         BarPositionHelper* pSubPosHelper = pPosHelper;
 
                         double fUnclippedUpperYValue = fUpperYValue;
 
-                        //apply clipping to Y
+                        
                         if( !pPosHelper->clipYRange(fLowerYValue,fUpperYValue) )
                         {
                             if( bDrawConnectionLines )
@@ -649,16 +649,16 @@ void BarChart::createShapes()
                             else
                                 continue;
                         }
-                        //@todo clipping of X and Z is not fully integrated so far, as there is a need to create different objects
+                        
 
-                        //apply scaling to Y before calculating width (necessary to maintain gradient in clipped objects)
+                        
                         pSubPosHelper->doLogicScaling(NULL,&fLowerYValue,NULL);
                         pSubPosHelper->doLogicScaling(NULL,&fUpperYValue,NULL);
-                        //scaling of X and Z is not provided as the created objects should be symmetric in that dimensions
+                        
 
                         pSubPosHelper->doLogicScaling(NULL,&fUnclippedUpperYValue,NULL);
 
-                        //calculate resulting width
+                        
                         double fCompleteHeight = bPositive ? fLogicPositiveYSum : fLogicNegativeYSum;
                         if( pPosHelper->isPercentY() )
                             fCompleteHeight = 1.0;
@@ -687,7 +687,7 @@ void BarChart::createShapes()
                             }
                         }
 
-                        //better performance for big data
+                        
                         FormerBarPoint aFormerPoint( aSeriesFormerPointMap[pSeries] );
                         pPosHelper->setCoordinateSystemResolution( m_aCoordinateSystemResolution );
                         if( !pSeries->isAttributedDataPoint(nPointIndex)
@@ -709,7 +709,7 @@ void BarChart::createShapes()
                         //
                         if( bDrawConnectionLines )
                         {
-                            //store point information for connection lines
+                            
 
                             drawing::Position3D aLeftUpperPoint( fLogicX-fLogicBarWidth/2.0,fUnclippedUpperYValue,fLogicZ );
                             drawing::Position3D aRightUpperPoint( fLogicX+fLogicBarWidth/2.0,fUnclippedUpperYValue,fLogicZ );
@@ -723,13 +723,13 @@ void BarChart::createShapes()
                         if( bOnlyConnectionLinesForThisPoint )
                             continue;
 
-                        //maybe additional possibility for performance improvement
-                        //bool bCreateLineInsteadOfComplexGeometryDueToMissingSpace = false;
-                        //pPosHelper->isSameForGivenResolution( fLogicX-fLogicBarWidth/2.0, fLowerYValue, fLogicZ
-                        //                            , fLogicX+fLogicBarWidth/2.0, fLowerYValue, fLogicZ );
+                        
+                        
+                        
+                        
 
                         nCreatedPoints++;
-                        //create partial point
+                        
                         if( !approxEqual(fLowerYValue,fUpperYValue) )
                         {
                             uno::Reference< drawing::XShape >  xShape;
@@ -742,7 +742,7 @@ void BarChart::createShapes()
 
                                 uno::Reference< XTransformation > xTransformation = pSubPosHelper->getTransformationScaledLogicToScene();
 
-                                //transformation 3) -> 4)
+                                
                                 drawing::Position3D aTransformedBottom          ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicBottom) ) ) );
                                 drawing::Position3D aTransformedLeftBottomFront ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicLeftBottomFront) ) ) );
                                 drawing::Position3D aTransformedRightDeepTop    ( SequenceToPosition3D( xTransformation->transform( Position3DToSequence(aLogicRightDeepTop) ) ) );
@@ -771,10 +771,10 @@ void BarChart::createShapes()
                                     xPointGroupShape_Shapes, aTransformedBottom, aSize, fTopHeight, nRotateZAngleHundredthDegree
                                     , xDataPointProperties, nGeometry3D );
                             }
-                            else //m_nDimension!=3
+                            else 
                             {
-                                // performance improvement: alloc the sequence before the rendering
-                                // otherwise we have 2 realloc calls
+                                
+                                
                                 drawing::PolyPolygonShape3D aPoly;
                                 aPoly.SequenceX.realloc(1);
                                 aPoly.SequenceY.realloc(1);
@@ -801,16 +801,16 @@ void BarChart::createShapes()
                                 xProps->setPropertyValue("FillColor", uno::makeAny(static_cast<sal_Int32>(
                                                 pSeries->getValueByProperty(nPointIndex, "FillColor"))));
                             }
-                            //set name/classified ObjectID (CID)
+                            
                             ShapeFactory::setShapeName(xShape
                                 , ObjectIdentifier::createPointCID(
                                     (*aSeriesIter)->getPointCID_Stub(),nPointIndex) );
                         }
 
-                        //create error bar
+                        
                         createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nPointIndex, m_xLogicTarget, &fLogicX );
 
-                        //create data point label
+                        
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nPointIndex) )
                         {
                             double fLogicSum = aLogicYSumMap[nAttachedAxisIndex];
@@ -837,7 +837,7 @@ void BarChart::createShapes()
                             sal_Int32 nOffset = 0;
                             if(LABEL_ALIGN_CENTER!=eAlignment)
                             {
-                                nOffset = 100;//add some spacing //@todo maybe get more intelligent values
+                                nOffset = 100;
                                 if( m_nDimension == 3 )
                                     nOffset = 260;
                             }
@@ -845,12 +845,12 @@ void BarChart::createShapes()
                                             , fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset );
                         }
 
-                    }//end iteration through partial points
+                    }
 
-                }//next series in x slot (next y slot)
-            }//next x slot
-        }//next z slot
-    }//next category
+                }
+            }
+        }
+    }
     if( bDrawConnectionLines )
     {
         ::std::vector< ::std::vector< VDataSeriesGroup > >::iterator             aZSlotIter = m_aZSlots.begin();
@@ -864,21 +864,21 @@ void BarChart::createShapes()
             if( aXSlotIter != aXSlotEnd )
             {
                 sal_Int32 nAttachedAxisIndex = aXSlotIter->getAttachedAxisIndexForFirstSeries();
-                //2ND_AXIS_IN_BARS so far one can assume to have the same plotter for each z slot
+                
                 pPosHelper = dynamic_cast<BarPositionHelper*>(&( this->getPlottingPositionHelper( nAttachedAxisIndex ) ) );
                 if(!pPosHelper)
                     pPosHelper = m_pMainPosHelper;
             }
             PlotterBase::m_pPosHelper = pPosHelper;
 
-            //iterate through all x slots in this category
+            
             for( double fSlotX=0; aXSlotIter != aXSlotEnd; ++aXSlotIter, fSlotX+=1.0 )
             {
                 ::std::vector< VDataSeries* >* pSeriesList = &(aXSlotIter->m_aSeriesVector);
 
                 ::std::vector< VDataSeries* >::const_iterator       aSeriesIter = pSeriesList->begin();
                 const ::std::vector< VDataSeries* >::const_iterator aSeriesEnd  = pSeriesList->end();
-                //iterate through all series in this x slot
+                
                 for( ; aSeriesIter != aSeriesEnd; ++aSeriesIter )
                 {
                     VDataSeries* pSeries( *aSeriesIter );
@@ -894,7 +894,7 @@ void BarChart::createShapes()
                     if(!ShapeFactory::hasPolygonAnyLines(aPoly))
                         continue;
 
-                    //transformation 3) -> 4)
+                    
                     pPosHelper->transformScaledLogicToScene( aPoly );
 
                     uno::Reference< drawing::XShapes > xSeriesGroupShape_Shapes(
@@ -914,6 +914,6 @@ void BarChart::createShapes()
     OSL_TRACE( "\nPPPPPPPPP<<<<<<<<<<<< bar chart :: createShapes():: skipped points: %d created points: %d", nSkippedPoints, nCreatedPoints );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

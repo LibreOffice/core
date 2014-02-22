@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustring.hxx>
@@ -22,11 +22,11 @@
 #include <svl/poolitem.hxx>
 #include <tools/stream.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+
 
 DBG_NAME(SfxSetItem)
 
-// --------------------------------------------------------------------------
+
 
 SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     SfxPoolItem(which),
@@ -35,7 +35,7 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, const SfxItemSet &rSet) :
     DBG_CTOR(SfxSetItem, 0);
 }
 
-// --------------------------------------------------------------------------
+
 
 SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet *pS) :
     SfxPoolItem(which),
@@ -45,7 +45,7 @@ SfxSetItem::SfxSetItem( sal_uInt16 which, SfxItemSet *pS) :
     DBG_ASSERT(pS, "SfxSetItem without set constructed" );
 }
 
-// --------------------------------------------------------------------------
+
 
 SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
     SfxPoolItem(rCopy.Which()),
@@ -54,7 +54,7 @@ SfxSetItem::SfxSetItem( const SfxSetItem& rCopy, SfxItemPool *pPool ) :
     DBG_CTOR(SfxSetItem, 0);
 }
 
-// --------------------------------------------------------------------------
+
 
 SfxSetItem::~SfxSetItem()
 {
@@ -62,7 +62,7 @@ SfxSetItem::~SfxSetItem()
     delete pSet; pSet = 0;
 }
 
-// --------------------------------------------------------------------------
+
 
 bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
 {
@@ -71,7 +71,7 @@ bool SfxSetItem::operator==( const SfxPoolItem& rCmp) const
     return *pSet == *(((const SfxSetItem &)rCmp).pSet);
 }
 
-// --------------------------------------------------------------------------
+
 
 SfxItemPresentation SfxSetItem::GetPresentation
 (
@@ -86,7 +86,7 @@ SfxItemPresentation SfxSetItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// --------------------------------------------------------------------------
+
 
 SvStream& SfxSetItem::Store(SvStream& rStream, sal_uInt16) const
 {

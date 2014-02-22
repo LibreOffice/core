@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,9 +14,8 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
-
 
 #include "accessibility/extended/AccessibleToolPanelDeck.hxx"
 
@@ -35,11 +34,9 @@
 
 #include <boost/noncopyable.hpp>
 
-//......................................................................................................................
+
 namespace accessibility
 {
-//......................................................................................................................
-
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
@@ -67,9 +64,7 @@ namespace accessibility
 
     typedef ::com::sun::star::awt::Point        UnoPoint;
 
-    //==================================================================================================================
-    //= AccessibleToolPanelDeck_Impl - declaration
-    //==================================================================================================================
+    
     class AccessibleToolPanelDeck_Impl  :public ::boost::noncopyable
                                         ,public ::svt::IToolPanelDeckListener
     {
@@ -90,7 +85,7 @@ namespace accessibility
         Reference< XAccessible >    getActivePanelAccessible();
 
     protected:
-        // IToolPanelDeckListener
+        
         virtual void PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition );
         virtual void PanelRemoved( const size_t i_nPosition );
         virtual void ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive );
@@ -105,9 +100,7 @@ namespace accessibility
         Reference< XAccessible >        m_xActivePanelAccessible;
     };
 
-    //==================================================================================================================
-    //= MethodGuard
-    //==================================================================================================================
+    
     namespace
     {
         class MethodGuard
@@ -127,10 +120,7 @@ namespace accessibility
         };
     }
 
-    //==================================================================================================================
-    //= AccessibleToolPanelDeck_Impl - implementation
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
     AccessibleToolPanelDeck_Impl::AccessibleToolPanelDeck_Impl( AccessibleToolPanelDeck& i_rAntiImpl, const Reference< XAccessible >& i_rAccessibleParent,
             ::svt::ToolPanelDeck& i_rPanelDeck )
         :m_rAntiImpl( i_rAntiImpl )
@@ -141,14 +131,12 @@ namespace accessibility
         m_pPanelDeck->AddListener( *this );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelDeck_Impl::~AccessibleToolPanelDeck_Impl()
     {
         if ( !isDisposed() )
             dispose();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::dispose()
     {
         ENSURE_OR_RETURN_VOID( !isDisposed(), "disposed twice" );
@@ -157,14 +145,12 @@ namespace accessibility
         m_xAccessibleParent.clear();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::checkDisposed()
     {
         if ( isDisposed() )
             throw DisposedException( OUString(), *&m_rAntiImpl );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > AccessibleToolPanelDeck_Impl::getOwnAccessible() const
     {
         Reference< XAccessible > xOwnAccessible( static_cast< XAccessible* >( m_rAntiImpl.GetVCLXWindow() ) );
@@ -173,7 +159,6 @@ namespace accessibility
         return xOwnAccessible;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > AccessibleToolPanelDeck_Impl::getActivePanelAccessible()
     {
         ENSURE_OR_RETURN( !isDisposed(), "AccessibleToolPanelDeck_Impl::getActivePanelAccessible: already disposed!", NULL );
@@ -191,28 +176,25 @@ namespace accessibility
         return m_xActivePanelAccessible;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::PanelInserted( const ::svt::PToolPanel& i_pPanel, const size_t i_nPosition )
     {
         (void)i_pPanel;
         (void)i_nPosition;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::PanelRemoved( const size_t i_nPosition )
     {
         (void)i_nPosition;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::ActivePanelChanged( const ::boost::optional< size_t >& i_rOldActive, const ::boost::optional< size_t >& i_rNewActive )
     {
         if ( !!i_rOldActive )
         {
             if ( !m_xActivePanelAccessible.is() )
             {
-                // again, this might in theory happen if the XAccessible for the active panel has never before been requested.
-                // In this case, just say that all our children are invalid, so they all must be re-requested.
+                
+                
                 m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any() );
             }
             else
@@ -229,7 +211,6 @@ namespace accessibility
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::LayouterChanged( const ::svt::PDeckLayouter& i_rNewLayouter )
     {
         MethodGuard aGuard( *this );
@@ -238,17 +219,13 @@ namespace accessibility
         m_rAntiImpl.NotifyAccessibleEvent( AccessibleEventId::INVALIDATE_ALL_CHILDREN, Any(), Any() );
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck_Impl::Dying()
     {
-        // the tool panel deck is dying, so dispose ourself
+        
         m_rAntiImpl.dispose();
     }
 
-    //==================================================================================================================
-    //= AccessibleToolPanelDeck
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
     AccessibleToolPanelDeck::AccessibleToolPanelDeck( const Reference< XAccessible >& i_rAccessibleParent,
             ::svt::ToolPanelDeck& i_rPanelDeck )
         :AccessibleToolPanelDeck_Base( i_rPanelDeck.GetWindowPeer() )
@@ -256,12 +233,10 @@ namespace accessibility
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     AccessibleToolPanelDeck::~AccessibleToolPanelDeck()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     sal_Int32 SAL_CALL AccessibleToolPanelDeck::getAccessibleChildCount(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
@@ -275,7 +250,6 @@ namespace accessibility
         return nChildCount;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleChild( sal_Int32 i_nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
@@ -284,7 +258,7 @@ namespace accessibility
         if ( ( i_nIndex < 0 ) || ( i_nIndex >= nChildCount ) )
             throw IndexOutOfBoundsException( OUString(), *this );
 
-        // first "n" children are provided by the layouter
+        
         const size_t nLayouterCount( m_pImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChildCount() );
         if ( size_t( i_nIndex ) < nLayouterCount )
             return m_pImpl->m_pPanelDeck->GetLayouter()->GetAccessibleChild(
@@ -292,11 +266,10 @@ namespace accessibility
                 m_pImpl->getOwnAccessible()
             );
 
-        // the last child is the XAccessible of the active panel
+        
         return m_pImpl->getActivePanelAccessible();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleParent(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
@@ -306,28 +279,26 @@ namespace accessibility
         return m_pImpl->m_xAccessibleParent;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     sal_Int16 SAL_CALL AccessibleToolPanelDeck::getAccessibleRole(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
         return AccessibleRole::PANEL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > SAL_CALL AccessibleToolPanelDeck::getAccessibleAtPoint( const UnoPoint& i_rPoint ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
 
         const ::Point aRequestedPoint( VCLUnoHelper::ConvertToVCLPoint( i_rPoint ) );
-        // check the panel window itself
+        
         const ::Window& rActivePanelAnchor( m_pImpl->m_pPanelDeck->GetPanelWindowAnchor() );
         const Rectangle aPanelAnchorArea( rActivePanelAnchor.GetPosPixel(), rActivePanelAnchor.GetOutputSizePixel() );
         if ( aPanelAnchorArea.IsInside( aRequestedPoint ) )
-            // note that this assumes that the Window which actually implements the concrete panel covers
-            // the complete area of its "anchor" Window. But this is ensured by the ToolPanelDeck implementation.
+            
+            
             return m_pImpl->getActivePanelAccessible();
 
-        // check the XAccessible instances provided by the layouter
+        
         try
         {
             const ::svt::PDeckLayouter pLayouter( m_pImpl->m_pPanelDeck->GetLayouter() );
@@ -351,30 +322,26 @@ namespace accessibility
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AccessibleToolPanelDeck::grabFocus(  ) throw (RuntimeException)
     {
         MethodGuard aGuard( *m_pImpl );
         m_pImpl->m_pPanelDeck->GrabFocus();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void SAL_CALL AccessibleToolPanelDeck::disposing()
     {
         AccessibleToolPanelDeck_Base::disposing();
         m_pImpl->dispose();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessible > AccessibleToolPanelDeck::GetChildAccessible( const VclWindowEvent& i_rVclWindowEvent )
     {
-        // don't let the base class generate any A11Y events from VclWindowEvent, we completely manage those
-        // A11Y events ourself
+        
+        
         (void)i_rVclWindowEvent;
         return NULL;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
     void AccessibleToolPanelDeck::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& i_rStateSet )
     {
         AccessibleToolPanelDeck_Base::FillAccessibleStateSet( i_rStateSet );
@@ -387,9 +354,6 @@ namespace accessibility
             i_rStateSet.AddState( AccessibleStateType::FOCUSABLE );
         }
     }
-
-//......................................................................................................................
-} // namespace accessibility
-//......................................................................................................................
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

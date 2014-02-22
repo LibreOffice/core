@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,7 +30,7 @@
 
 using namespace ::basegfx;
 
-// #114409#
+
 namespace sdr
 {
     namespace overlay
@@ -40,7 +40,7 @@ namespace sdr
             mePaintType( eType ),
             maRectangles( rRects )
         {
-            // no AA for selection overlays
+            
             allowAntiAliase(false);
         }
 
@@ -58,7 +58,7 @@ namespace sdr
                 const basegfx::BColor aRGBColor(getBaseColor().getBColor());
                 aRetval.realloc(nCount);
 
-                // create primitives for all ranges
+                
                 for(sal_uInt32 a(0); a < nCount; a++)
                 {
                     const basegfx::B2DRange& rRange(maRectangles[a]);
@@ -73,7 +73,7 @@ namespace sdr
 
                 if(mePaintType == CELL_OVERLAY_TRANSPARENT)
                 {
-                    // embed in 50% transparent paint
+                    
                     const drawinglayer::primitive2d::Primitive2DReference aUnifiedTransparence(
                         new drawinglayer::primitive2d::UnifiedTransparencePrimitive2D(
                             aRetval,
@@ -81,9 +81,9 @@ namespace sdr
 
                     aRetval = drawinglayer::primitive2d::Primitive2DSequence(&aUnifiedTransparence, 1);
                 }
-                else // CELL_OVERLAY_INVERT
+                else 
                 {
-                    // embed in invert primitive
+                    
                     const drawinglayer::primitive2d::Primitive2DReference aInvert(
                         new drawinglayer::primitive2d::InvertPrimitive2D(
                             aRetval));
@@ -94,7 +94,7 @@ namespace sdr
 
             return aRetval;
         }
-    } // end of namespace overlay
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

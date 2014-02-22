@@ -44,19 +44,19 @@ namespace drawinglayer
 
             if(nMarkerCount && !getMarker().IsEmpty())
             {
-                // get pixel size
+                
                 Size aBitmapSize(getMarker().GetSizePixel());
 
                 if(aBitmapSize.Width() && aBitmapSize.Height())
                 {
-                    // get logic half pixel size
+                    
                     basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
                         basegfx::B2DVector(aBitmapSize.getWidth() - 1.0, aBitmapSize.getHeight() - 1.0));
 
-                    // use half size for expand
+                    
                     aLogicHalfSize *= 0.5;
 
-                    // number of primitives is known; realloc accordingly
+                    
                     xRetval.realloc(nMarkerCount);
 
                     for(sal_uInt32 a(0); a < nMarkerCount; a++)
@@ -106,7 +106,7 @@ namespace drawinglayer
 
             if(getPositions().size())
             {
-                // get the basic range from the position vector
+                
                 for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()), aEnd(getPositions().end()); aIter != aEnd; ++aIter)
                 {
                     aRetval.expand(*aIter);
@@ -114,19 +114,19 @@ namespace drawinglayer
 
                 if(!getMarker().IsEmpty())
                 {
-                    // get pixel size
+                    
                     const Size aBitmapSize(getMarker().GetSizePixel());
 
                     if(aBitmapSize.Width() && aBitmapSize.Height())
                     {
-                        // get logic half size
+                        
                         basegfx::B2DVector aLogicHalfSize(rViewInformation.getInverseObjectToViewTransformation() *
                             basegfx::B2DVector(aBitmapSize.getWidth(), aBitmapSize.getHeight()));
 
-                        // use half size for expand
+                        
                         aLogicHalfSize *= 0.5;
 
-                        // apply aLogicHalfSize
+                        
                         aRetval.expand(aRetval.getMinimum() - aLogicHalfSize);
                         aRetval.expand(aRetval.getMaximum() + aLogicHalfSize);
                     }
@@ -136,10 +136,10 @@ namespace drawinglayer
             return aRetval;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(MarkerArrayPrimitive2D, PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

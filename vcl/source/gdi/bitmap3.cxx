@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <math.h>
@@ -222,7 +222,7 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
                                      {12,  2, 15,  1, },
                                      {7,   9,  4, 10 } };
 
-    // Build MagicSquare
+    
     for ( i = 0; i < 4; i++ )
        for ( j = 0; j < 4; j++ )
            for ( k = 0; k < 4; k++ )
@@ -230,7 +230,7 @@ void ImplCreateDitherMatrix( sal_uInt8 (*pDitherMatrix)[16][16] )
                     nMax = std::max ( pMtx[ (k<<2) + i][(l<<2 ) + j] =
                     (sal_uInt16) ( 0.5 + pMagic[i][j]*fVal + pMagic[k][l]*fVal16 ), nMax );
 
-    // Scale to interval [0;254]
+    
     for ( i = 0, fVal = 254. / nMax; i < 16; i++ )
         for( j = 0; j < 16; j++ )
             (*pDitherMatrix)[i][j] = (sal_uInt8) ( fVal * pMtx[i][j] );
@@ -695,7 +695,7 @@ bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
                 aPal[ aPal.GetEntryCount() - 1 ] = *pExtColor;
             }
 
-            // set Black/White always, if we have enough space
+            
             if( aPal.GetEntryCount() < ( nCount - 1 ) )
             {
                 aPal.SetEntryCount( aPal.GetEntryCount() + 2 );
@@ -718,7 +718,7 @@ bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
 
             for( nY = 0L; nY < nHeight; nY++, nYTmp++ )
             {
-                // first pixel in the line
+                
                 cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex( pQLine1[ 0 ].ImplGetColor() );
                 pWriteAcc->SetPixelIndex( nY, 0, cIndex );
 
@@ -733,14 +733,14 @@ bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
                     pWriteAcc->SetPixelIndex( nY, nX, cIndex );
                 }
 
-                // Last RowPixel
+                
                 if( nX < nWidth )
                 {
                     cIndex = (sal_uInt8) aColorMap.GetBestPaletteIndex( pQLine1[ nWidth1 ].ImplGetColor() );
                     pWriteAcc->SetPixelIndex( nY, nX, cIndex );
                 }
 
-                // Refill/copy row buffer
+                
                 pQLine1 = pQLine2;
                 pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2 : pErrQuad1;
 
@@ -756,7 +756,7 @@ bool Bitmap::ImplConvertDown( sal_uInt16 nBitCount, Color* pExtColor )
                 }
             }
 
-            // Delete row buffer
+            
             delete[] pErrQuad1;
             delete[] pErrQuad2;
 
@@ -865,13 +865,13 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
 
     if(basegfx::fTools::equalZero(rScaleX) || basegfx::fTools::equalZero(rScaleY))
     {
-        // no scale
+        
         bRetval = true;
     }
 
     if(basegfx::fTools::equal(rScaleX, 1.0) && basegfx::fTools::equal(rScaleY, 1.0))
     {
-        // no scale
+        
         bRetval = true;
     }
 
@@ -896,12 +896,12 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
         {
             if(GetSizePixel().Width() < 2 || GetSizePixel().Height() < 2)
             {
-                // fallback to ImplScaleFast
+                
                 bRetval = ImplScaleFast( rScaleX, rScaleY );
             }
             else
             {
-                // #i121233# use method from symphony
+                
                 bRetval = ImplScaleSuper( rScaleX, rScaleY );
             }
             break;
@@ -946,7 +946,7 @@ bool Bitmap::Scale( const double& rScaleX, const double& rScaleY, sal_uInt32 nSc
     return bRetval;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
 {
@@ -965,18 +965,18 @@ bool Bitmap::Scale( const Size& rNewSize, sal_uInt32 nScaleFlag )
     return bRet;
 }
 
-// ------------------------------------------------------------------------
+
 
 void Bitmap::AdaptBitCount(Bitmap& rNew) const
 {
     ImplAdaptBitCount(rNew);
 }
 
-// ------------------------------------------------------------------------
+
 
 void Bitmap::ImplAdaptBitCount(Bitmap& rNew) const
 {
-    // aNew is the result of some operation; adapt it's BitCount to the original (this)
+    
     if(GetBitCount() != rNew.GetBitCount())
     {
         switch(GetBitCount())
@@ -1217,7 +1217,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
                     pLutFrac[ nY ] = (long) ( fTemp * 1024. );
                 }
 
-                // after 1st step, bitmap *is* 24bit format (see above)
+                
                 OSL_ENSURE(!pReadAcc->HasPalette(), "OOps, somehow ImplScaleInterpolate in-between format has palette, should not happen (!)");
 
                 for( nX = 0L; nX < nNewWidth; nX++ )
@@ -1279,7 +1279,7 @@ bool Bitmap::ImplScaleInterpolate( const double& rScaleX, const double& rScaleY 
     return bRet;
 }
 
-// #i121233# Added BMP_SCALE_SUPER from symphony code
+
 
 bool Bitmap::ImplScaleSuper(
     const double& rScaleX,
@@ -1316,7 +1316,7 @@ bool Bitmap::ImplScaleSuper(
             const double fRevScaleX = ( nDstW > 1L ) ? ( (double) ( nW - 1 ) / ( nDstW - 1 ) ) : 0.0;
             const double fRevScaleY = ( nDstH > 1L ) ? ( (double) ( nH - 1 ) / ( nDstH - 1 ) ) : 0.0;
 
-            // create horizontal mapping table
+            
             for( long nX = 0L, nTempX = nW - 1L, nTemp = nW - 2L; nX < nDstW; nX++ )
             {
                 double fTemp = nX * fRevScaleX;
@@ -1327,7 +1327,7 @@ bool Bitmap::ImplScaleSuper(
                 pMapFX[ nX ] = (long) ( ( fTemp - pMapIX[nX] ) * 128. );
             }
 
-            // create vertical mapping table
+            
             for( long nY = 0L, nTempY = nH - 1L, nTemp = nH - 2L; nY < nDstH; nY++ )
             {
                 double fTemp = nY * fRevScaleY;
@@ -2084,7 +2084,7 @@ bool Bitmap::ImplScaleSuper(
     return bRet;
 }
 
-//-----------------------------------------------------------------------------------
+
 
 namespace
 {
@@ -2120,13 +2120,13 @@ namespace
             {
                 const double aWeight(aKernel.Calculate(fFilterFactor * (aCenter - static_cast< double>(j))));
 
-                // Reduce calculations with ignoring weights of 0.0
+                
                 if(fabs(aWeight) < 0.0001)
                 {
                     continue;
                 }
 
-                // Handling on edges
+                
                 const sal_uInt32 aPixelIndex(MinMax(j, 0, aSourceSize - 1));
                 const sal_uInt32 nIndex(aIndex + aCurrentCount);
 
@@ -2146,7 +2146,7 @@ namespace
         const double& rScaleX,
         const Kernel& aKernel)
     {
-        // Do horizontal filtering
+        
         OSL_ENSURE(rScaleX > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
         const sal_uInt32 nWidth(rSource.GetSizePixel().Width());
         const sal_uInt32 nNewWidth(FRound(nWidth * rScaleX));
@@ -2237,7 +2237,7 @@ namespace
         const double& rScaleY,
         const Kernel& aKernel)
     {
-        // Do vertical filtering
+        
         OSL_ENSURE(rScaleY > 0.0, "Error in scaling: Mirror given in non-mirror-capable method (!)");
         const sal_uInt32 nHeight(rSource.GetSizePixel().Height());
         const sal_uInt32 nNewHeight(FRound(nHeight * rScaleY));
@@ -2330,9 +2330,9 @@ namespace
     }
 }
 
-// #i121233# Added BMP_SCALE_LANCZOS, BMP_SCALE_BICUBIC, BMP_SCALE_BILINEAR and
-// BMP_SCALE_BOX derived from the original commit from Tomas Vajngerl (see
-// bugzilla task for deitails) Thanks!
+
+
+
 bool Bitmap::ImplScaleConvolution(
     const double& rScaleX,
     const double& rScaleY,
@@ -2401,7 +2401,7 @@ bool Bitmap::ImplScaleConvolution(
             {
                 if(bScaleHor)
                 {
-                    // copy partial result, independent of color depth
+                    
                     aSource = aResult;
                 }
 
@@ -2419,7 +2419,7 @@ bool Bitmap::ImplScaleConvolution(
             {
                 if(bScaleVer)
                 {
-                    // copy partial result, independent of color depth
+                    
                     aSource = aResult;
                 }
 
@@ -2442,7 +2442,7 @@ bool Bitmap::ImplScaleConvolution(
     return bResult;
 }
 
-// ------------------------------------------------------------------------
+
 
 bool Bitmap::Dither( sal_uLong nDitherFlags )
 {
@@ -2618,7 +2618,7 @@ bool Bitmap::ImplDitherFloyd()
                     }
                 }
 
-                // Examine first Pixel separately
+                
                 nX = 0;
                 CALC_ERRORS;
                 CALC_TABLES7;
@@ -2626,7 +2626,7 @@ bool Bitmap::ImplDitherFloyd()
                 CALC_TABLES5;
                 pWriteAcc->SetPixelIndex( nYAcc, 0, static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ]) );
 
-                // Get middle Pixels using a loop
+                
                 long nXAcc;
                 for ( nX = 3L, nXAcc = 1L; nX < nW2; nXAcc++ )
                 {
@@ -2638,7 +2638,7 @@ bool Bitmap::ImplDitherFloyd()
                     pWriteAcc->SetPixelIndex( nYAcc, nXAcc, static_cast<sal_uInt8>(nVCLBLut[ nBC ] + nVCLGLut[nGC ] + nVCLRLut[nRC ]) );
                 }
 
-                // Treat last Pixel separately
+                
                 CALC_ERRORS;
                 nX -= 5;
                 CALC_TABLES3;
@@ -2698,7 +2698,7 @@ bool Bitmap::ImplDitherFloyd16()
 
         for( nY = 0L; nY < nHeight; nY++, nYTmp++ )
         {
-            // First RowPixel
+            
             aBestCol = pQLine1[ 0 ].ImplGetColor();
             aBestCol.SetRed( ( aBestCol.GetRed() & 248 ) | 7 );
             aBestCol.SetGreen( ( aBestCol.GetGreen() & 248 ) | 7 );
@@ -2719,14 +2719,14 @@ bool Bitmap::ImplDitherFloyd16()
                 pWriteAcc->SetPixel( nY, nX, aBestCol );
             }
 
-            // Last RowPixel
+            
             aBestCol = pQLine1[ nWidth1 ].ImplGetColor();
             aBestCol.SetRed( ( aBestCol.GetRed() & 248 ) | 7 );
             aBestCol.SetGreen( ( aBestCol.GetGreen() & 248 ) | 7 );
             aBestCol.SetBlue( ( aBestCol.GetBlue() & 248 ) | 7 );
             pWriteAcc->SetPixel( nY, nX, aBestCol );
 
-            // Refill/copy row buffer
+            
             pQLine1 = pQLine2;
             pQLine2 = ( bQ1 = !bQ1 ) ? pErrQuad2 : pErrQuad1;
 
@@ -2735,7 +2735,7 @@ bool Bitmap::ImplDitherFloyd16()
                     pQLine2[ nX ] = pReadAcc->GetPixel( nYTmp, nX );
         }
 
-        // Destroy row buffer
+        
         delete[] pErrQuad1;
         delete[] pErrQuad2;
         bRet = true;
@@ -3038,7 +3038,7 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
 
             memset( (HPBYTE) pColBuf, 0, nSize );
 
-            // create Buffer
+            
             if( pRAcc->HasPalette() )
             {
                 for( long nY = 0L; nY < nHeight; nY++ )
@@ -3062,12 +3062,12 @@ bool Bitmap::ImplReduceMedian( sal_uInt16 nColCount )
                 }
             }
 
-            // create palette via median cut
+            
             BitmapPalette aPal( pWAcc->GetPaletteEntryCount() );
             ImplMedianCut( pColBuf, aPal, 0, 31, 0, 31, 0, 31,
                            nColCount, nWidth * nHeight, nIndex );
 
-            // do mapping of colors to palette
+            
             InverseColorMap aMap( aPal );
             pWAcc->SetPalette( aPal );
             for( long nY = 0L; nY < nHeight; nY++ )
@@ -3242,7 +3242,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
 {
     bool bRet = false;
 
-    // nothing to do => return quickly
+    
     if( !nLuminancePercent && !nContrastPercent &&
         !nChannelRPercent && !nChannelGPercent && !nChannelBPercent &&
         ( fGamma == 1.0 ) && !bInvert )
@@ -3264,25 +3264,25 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
             long            nX, nY;
             double          fM, fROff, fGOff, fBOff, fOff;
 
-            // calculate slope
+            
             if( nContrastPercent >= 0 )
                 fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0L, 100L ) );
             else
                 fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100L, 0L ) ) / 128.0;
 
-            // total offset = luminance offset + contrast offset
+            
             fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55 + 128.0 - fM * 128.0;
 
-            // channel offset = channel offset  + total offset
+            
             fROff = nChannelRPercent * 2.55 + fOff;
             fGOff = nChannelGPercent * 2.55 + fOff;
             fBOff = nChannelBPercent * 2.55 + fOff;
 
-            // calculate gamma value
+            
             fGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
             const bool bGamma = ( fGamma != 1.0 );
 
-            // create mapping table
+            
             for( nX = 0L; nX < 256L; nX++ )
             {
                 cMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0L, 255L );
@@ -3304,7 +3304,7 @@ bool Bitmap::Adjust( short nLuminancePercent, short nContrastPercent,
                 }
             }
 
-            // do modifying
+            
             if( pAcc->HasPalette() )
             {
                 BitmapColor aNewCol;

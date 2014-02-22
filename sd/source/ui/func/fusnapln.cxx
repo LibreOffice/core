@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,12 +60,12 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
     sal_uInt16  nHelpLine = 0;
     sal_Bool    bCreateNew = sal_True;
 
-    // Get index of snap line or snap point from the request.
+    
     SFX_REQUEST_ARG (rReq, pHelpLineIndex, SfxUInt32Item, ID_VAL_INDEX, false);
     if (pHelpLineIndex != NULL)
     {
         nHelpLine = static_cast<sal_uInt16>(pHelpLineIndex->GetValue());
-        // Reset the argument pointer to trigger the display of the dialog.
+        
         pArgs = NULL;
     }
 
@@ -79,8 +79,8 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
 
         if (pHelpLineIndex == NULL)
         {
-            // The index of the snap line is not provided as argument to the
-            // request.  Determine it from the mouse position.
+            
+            
 
             aLinePos = static_cast<DrawViewShell*>(mpViewShell)->GetMousePos();
             static_cast<DrawViewShell*>(mpViewShell)->SetMousePosFreezed( sal_False );
@@ -155,7 +155,7 @@ void FuSnapLine::DoExecute( SfxRequest& rReq )
                 break;
 
             case RET_SNAP_DELETE:
-                // delete snap object
+                
                 if ( !bCreateNew )
                     pPV->DeleteHelpLine(nHelpLine);
                 /*fall-through*/
@@ -199,6 +199,6 @@ void FuSnapLine::Deactivate()
 {
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

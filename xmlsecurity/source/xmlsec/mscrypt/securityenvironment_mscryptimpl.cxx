@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -85,7 +85,7 @@ CertErrorToString arErrStrings[] =
     { 0x02000000, "CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY"},
     { 0x04000000, "CERT_TRUST_IS_EXPLICIT_DISTRUST"},
     { 0x08000000, "CERT_TRUST_HAS_NOT_SUPPORTED_CRITICAL_EXT"},
-    //Chain errors
+    
     { 0x00010000, "CERT_TRUST_IS_PARTIAL_CHAIN"},
     { 0x00020000, "CERT_TRUST_CTL_IS_NOT_TIME_VALID"},
     { 0x00040000, "CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID"},
@@ -116,7 +116,7 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
     }
 
     if( m_pszContainer != NULL ) {
-        //TODO: Don't know whether or not it should be released now.
+        
         m_pszContainer = NULL ;
     }
 
@@ -130,7 +130,7 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
         m_hKeyStore = NULL ;
     }
 
-    //i120675, close the store handles
+    
     if( m_hMySystemStore != NULL ) {
         CertCloseStore( m_hMySystemStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
         m_hMySystemStore = NULL ;
@@ -195,7 +195,7 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_MSCryptImpl :: getSupportedSer
     return impl_getSupportedServiceNames() ;
 }
 
-//Helper for XServiceInfo
+
 Sequence< OUString > SecurityEnvironment_MSCryptImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
@@ -207,7 +207,7 @@ OUString SecurityEnvironment_MSCryptImpl :: impl_getImplementationName() throw( 
     return OUString("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl") ;
 }
 
-//Helper for registry
+
 Reference< XInterface > SAL_CALL SecurityEnvironment_MSCryptImpl :: impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
     return Reference< XInterface >( *new SecurityEnvironment_MSCryptImpl( aServiceManager ) ) ;
 }
@@ -268,7 +268,7 @@ LPCTSTR SecurityEnvironment_MSCryptImpl :: getKeyContainer() throw( ::com::sun::
 }
 
 void SecurityEnvironment_MSCryptImpl :: setKeyContainer( LPCTSTR aKeyContainer ) throw( ::com::sun::star::uno::Exception , ::com::sun::star::uno::RuntimeException ) {
-    //TODO: Don't know whether or not it should be copied.
+    
     m_pszContainer = aKeyContainer ;
 }
 
@@ -308,13 +308,13 @@ void SecurityEnvironment_MSCryptImpl :: adoptSymKey( HCRYPTKEY aSymKey ) throw( 
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aSymKey != NULL ) {
-        //First try to find the key in the list
+        
         for( keyIt = m_tSymKeyList.begin() ; keyIt != m_tSymKeyList.end() ; ++keyIt ) {
             if( *keyIt == aSymKey )
                 return ;
         }
 
-        //If we do not find the key in the list, add a new node
+        
         symkey = aSymKey ;
 
         try {
@@ -360,13 +360,13 @@ void SecurityEnvironment_MSCryptImpl :: adoptPubKey( HCRYPTKEY aPubKey ) throw( 
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aPubKey != NULL ) {
-        //First try to find the key in the list
+        
         for( keyIt = m_tPubKeyList.begin() ; keyIt != m_tPubKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPubKey )
                 return ;
         }
 
-        //If we do not find the key in the list, add a new node
+        
         pubkey = aPubKey ;
 
         try {
@@ -412,13 +412,13 @@ void SecurityEnvironment_MSCryptImpl :: adoptPriKey( HCRYPTKEY aPriKey ) throw( 
     std::list< HCRYPTKEY >::iterator keyIt ;
 
     if( aPriKey != NULL ) {
-        //First try to find the key in the list
+        
         for( keyIt = m_tPriKeyList.begin() ; keyIt != m_tPriKeyList.end() ; ++keyIt ) {
             if( *keyIt == aPriKey )
                 return ;
         }
 
-        //If we do not find the key in the list, add a new node
+        
         prikey = aPriKey ;
 
         try {
@@ -459,7 +459,7 @@ HCRYPTKEY SecurityEnvironment_MSCryptImpl :: getPriKey( unsigned int position ) 
     return prikey ;
 }
 
-//Methods from XSecurityEnvironment
+
 Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPersonalCertificates() throw( SecurityException , RuntimeException )
 {
     sal_Int32 length ;
@@ -467,7 +467,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
     std::list< X509Certificate_MSCryptImpl* > certsList ;
     PCCERT_CONTEXT pCertContext = NULL;
 
-    //firstly, we try to find private keys in given key store.
+    
     if( m_hKeyStore != NULL ) {
         pCertContext = CertEnumCertificatesInStore( m_hKeyStore, pCertContext );
         while (pCertContext)
@@ -479,12 +479,12 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
         }
     }
 
-    //secondly, we try to find certificate from registered private keys.
+    
     if( !m_tPriKeyList.empty()  ) {
-        //TODO: Don't know whether or not it is necessary ans possible.
+        
     }
 
-    //Thirdly, we try to find certificate from system default key store.
+    
     if( m_bEnableDefault ) {
         HCERTSTORE hSystemKeyStore ;
         DWORD      dwKeySpec;
@@ -495,7 +495,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
             pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
             while (pCertContext)
             {
-                // for checking whether the certificate is a personal certificate or not.
+                
                 if(!(CryptAcquireCertificatePrivateKey(pCertContext,
                         CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
                         NULL,
@@ -503,11 +503,11 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
                         &dwKeySpec,
                         NULL)))
                 {
-                    // Not Privatekey found. SKIP this one.
+                    
                     pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
                     continue;
                 }
-                // then TODO : Check the personal cert is valid or not.
+                
 
                 xcert = MswcryCertContextToXCert( pCertContext ) ;
                 if( xcert != NULL )
@@ -545,13 +545,13 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
     CRYPT_INTEGER_BLOB cryptSerialNumber ;
     CERT_INFO certInfo ;
 
-    // for correct encoding
+    
     sal_uInt16 encoding ;
     rtl_Locale *pLocale = NULL ;
     osl_getProcessLocale( &pLocale ) ;
     encoding = osl_getTextEncodingFromLocale( pLocale ) ;
 
-    //Create cert info from issue and serial
+    
     OString oissuer = OUStringToOString( issuerName , encoding ) ;
     pszName = ( char* )oissuer.getStr() ;
 
@@ -582,7 +582,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
         return NULL ;
     }
 
-    //Get the SerialNumber
+    
     cryptSerialNumber.cbData = serialNumber.getLength() ;
     cryptSerialNumber.pbData = ( BYTE* )malloc( cryptSerialNumber.cbData);
     if (!cryptSerialNumber.pbData)
@@ -596,7 +596,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
     certInfo.SerialNumber.cbData = cryptSerialNumber.cbData ;
     certInfo.SerialNumber.pbData = cryptSerialNumber.pbData ;
 
-    // Get the Cert from all store.
+    
     for( i = 0 ; i < 6 ; i ++ )
     {
         switch(i)
@@ -642,11 +642,11 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
         pCertContext = NULL ;
         found = 0;
         do{
-            //  1. enum the certs has same string in the issuer string.
+            
             pCertContext = CertEnumCertificatesInStore( hCertStore , pCertContext ) ;
             if( pCertContext != NULL )
             {
-                // 2. check the cert's issuer name .
+                
                 char* issuer = NULL ;
                 DWORD cbIssuer = 0 ;
 
@@ -657,10 +657,10 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
                     NULL, 0
                 ) ;
 
-                if( cbIssuer == 0 ) continue ; // discard this cert;
+                if( cbIssuer == 0 ) continue ; 
 
                 issuer = (char *)malloc( cbIssuer ) ;
-                if( issuer == NULL )  // discard this cert;
+                if( issuer == NULL )  
                 {
                     free( cryptSerialNumber.pbData) ;
                     free( certInfo.Issuer.pbData ) ;
@@ -679,23 +679,23 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
                 if( cbIssuer <= 0 )
                 {
                     free( issuer ) ;
-                    continue ;// discard this cert;
+                    continue ;
                 }
 
                 if(strncmp(pszName , issuer , cbIssuer) != 0)
                 {
                     free( issuer ) ;
-                    continue ;// discard this cert;
+                    continue ;
                 }
                 free( issuer ) ;
 
-                // 3. check the serial number.
+                
                 if( memcmp( cryptSerialNumber.pbData , pCertContext->pCertInfo->SerialNumber.pbData  , cryptSerialNumber.cbData ) != 0 )
                 {
-                    continue ;// discard this cert;
+                    continue ;
                 }
 
-                // 4. confirm and break;
+                
                 found = 1;
                 break ;
             }
@@ -703,7 +703,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
         }while(pCertContext);
 
         if(i != 0 && i != 1) CertCloseStore( hCertStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-        if( found != 0 ) break; // Found the certificate.
+        if( found != 0 ) break; 
 ********************************************************************************/
 
         pCertContext = CertFindCertificateInStore(
@@ -716,7 +716,7 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
         ) ;
 
         if(i != 0 && i != 1) CertCloseStore( hCertStore, CERT_CLOSE_STORE_CHECK_FLAG ) ;
-        if( pCertContext != NULL ) break ; // Found the certificate.
+        if( pCertContext != NULL ) break ; 
 
     }
 
@@ -775,7 +775,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
         HCERTSTORE hCollectionStore = NULL;
         if (m_hCertStore && m_hKeyStore)
         {
-            //Merge m_hCertStore and m_hKeyStore into one store.
+            
             hCollectionStore = CertOpenStore(
                 CERT_STORE_PROV_COLLECTION ,
                 0 ,
@@ -800,7 +800,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
 
         }
 
-        //if the merge of both stores failed then we add only m_hCertStore
+        
         if (hAdditionalStore == NULL && m_hCertStore)
             hAdditionalStore = m_hCertStore;
         else if (hAdditionalStore == NULL && m_hKeyStore)
@@ -808,11 +808,11 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
         else
             hAdditionalStore = NULL;
 
-        //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
+        
         bChain = CertGetCertificateChain(
             NULL ,
             pCertContext ,
-            NULL , //use current system time
+            NULL , 
             hAdditionalStore,
             &chainPara ,
             CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
@@ -821,7 +821,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
         if (!bChain)
             pChainContext = NULL;
 
-        //Close the additional store
+        
        CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
     }
 
@@ -915,18 +915,18 @@ HCERTSTORE getCertStoreForIntermediatCerts(
         Sequence<sal_Int8> data = seqCerts[i]->getEncoded();
         PCCERT_CONTEXT cert = CertCreateCertificateContext(
             X509_ASN_ENCODING, ( const BYTE* )&data[0], data.getLength());
-        //Adding the certificate creates a copy and not just increases the ref count
-        //Therefore we free later the certificate that we now add
+        
+        
         CertAddCertificateContextToStore(store, cert, CERT_STORE_ADD_ALWAYS, NULL);
         CertFreeCertificateContext(cert);
     }
     return store;
 }
 
-//We return only valid or invalid, as long as the API documentation expresses
-//explicitly that all validation steps are carried out even if one or several
-//errors occur. See also
-//http://wiki.openoffice.org/wiki/Certificate_Path_Validation#Validation_status
+
+
+
+
 sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     const Reference< ::com::sun::star::security::XCertificate >& aCert,
     const Sequence< Reference< ::com::sun::star::security::XCertificate > >& seqCerts)
@@ -958,7 +958,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
     CERT_CHAIN_PARA     chainPara ;
     memset(&chainPara, 0, sizeof(CERT_CHAIN_PARA));
 
-    //Prepare parameter for CertGetCertificateChain
+    
     enhKeyUsage.cUsageIdentifier = 0 ;
     enhKeyUsage.rgpszUsageIdentifier = NULL ;
     certUsage.dwType = USAGE_MATCH_TYPE_AND ;
@@ -975,8 +975,8 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
         hIntermediateCertsStore =
             getCertStoreForIntermediatCerts(seqCerts);
 
-        //Merge m_hCertStore and m_hKeyStore and the store of the intermediate
-        //certificates into one store.
+        
+        
         hCollectionStore = CertOpenStore(
             CERT_STORE_PROV_COLLECTION ,
             0 ,
@@ -1004,14 +1004,14 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
 
         }
 
-        //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
-        //We do not check revocation of the root. In most cases there are none.
-        //Then we would get CERT_TRUST_REVOCATION_STATUS_UNKNOWN
+        
+        
+        
         xmlsec_trace("Verifying cert using revocation information.");
         bChain = CertGetCertificateChain(
             NULL ,
             pCertContext ,
-            NULL , //use current system time
+            NULL , 
             hCollectionStore,
             &chainPara ,
             CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_REVOCATION_CHECK_CHAIN_EXCLUDE_ROOT,
@@ -1022,33 +1022,33 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
         {
             xmlsec_trace("Overall error status (all chains):");
             traceTrustStatus(pChainContext->TrustStatus.dwErrorStatus);
-            //highest quality chains come first
+            
             PCERT_SIMPLE_CHAIN pSimpleChain = pChainContext->rgpChain[0];
             xmlsec_trace("Error status of first chain: ");
             traceTrustStatus(pSimpleChain->TrustStatus.dwErrorStatus);
 
-            //CERT_TRUST_REVOCATION_STATUS_UNKNOWN is also set if a certificate
-            //has no AIA(OCSP) or CRLDP extension and there is no CRL locally installed.
+            
+            
             DWORD revocationFlags = CERT_TRUST_REVOCATION_STATUS_UNKNOWN |
                 CERT_TRUST_IS_OFFLINE_REVOCATION;
             DWORD otherErrorsMask = ~revocationFlags;
             if( !(pSimpleChain->TrustStatus.dwErrorStatus & otherErrorsMask))
 
             {
-                //No errors except maybe those caused by missing revocation information
-                //Check if there are errors
+                
+                
                 if ( pSimpleChain->TrustStatus.dwErrorStatus & revocationFlags)
                 {
-                    //No revocation information. Because MSDN documentation is not
-                    //clear about if all other tests are performed if an error occurrs,
-                    //we test again, without requiring revocation checking.
+                    
+                    
+                    
                     CertFreeCertificateChain(pChainContext);
                     pChainContext = NULL;
                     xmlsec_trace("Checking again but without requiring revocation information.");
                     bChain = CertGetCertificateChain(
                         NULL ,
                         pCertContext ,
-                        NULL , //use current system time
+                        NULL , 
                         hCollectionStore,
                         &chainPara ,
                         0,
@@ -1068,14 +1068,14 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
                 }
                 else
                 {
-                    //valid and revocation information available
+                    
                     xmlsec_trace("Certificate is valid.\n");
                     validity = ::com::sun::star::security::CertificateValidity::VALID;
                 }
             }
             else
             {
-                //invalid
+                
                 xmlsec_trace("Certificate is invalid.\n");
                 validity = ::com::sun::star::security::CertificateValidity::INVALID ;
             }
@@ -1092,10 +1092,10 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate(
         pChainContext = NULL;
     }
 
-    //Close the additional store, do not destroy the contained certs
+    
     CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
-    //Close the temporary store containing the intermediate certificates and make
-    //sure all certificates are deleted.
+    
+    
     CertCloseStore(hIntermediateCertsStore, CERT_CLOSE_STORE_CHECK_FLAG);
 
     return validity ;
@@ -1120,14 +1120,14 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: getCertificateCharacters( const ::c
 
     characters = 0x00000000 ;
 
-    //Firstly, make sentence whether or not the cert is self-signed.
+    
     if( CertCompareCertificateName( X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, &(pCertContext->pCertInfo->Subject), &(pCertContext->pCertInfo->Issuer) ) ) {
         characters |= ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
     } else {
         characters &= ~ ::com::sun::star::security::CertificateCharacters::SELF_SIGNED ;
     }
 
-    //Secondly, make sentence whether or not the cert has a private key.
+    
     {
         BOOL    fCallerFreeProv ;
         DWORD   dwKeySpec ;
@@ -1226,7 +1226,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl :: createKeysManager() throw( 
      * Adopt system default certificate store.
      */
     if( defaultEnabled() ) {
-        //Add system key store into the keys manager.
+        
         m_hMySystemStore = CertOpenSystemStore( 0, "MY" ) ;
         if( m_hMySystemStore != NULL ) {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptKeyStore( pKeysMngr, m_hMySystemStore ) < 0 ) {
@@ -1236,7 +1236,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl :: createKeysManager() throw( 
             }
         }
 
-        //Add system root store into the keys manager.
+        
         m_hRootSystemStore = CertOpenSystemStore( 0, "Root" ) ;
         if( m_hRootSystemStore != NULL ) {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptTrustedStore( pKeysMngr, m_hRootSystemStore ) < 0 ) {
@@ -1246,7 +1246,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl :: createKeysManager() throw( 
             }
         }
 
-        //Add system trusted store into the keys manager.
+        
         m_hTrustSystemStore = CertOpenSystemStore( 0, "Trust" ) ;
         if( m_hTrustSystemStore != NULL ) {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hTrustSystemStore ) < 0 ) {
@@ -1256,7 +1256,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_MSCryptImpl :: createKeysManager() throw( 
             }
         }
 
-        //Add system CA store into the keys manager.
+        
         m_hCaSystemStore = CertOpenSystemStore( 0, "CA" ) ;
         if( m_hCaSystemStore != NULL ) {
             if( xmlSecMSCryptoAppliedKeysMngrAdoptUntrustedStore( pKeysMngr, m_hCaSystemStore ) < 0 ) {

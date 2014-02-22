@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbu_reghelper.hxx"
@@ -72,12 +72,12 @@ public:
     DBContentLoader(const Reference< XComponentContext >&);
     ~DBContentLoader();
 
-    // XServiceInfo
+    
     OUString                 SAL_CALL getImplementationName() throw(  );
     sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(  );
     Sequence< OUString >     SAL_CALL getSupportedServiceNames(void) throw(  );
 
-    // static methods
+    
     static OUString          getImplementationName_Static() throw(  )
     {
         return OUString("org.openoffice.comp.dbu.DBContentLoader");
@@ -86,7 +86,7 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
             SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-    // XLoader
+    
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
                                 const Reference< XLoadEventListener > & _rListener) throw(::com::sun::star::uno::RuntimeException);
@@ -115,25 +115,25 @@ Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMult
     return *(new DBContentLoader(comphelper::getComponentContext(rSMgr)));
 }
 
-// XServiceInfo
+
 OUString SAL_CALL DBContentLoader::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
 
-// XServiceInfo
+
 sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-// ORegistryServiceManager_Static
+
 Sequence< OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< OUString > aSNS( 2 );
@@ -183,14 +183,14 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         }
     }
 
-    // if a data source browser is loaded without its tree pane, then we assume it to be a
-    // table data view, effectively. In this case, we need to adjust the module identifier.
-    // #i85879#
+    
+    
+    
     ::comphelper::NamedValueCollection aLoadArgs( rArgs );
 
     if  ( sComponentURL == URL_COMPONENT_DATASOURCEBROWSER )
     {
-        sal_Bool bDisableBrowser =  ( sal_False == aLoadArgs.getOrDefault( "ShowTreeViewButton", sal_True ) )   // compatibility name
+        sal_Bool bDisableBrowser =  ( sal_False == aLoadArgs.getOrDefault( "ShowTreeViewButton", sal_True ) )   
                                 ||  ( sal_False == aLoadArgs.getOrDefault( (OUString)PROPERTY_ENABLE_BROWSER, sal_True ) );
 
         if ( bDisableBrowser )
@@ -211,7 +211,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
     {
         sal_Bool bPreview = aLoadArgs.getOrDefault( "Preview", sal_False );
         if ( bPreview )
-        {   // report designs cannot be previewed
+        {   
             if ( rListener.is() )
                 rListener->loadCancelled( this );
             return;
@@ -254,7 +254,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
             }
         }
 
-        // init controller
+        
         SolarMutexGuard aGuard;
         try
         {
@@ -275,7 +275,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         }
         catch(const Exception&)
         {
-            // Does this need to be shown to the user?
+            
             bSuccess = false;
             try
             {
@@ -288,7 +288,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         }
     }
 
-    // assign controller and frame
+    
     if ( bSuccess )
     {
         if ( xController.is() && rFrame.is() )

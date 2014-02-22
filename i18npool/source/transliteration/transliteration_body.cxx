@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustrbuf.hxx>
@@ -73,9 +73,9 @@ static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Un
 {
     sal_uInt8 nRes = nMappingType;
 
-    // take care of TOGGLE_CASE transliteration:
-    // nMappingType should not be a combination of flags, thuse we decide now
-    // which one to use.
+    
+    
+    
     if (nMappingType == (MappingTypeLowerToUpper | MappingTypeUpperToLower))
     {
         const sal_Int16 nType = unicode::getUnicodeType( cChar );
@@ -83,7 +83,7 @@ static sal_uInt8 lcl_getMappingTypeForToggleCase( sal_uInt8 nMappingType, sal_Un
             nRes = MappingTypeLowerToUpper;
         else
         {
-            // should also work properly for non-upper characters like white spacs, numbers, ...
+            
             nRes = MappingTypeUpperToLower;
         }
     }
@@ -99,14 +99,14 @@ Transliteration_body::transliterate(
 {
     const sal_Unicode *in = inStr.getStr() + startPos;
 
-    // Two different blocks to eliminate the if(useOffset) condition inside the
-    // inner k loop. Yes, on massive use even such small things do count.
+    
+    
     if ( useOffset )
     {
         sal_Int32 nOffCount = 0, i;
         for (i = 0; i < nCount; i++)
         {
-            // take care of TOGGLE_CASE transliteration:
+            
             sal_uInt8 nTmpMappingType = nMappingType;
             if (nMappingType == (MappingTypeLowerToUpper | MappingTypeUpperToLower))
                 nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
@@ -124,7 +124,7 @@ Transliteration_body::transliterate(
         sal_Int32 * pArr = offset.getArray();
         for (i = 0; i < nCount; i++)
         {
-            // take care of TOGGLE_CASE transliteration:
+            
             sal_uInt8 nTmpMappingType = nMappingType;
             if (nMappingType == (MappingTypeLowerToUpper | MappingTypeUpperToLower))
                 nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
@@ -142,17 +142,17 @@ Transliteration_body::transliterate(
     }
     else
     {
-        // In the simple case of no offset sequence used we can eliminate the
-        // first getValue() loop. We could also assume that most calls result
-        // in identical string lengths, thus using a preallocated
-        // OUStringBuffer could be an easy way to assemble the return string
-        // without too much hassle. However, for single characters the
-        // OUStringBuffer::append() method is quite expensive compared to a
-        // simple array operation, so it pays here to copy the final result
-        // instead.
+        
+        
+        
+        
+        
+        
+        
+        
 
-        // Allocate the max possible buffer. Try to use stack instead of heap,
-        // which would have to be reallocated most times anyways.
+        
+        
         const sal_Int32 nLocalBuf = 2048;
         sal_Unicode aLocalBuf[ nLocalBuf * NMAPPINGMAX ], *out = aLocalBuf, *pHeapBuf = NULL;
         if ( nCount > nLocalBuf )
@@ -161,7 +161,7 @@ Transliteration_body::transliterate(
         sal_Int32 j = 0;
         for ( sal_Int32 i = 0; i < nCount; i++)
         {
-            // take care of TOGGLE_CASE transliteration:
+            
             sal_uInt8 nTmpMappingType = nMappingType;
             if (nMappingType == (MappingTypeLowerToUpper | MappingTypeUpperToLower))
                 nTmpMappingType = lcl_getMappingTypeForToggleCase( nMappingType, in[i] );
@@ -241,10 +241,10 @@ Transliteration_l2u::Transliteration_l2u()
 
 Transliteration_togglecase::Transliteration_togglecase()
 {
-    // usually nMappingType must NOT be a combiantion of different flages here,
-    // but we take care of that problem in Transliteration_body::transliterate above
-    // before that value is used. There we will decide which of both is to be used on
-    // a per character basis.
+    
+    
+    
+    
     nMappingType = MappingTypeLowerToUpper | MappingTypeUpperToLower;
     transliterationName = "toggle(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_togglecase";
@@ -271,22 +271,22 @@ static OUString transliterate_titlecase_Impl(
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
         CharacterClassificationImpl aCharClassImpl( xContext );
 
-        // because aCharClassImpl.toTitle does not handle ligatures or Beta but will raise
-        // an exception we need to handle the first chara manually...
+        
+        
 
-        // we don't want to change surrogates by accident, thuse we use proper code point iteration
+        
         sal_Int32 nPos = 0;
         sal_uInt32 cFirstChar = aText.iterateCodePoints( &nPos );
         OUString aResolvedLigature( &cFirstChar, 1 );
-        // toUpper can be used to properly resolve ligatures and characters like Beta
+        
         aResolvedLigature = aCharClassImpl.toUpper( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
-        // since toTitle will leave all-uppercase text unchanged we first need to
-        // use toLower to bring possible 2nd and following charas in lowercase
+        
+        
         aResolvedLigature = aCharClassImpl.toLower( aResolvedLigature, 0, aResolvedLigature.getLength(), rLocale );
         sal_Int32 nResolvedLen = aResolvedLigature.getLength();
 
-        // now we can properly use toTitle to get the expected result for the resolved string.
-        // The rest of the text should just become lowercase.
+        
+        
         aRes = aCharClassImpl.toTitle( aResolvedLigature, 0, nResolvedLen, rLocale );
         aRes += aCharClassImpl.toLower( aText, 1, aText.getLength() - 1, rLocale );
         offset.realloc( aRes.getLength() );
@@ -309,8 +309,8 @@ static OUString transliterate_titlecase_Impl(
     return aRes;
 }
 
-// this function expects to be called on a word-by-word basis,
-// namely that startPos points to the first char of the word
+
+
 OUString SAL_CALL Transliteration_titlecase::transliterate(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset )
@@ -321,13 +321,13 @@ OUString SAL_CALL Transliteration_titlecase::transliterate(
 
 Transliteration_sentencecase::Transliteration_sentencecase()
 {
-    nMappingType = MappingTypeToTitle;  // though only to be applied to the first word...
+    nMappingType = MappingTypeToTitle;  
     transliterationName = "sentence(generic)";
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_sentencecase";
 }
 
-// this function expects to be called on a sentence-by-sentence basis,
-// namely that startPos points to the first word (NOT first char!) in the sentence
+
+
 OUString SAL_CALL Transliteration_sentencecase::transliterate(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     Sequence< sal_Int32 >& offset )

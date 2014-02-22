@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -93,7 +93,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
                         }
                         if( nChar > 255 )
                         {
-                            // value is too big, or more than 3 digits
+                            
                             delete [] pOrgStr;
                             return( NULL );
                         }
@@ -150,7 +150,7 @@ char * RscChar::MakeUTF8( char * pStr, sal_uInt16 nTextEncoding )
     delete[] pOrgStr, pOrgStr = 0;
 
     hConv = rtl_createUnicodeToTextConverter( RTL_TEXTENCODING_UTF8 );
-    // factor of 6 is the maximum size of an UNICODE character as utf8
+    
     char * pUtf8 = (char *)rtl_allocateMemory( nUniSize * 6 );
     rtl_convertUnicodeToText( hConv, 0,
                             pUniCode, nUniSize,

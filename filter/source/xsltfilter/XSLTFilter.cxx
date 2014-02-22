@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -105,10 +105,10 @@ namespace XSLT
     {
     private:
 
-        // the UNO ServiceFactory
+        
         css::uno::Reference<XComponentContext> m_xContext;
 
-        // DocumentHandler interface of the css::xml::sax::Writer service
+        
         css::uno::Reference<XOutputStream> m_rOutputStream;
 
         css::uno::Reference<xslt::XXSLTTransformer> m_tcontrol;
@@ -128,12 +128,12 @@ namespace XSLT
 
     public:
 
-        // ctor...
+        
         XSLTFilter(const css::uno::Reference<XComponentContext> &r);
 
         ~XSLTFilter();
 
-        // XStreamListener
+        
         virtual void SAL_CALL
         error(const Any& a) throw (RuntimeException);
         virtual void SAL_CALL
@@ -145,18 +145,18 @@ namespace XSLT
         virtual void SAL_CALL
         disposing(const EventObject& e) throw (RuntimeException);
 
-        // XImportFilter
+        
         virtual sal_Bool SAL_CALL
         importer(const Sequence<PropertyValue>& aSourceData, const css::uno::Reference<
                 XDocumentHandler>& xHandler,
                 const Sequence<OUString>& msUserData) throw (RuntimeException);
 
-        // XExportFilter
+        
         virtual sal_Bool SAL_CALL
         exporter(const Sequence<PropertyValue>& aSourceData, const Sequence<
                 OUString>& msUserData) throw (RuntimeException);
 
-        // XDocumentHandler
+        
         virtual void SAL_CALL
         startDocument() throw (SAXException, RuntimeException);
         virtual void SAL_CALL
@@ -203,11 +203,11 @@ namespace XSLT
     {
         css::uno::Reference<xslt::XXSLTTransformer> xTransformer;
 
-        // check if the filter needs XSLT-2.0-capable transformer
-        // COMPATIBILITY: libreoffice 3.5/3.6 used to save the impl.
-        // name of the XSLT 2.0 transformation service there, so check
-        // for that too (it is sufficient to check that there is _a_
-        // service name there)
+        
+        
+        
+        
+        
         if (rTransformer.toBoolean() || rTransformer.startsWith("com.sun."))
         {
             try
@@ -216,15 +216,15 @@ namespace XSLT
             }
             catch (const Exception&)
             {
-                // TODO: put a dialog telling about the need to install
-                // xslt2-transformer extension here
+                
+                
                 SAL_WARN("filter.xslt", "could not create XSLT 2.0 transformer");
                 throw;
             }
         }
 
-        // instantiation of XSLT 2.0 transformer service failed, or the
-        // filter does not need it
+        
+        
         if (!xTransformer.is())
         {
             xTransformer = xslt::XSLTTransformer::create(m_xContext, rArgs);
@@ -286,10 +286,10 @@ namespace XSLT
 
         OUString udStyleSheet = rel2abs(msUserData[4]);
 
-        // get information from media descriptor
-        // the imput stream that represents the imported file
-        // is most important here since we need to supply it to
-        // the sax parser that drives the supplied document handler
+        
+        
+        
+        
         sal_Int32 nLength = aSourceData.getLength();
         OUString aName, aFileName, aURL;
         css::uno::Reference<XInputStream> xInputStream;
@@ -311,11 +311,11 @@ namespace XSLT
         if (!xInputStream.is())
             return sal_False;
 
-        // create SAX parser that will read the document file
-        // and provide events to xHandler passed to this call
+        
+        
         css::uno::Reference<XParser> xSaxParser = Parser::create(m_xContext);
 
-        // create transformer
+        
         Sequence<Any> args(3);
         NamedValue nv;
 
@@ -338,35 +338,35 @@ namespace XSLT
             {
                 try
                     {
-                        // we want to be notfied when the processing is done...
+                        
                         m_tcontrol->addListener(css::uno::Reference<XStreamListener> (
                                 this));
 
-                        // connect input to transformer
+                        
                         css::uno::Reference<XActiveDataSink> tsink(m_tcontrol, UNO_QUERY);
                         tsink->setInputStream(xInputStream);
 
-                        // create pipe
+                        
                         css::uno::Reference<XOutputStream> pipeout(
                                         Pipe::create(m_xContext),
                                         UNO_QUERY);
                         css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
-                        //connect transformer to pipe
+                        
                         css::uno::Reference<XActiveDataSource> tsource(m_tcontrol,
                                 UNO_QUERY);
                         tsource->setOutputStream(pipeout);
 
-                        // connect pipe to sax parser
+                        
                         InputSource aInput;
                         aInput.sSystemId = aURL;
                         aInput.sPublicId = aURL;
                         aInput.aInputStream = pipein;
 
-                        // set doc handler
+                        
                         xSaxParser->setDocumentHandler(xHandler);
 
-                        // transform
+                        
                         m_tcontrol->start();
                         TimeValue timeout = { TRANSFORMATION_TIMEOUT_SEC, 0};
                         oslConditionResult result(osl_waitCondition(m_cTransformed, &timeout));
@@ -407,7 +407,7 @@ namespace XSLT
                 catch (const Exception&)
 #endif
                     {
-                        // something went wrong
+                        
                         OSL_FAIL(OUStringToOString(exc.Message, RTL_TEXTENCODING_ASCII_US).getStr());
                         return sal_False;
                     }
@@ -425,17 +425,17 @@ namespace XSLT
         if (msUserData.getLength() < 6)
             return sal_False;
 
-        // get interesting values from user data
+        
         OUString udStyleSheet = rel2abs(msUserData[5]);
 
-        // read source data
-        // we are especialy interested in the output stream
-        // since that is where our xml-writer will push the data
-        // from it's data-source interface
+        
+        
+        
+        
         OUString aName, sURL;
         sal_Bool bIndent = sal_False;
         OUString aDoctypePublic;
-        // css::uno::Reference<XOutputStream> rOutputStream;
+        
         sal_Int32 nLength = aSourceData.getLength();
         for (sal_Int32 i = 0; i < nLength; i++)
             {
@@ -452,13 +452,13 @@ namespace XSLT
 
         if (!getDelegate().is())
             {
-                // get the document writer
+                
                 setDelegate(css::uno::Reference<XExtendedDocumentHandler>(
                                 Writer::create(m_xContext),
                                 UNO_QUERY_THROW));
             }
 
-        // create transformer
+        
         Sequence<Any> args(4);
         NamedValue nv;
         nv.Name = "StylesheetURL";
@@ -483,31 +483,31 @@ namespace XSLT
         OSL_ASSERT(m_tcontrol.is());
         if (m_tcontrol.is() && m_rOutputStream.is())
             {
-                // we want to be notfied when the processing is done...
+                
                 m_tcontrol->addListener(css::uno::Reference<XStreamListener> (this));
 
-                // create pipe
+                
                 css::uno::Reference<XOutputStream> pipeout(
                                 Pipe::create(m_xContext),
                                 UNO_QUERY);
                 css::uno::Reference<XInputStream> pipein(pipeout, UNO_QUERY);
 
-                // connect sax writer to pipe
+                
                 css::uno::Reference<XActiveDataSource> xmlsource(getDelegate(),
                         UNO_QUERY);
                 xmlsource->setOutputStream(pipeout);
 
-                // connect pipe to transformer
+                
                 css::uno::Reference<XActiveDataSink> tsink(m_tcontrol, UNO_QUERY);
                 tsink->setInputStream(pipein);
 
-                // connect transformer to output
+                
                 css::uno::Reference<XActiveDataSource> tsource(m_tcontrol, UNO_QUERY);
                 tsource->setOutputStream(m_rOutputStream);
 
-                // we will start receiving events after returning 'true'.
-                // we will start the transformation as soon as we receive the startDocument
-                // event.
+                
+                
+                
                 return sal_True;
             }
         else
@@ -516,9 +516,9 @@ namespace XSLT
             }
     }
 
-    // for the DocumentHandler implementation, we just proxy the the
-    // events to the XML writer that we created upon the output stream
-    // that was provided by the XMLFilterAdapter
+    
+    
+    
     void
     XSLTFilter::startDocument() throw (SAXException, RuntimeException)
     {
@@ -530,7 +530,7 @@ namespace XSLT
     XSLTFilter::endDocument() throw (SAXException, RuntimeException)
     {
         ExtendedDocumentHandlerAdapter::endDocument();
-        // wait for the transformer to finish
+        
         osl_waitCondition(m_cTransformed, 0);
         m_tcontrol->terminate();
         if (!m_bError && !m_bTerminated)
@@ -545,9 +545,9 @@ namespace XSLT
     }
 
 
-    // --------------------------------------
-    // Component management
-    // --------------------------------------
+    
+    
+    
 #define FILTER_SERVICE_NAME "com.sun.star.documentconversion.XSLTFilter"
 #define FILTER_IMPL_NAME "com.sun.star.comp.documentconversion.XSLTFilter"
 #define TRANSFORMER_SERVICE_NAME "com.sun.star.xml.xslt.XSLTTransformer"
@@ -622,6 +622,6 @@ extern "C"
         return pRet;
     }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

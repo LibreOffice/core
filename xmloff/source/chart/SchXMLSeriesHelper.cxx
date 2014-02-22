@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/SchXMLSeriesHelper.hxx>
@@ -26,7 +26,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <rtl/ustring.h>
-// header for define DBG_ERROR1
+
 #include <tools/debug.hxx>
 
 #include <typeinfo>
@@ -100,10 +100,10 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
     if(!xDiagram.is())
         return 0;
 
-    //iterate through the model to find the given xSeries
-    //the found parent indicates the charttype
+    
+    
 
-    //iterate through all coordinate systems
+    
     uno::Reference< chart2::XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( !xCooSysContainer.is())
         return 0;
@@ -113,7 +113,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
     {
         uno::Reference< chart2::XCoordinateSystem > xCooSys( aCooSysList[nCS] );
 
-        //iterate through all chart types in the current coordinate system
+        
         uno::Reference< chart2::XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
         SAL_WARN_IF( !xChartTypeContainer.is(), "xmloff.chart", "xChartTypeContainer is NULL");
         if( !xChartTypeContainer.is() )
@@ -123,7 +123,7 @@ uno::Reference< chart2::XChartType > lcl_getChartTypeOfSeries(
         {
             uno::Reference< chart2::XChartType > xChartType( aChartTypeList[nT] );
 
-            //iterate through all series in this chart type
+            
             uno::Reference< chart2::XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
             SAL_WARN_IF( !xDataSeriesContainer.is(), "xmloff.chart", "xDataSeriesContainer is NULL");
             if( !xDataSeriesContainer.is() )
@@ -168,7 +168,7 @@ bool SchXMLSeriesHelper::isCandleStickSeries(
     return bRet;
 }
 
-//static
+
 uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesPropertySet(
             const uno::Reference< chart2::XDataSeries >& xSeries
             , const uno::Reference< frame::XModel >& xChartModel )
@@ -202,7 +202,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
     return xRet;
 }
 
-//static
+
 uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointPropertySet(
             const uno::Reference< chart2::XDataSeries >& xSeries
             , sal_Int32 nPointIndex

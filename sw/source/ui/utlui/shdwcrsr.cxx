@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -52,10 +52,10 @@ void SwShadowCursor::DrawTri( const Point& rPt, long nHeight, bool bLeft )
     long nLineDiff = ( nHeight / 2 );
     long nLineDiffHalf = nLineDiff / 2;
 
-    // Dot above
+    
     Point aPt1( (bLeft ? rPt.X() - 3 : rPt.X() + 3),
                 rPt.Y() + nLineDiffHalf );
-    // Dot below
+    
     Point aPt2( aPt1.X(), aPt1.Y() + nHeight - nLineDiff - 1 );
     long nDiff = bLeft ? -1 : 1;
     while( aPt1.Y() <= aPt2.Y() )
@@ -77,14 +77,14 @@ void SwShadowCursor::DrawCrsr( const Point& rPt, long nHeight, sal_uInt16 nMode 
 
     pWin->SetLineColor( Color( aCol.GetColor() ^ COL_WHITE ) );
 
-    // 1. The Line:
+    
     pWin->DrawLine( Point( rPt.X(), rPt.Y() + 1),
               Point( rPt.X(), rPt.Y() - 2 + nHeight ));
 
-    // 2. The Triangle
-    if( text::HoriOrientation::LEFT == nMode || text::HoriOrientation::CENTER == nMode )    // Arrow to the right
+    
+    if( text::HoriOrientation::LEFT == nMode || text::HoriOrientation::CENTER == nMode )    
         DrawTri( rPt, nHeight, false );
-    if( text::HoriOrientation::RIGHT == nMode || text::HoriOrientation::CENTER == nMode )   // Arrow to the left
+    if( text::HoriOrientation::RIGHT == nMode || text::HoriOrientation::CENTER == nMode )   
         DrawTri( rPt, nHeight, true );
 
     pWin->Pop();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <chrhghdl.hxx>
@@ -30,12 +30,12 @@
 using namespace ::com::sun::star;
 
 //
-// class XMLEscapementPropHdl
+
 //
 
 XMLCharHeightHdl::~XMLCharHeightHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -48,7 +48,7 @@ bool XMLCharHeightHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue
         if (::sax::Converter::convertDouble(fSize, rStrImpValue,
                     eSrcUnit, util::MeasureUnit::POINT))
         {
-            fSize = ::std::max<double>(fSize, 1.0); // fdo#49876: 0pt is invalid
+            fSize = ::std::max<double>(fSize, 1.0); 
             rValue <<= (float)fSize;
             return true;
         }
@@ -64,7 +64,7 @@ bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
     float fSize = 0;
     if( rValue >>= fSize )
     {
-        fSize = ::std::max<float>(fSize, 1.0f); // fdo#49876: 0pt is invalid
+        fSize = ::std::max<float>(fSize, 1.0f); 
         ::sax::Converter::convertDouble(aOut, (double)fSize, true,
                 util::MeasureUnit::POINT, util::MeasureUnit::POINT);
         aOut.append( 'p');
@@ -76,12 +76,12 @@ bool XMLCharHeightHdl::exportXML( OUString& rStrExpValue, const uno::Any& rValue
 }
 
 //
-// class XMLEscapementHeightPropHdl
+
 //
 
 XMLCharHeightPropHdl::~XMLCharHeightPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCharHeightPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -114,12 +114,12 @@ bool XMLCharHeightPropHdl::exportXML( OUString& rStrExpValue, const uno::Any& rV
 }
 
 //
-// class XMLEscapementPropHdl
+
 //
 
 XMLCharHeightDiffHdl::~XMLCharHeightDiffHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLCharHeightDiffHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const

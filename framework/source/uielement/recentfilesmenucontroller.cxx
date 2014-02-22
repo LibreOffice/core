@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <classes/resource.hrc>
@@ -62,7 +62,7 @@ public:
     RecentFilesMenuController( const uno::Reference< uno::XComponentContext >& xContext );
     virtual ~RecentFilesMenuController();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     {
@@ -83,20 +83,20 @@ public:
         return aSeq;
     }
 
-    // XStatusListener
+    
     virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException );
 
-    // XMenuListener
+    
     virtual void SAL_CALL itemSelected( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException);
     virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException);
 
-    // XDispatchProvider
+    
     virtual uno::Reference< frame::XDispatch > SAL_CALL queryDispatch( const util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) throw( uno::RuntimeException );
 
-    // XDispatch
+    
     virtual void SAL_CALL dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& seqProperties ) throw( uno::RuntimeException );
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const com::sun::star::lang::EventObject& Source ) throw ( uno::RuntimeException );
 
     DECL_STATIC_LINK( RecentFilesMenuController, ExecuteHdl_Impl, LoadRecentFile* );
@@ -126,7 +126,7 @@ RecentFilesMenuController::~RecentFilesMenuController()
 {
 }
 
-// private function
+
 void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu* pPopupMenu    = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
@@ -193,19 +193,19 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
                 aStrBuffer.append( sal_Int32( i ) );
                 OUString  aURLString( aStrBuffer.makeStringAndClear() );
 
-                // Abbreviate URL
+                
                 OUString   aMenuTitle;
                 INetURLObject   aURL( m_aRecentFilesItems[i].aURL );
                 OUString aTipHelpText( aURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
 
                 if ( aURL.GetProtocol() == INET_PROT_FILE )
                 {
-                    // Do handle file URL differently: don't show the protocol, just the file name
+                    
                     aMenuTitle = aURL.GetLastName(INetURLObject::DECODE_WITH_CHARSET, RTL_TEXTENCODING_UTF8);
                 }
                 else
                 {
-                    // In all other URLs show the protocol name before the file name
+                    
                     aMenuTitle   = aURL.GetSchemeName(aURL.GetProtocol()) + ": " + aURL.getName();
                 }
 
@@ -217,7 +217,7 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
             }
 
             pVCLPopupMenu->InsertSeparator();
-            // Clear List menu entry
+            
             pVCLPopupMenu->InsertItem( sal_uInt16( nCount + 1 ),
                                        FWK_RESSTR(STR_CLEAR_RECENT_FILES) );
             pVCLPopupMenu->SetItemCommand( sal_uInt16( nCount + 1 ),
@@ -227,10 +227,10 @@ void RecentFilesMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
         }
         else
         {
-            // No recent documents => insert "no document" string
+            
             pVCLPopupMenu->InsertItem( 1, FWK_RESSTR(STR_NODOCUMENT) );
-            // Do not disable it, otherwise the Toolbar controller and MenuButton
-            // will display SV_RESID_STRING_NOSELECTIONPOSSIBLE instead of STR_NODOCUMENT
+            
+            
             pVCLPopupMenu->SetItemBits( 1, pVCLPopupMenu->GetItemBits( 1 ) | MIB_NOSELECT );
         }
     }
@@ -260,13 +260,13 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         aArgsList[0].Name = "Referer";
         aArgsList[0].Value = makeAny( OUString( "private:user" ) );
 
-        // documents in the picklist will never be opened as templates
+        
         aArgsList[1].Name = "AsTemplate";
         aArgsList[1].Value = makeAny( (sal_Bool) sal_False );
 
         if (!m_aModuleName.isEmpty())
         {
-            // Type detection needs to know which app we are opening it from.
+            
             aArgsList.realloc(++nSize);
             aArgsList[nSize-1].Name = "DocumentService";
             aArgsList[nSize-1].Value <<= m_aModuleName;
@@ -277,9 +277,9 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
     if ( xDispatch.is() )
     {
-        // Call dispatch asychronously as we can be destroyed while dispatch is
-        // executed. VCL is not able to survive this as it wants to call listeners
-        // after select!!!
+        
+        
+        
         LoadRecentFile* pLoadRecentFile = new LoadRecentFile;
         pLoadRecentFile->xDispatch  = xDispatch;
         pLoadRecentFile->aTargetURL = aTargetURL;
@@ -289,7 +289,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
     }
 }
 
-// XEventListener
+
 void SAL_CALL RecentFilesMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -303,7 +303,7 @@ void SAL_CALL RecentFilesMenuController::disposing( const EventObject& ) throw (
     m_xPopupMenu.clear();
 }
 
-// XStatusListener
+
 void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     osl::MutexGuard aLock( m_aMutex );
@@ -342,14 +342,14 @@ void SAL_CALL RecentFilesMenuController::itemActivated( const css::awt::MenuEven
     impl_setPopupMenu();
 }
 
-// XPopupMenuController
+
 void RecentFilesMenuController::impl_setPopupMenu()
 {
     if ( m_xPopupMenu.is() )
         fillPopupMenu( m_xPopupMenu );
 }
 
-// XDispatchProvider
+
 Reference< XDispatch > SAL_CALL RecentFilesMenuController::queryDispatch(
     const URL& aURL,
     const OUString& /*sTarget*/,
@@ -366,7 +366,7 @@ throw( RuntimeException )
         return Reference< XDispatch >();
 }
 
-// XDispatch
+
 void SAL_CALL RecentFilesMenuController::dispatch(
     const URL& aURL,
     const Sequence< PropertyValue >& /*seqProperties*/ )
@@ -378,7 +378,7 @@ throw( RuntimeException )
 
     if ( aURL.Complete.startsWith( m_aBaseURL ) )
     {
-        // Parse URL to retrieve entry argument and its value
+        
         sal_Int32 nQueryPart = aURL.Complete.indexOf( '?', m_aBaseURL.getLength() );
         if ( nQueryPart > 0 )
         {
@@ -406,9 +406,9 @@ IMPL_STATIC_LINK_NOINSTANCE( RecentFilesMenuController, ExecuteHdl_Impl, LoadRec
 {
     try
     {
-        // Asynchronous execution as this can lead to our own destruction!
-        // Framework can recycle our current frame and the layout manager disposes all user interface
-        // elements if a component gets detached from its frame!
+        
+        
+        
         pLoadRecentFile->xDispatch->dispatch( pLoadRecentFile->aTargetURL, pLoadRecentFile->aArgSeq );
     }
     catch ( const Exception& )

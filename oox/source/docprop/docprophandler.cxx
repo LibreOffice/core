@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "docprophandler.hxx"
@@ -36,7 +36,7 @@ using namespace ::com::sun::star;
 namespace oox {
 namespace docprop {
 
-// ------------------------------------------------
+
 OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentContext >& xContext,
                                           const uno::Reference< document::XDocumentProperties > xDocProp )
     : m_xContext( xContext )
@@ -50,12 +50,12 @@ OOXMLDocPropHandler::OOXMLDocPropHandler( const uno::Reference< uno::XComponentC
         throw uno::RuntimeException();
 }
 
-// ------------------------------------------------
+
 OOXMLDocPropHandler::~OOXMLDocPropHandler()
 {
 }
 
-// ------------------------------------------------
+
 void OOXMLDocPropHandler::InitNew()
 {
     m_nState = 0;
@@ -65,7 +65,7 @@ void OOXMLDocPropHandler::InitNew()
     m_nInBlock = 0;
 }
 
-// ------------------------------------------------
+
 void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
 {
     if ( !m_aCustomPropertyName.isEmpty() )
@@ -82,7 +82,7 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
         }
         catch( beans::PropertyExistException& )
         {
-            // conflicts with core and extended properties are possible
+            
         }
         catch( uno::Exception& )
         {
@@ -91,7 +91,7 @@ void OOXMLDocPropHandler::AddCustomProperty( const uno::Any& aAny )
     }
 }
 
-// ------------------------------------------------
+
 util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChars )
 {
     oslDateTime aOslDTime = { 0, 0, 0, 0, 0, 0, 0, 0 };
@@ -133,8 +133,8 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
                             }
                             if ( digitPos < 29 )
                             {
-                                // read less digits than 9
-                                // add correct exponent of 10
+                                
+                                
                                 nOptTime += digitPos - 20;
                                 for(; digitPos<29; ++digitPos)
                                 {
@@ -143,7 +143,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
                             }
                             else
                             {
-                                //skip digits with more precision than we can handle
+                                
                                 while(nLen > digitPos)
                                 {
                                     sal_Unicode c = aChars[digitPos];
@@ -171,7 +171,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
 
                     if ( nModif )
                     {
-                        // convert to UTC time
+                        
                         TimeValue aTmp;
                         if ( osl_getTimeValueFromDateTime( &aOslDTime, &aTmp ) )
                         {
@@ -189,7 +189,7 @@ util::DateTime OOXMLDocPropHandler::GetDateTimeFromW3CDTF( const OUString& aChar
             aOslDTime.Day, aOslDTime.Month, aOslDTime.Year, false);
 }
 
-// ------------------------------------------------
+
 uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( const OUString& aChars )
 {
     if ( !aChars.isEmpty() )
@@ -212,7 +212,7 @@ uno::Sequence< OUString > OOXMLDocPropHandler::GetKeywordsSet( const OUString& a
     return uno::Sequence< OUString >();
 }
 
-// ------------------------------------------------
+
 void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
 {
     uno::Sequence< beans::NamedValue > aSet = m_xDocProp->getDocumentStatistics();
@@ -264,30 +264,30 @@ void OOXMLDocPropHandler::UpdateDocStatistic( const OUString& aChars )
     }
 }
 
-// ------------------------------------------------
-// com.sun.star.xml.sax.XFastDocumentHandler
-// ------------------------------------------------
+
+
+
 void SAL_CALL OOXMLDocPropHandler::startDocument()
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::endDocument()
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
     InitNew();
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
 
-// com.sun.star.xml.sax.XFastContextHandler
-// ------------------------------------------------
+
+
 void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList >& xAttribs )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -304,11 +304,11 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
                 OSL_FAIL( "Unexpected file format!" );
         }
     }
-    else if ( m_nState && m_nInBlock == 1 ) // that tag should contain the property name
+    else if ( m_nState && m_nInBlock == 1 ) 
     {
-        // Currently the attributes are ignored for the core properties since the only
-        // known attribute is xsi:type that can only be used with dcterms:created and
-        // dcterms:modified, and this element is allowed currently to have only one value dcterms:W3CDTF
+        
+        
+        
         m_nBlock = nElement;
 
         if ( xAttribs.is() && xAttribs->hasAttribute( XML_name ) )
@@ -329,7 +329,7 @@ void SAL_CALL OOXMLDocPropHandler::startFastElement( ::sal_Int32 nElement, const
     m_nInBlock++;
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespace, const OUString& aName, const uno::Reference< xml::sax::XFastAttributeList >& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -341,7 +341,7 @@ void SAL_CALL OOXMLDocPropHandler::startUnknownElement( const OUString& aNamespa
     m_nInBlock++;
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -361,7 +361,7 @@ void SAL_CALL OOXMLDocPropHandler::endFastElement( ::sal_Int32 )
     }
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::endUnknownElement( const OUString&, const OUString& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -369,22 +369,22 @@ void SAL_CALL OOXMLDocPropHandler::endUnknownElement( const OUString&, const OUS
         m_nInBlock--;
 }
 
-// ------------------------------------------------
+
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL OOXMLDocPropHandler::createFastChildContext( ::sal_Int32, const uno::Reference< xml::sax::XFastAttributeList >& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
-    // Should the arguments be parsed?
+    
     return uno::Reference< xml::sax::XFastContextHandler >( static_cast< xml::sax::XFastContextHandler* >( this ) );
 }
 
-// ------------------------------------------------
+
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL OOXMLDocPropHandler::createUnknownChildContext( const OUString&, const OUString&, const uno::Reference< xml::sax::XFastAttributeList >& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
     return uno::Reference< xml::sax::XFastContextHandler >( static_cast< xml::sax::XFastContextHandler* >( this ) );
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
@@ -398,27 +398,27 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                 {
                 case COREPR_TOKEN( category ):
                     m_aCustomPropertyName = "category";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case COREPR_TOKEN( contentStatus ):
                     m_aCustomPropertyName = "contentStatus";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case COREPR_TOKEN( contentType ):
                     m_aCustomPropertyName = "contentType";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case COREPR_TOKEN( identifier ):
                     m_aCustomPropertyName = "identifier";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case COREPR_TOKEN( version ):
                     m_aCustomPropertyName = "version";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case DCT_TOKEN( created ):
@@ -465,7 +465,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     }
                     catch (lang::IllegalArgumentException &)
                     {
-                        // ignore
+                        
                     }
                     break;
 
@@ -500,7 +500,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     }
                     catch (lang::IllegalArgumentException &)
                     {
-                        // ignore
+                        
                     }
                     break;
 
@@ -513,72 +513,72 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
 
                 case EXTPR_TOKEN( HyperlinksChanged ):
                     m_aCustomPropertyName = "HyperlinksChanged";
-                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); 
                     break;
 
                 case EXTPR_TOKEN( LinksUpToDate ):
                     m_aCustomPropertyName = "LinksUpToDate";
-                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); 
                     break;
 
                 case EXTPR_TOKEN( ScaleCrop ):
                     m_aCustomPropertyName = "ScaleCrop";
-                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); 
                     break;
 
                 case EXTPR_TOKEN( SharedDoc ):
                     m_aCustomPropertyName = "ShareDoc";
-                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); // the property has boolean type
+                    AddCustomProperty( uno::makeAny( aChars.toBoolean() ) ); 
                     break;
 
                 case EXTPR_TOKEN( DocSecurity ):
                     m_aCustomPropertyName = "DocSecurity";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); 
                     break;
 
                 case EXTPR_TOKEN( HiddenSlides ):
                     m_aCustomPropertyName = "HiddenSlides";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); 
                     break;
 
                 case EXTPR_TOKEN( MMClips ):
                     m_aCustomPropertyName = "MMClips";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); 
                     break;
 
                 case EXTPR_TOKEN( Notes ):
                     m_aCustomPropertyName = "Notes";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); 
                     break;
 
                 case EXTPR_TOKEN( Slides ):
                     m_aCustomPropertyName = "Slides";
-                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); // the property has sal_Int32 type
+                    AddCustomProperty( uno::makeAny( aChars.toInt32() ) ); 
                     break;
 
                 case EXTPR_TOKEN( AppVersion ):
                     m_aCustomPropertyName = "AppVersion";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case EXTPR_TOKEN( Company ):
                     m_aCustomPropertyName = "Company";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case EXTPR_TOKEN( HyperlinkBase ):
                     m_aCustomPropertyName = "HyperlinkBase";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case EXTPR_TOKEN( Manager ):
                     m_aCustomPropertyName = "Manager";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case EXTPR_TOKEN( PresentationFormat ):
                     m_aCustomPropertyName = "PresentationFormat";
-                    AddCustomProperty( uno::makeAny( aChars ) ); // the property has string type
+                    AddCustomProperty( uno::makeAny( aChars ) ); 
                     break;
 
                 case EXTPR_TOKEN( CharactersWithSpaces ):
@@ -587,7 +587,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                 case EXTPR_TOKEN( HeadingPairs ):
                 case EXTPR_TOKEN( HLinks ):
                 case EXTPR_TOKEN( TitlesOfParts ):
-                    // ignored during the import currently
+                    
                     break;
 
                 default:
@@ -598,7 +598,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
             {
                 if ( m_nBlock == CUSTPR_TOKEN( property ) )
                 {
-                    // this is a custom property
+                    
                     switch( m_nType )
                     {
                     case VT_TOKEN( bool ):
@@ -608,7 +608,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                     case VT_TOKEN( bstr ):
                     case VT_TOKEN( lpstr ):
                     case VT_TOKEN( lpwstr ):
-                        // the property has string type
+                        
                         AddCustomProperty( uno::makeAny( AttributeConversion::decodeXString( aChars ) ) );
                         break;
 
@@ -640,7 +640,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
                         break;
 
                     default:
-                        // all the other types are ignored;
+                        
                         break;
                     }
                 }
@@ -668,19 +668,19 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     }
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::ignorableWhitespace( const OUString& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-// ------------------------------------------------
+
 void SAL_CALL OOXMLDocPropHandler::processingInstruction( const OUString&, const OUString& )
     throw (xml::sax::SAXException, uno::RuntimeException)
 {
 }
 
-} // namespace docprop
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

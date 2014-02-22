@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef _MSC_VER
@@ -80,7 +80,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 
-// needs to be converted to a better data structure
+
 SfxFormalArgument aFormalArgs[] = {
     SFX_ARGUMENT(SID_DEFAULTFILENAME,"SuggestedSaveAsName",SfxStringItem),
     SFX_ARGUMENT(SID_DEFAULTFILEPATH,"SuggestedSaveAsDir",SfxStringItem),
@@ -89,7 +89,7 @@ SfxFormalArgument aFormalArgs[] = {
     SFX_ARGUMENT(SID_DOCINFO_MAJOR,"VersionMajor",SfxBoolItem),
     SFX_ARGUMENT(SID_FILE_FILTEROPTIONS,"FilterOptions",SfxStringItem),
     SFX_ARGUMENT(SID_FILTER_NAME,"FilterName",SfxStringItem),
-//    SFX_ARGUMENT(SID_FILE_NAME,"FileName",SfxStringItem),
+
     SFX_ARGUMENT(SID_FILE_NAME,"URL",SfxStringItem),
     SFX_ARGUMENT(SID_OPTIONS,"OpenFlags",SfxStringItem),
     SFX_ARGUMENT(SID_OVERWRITE,"Overwrite",SfxBoolItem),
@@ -99,8 +99,8 @@ SfxFormalArgument aFormalArgs[] = {
     SFX_ARGUMENT(SID_SAVETO,"SaveTo",SfxBoolItem),
     SFX_ARGUMENT(SID_TEMPLATE_NAME,"TemplateName",SfxStringItem),
     SFX_ARGUMENT(SID_TEMPLATE_REGIONNAME,"TemplateRegion",SfxStringItem),
-//    SFX_ARGUMENT(SID_TEMPLATE_REGIONNAME,"Region",SfxStringItem),
-//    SFX_ARGUMENT(SID_TEMPLATE_NAME,"Name",SfxStringItem),
+
+
     SFX_ARGUMENT(SID_UNPACK,"Unpacked",SfxBoolItem),
     SFX_ARGUMENT(SID_VERSION,"Version",SfxInt16Item),
     SFX_ARGUMENT(SID_SAVEACOPYITEM,"SaveACopy",SfxBoolItem),
@@ -193,7 +193,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     const beans::PropertyValue* pPropsVal = rArgs.getConstArray();
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
-        // slot is a property
+        
         const SfxType* pType = pSlot->GetType();
         boost::scoped_ptr<SfxPoolItem> pItem(pType->CreateItem());
 
@@ -216,10 +216,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         OUString aName = rProp.Name;
         if ( nCount == 1 && aName == OUString( pSlot->pUnoName, strlen( pSlot->pUnoName ), RTL_TEXTENCODING_UTF8 ) )
         {
-            // there is only one parameter and its name matches the name of the property,
-            // so it's either a simple property or a complex property in one single UNO struct
+            
+            
             if( pItem->PutValue( rProp.Value, bConvertTwips ? CONVERT_TWIPS : 0 ) )
-                // only use successfully converted items
+                
                 rSet.Put( *pItem );
 #ifdef DBG_UTIL
             else
@@ -233,7 +233,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DBG_UTIL
         else if ( nSubCount == 0 )
         {
-            // for a simple property there can be only one parameter and its name *must* match
+            
             OUStringBuffer aStr("Property name does not match: ");
             aStr.append(aName);
             OSL_FAIL( aStr.getStr() );
@@ -241,12 +241,12 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #endif
         else
         {
-            // there is more than one parameter and the property is a complex one
+            
 #ifdef DBG_UTIL
-            // if the dispatch API is used for UI purposes or from the testtool,
-            // it is possible to skip some or all arguments,
-            // but it indicates an error for macro recording;
-            // so this should be notified as a warning only
+            
+            
+            
+            
             if ( nCount != nSubCount )
             {
                 OStringBuffer aStr("MacroPlayer: wrong number of parameters for slot: ");
@@ -254,7 +254,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 DBG_WARNING(aStr.getStr());
             }
 #endif
-            // complex property; collect sub items from the parameter set and reconstruct complex item
+            
             sal_uInt16 nFound=0;
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
@@ -262,7 +262,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 sal_uInt16 nSub;
                 for ( nSub=0; nSub<nSubCount; nSub++ )
                 {
-                    // search sub item by name
+                    
                     OStringBuffer aStr;
                     aStr.append(pSlot->pUnoName).append('.').append(pType->aAttrib[nSub].pName);
                     if ( rPropValue.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
@@ -287,7 +287,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DBG_UTIL
                 if ( nSub >= nSubCount )
                 {
-                    // there was a parameter with a name that didn't match to any of the members
+                    
                     OStringBuffer aStr("Property name does not match: ");
                     aStr.append(OUStringToOString(rPropValue.Name, RTL_TEXTENCODING_UTF8));
                     OSL_FAIL( aStr.getStr() );
@@ -295,7 +295,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #endif
             }
 
-            // at least one part of the complex item must be present; other parts can have default values
+            
             if ( nFound > 0 )
                 rSet.Put( *pItem );
         }
@@ -306,10 +306,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
     OSL_ASSERT(nCount > 0);
 
 #ifdef DBG_UTIL
-    // detect parameters that don't match to any formal argument or one of its members
+    
     sal_Int32 nFoundArgs = 0;
 #endif
-    // slot is a method
+    
     bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
     sal_uInt16 nMaxArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->nArgDefCount;
     for ( sal_uInt16 nArgs=0; nArgs<nMaxArgs; nArgs++ )
@@ -333,7 +333,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         sal_uInt16 nSubCount = pType->nAttribs;
         if ( nSubCount == 0 )
         {
-            // "simple" (base type) argument
+            
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
                 const beans::PropertyValue& rProp = pPropsVal[n];
@@ -344,7 +344,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     ++nFoundArgs;
 #endif
                     if( pItem->PutValue( rProp.Value ) )
-                        // only use successfully converted items
+                        
                         rSet.Put( *pItem );
 #ifdef DBG_UTIL
                     else
@@ -360,7 +360,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
         }
         else
         {
-            // complex argument, could be passed in one struct
+            
             sal_Bool bAsWholeItem = sal_False;
             for ( sal_uInt16 n=0; n<nCount; n++ )
             {
@@ -373,7 +373,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                     ++nFoundArgs;
 #endif
                     if( pItem->PutValue( rProp.Value ) )
-                        // only use successfully converted items
+                        
                         rSet.Put( *pItem );
 #ifdef DBG_UTIL
                     else
@@ -388,21 +388,21 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 
             if ( !bAsWholeItem )
             {
-                // complex argument; collect sub items from argument array and reconstruct complex item
-                // only put item if at least one member was found and had the correct type
-                // (is this a good idea?! Should we ask for *all* members?)
+                
+                
+                
                 sal_Bool bRet = sal_False;
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     const beans::PropertyValue& rProp = pPropsVal[n];
                     for ( sal_uInt16 nSub=0; nSub<nSubCount; nSub++ )
                     {
-                        // search sub item by name
+                        
                         OStringBuffer aStr;
                         aStr.append(rArg.pName).append('.').append(pType->aAttrib[nSub].pName);
                         if ( rProp.Name.equalsAsciiL(aStr.getStr(), aStr.getLength()) )
                         {
-                            // at least one member found ...
+                            
                             bRet = sal_True;
 #ifdef DBG_UTIL
                             ++nFoundArgs;
@@ -412,7 +412,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                                 nSubId |= CONVERT_TWIPS;
                             if (!pItem->PutValue( rProp.Value, nSubId ) )
                             {
-                                // ... but it was not convertible
+                                
                                 bRet = sal_False;
 #ifdef DBG_UTIL
                                 OStringBuffer aDbgStr("Property not convertible: ");
@@ -427,18 +427,18 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
                 }
 
                 if ( bRet )
-                    // only use successfully converted items
+                    
                     rSet.Put( *pItem );
 
             }
         }
     }
 
-    // special additional parameters for some slots not seen in the slot definitions
-    // Some of these slots are not considered to be used for macro recording, because they shouldn't be recorded as slots,
-    // but as dispatching or factory or arbitrary URLs to the frame
-    // Some also can use additional arguments that are not recordable (will be changed later,
-    // f.e. "SaveAs" shouldn't support parameters not in the slot definition!)
+    
+    
+    
+    
+    
     if ( nSlotId == SID_NEWWINDOW )
     {
         for ( sal_uInt16 n=0; n<nCount; n++ )
@@ -810,7 +810,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
             else if ( aName == sDocumentBaseURL )
             {
                 OUString sVal;
-                // the base url can be set to empty ( for embedded objects for example )
+                
                 sal_Bool bOK = (rProp.Value >>= sVal);
                 DBG_ASSERT( bOK, "invalid type or value for DocumentBaseURL" );
                 if (bOK)
@@ -884,10 +884,10 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #endif
         }
     }
-    // API to raise options dialog with a specified options ab page (#i83757#)
+    
     else
     {
-        // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
+        
         OUString sSlotName( "OptionsTreeDialog" );
         OUString sPropName( "OptionsPageURL" );
         if ( sSlotName == OUString( pSlot->pUnoName, strlen(pSlot->pUnoName), RTL_TEXTENCODING_UTF8 ) )
@@ -909,7 +909,7 @@ void TransformParameters( sal_uInt16 nSlotId, const uno::Sequence<beans::Propert
 #ifdef DB_UTIL
     if ( nFoundArgs == nCount )
     {
-        // except for the "special" slots: assure that every argument was convertible
+        
         OStringBuffer aStr("MacroPlayer: Some properties didn't match to any formal argument for slot: ");
         aStr.append(pSlot->pUnoName);
         DBG_WARNING( aStr.getStr() );
@@ -930,34 +930,34 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     if ( nSlotId == SID_SAVEASURL )
         nSlotId = SID_SAVEASDOC;
 
-    // find number of properties to avoid permanent reallocations in the sequence
+    
     sal_Int32 nProps=0;
 
 #ifdef DBG_UTIL
-    // trace number of items and compare with number of properties for debugging purposes
+    
     sal_Int32 nItems=0;
 #endif
 
     const SfxType *pType = pSlot->GetType();
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
-        // slot is a property
+        
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
-        if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
+        if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) 
         {
             sal_uInt16 nSubCount = pType->nAttribs;
             if ( nSubCount )
-                // it's a complex property, we want it split into simple types
-                // so we expect to get as many items as we have (sub) members
+                
+                
                 nProps = nSubCount;
             else
-                // simple property: we expect to get exactly one item
+                
                 nProps++;
         }
 #ifdef DBG_UTIL
         else
         {
-            // we will not rely on the "toggle" ability of some property slots
+            
             OStringBuffer aStr("Processing property slot without argument: ");
             aStr.append(static_cast<sal_Int32>(nSlotId));
             OSL_FAIL(aStr.getStr());
@@ -970,24 +970,24 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     }
     else
     {
-        // slot is a method
+        
         bool bIsMediaDescriptor = isMediaDescriptor( nSlotId );
         sal_uInt16 nFormalArgs = bIsMediaDescriptor ? nMediaArgsCount : pSlot->GetFormalArgumentCount();
         for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
         {
-            // check every formal argument of the method
+            
             const SfxFormalArgument &rArg = pSlot->GetFormalArgument( nArg );
 
             sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
-            if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) //???
+            if ( rSet.GetItemState( nWhich ) == SFX_ITEM_SET ) 
             {
                 sal_uInt16 nSubCount = rArg.pType->nAttribs;
                 if ( nSubCount )
-                    // argument has a complex type, we want it split into simple types
-                    // so for this argument we expect to get as many items as we have (sub) members
+                    
+                    
                     nProps += nSubCount;
                 else
-                    // argument of simple type: we expect to get exactly one item for it
+                    
                     nProps++;
 #ifdef DBG_UTIL
                 nItems++;
@@ -995,7 +995,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             }
         }
 
-        // special treatment for slots that are *not* meant to be recorded as slots (except SaveAs/To)
+        
         if ( bIsMediaDescriptor )
         {
             sal_Int32 nAdditional=0;
@@ -1106,7 +1106,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             if (rSet.HasItem(SID_FILTER_PROVIDER))
                 ++nAdditional;
 
-            // consider additional arguments
+            
             nProps += nAdditional;
 #ifdef DBG_UTIL
             nItems += nAdditional;
@@ -1115,18 +1115,18 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     }
 
 #ifdef DBG_UTIL
-    // now check the itemset: is there any item that is not convertible using the list of formal arguments
-    // or the table of additional items?!
+    
+    
     if ( rSet.Count() != nItems )
     {
-        // detect unknown item and present error message
+        
         const sal_uInt16 *pRanges = rSet.GetRanges();
         while ( *pRanges )
         {
             for(sal_uInt16 nId = *pRanges++; nId <= *pRanges; ++nId)
             {
-                if ( rSet.GetItemState(nId) < SFX_ITEM_SET ) //???
-                    // not really set
+                if ( rSet.GetItemState(nId) < SFX_ITEM_SET ) 
+                    
                     continue;
 
                 if ( !pSlot->IsMode(SFX_SLOT_METHOD) && nId == rSet.GetPool()->GetWhich( pSlot->GetSlotId() ) )
@@ -1247,7 +1247,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
                     if (nId == SID_FILTER_PROVIDER)
                         continue;
 
-                    // used only internally
+                    
                     if ( nId == SID_SAVETO )
                         continue;
                     if ( nId == SID_SAVEACOPYITEM )
@@ -1271,18 +1271,18 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
     if ( !nProps )
         return;
 
-    // convert every item into a property
+    
     uno::Sequence<beans::PropertyValue> aSequ(nProps);
     beans::PropertyValue *pValue = aSequ.getArray();
 
     sal_Int32 nActProp=0;
     if ( !pSlot->IsMode(SFX_SLOT_METHOD) )
     {
-        // slot is a property
+        
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich(nSlotId);
         sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
         SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, false );
-        if ( pItem ) //???
+        if ( pItem ) 
         {
             sal_uInt16 nSubCount = pType->nAttribs;
             if ( !nSubCount )
@@ -1297,7 +1297,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             }
             else
             {
-                // complex type, add a property value for every member of the struct
+                
                 for ( sal_uInt16 n=1; n<=nSubCount; ++n )
                 {
                     sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) pType->aAttrib[n-1].nAID;
@@ -1326,7 +1326,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         return;
     }
 
-    // slot is a method
+    
     sal_uInt16 nFormalArgs = pSlot->GetFormalArgumentCount();
     for ( sal_uInt16 nArg=0; nArg<nFormalArgs; ++nArg )
     {
@@ -1334,7 +1334,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
         sal_uInt16 nWhich = rSet.GetPool()->GetWhich( rArg.nSlotId );
         sal_Bool bConvertTwips = ( rSet.GetPool()->GetMetric( nWhich ) == SFX_MAPUNIT_TWIP );
         SFX_ITEMSET_ARG( &rSet, pItem, SfxPoolItem, nWhich, false );
-        if ( pItem ) //???
+        if ( pItem ) 
         {
             sal_uInt16 nSubCount = rArg.pType->nAttribs;
             if ( !nSubCount )
@@ -1349,7 +1349,7 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, uno::Sequence<b
             }
             else
             {
-                // complex type, add a property value for every member of the struct
+                
                 for ( sal_uInt16 n = 1; n <= nSubCount; ++n )
                 {
                     sal_uInt8 nSubId = (sal_uInt8) (sal_Int8) rArg.pType->aAttrib[n-1].nAID;
@@ -1676,7 +1676,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL
     return rProperties;
 }
 
-//=========================================================================
+
 
 RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > rModel,
                               uno::Sequence< beans::PropertyValue > rProperties )
@@ -1711,7 +1711,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     return m_lContinuations;
 }
 
-//=========================================================================
+
 class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper1< task::XInteractionRequest >
 {
     uno::Any m_aRequest;
@@ -1781,7 +1781,7 @@ com::sun::star::uno::Reference < task::XInteractionRequest > RequestPackageRepar
     return com::sun::star::uno::Reference < task::XInteractionRequest >(pImp);
 }
 
-//=========================================================================
+
 class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper1< task::XInteractionRequest >
 {
     uno::Any m_aRequest;

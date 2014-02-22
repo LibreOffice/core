@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "shellexec.hxx"
@@ -26,7 +26,7 @@
 #include <string.h>
 #include <strings.h>
 
-// -----------------------------------------------------------------------
+
 
 int main(int argc, const char *argv[])
 {
@@ -45,7 +45,7 @@ int main(int argc, const char *argv[])
         return -1;
     }
 
-    // expect urltest.sh beside this binary
+    
     char line[LINE_MAX];
     size_t len = strlen(argv[0]);
     strcpy( line, argv[0] );
@@ -54,21 +54,21 @@ int main(int argc, const char *argv[])
 
     unsigned int errors = 0;
 
-    // read url(s) to test from file
+    
     char url[512];
     while( NULL != fgets(url, sizeof(url), fp))
     {
-        // remove trailing line break
+        
         strtok( url, "\r\n" );
 
         printf( "Passing URL: %s\n", url );
 
-        // test the encoding functionality from shellexec.cxx
+        
         OString aURL( url );
         OStringBuffer aBuffer;
         escapeForShell(aBuffer, aURL);
 
-        // append encoded URL as (only) parameter to the script
+        
         strcpy( line + len, aBuffer.getStr() );
 
         printf( "Command line: %s\n", line );
@@ -78,10 +78,10 @@ int main(int argc, const char *argv[])
         {
             char buffer[BUFSIZ];
 
-            // initialize buffer with '\0'
+            
             memset(buffer, '\0', BUFSIZ);
 
-            // read the output of the script
+            
             if(NULL == fgets( buffer, BUFSIZ, pipe))
             {
                 perror("FAILED: output of script could not be read");
@@ -90,7 +90,7 @@ int main(int argc, const char *argv[])
                 continue;
             }
 
-            // remove trailing line break again
+            
             strtok( buffer, "\r\n" );
 
             int n = pclose(pipe);
@@ -103,12 +103,12 @@ int main(int argc, const char *argv[])
 
             if( 0 == strcmp( url, buffer ) )
             {
-                // strings are identical: good !
+                
                 printf( "OK\n\n");
             }
             else
             {
-                // compare failed
+                
                 printf( "FAILED: returned string is %s\n\n", buffer);
                 ++errors;
             }

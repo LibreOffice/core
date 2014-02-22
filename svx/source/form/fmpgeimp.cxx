@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -66,7 +66,7 @@ using ::com::sun::star::drawing::XControlShape;
 using namespace ::svxform;
 
 DBG_NAME(FmFormPageImpl)
-//------------------------------------------------------------------------------
+
 FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
                :m_rPage( _rPage )
                ,m_bFirstActivation( sal_True )
@@ -76,7 +76,7 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage )
     DBG_CTOR(FmFormPageImpl,NULL);
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     typedef Reference< XInterface > FormComponent;
@@ -154,10 +154,10 @@ namespace
     };
 }
 
-//------------------------------------------------------------------------------
+
 void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
 {
-    // clone the Forms collection
+    
     const Reference< css::form::XForms > xForeignForms( const_cast< FmFormPageImpl& >( i_foreignImpl ).getForms( false ) );
 
     if ( !xForeignForms.is() )
@@ -167,7 +167,7 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
     {
         m_xForms.set( xForeignForms->createClone(), UNO_QUERY_THROW );
 
-        // create a mapping between the original control models and their clones
+        
         MapControlModels aModelAssignment;
 
         typedef TreeVisitor< FormComponentPair, FormHierarchyComparator, FormComponentAssignment >   FormComponentVisitor;
@@ -176,7 +176,7 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
         FormComponentAssignment aAssignmentProcessor( aModelAssignment );
         aVisitor.process( FormComponentPair( xForeignForms, m_xForms ), aAssignmentProcessor );
 
-        // assign the cloned models to their SdrObjects
+        
         SdrObjListIter aForeignIter( i_foreignImpl.m_rPage );
         SdrObjListIter aOwnIter( m_rPage );
 
@@ -191,20 +191,20 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
 
             if ( bForeignIsForm != bOwnIsForm )
             {
-                // if this fires, don't attempt to do further assignments, something's completely messed up
+                
                 SAL_WARN( "svx.form", "FmFormPageImpl::FmFormPageImpl: inconsistent ordering of objects!" );
                 break;
             }
 
             if ( !bForeignIsForm )
-                // no form control -> next round
+                
                 continue;
 
             Reference< XControlModel > xForeignModel( pForeignObj->GetUnoControlModel() );
             if ( !xForeignModel.is() )
             {
-                // if this fires, the SdrObject does not have a UNO Control Model. This is pathological, but well ...
-                // So the cloned SdrObject will also not have a UNO Control Model.
+                
+                
                 SAL_WARN( "svx.form", "FmFormPageImpl::FmFormPageImpl: control shape without control!" );
                 continue;
             }
@@ -212,9 +212,9 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
             MapControlModels::const_iterator assignment = aModelAssignment.find( xForeignModel );
             if ( assignment == aModelAssignment.end() )
             {
-                // if this fires, the source SdrObject has a model, but it is not part of the model hierarchy in
-                // i_foreignImpl.getForms().
-                // Pathological, too ...
+                
+                
+                
                 SAL_WARN( "svx.form", "FmFormPageImpl::FmFormPageImpl: no clone found for this model!" );
                 continue;
             }
@@ -229,7 +229,7 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
     }
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XMap > FmFormPageImpl::getControlToShapeMap()
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
@@ -241,12 +241,12 @@ Reference< XMap > FmFormPageImpl::getControlToShapeMap()
     return xControlShapeMap;
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     static void lcl_insertFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
     {
-        // the control model
+        
         Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
         OSL_ENSURE( xControlModel.is(), "lcl_insertFormObject_throw: suspicious: no control model!" );
         if ( !xControlModel.is() )
@@ -262,7 +262,7 @@ namespace
 
     static void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map, bool i_ignoreNonExistence = false )
     {
-        // the control model
+        
         Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
         OSL_ENSURE( xControlModel.is(), "lcl_removeFormObject: suspicious: no control model!" );
         if ( !xControlModel.is() )
@@ -284,7 +284,7 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
 {
     Reference< XMap > xMap;
@@ -299,7 +299,7 @@ Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
         SdrObjListIter aPageIter( m_rPage );
         while ( aPageIter.IsMore() )
         {
-            // only FmFormObjs are what we're interested in
+            
             FmFormObj* pCurrent = FmFormObj::GetFormObject( aPageIter.Next() );
             if ( !pCurrent )
                 continue;
@@ -314,7 +314,7 @@ Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
     return xMap;
 }
 
-//------------------------------------------------------------------------------
+
 const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCreate )
 {
     if ( m_xForms.is() || !_bForceCreate )
@@ -334,19 +334,19 @@ const Reference< css::form::XForms >& FmFormPageImpl::getForms( bool _bForceCrea
 
         FmFormModel* pFormsModel = PTR_CAST( FmFormModel, m_rPage.GetModel() );
 
-        // give the newly created collection a place in the universe
+        
         SfxObjectShell* pObjShell = pFormsModel ? pFormsModel->GetObjectShell() : NULL;
         if ( pObjShell )
             m_xForms->setParent( pObjShell->GetModel() );
 
-        // tell the UNDO environment that we have a new forms collection
+        
         if ( pFormsModel )
             pFormsModel->GetUndoEnv().AddForms( Reference<XNameContainer>(m_xForms,UNO_QUERY_THROW) );
     }
     return m_xForms;
 }
 
-//------------------------------------------------------------------------------
+
 FmFormPageImpl::~FmFormPageImpl()
 {
     xCurrentForm = NULL;
@@ -355,7 +355,7 @@ FmFormPageImpl::~FmFormPageImpl()
     DBG_DTOR(FmFormPageImpl,NULL);
 }
 
-//------------------------------------------------------------------------------
+
 bool FmFormPageImpl::validateCurForm()
 {
     if ( !xCurrentForm.is() )
@@ -369,26 +369,26 @@ bool FmFormPageImpl::validateCurForm()
     return xCurrentForm.is();
 }
 
-//------------------------------------------------------------------------------
+
 void FmFormPageImpl::setCurForm(Reference< ::com::sun::star::form::XForm >  xForm)
 {
     xCurrentForm = xForm;
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XForm >  FmFormPageImpl::getDefaultForm()
 {
     Reference< XForm > xForm;
 
     Reference< XForms > xForms( getForms() );
 
-    // by default, we use our "current form"
+    
     if ( !validateCurForm() )
     {
-        // check whether there is a "standard" form
+        
         if ( Reference<XNameAccess>(xForms,UNO_QUERY_THROW)->hasElements() )
         {
-            // suche die Standardform
+            
             OUString sStandardFormname = SVX_RESSTR(RID_STR_STDFORMNAME);
 
             try
@@ -411,7 +411,7 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
         xForm = xCurrentForm;
     }
 
-    // did not find an existing suitable form -> create a new one
+    
     if ( !xForm.is() )
     {
         SdrModel* pModel = m_rPage.GetModel();
@@ -427,11 +427,11 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
         {
             xForm.set( ::comphelper::getProcessServiceFactory()->createInstance( FM_SUN_COMPONENT_FORM ), UNO_QUERY );
 
-            // a form should always have the command type table as default
+            
             Reference< XPropertySet > xFormProps( xForm, UNO_QUERY_THROW );
             xFormProps->setPropertyValue( FM_PROP_COMMANDTYPE, makeAny( sal_Int32( CommandType::TABLE ) ) );
 
-            // and the "Standard" name
+            
             OUString sName = SVX_RESSTR(RID_STR_STDFORMNAME);
             xFormProps->setPropertyValue( FM_PROP_NAME, makeAny( sName ) );
 
@@ -459,25 +459,25 @@ Reference< XForm >  FmFormPageImpl::getDefaultForm()
     return xForm;
 }
 
-//------------------------------------------------------------------------------
+
 Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormComponentHierarchy(
     const Reference< XFormComponent > & rContent, const Reference< XDataSource > & rDatabase,
     const OUString& rDBTitle, const OUString& rCursorSource, sal_Int32 nCommandType )
 {
-    // if the control already is child of a form, don't do anything
+    
     if (!rContent.is() || rContent->getParent().is())
         return NULL;
 
     Reference< XForm >  xForm;
 
-    // Wenn Datenbank und CursorSource gesetzt sind, dann wird
-    // die Form anhand dieser Kriterien gesucht, ansonsten nur aktuelle
-    // und die StandardForm
+    
+    
+    
     if (rDatabase.is() && !rCursorSource.isEmpty())
     {
         validateCurForm();
 
-        // erst in der aktuellen form suchen
+        
         xForm = findFormForDataSource( xCurrentForm, rDatabase, rCursorSource, nCommandType );
 
         Reference< ::com::sun::star::container::XIndexAccess >  xFormsByIndex( getForms(), UNO_QUERY );
@@ -490,7 +490,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             xForm = findFormForDataSource( xToSearch, rDatabase, rCursorSource, nCommandType );
         }
 
-        // wenn keine ::com::sun::star::form gefunden, dann eine neue erzeugen
+        
         if (!xForm.is())
         {
             SdrModel* pModel = m_rPage.GetModel();
@@ -506,7 +506,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
             }
 
             xForm = Reference< ::com::sun::star::form::XForm >(::comphelper::getProcessServiceFactory()->createInstance(FM_SUN_COMPONENT_FORM), UNO_QUERY);
-            // a form should always have the command type table as default
+            
             Reference< ::com::sun::star::beans::XPropertySet > xFormProps(xForm, UNO_QUERY);
             try { xFormProps->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE))); }
             catch(Exception&) { }
@@ -553,7 +553,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::findPlaceInFormCompo
     return xForm;
 }
 
-//------------------------------------------------------------------------------
+
 Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         const Reference< XForm > & rForm, const Reference< XDataSource > & _rxDatabase,
         const OUString& _rCursorSource, sal_Int32 nCommandType)
@@ -565,8 +565,8 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         return xResultForm;
 
     OSL_ENSURE(_rxDatabase.is(), "FmFormPageImpl::findFormForDataSource: invalid data source!");
-    OUString sLookupName;            // the name of the data source we're looking for
-    OUString sFormDataSourceName;    // the name of the data source the current connection in the form is based on
+    OUString sLookupName;            
+    OUString sFormDataSourceName;    
     try
     {
         Reference< XPropertySet > xDSProps(_rxDatabase, UNO_QUERY);
@@ -574,8 +574,8 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
             xDSProps->getPropertyValue(FM_PROP_NAME) >>= sLookupName;
 
         xFormProps->getPropertyValue(FM_PROP_DATASOURCE) >>= sFormDataSourceName;
-        // if there's no DataSourceName set at the form, check whether we can deduce one from its
-        // ActiveConnection
+        
+        
         if (sFormDataSourceName.isEmpty())
         {
             Reference< XConnection > xFormConnection;
@@ -606,13 +606,13 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
 
     if (sLookupName == sFormDataSourceName)
     {
-        // jetzt noch ueberpruefen ob CursorSource und Type uebereinstimmen
+        
         OUString aCursorSource = ::comphelper::getString(xFormProps->getPropertyValue(FM_PROP_COMMAND));
         sal_Int32 nType = ::comphelper::getINT32(xFormProps->getPropertyValue(FM_PROP_COMMANDTYPE));
-        if (aCursorSource.isEmpty() || ((nType == nCommandType) && (aCursorSource == _rCursorSource))) // found the form
+        if (aCursorSource.isEmpty() || ((nType == nCommandType) && (aCursorSource == _rCursorSource))) 
         {
             xResultForm = rForm;
-            // Ist noch keine Datenquelle gesetzt, wird dieses hier nachgeholt
+            
             if (aCursorSource.isEmpty())
             {
                 xFormProps->setPropertyValue(FM_PROP_COMMAND, makeAny(_rCursorSource));
@@ -621,21 +621,21 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
         }
     }
 
-    // as long as xResultForm is NULL, search the child forms of rForm
+    
     Reference< XIndexAccess >  xComponents(rForm, UNO_QUERY);
     sal_Int32 nCount = xComponents->getCount();
     for (sal_Int32 i = 0; !xResultForm.is() && i < nCount; ++i)
     {
         Reference< ::com::sun::star::form::XForm >  xSearchForm;
         xComponents->getByIndex(i) >>= xSearchForm;
-        // continue searching in the sub form
+        
         if (xSearchForm.is())
             xResultForm = findFormForDataSource( xSearchForm, _rxDatabase, _rCursorSource, nCommandType );
     }
     return xResultForm;
 }
 
-//------------------------------------------------------------------------------
+
 OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xFormComponent, const Reference< XForm > & xControls)
 {
 #if OSL_DEBUG_LEVEL > 0
@@ -657,14 +657,14 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
 
         if (sName.isEmpty() || xNameAcc->hasByName(sName))
         {
-            // setzen eines default Namens ueber die ClassId
+            
             sal_Int16 nClassId( FormComponentType::CONTROL );
             xSet->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
 
             OUString sDefaultName = FormControlFactory::getDefaultUniqueName_ByComponentType(
                 Reference< XNameAccess >( xControls, UNO_QUERY ), xSet );
 
-            // bei Radiobuttons, die einen Namen haben, diesen nicht ueberschreiben!
+            
             if (sName.isEmpty() || nClassId != ::com::sun::star::form::FormComponentType::RADIOBUTTON)
             {
                 xSet->setPropertyValue(FM_PROP_NAME, makeAny(sDefaultName));
@@ -676,12 +676,12 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
     return sName;
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
     if ( !xControlShapeMap.is() )
-        // our map does not exist -> not interested in this event
+        
         return;
 
     try
@@ -695,12 +695,12 @@ void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
     if ( !xControlShapeMap.is() )
-        // our map does not exist -> not interested in this event
+        
         return;
 
     try
@@ -713,12 +713,12 @@ void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
     }
 }
 
-//----------------------------------------------------------------------------------------------------------------------
+
 void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
     if ( !xControlShapeMap.is() )
-        // our map does not exist -> not interested in this event
+        
         return;
 
     try

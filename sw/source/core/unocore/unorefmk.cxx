@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@ class SwXReferenceMark::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
     SwXReferenceMark & m_rThis;
 
 public:
@@ -62,7 +62,7 @@ public:
         : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
         , m_rThis(rThis)
         , m_EventListeners(m_Mutex)
-        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
+        
         , m_bIsDescriptor((0 == pRefMark) ? true : false)
         , m_pDoc(pDoc)
         , m_pMarkFmt(pRefMark)
@@ -77,7 +77,7 @@ public:
     void    InsertRefMark( SwPaM & rPam, SwXTextCursor const*const pCursor );
     void    Invalidate();
 protected:
-    // SwClient
+    
     virtual void    Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 };
@@ -98,7 +98,7 @@ void SwXReferenceMark::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem 
 {
     ClientModify(this, pOld, pNew);
 
-    if (!GetRegisteredIn()) // removed => dispose
+    if (!GetRegisteredIn()) 
     {
         Invalidate();
     }
@@ -131,9 +131,9 @@ SwXReferenceMark *
 SwXReferenceMark::GetReferenceMark(
         SwModify const& /*rUnoCB*/, SwFmtRefMark const& /*rMarkFmt*/)
 {
-    // #i105557#: do not iterate over the registered clients: race condition
-    // to do this properly requires the SwXReferenceMark to register at the
-    // SwFmtRefMark directly, not at the unocallback
+    
+    
+    
     return 0;
 }
 
@@ -209,9 +209,9 @@ template<typename T> struct NotContainedIn
 void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         SwXTextCursor const*const pCursor)
 {
-    //! in some cases when this function is called the pDoc pointer member may have become
-    //! invalid/deleted thus we obtain the document pointer from rPaM where it should always
-    //! be valid.
+    
+    
+    
     SwDoc *pDoc2 = rPam.GetDoc();
 
     UnoActionContext aCont(pDoc2);
@@ -239,12 +239,12 @@ void SwXReferenceMark::Impl::InsertRefMark(SwPaM& rPam,
         rPam.Exchange();
     }
 
-    // aRefMark was copied into the document pool; now retrieve real format...
+    
     SwTxtAttr * pTxtAttr(0);
     if (bMark)
     {
-        // #i107672#
-        // ensure that we do not retrieve a different mark at the same position
+        
+        
         ::std::vector<SwTxtAttr *> const newMarks(
             rPam.GetNode()->GetTxtNode()->GetTxtAttrsAt(
                 rPam.GetPoint()->nContent.GetIndex(), RES_TXTATR_REFMARK));
@@ -303,7 +303,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     }
 
     SwUnoInternalPaM aPam(*pDocument);
-    //das muss jetzt sal_True liefern
+    
     ::sw::XTextRangeToSwPaM(aPam, xTextRange);
     m_pImpl->InsertRefMark(aPam, dynamic_cast<SwXTextCursor*>(pCursor));
     m_pImpl->m_bIsDescriptor = false;
@@ -379,7 +379,7 @@ void SAL_CALL SwXReferenceMark::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -387,7 +387,7 @@ void SAL_CALL SwXReferenceMark::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -438,12 +438,12 @@ throw (uno::RuntimeException)
                                         : nStt + 1;
 
                 SwPaM aPam( rTxtNode, nStt, rTxtNode, nEnd );
-                // deletes the m_pImpl->m_pDoc member in the SwXReferenceMark!
+                
                 m_pImpl->m_pDoc->DeleteAndJoin( aPam );
-                // The aPam will keep the correct and functional doc though
+                
 
                 m_pImpl->m_sMarkName = rName;
-                //create a new one
+                
                 m_pImpl->InsertRefMark( aPam, 0 );
                 m_pImpl->m_pDoc = aPam.GetDoc();
             }
@@ -476,7 +476,7 @@ SwXReferenceMark::getPropertyValue(const OUString& rPropertyName)
 throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::RuntimeException)
 {
-    // does not seem to need SolarMutex
+    
     uno::Any aRet;
     if (! ::sw::GetDefaultTextContentValue(aRet, rPropertyName))
     {
@@ -552,20 +552,20 @@ protected:
 public:
     SwXMetaText(SwDoc & rDoc, SwXMeta & rMeta);
 
-    /// make available for SwXMeta
+    
     void Invalidate() { SwXText::Invalidate(); };
 
-    // XInterface
+    
     virtual void SAL_CALL acquire() throw()
         { OSL_FAIL("ERROR: SwXMetaText::acquire"); }
     virtual void SAL_CALL release() throw()
         { OSL_FAIL("ERROR: SwXMetaText::release"); }
 
-    // XTypeProvider
+    
     virtual uno::Sequence< sal_Int8 > SAL_CALL
         getImplementationId() throw (uno::RuntimeException);
 
-    // XText
+    
     virtual uno::Reference< text::XTextCursor >  SAL_CALL
         createTextCursor() throw (uno::RuntimeException);
     virtual uno::Reference< text::XTextCursor >  SAL_CALL
@@ -593,7 +593,7 @@ const SwStartNode *SwXMetaText::GetStartNode() const
 void SwXMetaText::PrepareForAttach( uno::Reference<text::XTextRange> & xRange,
         const SwPaM & rPam)
 {
-    // create a new cursor to prevent modifying SwXTextRange
+    
     xRange = static_cast<text::XWordCursor*>(
         new SwXTextCursor(*GetDoc(), &m_rMeta, CURSOR_META, *rPam.GetPoint(),
                 (rPam.HasMark()) ? rPam.GetMark() : 0));
@@ -632,7 +632,7 @@ SwXMetaText::getImplementationId() throw (uno::RuntimeException)
     return m_rMeta.getImplementationId();
 }
 
-// XText
+
 uno::Reference< text::XTextCursor > SAL_CALL
 SwXMetaText::createTextCursor() throw (uno::RuntimeException)
 {
@@ -652,21 +652,21 @@ SwXMetaText::createTextCursorByRange(
 /******************************************************************
  * SwXMeta
  ******************************************************************/
-// the Meta has a cached list of text portions for its contents
-// this list is created by SwXTextPortionEnumeration
-// the Meta listens at the SwTxtNode and throws away the cache when it changes
+
+
+
 class SwXMeta::Impl
     : public SwClient
 {
 private:
-    ::osl::Mutex m_Mutex; // just for OInterfaceContainerHelper
+    ::osl::Mutex m_Mutex; 
 
 public:
     ::cppu::OInterfaceContainerHelper m_EventListeners;
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     ::std::auto_ptr<const TextRangeList_t> m_pTextPortions;
     SAL_WNODEPRECATED_DECLARATIONS_POP
-    // 3 possible states: not attached, attached, disposed
+    
     bool m_bIsDisposed;
     bool m_bIsDescriptor;
     uno::Reference<text::XText> m_xParentText;
@@ -680,7 +680,7 @@ public:
         , m_EventListeners(m_Mutex)
         , m_pTextPortions( pPortions )
         , m_bIsDisposed( false )
-        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
+        
         , m_bIsDescriptor((0 == pMeta) ? true : false)
         , m_xParentText(xParentText)
         , m_Text(rDoc, rThis)
@@ -688,10 +688,10 @@ public:
     }
 
     inline const ::sw::Meta * GetMeta() const;
-    // only for SwXMetaField!
+    
     inline const ::sw::MetaField * GetMetaField() const;
 protected:
-    // SwClient
+    
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 };
@@ -701,14 +701,14 @@ inline const ::sw::Meta * SwXMeta::Impl::GetMeta() const
     return static_cast< const ::sw::Meta * >(GetRegisteredIn());
 }
 
-// SwModify
+
 void SwXMeta::Impl::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
-    m_pTextPortions.reset(); // throw away cache (SwTxtNode changed)
+    m_pTextPortions.reset(); 
 
     ClientModify(this, pOld, pNew);
 
-    if (!GetRegisteredIn()) // removed => dispose
+    if (!GetRegisteredIn()) 
     {
         m_bIsDisposed = true;
         lang::EventObject const ev(
@@ -745,22 +745,22 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
             uno::Reference<text::XText> const& i_xParent,
             ::std::auto_ptr<TextRangeList_t const> pPortions)
 {
-    // re-use existing SwXMeta
-    // #i105557#: do not iterate over the registered clients: race condition
+    
+    
     uno::Reference<rdf::XMetadatable> xMeta(rMeta.GetXMeta());
     if (xMeta.is())
     {
-        if (pPortions.get()) // set cache in the XMeta to the given portions
+        if (pPortions.get()) 
         {
             const uno::Reference<lang::XUnoTunnel> xUT(xMeta, uno::UNO_QUERY);
             SwXMeta *const pXMeta(
                 ::sw::UnoTunnelGetImplementation<SwXMeta>(xUT));
             OSL_ENSURE(pXMeta, "no pXMeta?");
-            // NB: the meta must always be created with the complete content
-            // if SwXTextPortionEnumeration is created for a selection,
-            // it must be checked that the Meta is contained in the selection!
+            
+            
+            
             pXMeta->m_pImpl->m_pTextPortions = pPortions;
-            // ??? is this necessary?
+            
             if (pXMeta->m_pImpl->m_xParentText.get() != i_xParent.get())
             {
                 OSL_FAIL("SwXMeta with different parent?");
@@ -770,7 +770,7 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
         return xMeta;
     }
 
-    // create new SwXMeta
+    
     SwTxtNode * const pTxtNode( rMeta.GetTxtNode() );
     OSL_ENSURE(pTxtNode, "CreateXMeta: no text node?");
     if (!pTxtNode) { return 0; }
@@ -786,12 +786,12 @@ SwXMeta::CreateXMeta(::sw::Meta & rMeta,
     if (!xParentText.is()) { return 0; }
     SwXMeta *const pXMeta( (RES_TXTATR_META == rMeta.GetFmtMeta()->Which())
         ? new SwXMeta     (pTxtNode->GetDoc(), &rMeta, xParentText,
-                            pPortions.release()) // temporarily un-auto_ptr :-(
+                            pPortions.release()) 
         : new SwXMetaField(pTxtNode->GetDoc(), &rMeta, xParentText,
                             pPortions.release()));
-    // this is why the constructor is private: need to acquire pXMeta here
+    
     xMeta.set(pXMeta);
-    // in order to initialize the weak pointer cache in the core object
+    
     rMeta.SetXMeta(xMeta);
     return xMeta;
 }
@@ -809,7 +809,7 @@ bool SwXMeta::SetContentRange(
             rpNode = pMeta->GetTxtNode();
             if (rpNode)
             {
-                // rStart points at the first position _within_ the meta!
+                
                 rStart = *pTxtAttr->GetStart() + 1;
                 rEnd = *pTxtAttr->End();
                 return true;
@@ -840,8 +840,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
     }
     bool bForceExpandHints(false);
     const sal_Int32 nStartPos(pStartPos->nContent.GetIndex());
-    // not <= but < because nMetaStart is behind dummy char!
-    // not >= but > because == means insert at end!
+    
+    
     if ((nStartPos < nMetaStart) || (nStartPos > nMetaEnd))
     {
         throw lang::IllegalArgumentException(
@@ -864,8 +864,8 @@ bool SwXMeta::CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
                     0, 0);
         }
         const sal_Int32 nEndPos(pEndPos->nContent.GetIndex());
-        // not <= but < because nMetaStart is behind dummy char!
-        // not >= but > because == means insert at end!
+        
+        
         if ((nEndPos < nMetaStart) || (nEndPos > nMetaEnd))
         {
             throw lang::IllegalArgumentException(
@@ -891,7 +891,7 @@ const uno::Sequence< sal_Int8 > & SwXMeta::getUnoTunnelId()
     return theSwXMetaUnoTunnelId::get().getSeq();
 }
 
-// XUnoTunnel
+
 sal_Int64 SAL_CALL
 SwXMeta::getSomething( const uno::Sequence< sal_Int8 > & i_rId )
 throw (uno::RuntimeException)
@@ -899,7 +899,7 @@ throw (uno::RuntimeException)
     return ::sw::UnoTunnelImpl<SwXMeta>(i_rId, this);
 }
 
-// XServiceInfo
+
 OUString SAL_CALL
 SwXMeta::getImplementationName() throw (uno::RuntimeException)
 {
@@ -928,13 +928,13 @@ SwXMeta::getSupportedServiceNames() throw (uno::RuntimeException)
     return ::sw::GetSupportedServiceNamesImpl(g_nServicesMeta, g_ServicesMeta);
 }
 
-// XComponent
+
 void SAL_CALL
 SwXMeta::addEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.addInterface(xListener);
 }
 
@@ -943,7 +943,7 @@ SwXMeta::removeEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
 throw (uno::RuntimeException)
 {
-    // no need to lock here as m_pImpl is const and container threadsafe
+    
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
@@ -969,12 +969,12 @@ SwXMeta::dispose() throw (uno::RuntimeException)
         OSL_ENSURE(bSuccess, "no pam?");
         if (bSuccess)
         {
-            // -1 because of CH_TXTATR
+            
             SwPaM aPam( *pTxtNode, nMetaStart - 1, *pTxtNode, nMetaEnd );
             SwDoc * const pDoc( pTxtNode->GetDoc() );
             pDoc->DeleteAndJoin( aPam );
 
-            // removal should call Modify and do the dispose
+            
             OSL_ENSURE(m_pImpl->m_bIsDisposed, "zombie meta");
         }
     }
@@ -1043,7 +1043,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         ? ::boost::shared_ptr< ::sw::Meta>( new ::sw::Meta() )
         : ::boost::shared_ptr< ::sw::Meta>(
             pDoc->GetMetaFieldManager().makeMetaField()) );
-    SwFmtMeta meta(pMeta, i_nWhich); // this is cloned by Insert!
+    SwFmtMeta meta(pMeta, i_nWhich); 
     const bool bSuccess( pDoc->InsertPoolItem( aPam, meta, nInsertFlags ) );
     SwTxtAttr * const pTxtAttr( pMeta->GetTxtAttr() );
     if (!bSuccess)
@@ -1068,7 +1068,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->m_bIsDescriptor = false;
 }
 
-// XTextContent
+
 void SAL_CALL
 SwXMeta::attach(const uno::Reference< text::XTextRange > & i_xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -1104,12 +1104,12 @@ SwXMeta::getAnchor() throw (uno::RuntimeException)
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
-    const SwPosition start(*pTxtNode, nMetaStart - 1); // -1 due to CH_TXTATR
+    const SwPosition start(*pTxtNode, nMetaStart - 1); 
     const SwPosition end(*pTxtNode, nMetaEnd);
     return SwXTextRange::CreateXTextRange(*pTxtNode->GetDoc(), start, &end);
 }
 
-// XTextRange
+
 uno::Reference< text::XText > SAL_CALL
 SwXMeta::getText() throw (uno::RuntimeException)
 {
@@ -1145,7 +1145,7 @@ SwXMeta::setString(const OUString& rString) throw (uno::RuntimeException)
     return m_pImpl->m_Text.setString(rString);
 }
 
-// XSimpleText
+
 uno::Reference< text::XTextCursor > SAL_CALL
 SwXMeta::createTextCursor() throw (uno::RuntimeException)
 {
@@ -1181,7 +1181,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 bAbsorb);
 }
 
-// XText
+
 void SAL_CALL
 SwXMeta::insertTextContent( const uno::Reference<text::XTextRange> & xRange,
         const uno::Reference<text::XTextContent> & xContent, sal_Bool bAbsorb)
@@ -1200,7 +1200,7 @@ SwXMeta::removeTextContent(
     return m_pImpl->m_Text.removeTextContent(xContent);
 }
 
-// XChild
+
 uno::Reference< uno::XInterface > SAL_CALL
 SwXMeta::getParent() throw (uno::RuntimeException)
 {
@@ -1211,9 +1211,9 @@ SwXMeta::getParent() throw (uno::RuntimeException)
     bool const bSuccess( SetContentRange(pTxtNode, nMetaStart, nMetaEnd) );
     OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess) { throw lang::DisposedException(); }
-    // in order to prevent getting this meta, subtract 1 from nMetaStart;
-    // so we get the index of the dummy character, and we exclude it
-    // by calling GetTxtAttrAt(_, _, PARENT) in GetNestedTextContent
+    
+    
+    
     uno::Reference<text::XTextContent> const xRet(
         SwUnoCursorHelper::GetNestedTextContent(*pTxtNode, nMetaStart - 1,
             true) );
@@ -1227,7 +1227,7 @@ SwXMeta::setParent(uno::Reference< uno::XInterface > const& /*xParent*/)
     throw lang::NoSupportException("setting parent not supported", *this);
 }
 
-// XElementAccess
+
 uno::Type SAL_CALL
 SwXMeta::getElementType() throw (uno::RuntimeException)
 {
@@ -1242,7 +1242,7 @@ SwXMeta::hasElements() throw (uno::RuntimeException)
     return m_pImpl->GetRegisteredIn() ? sal_True : sal_False;
 }
 
-// XEnumerationAccess
+
 uno::Reference< container::XEnumeration > SAL_CALL
 SwXMeta::createEnumeration() throw (uno::RuntimeException)
 {
@@ -1274,13 +1274,13 @@ SwXMeta::createEnumeration() throw (uno::RuntimeException)
         return new SwXTextPortionEnumeration(
                     aPam, GetParentText(), nMetaStart, nMetaEnd);
     }
-    else // cached!
+    else 
     {
         return new SwXTextPortionEnumeration(aPam, *m_pImpl->m_pTextPortions);
     }
 }
 
-// MetadatableMixin
+
 ::sfx2::Metadatable* SwXMeta::GetCoreObject()
 {
     return const_cast< ::sw::Meta * >(m_pImpl->GetMeta());
@@ -1327,7 +1327,7 @@ SwXMetaField::~SwXMetaField()
 {
 }
 
-// XServiceInfo
+
 OUString SAL_CALL
 SwXMetaField::getImplementationName() throw (uno::RuntimeException)
 {
@@ -1358,7 +1358,7 @@ SwXMetaField::getSupportedServiceNames() throw (uno::RuntimeException)
             g_nServicesMetaField, g_ServicesMetaField);
 }
 
-// XComponent
+
 void SAL_CALL
 SwXMetaField::addEventListener(
         uno::Reference< lang::XEventListener> const & xListener )
@@ -1381,7 +1381,7 @@ SwXMetaField::dispose() throw (uno::RuntimeException)
     return SwXMeta::dispose();
 }
 
-// XTextContent
+
 void SAL_CALL
 SwXMetaField::attach(const uno::Reference< text::XTextRange > & i_xTextRange)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -1395,7 +1395,7 @@ SwXMetaField::getAnchor() throw (uno::RuntimeException)
     return SwXMeta::getAnchor();
 }
 
-// XPropertySet
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXMetaField::getPropertySetInfo() throw (uno::RuntimeException)
 {
@@ -1590,7 +1590,7 @@ getPrefixAndSuffix(
     }
 }
 
-// XTextField
+
 OUString SAL_CALL
 SwXMetaField::getPresentation(sal_Bool bShowCommand)
 throw (uno::RuntimeException)
@@ -1599,12 +1599,12 @@ throw (uno::RuntimeException)
 
     if (bShowCommand)
     {
-//FIXME ?
+
         return OUString();
     }
     else
     {
-        // getString should check if this is invalid
+        
         const OUString content( this->getString() );
         OUString prefix;
         OUString suffix;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -40,7 +40,7 @@ TVFactory::~TVFactory()
 {
 }
 
-// XInterface
+
 
 void SAL_CALL
 TVFactory::acquire(
@@ -71,14 +71,14 @@ TVFactory::queryInterface(
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-// XTypeProvider methods.
+
 
 XTYPEPROVIDER_IMPL_3( TVFactory,
                          XServiceInfo,
                          XTypeProvider,
                          XMultiServiceFactory );
 
-// XServiceInfo methods.
+
 
 OUString SAL_CALL
 TVFactory::getImplementationName()
@@ -104,7 +104,7 @@ TVFactory::getSupportedServiceNames( void )
     return TVFactory::getSupportedServiceNames_static();
 }
 
-// XMultiServiceFactory
+
 
 Reference< XInterface > SAL_CALL
 TVFactory::createInstance(
@@ -179,7 +179,7 @@ TVFactory::getAvailableServiceNames( )
     return seq;
 }
 
-// static
+
 
 OUString SAL_CALL
 TVFactory::getImplementationName_static()

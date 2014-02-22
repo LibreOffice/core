@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -126,7 +126,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
         if( bNew )
             pGcpHelper = new SvpGcpHelper;
 
-        // get glyph bitmap in matching format
+        
         bool bFound = false;
         switch( nBmpFormat )
         {
@@ -138,13 +138,13 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
                 break;
             default:
                 OSL_FAIL( "SVP GCP::GetGlyphBmp(): illegal scanline format");
-                // fall back to black&white mask
+                
                 nBmpFormat = FORMAT_ONE_BIT_LSB_GREY;
                 bFound = false;
                 break;
         }
 
-        // return .notdef glyph if needed
+        
         if( !bFound && (aGlyphId != 0) )
         {
             if( bNew )
@@ -152,7 +152,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
             return GetGlyphBmp( rServerFont, 0, nBmpFormat, rTargetPos );
         }
 
-        // construct alpha mask from raw bitmap
+        
         const B2IVector aSize(
             pGcpHelper->maRawBitmap.mnScanlineSize,
             pGcpHelper->maRawBitmap.mnHeight );
@@ -176,7 +176,7 @@ BitmapDeviceSharedPtr SvpGlyphPeer::GetGlyphBmp( ServerFont& rServerFont,
 
 void SvpGlyphPeer::RemovingFont( ServerFont& )
 {
-    // nothing to do: no font resources held in SvpGlyphPeer
+    
 }
 
 
@@ -191,34 +191,34 @@ void SvpGlyphPeer::RemovingGlyph( GlyphData& rGlyphData )
 
 sal_uInt16 SvpSalGraphics::SetFont( FontSelectPattern* pIFSD, int nFallbackLevel )
 {
-    // release all no longer needed font resources
+    
     for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
     {
         if( m_pServerFont[i] != NULL )
         {
-            // old server side font is no longer referenced
+            
             SvpGlyphCache::GetInstance().UncacheFont( *m_pServerFont[i] );
             m_pServerFont[i] = NULL;
         }
     }
 
-    // return early if there is no new font
+    
     if( !pIFSD )
         return 0;
 
-    // handle the request for a non-native X11-font => use the GlyphCache
+    
     ServerFont* pServerFont = SvpGlyphCache::GetInstance().CacheFont( *pIFSD );
     if( !pServerFont )
         return SAL_SETFONT_BADFONT;
 
-    // check selected font
+    
     if( !pServerFont->TestFont() )
     {
         SvpGlyphCache::GetInstance().UncacheFont( *pServerFont );
         return SAL_SETFONT_BADFONT;
     }
 
-    // update SalGraphics font settings
+    
     m_pServerFont[ nFallbackLevel ] = pServerFont;
     return SAL_SETFONT_USEDRAWTEXTARRAY;
 }
@@ -269,20 +269,20 @@ void SvpSalGraphics::GetDevFontList( ImplDevFontList* pDevFontList )
         if( !rMgr.getFontFastInfo( *it, aInfo ) )
             continue;
 
-        // normalize face number to the GlyphCache
+        
         int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
 
-        // inform GlyphCache about this font provided by the PsPrint subsystem
+        
         ImplDevFontAttributes aDFA = GenPspGraphics::Info2DevFontAttributes( aInfo );
         aDFA.mnQuality += 4096;
         const OString& rFileName = rMgr.getFontFileSysPath( aInfo.m_nID );
         rGC.AddFontFile( rFileName, nFaceNum, aInfo.m_nID, aDFA );
    }
 
-    // announce glyphcache fonts
+    
     rGC.AnnounceFonts( pDevFontList );
 
-    // register platform specific font substitutions if available
+    
     SalGenericInstance::RegisterFontSubstitutors( pDevFontList );
 
     ImplGetSVData()->maGDIData.mbNativeFontConfig = true;
@@ -312,11 +312,11 @@ bool SvpSalGraphics::CreateFontSubset(
     FontSubsetInfo& rInfo
     )
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    
+    
+    
+    
+    
     psp::fontID aFont = pFont->GetFontId();
 
     psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
@@ -333,11 +333,11 @@ bool SvpSalGraphics::CreateFontSubset(
 
 const Ucs2SIntMap* SvpSalGraphics::GetFontEncodingVector( const PhysicalFontFace* pFont, const Ucs2OStrMap** pNonEncoded )
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    
+    
+    
+    
+    
     psp::fontID aFont = pFont->GetFontId();
     return GenPspGraphics::DoGetFontEncodingVector( aFont, pNonEncoded );
 }
@@ -351,11 +351,11 @@ const void* SvpSalGraphics::GetEmbedFontData(
     long* pDataLen
     )
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    
+    
+    
+    
+    
     psp::fontID aFont = pFont->GetFontId();
     return GenPspGraphics::DoGetEmbedFontData( aFont, pUnicodes, pWidths, rInfo, pDataLen );
 }
@@ -371,11 +371,11 @@ void SvpSalGraphics::GetGlyphWidths( const PhysicalFontFace* pFont,
                                    Int32Vector& rWidths,
                                    Ucs2UIntMap& rUnicodeEnc )
 {
-    // in this context the pFont->GetFontId() is a valid PSP
-    // font since they are the only ones left after the PDF
-    // export has filtered its list of subsettable fonts (for
-    // which this method was created). The correct way would
-    // be to have the GlyphCache search for the PhysicalFontFace pFont
+    
+    
+    
+    
+    
     psp::fontID aFont = pFont->GetFontId();
     GenPspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
@@ -429,7 +429,7 @@ SalLayout* SvpSalGraphics::GetTextLayout( ImplLayoutArgs&, int nFallbackLevel )
 
 void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
 {
-    // iterate over all glyphs in the layout
+    
     Point aPos;
     sal_GlyphId aGlyphId;
     SvpGlyphPeer& rGlyphPeer = SvpGlyphCache::GetInstance().GetPeer();
@@ -441,15 +441,15 @@ void SvpSalGraphics::DrawServerFontLayout( const ServerFontLayout& rSalLayout )
         if( !pSF )
             continue;
 
-        // get the glyph's alpha mask and adjust the drawing position
+        
         aGlyphId &= GF_IDXMASK;
         B2IPoint aDstPoint( aPos.X(), aPos.Y() );
         BitmapDeviceSharedPtr aAlphaMask
             = rGlyphPeer.GetGlyphBmp( *pSF, aGlyphId, m_eTextFmt, aDstPoint );
-        if( !aAlphaMask )   // ignore empty glyphs
+        if( !aAlphaMask )   
             continue;
 
-        // blend text color into target using the glyph's mask
+        
         const B2IBox aSrcRect( B2ITuple(0,0), aAlphaMask->getSize() );
         const B2IBox aClipRect( aDstPoint, aAlphaMask->getSize() );
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "jobqueue.hxx"
@@ -57,7 +57,7 @@ namespace cppu_threadpool {
     {
         void *pReturn = 0;
         {
-            // synchronize with the dispose calls
+            
             MutexGuard guard( m_mutex );
             if( m_DisposedCallerAdmin->isDisposed( nDisposeId ) )
             {
@@ -82,12 +82,12 @@ namespace cppu_threadpool {
 
             struct Job job={0,0};
             {
-                // synchronize with add and dispose calls
+                
                 MutexGuard guard( m_mutex );
 
                 if( 0 == m_lstCallstack.front() )
                 {
-                    // disposed !
+                    
                     if( m_lstJob.empty()
                         && (m_lstCallstack.empty()
                             || m_lstCallstack.front() != 0) )
@@ -126,7 +126,7 @@ namespace cppu_threadpool {
         }
 
         {
-            // synchronize with the dispose calls
+            
             MutexGuard guard( m_mutex );
             m_lstCallstack.pop_front();
         }
@@ -149,7 +149,7 @@ namespace cppu_threadpool {
 
         if( !m_lstCallstack.empty()  && ! m_lstCallstack.front() )
         {
-            // The thread is waiting for a disposed pCallerId, let it go
+            
             osl_setCondition( m_cndWait );
         }
     }

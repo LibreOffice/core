@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -39,8 +39,8 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::ui;
 using namespace ::com::sun::star::container;
 
-#define XMLNS_STATUSBAR             "http://openoffice.org/2001/statusbar"
-#define XMLNS_XLINK                 "http://www.w3.org/1999/xlink"
+#define XMLNS_STATUSBAR             "http:
+#define XMLNS_XLINK                 "http:
 #define XMLNS_STATUSBAR_PREFIX      "statusbar:"
 #define XMLNS_XLINK_PREFIX          "xlink:"
 
@@ -77,12 +77,12 @@ using namespace ::com::sun::star::container;
 #define ATTRIBUTE_STYLE_OUT         "out"
 #define ATTRIBUTE_STYLE_FLAT        "flat"
 
-#define STATUSBAR_DOCTYPE           "<!DOCTYPE statusbar:statusbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"statusbar.dtd\">"
+#define STATUSBAR_DOCTYPE           "<!DOCTYPE statusbar:statusbar PUBLIC \"-
 
 namespace framework
 {
 
-// Property names of a menu/menu item ItemDescriptor
+
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
 static const char ITEM_DESCRIPTOR_OFFSET[]      = "Offset";
@@ -154,7 +154,7 @@ OReadStatusBarDocumentHandler::OReadStatusBarDocumentHandler(
     OUString aNamespaceXLink( XMLNS_XLINK );
     OUString aSeparator( XMLNS_FILTER_SEPARATOR );
 
-    // create hash map
+    
     for ( int i = 0; i < (int)SB_XML_ENTRY_COUNT; i++ )
     {
         if ( StatusBarEntries[i].nNamespace == SB_NS_STATUSBAR )
@@ -182,7 +182,7 @@ OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
 {
 }
 
-// XDocumentHandler
+
 void SAL_CALL OReadStatusBarDocumentHandler::startDocument(void)
 throw ( SAXException, RuntimeException )
 {
@@ -366,7 +366,7 @@ throw(  SAXException, RuntimeException )
                                               break;
                         }
                     }
-                } // for
+                } 
 
                 if ( !bCommandURL )
                 {
@@ -485,9 +485,9 @@ OUString OReadStatusBarDocumentHandler::getErrorLineString()
 }
 
 
-//_________________________________________________________________________________________________________________
-//  OWriteStatusBarDocumentHandler
-//_________________________________________________________________________________________________________________
+
+
+
 
 OWriteStatusBarDocumentHandler::OWriteStatusBarDocumentHandler(
     const Reference< XIndexAccess >& aStatusBarItems,
@@ -514,7 +514,7 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
 
     m_xWriteDocumentHandler->startDocument();
 
-    // write DOCTYPE line!
+    
     Reference< XExtendedDocumentHandler > xExtendedDocHandler( m_xWriteDocumentHandler, UNO_QUERY );
     if ( xExtendedDocHandler.is() )
     {
@@ -570,9 +570,9 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
     m_xWriteDocumentHandler->endDocument();
 }
 
-//_________________________________________________________________________________________________________________
-//  protected member functions
-//_________________________________________________________________________________________________________________
+
+
+
 
 void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     const OUString& rCommandURL,
@@ -591,10 +591,10 @@ throw ( SAXException, RuntimeException )
         m_aAttributeURL += OUString( ATTRIBUTE_URL );
     }
 
-    // save required attribute (URL)
+    
     pList->AddAttribute( m_aAttributeURL, m_aAttributeType, rCommandURL );
 
-    // alignment
+    
     if ( nStyle & ItemStyle::ALIGN_RIGHT )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_ALIGN ),
@@ -614,7 +614,7 @@ throw ( SAXException, RuntimeException )
                              OUString( ATTRIBUTE_ALIGN_LEFT ) );
     }
 
-    // style ( SIB_IN is default )
+    
     if ( nStyle & ItemStyle::DRAW_FLAT )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_STYLE ),
@@ -628,7 +628,7 @@ throw ( SAXException, RuntimeException )
                              OUString( ATTRIBUTE_STYLE_OUT ) );
     }
 
-    // autosize (default sal_False)
+    
     if ( nStyle & ItemStyle::AUTO_SIZE )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_AUTOSIZE ),
@@ -636,7 +636,7 @@ throw ( SAXException, RuntimeException )
                              OUString( ATTRIBUTE_BOOLEAN_TRUE ) );
     }
 
-    // ownerdraw (default sal_False)
+    
     if ( nStyle & ItemStyle::OWNER_DRAW )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_OWNERDRAW ),
@@ -644,7 +644,7 @@ throw ( SAXException, RuntimeException )
                              OUString( ATTRIBUTE_BOOLEAN_TRUE ) );
     }
 
-    // width (default 0)
+    
     if ( nWidth > 0 )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_WIDTH ),
@@ -652,7 +652,7 @@ throw ( SAXException, RuntimeException )
                              OUString::number( nWidth ) );
     }
 
-    // offset (default STATUSBAR_OFFSET)
+    
     if ( nOffset != STATUSBAR_OFFSET )
     {
         pList->AddAttribute( m_aXMLStatusBarNS + OUString( ATTRIBUTE_OFFSET ),
@@ -666,6 +666,6 @@ throw ( SAXException, RuntimeException )
     m_xWriteDocumentHandler->endElement( OUString( ELEMENT_NS_STATUSBARITEM ) );
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

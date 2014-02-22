@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -99,7 +99,7 @@ void ImpDeleteUnusedMasterPages( const Reference< XModel >& rxModel )
     vector< PageCollector::MasterPageEntity > aMasterPageList;
     PageCollector::CollectMasterPages( rxModel, aMasterPageList );
 
-    // now master pages that are not marked can be deleted
+    
     Reference< XMasterPagesSupplier > xMasterPagesSupplier( rxModel, UNO_QUERY_THROW );
     Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
     vector< PageCollector::MasterPageEntity >::iterator aIter( aMasterPageList.begin() );
@@ -223,13 +223,13 @@ void ImpCompressGraphic( Reference< XGraphicProvider >& rxGraphicProvider, const
             Sequence< PropertyValue > aFilterData( 8 );
             aFilterData[ 0 ].Name = "ImageResolution";
             aFilterData[ 0 ].Value <<= nImageResolution;
-            aFilterData[ 1 ].Name = "ColorMode";      // todo: jpeg color mode (0->true color, 1->greyscale)
+            aFilterData[ 1 ].Name = "ColorMode";      
             aFilterData[ 1 ].Value <<= (sal_Int32)0;
-            aFilterData[ 2 ].Name = "Quality";        // quality that is used if we export to jpeg
+            aFilterData[ 2 ].Name = "Quality";        
             aFilterData[ 2 ].Value <<= nJPEGQuality;
-            aFilterData[ 3 ].Name = "Compression";    // compression that is used if we export to png
+            aFilterData[ 3 ].Name = "Compression";    
             aFilterData[ 3 ].Value <<= (sal_Int32)6;
-            aFilterData[ 4 ].Name = "Interlaced";     // interlaced is turned off if we export to png
+            aFilterData[ 4 ].Name = "Interlaced";     
             aFilterData[ 4 ].Value <<= (sal_Int32)0;
             aFilterData[ 5 ].Name = "LogicalSize";
             aFilterData[ 5 ].Value <<= rLogicalSize;
@@ -239,7 +239,7 @@ void ImpCompressGraphic( Reference< XGraphicProvider >& rxGraphicProvider, const
             aFilterData[ 7 ].Value <<= rGraphicCropLogic;
 
             Sequence< PropertyValue > aArgs( 3 );
-            aArgs[ 0 ].Name = "MimeType";             // the GraphicProvider is using "MimeType", the GraphicExporter "MediaType"...
+            aArgs[ 0 ].Name = "MimeType";             
             aArgs[ 0 ].Value <<= rDestMimeType;
             aArgs[ 1 ].Name = "OutputStream";
             aArgs[ 1 ].Value <<= rxOutputStream;
@@ -286,7 +286,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                         sal_Bool bNeedsOptimizing = sal_False;
                         sal_Bool bRemoveCropArea( rGraphicSettings.mbRemoveCropArea );
 
-                        // cropping has to be removed from SourceSizePixel
+                        
                         if ( aGraphicCropLogic.Left || aGraphicCropLogic.Top || aGraphicCropLogic.Right || aGraphicCropLogic.Bottom )
                         {
                             const awt::Size aSize100thMM( GraphicCollector::GetOriginalSize( rxContext, xGraphic ) );
@@ -301,7 +301,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                                 aGraphicCropPixel.Right = static_cast< sal_Int32 >( ( (double)aSourceSizePixel.Width * ( aSize100thMM.Width - aGraphicCropLogic.Right ) ) / aSize100thMM.Width );
                                 aGraphicCropPixel.Bottom = static_cast< sal_Int32 >( ( (double)aSourceSizePixel.Height* ( aSize100thMM.Height - aGraphicCropLogic.Bottom ) ) / aSize100thMM.Height );
 
-                                // first calculating new SourceSizePixel by removing the cropped area
+                                
                                 aSourceSizePixel.Width = aGraphicCropPixel.Right - aGraphicCropPixel.Left;
                                 aSourceSizePixel.Height= aGraphicCropPixel.Bottom - aGraphicCropPixel.Top;
                             }
@@ -316,7 +316,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             if ( rGraphicSettings.mbJPEGCompression && !bTransparent && !bAlpha && !bAnimated )
                             {
                                 aDestMimeType = "image/jpeg";
-//                                      if( aSourceMimeType != aDestMimeType )
+
                                 bNeedsOptimizing = sal_True;
                             }
                             if ( bRemoveCropArea )
@@ -326,7 +326,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                                 const double fSourceDPIX = ((double)aSourceSizePixel.Width / ((double)aLogicalSize.Width / 2540.0 ));
                                 const double fSourceDPIY = ((double)aSourceSizePixel.Height/ ((double)aLogicalSize.Height/ 2540.0 ));
 
-                                // check, if the bitmap DPI exceeds the maximum DPI
+                                
                                 if( ( fSourceDPIX > rGraphicSettings.mnImageResolution ) || ( fSourceDPIY > rGraphicSettings.mnImageResolution ) )
                                 {
                                     const double fNewSizePixelX = ((double)aDestSizePixel.Width * rGraphicSettings.mnImageResolution ) / fSourceDPIX;
@@ -355,7 +355,7 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                     }
                 }
             }
-            else // this is a metafile
+            else 
             {
                 OUString aDestMimeType( aSourceMimeType );
                 Reference< XStream > xTempFile( io::TempFile::create(rxContext), UNO_QUERY_THROW );
@@ -417,7 +417,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
                     Reference< XGraphic > xNewGraphic( ImpCompressGraphic( rxContext, xGraphic, aGraphicIter->maLogicalSize, aGraphicIter->maGraphicCropLogic, aGraphicSettings ) );
                     if ( xNewGraphic.is() )
                     {
-                        // applying graphic to each user
+                        
                         std::vector< GraphicCollector::GraphicUser >::iterator aGraphicUserIter( aGraphicIter->maUser.begin() );
                         while( aGraphicUserIter != aGraphicIter->maUser.end() )
                         {
@@ -430,7 +430,7 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
 
                                 if ( aGraphicUserIter->maGraphicCropLogic.Left || aGraphicUserIter->maGraphicCropLogic.Top
                                 || aGraphicUserIter->maGraphicCropLogic.Right || aGraphicUserIter->maGraphicCropLogic.Bottom )
-                                {   // removing crop area was not possible or should't been applied
+                                {   
                                     text::GraphicCrop aGraphicCropLogic( 0, 0, 0, 0 );
                                     if ( !aGraphicSettings.mbRemoveCropArea )
                                     {
@@ -481,9 +481,9 @@ void CompressGraphics( ImpOptimizer& rOptimizer, const Reference< XComponentCont
     }
 }
 
-// ----------------
-// - ImpOptimizer -
-// ----------------
+
+
+
 
 ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, const Reference< XModel >& rxModel ) :
     mxContext                   ( rxContext ),
@@ -502,13 +502,13 @@ ImpOptimizer::ImpOptimizer( const Reference< XComponentContext >& rxContext, con
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 ImpOptimizer::~ImpOptimizer()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void ImpOptimizer::DispatchStatus()
 {
@@ -521,7 +521,7 @@ void ImpOptimizer::DispatchStatus()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool ImpOptimizer::Optimize()
 {
@@ -586,7 +586,7 @@ static void DispatchURL( Reference< XComponentContext > xContext, OUString sURL,
         xURLTransformer->parseStrict( aUrl );
         Sequence< PropertyValue > aArgs;
         Reference< XDispatchProvider > xDispatchProvider( xFrame, UNO_QUERY_THROW );
-        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aUrl, OUString(), 0 );  // "_self"
+        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aUrl, OUString(), 0 );  
         if ( xDispatch.is() )
             xDispatch->dispatch( aUrl, aArgs );
     }
@@ -595,7 +595,7 @@ static void DispatchURL( Reference< XComponentContext > xContext, OUString sURL,
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
 {
@@ -692,7 +692,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             }
         }
 
-        // check if the document is ReadOnly -> error
+        
         Reference< XStorable > xStorable( mxModel, UNO_QUERY );
         if ( xStorable.is() && !xStorable->isReadonly() )
         {
@@ -700,7 +700,7 @@ sal_Bool ImpOptimizer::Optimize( const Sequence< PropertyValue >& rArguments )
             bRet = Optimize();
             mxModel->unlockControllers();
 
-            // clearing undo stack:
+            
             Reference< XFrame > xFrame( xSelf.is() ? xSelf : mxInformationDialog );
             if ( xFrame.is() )
             {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ namespace {
 typedef ::cppu::WeakComponentImplHelper2<
     deployment::XPackageRegistry, util::XUpdatable > t_helper;
 
-//==============================================================================
+
 class PackageRegistryImpl : private MutexHolder, public t_helper
 {
     struct ci_string_hash {
@@ -110,10 +110,10 @@ public:
         OUString const & cachePath, bool readOnly,
         Reference<XComponentContext> const & xComponentContext );
 
-    // XUpdatable
+    
     virtual void SAL_CALL update() throw (RuntimeException);
 
-    // XPackageRegistry
+    
     virtual Reference<deployment::XPackage> SAL_CALL bindPackage(
         OUString const & url, OUString const & mediaType, sal_Bool bRemoved,
         OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
@@ -129,7 +129,7 @@ public:
 
 };
 
-//______________________________________________________________________________
+
 inline void PackageRegistryImpl::check()
 {
     ::osl::MutexGuard guard( getMutex() );
@@ -140,10 +140,10 @@ inline void PackageRegistryImpl::check()
     }
 }
 
-//______________________________________________________________________________
+
 void PackageRegistryImpl::disposing()
 {
-    // dispose all backends:
+    
     t_registryset::const_iterator iPos( m_allBackends.begin() );
     t_registryset::const_iterator const iEnd( m_allBackends.end() );
     for ( ; iPos != iEnd; ++iPos ) {
@@ -156,12 +156,12 @@ void PackageRegistryImpl::disposing()
     t_helper::disposing();
 }
 
-//______________________________________________________________________________
+
 PackageRegistryImpl::~PackageRegistryImpl()
 {
 }
 
-//______________________________________________________________________________
+
 OUString normalizeMediaType( OUString const & mediaType )
 {
     OUStringBuffer buf;
@@ -175,7 +175,7 @@ OUString normalizeMediaType( OUString const & mediaType )
     return buf.makeStringAndClear();
 }
 
-//______________________________________________________________________________
+
 
 void PackageRegistryImpl::packageRemoved(
     OUString const & url, OUString const & mediaType)
@@ -213,7 +213,7 @@ void PackageRegistryImpl::insertBackend(
                                             mediaType, xBackend ) ) );
         if (mb_insertion.second)
         {
-            // add parameterless media-type, too:
+            
             sal_Int32 semi = mediaType.indexOf( ';' );
             if (semi >= 0) {
                 m_mediaType2backend.insert(
@@ -221,8 +221,8 @@ void PackageRegistryImpl::insertBackend(
                         mediaType.copy( 0, semi ), xBackend ) );
             }
             const OUString fileFilter( xPackageType->getFileFilter() );
-            //The package backend shall also be called to determine the mediatype
-            //(XPackageRegistry.bindPackage) when the URL points to a directory.
+            
+            
             const bool bExtension = (mediaType == "application/vnd.sun.star.package-bundle");
             if (fileFilter.isEmpty() || fileFilter == "*.*" || fileFilter == "*" || bExtension)
             {
@@ -237,7 +237,7 @@ void PackageRegistryImpl::insertBackend(
                         token = token.copy( 1 );
                     if (token.isEmpty())
                         continue;
-                    // mark any further wildcards ambig:
+                    
                     bool ambig = (token.indexOf('*') >= 0 ||
                                   token.indexOf('?') >= 0);
                     if (! ambig) {
@@ -247,8 +247,8 @@ void PackageRegistryImpl::insertBackend(
                                     token, mediaType ) ) );
                         ambig = !ins.second;
                         if (ambig) {
-                            // filter has already been in: add previously
-                            // added backend to ambig set
+                            
+                            
                             const t_string2registry::const_iterator iFind(
                                 m_mediaType2backend.find(
                                     /* media-type of pr. added backend */
@@ -261,7 +261,7 @@ void PackageRegistryImpl::insertBackend(
                     }
                     if (ambig) {
                         m_ambiguousBackends.insert( xBackend );
-                        // mark filter to be removed later from filters map:
+                        
                         ambiguousFilters.insert( token );
                     }
                 }
@@ -286,7 +286,7 @@ void PackageRegistryImpl::insertBackend(
 #endif
     }
 
-    // cut out ambiguous filters:
+    
     t_stringset::const_iterator iPos( ambiguousFilters.begin() );
     const t_stringset::const_iterator iEnd( ambiguousFilters.end() );
     for ( ; iPos != iEnd; ++iPos ) {
@@ -294,7 +294,7 @@ void PackageRegistryImpl::insertBackend(
     }
 }
 
-//______________________________________________________________________________
+
 Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     OUString const & context,
     OUString const & cachePath, bool readOnly,
@@ -303,7 +303,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     PackageRegistryImpl * that = new PackageRegistryImpl;
     Reference<deployment::XPackageRegistry> xRet(that);
 
-    // auto-detect all registered package registries:
+    
     Reference<container::XEnumeration> xEnum(
         Reference<container::XContentEnumerationAccess>(
             xComponentContext->getServiceManager(),
@@ -360,10 +360,10 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
         }
     }
 
-    // Insert bundle back-end.
-    // Always register as last, because we want to add extensions also as folders
-    // and as a default we accept every folder, which was not recognized by the other
-    // backends.
+    
+    
+    
+    
     Reference<deployment::XPackageRegistry> extensionBackend =
         ::dp_registry::backend::bundle::create(
             that, context, cachePath, readOnly, xComponentContext);
@@ -384,7 +384,7 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
 
 
 #if OSL_DEBUG_LEVEL > 1
-    // dump tables:
+    
     {
         t_registryset allBackends;
         dp_misc::TRACE("> [dp_registry.cxx] media-type detection:\n\n" );
@@ -442,8 +442,8 @@ Reference<deployment::XPackageRegistry> PackageRegistryImpl::create(
     return xRet;
 }
 
-// XUpdatable: broadcast to backends
-//______________________________________________________________________________
+
+
 void PackageRegistryImpl::update() throw (RuntimeException)
 {
     check();
@@ -456,8 +456,8 @@ void PackageRegistryImpl::update() throw (RuntimeException)
     }
 }
 
-// XPackageRegistry
-//______________________________________________________________________________
+
+
 Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     OUString const & url, OUString const & mediaType_, sal_Bool bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
@@ -492,7 +492,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     }
     if (mediaType.isEmpty())
     {
-        // try ambiguous backends:
+        
         t_registryset::const_iterator iPos( m_ambiguousBackends.begin() );
         const t_registryset::const_iterator iEnd( m_ambiguousBackends.end() );
         for ( ; iPos != iEnd; ++iPos )
@@ -510,16 +510,16 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     }
     else
     {
-        // get backend by media-type:
+        
         t_string2registry::const_iterator iFind(
             m_mediaType2backend.find( normalizeMediaType(mediaType) ) );
         if (iFind == m_mediaType2backend.end()) {
-            // xxx todo: more sophisticated media-type argument parsing...
+            
             sal_Int32 q = mediaType.indexOf( ';' );
             if (q >= 0) {
                 iFind = m_mediaType2backend.find(
                     normalizeMediaType(
-                        // cut parameters:
+                        
                         mediaType.copy( 0, q ) ) );
             }
         }
@@ -533,15 +533,15 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
     }
 }
 
-//______________________________________________________________________________
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 PackageRegistryImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
     return comphelper::containerToSequence(m_typesInfos);
 }
-} // anon namespace
+} 
 
-//==============================================================================
+
 Reference<deployment::XPackageRegistry> SAL_CALL create(
     OUString const & context,
     OUString const & cachePath, bool readOnly,
@@ -551,6 +551,6 @@ Reference<deployment::XPackageRegistry> SAL_CALL create(
         context, cachePath, readOnly, xComponentContext );
 }
 
-} // namespace dp_registry
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

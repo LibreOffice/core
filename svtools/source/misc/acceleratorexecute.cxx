@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/acceleratorexecute.hxx>
@@ -43,11 +43,11 @@ namespace svt
 {
 
 
-//-----------------------------------------------
+
 class SVT_DLLPRIVATE AsyncAccelExec
 {
     public:
-        //---------------------------------------
+        
         /** creates a new instance of this class, which can be used
             one times only!
 
@@ -60,7 +60,7 @@ class SVT_DLLPRIVATE AsyncAccelExec
         void execAsync();
 
     private:
-        //---------------------------------------
+        
         /** @short  allow creation of instances of this class
                     by using our factory only!
          */
@@ -75,57 +75,57 @@ class SVT_DLLPRIVATE AsyncAccelExec
         css::util::URL m_aURL;
 };
 
-//-----------------------------------------------
+
 AcceleratorExecute::AcceleratorExecute()
     : TMutexInit      (                                                     )
     , m_aAsyncCallback(LINK(this, AcceleratorExecute, impl_ts_asyncCallback))
 {
 }
 
-//-----------------------------------------------
+
 AcceleratorExecute::AcceleratorExecute(const AcceleratorExecute&)
     : TMutexInit      (                                                     )
     , m_aAsyncCallback(LINK(this, AcceleratorExecute, impl_ts_asyncCallback))
 {
-    // copy construction sint supported in real ...
-    // but we need this ctor to init our async callback ...
+    
+    
 }
 
-//-----------------------------------------------
+
 AcceleratorExecute::~AcceleratorExecute()
 {
-    // does nothing real
+    
 }
 
-//-----------------------------------------------
+
 AcceleratorExecute* AcceleratorExecute::createAcceleratorHelper()
 {
     AcceleratorExecute* pNew = new AcceleratorExecute();
     return pNew;
 }
 
-//-----------------------------------------------
+
 void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                               const css::uno::Reference< css::frame::XFrame >&              xEnv )
 {
-    // SAFE -> ----------------------------------
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
-    // take over the uno service manager
+    
     m_xContext = rxContext;
 
-    // specify our internal dispatch provider
-    // frame or desktop?! => document or global config.
+    
+    
     sal_Bool bDesktopIsUsed = sal_False;
     m_xDispatcher  = css::uno::Reference< css::frame::XDispatchProvider >(xEnv, css::uno::UNO_QUERY);
     if (!m_xDispatcher.is())
     {
         aLock.clear();
-        // <- SAFE ------------------------------
+        
 
         css::uno::Reference< css::frame::XDispatchProvider > xDispatcher(css::frame::Desktop::create(rxContext), css::uno::UNO_QUERY_THROW);
 
-        // SAFE -> ------------------------------
+        
         aLock.reset();
 
         m_xDispatcher  = xDispatcher;
@@ -133,21 +133,21 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
     }
 
     aLock.clear();
-    // <- SAFE ----------------------------------
+    
 
-    // open all needed configuration objects
+    
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xModuleCfg;
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xDocCfg   ;
 
-    // global cfg
+    
     xGlobalCfg = css::ui::GlobalAcceleratorConfiguration::create(rxContext);
     if (!bDesktopIsUsed)
     {
-        // module cfg
+        
         xModuleCfg = AcceleratorExecute::st_openModuleConfig(rxContext, xEnv);
 
-        // doc cfg
+        
         css::uno::Reference< css::frame::XController > xController;
         css::uno::Reference< css::frame::XModel >      xModel;
         xController = xEnv->getController();
@@ -157,7 +157,7 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
             xDocCfg = AcceleratorExecute::st_openDocConfig(xModel);
     }
 
-    // SAFE -> ------------------------------
+    
     aLock.reset();
 
     m_xGlobalCfg = xGlobalCfg;
@@ -165,45 +165,45 @@ void AcceleratorExecute::init(const css::uno::Reference< css::uno::XComponentCon
     m_xDocCfg    = xDocCfg   ;
 
     aLock.clear();
-    // <- SAFE ----------------------------------
+    
 }
 
-//-----------------------------------------------
+
 sal_Bool AcceleratorExecute::execute(const KeyCode& aVCLKey)
 {
     css::awt::KeyEvent aAWTKey = AcceleratorExecute::st_VCLKey2AWTKey(aVCLKey);
     return execute(aAWTKey);
 }
 
-//-----------------------------------------------
+
 sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
 {
     OUString sCommand = impl_ts_findCommand(aAWTKey);
 
-    // No Command found? Do nothing! User isnt interested on any error handling .-)
+    
     if (sCommand.isEmpty())
         return sal_False;
 
-    // SAFE -> ----------------------------------
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     css::uno::Reference< css::frame::XDispatchProvider > xProvider = m_xDispatcher;
 
     aLock.clear();
-    // <- SAFE ----------------------------------
+    
 
-    // convert command in URL structure
+    
     css::uno::Reference< css::util::XURLTransformer > xParser = impl_ts_getURLParser();
     css::util::URL aURL;
     aURL.Complete = sCommand;
     xParser->parseStrict(aURL);
 
-    // ask for dispatch object
+    
     css::uno::Reference< css::frame::XDispatch > xDispatch = xProvider->queryDispatch(aURL, OUString(), 0);
     sal_Bool bRet = xDispatch.is();
     if ( bRet )
     {
-        // Note: Such instance can be used one times only and destroy itself afterwards .-)
+        
         AsyncAccelExec* pExec = AsyncAccelExec::createOnShotInstance(xDispatch, aURL);
         pExec->execAsync();
     }
@@ -211,7 +211,7 @@ sal_Bool AcceleratorExecute::execute(const css::awt::KeyEvent& aAWTKey)
     return bRet;
 }
 
-//-----------------------------------------------
+
 css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
 {
     css::awt::KeyEvent aAWTKey;
@@ -229,7 +229,7 @@ css::awt::KeyEvent AcceleratorExecute::st_VCLKey2AWTKey(const KeyCode& aVCLKey)
     return aAWTKey;
 }
 
-//-----------------------------------------------
+
 KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 {
     sal_Bool bShift = ((aAWTKey.Modifiers & css::awt::KeyModifier::SHIFT) == css::awt::KeyModifier::SHIFT );
@@ -240,15 +240,15 @@ KeyCode AcceleratorExecute::st_AWTKey2VCLKey(const css::awt::KeyEvent& aAWTKey)
 
     return KeyCode(nKey, bShift, bMod1, bMod2, bMod3);
 }
-//-----------------------------------------------
+
 OUString AcceleratorExecute::findCommand(const css::awt::KeyEvent& aKey)
 {
     return impl_ts_findCommand(aKey);
 }
-//-----------------------------------------------
+
 OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
 {
-    // SAFE -> ----------------------------------
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xGlobalCfg = m_xGlobalCfg;
@@ -256,7 +256,7 @@ OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
     css::uno::Reference< css::ui::XAcceleratorConfiguration > xDocCfg    = m_xDocCfg   ;
 
     aLock.clear();
-    // <- SAFE ----------------------------------
+    
 
     OUString sCommand;
 
@@ -290,7 +290,7 @@ OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
     catch(const css::container::NoSuchElementException&)
         {}
 
-    // fall back to functional key codes
+    
     if( aKey.Modifiers == 0 )
     {
         switch( aKey.KeyCode )
@@ -363,7 +363,7 @@ OUString AcceleratorExecute::impl_ts_findCommand(const css::awt::KeyEvent& aKey)
     return OUString();
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openModuleConfig(const css::uno::Reference< css::uno::XComponentContext >& rxContext,
                                                                                                    const css::uno::Reference< css::frame::XFrame >&              xFrame)
 {
@@ -394,7 +394,7 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     return xAccCfg;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st_openDocConfig(const css::uno::Reference< css::frame::XModel >& xModel)
 {
     css::uno::Reference< css::ui::XAcceleratorConfiguration >       xAccCfg;
@@ -407,10 +407,10 @@ css::uno::Reference< css::ui::XAcceleratorConfiguration > AcceleratorExecute::st
     return xAccCfg;
 }
 
-//-----------------------------------------------
+
 css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_getURLParser()
 {
-    // SAFE -> ----------------------------------
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     if (m_xURLParser.is())
@@ -418,27 +418,27 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
 
     aLock.clear();
-    // <- SAFE ----------------------------------
+    
 
     css::uno::Reference< css::util::XURLTransformer > xParser =  css::util::URLTransformer::create( xContext );
 
-    // SAFE -> ----------------------------------
+    
     aLock.reset();
     m_xURLParser = xParser;
     aLock.clear();
-    // <- SAFE ----------------------------------
+    
 
     return xParser;
 }
 
-//-----------------------------------------------
+
 IMPL_LINK_NOARG(AcceleratorExecute, impl_ts_asyncCallback)
 {
-    // replaced by AsyncAccelExec!
+    
     return 0;
 }
 
-//-----------------------------------------------
+
 AsyncAccelExec::AsyncAccelExec(const css::uno::Reference< css::frame::XDispatch >& xDispatch,
                                const css::util::URL&                               aURL     )
     : m_aAsyncCallback(LINK(this, AsyncAccelExec, impl_ts_asyncCallback))
@@ -447,7 +447,7 @@ AsyncAccelExec::AsyncAccelExec(const css::uno::Reference< css::frame::XDispatch 
 {
 }
 
-//-----------------------------------------------
+
 AsyncAccelExec* AsyncAccelExec::createOnShotInstance(const css::uno::Reference< css::frame::XDispatch >& xDispatch,
                                                      const css::util::URL&                               aURL     )
 {
@@ -455,13 +455,13 @@ AsyncAccelExec* AsyncAccelExec::createOnShotInstance(const css::uno::Reference< 
     return pExec;
 }
 
-//-----------------------------------------------
+
 void AsyncAccelExec::execAsync()
 {
     m_aAsyncCallback.Post(0);
 }
 
-//-----------------------------------------------
+
 IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
 {
     if (! m_xDispatch.is())
@@ -483,6 +483,6 @@ IMPL_LINK(AsyncAccelExec, impl_ts_asyncCallback, void*,)
     return 0;
 }
 
-} // namespace svt
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

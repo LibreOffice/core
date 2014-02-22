@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <stdio.h>
@@ -36,8 +36,8 @@ G_DEFINE_TYPE (GLOMenu, g_lo_menu, G_TYPE_MENU_MODEL);
 
 struct item
 {
-    GHashTable*     attributes;     // Item attributes.
-    GHashTable*     links;          // Item links.
+    GHashTable*     attributes;     
+    GHashTable*     links;          
 };
 
 
@@ -90,7 +90,7 @@ valid_attribute_name (const gchar *name)
 static gboolean
 g_lo_menu_is_mutable (GMenuModel*)
 {
-    // Menu is always mutable.
+    
     return TRUE;
 }
 
@@ -244,7 +244,7 @@ g_lo_menu_set_label_to_item_in_section (GLOMenu     *menu,
 
     g_lo_menu_set_label (model, position, label);
 
-    // Notify the update.
+    
     g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
 
     g_object_unref (model);
@@ -339,7 +339,7 @@ g_lo_menu_set_accelerator_to_item_in_section (GLOMenu     *menu,
 
     g_lo_menu_set_attribute_value (model, position, G_LO_MENU_ATTRIBUTE_ACCELERATOR, value);
 
-    // Notify the update.
+    
     g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
 
     g_object_unref (model);
@@ -390,7 +390,7 @@ g_lo_menu_set_command_to_item_in_section (GLOMenu     *menu,
 
     g_lo_menu_set_attribute_value (model, position, G_LO_MENU_ATTRIBUTE_COMMAND, value);
 
-    // Notify the update.
+    
     g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
 
     g_object_unref (model);
@@ -527,7 +527,7 @@ g_lo_menu_set_submenu_to_item_in_section (GLOMenu    *menu,
 
     g_lo_menu_set_link (model, position, G_MENU_LINK_SUBMENU, submenu);
 
-    // Notify the update.
+    
     g_menu_model_items_changed (G_MENU_MODEL (model), position, 1, 1);
 
     g_object_unref (model);
@@ -550,7 +550,7 @@ g_lo_menu_get_submenu_from_item_in_section (GLOMenu *menu,
     if (0 <= position && position < (gint) model->items->len)
         submenu = G_LO_MENU (G_MENU_MODEL_CLASS (g_lo_menu_parent_class)
                 ->get_item_link (G_MENU_MODEL (model), position, G_MENU_LINK_SUBMENU));
-        //submenu = g_menu_model_get_item_link (G_MENU_MODEL (model), position, G_MENU_LINK_SUBMENU);
+        
 
     g_object_unref (model);
 
@@ -578,7 +578,7 @@ g_lo_menu_set_submenu_action_to_item_in_section (GLOMenu     *menu,
 
     g_lo_menu_set_attribute_value (G_LO_MENU (model), position, G_LO_MENU_ATTRIBUTE_SUBMENU_ACTION, value);
 
-    // Notify the update.
+    
     g_menu_model_items_changed (model, position, 1, 1);
 
     g_object_unref (model);

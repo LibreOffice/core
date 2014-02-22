@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -74,7 +74,7 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
 
     SetExchangeSupport();
 
-    // set the correct metric
+    
     const FieldUnit eMetric = GetModuleFieldUnit( rSet );
 
     SetFieldUnit( *m_pWidthMF, eMetric );
@@ -174,7 +174,7 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     nW = rPool.GetWhich( SID_ATTR_PAGE_SIZE );
     if ( SFX_ITEM_SET == rSet.GetItemState( nW, false, &pItem ) )
     {
-        // orientation and size from the PageItem
+        
         FieldUnit eUnit = MapToFieldUnit( rSet.GetPool()->GetMetric( nW ));
 
         aPageSize = ((const SvxSizeItem*)pItem)->GetSize();
@@ -245,8 +245,8 @@ sal_Bool SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 
         SvxSizeItem aSz( nW );
 
-        // size could already have been set from another page
-        // #44204#
+        
+        
         const SfxItemSet* pExSet = GetTabDialog() ? GetTabDialog()->GetExampleSet() : NULL;
         const SfxPoolItem* pItem = 0;
         if( pExSet && SFX_ITEM_SET ==
@@ -307,7 +307,7 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 
     bSetOrigSize = sal_False;
 
-    // Size
+    
     Size aSize;
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRAF_FRMSIZE, false, &pItem ) )
@@ -323,8 +323,8 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     {
         if(!bReset)
         {
-            // value was changed by wrap-tabpage and has to
-            // be set with modify-flag
+            
+            
             m_pWidthMF->SetUserValue(nWidth, FUNIT_TWIP);
         }
         else
@@ -336,8 +336,8 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
     {
         if (!bReset)
         {
-            // value was changed by wrap-tabpage and has to
-            // be set with modify-flag
+            
+            
             m_pHeightMF->SetUserValue(nHeight, FUNIT_TWIP);
         }
         else
@@ -492,7 +492,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
         m_pExampleWN->SetRight(nRight);
         if(bZoom)
         {
-            // scale stays, recompute width
+            
             ZoomHdl(m_pWidthZoomMF);
         }
     }
@@ -521,12 +521,12 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
         m_pExampleWN->SetBottom( nBottom );
         if(bZoom)
         {
-            // scale stays, recompute height
+            
             ZoomHdl(m_pHeightZoomMF);
         }
     }
     m_pExampleWN->Invalidate();
-    // size and border changed -> recompute scale
+    
     if(!bZoom)
         CalcZoom();
     CalcMinMaxBorder();
@@ -631,7 +631,7 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
         nSpin = MetricField::ConvertValue( nSpin, aOrigSize.Width(), 0,
                                                eUnit, m_pLeftMF->GetUnit());
 
-        // if the margin is too big, it is set to 1/3 on both pages
+        
         long nR = lcl_GetValue( *m_pRightMF, eUnit );
         long nL = lcl_GetValue( *m_pLeftMF, eUnit );
         if((nL + nR) < - aOrigSize.Width())
@@ -661,7 +661,7 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
         m_pTopMF->SetSpinSize(nSpin);
         m_pBottomMF->SetSpinSize(nSpin);
 
-        // display original size
+        
         const FieldUnit eMetric = GetModuleFieldUnit( GetItemSet() );
 
         MetricField aFld(this, WB_HIDE);
@@ -672,7 +672,7 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
         aFld.SetValue( aFld.Normalize( aOrigSize.Width() ), eUnit );
         OUString sTemp = aFld.GetText();
         aFld.SetValue( aFld.Normalize( aOrigSize.Height() ), eUnit );
-        // multiplication sign (U+00D7)
+        
         sTemp += OUString( sal_Unicode (0x00D7) );
         sTemp += aFld.GetText();
 

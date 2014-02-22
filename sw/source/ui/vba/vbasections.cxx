@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbasections.hxx"
 #include "vbasection.hxx"
@@ -51,7 +51,7 @@ public:
     }
 };
 
-// here I regard pagestyle as section
+
 class SectionCollectionHelper : public SectionCollectionHelper_Base
 {
 private:
@@ -70,7 +70,7 @@ public:
         for( sal_Int32 index = 0; index < nCount; ++index )
         {
             uno::Reference< style::XStyle > xStyle( xPageStyles->getByIndex( index ), uno::UNO_QUERY_THROW );
-            // only the pagestyles in using are considered
+            
             if( xStyle->isInUse( ) )
             {
                 uno::Reference< beans::XPropertySet > xPageProps( xStyle, uno::UNO_QUERY_THROW );
@@ -81,7 +81,7 @@ public:
 
     SectionCollectionHelper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ) throw (uno::RuntimeException) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel )
     {
-        // Hacky implementation of Range.Sections, only support 1 secction
+        
         uno::Reference< beans::XPropertySet > xRangeProps( xTextRange, uno::UNO_QUERY_THROW );
         uno::Reference< style::XStyle > xStyle = word::getCurrentPageStyle( mxModel, xRangeProps );
         uno::Reference< beans::XPropertySet > xPageProps( xStyle, uno::UNO_QUERY_THROW );
@@ -90,7 +90,7 @@ public:
 
     ~SectionCollectionHelper(){}
 
-    // XIndexAccess
+    
     virtual sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
     {
         return mxSections.size();
@@ -111,7 +111,7 @@ public:
     {
         return sal_True;
     }
-    // XEnumerationAccess
+    
     virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException)
     {
         return new SectionEnumeration( mxSections );
@@ -144,14 +144,14 @@ SwVbaSections::PageSetup( ) throw (uno::RuntimeException)
 {
     if( m_xIndexAccess->getCount() )
     {
-        // check if the first section is our want
+        
         uno::Reference< word::XSection > xSection( m_xIndexAccess->getByIndex( 0 ), uno::UNO_QUERY_THROW );
         return xSection->PageSetup();
     }
     throw uno::RuntimeException("There is no section", uno::Reference< uno::XInterface >() );
 }
 
-// XEnumerationAccess
+
 uno::Type SAL_CALL
 SwVbaSections::getElementType() throw (uno::RuntimeException)
 {

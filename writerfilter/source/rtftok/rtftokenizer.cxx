@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <tools/stream.hxx>
@@ -57,7 +57,7 @@ int RTFTokenizer::resolveParse()
     SAL_INFO( "writerfilter", OSL_THIS_FUNC );
     char ch;
     int ret;
-    // for hex chars
+    
     int b = 0, count = 2;
     sal_uInt32 nPercentSize = 0;
     sal_uInt32 nLastPos = 0;
@@ -79,7 +79,7 @@ int RTFTokenizer::resolveParse()
 
     while ((Strm().ReadChar( ch ), !Strm().IsEof()))
     {
-        //SAL_INFO("writerfilter", OSL_THIS_FUNC << ": parsing character '" << ch << "'");
+        
 
         sal_uInt32 nCurrentPos = Strm().Tell();
         if (m_xStatusIndicator.is() && nCurrentPos > (nLastPos + nPercentSize))
@@ -120,7 +120,7 @@ int RTFTokenizer::resolveParse()
                         return ret;
                     break;
                 case 0x0d:
-                    break; // ignore this
+                    break; 
                 case 0x0a:
                     m_nLineNumber++;
                     m_nLineStartPos = nCurrentPos;
@@ -220,8 +220,8 @@ int RTFTokenizer::resolveKeyword()
     {
         aBuf.append(ch);
         OString aKeyword = aBuf.makeStringAndClear();
-        // control symbols aren't followed by a space, so we can return here
-        // without doing any SeekRel()
+        
+        
         return dispatchKeyword(aKeyword, bParam, nParam);
     }
     while(isalpha(ch))
@@ -235,13 +235,13 @@ int RTFTokenizer::resolveKeyword()
         }
     }
     if (aBuf.getLength() > 32)
-        // See RTF spec v1.9.1, page 7
-        // A control word's name cannot be longer than 32 letters.
+        
+        
         throw io::BufferSizeExceededException();
 
     if (ch == '-')
     {
-        // in case we'll have a parameter, that will be negative
+        
         bNeg = true;
         Strm().ReadChar( ch );
         if (Strm().IsEof())
@@ -251,7 +251,7 @@ int RTFTokenizer::resolveKeyword()
     {
         OStringBuffer aParameter;
 
-        // we have a parameter
+        
         bParam = true;
         while(isdigit(ch))
         {
@@ -295,19 +295,19 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
     switch (m_aRTFControlWords[i].nControlType)
     {
         case CONTROL_FLAG:
-            // flags ignore any parameter by definition
+            
             ret = m_rImport.dispatchFlag(m_aRTFControlWords[i].nIndex);
             if (ret)
                 return ret;
             break;
         case CONTROL_DESTINATION:
-            // same for destinations
+            
             ret = m_rImport.dispatchDestination(m_aRTFControlWords[i].nIndex);
             if (ret)
                 return ret;
             break;
         case CONTROL_SYMBOL:
-            // and symbols
+            
             ret = m_rImport.dispatchSymbol(m_aRTFControlWords[i].nIndex);
             if (ret)
                 return ret;
@@ -318,7 +318,7 @@ int RTFTokenizer::dispatchKeyword(OString& rKeyword, bool bParam, int nParam)
                 return ret;
             break;
         case CONTROL_VALUE:
-            // values require a parameter by definition
+            
             if (bParam) {
                 ret = m_rImport.dispatchValue(m_aRTFControlWords[i].nIndex, nParam);
                 if (ret)
@@ -344,7 +344,7 @@ sal_Size RTFTokenizer::getGroupStart()
     return m_nGroupStart;
 }
 
-} // namespace rtftok
-} // namespace writerfilter
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

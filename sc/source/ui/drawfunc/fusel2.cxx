@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svditer.hxx>
@@ -37,7 +37,7 @@
 #include "drawview.hxx"
 #include <svx/sdrhittesthelper.hxx>
 
-// -----------------------------------------------------------------------
+
 
 inline long Diff( const Point& rP1, const Point& rP2 )
 {
@@ -132,7 +132,7 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
         ScDocShell* pDocSh = rViewData.GetDocShell();
         bool bProtectDoc =  rDoc.IsTabProtected( nTab ) || (pDocSh && pDocSh->IsReadOnly());
 
-        // search the last object (on top) in the object list
+        
         SdrObjListIter aIter( *pPageView->GetObjList(), IM_DEEPNOGROUPS, true );
         for( SdrObject* pObj = aIter.Next(); pObj; pObj = aIter.Next() )
         {
@@ -141,7 +141,7 @@ bool FuSelection::IsNoteCaptionClicked( const Point& rPos ) const
                 if( const ScDrawObjData* pCaptData = ScDrawLayer::GetNoteCaptionData( pObj, nTab ) )
                 {
                     const ScAddress& rNotePos = pCaptData->maStart;
-                    // skip caption objects of notes in protected cells
+                    
                     const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* >( rDoc.GetAttr( rNotePos.Col(), rNotePos.Row(), nTab, ATTR_PROTECTION ) );
                     bool bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell();
                     if( !bProtectAttr || !bProtectDoc )
@@ -157,13 +157,13 @@ void FuSelection::ActivateNoteHandles(SdrObject* pObject)
 {
     if( pView && ScDrawLayer::IsNoteCaption( pObject ) )
     {
-        // Leave the internal layer unlocked - relock in ScDrawView::MarkListHasChanged()
+        
         pView->UnlockInternalLayer();
         pView->MarkObj( pObject, pView->GetSdrPageView() );
     }
 }
 
-//==================================================================
+
 
 
 

@@ -50,7 +50,7 @@ OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< uno::XComp
     m_nObjectState = embed::EmbedStates::LOADED;
 }
 
-//------------------------------------------------------
+
 uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType )
         throw( uno::RuntimeException )
 {
@@ -71,7 +71,7 @@ uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType
 
 }
 
-//------------------------------------------------------
+
 uno::Sequence< uno::Type > SAL_CALL OSpecialEmbeddedObject::getTypes()
         throw( uno::RuntimeException )
 {

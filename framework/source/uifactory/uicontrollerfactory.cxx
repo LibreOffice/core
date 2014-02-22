@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uifactory/factoryconfiguration.hxx>
@@ -47,17 +47,17 @@ class UIControllerFactory : private osl::Mutex,
 public:
     virtual ~UIControllerFactory();
 
-    // XServiceInfo
+    
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) = 0;
     virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName ) throw (css::uno::RuntimeException) = 0;
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) = 0;
 
-    // XMultiComponentFactory
+    
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithContext( const OUString& aServiceSpecifier, const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException);
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArgumentsAndContext( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments, const css::uno::Reference< css::uno::XComponentContext >& Context ) throw (css::uno::Exception, css::uno::RuntimeException);
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() throw (css::uno::RuntimeException);
 
-    // XUIControllerRegistration
+    
     virtual sal_Bool SAL_CALL hasController( const OUString& aCommandURL, const OUString& aModuleName ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL registerController( const OUString& aCommandURL, const OUString& aModuleName, const OUString& aControllerImplementationName ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL deregisterController( const OUString& aCommandURL, const OUString& aModuleName ) throw (css::uno::RuntimeException);
@@ -95,19 +95,19 @@ void SAL_CALL UIControllerFactory::disposing()
     osl::MutexGuard g(rBHelper.rMutex);
     if (m_pConfigAccess)
     {
-        // reduce reference count
+        
         m_pConfigAccess->release();
         m_pConfigAccess = 0;
     }
 }
 
-// XMultiComponentFactory
+
 Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithContext(
     const OUString& aServiceSpecifier,
     const Reference< XComponentContext >& )
 throw (Exception, RuntimeException)
 {
-    // SAFE
+    
     osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
@@ -121,7 +121,7 @@ throw (Exception, RuntimeException)
         return m_xContext->getServiceManager()->createInstanceWithContext( aServiceName, m_xContext );
     else
         return Reference< XInterface >();
-    // SAFE
+    
 }
 
 Reference< XInterface > SAL_CALL UIControllerFactory::createInstanceWithArgumentsAndContext(
@@ -136,9 +136,9 @@ throw (Exception, RuntimeException)
     OUString   aPropName;
     PropertyValue   aPropValue;
 
-    // Retrieve the optional module name form the Arguments sequence. It is used as a part of
-    // the hash map key to support different controller implementation for the same URL but different
-    // module!!
+    
+    
+    
     for ( int i = 0; i < Arguments.getLength(); i++ )
     {
         if (( Arguments[i] >>= aPropValue ) && ( aPropValue.Name.equals( aPropModuleName )))
@@ -154,16 +154,16 @@ throw (Exception, RuntimeException)
     bool bHasValue = m_pConfigAccess->hasValue();
     aNewArgs.realloc( aNewArgs.getLength() + (bHasValue ? 2 : 1) );
 
-    // Append the command URL to the Arguments sequence so that one controller can be
-    // used for more than one command URL.
+    
+    
     aPropValue.Name     = "CommandURL";
     aPropValue.Value  <<= ServiceSpecifier;
     aNewArgs[nAppendIndex] <<= aPropValue;
 
     if ( bHasValue )
     {
-        // Append the optional value argument. It's an empty string if no additional info
-        // is provided to the controller.
+        
+        
         OUString aValue = m_pConfigAccess->getValueFromCommandModule( ServiceSpecifier, aPropName );
         aPropValue.Name = aPropValueName;
         aPropValue.Value <<= aValue;
@@ -172,7 +172,7 @@ throw (Exception, RuntimeException)
 
     {
         OUString aServiceName;
-        { // SAFE
+        { 
         osl::MutexGuard g(rBHelper.rMutex);
 
         if ( !m_bConfigRead )
@@ -182,7 +182,7 @@ throw (Exception, RuntimeException)
         }
 
         aServiceName = m_pConfigAccess->getServiceFromCommandModule( ServiceSpecifier, aPropName );
-        } // SAFE
+        } 
 
         if ( !aServiceName.isEmpty() )
             return m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( aServiceName, aNewArgs, m_xContext );
@@ -197,7 +197,7 @@ throw (RuntimeException)
     return Sequence< OUString >();
 }
 
-// XUIControllerRegistration
+
 sal_Bool SAL_CALL UIControllerFactory::hasController(
     const OUString& aCommandURL,
     const OUString& aModuleName )
@@ -220,7 +220,7 @@ void SAL_CALL UIControllerFactory::registerController(
     const OUString& aControllerImplementationName )
 throw (RuntimeException)
 {
-    // SAFE
+    
     osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
@@ -230,7 +230,7 @@ throw (RuntimeException)
     }
 
     m_pConfigAccess->addServiceToCommandModule( aCommandURL, aModuleName, aControllerImplementationName );
-    // SAFE
+    
 }
 
 void SAL_CALL UIControllerFactory::deregisterController(
@@ -238,7 +238,7 @@ void SAL_CALL UIControllerFactory::deregisterController(
     const OUString& aModuleName )
 throw (RuntimeException)
 {
-    // SAFE
+    
     osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
@@ -248,7 +248,7 @@ throw (RuntimeException)
     }
 
     m_pConfigAccess->removeServiceFromCommandModule( aCommandURL, aModuleName );
-    // SAFE
+    
 }
 
 class PopupMenuControllerFactory :  public UIControllerFactory

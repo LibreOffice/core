@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "stringutil.hxx"
@@ -50,11 +50,11 @@ void ScSetStringParam::setNumericInput()
 bool ScStringUtil::parseSimpleNumber(
     const OUString& rStr, sal_Unicode dsep, sal_Unicode gsep, double& rVal)
 {
-    // Actually almost the entire pre-check is unnecessary and we could call
-    // rtl::math::stringToDouble() just after having exchanged ascii space with
-    // non-breaking space, if it wasn't for check of grouped digits. The NaN
-    // and Inf cases that are accepted by stringToDouble() could be detected
-    // using rtl::math::isFinite() on the result.
+    
+    
+    
+    
+    
 
     /* TODO: The grouped digits check isn't even valid for locales that do not
      * group in thousands ... e.g. Indian locales. But that's something also
@@ -70,27 +70,27 @@ bool ScStringUtil::parseSimpleNumber(
     sal_uInt32 nDigitCount = 0;
     sal_Int32 nPosExponent = -1;
 
-    // Skip preceding spaces.
+    
     for (i = 0; i < n; ++i, ++p)
     {
         sal_Unicode c = *p;
         if (c != 0x0020 && c != 0x00A0)
-            // first non-space character.  Exit.
+            
             break;
     }
 
     if (i == n)
-        // the whole string is space.  Fail.
+        
         return false;
 
-    n -= i; // Subtract the length of the preceding spaces.
+    n -= i; 
 
-    // Determine the last non-space character.
+    
     for (; p != pLast; --pLast, --n)
     {
         sal_Unicode c = *pLast;
         if (c != 0x0020 && c != 0x00A0)
-            // Non space character. Exit.
+            
             break;
     }
 
@@ -98,26 +98,26 @@ bool ScStringUtil::parseSimpleNumber(
     {
         sal_Unicode c = *p;
         if (c == 0x0020 && gsep == 0x00A0)
-            // ascii space to unicode space if that is group separator
+            
             c = 0x00A0;
 
         if ('0' <= c && c <= '9')
         {
-            // this is a digit.
+            
             aBuf.append(c);
             ++nDigitCount;
         }
         else if (c == dsep)
         {
-            // this is a decimal separator.
+            
 
             if (nPosDSep >= 0)
-                // a second decimal separator -> not a valid number.
+                
                 return false;
 
             if (nPosGSep >= 0 && i - nPosGSep != 4)
-                // the number has a group separator and the decimal sep is not
-                // positioned correctly.
+                
+                
                 return false;
 
             nPosDSep = i;
@@ -127,22 +127,22 @@ bool ScStringUtil::parseSimpleNumber(
         }
         else if (c == gsep)
         {
-            // this is a group (thousand) separator.
+            
 
             if (i == 0)
-                // not allowed as the first character.
+                
                 return false;
 
             if (nPosDSep >= 0)
-                // not allowed after the decimal separator.
+                
                 return false;
 
             if (nPosGSep >= 0 && nDigitCount != 3)
-                // must be exactly 3 digits since the last group separator.
+                
                 return false;
 
             if (nPosExponent >= 0)
-                // not allowed in exponent.
+                
                 return false;
 
             nPosGSep = i;
@@ -150,8 +150,8 @@ bool ScStringUtil::parseSimpleNumber(
         }
         else if (c == '-' || c == '+')
         {
-            // A sign must be the first character if it's given, or immediately
-            // follow the exponent character if present.
+            
+            
             if (i == 0 || (nPosExponent >= 0 && i == nPosExponent + 1))
                 aBuf.append(c);
             else
@@ -159,14 +159,14 @@ bool ScStringUtil::parseSimpleNumber(
         }
         else if (c == 'E' || c == 'e')
         {
-            // this is an exponent designator.
+            
 
             if (nPosExponent >= 0)
-                // Only one exponent allowed.
+                
                 return false;
 
             if (nPosGSep >= 0 && nDigitCount != 3)
-                // must be exactly 3 digits since the last group separator.
+                
                 return false;
 
             aBuf.append(c);
@@ -179,10 +179,10 @@ bool ScStringUtil::parseSimpleNumber(
             return false;
     }
 
-    // finished parsing the number.
+    
 
     if (nPosGSep >= 0 && nDigitCount != 3)
-        // must be exactly 3 digits since the last group separator.
+        
         return false;
 
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
@@ -190,7 +190,7 @@ bool ScStringUtil::parseSimpleNumber(
     OUString aString( aBuf.makeStringAndClear());
     rVal = ::rtl::math::stringToDouble( aString, dsep, gsep, &eStatus, &nParseEnd);
     if (eStatus != rtl_math_ConversionStatus_Ok || nParseEnd < aString.getLength())
-        // Not a valid number or not entire string consumed.
+        
         return false;
 
     return true;
@@ -199,11 +199,11 @@ bool ScStringUtil::parseSimpleNumber(
 bool ScStringUtil::parseSimpleNumber(
     const char* p, size_t n, char dsep, char gsep, double& rVal)
 {
-    // Actually almost the entire pre-check is unnecessary and we could call
-    // rtl::math::stringToDouble() just after having exchanged ascii space with
-    // non-breaking space, if it wasn't for check of grouped digits. The NaN
-    // and Inf cases that are accepted by stringToDouble() could be detected
-    // using rtl::math::isFinite() on the result.
+    
+    
+    
+    
+    
 
     /* TODO: The grouped digits check isn't even valid for locales that do not
      * group in thousands ... e.g. Indian locales. But that's something also
@@ -217,27 +217,27 @@ bool ScStringUtil::parseSimpleNumber(
     sal_uInt32 nDigitCount = 0;
     sal_Int32 nPosExponent = -1;
 
-    // Skip preceding spaces.
+    
     for (i = 0; i < n; ++i, ++p)
     {
         char c = *p;
         if (c != ' ')
-            // first non-space character.  Exit.
+            
             break;
     }
 
     if (i == n)
-        // the whole string is space.  Fail.
+        
         return false;
 
-    n -= i; // Subtract the length of the preceding spaces.
+    n -= i; 
 
-    // Determine the last non-space character.
+    
     for (; p != pLast; --pLast, --n)
     {
         char c = *pLast;
         if (c != ' ')
-            // Non space character. Exit.
+            
             break;
     }
 
@@ -247,21 +247,21 @@ bool ScStringUtil::parseSimpleNumber(
 
         if ('0' <= c && c <= '9')
         {
-            // this is a digit.
+            
             aBuf.append(c);
             ++nDigitCount;
         }
         else if (c == dsep)
         {
-            // this is a decimal separator.
+            
 
             if (nPosDSep >= 0)
-                // a second decimal separator -> not a valid number.
+                
                 return false;
 
             if (nPosGSep >= 0 && i - nPosGSep != 4)
-                // the number has a group separator and the decimal sep is not
-                // positioned correctly.
+                
+                
                 return false;
 
             nPosDSep = i;
@@ -271,22 +271,22 @@ bool ScStringUtil::parseSimpleNumber(
         }
         else if (c == gsep)
         {
-            // this is a group (thousand) separator.
+            
 
             if (i == 0)
-                // not allowed as the first character.
+                
                 return false;
 
             if (nPosDSep >= 0)
-                // not allowed after the decimal separator.
+                
                 return false;
 
             if (nPosGSep >= 0 && nDigitCount != 3)
-                // must be exactly 3 digits since the last group separator.
+                
                 return false;
 
             if (nPosExponent >= 0)
-                // not allowed in exponent.
+                
                 return false;
 
             nPosGSep = i;
@@ -294,8 +294,8 @@ bool ScStringUtil::parseSimpleNumber(
         }
         else if (c == '-' || c == '+')
         {
-            // A sign must be the first character if it's given, or immediately
-            // follow the exponent character if present.
+            
+            
             if (i == 0 || (nPosExponent >= 0 && i == static_cast<size_t>(nPosExponent+1)))
                 aBuf.append(c);
             else
@@ -303,14 +303,14 @@ bool ScStringUtil::parseSimpleNumber(
         }
         else if (c == 'E' || c == 'e')
         {
-            // this is an exponent designator.
+            
 
             if (nPosExponent >= 0)
-                // Only one exponent allowed.
+                
                 return false;
 
             if (nPosGSep >= 0 && nDigitCount != 3)
-                // must be exactly 3 digits since the last group separator.
+                
                 return false;
 
             aBuf.append(c);
@@ -323,10 +323,10 @@ bool ScStringUtil::parseSimpleNumber(
             return false;
     }
 
-    // finished parsing the number.
+    
 
     if (nPosGSep >= 0 && nDigitCount != 3)
-        // must be exactly 3 digits since the last group separator.
+        
         return false;
 
     rtl_math_ConversionStatus eStatus = rtl_math_ConversionStatus_Ok;
@@ -334,7 +334,7 @@ bool ScStringUtil::parseSimpleNumber(
     OString aString( aBuf.makeStringAndClear());
     rVal = ::rtl::math::stringToDouble( aString, dsep, gsep, &eStatus, &nParseEnd);
     if (eStatus != rtl_math_ConversionStatus_Ok || nParseEnd < aString.getLength())
-        // Not a valid number or not entire string consumed.
+        
         return false;
 
     return true;
@@ -345,7 +345,7 @@ sal_Int32 ScStringUtil::GetQuotedTokenCount(const OUString &rIn, const OUString&
     assert( !(rQuotedPairs.getLength()%2) );
     assert( rQuotedPairs.indexOf(cTok) );
 
-    // empty string: TokenCount is 0 per definition
+    
     if ( rIn.isEmpty() )
         return 0;
 
@@ -361,13 +361,13 @@ sal_Int32 ScStringUtil::GetQuotedTokenCount(const OUString &rIn, const OUString&
         sal_Unicode c = *pStr;
         if ( cQuotedEndChar )
         {
-            // reached end of the quote ?
+            
             if ( c == cQuotedEndChar )
                 cQuotedEndChar = 0;
         }
         else
         {
-            // Is the char a quote-beginn char ?
+            
             sal_Int32 nQuoteIndex = 0;
             while ( nQuoteIndex < nQuotedLen )
             {
@@ -380,7 +380,7 @@ sal_Int32 ScStringUtil::GetQuotedTokenCount(const OUString &rIn, const OUString&
                     nQuoteIndex += 2;
             }
 
-            // If the token-char matches then increase TokCount
+            
             if ( c == cTok )
                 ++nTokCount;
         }
@@ -407,20 +407,20 @@ OUString ScStringUtil::GetQuotedToken(const OUString &rIn, sal_Int32 nToken, con
     sal_Int32      nFirstChar      = rIndex;
     sal_Int32      i               = nFirstChar;
 
-    // detect token position and length
+    
     pStr += i;
     while ( i < nLen )
     {
         sal_Unicode c = *pStr;
         if ( cQuotedEndChar )
         {
-            // end of the quote reached ?
+            
             if ( c == cQuotedEndChar )
                 cQuotedEndChar = 0;
         }
         else
         {
-            // Is the char a quote-begin char ?
+            
             sal_Int32 nQuoteIndex = 0;
             while ( nQuoteIndex < nQuotedLen )
             {
@@ -433,7 +433,7 @@ OUString ScStringUtil::GetQuotedToken(const OUString &rIn, sal_Int32 nToken, con
                     nQuoteIndex += 2;
             }
 
-            // If the token-char matches then increase TokCount
+            
             if ( c == cTok )
             {
                 ++nTok;
@@ -493,12 +493,12 @@ ScInputStringType ScStringUtil::parseInputString(
     }
     else if (rStr.getLength() > 1 && rStr[0] == '\'')
     {
-        //  for bEnglish, "'" at the beginning is always interpreted as text
-        //  marker and stripped
+        
+        
         aRet.maText = rStr.copy(1);
         aRet.meType = ScInputStringType::Text;
     }
-    else        // (nur) auf englisches Zahlformat testen
+    else        
     {
         sal_uInt32 nNumFormat = rFormatter.GetStandardIndex(eLang);
 
@@ -510,8 +510,8 @@ ScInputStringType ScStringUtil::parseInputString(
         else if (!rStr.isEmpty())
             aRet.meType = ScInputStringType::Text;
 
-        //  das (englische) Zahlformat wird nicht gesetzt
-        //! passendes lokales Format suchen und setzen???
+        
+        
     }
 
     return aRet;

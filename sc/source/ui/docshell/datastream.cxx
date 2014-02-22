@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <datastream.hxx>
@@ -193,7 +193,7 @@ public:
     void resumeReadStream()
     {
         if (maPendingLines.size() <= 4)
-            maCondReadStream.set(); // start producer again
+            maCondReadStream.set(); 
     }
 
     bool hasNewLines()
@@ -221,18 +221,18 @@ private:
 
             if (!maUsedLines.empty())
             {
-                // Re-use lines from previous runs.
+                
                 pLines = maUsedLines.front();
                 maUsedLines.pop();
-                aGuard.clear(); // unlock
+                aGuard.clear(); 
             }
             else
             {
-                aGuard.clear(); // unlock
+                aGuard.clear(); 
                 pLines = new DataStream::LinesType(10);
             }
 
-            // Read & store new lines from stream.
+            
             for (size_t i = 0, n = pLines->size(); i < n; ++i)
             {
                 DataStream::Line& rLine = (*pLines)[i];
@@ -245,14 +245,14 @@ private:
 #endif
             }
 
-            aGuard.reset(); // lock
+            aGuard.reset(); 
             while (!isTerminateRequested() && maPendingLines.size() >= 8)
             {
-                // pause reading for a bit
-                aGuard.clear(); // unlock
+                
+                aGuard.clear(); 
                 maCondReadStream.wait();
                 maCondReadStream.reset();
-                aGuard.reset(); // lock
+                aGuard.reset(); 
             }
             maPendingLines.push(pLines);
             maCondConsume.set();
@@ -321,7 +321,7 @@ DataStream::MoveType DataStream::ToMoveType( const OUString& rMoveStr )
     if (rMoveStr == "MOVE_UP")
         return MOVE_UP;
 
-    return NO_MOVE; // default
+    return NO_MOVE; 
 }
 
 DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& rRange,
@@ -373,9 +373,9 @@ DataStream::Line DataStream::ConsumeLine()
 
         while (!mxReaderThread->hasNewLines())
         {
-            aGuard.clear(); // unlock
+            aGuard.clear(); 
             mxReaderThread->waitForNewLines();
-            aGuard.reset(); // lock
+            aGuard.reset(); 
         }
 
         mpLines = mxReaderThread->popNewLines();
@@ -410,25 +410,25 @@ void DataStream::Decode(const OUString& rURL, const ScRange& rRange,
     meOrigMove = eMove;
     mnSettings = nSettings;
 
-    mbValuesInLine = true; // always true.
+    mbValuesInLine = true; 
 
     mnCurRow = rRange.aStart.Row();
 
     ScRange aRange = rRange;
     if (aRange.aStart.Row() != aRange.aEnd.Row())
-        // We only allow this range to be one row tall.
+        
         aRange.aEnd.SetRow(aRange.aStart.Row());
 
     maStartRange = aRange;
     maEndRange = aRange;
     if (nLimit == 0)
     {
-        // Unlimited
+        
         maEndRange.aStart.SetRow(MAXROW);
     }
     else if (nLimit > 0)
     {
-        // Limited.
+        
         maEndRange.aStart.IncRow(nLimit-1);
         if (maEndRange.aStart.Row() > MAXROW)
             maEndRange.aStart.SetRow(MAXROW);
@@ -479,7 +479,7 @@ void DataStream::Refresh()
 
     double fStart = getNow();
 
-    // Hard recalc will repaint the grid area.
+    
     mpDocShell->DoHardRecalc(true);
     mpDocShell->SetDocumentModified(true);
 
@@ -501,8 +501,8 @@ void DataStream::MoveData()
         break;
         case MOVE_UP:
         {
-            // Remove the top row and shift the remaining rows upward. Then
-            // insert a new row at the end row position.
+            
+            
             ScRange aRange = maStartRange;
             aRange.aEnd = maEndRange.aEnd;
             maDocAccess.shiftRangeUp(aRange);
@@ -510,8 +510,8 @@ void DataStream::MoveData()
         break;
         case MOVE_DOWN:
         {
-            // Remove the end row and shift the remaining rows downward by
-            // inserting a new row at the top row.
+            
+            
             ScRange aRange = maStartRange;
             aRange.aEnd = maEndRange.aEnd;
             maDocAccess.shiftRangeDown(aRange);
@@ -530,7 +530,7 @@ void DataStream::Text2Doc()
     Line aLine = ConsumeLine();
     if (aLine.maCells.empty() && mbRefreshOnEmptyLine)
     {
-        // Empty line detected.  Trigger refresh and discard it.
+        
         Refresh();
         return;
     }
@@ -567,13 +567,13 @@ void DataStream::Text2Doc()
     if (meMove == RANGE_DOWN)
     {
         ++mnCurRow;
-//      mpDocShell->GetViewData()->GetView()->AlignToCursor(
-//              maStartRange.aStart.Col(), mnCurRow, SC_FOLLOW_JUMP);
+
+
     }
 
     if (getNow() - mfLastRefreshTime > 0.1 && mnLinesSinceRefresh > 200)
-        // Refresh no more frequently than every 0.1 second, and wait until at
-        // least we have processed 200 lines.
+        
+        
         Refresh();
 
     ++mnLinesSinceRefresh;
@@ -588,7 +588,7 @@ void DataStream::Text2Doc() {}
 bool DataStream::ImportData()
 {
     if (!mbValuesInLine)
-        // We no longer support this mode. To be deleted later.
+        
         return false;
 
     if (ScDocShell::GetViewData()->GetViewShell()->NeedsRepaint())
@@ -606,6 +606,6 @@ IMPL_LINK_NOARG(DataStream, ImportTimerHdl)
     return 0;
 }
 
-} // namespace sc
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

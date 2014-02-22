@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::lang;
 
 namespace sd { namespace presenter {
 
-//===== Service ===============================================================
+
 
 Reference<XInterface> SAL_CALL PresenterTextViewService_createInstance (
     const Reference<XComponentContext>& rxContext)
@@ -78,7 +78,7 @@ Sequence<OUString> SAL_CALL PresenterTextViewService_getSupportedServiceNames (v
 
 
 
-//===== PresenterTextView::Implementation =====================================
+
 
 class PresenterTextView::Implementation
 {
@@ -129,7 +129,7 @@ private:
 
 
 
-//===== PresenterTextView =====================================================
+
 
 PresenterTextView::PresenterTextView (const Reference<XComponentContext>& rxContext)
     : PresenterTextViewInterfaceBase(),
@@ -156,7 +156,7 @@ void SAL_CALL PresenterTextView::disposing (void)
 
 
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
     throw (Exception, RuntimeException)
@@ -189,7 +189,7 @@ void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
 
 
 
-//-----------------------------------------------------------------------------
+
 
 Any PresenterTextView::GetPropertyValue (const OUString& rsPropertyName)
 {
@@ -286,7 +286,7 @@ void PresenterTextView::ThrowIfDisposed (void)
 
 
 
-//===== PresenterTextView::Implementation =====================================
+
 
 PresenterTextView::Implementation::Implementation (void)
     : msTextPropertyName("Text"),
@@ -344,7 +344,7 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
     if (pEditEngine == NULL)
     {
         //
-        // set fonts to be used
+        
         //
         SvtLinguOptions aOpt;
         SvtLinguConfig().GetOptions( aOpt );
@@ -356,13 +356,13 @@ EditEngine* PresenterTextView::Implementation::CreateEditEngine (void)
             sal_uInt16      nFontInfoId;
             } aTable[3] =
         {
-            // info to get western font to be used
+            
             {   LANGUAGE_ENGLISH_US,    LANGUAGE_NONE,
                 DEFAULTFONT_SERIF,      EE_CHAR_FONTINFO },
-            // info to get CJK font to be used
+            
             {   LANGUAGE_JAPANESE,      LANGUAGE_NONE,
                 DEFAULTFONT_CJK_TEXT,   EE_CHAR_FONTINFO_CJK },
-            // info to get CTL font to be used
+            
             {   LANGUAGE_ARABIC_SAUDI_ARABIA,  LANGUAGE_NONE,
                 DEFAULTFONT_CTL_TEXT,   EE_CHAR_FONTINFO_CTL }
         };
@@ -540,7 +540,7 @@ sal_Int32 PresenterTextView::Implementation::ParseDistance (const OUString& rsDi
     else if (rsDistance.endsWithAsciiL("l", 1))
     {
         const sal_Int32 nLines (rsDistance.copy(0,rsDistance.getLength()-1).toInt32());
-        // Take the height of the first line as the height of every line.
+        
         const sal_uInt32 nFirstLineHeight (mpEditEngine->GetLineHeight(0,0));
         nDistance = nFirstLineHeight * nLines;
     }
@@ -627,6 +627,6 @@ void PresenterTextView::Implementation::CheckTop (void)
 }
 
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

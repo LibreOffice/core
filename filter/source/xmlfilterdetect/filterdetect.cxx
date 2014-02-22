@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <iostream>
@@ -140,7 +140,7 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
         const sal_uInt16 nSize = 4000;
         bool  bTryUtf16 = false;
 
-        if ( nUniPos == 0 ) // No BOM detected, try to guess UTF-16 endianness
+        if ( nUniPos == 0 ) 
         {
             sal_uInt16 sHeader = 0;
             pInStream->ReadUInt16( sHeader );
@@ -154,17 +154,17 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
             pInStream->Seek( STREAM_SEEK_TO_BEGIN );
         }
 
-        if ( nUniPos == 3 || ( nUniPos == 0 && !bTryUtf16 ) ) // UTF-8 or non-Unicode
+        if ( nUniPos == 3 || ( nUniPos == 0 && !bTryUtf16 ) ) 
             resultString = OStringToOUString( read_uInt8s_ToOString( *pInStream, nSize ), RTL_TEXTENCODING_UTF8 );
-        else if ( nUniPos == 2 || bTryUtf16 ) // UTF-16
+        else if ( nUniPos == 2 || bTryUtf16 ) 
             resultString = read_uInt16s_ToOUString( *pInStream, nSize );
 
         if ( !resultString.startsWith( "<?xml" ) )
-            // This is not an XML stream.  It makes no sense to try to detect
-            // a non-XML file type here.
+            
+            
             return OUString();
 
-        // test typedetect code
+        
         Reference <XNameAccess> xTypeCont(mxCtx->getServiceManager()->createInstanceWithContext("com.sun.star.document.TypeDetection", mxCtx), UNO_QUERY);
         Sequence < OUString > myTypes= xTypeCont->getElementNames();
         nLength = myTypes.getLength();
@@ -208,7 +208,7 @@ OUString SAL_CALL FilterDetect::detect( com::sun::star::uno::Sequence< com::sun:
     return sTypeName;
 }
 
-// XInitialization
+
 
 void SAL_CALL FilterDetect::initialize( const Sequence< Any >& aArguments )
     throw (Exception, RuntimeException)
@@ -262,7 +262,7 @@ Reference< XInterface > FilterDetect_createInstance( const Reference< XComponent
     return static_cast< cppu::OWeakObject * >( new FilterDetect( context ) );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL FilterDetect::getImplementationName(  )
     throw (RuntimeException)
 {

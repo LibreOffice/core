@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -93,7 +93,7 @@ public:
     void Append( const String &rLine );
 };
 
-//-------------------------------------------------------------------------
+
 void MyOutWindow::Append( const String &rLine )
 {
     OUString aLine( rLine );
@@ -138,13 +138,13 @@ public:
     void print( const OUString& rText );
 };
 
-//-------------------------------------------------------------------------
+
 void MessagePrinter::print( const sal_Char* pText )
 {
     print( OUString::createFromAscii(pText) );
 }
 
-//-------------------------------------------------------------------------
+
 void MessagePrinter::print( const OUString& rText )
 {
     SolarMutexGuard aGuard;
@@ -156,11 +156,11 @@ void MessagePrinter::print( const OUString& rText )
     }
 }
 
-//============================================================================
+
 //
-//  TestOutputStream
+
 //
-//============================================================================
+
 
 class TestOutputStream:
     public cppu::OWeakObject,
@@ -190,8 +190,8 @@ public:
     OUString getStart() const;
 };
 
-//============================================================================
-// virtual
+
+
 uno::Any SAL_CALL
 TestOutputStream::queryInterface(const uno::Type & rType)
     throw(uno::RuntimeException)
@@ -201,8 +201,8 @@ TestOutputStream::queryInterface(const uno::Type & rType)
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface(rType);
 }
 
-//============================================================================
-// virtual
+
+
 void SAL_CALL TestOutputStream::writeBytes(
                                     const uno::Sequence< sal_Int8 > & rData)
     throw(uno::RuntimeException)
@@ -218,7 +218,7 @@ void SAL_CALL TestOutputStream::writeBytes(
                          nLen, RTL_TEXTENCODING_ISO_8859_1);
 }
 
-//============================================================================
+
 OUString TestOutputStream::getStart() const
 {
     OUString sResult = m_sStart;
@@ -295,8 +295,8 @@ OUString ProgressHandler::toString(const uno::Any & rStatus)
     return OUString("(Unknown object)");
 }
 
-//============================================================================
-// virtual
+
+
 uno::Any SAL_CALL
 ProgressHandler::queryInterface( const uno::Type & rType )
     throw(uno::RuntimeException)
@@ -307,8 +307,8 @@ ProgressHandler::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//============================================================================
-// virtual
+
+
 void SAL_CALL ProgressHandler::push(const uno::Any & rStatus)
     throw (uno::RuntimeException)
 {
@@ -317,8 +317,8 @@ void SAL_CALL ProgressHandler::push(const uno::Any & rStatus)
     m_rPrinter.print(sMessage);
 }
 
-//============================================================================
-// virtual
+
+
 void SAL_CALL ProgressHandler::update(const uno::Any & rStatus)
     throw (uno::RuntimeException)
 {
@@ -327,8 +327,8 @@ void SAL_CALL ProgressHandler::update(const uno::Any & rStatus)
     m_rPrinter.print(sMessage);
 }
 
-//============================================================================
-// virtual
+
+
 void SAL_CALL ProgressHandler::pop() throw (uno::RuntimeException)
 {
     m_rPrinter.print("Status pop");
@@ -373,11 +373,11 @@ public:
     static OUString m_aProtocol;
 };
 
-// static
+
 OUString Ucb::m_aProtocol;
 
-//-------------------------------------------------------------------------
-// static
+
+
 OUString Ucb::getUnoURL()
 {
     OUString aUnoURL(
@@ -390,7 +390,7 @@ OUString Ucb::getUnoURL()
     return aUnoURL;
 }
 
-//-------------------------------------------------------------------------
+
 Ucb::Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
           OUString const & rConfigurationKey1,
           OUString const & rConfigurationKey2 )
@@ -401,18 +401,18 @@ Ucb::Ucb( uno::Reference< lang::XMultiServiceFactory >& rxFactory,
 {
 }
 
-//-------------------------------------------------------------------------
+
 Ucb::~Ucb()
 {
 }
 
-//-------------------------------------------------------------------------
+
 sal_Bool Ucb::init()
 {
     if ( m_bInited )
         return sal_True;
 
-    // Create auto configured UCB:
+    
     if (m_xFac.is())
         try
         {
@@ -451,7 +451,7 @@ sal_Bool Ucb::init()
     return m_bInited;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< ucb::XContentIdentifierFactory >
 Ucb::getContentIdentifierFactory()
 {
@@ -465,7 +465,7 @@ Ucb::getContentIdentifierFactory()
     return m_xIdFac;
 }
 
-//-------------------------------------------------------------------------
+
 uno::Reference< ucb::XContentProvider > Ucb::getContentProvider()
 {
     if ( !m_xProv.is() )
@@ -493,9 +493,9 @@ public:
                          rxProgressHandler );
     virtual ~UcbTaskEnvironment();
 
-    // Interface implementations...
+    
 
-    // XInterface
+    
 
     virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
         throw( uno::RuntimeException );
@@ -504,7 +504,7 @@ public:
     virtual void SAL_CALL release()
         throw();
 
-     // XCommandEnvironemnt
+     
 
     virtual uno::Reference<task::XInteractionHandler> SAL_CALL
     getInteractionHandler()
@@ -517,7 +517,7 @@ public:
     { return m_xProgressHandler; }
  };
 
-//-------------------------------------------------------------------------
+
 UcbTaskEnvironment::UcbTaskEnvironment(
                     const uno::Reference< task::XInteractionHandler >&
                      rxInteractionHandler,
@@ -528,19 +528,19 @@ UcbTaskEnvironment::UcbTaskEnvironment(
 {
 }
 
-//-------------------------------------------------------------------------
-// virtual
+
+
 UcbTaskEnvironment::~UcbTaskEnvironment()
 {
 }
 
-//----------------------------------------------------------------------------
-//
-// XInterface methods
-//
-//----------------------------------------------------------------------------
 
-// virtual
+//
+
+//
+
+
+
 uno::Any SAL_CALL
 UcbTaskEnvironment::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException )
@@ -550,16 +550,16 @@ UcbTaskEnvironment::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//----------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL UcbTaskEnvironment::acquire()
     throw()
 {
     OWeakObject::acquire();
 }
 
-//----------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL UcbTaskEnvironment::release()
     throw()
 {
@@ -594,7 +594,7 @@ public:
                              bool bPrint = true );
 };
 
-//-------------------------------------------------------------------------
+
 UcbCommandProcessor::UcbCommandProcessor( Ucb& rUCB,
                                           const uno::Reference<
                                             ucb::XCommandProcessor >&
@@ -607,20 +607,20 @@ UcbCommandProcessor::UcbCommandProcessor( Ucb& rUCB,
 {
     if ( m_xProcessor.is() )
     {
-        // Generally, one command identifier per thread is enough. It
-        // can be used for all commands executed by the processor which
-        // created this id.
+        
+        
+        
         m_aCommandId = m_xProcessor->createCommandIdentifier();
     }
 }
 
-//----------------------------------------------------------------------------
-// virtual
+
+
 UcbCommandProcessor::~UcbCommandProcessor()
 {
 }
 
-//----------------------------------------------------------------------------
+
 uno::Any UcbCommandProcessor::executeCommand( const OUString& rName,
                                               const uno::Any& rArgument,
                                               bool bPrint )
@@ -649,7 +649,7 @@ uno::Any UcbCommandProcessor::executeCommand( const OUString& rName,
             print( aText );
         }
 
-        // Execute command
+        
         uno::Any aResult;
         bool bException = false;
         bool bAborted = false;
@@ -756,7 +756,7 @@ public:
     void transfer( const OUString& rSourceURL, sal_Bool bMove );
     void destroy();
 
-    // XInterface
+    
     virtual uno::Any SAL_CALL queryInterface( const uno::Type & rType )
         throw( uno::RuntimeException );
     virtual void SAL_CALL
@@ -766,24 +766,24 @@ public:
     release()
         throw();
 
-    // XEventListener
-    // ( base interface of XContentEventListener, XPropertiesChangeListener )
+    
+    
     virtual void SAL_CALL
     disposing( const lang::EventObject& Source )
         throw( uno::RuntimeException );
 
-    // XContentEventListener
+    
     virtual void SAL_CALL
     contentEvent( const ucb::ContentEvent& evt )
         throw( uno::RuntimeException );
 
-    // XPropertiesChangeListener
+    
     virtual void SAL_CALL
     propertiesChange( const uno::Sequence< beans::PropertyChangeEvent >& evt )
         throw( uno::RuntimeException );
 };
 
-//-------------------------------------------------------------------------
+
 UcbContent::UcbContent( Ucb& rUCB,
                         uno::Reference< ucb::XContent >& rxContent,
                         MyOutWindow* pOutEdit)
@@ -795,24 +795,24 @@ UcbContent::UcbContent( Ucb& rUCB,
 {
 }
 
-//----------------------------------------------------------------------------
-// virtual
+
+
 UcbContent::~UcbContent()
 {
 }
 
-//-------------------------------------------------------------------------
-// static
+
+
 UcbContent* UcbContent::create(
         Ucb& rUCB, const OUString& rURL, MyOutWindow* pOutEdit )
 {
     if ( !rURL.Len() )
         return NULL;
 
-    //////////////////////////////////////////////////////////////////////
-    // Get XContentIdentifier interface from UCB and let it create an
-    // identifer for the given URL.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
+    
 
     uno::Reference< ucb::XContentIdentifierFactory > xIdFac =
                                         rUCB.getContentIdentifierFactory();
@@ -824,10 +824,10 @@ UcbContent* UcbContent::create(
     if ( !xId.is() )
         return NULL;
 
-    //////////////////////////////////////////////////////////////////////
-    // Get XContentProvider interface from UCB and let it create a
-    // content for the given identifier.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
+    
 
     uno::Reference< ucb::XContentProvider > xProv
         = rUCB.getContentProvider();
@@ -846,14 +846,14 @@ UcbContent* UcbContent::create(
     UcbContent* pNew = new UcbContent( rUCB, xContent, pOutEdit );
     pNew->acquire();
 
-    // Register listener(s).
+    
     xContent->addContentEventListener( pNew );
 
     uno::Reference< beans::XPropertiesChangeNotifier > xNotifier(
         xContent, uno::UNO_QUERY );
     if ( xNotifier.is() )
     {
-        // Empty sequence -> interested in any property changes.
+        
         xNotifier->addPropertiesChangeListener(
             uno::Sequence< OUString >(), pNew );
     }
@@ -861,7 +861,7 @@ UcbContent* UcbContent::create(
     return pNew;
 }
 
-//-------------------------------------------------------------------------
+
 const OUString UcbContent::getURL() const
 {
     uno::Reference< ucb::XContentIdentifier > xId(
@@ -872,14 +872,14 @@ const OUString UcbContent::getURL() const
     return OUString();
 }
 
-//-------------------------------------------------------------------------
+
 const OUString UcbContent::getType() const
 {
     const OUString aType( m_xContent->getContentType() );
     return aType;
 }
 
-//-------------------------------------------------------------------------
+
 void UcbContent::dispose()
 {
     uno::Reference< lang::XComponent > xComponent( m_xContent, uno::UNO_QUERY );
@@ -887,7 +887,7 @@ void UcbContent::dispose()
         xComponent->dispose();
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::open( const OUString & rName, const OUString& rInput,
                        bool bPrint, bool bTiming, bool bSort,
                        OpenStack * pStack, sal_uInt32 nLevel,
@@ -923,47 +923,47 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
     {
         aOpenArg.Mode = ucb::OpenMode::ALL;
         aOpenArg.Priority = 32768;
-//      if ( bFolder )
+
         {
-            // Property values which shall be in the result set...
+            
             uno::Sequence< beans::Property > aProps( 5 );
             beans::Property* pProps = aProps.getArray();
             pProps[ 0 ].Name   = "Title";
-            pProps[ 0 ].Handle = -1; // Important!
+            pProps[ 0 ].Handle = -1; 
 /**/        pProps[ 0 ].Type = getCppuType(static_cast< OUString * >(0));
-                // HACK for sorting...
+                
             pProps[ 1 ].Name   = "DateCreated";
-            pProps[ 1 ].Handle = -1; // Important!
+            pProps[ 1 ].Handle = -1; 
             pProps[ 2 ].Name   = "Size";
-            pProps[ 2 ].Handle = -1; // Important!
+            pProps[ 2 ].Handle = -1; 
             pProps[ 3 ].Name   = "IsFolder";
-            pProps[ 3 ].Handle = -1; // Important!
+            pProps[ 3 ].Handle = -1; 
 /**/        pProps[ 3 ].Type = getCppuType(static_cast< sal_Bool * >(0));
-                // HACK for sorting...
+                
             pProps[ 4 ].Name   = "IsDocument";
-            pProps[ 4 ].Handle = -1; // Important!
+            pProps[ 4 ].Handle = -1; 
             aOpenArg.Properties = aProps;
 
             bDoSort = bSort;
             if (bDoSort)
             {
-                // Sort criteria... Note that column numbering starts with 1!
+                
                 aOpenArg.SortingInfo.realloc(2);
-                // primary sort criterium: column 4 --> IsFolder
+                
                 aOpenArg.SortingInfo[ 0 ].ColumnIndex = 4;
                 aOpenArg.SortingInfo[ 0 ].Ascending   = sal_False;
-                // secondary sort criterium: column 1 --> Title
+                
                 aOpenArg.SortingInfo[ 1 ].ColumnIndex = 1;
                 aOpenArg.SortingInfo[ 1 ].Ascending   = sal_True;
             }
         }
-//      else
+
             aOpenArg.Sink
                 = static_cast< cppu::OWeakObject * >(new TestOutputStream);
         aArg <<= aOpenArg;
     }
 
-//  putenv("PROT_REMOTE_ACTIVATE=1"); // to log remote uno traffic
+
 
     ULONG nTime = 0;
     if ( bTiming )
@@ -1061,7 +1061,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
                         aText = OUString::number( ++n ) + ") " + aId + " : ";
                     }
 
-                    // Title:
+                    
                     OUString aTitle( xRow->getString( 1 ) );
                     if ( bPrint )
                     {
@@ -1072,7 +1072,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
                         aText += " : ";
                     }
 
-                    // Size:
+                    
                     sal_Int32 nSize = xRow->getInt( 3 );
                     if ( bPrint )
                     {
@@ -1083,7 +1083,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
                         aText += " : ";
                     }
 
-                    // IsFolder:
+                    
                     sal_Bool bFolder = xRow->getBoolean( 4 );
                     if ( bPrint )
                     {
@@ -1094,7 +1094,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
                         aText.AppendAscii( " : " );
                     }
 
-                    // IsDocument:
+                    
                     sal_Bool bDocument = xRow->getBoolean( 5 );
                     if ( bPrint )
                     {
@@ -1102,7 +1102,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
                             aText.AppendAscii( "<null>" );
                         else
                             aText
-                                += bDocument ? OUString("true") : OUString("false"); //  IsDocument
+                                += bDocument ? OUString("true") : OUString("false"); 
                     }
 
                     if ( bPrint )
@@ -1134,7 +1134,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
     if (xComponent.is())
         xComponent->dispose();
 
-//  putenv("PROT_REMOTE_ACTIVATE="); // to log remote uno traffic
+
 
     if ( bTiming )
     {
@@ -1144,7 +1144,7 @@ void UcbContent::open( const OUString & rName, const OUString& rInput,
     }
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
                           sal_Int32 nFetchSize )
 {
@@ -1219,7 +1219,7 @@ void UcbContent::openAll( Ucb& rUCB, bool bPrint, bool bTiming, bool bSort,
     }
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
 {
     if ( bMove )
@@ -1239,7 +1239,7 @@ void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
                             rSourceURL,
                             getURL(),
                             OUString(),
-                            //OUString("NewTitle"),
+                            
                             ucb::NameClash::ERROR );
 
         ucb::Command aTransferCommand( OUString( "globalTransfer" ),
@@ -1277,24 +1277,24 @@ void UcbContent::transfer( const OUString& rSourceURL, sal_Bool bMove  )
             bMove, rSourceURL, OUString(), ucb::NameClash::ERROR );
     executeCommand( OUString("transfer"), aArg );
 
-//  executeCommand( OUString("flush"), Any() );
+
 
 #endif
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::destroy()
 {
     print( "Deleting content..." );
 
     uno::Any aArg;
-    aArg <<= sal_Bool( sal_True ); // delete physically, not only to trash.
+    aArg <<= sal_Bool( sal_True ); 
     executeCommand( OUString("delete"), aArg );
 
-//  executeCommand( OUString("flush"), Any() );
+
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< ucb::CommandInfo > UcbContent::getCommands()
 {
     uno::Any aResult = executeCommand(
@@ -1322,7 +1322,7 @@ uno::Sequence< ucb::CommandInfo > UcbContent::getCommands()
     return uno::Sequence< ucb::CommandInfo >();
 }
 
-//-------------------------------------------------------------------------
+
 uno::Sequence< beans::Property > UcbContent::getProperties()
 {
     uno::Any aResult = executeCommand(
@@ -1349,7 +1349,7 @@ uno::Sequence< beans::Property > UcbContent::getProperties()
     return uno::Sequence< beans::Property >();
 }
 
-//----------------------------------------------------------------------------
+
 uno::Any UcbContent::getPropertyValue( const OUString& rName )
 {
     uno::Sequence< beans::Property > aProps( 1 );
@@ -1357,8 +1357,8 @@ uno::Any UcbContent::getPropertyValue( const OUString& rName )
 
     rProp.Name       = rName;
     rProp.Handle     = -1; /* unknown */
-//  rProp.Type       = ;
-//  rProp.Attributes = ;
+
+
 
     uno::Any aArg;
     aArg <<= aProps;
@@ -1375,7 +1375,7 @@ uno::Any UcbContent::getPropertyValue( const OUString& rName )
     return uno::Any();
 }
 
-//----------------------------------------------------------------------------
+
 OUString UcbContent::getStringPropertyValue( const OUString& rName )
 {
     uno::Any aAny = getPropertyValue( rName );
@@ -1394,7 +1394,7 @@ OUString UcbContent::getStringPropertyValue( const OUString& rName )
     return OUString();
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::setPropertyValue( const OUString& rName,
                                    const uno::Any& rValue )
 {
@@ -1404,7 +1404,7 @@ void UcbContent::setPropertyValue( const OUString& rName,
     rProp.Name       = rName;
     rProp.Handle     = -1; /* unknown */
     rProp.Value      = rValue;
-//  rProp.State      = ;
+
 
     uno::Any aArg;
     aArg <<= aProps;
@@ -1412,10 +1412,10 @@ void UcbContent::setPropertyValue( const OUString& rName,
     executeCommand( OUString("setPropertyValues"),
                     aArg );
 
-//  executeCommand( OUString("flush"), Any() );
+
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::setStringPropertyValue( const OUString& rName,
                                          const OUString& rValue )
 {
@@ -1427,7 +1427,7 @@ void UcbContent::setStringPropertyValue( const OUString& rName,
     print( aText );
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::addProperty( const OUString& rName,
                               const uno::Any& rValue )
 {
@@ -1465,7 +1465,7 @@ void UcbContent::addProperty( const OUString& rName,
     print( "Adding property failed. No XPropertyContainer!" );
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::addStringProperty(
                     const OUString& rName, const OUString& rValue )
 {
@@ -1474,7 +1474,7 @@ void UcbContent::addStringProperty(
     addProperty( rName, aValue );
 }
 
-//----------------------------------------------------------------------------
+
 void UcbContent::removeProperty( const OUString& rName )
 {
     uno::Reference< beans::XPropertyContainer > xContainer( m_xContent,
@@ -1501,13 +1501,13 @@ void UcbContent::removeProperty( const OUString& rName )
     print( "Removing property failed. No XPropertyContainer!" );
 }
 
-//----------------------------------------------------------------------------
-//
-// XInterface methods
-//
-//----------------------------------------------------------------------------
 
-// virtual
+//
+
+//
+
+
+
 uno::Any SAL_CALL UcbContent::queryInterface( const uno::Type & rType )
     throw(uno::RuntimeException)
 {
@@ -1520,42 +1520,42 @@ uno::Any SAL_CALL UcbContent::queryInterface( const uno::Type & rType )
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
-//----------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL UcbContent::acquire()
     throw()
 {
     OWeakObject::acquire();
 }
 
-//----------------------------------------------------------------------------
-// virtual
+
+
 void SAL_CALL UcbContent::release()
     throw()
 {
     OWeakObject::release();
 }
 
-//----------------------------------------------------------------------------
-//
-// XEventListener methods.
-//
-//----------------------------------------------------------------------------
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL UcbContent::disposing( const lang::EventObject& /*Source*/ )
     throw( uno::RuntimeException )
 {
     print ( "Content: disposing..." );
 }
 
-//----------------------------------------------------------------------------
-//
-// XContentEventListener methods,
-//
-//----------------------------------------------------------------------------
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL UcbContent::contentEvent( const ucb::ContentEvent& evt )
     throw( uno::RuntimeException )
 {
@@ -1611,13 +1611,13 @@ void SAL_CALL UcbContent::contentEvent( const ucb::ContentEvent& evt )
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// XPropertiesChangeListener methods.
-//
-//----------------------------------------------------------------------------
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL UcbContent::propertiesChange(
                     const uno::Sequence< beans::PropertyChangeEvent >& evt )
     throw( uno::RuntimeException )
@@ -1668,7 +1668,7 @@ void SAL_CALL UcbContent::propertiesChange(
 #define MYWIN_ITEMID_ONLINE         24
 #define MYWIN_ITEMID_REORGANIZE     25
 
-//-------------------------------------------------------------------------
+
 class MyWin : public WorkWindow
 {
 private:
@@ -1697,7 +1697,7 @@ public:
     void print( const sal_Char* pText );
 };
 
-//-------------------------------------------------------------------------
+
 MyWin::MyWin( Window *pParent, WinBits nWinStyle,
               uno::Reference< lang::XMultiServiceFactory >& rxFactory,
               OUString const & rConfigurationKey1,
@@ -1711,7 +1711,7 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
   m_bTiming( false ),
   m_bSort( false )
 {
-    // ToolBox.
+    
     m_pTool = new ToolBox( this, WB_3DLOOK | WB_BORDER  | WB_SCROLL );
 
     m_pTool->InsertItem ( MYWIN_ITEMID_CLEAR,
@@ -1859,13 +1859,13 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
     m_pTool->SetSelectHdl( LINK( this, MyWin, ToolBarHandler ) );
     m_pTool->Show();
 
-    // Edit.
+    
     m_pCmdEdit = new Edit( this );
     m_pCmdEdit->SetReadOnly( FALSE );
-    m_pCmdEdit->SetText( OUString( "file:///" ) );
+    m_pCmdEdit->SetText( OUString( "file:
     m_pCmdEdit->Show();
 
-    // MyOutWindow.
+    
     m_pOutEdit = new MyOutWindow( this, WB_HSCROLL | WB_VSCROLL | WB_BORDER );
     m_pOutEdit->SetReadOnly( TRUE );
     m_pOutEdit->Show();
@@ -1873,8 +1873,8 @@ MyWin::MyWin( Window *pParent, WinBits nWinStyle,
     m_aUCB.setOutEdit( m_pOutEdit );
 }
 
-//-------------------------------------------------------------------------
-// virtual
+
+
 MyWin::~MyWin()
 {
     if ( m_pContent )
@@ -1888,7 +1888,7 @@ MyWin::~MyWin()
     delete m_pOutEdit;
 }
 
-//-------------------------------------------------------------------------
+
 void MyWin::Resize()
 {
     Size aWinSize = GetOutputSizePixel();
@@ -1904,13 +1904,13 @@ void MyWin::Resize()
         Point( 0, nBoxH + nBoxH ), Size ( nWinW, nWinH - ( nBoxH + nBoxH ) ) );
 }
 
-//-------------------------------------------------------------------------
+
 void MyWin::print( const sal_Char* pText )
 {
     print( OUString.createFromAscii( pText ) );
 }
 
-//-------------------------------------------------------------------------
+
 void MyWin::print( const OUString& rText )
 {
     SolarMutexGuard aGuard;
@@ -1922,7 +1922,7 @@ void MyWin::print( const OUString& rText )
     }
 }
 
-//-------------------------------------------------------------------------
+
 IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
 {
     USHORT nItemId   = pToolBox->GetCurItemId();
@@ -2219,7 +2219,7 @@ IMPL_LINK( MyWin, ToolBarHandler, ToolBox*, pToolBox )
             break;
         }
 
-        default: // Ignored.
+        default: 
             break;
     }
 
@@ -2240,13 +2240,13 @@ public:
 
 MyApp aMyApp;
 
-//-------------------------------------------------------------------------
-// virtual
+
+
 void MyApp::Main()
 {
-    //////////////////////////////////////////////////////////////////////
-    // Read command line params.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     OUString aConfigurationKey1( UCB_CONFIGURATION_KEY1_LOCAL);
     OUString aConfigurationKey2( UCB_CONFIGURATION_KEY2_OFFICE);
@@ -2277,9 +2277,9 @@ void MyApp::Main()
         }
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // Initialize local Service Manager and basic services.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     uno::Reference< lang::XMultiServiceFactory > xFac;
     try
@@ -2311,9 +2311,9 @@ void MyApp::Main()
 
     uno::Reference< lang::XComponent > xComponent( xFac, uno::UNO_QUERY );
 
-    //////////////////////////////////////////////////////////////////////
-    // Create Application Window...
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     Help::EnableBalloonHelp();
 
@@ -2326,25 +2326,25 @@ void MyApp::Main()
 
     pMyWin->Show();
 
-    //////////////////////////////////////////////////////////////////////
-    // Go...
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     Execute();
 
-    //////////////////////////////////////////////////////////////////////
-    // Destroy Application Window...
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     delete pMyWin;
 
-    //////////////////////////////////////////////////////////////////////
-    // Cleanup.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     ::ucbhelper::ContentBroker::deinitialize();
 
-    // Dispose local service manager.
+    
     if ( xComponent.is() )
         xComponent->dispose();
 }

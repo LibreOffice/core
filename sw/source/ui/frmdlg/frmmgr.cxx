@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -64,7 +64,7 @@ SwFlyFrmAttrMgr::SwFlyFrmAttrMgr( sal_Bool bNew, SwWrtShell* pSh, sal_uInt8 nTyp
 {
     if ( m_bNewFrm )
     {
-        // set defaults:
+        
         sal_uInt16 nId = 0;
         switch ( nType )
         {
@@ -137,7 +137,7 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
 
     if( m_pOwnSh->IsFrmSelected() )
     {
-        //JP 6.8.2001: set never an invalid anchor into the core.
+        
         const SfxPoolItem *pGItem, *pItem;
         if( SFX_ITEM_SET == m_aSet.GetItemState( RES_ANCHOR, false, &pItem ))
         {
@@ -149,7 +149,7 @@ void SwFlyFrmAttrMgr::UpdateFlyFrm()
                 m_aSet.ClearItem( RES_ANCHOR );
         }
 
-        // return wg. BASIC
+        
         if( m_aSet.Count() )
         {
             m_pOwnSh->StartAllAction();
@@ -169,7 +169,7 @@ sal_Bool SwFlyFrmAttrMgr::InsertFlyFrm()
 
     sal_Bool bRet = 0 != m_pOwnSh->NewFlyFrm( m_aSet );
 
-    // turn on the right mode at the shell, frame got selected automatically.
+    
     if ( bRet )
     {
         _UpdateFlyFrm();
@@ -266,8 +266,8 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
 
     SwRect aBoundRect;
 
-    // OD 18.09.2003 #i18732# - adjustment for allowing vertical position
-    //      aligned to page for fly frame anchored to paragraph or to character.
+    
+    
     const RndStdIds eAnchorType = static_cast<RndStdIds >(rVal.nAnchorType);
     const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)m_aSet.Get(RES_FRM_SIZE);
     m_pOwnSh->CalcBoundRect( aBoundRect, eAnchorType,
@@ -281,7 +281,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
     if (bOnlyPercentRefValue)
         return;
 
-    // --> OD 2009-09-01 #mongolianlayout#
+    
     if ( m_bIsInVertical || m_bIsInVerticalL2R )
     {
         Point aPos(aBoundRect.Pos());
@@ -293,14 +293,14 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         aSize.Width() = aSize.Height();
         aSize.Height() = nTmp;
         aBoundRect.Chg( aPos, aSize );
-        //exchange width/height to enable correct values
+        
         nTmp = rVal.nWidth;
         rVal.nWidth = rVal.nHeight;
         rVal.nHeight = nTmp;
     }
     if ((eAnchorType == FLY_AT_PAGE) || (eAnchorType == FLY_AT_FLY))
     {
-        // MinimalPosition
+        
         rVal.nMinHPos = aBoundRect.Left();
         rVal.nMinVPos = aBoundRect.Top();
         SwTwips nH = rVal.nHPos;
@@ -346,8 +346,8 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         rVal.nMaxVPos   = aBoundRect.Bottom() - rVal.nHeight;
         rVal.nMaxWidth  = aBoundRect.Right()  - nH;
     }
-    // OD 12.11.2003 #i22341# - handle to character anchored objects vertical
-    // aligned at character or top of line in a special case
+    
+    
     else if ((eAnchorType == FLY_AT_PARA) ||
                 ((eAnchorType == FLY_AT_CHAR) &&
                 !(rVal.nVRelOrient == text::RelOrientation::CHAR) &&
@@ -363,8 +363,8 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
                 rVal.nWidth = aBoundRect.Right() - rVal.nHPos;
         }
 
-        // OD 29.09.2003 #i17567#, #i18732# - consider following the text flow
-        // and alignment at page areas.
+        
+        
         const bool bMaxVPosAtBottom = !rVal.bFollowTextFlow ||
                                       rVal.nVRelOrient == text::RelOrientation::PAGE_FRAME ||
                                       rVal.nVRelOrient == text::RelOrientation::PAGE_PRINT_AREA;
@@ -392,7 +392,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         rVal.nMaxHPos  = aBoundRect.Right() - rVal.nWidth;
 
         rVal.nMinVPos  = aBoundRect.Top();
-        // OD 26.09.2003 #i17567#, #i18732# - determine maximum vertical position
+        
         if ( bMaxVPosAtBottom )
         {
             rVal.nMaxVPos  = aBoundRect.Bottom() - rVal.nHeight;
@@ -402,7 +402,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
             rVal.nMaxVPos  = aBoundRect.Height() - rVal.nHeight;
         }
 
-        // maximum width height
+        
         const SwTwips nH = ( rVal.nHoriOrient != text::HoriOrientation::NONE )
                            ? aBoundRect.Left()
                            : rVal.nHPos;
@@ -412,15 +412,15 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
         rVal.nMaxHeight  = rVal.nMaxVPos + rVal.nHeight - nV;
         rVal.nMaxWidth   = rVal.nMaxHPos + rVal.nWidth - nH;
     }
-    // OD 12.11.2003 #i22341# - special case for to character anchored objects
-    // vertical aligned at character or top of line.
-    // Note: (1) positive vertical values are positions above the top of line
-    //       (2) negative vertical values are positions below the top of line
+    
+    
+    
+    
     else if ( (eAnchorType == FLY_AT_CHAR) &&
               ( rVal.nVRelOrient == text::RelOrientation::CHAR ||
                 rVal.nVRelOrient == text::RelOrientation::TEXT_LINE ) )
     {
-        // determine horizontal values
+        
         rVal.nMinHPos  = aBoundRect.Left();
 
         rVal.nMaxHPos  = aBoundRect.Right() - rVal.nWidth;
@@ -439,7 +439,7 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
                            : rVal.nHPos;
         rVal.nMaxWidth   = rVal.nMaxHPos + rVal.nWidth - nH;
 
-        // determine vertical values
+        
         rVal.nMinVPos = -( aBoundRect.Bottom() - rVal.nHeight );
         if ( rVal.nVPos < rVal.nMinVPos &&
              rVal.nVertOrient == text::VertOrientation::NONE )
@@ -479,10 +479,10 @@ void SwFlyFrmAttrMgr::ValidateMetrics( SvxSwFrameValidation& rVal,
             rVal.nMaxVPos = -aBoundRect.Height();
         }
     }
-    // --> OD 2009-09-01 #mongolianlayout#
+    
     if ( m_bIsInVertical || m_bIsInVerticalL2R )
     {
-        //restore width/height exchange
+        
         long nTmp = rVal.nWidth;
         rVal.nWidth = rVal.nHeight;
         rVal.nHeight = nTmp;

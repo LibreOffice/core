@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "tokenstringcontext.hxx"
@@ -44,7 +44,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
     if (!pDoc)
         return;
 
-    // Fetch all sheet names.
+    
     maTabNames = pDoc->GetAllTableNames();
     {
         std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();
@@ -52,10 +52,10 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
             ScCompiler::CheckTabQuotes(*it, formula::FormulaGrammar::extractRefConvention(eGram));
     }
 
-    // Fetch all named range names.
+    
     const ScRangeName* pNames = pDoc->GetRangeName();
     if (pNames)
-        // global names
+        
         insertAllNames(maGlobalRangeNames, *pNames);
 
     {
@@ -75,7 +75,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
         }
     }
 
-    // Fetch all named database ranges names.
+    
     const ScDBCollection* pDBs = pDoc->GetDBCollection();
     if (pDBs)
     {
@@ -88,7 +88,7 @@ TokenStringContext::TokenStringContext( const ScDocument* pDoc, formula::Formula
         }
     }
 
-    // Fetch all relevant bits for external references.
+    
     if (pDoc->HasExternalRefManager())
     {
         const ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
@@ -119,7 +119,7 @@ CompileFormulaContext::CompileFormulaContext( ScDocument* pDoc, formula::Formula
 
 void CompileFormulaContext::updateTabNames()
 {
-    // Fetch all sheet names.
+    
     maTabNames = mpDoc->GetAllTableNames();
     {
         std::vector<OUString>::iterator it = maTabNames.begin(), itEnd = maTabNames.end();

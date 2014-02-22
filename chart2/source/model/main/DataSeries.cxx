@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DataSeries.hxx"
@@ -146,7 +146,7 @@ void lcl_CloneAttributedDataPoints(
     }
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -175,7 +175,7 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
     CloneHelper::CloneRefVector< Reference< chart2::XRegressionCurve > >( rOther.m_aRegressionCurves, m_aRegressionCurves );
     ModifyListenerHelper::addListenerToAllElements( m_aRegressionCurves, m_xModifyEventForwarder );
 
-    // add as listener to XPropertySet properties
+    
     Reference< beans::XPropertySet > xPropertySet;
     uno::Any aValue;
 
@@ -190,7 +190,7 @@ DataSeries::DataSeries( const DataSeries & rOther ) :
         ModifyListenerHelper::addListener( xPropertySet, m_xModifyEventForwarder );
 }
 
-// late initialization to call after copy-constructing
+
 void DataSeries::Init( const DataSeries & rOther )
 {
     if( ! rOther.m_aDataSequences.empty())
@@ -204,7 +204,7 @@ void DataSeries::Init( const DataSeries & rOther )
         ModifyListenerHelper::addListenerToAllMapElements( m_aAttributedDataPoints, m_xModifyEventForwarder );
     }
 
-    // add as parent to error bars
+    
     Reference< beans::XPropertySet > xPropertySet;
     uno::Any aValue;
 
@@ -227,7 +227,7 @@ DataSeries::~DataSeries()
         ModifyListenerHelper::removeListenerFromAllElements( m_aRegressionCurves, m_xModifyEventForwarder );
         ModifyListenerHelper::removeListenerFromAllElements( m_aDataSequences, m_xModifyEventForwarder );
 
-        // remove listener from XPropertySet properties
+        
         Reference< beans::XPropertySet > xPropertySet;
         uno::Any aValue;
 
@@ -247,14 +247,14 @@ DataSeries::~DataSeries()
     }
 }
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
     throw (uno::RuntimeException)
 {
     DataSeries * pNewSeries( new DataSeries( *this ));
-    // hold a reference to the clone
+    
     uno::Reference< util::XCloneable > xResult( pNewSeries );
-    // do initialization that uses uno references to the clone
+    
     pNewSeries->Init( *this );
 
     return xResult;
@@ -269,7 +269,7 @@ Sequence< OUString > DataSeries::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// ____ OPropertySet ____
+
 uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -280,13 +280,13 @@ uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
     return (*aFound).second;
 }
 
-// ____ OPropertySet ____
+
 ::cppu::IPropertyArrayHelper & SAL_CALL DataSeries::getInfoHelper()
 {
     return *StaticDataSeriesInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL DataSeries::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -297,10 +297,10 @@ void SAL_CALL DataSeries::getFastPropertyValue
     ( uno::Any& rValue,
       sal_Int32 nHandle ) const
 {
-    // special handling for get.  set is not possible for this property
+    
     if( nHandle == DataSeriesProperties::PROP_DATASERIES_ATTRIBUTED_DATA_POINTS )
     {
-        // ToDo: only add those property sets that are really modified
+        
         uno::Sequence< sal_Int32 > aSeq( m_aAttributedDataPoints.size());
         sal_Int32 * pIndexArray = aSeq.getArray();
         sal_Int32 i = 0;
@@ -383,7 +383,7 @@ Reference< beans::XPropertySet >
                     xModifyEventForwarder = m_xModifyEventForwarder;
                 }
 
-                // create a new XPropertySet for this data point
+                
                 xResult.set( new DataPoint( xParentProperties ) );
                 {
                     MutexGuard aGuard( GetMutex() );
@@ -441,7 +441,7 @@ void SAL_CALL DataSeries::resetAllDataPoints()
     fireModifyEvent();
 }
 
-// ____ XDataSink ____
+
 void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data::XLabeledDataSequence > >& aData )
     throw (uno::RuntimeException)
 {
@@ -464,7 +464,7 @@ void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data:
     fireModifyEvent();
 }
 
-// ____ XDataSource ____
+
 Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries::getDataSequences()
     throw (uno::RuntimeException)
 {
@@ -472,7 +472,7 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries:
     return ContainerHelper::ContainerToSequence( m_aDataSequences );
 }
 
-// ____ XRegressionCurveContainer ____
+
 void SAL_CALL DataSeries::addRegressionCurve(
     const uno::Reference< chart2::XRegressionCurve >& xRegressionCurve )
     throw (lang::IllegalArgumentException,
@@ -541,7 +541,7 @@ void SAL_CALL DataSeries::setRegressionCurves(
     fireModifyEvent();
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL DataSeries::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -570,25 +570,25 @@ void SAL_CALL DataSeries::removeModifyListener( const Reference< util::XModifyLi
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL DataSeries::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL DataSeries::disposing( const lang::EventObject& rEventObject )
     throw (uno::RuntimeException)
 {
-    // forget disposed data sequences
+    
     tDataSequenceContainer::iterator aIt(
         ::std::find( m_aDataSequences.begin(), m_aDataSequences.end(), rEventObject.Source ));
     if( aIt != m_aDataSequences.end())
         m_aDataSequences.erase( aIt );
 }
 
-// ____ OPropertySet ____
+
 void DataSeries::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -605,10 +605,10 @@ using ::property::OPropertySet;
 IMPLEMENT_FORWARD_XINTERFACE2( DataSeries, DataSeries_Base, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataSeries, DataSeries_Base, OPropertySet )
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( DataSeries,
                              OUString("com.sun.star.comp.chart.DataSeries") );
 
-}  // namespace chart
+}  
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

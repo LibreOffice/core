@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <canvas/debug.hxx>
@@ -54,7 +54,7 @@ namespace cairocanvas
     {
         VERBOSE_TRACE("CairoSpriteCanvas created %p\n", this);
 
-        // #i64742# Only call initialize when not in probe mode
+        
         if( maArguments.getLength() == 0 )
             return;
 
@@ -96,7 +96,7 @@ namespace cairocanvas
         ENSURE_ARG_OR_THROW( pParentWindow != NULL,
                              "CairoSpriteCanvas::initialize: invalid Window pointer" );
 
-        // setup helper
+        
         maDeviceHelper.init( *pParentWindow,
                              *this,
                              aSize,
@@ -117,7 +117,7 @@ namespace cairocanvas
 
         mxComponentContext.clear();
 
-        // forward to parent
+        
         SpriteCanvasBaseT::disposeThis();
     }
 
@@ -135,9 +135,9 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // avoid repaints on hidden window (hidden: not mapped to
-        // screen). Return failure, since the screen really has _not_
-        // been updated (caller should try again later)
+        
+        
+        
         return !mbIsVisible ? false : maCanvasHelper.updateScreen(
             ::basegfx::unotools::b2IRectangleFromAwtRectangle(maBounds),
             bUpdateAll,
@@ -173,7 +173,7 @@ namespace cairocanvas
 
     SurfaceSharedPtr SpriteCanvas::changeSurface( bool, bool )
     {
-        // non-modifiable surface here
+        
         return SurfaceSharedPtr();
     }
 
@@ -200,7 +200,7 @@ namespace cairocanvas
     void SpriteCanvas::setSizePixel( const ::basegfx::B2ISize& rSize )
     {
         maCanvasHelper.setSize( rSize );
-        // re-set background surface, in case it needed recreation
+        
         maCanvasHelper.setSurface( maDeviceHelper.getBufferSurface(),
                                    false );
     }

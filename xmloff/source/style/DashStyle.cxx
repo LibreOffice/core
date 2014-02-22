@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/drawing/DashStyle.hpp>
@@ -74,7 +74,7 @@ SvXMLEnumMapEntry const pXML_DashStyle_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-// Import
+
 
 XMLDashStyleImport::XMLDashStyleImport( SvXMLImport& rImp )
     : rImport(rImp)
@@ -141,7 +141,7 @@ sal_Bool XMLDashStyleImport::importXML(
 
         case XML_TOK_DASH_DOTS1LEN:
             {
-                if( rStrValue.indexOf( '%' ) != -1 ) // it's a percentage
+                if( rStrValue.indexOf( '%' ) != -1 ) 
                 {
                     bIsRel = true;
                     ::sax::Converter::convertPercent(aLineDash.DotLen, rStrValue);
@@ -160,7 +160,7 @@ sal_Bool XMLDashStyleImport::importXML(
 
         case XML_TOK_DASH_DOTS2LEN:
             {
-                if( rStrValue.indexOf( '%' ) != -1 ) // it's a percentage
+                if( rStrValue.indexOf( '%' ) != -1 ) 
                 {
                     bIsRel = true;
                     ::sax::Converter::convertPercent(aLineDash.DashLen, rStrValue);
@@ -175,7 +175,7 @@ sal_Bool XMLDashStyleImport::importXML(
 
         case XML_TOK_DASH_DISTANCE:
             {
-                if( rStrValue.indexOf( '%' ) != -1 ) // it's a percentage
+                if( rStrValue.indexOf( '%' ) != -1 ) 
                 {
                     bIsRel = true;
                     ::sax::Converter::convertPercent(aLineDash.Distance, rStrValue);
@@ -207,7 +207,7 @@ sal_Bool XMLDashStyleImport::importXML(
     return sal_True;
 }
 
-// Export
+
 
 XMLDashStyleExport::XMLDashStyleExport( SvXMLExport& rExp )
     : rExport(rExp)
@@ -237,7 +237,7 @@ sal_Bool XMLDashStyleExport::exportXML(
             OUString aStrValue;
             OUStringBuffer aOut;
 
-            // Name
+            
             sal_Bool bEncoded = sal_False;
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME,
                                   rExport.EncodeStyleName( rStrName,
@@ -246,19 +246,19 @@ sal_Bool XMLDashStyleExport::exportXML(
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISPLAY_NAME,
                                       rStrName );
 
-            // Style
+            
             rUnitConverter.convertEnum( aOut, aLineDash.Style, pXML_DashStyle_Enum );
             aStrValue = aOut.makeStringAndClear();
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_STYLE, aStrValue );
 
-            // dots
+            
             if( aLineDash.Dots )
             {
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS1, OUString::number( aLineDash.Dots ) );
 
                 if( aLineDash.DotLen )
                 {
-                    // dashes length
+                    
                     if( bIsRel )
                     {
                         ::sax::Converter::convertPercent(aOut, aLineDash.DotLen);
@@ -273,14 +273,14 @@ sal_Bool XMLDashStyleExport::exportXML(
                 }
             }
 
-            // dashes
+            
             if( aLineDash.Dashes )
             {
                 rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DOTS2, OUString::number( aLineDash.Dashes ) );
 
                 if( aLineDash.DashLen )
                 {
-                    // dashes length
+                    
                     if( bIsRel )
                     {
                         ::sax::Converter::convertPercent(aOut, aLineDash.DashLen);
@@ -295,7 +295,7 @@ sal_Bool XMLDashStyleExport::exportXML(
                 }
             }
 
-            // distance
+            
             if( bIsRel )
             {
                 ::sax::Converter::convertPercent( aOut, aLineDash.Distance );
@@ -308,7 +308,7 @@ sal_Bool XMLDashStyleExport::exportXML(
             aStrValue = aOut.makeStringAndClear();
             rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_DISTANCE, aStrValue );
 
-            // do Write
+            
             SvXMLElementExport rElem( rExport,
                                       XML_NAMESPACE_DRAW, XML_STROKE_DASH,
                                       sal_True, sal_False );

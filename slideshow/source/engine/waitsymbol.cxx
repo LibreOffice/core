@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -96,7 +96,7 @@ void WaitSymbol::setVisible( const bool bVisible )
             ++aIter;
         }
 
-        // sprites changed, need a screen update for this frame.
+        
         mrScreenUpdater.requestImmediateUpdate();
     }
 }
@@ -122,8 +122,8 @@ void WaitSymbol::viewAdded( const UnoViewSharedPtr& rView )
         const geometry::IntegerSize2D spriteSize( mxBitmap->getSize() );
         sprite = rView->createSprite( basegfx::B2DVector( spriteSize.Width,
                                                           spriteSize.Height ),
-                                      1000.0 ); // sprite should be in front of all
-                                                // other sprites
+                                      1000.0 ); 
+                                                
         rendering::ViewState viewState;
         canvas::tools::initViewState( viewState );
         rendering::RenderState renderState;
@@ -154,14 +154,14 @@ void WaitSymbol::viewRemoved( const UnoViewSharedPtr& rView )
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
-                // select view:
+                
                 boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ) ) ),
         maViews.end() );
 }
 
 void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
 {
-    // find entry corresponding to modified view
+    
     ViewsVecT::iterator aModifiedEntry(
         std::find_if(
             maViews.begin(),
@@ -169,7 +169,7 @@ void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
-                // select view:
+                
                 boost::bind( o3tl::select1st<ViewsVecT::value_type>(), _1 ))));
 
     OSL_ASSERT( aModifiedEntry != maViews.end() );
@@ -183,7 +183,7 @@ void WaitSymbol::viewChanged( const UnoViewSharedPtr& rView )
 
 void WaitSymbol::viewsChanged()
 {
-    // reposition sprites on all views
+    
     ViewsVecT::const_iterator       aIter( maViews.begin() );
     ViewsVecT::const_iterator const aEnd ( maViews.end() );
     while( aIter != aEnd )
@@ -195,7 +195,7 @@ void WaitSymbol::viewsChanged()
     }
 }
 
-} // namespace internal
-} // namespace slideshow
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

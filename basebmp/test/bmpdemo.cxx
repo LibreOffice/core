@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -66,7 +66,7 @@ using namespace ::com::sun::star;
 namespace
 {
 
-/// template meta function: add const qualifier, if given 2nd type has it
+
 template<typename A, typename B> struct clone_const
 {
     typedef B type;
@@ -145,8 +145,8 @@ template< class DestIterator, class DestAccessor >
 }
 
 
-// changed semantics re. DirectionSelector<StridedArrayTag>: stride
-// now counts in <em>raw</em> bytes!
+
+
 template< typename T > class StridedArrayIterator
 {
 public:
@@ -157,7 +157,7 @@ public:
         current_(reinterpret_cast<internal_type*>(ptr))
     {}
 
-    /// Copy from other StridedArrayIterator, plus given offset
+    
     StridedArrayIterator( StridedArrayIterator const& rSrc,
                           int                         offset ) :
         stride_(rSrc.stride_),
@@ -203,7 +203,7 @@ public:
     internal_type* current_;
 };
 
-/// template meta function: remove const qualifier from plain type
+
 template <typename T> struct remove_const
 {
     typedef T type;
@@ -213,20 +213,20 @@ template <typename T> struct remove_const<const T>
     typedef T type;
 };
 
-/// returns true, if given number is strictly less than 0
+
 template< typename T > inline bool is_negative( T x )
 {
     return x < 0;
 }
 
-/// Overload for ints (branch-free)
+
 inline bool is_negative( int x )
 {
-    // force logic shift (result for signed shift right is undefined)
+    
     return static_cast<unsigned int>(x) >> (sizeof(int)*8-1);
 }
 
-/// Get bitmask for data at given intra-word position, for given bit depth
+
 template< typename data_type, int bits_per_pixel, bool MsbFirst, typename difference_type > inline data_type get_mask( difference_type d )
 {
     BOOST_STATIC_ASSERT(bits_per_pixel > 0);
@@ -236,7 +236,7 @@ template< typename data_type, int bits_per_pixel, bool MsbFirst, typename differ
 
     const unsigned int nIntraWordPositions( sizeof(data_type)*8 / bits_per_pixel );
 
-    //      create bits_per_pixel 1s      shift to intra-word position
+    
     return ((~(~0 << bits_per_pixel)) << bits_per_pixel*(MsbFirst ?
                                                          (nIntraWordPositions-1 - (d % nIntraWordPositions)) :
                                                          (d % nIntraWordPositions)));
@@ -255,7 +255,7 @@ template< typename Datatype,
           bool     MsbFirst > class PackedPixelColumnIterator
 {
 public:
-    // no reference, no index_reference type here
+    
     typedef Datatype                                    data_type;
     typedef Valuetype                                   value_type;
     typedef int                                         difference_type;
@@ -401,15 +401,15 @@ public:
 
     value_type get() const
     {
-        // TODO(Q3): use traits to get unsigned type for data_type (if
-        // not already)
+        
+        
         return static_cast<unsigned int>(*y() & mask_) >> shift_;
     }
 
     value_type get(difference_type d) const
     {
-        // TODO(Q3): use traits to get unsigned type for data_type (if
-        // not already)
+        
+        
         return static_cast<unsigned int>(*y(d) & mask_) >> shift_;
     }
 
@@ -432,7 +432,7 @@ template< typename Datatype,
           bool     MsbFirst > class PackedPixelRowIterator
 {
 public:
-    // no reference, no index_reference type here
+    
     typedef Datatype                                    data_type;
     typedef Valuetype                                   value_type;
     typedef int                                         difference_type;
@@ -470,12 +470,12 @@ private:
 
         const mask_type shifted_mask(
             MsbFirst ?
-            // TODO(Q3): use traits to get unsigned type for data_type
-            // (if not already)
+            
+            
             static_cast<unsigned int>(mask_) >> bits_per_pixel :
             mask_ << bits_per_pixel );
 
-        // data_offset is 0 for shifted mask, and 1 for wrapped-around mask
+        
         mask_ = (1-data_offset)*shifted_mask + data_offset*(MsbFirst ?
                                                             bit_mask << bits_per_pixel*(num_intraword_positions-1) :
                                                             bit_mask);
@@ -487,13 +487,13 @@ private:
         const bool            isNegative( is_negative(newValue) );
         const difference_type newRemainder( newValue % num_intraword_positions );
 
-        // calc  data_ += newValue / num_intraword_positions;
-        //       remainder_ = newRemainder;
-        // for newValue >= 0, and
-        //       data_ += newValue / num_intraword_positions - 1;
-        //       remainder_ = num_intraword_positions - newRemainder;
-        // (to force remainder_ to be positive).
-        // This is branch-free, if is_negative() is branch-free
+        
+        
+        
+        
+        
+        
+        
         const difference_type data_offset( newValue / num_intraword_positions - isNegative );
         data_     += data_offset;
         remainder_ = newRemainder + isNegative*num_intraword_positions;
@@ -501,11 +501,11 @@ private:
         const mask_type shifted_mask(
             MsbFirst ?
             mask_ << bits_per_pixel :
-            // TODO(Q3): use traits to get unsigned type for data_type
-            // (if not already)
+            
+            
             static_cast<unsigned int>(mask_) >> bits_per_pixel );
 
-        // data_offset is 0 for shifted mask, and 1 for wrapped-around mask
+        
         mask_ = (1-data_offset)*shifted_mask + data_offset*(MsbFirst ?
                                                             bit_mask :
                                                             bit_mask << bits_per_pixel*(num_intraword_positions-1));
@@ -553,13 +553,13 @@ public:
         const bool            isNegative( is_negative(newValue) );
         const difference_type newRemainder( newValue % num_intraword_positions );
 
-        // calc  data_ += newValue / num_intraword_positions;
-        //       remainder_ = newRemainder;
-        // for newValue >= 0, and
-        //       data_ += newValue / num_intraword_positions - 1;
-        //       remainder_ = num_intraword_positions - newRemainder;
-        // (to force remainder_ to be positive).
-        // This is branch-free, if is_negative() is branch-free
+        
+        
+        
+        
+        
+        
+        
         data_     += newValue / num_intraword_positions - isNegative;
         remainder_ = newRemainder + isNegative*(num_intraword_positions - 2*newRemainder);
         update_mask();
@@ -644,8 +644,8 @@ public:
 
     value_type get() const
     {
-        // TODO(Q3): use traits to get unsigned type for data_type (if
-        // not already)
+        
+        
         return static_cast<unsigned int>(*data_ & mask_) >>
             get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder_);
     }
@@ -680,7 +680,7 @@ template< typename Datatype,
           bool     MsbFirst > class PackedPixelIterator
 {
 public:
-    // no reference, no index_reference type here
+    
     typedef Datatype                                    data_type;
     typedef Valuetype                                   value_type;
     typedef vigra::Diff2D                               difference_type;
@@ -707,8 +707,8 @@ public:
         bit_mask=~(~0 << bits_per_pixel)
     };
 
-    // TODO(F2): direction of iteration (ImageIterator can be made to
-    // run backwards)
+    
+    
 
 private:
     pointer current() const
@@ -799,8 +799,8 @@ public:
     {
         const int remainder( x() % num_intraword_positions );
 
-        // TODO(Q3): use traits to get unsigned type for data_type (if
-        // not already)
+        
+        
         return (static_cast<unsigned int>(*current() &
                                           get_mask<data_type, bits_per_pixel, MsbFirst>(remainder))
                 >> (MsbFirst ?
@@ -812,8 +812,8 @@ public:
     {
         const int remainder( x(d.x) % num_intraword_positions );
 
-        // TODO(Q3): use traits to get unsigned type for data_type (if
-        // not already)
+        
+        
         return (static_cast<unsigned int>(*current(d.x,d.y) &
                                           get_mask<data_type, bits_per_pixel, MsbFirst>(remainder))
                 >> get_shift<num_intraword_positions, bits_per_pixel, MsbFirst>(remainder));
@@ -862,7 +862,7 @@ private:
     double norm( BitmapColor const& rLHS,
                  BitmapColor const& rRHS ) const
     {
-        // convert RGBValue's linear space to a normed linear space
+        
         return sqrt(
             vigra::sq(rLHS.GetRed()-rRHS.GetRed()) +
             vigra::sq(rLHS.GetGreen()-rRHS.GetGreen()) +
@@ -871,20 +871,20 @@ private:
 
     data_type find_best_match(value_type const& v) const
     {
-        // TODO(F3): not generic!!!
+        
         const BitmapColor aTmpCol(v.red(),
                                   v.green(),
                                   v.blue());
 
-        // TODO(P3): use table-based/octree approach here!
+        
         const BitmapColor* best_entry;
         const BitmapColor* palette_end( palette+num_entries );
         if( (best_entry=std::find( palette, palette_end, aTmpCol)) != palette_end )
             return best_entry-palette;
 
-        // TODO(F3): HACK. Need palette traits, and an error function
-        // here. We blatantly assume value_type is a normed linear
-        // space.
+        
+        
+        
         const BitmapColor* curr_entry( palette );
         best_entry = curr_entry;
         while( curr_entry != palette_end )
@@ -966,7 +966,7 @@ class TestWindow : public Dialog
         virtual ~TestWindow() {}
         virtual void MouseButtonUp( const MouseEvent& /*rMEvt*/ )
         {
-            //TODO: do something cool
+            
             EndDialog();
         }
         virtual void Paint( const Rectangle& rRect );
@@ -978,22 +978,22 @@ static basegfx::B2IPoint project( const basegfx::B2IPoint& rPoint )
     const double angle_x = M_PI / 6.0;
     const double angle_z = M_PI / 6.0;
 
-    // transform planar coordinates to 3d
+    
     double x = rPoint.getX();
     double y = rPoint.getY();
-    //double z = 0;
+    
 
-    // rotate around X axis
+    
     double x1 = x;
     double y1 = y * cos( angle_x );
     double z1 = y * sin( angle_x );
 
-    // rotate around Z axis
+    
     double x2 = x1 * cos( angle_z ) + y1 * sin( angle_z );
-    //double y2 = y1 * cos( angle_z ) - x1 * sin( angle_z );
+    
     double z2 = z1;
 
-    //return basegfx::B2IPoint( (sal_Int32)3*x2, (sal_Int32)3*z2 );
+    
     return basegfx::B2IPoint( (sal_Int32)(6*x2), (sal_Int32)(6*z2) );
 }
 
@@ -1001,7 +1001,7 @@ static basebmp::Color approachColor( const basebmp::Color& rFrom, const basebmp:
 {
     basebmp::Color aColor;
     UINT8 nDiff;
-    // approach red
+    
     if( rFrom.getRed() < rTo.getRed() )
     {
         nDiff = rTo.getRed() - rFrom.getRed();
@@ -1015,7 +1015,7 @@ static basebmp::Color approachColor( const basebmp::Color& rFrom, const basebmp:
     else
         aColor.setRed( rFrom.getRed() );
 
-    // approach Green
+    
     if( rFrom.getGreen() < rTo.getGreen() )
     {
         nDiff = rTo.getGreen() - rFrom.getGreen();
@@ -1029,7 +1029,7 @@ static basebmp::Color approachColor( const basebmp::Color& rFrom, const basebmp:
     else
         aColor.setGreen( rFrom.getGreen() );
 
-    // approach blue
+    
     if( rFrom.getBlue() < rTo.getBlue() )
     {
         nDiff = rTo.getBlue() - rFrom.getBlue();
@@ -1120,9 +1120,9 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
 
         basegfx::B2IPoint aCenter( aTestSize.getX()/2,
                                    aTestSize.getY()/2 );
-        //basegfx::B2IPoint aP1( aTestSize.getX()/48, 0), aP2( aTestSize.getX()/40, 0 ), aPoint;
-        //basegfx::B2IPoint aP1( aTestSize.getX()/7, 0), aP2( aTestSize.getX()/6, 0 ), aPoint;
-        //basegfx::B2IPoint aP1( aTestSize.getX()/5, 0), aP2( aTestSize.getX()/4, 0 ), aPoint;
+        
+        
+        
         basegfx::B2IPoint aP1( aTestSize.getX()/12, 0), aP2( aTestSize.getX()/11, 0 ), aPoint;
 
         double sind = sin( DELTA*M_PI/180.0 );
@@ -1135,7 +1135,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
         {
             aLineColor = approachColor( aLineColor, aApproachColor );
 
-            // switch aproach color
+            
             if( aApproachColor == aLineColor )
             {
                 if( aApproachColor.getRed() )
@@ -1152,8 +1152,8 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
             pDevice->fillPolyPolygon(
                 basegfx::tools::createAreaGeometry(
                     aPoly,
-//                    std::max(1,n/30),
-//                    std::max(1,n/60),
+
+
                     std::max(1,n/30),
                     basegfx::B2DLINEJOIN_NONE),
                 aLineColor,
@@ -1171,7 +1171,7 @@ void TestWindow::Paint( const Rectangle& /*rRect*/ )
     Bitmap aBitmap( Size(aTestSize.getX(),
                          aTestSize.getY()), 24 );
 
-    // Fill bitmap with generated content
+    
     {
         Bitmap::ScopedWriteAccess pWriteAccess( aBitmap );
         for( int y=0; y<aTestSize.getY(); ++y )
@@ -1196,7 +1196,7 @@ USHORT TestApp::Exception( USHORT nError )
 
 void TestApp::Main()
 {
-    // create the global service-manager
+    
     uno::Reference< lang::XMultiServiceFactory > xFactory;
     try
     {
@@ -1216,8 +1216,8 @@ void TestApp::Main()
         exit( 1 );
     }
 
-    // Create UCB (for backwards compatibility, in case some code still uses
-    // plain createInstance w/o args directly to obtain an instance):
+    
+    
     ::ucb::UniversalContentBroker::create(
         comphelper::getProcessComponentContext() );
 

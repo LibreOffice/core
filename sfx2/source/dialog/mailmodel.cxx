@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -74,7 +74,7 @@
 #include <vcl/svapp.hxx>
 #include <cppuhelper/implbase1.hxx>
 
-// --------------------------------------------------------------
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
@@ -86,7 +86,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::system;
 using namespace ::rtl;
 
-// - class PrepareListener_Impl ------------------------------------------
+
 class PrepareListener_Impl : public ::cppu::WeakImplHelper1< css::frame::XStatusListener >
 {
     bool m_bState;
@@ -94,11 +94,11 @@ public:
         PrepareListener_Impl();
         virtual ~PrepareListener_Impl();
 
-        // css.frame.XStatusListener
+        
         virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent)
           throw(css::uno::RuntimeException);
 
-        // css.lang.XEventListener
+        
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
           throw(css::uno::RuntimeException);
 
@@ -126,7 +126,7 @@ void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) t
 {
 }
 
-// class SfxMailModel -----------------------------------------------
+
 
 static const char       PDF_DOCUMENT_TYPE[]   = "pdf_Portable_Document_Format";
 
@@ -202,18 +202,18 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
 
                             if ( rType == PDF_DOCUMENT_TYPE )
                             {
-                                //add an internal property, used to tell the dialog we want to set a different
-                                //string for the ok button
-                                //used in filter/source/pdf/impdialog.cxx
+                                
+                                
+                                
                                 uno::Sequence< beans::PropertyValue > aFilterDataValue(1);
                                 aFilterDataValue[0].Name = "_OkButtonString";
                                 aFilterDataValue[0].Value = css::uno::makeAny(SfxResId(STR_PDF_EXPORT_SEND ).toString());
 
-                                //add to the filterdata property, the only one the PDF export filter dialog will care for
+                                
                                 aPropsForDialog[0].Name = "FilterData";
                                 aPropsForDialog[0].Value = css::uno::makeAny( aFilterDataValue );
 
-                                //when executing the dialog will merge the persistent FilterData properties
+                                
                                 xFilterProperties->setPropertyValues( aPropsForDialog );
                             }
 
@@ -223,15 +223,15 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
 
                             if( xFilterDialog->execute() )
                             {
-                                //get the filter data
+                                
                                 uno::Sequence< beans::PropertyValue > aPropsFromDialog = xFilterProperties->getPropertyValues();
 
-                                //add them to the args
+                                
                                 for ( sal_Int32 nInd = 0; nInd < aPropsFromDialog.getLength(); nInd++ )
                                 {
                                     if( aPropsFromDialog[ nInd ].Name == "FilterData" )
                                     {
-                                        //found the filterdata, add to the storing argument
+                                        
                                         rArgs.realloc( ++rNumArgs );
                                         rArgs[rNumArgs-1].Name = aPropsFromDialog[ nInd ].Name;
                                         rArgs[rNumArgs-1].Value = aPropsFromDialog[ nInd ].Value;
@@ -242,10 +242,10 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
                             }
                             else
                             {
-                                // cancel from dialog, then do not send
-                                // If the model is not modified, it could be modified by the dispatch calls.
-                                // Therefore set back to modified = false. This should not hurt if we call
-                                // on a non-modified model.
+                                
+                                
+                                
+                                
                                 if ( !bModified )
                                 {
                                     try
@@ -319,7 +319,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             xModel = xController->getModel();
     }
 
-    // We need at least a valid module name and model reference
+    
     if ( !aModule.isEmpty()  && xModel.is() )
     {
         bool bModified( false );
@@ -358,7 +358,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
             if ( bStoreTo )
             {
-                // Retrieve filter from type
+                
                 css::uno::Sequence< css::beans::NamedValue > aQuery( bSendAsPDF ? 3 : 2 );
                 aQuery[0].Name  = "Type";
                 aQuery[0].Value = css::uno::makeAny( aTypeName );
@@ -366,13 +366,13 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 aQuery[1].Value = css::uno::makeAny( aModule );
                 if( bSendAsPDF )
                 {
-                    // #i91419#
-                    // FIXME: we want just an export filter. However currently we need
-                    // exact flag value as detailed in the filter configuration to get it
-                    // this seems to be a bug
-                    // without flags we get an import filter here, which is also unwanted
+                    
+                    
+                    
+                    
+                    
                     aQuery[2].Name  = "Flags";
-                    aQuery[2].Value = css::uno::makeAny( sal_Int32(0x80042) ); // EXPORT ALIEN 3RDPARTY
+                    aQuery[2].Value = css::uno::makeAny( sal_Int32(0x80042) ); 
                 }
 
                 css::uno::Reference< css::container::XEnumeration > xEnumeration =
@@ -388,16 +388,16 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
                 if ( bHasLocation )
                 {
-                    // Retrieve filter from media descriptor
+                    
                     ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
                     OUString aOrgFilterName = aMediaDescrPropsHM.getUnpackedValueOrDefault(
                                     OUString( "FilterName" ),
                                     OUString() );
                     if ( aOrgFilterName == aFilterName )
                     {
-                        // We should save the document in the original format. Therefore this
-                        // is not a storeTo operation. To support signing in this case, reset
-                        // bStoreTo flag.
+                        
+                        
+                        
                         bStoreTo = false;
                     }
                 }
@@ -406,7 +406,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             {
                 if ( bHasLocation )
                 {
-                    // Retrieve filter from media descriptor
+                    
                     ::comphelper::SequenceAsHashMap aMediaDescrPropsHM( xModel->getArgs() );
                     aFilterName = aMediaDescrPropsHM.getUnpackedValueOrDefault(
                                     OUString( "FilterName" ),
@@ -415,7 +415,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
                 if ( !bHasLocation ||  aFilterName.isEmpty())
                 {
-                    // Retrieve the user defined default filter
+                    
                     try
                     {
                         ::comphelper::SequenceAsHashMap aFilterPropsHM( xModuleManager->getByName( aModule ) );
@@ -441,13 +441,13 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 }
             }
 
-            // No filter found => error
-            // No type and no location => error
+            
+            
             if (( aFilterName.isEmpty() ) ||
                 ( aTypeName.isEmpty()  && !bHasLocation ))
                 return eRet;
 
-            // Determine filen name and extension
+            
             if ( bHasLocation && !bStoreTo )
             {
                 INetURLObject aFileObj( xStorable->getLocation() );
@@ -478,35 +478,35 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                 }
             }
 
-            // Use provided save file name. If empty determine file name
+            
             aFileName = aSaveFileName;
             if ( aFileName.isEmpty() )
             {
                 if ( !bHasLocation )
                 {
-                    // Create a noname file name with the correct extension
+                    
                     const OUString aNoNameFileName( "noname" );
                     aFileName = aNoNameFileName;
                 }
                 else
                 {
-                    // Determine file name from model
+                    
                     INetURLObject aFileObj( xStorable->getLocation() );
                     aFileName = aFileObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::NO_DECODE );
                 }
             }
 
-            // No file name => error
+            
             if ( aFileName.isEmpty() )
                 return eRet;
 
             OSL_ASSERT( !aFilterName.isEmpty() );
             OSL_ASSERT( !aFileName.isEmpty() );
 
-            // Creates a temporary directory to store a predefined file into it.
-            // This makes it possible to store the file for "send document as e-mail"
-            // with the original file name. We cannot use the original file as
-            // some mail programs need exclusive access.
+            
+            
+            
+            
             ::utl::TempFile aTempDir( NULL, true );
 
             INetURLObject aFilePathObj( aTempDir.GetURL() );
@@ -541,7 +541,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             {
                 try
                 {
-                    // check if the document needs to be prepared for sending as mail (embedding of links, removal of invisible content)
+                    
 
                     aPrepareURL.Complete = ".uno:PrepareMailExport";
                     xURLTransformer->parseStrict( aPrepareURL );
@@ -571,7 +571,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
 
             if ( bModified || !bHasLocation || bStoreTo || bNeedsPreparation )
             {
-                // Document is modified, is newly created or should be stored in a special format
+                
                 try
                 {
                     if( bNeedsPreparation && xPrepareDispatch.is() )
@@ -593,13 +593,13 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                         }
                     }
 
-                    //check if this is the pdf otput filter (i#64555)
+                    
                     if( bSendAsPDF )
                     {
                         SaveResult eShowPDFFilterDialog = ShowFilterOptionsDialog(
                                                             xSMGR, xModel, aFilterName, rType, bModified, nNumArgs, aArgs );
 
-                        // don't continue on dialog cancel or error
+                        
                         if ( eShowPDFFilterDialog != SAVE_SUCCESSFULL )
                             return eShowPDFFilterDialog;
                     }
@@ -611,7 +611,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     if( !bSendAsPDF )
                     {
                         css::util::URL aURL;
-                        // #i30432# notify that export is finished - the Writer may want to restore removed content
+                        
                         aURL.Complete = ".uno:MailExportFinished";
                         xURLTransformer->parseStrict( aURL );
 
@@ -636,9 +636,9 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                             }
                         }
                     }
-                    // If the model is not modified, it could be modified by the dispatch calls.
-                    // Therefore set back to modified = false. This should not hurt if we call
-                    // on a non-modified model.
+                    
+                    
+                    
                     if ( !bModified )
                     {
                         try
@@ -657,7 +657,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
             }
             else
             {
-                // We need 1:1 copy of the document to preserve an added signature.
+                
                 aArgs.realloc( ++nNumArgs );
                 aArgs[nNumArgs-1].Name = "CopyStreamIfPossible";
                 aArgs[nNumArgs-1].Value = css::uno::makeAny( (sal_Bool)sal_True );
@@ -697,28 +697,28 @@ SfxMailModel::~SfxMailModel()
 
 void SfxMailModel::AddAddress( const OUString& rAddress, AddressRole eRole )
 {
-    // don't add a empty address
+    
     if ( !rAddress.isEmpty() )
     {
         AddressList_Impl* pList = NULL;
         if ( ROLE_TO == eRole )
         {
             if ( !mpToList )
-                // create the list
+                
                 mpToList = new AddressList_Impl();
             pList = mpToList;
         }
         else if ( ROLE_CC == eRole )
         {
             if ( !mpCcList )
-                // create the list
+                
                 mpCcList = new AddressList_Impl();
             pList = mpCcList;
         }
         else if ( ROLE_BCC == eRole )
         {
             if ( !mpBccList )
-                // create the list
+                
                 mpBccList = new AddressList_Impl();
             pList = mpBccList;
         }
@@ -729,7 +729,7 @@ void SfxMailModel::AddAddress( const OUString& rAddress, AddressRole eRole )
 
         if ( pList )
         {
-            // add address to list
+            
             pList->push_back( rAddress );
         }
     }
@@ -758,7 +758,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
         css::uno::Reference< XSimpleMailClientSupplier >    xSimpleMailClientSupplier;
 
-        // Prefer the SimpleSystemMail service if available
+        
         try {
             xSimpleMailClientSupplier = SimpleSystemMail::create( xContext );
         }
@@ -780,18 +780,18 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
 
             if ( !xSimpleMailClient.is() )
             {
-                // no mail client support => message box!
+                
                 return SEND_MAIL_ERROR;
             }
 
-            // we have a simple mail client
+            
             css::uno::Reference< XSimpleMailMessage > xSimpleMailMessage = xSimpleMailClient->createSimpleMailMessage();
             if ( xSimpleMailMessage.is() )
             {
                 sal_Int32 nSendFlags = SimpleMailClientFlags::DEFAULTS;
                 if ( maFromAddress.isEmpty() )
                 {
-                    // from address not set, try figure out users e-mail address
+                    
                     CreateFromAddress_Impl( maFromAddress );
                 }
                 xSimpleMailMessage->setOriginator( maFromAddress );
@@ -800,7 +800,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                 size_t nCcCount     = mpCcList ? mpCcList->size() : 0;
                 size_t nCcSeqCount  = nCcCount;
 
-                // set recipient (only one) for this simple mail server!!
+                
                 if ( nToCount > 1 )
                 {
                     nCcSeqCount = nToCount - 1 + nCcCount;
@@ -813,7 +813,7 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
                 }
 
-                // all other recipient must be handled with CC recipients!
+                
                 if ( nCcSeqCount > 0 )
                 {
                     size_t                  nIndex = 0;
@@ -918,7 +918,7 @@ SfxMailModel::SendMailResult SfxMailModel::SaveAndSend( const css::uno::Referenc
     return eResult;
 }
 
-// functions -------------------------------------------------------------
+
 
 sal_Bool CreateFromAddress_Impl( OUString& rFrom )
 
@@ -948,14 +948,14 @@ sal_Bool CreateFromAddress_Impl( OUString& rFrom )
                 rFrom += " ";
         }
         rFrom += comphelper::string::strip(aName, ' ');
-        // remove illegal characters
+        
         rFrom = comphelper::string::remove(rFrom, '<');
         rFrom = comphelper::string::remove(rFrom, '>');
         rFrom = comphelper::string::remove(rFrom, '@');
     }
     OUString aEmailName = aUserCFG.GetEmail();
 
-    // remove illegal characters
+    
     aEmailName = comphelper::string::remove(aEmailName, '<');
     aEmailName = comphelper::string::remove(aEmailName, '>');
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbastrings.hrc"
@@ -48,8 +48,8 @@ namespace dbaccess
 sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vector< WildCard >& _rOut)
 {
     SAL_INFO("dbaccess", "api OFilteredContainer::createWildCardVector" );
-    // for wildcard search : remove all table filters which are a wildcard expression and build a WilCard
-    // for them
+    
+    
     OUString* pTableFilters = _rTableFilter.getArray();
     OUString* pEnd          = pTableFilters + _rTableFilter.getLength();
     sal_Int32 nShiftPos = 0;
@@ -68,7 +68,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             ++nShiftPos;
         }
     }
-    // now aTableFilter contains nShiftPos non-wc-strings and aWCSearch all wc-strings
+    
     _rTableFilter.realloc(nShiftPos);
     return nShiftPos;
 }
@@ -82,9 +82,9 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         const OUString* tableFilter = _rTableFilter.getConstArray();
         const OUString* tableFilterEnd = _rTableFilter.getConstArray() + nTableFilterLen;
         bool bFilterMatch = ::std::find( tableFilter, tableFilterEnd, _rName ) != tableFilterEnd;
-        // the table is allowed to "pass" if we had no filters at all or any of the non-wildcard filters matches
+        
         if (!bFilterMatch && !_rWCSearch.empty())
-        {   // or if one of the wildcrad expression matches
+        {   
             for (   ::std::vector< WildCard >::const_iterator aLoop = _rWCSearch.begin();
                     aLoop != _rWCSearch.end() && !bFilterMatch;
                     ++aLoop
@@ -166,7 +166,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
     {
         TableInfos aFilteredTables;
 
-        // first, filter for the table names
+        
         sal_Int32 nTableFilterCount = _tableFilter.getLength();
         sal_Bool dontFilterTableNames = ( ( nTableFilterCount == 1 ) && _tableFilter[0] == "%" );
         if( dontFilterTableNames )
@@ -175,8 +175,8 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         }
         else
         {
-            // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
-            // for them
+            
+            
             ::std::vector< WildCard > aWildCardTableFilter;
             Sequence< OUString > aNonWildCardTableFilter = _tableFilter;
             nTableFilterCount = createWildCardVector( aNonWildCardTableFilter, aWildCardTableFilter );
@@ -196,11 +196,11 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             }
         }
 
-        // second, filter for the table types
+        
         sal_Int32 nTableTypeFilterCount = _tableTypeFilter.getLength();
         sal_Bool dontFilterTableTypes = ( ( nTableTypeFilterCount == 1 ) && _tableTypeFilter[0] == "%" );
         dontFilterTableTypes = dontFilterTableTypes || ( nTableTypeFilterCount == 0 );
-            // (for TableTypeFilter, unlike TableFilter, "empty" means "do not filter at all")
+            
         if ( !dontFilterTableTypes )
         {
             TableInfos aUnfilteredTables;
@@ -214,7 +214,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                     ++table
                 )
             {
-                // ensure that we know the table type
+                
                 lcl_ensureType( *table, _metaData, _masterContainer );
 
                 if ( ::std::find( pTableTypeFilterBegin, pTableTypeFilterEnd, *table->sType ) != pTableTypeFilterEnd )
@@ -234,7 +234,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         return aReturn;
     }
 
-    // OViewContainer
+    
     OFilteredContainer::OFilteredContainer(::cppu::OWeakObject& _rParent,
                                  ::osl::Mutex& _rMutex,
                                  const Reference< XConnection >& _xCon,
@@ -293,11 +293,11 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
 
     void OFilteredContainer::construct(const Sequence< OUString >& _rTableFilter, const Sequence< OUString >& _rTableTypeFilter)
     {
-        // build sorted versions of the filter sequences, so the visibility decision is faster
+        
         Sequence< OUString > aTableFilter(_rTableFilter);
 
-        // for wildcard search : remove all table filters which are a wildcard expression and build a WildCard
-        // for them
+        
+        
         ::std::vector< WildCard > aWCSearch;
         createWildCardVector(aTableFilter,aWCSearch);
 
@@ -312,9 +312,9 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
             SAL_DEBUG("OFilteredContainer::construct(). "
                       "Metadata got.");
 
-            // create a table table filter suitable for the XDatabaseMetaData::getTables call,
-            // taking into account both the externally-provided table type filter, and any
-            // table type restriction which is inherent to the container
+            
+            
+            
             Sequence< OUString > aTableTypeFilter;
             OUString sInherentTableTypeRestriction( getTableTypeRestriction() );
             if ( !sInherentTableTypeRestriction.isEmpty() )
@@ -332,8 +332,8 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                             break;
                     }
                     if ( tableType == tableTypeEnd )
-                    {   // the only table type which can be part of this container is not allowed
-                        // by the externally provided table type filter.
+                    {   
+                        
                         m_bConstructed = sal_True;
                         return;
                     }
@@ -346,9 +346,9 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
                 SAL_DEBUG("OFilteredContainer::construct(). "
                           "InherentTableTypeRestriction.");
 
-                // no container-inherent restriction for the table types
+                
                 if ( _rTableTypeFilter.getLength() == 0 )
-                {   // no externally-provided table type filter => use the default filter
+                {   
                     getAllTableTypeFilter( aTableTypeFilter );
                 }
                 else
@@ -428,26 +428,26 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         return ::dbtools::composeTableName( m_xMetaData, _xObject, ::dbtools::eInDataManipulation, false, false, false );
     }
 
-    // multiple to obtain all tables from XDatabaseMetaData::getTables, via passing a particular
-    // table type filter:
-    // adhere to the standard, which requests to pass a NULL table type filter, if
-    // you want to retrieve all tables
+    
+    
+    
+    
     #define FILTER_MODE_STANDARD 0
-    // only pass %, which is not allowed by the standard, but understood by some drivers
+    
     #define FILTER_MODE_WILDCARD 1
-    // only pass TABLE and VIEW
+    
     #define FILTER_MODE_FIXED    2
-    // do the thing which showed to be the safest way, understood by nearly all
-    // drivers, even the ones which do not understand the standard
+    
+    
     #define FILTER_MODE_MIX_ALL  3
 
     void OFilteredContainer::getAllTableTypeFilter( Sequence< OUString >& /* [out] */ _rFilter ) const
     {
         sal_Int32 nFilterMode = FILTER_MODE_MIX_ALL;
-            // for compatibility reasons, this is the default: we used this way before we
-            // introduced the TableTypeFilterMode setting
+            
+            
 
-        // obtain the data source we belong to, and the TableTypeFilterMode setting
+        
         Any aFilterModeSetting;
         if ( getDataSourceSetting( getDataSource( (Reference< XInterface >)m_rParent ), "TableTypeFilterMode", aFilterModeSetting ) )
         {
@@ -484,6 +484,6 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         }
     }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

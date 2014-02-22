@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,15 +29,15 @@
 
 namespace unnamed_chaos_ucbdemo_srcharg {}
 using namespace unnamed_chaos_ucbdemo_srcharg;
-    // unnamed namespaces don't work well yet...
+    
 
 using namespace com::sun::star;
 
-//============================================================================
+
 //
-//  skipWhiteSpace
+
 //
-//============================================================================
+
 
 namespace unnamed_chaos_ucbdemo_srcharg {
 
@@ -48,11 +48,11 @@ void skipWhiteSpace(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
         ++rBegin;
 }
 
-//============================================================================
+
 //
-//  scanAtom
+
 //
-//============================================================================
+
 
 String scanAtom(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
 {
@@ -62,11 +62,11 @@ String scanAtom(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
     return String(pTheBegin, rBegin - pTheBegin);
 }
 
-//============================================================================
+
 //
-//  scanProperty
+
 //
-//============================================================================
+
 
 String scanProperty(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
 {
@@ -77,11 +77,11 @@ String scanProperty(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
     return String(pTheBegin, rBegin - pTheBegin);
 }
 
-//============================================================================
+
 //
-//  scanOperator
+
 //
-//============================================================================
+
 
 String scanOperator(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
 {
@@ -95,11 +95,11 @@ String scanOperator(sal_Unicode const *& rBegin, sal_Unicode const * pEnd)
 
 }
 
-//============================================================================
+
 //
-//  parseSearchArgument
+
 //
-//============================================================================
+
 
 bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
 {
@@ -143,7 +143,7 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
     sal_Unicode const * p = rInput.GetBuffer();
     sal_Unicode const * pEnd = p + rInput.Len();
 
-    // Parse options:
+    
     rInfo.Recursion = ucb::SearchRecursion_ONE_LEVEL;
     rInfo.IncludeBase = true;
     rInfo.RespectFolderViewRestrictions = true;
@@ -221,18 +221,18 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
         p = q;
     }
 
-    // Parse criteria:
+    
     ucb::SearchCriterium aCriterium;
     for (;;)
     {
         sal_Unicode const * q = p;
 
-        // Parse either property name or "empty":
+        
         skipWhiteSpace(q, pEnd);
         String aProperty(scanProperty(q, pEnd));
         sal_Unicode const * pPropertyEnd = q;
 
-        // Parse operator:
+        
         skipWhiteSpace(q, pEnd);
         String aOperator(scanOperator(q, pEnd));
         struct Operator
@@ -278,7 +278,7 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
             skipWhiteSpace(q, pEnd);
             bool bHasOperand = false;
 
-            // Parse string operand:
+            
             if (!bHasOperand && pTheOperator->m_nText)
             {
                 if (q != pEnd && *q == '"')
@@ -329,7 +329,7 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
                     }
                 }
 
-                // Parse "-C" and "-R":
+                
                 if (bHasOperand)
                     for (;;)
                     {
@@ -353,7 +353,7 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
                     }
             }
 
-            // Parse date operand:
+            
             if (!bHasOperand && pTheOperator->m_nDate != 0)
             {
                 sal_Unicode const * r = q;
@@ -391,7 +391,7 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
                 }
             }
 
-            // Parse number operand:
+            
             if (!bHasOperand && pTheOperator->m_nNumeric != 0)
             {
                 sal_Unicode const * r = q;
@@ -425,7 +425,7 @@ bool parseSearchArgument(String const & rInput, ucb::SearchInfo & rInfo)
                 }
             }
 
-            // Bool operator has no operand:
+            
             if (!bHasOperand && pTheOperator->m_nBool != 0)
             {
                 bHasOperand = true;

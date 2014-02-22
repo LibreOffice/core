@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -97,14 +97,14 @@ public:
     virtual ~CanvasFactory();
     CanvasFactory( Reference<XComponentContext> const & xContext );
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
         throw (RuntimeException);
     virtual Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (RuntimeException);
 
-    // XMultiComponentFactory
+    
     virtual Sequence<OUString> SAL_CALL getAvailableServiceNames()
         throw (RuntimeException);
     virtual Reference<XInterface> SAL_CALL createInstanceWithContext(
@@ -116,7 +116,7 @@ public:
         Sequence<Any> const & args,
         Reference<XComponentContext> const & xContext ) throw (Exception);
 
-    // XMultiServiceFactory
+    
     virtual Reference<XInterface> SAL_CALL createInstance(
         OUString const & name )
         throw (Exception);
@@ -139,7 +139,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
 {
     try
     {
-        // read out configuration for preferred services:
+        
         Reference<lang::XMultiServiceFactory> xConfigProvider(
             configuration::theDefaultProvider::get( m_xContext ) );
 
@@ -201,8 +201,8 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
 
     if( m_aAvailableImplementations.empty() )
     {
-        // Ugh. Looks like configuration is borked. Fake minimal
-        // setup.
+        
+        
         Sequence<OUString> aServices(1);
         aServices[0] = "com.sun.star.comp.rendering.Canvas.VCL";
         m_aAvailableImplementations.push_back( std::make_pair(OUString("com.sun.star.rendering.Canvas"),
@@ -218,14 +218,14 @@ CanvasFactory::~CanvasFactory()
 {
 }
 
-//------------------------------------------------------------------------------
+
 Reference<XInterface> create( Reference<XComponentContext> const & xContext )
 {
     return static_cast< ::cppu::OWeakObject * >(
         new CanvasFactory( xContext ) );
 }
 
-// XServiceInfo
+
 OUString CanvasFactory::getImplementationName() throw (RuntimeException)
 {
     return getImplName();
@@ -243,7 +243,7 @@ Sequence<OUString> CanvasFactory::getSupportedServiceNames()
     return getSuppServices();
 }
 
-// XMultiComponentFactory
+
 Sequence<OUString> CanvasFactory::getAvailableServiceNames()
     throw (RuntimeException)
 {
@@ -263,7 +263,7 @@ Reference<XInterface> CanvasFactory::createInstanceWithContext(
         name, Sequence<Any>(), xContext );
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> CanvasFactory::use(
     OUString const & serviceName,
     Sequence<Any> const & args,
@@ -287,7 +287,7 @@ Reference<XInterface> CanvasFactory::use(
     }
 }
 
-//______________________________________________________________________________
+
 void CanvasFactory::checkConfigFlag( bool& r_bFlag,
                                      bool& r_CacheFlag,
                                      const OUString& nodeName ) const
@@ -298,40 +298,40 @@ void CanvasFactory::checkConfigFlag( bool& r_bFlag,
 
         if( r_CacheFlag != r_bFlag )
         {
-            // cache is invalid, because of different order of
-            // elements
+            
+            
             r_CacheFlag = r_bFlag;
             m_aCachedImplementations.clear();
         }
     }
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> CanvasFactory::lookupAndUse(
     OUString const & serviceName, Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext ) const
 {
     ::osl::MutexGuard guard(m_mutex);
 
-    // forcing last entry from impl list, if config flag set
+    
     bool bForceLastEntry(false);
     checkConfigFlag( bForceLastEntry,
                      m_bCacheHasForcedLastImpl,
                      OUString("ForceSafeServiceImpl") );
 
-    // use anti-aliasing canvas, if config flag set (or not existing)
+    
     bool bUseAAEntry(true);
     checkConfigFlag( bUseAAEntry,
                      m_bCacheHasUseAAEntry,
                      OUString("UseAntialiasingCanvas") );
 
-    // use accelerated canvas, if config flag set (or not existing)
+    
     bool bUseAcceleratedEntry(true);
     checkConfigFlag( bUseAcceleratedEntry,
                      m_bCacheHasUseAcceleratedEntry,
                      OUString("UseAcceleratedCanvas") );
 
-    // try to reuse last working implementation for given service name
+    
     const CacheVector::iterator aEnd(m_aCachedImplementations.end());
     CacheVector::iterator aMatch;
     if( (aMatch=std::find_if(m_aCachedImplementations.begin(),
@@ -347,7 +347,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
             return xCanvas;
     }
 
-    // lookup in available service list
+    
     const AvailVector::const_iterator aAvailEnd(m_aAvailableImplementations.end());
     AvailVector::const_iterator aAvailImplsMatch;
     if( (aAvailImplsMatch=std::find_if(m_aAvailableImplementations.begin(),
@@ -399,7 +399,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     const OUString* const pFirstAccelImpl = aAccelImpls.getConstArray();
     const OUString* const pEndAccelImpl = pFirstAccelImpl + aAccelImpls.getLength();
 
-    // force last entry from impl list, if config flag set
+    
     if( bForceLastEntry )
         pCurrImpl = pEndImpl-1;
 
@@ -407,8 +407,8 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     {
         const OUString aCurrName(pCurrImpl->trim());
 
-        // check whether given canvas service is listed in the
-        // sequence of "accelerated canvas implementations"
+        
+        
         const bool bIsAcceleratedImpl(
             std::find_if(pFirstAccelImpl,
                          pEndAccelImpl,
@@ -418,8 +418,8 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                                          &OUString::trim,
                                          _1))) != pEndAccelImpl );
 
-        // check whether given canvas service is listed in the
-        // sequence of "antialiasing canvas implementations"
+        
+        
         const bool bIsAAImpl(
             std::find_if(pFirstAAImpl,
                          pEndAAImpl,
@@ -429,12 +429,12 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
                                          &OUString::trim,
                                          _1))) != pEndAAImpl );
 
-        // try to instantiate canvas *only* if either accel and AA
-        // property match preference, *or*, if there's a mismatch, only
-        // go for a less capable canvas (that effectively let those
-        // pour canvas impls still work as fallbacks, should an
-        // accelerated/AA one fail). Property implies configuration:
-        // http://en.wikipedia.org/wiki/Truth_table#Logical_implication
+        
+        
+        
+        
+        
+        
         if( (!bIsAAImpl || bUseAAEntry) && (!bIsAcceleratedImpl || bUseAcceleratedEntry) )
         {
             Reference<XInterface> xCanvas(
@@ -444,13 +444,13 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
             {
                 if( aMatch != aEnd )
                 {
-                    // cache entry exists, replace dysfunctional
-                    // implementation name
+                    
+                    
                     aMatch->second = pCurrImpl->trim();
                 }
                 else
                 {
-                    // new service name, add new cache entry
+                    
                     m_aCachedImplementations.push_back(std::make_pair(serviceName,
                                                                       pCurrImpl->trim()));
                 }
@@ -465,7 +465,7 @@ Reference<XInterface> CanvasFactory::lookupAndUse(
     return Reference<XInterface>();
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
     OUString const & preferredOne, Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext ) throw (Exception)
@@ -475,12 +475,12 @@ Reference<XInterface> CanvasFactory::createInstanceWithArgumentsAndContext(
     if(xCanvas.is())
         return xCanvas;
 
-    // last resort: try service name directly
+    
     return use( preferredOne, args, xContext );
 }
 
-// XMultiServiceFactory
-//______________________________________________________________________________
+
+
 Reference<XInterface> CanvasFactory::createInstance( OUString const & name )
     throw (Exception)
 {
@@ -488,7 +488,7 @@ Reference<XInterface> CanvasFactory::createInstance( OUString const & name )
         name, Sequence<Any>(), m_xContext );
 }
 
-//______________________________________________________________________________
+
 Reference<XInterface> CanvasFactory::createInstanceWithArguments(
     OUString const & name, Sequence<Any> const & args ) throw (Exception)
 {
@@ -507,7 +507,7 @@ const ::cppu::ImplementationEntry s_entries [] = {
     { 0, 0, 0, 0, 0, 0 }
 };
 
-} // anon namespace
+} 
 
 extern "C" {
 

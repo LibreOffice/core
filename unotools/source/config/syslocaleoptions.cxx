@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Sequence.hxx>
@@ -50,12 +50,12 @@ class SvtSysLocaleOptions_Impl : public utl::ConfigItem
 {
         LanguageTag             m_aRealLocale;
         LanguageTag             m_aRealUILocale;
-        OUString                m_aLocaleString;    // en-US or de-DE or empty for SYSTEM
-        OUString                m_aUILocaleString;    // en-US or de-DE or empty for SYSTEM
-        OUString                m_aCurrencyString;  // USD-en-US or EUR-de-DE
-        OUString                m_aDatePatternsString;  // "Y-M-D;M-D"
-        bool                    m_bDecimalSeparator; //use decimal separator same as locale
-        bool                    m_bIgnoreLanguageChange; //OS language change doesn't affect LO document language
+        OUString                m_aLocaleString;    
+        OUString                m_aUILocaleString;    
+        OUString                m_aCurrencyString;  
+        OUString                m_aDatePatternsString;  
+        bool                    m_bDecimalSeparator; 
+        bool                    m_bIgnoreLanguageChange; 
 
         bool                    m_bROLocale;
         bool                    m_bROUILocale;
@@ -119,7 +119,7 @@ public:
 #define PROPERTYHANDLE_DATEPATTERNS     4
 #define PROPERTYHANDLE_IGNORELANGCHANGE 5
 
-//#define PROPERTYCOUNT                   5
+
 #define PROPERTYCOUNT                   6
 
 const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
@@ -137,7 +137,7 @@ const Sequence< OUString > SvtSysLocaleOptions_Impl::GetPropertyNames()
     return seqPropertyNames;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtSysLocaleOptions_Impl::SvtSysLocaleOptions_Impl()
     : ConfigItem( ROOTNODE_SYSLOCALE )
@@ -417,7 +417,7 @@ void SvtSysLocaleOptions_Impl::SetUILocaleString( const OUString& rStr )
     {
         m_aUILocaleString = rStr;
 
-        // as we can't switch UILocale at runtime, we only store changes in the configuration
+        
         MakeRealUILocale();
         LanguageTag::setConfiguredSystemLanguage( m_aRealUILocale.getLanguageType() );
         SetModified();
@@ -520,7 +520,7 @@ void SvtSysLocaleOptions_Impl::Notify( const Sequence< OUString >& seqPropertyNa
         NotifyListeners( nHint );
 }
 
-// ====================================================================
+
 
 SvtSysLocaleOptions::SvtSysLocaleOptions()
 {
@@ -548,7 +548,7 @@ SvtSysLocaleOptions::~SvtSysLocaleOptions()
 }
 
 
-// static
+
 Mutex& SvtSysLocaleOptions::GetMutex()
 {
     static Mutex* pMutex = NULL;
@@ -557,9 +557,9 @@ Mutex& SvtSysLocaleOptions::GetMutex()
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if( !pMutex )
         {
-            // #i77768# Due to a static reference in the toolkit lib
-            // we need a mutex that lives longer than the svl library.
-            // Otherwise the dtor would use a destructed mutex!!
+            
+            
+            
             pMutex = new Mutex;
         }
     }
@@ -661,7 +661,7 @@ bool SvtSysLocaleOptions::IsReadOnly( EOption eOption ) const
     return pOptions->IsReadOnly( eOption );
 }
 
-// static
+
 void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( OUString& rAbbrev,
                                                         LanguageType& eLang,
                                                         const OUString& rConfigString )
@@ -681,7 +681,7 @@ void SvtSysLocaleOptions::GetCurrencyAbbrevAndLanguage( OUString& rAbbrev,
 }
 
 
-// static
+
 OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
         const OUString& rAbbrev, LanguageType eLang )
 {
@@ -699,7 +699,7 @@ OUString SvtSysLocaleOptions::CreateCurrencyConfigString(
 }
 
 
-// static
+
 void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link& rLink )
 {
     MutexGuard aGuard( GetMutex() );
@@ -708,7 +708,7 @@ void SvtSysLocaleOptions::SetCurrencyChangeLink( const Link& rLink )
 }
 
 
-// static
+
 const Link& SvtSysLocaleOptions::GetCurrencyChangeLink()
 {
     MutexGuard aGuard( GetMutex() );

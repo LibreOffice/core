@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,9 +44,9 @@
 #include "colorwindow.hxx"
 #include "extrusiondepthdialog.hxx"
 
-////////////
 
-//using ::svtools::ToolbarMenu;
+
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -131,7 +131,7 @@ void ExtrusionDirectionWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionDirectionWindow::implSetDirection( sal_Int32 nSkew, bool bEnabled )
 {
@@ -156,7 +156,7 @@ void ExtrusionDirectionWindow::implSetDirection( sal_Int32 nSkew, bool bEnabled 
     enableEntry( 2, bEnabled );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionDirectionWindow::implSetProjection( sal_Int32 nProjection, bool bEnabled )
 {
@@ -166,7 +166,7 @@ void ExtrusionDirectionWindow::implSetProjection( sal_Int32 nProjection, bool bE
     enableEntry( 1, bEnabled );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL ExtrusionDirectionWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
@@ -200,7 +200,7 @@ void SAL_CALL ExtrusionDirectionWindow::statusChanged(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
 {
@@ -232,9 +232,9 @@ IMPL_LINK( ExtrusionDirectionWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-// =======================================================================
-// ExtrusionDirectionControl
-// =======================================================================
+
+
+
 
 ExtrusionDirectionControl::ExtrusionDirectionControl(
     const Reference< XComponentContext >& rxContext
@@ -246,23 +246,23 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ::Window* ExtrusionDirectionControl::createPopupWindow( ::Window* pParent )
 {
     return new ExtrusionDirectionWindow( *this, m_xFrame, pParent );
 }
 
-// -----------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------
+
+
+
 
 OUString SAL_CALL ExtrusionDirectionControl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionDirectionController" );
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -271,7 +271,7 @@ Sequence< OUString > SAL_CALL ExtrusionDirectionControl_getSupportedServiceNames
     return aSNS;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDirectionControl_createInstance(
     const Reference< XMultiServiceFactory >& rSMgr
@@ -280,21 +280,21 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDirectionControl_createInstan
     return *new ExtrusionDirectionControl( comphelper::getComponentContext(rSMgr) );
 }
 
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL ExtrusionDirectionControl::getImplementationName(  ) throw (RuntimeException)
 {
     return ExtrusionDirectionControl_getImplementationName();
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ExtrusionDirectionControl::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     return ExtrusionDirectionControl_getSupportedServiceNames();
 }
 
-// ####################################################################
+
 
 ExtrusionDepthDialog::ExtrusionDepthDialog( Window* pParent, double fDepth, FieldUnit eDefaultUnit )
     : ModalDialog( pParent, "ExtrustionDepthDialog", "svx/ui/extrustiondepthdialog.ui" )
@@ -309,7 +309,7 @@ double ExtrusionDepthDialog::getDepth() const
     return (double)( m_pMtrDepth->GetValue( FUNIT_100TH_MM ) ) / 100.0;
 }
 
-// ####################################################################
+
 
 double aDepthListInch[] = { 0, 1270,2540,5080,10160 };
 double aDepthListMM[] = { 0, 1000, 2500, 5000, 10000 };
@@ -352,7 +352,7 @@ ExtrusionDepthWindow::ExtrusionDepthWindow(
     AddStatusListener( msMetricUnit );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionDepthWindow::implSetDepth( double fDepth )
 {
@@ -371,7 +371,7 @@ void ExtrusionDepthWindow::implSetDepth( double fDepth )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
 {
@@ -385,7 +385,7 @@ void ExtrusionDepthWindow::implFillStrings( FieldUnit eUnit )
     };
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL ExtrusionDepthWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
@@ -419,7 +419,7 @@ void SAL_CALL ExtrusionDepthWindow::statusChanged(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -437,7 +437,7 @@ void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
 {
@@ -486,9 +486,9 @@ IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
     return 0;
 }
 
-// =======================================================================
-// ExtrusionDirectionControl
-// =======================================================================
+
+
+
 
 ExtrusionDepthController::ExtrusionDepthController(
     const Reference< XComponentContext >& rxContext
@@ -500,7 +500,7 @@ ExtrusionDepthController::ExtrusionDepthController(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ::Window* ExtrusionDepthController::createPopupWindow( ::Window* pParent )
 {
@@ -508,16 +508,16 @@ ExtrusionDepthController::ExtrusionDepthController(
 }
 
 
-// -----------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------
+
+
+
 
 OUString SAL_CALL ExtrusionDepthController_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionDepthController" );
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -526,21 +526,21 @@ Sequence< OUString > SAL_CALL ExtrusionDepthController_getSupportedServiceNames(
     return aSNS;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionDepthController_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
 {
     return *new ExtrusionDepthController( comphelper::getComponentContext(rSMgr) );
 }
 
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL ExtrusionDepthController::getImplementationName(  ) throw (RuntimeException)
 {
     return ExtrusionDepthController_getImplementationName();
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames(  ) throw (RuntimeException)
 {
@@ -548,9 +548,9 @@ Sequence< OUString > SAL_CALL ExtrusionDepthController::getSupportedServiceNames
 }
 
 
-// ####################################################################
 
-// -------------------------------------------------------------------------
+
+
 
 ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rController, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, Window* pParentWindow )
 : ToolbarMenu( rFrame, pParentWindow, SVX_RES( RID_SVXFLOAT_EXTRUSION_LIGHTING ))
@@ -613,7 +613,7 @@ ExtrusionLightingWindow::ExtrusionLightingWindow( svt::ToolboxController& rContr
     AddStatusListener( msExtrusionLightingIntensity );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionLightingWindow::implSetIntensity( int nLevel, bool bEnabled )
 {
@@ -627,7 +627,7 @@ void ExtrusionLightingWindow::implSetIntensity( int nLevel, bool bEnabled )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
 {
@@ -656,7 +656,7 @@ void ExtrusionLightingWindow::implSetDirection( int nDirection, bool bEnabled )
     enableEntry( 3, bEnabled );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL ExtrusionLightingWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
@@ -690,7 +690,7 @@ void SAL_CALL ExtrusionLightingWindow::statusChanged(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -705,7 +705,7 @@ void ExtrusionLightingWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
 {
@@ -751,7 +751,7 @@ IMPL_LINK( ExtrusionLightingWindow, SelectHdl, void *, pControl )
     return 0;
 }
 
-// ========================================================================
+
 
 ExtrusionLightingControl::ExtrusionLightingControl(
     const Reference< XComponentContext >& rxContext
@@ -762,23 +762,23 @@ ExtrusionLightingControl::ExtrusionLightingControl(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ::Window* ExtrusionLightingControl::createPopupWindow( ::Window* pParent )
 {
     return new ExtrusionLightingWindow( *this, m_xFrame, pParent );
 }
 
-// -----------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------
+
+
+
 
 OUString SAL_CALL ExtrusionLightingControl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionLightingController" );
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -787,7 +787,7 @@ Sequence< OUString > SAL_CALL ExtrusionLightingControl_getSupportedServiceNames(
     return aSNS;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionLightingControl_createInstance(
     const Reference< XMultiServiceFactory >& rSMgr
@@ -796,21 +796,21 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionLightingControl_createInstanc
     return *new ExtrusionLightingControl( comphelper::getComponentContext(rSMgr) );
 }
 
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL ExtrusionLightingControl::getImplementationName(  ) throw (RuntimeException)
 {
     return ExtrusionLightingControl_getImplementationName();
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ExtrusionLightingControl::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     return ExtrusionLightingControl_getSupportedServiceNames();
 }
 
-// ####################################################################
+
 
 ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     svt::ToolboxController& rController,
@@ -839,7 +839,7 @@ ExtrusionSurfaceWindow::ExtrusionSurfaceWindow(
     AddStatusListener( msExtrusionSurface );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
 {
@@ -851,7 +851,7 @@ void ExtrusionSurfaceWindow::implSetSurface( int nSurface, bool bEnabled )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SAL_CALL ExtrusionSurfaceWindow::statusChanged(
     const ::com::sun::star::frame::FeatureStateEvent& Event
@@ -872,7 +872,7 @@ void SAL_CALL ExtrusionSurfaceWindow::statusChanged(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl)
 {
@@ -894,7 +894,7 @@ IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl)
     return 0;
 }
 
-// ========================================================================
+
 
 ExtrusionSurfaceControl::ExtrusionSurfaceControl(
     const Reference< XComponentContext >& rxContext
@@ -907,23 +907,23 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 ::Window* ExtrusionSurfaceControl::createPopupWindow( ::Window* pParent )
 {
     return new ExtrusionSurfaceWindow( *this, m_xFrame, pParent );
 }
 
-// -----------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------
+
+
+
 
 OUString SAL_CALL ExtrusionSurfaceControl_getImplementationName()
 {
     return OUString( "com.sun.star.comp.svx.ExtrusionSurfaceController" );
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames() throw( RuntimeException )
 {
@@ -932,7 +932,7 @@ Sequence< OUString > SAL_CALL ExtrusionSurfaceControl_getSupportedServiceNames()
     return aSNS;
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XInterface > SAL_CALL SAL_CALL ExtrusionSurfaceControl_createInstance(
     const Reference< XMultiServiceFactory >& rSMgr
@@ -941,21 +941,21 @@ Reference< XInterface > SAL_CALL SAL_CALL ExtrusionSurfaceControl_createInstance
     return *new ExtrusionSurfaceControl( comphelper::getComponentContext(rSMgr) );
 }
 
-// --------------------------------------------------------------------
+
 
 OUString SAL_CALL ExtrusionSurfaceControl::getImplementationName(  ) throw (RuntimeException)
 {
     return ExtrusionSurfaceControl_getImplementationName();
 }
 
-// --------------------------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL ExtrusionSurfaceControl::getSupportedServiceNames(  ) throw (RuntimeException)
 {
     return ExtrusionSurfaceControl_getSupportedServiceNames();
 }
 
-//========================================================================
+
 
 SFX_IMPL_TOOLBOX_CONTROL( ExtrusionColorControl, SvxColorItem );
 
@@ -968,21 +968,21 @@ ExtrusionColorControl::ExtrusionColorControl(
     mpBtnUpdater = new ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox() );
 }
 
-// -----------------------------------------------------------------------
+
 
 ExtrusionColorControl::~ExtrusionColorControl()
 {
     delete mpBtnUpdater;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindowType ExtrusionColorControl::GetPopupWindowType() const
 {
     return SFX_POPUPWINDOW_ONCLICK;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPopupWindow* ExtrusionColorControl::CreatePopupWindow()
 {
@@ -999,7 +999,7 @@ SfxPopupWindow* ExtrusionColorControl::CreatePopupWindow()
     return pColorWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ExtrusionColorControl::StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::util;
 using namespace ::dbtools;
 
-// -------------------------------------------------------------------------
+
 MacabHeader::MacabHeader(const sal_Int32 _size, macabfield **_fields)
 {
     sal_Int32 i;
@@ -58,26 +58,26 @@ MacabHeader::MacabHeader(const sal_Int32 _size, macabfield **_fields)
 
 }
 
-// -------------------------------------------------------------------------
+
 MacabHeader::MacabHeader()
 {
     size = 0;
     fields = NULL;
 }
 
-// -------------------------------------------------------------------------
+
 MacabHeader::~MacabHeader()
 {
 }
 
-// -------------------------------------------------------------------------
+
 void MacabHeader::operator+= (const MacabHeader *r)
 {
     /* Add one MacabHeader to another. Anything not already in the header is
      * added to the end of it.
      */
     sal_Int32 rSize = r->getSize();
-    if(rSize != 0) // If the new header does actually have fields
+    if(rSize != 0) 
     {
         /* If our header is currently empty, just copy all of the fields from
          * the new header to this one.
@@ -139,7 +139,7 @@ void MacabHeader::operator+= (const MacabHeader *r)
     }
 }
 
-// -------------------------------------------------------------------------
+
 OUString MacabHeader::getString(const sal_Int32 i) const
 {
     OUString nRet;
@@ -158,13 +158,13 @@ OUString MacabHeader::getString(const sal_Int32 i) const
     return nRet;
 }
 
-// -------------------------------------------------------------------------
+
 void MacabHeader::sortRecord()
 {
     sortRecord(0,size);
 }
 
-// -------------------------------------------------------------------------
+
 macabfield **MacabHeader::sortRecord(const sal_Int32 _start, const sal_Int32 _length)
 {
     /* Sort using mergesort. Because it uses mergesort, it is recursive and
@@ -258,12 +258,12 @@ sal_Int32 MacabHeader::compareFields(const macabfield *_field1, const macabfield
     CFComparisonResult result = CFStringCompare(
         (CFStringRef) _field1->value,
         (CFStringRef) _field2->value,
-        0); // 0 = no options (like ignore case)
+        0); 
 
     return (sal_Int32) result;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MacabHeader::getColumnNumber(const OUString s) const
 {
     sal_Int32 i;
@@ -279,18 +279,18 @@ sal_Int32 MacabHeader::getColumnNumber(const OUString s) const
     return i;
 }
 
-// -------------------------------------------------------------------------
+
 MacabHeader *MacabHeader::begin()
 {
     return this;
 }
 
-// -------------------------------------------------------------------------
+
 MacabHeader::iterator::iterator ()
 {
 }
 
-// -------------------------------------------------------------------------
+
 MacabHeader::iterator::~iterator ()
 {
 }
@@ -302,31 +302,31 @@ MacabHeader::iterator& MacabHeader::iterator::operator= (MacabHeader *_record)
     return *this;
 }
 
-// -------------------------------------------------------------------------
+
 void MacabHeader::iterator::operator++ ()
 {
     id++;
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool MacabHeader::iterator::operator!= (const sal_Int32 i) const
 {
     return(id != i);
 }
 
-// -------------------------------------------------------------------------
+
 sal_Bool MacabHeader::iterator::operator== (const sal_Int32 i) const
 {
     return(id == i);
 }
 
-// -------------------------------------------------------------------------
+
 macabfield *MacabHeader::iterator::operator* () const
 {
     return record->get(id);
 }
 
-// -------------------------------------------------------------------------
+
 sal_Int32 MacabHeader::end() const
 {
     return size;

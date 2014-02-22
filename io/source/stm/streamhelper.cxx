@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/alloc.h>
@@ -100,7 +100,7 @@ void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize ) throw( IRingBuffer_OutOfM
         nNewLen = nNewLen << 1;
     }
 
-    // buffer never shrinks !
+    
     if( nNewLen < m_nBufferLen ) {
         nNewLen = m_nBufferLen;
     }
@@ -167,14 +167,14 @@ void MemRingBuffer::writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &seq )
     }
 
     if( nLen + nStartWritingIndex > m_nBufferLen ) {
-        // two area copy
+        
         memcpy( &(m_p[nStartWritingIndex]) , seq.getConstArray(), m_nBufferLen-nStartWritingIndex );
         memcpy( m_p , &( seq.getConstArray()[m_nBufferLen-nStartWritingIndex] ),
                                         nLen - (m_nBufferLen-nStartWritingIndex) );
 
     }
     else {
-        // one area copy
+        
         memcpy( &( m_p[nStartWritingIndex]), seq.getConstArray() , nLen );
     }
     m_nOccupiedBuffer = Max( nPos + seq.getLength() , m_nOccupiedBuffer );
@@ -217,8 +217,8 @@ void MemRingBuffer::shrink() throw ()
 {
     checkInvariants();
 
-    // Up to now, only shrinking of while buffer works.
-    // No other shrinking supported up to now.
+    
+    
     if( ! m_nOccupiedBuffer ) {
         if( m_p ) {
             free( m_p );

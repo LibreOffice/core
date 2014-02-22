@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ole/olestorage.hxx"
@@ -38,7 +38,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
@@ -85,7 +85,7 @@ private:
     OUString            maElementName;
 };
 
-// ----------------------------------------------------------------------------
+
 
 OleOutputStream::OleOutputStream( const Reference< XComponentContext >& rxContext,
         const Reference< XNameContainer >& rxStorage, const OUString& rElementName ) :
@@ -141,15 +141,15 @@ void SAL_CALL OleOutputStream::closeOutput() throw( NotConnectedException, Buffe
 {
     ensureConnected();
     ensureSeekable();
-    // remember the class members
+    
     Reference< XOutputStream > xOutStrm = mxOutStrm;
     Reference< XSeekable > xSeekable = mxSeekable;
-    // reset all class members
+    
     mxOutStrm.clear();
     mxSeekable.clear();
-    // close stream (and let it throw something if needed)
+    
     xOutStrm->closeOutput();
-    // on success, insert the stream into the OLE storage (must be seeked back before)
+    
     xSeekable->seek( 0 );
     if( !ContainerHelper::insertByName( mxStorage, maElementName, Any( mxTempFile ) ) )
         throw IOException();
@@ -167,9 +167,9 @@ void OleOutputStream::ensureConnected() const throw( NotConnectedException )
         throw NotConnectedException();
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 OleStorage::OleStorage( const Reference< XComponentContext >& rxContext,
         const Reference< XInputStream >& rxInStream, bool bBaseStreamAccess ) :
@@ -214,11 +214,11 @@ OleStorage::~OleStorage()
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
 {
-    // if stream is not seekable, create temporary copy
+    
     Reference< XInputStream > xInStrm = rxInStream;
     if( !Reference< XSeekable >( xInStrm, UNO_QUERY ).is() ) try
     {
@@ -231,7 +231,7 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
             BinaryXOutputStream aOutStrm( xOutStrm, false );
             BinaryXInputStream aInStrm( xInStrm, false );
             aInStrm.copyToStream( aOutStrm );
-        } // scope closes output stream of tempfile
+        } 
         xInStrm = xTempFile->getInputStream();
     }
     catch(const Exception& )
@@ -239,13 +239,13 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
         OSL_FAIL( "OleStorage::initStorage - cannot create temporary copy of input stream" );
     }
 
-    // create base storage object
+    
     if( xInStrm.is() ) try
     {
         Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
         Sequence< Any > aArgs( 2 );
         aArgs[ 0 ] <<= xInStrm;
-        aArgs[ 1 ] <<= true;        // true = do not create a copy of the input stream
+        aArgs[ 1 ] <<= true;        
         mxStorage.set( xFactory->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", aArgs ), UNO_QUERY_THROW );
     }
     catch(const Exception& )
@@ -255,13 +255,13 @@ void OleStorage::initStorage( const Reference< XInputStream >& rxInStream )
 
 void OleStorage::initStorage( const Reference< XStream >& rxOutStream )
 {
-    // create base storage object
+    
     if( rxOutStream.is() ) try
     {
         Reference< XMultiServiceFactory > xFactory( mxContext->getServiceManager(), UNO_QUERY_THROW );
         Sequence< Any > aArgs( 2 );
         aArgs[ 0 ] <<= rxOutStream;
-        aArgs[ 1 ] <<= true;        // true = do not create a copy of the stream
+        aArgs[ 1 ] <<= true;        
         mxStorage.set( xFactory->createInstanceWithArguments("com.sun.star.embed.OLESimpleStorage", aArgs ), UNO_QUERY_THROW );
     }
     catch(const Exception& )
@@ -269,7 +269,7 @@ void OleStorage::initStorage( const Reference< XStream >& rxOutStream )
     }
 }
 
-// StorageBase interface ------------------------------------------------------
+
 
 bool OleStorage::implIsStorage() const
 {
@@ -329,13 +329,13 @@ StorageRef OleStorage::implOpenSubStorage( const OUString& rElementName, bool bC
             completely re-inserted into the parent storage. */
         if( !isReadOnly() && (bCreateMissing || xSubStorage.get()) ) try
         {
-            // create new storage based on a temp file
+            
             Reference< XStream > xTempFile( TempFile::create(mxContext), UNO_QUERY_THROW );
             StorageRef xTempStorage( new OleStorage( *this, xTempFile, rElementName ) );
-            // copy existing substorage into temp storage
+            
             if( xSubStorage.get() )
                 xSubStorage->copyStorageToStorage( *xTempStorage );
-            // return the temp storage to caller
+            
             xSubStorage = xTempStorage;
         }
         catch(const Exception& )
@@ -370,19 +370,19 @@ void OleStorage::implCommit() const
 {
     try
     {
-        // commit this storage (finalizes the file this storage is based on)
+        
         Reference< XTransactedObject >( mxStorage, UNO_QUERY_THROW )->commit();
-        // re-insert this storage into the parent storage
+        
         if( mpParentStorage )
         {
             if( mpParentStorage->mxStorage->hasByName( getName() ) )
             {
-                // replaceByName() does not work (#i109539#)
+                
                 mpParentStorage->mxStorage->removeByName( getName() );
                 Reference< XTransactedObject >( mpParentStorage->mxStorage, UNO_QUERY_THROW )->commit();
             }
             mpParentStorage->mxStorage->insertByName( getName(), Any( mxStorage ) );
-            // this requires another commit(), which will be performed by the parent storage
+            
         }
     }
     catch(const Exception& )
@@ -390,9 +390,9 @@ void OleStorage::implCommit() const
     }
 }
 
-// ============================================================================
 
-} // namespace ole
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

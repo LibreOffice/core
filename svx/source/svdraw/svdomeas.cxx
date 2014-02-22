@@ -109,7 +109,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 
                 if(eMeasureUnit != eModUIUnit)
                 {
-                    // for the unit conversion
+                    
                     aFact *= GetMapFactor(eModUIUnit, eMeasureUnit).X();
                 }
 
@@ -120,7 +120,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 
                 if(aFact.GetNumerator() != aFact.GetDenominator())
                 {
-                    // scale via BigInt, to avoid overruns
+                    
                     nLen = BigMulDiv(nLen, aFact.GetNumerator(), aFact.GetDenominator());
                 }
 
@@ -158,7 +158,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
             }
             else
             {
-                // if there's no Model ... (e. g. preview in dialog)
+                
                 aStr = "4711";
             }
 
@@ -196,7 +196,7 @@ OUString SdrMeasureObj::TakeRepresentation(SdrMeasureFieldKind eMeasureFieldKind
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// BaseProperties section
+
 
 sdr::properties::BaseProperties* SdrMeasureObj::CreateObjectSpecificProperties()
 {
@@ -204,7 +204,7 @@ sdr::properties::BaseProperties* SdrMeasureObj::CreateObjectSpecificProperties()
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// DrawContact section
+
 
 sdr::contact::ViewContact* SdrMeasureObj::CreateObjectSpecificViewContact()
 {
@@ -218,7 +218,7 @@ TYPEINIT1(SdrMeasureObj,SdrTextObj);
 SdrMeasureObj::SdrMeasureObj():
     bTextDirty(false)
 {
-    // #i25616#
+    
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
@@ -227,7 +227,7 @@ SdrMeasureObj::SdrMeasureObj(const Point& rPt1, const Point& rPt2):
     aPt2(rPt2),
     bTextDirty(false)
 {
-    // #i25616#
+    
     mbSupportTextIndentingOnLineWidthChange = false;
 }
 
@@ -298,9 +298,9 @@ struct ImpLineRec
 
 struct ImpMeasurePoly
 {
-    ImpLineRec                  aMainline1; // those with the 1st arrowhead
-    ImpLineRec                  aMainline2; // those with the 2nd arrowhead
-    ImpLineRec                  aMainline3; // those in between
+    ImpLineRec                  aMainline1; 
+    ImpLineRec                  aMainline2; 
+    ImpLineRec                  aMainline3; 
     ImpLineRec                  aHelpline1;
     ImpLineRec                  aHelpline2;
     Rectangle                   aTextRect;
@@ -316,16 +316,16 @@ struct ImpMeasurePoly
     sal_uInt16                      nMainlineAnz;
     SdrMeasureTextHPos          eUsedTextHPos;
     SdrMeasureTextVPos          eUsedTextVPos;
-    long                        nLineWdt2;  // half the line width
-    long                        nArrow1Len; // length of 1st arrowhead; for Center, use only half
-    long                        nArrow2Len; // length of 2nd arrowhead; for Center, use only half
-    long                        nArrow1Wdt; // width of 1st arrow
-    long                        nArrow2Wdt; // width of 2nd arrow
-    long                        nShortLineLen; // line length, if PfeileAussen (arrowheads on the outside)
-    bool                        bArrow1Center; // arrowhead 1 centered?
-    bool                        bArrow2Center; // arrowhead 2 centered?
-    bool                        bAutoUpsideDown; // UpsideDown via automation
-    bool                        bPfeileAussen; // arrowheads on the outside
+    long                        nLineWdt2;  
+    long                        nArrow1Len; 
+    long                        nArrow2Len; 
+    long                        nArrow1Wdt; 
+    long                        nArrow2Wdt; 
+    long                        nShortLineLen; 
+    bool                        bArrow1Center; 
+    bool                        bArrow2Center; 
+    bool                        bAutoUpsideDown; 
+    bool                        bPfeileAussen; 
     bool                        bBreakedLine;
 };
 
@@ -393,16 +393,16 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     bool bPfeileAussen = false;
 
     const SfxItemSet& rSet = GetObjectItemSet();
-    sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); // line width
+    sal_Int32 nLineWdt = ((XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue(); 
     rPol.nLineWdt2 = (nLineWdt + 1) / 2;
 
     nArrow1Wdt = ((const XLineStartWidthItem&)(rSet.Get(XATTR_LINESTARTWIDTH))).GetValue();
     if(nArrow1Wdt < 0)
-        nArrow1Wdt = -nLineWdt * nArrow1Wdt / 100; // <0 = relativ
+        nArrow1Wdt = -nLineWdt * nArrow1Wdt / 100; 
 
     nArrow2Wdt = ((const XLineEndWidthItem&)(rSet.Get(XATTR_LINEENDWIDTH))).GetValue();
     if(nArrow2Wdt < 0)
-        nArrow2Wdt = -nLineWdt * nArrow2Wdt / 100; // <0 = relativ
+        nArrow2Wdt = -nLineWdt * nArrow2Wdt / 100; 
 
     basegfx::B2DPolyPolygon aPol1(((const XLineStartItem&)(rSet.Get(XATTR_LINESTART))).GetLineStartValue());
     basegfx::B2DPolyPolygon aPol2(((const XLineEndItem&)(rSet.Get(XATTR_LINEEND))).GetLineEndValue());
@@ -411,8 +411,8 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     nArrow1Len = impGetLineStartEndDistance(aPol1, nArrow1Wdt, bArrow1Center) - 1;
     nArrow2Len = impGetLineStartEndDistance(aPol2, nArrow2Wdt, bArrow2Center) - 1;
 
-    // nArrowLen is already halved at bCenter.
-    // In the case of 2 arrowheads each 4mm long, we can't go below 10mm.
+    
+    
     nArrowNeed=nArrow1Len+nArrow2Len+(nArrow1Wdt+nArrow2Wdt)/2;
     if (rPol.nLineLen<nArrowNeed) bPfeileAussen = true;
     nShortLen=(nArrow1Len+nArrow1Wdt + nArrow2Len+nArrow2Wdt) /2;
@@ -426,19 +426,19 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
         OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
         if (pOutlinerParaObject!=NULL && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1)
         {
-            bBrkLine=true; // dashed line if there's only on paragraph.
+            bBrkLine=true; 
         }
     }
     rPol.bBreakedLine=bBrkLine;
-    if (rPol.eUsedTextHPos==SDRMEASURE_TEXTHAUTO) { // if text is too wide, push it outside
+    if (rPol.eUsedTextHPos==SDRMEASURE_TEXTHAUTO) { 
         bool bOutside = false;
         long nNeedSiz=!rRec.bTextRota90 ? rPol.aTextSize.Width() : rPol.aTextSize.Height();
-        if (nNeedSiz>rPol.nLineLen) bOutside = true; // text doesn't fit in between
+        if (nNeedSiz>rPol.nLineLen) bOutside = true; 
         if (bBrkLine) {
-            if (nNeedSiz+nArrowNeed>rPol.nLineLen) bPfeileAussen = true; // text fits in between, if arrowheads are on the outside
+            if (nNeedSiz+nArrowNeed>rPol.nLineLen) bPfeileAussen = true; 
         } else {
             long nSmallNeed=nArrow1Len+nArrow2Len+(nArrow1Wdt+nArrow2Wdt)/2/4;
-            if (nNeedSiz+nSmallNeed>rPol.nLineLen) bPfeileAussen = true; // text fits in between, if arrowheads are on the outside
+            if (nNeedSiz+nSmallNeed>rPol.nLineLen) bPfeileAussen = true; 
         }
         rPol.eUsedTextHPos=bOutside ? SDRMEASURE_TEXTLEFTOUTSIDE : SDRMEASURE_TEXTINSIDE;
     }
@@ -498,15 +498,15 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     long dxh2= Round((nLineDist+nOverhang)*nHlpCos);
     long dyh2=-Round((nLineDist+nOverhang)*nHlpSin);
 
-    // extension line 1
+    
     rPol.aHelpline1.aP1=Point(aP1.X()+dxh1a,aP1.Y()+dyh1a);
     rPol.aHelpline1.aP2=Point(aP1.X()+dxh2,aP1.Y()+dyh2);
 
-    // extension line 2
+    
     rPol.aHelpline2.aP1=Point(aP2.X()+dxh1b,aP2.Y()+dyh1b);
     rPol.aHelpline2.aP2=Point(aP2.X()+dxh2,aP2.Y()+dyh2);
 
-    // dimension line
+    
     Point aMainlinePt1(aP1.X()+dx,aP1.Y()+dy);
     Point aMainlinePt2(aP2.X()+dx,aP2.Y()+dy);
     if (!bPfeileAussen) {
@@ -527,7 +527,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
             RotatePoint(rPol.aMainline2.aP1,rPol.aMainline2.aP2,nLineSin,nLineCos);
         }
     } else {
-        long nLen1=nShortLen; // arrowhead's width as line length outside of the arrowhead
+        long nLen1=nShortLen; 
         long nLen2=nShortLen;
         long nTextWdt=rRec.bTextRota90 ? rPol.aTextSize.Height() : rPol.aTextSize.Width();
         if (!bBrkLine) {
@@ -622,7 +622,7 @@ void SdrMeasureObj::UndirtyText() const
 
             rOutliner.SetParaAttribs(0, GetObjectItemSet());
 
-            // cast to nonconst
+            
             const_cast<SdrMeasureObj*>(this)->NbcSetOutlinerParaObject( rOutliner.CreateParaObject() );
         }
         else
@@ -634,7 +634,7 @@ void SdrMeasureObj::UndirtyText() const
         rOutliner.UpdateFields();
         Size aSiz(rOutliner.CalcTextSize());
         rOutliner.Clear();
-        // cast to nonconst three times
+        
         ((SdrMeasureObj*)this)->aTextSize=aSiz;
         ((SdrMeasureObj*)this)->bTextSizeDirty=sal_False;
         ((SdrMeasureObj*)this)->bTextDirty=false;
@@ -649,7 +649,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     ImpTakeAttr(aRec);
     ImpCalcGeometrics(aRec,aMPol);
 
-    // determine TextSize including text frame margins
+    
     Size aTextSize2(aMPol.aTextSize);
     if (aTextSize2.Width()<1) aTextSize2.Width()=1;
     if (aTextSize2.Height()<1) aTextSize2.Height()=1;
@@ -662,9 +662,9 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
     long nArr1Len=aMPol.nArrow1Len;
     long nArr2Len=aMPol.nArrow2Len;
     if (aMPol.bBreakedLine) {
-        // In the case of a dashed line and Outside, the text should be
-        // placed next to the line at the arrowhead instead of directly
-        // at the arrowhead.
+        
+        
+        
         nArr1Len=aMPol.nShortLineLen+aMPol.nArrow1Wdt/4;
         nArr2Len=aMPol.nShortLineLen+aMPol.nArrow2Wdt/4;
     }
@@ -697,7 +697,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
             aTextPos.X()+=aTextSize2.Width();
             aTextPos.Y()+=aTextSize2.Height();
         }
-    } else { // also if bTextRota90==TRUE
+    } else { 
         switch (eMH) {
             case SDRMEASURE_TEXTLEFTOUTSIDE: aTextPos.X()=aPt1b.X()-aTextSize2.Height()-nArr1Len; break;
             case SDRMEASURE_TEXTRIGHTOUTSIDE: aTextPos.X()=aPt1b.X()+nLen+nArr2Len; break;
@@ -725,7 +725,7 @@ void SdrMeasureObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
         ((SdrMeasureObj*)this)->aGeo.RecalcSinCos();
     }
     RotatePoint(aTextPos,aPt1b,aMPol.nLineSin,aMPol.nLineCos);
-    aTextSize2.Width()++; aTextSize2.Height()++; // because of the Rect-Ctor's odd behavior
+    aTextSize2.Width()++; aTextSize2.Height()++; 
     rRect=Rectangle(aTextPos,aTextSize2);
     rRect.Justify();
     ((SdrMeasureObj*)this)->aRect=rRect;
@@ -792,7 +792,7 @@ SdrHdl* SdrMeasureObj::GetHdl(sal_uInt32 nHdlNum) const
         case 3: aPt=aPt2;       break;
         case 4: aPt=aMPol.aHelpline1.aP2; break;
         case 5: aPt=aMPol.aHelpline2.aP2; break;
-    } // switch
+    } 
     SdrHdl* pHdl=new ImpMeasureHdl(aPt,HDL_USER);
     pHdl->SetObjHdlNum(nHdlNum);
     pHdl->SetDrehWink(aMPol.nLineWink);
@@ -889,7 +889,7 @@ bool SdrMeasureObj::applySpecialDrag(SdrDragStat& rDrag)
                 }
             }
         }
-    } // switch
+    } 
 
     SetRectsDirty();
     SetChanged();
@@ -939,7 +939,7 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
                 long ndy0=aMov.Y()-aFix.Y();
                 bool bHLin=ndy0==0;
                 bool bVLin=ndx0==0;
-                if (!bHLin || !bVLin) { // else aPt1==aPt2
+                if (!bHLin || !bVLin) { 
                     long ndx=aPt.X()-aFix.X();
                     long ndy=aPt.Y()-aFix.Y();
                     double nXFact=0; if (!bVLin) nXFact=(double)ndx/(double)ndx0;
@@ -951,7 +951,7 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
                     aPt=aFix;
                     aPt.X()+=ndx;
                     aPt.Y()+=ndy;
-                } // else Ortho8
+                } 
             }
             rMov=aPt;
         } break;
@@ -967,7 +967,7 @@ void SdrMeasureObj::ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) c
             rRec.nLineDist-=rRec.nHelplineOverhang;
             if (bOrtho) rRec.nLineDist=nVal0;
         } break;
-    } // switch
+    } 
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1050,7 +1050,7 @@ void SdrMeasureObj::NbcRotate(const Point& rRef, long nWink, double sn, double c
     RotatePoint(aPt1,rRef,sn,cs);
     RotatePoint(aPt2,rRef,sn,cs);
     long nLen1=GetLen(aPt2-aPt1);
-    if (nLen1!=nLen0) { // rounding error!
+    if (nLen1!=nLen0) { 
         long dx=aPt2.X()-aPt1.X();
         long dy=aPt2.Y()-aPt1.Y();
         dx=BigMulDiv(dx,nLen0,nLen1);
@@ -1160,18 +1160,18 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
 
 SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) const
 {
-    // get XOR Poly as base
+    
     XPolyPolygon aTmpPolyPolygon(TakeXorPoly());
 
-    // get local ItemSet and StyleSheet
+    
     SfxItemSet aSet(GetObjectItemSet());
     SfxStyleSheet* pStyleSheet = GetStyleSheet();
 
-    // prepare group
+    
     SdrObjGroup* pGroup = new SdrObjGroup;
     pGroup->SetModel(GetModel());
 
-    // prepare parameters
+    
     basegfx::B2DPolyPolygon aPolyPoly;
     SdrPathObj* pPath;
     sal_uInt16 nCount(aTmpPolyPolygon.Count());
@@ -1179,7 +1179,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) co
 
     if(nCount == 3)
     {
-        // three lines, first one is the middle one
+        
         aPolyPoly.clear();
         aPolyPoly.append(aTmpPolyPolygon[0].getB2DPolygon());
 
@@ -1194,8 +1194,8 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) co
     }
     else if(nCount == 4)
     {
-        // four lines, middle line with gap, so there are two lines used
-        // which have one arrow each
+        
+        
         sal_Int32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
         aSet.Put(XLineEndWidthItem(0L));
 
@@ -1225,7 +1225,7 @@ SdrObject* SdrMeasureObj::DoConvertToPolyObj(sal_Bool bBezier, bool bAddText) co
     }
     else if(nCount == 5)
     {
-        // five lines, first two are the outer ones
+        
         sal_Int32 nEndWidth = ((const XLineEndWidthItem&)(aSet.Get(XATTR_LINEENDWIDTH))).GetValue();
 
         aSet.Put(XLineEndWidthItem(0L));
@@ -1300,7 +1300,7 @@ void SdrMeasureObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
 {
     SdrTextObj::NbcSetOutlinerParaObject(pTextObject);
     if(SdrTextObj::GetOutlinerParaObject())
-        SetTextDirty(); // recalculate text
+        SetTextDirty(); 
 }
 
 void SdrMeasureObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, bool bNoEditText,
@@ -1337,18 +1337,18 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
     bool bTextRota90=aRec.bTextRota90;
     bool bBelowRefEdge=aRec.bBelowRefEdge;
 
-    // TODO: bTextUpsideDown should be interpreted here!
+    
     if (!bTextRota90) {
         if (eMH==SDRMEASURE_TEXTLEFTOUTSIDE) eTH=SDRTEXTHORZADJUST_RIGHT;
         if (eMH==SDRMEASURE_TEXTRIGHTOUTSIDE) eTH=SDRTEXTHORZADJUST_LEFT;
-        // at eMH==SDRMEASURE_TEXTINSIDE we can anchor horizontally
+        
         if (eMV==SDRMEASURE_ABOVE) eTV=SDRTEXTVERTADJUST_BOTTOM;
         if (eMV==SDRMEASURE_BELOW) eTV=SDRTEXTVERTADJUST_TOP;
         if (eMV==SDRMEASURETEXT_BREAKEDLINE || eMV==SDRMEASURETEXT_VERTICALCENTERED) eTV=SDRTEXTVERTADJUST_CENTER;
     } else {
         if (eMH==SDRMEASURE_TEXTLEFTOUTSIDE) eTV=SDRTEXTVERTADJUST_BOTTOM;
         if (eMH==SDRMEASURE_TEXTRIGHTOUTSIDE) eTV=SDRTEXTVERTADJUST_TOP;
-        // at eMH==SDRMEASURE_TEXTINSIDE we can anchor vertically
+        
         if (!bBelowRefEdge) {
             if (eMV==SDRMEASURE_ABOVE) eTH=SDRTEXTHORZADJUST_LEFT;
             if (eMV==SDRMEASURE_BELOW) eTH=SDRTEXTHORZADJUST_RIGHT;
@@ -1377,20 +1377,20 @@ sal_uInt16 SdrMeasureObj::GetOutlinerViewAnchorMode() const
 }
 
 //////////////////////////////////////////////////////////////////////////////
-// #i97878#
-// TRGetBaseGeometry/TRSetBaseGeometry needs to be based on two positions,
-// same as line geometry in SdrPathObj. Thus needs to be overloaded and
-// implemented since currently it is derived from SdrTextObj which uses
-// a functionality based on SnapRect which is not useful here
+
+
+
+
+
 
 sal_Bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& /*rPolyPolygon*/) const
 {
-    // handle the same as a simple line since the definition is based on two points
+    
     const basegfx::B2DRange aRange(aPt1.X(), aPt1.Y(), aPt2.X(), aPt2.Y());
     basegfx::B2DTuple aScale(aRange.getRange());
     basegfx::B2DTuple aTranslate(aRange.getMinimum());
 
-    // position maybe relative to anchor position, convert
+    
     if( pModel->IsWriter() )
     {
         if(GetAnchorPos().X() || GetAnchorPos().Y())
@@ -1399,7 +1399,7 @@ sal_Bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
         }
     }
 
-    // force MapUnit to 100th mm
+    
     SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
@@ -1407,11 +1407,11 @@ sal_Bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
         {
             case SFX_MAPUNIT_TWIP :
             {
-                // position
+                
                 aTranslate.setX(ImplTwipsToMM(aTranslate.getX()));
                 aTranslate.setY(ImplTwipsToMM(aTranslate.getY()));
 
-                // size
+                
                 aScale.setX(ImplTwipsToMM(aScale.getX()));
                 aScale.setY(ImplTwipsToMM(aScale.getY()));
 
@@ -1424,7 +1424,7 @@ sal_Bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
         }
     }
 
-    // build return value matrix
+    
     rMatrix = basegfx::tools::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
     return sal_True;
@@ -1432,11 +1432,11 @@ sal_Bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegf
 
 void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
 {
-    // use given transformation to derive the two defining points from unit line
+    
     basegfx::B2DPoint aPosA(rMatrix * basegfx::B2DPoint(0.0, 0.0));
     basegfx::B2DPoint aPosB(rMatrix * basegfx::B2DPoint(1.0, 0.0));
 
-    // force metric to pool metric
+    
     SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
     if(eMapUnit != SFX_MAPUNIT_100TH_MM)
     {
@@ -1444,7 +1444,7 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
         {
             case SFX_MAPUNIT_TWIP :
             {
-                // position
+                
                 aPosA.setX(ImplMMToTwips(aPosA.getX()));
                 aPosA.setY(ImplMMToTwips(aPosA.getY()));
                 aPosB.setX(ImplMMToTwips(aPosB.getX()));
@@ -1461,7 +1461,7 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
 
     if( pModel->IsWriter() )
     {
-        // if anchor is used, make position relative to it
+        
         if(GetAnchorPos().X() || GetAnchorPos().Y())
         {
             const basegfx::B2DVector aAnchorOffset(GetAnchorPos().X(), GetAnchorPos().Y());
@@ -1471,13 +1471,13 @@ void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, cons
         }
     }
 
-    // derive new model data
+    
     const Point aNewPt1(basegfx::fround(aPosA.getX()), basegfx::fround(aPosA.getY()));
     const Point aNewPt2(basegfx::fround(aPosB.getX()), basegfx::fround(aPosB.getY()));
 
     if(aNewPt1 != aPt1 || aNewPt2 != aPt2)
     {
-        // set model values and broadcast
+        
         Rectangle aBoundRect0; if (pUserCall!=NULL) aBoundRect0=GetLastBoundRect();
 
         aPt1 = aNewPt1;

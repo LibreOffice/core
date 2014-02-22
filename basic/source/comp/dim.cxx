@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basic/sbx.hxx>
@@ -35,10 +35,10 @@ using namespace ::com::sun::star::uno;
 
 SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
 
-// Declaration of a variable
-// If there are errors it will be parsed up to the comma or the newline.
-// Return-value: a new instance, which were inserted and then deleted.
-// Array-Indexex were returned as SbiDimList
+
+
+
+
 
 SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, bool bStatic, bool bConst )
 {
@@ -52,7 +52,7 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, bool bStatic, bool bConst )
     SbxDataType t = eScanType;
     SbiSymDef* pDef = bConst ? new SbiConstDef( aSym ) : new SbiSymDef( aSym );
     SbiDimList* pDim = NULL;
-    // Brackets?
+    
     if( Peek() == LPAREN )
     {
         pDim = new SbiDimList( this );
@@ -76,8 +76,8 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, bool bStatic, bool bConst )
     return pDef;
 }
 
-// Resolving of a AS-Type-Declaration
-// The data type were inserted into the handed over variable
+
+
 
 void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
 {
@@ -117,9 +117,9 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                 eType = (eTok==TBYTE) ? SbxBYTE : SbxDataType( eTok - TINTEGER + SbxINTEGER );
                 if( eType == SbxSTRING )
                 {
-                    // STRING*n ?
+                    
                     if( Peek() == MUL )
-                    {       // fixed size!
+                    {       
                         Next();
                         SbiConstExpression aSize( this );
                         nSize = aSize.GetShortValue();
@@ -130,14 +130,14 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                     }
                 }
                 break;
-            case SYMBOL: // can only be a TYPE or a object class!
+            case SYMBOL: 
                 if( eScanType != SbxVARIANT )
                     Error( SbERR_SYNTAX );
                 else
                 {
                     OUString aCompleteName = aSym;
 
-                    // #52709 DIM AS NEW for Uno with full-qualified name
+                    
                     if( Peek() == DOT )
                     {
                         OUString aDotStr( '.' );
@@ -165,7 +165,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                         break;
                     }
 
-                    // Take over in the string pool
+                    
                     rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
 
                     if( rDef.IsNew() && pProc == NULL )
@@ -173,7 +173,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                 }
                 eType = SbxOBJECT;
                 break;
-            case FIXSTRING: // new syntax for complex UNO types
+            case FIXSTRING: 
                 rDef.SetTypeId( aGblStrings.Add( aSym ) );
                 eType = SbxOBJECT;
                 break;
@@ -181,7 +181,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
                 Error( SbERR_UNEXPECTED, eTok );
                 Next();
         }
-        // The variable could have been declared with a suffix
+        
         if( rDef.GetType() != SbxVARIANT )
         {
             if( rDef.GetType() != eType )
@@ -194,8 +194,8 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, bool bAsNewAlreadyParsed )
     }
 }
 
-// Here variables, arrays and structures were definied.
-// DIM/PRIVATE/PUBLIC/GLOBAL
+
+
 
 void SbiParser::Dim()
 {
@@ -213,27 +213,27 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         Error( SbERR_NOT_IN_SUBR, eCurTok );
     if( eCurTok == PUBLIC || eCurTok == GLOBAL )
     {
-        bSwitchPool = true;     // at the right moment switch to the global pool
+        bSwitchPool = true;     
         if( eCurTok == GLOBAL )
             bPersistantGlobal = true;
     }
-    // behavior in VBA is that a module scope variable's lifetime is
-    // tied to the document. e.g. a module scope variable is global
+    
+    
        if(  GetBasic()->IsDocBasic() && bVBASupportOn && !pProc )
         bPersistantGlobal = true;
-    // PRIVATE is a synonymous for DIM
-    // _CONST_?
+    
+    
     bool bConst = false;
     if( eCurTok == _CONST_ )
         bConst = true;
     else if( Peek() == _CONST_ )
         Next(), bConst = true;
 
-    // #110004 It can also be a sub/function
+    
     if( !bConst && (eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ||
                     eCurTok == STATIC || eCurTok == ENUM || eCurTok == DECLARE || eCurTok == TYPE) )
     {
-        // Next token is read here, because !bConst
+        
         bool bPrivate = ( eFirstTok == PRIVATE );
 
         if( eCurTok == STATIC )
@@ -243,8 +243,8 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         }
         else if( eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY )
         {
-            // End global chain if necessary (not done in
-            // SbiParser::Parse() under these conditions
+            
+            
             if( bNewGblDefs && nGblChain == 0 )
             {
                 nGblChain = aGen.Gen( _JUMP, 0 );
@@ -266,7 +266,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             DefDeclare( bPrivate );
             return;
         }
-        // #i109049
+        
         else if( eCurTok == TYPE )
         {
             Next();
@@ -279,13 +279,13 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
 #define tmpSHARED
 #undef SHARED
 #endif
-    // SHARED were ignored
+    
     if( Peek() == SHARED ) Next();
 #ifdef tmpSHARED
 #define SHARED
 #undef tmpSHARED
 #endif
-    // PRESERVE only at REDIM
+    
     if( Peek() == PRESERVE )
     {
         Next();
@@ -297,12 +297,12 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
     SbiSymDef* pDef;
     SbiDimList* pDim;
 
-    // #40689, Statics -> Modul-Initialising, skip in Sub
+    
     sal_uInt32 nEndOfStaticLbl = 0;
     if( !bVBASupportOn && bStatic )
     {
         nEndOfStaticLbl = aGen.Gen( _JUMP, 0 );
-        aGen.Statement();   // catch up on static here
+        aGen.Statement();   
     }
 
     bool bDefined = false;
@@ -311,11 +311,11 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         /*fprintf(stderr, "Actual sub: \n");
         fprintf(stderr, "Symbol name: %s\n",OUStringToOString(pDef->GetName(),RTL_TEXTENCODING_UTF8).getStr());*/
         EnableErrors();
-        // search variable:
+        
         if( bSwitchPool )
             pPool = &aGlobals;
         SbiSymDef* pOld = pPool->Find( pDef->GetName() );
-        // search also in the Runtime-Library
+        
         bool bRtlSym = false;
         if( !pOld )
         {
@@ -331,10 +331,10 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         if( pOld )
         {
             bDefined = true;
-            // always an error at a RTL-S
+            
             if( !bRtlSym && (eOp == _REDIM || eOp == _REDIMP) )
             {
-                // compare the attributes at a REDIM
+                
                 SbxDataType eDefType;
                 bool bError_ = false;
                 if( pOld->IsStatic() )
@@ -356,19 +356,19 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         else
             pPool->Add( pDef );
 
-        // #36374: Create the variable in front of the distinction IsNew()
-        // Otherwise error at Dim Identifier As New Type and option explicit
+        
+        
         if( !bDefined && !(eOp == _REDIM || eOp == _REDIMP)
                       && ( !bConst || pDef->GetScope() == SbGLOBAL ) )
         {
-            // Declare variable or global constant
+            
             SbiOpcode eOp2;
             switch ( pDef->GetScope() )
             {
                 case SbGLOBAL:  eOp2 = bPersistantGlobal ? _GLOBAL_P : _GLOBAL;
                                 goto global;
                 case SbPUBLIC:  eOp2 = bPersistantGlobal ? _PUBLIC_P : _PUBLIC;
-                                // #40689, no own Opcode anymore
+                                
                                 if( bVBASupportOn && bStatic )
                                 {
                                     eOp2 = _STATIC;
@@ -389,7 +389,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
 
             short nFixedStringLength = pDef->GetFixedStringLength();
             if( nFixedStringLength >= 0 )
-                nOpnd2 |= (SBX_FIXED_LEN_STRING_FLAG + (sal_uInt32(nFixedStringLength) << 17));     // len = all bits above 0x10000
+                nOpnd2 |= (SBX_FIXED_LEN_STRING_FLAG + (sal_uInt32(nFixedStringLength) << 17));     
 
             if( pDim != NULL && pDim->GetDims() > 0 )
                 nOpnd2 |= SBX_TYPE_VAR_TO_DIM_FLAG;
@@ -397,8 +397,8 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             aGen.Gen( eOp2, pDef->GetId(), nOpnd2 );
         }
 
-        // Initialising for self-defined daty types
-        // and per NEW created variable
+        
+        
         if( pDef->GetType() == SbxOBJECT
          && pDef->GetTypeId() )
         {
@@ -459,7 +459,7 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         {
             if( bConst )
             {
-                // Definition of the constants
+                
                 if( pDim )
                 {
                     Error( SbERR_SYNTAX );
@@ -467,13 +467,13 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
                 }
                 SbiExpression aVar( this, *pDef );
                 if( !TestToken( EQ ) )
-                    goto MyBreak;   // (see below)
+                    goto MyBreak;   
                 SbiConstExpression aExpr( this );
                 if( !bDefined && aExpr.IsValid() )
                 {
                     if( pDef->GetScope() == SbGLOBAL )
                     {
-                        // Create code only for the global constant!
+                        
                         aVar.Gen();
                         aExpr.Gen();
                         aGen.Gen( _PUTC );
@@ -487,17 +487,17 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
             }
             else if( pDim )
             {
-                // Dimension the variable
-                // Delete the var at REDIM beforehand
+                
+                
                 if( eOp == _REDIM )
                 {
                     SbiExpression aExpr( this, *pDef, NULL );
                     aExpr.Gen();
                     if ( bVBASupportOn )
-                        // delete the array but
-                        // clear the variable ( this
-                        // allows the processing of
-                        // the param to happen as normal without errors ( ordinary ERASE just clears the array )
+                        
+                        
+                        
+                        
                         aGen.Gen( _ERASE_CLEAR );
                     else
                         aGen.Gen( _ERASE );
@@ -520,39 +520,39 @@ void SbiParser::DefVar( SbiOpcode eOp, bool bStatic )
         if( !TestComma() )
             goto MyBreak;
 
-        // Implementation of bSwitchPool (see above): pPool must not be set to &aGlobals
-        // at the VarDecl-Call.
-        // Apart from that the behavior should be absolutely identical,
-        // i.e., pPool had to be reset always at the end of the loop.
-        // also at a break
+        
+        
+        
+        
+        
         pPool = pOldPool;
-        continue;       // Skip MyBreak
+        continue;       
     MyBreak:
         pPool = pOldPool;
         break;
     }
 
-    // #40689, finalize the jump over statics declarations
+    
     if( !bVBASupportOn && bStatic )
     {
-        // maintain the global chain
+        
         nGblChain = aGen.Gen( _JUMP, 0 );
         bGblDefs = bNewGblDefs = true;
 
-        // Register for Sub a jump to the end of statics
+        
         aGen.BackChain( nEndOfStaticLbl );
     }
 
 }
 
-// Here were Arrays redimensioned.
+
 
 void SbiParser::ReDim()
 {
     DefVar( _REDIM, (  pProc && bVBASupportOn ) ? pProc->IsStatic() : false );
 }
 
-// ERASE array, ...
+
 
 void SbiParser::Erase()
 {
@@ -565,7 +565,7 @@ void SbiParser::Erase()
     }
 }
 
-// Declaration of a data type
+
 
 void SbiParser::Type()
 {
@@ -574,10 +574,10 @@ void SbiParser::Type()
 
 void SbiParser::DefType( bool bPrivate )
 {
-    // TODO: Use bPrivate
+    
     (void)bPrivate;
 
-    // Read the new Token lesen. It had to be a symbol
+    
     if (!TestSymbol())
         return;
 
@@ -612,7 +612,7 @@ void SbiParser::DefType( bool bPrivate )
             default:
                 pElem = VarDecl(&pDim, false, false);
                 if( !pElem )
-                    bDone = true;   // Error occurred
+                    bDone = true;   
         }
         if( pElem )
         {
@@ -631,16 +631,16 @@ void SbiParser::DefType( bool bPrivate )
                     SbxDimArray* pArray = new SbxDimArray( pElem->GetType() );
                     if ( pDim->GetSize() )
                     {
-                        // Dimension the target array
+                        
 
                         for ( short i=0; i<pDim->GetSize();++i )
                         {
                             sal_Int32 lb = nBase;
                             SbiExprNode* pNode =  pDim->Get(i)->GetExprNode();
                             sal_Int32 ub = pNode->GetNumber();
-                            if ( !pDim->Get( i )->IsBased() ) // each dim is low/up
+                            if ( !pDim->Get( i )->IsBased() ) 
                             {
-                                if (  ++i >= pDim->GetSize() ) // trouble
+                                if (  ++i >= pDim->GetSize() ) 
                                     StarBASIC::FatalError( SbERR_INTERNAL_ERROR );
                                 pNode =  pDim->Get(i)->GetExprNode();
                                 lb = ub;
@@ -653,15 +653,15 @@ void SbiParser::DefType( bool bPrivate )
                         pArray->setHasFixedSize( true );
                     }
                     else
-                        pArray->unoAddDim( 0, -1 ); // variant array
+                        pArray->unoAddDim( 0, -1 ); 
                     sal_uInt16 nSavFlags = pTypeElem->GetFlags();
-                    // need to reset the FIXED flag
-                    // when calling PutObject ( because the type will not match Object )
+                    
+                    
                     pTypeElem->ResetFlag( SBX_FIXED );
                     pTypeElem->PutObject( pArray );
                     pTypeElem->SetFlags( nSavFlags );
                 }
-                // Nested user type?
+                
                 if( eElemType == SbxOBJECT )
                 {
                     sal_uInt16 nElemTypeId = pElem->GetTypeId();
@@ -690,7 +690,7 @@ void SbiParser::DefType( bool bPrivate )
 }
 
 
-// Declaration of Enum type
+
 
 void SbiParser::Enum()
 {
@@ -699,7 +699,7 @@ void SbiParser::Enum()
 
 void SbiParser::DefEnum( bool bPrivate )
 {
-    // Read a the new Token. It had to be a symbol
+    
     if (!TestSymbol())
         return;
 
@@ -719,7 +719,7 @@ void SbiParser::DefEnum( bool bPrivate )
     SbiDimList* pDim;
     bool bDone = false;
 
-    // Starting with -1 to make first default value 0 after ++
+    
     sal_Int32 nCurrentEnumValue = -1;
     while( !bDone && !IsEof() )
     {
@@ -739,21 +739,21 @@ void SbiParser::DefEnum( bool bPrivate )
 
             default:
             {
-                // TODO: Check existing!
+                
                 bool bDefined = false;
 
                 pDim = NULL;
                 pElem = VarDecl( &pDim, false, true );
                 if( !pElem )
                 {
-                    bDone = true;   // Error occurred
+                    bDone = true;   
                     break;
                 }
                 else if( pDim )
                 {
                     delete pDim;
                     Error( SbERR_SYNTAX );
-                    bDone = true;   // Error occurred
+                    bDone = true;   
                     break;
                 }
 
@@ -783,7 +783,7 @@ void SbiParser::DefEnum( bool bPrivate )
                 if( pOld )
                 {
                     Error( SbERR_VAR_DEFINED, pElem->GetName() );
-                    bDone = true;   // Error occurred
+                    bDone = true;   
                     break;
                 }
 
@@ -827,9 +827,9 @@ void SbiParser::DefEnum( bool bPrivate )
 }
 
 
-// Procedure-Declaration
-// the first Token is already read in (SUB/FUNCTION)
-// xxx Name [LIB "name"[ALIAS "name"]][(Parameter)][AS TYPE]
+
+
+
 
 SbiProcDef* SbiParser::ProcDecl( bool bDecl )
 {
@@ -870,7 +870,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     }
     if( !bDecl )
     {
-        // CDECL, LIB and ALIAS are invalid
+        
         if( !pDef->GetLib().isEmpty() )
         {
             Error( SbERR_UNEXPECTED, LIB );
@@ -889,7 +889,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     }
     else if( pDef->GetLib().isEmpty() )
     {
-        // ALIAS and CDECL only together with LIB
+        
         if( !pDef->GetAlias().isEmpty() )
         {
             Error( SbERR_UNEXPECTED, ALIAS );
@@ -901,7 +901,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
         pDef->SetCdecl( false );
         pDef->GetAlias() = "";
     }
-    // Brackets?
+    
     if( Peek() == LPAREN )
     {
         Next();
@@ -1011,7 +1011,7 @@ SbiProcDef* SbiParser::ProcDecl( bool bDecl )
     return pDef;
 }
 
-// DECLARE
+
 
 void SbiParser::Declare()
 {
@@ -1036,14 +1036,14 @@ void SbiParser::DefDeclare( bool bPrivate )
             {
                 Error( SbERR_EXPECTED, LIB );
             }
-            // Is it already there?
+            
             SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
             if( pOld )
             {
                 SbiProcDef* p = pOld->GetProcDef();
                 if( !p )
                 {
-                    // Declared as a variable
+                    
                     Error( SbERR_BAD_DECLARATION, pDef->GetName() );
                     delete pDef;
                     pDef = NULL;
@@ -1061,7 +1061,7 @@ void SbiParser::DefDeclare( bool bPrivate )
             {
                 pDef->SetPublic( !bPrivate );
 
-                // New declare handling
+                
                 if( !pDef->GetLib().isEmpty())
                 {
                     if( bNewGblDefs && nGblChain == 0 )
@@ -1099,7 +1099,7 @@ void SbiParser::DefDeclare( bool bPrivate )
                             sal_uInt16 nTyp = sal::static_int_cast< sal_uInt16 >( pParDef->GetType() );
                             if( pParDef->IsByVal() )
                             {
-                                // Reset to avoid additional byval in call to wrapper function
+                                
                                 pParDef->SetByVal( false );
                                 nTyp |= 0x8000;
                             }
@@ -1134,7 +1134,7 @@ void SbiParser::DefDeclare( bool bPrivate )
 
 void SbiParser::Attribute()
 {
-    // TODO: Need to implement the method as an attributed object.
+    
     while( Next() != EQ )
     {
         if( Next() != DOT)
@@ -1151,10 +1151,10 @@ void SbiParser::Attribute()
     {
         SbiExpression aValue( this );
     }
-    // Don't generate any code - just discard it.
+    
 }
 
-// Call of a SUB or a FUNCTION
+
 
 void SbiParser::Call()
 {
@@ -1163,14 +1163,14 @@ void SbiParser::Call()
     aGen.Gen( _GET );
 }
 
-// SUB/FUNCTION
+
 
 void SbiParser::SubFunc()
 {
     DefProc( false, false );
 }
 
-// Read in of a procedure
+
 
 void SbiParser::DefProc( bool bStatic, bool bPrivate )
 {
@@ -1207,7 +1207,7 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     }
     pDef->setPropertyMode( ePropertyMode );
 
-    // Is the Proc already declared?
+    
     SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
     if( pOld )
     {
@@ -1216,14 +1216,14 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         pProc = pOld->GetProcDef();
         if( !pProc )
         {
-            // Declared as a variable
+            
             Error( SbERR_BAD_DECLARATION, pDef->GetName() );
             delete pDef;
             pProc = NULL;
             bError_ = true;
         }
-        // #100027: Multiple declaration -> Error
-        // #112787: Not for setup, REMOVE for 8
+        
+        
         else if( pProc->IsUsedForProcDecl() )
         {
             PropertyMode ePropMode = pDef->getPropertyMode();
@@ -1252,8 +1252,8 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     }
     pProc->SetPublic( !bPrivate );
 
-    // Now we set the search hierarchy for symbols as well as the
-    // current procedure.
+    
+    
     aPublics.SetProcId( pProc->GetId() );
     pProc->GetParams().SetParent( &aPublics );
     if( bStatic )
@@ -1264,14 +1264,14 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
         }
         else
         {
-            Error( SbERR_NOT_IMPLEMENTED ); // STATIC SUB ...
+            Error( SbERR_NOT_IMPLEMENTED ); 
         }
     }
     else
     {
         pProc->SetStatic( false );
     }
-    // Normal case: Local variable->parameter->global variable
+    
     pProc->GetLocals().SetParent( &pProc->GetParams() );
     pPool = &pProc->GetLocals();
 
@@ -1283,14 +1283,14 @@ void SbiParser::DefProc( bool bStatic, bool bPrivate )
     pProc->SetLine2( l2 );
     pPool = &aPublics;
     aPublics.SetProcId( 0 );
-    // Open labels?
+    
     pProc->GetLabels().CheckRefs();
     CloseBlock();
     aGen.Gen( _LEAVE );
     pProc = NULL;
 }
 
-// STATIC variable|procedure
+
 
 void SbiParser::Static()
 {
@@ -1306,8 +1306,8 @@ void SbiParser::DefStatic( bool bPrivate )
     case SUB:
     case FUNCTION:
     case PROPERTY:
-        // End global chain if necessary (not done in
-        // SbiParser::Parse() under these conditions
+        
+        
         if( bNewGblDefs && nGblChain == 0 )
         {
             nGblChain = aGen.Gen( _JUMP, 0 );
@@ -1321,8 +1321,8 @@ void SbiParser::DefStatic( bool bPrivate )
         {
             Error( SbERR_NOT_IN_SUBR );
         }
-        // Reset the Pool, so that STATIC-Declarations go into the
-        // global Pool
+        
+        
         p = pPool;
         pPool = &aPublics;
         DefVar( _STATIC, true );

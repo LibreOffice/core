@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svdmodel.hxx>
@@ -49,7 +49,7 @@ void SwViewImp::StartAction()
     {
         SET_CURR_SHELL( GetShell() );
         if ( pSh->ISA(SwFEShell) )
-            ((SwFEShell*)pSh)->HideChainMarker(); // might have changed
+            ((SwFEShell*)pSh)->HideChainMarker(); 
     }
 }
 
@@ -59,7 +59,7 @@ void SwViewImp::EndAction()
     {
         SET_CURR_SHELL( GetShell() );
         if ( pSh->ISA(SwFEShell) )
-            ((SwFEShell*)pSh)->SetChainMarker(); // might have changed
+            ((SwFEShell*)pSh)->SetChainMarker(); 
     }
 }
 
@@ -91,7 +91,7 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
 {
     if ( HasDrawView() )
     {
-        //change the draw mode in high contrast mode
+        
         OutputDevice* pOutDev = GetShell()->GetOut();
         sal_uLong nOldDrawMode = pOutDev->GetDrawMode();
         if( GetShell()->GetWin() &&
@@ -102,13 +102,13 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
                                 DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
         }
 
-        // For correct handling of accessibility, high contrast, the
-        // page background color is set as the background color at the
-        // outliner of the draw view.  Only necessary for the layers
-        // hell and heaven
+        
+        
+        
+        
         Color aOldOutlinerBackgrdColor;
-        // set default horizontal text direction on painting <hell> or
-        // <heaven>.
+        
+        
         EEHorizontalTextDirection aOldEEHoriTextDir = EE_HTEXTDIR_L2R;
         const IDocumentDrawModelAccess* pIDDMA = GetShell()->getIDocumentDrawModelAccess();
         if ( (_nLayerID == pIDDMA->GetHellId()) ||
@@ -130,17 +130,17 @@ void SwViewImp::PaintLayer( const SdrLayerID _nLayerID,
             GetDrawView()->GetModel()->GetDrawOutliner().SetDefaultHorizontalTextDirection( aEEHoriTextDirOfPage );
         }
 
-        pOutDev->Push( PUSH_LINECOLOR ); // #114231#
+        pOutDev->Push( PUSH_LINECOLOR ); 
         if (pPrintData)
         {
-            // hide drawings but not form controls (form controls are handled elsewhere)
+            
             SdrView &rSdrView = const_cast< SdrView & >(GetPageView()->GetView());
             rSdrView.setHideDraw( !pPrintData->IsPrintDraw() );
         }
         GetPageView()->DrawLayer( _nLayerID, pOutDev, pRedirector, aPaintRect.SVRect() );
         pOutDev->Pop();
 
-        // reset background color of the outliner & default horiz. text dir.
+        
         if ( (_nLayerID == pIDDMA->GetHellId()) ||
              (_nLayerID == pIDDMA->GetHeavenId()) )
         {
@@ -191,7 +191,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
     if ( GetPageView() )
         GetPageView()->GetPage()->SetSize( rNewSz );
 
-    // Limitation of the work area
+    
     const Rectangle aRect( Point( DOCUMENTBORDER, DOCUMENTBORDER ), rNewSz );
     const Rectangle &rOldWork = GetDrawView()->GetWorkArea();
     bool bCheckDrawObjs = false;
@@ -212,11 +212,11 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
         SdrObject *pObj = pPage->GetObj( nObj );
         if( !pObj->ISA(SwVirtFlyDrawObj) )
         {
-            // Objects not anchored to the frame, do not need to be adjusted
+            
             const SwContact *pCont = (SwContact*)GetUserCall(pObj);
-            // this function might be called by the InsertDocument, when
-            // a PageDesc-Attribute is set on a node. Then the SdrObject
-            // must not have an UserCall.
+            
+            
+            
             if( !pCont || !pCont->ISA(SwDrawContact) )
                 continue;
 
@@ -228,7 +228,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
                 continue;
             }
 
-            // no move for drawing objects in header/footer
+            
             if ( pAnchor->FindFooterOrHeader() )
             {
                 continue;
@@ -245,7 +245,7 @@ void SwViewImp::NotifySizeChg( const Size &rNewSz )
                 if ( aSz.Width() || aSz.Height() )
                     pObj->Move( aSz );
 
-                // Don't let large objects dissappear to the top
+                
                 aSz.Width() = aSz.Height() = 0;
                 if ( aBound.Bottom() < aRect.Top() )
                     aSz.Width() = (aBound.Bottom() - aRect.Top()) - MINFLY;

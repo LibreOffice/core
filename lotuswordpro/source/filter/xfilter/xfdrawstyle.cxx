@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -66,7 +66,7 @@
 XFDrawStyle::XFDrawStyle()
 {
     m_eWrap = enumXFWrapNone;
-    m_nWrapLines = 0;   //not limited.
+    m_nWrapLines = 0;   
 
     m_pLineStyle = NULL;
     m_pAreaStyle = NULL;
@@ -81,7 +81,7 @@ XFDrawStyle::XFDrawStyle()
 
 XFDrawStyle::~XFDrawStyle()
 {
-    //don't delete m_pLineStyle, it was managed by XFStyleManager.
+    
     if (m_pFontWorkStyle)
     {
         delete m_pFontWorkStyle;
@@ -198,13 +198,13 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
             pAttrList->AddAttribute( A2OUSTR("style:wrap"), A2OUSTR("dynamic") );
     }
 
-    //line style:
+    
     if( m_pLineStyle )
     {
-        //1. if is a dash style, register the stroke-dash style first.
+        
         if( !m_pLineStyle->IsSolid() )
         {
-//          pAttrList->Clear();
+
             pAttrList->AddAttribute( A2OUSTR("draw:stroke"), A2OUSTR("dash") );
             pAttrList->AddAttribute( A2OUSTR("draw:stroke-dash"), m_pLineStyle->GetStyleName() );
         }
@@ -225,7 +225,7 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
     }
     else
         pAttrList->AddAttribute( A2OUSTR("draw:stroke"), A2OUSTR("none") );
-    //area style:
+    
     if( m_pAreaStyle )
     {
         if( enumXFAreaSolid == m_pAreaStyle->GetAreaStyle() )
@@ -266,11 +266,11 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
     }
     if (m_pFontWorkStyle)
     {
-        // style
+        
         OUString aStr = A2OUSTR("");
         switch (m_pFontWorkStyle->GetStyleType())
         {
-        default: // fall through!
+        default: 
         case enumXFFWOff:
             break;
         case enumXFFWRotate:
@@ -291,11 +291,11 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
             pAttrList->AddAttribute(A2OUSTR("draw:fontwork-style"), aStr);
         }
 
-        //adjust
+        
         aStr = A2OUSTR("");
         switch (m_pFontWorkStyle->GetAdjustType())
         {
-        default: // fall througth
+        default: 
         case enumXFFWAdjustAutosize:
             aStr = A2OUSTR("autosize");
             break;
@@ -314,11 +314,11 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
             pAttrList->AddAttribute(A2OUSTR("draw:fontwork-adjust"), aStr);
         }
 
-        //form
+        
         aStr = A2OUSTR("");
         switch (m_pFontWorkStyle->GetButtonForm())
         {
-        default: // fall through!
+        default: 
         case -1:
             break;
         case 4:
@@ -333,9 +333,9 @@ void    XFDrawStyle::ToXml(IXFStream *pStrm)
             pAttrList->AddAttribute(A2OUSTR("draw:fontwork-form"), aStr);
         }
 
-        // distance
-        //pAttrList->AddAttribute(A2OUSTR("draw:fontwork-distance"),
-        //  DoubleToOUString(m_pFontWorkStyle->GetFWDistance())+A2OUSTR("cm"));
+        
+        
+        
     }
 
     pStrm->StartElement( A2OUSTR("style:properties") );

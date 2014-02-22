@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -62,19 +62,19 @@
 #include "sc.hrc"
 #include <vcl/virdev.hxx>
 
-// #i74769#
+
 #include <svx/sdrpaintwindow.hxx>
 
-//------------------------------------------------------------------------
+
 
 static void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
 {
     if ( rRect.Top()    < rVisible.Top()-1 )    rRect.Top()    = rVisible.Top()-1;
     if ( rRect.Bottom() > rVisible.Bottom()+1 ) rRect.Bottom() = rVisible.Bottom()+1;
 
-    // auch wenn das inner-Rectangle nicht sichtbar ist, muss evtl.
-    // die Titelzeile gezeichnet werden, darum kein Rueckgabewert mehr.
-    // Wenn's weit daneben liegt, wird lcl_DrawOneFrame erst gar nicht gerufen.
+    
+    
+    
 }
 
 static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
@@ -82,8 +82,8 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
                         double nPPTX, double nPPTY, const Fraction& rZoomY,
                         ScDocument* pDoc, ScViewData* pButtonViewData, sal_Bool bLayoutRTL )
 {
-    //  pButtonViewData wird nur benutzt, um die Button-Groesse zu setzen,
-    //  darf ansonsten NULL sein!
+    
+    
 
     Rectangle aInner = rInnerPixel;
     if ( bLayoutRTL )
@@ -103,12 +103,12 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
     aOuter.Top()    -= nVer;
     aOuter.Bottom() += nVer;
 
-    //  use ScPatternAttr::GetFont only for font size
+    
     Font aAttrFont;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).
                                     GetFont(aAttrFont,SC_AUTOCOL_BLACK,pDev,&rZoomY);
 
-    //  everything else from application font
+    
     Font aAppFont = pDev->GetSettings().GetStyleSettings().GetAppFont();
     aAppFont.SetSize( aAttrFont.GetSize() );
 
@@ -124,7 +124,7 @@ static void lcl_DrawOneFrame( OutputDevice* pDev, const Rectangle& rInnerPixel,
 
     pDev->SetLineColor();
     pDev->SetFillColor( rColor );
-    //  links, oben, rechts, unten
+    
     pDev->DrawRect( Rectangle( aOuter.Left(),  aOuter.Top(),    aInner.Left(),  aOuter.Bottom() ) );
     pDev->DrawRect( Rectangle( aOuter.Left(),  aOuter.Top(),    aOuter.Right(), aInner.Top()    ) );
     pDev->DrawRect( Rectangle( aInner.Right(), aOuter.Top(),    aOuter.Right(), aOuter.Bottom() ) );
@@ -186,14 +186,14 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
     if ( nTab+1<nTabCount && pDoc->IsScenario(nTab+1) && !pDoc->IsScenario(nTab) )
     {
         if ( nX1 > 0 ) --nX1;
-        if ( nY1>=2 ) nY1 -= 2;             // Hack: Titelzeile beruehrt zwei Zellen
+        if ( nY1>=2 ) nY1 -= 2;             
         else if ( nY1 > 0 ) --nY1;
         if ( nX2 < MAXCOL ) ++nX2;
-        if ( nY2 < MAXROW-1 ) nY2 += 2;     // Hack: Titelzeile beruehrt zwei Zellen
+        if ( nY2 < MAXROW-1 ) nY2 += 2;     
         else if ( nY2 < MAXROW ) ++nY2;
         ScRange aViewRange( nX1,nY1,nTab, nX2,nY2,nTab );
 
-        //! Ranges an der Table cachen!!!!
+        
 
         ScMarkData aMarks;
         for (SCTAB i=nTab+1; i<nTabCount && pDoc->IsScenario(i); i++)
@@ -207,19 +207,19 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
         for (size_t j = 0, n = xRanges->size(); j < n; ++j)
         {
             ScRange aRange = *(*xRanges)[j];
-            //  Szenario-Rahmen immer dann auf zusammengefasste Zellen erweitern, wenn
-            //  dadurch keine neuen nicht-ueberdeckten Zellen mit umrandet werden
+            
+            
             pDoc->ExtendTotalMerge( aRange );
 
-            //! -> Repaint beim Zusammenfassen erweitern !!!
+            
 
-            if ( aRange.Intersects( aViewRange ) )          //! Platz fuer Text/Button?
+            if ( aRange.Intersects( aViewRange ) )          
             {
                 Point aStartPos = pViewData->GetScrPos(
                                     aRange.aStart.Col(), aRange.aStart.Row(), eWhich, true );
                 Point aEndPos = pViewData->GetScrPos(
                                     aRange.aEnd.Col()+1, aRange.aEnd.Row()+1, eWhich, true );
-                //  on the grid:
+                
                 aStartPos.X() -= nLayoutSign;
                 aStartPos.Y() -= 1;
                 aEndPos.X() -= nLayoutSign;
@@ -241,7 +241,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
                 if (aCurrent.isEmpty())
                     aCurrent = ScGlobal::GetRscString( STR_EMPTYDATA );
 
-                //! eigener Text "(keins)" statt "(leer)" ???
+                
 
                 lcl_DrawOneFrame( pDev, Rectangle( aStartPos, aEndPos ),
                                     aCurrent, aColor, bTextBelow,
@@ -252,7 +252,7 @@ static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, S
     }
 }
 
-//------------------------------------------------------------------------
+
 
 static void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
                         const std::vector<ScHighlightEntry>& rHighlightRanges )
@@ -272,27 +272,27 @@ static void lcl_DrawHighlight( ScOutputData& rOutputData, ScViewData* pViewData,
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
 {
     if ( rPixel == aInvertRect )
-        aInvertRect = Rectangle();      // aufheben
+        aInvertRect = Rectangle();      
     else
     {
         OSL_ENSURE( aInvertRect.IsEmpty(), "DoInvertRect nicht paarig" );
 
-        aInvertRect = rPixel;           // neues Rechteck merken
+        aInvertRect = rPixel;           
     }
 
-    UpdateHeaderOverlay();      // uses aInvertRect
+    UpdateHeaderOverlay();      
 }
 
-//------------------------------------------------------------------------
+
 
 void ScGridWindow::PrePaint()
 {
-    // forward PrePaint to DrawingLayer
+    
     ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
 
     if(pTabViewShell)
@@ -306,32 +306,32 @@ void ScGridWindow::PrePaint()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScGridWindow::Paint( const Rectangle& rRect )
 {
     ScDocument* pDoc = pViewData->GetDocument();
     if ( pDoc->IsInInterpreter() )
     {
-        //  via Reschedule, interpretierende Zellen nicht nochmal anstossen
-        //  hier kein Invalidate, sonst kommt z.B. eine Error-Box nie an die Reihe
-        //  (Bug 36381). Durch bNeedsRepaint wird spaeter alles nochmal gemalt.
+        
+        
+        
 
         if ( bNeedsRepaint )
         {
-            //! Rechtecke zusammenfassen?
-            aRepaintPixel = Rectangle();            // mehrfach -> alles painten
+            
+            aRepaintPixel = Rectangle();            
         }
         else
         {
             bNeedsRepaint = true;
-            aRepaintPixel = LogicToPixel(rRect);    // nur betroffenen Bereich
+            aRepaintPixel = LogicToPixel(rRect);    
         }
         return;
     }
 
-    // #i117893# If GetSizePixel needs to call the resize handler, the resulting nested Paint call
-    // (possibly for a larger rectangle) has to be allowed. Call GetSizePixel before setting bIsInPaint.
+    
+    
     GetSizePixel();
 
     if (bIsInPaint)
@@ -352,7 +352,7 @@ void ScGridWindow::Paint( const Rectangle& rRect )
     Rectangle aMirroredPixel = aPixRect;
     if ( pDoc->IsLayoutRTL( nTab ) )
     {
-        //  mirror and swap
+        
         long nWidth = GetSizePixel().Width();
         aMirroredPixel.Left()  = nWidth - 1 - aPixRect.Right();
         aMirroredPixel.Right() = nWidth - 1 - aPixRect.Left();
@@ -380,13 +380,13 @@ void ScGridWindow::Paint( const Rectangle& rRect )
         ScViewData::AddPixelsWhile( nScrY, aPixRect.Bottom(), nY2, MAXROW, nPPTY, pDoc, nTab);
     }
 
-    Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS );           // nicht weiterzeichnen
+    Draw( nX1,nY1,nX2,nY2, SC_UPDATE_MARKS );           
 
     bIsInPaint = false;
 }
 
 //
-//  Draw  ----------------------------------------------------------------
+
 //
 
 void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMode eMode )
@@ -404,7 +404,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     if (nX2 < maVisibleRange.mnCol1 || nY2 < maVisibleRange.mnRow1)
         return;
-                    // unsichtbar
+                    
     if (nX1 < maVisibleRange.mnCol1)
         nX1 = maVisibleRange.mnCol1;
     if (nY1 < maVisibleRange.mnRow1)
@@ -419,11 +419,11 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         nY2 = maVisibleRange.mnRow2;
 
     if ( eMode != SC_UPDATE_MARKS && nX2 < maVisibleRange.mnCol2)
-        nX2 = maVisibleRange.mnCol2;                                // zum Weiterzeichnen
+        nX2 = maVisibleRange.mnCol2;                                
 
-        //  ab hier kein return mehr
+        
 
-    ++nPaintCount;                  // merken, dass gemalt wird (wichtig beim Invertieren)
+    ++nPaintCount;                  
 
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -453,7 +453,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     sal_Bool bCurVis = nCursorHideCount==0 &&
                     ( nCurEndX+1 >= nX1 && nCurX <= nX2+1 && nCurEndY+1 >= nY1 && nCurY <= nY2+1 );
 
-    //  AutoFill-Anfasser
+    
     if ( !bCurVis && nCursorHideCount==0 && bAutoMarkVisible && aAutoMarkPos.Tab() == nTab &&
             ( aAutoMarkPos.Col() != nCurX || aAutoMarkPos.Row() != nCurY ) )
     {
@@ -461,9 +461,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         SCROW nHdlY = aAutoMarkPos.Row();
         pDoc->ExtendMerge( nHdlX, nHdlY, nHdlX, nHdlY, nTab );
         bCurVis = ( nHdlX+1 >= nX1 && nHdlX <= nX2 && nHdlY+1 >= nY1 && nHdlY <= nY2 );
-        //  links und oben ist nicht betroffen
+        
 
-        //! AutoFill-Anfasser alleine (ohne Cursor) zeichnen ???
+        
     }
 
     double nPPTX = pViewData->GetPPTX();
@@ -473,14 +473,14 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     sal_Bool bFormulaMode = rOpts.GetOption( VOPT_FORMULAS );
     sal_Bool bMarkClipped = rOpts.GetOption( VOPT_CLIPMARKS );
 
-        // Datenblock
+        
 
     ScTableInfo aTabInfo;
     pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
                                         nPPTX, nPPTY, false, bFormulaMode,
                                         &pViewData->GetMarkData() );
 
-    //--------------------------------------------------------------------
+    
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
@@ -488,15 +488,15 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
 
-    aOutputData.SetMirrorWidth( nMirrorWidth );         // needed for RTL
+    aOutputData.SetMirrorWidth( nMirrorWidth );         
     aOutputData.SetSpellCheckContext(mpSpellCheckCxt.get());
 
     std::auto_ptr< VirtualDevice > xFmtVirtDev;
-    sal_Bool bLogicText = bTextWysiwyg;                     // call DrawStrings in logic MapMode?
+    sal_Bool bLogicText = bTextWysiwyg;                     
 
     if ( bTextWysiwyg )
     {
-        //  use printer for text formatting
+        
 
         OutputDevice* pFmtDev = pDoc->GetPrinter();
         pFmtDev->SetMapMode( pViewData->GetLogicMode(eWhich) );
@@ -504,21 +504,21 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     }
     else if ( aZoomX != aZoomY && pViewData->IsOle() )
     {
-        //  #i45033# For OLE inplace editing with different zoom factors,
-        //  use a virtual device with 1/100th mm as text formatting reference
+        
+        
 
         xFmtVirtDev.reset( new VirtualDevice );
         xFmtVirtDev->SetMapMode( MAP_100TH_MM );
         aOutputData.SetFmtDevice( xFmtVirtDev.get() );
 
-        bLogicText = sal_True;                      // use logic MapMode
+        bLogicText = sal_True;                      
     }
 
     const svtools::ColorConfig& rColorCfg = pScMod->GetColorConfig();
     Color aGridColor( rColorCfg.GetColorValue( svtools::CALCGRID, false ).nColor );
     if ( aGridColor.GetColor() == COL_TRANSPARENT )
     {
-        //  use view options' grid color only if color config has "automatic" color
+        
         aGridColor = rOpts.GetGridColor();
     }
 
@@ -529,7 +529,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.SetShowSpellErrors  ( pDoc->GetDocOptions().IsAutoSpell() );
     aOutputData.SetMarkClipped      ( bMarkClipped );
 
-    aOutputData.SetUseStyleColor( true );       // always set in table view
+    aOutputData.SetUseStyleColor( true );       
 
     aOutputData.SetEditObject( GetEditObject() );
     aOutputData.SetViewShell( pViewData->GetViewShell() );
@@ -546,9 +546,9 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     }
 
     sal_Bool bPageMode = pViewData->IsPagebreakMode();
-    if (bPageMode)                                      // nach FindChanged
+    if (bPageMode)                                      
     {
-        // SetPagebreakMode initialisiert auch bPrinted Flags
+        
         aOutputData.SetPagebreakMode( pViewData->GetView()->GetPageBreakData() );
     }
 
@@ -568,15 +568,15 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             bEditMode = false;
     }
 
-    // define drawing layer map mode and paint rectangle
+    
     const MapMode aDrawMode = GetDrawMapMode();
     Rectangle aDrawingRectLogic;
 
     {
-        // get drawing pixel rect
+        
         Rectangle aDrawingRectPixel(Point(nScrX, nScrY), Size(aOutputData.GetScrW(), aOutputData.GetScrH()));
 
-        // correct for border (left/right)
+        
         if(MAXCOL == nX2)
         {
             if(bLayoutRTL)
@@ -589,21 +589,21 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             }
         }
 
-        // correct for border (bottom)
+        
         if(MAXROW == nY2)
         {
             aDrawingRectPixel.Bottom() = GetOutputSizePixel().getHeight();
         }
 
-        // get logic positions
+        
         aDrawingRectLogic = PixelToLogic(aDrawingRectPixel, aDrawMode);
     }
 
-    OutputDevice* pContentDev = this;       // device for document content, used by overlay manager
-    SdrPaintWindow* pTargetPaintWindow = 0; // #i74769# work with SdrPaintWindow directly
+    OutputDevice* pContentDev = this;       
+    SdrPaintWindow* pTargetPaintWindow = 0; 
 
     {
-        // init redraw
+        
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
 
         if(pTabViewShell)
@@ -614,13 +614,13 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
             if(pDrawView)
             {
-                // #i74769# Use new BeginDrawLayers() interface
+                
                 Region aDrawingRegion(aDrawingRectLogic);
                 pTargetPaintWindow = pDrawView->BeginDrawLayers(this, aDrawingRegion);
                 OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
 
-                // #i74769# get target device from SdrPaintWindow, this may be the prerender
-                // device now, too.
+                
+                
                 pContentDev = &(pTargetPaintWindow->GetTargetOutputDevice());
                 aOutputData.SetContentDevice( pContentDev );
             }
@@ -629,10 +629,10 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         }
     }
 
-    //  Rand (Wiese) (Pixel)
+    
     if ( nX2==MAXCOL || nY2==MAXROW )
     {
-        // save MapMode and set to pixel
+        
         MapMode aCurrentMapMode(pContentDev->GetMapMode());
         pContentDev->SetMapMode(MAP_PIXEL);
 
@@ -655,7 +655,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             aDrawRect.Top() = nScrY + aOutputData.GetScrH();
             if ( nX2==MAXCOL )
             {
-                // no double painting of the corner
+                
                 if ( bLayoutRTL )
                     aDrawRect.Left() = nScrX;
                 else
@@ -665,7 +665,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
                 pContentDev->DrawRect( aDrawRect );
         }
 
-        // restore MapMode
+        
         pContentDev->SetMapMode(aCurrentMapMode);
     }
 
@@ -674,7 +674,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         pContentDev->SetMapMode(MAP_PIXEL);
         aOutputData.DrawClear();
 
-            // Drawing Hintergrund
+            
 
         pContentDev->SetMapMode(aDrawMode);
         DrawRedraw( aOutputData, eMode, SC_LAYER_BACK );
@@ -695,7 +695,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     if ( bPageMode )
     {
-        // DrawPagePreview draws complete lines/page numbers, must always be clipped
+        
         if ( aOutputData.SetChangedClip() )
         {
             DrawPagePreview(nX1,nY1,nX2,nY2, pContentDev);
@@ -706,32 +706,32 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     aOutputData.DrawShadow();
     aOutputData.DrawFrame();
     if ( !bLogicText )
-        aOutputData.DrawStrings(false);     // in pixel MapMode
+        aOutputData.DrawStrings(false);     
 
-    // edit cells and printer-metrics text must be before the buttons
-    // (DataPilot buttons contain labels in UI font)
+    
+    
 
     pContentDev->SetMapMode(pViewData->GetLogicMode(eWhich));
     if ( bLogicText )
-        aOutputData.DrawStrings(true);      // in logic MapMode if bTextWysiwyg is set
+        aOutputData.DrawStrings(true);      
     aOutputData.DrawEdit(true);
     pContentDev->SetMapMode(MAP_PIXEL);
 
-        // Autofilter- und Pivot-Buttons
+        
 
-    DrawButtons( nX1, nX2, aTabInfo, pContentDev );          // Pixel
+    DrawButtons( nX1, nX2, aTabInfo, pContentDev );          
 
-        // Notiz-Anzeiger
+        
 
     if ( rOpts.GetOption( VOPT_NOTES ) )
         aOutputData.DrawNoteMarks();
 
     aOutputData.DrawClipMarks();
 
-    //  Szenario / ChangeTracking muss auf jeden Fall nach DrawGrid sein, auch bei !bGridFirst
+    
 
-    //! Test, ob ChangeTrack-Anzeige aktiv ist
-    //! Szenario-Rahmen per View-Optionen abschaltbar?
+    
+    
 
     SCTAB nTabCount = pDoc->GetTableCount();
     const std::vector<ScHighlightEntry> &rHigh = pViewData->GetView()->GetHighlightRanges();
@@ -741,7 +741,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if ( bHasChange || bHasScenario || !rHigh.empty() )
     {
 
-        //! SetChangedClip() mit DrawMarks() zusammenfassen?? (anderer MapMode!)
+        
 
         sal_Bool bAny = sal_True;
         if (eMode == SC_UPDATE_CHANGED)
@@ -761,7 +761,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         }
     }
 
-        // Drawing Vordergrund
+        
 
     pContentDev->SetMapMode(aDrawMode);
 
@@ -769,7 +769,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     DrawRedraw( aOutputData, eMode, SC_LAYER_INTERN );
     DrawSdrGrid( aDrawingRectLogic, pContentDev );
 
-    if (!bIsInScroll)                               // Drawing Markierungen
+    if (!bIsInScroll)                               
     {
         if(eMode == SC_UPDATE_CHANGED && aOutputData.SetChangedClip())
         {
@@ -787,7 +787,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
                                  aRefColor, false );
     }
 
-        //  Range-Finder
+        
 
     ScInputHandler* pHdl = pScMod->GetInputHdl( pViewData->GetViewShell() );
     if (pHdl)
@@ -813,7 +813,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     }
 
     {
-        // end redraw
+        
         ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
 
         if(pTabViewShell)
@@ -824,7 +824,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
             if(pDrawView)
             {
-                // #i74769# work with SdrPaintWindow directly
+                
                 pDrawView->EndDrawLayers(*pTargetPaintWindow, true);
             }
 
@@ -832,12 +832,12 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         }
     }
 
-    //  InPlace Edit-View
-    // moved after EndDrawLayers() to get it outside the overlay buffer and
-    // on top of everything
+    
+    
+    
     if ( bEditMode && (pViewData->GetRefTabNo() == pViewData->GetTabNo()) )
     {
-        //! use pContentDev for EditView?
+        
         SetMapMode(MAP_PIXEL);
         SCCOL nCol1 = pViewData->GetEditStartCol();
         SCROW nRow1 = pViewData->GetEditStartRow();
@@ -847,7 +847,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
         SetFillColor( pEditView->GetBackgroundColor() );
         Point aStart = pViewData->GetScrPos( nCol1, nRow1, eWhich );
         Point aEnd = pViewData->GetScrPos( nCol2+1, nRow2+1, eWhich );
-        aEnd.X() -= 2 * nLayoutSign;        // don't overwrite grid
+        aEnd.X() -= 2 * nLayoutSign;        
         aEnd.Y() -= 2;
         DrawRect( Rectangle( aStart,aEnd ) );
 
@@ -859,21 +859,21 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     if (pViewData->HasEditView(eWhich))
     {
-        // flush OverlayManager before changing the MapMode
+        
         flushOverlayManager();
 
-        // set MapMode for text edit
+        
         SetMapMode(pViewData->GetLogicMode());
     }
     else
         SetMapMode(aDrawMode);
 
     if ( pNoteMarker )
-        pNoteMarker->Draw();        // ueber den Cursor, im Drawing-MapMode
+        pNoteMarker->Draw();        
 
     //
-    //  Wenn waehrend des Paint etwas invertiert wurde (Selektion geaendert aus Basic-Macro),
-    //  ist das jetzt durcheinandergekommen und es muss neu gemalt werden
+    
+    
     //
 
     OSL_ENSURE(nPaintCount, "nPaintCount falsch");
@@ -881,14 +881,14 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     if (!nPaintCount)
         CheckNeedsRepaint();
 
-    // Flag drawn formula cells "unchanged".
+    
     pDoc->ResetChanged(ScRange(nX1,nY1,nTab,nX2,nY2,nTab));
     pDoc->ClearFormulaContext();
 }
 
 void ScGridWindow::CheckNeedsRepaint()
 {
-    //  called at the end of painting, and from timer after background text width calculation
+    
 
     if (bNeedsRepaint)
     {
@@ -899,7 +899,7 @@ void ScGridWindow::CheckNeedsRepaint()
             Invalidate(PixelToLogic(aRepaintPixel));
         aRepaintPixel = Rectangle();
 
-        // selection function in status bar might also be invalid
+        
         SfxBindings& rBindings = pViewData->GetBindings();
         rBindings.Invalidate( SID_STATUS_SUM );
         rBindings.Invalidate( SID_ATTR_SIZE );
@@ -922,7 +922,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         OUString aPageStr = ScGlobal::GetRscString( STR_PGNUM );
         if ( nPageScript == 0 )
         {
-            //  get script type of translated "Page" string only once
+            
             nPageScript = pDoc->GetStringScriptType( aPageStr );
             if (nPageScript == 0)
                 nPageScript = ScGlobal::GetDefaultScriptType();
@@ -933,14 +933,14 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
         const ScPatternAttr& rDefPattern = ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN));
         if ( nPageScript == SCRIPTTYPE_LATIN )
         {
-            //  use single font and call DrawText directly
+            
             rDefPattern.GetFont( aFont, SC_AUTOCOL_BLACK );
             aFont.SetColor( Color( COL_LIGHTGRAY ) );
-            //  font size is set as needed
+            
         }
         else
         {
-            //  use EditEngine to draw mixed-script string
+            
             pEditEng = new ScEditEngineDefaulter( EditEngine::CreatePool(), true );
             pEditEng->SetRefMapMode( pContentDev->GetMapMode() );
             SfxItemSet* pEditDefaults = new SfxItemSet( pEditEng->GetEmptyItemSet() );
@@ -957,8 +957,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
             if ( aRange.aStart.Col() <= nX2+1  && aRange.aEnd.Col()+1 >= nX1 &&
                  aRange.aStart.Row() <= nY2+1 && aRange.aEnd.Row()+1 >= nY1 )
             {
-                //  3 Pixel Rahmen um den Druckbereich
-                //  (mittlerer Pixel auf den Gitterlinien)
+                
+                
 
                 pContentDev->SetLineColor();
                 if (rData.IsAutomatic())
@@ -973,7 +973,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 aStart.X() -= 2;
                 aStart.Y() -= 2;
 
-                //  Ueberlaeufe verhindern:
+                
                 if ( aStart.X() < -10 ) aStart.X() = -10;
                 if ( aStart.Y() < -10 ) aStart.Y() = -10;
                 if ( aEnd.X() > aWinSize.Width() + 10 )
@@ -986,8 +986,8 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                 pContentDev->DrawRect( Rectangle( Point(aStart.X(),aEnd.Y()-2), aEnd ) );
                 pContentDev->DrawRect( Rectangle( Point(aEnd.X()-2,aStart.Y()), aEnd ) );
 
-                //  Seitenumbrueche
-                //! anders darstellen (gestrichelt ????)
+                
+                
 
                 size_t nColBreaks = rData.GetPagesX();
                 const SCCOL* pColEnd = rData.GetPageEndX();
@@ -997,7 +997,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     SCCOL nBreak = pColEnd[nColPos]+1;
                     if ( nBreak >= nX1 && nBreak <= nX2+1 )
                     {
-                        //! hidden suchen
+                        
                         if (pDoc->HasColBreak(nBreak, nTab) & BREAK_MANUAL)
                             pContentDev->SetFillColor( aManual );
                         else
@@ -1016,7 +1016,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     SCROW nBreak = pRowEnd[nRowPos]+1;
                     if ( nBreak >= nY1 && nBreak <= nY2+1 )
                     {
-                        //! hidden suchen
+                        
                         if (pDoc->HasRowBreak(nBreak, nTab) & BREAK_MANUAL)
                             pContentDev->SetFillColor( aManual );
                         else
@@ -1027,7 +1027,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                     }
                 }
 
-                //  Seitenzahlen
+                
 
                 SCROW nPrStartY = aRange.aStart.Row();
                 for (nRowPos=0; nRowPos<nRowBreaks; nRowPos++)
@@ -1056,7 +1056,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
 
                                 if ( pEditEng )
                                 {
-                                    //  find right font size with EditEngine
+                                    
                                     long nHeight = 100;
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT ) );
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
@@ -1064,7 +1064,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     pEditEng->SetText( aThisPageStr );
                                     Size aSize100( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
 
-                                    //  40% of width or 60% of height
+                                    
                                     long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
                                     long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
                                     nHeight = std::min(nSizeX,nSizeY);
@@ -1072,7 +1072,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CJK ) );
                                     pEditEng->SetDefaultItem( SvxFontHeightItem( nHeight, 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
-                                    //  centered output with EditEngine
+                                    
                                     Size aTextSize( pEditEng->CalcTextWidth(), pEditEng->GetTextHeight() );
                                     Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
                                                 (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
@@ -1080,18 +1080,18 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, 
                                 }
                                 else
                                 {
-                                    //  find right font size for DrawText
+                                    
                                     aFont.SetSize( Size( 0,100 ) );
                                     pContentDev->SetFont( aFont );
                                     Size aSize100( pContentDev->GetTextWidth( aThisPageStr ), pContentDev->GetTextHeight() );
 
-                                    //  40% of width or 60% of height
+                                    
                                     long nSizeX = 40 * ( aPageEnd.X() - aPageStart.X() ) / aSize100.Width();
                                     long nSizeY = 60 * ( aPageEnd.Y() - aPageStart.Y() ) / aSize100.Height();
                                     aFont.SetSize( Size( 0,std::min(nSizeX,nSizeY) ) );
                                     pContentDev->SetFont( aFont );
 
-                                    //  centered output with DrawText
+                                    
                                     Size aTextSize( pContentDev->GetTextWidth( aThisPageStr ), pContentDev->GetTextHeight() );
                                     Point aPos( (aPageStart.X()+aPageEnd.X()-aTextSize.Width())/2,
                                                 (aPageStart.Y()+aPageEnd.Y()-aTextSize.Height())/2 );
@@ -1130,8 +1130,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
 
     sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
-    Point aOldPos  = aComboButton.GetPosPixel();    // Zustand fuer MouseDown/Up
-    Size  aOldSize = aComboButton.GetSizePixel();   // merken
+    Point aOldPos  = aComboButton.GetPosPixel();    
+    Size  aOldSize = aComboButton.GetSizePixel();   
 
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -1145,8 +1145,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
             for (nCol=nX1; nCol<=nX2; nCol++)
             {
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nCol+1];
-                //if several columns merged on a row, there should be only one auto button at the end of the columns.
-                //if several rows merged on a column, the button may be in the middle, so "!pInfo->bVOverlapped" should not be used
+                
+                
                 if ( pInfo->bAutoFilter && !pInfo->bHOverlapped )
                 {
                     if (!pQueryParam)
@@ -1172,12 +1172,12 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
                             pDBData->GetQueryParam( *pQueryParam );
                         else
                         {
-                            // can also be part of DataPilot table
-                            // OSL_FAIL("Auto-Filter-Button ohne DBData");
+                            
+                            
                         }
                     }
 
-                    //  pQueryParam kann nur MAXQUERY Eintraege enthalten
+                    
 
                     sal_Bool bSimpleQuery = sal_True;
                     sal_Bool bColumnFound = false;
@@ -1187,8 +1187,8 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
                     for (nQuery = 0; nQuery < nCount && bSimpleQuery; ++nQuery)
                         if (pQueryParam->GetEntry(nQuery).bDoQuery)
                         {
-                            //  hier nicht auf EQUAL beschraenken
-                            //  (auch bei ">1" soll der Spaltenkopf blau werden)
+                            
+                            
 
                             if (pQueryParam->GetEntry(nQuery).nField == nCol)
                                 bColumnFound = sal_True;
@@ -1202,15 +1202,15 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
                     long    nSizeY;
                     SCCOL nStartCol= nCol;
                     SCROW nStartRow = nRow;
-                    //if address(nCol,nRow) is not the start pos of the merge area, the value of the nSizeX will be incorrect, it will be the length of the cell.
-                    //should first get the start pos of the merge area, then get the nSizeX through the start pos.
-                    pDoc->ExtendOverlapped(nStartCol, nStartRow,nCol, nRow, nTab);//get nStartCol,nStartRow
-                    pViewData->GetMergeSizePixel( nStartCol, nStartRow, nSizeX, nSizeY );//get nSizeX
+                    
+                    
+                    pDoc->ExtendOverlapped(nStartCol, nStartRow,nCol, nRow, nTab);
+                    pViewData->GetMergeSizePixel( nStartCol, nStartRow, nSizeX, nSizeY );
                     nSizeY = pViewData->ToPixel(pDoc->GetRowHeight(nRow, nTab), pViewData->GetPPTY());
                     Point aScrPos = pViewData->GetScrPos( nCol, nRow, eWhich );
 
                     aCellBtn.setBoundingBox(aScrPos, Size(nSizeX-1, nSizeY-1), bLayoutRTL);
-                    aCellBtn.setPopupLeft(bLayoutRTL);   // #i114944# AutoFilter button is left-aligned in RTL
+                    aCellBtn.setPopupLeft(bLayoutRTL);   
                     aCellBtn.setDrawBaseButton(false);
                     aCellBtn.setDrawPopupButton(true);
                     aCellBtn.setHasHiddenMember(bArrowState);
@@ -1235,12 +1235,12 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
                 pViewData->GetMergeSizePixel( nCol, nRow, nSizeX, nSizeY );
                 long nPosX = aScrPos.X();
                 long nPosY = aScrPos.Y();
-                // bLayoutRTL is handled in setBoundingBox
+                
 
                 OUString aStr = pDoc->GetString(nCol, nRow, nTab);
                 aCellBtn.setText(aStr);
                 aCellBtn.setBoundingBox(Point(nPosX, nPosY), Size(nSizeX-1, nSizeY-1), bLayoutRTL);
-                aCellBtn.setPopupLeft(false);   // DataPilot popup is always right-aligned for now
+                aCellBtn.setPopupLeft(false);   
                 aCellBtn.setDrawBaseButton(pInfo->bPivotButton);
                 aCellBtn.setDrawPopupButton(pInfo->bPivotPopupButton);
                 aCellBtn.setHasHiddenMember(pInfo->bFilterActive);
@@ -1255,9 +1255,9 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCCOL nX2, ScTableInfo& rTabInfo, Out
             aComboButton.SetSizePixel( aRect.GetSize() );
             pContentDev->SetClipRegion(Region(aRect));
             aComboButton.Draw( false, false );
-            pContentDev->SetClipRegion();           // always called from Draw() without clip region
-            aComboButton.SetPosPixel( aOldPos );    // restore old state
-            aComboButton.SetSizePixel( aOldSize );  // for MouseUp/Down (AutoFilter)
+            pContentDev->SetClipRegion();           
+            aComboButton.SetPosPixel( aOldPos );    
+            aComboButton.SetSizePixel( aOldSize );  
         }
     }
 
@@ -1272,25 +1272,25 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
     sal_Bool bLayoutRTL = pDoc->IsLayoutRTL( nTab );
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-    ScDDComboBoxButton aButton( this );             // for optimal size
+    ScDDComboBoxButton aButton( this );             
     Size aBtnSize = aButton.GetSizePixel();
 
     SCCOL nCol = rButtonPos.Col();
     SCROW nRow = rButtonPos.Row();
 
-    long nCellSizeX;    // width of this cell, including merged
+    long nCellSizeX;    
     long nDummy;
     pViewData->GetMergeSizePixel( nCol, nRow, nCellSizeX, nDummy );
 
-    // for height, only the cell's row is used, excluding merged cells
+    
     long nCellSizeY = ScViewData::ToPixel( pDoc->GetRowHeight( nRow, nTab ), pViewData->GetPPTY() );
     long nAvailable = nCellSizeX;
 
-    //  left edge of next cell if there is a non-hidden next column
+    
     SCCOL nNextCol = nCol + 1;
     const ScMergeAttr* pMerge = static_cast<const ScMergeAttr*>(pDoc->GetAttr( nCol,nRow,nTab, ATTR_MERGE ));
     if ( pMerge->GetColMerge() > 1 )
-        nNextCol = nCol + pMerge->GetColMerge();    // next cell after the merged area
+        nNextCol = nCol + pMerge->GetColMerge();    
     while ( nNextCol <= MAXCOL && pDoc->ColHidden(nNextCol, nTab) )
         ++nNextCol;
     sal_Bool bNextCell = ( nNextCol <= MAXCOL );
@@ -1303,14 +1303,14 @@ Rectangle ScGridWindow::GetListValButtonRect( const ScAddress& rButtonPos )
         aBtnSize.Height() = nCellSizeY;
 
     Point aPos = pViewData->GetScrPos( nCol, nRow, eWhich, true );
-    aPos.X() += nCellSizeX * nLayoutSign;               // start of next cell
+    aPos.X() += nCellSizeX * nLayoutSign;               
     if (!bNextCell)
-        aPos.X() -= aBtnSize.Width() * nLayoutSign;     // right edge of cell if next cell not available
+        aPos.X() -= aBtnSize.Width() * nLayoutSign;     
     aPos.Y() += nCellSizeY - aBtnSize.Height();
-    // X remains at the left edge
+    
 
     if ( bLayoutRTL )
-        aPos.X() -= aBtnSize.Width()-1;     // align right edge of button with cell border
+        aPos.X() -= aBtnSize.Width()-1;     
 
     return Rectangle( aPos, aBtnSize );
 }
@@ -1335,7 +1335,7 @@ bool ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( !aQueryParam.bInplace )
         bSimpleQuery = false;
 
-    //  aQueryParam kann nur MAXQUERY Eintraege enthalten
+    
 
     SCSIZE nCount = aQueryParam.GetEntryCount();
     for (nQuery = 0; nQuery < nCount && bSimpleQuery; ++nQuery)
@@ -1385,7 +1385,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     SCCOL nPosX = pViewData->GetPosX( eHWhich );
     SCROW nPosY = pViewData->GetPosY( eVWhich );
     if (nTestX2 < nPosX || nTestY2 < nPosY)
-        return;                                         // unsichtbar
+        return;                                         
     SCCOL nRealX1 = nX1;
     if (nX1 < nPosX)
         nX1 = nPosX;
@@ -1398,7 +1398,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     if (nYBottom > MAXROW) nYBottom = MAXROW;
 
     if (nX1 > nXRight || nY1 > nYBottom)
-        return;                                         // unsichtbar
+        return;                                         
     if (nX2 > nXRight) nX2 = nXRight;
     if (nY2 > nYBottom) nY2 = nYBottom;
 
@@ -1412,14 +1412,14 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     sal_Bool bWasHidden = false;
     for (SCROW nY=nY1; nY<=nY2; nY++)
     {
-        sal_Bool bFirstRow = ( nY == nPosY );                       // first visible row?
-        sal_Bool bDoHidden = false;                                 // versteckte nachholen ?
+        sal_Bool bFirstRow = ( nY == nPosY );                       
+        sal_Bool bDoHidden = false;                                 
         sal_uInt16 nHeightTwips = pDoc->GetRowHeight( nY,nTab );
         sal_Bool bDoRow = ( nHeightTwips != 0 );
         if (bDoRow)
         {
             if (bTestMerge)
-                if (bWasHidden)                 // auf versteckte zusammengefasste testen
+                if (bWasHidden)                 
                 {
                     bDoHidden = sal_True;
                     bDoRow = sal_True;
@@ -1432,13 +1432,13 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
             bWasHidden = sal_True;
             if (bTestMerge)
                 if (nY==nY2)
-                    bDoRow = sal_True;              // letzte Zeile aus Block
+                    bDoRow = sal_True;              
         }
 
         if ( bDoRow )
         {
             SCCOL nLoopEndX = nX2;
-            if (nX2 < nX1)                      // Rest von zusammengefasst
+            if (nX2 < nX1)                      
             {
                 SCCOL nStartX = nX1;
                 while ( ((const ScMergeFlagAttr*)pDoc->
@@ -1473,7 +1473,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                             }
                         }
 
-                        // nur Rest von zusammengefasster zu sehen ?
+                        
                         SCCOL nThisX = nX;
                         if ( pMergeFlag->IsHorOverlapped() && nX == nPosX && nX > nRealX1 )
                         {
@@ -1508,7 +1508,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
                             }
                         }
                     }
-                    else        // !bTestMerge
+                    else        
                     {
                         if ( aMultiMark.IsCellMarked( nX, nY, true ) == bRepeat &&
                                                 nEndX * nLayoutSign >= nScrX * nLayoutSign && nEndY >= nScrY )
@@ -1525,7 +1525,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     }
 }
 
-// -------------------------------------------------------------------------
+
 
 void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -1544,20 +1544,20 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
         if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
              (rDCEvt.GetFlags() & SETTINGS_STYLE) )
         {
-            if ( eWhich == pViewData->GetActivePart() )     // only once for the view
+            if ( eWhich == pViewData->GetActivePart() )     
             {
                 ScTabView* pView = pViewData->GetView();
 
-                //  update scale in case the UI ScreenZoom has changed
+                
                 ScGlobal::UpdatePPT(this);
                 pView->RecalcPPT();
 
-                //  RepeatResize in case scroll bar sizes have changed
+                
                 pView->RepeatResize();
                 pView->UpdateAllOverlays();
 
-                //  invalidate cell attribs in input handler, in case the
-                //  EditEngine BackgroundColor has to be changed
+                
+                
                 if ( pViewData->IsActive() )
                 {
                     ScInputHandler* pHdl = SC_MOD()->GetInputHdl();

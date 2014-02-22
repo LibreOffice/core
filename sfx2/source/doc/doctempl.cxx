@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -97,14 +97,14 @@ using namespace ::ucbhelper;
 using ::std::vector;
 using ::std::advance;
 
-//========================================================================
+
 
 #define TITLE                   "Title"
 #define TARGET_URL              "TargetURL"
 
 #define COMMAND_TRANSFER        "transfer"
 
-//========================================================================
+
 
 class RegionData_Impl;
 
@@ -114,8 +114,8 @@ class DocTempl_EntryData_Impl
 {
     RegionData_Impl*    mpParent;
 
-    // the following member must be SfxObjectShellLock since it controlls that SfxObjectShell lifetime by design
-    // and users of this class expect it to be so.
+    
+    
     SfxObjectShellLock  mxObjShell;
 
     OUString            maTitle;
@@ -146,7 +146,7 @@ public:
 
 using namespace ::DocTempl;
 
-// ------------------------------------------------------------------------
+
 
 class RegionData_Impl
 {
@@ -191,7 +191,7 @@ public:
 
 typedef vector< RegionData_Impl* > RegionList_Impl;
 
-// ------------------------------------------------------------------------
+
 
 class SfxDocTemplate_Impl : public SvRefBase
 {
@@ -206,8 +206,8 @@ class SfxDocTemplate_Impl : public SvRefBase
 
     uno::Reference< XAnyCompareFactory > m_rCompareFactory;
 
-    // the following member is intended to prevent clearing of the global data when it is in use
-    // TODO/LATER: it still does not make the implementation complete thread-safe
+    
+    
     sal_Int32           mnLockCounter;
 
 private:
@@ -242,7 +242,7 @@ public:
     uno::Reference< XDocumentTemplates >     getDocTemplates() { return mxTemplates; }
 };
 
-// ------------------------------------------------------------------------
+
 
 class DocTemplLocker_Impl
 {
@@ -260,7 +260,7 @@ public:
     }
 };
 
-// ------------------------------------------------------------------------
+
 
 #ifndef SFX_DECL_DOCTEMPLATES_DEFINED
 #define SFX_DECL_DOCTEMPLATES_DEFINED
@@ -269,21 +269,21 @@ SV_DECL_REF(SfxDocTemplate_Impl)
 
 SV_IMPL_REF(SfxDocTemplate_Impl)
 
-// ------------------------------------------------------------------------
+
 
 SfxDocTemplate_Impl *gpTemplateData = 0;
 
-// -----------------------------------------------------------------------
+
 
 static sal_Bool getTextProperty_Impl( Content& rContent,
                                       const OUString& rPropName,
                                       OUString& rPropValue );
 
-//========================================================================
+
 
 OUString SfxDocumentTemplates::GetFullRegionName
 (
-    sal_uInt16 nIdx                     // Region Index
+    sal_uInt16 nIdx                     
 )   const
 
 /*  [Description]
@@ -295,7 +295,7 @@ OUString SfxDocumentTemplates::GetFullRegionName
 */
 
 {
-    // First: find the RegionData for the index
+    
     OUString aName;
 
     DocTemplLocker_Impl aLocker( *pImp );
@@ -307,19 +307,19 @@ OUString SfxDocumentTemplates::GetFullRegionName
         if ( pData1 )
             aName = pData1->GetTitle();
 
-        // --**-- here was some code which appended the path to the
-        //      group if there was more than one with the same name.
-        //      this should not happen anymore
+        
+        
+        
     }
 
     return aName;
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString& SfxDocumentTemplates::GetRegionName
 (
-    sal_uInt16 nIdx                 // Region Index
+    sal_uInt16 nIdx                 
 )   const
 
 /*  [Description]
@@ -351,7 +351,7 @@ const OUString& SfxDocumentTemplates::GetRegionName
     return maTmpString;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
 
@@ -374,7 +374,7 @@ sal_uInt16 SfxDocumentTemplates::GetRegionCount() const
     return (sal_uInt16) nCount;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 SfxDocumentTemplates::GetCount
 (
@@ -405,12 +405,12 @@ sal_uInt16 SfxDocumentTemplates::GetCount
     return (sal_uInt16) nCount;
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString& SfxDocumentTemplates::GetName
 (
-    sal_uInt16 nRegion,     //  Region Index, in which the entry lies
-    sal_uInt16 nIdx         //  Index of the entry
+    sal_uInt16 nRegion,     
+    sal_uInt16 nIdx         
 )   const
 
 /*  [Description]
@@ -446,12 +446,12 @@ const OUString& SfxDocumentTemplates::GetName
     return maTmpString;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString SfxDocumentTemplates::GetPath
 (
-    sal_uInt16  nRegion,    //  Region Index, in which the entry lies
-    sal_uInt16  nIdx        //  Index of the entry
+    sal_uInt16  nRegion,    
+    sal_uInt16  nIdx        
 )   const
 
 /*  [Description]
@@ -480,7 +480,7 @@ OUString SfxDocumentTemplates::GetPath
         return OUString();
 }
 
-//------------------------------------------------------------------------
+
 
 OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString& aGroupName,
                                                                          const OUString& aTitle )
@@ -511,7 +511,7 @@ OUString SfxDocumentTemplates::GetTemplateTargetURLFromComponent( const OUString
     return aResult;
 }
 
-//------------------------------------------------------------------------
+
 
 /** Convert a resource string - a template name - to its localised pair if it exists.
     @param nSourceResIds
@@ -536,15 +536,15 @@ OUString SfxDocumentTemplates::ConvertResourceString (
     return rString;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::CopyOrMove
 (
-    sal_uInt16  nTargetRegion,      //  Target Region Index
-    sal_uInt16  nTargetIdx,         //  Target position Index
-    sal_uInt16  nSourceRegion,      //  Source Region Index
+    sal_uInt16  nTargetRegion,      
+    sal_uInt16  nTargetIdx,         
+    sal_uInt16  nSourceRegion,      
     sal_uInt16  nSourceIdx,         /*  Index to be copied / to moved template */
-    sal_Bool    bMove           //  Copy / Move
+    sal_Bool    bMove           
 )
 
 /*  [Description]
@@ -577,7 +577,7 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
     if ( !pImp->Construct() )
         return sal_False;
 
-    // Don't copy or move any folders
+    
     if( nSourceIdx == USHRT_MAX )
         return sal_False ;
 
@@ -613,7 +613,7 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
 
         if ( bMove )
         {
-            // --**-- delete the original file
+            
             sal_Bool bDeleted = xTemplates->removeTemplate( pSourceRgn->GetTitle(),
                                                             pSource->GetTitle() );
             if ( bDeleted )
@@ -621,34 +621,34 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
             else
             {
                 if ( xTemplates->removeTemplate( pTargetRgn->GetTitle(), aTitle ) )
-                    return sal_False; // will trigger tetry with copy instead of move
+                    return sal_False; 
 
-                // if it is not possible to remove just created template ( must be possible! )
-                // it is better to report success here, since at least the copy has succeeded
-                // TODO/LATER: solve it more gracefully in future
+                
+                
+                
             }
         }
 
-        // todo: fix SfxDocumentTemplates to handle size_t instead of sal_uInt16
+        
         size_t temp_nTargetIdx = nTargetIdx;
         pTargetRgn->AddEntry( aTitle, aNewTargetURL, &temp_nTargetIdx );
 
         return sal_True;
     }
 
-    // --**-- if the current file is opened,
-    // it must be re-opened afterwards.
+    
+    
 
     return sal_False;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::Move
 (
-    sal_uInt16 nTargetRegion,       //  Target Region Index
-    sal_uInt16 nTargetIdx,          //  Target position Index
-    sal_uInt16 nSourceRegion,       //  Source Region Index
+    sal_uInt16 nTargetRegion,       
+    sal_uInt16 nTargetIdx,          
+    sal_uInt16 nSourceRegion,       
     sal_uInt16 nSourceIdx           /*  Index to be copied / to moved template */
 )
 
@@ -672,13 +672,13 @@ sal_Bool SfxDocumentTemplates::Move
                        nSourceRegion, nSourceIdx, sal_True );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::Copy
 (
-    sal_uInt16 nTargetRegion,       //  Target Region Index
-    sal_uInt16 nTargetIdx,          //  Target position Index
-    sal_uInt16 nSourceRegion,       //  Source Region Index
+    sal_uInt16 nTargetRegion,       
+    sal_uInt16 nTargetIdx,          
+    sal_uInt16 nSourceRegion,       
     sal_uInt16 nSourceIdx           /*  Index to be copied / to moved template */
 )
 
@@ -703,12 +703,12 @@ sal_Bool SfxDocumentTemplates::Copy
                        nSourceRegion, nSourceIdx, sal_False );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::CopyTo
 (
-    sal_uInt16          nRegion,    //  Region of the template to be exported
-    sal_uInt16          nIdx,       //  Index of the template to be exported
+    sal_uInt16          nRegion,    
+    sal_uInt16          nIdx,       
     const OUString&     rName       /*  File name under which the template is to
                                     be created */
 )   const
@@ -775,13 +775,13 @@ sal_Bool SfxDocumentTemplates::CopyTo
     return sal_True;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::CopyFrom
 (
     sal_uInt16      nRegion,        /*  Region in which the template is to be
                                     imported */
-    sal_uInt16      nIdx,           //  Index of the new template in this Region
+    sal_uInt16      nIdx,           
     OUString&       rName           /*  File name of the template to be imported
                                     as an out parameter of the (automatically
                                     generated from the file name) logical name
@@ -853,7 +853,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
 
         if( xStorable.is() )
         {
-            // get Title from XDocumentPropertiesSupplier
+            
             if( xDocPropsSupplier.is() )
             {
                 uno::Reference< XDocumentProperties > xDocProps
@@ -871,7 +871,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
                                         INetURLObject::DECODE_WITH_CHARSET );
             }
 
-            // write a template using XStorable interface
+            
             bTemplateAdded = xTemplates->storeTemplate( pTargetRgn->GetTitle(), aTitle, xStorable );
         }
     }
@@ -900,7 +900,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
                 else
                     nIdx += 1;
 
-                // todo: fix SfxDocumentTemplates to handle size_t instead of sal_uInt16
+                
                 size_t temp_nIdx = nIdx;
                 pTargetRgn->AddEntry( aTitle, aTemplName, &temp_nIdx );
                 rName = aTitle;
@@ -920,11 +920,11 @@ sal_Bool SfxDocumentTemplates::CopyFrom
     return sal_False;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::Delete
 (
-    sal_uInt16 nRegion,             //  Region Index
+    sal_uInt16 nRegion,             
     sal_uInt16 nIdx                 /*  Index of the entry or USHRT_MAX,
                                     if a directory is meant. */
 )
@@ -984,12 +984,12 @@ sal_Bool SfxDocumentTemplates::Delete
     return bRet;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::InsertDir
 (
-    const OUString&     rText,      //  the logical name of the new Region
-    sal_uInt16          nRegion     //  Region Index
+    const OUString&     rText,      
+    sal_uInt16          nRegion     
 )
 
 /*  [Description]
@@ -1072,7 +1072,7 @@ sal_Bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegio
         if ( pRegion->GetTitle() == rName )
             return sal_True;
 
-        // we have to rename a region
+        
         if ( xTemplates->renameGroup( pRegion->GetTitle(), rName ) )
         {
             pRegion->SetTitle( rName );
@@ -1105,13 +1105,13 @@ sal_Bool SfxDocumentTemplates::SetName( const OUString& rName, sal_uInt16 nRegio
     return sal_False;
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::GetFull
 (
-    const OUString &rRegion,      // Region Name
-    const OUString &rName,        // Template Name
-    OUString &rPath               // Out: Path + File name
+    const OUString &rRegion,      
+    const OUString &rName,        
+    OUString &rPath               
 )
 
 /*  [Description]
@@ -1131,7 +1131,7 @@ sal_Bool SfxDocumentTemplates::GetFull
 {
     DocTemplLocker_Impl aLocker( *pImp );
 
-    // We don't search for empty names!
+    
     if ( rName.isEmpty() )
         return sal_False;
 
@@ -1161,13 +1161,13 @@ sal_Bool SfxDocumentTemplates::GetFull
     return ( pEntry != NULL );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SfxDocumentTemplates::GetLogicNames
 (
-    const OUString &rPath,            // Full Path to the template
-    OUString &rRegion,                // Out: Region name
-    OUString &rName                   // Out: Template name
+    const OUString &rPath,            
+    OUString &rRegion,                
+    OUString &rName                   
 ) const
 
 /*  [Description]
@@ -1229,7 +1229,7 @@ sal_Bool SfxDocumentTemplates::GetLogicNames
     return bFound;
 }
 
-//------------------------------------------------------------------------
+
 
 SfxDocumentTemplates::SfxDocumentTemplates()
 
@@ -1244,16 +1244,16 @@ SfxDocumentTemplates::SfxDocumentTemplates()
     pImp = gpTemplateData;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxDocumentTemplates::Construct()
 
-//  Delayed build-up of administrative data
+
 
 {
 }
 
-//------------------------------------------------------------------------
+
 
 SfxDocumentTemplates::~SfxDocumentTemplates()
 
@@ -1269,8 +1269,8 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
 
 void SfxDocumentTemplates::Update( sal_Bool _bSmart )
 {
-    if  (   !_bSmart                                                // don't be smart
-        ||  ::svt::TemplateFolderCache( sal_True ).needsUpdate()    // update is really necessary
+    if  (   !_bSmart                                                
+        ||  ::svt::TemplateFolderCache( sal_True ).needsUpdate()    
         )
     {
         if ( pImp->Construct() )
@@ -1283,7 +1283,7 @@ void SfxDocumentTemplates::ReInitFromComponent()
     pImp->ReInitFromComponent();
 }
 
-// -----------------------------------------------------------------------
+
 DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
                                 const OUString& rTitle )
 {
@@ -1294,13 +1294,13 @@ DocTempl_EntryData_Impl::DocTempl_EntryData_Impl( RegionData_Impl* pParent,
     mbDidConvert= sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 int DocTempl_EntryData_Impl::Compare( const OUString& rTitle ) const
 {
     return maTitle.compareTo( rTitle );
 }
 
-// -----------------------------------------------------------------------
+
 const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
 {
     if ( maOwnURL.isEmpty() )
@@ -1318,7 +1318,7 @@ const OUString& DocTempl_EntryData_Impl::GetHierarchyURL()
     return maOwnURL;
 }
 
-// -----------------------------------------------------------------------
+
 const OUString& DocTempl_EntryData_Impl::GetTargetURL()
 {
     if ( maTargetURL.isEmpty() )
@@ -1341,7 +1341,7 @@ const OUString& DocTempl_EntryData_Impl::GetTargetURL()
     return maTargetURL;
 }
 
-// -----------------------------------------------------------------------
+
 RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
                                   const OUString& rTitle )
 {
@@ -1349,7 +1349,7 @@ RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
     mpParent    = pParent;
 }
 
-// -----------------------------------------------------------------------
+
 RegionData_Impl::~RegionData_Impl()
 {
     for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
@@ -1357,10 +1357,10 @@ RegionData_Impl::~RegionData_Impl()
     maEntries.clear();
 }
 
-// -----------------------------------------------------------------------
+
 size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, sal_Bool& rFound ) const
 {
-#if 1   // Don't use binary search today
+#if 1   
     size_t i;
     size_t nCount = maEntries.size();
 
@@ -1379,8 +1379,8 @@ size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, sal_Bool& rFound ) 
     return i;
 
 #else
-    // use binary search to find the correct position
-    // in the maEntries list
+    
+    
 
     int     nCompVal = 1;
     size_t  nStart = 0;
@@ -1398,7 +1398,7 @@ size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, sal_Bool& rFound ) 
 
         nCompVal = pMid->Compare( rTitle );
 
-        if ( nCompVal < 0 )     // pMid < pData
+        if ( nCompVal < 0 )     
             nStart = nMid + 1;
         else
             nEnd = nMid - 1;
@@ -1410,7 +1410,7 @@ size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, sal_Bool& rFound ) 
     }
     else
     {
-        if ( nCompVal < 0 )     // pMid < pData
+        if ( nCompVal < 0 )     
             nMid++;
     }
 
@@ -1418,7 +1418,7 @@ size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, sal_Bool& rFound ) 
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 void RegionData_Impl::AddEntry( const OUString& rTitle,
                                 const OUString& rTargetURL,
                                 size_t *pPos )
@@ -1455,13 +1455,13 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
     }
 }
 
-// -----------------------------------------------------------------------
+
 size_t RegionData_Impl::GetCount() const
 {
     return maEntries.size();
 }
 
-// -----------------------------------------------------------------------
+
 const OUString& RegionData_Impl::GetHierarchyURL()
 {
     if ( maOwnURL.isEmpty() )
@@ -1479,7 +1479,7 @@ const OUString& RegionData_Impl::GetHierarchyURL()
     return maOwnURL;
 }
 
-// -----------------------------------------------------------------------
+
 DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) const
 {
     sal_Bool    bFound = sal_False;
@@ -1491,7 +1491,7 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) cons
         return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( size_t nIndex ) const
 {
     if ( nIndex < maEntries.size() )
@@ -1499,7 +1499,7 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( size_t nIndex ) const
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 void RegionData_Impl::DeleteEntry( size_t nIndex )
 {
     if ( nIndex < maEntries.size() )
@@ -1511,7 +1511,7 @@ void RegionData_Impl::DeleteEntry( size_t nIndex )
     }
 }
 
-// -----------------------------------------------------------------------
+
 int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
 {
     int nCompare = maTitle.compareTo( pCompare->maTitle );
@@ -1519,7 +1519,7 @@ int RegionData_Impl::Compare( RegionData_Impl* pCompare ) const
     return nCompare;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxDocTemplate_Impl::SfxDocTemplate_Impl()
 : mbConstructed( sal_False )
@@ -1527,7 +1527,7 @@ SfxDocTemplate_Impl::SfxDocTemplate_Impl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 SfxDocTemplate_Impl::~SfxDocTemplate_Impl()
 {
     Clear();
@@ -1535,14 +1535,14 @@ SfxDocTemplate_Impl::~SfxDocTemplate_Impl()
     gpTemplateData = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxDocTemplate_Impl::IncrementLock()
 {
     ::osl::MutexGuard aGuard( maMutex );
     mnLockCounter++;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxDocTemplate_Impl::DecrementLock()
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1550,7 +1550,7 @@ void SfxDocTemplate_Impl::DecrementLock()
         mnLockCounter--;
 }
 
-// -----------------------------------------------------------------------
+
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( size_t nIndex ) const
 {
     if ( nIndex < maRegions.size() )
@@ -1558,7 +1558,7 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( size_t nIndex ) const
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
     const
 {
@@ -1571,7 +1571,7 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxDocTemplate_Impl::DeleteRegion( size_t nIndex )
 {
     if ( nIndex < maRegions.size() )
@@ -1583,7 +1583,7 @@ void SfxDocTemplate_Impl::DeleteRegion( size_t nIndex )
     }
 }
 
-// -----------------------------------------------------------------------
+
 /*  AddRegion adds a Region to the RegionList
 */
 void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
@@ -1598,7 +1598,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
         return;
     }
 
-    // now get the content of the region
+    
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(2);
     aProps[0] = TITLE;
@@ -1633,7 +1633,7 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
     uno::Reference< XResultSet > xResultSet;
@@ -1672,7 +1672,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
     }
 }
 
-// ------------------------------------------------------------------------
+
 sal_Bool SfxDocTemplate_Impl::Construct( )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1711,7 +1711,7 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxDocTemplate_Impl::ReInitFromComponent()
 {
     uno::Reference< XDocumentTemplates > xTemplates = getDocTemplates();
@@ -1725,12 +1725,12 @@ void SfxDocTemplate_Impl::ReInitFromComponent()
     }
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew, size_t nPos )
 {
     ::osl::MutexGuard   aGuard( maMutex );
 
-    // return false (not inserted) if the entry already exists
+    
     for ( size_t i = 0, n = maRegions.size(); i < n; ++i )
         if ( maRegions[ i ]->Compare( pNew ) == 0 )
             return sal_False;
@@ -1751,7 +1751,7 @@ sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew, size_t nPos )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 void SfxDocTemplate_Impl::Rescan()
 {
     Clear();
@@ -1777,7 +1777,7 @@ void SfxDocTemplate_Impl::Rescan()
     }
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
                                            OUString& aTitle )
 {
@@ -1789,7 +1789,7 @@ sal_Bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
         }
         catch ( Exception& )
         {
-            // the document is not a StarOffice document
+            
             return sal_False;
         }
 
@@ -1821,7 +1821,7 @@ sal_Bool SfxDocTemplate_Impl::GetTitleFromURL( const OUString& rURL,
 }
 
 
-// -----------------------------------------------------------------------
+
 void SfxDocTemplate_Impl::Clear()
 {
     ::osl::MutexGuard   aGuard( maMutex );
@@ -1833,25 +1833,25 @@ void SfxDocTemplate_Impl::Clear()
     maRegions.clear();
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool getTextProperty_Impl( Content& rContent,
                                const OUString& rPropName,
                                OUString& rPropValue )
 {
     sal_Bool bGotProperty = sal_False;
 
-    // Get the property
+    
     try
     {
         uno::Reference< XPropertySetInfo > aPropInfo = rContent.getProperties();
 
-        // check, whether or not the property exists
+        
         if ( !aPropInfo.is() || !aPropInfo->hasPropertyByName( rPropName ) )
         {
             return sal_False;
         }
 
-        // now get the property
+        
         Any aAnyValue;
 
         aAnyValue = rContent.getPropertyValue( rPropName );

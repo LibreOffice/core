@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 
 class FilterConfigItem;
 
-#define RAS_TYPE_OLD            0x00000000      // supported formats by this filter
+#define RAS_TYPE_OLD            0x00000000      
 #define RAS_TYPE_STANDARD       0x00000001
 #define RAS_TYPE_BYTE_ENCODED   0x00000002
 #define RAS_TYPE_RGB_FORMAT     0x00000003
@@ -34,23 +34,23 @@ class FilterConfigItem;
 
 #define SUNRASTER_MAGICNUMBER   0x59a66a95
 
-//============================ RASReader ==================================
+
 
 class RASReader {
 
 private:
 
-    SvStream&           m_rRAS;                 // Die einzulesende RAS-Datei
+    SvStream&           m_rRAS;                 
 
     sal_Bool                mbStatus;
     Bitmap              maBmp;
     BitmapWriteAccess*  mpAcc;
-    sal_uInt32          mnWidth, mnHeight;      // Bildausmass in Pixeln
+    sal_uInt32          mnWidth, mnHeight;      
     sal_uInt16              mnDstBitsPerPix;
     sal_uInt16              mnDstColors;
     sal_uInt32          mnDepth, mnImageDatSize, mnType;
     sal_uInt32          mnColorMapType, mnColorMapSize;
-    sal_uInt8               mnRepCount, mnRepVal;   // RLE Decoding
+    sal_uInt8               mnRepCount, mnRepVal;   
     sal_Bool                mbPalette;
 
     sal_Bool                ImplReadBody();
@@ -63,7 +63,7 @@ public:
     sal_Bool                ReadRAS(Graphic & rGraphic);
 };
 
-//=================== Methoden von RASReader ==============================
+
 
 RASReader::RASReader(SvStream &rRAS)
     : m_rRAS(rRAS)
@@ -78,7 +78,7 @@ RASReader::~RASReader()
 {
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
 {
@@ -92,7 +92,7 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
     if ( nMagicNumber != SUNRASTER_MAGICNUMBER )
         return sal_False;
 
-    // Kopf einlesen:
+    
 
     if ( ( mbStatus = ImplReadHeader() ) == sal_False )
         return sal_False;
@@ -101,14 +101,14 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
     if ( ( mpAcc = maBmp.AcquireWriteAccess() ) == 0 )
         return sal_False;
 
-    if ( mnDstBitsPerPix <= 8 )     // paletten bildchen
+    if ( mnDstBitsPerPix <= 8 )     
     {
-        if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW Colormap wird geskipped
+        if ( mnColorMapType == RAS_COLOR_RAW_MAP )      
         {
             sal_uLong nCurPos = m_rRAS.Tell();
             m_rRAS.Seek( nCurPos + mnColorMapSize );
         }
-        else if ( mnColorMapType == RAS_COLOR_RGB_MAP ) // RGB koennen wir auslesen
+        else if ( mnColorMapType == RAS_COLOR_RGB_MAP ) 
         {
             mnDstColors = (sal_uInt16)( mnColorMapSize / 3 );
 
@@ -133,7 +133,7 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
                 return sal_False;
 
         }
-        else if ( mnColorMapType != RAS_COLOR_NO_MAP )  // alles andere ist kein standard
+        else if ( mnColorMapType != RAS_COLOR_NO_MAP )  
             return sal_False;
 
         if ( !mbPalette )
@@ -149,14 +149,14 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
     }
     else
     {
-        if ( mnColorMapType != RAS_COLOR_NO_MAP )   // when graphic has more then 256 colors and a color map we skip
-        {                                           // the colormap
+        if ( mnColorMapType != RAS_COLOR_NO_MAP )   
+        {                                           
             sal_uLong nCurPos = m_rRAS.Tell();
             m_rRAS.Seek( nCurPos + mnColorMapSize );
         }
     }
 
-    // Bitmap-Daten einlesen
+    
     mbStatus = ImplReadBody();
 
     if ( mpAcc )
@@ -169,7 +169,7 @@ sal_Bool RASReader::ReadRAS(Graphic & rGraphic)
     return mbStatus;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool RASReader::ImplReadHeader()
 {
@@ -198,7 +198,7 @@ sal_Bool RASReader::ImplReadHeader()
         case RAS_TYPE_OLD :
         case RAS_TYPE_STANDARD :
         case RAS_TYPE_RGB_FORMAT :
-        case RAS_TYPE_BYTE_ENCODED :            // this type will be supported later
+        case RAS_TYPE_BYTE_ENCODED :            
             break;
 
         default:
@@ -207,7 +207,7 @@ sal_Bool RASReader::ImplReadHeader()
     return mbStatus;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_Bool RASReader::ImplReadBody()
 {
@@ -227,7 +227,7 @@ sal_Bool RASReader::ImplReadBody()
                         sal::static_int_cast< sal_uInt8 >(
                             nDat >> ( ( x & 7 ) ^ 7 )) );
                 }
-                if (!( ( x - 1 ) & 0x8 ) ) ImplGetByte();       // WORD ALIGNMENT ???
+                if (!( ( x - 1 ) & 0x8 ) ) ImplGetByte();       
             }
             break;
 
@@ -239,7 +239,7 @@ sal_Bool RASReader::ImplReadBody()
                     nDat = ImplGetByte();
                     mpAcc->SetPixelIndex( y, x, nDat );
                 }
-                if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
+                if ( x & 1 ) ImplGetByte();                     
             }
             break;
 
@@ -266,7 +266,7 @@ sal_Bool RASReader::ImplReadBody()
                             }
                             mpAcc->SetPixel ( y, x, BitmapColor( nRed, nGreen, nBlue ) );
                         }
-                        if ( x & 1 ) ImplGetByte();                     // WORD ALIGNMENT ???
+                        if ( x & 1 ) ImplGetByte();                     
                     }
                     break;
 
@@ -275,7 +275,7 @@ sal_Bool RASReader::ImplReadBody()
                     {
                         for ( x = 0; x < mnWidth; x++ )
                         {
-                            nDat = ImplGetByte();               // pad byte > nil
+                            nDat = ImplGetByte();               
                             if ( mnType == RAS_TYPE_RGB_FORMAT )
                             {
                                 nRed = ImplGetByte();
@@ -302,7 +302,7 @@ sal_Bool RASReader::ImplReadBody()
     return mbStatus;
 }
 
-//----------------------------------------------------------------------------
+
 
 sal_uInt8 RASReader::ImplGetByte()
 {
@@ -334,11 +334,11 @@ sal_uInt8 RASReader::ImplGetByte()
     }
 }
 
-//================== GraphicImport - die exportierte Funktion ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicImport iraGraphicImport
 #endif

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/fltcall.hxx>
@@ -37,7 +37,7 @@
 #include <vcl/gdimetafiletools.hxx>
 #include <vcl/dibtools.hxx>
 
-// -----------------------------Field Types-------------------------------
+
 
 #define BegDocumnMagic 0xA8A8 /* Begin Document */
 #define EndDocumnMagic 0xA8A9 /* End Document   */
@@ -66,39 +66,39 @@
 #define MapCodFntMagic 0x8AAB /* Map Coded Font    */
 #define MapDatResMagic 0xC3AB /* Map Data Resource */
 
-// Struktur des Metafiles
-// BegDocumn
-//   BegResGrp
-//     BegColAtr
-//       BlkColAtr
-//     EndColAtr
-//     BegImgObj[0..n]
-//       BegResGrp[]
-//         BegColAtr[]
-//           BlkColAtr
-//         EndColAtr
-//       EndResGrp
-//       BegObjEnv[]
-//         MapColAtr
-//       EndObjEnv
-//       DscImgObj
-//       DatImgOb1
-//       DatImgOb2[1..n]
-//     EndImgObj
-//     BegGrfObj
-//       BegObjEnv[]
-//         MapColAtr
-//         MapCodFnt1
-//         MapCodFnt2[0..n]
-//         MapDatRes[0..n]
-//       EndObjEnv
-//       DscGrfObj
-//       DatGrfObj[0..n]
-//     EndGrfObj
-//   EndResGrp
-// EndDocumn
 
-//============================== METWriter ===================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 struct METChrSet
 {
@@ -124,19 +124,19 @@ class METWriter
 private:
 
     sal_Bool                bStatus;
-    sal_uLong               nLastPercent; // with which number pCallback has been called the last time
+    sal_uLong               nLastPercent; 
     SvStream*           pMET;
     Rectangle           aPictureRect;
     MapMode             aPictureMapMode;
     MapMode             aTargetMapMode;
-    sal_uLong               nActualFieldStartPos;     // start position of the current 'Field'
-    sal_uLong               nNumberOfDataFields;  // number of commenced 'Graphcis Data Fields'
+    sal_uLong               nActualFieldStartPos;     
+    sal_uLong               nNumberOfDataFields;  
     Color               aGDILineColor;
     Color               aGDIFillColor;
     RasterOp            eGDIRasterOp;
     Font                aGDIFont;
-    MapMode             aGDIMapMode;   // currently ununsed!
-    Rectangle           aGDIClipRect; // currently ununsed!
+    MapMode             aGDIMapMode;   
+    Rectangle           aGDIClipRect; 
     METGDIStackMember*  pGDIStack;
     Color               aMETColor;
     Color               aMETBackgroundColor;
@@ -146,14 +146,14 @@ private:
     Size                aMETChrCellSize;
     short               nMETChrAngle;
     sal_uInt8               nMETChrSet;
-    METChrSet*          pChrSetList; // list of Character-Sets
-    sal_uInt8               nNextChrSetId; // the first unused ChrSet-Id
-    sal_uLong               nActBitmapId; // Field-Id of the next Bitmap
-    sal_uLong               nNumberOfActions; // number of Actions in the GDIMetafile
-    sal_uLong               nNumberOfBitmaps; // number of Bitmaps
-    sal_uLong               nWrittenActions;  // number of already processed actions during the writing of the orders
-    sal_uLong               nWrittenBitmaps;  // number of already written Bitmaps
-    sal_uLong               nActBitmapPercent; // percentage of the next bitmap that's already written
+    METChrSet*          pChrSetList; 
+    sal_uInt8               nNextChrSetId; 
+    sal_uLong               nActBitmapId; 
+    sal_uLong               nNumberOfActions; 
+    sal_uLong               nNumberOfBitmaps; 
+    sal_uLong               nWrittenActions;  
+    sal_uLong               nWrittenBitmaps;  
+    sal_uLong               nActBitmapPercent; 
 
     ::std::auto_ptr< VirtualDevice >    apDummyVDev;
     OutputDevice*                       pCompDev;
@@ -161,12 +161,12 @@ private:
     com::sun::star::uno::Reference< com::sun::star::task::XStatusIndicator > xStatusIndicator;
 
     void MayCallback();
-        // calculates a percentage based on the 5 parameters above and then does a
-        // Callback as the case may be. Sets bStatus to sal_False if the user wants to cancel
+        
+        
 
     void CountActionsAndBitmaps(const GDIMetaFile * pMTF);
-        // Counts the bitmaps and actions (nNumberOfActions and nNumberOfBitmaps have to
-        // be set to 0 at the beginning, since this method is recursive)
+        
+        
 
     void WriteBigEndianShort(sal_uInt16 nWord);
     void WriteBigEndianLong(sal_uLong nLong);
@@ -270,7 +270,7 @@ public:
 };
 
 
-//========================== Methods of METWriter ==========================
+
 
 void METWriter::MayCallback()
 {
@@ -513,13 +513,13 @@ void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPal
 
     if (bStatus==sal_False) return;
 
-    //--- The Field 'Begin Color Attribute Table':
+    
     WriteFieldIntroducer(16,BegColAtrMagic,0,0);
     WriteFieldId(nFieldId);
 
-    //--- The Field 'Color Attribute Table':
+    
     WriteFieldIntroducer(0,BlkColAtrMagic,0,0);
-    pMET->WriteUChar( nBasePartFlags ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( nBasePartLCTID ); // 'Base Part'
+    pMET->WriteUChar( nBasePartFlags ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( nBasePartLCTID ); 
     if (pPalette!=NULL)
     {
         nIndex=0;
@@ -527,11 +527,11 @@ void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPal
         {
             nNumI=pPalette->GetEntryCount()-nIndex;
             if (nNumI>81) nNumI=81;
-            pMET->WriteUChar( (sal_uInt8)(11+nNumI*3) );                   // length of the parameter
-            pMET->WriteUChar( (sal_uInt8)1 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)1 );        // typ: element list, Reserved, Format: RGB
-            pMET->WriteUChar( (sal_uInt8)0 ); WriteBigEndianShort(nIndex); // start-Index (3 Bytes)
-            pMET->WriteUChar( (sal_uInt8)8 ).WriteUChar( (sal_uInt8)8 ).WriteUChar( (sal_uInt8)8 );        // Bits per component R,G,B
-            pMET->WriteUChar( (sal_uInt8)3 );                              // number of bytes per entry
+            pMET->WriteUChar( (sal_uInt8)(11+nNumI*3) );                   
+            pMET->WriteUChar( (sal_uInt8)1 ).WriteUChar( (sal_uInt8)0 ).WriteUChar( (sal_uInt8)1 );        
+            pMET->WriteUChar( (sal_uInt8)0 ); WriteBigEndianShort(nIndex); 
+            pMET->WriteUChar( (sal_uInt8)8 ).WriteUChar( (sal_uInt8)8 ).WriteUChar( (sal_uInt8)8 );        
+            pMET->WriteUChar( (sal_uInt8)3 );                              
             for (i=0; i<nNumI; i++)
             {
                 const BitmapColor& rCol = (*pPalette)[ nIndex ];
@@ -545,13 +545,13 @@ void METWriter::WriteColorAttributeTable(sal_uLong nFieldId, BitmapPalette* pPal
     }
     else
     {
-        // 'Trible Generating'
+        
         pMET->WriteUChar( (sal_uInt8)0x0a ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0x00 );
         pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x08 );
     }
     UpdateFieldSize();
 
-    //--- The Field 'End Color Attribute Table':
+    
     WriteFieldIntroducer(16,EndColAtrMagic,0,0);
     WriteFieldId(nFieldId);
 
@@ -575,14 +575,14 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     nActColMapId=((nActBitmapId>>24)&0x000000ff) | ((nActBitmapId>> 8)&0x0000ff00) |
                  ((nActBitmapId<< 8)&0x00ff0000) | ((nActBitmapId<<24)&0xff000000);
 
-    //--- The Field 'Begin Image Object':
+    
     WriteFieldIntroducer(16,BegImgObjMagic,0,0);
     WriteFieldId(nActBitmapId);
 
-    // generate Windows-BMP file
+    
     WriteDIB(rBitmap, aTemp, false, true);
 
-    // read header of the Windows-BMP file:
+    
     aTemp.SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
     aTemp.Seek(18);
     aTemp.ReadUInt32( nWidth ).ReadUInt32( nHeight );
@@ -595,7 +595,7 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     nNumColors=1<<nBitsPerPixel;
     nBytesPerLine=((nWidth*nBitsPerPixel+0x0000001f) & 0xffffffe0 ) >> 3;
 
-    // read color palette as the case may be and write it to the MET file:
+    
     if (nBitsPerPixel<=8)
     {
         BitmapPalette   aPal( (sal_uInt16) nNumColors );
@@ -607,68 +607,68 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
             aPal[ (sal_uInt16) i ] = BitmapColor( nr, ng, nb );
         }
 
-        //--- The Field 'Begin Resource Group':
+        
         WriteFieldIntroducer(16,BegResGrpMagic,0,0);
         WriteFieldId(nActColMapId);
 
-        //--- writer color table:
+        
         WriteColorAttributeTable(nActColMapId,&aPal,0,1);
 
-        //--- The Field 'End Resource Group':
+        
         WriteFieldIntroducer(16,EndResGrpMagic,0,0);
         WriteFieldId(nActColMapId);
 
-        //--- The Field 'Begin Object Environment Group':
+        
         WriteFieldIntroducer(16,BegObjEnvMagic,0,0);
         WriteFieldId(nActBitmapId);
 
-        //--- The Field 'Map Color Attribute Table':
+        
         WriteFieldIntroducer(26,MapColAtrMagic,0,0);
         WriteBigEndianShort(0x0012);
         pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
         WriteFieldId(nActColMapId);
         pMET->WriteUChar( (sal_uInt8)0x04 ).WriteUChar( (sal_uInt8)0x24 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0x01 );
 
-        //--- The Field 'End Object Environment Group':
+        
         WriteFieldIntroducer(16,EndObjEnvMagic,0,0);
         WriteFieldId(nActBitmapId);
     }
 
-    //--- The Field 'Image Data Descriptor':
+    
     WriteFieldIntroducer(17,DscImgObjMagic,0,0);
-    pMET->WriteUChar( (sal_uInt8)0x01 ); // Unit of measure: tens of centimeters
+    pMET->WriteUChar( (sal_uInt8)0x01 ); 
     WriteBigEndianShort((sal_uInt16)nResX);
     WriteBigEndianShort((sal_uInt16)nResY);
     WriteBigEndianShort((sal_uInt16)nWidth);
     WriteBigEndianShort((sal_uInt16)nHeight);
 
-    //--- The first Field 'Image Picture Data':
+    
     WriteFieldIntroducer(0,DatImgObjMagic,0,0);
 
-    // Begin Segment:
+    
     pMET->WriteUChar( (sal_uInt8)0x70 ).WriteUChar( (sal_uInt8)0x00 );
 
-    // Begin Image Content:
+    
     pMET->WriteUChar( (sal_uInt8)0x91 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0xff );
 
-    // Image Size:
+    
     pMET->WriteUChar( (sal_uInt8)0x94 ).WriteUChar( (sal_uInt8)0x09 ).WriteUChar( (sal_uInt8)0x02 );
     pMET->WriteUInt16( (sal_uInt16) 0 ).WriteUInt16( (sal_uInt16) 0 );
     WriteBigEndianShort((sal_uInt16)nHeight);
     WriteBigEndianShort((sal_uInt16)nWidth);
 
-    // Image Encoding:
+    
     pMET->WriteUChar( (sal_uInt8)0x95 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x03 );
 
-    // Image IDE-Size:
+    
     pMET->WriteUChar( (sal_uInt8)0x96 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)nBitsPerPixel );
 
     if (nBitsPerPixel<=8) {
-        // Image LUT-ID
+        
         pMET->WriteUChar( (sal_uInt8)0x97 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0x01 );
     }
     else {
-        // IDE Structure
+        
         pMET->WriteUChar( (sal_uInt8)0x9b ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x01 );
         pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x08 );
         pMET->WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0x08 );
@@ -678,13 +678,13 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     ny=0;
     while (ny<nHeight) {
 
-        // finalize the previous field 'Image Picture Data':
+        
         UpdateFieldSize();
 
-        // and start a new field 'Image Picture Data':
+        
         WriteFieldIntroducer(0,DatImgObjMagic,0,0);
 
-        // read and write several Scanlines:
+        
         nLines=nHeight-ny;
         if (nLines*nBytesPerLine>30000) nLines=30000/nBytesPerLine;
         if (nLines<1) nLines=1;
@@ -707,23 +707,23 @@ void METWriter::WriteImageObject(const Bitmap & rBitmap)
     }
     delete[] pBuf;
 
-    // End Image Content:
+    
     pMET->WriteUChar( (sal_uInt8)0x93 ).WriteUChar( (sal_uInt8)0x00 );
 
-    // End Segment:
+    
     pMET->WriteUChar( (sal_uInt8)0x71 ).WriteUChar( (sal_uInt8)0x00 );
 
-    // finalize the last field 'Image Picture Data':
+    
     UpdateFieldSize();
 
-    //--- The Field 'End Image Object':
+    
     WriteFieldIntroducer(16,EndImgObjMagic,0,0);
     WriteFieldId(nActBitmapId);
 
-    // increase Ids:
+    
     nActBitmapId++;
 
-    // count Bitmaps:
+    
     nWrittenBitmaps++;
     nActBitmapPercent=0;
 
@@ -822,53 +822,53 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
 
     WriteFieldIntroducer(0,DscGrfObjMagic,0,0);
 
-    //------------------------------------------------------------------------------
-    // The following is the OS2 original documentation and the associated implementation
-    //------------------------------------------------------------------------------
+    
+    
+    
 
-    //  Parameters (all required and in this order)
+    
 
-    //  0         0xF7 Specify GVM Subset
-    //  1         Length of following data 0x07
-    //  2         0xB0 drawing order subset
-    //  3-4       0x0000
-    //  5         0x23 Level 3.2
-    //  6         0x01 Version 1
-    //  7         Length of following field 0x01
-    //  8         Coordinate types in data
-    //       0x04Intel16
-    //       0x05Intel32
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     pMET->WriteUChar( (sal_uInt8)0xf7 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0xb0 ).WriteUChar( (sal_uInt8)0x00 )
          .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x23 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0x01 )
          .WriteUChar( (sal_uInt8)0x05 );
 
-    //  0         0xF6 Set Picture Descriptor
-    //  1         Length of following data
-    //  2         Flags
-    //       0    B'0' Picture in 2D
-    //       1    Picture Dimensions
-    //            B'0'  Not absolute (PU_ARBITRARY PS)
-    //            B'1'  Absolute (example: PU_TWIPS PS)
-    //       2    Picture Elements
-    //            B'0'  Not pels
-    //            B'1'  Pels (PU_PELS PS)
-    //                  (Bit 1 must also be set)
-    //       3-7  B'00000'
-    //  3         0x00 Reserved
-    //  4         Picture frame size coordinate type
-    //       0x04  Intel16
-    //       0x05  Intel32
-    //  5         UnitsOfMeasure
-    //       0x00  Ten inches
-    //       0x01  Decimeter
-    //  6-11 or 6-17(2 or 4 bytes) Resolution.
-    //       GPS Units / UOM on x axis
-    //       GPS Units / UOM on y axis
-    //       GPS Units / UOM on z axis
-    //  12-23 or 18-41(2 or 4 bytes) Window Size.
-    //       GPS X left, X right
-    //       GPS Y bottom, Y top
-    //       GPS Z near, Z far
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     Size aUnitsPerDecimeter=OutputDevice::LogicToLogic(Size(10,10),MapMode(MAP_CM),aPictureMapMode);
     pMET->WriteUChar( (sal_uInt8)0xf6 ).WriteUChar( (sal_uInt8)0x28 ).WriteUChar( (sal_uInt8)0x40 ).WriteUChar( (sal_uInt8)0x00 )
          .WriteUChar( (sal_uInt8)0x05 ).WriteUChar( (sal_uInt8)0x01 )
@@ -879,246 +879,246 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
          .WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)aPictureRect.GetHeight() )
          .WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );
 
-    //  0         0x21 Set Current Defaults
-    //  1         Length of following data
-    //  2         Set Default Parameter Format 0x08
-    //  3-4       Mask 0xE000
-    //  5         Names 0x8F
-    //  6         Coordinates
-    //       0x00  Picture in 2D
-    //  7         Transforms
-    //       0x04  Intel16
-    //       0x05  Intel32
-    //  8         Geometrics
-    //       0x04  Intel16
-    //       0x05  Intel32
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     pMET->WriteUChar( (sal_uInt8)0x21 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0x08 ).WriteUChar( (sal_uInt8)0xe0 )
          .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x8f ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x05 )
          .WriteUChar( (sal_uInt8)0x05 );
 
-    //  0         0x21 Set Current Defaults
-    //  1         Length of following data
-    //  2         Set default viewing transform 0x07
-    //  3-4       Mask 0xCC0C
-    //  5         Names 0x8F
-    //  6-n       M11, M12, M21, M22, M41, M42   Matrix elements
+    
+    
+    
+    
+    
+    
     pMET->WriteUChar( (sal_uInt8)0x21 ).WriteUChar( (sal_uInt8)0x1c ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0xcc )
          .WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x8f )
          .WriteUInt32( (sal_uInt32)0x00010000 ).WriteUInt32( (sal_uInt32)0x00000000 ).WriteUInt32( (sal_uInt32)0x00000000 )
          .WriteUInt32( (sal_uInt32)0x00010000 ).WriteUInt32( (sal_uInt32)0x00000000 ).WriteUInt32( (sal_uInt32)0x00000000 );
 
-    //  0         0x21 Set Current Defaults
-    //  1         Length of following data
-    //  2         Set default line attributes 0x01
-    //  3-4       Mask - OR of as many of the following bits as are required:
-    //       0x8000  Line type
-    //       0x4000  Line width
-    //       0x2000  Line end
-    //       0x1000  Line join
-    //       0x0800  Stroke width
-    //       0x0008  Line color
-    //       0x0002  Line mix
-    //  5         Flags
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    //       0x0F Set indicated default attributes to initial values. (Data field is not present in this
-    //             instance).
-    //       0x8F Set indicated default attributes to specified values.
-    //  6-n       Data - data values as required, in the following order if present.
-    //            No space is reserved for attributes for which the corresponding mask flag was not
-    //            set.
+    
+    
+    
+    
+    
+    
     //
-    //       (1 byte)  - Line type
-    //       (1 byte)  - Line width
-    //       (1 byte)  - Line end
-    //       (1 byte)  - Line join
-    //       (G bytes) - Stroke width
-    //       (4 bytes) - Line color
-    //       (1 byte)  - Line mix (G=2 or 4 depending on the Geometrics parameter of Set Default
-    //            Parameter Format)
-    // Nanu! witziger-weise fehlt obiger Abschnitt in den Metadateien. Also lassen wir ihn auch weg
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    //  0         0x21 Set Current Defaults
-    //  1         Length of following data
-    //  2         Set Default Character Attributes 0x02
-    //  3-4       Mask - OR of as many of the following bits as are required:
+    
+    
+    
+    
     //
-    //       0x8000  Character angle
-    //       0x4000  Character box
-    //       0x2000  Character direction
-    //       0x1000  Character precision
-    //       0x0800  Character set
-    //       0x0400  Character shear
-    //       0x0040  Character break extra
-    //       0x0020  Character extra
-    //       0x0008  Character color
-    //       0x0004  Character background color
-    //       0x0002  Character mix
-    //       0x0001  Character background mix
-    //  5         Flags
-    //       0x0FSet indicated default attributes to initial values.  (Data field is not present in this
-    //            case).
-    //       0x8FSet indicated default attributes to specified values.
-    //  6-n       Data - data values as required, in the following order if present.
-    //            No space is reserved for attributes for which the corresponding Mask flag was not
-    //            set.
-    //       (2*G bytes)     - Character angle
-    //       (2*G + 4 bytes)- Character box
-    //       (1 byte)        - Character direction
-    //       (1 byte)        - Character precision
-    //       (1 byte)        - Character set
-    //       (2*G bytes)     - Character shear
-    //       (4 bytes)       - Character break extra
-    //       (4 bytes)       - Character extra
-    //       (4 bytes)       - Character color
-    //       (4 bytes)       - Character background color
-    //       (1 byte)        - Character mix
-    //       (1 byte)        - Character background mix (G=2 or 4 depending on the Geometrics
-    //            parameter of Set Default Parameter Format)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     pMET->WriteUChar( (sal_uInt8)0x21 ).WriteUChar( (sal_uInt8)0x10 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x40 )
          .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x8f )
          .WriteUChar( (sal_uInt8)0xaa ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 )
          .WriteUChar( (sal_uInt8)0x44 ).WriteUChar( (sal_uInt8)0x04 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 )
          .WriteUChar( (sal_uInt8)0xa8 ).WriteUChar( (sal_uInt8)0xaa ).WriteUChar( (sal_uInt8)0x40 ).WriteUChar( (sal_uInt8)0x44 );
 
-    //  0         0x21 Set Current Defaults
-    //  1         Length of following data
-    //  2         Set Default Marker Attributes 0x03
-    //  3-4       Mask - OR of as many of the following bits as are required:
-    //       0x4000  Marker box
-    //       0x1000  Marker precision
-    //       0x0800  Marker set
-    //       0x0100  Marker symbol
-    //       0x0008  Marker color
-    //       0x0004  Marker background color
-    //       0x0002  Marker mix
-    //       0x0001  Marker background mix
-    //  5         Flags
-    //       0x0F  Set indicated default attributes to initial values.
-    //             (Data field is not present in this instance)
-    //       0x8F  Set indicated default attributes to specified values.
-    //  6-n       Data - data values as required, in this order if present.
-    //            No space is reserved for attributes for which the corresponding Mask flag was not
-    //            set.
-    //       (2*G bytes)    - Marker box
-    //       (1 byte)       - Marker precision
-    //       (1 byte)       - Marker set
-    //       (1 byte)       - Marker symbol
-    //       (4 bytes)      - Marker color
-    //       (4 bytes)      - Marker background color
-    //       (1 byte)       - Marker mix
-    //       (1 byte)       - Marker background mix (G=2 or 4 depending on the Geometrics
-    //            parameter of Set Default Parameter Format)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     pMET->WriteUChar( (sal_uInt8)0x21 ).WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x40 )
          .WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x8f )
          .WriteUChar( (sal_uInt8)0x66 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 )
          .WriteUChar( (sal_uInt8)0x66 ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
 
-    //  0         0x21 Set Current Defaults
-    //  1         Length of following data
-    //  2         Set Default Pattern Attributes 0x04
-    //  3-4       Mask - OR of as many of the following bits as are required:
-    //       0x0800  Pattern set
-    //       0x0100  Pattern symbol
-    //       0x0080  Pattern reference point
-    //       0x0008  Pattern color
-    //       0x0004  Pattern background color
-    //       0x0002  Pattern mix
-    //       0x0001  Pattern background mix
-    //       5       Flags
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     //
-    //            0x0F Set indicated default attributes to initial values.
-    //                  (Data field is not present in this instance)
-    //            0x8F Set indicated default attributes to specified values.
-    //       6-n     Data - data values as required, in this order if present.
-    //               No space is reserved for attributes for which the corresponding Mask flag was
-    //               not set.
+    
+    
+    
+    
+    
+    
     //
-    //            (1 byte)     - Pattern set
-    //            (1 byte)     - Pattern symbol
-    //            (2*G bytes)  - Pattern reference point
-    //            (4 bytes)    - Pattern color
-    //            (4 bytes)    - Pattern background color
-    //            (1 byte)     - Pattern mix
-    //            (1 byte)     - Pattern background mix (G=2 or 4 depending on the Geometrics
-    //               parameter of Set Default Parameter Format)
-    //       0       0x21 Set Current Defaults
-    //       1       Length of following data
-    //       2       Set Default Image Attributes 0x06
-    //       3-4     Mask - OR of as many of these bits as are required:
-    //            0x0008  Image color
-    //            0x0004  Image background color
-    //            0x0002  Image mix
-    //            0x0001  Image background mix
-    //       5       Flags
-    //            0x0F Set indicated default attributes to initial values. (Data field is not present in
-    //                  this instance)
-    //            0x8F Set indicated default attributes to specified values.
-    //       6-n     Data - data values as required, in this order if present.
-    //               No space is reserved for attributes for which the corresponding Mask flag was
-    //               not set.
-    //            (4 bytes)  - Image color
-    //            (4 bytes)  - Image background color
-    //            (1 byte)   - Image mix
-    //            (1 byte)   - Image background mix
-    //       0       0x21 Set Current Defaults
-    //       1       Length of following data
-    //       2       Set Default Viewing Window 0x05
-    //       3-4     Mask - OR of as many of the following bits as are required:
-    //            0x8000  x left limit
-    //            0x4000  x right limit
-    //            0x2000  y bottom limit
-    //            0x1000  y top limit
-    //       5       Flags
-    //            0x0F Set indicated default attributes to initial values.
-    //                  (Data field is not present in this case).
-    //            0x8F Set indicated default attributes to specified values.
-    //       6-n     Data - data values as required, in the following order if present.
-    //               No space is reserved for attributes for which the corresponding Mask flag was
-    //               not set.
-    //            (2*G bytes)  - x left limit
-    //            (2*G bytes)  - x right limit
-    //            (2*G bytes)  - y bottom limit
-    //            (2*G bytes)  - y top limit (G=2 or 4 depending on the Geometrics parameter of Set
-    //               Default Parameter Format)
-    //       0       0x21 Set Current Defaults
-    //       1       Length of following data
-    //       2       Set Default Arc Parameters 0x0B
-    //       3-4     Mask - OR of as many of the following bits as are required:
-    //            0x8000  P value
-    //            0x4000  Q value
-    //            0x2000  R value
-    //            0x1000  S value
-    //       5       Flags
-    //            0x0F Set indicated default attributes to initial values.
-    //                  (Data field is not present in this case).
-    //            0x8F Set indicated default attributes to specified values.
-    //       6-n     Data - data values as required, in the following order if present.
-    //               No space is reserved for attributes for which the corresponding Mask flag was
-    //               not set.
-    //            (G bytes)  - P value
-    //            (G bytes)  - Q value
-    //            (G bytes)  - R value
-    //            (G bytes)  - S value (G=2 or 4 depending on the Geometrics parameter of Set
-    //               Default Parameter Format)
-    //       0       0x21 Set Current Defaults
-    //       1       Length of following data
-    //       2       Set Default Pick Identifier 0x0C
-    //       3-4     Mask - OR of as many of the following bits as are required:
-    //            0x8000  Pick identifier
-    //       5       Flags
-    //            0x0F Set indicated default attributes to initial values.
-    //                  (Data field is not present in this case).
-    //            0x8F Set indicated default attributes to specified values.
-    //       6-n     Data - data values as required, in the following order if present.
-    //               No space is reserved for attributes for which the corresponding Mask flag was
-    //               not set.
-    //            (4 bytes)  - Pick identifier
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    //       0       0xE7 Set Bit-map Identifier
-    //       1       Length of following data 0x07
-    //       2-3     Usage Flags 0x8000
-    //       4-7     Bit-map handle
-    //       8       Lcid
+    
+    
+    
+    
+    
     if (nNumberOfBitmaps>0) {
         pMET->WriteUChar( (sal_uInt8)0xe7 ).WriteUChar( (sal_uInt8)0x07 ).WriteUChar( (sal_uInt8)0x80 ).WriteUChar( (sal_uInt8)0x00 );
         WriteBigEndianLong(nActBitmapId);
@@ -1133,11 +1133,11 @@ void METWriter::WriteDataDescriptor(const GDIMetaFile *)
 
 void METWriter::WillWriteOrder(sal_uLong nNextOrderMaximumLength)
 {
-    // The parameters of a 'Graphics Data Fields' can be (according to OS2
-    // documentation) at most 32759 bytes long. Meant by this is the size
-    // of the field minus the 'Structured Field Introducer' (size 8).
-    // So the size of the whole field can be at most 8+32759=32767=0x7fff.
-    // To be on the safe side whe use 30000 as the limit.
+    
+    
+    
+    
+    
     if (pMET->Tell()-nActualFieldStartPos+nNextOrderMaximumLength>30000)
     {
         UpdateFieldSize();
@@ -1165,16 +1165,16 @@ void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
 {
     sal_Int32 nWidth = pCompDev->LogicToLogic( Size( rLineInfo.GetWidth(),0 ), aPictureMapMode, aTargetMapMode ).Width();
 
-    WillWriteOrder( 8 );            // set stroke linewidth
+    WillWriteOrder( 8 );            
     pMET  ->WriteUChar( (sal_uInt8)0x15 )
            .WriteUChar( (sal_uInt8)6 )
-           .WriteUChar( (sal_uInt8)0 )             // Flags
+           .WriteUChar( (sal_uInt8)0 )             
            .WriteUChar( (sal_uInt8)0 )
            .WriteInt32( nWidth );
 
     if ( rLineInfo.GetStyle() != LINE_SOLID )
     {
-        sal_uInt8 nStyle = 0;           // LineDefault;
+        sal_uInt8 nStyle = 0;           
 
         switch ( rLineInfo.GetStyle() )
         {
@@ -1187,36 +1187,36 @@ void METWriter::METSetAndPushLineInfo( const LineInfo& rLineInfo )
                 if ( rLineInfo.GetDotCount() )
                 {
                     if ( !rLineInfo.GetDashCount() )
-                        nStyle = 1; // LINE_DOT
+                        nStyle = 1; 
                     else
-                        nStyle = 3; // LINE_DASH_DOT
+                        nStyle = 3; 
                 }
                 else
-                    nStyle = 2;     // LINE_DASH
+                    nStyle = 2;     
             }
             break;
             case LineStyle_SOLID:
             case LineStyle_FORCE_EQUAL_SIZE:
-                break;  // not handled -Wall
+                break;  
         }
         WillWriteOrder( 2 );
-        pMET->WriteUChar( (sal_uInt8)0x18 ).WriteUChar( nStyle );     // set LineType
+        pMET->WriteUChar( (sal_uInt8)0x18 ).WriteUChar( nStyle );     
     }
 }
 
 void METWriter::METPopLineInfo( const LineInfo& rLineInfo )
 {
-    WillWriteOrder( 8 );            // set stroke linewidth
+    WillWriteOrder( 8 );            
     pMET  ->WriteUChar( (sal_uInt8)0x15 )
            .WriteUChar( (sal_uInt8)6 )
-           .WriteUChar( (sal_uInt8)0 )             // Flags
+           .WriteUChar( (sal_uInt8)0 )             
            .WriteUChar( (sal_uInt8)0 )
            .WriteUInt32( (sal_uInt32)1 );
 
     if ( rLineInfo.GetStyle() != LINE_SOLID )
     {
         WillWriteOrder( 2 );
-        pMET->WriteUChar( (sal_uInt8)0x18 ).WriteUChar( (sal_uInt8)0 );       // set LineType
+        pMET->WriteUChar( (sal_uInt8)0x18 ).WriteUChar( (sal_uInt8)0 );       
     }
 }
 
@@ -1301,11 +1301,11 @@ void METWriter::METLine(const Polygon & rPolygon)
         if (nOrderPoints>30) nOrderPoints=30;
         WillWriteOrder(nOrderPoints*8+2);
         if (bFirstOrder==sal_True) {
-            pMET->WriteUChar( (sal_uInt8)0xc1 ); // Line at given pos
+            pMET->WriteUChar( (sal_uInt8)0xc1 ); 
             bFirstOrder=sal_False;
         }
         else {
-            pMET->WriteUChar( (sal_uInt8)0x81 ); // Line at current pos
+            pMET->WriteUChar( (sal_uInt8)0x81 ); 
         }
         pMET->WriteUChar( (sal_uInt8)(nOrderPoints*8) );
         for (j=0; j<nOrderPoints; j++) WritePoint(rPolygon.GetPoint(i++));
@@ -1982,7 +1982,7 @@ void METWriter::WriteOrders( const GDIMetaFile* pMTF )
 
             case META_TEXTRECT_ACTION:
             {
-//              OSL_FAIL( "Unsupported MET-Action: META_TEXTRECT_ACTION!" );
+
             }
             break;
 
@@ -2343,17 +2343,17 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
 {
     sal_uLong i, nId;
 
-    //--- The Field 'Begin Object Environment Group':
+    
     WriteFieldIntroducer(16,BegObjEnvMagic,0,0);
     WriteFieldId(7);
 
-    //--- The Field 'Map Color Attribute Table':
+    
     WriteFieldIntroducer(22,MapColAtrMagic,0,0);
     WriteBigEndianShort(0x000e);
     pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
     WriteFieldId(4);
 
-    //--- The first Field 'Map Coded Font':
+    
     WriteFieldIntroducer(32,MapCodFntMagic,0,0);
     WriteBigEndianShort(0x0018);
     pMET->WriteUChar( (sal_uInt8)0x0c ).WriteUChar( (sal_uInt8)0x02 ).WriteUChar( (sal_uInt8)0x84 ).WriteUChar( (sal_uInt8)0x00 );
@@ -2363,11 +2363,11 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
     pMET->WriteUChar( (sal_uInt8)0x06 ).WriteUChar( (sal_uInt8)0x20 );
     pMET->WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x97 ).WriteUChar( (sal_uInt8)0x01 ).WriteUChar( (sal_uInt8)0xb5 );
 
-    //--- The additional Fields 'Map Coded Font':
+    
     CreateChrSets(pMTF);
     WriteChrSets();
 
-    //--- The Fields 'Map Data Resource':
+    
     nId=nActBitmapId;
     for (i=0; i<nNumberOfBitmaps; i++)
     {
@@ -2380,7 +2380,7 @@ void METWriter::WriteObjectEnvironmentGroup(const GDIMetaFile * pMTF)
         nId++;
     }
 
-    //--- Das Feld 'End Object Environment Group':
+    
     WriteFieldIntroducer(16,EndObjEnvMagic,0,0);
     WriteFieldId(7);
 }
@@ -2393,53 +2393,53 @@ void METWriter::WriteGraphicsObject(const GDIMetaFile * pMTF)
     if( bStatus==sal_False )
         return;
 
-    //--- Das Feld 'Begin Graphics Object':
+    
     WriteFieldIntroducer(16,BegGrfObjMagic,0,0);
     WriteFieldId(7);
 
-    // Map Color Attribute Table, Fonts and other stuff:
+    
     WriteObjectEnvironmentGroup(pMTF);
 
-    //--- The Field 'Graphics Data Descriptor':
+    
     WriteDataDescriptor(pMTF);
 
-    // initialise the counter for Data Fields:
+    
     nNumberOfDataFields=0;
 
-    // and remember the position of the first Data Field:
+    
     nDataFieldsStartPos=pMET->Tell();
 
-    //--- start of the first Field 'Graphics Data'
+    
     WriteFieldIntroducer(0,DatGrfObjMagic,0,0);
     nNumberOfDataFields++;
 
-    // now at first we write the head of the segment:
+    
     pMET->WriteUChar( (sal_uInt8)0x70 ).WriteUChar( (sal_uInt8)0x0e ).WriteUInt32( (sal_uInt32)0 );
-    pMET->WriteUChar( (sal_uInt8)0x70 ).WriteUChar( (sal_uInt8)0x10 ); // Flags
-    pMET->WriteUInt16( (sal_uInt16)0 ); // Lo-Word of the length of the segment data  (Big Endian)
-    pMET->WriteUInt32( (sal_uInt32)0 );  // Reserved
-    pMET->WriteUInt16( (sal_uInt16)0 ); // Hi-Word of the length of the segment (Big Endian) (Ohh Ohh OS2)
-    // Annotation: we're writing the correct data length again below
+    pMET->WriteUChar( (sal_uInt8)0x70 ).WriteUChar( (sal_uInt8)0x10 ); 
+    pMET->WriteUInt16( (sal_uInt16)0 ); 
+    pMET->WriteUInt32( (sal_uInt32)0 );  
+    pMET->WriteUInt16( (sal_uInt16)0 ); 
+    
 
-    // now all orders are being written out:
-    // (wobei die Sache ggf. in mehrere 'Graphics Data Fields' aufgeteilt
-    // wird, per Methode WillWriteOrder(..))
+    
+    
+    
     WriteOrders(pMTF);
 
-    //--- terminate the last Field 'Graphic Data':
+    
     UpdateFieldSize();
 
-    //--- and finally correct the segment size:
+    
     nPos=pMET->Tell();
     nSegmentSize=nPos-nDataFieldsStartPos;
-    nSegmentSize-=nNumberOfDataFields*8; // Structured Field Introducers are not counted
-    pMET->Seek(nDataFieldsStartPos+16); // seek to the Lo-Word of the segment size
-    WriteBigEndianShort((sal_uInt16)(nSegmentSize&0x0000ffff)); // Und schreiben
-    pMET->Seek(nDataFieldsStartPos+22); // seek to the Hi-Word of the segment size
-    WriteBigEndianShort((sal_uInt16)(nSegmentSize>>16)); // and writing it
-    pMET->Seek(nPos); // back to business as usual
+    nSegmentSize-=nNumberOfDataFields*8; 
+    pMET->Seek(nDataFieldsStartPos+16); 
+    WriteBigEndianShort((sal_uInt16)(nSegmentSize&0x0000ffff)); 
+    pMET->Seek(nDataFieldsStartPos+22); 
+    WriteBigEndianShort((sal_uInt16)(nSegmentSize>>16)); 
+    pMET->Seek(nPos); 
 
-    //--- The Field 'End Graphic Objects':
+    
     WriteFieldIntroducer(16,EndGrfObjMagic,0,0);
     WriteFieldId(7);
 
@@ -2453,18 +2453,18 @@ void METWriter::WriteResourceGroup(const GDIMetaFile * pMTF)
     if( bStatus==sal_False )
         return;
 
-    //--- The Field 'Begin Resource Group':
+    
     WriteFieldIntroducer(16,BegResGrpMagic,0,0);
     WriteFieldId(2);
 
-    //--- The Content:
+    
     WriteColorAttributeTable();
     nActBitmapId=0x77777700;
     WriteImageObjects(pMTF);
     nActBitmapId=0x77777700;
     WriteGraphicsObject(pMTF);
 
-    //--- The Field 'End Resource Group':
+    
     WriteFieldIntroducer(16,EndResGrpMagic,0,0);
     WriteFieldId(2);
 
@@ -2478,7 +2478,7 @@ void METWriter::WriteDocument(const GDIMetaFile * pMTF)
     if( bStatus==sal_False )
         return;
 
-    //--- The Field 'Begin Document':
+    
     WriteFieldIntroducer(0,BegDocumnMagic,0,0);
     WriteFieldId(1);
     pMET->WriteUChar( (sal_uInt8)0x00 ).WriteUChar( (sal_uInt8)0x00 );
@@ -2487,10 +2487,10 @@ void METWriter::WriteDocument(const GDIMetaFile * pMTF)
     pMET->WriteUChar( (sal_uInt8)0x03 ).WriteUChar( (sal_uInt8)0x65 ).WriteUChar( (sal_uInt8)0x00 );
     UpdateFieldSize();
 
-    //--- The Content:
+    
     WriteResourceGroup(pMTF);
 
-    //--- The Field 'End Document':
+    
     WriteFieldIntroducer(16,EndDocumnMagic,0,0);
     WriteFieldId(1);
 
@@ -2568,11 +2568,11 @@ sal_Bool METWriter::WriteMET( const GDIMetaFile& rMTF, SvStream& rTargetStream, 
     return bStatus;
 }
 
-//================== GraphicExport - the exported Function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicExport emeGraphicExport
 #endif
@@ -2582,14 +2582,14 @@ GraphicExport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* pFilter
 {
     METWriter aMETWriter;
 
-    // #119735# just use GetGDIMetaFile, it will create a buffered version of contained bitmap now automatically
+    
     GDIMetaFile aMetafile(rGraphic.GetGDIMetaFile());
 
     if(usesClipActions(aMetafile))
     {
-        // #i121267# It is necessary to prepare the metafile since the export does *not* support
-        // clip regions. This tooling method clips the geometry content of the metafile internally
-        // against it's own clip regions, so that the export is safe to ignore clip regions
+        
+        
+        
         clipMetafileContentAgainstOwnRegions(aMetafile);
     }
 

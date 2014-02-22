@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -51,7 +51,7 @@ using namespace ::com::sun::star;
 namespace svt
 {
 
-// internal helper class to retrieve status updates
+
 class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
                          public ::cppu::OWeakObject
 {
@@ -63,15 +63,15 @@ class StateEventHelper : public ::com::sun::star::frame::XStatusListener,
 
         bool isCommandEnabled();
 
-        // XInterface
+        
         virtual uno::Any SAL_CALL queryInterface( const uno::Type& aType ) throw ( uno::RuntimeException);
         virtual void SAL_CALL acquire() throw ();
         virtual void SAL_CALL release() throw ();
 
-        // XEventListener
+        
         virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( uno::RuntimeException );
 
-        // XStatusListener
+        
         virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& Event) throw( uno::RuntimeException );
 
     private:
@@ -148,7 +148,7 @@ throw ( uno::RuntimeException )
 
 bool StateEventHelper::isCommandEnabled()
 {
-    // Be sure that we cannot die during condition wait
+    
     uno::Reference< frame::XStatusListener > xSelf(
         (static_cast< frame::XStatusListener* >(this)));
 
@@ -182,11 +182,11 @@ bool StateEventHelper::isCommandEnabled()
     {
         try
         {
-            // add/remove ourself to retrieve status by callback
+            
             xDispatch->addStatusListener( xSelf, aTargetURL );
             xDispatch->removeStatusListener( xSelf, aTargetURL );
 
-            // wait for anwser
+            
             m_aCondition.wait();
         }
         catch ( uno::RuntimeException& )
@@ -288,7 +288,7 @@ ContextMenuHelper::completeAndExecute(
     if ( pXMenu )
     {
         PopupMenu* pPopupMenu = dynamic_cast< PopupMenu* >( pXMenu->GetMenu() );
-        // as dynamic_cast can return zero check pointer
+        
         if ( pPopupMenu )
         {
             associateUIConfigurationManagers();
@@ -299,7 +299,7 @@ ContextMenuHelper::completeAndExecute(
     }
 }
 
-// private member
+
 
 void
 ContextMenuHelper::executePopupMenu(
@@ -374,16 +374,16 @@ ContextMenuHelper::dispatchCommand(
     return false;
 }
 
-// retrieves and stores references to our user-interface
-// configuration managers, like image manager, ui command
-// description manager.
+
+
+
 bool
 ContextMenuHelper::associateUIConfigurationManagers()
 {
     uno::Reference< frame::XFrame > xFrame( m_xWeakFrame );
     if ( !m_bUICfgMgrAssociated && xFrame.is() )
     {
-        // clear current state
+        
         m_xDocImageMgr.clear();
         m_xModuleImageMgr.clear();
         m_xUICommandLabels.clear();
@@ -398,7 +398,7 @@ ContextMenuHelper::associateUIConfigurationManagers()
 
             if ( xModel.is() )
             {
-                // retrieve document image manager form model
+                
                 uno::Reference< ui::XUIConfigurationManagerSupplier > xSupplier( xModel, uno::UNO_QUERY );
                 if ( xSupplier.is() )
                 {
@@ -414,7 +414,7 @@ ContextMenuHelper::associateUIConfigurationManagers()
 
             uno::Reference< ui::XImageManager > xModuleImageManager;
             OUString                       aModuleId;
-            // retrieve module image manager
+            
             aModuleId = xModuleManager->identify( xFrame );
 
             uno::Reference< ui::XModuleUIConfigurationManagerSupplier > xModuleCfgMgrSupplier(
@@ -554,8 +554,8 @@ void
 ContextMenuHelper::completeMenuProperties(
     Menu* pMenu )
 {
-    // Retrieve some settings necessary to display complete context
-    // menu correctly.
+    
+    
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     bool  bShowMenuImages( rSettings.GetUseImagesInMenus() );
 
@@ -595,7 +595,7 @@ ContextMenuHelper::completeMenuProperties(
                     pMenu->SetItemText( nId, aLabel );
                 }
 
-                // Use helper to retrieve state of the command URL
+                
                 StateEventHelper* pHelper = new StateEventHelper(
                                                     xDispatchProvider,
                                                     m_xURLTransformer,
@@ -611,24 +611,24 @@ ContextMenuHelper::completeMenuProperties(
 
 IMPL_STATIC_LINK_NOINSTANCE( ContextMenuHelper, ExecuteHdl_Impl, ExecuteInfo*, pExecuteInfo )
 {
-    // Release solar mutex to prevent deadlocks with clipboard thread
+    
     const sal_uInt32 nRef = Application::ReleaseSolarMutex();
     try
     {
-        // Asynchronous execution as this can lead to our own destruction while we are
-        // on the stack. Stack unwinding would access the destroyed context menu.
+        
+        
         pExecuteInfo->xDispatch->dispatch( pExecuteInfo->aTargetURL, pExecuteInfo->aArgs );
     }
     catch ( uno::Exception& )
     {
     }
 
-    // Acquire solar mutex again
+    
     Application::AcquireSolarMutex( nRef );
     delete pExecuteInfo;
     return 0;
 }
 
-} // namespace svt
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "commoncontrol.hxx"
@@ -24,10 +24,10 @@
 #include <vcl/combobox.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using ::com::sun::star::uno::RuntimeException;
     using ::com::sun::star::uno::Reference;
@@ -36,10 +36,10 @@ namespace pcr
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::inspection::XPropertyControl;
 
-    //==================================================================
-    //= ControlHelper
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ControlHelper::ControlHelper( Window* _pControlWindow, sal_Int16 _nControlType, XPropertyControl& _rAntiImpl, IModifyListener* _pModifyListener )
         :m_pControlWindow( _pControlWindow )
         ,m_nControlType( _nControlType )
@@ -50,42 +50,42 @@ namespace pcr
         DBG_ASSERT( m_pControlWindow != NULL, "ControlHelper::ControlHelper: invalid window!" );
     }
 
-    //------------------------------------------------------------------
+    
     ControlHelper::~ControlHelper()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int16 SAL_CALL ControlHelper::getControlType() throw (RuntimeException)
     {
         return m_nControlType;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XPropertyControlContext > SAL_CALL ControlHelper::getControlContext() throw (RuntimeException)
     {
         return m_xContext;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ControlHelper::setControlContext( const Reference< XPropertyControlContext >& _controlcontext ) throw (RuntimeException)
     {
         m_xContext = _controlcontext;
     }
 
-    //--------------------------------------------------------------------
+    
     Reference< XWindow > SAL_CALL ControlHelper::getControlWindow() throw (RuntimeException)
     {
         return VCLUnoHelper::GetInterface( m_pControlWindow );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Bool SAL_CALL ControlHelper::isModified(  ) throw (RuntimeException)
     {
         return m_bModified;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ControlHelper::notifyModifiedValue(  ) throw (RuntimeException)
     {
         if ( isModified() && m_xContext.is() )
@@ -102,13 +102,13 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ControlHelper::dispose()
     {
         DELETEZ( m_pControlWindow );
     }
 
-    //------------------------------------------------------------------
+    
     void ControlHelper::autoSizeWindow()
     {
         OSL_PRECOND( m_pControlWindow, "ControlHelper::autoSizeWindow: no window!" );
@@ -119,11 +119,11 @@ namespace pcr
         aComboBox.SetPosSizePixel(Point(0,0), Size(100,100));
         m_pControlWindow->SetSizePixel(aComboBox.GetSizePixel());
 
-        // TODO/UNOize: why do the controls this themselves? Shouldn't this be the task
-        // of the browser listbox/line?
+        
+        
     }
 
-    //------------------------------------------------------------------
+    
     void ControlHelper::impl_activateNextControl_nothrow() const
     {
         try
@@ -137,7 +137,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     bool ControlHelper::handlePreNotify(NotifyEvent& rNEvt)
     {
         if (EVENT_KEYINPUT == rNEvt.GetType())
@@ -155,7 +155,7 @@ namespace pcr
         return false;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK( ControlHelper, ModifiedHdl, Window*, /*_pWin*/ )
     {
         if ( m_pModifyListener )
@@ -163,7 +163,7 @@ namespace pcr
         return 0;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK( ControlHelper, GetFocusHdl, Window*, /*_pWin*/ )
     {
         try
@@ -178,18 +178,18 @@ namespace pcr
         return 0;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK( ControlHelper, LoseFocusHdl, Window*, /*_pWin*/ )
     {
-        // TODO/UNOize: should this be outside the default control's implementations? If somebody
-        // has an own control implementation, which does *not* do this - would this be allowed?
-        // If not, then we must move this logic out of here.
+        
+        
+        
         notifyModifiedValue();
         return 0;
     }
 
-//............................................................................
-} // namespace pcr
-//............................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

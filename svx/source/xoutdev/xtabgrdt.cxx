@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svx/XPropertyTable.hxx"
@@ -97,7 +97,7 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
 
-        // prepare polygon geometry for rectangle
+        
         const basegfx::B2DPolygon aRectangle(
             basegfx::tools::createPolygonFromRect(
                 basegfx::B2DRange(0.0, 0.0, rSize.Width(), rSize.Height())));
@@ -152,7 +152,7 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
             }
             default :
             {
-                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RECT; // XGRAD_RECT
+                aGradientStyle = drawinglayer::attribute::GRADIENTSTYLE_RECT; 
                 break;
             }
         }
@@ -179,7 +179,7 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
                 aRectangle,
                 aBlack));
 
-        // prepare VirtualDevice
+        
         VirtualDevice aVirtualDevice;
         const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
@@ -188,7 +188,7 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
             ? DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT
             : DRAWMODE_DEFAULT);
 
-        // create processor and draw primitives
+        
         drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
             aVirtualDevice,
             aNewViewInformation2D);
@@ -204,7 +204,7 @@ Bitmap XGradientList::CreateBitmapForUI( long nIndex )
             delete pProcessor2D;
         }
 
-        // get result bitmap and scale
+        
         aRetval = aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel());
     }
 

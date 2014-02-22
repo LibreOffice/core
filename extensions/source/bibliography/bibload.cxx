@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -97,28 +97,28 @@ public:
                             BibliographyLoader();
                             ~BibliographyLoader();
 
-    // XServiceInfo
+    
     OUString               SAL_CALL getImplementationName() throw(  );
     sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(  );
     Sequence< OUString >   SAL_CALL getSupportedServiceNames(void) throw(  );
     static OUString                getImplementationName_Static() throw(  )
 
                             {
-                                //!
+                                
                                 return OUString("com.sun.star.extensions.Bibliography");
-                                //!
+                                
                             }
 
-    //XNameAccess
+    
     virtual Any SAL_CALL getByName(const OUString& aName) throw ( NoSuchElementException, WrappedTargetException, RuntimeException );
     virtual Sequence< OUString > SAL_CALL getElementNames(void) throw ( RuntimeException );
     virtual sal_Bool SAL_CALL hasByName(const OUString& aName) throw ( RuntimeException );
 
-    //XElementAccess
+    
     virtual Type  SAL_CALL getElementType(void) throw ( RuntimeException );
     virtual sal_Bool SAL_CALL hasElements(void) throw ( RuntimeException );
 
-    //XPropertySet
+    
     virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo(void) throw ( RuntimeException );
     virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException );
     virtual Any SAL_CALL getPropertyValue(const OUString& PropertyName) throw ( UnknownPropertyException, WrappedTargetException, RuntimeException );
@@ -131,7 +131,7 @@ public:
 
     friend  Reference< XInterface >     SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception );
 
-    // XLoader
+    
     virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
                                 const Reference< XLoadEventListener > & aListener) throw (::com::sun::star::uno::RuntimeException);
@@ -160,33 +160,33 @@ Reference< XInterface >  SAL_CALL BibliographyLoader_CreateInstance( const Refer
 }
 
 
-// XServiceInfo
+
 OUString BibliographyLoader::getImplementationName() throw(  )
 
 {
     return getImplementationName_Static();
 }
 
-// XServiceInfo
+
 sal_Bool BibliographyLoader::supportsService(const OUString& ServiceName) throw(  )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XServiceInfo
+
 Sequence< OUString > BibliographyLoader::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-// ORegistryServiceManager_Static
+
 Sequence< OUString > BibliographyLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[0] = "com.sun.star.frame.FrameLoader";
-    //!
+    
     aSNS.getArray()[1] = "com.sun.star.frame.Bibliography";
-    //!
+    
     return aSNS;
 }
 
@@ -198,14 +198,14 @@ extern "C"
         void * pRet = 0;
         if (BibliographyLoader::getImplementationName_Static().equalsAscii( pImplName ) )
         {
-            // create the factory
+            
             Reference< XSingleServiceFactory > xFactory =
                 cppu::createSingleFactory(
                     pServiceManager,
                     BibliographyLoader::getImplementationName_Static(),
                     BibliographyLoader_CreateInstance,
                     BibliographyLoader::getSupportedServiceNames_Static() );
-            // acquire, because we return an interface pointer instead of a reference
+            
             xFactory->acquire();
             pRet = xFactory.get();
         }
@@ -213,11 +213,11 @@ extern "C"
     }
 
 }
-// -----------------------------------------------------------------------
+
 void BibliographyLoader::cancel(void) throw (::com::sun::star::uno::RuntimeException)
 {
-    //!
-    //!
+    
+    
 }
 
 void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
@@ -244,13 +244,13 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString
     }
 }
 
-// -----------------------------------------------------------------------
+
 void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUString& /*rURL*/,
         const Sequence< PropertyValue >& /*rArgs*/,
         const Reference< XLoadEventListener > & rListener)
 {
     SolarMutexGuard aGuard;
-    //!
+    
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
 
@@ -293,19 +293,19 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     xCtrRef->attachFrame(rFrame);
     rFrame->setComponent( xWin, xCtrRef);
     pBeamer->SetXController(xCtrRef);
-    //!
+    
 
-    // not earlier because SetFocus() is triggered in setVisible()
+    
     pParentComponent->setVisible(sal_True);
 
     m_xDatMan->load();
-    // #100312# ----------
+    
     m_pDatMan->RegisterInterceptor(pBeamer);
 
     if ( rListener.is() )
         rListener->loadFinished( this );
 
-    // attach menu bar
+    
     Reference< XPropertySet > xPropSet( rFrame, UNO_QUERY );
     Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
     if ( xPropSet.is() )
@@ -440,7 +440,7 @@ static OUString lcl_AddProperty(Reference< XNameAccess >  xColumns,
         uRet = xCol->getString();
     return uRet;
 }
-//-----------------------------------------------------------------------------
+
 Any BibliographyLoader::getByName(const OUString& rName) throw
                         ( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
@@ -504,7 +504,7 @@ Sequence< OUString > BibliographyLoader::getElementNames(void) throw ( RuntimeEx
     {
         Reference< XResultSet >  xCursor(GetDataCursor());
         Reference< sdb::XColumn >  xIdColumn(GetIdentifierColumn());
-        if (xIdColumn.is()) // implies xCursor.is()
+        if (xIdColumn.is()) 
         {
             do
             {
@@ -539,7 +539,7 @@ sal_Bool BibliographyLoader::hasByName(const OUString& rName) throw ( RuntimeExc
         Reference< XResultSet >  xCursor = GetDataCursor();
         Reference< sdb::XColumn >  xIdColumn = GetIdentifierColumn();
 
-        if (xIdColumn.is())     // implies xCursor.is()
+        if (xIdColumn.is())     
         {
             do
             {
@@ -591,7 +591,7 @@ void BibliographyLoader::setPropertyValue(const OUString& /*PropertyName*/,
         IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
     throw UnknownPropertyException();
-    //no changeable properties
+    
 }
 
 Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
@@ -600,37 +600,37 @@ Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
     Any aRet;
     static const sal_uInt16 aInternalMapping[] =
     {
-        IDENTIFIER_POS             , // BibliographyDataField_IDENTIFIER
-        AUTHORITYTYPE_POS          , // BibliographyDataField_BIBILIOGRAPHIC_TYPE
-        ADDRESS_POS                , // BibliographyDataField_ADDRESS
-        ANNOTE_POS                 , // BibliographyDataField_ANNOTE
-        AUTHOR_POS                 , // BibliographyDataField_AUTHOR
-        BOOKTITLE_POS              , // BibliographyDataField_BOOKTITLE
-        CHAPTER_POS                , // BibliographyDataField_CHAPTER
-        EDITION_POS                , // BibliographyDataField_EDITION
-        EDITOR_POS                 , // BibliographyDataField_EDITOR
-        HOWPUBLISHED_POS           , // BibliographyDataField_HOWPUBLISHED
-        INSTITUTION_POS            , // BibliographyDataField_INSTITUTION
-        JOURNAL_POS                , // BibliographyDataField_JOURNAL
-        MONTH_POS                  , // BibliographyDataField_MONTH
-        NOTE_POS                   , // BibliographyDataField_NOTE
-        NUMBER_POS                 , // BibliographyDataField_NUMBER
-        ORGANIZATIONS_POS          , // BibliographyDataField_ORGANIZATIONS
-        PAGES_POS                  , // BibliographyDataField_PAGES
-        PUBLISHER_POS              , // BibliographyDataField_PUBLISHER
-        SCHOOL_POS                 , // BibliographyDataField_SCHOOL
-        SERIES_POS                 , // BibliographyDataField_SERIES
-        TITLE_POS                  , // BibliographyDataField_TITLE
-        REPORTTYPE_POS             , // BibliographyDataField_REPORT_TYPE
-        VOLUME_POS                 , // BibliographyDataField_VOLUME
-        YEAR_POS                   , // BibliographyDataField_YEAR
-        URL_POS                    , // BibliographyDataField_URL
-        CUSTOM1_POS                , // BibliographyDataField_CUSTOM1
-        CUSTOM2_POS                , // BibliographyDataField_CUSTOM2
-        CUSTOM3_POS                , // BibliographyDataField_CUSTOM3
-        CUSTOM4_POS                , // BibliographyDataField_CUSTOM4
-        CUSTOM5_POS                , // BibliographyDataField_CUSTOM5
-        ISBN_POS                    //BibliographyDataField_ISBN
+        IDENTIFIER_POS             , 
+        AUTHORITYTYPE_POS          , 
+        ADDRESS_POS                , 
+        ANNOTE_POS                 , 
+        AUTHOR_POS                 , 
+        BOOKTITLE_POS              , 
+        CHAPTER_POS                , 
+        EDITION_POS                , 
+        EDITOR_POS                 , 
+        HOWPUBLISHED_POS           , 
+        INSTITUTION_POS            , 
+        JOURNAL_POS                , 
+        MONTH_POS                  , 
+        NOTE_POS                   , 
+        NUMBER_POS                 , 
+        ORGANIZATIONS_POS          , 
+        PAGES_POS                  , 
+        PUBLISHER_POS              , 
+        SCHOOL_POS                 , 
+        SERIES_POS                 , 
+        TITLE_POS                  , 
+        REPORTTYPE_POS             , 
+        VOLUME_POS                 , 
+        YEAR_POS                   , 
+        URL_POS                    , 
+        CUSTOM1_POS                , 
+        CUSTOM2_POS                , 
+        CUSTOM3_POS                , 
+        CUSTOM4_POS                , 
+        CUSTOM5_POS                , 
+        ISBN_POS                    
     };
     if(rPropertyName == "BibliographyDataFieldNames")
     {
@@ -653,28 +653,28 @@ void BibliographyLoader::addPropertyChangeListener(
         const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    //no bound properties
+    
 }
 
 void BibliographyLoader::removePropertyChangeListener(
         const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    //no bound properties
+    
 }
 
 void BibliographyLoader::addVetoableChangeListener(
     const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    //no vetoable properties
+    
 }
 
 void BibliographyLoader::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
-    //no vetoable properties
+    
 }
 
 

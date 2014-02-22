@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <config_folders.h>
@@ -79,14 +79,14 @@ OString getCacheFolder()
 void clearCache()
 {
 #if 0
-    // We used to delete all files that did not end with the hash of
-    // the static kernel source string from oclkernels.hxx. But as
-    // those static kernels were not used for anything, it was
-    // pointless, that hash never changed. The static kernels are now
-    // removed, their hash is not part of the .bin file names any
-    // more.  So there is little this function can do until we come up
-    // with some other way to figure out which cached .bin files are
-    // "current".
+    
+    
+    
+    
+    
+    
+    
+    
     OUString aCacheDirURL(rtl::OStringToOUString(OpenclDevice::maCacheFolder, RTL_TEXTENCODING_UTF8));
     osl::Directory aCacheDir(aCacheDirURL);
     osl::FileBase::RC status = aCacheDir.open();
@@ -106,7 +106,7 @@ void clearCache()
         {
             if ( file is in some way obsolete )
             {
-                // delete the file
+                
                 OUString aFileUrl = aFileStatus.getFileURL();
                 osl::File::remove(aFileUrl);
             }
@@ -162,7 +162,7 @@ OString createFileName(cl_device_id deviceId, const char* clFileName)
     clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, sizeof(platformVersion),
             platformVersion, NULL);
 
-    // create hash for deviceName + driver version + platform version
+    
     OString aString = OString(deviceName) + driverVersion + platformVersion;
     OString aHash = generateMD5(aString.getStr(), aString.getLength());
 
@@ -185,7 +185,7 @@ std::vector<boost::shared_ptr<osl::File> > OpenclDevice::binaryGenerated( const 
         return aGeneratedFiles;
 
 
-    // grab the handles to all of the devices in the context.
+    
     boost::scoped_array<cl_device_id> mpArryDevsID(new cl_device_id[numDevices]);
     clStatus = clGetContextInfo( context, CL_CONTEXT_DEVICES,
             sizeof( cl_device_id ) * numDevices, mpArryDevsID.get(), NULL );
@@ -289,7 +289,7 @@ bool OpenclDevice::generatBinFromKernelSource( cl_program program, const char * 
         }
     }
 
-    // Release all resouces and memory
+    
     for ( size_t i = 0; i < numDevices; i++ )
     {
         delete[] binaries[i];
@@ -342,8 +342,8 @@ namespace {
 bool buildProgram(const char* buildOption, GPUEnv* gpuInfo, int idx)
 {
     cl_int clStatus;
-    //char options[512];
-    // create a cl program executable for all the devices specified
+    
+    
     if (!gpuInfo->mnIsUserCreated)
     {
         clStatus = clBuildProgram(gpuInfo->mpArryPrograms[idx], 1, gpuInfo->mpArryDevsID,
@@ -438,7 +438,7 @@ bool OpenclDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
             pBinary[i] = binary;
         }
 
-        // grab the handles to all of the devices in the context.
+        
         boost::scoped_array<cl_device_id> mpArryDevsID(new cl_device_id[numDevices]);
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES,
                        sizeof( cl_device_id ) * numDevices, mpArryDevsID.get(), NULL );
@@ -459,7 +459,7 @@ bool OpenclDevice::buildProgramFromBinary(const char* buildOption, GPUEnv* gpuIn
                                            &binary_status, &clStatus );
         if(clStatus != CL_SUCCESS)
         {
-            // something went wrong, fall back to compiling from source
+            
             return false;
         }
         for(size_t i = 0; i < numDevices; ++i)
@@ -487,13 +487,13 @@ bool OpenclDevice::initOpenclRunEnv( int argc )
     if ( !isInited )
     {
         registOpenclKernel();
-        //initialize devices, context, command_queue
+        
         bool status = initOpenclRunEnv( &gpuEnv );
         if ( status )
         {
             return true;
         }
-        //initialize program, kernelName, kernelCount
+        
         if( getenv( "SC_FLOAT" ) )
         {
             gpuEnv.mnKhrFp64Flag = false;
@@ -523,7 +523,7 @@ void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bA
     bKhrFp64 = false;
     bAmdFp64 = false;
 
-    // Check device extensions for double type
+    
     size_t aDevExtInfoSize = 0;
 
     cl_uint clStatus = clGetDeviceInfo( deviceId, CL_DEVICE_EXTENSIONS, 0, NULL, &aDevExtInfoSize );
@@ -544,7 +544,7 @@ void checkDeviceForDoubleSupport(cl_device_id deviceId, bool& bKhrFp64, bool& bA
     }
     else
     {
-        // Check if cl_amd_fp64 extension is supported
+        
         if ( strstr( pExtInfo.get(), "cl_amd_fp64" ) )
             bAmdFp64 = true;
     }
@@ -559,7 +559,7 @@ bool OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
     cl_uint numPlatforms, numDevices;
     cl_platform_id *platforms;
 
-    // Have a look at the available platforms.
+    
 
     if ( !gpuInfo->mnIsUserCreated )
     {
@@ -589,24 +589,24 @@ bool OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
                 }
                 gpuInfo->mpPlatformID = platforms[i];
 
-                //if (!strcmp(platformName, "Intel(R) Coporation"))
-                //if( !strcmp( platformName, "Advanced Micro Devices, Inc." ))
+                
+                
                 {
                     gpuInfo->mpPlatformID = platforms[i];
                     if ( getenv("SC_OPENCLCPU") )
                     {
-                        clStatus = clGetDeviceIDs(gpuInfo->mpPlatformID, // platform
-                                                  CL_DEVICE_TYPE_CPU,    // device_type for CPU device
-                                                  0,                     // num_entries
-                                                  NULL,                  // devices
+                        clStatus = clGetDeviceIDs(gpuInfo->mpPlatformID, 
+                                                  CL_DEVICE_TYPE_CPU,    
+                                                  0,                     
+                                                  NULL,                  
                                                   &numDevices);
                     }
                     else
                     {
-                          clStatus = clGetDeviceIDs(gpuInfo->mpPlatformID, // platform
-                                                  CL_DEVICE_TYPE_GPU,      // device_type for GPU device
-                                                  0,                       // num_entries
-                                                  NULL,                    // devices
+                          clStatus = clGetDeviceIDs(gpuInfo->mpPlatformID, 
+                                                  CL_DEVICE_TYPE_GPU,      
+                                                  0,                       
+                                                  NULL,                    
                                                   &numDevices);
                     }
                     if ( clStatus != CL_SUCCESS )
@@ -623,12 +623,12 @@ bool OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
         if ( NULL == gpuInfo->mpPlatformID )
             return true;
 
-        // Use available platform.
+        
         cl_context_properties cps[3];
         cps[0] = CL_CONTEXT_PLATFORM;
         cps[1] = (cl_context_properties) gpuInfo->mpPlatformID;
         cps[2] = 0;
-        // Set device type for OpenCL
+        
         if ( getenv("SC_OPENCLCPU") )
         {
             gpuInfo->mDevType = CL_DEVICE_TYPE_CPU;
@@ -651,21 +651,21 @@ bool OpenclDevice::initOpenclRunEnv( GPUEnv *gpuInfo )
         }
         if ( ( gpuInfo->mpContext == (cl_context) NULL) || ( clStatus != CL_SUCCESS ) )
             return true;
-        // Detect OpenCL devices.
-        // First, get the size of device list data
+        
+        
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES, 0, NULL, &length );
         if ( ( clStatus != CL_SUCCESS ) || ( length == 0 ) )
             return true;
-        // Now allocate memory for device list based on the size we got earlier
+        
         gpuInfo->mpArryDevsID = (cl_device_id*) malloc( length );
         if ( gpuInfo->mpArryDevsID == (cl_device_id*) NULL )
             return true;
-        // Now, get the device list data
+        
         clStatus = clGetContextInfo( gpuInfo->mpContext, CL_CONTEXT_DEVICES, length,
                        gpuInfo->mpArryDevsID, NULL );
         CHECK_OPENCL(clStatus, "clGetContextInfo");
 
-        // Create OpenCL command queue.
+        
         gpuInfo->mpCmdQueue = clCreateCommandQueue( gpuInfo->mpContext, gpuInfo->mpArryDevsID[0], 0, &clStatus );
 
         CHECK_OPENCL(clStatus, "clCreateCommandQueue");
@@ -693,7 +693,7 @@ int OpenclDevice::getOpenclState()
 
 namespace {
 
-// based on crashes and hanging during kernel compilation
+
 bool checkForKnownBadCompilers(const OpenclDeviceInfo& rInfo)
 {
 
@@ -763,7 +763,7 @@ void createDeviceInfo(cl_device_id aDeviceId, OpenclPlatformInfo& rPlatformInfo)
     bool bAmdFp64 = false;
     checkDeviceForDoubleSupport(aDeviceId, bKhrFp64, bAmdFp64);
 
-    // only list devices that support double
+    
     if(!bKhrFp64 && !bAmdFp64)
         return;
 
@@ -796,8 +796,8 @@ bool createPlatformInfo(cl_platform_id nPlatformId, OpenclPlatformInfo& rPlatfor
     if(nState != CL_SUCCESS)
         return false;
 
-    // memory leak that does not matter
-    // memory is stored in static variable that lives through the whole program
+    
+    
     cl_device_id* pDevices = new cl_device_id[nDevices];
     nState = clGetDeviceIDs(nPlatformId, CL_DEVICE_TYPE_ALL, nDevices, pDevices, NULL);
     if(nState != CL_SUCCESS)
@@ -844,8 +844,8 @@ const std::vector<OpenclPlatformInfo>& fillOpenCLInfo()
     if(nState != CL_SUCCESS)
         return aPlatforms;
 
-    // memory leak that does not matter,
-    // memory is stored in static instance aPlatforms
+    
+    
     cl_platform_id* pPlatforms = new cl_platform_id[nPlatforms];
     nState = clGetPlatformIDs(nPlatforms, pPlatforms, NULL);
 
@@ -941,8 +941,8 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
 
     if(OpenclDevice::gpuEnv.mpDevID == pDeviceId)
     {
-        // we don't need to change anything
-        // still the same device
+        
+        
         return pDeviceId != NULL;
     }
 
@@ -986,7 +986,7 @@ bool switchOpenclDevice(const OUString* pDevice, bool bAutoSelect, bool bForceEv
     env.mpOclCmdQueue = command_queue;
     OpenclDevice::initOpenclAttr(&env);
 
-    // why do we need this at all?
+    
     OpenclDevice::gpuEnv.mpArryDevsID = (cl_device_id*) malloc( sizeof(cl_device_id) );
     OpenclDevice::gpuEnv.mpArryDevsID[0] = pDeviceId;
     return !OpenclDevice::initOpenclRunEnv(0);

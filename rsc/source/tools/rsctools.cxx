@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -102,7 +102,7 @@ bool Append(FILE * fDest, const OString &rTmpFile)
     char szBuf[ MAX_BUF ];
     size_t nItems;
 
-    do //append
+    do 
     {
         nItems = fread( szBuf, 1, MAX_BUF, fSource );
         bSuccess = (nItems == fwrite(szBuf, 1, nItems, fDest));
@@ -143,15 +143,15 @@ char * ResponseFile( RscPtrPtr * ppCmd, char ** ppArgv, sal_uInt32 nArgc )
 {
     FILE    *fFile;
     int     nItems;
-    char    szBuffer[4096];       // file buffer
+    char    szBuffer[4096];       
     sal_uInt32  i;
     bool bInQuotes = false;
 
-    // program name
+    
     ppCmd->Append( rsc_strdup( *ppArgv ) );
     for( i = 1; i < nArgc; i++ )
     {
-        if( '@' == **(ppArgv +i) ){ // when @, then response file
+        if( '@' == **(ppArgv +i) ){ 
             if( NULL == (fFile = fopen( (*(ppArgv +i)) +1, "r" )) )
                 return( (*(ppArgv +i)) );
             nItems = fread( &szBuffer[ 0 ], 1, sizeof( char ), fFile );
@@ -301,12 +301,12 @@ void RscWriteRc :: PutUTF8( char * pStr )
 
     sal_uInt32  n = nStrLen +1;
     if( n % 2 )
-        // align to 2
+        
         n++;
 
     sal_uInt32  nOldLen = IncSize( n );
     memcpy( GetPointer( nOldLen ), pStr, nStrLen );
-    // 0 terminated
+    
     pMem[ nOldLen + nStrLen ] = '\0';
 }
 

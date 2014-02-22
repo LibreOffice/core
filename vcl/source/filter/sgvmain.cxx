@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -83,26 +83,26 @@
 
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Restrictions:
-//
-//  - area patterns are matched to the available ones in Starview.
-//  - line ends are always rounded in StarView and continue past the end of line.
-//  - line patterns are matched to the available ones in Starview.
-//    transparency/opacity is not taken into account
-//  - no rotated ellipses
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// for font translation  ///////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+
+//
+
+
+
+
+
+//
+
+
+
+
+
 SgfFontLst* pSgfFonts = 0;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// for circle kinds, text and rotated rectangles     ///////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 void RotatePoint(PointType& P, sal_Int16 cx, sal_Int16 cy, double sn, double cs)
 {
     sal_Int16  dx,dy;
@@ -140,9 +140,9 @@ sal_uInt16 MulDiv(sal_uInt16 a, sal_uInt16 Mul, sal_uInt16 Div)
     return sal_uInt16(Temp);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// SgfFilterSDrw ///////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 SvStream& ReadDtHdType(SvStream& rIStream, DtHdType& rDtHd)
 {
@@ -174,13 +174,13 @@ SvStream& ReadPageType(SvStream& rIStream, PageType& rPage)
 void ObjkOverSeek(SvStream& rInp, ObjkType& rObjk)
 {
     sal_uLong Siz;
-    Siz=(sal_uLong)rObjk.MemSize+rObjk.Last;  // ObjSize+ObjAnhSize
+    Siz=(sal_uLong)rObjk.MemSize+rObjk.Last;  
     rInp.Seek(rInp.Tell()+Siz);
 }
 
 SvStream& ReadObjkType(SvStream& rInp, ObjkType& rObjk)
 {
-    // fileposition in stream is not changed!
+    
     sal_uLong nPos;
     nPos=rInp.Tell();
     rInp.Read((char*)&rObjk.Last,ObjkSize);
@@ -378,7 +378,7 @@ void Obj0Type::Draw(OutputDevice&) {}
 void StrkType::Draw(OutputDevice& rOut)
 {
     SetLine(L,rOut);
-    rOut.DrawLine(Point(Pos1.x,Pos1.y),Point(Pos2.x,Pos2.y)); // !!!
+    rOut.DrawLine(Point(Pos1.x,Pos1.y),Point(Pos2.x,Pos2.y)); 
 }
 
 /*************************************************************************
@@ -401,7 +401,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
     sal_Int16 i,i0,b,b0;
     sal_Int16 Int1,Int2;
     sal_Int16 Col1,Col2;
-    //     ClipMerk: HgdClipRec;
+    
     sal_Int16 cx,cy;
     sal_Int16 MaxR;
     sal_Int32 dx,dy;
@@ -417,7 +417,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
     } else {
         b0=Int1;
         switch (F.FBFarbe & 0x38) {
-            case 0x08: { // vertikal
+            case 0x08: { 
                 i0=y1;
                 i=y1;
                 while (i<=y2) {
@@ -432,7 +432,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
                 SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int2,rOut);
                 rOut.DrawRect(Rectangle(x1,i0,x2,y2));
             } break;
-            case 0x28: { // horizontal
+            case 0x28: { 
                 i0=x1;
                 i=x1;
                 while (i<=x2) {
@@ -448,7 +448,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
                 rOut.DrawRect(Rectangle(i0,y1,x2,y2));
             } break;
 
-            case 0x18: case 0x38: { // circle
+            case 0x18: case 0x38: { 
                 Region ClipMerk=rOut.GetClipRegion();
                 double a;
 
@@ -474,7 +474,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
                 SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int1,rOut);
                 rOut.DrawEllipse(Rectangle(cx-i0,cy-i0,cx+i0,cy+i0));
                 rOut.SetClipRegion(ClipMerk);
-            } break; // circle
+            } break; 
         }
     }
 }
@@ -482,7 +482,7 @@ void DrawSlideRect(sal_Int16 x1, sal_Int16 y1, sal_Int16 x2, sal_Int16 y2, ObjAr
 
 void RectType::Draw(OutputDevice& rOut)
 {
-    if (L.LMuster!=0) L.LMuster=1; // no line separator here, only on or off
+    if (L.LMuster!=0) L.LMuster=1; 
     SetArea(F,rOut);
     if (DrehWink==0) {
     if ((F.FBFarbe & 0x38)==0 || Radius!=0) {
@@ -581,7 +581,7 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
     } else {
         b0=Int1;
         switch (F.FBFarbe & 0x38) {
-            case 0x08: { // vertical
+            case 0x08: { 
                 Region ClipMerk=rOut.GetClipRegion();
                 i0=y1;
                 i=y1;
@@ -600,7 +600,7 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
                 rOut.DrawEllipse(Rectangle(x1,y1,x2,y2));
                 rOut.SetClipRegion(ClipMerk);
             } break;
-            case 0x28: { // horizontal
+            case 0x28: { 
                 Region ClipMerk=rOut.GetClipRegion();
                 i0=x1;
                 i=x1;
@@ -620,7 +620,7 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
                 rOut.SetClipRegion(ClipMerk);
             } break;
 
-            case 0x18: case 0x38: { // circle
+            case 0x18: case 0x38: { 
                 sal_Int16 MaxR;
 
                 if (rx<1) rx=1;
@@ -642,7 +642,7 @@ void DrawSlideCirc(sal_Int16 cx, sal_Int16 cy, sal_Int16 rx, sal_Int16 ry, ObjAr
                 }
                 SgfAreaColorIntens(F.FMuster,(sal_uInt8)Col1,(sal_uInt8)Col2,(sal_uInt8)Int1,rOut);
                 rOut.DrawEllipse(Rectangle(cx-i0,cy-i0,cx+i0,cy+i0));
-            } break; // circle
+            } break; 
         }
     }
 }
@@ -652,7 +652,7 @@ void CircType::Draw(OutputDevice& rOut)
 {
     Rectangle aRect(Center.x-Radius.x,Center.y-Radius.y,Center.x+Radius.x,Center.y+Radius.y);
 
-    if (L.LMuster!=0) L.LMuster=1; // no line pattern here, only on or off
+    if (L.LMuster!=0) L.LMuster=1; 
     SetArea(F,rOut);
     if ((Flags & 0x03)==CircFull) {
         if ((F.FBFarbe & 0x38)==0) {
@@ -707,7 +707,7 @@ void CircType::Draw(OutputDevice& rOut)
 
 void BmapType::Draw(OutputDevice& rOut)
 {
-    //ifstream aInp;
+    
     unsigned char   nSgfTyp;
     sal_uInt16      nVersion;
     OUString        aStr(
@@ -782,7 +782,7 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     TextType aText;
                     ReadTextType( rInp, aText );
                     if (!rInp.GetError()) {
-                        aText.Buffer=new UCHAR[aText.BufSize+1]; // add one for LookAhead at CK-separation
+                        aText.Buffer=new UCHAR[aText.BufSize+1]; 
                         rInp.Read((char* )aText.Buffer,aText.BufSize);
                         if (!rInp.GetError()) aText.Draw(rOut);
                         delete[] aText.Buffer;
@@ -825,23 +825,23 @@ void DrawObjkList( SvStream& rInp, OutputDevice& rOut )
                     GrupType aGrup;
                     ReadGrupType( rInp, aGrup );
                     if (!rInp.GetError()) {
-                        rInp.Seek(rInp.Tell()+aGrup.Last);   // object appendix
-                        if(aGrup.GetSubPtr()!=0L) nGrpCnt++; // DrawObjkList(rInp,rOut );
+                        rInp.Seek(rInp.Tell()+aGrup.Last);   
+                        if(aGrup.GetSubPtr()!=0L) nGrpCnt++; 
                     }
                 } break;
                 default: {
-                    aObjk.Draw(rOut);          // object name on 2. Screen
-                    ObjkOverSeek(rInp,aObjk);  // to next object
+                    aObjk.Draw(rOut);          
+                    ObjkOverSeek(rInp,aObjk);  
                 }
             }
-        } // if rInp
+        } 
         if (!rInp.GetError()) {
             if (aObjk.Next==0L) {
                 if (nGrpCnt==0) bEnd=true;
                 else nGrpCnt--;
             }
         } else {
-            bEnd=true;  // read error
+            bEnd=true;  
         }
     } while (!bEnd);
 }
@@ -860,10 +860,10 @@ void SkipObjkList(SvStream& rInp)
         if(aObjk.Art==ObjGrup) {
             GrupType aGrup;
             ReadGrupType( rInp, aGrup );
-            rInp.Seek(rInp.Tell()+aGrup.Last); // object appendix
+            rInp.Seek(rInp.Tell()+aGrup.Last); 
             if(aGrup.GetSubPtr()!=0L) SkipObjkList(rInp);
         } else {
-            ObjkOverSeek(rInp,aObjk);  // to next object
+            ObjkOverSeek(rInp,aObjk);  
         }
     } while (aObjk.Next!=0L && !rInp.GetError());
 }
@@ -884,15 +884,15 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
     sal_uInt16        Num;
 
     pOutDev=&aOutDev;
-    DtHdOverSeek(rInp); // read dataheader
+    DtHdOverSeek(rInp); 
 
     nStdPos=rInp.Tell();
-    do {                // read standard page
+    do {                
         ReadPageType( rInp, aPage );
         if (aPage.nList!=0) SkipObjkList(rInp);
     } while (aPage.Next!=0L && !rInp.GetError());
 
-//    ShowMsg("Drawingpage(n)\n");
+
     nZchPos=rInp.Tell();
     ReadPageType( rInp, aPage );
 
@@ -900,7 +900,7 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
     Num=aPage.StdPg;
     if (Num!=0) {
       rInp.Seek(nStdPos);
-      while(Num>1 && aPage.Next!=0L && !rInp.GetError()) { // search standard page
+      while(Num>1 && aPage.Next!=0L && !rInp.GetError()) { 
         ReadPageType( rInp, aPage );
         if (aPage.nList!=0) SkipObjkList(rInp);
         Num--;
@@ -931,15 +931,15 @@ bool SgfFilterSDrw( SvStream& rInp, SgfHeader&, SgfEntry&, GDIMetaFile& rMtf )
 *************************************************************************/
 bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
 {
-#if OSL_DEBUG_LEVEL > 1 // check record size. New compiler possibly aligns different!
+#if OSL_DEBUG_LEVEL > 1 
     if (sizeof(ObjTextType)!=ObjTextTypeSize)  return false;
 #endif
 
-    sal_uLong   nFileStart;        // offset of SgfHeaders. In general 0.
+    sal_uLong   nFileStart;        
     SgfHeader   aHead;
     SgfEntry    aEntr;
     sal_uLong   nNext;
-    bool        bRet=false;        // return value
+    bool        bRet=false;        
 
     aIniPath.Append(OUString("sgf.ini"));
 
@@ -957,7 +957,7 @@ bool SgfSDrwFilter(SvStream& rInp, GDIMetaFile& rMtf, INetURLObject aIniPath )
             if (aEntr.Typ==aHead.Typ) {
                 bRet=SgfFilterSDrw( rInp,aHead,aEntr,rMtf );
             }
-        } // while(nNext)
+        } 
     }
     delete pSgfFonts;
     return(bRet);

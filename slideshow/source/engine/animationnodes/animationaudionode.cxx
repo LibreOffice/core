@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 
@@ -71,14 +71,14 @@ void AnimationAudioNode::activate_st()
 
     if (mpPlayer && mpPlayer->startPlayback())
     {
-        // TODO(F2): Handle end time attribute, too
+        
         if( getXAnimationNode()->getDuration().hasValue() )
         {
             scheduleDeactivationEvent();
         }
         else
         {
-            // no node duration. Take inherent media time, then
+            
             scheduleDeactivationEvent(
                 makeDelay( boost::bind( &AnimationNode::deactivate, getSelf() ),
                                         mpPlayer->getDuration(),
@@ -87,15 +87,15 @@ void AnimationAudioNode::activate_st()
     }
     else
     {
-        // deactivate ASAP:
+        
         scheduleDeactivationEvent(
             makeEvent( boost::bind( &AnimationNode::deactivate, getSelf() ),
                                     "AnimationAudioNode::deactivate without delay") );
     }
 }
 
-// TODO(F2): generate deactivation event, when sound
-// is over
+
+
 
 void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 {
@@ -105,14 +105,14 @@ void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
                 "could not cas self to AnimationEventHandler?" );
     getContext().mrEventMultiplexer.removeCommandStopAudioHandler( aHandler );
 
-    // force-end sound
+    
     if (mpPlayer)
     {
         mpPlayer->stopPlayback();
         resetPlayer();
     }
 
-    // notify _after_ state change:
+    
     getContext().mrEventQueue.addEvent(
         makeEvent( boost::bind( &EventMultiplexer::notifyAudioStopped,
                                 boost::ref(getContext().mrEventMultiplexer),
@@ -122,9 +122,9 @@ void AnimationAudioNode::deactivate_st( NodeState /*eDestState*/ )
 
 bool AnimationAudioNode::hasPendingAnimation() const
 {
-    // force slide to use the animation framework
-    // (otherwise, a single sound on the slide would
-    // not be played).
+    
+    
+    
     return true;
 }
 
@@ -141,10 +141,10 @@ void AnimationAudioNode::createPlayer() const
     }
     catch( lang::NoSupportException& )
     {
-        // catch possible exceptions from SoundPlayer,
-        // since being not able to playback the sound
-        // is not a hard error here (remainder of the
-        // animations should still work).
+        
+        
+        
+        
     }
 }
 
@@ -161,12 +161,12 @@ void AnimationAudioNode::resetPlayer() const
 bool AnimationAudioNode::handleAnimationEvent(
     const AnimationNodeSharedPtr& /*rNode*/ )
 {
-    // TODO(F2): for now we support only STOPAUDIO events.
+    
     deactivate();
     return true;
 }
 
-} // namespace internal
-} // namespace presentation
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

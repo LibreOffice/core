@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/supportsservice.hxx>
@@ -120,7 +120,7 @@ IMPL_LINK( PopupWindowControllerImpl, WindowEventListener, VclSimpleEvent*, pEve
     return 1;
 }
 
-//--------------------------------------------------------------------
+
 
 IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, Window*, pWindow )
 {
@@ -129,9 +129,9 @@ IMPL_STATIC_LINK( PopupWindowControllerImpl, AsyncDeleteWindowHdl, Window*, pWin
     return 0;
 }
 
-//========================================================================
-// class PopupWindowController
-//========================================================================
+
+
+
 
 PopupWindowController::PopupWindowController( const Reference< uno::XComponentContext >& rxContext,
                                               const Reference< frame::XFrame >& xFrame,
@@ -145,7 +145,7 @@ PopupWindowController::~PopupWindowController()
 {
 }
 
-// XInterface
+
 Any SAL_CALL PopupWindowController::queryInterface( const Type& aType )
 throw (RuntimeException)
 {
@@ -166,13 +166,13 @@ void SAL_CALL PopupWindowController::release() throw ()
     ToolboxController::release();
 }
 
-// XServiceInfo
+
 sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName ) throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-// XInitialization
+
 void SAL_CALL PopupWindowController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
 {
     svt::ToolboxController::initialize( aArguments );
@@ -180,7 +180,7 @@ void SAL_CALL PopupWindowController::initialize( const ::com::sun::star::uno::Se
         addStatusListener( m_aCommandURL );
 }
 
-// XComponent
+
 void SAL_CALL PopupWindowController::dispose() throw (RuntimeException)
 {
     if( !m_aCommandURL.isEmpty() )
@@ -190,14 +190,14 @@ void SAL_CALL PopupWindowController::dispose() throw (RuntimeException)
 }
 
 
-// XStatusListener
+
 void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException )
 {
     svt::ToolboxController::statusChanged(rEvent);
     enable( rEvent.IsEnabled );
 }
 
-// XToolbarController
+
 void SAL_CALL PopupWindowController::execute( sal_Int16 KeyModifier ) throw (RuntimeException)
 {
     svt::ToolboxController::execute( KeyModifier );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,15 +14,15 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <helper/networkdomain.hxx>
 
 #ifdef WNT
-//_________________________________________________________________________________________________________________
-//  Windows
-//_________________________________________________________________________________________________________________
+
+
+
 
 #define UNICODE
 #if defined _MSC_VER
@@ -51,9 +51,9 @@ static OUString GetUserDomain()
         return OUString();
 }
 
-//_________________________________________________________________________________________________________________
-//  Windows
-//_________________________________________________________________________________________________________________
+
+
+
 
 namespace framework
 {
@@ -77,15 +77,15 @@ OUString NetworkDomain::GetNTDomainName()
 #include <errno.h>
 #include <osl/thread.h>
 
-//_________________________________________________________________________________________________________________
-//  Unix
-//_________________________________________________________________________________________________________________
+
+
+
 
 #if defined( SOLARIS )
 
-//_________________________________________________________________________________________________________________
-//  Solaris
-//_________________________________________________________________________________________________________________
+
+
+
 
 #include <sys/systeminfo.h>
 #include <sal/alloca.h>
@@ -129,9 +129,9 @@ static rtl_uString *getDomainName()
 
 #elif defined( LINUX ) /* endif SOLARIS */
 
-//_________________________________________________________________________________________________________________
-//  Linux
-//_________________________________________________________________________________________________________________
+
+
+
 
 #include <unistd.h>
 #include <string.h>
@@ -170,9 +170,9 @@ static rtl_uString *getDomainName()
 
 #else /* LINUX */
 
-//_________________________________________________________________________________________________________________
-//  Other Unix
-//_________________________________________________________________________________________________________________
+
+
+
 
 static rtl_uString *getDomainName()
 {
@@ -181,9 +181,9 @@ static rtl_uString *getDomainName()
 
 #endif
 
-//_________________________________________________________________________________________________________________
-//  Unix
-//_________________________________________________________________________________________________________________
+
+
+
 
 namespace framework
 {
@@ -206,9 +206,9 @@ OUString NetworkDomain::GetNTDomainName()
 
 #else /* UNIX */
 
-//_________________________________________________________________________________________________________________
-//  Other operating systems (non-Windows and non-Unix)
-//_________________________________________________________________________________________________________________
+
+
+
 
 namespace framework
 {

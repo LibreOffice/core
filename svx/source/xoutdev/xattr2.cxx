@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/drawing/LineJoint.hpp>
@@ -32,7 +32,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
-// class XLineTransparenceItem
+
 
 TYPEINIT1_AUTOFACTORY(XLineTransparenceItem, SfxUInt16Item);
 
@@ -81,7 +81,7 @@ SfxItemPresentation XLineTransparenceItem::GetPresentation
     }
 }
 
-// class XLineJointItem -
+
 
 TYPEINIT1_AUTOFACTORY(XLineJointItem, SfxEnumItem);
 
@@ -179,7 +179,7 @@ bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
 
     if(!(rVal >>= eUnoJoint))
     {
-        // also try an int (for Basic)
+        
         sal_Int32 nLJ = 0;
         if(!(rVal >>= nLJ))
             return false;
@@ -193,11 +193,11 @@ bool XLineJointItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8
 
 sal_uInt16 XLineJointItem::GetValueCount() const
 {
-    // don't forget to update the api interface also
+    
     return 5;
 }
 
-// class AffineMatrixItem
+
 
 TYPEINIT1_AUTOFACTORY(AffineMatrixItem, SfxPoolItem);
 
@@ -300,7 +300,7 @@ bool AffineMatrixItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8
     return false;
 }
 
-// class XLineCapItem -
+
 
 TYPEINIT1_AUTOFACTORY(XLineCapItem, SfxEnumItem);
 
@@ -386,7 +386,7 @@ bool XLineCapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /
 
     if(!(rVal >>= eUnoCap))
     {
-        // also try an int (for Basic)
+        
         sal_Int32 nLJ(0);
 
         if(!(rVal >>= nLJ))
@@ -408,7 +408,7 @@ bool XLineCapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt8 /
 
 sal_uInt16 XLineCapItem::GetValueCount() const
 {
-    // don't forget to update the api interface also
+    
     return 3;
 }
 
@@ -422,7 +422,7 @@ com::sun::star::drawing::LineCap XLineCapItem::GetValue() const
     return eRetval;
 }
 
-// class XFillTransparenceItem
+
 
 TYPEINIT1_AUTOFACTORY(XFillTransparenceItem, SfxUInt16Item);
 
@@ -471,7 +471,7 @@ SfxItemPresentation XFillTransparenceItem::GetPresentation
     }
 }
 
-// class XFormTextShadowTranspItem
+
 
 TYPEINIT1_AUTOFACTORY(XFormTextShadowTranspItem, SfxUInt16Item);
 
@@ -495,7 +495,7 @@ SfxPoolItem* XFormTextShadowTranspItem::Create(SvStream& rIn, sal_uInt16 /*nVer*
     return new XFormTextShadowTranspItem(rIn);
 }
 
-// class XFillGradientStepCountItem
+
 
 TYPEINIT1_AUTOFACTORY(XGradientStepCountItem, SfxUInt16Item);
 
@@ -534,7 +534,7 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NONE:
             return ePres;
         case SFX_ITEM_PRESENTATION_COMPLETE:
-//          rText = OUString( ResId( RID_SVXSTR_GRADIENTSTEPCOUNT, DIALOG_MGR() ) ) + ": ";
+
         case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += OUString::number(GetValue());
             return ePres;
@@ -543,7 +543,7 @@ SfxItemPresentation XGradientStepCountItem::GetPresentation
     }
 }
 
-// class XFillBmpTileItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpTileItem, SfxBoolItem );
 
@@ -589,7 +589,7 @@ SfxItemPresentation XFillBmpTileItem::GetPresentation
     }
 }
 
-// class XFillBmpTilePosItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpPosItem, SfxEnumItem );
 
@@ -640,7 +640,7 @@ sal_uInt16 XFillBmpPosItem::GetValueCount() const
     return 9;
 }
 
-// class XFillBmpTileSizeXItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeXItem, SfxMetricItem );
 
@@ -691,7 +691,7 @@ bool XFillBmpSizeXItem::HasMetrics() const
     return GetValue() > 0L;
 }
 
-// class XFillBmpTileSizeYItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeYItem, SfxMetricItem );
 
@@ -742,7 +742,7 @@ bool XFillBmpSizeYItem::HasMetrics() const
     return GetValue() > 0L;
 }
 
-// class XFillBmpTileLogItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpSizeLogItem, SfxBoolItem );
 
@@ -788,7 +788,7 @@ SfxItemPresentation XFillBmpSizeLogItem::GetPresentation
     }
 }
 
-// class XFillBmpTileOffXItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetXItem, SfxUInt16Item );
 
@@ -834,7 +834,7 @@ SfxItemPresentation XFillBmpTileOffsetXItem::GetPresentation
     }
 }
 
-// class XFillBmpTileOffYItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpTileOffsetYItem, SfxUInt16Item );
 
@@ -880,7 +880,7 @@ SfxItemPresentation XFillBmpTileOffsetYItem::GetPresentation
     }
 }
 
-// class XFillBmpStretchItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpStretchItem, SfxBoolItem );
 
@@ -926,7 +926,7 @@ SfxItemPresentation XFillBmpStretchItem::GetPresentation
     }
 }
 
-// class XFillBmpTileOffPosXItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetXItem, SfxUInt16Item );
 
@@ -972,7 +972,7 @@ SfxItemPresentation XFillBmpPosOffsetXItem::GetPresentation
     }
 }
 
-// class XFillBmpTileOffPosYItem
+
 
 TYPEINIT1_AUTOFACTORY( XFillBmpPosOffsetYItem, SfxUInt16Item );
 
@@ -1018,7 +1018,7 @@ SfxItemPresentation XFillBmpPosOffsetYItem::GetPresentation
     }
 }
 
-// class XFillBackgroundItem
+
 
 TYPEINIT1_AUTOFACTORY(XFillBackgroundItem, SfxBoolItem);
 

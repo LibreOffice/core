@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,39 +14,39 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <comphelper/SelectionMultiplex.hxx>
 #include <osl/diagnose.h>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::view;
 
-//========================================================================
-//= OSelectionChangeListener
-//========================================================================
-//------------------------------------------------------------------------
+
+
+
+
 OSelectionChangeListener::~OSelectionChangeListener()
 {
     if (m_pAdapter)
         m_pAdapter->dispose();
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeListener::_disposing(const EventObject&) throw( RuntimeException)
 {
-    // nothing to do here
+    
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeListener::setAdapter(OSelectionChangeMultiplexer* pAdapter)
 {
     if (m_pAdapter)
@@ -64,10 +64,10 @@ void OSelectionChangeListener::setAdapter(OSelectionChangeMultiplexer* pAdapter)
     }
 }
 
-//========================================================================
-//= OSelectionChangeMultiplexer
-//========================================================================
-//------------------------------------------------------------------
+
+
+
+
 OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  Reference< XSelectionSupplier>& _rxSet, bool _bAutoReleaseSet)
             :m_xSet(_rxSet)
             ,m_pListener(_pListener)
@@ -84,24 +84,24 @@ OSelectionChangeMultiplexer::OSelectionChangeMultiplexer(OSelectionChangeListene
     osl_atomic_decrement(&m_refCount);
 }
 
-//------------------------------------------------------------------
+
 OSelectionChangeMultiplexer::~OSelectionChangeMultiplexer()
 {
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeMultiplexer::lock()
 {
     ++m_nLockCount;
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeMultiplexer::unlock()
 {
     --m_nLockCount;
 }
 
-//------------------------------------------------------------------
+
 void OSelectionChangeMultiplexer::dispose()
 {
     if (m_bListening)
@@ -120,17 +120,17 @@ void OSelectionChangeMultiplexer::dispose()
     }
 }
 
-// XEventListener
-//------------------------------------------------------------------
+
+
 void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSource) throw( RuntimeException)
 {
     if (m_pListener)
     {
-         // tell the listener
+         
         if (!locked())
             m_pListener->_disposing(_rSource);
-        // disconnect the listener
-        if (m_pListener)    // may have been reset whilest calling into _disposing
+        
+        if (m_pListener)    
             m_pListener->setAdapter(NULL);
     }
 
@@ -141,15 +141,15 @@ void SAL_CALL OSelectionChangeMultiplexer::disposing( const  EventObject& _rSour
         m_xSet = NULL;
 }
 
-// XSelectionChangeListener
-//------------------------------------------------------------------
+
+
 void SAL_CALL OSelectionChangeMultiplexer::selectionChanged( const  EventObject& _rEvent ) throw( RuntimeException)
 {
     if (m_pListener && !locked())
         m_pListener->_selectionChanged(_rEvent);
 }
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

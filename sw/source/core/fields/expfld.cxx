@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -63,16 +63,16 @@ static sal_Int16 lcl_SubTypeToAPI(sal_uInt16 nSubType)
         switch(nSubType)
         {
             case nsSwGetSetExpType::GSE_EXPR:
-                nRet = SetVariableType::VAR;      // 0
+                nRet = SetVariableType::VAR;      
                 break;
             case nsSwGetSetExpType::GSE_SEQ:
-                nRet = SetVariableType::SEQUENCE; // 1
+                nRet = SetVariableType::SEQUENCE; 
                 break;
             case nsSwGetSetExpType::GSE_FORMULA:
-                nRet = SetVariableType::FORMULA;  // 2
+                nRet = SetVariableType::FORMULA;  
                 break;
             case nsSwGetSetExpType::GSE_STRING:
-                nRet = SetVariableType::STRING;   // 3
+                nRet = SetVariableType::STRING;   
                 break;
         }
         return nRet;
@@ -98,8 +98,8 @@ static sal_Int32 lcl_APIToSubType(const uno::Any& rAny)
 
 OUString ReplacePoint( OUString rTmpName, bool bWithCommandType )
 {
-    // replace first and last (if bWithCommandType: last two) dot
-    // since table names may contain dots
+    
+    
 
     sal_Int32 nIndex = rTmpName.lastIndexOf('.');
     if (nIndex<0)
@@ -166,7 +166,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
     {
         if( pLayout->IsFlyFrm() )
         {
-            // hole das FlyFormat
+            
             SwFrmFmt* pFlyFmt = ((SwFlyFrm*)pLayout)->GetFmt();
             OSL_ENSURE( pFlyFmt, "kein FlyFormat gefunden, wo steht das Feld" );
 
@@ -174,7 +174,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
 
             if( FLY_AT_FLY == rAnchor.GetAnchorId() )
             {
-                // the fly needs to be attached somewhere, so ask it
+                
                 pLayout = (SwLayoutFrm*)((SwFlyFrm*)pLayout)->GetAnchorFrm();
                 continue;
             }
@@ -191,7 +191,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                             &rPos.nContent );
                 }
 
-                // do not break yet, might be as well in Header/Footer/Footnote/Fly
+                
                 pLayout = ((SwFlyFrm*)pLayout)->GetAnchorFrm()
                             ? ((SwFlyFrm*)pLayout)->GetAnchorFrm()->GetUpper() : 0;
                 continue;
@@ -205,7 +205,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         }
         else if( pLayout->IsFtnFrm() )
         {
-            // get the anchor's node
+            
             const SwTxtFtn* pFtn = ((SwFtnFrm*)pLayout)->GetAttr();
             pTxtNode = &pFtn->GetTxtNode();
             rPos.nNode = *pTxtNode;
@@ -223,7 +223,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                     pTab->GetTable()->GetRowsToRepeat() > 0 &&
                     pTab->IsInHeadline( *pCntFrm ) )
                 {
-                    // take the next line
+                    
                     const SwLayoutFrm* pRow = pTab->GetFirstNonHeadlineRow();
                     pCntFrm = pRow->ContainsCntnt();
                 }
@@ -240,7 +240,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             else
             {
                 Point aPt( pLayout->Frm().Pos() );
-                aPt.Y()++;      // aus dem Header raus
+                aPt.Y()++;      
                 pCntFrm = pPgFrm->GetCntntPos( aPt, sal_False, sal_True, sal_False );
                 pTxtNode = GetFirstTxtNode( rDoc, rPos, pCntFrm, aPt );
             }
@@ -250,7 +250,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
             pLayout = pLayout->GetUpper();
             continue;
         }
-        break; // found, so finish loop
+        break; 
     }
     return pTxtNode;
 }
@@ -269,7 +269,7 @@ void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
 {
     if( pNew && RES_DOCPOS_UPDATE == pNew->Which() )
         NotifyClients( 0, pNew );
-    // do not expand anything else
+    
 }
 
 SwGetExpField::SwGetExpField(SwGetExpFieldType* pTyp, const OUString& rFormel,
@@ -317,24 +317,24 @@ SwField* SwGetExpField::Copy() const
 
 void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
 {
-    if( bIsInBodyTxt ) // only fields in Footer, Header, FootNote, Flys
+    if( bIsInBodyTxt ) 
         return;
 
     OSL_ENSURE( !rFrm.IsInDocBody(), "Flag incorrect, frame is in DocBody" );
 
-    // determine document (or is there an easier way?)
+    
     const SwTxtNode* pTxtNode = &rFld.GetTxtNode();
     SwDoc& rDoc = *(SwDoc*)pTxtNode->GetDoc();
 
-    // create index for determination of the TextNode
+    
     SwPosition aPos( SwNodeIndex( rDoc.GetNodes() ) );
     pTxtNode = GetBodyTxtNode( rDoc, aPos, rFrm );
 
-    // If no layout exists, ChangeExpansion is called for header and
-    // footer lines via layout formatting without existing TxtNode.
+    
+    
     if(!pTxtNode)
         return;
-    // #i82544#
+    
     if( bLateInitialization )
     {
         SwFieldType* pSetExpFld = rDoc.GetFldType(RES_SETEXPFLD, GetFormula(), false);
@@ -358,14 +358,14 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     }
     else
     {
-        // fill calculator with values
+        
         SwCalc aCalc( rDoc );
         rDoc.FldsToCalc(aCalc, aEndFld);
 
-        // calculate value
+        
         SetValue(aCalc.Calculate(GetFormula()).GetDouble());
 
-        // analyse based on format
+        
         sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue(
                                 GetValue(), GetFormat(), GetLanguage());
     }
@@ -492,7 +492,7 @@ SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const OUString& rName, sal_uIn
     bDeleted( sal_False )
 {
     if( ( nsSwGetSetExpType::GSE_SEQ | nsSwGetSetExpType::GSE_STRING ) & nType )
-        EnableFormat(sal_False);    // do not use Numberformatter
+        EnableFormat(sal_False);    
 }
 
 SwFieldType* SwSetExpFieldType::Copy() const
@@ -512,7 +512,7 @@ OUString SwSetExpFieldType::GetName() const
 
 void SwSetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* )
 {
-    return;     // do not expand further
+    return;     
 }
 
 void SwSetExpFieldType::SetSeqFormat(sal_uLong nFmt)
@@ -541,7 +541,7 @@ extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt
 
     sal_uInt16 n;
 
-    // check if number is already used and if a new one needs to be created
+    
     SwIterator<SwFmtFld,SwFieldType> aIter( *this );
     const SwTxtNode* pNd;
     for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
@@ -551,21 +551,21 @@ extern void InsertSort( std::vector<sal_uInt16>& rArr, sal_uInt16 nIdx, sal_uInt
             InsertSort( aArr, ((SwSetExpField*)pF->GetField())->GetSeqNumber() );
 
 
-    // check first if number already exists
+    
     sal_uInt16 nNum = rFld.GetSeqNumber();
     if( USHRT_MAX != nNum )
     {
         for( n = 0; n < aArr.size(); ++n )
             if( aArr[ n ] > nNum )
-                return nNum;            // no -> use it
+                return nNum;            
             else if( aArr[ n ] == nNum )
-                break;                  // yes -> create new
+                break;                  
 
         if( n == aArr.size() )
-            return nNum;            // no -> use it
+            return nNum;            
     }
 
-    // flagged all numbers, so determine the right number
+    
     for( n = 0; n < aArr.size(); ++n )
         if( n != aArr[ n ] )
             break;
@@ -603,12 +603,12 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
 
         if (pRule)
         {
-            // --> OD 2005-11-02 #i51089 - TUNING#
+            
             if ( pTxtNd->GetNum() )
             {
                 const SwNodeNum & aNum = *(pTxtNd->GetNum());
 
-                // only get the number, without pre-/post-fixstrings
+                
                 OUString sNumber( pRule->MakeNumString(aNum, sal_False ));
 
                 if( !sNumber.isEmpty() )
@@ -713,7 +713,7 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
                         & rColl = ::GetAppCollator();
         const CharClass& rCC = GetAppCharClass();
 
-        //#59900# Sorting should sort number correctly (e.g. "10" after "9" not after "1")
+        
         const OUString rTmp2 = rNew.sDlgEntry;
         sal_Int32 nFndPos2 = 0;
         const OUString sNum2( rTmp2.getToken( 0, ' ', nFndPos2 ));
@@ -725,7 +725,7 @@ bool SwSeqFldList::SeekEntry( const _SeqFldLstElem& rNew, sal_uInt16* pP ) const
         {
             nM = nU + ( nO - nU ) / 2;
 
-            //#59900# Sorting should sort number correctly (e.g. "10" after "9" not after "1")
+            
             const OUString rTmp1 = maData[nM]->sDlgEntry;
             sal_Int32 nFndPos1 = 0;
             const OUString sNum1( rTmp1.getToken( 0, ' ', nFndPos1 ));
@@ -765,7 +765,7 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
     nSubType(0)
 {
     SetFormula(rFormel);
-    // ignore SubType
+    
     bInput = sal_False;
     if( IsSequenceFld() )
     {
@@ -780,17 +780,17 @@ SwSetExpField::SwSetExpField(SwSetExpFieldType* pTyp, const OUString& rFormel,
 OUString SwSetExpField::Expand() const
 {
     if (nSubType & nsSwExtendedSubType::SUB_CMD)
-    {   // we need the CommandString
+    {   
         return GetTyp()->GetName() + " = " + GetFormula();
     }
     if(!(nSubType & nsSwExtendedSubType::SUB_INVISIBLE))
-    {   // value is visible
+    {   
         return sExpand;
     }
     return OUString();
 }
 
-/// @return the field name
+
 OUString SwSetExpField::GetFieldName() const
 {
     SwFldTypesEnum const nStrType( (IsSequenceFld())
@@ -804,7 +804,7 @@ OUString SwSetExpField::GetFieldName() const
         + " "
         + GetTyp()->GetName() );
 
-    // Sequence: without formula
+    
     if (TYP_SEQFLD != nStrType)
     {
         aStr += " = " + GetFormula();
@@ -879,7 +879,7 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc,
     {
         sNodeText = sNodeText.copy(nRet);
 
-        // now check if sNodeText starts with a non-alphanumeric character plus blanks
+        
         sal_uInt16 nSrcpt = g_pBreakIt->GetRealScriptOfText( sNodeText, 0 );
 
         static const sal_uInt16 nIds[] =
@@ -907,7 +907,7 @@ sal_Int32 SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc,
             if( !bIsAlphaNum ||
                 (c0 == ' ' || c0 == '\t'))
             {
-                // ignoring blanks
+                
                 nRet++;
                 const sal_Int32 nLen = sNodeText.getLength();
                 for (sal_Int32 i = 1;
@@ -971,7 +971,7 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
             if(nTmp16 <= SVX_NUMBER_NONE )
                 SetFormat(nTmp16);
             else {
-                //exception(wrong_value)
+                
                 ;
             }
         }
@@ -991,9 +991,9 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         {
             OUString uTmp;
             rAny >>= uTmp;
-            //I18N - if the formula contains only "TypeName+1"
-            //and it's one of the initially created sequence fields
-            //then the localized names has to be replaced by a programmatic name
+            
+            
+            
             OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, uTmp, sal_False);
             SetFormula( sMyFormula );
         }
@@ -1060,9 +1060,9 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_PAR2:
         {
-            //I18N - if the formula contains only "TypeName+1"
-            //and it's one of the initially created sequence fields
-            //then the localized names has to be replaced by a programmatic name
+            
+            
+            
             OUString sMyFormula = SwXFieldMaster::LocalizeFormula(*this, GetFormula(), sal_True);
             rAny <<= OUString( sMyFormula );
         }
@@ -1188,7 +1188,7 @@ void SwInputField::applyFieldContent( const OUString& rNewFieldContent )
         {
             pUserTyp->SetContent( rNewFieldContent );
 
-            // trigger update of the corresponding User Fields and other related Input Fields
+            
             {
                 LockNotifyContentChange();
                 pUserTyp->UpdateFlds();
@@ -1298,7 +1298,7 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
 }
 
 
-/// set condition
+
 void SwInputField::SetPar1(const OUString& rStr)
 {
     aContent = rStr;

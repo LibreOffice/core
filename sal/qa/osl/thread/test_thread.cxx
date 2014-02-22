@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -46,22 +46,22 @@ private:
 
 class Test: public CppUnit::TestFixture {
 public:
-    // Nondeterministic, best effort test that an osl::Thread can be destroyed
-    // (and in particular osl_destroyThread---indirectly---be called) before the
-    // corresponding thread has terminated:
+    
+    
+    
     void test() {
         for (int i = 0; i < 50; ++i) {
             osl::Condition c;
             Thread t(c);
             CPPUNIT_ASSERT(t.create());
-            // Make sure virtual Thread::run/onTerminated are called before
-            // Thread::~Thread:
+            
+            
             CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, c.wait());
         }
-        // Make sure Thread::~Thread is called before each spawned thread
-        // terminates:
+        
+        
         global.set();
-        // Give the spawned threads enough time to terminate:
+        
         TimeValue const twentySeconds = { 20, 0 };
         osl::Thread::wait(twentySeconds);
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "svl/sharedstring.hxx"
@@ -13,8 +13,8 @@ namespace svl {
 
 SharedString SharedString::getEmptyString()
 {
-    // unicode string array for empty string is globally shared in OUString.
-    // Let's take advantage of that.
+    
+    
     rtl_uString* pData = NULL;
     rtl_uString_new(&pData);
     return SharedString(pData, pData);
@@ -72,7 +72,7 @@ SharedString& SharedString::operator= ( const SharedString& r )
 
 bool SharedString::operator== ( const SharedString& r ) const
 {
-    // Only compare case sensitive strings.
+    
     if (mpData == r.mpData)
         return true;
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -269,14 +269,14 @@ private:
 
     struct LZWCTreeNode
     {
-        LZWCTreeNode*   mpBrother;      // next node with same parent
-        LZWCTreeNode*   mpFirstChild;   // first son
-        sal_uInt16      mnCode;         // code for the string
-        sal_uInt16      mnValue;        // pixelvalue
+        LZWCTreeNode*   mpBrother;      
+        LZWCTreeNode*   mpFirstChild;   
+        sal_uInt16      mnCode;         
+        sal_uInt16      mnValue;        
     };
 
-    LZWCTreeNode*   mpTable;    // LZW compression data
-    LZWCTreeNode*   mpPrefix;   // the compression is as same as the TIFF compression
+    LZWCTreeNode*   mpTable;    
+    LZWCTreeNode*   mpPrefix;   
     sal_uInt16      mnDataSize;
     sal_uInt16      mnClearCode;
     sal_uInt16      mnEOICode;
@@ -306,7 +306,7 @@ LZWEncoder::LZWEncoder(osl::File* pOutputFile) :
     mnTableSize = mnEOICode   + 1;
     mnCodeSize  = mnDataSize  + 1;
 
-    mnOffset    = 32;   // free bits in dwShift
+    mnOffset    = 32;   
     mdwShift    = 0;
 
     mpTable = new LZWCTreeNode[ 4096 ];
@@ -430,9 +430,9 @@ PrinterGfx::DrawBitmap (const Rectangle& rDest, const Rectangle& rSrc,
         else
         if (rBitmap.GetDepth() ==  8 && mbColor)
         {
-            // if the palette is larger than the image itself print it as a truecolor
-            // image to save diskspace. This is important for printing transparent
-            // bitmaps that are disassembled into small pieces
+            
+            
+            
             sal_Int32 nImageSz   = rSrc.GetWidth() * rSrc.GetHeight();
             sal_Int32 nPaletteSz = rBitmap.GetPaletteEntryCount();
             if ((nImageSz < nPaletteSz) || (nImageSz < 24) )
@@ -473,7 +473,7 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
     sal_Char  pGrayImage [512];
     sal_Int32 nChar = 0;
 
-    // image header
+    
     nChar += psp::getValueOf (nWidth,                           pGrayImage + nChar);
     nChar += psp::appendStr  (" ",                              pGrayImage + nChar);
     nChar += psp::getValueOf (nHeight,                          pGrayImage + nChar);
@@ -488,7 +488,7 @@ PrinterGfx::DrawPS1GrayImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
 
     WritePS (mpPageBody, pGrayImage);
 
-    // image body
+    
     HexEncoder* pEncoder = new HexEncoder (mpPageBody);
 
     for (long nRow = rArea.Top(); nRow <= rArea.Bottom(); nRow++)
@@ -639,7 +639,7 @@ PrinterGfx::DrawPS2MonoImage (const PrinterBmp& rBitmap, const Rectangle& rArea)
                 nByte   = 0;
             }
         }
-        // keep the row byte aligned
+        
         if (nBitPos != 0)
             pEncoder->EncodeByte (nByte);
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,8 +40,8 @@ namespace cppcanvas
             maLastTransformation(),
             mbOnlyRedrawWithSameTransform( bOnlyRedrawWithSameTransform )
         {
-            // TODO(F2): also store last view transform, and refuse to
-            // redraw if changed.
+            
+            
         }
 
         bool CachedPrimitiveBase::render( const ::basegfx::B2DHomMatrix& rTransformation ) const
@@ -56,10 +56,10 @@ namespace cppcanvas
                                                     rViewState );
             aTotalTransform *= rTransformation;
 
-            // can we use the cached primitive? For that, it must be
-            // present in the first place, and, if
-            // mbOnlyRedrawWithSameTransform is true, the overall
-            // transformation must be the same.
+            
+            
+            
+            
             if( mxCachedPrimitive.is() &&
                 (!mbOnlyRedrawWithSameTransform ||
                  maLastTransformation == aTotalTransform) )
@@ -67,14 +67,14 @@ namespace cppcanvas
                 if( mxCachedPrimitive->redraw( rViewState ) ==
                     rendering::RepaintResult::REDRAWN )
                 {
-                    // cached repaint succeeded, done.
+                    
                     return true;
                 }
             }
 
             maLastTransformation = aTotalTransform;
 
-            // delegate rendering to derived classes
+            
             return renderPrimitive( mxCachedPrimitive,
                                     rTransformation );
         }

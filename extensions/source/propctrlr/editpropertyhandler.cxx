@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "editpropertyhandler.hxx"
@@ -28,16 +28,16 @@
 #define TEXTTYPE_MULTILINE      1
 #define TEXTTYPE_RICHTEXT       2
 
-//------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_EditPropertyHandler()
 {
     ::pcr::EditPropertyHandler::registerImplementation();
 }
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -46,30 +46,30 @@ namespace pcr
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::inspection;
 
-    //====================================================================
-    //= EditPropertyHandler
-    //====================================================================
+    
+    
+    
     DBG_NAME( EditPropertyHandler )
-    //--------------------------------------------------------------------
+    
     EditPropertyHandler::EditPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EditPropertyHandler_Base( _rxContext )
     {
         DBG_CTOR( EditPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     EditPropertyHandler::~EditPropertyHandler( )
     {
         DBG_DTOR( EditPropertyHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL EditPropertyHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.EditPropertyHandler" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL EditPropertyHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -77,7 +77,7 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL EditPropertyHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -133,7 +133,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL EditPropertyHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -186,10 +186,10 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     bool EditPropertyHandler::implHaveBothScrollBarProperties() const
     {
-        // have a "Scrollbars" property if the object supports both "HScroll" and "VScroll"
+        
         Reference< XPropertySetInfo > xPSI;
         if ( m_xComponent.is() )
             xPSI = m_xComponent->getPropertySetInfo();
@@ -199,10 +199,10 @@ namespace pcr
             && xPSI->hasPropertyByName( PROPERTY_VSCROLL );
     }
 
-    //--------------------------------------------------------------------
+    
     bool EditPropertyHandler::implHaveTextTypeProperty() const
     {
-        // have a "Scrollbars" property if the object supports both "HScroll" and "VScroll"
+        
         Reference< XPropertySetInfo > xPSI;
         if ( m_xComponent.is() )
             xPSI = m_xComponent->getPropertySetInfo();
@@ -212,7 +212,7 @@ namespace pcr
             && xPSI->hasPropertyByName( PROPERTY_MULTILINE );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< Property > SAL_CALL EditPropertyHandler::doDescribeSupportedProperties() const
     {
         ::std::vector< Property > aProperties;
@@ -228,7 +228,7 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL EditPropertyHandler::getSupersededProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -248,7 +248,7 @@ namespace pcr
         return Sequence< OUString >( &(*aSuperseded.begin()), aSuperseded.size() );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL EditPropertyHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -259,7 +259,7 @@ namespace pcr
         return Sequence< OUString >( &(*aInterestingActuatingProps.begin()), aInterestingActuatingProps.size() );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL EditPropertyHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -305,8 +305,8 @@ namespace pcr
         }
     }
 
-//........................................................................
-}   // namespace pcr
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

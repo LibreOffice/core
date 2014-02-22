@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/crc.h>
@@ -133,7 +133,7 @@ GDIMetaFile::GDIMetaFile( const GDIMetaFile& rMtf ) :
     bRecord         ( false ),
     bUseCanvas      ( rMtf.bUseCanvas )
 {
-    // Increment RefCount of MetaActions
+    
     for( size_t i = 0, n = rMtf.GetActionSize(); i < n; ++i )
     {
         rMtf.GetAction( i )->Duplicate();
@@ -179,13 +179,13 @@ MetaAction* GDIMetaFile::ReplaceAction( MetaAction* pAction, size_t nAction )
 {
     if ( nAction >= aList.size() )
     {
-        // this method takes ownership of pAction and is
-        // therefore responsible for deleting it
+        
+        
         pAction->Delete();
         return NULL;
     }
-    //fdo#39995 This does't increment the incoming action ref-count nor does it
-    //decrement the outgoing action ref-count
+    
+    
     std::swap(pAction, aList[nAction]);
     return pAction;
 }
@@ -196,7 +196,7 @@ GDIMetaFile& GDIMetaFile::operator=( const GDIMetaFile& rMtf )
     {
         Clear();
 
-        // Increment RefCount of MetaActions
+        
         for( size_t i = 0, n = rMtf.GetActionSize(); i < n; ++i )
         {
             rMtf.GetAction( i )->Duplicate();
@@ -346,10 +346,10 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
         if( nPos > nObjCount )
             nPos = nObjCount;
 
-        // #i23407# Set backwards-compatible text language and layout mode
-        // This is necessary, since old metafiles don't even know of these
-        // recent add-ons. Newer metafiles must of course explicitly set
-        // those states.
+        
+        
+        
+        
         pOut->Push( PUSH_TEXTLAYOUTMODE|PUSH_TEXTLANGUAGE );
         pOut->SetLayoutMode( 0 );
         pOut->SetDigitLanguage( 0 );
@@ -373,7 +373,7 @@ void GDIMetaFile::Play( OutputDevice* pOut, size_t nPos )
                         pAction->Execute( pOut );
                     }
 
-                    // flush output from time to time
+                    
                     if( i++ > nSyncCount )
                         ( (Window*) pOut )->Flush(), i = 0;
                 }
@@ -422,9 +422,9 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
                 xBitmapCanvas->clear();
                 uno::Reference< beans::XFastPropertySet > xMtfFastPropertySet( xMtfRenderer, uno::UNO_QUERY );
                 if( xMtfFastPropertySet.is() )
-                    // set this metafile to the renderer to
-                    // speedup things (instead of copying data to
-                    // sequence of bytes passed to renderer)
+                    
+                    
+                    
                     xMtfFastPropertySet->setFastPropertyValue( 0, uno::Any( reinterpret_cast<sal_Int64>( this ) ) );
 
                 xMtfRenderer->draw( rDestSize.Width(), rDestSize.Height() );
@@ -443,11 +443,11 @@ bool GDIMetaFile::ImplPlayWithRenderer( OutputDevice* pOut, const Point& rPos, S
     }
     catch (const uno::RuntimeException& )
     {
-        throw; // runtime errors are fatal
+        throw; 
     }
     catch (const uno::Exception& e)
     {
-        // ignore errors, no way of reporting them here
+        
         SAL_WARN("vcl",
             "GDIMetaFile::ImplPlayWithRenderer: exception: " << e.Message);
     }
@@ -459,7 +459,7 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
 {
     OSL_ASSERT( pAct->GetComment() == "DELEGATE_PLUGGABLE_RENDERER" );
 
-    // read payload - string of service name, followed by raw render input
+    
     const sal_uInt8* pData = pAct->GetData();
     const sal_uInt8* const pEndData = pData + pAct->GetDataSize();
     if( !pData )
@@ -481,7 +481,7 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
     {
         try
         {
-            // instantiate render service
+            
             uno::Sequence<uno::Any> aRendererArgs(1);
             aRendererArgs[0] = makeAny(uno::Reference<awt::XGraphics>(pOut->CreateUnoGraphics()));
             uno::Reference<graphic::XGraphicRenderer> xRenderer(
@@ -490,7 +490,7 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
                     aRendererArgs),
                 uno::UNO_QUERY );
 
-            // instantiate graphic service
+            
             uno::Reference<graphic::XGraphic> xGraphic(
                 xFactory->createInstance(
                     aGraphicServiceName),
@@ -501,8 +501,8 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
 
             if(xGraphic.is() && xRenderer.is() && xInit.is())
             {
-                // delay intialization of XGraphic, to only expose
-                // XGraphic-generating services to arbitrary binary data
+                
+                
                 uno::Sequence< sal_Int8 > aSeq(
                     (sal_Int8*)&pData, pEndData-pData );
                 uno::Sequence<uno::Any> aGraphicsArgs(1);
@@ -514,12 +514,12 @@ void GDIMetaFile::ImplDelegate2PluggableRenderer( const MetaCommentAction* pAct,
         }
         catch (const uno::RuntimeException&)
         {
-            // runtime errors are fatal
+            
             throw;
         }
         catch (const uno::Exception& e)
         {
-            // ignore errors, no way of reporting them here
+            
             SAL_WARN("vcl", "GDIMetaFile::ImplDelegate2PluggableRenderer:"
                     " exception: " << e.Message);
         }
@@ -554,16 +554,16 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
         aScaleX *= aDrawMap.GetScaleX(); aDrawMap.SetScaleX( aScaleX );
         aScaleY *= aDrawMap.GetScaleY(); aDrawMap.SetScaleY( aScaleY );
 
-        // #i47260# Convert logical output position to offset within
-        // the metafile's mapmode. Therefore, disable pixel offset on
-        // outdev, it's inverse mnOutOffLogicX/Y is calculated for a
-        // different mapmode (the one currently set on pOut, that is)
-        // - thus, aDrawMap's origin would generally be wrong. And
-        // even _if_ aDrawMap is similar to pOutDev's current mapmode,
-        // it's _still_ undesirable to have pixel offset unequal zero,
-        // because one would still get round-off errors (the
-        // round-trip error for LogicToPixel( PixelToLogic() ) was the
-        // reason for having pixel offset in the first place).
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         const Size& rOldOffset( pOut->GetPixelOffset() );
         const Size  aEmptySize;
         pOut->SetPixelOffset( aEmptySize );
@@ -577,10 +577,10 @@ void GDIMetaFile::Play( OutputDevice* pOut, const Point& rPos,
         else
             pOut->SetMapMode( aDrawMap );
 
-        // #i23407# Set backwards-compatible text language and layout mode
-        // This is necessary, since old metafiles don't even know of these
-        // recent add-ons. Newer metafiles must of course explicitly set
-        // those states.
+        
+        
+        
+        
         pOut->SetLayoutMode( 0 );
         pOut->SetDigitLanguage( 0 );
 
@@ -888,7 +888,7 @@ void GDIMetaFile::ImplAddGradientEx( GDIMetaFile&         rMtf,
                                      const PolyPolygon&   rPolyPoly,
                                      const Gradient&      rGrad     )
 {
-    // Generate comment, GradientEx and Gradient actions (within DrawGradient)
+    
     VirtualDevice aVDev( rMapDev, 0 );
     aVDev.EnableOutput( false );
     GDIMetaFile aGradMtf;
@@ -1141,7 +1141,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
-                // Handle gradientex comment block correctly
+                
                 case( META_COMMENT_ACTION ):
                 {
                     MetaCommentAction* pCommentAct = (MetaCommentAction*) pAction;
@@ -1150,14 +1150,14 @@ void GDIMetaFile::Rotate( long nAngle10 )
                         int nBeginComments( 1 );
                         pAction = NextAction();
 
-                        // skip everything, except gradientex action
+                        
                         while( pAction )
                         {
                             const sal_uInt16 nType = pAction->GetType();
 
                             if( META_GRADIENTEX_ACTION == nType )
                             {
-                                // Add rotated gradientex
+                                
                                 MetaGradientExAction* pAct = (MetaGradientExAction*) pAction;
                                 ImplAddGradientEx( aMtf, aMapVDev,
                                                    ImplGetRotatedPolyPolygon( pAct->GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ),
@@ -1168,16 +1168,16 @@ void GDIMetaFile::Rotate( long nAngle10 )
                                 MetaCommentAction* pAct = (MetaCommentAction*) pAction;
                                 if( pAct->GetComment() == "XGRAD_SEQ_END" )
                                 {
-                                    // handle nested blocks
+                                    
                                     --nBeginComments;
 
-                                    // gradientex comment block: end reached, done.
+                                    
                                     if( !nBeginComments )
                                         break;
                                 }
                                 else if( pAct->GetComment() == "XGRAD_SEQ_BEGIN" )
                                 {
-                                    // handle nested blocks
+                                    
                                     ++nBeginComments;
                                 }
 
@@ -1349,7 +1349,7 @@ void GDIMetaFile::Rotate( long nAngle10 )
                     pAction->Duplicate();
                     aMtf.AddAction( pAction );
 
-                    // update rotation point and offset, if necessary
+                    
                     if( ( META_MAPMODE_ACTION == nActionType ) ||
                         ( META_PUSH_ACTION == nActionType ) ||
                         ( META_POP_ACTION == nActionType ) )
@@ -1483,8 +1483,8 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         case( META_ARC_ACTION ):
         {
             MetaArcAction*  pAct = (MetaArcAction*) pAction;
-            // FIXME: this is imprecise
-            // e.g. for small arcs the whole rectangle is WAY too large
+            
+            
             ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
@@ -1492,8 +1492,8 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         case( META_PIE_ACTION ):
         {
             MetaPieAction*  pAct = (MetaPieAction*) pAction;
-            // FIXME: this is imprecise
-            // e.g. for small arcs the whole rectangle is WAY too large
+            
+            
             ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
@@ -1501,8 +1501,8 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         case( META_CHORD_ACTION ):
         {
             MetaChordAction*    pAct = (MetaChordAction*) pAction;
-            // FIXME: this is imprecise
-            // e.g. for small arcs the whole rectangle is WAY too large
+            
+            
             ImplActionBounds( aBound, aMapVDev.LogicToLogic( pAct->GetRect(), aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, pUseHairline );
         }
         break;
@@ -1544,7 +1544,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         {
             MetaTextAction* pAct = (MetaTextAction*) pAction;
             Rectangle aRect;
-            // hdu said base = index
+            
             aMapVDev.GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen() );
             Point aPt( pAct->GetPoint() );
             aRect.Move( aPt.X(), aPt.Y() );
@@ -1556,7 +1556,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         {
             MetaTextArrayAction* pAct = (MetaTextArrayAction*) pAction;
             Rectangle aRect;
-            // hdu said base = index
+            
             aMapVDev.GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen(),
                                        0, pAct->GetDXArray() );
             Point aPt( pAct->GetPoint() );
@@ -1569,7 +1569,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         {
             MetaStretchTextAction* pAct = (MetaStretchTextAction*) pAction;
             Rectangle aRect;
-            // hdu said base = index
+            
             aMapVDev.GetTextBoundRect( aRect, pAct->GetText(), pAct->GetIndex(), pAct->GetIndex(), pAct->GetLen(),
                                        pAct->GetWidth(), NULL );
             Point aPt( pAct->GetPoint() );
@@ -1581,7 +1581,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         case( META_TEXTLINE_ACTION ):
         {
             MetaTextLineAction* pAct = (MetaTextLineAction*) pAction;
-            // measure a test string to get ascend and descent right
+            
             static const sal_Unicode pStr[] = { 0xc4, 0x67, 0 };
             OUString aStr( pStr );
 
@@ -1644,7 +1644,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
 
         case( META_COMMENT_ACTION ):
         {
-            // nothing to do
+            
         };
         break;
 
@@ -1667,8 +1667,8 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
         case( META_FLOATTRANSPARENT_ACTION ):
         {
             MetaFloatTransparentAction* pAct = (MetaFloatTransparentAction*) pAction;
-            // MetaFloatTransparentAction is defined limiting it's content Metafile
-            // to it's geometry definition(Point, Size), so use these directly
+            
+            
             const Rectangle aRect( pAct->GetPoint(), pAct->GetSize() );
             ImplActionBounds( aBound, aMapVDev.LogicToLogic( aRect, aMapVDev.GetMapMode(), GetPrefMapMode() ), aClipStack, 0 );
         }
@@ -1798,7 +1798,7 @@ Rectangle GDIMetaFile::GetBoundRect( OutputDevice& i_rReference, Rectangle* pHai
                 }
                 else if( nActionType == META_POP_ACTION )
                 {
-                    // sanity check
+                    
                     if( ! aPushFlagStack.empty() )
                     {
                         if( (aPushFlagStack.back() & PUSH_CLIPREGION) != 0 )
@@ -2178,7 +2178,7 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
                           short nChannelRPercent, short nChannelGPercent,
                           short nChannelBPercent, double fGamma, bool bInvert )
 {
-    // nothing to do? => return quickly
+    
     if( nLuminancePercent || nContrastPercent ||
         nChannelRPercent || nChannelGPercent || nChannelBPercent ||
         ( fGamma != 1.0 ) || bInvert )
@@ -2191,25 +2191,25 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
         aColParam.pMapG = new sal_uInt8[ 256 ];
         aColParam.pMapB = new sal_uInt8[ 256 ];
 
-        // calculate slope
+        
         if( nContrastPercent >= 0 )
             fM = 128.0 / ( 128.0 - 1.27 * MinMax( nContrastPercent, 0L, 100L ) );
         else
             fM = ( 128.0 + 1.27 * MinMax( nContrastPercent, -100L, 0L ) ) / 128.0;
 
-        // total offset = luminance offset + contrast offset
+        
         fOff = MinMax( nLuminancePercent, -100L, 100L ) * 2.55 + 128.0 - fM * 128.0;
 
-        // channel offset = channel offset  + total offset
+        
         fROff = nChannelRPercent * 2.55 + fOff;
         fGOff = nChannelGPercent * 2.55 + fOff;
         fBOff = nChannelBPercent * 2.55 + fOff;
 
-        // calculate gamma value
+        
         fGamma = ( fGamma <= 0.0 || fGamma > 10.0 ) ? 1.0 : ( 1.0 / fGamma );
         const bool bGamma = ( fGamma != 1.0 );
 
-        // create mapping table
+        
         for( long nX = 0L; nX < 256L; nX++ )
         {
             aColParam.pMapR[ nX ] = (sal_uInt8) MinMax( FRound( nX * fM + fROff ), 0L, 255L );
@@ -2239,7 +2239,7 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
         aBmpParam.fGamma = fGamma;
         aBmpParam.bInvert = bInvert;
 
-        // do color adjustment
+        
         ImplExchangeColors( ImplColAdjustFnc, &aColParam, ImplBmpAdjustFnc, &aBmpParam );
 
         delete[] aColParam.pMapR;
@@ -2250,7 +2250,7 @@ void GDIMetaFile::Adjust( short nLuminancePercent, short nContrastPercent,
 
 void GDIMetaFile::Convert( MtfConversion eConversion )
 {
-    // nothing to do? => return quickly
+    
     if( eConversion != MTF_CONVERSION_NONE )
     {
         ImplColConvertParam aColParam;
@@ -2599,9 +2599,9 @@ sal_uLong GDIMetaFile::GetChecksum() const
 
                 if(rRegion.HasPolyPolygonOrB2DPolyPolygon())
                 {
-                    // It has shown that this is a possible bottleneck for checksum calculation.
-                    // In worst case a very expensive RegionHandle representation gets created.
-                    // In this case it's cheaper to use the PolyPolygon
+                    
+                    
+                    
                     const basegfx::B2DPolyPolygon aPolyPolygon(rRegion.GetAsB2DPolyPolygon());
                     const sal_uInt32 nPolyCount(aPolyPolygon.count());
                     SVBT64 aSVBT64;
@@ -2679,10 +2679,10 @@ sal_uLong GDIMetaFile::GetSizeBytes() const
     {
         MetaAction* pAction = GetAction( i );
 
-        // default action size is set to 32 (=> not the exact value)
+        
         nSizeBytes += 32;
 
-        // add sizes for large action content
+        
         switch( pAction->GetType() )
         {
             case( META_BMP_ACTION ): nSizeBytes += ( (MetaBmpAction*) pAction )->GetBitmap().GetSizeBytes(); break;
@@ -2743,7 +2743,7 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
 
         if ( !strcmp( aId, "VCLMTF" ) )
         {
-            // new format
+            
             VersionCompat* pCompat;
             MetaAction*    pAction;
             sal_uInt32     nStmCompressMode = 0;
@@ -2780,12 +2780,12 @@ SvStream& ReadGDIMetaFile( SvStream& rIStm, GDIMetaFile& rGDIMetaFile )
         }
         else
         {
-            // to avoid possible compiler optimizations => new/delete
+            
             rIStm.Seek( nStmPos );
             delete( new SVMConverter( rIStm, rGDIMetaFile, CONVERT_FROM_SVM1 ) );
         }
 
-        // check for errors
+        
         if( rIStm.GetError() )
         {
             rGDIMetaFile.Clear();
@@ -2822,7 +2822,7 @@ OSL_TRACE( \
 The current implementation always writes in VCLMTF format. \
 Please set environment variable SAL_ENABLE_SVM1 to '1' to reenable old behavior" );
         }
-#endif // DEBUG
+#endif 
     }
 
     return rOStm;
@@ -2872,7 +2872,7 @@ SvStream& GDIMetaFile::Write( SvStream& rOStm )
 
 bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent) const
 {
-    // initialization seems to be complicated but is used to avoid rounding errors
+    
     VirtualDevice   aVDev;
     const Point     aNullPt;
     const Point     aTLPix( aVDev.LogicToPixel( aNullPt, GetPrefMapMode() ) );
@@ -2883,8 +2883,8 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent) c
     if ( !rBmpEx.IsEmpty() )
         rBmpEx.SetEmpty();
 
-    // determine size that has the same aspect ratio as image size and
-    // fits into the rectangle determined by nMaximumExtent
+    
+    
     if ( aSizePix.Width() && aSizePix.Height()
       && ( sal::static_int_cast< unsigned long >(aSizePix.Width()) >
                nMaximumExtent ||
@@ -2909,27 +2909,27 @@ bool GDIMetaFile::CreateThumbnail(BitmapEx& rBmpEx, sal_uInt32 nMaximumExtent) c
         aDrawSize.Height() = FRound( ( static_cast< double >( aDrawSize.Height() ) * aSizePix.Height() ) / aOldSizePix.Height() );
     }
 
-    // draw image(s) into VDev and get resulting image
-    // do it 4x larger to be able to scale it down & get beautiful antialias
+    
+    
     Size aAntialiasSize(aSizePix.Width() * 4, aSizePix.Height() * 4);
     if (aVDev.SetOutputSizePixel(aAntialiasSize))
     {
-        // antialias: provide 4x larger size, and then scale down the result
+        
         Size aAntialias(aDrawSize.Width() * 4, aDrawSize.Height() * 4);
 
-        // draw metafile into VDev
+        
         Point aBackPosPix;
         const_cast<GDIMetaFile *>(this)->WindStart();
         const_cast<GDIMetaFile *>(this)->Play(&aVDev, aBackPosPix, aAntialias);
 
-        // get paint bitmap
+        
         Bitmap aBmp( aVDev.GetBitmap( aNullPt, aVDev.GetOutputSizePixel() ) );
 
-        // assure that we have a true color image
+        
         if ( aBmp.GetBitCount() != 24 )
             aBmp.Convert( BMP_CONVERSION_24BIT );
 
-        // downsize, to get the antialiased picture
+        
         aBmp.Scale(aDrawSize, BMP_SCALE_BESTQUALITY);
 
         rBmpEx = BitmapEx(aBmp);
@@ -2950,7 +2950,7 @@ MetaCommentAction* makePluggableRendererAction( const OUString& rRendererService
 {
     const sal_uInt8* pData=(sal_uInt8*)_pData;
 
-    // FIXME: Data gets copied twice, unfortunately
+    
     OString aRendererServiceName(
         rRendererServiceName.getStr(),
         rRendererServiceName.getLength(),

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -142,9 +142,9 @@ private:
     SvxFrameDirectionItem   m_FrmDirItem;
     SvxLRSpaceItem          m_LRSpaceItem;
     sal_uInt16                  m_nArrPos;
-    // shows, if maybe textcontent is in the region
+    
     bool                    m_bContent  : 1;
-    // for multiselection, mark at first, then work with TreeListBox!
+    
     bool                    m_bSelected : 1;
     uno::Sequence<sal_Int8> m_TempPasswd;
 
@@ -218,7 +218,7 @@ void SectRepr::SetFile( const OUString& rFile )
     if( !rFile.isEmpty() || !sSub.isEmpty() )
     {
         sNewFile += OUString(sfx2::cTokenSeparator);
-        if( !rFile.isEmpty() ) // Filter only with FileName
+        if( !rFile.isEmpty() ) 
             sNewFile += sOldFileName.getToken( 1, sfx2::cTokenSeparator );
 
         sNewFile += OUString(sfx2::cTokenSeparator);
@@ -347,7 +347,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     m_pHideCB->SetState(STATE_NOCHECK);
     get(m_pConditionFT, "conditionft");
     get(m_pConditionED, "condition");
-    // edit in readonly sections
+    
     get(m_pEditInReadonlyCB, "editinro");
     m_pEditInReadonlyCB->SetState(STATE_NOCHECK);
     get(m_pOptionsPB, "options");
@@ -364,7 +364,7 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     m_pPasswdCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangePasswdHdl));
     m_pPasswdPB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangePasswdHdl));
     m_pHideCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangeHideHdl));
-    // edit in readonly sections
+    
     m_pEditInReadonlyCB->SetClickHdl(LINK(this, SwEditRegionDlg, ChangeEditInReadonlyHdl));
 
     m_pOptionsPB->SetClickHdl(LINK(this, SwEditRegionDlg, OptionsHdl));
@@ -393,8 +393,8 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
 
     pCurrSect = rSh.GetCurrSection();
     RecurseList( 0, 0 );
-    // if the cursor is not in a region
-    // the first one will always be selected
+    
+    
     if( !m_pTree->FirstSelected() && m_pTree->First() )
         m_pTree->Select( m_pTree->First() );
     m_pTree->Show();
@@ -436,7 +436,7 @@ sal_Bool SwEditRegionDlg::CheckPasswd(CheckBox* pBox)
     }
     if(!bRet && pBox)
     {
-        //reset old button state
+        
         if(pBox->IsTriStateEnabled())
             pBox->SetState(pBox->IsChecked() ? STATE_NOCHECK : STATE_DONTKNOW);
         else
@@ -568,7 +568,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     bDontCheckPasswd = true;
     SvTreeListEntry* pEntry=pBox->FirstSelected();
     m_pHideCB->Enable(true);
-    // edit in readonly sections
+    
     m_pEditInReadonlyCB->Enable(true);
 
     m_pProtectCB->Enable(true);
@@ -578,7 +578,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
     {
         m_pHideCB->EnableTriState(true);
         m_pProtectCB->EnableTriState(true);
-        // edit in readonly sections
+        
         m_pEditInReadonlyCB->EnableTriState(true);
 
         m_pFileCB->EnableTriState(true);
@@ -586,7 +586,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
         bool bHiddenValid       = true;
         bool bProtectValid      = true;
         bool bConditionValid    = true;
-        // edit in readonly sections
+        
         bool bEditInReadonlyValid = true;
         bool bEditInReadonly    = true;
 
@@ -607,7 +607,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                 sCondition      = rData.GetCondition();
                 bHidden         = rData.IsHidden();
                 bProtect        = rData.IsProtectFlag();
-                // edit in readonly sections
+                
                 bEditInReadonly = rData.IsEditInReadonlyFlag();
 
                 bFile           = (rData.GetType() != CONTENT_SECTION);
@@ -620,7 +620,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                     bConditionValid = false;
                 bHiddenValid      = (bHidden == rData.IsHidden());
                 bProtectValid     = (bProtect == rData.IsProtectFlag());
-                // edit in readonly sections
+                
                 bEditInReadonlyValid =
                     (bEditInReadonly == rData.IsEditInReadonlyFlag());
 
@@ -636,7 +636,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                     bHidden ? STATE_CHECK : STATE_NOCHECK);
         m_pProtectCB->SetState(!bProtectValid ? STATE_DONTKNOW :
                     bProtect ? STATE_CHECK : STATE_NOCHECK);
-        // edit in readonly sections
+        
         m_pEditInReadonlyCB->SetState(!bEditInReadonlyValid ? STATE_DONTKNOW :
                     bEditInReadonly ? STATE_CHECK : STATE_NOCHECK);
 
@@ -712,7 +712,7 @@ IMPL_LINK( SwEditRegionDlg, GetFirstEntryHdl, SvTreeListBox *, pBox )
                 ? STATE_CHECK : STATE_NOCHECK);
         m_pProtectCB->Enable();
 
-        // edit in readonly sections
+        
         m_pEditInReadonlyCB->SetState((rData.IsEditInReadonlyFlag())
                 ? STATE_CHECK : STATE_NOCHECK);
         m_pEditInReadonlyCB->Enable();
@@ -731,7 +731,7 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
     {
         m_pHideCB->Enable(false);
         m_pProtectCB->Enable(false);
-        // edit in readonly sections
+        
         m_pEditInReadonlyCB->Enable(false);
 
         m_pPasswdCB->Enable(false);
@@ -754,12 +754,12 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
 ---------------------------------------------------------------------*/
 IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
 {
-    // temp. Array because during changing of a region the position
-    // inside of the "Core-Arrays" can be shifted:
-    //  - at linked regions, when they have more SubRegions or get
-    //    new ones.
-    // StartUndo must certainly also happen not before the formats
-    // are copied (ClearRedo!)
+    
+    
+    
+    
+    
+    
 
     const SwSectionFmts& rDocFmts = rSh.GetDoc()->GetSections();
     SwSectionFmts aOrigArray(rDocFmts);
@@ -819,8 +819,8 @@ IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
 
     aOrigArray.clear();
 
-    // EndDialog must be called ahead of EndAction's end,
-    // otherwise ScrollError can occur.
+    
+    
     EndDialog(RET_OK);
 
     rSh.EndUndo();
@@ -915,7 +915,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
     SvTreeListEntry* pEntry = m_pTree->FirstSelected();
     SvTreeListEntry* pChild;
     SvTreeListEntry* pParent;
-    // at first mark all selected
+    
     while(pEntry)
     {
         const SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
@@ -923,7 +923,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
         pEntry = m_pTree->NextSelected(pEntry);
     }
     pEntry = m_pTree->FirstSelected();
-    // then delete
+    
     while(pEntry)
     {
         const SectReprPtr pSectRepr = (SectRepr*)pEntry->GetUserData();
@@ -934,7 +934,7 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
             aSectReprArr.insert( pSectRepr );
             while( (pChild = m_pTree->FirstChild(pEntry) )!= 0 )
             {
-                // because of the repositioning we have to start at the beginning again
+                
                 bRestart = true;
                 pParent = m_pTree->GetParent(pEntry);
                 m_pTree->GetModel()->Move(pChild, pParent, m_pTree->GetModel()->GetRelPos(pEntry));
@@ -958,14 +958,14 @@ IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
         m_pProtectCB->Enable(false);
         m_pPasswdCB->Enable(false);
         m_pHideCB->Enable(false);
-        // edit in readonly sections
+        
         m_pEditInReadonlyCB->Enable(false);
         m_pEditInReadonlyCB->SetState(STATE_NOCHECK);
         m_pProtectCB->SetState(STATE_NOCHECK);
         m_pPasswdCB->Check(false);
         m_pHideCB->SetState(STATE_NOCHECK);
         m_pFileCB->Check(false);
-        // otherwise the focus would be on HelpButton
+        
         m_pOK->GrabFocus();
         UseFileHdl(m_pFileCB);
     }
@@ -1380,7 +1380,7 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
 {
     if( !m_bSubRegionsFilled && pEvent && pEvent->GetId() == VCLEVENT_DROPDOWN_PRE_OPEN )
     {
-        //if necessary fill the names bookmarks/sections/tables now
+        
 
         OUString sFileName = m_pFileNameED->GetText();
         if(!sFileName.isEmpty())
@@ -1392,7 +1392,7 @@ IMPL_LINK( SwEditRegionDlg, SubRegionEventHdl, VclWindowEvent *, pEvent )
             sFileName = URIHelper::SmartRel2Abs(
                     aAbs, sFileName, URIHelper::GetMaybeFileHdl() );
 
-            //load file and set the shell
+            
             SfxMedium aMedium( sFileName, STREAM_STD_READ );
             sFileName = aMedium.GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
             ::lcl_ReadSections(aMedium, *m_pSubRegionED);
@@ -1518,7 +1518,7 @@ short   SwInsertSectionTabDialog::Ok()
                     m_pSectionData->IsHidden()));
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_PROTECT,
                     m_pSectionData->IsProtectFlag()));
-        // edit in readonly sections
+        
         aRequest.AppendItem(SfxBoolItem( FN_PARAM_REGION_EDIT_IN_READONLY,
                     m_pSectionData->IsEditInReadonlyFlag()));
 
@@ -1557,14 +1557,14 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     get(m_pHideCB, "hide");
     get(m_pConditionFT, "condlabel");
     get(m_pConditionED, "withcond");
-    // edit in readonly sections
+    
     get(m_pEditInReadonlyCB, "editable");
 
     m_pProtectCB->SetClickHdl  ( LINK( this, SwInsertSectionTabPage, ChangeProtectHdl));
     m_pPasswdCB->SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     m_pPasswdPB->SetClickHdl   ( LINK( this, SwInsertSectionTabPage, ChangePasswdHdl));
     m_pHideCB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, ChangeHideHdl));
-    // edit in readonly sections
+    
     m_pEditInReadonlyCB->SetClickHdl       ( LINK( this, SwInsertSectionTabPage, ChangeEditInReadonlyHdl));
     m_pFileCB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, UseFileHdl ));
     m_pFilePB->SetClickHdl     ( LINK( this, SwInsertSectionTabPage, FileSearchHdl ));
@@ -1598,7 +1598,7 @@ void    SwInsertSectionTabPage::SetWrtShell(SwWrtShell& rSh)
     SwSectionData *const pSectionData =
         static_cast<SwInsertSectionTabDialog*>(GetTabDialog())
             ->GetSectionData();
-    if (pSectionData) // something set?
+    if (pSectionData) 
     {
         const OUString sSectionName(pSectionData->GetSectionName());
         m_pCurName->SetText(rSh.GetUniqueSectionName(&sSectionName));
@@ -1622,7 +1622,7 @@ sal_Bool SwInsertSectionTabPage::FillItemSet( SfxItemSet& )
     sal_Bool bProtected = m_pProtectCB->IsChecked();
     aSection.SetProtectFlag(bProtected);
     aSection.SetHidden(m_pHideCB->IsChecked());
-    // edit in readonly sections
+    
     aSection.SetEditInReadonlyFlag(m_pEditInReadonlyCB->IsChecked());
 
     if(bProtected)
@@ -1837,17 +1837,17 @@ IMPL_LINK( SwInsertSectionTabPage, DlgClosedHdl, sfx2::FileDialogHelper *, _pFil
     return 0;
 }
 
-// --------------------------------------------------------------
 
-// numbering format conversion:
-// ListBox  - format            - enum-value
-// 0        - A, B, C, ...      - 0
-// 1        - a, b, c, ...      - 1
-// 2        - I, II, III, ...   - 2
-// 3        - i, ii, iii, ...   - 3
-// 4        - 1, 2, 3, ...      - 4
-// 5        - A, .., AA, ..,    - 9
-// 6        - a, .., aa, ..,    - 10
+
+
+
+
+
+
+
+
+
+
 
 inline SvxExtNumType GetNumType( sal_uInt16 n )
 {
@@ -1912,13 +1912,13 @@ sal_Bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
         aFtn.SetNumType( pFtnNumViewBox->GetSelectedNumberingType() );
-        aFtn.SetPrefix( pFtnPrefixED->GetText().replaceAll("\\t", "\t") ); // fdo#65666
+        aFtn.SetPrefix( pFtnPrefixED->GetText().replaceAll("\\t", "\t") ); 
         aFtn.SetSuffix( pFtnSuffixED->GetText().replaceAll("\\t", "\t") );
-        // no break;
+        
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         aFtn.SetOffset( static_cast< sal_uInt16 >( pFtnOffsetFld->GetValue()-1 ) );
-        // no break;
+        
     }
 
     SwFmtEndAtTxtEnd aEnd( pEndNtAtTextEndCB->IsChecked()
@@ -1935,11 +1935,11 @@ sal_Bool SwSectionFtnEndTabPage::FillItemSet( SfxItemSet& rSet )
         aEnd.SetNumType( pEndNumViewBox->GetSelectedNumberingType() );
         aEnd.SetPrefix( pEndPrefixED->GetText().replaceAll("\\t", "\t") );
         aEnd.SetSuffix( pEndSuffixED->GetText().replaceAll("\\t", "\t") );
-        // no break;
+        
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         aEnd.SetOffset( static_cast< sal_uInt16 >( pEndOffsetFld->GetValue()-1 ) );
-        // no break;
+        
     }
 
     rSet.Put( aFtn );
@@ -1990,15 +1990,15 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
     {
     case FTNEND_ATTXTEND_OWNNUMANDFMT:
         pNtNumFmtCB->SetState( STATE_CHECK );
-        // no break;
+        
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         pNtNumCB->SetState( STATE_CHECK );
-        // no break;
+        
 
     case FTNEND_ATTXTEND:
         pNtAtTextEndCB->SetState( STATE_CHECK );
-        // no break;
+        
     }
 
     pNumViewBox->SelectNumberingType( rAttr.GetNumType() );
@@ -2010,13 +2010,13 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
     {
     case FTNEND_ATPGORDOCEND:
         pNtNumCB->Enable( false );
-        // no break;
+        
 
     case FTNEND_ATTXTEND:
         pNtNumFmtCB->Enable( false );
         pOffsetFld->Enable( false );
         pOffsetTxt->Enable( false );
-        // no break;
+        
 
     case FTNEND_ATTXTEND_OWNNUMSEQ:
         pNumViewBox->Enable( false );
@@ -2024,7 +2024,7 @@ void SwSectionFtnEndTabPage::ResetState( sal_Bool bFtn,
         pPrefixED->Enable( false );
         pSuffixFT->Enable( false );
         pSuffixED->Enable( false );
-        // no break;
+        
     }
 }
 
@@ -2174,7 +2174,7 @@ sal_Bool SwSectionIndentTabPage::FillItemSet( SfxItemSet& rSet)
 
 void SwSectionIndentTabPage::Reset( const SfxItemSet& rSet)
 {
-    //this page doesn't show up in HTML mode
+    
     FieldUnit aMetric = ::GetDfltMetric(sal_False);
     SetMetric(*m_pBeforeMF, aMetric);
     SetMetric(*m_pAfterMF , aMetric);
@@ -2205,7 +2205,7 @@ SfxTabPage*  SwSectionIndentTabPage::Create( Window* pParent, const SfxItemSet& 
 
 void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
 {
-    //set sensible values at the preview
+    
     m_pPreviewWin->SetAdjust(SVX_ADJUST_BLOCK);
     m_pPreviewWin->SetLastLine(SVX_ADJUST_BLOCK);
     const SwRect& rPageRect = rSh.GetAnyCurRect( RECT_PAGE, 0 );

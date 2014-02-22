@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/filectrl.hxx>
@@ -32,7 +32,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui;
 
-// =======================================================================
+
 
 FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlags ) :
     Window( pParent, nStyle|WB_DIALOGCONTROL ),
@@ -53,7 +53,7 @@ FileControl::FileControl( Window* pParent, WinBits nStyle, FileControlMode nFlag
     SetStyle( ImplInitStyle( GetStyle() ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 WinBits FileControl::ImplInitStyle( WinBits nStyle )
 {
@@ -82,13 +82,13 @@ WinBits FileControl::ImplInitStyle( WinBits nStyle )
     return nStyle;
 }
 
-// -----------------------------------------------------------------------
+
 
 FileControl::~FileControl()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::SetText( const OUString& rStr )
 {
@@ -97,14 +97,14 @@ void FileControl::SetText( const OUString& rStr )
         Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString FileControl::GetText() const
 {
     return maEdit.GetText();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::StateChanged( StateChangedType nType )
 {
@@ -125,8 +125,8 @@ void FileControl::StateChanged( StateChangedType nType )
     else if ( nType == STATE_CHANGE_CONTROLFONT )
     {
         GetEdit().SetControlFont( GetControlFont() );
-        // Only use height of the button, as in HTML
-        // always Courier is used
+        
+        
         Font aFont = GetButton().GetControlFont();
         aFont.SetSize( GetControlFont().GetSize() );
         GetButton().SetControlFont( aFont );
@@ -144,7 +144,7 @@ void FileControl::StateChanged( StateChangedType nType )
     Window::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::Resize()
 {
@@ -152,7 +152,7 @@ void FileControl::Resize()
 
     if( mnInternalFlags & FILECTRL_INRESIZE )
         return;
-    mnInternalFlags |= FILECTRL_INRESIZE;//InResize = sal_True
+    mnInternalFlags |= FILECTRL_INRESIZE;
 
     Size aOutSz = GetOutputSizePixel();
     long nButtonTextWidth = maButton.GetTextWidth( maButtonText );
@@ -177,10 +177,10 @@ void FileControl::Resize()
     maEdit.setPosSizePixel( 0, 0, aOutSz.Width()-nButtonWidth, aOutSz.Height() );
     maButton.setPosSizePixel( aOutSz.Width()-nButtonWidth, 0, nButtonWidth, aOutSz.Height() );
 
-    mnInternalFlags &= ~FILECTRL_INRESIZE; //InResize = sal_False
+    mnInternalFlags &= ~FILECTRL_INRESIZE; 
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(FileControl, ButtonHdl)
 {
@@ -189,14 +189,14 @@ IMPL_LINK_NOARG(FileControl, ButtonHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::GetFocus()
 {
     maEdit.GrabFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void FileControl::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal_uLong nFlags )
 {
@@ -214,17 +214,17 @@ void FileControl::ImplBrowseFile( )
     {
         Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
         Reference < dialogs::XFilePicker3 > xFilePicker = dialogs::FilePicker::createWithMode( xContext, dialogs::TemplateDescription::FILEOPEN_SIMPLE );
-        // transform the system notation text into a file URL
+        
         OUString sSystemNotation = GetText(), sFileURL;
         oslFileError nError = osl_getFileURLFromSystemPath( sSystemNotation.pData, &sFileURL.pData );
         if ( nError == osl_File_E_INVAL )
-            sFileURL = GetText();   // #97709# Maybe URL is already a file URL...
+            sFileURL = GetText();   
 
-        //#90430# Check if URL is really a file URL
+        
         OUString aTmp;
         if ( osl_getSystemPathFromFileURL( sFileURL.pData, &aTmp.pData ) == osl_File_E_None )
         {
-            // initially set this directory
+            
             xFilePicker->setDisplayDirectory( sFileURL );
         }
 

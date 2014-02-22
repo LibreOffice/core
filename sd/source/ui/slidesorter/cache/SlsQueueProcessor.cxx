@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,7 +25,7 @@
 namespace sd { namespace slidesorter { namespace cache {
 
 
-//=====  QueueProcessor  ======================================================
+
 
 QueueProcessor::QueueProcessor (
     RequestQueue& rQueue,
@@ -46,7 +46,7 @@ QueueProcessor::QueueProcessor (
       maBitmapFactory(),
       mbIsPaused(false)
 {
-    // Look into the configuration if there for overriding values.
+    
     ::com::sun::star::uno::Any aTimeBetweenReqeusts;
     aTimeBetweenReqeusts = CacheConfiguration::Instance()->GetValue("TimeBetweenHighPriorityRequests");
     if (aTimeBetweenReqeusts.has<sal_Int32>())
@@ -150,8 +150,8 @@ void QueueProcessor::ProcessRequests (void)
 {
     OSL_ASSERT(mpCacheContext.get()!=NULL);
 
-    // Never process more than one request at a time in order to prevent the
-    // lock up of the edit view.
+    
+    
     if ( ! mrQueue.IsEmpty()
         && ! mbIsPaused
         &&  mpCacheContext->IsIdle())
@@ -163,7 +163,7 @@ void QueueProcessor::ProcessRequests (void)
 
             if ( ! mrQueue.IsEmpty())
             {
-                // Get the request with the highest priority from the queue.
+                
                 ePriorityClass = mrQueue.GetFrontPriorityClass();
                 aKey = mrQueue.GetFront();
                 mrQueue.PopFront();
@@ -174,7 +174,7 @@ void QueueProcessor::ProcessRequests (void)
             ProcessOneRequest(aKey, ePriorityClass);
     }
 
-    // Schedule the processing of the next element(s).
+    
     {
         ::osl::MutexGuard aGuard (mrQueue.GetMutex());
         if ( ! mrQueue.IsEmpty())
@@ -193,7 +193,7 @@ void QueueProcessor::ProcessOneRequest (
     {
         ::osl::MutexGuard aGuard (maMutex);
 
-        // Create a new preview bitmap and store it in the cache.
+        
         if (mpCache.get() != NULL
             && mpCacheContext.get() != NULL)
         {
@@ -204,7 +204,7 @@ void QueueProcessor::ProcessOneRequest (
                     maBitmapFactory.CreateBitmap(*pSdPage, maPreviewSize, mbDoSuperSampling));
                 mpCache->SetBitmap (pSdPage, aPreview, ePriorityClass!=NOT_VISIBLE);
 
-                // Initiate a repaint of the new preview.
+                
                 mpCacheContext->NotifyPreviewCreation(aKey, aPreview);
             }
         }
@@ -226,6 +226,6 @@ void QueueProcessor::SetBitmapCache (
 }
 
 
-} } } // end of namespace ::sd::slidesorter::cache
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

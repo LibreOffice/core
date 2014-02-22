@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <o3tl/sorted_vector.hxx>
@@ -231,7 +231,7 @@ void XMLFontAutoStylePool::exportXML()
     XMLFontEncodingPropHdl aEncHdl;
     const SvXMLUnitConverter& rUnitConv = GetExport().GetMM100UnitConverter();
 
-    std::map< OUString, OUString > fontFilesMap; // our url to document url
+    std::map< OUString, OUString > fontFilesMap; 
     sal_uInt32 nCount = pPool->size();
     for( sal_uInt32 i=0; i<nCount; i++ )
     {
@@ -280,8 +280,8 @@ void XMLFontAutoStylePool::exportXML()
                  j < SAL_N_ELEMENTS( weight );
                  ++j )
             {
-                // Embed font if at least viewing is allowed (in which case the opening app must check
-                // the font license rights too and open either read-only or not use the font for editing).
+                
+                
                 OUString fileUrl = EmbeddedFontsHelper::fontFileUrl( pEntry->GetFamilyName(), pEntry->GetFamily(),
                     italic[ j ], weight[ j ], pEntry->GetPitch(), pEntry->GetEncoding(),
                     EmbeddedFontsHelper::ViewingAllowed );
@@ -293,7 +293,7 @@ void XMLFontAutoStylePool::exportXML()
                     if( !docUrl.isEmpty())
                         fontFilesMap[ fileUrl ] = docUrl;
                     else
-                        continue; // --> failed to embed
+                        continue; 
                 }
                 fileUrls.push_back( fileUrl );
             }
@@ -338,7 +338,7 @@ OUString XMLFontAutoStylePool::embedFontFile( const OUString& fileUrl )
         outputStream.set( storage->openStreamElement( name, ::embed::ElementModes::WRITE ), UNO_QUERY_THROW );
         uno::Reference < beans::XPropertySet > propertySet( outputStream, uno::UNO_QUERY );
         assert( propertySet.is());
-        propertySet->setPropertyValue( "MediaType", uno::makeAny( OUString( "application/x-font-ttf" ))); // TODO
+        propertySet->setPropertyValue( "MediaType", uno::makeAny( OUString( "application/x-font-ttf" ))); 
         for(;;)
         {
             char buffer[ 4096 ];

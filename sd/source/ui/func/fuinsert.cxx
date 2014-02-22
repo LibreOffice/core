@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -143,15 +143,15 @@ void FuInsertGraphic::DoExecute( SfxRequest&  )
 
                 if(pGrafObj && aDlg.IsAsLink())
                 {
-                    // really store as link only?
+                    
                     if( SvtMiscOptions().ShowLinkWarningDialog() )
                     {
                         SvxLinkWarningDialog aWarnDlg(mpWindow,aDlg.GetPath());
                         if( aWarnDlg.Execute() != RET_OK )
-                            return; // don't store as link
+                            return; 
                     }
 
-                    // store as link
+                    
                     OUString aFltName(aDlg.GetCurrentFilter());
                     OUString aPath(aDlg.GetPath());
                     OUString aReferer;
@@ -215,7 +215,7 @@ void FuInsertClipboard::DoExecute( SfxRequest&  )
         pDlg->Insert( FORMAT_RTF, OUString() );
         pDlg->Insert( SOT_FORMATSTR_ID_EDITENGINE, OUString() );
 
-        //TODO/MBA: testing
+        
         nFormatId = pDlg->GetFormat( aDataHelper );
         if( nFormatId && aDataHelper.GetTransferable().is() )
         {
@@ -274,7 +274,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
         SdrObject* pPickObj = mpView->GetEmptyPresentationObject( ePresObjKind );
 
-        // insert diagram or Calc table
+        
         OUString aObjName;
         SvGlobalName aName;
         if (nSlotId == SID_INSERT_DIAGRAM)
@@ -311,14 +311,14 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 }
                 catch ( embed::NoVisualAreaSizeException& )
                 {
-                    // the default size will be set later
+                    
                 }
 
                 Size aSize( aSz.Width, aSz.Height );
 
                 if (aSize.Height() == 0 || aSize.Width() == 0)
                 {
-                    // rectangle with balanced edge ratio
+                    
                     aSize.Width()  = 14100;
                     aSize.Height() = 10000;
                     Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aUnit );
@@ -343,7 +343,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
             SdrOle2Obj* pOleObj = new SdrOle2Obj( svt::EmbeddedObjectRef( xObj, nAspect ), aObjName, aRect );
             SdrPageView* pPV = mpView->GetSdrPageView();
 
-            // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
+            
             if( pPickObj )
             {
                 SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
@@ -353,9 +353,9 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     pOleObj->SetUserCall(pPickObj->GetUserCall());
                 }
 
-                // #i123468# we need to end text edit before replacing the object. There cannot yet
-                // being text typed (else it would not be an EmptyPresObj anymore), but it may be
-                // in text edit mode
+                
+                
+                
                 if (mpView->IsTextEdit())
                 {
                     mpView->SdrEndTextEdit();
@@ -393,9 +393,9 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                 if (nSlotId == SID_INSERT_DIAGRAM)
                 {
-                    // note, that this call modified the chart model which
-                    // results in a change notification.  So call this after
-                    // everything else is finished.
+                    
+                    
+                    
                     ChartHelper::AdaptDefaultsForChart( xObj );
                 }
             }
@@ -408,7 +408,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
     }
     else
     {
-        // insert object
+        
         sal_Int64 nAspect = embed::Aspects::MSOLE_CONTENT;
         sal_Bool bCreateNew = sal_False;
         uno::Reference < embed::XEmbeddedObject > xObj;
@@ -442,7 +442,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         aServerLst.Remove( DrawDocShell::Factory().GetClassId() );
                     }
 
-                    // intentionally no break!
+                    
                 }
                 case SID_INSERT_PLUGIN :
                 case SID_INSERT_FLOATINGFRAME :
@@ -471,22 +471,22 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                 case SID_INSERT_SOUND :
                 case SID_INSERT_VIDEO :
                 {
-                    // create special filedialog for plugins
+                    
                     SvxPluginFileDlg aPluginFileDialog (mpWindow, nSlotId);
                     if( ERRCODE_NONE == aPluginFileDialog.Execute () )
                     {
-                        // get URL
+                        
                         OUString aStrURL(aPluginFileDialog.GetPath());
                         INetURLObject aURL( aStrURL, INET_PROT_FILE );
                         if( aURL.GetProtocol() != INET_PROT_NOT_VALID )
                         {
-                            // create a plugin object
+                            
                             xObj = mpViewShell->GetObjectShell()->GetEmbeddedObjectContainer().CreateEmbeddedObject( SvGlobalName( SO3_PLUGIN_CLASSID ).GetByteSequence(), aName );
                         }
 
                         if ( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                         {
-                            // set properties from dialog
+                            
                             uno::Reference < embed::XComponentSupplier > xSup( xObj, uno::UNO_QUERY );
                             if ( xSup.is() )
                             {
@@ -500,7 +500,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         }
                         else
                         {
-                            // unable to create PlugIn
+                            
                             OUString aStrErr( SdResId( STR_ERROR_OBJNOCREATE_PLUGIN ) );
                             aStrErr = aStrErr.replaceFirst( "%", aStrURL );
                             ErrorBox( mpWindow, WB_3DLOOK | WB_OK, aStrErr ).Execute();
@@ -514,9 +514,9 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         {
             if (xObj.is())
             {
-                //TODO/LATER: needs status for RESIZEONPRINTERCHANGE
-                //if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE & xObj->getStatus( nAspect ) )
-                //    aIPObj->OnDocumentPrinterChanged( mpDocSh->GetPrinter(sal_False) );
+                
+                
+                
 
                 sal_Bool bInsertNewObject = sal_True;
 
@@ -531,7 +531,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     }
                     catch( embed::NoVisualAreaSizeException& )
                     {
-                        // the default size will be set later
+                        
                     }
 
                     aSize =Size( aSz.Width, aSz.Height );
@@ -539,7 +539,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( nAspect ) );
                     if (aSize.Height() == 0 || aSize.Width() == 0)
                     {
-                        // rectangle with balanced edge ratio
+                        
                         aSize.Width()  = 14100;
                         aSize.Height() = 10000;
                         Size aTmp = OutputDevice::LogicToLogic( aSize, MAP_100TH_MM, aMapUnit );
@@ -555,7 +555,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                 if ( mpView->AreObjectsMarked() )
                 {
-                    // as an empty OLE object available?
+                    
                     const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
                     if (rMarkList.GetMarkCount() == 1)
@@ -568,7 +568,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                         {
                             if ( !( (SdrOle2Obj*) pObj)->GetObjRef().is() )
                             {
-                                // the empty OLE object gets a new IPObj
+                                
                                 bInsertNewObject = sal_False;
                                 pObj->SetEmptyPresObj(false);
                                 ( (SdrOle2Obj*) pObj)->SetOutlinerParaObject(NULL);
@@ -596,11 +596,11 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                 if (bInsertNewObject)
                 {
-                    // we create a new OLE object
+                    
                     SdrPageView* pPV = mpView->GetSdrPageView();
                     Size aPageSize = pPV->GetPage()->GetSize();
 
-                    // get the size from the iconified object
+                    
                     ::svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
                     if ( nAspect == embed::Aspects::MSOLE_ICON )
                     {
@@ -617,9 +617,9 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                     if( mpView->InsertObjectAtView(pObj, *pPV, SDRINSERT_SETDEFLAYER) )
                     {
-                        //  Math objects change their object size during InsertObject.
-                        //  New size must be set in SdrObject, or a wrong scale will be set at
-                        //  ActivateObject.
+                        
+                        
+                        
 
                         if ( nAspect != embed::Aspects::MSOLE_ICON )
                         {
@@ -663,8 +663,8 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
         }
         catch (uno::Exception&)
         {
-            // For some reason the object can not be inserted.  For example
-            // because it is password protected and is not properly unlocked.
+            
+            
         }
     }
 }
@@ -753,6 +753,6 @@ void FuInsertAVMedia::DoExecute( SfxRequest& rReq )
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

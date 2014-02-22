@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,13 +43,13 @@ SvxAccessibleTextPropertySet::~SvxAccessibleTextPropertySet() throw()
 
 uno::Reference< text::XText > SAL_CALL SvxAccessibleTextPropertySet::getText() throw (uno::RuntimeException)
 {
-  // TODO (empty?)
+  
   return uno::Reference< text::XText > ();
 }
 
 uno::Any SAL_CALL SvxAccessibleTextPropertySet::queryAggregation( const uno::Type & ) throw(uno::RuntimeException)
 {
-  // TODO (empty?)
+  
   return uno::Any();
 }
 
@@ -71,20 +71,20 @@ void SAL_CALL SvxAccessibleTextPropertySet::release()
     OWeakObject::release();
 }
 
-// XTypeProvider
+
 uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() throw ( uno::RuntimeException )
 {
     static ::cppu::OTypeCollection* pTypeCollection = NULL ;
 
-    // double-checked locking pattern.
+    
     if ( pTypeCollection == NULL )
     {
         osl::MutexGuard aGuard( osl::Mutex::getGlobalMutex() ) ;
 
-        // Control these pointer again ... it can be, that another instance will be faster then these!
+        
         if ( pTypeCollection == NULL )
         {
-            // Create a static typecollection ...
+            
             static ::cppu::OTypeCollection aTypeCollection(
                 ::getCppuType( static_cast< const uno::Reference< beans::XPropertySet >* > (0) ),
                 ::getCppuType( static_cast< const uno::Reference< beans::XMultiPropertySet >* > (0) ),
@@ -92,7 +92,7 @@ uno::Sequence< uno::Type > SAL_CALL SvxAccessibleTextPropertySet::getTypes() thr
                 ::getCppuType( static_cast< const uno::Reference< lang::XServiceInfo >* > (0) ),
                 ::getCppuType( static_cast< const uno::Reference< lang::XTypeProvider >* > (0) ) );
 
-            // ... and set his address to static pointer!
+            
             pTypeCollection = &aTypeCollection ;
         }
     }
@@ -111,7 +111,7 @@ uno::Sequence< sal_Int8 > SAL_CALL SvxAccessibleTextPropertySet::getImplementati
     return theSvxAccessibleTextPropertySetImplementationId::get().getSeq();
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SAL_CALL SvxAccessibleTextPropertySet::getImplementationName (void) throw (uno::RuntimeException)
 {
     return OUString("SvxAccessibleTextPropertySet");
@@ -124,7 +124,7 @@ sal_Bool SAL_CALL SvxAccessibleTextPropertySet::supportsService (const OUString&
 
 uno::Sequence< OUString> SAL_CALL SvxAccessibleTextPropertySet::getSupportedServiceNames (void) throw (uno::RuntimeException)
 {
-    // TODO
+    
     return SvxUnoTextRangeBase::getSupportedServiceNames();
 }
 

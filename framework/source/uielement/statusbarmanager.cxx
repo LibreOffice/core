@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <uielement/statusbarmanager.hxx>
@@ -55,7 +55,7 @@
 
 using namespace ::com::sun::star;
 
-// Property names of a menu/menu item ItemDescriptor
+
 static const char ITEM_DESCRIPTOR_COMMANDURL[]  = "CommandURL";
 static const char ITEM_DESCRIPTOR_HELPURL[]     = "HelpURL";
 static const char ITEM_DESCRIPTOR_OFFSET[]      = "Offset";
@@ -190,7 +190,7 @@ void SAL_CALL StatusBarManager::disposing( const lang::EventObject& Source ) thr
     }
 }
 
-// XComponent
+
 void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException )
 {
     uno::Reference< lang::XComponent > xThis(
@@ -205,7 +205,7 @@ void SAL_CALL StatusBarManager::dispose() throw( uno::RuntimeException )
         {
             RemoveControllers();
 
-            // destroy the item data
+            
             for ( sal_uInt16 n = 0; n < m_pStatusBar->GetItemCount(); n++ )
             {
                 AddonStatusbarItemData *pUserData = static_cast< AddonStatusbarItemData *>(
@@ -256,7 +256,7 @@ void SAL_CALL StatusBarManager::removeEventListener( const uno::Reference< lang:
         ( const uno::Reference< lang::XEventListener >* ) NULL ), xListener );
 }
 
-// XUIConfigurationListener
+
 void SAL_CALL StatusBarManager::elementInserted( const css::ui::ConfigurationEvent& ) throw ( uno::RuntimeException )
 {
     ResetableGuard aGuard( m_aLock );
@@ -344,7 +344,7 @@ void StatusBarManager::CreateControllers()
         aPropValue.Value    <<= m_xFrame;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
-        // TODO remove this
+        
         aPropValue.Name     = "ServiceManager";
         aPropValue.Value    = uno::makeAny( uno::Reference<lang::XMultiServiceFactory>(m_xContext->getServiceManager(), uno::UNO_QUERY_THROW) );
         aPropVector.push_back( uno::makeAny( aPropValue ) );
@@ -353,7 +353,7 @@ void StatusBarManager::CreateControllers()
         aPropValue.Value    <<= xStatusbarWindow;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
 
-        // TODO still needing with the css::ui::XStatusbarItem?
+        
         aPropValue.Name     = "Identifier";
         aPropValue.Value    <<= nId;
         aPropVector.push_back( uno::makeAny( aPropValue ) );
@@ -364,7 +364,7 @@ void StatusBarManager::CreateControllers()
 
         uno::Sequence< uno::Any > aArgs( comphelper::containerToSequence( aPropVector ) );
 
-        // 1) UNO Statusbar controllers, registered in Controllers.xcu
+        
         if ( m_xStatusbarControllerFactory.is() &&
              m_xStatusbarControllerFactory->hasController( aCommandURL, m_aModuleIdentifier ))
         {
@@ -372,18 +372,18 @@ void StatusBarManager::CreateControllers()
                             m_xStatusbarControllerFactory->createInstanceWithArgumentsAndContext(
                                 aCommandURL, aArgs, m_xContext ),
                             uno::UNO_QUERY );
-            bInit = sal_False; // Initialization is done through the factory service
+            bInit = sal_False; 
         }
 
         if ( !xController.is() )
         {
             svt::StatusbarController* pController( 0 );
 
-            // 2) Old SFX2 Statusbar controllers
+            
             pController = CreateStatusBarController( m_xFrame, m_pStatusBar, nId, aCommandURL );
             if ( !pController )
             {
-                // 3) Is Add-on? Generic statusbar controller
+                
                 if ( pItemData )
                 {
                     pController = new GenericStatusbarController( m_xContext,
@@ -393,7 +393,7 @@ void StatusBarManager::CreateControllers()
                 }
                 else
                 {
-                    // 4) Default Statusbar controller
+                    
                     pController = new svt::StatusbarController( m_xContext, m_xFrame, aCommandURL, nId );
                 }
             }
@@ -436,9 +436,9 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
 
     RemoveControllers();
 
-    // reset and fill command map
+    
     m_pStatusBar->Clear();
-    m_aControllerMap.clear();// TODO already done in RemoveControllers
+    m_aControllerMap.clear();
 
     for ( sal_Int32 n = 0; n < rItemContainer->getCount(); n++ )
     {
@@ -500,7 +500,7 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
         }
     }
 
-    // Statusbar Merging
+    
     const sal_uInt16 STATUSBAR_ITEM_STARTID = 1000;
     MergeStatusbarInstructionContainer aMergeInstructions = AddonsOptions().GetMergeStatusbarInstructions();
     if ( !aMergeInstructions.empty() )
@@ -541,10 +541,10 @@ void StatusBarManager::FillStatusBar( const uno::Reference< container::XIndexAcc
         }
     }
 
-    // Create controllers
+    
     CreateControllers();
 
-    // Notify controllers that they are now correctly initialized and can start listening
+    
     UpdateControllers();
 }
 

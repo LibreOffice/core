@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <globals.hrc>
@@ -68,7 +68,7 @@ namespace
     {
         if ( rMEvt.IsLeaveWindow() )
         {
-            // don't fade if we just move to the 'button'
+            
             Point aEventPos( GetPosPixel() + rMEvt.GetPosPixel() );
             if ( !m_pWin->Contains( aEventPos ) || !m_pWin->IsVisible() )
                 m_pWin->Fade( false );
@@ -97,13 +97,13 @@ SwPageBreakWin::SwPageBreakWin( SwEditWin* pEditWin, const SwPageFrm* pPageFrm )
     m_bDestroyed( false ),
     m_pMousePt( NULL )
 {
-    // Use pixels for the rest of the drawing
+    
     SetMapMode( MapMode ( MAP_PIXEL ) );
 
-    // Create the line control
+    
     m_pLine = new SwBreakDashedLine( GetEditWin(), &SwViewOption::GetPageBreakColor, this );
 
-    // Create the popup menu
+    
     m_pPopupMenu = new PopupMenu( SW_RES( MN_PAGEBREAK_BUTTON ) );
     m_pPopupMenu->SetDeactivateHdl( LINK( this, SwPageBreakWin, HideHandler ) );
     SetPopupMenu( m_pPopupMenu );
@@ -126,7 +126,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
 {
     const Rectangle aRect( Rectangle( Point( 0, 0 ), PixelToLogic( GetSizePixel() ) ) );
 
-    // Properly paint the control
+    
     BColor aColor = SwViewOption::GetPageBreakColor().getBColor();
 
     BColor aHslLine = rgb2hsl( aColor );
@@ -151,13 +151,13 @@ void SwPageBreakWin::Paint( const Rectangle& )
            double( aRect.Right() ), double( aRect.Bottom( ) ) );
     B2DPolygon aPolygon = createPolygonFromRect( aBRect, 3.0 / BUTTON_WIDTH, 3.0 / BUTTON_HEIGHT );
 
-    // Create the polygon primitives
+    
     aSeq[0] = Primitive2DReference( new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
             B2DPolyPolygon( aPolygon ), aOtherColor ) );
     aSeq[1] = Primitive2DReference( new drawinglayer::primitive2d::PolygonHairlinePrimitive2D(
             aPolygon, aColor ) );
 
-    // Create the primitive for the image
+    
     Image aImg( SW_RES( IMG_PAGE_BREAK ) );
     double nImgOfstX = 3.0;
     if ( bRtl )
@@ -195,7 +195,7 @@ void SwPageBreakWin::Paint( const Rectangle& )
     aGhostedSeq[0] = Primitive2DReference( new drawinglayer::primitive2d::ModifiedColorPrimitive2D(
                 aSeq, aBColorModifier ) );
 
-    // Create the processor and process the primitives
+    
     const drawinglayer::geometry::ViewInformation2D aNewViewInfos;
     drawinglayer::processor2d::BaseProcessor2D * pProcessor =
         drawinglayer::processor2d::createBaseProcessor2DFromOutputDevice(
@@ -285,8 +285,8 @@ void SwPageBreakWin::Select( )
             break;
     }
 
-    // Only fade if there is more than this temporary shared pointer:
-    // The main reference has been deleted due to a page break removal
+    
+    
     if ( pThis.use_count() > 1 )
         Fade( false );
 }
@@ -295,7 +295,7 @@ void SwPageBreakWin::MouseMove( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeaveWindow() )
     {
-        // don't fade if we just move to the 'line', or the popup menu is open
+        
         Point aEventPos( rMEvt.GetPosPixel() + rMEvt.GetPosPixel() );
         if ( !Contains( aEventPos ) && !PopupMenu::IsInExecute() )
             Fade( false );
@@ -339,7 +339,7 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
         nYLineOffset = ( aPrevFrmRect.Bottom() + aFrmRect.Top() ) / 2;
     }
 
-    // Get the page + sidebar coords
+    
     long nPgLeft = aFrmRect.Left();
     long nPgRight = aFrmRect.Right();
 
@@ -355,7 +355,7 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
 
     Size aBtnSize( BUTTON_WIDTH + ARROW_WIDTH, BUTTON_HEIGHT );
 
-    // Place the button on the left or right?
+    
     Rectangle aVisArea = GetEditWin()->LogicToPixel( GetEditWin()->GetView().GetVisArea() );
 
     long nLineLeft = std::max( nPgLeft, aVisArea.Left() );
@@ -372,11 +372,11 @@ void SwPageBreakWin::UpdatePosition( const Point* pEvtPt )
             nBtnLeft = nLineRight - aBtnSize.getWidth();
     }
 
-    // Set the button position
+    
     Point aBtnPos( nBtnLeft, nYLineOffset - BUTTON_HEIGHT / 2 );
     SetPosSizePixel( aBtnPos, aBtnSize );
 
-    // Set the line position
+    
     Point aLinePos( nLineLeft, nYLineOffset - 5 );
     Size aLineSize( nLineRight - nLineLeft, 10 );
     m_pLine->SetPosSizePixel( aLinePos, aLineSize );

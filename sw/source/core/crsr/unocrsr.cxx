@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unocrsr.hxx>
@@ -37,7 +37,7 @@ SwUnoCrsr::~SwUnoCrsr()
     SwDoc* pDoc = GetDoc();
     if( !pDoc->IsInDtor() )
     {
-        // then remove cursor from array
+        
         SwUnoCrsrTbl& rTbl = (SwUnoCrsrTbl&)pDoc->GetUnoCrsrTbl();
         if( !rTbl.erase( this ) )
         {
@@ -45,12 +45,12 @@ SwUnoCrsr::~SwUnoCrsr()
         }
     }
 
-    // delete the whole ring
+    
     while( GetNext() != this )
     {
         Ring* pNxt = GetNext();
-        pNxt->MoveTo( 0 ); // remove from chain
-        delete pNxt;       // and delete
+        pNxt->MoveTo( 0 ); 
+        delete pNxt;       
     }
 }
 
@@ -87,12 +87,12 @@ bool SwUnoCrsr::IsReadOnlyAvailable() const
 const SwCntntFrm*
 SwUnoCrsr::DoSetBidiLevelLeftRight( sal_Bool &, sal_Bool, sal_Bool )
 {
-    return 0; // not for uno cursor
+    return 0; 
 }
 
 void SwUnoCrsr::DoSetBidiLevelUpDown()
 {
-    return; // not for uno cursor
+    return; 
 }
 
 sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
@@ -109,17 +109,17 @@ sal_Bool SwUnoCrsr::IsSelOvr( int eFlags )
             bool bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
             bool bValidPos = false;
 
-            // search the correct surrounded start node - which the index
-            // can't leave.
+            
+            
             while( pOldSttNd->IsSectionNode() )
                 pOldSttNd = pOldSttNd->StartOfSectionNode();
 
-            // is the new index inside this surrounded section?
+            
             if( rPtIdx > *pOldSttNd &&
                 rPtIdx < pOldSttNd->EndOfSectionIndex() )
             {
-                // check if it a valid move inside this section
-                // (only over SwSection's !)
+                
+                
                 const SwStartNode* pInvalidNode;
                 do {
                     pInvalidNode = 0;

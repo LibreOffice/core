@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/fixed.hxx>
@@ -25,7 +25,7 @@
 
 
 
-// =======================================================================
+
 
 void TabDialog::ImplInitTabDialogData()
 {
@@ -35,7 +35,7 @@ void TabDialog::ImplInitTabDialogData()
     mbPosControls   = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabDialog::ImplPosControls()
 {
@@ -76,10 +76,10 @@ void TabDialog::ImplPosControls()
         pChild = pChild->GetWindow( WINDOW_NEXT );
     }
 
-    // Haben wir ueberhaupt ein TabControl
+    
     if ( pTabControl )
     {
-        // Offset bei weiteren Controls um einen weiteren Abstand anpassen
+        
         if ( nOffY )
             nOffY += IMPL_DIALOG_BAR_OFFSET*2 + 2;
 
@@ -94,7 +94,7 @@ void TabDialog::ImplPosControls()
                           aTabSize.Height() + IMPL_DIALOG_OFFSET*2 + nOffY );
         long    nBtnEx = 0;
 
-        // Preview-Fenster beruecksichtigen und die Groessen/Offsets anpassen
+        
         if ( mpViewWindow && mpViewWindow->IsVisible() )
         {
             long    nViewOffX = 0;
@@ -129,7 +129,7 @@ void TabDialog::ImplPosControls()
                 aDlgSize.Width() += aViewSize.Width()+IMPL_DIALOG_OFFSET;
                 nBtnEx          = aViewSize.Width()+IMPL_DIALOG_OFFSET;
             }
-            else // meViewAlign == WINDOWALIGN_LEFT
+            else 
             {
                 nViewOffX       = IMPL_DIALOG_OFFSET;
                 nViewOffY       = aTabOffset.Y();
@@ -145,17 +145,17 @@ void TabDialog::ImplPosControls()
                                            nViewPosFlags );
         }
 
-        // Positionierung vornehmen
+        
         pTabControl->SetPosPixel( aTabOffset );
 
-        // Alle anderen Children positionieren
+        
         bool bTabCtrl   = false;
         int  nLines     = 0;
         long nX;
         long nY         = aDlgSize.Height();
         long nTopX      = IMPL_DIALOG_OFFSET;
 
-        // Unter Windows 95 werden die Buttons rechtsbuendig angeordnet
+        
         nX = IMPL_DIALOG_OFFSET;
         long nCtrlBarWidth = ((aCtrlSize.Width()+IMPL_DIALOG_OFFSET)*nDownCtrl)-IMPL_DIALOG_OFFSET;
         if ( nCtrlBarWidth <= (aTabSize.Width()+nBtnEx) )
@@ -198,7 +198,7 @@ void TabDialog::ImplPosControls()
         SetOutputSizePixel( aDlgSize );
     }
 
-    // Offset merken
+    
     if ( nOffY )
     {
         Size aDlgSize = GetOutputSizePixel();
@@ -212,7 +212,7 @@ void TabDialog::ImplPosControls()
     mbPosControls = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 TabDialog::TabDialog( Window* pParent, WinBits nStyle ) :
     Dialog( WINDOW_TABDIALOG )
@@ -221,7 +221,7 @@ TabDialog::TabDialog( Window* pParent, WinBits nStyle ) :
     ImplInit( pParent, nStyle );
 }
 
-// -----------------------------------------------------------------------
+
 
 TabDialog::TabDialog( Window* pParent, const ResId& rResId ) :
     Dialog( WINDOW_TABDIALOG )
@@ -237,27 +237,27 @@ TabDialog::TabDialog( Window* pParent, const OString& rID, const OUString& rUIXM
     ImplInitTabDialogData();
 }
 
-// -----------------------------------------------------------------------
+
 
 TabDialog::~TabDialog()
 {
     delete mpFixedLine;
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabDialog::StateChanged( StateChangedType nType )
 {
     if ( nType == STATE_CHANGE_INITSHOW )
     {
-        // Calculate the Layout only for the initialized state
+        
         if ( mbPosControls )
             ImplPosControls();
     }
     Dialog::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void TabDialog::AdjustLayout()
 {

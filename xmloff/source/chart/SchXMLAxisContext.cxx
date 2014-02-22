@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sax/tools/converter.hxx>
@@ -213,10 +213,10 @@ void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName, bool bIsMajor )
     else
         xGridProp = xAxis->getMinorGrid();
 
-    // set properties
+    
     if( xGridProp.is())
     {
-        // the line color is black as default, in the model it is a light gray
+        
         xGridProp->setPropertyValue("LineColor",
                                      uno::makeAny( COL_BLACK ));
         if( !sAutoStyleName.isEmpty())
@@ -262,13 +262,13 @@ public:
     virtual ~AxisAttributeTokenMap() {}
 };
 
-//a AxisAttributeTokenMap Singleton
+
 struct theAxisAttributeTokenMap : public rtl::Static< AxisAttributeTokenMap, theAxisAttributeTokenMap > {};
 }
 
 void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList >& xAttrList )
 {
-    // parse attributes
+    
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     SchXMLImport& rImport = ( SchXMLImport& )GetImport();
     const SvXMLTokenMap& rAttrTokenMap = theAxisAttributeTokenMap::get();
@@ -307,7 +307,7 @@ void SchXMLAxisContext::StartElement( const Reference< xml::sax::XAttributeList 
         }
     }
 
-    // check for number of axes with same dimension
+    
     m_aCurrentAxis.nAxisIndex = 0;
     sal_Int32 nNumOfAxes = m_rAxes.size();
     for( sal_Int32 nCurrent = 0; nCurrent < nNumOfAxes; nCurrent++ )
@@ -377,7 +377,7 @@ bool lcl_AdaptWrongPercentScaleValues(chart2::ScaleData& rScaleData)
     return bChanged;
 }
 
-}//end anonymous namespace
+}
 
 void SchXMLAxisContext::CreateAxis()
 {
@@ -448,19 +448,19 @@ void SchXMLAxisContext::CreateAxis()
         }
     }
 
-    // set properties
+    
     if( m_xAxisProps.is())
     {
         uno::Any aTrueBool( uno::makeAny( sal_True ));
         uno::Any aFalseBool( uno::makeAny( sal_False ));
 
-        // #i109879# the line color is black as default, in the model it is a light gray
+        
         m_xAxisProps->setPropertyValue("LineColor",
                                      uno::makeAny( COL_BLACK ));
 
         m_xAxisProps->setPropertyValue("DisplayLabels", aFalseBool );
 
-        // #88077# AutoOrigin 'on' is default
+        
         m_xAxisProps->setPropertyValue("AutoOrigin", aTrueBool );
 
         if( m_bAxisTypeImported )
@@ -476,14 +476,14 @@ void SchXMLAxisContext::CreateAxis()
 
                 if( pStyle && pStyle->ISA( XMLPropStyleContext ))
                 {
-                    // note: SvXMLStyleContext::FillPropertySet is not const
+                    
                     XMLPropStyleContext * pPropStyleContext = const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
                     if( pPropStyleContext )
                         pPropStyleContext->FillPropertySet( m_xAxisProps );
 
                     if( m_bAdaptWrongPercentScaleValues && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y )
                     {
-                        //set scale data of added x axis back to default
+                        
                         Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
                                             m_aCurrentAxis.eDimension, m_aCurrentAxis.nAxisIndex ) );
                         if( xAxis.is() )
@@ -496,7 +496,7 @@ void SchXMLAxisContext::CreateAxis()
 
                     if( m_bAddMissingXAxisForNetCharts )
                     {
-                        //copy style from y axis to added x axis:
+                        
 
                         Reference< chart::XAxisSupplier > xAxisSuppl( xDiaProp, uno::UNO_QUERY );
                         if( xAxisSuppl.is() )
@@ -505,7 +505,7 @@ void SchXMLAxisContext::CreateAxis()
                             (( XMLPropStyleContext* )pStyle )->FillPropertySet( xXAxisProp );
                         }
 
-                        //set scale data of added x axis back to default
+                        
                         Reference< chart2::XAxis > xAxis( lcl_getAxis( GetImport().GetModel(),
                                             0 /*nDimensionIndex*/, 0 /*nAxisIndex*/ ) );
                         if( xAxis.is() )
@@ -516,7 +516,7 @@ void SchXMLAxisContext::CreateAxis()
                             xAxis->setScaleData( aScaleData );
                         }
 
-                        //set line style of added x axis to invisible
+                        
                         Reference< beans::XPropertySet > xNewAxisProp( xAxis, uno::UNO_QUERY );
                         if( xNewAxisProp.is() )
                         {
@@ -619,7 +619,7 @@ public:
     virtual ~AxisChildTokenMap() {}
 };
 
-//a AxisChildTokenMap Singleton
+
 struct theAxisChildTokenMap : public rtl::Static< AxisChildTokenMap, theAxisChildTokenMap > {};
 }
 
@@ -659,7 +659,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
         case XML_TOK_AXIS_GRID:
         {
             sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-            bool bIsMajor = true;       // default value for class is "major"
+            bool bIsMajor = true;       
             OUString sAutoStyleName;
 
             for( sal_Int16 i = 0; i < nAttrCount; i++ )
@@ -682,7 +682,7 @@ SvXMLImportContext* SchXMLAxisContext::CreateChildContext(
 
             CreateGrid( sAutoStyleName, bIsMajor );
 
-            // don't create a context => use default context. grid elements are empty
+            
             pContext = new SvXMLImportContext( GetImport(), p_nPrefix, rLocalName );
         }
         break;
@@ -703,7 +703,7 @@ void SchXMLAxisContext::EndElement()
         if( xAxis.is() )
         {
             chart2::ScaleData aScaleData( xAxis->getScaleData());
-            aScaleData.AutoDateAxis = false;//different default for older documents
+            aScaleData.AutoDateAxis = false;
             xAxis->setScaleData( aScaleData );
         }
     }
@@ -727,7 +727,7 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< chart2::XCoordinateSyst
     return xAxis;
 }
 
-} // anonymous namespace
+} 
 
 void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDocument >& xNewDoc,
                           const OUString& rChartTypeServiceName,
@@ -748,7 +748,7 @@ void SchXMLAxisContext::CorrectAxisPositions( const Reference< chart2::XChartDoc
                 {
                     Reference< chart2::XAxis > xMainXAxis = lcl_getAxis( xCooSys, 0, 0 );
                     Reference< chart2::XAxis > xMainYAxis = lcl_getAxis( xCooSys, 1, 0 );
-                    //Reference< chart2::XAxis > xMajorZAxis = lcl_getAxis( xCooSys, 2, 0 );
+                    
                     Reference< chart2::XAxis > xSecondaryXAxis = lcl_getAxis( xCooSys, 0, 1 );
                     Reference< chart2::XAxis > xSecondaryYAxis = lcl_getAxis( xCooSys, 1, 1 );
 
@@ -944,7 +944,7 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
     if( !m_xAxisProps.is() )
         return;
 
-    // parse attributes
+    
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     const SvXMLTokenMap& rAttrTokenMap = theDateScaleAttributeTokenMap::get();
 

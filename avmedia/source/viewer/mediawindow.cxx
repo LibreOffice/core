@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -41,9 +41,9 @@ using namespace ::com::sun::star;
 
 namespace avmedia {
 
-// ---------------
-// - MediaWindow -
-// ---------------
+
+
+
 
 MediaWindow::MediaWindow( Window* parent, bool bInternalMediaControl ) :
     mpImpl( new priv::MediaWindowImpl( parent, this, bInternalMediaControl ) )
@@ -51,151 +51,151 @@ MediaWindow::MediaWindow( Window* parent, bool bInternalMediaControl ) :
     mpImpl->Show();
 }
 
-// -------------------------------------------------------------------------
+
 
 MediaWindow::~MediaWindow() {}
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::setURL( const OUString& rURL, const OUString& rReferer )
 {
     mpImpl->setURL( rURL, OUString(), rReferer );
 }
 
-// -------------------------------------------------------------------------
+
 
 const OUString& MediaWindow::getURL() const
 {
     return mpImpl->getURL();
 }
 
-// -------------------------------------------------------------------------
+
 
 bool MediaWindow::isValid() const
 {
     return mpImpl->isValid();
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::MouseMove( const MouseEvent& /* rMEvt */ )
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindow::MouseButtonDown( const MouseEvent& /* rMEvt */ )
 {
 }
 
-// ---------------------------------------------------------------------
+
 
 void MediaWindow::MouseButtonUp( const MouseEvent& /* rMEvt */ )
 {
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::KeyInput( const KeyEvent& /* rKEvt */ )
 {
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::KeyUp( const KeyEvent& /* rKEvt */ )
 {
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::Command( const CommandEvent& /* rCEvt */ )
 {
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Int8 MediaWindow::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {
     return 0;
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Int8 MediaWindow::ExecuteDrop( const ExecuteDropEvent& /* rEvt */ )
 {
     return 0;
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::StartDrag( sal_Int8 /* nAction */, const Point& /* rPosPixel */ )
 {
 }
 
-// -------------------------------------------------------------------------
+
 
 Size MediaWindow::getPreferredSize() const
 {
     return mpImpl->getPreferredSize();
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::setPosSize( const Rectangle& rNewRect )
 {
     mpImpl->setPosSize( rNewRect );
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::setPointer( const Pointer& rPointer )
 {
     mpImpl->setPointer( rPointer );
 }
 
-// -------------------------------------------------------------------------
+
 
 bool MediaWindow::start()
 {
     return mpImpl->start();
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::updateMediaItem( MediaItem& rItem ) const
 {
     mpImpl->updateMediaItem( rItem );
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::executeMediaItem( const MediaItem& rItem )
 {
     mpImpl->executeMediaItem( rItem );
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::show()
 {
     mpImpl->Show();
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::hide()
 {
     mpImpl->Hide();
 }
 
-// -------------------------------------------------------------------------
+
 
 Window* MediaWindow::getWindow() const
 {
     return mpImpl.get();
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
 {
@@ -229,7 +229,7 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
     }
 }
 
-// -------------------------------------------------------------------------
+
 
 bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
         OUString& rURL, bool *const o_pbLink)
@@ -259,7 +259,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
         }
     }
 
-    // add filter for all media types
+    
     aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_MEDIAFILES ), aAllTypes );
 
     for( i = 0; i < aFilters.size(); ++i )
@@ -274,11 +274,11 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
             ( aTypes += aWildcard ) += aFilters[ i ].second.getToken( 0, ';', nIndex );
         }
 
-        // add single filters
+        
         aDlg.AddFilter( aFilters[ i ].first, aTypes );
     }
 
-    // add filter for all types
+    
     aDlg.AddFilter( AVMEDIA_RESSTR( AVMEDIA_STR_ALL_FILES ), OUString( "*.*"  ) );
 
     uno::Reference<ui::dialogs::XFilePicker> const xFP(aDlg.GetFilePicker());
@@ -286,11 +286,11 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
             uno::UNO_QUERY_THROW);
     if (o_pbLink)
     {
-        // for video link should be the default
+        
         xCtrlAcc->setValue(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0,
                 uno::makeAny(sal_True) );
-        // disabled for now: TODO: preview?
+        
         xCtrlAcc->enableControl(
                 ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW,
                 sal_False);
@@ -318,7 +318,7 @@ bool MediaWindow::executeMediaURLDialog(Window* /* pParent */,
     return !rURL.isEmpty();
 }
 
-// -------------------------------------------------------------------------
+
 
 void MediaWindow::executeFormatErrorBox( Window* pParent )
 {
@@ -327,7 +327,7 @@ void MediaWindow::executeFormatErrorBox( Window* pParent )
     aErrBox.Execute();
 }
 
-// -------------------------------------------------------------------------
+
 
 bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bool bDeep, Size* pPreferredSizePixel )
 {
@@ -383,14 +383,14 @@ bool MediaWindow::isMediaURL( const OUString& rURL, const OUString& rReferer, bo
     return bRet;
 }
 
-// -------------------------------------------------------------------------
+
 
 uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL, const OUString& rReferer )
 {
     return priv::MediaWindowImpl::createPlayer( rURL, rReferer );
 }
 
-// -------------------------------------------------------------------------
+
 
 uno::Reference< graphic::XGraphic > MediaWindow::grabFrame( const OUString& rURL,
                                                             const OUString& rReferer,
@@ -451,6 +451,6 @@ BitmapEx MediaWindow::getEmptyLogo()
 }
 
 
-} // namespace avemdia
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

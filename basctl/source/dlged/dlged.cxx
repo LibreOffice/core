@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -62,9 +62,9 @@ static OUString aDecorationPropName( "Decoration" );
 static OUString aTitlePropName( "Title" );
 
 
-//============================================================================
-// DlgEdHint
-//============================================================================
+
+
+
 
 TYPEINIT1( DlgEdHint, SfxHint );
 
@@ -84,18 +84,18 @@ DlgEdHint::~DlgEdHint()
 {
 }
 
-//============================================================================
-// DlgEditor
-//============================================================================
+
+
+
 
 void DlgEditor::ShowDialog()
 {
     uno::Reference< uno::XComponentContext >  xContext = getProcessComponentContext();
 
-    // create a dialog
+    
     uno::Reference< awt::XUnoControlDialog > xDlg = awt::UnoControlDialog::create( xContext );
 
-    // clone the dialog model
+    
     uno::Reference< util::XCloneable > xC( m_xUnoControlDialogModel, uno::UNO_QUERY );
     uno::Reference< util::XCloneable > xNew = xC->createClone();
     uno::Reference< awt::XControlModel > xDlgMod( xNew, uno::UNO_QUERY );
@@ -117,7 +117,7 @@ void DlgEditor::ShowDialog()
             }
         }
 
-        // Disable decoration
+        
         bool bDecoration = true;
         try
         {
@@ -133,16 +133,16 @@ void DlgEditor::ShowDialog()
         {}
     }
 
-    // set the model
+    
     xDlg->setModel( xDlgMod );
 
-    // create a peer
+    
     uno::Reference< awt::XToolkit> xToolkit = awt::Toolkit::create( xContext );
     xDlg->createPeer( xToolkit, rWindow.GetComponentInterface() );
 
     xDlg->execute();
 
-    // need to cast because of multiple inheritance
+    
     Reference<awt::XControl>(xDlg)->dispose();
 }
 
@@ -194,7 +194,7 @@ DlgEditor::DlgEditor (
     ,eMode( DlgEditor::SELECT )
     ,eActObj( OBJ_DLG_PUSHBUTTON )
     ,bFirstDraw(false)
-    ,aGridSize( 100, 100 )  // 100TH_MM
+    ,aGridSize( 100, 100 )  
     ,bGridVisible(false)
     ,bGridSnap(true)
     ,bCreateOK(true)
@@ -211,7 +211,7 @@ DlgEditor::DlgEditor (
 
     pDlgEdModel->InsertPage(pDlgEdPage);
 
-    // set clipboard data flavors
+    
     m_ClipboardDataFlavors[0].MimeType =             "application/vnd.sun.xml.dialog" ;
     m_ClipboardDataFlavors[0].HumanPresentableName = "Dialog 6.0" ;
     m_ClipboardDataFlavors[0].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
@@ -320,14 +320,14 @@ void DlgEditor::DoScroll( ScrollBar* )
 
     rWindow.Update();
 
-    // #i31562#
-    // When scrolling, someone was rescuing the Wallpaper and forced the window scroll to
-    // be done without background refresh. I do not know why, but that causes the repaint
-    // problems. Taking that out.
-    //  Wallpaper aOldBackground = rWindow.GetBackground();
-    //  rWindow.SetBackground();
+    
+    
+    
+    
+    
+    
 
-    // #i74769# children should be scrolled
+    
     rWindow.Scroll( -nX, -nY, SCROLL_CHILDREN);
     aMap.SetOrigin( Point( -aScrollPos.Width(), -aScrollPos.Height() ) );
     rWindow.SetMapMode( aMap );
@@ -353,10 +353,10 @@ void DlgEditor::UpdateScrollBars()
 
 void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoControlDialogModel )
 {
-    // set dialog model
+    
     m_xUnoControlDialogModel = xUnoControlDialogModel;
 
-    // create dialog form
+    
     pDlgEdForm = new DlgEdForm(*this);
     uno::Reference< awt::XControlModel > xDlgMod( m_xUnoControlDialogModel , uno::UNO_QUERY );
     pDlgEdForm->SetUnoControlModel(xDlgMod);
@@ -364,26 +364,26 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
     pDlgEdModel->GetPage(0)->InsertObject( pDlgEdForm );
     AdjustPageSize();
     pDlgEdForm->SetRectFromProps();
-    pDlgEdForm->UpdateTabIndices();     // for backward compatibility
+    pDlgEdForm->UpdateTabIndices();     
     pDlgEdForm->StartListening();
 
-    // create controls
+    
     Reference< ::com::sun::star::container::XNameAccess > xNameAcc( m_xUnoControlDialogModel, UNO_QUERY );
     if ( xNameAcc.is() )
     {
-        // get sequence of control names
+        
         Sequence< OUString > aNames = xNameAcc->getElementNames();
         const OUString* pNames = aNames.getConstArray();
         sal_Int32 nCtrls = aNames.getLength();
 
-        // create a map of tab indices and control names, sorted by tab index
+        
         IndexToNameMap aIndexToNameMap;
         for ( sal_Int32 i = 0; i < nCtrls; ++i )
         {
-            // get name
+            
             OUString aName( pNames[i] );
 
-            // get tab index
+            
             sal_Int16 nTabIndex = -1;
             Any aCtrl = xNameAcc->getByName( aName );
             Reference< ::com::sun::star::beans::XPropertySet > xPSet;
@@ -391,11 +391,11 @@ void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoContr
             if ( xPSet.is() )
                 xPSet->getPropertyValue( DLGED_PROP_TABINDEX ) >>= nTabIndex;
 
-            // insert into map
+            
             aIndexToNameMap.insert( IndexToNameMap::value_type( nTabIndex, aName ) );
         }
 
-        // create controls and insert them into drawing page
+        
         for ( IndexToNameMap::iterator aIt = aIndexToNameMap.begin(); aIt != aIndexToNameMap.end(); ++aIt )
         {
             Any aCtrl = xNameAcc->getByName( aIt->second );
@@ -495,12 +495,12 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
     {
         bFirstDraw = false;
 
-        // get property set
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xPSet(pDlgEdForm->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
 
         if ( xPSet.is() )
         {
-            // get dialog size from properties
+            
             sal_Int32 nWidth = 0, nHeight = 0;
             xPSet->getPropertyValue( DLGED_PROP_WIDTH ) >>= nWidth;
             xPSet->getPropertyValue( DLGED_PROP_HEIGHT ) >>= nHeight;
@@ -509,7 +509,7 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
             {
                 Size   aSize = rWindow.PixelToLogic( Size( 400, 300 ) );
 
-                // align with grid
+                
                 Size aGridSize_(long(pDlgEdView->GetSnapGridWidthX()), long(pDlgEdView->GetSnapGridWidthY()));
                 aSize.Width()  -= aSize.Width()  % aGridSize_.Width();
                 aSize.Height() -= aSize.Height() % aGridSize_.Height();
@@ -519,11 +519,11 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
                 aPos.X() = (aOutSize.Width()>>1)  -  (aSize.Width()>>1);
                 aPos.Y() = (aOutSize.Height()>>1) -  (aSize.Height()>>1);
 
-                // align with grid
+                
                 aPos.X() -= aPos.X() % aGridSize_.Width();
                 aPos.Y() -= aPos.Y() % aGridSize_.Height();
 
-                // don't put in the corner
+                
                 Point aMinPos = rWindow.PixelToLogic( Point( 30, 20 ) );
                 if( (aPos.X() < aMinPos.X()) || (aPos.Y() < aMinPos.Y()) )
                 {
@@ -532,14 +532,14 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
                     aPos.Y() -= aPos.Y() % aGridSize_.Height();
                 }
 
-                // set dialog position and size
+                
                 pDlgEdForm->SetSnapRect( Rectangle( aPos, aSize ) );
                 pDlgEdForm->EndListening(false);
                 pDlgEdForm->SetPropsFromRect();
                 pDlgEdForm->GetDlgEditor().SetDialogModelChanged(true);
                 pDlgEdForm->StartListening();
 
-                // set position and size of controls
+                
                 if (sal_uLong nObjCount = pDlgEdPage->GetObjCount())
                 {
                     for ( sal_uLong i = 0 ; i < nObjCount ; i++ )
@@ -551,33 +551,33 @@ IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
         }
     }
 
-    // repaint, get PageView and prepare Region
+    
     SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
     const Region aPaintRectRegion(aPaintRect);
 
 
-    // #i74769#
+    
     SdrPaintWindow* pTargetPaintWindow = 0;
 
-    // mark repaint start
+    
     if(pPgView)
     {
         pTargetPaintWindow = pPgView->GetView().BeginDrawLayers(&rWindow, aPaintRectRegion);
         OSL_ENSURE(pTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
     }
 
-    // draw background self using wallpaper
-    // #i79128# ...and use correct OutDev for that
+    
+    
     if(pTargetPaintWindow)
     {
         OutputDevice& rTargetOutDev = pTargetPaintWindow->GetTargetOutputDevice();
         rTargetOutDev.DrawWallpaper(aPaintRect, Wallpaper(Color(COL_WHITE)));
     }
 
-    // do paint (unbuffered) and mark repaint end
+    
     if(pPgView)
     {
-        // paint of control layer is done in EndDrawLayers anyway...
+        
         pPgView->GetView().EndDrawLayers(*pTargetPaintWindow, true);
     }
 
@@ -632,26 +632,26 @@ sal_uInt16 DlgEditor::GetInsertObj() const
 
 void DlgEditor::CreateDefaultObject()
 {
-    // create object by factory
+    
     SdrObject* pObj = SdrObjFactory::MakeNewObject( pDlgEdView->GetCurrentObjInventor(), pDlgEdView->GetCurrentObjIdentifier(), pDlgEdPage );
 
     if (DlgEdObj* pDlgEdObj = dynamic_cast<DlgEdObj*>(pObj))
     {
-        // set position and size
+        
         Size aSize = rWindow.PixelToLogic( Size( 96, 24 ) );
         Point aPoint = (pDlgEdForm->GetSnapRect()).Center();
         aPoint.X() -= aSize.Width() / 2;
         aPoint.Y() -= aSize.Height() / 2;
         pDlgEdObj->SetSnapRect( Rectangle( aPoint, aSize ) );
 
-        // set default property values
+        
         pDlgEdObj->SetDefaults();
 
-        // insert object into drawing page
+        
         SdrPageView* pPageView = pDlgEdView->GetSdrPageView();
         pDlgEdView->InsertObjectAtView( pDlgEdObj, *pPageView);
 
-        // start listening
+        
         pDlgEdObj->StartListening();
     }
 }
@@ -686,10 +686,10 @@ void DlgEditor::Copy()
     if( !pDlgEdView->AreObjectsMarked() )
         return;
 
-    // stop all drawing actions
+    
     pDlgEdView->BrkAction();
 
-    // create an empty clipboard dialog model
+    
     Reference< util::XCloneable > xClone( m_xUnoControlDialogModel, UNO_QUERY );
     Reference< util::XCloneable > xNewClone = xClone->createClone();
     Reference< container::XNameContainer > xClipDialogModel( xNewClone, UNO_QUERY );
@@ -707,7 +707,7 @@ void DlgEditor::Copy()
         }
     }
 
-    // insert control models of marked objects into clipboard dialog model
+    
     sal_uLong nMark = pDlgEdView->GetMarkedObjectList().GetMarkCount();
     for( sal_uLong i = 0; i < nMark; i++ )
     {
@@ -728,7 +728,7 @@ void DlgEditor::Copy()
             {
                 Any aCtrl = xNameAcc->getByName( aName );
 
-                // clone control model
+                
                 Reference< util::XCloneable > xCtrl;
                    aCtrl >>= xCtrl;
                 Reference< util::XCloneable > xNewCtrl = xCtrl->createClone();
@@ -741,7 +741,7 @@ void DlgEditor::Copy()
         }
     }
 
-    // export clipboard dialog model to xml
+    
     Reference< XComponentContext > xContext(
         comphelper::getProcessComponentContext() );
     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xClipDialogModel, xContext, m_xDocument );
@@ -750,11 +750,11 @@ void DlgEditor::Copy()
     implCopyStreamToByteSequence( xStream, DialogModelBytes );
     xStream->closeInput();
 
-    // set clipboard content
+    
     Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow().GetClipboard();
     if ( xClipboard.is() )
     {
-        // With resource?
+        
         uno::Reference< beans::XPropertySet > xDialogModelPropSet( m_xUnoControlDialogModel, uno::UNO_QUERY );
         uno::Reference< resource::XStringResourcePersistence > xStringResourcePersistence;
         if( xDialogModelPropSet.is() )
@@ -771,9 +771,9 @@ void DlgEditor::Copy()
         DlgEdTransferableImpl* pTrans = NULL;
         if( xStringResourcePersistence.is() )
         {
-            // With resource, support old and new format
+            
 
-            // Export xClipDialogModel another time with ids replaced by current language string
+            
             uno::Reference< resource::XStringResourceManager >
                 xStringResourceManager( xStringResourcePersistence, uno::UNO_QUERY );
             LocalizationMgr::resetResourceForDialog( xClipDialogModel, xStringResourceManager );
@@ -783,27 +783,27 @@ void DlgEditor::Copy()
             implCopyStreamToByteSequence( xStream2, NoResourceDialogModelBytes );
             xStream2->closeInput();
 
-            // Old format contains dialog with replaced ids
+            
             Sequence< Any > aSeqData(2);
             Any aNoResourceDialogModelBytesAny;
             aNoResourceDialogModelBytesAny <<= NoResourceDialogModelBytes;
             aSeqData[0] = aNoResourceDialogModelBytesAny;
 
-            // New format contains dialog and resource
+            
             Sequence< sal_Int8 > aResData = xStringResourcePersistence->exportBinary();
 
-            // Create sequence for combined dialog and resource
+            
             sal_Int32 nDialogDataLen = DialogModelBytes.getLength();
             sal_Int32 nResDataLen = aResData.getLength();
 
-            // Combined data = 4 Bytes 32Bit Offset to begin of resource data, lowest byte first
-            // + nDialogDataLen bytes dialog data + nResDataLen resource data
+            
+            
             sal_Int32 nTotalLen = 4 + nDialogDataLen + nResDataLen;
             sal_Int32 nResOffset = 4 + nDialogDataLen;
             Sequence< sal_Int8 > aCombinedData( nTotalLen );
             sal_Int8* pCombinedData = aCombinedData.getArray();
 
-            // Write offset
+            
             sal_Int32 n = nResOffset;
             for( sal_Int16 i = 0 ; i < 4 ; i++ )
             {
@@ -821,7 +821,7 @@ void DlgEditor::Copy()
         }
         else
         {
-            // No resource, support only old format
+            
             Sequence< Any > aSeqData(1);
             Any aDialogModelBytesAny;
             aDialogModelBytesAny <<= DialogModelBytes;
@@ -837,23 +837,23 @@ void DlgEditor::Copy()
 
 void DlgEditor::Paste()
 {
-    // stop all drawing actions
+    
     pDlgEdView->BrkAction();
 
-    // unmark all objects
+    
     pDlgEdView->UnmarkAll();
 
-    // get clipboard
+    
     Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow().GetClipboard();
     if ( xClipboard.is() )
     {
-        // get clipboard content
+        
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
         Application::AcquireSolarMutex( nRef );
         if ( xTransf.is() )
         {
-            // Is target dialog (library) localized?
+            
             uno::Reference< beans::XPropertySet > xDialogModelPropSet( m_xUnoControlDialogModel, uno::UNO_QUERY );
             uno::Reference< resource::XStringResourceManager > xStringResourceManager;
             if( xDialogModelPropSet.is() )
@@ -872,7 +872,7 @@ void DlgEditor::Paste()
 
             if ( xTransf->isDataFlavorSupported( m_ClipboardDataFlavors[0] ) )
             {
-                // create clipboard dialog model from xml
+                
                 Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
                 Reference< container::XNameContainer > xClipDialogModel( xContext->getServiceManager()->createInstanceWithContext(
                     "com.sun.star.awt.UnoControlDialogModel", xContext ), uno::UNO_QUERY );
@@ -891,7 +891,7 @@ void DlgEditor::Paste()
 
                     sal_Int32 nTotalLen = aCombinedData.getLength();
 
-                    // Reading offset
+                    
                     sal_Int32 nResOffset = 0;
                     sal_Int32 nFactor = 1;
                     for( sal_Int16 i = 0; i < 4; i++ )
@@ -920,7 +920,7 @@ void DlgEditor::Paste()
                     ::xmlscript::importDialogModel( ::xmlscript::createInputStream( rtl::ByteSequence(DialogModelBytes.getArray(), DialogModelBytes.getLength()) ) , xClipDialogModel, xContext, m_xDocument );
                 }
 
-                // get control models from clipboard dialog model
+                
                 Reference< ::com::sun::star::container::XNameAccess > xNameAcc( xClipDialogModel, UNO_QUERY );
                 if ( xNameAcc.is() )
                 {
@@ -940,23 +940,23 @@ void DlgEditor::Paste()
                         Reference< ::com::sun::star::awt::XControlModel > xCM;
                            aA >>= xCM;
 
-                        // clone the control model
+                        
                         Reference< util::XCloneable > xClone( xCM, uno::UNO_QUERY );
                         Reference< awt::XControlModel > xCtrlModel( xClone->createClone(), uno::UNO_QUERY );
 
                         DlgEdObj* pCtrlObj = new DlgEdObj();
-                        pCtrlObj->SetDlgEdForm(pDlgEdForm);         // set parent form
-                        pDlgEdForm->AddChild(pCtrlObj);             // add child to parent form
-                        pCtrlObj->SetUnoControlModel( xCtrlModel ); // set control model
+                        pCtrlObj->SetDlgEdForm(pDlgEdForm);         
+                        pDlgEdForm->AddChild(pCtrlObj);             
+                        pCtrlObj->SetUnoControlModel( xCtrlModel ); 
 
-                        // set new name
+                        
                         OUString aOUniqueName( pCtrlObj->GetUniqueName() );
                         Reference< beans::XPropertySet > xPSet( xCtrlModel , UNO_QUERY );
                         Any aUniqueName;
                         aUniqueName <<= aOUniqueName;
                         xPSet->setPropertyValue( DLGED_PROP_NAME, aUniqueName );
 
-                        // set tabindex
+                        
                         Reference< container::XNameAccess > xNA( m_xUnoControlDialogModel , UNO_QUERY );
                            Sequence< OUString > aNames_ = xNA->getElementNames();
                         Any aTabIndex;
@@ -981,32 +981,32 @@ void DlgEditor::Paste()
                             }
                         }
 
-                        // insert control model in editor dialog model
+                        
                         Any aCtrlModel;
                         aCtrlModel <<= xCtrlModel;
                         m_xUnoControlDialogModel->insertByName( aOUniqueName , aCtrlModel );
 
-                        // insert object into drawing page
+                        
                         pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );
                         pCtrlObj->SetRectFromProps();
                         pCtrlObj->UpdateStep();
                         pDlgEdForm->UpdateTabOrderAndGroups();
-                        pCtrlObj->StartListening();                         // start listening
+                        pCtrlObj->StartListening();                         
 
-                        // mark object
+                        
                         SdrPageView* pPgView = pDlgEdView->GetSdrPageView();
                         pDlgEdView->MarkObj( pCtrlObj, pPgView, false, true);
                     }
 
-                    // center marked objects in dialog editor form
+                    
                     Point aMarkCenter = (pDlgEdView->GetMarkedObjRect()).Center();
                     Point aFormCenter = (pDlgEdForm->GetSnapRect()).Center();
                     Point aPoint = aFormCenter - aMarkCenter;
                     Size  aSize( aPoint.X() , aPoint.Y() );
-                    pDlgEdView->MoveMarkedObj( aSize );                     // update of control model properties (position + size) in NbcMove
+                    pDlgEdView->MoveMarkedObj( aSize );                     
                     pDlgEdView->MarkListHasChanged();
 
-                    // dialog model changed
+                    
                     SetDialogModelChanged(true);
                 }
             }
@@ -1020,7 +1020,7 @@ void DlgEditor::Delete()
     if( !pDlgEdView->AreObjectsMarked() )
         return;
 
-    // remove control models of marked objects from dialog model
+    
     sal_uLong nMark = pDlgEdView->GetMarkedObjectList().GetMarkCount();
 
     for( sal_uLong i = 0; i < nMark; i++ )
@@ -1030,7 +1030,7 @@ void DlgEditor::Delete()
 
         if ( pDlgEdObj && !dynamic_cast<DlgEdForm*>(pDlgEdObj) )
         {
-            // get name from property
+            
             OUString aName;
             uno::Reference< beans::XPropertySet >  xPSet(pDlgEdObj->GetUnoControlModel(), uno::UNO_QUERY);
             if (xPSet.is())
@@ -1038,7 +1038,7 @@ void DlgEditor::Delete()
                 xPSet->getPropertyValue( DLGED_PROP_NAME ) >>= aName;
             }
 
-            // remove control from dialog model
+            
             Reference< ::com::sun::star::container::XNameAccess > xNameAcc(pDlgEdObj->GetDlgEdForm()->GetUnoControlModel(), UNO_QUERY );
             if ( xNameAcc.is() && xNameAcc->hasByName(aName) )
             {
@@ -1054,12 +1054,12 @@ void DlgEditor::Delete()
                 }
             }
 
-            // remove child from parent form
+            
             pDlgEdForm->RemoveChild( pDlgEdObj );
         }
     }
 
-    // update tab indices
+    
     pDlgEdForm->UpdateTabIndices();
 
     pDlgEdView->BrkAction();
@@ -1073,11 +1073,11 @@ void DlgEditor::Delete()
 
 bool DlgEditor::IsPasteAllowed()
 {
-    // get clipboard
+    
     Reference< datatransfer::clipboard::XClipboard > xClipboard = GetWindow().GetClipboard();
     if ( xClipboard.is() )
     {
-        // get clipboard content
+        
         const sal_uInt32 nRef = Application::ReleaseSolarMutex();
         Reference< datatransfer::XTransferable > xTransf = xClipboard->getContents();
         Application::AcquireSolarMutex( nRef );
@@ -1121,7 +1121,7 @@ namespace Print
     long const nBorder = 300;
 }
 
-void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working yet
+void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) 
 {
 
     pPrinter->Push();
@@ -1138,7 +1138,7 @@ void lcl_PrintHeader( Printer* pPrinter, const OUString& rTitle ) // not working
 
     long const nFontHeight = pPrinter->GetTextHeight();
 
-    // 1st border => line, 2+3 border = free space
+    
     long const nYTop = Print::nTopMargin - 3*Print::nBorder - nFontHeight;
 
     long const nXLeft = Print::nLeftMargin - Print::nBorder;
@@ -1172,7 +1172,7 @@ void DlgEditor::printPage( sal_Int32 nPage, Printer* pPrinter, const OUString& r
 }
 
 
-void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    // not working yet
+void DlgEditor::Print( Printer* pPrinter, const OUString& rTitle )    
 {
     {
         MapMode aOldMap( pPrinter->GetMapMode());
@@ -1277,6 +1277,6 @@ bool DlgEditor::AdjustPageSize()
 }
 
 
-} // namespace basctl
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

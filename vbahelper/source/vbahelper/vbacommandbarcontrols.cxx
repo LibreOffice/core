@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbacommandbarcontrols.hxx"
 #include "vbacommandbarcontrol.hxx"
@@ -25,7 +25,7 @@ using namespace ooo::vba;
 typedef ::cppu::WeakImplHelper1< container::XEnumeration > CommandBarControlEnumeration_BASE;
 class CommandBarControlEnumeration : public CommandBarControlEnumeration_BASE
 {
-    //uno::Reference< uno::XComponentContext > m_xContext;
+    
     CommandBarControls_BASE* m_pCommandBarControls;
     sal_Int32 m_nCurrentPosition;
 public:
@@ -102,7 +102,7 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItem
     return aProps;
 }
 
-// XEnumerationAccess
+
 uno::Type SAL_CALL
 ScVbaCommandBarControls::getElementType() throw ( uno::RuntimeException )
 {
@@ -133,7 +133,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
     return uno::makeAny( uno::Reference< XCommandBarControl > ( pNewCommandBarControl ) );
 }
 
-// Methods
+
 uno::Any SAL_CALL
 ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*/ ) throw (uno::RuntimeException)
 {
@@ -160,8 +160,8 @@ ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*
 uno::Reference< XCommandBarControl > SAL_CALL
 ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const uno::Any& Parameter, const uno::Any& Before, const uno::Any& Temporary ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // Parameter is not supported
-    // the following name needs to be individually created;
+    
+    
     OUString sLabel("Custom");
     OUString sCommandUrl( CUSTOM_MENU_STR + sLabel);
     sal_Int32 nType = office::MsoControlType::msoControlButton;
@@ -193,12 +193,12 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     uno::Any aSubMenu;
     if( nType == office::MsoControlType::msoControlPopup )
     {
-        // it is a Popmenu
+        
         uno::Reference< lang::XSingleComponentFactory > xSCF( m_xBarSettings, uno::UNO_QUERY_THROW );
         aSubMenu <<= xSCF->createInstanceWithContext( mxContext );
     }
 
-    // create control
+    
     uno::Sequence< beans::PropertyValue > aProps;
     OUString sHelpUrl;
     sal_uInt16 nItemType = 0;
@@ -228,7 +228,7 @@ ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const un
     return uno::Reference< XCommandBarControl >( pNewCommandBarControl );
 }
 
-// XHelperInterface
+
 OUString
 ScVbaCommandBarControls::getServiceImplName()
 {
@@ -247,25 +247,25 @@ ScVbaCommandBarControls::getServiceNames()
     return aServiceNames;
 }
 
-// ============================================================================
+
 
 class VbaDummyIndexAccess : public ::cppu::WeakImplHelper1< container::XIndexAccess >
 {
 public:
     inline VbaDummyIndexAccess() {}
-    // XIndexAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException)
         { return 0; }
     virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException)
         { throw lang::IndexOutOfBoundsException(); }
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
         { return cppu::UnoType<XCommandBarControl>::get(); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException)
         { return false; }
 };
 
-// ----------------------------------------------------------------------------
+
 
 VbaDummyCommandBarControls::VbaDummyCommandBarControls(
         const uno::Reference< XHelperInterface >& xParent,
@@ -274,7 +274,7 @@ VbaDummyCommandBarControls::VbaDummyCommandBarControls(
 {
 }
 
-// XEnumerationAccess
+
 uno::Type SAL_CALL VbaDummyCommandBarControls::getElementType() throw ( uno::RuntimeException )
 {
     return cppu::UnoType<XCommandBarControl>::get();
@@ -290,7 +290,7 @@ uno::Any VbaDummyCommandBarControls::createCollectionObject( const uno::Any& /*a
     return uno::Any( uno::Reference< XCommandBarControl >() );
 }
 
-// Methods
+
 uno::Any SAL_CALL VbaDummyCommandBarControls::Item( const uno::Any& /*aIndex*/, const uno::Any& /*aIndex*/ ) throw (uno::RuntimeException)
 {
     return uno::Any( uno::Reference< XCommandBarControl >() );
@@ -302,7 +302,7 @@ uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
     return uno::Reference< XCommandBarControl >();
 }
 
-// XHelperInterface
+
 OUString VbaDummyCommandBarControls::getServiceImplName()
 {
     return OUString("VbaDummyCommandBarControls");

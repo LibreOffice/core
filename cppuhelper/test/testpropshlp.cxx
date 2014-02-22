@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if !defined(OSL_DEBUG_LEVEL) || OSL_DEBUG_LEVEL == 0
@@ -53,17 +53,17 @@ static Property * getPropertyTable1()
             static Property aTable[] =
             {
                 Property( OUString("a"), 0, getCppuType( (OUString *)0) ,
-                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //OUString
+                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), 
                 Property( OUString("b"), 1, getCppuCharType( ) ,
-                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //Char
+                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), 
                 Property( OUString("c"), 2, getCppuType( (sal_Int32*)0) ,
-                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //sal_Int32
+                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), 
                 Property( OUString("d"), 5, getCppuType( (double*)0)     ,
-                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //double
+                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), 
                 Property( OUString("e"), 7, getCppuBooleanType()         ,
-                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), //BOOL
+                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), 
                 Property( OUString("f"), 8, getCppuType( (Any*)0)        ,
-                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )  //Any
+                             PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )  
             };
             pTable = aTable;
         }
@@ -82,17 +82,17 @@ static Property * getPropertyTable2()
             static Property aTable[] =
             {
                 Property( OUString("f"), 8, getCppuType( (Any *)0)   ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Any
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   
                 Property( OUString("b"), 1, getCppuCharType( ),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Char
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   
                 Property( OUString("a"), 0, getCppuType( (OUString*)0),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // OUString
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   
                 Property( OUString("d"), 5, getCppuType( (double*)0) ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Double
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   
                 Property( OUString("c"), 2, getCppuType( (sal_Int32*)0),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // sal_Int32
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   
                 Property( OUString("e"), 7, getCppuBooleanType()         ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // Bool
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    
             };
             pTable = aTable;
         }
@@ -110,11 +110,11 @@ static Property * getPropertyTable3()
             static Property aTable[] =
             {
                 Property( OUString("b"), 1, getCppuCharType( ),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // Char
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   
                 Property( OUString("f"), 8, getCppuType( (Any *)0)   ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // any
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   
                 Property( OUString("a"), 0, getCppuType( (OUString*)0),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // OUString
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    
             };
             pTable = aTable;
         }
@@ -133,11 +133,11 @@ static Property * getPropertyTable4()
             static Property aTable[] =
             {
                 Property( OUString("a"), 0, getCppuType( (OUString*)0),
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   // OUString
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ),   
                 Property( OUString("b"), 1, getCppuCharType( ),
-                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), // Char
+                                     PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID ), 
                 Property( OUString("f"), 2, getCppuType( (Any *)0)   ,
-                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    // Any
+                                    PropertyAttribute::READONLY | PropertyAttribute::MAYBEVOID )    
             };
             pTable = aTable;
         }
@@ -156,7 +156,7 @@ static Property * getPropertyTable4()
 
 void test_PropertyArrayHelper()
 {
-    // Test getProperties() and getCount()
+    
     {
         OPropertyArrayHelper a1( getPropertyTable1(), 6 );
         OSL_ENSURE( 6 == a1.getCount(), "not all properties inserted" );
@@ -172,14 +172,14 @@ void test_PropertyArrayHelper()
         }
     }
 
-    // Test sorting
+    
     {
           OPropertyArrayHelper a1( getPropertyTable2(), 6, sal_False );
           Sequence< Property > aProps = a1.getProperties();
           Property * pP = aProps.getArray();
           OSL_ENSURE( 6 == aProps.getLength(), "getProperties() gives not all properties" );
 
-        // table to switch to sorted
+        
         int a[] = { 2 , 1 , 4, 3, 5, 0 };
           for( int i = 0; i < 6; i++ )
           {
@@ -190,13 +190,13 @@ void test_PropertyArrayHelper()
           }
     }
 
-    // Test sorting
+    
     {
           OPropertyArrayHelper a1( getPropertyTable3(), 3, sal_False );
           Sequence< Property > aProps = a1.getProperties();
           Property * pP = aProps.getArray();
           OSL_ENSURE( 3 == aProps.getLength(), "getProperties() gives not all properties" );
-        // table to switch to sorted
+        
         int a[] = { 2 , 0 , 1 };
           for( int i = 0; i < 3; i++ )
           {
@@ -207,7 +207,7 @@ void test_PropertyArrayHelper()
           }
     }
 
-    // Test getPropertyByName and hasPropertyByName
+    
     {
         OPropertyArrayHelper a1( getPropertyTable1(), 6 );
         for( int i = 0; i < 6; i++ )
@@ -231,7 +231,7 @@ void test_PropertyArrayHelper()
         }
     }
 
-    // Test getHandleByName
+    
     {
         OPropertyArrayHelper a1( getPropertyTable1(), 6 );
         for( int i = 0; i < 6; i++ )
@@ -243,7 +243,7 @@ void test_PropertyArrayHelper()
         OSL_ENSURE( Handle == -1, "Handle not correct" );
     }
 
-    // Test fillPropertyMembersByHandle
+    
     {
         OPropertyArrayHelper a1( getPropertyTable1(), 6 );
         int i;
@@ -257,7 +257,7 @@ void test_PropertyArrayHelper()
             OSL_ENSURE( aPropName == getPropertyTable1()[i].Name , "fillPropertyMembersByHandle: Name not correct" );
         }
         OSL_ENSURE( !a1.fillPropertyMembersByHandle( NULL, NULL, 66666 ), "fillPropertyMembersByHandle: handle found" );
-        // optimized table
+        
         OPropertyArrayHelper a4( getPropertyTable4(), 3 );
         for( i = 0; i < 3; i++ )
         {
@@ -271,12 +271,12 @@ void test_PropertyArrayHelper()
         OSL_ENSURE( !a4.fillPropertyMembersByHandle( NULL, NULL, 66666 ), "fillPropertyMembersByHandle: handle found" );
     }
 
-    // Test fillHandles
+    
     {
         OPropertyArrayHelper a1( getPropertyTable1(), 6 );
         Sequence< OUString > aS( 4 );
         sal_Int32 Handles[4];
-        // muss sortiert sein
+        
         aS[0] = "a";
         aS[1] = "d";
         aS[2] = "f";
@@ -293,9 +293,9 @@ void test_PropertyArrayHelper()
 
 
 
-//----------------------------------------------------
-//  test_OPropertySetHelper
-//----------------------------------------------------
+
+
+
 struct MutexContainer
 {
     Mutex aMutex;
@@ -311,9 +311,9 @@ public:
                     test_OPropertySetHelper( Property * p, sal_Int32    n )
                         : MutexContainer()
                         , OBroadcastHelper( ((MutexContainer *)this)->aMutex )
-//                      , OPropertySetHelper( *(static_cast< OBroadcastHelper * >(this)))
-                        // MSCI 4 bug ! :
-                        //      OBroadcastHelper == OBroadcastHelperVar<OMultiTypeInterfaceContainerHelper>
+
+                        
+                        
                         , OPropertySetHelper(
                                 *(static_cast< OBroadcastHelper * >(this)))
                         , bBOOL( sal_False )
@@ -331,7 +331,7 @@ public:
 
     void dispose()
                     {
-                        // see comphlp.cxx
+                        
                         sal_Bool bDoDispose = sal_False;
                         {
                             MutexGuard aGuard( rBHelper.rMutex );
@@ -353,7 +353,7 @@ public:
                         }
                     }
 
-    // XInterface
+    
     Any             SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(RuntimeException)
                     {
                         Any aRet( OPropertySetHelper::queryInterface( rType ) );
@@ -364,7 +364,7 @@ public:
     void            SAL_CALL release() throw()
                             { OWeakObject::release(); }
 
-    // XPropertySet
+    
     Reference < XPropertySetInfo >  SAL_CALL getPropertySetInfo()throw(RuntimeException);
 
     using OPropertySetHelper::getFastPropertyValue;
@@ -384,17 +384,17 @@ protected:
     void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw(RuntimeException);
 };
 
-//----------------------------------------------------------------------
-//------ The Properties of this implementation -------------------------
-//----------------------------------------------------------------------
-// Id must be the index into the array
+
+
+
+
 #define PROPERTY_BOOL       0
 #define PROPERTY_INT16      1
 #define PROPERTY_INT32      2
 
-// Max number of properties
+
 #define PROPERTY_COUNT                      4
-// Names of Properties
+
 /**
  * All Properties of this implementation. Must be sorted by name.
  */
@@ -421,9 +421,9 @@ Property * getBasicProps()
 }
 
 
-//----------------------------------------------------
-//  test_OPropertySetHelper_Listener
-//----------------------------------------------------
+
+
+
 class test_OPropertySetHelper_Listener
     : public WeakImplHelper3< XPropertyChangeListener, XPropertiesChangeListener, XVetoableChangeListener >
 {
@@ -448,14 +448,14 @@ public:
     sal_Int32   getRefCount() const
         { return m_refCount; }
 
-    // XEventListener
+    
     void SAL_CALL disposing(const EventObject& /*evt*/) throw ( RuntimeException)
     {
         MutexGuard aGuard( aMutex );
         nDisposing++;
     }
 
-    // XPropertyChangeListener
+    
     void SAL_CALL propertyChange(const PropertyChangeEvent& evt) throw (RuntimeException)
     {
         if( !pExceptedListenerValues )
@@ -513,7 +513,7 @@ public:
         nCurrent += 2;
     }
 
-    // XVetoableChangeListener
+    
     void SAL_CALL vetoableChange(const PropertyChangeEvent& evt) throw  (PropertyVetoException, RuntimeException)
     {
         if( !pExceptedListenerValues )
@@ -573,7 +573,7 @@ public:
         nCurrent += 2;
     }
 
-    // XPropertiesChangeListener
+    
     void SAL_CALL propertiesChange(const Sequence< PropertyChangeEvent >& evtSeq) throw (RuntimeException)
     {
         if( !pExceptedListenerValues )
@@ -638,21 +638,21 @@ public:
  */
 IPropertyArrayHelper & test_OPropertySetHelper::getInfoHelper() throw(RuntimeException)
 {
-    // no multi thread protection
+    
     static OPropertyArrayHelper aInfo( pBasicProps, nPropCount );
     return aInfo;
 }
 
-// XPropertySet
+
 Reference < XPropertySetInfo >  test_OPropertySetHelper::getPropertySetInfo()
     throw(RuntimeException)
 {
-    // no multi thread protection
+    
     static Reference < XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
 }
 
-// Return sal_True, value changed
+
 sal_Bool test_OPropertySetHelper::convertFastPropertyValue
 (
     Any & rConvertedValue,
@@ -744,7 +744,7 @@ void test_OPropertySetHelper::setFastPropertyValue_NoBroadcast
     }
 }
 
-//--------------------------
+
 void test_OPropertySetHelper::getFastPropertyValue( Any & rRet, sal_Int32 nHandle ) const
     throw(RuntimeException)
 {
@@ -782,12 +782,12 @@ void test_PropertySetHelper()
 
     for( int z = 0; z < 2; z++ )
     {
-        // first test aBasicProps Handles are { 0, 1, 2, 55 }
-        // first test getBasicProps() Handles are { 0, 1, 2 }
+        
+        
         xPS = pPS = new test_OPropertySetHelper( getBasicProps(), PROPERTY_COUNT - z );
         xPS_L = static_cast< XPropertyChangeListener * >( pPS_L = new test_OPropertySetHelper_Listener() );
 
-        // Test queryInterface
+        
         Reference < XPropertySet > rProp( xPS , UNO_QUERY );
         OSL_ENSURE( rProp.is() , "PropertySetHelper: XPropertySet nor supported" );
 
@@ -799,7 +799,7 @@ void test_PropertySetHelper()
 
         x = Reference < XInterface > ();
 
-        // Test add-remove listener
+        
         {
             Reference < XPropertiesChangeListener >     x1( xPS_L, UNO_QUERY );
             Reference < XVetoableChangeListener >       x2( xPS_L, UNO_QUERY );
@@ -808,7 +808,7 @@ void test_PropertySetHelper()
             Sequence<OUString> szPN( 3 );
             szPN[0] = "BOOL";
             szPN[1] = "INT32";
-            szPN[2] = "Does not exist"; // must ne ignored by the addPropertiesChangeListener method
+            szPN[2] = "Does not exist"; 
             pPS->addPropertiesChangeListener( szPN, x1 );
 
             szPN = Sequence<OUString>();
@@ -820,7 +820,7 @@ void test_PropertySetHelper()
             pPS->removePropertiesChangeListener( x1 );
             pPS->removeVetoableChangeListener( OUString("INT16"), x2 );
 
-            // this exception must thrown
+            
             try
             {
                 xPS->addPropertyChangeListener( OUString("Does not exist"), xPS_L );
@@ -844,7 +844,7 @@ void test_PropertySetHelper()
         }
         OSL_ENSURE( pPS_L->getRefCount() == 1, "PropertySetHelper: wrong reference count" );
 
-        // Test disposing
+        
         {
             Reference < XPropertiesChangeListener >  x1( xPS_L, UNO_QUERY );
             Reference < XVetoableChangeListener >    x2( xPS_L, UNO_QUERY );
@@ -864,12 +864,12 @@ void test_PropertySetHelper()
         pPS_L->nDisposing = 0;
         xPS = pPS = new test_OPropertySetHelper( getBasicProps(), PROPERTY_COUNT - z );
 
-        // Test set- and get- (Fast) propertyValue
+        
         {
-            // set read only property
+            
             try
             {
-                // Readonly raises a vetoable exception
+                
                 sal_Bool b = sal_True;
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
@@ -882,11 +882,11 @@ void test_PropertySetHelper()
 
             try
             {
-                // Readonly raises a vetoable exception
+                
                 sal_Bool b = sal_True;
                 Any aBool;
                 aBool.setValue( &b , getCppuBooleanType() );
-                // BOOL i s0
+                
                 pPS->setFastPropertyValue( PROPERTY_BOOL, aBool );
                 OSL_FAIL( "PropertySetHelper: exeption not thrown" );
             }
@@ -894,7 +894,7 @@ void test_PropertySetHelper()
             {
             }
 
-            // set unknown property
+            
             try
             {
                 sal_Bool b = sal_True;
@@ -919,7 +919,7 @@ void test_PropertySetHelper()
             {
             }
 
-            // get unknown property
+            
             try
             {
                 Any aBool;
@@ -940,7 +940,7 @@ void test_PropertySetHelper()
             {
             }
 
-            // set property with invalid type
+            
             try
             {
                 Any aBool;
@@ -961,7 +961,7 @@ void test_PropertySetHelper()
             {
             }
 
-            // narrowing conversion is not allowed!
+            
             try
             {
                 Any aINT32;
@@ -1008,7 +1008,7 @@ void test_PropertySetHelper()
             aValue >>= n16;
             OSL_ENSURE( 44 == n16, "PropertySetHelper: wrong INT16 value" );
 
-            // widening conversion
+            
             aValue <<= (sal_Int16)55;
             xPS->setPropertyValue("INT32", aValue );
             aValue = xPS->getPropertyValue("INT32");
@@ -1038,7 +1038,7 @@ void test_PropertySetHelper()
         pPS->nINT32 = 0;
         pPS->nINT16 = 0;
 
-        // Test add-remove listener
+        
         {
             Reference < XVetoableChangeListener >  x2( xPS_L, UNO_QUERY );
 
@@ -1051,23 +1051,23 @@ void test_PropertySetHelper()
 
             pPS_L->pExceptedListenerValues = aSeq.getArray();
 
-            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; // old value   vetoable
-            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 22; // new value  vetoable
-            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; // old value   bound
-            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 22; // new value  bound
-            pPS_L->pExceptedListenerValues[4] <<= (sal_Int16) 22; // old value  vetoable
-            pPS_L->pExceptedListenerValues[5] <<= (sal_Int16) 44; // new value  vetoable
-            pPS_L->pExceptedListenerValues[6] <<= (sal_Int16) 22; // old value  bound
-            pPS_L->pExceptedListenerValues[7] <<= (sal_Int16) 44; // new value  bound
-            pPS_L->pExceptedListenerValues[8] <<= (sal_Int16) 44; // old value  vetoable
-            pPS_L->pExceptedListenerValues[9] <<= (sal_Int16) 100; // new value vetoable exception
+            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; 
+            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 22; 
+            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; 
+            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 22; 
+            pPS_L->pExceptedListenerValues[4] <<= (sal_Int16) 22; 
+            pPS_L->pExceptedListenerValues[5] <<= (sal_Int16) 44; 
+            pPS_L->pExceptedListenerValues[6] <<= (sal_Int16) 22; 
+            pPS_L->pExceptedListenerValues[7] <<= (sal_Int16) 44; 
+            pPS_L->pExceptedListenerValues[8] <<= (sal_Int16) 44; 
+            pPS_L->pExceptedListenerValues[9] <<= (sal_Int16) 100; 
 
             Any aValue;
             aValue <<= (sal_Int16)22;
             xPS->setPropertyValue("INT16", aValue );
             aValue <<= (sal_Int16) 44;
             ((XFastPropertySet *)pPS)->setFastPropertyValue( PROPERTY_INT16, aValue );
-            aValue <<= (sal_Int16)100;// exception
+            aValue <<= (sal_Int16)100;
 
             try
             {
@@ -1088,7 +1088,7 @@ void test_PropertySetHelper()
             pPS->removeVetoableChangeListener( OUString("INT16"), x2 );
         }
 
-        // Test multi property set listener
+        
         {
             Reference < XPropertiesChangeListener > x1( xPS_L, UNO_QUERY );
             Reference < XVetoableChangeListener >  x2( xPS_L, UNO_QUERY );
@@ -1097,7 +1097,7 @@ void test_PropertySetHelper()
             Sequence<OUString> szPN( 4 );
             szPN[0] = "BOOL";
             szPN[1] = "INT32";
-            szPN[2] = "Does not exist"; // must ne ignored by the addPropertiesChangeListener method
+            szPN[2] = "Does not exist"; 
             szPN[3] = "INT16";
             pPS->addPropertiesChangeListener( szPN, x1 );
 
@@ -1105,13 +1105,13 @@ void test_PropertySetHelper()
             Sequence< Any > aSeq( pPS_L->nCount );
             pPS_L->nCurrent = 0;
             pPS_L->pExceptedListenerValues = aSeq.getArray();
-            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; // old value   vetoable
-            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16 ) 22; // new value vetoable
-            // INT32 is not constrained
-            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; // old value   bound
-            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 22; // new value  bound
-            pPS_L->pExceptedListenerValues[4] <<= (sal_Int32) 0; // old value   bound
-            pPS_L->pExceptedListenerValues[5] <<= (sal_Int32) 44; // new value  bound
+            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; 
+            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16 ) 22; 
+            
+            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; 
+            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 22; 
+            pPS_L->pExceptedListenerValues[4] <<= (sal_Int32) 0; 
+            pPS_L->pExceptedListenerValues[5] <<= (sal_Int32) 44; 
 
             szPN = Sequence<OUString>( 2 );
             szPN[0] = "INT16";
@@ -1122,30 +1122,30 @@ void test_PropertySetHelper()
             pPS->setPropertyValues( szPN, aValues );
             OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
 
-            //firePropertiesChangeEvent
+            
             pPS->nINT16 = 8;
             pPS->nINT32 = 5;
             pPS_L->nCount = 4;
             pPS_L->nCurrent = 0;
-            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 8; // old value
-            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 8; // new value
-            pPS_L->pExceptedListenerValues[2] <<= (sal_Int32) 5; // old value
-            pPS_L->pExceptedListenerValues[3] <<= (sal_Int32) 5; // new value
+            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 8; 
+            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 8; 
+            pPS_L->pExceptedListenerValues[2] <<= (sal_Int32) 5; 
+            pPS_L->pExceptedListenerValues[3] <<= (sal_Int32) 5; 
             pPS->firePropertiesChangeEvent( szPN, pPS_L );
             OSL_ENSURE( pPS_L->nCount == pPS_L->nCurrent, "not all listeners called" );
 
 
-            //vetoable exception with multible
+            
             szPN[0] = "INT16";
             szPN[1] = "INT16";
             pPS->nINT32 = 0;
             pPS->nINT16 = 0;
             pPS_L->nCount = 4;
             pPS_L->nCurrent = 0;
-            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; // old value   vetoable
-            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 44; // new value  vetoable
-            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; // old value   vetoable
-            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 100; // new value vetoable
+            pPS_L->pExceptedListenerValues[0] <<= (sal_Int16) 0; 
+            pPS_L->pExceptedListenerValues[1] <<= (sal_Int16) 44; 
+            pPS_L->pExceptedListenerValues[2] <<= (sal_Int16) 0; 
+            pPS_L->pExceptedListenerValues[3] <<= (sal_Int16) 100; 
 
             try
             {

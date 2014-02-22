@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,7 +41,7 @@
 
 #include "extension.hxx"
 
-// C interface
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::xml::dom;
@@ -86,7 +86,7 @@ xmlXPathFunction xforms_lookupFunc(void *, const xmlChar *xname, const xmlChar *
         return NULL;
 }
 
-// boolean functions
+
 void xforms_booleanFromStringFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
@@ -121,29 +121,29 @@ void xforms_ifFunction(xmlXPathParserContextPtr ctxt, int nargs)
 
 }
 
-// Number Functions
+
 void xforms_avgFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
-    // use sum(), div() and count()
+    
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
 
-    // save nodeset
+    
     xmlXPathObjectPtr pObject = valuePop(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
-    //push back a copy
+    
     valuePush(ctxt, xmlXPathObjectCopy(pObject));
-    // get the Sum
+    
     xmlXPathSumFunction(ctxt, 1);
     double nSum = xmlXPathPopNumber(ctxt);
-    // push a copy once more
+    
     valuePush(ctxt, xmlXPathObjectCopy(pObject));
     xmlXPathCountFunction(ctxt, 1);
     double nCount = xmlXPathPopNumber(ctxt);
-    // push args for div()
+    
     xmlXPathReturnNumber(ctxt, nSum);
     xmlXPathReturnNumber(ctxt, nCount);
     xmlXPathDivValues(ctxt);
-    // the result is now on the ctxt stack
+    
     xmlXPathFreeObject(pObject);
 }
 
@@ -208,15 +208,15 @@ void xforms_countNonEmptyFunction(xmlXPathParserContextPtr ctxt, int nargs)
 }
 void xforms_indexFunction(xmlXPathParserContextPtr /*ctxt*/, int /*nargs*/)
 {
-    // function index takes a string argument that is the IDREF of a
-    // 'repeat' and returns the current 1-based position of the repeat
-    // index of the identified repeat -- see xforms/9.3.1
+    
+    
+    
 
-    // doc.getElementByID
-    // (...)
+    
+    
 }
 
-// String Functions
+
 static const char* _version = "1.0";
 static const char* _conformance = "conformance";
 void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
@@ -233,7 +233,7 @@ void xforms_propertyFunction(xmlXPathParserContextPtr ctxt, int nargs)
         xmlXPathReturnEmptyString(ctxt);
 }
 
-// Date and Time Functions
+
 
 static OString makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sal_True)
 {
@@ -259,8 +259,8 @@ static OString makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = sa
     return aDateTimeString.makeStringAndClear();
 }
 
-// returns current system date and time in canonical xsd:dateTime
-// format
+
+
 void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
 {
     /*
@@ -290,12 +290,12 @@ void xforms_nowFunction(xmlXPathParserContextPtr ctxt, int /*nargs*/)
 
 static sal_Bool parseDateTime(const OUString& aString, DateTime& aDateTime)
 {
-    // take apart a canonical literal xsd:dateTime string
-    //CCYY-MM-DDThh:mm:ss(Z)
+    
+    
 
     OUString aDateTimeString = aString.trim();
 
-    // check length
+    
     if (aDateTimeString.getLength() < 19 || aDateTimeString.getLength() > 20)
         return sal_False;
 
@@ -330,7 +330,7 @@ static sal_Bool parseDateTime(const OUString& aString, DateTime& aDateTime)
 
 void xforms_daysFromDateFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
-    // number of days from 1970-01-01 to supplied xsd:date(Time)
+    
 
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
@@ -353,7 +353,7 @@ void xforms_daysFromDateFunction(xmlXPathParserContextPtr ctxt, int nargs)
 
 void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
-    // number of seconds from 1970-01-01T00:00:00Z to supplied xsd:date(Time)
+    
 
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
@@ -380,7 +380,7 @@ void xforms_secondsFromDateTimeFunction(xmlXPathParserContextPtr ctxt, int nargs
 static sal_Bool parseDuration(const xmlChar* aString, sal_Bool& bNegative, sal_Int32& nYears, sal_Int32& nMonth, sal_Int32& nDays,
                               sal_Int32& nHours, sal_Int32& nMinutes, sal_Int32& nSeconds)
 {
-    sal_Bool bTime = sal_False; // in part after T
+    sal_Bool bTime = sal_False; 
     sal_Int32 nLength = strlen((char*)aString)+1;
     char *pString = (char*)rtl_allocateMemory(nLength);
     char *pString0 = pString;
@@ -444,8 +444,8 @@ static sal_Bool parseDuration(const xmlChar* aString, sal_Bool& bNegative, sal_I
 
 void xforms_secondsFuction(xmlXPathParserContextPtr ctxt, int nargs)
 {
-    // convert a xsd:duration to seconds
-    // (-)PnYnMnDTnHnMnS
+    
+    
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
@@ -463,7 +463,7 @@ void xforms_secondsFuction(xmlXPathParserContextPtr ctxt, int nargs)
         nSeconds += nMinutes*60;
         nSeconds += nHours*60*60;
         nSeconds += nDays*24*60*60;
-        // year and month are ignored according to spec
+        
         if (bNegative)
             nSeconds = 0 - nSeconds;
         xmlXPathReturnNumber(ctxt, nSeconds);
@@ -474,8 +474,8 @@ void xforms_secondsFuction(xmlXPathParserContextPtr ctxt, int nargs)
 
 void xforms_monthsFuction(xmlXPathParserContextPtr ctxt, int nargs)
 {
-    // convert a xsd:duration to seconds
-    // (-)PnYnMnDTnHnMnS
+    
+    
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
     xmlChar* pString = xmlXPathPopString(ctxt);
     if (xmlXPathCheckError(ctxt)) XP_ERROR(XPATH_INVALID_TYPE);
@@ -491,7 +491,7 @@ void xforms_monthsFuction(xmlXPathParserContextPtr ctxt, int nargs)
     if (parseDuration(pString, bNegative, nYears, nMonths, nDays, nHours, nMinutes, nSeconds))
     {
         nMonths += nYears*12;
-        // Days, Houres, Minutes and seconds are ignored, see spec
+        
         if (bNegative)
             nMonths = 0 - nMonths;
         xmlXPathReturnNumber(ctxt, nMonths);
@@ -501,7 +501,7 @@ void xforms_monthsFuction(xmlXPathParserContextPtr ctxt, int nargs)
 
 }
 
-// Node-set Functions
+
 void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
 {
     if (nargs != 1) XP_ERROR(XPATH_INVALID_ARITY);
@@ -516,7 +516,7 @@ void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
         if (aInstance.is())
         {
             try {
-                // xmlXPathObjectPtr xmlXPathNewNodeSet        (xmlNodePtr val);
+                
                 Reference< XUnoTunnel > aTunnel(aInstance, UNO_QUERY_THROW);
                 xmlNodePtr pNode = reinterpret_cast< xmlNodePtr >( aTunnel->getSomething(Sequence< sal_Int8 >()) );
                 xmlXPathObjectPtr pObject = xmlXPathNewNodeSet(pNode);
@@ -534,7 +534,7 @@ void xforms_instanceFuction(xmlXPathParserContextPtr ctxt, int nargs)
 
 }
 
-// Node-set Functions, XForms 1.1
+
 void xforms_currentFunction(xmlXPathParserContextPtr ctxt, int nargs)
 {
     if (nargs != 0) XP_ERROR(XPATH_INVALID_ARITY);

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Reference.h>
@@ -78,15 +78,15 @@ public:
                             EnhancedCustomShapeEngine();
     virtual                 ~EnhancedCustomShapeEngine();
 
-    // XInterface
+    
     virtual void SAL_CALL   acquire() throw();
     virtual void SAL_CALL   release() throw();
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
         throw ( css::uno::Exception, css::uno::RuntimeException );
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw ( css::uno::RuntimeException );
     virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName )
@@ -94,7 +94,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
         throw ( css::uno::RuntimeException );
 
-    // XCustomShapeEngine
+    
     virtual css::uno::Reference< css::drawing::XShape > SAL_CALL render()
         throw ( css::uno::RuntimeException );
     virtual css::awt::Rectangle SAL_CALL getTextBounds()
@@ -113,7 +113,7 @@ EnhancedCustomShapeEngine::~EnhancedCustomShapeEngine()
 {
 }
 
-// XInterface -----------------------------------------------------------------
+
 
 void SAL_CALL EnhancedCustomShapeEngine::acquire() throw()
 {
@@ -124,7 +124,7 @@ void SAL_CALL EnhancedCustomShapeEngine::release() throw()
     OWeakObject::release();
 }
 
-// XInitialization ------------------------------------------------------------
+
 
 void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArguments )
     throw ( Exception, RuntimeException )
@@ -146,7 +146,7 @@ void SAL_CALL EnhancedCustomShapeEngine::initialize( const Sequence< Any >& aArg
     }
 }
 
-// XServiceInfo ---------------------------------------------------------------
+
 OUString SAL_CALL EnhancedCustomShapeEngine::getImplementationName()
     throw( RuntimeException )
 {
@@ -166,13 +166,13 @@ Sequence< OUString > SAL_CALL EnhancedCustomShapeEngine::getSupportedServiceName
     return aRet;
 }
 
-// XCustomShapeEngine -----------------------------------------------------------
+
 SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustomShape* pCustoObj, SdrObject* pRenderedShape )
 {
     bool bHasText = pCustoObj->HasText();
     if ( pRenderedShape || bHasText )
     {
-        // applying shadow
+        
         const SdrObject* pShadowGeometry = pCustoObj->GetSdrObjectShadowFromCustomShape();
         if ( pShadowGeometry )
         {
@@ -190,26 +190,26 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 pRenderedShape = pShadowGeometry->Clone();
         }
 
-        // apply text
+        
         if ( bHasText )
         {
-            // #i37011# also create a text object and add at rPos + 1
+            
             SdrTextObj* pTextObj = (SdrTextObj*)SdrObjFactory::MakeNewObject(
                 pCustoObj->GetObjInventor(), OBJ_TEXT, 0L, pCustoObj->GetModel());
 
-            // Copy text content
+            
             OutlinerParaObject* pParaObj = pCustoObj->GetOutlinerParaObject();
             if( pParaObj )
                 pTextObj->NbcSetOutlinerParaObject( new OutlinerParaObject(*pParaObj) );
 
-            // copy all attributes
+            
             SfxItemSet aTargetItemSet( pCustoObj->GetMergedItemSet() );
 
-            // clear fill and line style
+            
             aTargetItemSet.Put(XLineStyleItem(XLINE_NONE));
             aTargetItemSet.Put(XFillStyleItem(XFILL_NONE));
 
-            // get the text bounds and set at text object
+            
             Rectangle aTextBounds = pCustoObj->GetSnapRect();
             SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
             if ( pSdrObjCustomShape )
@@ -219,7 +219,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
             }
             pTextObj->SetSnapRect( aTextBounds );
 
-            // if rotated, copy GeoStat, too.
+            
             const GeoStat& rSourceGeo = pCustoObj->GetGeoStat();
             if ( rSourceGeo.nDrehWink )
             {
@@ -228,7 +228,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                     rSourceGeo.nSin, rSourceGeo.nCos);
             }
 
-            // set modified ItemSet at text object
+            
             pTextObj->SetMergedItemSet(aTargetItemSet);
 
             if ( pRenderedShape )
@@ -245,7 +245,7 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 pRenderedShape = pTextObj;
         }
 
-        // force group
+        
         if ( pRenderedShape )
         {
             if ( !pRenderedShape->ISA( SdrObjGroup ) )
@@ -278,7 +278,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
     SdrObject* pSdrObjCustomShape( GetSdrObjectFromXShape( mxShape ) );
     if ( pSdrObjCustomShape )
     {
-        // retrieving the TextPath property to check if feature is enabled
+        
         SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)
             pSdrObjCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
         sal_Bool bTextPathOn = sal_False;
@@ -346,7 +346,7 @@ Reference< drawing::XShape > SAL_CALL EnhancedCustomShapeEngine::render()
                 Point aBottom( aTop.X(), aTop.Y() + 1000 );
                 pRenderedShape->NbcMirror( aTop, aBottom );
             }
-            // Specifically for pptx imports
+            
             if( bPostRotateAngle && nRotateAngle )
             {
                 double a = nRotateAngle * F_PI18000;

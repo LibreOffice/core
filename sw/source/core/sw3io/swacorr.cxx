@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <swacorr.hxx>
@@ -31,9 +31,9 @@ using namespace ::com::sun::star;
 TYPEINIT1( SwAutoCorrect, SvxAutoCorrect );
 
 
-    //  - return den Ersetzungstext (nur fuer SWG-Format, alle anderen
-    //      koennen aus der Wortliste herausgeholt werden!)
-    //      rShort ist der Stream-Name - gecryptet!
+    
+    
+    
 
 sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
                                      const OUString& rFileName, const OUString& rShort, OUString& rLong )
@@ -41,7 +41,7 @@ sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& r
     sal_uLong nRet = 0;
     if (rStg.is())
     {
-        // mba: relative URLs don't make sense here
+        
         SwXMLTextBlocks aBlk( rStg, rFileName );
         nRet = aBlk.GetText( rShort, rLong );
     }
@@ -51,8 +51,8 @@ sal_Bool SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& r
     return !IsError( nRet ) && !rLong.isEmpty();
 }
 
-    //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
-    //      rShort ist der Stream-Name - gecryptet!
+    
+    
 sal_Bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg,
                                  const OUString& rFileName, const OUString& rShort,
                                  SfxObjectShell& rObjSh, OUString& rLong )
@@ -63,7 +63,7 @@ sal_Bool SwAutoCorrect::PutText( const uno::Reference < embed::XStorage >&  rStg
     SwDocShell& rDShell = (SwDocShell&)rObjSh;
     sal_uLong nRet = 0;
 
-    // mba: relative URLs don't make sense here
+    
     SwXMLTextBlocks aBlk( rStg, rFileName );
     SwDoc* pDoc = aBlk.GetDoc();
 

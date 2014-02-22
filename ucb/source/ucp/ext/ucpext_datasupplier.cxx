@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,10 +35,10 @@
 #include <vector>
 #include <boost/shared_ptr.hpp>
 
-//......................................................................................................................
+
 namespace ucb { namespace ucp { namespace ext
 {
-//......................................................................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -64,9 +64,9 @@ namespace ucb { namespace ucp { namespace ext
     using ::com::sun::star::sdbc::XResultSet;
     using ::com::sun::star::ucb::XCommandEnvironment;
 
-    //==================================================================================================================
-    //= ResultListEntry
-    //==================================================================================================================
+    
+    
+    
     struct ResultListEntry
     {
         OUString                 sId;
@@ -77,9 +77,9 @@ namespace ucb { namespace ucp { namespace ext
 
     typedef ::std::vector< ResultListEntry >    ResultList;
 
-    //==================================================================================================================
-    //= DataSupplier_Impl
-    //==================================================================================================================
+    
+    
+    
     struct DataSupplier_Impl
     {
         ::osl::Mutex                                m_aMutex;
@@ -98,14 +98,14 @@ namespace ucb { namespace ucp { namespace ext
         ~DataSupplier_Impl();
     };
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     DataSupplier_Impl::~DataSupplier_Impl()
     {
     }
 
-    //==================================================================================================================
-    //= helper
-    //==================================================================================================================
+    
+    
+    
     namespace
     {
         OUString lcl_compose( const OUString& i_rBaseURL, const OUString& i_rRelativeURL )
@@ -121,10 +121,10 @@ namespace ucb { namespace ucp { namespace ext
     }
 
 
-    //==================================================================================================================
-    //= DataSupplier
-    //==================================================================================================================
-    //------------------------------------------------------------------------------------------------------------------
+    
+    
+    
+    
     DataSupplier::DataSupplier( const Reference< XComponentContext >& rxContext,
                                 const ::rtl::Reference< Content >& i_rContent,
                                 const sal_Int32 i_nOpenMode )
@@ -132,7 +132,7 @@ namespace ucb { namespace ucp { namespace ext
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DataSupplier::fetchData()
     {
         try
@@ -170,7 +170,7 @@ namespace ucb { namespace ucp { namespace ext
                 const OUString sPackageLocation( m_pImpl->m_xContent->getPhysicalURL() );
                 ::ucbhelper::Content aWrappedContent( sPackageLocation, getResultSet()->getEnvironment(), m_pImpl->m_xContext );
 
-                // obtain the properties which our result set is set up for from the wrapped content
+                
                 Sequence< OUString > aPropertyNames(1);
                 aPropertyNames[0] = "Title";
 
@@ -195,12 +195,12 @@ namespace ucb { namespace ucp { namespace ext
         }
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     DataSupplier::~DataSupplier()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     OUString DataSupplier::queryContentIdentifierString( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -216,7 +216,7 @@ namespace ucb { namespace ucp { namespace ext
         return OUString();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XContentIdentifier > DataSupplier::queryContentIdentifier( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -239,7 +239,7 @@ namespace ucb { namespace ucp { namespace ext
         return Reference< XContentIdentifier >();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XContent > DataSupplier::queryContent( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -271,38 +271,38 @@ namespace ucb { namespace ucp { namespace ext
         return Reference< XContent >();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DataSupplier::getResult( sal_uInt32 i_nIndex )
     {
         ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
         if ( m_pImpl->m_aResults.size() > i_nIndex )
-            // result already present.
+            
             return true;
 
         return false;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_uInt32 DataSupplier::totalCount()
     {
         ::osl::ClearableGuard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
         return m_pImpl->m_aResults.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     sal_uInt32 DataSupplier::currentCount()
     {
         return m_pImpl->m_aResults.size();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     bool DataSupplier::isCountFinal()
     {
         return true;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     Reference< XRow > DataSupplier::queryPropertyValues( sal_uInt32 i_nIndex  )
     {
         ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
@@ -343,7 +343,7 @@ namespace ucb { namespace ucp { namespace ext
         return xRow;
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DataSupplier::releasePropertyValues( sal_uInt32 i_nIndex )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -352,18 +352,18 @@ namespace ucb { namespace ucp { namespace ext
             m_pImpl->m_aResults[ i_nIndex ].xRow.clear();
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DataSupplier::close()
     {
     }
 
-    //------------------------------------------------------------------------------------------------------------------
+    
     void DataSupplier::validate() throw( ResultSetException )
     {
     }
 
-//......................................................................................................................
-} } }   // namespace ucp::ext
-//......................................................................................................................
+
+} } }   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

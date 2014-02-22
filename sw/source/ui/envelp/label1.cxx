@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/waitobj.hxx>
@@ -35,7 +35,7 @@
 #include <globals.hrc>
 #include <label.hrc>
 
-//impl in envimg.cxx
+
 extern SW_DLLPUBLIC OUString MakeSender();
 
 
@@ -70,7 +70,7 @@ void SwLabRec::FillItem( SwLabItem& rItem ) const
 
 void SwLabDlg::_ReplaceGroup( const OUString &rMake )
 {
-    // Remove old entries
+    
     pRecs->erase(pRecs->begin() + 1, pRecs->end());
     aLabelsCfg.FillLabels(OUString(rMake), *pRecs);
     aLstGroup = rMake;
@@ -132,7 +132,7 @@ SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
         m_nPrivateId = AddTabPage("private", SwPrivateDataPage::Create, 0);
         SetText(m_sBusinessCardDlg);
     }
-    // Read user label from writer.cfg
+    
     SwLabItem aItem((const SwLabItem&)rSet.Get( FN_LABEL ));
     SwLabRec* pRec = new SwLabRec;
     const OUString aTmp( SW_RES( STR_CUSTOM ) );
@@ -184,15 +184,15 @@ void SwLabDlg::GetLabItem(SwLabItem &rItem)
 
     if (rActItem != rOldItem)
     {
-        // Was already "put" with (hopefully) correct content
+        
         rItem = rActItem;
     }
     else
     {
         rItem = rOldItem;
 
-        // In rItem there are only settings defined by users.
-        // Therefore get the real settings directly from Record
+        
+        
         SwLabRec* pRec = GetRecord(rItem.aType, rItem.bCont);
         pRec->FillItem( rItem );
     }
@@ -215,7 +215,7 @@ SwLabRec* SwLabDlg::GetRecord(const OUString &rRecName, sal_Bool bCont)
             break;
         }
     }
-    if (!bFound)    // User defined
+    if (!bFound)    
         pRec = Recs()[0];
 
     return(pRec);
@@ -261,7 +261,7 @@ SwLabPage::SwLabPage(Window* pParent, const SfxItemSet& rSet)
 
     SetExchangeSupport();
 
-    // Install handlers
+    
     m_pAddrBox->SetClickHdl (LINK(this, SwLabPage, AddrHdl         ));
     m_pDatabaseLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
     m_pTableLB->SetSelectHdl(LINK(this, SwLabPage, DatabaseHdl     ));
@@ -362,7 +362,7 @@ IMPL_LINK_NOARG(SwLabPage, MakeHdl)
           sal_uInt16 nLstType = 0;
 
     const OUString sCustom(SW_RES(STR_CUSTOM));
-    //insert the entries into the sorted list box
+    
     for ( sal_uInt16 i = 0; i < nCount; ++i )
     {
         const OUString aType ( GetParentSwLabDlg()->Recs()[i]->aType );
@@ -520,11 +520,11 @@ void SwLabPage::Reset(const SfxItemSet& rSet)
     }
 
     m_pMakeBox->SelectEntry( aItem.aMake );
-    //save the current type
+    
     OUString sType(aItem.aType);
     m_pMakeBox->GetSelectHdl().Call(m_pMakeBox);
     aItem.aType = sType;
-    //#102806# a newly added make may not be in the type ListBox already
+    
     if (m_pTypeBox->GetEntryPos(aItem.aType) == LISTBOX_ENTRY_NOTFOUND && !aItem.aMake.isEmpty())
         GetParentSwLabDlg()->UpdateGroup( aItem.aMake );
     if (m_pTypeBox->GetEntryPos(aItem.aType) != LISTBOX_ENTRY_NOTFOUND)
@@ -676,8 +676,8 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
 
     if(!bFound)
     {
-        // initially search for a group starting with "crd" which is the name of the
-        // business card AutoTexts
+        
+        
         for(i = 0; i < m_pAutoTextGroupLB->GetEntryCount() && !bFound; i++)
             if (((const OUString*)m_pAutoTextGroupLB->GetEntryData(i))->startsWith("crd"))
             {

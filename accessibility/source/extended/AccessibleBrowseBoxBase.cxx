@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "accessibility/extended/AccessibleBrowseBoxBase.hxx"
@@ -26,7 +26,7 @@
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
 #include <unotools/accessiblerelationsethelper.hxx>
 
-// ============================================================================
+
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
@@ -38,14 +38,14 @@ using namespace ::comphelper;
 using namespace ::svt;
 
 
-// ============================================================================
+
 
 namespace accessibility {
 
 using namespace com::sun::star::accessibility::AccessibleStateType;
-// ============================================================================
 
-// Ctor/Dtor/disposing --------------------------------------------------------
+
+
 
 AccessibleBrowseBoxBase::AccessibleBrowseBoxBase(
         const Reference< XAccessible >& rxParent,
@@ -89,7 +89,7 @@ AccessibleBrowseBoxBase::~AccessibleBrowseBoxBase()
 {
     if( isAlive() )
     {
-        // increment ref count to prevent double call of Dtor
+        
         osl_atomic_increment( &m_refCount );
         dispose();
     }
@@ -115,7 +115,7 @@ void SAL_CALL AccessibleBrowseBoxBase::disposing()
     mpBrowseBox = NULL;
 }
 
-// XAccessibleContext ---------------------------------------------------------
+
 
 Reference< XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleParent()
     throw ( uno::RuntimeException )
@@ -131,12 +131,12 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getAccessibleIndexInParent()
     ::osl::MutexGuard aGuard( getOslMutex() );
     ensureIsAlive();
 
-    // -1 for child not found/no parent (according to specification)
+    
     sal_Int32 nRet = -1;
 
     Reference< uno::XInterface > xMeMyselfAndI( static_cast< XAccessibleContext* >( this ), uno::UNO_QUERY );
 
-    //  iterate over parent's children and search for this object
+    
     if( mxParent.is() )
     {
         Reference< XAccessibleContext >
@@ -182,7 +182,7 @@ AccessibleBrowseBoxBase::getAccessibleRelationSet()
     throw ( uno::RuntimeException )
 {
     ensureIsAlive();
-    // BrowseBox does not have relations.
+    
        return new utl::AccessibleRelationSetHelper;
 }
 
@@ -192,7 +192,7 @@ AccessibleBrowseBoxBase::getAccessibleStateSet()
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getOslMutex() );
-    // don't check whether alive -> StateSet may contain DEFUNC
+    
     return implCreateStateSetHelper();
 }
 
@@ -211,7 +211,7 @@ lang::Locale SAL_CALL AccessibleBrowseBoxBase::getLocale()
     throw IllegalAccessibleComponentStateException();
 }
 
-// XAccessibleComponent -------------------------------------------------------
+
 
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::containsPoint( const awt::Point& rPoint )
     throw ( uno::RuntimeException )
@@ -276,7 +276,7 @@ void SAL_CALL AccessibleBrowseBoxBase::focusGained( const ::com::sun::star::awt:
 
     commitEvent(AccessibleEventId::STATE_CHANGED,aFocused,aEmpty);
 }
-// -----------------------------------------------------------------------------
+
 
 void SAL_CALL AccessibleBrowseBoxBase::focusLost( const ::com::sun::star::awt::FocusEvent& ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -286,7 +286,7 @@ void SAL_CALL AccessibleBrowseBoxBase::focusLost( const ::com::sun::star::awt::F
 
     commitEvent(AccessibleEventId::STATE_CHANGED,aEmpty,aFocused);
 }
-// XAccessibleEventBroadcaster ------------------------------------------------
+
 
 void SAL_CALL AccessibleBrowseBoxBase::addAccessibleEventListener(
         const Reference< XAccessibleEventListener>& _rxListener )
@@ -312,10 +312,10 @@ void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
         sal_Int32 nListenerCount = AccessibleEventNotifier::removeEventListener( getClientId( ), _rxListener );
         if ( !nListenerCount )
         {
-            // no listeners anymore
-            // -> revoke ourself. This may lead to the notifier thread dying (if we were the last client),
-            // and at least to us not firing any events anymore, in case somebody calls
-            // NotifyAccessibleEvent, again
+            
+            
+            
+            
 
             AccessibleEventNotifier::TClientId nId( getClientId( ) );
             setClientId( 0 );
@@ -324,7 +324,7 @@ void SAL_CALL AccessibleBrowseBoxBase::removeAccessibleEventListener(
     }
 }
 
-// XTypeProvider --------------------------------------------------------------
+
 
 namespace
 {
@@ -337,7 +337,7 @@ Sequence< sal_Int8 > SAL_CALL AccessibleBrowseBoxBase::getImplementationId()
     return theAccessibleBrowseBoxBaseImplementationId::get().getSeq();
 }
 
-// XServiceInfo ---------------------------------------------------------------
+
 
 sal_Bool SAL_CALL AccessibleBrowseBoxBase::supportsService(
         const OUString& rServiceName )
@@ -353,7 +353,7 @@ Sequence< OUString > SAL_CALL AccessibleBrowseBoxBase::getSupportedServiceNames(
     return Sequence< OUString >( &aServiceName, 1 );
 }
 
-// other public methods -------------------------------------------------------
+
 
 void AccessibleBrowseBoxBase::setAccessibleName( const OUString& rName )
 {
@@ -385,7 +385,7 @@ void AccessibleBrowseBoxBase::setAccessibleDescription( const OUString& rDescrip
         aOld );
 }
 
-// internal virtual methods ---------------------------------------------------
+
 
 sal_Bool AccessibleBrowseBoxBase::implIsShowing()
 {
@@ -408,10 +408,10 @@ sal_Bool AccessibleBrowseBoxBase::implIsShowing()
 
     if( isAlive() )
     {
-        // SHOWING done with mxParent
+        
         if( implIsShowing() )
             pStateSetHelper->AddState( AccessibleStateType::SHOWING );
-        // BrowseBox fills StateSet with states depending on object type
+        
         mpBrowseBox->FillAccessibleStateSet( *pStateSetHelper, getType() );
     }
     else
@@ -420,7 +420,7 @@ sal_Bool AccessibleBrowseBoxBase::implIsShowing()
     return pStateSetHelper;
 }
 
-// internal helper methods ----------------------------------------------------
+
 
 sal_Bool AccessibleBrowseBoxBase::isAlive() const
 {
@@ -467,18 +467,18 @@ void AccessibleBrowseBoxBase::commitEvent(
 {
     ::osl::ClearableMutexGuard aGuard( getOslMutex() );
     if ( !getClientId( ) )
-            // if we don't have a client id for the notifier, then we don't have listeners, then
-            // we don't need to notify anything
+            
+            
             return;
 
-    // build an event object
+    
     AccessibleEventObject aEvent;
     aEvent.Source = *this;
     aEvent.EventId = _nEventId;
     aEvent.OldValue = _rOldValue;
     aEvent.NewValue = _rNewValue;
 
-    // let the notifier handle this event
+    
 
     AccessibleEventNotifier::addEvent( getClientId( ), aEvent );
 }
@@ -513,24 +513,24 @@ sal_Int16 SAL_CALL AccessibleBrowseBoxBase::getAccessibleRole()
     }
     return nRole;
 }
-// -----------------------------------------------------------------------------
+
 Any SAL_CALL AccessibleBrowseBoxBase::getAccessibleKeyBinding()
         throw ( uno::RuntimeException )
 {
     return Any();
 }
-// -----------------------------------------------------------------------------
+
 Reference<XAccessible > SAL_CALL AccessibleBrowseBoxBase::getAccessibleAtPoint( const ::com::sun::star::awt::Point& )
         throw ( uno::RuntimeException )
 {
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL AccessibleBrowseBoxBase::disposing( const ::com::sun::star::lang::EventObject& ) throw (::com::sun::star::uno::RuntimeException)
 {
     m_xFocusWindow = NULL;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -556,7 +556,7 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getForeground(  ) throw (::com::sun:
 
     return nColor;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aSolarGuard;
@@ -575,14 +575,14 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxBase::getBackground(  ) throw (::com::sun:
     return nColor;
 }
 
-// ============================================================================
-// XInterface -----------------------------------------------------------------
+
+
 IMPLEMENT_FORWARD_XINTERFACE2( BrowseBoxAccessibleElement, AccessibleBrowseBoxBase, BrowseBoxAccessibleElement_Base )
 
-// XTypeProvider --------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( BrowseBoxAccessibleElement, AccessibleBrowseBoxBase, BrowseBoxAccessibleElement_Base )
 
-// XAccessible ----------------------------------------------------------------
+
 
 Reference< XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessibleContext() throw ( uno::RuntimeException )
 {
@@ -590,14 +590,14 @@ Reference< XAccessibleContext > SAL_CALL BrowseBoxAccessibleElement::getAccessib
     return this;
 }
 
-// ----------------------------------------------------------------------------
+
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccessible >& rxParent, IAccessibleTableProvider& rBrowseBox,
         const Reference< awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType )
     :AccessibleBrowseBoxBase( rxParent, rBrowseBox, _xFocusWindow, eObjType )
 {
 }
 
-// ----------------------------------------------------------------------------
+
 BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccessible >& rxParent, IAccessibleTableProvider& rBrowseBox,
         const Reference< awt::XWindow >& _xFocusWindow, AccessibleBrowseBoxObjType  eObjType,
         const OUString& rName, const OUString& rDescription )
@@ -605,15 +605,15 @@ BrowseBoxAccessibleElement::BrowseBoxAccessibleElement( const Reference< XAccess
 {
 }
 
-// ----------------------------------------------------------------------------
+
 BrowseBoxAccessibleElement::~BrowseBoxAccessibleElement( )
 {
 }
 
-// ============================================================================
 
-} // namespace accessibility
 
-// ============================================================================
+} 
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

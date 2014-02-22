@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/drawing/BitmapMode.hpp>
@@ -84,8 +84,8 @@ void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
     if( pSdrHint )
     {
-        // delete item set if document is dying because then the pool
-        // will also die
+        
+        
         if( pSdrHint->GetKind() == HINT_MODELCLEARED )
         {
             delete mpSet;
@@ -178,7 +178,7 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
     rSet.Put( *mpSet );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL SdUnoPageBackground::getImplementationName()
     throw(uno::RuntimeException)
 {
@@ -203,7 +203,7 @@ uno::Sequence< OUString > SAL_CALL SdUnoPageBackground::getSupportedServiceNames
     return aNameSequence;
 }
 
-// XPropertySet
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SdUnoPageBackground::getPropertySetInfo()
     throw(uno::RuntimeException)
 {
@@ -307,7 +307,7 @@ uno::Any SAL_CALL SdUnoPageBackground::getPropertyValue( const OUString& Propert
                 if( !aSet.Count() )
                     aSet.Put( rPool.GetDefaultItem( pEntry->nWID ) );
 
-                // get value from ItemSet
+                
                 aAny = SvxItemPropertySet_getPropertyValue( *mpPropSet, pEntry, aSet );
             }
         }
@@ -325,7 +325,7 @@ void SAL_CALL SdUnoPageBackground::removePropertyChangeListener( const OUString&
 void SAL_CALL SdUnoPageBackground::addVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL SdUnoPageBackground::removeVetoableChangeListener( const OUString& , const uno::Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
-// XPropertyState
+
 beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
@@ -359,8 +359,8 @@ beans::PropertyState SAL_CALL SdUnoPageBackground::getPropertyState( const OUStr
         case SFX_ITEM_DEFAULT:
             return beans::PropertyState_DEFAULT_VALUE;
         default:
-//      case SFX_ITEM_DONTCARE:
-//      case SFX_ITEM_DISABLED:
+
+
             return beans::PropertyState_AMBIGUOUS_VALUE;
         }
     }

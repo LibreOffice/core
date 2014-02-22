@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -113,10 +113,10 @@ void SwNumberTreeNode::ClearObsoletePhantoms()
 
         if ((*aIt)->mChildren.empty())
         {
-            // #i60652#
-            // Because <mChildren.erase(aIt)> could destroy the element, which
-            // is referenced by <mItLastValid>, it's needed to adjust
-            // <mItLastValid> before erasing <aIt>.
+            
+            
+            
+            
             SetLastValid(mChildren.end());
 
             delete *aIt;
@@ -136,16 +136,16 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
 
         tSwNumberTreeChildren::const_iterator aIt = mItLastValid;
 
-        // -->
-        // improvement:
-        // - Only one time checked for <mChildren.end()>.
-        // - Less checks for each loop run.
-        // correction:
-        // - consider case that current node isn't counted and isn't the first
-        // child of its parent. In this case the number of last counted child
-        // of the previous node determines the start value for the following
-        // children loop, if all children have to be validated and the first
-        // one doesn't restart the counting.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         SwNumberTree::tSwNumTreeNumber nTmpNumber( 0 );
         if (aIt != mChildren.end())
             nTmpNumber = (*aIt)->mnNumber;
@@ -154,8 +154,8 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
             aIt = mChildren.begin();
             (*aIt)->mbContinueingPreviousSubTree = false;
 
-            // determine default start value
-            // consider the case that the first child isn't counted.
+            
+            
             nTmpNumber = (*aIt)->GetStartValue();
             if ( !(*aIt)->IsCounted() &&
                  ( !(*aIt)->HasCountedChildren() || (*aIt)->IsPhantom() ) )
@@ -163,9 +163,9 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
                 --nTmpNumber;
             }
 
-            // determine special start value for the case that first child
-            // doesn't restart the numbering and the parent node isn't counted
-            // and isn't the first child.
+            
+            
+            
             const bool bParentCounted( IsCounted() &&
                                        ( !IsPhantom() ||
                                          HasPhantomCountedParent() ) );
@@ -196,8 +196,8 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
                     }
                     else
                     {
-                        // Previous node has no children and is not counted.
-                        // Thus, next turn and check for the previous node.
+                        
+                        
                     }
                 }
             }
@@ -210,9 +210,9 @@ void SwNumberTreeNode::ValidateHierarchical(const SwNumberTreeNode * pNode) cons
             ++aIt;
             (*aIt)->mbContinueingPreviousSubTree = false;
 
-            // --> only for counted nodes the number
-            // has to be adjusted, compared to the previous node.
-            // this condition is hold also for nodes, which restart the numbering.
+            
+            
+            
             if ( (*aIt)->IsCounted() )
             {
                 if ((*aIt)->IsRestart())
@@ -249,13 +249,13 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
         {
             SwNumberTreeNode * pPred = (*aIt)->GetPred();
 
-            // #i64311#
-            // correct consideration of phantoms
-            // correct consideration of restart at a number tree node
+            
+            
+            
             if ( pPred )
             {
                 if ( !(*aIt)->IsCounted() )
-                    // #i65284#
+                    
                     nTmpNumber = pPred->GetNumber( pPred->GetParent() != (*aIt)->GetParent() );
                 else
                 {
@@ -283,8 +283,8 @@ void SwNumberTreeNode::ValidateContinuous(const SwNumberTreeNode * pNode) const
     }
     while (aIt != mChildren.end() && *aIt != pNode);
 
-    // #i74748# - applied patch from garnier_romain
-    // number tree node has to be validated.
+    
+    
     SetLastValid( aIt, true );
 }
 
@@ -352,7 +352,7 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
     if ( mChildren.empty() )
         return;
 
-    // determine first child, which has to move to <_rDestNode>
+    
     tSwNumberTreeChildren::iterator aItUpper( mChildren.end() );
     if ((*mChildren.begin())->IsPhantom() &&
         _rCompareNode.LessThan(*(*mChildren.begin())->GetFirstNonPhantomChild()))
@@ -364,7 +364,7 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
         aItUpper = mChildren.upper_bound(&_rCompareNode);
     }
 
-    // move children
+    
     if (aItUpper != mChildren.end())
     {
         tSwNumberTreeChildren::iterator aIt;
@@ -373,15 +373,15 @@ void SwNumberTreeNode::MoveGreaterChildren( SwNumberTreeNode& _rCompareNode,
 
         _rDestNode.mChildren.insert(aItUpper, mChildren.end());
 
-        // #i60652#
-        // Because <mChildren.erase(aItUpper, mChildren.end())> could destroy
-        // the element, which is referenced by <mItLastValid>, it's needed to
-        // adjust <mItLastValid> before erasing <aIt>.
+        
+        
+        
+        
         SetLastValid( mChildren.end() );
 
         mChildren.erase(aItUpper, mChildren.end());
 
-        // #i60652#
+        
         if ( !mChildren.empty() )
         {
             SetLastValid( --(mChildren.end()) );
@@ -401,10 +401,10 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
         tSwNumberTreeChildren::iterator aItBegin = mChildren.begin();
         SwNumberTreeNode * pMyFirst = *mChildren.begin();
 
-        // #i60652#
-        // Because <mChildren.erase(aItBegin)> could destroy the element,
-        // which is referenced by <mItLastValid>, it's needed to adjust
-        // <mItLastValid> before erasing <aItBegin>.
+        
+        
+        
+        
         SetLastValid(mChildren.end());
 
         if (pMyFirst->IsPhantom())
@@ -430,8 +430,8 @@ void SwNumberTreeNode::MoveChildren(SwNumberTreeNode * pDest)
 
         pDest->mChildren.insert(mChildren.begin(), mChildren.end());
         mChildren.clear();
-        // <stl::set.clear()> destroys all existing iterators.
-        // Thus, <mItLastValid> is also destroyed and reset becomes necessary
+        
+        
         mItLastValid = mChildren.end();
     }
 
@@ -524,28 +524,28 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
                 tSwNumberTreeChildren::iterator aPredIt = aInsertedIt;
                 --aPredIt;
 
-                // -->
-                // Move greater children of previous node to new child.
-                // This has to be done recursively on the children levels.
-                // Initialize loop variables <pPrevChildNode> and <pDestNode>
-                // for loop on children levels.
+                
+                
+                
+                
+                
                 SwNumberTreeNode* pPrevChildNode( *aPredIt );
                 SwNumberTreeNode* pDestNode( pChild );
                 while ( pDestNode && pPrevChildNode &&
                         pPrevChildNode->GetChildCount() > 0 )
                 {
-                    // move children
+                    
                     pPrevChildNode->MoveGreaterChildren( *pChild, *pDestNode );
 
-                    // prepare next loop:
-                    // - search of last child of <pPrevChildNode
-                    // - If found, determine destination node
+                    
+                    
+                    
                     if ( pPrevChildNode->GetChildCount() > 0 )
                     {
                         tSwNumberTreeChildren::reverse_iterator aIt =
                                         pPrevChildNode->mChildren.rbegin();
                         pPrevChildNode = *aIt;
-                        // determine new destination node
+                        
                         if ( pDestNode->GetChildCount() > 0 )
                         {
                             pDestNode = *(pDestNode->mChildren.begin());
@@ -561,11 +561,11 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
                     }
                     else
                     {
-                        // ready -> break loop.
+                        
                         break;
                     }
                 }
-                // assure that unnessary created phantoms at <pChild> are deleted.
+                
                 pChild->ClearObsoletePhantoms();
 
                 if ((*aPredIt)->IsValid())
@@ -578,8 +578,8 @@ void SwNumberTreeNode::AddChild( SwNumberTreeNode * pChild,
 
             if( bNotification )
             {
-                // invalidation of not counted parent
-                // and notification of its siblings.
+                
+                
                 if ( !IsCounted() )
                 {
                     InvalidateMe();
@@ -648,10 +648,10 @@ void SwNumberTreeNode::RemoveChild(SwNumberTreeNode * pChild)
             (*aItPred)->NotifyInvalidChildren();
         }
 
-        // #i60652#
-        // Because <mChildren.erase(aRemoveIt)> could destroy the element,
-        // which is referenced by <mItLastValid>, it's needed to adjust
-        // <mItLastValid> before erasing <aRemoveIt>.
+        
+        
+        
+        
         if (aItPred != mChildren.end() && (*aItPred)->IsPhantom())
             SetLastValid(mChildren.end());
         else
@@ -823,9 +823,9 @@ bool SwNumberTreeNode::IsFirst() const
                 pNode = pNode->GetParent();
             }
 
-            // If node isn't the first child, it is the second child and the
-            // first child is a phanton. In this case check, if the first phantom
-            // child have only phanton children
+            
+            
+            
             if ( bResult &&
                  this != *(GetParent()->mChildren.begin()) &&
                  !(*(GetParent()->mChildren.begin()))->HasOnlyPhantoms() )
@@ -961,7 +961,7 @@ bool SwNumberTreeNode::IsSane(bool bRecursive,
 
     return bResult;
 }
-#endif // __SW_NUMBER_TREE_SANITY_CHECK
+#endif 
 
 SwNumberTreeNode::tSwNumberTreeChildren::const_iterator
 SwNumberTreeNode::GetIterator(const SwNumberTreeNode * pChild) const
@@ -1020,8 +1020,8 @@ SwNumberTreeNode * SwNumberTreeNode::GetPred(bool bSibling) const
 
         if ( aIt == mpParent->mChildren.begin() )
         {
-            // #i64311#
-            // root node is no valid predecessor
+            
+            
             pResult = mpParent->GetParent() ? mpParent : NULL;
         }
         else
@@ -1056,7 +1056,7 @@ void SwNumberTreeNode::SetLastValid
         )
     {
         mItLastValid = aItValid;
-        // invalidation of children of next not counted is needed
+        
         if ( GetParent() )
         {
             tSwNumberTreeChildren::const_iterator aParentChildIt =
@@ -1107,7 +1107,7 @@ void SwNumberTreeNode::SetLastValid(bool bValidating) const
 
 void SwNumberTreeNode::InvalidateTree() const
 {
-    // do not call SetInvalid, would cause loop !!!
+    
     mItLastValid = mChildren.end();
 
     tSwNumberTreeChildren::const_iterator aIt;
@@ -1175,7 +1175,7 @@ void SwNumberTreeNode::NotifyInvalidChildren()
 
             ++aIt;
         }
-        // notification of next not counted node is also needed.
+        
         if ( GetParent() )
         {
             tSwNumberTreeChildren::const_iterator aParentChildIt =
@@ -1203,7 +1203,7 @@ void SwNumberTreeNode::NotifyInvalidSiblings()
         mpParent->NotifyInvalidChildren();
 }
 
-// #i81002#
+
 const SwNumberTreeNode* SwNumberTreeNode::GetPrecedingNodeOf(
                                         const SwNumberTreeNode& rNode ) const
 {
@@ -1222,10 +1222,10 @@ const SwNumberTreeNode* SwNumberTreeNode::GetPrecedingNodeOf(
 
     if ( pPrecedingNode == 0 && GetRoot() )
     {
-        // <this> node has no children or the given node precedes all its children
-        // and the <this> node isn't the root node.
-        // Thus, compare the given node with the <this> node in order to check,
-        // if the <this> node precedes the given node.
+        
+        
+        
+        
         if ( !(rNode.LessThan( *this )) )
         {
             pPrecedingNode = this;

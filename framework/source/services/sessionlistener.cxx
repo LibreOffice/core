@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -55,7 +55,7 @@ using namespace framework;
 
 namespace {
 
-/// @HTML
+
 /** @short  implements flat/deep detection of file/stream formats and provides
             further read/write access to the global office type configuration.
 
@@ -92,7 +92,7 @@ private:
 
     css::uno::Reference< css::frame::XSessionManagerClient > m_rSessionManager;
 
-    // restore handling
+    
     sal_Bool m_bRestored;
 
     sal_Bool m_bSessionStoreRequested;
@@ -101,10 +101,10 @@ private:
     sal_Bool m_bTerminated;
 
 
-    // in case of synchronous call the caller should do saveDone() call himself!
+    
     void StoreSession( sal_Bool bAsync );
 
-    // let session quietly close the documents, remove lock files, store configuration and etc.
+    
     void QuitSessionQuietly();
 
 public:
@@ -134,10 +134,10 @@ public:
 
     virtual void SAL_CALL disposing(const com::sun::star::lang::EventObject&) throw (css::uno::RuntimeException);
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any  >& args) throw (css::uno::RuntimeException);
 
-    // XSessionManagerListener
+    
     virtual void SAL_CALL doSave( sal_Bool bShutdown, sal_Bool bCancelable )
         throw (css::uno::RuntimeException);
     virtual void SAL_CALL approveInteraction( sal_Bool bInteractionGranted )
@@ -147,11 +147,11 @@ public:
    virtual sal_Bool SAL_CALL doRestore()
         throw (css::uno::RuntimeException);
 
-    // XSessionManagerListener2
+    
     virtual void SAL_CALL doQuit()
         throw (::com::sun::star::uno::RuntimeException);
 
-    // XStatusListener
+    
     virtual void SAL_CALL statusChanged(const com::sun::star::frame::FeatureStateEvent& event)
         throw (css::uno::RuntimeException);
 
@@ -184,10 +184,10 @@ void SessionListener::StoreSession( sal_Bool bAsync )
     osl::MutexGuard g(m_aMutex);
     try
     {
-        // xd create SERVICENAME_AUTORECOVERY -> frame::XDispatch
-        // xd->dispatch("vnd.sun.star.autorecovery:/doSessionSave, async=bAsync
-        // on stop event m_rSessionManager->saveDone(this); in case of asynchronous call
-        // in case of synchronous call the caller should do saveDone() call himself!
+        
+        
+        
+        
 
         css::uno::Reference< frame::XDispatch > xDispatch = css::frame::theAutoRecovery::get( m_xContext );
         css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
@@ -195,7 +195,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         aURL.Complete = "vnd.sun.star.autorecovery:/doSessionSave";
         xURLTransformer->parseStrict(aURL);
 
-        // in case of asynchronous call the notification will trigger saveDone()
+        
         if ( bAsync )
             xDispatch->addStatusListener(this, aURL);
 
@@ -204,8 +204,8 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         xDispatch->dispatch(aURL, args);
     } catch (const com::sun::star::uno::Exception& e) {
         SAL_WARN("fwk.session",e.Message);
-        // save failed, but tell manager to go on if we havent yet dispatched the request
-        // in case of synchronous saving the notification is done by the caller
+        
+        
         if ( bAsync && m_rSessionManager.is() )
             m_rSessionManager->saveDone(this);
     }
@@ -217,9 +217,9 @@ void SessionListener::QuitSessionQuietly()
     osl::MutexGuard g(m_aMutex);
     try
     {
-        // xd create SERVICENAME_AUTORECOVERY -> frame::XDispatch
-        // xd->dispatch("vnd.sun.star.autorecovery:/doSessionQuietQuit, async=false
-        // it is done synchronously to avoid conflict with normal quit process
+        
+        
+        
 
         css::uno::Reference< frame::XDispatch > xDispatch = css::frame::theAutoRecovery::get( m_xContext );
         css::uno::Reference< XURLTransformer > xURLTransformer = URLTransformer::create( m_xContext );
@@ -247,7 +247,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
 
     OUString aSMgr("com.sun.star.frame.SessionManagerClient");
     if ( (args.getLength() == 1) && (args[0] >>= m_bAllowUserInteractionOnQuit) )
-       ;// do nothing
+       ;
     else if (args.getLength() > 0)
     {
         NamedValue v;
@@ -281,7 +281,7 @@ void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& eve
    if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionRestore" )
     {
         if (event.FeatureDescriptor.equalsAscii("update"))
-            m_bRestored = sal_True; // a document was restored
+            m_bRestored = sal_True; 
 
     }
     else if ( event.FeatureURL.Complete == "vnd.sun.star.autorecovery:/doSessionSave" )
@@ -289,7 +289,7 @@ void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& eve
         if (event.FeatureDescriptor.equalsAscii("stop"))
         {
             if (m_rSessionManager.is())
-                m_rSessionManager->saveDone(this); // done with save
+                m_rSessionManager->saveDone(this); 
         }
     }
 }
@@ -327,13 +327,13 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
     SAL_INFO("fwk.session", "SessionListener::doSave");
     if (bShutdown)
     {
-        m_bSessionStoreRequested = sal_True; // there is no need to protect it with mutex
+        m_bSessionStoreRequested = sal_True; 
         if ( m_bAllowUserInteractionOnQuit && m_rSessionManager.is() )
             m_rSessionManager->queryInteraction( static_cast< css::frame::XSessionManagerListener* >( this ) );
         else
             StoreSession( sal_True );
     }
-    // we don't have anything to do so tell the session manager we're done
+    
     else if( m_rSessionManager.is() )
         m_rSessionManager->saveDone( this );
 }
@@ -342,20 +342,20 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
     throw (RuntimeException)
 {
     SAL_INFO("fwk.session", "SessionListener::approveInteraction");
-    // do AutoSave as the first step
+    
     osl::MutexGuard g(m_aMutex);
 
     if ( bInteractionGranted )
     {
-        // close the office documents in normal way
+        
         try
         {
-            // first of all let the session be stored to be sure that we lose no information
+            
             StoreSession( sal_False );
 
             css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create( m_xContext );
-            // honestly: how many implementations of XDesktop will we ever have?
-            // so casting this directly to the implementation
+            
+            
             Desktop* pDesktop(dynamic_cast<Desktop*>(xDesktop.get()));
             if(pDesktop)
             {
@@ -370,7 +370,7 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
 
             if ( m_rSessionManager.is() )
             {
-                // false means that the application closing has been cancelled
+                
                 if ( !m_bTerminated )
                     m_rSessionManager->cancelShutdown();
                 else
@@ -396,8 +396,8 @@ void SessionListener::shutdownCanceled()
     throw (RuntimeException)
 {
     SAL_INFO("fwk.session", "SessionListener::shutdownCanceled");
-    // set the state back
-    m_bSessionStoreRequested = sal_False; // there is no need to protect it with mutex
+    
+    m_bSessionStoreRequested = sal_False; 
 }
 
 void SessionListener::doQuit()
@@ -406,7 +406,7 @@ void SessionListener::doQuit()
     SAL_INFO("fwk.session", "SessionListener::doQuit");
     if ( m_bSessionStoreRequested && !m_bTerminated )
     {
-        // let the session be closed quietly in this case
+        
         QuitSessionQuietly();
     }
 }

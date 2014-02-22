@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "climaker_share.h"
@@ -38,7 +38,7 @@ using namespace ::com::sun::star::uno;
 namespace climaker
 {
 System::String^ mapUnoPolymorphicName(System::String^ unoName);
-//------------------------------------------------------------------------------
+
 static inline ::System::String ^ to_cts_name(
     OUString const & uno_name )
 {
@@ -48,7 +48,7 @@ static inline ::System::String ^ to_cts_name(
     return ustring_to_String( buf.makeStringAndClear() );
 }
 
-//------------------------------------------------------------------------------
+
 static inline ::System::Object ^ to_cli_constant( Any const & value )
 {
     switch (value.getValueTypeClass())
@@ -95,7 +95,7 @@ static inline ::System::Object ^ to_cli_constant( Any const & value )
     }
 }
 
-//------------------------------------------------------------------------------
+
 static inline void emit_ldarg( Emit::ILGenerator ^ code, ::System::Int32 index )
 {
     switch (index)
@@ -141,19 +141,19 @@ System::String^ mapUnoTypeName(System::String ^ typeName)
 {
     ::System::Text::StringBuilder^ buf= gcnew System::Text::StringBuilder();
     ::System::String ^ sUnoName = ::System::String::Copy(typeName);
-    //determine if the type is a sequence and its dimensions
+    
     int dims= 0;
-    if (typeName->StartsWith("["))//if (usUnoName[0] == '[')
+    if (typeName->StartsWith("["))
     {
         int index= 1;
         while (true)
         {
-            if (typeName[index++] == ']')//if (usUnoName[index++] == ']')
+            if (typeName[index++] == ']')
                 dims++;
-            if (typeName[index++] != '[')//usUnoName[index++] != '[')
+            if (typeName[index++] != '[')
                 break;
         }
-        sUnoName = sUnoName->Substring(index - 1);//usUnoName = usUnoName.copy(index - 1);
+        sUnoName = sUnoName->Substring(index - 1);
     }
     if (sUnoName->Equals(const_cast<System::String^>(Constants::sUnoBool)))
         buf->Append(const_cast<System::String^>(Constants::sBoolean));
@@ -191,11 +191,11 @@ System::String^ mapUnoTypeName(System::String ^ typeName)
     }
     else
     {
-        //put "unoidl." at the beginning
+        
         buf->Append(const_cast<System::String^>(Constants::sUnoidl));
         buf->Append(mapUnoPolymorphicName(sUnoName));
     }
-    // apend []
+    
     for (;dims--;)
         buf->Append(const_cast<System::String^>(Constants::sBrackets));
 
@@ -221,10 +221,10 @@ System::String^ mapUnoPolymorphicName(System::String^ unoName)
     System::Text::StringBuilder ^ builder =
         gcnew System::Text::StringBuilder(unoName->Substring(0, index +1 ));
 
-    //Find the first occurrence of ','
-    //If the parameter is a polymorphic struct then we neede to ignore everything
-    //between the brackets because it can also contain commas
-    //get the type list within < and >
+    
+    
+    
+    
     int endIndex = unoName->Length - 1;
     index++;
     int cur = index;
@@ -234,21 +234,21 @@ System::String^ mapUnoPolymorphicName(System::String^ unoName)
         System::Char c = unoName[cur];
         if (c == ',' || c == '>')
         {
-            //insert a comma if needed
+            
             if (countParams != 0)
                 builder->Append(",");
             countParams++;
             System::String ^ sParam = unoName->Substring(index, cur - index);
-            //skip the comma
+            
             cur++;
-            //the the index to the beginning of the next param
+            
             index = cur;
             builder->Append(mapUnoTypeName(sParam));
         }
         else if (c == '<')
         {
             cur++;
-            //continue until the matching '>'
+            
             int numNested = 0;
             for (;;cur++)
             {
@@ -275,7 +275,7 @@ System::String^ mapUnoPolymorphicName(System::String^ unoName)
 
 
 
-//______________________________________________________________________________
+
 Assembly ^ TypeEmitter::type_resolve(
     ::System::Object ^, ::System::ResolveEventArgs ^ args )
 {
@@ -310,21 +310,21 @@ Assembly ^ TypeEmitter::type_resolve(
     return nullptr;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     ::System::String ^ cts_name, bool throw_exc )
 {
     ::System::Type ^ ret_type = m_module_builder->GetType( cts_name, false );
-    //We get the type from the ModuleBuilder even if the type is not complete
-    //but have been defined.
-    //if (ret_type == 0)
-    //{
-    //    iface_entry * entry = dynamic_cast< iface_entry * >(
-    //        m_incomplete_ifaces->get_Item( cts_name ) );
-    //    if (0 != entry)
-    //        ret_type = entry->m_type_builder;
-    //}
-        //try the cli_basetypes assembly
+    
+    
+    
+    
+    
+    
+    
+    
+    
+        
     if (ret_type == nullptr)
     {
         ::System::Text::StringBuilder ^ builder = gcnew ::System::Text::StringBuilder(cts_name);
@@ -336,13 +336,13 @@ Assembly ^ TypeEmitter::type_resolve(
     {
         try
         {
-            // may call on type_resolve()
+            
             return ::System::Type::GetType( cts_name, throw_exc );
         }
         catch (::System::Exception^ exc)
         {
-            //If the type is not found one may have forgotten to specify assemblies with
-            //additional types
+            
+            
             ::System::Text::StringBuilder ^ sb = gcnew ::System::Text::StringBuilder();
             sb->Append(gcnew ::System::String("\nThe type "));
             sb->Append(cts_name);
@@ -358,7 +358,7 @@ Assembly ^ TypeEmitter::type_resolve(
     }
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type_Exception()
 {
     if (nullptr == m_type_Exception)
@@ -367,7 +367,7 @@ Assembly ^ TypeEmitter::type_resolve(
             "unoidl.com.sun.star.uno.Exception", false /* no exc */ );
         if (nullptr == m_type_Exception)
         {
-            // define hardcoded type unoidl.com.sun.star.uno.Exception
+            
             Emit::TypeBuilder ^ type_builder =
                 m_module_builder->DefineType(
                       "unoidl.com.sun.star.uno.Exception",
@@ -378,9 +378,9 @@ Assembly ^ TypeEmitter::type_resolve(
             Emit::FieldBuilder ^ field_Context = type_builder->DefineField(
                 "Context", (::System::Object::typeid),
                 FieldAttributes::Public );
-            // default .ctor
+            
             type_builder->DefineDefaultConstructor( c_ctor_method_attr );
-            // .ctor
+            
             array< ::System::Type^>^ param_types =
                   gcnew array< ::System::Type^>(2);
             param_types[ 0 ] = ::System::String::typeid;
@@ -419,7 +419,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return m_type_Exception;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type_RuntimeException()
 {
     if (nullptr == m_type_RuntimeException)
@@ -428,7 +428,7 @@ Assembly ^ TypeEmitter::type_resolve(
             "unoidl.com.sun.star.uno.RuntimeException", false /* no exc */ );
         if (nullptr == m_type_RuntimeException)
         {
-            // define hardcoded type unoidl.com.sun.star.uno.RuntimeException
+            
             ::System::Type ^ type_Exception = get_type_Exception();
             Emit::TypeBuilder ^ type_builder =
                   m_module_builder->DefineType(
@@ -437,9 +437,9 @@ Assembly ^ TypeEmitter::type_resolve(
                                         TypeAttributes::BeforeFieldInit |
                                         TypeAttributes::AnsiClass),
                       type_Exception );
-            // default .ctor
+            
             type_builder->DefineDefaultConstructor( c_ctor_method_attr );
-            // .ctor
+            
             array< ::System::Type^>^ param_types =
                   gcnew array< ::System::Type^>(2);
             param_types[ 0 ] = ::System::String::typeid;
@@ -473,7 +473,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return m_type_RuntimeException;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XConstantTypeDescription > const & xType )
 {
@@ -511,7 +511,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return ret_type;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XConstantsTypeDescription > const & xType )
 {
@@ -562,7 +562,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return ret_type;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XEnumTypeDescription > const & xType )
 {
@@ -570,14 +570,14 @@ Assembly ^ TypeEmitter::type_resolve(
     ::System::Type ^ ret_type = get_type( cts_name, false /* no exc */ );
     if (nullptr == ret_type)
     {
-//         Emit::EnumBuilder * enum_builder =
-//             m_module_builder->DefineEnum(
-//                 cts_name,
-//                 (TypeAttributes) (TypeAttributes::Public |
-// //                                   TypeAttributes::Sealed |
-//                                   TypeAttributes::AnsiClass),
-//                 __typeof (::System::Int32) );
-        // workaround enum builder bug
+
+
+
+
+
+
+
+        
         Emit::TypeBuilder ^ enum_builder =
             m_module_builder->DefineType(
                 cts_name,
@@ -597,9 +597,9 @@ Assembly ^ TypeEmitter::type_resolve(
         sal_Int32 const * enum_values = seq_enum_values.getConstArray();
         for ( sal_Int32 enum_pos = 0; enum_pos < enum_length; ++enum_pos )
         {
-//             enum_builder->DefineLiteral(
-//                 ustring_to_String( enum_names[ enum_pos ] ),
-//                 __box ((::System::Int32) enum_values[ enum_pos ]) );
+
+
+
             Emit::FieldBuilder ^ field_builder =
                 enum_builder->DefineField(
                     ustring_to_String( enum_names[ enum_pos ] ),
@@ -621,7 +621,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return ret_type;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XCompoundTypeDescription > const & xType )
 {
@@ -638,10 +638,10 @@ Assembly ^ TypeEmitter::type_resolve(
         }
     }
     ::System::String ^ cts_name = to_cts_name( uno_name );
-    // if the struct is an instantiated polymorpic struct then we create the simple struct name
-    // For example:
-    // void func ([in] PolyStruct<boolean> arg);
-    //PolyStruct<boolean> will be converted to PolyStruct
+    
+    
+    
+    
     polymorphicStructNameToStructName( & cts_name);
 
     ::System::Type ^ ret_type = get_type( cts_name, false /* no exc */ );
@@ -661,7 +661,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 base_type );
 
 
-         // insert to be completed
+         
         struct_entry ^ entry = gcnew struct_entry();
         xType->acquire();
         entry->m_xType = xType.get();
@@ -669,13 +669,13 @@ Assembly ^ TypeEmitter::type_resolve(
         entry->m_base_type = base_type;
         m_incomplete_structs->Add( cts_name, entry );
 
-        // type is incomplete
+        
         ret_type = type_builder;
     }
 
-    //In case of an instantiated polymorphic struct we want to return a
-    //uno.PolymorphicType (inherits Type) rather then Type. This is neaded for constructing
-    //the service code. We can only do that if the struct is completed.
+    
+    
+    
     if (m_generated_structs[cts_name])
     {
         Reference< reflection::XStructTypeDescription> xStructTypeDesc(
@@ -687,7 +687,7 @@ Assembly ^ TypeEmitter::type_resolve(
             sal_Int32 numTypes = seqTypeArgs.getLength();
             if (numTypes > 0)
             {
-                //it is an instantiated polymorphic struct
+                
                 ::System::String ^ sCliName = mapUnoTypeName(ustring_to_String(xType->getName()));
                 ret_type = ::uno::PolymorphicType::GetType(ret_type, sCliName);
             }
@@ -696,7 +696,7 @@ Assembly ^ TypeEmitter::type_resolve(
     return ret_type;
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XInterfaceTypeDescription2 > const & xType )
 {
@@ -753,21 +753,21 @@ Assembly ^ TypeEmitter::type_resolve(
             type_builder = m_module_builder->DefineType( cts_name, attr );
         }
 
-        // insert to be completed
+        
         iface_entry ^ entry = gcnew iface_entry();
         xType->acquire();
         entry->m_xType = xType.get();
         entry->m_type_builder = type_builder;
         m_incomplete_ifaces->Add( cts_name, entry );
 
-        // type is incomplete
+        
         ret_type = type_builder;
     }
     return ret_type;
 }
 
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XServiceTypeDescription2 > const & xType )
 {
@@ -787,7 +787,7 @@ Assembly ^ TypeEmitter::type_resolve(
     Emit::TypeBuilder ^ type_builder = m_module_builder->DefineType(
         cts_name, attr);
 
-    // insert to be completed
+    
     service_entry ^ entry = gcnew service_entry();
     xType->acquire();
     entry->m_xType = xType.get();
@@ -817,7 +817,7 @@ Assembly ^ TypeEmitter::type_resolve(
     Emit::TypeBuilder ^ type_builder = m_module_builder->DefineType(
         cts_name, attr);
 
-    // insert to be completed
+    
     singleton_entry ^ entry = gcnew singleton_entry();
     xType->acquire();
     entry->m_xType = xType.get();
@@ -828,7 +828,7 @@ Assembly ^ TypeEmitter::type_resolve(
 
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::complete_iface_type( iface_entry ^ entry )
 {
     Emit::TypeBuilder ^ type_builder = entry->m_type_builder;
@@ -839,7 +839,7 @@ Assembly ^ TypeEmitter::type_resolve(
     {
         for (int i = 0; i < seqBaseTypes.getLength(); i++)
         {
-            //make sure we get the interface rather then a typedef
+            
             Reference<reflection::XInterfaceTypeDescription2> aBaseType =
                 resolveInterfaceTypedef( seqBaseTypes[i]);
 
@@ -850,7 +850,7 @@ Assembly ^ TypeEmitter::type_resolve(
                     m_incomplete_ifaces[basetype_name] );
                 if (nullptr != base_entry)
                 {
-                // complete uncompleted base type first
+                
                     complete_iface_type( base_entry );
                 }
             }
@@ -878,11 +878,11 @@ Assembly ^ TypeEmitter::type_resolve(
              MethodAttributes::Virtual |
              MethodAttributes::NewSlot |
              MethodAttributes::HideBySig);
-//#if defined(_MSC_VER) && (_MSC_VER < 1400)
-//             MethodAttributes::Instance);
-//#else
-//       Instance);
-//#endif
+
+
+
+
+
 
         if (TypeClass_INTERFACE_METHOD == xMember->getTypeClass())
         {
@@ -897,8 +897,8 @@ Assembly ^ TypeEmitter::type_resolve(
                   gcnew array< ::System::Type^>( params_length );
             Reference< reflection::XMethodParameter > const * parameters =
                 seq_parameters.getConstArray();
-            // first determine all types
-            //Make the first param type as return type
+            
+            
             sal_Int32 params_pos = 0;
             for ( ; params_pos < params_length; ++params_pos )
             {
@@ -916,18 +916,18 @@ Assembly ^ TypeEmitter::type_resolve(
             }
 
 
-            // create method
-//             if (tb)
-//                 method_builder = type_builder->DefineMethod(
-//                 ustring_to_String( xMethod->getMemberName() ),
-//                 c_method_attr, tb,
-//                 param_types );
-//             else
+            
+
+
+
+
+
+
                 method_builder = type_builder->DefineMethod(
                     ustring_to_String( xMethod->getMemberName() ),
                     c_method_attr, get_type( xMethod->getReturnType() ),
                     param_types );
-            // then define parameter infos
+            
             params_pos = 0;
             for ( ; params_pos < params_length; ++params_pos )
             {
@@ -944,8 +944,8 @@ Assembly ^ TypeEmitter::type_resolve(
                     (ParameterAttributes) param_flags,
                     ustring_to_String( xParam->getName() ) );
             }
-            //Apply attribute TypeParametersAttribute to return value if it
-            //is a parameterized Type. Currently only structs can have parameters.
+            
+            
             Reference<reflection::XStructTypeDescription> xReturnStruct(
                 xMethod->getReturnType(), UNO_QUERY);
 
@@ -955,9 +955,9 @@ Assembly ^ TypeEmitter::type_resolve(
                     xReturnStruct->getTypeArguments();
                 if (seq_type_args.getLength() != 0)
                 {
-                    //get th ctor of the attribute
+                    
                     array< ::System::Type^>^ arCtor = {::System::Type::GetType("System.Type[]")};
-                    //Get the arguments for the attribute's ctor
+                    
                     Reference<reflection::XTypeDescription> const * arXTypeArgs =
                         seq_type_args.getConstArray();
                     int numTypes = seq_type_args.getLength();
@@ -976,13 +976,13 @@ Assembly ^ TypeEmitter::type_resolve(
                 }
             }
 
-            //define UNO exception attribute (exceptions)--------------------------------------
+            
             Emit::CustomAttributeBuilder^ attrBuilder =
                 get_iface_method_exception_attribute(xMethod);
             if (attrBuilder != nullptr)
                 method_builder->SetCustomAttribute(attrBuilder);
 
-            // oneway attribute
+            
             if (xMethod->isOneway())
             {
                 array< ::System::Type^>^ arCtorOneway = gcnew array< ::System::Type^>(0);
@@ -994,7 +994,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 method_builder->SetCustomAttribute(attrBuilder);
             }
         }
-        else // attribute
+        else 
         {
             OSL_ASSERT(
                 TypeClass_INTERFACE_ATTRIBUTE == xMember->getTypeClass() );
@@ -1015,7 +1015,7 @@ Assembly ^ TypeEmitter::type_resolve(
                     PropertyAttributes::None,
                     attribute_type, parameters );
 
-            //set BoundAttribute, if necessary
+            
             if (xAttribute->isBound())
             {
                 ConstructorInfo ^ ctorBoundAttr =
@@ -1027,14 +1027,14 @@ Assembly ^ TypeEmitter::type_resolve(
                 property_builder->SetCustomAttribute(attrBuilderBound);
             }
 
-            // getter
+            
             Emit::MethodBuilder ^ method_builder =
                 type_builder->DefineMethod(
                     ustring_to_String( "get_" +
                                        xAttribute->getMemberName() ),
                     c_property_method_attr, attribute_type, parameters );
 
-           //define UNO exception attribute (exceptions)--------------------------------------
+           
             Emit::CustomAttributeBuilder^ attrBuilder =
                 get_exception_attribute(xAttribute->getGetExceptions());
             if (attrBuilder != nullptr)
@@ -1044,7 +1044,7 @@ Assembly ^ TypeEmitter::type_resolve(
 
             if (! xAttribute->isReadOnly())
             {
-                // setter
+                
                 parameters = gcnew array< ::System::Type^> ( 1 );
                 parameters[ 0 ] = attribute_type;
                 method_builder =
@@ -1052,10 +1052,10 @@ Assembly ^ TypeEmitter::type_resolve(
                         ustring_to_String( "set_" +
                                            xAttribute->getMemberName() ),
                         c_property_method_attr, nullptr, parameters );
-                // define parameter info
+                
                 method_builder->DefineParameter(
                     1 /* starts with 1 */, ParameterAttributes::In, "value" );
-                //define UNO exception attribute (exceptions)--------------------------------------
+                
                 Emit::CustomAttributeBuilder^ attrBuilder =
                     get_exception_attribute(xAttribute->getSetExceptions());
                 if (attrBuilder != nullptr)
@@ -1066,7 +1066,7 @@ Assembly ^ TypeEmitter::type_resolve(
         }
     }
 
-    // remove from incomplete types map
+    
     ::System::String ^ cts_name = type_builder->FullName;
     m_incomplete_ifaces->Remove( cts_name );
     xType->release();
@@ -1084,10 +1084,10 @@ Assembly ^ TypeEmitter::type_resolve(
      OSL_ASSERT(entry);
     ::System::String ^ cts_name = entry->m_type_builder->FullName;
 
-    //Polymorphic struct, define uno.TypeParametersAttribute
-    //A polymorphic struct cannot have a basetype.
-    //When we create the template of the struct then we have no exact types
-    //and the name does not contain a parameter list
+    
+    
+    
+    
     Sequence< OUString > seq_type_parameters;
     Reference< reflection::XStructTypeDescription> xStructTypeDesc(
         entry->m_xType, UNO_QUERY);
@@ -1112,25 +1112,25 @@ Assembly ^ TypeEmitter::type_resolve(
         }
     }
 
-    // optional: lookup base type whether generated entry of this session
+    
     struct_entry ^ base_type_entry = nullptr;
     if (nullptr != entry->m_base_type)
     {
-        //ToDo maybe get from incomplete structs
+        
         base_type_entry =
             dynamic_cast< struct_entry ^ >(
                 m_generated_structs[
                     entry->m_base_type->FullName ] );
     }
 
-        // members
+        
     Sequence< Reference< reflection::XTypeDescription > > seq_members(
         entry->m_xType->getMemberTypes() );
     Sequence< OUString > seq_member_names( entry->m_xType->getMemberNames() );
     sal_Int32 members_length = seq_members.getLength();
     OSL_ASSERT( seq_member_names.getLength() == members_length );
-    //check if we have a XTypeDescription for every member. If not then the user may
-    //have forgotten to specify additional rdbs with the --extra option.
+    
+    
     Reference< reflection::XTypeDescription > const * pseq_members =
             seq_members.getConstArray();
     OUString const * pseq_member_names =
@@ -1149,7 +1149,7 @@ Assembly ^ TypeEmitter::type_resolve(
     sal_Int32 member_pos;
     sal_Int32 type_param_pos = 0;
 
-    // collect base types; wrong order
+    
     ::System::Collections::ArrayList ^ base_types_list =
             gcnew ::System::Collections::ArrayList( 3 /* initial capacity */ );
     for (::System::Type ^ base_type_pos = entry->m_base_type;
@@ -1159,13 +1159,13 @@ Assembly ^ TypeEmitter::type_resolve(
         base_types_list->Add( base_type_pos );
         if (base_type_pos->Equals( ::System::Exception::typeid ))
         {
-            // special Message member
+            
             all_members_length += 1;
-            break; // don't include System.Exception base classes
+            break; 
         }
         else
         {
-            //ensure the base type is complete. Otherwise GetFields won't work
+            
             get_complete_struct(base_type_pos->FullName);
             all_members_length +=
                 base_type_pos->GetFields(
@@ -1176,7 +1176,7 @@ Assembly ^ TypeEmitter::type_resolve(
         }
     }
 
-    // create all_members arrays; right order
+    
     array< ::System::String^>^ all_member_names =
         gcnew array< ::System::String^> (all_members_length + members_length );
     array< ::System::Type^>^ all_param_types =
@@ -1196,13 +1196,13 @@ Assembly ^ TypeEmitter::type_resolve(
         {
             ::System::String ^ base_type_name = base_type->FullName;
 
-            //ToDo m_generated_structs?
+            
             struct_entry ^ entry =
                 dynamic_cast< struct_entry ^ >(
                 m_generated_structs[base_type_name] );
             if (nullptr == entry)
             {
-                // complete type
+                
                 array<FieldInfo^>^ fields =
                     base_type->GetFields(
                     (BindingFlags) (BindingFlags::Instance |
@@ -1217,8 +1217,8 @@ Assembly ^ TypeEmitter::type_resolve(
                     ++member_pos;
                 }
             }
-            else // generated during this session:
-                // members may be incomplete ifaces
+            else 
+                
             {
                 sal_Int32 len = entry->m_member_names->Length;
                 for ( sal_Int32 pos = 0; pos < len; ++pos )
@@ -1234,25 +1234,25 @@ Assembly ^ TypeEmitter::type_resolve(
     }
     OSL_ASSERT( all_members_length == member_pos );
 
-    // build up entry
-//    struct_entry * entry = new struct_entry();
+    
+
     entry->m_member_names = gcnew array< ::System::String^> ( members_length );
     entry->m_param_types = gcnew array< ::System::Type^> ( members_length );
 
-    // add members
+    
     array<Emit::FieldBuilder^>^ members = gcnew array<Emit::FieldBuilder^> ( members_length );
-    //Reference< reflection::XTypeDescription > const * pseq_members =
-    //    seq_members.getConstArray();
-    //OUString const * pseq_member_names =
-    //    seq_member_names.getConstArray();
+    
+    
+    
+    
 
-    int curParamIndex = 0; //count the fields which have parameterized types
+    int curParamIndex = 0; 
     for ( member_pos = 0; member_pos < members_length; ++member_pos )
     {
         ::System::String ^ field_name =
             ustring_to_String( pseq_member_names[ member_pos ] );
         ::System::Type ^ field_type;
-        //Special handling of struct parameter types
+        
         bool bParameterizedType = false;
         if (pseq_members[ member_pos ]->getTypeClass() == TypeClass_UNKNOWN)
         {
@@ -1278,15 +1278,15 @@ Assembly ^ TypeEmitter::type_resolve(
             entry->m_type_builder->DefineField(
             field_name, field_type, FieldAttributes::Public );
 
-        //parameterized type (polymorphic struct) ?
+        
         if (bParameterizedType && xStructTypeDesc.is())
         {
-            //get the name
+            
             OSL_ASSERT(seq_type_parameters.getLength() > curParamIndex);
             ::System::String^ sTypeName = ustring_to_String(
                 seq_type_parameters.getConstArray()[curParamIndex++]);
             array< ::System::Object^>^ args = {sTypeName};
-            //set ParameterizedTypeAttribute
+            
             array< ::System::Type^>^ arCtorTypes = {::System::String::typeid};
 
             Emit::CustomAttributeBuilder ^ attrBuilder =
@@ -1297,16 +1297,16 @@ Assembly ^ TypeEmitter::type_resolve(
 
             members[member_pos]->SetCustomAttribute(attrBuilder);
         }
-        // add to all_members
+        
         all_member_names[ all_members_length + member_pos ] = field_name;
         all_param_types[ all_members_length + member_pos ] = field_type;
-        // add to entry
+        
         entry->m_member_names[ member_pos ] = field_name;
         entry->m_param_types[ member_pos ] = field_type;
     }
     all_members_length += members_length;
 
-    // default .ctor
+    
     Emit::ConstructorBuilder ^ ctor_builder =
         entry->m_type_builder->DefineConstructor(
         c_ctor_method_attr, CallingConventions::Standard,
@@ -1318,14 +1318,14 @@ Assembly ^ TypeEmitter::type_resolve(
         nullptr == base_type_entry
         ? entry->m_base_type->GetConstructor( gcnew array< ::System::Type^> ( 0 ) )
         : base_type_entry->m_default_ctor );
-    // default initialize members
+    
     for ( member_pos = 0; member_pos < members_length; ++member_pos )
     {
         FieldInfo ^ field = members[ member_pos ];
         ::System::Type ^ field_type = field->FieldType;
-        //            ::System::Type * new_field_type = m_module_builder->GetType(field_type->FullName, false);
-        // default initialize:
-        // string, type, enum, sequence, struct, exception, any
+        
+        
+        
         if (field_type->Equals( ::System::String::typeid ))
         {
             code->Emit( Emit::OpCodes::Ldarg_0 );
@@ -1343,10 +1343,10 @@ Assembly ^ TypeEmitter::type_resolve(
         }
         else if (field_type->IsArray)
         {
-            //Find the value type. In case of sequence<sequence< ... > > find the actual value type
+            
             ::System::Type ^ value = field_type;
             while ((value = value->GetElementType())->IsArray);
-            //If the value type is a struct then make sure it is fully created.
+            
             get_complete_struct(value->FullName);
 
             code->Emit( Emit::OpCodes::Ldarg_0 );
@@ -1369,13 +1369,13 @@ Assembly ^ TypeEmitter::type_resolve(
             /* may be XInterface */
             if (! field_type->Equals( ::System::Object::typeid ))
             {
-                // struct, exception
-                //make sure the struct is already complete.
+                
+                
                 get_complete_struct(field_type->FullName);
                 code->Emit( Emit::OpCodes::Ldarg_0 );
                 code->Emit(
                     Emit::OpCodes::Newobj,
-                    //GetConstructor requies that the member types of the object which is to be constructed are already known.
+                    
                     field_type->GetConstructor(
                     gcnew array< ::System::Type^> ( 0 ) ) );
                 code->Emit( Emit::OpCodes::Stfld, field );
@@ -1385,7 +1385,7 @@ Assembly ^ TypeEmitter::type_resolve(
     code->Emit( Emit::OpCodes::Ret );
     entry->m_default_ctor = ctor_builder;
 
-    // parameterized .ctor including all base members
+    
     ctor_builder = entry->m_type_builder->DefineConstructor(
         c_ctor_method_attr, CallingConventions::Standard, all_param_types );
     for ( member_pos = 0; member_pos < all_members_length; ++member_pos )
@@ -1395,8 +1395,8 @@ Assembly ^ TypeEmitter::type_resolve(
             all_member_names[ member_pos ] );
     }
     code = ctor_builder->GetILGenerator();
-    // call base .ctor
-    code->Emit( Emit::OpCodes::Ldarg_0 ); // push this
+    
+    code->Emit( Emit::OpCodes::Ldarg_0 ); 
     sal_Int32 base_members_length = all_members_length - members_length;
     array< ::System::Type^>^ param_types  =
         gcnew array< ::System::Type^> ( base_members_length );
@@ -1410,10 +1410,10 @@ Assembly ^ TypeEmitter::type_resolve(
         nullptr == base_type_entry
         ? entry->m_base_type->GetConstructor( param_types )
         : base_type_entry->m_ctor );
-    // initialize members
+    
     for ( member_pos = 0; member_pos < members_length; ++member_pos )
     {
-        code->Emit( Emit::OpCodes::Ldarg_0 ); // push this
+        code->Emit( Emit::OpCodes::Ldarg_0 ); 
         emit_ldarg( code, member_pos + base_members_length +1 );
         code->Emit( Emit::OpCodes::Stfld, members[ member_pos ] );
     }
@@ -1429,11 +1429,11 @@ Assembly ^ TypeEmitter::type_resolve(
             : "exception",
             cts_name);
     }
-    // new entry
+    
     m_generated_structs->Add(cts_name, entry );
     ::System::Type ^ ret_type = entry->m_type_builder->CreateType();
 
-    // remove from incomplete types map
+    
     m_incomplete_structs->Remove( cts_name );
     entry->m_xType->release();
 
@@ -1445,41 +1445,41 @@ Assembly ^ TypeEmitter::type_resolve(
     return ret_type;
 }
 
-//Examples of generated code
-//      public static XWeak constructor1(XComponentContext ctx)
-//      {
-//          XMultiComponentFactory factory = ctx.getServiceManager();
-//          if (factory == null)
-//              throw new com.sun.star.uno.DeploymentException("bla", null);
-//          return (XWeak) factory.createInstanceWithContext("service_specifier", ctx);
-//      }
-//      public static XWeak constructor2(XComponentContext ctx, int a, int b, Any c)
-//      {
-//          XMultiComponentFactory factory = ctx.getServiceManager();
-//          if (factory == null)
-//              throw new com.sun.star.uno.DeploymentException("bla", null);
-//          Any[] arAny = new Any[3];
-//          arAny[0] = new Any(typeof(int), a);
-//          arAny[1] = new Any(typeof(int), b);
-//          arAny[2] = new Any(c.Type, c.Value);
-//          return (XWeak) factory.createInstanceWithArgumentsAndContext("service_specifier", arAny, ctx);
-//      }
-// Notice that a any parameter is NOT wrapped by another any. Instead the new any is created with the type and value
-// of the parameter.
 
-//      public static XWeak constructor3(XComponentContext ctx, params Any[] c)
-//      {
-//          XMultiComponentFactory factory = ctx.getServiceManager();
-//          if (factory == null)
-//              throw new com.sun.star.uno.DeploymentException("bla", null);
-//          return (XWeak) factory.createInstanceWithArgumentsAndContext("service_specifier", c, ctx);
-//      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ::System::Type ^ TypeEmitter::complete_service_type(service_entry ^ entry)
 {
     Emit::TypeBuilder ^ type_builder = entry->m_type_builder;
     reflection::XServiceTypeDescription2 * xServiceType = entry->m_xType;
 
-    //Create the private default constructor
+    
     Emit::ConstructorBuilder^ ctor_builder =
         type_builder->DefineConstructor(
             (MethodAttributes) (MethodAttributes::Private |
@@ -1489,23 +1489,23 @@ Assembly ^ TypeEmitter::type_resolve(
             CallingConventions::Standard, nullptr);
 
     Emit::ILGenerator^ ilGen = ctor_builder->GetILGenerator();
-    ilGen->Emit( Emit::OpCodes::Ldarg_0 ); // push this
+    ilGen->Emit( Emit::OpCodes::Ldarg_0 ); 
     ilGen->Emit(
             Emit::OpCodes::Call,
             type_builder->BaseType->GetConstructor(gcnew array< ::System::Type^>(0)));
     ilGen->Emit( Emit::OpCodes::Ret );
 
 
-    //Create the service constructors.
-    //obtain the interface which makes up this service, it is the return
-    //type of the constructor functions
+    
+    
+    
     Reference<reflection::XInterfaceTypeDescription2> xIfaceType(
         xServiceType->getInterface(), UNO_QUERY);
     if (xIfaceType.is () == sal_False)
         xIfaceType = resolveInterfaceTypedef(xServiceType->getInterface());
     System::Type ^ retType = get_type(xIfaceType);
 
-    //Create the ConstructorInfo for a DeploymentException
+    
     ::System::Type ^ typeDeploymentExc =
           get_type("unoidl.com.sun.star.uno.DeploymentException", true);
 
@@ -1525,7 +1525,7 @@ Assembly ^ TypeEmitter::type_resolve(
         ::System::Type ^ typeAny = ::uno::Any::typeid;
         const Reference<reflection::XServiceConstructorDescription> & ctorDes =
             seqCtors[i];
-        //obtain the parameter types
+        
         Sequence<Reference<reflection::XParameter> > seqParams =
             ctorDes->getParameters();
         Reference<reflection::XParameter> const * arXParams = seqParams.getConstArray();
@@ -1539,15 +1539,15 @@ Assembly ^ TypeEmitter::type_resolve(
             else
                 arTypeParameters[iparam + 1] = get_type(arXParams[iparam]->getType());
         }
-        //The array arTypeParameters can contain:
-        //System.Type and uno.PolymorphicType.
-        //Passing PolymorphicType to MethodBuilder.DefineMethod will cause a problem.
-        //The exception will read something like no on information for parameter # d
-        //Maybe we need no override another Type method in PolymorphicType ...
-        //Until we have figured this out, we will create another array of System.Type which
-        //we pass on to DefineMethod.
+        
+        
+        
+        
+        
+        
+        
         array< ::System::Type^>^ arParamTypes = gcnew array< ::System::Type^> (cParams + 1);
-//        arParamTypes[0] = get_type("unoidl.com.sun.star.uno.XComponentContext", true);
+
         for (int i = 0; i < cParams + 1; i++)
         {
             ::uno::PolymorphicType ^ pT = dynamic_cast< ::uno::PolymorphicType ^ >(arTypeParameters[i]);
@@ -1556,7 +1556,7 @@ Assembly ^ TypeEmitter::type_resolve(
             else
                 arParamTypes[i] = arTypeParameters[i];
         }
-        //define method
+        
         System::String ^ ctorName;
         if (ctorDes->isDefaultConstructor())
             ctorName = gcnew ::System::String("create");
@@ -1567,19 +1567,19 @@ Assembly ^ TypeEmitter::type_resolve(
             static_cast<MethodAttributes>(MethodAttributes::Public | MethodAttributes::HideBySig |
                                           MethodAttributes::Static),
             retType,
-//            arTypeParameters);
+
             arParamTypes);
 
-        //define UNO exception attribute (exceptions)--------------------------------------
+        
         Emit::CustomAttributeBuilder^ attrBuilder = get_service_exception_attribute(ctorDes);
         if (attrBuilder != nullptr)
             method_builder->SetCustomAttribute(attrBuilder);
 
-        //-------------------------------------------------------------
-        //define parameter attributes (paramarray), names etc.
-        //The first parameter is the XComponentContext, which cannot be obtained
-        //from reflection.
-        //The context is not part of the idl description
+        
+        
+        
+        
+        
         method_builder->DefineParameter(
             1, ParameterAttributes::In, "the_context");
 
@@ -1596,7 +1596,7 @@ Assembly ^ TypeEmitter::type_resolve(
             if (aParam->isRestParameter())
             {
                 bParameterArray = true;
-                //set the ParameterArrayAttribute
+                
                 ::System::Reflection::ConstructorInfo^ ctor_info =
                     System::ParamArrayAttribute::typeid->GetConstructor(
                         gcnew array< ::System::Type^>(0));
@@ -1609,17 +1609,17 @@ Assembly ^ TypeEmitter::type_resolve(
 
         Emit::ILGenerator ^ ilGen = method_builder->GetILGenerator();
 
-        //Define locals ---------------------------------
-        //XMultiComponentFactory
+        
+        
         Emit::LocalBuilder^ local_factory =
             ilGen->DeclareLocal(
                 get_type("unoidl.com.sun.star.lang.XMultiComponentFactory", true));
 
-        //The return type
+        
         Emit::LocalBuilder^ local_return_val =
             ilGen->DeclareLocal(retType);
 
-        //Obtain the XMultiComponentFactory and throw an exception if we do not get one
+        
         ilGen->Emit(Emit::OpCodes::Ldarg_0);
 
         ::System::Reflection::MethodInfo ^ methodGetServiceManager = get_type(
@@ -1630,7 +1630,7 @@ Assembly ^ TypeEmitter::type_resolve(
         ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
         Emit::Label label1 = ilGen->DefineLabel();
         ilGen->Emit(Emit::OpCodes::Brtrue, label1);
-        //The string for the exception
+        
         ::System::Text::StringBuilder ^ strbuilder = gcnew ::System::Text::StringBuilder(256);
         strbuilder->Append("The service ");
         strbuilder->Append(to_cts_name(xServiceType->getName()));
@@ -1642,15 +1642,15 @@ Assembly ^ TypeEmitter::type_resolve(
         ilGen->Emit(Emit::OpCodes::Throw);
         ilGen->MarkLabel(label1);
 
-        //We create a try/ catch around the createInstanceWithContext, etc. functions
-        //There are 3 cases
-        //1. function do not specify exceptions. Then RuntimeExceptions are retrhown and other
-        //   exceptions produce a DeploymentException.
-        //2. function specify  Exception. Then all exceptions fly through
-        //3. function specifies exceptions but no Exception. Then these are rethrown
-        //   and other exceptions, except RuntimeException, produce a deployment exception.
-        //In case there are no parameters we call
-        //XMultiComponentFactory.createInstanceWithContext
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         ::System::Collections::ArrayList ^ arExceptionTypes =
               get_service_ctor_method_exceptions_reduced(ctorDes->getExceptions());
@@ -1671,7 +1671,7 @@ Assembly ^ TypeEmitter::type_resolve(
         }
         else if(bParameterArray)
         {
-            //Service constructor with parameter array
+            
             ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
             ilGen->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
             ilGen->Emit(Emit::OpCodes::Ldarg_1);
@@ -1682,9 +1682,9 @@ Assembly ^ TypeEmitter::type_resolve(
         }
         else
         {
-            // Any param1, Any param2, etc.
-            // For each parameter,except the component context, and parameter array
-            // and Any is created.
+            
+            
+            
             array<Emit::LocalBuilder^>^ arLocalAny = gcnew array<Emit::LocalBuilder^> (cParams);
 
             for (int iParam = 0; iParam < cParams; iParam ++)
@@ -1692,15 +1692,15 @@ Assembly ^ TypeEmitter::type_resolve(
                 arLocalAny[iParam] = ilGen->DeclareLocal(typeAny);
             }
 
-            //Any[]. This array is filled with the created Anys which contain the parameters
-            //and the values contained in the parameter array
+            
+            
             Emit::LocalBuilder ^ local_anyParams =
                 ilGen->DeclareLocal(array< ::uno::Any>::typeid);
 
-            //Create the Any for every argument, except for the parameter array
-            //arLocalAny contains the LocalBuilder for all these parameters.
-            //we call the ctor Any(Type, Object)
-            //If the parameter is an Any then the Any is created with Any(param.Type, param.Value);
+            
+            
+            
+            
             array< ::System::Type^>^ arTypesCtorAny = {::System::Type::typeid,
                                                     ::System::Object::typeid};
             ::System::Reflection::ConstructorInfo ^ ctorAny =
@@ -1711,53 +1711,53 @@ Assembly ^ TypeEmitter::type_resolve(
                 typeAny->GetProperty("Value")->GetGetMethod();
             for (int i = 0; i < arLocalAny->Length; i ++)
             {
-                //check if the parameter is a polymorphic struct
+                
                 ::uno::PolymorphicType ^polyType = dynamic_cast< ::uno::PolymorphicType^ >(arTypeParameters[i+1]);
-                //arTypeParameters[i+1] = polyType->OriginalType;
+                
                 if (polyType)
                 {
-                    //It is a polymorphic struct
-                    //Load the uninitialized local Any on which we will call the ctor
+                    
+                    
                     ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
-                    // Call PolymorphicType PolymorphicType::GetType(Type t, String polyName)
-                    // Prepare the first parameter
+                    
+                    
                     ilGen->Emit(Emit::OpCodes::Ldtoken, polyType->OriginalType);
                     array< ::System::Type^>^ arTypeParams = {::System::RuntimeTypeHandle::typeid};
                     ilGen->Emit(Emit::OpCodes::Call,
                                 ::System::Type::typeid->GetMethod(
                                     "GetTypeFromHandle", arTypeParams));
-                    // Prepare the second parameter
+                    
                     ilGen->Emit(Emit::OpCodes::Ldstr, polyType->PolymorphicName);
-                    // Make the actual call
+                    
                     array< ::System::Type^>^ arTypeParam_GetType = {
                         ::System::Type::typeid, ::System::String::typeid };
                     ilGen->Emit(Emit::OpCodes::Call,
                     ::uno::PolymorphicType::typeid->GetMethod(gcnew System::String("GetType"),
                         arTypeParam_GetType));
 
-                    //Stack is: localAny, PolymorphicType
-                    //Call Any::Any(Type, Object)
-                    //Prepare the second parameter for the any ctor
+                    
+                    
+                    
                     ilGen->Emit(Emit::OpCodes::Ldarg, i + 1);
-                    // if the parameter is a value type then we need to box it, because
-                    // the Any ctor takes an Object
+                    
+                    
                     if (arTypeParameters[i+1]->IsValueType)
                         ilGen->Emit(Emit::OpCodes::Box, arTypeParameters[i+1]);
                     ilGen->Emit(Emit::OpCodes::Call, ctorAny);
                 }
                 else if (arTypeParameters[i+1] == typeAny)
                 {
-                    //Create the call new Any(param.Type,param,Value)
-                    //Stack must be Any,Type,Value
-                    //First load the Any which is to be constructed
+                    
+                    
+                    
                     ilGen->Emit(Emit::OpCodes::Ldloca, arLocalAny[i]);
-                    //Load the Type, which is obtained by calling param.Type
+                    
                     ilGen->Emit(Emit::OpCodes::Ldarga, i + 1);
                     ilGen->Emit(Emit::OpCodes::Call, methodAnyGetType);
-                    //Load the Value, which is obtained by calling param.Value
+                    
                     ilGen->Emit(Emit::OpCodes::Ldarga, i + 1);
                     ilGen->Emit(Emit::OpCodes::Call, methodAnyGetValue);
-                    //Call the Any ctor.
+                    
                     ilGen->Emit(Emit::OpCodes::Call, ctorAny);
                 }
                 else
@@ -1770,22 +1770,22 @@ Assembly ^ TypeEmitter::type_resolve(
                                 ::System::Type::typeid->GetMethod(
                                     "GetTypeFromHandle", arTypeParams));
                     ilGen->Emit(Emit::OpCodes::Ldarg, i + 1);
-                    // if the parameter is a value type then we need to box it, because
-                    // the Any ctor takes an Object
+                    
+                    
                     if (arTypeParameters[i+1]->IsValueType)
                         ilGen->Emit(Emit::OpCodes::Box, arTypeParameters[i+1]);
                     ilGen->Emit(Emit::OpCodes::Call, ctorAny);
                 }
             }
 
-            //Create the Any[] that is passed to the
-            //createInstanceWithContext[AndArguments] function
+            
+            
             ilGen->Emit(Emit::OpCodes::Ldc_I4, arLocalAny->Length);
             ilGen->Emit(Emit::OpCodes::Newarr, typeAny);
             ilGen->Emit(Emit::OpCodes::Stloc, local_anyParams);
 
-            //Assign all anys created from the parameters
-            //array to the Any[]
+            
+            
             for (int i = 0; i < arLocalAny->Length; i++)
             {
                 ilGen->Emit(Emit::OpCodes::Ldloc, local_anyParams);
@@ -1794,7 +1794,7 @@ Assembly ^ TypeEmitter::type_resolve(
                 ilGen->Emit(Emit::OpCodes::Ldloc, arLocalAny[i]);
                 ilGen->Emit(Emit::OpCodes::Stobj, typeAny);
             }
-            // call createInstanceWithContextAndArguments
+            
             ilGen->Emit(Emit::OpCodes::Ldloc, local_factory);
             ilGen->Emit(Emit::OpCodes::Ldstr, ustring_to_String(xServiceType->getName()));
             ilGen->Emit(Emit::OpCodes::Ldloc, local_anyParams);
@@ -1803,46 +1803,46 @@ Assembly ^ TypeEmitter::type_resolve(
                     local_factory->LocalType->GetMethod("createInstanceWithArgumentsAndContext");
             ilGen->Emit(Emit::OpCodes::Callvirt, methodCreate);
         }
-        //cast the object returned by the functions createInstanceWithContext or
-        //createInstanceWithArgumentsAndContext to the interface type
+        
+        
         ilGen->Emit(Emit::OpCodes::Castclass, retType);
         ilGen->Emit(Emit::OpCodes::Stloc, local_return_val);
 
-        //catch exceptions thrown by createInstanceWithArgumentsAndContext and createInstanceWithContext
+        
         if (arExceptionTypes->Contains(type_uno_exception) == false)
         {
-            // catch (unoidl.com.sun.star.uno.RuntimeException) {throw;}
+            
             ilGen->BeginCatchBlock(get_type("unoidl.com.sun.star.uno.RuntimeException", true));
             ilGen->Emit(Emit::OpCodes::Pop);
             ilGen->Emit(Emit::OpCodes::Rethrow);
 
-            //catch and rethrow all other defined Exceptions
+            
             for (int i = 0; i < arExceptionTypes->Count; i++)
             {
                 ::System::Type ^ excType = safe_cast< ::System::Type^ >(
                     arExceptionTypes[i]);
                 if (excType->IsInstanceOfType(
                         get_type("unoidl.com.sun.star.uno.RuntimeException", true)))
-                {// we have a catch for RuntimeException already defined
+                {
                     continue;
                 }
 
-                //catch Exception and rethrow
+                
                 ilGen->BeginCatchBlock(excType);
                 ilGen->Emit(Emit::OpCodes::Pop);
                 ilGen->Emit(Emit::OpCodes::Rethrow);
             }
-            //catch (unoidl.com.sun.star.uno.Exception) {throw DeploymentException...}
+            
             ilGen->BeginCatchBlock(type_uno_exception);
 
-            //Define the local variabe that keeps the exception
+            
              Emit::LocalBuilder ^ local_exception = ilGen->DeclareLocal(
                  type_uno_exception);
 
-             //Store the exception
+             
              ilGen->Emit(Emit::OpCodes::Stloc, local_exception);
 
-            //prepare the construction of the exception
+            
              strbuilder = gcnew ::System::Text::StringBuilder(256);
              strbuilder->Append("The context (com.sun.star.uno.XComponentContext) failed to supply the service ");
              strbuilder->Append(to_cts_name(xServiceType->getName()));
@@ -1850,7 +1850,7 @@ Assembly ^ TypeEmitter::type_resolve(
 
              ilGen->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
 
-            //add to the string the Exception.Message
+            
             ilGen->Emit(Emit::OpCodes::Ldloc, local_exception);
             ilGen->Emit(Emit::OpCodes::Callvirt,
                         type_uno_exception->GetProperty("Message")->GetGetMethod());
@@ -1858,16 +1858,16 @@ Assembly ^ TypeEmitter::type_resolve(
                                                   System::String::typeid};
             ilGen->Emit(Emit::OpCodes::Call,
                         System::String::typeid->GetMethod("Concat", arConcatParams));
-            //load contex argument
+            
             ilGen->Emit(Emit::OpCodes::Ldarg_0);
             ilGen->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
-            ilGen->Emit(Emit::OpCodes::Throw);//Exception(typeDeploymentExc);
+            ilGen->Emit(Emit::OpCodes::Throw);
 
             ilGen->EndExceptionBlock();
         }
 
 
-        //Check if the service instance was create and throw a exception if not.
+        
         Emit::Label label_service_created = ilGen->DefineLabel();
         ilGen->Emit(Emit::OpCodes::Ldloc, local_return_val);
         ilGen->Emit(Emit::OpCodes::Brtrue_S, label_service_created);
@@ -1879,14 +1879,14 @@ Assembly ^ TypeEmitter::type_resolve(
         ilGen->Emit(Emit::OpCodes::Ldstr, strbuilder->ToString());
         ilGen->Emit(Emit::OpCodes::Ldarg_0);
         ilGen->Emit(Emit::OpCodes::Newobj, ctorDeploymentException);
-        ilGen->Emit(Emit::OpCodes::Throw);//Exception(typeDeploymentExc);
+        ilGen->Emit(Emit::OpCodes::Throw);
 
         ilGen->MarkLabel(label_service_created);
         ilGen->Emit(Emit::OpCodes::Ldloc, local_return_val);
         ilGen->Emit(Emit::OpCodes::Ret);
 
     }
-    // remove from incomplete types map
+    
     ::System::String ^ cts_name = type_builder->FullName;
     m_incomplete_services->Remove( cts_name );
     xServiceType->release();
@@ -1932,7 +1932,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
         ::uno::ExceptionAttribute::typeid->GetConstructor(arTypesCtor);
 
     sal_Int32 exc_length = seq_exceptionsTd.getLength();
-    if (exc_length != 0) // opt
+    if (exc_length != 0) 
     {
         array< ::System::Type^>^ exception_types =
               gcnew array< ::System::Type^> ( exc_length );
@@ -1956,7 +1956,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     reflection::XSingletonTypeDescription2 * xSingletonType = entry->m_xType;
     ::System::String^ sSingletonName = to_cts_name(xSingletonType->getName());
 
-    //Create the private default constructor
+    
     Emit::ConstructorBuilder^ ctor_builder =
         type_builder->DefineConstructor(
             static_cast<MethodAttributes>(MethodAttributes::Private |
@@ -1966,22 +1966,22 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
             CallingConventions::Standard, nullptr);
 
     Emit::ILGenerator^ ilGen = ctor_builder->GetILGenerator();
-    ilGen->Emit( Emit::OpCodes::Ldarg_0 ); // push this
+    ilGen->Emit( Emit::OpCodes::Ldarg_0 ); 
     ilGen->Emit(
             Emit::OpCodes::Call,
             type_builder->BaseType->GetConstructor(gcnew array< ::System::Type^>(0)));
     ilGen->Emit( Emit::OpCodes::Ret );
 
 
-    //obtain the interface which makes up this service, it is the return
-    //type of the constructor functions
+    
+    
     Reference<reflection::XInterfaceTypeDescription2> xIfaceType(
         xSingletonType->getInterface(), UNO_QUERY);
     if (xIfaceType.is () == sal_False)
         xIfaceType = resolveInterfaceTypedef(xSingletonType->getInterface());
     System::Type ^ retType = get_type(xIfaceType);
 
-    //define method
+    
     array< ::System::Type^>^ arTypeParameters = {get_type("unoidl.com.sun.star.uno.XComponentContext", true)};
     Emit::MethodBuilder^ method_builder = type_builder->DefineMethod(
         gcnew System::String("get"),
@@ -1991,23 +1991,23 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
         arTypeParameters);
 
 
-//         method_builder->SetCustomAttribute(get_service_ctor_method_attribute(ctorDes));
 
-    //The first parameter is the XComponentContext, which cannot be obtained
-    //from reflection.
-    //The context is not part of the idl description
+
+    
+    
+    
     method_builder->DefineParameter(1, ParameterAttributes::In, "the_context");
 
 
     ilGen = method_builder->GetILGenerator();
-    //Define locals ---------------------------------
-    // Any, returned by XComponentContext.getValueByName
+    
+    
     Emit::LocalBuilder^ local_any =
         ilGen->DeclareLocal(::uno::Any::typeid);
 
-    //Call XContext::getValueByName
+    
     ilGen->Emit(Emit::OpCodes::Ldarg_0);
-    // build the singleton name : /singleton/unoidl.com.sun.star.XXX
+    
     ::System::Text::StringBuilder^ sBuilder =
           gcnew ::System::Text::StringBuilder("/singletons/");
     sBuilder->Append(sSingletonName);
@@ -2018,13 +2018,13 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     ilGen->Emit(Emit::OpCodes::Callvirt, methodGetValueByName);
     ilGen->Emit(Emit::OpCodes::Stloc_0);
 
-    //Contains the returned Any a value?
+    
     ilGen->Emit(Emit::OpCodes::Ldloca_S, local_any);
     ::System::Reflection::MethodInfo ^ methodHasValue =
           ::uno::Any::typeid->GetMethod("hasValue");
     ilGen->Emit(Emit::OpCodes::Call, methodHasValue);
 
-    //If not, then throw an DeploymentException
+    
     Emit::Label label_singleton_exists = ilGen->DefineLabel();
     ilGen->Emit(Emit::OpCodes::Brtrue_S, label_singleton_exists);
     sBuilder = gcnew ::System::Text::StringBuilder(
@@ -2043,13 +2043,13 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     ilGen->Emit(Emit::OpCodes::Throw);
     ilGen->MarkLabel(label_singleton_exists);
 
-    //Cast the singleton contained in the Any to the expected interface and return it.
+    
     ilGen->Emit(Emit::OpCodes::Ldloca_S, local_any);
     ilGen->Emit(Emit::OpCodes::Call,  ::uno::Any::typeid->GetProperty("Value")->GetGetMethod());
     ilGen->Emit(Emit::OpCodes::Castclass, retType);
     ilGen->Emit(Emit::OpCodes::Ret);
 
-    // remove from incomplete types map
+    
     ::System::String ^ cts_name = type_builder->FullName;
     m_incomplete_singletons->Remove( cts_name );
     xSingletonType->release();
@@ -2062,7 +2062,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
 }
 
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_type(
     Reference< reflection::XTypeDescription > const & xType )
 {
@@ -2102,7 +2102,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
         return get_type( Reference< reflection::XEnumTypeDescription >(
                              xType, UNO_QUERY_THROW ) );
     case TypeClass_TYPEDEF:
-        // unwind typedefs
+        
         return get_type(
             Reference< reflection::XIndirectTypeDescription >(
                 xType, UNO_QUERY_THROW )->getReferencedType() );
@@ -2149,7 +2149,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
             Reference< reflection::XSingletonTypeDescription2 >(
                 xType, UNO_QUERY_THROW) );
     case TypeClass_MODULE:
-        // ignore these
+        
         return nullptr;
     default:
         throw RuntimeException(
@@ -2158,7 +2158,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     }
 }
 
-//______________________________________________________________________________
+
 ::System::Type ^ TypeEmitter::get_complete_struct( ::System::String ^ sName)
 {
     struct_entry ^ pStruct = safe_cast< struct_entry ^>(
@@ -2167,7 +2167,7 @@ Emit::CustomAttributeBuilder^ TypeEmitter::get_exception_attribute(
     {
         complete_struct_type(pStruct);
     }
-    //get_type will asked the module builder for the type or otherwise all known assemblies.
+    
     return get_type(sName, true);
 }
 TypeEmitter::~TypeEmitter()
@@ -2213,7 +2213,7 @@ TypeEmitter::~TypeEmitter()
             safe_cast< singleton_entry ^ >( enumerator->Value ) );
     }
 }
-//______________________________________________________________________________
+
 TypeEmitter::TypeEmitter(
     ::System::Reflection::Emit::ModuleBuilder ^ module_builder,
     array< ::System::Reflection::Assembly^>^ extra_assemblies )

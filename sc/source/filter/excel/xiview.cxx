@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xiview.hxx"
@@ -25,7 +25,7 @@
 #include "xihelper.hxx"
 #include "xistyle.hxx"
 
-// Document view settings =====================================================
+
 
 XclImpDocViewSettings::XclImpDocViewSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -64,15 +64,15 @@ void XclImpDocViewSettings::Finalize()
     aViewOpt.SetOption( VOPT_TABCONTROLS,   ::get_flag( maData.mnFlags, EXC_WIN1_TABBAR ) );
     GetDoc().SetViewOptions( aViewOpt );
 
-    // displayed sheet
+    
     GetExtDocOptions().GetDocSettings().mnDisplTab = GetDisplScTab();
 
-    // width of the tabbar with sheet names
+    
     if( maData.mnTabBarWidth <= 1000 )
         GetExtDocOptions().GetDocSettings().mfTabBarWidth = static_cast< double >( maData.mnTabBarWidth ) / 1000.0;
 }
 
-// Sheet view settings ========================================================
+
 
 namespace {
 
@@ -81,9 +81,9 @@ long lclGetScZoom( sal_uInt16 nXclZoom, sal_uInt16 nDefZoom )
     return static_cast< long >( nXclZoom ? nXclZoom : nDefZoom );
 }
 
-} // namespace
+} 
 
-// ----------------------------------------------------------------------------
+
 
 XclImpTabViewSettings::XclImpTabViewSettings( const XclImpRoot& rRoot ) :
     XclImpRoot( rRoot )
@@ -106,8 +106,8 @@ void XclImpTabViewSettings::ReadTabBgColor( XclImpStream& rStrm, XclImpPalette& 
     Color TabBgColor;
 
     rStrm.Ignore( 16 );
-    ColorIndex = rStrm.ReaduInt8() & EXC_SHEETEXT_TABCOLOR; //0x7F
-    if ( ColorIndex >= 8 && ColorIndex <= 63 ) //only accept valid index values
+    ColorIndex = rStrm.ReaduInt8() & EXC_SHEETEXT_TABCOLOR; 
+    if ( ColorIndex >= 8 && ColorIndex <= 63 ) 
     {
         TabBgColor = rPal.GetColor( ColorIndex );
         maData.maTabBgColor = TabBgColor;
@@ -132,7 +132,7 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
         sal_uInt16 nFlags;
         rStrm >> nFlags >> maData.maFirstXclPos;
 
-        // #i59590# real life: Excel ignores some view settings in chart sheets
+        
         maData.mbSelected       = ::get_flag( nFlags, EXC_WIN2_SELECTED );
         maData.mbDisplayed      = ::get_flag( nFlags, EXC_WIN2_DISPLAYED );
         maData.mbMirrored       = !bChart && ::get_flag( nFlags, EXC_WIN2_MIRRORED );
@@ -156,7 +156,7 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
             {
                 sal_uInt16 nGridColorIdx;
                 rStrm >> nGridColorIdx;
-                // zoom data not included in chart sheets
+                
                 if( rStrm.GetRecLeft() >= 6 )
                 {
                     rStrm.Ignore( 2 );
@@ -171,7 +171,7 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
         }
     }
 
-    // do not scroll chart sheets
+    
     if( bChart )
         maData.maFirstXclPos.Set( 0, 0 );
 }
@@ -196,11 +196,11 @@ void XclImpTabViewSettings::ReadPane( XclImpStream& rStrm )
 
 void XclImpTabViewSettings::ReadSelection( XclImpStream& rStrm )
 {
-    // pane of this selection
+    
     sal_uInt8 nPane;
     rStrm >> nPane;
     XclSelectionData& rSelData = maData.CreateSelectionData( nPane );
-    // cursor position and selection
+    
     rStrm >> rSelData.maXclCursor >> rSelData.mnCursorIdx;
     rSelData.maXclSelection.Read( rStrm, false );
 }
@@ -213,26 +213,26 @@ void XclImpTabViewSettings::Finalize()
     ScExtTabSettings& rTabSett = GetExtDocOptions().GetOrCreateTabSettings( nScTab );
     bool bDisplayed = GetDocViewSettings().GetDisplScTab() == nScTab;
 
-    // *** sheet options: cursor, selection, splits, zoom ***
+    
 
-    // sheet flags
+    
     if( maData.mbMirrored )
-        // do not call this function with sal_False, it would mirror away all drawing objects
+        
         rDoc.SetLayoutRTL( nScTab, true );
     rTabSett.mbSelected = maData.mbSelected || bDisplayed;
 
-    // first visible cell in top-left pane and in additional pane(s)
+    
     rTabSett.maFirstVis = rAddrConv.CreateValidAddress( maData.maFirstXclPos, nScTab, false );
     rTabSett.maSecondVis = rAddrConv.CreateValidAddress( maData.maSecondXclPos, nScTab, false );
 
-    // cursor position and selection
+    
     if( const XclSelectionData* pSelData = maData.GetSelectionData( maData.mnActivePane ) )
     {
         rTabSett.maCursor = rAddrConv.CreateValidAddress( pSelData->maXclCursor, nScTab, false );
         rAddrConv.ConvertRangeList( rTabSett.maSelection, pSelData->maXclSelection, nScTab, false );
     }
 
-    // active pane
+    
     switch( maData.mnActivePane )
     {
         case EXC_PANE_TOPLEFT:      rTabSett.meActivePane = SCEXT_PANE_TOPLEFT;     break;
@@ -241,7 +241,7 @@ void XclImpTabViewSettings::Finalize()
         case EXC_PANE_BOTTOMRIGHT:  rTabSett.meActivePane = SCEXT_PANE_BOTTOMRIGHT; break;
     }
 
-    // freeze/split position
+    
     rTabSett.mbFrozenPanes = maData.mbFrozenPanes;
     if( maData.mbFrozenPanes )
     {
@@ -254,32 +254,32 @@ void XclImpTabViewSettings::Finalize()
     }
     else
     {
-        // split window: position is in twips
+        
         rTabSett.maSplitPos.X() = static_cast< long >( maData.mnSplitX );
         rTabSett.maSplitPos.Y() = static_cast< long >( maData.mnSplitY );
     }
 
-    // grid color
+    
     if( maData.mbDefGridColor )
         rTabSett.maGridColor.SetColor( COL_AUTO );
     else
         rTabSett.maGridColor = maData.maGridColor;
 
-    // show grid option
+    
     rTabSett.mbShowGrid      = maData.mbShowGrid;
 
-    // view mode and zoom
+    
     if( maData.mnCurrentZoom != 0 )
         (maData.mbPageMode ? maData.mnPageZoom : maData.mnNormalZoom) = maData.mnCurrentZoom;
     rTabSett.mbPageMode      = maData.mbPageMode;
     rTabSett.mnNormalZoom    = lclGetScZoom( maData.mnNormalZoom, EXC_WIN2_NORMALZOOM_DEF );
     rTabSett.mnPageZoom      = lclGetScZoom( maData.mnPageZoom, EXC_WIN2_PAGEZOOM_DEF );
 
-    // *** additional handling for displayed sheet ***
+    
 
     if( bDisplayed )
     {
-        // set Excel sheet settings globally at Calc document, take settings from displayed sheet
+        
         ScViewOptions aViewOpt( rDoc.GetViewOptions() );
         aViewOpt.SetOption( VOPT_FORMULAS, maData.mbShowFormulas );
         aViewOpt.SetOption( VOPT_HEADER,   maData.mbShowHeadings );
@@ -288,11 +288,11 @@ void XclImpTabViewSettings::Finalize()
         rDoc.SetViewOptions( aViewOpt );
     }
 
-    // *** set tab bg color
+    
     if ( !maData.IsDefaultTabBgColor() )
         rDoc.SetTabBgColor(nScTab, maData.maTabBgColor);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

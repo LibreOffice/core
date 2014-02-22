@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "BubbleDataInterpreter.hxx"
@@ -47,7 +47,7 @@ BubbleDataInterpreter::~BubbleDataInterpreter()
 {
 }
 
-// ____ XDataInterpreter ____
+
 chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
     const Reference< chart2::data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
@@ -110,7 +110,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
                 aSizeValuesVector.push_back( aData[nDataIdx] );
                 if( aData[nDataIdx].is())
                     SetRole( aData[nDataIdx]->getValues(), "values-size");
-                bNextIsYValues = (nDataSeqCount-(nDataIdx+1)) >= 2;//two or more left
+                bNextIsYValues = (nDataSeqCount-(nDataIdx+1)) >= 2;
             }
         }
         catch( const uno::Exception & ex )
@@ -119,7 +119,7 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
         }
     }
 
-    // create DataSeries
+    
     sal_Int32 nSeriesIndex = 0;
     vector< Reference< XDataSeries > > aSeriesVec;
     aSeriesVec.reserve( aSizeValuesVector.size());
@@ -293,6 +293,6 @@ sal_Bool SAL_CALL BubbleDataInterpreter::isDataCompatible(
     return sal_True;
 }
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

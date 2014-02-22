@@ -171,7 +171,7 @@ private:
     virtual uno::Reference< awt::XWindow > SAL_CALL getWindow() throw ( uno::RuntimeException );
 };
 
-//--------------------------------------------------------------------
+
 SdrLightEmbeddedClient_Impl::SdrLightEmbeddedClient_Impl( SdrOle2Obj* pObj )
 : mpObj( pObj )
 {
@@ -184,12 +184,12 @@ Rectangle SdrLightEmbeddedClient_Impl::impl_getScaledRect_nothrow() const
                                 Fraction( aLogicRect.GetHeight() ) * m_aScaleHeight ) );
     return aLogicRect;
 }
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::changingState( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
 {
 }
 
-//--------------------------------------------------------------------
+
 void SdrLightEmbeddedClient_Impl::Release()
 {
     {
@@ -200,7 +200,7 @@ void SdrLightEmbeddedClient_Impl::Release()
     release();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -216,7 +216,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::stateChanged( const ::com::sun::star:
     }
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const ::com::sun::star::lang::EventObject& /*aEvent*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -224,7 +224,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::disposing( const ::com::sun::star::la
     GetSdrGlobalData().GetOLEObjCache().RemoveObj(mpObj);
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObject& aEvent ) throw( uno::RuntimeException )
 {
     // TODO/LATER: when writer uses this implementation the code could be shared with SfxInPlaceClient_Impl
@@ -290,7 +290,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::notifyEvent( const document::EventObj
     }
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
     throw ( embed::ObjectSaveVetoException,
             uno::Exception,
@@ -317,7 +317,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::saveObject()
         xModifiable->setModified( sal_True );
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::visibilityChanged( sal_Bool /*bVisible*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -338,7 +338,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::visibilityChanged( sal_Bool /*bVisibl
     }
 }
 
-//--------------------------------------------------------------------
+
 uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComponent()
     throw ( uno::RuntimeException )
 {
@@ -351,7 +351,7 @@ uno::Reference< util::XCloseable > SAL_CALL SdrLightEmbeddedClient_Impl::getComp
     return xResult;
 }
 // XInplaceClient
-//--------------------------------------------------------------------
+
 sal_Bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
     throw ( uno::RuntimeException )
 {
@@ -368,14 +368,14 @@ sal_Bool SAL_CALL SdrLightEmbeddedClient_Impl::canInplaceActivate()
     return bRet;
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::activatingInplace()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -420,14 +420,14 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::activatingUI()
     } // for(sal_Int32 i = nCount-1 ; i >= 0;--i)
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedInplace()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -442,7 +442,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::deactivatedUI()
     }
 }
 
-//--------------------------------------------------------------------
+
 uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbeddedClient_Impl::getLayoutManager()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -462,7 +462,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbed
     return xMan;
 }
 
-//--------------------------------------------------------------------
+
 uno::Reference< frame::XDispatchProvider > SAL_CALL SdrLightEmbeddedClient_Impl::getInplaceDispatchProvider()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -471,7 +471,7 @@ uno::Reference< frame::XDispatchProvider > SAL_CALL SdrLightEmbeddedClient_Impl:
     return uno::Reference < frame::XDispatchProvider >( lcl_getFrame_throw(mpObj), uno::UNO_QUERY_THROW );
 }
 
-//--------------------------------------------------------------------
+
 awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -490,7 +490,7 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getPlacement()
     return AWTRectangle( aLogicRect );
 }
 
-//--------------------------------------------------------------------
+
 awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getClipRectangle()
     throw ( embed::WrongStateException,
             uno::RuntimeException )
@@ -498,21 +498,21 @@ awt::Rectangle SAL_CALL SdrLightEmbeddedClient_Impl::getClipRectangle()
     return getPlacement();
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::translateAccelerators( const uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::scrollObject( const awt::Size& /*aOffset*/ )
     throw ( embed::WrongStateException,
             uno::RuntimeException )
 {
 }
 
-//--------------------------------------------------------------------
+
 void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangle& aPosRect )
     throw ( embed::WrongStateException,
             uno::Exception,
@@ -571,7 +571,7 @@ void SAL_CALL SdrLightEmbeddedClient_Impl::changedPlacement( const awt::Rectangl
     }
 }
 // XWindowSupplier
-//--------------------------------------------------------------------
+
 uno::Reference< awt::XWindow > SAL_CALL SdrLightEmbeddedClient_Impl::getWindow()
     throw ( uno::RuntimeException )
 {

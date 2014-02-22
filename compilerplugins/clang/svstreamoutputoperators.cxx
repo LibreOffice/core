@@ -165,15 +165,15 @@ bool SvStreamOutputOperators::VisitCallExpr( const CallExpr* callExpr )
         }
     }
 
-    // CallExpr overrides the children() method from Stmt, but not the const variant of it, so we need to cast const away.
+    
     StmtRange range = const_cast<CallExpr*>(callExpr)->children();
-    const Stmt* child1 = *range; // ImplicitCastExpr
+    const Stmt* child1 = *range; 
     ++range;
-    const Stmt* child2 = *range; // ImplicitCastExpr
+    const Stmt* child2 = *range; 
 
     if( dyn_cast_or_null< UnaryOperator >( child2 ) != NULL )
     {
-        // remove the "*" before the stream variable
+        
         if( !replaceText( callExpr->getLocStart(), 1, "" ) )
             return true;
         if( !replaceText( child1->getLocStart().getLocWithOffset(-1), 4, "->" ) )
@@ -190,15 +190,15 @@ bool SvStreamOutputOperators::VisitCallExpr( const CallExpr* callExpr )
     if( !insertTextAfter( after( callExpr->getLocEnd() ), " )" ) )
         return true;
 
-//TODO for some reason this is currently removing too much text
-    // if there was a cast e.g. "r << (sal_Int32) 1", then remove the cast
-//    const CStyleCastExpr* cast = dyn_cast_or_null< CStyleCastExpr >( callExpr->getArg(1) );
-//    if (cast != NULL)
-//    {
-//        replaceText( SourceRange( cast->getLParenLoc(), cast->getRParenLoc() ), "" );
-//    }
 
-    // if there was already parentheses around the expression, remove them
+    
+
+
+
+
+
+
+    
     const ParenExpr* paren = dyn_cast_or_null< ParenExpr >( callExpr->getArg(1) );
     if (paren != NULL)
     {
@@ -208,7 +208,7 @@ bool SvStreamOutputOperators::VisitCallExpr( const CallExpr* callExpr )
             return true;
     }
 
-//    report( DiagnosticsEngine::Note, "found", callExpr->getLocStart());
+
     return true;
 }
 
@@ -220,6 +220,6 @@ SourceLocation SvStreamOutputOperators::after( const SourceLocation& loc )
 
 static Plugin::Registration< SvStreamOutputOperators > X( "svstreamoutputoperators" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

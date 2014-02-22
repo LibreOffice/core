@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef SC_DLLIMPLEMENTATION
@@ -74,7 +74,7 @@
 #include "condformatmgr.hxx"
 #include "xmlsourcedlg.hxx"
 
-// ause
+
 #include "editutil.hxx"
 
 IMPL_ABSTDLG_BASE(ScVclAbstractDialog_Impl);
@@ -86,7 +86,7 @@ IMPL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDeleteCellDlg_Impl);
-//for dataform
+
 IMPL_ABSTDLG_BASE(AbstractScDataFormDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScDeleteContentsDlg_Impl);
 IMPL_ABSTDLG_BASE(AbstractScFillSeriesDlg_Impl);
@@ -140,7 +140,7 @@ void ScAbstractTabDialog_Impl::SetInputSet( const SfxItemSet* pInSet )
      pDlg->SetInputSet( pInSet );
 }
 
-//From class Window.
+
 void ScAbstractTabDialog_Impl::SetText( const OUString& rStr )
 {
     pDlg->SetText( rStr );
@@ -602,7 +602,7 @@ bool AbstractScTextImportOptionsDlg_Impl::IsDateConversionSet() const
     return pDlg->isDateConversionSet();
 }
 
-// =========================Factories  for createdialog ===================
+
 AbstractScImportAsciiDlg * ScAbstractDialogFactory_Impl::CreateScImportAsciiDlg ( Window* pParent, OUString aDatName,
                                                     SvStream* pInStream, ScImportAsciiCall eCall )
 {
@@ -1050,17 +1050,17 @@ SfxAbstractTabDialog * ScAbstractDialogFactory_Impl::CreateScSortDlg(Window* pPa
 #undef SfxTabDialog
 #undef ScAbstractTabDialog_Impl
 
-//------------------ Factories for TabPages--------------------
+
 CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nId )
 {
     switch ( nId )
     {
         case RID_SCPAGE_OPREDLINE :
             return ScRedlineOptionsTabPage::Create;
-            //break;
+            
         case    RID_SCPAGE_CALC :
             return ScTpCalcOptions::Create;
-            //break;
+            
         case RID_SCPAGE_FORMULA:
             return ScTpFormulaOptions::Create;
         case RID_SCPAGE_COMPATIBILITY:
@@ -1069,19 +1069,19 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( sal_uInt16 nI
             return ScTpDefaultsOptions::Create;
         case    RID_SCPAGE_PRINT :
             return ScTpPrintOptions::Create;
-            //break;
+            
         case    RID_SCPAGE_STAT :
             return ScDocStatPage::Create;
-            //break;
+            
         case RID_SCPAGE_USERLISTS :
              return ScTpUserLists::Create;
-            //break;
+            
         case RID_SCPAGE_CONTENT :
             return ScTpContentOptions::Create;
-            //break;
+            
         case RID_SCPAGE_LAYOUT :
             return ScTpLayoutOptions::Create;
-            //break;
+            
 
         default:
             break;
@@ -1096,7 +1096,7 @@ GetTabPageRanges ScAbstractDialogFactory_Impl::GetTabPageRangesFunc( sal_uInt16 
     {
     case TP_VALIDATION_VALUES :
             return ScTPValidationValue::GetRanges;
-            //break;
+            
         default:
             break;
     }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -29,15 +29,15 @@
 
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace sfx2 {
 
 #define MAX_SAVE_COUNT      (sal_uInt16)10
 
-// ============================================================================
-// SearchDialog
-// ============================================================================
+
+
+
 
 SearchDialog::SearchDialog(Window* pWindow, const OUString& rConfigName)
     : ModelessDialog(pWindow, "SearchDialog", "sfx/ui/searchdialog.ui")
@@ -52,11 +52,11 @@ SearchDialog::SearchDialog(Window* pWindow, const OUString& rConfigName)
     get(m_pBackwardsBox, "backwards");
     get(m_pFindBtn, "search");
 
-    // set handler
+    
     m_pFindBtn->SetClickHdl( LINK( this, SearchDialog, FindHdl ) );
-    // load config: old search strings and the status of the check boxes
+    
     LoadConfig();
-    // the search edit should have the focus
+    
     m_pSearchEdit->GrabFocus();
 }
 
@@ -165,10 +165,10 @@ void SearchDialog::Move()
         m_sWinState = GetWindowState( WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE );
 }
 
-// ============================================================================
 
-} // namespace sfx2
 
-// ============================================================================
+} 
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

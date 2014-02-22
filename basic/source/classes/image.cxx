@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -80,7 +80,7 @@ bool SbiGood( SvStream& r )
     return !r.IsEof() && r.GetError() == SVSTREAM_OK;
 }
 
-// Open Record
+
 sal_uIntPtr SbiOpenRecord( SvStream& r, sal_uInt16 nSignature, sal_uInt16 nElem )
 {
     sal_uIntPtr nPos = r.Tell();
@@ -88,7 +88,7 @@ sal_uIntPtr SbiOpenRecord( SvStream& r, sal_uInt16 nSignature, sal_uInt16 nElem 
     return nPos;
 }
 
-// Close Record
+
 void SbiCloseRecord( SvStream& r, sal_uIntPtr nOff )
 {
     sal_uIntPtr nPos = r.Tell();
@@ -110,10 +110,10 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
     sal_uInt32 nLen, nOff;
 
     Clear();
-    // Read Master-Record
+    
     r.ReadUInt16( nSign ).ReadUInt32( nLen ).ReadUInt16( nCount );
     sal_uIntPtr nLast = r.Tell() + nLen;
-    sal_uInt32 nCharSet;               // System charset
+    sal_uInt32 nCharSet;               
     sal_uInt32 lDimBase;
     sal_uInt16 nReserved1;
     sal_uInt32 nReserved2;
@@ -167,7 +167,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 r.Read( pCode, nCodeSize );
                 if ( bLegacy )
                 {
-                    ReleaseLegacyBuffer(); // release any previously held buffer
+                    ReleaseLegacyBuffer(); 
                     nLegacyCodeSize = (sal_uInt16) nCodeSize;
                     pLegacyPCode = pCode;
 
@@ -175,14 +175,14 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                     aLegacyToNew.convert();
                     pCode = (char*)aLegacyToNew.GetBuffer();
                     nCodeSize = aLegacyToNew.GetSize();
-                    // we don't release the legacy buffer
-                    // right now, thats because the module
-                    // needs it to fix up the method
-                    // nStart members. When that is done
-                    // the module can release the buffer
-                    // or it can wait until this routine
-                    // is called again or when this class                       // destructs all of which will trigger
-                    // release of the buffer.
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                 }
                 break;
             case B_PUBLICS:
@@ -242,8 +242,8 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
 {
     bool bLegacy = ( nVer < B_EXT_IMG_VERSION );
 
-    // detect if old code exceeds legacy limits
-    // if so, then disallow save
+    
+    
     if ( bLegacy && ExceedsLegacyLimits() )
     {
         SbiImage aEmptyImg;
@@ -251,7 +251,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         aEmptyImg.Save( r, B_LEGACYVERSION );
         return true;
     }
-    // First of all the header
+    
     sal_uIntPtr nStart = SbiOpenRecord( r, B_MODULE, 1 );
     sal_uIntPtr nPos;
 
@@ -271,34 +271,34 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
       .WriteInt32( (sal_Int32) 0 )
       .WriteInt32( (sal_Int32) 0 );
 
-    // Name?
+    
     if( !aName.isEmpty() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_NAME, 1 );
         r.WriteUniOrByteString( aName, eCharSet );
         SbiCloseRecord( r, nPos );
     }
-    // Comment?
+    
     if( !aComment.isEmpty() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_COMMENT, 1 );
         r.WriteUniOrByteString( aComment, eCharSet );
         SbiCloseRecord( r, nPos );
     }
-    // Source?
+    
     if( !aOUSource.isEmpty() && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_SOURCE, 1 );
         r.WriteUniOrByteString( aOUSource, eCharSet );
         SbiCloseRecord( r, nPos );
     }
-    // Binary data?
+    
     if( pCode && SbiGood( r ) )
     {
         nPos = SbiOpenRecord( r, B_PCODE, 1 );
         if ( bLegacy )
         {
-            ReleaseLegacyBuffer(); // release any previously held buffer
+            ReleaseLegacyBuffer(); 
             PCodeBuffConvertor< sal_uInt32, sal_uInt16 > aNewToLegacy( (sal_uInt8*)pCode, nCodeSize );
             aNewToLegacy.convert();
             pLegacyPCode = (char*)aNewToLegacy.GetBuffer();
@@ -311,19 +311,19 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         }
         SbiCloseRecord( r, nPos );
     }
-    // String-Pool?
+    
     if( nStrings )
     {
         nPos = SbiOpenRecord( r, B_STRINGPOOL, nStrings );
-        // For every String:
-        //  sal_uInt32 Offset of the Strings in the Stringblock
+        
+        
         short i;
 
         for( i = 0; i < nStrings && SbiGood( r ); i++ )
         {
             r.WriteUInt32( (sal_uInt32) pStringOff[ i ] );
         }
-        // Then the String-Block
+        
         char* pByteStrings = new char[ nStringSize ];
         for( i = 0; i < nStrings; i++ )
         {
@@ -337,7 +337,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         delete[] pByteStrings;
         SbiCloseRecord( r, nPos );
     }
-    // Set overall length
+    
     SbiCloseRecord( r, nStart );
     if( !SbiGood( r ) )
     {
@@ -372,8 +372,8 @@ void SbiImage::MakeStrings( short nSize )
     }
 }
 
-// Add a string to StringPool. The String buffer is dynamically
-// growing in 1K-Steps
+
+
 void SbiImage::AddString( const OUString& r )
 {
     if( nStringIdx >= nStrings )
@@ -386,12 +386,12 @@ void SbiImage::AddString( const OUString& r )
         sal_uInt32 needed = nStringOff + len;
         if( needed > 0xFFFFFF00L )
         {
-            bError = true;  // out of mem!
+            bError = true;  
         }
         else if( needed > nStringSize )
         {
             sal_uInt32 nNewLen = needed + 1024;
-            nNewLen &= 0xFFFFFC00;  // trim to 1K border
+            nNewLen &= 0xFFFFFC00;  
             sal_Unicode* p = NULL;
             if( (p = new sal_Unicode[ nNewLen ]) != NULL )
             {
@@ -410,7 +410,7 @@ void SbiImage::AddString( const OUString& r )
             pStringOff[ nStringIdx++ ] = nStringOff;
             memcpy( pStrings + nStringOff, r.getStr(), len * sizeof( sal_Unicode ) );
             nStringOff = nStringOff + len;
-            // Last String? The update the size of the buffer
+            
             if( nStringIdx >= nStrings )
             {
                 nStringSize = nStringOff;
@@ -419,17 +419,17 @@ void SbiImage::AddString( const OUString& r )
     }
 }
 
-// Add code block
-// The block was fetched by the compiler from class SbBuffer and
-// is already created with new. Additionally it contains all Integers
-// in Big Endian format, so can be directly read/written.
+
+
+
+
 void SbiImage::AddCode( char* p, sal_uInt32 s )
 {
     pCode = p;
     nCodeSize = s;
 }
 
-// Add user type
+
 void SbiImage::AddType(SbxObject* pObject)
 {
     if( !rTypes.Is() )
@@ -440,7 +440,7 @@ void SbiImage::AddType(SbxObject* pObject)
     rTypes->Insert (pCopyObject,rTypes->Count());
 }
 
-void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
+void SbiImage::AddEnum(SbxObject* pObject) 
 {
     if( !rEnums.Is() )
     {
@@ -456,7 +456,7 @@ void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
 *
 **************************************************************************/
 
-// Note: IDs start with 1
+
 OUString SbiImage::GetString( short nId ) const
 {
     if( nId && nId <= nStrings )
@@ -464,14 +464,14 @@ OUString SbiImage::GetString( short nId ) const
         sal_uInt32 nOff = pStringOff[ nId - 1 ];
         sal_Unicode* pStr = pStrings + nOff;
 
-        // #i42467: Special treatment for vbNullChar
+        
         if( *pStr == 0 )
         {
             sal_uInt32 nNextOff = (nId < nStrings) ? pStringOff[ nId ] : nStringOff;
             sal_uInt32 nLen = nNextOff - nOff - 1;
             if( nLen == 1 )
             {
-                // Force length 1 and make char 0 afterwards
+                
                 OUString aNullCharStr( (sal_Unicode)0);
                 return aNullCharStr;
             }

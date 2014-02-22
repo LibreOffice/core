@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -31,16 +31,16 @@
 using namespace http_dav_ucp;
 using namespace com::sun::star;
 
-//=========================================================================
-//=========================================================================
-//
-// DAVAuthListener_Impl Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
-// virtual
+
+//
+
+//
+
+
+
+
+
 int DAVAuthListener_Impl::authenticate(
     const OUString & inRealm,
     const OUString & inHostName,
@@ -56,10 +56,10 @@ int DAVAuthListener_Impl::authenticate(
 
         if ( xIH.is() )
         {
-            // Providing previously retrieved credentials will cause the password
-            // container to reject these. Thus, the credential input dialog will be shown again.
-            // #102871# - Supply username and password from previous try.
-            // Password container service depends on this!
+            
+            
+            
+            
             if ( inoutUserName.isEmpty() && bUsePreviousCredentials )
                 inoutUserName = m_aPrevUsername;
 
@@ -79,7 +79,7 @@ int DAVAuthListener_Impl::authenticate(
 
             if ( xSelection.is() )
             {
-                // Handler handled the request.
+                
                 uno::Reference< task::XInteractionAbort > xAbort(
                     xSelection.get(), uno::UNO_QUERY );
                 if ( !xAbort.is() )
@@ -96,8 +96,8 @@ int DAVAuthListener_Impl::authenticate(
 
                     if ( bUseSystemCredentials )
                     {
-                        // This is the (strange) way to tell neon to use
-                        // system credentials.
+                        
+                        
                         inoutUserName = OUString();
                         outPassWord   = OUString();
                     }
@@ -107,29 +107,29 @@ int DAVAuthListener_Impl::authenticate(
                         outPassWord   = xSupp->getPassword();
                     }
 
-                    // #102871# - Remember username and password.
+                    
                     m_aPrevUsername = inoutUserName;
                     m_aPrevPassword = outPassWord;
 
-                    // go on.
+                    
                     return 0;
                 }
             }
         }
     }
-    // Abort.
+    
     return -1;
 }
 
-//=========================================================================
-//=========================================================================
-//
-// DAVResourceAccess Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
+
+//
+
+//
+
+
+
+
 DAVResourceAccess::DAVResourceAccess(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr,
     rtl::Reference< DAVSessionFactory > const & rSessionFactory,
@@ -140,7 +140,7 @@ DAVResourceAccess::DAVResourceAccess(
 {
 }
 
-//=========================================================================
+
 DAVResourceAccess::DAVResourceAccess( const DAVResourceAccess & rOther )
 : m_aURL( rOther.m_aURL ),
   m_aPath( rOther.m_aPath ),
@@ -151,7 +151,7 @@ DAVResourceAccess::DAVResourceAccess( const DAVResourceAccess & rOther )
 {
 }
 
-//=========================================================================
+
 DAVResourceAccess & DAVResourceAccess::operator=(
     const DAVResourceAccess & rOther )
 {
@@ -165,7 +165,7 @@ DAVResourceAccess & DAVResourceAccess::operator=(
     return *this;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::PROPFIND(
     const Depth nDepth,
     const std::vector< OUString > & rPropertyNames,
@@ -209,7 +209,7 @@ void DAVResourceAccess::PROPFIND(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::PROPFIND(
     const Depth nDepth,
     std::vector< DAVResourceInfo > & rResInfo,
@@ -250,7 +250,7 @@ void DAVResourceAccess::PROPFIND(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::PROPPATCH(
     const std::vector< ProppatchValue >& rValues,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
@@ -289,7 +289,7 @@ void DAVResourceAccess::PROPPATCH(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::HEAD(
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
@@ -330,7 +330,7 @@ void DAVResourceAccess::HEAD(
     while ( bRetry );
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -371,7 +371,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     return xStream;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::GET(
     uno::Reference< io::XOutputStream > & rStream,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -410,7 +410,7 @@ void DAVResourceAccess::GET(
     while ( bRetry );
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
@@ -455,7 +455,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     return xStream;
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     DAVRequestHeaders &rRequestHeaders,
     const std::vector< OUString > & rHeaderNames,
@@ -500,7 +500,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     return xStream;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::GET(
     uno::Reference< io::XOutputStream > & rStream,
     const std::vector< OUString > & rHeaderNames,
@@ -543,17 +543,17 @@ void DAVResourceAccess::GET(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::abort()
   throw( DAVException )
 {
-    // 17.11.09 (tkr): abort currently disabled caused by issue i106766
-    // initialize();
-    // m_xSession->abort();
+    
+    
+    
     OSL_TRACE( "Not implemented. -> #i106766#" );
 }
 
-//=========================================================================
+
 namespace {
 
     void resetInputStream( const uno::Reference< io::XInputStream > & rStream )
@@ -579,9 +579,9 @@ namespace {
         throw DAVException( DAVException::DAV_INVALID_ARG );
     }
 
-} // namespace
+} 
 
-//=========================================================================
+
 void DAVResourceAccess::PUT(
     const uno::Reference< io::XInputStream > & rStream,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -589,7 +589,7 @@ void DAVResourceAccess::PUT(
 {
     initialize();
 
-    // Make stream seekable, if it not. Needed, if request must be retried.
+    
     uno::Reference< io::XInputStream > xSeekableStream
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
             rStream, m_xSMgr );
@@ -628,7 +628,7 @@ void DAVResourceAccess::PUT(
     while ( bRetry );
 }
 
-//=========================================================================
+
 uno::Reference< io::XInputStream > DAVResourceAccess::POST(
     const OUString & rContentType,
     const OUString & rReferer,
@@ -638,7 +638,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
 {
     initialize();
 
-    // Make stream seekable, if it not. Needed, if request must be retried.
+    
     uno::Reference< io::XInputStream > xSeekableStream
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
             rInputStream, m_xSMgr );
@@ -681,7 +681,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
 
             if ( e.getError() == DAVException::DAV_HTTP_REDIRECT )
             {
-                // #i74980# - Upon POST redirect, do a GET.
+                
                 return GET( xEnv );
             }
         }
@@ -691,7 +691,7 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
     return xStream;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::POST(
     const OUString & rContentType,
     const OUString & rReferer,
@@ -702,7 +702,7 @@ void DAVResourceAccess::POST(
 {
     initialize();
 
-    // Make stream seekable, if it not. Needed, if request must be retried.
+    
     uno::Reference< io::XInputStream > xSeekableStream
         = comphelper::OSeekableInputWrapper::CheckSeekableCanWrap(
             rInputStream, m_xSMgr );
@@ -744,7 +744,7 @@ void DAVResourceAccess::POST(
 
             if ( e.getError() == DAVException::DAV_HTTP_REDIRECT )
             {
-                // #i74980# - Upon POST redirect, do a GET.
+                
                 GET( rOutputStream, xEnv );
                 return;
             }
@@ -753,7 +753,7 @@ void DAVResourceAccess::POST(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::MKCOL(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -790,7 +790,7 @@ void DAVResourceAccess::MKCOL(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::COPY(
     const OUString & rSourcePath,
     const OUString & rDestinationURI,
@@ -832,7 +832,7 @@ void DAVResourceAccess::COPY(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::MOVE(
     const OUString & rSourcePath,
     const OUString & rDestinationURI,
@@ -874,7 +874,7 @@ void DAVResourceAccess::MOVE(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::DESTROY(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw( DAVException )
@@ -911,8 +911,8 @@ void DAVResourceAccess::DESTROY(
     while ( bRetry );
 }
 
-//=========================================================================
-// set new lock.
+
+
 void DAVResourceAccess::LOCK(
     ucb::Lock & inLock,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -951,9 +951,9 @@ void DAVResourceAccess::LOCK(
     while ( bRetry );
 }
 
-#if 0 // currently not used, but please don't remove code
-//=========================================================================
-// refresh existing lock.
+#if 0 
+
+
 sal_Int64 DAVResourceAccess::LOCK(
     sal_Int64 nTimeout,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
@@ -997,7 +997,7 @@ sal_Int64 DAVResourceAccess::LOCK(
 }
 #endif
 
-//=========================================================================
+
 void DAVResourceAccess::UNLOCK(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
   throw ( DAVException )
@@ -1034,17 +1034,17 @@ void DAVResourceAccess::UNLOCK(
     while ( bRetry );
 }
 
-//=========================================================================
+
 void DAVResourceAccess::setURL( const OUString & rNewURL )
     throw( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_aURL  = rNewURL;
-    m_aPath = OUString(); // Next initialize() will create new session.
+    m_aPath = OUString(); 
 }
 
-//=========================================================================
-// init dav session and path
+
+
 void DAVResourceAccess::initialize()
     throw ( DAVException )
 {
@@ -1066,7 +1066,7 @@ void DAVResourceAccess::initialize()
         {
             m_xSession.clear();
 
-            // create new webdav session
+            
             m_xSession
                 = m_xSessionFactory->createDAVSession( m_aURL, m_xSMgr );
 
@@ -1074,32 +1074,32 @@ void DAVResourceAccess::initialize()
                 return;
         }
 
-        // Own URI is needed for redirect cycle detection.
+        
         m_aRedirectURIs.push_back( aURI );
 
-        // Success.
+        
         m_aPath = aPath;
 
-        // Not only the path has to be encoded
+        
         m_aURL = aURI.GetURI();
     }
 }
 
-//=========================================================================
+
 const OUString & DAVResourceAccess::getRequestURI() const
 {
     OSL_ENSURE( m_xSession.is(),
                 "DAVResourceAccess::getRequestURI - Not initialized!" );
 
-    // In case a proxy is used we have to use the absolute URI for a request.
+    
     if ( m_xSession->UsesProxy() )
         return m_aURL;
 
     return m_aPath;
 }
 
-//=========================================================================
-// static
+
+
 void DAVResourceAccess::getUserRequestHeaders(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv,
     const rtl::OUString & rURI,
@@ -1126,7 +1126,7 @@ void DAVResourceAccess::getUserRequestHeaders(
     }
 }
 
-//=========================================================================
+
 sal_Bool DAVResourceAccess::detectRedirectCycle(
                                 const OUString& rRedirectURL )
     throw ( DAVException )
@@ -1149,7 +1149,7 @@ sal_Bool DAVResourceAccess::detectRedirectCycle(
     return sal_False;
 }
 
-//=========================================================================
+
 void DAVResourceAccess::resetUri()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -1164,7 +1164,7 @@ void DAVResourceAccess::resetUri()
     }
 }
 
-//=========================================================================
+
 sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
     throw ( DAVException )
 {
@@ -1173,16 +1173,16 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
     case DAVException::DAV_HTTP_REDIRECT:
         if ( !detectRedirectCycle( e.getData() ) )
         {
-            // set new URL and path.
+            
             setURL( e.getData() );
             initialize();
             return sal_True;
         }
         return sal_False;
-    // --> tkr #67048# copy & paste images doesn't display.
-    // if we have a bad connection try again. Up to three times.
+    
+    
     case DAVException::DAV_HTTP_ERROR:
-        // retry up to three times, if not a client-side error.
+        
         if ( ( e.getStatus() < 400 || e.getStatus() >= 500 ||
                e.getStatus() == 413 ) &&
              errorCount < 3 )
@@ -1190,13 +1190,13 @@ sal_Bool DAVResourceAccess::handleException( DAVException & e, int errorCount )
             return sal_True;
         }
         return sal_False;
-    // <--
-    // --> tkr: if connection has said retry then retry!
+    
+    
     case DAVException::DAV_HTTP_RETRY:
         return sal_True;
-    // <--
+    
     default:
-        return sal_False; // Abort
+        return sal_False; 
     }
 }
 

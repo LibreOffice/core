@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotools/componentresmodule.hxx>
@@ -23,14 +23,14 @@
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 
-//........................................................................
+
 namespace utl
 {
-//........................................................................
 
-    //====================================================================
-    //= OComponentResModuleImpl
-    //====================================================================
+
+    
+    
+    
     /** PIMPL-class for OComponentResourceModule
 
         not threadsafe!
@@ -64,24 +64,24 @@ namespace utl
         ResMgr* getResManager();
 
     private:
-        OComponentResModuleImpl();                                              // never implemented
-        OComponentResModuleImpl( const OComponentResModuleImpl& );              // never implemented
-        OComponentResModuleImpl& operator=( const OComponentResModuleImpl& );   // never implemented
+        OComponentResModuleImpl();                                              
+        OComponentResModuleImpl( const OComponentResModuleImpl& );              
+        OComponentResModuleImpl& operator=( const OComponentResModuleImpl& );   
     };
 
-    //--------------------------------------------------------------------
+    
     void OComponentResModuleImpl::freeResManager()
     {
         delete m_pResources, m_pResources = NULL;
         m_bInitialized = false;
     }
 
-    //--------------------------------------------------------------------
+    
     ResMgr* OComponentResModuleImpl::getResManager()
     {
         if ( !m_pResources && !m_bInitialized )
         {
-            // create a manager with a fixed prefix
+            
             OString aMgrName = m_sResFilePrefix;
 
             m_pResources = ResMgr::CreateResMgr( aMgrName.getStr() );
@@ -95,43 +95,43 @@ namespace utl
         return m_pResources;
     }
 
-    //====================================================================
-    //= OComponentResourceModule
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OComponentResourceModule::OComponentResourceModule( const OString& _rResFilePrefix )
         :BaseClass()
         ,m_pImpl( new OComponentResModuleImpl( _rResFilePrefix ) )
     {
     }
 
-    //--------------------------------------------------------------------
+    
     OComponentResourceModule::~OComponentResourceModule()
     {
     }
 
-    //-------------------------------------------------------------------------
+    
     ResMgr* OComponentResourceModule::getResManager()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return m_pImpl->getResManager();
     }
 
-    //--------------------------------------------------------------------------
+    
     void OComponentResourceModule::onFirstClient()
     {
         BaseClass::onFirstClient();
     }
 
-    //--------------------------------------------------------------------------
+    
     void OComponentResourceModule::onLastClient()
     {
         m_pImpl->freeResManager();
         BaseClass::onLastClient();
     }
 
-//........................................................................
-} // namespace utl
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

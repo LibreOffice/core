@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -101,7 +101,7 @@ UnxPluginComm::UnxPluginComm(
     }
 
     m_nCommPID = pid;
-    // wait for pluginapp.bin to start up
+    
     if( ! WaitForMessage( 5000 ) )
     {
         SAL_WARN(

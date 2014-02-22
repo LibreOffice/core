@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -58,14 +58,14 @@ char const* const* OtherInfo::getRuntimePaths(int * size)
     "/bin/jrockit/jvm.dll"
 #elif defined UNX
 #ifdef MACOSX
-        "/../../../../../Frameworks/JavaVM.framework/JavaVM"  //as of  1.6.0_22
+        "/../../../../../Frameworks/JavaVM.framework/JavaVM"  
 #else
-        "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", // for Blackdown PPC
-        "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", // for Blackdown AMD64
-        "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so", // for Blackdown PPC
-        "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so", // for Java of BEA Systems
-        "/bin/classic/libjvm.so", // fallback for older for IBM Java
-        "/jre/bin/classic/libjvm.so" // fallback for older for IBM Java
+        "/lib/" JFW_PLUGIN_ARCH "/client/libjvm.so", 
+        "/lib/" JFW_PLUGIN_ARCH "/server/libjvm.so", 
+        "/lib/" JFW_PLUGIN_ARCH "/classic/libjvm.so", 
+        "/lib/" JFW_PLUGIN_ARCH "/jrockit/libjvm.so", 
+        "/bin/classic/libjvm.so", 
+        "/jre/bin/classic/libjvm.so" 
 #endif
 #endif
 
@@ -78,7 +78,7 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
 {
 
 #if defined(UNX) && !defined(MACOSX)
-    //mac version does not have a ld library path anymore
+    
     static char const * ar[] = {
         "/bin",
         "/jre/bin",
@@ -102,10 +102,10 @@ char const* const* OtherInfo::getLibraryPaths(int* size)
 
 int OtherInfo::compareVersions(const OUString& /*sSecond*/) const
 {
-    //Need to provide an own algorithm for comparing version.
-    //Because this function returns always 0, which means the version of
-    //this JRE and the provided version "sSecond" are equal, one cannot put
-    //any excludeVersion entries in the javavendors.xml file.
+    
+    
+    
+    
     return 0;
 }
 

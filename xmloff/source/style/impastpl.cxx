@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <algorithm>
@@ -39,8 +39,8 @@ using namespace ::std;
 using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 
-// Class XMLAutoStyleFamily
-// ctor/dtor class XMLAutoStyleFamily
+
+
 
 XMLAutoStyleFamily::XMLAutoStyleFamily(
         sal_Int32 nFamily,
@@ -154,7 +154,7 @@ data2string(void *data,
         result.append(OUString::number((*reinterpret_cast<const sal_Int32*>(data))));
         break;
     default:
-        assert(false); // this cannot happen I hope
+        assert(false); 
         break;
     }
 
@@ -167,8 +167,8 @@ any2string(uno::Any any)
     return data2string((void*)any.getValue(), any.pType);
 }
 
-// Class SvXMLAutoStylePoolProperties_Impl
-// ctor class SvXMLAutoStylePoolProperties_Impl
+
+
 
 XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rParentName )
 : maProperties( rProperties ),
@@ -187,7 +187,7 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
                 aStemBuffer.append(rParentName);
             }
 
-        // Create a name based on the properties used
+        
         for( size_t i = 0, n = maProperties.size(); i < n; ++i )
             {
                 XMLPropertyState& rState = maProperties[i];
@@ -205,15 +205,15 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
             }
 
 #if 0
-        // Finally append an incremental counter in an attempt to make identical
-        // styles always come out in the same order. Will see if this works.
+        
+        
         aStemBuffer.append("-z");
         static sal_Int32 nCounter = 0;
         aStemBuffer.append(OUString::number(nCounter++));
 #endif
 
-        // create a name that hasn't been used before. The created name has not
-        // to be added to the array, because it will never tried again
+        
+        
         OUStringBuffer aTry( aStemBuffer );
 
         msName = aTry.makeStringAndClear();
@@ -234,8 +234,8 @@ XMLAutoStylePoolProperties::XMLAutoStylePoolProperties( XMLAutoStyleFamily& rFam
     }
     else
     {
-        // create a name that hasn't been used before. The created name has not
-        // to be added to the array, because it will never tried again
+        
+        
         OUStringBuffer sBuffer( 7 );
         do
         {
@@ -258,8 +258,8 @@ XMLAutoStylePoolParent::~XMLAutoStylePoolParent()
 {
 }
 
-// Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
-// if not added, yet.
+
+
 
 sal_Bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, OUString& rName, bool bDontSeek )
 {
@@ -300,9 +300,9 @@ sal_Bool XMLAutoStylePoolParent::Add( XMLAutoStyleFamily& rFamilyData, const vec
 }
 
 //
-// Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) with a given name.
-// If the name exists already, nothing is done. If a style with a different name and
-// the same properties exists, a new one is added (like with bDontSeek).
+
+
+
 //
 
 sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties, const OUString& rName )
@@ -327,7 +327,7 @@ sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, cons
     {
         XMLAutoStylePoolProperties* pProperties =
                 new XMLAutoStylePoolProperties( rFamilyData, rProperties, msParent );
-        // ignore the generated name
+        
         pProperties->SetName( rName );
         PropertiesListType::iterator it = maPropertiesList.begin();
         ::std::advance( it, i );
@@ -339,7 +339,7 @@ sal_Bool XMLAutoStylePoolParent::AddNamed( XMLAutoStyleFamily& rFamilyData, cons
 }
 
 //
-// Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
+
 //
 
 OUString XMLAutoStylePoolParent::Find( const XMLAutoStyleFamily& rFamilyData, const vector< XMLPropertyState >& rProperties ) const
@@ -372,8 +372,8 @@ bool XMLAutoStylePoolParent::operator< (const XMLAutoStylePoolParent& rOther) co
     return msParent < rOther.msParent;
 }
 
-// Class SvXMLAutoStylePool_Impl
-// ctor/dtor class SvXMLAutoStylePool_Impl
+
+
 
 SvXMLAutoStylePoolP_Impl::SvXMLAutoStylePoolP_Impl( SvXMLExport& rExp)
     :   rExport( rExp )
@@ -384,7 +384,7 @@ SvXMLAutoStylePoolP_Impl::~SvXMLAutoStylePoolP_Impl()
 {
 }
 
-// Adds stylefamily-information to sorted list
+
 
 void SvXMLAutoStylePoolP_Impl::AddFamily(
         sal_Int32 nFamily,
@@ -393,7 +393,7 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
            const OUString& rStrPrefix,
         sal_Bool bAsFamily )
 {
-    // store family in a list if not already stored
+    
     sal_uInt16 nExportFlags = GetExport().getExportFlags();
     sal_Bool bStylesOnly = (nExportFlags & EXPORT_STYLES) != 0 && (nExportFlags & EXPORT_CONTENT) == 0;
 
@@ -409,8 +409,8 @@ void SvXMLAutoStylePoolP_Impl::AddFamily(
     FamilySetType::iterator aFind = maFamilySet.find(aTemporary);
     if( aFind != maFamilySet.end() )
     {
-        // FIXME: do we really intend to replace the previous nFamily
-        // entry in this case ?
+        
+        
         SAL_WARN_IF( aFind->mxMapper != rMapper, "xmloff",
                      "Adding duplicate family " << rStrName <<
                      " with mismatching mapper ! " <<
@@ -434,7 +434,7 @@ void SvXMLAutoStylePoolP_Impl::SetFamilyPropSetMapper(
         aFind->mxMapper = rMapper;
 }
 
-// Adds a name to list
+
 void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& rName )
 {
     XMLAutoStyleFamily aTmp( nFamily );
@@ -443,29 +443,29 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
                 "SvXMLAutoStylePool_Impl::RegisterName: unknown family" );
     if (aFind != maFamilySet.end())
     {
-        // SAL_DEBUG("SvXMLAutoStylePoolP_Impl::RegisterName: " << nFamily << ", '" << rName << "'");
+        
         aFind->maNameSet.insert(rName);
     }
 }
 
 //
-// Retrieve the list of registered names
+
 //
 
 void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     uno::Sequence<sal_Int32>& rFamilies,
     uno::Sequence<OUString>& rNames )
 {
-    // collect registered names + families
+    
     vector<sal_Int32> aFamilies;
     vector<OUString> aNames;
 
-    // iterate over families
+    
     for (FamilySetType::iterator aJ = maFamilySet.begin(); aJ != maFamilySet.end(); ++aJ)
     {
         XMLAutoStyleFamily &rFamily = *aJ;
 
-        // iterate over names
+        
         for (XMLAutoStyleFamily::NameSetType::const_iterator aI = rFamily.maNameSet.begin(); aI != rFamily.maNameSet.end(); ++aI)
         {
             aFamilies.push_back( rFamily.mnFamily );
@@ -473,7 +473,7 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
         }
     }
 
-    // copy the families + names into the sequence types
+    
     DBG_ASSERT( aFamilies.size() == aNames.size(), "families != names" );
 
     rFamilies.realloc( aFamilies.size() );
@@ -483,8 +483,8 @@ void SvXMLAutoStylePoolP_Impl::GetRegisteredNames(
     std::copy( aNames.begin(), aNames.end(), rNames.getArray() );
 }
 
-// Adds a array of XMLPropertyState ( vector< XMLPropertyState > ) to list
-// if not added, yet.
+
+
 
 bool SvXMLAutoStylePoolP_Impl::Add(
     OUString& rName, sal_Int32 nFamily, const OUString& rParentName,
@@ -524,7 +524,7 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
     const OUString& rName, sal_Int32 nFamily, const OUString& rParentName,
     const ::std::vector< XMLPropertyState >& rProperties )
 {
-    // get family and parent the same way as in Add()
+    
 
     XMLAutoStyleFamily aTemporary( nFamily );
     FamilySetType::iterator aFind = maFamilySet.find(aTemporary);
@@ -557,7 +557,7 @@ bool SvXMLAutoStylePoolP_Impl::AddNamed(
 }
 
 //
-// Search for a array of XMLPropertyState ( vector< XMLPropertyState > ) in list
+
 //
 
 OUString SvXMLAutoStylePoolP_Impl::Find( sal_Int32 nFamily,
@@ -612,7 +612,7 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
         const SvXMLNamespaceMap&,
         const SvXMLAutoStylePoolP *pAntiImpl) const
 {
-    // Get list of parents for current family (nFamily)
+    
     XMLAutoStyleFamily aTmp( nFamily );
     FamilySetType::const_iterator aFind = maFamilySet.find(aTmp);
     DBG_ASSERT( aFind != maFamilySet.end(),
@@ -626,8 +626,8 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
     if (!nCount)
         return;
 
-    // create, initialize and fill helper-structure (SvXMLAutoStylePoolProperties_Impl)
-    // which contains a parent-name and a SvXMLAutoStylePoolProperties_Impl
+    
+    
     std::vector<AutoStylePoolExport> aExpStyles(nCount);
 
     XMLAutoStyleFamily::ParentSetType::iterator it = rFamily.maParentSet.begin(), itEnd = rFamily.maParentSet.end();
@@ -664,13 +664,13 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
             OUString oldName = aExpStyles[i].mpProperties->GetName();
             sal_Int32 dashIx = oldName.indexOf('-');
             OUString newName = (dashIx > 0 ? oldName.copy(0, dashIx) : oldName) + OUString::number(i);
-            // SAL_DEBUG("renaming '" << oldName << "' -> '" << newName << "'");
+            
             aExpStyles[i].mpProperties->SetName(newName);
         }
     }
 
     //
-    // create string to export for each XML-style. That means for each property-list
+    
     //
     OUString aStrFamilyName = rFamily.maStrFamilyName;
 

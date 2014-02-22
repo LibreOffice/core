@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,7 +77,7 @@ OUString ComputedExpression::getExpression() const
 
 void ComputedExpression::setExpression( const OUString& rExpression )
 {
-    // set new expression, and clear pre-computed results
+    
     msExpression = rExpression;
     mbIsEmpty = _checkExpression( " *" );
     mbIsSimple = false;
@@ -89,7 +89,7 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
 {
     OSL_ENSURE( pExpression != NULL, "no expression?" );
 
-    // call RegExp engine
+    
     SearchOptions aSearchOptions;
     aSearchOptions.algorithmType = SearchAlgorithms_REGEXP;
     aSearchOptions.searchString = OUString( pExpression, strlen(pExpression), RTL_TEXTENCODING_ASCII_US );
@@ -100,13 +100,13 @@ bool ComputedExpression::_checkExpression( const sal_Char* pExpression ) const
     sal_Int32 nEnd = nLength;
     bool nSearch = aTextSearch.SearchForward( msExpression, &nStart, &nEnd );
 
-    // our expression is static only if 1) we found our regexp, and 2)
-    // the regexp goes from beginning to end.
+    
+    
     return ( nLength == 0  ||  nSearch )
         && ( nStart == 0  &&  nEnd == nLength );
 }
 
-/// do we have an actual expression?
+
 bool ComputedExpression::isEmptyExpression() const
 {
     return mbIsEmpty;
@@ -114,14 +114,14 @@ bool ComputedExpression::isEmptyExpression() const
 
 bool ComputedExpression::isSimpleExpression() const
 {
-    // actual work is done by setExpression
+    
     return mbIsEmpty || mbIsSimple;
 }
 
 
 const OUString ComputedExpression::_getExpressionForEvaluation() const
 {
-    // the default implementation is to do nothing...
+    
     return msExpression;
 }
 
@@ -131,7 +131,7 @@ bool ComputedExpression::_evaluate(
 {
     OSL_ENSURE( rContext.mxContextNode.is(), "no context node in context" );
 
-    // obtain value by evaluating XPath expression
+    
     mxResult.clear();
     try
     {
@@ -140,7 +140,7 @@ bool ComputedExpression::_evaluate(
     }
     catch( const Exception& )
     {
-        ; // ignore exception -> mxResult will be empty
+        ; 
     }
 
     return hasValue();
@@ -148,8 +148,8 @@ bool ComputedExpression::_evaluate(
 
 bool ComputedExpression::evaluate( const EvaluationContext& rContext )
 {
-    // for simple expression we don't need to re-evaluate (if we have
-    // an older result); neither for empty expressions
+    
+    
     if( mbIsEmpty || (mxResult.is() && mbIsSimple) )
         return true;
 
@@ -188,15 +188,15 @@ bool ComputedExpression::getBool( bool bDefault ) const
 
 Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationContext& aContext)
 {
-    // create XPath API, then register namespaces
+    
     Reference<XXPathAPI> xXPath( XPathAPI::create( comphelper::getProcessComponentContext() ) );
 
-    // register xforms extension#
+    
     Reference< XComponentContext > aComponentContext = comphelper::getProcessComponentContext();
     Reference< XXPathExtension > aExtension = XPathExtension::createWithModel(aComponentContext, aContext.mxModel, aContext.mxContextNode);
     xXPath->registerExtensionInstance(aExtension);
 
-    // register namespaces
+    
     if( aContext.mxNamespaces.is() )
     {
         Sequence<OUString> aPrefixes =aContext.mxNamespaces->getElementNames();
@@ -211,11 +211,11 @@ Reference<XXPathAPI> ComputedExpression::_getXPathAPI(const xforms::EvaluationCo
         }
     }
 
-    // done, so return xXPath-object
+    
     return xXPath;
 }
 
 
-} // namespace xforms
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

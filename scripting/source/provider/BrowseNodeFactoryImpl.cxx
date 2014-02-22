@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -104,8 +104,8 @@ public:
             }
             catch ( Exception& )
             {
-                // some form of exception getting child nodes so they
-                // won't be displayed
+                
+                
             }
         }
 
@@ -141,8 +141,8 @@ public:
                 }
                 catch ( Exception& )
                 {
-                    // some form of exception getting child nodes so move
-                    // on to the next one
+                    
+                    
                 }
             }
         }
@@ -158,7 +158,7 @@ public:
 };
 
 
-//typedef ::std::map< OUString, Reference< browse::XBrowseNode > >
+
 typedef ::boost::unordered_map< OUString, Reference< browse::XBrowseNode >,
     OUStringHash, ::std::equal_to< OUString > >
         BrowseNodeAggregatorHash;
@@ -198,9 +198,9 @@ public:
         }
     }
 
-    // -------------------------------------------------------------------------
-    // XBrowseNode
-    // -------------------------------------------------------------------------
+    
+    
+    
 
     virtual OUString SAL_CALL getName()
         throw ( RuntimeException )
@@ -287,7 +287,7 @@ private:
                 }
             }
         }
-        // sort children alpahbetically
+        
         ::std::sort( m_vStr.begin(), m_vStr.end(), alphaSort() );
     }
 };
@@ -312,7 +312,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
         locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( OUString("user") ) ), UNO_QUERY_THROW );
         locnBNs[ mspIndex++ ] = Reference< browse::XBrowseNode >( xFac->createScriptProvider( makeAny( OUString("share") ) ), UNO_QUERY_THROW );
     }
-    // TODO proper exception handling, should throw
+    
     catch( const Exception& e )
     {
         (void)e;
@@ -328,7 +328,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
         {
             Reference< frame::XModel > model( MiscUtils::tDocUrlToModel( openDocs[ i ] ), UNO_QUERY_THROW );
 
-            // #i44599 Check if it's a real document or something special like Hidden/Preview
+            
             css::uno::Reference< css::frame::XController > xCurrentController = model->getCurrentController();
             if( xCurrentController.is() )
             {
@@ -359,7 +359,7 @@ Sequence< Reference< browse::XBrowseNode > > getAllBrowseNodes( const Reference<
     return locnBNs_Return;
 }
 
-} // namespace
+} 
 
 typedef ::std::vector< Reference< browse::XBrowseNode > > vXBrowseNodes;
 
@@ -389,7 +389,7 @@ public:
         OSL_ENSURE( m_xWrappedBrowseNode.is(), "DefaultBrowseNode::DefaultBrowseNode(): No BrowseNode to wrap" );
         OSL_ENSURE( m_xWrappedTypeProv.is(), "DefaultBrowseNode::DefaultBrowseNode(): No BrowseNode to wrap" );
         OSL_ENSURE( m_xCtx.is(), "DefaultBrowseNode::DefaultBrowseNode(): No ComponentContext" );
-    // Use proxy factory service to create aggregatable proxy.
+    
         try
         {
             Reference< reflection::XProxyFactory > xProxyFac =
@@ -456,7 +456,7 @@ public:
         }
         else
         {
-            // no nodes
+            
 
             Sequence < Reference< browse::XBrowseNode > > none;
             return none;
@@ -483,7 +483,7 @@ public:
         return m_xWrappedBrowseNode->hasChildNodes();
     }
 
-    // XInterface
+    
     virtual Any SAL_CALL queryInterface( const Type& aType )
         throw ( com::sun::star::uno::RuntimeException )
     {
@@ -516,8 +516,8 @@ public:
             delete this;
         }
     }
-    // XTypeProvider (implemnented by base, but needs to be overridden for
-    //                delegating to aggregate)
+    
+    
     virtual Sequence< Type > SAL_CALL getTypes()
         throw ( com::sun::star::uno::RuntimeException )
     {
@@ -561,8 +561,8 @@ public:
                 getChildNodes()
     throw ( RuntimeException )
     {
-        // no need to sort user, share, doc1...docN
-        //::std::sort( m_vNodes.begin(), m_vNodes.end(), alphaSortForBNodes() );
+        
+        
         Sequence < Reference< browse::XBrowseNode > > children( m_vNodes.size() );
         vXBrowseNodes::const_iterator it = m_vNodes.begin();
         for ( sal_Int32 i=0; it != m_vNodes.end() && i<children.getLength(); i++, ++it )
@@ -642,7 +642,7 @@ public:
     virtual sal_Bool SAL_CALL hasChildNodes()
         throw ( RuntimeException )
     {
-        return sal_True; // will always be user and share
+        return sal_True; 
     }
 
     virtual sal_Int16 SAL_CALL getType()
@@ -663,9 +663,9 @@ BrowseNodeFactoryImpl::~BrowseNodeFactoryImpl()
 }
 
 
-//############################################################################
-// Implementation of XBrowseNodeFactory
-//############################################################################
+
+
+
 
 /*
  * The selector hierarchy is the standard hierarchy for organizers with the
@@ -704,13 +704,13 @@ BrowseNodeFactoryImpl::getOrganizerHierarchy()
     Reference< browse::XBrowseNode > xRet = new  DefaultRootBrowseNode( m_xComponentContext );
     return xRet;
 }
-//############################################################################
-// Helper methods
-//############################################################################
 
-//############################################################################
-// Namespace global methods for setting up BrowseNodeFactory service
-//############################################################################
+
+
+
+
+
+
 
 Sequence< OUString > SAL_CALL
 bnf_getSupportedServiceNames( )
@@ -738,9 +738,9 @@ bnf_create( Reference< XComponentContext > const & xComponentContext )
         new BrowseNodeFactoryImpl( xComponentContext ) );
 }
 
-//############################################################################
-// Implementation of XServiceInfo
-//############################################################################
+
+
+
 
 OUString SAL_CALL
 BrowseNodeFactoryImpl::getImplementationName()
@@ -762,6 +762,6 @@ sal_Bool BrowseNodeFactoryImpl::supportsService(OUString const & serviceName )
     return cppu::supportsService(this, serviceName);
 }
 
-} // namespace browsenodefactory
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

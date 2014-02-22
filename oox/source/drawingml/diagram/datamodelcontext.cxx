@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "datamodelcontext.hxx"
@@ -29,7 +29,7 @@ using namespace ::com::sun::star::uno;
 
 namespace oox { namespace drawingml {
 
-// CT_CxnList
+
 class CxnListContext
     : public ContextHandler2
 {
@@ -63,7 +63,7 @@ public:
                     rConnection.mnSourceOrder = rAttribs.getInteger( XML_srcOrd, 0 );
                     rConnection.mnDestOrder = rAttribs.getInteger( XML_destOrd, 0 );
 
-                    // skip CT_extLst
+                    
                     return 0;
                 }
                 default:
@@ -77,7 +77,7 @@ private:
 };
 
 
-// CT_presLayoutVars
+
 class PresLayoutVarsContext
     : public ContextHandler2
 {
@@ -94,7 +94,7 @@ public:
     {
         switch( aElementToken )
         {
-            // TODO
+            
             case DGM_TOKEN( animLvl ):
             case DGM_TOKEN( animOne ):
                 break;
@@ -131,7 +131,7 @@ private:
 };
 
 
-// CT_prSet
+
 class PropertiesContext
     : public ContextHandler2
 {
@@ -185,7 +185,7 @@ public:
             case DGM_TOKEN( presLayoutVars ):
                 return new PresLayoutVarsContext( *this, mrPoint );
             case DGM_TOKEN( style ):
-                // skip CT_shapeStyle
+                
                 return 0;
             default:
                 break;
@@ -198,7 +198,7 @@ private:
 };
 
 
-// CL_Pt
+
 class PtContext
     : public ContextHandler2
 {
@@ -211,11 +211,11 @@ public:
     {
         mrPoint.msModelId = rAttribs.getString( XML_modelId ).get();
 
-        // the default type is XML_node
+        
         const sal_Int32 nType  = rAttribs.getToken( XML_type, XML_node );
         mrPoint.mnType = nType;
 
-        // ignore the cxnId unless it is this type. See 5.15.3.1.3 in Primer
+        
         if( ( nType == XML_parTrans ) || ( nType == XML_sibTrans ) )
             mrPoint.msCnxId = rAttribs.getString( XML_cxnId ).get();
     }
@@ -258,7 +258,7 @@ private:
 
 
 
-// CT_PtList
+
 class PtListContext
     : public ContextHandler2
 {
@@ -275,7 +275,7 @@ public:
             {
             case DGM_TOKEN( pt ):
             {
-                // CT_Pt
+                
                 mrPoints.push_back( dgm::Point() );
                 return new PtContext( *this, rAttribs, mrPoints.back() );
             }
@@ -289,7 +289,7 @@ private:
     dgm::Points& mrPoints;
 };
 
-// CT_BackgroundFormatting
+
 class BackgroundFormattingContext
     : public ContextHandler2
 {
@@ -313,13 +313,13 @@ public:
             case A_TOKEN( noFill ):
             case A_TOKEN( pattFill ):
             case A_TOKEN( solidFill ):
-                // EG_FillProperties
+                
                 return FillPropertiesContext::createFillContext(
                     *this, aElementToken, rAttribs, *mpDataModel->getFillProperties() );
             case A_TOKEN( effectDag ):
             case A_TOKEN( effectLst ):
-                // TODO
-                // EG_EffectProperties
+                
+                
                 break;
             default:
                 break;
@@ -343,7 +343,7 @@ DataModelContext::DataModelContext( ContextHandler2Helper& rParent,
 
 DataModelContext::~DataModelContext()
 {
-    // some debug
+    
     mpDataModel->dump();
 }
 
@@ -354,17 +354,17 @@ DataModelContext::onCreateContext( ::sal_Int32 aElement,
     switch( aElement )
     {
     case DGM_TOKEN( cxnLst ):
-        // CT_CxnList
+        
         return new CxnListContext( *this, mpDataModel->getConnections() );
     case DGM_TOKEN( ptLst ):
-        // CT_PtList
+        
         return new PtListContext( *this, mpDataModel->getPoints() );
     case DGM_TOKEN( bg ):
-        // CT_BackgroundFormatting
+        
         return new BackgroundFormattingContext( *this, mpDataModel );
     case DGM_TOKEN( whole ):
-        // CT_WholeE2oFormatting
-        // TODO
+        
+        
         return 0;
     case DGM_TOKEN( extLst ):
     case A_TOKEN( ext ):

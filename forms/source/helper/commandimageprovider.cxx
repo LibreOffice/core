@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,10 +28,10 @@
 
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -57,9 +57,9 @@ namespace frm
 
     namespace ImageType = ::com::sun::star::ui::ImageType;
 
-    //====================================================================
-    //= DocumentCommandImageProvider
-    //====================================================================
+    
+    
+    
     class DocumentCommandImageProvider : public ICommandImageProvider
     {
     public:
@@ -71,7 +71,7 @@ namespace frm
         {
         }
 
-        // ICommandImageProvider
+        
         virtual CommandImages getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const;
 
     private:
@@ -82,14 +82,14 @@ namespace frm
         Reference< XImageManager >    m_xModuleImageManager;
     };
 
-    //--------------------------------------------------------------------
+    
     void DocumentCommandImageProvider::impl_init_nothrow( const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
     {
         OSL_ENSURE( _rxDocument.is(), "DocumentCommandImageProvider::impl_init_nothrow: no document => no images!" );
         if ( !_rxDocument.is() )
             return;
 
-        // obtain the image manager of the document
+        
         try
         {
             Reference< XUIConfigurationManagerSupplier > xSuppUIConfig( _rxDocument, UNO_QUERY_THROW );
@@ -101,7 +101,7 @@ namespace frm
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        // obtain the image manager or the module
+        
         try
         {
             Reference< XModuleManager2 > xModuleManager( ModuleManager::create(_rContext) );
@@ -119,7 +119,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     CommandImages DocumentCommandImageProvider::getCommandImages( const CommandURLs& _rCommandURLs, const bool _bLarge ) const
     {
         const size_t nCommandCount = _rCommandURLs.getLength();
@@ -132,11 +132,11 @@ namespace frm
             Sequence< Reference< XGraphic > > aDocImages( nCommandCount );
             Sequence< Reference< XGraphic > > aModImages( nCommandCount );
 
-            // first try the document image manager
+            
             if ( m_xDocumentImageManager.is() )
                 aDocImages = m_xDocumentImageManager->getImages( nImageType, _rCommandURLs );
 
-            // then the module's image manager
+            
             if ( m_xModuleImageManager.is() )
                 aModImages = m_xModuleImageManager->getImages( nImageType, _rCommandURLs );
 
@@ -158,7 +158,7 @@ namespace frm
         return aImages;
     }
 
-    //--------------------------------------------------------------------
+    
     PCommandImageProvider createDocumentCommandImageProvider(
         const Reference<XComponentContext>& _rContext, const Reference< XModel >& _rxDocument )
     {
@@ -166,8 +166,8 @@ namespace frm
         return pImageProvider;
     }
 
-//........................................................................
-} // namespace frm
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

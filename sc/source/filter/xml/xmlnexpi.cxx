@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustrbuf.hxx>
@@ -30,7 +30,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
+
 
 ScXMLNamedExpressionsContext::GlobalInserter::GlobalInserter(ScXMLImport& rImport) : mrImport(rImport) {}
 
@@ -91,8 +91,8 @@ SvXMLImportContext *ScXMLNamedExpressionsContext::CreateChildContext( sal_uInt16
 
 void ScXMLNamedExpressionsContext::EndElement()
 {
-    // happends in ScXMLImport::EndDocument()
-    // because it has to be set after the Database Ranges
+    
+    
 }
 
 ScXMLNamedRangeContext::ScXMLNamedRangeContext(
@@ -108,8 +108,8 @@ ScXMLNamedRangeContext::ScXMLNamedRangeContext(
         return;
 
     ScMyNamedExpression* pNamedExpression(new ScMyNamedExpression);
-    // A simple table:cell-range-address is not a formula expression, stored
-    // without [] brackets but with dot, .A1
+    
+    
     pNamedExpression->eGrammar = formula::FormulaGrammar::mergeToGrammar(
             GetScImport().GetDocument()->GetStorageGrammar(),
             formula::FormulaGrammar::CONV_OOO);

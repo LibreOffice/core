@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,7 +50,7 @@ using namespace com::sun::star::lang;
 
 namespace vcl
 {
-// generic implementation to satisfy SalInstance
+
 class GenericClipboard :
         public cppu::WeakComponentImplHelper2 <
         datatransfer::clipboard::XSystemClipboard,
@@ -207,7 +207,7 @@ void GenericClipboard::removeClipboardListener( const Reference< datatransfer::c
     m_aListeners.remove( listener );
 }
 
-// ------------------------------------------------------------------------
+
 
 class ClipboardFactory : public ::cppu::WeakComponentImplHelper1<
     com::sun::star::lang::XSingleServiceFactory
@@ -225,7 +225,7 @@ public:
     virtual Reference< XInterface > SAL_CALL createInstanceWithArguments( const Sequence< Any >& rArgs ) throw();
 };
 
-// ------------------------------------------------------------------------
+
 
 ClipboardFactory::ClipboardFactory() :
         cppu::WeakComponentImplHelper1<
@@ -234,20 +234,20 @@ ClipboardFactory::ClipboardFactory() :
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 ClipboardFactory::~ClipboardFactory()
 {
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XInterface > ClipboardFactory::createInstance() throw()
 {
     return createInstanceWithArguments( Sequence< Any >() );
 }
 
-// ------------------------------------------------------------------------
+
 
 Reference< XInterface > ClipboardFactory::createInstanceWithArguments( const Sequence< Any >& arguments ) throw()
 {
@@ -289,7 +289,7 @@ public:
     GenericDragSource() : cppu::WeakComponentImplHelper2< datatransfer::dnd::XDragSource, XInitialization >( m_aMutex ) {}
     virtual ~GenericDragSource();
 
-    // XDragSource
+    
     virtual sal_Bool    SAL_CALL isDragImageSupported() throw();
     virtual sal_Int32   SAL_CALL getDefaultCursor( sal_Int8 dragAction ) throw();
     virtual void        SAL_CALL startDrag(
@@ -299,7 +299,7 @@ public:
                                      const Reference< datatransfer::dnd::XDragSourceListener >& listener
                                      ) throw();
 
-    // XInitialization
+    
     virtual void        SAL_CALL initialize( const Sequence< Any >& arguments ) throw( ::com::sun::star::uno::Exception );
 
     static Sequence< OUString > getSupportedServiceNames_static()
@@ -402,10 +402,10 @@ public:
     {}
     virtual ~GenericDropTarget();
 
-    // XInitialization
+    
     virtual void        SAL_CALL initialize( const Sequence< Any >& args ) throw ( Exception );
 
-    // XDropTarget
+    
     virtual void        SAL_CALL addDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
     virtual void        SAL_CALL removeDropTargetListener( const Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener >& ) throw();
     virtual sal_Bool    SAL_CALL isActive() throw();
@@ -499,7 +499,7 @@ Reference< XInterface > SAL_CALL DropTarget_createInstance( const Reference< XMu
 }
 
 
-} // namespace vcl
+} 
 
 /*
 *   SalInstance generic

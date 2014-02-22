@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -59,7 +59,7 @@ prepare_to_access_file_path( const char *cpFilePath )
     BOOL stale;
     accessFilePathState *state;
 
-    // If malloc() fails we are screwed anyway
+    
     state = (accessFilePathState*) malloc(sizeof(accessFilePathState));
 
     state->pool = [[NSAutoreleasePool alloc] init];
@@ -261,12 +261,12 @@ int open_c(const char *cpPath, int oflag, int mode)
 #if defined(MACOSX) && MAC_OS_X_VERSION_MIN_REQUIRED >= 1070 && HAVE_FEATURE_MACOSX_SANDBOX
     if (result != -1 && (oflag & O_CREAT) && (oflag & O_EXCL))
     {
-        // A new file was created. Check if it is outside the sandbox.
-        // (In that case it must be one the user selected as export or
-        // save destination in a file dialog, otherwise we wouldn't
-        // have been able to crete it.) Create and store a security
-        // scoped bookmark for it so that we can access the file in
-        // the future, too. (For the "Recent Files" functionality.)
+        
+        
+        
+        
+        
+        
         const char *sandbox = [NSHomeDirectory() UTF8String];
         if (!(strncmp(sandbox, cpPath, strlen(sandbox)) == 0 &&
               cpPath[strlen(sandbox)] == '/'))

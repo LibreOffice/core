@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -78,7 +78,7 @@
 #include <cassert>
 #include <set>
 
-#define STYLE_FAMILY_COUNT 5            // we have 5 style families
+#define STYLE_FAMILY_COUNT 5            
 #define TYPE_BOOL       0
 #define TYPE_SIZE       1
 #define TYPE_BRUSH      2
@@ -96,7 +96,7 @@ const unsigned short aStyleByIndex[] =
     SFX_STYLE_FAMILY_PSEUDO
 };
 
-// Already implemented autostyle families: 3
+
 #define AUTOSTYLE_FAMILY_COUNT 3
 const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
 {
@@ -107,7 +107,7 @@ const IStyleAccess::SwAutoStyleFamily aAutoStyleByIndex[] =
 
 using namespace ::com::sun::star;
 
-//convert FN_... to RES_ in header and footer itemset
+
 static sal_uInt16 lcl_ConvertFNToRES(sal_uInt16 nFNId)
 {
     sal_uInt16 nRes = USHRT_MAX;
@@ -233,7 +233,7 @@ uno::Any SAL_CALL SwXStyleFamilies::getByName(const OUString& Name)
         uno::RuntimeException )
 {
     SolarMutexGuard aGuard;
-// der Index kommt aus const unsigned short aStyleByIndex[] =
+
     uno::Any aRet;
     if(!IsValid())
         throw uno::RuntimeException();
@@ -488,7 +488,7 @@ static sal_Int32 lcl_GetCountOrName(const SwDoc &rDoc,
                 {
                     if ( nIndex == nCount )
                     {
-                        // the default character format needs to be set to "Default!"
+                        
                         if(rDoc.GetDfltCharFmt() == pFmt)
                             SwStyleNameMapper::FillUIName(
                                 RES_POOLCOLL_STANDARD, *pString );
@@ -890,7 +890,7 @@ void SwXStyleFamily::insertByName(const OUString& rName, const uno::Any& rElemen
 #if OSL_DEBUG_LEVEL > 1
                     (void)rNewBase;
 #endif
-                    //so, jetzt sollten noch die Properties des Descriptors angewandt werden
+                    
                     pNewStyle->ApplyDescriptorProperties();
                 }
                 else
@@ -912,12 +912,12 @@ void SwXStyleFamily::replaceByName(const OUString& rName, const uno::Any& rEleme
     {
         pBasePool->SetSearchMask(eFamily);
         SfxStyleSheetBase* pBase = pBasePool->Find(rName);
-        //Ersetzung geht nur fuer benutzerdefinierte Styles
+        
         if(!pBase)
             throw container::NoSuchElementException();
         if(!pBase->IsUserDefined())
             throw lang::IllegalArgumentException();
-        //if theres an object available to this style then it must be invalidated
+        
         uno::Reference< style::XStyle >  xStyle = _FindStyle(pBase->GetName());
         if(xStyle.is())
         {
@@ -1245,14 +1245,14 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, sal_Bool bConditional) :
     bIsDescriptor(sal_True),
     bIsConditional(bConditional)
 {
-    // Register ourselves as a listener to the document (via the page descriptor)
+    
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
-    // get the property set for the default style data
-    // First get the model
+    
+    
     uno::Reference < frame::XModel > xModel = pDoc->GetDocShell()->GetBaseModel();
-    // Ask the model for it's family supplier interface
+    
     uno::Reference < style::XStyleFamiliesSupplier > xFamilySupplier ( xModel, uno::UNO_QUERY );
-    // Get the style families
+    
     uno::Reference < container::XNameAccess > xFamilies = xFamilySupplier->getStyleFamilies();
 
     uno::Any aAny;
@@ -1263,7 +1263,7 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, sal_Bool bConditional) :
         {
             nMapId = PROPERTY_MAP_CHAR_STYLE;
             aAny = xFamilies->getByName ("CharacterStyles");
-            // Get the Frame family (and keep it for later)
+            
             aAny >>= mxStyleFamily;
         }
         break;
@@ -1271,7 +1271,7 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, sal_Bool bConditional) :
         {
             nMapId = bIsConditional ? PROPERTY_MAP_CONDITIONAL_PARA_STYLE : PROPERTY_MAP_PARA_STYLE;
             aAny = xFamilies->getByName ("ParagraphStyles");
-            // Get the Frame family (and keep it for later)
+            
             aAny >>= mxStyleFamily;
             aAny = mxStyleFamily->getByName ("Standard");
             aAny >>= mxStyleData;
@@ -1281,7 +1281,7 @@ SwXStyle::SwXStyle( SwDoc *pDoc, SfxStyleFamily eFam, sal_Bool bConditional) :
         {
             nMapId = PROPERTY_MAP_PAGE_STYLE;
             aAny = xFamilies->getByName ("PageStyles");
-            // Get the Frame family (and keep it for later)
+            
             aAny >>= mxStyleFamily;
             aAny = mxStyleFamily->getByName ("Standard");
             aAny >>= mxStyleData;
@@ -1397,7 +1397,7 @@ sal_Bool SwXStyle::isUserDefined(void) throw( uno::RuntimeException )
     {
         pBasePool->SetSearchMask(eFamily, SFXSTYLEBIT_ALL );
         SfxStyleSheetBase* pBase = pBasePool->Find(m_sStyleName);
-        //if it is not found it must be non user defined
+        
         if(pBase)
             bRet = pBase->IsUserDefined();
     }
@@ -1455,7 +1455,7 @@ void SwXStyle::setParentStyle(const OUString& rParentStyle)
         if(pBase)
         {
             rtl::Reference< SwDocStyleSheet > xBase( new SwDocStyleSheet(*(SwDocStyleSheet*)pBase) );
-            //make it a 'real' style - necessary for pooled styles
+            
             xBase->GetItemSet();
             if(xBase->GetParent() != sParentStyle)
             {
@@ -1661,7 +1661,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             sal_Bool bHidden = sal_False;
             if ( rValue >>= bHidden )
             {
-                //make it a 'real' style - necessary for pooled styles
+                
                 rBase.mxNewBase->GetItemSet();
                 rBase.mxNewBase->SetHidden( bHidden );
             }
@@ -1707,7 +1707,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             }
         }
         break;
-        case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
+        case  FN_UNO_NUM_RULES: 
         {
             if(rValue.getValueType() == ::getCppuType((uno::Reference< container::XIndexReplace>*)0) )
             {
@@ -1765,7 +1765,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
 
                                 aFmt.SetCharFmt( pCharFmt );
                             }
-                            //jetzt nochmal fuer Fonts
+                            
                             if (!pBulletFontNames[i].isEmpty() &&
                                 !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
                                 (!pFmt->GetBulletFont() || pFmt->GetBulletFont()->GetName() != pBulletFontNames[i]) )
@@ -1810,7 +1810,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         if( MID_PAGEDESC_PAGEDESCNAME != rEntry.nMemberId)
             goto put_itemset;
         {
-            // Sonderbehandlung RES_PAGEDESC
+            
             if(rValue.getValueType() != ::getCppuType((const OUString*)0))
                 throw lang::IllegalArgumentException();
             SfxItemSet& rStyleSet = rBase.GetItemSet();
@@ -1881,13 +1881,13 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 OUString aTmp;
                 if ((pSeq[i].Value >>= aTmp))
                 {
-                    // get UI style name from programmatic style name
+                    
                     OUString aStyleName;
                     SwStyleNameMapper::FillUIName(aTmp, aStyleName,
                             lcl_GetSwEnumFromSfxEnum(eFamily), true);
 
                     //
-                    // check for correct context and style name
+                    
                     //
                     sal_Int16 nIdx = GetCommandContextIndex( pSeq[i].Name );
 
@@ -2024,7 +2024,7 @@ static void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 break;
             }
         }
-        //no break!
+        
         default:
 put_itemset:
         {
@@ -2033,7 +2033,7 @@ put_itemset:
             aSet.SetParent(&rStyleSet);
             rPropSet.setPropertyValue(rEntry, rValue, aSet);
             rStyleSet.Put(aSet);
-            // #i70223#
+            
             if ( SFX_STYLE_FAMILY_PARA == eFamily &&
                  rEntry.nWID == RES_PARATR_NUMRULE &&
                  rBase.mxNewBase.is() && rBase.mxNewBase->GetCollection() &&
@@ -2127,15 +2127,15 @@ void SwXStyle::setPropertyValues(
 {
     SolarMutexGuard aGuard;
 
-    // workaround for bad designed API
+    
     try
     {
         SetPropertyValues_Impl( rPropertyNames, rValues );
     }
     catch (const beans::UnknownPropertyException &rException)
     {
-        // wrap the original (here not allowed) exception in
-        // a lang::WrappedTargetException that gets thrown instead.
+        
+        
         lang::WrappedTargetException aWExc;
         aWExc.TargetException <<= rException;
         throw aWExc;
@@ -2156,7 +2156,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
         if(pBase)
         {
             bPhys = ((SwDocStyleSheet*)pBase)->IsPhysical();
-            // The standard character format is not existing physically
+            
             if( bPhys && SFX_STYLE_FAMILY_CHAR == eFamily &&
                 ((SwDocStyleSheet*)pBase)->GetCharFmt() &&
                 ((SwDocStyleSheet*)pBase)->GetCharFmt()->IsDefault() )
@@ -2206,7 +2206,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                 }
             }
             break;
-            case  FN_UNO_NUM_RULES: //Sonderbehandlung fuer das SvxNumRuleItem:
+            case  FN_UNO_NUM_RULES: 
             {
                 const SwNumRule* pRule = rBase.mxNewBase->GetNumRule();
                 OSL_ENSURE(pRule, "Wo ist die NumRule?");
@@ -2232,7 +2232,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
             if( MID_PAGEDESC_PAGEDESCNAME != rEntry.nMemberId)
                 goto query_itemset;
             {
-                // Sonderbehandlung RES_PAGEDESC
+                
                 const SfxPoolItem* pItem;
                 if(SFX_ITEM_SET == rBase.GetItemSet().GetItemState( RES_PAGEDESC, true, &pItem ) )
                 {
@@ -2281,7 +2281,7 @@ static uno::Any lcl_GetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         HasCondition( SwCollCondition( 0, pCmds[n].nCnd, pCmds[n].nSubCond ) ) )
                         && pCond->GetTxtFmtColl() )
                     {
-                        // get programmatic style name from UI style name
+                        
                         aStyleName = pCond->GetTxtFmtColl()->GetName();
                         SwStyleNameMapper::FillProgName(aStyleName, aStyleName, lcl_GetSwEnumFromSfxEnum ( eFamily ), true);
                     }
@@ -2447,7 +2447,7 @@ uno::Sequence< uno::Any > SwXStyle::getPropertyValues(
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
 
-    // workaround for bad designed API
+    
     try
     {
         aValues = GetPropertyValues_Impl( rPropertyNames );
@@ -2869,8 +2869,8 @@ uno::Sequence< uno::Any > SAL_CALL SwXStyle::getPropertyDefaults( const uno::Seq
 
                     if (pEntry->nWID >= RES_UNKNOWNATR_END)
                     {
-                        // these cannot be in an item set, especially not the
-                        // parent set, so the default value is void
+                        
+                        
                         continue;
                     }
                     if( pParentSet )
@@ -3056,45 +3056,45 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                     switch(pEntry->nWID)
                     {
                         case FN_UNO_FOOTER_ON:                  bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_ON:                  nRes = SID_ATTR_PAGE_ON;
                         break;
                         case FN_UNO_FOOTER_BACKGROUND:          bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_BACKGROUND:          nRes = RES_BACKGROUND; nItemType = TYPE_BRUSH;
                         break;
                         case FN_UNO_FOOTER_BOX:                 bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_BOX:                 nRes = RES_BOX; nItemType = TYPE_BOX;
                         break;
                         case FN_UNO_FOOTER_LR_SPACE:            bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_LR_SPACE:            nRes = RES_LR_SPACE;nItemType = TYPE_LRSPACE;
                         break;
                         case FN_UNO_FOOTER_SHADOW:              bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_SHADOW:              nRes = RES_SHADOW;nItemType = TYPE_SHADOW;
                         break;
                         case FN_UNO_FOOTER_BODY_DISTANCE:       bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_BODY_DISTANCE:       nRes = RES_UL_SPACE;nItemType = TYPE_ULSPACE;
                         break;
                         case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
                         break;
                         case FN_UNO_FOOTER_SHARE_CONTENT:       bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_SHARE_CONTENT:       nRes = SID_ATTR_PAGE_SHARED;
                         break;
                         case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                         break;
                         case FN_UNO_FOOTER_HEIGHT:              bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_HEIGHT:              nRes = SID_ATTR_PAGE_SIZE;nItemType = TYPE_SIZE;
                         break;
                         case FN_UNO_FOOTER_EAT_SPACING:     bFooter = true;
-                        // no break
+                        
                         case FN_UNO_HEADER_EAT_SPACING:     nRes = RES_HEADER_FOOTER_EAT_SPACING;nItemType = TYPE_SIZE;
                         break;
                     }
@@ -3107,7 +3107,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
 
                         if (nRes == SID_ATTR_PAGE_SHARED_FIRST)
                         {
-                            // Need to add this to the other as well
+                            
                             if (SFX_ITEM_SET == aBaseImpl.GetItemSet().GetItemState(
                                         bFooter ? SID_ATTR_PAGE_HEADERSET : SID_ATTR_PAGE_FOOTERSET,
                                         false, (const SfxPoolItem**)&pSetItem))
@@ -3163,7 +3163,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                 case  FN_UNO_FOOTER_RIGHT :
                 case  FN_UNO_FOOTER_FIRST :
                     throw lang::IllegalArgumentException();
-                //break;
+                
                 default:
                     lcl_SetStyleProperty(*pEntry, *pPropSet, pValues[nProp], aBaseImpl,
                                         GetBasePool(), GetDoc(), GetFamily());
@@ -3182,7 +3182,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
         ::sw::UndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
         if (undoGuard.UndoWasEnabled())
         {
-            // Fix i64460: as long as Undo of page styles with header/footer causes trouble...
+            
             GetDoc()->GetIDocumentUndoRedo().DelAllUndoObj();
         }
         aBaseImpl.mxNewBase->SetItemSet(aBaseImpl.GetItemSet());
@@ -3196,15 +3196,15 @@ void SwXPageStyle::setPropertyValues(
 {
     SolarMutexGuard aGuard;
 
-    // workaround for bad designed API
+    
     try
     {
         SetPropertyValues_Impl( rPropertyNames, rValues );
     }
     catch (const beans::UnknownPropertyException &rException)
     {
-        // wrap the original (here not allowed) exception in
-        // a lang::WrappedTargetException that gets thrown instead.
+        
+        
         lang::WrappedTargetException aWExc;
         aWExc.TargetException <<= rException;
         throw aWExc;
@@ -3307,51 +3307,51 @@ uno::Sequence< uno::Any > SAL_CALL SwXPageStyle::GetPropertyValues_Impl(
                         {
                             case FN_UNO_FOOTER_ON:
                                 bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_ON:
                             {
-                                //falls das SetItem nicht da ist, dann ist der Wert sal_False
+                                
                                 sal_Bool bRet = sal_False;
                                 pRet[nProp].setValue(&bRet, ::getCppuBooleanType());
                                 nRes = SID_ATTR_PAGE_ON;
                             }
                             break;
                             case FN_UNO_FOOTER_BACKGROUND:      bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_BACKGROUND:      nRes = RES_BACKGROUND;
                             break;
                             case FN_UNO_FOOTER_BOX:             bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_BOX:             nRes = RES_BOX;
                             break;
                             case FN_UNO_FOOTER_LR_SPACE:        bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_LR_SPACE:        nRes = RES_LR_SPACE;
                             break;
                             case FN_UNO_FOOTER_SHADOW:          bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_SHADOW:          nRes = RES_SHADOW;
                             break;
                             case FN_UNO_FOOTER_BODY_DISTANCE:   bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_BODY_DISTANCE:   nRes = RES_UL_SPACE;
                             break;
                             case FN_UNO_FOOTER_IS_DYNAMIC_DISTANCE: bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_IS_DYNAMIC_DISTANCE: nRes = SID_ATTR_PAGE_DYNAMIC;
                             break;
                             case FN_UNO_FOOTER_SHARE_CONTENT:   bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_SHARE_CONTENT:   nRes = SID_ATTR_PAGE_SHARED;
                             break;
                             case FN_UNO_FIRST_SHARE_CONTENT: nRes = SID_ATTR_PAGE_SHARED_FIRST;
                             break;
                             case FN_UNO_FOOTER_HEIGHT:          bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_HEIGHT:          nRes = SID_ATTR_PAGE_SIZE;
                             break;
                             case FN_UNO_FOOTER_EAT_SPACING: bFooter = true;
-                            // no break
+                            
                             case FN_UNO_HEADER_EAT_SPACING: nRes = RES_HEADER_FOOTER_EAT_SPACING;
                             break;
                         }
@@ -3398,10 +3398,10 @@ MakeObject:
                     bool bShare = (bHeader && rDesc.IsHeaderShared())||
                                     (!bHeader && rDesc.IsFooterShared());
                     bool bShareFirst = rDesc.IsFirstShared();
-                    // TextLeft returns the left content if there is one,
-                    // Text and TextRight return the master content.
-                    // TextRight does the same as Text and is for
-                    // comptability only.
+                    
+                    
+                    
+                    
                     if( bLeft && !bShare )
                     {
                         pFrmFmt = &rDesc.GetLeft();
@@ -3409,8 +3409,8 @@ MakeObject:
                     else if (bFirst && !bShareFirst)
                     {
                         pFrmFmt = &rDesc.GetFirstMaster();
-                        // no need to make GetFirstLeft() accessible
-                        // since it is always shared
+                        
+                        
                     }
                     else
                     {
@@ -3458,7 +3458,7 @@ uno::Sequence< uno::Any > SwXPageStyle::getPropertyValues(
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
 
-    // workaround for bad designed API
+    
     try
     {
         aValues = GetPropertyValues_Impl( rPropertyNames );
@@ -3639,7 +3639,7 @@ sal_Bool SwXAutoStyles::hasByName(const OUString& Name)
 SwXAutoStyleFamily::SwXAutoStyleFamily(SwDocShell* pDocSh, IStyleAccess::SwAutoStyleFamily nFamily) :
     pDocShell( pDocSh ), eFamily(nFamily)
 {
-    // Register ourselves as a listener to the document (via the page descriptor)
+    
     pDocSh->GetDoc()->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
@@ -3672,7 +3672,7 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         break;
         case IStyleAccess::AUTO_STYLE_RUBY:
         {
-            pRange = 0;//aTxtNodeSetRange;
+            pRange = 0;
             pPropSet = aSwMapProvider.GetPropertySet(PROPERTY_MAP_RUBY_AUTO_STYLE);
         }
         break;
@@ -3732,7 +3732,7 @@ sal_Bool SwXAutoStyleFamily::hasElements(  ) throw(uno::RuntimeException)
 SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAutoStyleFamily eFam )
 : pDoc( pInitDoc ), eFamily( eFam )
 {
-    // special case for ruby auto styles:
+    
     if ( IStyleAccess::AUTO_STYLE_RUBY == eFam )
     {
         std::set< std::pair< sal_uInt16, sal_uInt16 > > aRubyMap;
@@ -3766,7 +3766,7 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
 SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwAutoStyleFamily eFam )
 : pImpl( new SwAutoStylesEnumImpl( pDoc, eFam ) )
 {
-    // Register ourselves as a listener to the document (via the page descriptor)
+    
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
@@ -3812,7 +3812,7 @@ uno::Any SwXAutoStylesEnumerator::nextElement(  )
 SwXAutoStyle::SwXAutoStyle( SwDoc* pDoc, SfxItemSet_Pointer_t pInitSet, IStyleAccess::SwAutoStyleFamily eFam )
 : pSet( pInitSet ), eFamily( eFam )
 {
-    // Register ourselves as a listener to the document (via the page descriptor)
+    
     pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
 }
 
@@ -3938,7 +3938,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::GetPropertyValues_Impl(
 {
     if( !pSet.get() )
         throw uno::RuntimeException();
-    // query_item
+    
 
     sal_Int8 nPropSetId = PROPERTY_MAP_CHAR_AUTO_STYLE;
     switch(eFamily)
@@ -3983,7 +3983,7 @@ uno::Sequence< uno::Any > SwXAutoStyle::getPropertyValues (
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
 
-    // workaround for bad designed API
+    
     try
     {
         aValues = GetPropertyValues_Impl( rPropertyNames );
@@ -4132,8 +4132,8 @@ uno::Sequence< beans::PropertyValue > SwXAutoStyle::getProperties() throw (uno::
     {
         const sal_uInt16 nWID = pItem->Which();
 
-        // TODO: Optimize - and fix! the old iteration filled each WhichId
-        // only once but there are more properties than WhichIds
+        
+        
         PropertyEntryVector_t::const_iterator aIt = aPropVector.begin();
         while( aIt != aPropVector.end() )
         {

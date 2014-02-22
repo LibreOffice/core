@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "precompile.h"
@@ -36,12 +36,12 @@ static int lnnumber = 0;
 
 bool HBox::Read(HWPFile & )
 {
-// already read
+
     return true;
 }
 
 
-// skip block
+
 
 bool SkipData::Read(HWPFile & hwpf)
 {
@@ -58,7 +58,7 @@ bool SkipData::Read(HWPFile & hwpf)
 }
 
 
-// Field code(5)
+
 bool FieldCode::Read(HWPFile & hwpf)
 {
     ulong size;
@@ -115,7 +115,7 @@ bool FieldCode::Read(HWPFile & hwpf)
 }
 
 
-// book mark(6)
+
 bool Bookmark::Read(HWPFile & hwpf)
 {
     long len;
@@ -123,7 +123,7 @@ bool Bookmark::Read(HWPFile & hwpf)
     hwpf.Read4b(&len, 1);
     dummy = sal::static_int_cast<hchar>(hwpf.Read2b());
 
-    if (!(len == 34))// 2 * (BMK_COMMENT_LEN + 1) + 2
+    if (!(len == 34))
      {
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
@@ -133,12 +133,12 @@ bool Bookmark::Read(HWPFile & hwpf)
 
     hwpf.Read2b(id, BMK_COMMENT_LEN + 1);
     hwpf.Read2b(&type, 1);
-//return hwpf.Read2b(&type, 1);
+
     return true;
 }
 
 
-// date format(7)
+
 
 bool DateFormat::Read(HWPFile & hwpf)
 {
@@ -151,7 +151,7 @@ bool DateFormat::Read(HWPFile & hwpf)
 }
 
 
-// date code(8)
+
 
 bool DateCode::Read(HWPFile & hwpf)
 {
@@ -166,7 +166,7 @@ bool DateCode::Read(HWPFile & hwpf)
 }
 
 
-// tab(9)
+
 
 bool Tab::Read(HWPFile & hwpf)
 {
@@ -180,7 +180,7 @@ bool Tab::Read(HWPFile & hwpf)
 }
 
 
-// tbox(10) TABLE BOX MATH BUTTON HYPERTEXT
+
 
 static void UpdateBBox(FBox * fbox)
 {
@@ -265,19 +265,19 @@ bool TxtBox::Read(HWPFile & hwpf)
     hwpf.Read2b(&protect, 1);
     switch (type)
     {
-        case 0:                                   //table
+        case 0:                                   
             style.boxtype = 'T';
             break;
-        case 1:                                   // text-box
+        case 1:                                   
             style.boxtype = 'X';
             break;
-        case 2:                                   // equation
+        case 2:                                   
             style.boxtype = 'E';
             break;
-        case 3:                                   // button
+        case 3:                                   
             style.boxtype = 'B';
             break;
-        default:                                  // other
+        default:                                  
             style.boxtype = 'O';
             break;
     }
@@ -306,10 +306,10 @@ bool TxtBox::Read(HWPFile & hwpf)
     }
     for (ii = 0; ii < ncell; ii++)
         hwpf.ReadParaList(plists[ii]);
-     // caption
+     
     hwpf.ReadParaList(caption);
 
-     if( type == 0 ){ // if table?
+     if( type == 0 ){ 
           TCell* *pArr = ::comphelper::newArray_null<TCell *>(ncell);
           if (!pArr) {
                 return hwpf.SetState(HWP_InvalidFileFormat);
@@ -335,7 +335,7 @@ bool TxtBox::Read(HWPFile & hwpf)
                 pArr[ii] = tcell;
           }
           TCell *tmp;
-          // Sort by row and column
+          
           for( ii = 0 ; ii < ncell - 1; ii++ ){
                 for( int jj = ii ; jj < ncell ; jj++){
                      if( pArr[ii]->nRowIndex > pArr[jj]->nRowIndex ){
@@ -368,7 +368,7 @@ bool TxtBox::Read(HWPFile & hwpf)
 }
 
 
-// picture(11)
+
 bool Picture::Read(HWPFile & hwpf)
 {
     hwpf.Read2b(reserved, 2);
@@ -454,14 +454,14 @@ bool Picture::Read(HWPFile & hwpf)
         style.boxtype = 'D';
     hwpf.AddFBoxStyle(&style);
 
-// cation
+
     hwpf.ReadParaList(caption);
 
     return !hwpf.State();
 }
 
 
-// line(15)
+
 
 Line::Line():FBox(CH_LINE)
 {
@@ -522,7 +522,7 @@ bool Line::Read(HWPFile & hwpf)
 }
 
 
-// hidden(15)
+
 Hidden::Hidden():HBox(CH_HIDDEN)
 {
 }
@@ -543,7 +543,7 @@ bool Hidden::Read(HWPFile & hwpf)
 }
 
 
-// header/footer(16)
+
 HeaderFooter::HeaderFooter():HBox(CH_HEADER_FOOTER)
 {
     linenumber = 0;
@@ -572,7 +572,7 @@ bool HeaderFooter::Read(HWPFile & hwpf)
 }
 
 
-// footnote(17)
+
 Footnote::Footnote():HBox(CH_FOOTNOTE)
 {
 }
@@ -596,7 +596,7 @@ bool Footnote::Read(HWPFile & hwpf)
 }
 
 
-// auto number(18)
+
 AutoNum::AutoNum():HBox(CH_AUTO_NUM)
 {
 }
@@ -615,7 +615,7 @@ bool AutoNum::Read(HWPFile & hwpf)
 }
 
 
-// new number(19)
+
 NewNum::NewNum():HBox(CH_NEW_NUM)
 {
 }
@@ -634,7 +634,7 @@ bool NewNum::Read(HWPFile & hwpf)
 }
 
 
-// show page number (20)
+
 ShowPageNum::ShowPageNum():HBox(CH_SHOW_PAGE_NUM)
 {
 }
@@ -675,7 +675,7 @@ bool PageNumCtrl::Read(HWPFile & hwpf)
 }
 
 
-// mail merge(22)
+
 MailMerge::MailMerge():HBox(CH_MAIL_MERGE)
 {
 }
@@ -693,7 +693,7 @@ bool MailMerge::Read(HWPFile & hwpf)
 }
 
 
-// char compositon(23)
+
 Compose::Compose():HBox(CH_COMPOSE)
 {
 }
@@ -711,7 +711,7 @@ bool Compose::Read(HWPFile & hwpf)
 }
 
 
-// hyphen(24)
+
 Hyphen::Hyphen():HBox(CH_HYPHEN)
 {
 }
@@ -729,7 +729,7 @@ bool Hyphen::Read(HWPFile & hwpf)
 }
 
 
-// toc mark(25)
+
 TocMark::TocMark():HBox(CH_TOC_MARK)
 {
 }
@@ -747,7 +747,7 @@ bool TocMark::Read(HWPFile & hwpf)
 }
 
 
-// index mark(26)
+
 IndexMark::IndexMark():HBox(CH_INDEX_MARK)
 {
 }
@@ -767,7 +767,7 @@ bool IndexMark::Read(HWPFile & hwpf)
 }
 
 
-// outline(28)
+
 Outline::Outline():HBox(CH_OUTLINE)
 {
 }

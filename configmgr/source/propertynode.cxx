@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -59,9 +59,9 @@ css::uno::Any PropertyNode::getValue(Components & components) {
         css::beans::Optional< css::uno::Any > val(
             components.getExternalValue(externalDescriptor_));
         if (val.IsPresent) {
-            value_ = val.Value; //TODO: check value type
+            value_ = val.Value; 
         }
-        externalDescriptor_ = ""; // must not throw
+        externalDescriptor_ = ""; 
     }
     SAL_WARN_IF(
         !(value_.hasValue() || nillable_), "configmgr",

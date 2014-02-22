@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <canvas/verbosetrace.hxx>
@@ -51,8 +51,8 @@ namespace slideshow
     {
         namespace
         {
-            // attention, there is a similar implementation of Animation in
-            // transitions/transitionfactory.cxx
+            
+            
 
             template< typename ValueT > class TupleAnimation : public PairAnimation
             {
@@ -90,8 +90,8 @@ namespace slideshow
                     end_();
                 }
 
-                // Animation interface
-                // -------------------
+                
+                
                 virtual void prefetch( const AnimatableShapeSharedPtr&,
                                        const ShapeAttributeLayerSharedPtr& )
                 {}
@@ -136,8 +136,8 @@ namespace slideshow
                     }
                 }
 
-                // PairAnimation interface
-                // -----------------------
+                
+                
 
                 virtual bool operator()( const ::basegfx::B2DTuple& rValue )
                 {
@@ -147,9 +147,9 @@ namespace slideshow
                     ValueT aValue( rValue.getX(),
                                    rValue.getY() );
 
-                    // Activitis get values from the expression parser,
-                    // which returns _relative_ sizes/positions.
-                    // Convert back relative to reference coordinate system
+                    
+                    
+                    
                     aValue *= maReferenceSize;
 
                     ((*mpAttrLayer).*mpSetValueFunc)( aValue );
@@ -167,9 +167,9 @@ namespace slideshow
 
                     ::basegfx::B2DTuple aRetVal;
 
-                    // deviated from the (*shared_ptr).*mpFuncPtr
-                    // notation here, since gcc does not seem to parse
-                    // that as a member function call anymore.
+                    
+                    
+                    
                     aRetVal.setX( (mpAttrLayer.get()->*mpIs1stValidFunc)() ?
                                   (mpAttrLayer.get()->*mpGet1stValueFunc)() :
                                   maDefaultValue.getX() );
@@ -177,11 +177,11 @@ namespace slideshow
                                   (mpAttrLayer.get()->*mpGet2ndValueFunc)() :
                                   maDefaultValue.getY() );
 
-                    // Activities get values from the expression
-                    // parser, which returns _relative_
-                    // sizes/positions.  Convert start value to the
-                    // same coordinate space (i.e. relative to given
-                    // reference size).
+                    
+                    
+                    
+                    
+                    
                     aRetVal /= maReferenceSize;
 
                     return aRetVal;
@@ -233,9 +233,9 @@ namespace slideshow
                     ENSURE_OR_THROW( aPolyPoly.count() == 1,
                                       "PathAnimation::PathAnimation(): motion path consists of multiple/zero polygon(s)" );
 
-                    // TODO(F2): Since getPositionRelative() currently
-                    // cannot handle beziers, have to subdivide.
-                    // AW: Should be no longer necessary; getPositionRelative is now bezier-safe
+                    
+                    
+                    
                     maPathPoly = ::basegfx::tools::adaptiveSubdivideByAngle(aPolyPoly.getB2DPolygon(0) );
                 }
 
@@ -244,8 +244,8 @@ namespace slideshow
                     end_();
                 }
 
-                // Animation interface
-                // -------------------
+                
+                
                 virtual void prefetch( const AnimatableShapeSharedPtr&,
                                        const ShapeAttributeLayerSharedPtr& )
                 {}
@@ -266,10 +266,10 @@ namespace slideshow
                     ENSURE_OR_THROW( rAttrLayer,
                                       "PathAnimation::start(): Invalid attribute layer" );
 
-                    // TODO(F1): Check whether _shape_ bounds are correct here.
-                    // Theoretically, our AttrLayer is way down the stack, and
-                    // we only have to consider _that_ value, not the one from
-                    // the top of the stack as returned by Shape::getBounds()
+                    
+                    
+                    
+                    
                     if( mnAdditive == animations::AnimationAdditiveMode::SUM )
                         maShapeOrig = mpShape->getBounds().getCenter();
                     else
@@ -299,8 +299,8 @@ namespace slideshow
                     }
                 }
 
-                // NumberAnimation interface
-                // -----------------------
+                
+                
 
                 virtual bool operator()( double nValue )
                 {
@@ -310,16 +310,16 @@ namespace slideshow
                     ::basegfx::B2DPoint rOutPos = ::basegfx::tools::getPositionRelative( maPathPoly,
                                                                                          nValue );
 
-                    // TODO(F1): Determine whether the path is
-                    // absolute, or shape-relative.
+                    
+                    
 
-                    // interpret path as page-relative. Scale up with page size
+                    
                     rOutPos *= maPageSize;
 
-                    // TODO(F1): Determine whether the path origin is
-                    // absolute, or shape-relative.
+                    
+                    
 
-                    // interpret path as shape-originated. Offset to shape position
+                    
 
                     rOutPos += maShapeOrig;
 
@@ -336,10 +336,10 @@ namespace slideshow
                     ENSURE_OR_THROW( mpAttrLayer,
                                       "PathAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
-                    return 0.0; // though this should be used in concert with
-                                // ActivitiesFactory::createSimpleActivity, better
-                                // explicitly name our start value.
-                                // Permissible range for operator() above is [0,1]
+                    return 0.0; 
+                                
+                                
+                                
                 }
 
             private:
@@ -442,8 +442,8 @@ namespace slideshow
                     end_();
                 }
 
-                // Animation interface
-                // -------------------
+                
+                
                 virtual void prefetch( const AnimatableShapeSharedPtr&,
                                        const ShapeAttributeLayerSharedPtr& )
                 {}
@@ -464,8 +464,8 @@ namespace slideshow
                     ENSURE_OR_THROW( rAttrLayer,
                                       "GenericAnimation::start(): Invalid attribute layer" );
 
-                    // only start animation once per repeated start() call,
-                    // and only if sprites should be used for display
+                    
+                    
                     if( !mbAnimationStarted )
                     {
                         mbAnimationStarted = true;
@@ -478,11 +478,11 @@ namespace slideshow
                 virtual void end() { end_(); }
                 void end_()
                 {
-                    // TODO(Q2): Factor out common code (most
-                    // prominently start() and end()) into base class
+                    
+                    
 
-                    // only stop animation once per repeated end() call,
-                    // and only if sprites are used for display
+                    
+                    
                     if( mbAnimationStarted )
                     {
                         mbAnimationStarted = false;
@@ -490,35 +490,35 @@ namespace slideshow
                         if( !(mnFlags & AnimationFactory::FLAG_NO_SPRITE) )
                             mpShapeManager->leaveAnimationMode( mpShape );
 
-                        // Attention, this notifyShapeUpdate() is
-                        // somewhat delicate here. Calling it
-                        // unconditional (i.e. not guarded by
-                        // mbAnimationStarted) will lead to shapes
-                        // snapping back to their original state just
-                        // before the slide ends. Not calling it at
-                        // all might swallow final animation
-                        // states. The current implementation relies
-                        // on the fact that end() is either called by
-                        // the Activity (then, the last animation
-                        // state has been set, and corresponds to the
-                        // shape's hold state), or by the animation
-                        // node (then, it's a forced end, and we
-                        // _have_ to snap back).
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         //
-                        // To reiterate: normally, we're called from
-                        // the Activity first, thus the
-                        // notifyShapeUpdate() below will update to
-                        // the last activity value.
+                        
+                        
+                        
+                        
 
-                        // force shape update, activity might have changed
-                        // state in the last round.
+                        
+                        
                         if( mpShape->isContentChanged() )
                             mpShapeManager->notifyShapeUpdate( mpShape );
                     }
                 }
 
-                // Derived Animation interface
-                // ---------------------------
+                
+                
 
                 /** For by-reference interfaces (B2DTuple, OUString)
                  */
@@ -555,9 +555,9 @@ namespace slideshow
                     ENSURE_OR_THROW( mpAttrLayer,
                                       "GenericAnimation::getUnderlyingValue(): Invalid ShapeAttributeLayer" );
 
-                    // deviated from the (*shared_ptr).*mpFuncPtr
-                    // notation here, since gcc does not seem to parse
-                    // that as a member function call anymore.
+                    
+                    
+                    
                     if( (mpAttrLayer.get()->*mpIsValidFunc)() )
                         return maGetterModifier( ((*mpAttrLayer).*mpGetValueFunc)() );
                     else
@@ -581,7 +581,7 @@ namespace slideshow
                 bool                               mbAnimationStarted;
             };
 
-            //Current c++0x draft (apparently) has std::identity, but not operator()
+            
             template<typename T> struct SGI_identity : public std::unary_function<T,T>
             {
                 T& operator()(T& x) const { return x; }
@@ -611,7 +611,7 @@ namespace slideshow
                                               rDefaultValue,
                                               pGetValue,
                                               pSetValue,
-                                              // no modification necessary, use identity functor here
+                                              
                                               SGI_identity< typename AnimationBase::ValueType >(),
                                               SGI_identity< typename AnimationBase::ValueType >() ) );
             }
@@ -661,10 +661,10 @@ namespace slideshow
                 uno::Reference< drawing::XShape > xShape( rShape->getXShape() );
 
                 if( !xShape.is() )
-                    return uno::Any(); // no regular shape, no defaults available
+                    return uno::Any(); 
 
 
-                // extract relevant value from XShape's PropertySet
+                
                 uno::Reference< beans::XPropertySet > xPropSet( xShape,
                                                                 uno::UNO_QUERY );
 
@@ -732,8 +732,8 @@ namespace slideshow
                         return RGBColor();
                     }
 
-                    // convert from 0xAARRGGBB API color to 0xRRGGBB00
-                    // canvas color
+                    
+                    
                     return RGBColor( (nValue << 8U) & 0xFFFFFF00U );
                 }
             }
@@ -741,26 +741,26 @@ namespace slideshow
 
         AnimationFactory::AttributeClass AnimationFactory::classifyAttributeName( const OUString& rAttrName )
         {
-            // ATTENTION: When changing this map, also the create*PropertyAnimation() methods must
-            // be checked and possibly adapted in their switch statements
+            
+            
 
-            // TODO(Q2): Since this map must be coherent with the various switch statements
-            // in the create*PropertyAnimation methods, try to unify into a single method or table
+            
+            
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_INVALID:
                     return CLASS_UNKNOWN_PROPERTY;
 
                 case ATTRIBUTE_CHAR_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_DIMCOLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_COLOR:
                     return CLASS_COLOR_PROPERTY;
 
@@ -771,34 +771,34 @@ namespace slideshow
                     return CLASS_BOOL_PROPERTY;
 
                 case ATTRIBUTE_CHAR_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_WEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_ROTATION:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_OPACITY:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_ROTATE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_Y:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_WIDTH:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_Y:
                     return CLASS_NUMBER_PROPERTY;
 
                 case ATTRIBUTE_CHAR_UNDERLINE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_STYLE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_STYLE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_POSTURE:
                     return CLASS_ENUM_PROPERTY;
             }
@@ -810,37 +810,37 @@ namespace slideshow
                                                                                   const ::basegfx::B2DVector&           rSlideSize,
                                                                                   int                                   nFlags )
         {
-            // ATTENTION: When changing this map, also the classifyAttributeName() method must
-            // be checked and possibly adapted in their switch statement
+            
+            
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_INVALID:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createNumberPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case ATTRIBUTE_CHAR_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_FONT_NAME:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_POSTURE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_UNDERLINE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_DIMCOLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_STYLE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_STYLE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_VISIBILITY:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createNumberPropertyAnimation(): Attribute type mismatch" );
@@ -850,8 +850,8 @@ namespace slideshow
                     return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isCharScaleValid,
-                                                                  1.0, // CharHeight is a relative attribute, thus
-                                                                         // default is 1.0
+                                                                  1.0, 
+                                                                         
                                                                   &ShapeAttributeLayer::getCharScale,
                                                                   &ShapeAttributeLayer::setCharScale );
 
@@ -875,21 +875,21 @@ namespace slideshow
                     return makeGenericAnimation( rShapeManager,
                                                  nFlags,
                                                  &ShapeAttributeLayer::isHeightValid,
-                                                 // TODO(F1): Check whether _shape_ bounds are correct here.
-                                                 // Theoretically, our AttrLayer is way down the stack, and
-                                                 // we only have to consider _that_ value, not the one from
-                                                 // the top of the stack as returned by Shape::getBounds()
+                                                 
+                                                 
+                                                 
+                                                 
                                                  rShape->getBounds().getHeight(),
                                                  &ShapeAttributeLayer::getHeight,
                                                  &ShapeAttributeLayer::setHeight,
-                                                 // convert expression parser value from relative page size
+                                                 
                                                  rSlideSize.getY() );
 
                 case ATTRIBUTE_OPACITY:
                     return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isAlphaValid,
-                                                                  // TODO(F1): Provide shape default here (FillTransparency?)
+                                                                  
                                                                   1.0,
                                                                   &ShapeAttributeLayer::getAlpha,
                                                                   &ShapeAttributeLayer::setAlpha );
@@ -898,8 +898,8 @@ namespace slideshow
                     return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isRotationAngleValid,
-                                                                  // NOTE: Since we paint the shape as-is from metafile,
-                                                                  // rotation angle is always 0.0, even for rotated shapes
+                                                                  
+                                                                  
                                                                   0.0,
                                                                   &ShapeAttributeLayer::getRotationAngle,
                                                                   &ShapeAttributeLayer::setRotationAngle );
@@ -908,7 +908,7 @@ namespace slideshow
                     return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isShearXAngleValid,
-                                                                  // TODO(F1): Is there any shape property for skew?
+                                                                  
                                                                   0.0,
                                                                   &ShapeAttributeLayer::getShearXAngle,
                                                                   &ShapeAttributeLayer::setShearXAngle );
@@ -917,7 +917,7 @@ namespace slideshow
                     return makeGenericAnimation<NumberAnimation>( rShapeManager,
                                                                   nFlags,
                                                                   &ShapeAttributeLayer::isShearYAngleValid,
-                                                                  // TODO(F1): Is there any shape property for skew?
+                                                                  
                                                                   0.0,
                                                                   &ShapeAttributeLayer::getShearYAngle,
                                                                   &ShapeAttributeLayer::setShearYAngle );
@@ -926,42 +926,42 @@ namespace slideshow
                     return makeGenericAnimation( rShapeManager,
                                                  nFlags,
                                                  &ShapeAttributeLayer::isWidthValid,
-                                                 // TODO(F1): Check whether _shape_ bounds are correct here.
-                                                 // Theoretically, our AttrLayer is way down the stack, and
-                                                 // we only have to consider _that_ value, not the one from
-                                                 // the top of the stack as returned by Shape::getBounds()
+                                                 
+                                                 
+                                                 
+                                                 
                                                  rShape->getBounds().getWidth(),
                                                  &ShapeAttributeLayer::getWidth,
                                                  &ShapeAttributeLayer::setWidth,
-                                                 // convert expression parser value from relative page size
+                                                 
                                                  rSlideSize.getX() );
 
                 case ATTRIBUTE_POS_X:
                     return makeGenericAnimation( rShapeManager,
                                                  nFlags,
                                                  &ShapeAttributeLayer::isPosXValid,
-                                                 // TODO(F1): Check whether _shape_ bounds are correct here.
-                                                 // Theoretically, our AttrLayer is way down the stack, and
-                                                 // we only have to consider _that_ value, not the one from
-                                                 // the top of the stack as returned by Shape::getBounds()
+                                                 
+                                                 
+                                                 
+                                                 
                                                  rShape->getBounds().getCenterX(),
                                                  &ShapeAttributeLayer::getPosX,
                                                  &ShapeAttributeLayer::setPosX,
-                                                 // convert expression parser value from relative page size
+                                                 
                                                  rSlideSize.getX() );
 
                 case ATTRIBUTE_POS_Y:
                     return makeGenericAnimation( rShapeManager,
                                                  nFlags,
                                                  &ShapeAttributeLayer::isPosYValid,
-                                                 // TODO(F1): Check whether _shape_ bounds are correct here.
-                                                 // Theoretically, our AttrLayer is way down the stack, and
-                                                 // we only have to consider _that_ value, not the one from
-                                                 // the top of the stack as returned by Shape::getBounds()
+                                                 
+                                                 
+                                                 
+                                                 
                                                  rShape->getBounds().getCenterY(),
                                                  &ShapeAttributeLayer::getPosY,
                                                  &ShapeAttributeLayer::setPosY,
-                                                 // convert expression parser value from relative page size
+                                                 
                                                  rSlideSize.getY() );
             }
 
@@ -974,51 +974,51 @@ namespace slideshow
                                                                               const ::basegfx::B2DVector&           /*rSlideSize*/,
                                                                               int                                   nFlags )
         {
-            // ATTENTION: When changing this map, also the classifyAttributeName() method must
-            // be checked and possibly adapted in their switch statement
+            
+            
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_INVALID:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createEnumPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case ATTRIBUTE_CHAR_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_FONT_NAME:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_DIMCOLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_VISIBILITY:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_WEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_ROTATION:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_OPACITY:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_ROTATE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_Y:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_WIDTH:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_Y:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createEnumPropertyAnimation(): Attribute type mismatch" );
@@ -1070,49 +1070,49 @@ namespace slideshow
                                                                                 const ::basegfx::B2DVector&         /*rSlideSize*/,
                                                                                 int                                 nFlags )
         {
-            // ATTENTION: When changing this map, also the classifyAttributeName() method must
-            // be checked and possibly adapted in their switch statement
+            
+            
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_INVALID:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createColorPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case ATTRIBUTE_CHAR_FONT_NAME:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_POSTURE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_ROTATION:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_UNDERLINE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_WEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_STYLE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_STYLE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_OPACITY:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_ROTATE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_Y:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_VISIBILITY:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_WIDTH:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_Y:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createColorPropertyAnimation(): Attribute type mismatch" );
@@ -1127,7 +1127,7 @@ namespace slideshow
                                                                  &ShapeAttributeLayer::setCharColor );
 
                 case ATTRIBUTE_COLOR:
-                    // TODO(F2): This is just mapped to fill color to make it work
+                    
                     return makeGenericAnimation<ColorAnimation>( rShapeManager,
                                                                  nFlags,
                                                                  &ShapeAttributeLayer::isFillColorValid,
@@ -1180,10 +1180,10 @@ namespace slideshow
                             nFlags,
                             &ShapeAttributeLayer::isWidthValid,
                             &ShapeAttributeLayer::isHeightValid,
-                            // TODO(F1): Check whether _shape_ bounds are correct here.
-                            // Theoretically, our AttrLayer is way down the stack, and
-                            // we only have to consider _that_ value, not the one from
-                            // the top of the stack as returned by Shape::getBounds()
+                            
+                            
+                            
+                            
                             rBounds.getRange(),
                             rBounds.getRange(),
                             &ShapeAttributeLayer::getWidth,
@@ -1197,10 +1197,10 @@ namespace slideshow
                             nFlags,
                             &ShapeAttributeLayer::isPosXValid,
                             &ShapeAttributeLayer::isPosYValid,
-                            // TODO(F1): Check whether _shape_ bounds are correct here.
-                            // Theoretically, our AttrLayer is way down the stack, and
-                            // we only have to consider _that_ value, not the one from
-                            // the top of the stack as returned by Shape::getBounds()
+                            
+                            
+                            
+                            
                             rBounds.getCenter(),
                             rSlideSize,
                             &ShapeAttributeLayer::getPosX,
@@ -1222,57 +1222,57 @@ namespace slideshow
                                                                                   const ::basegfx::B2DVector&           /*rSlideSize*/,
                                                                                   int                                   nFlags )
         {
-            // ATTENTION: When changing this map, also the classifyAttributeName() method must
-            // be checked and possibly adapted in their switch statement
+            
+            
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_INVALID:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createStringPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case ATTRIBUTE_CHAR_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_ROTATION:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_UNDERLINE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_DIMCOLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_OPACITY:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_ROTATE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_Y:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_VISIBILITY:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_WIDTH:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_Y:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_POSTURE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_WEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_STYLE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_STYLE:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createStringPropertyAnimation(): Attribute type mismatch" );
@@ -1296,57 +1296,57 @@ namespace slideshow
                                                                               const ::basegfx::B2DVector&           /*rSlideSize*/,
                                                                               int                                   nFlags )
         {
-            // ATTENTION: When changing this map, also the classifyAttributeName() method must
-            // be checked and possibly adapted in their switch statement
+            
+            
             switch( mapAttributeName( rAttrName ) )
             {
                 default:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_INVALID:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createBoolPropertyAnimation(): Unknown attribute" );
                     break;
 
                 case ATTRIBUTE_CHAR_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_FONT_NAME:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_POSTURE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_ROTATION:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_WEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_DIMCOLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_FILL_STYLE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_HEIGHT:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_COLOR:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_LINE_STYLE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_OPACITY:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_ROTATE:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_SKEW_Y:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_WIDTH:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_X:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_POS_Y:
-                    // FALLTHROUGH intended
+                    
                 case ATTRIBUTE_CHAR_UNDERLINE:
                     ENSURE_OR_THROW( false,
                                       "AnimationFactory::createBoolPropertyAnimation(): Attribute type mismatch" );
@@ -1356,7 +1356,7 @@ namespace slideshow
                     return makeGenericAnimation<BoolAnimation>( rShapeManager,
                                                                 nFlags,
                                                                 &ShapeAttributeLayer::isVisibilityValid,
-                                                                // TODO(F1): Is there a corresponding shape property?
+                                                                
                                                                 true,
                                                                 &ShapeAttributeLayer::getVisibility,
                                                                 &ShapeAttributeLayer::setVisibility );

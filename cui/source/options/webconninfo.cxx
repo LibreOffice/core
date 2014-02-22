@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "webconninfo.hxx"
@@ -32,12 +32,12 @@
 
 using namespace ::com::sun::star;
 
-//........................................................................
+
 namespace svx
 {
-//........................................................................
 
-// class PasswordTable ---------------------------------------------------
+
+
 
 PasswordTable::PasswordTable(SvSimpleTableContainer& rParent, WinBits nBits)
     : SvSimpleTable(rParent, nBits | WB_NOINITIALSELECTION)
@@ -52,7 +52,7 @@ void PasswordTable::InsertHeaderItem(sal_uInt16 nColumn, const OUString& rText, 
 void PasswordTable::Resort( bool bForced )
 {
     sal_uInt16 nColumn = GetSelectedCol();
-    if ( 0 == nColumn || bForced ) // only the first column is sorted
+    if ( 0 == nColumn || bForced ) 
     {
         HeaderBarItemBits nBits = GetTheHeaderBar().GetItemBits(1);
         sal_Bool bUp = ( ( nBits & HIB_UPARROW ) == HIB_UPARROW );
@@ -99,9 +99,9 @@ void PasswordTable::setColWidths()
     SvSimpleTable::SetTabs(aStaticTabs, MAP_PIXEL);
 }
 
-// class WebConnectionInfoDialog -----------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 WebConnectionInfoDialog::WebConnectionInfoDialog(Window* pParent)
     : ModalDialog(pParent, "StoredWebConnectionDialog", "cui/ui/storedwebconnectiondialog.ui")
     , m_nPos( -1 )
@@ -145,14 +145,14 @@ WebConnectionInfoDialog::~WebConnectionInfoDialog()
     delete m_pPasswordsLB;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( WebConnectionInfoDialog, HeaderBarClickedHdl, SvSimpleTable*, pTable )
 {
     m_pPasswordsLB->Resort( NULL == pTable );
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 void WebConnectionInfoDialog::FillPasswordList()
 {
     try
@@ -180,7 +180,7 @@ void WebConnectionInfoDialog::FillPasswordList()
                 }
             }
 
-            // remember pos of first url container entry.
+            
             m_nPos = nCount;
 
             uno::Sequence< OUString > aUrls
@@ -200,7 +200,7 @@ void WebConnectionInfoDialog::FillPasswordList()
     {}
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
 {
     try
@@ -232,7 +232,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
 {
     try
@@ -240,7 +240,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
         uno::Reference< task::XPasswordContainer2 > xPasswdContainer(
             task::PasswordContainer::create(comphelper::getProcessComponentContext()));
 
-        // should the master password be requested before?
+        
         xPasswdContainer->removeAllPersistent();
 
         uno::Sequence< OUString > aUrls
@@ -256,7 +256,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
 {
     try
@@ -295,7 +295,7 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
 {
     SvTreeListEntry* pEntry = m_pPasswordsLB->GetCurEntry();
@@ -308,8 +308,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
     {
         m_pRemoveBtn->Enable( true );
 
-        // url container entries (-> use system credentials) have
-        // no password
+        
+        
         sal_Int32 nPos = (sal_Int32)(sal_IntPtr)pEntry->GetUserData();
         m_pChangeBtn->Enable( nPos < m_nPos );
     }
@@ -317,8 +317,8 @@ IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
     return 0;
 }
 
-//........................................................................
-}   // namespace svx
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

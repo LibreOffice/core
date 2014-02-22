@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -48,12 +48,12 @@ void process_headers( ne_request * req,
         OUString aHeaderName( OUString::createFromAscii( name ) );
         OUString aHeaderValue( OUString::createFromAscii( value ) );
 
-        // Note: Empty vector means that all headers are requested.
+        
         bool bIncludeIt = ( rHeaderNames.empty() );
 
         if ( !bIncludeIt )
         {
-            // Check whether this header was requested.
+            
             std::vector< OUString >::const_iterator it(
                 rHeaderNames.begin() );
             const std::vector< OUString >::const_iterator end(
@@ -73,19 +73,19 @@ void process_headers( ne_request * req,
 
         if ( bIncludeIt )
         {
-            // Create & set the PropertyValue
+            
             DAVPropertyValue thePropertyValue;
             thePropertyValue.Name = aHeaderName;
             thePropertyValue.IsCaseSensitive = false;
             thePropertyValue.Value <<= aHeaderValue;
 
-            // Add the newly created PropertyValue
+            
             rResource.properties.push_back( thePropertyValue );
         }
     }
 }
 
-} // namespace
+} 
 
 extern osl::Mutex aGlobalNeonMutex;
 
@@ -99,8 +99,8 @@ NeonHeadRequest::NeonHeadRequest( HttpSession * inSession,
     ioResource.uri = inPath;
     ioResource.properties.clear();
 
-    // Create and dispatch HEAD request. Install catcher for all response
-    // header fields.
+    
+    
     ne_request * req = ne_request_create( inSession,
                                           "HEAD",
                                           OUStringToOString(

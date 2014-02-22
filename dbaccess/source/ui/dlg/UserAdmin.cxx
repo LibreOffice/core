@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "UserAdmin.hxx"
@@ -88,7 +88,7 @@ OPasswordDialog::OPasswordDialog(Window* _pParent,const OUString& _sUserName) :
     aCancelBtn          ( this, ModuleRes( BTN_PASSWORD_CANCEL ) ),
     aHelpBtn            ( this, ModuleRes( BTN_PASSWORD_HELP ) )
 {
-    // hide until a help is available
+    
     aHelpBtn.Hide();
 
     FreeResource();
@@ -123,7 +123,7 @@ IMPL_LINK( OPasswordDialog, ModifiedHdl, Edit *, pEdit )
     return 0;
 }
 
-// OUserAdmin
+
 OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
     : OGenericAdministrationPage( pParent, ModuleRes(TAB_PAGE_USERADMIN), _rAttrSet)
     ,m_FL_USER(         this , ModuleRes(FL_USER))
@@ -161,7 +161,7 @@ void OUserAdmin::FillUserNames()
         {
             m_UserName = xMetaData->getUserName();
 
-            // first we need the users
+            
             if ( m_xUsers.is() )
             {
                 m_LB_USER.Clear();
@@ -247,7 +247,7 @@ IMPL_LINK( OUserAdmin, UserHdl, PushButton *, pButton )
             }
         }
         else
-        {// delete user
+        {
             if(m_xUsers.is() && m_xUsers->hasByName(GetUser()))
             {
                 Reference<XDrop> xDrop(m_xUsers,UNO_QUERY);

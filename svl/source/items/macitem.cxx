@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,22 +14,22 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
 
 #include <svl/macitem.hxx>
 
-// STATIC DATA -----------------------------------------------------------
+
 
 DBG_NAME(SvxMacroItem);
 
-// -----------------------------------------------------------------------
+
 
 TYPEINIT1_FACTORY(SvxMacroItem, SfxPoolItem, new SvxMacroItem(0));
 
-// -----------------------------------------------------------------------
+
 
 SvxMacro::SvxMacro( const OUString &rMacName, const OUString &rLanguage)
     : aMacName( rMacName ), aLibName( rLanguage),
@@ -70,7 +70,7 @@ SvxMacro& SvxMacro::operator=( const SvxMacro& rBase )
     return *this;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 {
@@ -81,11 +81,11 @@ SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 
 int SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
 {
-    // Anzahl unterschiedlich => auf jeden Fall ungleich
+    
     if ( aSvxMacroTable.size() != rOther.aSvxMacroTable.size() )
         return sal_False;
 
-    // einzeln verleichen; wegen Performance ist die Reihenfolge wichtig
+    
     SvxMacroTable::const_iterator it1 = aSvxMacroTable.begin();
     SvxMacroTable::const_iterator it2 = rOther.aSvxMacroTable.begin();
     for ( ; it1 != aSvxMacroTable.end(); ++it1, ++it2 )
@@ -151,34 +151,34 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
     return rStream;
 }
 
-// returns NULL if no entry exists, or a pointer to the internal value
+
 const SvxMacro* SvxMacroTableDtor::Get(sal_uInt16 nEvent) const
 {
     SvxMacroTable::const_iterator it = aSvxMacroTable.find(nEvent);
     return it == aSvxMacroTable.end() ? NULL : &(it->second);
 }
 
-// returns NULL if no entry exists, or a pointer to the internal value
+
 SvxMacro* SvxMacroTableDtor::Get(sal_uInt16 nEvent)
 {
     SvxMacroTable::iterator it = aSvxMacroTable.find(nEvent);
     return it == aSvxMacroTable.end() ? NULL : &(it->second);
 }
 
-// return true if the key exists
+
 bool SvxMacroTableDtor::IsKeyValid(sal_uInt16 nEvent) const
 {
     SvxMacroTable::const_iterator it = aSvxMacroTable.find(nEvent);
     return it != aSvxMacroTable.end();
 }
 
-// This stores a copy of the rMacro parameter
+
 SvxMacro& SvxMacroTableDtor::Insert(sal_uInt16 nEvent, const SvxMacro& rMacro)
 {
     return aSvxMacroTable.insert( SvxMacroTable::value_type( nEvent, rMacro ) ).first->second;
 }
 
-// If the entry exists, remove it from the map and release it's storage
+
 bool SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
 {
     SvxMacroTable::iterator it = aSvxMacroTable.find(nEvent);
@@ -190,7 +190,7 @@ bool SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
     return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -202,7 +202,7 @@ bool SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
     return rOwn == rOther;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxMacroItem::Clone( SfxItemPool* ) const
 {
@@ -237,14 +237,14 @@ SfxItemPresentation SvxMacroItem::GetPresentation
     return SFX_ITEM_PRESENTATION_NONE;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvStream& SvxMacroItem::Store( SvStream& rStrm , sal_uInt16 ) const
 {
     return aMacroTable.Write( rStrm );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 {
@@ -253,14 +253,14 @@ SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
     return pAttr;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
     aMacroTable.Insert( nEvent, rMacro);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 SvxMacroItem::GetVersion( sal_uInt16 nFileFormatVersion ) const
 {

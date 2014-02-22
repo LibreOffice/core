@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * Major Contributor(s):
  * Copyright (C) 2007 Fridrich Strba (fridrich.strba@bluewin.ch)
@@ -16,7 +16,7 @@
  * (LGPLv2.1+), in which case the provisions of the LGPLv2.1+ are
  * applicable instead of those above.
  *
- * For further information visit http://libwpd.sourceforge.net
+ * For further information visit http:
  */
 
 #include <com/sun/star/io/XInputStream.hpp>
@@ -87,11 +87,11 @@ uno::Reference<io::XInputStream> findStream(ucbhelper::Content &rContent, const 
     }
     catch (uno::RuntimeException)
     {
-        // ignore
+        
     }
     catch (uno::Exception)
     {
-        // ignore
+        
     }
 
     return xInputStream;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <math.h>
@@ -56,9 +56,9 @@ using namespace ::com::sun::star;
 
 namespace avmedia { namespace gstreamer {
 
-// ----------------
-// - Player -
-// ----------------
+
+
+
 
 Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     GstPlayer_BASE( m_aMutex ),
@@ -76,7 +76,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
     mnWidth( 0 ),
     mnHeight( 0 )
 {
-    // Initialize GStreamer library
+    
     int argc = 1;
     char name[] = "libreoffice";
     char *arguments[] = { name };
@@ -89,13 +89,13 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 
     if (pError != NULL)
     {
-        // TODO: thow an exception?
+        
         DBG( "%p Player::Player error '%s'", this, pError->message );
         g_error_free (pError);
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 Player::~Player()
 {
@@ -112,7 +112,7 @@ void SAL_CALL Player::disposing()
 
     DBG( "%p Player::disposing", this );
 
-    // Release the elements and pipeline
+    
     if( mbInitialized )
     {
         if( mpPlaybin )
@@ -130,7 +130,7 @@ void SAL_CALL Player::disposing()
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 static gboolean pipeline_bus_callback( GstBus *, GstMessage *message, gpointer data )
 {
@@ -198,7 +198,7 @@ static gboolean wrap_element_query_duration (GstElement *element, GstFormat form
 
 GstBusSyncReply Player::processSyncMessage( GstMessage *message )
 {
-//    DBG( "%p processSyncMessage has handle: %s", this, GST_MESSAGE_TYPE_NAME( message ) );
+
 
 #if OSL_DEBUG_LEVEL > 0
     if ( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR )
@@ -289,7 +289,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
             }
         }
 #else
-    // We get to use the exciting new playbin2 ! (now known as playbin)
+    
     if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ASYNC_DONE ) {
         if( mnDuration == 0) {
             gint64 gst_duration = 0L;
@@ -326,7 +326,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         DBG( "Error !\n" );
         if( mnWidth == 0 ) {
-            // an error occurred, set condition so that OOo thread doesn't wait for us
+            
             maSizeCondition.set();
         }
     }
@@ -345,7 +345,7 @@ void Player::preparePlaybin( const OUString& rURL, GstElement *pSink )
         }
 
         mpPlaybin = gst_element_factory_make( "playbin", NULL );
-        if( pSink != NULL ) // used for getting preferred size etc.
+        if( pSink != NULL ) 
         {
             g_object_set( G_OBJECT( mpPlaybin ), "video-sink", pSink, NULL );
             mbFakeVideo = true;
@@ -371,13 +371,13 @@ bool Player::create( const OUString& rURL )
 {
     bool    bRet = false;
 
-    // create all the elements and link them
+    
 
     DBG("create player, URL: %s", OUStringToOString( rURL, RTL_TEXTENCODING_UTF8 ).getStr());
 
     if( mbInitialized && !rURL.isEmpty() )
     {
-        // fakesink for pre-roll & sizing ...
+        
         preparePlaybin( rURL, gst_element_factory_make( "fakesink", NULL ) );
 
         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
@@ -394,14 +394,14 @@ bool Player::create( const OUString& rURL )
     return bRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Player::start()
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // set the pipeline state to READY and run the loop
+    
     if( mbInitialized && NULL != mpPlaybin )
     {
         gst_element_set_state( mpPlaybin, GST_STATE_PLAYING );
@@ -409,14 +409,14 @@ void SAL_CALL Player::start()
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Player::stop()
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // set the pipeline in PAUSED STATE
+    
     if( mpPlaybin )
         gst_element_set_state( mpPlaybin, GST_STATE_PAUSED );
 
@@ -424,7 +424,7 @@ void SAL_CALL Player::stop()
     DBG( "stop %p", mpPlaybin );
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL Player::isPlaying()
     throw (uno::RuntimeException)
@@ -433,7 +433,7 @@ sal_Bool SAL_CALL Player::isPlaying()
 
     bool            bRet = mbPlayPending;
 
-    // return whether the pipeline is in PLAYING STATE or not
+    
     if( !mbPlayPending && mbInitialized && mpPlaybin )
     {
         bRet = GST_STATE_PLAYING == GST_STATE( mpPlaybin );
@@ -444,14 +444,14 @@ sal_Bool SAL_CALL Player::isPlaying()
     return bRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 double SAL_CALL Player::getDuration()
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // slideshow checks for non-zero duration, so cheat here
+    
     double duration = 0.01;
 
     if( mpPlaybin && mnDuration > 0 ) {
@@ -461,7 +461,7 @@ double SAL_CALL Player::getDuration()
     return duration;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Player::setMediaTime( double fTime )
     throw (uno::RuntimeException)
@@ -483,7 +483,7 @@ void SAL_CALL Player::setMediaTime( double fTime )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 double SAL_CALL Player::getMediaTime()
     throw (uno::RuntimeException)
@@ -493,7 +493,7 @@ double SAL_CALL Player::getMediaTime()
     double position = 0.0;
 
     if( mpPlaybin ) {
-        // get current position in the stream
+        
         gint64 gst_position;
         if( wrap_element_query_position( mpPlaybin, GST_FORMAT_TIME, &gst_position ) )
             position = gst_position / 1E9;
@@ -502,7 +502,7 @@ double SAL_CALL Player::getMediaTime()
     return position;
 }
 
-// ------------------------------------------------------------------------------
+
 
 double SAL_CALL Player::getRate()
     throw (uno::RuntimeException)
@@ -511,33 +511,33 @@ double SAL_CALL Player::getRate()
 
     double rate = 1.0;
 
-    // TODO get the window rate - but no need since
-    // higher levels never set rate > 1
+    
+    
 
     return rate;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    // TODO check how to do with GST
+    
     mbLooping = bSet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL Player::isPlaybackLoop()
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    // TODO check how to do with GST
+    
     return mbLooping;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Player::setMute( sal_Bool bSet )
     throw (uno::RuntimeException)
@@ -546,7 +546,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 
     DBG( "set mute: %d muted: %d unmuted volume: %lf", bSet, mbMuted, mnUnmutedVolume );
 
-    // change the volume to 0 or the unmuted volume
+    
     if(  mpPlaybin && mbMuted != bSet )
     {
         double nVolume = mnUnmutedVolume;
@@ -561,7 +561,7 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
     }
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL Player::isMute()
     throw (uno::RuntimeException)
@@ -571,7 +571,7 @@ sal_Bool SAL_CALL Player::isMute()
     return mbMuted;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
     throw (uno::RuntimeException)
@@ -582,14 +582,14 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 
     DBG( "set volume: %d gst volume: %lf", nVolumeDB, mnUnmutedVolume );
 
-    // change volume
+    
      if( !mbMuted && mpPlaybin )
      {
          g_object_set( G_OBJECT( mpPlaybin ), "volume", (gdouble) mnUnmutedVolume, NULL );
      }
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Int16 SAL_CALL Player::getVolumeDB()
     throw (uno::RuntimeException)
@@ -609,7 +609,7 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
     return nVolumeDB;
 }
 
-// ------------------------------------------------------------------------------
+
 
 awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
     throw (uno::RuntimeException)
@@ -642,7 +642,7 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
     return aSize;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& rArguments )
     throw (uno::RuntimeException)
@@ -684,7 +684,7 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
     return xRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     throw (uno::RuntimeException)
@@ -700,7 +700,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
     return pFrameGrabber;
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString SAL_CALL Player::getImplementationName()
     throw (uno::RuntimeException)
@@ -708,7 +708,7 @@ OUString SAL_CALL Player::getImplementationName()
     return OUString( AVMEDIA_GST_PLAYER_IMPLEMENTATIONNAME );
 }
 
-// ------------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
     throw (uno::RuntimeException)
@@ -716,7 +716,7 @@ sal_Bool SAL_CALL Player::supportsService( const OUString& ServiceName )
     return cppu::supportsService(this, ServiceName);
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames()
     throw (uno::RuntimeException)
@@ -727,7 +727,7 @@ uno::Sequence< OUString > SAL_CALL Player::getSupportedServiceNames()
     return aRet;
 }
 
-} // namespace gstreamer
-} // namespace avmedia
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

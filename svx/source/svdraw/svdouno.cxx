@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/contact/viewcontactofunocontrol.hxx>
@@ -54,18 +54,18 @@
 using namespace ::com::sun::star;
 using namespace ::sdr::contact;
 
-//************************************************************
-//   Defines
-//************************************************************
 
-//************************************************************
-//   Helper class SdrControlEventListenerImpl
-//************************************************************
+
+
+
+
+
+
 #include <com/sun/star/lang/XEventListener.hpp>
 
 #include <cppuhelper/implbase1.hxx>
 
-// =============================================================================
+
 class SdrControlEventListenerImpl : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
 protected:
@@ -76,14 +76,14 @@ public:
     :   pObj(_pObj)
     {}
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
 
     void StopListening(const uno::Reference< lang::XComponent >& xComp);
     void StartListening(const uno::Reference< lang::XComponent >& xComp);
 };
 
-// XEventListener
+
 void SAL_CALL SdrControlEventListenerImpl::disposing( const ::com::sun::star::lang::EventObject& /*Source*/)
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -105,14 +105,14 @@ void SdrControlEventListenerImpl::StartListening(const uno::Reference< lang::XCo
         xComp->addEventListener(this);
 }
 
-// =============================================================================
+
 struct SdrUnoObjDataHolder
 {
     mutable ::rtl::Reference< SdrControlEventListenerImpl >
                                     pEventListener;
 };
 
-// =============================================================================
+
 namespace
 {
     void lcl_ensureControlVisibility( SdrView* _pView, const SdrUnoObj* _pObject, bool _bVisible )
@@ -148,9 +148,9 @@ namespace
     }
 }
 
-//************************************************************
-//   SdrUnoObj
-//************************************************************
+
+
+
 
 TYPEINIT1(SdrUnoObj, SdrRectObj);
 
@@ -162,7 +162,7 @@ SdrUnoObj::SdrUnoObj(const OUString& rModelName, sal_Bool _bOwnUnoControlModel)
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
-    // only an owner may create independently
+    
     if (!rModelName.isEmpty())
         CreateUnoControlModel(rModelName);
 }
@@ -177,7 +177,7 @@ SdrUnoObj::SdrUnoObj(const OUString& rModelName,
 
     m_pImpl->pEventListener = new SdrControlEventListenerImpl(this);
 
-    // only an owner may create independently
+    
     if (!rModelName.isEmpty())
         CreateUnoControlModel(rModelName,rxSFac);
 }
@@ -186,11 +186,11 @@ SdrUnoObj::~SdrUnoObj()
 {
     try
     {
-        // clean up the control model
+        
         uno::Reference< lang::XComponent > xComp(xUnoControlModel, uno::UNO_QUERY);
         if (xComp.is())
         {
-            // is the control model owned by its environment?
+            
             uno::Reference< container::XChild > xContent(xUnoControlModel, uno::UNO_QUERY);
             if (xContent.is() && !xContent->getParent().is())
                 xComp->dispose();
@@ -287,13 +287,13 @@ SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
         return *this;
     SdrRectObj::operator= (rObj);
 
-    // release the reference to the current control model
+    
     SetUnoControlModel( NULL );
 
     aUnoControlModelTypeName = rObj.aUnoControlModelTypeName;
     aUnoControlTypeName = rObj.aUnoControlTypeName;
 
-    // copy the uno control model
+    
     const uno::Reference< awt::XControlModel > xSourceControlModel( rObj.GetUnoControlModel(), uno::UNO_QUERY );
     if ( xSourceControlModel.is() )
     {
@@ -308,7 +308,7 @@ SdrUnoObj& SdrUnoObj::operator= (const SdrUnoObj& rObj)
         }
     }
 
-    // get service name of the control from the control model
+    
     uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
     if (xSet.is())
     {
@@ -331,7 +331,7 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
 
     if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0)
     {
-        // small correctures
+        
         if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000)
         {
             aRect.Move(aRect.Left()-aRect.Right(),aRect.Top()-aRect.Bottom());
@@ -346,20 +346,20 @@ void SdrUnoObj::NbcResize(const Point& rRef, const Fraction& xFact, const Fracti
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 bool SdrUnoObj::hasSpecialDrag() const
 {
-    // no special drag; we have no rounding rect and
-    // do want frame handles
+    
+    
     return false;
 }
 
 bool SdrUnoObj::supportsFullDrag() const
 {
-    // overloaded to have the possibility to enable/disable in debug and
-    // to ckeck some things out. Current solution is working, so default is
-    // enabled
+    
+    
+    
     static bool bDoSupportFullDrag(true);
 
     return bDoSupportFullDrag;
@@ -372,36 +372,36 @@ SdrObject* SdrUnoObj::getFullDragClone() const
 
     if(bHandleSpecial)
     {
-        // special handling for SdrUnoObj (FormControl). Create a SdrGrafObj
-        // for drag containing the graphical representation. This does not work too
-        // well, so the default is to simply clone
+        
+        
+        
         pRetval = new SdrGrafObj(SdrDragView::GetObjGraphic(GetModel(), this), GetLogicRect());
     }
     else
     {
-        // call parent (simply clone)
+        
         pRetval = SdrRectObj::getFullDragClone();
     }
 
     return pRetval;
 }
 
-// -----------------------------------------------------------------------------
+
 void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
 {
     if ( GetLayer() == _nLayer )
-    {   // redundant call -> not interested in doing anything here
+    {   
         SdrRectObj::NbcSetLayer( _nLayer );
         return;
     }
 
-    // we need some special handling here in case we're moved from an invisible layer
-    // to a visible one, or vice versa
-    // (relative to a layer. Remember that the visibility of a layer is a view attribute
-    // - the same layer can be visible in one view, and invisible in another view, at the
-    // same time)
+    
+    
+    
+    
+    
 
-    // collect all views in which our old layer is visible
+    
     ::std::set< SdrView* > aPreviouslyVisible;
 
     {
@@ -412,7 +412,7 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
 
     SdrRectObj::NbcSetLayer( _nLayer );
 
-    // collect all views in which our new layer is visible
+    
     ::std::set< SdrView* > aNewlyVisible;
 
     {
@@ -421,22 +421,22 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
         {
             ::std::set< SdrView* >::const_iterator aPrevPos = aPreviouslyVisible.find( pView );
             if ( aPreviouslyVisible.end() != aPrevPos )
-            {   // in pView, we were visible _before_ the layer change, and are
-                // visible _after_ the layer change, too
-                // -> we're not interested in this view at all
+            {   
+                
+                
                 aPreviouslyVisible.erase( aPrevPos );
             }
             else
             {
-                // in pView, we were visible _before_ the layer change, and are
-                // _not_ visible after the layer change
-                // => remember this view, as our visibility there changed
+                
+                
+                
                 aNewlyVisible.insert( pView );
             }
         }
     }
 
-    // now aPreviouslyVisible contains all views where we became invisible
+    
     ::std::set< SdrView* >::const_iterator aLoopViews;
     for (   aLoopViews = aPreviouslyVisible.begin();
             aLoopViews != aPreviouslyVisible.end();
@@ -446,7 +446,7 @@ void SdrUnoObj::NbcSetLayer( SdrLayerID _nLayer )
         lcl_ensureControlVisibility( *aLoopViews, this, false );
     }
 
-    // and aNewlyVisible all views where we became visible
+    
     for (   aLoopViews = aNewlyVisible.begin();
             aLoopViews != aNewlyVisible.end();
             ++aLoopViews
@@ -507,7 +507,7 @@ void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& 
 
     xUnoControlModel = xModel;
 
-    // control model has to contain service name of the control
+    
     if (xUnoControlModel.is())
     {
         uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
@@ -524,17 +524,17 @@ void SdrUnoObj::SetUnoControlModel( const uno::Reference< awt::XControlModel >& 
             m_pImpl->pEventListener->StartListening(xComp);
     }
 
-    // invalidate all ViewObject contacts
+    
     ViewContactOfUnoControl* pVC = NULL;
     if ( impl_getViewContact( pVC ) )
     {
-        // flushViewObjectContacts() removes all existing VOCs for the local DrawHierarchy. This
-        // is always allowed since they will be re-created on demand (and with the changed model)
+        
+        
         GetViewContact().flushViewObjectContacts(true);
     }
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const SdrView& _rView, const OutputDevice& _rOut) const
 {
     uno::Reference< awt::XControl > xControl;
@@ -558,7 +558,7 @@ uno::Reference< awt::XControl > SdrUnoObj::GetUnoControl(const SdrView& _rView, 
     return xControl;
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< awt::XControl > SdrUnoObj::GetTemporaryControlForWindow(
     const Window& _rWindow, uno::Reference< awt::XControlContainer >& _inout_ControlContainer ) const
 {
@@ -571,7 +571,7 @@ uno::Reference< awt::XControl > SdrUnoObj::GetTemporaryControlForWindow(
     return xControl;
 }
 
-//------------------------------------------------------------------------
+
 bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) const
 {
     ViewContact& rViewContact( GetViewContact() );
@@ -580,7 +580,7 @@ bool SdrUnoObj::impl_getViewContact( ViewContactOfUnoControl*& _out_rpContact ) 
     return ( _out_rpContact != NULL );
 }
 
-//------------------------------------------------------------------------
+
 ::sdr::contact::ViewContact* SdrUnoObj::CreateObjectSpecificViewContact()
 {
   return new ::sdr::contact::ViewContactOfUnoControl( *this );

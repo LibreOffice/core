@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,11 +45,11 @@ using namespace ::com::sun::star::util;
 namespace framework
 {
 
-// ------------------------------------------------------------------
 
-// Wrapper class to notify controller about events from edit.
-// Unfortunaltly the events are notifed through virtual methods instead
-// of Listeners.
+
+
+
+
 
 class EditControl : public Edit
 {
@@ -117,7 +117,7 @@ bool EditControl::PreNotify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// ------------------------------------------------------------------
+
 
 EditToolbarController::EditToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -133,20 +133,20 @@ EditToolbarController::EditToolbarController(
     if ( nWidth == 0 )
         nWidth = 100;
 
-    // Calculate height of the edit field according to the application font height
+    
     sal_Int32 nHeight = getFontSizePixel( m_pEditControl ) + 6 + 1;
 
     m_pEditControl->SetSizePixel( ::Size( nWidth, nHeight ));
     m_pToolbar->SetItemWindow( m_nID, m_pEditControl );
 }
 
-// ------------------------------------------------------------------
+
 
 EditToolbarController::~EditToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL EditToolbarController::dispose()
 throw ( RuntimeException )
@@ -161,13 +161,13 @@ throw ( RuntimeException )
     m_pEditControl = 0;
 }
 
-// ------------------------------------------------------------------
+
 Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModifier) const
 {
     Sequence<PropertyValue> aArgs( 2 );
     OUString aSelectedText = m_pEditControl->GetText();
 
-    // Add key modifier to argument list
+    
     aArgs[0].Name = "KeyModifier";
     aArgs[0].Value <<= KeyModifier;
     aArgs[1].Name = "Text";
@@ -175,7 +175,7 @@ Sequence<PropertyValue> EditToolbarController::getExecuteArgs(sal_Int16 KeyModif
     return aArgs;
 }
 
-// ------------------------------------------------------------------
+
 
 void EditToolbarController::Modify()
 {
@@ -204,7 +204,7 @@ bool EditToolbarController::PreNotify( NotifyEvent& rNEvt )
         const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
         if(( rKeyCode.GetModifier() | rKeyCode.GetCode()) == KEY_RETURN )
         {
-            // Call execute only with non-empty text
+            
             if ( !m_pEditControl->GetText().isEmpty() )
                 execute( rKeyCode.GetModifier() );
             return true;
@@ -214,7 +214,7 @@ bool EditToolbarController::PreNotify( NotifyEvent& rNEvt )
     return false;
 }
 
-// --------------------------------------------------------
+
 
 void EditToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
@@ -228,7 +228,7 @@ void EditToolbarController::executeControlCommand( const ::com::sun::star::frame
                 rControlCommand.Arguments[i].Value >>= aText;
                 m_pEditControl->SetText( aText );
 
-                // send notification
+                
                 notifyTextChanged( aText );
                 break;
             }
@@ -236,6 +236,6 @@ void EditToolbarController::executeControlCommand( const ::com::sun::star::frame
     }
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

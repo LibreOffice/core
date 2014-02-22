@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ole/vbamodule.hxx"
@@ -36,7 +36,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::script::vba;
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
 using ::com::sun::star::awt::KeyEvent;
-// ============================================================================
+
 typedef ::cppu::WeakImplHelper1< container::XIndexContainer > OleIdToNameContainer_BASE;
 typedef boost::unordered_map< sal_Int32, OUString >  ObjIdToName;
 
@@ -59,7 +59,7 @@ class OleIdToNameContainer : public OleIdToNameContainer_BASE
     }
 public:
     OleIdToNameContainer() {}
-    // XIndexContainer Methods
+    
     virtual void SAL_CALL insertByIndex( ::sal_Int32 Index, const Any& Element ) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -75,7 +75,7 @@ public:
             throw IndexOutOfBoundsException();
         ObjIdToNameHash.erase( ObjIdToNameHash.find( Index ) );
     }
-    // XIndexReplace Methods
+    
     virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const Any& Element ) throw (IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -86,7 +86,7 @@ public:
             throw IllegalArgumentException();
         ObjIdToNameHash[ Index ] = sOleName;
     }
-    // XIndexAccess Methods
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -99,7 +99,7 @@ public:
             throw IndexOutOfBoundsException();
         return makeAny( ObjIdToNameHash[ Index ] );
     }
-    // XElementAccess Methods
+    
     virtual Type SAL_CALL getElementType(  ) throw (RuntimeException)
     {
         return ::getCppuType( static_cast< const OUString* >( 0 ) );
@@ -111,7 +111,7 @@ public:
     }
 };
 
- // ============================================================================
+ 
 
 VbaModule::VbaModule( const Reference< XComponentContext >& rxContext,
                       const Reference< frame::XModel >& rxDocModel,
@@ -147,8 +147,8 @@ void VbaModule::importDirRecords( BinaryInputStream& rDirStrm )
             break;
             case VBA_ID_MODULESTREAMNAME:
                 maStreamName = aRecStrm.readCharArrayUC( nRecSize, meTextEnc );
-                // Actually the stream name seems the best name to use
-                // the VBA_ID_MODULENAME name can sometimes be the wrong case
+                
+                
                 maName = maStreamName;
             break;
             case VBA_ID_MODULESTREAMNAMEUNICODE:
@@ -219,14 +219,14 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
     {
         BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
         OSL_ENSURE( !aInStrm.isEof(), "VbaModule::readSourceCode - cannot open module stream" );
-        // skip the 'performance cache' stored before the actual source code
+        
         aInStrm.seek( mnOffset );
-        // if stream is still valid, load the source code
+        
         if( !aInStrm.isEof() )
         {
-            // decompression starts at current stream position of aInStrm
+            
             VbaInputStream aVbaStrm( aInStrm );
-            // load the source code line-by-line, with some more processing
+            
             TextInputStream aVbaTextStrm( mxContext, aVbaStrm, meTextEnc );
 
             struct ProcedurePair
@@ -241,25 +241,25 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                 OUString aCodeLine = aVbaTextStrm.readLine();
                 if( aCodeLine.match( "Attribute " ) )
                 {
-                    // attribute
+                    
                     int index = aCodeLine.indexOf( ".VB_ProcData.VB_Invoke_Func = " );
                     if ( index != -1 )
                     {
-                        // format is
-                        //    'Attribute Procedure.VB_ProcData.VB_Invoke_Func = "*\n14"'
-                        //    where 'Procedure' is the procedure name and '*' is the shortcut key
-                        // note: his is only relevant for Excel, seems that
-                        // word doesn't store the shortcut in the module
-                        // attributes
+                        
+                        
+                        
+                        
+                        
+                        
                         int nSpaceIndex = aCodeLine.indexOf(' ');
                         OUString sProc = aCodeLine.copy( nSpaceIndex + 1, index - nSpaceIndex - 1);
-                        // for Excel short cut key seems limited to cntrl+'a-z, A-Z'
+                        
                         OUString sKey = aCodeLine.copy( aCodeLine.lastIndexOf("= ") + 3, 1 );
-                        // only alpha key valid for key shortcut, however the api will accept other keys
+                        
                         if ( !isalpha( (char)sKey[ 0 ] ) )
                         {
-                            // cntrl modifier is explicit ( but could be cntrl+shift ), parseKeyEvent
-                            // will handle and uppercase letter appropriately
+                            
+                            
                             OUString sApiKey = "^";
                             sApiKey += sKey;
                             try
@@ -275,10 +275,10 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                 }
                 else
                 {
-                    // Hack here to weed out any unmatched End Sub / Sub Foo statements.
-                    // The behaviour of the vba ide practically guarantees the case and
-                    // spacing of Sub statement(s). However, indentation can be arbitrary hence
-                    // the trim.
+                    
+                    
+                    
+                    
                     OUString trimLine( aCodeLine.trim() );
                     if ( mbExecutable && (
                       trimLine.match("Sub ")         ||
@@ -286,13 +286,13 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                       trimLine.match("Private Sub ") ||
                       trimLine.match("Static Sub ") ) )
                     {
-                        // this should never happen, basic doesn't support nested procedures
-                        // first Sub Foo must be bogus
+                        
+                        
                         if ( procInfo.bInProcedure )
                         {
-                            // comment out the line
+                            
                             aSourceCode.insert( procInfo.nPos, sUnmatchedRemovedTag );
-                            // mark location of this Sub
+                            
                             procInfo.nPos = aSourceCode.getLength();
                         }
                         else
@@ -303,7 +303,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                     }
                     else if ( mbExecutable && aCodeLine.trim().match("End Sub") )
                     {
-                        // un-matched End Sub
+                        
                         if ( !procInfo.bInProcedure )
                         {
                             aSourceCode.append( sUnmatchedRemovedTag );
@@ -314,7 +314,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg ) const
                             procInfo.nPos = 0;
                         }
                     }
-                    // normal source code line
+                    
                     if( !mbExecutable )
                         aSourceCode.appendAscii( "Rem " );
                     aSourceCode.append( aCodeLine ).append( '\n' );
@@ -332,7 +332,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     if( maName.isEmpty() )
         return;
 
-    // prepare the Basic module
+    
     script::ModuleInfo aModuleInfo;
     aModuleInfo.ModuleType = mnType;
     OUStringBuffer aSourceCode;
@@ -347,12 +347,12 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
         break;
         case script::ModuleType::FORM:
             aSourceCode.appendAscii( "VBAFormModule" );
-            // hack from old filter, document Basic should know the XModel, but it doesn't
+            
             aModuleInfo.ModuleObject.set( mxDocModel, UNO_QUERY );
         break;
         case script::ModuleType::DOCUMENT:
             aSourceCode.appendAscii( "VBADocumentModule" );
-            // get the VBA implementation object associated to the document module
+            
             if( rxDocObjectNA.is() ) try
             {
                 aModuleInfo.ModuleObject.set( rxDocObjectNA->getByName( maName ), UNO_QUERY );
@@ -373,19 +373,19 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     }
     else
     {
-        // add a subroutine named after the module itself
+        
         aSourceCode.appendAscii( "Sub " ).
             append( maName.replace( ' ', '_' ) ).append( '\n' );
     }
 
-    // append passed VBA source code
+    
     aSourceCode.append( rVBASourceCode );
 
-    // close the subroutine named after the module
+    
     if( !mbExecutable )
         aSourceCode.appendAscii( "End Sub\n" );
 
-    // insert extended module info
+    
     try
     {
         Reference< XVBAModuleInfo > xVBAModuleInfo( rxBasicLib, UNO_QUERY_THROW );
@@ -395,7 +395,7 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     {
     }
 
-    // insert the module into the passed Basic library
+    
     try
     {
         rxBasicLib->insertByName( maName, Any( aSourceCode.makeStringAndClear() ) );
@@ -406,9 +406,9 @@ void VbaModule::createModule( const OUString& rVBASourceCode,
     }
 }
 
-// ============================================================================
 
-} // namespace ole
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/controls/roadmapentry.hxx>
@@ -26,7 +26,7 @@
 ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
                                 ,OPropertyContainer( GetBroadcastHelper() )
 {
-    // registerProperty or registerMayBeVoidProperty or registerPropertyNoMember
+    
 
     registerProperty( OUString("Label"), RM_PROPERTY_ID_LABEL,
                       ::com::sun::star::beans::PropertyAttribute::BOUND |
@@ -49,26 +49,26 @@ ORoadmapEntry::ORoadmapEntry() : ORoadmapEntry_Base( )
                     & m_bInteractive, ::getCppuType( &m_bInteractive ) );
 
 
-    // ...
+    
 
-    // Note that the list of registered properties has to be fixed: Different
-    // instances of this class have to register the same set of properties with
-    // the same attributes.
+    
+    
+    
     //
-    // This is because all instances of the class share the same PropertySetInfo
-    // which has been built from the registered property of _one_ instance.
+    
+    
 }
 
-//--------------------------------------------------------------------------
+
 IMPLEMENT_FORWARD_XINTERFACE2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelper::OPropertyContainer );
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelper::OPropertyContainer );
-    // order matters:
-    //  the first is the class name
-    //  the second is the class which implements the ref-counting
-    //  the third up to n-th (when using IMPLEMENT_FORWARD_*3 and so on) are other base classes
-    //  whose XInterface and XTypeProvider implementations should be merged
+    
+    
+    
+    
+    
 
-//--------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star:: beans::XPropertySetInfo > SAL_CALL
     ORoadmapEntry::getPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
@@ -95,17 +95,17 @@ sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) 
     pArray[0] = "com.sun.star.awt.RoadmapItem";
     return aRet;
 }
-//--------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper& ORoadmapEntry::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
-//--------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper* ORoadmapEntry::createArrayHelper() const
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > aProps;
-    // describes all properties which have been registered in the ctor
+    
     describeProperties( aProps );
 
     return new ::cppu::OPropertyArrayHelper( aProps );

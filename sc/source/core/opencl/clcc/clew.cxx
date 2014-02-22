@@ -1,15 +1,15 @@
-//////////////////////////////////////////////////////////////////////////
-//  Copyright (c) 2009-2011 Organic Vectory B.V.
-//  Written by George van Venrooij
+
+
+
 //
-//  Distributed under the Boost Software License, Version 1.0.
-//  (See accompanying file license.txt)
-//////////////////////////////////////////////////////////////////////////
+
+
+
 
 #include "clew.h"
 
-//! \file clew.c
-//! \brief OpenCL run-time loader source
+
+
 
 #ifndef CLCC_GENERATE_DOCUMENTATION
     #ifdef _WIN32
@@ -32,18 +32,18 @@
         #define CLCC_DYNLIB_IMPORT      dlsym
     #endif
 #else
-    //typedef implementation_defined  CLCC_DYNLIB_HANDLE;
-    //#define CLCC_DYNLIB_OPEN(path)  implementation_defined
-    //#define CLCC_DYNLIB_CLOSE       implementation_defined
-    //#define CLCC_DYNLIB_IMPORT      implementation_defined
+    
+    
+    
+    
 #endif
 
 #include <stdlib.h>
 
-//! \brief module handle
+
 static CLCC_DYNLIB_HANDLE module = NULL;
 
-//  Variables holding function entry points
+
 #ifndef CLCC_GENERATE_DOCUMENTATION
 PFNCLGETPLATFORMIDS                 __clewGetPlatformIDs                = NULL;
 PFNCLGETPLATFORMINFO                __clewGetPlatformInfo               = NULL;
@@ -111,15 +111,15 @@ PFNCLENQUEUEMARKER                  __clewEnqueueMarker                 = NULL;
 PFNCLENQUEUEWAITFOREVENTS           __clewEnqueueWaitForEvents          = NULL;
 PFNCLENQUEUEBARRIER                 __clewEnqueueBarrier                = NULL;
 PFNCLGETEXTENSIONFUNCTIONADDRESS    __clewGetExtensionFunctionAddress   = NULL;
-#endif  //  CLCC_GENERATE_DOCUMENTATION
+#endif  
 
 
-//! \brief Unloads OpenCL dynamic library, should not be called directly
+
 static void clewExit(void)
 {
     if (module != NULL)
     {
-        //  Ignore errors
+        
         CLCC_DYNLIB_CLOSE(module);
         module = NULL;
     }
@@ -133,42 +133,42 @@ static void clewExit(void)
         return CLEW_ERROR_IMPORT_FAILED;    \
     }                                       \
 
-//! \param path path to dynamic library to load
-//! \return CLEW_ERROR_OPEN_FAILED if the library could not be opened
-//! CLEW_ERROR_ATEXIT_FAILED if atexit(clewExit) failed
-//! CLEW_SUCCESS when the library was successfully loaded
+
+
+
+
 int clewInit(const char* path)
 {
     int error = 0;
 
-    //  Check if already initialized
+    
     if (module != NULL)
     {
         return CLEW_SUCCESS;
     }
 
-    //  Load library
+    
     module = CLCC_DYNLIB_OPEN(path);
 
-    //  Check for errors
+    
     if (module == NULL)
     {
         return CLEW_ERROR_OPEN_FAILED;
     }
 
-    //  Set unloading
+    
     error = atexit(clewExit);
 
     if (error)
     {
-        //  Failure queing atexit, shutdown with error
+        
         CLCC_DYNLIB_CLOSE(module);
         module = NULL;
 
         return CLEW_ERROR_ATEXIT_FAILED;
     }
 
-    //  Determine function entry-points
+    
     CLEW_CHECK_FUNCTION(__clewGetPlatformIDs                = (PFNCLGETPLATFORMIDS              )CLCC_DYNLIB_IMPORT(module, "clGetPlatformIDs"));
     CLEW_CHECK_FUNCTION(__clewGetPlatformInfo               = (PFNCLGETPLATFORMINFO             )CLCC_DYNLIB_IMPORT(module, "clGetPlatformInfo"));
     CLEW_CHECK_FUNCTION(__clewGetDeviceIDs                  = (PFNCLGETDEVICEIDS                )CLCC_DYNLIB_IMPORT(module, "clGetDeviceIDs"));
@@ -239,80 +239,80 @@ int clewInit(const char* path)
     return CLEW_SUCCESS;
 }
 
-//! \param error CL error code
-//! \return a string representation of the error code
+
+
 const char* clewErrorString(cl_int error)
 {
     static const char* strings[] =
     {
-        // Error Codes
-          "CL_SUCCESS"                                  //   0
-        , "CL_DEVICE_NOT_FOUND"                         //  -1
-        , "CL_DEVICE_NOT_AVAILABLE"                     //  -2
-        , "CL_COMPILER_NOT_AVAILABLE"                   //  -3
-        , "CL_MEM_OBJECT_ALLOCATION_FAILURE"            //  -4
-        , "CL_OUT_OF_RESOURCES"                         //  -5
-        , "CL_OUT_OF_HOST_MEMORY"                       //  -6
-        , "CL_PROFILING_INFO_NOT_AVAILABLE"             //  -7
-        , "CL_MEM_COPY_OVERLAP"                         //  -8
-        , "CL_IMAGE_FORMAT_MISMATCH"                    //  -9
-        , "CL_IMAGE_FORMAT_NOT_SUPPORTED"               //  -10
-        , "CL_BUILD_PROGRAM_FAILURE"                    //  -11
-        , "CL_MAP_FAILURE"                              //  -12
+        
+          "CL_SUCCESS"                                  
+        , "CL_DEVICE_NOT_FOUND"                         
+        , "CL_DEVICE_NOT_AVAILABLE"                     
+        , "CL_COMPILER_NOT_AVAILABLE"                   
+        , "CL_MEM_OBJECT_ALLOCATION_FAILURE"            
+        , "CL_OUT_OF_RESOURCES"                         
+        , "CL_OUT_OF_HOST_MEMORY"                       
+        , "CL_PROFILING_INFO_NOT_AVAILABLE"             
+        , "CL_MEM_COPY_OVERLAP"                         
+        , "CL_IMAGE_FORMAT_MISMATCH"                    
+        , "CL_IMAGE_FORMAT_NOT_SUPPORTED"               
+        , "CL_BUILD_PROGRAM_FAILURE"                    
+        , "CL_MAP_FAILURE"                              
 
-        , ""    //  -13
-        , ""    //  -14
-        , ""    //  -15
-        , ""    //  -16
-        , ""    //  -17
-        , ""    //  -18
-        , ""    //  -19
+        , ""    
+        , ""    
+        , ""    
+        , ""    
+        , ""    
+        , ""    
+        , ""    
 
-        , ""    //  -20
-        , ""    //  -21
-        , ""    //  -22
-        , ""    //  -23
-        , ""    //  -24
-        , ""    //  -25
-        , ""    //  -26
-        , ""    //  -27
-        , ""    //  -28
-        , ""    //  -29
+        , ""    
+        , ""    
+        , ""    
+        , ""    
+        , ""    
+        , ""    
+        , ""    
+        , ""    
+        , ""    
+        , ""    
 
-        , "CL_INVALID_VALUE"                            //  -30
-        , "CL_INVALID_DEVICE_TYPE"                      //  -31
-        , "CL_INVALID_PLATFORM"                         //  -32
-        , "CL_INVALID_DEVICE"                           //  -33
-        , "CL_INVALID_CONTEXT"                          //  -34
-        , "CL_INVALID_QUEUE_PROPERTIES"                 //  -35
-        , "CL_INVALID_COMMAND_QUEUE"                    //  -36
-        , "CL_INVALID_HOST_PTR"                         //  -37
-        , "CL_INVALID_MEM_OBJECT"                       //  -38
-        , "CL_INVALID_IMAGE_FORMAT_DESCRIPTOR"          //  -39
-        , "CL_INVALID_IMAGE_SIZE"                       //  -40
-        , "CL_INVALID_SAMPLER"                          //  -41
-        , "CL_INVALID_BINARY"                           //  -42
-        , "CL_INVALID_BUILD_OPTIONS"                    //  -43
-        , "CL_INVALID_PROGRAM"                          //  -44
-        , "CL_INVALID_PROGRAM_EXECUTABLE"               //  -45
-        , "CL_INVALID_KERNEL_NAME"                      //  -46
-        , "CL_INVALID_KERNEL_DEFINITION"                //  -47
-        , "CL_INVALID_KERNEL"                           //  -48
-        , "CL_INVALID_ARG_INDEX"                        //  -49
-        , "CL_INVALID_ARG_VALUE"                        //  -50
-        , "CL_INVALID_ARG_SIZE"                         //  -51
-        , "CL_INVALID_KERNEL_ARGS"                      //  -52
-        , "CL_INVALID_WORK_DIMENSION"                   //  -53
-        , "CL_INVALID_WORK_GROUP_SIZE"                  //  -54
-        , "CL_INVALID_WORK_ITEM_SIZE"                   //  -55
-        , "CL_INVALID_GLOBAL_OFFSET"                    //  -56
-        , "CL_INVALID_EVENT_WAIT_LIST"                  //  -57
-        , "CL_INVALID_EVENT"                            //  -58
-        , "CL_INVALID_OPERATION"                        //  -59
-        , "CL_INVALID_GL_OBJECT"                        //  -60
-        , "CL_INVALID_BUFFER_SIZE"                      //  -61
-        , "CL_INVALID_MIP_LEVEL"                        //  -62
-        , "CL_INVALID_GLOBAL_WORK_SIZE"                 //  -63
+        , "CL_INVALID_VALUE"                            
+        , "CL_INVALID_DEVICE_TYPE"                      
+        , "CL_INVALID_PLATFORM"                         
+        , "CL_INVALID_DEVICE"                           
+        , "CL_INVALID_CONTEXT"                          
+        , "CL_INVALID_QUEUE_PROPERTIES"                 
+        , "CL_INVALID_COMMAND_QUEUE"                    
+        , "CL_INVALID_HOST_PTR"                         
+        , "CL_INVALID_MEM_OBJECT"                       
+        , "CL_INVALID_IMAGE_FORMAT_DESCRIPTOR"          
+        , "CL_INVALID_IMAGE_SIZE"                       
+        , "CL_INVALID_SAMPLER"                          
+        , "CL_INVALID_BINARY"                           
+        , "CL_INVALID_BUILD_OPTIONS"                    
+        , "CL_INVALID_PROGRAM"                          
+        , "CL_INVALID_PROGRAM_EXECUTABLE"               
+        , "CL_INVALID_KERNEL_NAME"                      
+        , "CL_INVALID_KERNEL_DEFINITION"                
+        , "CL_INVALID_KERNEL"                           
+        , "CL_INVALID_ARG_INDEX"                        
+        , "CL_INVALID_ARG_VALUE"                        
+        , "CL_INVALID_ARG_SIZE"                         
+        , "CL_INVALID_KERNEL_ARGS"                      
+        , "CL_INVALID_WORK_DIMENSION"                   
+        , "CL_INVALID_WORK_GROUP_SIZE"                  
+        , "CL_INVALID_WORK_ITEM_SIZE"                   
+        , "CL_INVALID_GLOBAL_OFFSET"                    
+        , "CL_INVALID_EVENT_WAIT_LIST"                  
+        , "CL_INVALID_EVENT"                            
+        , "CL_INVALID_OPERATION"                        
+        , "CL_INVALID_GL_OBJECT"                        
+        , "CL_INVALID_BUFFER_SIZE"                      
+        , "CL_INVALID_MIP_LEVEL"                        
+        , "CL_INVALID_GLOBAL_WORK_SIZE"                 
     };
 
     if  (   (error > 0)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaglobals.hxx"
 
@@ -36,11 +36,11 @@ using namespace ::ooo::vba;
 
 
 
-// =============================================================================
-// ScVbaGlobals
-// =============================================================================
 
-//ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< css::uno::XComponentContext >const& rxContext,  ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext )
+
+
+
+
 
 ScVbaGlobals::ScVbaGlobals( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : ScVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "ExcelDocumentContext" )
 {
@@ -60,13 +60,13 @@ ScVbaGlobals::~ScVbaGlobals()
     OSL_TRACE("ScVbaGlobals::~ScVbaGlobals");
 }
 
-// =============================================================================
-// XGlobals
-// =============================================================================
+
+
+
 uno::Reference<excel::XApplication >
 ScVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
-//  OSL_TRACE("In ScVbaGlobals::getApplication");
+
         if ( !mxApplication.is() )
         mxApplication.set( new ScVbaApplication( mxContext) );
        return mxApplication;
@@ -84,13 +84,13 @@ ScVbaGlobals::getExcel() throw (uno::RuntimeException)
 uno::Reference< excel::XWorkbook > SAL_CALL
 ScVbaGlobals::getActiveWorkbook() throw (uno::RuntimeException)
 {
-//  OSL_TRACE("In ScVbaGlobals::getActiveWorkbook");
+
     uno::Reference< excel::XWorkbook > xWorkbook( getApplication()->getActiveWorkbook(), uno::UNO_QUERY);
     if ( xWorkbook.is() )
     {
         return xWorkbook;
     }
-// FIXME check if this is correct/desired behavior
+
     throw uno::RuntimeException( OUString(
         "No activeWorkbook available" ), Reference< uno::XInterface >() );
 }
@@ -224,7 +224,7 @@ ScVbaGlobals::Rows( const uno::Any& aIndex ) throw (uno::RuntimeException)
 uno::Any SAL_CALL
 ScVbaGlobals::getDebug() throw (uno::RuntimeException)
 {
-    try // return empty object on error
+    try 
     {
         uno::Reference< lang::XMultiComponentFactory > xServiceManager( mxContext->getServiceManager(), uno::UNO_SET_THROW );
         uno::Reference< uno::XInterface > xVBADebug = xServiceManager->createInstanceWithContext(

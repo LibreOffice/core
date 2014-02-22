@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterPaneBase.hxx"
@@ -38,7 +38,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sdext { namespace presenter {
 
-//===== PresenterPaneBase =====================================================
+
 
 PresenterPaneBase::PresenterPaneBase (
     const Reference<XComponentContext>& rxContext,
@@ -130,15 +130,15 @@ Reference<drawing::framework::XPaneBorderPainter>
 void PresenterPaneBase::SetCalloutAnchor (const css::awt::Point& rCalloutAnchor)
 {
     mbHasCallout = true;
-    // Anchor is given in the coorindate system of the parent window.
-    // Transform it into the local coordinate system.
+    
+    
     maCalloutAnchor = rCalloutAnchor;
     const awt::Rectangle aBorderBox (mxBorderWindow->getPosSize());
     maCalloutAnchor.X -= aBorderBox.X;
     maCalloutAnchor.Y -= aBorderBox.Y;
 
-    // Move the bottom of the border window so that it goes through the
-    // callout anchor (special case for bottom callout).
+    
+    
     sal_Int32 nHeight (rCalloutAnchor.Y - aBorderBox.Y);
     if (mxBorderPainter.is() && mxPaneId.is())
         nHeight += mxBorderPainter->getCalloutOffset(mxPaneId->getResourceURL()).Y;
@@ -161,7 +161,7 @@ awt::Point PresenterPaneBase::GetCalloutAnchor (void) const
     return maCalloutAnchor;
 }
 
-//----- XInitialization -------------------------------------------------------
+
 
 void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
     throw (Exception, RuntimeException)
@@ -179,7 +179,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
     {
         try
         {
-            // Get the resource id from the first argument.
+            
             if ( ! (rArguments[0] >>= mxPaneId))
             {
                 throw lang::IllegalArgumentException(
@@ -240,7 +240,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
 
             CreateCanvases(mxParentWindow, xParentCanvas);
 
-            // Raise new windows.
+            
             ToTop();
         }
         catch (Exception&)
@@ -258,7 +258,7 @@ void SAL_CALL PresenterPaneBase::initialize (const Sequence<Any>& rArguments)
     }
 }
 
-//----- XResourceId -----------------------------------------------------------
+
 
 Reference<XResourceId> SAL_CALL PresenterPaneBase::getResourceId (void)
     throw (RuntimeException)
@@ -273,7 +273,7 @@ sal_Bool SAL_CALL PresenterPaneBase::isAnchorOnly (void)
     return true;
 }
 
-//----- XWindowListener -------------------------------------------------------
+
 
 void SAL_CALL PresenterPaneBase::windowResized (const awt::WindowEvent& rEvent)
     throw (RuntimeException)
@@ -303,7 +303,7 @@ void SAL_CALL PresenterPaneBase::windowHidden (const lang::EventObject& rEvent)
     ThrowIfDisposed();
 }
 
-//----- lang::XEventListener --------------------------------------------------
+
 
 void SAL_CALL PresenterPaneBase::disposing (const lang::EventObject& rEvent)
     throw (RuntimeException)
@@ -314,7 +314,7 @@ void SAL_CALL PresenterPaneBase::disposing (const lang::EventObject& rEvent)
     }
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterPaneBase::CreateWindows (
     const Reference<awt::XWindow>& rxParentWindow,
@@ -361,8 +361,8 @@ void PresenterPaneBase::PaintBorderBackground (
     (void)rBorderBox;
     (void)rUpdateBox;
     /*
-    // The outer box of the border is given.  We need the center and inner
-    // box as well.
+    
+    
     awt::Rectangle aCenterBox (
         mxBorderPainter->removeBorder(
             mxPaneId->getResourceURL(),
@@ -452,6 +452,6 @@ void PresenterPaneBase::ThrowIfDisposed (void)
     }
 }
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -42,7 +42,7 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
+        throw lang::DisposedException(); 
 
     if ( m_nObjectState != embed::EmbedStates::INPLACE_ACTIVE
       && m_nObjectState != embed::EmbedStates::UI_ACTIVE )
@@ -52,7 +52,7 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
     awt::Rectangle aNewRectToShow = GetRectangleInterception( aPosRect, aClipRect );
     awt::Rectangle aOldRectToShow = GetRectangleInterception( m_aOwnRectangle, m_aClipRectangle );
 
-    // the clip rectangle changes view only in case interception is also changed
+    
     if ( !RectanglesEqual( m_aOwnRectangle, aPosRect )
       || ( !RectanglesEqual( m_aClipRectangle, aPosRect ) && !RectanglesEqual( aOldRectToShow, aNewRectToShow ) ) )
         m_pDocHolder->PlaceFrame( aNewRectToShow );
@@ -66,7 +66,7 @@ void SAL_CALL OCommonEmbeddedObject::enableModeless( sal_Bool /*bEnable*/ )
                 uno::Exception,
                 uno::RuntimeException )
 {
-    // TODO: notify model that it can not use modal dialogs
+    
 }
 
 void SAL_CALL OCommonEmbeddedObject::translateAccelerators(
@@ -74,7 +74,7 @@ void SAL_CALL OCommonEmbeddedObject::translateAccelerators(
         throw ( embed::WrongStateException,
                 uno::RuntimeException )
 {
-    // TODO: UI activation related
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

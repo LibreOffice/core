@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vcl/svapp.hxx"
@@ -33,12 +33,12 @@
 #endif
 #include "quartz/salgdi.h"
 
-// -----------------------------------------------------------------------
+
 
 SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 {
-    // #i92075# can be called first in a thread
+    
     SalData::ensureThreadAutoreleasePool();
 
 #ifdef IOS
@@ -51,14 +51,14 @@ SalVirtualDevice* AquaSalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 {
     delete pDevice;
 }
 
-// =======================================================================
+
 
 AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX, long nDY, sal_uInt16 nBitCount, const SystemGraphicsData *pData )
 :   mbGraphicsUsed( false )
@@ -68,34 +68,34 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
 {
     if( pGraphic && pData && pData->rCGContext )
     {
-        // Create virtual device based on existing SystemGraphicsData
-        // We ignore nDx and nDY, as the desired size comes from the SystemGraphicsData.
-        // WTF does the above mean, SystemGraphicsData has no size field(s).
-        mbForeignContext = true;        // the mxContext is from pData
+        
+        
+        
+        mbForeignContext = true;        
         mpGraphics = new AquaSalGraphics( /*pGraphic*/ );
 #ifdef IOS
-        // Note: we should *not* create a CGLayer and assign it to
-        // mxLayer here. Don't confuse CGLayer and CALayer. A CGLayer
-        // is basically a fancy off-screen bitmap not related to
-        // anything being displayed at all. The CGContext passed in
-        // here refers to something actively part of the compositor
-        // stack and being dislayed on the device, and *there*
-        // CALayers are involved, sure. The use of mxLayer in this
-        // code is for "traditional" LO virtual devices, off-screen
-        // bitmaps. I think. On the other hand, the use of
-        // VirtualDevice with a "foreign" CGContext for OS X is
-        // actually dead code...
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 #endif
         mpGraphics->SetVirDevGraphics( mxLayer, pData->rCGContext );
     }
     else
     {
-        // create empty new virtual device
-        mbForeignContext = false;           // the mxContext is created within VCL
-        mpGraphics = new AquaSalGraphics(); // never fails
+        
+        mbForeignContext = false;           
+        mpGraphics = new AquaSalGraphics(); 
         mnBitmapDepth = nBitCount;
 #ifdef MACOSX
-        // inherit resolution from reference device
+        
         if( pGraphic )
         {
             AquaSalFrame* pFrame = pGraphic->getGraphicsFrame();
@@ -109,11 +109,11 @@ AquaSalVirtualDevice::AquaSalVirtualDevice( AquaSalGraphics* pGraphic, long nDX,
         if( nDX && nDY )
             SetSize( nDX, nDY );
 
-        // NOTE: if SetSize does not succeed, we just ignore the nDX and nDY
+        
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 AquaSalVirtualDevice::~AquaSalVirtualDevice()
 {
@@ -126,12 +126,12 @@ AquaSalVirtualDevice::~AquaSalVirtualDevice()
     Destroy();
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalVirtualDevice::Destroy()
 {
     if( mbForeignContext ) {
-        // Do not delete mxContext that we have received from outside VCL
+        
         mxLayer = NULL;
         return;
     }
@@ -153,7 +153,7 @@ void AquaSalVirtualDevice::Destroy()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 SalGraphics* AquaSalVirtualDevice::GetGraphics()
 {
@@ -164,14 +164,14 @@ SalGraphics* AquaSalVirtualDevice::GetGraphics()
     return mpGraphics;
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalVirtualDevice::ReleaseGraphics( SalGraphics* )
 {
     mbGraphicsUsed = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 {
@@ -183,7 +183,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 
     if( mbForeignContext )
     {
-        // Do not delete/resize mxContext that we have received from outside VCL
+        
         return true;
     }
 
@@ -195,18 +195,18 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
         const CGSize aSize = CGLayerGetSize( mxLayer );
         if( (nDX == aSize.width) && (nDY == aSize.height) )
         {
-            // Yay, we do not have to do anything :)
+            
             return true;
         }
     }
 
     Destroy();
 
-    // create a Quartz layer matching to the intended virdev usage
+    
     CGContextRef xCGContext = NULL;
     if( mnBitmapDepth && (mnBitmapDepth < 16) )
     {
-        mnBitmapDepth = 8;  // TODO: are 1bit vdevs worth it?
+        mnBitmapDepth = 8;  
         const CGColorSpaceRef aCGColorSpace = GetSalData()->mxGraySpace;
         const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNone;
         const int nBytesPerRow = (mnBitmapDepth * nDX + 7) / 8;
@@ -218,27 +218,27 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
     }
     else
     {
-        // default to a NSView target context
+        
         AquaSalFrame* pSalFrame = mpGraphics->getGraphicsFrame();
         if( !pSalFrame || !AquaSalFrame::isAlive( pSalFrame ))
         {
             if( !GetSalData()->maFrames.empty() )
             {
-                // get the first matching frame
+                
                 pSalFrame = *GetSalData()->maFrames.begin();
             }
             else
             {
-                // ensure we don't reuse a dead AquaSalFrame on the very
-                // unlikely case of no other frame to use
+                
+                
                 pSalFrame = NULL;
             }
-            // update the frame reference
+            
             mpGraphics->setGraphicsFrame( pSalFrame );
         }
         if( pSalFrame )
         {
-            // #i91990#
+            
             NSWindow* pNSWindow = pSalFrame->getNSWindow();
             if ( pNSWindow )
             {
@@ -248,7 +248,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             }
             else
             {
-                // fall back to a bitmap context
+                
                 mnBitmapDepth = 32;
                 const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
                 const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNoneSkipFirst;
@@ -269,7 +269,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 
     if( mxLayer && mpGraphics )
     {
-        // get the matching Quartz context
+        
         CGContextRef xDrawContext = CGLayerGetContext( mxLayer );
         mpGraphics->SetVirDevGraphics( mxLayer, xDrawContext, mnBitmapDepth );
     }
@@ -278,7 +278,7 @@ bool AquaSalVirtualDevice::SetSize( long nDX, long nDY )
 #endif
 }
 
-// -----------------------------------------------------------------------
+
 
 void AquaSalVirtualDevice::GetSize( long& rWidth, long& rHeight )
 {

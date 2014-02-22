@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textcharacterproperties.hxx"
@@ -37,11 +37,11 @@ using namespace ::com::sun::star::beans;
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSourceProps )
 {
-    // overwrite all properties exisiting in rSourceProps
+    
     maHyperlinkPropertyMap.insert( rSourceProps.maHyperlinkPropertyMap.begin(), rSourceProps.maHyperlinkPropertyMap.end() );
     maLatinFont.assignIfUsed( rSourceProps.maLatinFont );
     maAsianFont.assignIfUsed( rSourceProps.maAsianFont );
@@ -89,7 +89,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap[ PROP_CharFontFamilyComplex ] <<= nFontFamily;
     }
 
-    // symbolfont, will now be ... textrun.cxx ... ausgewertet !!!i#113673
+    
 
     if( maCharColor.isUsed() )
         rPropMap[ PROP_CharColor ] <<= maCharColor.getColor( rFilter.getGraphicHelper() );
@@ -121,7 +121,7 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         rPropMap[ PROP_CharEscapementHeight ] <<= sal_Int8(DFLT_ESC_PROP);
     } else {
         rPropMap[ PROP_CharEscapement ] <<= sal_Int16(0);
-        rPropMap[ PROP_CharEscapementHeight ] <<= sal_Int8(100); // 100%
+        rPropMap[ PROP_CharEscapementHeight ] <<= sal_Int8(100); 
     }
 
     if( !bUseOptional || moBold.has() ) {
@@ -158,9 +158,9 @@ float TextCharacterProperties::getCharHeightPoints( float fDefault ) const
     return moHeight.has() ? GetFontHeight( moHeight.get() ) : fDefault;
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

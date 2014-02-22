@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Any.hxx>
@@ -23,12 +23,12 @@
 #include <tools/stream.hxx>
 #include <svl/ctypeitm.hxx>
 
-// The following defines are copied from chaos/source/items/cstritem.cxx:
+
 #define CNTSTRINGITEM_STREAM_MAGIC   ( (sal_uInt32)0xfefefefe )
 #define CNTSTRINGITEM_STREAM_SEEKREL (-( (long)( sizeof( sal_uInt32 ) ) ) )
 
 //
-// class CntContentTypeItem Implementation.
+
 //
 
 TYPEINIT1_AUTOFACTORY( CntContentTypeItem, CntUnencodedStringItem );
@@ -54,18 +54,18 @@ CntContentTypeItem::CntContentTypeItem( const CntContentTypeItem& rOrig )
 {
 }
 
-// virtual
+
 sal_uInt16 CntContentTypeItem::GetVersion(sal_uInt16) const
 {
-    return 1; // because it uses SfxPoolItem::read/writeUnicodeString()
+    return 1; 
 }
 
-// virtual
+
 SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
                                          sal_uInt16 nItemVersion ) const
 {
-    // CntContentTypeItem used to be derived from CntStringItem, so take that
-    // into account:
+    
+    
     OUString aValue = readUnicodeString(rStream, nItemVersion >= 1);
     sal_uInt32 nMagic = 0;
     rStream.ReadUInt32( nMagic );
@@ -82,17 +82,17 @@ SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
     return new CntContentTypeItem(Which(), aValue);
 }
 
-// virtual
+
 SvStream & CntContentTypeItem::Store(SvStream & rStream, sal_uInt16) const
 {
-    // CntContentTypeItem used to be derived from CntStringItem, so take that
-    // into account:
+    
+    
     writeUnicodeString(rStream, GetValue());
     rStream.WriteUInt32( CNTSTRINGITEM_STREAM_MAGIC ).WriteUChar( false );
     return rStream;
 }
 
-// virtual
+
 bool CntContentTypeItem::operator==( const SfxPoolItem& rOrig ) const
 {
     const CntContentTypeItem& rOther = (const CntContentTypeItem&)rOrig;
@@ -104,7 +104,7 @@ bool CntContentTypeItem::operator==( const SfxPoolItem& rOrig ) const
         return CntUnencodedStringItem::operator==( rOther );
 }
 
-// virtual
+
 SfxPoolItem* CntContentTypeItem::Clone( SfxItemPool* /* pPool */ ) const
 {
     return new CntContentTypeItem( *this );
@@ -112,7 +112,7 @@ SfxPoolItem* CntContentTypeItem::Clone( SfxItemPool* /* pPool */ ) const
 
 void CntContentTypeItem::SetValue( const OUString& rNewVal )
 {
-    // De-initialize enum type and presentation.
+    
     _eType = CONTENT_TYPE_NOT_INIT;
     _aPresentation = OUString();
 
@@ -160,7 +160,7 @@ INetContentType CntContentTypeItem::GetEnumValue() const
 {
     if ( _eType == CONTENT_TYPE_NOT_INIT )
     {
-        // Not yet initialized... Get enum value for string content type.
+        
 
         CntContentTypeItem* pVarThis = (const_cast< CntContentTypeItem* >(this));
 
@@ -174,26 +174,26 @@ void CntContentTypeItem::SetValue( const INetContentType eType )
 {
     SetValue( INetContentTypes::GetContentType( eType ) );
 
-    // Note: SetValue( const String& ....) resets _eType. Set new enum value
-    //       after(!) calling it.
+    
+    
     _eType = eType;
 }
 
-// virtual
+
 bool CntContentTypeItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8) const
 {
     rVal <<= OUString(GetValue());
     return true;
 }
 
-// virtual
+
 bool CntContentTypeItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8)
 {
     OUString aValue;
     if ( rVal >>= aValue )
     {
-        // SetValue with an empty string resets the item; so call that
-        // function when PutValue is called with an empty string
+        
+        
         if (aValue.isEmpty())
             SetValue(aValue);
         else

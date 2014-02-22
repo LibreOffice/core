@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -63,12 +63,12 @@ using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 namespace ErrorCondition = ::com::sun::star::sdb::ErrorCondition;
 
-//------------------------------------------------------------------------------
+
 OUString SAL_CALL OEvoabResultSet::getImplementationName(  ) throw ( RuntimeException)   \
 {
     return OUString("com.sun.star.sdbcx.evoab.ResultSet");
 }
-// -------------------------------------------------------------------------
+
  Sequence< OUString > SAL_CALL OEvoabResultSet::getSupportedServiceNames(  ) throw( RuntimeException)
 {
      Sequence< OUString > aSupported(1);
@@ -385,8 +385,8 @@ public:
 
     virtual EBook* openBook(const char *abname)
     {
-        //It would be better if here we had id to begin with, see
-        //NDatabaseMetaData.cxx
+        
+        
         const char *id = NULL;
         GList *pSources = e_source_registry_list_sources(get_e_source_registry(), E_SOURCE_EXTENSION_ADDRESS_BOOK);
         for (GList* liter = pSources; liter; liter = liter->next)
@@ -547,12 +547,12 @@ public:
 
     virtual bool isLDAP( EBook *pBook )
     {
-        return pBook && !strncmp( "ldap://", e_book_get_uri( pBook ), 6 );
+        return pBook && !strncmp( "ldap:
     }
 
     virtual bool isLocal( EBook *pBook )
     {
-        return pBook && ( !strncmp( "file://", e_book_get_uri( pBook ), 6 ) ||
+        return pBook && ( !strncmp( "file:
                           !strncmp( "local:", e_book_get_uri( pBook ), 6 ) );
     }
 
@@ -645,12 +645,12 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     REGISTER_PROP( PROPERTY_ID_RESULTSETCONCURRENCY, m_nResultSetConcurrency );
 }
 
-// -------------------------------------------------------------------------
+
 OEvoabResultSet::~OEvoabResultSet()
 {
 }
 
-// -------------------------------------------------------------------------
+
 void OEvoabResultSet::construct( const QueryData& _rData )
 {
     ENSURE_OR_THROW( _rData.getQuery(), "internal error: no EBookQuery" );
@@ -701,14 +701,14 @@ void OEvoabResultSet::construct( const QueryData& _rData )
     OSL_TRACE( "Query return %d records", m_nLength );
     m_nIndex = -1;
 
-    // create our meta data (need the EBookQuery for this)
+    
     OEvoabResultSetMetaData* pMeta = new OEvoabResultSetMetaData( _rData.sTable );
     m_xMetaData = pMeta;
 
     pMeta->setEvoabFields( _rData.xSelectColumns );
 }
 
-// -------------------------------------------------------------------------
+
 void OEvoabResultSet::disposing(void)
 {
     ::comphelper::OPropertyContainer::disposing();
@@ -719,7 +719,7 @@ void OEvoabResultSet::disposing(void)
     m_pStatement = NULL;
     m_xMetaData.clear();
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(RuntimeException)
 {
     Any aRet = ::comphelper::OPropertyContainer::queryInterface(rType);
@@ -727,7 +727,7 @@ Any SAL_CALL OEvoabResultSet::queryInterface( const Type & rType ) throw(Runtime
         aRet = OResultSet_BASE::queryInterface(rType);
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException)
 {
     return ::comphelper::concatSequences(
@@ -736,8 +736,8 @@ Sequence< Type > SAL_CALL OEvoabResultSet::getTypes(  ) throw( RuntimeException)
     );
 }
 
-// -------------------------------------------------------------------------
-// XRow Interface
+
+
 
 /**
  * getString:
@@ -761,7 +761,7 @@ OUString SAL_CALL OEvoabResultSet::getString( sal_Int32 nColumnNum ) throw(SQLEx
     }
     return aResult;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -778,125 +778,125 @@ sal_Bool SAL_CALL OEvoabResultSet::getBoolean( sal_Int32 nColumnNum ) throw(SQLE
     }
     return bResult ? sal_True : sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Int64 SAL_CALL OEvoabResultSet::getLong( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getLong", *this );
     return sal_Int64();
 }
-// -------------------------------------------------------------------------
+
 Reference< XArray > SAL_CALL OEvoabResultSet::getArray( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getArray", *this );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 Reference< XClob > SAL_CALL OEvoabResultSet::getClob( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getClob", *this );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 Reference< XBlob > SAL_CALL OEvoabResultSet::getBlob( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getBlob", *this );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 Reference< XRef > SAL_CALL OEvoabResultSet::getRef( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getRef", *this );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OEvoabResultSet::getObject( sal_Int32 /*nColumnNum*/, const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getObject", *this );
     return Any();
 }
-// -------------------------------------------------------------------------
+
 sal_Int16 SAL_CALL OEvoabResultSet::getShort( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getShort", *this );
     return 0;
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::Time SAL_CALL OEvoabResultSet::getTime( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getTime", *this );
     return ::com::sun::star::util::Time();
 }
-// -------------------------------------------------------------------------
+
 util::DateTime SAL_CALL OEvoabResultSet::getTimestamp( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getTimestamp", *this );
     return ::com::sun::star::util::DateTime();
 }
-// -------------------------------------------------------------------------
+
 Reference< XInputStream > SAL_CALL OEvoabResultSet::getBinaryStream( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getBinaryStream", *this );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 Reference< XInputStream > SAL_CALL OEvoabResultSet::getCharacterStream( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getCharacterStream", *this );
     return NULL;
 }
-// -------------------------------------------------------------------------
+
 sal_Int8 SAL_CALL OEvoabResultSet::getByte( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getByte", *this );
     return 0;
 }
-// -------------------------------------------------------------------------
+
 Sequence< sal_Int8 > SAL_CALL OEvoabResultSet::getBytes( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getBytes", *this );
     return Sequence< sal_Int8 >();
 }
-// -------------------------------------------------------------------------
+
 ::com::sun::star::util::Date SAL_CALL OEvoabResultSet::getDate( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getDate", *this );
     return ::com::sun::star::util::Date();
 }
-// -------------------------------------------------------------------------
+
 double SAL_CALL OEvoabResultSet::getDouble( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getDouble", *this );
     return 0;
 }
-// -------------------------------------------------------------------------
+
 float SAL_CALL OEvoabResultSet::getFloat( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getFloat", *this );
     return 0;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabResultSet::getInt( sal_Int32 /*nColumnNum*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFunctionNotSupportedException( "XRow::getInt", *this );
     return 0;
 }
-// XRow Interface Ends
-// -------------------------------------------------------------------------
 
-// XResultSetMetaDataSupplier Interface
+
+
+
 Reference< XResultSetMetaData > SAL_CALL OEvoabResultSet::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    // the meta data should have been created at construction time
+    
     ENSURE_OR_THROW( m_xMetaData.is(), "internal error: no meta data" );
     return m_xMetaData;
 }
-// XResultSetMetaDataSupplier Interface Ends
-// -------------------------------------------------------------------------
 
-// XResultSet Interface
+
+
+
 sal_Bool SAL_CALL OEvoabResultSet::next(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -908,7 +908,7 @@ sal_Bool SAL_CALL OEvoabResultSet::next(  ) throw(SQLException, RuntimeException
     else
         return false;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::wasNull(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -916,7 +916,7 @@ sal_Bool SAL_CALL OEvoabResultSet::wasNull(  ) throw(SQLException, RuntimeExcept
 
     return m_bWasNull;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -924,7 +924,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isBeforeFirst(  ) throw(SQLException, Runtime
 
     return m_nIndex < 0;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OEvoabResultSet::getRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -932,7 +932,7 @@ sal_Int32 SAL_CALL OEvoabResultSet::getRow(  ) throw(SQLException, RuntimeExcept
 
     return m_nIndex;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -940,7 +940,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isAfterLast(  ) throw(SQLException, RuntimeEx
 
     return m_nIndex >= m_nLength;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::isFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -948,7 +948,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isFirst(  ) throw(SQLException, RuntimeExcept
 
     return m_nIndex == 0;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::isLast(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -956,7 +956,7 @@ sal_Bool SAL_CALL OEvoabResultSet::isLast(  ) throw(SQLException, RuntimeExcepti
 
     return m_nIndex == m_nLength - 1;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OEvoabResultSet::beforeFirst(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -964,7 +964,7 @@ void SAL_CALL OEvoabResultSet::beforeFirst(  ) throw(SQLException, RuntimeExcept
 
     m_nIndex = -1;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OEvoabResultSet::afterLast(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -972,7 +972,7 @@ void SAL_CALL OEvoabResultSet::afterLast(  ) throw(SQLException, RuntimeExceptio
 
     m_nIndex = m_nLength;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OEvoabResultSet::first(  ) throw(SQLException, RuntimeException)
 {
@@ -982,7 +982,7 @@ sal_Bool SAL_CALL OEvoabResultSet::first(  ) throw(SQLException, RuntimeExceptio
     m_nIndex = 0;
     return true;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OEvoabResultSet::last(  ) throw(SQLException, RuntimeException)
 {
@@ -992,7 +992,7 @@ sal_Bool SAL_CALL OEvoabResultSet::last(  ) throw(SQLException, RuntimeException
     m_nIndex = m_nLength - 1;
     return true;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1004,7 +1004,7 @@ sal_Bool SAL_CALL OEvoabResultSet::absolute( sal_Int32 row ) throw(SQLException,
     else
         return false;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1017,7 +1017,7 @@ sal_Bool SAL_CALL OEvoabResultSet::relative( sal_Int32 row ) throw(SQLException,
     else
         return false;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::previous(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1030,7 +1030,7 @@ sal_Bool SAL_CALL OEvoabResultSet::previous(  ) throw(SQLException, RuntimeExcep
         else
         return false;
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1038,7 +1038,7 @@ Reference< XInterface > SAL_CALL OEvoabResultSet::getStatement(  ) throw(SQLExce
 ::com::sun::star::uno::WeakReferenceHelper      aStatement((OWeakObject*)m_pStatement);
     return aStatement.get();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OEvoabResultSet::rowDeleted(  ) throw(SQLException, RuntimeException)
 {
@@ -1047,7 +1047,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowDeleted(  ) throw(SQLException, RuntimeExc
 
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::rowInserted(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1055,7 +1055,7 @@ sal_Bool SAL_CALL OEvoabResultSet::rowInserted(  ) throw(SQLException, RuntimeEx
 
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OEvoabResultSet::rowUpdated(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1063,15 +1063,15 @@ sal_Bool SAL_CALL OEvoabResultSet::rowUpdated(  ) throw(SQLException, RuntimeExc
 
     return sal_False;
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OEvoabResultSet::refreshRow(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 }
-//XResult Interface ends
-// -------------------------------------------------------------------------
-// XCancellable
+
+
+
 
 void SAL_CALL OEvoabResultSet::cancel(  ) throw(RuntimeException)
 {
@@ -1081,7 +1081,7 @@ void SAL_CALL OEvoabResultSet::cancel(  ) throw(RuntimeException)
 
 }
 
-//XCloseable
+
 void SAL_CALL OEvoabResultSet::close(  ) throw(SQLException, RuntimeException)
 {
     {
@@ -1092,27 +1092,27 @@ void SAL_CALL OEvoabResultSet::close(  ) throw(SQLException, RuntimeException)
     dispose();
 }
 
-// XWarningsSupplier
-// -------------------------------------------------------------------------
+
+
 void SAL_CALL OEvoabResultSet::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("In/Out: OEvoabResultSet::clearWarnings" );
     m_aWarnings.clearWarnings();
 }
-// -------------------------------------------------------------------------
+
 Any SAL_CALL OEvoabResultSet::getWarnings(  ) throw(SQLException, RuntimeException)
 {
     OSL_TRACE("In/Out: OEvoabResultSet::getWarnings" );
     return m_aWarnings.getWarnings();
 }
-// -------------------------------------------------------------------------
-//XColumnLocate Interface
+
+
 sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    // find the first column with the name columnName
+    
     Reference< XResultSetMetaData > xMeta = getMetaData();
     sal_Int32 nLen = xMeta->getColumnCount();
     sal_Int32 i = 1;
@@ -1125,41 +1125,41 @@ sal_Int32 SAL_CALL OEvoabResultSet::findColumn( const OUString& columnName ) thr
 
     ::dbtools::throwInvalidColumnException( columnName, *this );
     assert(false);
-    return 0; // Never reached
+    return 0; 
 }
-// -------------------------------------------------------------------------
-//XColumnLocate interface ends
 
-// -------------------------------------------------------------------------
+
+
+
 ::cppu::IPropertyArrayHelper* OEvoabResultSet::createArrayHelper( ) const
 {
     Sequence< Property > aProps;
     describeProperties( aProps );
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
-// -------------------------------------------------------------------------
+
 ::cppu::IPropertyArrayHelper & OEvoabResultSet::getInfoHelper()
 {
     return *const_cast<OEvoabResultSet*>(this)->getArrayHelper();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OEvoabResultSet::acquire() throw()
 {
     OResultSet_BASE::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OEvoabResultSet::release() throw()
 {
     OResultSet_BASE::release();
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL
 OEvoabResultSet::getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
-// -----------------------------------------------------------------------------
 
-} } // connectivity::evoab
+
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

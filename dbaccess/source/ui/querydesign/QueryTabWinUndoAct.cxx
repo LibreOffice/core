@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "QueryTabWinUndoAct.hxx"
@@ -50,7 +50,7 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
 {
     if (m_bOwnerOfObjects)
     {
-        // I should take care to delete the window if I am the only owner
+        
         OSL_ENSURE(m_pTabWin != NULL, "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : m_pTabWin sollte nicht NULL sein");
         OSL_ENSURE(!m_pTabWin->IsVisible(), "OQueryTabWinUndoAct::~OQueryTabWinUndoAct() : *m_pTabWin sollte nicht sichtbar sein");
 
@@ -58,7 +58,7 @@ OQueryTabWinUndoAct::~OQueryTabWinUndoAct()
             m_pTabWin->clearListBox();
         delete m_pTabWin;
 
-        // and of course the corresponding connections
+        
         ::std::vector<OTableConnection*>::iterator aIter = m_vTableConnection.begin();
         ::std::vector<OTableConnection*>::iterator aEnd = m_vTableConnection.end();
         for(;aIter != aEnd;++aIter)

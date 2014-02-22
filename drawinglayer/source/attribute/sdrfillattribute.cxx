@@ -33,12 +33,12 @@ namespace drawinglayer
         class ImpSdrFillAttribute
         {
         public:
-            // fill definitions
-            double                              mfTransparence;     // [0.0 .. 1.0], 0.0==no transp.
-            basegfx::BColor                     maColor;            // fill color
-            FillGradientAttribute               maGradient;         // fill gradient (if used)
-            FillHatchAttribute                  maHatch;            // fill hatch (if used)
-            SdrFillGraphicAttribute             maFillGraphic;      // fill graphic (if used)
+            
+            double                              mfTransparence;     
+            basegfx::BColor                     maColor;            
+            FillGradientAttribute               maGradient;         
+            FillHatchAttribute                  maHatch;            
+            SdrFillGraphicAttribute             maFillGraphic;      
 
         public:
             ImpSdrFillAttribute(
@@ -64,14 +64,14 @@ namespace drawinglayer
             {
             }
 
-            // data read access
+            
             double getTransparence() const { return mfTransparence; }
             const basegfx::BColor& getColor() const { return maColor; }
             const FillGradientAttribute& getGradient() const { return maGradient; }
             const FillHatchAttribute& getHatch() const { return maHatch; }
             const SdrFillGraphicAttribute& getFillGraphic() const { return maFillGraphic; }
 
-            // compare operator
+            
             bool operator==(const ImpSdrFillAttribute& rCandidate) const
             {
                 return(getTransparence() == rCandidate.getTransparence()
@@ -153,7 +153,7 @@ namespace drawinglayer
         {
             return mpSdrFillAttribute->getFillGraphic();
         }
-    } // end of namespace attribute
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

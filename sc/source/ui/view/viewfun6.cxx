@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -53,7 +53,7 @@ void ScViewFunc::DetectiveAddPred()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     pDocSh->GetDocFunc().DetectiveAddPred( GetViewData()->GetCurPos() );
-    RecalcPPT();    //! use broadcast in DocFunc instead?
+    RecalcPPT();    
 }
 
 void ScViewFunc::DetectiveDelPred()
@@ -109,7 +109,7 @@ static void lcl_jumpToRange(const ScRange& rRange, ScViewData* pView, ScDocument
 {
     OUString aAddrText(rRange.Format(SCR_ABS_3D, pDoc));
     SfxStringItem aPosItem(SID_CURRENTCELL, aAddrText);
-    SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        // remove existing selection
+    SfxBoolItem aUnmarkItem(FN_PARAM_1, true);        
     pView->GetDispatcher().Execute(
         SID_CURRENTCELL, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD,
         &aPosItem, &aUnmarkItem, 0L);
@@ -127,8 +127,8 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
     for ( size_t i = 0; i < ListSize; ++i )
     {
         const ScRange* p = aRanges[i];
-        // Collect only those ranges that are on the same sheet as the current
-        // cursor.
+        
+        
         if (p->aStart.Tab() == aCurPos.Tab())
             aRangesToMark.Append(*p);
     }
@@ -136,7 +136,7 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
     if (aRangesToMark.empty())
         return;
 
-    // Jump to the first range of all precedent ranges.
+    
     const ScRange* p = aRangesToMark.front();
     lcl_jumpToRange(*p, pView, pDocSh->GetDocument());
 
@@ -165,14 +165,14 @@ void ScViewFunc::DetectiveMarkPred()
     pDocSh->GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
 
     if (aRefTokens.empty())
-        // No precedents found.  Nothing to do.
+        
         return;
 
     ScTokenRef p = aRefTokens.front();
     if (ScRefTokenHelper::isExternalRef(p))
     {
-        // This is external.  Open the external document if available, and
-        // jump to the destination.
+        
+        
 
         sal_uInt16 nFileId = p->GetIndex();
         ScExternalRefManager* pRefMgr = pDoc->GetExternalRefManager();
@@ -201,8 +201,8 @@ void ScViewFunc::DetectiveMarkPred()
         ScRefTokenHelper::getRangeFromToken(aRange, p, aCurPos, false);
         if (aRange.aStart.Tab() != aCurPos.Tab())
         {
-            // The first precedent range is on a different sheet.  Jump to it
-            // immediately and forget the rest.
+            
+            
             lcl_jumpToRange(aRange, pView, pDoc);
             return;
         }
@@ -229,7 +229,7 @@ void ScViewFunc::DetectiveMarkSucc()
     pDocSh->GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
 
     if (aRefTokens.empty())
-        // No dependents found.  Nothing to do.
+        
         return;
 
     ScRangeList aDestRanges;
@@ -255,8 +255,8 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
     pDocSh->GetDocFunc().SetValueCell(aCurPos, fDate+fTime, true);
 
-    // Set the new cell format only when it differs from the current cell
-    // format type.
+    
+    
     sal_uInt32 nCurNumFormat = pDoc->GetNumberFormat(aCurPos);
     const SvNumberformat* pEntry = pFormatter->GetEntry(nCurNumFormat);
     if (!pEntry || !(pEntry->GetType() & nCellFmt))
@@ -270,13 +270,13 @@ void ScViewFunc::ShowNote( bool bShow )
         HideNoteMarker();
     const ScViewData& rViewData = *GetViewData();
     ScAddress aPos( rViewData.GetCurX(), rViewData.GetCurY(), rViewData.GetTabNo() );
-    // show note moved to ScDocFunc, to be able to use it in notesuno.cxx
+    
     rViewData.GetDocShell()->GetDocFunc().ShowNote( aPos, bShow );
 }
 
 void ScViewFunc::EditNote()
 {
-    // for editing display and activate
+    
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -285,18 +285,18 @@ void ScViewFunc::EditNote()
     SCTAB nTab = GetViewData()->GetTabNo();
     ScAddress aPos( nCol, nRow, nTab );
 
-    // start drawing undo to catch undo action for insertion of the caption object
+    
     pDocSh->MakeDrawLayer();
     ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
     pDrawLayer->BeginCalcUndo(true);
-    // generated undo action is processed in FuText::StopEditMode
+    
 
-    // get existing note or create a new note (including caption drawing object)
+    
     if( ScPostIt* pNote = pDoc->GetOrCreateNote( aPos ) )
     {
-        // hide temporary note caption
+        
         HideNoteMarker();
-        // show caption object without changing internal visibility state
+        
         pNote->ShowCaptionTemp( aPos );
 
         /*  Drawing object has been created in ScDocument::GetOrCreateNote() or
@@ -306,17 +306,17 @@ void ScViewFunc::EditNote()
         {
             if ( ScDrawView* pScDrawView = GetScDrawView() )
                pScDrawView->SyncForGrid( pCaption );
-            // #i33764# enable the resize handles before starting edit mode
+            
             if( FuPoor* pDraw = GetDrawFuncPtr() )
                 static_cast< FuSelection* >( pDraw )->ActivateNoteHandles( pCaption );
 
-            // activate object (as in FuSelection::TestComment)
+            
             GetViewData()->GetDispatcher().Execute( SID_DRAW_NOTEEDIT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
-            // now get the created FuText and set into EditMode
+            
             FuPoor* pPoor = GetDrawFuncPtr();
-            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    // has no RTTI
+            if ( pPoor && (pPoor->GetSlotID() == SID_DRAW_NOTEEDIT) )    
             {
-                ScrollToObject( pCaption );         // make object fully visible
+                ScrollToObject( pCaption );         
                 static_cast< FuText* >( pPoor )->SetInEditMode( pCaption );
             }
         }

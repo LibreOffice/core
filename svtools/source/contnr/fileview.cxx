@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fileview.hxx"
@@ -93,14 +93,14 @@ using ::svt::FolderDescriptor;
 
 #define SEPARATOR_STR  "----------------------------------"
 
-#define ROW_HEIGHT                17    // the height of a row has to be a little higher than the bitmap
-#define QUICK_SEARCH_TIMEOUT    1500    // time in mSec before the quicksearch string will be reseted
+#define ROW_HEIGHT                17    
+#define QUICK_SEARCH_TIMEOUT    1500    
 
 namespace
 {
-    //====================================================================
-    //= ITimeoutHandler
-    //====================================================================
+    
+    
+    
     class CallbackTimer;
     class ITimeoutHandler
     {
@@ -111,9 +111,9 @@ namespace
         ~ITimeoutHandler() {}
     };
 
-    //====================================================================
-    //= CallbackTimer
-    //====================================================================
+    
+    
+    
     class CallbackTimer : public ::salhelper::Timer
     {
     protected:
@@ -126,7 +126,7 @@ namespace
         virtual void SAL_CALL onShot();
     };
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL CallbackTimer::onShot()
     {
         OSL_ENSURE( m_pTimeoutHandler, "CallbackTimer::onShot: nobody interested in?" );
@@ -137,13 +137,13 @@ namespace
 
 }
 
-// -----------------------------------------------------------------------
+
 
 void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::vector< WildCard >& _rFilters)
 {
     if( _rFilterList.getLength() )
     {
-        // filter is given
+        
         sal_Int32 nIndex = 0;
         OUString sToken;
         do
@@ -158,11 +158,11 @@ void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::v
     }
     else
     {
-        // no filter is given -> match all
+        
         _rFilters.push_back( WildCard(OUString("*")) );
     }
 }
-// class ViewTabListBox_Impl ---------------------------------------------
+
 
 class ViewTabListBox_Impl : public SvHeaderTabListBox
 {
@@ -216,10 +216,10 @@ public:
     virtual void        ExcecuteContextMenuAction( sal_uInt16 nSelectedPopentry );
 };
 
-// class HashedEntry --------------------------------------------------
+
 
 class HashedEntry
-{   // just a special String which can be compared on equality much faster
+{   
 protected:
     OUString                maName;
     sal_Int32               mnHashCode;
@@ -277,14 +277,14 @@ inline const OUString& HashedEntry::GetName() const
     return maName;
 }
 
-// class HashedEntryList ----------------------------------------------
-// provides a list of _unique_ Entries
+
+
 class HashedEntryList : public boost::ptr_set<HashedEntry> {};
 
-// class NameTranslationEntry -----------------------------------------
+
 
 class NameTranslationEntry : public HashedEntry
-{// a fast compareble String and another String, which is used to get a substitution for a given String
+{
 protected:
     OUString                maTranslatedName;
 public:
@@ -311,23 +311,23 @@ inline const OUString& NameTranslationEntry::GetTranslation() const
     return maTranslatedName;
 }
 
-// class NameTranslationList -----------------------------------------
+
 
 class NameTranslationList : protected HashedEntryList
-{   // contains a list of substitutes of strings for a given folder (as URL)
-    // explanation of the circumstances see in remarks for Init();
+{   
+    
 protected:
-    INetURLObject               maTransFile;    // URL of file with translation entries
-    HashedEntry                 maHashedURL;    // for future purposes when dealing with a set of cached
-                                                //  NameTranslationLists
+    INetURLObject               maTransFile;    
+    HashedEntry                 maHashedURL;    
+                                                
 private:
     const OUString          maTransFileName;
-    void                    Init();             // reads the translation file and fills the (internal) list
+    void                    Init();             
 
 public:
                             NameTranslationList( const INetURLObject& rBaseURL );
-                                            // rBaseURL: path to folder for which the translation of the entries
-                                            //  should be done
+                                            
+                                            
 
     using HashedEntryList::operator==;
     using HashedEntryList::operator!=;
@@ -335,12 +335,12 @@ public:
     inline bool operator       !=( const HashedEntry& rRef ) const;
 
     const OUString*             Translate( const OUString& rName ) const;
-                                            // returns NULL, if rName can't be found
+                                            
 
-    inline void                 Update();   // clears list and init
+    inline void                 Update();   
 
     inline const OUString&      GetTransTableFileName() const;
-                                            // returns the name for the file, which contains the translation strings
+                                            
 };
 
 inline const OUString& NameTranslationList::GetTransTableFileName() const
@@ -350,10 +350,10 @@ inline const OUString& NameTranslationList::GetTransTableFileName() const
 
 void NameTranslationList::Init()
 {
-// Tries to read the file ".nametranslation.table" in the base folder. Complete path/name is in maTransFile.
-// Further on, the found entries in the section "TRANSLATIONNAMES" are used to replace names in the
-// base folder by translated ones. The translation must be given in UTF8
-// See examples of such a files in the samples-folder of an Office installation
+
+
+
+
 
     try
     {
@@ -361,7 +361,7 @@ void NameTranslationList::Init()
 
         if( aTestContent.isDocument() )
         {
-            // ... also tests the existence of maTransFile by throwing an Exception
+            
             OUString        aFsysName( maTransFile.getFSysPath( INetURLObject::FSYS_DETECT ) );
             Config          aConfig( aFsysName );
 
@@ -414,10 +414,10 @@ inline void NameTranslationList::Update()
     Init();
 }
 
-// class NameTranslator_Impl ------------------------------------------
 
-// enables the user to get string substitutions (translations for the content) for a given folder
-// see more explanations above in the description for NameTranslationList
+
+
+
 class NameTranslator_Impl : public ::svt::IContentTitleTranslation
 {
 private:
@@ -426,17 +426,17 @@ public:
                             NameTranslator_Impl( const INetURLObject& rActualFolder );
                             virtual ~NameTranslator_Impl();
 
-     // IContentTitleTranslation
+     
     virtual sal_Bool        GetTranslation( const OUString& rOriginalName, OUString& rTranslatedName ) const;
 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
     const OUString*         GetTransTableFileName() const;
-                                            // returns the name for the file, which contains the translation strings
+                                            
 };
 
-//====================================================================
-//= SvtFileView_Impl
-//====================================================================
+
+
+
 
 class SvtFileView_Impl  :public ::svt::IEnumerationResultHandler
                         ,public ITimeoutHandler
@@ -465,7 +465,7 @@ public:
     sal_uInt16              mnSortColumn;
     sal_Bool                mbAscending     : 1;
     sal_Bool                mbOnlyFolder    : 1;
-    sal_Bool                mbReplaceNames  : 1;    // translate folder names or display doc-title instead of file name
+    sal_Bool                mbReplaceNames  : 1;    
     sal_Int16               mnSuspendSelectCallback : 1;
     sal_Bool                mbIsFirstResort : 1;
 
@@ -498,7 +498,7 @@ public:
     void                    CancelRunningAsyncAction();
 
     void                    OpenFolder_Impl();
-    // #83004# -------
+    
     void                        ReplaceTabWithString( OUString& aValue );
     void                    CreateDisplayText_Impl();
     void                    CreateVector_Impl( const Sequence < OUString > &rList );
@@ -520,7 +520,7 @@ public:
                                              const OUString& rTitle,
                                              sal_Bool bWrapAround );
 
-    inline sal_Bool         EnableNameReplacing( sal_Bool bEnable = sal_True ); // returns false, if action wasn't possible
+    inline sal_Bool         EnableNameReplacing( sal_Bool bEnable = sal_True ); 
     void                    SetActualFolder( const INetURLObject& rActualFolder );
 
     sal_Bool                GetDocTitle( const OUString& rTargetURL, OUString& rDocTitle ) const;
@@ -536,11 +536,11 @@ protected:
     DECL_LINK( SelectionMultiplexer, void* );
 
 protected:
-    // IEnumerationResultHandler overridables
+    
     virtual void        enumerationDone( ::svt::EnumerationResult eResult );
             void        implEnumerationSuccess();
 
-    // ITimeoutHandler
+    
     virtual void onTimeout( CallbackTimer* _pInstigator );
 };
 
@@ -566,7 +566,7 @@ inline sal_Bool SvtFileView_Impl::EnableNameReplacing( sal_Bool bEnable )
     if( mpView->IsDeleteOrContextMenuEnabled() )
     {
         DBG_ASSERT( !mbReplaceNames, "SvtFileView_Impl::EnableNameReplacing(): state should be not possible!" );
-        bRet = !bEnable; // only for enabling this is an unsuccessful result
+        bRet = !bEnable; 
     }
     else
     {
@@ -583,7 +583,7 @@ inline void SvtFileView_Impl::EndEditing( bool _bCancel )
         mpView->EndEditing( _bCancel != false );
 }
 
-// functions -------------------------------------------------------------
+
 
 OUString CreateExactSizeText( sal_Int64 nSize )
 {
@@ -627,9 +627,9 @@ OUString CreateExactSizeText( sal_Int64 nSize )
     return aSizeStr;
 }
 
-// -----------------------------------------------------------------------
-// class ViewTabListBox_Impl ---------------------------------------------
-// -----------------------------------------------------------------------
+
+
+
 
 ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
                                           SvtFileView_Impl* pParent,
@@ -665,7 +665,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     {
         long pTabs[] = { 5, 20, 180, 320, 400, 600 };
         SetTabs(&pTabs[0], MAP_PIXEL);
-        SetTabJustify(2, AdjustRight); // column "Size"
+        SetTabJustify(2, AdjustRight); 
 
         mpHeaderBar->InsertItem(COLUMN_TITLE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TITLE), 180, nBits | HIB_UPARROW);
         mpHeaderBar->InsertItem(COLUMN_TYPE, SVT_RESSTR(STR_SVT_FILEVIEW_COLUMN_TYPE), 140, nBits);
@@ -698,7 +698,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     EnableContextMenuHandling();
 }
 
-// -----------------------------------------------------------------------
+
 
 ViewTabListBox_Impl::~ViewTabListBox_Impl()
 {
@@ -707,7 +707,7 @@ ViewTabListBox_Impl::~ViewTabListBox_Impl()
     delete mpHeaderBar;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl)
 {
@@ -719,7 +719,7 @@ IMPL_LINK_NOARG(ViewTabListBox_Impl, ResetQuickSearch_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ViewTabListBox_Impl::Resize()
 {
@@ -746,7 +746,7 @@ void ViewTabListBox_Impl::Resize()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
 {
@@ -783,7 +783,7 @@ void ViewTabListBox_Impl::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
 {
@@ -873,7 +873,7 @@ PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
     return NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ViewTabListBox_Impl::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry )
 {
@@ -889,7 +889,7 @@ void ViewTabListBox_Impl::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEn
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ViewTabListBox_Impl::ClearAll()
 {
@@ -898,7 +898,7 @@ void ViewTabListBox_Impl::ClearAll()
     Clear();
 }
 
-// -----------------------------------------------------------------------
+
 void ViewTabListBox_Impl::DeleteEntries()
 {
     short eResult = svtools::QUERYDELETE_YES;
@@ -935,7 +935,7 @@ void ViewTabListBox_Impl::DeleteEntries()
         }
 
         if (!canDelete)
-            continue; // process next entry
+            continue; 
 
         if ( eResult != svtools::QUERYDELETE_ALL )
         {
@@ -965,7 +965,7 @@ void ViewTabListBox_Impl::DeleteEntries()
     }
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
                                  const OUString& rNewText )
 {
@@ -1024,7 +1024,7 @@ sal_Bool ViewTabListBox_Impl::EditedEntry( SvTreeListEntry* pEntry,
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 void ViewTabListBox_Impl::DoQuickSearch( const sal_Unicode& rChar )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1061,18 +1061,18 @@ void ViewTabListBox_Impl::DoQuickSearch( const sal_Unicode& rChar )
     maResetQuickSearch.Start();
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool ViewTabListBox_Impl::DoubleClickHdl()
 {
     SvHeaderTabListBox::DoubleClickHdl();
     return sal_False;
-        // this means "do no additional handling". Especially this means that the SvImpLBox does not
-        // recognize that the entry at the double click position change after the handler call (which is
-        // the case if in the handler, our content was replaced)
-        // If it _would_ recognize this change, it would take this as a reason to select the entry, again
-        // - which is not what in the case of content replace
-        // (I really doubt that this behaviour of the SvImpLBox does make any sense at all, but
-        // who knows ...)
+        
+        
+        
+        
+        
+        
+        
 }
 
 OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::svt::AccessibleBrowseBoxObjType _eType, sal_Int32 _nPos ) const
@@ -1103,7 +1103,7 @@ OUString ViewTabListBox_Impl::GetAccessibleObjectDescription( ::svt::AccessibleB
     return sRet;
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 {
     sal_Bool bRet = sal_True;
@@ -1130,9 +1130,9 @@ sal_Bool ViewTabListBox_Impl::Kill( const OUString& rContent )
 
 
 
-// -----------------------------------------------------------------------
-// class SvtFileView -----------------------------------------------------
-// -----------------------------------------------------------------------
+
+
+
 
 SvtFileView::SvtFileView( Window* pParent, const ResId& rResId,
                           sal_Bool bOnlyFolder, sal_Bool bMultiSelection ) :
@@ -1177,17 +1177,17 @@ SvtFileView::SvtFileView( Window* pParent, const ResId& rResId, sal_uInt8 nFlags
     pHeaderBar->SetEndDragHdl( LINK( this, SvtFileView, HeaderEndDrag_Impl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvtFileView::~SvtFileView()
 {
-    // use temp pointer to prevent access of deleted member (GetFocus())
+    
     SvtFileView_Impl* pTemp = mpImp;
     mpImp = NULL;
     delete pTemp;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvtFileView::GetURL( SvTreeListEntry* pEntry ) const
 {
@@ -1197,7 +1197,7 @@ OUString SvtFileView::GetURL( SvTreeListEntry* pEntry ) const
     return aURL;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvtFileView::GetCurrentURL() const
 {
@@ -1207,7 +1207,7 @@ OUString SvtFileView::GetCurrentURL() const
         aURL = ( (SvtContentEntry*)pEntry->GetUserData() )->maURL;
     return aURL;
 }
-// -----------------------------------------------------------------------------
+
 
 void SvtFileView::CreatedFolder( const OUString& rUrl, const OUString& rNewFolder )
 {
@@ -1218,7 +1218,7 @@ void SvtFileView::CreatedFolder( const OUString& rUrl, const OUString& rNewFolde
     mpImp->mpView->MakeVisible( pEntry );
 }
 
-// -----------------------------------------------------------------------
+
 
 FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDescriptor )
 {
@@ -1231,7 +1231,7 @@ FileViewResult SvtFileView::PreviousLevel( const FileViewAsyncAction* pAsyncDesc
     return eResult;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvtFileView::GetParentURL( OUString& rParentURL ) const
 {
@@ -1253,27 +1253,27 @@ sal_Bool SvtFileView::GetParentURL( OUString& rParentURL ) const
     }
     catch( Exception const & )
     {
-        // perhaps an unknown url protocol (e.g. "private:newdoc")
+        
     }
 
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 const OString& SvtFileView::GetHelpId( ) const
 {
     return mpImp->mpView->GetHelpId( );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::SetHelpId( const OString& rHelpId )
 {
     mpImp->mpView->SetHelpId( rHelpId );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::SetSizePixel( const Size& rNewSize )
 {
@@ -1281,7 +1281,7 @@ void SvtFileView::SetSizePixel( const Size& rNewSize )
     mpImp->mpView->SetSizePixel( rNewSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
 {
@@ -1289,7 +1289,7 @@ void SvtFileView::SetPosSizePixel( const Point& rNewPos, const Size& rNewSize )
     SetSizePixel( rNewSize );
 }
 
-// -----------------------------------------------------------------------------
+
 sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent>& _xContent, const OUString& rFilter  )
 {
     WaitObject aWaitCursor( this );
@@ -1303,7 +1303,7 @@ sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com:
 
     mpImp->FilterFolderContent_Impl( rFilter );
 
-    mpImp->SortFolderContent_Impl(); // possibly not necessary!!!!!!!!!!
+    mpImp->SortFolderContent_Impl(); 
     mpImp->CreateDisplayText_Impl();
     mpImp->OpenFolder_Impl();
 
@@ -1311,7 +1311,7 @@ sal_Bool SvtFileView::Initialize( const ::com::sun::star::uno::Reference< ::com:
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 FileViewResult SvtFileView::Initialize(
     const OUString& rURL,
     const OUString& rFilter,
@@ -1342,7 +1342,7 @@ FileViewResult SvtFileView::Initialize(
     return eFailure;
 }
 
-// -----------------------------------------------------------------------
+
 FileViewResult SvtFileView::Initialize(
     const OUString& rURL,
     const OUString& rFilter,
@@ -1351,9 +1351,9 @@ FileViewResult SvtFileView::Initialize(
     return Initialize( rURL, rFilter, pAsyncDescriptor, ::com::sun::star::uno::Sequence< OUString >());
 }
 
-// -----------------------------------------------------------------------
 
-// -----------------------------------------------------------------------
+
+
 sal_Bool SvtFileView::Initialize( const Sequence< OUString >& aContents )
 {
     WaitObject aWaitCursor( this );
@@ -1373,7 +1373,7 @@ sal_Bool SvtFileView::Initialize( const Sequence< OUString >& aContents )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 FileViewResult SvtFileView::ExecuteFilter( const OUString& rFilter, const FileViewAsyncAction* pAsyncDescriptor )
 {
@@ -1385,21 +1385,21 @@ FileViewResult SvtFileView::ExecuteFilter( const OUString& rFilter, const FileVi
     return eResult;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::CancelRunningAsyncAction()
 {
     mpImp->CancelRunningAsyncAction();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::SetNoSelection()
 {
     mpImp->mpView->SelectAll( sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::GetFocus()
 {
@@ -1408,74 +1408,74 @@ void SvtFileView::GetFocus()
         mpImp->mpView->GrabFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::SetSelectHdl( const Link& rHdl )
 {
     mpImp->SetSelectHandler( rHdl );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::SetDoubleClickHdl( const Link& rHdl )
 {
     mpImp->mpView->SetDoubleClickHdl( rHdl );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uLong SvtFileView::GetSelectionCount() const
 {
     return mpImp->mpView->GetSelectionCount();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvTreeListEntry* SvtFileView::FirstSelected() const
 {
     return mpImp->mpView->FirstSelected();
 }
 
-// -----------------------------------------------------------------------
+
 
 SvTreeListEntry* SvtFileView::NextSelected( SvTreeListEntry* pEntry ) const
 {
     return mpImp->mpView->NextSelected( pEntry );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::EnableAutoResize()
 {
     mpImp->mpView->EnableAutoResize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvtFileView::SetFocus()
 {
     mpImp->mpView->GrabFocus();
 }
 
-// -----------------------------------------------------------------------
+
 const OUString& SvtFileView::GetViewURL() const
 {
     return mpImp->maViewURL;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView::SetOpenDoneHdl( const Link& rHdl )
 {
     mpImp->maOpenDoneLink = rHdl;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView::EnableContextMenu( sal_Bool bEnable )
 {
     mpImp->EnableContextMenu( bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView::EnableDelete( sal_Bool bEnable )
 {
     mpImp->EnableDelete( bEnable );
@@ -1486,13 +1486,13 @@ void SvtFileView::EnableNameReplacing( sal_Bool bEnable )
     mpImp->EnableNameReplacing( bEnable );
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView::EndInplaceEditing( bool _bCancel )
 {
     return mpImp->EndEditing( _bCancel );
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
 {
     DBG_ASSERT( pBar, "no headerbar" );
@@ -1500,13 +1500,13 @@ IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
 
     HeaderBarItemBits nBits;
 
-    // clear the arrow of the recently used column
+    
     if ( nItemID != mpImp->mnSortColumn )
     {
         if ( !nItemID )
         {
-            // first call -> remove arrow from title column,
-            // because another column is the sort column
+            
+            
             nItemID = mpImp->mnSortColumn;
             mpImp->mnSortColumn = COLUMN_TITLE;
         }
@@ -1535,7 +1535,7 @@ IMPL_LINK( SvtFileView, HeaderSelect_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
     if ( !pBar->IsItemMode() )
@@ -1556,14 +1556,14 @@ IMPL_LINK( SvtFileView, HeaderEndDrag_Impl, HeaderBar*, pBar )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 OUString SvtFileView::GetConfigString() const
 {
     OUString sRet;
     HeaderBar* pBar = mpImp->mpView->GetHeaderBar();
     DBG_ASSERT( pBar, "invalid headerbar" );
 
-    // sort order
+    
     sRet += OUString::number( mpImp->mnSortColumn );
     sRet += ";";
     HeaderBarItemBits nBits = pBar->GetItemBits( mpImp->mnSortColumn );
@@ -1585,7 +1585,7 @@ OUString SvtFileView::GetConfigString() const
     return sRet;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView::SetConfigString( const OUString& rCfgStr )
 {
     HeaderBar* pBar = mpImp->mpView->GetHeaderBar();
@@ -1618,7 +1618,7 @@ void SvtFileView::SetConfigString( const OUString& rCfgStr )
     HeaderEndDrag_Impl( pBar );
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView::StateChanged( StateChangedType nStateChange )
 {
     if ( nStateChange == STATE_CHANGE_ENABLE )
@@ -1626,9 +1626,9 @@ void SvtFileView::StateChanged( StateChangedType nStateChange )
     Control::StateChanged( nStateChange );
 }
 
-// -----------------------------------------------------------------------
-// class NameTranslator_Impl
-// -----------------------------------------------------------------------
+
+
+
 
 NameTranslator_Impl::NameTranslator_Impl( const INetURLObject& rActualFolder )
 {
@@ -1679,9 +1679,9 @@ const OUString* NameTranslator_Impl::GetTransTableFileName() const
     return mpActFolder? &mpActFolder->GetTransTableFileName() : NULL;
 }
 
-// -----------------------------------------------------------------------
-// class SvtFileView_Impl
-// -----------------------------------------------------------------------
+
+
+
 
 SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommandEnvironment > xEnv, sal_Int16 nFlags, sal_Bool bOnlyFolder )
 
@@ -1706,18 +1706,18 @@ SvtFileView_Impl::SvtFileView_Impl( SvtFileView* pAntiImpl, Reference < XCommand
     mpView->EnableCellFocus();
 }
 
-// -----------------------------------------------------------------------
+
 SvtFileView_Impl::~SvtFileView_Impl()
 {
     Clear();
 
-    // use temp pointer to prevent access of deleted member (GetFocus())
+    
     ViewTabListBox_Impl* pTemp = mpView;
     mpView = NULL;
     delete pTemp;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::Clear()
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1733,7 +1733,7 @@ void SvtFileView_Impl::Clear()
         DELETEZ( mpNameTrans );
 }
 
-// -----------------------------------------------------------------------
+
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const OUString& rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
@@ -1743,7 +1743,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     INetURLObject aFolderObj( rFolder );
     DBG_ASSERT( aFolderObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
 
-    // prepare name translation
+    
     SetActualFolder( aFolderObj );
 
     FolderDescriptor aFolder( aFolderObj.GetMainURL( INetURLObject::NO_DECODE ) );
@@ -1752,7 +1752,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     return GetFolderContent_Impl( aFolder, pAsyncDescriptor, rBlackList );
 }
 
-// -----------------------------------------------------------------------
+
 FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     const FolderDescriptor& _rFolder,
     const FileViewAsyncAction* pAsyncDescriptor,
@@ -1764,7 +1764,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     OSL_ENSURE( !m_pContentEnumerator.is(), "SvtFileView_Impl::GetFolderContent_Impl: still running another enumeration!" );
     m_pContentEnumerator = new ::svt::FileViewContentEnumerator(
         mpView->GetCommandEnvironment(), maContent, maMutex, mbReplaceNames ? mpNameTrans : NULL );
-        // TODO: should we cache and re-use this thread?
+        
 
     if ( !pAsyncDescriptor )
     {
@@ -1784,12 +1784,12 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     m_eAsyncActionResult = ::svt::ERROR;
     m_aAsyncActionFinished.reset();
 
-    // don't (yet) set m_aCurrentAsyncActionHandler to pTimeout->aFinishHandler.
-    // By definition, this handler *only* get's called when the result cannot be obtained
-    // during the minimum wait time, so it is only set below, when needed.
+    
+    
+    
     m_aCurrentAsyncActionHandler = Link();
 
-    // minimum time to wait
+    
     ::std::auto_ptr< TimeValue > pTimeout( new TimeValue );
     sal_Int32 nMinTimeout = pAsyncDescriptor->nMinTimeout;
     OSL_ENSURE( nMinTimeout > 0, "SvtFileView_Impl::GetFolderContent_Impl: invalid minimum timeout!" );
@@ -1800,25 +1800,25 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
 
     m_pContentEnumerator->enumerateFolderContent( _rFolder, this );
 
-    // wait until the enumeration is finished
-    // for this, release our own mutex (which is used by the enumerator thread)
+    
+    
     aGuard.clear();
 
     ::osl::Condition::Result eResult = ::osl::Condition::result_ok;
     {
-        // also release the SolarMutex. Not all code which is needed during the enumeration
-        // is Solar-Thread-Safe, in particular there is some code which needs to access
-        // string resources (and our resource system relies on the SolarMutex :()
+        
+        
+        
         SolarMutexReleaser aSolarRelease;
 
-        // now wait. Note that if we didn't get an pAsyncDescriptor, then this is an infinite wait.
+        
         eResult = m_aAsyncActionFinished.wait( pTimeout.get() );
     }
 
     ::osl::MutexGuard aGuard2( maMutex );
     if ( ::osl::Condition::result_timeout == eResult )
     {
-        // maximum time to wait
+        
         OSL_ENSURE( !m_pCancelAsyncTimer.get(), "SvtFileView_Impl::GetFolderContent_Impl: there's still a previous timer!" );
         m_pCancelAsyncTimer = new CallbackTimer( this );
         sal_Int32 nMaxTimeout = pAsyncDescriptor->nMaxTimeout;
@@ -1827,7 +1827,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
         if ( nMaxTimeout <= nMinTimeout )
             nMaxTimeout = nMinTimeout + 5000;
         m_pCancelAsyncTimer->setRemainingTime( salhelper::TTimeValue( nMaxTimeout - nMinTimeout ) );
-            // we already waited for nMinTimeout milliseconds, so take this into account
+            
         m_pCancelAsyncTimer->start();
 
         m_aCurrentAsyncActionHandler = pAsyncDescriptor->aFinishHandler;
@@ -1853,7 +1853,7 @@ FileViewResult SvtFileView_Impl::GetFolderContent_Impl(
     return eFailure;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 {
     sal_Bool bHideTransFile = mbReplaceNames && mpNameTrans;
@@ -1873,7 +1873,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 
     if ( !bHideTransFile &&
         ( rFilter.isEmpty() || ( rFilter == ALL_FILES_FILTER ) ) )
-        // when replacing names, there is always something to filter (no view of ".nametranslation.table")
+        
         return;
 
     ::osl::MutexGuard aGuard( maMutex );
@@ -1881,7 +1881,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
     if ( maContent.empty() )
         return;
 
-    // count (estimate) the number of filter tokens
+    
     sal_Int32 nTokens=0;
     const sal_Unicode* pStart = rFilter.getStr();
     const sal_Unicode* pEnd = pStart + rFilter.getLength();
@@ -1889,12 +1889,12 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
         if ( *pStart++ == ';' )
             ++nTokens;
 
-    // collect the filter tokens
+    
     ::std::vector< WildCard > aFilters;
     FilterMatch::createWildCardFilterList(rFilter,aFilters);
 
 
-    // do the filtering
+    
     ::std::vector< SortingData_Impl* >::iterator aContentLoop = maContent.begin();
     OUString sCompareString;
     do
@@ -1903,16 +1903,16 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
             ++aContentLoop;
         else
         {
-            // normalize the content title (we always match case-insensitive)
-            // 91872 - 11.09.2001 - frank.schoenheit@sun.com
-            sCompareString = (*aContentLoop)->GetFileName(); // filter works on file name, not on title!
+            
+            
+            sCompareString = (*aContentLoop)->GetFileName(); 
             sal_Bool bDelete;
 
             if( bHideTransFile && sCompareString == sHideEntry )
                 bDelete = sal_True;
             else
             {
-                // search for the first filter which matches
+                
                 ::std::vector< WildCard >::const_iterator pMatchingFilter =
                     ::std::find_if(
                         aFilters.begin(),
@@ -1925,7 +1925,7 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
 
             if( bDelete )
             {
-                // none of the filters did match
+                
                 delete (*aContentLoop);
 
                 if ( maContent.begin() == aContentLoop )
@@ -1936,9 +1936,9 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
                 else
                 {
                     std::vector< SortingData_Impl* >::iterator aDelete = aContentLoop;
-                    --aContentLoop; // move the iterator to a position which is not invalidated by the erase
+                    --aContentLoop; 
                     maContent.erase( aDelete );
-                    ++aContentLoop; // this is now the next one ....
+                    ++aContentLoop; 
                 }
             }
             else
@@ -1948,13 +1948,13 @@ void SvtFileView_Impl::FilterFolderContent_Impl( const OUString &rFilter )
     while ( aContentLoop != maContent.end() );
 }
 
-// -----------------------------------------------------------------------
+
 IMPL_LINK( SvtFileView_Impl, SelectionMultiplexer, void*, _pSource )
 {
     return mnSuspendSelectCallback ? 0L : m_aSelectHandler.Call( _pSource );
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::SetSelectHandler( const Link& _rHdl )
 {
     m_aSelectHandler = _rHdl;
@@ -1966,7 +1966,7 @@ void SvtFileView_Impl::SetSelectHandler( const Link& _rHdl )
     mpView->SetSelectHdl( aMasterHandler );
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::InitSelection()
 {
     mpView->SelectAll( sal_False );
@@ -1975,7 +1975,7 @@ void SvtFileView_Impl::InitSelection()
         mpView->SetCursor( pFirst, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::OpenFolder_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -1990,7 +1990,7 @@ void SvtFileView_Impl::OpenFolder_Impl()
         if ( mbOnlyFolder && ! (*aIt)->mbIsFolder )
             continue;
 
-        // insert entry and set user data
+        
         SvTreeListEntry* pEntry = mpView->InsertEntry( (*aIt)->maDisplayText,
                                                    (*aIt)->maImage,
                                                    (*aIt)->maImage );
@@ -2009,19 +2009,19 @@ void SvtFileView_Impl::OpenFolder_Impl()
     ResetCursor();
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::ResetCursor()
 {
-    // deselect
+    
     SvTreeListEntry* pEntry = mpView->FirstSelected();
     if ( pEntry )
         mpView->Select( pEntry, sal_False );
-    // set cursor to the first entry
+    
     mpView->SetCursor( mpView->First(), sal_True );
     mpView->Update();
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::CancelRunningAsyncAction()
 {
     DBG_TESTSOLARMUTEX();
@@ -2039,13 +2039,13 @@ void SvtFileView_Impl::CancelRunningAsyncAction()
     m_pCancelAsyncTimer = NULL;
 }
 
-//-----------------------------------------------------------------------
+
 void SvtFileView_Impl::onTimeout( CallbackTimer* )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( maMutex );
     if ( !m_bRunningAsyncAction )
-        // there might have been a race condition while we waited for the mutex
+        
         return;
 
     CancelRunningAsyncAction();
@@ -2057,7 +2057,7 @@ void SvtFileView_Impl::onTimeout( CallbackTimer* )
     }
 }
 
-//-----------------------------------------------------------------------
+
 void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
 {
     SolarMutexGuard aSolarGuard;
@@ -2069,7 +2069,7 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
     m_pCancelAsyncTimer = NULL;
 
     if ( m_bAsyncActionCancelled )
-        // this is to prevent race conditions
+        
         return;
 
     m_eAsyncActionResult = eResult;
@@ -2087,7 +2087,7 @@ void SvtFileView_Impl::enumerationDone( ::svt::EnumerationResult eResult )
     }
 }
 
-//-----------------------------------------------------------------------
+
 void SvtFileView_Impl::implEnumerationSuccess()
 {
     FilterFolderContent_Impl( maCurrentFilter );
@@ -2097,7 +2097,7 @@ void SvtFileView_Impl::implEnumerationSuccess()
     maOpenDoneLink.Call( mpAntiImpl );
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::ReplaceTabWithString( OUString& aValue )
 {
     OUString aTab( "\t" );
@@ -2108,7 +2108,7 @@ void SvtFileView_Impl::ReplaceTabWithString( OUString& aValue )
        aValue = aValue.replaceAt( iPos, 1, aTabString );
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::CreateDisplayText_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -2121,18 +2121,18 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
 
     for ( aIt = maContent.begin(); aIt != maContent.end(); ++aIt )
     {
-        // title, type, size, date
+        
         aValue = (*aIt)->GetTitle();
-        // #83004# --------------------
+        
         ReplaceTabWithString( aValue );
         aValue += aTab;
         aValue += (*aIt)->maType;
         aValue += aTab;
-        // folders don't have a size
+        
         if ( ! (*aIt)->mbIsFolder )
             aValue += CreateExactSizeText( (*aIt)->maSize );
         aValue += aTab;
-        // set the date, but volumes have no date
+        
         if ( ! (*aIt)->mbIsFolder || ! (*aIt)->mbIsVolume )
         {
             SvtSysLocale aSysLocale;
@@ -2143,7 +2143,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
         }
         (*aIt)->maDisplayText = aValue;
 
-        // detect image
+        
         if ( (*aIt)->mbIsFolder )
         {
             ::svtools::VolumeInfo aVolInfo( (*aIt)->mbIsVolume, (*aIt)->mbIsRemote,
@@ -2156,10 +2156,10 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
-// this function converts the sequence of strings into a vector of SortingData
-// the string should have the form :
-// title \t type \t size \t date \t target url \t is folder \t image url
+
+
+
+
 
 void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
 {
@@ -2176,13 +2176,13 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         OUString            aDisplayText;
         sal_Int32           nIndex = 0;
 
-        // get the title
+        
         pEntry->SetNewTitle( aValue.getToken( 0, '\t', nIndex ) );
         aDisplayText = pEntry->GetTitle();
         ReplaceTabWithString( aDisplayText );
         aDisplayText += aTab;
 
-        // get the type
+        
         if ( nIndex >= 0 )
         {
             pEntry->maType = aValue.getToken( 0, '\t', nIndex );
@@ -2190,7 +2190,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         }
         aDisplayText += aTab;
 
-        // get the size
+        
         if ( nIndex >= 0 )
         {
             OUString aSize = aValue.getToken( 0, '\t', nIndex );
@@ -2201,7 +2201,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         }
         aDisplayText += aTab;
 
-        // get the date
+        
         if ( nIndex >= 0 )
         {
             OUString aDate = aValue.getToken( 0, '\t', nIndex );
@@ -2210,31 +2210,31 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
             if ( !aDate.isEmpty() )
             {
                 SAL_WARN( "svtools.contnr", "Don't know, how to convert date" );
-                ;// convert date string to date
+                ;
             }
         }
-        // get the target url
+        
         if ( nIndex >= 0 )
         {
             pEntry->maTargetURL = aValue.getToken( 0, '\t', nIndex );
         }
-        // get the size
+        
         if ( nIndex >= 0 )
         {
             OUString aBool = aValue.getToken( 0, '\t', nIndex );
             if ( !aBool.isEmpty() )
                 pEntry->mbIsFolder = aBool.toBoolean();
         }
-        // get the image url
+        
         if ( nIndex >= 0 )
         {
             pEntry->maImageURL = aValue.getToken( 0, '\t', nIndex );
         }
 
-        // set the display text
+        
         pEntry->maDisplayText = aDisplayText;
 
-        // detect the image
+        
         if( aValue != SEPARATOR_STR )
         {
             INetURLObject aObj( !pEntry->maImageURL.isEmpty() ? pEntry->maImageURL : pEntry->maTargetURL );
@@ -2244,7 +2244,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -2253,7 +2253,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
          ( bAscending == mbAscending ) )
          return;
 
-    // reset the quick search index
+    
     mpView->ResetQuickSearch_Impl( NULL );
 
     OUString aEntryURL;
@@ -2274,7 +2274,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
         {
             pEntry = mpView->GetEntry( nPos );
 
-            ++mnSuspendSelectCallback;  // #i15668#
+            ++mnSuspendSelectCallback;  
             mpView->SetCurEntry( pEntry );
             --mnSuspendSelectCallback;
         }
@@ -2283,7 +2283,7 @@ void SvtFileView_Impl::Resort_Impl( sal_Int16 nColumn, sal_Bool bAscending )
         mbIsFirstResort = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 static sal_Bool                 gbAscending = sal_True;
 static sal_Int16                gnColumn = COLUMN_TITLE;
 static const CollatorWrapper*   pCollatorWrapper = NULL;
@@ -2305,7 +2305,7 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl
         else
             bRet = sal_False;
 
-        // !!! pb: #100376# folder always on top
+        
         if ( !gbAscending )
             bRet = !bRet;
     }
@@ -2314,7 +2314,7 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl
         switch ( gnColumn )
         {
             case COLUMN_TITLE:
-                // compare case insensitive first
+                
                 nComp = pCollatorWrapper->compareString( aOne->GetLowerTitle(), aTwo->GetLowerTitle() );
 
                 if ( nComp == 0 )
@@ -2358,15 +2358,15 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl
         }
     }
 
-    // when the two elements are equal, we must not return sal_True (which would
-    // happen if we just return ! ( a < b ) when not sorting ascending )
+    
+    
     if ( bEqual )
         return sal_False;
 
     return gbAscending ? bRet : !bRet;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::SortFolderContent_Impl()
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -2385,7 +2385,7 @@ void SvtFileView_Impl::SortFolderContent_Impl()
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::EntryRemoved( const OUString& rURL )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -2402,7 +2402,7 @@ void SvtFileView_Impl::EntryRemoved( const OUString& rURL )
     }
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::EntryRenamed( OUString& rURL,
                                      const OUString& rTitle )
 {
@@ -2432,7 +2432,7 @@ void SvtFileView_Impl::EntryRenamed( OUString& rURL,
     }
 }
 
-// -----------------------------------------------------------------------
+
 OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& rTitle )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -2452,15 +2452,15 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
     OUString aTab( "\t" );
     OUString aDateSep( ", " );
 
-    // title, type, size, date
+    
     aValue = pData->GetTitle();
     ReplaceTabWithString( aValue );
     aValue += aTab;
     aValue += pData->maType;
     aValue += aTab;
-    // folders don't have a size
+    
     aValue += aTab;
-    // set the date
+    
     SvtSysLocale aSysLocale;
     const LocaleDataWrapper& rLocaleData = aSysLocale.GetLocaleData();
     aValue += rLocaleData.getDate( pData->maModDate );
@@ -2473,7 +2473,7 @@ OUString SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString&
     return aValue;
 }
 
-// -----------------------------------------------------------------------
+
 sal_uLong SvtFileView_Impl::GetEntryPos( const OUString& rURL )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -2491,7 +2491,7 @@ sal_uLong SvtFileView_Impl::GetEntryPos( const OUString& rURL )
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& rTitle, sal_Bool bWrapAround )
 {
     ::osl::MutexGuard aGuard( maMutex );
@@ -2521,7 +2521,7 @@ sal_Bool SvtFileView_Impl::SearchNextEntry( sal_uInt32& nIndex, const OUString& 
     return sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 void SvtFileView_Impl::SetActualFolder( const INetURLObject& rActualFolder )
 {
     if( mbReplaceNames )
@@ -2540,7 +2540,7 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl(Window* pParent, const OUString& rName)
 {
     get(m_pAllButton, "all");
 
-    // display specified texts
+    
     set_secondary_text(get_secondary_text().replaceFirst("%s", rName));
 }
 

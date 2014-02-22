@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "refupdat.hxx"
@@ -30,7 +30,7 @@ static bool lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
     if ( rRef >= nStart )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
-        rRef = nStart + nDelta;             //! begrenzen ???
+        rRef = nStart + nDelta;             
     if ( rRef < 0 )
     {
         rRef = 0;
@@ -51,7 +51,7 @@ static bool lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
     if ( rRef >= nStart )
         rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
-        rRef = nStart + nDelta - 1;         //! begrenzen ???
+        rRef = nStart + nDelta - 1;         
     if ( rRef < 0 )
     {
         rRef = 0;
@@ -74,25 +74,25 @@ static bool lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
         return true;
     }
 
-    if ( nDelta > 0 )                   // nach hinten schieben
+    if ( nDelta > 0 )                   
     {
         if ( rRef >= nStart && rRef <= nEnd + nDelta )
         {
             if ( rRef <= nEnd )
-                rRef = sal::static_int_cast<R>( rRef + nDelta );    // in the moved range
+                rRef = sal::static_int_cast<R>( rRef + nDelta );    
             else
-                rRef -= nEnd - nStart + 1;      // nachruecken
+                rRef -= nEnd - nStart + 1;      
             return true;
         }
     }
-    else                                // nach vorne schieben
+    else                                
     {
         if ( rRef >= nStart + nDelta && rRef <= nEnd )
         {
             if ( rRef >= nStart )
-                rRef = sal::static_int_cast<R>( rRef + nDelta );    // in the moved range
+                rRef = sal::static_int_cast<R>( rRef + nDelta );    
             else
-                rRef += nEnd - nStart + 1;      // nachruecken
+                rRef += nEnd - nStart + 1;      
             return true;
         }
     }
@@ -156,7 +156,7 @@ static bool lcl_MoveRefPart( R& rRef1Val, bool& rRef1Del, bool bDo1,
             }
         }
         if ( bDel )
-        {   // move deleted along
+        {   
             rRef1Val = sal::static_int_cast<R>( rRef1Val + nDelta );
             rRef2Val = sal::static_int_cast<R>( rRef2Val + nDelta );
         }
@@ -187,26 +187,26 @@ static bool lcl_MoveRefPart( R& rRef1Val, bool& rRef1Del, bool bDo1,
 
 template< typename R, typename S, typename U >
 bool IsExpand( R n1, R n2, U nStart, S nD )
-{   //! vor normalem Move...
+{   
     return
-        nD > 0          // Insert
-     && n1 < n2         // mindestens zwei Cols/Rows/Tabs in Ref
+        nD > 0          
+     && n1 < n2         
      && (
-        (nStart <= n1 && n1 < nStart + nD)      // n1 innerhalb des Insert
-        || (n2 + 1 == nStart)                   // n2 direkt vor Insert
-        );      // n1 < nStart <= n2 wird sowieso expanded!
+        (nStart <= n1 && n1 < nStart + nD)      
+        || (n2 + 1 == nStart)                   
+        );      
 }
 
 template< typename R, typename S, typename U >
 void Expand( R& n1, R& n2, U nStart, S nD )
-{   //! nach normalem Move..., nur wenn IsExpand vorher true war!
-    //! erst das Ende
+{   
+    
     if ( n2 + 1 == nStart )
-    {   // am Ende
+    {   
         n2 = sal::static_int_cast<R>( n2 + nD );
         return;
     }
-    // am Anfang
+    
     n1 = sal::static_int_cast<R>( n1 - nD );
 }
 
@@ -304,7 +304,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) )
         {
             SCsTAB nMaxTab = pDoc->GetTableCount() - 1;
-            nMaxTab = sal::static_int_cast<SCsTAB>(nMaxTab + nDz);      // adjust to new count
+            nMaxTab = sal::static_int_cast<SCsTAB>(nMaxTab + nDz);      
             bool bExp = (bExpand && IsExpand( theTab1, theTab2, nTab1, nDz ));
             bCut1 = lcl_MoveStart( theTab1, nTab1, nDz, static_cast<SCTAB>(nMaxTab) );
             bCut2 = lcl_MoveEnd( theTab2, nTab1, nDz, static_cast<SCTAB>(nMaxTab) );
@@ -353,7 +353,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     }
     else if (eUpdateRefMode == URM_REORDER)
     {
-        //  bisher nur fuer nDz (MoveTab)
+        
         OSL_ENSURE ( !nDx && !nDy, "URM_REORDER for x and y not yet implemented" );
 
         if ( nDz && (theCol1 >= nCol1) && (theCol2 <= nCol2) &&
@@ -380,9 +380,9 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
     return eRet;
 }
 
-// simples UpdateReference fuer ScBigRange (ScChangeAction/ScChangeTrack)
-// Referenzen koennen auch ausserhalb des Dokuments liegen!
-// Ganze Spalten/Zeilen (nInt32Min..nInt32Max) bleiben immer solche!
+
+
+
 ScRefUpdateRes ScRefUpdate::Update( UpdateRefMode eUpdateRefMode,
         const ScBigRange& rWhere, sal_Int32 nDx, sal_Int32 nDy, sal_Int32 nDz,
         ScBigRange& rWhat )
@@ -551,7 +551,7 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
         rRef.aStart.Row() >= rSource.aStart.Row() && rRef.aEnd.Row() <= rSource.aEnd.Row() &&
         rRef.aStart.Tab() >= rSource.aStart.Tab() && rRef.aEnd.Tab() <= rSource.aEnd.Tab())
     {
-        // Source range contains the reference range.
+        
         SCCOL nCol1 = rRef.aStart.Col(), nCol2 = rRef.aEnd.Col();
         SCROW nRow1 = rRef.aStart.Row(), nRow2 = rRef.aEnd.Row();
         SCTAB nTab1 = rRef.aStart.Tab(), nTab2 = rRef.aEnd.Tab();
@@ -564,16 +564,16 @@ ScRefUpdateRes ScRefUpdate::UpdateTranspose(
     return eRet;
 }
 
-//  UpdateGrow - erweitert Referenzen, die genau auf den Bereich zeigen
-//  kommt ohne Dokument aus
+
+
 
 ScRefUpdateRes ScRefUpdate::UpdateGrow(
     const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY, ScRange& rRef )
 {
     ScRefUpdateRes eRet = UR_NOTHING;
 
-    //  in Y-Richtung darf die Ref auch eine Zeile weiter unten anfangen,
-    //  falls ein Bereich Spaltenkoepfe enthaelt
+    
+    
 
     bool bUpdateX = ( nGrowX &&
             rRef.aStart.Col() == rArea.aStart.Col() && rRef.aEnd.Col() == rArea.aEnd.Col() &&

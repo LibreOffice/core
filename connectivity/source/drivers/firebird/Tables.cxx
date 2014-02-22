@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "Table.hxx"
@@ -42,16 +42,16 @@ Tables::Tables(const uno::Reference< XDatabaseMetaData >& rMetaData,
 {
 }
 
-//----- OCollection -----------------------------------------------------------
+
 void Tables::impl_refresh()
     throw(RuntimeException)
 {
-    // TODO: IMPLEMENT ME
+    
 }
 
 ObjectType Tables::createObject(const OUString& rName)
 {
-    // Only retrieving a single table, so table type is irrelevant (param 4)
+    
     uno::Reference< XResultSet > xTables = m_xMetaData->getTables(Any(),
                                                                   OUString(),
                                                                   rName,
@@ -68,25 +68,25 @@ ObjectType Tables::createObject(const OUString& rName)
     ObjectType xRet(new Table(this,
                               m_rMutex,
                               m_xMetaData->getConnection(),
-                              xRow->getString(3), // Name
-                              xRow->getString(4), // Type
-                              xRow->getString(5))); // Description / Remarks / Comments
+                              xRow->getString(3), 
+                              xRow->getString(4), 
+                              xRow->getString(5))); 
 
     if (xTables->next())
-        throw RuntimeException(); // Only one table should be returned
+        throw RuntimeException(); 
 
     return xRet;
 }
 
 uno::Reference< XPropertySet > Tables::createDescriptor()
 {
-    // There is some internal magic so that the same class can be used as either
-    // a descriptor or as a normal table. See VTable.cxx for the details. In our
-    // case we just need to ensure we use the correct constructor.
+    
+    
+    
     return new Table(this, m_rMutex, m_xMetaData->getConnection());
 }
 
-//----- XAppend ---------------------------------------------------------------
+
 ObjectType Tables::appendObject(const OUString& rName,
                                 const uno::Reference< XPropertySet >& rDescriptor)
 {
@@ -97,7 +97,7 @@ ObjectType Tables::appendObject(const OUString& rName,
     return createObject(rName);
 }
 
-//----- XDrop -----------------------------------------------------------------
+
 void Tables::dropObject(sal_Int32 nPosition, const OUString sName)
 {
     uno::Reference< XPropertySet > xTable(getObject(nPosition));

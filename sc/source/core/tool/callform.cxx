@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -171,7 +171,7 @@ bool InitExternalFunc(const OUString& rModuleName)
     (void) rModuleName;
     return false;
 #else
-    // Module already loaded?
+    
     const ModuleData* pTemp = aModuleCollection.findByName(rModuleName);
     if (pTemp)
         return false;
@@ -197,11 +197,11 @@ bool InitExternalFunc(const OUString& rModuleName)
                 (*((SetLanguagePtr)fpSetLanguage))( nLanguage );
             }
 
-            // Module in die Collection aufnehmen
+            
             ModuleData* pModuleData = new ModuleData(rModuleName, pLib);
             aModuleCollection.insert(pModuleData);
 
-            // Schnittstelle initialisieren
+            
             AdvData pfCallBack = &ScAddInAsyncCallBack;
             FuncData* pFuncData;
             FuncCollection* pFuncCol = ScGlobal::GetFuncCollection();
@@ -214,7 +214,7 @@ bool InitExternalFunc(const OUString& rModuleName)
                 sal_uInt16 nParamCount;
                 ParamType eParamType[MAXFUNCPARAM];
                 ParamType eAsyncType = NONE;
-                // initialize all,  in case the AddIn behaves bad
+                
                 cFuncName[0] = 0;
                 cInternalName[0] = 0;
                 nParamCount = 0;
@@ -396,7 +396,7 @@ bool FuncData::getParamDesc( OUString& aName, OUString& aDesc, sal_uInt16 nParam
             sal_Char pcName[256];
             sal_Char pcDesc[256];
             *pcName = *pcDesc = 0;
-            sal_uInt16 nFuncNo = nNumber;   // nicht per Reference versauen lassen..
+            sal_uInt16 nFuncNo = nNumber;   
             ((::GetParamDesc)fProc)( nFuncNo, nParam, pcName, pcDesc );
             aName = OUString( pcName, 256, osl_getThreadTextEncoding() );
             aDesc = OUString( pcDesc, 256, osl_getThreadTextEncoding() );

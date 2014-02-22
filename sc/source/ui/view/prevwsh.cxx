@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -66,7 +66,7 @@
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include "scabstdlg.hxx"
-//  for mouse wheel
+
 #define MINZOOM_SLIDER 10
 #define MAXZOOM_SLIDER 400
 
@@ -74,7 +74,7 @@
 
 using namespace com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 #define ScPreviewShell
 #include "scslots.hxx"
@@ -94,12 +94,12 @@ SFX_IMPL_NAMED_VIEWFACTORY( ScPreviewShell, "PrintPreview" )
     SFX_VIEW_REGISTRATION(ScDocShell);
 }
 
-//------------------------------------------------------------------
+
 
 void ScPreviewShell::Construct( Window* pParent )
 {
-    // Find the top-most window, and set the close window handler to intercept
-    // the window close event.
+    
+    
     Window* pWin = pParent;
     while (!pWin->IsSystemWindow())
     {
@@ -120,7 +120,7 @@ void ScPreviewShell::Construct( Window* pParent )
     pHorScroll = new ScrollBar(pParent, WB_HSCROLL );
     pVerScroll = new ScrollBar(pParent, WB_VSCROLL);
 
-    // SSA: --- RTL --- no mirroring for horizontal scrollbars
+    
     pHorScroll->EnableRTL( false );
 
     pHorScroll->SetEndScrollHdl( LINK( this, ScPreviewShell, ScrollHandler ) );
@@ -131,7 +131,7 @@ void ScPreviewShell::Construct( Window* pParent )
     SetPool( &SC_MOD()->GetPool() );
     SetWindow( pPreview );
     StartListening(*pDocShell,true);
-    StartListening(*SFX_APP(),true);        // #i62045# #i62046# application is needed for Calc's own hints
+    StartListening(*SFX_APP(),true);        
     SfxBroadcaster* pDrawBC = pDocShell->GetDocument()->GetDrawBroadcaster();
     if (pDrawBC)
         StartListening(*pDrawBC);
@@ -155,9 +155,9 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 
     if ( pOldSh && pOldSh->ISA( ScTabViewShell ) )
     {
-        //  store view settings, show table from TabView
-        //! store live ScViewData instead, and update on ScTablesHint?
-        //! or completely forget aSourceData on ScTablesHint?
+        
+        
+        
 
         ScTabViewShell* pTabViewShell = ((ScTabViewShell*)pOldSh);
         const ScViewData* pData = pTabViewShell->GetViewData();
@@ -165,8 +165,8 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
         pPreview->SetSelectedTabs(pData->GetMarkData());
         InitStartTable( pData->GetTabNo() );
 
-        //  also have to store the TabView's DesignMode state
-        //  (only if draw view exists)
+        
+        
         SdrView* pDrawView = pTabViewShell->GetSdrView();
         if ( pDrawView )
             nSourceDesignMode = pDrawView->IsDesignMode();
@@ -178,9 +178,9 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
 ScPreviewShell::~ScPreviewShell()
 {
     if (mpFrameWindow)
-        mpFrameWindow->SetCloseHdl(Link()); // Remove close handler.
+        mpFrameWindow->SetCloseHdl(Link()); 
 
-    // #108333#; notify Accessibility that Shell is dying and before destroy all
+    
     BroadcastAccessibility( SfxSimpleHint( SFX_HINT_DYING ) );
     DELETEZ(pAccessibilityBroadcaster);
 
@@ -196,8 +196,8 @@ ScPreviewShell::~ScPreviewShell()
     delete pVerScroll;
     delete pCorner;
 
-    //  normal mode of operation is switching back to default view in the same frame,
-    //  so there's no need to activate any other window here anymore
+    
+    
 }
 
 void ScPreviewShell::InitStartTable(SCTAB nTab)
@@ -205,7 +205,7 @@ void ScPreviewShell::InitStartTable(SCTAB nTab)
     pPreview->SetPageNo( pPreview->GetFirstPage(nTab) );
 }
 
-//------------------------------------------------------------------
+
 
 OUString ScPreviewShell::GetDescription() const
 {
@@ -268,15 +268,15 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     if (!GetPageSize( aPageSize ))
         return;
 
-    //  for centering, page size without the shadow is used
+    
     bool bVert = pVerScroll->IsVisible();
     bool bHori = pHorScroll->IsVisible();
     Size aWindowSize = pPreview->GetOutputSize();
     Point aPos = pPreview->GetPosPixel();
     Size aWindowPixelSize = pPreview->GetOutputSizePixel();
 
-    // if we are called from Zoom then we need to compensate for whatever
-    // scrollbars were displayed before the zoom was called
+    
+    
     if ( bFromZoom )
     {
         if ( bVert )
@@ -290,7 +290,7 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
             aWindowSize.Height() += aWidthOffSet;
         }
     }
-    // recalculate any needed scrollbars
+    
     bHori = false;
     bVert = false;
 
@@ -307,7 +307,7 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     else
         bVert = true;
 
-    // see if having a scroll bar requires the other
+    
     if ( bVert != bHori && ( bVert || bHori ) )
     {
         if ( bVert && ( (nMaxWidthPos + aWidthOffSet  ) > 0 ) )
@@ -318,8 +318,8 @@ void ScPreviewShell::UpdateNeededScrollBars( bool bFromZoom )
     pHorScroll->Show( bHori );
     pVerScroll->Show( bVert );
 
-    // make room for needed scrollbars ( and reduce the size
-    // of the preview appropriately )
+    
+    
     if ( bHori )
         aWindowPixelSize.Height() -= nBarW;
     if ( bVert )
@@ -341,7 +341,7 @@ void ScPreviewShell::UpdateScrollBars()
     if ( !GetPageSize( aPageSize ) )
         return;
 
-    //  for centering, page size without the shadow is used
+    
 
     Size aWindowSize = pPreview->GetOutputSize();
 
@@ -356,19 +356,19 @@ void ScPreviewShell::UpdateScrollBars()
         long nMaxPos = aPageSize.Width() - aWindowSize.Width();
         if ( nMaxPos<0 )
         {
-            //  page smaller than window -> center (but put scrollbar to 0)
+            
             aOfs.X() = 0;
             pPreview->SetXOffset( nMaxPos / 2 );
         }
         else if (aOfs.X() < 0)
         {
-            //  page larger than window -> never use negative offset
+            
             aOfs.X() = 0;
             pPreview->SetXOffset( 0 );
         }
         else if (aOfs.X() > nMaxPos)
         {
-            //  limit offset to align with right edge of window
+            
             aOfs.X() = nMaxPos;
             pPreview->SetXOffset(nMaxPos);
         }
@@ -386,7 +386,7 @@ void ScPreviewShell::UpdateScrollBars()
         pVerScroll->SetVisibleSize( aWindowSize.Height() );
         if ( nMaxVertPos < 0 )
         {
-            //  page smaller than window -> center (but put scrollbar to 0)
+            
             aOfs.Y() = 0;
             pPreview->SetYOffset( nMaxVertPos / 2 );
             pVerScroll->SetThumbPos( nPageNo * aWindowSize.Height() );
@@ -394,7 +394,7 @@ void ScPreviewShell::UpdateScrollBars()
         }
         else if (aOfs.Y() < 0)
         {
-            //  page larger than window -> never use negative offset
+            
             pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
             aOfs.Y() = 0;
             pPreview->SetYOffset( 0 );
@@ -402,7 +402,7 @@ void ScPreviewShell::UpdateScrollBars()
         }
         else if (aOfs.Y() > nMaxVertPos )
         {
-            //  limit offset to align with window bottom
+            
             pVerScroll->SetRange( Range( 0, aPageSize.Height() ) );
             aOfs.Y() = nMaxVertPos;
             pPreview->SetYOffset( nMaxVertPos );
@@ -548,11 +548,11 @@ void ScPreviewShell::Activate(sal_Bool bMDI)
 {
     SfxViewShell::Activate(bMDI);
 
-    //! Basic etc. -> auslagern in eigene Datei (s. tabvwsh4)
+    
 
     if (bMDI)
     {
-        // InputHdl ist jetzt meistens Null, keine Assertion mehr!
+        
         ScInputHandler* pInputHdl = SC_MOD()->GetInputHdl();
         if ( pInputHdl )
             pInputHdl->NotifyChange( NULL );
@@ -568,7 +568,7 @@ void ScPreviewShell::Deactivate(sal_Bool bMDI)
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPreviewShell::Execute( SfxRequest& rReq )
 {
@@ -586,7 +586,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             pPreview->Invalidate();
             rReq.Done();
             break;
-        case SID_PREV_TABLE: // Accelerator
+        case SID_PREV_TABLE: 
         case SID_PREVIEW_PREVIOUS:
             {
                 long nPage = pPreview->GetPageNo();
@@ -595,7 +595,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                     pPreview->SetPageNo( nPage-1 );
             }
             break;
-        case SID_NEXT_TABLE: // Accelerator
+        case SID_NEXT_TABLE: 
         case SID_PREVIEW_NEXT:
             {
                 sal_Bool bAllTested = pPreview->AllTested();
@@ -605,7 +605,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                     pPreview->SetPageNo( nPage+1 );
             }
             break;
-        case SID_CURSORTOPOFFILE: // Accelerator
+        case SID_CURSORTOPOFFILE: 
         case SID_PREVIEW_FIRST:
             {
                 long nPage = pPreview->GetPageNo();
@@ -614,7 +614,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                     pPreview->SetPageNo( 0 );
             }
             break;
-        case SID_CURSORENDOFFILE: // Accelerator
+        case SID_CURSORENDOFFILE: 
         case SID_PREVIEW_LAST:
             {
                 if (!pPreview->AllTested())
@@ -685,7 +685,7 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
                             break;
                         default:
                         {
-                            // added to avoid warnings
+                            
                         }
                     }
 
@@ -758,9 +758,9 @@ void ScPreviewShell::Execute( SfxRequest& rReq )
             break;
         case SID_PRINTPREVIEW:
         case SID_PREVIEW_CLOSE:
-            //  print preview is now always in the same frame as the tab view
-            //  -> always switch this frame back to normal view
-            //  (ScTabViewShell ctor reads stored view data)
+            
+            
+            
 
             ExitPreview();
             break;
@@ -920,13 +920,13 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     else
         rData.nTotalPages = 99;
 
-    //  the dialog knows eNumType
+    
 }
 
 void ScPreviewShell::WriteUserData(OUString& rData, bool /* bBrowse */)
 {
-    //  nZoom
-    //  nPageNo
+    
+    
 
     rData =  OUString::number(pPreview->GetZoom());
     rData += OUString(SC_USERDATA_SEP);
@@ -1032,7 +1032,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 long nPage = pPreview->GetPageNo();
                 long nTotal = pPreview->GetTotalPages();
 
-                // before testing for last page, make sure all page counts are calculated
+                
                 if ( nPage+1 == nTotal && !pPreview->AllTested() )
                 {
                     pPreview->CalcAll();
@@ -1077,7 +1077,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
                 long nPage = pPreview->GetPageNo();
                 long nTotal = pPreview->GetTotalPages();
 
-                // before testing for last page, make sure all page counts are calculated
+                
                 if ( nPage+1 == nTotal && !pPreview->AllTested() )
                 {
                     pPreview->CalcAll();
@@ -1134,7 +1134,7 @@ void ScPreviewShell::DoScroll( sal_uInt16 nMode )
             break;
     }
 
-        // nHRange-nHPage might be negative, that's why we check for < 0 afterwards
+        
 
     if( aCurPos.Y() > (nVRange-nVPage) )
         aCurPos.Y() = (nVRange-nVPage);

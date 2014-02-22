@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,18 +14,18 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "sbcomp.hxx"
 #include "expr.hxx"
 
-// Transform table for token operators and opcodes
+
 
 typedef struct {
-        SbiToken  eTok;                 // Token
-        SbiOpcode eOp;                  // Opcode
+        SbiToken  eTok;                 
+        SbiOpcode eOp;                  
 } OpTable;
 
 static const OpTable aOpTable [] = {
@@ -54,7 +54,7 @@ static const OpTable aOpTable [] = {
     { IS,   _IS },
     { NIL,  _NOP }};
 
-// Output of an element
+
 void SbiExprNode::Gen( RecursiveMode eRecMode )
 {
     sal_uInt16 nStringId;
@@ -106,10 +106,10 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
                 }
             }
         }
-        // special treatment for WITH
+        
         else if( (pWithParent_ = GetWithParent()) != NULL )
         {
-            eOp = _ELEM;            // .-Term in in WITH
+            eOp = _ELEM;            
         }
         else
         {
@@ -166,7 +166,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
     }
 }
 
-// Output of an operand element
+
 
 void SbiExprNode::GenElement( SbiOpcode eOp )
 {
@@ -175,11 +175,11 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
         pGen->GetParser()->Error( SbERR_INTERNAL_ERROR, "Opcode" );
 #endif
     SbiSymDef* pDef = aVar.pDef;
-    // The ID is either the position or the String-ID
-    // If the bit Bit 0x8000 is set, the variable have
-    // a parameter list.
+    
+    
+    
     sal_uInt16 nId = ( eOp == _PARAM ) ? pDef->GetPos() : pDef->GetId();
-    // Build a parameter list
+    
     if( aVar.pPar && aVar.pPar->GetSize() )
     {
         nId |= 0x8000;
@@ -201,16 +201,16 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
     }
 }
 
-// Create an Argv-Table
-// The first element remain available for return value etc.
-// See as well SbiProcDef::SbiProcDef() in symtbl.cxx
+
+
+
 
 void SbiExprList::Gen()
 {
     if( pFirst )
     {
         pParser->aGen.Gen( _ARGC );
-        // Type adjustment at DECLARE
+        
         sal_uInt16 nCount = 1;
 
         for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
@@ -218,32 +218,32 @@ void SbiExprList::Gen()
             pExpr->Gen();
             if( !pExpr->GetName().isEmpty() )
             {
-                // named arg
+                
                 sal_uInt16 nSid = pParser->aGblStrings.Add( pExpr->GetName() );
                 pParser->aGen.Gen( _ARGN, nSid );
 
                 /* TODO: Check after Declare concept change
-                // From 1996-01-10: Type adjustment at named -> search suitable parameter
+                
                 if( pProc )
                 {
-                    // For the present: trigger an error
+                    
                     pParser->Error( SbERR_NO_NAMED_ARGS );
 
-                    // Later, if Named Args at DECLARE is posible
-                    //for( sal_uInt16 i = 1 ; i < nParAnz ; i++ )
-                    //{
-                    //  SbiSymDef* pDef = pPool->Get( i );
-                    //  const String& rName = pDef->GetName();
-                    //  if( rName.Len() )
-                    //  {
-                    //      if( pExpr->GetName().ICompare( rName )
-                    //          == COMPARE_EQUAL )
-                    //      {
-                    //          pParser->aGen.Gen( _ARGTYP, pDef->GetType() );
-                    //          break;
-                    //      }
-                    //  }
-                    //}
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                 }
                 */
             }
@@ -257,8 +257,8 @@ void SbiExprList::Gen()
 
 void SbiExpression::Gen( RecursiveMode eRecMode )
 {
-    // special treatment for WITH
-    // If pExpr == .-term in With, approximately Gen for Basis-Object
+    
+    
     pExpr->Gen( eRecMode );
     if( bByVal )
     {
@@ -269,7 +269,7 @@ void SbiExpression::Gen( RecursiveMode eRecMode )
         sal_uInt16 uBase = pParser->nBase;
         if( pParser->IsCompatible() )
         {
-            uBase |= 0x8000;        // #109275 Flag compatiblity
+            uBase |= 0x8000;        
         }
         pParser->aGen.Gen( _BASED, uBase );
         pParser->aGen.Gen( _ARGV );

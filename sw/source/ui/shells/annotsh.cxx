@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -171,7 +171,7 @@ SwAnnotationShell::~SwAnnotationShell()
 
 void SwAnnotationShell::Exec( SfxRequest &rReq )
 {
-    //TODO: clean this up!!!!
+    
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
         return;
@@ -356,7 +356,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
                 if (pFieldItem && pFieldItem->GetField()->ISA(SvxURLField))
                 {
-                    // Select the field so that it will be deleted during insert
+                    
                     ESelection aSel = pOLV->GetSelection();
                     aSel.nEndPos++;
                     pOLV->SetSelection(aSel);
@@ -470,7 +470,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 */
                 SfxItemSet aDlgAttr(GetPool(), EE_ITEMS_START, EE_ITEMS_END);
 
-                // util::Language does not exist in the EditEngine! Therefore not included in the set.
+                
 
                 aDlgAttr.Put( aEditAttr );
                 aDlgAttr.Put( SvxKerningItem(0, RES_CHRATR_KERNING) );
@@ -605,10 +605,10 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
 
 void SwAnnotationShell::GetState(SfxItemSet& rSet)
 {
-    //TODO: clean this up!!!
-    // FN_SET_SUPER_SCRIPT
-    //SID_ATTR_PARA_ADJUST
-    //SID_ATTR_PARA_ADJUST_BLOCK
+    
+    
+    
+    
 
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
@@ -1219,9 +1219,9 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
 
         case SID_CHINESE_CONVERSION:
         {
-                //open ChineseTranslationDialog
+                
                 Reference< XComponentContext > xContext(
-                    ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+                    ::cppu::defaultBootstrap_InitialComponentContext() ); 
                 if(xContext.is())
                 {
                     Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
@@ -1234,7 +1234,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
                         {
-                            //  initialize dialog
+                            
                             Reference< awt::XWindow > xDialogParentWindow(0);
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
@@ -1244,11 +1244,11 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                             pArray[0] <<= makeAny(aParam);
                             xInit->initialize( aSeq );
 
-                            //execute dialog
+                            
                             sal_Int16 nDialogRet = xDialog->execute();
                             if( RET_OK == nDialogRet )
                             {
-                                //get some parameters from the dialog
+                                
                                 sal_Bool bToSimplified = sal_True;
                                 sal_Bool bUseVariants = sal_True;
                                 sal_Bool bCommonTerms = sal_True;
@@ -1266,7 +1266,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                                     }
                                 }
 
-                                //execute translation
+                                
                                 sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
                                 sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
                                 sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
@@ -1290,7 +1290,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
 
     if (bRestoreSelection)
     {
-        // restore selection
+        
         pOLV->GetEditView().SetSelection( aOldSelection );
     }
 }
@@ -1323,7 +1323,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                 bool bIsLookUpWord = GetStatusValueForThesaurusFromContext( aStatusVal, nLang, pOLV->GetEditView() );
                 rSet.Put( SfxStringItem( SID_THES, aStatusVal ) );
 
-                // disable "Thesaurus" context menu entry if there is nothing to look up
+                
                 uno::Reference< linguistic2::XThesaurus >  xThes( ::GetThesaurus() );
                 if (!bIsLookUpWord ||
                     !xThes.is() || nLang == LANGUAGE_NONE || !xThes->hasLocale( LanguageTag::convertToLocale( nLang ) ))
@@ -1331,7 +1331,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
                 break;
             }
 
-            // disable "Thesaurus" if the language is not supported
+            
             case SID_THESAURUS:
             {
                 const SfxPoolItem &rItem = rView.GetWrtShell().GetDoc()->GetDefault(
@@ -1680,7 +1680,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
         else
             aAllSet.Put( SfxStringItem( SID_FONT_NAME, aSetDlgFont.GetFamilyName() ) );
 
-        // If character is selected then it can be shown.
+        
         SfxAbstractDialog* pDlg = pFact->CreateSfxDialog( rView.GetWindow(), aAllSet,
             rView.GetViewFrame()->GetFrame().GetFrameInterface(), RID_SVXDLG_CHARMAP );
 
@@ -1710,7 +1710,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
 
     if( !sSym.isEmpty() )
     {
-        // do not flicker
+        
         pOLV->HideCursor();
         Outliner * pOutliner = pOLV->GetOutliner();
         pOutliner->SetUpdateMode(sal_False);
@@ -1723,10 +1723,10 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
                             0 );
         aFontSet.Set( aOldSet );
 
-        // Insert string
+        
         pOLV->InsertText( sSym);
 
-        // Attributing (set font)
+        
         SfxItemSet aSetFont( *aFontSet.GetPool(), aFontSet.GetRanges() );
         SvxFontItem aFontItem (aFont.GetFamily(),    aFont.GetName(),
                                 aFont.GetStyleName(), aFont.GetPitch(),
@@ -1741,16 +1741,16 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
             aSetFont.Put( aFontItem, EE_CHAR_FONTINFO_CTL );
         pOLV->SetAttribs(aSetFont);
 
-        // Erase selection
+        
         ESelection aSel(pOLV->GetSelection());
         aSel.nStartPara = aSel.nEndPara;
         aSel.nStartPos = aSel.nEndPos;
         pOLV->SetSelection(aSel);
 
-        // Restore old font
+        
         pOLV->SetAttribs( aFontSet );
 
-        // From now on show it again
+        
         pOutliner->SetUpdateMode(sal_True);
         pOLV->ShowCursor();
 

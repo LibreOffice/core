@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -50,15 +50,15 @@ Timer CacheConfiguration::maReleaseTimer;
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
     if (rInstancePtr.get() == NULL)
     {
-        // Maybe somebody else kept a previously created instance alive.
+        
         if ( ! mpWeakInstance.expired())
             rInstancePtr = ::boost::shared_ptr<CacheConfiguration>(mpWeakInstance);
         if (rInstancePtr.get() == NULL)
         {
-            // We have to create a new instance.
+            
             rInstancePtr.reset(new CacheConfiguration());
             mpWeakInstance = rInstancePtr;
-            // Prepare to release this instance in the near future.
+            
             maReleaseTimer.SetTimeoutHdl(
                 LINK(rInstancePtr.get(),CacheConfiguration,TimerCallback));
             maReleaseTimer.SetTimeout(5000 /* 5s */);
@@ -73,17 +73,17 @@ Timer CacheConfiguration::maReleaseTimer;
 
 CacheConfiguration::CacheConfiguration (void)
 {
-    // Get the cache size from configuration.
+    
     const OUString sPathToImpressConfigurationRoot("/org.openoffice.Office.Impress/");
     const OUString sPathToNode("MultiPaneGUI/SlideSorter/PreviewCache");
 
     try
     {
-        // Obtain access to the configuration.
+        
         Reference<lang::XMultiServiceFactory> xProvider =
             configuration::theDefaultProvider::get( ::comphelper::getProcessComponentContext() );
 
-        // Obtain access to Impress configuration.
+        
         Sequence<Any> aCreationArguments(3);
         aCreationArguments[0] = makeAny(beans::PropertyValue(
             "nodepath",
@@ -110,7 +110,7 @@ CacheConfiguration::CacheConfiguration (void)
         if ( ! xHierarchy.is())
             return;
 
-        // Get the node for the slide sorter preview cache.
+        
         mxCacheNode = Reference<container::XNameAccess>(
             xHierarchy->getByHierarchicalName(sPathToNode),
             UNO_QUERY);
@@ -150,12 +150,12 @@ Any CacheConfiguration::GetValue (const OUString& rName)
 IMPL_LINK_NOARG(CacheConfiguration, TimerCallback)
 {
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
-    // Release out reference to the instance.
+    
     rInstancePtr.reset();
     return 0;
 }
 
 
-} } } // end of namespace ::sd::slidesorter::cache
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

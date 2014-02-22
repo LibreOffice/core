@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -92,9 +92,9 @@ SvStream& WriteSvVersion(SvStream & rStm, const SvVersion & r )
 {
     if( (r.GetMajorVersion() || r.GetMinorVersion())
       && r.GetMajorVersion() <= 0x0F && r.GetMinorVersion() <= 0x0F )
-    { // compress version number in 1 byte
-        // format first 4 bit for major, then 4 bit for minor
-        // 0.0 gets not compressed
+    { 
+        
+        
 
         int n = r.GetMajorVersion() << 4;
         n |= r.GetMinorVersion();
@@ -114,12 +114,12 @@ SvStream& operator >> (SvStream & rStm, SvVersion & r )
     sal_uInt8 n;
     rStm.ReadUChar( n );
     if( n == 0 )
-    { // not compressed
+    { 
         rStm.ReadUInt16( r.nMajorVersion );
         rStm.ReadUInt16( r.nMinorVersion );
     }
     else
-    { // compressed
+    { 
         r.nMajorVersion = (n >> 4) & 0x0F;
         r.nMinorVersion = n & 0x0F;
     }
@@ -149,7 +149,7 @@ sal_Bool SvBOOL::ReadSvIdl( SvStringHashEntry * pName, SvTokenStream & rInStm )
                 bOk = rInStm.Read( ')' );
         }
         else
-            *this = sal_True; //default action set to TRUE
+            *this = sal_True; 
         if( bOk )
             return sal_True;
     }
@@ -377,7 +377,7 @@ sal_Bool SvUUId::ReadSvIdl( SvIdlDataBase &, SvTokenStream & rInStm )
 
 sal_Bool SvUUId::WriteSvIdl( SvStream & rOutStm )
 {
-    // write global id
+    
     rOutStm.WriteCharPtr( SvHash_uuid()->GetName().getStr() ).WriteCharPtr( "(\"" );
     rOutStm.WriteCharPtr( OUStringToOString(GetHexName(), RTL_TEXTENCODING_UTF8).getStr() ).WriteCharPtr( "\")" );
     return sal_True;

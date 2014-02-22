@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "warnbox.hxx"
@@ -25,13 +25,13 @@
 #include "sc.hrc"
 
 
-// ============================================================================
+
 
 ScCbWarningBox::ScCbWarningBox( Window* pParent, const OUString& rMsgStr, bool bDefYes ) :
     WarningBox( pParent, WB_YES_NO | (bDefYes ? WB_DEF_YES : WB_DEF_NO), rMsgStr )
 {
-    // By default, the check box is ON, and the user needs to un-check it to
-    // disable all future warnings.
+    
+    
     SetCheckBoxState(true);
     SetCheckBoxText(ScResId(SCSTR_WARN_ME_IN_FUTURE_CHECK));
 }
@@ -58,7 +58,7 @@ void ScCbWarningBox::DisableDialog()
 }
 
 
-// ----------------------------------------------------------------------------
+
 
 ScReplaceWarnBox::ScReplaceWarnBox( Window* pParent ) :
     ScCbWarningBox( pParent, OUString( ScResId( STR_REPLCELLSWARN ) ), true )
@@ -80,6 +80,6 @@ void ScReplaceWarnBox::DisableDialog()
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

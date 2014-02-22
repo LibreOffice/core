@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,13 +22,13 @@
 
 #define MAX_TEXTURE_SIZE (2048)
 #define MIN_TEXTURE_SIZE (32)
-//#define FAKE_MAX_NUMBER_TEXTURES (2)
-//#define FAKE_MAX_TEXTURE_SIZE (4096)
 
-#define VERTEX_BUFFER_SIZE (341*3) // 1023, the size of the internal
-                                   // vertex buffer (must be divisable
-                                   // by 3, as each triangle primitive
-                                   // has 3 vertices)
+
+
+#define VERTEX_BUFFER_SIZE (341*3) 
+                                   
+                                   
+                                   
 #include <string.h>
 
 #include <osl/thread.h>
@@ -73,17 +73,17 @@
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////////
-// 'dxcanvas' namespace
-//////////////////////////////////////////////////////////////////////////////////
+
+
+
 
 namespace dxcanvas
 {
     namespace
     {
-        //////////////////////////////////////////////////////////////////////////////////
-        // monitorSupport
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         class monitorSupport
         {
@@ -108,10 +108,10 @@ namespace dxcanvas
 
             HMONITOR MonitorFromWindow( HWND hwnd )
             {
-                // return adapter_default in case something went wrong...
+                
                 if(!(mpMonitorFromWindow))
                     return HMONITOR(0);
-                // MONITOR_DEFAULTTONEAREST
+                
                 const DWORD dwFlags(0x00000002);
                 return mpMonitorFromWindow(hwnd,dwFlags);
             }
@@ -127,9 +127,9 @@ namespace dxcanvas
 
         class DXRenderModule;
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXSurface
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         /** ISurface implemenation.
 
@@ -155,7 +155,7 @@ namespace dxcanvas
             COMReference<IDirect3DTexture9> getTexture() const;
 
         private:
-            /// Guard local methods against concurrent acces to RenderModule
+            
             class ImplRenderModuleGuard : private ::boost::noncopyable
             {
             public:
@@ -173,11 +173,11 @@ namespace dxcanvas
         };
 
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
-        /// Default implementation of IDXRenderModule
+        
         class DXRenderModule : public IDXRenderModule
         {
         public:
@@ -256,9 +256,9 @@ namespace dxcanvas
 
         ::osl::Mutex DXRenderModule::maMutex;
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXSurface::ImplRenderModuleGuard
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         inline DXSurface::ImplRenderModuleGuard::ImplRenderModuleGuard(
             DXRenderModule& rRenderModule ) :
@@ -296,9 +296,9 @@ namespace dxcanvas
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXSurface::DXSurface
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         DXSurface::DXSurface( DXRenderModule&           rRenderModule,
                               const ::basegfx::B2ISize& rSize ) :
@@ -339,9 +339,9 @@ namespace dxcanvas
             maSize = rSize;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXSurface::~DXSurface
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         DXSurface::~DXSurface()
         {
@@ -352,9 +352,9 @@ namespace dxcanvas
 #endif
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXSurface::selectTexture
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         bool DXSurface::selectTexture()
         {
@@ -368,9 +368,9 @@ namespace dxcanvas
             return true;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXSurface::isValid
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         bool DXSurface::isValid()
         {
@@ -381,9 +381,9 @@ namespace dxcanvas
             return true;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXSurface::update
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         bool DXSurface::update( const ::basegfx::B2IPoint& rDestPos,
                                 const ::basegfx::B2IRange& rSourceRect,
@@ -391,8 +391,8 @@ namespace dxcanvas
         {
             ImplRenderModuleGuard aGuard( mrRenderModule );
 
-            // can't update if surface is not valid, that means
-            // either not existent nor restored...
+            
+            
             if(!(isValid()))
                 return false;
 
@@ -400,9 +400,9 @@ namespace dxcanvas
             RECT rect;
             rect.left = std::max(sal_Int32(0),rDestPos.getX());
             rect.top =  std::max(sal_Int32(0),rDestPos.getY());
-            // to avoid interpolation artifacts from other textures,
-            // the surface manager allocates one pixel gap between
-            // them. Clear that to transparent.
+            
+            
+            
             rect.right = std::min(maSize.getX(),
                                   rect.left + sal_Int32(rSourceRect.getWidth()+1));
             rect.bottom = std::min(maSize.getY(),
@@ -423,7 +423,7 @@ namespace dxcanvas
                             pImage += rSourceRect.getMinY()*nSourcePitchInBytes;
                             pImage += rSourceRect.getMinX()*nSourceBytesPerPixel;
 
-                            // calculate the destination memory address
+                            
                             sal_uInt8 *pDst = (sal_uInt8*)aLockedRect.pBits;
 
                             const sal_uInt32 nNumBytesToCopy(
@@ -438,11 +438,11 @@ namespace dxcanvas
 
                                 if( bClearRightColumn )
                                 {
-                                    // to avoid interpolation artifacts
-                                    // from other textures, the surface
-                                    // manager allocates one pixel gap
-                                    // between them. Clear that to
-                                    // transparent.
+                                    
+                                    
+                                    
+                                    
+                                    
                                     pDst[nNumBytesToCopy] =
                                         pDst[nNumBytesToCopy+1] =
                                         pDst[nNumBytesToCopy+2] =
@@ -464,7 +464,7 @@ namespace dxcanvas
                             pImage += rSourceRect.getMinY()*nSourcePitchInBytes;
                             pImage += rSourceRect.getMinX()*nSourceBytesPerPixel;
 
-                            // calculate the destination memory address
+                            
                             sal_uInt8 *pDst = (sal_uInt8*)aLockedRect.pBits;
 
                             const sal_Int32 nNumColumns(
@@ -504,7 +504,7 @@ namespace dxcanvas
                             pImage += rSourceRect.getMinY()*nSourcePitchInBytes;
                             pImage += rSourceRect.getMinX()*nSourceBytesPerPixel;
 
-                            // calculate the destination memory address
+                            
                             sal_uInt8 *pDst = (sal_uInt8*)aLockedRect.pBits;
 
                             const sal_Int32 nNumLines(
@@ -545,9 +545,9 @@ namespace dxcanvas
             return true;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXSurface::getSize
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         ::basegfx::B2IVector DXSurface::getSize()
         {
@@ -559,9 +559,9 @@ namespace dxcanvas
             return mpTexture;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::DXRenderModule
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         DXRenderModule::DXRenderModule( const ::Window& rWindow ) :
             mhWnd(0),
@@ -583,7 +583,7 @@ namespace dxcanvas
             maWriteIndex(0),
             maReadIndex(0)
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
 
             if(!(create(rWindow)))
@@ -591,8 +591,8 @@ namespace dxcanvas
                 throw lang::NoSupportException( "Could not create DirectX device!" ,NULL);
             }
 
-            // allocate a single texture surface which can be used later.
-            // we also use this to calibrate the page size.
+            
+            
             ::basegfx::B2IVector aPageSize(maPageSize);
             while(true)
             {
@@ -628,18 +628,18 @@ namespace dxcanvas
             mpVertexBuffer=COMReference<IDirect3DVertexBuffer9>(pVB);
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::~DXRenderModule
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         DXRenderModule::~DXRenderModule()
         {
             disposing();
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::disposing
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         void DXRenderModule::disposing()
         {
@@ -650,19 +650,19 @@ namespace dxcanvas
             mpWindow.reset();
             mhWnd=NULL;
 
-            // refrain from releasing the DX9 objects. We're the only
-            // ones holding references to them, and it might be
-            // dangerous to destroy the DX9 device, before all other
-            // objects are dead.
+            
+            
+            
+            
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::create
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         bool DXRenderModule::create( const ::Window& rWindow )
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
 
             maVertexCache.reserve(1024);
@@ -671,16 +671,16 @@ namespace dxcanvas
                 new SystemChildWindow(
                 const_cast<Window *>(&rWindow), 0) );
 
-            // system child window must not receive mouse events
+            
             mpWindow->SetMouseTransparent( TRUE );
 
-            // parent should receive paint messages as well
-            // [PARENTCLIPMODE_NOCLIP], the argument is here
-            // passed as plain numeric value since the stupid
-            // define utilizes a USHORT cast.
+            
+            
+            
+            
             mpWindow->SetParentClipMode(0x0002);
 
-            // the system child window must not clear its background
+            
             mpWindow->EnableEraseBackground( sal_False );
 
             mpWindow->SetControlForeground();
@@ -694,26 +694,26 @@ namespace dxcanvas
             ENSURE_OR_THROW( IsWindow( reinterpret_cast<HWND>(mhWnd) ),
                             "DXRenderModule::create() No valid HWND given." );
 
-            // retrieve position and size of the parent window
+            
             const ::Size &rSizePixel(rWindow.GetSizePixel());
 
-            // remember the size of the parent window, since we
-            // need to use this for our child window.
+            
+            
             maSize.setX(static_cast<sal_Int32>(rSizePixel.Width()));
             maSize.setY(static_cast<sal_Int32>(rSizePixel.Height()));
 
-            // let the child window cover the same size as the parent window.
+            
             mpWindow->setPosSizePixel(0,0,maSize.getX(),maSize.getY());
 
-            // TODO(F2): since we would like to share precious hardware
-            // resources, the direct3d9 object should be global. each new
-            // request for a canvas should only create a new swapchain.
+            
+            
+            
             mpDirect3D9 = COMReference<IDirect3D9>(
                 Direct3DCreate9(D3D_SDK_VERSION));
             if(!mpDirect3D9.is())
                 return false;
 
-            // create a device from the direct3d9 object.
+            
             if(!(createDevice()))
                 return false;
 
@@ -722,19 +722,19 @@ namespace dxcanvas
             return true;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::verifyDevice
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         bool DXRenderModule::verifyDevice( const UINT nAdapter )
         {
             ENSURE_OR_THROW( mpDirect3D9.is(),
                               "DXRenderModule::verifyDevice() No valid device." );
 
-            // ask direct3d9 about the capabilities of hardware devices on a specific adapter.
-            // here we decide if the underlying hardware of the machine 'is good enough'.
-            // since we only need a tiny little fraction of what could be used, this
-            // is basically a no-op.
+            
+            
+            
+            
             D3DCAPS9 aCaps;
             if(FAILED(mpDirect3D9->GetDeviceCaps(nAdapter,D3DDEVTYPE_HAL,&aCaps)))
                 return false;
@@ -744,7 +744,7 @@ namespace dxcanvas
                 return false;
             maPageSize = ::basegfx::B2IVector(aCaps.MaxTextureWidth,aCaps.MaxTextureHeight);
 
-            // check device against white & blacklist entries
+            
             D3DADAPTER_IDENTIFIER9 aIdent;
             if(FAILED(mpDirect3D9->GetAdapterIdentifier(nAdapter,0,&aIdent)))
                 return false;
@@ -778,52 +778,52 @@ namespace dxcanvas
         }
 
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::createDevice
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         bool DXRenderModule::createDevice()
         {
-            // we expect that the caller provides us with a valid HWND
+            
             ENSURE_OR_THROW( IsWindow(mhWnd),
                               "DXRenderModule::createDevice() No valid HWND given." );
 
-            // we expect that the caller already created the direct3d9 object.
+            
             ENSURE_OR_THROW( mpDirect3D9.is(),
                               "DXRenderModule::createDevice() no direct3d?." );
 
-            // find the adapter identifier from the window.
+            
             const UINT aAdapter(getAdapterFromWindow());
             if(aAdapter == static_cast<UINT>(-1))
                 return false;
 
-            // verify that device possibly works
+            
             if( !verifyDevice(aAdapter) )
                 return false;
 
-            // query the display mode from the selected adapter.
-            // we'll later request the backbuffer format to be same
-            // same as the display format.
+            
+            
+            
             D3DDISPLAYMODE d3ddm;
             mpDirect3D9->GetAdapterDisplayMode(aAdapter,&d3ddm);
 
-            // we need to use D3DSWAPEFFECT_COPY here since the canvas-api has
-            // basically nothing to do with efficient resource handling. it tries
-            // to avoid drawing whenevery possible, which is simply not the most
-            // efficient way we could leverage the hardware in this case. it would
-            // be far better to redraw the backbuffer each time we would like to
-            // display the content of the backbuffer, but we need to face reality
-            // here and follow how the canvas was designed.
+            
+            
+            
+            
+            
+            
+            
 
-            // Strictly speaking, we don't need a full screen worth of
-            // backbuffer here. We could also scale dynamically with
-            // the current window size, but this will make it
-            // necessary to temporarily have two buffers while copying
-            // from the old to the new one. What's more, at the time
-            // we need a larger buffer, DX might not have sufficient
-            // resources available, and we're then left with too small
-            // a back buffer, and no way of falling back to a
-            // different canvas implementation.
+            
+            
+            
+            
+            
+            
+            
+            
+            
             ZeroMemory( &mad3dpp, sizeof(mad3dpp) );
             mad3dpp.BackBufferWidth = std::max(sal_Int32(maSize.getX()),
                                                sal_Int32(d3ddm.Width));
@@ -837,9 +837,9 @@ namespace dxcanvas
             mad3dpp.hDeviceWindow = mhWnd;
             mad3dpp.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
 
-            // now create the device, first try hardware vertex processing,
-            // then software vertex processing. if both queries fail, we give up
-            // and indicate failure.
+            
+            
+            
             IDirect3DDevice9 *pDevice(NULL);
             if(FAILED(mpDirect3D9->CreateDevice(aAdapter,
                                                 D3DDEVTYPE_HAL,
@@ -857,21 +857,21 @@ namespace dxcanvas
                                                     &pDevice)))
                     return false;
 
-            // got it, store it in a safe place...
+            
             mpDevice=COMReference<IDirect3DDevice9>(pDevice);
 
-            // After CreateDevice, the first swap chain already exists, so just get it...
+            
             IDirect3DSwapChain9 *pSwapChain(NULL);
             pDevice->GetSwapChain(0,&pSwapChain);
             mpSwapChain=COMReference<IDirect3DSwapChain9>(pSwapChain);
             if( !mpSwapChain.is() )
                 return false;
 
-            // clear the render target [which is the backbuffer in this case].
-            // we are forced to do this once, and furthermore right now.
-            // please note that this is only possible since we created the
-            // backbuffer with copy semantics [the content is preserved after
-            // calls to Present()], which is an unnecessarily expensive operation.
+            
+            
+            
+            
+            
             LPDIRECT3DSURFACE9 pBackBuffer = NULL;
             mpSwapChain->GetBackBuffer(0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer);
             mpDevice->SetRenderTarget( 0, pBackBuffer );
@@ -881,18 +881,18 @@ namespace dxcanvas
             return true;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::createSystemMemorySurface
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         COMReference<IDirect3DSurface9> DXRenderModule::createSystemMemorySurface( const ::basegfx::B2IVector& rSize )
         {
             if(isDisposed())
                 return COMReference<IDirect3DSurface9>(NULL);
 
-            // please note that D3DFMT_X8R8G8B8 is the only format we're
-            // able to choose here, since GetDC() doesn't support any
-            // other 32bit-format.
+            
+            
+            
             IDirect3DSurface9 *pSurface(NULL);
             if( FAILED(mpDevice->CreateOffscreenPlainSurface(
                            rSize.getX(),
@@ -909,14 +909,14 @@ namespace dxcanvas
             return COMReference<IDirect3DSurface9>(pSurface);
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::flip
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         bool DXRenderModule::flip( const ::basegfx::B2IRectangle& rUpdateArea,
                                    const ::basegfx::B2IRectangle& /*rCurrWindowArea*/ )
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
 
             if(isDisposed() || !mpSwapChain.is())
@@ -924,7 +924,7 @@ namespace dxcanvas
 
             flushVertexCache();
 
-            // TODO(P2): Might be faster to actually pass update area here
+            
             RECT aRect =
                 {
                     rUpdateArea.getMinX(),
@@ -938,9 +938,9 @@ namespace dxcanvas
                 if(hr != D3DERR_DEVICELOST)
                     return false;
 
-                // interestingly enough, sometimes the Reset() below
-                // *still* causes DeviceLost errors. So, cycle until
-                // DX was kind enough to really reset the device...
+                
+                
+                
                 do
                 {
                     mpVertexBuffer.reset();
@@ -961,7 +961,7 @@ namespace dxcanvas
                         }
                         mpVertexBuffer=COMReference<IDirect3DVertexBuffer9>(pVB);
 
-                        // retry after the restore
+                        
                         if(SUCCEEDED(mpSwapChain->Present(&aRect,&aRect,NULL,NULL,0)))
                             return true;
                     }
@@ -979,56 +979,56 @@ namespace dxcanvas
             return true;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::screenShot
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         void DXRenderModule::screenShot()
         {
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::resize
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         void DXRenderModule::resize( const ::basegfx::B2IRange& rect )
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
 
             if(isDisposed())
                 return;
 
-            // don't do anything if the size didn't change.
+            
             if(maSize.getX() == static_cast<sal_Int32>(rect.getWidth()) &&
                maSize.getY() == static_cast<sal_Int32>(rect.getHeight()))
                return;
 
-            // TODO(Q2): use numeric cast to prevent overflow
+            
             maSize.setX(static_cast<sal_Int32>(rect.getWidth()));
             maSize.setY(static_cast<sal_Int32>(rect.getHeight()));
 
             mpWindow->setPosSizePixel(0,0,maSize.getX(),maSize.getY());
 
-            // resize back buffer, if necessary
-            // -------------------------------------------------------------
+            
+            
 
-            // don't attempt to create anything if the
-            // requested size is NULL.
+            
+            
             if(!(maSize.getX()))
                 return;
             if(!(maSize.getY()))
                 return;
 
-            // backbuffer too small (might happen, if window is
-            // maximized across multiple monitors)
+            
+            
             if( sal_Int32(mad3dpp.BackBufferWidth) < maSize.getX() ||
                 sal_Int32(mad3dpp.BackBufferHeight) < maSize.getY() )
             {
                 mad3dpp.BackBufferWidth = maSize.getX();
                 mad3dpp.BackBufferHeight = maSize.getY();
 
-                // clear before, save resources
+                
                 mpSwapChain.reset();
 
                 IDirect3DSwapChain9 *pSwapChain(NULL);
@@ -1036,11 +1036,11 @@ namespace dxcanvas
                     return;
                 mpSwapChain=COMReference<IDirect3DSwapChain9>(pSwapChain);
 
-                // clear the render target [which is the backbuffer in this case].
-                // we are forced to do this once, and furthermore right now.
-                // please note that this is only possible since we created the
-                // backbuffer with copy semantics [the content is preserved after
-                // calls to Present()], which is an unnecessarily expensive operation.
+                
+                
+                
+                
+                
                 LPDIRECT3DSURFACE9 pBackBuffer = NULL;
                 mpSwapChain->GetBackBuffer(0,D3DBACKBUFFER_TYPE_MONO,&pBackBuffer);
                 mpDevice->SetRenderTarget( 0, pBackBuffer );
@@ -1049,24 +1049,24 @@ namespace dxcanvas
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::getPageSize
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         ::basegfx::B2IVector DXRenderModule::getPageSize()
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
             return maPageSize;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::createSurface
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         ::canvas::ISurfaceSharedPtr DXRenderModule::createSurface( const ::basegfx::B2IVector& surfaceSize )
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
 
             if(isDisposed())
@@ -1085,13 +1085,13 @@ namespace dxcanvas
             return ::canvas::ISurfaceSharedPtr( new DXSurface(*this,aSize) );
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::beginPrimitive
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         void DXRenderModule::beginPrimitive( PrimitiveType eType )
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
 
             if(isDisposed())
@@ -1105,13 +1105,13 @@ namespace dxcanvas
             mnCount=0;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::endPrimitive
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         void DXRenderModule::endPrimitive()
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
 
             if(isDisposed())
@@ -1122,13 +1122,13 @@ namespace dxcanvas
             mnCount=0;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::pushVertex
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         void DXRenderModule::pushVertex( const ::canvas::Vertex& vertex )
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
 
             if(isDisposed())
@@ -1170,21 +1170,21 @@ namespace dxcanvas
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::isError
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         bool DXRenderModule::isError()
         {
-            // TODO(P2): get rid of those fine-grained locking
+            
             ::osl::MutexGuard aGuard( maMutex );
 
             return mbError;
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::getAdapterFromWindow
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         UINT DXRenderModule::getAdapterFromWindow()
         {
@@ -1196,9 +1196,9 @@ namespace dxcanvas
             return static_cast<UINT>(-1);
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::commitVertexCache
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         void DXRenderModule::commitVertexCache()
         {
@@ -1224,9 +1224,9 @@ namespace dxcanvas
             }
         }
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // DXRenderModule::flushVertexCache
-        //////////////////////////////////////////////////////////////////////////////////
+        
+        
+        
 
         void DXRenderModule::flushVertexCache()
         {
@@ -1238,7 +1238,7 @@ namespace dxcanvas
             if( FAILED(mpDevice->SetRenderState(D3DRS_LIGHTING,FALSE)))
                 return;
 
-            // enable texture alpha blending
+            
             if( FAILED(mpDevice->SetRenderState(D3DRS_ALPHABLENDENABLE,TRUE)))
                 return;
 
@@ -1247,26 +1247,26 @@ namespace dxcanvas
             mpDevice->SetSamplerState(0,D3DSAMP_ADDRESSU ,D3DTADDRESS_CLAMP );
             mpDevice->SetSamplerState(0,D3DSAMP_ADDRESSV ,D3DTADDRESS_CLAMP );
 
-            // configure the fixed-function pipeline.
-            // the only 'feature' we need here is to modulate the alpha-channels
-            // from the texture and the interpolated diffuse color. the result
-            // will then be blended with the backbuffer.
-            // fragment color = texture color * diffuse.alpha.
+            
+            
+            
+            
+            
             mpDevice->SetTextureStageState(0,D3DTSS_ALPHAOP,D3DTOP_MODULATE);
             mpDevice->SetTextureStageState(0,D3DTSS_ALPHAARG1,D3DTA_TEXTURE);
             mpDevice->SetTextureStageState(0,D3DTSS_ALPHAARG2,D3DTA_DIFFUSE);
 
-            // normal combination of object...
+            
             if( FAILED(mpDevice->SetRenderState(D3DRS_SRCBLEND,D3DBLEND_SRCALPHA)) )
                 return;
 
-            // ..and background color
+            
             if( FAILED(mpDevice->SetRenderState(D3DRS_DESTBLEND,D3DBLEND_INVSRCALPHA)) )
                 return;
 
-            // disable backface culling; this enables us to mirror sprites
-            // by simply reverting the triangles, which, with enabled
-            // culling, would be invisible otherwise
+            
+            
+            
             if( FAILED(mpDevice->SetRenderState(D3DRS_CULLMODE,D3DCULL_NONE)) )
                 return;
 
@@ -1284,8 +1284,8 @@ namespace dxcanvas
             {
                 DWORD dwLockFlags(D3DLOCK_NOOVERWRITE);
 
-                // Check to see if there's space for the current set of
-                // vertices in the buffer.
+                
+                
                 if( maNumVertices - maWriteIndex < nSize )
                 {
                     commitVertexCache();
@@ -1321,7 +1321,7 @@ namespace dxcanvas
 
                 mpVertexBuffer->Unlock();
 
-                // Advance to the next position in the vertex buffer.
+                
                 maWriteIndex += nNumVertices;
                 nSize -= nNumVertices;
 
@@ -1332,9 +1332,9 @@ namespace dxcanvas
         }
     }
 
-    //////////////////////////////////////////////////////////////////////////////////
-    // createRenderModule
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     IDXRenderModuleSharedPtr createRenderModule( const ::Window& rParent )
     {

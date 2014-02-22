@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svxids.hrc>
@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-extern bool bNoInterrupt;       // in mainwn.cxx
+extern bool bNoInterrupt;       
 
 sal_Bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
@@ -51,7 +51,7 @@ sal_Bool SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark
         case BOOKMARK_INDEX:bRet = SwCrsrShell::GotoMark( pMark );break;
         case BOOKMARK_NEXT: bRet = SwCrsrShell::GoNextBookmark();break;
         case BOOKMARK_PREV: bRet = SwCrsrShell::GoPrevBookmark();break;
-        default:;//prevent warning
+        default:;
     }
 
     if( bRet && IsSelFrmMode() )
@@ -104,7 +104,7 @@ bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
     return bRet;
 }
 
-// Invalidate FontWork-Slots
+
 
 void SwWrtShell::DrawSelChanged( )
 {
@@ -122,7 +122,7 @@ void SwWrtShell::DrawSelChanged( )
     GetView().GetViewFrame()->GetBindings().Invalidate(aInval);
 
     bool bOldVal = bNoInterrupt;
-    bNoInterrupt = true;    // Trick to run AttrChangedNotify by timer.
+    bNoInterrupt = true;    
     GetView().AttrChangedNotify(this);
     bNoInterrupt = bOldVal;
 }
@@ -151,7 +151,7 @@ sal_Bool SwWrtShell::GoPrevBookmark()
 
 void SwWrtShell::ExecMacro( const SvxMacro& rMacro, OUString* pRet, SbxArray* pArgs )
 {
-    // OD 11.02.2003 #100556# - execute macro, if it is allowed.
+    
     if ( IsMacroExecAllowed() )
     {
         GetDoc()->ExecMacro( rMacro, pRet, pArgs );
@@ -167,15 +167,15 @@ sal_uInt16 SwWrtShell::CallEvent( sal_uInt16 nEvent, const SwCallMouseEvent& rCa
 }
 
 
-    // If a util::URL-Button is selected, return its util::URL
-    // otherwise an emtpy string.
+    
+    
 bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
 {
     bool bRet = false;
     const SdrView *pDView = GetDrawView();
     if( pDView )
     {
-        // A fly is precisely achievable if it is selected.
+        
         const SdrMarkList &rMarkList = pDView->GetMarkedObjectList();
 
         if (rMarkList.GetMark(0))
@@ -202,7 +202,7 @@ bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
                     aTmp >>= eTmpButtonType;
                     if( eButtonType == eTmpButtonType)
                     {
-                        // Label
+                        
                         aTmp = xPropSet->getPropertyValue( "Label" );
                         OUString uTmp;
                         if( (aTmp >>= uTmp) && !uTmp.isEmpty())
@@ -210,7 +210,7 @@ bool SwWrtShell::GetURLFromButton( OUString& rURL, OUString& rDescr ) const
                             rDescr = uTmp;
                         }
 
-                        // util::URL
+                        
                         aTmp = xPropSet->getPropertyValue( "TargetURL" );
                         if( (aTmp >>= uTmp) && !uTmp.isEmpty())
                         {

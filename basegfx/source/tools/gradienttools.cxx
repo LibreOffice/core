@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basegfx/tools/gradienttools.hxx>
@@ -61,7 +61,7 @@ namespace basegfx
         double fTargetOffsetX(rTargetRange.getMinX());
         double fTargetOffsetY(rTargetRange.getMinY());
 
-        // add object expansion
+        
         const bool bAngleUsed(!fTools::equalZero(fAngle));
 
         if(bAngleUsed)
@@ -95,7 +95,7 @@ namespace basegfx
 
         aTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
-        // add texture rotate after scale to keep perpendicular angles
+        
         if(bAngleUsed)
         {
             const B2DPoint aCenter(0.5 * fTargetSizeX, 0.5 * fTargetSizeY);
@@ -103,10 +103,10 @@ namespace basegfx
             aTextureTransform *= basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
-        // add object translate
+        
         aTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
-        // prepare aspect for texture
+        
         const double fAspectRatio(fTools::equalZero(fTargetSizeY) ?  1.0 : fTargetSizeX / fTargetSizeY);
 
         return ODFGradientInfo(aTextureTransform, fAspectRatio, nSteps);
@@ -132,7 +132,7 @@ namespace basegfx
         double fTargetOffsetX(rTargetRange.getMinX());
         double fTargetOffsetY(rTargetRange.getMinY());
 
-        // add object expansion
+        
         if(bCircular)
         {
             const double fOriginalDiag(sqrt((fTargetSizeX * fTargetSizeX) + (fTargetSizeY * fTargetSizeY)));
@@ -156,7 +156,7 @@ namespace basegfx
         aTextureTransform.translate(0.5, 0.5);
         aTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
-        // add texture rotate after scale to keep perpendicular angles
+        
         if(!bCircular && !fTools::equalZero(fAngle))
         {
             const B2DPoint aCenter(0.5 * fTargetSizeX, 0.5 * fTargetSizeY);
@@ -164,18 +164,18 @@ namespace basegfx
             aTextureTransform *= basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
-        // add defined offsets after rotation
+        
         if(!fTools::equal(0.5, rOffset.getX()) || !fTools::equal(0.5, rOffset.getY()))
         {
-            // use original target size
+            
             fTargetOffsetX += (rOffset.getX() - 0.5) * rTargetRange.getWidth();
             fTargetOffsetY += (rOffset.getY() - 0.5) * rTargetRange.getHeight();
         }
 
-        // add object translate
+        
         aTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
-        // prepare aspect for texture
+        
         const double fAspectRatio((0.0 != fTargetSizeY) ?  fTargetSizeX / fTargetSizeY : 1.0);
 
         return ODFGradientInfo(aTextureTransform, fAspectRatio, nSteps);
@@ -201,7 +201,7 @@ namespace basegfx
         double fTargetOffsetX(rTargetRange.getMinX());
         double fTargetOffsetY(rTargetRange.getMinY());
 
-        // add object expansion
+        
         if(bSquare)
         {
             const double fSquareWidth(std::max(fTargetSizeX, fTargetSizeY));
@@ -211,7 +211,7 @@ namespace basegfx
             fTargetSizeX = fTargetSizeY = fSquareWidth;
         }
 
-        // add object expansion
+        
         const bool bAngleUsed(!fTools::equalZero(fAngle));
 
         if(bAngleUsed)
@@ -233,7 +233,7 @@ namespace basegfx
         aTextureTransform.translate(0.5, 0.5);
         aTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
-        // add texture rotate after scale to keep perpendicular angles
+        
         if(bAngleUsed)
         {
             const B2DPoint aCenter(0.5 * fTargetSizeX, 0.5 * fTargetSizeY);
@@ -241,18 +241,18 @@ namespace basegfx
             aTextureTransform *= basegfx::tools::createRotateAroundPoint(aCenter, fAngle);
         }
 
-        // add defined offsets after rotation
+        
         if(!fTools::equal(0.5, rOffset.getX()) || !fTools::equal(0.5, rOffset.getY()))
         {
-            // use scaled target size
+            
             fTargetOffsetX += (rOffset.getX() - 0.5) * fTargetSizeX;
             fTargetOffsetY += (rOffset.getY() - 0.5) * fTargetSizeY;
         }
 
-        // add object translate
+        
         aTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
-        // prepare aspect for texture
+        
         const double fAspectRatio((0.0 != fTargetSizeY) ? fTargetSizeX / fTargetSizeY : 1.0);
 
         return ODFGradientInfo(aTextureTransform, fAspectRatio, nSteps);
@@ -355,20 +355,20 @@ namespace basegfx
         {
             const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
 
-            // Ignore Y, this is not needed at all for Y-Oriented gradients
-            // if(aCoor.getX() < 0.0 || aCoor.getX() > 1.0)
-            // {
-            //     return 0.0;
-            // }
+            
+            
+            
+            
+            
 
             if(aCoor.getY() <= 0.0)
             {
-                return 0.0; // start value for inside
+                return 0.0; 
             }
 
             if(aCoor.getY() >= 1.0)
             {
-                return 1.0; // end value for outside
+                return 1.0; 
             }
 
             const sal_uInt32 nSteps(rGradInfo.getSteps());
@@ -385,17 +385,17 @@ namespace basegfx
         {
             const B2DPoint aCoor(rGradInfo.getBackTextureTransform() * rUV);
 
-            // Ignore Y, this is not needed at all for Y-Oriented gradients
-            //if(aCoor.getX() < 0.0 || aCoor.getX() > 1.0)
-            //{
-            //    return 0.0;
-            //}
+            
+            
+            
+            
+            
 
             const double fAbsY(fabs(aCoor.getY()));
 
             if(fAbsY >= 1.0)
             {
-                return 1.0; // use end value when outside in Y
+                return 1.0; 
             }
 
             const sal_uInt32 nSteps(rGradInfo.getSteps());
@@ -430,7 +430,7 @@ namespace basegfx
 
         double getEllipticalGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
         {
-            return getRadialGradientAlpha(rUV, rGradInfo); // only matrix setup differs
+            return getRadialGradientAlpha(rUV, rGradInfo); 
         }
 
         double getSquareGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
@@ -463,9 +463,9 @@ namespace basegfx
 
         double getRectangularGradientAlpha(const B2DPoint& rUV, const ODFGradientInfo& rGradInfo)
         {
-            return getSquareGradientAlpha(rUV, rGradInfo); // only matrix setup differs
+            return getSquareGradientAlpha(rUV, rGradInfo); 
         }
-    } // namespace tools
-} // namespace basegfx
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

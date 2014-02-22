@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <sfx2/sidebar/ResourceDefinitions.hrc>
 #include <sfx2/sidebar/Theme.hxx>
@@ -72,7 +72,7 @@ namespace {
         rListBoxStart.Clear();
         rListBoxEnd.Clear();
 
-        // add 'none' entries
+        
         rListBoxStart.InsertEntry(sNone);
         rListBoxEnd.InsertEntry(sNone);
 
@@ -85,7 +85,7 @@ namespace {
             {
                 Bitmap aCopyStart(aBitmap);
                 Bitmap aCopyEnd(aBitmap);
-                // delete pBitmap;
+                
                 const Size aBmpSize(aCopyStart.GetSizePixel());
                 const Rectangle aCropRectStart(Point(), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
                 const Rectangle aCropRectEnd(Point(aBmpSize.Width() / 2, 0), Size(aBmpSize.Width() / 2, aBmpSize.Height()));
@@ -118,10 +118,10 @@ namespace {
 
         rListBox.Clear();
 
-        // entry for 'none'
+        
         rListBox.InsertEntry(rList.GetStringForUiNoLine());
 
-        // entry for solid line
+        
         rListBox.InsertEntry(rList.GetStringForUiSolidLine(),
                 Image( rList.GetBitmapForUISolidLine()));
 
@@ -135,7 +135,7 @@ namespace {
                 rListBox.InsertEntry(
                     pEntry->GetName(),
                     Image(aBitmap));
-                // delete pBitmap;
+                
             }
             else
             {
@@ -145,9 +145,9 @@ namespace {
 
         rListBox.SetUpdateMode(true);
     }
-} // end of anonymous namespace
+} 
 
-// namespace open
+
 
 namespace svx { namespace sidebar {
 
@@ -254,16 +254,16 @@ void LinePropertyPanel::Initialize()
     SelectEndStyle(false);
     aLink = LINK( this, LinePropertyPanel, ChangeStartHdl );
     mpLBStart->SetSelectHdl( aLink );
-    mpLBStart->SetAccessibleName(OUString( "Beginning Style")); //wj acc
+    mpLBStart->SetAccessibleName(OUString( "Beginning Style")); 
     mpLBStart->AdaptDropDownLineCountToMaximum();
     aLink = LINK( this, LinePropertyPanel, ChangeEndHdl );
     mpLBEnd->SetSelectHdl( aLink );
-    mpLBEnd->SetAccessibleName(OUString( "Ending Style"));  //wj acc
+    mpLBEnd->SetAccessibleName(OUString( "Ending Style"));  
     mpLBEnd->AdaptDropDownLineCountToMaximum();
 
     aLink = LINK(this, LinePropertyPanel, ChangeTransparentHdl);
     mpMFTransparent->SetModifyHdl(aLink);
-    mpMFTransparent->SetAccessibleName(OUString( "Transparency"));  //wj acc
+    mpMFTransparent->SetAccessibleName(OUString( "Transparency"));  
 
     mpTBWidth->SetAccessibleRelationLabeledBy(mpFTWidth);
     mpTBColor->SetAccessibleRelationLabeledBy(mpFTColor);
@@ -287,11 +287,11 @@ void LinePropertyPanel::SetupIcons(void)
 {
     if(Theme::GetBoolean(Theme::Bool_UseSymphonyIcons))
     {
-        // todo
+        
     }
     else
     {
-        // todo
+        
     }
 }
 
@@ -338,7 +338,7 @@ void LinePropertyPanel::NotifyItemUpdate(
     (void)bIsEnabled;
     const bool bDisabled(SFX_ITEM_DISABLED == eState);
 
-    // By default, fill and show the color of existing line-color
+    
     mpColorUpdater->Update( maColor );
 
     switch(nSID)
@@ -397,7 +397,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                         mpStyleItem.reset(pState ? (XLineStyleItem*)pItem->Clone() : 0);
                     }
                 }
-                else // if(nSID == SID_ATTR_LINE_DASH)
+                else 
                 {
                     const XLineDashItem* pItem = dynamic_cast< const XLineDashItem* >(pState);
 
@@ -447,7 +447,7 @@ void LinePropertyPanel::NotifyItemUpdate(
                 }
             }
 
-            mpMFTransparent->SetValue(0);//add
+            mpMFTransparent->SetValue(0);
             mpMFTransparent->SetText(OUString());
             break;
         }
@@ -702,21 +702,21 @@ IMPL_LINK_NOARG(LinePropertyPanel, ChangeLineStyleHdl)
     {
         if(0 == nPos)
         {
-            // XLINE_NONE
+            
             const XLineStyleItem aItem(XLINE_NONE);
 
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aItem, 0L);
         }
         else if(1 == nPos)
         {
-            // XLINE_SOLID
+            
             const XLineStyleItem aItem(XLINE_SOLID);
 
             GetBindings()->GetDispatcher()->Execute(SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aItem, 0L);
         }
         else if (mxLineStyleList.is() && mxLineStyleList->Count() > (long)(nPos - 2))
         {
-            // XLINE_DASH
+            
             const XLineStyleItem aItemA(XLINE_DASH);
             const XDashEntry* pDashEntry = mxLineStyleList->GetDash(nPos - 2);
             OSL_ENSURE(pDashEntry, "OOps, got empty XDash from XDashList (!)");
@@ -782,22 +782,22 @@ IMPL_LINK(LinePropertyPanel, ChangeEdgeStyleHdl, void*, EMPTYARG)
 
         switch(nPos)
         {
-            case 0: // rounded
+            case 0: 
             {
                 pItem = new XLineJointItem(com::sun::star::drawing::LineJoint_ROUND);
                 break;
             }
-            case 1: // none
+            case 1: 
             {
                 pItem = new XLineJointItem(com::sun::star::drawing::LineJoint_NONE);
                 break;
             }
-            case 2: // mitered
+            case 2: 
             {
                 pItem = new XLineJointItem(com::sun::star::drawing::LineJoint_MITER);
                 break;
             }
-            case 3: // beveled
+            case 3: 
             {
                 pItem = new XLineJointItem(com::sun::star::drawing::LineJoint_BEVEL);
                 break;
@@ -823,17 +823,17 @@ IMPL_LINK(LinePropertyPanel, ChangeCapStyleHdl, void*, EMPTYARG)
 
         switch(nPos)
         {
-            case 0: // flat
+            case 0: 
             {
                 pItem = new XLineCapItem(com::sun::star::drawing::LineCap_BUTT);
                 break;
             }
-            case 1: // round
+            case 1: 
             {
                 pItem = new XLineCapItem(com::sun::star::drawing::LineCap_ROUND);
                 break;
             }
-            case 2: // square
+            case 2: 
             {
                 pItem = new XLineCapItem(com::sun::star::drawing::LineCap_SQUARE);
                 break;
@@ -880,7 +880,7 @@ namespace
     {
         return COL_TRANSPARENT;
     }
-} // end of anonymous namespace
+} 
 
 PopupControl* LinePropertyPanel::CreateColorPopupControl (PopupContainer* pParent)
 {
@@ -1134,6 +1134,6 @@ void LinePropertyPanel::SelectEndStyle(bool bStart)
 }
 
 
-} } // end of namespace svx::sidebar
+} } 
 
-// eof
+

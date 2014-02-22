@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -22,9 +22,9 @@
 #include <osl/file.h>
 #include "smplmailmsg.hxx"
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+
+
+
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::RuntimeException;
@@ -35,9 +35,9 @@ using osl::Mutex;
 
 using namespace cppu;
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
+
+
+
 
 CSmplMailMsg::CSmplMailMsg( )
 {
@@ -55,7 +55,7 @@ void SAL_CALL CSmplMailMsg::setBody( const ::rtl::OUString& aBody )
     return m_aBody;
 }
 
-//------------------------------------------------
+
 
 void SAL_CALL CSmplMailMsg::setRecipient( const OUString& aRecipient )
     throw (RuntimeException)
@@ -63,7 +63,7 @@ void SAL_CALL CSmplMailMsg::setRecipient( const OUString& aRecipient )
     m_aRecipient = aRecipient;
 }
 
-//------------------------------------------------
+
 
 OUString SAL_CALL CSmplMailMsg::getRecipient(  )
     throw (RuntimeException)
@@ -71,7 +71,7 @@ OUString SAL_CALL CSmplMailMsg::getRecipient(  )
     return m_aRecipient;
 }
 
-//------------------------------------------------
+
 
 void SAL_CALL CSmplMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
     throw (RuntimeException)
@@ -79,7 +79,7 @@ void SAL_CALL CSmplMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecip
     m_CcRecipients = aCcRecipient;
 }
 
-//------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL CSmplMailMsg::getCcRecipient(  )
     throw (RuntimeException)
@@ -87,7 +87,7 @@ Sequence< OUString > SAL_CALL CSmplMailMsg::getCcRecipient(  )
     return m_CcRecipients;
 }
 
-//------------------------------------------------
+
 
 void SAL_CALL CSmplMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
     throw (RuntimeException)
@@ -95,7 +95,7 @@ void SAL_CALL CSmplMailMsg::setBccRecipient( const Sequence< OUString >& aBccRec
     m_BccRecipients = aBccRecipient;
 }
 
-//------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL CSmplMailMsg::getBccRecipient(  )
     throw (RuntimeException)
@@ -103,7 +103,7 @@ Sequence< OUString > SAL_CALL CSmplMailMsg::getBccRecipient(  )
     return m_BccRecipients;
 }
 
-//------------------------------------------------
+
 
 void SAL_CALL CSmplMailMsg::setOriginator( const OUString& aOriginator )
     throw (RuntimeException)
@@ -111,7 +111,7 @@ void SAL_CALL CSmplMailMsg::setOriginator( const OUString& aOriginator )
     m_aOriginator = aOriginator;
 }
 
-//------------------------------------------------
+
 
 OUString SAL_CALL CSmplMailMsg::getOriginator(  )
     throw (RuntimeException)
@@ -119,7 +119,7 @@ OUString SAL_CALL CSmplMailMsg::getOriginator(  )
     return m_aOriginator;
 }
 
-//------------------------------------------------
+
 
 void SAL_CALL CSmplMailMsg::setSubject( const OUString& aSubject )
     throw (RuntimeException)
@@ -127,7 +127,7 @@ void SAL_CALL CSmplMailMsg::setSubject( const OUString& aSubject )
     m_aSubject = aSubject;
 }
 
-//------------------------------------------------
+
 
 OUString SAL_CALL CSmplMailMsg::getSubject(  )
     throw (RuntimeException)
@@ -135,7 +135,7 @@ OUString SAL_CALL CSmplMailMsg::getSubject(  )
     return m_aSubject;
 }
 
-//------------------------------------------------
+
 
 void SAL_CALL CSmplMailMsg::setAttachement( const Sequence< OUString >& aAttachement )
     throw (IllegalArgumentException, RuntimeException)
@@ -143,7 +143,7 @@ void SAL_CALL CSmplMailMsg::setAttachement( const Sequence< OUString >& aAttache
     m_Attachements = aAttachement;
 }
 
-//------------------------------------------------
+
 
 Sequence< OUString > SAL_CALL CSmplMailMsg::getAttachement(  )
     throw (RuntimeException)

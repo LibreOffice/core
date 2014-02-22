@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "browserids.hxx"
@@ -125,7 +125,7 @@ using namespace ::svt;
 namespace dbaui
 {
 
-// OParameterContinuation
+
 class OParameterContinuation : public OInteraction< XInteractionSupplyParameters >
 {
     Sequence< PropertyValue >       m_aValues;
@@ -135,7 +135,7 @@ public:
 
     Sequence< PropertyValue >   getValues() const { return m_aValues; }
 
-// XInteractionSupplyParameters
+
     virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException);
 };
 
@@ -144,9 +144,9 @@ void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyVal
     m_aValues = _rValues;
 }
 
-// a helper class implementing a runtime::XFormController, will be aggregated by SbaXDataBrowserController
-// (we can't derive from XFormController as it's base class is XTabController and the XTabController::getModel collides
-// with the XController::getModel implemented in our base class SbaXDataBrowserController)
+
+
+
 class SbaXDataBrowserController::FormControllerImpl
     : public ::cppu::WeakAggImplHelper2< ::com::sun::star::form::runtime::XFormController,
                                          ::com::sun::star::frame::XFrameActionListener >
@@ -158,7 +158,7 @@ class SbaXDataBrowserController::FormControllerImpl
 public:
     FormControllerImpl(SbaXDataBrowserController* pOwner);
 
-    // XFormController
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::form::runtime::XFormOperations > SAL_CALL getFormOperations() throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  SAL_CALL getCurrentControl(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL addActivateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormControllerListener > & l) throw( ::com::sun::star::uno::RuntimeException );
@@ -169,57 +169,57 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _interactionHandler ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XChild, base of XFormController
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setParent( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& Parent ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 
-    // XComponent, base of XFormController
+    
     virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XIndexAccess, base of XFormController
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    // XElementAccess, base of XIndexAccess
+    
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XEnumerationAccess, base of XElementAccess
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XModifyBroadcaster, base of XFormController
+    
     virtual void SAL_CALL addModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XConfirmDeleteBroadcaster, base of XFormController
+    
     virtual void SAL_CALL addConfirmDeleteListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XConfirmDeleteListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeConfirmDeleteListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XConfirmDeleteListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XSQLErrorBroadcaster, base of XFormController
+    
     virtual void SAL_CALL addSQLErrorListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeSQLErrorListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLErrorListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XRowSetApproveBroadcaster, base of XFormController
+    
     virtual void SAL_CALL addRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeRowSetApproveListener( const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XRowSetApproveListener >& listener ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XDatabaseParameterBroadcaster2, base of XFormController
+    
     virtual void SAL_CALL addDatabaseParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeDatabaseParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XDatabaseParameterBroadcaster, base of XDatabaseParameterBroadcaster2
+    
     virtual void SAL_CALL addParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeParameterListener( const ::com::sun::star::uno::Reference< ::com::sun::star::form::XDatabaseParameterListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XModeSelector, base of XFormController
+    
     virtual void SAL_CALL setMode( const OUString& aMode ) throw (::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
     virtual OUString SAL_CALL getMode(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (::com::sun::star::uno::RuntimeException);
 
-    // XTabController, base of XFormController
+    
     virtual void SAL_CALL setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel > & Model) throw( ::com::sun::star::uno::RuntimeException );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabControllerModel >  SAL_CALL getModel(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL setContainer(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > & _Container) throw( ::com::sun::star::uno::RuntimeException );
@@ -230,10 +230,10 @@ public:
     virtual void SAL_CALL activateFirst(void) throw( ::com::sun::star::uno::RuntimeException );
     virtual void SAL_CALL activateLast(void) throw( ::com::sun::star::uno::RuntimeException );
 
-    // XFrameActionListener
+    
     virtual void SAL_CALL frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( ::com::sun::star::uno::RuntimeException );
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw( ::com::sun::star::uno::RuntimeException );
 
 protected:
@@ -276,7 +276,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListe
 
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& /*_ChildController*/ ) throw( RuntimeException, IllegalArgumentException )
 {
-    // not supported
+    
     throw IllegalArgumentException( OUString(), *this, 1 );
 }
 
@@ -304,7 +304,7 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandl
 
 Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getParent(  ) throw (RuntimeException)
 {
-    // don't have any parent form controllers
+    
     return NULL;
 }
 
@@ -330,13 +330,13 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener
 
 ::sal_Int32 SAL_CALL SbaXDataBrowserController::FormControllerImpl::getCount(  ) throw (RuntimeException)
 {
-    // no sub controllers, never
+    
     return 0;
 }
 
 Any SAL_CALL SbaXDataBrowserController::FormControllerImpl::getByIndex( ::sal_Int32 /*Index*/ ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException)
 {
-    // no sub controllers, never
+    
     throw IndexOutOfBoundsException( OUString(), *this );
 }
 
@@ -347,7 +347,7 @@ Type SAL_CALL SbaXDataBrowserController::FormControllerImpl::getElementType(  ) 
 
 ::sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::hasElements(  ) throw (RuntimeException)
 {
-    // no sub controllers, never
+    
     return false;
 }
 
@@ -499,11 +499,11 @@ void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const :
 
 void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const ::com::sun::star::lang::EventObject& /*Source*/) throw( RuntimeException )
 {
-    // nothing to do
-    // we don't add ourself as listener to any broadcasters, so we are not resposible for removing us
+    
+    
 }
 
-// SbaXDataBrowserController
+
 Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  ) throw (RuntimeException)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::getTypes" );
@@ -531,14 +531,14 @@ Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  )
 
 Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw (RuntimeException)
 {
-    // check for our additional interfaces
+    
     Any aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
 
-    // check for our aggregate (implementing the XFormController)
+    
     if (!aRet.hasValue())
         aRet = m_xFormControllerImpl->queryAggregation(_rType);
 
-    // no more to offer
+    
     return aRet;
 }
 
@@ -558,7 +558,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::SbaXDataBrowserController" );
 
-    // create the form controller aggregate
+    
     ::comphelper::increment(m_refCount);
     {
         m_pFormControllerImpl = new FormControllerImpl(this);
@@ -574,8 +574,8 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< ::com::sun
 SbaXDataBrowserController::~SbaXDataBrowserController()
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::~SbaXDataBrowserController" );
-    //  deleteView();
-    // release the aggregated form controller
+    
+    
     if (m_xFormControllerImpl.is())
     {
         Reference< XInterface >  xEmpty;
@@ -694,17 +694,17 @@ sal_Bool SbaXDataBrowserController::reloadForm( const Reference< XLoadable >& _r
 void SbaXDataBrowserController::initFormatter()
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::initFormatter" );
-    // create a formatter working with the connections format supplier
+    
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True, getORB()));
 
     if(xSupplier.is())
     {
-        // create a new formatter
+        
         m_xFormatter = Reference< util::XNumberFormatter > (
             util::NumberFormatter::create(getORB()), UNO_QUERY_THROW);
         m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
-    else // clear the formatter
+    else 
         m_xFormatter = NULL;
 }
 
@@ -735,7 +735,7 @@ void SbaXDataBrowserController::describeSupportedFeatures()
 sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::Construct" );
-    // create/initialize the form and the grid model
+    
     m_xRowSet = CreateForm();
     if (!m_xRowSet.is())
         return sal_False;
@@ -751,28 +751,28 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     if (!m_xGridModel.is())
         return sal_False;
 
-    // set the formatter if available
+    
     initFormatter();
 
-    // we want to have a grid with a "flat" border
+    
     Reference< XPropertySet >  xGridSet(m_xGridModel, UNO_QUERY);
     if ( xGridSet.is() )
         xGridSet->setPropertyValue(PROPERTY_BORDER, makeAny((sal_Int16)2));
 
-    // ----------
-    // marry them
+    
+    
     Reference< ::com::sun::star::container::XNameContainer >  xNameCont(m_xRowSet, UNO_QUERY);
     {
         OUString sText(ModuleRes(STR_DATASOURCE_GRIDCONTROL_NAME));
         xNameCont->insertByName(OUString(sText), makeAny(m_xGridModel));
     }
 
-    // create the view
+    
     setView( * new UnoDataBrowserView( pParent, *this, getORB() ) );
     if (!getBrowserView())
         return sal_False;
 
-    // late construction
+    
     sal_Bool bSuccess = sal_False;
     try
     {
@@ -789,11 +789,11 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
 
     if (!bSuccess)
     {
-        //  deleteView();
+        
         return sal_False;
     }
 
-    // now that we have a view we can create the clipboard listener
+    
     m_aSystemClipboard = TransferableDataHelper::CreateFromSystemClipboard( getView() );
     m_aSystemClipboard.StartClipboardListening( );
 
@@ -801,19 +801,19 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     m_pClipbordNotifier->acquire();
     m_pClipbordNotifier->AddRemoveListener( getView(), sal_True );
 
-    // this call create the toolbox
+    
     SbaXDataBrowserController_Base::Construct(pParent);
 
     getBrowserView()->Show();
 
-    // set the callbacks for the grid control
+    
     SbaGridControl* pVclGrid = getBrowserView()->getVclControl();
     OSL_ENSURE(pVclGrid, "SbaXDataBrowserController::Construct : have no VCL control !");
     pVclGrid->SetMasterListener(this);
 
-    // add listeners ...
+    
 
-    // ... to the form model
+    
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
     if (xFormSet.is())
     {
@@ -840,7 +840,7 @@ sal_Bool SbaXDataBrowserController::Construct(Window* pParent)
     addModelListeners(getControlModel());
     addControlListeners(getBrowserView()->getGridControl());
 
-    // load the form
+    
     return LoadForm();
 }
 
@@ -854,7 +854,7 @@ sal_Bool SbaXDataBrowserController::LoadForm()
 void SbaXDataBrowserController::AddColumnListener(const Reference< XPropertySet > & /*xCol*/)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::AddColumnListener" );
-    // we're not interested in any column properties ...
+    
 }
 
 void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertySet > & /*xCol*/)
@@ -881,10 +881,10 @@ Reference< ::com::sun::star::form::XFormComponent >  SbaXDataBrowserController::
 void SbaXDataBrowserController::addModelListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::addModelListeners" );
-    // ... all the grid columns
+    
     addColumnListeners(_xGridControlModel);
 
-    // (we are interested in all columns the grid has (and only in these) so we have to listen to the container, too)
+    
     Reference< ::com::sun::star::container::XContainer >  xColContainer(_xGridControlModel, UNO_QUERY);
     if (xColContainer.is())
         xColContainer->addContainerListener((::com::sun::star::container::XContainerListener*)this);
@@ -897,7 +897,7 @@ void SbaXDataBrowserController::addModelListeners(const Reference< ::com::sun::s
 void SbaXDataBrowserController::removeModelListeners(const Reference< XControlModel > & _xGridControlModel)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::removeModelListeners" );
-    // every single column model
+    
     Reference< XIndexContainer >  xColumns(_xGridControlModel, UNO_QUERY);
     if (xColumns.is())
     {
@@ -921,17 +921,17 @@ void SbaXDataBrowserController::removeModelListeners(const Reference< XControlMo
 void SbaXDataBrowserController::addControlListeners(const Reference< ::com::sun::star::awt::XControl > & _xGridControl)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::addControlListeners" );
-    // to ge the 'modified' for the current cell
+    
     Reference< XModifyBroadcaster >  xBroadcaster(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xBroadcaster.is())
         xBroadcaster->addModifyListener(static_cast<XModifyListener*>(this));
 
-    // introduce ourself as dispatch provider for the grid
+    
     Reference< XDispatchProviderInterception >  xInterception(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xInterception.is())
         xInterception->registerDispatchProviderInterceptor(static_cast<XDispatchProviderInterceptor*>(this));
 
-    // add as focus listener to the control (needed for the form controller functionality)
+    
     Reference< XWindow >  xWindow(_xGridControl, UNO_QUERY);
     if (xWindow.is())
         xWindow->addFocusListener(this);
@@ -956,7 +956,7 @@ void SbaXDataBrowserController::removeControlListeners(const Reference< ::com::s
 void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/) throw( RuntimeException )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::focusGained" );
-    // notify our activate listeners (registered on the form controller aggregate)
+    
     EventObject aEvt(*this);
     ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
@@ -966,7 +966,7 @@ void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/) th
 void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( RuntimeException )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::focusLost" );
-    // some general checks
+    
     if (!getBrowserView() || !getBrowserView()->getGridControl().is())
         return;
     Reference< XVclWindowPeer >  xMyGridPeer(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
@@ -976,20 +976,20 @@ void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( R
     if (!xNextControlPeer.is())
         return;
 
-    // don't do a notification if it remains in the family (i.e. a child of the grid control gets the focus)
+    
     if (xMyGridPeer->isChild(xNextControlPeer))
         return;
 
     if (xMyGridPeer == xNextControlPeer)
         return;
 
-    // notify the listeners that the "form" we represent has been deactivated
+    
     EventObject aEvt(*this);
     ::cppu::OInterfaceIteratorHelper aIter(m_pFormControllerImpl->m_aActivateListeners);
     while (aIter.hasMoreElements())
         static_cast<XFormControllerListener*>(aIter.next())->formDeactivated(aEvt);
 
-    // commit the changes of the grid control (as we're deactivated)
+    
     Reference< XBoundComponent >  xCommitable(getBrowserView()->getGridControl(), UNO_QUERY);
     if (xCommitable.is())
         xCommitable->commit();
@@ -1046,7 +1046,7 @@ void SbaXDataBrowserController::disposingColumnModel(const ::com::sun::star::lan
 void SbaXDataBrowserController::disposing(const EventObject& Source) throw( RuntimeException )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::disposing" );
-    // if it's a component other than our aggregate, forward it to the aggregate
+    
     if ( m_xFormControllerImpl != Source.Source )
     {
         Reference< XEventListener > xAggListener;
@@ -1055,7 +1055,7 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
             xAggListener->disposing( Source );
     }
 
-    // is it the grid control ?
+    
     if (getBrowserView())
     {
         Reference< ::com::sun::star::awt::XControl >  xSourceControl(Source.Source, UNO_QUERY);
@@ -1063,20 +1063,20 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
             disposingGridControl(Source);
     }
 
-    // it's model (the container of the columns) ?
+    
     if (getControlModel() == Source.Source)
         disposingGridModel(Source);
 
-    // the form's model ?
+    
     if ((getRowSet() == Source.Source))
         disposingFormModel(Source);
 
-    // from a single column model ?
+    
     Reference< XPropertySet >  xSourceSet(Source.Source, UNO_QUERY);
     if (xSourceSet.is())
     {
         Reference< XPropertySetInfo >  xInfo = xSourceSet->getPropertySetInfo();
-        // we assume that columns have a Width property and all other sets we are listening to don't have
+        
         if (xInfo->hasPropertyByName(PROPERTY_WIDTH))
             disposingColumnModel(Source);
     }
@@ -1105,22 +1105,22 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
         return;
 
     SolarMutexGuard aGuard;
-    // the IsModified changed to sal_False ?
+    
     if  (   (evt.PropertyName.equals(PROPERTY_ISMODIFIED))
         &&  !::comphelper::getBOOL(evt.NewValue)
         )
-    {   // -> the current field isn't modified anymore, too
+    {   
         setCurrentModified( sal_False );
     }
 
-    // switching to a new record ?
+    
     if  (   (evt.PropertyName.equals(PROPERTY_ISNEW))
         &&  ::comphelper::getBOOL(evt.NewValue)
         )
     {
         if (::comphelper::getINT32(xSource->getPropertyValue(PROPERTY_ROWCOUNT)) == 0)
-            // if we're switching to a new record and didn't have any records before we need to invalidate
-            // all slots (as the cursor was invalid before the mode change and so the slots were disabled)
+            
+            
             InvalidateAll();
     }
 
@@ -1137,7 +1137,7 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
 
-    // a new record count ? -> may be our search availability has changed
+    
     if (evt.PropertyName.equals(PROPERTY_ROWCOUNT))
     {
         sal_Int32 nNewValue = 0, nOldValue = 0;
@@ -1202,10 +1202,10 @@ sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( Runtim
 
 void SbaXDataBrowserController::disposing()
 {
-    // the base class
+    
     SbaXDataBrowserController_Base::OGenericUnoController::disposing();
 
-    // the data source
+    
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
     if (xFormSet.is())
     {
@@ -1243,14 +1243,14 @@ void SbaXDataBrowserController::disposing()
     if (getBrowserView())
     {
         removeControlListeners(getBrowserView()->getGridControl());
-        // don't delete explicitly, this is done by the owner (and user) of this controller (me hopes ...)
+        
         clearView();
     }
 
     if(m_aInvalidateClipboard.IsActive())
         m_aInvalidateClipboard.Stop();
 
-    // dispose the row set
+    
     try
     {
         ::comphelper::disposeComponent(m_xRowSet);
@@ -1264,7 +1264,7 @@ void SbaXDataBrowserController::disposing()
         DBG_UNHANDLED_EXCEPTION();
     }
     m_xParser.clear();
-        // don't dispose, just reset - it's owned by the RowSet
+        
 }
 
 void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::FrameActionEvent& aEvent) throw( RuntimeException )
@@ -1279,9 +1279,9 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
         {
             case FrameAction_FRAME_ACTIVATED:
             case FrameAction_FRAME_UI_ACTIVATED:
-                // ensure that the active cell (if any) has the focus
+                
                 m_aAsyncGetCellFocus.Call();
-                // start the clipboard timer
+                
                 if (getBrowserView() && getBrowserView()->getVclControl() && !m_aInvalidateClipboard.IsActive())
                 {
                     m_aInvalidateClipboard.Start();
@@ -1290,13 +1290,13 @@ void SbaXDataBrowserController::frameAction(const ::com::sun::star::frame::Frame
                 break;
             case FrameAction_FRAME_DEACTIVATING:
             case FrameAction_FRAME_UI_DEACTIVATING:
-                // stop the clipboard invalidator
+                
                 if (getBrowserView() && getBrowserView()->getVclControl() && m_aInvalidateClipboard.IsActive())
                 {
                     m_aInvalidateClipboard.Stop();
                     OnInvalidateClipboard( NULL );
                 }
-                // remove the "get cell focus"-event
+                
                 m_aAsyncGetCellFocus.CancelCall();
                 break;
             default:
@@ -1340,7 +1340,7 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::approveParameter" );
     if (aEvent.Source != getRowSet())
     {
-        // not my data source -> allow anything
+        
         SAL_WARN("dbaccess.ui","SbaXDataBrowserController::approveParameter : invalid event source !");
         return sal_True;
     }
@@ -1348,33 +1348,33 @@ sal_Bool SbaXDataBrowserController::approveParameter(const ::com::sun::star::for
     Reference< ::com::sun::star::container::XIndexAccess >  xParameters = aEvent.Parameters;
     SolarMutexGuard aSolarGuard;
 
-    // default handling: instantiate an interaction handler and let it handle the parameter request
+    
     try
     {
-        // two continuations allowed: OK and Cancel
+        
         OParameterContinuation* pParamValues = new OParameterContinuation;
         OInteractionAbort* pAbort = new OInteractionAbort;
-        // the request
+        
         ParametersRequest aRequest;
         aRequest.Parameters = xParameters;
         aRequest.Connection = getConnection(Reference< XRowSet >(aEvent.Source, UNO_QUERY));
         OInteractionRequest* pParamRequest = new OInteractionRequest(makeAny(aRequest));
         Reference< XInteractionRequest > xParamRequest(pParamRequest);
-        // some knittings
+        
         pParamRequest->addContinuation(pParamValues);
         pParamRequest->addContinuation(pAbort);
 
-        // create the handler, let it handle the request
+        
         Reference< XInteractionHandler2 > xHandler( InteractionHandler::createWithParent(getORB(), 0) );
         xHandler->handle(xParamRequest);
 
         if (!pParamValues->wasSelected())
-        {   // canceled
+        {   
             setLoadingCancelled();
             return sal_False;
         }
 
-        // transfer the values into the parameter supplier
+        
         Sequence< PropertyValue > aFinalValues = pParamValues->getValues();
         if (aFinalValues.getLength() != aRequest.Parameters->getCount())
         {
@@ -1438,11 +1438,11 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::GetState" );
     FeatureState aReturn;
-        // (disabled automatically)
+        
 
     try
     {
-        // no chance without a view
+        
         if (!getBrowserView() || !getBrowserView()->getVclControl())
             return aReturn;
 
@@ -1454,11 +1454,11 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     aReturn.bEnabled = false;
                     return aReturn;
                 }
-                // any filter or sort order set ?
+                
                 aReturn.bEnabled = m_xParser->getFilter().getLength() || m_xParser->getHavingClause().getLength() || m_xParser->getOrder().getLength();
                 return aReturn;
         }
-        // no chance without valid models
+        
         if (isValid() && !isValidCursor())
             return aReturn;
 
@@ -1473,7 +1473,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             break;
             case ID_BROWSER_INSERT_ROW:
                 {
-                    // check if it is available
+                    
                     sal_Bool bInsertPrivilege = ( m_nRowSetPrivileges & Privilege::INSERT) != 0;
                     sal_Bool bAllowInsertions = sal_True;
                     try
@@ -1490,7 +1490,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 break;
             case SID_FM_DELETEROWS:
                 {
-                    // check if it is available
+                    
                     sal_Bool bDeletePrivilege = ( m_nRowSetPrivileges & Privilege::INSERT) != 0;
                     sal_Bool bAllowDeletions = sal_True;
                     sal_Int32 nRowCount = 0;
@@ -1516,7 +1516,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     aReturn.bEnabled = m_aCurrentFrame.isActive();
                     break;
                 }
-                // run through
+                
             case ID_BROWSER_PASTE:
             case ID_BROWSER_CUT:
             {
@@ -1546,7 +1546,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_SORTDOWN:
             case ID_BROWSER_AUTOFILTER:
             {
-                // a native statement can't be filtered or sorted
+                
                 const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
                 if ( !::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) || !m_xParser.is() )
                     break;
@@ -1572,7 +1572,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     aReturn.bEnabled = sal_True;
                     break;
                 }
-                // no break
+                
             case ID_BROWSER_ORDERCRIT:
                 {
                     const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -1589,7 +1589,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                 break;
 
             case ID_BROWSER_REDO:
-                aReturn.bEnabled = sal_False;   // simply forget it ;). no redo possible.
+                aReturn.bEnabled = sal_False;   
                 break;
 
             case ID_BROWSER_UNDORECORD:
@@ -1609,20 +1609,20 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             break;
             case ID_BROWSER_EDITDOC:
             {
-                // check if it is available
+                
                 Reference< XPropertySet >  xDataSourceSet(getRowSet(), UNO_QUERY);
                 if (!xDataSourceSet.is())
-                    break;  // no datasource -> no edit mode
+                    break;  
 
                 sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
                 sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowInserts"));
                 sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowUpdates"));
                 sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue("AllowDeletes"));
                 if (!bInsertAllowedAndPossible && !bUpdateAllowedAndPossible && !bDeleteAllowedAndPossible)
-                    break;  // no insert/update/delete -> no edit mode
+                    break;  
 
                 if (!isValidCursor() || !isLoaded())
-                    break;  // no cursor -> no edit mode
+                    break;  
 
                 aReturn.bEnabled = sal_True;
 
@@ -1812,7 +1812,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
         {
             DlgFilterCrit aDlg( getBrowserView(), getORB(), xCon, xParser, xSup->getColumns() );
             if ( !aDlg.Execute() )
-                return; // if so we don't need to update the grid
+                return; 
             aDlg.BuildWherePart();
         }
         else
@@ -1820,7 +1820,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             DlgOrderCrit aDlg( getBrowserView(),xCon,xParser,xSup->getColumns() );
             if(!aDlg.Execute())
             {
-                return; // if so we don't need to actualize the grid
+                return; 
             }
             aDlg.BuildOrderPart();
         }
@@ -1845,7 +1845,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
 
     OUString sNewHaving = xParser->getHavingClause();
     if ( sOldVal.equals(sNewVal) && (!bFilter || sOldHaving.equals(sNewHaving)) )
-        // nothing to be done
+        
         return;
 
     if (bFilter)
@@ -1859,7 +1859,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
 void SbaXDataBrowserController::ExecuteSearch()
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::ExecuteSearch" );
-    // calculate the control source of the active field
+    
     Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
     OSL_ENSURE(xGrid.is(), "SbaXDataBrowserController::ExecuteSearch : the control should have an ::com::sun::star::form::XGrid interface !");
 
@@ -1873,7 +1873,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     Reference< XPropertySet >  xCurrentCol(xColumns->getByIndex(nModelCol),UNO_QUERY);
     OUString sActiveField = ::comphelper::getString(xCurrentCol->getPropertyValue(PROPERTY_CONTROLSOURCE));
 
-    // the text within the current cell
+    
     OUString sInitialText;
     Reference< ::com::sun::star::container::XIndexAccess >  xColControls(xGridPeer, UNO_QUERY);
     Reference< XInterface >  xCurControl(xColControls->getByIndex(nViewCol),UNO_QUERY);
@@ -1881,7 +1881,7 @@ void SbaXDataBrowserController::ExecuteSearch()
     if (IsSearchableControl(xCurControl, &aInitialText))
         sInitialText = aInitialText;
 
-    // prohibit the synchronization of the grid's display with the cursor's position
+    
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
     xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(false));
@@ -1908,7 +1908,7 @@ void SbaXDataBrowserController::ExecuteSearch()
         delete pDialog;
     }
 
-    // restore the grid's normal operating state
+    
     xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(true));
     xModelSet->setPropertyValue("AlwaysShowCursor", ::comphelper::makeBoolAny(false));
     xModelSet->setPropertyValue("CursorColor", Any());
@@ -1931,7 +1931,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 if (SaveModified())
                 {
                     getRowSet()->afterLast();
-                    // check if it is available
+                    
                     Reference< XResultSetUpdate >  xUpdateCursor(getRowSet(), UNO_QUERY_THROW);
                     xUpdateCursor->moveToInsertRow();
                 }
@@ -1973,14 +1973,14 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             sal_Int16 nGridMode = getBrowserView()->getVclControl()->GetOptions();
             if (nGridMode == DbGridControl::OPT_READONLY)
                 getBrowserView()->getVclControl()->SetOptions(DbGridControl::OPT_UPDATE | DbGridControl::OPT_INSERT | DbGridControl::OPT_DELETE);
-                    // the options not supported by the data source will be removed automatically
+                    
             else
             {
                 if ( !SaveModified( ) )
-                    // give the user a chance to save the current record (if necessary)
+                    
                     break;
 
-                // maybe the user wanted to reject the modified record ?
+                
                 if (GetState(ID_BROWSER_UNDORECORD).bEnabled)
                     Execute(ID_BROWSER_UNDORECORD,Sequence<PropertyValue>());
 
@@ -2001,15 +2001,15 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 getBrowserView()->getVclControl()->CopySelectedRowsToClipboard();
                 break;
             }
-            // run through
+            
         case ID_BROWSER_CUT:
         case ID_BROWSER_PASTE:
         {
             CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
             if (!xCurrentController.Is())
-                // should be intercepted by GetState. Normally.
-                // Unfortunately ID_BROWSER_PASTE is a 'fast call' slot, which means it may be executed without checking if it is
-                // enabled. This would be really deadly herein if the current cell has no controller ...
+                
+                
+                
                 return;
 
             Edit& rEdit = (Edit&)xCurrentController->GetWindow();
@@ -2029,7 +2029,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
         case ID_BROWSER_SORTDOWN:
             bSortUp = sal_False;
-            // DON'T break
+            
         case ID_BROWSER_SORTUP:
         {
             if (!SaveModified())
@@ -2038,7 +2038,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if (!isValidCursor())
                 break;
 
-            // only one sort order
+            
             Reference< XPropertySet >  xField(getBoundField(), UNO_QUERY);
             if (!xField.is())
                 break;
@@ -2070,7 +2070,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             if (!xField.is())
                 break;
 
-            // check if the column is a aggregate function
+            
             sal_Bool bHaving = sal_False;
             OUString sName;
             xField->getPropertyValue(PROPERTY_NAME) >>= sName;
@@ -2090,8 +2090,8 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
 
             Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
             sal_Bool bApplied = ::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_APPLYFILTER));
-            // do we have a filter but it's not applied ?
-            // -> completely overwrite it, else append one
+            
+            
             if (!bApplied)
             {
                 DO_SAFE( (bHaving ? xParser->setHavingClause(OUString()) : xParser->setFilter(::OUString())), "SbaXDataBrowserController::Execute : caught an exception while resetting the new filter !" );
@@ -2143,8 +2143,8 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 break;
 
             sal_Bool bNeedPostReload = preReloadForm();
-            // reset the filter and the sort property simutaneously so only _one_ new statement has to be
-            // sent
+            
+            
             Reference< XPropertySet >  xSet(getRowSet(), UNO_QUERY);
             if ( xSet.is() )
             {
@@ -2183,23 +2183,23 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
         {
             try
             {
-                // restore the cursor state
+                
                 Reference< XResultSetUpdate >  xCursor(getRowSet(), UNO_QUERY);
                 Reference< XPropertySet >  xSet(xCursor, UNO_QUERY);
                 Any aVal = xSet->getPropertyValue(PROPERTY_ISNEW);
                 if (aVal.hasValue() && ::comphelper::getBOOL(aVal))
                 {
                     xCursor->moveToInsertRow();
-                    // no need to reset the grid model after we moved to the insert row, this is done implicitly by the
-                    // form
-                    // (and in some cases it may be deadly to do the reset explicitly after the form did it implicitly,
-                    // cause the form's reset may be async, and this leads to some nice deadlock scenarios ....)
+                    
+                    
+                    
+                    
                 }
                 else
                 {
                     xCursor->cancelRowUpdates();
 
-                    // restore the grids state
+                    
                     Reference< ::com::sun::star::form::XReset >  xReset(getControlModel(), UNO_QUERY);
                     if (xReset.is())
                         xReset->reset();
@@ -2233,7 +2233,7 @@ sal_Bool SbaXDataBrowserController::SaveModified(sal_Bool bAskFor)
         }
     }
 
-    if ( !CommitCurrent() ) // das aktuelle Control committen lassen
+    if ( !CommitCurrent() ) 
         return sal_False;
 
     Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
@@ -2275,7 +2275,7 @@ sal_Bool SbaXDataBrowserController::CommitCurrent()
     sal_Bool bControlIsLocked = xLockingTest.is() && xLockingTest->getLock();
     if (xActiveControl.is() && !bControlIsLocked)
     {
-        // zunaechst das Control fragen ob es das IFace unterstuetzt
+        
         Reference< ::com::sun::star::form::XBoundComponent >  xBoundControl(xActiveControl, UNO_QUERY);
         if (!xBoundControl.is())
             xBoundControl  = Reference< ::com::sun::star::form::XBoundComponent > (xActiveControl->getModel(), UNO_QUERY);
@@ -2315,7 +2315,7 @@ void SbaXDataBrowserController::ColumnChanged()
 void SbaXDataBrowserController::SelectionChanged()
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::SelectionChanged" );
-    // not interested in
+    
 }
 
 void SbaXDataBrowserController::CellActivated()
@@ -2343,11 +2343,11 @@ IMPL_LINK(SbaXDataBrowserController, OnInvalidateClipboard, AutoTimer*, _pTimer)
     InvalidateFeature(ID_BROWSER_CUT);
     InvalidateFeature(ID_BROWSER_COPY);
 
-    // if the invalidation was triggered by the timer, we do not need to invalidate PASTE.
-    // The timer is only for checking the CUT/COPY slots regulariry, which depend on the
-    // selection state of the active cell
-    // TODO: get a callback at the Edit which allows to be notified when the selection
-    // changes. This would be much better than this cycle-eating polling mechanism here ....
+    
+    
+    
+    
+    
     if ( _pTimer != &m_aInvalidateClipboard )
         InvalidateFeature(ID_BROWSER_PASTE);
 
@@ -2359,7 +2359,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::SaveData" );
     Reference< XPropertySet >  xEmptyReturn;
 
-    // get the current column from the grid
+    
     if (nViewPos == (sal_uInt16)-1)
     {
         Reference< ::com::sun::star::form::XGrid >  xGrid(getBrowserView()->getGridControl(), UNO_QUERY);
@@ -2371,7 +2371,7 @@ Reference< XPropertySet >  SbaXDataBrowserController::getBoundField(sal_uInt16 n
     if (nCurrentCol == (sal_uInt16)-1)
         return xEmptyReturn;
 
-    // get the according column from the model
+    
     Reference< ::com::sun::star::container::XIndexContainer >  xCols(getControlModel(), UNO_QUERY);
     Reference< XPropertySet >  xCurrentCol(xCols->getByIndex(nCurrentCol),UNO_QUERY);
     if (!xCurrentCol.is())
@@ -2385,10 +2385,10 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
 {
     Reference< ::com::sun::star::container::XIndexAccess >  xPeerContainer(getBrowserView()->getGridControl(), UNO_QUERY);
 
-    // check all grid columns for their control source
+    
     Reference< ::com::sun::star::container::XIndexAccess >  xModelColumns(getFormComponent(), UNO_QUERY);
     OSL_ENSURE(xModelColumns.is(), "SbaXDataBrowserController::OnSearchContextRequest : there is a grid control without columns !");
-        // the case 'no columns' should be indicated with an empty container, I think ...
+        
     OSL_ENSURE(xModelColumns->getCount() >= xPeerContainer->getCount(), "SbaXDataBrowserController::OnSearchContextRequest : impossible : have more view than model columns !");
 
     OUString sFieldList;
@@ -2398,7 +2398,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
         if (!xCurrentColumn.is())
             continue;
 
-        // can we use this column control for searching ?
+        
         if (!IsSearchableControl(xCurrentColumn))
             continue;
 
@@ -2415,7 +2415,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
     pContext->xCursor.set(getRowSet(),UNO_QUERY);
     pContext->strUsedFields = sFieldList;
 
-    // if the cursor is in a mode other than STANDARD -> reset
+    
     Reference< XPropertySet >  xCursorSet(pContext->xCursor, UNO_QUERY);
     OSL_ENSURE(xCursorSet.is() && !::comphelper::getBOOL(xCursorSet->getPropertyValue(PROPERTY_ISMODIFIED)),
         "SbaXDataBrowserController::OnSearchContextRequest : please do not call for cursors with modified rows !");
@@ -2432,17 +2432,17 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     Reference< ::com::sun::star::sdbcx::XRowLocate >  xCursor(getRowSet(), UNO_QUERY);
     OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnFoundData : xCursor is empty");
 
-    // move the cursor
+    
     xCursor->moveToBookmark(pInfo->aPosition);
 
-    // let the grid snyc it's display with the cursor
+    
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
     Any aOld = xModelSet->getPropertyValue("DisplayIsSynchron");
     xModelSet->setPropertyValue("DisplayIsSynchron", ::comphelper::makeBoolAny(true));
     xModelSet->setPropertyValue("DisplayIsSynchron", aOld);
 
-    // and move to the field
+    
     Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
     sal_uInt16 nViewPos;
 
@@ -2471,7 +2471,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
     try
     {
         OSL_ENSURE(xCursor.is(), "SbaXDataBrowserController::OnCanceledNotFound : xCursor is empty");
-        // move the cursor
+        
         xCursor->moveToBookmark(pInfo->aPosition);
     }
     catch( const Exception& )
@@ -2481,7 +2481,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
 
     try
     {
-        // let the grid snyc its display with the cursor
+        
         Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
         OSL_ENSURE(xModelSet.is(), "SbaXDataBrowserController::OnCanceledNotFound : no model set ?!");
         Any aOld = xModelSet->getPropertyValue("DisplayIsSynchron");
@@ -2499,7 +2499,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
 IMPL_LINK_NOARG(SbaXDataBrowserController, OnAsyncGetCellFocus)
 {
     SbaGridControl* pVclGrid = getBrowserView() ? getBrowserView()->getVclControl() : NULL;
-    // if we have a controller, but the window for the controller doesn't have the focus, we correct this
+    
     if(pVclGrid)
     {
         if (!pVclGrid->IsEditing())
@@ -2526,7 +2526,7 @@ void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
 
     if (isValid() && !loadingCancelled())
     {
-        // obtain cached values
+        
         try
         {
             Reference< XPropertySet > xFormProps( m_xLoadable, UNO_QUERY_THROW );
@@ -2537,7 +2537,7 @@ void SbaXDataBrowserController::LoadFinished(sal_Bool /*bWasSynch*/)
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        // switch the control to alive mode
+        
         getBrowserView()->getGridControl()->setDesignMode(sal_False);
 
         initializeParser();
@@ -2553,13 +2553,13 @@ void SbaXDataBrowserController::initializeParser() const
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::initializeParser" );
     if ( !m_xParser.is() )
     {
-        // create a parser (needed for filtering/sorting)
+        
         try
         {
             const Reference< XPropertySet >  xFormSet(getRowSet(), UNO_QUERY);
             if (::comphelper::getBOOL(xFormSet->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)))
-            {   // (only if the statement isn't native)
-                // (it is allowed to use the PROPERTY_ISPASSTHROUGH : _after_ loading a form it is valid)
+            {   
+                
                 xFormSet->getPropertyValue(PROPERTY_SINGLESELECTQUERYCOMPOSER) >>= m_xParser;
             }
         }
@@ -2567,7 +2567,7 @@ void SbaXDataBrowserController::initializeParser() const
         {
             DBG_UNHANDLED_EXCEPTION();
             m_xParser = NULL;
-            // no further handling, we ignore the error
+            
         }
     }
 }
@@ -2575,14 +2575,14 @@ void SbaXDataBrowserController::initializeParser() const
 void SbaXDataBrowserController::loaded(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::loaded" );
-    // not interested in
-    // we're loading within an separate thread and have a handling  for it's "finished event"
+    
+    
 }
 
 void SbaXDataBrowserController::unloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::unloading" );
-    // not interested in
+    
 }
 
 void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/) throw( RuntimeException )
@@ -2590,34 +2590,34 @@ void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/) throw( R
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::unloaded" );
     m_xParser.clear();
     InvalidateAll();
-        // do this asynchronously, there are other listeners reacting on this message ...
-        // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
-        // change as a reaction on that event. as we have no chance to be notified of this change (which is
-        // the one we're interested in) we give them time to do what they want to before invalidating our
-        // bound-field-dependent slots ....
+        
+        
+        
+        
+        
 }
 
 void SbaXDataBrowserController::reloading(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::reloading" );
-    // not interested in
+    
 }
 
 void SbaXDataBrowserController::reloaded(const EventObject& /*aEvent*/) throw( RuntimeException )
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::reloaded" );
     InvalidateAll();
-        // do this asynchronously, there are other listeners reacting on this message ...
-        // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
-        // change as a reaction on that event. as we have no chance to be notified of this change (which is
-        // the one we're interested in) we give them time to do what they want to before invalidating our
-        // bound-field-dependent slots ....
+        
+        
+        
+        
+        
 }
 
 void SbaXDataBrowserController::enterFormAction()
 {
     if ( !m_nFormActionNestingLevel )
-        // first action -> reset
+        
         m_aCurrentError.clear();
 
     ++m_nFormActionNestingLevel;
@@ -2708,7 +2708,7 @@ void SbaXDataBrowserController::AfterDrop()
 void SbaXDataBrowserController::addColumnListeners(const Reference< ::com::sun::star::awt::XControlModel > & _xGridControlModel)
 {
     SAL_INFO("dbaccess.ui", "SbaXDataBrowserController::addColumnListeners" );
-// ... all the grid columns
+
     Reference< ::com::sun::star::container::XIndexContainer >  xColumns(_xGridControlModel, UNO_QUERY);
     if (xColumns.is())
     {
@@ -2727,6 +2727,6 @@ sal_Bool SbaXDataBrowserController::InitializeGridModel(const Reference< ::com::
     return sal_True;
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

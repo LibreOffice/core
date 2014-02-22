@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "checklistmenu.hxx"
@@ -48,7 +48,7 @@ ScMenuFloatingWindow::MenuItemData::MenuItemData() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScMenuFloatingWindow::SubMenuItemData::SubMenuItemData(ScMenuFloatingWindow* pParent) :
     mpSubMenu(NULL),
@@ -72,7 +72,7 @@ IMPL_LINK_NOARG(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl)
     return 0;
 }
 
-// ----------------------------------------------------------------------------
+
 
 size_t ScMenuFloatingWindow::MENU_NOT_SELECTED = 999;
 
@@ -88,7 +88,7 @@ ScMenuFloatingWindow::ScMenuFloatingWindow(Window* pParent, ScDocument* pDoc, sa
 {
     SetMenuStackLevel(nMenuStackLevel);
 
-    // TODO: How do we get the right font to use here ?
+    
     const sal_uInt16 nPopupFontHeight = 12;
     const StyleSettings& rStyle = GetSettings().GetStyleSettings();
     maLabelFont = rStyle.GetLabelFont();
@@ -148,7 +148,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
         case KEY_UP:
         {
             if (nLastMenuPos == 0)
-                // There is only one menu item.  Do nothing.
+                
                 break;
 
             size_t nOldPos = nSelectedMenu;
@@ -158,7 +158,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
             else
                 --nSelectedMenu;
 
-            // Loop until a non-separator menu item is found.
+            
             while (nSelectedMenu != nOldPos)
             {
                 if (maMenuItems[nSelectedMenu].mbSeparator)
@@ -178,7 +178,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
         case KEY_DOWN:
         {
             if (nLastMenuPos == 0)
-                // There is only one menu item.  Do nothing.
+                
                 break;
 
             size_t nOldPos = nSelectedMenu;
@@ -188,7 +188,7 @@ void ScMenuFloatingWindow::KeyInput(const KeyEvent& rKEvt)
             else
                 ++nSelectedMenu;
 
-            // Loop until a non-separator menu item is found.
+            
             while (nSelectedMenu != nOldPos)
             {
                 if (maMenuItems[nSelectedMenu].mbSeparator)
@@ -243,7 +243,7 @@ void ScMenuFloatingWindow::Paint(const Rectangle& /*rRect*/)
 
     Rectangle aCtrlRect(Point(0, 0), GetOutputSizePixel());
 
-    // Window background
+    
     bool bNativeDrawn = true;
     if (IsNativeControlSupported(CTRL_MENU_POPUP, PART_ENTIRE_CONTROL))
     {
@@ -262,7 +262,7 @@ void ScMenuFloatingWindow::Paint(const Rectangle& /*rRect*/)
         DrawRect(aCtrlRect);
     }
 
-    // Menu items
+    
     SetTextColor(rStyle.GetMenuTextColor());
     drawAllMenuItems();
 }
@@ -425,10 +425,10 @@ void ScMenuFloatingWindow::drawAllMenuItems()
     for (size_t i = 0; i < n; ++i)
     {
         if (maMenuItems[i].mbSeparator)
-            // Separator
+            
             drawSeparator(i);
         else
-            // Normal menu item
+            
             highlightMenuItem(i, i == mnSelectedMenu);
     }
 }
@@ -444,7 +444,7 @@ void ScMenuFloatingWindow::executeMenuItem(size_t nPos)
         return;
 
     if (!maMenuItems[nPos].mpAction)
-        // no action is defined.
+        
         return;
 
     maMenuItems[nPos].mpAction->execute();
@@ -454,12 +454,12 @@ void ScMenuFloatingWindow::executeMenuItem(size_t nPos)
 void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, bool bEnsureSubMenu)
 {
     if (mnSelectedMenu == nPos)
-        // nothing to do.
+        
         return;
 
     if (bEnsureSubMenu)
     {
-        // Dismiss any child popup menu windows.
+        
         if (mnSelectedMenu < maMenuItems.size() &&
             maMenuItems[mnSelectedMenu].mpSubMenuWin &&
             maMenuItems[mnSelectedMenu].mpSubMenuWin->IsVisible())
@@ -467,9 +467,9 @@ void ScMenuFloatingWindow::setSelectedMenuItem(size_t nPos, bool bSubMenuTimer, 
             maMenuItems[mnSelectedMenu].mpSubMenuWin->ensureSubMenuNotVisible();
         }
 
-        // The popup is not visible, yet a menu item is selected.  The request
-        // most likely comes from the accessible object.  Make sure this
-        // window, as well as all its parent windows are visible.
+        
+        
+        
         if (!IsVisible() && mpParentMenu)
             mpParentMenu->ensureSubMenuVisible(this);
     }
@@ -490,7 +490,7 @@ void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItemData* pTimer)
 {
     if (pTimer == &maOpenTimer)
     {
-        // Close any open submenu immediately.
+        
         if (maCloseTimer.mpSubMenu)
         {
             maCloseTimer.mpSubMenu->EndPopupMode();
@@ -502,7 +502,7 @@ void ScMenuFloatingWindow::handleMenuTimeout(SubMenuItemData* pTimer)
     }
     else if (pTimer == &maCloseTimer)
     {
-        // end submenu.
+        
         if (maCloseTimer.mpSubMenu)
         {
             maOpenTimer.mpSubMenu = NULL;
@@ -521,7 +521,7 @@ void ScMenuFloatingWindow::queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow*
     if (!pMenu)
         return;
 
-    // Set the submenu on launch queue.
+    
     if (maOpenTimer.mpSubMenu)
     {
         if (maOpenTimer.mpSubMenu == pMenu)
@@ -531,7 +531,7 @@ void ScMenuFloatingWindow::queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow*
             return;
         }
 
-        // new submenu is being requested.
+        
         queueCloseSubMenu();
     }
 
@@ -543,10 +543,10 @@ void ScMenuFloatingWindow::queueLaunchSubMenu(size_t nPos, ScMenuFloatingWindow*
 void ScMenuFloatingWindow::queueCloseSubMenu()
 {
     if (!maOpenTimer.mpSubMenu)
-        // There is no submenu to close.
+        
         return;
 
-    // Stop any submenu on queue for opening.
+    
     maOpenTimer.maTimer.Stop();
 
     maCloseTimer.mpSubMenu = maOpenTimer.mpSubMenu;
@@ -566,12 +566,12 @@ void ScMenuFloatingWindow::launchSubMenu(bool bSetMenuPos)
 
     sal_uInt32 nOldFlags = GetPopupModeFlags();
     SetPopupModeFlags(nOldFlags | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
-    pSubMenu->resizeToFitMenuItems(); // set the size before launching the popup to get it positioned correctly.
+    pSubMenu->resizeToFitMenuItems(); 
     pSubMenu->StartPopupMode(
         Rectangle(aPos,aSize), (FLOATWIN_POPUPMODE_RIGHT | FLOATWIN_POPUPMODE_GRABFOCUS));
     pSubMenu->AddPopupModeWindow(this);
     if (bSetMenuPos)
-        pSubMenu->setSelectedMenuItem(0, false, false); // select menu item after the popup becomes fully visible.
+        pSubMenu->setSelectedMenuItem(0, false, false); 
     SetPopupModeFlags(nOldFlags);
 }
 
@@ -816,7 +816,7 @@ void ScMenuFloatingWindow::ensureSubMenuVisible(ScMenuFloatingWindow* pSubMenu)
     if (pSubMenu->IsVisible())
         return;
 
-    // Find the menu position of the submenu.
+    
     size_t nMenuPos = getSubMenuPos(pSubMenu);
     if (nMenuPos != MENU_NOT_SELECTED)
     {
@@ -828,7 +828,7 @@ void ScMenuFloatingWindow::ensureSubMenuVisible(ScMenuFloatingWindow* pSubMenu)
 
         sal_uInt32 nOldFlags = GetPopupModeFlags();
         SetPopupModeFlags(nOldFlags | FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE);
-        pSubMenu->resizeToFitMenuItems(); // set the size before launching the popup to get it positioned correctly.
+        pSubMenu->resizeToFitMenuItems(); 
         pSubMenu->StartPopupMode(
             Rectangle(aPos,aSize), (FLOATWIN_POPUPMODE_RIGHT | FLOATWIN_POPUPMODE_GRABFOCUS));
         pSubMenu->AddPopupModeWindow(this);
@@ -860,7 +860,7 @@ ScDocument* ScMenuFloatingWindow::getDoc()
     return mpDoc;
 }
 
-// ============================================================================
+
 
 ScCheckListMenuWindow::Config::Config() :
     mbAllowEmptySet(true), mbRTL(false)
@@ -872,7 +872,7 @@ ScCheckListMenuWindow::Member::Member() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScCheckListMenuWindow::CancelButton::CancelButton(ScCheckListMenuWindow* pParent) :
     ::CancelButton(pParent), mpParent(pParent) {}
@@ -883,7 +883,7 @@ void ScCheckListMenuWindow::CancelButton::Click()
     ::CancelButton::Click();
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) :
     ScMenuFloatingWindow(pParent, pDoc),
@@ -909,7 +909,7 @@ ScCheckListMenuWindow::ScCheckListMenuWindow(Window* pParent, ScDocument* pDoc) 
     maTabStopCtrls.push_back(&maBtnOk);
     maTabStopCtrls.push_back(&maBtnCancel);
 
-    // Enable type-ahead search in the check list box.
+    
     maChecks.SetStyle(maChecks.GetStyle() | WB_QUICK_SEARCH);
 }
 
@@ -920,20 +920,20 @@ ScCheckListMenuWindow::~ScCheckListMenuWindow()
 void ScCheckListMenuWindow::getSectionPosSize(
     Point& rPos, Size& rSize, SectionType eType) const
 {
-    // constant parameters.
-    const long nListBoxMargin = 5;            // horizontal distance from the side of the dialog to the listbox border.
+    
+    const long nListBoxMargin = 5;            
     const long nListBoxInnerPadding = 5;
     const long nTopMargin = 5;
     const long nMenuHeight = maMenuSize.getHeight();
-    const long nSingleItemBtnAreaHeight = 32; // height of the middle area below the list box where the single-action buttons are.
-    const long nBottomBtnAreaHeight = 50;     // height of the bottom area where the OK and Cancel buttons are.
+    const long nSingleItemBtnAreaHeight = 32; 
+    const long nBottomBtnAreaHeight = 50;     
     const long nBtnWidth = 90;
     const long nLabelHeight = getLabelFont().GetHeight();
     const long nBtnHeight = nLabelHeight*2;
     const long nBottomMargin = 10;
     const long nMenuListMargin = 5;
 
-    // parameters calculated from constants.
+    
     const long nListBoxWidth = maWndSize.Width() - nListBoxMargin*2;
     const long nListBoxHeight = maWndSize.Height() - nTopMargin - nMenuHeight -
         nMenuListMargin - nSingleItemBtnAreaHeight - nBottomBtnAreaHeight;
@@ -1024,15 +1024,15 @@ void ScCheckListMenuWindow::packWindow()
     maMenuSize = getMenuSize();
 
     if (maWndSize.Width() < maMenuSize.Width())
-        // Widen the window to fit the menu items.
+        
         maWndSize.Width() = maMenuSize.Width();
 
-    // Set proper window height based on the number of menu items.
+    
     if (maWndSize.Height() < maMenuSize.Height()*2.8)
         maWndSize.Height() = maMenuSize.Height()*2.8;
 
-    // TODO: Make sure the window height never exceeds the height of the
-    // screen. Also do adjustment based on the number of check box items.
+    
+    
 
     SetOutputSizePixel(maWndSize);
 
@@ -1091,7 +1091,7 @@ void ScCheckListMenuWindow::setAllMemberState(bool bSet)
         maChecks.CheckEntry( maMembers[i].maName, maMembers[i].mpParent, bSet);
 
     if (!maConfig.mbAllowEmptySet)
-        // We need to have at least one member selected.
+        
         maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
 }
 
@@ -1175,16 +1175,16 @@ IMPL_LINK( ScCheckListMenuWindow, CheckHdl, SvTreeListBox*, pChecks )
         maChecks.CheckEntry( pEntry,  ( pChecks->GetCheckButtonState( pEntry ) == SV_BUTTON_CHECKED ) );
     size_t nNumChecked = maChecks.GetCheckedEntryCount();
     if (nNumChecked == maMembers.size())
-        // all members visible
+        
         maChkToggleAll.SetState(STATE_CHECK);
     else if (nNumChecked == 0)
-        // no members visible
+        
         maChkToggleAll.SetState(STATE_NOCHECK);
     else
         maChkToggleAll.SetState(STATE_DONTKNOW);
 
     if (!maConfig.mbAllowEmptySet)
-        // We need to have at least one member selected.
+        
         maBtnOk.Enable(nNumChecked != 0);
 
     mePrevToggleAllState = maChkToggleAll.GetState();
@@ -1232,12 +1232,12 @@ void ScCheckListMenuWindow::Paint(const Rectangle& rRect)
     Size aSize;
     getSectionPosSize(aPos, aSize, LISTBOX_AREA_OUTER);
 
-    // Member list box background
+    
     SetFillColor(aMemberBackColor);
     SetLineColor(aBorderColor);
     DrawRect(Rectangle(aPos,aSize));
 
-    // Single-action button box
+    
     getSectionPosSize(aPos, aSize, SINGLE_BTN_AREA);
     SetFillColor(rStyle.GetMenuColor());
     DrawRect(Rectangle(aPos,aSize));
@@ -1284,7 +1284,7 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
     ScDocument* pDoc = getDoc();
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
-    // Convert the numeric date value to a date object.
+    
     Date aDate = *(pFormatter->GetNullDate());
     aDate += static_cast<long>(rtl::math::approxFloor(nVal));
 
@@ -1292,7 +1292,7 @@ void ScCheckListMenuWindow::addDateMember(const OUString& rsName, double nVal, b
     sal_uInt16 nMonth = aDate.GetMonth();
     sal_uInt16 nDay = aDate.GetDay();
 
-    // Get the localized month name list.
+    
     CalendarWrapper* pCalendar = ScGlobal::GetCalendar();
     uno::Sequence<i18n::CalendarItem2> aMonths = pCalendar->getMonths();
     if (aMonths.getLength() < nMonth)
@@ -1402,7 +1402,7 @@ void ScCheckListBox::CheckEntry( OUString& sName, SvTreeListEntry* pParent, bool
         CheckEntry(  pEntry, bCheck );
 }
 
-// Recursively check all children of pParent
+
 void ScCheckListBox::CheckAllChildren( SvTreeListEntry* pParent, bool bCheck )
 {
     if ( pParent )
@@ -1421,18 +1421,18 @@ void ScCheckListBox::CheckAllChildren( SvTreeListEntry* pParent, bool bCheck )
 
 void ScCheckListBox::CheckEntry( SvTreeListEntry* pParent, bool bCheck )
 {
-    // recursively check all items below pParent
+    
     CheckAllChildren( pParent, bCheck );
-    // checking pParent can affect ancestors, e.g. if ancestor is unchecked and pParent is
-    // now checked then the ancestor needs to be checked also
+    
+    
     SvTreeListEntry* pAncestor = GetParent(pParent);
     if ( pAncestor )
     {
         while ( pAncestor )
         {
-            // if any first level children checked then ancestor
-            // needs to be checked, similarly if no first level children
-            // checked then ancestor needs to be unchecked
+            
+            
+            
             SvTreeListEntry* pChild = FirstChild( pAncestor );
             bool bChildChecked = false;
 
@@ -1457,7 +1457,7 @@ SvTreeListEntry* ScCheckListBox::CountCheckedEntries( SvTreeListEntry* pParent, 
 {
     if ( pParent && GetCheckButtonState( pParent ) == SV_BUTTON_CHECKED  )
         nCount++;
-    // Iterate over the children
+    
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
     while ( pEntry )
     {
@@ -1478,7 +1478,7 @@ void ScCheckListBox::ExpandChildren( SvTreeListEntry* pParent )
 {
     if ( pParent )
         Expand( pParent );
-    // Iterate over the children
+    
     SvTreeListEntry* pEntry = pParent ? FirstChild( pParent ) : First();
     while ( pEntry )
     {
@@ -1521,7 +1521,7 @@ void ScCheckListMenuWindow::initMembers()
         }
 
         maChecks.CheckEntry( maMembers[i].maName, maMembers[i].mpParent, maMembers[i].mbVisible);
-        // Expand first node of checked dates
+        
         if ( maMembers[ i ].mpParent == NULL && maChecks.IsChecked( maMembers[i].maName,  maMembers[i].mpParent ) )
             maChecks.Expand( maChecks.FindEntry( NULL, maMembers[ i ].maName ) );
 
@@ -1530,13 +1530,13 @@ void ScCheckListMenuWindow::initMembers()
     }
     if (nVisMemCount == n)
     {
-        // all members visible
+        
         maChkToggleAll.SetState(STATE_CHECK);
         mePrevToggleAllState = STATE_CHECK;
     }
     else if (nVisMemCount == 0)
     {
-        // no members visible
+        
         maChkToggleAll.SetState(STATE_NOCHECK);
         mePrevToggleAllState = STATE_NOCHECK;
     }
@@ -1582,27 +1582,27 @@ void ScCheckListMenuWindow::launch(const Rectangle& rRect)
 {
     packWindow();
     if (!maConfig.mbAllowEmptySet)
-        // We need to have at least one member selected.
+        
         maBtnOk.Enable(maChecks.GetCheckedEntryCount() != 0);
 
     Rectangle aRect(rRect);
     if (maConfig.mbRTL)
     {
-        // In RTL mode, the logical "left" is visual "right".
+        
         long nLeft = aRect.Left() - aRect.GetWidth();
         aRect.Left() = nLeft;
     }
     else if (maWndSize.Width() < aRect.GetWidth())
     {
-        // Target rectangle (i.e. cell width) is wider than the window.
-        // Simulate right-aligned launch by modifying the target rectangle
-        // size.
+        
+        
+        
         long nDiff = aRect.GetWidth() - maWndSize.Width();
         aRect.Left() += nDiff;
     }
 
     StartPopupMode(aRect, (FLOATWIN_POPUPMODE_DOWN | FLOATWIN_POPUPMODE_GRABFOCUS));
-    cycleFocus(); // Set initial focus to the check list box.
+    cycleFocus(); 
 }
 
 void ScCheckListMenuWindow::close(bool bOK)

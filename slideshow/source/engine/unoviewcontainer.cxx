@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,7 +28,7 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------------
+
 
 namespace slideshow
 {
@@ -41,10 +41,10 @@ namespace slideshow
 
         bool UnoViewContainer::addView( const UnoViewSharedPtr& rView )
         {
-            // check whether same view is already added
+            
             const UnoViewVector::iterator aEnd( maViews.end() );
 
-            // already added?
+            
             if( ::std::find_if( maViews.begin(),
                                 aEnd,
                                 ::boost::bind(
@@ -54,11 +54,11 @@ namespace slideshow
                                         &UnoView::getUnoView,
                                         _1 ) ) ) != aEnd )
             {
-                // yes, nothing to do
+                
                 return false;
             }
 
-            // add locally
+            
             maViews.push_back( rView );
 
             return true;
@@ -66,11 +66,11 @@ namespace slideshow
 
         UnoViewSharedPtr UnoViewContainer::removeView( const uno::Reference< presentation::XSlideShowView >& xView )
         {
-            // check whether same view is already added
+            
             const UnoViewVector::iterator aEnd( maViews.end() );
             UnoViewVector::iterator aIter;
 
-            // added in the first place?
+            
             if( (aIter=::std::find_if( maViews.begin(),
                                        aEnd,
                                        ::boost::bind(
@@ -80,7 +80,7 @@ namespace slideshow
                                                &UnoView::getUnoView,
                                                _1 ) ) ) ) == aEnd )
             {
-                // nope, nothing to do
+                
                 return UnoViewSharedPtr();
             }
 
@@ -98,7 +98,7 @@ namespace slideshow
 
             UnoViewSharedPtr pView( *aIter );
 
-            // actually erase from container
+            
             maViews.erase( aIter );
 
             return pView;

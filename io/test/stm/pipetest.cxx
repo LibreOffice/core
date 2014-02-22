@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,7 +43,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::test;
-// streams
+
 
 #include "testfactreg.hxx"
 #define IMPLEMENTATION_NAME "test.com.sun.star.comp.extensions.stm.Pipe"
@@ -67,7 +67,7 @@ public:
 
 protected:
 
-    /// Working method which should be overridden.
+    
     virtual void SAL_CALL run() {
         for( int i = 0 ; i < m_iMax ; i ++ ) {
             m_output->writeBytes( createIntSeq(i) );
@@ -98,7 +98,7 @@ public:
     OPipeTest( const Reference< XMultiServiceFactory >  & rFactory );
     ~OPipeTest();
 
-public: // implementation names
+public: 
     static Sequence< OUString >     getSupportedServiceNames_Static(void) throw();
     static OUString                 getImplementationName_Static() throw();
 
@@ -195,7 +195,7 @@ sal_Int32 OPipeTest::test(
 
         if( 4 == hTestHandle )
         {
-            // all tests finished.
+            
             hTestHandle = -1;
         }
     }
@@ -246,7 +246,7 @@ void OPipeTest::testSimple( const Reference < XInterface > &r )
     ERROR_ASSERT( input.is()  , "queryInterface on XInputStream failed" );
     ERROR_ASSERT( output.is() , "queryInterface onXOutputStream failed" );
 
-    // basic read/write
+    
     Sequence<sal_Int8> seqWrite = createSeq( "Hallo, du Ei !" );
 
     Sequence<sal_Int8> seqRead;
@@ -259,11 +259,11 @@ void OPipeTest::testSimple( const Reference < XInterface > &r )
         ERROR_ASSERT( 0 == input->available() ,
                       "error during read/write/skip" );
 
-        // available shouldn't return a negative value
+        
         input->skipBytes( seqWrite.getLength() - 5 );
         ERROR_ASSERT( 0 == input->available() , "wrong available after skip" );
 
-        // 5 bytes should be available
+        
         output->writeBytes( seqWrite );
         ERROR_ASSERT( 5 == input->available() , "wrong available after skip/write " );
 
@@ -334,8 +334,8 @@ void OPipeTest::testBufferResizing( const Reference < XInterface > &r )
 
     Sequence<sal_Int8> seqRead;
 
-    // this is just to better check the
-    // internal buffers
+    
+    
     output->writeBytes( Sequence<sal_Int8>(100) );
     Sequence< sal_Int8 > dummy;
     input->readBytes( dummy , 100);
@@ -372,7 +372,7 @@ void OPipeTest::testMultithreading( const Reference < XInterface > &r )
 
     Sequence<sal_Int8> seqRead;
 
-    // deletes itself
+    
     Thread *p = new WriteToStreamThread( output,  iMax );
 
     ERROR_ASSERT( p , "couldn't create thread for testing !\n" );
@@ -381,7 +381,7 @@ void OPipeTest::testMultithreading( const Reference < XInterface > &r )
 
     for(  i = 0 ; sal_True ; i ++ ) {
         if( 0 == input->readBytes( seqRead, createIntSeq(i).getLength() ) ) {
-            // eof reached !
+            
             break;
         }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -112,14 +112,14 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     rStm.ReadUInt16( nTemp16 );
 
-    // OS/2-BitmapArray
+    
     if ( nTemp16 == 0x4142 )
     {
         rStm.SeekRel( 0x0c );
         rStm.ReadUInt16( nTemp16 );
     }
 
-    // Bitmap
+    
     if ( nTemp16 == 0x4d42 )
     {
         nFormat = GFF_BMP;
@@ -130,41 +130,41 @@ bool GraphicDescriptor::ImpDetectBMP( SvStream& rStm, bool bExtendedInfo )
             sal_uInt32  nTemp32;
             sal_uInt32  nCompression;
 
-            // up to first info
+            
             rStm.SeekRel( 0x10 );
 
-            // Pixel width
+            
             rStm.ReadUInt32( nTemp32 );
             aPixSize.Width() = nTemp32;
 
-            // Pixel height
+            
             rStm.ReadUInt32( nTemp32 );
             aPixSize.Height() = nTemp32;
 
-            // Planes
+            
             rStm.ReadUInt16( nTemp16 );
             nPlanes = nTemp16;
 
-            // BitCount
+            
             rStm.ReadUInt16( nTemp16 );
             nBitsPerPixel = nTemp16;
 
-            // Compression
+            
             rStm.ReadUInt32( nTemp32 );
             bCompressed = ( ( nCompression = nTemp32 ) > 0 );
 
-            // logical width
+            
             rStm.SeekRel( 4 );
             rStm.ReadUInt32( nTemp32 );
             if ( nTemp32 )
                 aLogSize.Width() = ( aPixSize.Width() * 100000 ) / nTemp32;
 
-            // logical height
+            
             rStm.ReadUInt32( nTemp32 );
             if ( nTemp32 )
                 aLogSize.Height() = ( aPixSize.Height() * 100000 ) / nTemp32;
 
-            // further validation, check for rational values
+            
             if ( ( nBitsPerPixel > 24 ) || ( nCompression > 3 ) )
             {
                 nFormat = GFF_NOT;
@@ -199,15 +199,15 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
             {
                 sal_uInt16 nTemp16 = 0;
 
-                // Pixel width
+                
                 rStm.ReadUInt16( nTemp16 );
                 aPixSize.Width() = nTemp16;
 
-                // Pixel height
+                
                 rStm.ReadUInt16( nTemp16 );
                 aPixSize.Height() = nTemp16;
 
-                // Bits/Pixel
+                
                 rStm.ReadUChar( cByte );
                 nBitsPerPixel = ( ( cByte & 112 ) >> 4 ) + 1;
             }
@@ -217,7 +217,7 @@ bool GraphicDescriptor::ImpDetectGIF( SvStream& rStm, bool bExtendedInfo )
     return bRet;
 }
 
-// returns the next jpeg marker, a return value of 0 represents an error
+
 sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
 {
     sal_uInt8 nByte;
@@ -226,8 +226,8 @@ sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
         do
         {
             rStm.ReadUChar( nByte );
-            if ( rStm.IsEof() || rStm.GetError() )  // as 0 is not allowed as marker,
-                return 0;                           // we can use it as errorcode
+            if ( rStm.IsEof() || rStm.GetError() )  
+                return 0;                           
         }
         while ( nByte != 0xff );
         do
@@ -238,8 +238,8 @@ sal_uInt8 ImpDetectJPG_GetNextMarker( SvStream& rStm )
         }
         while( nByte == 0xff );
     }
-    while( nByte == 0 );        // 0xff00 represents 0xff and not a marker,
-                                // the marker detection has to be restartet.
+    while( nByte == 0 );        
+                                
     return nByte;
 }
 
@@ -253,7 +253,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
     rStm.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
     rStm.ReadUInt32( nTemp32 );
 
-    // compare upper 24 bits
+    
     if( 0xffd8ff00 == ( nTemp32 & 0xffffff00 ) )
     {
         nFormat = GFF_JPG;
@@ -273,28 +273,28 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                 sal_uInt8 nMarker = ImpDetectJPG_GetNextMarker( rStm );
                 switch( nMarker )
                 {
-                    // fixed size marker, not having a two byte length parameter
-                    case 0xd0 :     // RST0
+                    
+                    case 0xd0 :     
                     case 0xd1 :
                     case 0xd2 :
                     case 0xd3 :
                     case 0xd4 :
                     case 0xd5 :
                     case 0xd6 :
-                    case 0xd7 :     // RST7
-                    case 0x01 :     // TEM
+                    case 0xd7 :     
+                    case 0x01 :     
                     break;
 
-                    case 0xd8 :     // SOI (has already been checked, there should not be a second one)
-                    case 0x00 :     // marker is invalid, we should stop now
+                    case 0xd8 :     
+                    case 0x00 :     
                         bScanFailure = true;
                     break;
 
-                    case 0xd9 :     // EOI
+                    case 0xd9 :     
                         bScanFinished = true;
                     break;
 
-                    // per default we assume marker segments conaining a length parameter
+                    
                     default :
                     {
                         sal_uInt16 nLength = 0;
@@ -307,13 +307,13 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                             sal_uInt32 nNextMarkerPos = rStm.Tell() + nLength - 2;
                             switch( nMarker )
                             {
-                                case 0xe0 : // APP0 Marker
+                                case 0xe0 : 
                                 {
                                     if ( nLength == 16 )
                                     {
                                         sal_Int32 nIdentifier = 0;
                                         rStm.ReadInt32( nIdentifier );
-                                        if ( nIdentifier == 0x4a464946 )    // JFIF Identifier
+                                        if ( nIdentifier == 0x4a464946 )    
                                         {
                                             sal_uInt8   nStringTerminator = 0;
                                             sal_uInt8   nMajorRevision = 0;
@@ -333,7 +333,7 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                                 .ReadUChar( nHorzThumbnailPixelCount )
                                                 .ReadUChar( nVertThumbnailPixelCount );
 
-                                            // setting the logical size
+                                            
                                             if ( nUnits && nHorizontalResolution && nVerticalResolution )
                                             {
                                                 MapMode aMap;
@@ -347,20 +347,20 @@ bool GraphicDescriptor::ImpDetectJPG( SvStream& rStm,  bool bExtendedInfo )
                                 }
                                 break;
 
-                                // Start of Frame Markers
-                                case 0xc0 : // SOF0
-                                case 0xc1 : // SOF1
-                                case 0xc2 : // SOF2
-                                case 0xc3 : // SOF3
-                                case 0xc5 : // SOF5
-                                case 0xc6 : // SOF6
-                                case 0xc7 : // SOF7
-                                case 0xc9 : // SOF9
-                                case 0xca : // SOF10
-                                case 0xcb : // SOF11
-                                case 0xcd : // SOF13
-                                case 0xce : // SOF14
-                                case 0xcf : // SOF15
+                                
+                                case 0xc0 : 
+                                case 0xc1 : 
+                                case 0xc2 : 
+                                case 0xc3 : 
+                                case 0xc5 : 
+                                case 0xc6 : 
+                                case 0xc7 : 
+                                case 0xc9 : 
+                                case 0xca : 
+                                case 0xcb : 
+                                case 0xcd : 
+                                case 0xce : 
+                                case 0xcf : 
                                 {
                                     sal_uInt8   nSamplePrecision = 0;
                                     sal_uInt16  nNumberOfLines = 0;
@@ -429,10 +429,10 @@ bool GraphicDescriptor::ImpDetectPCD( SvStream& rStm, bool )
 
 bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
 {
-    // ! Because 0x0a can be interpreted as LF too ...
-    // we cant be sure that this special sign represent a PCX file only.
-    // Every Ascii file is possible here :-(
-    // We must detect the whole header.
+    
+    
+    
+    
     bExtendedInfo = true;
 
     bool    bRet = false;
@@ -460,18 +460,18 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
 
             rStm.SeekRel( 1 );
 
-            // compression
+            
             rStm.ReadUChar( cByte );
             bCompressed = ( cByte > 0 );
 
             bRet = (cByte==0 || cByte ==1);
             if (bRet)
             {
-                // Bits/Pixel
+                
                 rStm.ReadUChar( cByte );
                 nBitsPerPixel = cByte;
 
-                // image dimensions
+                
                 rStm.ReadUInt16( nTemp16 );
                 nXmin = nTemp16;
                 rStm.ReadUInt16( nTemp16 );
@@ -484,20 +484,20 @@ bool GraphicDescriptor::ImpDetectPCX( SvStream& rStm, bool bExtendedInfo )
                 aPixSize.Width() = nXmax - nXmin + 1;
                 aPixSize.Height() = nYmax - nYmin + 1;
 
-                // resolution
+                
                 rStm.ReadUInt16( nTemp16 );
                 nDPIx = nTemp16;
                 rStm.ReadUInt16( nTemp16 );
                 nDPIy = nTemp16;
 
-                // set logical size
+                
                 MapMode aMap( MAP_INCH, Point(),
                               Fraction( 1, nDPIx ), Fraction( 1, nDPIy ) );
                 aLogSize = OutputDevice::LogicToLogic( aPixSize, aMap,
                                                        MapMode( MAP_100TH_MM ) );
 
-                // number of color planes
-                cByte = 5; // Illegal value in case of EOF.
+                
+                cByte = 5; 
                 rStm.SeekRel( 49 );
                 rStm.ReadUChar( cByte );
                 nPlanes = cByte;
@@ -532,23 +532,23 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
             {
                 sal_uInt8 cByte = 0;
 
-                // IHDR-Chunk
+                
                 rStm.SeekRel( 8 );
 
-                // width
+                
                 rStm.ReadUInt32( nTemp32 );
                 aPixSize.Width() = nTemp32;
 
-                // height
+                
                 rStm.ReadUInt32( nTemp32 );
                 aPixSize.Height() = nTemp32;
 
-                // Bits/Pixel
+                
                 rStm.ReadUChar( cByte );
                 nBitsPerPixel = cByte;
 
-                // Planes always 1;
-                // compression always
+                
+                
                 nPlanes = 1;
                 bCompressed = true;
 
@@ -557,7 +557,7 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
 
                 rStm.SeekRel( 8 );
 
-                // read up to the pHYs-Chunk or the start of the image
+                
                 rStm.ReadUInt32( nLen32 );
                 rStm.ReadUInt32( nTemp32 );
                 while( ( nTemp32 != 0x70485973 ) && ( nTemp32 != 0x49444154 )
@@ -574,17 +574,17 @@ bool GraphicDescriptor::ImpDetectPNG( SvStream& rStm, bool bExtendedInfo )
                     sal_uLong   nXRes;
                     sal_uLong   nYRes;
 
-                    // horizontal resolution
+                    
                     nTemp32 = 0;
                     rStm.ReadUInt32( nTemp32 );
                     nXRes = nTemp32;
 
-                    // vertical resolution
+                    
                     nTemp32 = 0;
                     rStm.ReadUInt32( nTemp32 );
                     nYRes = nTemp32;
 
-                    // unit
+                    
                     cByte = 0;
                     rStm.ReadUChar( cByte );
 
@@ -646,14 +646,14 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                     sal_uInt32  nTemp32 = 0;
                     bool        bOk = false;
 
-                    // Offset of the first IFD
+                    
                     rStm.ReadUInt32( nTemp32 );
                     rStm.SeekRel( ( nCount = ( nTemp32 + 2 ) ) - 0x08 );
 
                     if ( nCount < nMax )
                     {
-                        // read tags till we find Tag256 ( Width )
-                        // do not read more bytes than DATA_SIZE
+                        
+                        
                         rStm.ReadUInt16( nTemp16 );
                         while ( nTemp16 != 256 )
                         {
@@ -669,7 +669,7 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
 
                         if ( bOk )
                         {
-                            // width
+                            
                             rStm.ReadUInt16( nTemp16 );
                             rStm.SeekRel( 4 );
                             if ( nTemp16 == 3 )
@@ -685,7 +685,7 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                             }
                             nCount += 12;
 
-                            // height
+                            
                             rStm.SeekRel( 2 );
                             rStm.ReadUInt16( nTemp16 );
                             rStm.SeekRel( 4 );
@@ -702,7 +702,7 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                             }
                             nCount += 12;
 
-                            // Bits/Pixel
+                            
                             rStm.ReadUInt16( nTemp16 );
                             if ( nTemp16 == 258 )
                             {
@@ -715,7 +715,7 @@ bool GraphicDescriptor::ImpDetectTIF( SvStream& rStm, bool bExtendedInfo )
                             else
                                 rStm.SeekRel( -2 );
 
-                            // compression
+                            
                             rStm.ReadUInt16( nTemp16 );
                             if ( nTemp16 == 259 )
                             {
@@ -759,7 +759,7 @@ bool GraphicDescriptor::ImpDetectPBM( SvStream& rStm, bool )
 {
     bool bRet = false;
 
-    // check file extension first, as this trumps the 2 ID bytes
+    
     if ( aPathExt.startsWith( "pbm" ) )
         bRet = true;
     else
@@ -869,7 +869,7 @@ bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
                 sal_uInt32 nColumns = 0;
                 sal_uInt16 nDepth = 0;
                 sal_uInt16 nMode = 0;
-                rStm.SeekRel( 6 );  // Pad
+                rStm.SeekRel( 6 );  
                 rStm.ReadUInt16( nChannels ).ReadUInt32( nRows ).ReadUInt32( nColumns ).ReadUInt16( nDepth ).ReadUInt16( nMode );
                 if ( ( nDepth == 1 ) || ( nDepth == 8 ) || ( nDepth == 16 ) )
                 {
@@ -902,7 +902,7 @@ bool GraphicDescriptor::ImpDetectPSD( SvStream& rStm, bool bExtendedInfo )
 
 bool GraphicDescriptor::ImpDetectEPS( SvStream& rStm, bool )
 {
-    // check the EPS preview and the file extension
+    
     sal_uInt32  nFirstLong = 0;
     sal_uInt8   nFirstBytes[20];
     bool        bRet = false;
@@ -1024,17 +1024,17 @@ bool GraphicDescriptor::ImpDetectSVM( SvStream& rStm, bool bExtendedInfo )
 
                 rStm.SeekRel( 0x04 );
 
-                // width
+                
                 nTemp32 = 0;
                 rStm.ReadUInt32( nTemp32 );
                 aLogSize.Width() = nTemp32;
 
-                // height
+                
                 nTemp32 = 0;
                 rStm.ReadUInt32( nTemp32 );
                 aLogSize.Height() = nTemp32;
 
-                // read MapUnit and determine PrefSize
+                
                 nTemp16 = 0;
                 rStm.ReadUInt16( nTemp16 );
                 aLogSize = OutputDevice::LogicToLogic( aLogSize,

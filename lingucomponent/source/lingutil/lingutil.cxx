@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,26 +55,26 @@ OString Win_GetShortPathName( const OUString &rLongPathName )
     sal_Unicode aShortBuffer[1024] = {0};
     sal_Int32   nShortBufSize = SAL_N_ELEMENTS( aShortBuffer );
 
-    // use the version of 'GetShortPathName' that can deal with Unicode...
+    
     sal_Int32 nShortLen = GetShortPathNameW(
             reinterpret_cast<LPCWSTR>( rLongPathName.getStr() ),
             reinterpret_cast<LPWSTR>( aShortBuffer ),
             nShortBufSize );
 
-    if (nShortLen < nShortBufSize) // conversion successful?
+    if (nShortLen < nShortBufSize) 
         aRes = OString( OU2ENC( OUString( aShortBuffer, nShortLen ), osl_getThreadTextEncoding()) );
     else
         OSL_FAIL( "Win_GetShortPathName: buffer to short" );
 
     return aRes;
 }
-#endif //defined(WNT)
+#endif 
 
-//////////////////////////////////////////////////////////////////////
 
-// build list of old style diuctionaries (not as extensions) to use.
-// User installed dictionaries (the ones residing in the user paths)
-// will get precedence over system installed ones for the same language.
+
+
+
+
 std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicType )
 {
     std::vector< SvtLinguConfigDictionaryEntry > aRes;
@@ -127,8 +127,8 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
     osl::Directory aSystemDicts(aSystemDir);
     if (aSystemDicts.open() == osl::FileBase::E_None)
     {
-        // set of languages to remember the language where it is already
-        // decided to make use of the dictionary.
+        
+        
         std::set< OUString > aDicLangInUse;
 
         osl::DirectoryItem aItem;
@@ -148,24 +148,24 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
                 if (sChunk.isEmpty())
                     continue;
 
-                // We prefer (now) to use language tags.
-                // Avoid feeding in the older LANG_REGION scheme to the BCP47
-                // ctor as that triggers use of liblangtag and initializes its
-                // database which we do not want during startup. Convert
-                // instead.
+                
+                
+                
+                
+                
                 sChunk = sChunk.replace( '_', '-');
 
-                // There's a known exception to the rule, the dreaded
-                // hu_HU_u8.dic of the myspell-hu package, see
-                // http://packages.debian.org/search?arch=any&searchon=contents&keywords=hu_HU_u8.dic
-                // This was ignored because unknown in the old implementation,
-                // truncate to the known locale and either insert because hu_HU
-                // wasn't encountered yet, or skip because it was. It doesn't
-                // really matter because the proper new-style hu_HU dictionary
-                // will take precedence anyway if installed with a Hungarian
-                // languagepack. Again, this is only to not pull in all
-                // liblangtag and stuff during startup, the result would be
-                // !isValidBcp47() and the dictionary ignored.
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 if (sChunk == "hu-HU-u8")
                     sChunk = "hu-HU";
 
@@ -173,12 +173,12 @@ std::vector< SvtLinguConfigDictionaryEntry > GetOldStyleDics( const char *pDicTy
                 if (!aLangTag.isValidBcp47())
                     continue;
 
-                // Thus we first get the language of the dictionary
+                
                 OUString aLocaleName(aLangTag.getBcp47());
 
                 if (aDicLangInUse.insert(aLocaleName).second)
                 {
-                    // add the dictionary to the resulting vector
+                    
                     SvtLinguConfigDictionaryEntry aDicEntry;
                     aDicEntry.aLocations.realloc(1);
                     aDicEntry.aLocaleNames.realloc(1);
@@ -200,7 +200,7 @@ void MergeNewStyleDicsAndOldStyleDics(
     std::list< SvtLinguConfigDictionaryEntry > &rNewStyleDics,
     const std::vector< SvtLinguConfigDictionaryEntry > &rOldStyleDics )
 {
-    // get list of languages supported by new style dictionaries
+    
     std::set< OUString > aNewStyleLanguages;
     std::list< SvtLinguConfigDictionaryEntry >::const_iterator aIt;
     for (aIt = rNewStyleDics.begin() ;  aIt != rNewStyleDics.end();  ++aIt)
@@ -213,14 +213,14 @@ void MergeNewStyleDicsAndOldStyleDics(
         }
     }
 
-    // now check all old style dictionaries if they will add a not yet
-    // added language. If so add them to the resulting vector
+    
+    
     std::vector< SvtLinguConfigDictionaryEntry >::const_iterator aIt2;
     for (aIt2 = rOldStyleDics.begin();  aIt2 != rOldStyleDics.end();  ++aIt2)
     {
         sal_Int32 nOldStyleDics = aIt2->aLocaleNames.getLength();
 
-        // old style dics should only have one language listed...
+        
         DBG_ASSERT( nOldStyleDics, "old style dictionary with more then one language found!");
         if (nOldStyleDics > 0)
         {
@@ -230,7 +230,7 @@ void MergeNewStyleDicsAndOldStyleDics(
                 continue;
             }
 
-            // language not yet added?
+            
             if (aNewStyleLanguages.find( aIt2->aLocaleNames[0] ) == aNewStyleLanguages.end())
                 rNewStyleDics.push_back( *aIt2 );
         }
@@ -244,7 +244,7 @@ void MergeNewStyleDicsAndOldStyleDics(
 
 rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset)
 {
-    // default result: used to indicate that we failed to get the proper encoding
+    
     rtl_TextEncoding eRet = RTL_TEXTENCODING_DONTKNOW;
 
     if (pCharset)
@@ -261,6 +261,6 @@ rtl_TextEncoding getTextEncodingFromCharset(const sal_Char* pCharset)
     return eRet;
 }
 
-//////////////////////////////////////////////////////////////////////
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

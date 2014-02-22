@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -44,12 +44,12 @@
 #include <svtools/popupmenucontrollerbase.hxx>
 #include <osl/mutex.hxx>
 
-// Copied from svx
-// Function-Id's
+
+
 #define RID_FMSHELL_CONVERSIONMENU (RID_FORMS_START + 4)
 #define RID_SVXIMGLIST_FMEXPL      (RID_FORMS_START + 0)
 
-// Forms - Ids, used to address images from image list
+
 #define SID_FMSLOTS_START                   (SID_SVX_START + 592)
 #define SID_MORE_FMSLOTS_START              (SID_SVX_START + 702)
 
@@ -103,7 +103,7 @@ static const sal_Int16 nConvertSlots[] =
     SID_FM_CONVERTTO_RADIOBUTTON,
     SID_FM_CONVERTTO_GROUPBOX,
     SID_FM_CONVERTTO_COMBOBOX,
-//  SID_FM_CONVERTTO_GRID,
+
     SID_FM_CONVERTTO_IMAGEBUTTON,
     SID_FM_CONVERTTO_FILECONTROL,
     SID_FM_CONVERTTO_DATE,
@@ -127,7 +127,7 @@ static const sal_Int16 nCreateSlots[] =
     SID_FM_RADIOBUTTON,
     SID_FM_GROUPBOX,
     SID_FM_COMBOBOX,
-//  SID_FM_DBGRID,
+
     SID_FM_IMAGEBUTTON,
     SID_FM_FILECONTROL,
     SID_FM_DATEFIELD,
@@ -151,7 +151,7 @@ static const char* aCommands[] =
     ".uno:ConvertToRadio",
     ".uno:ConvertToGroup",
     ".uno:ConvertToCombo",
-//    ".uno:ConvertToGrid",
+
     ".uno:ConvertToImageBtn",
     ".uno:ConvertToFileControl",
     ".uno:ConvertToDate",
@@ -181,7 +181,7 @@ public:
     ControlMenuController( const uno::Reference< uno::XComponentContext >& xContext );
     virtual ~ControlMenuController();
 
-    // XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     {
@@ -203,19 +203,19 @@ public:
     }
 
 
-    // XPopupMenuController
+    
     virtual void SAL_CALL updatePopupMenu() throw (uno::RuntimeException);
 
-    // XInitialization
+    
     virtual void SAL_CALL initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException);
 
-    // XStatusListener
+    
     virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException );
 
-    // XMenuListener
+    
     virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException);
 
-    // XEventListener
+    
     virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw ( uno::RuntimeException );
 
 private:
@@ -255,7 +255,7 @@ ControlMenuController::~ControlMenuController()
 {
 }
 
-// private function
+
 void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
 {
     ResMgr* pResMgr = ResMgr::CreateResMgr("svx", Application::GetSettings().GetUILanguageTag());
@@ -267,7 +267,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
         ImageList aImageList( aResId );
         for ( sal_uInt32 i=0; i < sizeof(nConvertSlots)/sizeof(nConvertSlots[0]); ++i )
         {
-            // das entsprechende Image dran
+            
             if ( m_bShowMenuImages )
                 pPopupMenu->SetItemImage( nConvertSlots[i], aImageList.GetImage(nCreateSlots[i]));
             else
@@ -278,7 +278,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
     delete pResMgr;
 }
 
-// private function
+
 void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopupMenu )
 {
     VCLXPopupMenu*                                     pPopupMenu        = (VCLXPopupMenu *)VCLXMenu::GetImplementation( rPopupMenu );
@@ -294,7 +294,7 @@ void ControlMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rP
         *pVCLPopupMenu = *m_pResPopupMenu;
 }
 
-// XEventListener
+
 void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( RuntimeException )
 {
     Reference< css::awt::XMenuListener > xHolder(( OWeakObject *)this, UNO_QUERY );
@@ -309,7 +309,7 @@ void SAL_CALL ControlMenuController::disposing( const EventObject& ) throw ( Run
     delete m_pResPopupMenu;
 }
 
-// XStatusListener
+
 void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException )
 {
     osl::ResettableMutexGuard aLock( m_aMutex );
@@ -343,15 +343,15 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
             {
                 sal_Int16 nPrevId = m_pResPopupMenu->GetItemId(--nPrevInSource);
 
-                // do we have the source's predecessor in our conversion menu, too ?
+                
                 nPrevInConversion = pVCLPopupMenu->GetItemPos( nPrevId );
                 if ( nPrevInConversion != MENU_ITEM_NOTFOUND )
                     break;
             }
 
           if ( MENU_ITEM_NOTFOUND == nPrevInConversion )
-                // none of the items which precede the nSID-slot in the source menu are present in our conversion menu
-                nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); // put the item at the first position
+                
+                nPrevInConversion = sal::static_int_cast< sal_uInt16 >(-1); 
 
             pVCLPopupMenu->InsertItem( nMenuId, m_pResPopupMenu->GetItemText( nMenuId ), m_pResPopupMenu->GetItemBits( nMenuId ), OString(), ++nPrevInConversion );
             pVCLPopupMenu->SetItemImage( nMenuId, m_pResPopupMenu->GetItemImage( nMenuId ));
@@ -360,7 +360,7 @@ void SAL_CALL ControlMenuController::statusChanged( const FeatureStateEvent& Eve
     }
 }
 
-// XMenuListener
+
 void ControlMenuController::impl_select(const Reference< XDispatch >& /*_xDispatch*/,const ::com::sun::star::util::URL& aURL)
 {
     UrlToDispatchMap::iterator pIter = m_aURLToDispatchMap.find( aURL.Complete );
@@ -381,7 +381,7 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
     {
         SolarMutexGuard aSolarMutexGuard;
 
-        // Check if some modes have changed so we have to update our menu images
+        
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         sal_Bool bShowMenuImages    = rSettings.GetUseImagesInMenus();
         sal_Bool bUpdateImages      = (bShowMenuImages != m_bShowMenuImages);
@@ -401,7 +401,7 @@ void SAL_CALL ControlMenuController::itemActivated( const css::awt::MenuEvent& )
     }
 }
 
-// XPopupMenuController
+
 void ControlMenuController::impl_setPopupMenu()
 {
     if ( m_pResPopupMenu == 0 )
@@ -419,7 +419,7 @@ void ControlMenuController::impl_setPopupMenu()
 
             delete pResMgr;
         }
-    } // if ( m_pResPopupMenu == 0 )
+    } 
 }
 
 void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::uno::RuntimeException)
@@ -451,7 +451,7 @@ void SAL_CALL ControlMenuController::updatePopupMenu() throw (::com::sun::star::
     }
 }
 
-// XInitialization
+
 void SAL_CALL ControlMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     osl::ResettableMutexGuard aLock( m_aMutex );

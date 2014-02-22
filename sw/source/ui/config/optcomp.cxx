@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "optcomp.hxx"
@@ -43,7 +43,7 @@ using namespace ::std;
 #define DEFAULT_ENTRY       COMPATIBILITY_DEFAULT_NAME
 #define USER_ENTRY          "_user"
 
-// struct CompatibilityItem ----------------------------------------------
+
 
 struct CompatibilityItem
 {
@@ -96,7 +96,7 @@ struct SwCompatibilityOptPage_Impl
     SwCompatibilityItemList     m_aList;
 };
 
-// class SwCompatibilityOptPage ------------------------------------------
+
 
 SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet& rSet)
     : SfxTabPage(pParent, "OptCompatPage",
@@ -128,7 +128,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage(Window* pParent, const SfxItemSet
 
     InitControls( rSet );
 
-    // set handler
+    
     m_pFormattingLB->SetSelectHdl( LINK( this, SwCompatibilityOptPage, SelectHdl ) );
     m_pDefaultPB->SetClickHdl( LINK( this, SwCompatibilityOptPage, UseAsDefaultHdl ) );
 }
@@ -194,7 +194,7 @@ sal_uLong convertBools2Ulong_Impl
 
 void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
 {
-    // init objectshell and detect document name
+    
     OUString sDocTitle;
     const SfxPoolItem* pItem = NULL;
     SfxObjectShell* pObjShell = NULL;
@@ -213,7 +213,7 @@ void SwCompatibilityOptPage::InitControls( const SfxItemSet& rSet )
     const OUString& rText = m_pMain->get_label();
     m_pMain->set_label(rText.replaceAll("%DOCNAME", sDocTitle));
 
-    // loading file formats
+    
     Sequence< Sequence< PropertyValue > > aList = m_aConfigItem.GetList();
     OUString sName;
     OUString sModule;

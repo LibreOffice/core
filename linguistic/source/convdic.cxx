@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -76,7 +76,7 @@ void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport )
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    // get xInputStream stream
+    
     uno::Reference< io::XInputStream > xIn;
     try
     {
@@ -92,25 +92,25 @@ void ReadThroughDic( const OUString &rMainURL, ConvDicXMLImport &rImport )
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xIn ) );
 
-    // prepare ParserInputSource
+    
     xml::sax::InputSource aParserInput;
     aParserInput.aInputStream = xIn;
 
-    // get parser
+    
     uno::Reference< xml::sax::XParser > xParser = xml::sax::Parser::create( xContext );
 
-    //!! keep a reference until everything is done to
-    //!! ensure the proper lifetime of the object
+    
+    
     uno::Reference < xml::sax::XDocumentHandler > xFilter(
             (xml::sax::XExtendedDocumentHandler *) &rImport, UNO_QUERY );
 
-    // connect parser and filter
+    
     xParser->setDocumentHandler( xFilter );
 
-    // finally, parser the stream
+    
     try
     {
-        xParser->parseStream( aParserInput );   // implicitly calls ConvDicXMLImport::CreateContext
+        xParser->parseStream( aParserInput );   
     }
     catch( xml::sax::SAXParseException& )
     {
@@ -130,7 +130,7 @@ sal_Bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConv
     if (rFileURL.isEmpty())
         return bRes;
 
-    // check if file extension matches CONV_DIC_EXT
+    
     OUString aExt;
     sal_Int32 nPos = rFileURL.lastIndexOf( '.' );
     if (-1 != nPos)
@@ -138,15 +138,15 @@ sal_Bool IsConvDic( const OUString &rFileURL, sal_Int16 &nLang, sal_Int16 &nConv
     if (aExt != CONV_DIC_EXT)
         return bRes;
 
-    // first argument being 0 should stop the file from being parsed
-    // up to the end (reading all entries) when the required
-    // data (language, conversion type) is found.
+    
+    
+    
     ConvDicXMLImport *pImport = new ConvDicXMLImport( 0, rFileURL );
 
-    //!! keep a first reference to ensure the lifetime of the object !!
+    
     uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
 
-    ReadThroughDic( rFileURL, *pImport );    // will implicitly add the entries
+    ReadThroughDic( rFileURL, *pImport );    
     bRes =  !LinguIsUnspecified( pImport->GetLanguage()) &&
             pImport->GetConversionType() != -1;
     DBG_ASSERT( bRes, "conversion dictionary corrupted?" );
@@ -192,14 +192,14 @@ ConvDic::ConvDic(
         sal_Bool bExists = sal_False;
         bIsReadonly = IsReadOnly( rMainURL, &bExists );
 
-        if( !bExists )  // new empty dictionary
+        if( !bExists )  
         {
             bNeedEntries = sal_False;
-            //! create physical representation of an **empty** dictionary
-            //! that could be found by the dictionary-list implementation
-            // (Note: empty dictionaries are not just empty files!)
+            
+            
+            
             Save();
-            bIsReadonly = IsReadOnly( rMainURL );   // will be sal_False if Save was successful
+            bIsReadonly = IsReadOnly( rMainURL );   
         }
     }
     else
@@ -218,12 +218,12 @@ void ConvDic::Load()
 {
     DBG_ASSERT( !bIsModified, "dictionary is modified. Really do 'Load'?" );
 
-    //!! prevent function from being called recursively via HasEntry, AddEntry
+    
     bNeedEntries = sal_False;
     ConvDicXMLImport *pImport = new ConvDicXMLImport( this, aMainURL );
-    //!! keep a first reference to ensure the lifetime of the object !!
+    
     uno::Reference< XInterface > xRef( (document::XFilter *) pImport, UNO_QUERY );
-    ReadThroughDic( aMainURL, *pImport );    // will implicitly add the entries
+    ReadThroughDic( aMainURL, *pImport );    
     bIsModified = sal_False;
 }
 
@@ -237,7 +237,7 @@ void ConvDic::Save()
 
     uno::Reference< uno::XComponentContext > xContext( comphelper::getProcessComponentContext() );
 
-    // get XOutputStream stream
+    
     uno::Reference< io::XStream > xStream;
     try
     {
@@ -253,21 +253,21 @@ void ConvDic::Save()
 
     SvStreamPtr pStream = SvStreamPtr( utl::UcbStreamHelper::CreateStream( xStream ) );
 
-    // get XML writer
+    
     uno::Reference< xml::sax::XWriter > xSaxWriter = xml::sax::Writer::create(xContext);
 
     if (xStream.is())
     {
-        // connect XML writer to output stream
+        
         xSaxWriter->setOutputStream( xStream->getOutputStream() );
 
-        // prepare arguments (prepend doc handler to given arguments)
+        
         uno::Reference< xml::sax::XDocumentHandler > xDocHandler( xSaxWriter, UNO_QUERY );
         ConvDicXMLExport *pExport = new ConvDicXMLExport( *this, aMainURL, xDocHandler );
-        //!! keep a first(!) reference until everything is done to
-        //!! ensure the proper lifetime of the object
+        
+        
         uno::Reference< document::XFilter > aRef( (document::XFilter *) pExport );
-        sal_Bool bRet = pExport->Export();     // write entries to file
+        sal_Bool bRet = pExport->Export();     
         DBG_ASSERT( !pStream->GetError(), "I/O error while writing to stream" );
         if (bRet)
             bIsModified = sal_False;
@@ -437,14 +437,14 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversions(
 
 
 static sal_Bool lcl_SeqHasEntry(
-    const OUString *pSeqStart,  // first element to check
-    sal_Int32 nToCheck,             // number of elements to check
+    const OUString *pSeqStart,  
+    sal_Int32 nToCheck,             
     const OUString &rText)
 {
     sal_Bool bRes = sal_False;
     if (pSeqStart && nToCheck > 0)
     {
-        const OUString *pDone = pSeqStart + nToCheck;   // one behind last to check
+        const OUString *pDone = pSeqStart + nToCheck;   
         while (!bRes && pSeqStart != pDone)
         {
             if (*pSeqStart++ == rText)
@@ -475,10 +475,10 @@ uno::Sequence< OUString > SAL_CALL ConvDic::getConversionEntries(
     while (aIt != rConvMap.end())
     {
         OUString aCurEntry( (*aIt).first );
-        // skip duplicate entries ( duplicate = duplicate entries
-        // respective to the evaluated side (FROM_LEFT or FROM_RIGHT).
-        // Thus if FROM_LEFT is evaluated for pairs (A,B) and (A,C)
-        // only one entry for A will be returned in the result)
+        
+        
+        
+        
         if (nIdx == 0 || !lcl_SeqHasEntry( pRes, nIdx, aCurEntry ))
             pRes[ nIdx++ ] = aCurEntry;
         ++aIt;
@@ -575,8 +575,8 @@ void SAL_CALL ConvDic::setPropertyType(
     if (!bHasElement)
         throw container::NoSuchElementException();
 
-    // currently we assume that entries with the same left text have the
-    // same PropertyType even if the right text is different...
+    
+    
     if (pConvPropType.get())
         pConvPropType->insert( PropTypeMap::value_type( rLeftText, nPropertyType ) );
     bIsModified = sal_True;
@@ -595,8 +595,8 @@ sal_Int16 SAL_CALL ConvDic::getPropertyType(
     sal_Int16 nRes = ConversionPropertyType::NOT_DEFINED;
     if (pConvPropType.get())
     {
-        // still assuming that entries with same left text have same PropertyType
-        // even if they have different right text...
+        
+        
         PropTypeMap::iterator aIt = pConvPropType->find( rLeftText );
         if (aIt != pConvPropType->end())
             nRes = (*aIt).second;
@@ -615,7 +615,7 @@ void SAL_CALL ConvDic::flush(  )
 
     Save();
 
-    // notify listeners
+    
     EventObject aEvtObj;
     aEvtObj.Source = uno::Reference< XFlushable >( this );
     cppu::OInterfaceIteratorHelper aIt( aFlushListeners );

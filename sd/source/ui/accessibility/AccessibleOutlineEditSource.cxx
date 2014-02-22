@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/unoedhlp.hxx>
@@ -39,9 +39,9 @@ namespace accessibility
           mTextForwarder( rOutliner, 0 ),
           mViewForwarder( rOutlView )
     {
-        // register as listener - need to broadcast state change messages
-        // Moved to ::GetTextForwarder()
-        //rOutliner.SetNotifyHdl( LINK(this, AccessibleOutlineEditSource, NotifyHdl) );
+        
+        
+        
         StartListening(rOutliner);
     }
 
@@ -59,11 +59,11 @@ namespace accessibility
 
     SvxTextForwarder* AccessibleOutlineEditSource::GetTextForwarder()
     {
-        // TODO: maybe suboptimal
+        
         if( IsValid() )
         {
-            // Moved here to make sure that
-            // the NotifyHandler was set on the current object.
+            
+            
             mpOutliner->SetNotifyHdl( LINK(this, AccessibleOutlineEditSource, NotifyHdl) );
             return &mTextForwarder;
         }
@@ -73,7 +73,7 @@ namespace accessibility
 
     SvxViewForwarder* AccessibleOutlineEditSource::GetViewForwarder()
     {
-        // TODO: maybe suboptimal
+        
         if( IsValid() )
             return this;
         else
@@ -82,10 +82,10 @@ namespace accessibility
 
     SvxEditViewForwarder* AccessibleOutlineEditSource::GetEditViewForwarder( bool )
     {
-        // TODO: maybe suboptimal
+        
         if( IsValid() )
         {
-            // ignore parameter, we're always in edit mode here
+            
             return &mViewForwarder;
         }
         else
@@ -94,8 +94,8 @@ namespace accessibility
 
     void AccessibleOutlineEditSource::UpdateData()
     {
-        // NOOP, since we're always working on the 'real' outliner,
-        // i.e. changes are immediately reflected on the screen
+        
+        
     }
 
     SfxBroadcaster& AccessibleOutlineEditSource::GetBroadcaster() const
@@ -107,7 +107,7 @@ namespace accessibility
     {
         if( mpOutliner && mpOutlinerView )
         {
-            // Our view still on outliner?
+            
             sal_uLong nCurrView, nViews;
 
             for( nCurrView=0, nViews=mpOutliner->GetViewCount(); nCurrView<nViews; ++nCurrView )
@@ -188,7 +188,7 @@ namespace accessibility
 
             if( pSdrHint && ( pSdrHint->GetKind() == HINT_MODELCLEARED ) )
             {
-                // model is dying under us, going defunc
+                
                 bDispose = true;
             }
         }
@@ -216,6 +216,6 @@ namespace accessibility
         return 0;
     }
 
-} // end of namespace accessibility
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

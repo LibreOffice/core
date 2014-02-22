@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sdattr.hxx"
@@ -72,13 +72,13 @@ SdPrintOptions::SdPrintOptions( Window* pParent, const SfxItemSet& rInAttrs ) :
     m_pCbxBack->SetAccessibleRelationLabeledBy( m_pRbtBooklet );
 }
 
-// -----------------------------------------------------------------------
+
 
 SdPrintOptions::~SdPrintOptions()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
 {
@@ -117,7 +117,7 @@ sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
         aOptions.GetOptionsPrint().SetBackPage( m_pCbxBack->IsChecked() );
         aOptions.GetOptionsPrint().SetPaperbin( m_pCbxPaperbin->IsChecked() );
 
-        sal_uInt16 nQuality = 0; // Standard, also Color
+        sal_uInt16 nQuality = 0; 
         if( m_pRbtGrayscale->IsChecked() )
             nQuality = 1;
         if( m_pRbtBlackWhite->IsChecked() )
@@ -131,7 +131,7 @@ sal_Bool SdPrintOptions::FillItemSet( SfxItemSet& rAttrs )
     return( sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
 {
@@ -188,7 +188,7 @@ void SdPrintOptions::Reset( const SfxItemSet& rAttrs )
     ClickBookletHdl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SdPrintOptions::Create( Window* pWindow,
                 const SfxItemSet& rOutAttrs )
@@ -196,11 +196,11 @@ SfxTabPage* SdPrintOptions::Create( Window* pWindow,
     return( new SdPrintOptions( pWindow, rOutAttrs ) );
 }
 
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
 {
-    // there must be at least one of them checked
+    
     if( !m_pCbxDraw->IsChecked() && !m_pCbxNotes->IsChecked() && !m_pCbxOutline->IsChecked() && !m_pCbxHandout->IsChecked() )
         pCbx->Check();
 
@@ -208,7 +208,7 @@ IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl)
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "ConversionHelper.hxx"
 #include "GraphicHelpers.hxx"
@@ -72,7 +72,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
     {
         case NS_ooxml::LN_CT_PosV_relativeFrom:
             {
-                // TODO There are some other unhandled values
+                
                 static const Id pVertRelValues[] =
                 {
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromV_margin,
@@ -98,7 +98,7 @@ void PositionHandler::lcl_attribute( Id aName, Value& rVal )
             break;
         case NS_ooxml::LN_CT_PosH_relativeFrom:
             {
-                // TODO There are some other unhandled values
+                
                 static const Id pHoriRelValues[] =
                 {
                     NS_ooxml::LN_Value_wordprocessingDrawing_ST_RelFromH_margin,
@@ -137,8 +137,8 @@ void PositionHandler::lcl_sprm( Sprm& )
 sal_Int16 PositionHandler::orientation() const
 {
     if( m_nRelation == text::RelOrientation::TEXT_LINE )
-    { // It appears that to 'line of text' alignment is backwards to other alignments,
-      // 'top' meaning putting on top of the line instead of having top at the line.
+    { 
+      
         if( m_nOrient == text::VertOrientation::TOP )
             return text::VertOrientation::BOTTOM;
         else if( m_nOrient == text::VertOrientation::BOTTOM )
@@ -232,14 +232,14 @@ void WrapHandler::lcl_sprm( Sprm& )
 
 sal_Int32 WrapHandler::getWrapMode( )
 {
-    // The wrap values do not map directly to our wrap mode,
-    // e.g. none in .docx actually means through in LO.
+    
+    
     sal_Int32 nMode = com::sun::star::text::WrapTextMode_THROUGHT;
 
     switch ( m_nType )
     {
         case NS_ooxml::LN_Value_vml_wordprocessingDrawing_ST_WrapType_square:
-        // through and tight are somewhat complicated, approximate
+        
         case NS_ooxml::LN_Value_vml_wordprocessingDrawing_ST_WrapType_tight:
         case NS_ooxml::LN_Value_vml_wordprocessingDrawing_ST_WrapType_through:
             {
@@ -273,22 +273,22 @@ void GraphicZOrderHelper::addItem( uno::Reference< beans::XPropertySet > props, 
     items[ relativeHeight ] = props;
 }
 
-// The relativeHeight value in .docx is an arbitrary number, where only the relative ordering matters.
-// But in Writer, the z-order is index in 0..(numitems-1) range, so whenever a new item needs to be
-// added in the proper z-order, it is necessary to find the proper index.
+
+
+
 sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight )
 {
     Items::const_iterator it = items.begin();
     while( it != items.end())
     {
-        // std::map is iterated sorted by key
-        // if there is an item that has the same z-order, we belong under it
+        
+        
         if( it->first >= relativeHeight )
-            break; // this is the first one higher, we belong right before it
+            break; 
         else
             ++it;
     }
-    if( it == items.end()) // we're topmost
+    if( it == items.end()) 
     {
         if( items.empty())
             return 0;
@@ -296,17 +296,17 @@ sal_Int32 GraphicZOrderHelper::findZOrder( sal_Int32 relativeHeight )
         --it;
         if( it->second->getPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier()
             .GetName( PROP_Z_ORDER )) >>= itemZOrder )
-            return itemZOrder + 1; // after the topmost
+            return itemZOrder + 1; 
     }
     else
     {
         sal_Int32 itemZOrder(0);
         if( it->second->getPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier()
             .GetName( PROP_Z_ORDER )) >>= itemZOrder )
-            return itemZOrder; // before the item
+            return itemZOrder; 
     }
     SAL_WARN( "writerfilter", "findZOrder() didn't find item z-order" );
-    return 0; // this should not(?) happen
+    return 0; 
 }
 
 } }

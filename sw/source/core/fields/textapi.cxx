@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <textapi.hxx>
@@ -65,7 +65,7 @@ SwTextAPIObject::~SwTextAPIObject() throw()
 
 struct SwTextAPIEditSource_Impl
 {
-    // needed for "internal" refcounting
+    
     SfxItemPool*                    mpPool;
     SwDoc*                          mpDoc;
     Outliner*                       mpOutliner;
@@ -76,7 +76,7 @@ struct SwTextAPIEditSource_Impl
 SwTextAPIEditSource::SwTextAPIEditSource( const SwTextAPIEditSource& rSource )
 : SvxEditSource( *this )
 {
-    // shallow copy; uses internal refcounting
+    
     pImpl = rSource.pImpl;
     pImpl->mnRef++;
 }
@@ -88,7 +88,7 @@ SvxEditSource* SwTextAPIEditSource::Clone() const
 
 void SwTextAPIEditSource::UpdateData()
 {
-    // data is kept in outliner all the time
+    
 }
 
 SwTextAPIEditSource::SwTextAPIEditSource(SwDoc* pDoc)
@@ -118,11 +118,11 @@ void SwTextAPIEditSource::Dispose()
 SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
 {
     if( !pImpl->mpPool )
-        return 0; // mpPool == 0 can be used to flag this as disposed
+        return 0; 
 
     if( !pImpl->mpOutliner )
     {
-        //init draw model first
+        
         pImpl->mpDoc->GetOrCreateDrawModel();
         pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
         pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
@@ -140,7 +140,7 @@ void SwTextAPIEditSource::SetText( OutlinerParaObject& rText )
     {
         if( !pImpl->mpOutliner )
         {
-            //init draw model first
+            
             pImpl->mpDoc->GetOrCreateDrawModel();
             pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
             pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
@@ -156,7 +156,7 @@ void SwTextAPIEditSource::SetString( const OUString& rText )
     {
         if( !pImpl->mpOutliner )
         {
-            //init draw model first
+            
             pImpl->mpDoc->GetOrCreateDrawModel();
             pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
             pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );

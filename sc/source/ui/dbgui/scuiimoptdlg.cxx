@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -30,9 +30,9 @@
 #include <osl/thread.h>
 #include <rtl/tencinfo.h>
 
-//========================================================================
-// ScDelimiterTable
-//========================================================================
+
+
+
 
 class ScDelimiterTable
 {
@@ -57,7 +57,7 @@ private:
     sal_Int32          nIter;
 };
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
 {
@@ -81,7 +81,7 @@ sal_uInt16 ScDelimiterTable::GetCode( const OUString& rDel ) const
     return nCode;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
 {
@@ -105,9 +105,9 @@ OUString ScDelimiterTable::GetDelimiter( sal_Unicode nCode ) const
     return aStrDel;
 }
 
-//========================================================================
-// ScImportOptionsDlg
-//========================================================================
+
+
+
 
 ScImportOptionsDlg::ScImportOptionsDlg(
         Window*                 pParent,
@@ -145,7 +145,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     sFieldSep = sFieldSep.replaceFirst( "%TAB",   SC_RESSTR(SCSTR_FIELDSEP_TAB) );
     sFieldSep = sFieldSep.replaceFirst( "%SPACE", SC_RESSTR(SCSTR_FIELDSEP_SPACE) );
 
-    // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
+    
     pFieldSepTab = new ScDelimiterTable( sFieldSep );
     pTextSepTab  = new ScDelimiterTable( OUString(ScResId(SCSTR_TEXTSEP)) );
 
@@ -171,14 +171,14 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
     if ( bOnlyDbtoolsEncodings )
     {
-        // Even dBase export allows multibyte now
+        
         if ( bMultiByte )
             m_pLbCharset->FillFromDbTextEncodingMap( bImport );
         else
             m_pLbCharset->FillFromDbTextEncodingMap( bImport, RTL_TEXTENCODING_INFO_MULTIBYTE );
     }
     else if ( !bAscii )
-    {   //!TODO: Unicode would need work in each filter
+    {   
         if ( bMultiByte )
             m_pLbCharset->FillFromTextEncodingTable( bImport, RTL_TEXTENCODING_INFO_UNICODE );
         else
@@ -205,7 +205,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
             else
                 m_pEdTextSep->SetText( aStr );
         }
-        // all encodings allowed, even Unicode
+        
         m_pLbCharset->FillFromTextEncodingTable( bImport );
     }
 
@@ -244,12 +244,12 @@ ScImportOptionsDlg::ScImportOptionsDlg(
     m_pLbCharset->SelectTextEncoding( pOptions ? pOptions->eCharSet :
         osl_getThreadTextEncoding() );
 
-    // optionaler Titel:
+    
     if ( pStrTitle )
         SetText( *pStrTitle );
 }
 
-//------------------------------------------------------------------------
+
 
 ScImportOptionsDlg::~ScImportOptionsDlg()
 {
@@ -257,7 +257,7 @@ ScImportOptionsDlg::~ScImportOptionsDlg()
     delete pTextSepTab;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
 {
@@ -274,7 +274,7 @@ void ScImportOptionsDlg::GetImportOptions( ScImportOptions& rOptions ) const
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 {
@@ -289,7 +289,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
 
     if ( aStr.isEmpty() )
     {
-        nCode = 0;          // kein Trennzeichen
+        nCode = 0;          
     }
     else
     {
@@ -302,7 +302,7 @@ sal_uInt16 ScImportOptionsDlg::GetCodeFromCombo( const ComboBox& rEd ) const
     return nCode;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( ScImportOptionsDlg, FixedWidthHdl, CheckBox*, pCheckBox )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "basmethnode.hxx"
@@ -49,14 +49,14 @@ using namespace ::sf_misc;
 #define BASPROV_DEFAULT_ATTRIBS()       PropertyAttribute::BOUND | PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY
 
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
 
-    // =============================================================================
-    // BasicMethodNodeImpl
-    // =============================================================================
+
+    
+    
+    
 
     BasicMethodNodeImpl::BasicMethodNodeImpl( const Reference< XComponentContext >& rxContext,
         const OUString& sScriptingContext, SbMethod* pMethod, bool isAppScript )
@@ -95,27 +95,27 @@ namespace basprov
         registerProperty( BASPROV_PROPERTY_EDITABLE, BASPROV_PROPERTY_ID_EDITABLE, BASPROV_DEFAULT_ATTRIBS(), &m_bEditable, ::getCppuType( &m_bEditable ) );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     BasicMethodNodeImpl::~BasicMethodNodeImpl()
     {
     }
 
-    // -----------------------------------------------------------------------------
-    // XInterface
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     IMPLEMENT_FORWARD_XINTERFACE2( BasicMethodNodeImpl, BasicMethodNodeImpl_BASE, OPropertyContainer )
 
-    // -----------------------------------------------------------------------------
-    // XTypeProvider
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicMethodNodeImpl, BasicMethodNodeImpl_BASE, OPropertyContainer )
 
-    // -----------------------------------------------------------------------------
-    // XBrowseNode
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     OUString BasicMethodNodeImpl::getName(  ) throw (RuntimeException)
     {
@@ -128,7 +128,7 @@ namespace basprov
         return sMethodName;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Sequence< Reference< browse::XBrowseNode > > BasicMethodNodeImpl::getChildNodes(  ) throw (RuntimeException)
     {
@@ -137,7 +137,7 @@ namespace basprov
         return Sequence< Reference< browse::XBrowseNode > >();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Bool BasicMethodNodeImpl::hasChildNodes(  ) throw (RuntimeException)
     {
@@ -146,7 +146,7 @@ namespace basprov
         return sal_False;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Int16 BasicMethodNodeImpl::getType(  ) throw (RuntimeException)
     {
@@ -155,18 +155,18 @@ namespace basprov
         return browse::BrowseNodeTypes::SCRIPT;
     }
 
-    // -----------------------------------------------------------------------------
-    // OPropertySetHelper
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     ::cppu::IPropertyArrayHelper& BasicMethodNodeImpl::getInfoHelper(  )
     {
         return *getArrayHelper();
     }
 
-    // -----------------------------------------------------------------------------
-    // OPropertyArrayUsageHelper
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     ::cppu::IPropertyArrayHelper* BasicMethodNodeImpl::createArrayHelper(  ) const
     {
@@ -175,9 +175,9 @@ namespace basprov
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    // -----------------------------------------------------------------------------
-    // XPropertySet
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     Reference< XPropertySetInfo > BasicMethodNodeImpl::getPropertySetInfo(  ) throw (RuntimeException)
     {
@@ -185,16 +185,16 @@ namespace basprov
         return xInfo;
     }
 
-    // -----------------------------------------------------------------------------
-    // XInvocation
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     Reference< XIntrospectionAccess > BasicMethodNodeImpl::getIntrospection(  ) throw (RuntimeException)
     {
         return Reference< XIntrospectionAccess >();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Any BasicMethodNodeImpl::invoke( const OUString& aFunctionName, const Sequence< Any >& aParams,
         Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
@@ -224,7 +224,7 @@ namespace basprov
                         const PropertyValue* pProps = aProps.getConstArray();
                         for ( sal_Int32 i = 0; i < nProps; ++i )
                         {
-                            // TODO: according to MBA the property 'Title' may change in future
+                            
                             if ( pProps[i].Name == "Title" )
                             {
                                 pProps[i].Value >>= sDocURL;
@@ -283,7 +283,7 @@ namespace basprov
         return Any();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void BasicMethodNodeImpl::setValue( const OUString& aPropertyName, const Any& aValue )
         throw (UnknownPropertyException, script::CannotConvertException,
@@ -297,7 +297,7 @@ namespace basprov
             Reference< XInterface >() );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Any BasicMethodNodeImpl::getValue( const OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
@@ -308,7 +308,7 @@ namespace basprov
             Reference< XInterface >() );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Bool BasicMethodNodeImpl::hasMethod( const OUString& aName ) throw (RuntimeException)
     {
@@ -319,7 +319,7 @@ namespace basprov
         return bReturn;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     sal_Bool BasicMethodNodeImpl::hasProperty( const OUString& aName ) throw (RuntimeException)
     {
@@ -328,10 +328,10 @@ namespace basprov
         return sal_False;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
-//.........................................................................
-}   // namespace basprov
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

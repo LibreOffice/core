@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svdmark.hxx>
@@ -45,7 +45,7 @@ SvxIMapDlg*     ScGetIMapDlg();
 const void*     ScIMapDlgGetObj( SvxIMapDlg* pDlg );
 const ImageMap& ScIMapDlgGetMap( SvxIMapDlg* pDlg );
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecChildWin(SfxRequest& rReq)
 {
@@ -72,7 +72,7 @@ void ScTabViewShell::GetChildWinState( SfxItemSet& rSet )
     }
 }
 
-//------------------------------------------------------------------
+
 
 void ScTabViewShell::ExecGallery( SfxRequest& rReq )
 {
@@ -95,8 +95,8 @@ void ScTabViewShell::ExecGallery( SfxRequest& rReq )
     }
     else if ( nType == com::sun::star::gallery::GalleryItemType::MEDIA )
     {
-        //  for sounds (linked or not), insert a hyperlink button,
-        //  like in Impress and Writer
+        
+        
         const SfxStringItem aMediaURLItem( SID_INSERT_AVMEDIA, pGalleryItem->GetURL() );
         GetViewFrame()->GetDispatcher()->Execute( SID_INSERT_AVMEDIA, SFX_CALLMODE_SYNCHRON, &aMediaURLItem, 0L );
     }
@@ -106,14 +106,14 @@ void ScTabViewShell::GetGalleryState( SfxItemSet& /* rSet */ )
 {
 }
 
-//------------------------------------------------------------------
+
 
 ScInputHandler* ScTabViewShell::GetInputHandler() const
 {
     return pInputHandler;
 }
 
-//------------------------------------------------------------------
+
 
 OUString ScTabViewShell::GetDescription() const
 {
@@ -189,7 +189,7 @@ void ScTabViewShell::GetImageMapState( SfxItemSet& rSet )
         {
             case SID_IMAP:
                 {
-                    //  Disabled wird nicht mehr...
+                    
 
                     sal_Bool bThere = false;
                     SfxViewFrame* pThisFrame = GetViewFrame();

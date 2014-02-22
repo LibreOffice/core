@@ -53,21 +53,21 @@ using ::rtl::OUStringToOString;
 
 SAL_IMPLEMENT_MAIN()
 {
-    // create the initial component context
+    
     Reference< XComponentContext > rComponentContext =
         defaultBootstrap_InitialComponentContext();
 
-    // retrieve the servicemanager from the context
+    
     Reference< XMultiComponentFactory > rServiceManager =
         rComponentContext->getServiceManager();
 
-    // instantiate a sample service with the servicemanager.
+    
     Reference< XInterface > rInstance =
         rServiceManager->createInstanceWithContext(
             OUString("com.sun.star.bridge.UnoUrlResolver"),
             rComponentContext );
 
-    // Query for the XUnoUrlResolver interface
+    
     Reference< XUnoUrlResolver > rResolver( rInstance, UNO_QUERY );
 
     if( ! rResolver.is() )
@@ -77,7 +77,7 @@ SAL_IMPLEMENT_MAIN()
     }
     try
     {
-        // resolve the uno-url
+        
         rInstance = rResolver->resolve( OUString(
             "uno:socket,host=localhost,port=2083;urp;StarOffice.ServiceManager" ) );
 
@@ -87,7 +87,7 @@ SAL_IMPLEMENT_MAIN()
             return 1;
         }
 
-        // query for the simpler XMultiServiceFactory interface, sufficient for scripting
+        
         Reference< XMultiServiceFactory > rOfficeServiceManager (rInstance, UNO_QUERY);
 
         if( ! rInstance.is() )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -146,12 +146,12 @@ namespace cppcanvas
                 delete [] pPointTypes;
             }
 
-            // TODO: remove rR argument when debug code is not longer needed
+            
             void Read (SvStream& s, sal_uInt32 pathFlags, ImplRenderer& rR)
             {
                 for (int i = 0; i < nPoints; i ++) {
                     if (pathFlags & 0x4000) {
-                        // EMFPlusPoint: stored in signed short 16bit integer format
+                        
                         sal_Int16 x, y;
 
                         s.ReadInt16( x ).ReadInt16( y );
@@ -159,12 +159,12 @@ namespace cppcanvas
                         pPoints [i*2] = x;
                         pPoints [i*2 + 1] = y;
                     } else if (!(pathFlags & 0xC000)) {
-                        // EMFPlusPointF: stored in Single (float) format
+                        
                         s.ReadFloat( pPoints [i*2] ).ReadFloat( pPoints [i*2 + 1] );
                         SAL_INFO ("cppcanvas.emf", "EMF+\tEMFPlusPointF [x,y]: " << pPoints [i*2] << "," << pPoints [i*2 + 1]);
-                    } else { //if (pathFlags & 0x8000)
-                        // EMFPlusPointR: points are stored in EMFPlusInteger7 or
-                        // EMFPlusInteger15 objects, see section 2.2.2.21/22
+                    } else { 
+                        
+                        
                         SAL_INFO("cppcanvas.emf", "EMF+\t\tTODO - parse EMFPlusPointR object (section 2.2.1.6)");
                     }
 
@@ -184,7 +184,7 @@ namespace cppcanvas
                 SAL_INFO ("cppcanvas.emf",
                           "EMF+\tpolygon bounding box: " << aBounds.getMinX () << "," << aBounds.getMinY () << aBounds.getWidth () << "x" << aBounds.getHeight () << " (mapped)");
 #else
-                (void) rR; // avoid warnings
+                (void) rR; 
 #endif
             }
 
@@ -231,7 +231,7 @@ namespace cppcanvas
                         hasPrev = false;
                     }
                     p ++;
-                    if (pPointTypes && (pPointTypes [i] & 0x80)) { // closed polygon
+                    if (pPointTypes && (pPointTypes [i] & 0x80)) { 
                         polygon.setClosed (true);
                         aPolygon.append (polygon);
                         SAL_INFO ("cppcanvas.emf", "close polygon");
@@ -329,7 +329,7 @@ namespace cppcanvas
             /* linear gradient */
             sal_Int32 wrapMode;
             float areaX, areaY, areaWidth, areaHeight;
-            ::Color secondColor; // first color is stored in solidColor;
+            ::Color secondColor; 
             XForm transformation;
             bool hasTransformation;
             sal_Int32 blendPoints;
@@ -400,7 +400,7 @@ namespace cppcanvas
 
                         break;
                     }
-                // path gradient
+                
                 case 3:
                     {
                         s.ReadUInt32( additionalFlags ).ReadInt32( wrapMode );
@@ -507,7 +507,7 @@ namespace cppcanvas
                         }
                         break;
                     }
-                // linear gradient
+                
                 case 4:
                     {
                         s.ReadUInt32( additionalFlags ).ReadInt32( wrapMode );
@@ -528,7 +528,7 @@ namespace cppcanvas
                         secondColor = ::Color (0xff - (color >> 24), (color >> 16) & 0xff, (color >> 8) & 0xff, color & 0xff);
                         SAL_INFO("cppcanvas.emf", "EMF+\tsecond color: 0x" << std::hex << color << std::dec);
 
-                        // repeated colors, unknown meaning, see http://www.aces.uiuc.edu/~jhtodd/Metafile/MetafileRecords/ObjectBrush.html
+                        
                         s.ReadUInt32( color );
                         s.ReadUInt32( color );
 
@@ -586,7 +586,7 @@ namespace cppcanvas
             }
         };
 
-        /// Convert stroke caps between EMF+ and rendering API
+        
         sal_Int8 lcl_convertStrokeCap(sal_uInt32 nEmfStroke)
         {
             switch (nEmfStroke)
@@ -595,8 +595,8 @@ namespace cppcanvas
                 case EmfPlusLineCapTypeRound:  return rendering::PathCapType::ROUND;
             }
 
-            // we have no mapping for EmfPlusLineCapTypeTriangle = 0x00000003,
-            // so return BUTT always
+            
+            
             return rendering::PathCapType::BUTT;
         }
 
@@ -604,12 +604,12 @@ namespace cppcanvas
         {
             switch (nEmfLineJoin)
             {
-                case EmfPlusLineJoinTypeMiter:        // fall-through
+                case EmfPlusLineJoinTypeMiter:        
                 case EmfPlusLineJoinTypeMiterClipped: return rendering::PathJoinType::MITER;
                 case EmfPlusLineJoinTypeBevel:        return rendering::PathJoinType::BEVEL;
                 case EmfPlusLineJoinTypeRound:        return rendering::PathJoinType::ROUND;
             }
-            assert(false); // Line Join type isn't in specification.
+            assert(false); 
             return 0;
         }
 
@@ -665,8 +665,8 @@ namespace cppcanvas
                 polygon = path.GetPolygon(rR, false);
                 mbIsFilled = bFill;
 
-                // transformation to convert the path to what LibreOffice
-                // expects
+                
+                
                 B2DHomMatrix aMatrix;
                 aMatrix.scale(1.0, -1.0);
 
@@ -715,8 +715,8 @@ namespace cppcanvas
                 }
                 else if (type == EmfPlusCustomLineCapDataTypeAdjustableArrow)
                 {
-                    // TODO only reads the data, does not use them [I've had
-                    // no test document to be able to implement it]
+                    
+                    
 
                     sal_Int32 width, height, middleInset, fillState, lineStartCap;
                     sal_Int32 lineEndCap, lineJoin, widthScale;
@@ -912,7 +912,7 @@ namespace cppcanvas
                     customStartCap = new EMFPCustomLineCap();
                     customStartCap->Read(s, rR);
 
-                    // maybe we don't read everything yet, play it safe ;-)
+                    
                     s.Seek(pos + customStartCapLen);
                 }
                 else
@@ -927,7 +927,7 @@ namespace cppcanvas
                     customEndCap = new EMFPCustomLineCap();
                     customEndCap->Read(s, rR);
 
-                    // maybe we don't read everything yet, play it safe ;-)
+                    
                     s.Seek(pos + customEndCapLen);
                 }
                 else
@@ -955,10 +955,10 @@ namespace cppcanvas
 
                 SAL_INFO("cppcanvas.emf", "EMF+\timage\nEMF+\theader: 0x" << std::hex << header << " type: " << type << std::dec );
 
-                if (type == 1) { // bitmap
+                if (type == 1) { 
                     s.ReadInt32( width ).ReadInt32( height ).ReadInt32( stride ).ReadInt32( pixelFormat ).ReadUInt32( unknown );
                     SAL_INFO("cppcanvas.emf", "EMF+\tbitmap width: " << width << " height: " << height << " stride: " << stride << " pixelFormat: 0x" << std::hex << pixelFormat << std::dec);
-                    if (width == 0) { // non native formats
+                    if (width == 0) { 
                         GraphicFilter filter;
 
                         filter.ImportGraphic (graphic, OUString(), s);
@@ -972,12 +972,12 @@ namespace cppcanvas
                     SAL_INFO("cppcanvas.emf", "EMF+\tmetafile type: " << mfType << " dataSize: " << mfSize << " real size calculated from record dataSize: " << dataSize - 16);
 
                     GraphicFilter filter;
-                    // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
+                    
                     SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), bUseWholeStream ? s.remainingSize() : dataSize - 16, STREAM_READ);
 
                     filter.ImportGraphic (graphic, OUString(), mfStream);
 
-                    // debug code - write the stream to debug file /tmp/emf-stream.emf
+                    
 #if OSL_DEBUG_LEVEL > 1
                         mfStream.Seek(0);
                         static sal_Int32 emfp_debug_stream_number = 0;
@@ -1023,7 +1023,7 @@ namespace cppcanvas
                         s.ReadUInt16( chars[ i ] );
 
                     family = OUString( chars, length );
-                    SAL_INFO("cppcanvas.emf", "EMF+\tfamily: " << OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()); // TODO: can we just use family?
+                    SAL_INFO("cppcanvas.emf", "EMF+\tfamily: " << OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()); 
                 }
             }
         };
@@ -1058,7 +1058,7 @@ namespace cppcanvas
 
         void ImplRenderer::MapToDevice (double& x, double& y)
         {
-            // TODO: other units
+            
             x = 100*nMmX*x/nPixX;
             y = 100*nMmY*y/nPixY;
         }
@@ -1125,11 +1125,11 @@ namespace cppcanvas
 
             } else {
                 rState.isFillColorSet = true;
-                // extract UseBrush
+                
                 EMFPBrush* brush = (EMFPBrush*) aObjects [brushIndexOrColor & 0xff];
                 SAL_INFO("cppcanvas.emf", "EMF+\tbrush fill slot: " << brushIndexOrColor << " (type: " << brush->GetType () << ")");
 
-                // give up in case something wrong happened
+                
                 if( !brush )
                     return;
 
@@ -1139,7 +1139,7 @@ namespace cppcanvas
                 if (brush->type == 3 || brush->type == 4) {
 
                     if (brush->type == 3 && !(brush->additionalFlags & 0x1))
-                        return;  // we are unable to parse these brushes yet
+                        return;  
 
                     ::basegfx::B2DHomMatrix aTextureTransformation;
                     ::basegfx::B2DHomMatrix aWorldTransformation;
@@ -1322,27 +1322,27 @@ namespace cppcanvas
             if (!rLineCap.count())
                 return 0.0;
 
-            // createAreaGeometryForLineStartEnd normalises the arrows height
-            // before scaling (i.e. scales down by rPolygon.height), hence
-            // we pre-scale it (which means we can avoid changing the logic
-            // that would affect arrows rendered outside of EMF+).
+            
+            
+            
+            
             const double fWidth = rAttributes.StrokeWidth*rLineCap.getB2DRange().getWidth();
 
-            // When drawing an outline (as opposed to a filled endCap), we also
-            // need to take account that the brush width also adds to the area
-            // of the polygon.
+            
+            
+            
             const double fShift = bIsFilled ? 0 : rAttributes.StrokeWidth;
             double fConsumed = 0;
             basegfx::B2DPolyPolygon aArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
                         rPolygon, rLineCap, bStart,
                         fWidth, fPolyLength, 0, &fConsumed, fShift));
 
-            // createAreaGeometryForLineStartEnd from some reason always sets
-            // the path as closed, correct it
+            
+            
             aArrow.setClosed(rLineCap.isClosed());
 
-            // If the endcap is filled, we draw ONLY the filling, if it isn't
-            // filled we draw ONLY the outline, but never both.
+            
+            
             if (bIsFilled)
             {
                 bool bWasFillColorSet = rState.isFillColorSet;
@@ -1366,11 +1366,11 @@ namespace cppcanvas
                 }
             }
 
-            // There isn't any clear definition of how far the line should extend
-            // for arrows, however the following values seem to give best results
-            // (fConsumed/2 draws the line to the center-point of the endcap
-            // for filled caps -- however it is likely this will need to be
-            // changed once we start taking baseInset into account).
+            
+            
+            
+            
+            
             if (bIsFilled)
                 return fConsumed/2;
             else
@@ -1395,18 +1395,18 @@ namespace cppcanvas
                 aPolyPolygon.transform(rState.mapModeTransform);
                 rendering::StrokeAttributes aCommonAttributes;
 
-                // some attributes are common for the polygon, and the line
-                // starts & ends - like the stroke width
+                
+                
                 pen->SetStrokeWidth(aCommonAttributes, *this, rState);
 
-                // but eg. dashing has to be additionally set only on the
-                // polygon
+                
+                
                 rendering::StrokeAttributes aPolygonAttributes(aCommonAttributes);
                 pen->SetStrokeAttributes(aPolygonAttributes);
 
                 basegfx::B2DPolyPolygon aFinalPolyPolygon;
 
-                // render line starts & ends if present
+                
                 if (!pen->customStartCap && !pen->customEndCap)
                     aFinalPolyPolygon = aPolyPolygon;
                 else
@@ -1421,7 +1421,7 @@ namespace cppcanvas
                             double fEnd = 0.0;
                             double fPolyLength = basegfx::tools::getLength(aPolygon);
 
-                            // line start
+                            
                             if (pen->customStartCap)
                             {
                                 rendering::StrokeAttributes aAttributes(aCommonAttributes);
@@ -1432,7 +1432,7 @@ namespace cppcanvas
                                         true, aAttributes, rParms, rState);
                             }
 
-                            // line end
+                            
                             if (pen->customEndCap)
                             {
                                 rendering::StrokeAttributes aAttributes(aCommonAttributes);
@@ -1443,7 +1443,7 @@ namespace cppcanvas
                                         false, aAttributes, rParms, rState);
                             }
 
-                            // build new poly, consume something from the old poly
+                            
                             if (fStart != 0.0 || fEnd != 0.0)
                                 aPolygon = basegfx::tools::getSnippetAbsolute(aPolygon, fStart, fPolyLength - fEnd, fPolyLength);
                         }
@@ -1452,7 +1452,7 @@ namespace cppcanvas
                     }
                 }
 
-                // finally render the polygon
+                
                 ActionSharedPtr pPolyAction(internal::PolyPolyActionFactory::createPolyPolyAction(aFinalPolyPolygon, rParms.mrCanvas, rState, aPolygonAttributes));
                 if( pPolyAction )
                 {
@@ -1617,7 +1617,7 @@ namespace cppcanvas
                         mMStream.Seek(0);
                     }
 
-                    // 1st 4 bytes are unknown
+                    
                     mMStream.Write (((const char *)rMF.GetData()) + rMF.Tell() + 4, dataSize - 4);
                     SAL_INFO("cppcanvas.emf", "EMF+ read next object part size: " << size << " type: " << type << " flags: " << flags << " data size: " << dataSize);
                 } else {
@@ -1709,9 +1709,9 @@ namespace cppcanvas
                     case EmfPlusRecordTypeDrawEllipse:
                     case EmfPlusRecordTypeFillEllipse:
                         {
-                            // Intentionally very bogus initial value to avoid MSVC complaining about potentially uninitialized local
-                            // variable. As long as the code stays as intended, this variable will be assigned a (real) value in the case
-                            // when it is later used.
+                            
+                            
+                            
                             sal_uInt32 brushIndexOrColor = 1234567;
 
                             if ( type == EmfPlusRecordTypeFillEllipse )
@@ -1845,7 +1845,7 @@ namespace cppcanvas
                             SAL_INFO("cppcanvas.emf", "EMF+ " << (type == EmfPlusRecordTypeDrawImagePoints ? "DrawImagePoints" : "DrawImage") << "attributes index: " << attrIndex << "source unit: " << sourceUnit);
                             SAL_INFO("cppcanvas.emf", "EMF+\tTODO: use image attributes");
 
-                            if (sourceUnit == 2 && aObjects [flags & 0xff]) { // we handle only GraphicsUnit.Pixel now
+                            if (sourceUnit == 2 && aObjects [flags & 0xff]) { 
                                 EMFPImage& image = *(EMFPImage *) aObjects [flags & 0xff];
                                 float sx, sy, sw, sh;
                                 sal_Int32 aCount;
@@ -1862,7 +1862,7 @@ namespace cppcanvas
                                 if (type == EmfPlusRecordTypeDrawImagePoints) {
                                     rMF.ReadInt32( aCount );
 
-                                    if( aCount == 3) { // TODO: now that we now that this value is count we should support it better
+                                    if( aCount == 3) { 
                                         float x1, y1, x2, y2, x3, y3;
 
                                         ReadPoint (rMF, x1, y1, flags);
@@ -1949,8 +1949,8 @@ namespace cppcanvas
 
                                 ActionSharedPtr pTextAction(
                                     TextActionFactory::createTextAction(
-                                                                        // position is just rough guess for now
-                                                                        // we should calculate it exactly from layoutRect or font
+                                                                        
+                                                                        
                                         ::vcl::unotools::pointFromB2DPoint ( point ),
                                         ::Size(),
                                         ::Color(),
@@ -2084,9 +2084,9 @@ namespace cppcanvas
                                 "EMF+\tm21: "        << transform.eM21 << "m22: " << transform.eM22 <<
                                 "EMF+\tdx: "         << transform.eDx  << "dy: "  << transform.eDy);
 
-                        if (flags & 0x2000)  // post multiply
+                        if (flags & 0x2000)  
                             aWorldTransform.Multiply (transform);
-                        else {               // pre multiply
+                        else {               
                             transform.Multiply (aWorldTransform);
                             aWorldTransform.Set (transform);
                         }
@@ -2147,7 +2147,7 @@ namespace cppcanvas
                         SAL_INFO("cppcanvas.emf", "EMF+\tregion in slot: " << (flags & 0xff) << " combine mode: " << combineMode);
                         EMFPRegion *region = (EMFPRegion*)aObjects [flags & 0xff];
 
-                        // reset clip
+                        
                         if (region && region->parts == 0 && region->initialState == EmfPlusRegionInitialStateInfinite) {
                             updateClipping (::basegfx::B2DPolyPolygon (), rFactoryParms, combineMode == 1);
                         } else {
@@ -2186,7 +2186,7 @@ namespace cppcanvas
                                 SAL_INFO("cppcanvas.emf", "EMF+\tmatrix: " << transform.eM11 << ", " << transform.eM12 << ", " << transform.eM21 << ", " << transform.eM22 << ", " << transform.eDx << ", " << transform.eDy);
                             }
 
-                            // add the text action
+                            
                             setFont (flags & 0xff, rFactoryParms, rState);
 
                             if( flags & 0x8000 )

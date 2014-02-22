@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vcl/pdfextoutdevdata.hxx"
@@ -146,7 +146,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
     {
         switch( *aIter )
         {
-            case PDFExtOutDevDataSync::CreateNamedDest : //i56629
+            case PDFExtOutDevDataSync::CreateNamedDest : 
             {
                  rWriter.Push( PUSH_MAPMODE );
                 rWriter.SetMapMode( mParaMapModes.front() );
@@ -177,7 +177,7 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
                 rWriter.SetMapMode( mParaMapModes.front() );
                 mParaMapModes.pop_front();
                 mParaIds.push_back( rWriter.CreateLink( mParaRects.front(), mParaInts.front() ) );
-                // resolve LinkAnnotation structural attribute
+                
                 rWriter.SetLinkPropertyID( mParaIds.back(), sal_Int32(mParaIds.size()-1) );
                 mParaRects.pop_front();
                 mParaInts.pop_front();
@@ -316,7 +316,7 @@ void PageSyncData::PushAction( const OutputDevice& rOutDev, const PDFExtOutDevDa
     if ( pMtf )
         aSync.nIdx = pMtf->GetActionSize();
     else
-        aSync.nIdx = 0x7fffffff;    // sync not possible
+        aSync.nIdx = 0x7fffffff;    
     mActions.push_back( aSync );
 }
 bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAction, const PDFExtOutDevData& rOutDevData )
@@ -429,7 +429,7 @@ bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIMtfAc
                 Graphic   aGraphic( mGraphics.front() );
 
                 mGraphics.pop_front();
-                mParaInts.pop_front(); //Transparency
+                mParaInts.pop_front(); 
                 aOutputRect = mParaRects.front();
                 mParaRects.pop_front();
                 aVisibleOutputRect = mParaRects.front();
@@ -636,7 +636,7 @@ void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
 /* global actions, syncronisation to the recorded metafile isn't needed,
    all actions will be played after the last page was recorded
 */
-//--->i56629
+
 sal_Int32 PDFExtOutDevData::CreateNamedDest(const OUString& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateNamedDest );
@@ -648,7 +648,7 @@ sal_Int32 PDFExtOutDevData::CreateNamedDest(const OUString& sDestName,  const Re
 
     return mpGlobalSyncData->mCurId++;
 }
-//<---i56629
+
 sal_Int32 PDFExtOutDevData::RegisterDest()
 {
     const sal_Int32 nLinkDestID = mpGlobalSyncData->mCurId++;
@@ -729,7 +729,7 @@ void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_u
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::BeginStructureElement );
     mpPageSyncData->mParaStructElements.push_back( eType );
     mpPageSyncData->mParaOUStrings.push_back( rAlias );
-    // need a global id
+    
     sal_Int32 nNewId = mpGlobalSyncData->mStructParents.size();
     mpGlobalSyncData->mStructParents.push_back( mpGlobalSyncData->mCurrentStructElement );
     mpGlobalSyncData->mCurrentStructElement = nNewId;

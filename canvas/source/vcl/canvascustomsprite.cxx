@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -59,45 +59,45 @@ namespace vclcanvas
                          rOutDevProvider,
                          "CanvasCustomSprite::CanvasCustomSprite(): Invalid sprite canvas" );
 
-        // setup back buffer
-        // -----------------
+        
+        
 
         const ::Size aSize(
             static_cast<sal_Int32>( ::std::max( 1.0,
-                                                ceil( rSpriteSize.Width ))),  // round up to nearest int,
-                                                                              // enforce sprite to have at
-                                                                               // least (1,1) pixel size
+                                                ceil( rSpriteSize.Width ))),  
+                                                                              
+                                                                               
             static_cast<sal_Int32>( ::std::max( 1.0,
                                                 ceil( rSpriteSize.Height ))) );
 
-        // create content backbuffer in screen depth
+        
         BackBufferSharedPtr pBackBuffer( new BackBuffer( rOutDevProvider->getOutDev() ) );
         pBackBuffer->setSize( aSize );
 
-        // create mask backbuffer, with one bit color depth
+        
         BackBufferSharedPtr pBackBufferMask( new BackBuffer( rOutDevProvider->getOutDev(),
                                                              true ) );
         pBackBufferMask->setSize( aSize );
 
-        // TODO(F1): Implement alpha vdev (could prolly enable
-        // antialiasing again, then)
+        
+        
 
-        // disable font antialiasing (causes ugly shadows otherwise)
+        
         pBackBuffer->getOutDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
         pBackBufferMask->getOutDev().SetAntialiasing( ANTIALIASING_DISABLE_TEXT );
 
-        // set mask vdev drawmode, such that everything is painted
-        // black. That leaves us with a binary image, white for
-        // background, black for painted content
+        
+        
+        
         pBackBufferMask->getOutDev().SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
                                                   DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
 
 
-        // setup canvas helper
-        // -------------------
+        
+        
 
-        // always render into back buffer, don't preserve state (it's
-        // our private VDev, after all), have notion of alpha
+        
+        
         maCanvasHelper.init( rDevice,
                              pBackBuffer,
                              false,
@@ -105,8 +105,8 @@ namespace vclcanvas
         maCanvasHelper.setBackgroundOutDev( pBackBufferMask );
 
 
-        // setup sprite helper
-        // -------------------
+        
+        
 
         maSpriteHelper.init( rSpriteSize,
                              rOwningSpriteCanvas,
@@ -114,7 +114,7 @@ namespace vclcanvas
                              pBackBufferMask,
                              bShowSpriteBounds );
 
-        // clear sprite to 100% transparent
+        
         maCanvasHelper.clear();
     }
 
@@ -136,7 +136,7 @@ namespace vclcanvas
         return aRet;
     }
 
-    // Sprite
+    
     void CanvasCustomSprite::redraw( OutputDevice& rOutDev,
                                      bool          bBufferedUpdate ) const
     {

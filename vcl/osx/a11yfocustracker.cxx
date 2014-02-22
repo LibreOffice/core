@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,7 +36,7 @@
 using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 
-//------------------------------------------------------------------------------
+
 
 static inline Window *
 getWindow(const ::VclSimpleEvent *pEvent)
@@ -45,9 +45,9 @@ getWindow(const ::VclSimpleEvent *pEvent)
 }
 
 
-//------------------------------------------------------------------------------
 
-// callback function for Application::addEventListener
+
+
 
 long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracker, ::VclSimpleEvent const *pEvent)
 {
@@ -61,7 +61,7 @@ long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracke
         break;
     case VCLEVENT_OBJECT_DYING:
         pFocusTracker->m_aDocumentWindowList.erase( getWindow(pEvent) );
-        // intentional pass through ..
+        
     case VCLEVENT_TOOLBOX_HIGHLIGHTOFF:
         pFocusTracker->toolbox_highlight_off( getWindow(pEvent) );
         break;
@@ -72,10 +72,10 @@ long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracke
         pFocusTracker->tabpage_activated( getWindow(pEvent) );
         break;
     case VCLEVENT_MENU_HIGHLIGHT:
-        // Inspired by code in WindowEventHandler in
-        // vcl/unx/gtk/a11y/atkutil.cxx, find out what kind of event
-        // it is to avoid blindly using a static_cast and crash,
-        // fdo#47275.
+        
+        
+        
+        
         if( const VclMenuEvent* pMenuEvent = dynamic_cast < const VclMenuEvent* > (pEvent) )
         {
             pFocusTracker->menu_highlighted( pMenuEvent );
@@ -94,7 +94,7 @@ long AquaA11yFocusTracker::WindowEventHandler(AquaA11yFocusTracker *pFocusTracke
     return 0;
 }
 
-//------------------------------------------------------------------------------
+
 
 AquaA11yFocusTracker::AquaA11yFocusTracker() :
     m_aWindowEventLink(this, (PSTUB) WindowEventHandler),
@@ -104,7 +104,7 @@ AquaA11yFocusTracker::AquaA11yFocusTracker() :
     window_got_focus(Application::GetFocusWindow());
 }
 
-//------------------------------------------------------------------------------
+
 
 void AquaA11yFocusTracker::setFocusedObject(const Reference< XAccessible >& xAccessible)
 {
@@ -117,7 +117,7 @@ void AquaA11yFocusTracker::setFocusedObject(const Reference< XAccessible >& xAcc
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void AquaA11yFocusTracker::notify_toolbox_item_focus(ToolBox *pToolBox)
 {
@@ -136,7 +136,7 @@ void AquaA11yFocusTracker::notify_toolbox_item_focus(ToolBox *pToolBox)
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void AquaA11yFocusTracker::toolbox_open_floater(Window *pWindow)
 {
@@ -171,11 +171,11 @@ void AquaA11yFocusTracker::toolbox_open_floater(Window *pWindow)
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void AquaA11yFocusTracker::toolbox_highlight_on(Window *pWindow)
 {
-    // Make sure either the toolbox or its parent toolbox has the focus
+    
     if ( ! pWindow->HasFocus() )
     {
         ToolBox* pToolBoxParent = dynamic_cast< ToolBox * >( pWindow->GetParent() );
@@ -186,18 +186,18 @@ void AquaA11yFocusTracker::toolbox_highlight_on(Window *pWindow)
     notify_toolbox_item_focus(static_cast <ToolBox *> (pWindow));
 }
 
-//------------------------------------------------------------------------------
+
 
 void AquaA11yFocusTracker::toolbox_highlight_off(Window *pWindow)
 {
     ToolBox* pToolBoxParent = dynamic_cast< ToolBox * >( pWindow->GetParent() );
 
-    // Notify when leaving sub toolboxes
+    
     if( pToolBoxParent && pToolBoxParent->HasFocus() )
         notify_toolbox_item_focus( pToolBoxParent );
 }
 
-//------------------------------------------------------------------------------
+
 
 void AquaA11yFocusTracker::tabpage_activated(Window *pWindow)
 {
@@ -212,7 +212,7 @@ void AquaA11yFocusTracker::tabpage_activated(Window *pWindow)
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void AquaA11yFocusTracker::menu_highlighted(const VclMenuEvent *pEvent)
 {
@@ -227,15 +227,15 @@ void AquaA11yFocusTracker::menu_highlighted(const VclMenuEvent *pEvent)
     }
 }
 
-//------------------------------------------------------------------------------
+
 
 void AquaA11yFocusTracker::window_got_focus(Window *pWindow)
 {
-    // The menu bar is handled through VCLEVENT_MENU_HIGHLIGHTED
+    
     if( ! pWindow || !pWindow->IsReallyVisible() || pWindow->GetType() == WINDOW_MENUBARWINDOW )
         return;
 
-    // ToolBoxes are handled through VCLEVENT_TOOLBOX_HIGHLIGHT
+    
     if( pWindow->GetType() == WINDOW_TOOLBOX )
         return;
 

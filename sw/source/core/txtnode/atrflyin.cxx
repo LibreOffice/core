@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -101,19 +101,19 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
 {
     SwFrmFmt* pFmt = GetFlyCnt().GetFrmFmt();
     OSL_ENSURE( pFmt, "von welchem Format soll ich eine Kopie erzeugen?" );
-    // Das FlyFrmFmt muss dupliziert werden.
-    // In CopyLayoutFmt (siehe doclay.cxx) wird das FlyFrmFmt erzeugt
-    // und der Inhalt dupliziert.
+    
+    
+    
 
-    // disable undo while copying attribute
+    
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     SwFmtAnchor aAnchor( pFmt->GetAnchor() );
     if ((FLY_AT_PAGE != aAnchor.GetAnchorId()) &&
-        (pDoc != pFmt->GetDoc()))   // different documents?
+        (pDoc != pFmt->GetDoc()))   
     {
-        // JP 03.06.96: dann sorge dafuer, das der koperierte Anker auf
-        //              gueltigen Content zeigt! Die Umsetzung auf die
-        //              richtige Position erfolgt spaeter.
+        
+        
+        
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), +2 );
         SwCntntNode* pCNd = aIdx.GetNode().GetCntntNode();
         if( !pCNd )
@@ -148,9 +148,9 @@ void SwTxtFlyCnt::CopyFlyFmt( SwDoc* pDoc )
 
 void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
 {
-    // fuers Undo muss der neue Anker schon bekannt sein !
+    
 
-    // Wir ermitteln den Index im Nodesarray zum Node
+    
 
     SwDoc* pDoc = (SwDoc*)pNode->GetDoc();
 
@@ -166,20 +166,20 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
     else
         aPos.nNode = aAnchor.GetCntntAnchor()->nNode;
 
-    aAnchor.SetType( FLY_AS_CHAR );        // default!
+    aAnchor.SetType( FLY_AS_CHAR );        
     aAnchor.SetAnchor( &aPos );
 
-    // beim Ankerwechsel werden immer alle FlyFrms vom Attribut geloescht
-    // JP 25.04.95: wird innerhalb des SplitNodes die Frames verschoben
-    //              koennen die Frames erhalten bleiben.
+    
+    
+    
     if( ( !pNode->GetpSwpHints() || !pNode->GetpSwpHints()->IsInSplitNode() )
         && RES_DRAWFRMFMT != pFmt->Which() )
         pFmt->DelFrms();
 
-    // stehen wir noch im falschen Dokument ?
+    
     if( pDoc != pFmt->GetDoc() )
     {
-        // disable undo while copying attribute
+        
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         SwFrmFmt* pNew = pDoc->CopyLayoutFmt( *pFmt, aAnchor, false, false );
 
@@ -193,14 +193,14 @@ void SwTxtFlyCnt::SetAnchor( const SwTxtNode *pNode )
             RES_DRAWFRMFMT != pFmt->Which() )
     {
         pFmt->LockModify();
-        pFmt->SetFmtAttr( aAnchor );        // nur den Anker neu setzen
+        pFmt->SetFmtAttr( aAnchor );        
         pFmt->UnlockModify();
     }
     else
-        pFmt->SetFmtAttr( aAnchor );        // nur den Anker neu setzen
+        pFmt->SetFmtAttr( aAnchor );        
 
-    // Am Node haengen u.a. abhaengige CntFrms.
-    // Fuer jeden CntFrm wird ein SwFlyInCntFrm angelegt.
+    
+    
 }
 
 /*************************************************************************
@@ -250,20 +250,20 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
         } while( pFrm );
     }
 
-    // Wir haben keinen passenden FlyFrm gefunden, deswegen wird ein
-    // neuer angelegt.
-    // Dabei wird eine sofortige Neuformatierung von pCurrFrm angestossen.
-    // Die Rekursion wird durch den Lockmechanismus in SwTxtFrm::Format()
-    // abgewuergt.
+    
+    
+    
+    
+    
     SwFrm* pCurrFrame = const_cast< SwFrm* >(pCurrFrm);
     SwFlyInCntFrm *pFly = new SwFlyInCntFrm( (SwFlyFrmFmt*)pFrmFmt, pCurrFrame, pCurrFrame );
     pCurrFrame->AppendFly( pFly );
     pFly->RegistFlys();
 
-    // 7922: Wir muessen dafuer sorgen, dass der Inhalt des FlyInCnt
-    // nach seiner Konstruktion stramm durchformatiert wird.
-    // #i26945# - Use new object formatter to format Writer
-    // fly frame and its content.
+    
+    
+    
+    
     SwObjectFormatter::FormatObj( *pFly, const_cast<SwFrm*>(pCurrFrm),
                                   pCurrFrm->FindPageFrm() );
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/standard/vclxaccessiblebutton.hxx>
@@ -39,22 +39,22 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::comphelper;
 
 
-// -----------------------------------------------------------------------------
-// VCLXAccessibleButton
-// -----------------------------------------------------------------------------
+
+
+
 
 VCLXAccessibleButton::VCLXAccessibleButton( VCLXWindow* pVCLWindow )
     :VCLXAccessibleTextComponent( pVCLWindow )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 VCLXAccessibleButton::~VCLXAccessibleButton()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 {
@@ -79,7 +79,7 @@ void VCLXAccessibleButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowE
    }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet )
 {
@@ -96,7 +96,7 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
         if ( pButton->IsPressed() )
             rStateSet.AddState( AccessibleStateType::PRESSED );
 
-        // IA2 CWS: If the button has a poppup menu,it should has the state EXPANDABLE
+        
         if( pButton->GetType() == WINDOW_MENUBUTTON )
         {
             rStateSet.AddState( AccessibleStateType::EXPANDABLE );
@@ -108,28 +108,28 @@ void VCLXAccessibleButton::FillAccessibleStateSet( utl::AccessibleStateSetHelper
     }
 }
 
-// -----------------------------------------------------------------------------
-// XInterface
-// -----------------------------------------------------------------------------
+
+
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXAccessibleButton, VCLXAccessibleTextComponent, VCLXAccessibleButton_BASE )
 
-// -----------------------------------------------------------------------------
-// XTypeProvider
-// -----------------------------------------------------------------------------
+
+
+
 
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleButton, VCLXAccessibleTextComponent, VCLXAccessibleButton_BASE )
 
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
+
+
+
 
 OUString VCLXAccessibleButton::getImplementationName() throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleButton" );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (RuntimeException)
 {
@@ -138,9 +138,9 @@ Sequence< OUString > VCLXAccessibleButton::getSupportedServiceNames() throw (Run
     return aNames;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleContext
-// -----------------------------------------------------------------------------
+
+
+
 
 OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
 {
@@ -153,32 +153,32 @@ OUString VCLXAccessibleButton::getAccessibleName(  ) throw (RuntimeException)
     {
         if ( nLength == 3 )
         {
-            // it's a browse button
+            
             aName = OUString( TK_RES_STRING( RID_STR_ACC_NAME_BROWSEBUTTON ) );
         }
         else
         {
-            // remove the three trailing dots
+            
             aName = aName.copy( 0, nLength - 3 );
         }
     }
     else if ( nLength >= 3 && aName.match( "<< ", 0 ) )
     {
-        // remove the leading symbols
+        
         aName = aName.copy( 3, nLength - 3 );
     }
     else if ( nLength >= 3 && aName.match( " >>", nLength - 3 ) )
     {
-        // remove the trailing symbols
+        
         aName = aName.copy( 0, nLength - 3 );
     }
 
     return aName;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleAction
-// -----------------------------------------------------------------------------
+
+
+
 
 sal_Int32 VCLXAccessibleButton::getAccessibleActionCount( ) throw (RuntimeException)
 {
@@ -187,7 +187,7 @@ sal_Int32 VCLXAccessibleButton::getAccessibleActionCount( ) throw (RuntimeExcept
     return 1;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -203,7 +203,7 @@ sal_Bool VCLXAccessibleButton::doAccessibleAction ( sal_Int32 nIndex ) throw (In
     return sal_True;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -215,7 +215,7 @@ OUString VCLXAccessibleButton::getAccessibleActionDescription ( sal_Int32 nIndex
     return OUString( TK_RES_STRING( RID_STR_ACC_ACTION_CLICK ) );
 }
 
-// -----------------------------------------------------------------------------
+
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
 {
@@ -254,9 +254,9 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleButton::getAccessibleActionKeyB
     return xKeyBinding;
 }
 
-// -----------------------------------------------------------------------------
-// XAccessibleValue
-// -----------------------------------------------------------------------------
+
+
+
 
 Any VCLXAccessibleButton::getCurrentValue(  ) throw (RuntimeException)
 {
@@ -271,7 +271,7 @@ Any VCLXAccessibleButton::getCurrentValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (RuntimeException)
 {
@@ -297,7 +297,7 @@ sal_Bool VCLXAccessibleButton::setCurrentValue( const Any& aNumber ) throw (Runt
     return bReturn;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException)
 {
@@ -309,7 +309,7 @@ Any VCLXAccessibleButton::getMaximumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 Any VCLXAccessibleButton::getMinimumValue(  ) throw (RuntimeException)
 {
@@ -321,6 +321,6 @@ Any VCLXAccessibleButton::getMinimumValue(  ) throw (RuntimeException)
     return aValue;
 }
 
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

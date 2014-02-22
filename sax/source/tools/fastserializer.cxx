@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fastserializer.hxx"
@@ -70,7 +70,7 @@ namespace sax_fastparser {
 
     void SAL_CALL FastSaxSerializer::startDocument(  ) throw (SAXException, RuntimeException)
     {
-        assert(mxOutputStream.is()); // cannot do anything without that
+        assert(mxOutputStream.is()); 
         if (!mxOutputStream.is())
             return;
         rtl::ByteSequence aXmlHeader((const sal_Int8*) "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n", 56);
@@ -172,7 +172,7 @@ namespace sax_fastparser {
 
 #ifdef DBG_UTIL
         assert(!m_DebugStartedElements.empty());
-        // Well-formedness constraint: Element Type Match
+        
         assert(Element == m_DebugStartedElements.top());
         m_DebugStartedElements.pop();
 #endif
@@ -214,7 +214,7 @@ namespace sax_fastparser {
         throw (::com::sun::star::uno::RuntimeException)
     {
         mxOutputStream = xOutputStream;
-        assert(mxOutputStream.is()); // cannot do anything without that
+        assert(mxOutputStream.is()); 
     }
 
     void SAL_CALL FastSaxSerializer::setFastTokenHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler >& xFastTokenHandler )
@@ -236,7 +236,7 @@ namespace sax_fastparser {
 
             OUString const& rAttrName(pAttr[i].Name);
 #ifdef DBG_UTIL
-            // Well-formedness constraint: Unique Att Spec
+            
             assert(DebugAttributes.find(rAttrName) == DebugAttributes.end());
             DebugAttributes.insert(rAttrName);
 #endif
@@ -257,7 +257,7 @@ namespace sax_fastparser {
             writeId(nToken);
 
 #ifdef DBG_UTIL
-            // Well-formedness constraint: Unique Att Spec
+            
             OUString const name(OStringToOUString(getId(nToken),
                                                   RTL_TEXTENCODING_UTF8));
             assert(DebugAttributes.find(name) == DebugAttributes.end());
@@ -383,12 +383,12 @@ namespace sax_fastparser {
             rTop.realloc( nTopLen + nMergeLen );
             if ( bAppend )
             {
-                // append the rMerge to the rTop
+                
                 memcpy( rTop.getArray() + nTopLen, rMerge.getConstArray(), nMergeLen );
             }
             else
             {
-                // prepend the rMerge to the rTop
+                
                 memmove( rTop.getArray() + nMergeLen, rTop.getConstArray(), nTopLen );
                 memcpy( rTop.getArray(), rMerge.getConstArray(), nMergeLen );
             }
@@ -423,10 +423,10 @@ namespace sax_fastparser {
 
     void FastSaxSerializer::ForSort::sort()
     {
-        // Clear the ForMerge data to avoid duplicate items
+        
         resetData();
 
-        // Sort it all
+        
         std::map< sal_Int32, Int8Sequence >::iterator iter;
         for ( sal_Int32 i=0, len=maOrder.getLength(); i < len; i++ )
         {
@@ -460,6 +460,6 @@ namespace sax_fastparser {
     }
 #endif
 
-} // namespace sax_fastparser
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

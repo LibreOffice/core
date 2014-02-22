@@ -210,12 +210,12 @@ OUString OFixedLine::getImplementationName_Static(  ) throw(uno::RuntimeExceptio
     return OUString("com.sun.star.comp.report.OFixedLine");
 }
 
-//--------------------------------------------------------------------------
+
 OUString SAL_CALL OFixedLine::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
 }
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > OFixedLine::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
     uno::Sequence< OUString > aServices(1);
@@ -223,18 +223,18 @@ uno::Sequence< OUString > OFixedLine::getSupportedServiceNames_Static(  ) throw(
 
     return aServices;
 }
-//------------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > OFixedLine::create(uno::Reference< uno::XComponentContext > const & xContext)
 {
     return *(new OFixedLine(xContext));
 }
 
-//--------------------------------------------------------------------------
+
 uno::Sequence< OUString > SAL_CALL OFixedLine::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
-//------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OFixedLine::supportsService(const OUString& ServiceName) throw( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);

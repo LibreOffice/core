@@ -93,7 +93,7 @@ namespace dbaxml
         protected:
             virtual ~FastLoader(){}
 
-            /// Working method which should be overridden.
+            /
             virtual void SAL_CALL run();
             virtual void SAL_CALL onTerminated();
         private:
@@ -152,7 +152,7 @@ namespace dbaxml
                             SvtModuleOptions aModuleOptions;
                             uno::Reference< frame::XModel > xModel(xFrameLoad->loadComponentFromURL(
                                 aModuleOptions.GetFactoryEmptyDocumentURL( aModuleOptions.ClassifyFactoryByServiceName( aHelper.GetDocServiceNameFromMediaType(MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET) )),
-                                OUString(), // empty frame name
+                                OUString(), 
                                 0,
                                 aArgs
                                 ),uno::UNO_QUERY);
@@ -181,7 +181,7 @@ namespace dbaxml
             virtual ~DatasourceURLListener(){}
         public:
             DatasourceURLListener(uno::Reference< uno::XComponentContext > const & _xContext) : m_xContext(_xContext), m_aTypeCollection(_xContext){}
-            // XPropertyChangeListener
+            
             virtual void SAL_CALL propertyChange( const beans::PropertyChangeEvent& _rEvent ) throw (uno::RuntimeException)
             {
                 OUString sURL;
@@ -205,7 +205,7 @@ namespace dbaxml
                     pCreatorThread->resume();
                 }
             }
-            // XEventListener
+            
             virtual void SAL_CALL disposing( const lang::EventObject& /*_rSource*/ ) throw (uno::RuntimeException)
             {
             }
@@ -215,7 +215,7 @@ namespace dbaxml
     sal_Char const sXML_np___db[] = "__db";
 
     using namespace ::com::sun::star::util;
-    /// read a component (file + filter version)
+    /
 sal_Int32 ReadThroughComponent(
     const uno::Reference<XInputStream>& xInputStream,
     const uno::Reference<XComponent>& xModelComponent,
@@ -228,27 +228,27 @@ sal_Int32 ReadThroughComponent(
 
    SAL_INFO("dbaccess", "dbaxml ReadThroughComponent" );
 
-    // prepare ParserInputSrouce
+    
     InputSource aParserInput;
     aParserInput.aInputStream = xInputStream;
 
-    // get parser
+    
     uno::Reference< XParser > xParser = Parser::create(rxContext);
     SAL_INFO("dbaccess", "parser created" );
 
-    // get filter
+    
     OSL_ENSURE( _xFilter.is(), "Can't instantiate filter component." );
     if( !_xFilter.is() )
         return 1;
 
-    // connect parser and filter
+    
     xParser->setDocumentHandler( _xFilter );
 
-    // connect model and filter
+    
     uno::Reference < XImporter > xImporter( _xFilter, UNO_QUERY );
     xImporter->setTargetDocument( xModelComponent );
 
-    // finally, parser the stream
+    
     try
     {
         xParser->parseStream( aParserInput );
@@ -275,11 +275,11 @@ sal_Int32 ReadThroughComponent(
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    // success!
+    
     return 0;
 }
 
-/// read a component (storage version)
+/
 sal_Int32 ReadThroughComponent(
     uno::Reference< embed::XStorage > xStorage,
     const uno::Reference<XComponent>& xModelComponent,
@@ -298,24 +298,24 @@ sal_Int32 ReadThroughComponent(
 
         try
         {
-            // open stream (and set parser input)
+            
         OUString sStreamName = OUString::createFromAscii(pStreamName);
             if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
             {
-                // stream name not found! Then try the compatibility name.
-                // if no stream can be opened, return immediately with OK signal
+                
+                
 
-                // do we even have an alternative name?
+                
                 if ( NULL == pCompatibilityStreamName )
                     return 0;
 
-                // if so, does the stream exist?
+                
                 sStreamName = OUString::createFromAscii(pCompatibilityStreamName);
                 if ( !xStorage->hasByName( sStreamName ) || !xStorage->isStreamElement( sStreamName ) )
                     return 0;
             }
 
-            // get input stream
+            
             xDocStream = xStorage->openStreamElement( sStreamName, embed::ElementModes::READ );
 
             uno::Reference< beans::XPropertySet > xProps( xDocStream, uno::UNO_QUERY_THROW );
@@ -328,22 +328,22 @@ sal_Int32 ReadThroughComponent(
         }
         catch (const uno::Exception&)
         {
-            return 1; // TODO/LATER: error handling
+            return 1; 
         }
 
         uno::Reference< XInputStream > xInputStream = xDocStream->getInputStream();
-        // read from the stream
+        
         return ReadThroughComponent( xInputStream
                                     ,xModelComponent
                                     ,rxContext
                                     ,_xFilter );
     }
 
-    // TODO/LATER: better error handling
+    
     return 1;
 }
 
-// - ODBFilter -
+
 
 ODBFilter::ODBFilter( const uno::Reference< XComponentContext >& _rxContext )
     : SvXMLImport(_rxContext, getImplementationName_Static())
@@ -484,11 +484,11 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
             switch( nRet )
             {
                 case ERRCODE_IO_BROKENPACKAGE:
-                    // TODO/LATER: no way to transport the error outside from the filter!
+                    
                     break;
                 default:
                 {
-                    // TODO/LATER: this is completely wrong! Filter code should never call ErrorHandler directly! But for now this is the only way!
+                    
                     ErrorHandler::HandleError( nRet );
                     if( nRet & ERRCODE_WARNING_MASK )
                         bRet = sal_True;
@@ -656,7 +656,7 @@ const SvXMLTokenMap& ODBFilter::GetDataSourceElemTokenMap() const
             { XML_NAMESPACE_DB,     XML_DELIMITER,                      XML_TOK_DELIMITER},
             { XML_NAMESPACE_DB,     XML_DATA_SOURCE_SETTINGS,           XML_TOK_DATA_SOURCE_SETTINGS},
             { XML_NAMESPACE_DB,     XML_FONT_CHARSET,                   XML_TOK_FONT_CHARSET},
-            // db odf 12
+            
             { XML_NAMESPACE_DB,     XML_CONNECTION_DATA,                XML_TOK_CONNECTION_DATA},
             { XML_NAMESPACE_DB,     XML_DATABASE_DESCRIPTION,           XML_TOK_DATABASE_DESCRIPTION},
             { XML_NAMESPACE_DB,     XML_COMPOUND_DATABASE,              XML_TOK_COMPOUND_DATABASE},
@@ -896,6 +896,6 @@ void ODBFilter::setPropertyInfo()
     }
 }
 
-}// dbaxml
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

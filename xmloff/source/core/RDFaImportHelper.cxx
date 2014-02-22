@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RDFaImportHelper.hxx"
@@ -32,10 +32,10 @@
 
 #include <boost/bind.hpp>
 #include <boost/iterator_adaptors.hpp>
-#ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_ // from iterator_adaptors.hpp
-// N.B.: the check for the header guard _of a specific version of boost_
-//       is here so this may work on different versions of boost,
-//       which sadly put the goods in different header files
+#ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_ 
+
+
+
 #include <boost/iterator/transform_iterator.hpp>
 #endif
 
@@ -55,7 +55,7 @@ class RDFaReader
 
     const SvXMLImport & GetImport() const { return m_rImport; }
 
-    //FIXME: this is an ugly hack to workaround buggy SvXMLImport::GetAbsolute
+    
     OUString GetAbsoluteReference(OUString const & i_rURI) const
     {
         if (i_rURI.isEmpty() || i_rURI[0] == '#')
@@ -73,7 +73,7 @@ public:
         : m_rImport(i_rImport)
     { }
 
-    // returns URI or blank node!
+    
     OUString ReadCURIE(OUString const & i_rCURIE) const;
 
     std::vector< OUString >
@@ -157,19 +157,19 @@ static OUString splitAtWS(OUString & io_rString)
     const sal_Int32 len( io_rString.getLength() );
     sal_Int32 idxstt(0);
     while ((idxstt < len) && ( isWS(io_rString[idxstt])))
-        ++idxstt; // skip leading ws
+        ++idxstt; 
     sal_Int32 idxend(idxstt);
     while ((idxend < len) && (!isWS(io_rString[idxend])))
-        ++idxend; // the CURIE
+        ++idxend; 
     const OUString ret(io_rString.copy(idxstt, idxend - idxstt));
-    io_rString = io_rString.copy(idxend); // rest
+    io_rString = io_rString.copy(idxend); 
     return ret;
 }
 
 OUString
 RDFaReader::ReadCURIE(OUString const & i_rCURIE) const
 {
-    // the RDFa spec says that a prefix is required (it may be empty: ":foo")
+    
     const sal_Int32 idx( i_rCURIE.indexOf(':') );
     if (idx >= 0)
     {
@@ -180,8 +180,8 @@ RDFaReader::ReadCURIE(OUString const & i_rCURIE) const
             i_rCURIE, &Prefix, &LocalName, &Namespace) );
         if ( Prefix == "_" )
         {
-            // eeek, it's a bnode!
-            // "_" is not a valid URI scheme => we can identify bnodes
+            
+            
             return i_rCURIE;
         }
         else
@@ -190,7 +190,7 @@ RDFaReader::ReadCURIE(OUString const & i_rCURIE) const
             if ((XML_NAMESPACE_UNKNOWN != nKey) &&
                 (XML_NAMESPACE_XMLNS   != nKey))
             {
-                // N.B.: empty LocalName is valid!
+                
                 const OUString URI(Namespace + LocalName);
                 return GetAbsoluteReference(URI);
             }
@@ -247,7 +247,7 @@ RDFaReader::ReadURIOrSafeCURIE(OUString const & i_rURIOrSafeCURIE) const
     }
     else
     {
-        if (i_rURIOrSafeCURIE.matchAsciiL("_:", 2)) // blank node
+        if (i_rURIOrSafeCURIE.matchAsciiL("_:", 2)) 
         {
             SAL_INFO("xmloff.core", "ReadURIOrSafeCURIE: invalid URI: scheme is _" );
             return OUString();
@@ -273,7 +273,7 @@ RDFaInserter::LookupBlankNode(OUString const & i_rNodeId )
 uno::Reference< rdf::XURI >
 RDFaInserter::MakeURI( OUString const & i_rURI) const
 {
-    if (i_rURI.matchAsciiL("_:", 2)) // blank node
+    if (i_rURI.matchAsciiL("_:", 2)) 
     {
         SAL_INFO("xmloff.core", "MakeURI: cannot create URI for blank node");
         return 0;
@@ -295,11 +295,11 @@ RDFaInserter::MakeURI( OUString const & i_rURI) const
 uno::Reference< rdf::XResource>
 RDFaInserter::MakeResource( OUString const & i_rResource)
 {
-    if (i_rResource.matchAsciiL("_:", 2)) // blank node
+    if (i_rResource.matchAsciiL("_:", 2)) 
     {
-        // we cannot use the blank node label as-is: it must be distinct
-        // from labels in other graphs, so create fresh ones per XML stream
-        // N.B.: content.xml and styles.xml are distinct graphs
+        
+        
+        
         OUString name( i_rResource.copy(2) );
         const uno::Reference< rdf::XBlankNode > xBNode( LookupBlankNode(name) );
         SAL_WARN_IF(!xBNode.is(), "xmloff.core", "no blank node?");
@@ -334,7 +334,7 @@ void RDFaInserter::InsertRDFaEntry(
         MakeResource( i_rEntry.m_pRDFaAttributes->m_About ) );
     if (!xSubject.is())
     {
-        return; // invalid
+        return; 
     }
 
     ::comphelper::SequenceAsVector< uno::Reference< rdf::XURI > > predicates;
@@ -345,22 +345,22 @@ void RDFaInserter::InsertRDFaEntry(
         ::boost::make_transform_iterator(
             i_rEntry.m_pRDFaAttributes->m_Properties.begin(),
             ::boost::bind(&RDFaInserter::MakeURI, this, _1)),
-        // argh, this must be the same type :(
+        
         ::boost::make_transform_iterator(
             i_rEntry.m_pRDFaAttributes->m_Properties.end(),
             ::boost::bind(&RDFaInserter::MakeURI, this, _1)),
         ::std::back_inserter(predicates),
         ref_is_null() );
-        // compiles only on wntmsci12
-//        ::boost::bind( ::std::logical_not<sal_Bool>(), ::boost::bind<sal_Bool>(&uno::Reference<rdf::XURI>::is, _1)));
-        // compiles on unxsoli4, wntsci12, but not unxlngi6
-//        ::boost::bind( ::std::logical_not<sal_Bool>(), ::boost::bind<sal_Bool, com::sun::star::uno::Reference<rdf::XURI> >(&uno::Reference<rdf::XURI>::is, _1)));
-        // compiles on unxsoli4, unxlngi6, but not wntsci12
-//        ::std::not1( ::std::mem_fun_ref(&uno::Reference<rdf::XURI>::is)) );
+        
+
+        
+
+        
+
 
     if (!predicates.size())
     {
-        return; // invalid
+        return; 
     }
 
     uno::Reference<rdf::XURI> xDatatype;
@@ -371,9 +371,9 @@ void RDFaInserter::InsertRDFaEntry(
 
     try
     {
-        // N.B.: this will call xMeta->ensureMetadataReference, which is why
-        // this must be done _after_ importing the whole XML file,
-        // to prevent collision between generated ids and ids in the file
+        
+        
+        
         m_xRepository->setStatementRDFa(xSubject, predicates.getAsConstList(),
             i_rEntry.m_xObject,
             i_rEntry.m_pRDFaAttributes->m_Content, xDatatype);
@@ -405,7 +405,7 @@ RDFaImportHelper::ParseRDFa(
         SAL_INFO("xmloff.core", "AddRDFa: invalid input: xhtml:property empty");
         return ::boost::shared_ptr<ParsedRDFaAttributes>();
     }
-    // must parse CURIEs here: need namespace declaration context
+    
     RDFaReader reader(GetImport());
     const OUString about( reader.ReadURIOrSafeCURIE(i_rAbout) );
     if (about.isEmpty()) {
@@ -471,6 +471,6 @@ void RDFaImportHelper::InsertRDFa(
         ::boost::bind(&RDFaInserter::InsertRDFaEntry, &inserter, _1));
 }
 
-} // namespace xmloff
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

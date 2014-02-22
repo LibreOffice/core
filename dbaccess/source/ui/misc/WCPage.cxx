@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WCPage.hxx"
@@ -50,7 +50,7 @@ using namespace ::com::sun::star::sdbcx;
 
 namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
-// Klasse OCopyTable
+
 OCopyTable::OCopyTable( Window * pParent )
     :OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) )
     ,m_ftTableName(         this, ModuleRes( FT_TABLENAME       ) )
@@ -135,7 +135,7 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
     m_aCB_PrimaryColumn.Enable(bKey);
     m_aCB_UseHeaderLine.Enable(m_bUseHeaderAllowed && IsOptionDefData());
 
-    // set typ what to do
+    
     if( IsOptionDefData() )
         m_pParent->setOperation( CopyTableOperation::CopyDefinitionAndData );
     else if( IsOptionDef() )
@@ -159,7 +159,7 @@ sal_Bool OCopyTable::LeavePage()
     m_pParent->m_aKeyName                   = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : OUString();
     m_pParent->setUseHeaderLine( m_aCB_UseHeaderLine.IsChecked() );
 
-    // first check if the table already exists in the database
+    
     if( m_pParent->getOperation() != CopyTableOperation::AppendData )
     {
         m_pParent->clearDestColumns();
@@ -173,7 +173,7 @@ sal_Bool OCopyTable::LeavePage()
             return sal_False;
         }
 
-        // have to check the length of the table name
+        
         Reference< XDatabaseMetaData > xMeta = m_pParent->m_xDestConnection->getMetaData();
         OUString sCatalog;
         OUString sSchema;
@@ -192,7 +192,7 @@ sal_Bool OCopyTable::LeavePage()
             return sal_False;
         }
 
-        // now we have to check if the name of the primary key already exists
+        
         if (    m_pParent->m_bCreatePrimaryKeyColumn
             &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
@@ -205,7 +205,7 @@ sal_Bool OCopyTable::LeavePage()
     }
 
     if ( m_edTableName.GetSavedValue() != m_edTableName.GetText() )
-    { // table exists and name has changed
+    { 
         if ( m_pParent->getOperation() == CopyTableOperation::AppendData )
         {
             if(!checkAppendData())
@@ -218,7 +218,7 @@ sal_Bool OCopyTable::LeavePage()
         }
     }
     else
-    { // table exist and is not new or doesn't exist and so on
+    { 
         if ( CopyTableOperation::AppendData == m_pParent->getOperation() )
         {
             if( !checkAppendData() )
@@ -274,7 +274,7 @@ sal_Bool OCopyTable::checkAppendData()
         m_pParent->m_vColumnPos.resize( nSrcSize, ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
         m_pParent->m_vColumnTypes.resize( nSrcSize , COLUMN_POSITION_NOT_FOUND );
 
-        // set new destination
+        
         xTables->getByName( m_edTableName.GetText() ) >>= xTable;
         ObjectCopySource aTableCopySource( m_pParent->m_xDestConnection, xTable );
         m_pParent->loadData( aTableCopySource, m_pParent->m_vDestColumns, m_pParent->m_aDestVec );
@@ -324,7 +324,7 @@ void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const OUString& _rSuggest
 
 void OCopyTable::setCreateStyleAction()
 {
-    // reselect the last action before
+    
     switch(m_pParent->getOperation())
     {
         case CopyTableOperation::CopyDefinitionAndData:

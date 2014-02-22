@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RtfReader.hxx"
@@ -56,7 +56,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::awt;
 
-// ORTFReader
+
 ORTFReader::ORTFReader( SvStream& rIn,
                         const SharedConnection& _rxConnection,
                         const Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
@@ -102,10 +102,10 @@ SvParserState ORTFReader::CallParser()
 void ORTFReader::NextToken( int nToken )
 {
     SAL_INFO("dbaccess.ui", "ORTFReader::NextToken" );
-    if(m_bError || !m_nRows) // if there is an error or no more rows to check, return immediatelly
+    if(m_bError || !m_nRows) 
         return;
 
-    if(m_xConnection.is())    // names, which CTOR was called and hence, if a table should be created
+    if(m_xConnection.is())    
     {
         switch(nToken)
         {
@@ -137,15 +137,15 @@ void ORTFReader::NextToken( int nToken )
                 break;
 
             case RTF_DEFLANG:
-            case RTF_LANG: // inquire language
+            case RTF_LANG: 
                 m_nDefToken = (rtl_TextEncoding)nTokenValue;
                 break;
             case RTF_TROWD:
                 {
                     bool bInsertRow = true;
-                    if ( !m_xTable.is() ) // use first line as header
+                    if ( !m_xTable.is() ) 
                     {
-                        sal_uInt32 nTell = rInput.Tell(); // perhaps alters position of the stream
+                        sal_uInt32 nTell = rInput.Tell(); 
 
                         m_bError = !CreateTable(nToken);
                         bInsertRow = m_bAppendFirstLine;
@@ -159,10 +159,10 @@ void ORTFReader::NextToken( int nToken )
                     {
                         try
                         {
-                            m_pUpdateHelper->moveToInsertRow(); // otherwise append new line
+                            m_pUpdateHelper->moveToInsertRow(); 
                         }
                         catch(SQLException& e)
-                        // handling update failure
+                        
                         {
                             showErrorDialog(e);
                         }
@@ -175,11 +175,11 @@ void ORTFReader::NextToken( int nToken )
                     eraseTokens();
                 }
 
-                m_bInTbl = sal_True; // Now we are in a table description
+                m_bInTbl = sal_True; 
                 break;
             case RTF_TEXTTOKEN:
             case RTF_SINGLECHAR:
-                if(m_bInTbl) // important, as otherwise we also get the names of the fonts
+                if(m_bInTbl) 
                     m_sTextToken += aToken;
                 break;
             case RTF_CELL:
@@ -189,7 +189,7 @@ void ORTFReader::NextToken( int nToken )
                         insertValueIntoColumn();
                     }
                     catch(SQLException& e)
-                    // handling update failure
+                    
                     {
                         showErrorDialog(e);
                     }
@@ -198,17 +198,17 @@ void ORTFReader::NextToken( int nToken )
                 }
                 break;
             case RTF_ROW:
-                // it can happen that the last cell is not concluded with \cell
+                
                 try
                 {
                     insertValueIntoColumn();
                     m_nRowCount++;
-                    if(m_bIsAutoIncrement) // if bSetAutoIncrement then I have to set the autoincrement
+                    if(m_bIsAutoIncrement) 
                         m_pUpdateHelper->updateInt(1,m_nRowCount);
                     m_pUpdateHelper->insertRow();
                 }
                 catch(SQLException& e)
-                // handling update failure
+                
                 {
                     showErrorDialog(e);
                 }
@@ -216,12 +216,12 @@ void ORTFReader::NextToken( int nToken )
                 break;
         }
     }
-    else // branch only valid for type checking
+    else 
     {
         switch(nToken)
         {
             case RTF_TROWD:
-                // The head of the column is not included
+                
                 if(m_bHead)
                 {
                     do

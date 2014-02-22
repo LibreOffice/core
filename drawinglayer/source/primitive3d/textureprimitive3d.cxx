@@ -54,8 +54,8 @@ namespace drawinglayer
 
             return false;
         }
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -85,8 +85,8 @@ namespace drawinglayer
 
         basegfx::B3DRange UnifiedTransparenceTexturePrimitive3D::getB3DRange(const geometry::ViewInformation3D& rViewInformation) const
         {
-            // do not use the fallback to decomposition here since for a correct BoundRect we also
-            // need invisible (1.0 == getTransparence()) geometry; these would be deleted in the decomposition
+            
+            
             return getB3DRangeFromPrimitive3DSequence(getChildren(), rViewInformation);
         }
 
@@ -94,12 +94,12 @@ namespace drawinglayer
         {
             if(0.0 == getTransparence())
             {
-                // no transparence used, so just use content
+                
                 return getChildren();
             }
             else if(getTransparence() > 0.0 && getTransparence() < 1.0)
             {
-                // create TransparenceTexturePrimitive3D with fixed transparence as replacement
+                
                 const basegfx::BColor aGray(getTransparence(), getTransparence(), getTransparence());
                 const attribute::FillGradientAttribute aFillGradient(attribute::GRADIENTSTYLE_LINEAR, 0.0, 0.0, 0.0, 0.0, aGray, aGray, 1);
                 const Primitive3DReference xRef(new TransparenceTexturePrimitive3D(aFillGradient, getChildren(), getTextureSize()));
@@ -107,16 +107,16 @@ namespace drawinglayer
             }
             else
             {
-                // completely transparent or invalid definition, add nothing
+                
                 return Primitive3DSequence();
             }
         }
 
-        // provide unique ID
+        
         ImplPrimitive3DIDBlock(UnifiedTransparenceTexturePrimitive3D, PRIMITIVE3D_ID_UNIFIEDTRANSPARENCETEXTUREPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -147,11 +147,11 @@ namespace drawinglayer
             return false;
         }
 
-        // provide unique ID
+        
         ImplPrimitive3DIDBlock(GradientTexturePrimitive3D, PRIMITIVE3D_ID_GRADIENTTEXTUREPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -181,11 +181,11 @@ namespace drawinglayer
             return false;
         }
 
-        // provide unique ID
+        
         ImplPrimitive3DIDBlock(BitmapTexturePrimitive3D, PRIMITIVE3D_ID_BITMAPTEXTUREPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -206,10 +206,10 @@ namespace drawinglayer
             return (GradientTexturePrimitive3D::operator==(rPrimitive));
         }
 
-        // provide unique ID
+        
         ImplPrimitive3DIDBlock(TransparenceTexturePrimitive3D, PRIMITIVE3D_ID_TRANSPARENCETEXTUREPRIMITIVE3D)
 
-    } // end of namespace primitive3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

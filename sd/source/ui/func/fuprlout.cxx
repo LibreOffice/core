@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fuprlout.hxx"
@@ -78,7 +78,7 @@ rtl::Reference<FuPoor> FuPresentationLayout::Create( ViewShell* pViewSh, ::sd::W
 
 void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 {
-    // prevent selected objects or objects which are under editing from disappearing
+    
     mpView->SdrEndTextEdit();
 
     if(mpView->GetSdrPageView())
@@ -88,7 +88,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
 
     sal_Bool bError = sal_False;
 
-    // determine the active page
+    
     sal_uInt16 nSelectedPage = SDRPAGE_NOTFOUND;
     for (sal_uInt16 nPage = 0; nPage < mpDoc->GetSdPageCount(PK_STANDARD); nPage++)
     {
@@ -119,8 +119,8 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     sal_Bool bMasterPage = bOnMaster;
     sal_Bool bCheckMasters = sal_False;
 
-    // call dialog
-    sal_Bool   bLoad = sal_False;           // appear the new master pages?
+    
+    sal_Bool   bLoad = sal_False;           
     OUString aFile;
 
     SfxItemSet aSet(mpDoc->GetPool(), ATTR_PRESLAYOUT_START, ATTR_PRESLAYOUT_END);
@@ -192,9 +192,9 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             OUString aFileName = aFile.getToken(0, DOCUMENT_TOKEN);
             SdDrawDocument* pTempDoc = mpDoc->OpenBookmarkDoc( aFileName );
 
-            // #69581: If I chosed the standard-template I got no filename and so I get no
-            //         SdDrawDocument-Pointer. But the method SetMasterPage is able to handle
-            //         a NULL-pointer as a Standard-template ( look at SdDrawDocument::SetMasterPage )
+            
+            
+            
             OUString aLayoutName;
             if( pTempDoc )
                 aLayoutName = aFile.getToken(1, DOCUMENT_TOKEN);
@@ -204,15 +204,15 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
         }
         else
         {
-            // use master page with the layout name aFile from current Doc
+            
             mpDoc->SetMasterPage(nSelectedPage, aFile, mpDoc, bMasterPage, bCheckMasters);
         }
 
-        // remove blocking
+        
         if (mpViewShell->ISA(DrawViewShell) && !bCheckMasters )
             static_cast<DrawView*>(mpView)->BlockPageOrderChangedHint(sal_False);
 
-        // if the master page was visible, show it again
+        
         if (!bError && nSelectedPage != SDRPAGE_NOTFOUND)
         {
             if (bOnMaster)
@@ -230,7 +230,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
                     pView->ShowSdrPage(pView->GetModel()->GetMasterPage(nPgNum));
                 }
 
-                // force update of TabBar
+                
                 mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_MASTERPAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
             }
             else
@@ -239,7 +239,7 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
             }
         }
 
-        // fake a mode change to repaint the page tab bar
+        
         if( mpViewShell && mpViewShell->ISA( DrawViewShell ) )
         {
             DrawViewShell* pDrawViewSh =
@@ -254,6 +254,6 @@ void FuPresentationLayout::DoExecute( SfxRequest& rReq )
     }
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

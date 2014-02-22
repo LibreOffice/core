@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <dispatch/systemexec.hxx>
@@ -36,8 +36,8 @@ namespace framework{
 #define PROTOCOL_VALUE      "systemexecute:"
 #define PROTOCOL_LENGTH     14
 
-//_________________________________________________________________________________________________________________
-// XInterface, XTypeProvider, XServiceInfo
+
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(SystemExec                   ,
                                  ::cppu::OWeakObject          ,
@@ -54,24 +54,24 @@ DEFINE_INIT_SERVICE(SystemExec,
                     }
                    )
 
-//_________________________________________________________________________________________________________________
+
 
 SystemExec::SystemExec( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-        //  Init baseclasses first
+        
         : ThreadHelpBase( &Application::GetSolarMutex() )
-        // Init member
+        
         , m_xContext    ( rxContext                     )
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 SystemExec::~SystemExec()
 {
     m_xContext = NULL;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch( const css::util::URL&  aURL    ,
                                                                                  const OUString&,
@@ -83,7 +83,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL SystemExec::queryDispatch(
     return xDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL SystemExec::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException )
 {
@@ -99,7 +99,7 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL Syst
     return lDispatcher;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL SystemExec::dispatch( const css::util::URL&                                  aURL       ,
                                     const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException )
@@ -107,34 +107,34 @@ void SAL_CALL SystemExec::dispatch( const css::util::URL&                       
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&                                             aURL      ,
                                                     const css::uno::Sequence< css::beans::PropertyValue >&,
                                                     const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) throw( css::uno::RuntimeException )
 {
-    // convert "systemexec:file:///c:/temp/test.html" => "file:///c:/temp/test.html"
+    
     sal_Int32 c = aURL.Complete.getLength()-PROTOCOL_LENGTH;
-    if (c<1) // we dont check for valid URLs here! The system will show an error message ...
+    if (c<1) 
     {
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::FAILURE);
         return;
     }
     OUString sSystemURLWithVariables = aURL.Complete.copy(PROTOCOL_LENGTH, c);
 
-    // SAFE ->
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
-    // <- SAFE
+    
 
-    // TODO check security settings ...
+    
 
     try
     {
         css::uno::Reference< css::util::XStringSubstitution > xPathSubst( css::util::PathSubstitution::create(xContext) );
 
-        OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, sal_True); // sal_True force an exception if unknown variables exists !
+        OUString sSystemURL = xPathSubst->substituteVariables(sSystemURLWithVariables, sal_True); 
 
         css::uno::Reference< css::system::XSystemShellExecute > xShell = css::system::SystemShellExecute::create( xContext );
 
@@ -147,23 +147,23 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
         }
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL SystemExec::addStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
                                              const css::util::URL& ) throw( css::uno::RuntimeException )
 {
-    // not suported yet
+    
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL SystemExec::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >&,
                                                 const css::util::URL& ) throw( css::uno::RuntimeException )
 {
-    // not suported yet
+    
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SystemExec::impl_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                            const sal_Int16                                                   nState   )
@@ -176,6 +176,6 @@ void SystemExec::impl_notifyResultListener(const css::uno::Reference< css::frame
     }
 }
 
-}       //  namespace framework
+}       
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

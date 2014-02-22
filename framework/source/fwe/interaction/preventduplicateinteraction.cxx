@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "framework/preventduplicateinteraction.hxx"
@@ -31,42 +31,42 @@ PreventDuplicateInteraction::PreventDuplicateInteraction(const css::uno::Referen
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 PreventDuplicateInteraction::~PreventDuplicateInteraction()
 {
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void PreventDuplicateInteraction::setHandler(const css::uno::Reference< css::task::XInteractionHandler >& xHandler)
 {
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
     m_xHandler = xHandler;
     aLock.clear();
-    // <- SAFE
+    
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void PreventDuplicateInteraction::useDefaultUUIHandler()
 {
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
     aLock.clear();
-    // <- SAFE
+    
 
     css::uno::Reference< css::task::XInteractionHandler > xHandler( css::task::InteractionHandler::createWithParent( m_xContext, 0 ), css::uno::UNO_QUERY_THROW );
 
-    // SAFE ->
+    
     aLock.reset();
     m_xHandler = xHandler;
     aLock.clear();
-    // <- SAFE
+    
 }
 
-//_________________________________________________________________________________________________________________
+
 css::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::uno::Type& aType )
     throw (css::uno::RuntimeException)
 {
@@ -80,7 +80,7 @@ css::uno::Any SAL_CALL PreventDuplicateInteraction::queryInterface( const css::u
     return ::cppu::WeakImplHelper1< css::task::XInteractionHandler2 >::queryInterface( aType );
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
     throw(css::uno::RuntimeException)
@@ -88,7 +88,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     css::uno::Any aRequest  = xRequest->getRequest();
     sal_Bool      bHandleIt = sal_True;
 
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     InteractionList::iterator pIt;
@@ -110,7 +110,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     css::uno::Reference< css::task::XInteractionHandler > xHandler = m_xHandler;
 
     aLock.clear();
-    // <- SAFE
+    
 
     if (
         (bHandleIt    ) &&
@@ -136,7 +136,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     }
 }
 
-//_________________________________________________________________________________________________________________
+
 
 ::sal_Bool SAL_CALL PreventDuplicateInteraction::handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
             throw (css::uno::RuntimeException)
@@ -144,7 +144,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     css::uno::Any aRequest  = xRequest->getRequest();
     sal_Bool      bHandleIt = sal_True;
 
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     InteractionList::iterator pIt;
@@ -168,7 +168,7 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
         "PreventDuplicateInteraction::handleInteractionRequest: inconsistency!" );
 
     aLock.clear();
-    // <- SAFE
+    
 
     if (
         (bHandleIt    ) &&
@@ -195,11 +195,11 @@ void SAL_CALL PreventDuplicateInteraction::handle(const css::uno::Reference< css
     return false;
 }
 
-//_________________________________________________________________________________________________________________
+
 
 void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInteraction::InteractionInfo& aInteractionInfo)
 {
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     InteractionList::iterator pIt;
@@ -219,15 +219,15 @@ void PreventDuplicateInteraction::addInteractionRule(const PreventDuplicateInter
     m_lInteractionRules.push_back(aInteractionInfo);
 
     aLock.clear();
-    // <- SAFE
+    
 }
 
-//_________________________________________________________________________________________________________________
+
 
 sal_Bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&                               aInteraction,
                                                                PreventDuplicateInteraction::InteractionInfo* pReturn     ) const
 {
-    // SAFE ->
+    
     ::osl::ResettableMutexGuard aLock(m_aLock);
 
     PreventDuplicateInteraction::InteractionList::const_iterator pIt;
@@ -244,11 +244,11 @@ sal_Bool PreventDuplicateInteraction::getInteractionInfo(const css::uno::Type&  
     }
 
     aLock.clear();
-    // <- SAFE
+    
 
     return sal_False;
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

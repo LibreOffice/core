@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/color.hxx"
@@ -29,7 +29,7 @@
 namespace oox {
 namespace drawingml {
 
-// ============================================================================
+
 
 namespace {
 
@@ -38,19 +38,19 @@ struct PresetColorsPool
 {
     typedef ::std::vector< sal_Int32 > ColorVector;
 
-    ColorVector         maDmlColors;        /// Predefined colors in DrawingML, indexed by XML token.
-    ColorVector         maVmlColors;        /// Predefined colors in VML, indexed by XML token.
+    ColorVector         maDmlColors;        
+    ColorVector         maVmlColors;        
 
     explicit            PresetColorsPool();
 };
 
-// ----------------------------------------------------------------------------
+
 
 PresetColorsPool::PresetColorsPool() :
     maDmlColors( static_cast< size_t >( XML_TOKEN_COUNT ), API_RGB_TRANSPARENT ),
     maVmlColors( static_cast< size_t >( XML_TOKEN_COUNT ), API_RGB_TRANSPARENT )
 {
-    // predefined colors in DrawingML (map XML token identifiers to RGB values)
+    
     static const sal_Int32 spnDmlColors[] =
     {
         XML_aliceBlue,         0xF0F8FF,    XML_antiqueWhite,      0xFAEBD7,
@@ -127,7 +127,7 @@ PresetColorsPool::PresetColorsPool() :
     for( const sal_Int32* pnEntry = spnDmlColors; pnEntry < STATIC_ARRAY_END( spnDmlColors ); pnEntry += 2 )
         maDmlColors[ static_cast< size_t >( pnEntry[ 0 ] ) ] = pnEntry[ 1 ];
 
-    // predefined colors in VML (map XML token identifiers to RGB values)
+    
     static const sal_Int32 spnVmlColors[] =
     {
         XML_aqua,              0x00FFFF,    XML_black,             0x000000,
@@ -143,16 +143,16 @@ PresetColorsPool::PresetColorsPool() :
         maVmlColors[ static_cast< size_t >( pnEntry[ 0 ] ) ] = pnEntry[ 1 ];
 }
 
-// ----------------------------------------------------------------------------
+
 
 struct StaticPresetColorsPool : public ::rtl::Static< PresetColorsPool, StaticPresetColorsPool > {};
 
-// ----------------------------------------------------------------------------
+
 
 const double DEC_GAMMA          = 2.3;
 const double INC_GAMMA          = 1.0 / DEC_GAMMA;
 
-// ----------------------------------------------------------------------------
+
 
 inline void lclRgbToRgbComponents( sal_Int32& ornR, sal_Int32& ornG, sal_Int32& ornB, sal_Int32 nRgb )
 {
@@ -200,9 +200,9 @@ void lclOffValue( sal_Int32& ornValue, sal_Int32 nOff, sal_Int32 nMax = MAX_PERC
     ornValue = getLimitedValue< sal_Int32, sal_Int32 >( ornValue + nOff, 0, nMax );
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 Color::Color() :
     meMode( COLOR_UNUSED ),
@@ -464,9 +464,9 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
     {
         case COLOR_UNUSED:  mnC1 = API_RGB_TRANSPARENT; break;
 
-        case COLOR_RGB:     break;  // nothing to do
-        case COLOR_CRGB:    break;  // nothing to do
-        case COLOR_HSL:     break;  // nothing to do
+        case COLOR_RGB:     break;  
+        case COLOR_CRGB:    break;  
+        case COLOR_HSL:     break;  
 
         case COLOR_SCHEME:  setResolvedRgb( rGraphicHelper.getSchemeColor( mnC1 ) );        break;
         case COLOR_PALETTE: setResolvedRgb( rGraphicHelper.getPaletteColor( mnC1 ) );       break;
@@ -476,7 +476,7 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
         case COLOR_FINAL:   return mnC1;
     }
 
-    // if color is UNUSED or turns to UNUSED in setResolvedRgb, do not perform transformations
+    
     if( meMode != COLOR_UNUSED )
     {
         for( TransformVec::const_iterator aIt = maTransforms.begin(), aEnd = maTransforms.end(); aIt != aEnd; ++aIt )
@@ -504,24 +504,24 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
                 case XML_lum:
                     toHsl();
                     lclSetValue( mnC3, aIt->mnValue );
-                    // if color changes to black or white, it will stay gray if luminance changes again
+                    
                     if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
                 break;
                 case XML_lumMod:
                     toHsl();
                     lclModValue( mnC3, aIt->mnValue );
-                    // if color changes to black or white, it will stay gray if luminance changes again
+                    
                     if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
                 break;
                 case XML_lumOff:
                     toHsl();
                     lclOffValue( mnC3, aIt->mnValue );
-                    // if color changes to black or white, it will stay gray if luminance changes again
+                    
                     if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) ) mnC2 = 0;
                 break;
 
                 case XML_shade:
-                    // shade: 0% = black, 100% = original color
+                    
                     toCrgb();
                     OSL_ENSURE( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid shade value" );
                     if( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
@@ -533,7 +533,7 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
                     }
                 break;
                 case XML_tint:
-                    // tint: 0% = white, 100% = original color
+                    
                     toCrgb();
                     OSL_ENSURE( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
                     if( (0 <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
@@ -545,17 +545,17 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
                     }
                 break;
                 case XLS_TOKEN( tint ):
-                    // Excel tint: move luminance relative to current value
+                    
                     toHsl();
                     OSL_ENSURE( (-MAX_PERCENT <= aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT), "Color::getColor - invalid tint value" );
                     if( (-MAX_PERCENT <= aIt->mnValue) && (aIt->mnValue < 0) )
                     {
-                        // negative: luminance towards 0% (black)
+                        
                         lclModValue( mnC3, aIt->mnValue + MAX_PERCENT );
                     }
                     else if( (0 < aIt->mnValue) && (aIt->mnValue <= MAX_PERCENT) )
                     {
-                        // positive: luminance towards 100% (white)
+                        
                         mnC3 = MAX_PERCENT - mnC3;
                         lclModValue( mnC3, MAX_PERCENT - aIt->mnValue );
                         mnC3 = MAX_PERCENT - mnC3;
@@ -563,18 +563,18 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
                 break;
 
                 case XML_gray:
-                    // change color to gray, weighted RGB: 22% red, 72% green, 6% blue
+                    
                     toRgb();
                     mnC1 = mnC2 = mnC3 = (mnC1 * 22 + mnC2 * 72 + mnC3 * 6) / 100;
                 break;
 
                 case XML_comp:
-                    // comp: rotate hue by 180 degrees, do not change lum/sat
+                    
                     toHsl();
                     (mnC1 += 180 * PER_DEGREE) %= MAX_DEGREE;
                 break;
                 case XML_inv:
-                    // invert percentual RGB values
+                    
                     toCrgb();
                     mnC1 = MAX_PERCENT - mnC1;
                     mnC2 = MAX_PERCENT - mnC2;
@@ -582,14 +582,14 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
                 break;
 
                 case XML_gamma:
-                    // increase gamma of color
+                    
                     toCrgb();
                     mnC1 = lclGamma( mnC1, INC_GAMMA );
                     mnC2 = lclGamma( mnC2, INC_GAMMA );
                     mnC3 = lclGamma( mnC3, INC_GAMMA );
                 break;
                 case XML_invGamma:
-                    // decrease gamma of color
+                    
                     toCrgb();
                     mnC1 = lclGamma( mnC1, DEC_GAMMA );
                     mnC2 = lclGamma( mnC2, DEC_GAMMA );
@@ -598,11 +598,11 @@ sal_Int32 Color::getColor( const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr
             }
         }
 
-        // store resulting RGB value in mnC1
+        
         toRgb();
         mnC1 = lclRgbComponentsToRgb( mnC1, mnC2, mnC3 );
     }
-    else // if( meMode != COLOR_UNUSED )
+    else 
     {
         mnC1 = API_RGB_TRANSPARENT;
     }
@@ -623,7 +623,7 @@ sal_Int16 Color::getTransparency() const
     return static_cast< sal_Int16 >( (MAX_PERCENT - mnAlpha) / PER_PERCENT );
 }
 
-// private --------------------------------------------------------------------
+
 
 void Color::setResolvedRgb( sal_Int32 nRgb ) const
 {
@@ -636,7 +636,7 @@ void Color::toRgb() const
     switch( meMode )
     {
         case COLOR_RGB:
-            // nothing to do
+            
         break;
         case COLOR_CRGB:
             meMode = COLOR_RGB;
@@ -654,33 +654,33 @@ void Color::toRgb() const
             }
             else if( mnC3 > 0 )
             {
-                // base color from hue
-                double fHue = static_cast< double >( mnC1 ) / MAX_DEGREE * 6.0; // interval [0.0, 6.0)
-                if( fHue <= 1.0 )       { fR = 1.0; fG = fHue; }        // red...yellow
-                else if( fHue <= 2.0 )  { fR = 2.0 - fHue; fG = 1.0; }  // yellow...green
-                else if( fHue <= 3.0 )  { fG = 1.0; fB = fHue - 2.0; }  // green...cyan
-                else if( fHue <= 4.0 )  { fG = 4.0 - fHue; fB = 1.0; }  // cyan...blue
-                else if( fHue <= 5.0 )  { fR = fHue - 4.0; fB = 1.0; }  // blue...magenta
-                else                    { fR = 1.0; fB = 6.0 - fHue; }  // magenta...red
+                
+                double fHue = static_cast< double >( mnC1 ) / MAX_DEGREE * 6.0; 
+                if( fHue <= 1.0 )       { fR = 1.0; fG = fHue; }        
+                else if( fHue <= 2.0 )  { fR = 2.0 - fHue; fG = 1.0; }  
+                else if( fHue <= 3.0 )  { fG = 1.0; fB = fHue - 2.0; }  
+                else if( fHue <= 4.0 )  { fG = 4.0 - fHue; fB = 1.0; }  
+                else if( fHue <= 5.0 )  { fR = fHue - 4.0; fB = 1.0; }  
+                else                    { fR = 1.0; fB = 6.0 - fHue; }  
 
-                // apply saturation
+                
                 double fSat = static_cast< double >( mnC2 ) / MAX_PERCENT;
                 fR = (fR - 0.5) * fSat + 0.5;
                 fG = (fG - 0.5) * fSat + 0.5;
                 fB = (fB - 0.5) * fSat + 0.5;
 
-                // apply luminance
-                double fLum = 2.0 * static_cast< double >( mnC3 ) / MAX_PERCENT - 1.0;  // interval [-1.0, 1.0]
+                
+                double fLum = 2.0 * static_cast< double >( mnC3 ) / MAX_PERCENT - 1.0;  
                 if( fLum < 0.0 )
                 {
-                    double fShade = fLum + 1.0; // interval [0.0, 1.0] (black...full color)
+                    double fShade = fLum + 1.0; 
                     fR *= fShade;
                     fG *= fShade;
                     fB *= fShade;
                 }
                 else if( fLum > 0.0 )
                 {
-                    double fTint = 1.0 - fLum;  // interval [0.0, 1.0] (white...full color)
+                    double fTint = 1.0 - fLum;  
                     fR = 1.0 - ((1.0 - fR) * fTint);
                     fG = 1.0 - ((1.0 - fG) * fTint);
                     fB = 1.0 - ((1.0 - fB) * fTint);
@@ -702,7 +702,7 @@ void Color::toCrgb() const
     {
         case COLOR_HSL:
             toRgb();
-            // run through!
+            
         case COLOR_RGB:
             meMode = COLOR_CRGB;
             mnC1 = lclGamma( lclRgbCompToCrgbComp( mnC1 ), DEC_GAMMA );
@@ -710,7 +710,7 @@ void Color::toCrgb() const
             mnC3 = lclGamma( lclRgbCompToCrgbComp( mnC3 ), DEC_GAMMA );
         break;
         case COLOR_CRGB:
-            // nothing to do
+            
         break;
         default:
             OSL_FAIL( "Color::toCrgb - unexpected color mode" );
@@ -723,52 +723,52 @@ void Color::toHsl() const
     {
         case COLOR_CRGB:
             toRgb();
-            // run through!
+            
         case COLOR_RGB:
         {
             meMode = COLOR_HSL;
-            double fR = static_cast< double >( mnC1 ) / 255.0;  // red [0.0, 1.0]
-            double fG = static_cast< double >( mnC2 ) / 255.0;  // green [0.0, 1.0]
-            double fB = static_cast< double >( mnC3 ) / 255.0;  // blue [0.0, 1.0]
+            double fR = static_cast< double >( mnC1 ) / 255.0;  
+            double fG = static_cast< double >( mnC2 ) / 255.0;  
+            double fB = static_cast< double >( mnC3 ) / 255.0;  
             double fMin = ::std::min( ::std::min( fR, fG ), fB );
             double fMax = ::std::max( ::std::max( fR, fG ), fB );
             double fD = fMax - fMin;
 
             using ::rtl::math::approxEqual;
 
-            // hue: 0deg = red, 120deg = green, 240deg = blue
-            if( fD == 0.0 )         // black/gray/white
+            
+            if( fD == 0.0 )         
                 mnC1 = 0;
-            else if( approxEqual(fMax, fR, 64) )   // magenta...red...yellow
+            else if( approxEqual(fMax, fR, 64) )   
                 mnC1 = static_cast< sal_Int32 >( ((fG - fB) / fD * 60.0 + 360.0) * PER_DEGREE + 0.5 ) % MAX_DEGREE;
-            else if( approxEqual(fMax, fG, 64) )   // yellow...green...cyan
+            else if( approxEqual(fMax, fG, 64) )   
                 mnC1 = static_cast< sal_Int32 >( ((fB - fR) / fD * 60.0 + 120.0) * PER_DEGREE + 0.5 );
-            else                    // cyan...blue...magenta
+            else                    
                 mnC1 = static_cast< sal_Int32 >( ((fR - fG) / fD * 60.0 + 240.0) * PER_DEGREE + 0.5 );
 
-            // luminance: 0% = black, 50% = full color, 100% = white
+            
             mnC3 = static_cast< sal_Int32 >( (fMin + fMax) / 2.0 * MAX_PERCENT + 0.5 );
 
-            // saturation: 0% = gray, 100% = full color
-            if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) )  // black/white
+            
+            if( (mnC3 == 0) || (mnC3 == MAX_PERCENT) )  
                 mnC2 = 0;
-            else if( mnC3 <= 50 * PER_PERCENT )         // dark...full color
+            else if( mnC3 <= 50 * PER_PERCENT )         
                 mnC2 = static_cast< sal_Int32 >( fD / (fMin + fMax) * MAX_PERCENT + 0.5 );
-            else                                        // full color...light
+            else                                        
                 mnC2 = static_cast< sal_Int32 >( fD / (2.0 - fMax - fMin) * MAX_PERCENT + 0.5 );
         }
         break;
         case COLOR_HSL:
-            // nothing to do
+            
         break;
         default:
             OSL_FAIL( "Color::toHsl - unexpected color mode" );
     }
 }
 
-// ============================================================================
 
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// Documentation about bootstraping can be found at:
-// http://udk.openoffice.org/common/man/concept/micro_deployment.html
+
+
 
 #include <math.h>
 #include <stdio.h>
@@ -107,7 +107,7 @@ static rtl::OUString getExecutableDirectory()
 }
 
 
-// get the URL of testshl2rc/rtlrc/pseudorc
+
 inline rtl::OUString t_getSourcePath(rtl::OString const& _sFilename)
 {
 
@@ -124,7 +124,7 @@ inline rtl::OUString t_getSourcePath(rtl::OString const& _sFilename)
 
 void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
 {
-#ifdef WNT      //Windows
+#ifdef WNT      
     Sleep(_nTenthSec * 100 );
 #endif
 #if ( defined UNX )
@@ -135,14 +135,14 @@ void thread_sleep_tenth_sec(sal_Int32 _nTenthSec)
 #endif
 }
 
-// -----------------------------------------------------------------------------
+
 
 namespace rtl_Bootstrap
 {
     class ctor : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
+        
         void setUp()
             {
             }
@@ -151,22 +151,22 @@ namespace rtl_Bootstrap
             {
             }
 
-        // ctor with ini name
+        
         void ctor_001()
             {
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 printUString( suIniname );
                 Bootstrap aBootstrap( suIniname );
-                rtl::OUString suGetname; // = rtl::OUString();
+                rtl::OUString suGetname; 
                 aBootstrap.getIniName( suGetname );
                 printUString( suGetname );
 
-                // LLA: first: this seems to be a wrong test.
-                //      second: there seems to be a design hole, if I give a absolute path ini file,
-                //              but try to use ${file::KEYVALUE} than 'file' will only used out of the 'executable path'/file
-                //              not from the path given from the absolute path.
+                
+                
+                
+                
 
-                // Due to the fact, we create at this position a file (createTestshl2rc() ), we check for existence
+                
                 bool bFileExist = t_fileExist( suGetname );
                 CPPUNIT_ASSERT_MESSAGE("ctor error with initial file.", bFileExist == true );
             }
@@ -184,12 +184,12 @@ namespace rtl_Bootstrap
         CPPUNIT_TEST(ctor_001);
         CPPUNIT_TEST(ctor_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class ctor
+    }; 
 
     class getFrom : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
+        
         void setUp()
             {
             }
@@ -197,16 +197,16 @@ namespace rtl_Bootstrap
         void tearDown()
             {
             }
-        // get the value of env variable
+        
         void getFrom_001()
             {
                 Bootstrap aBootstrap;
                 rtl::OUString suValue;
                 rtl::OUString suValuename ("ENABLE_JAVA");
-                //aBootstrap.getFrom( suValuename, suValue );
+                
                 aBootstrap.getFrom( suValuename, suValue );
                 sal_Char *  pStr = getenv("ENABLE_JAVA");
-                //      printUString( suGetname );
+                
                 CPPUNIT_ASSERT_MESSAGE("get the value of environment variable.", suValue.equalsAscii( pStr ) );
             }
         /* Notes on Windows:
@@ -215,10 +215,10 @@ namespace rtl_Bootstrap
            Bootstrap aBootstrap;
            rtl::OUString suValue;
            rtl::OUString suValuename ("SRC_ROOT");
-           //aBootstrap.getFrom( suValuename, suValue );
+           
            aBootstrap.getFrom( suValuename, suValue );
            sal_Char *  pStr = getenv("SRC_ROOT");
-           //   printUString( suGetname );
+           
            CPPUNIT_ASSERT_MESSAGE("get the value of environment variable.", suValue.equalsAscii( pStr ) );
            }
            The result on Windows:
@@ -229,7 +229,7 @@ namespace rtl_Bootstrap
            thus every \ will introduce an escape.
         */
 
-        // get the value of a variable in ini file
+        
         void getFrom_002()
             {
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
@@ -241,7 +241,7 @@ namespace rtl_Bootstrap
                 CPPUNIT_ASSERT_MESSAGE("get the value of a variable in ini file.", !suGetname.isEmpty());
             }
 
-        //use default value
+        
         void getFrom_003()
             {
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
@@ -256,8 +256,8 @@ namespace rtl_Bootstrap
         void getFrom_004()
             {
                 t_print("1\n");
-                // initialise Bootstrap with an own ini file
-                // PSEUDO_INI is pseudo(rc|.ini) created be create_pseudorc()
+                
+                
                 rtl::OUString suIniname = t_getSourcePath(PSEUDO_INI);
                 Bootstrap aBootstrap( suIniname );
 
@@ -278,7 +278,7 @@ namespace rtl_Bootstrap
             }
         void getFrom_004_1()
             {
-                // get the same key out of the default context
+                
                 rtl::OUString suKeyName("FILE");
                 rtl::OUString suGetValue;
                 Bootstrap::get( suKeyName, suGetValue );
@@ -308,7 +308,7 @@ namespace rtl_Bootstrap
 
             pParameters[0] = suFlag.pData;
             pParameters[1] = suEnv1.pData;
-            // the custom ini/rc file's URL
+            
             pParameters[2] = suIniname.pData;
 
             oslProcessError osl_error = osl_executeProcess(
@@ -398,12 +398,12 @@ namespace rtl_Bootstrap
         CPPUNIT_TEST(getFrom_005_5);
         CPPUNIT_TEST(getFrom_005_6);
         CPPUNIT_TEST_SUITE_END();
-    }; // class getFrom
+    }; 
 
     class setIniFilename : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
+        
         void setUp()
             {
             }
@@ -418,7 +418,7 @@ namespace rtl_Bootstrap
 
                 rtl::OUString suGetIniname;
                 aBootstrap.getIniName( suGetIniname );
-                //which should be .....testshl2rc
+                
 
                 rtl::OUString suIniname = t_getSourcePath(PSEUDO_INI);
                 Bootstrap::setIniFilename( suIniname );
@@ -447,12 +447,12 @@ namespace rtl_Bootstrap
         CPPUNIT_TEST(setIniFilename_001);
         CPPUNIT_TEST(setIniFilename_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class setIniFilename
+    }; 
 
     class getHandle : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
+        
         void setUp()
             {
             }
@@ -488,12 +488,12 @@ namespace rtl_Bootstrap
         CPPUNIT_TEST(getHandle_001);
         CPPUNIT_TEST(getHandle_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class getHandle
+    }; 
 
     class set : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
+        
         void setUp()
             {
             }
@@ -504,12 +504,12 @@ namespace rtl_Bootstrap
 
         void set_001()
             {
-                //in ini fle, INHERITED_VALUE=inherited_value
+                
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 Bootstrap aBootstrap( suIniname);
                 rtl::OUString suName("INHERITED_VALUE");
                 rtl::OUString suValue("ok");
-                // set to another value
+                
                 Bootstrap::set( suName, suValue );
                 rtl::OUString suGetValue;
                 Bootstrap::get( suName, suGetValue);
@@ -522,11 +522,11 @@ namespace rtl_Bootstrap
                 rtl::OUString suName("INHERITED_VALUE");
                 rtl::OUString suGetOrientValue;
                 Bootstrap::get( suName, suGetOrientValue);
-                // ??  INHERITED_VALUE = ok now, which is set in set_001
+                
                 printUString( suGetOrientValue );
 
                 rtl::OUString suValue( TESTSHL2_INI );
-                // set to another value
+                
                 Bootstrap::set( suName, suValue );
                 rtl::OUString suGetValue;
                 Bootstrap::get( suName, suGetValue);
@@ -537,7 +537,7 @@ namespace rtl_Bootstrap
         CPPUNIT_TEST(set_001);
         CPPUNIT_TEST(set_002);
         CPPUNIT_TEST_SUITE_END();
-    }; // class set
+    }; 
 
     class expandMacrosFrom : public CppUnit::TestFixture
     {
@@ -554,7 +554,7 @@ namespace rtl_Bootstrap
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 Bootstrap aBootstrap( suIniname);
                 rtl::OUString suMacro("$MYVAR/expand1");
-                //expandMacro now
+                
                 aBootstrap.expandMacrosFrom( suMacro );
                 rtl::OUString suExpectedMacro("src680_test/expand1");
                 CPPUNIT_ASSERT_MESSAGE("expandMacrosFrom failed.", suMacro.compareTo(suExpectedMacro) == 0 );
@@ -562,19 +562,19 @@ namespace rtl_Bootstrap
 
         /** here a special macro should expand
           * if rtlrc is under sal/qa/rtl/bootstrap/, "${rtlrc:Bootstrap:RTLVALUE}" could be expanded
-          * else rtlrc is under solver/680/unxlngi4.pro/bin/, "${file:/// ....solver/680/unxlngi4.pro/bin/rtlrc:Bootstrap:RTLVALUE}"
+          * else rtlrc is under solver/680/unxlngi4.pro/bin/, "${file:
       * could not be expanded
       */
         void expandMacrosFrom_002()
             {
-                // Build a string with '${rtl.ini:RTLVALUE}' and try to expand it.
-                // In function 'create_rtlrc() is the content of the rtl.ini file.
+                
+                
 
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 t_print("inifile is:");
                 printUString( suIniname );
                 Bootstrap aBootstrap( suIniname) ;
-                  rtl::OUString suMacro("${");         //rtlrc:Bootstrap:RTLVALUE}");
+                  rtl::OUString suMacro("${");         
 
      rtl::OUString aDirURL("$ORIGIN");
      aDirURL += "/rtl";
@@ -584,7 +584,7 @@ namespace rtl_Bootstrap
     aDirURL += rtl::OUString("rc");
 #endif
 
-                suMacro += aDirURL;//t_getSourcePath("rtl");
+                suMacro += aDirURL;
                 suMacro += rtl::OUString("::RTLVALUE}");
 
                 t_print("created macro is: ");
@@ -593,7 +593,7 @@ namespace rtl_Bootstrap
                 t_print("expanded macro is:");
                 printUString( suMacro );
                 rtl::OUString suExpectedMacro("qadev17");
-                CPPUNIT_ASSERT_MESSAGE("failed, can't expand '${file:///.../" SAL_CONFIGFILE("rtl") "::RTLVALUE}' to 'qadev17'", suMacro.compareTo(suExpectedMacro) == 0 );
+                CPPUNIT_ASSERT_MESSAGE("failed, can't expand '${file:
             }
         void expandMacrosFrom_002_1()
             {
@@ -603,7 +603,7 @@ namespace rtl_Bootstrap
                 Bootstrap aBootstrap( suIniname);
 
                 rtl::OUString suMacro;
-                // just a simple test, if this really work.
+                
                 aBootstrap.getFrom(rtl::OUString("SOFROMVALUE2"), suMacro );
                 t_print("SOFROMVALUE2:");
                 printUString( suMacro );
@@ -614,15 +614,15 @@ namespace rtl_Bootstrap
                 t_print("SOFROMVALUE:");
                 printUString( suMacro );
 
-                //expandMacro now
-                // seems to be, that getFrom() already expand the string
+                
+                
                 rtl::OUString suExpectedMacro("src680_qadev");
                 CPPUNIT_ASSERT_MESSAGE("failed, can't expand '${" SAL_CONFIGFILE("rtl") "::SOVALUE}' to 'src680_qadev'", suMacro.compareTo(suExpectedMacro) == 0 );
             }
         void expandMacrosFrom_002_2()
             {
-                // test, to read and expand SOFROMVALUE3
-                // SOFROMVALUE3 is 'rtl(.ini|rc)::TESTSHL_SOVALUE' which should expand to 'rtlfile' if all is ok.
+                
+                
 
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 t_print("inifile is:");
@@ -706,9 +706,9 @@ namespace rtl_Bootstrap
             rtl::OUString t(b.makeStringAndClear());
             Bootstrap(t_getSourcePath(TESTSHL2_INI)).expandMacrosFrom(t);
             CPPUNIT_ASSERT_MESSAGE( "section expansion", t == "$FILE" );
-                // the correct answer would be "testshl2 file" instead, but
-                // expansion including a section currently erroneously does not
-                // recursively expand macros in the resulting replacement text
+                
+                
+                
         }
 
         CPPUNIT_TEST_SUITE(expandMacrosFrom);
@@ -723,12 +723,12 @@ namespace rtl_Bootstrap
         CPPUNIT_TEST(testNonexisting);
         CPPUNIT_TEST(testSection);
         CPPUNIT_TEST_SUITE_END();
-    }; // class expandMacrosFrom
+    }; 
 
     class expandMacros : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
+        
         void setUp()
             {
             }
@@ -753,9 +753,9 @@ namespace rtl_Bootstrap
 
         CPPUNIT_TEST_SUITE(expandMacros);
         CPPUNIT_TEST(expandMacros_001);
-        //  CPPUNIT_TEST(expandMacros_002);
+        
         CPPUNIT_TEST_SUITE_END();
-    }; // class expandMacros
+    }; 
 
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Bootstrap::ctor, "rtl_Bootstrap");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Bootstrap::getFrom, "rtl_Bootstrap");
@@ -765,9 +765,9 @@ namespace rtl_Bootstrap
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Bootstrap::expandMacrosFrom, "rtl_Bootstrap");
     CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Bootstrap::expandMacros, "rtl_Bootstrap");
 
-} // namespace rtl_Bootstrap
+} 
 
-// -----------------------------------------------------------------------------
+
 
 static void removeAndCreateFile(rtl::OUString const& _suFileURL, rtl::OString const& _sContent)
 {
@@ -800,7 +800,7 @@ static void removeAndCreateFile(rtl::OUString const& _suFileURL, rtl::OString co
     OSL_ASSERT(t_fileExist(_suFileURL) == true);
 }
 
-// -----------------------------------------------------------------------------
+
 static void create_rtlrc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
@@ -823,7 +823,7 @@ static void create_rtlrc()
     removeAndCreateFile(aFileURL, sLines);
 }
 
-// -----------------------------------------------------------------------------
+
 static void create_testshl2rc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
@@ -862,7 +862,7 @@ static void create_testshl2rc()
         SAL_CONFIGFILE("rtl"));
 }
 
-// -----------------------------------------------------------------------------
+
 
 static void create_pseudorc()
 {
@@ -880,7 +880,7 @@ static void create_pseudorc()
     removeAndCreateFile(aFileURL, sLines);
 }
 
-// -----------------------------------------------------------------------------
+
 void create_bootstrap_processrc()
 {
     rtl::OUString aDirURL(getModulePath());
@@ -896,12 +896,12 @@ void create_bootstrap_processrc()
 
     removeAndCreateFile(aDirURL, sLines);
 }
-// -----------------------------------------------------------------------------
+
 
 void RegisterAdditionalFunctions(FktRegFuncPtr _pFunc)
 {
     (void) _pFunc;
-    // start message
+    
     t_print(T_VERBOSE, "Initializing ...\n" );
     create_rtlrc();
     create_testshl2rc();

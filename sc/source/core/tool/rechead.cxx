@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "rechead.hxx"
 #include "scerrors.hxx"
 
-// STATIC DATA
+
 
 ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
     rStream( rNewStream )
@@ -40,7 +40,7 @@ ScMultipleReadHeader::ScMultipleReadHeader(SvStream& rNewStream) :
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SVSTREAM_FILEFORMAT_ERROR );
 
-        //  everything to 0, so  BytesLeft() aborts at least
+        
         pBuf = NULL; pMemStream = NULL;
         nEntryEnd = nDataPos;
     }
@@ -79,10 +79,10 @@ void ScMultipleReadHeader::EndEntry()
     {
         if ( rStream.GetError() == SVSTREAM_OK )
             rStream.SetError( SCWARN_IMPORT_INFOLOST );
-        rStream.Seek( nEntryEnd );          // ignore the rest
+        rStream.Seek( nEntryEnd );          
     }
 
-    nEntryEnd = nTotalEnd;          // all remaining, if no StartEntry follows
+    nEntryEnd = nTotalEnd;          
 }
 
 void ScMultipleReadHeader::StartEntry()
@@ -124,12 +124,12 @@ ScMultipleWriteHeader::~ScMultipleWriteHeader()
     rStream.WriteUInt32( static_cast<sal_uInt32>(aMemStream.Tell()) );
     rStream.Write( aMemStream.GetData(), aMemStream.Tell() );
 
-    if ( nDataEnd - nDataPos != nDataSize )                 // matched default ?
+    if ( nDataEnd - nDataPos != nDataSize )                 
     {
         nDataSize = nDataEnd - nDataPos;
         sal_uLong nPos = rStream.Tell();
         rStream.Seek(nDataPos-sizeof(sal_uInt32));
-        rStream.WriteUInt32( nDataSize );                               // record size at the beginning
+        rStream.WriteUInt32( nDataSize );                               
         rStream.Seek(nPos);
     }
 }

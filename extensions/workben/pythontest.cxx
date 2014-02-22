@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -145,7 +145,7 @@ protected:
     XEngineRef  *m_pEngineRef;
     XInvokationRef *m_pInvokationRef;
     int m_bIsRunning;
-    int m_bIsTerminating;       // The listeners ignore everything when set
+    int m_bIsTerminating;       
 };
 
 
@@ -392,9 +392,9 @@ void CmdDebugger::dumpVarToStream( const char *pc , const UsrAny &aValue, FILE *
         fprintf( f, "void %s :\n" , pc );
     }
     else if( TypeClass_INTERFACE == type ) {
-        // Check, what has been put in
+        
         if( aValue.getReflection() == XPropertySet_getReflection() ) {
-            // XPropertySet !
+            
             XPropertySetRef *pRef = ( XPropertySetRef * ) aValue.get();
             XPropertySetInfoRef refInfo = (*pRef)->getPropertySetInfo();
             Sequence< Property > seq = refInfo->getProperties();
@@ -443,7 +443,7 @@ void CmdDebugger::detach()
     m_pInvokationRef = 0;
 }
 
-// Methoden von XInterface
+
 BOOL CmdDebugger::queryInterface( Uik aUik, XInterfaceRef & rOut )
 {
     if( aUik == XEngineListener::getSmartUik() )

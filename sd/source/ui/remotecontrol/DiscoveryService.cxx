@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <errno.h>
@@ -21,7 +21,7 @@
 #include "DiscoveryService.hxx"
 
 #ifdef WIN32
-  // LO vs WinAPI conflict
+  
   #undef WB_LEFT
   #undef WB_RIGHT
 
@@ -59,12 +59,12 @@ DiscoveryService::DiscoveryService()
     zService = NULL;
 
 #ifdef MACOSX
-    // Bonjour for OSX
+    
     zService = new OSXNetworkService();
 #endif
 
 #if HAVE_FEATURE_AVAHI
-    // Avahi for Linux
+    
     char hostname[1024];
     hostname[1023] = '\0';
     gethostname(hostname, 1023);
@@ -79,12 +79,12 @@ DiscoveryService::DiscoveryService()
     if (zService)
         zService->setup();
 
-    // Old implementation for backward compatibility matter
+    
     mSocket = socket( AF_INET, SOCK_DGRAM, IPPROTO_UDP );
     if (mSocket == -1)
     {
         SAL_WARN("sd", "DiscoveryService: socket failed: " << errno);
-        return; // would be better to throw, but unsure if caller handles that
+        return; 
     }
 
     sockaddr_in aAddr;
@@ -98,7 +98,7 @@ DiscoveryService::DiscoveryService()
     if (rc)
     {
         SAL_WARN("sd", "DiscoveryService: bind failed: " << errno);
-        return; // would be better to throw, but unsure if caller handles that
+        return; 
     }
 
     struct ip_mreq multicastRequest;
@@ -115,7 +115,7 @@ DiscoveryService::DiscoveryService()
     if (rc)
     {
         SAL_WARN("sd", "DiscoveryService: setsockopt failed: " << errno);
-        return; // would be better to throw, but unsure if caller handles that
+        return; 
     }
 }
 
@@ -134,7 +134,7 @@ DiscoveryService::~DiscoveryService()
 void SAL_CALL DiscoveryService::run()
 {
     osl::Thread::setName("DiscoveryService");
-    // Kept for backwrad compatibility
+    
     char aBuffer[BUFFER_SIZE];
     while ( true )
     {
@@ -153,7 +153,7 @@ void SAL_CALL DiscoveryService::run()
                 aStringBuffer.getLength(), 0, (sockaddr*) &aAddr,
                          sizeof(aAddr) ) <= 0 )
             {
-                // Read error or closed socket -- we are done.
+                
                 return;
             }
         }

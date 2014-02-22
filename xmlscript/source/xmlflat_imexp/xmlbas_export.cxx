@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlbas_export.hxx"
@@ -35,7 +35,7 @@ using namespace ::com::sun::star::uno;
 namespace xmlscript
 {
 
-    // component operations
+    
 
     OUString getImplementationName_XMLBasicExporter()
     {
@@ -99,7 +99,7 @@ namespace xmlscript
         return *pNames;
     }
 
-    // XMLBasicExporterBase
+    
 
     XMLBasicExporterBase::XMLBasicExporterBase( const Reference< XComponentContext >& rxContext, bool bOasis )
         :m_xContext( rxContext )
@@ -111,13 +111,13 @@ namespace xmlscript
     {
     }
 
-    // XServiceInfo
+    
     sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    // XInitialization
+    
 
     void XMLBasicExporterBase::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
@@ -138,7 +138,7 @@ namespace xmlscript
         }
     }
 
-    // XExporter
+    
 
     void XMLBasicExporterBase::setSourceDocument( const Reference< XComponent >& rxDoc )
         throw (IllegalArgumentException, RuntimeException)
@@ -153,7 +153,7 @@ namespace xmlscript
         }
     }
 
-    // XFilter
+    
 
 sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ )
         throw (RuntimeException)
@@ -168,7 +168,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
             {
                 m_xHandler->startDocument();
 
-                // ooo/script prefix and URI
+                
                 OUString aPrefix;
                 OUString aURI;
                 if ( m_bOasis )
@@ -182,32 +182,32 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                     aURI = XMLNS_SCRIPT_URI;
                 }
 
-                // ooo/script:libraries element
+                
                 OUString aLibContElementName( aPrefix );
                 aLibContElementName += ":libraries";
                 XMLElement* pLibContElement = new XMLElement( aLibContElementName );
                 Reference< xml::sax::XAttributeList > xLibContAttribs( pLibContElement );
 
-                // ooo/script namespace attribute
+                
                 pLibContElement->addAttribute( "xmlns:" + aPrefix, aURI );
 
-                // xlink namespace attribute
+                
                 pLibContElement->addAttribute( "xmlns:" XMLNS_XLINK_PREFIX, XMLNS_XLINK_URI );
 
-                // <ooo/script:libraries...
+                
                 m_xHandler->ignorableWhitespace( OUString() );
                 m_xHandler->startElement( aLibContElementName, xLibContAttribs );
 
                 Reference< script::XLibraryContainer2 > xLibContainer;
 
-                // try the XEmbeddedScripts interface
+                
                 Reference< document::XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
                 if ( xDocumentScripts.is() )
                     xLibContainer.set( xDocumentScripts->getBasicLibraries().get() );
 
                 if ( !xLibContainer.is() )
                 {
-                    // try the "BasicLibraries" property (old-style, for compatibility)
+                    
                     Reference< beans::XPropertySet > xPSet( m_xModel, UNO_QUERY );
                     if ( xPSet.is() )
                         xPSet->getPropertyValue("BasicLibraries" ) >>= xLibContainer;
@@ -230,64 +230,64 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
                             if ( xLibContainer->isLibraryLink( aLibName ) )
                             {
-                                // ooo/script:library-linked element
+                                
                                 OUString aLibElementName( aPrefix );
                                 aLibElementName +=  ":library-linked";
                                 XMLElement* pLibElement = new XMLElement( aLibElementName );
                                 Reference< xml::sax::XAttributeList > xLibAttribs;
                                 xLibAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
 
-                                // ooo/script:name attribute
+                                
                                 pLibElement->addAttribute( aPrefix + ":name", aLibName );
 
                                 OUString aLinkURL( xLibContainer->getLibraryLinkURL( aLibName ) );
                                 if ( !aLinkURL.isEmpty() )
                                 {
-                                    // xlink:href attribute
+                                    
                                     pLibElement->addAttribute( XMLNS_XLINK_PREFIX ":href", aLinkURL );
 
-                                    // xlink:type attribute
+                                    
                                     pLibElement->addAttribute( XMLNS_XLINK_PREFIX ":type", "simple" );
                                 }
 
                                 if ( xLibContainer->isLibraryReadOnly( aLibName ) )
                                 {
-                                    // ooo/script:readonly attribute
+                                    
                                     pLibElement->addAttribute( aPrefix + ":readonly", aTrueStr );
                                 }
 
-                                // <ooo/script:library-linked...
+                                
                                 m_xHandler->ignorableWhitespace( OUString() );
                                 m_xHandler->startElement( aLibElementName, xLibAttribs );
 
-                                // ...ooo/script:library-linked>
+                                
                                 m_xHandler->ignorableWhitespace( OUString() );
                                 m_xHandler->endElement( aLibElementName );
                             }
                             else
                             {
-                                // ooo/script:library-embedded element
+                                
                                 OUString aLibElementName( aPrefix );
                                 aLibElementName += ":library-embedded";
                                 XMLElement* pLibElement = new XMLElement( aLibElementName );
                                 Reference< xml::sax::XAttributeList > xLibAttribs;
                                 xLibAttribs = static_cast< xml::sax::XAttributeList* >( pLibElement );
 
-                                // ooo/script:name attribute
+                                
                                 pLibElement->addAttribute( aPrefix + ":name", aLibName );
 
                                 if ( xLibContainer->isLibraryReadOnly( aLibName ) )
                                 {
-                                    // ooo/script:readonly attribute
+                                    
                                     pLibElement->addAttribute( aPrefix + ":readonly", aTrueStr );
                                 }
 
-                                // TODO: password protected libraries
+                                
                                 Reference< script::XLibraryContainerPassword > xPasswd( xLibContainer, UNO_QUERY );
                                 if ( xPasswd.is() && xPasswd->isLibraryPasswordProtected( aLibName ) )
                                     continue;
 
-                                // <ooo/script:library-embedded...
+                                
                                 m_xHandler->ignorableWhitespace( OUString() );
                                 m_xHandler->startElement( aLibElementName, xLibAttribs );
 
@@ -307,51 +307,51 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                                         OUString aModName( pModNames[j] );
                                         if ( xLib->hasByName( aModName ) )
                                         {
-                                            // ooo/script:module element
+                                            
                                             OUString aModElementName( aPrefix );
                                             aModElementName += ":module";
                                             XMLElement* pModElement = new XMLElement( aModElementName );
                                             Reference< xml::sax::XAttributeList > xModAttribs;
                                             xModAttribs = static_cast< xml::sax::XAttributeList* >( pModElement );
 
-                                            // ooo/script:name attribute
+                                            
                                             pModElement->addAttribute( aPrefix + ":name", aModName );
 
-                                            // <ooo/script:module...
+                                            
                                             m_xHandler->ignorableWhitespace( OUString() );
                                             m_xHandler->startElement( aModElementName, xModAttribs );
 
-                                            // ooo/script:source-code element
+                                            
                                             OUString aSourceElementName( aPrefix );
                                             aSourceElementName += ":source-code";
                                             XMLElement* pSourceElement = new XMLElement( aSourceElementName );
                                             Reference< xml::sax::XAttributeList > xSourceAttribs;
                                             xSourceAttribs = static_cast< xml::sax::XAttributeList* >( pSourceElement );
 
-                                            // <ooo/script:source-code...
+                                            
                                             m_xHandler->ignorableWhitespace( OUString() );
                                             m_xHandler->startElement( aSourceElementName, xSourceAttribs );
 
-                                            // module data
-                                            // TODO: write encrypted data for password protected libraries
+                                            
+                                            
                                             OUString aSource;
                                             xLib->getByName( aModName ) >>= aSource;
                                             m_xHandler->characters( aSource );
 
-                                            // TODO: <ooo/script:byte-code>
+                                            
 
-                                            // ...ooo/script:source-code>
+                                            
                                             m_xHandler->ignorableWhitespace( OUString() );
                                             m_xHandler->endElement( aSourceElementName );
 
-                                            // ...ooo/script:module>
+                                            
                                             m_xHandler->ignorableWhitespace( OUString() );
                                             m_xHandler->endElement( aModElementName );
                                         }
                                     }
                                 }
 
-                                // ...ooo/script:library-embedded>
+                                
                                 m_xHandler->ignorableWhitespace( OUString() );
                                 m_xHandler->endElement( aLibElementName );
                             }
@@ -359,7 +359,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
                     }
                 }
 
-                // ...ooo/script:libraries>
+                
                 m_xHandler->ignorableWhitespace( OUString() );
                 m_xHandler->endElement( aLibContElementName );
 
@@ -395,10 +395,10 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // cancel export
+        
     }
 
-    // XMLBasicExporter
+    
 
     XMLBasicExporter::XMLBasicExporter( const Reference< XComponentContext >& rxContext )
         :XMLBasicExporterBase( rxContext, false )
@@ -409,7 +409,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     {
     }
 
-    // XServiceInfo
+    
 
     OUString XMLBasicExporter::getImplementationName(  ) throw (RuntimeException)
     {
@@ -421,7 +421,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         return getSupportedServiceNames_XMLBasicExporter();
     }
 
-    // XMLOasisBasicExporter
+    
 
     XMLOasisBasicExporter::XMLOasisBasicExporter( const Reference< XComponentContext >& rxContext )
         :XMLBasicExporterBase( rxContext, true )
@@ -432,7 +432,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     {
     }
 
-    // XServiceInfo
+    
 
     OUString XMLOasisBasicExporter::getImplementationName(  ) throw (RuntimeException)
     {
@@ -444,7 +444,7 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         return getSupportedServiceNames_XMLOasisBasicExporter();
     }
 
-    // component operations
+    
 
     Reference< XInterface > SAL_CALL create_XMLBasicExporter(
         Reference< XComponentContext > const & xContext )
@@ -460,6 +460,6 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
         return static_cast< lang::XTypeProvider * >( new XMLOasisBasicExporter( xContext ) );
     }
 
-}   // namespace xmlscript
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

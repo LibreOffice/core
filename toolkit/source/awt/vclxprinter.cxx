@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/awt/vclxprinter.hxx>
@@ -60,9 +60,9 @@
     return pProperties;
 }
 
-//    ----------------------------------------------------
-//    class VCLXPrinterPropertySet
-//    ----------------------------------------------------
+
+
+
 
 IMPLEMENT_FORWARD_XINTERFACE2( VCLXPrinterPropertySet, VCLXPrinterPropertySet_Base, OPropertySetHelper )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXPrinterPropertySet, VCLXPrinterPropertySet_Base, ::cppu::OPropertySetHelper )
@@ -195,7 +195,7 @@ void VCLXPrinterPropertySet::getFastPropertyValue( ::com::sun::star::uno::Any& r
     }
 }
 
-// ::com::sun::star::awt::XPrinterPropertySet
+
 void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( Mutex );
@@ -213,7 +213,7 @@ void VCLXPrinterPropertySet::setHorizontal( sal_Bool bHorizontal ) throw(::com::
     ::com::sun::star::uno::Sequence< OUString > aDescriptions( nPaperBinCount );
     for ( sal_uInt16 n = 0; n < nPaperBinCount; n++ )
     {
-        // Format: <DisplayFormName;FormNameId;DisplayPaperBinName;PaperBinNameId;DisplayPaperName;PaperNameId>
+        
         OUStringBuffer aDescr( "*;*;" );
         aDescr.append(GetPrinter()->GetPaperBinName( n ));
         aDescr.append(';');
@@ -262,9 +262,9 @@ void VCLXPrinterPropertySet::setBinarySetup( const ::com::sun::star::uno::Sequen
 }
 
 
-//    ----------------------------------------------------
-//    class VCLXPrinter
-//    ----------------------------------------------------
+
+
+
 VCLXPrinter::VCLXPrinter( const OUString& rPrinterName )
     : VCLXPrinter_Base( rPrinterName )
 {
@@ -328,9 +328,9 @@ void VCLXPrinter::endPage(  ) throw(::com::sun::star::awt::PrinterException, ::c
 }
 
 
-//    ----------------------------------------------------
-//    class VCLXInfoPrinter
-//    ----------------------------------------------------
+
+
+
 
 VCLXInfoPrinter::VCLXInfoPrinter( const OUString& rPrinterName )
     : VCLXInfoPrinter_Base( rPrinterName )
@@ -341,7 +341,7 @@ VCLXInfoPrinter::~VCLXInfoPrinter()
 {
 }
 
-// ::com::sun::star::awt::XInfoPrinter
+
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDevice > VCLXInfoPrinter::createDevice(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard( Mutex );
@@ -349,11 +349,11 @@ VCLXInfoPrinter::~VCLXInfoPrinter()
     return GetDevice();
 }
 
-//    ----------------------------------------------------
-//    class VCLXPrinterServer
-//    ----------------------------------------------------
 
-// ::com::sun::star::awt::XPrinterServer
+
+
+
+
 ::com::sun::star::uno::Sequence< OUString > VCLXPrinterServer::getPrinterNames(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     const std::vector<OUString>& rQueues = Printer::GetPrinterQueues();

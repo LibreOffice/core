@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "t602filter.hxx"
@@ -54,65 +54,65 @@ using com::sun::star::io::XInputStream;
 namespace T602ImportFilter {
 
     unsigned char kam2lat[129] =
-        //    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
-        "\xAC\x81\x82\xD4\x84\xD2\x9B\x9F\xD8\xB7\x91\xD6\x96\x92\x8E\xB5"  // 8
-        "\x90\xA7\xA6\x93\x94\xE0\x85\xE9\xEC\x99\x9A\xE6\x95\xED\xFC\x9C"  // 9
-        "\xA0\xA1\xA2\xA3\xE5\xD5\xDE\xE2\xE7\xFD\xEA\xE8\xCE\xF5\xAE\xAF"  // A
-        "\x80\x80\x83\xB3\xB4\xE1\x87\x88\x89\x8A\x8B\x8C\x8F\x97\x8D\xBF"  // B
-        "\xC0\xC1\xC2\xC3\xC4\xC5\xCF\x98\x9D\x9E\xA4\xA5\xA8\xA9\x86\xF3"  // C
-        "\xCD\xB1\xB2\xB6\xB8\xB9\xBA\xBB\xF7\xD9\xDA\xDB\xDC\xF8\xF9\xDF"  // D
-        "\xD0\xD1\xD3\xD7\xAA\xAB\xDD\xB0\xE3\xE4\xEB\xEE\xEF\xF0\xF2\xF4"  // E
-        "\xBC\xBD\xBE\xC6\xC7\xC8\xF6\xC9\xCA\xFA\xFB\xCB\xF1\xCC\xFE\xFF"; // F
+        
+        "\xAC\x81\x82\xD4\x84\xD2\x9B\x9F\xD8\xB7\x91\xD6\x96\x92\x8E\xB5"  
+        "\x90\xA7\xA6\x93\x94\xE0\x85\xE9\xEC\x99\x9A\xE6\x95\xED\xFC\x9C"  
+        "\xA0\xA1\xA2\xA3\xE5\xD5\xDE\xE2\xE7\xFD\xEA\xE8\xCE\xF5\xAE\xAF"  
+        "\x80\x80\x83\xB3\xB4\xE1\x87\x88\x89\x8A\x8B\x8C\x8F\x97\x8D\xBF"  
+        "\xC0\xC1\xC2\xC3\xC4\xC5\xCF\x98\x9D\x9E\xA4\xA5\xA8\xA9\x86\xF3"  
+        "\xCD\xB1\xB2\xB6\xB8\xB9\xBA\xBB\xF7\xD9\xDA\xDB\xDC\xF8\xF9\xDF"  
+        "\xD0\xD1\xD3\xD7\xAA\xAB\xDD\xB0\xE3\xE4\xEB\xEE\xEF\xF0\xF2\xF4"  
+        "\xBC\xBD\xBE\xC6\xC7\xC8\xF6\xC9\xCA\xFA\xFB\xCB\xF1\xCC\xFE\xFF"; 
 
     unsigned char koi2lat[129] =
-        //    0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
-        "\x80\x83\x86\xF5\xE1\x87\x88\x89\x8A\x8B\x8C\x8F\x97\xCF\xCF\x98"  // 8
-        "\x9D\x9E\xA4\xA5\xA8\xA9\xDB\xDC\xDF\xB1\xB2\xB6\xB8\xB9\xBA\xBB"  // 9
-        "\xBC\xBD\xBE\xC6\xC7\xC8\xF6\xC9\xCA\xCB\xCC\xCD\xCE\xAD\xAE\xAF"  // A
-        "\xD0\xD1\xD3\xD7\xAA\xAB\xDD\xB0\xE3\xE4\xEB\xEE\xEF\xF0\xF2\xF4"  // B
-        "\xDA\xA0\xC0\x9F\xD4\xD8\xEA\xC4\x81\xA1\x85\x92\x96\x94\xE5\xA2"  // C
-        "\x93\x84\xFD\xE7\x9C\xA3\xC3\x82\xF7\xEC\xA7\xC2\xF3\xF8\xF9\xC5"  // D
-        "\xBF\xB5\xD9\xAC\xD2\xB7\xE8\xB3\x9A\xD6\xDE\x91\x95\x99\xD5\xE0"  // E
-        "\xE2\x8E\xFC\xE6\x9B\xE9\xB4\x90\xFA\xED\xA6\xC1\xF1\xFB\xFE\xFF"; // F
+        
+        "\x80\x83\x86\xF5\xE1\x87\x88\x89\x8A\x8B\x8C\x8F\x97\xCF\xCF\x98"  
+        "\x9D\x9E\xA4\xA5\xA8\xA9\xDB\xDC\xDF\xB1\xB2\xB6\xB8\xB9\xBA\xBB"  
+        "\xBC\xBD\xBE\xC6\xC7\xC8\xF6\xC9\xCA\xCB\xCC\xCD\xCE\xAD\xAE\xAF"  
+        "\xD0\xD1\xD3\xD7\xAA\xAB\xDD\xB0\xE3\xE4\xEB\xEE\xEF\xF0\xF2\xF4"  
+        "\xDA\xA0\xC0\x9F\xD4\xD8\xEA\xC4\x81\xA1\x85\x92\x96\x94\xE5\xA2"  
+        "\x93\x84\xFD\xE7\x9C\xA3\xC3\x82\xF7\xEC\xA7\xC2\xF3\xF8\xF9\xC5"  
+        "\xBF\xB5\xD9\xAC\xD2\xB7\xE8\xB3\x9A\xD6\xDE\x91\x95\x99\xD5\xE0"  
+        "\xE2\x8E\xFC\xE6\x9B\xE9\xB4\x90\xFA\xED\xA6\xC1\xF1\xFB\xFE\xFF"; 
 
     unsigned char lat2UNC[257] =
-        //    0       1       2       3       4       5       6       7
-        //    8       9       A       B       C       D       E       F
-        "\x00\xe7\x00\xfc\x00\xe9\x00\xf9\x00\xe4\x01\x6f\x00\xe8\x00\xa3"  // 8
+        
+        
+        "\x00\xe7\x00\xfc\x00\xe9\x00\xf9\x00\xe4\x01\x6f\x00\xe8\x00\xa3"  
         "\x00\xc6\x00\xd8\x00\xc5\x00\xe6\x00\xf8\x00\xc4\x00\xc4\x00\xe5"
-        "\x00\xc9\x01\x39\x00\xf4\x00\xf4\x00\xf6\x01\x3d\x01\x3e\x00\x20"  // 9
+        "\x00\xc9\x01\x39\x00\xf4\x00\xf4\x00\xf6\x01\x3d\x01\x3e\x00\x20"  
         "\x00\xf2\x00\xd6\x00\xdc\x01\x64\x01\x65\x00\xec\x20\xa7\x01\x0d"
-        "\x00\xe1\x00\xed\x00\xf3\x00\xfa\x00\xa1\x00\xd1\x01\x7d\x01\x7e"  // A
+        "\x00\xe1\x00\xed\x00\xf3\x00\xfa\x00\xa1\x00\xd1\x01\x7d\x01\x7e"  
         "\x00\xbf\x00\xf1\x22\x11\x03\xc3\x01\x0c\x00\xa7\x00\xbb\x00\xab"
-        "\x25\x91\x25\x92\x25\x93\x25\x02\x25\x24\x00\xc1\x00\xc2\x01\x1a"  // B
+        "\x25\x91\x25\x92\x25\x93\x25\x02\x25\x24\x00\xc1\x00\xc2\x01\x1a"  
         "\x00\x20\x00\x20\x00\x20\x00\x20\x22\x61\x00\xb1\x22\x65\x25\x10"
-        "\x25\x14\x25\x34\x25\x2c\x25\x1c\x25\x00\x25\x3c\x22\x64\x23\x20"  // C
+        "\x25\x14\x25\x34\x25\x2c\x25\x1c\x25\x00\x25\x3c\x22\x64\x23\x20"  
         "\x23\x21\x22\x48\x00\xba\x22\x1a\x00\xb2\x00\xbd\x00\xbc\x00\xa4"
-        "\x03\xb1\x03\xb2\x01\x0e\x03\x93\x01\x0f\x01\x47\x00\xcd\x03\xc0"  // D
+        "\x03\xb1\x03\xb2\x01\x0e\x03\x93\x01\x0f\x01\x47\x00\xcd\x03\xc0"  
         "\x01\x1b\x25\x18\x25\x0c\x25\x88\x25\x84\x00\xb5\x01\x6e\x25\x80"
-        "\x00\xd3\x00\xdf\x00\xd4\x03\xa6\x03\x98\x01\x48\x01\x60\x01\x61"  // E
+        "\x00\xd3\x00\xdf\x00\xd4\x03\xa6\x03\x98\x01\x48\x01\x60\x01\x61"  
         "\x01\x54\x00\xda\x01\x55\x03\xa9\x00\xfd\x00\xdd\x03\xb4\x22\x1e"
-        "\x00\xf8\x02\xdd\x03\xb5\x02\xc7\x22\x29\x00\xa7\x00\xf7\x00\xe0"  // F
+        "\x00\xf8\x02\xdd\x03\xb5\x02\xc7\x22\x29\x00\xa7\x00\xf7\x00\xe0"  
         "\x00\xb4\x00\xb0\x00\xc0\x02\xc6\x01\x58\x01\x59\x00\x20\x00\x20";
 
     unsigned char rus2UNC[257] =
-        //    0       1       2       3       4       5       6       7
-        //    8       9       A       B       C       D       E       F
-        "\x04\x11\x00\xfc\x00\xe9\x04\x12\x00\xe4\x01\x6f\x04\x13\x04\x14"  // 8
+        
+        
+        "\x04\x11\x00\xfc\x00\xe9\x04\x12\x00\xe4\x01\x6f\x04\x13\x04\x14"  
         "\x04\x01\x04\x16\x04\x17\x04\x18\x04\x19\x00\xc4\x00\xc4\x04\x1a"
-        "\x00\xc9\x01\x39\x01\x3a\x00\xf4\x00\xf6\x01\x3d\x01\x3e\x00\x20"  // 9
+        "\x00\xc9\x01\x39\x01\x3a\x00\xf4\x00\xf6\x01\x3d\x01\x3e\x00\x20"  
         "\x04\x1c\x00\xd6\x00\xdc\x01\x64\x01\x65\x04\x1d\x04\x1f\x01\x0a"
-        "\x00\xe1\x00\xed\x00\xf3\x00\xfa\x04\x20\x04\x22\x01\x7d\x01\x7e"  // A
+        "\x00\xe1\x00\xed\x00\xf3\x00\xfa\x04\x20\x04\x22\x01\x7d\x01\x7e"  
         "\x04\x23\x04\x24\x04\x43\x04\x44\x01\x0c\x00\xa7\x04\x3b\x04\x3c"
-        "\x04\x47\x04\x26\x04\x27\x25\x02\x25\x24\x00\xc1\x04\x28\x01\x1a"  // B
+        "\x04\x47\x04\x26\x04\x27\x25\x02\x25\x24\x00\xc1\x04\x28\x01\x1a"  
         "\x04\x29\x04\x2a\x04\x2b\x04\x2c\x04\x2d\x04\x2e\x04\x2f\x25\x10"
-        "\x25\x14\x25\x34\x25\x2c\x25\x1c\x25\x00\x25\x3c\x04\x31\x04\x32"  // C
+        "\x25\x14\x25\x34\x25\x2c\x25\x1c\x25\x00\x25\x3c\x04\x31\x04\x32"  
         "\x04\x33\x04\x51\x04\x36\x04\x37\x04\x38\x04\x39\x04\x3a\x04\x1b"
-        "\x04\x3d\x04\x3f\x01\x0e\x04\x40\x01\x0f\x01\x47\x00\xcd\x04\x42"  // D
+        "\x04\x3d\x04\x3f\x01\x0e\x04\x40\x01\x0f\x01\x47\x00\xcd\x04\x42"  
         "\x01\x1b\x25\x18\x25\x0c\x25\x88\x25\x84\x04\x46\x01\x6e\x25\x80"
-        "\x00\xd3\x00\xdf\x00\xd4\x04\x48\x04\x49\x01\x48\x01\x60\x01\x61"  // E
+        "\x00\xd3\x00\xdf\x00\xd4\x04\x48\x04\x49\x01\x48\x01\x60\x01\x61"  
         "\x01\x54\x00\xda\x01\x55\x04\x4a\x00\xfd\x00\xdd\x04\x4b\x04\x4c"
-        "\x04\x4d\x02\xdd\x04\x4e\x02\xc7\x04\x4f\x00\xa7\x04\x34\x00\xe0"  // F
+        "\x04\x4d\x02\xdd\x04\x4e\x02\xc7\x04\x4f\x00\xa7\x04\x34\x00\xe0"  
         "\x00\xb4\x00\xb0\x00\xc0\x02\xc6\x01\x58\x01\x59\x00\x20\x00\x20";
 
 #define _AddAtt(_nam, _val) \
@@ -138,7 +138,7 @@ T602ImportFilter::~T602ImportFilter()
 {
 }
 
-// XExtendedTypeDetection
+
 OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
     throw(RuntimeException)
 {
@@ -166,21 +166,21 @@ OUString T602ImportFilter::detect( Sequence<PropertyValue>& Descriptor)
     return OUString(  "writer_T602_Document"  );
 }
 
-// XFilter
+
 sal_Bool SAL_CALL T602ImportFilter::filter( const Sequence< ::com::sun::star::beans::PropertyValue >& aDescriptor )
     throw (RuntimeException)
 {
     return importImpl ( aDescriptor );
 }
 
-// XImporter
+
 void SAL_CALL T602ImportFilter::setTargetDocument( const Reference< ::com::sun::star::lang::XComponent >& xDoc )
     throw (::com::sun::star::lang::IllegalArgumentException, RuntimeException)
 {
     mxDoc = xDoc;
 }
 
-// XInitialization
+
 void SAL_CALL T602ImportFilter::initialize( const Sequence< Any >& aArguments )
     throw (Exception, RuntimeException)
 {
@@ -201,7 +201,7 @@ void SAL_CALL T602ImportFilter::initialize( const Sequence< Any >& aArguments )
     }
 }
 
-// Other functions
+
 
 void T602ImportFilter::inschr(unsigned char ch)
 {
@@ -253,12 +253,12 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
         return sal_False;
     }
 
-    // An XML import service: what we push sax messages to..
+    
     OUString sXMLImportService (  "com.sun.star.comp.Writer.XMLImporter"  );
 
     mxHandler = Reference< XDocumentHandler >( mxMSF->createInstance( sXMLImportService ), UNO_QUERY );
 
-    // The XImporter sets up an empty target document for XDocumentHandler to write to..
+    
     Reference < XImporter > xImporter(mxHandler, UNO_QUERY);
     xImporter->setTargetDocument(mxDoc);
 
@@ -272,20 +272,20 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
 
     mxHandler->startDocument();
 
-    _AddAtt("xmlns:office", "http://openoffice.org/2000/office");
-    _AddAtt("xmlns:style", "http://openoffice.org/2000/style");
-    _AddAtt("xmlns:text", "http://openoffice.org/2000/text");
-    _AddAtt("xmlns:table", "http://openoffice.org/2000/table");
-    _AddAtt("xmlns:draw", "http://openoffice.org/2000/draw");
-    _AddAtt("xmlns:fo", "http://www.w3.org/1999/XSL/Format");
-    _AddAtt("xmlns:xlink", "http://www.w3.org/1999/xlink");
-    _AddAtt("xmlns:number", "http://openoffice.org/2000/datastyle");
-    _AddAtt("xmlns:svg", "http://www.w3.org/2000/svg");
-    _AddAtt("xmlns:chart", "http://openoffice.org/2000/chart");
-    _AddAtt("xmlns:dr3d", "http://openoffice.org/2000/dr3d");
-    _AddAtt("xmlns:math", "http://www.w3.org/1998/Math/MathML");
-    _AddAtt("xmlns:form", "http://openoffice.org/2000/form");
-    _AddAtt("xmlns:script", "http://openoffice.org/2000/script");
+    _AddAtt("xmlns:office", "http:
+    _AddAtt("xmlns:style", "http:
+    _AddAtt("xmlns:text", "http:
+    _AddAtt("xmlns:table", "http:
+    _AddAtt("xmlns:draw", "http:
+    _AddAtt("xmlns:fo", "http:
+    _AddAtt("xmlns:xlink", "http:
+    _AddAtt("xmlns:number", "http:
+    _AddAtt("xmlns:svg", "http:
+    _AddAtt("xmlns:chart", "http:
+    _AddAtt("xmlns:dr3d", "http:
+    _AddAtt("xmlns:math", "http:
+    _AddAtt("xmlns:form", "http:
+    _AddAtt("xmlns:script", "http:
     _AddAtt("office:class", "text");
     _AddAtt("office:version", "1.0");
     _Start("office:document-content");
@@ -300,7 +300,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
 
     _Start("office:automatic-styles");
 
-    // Standardni text
+    
     _AddAtt("style:name","P1");
     _AddAtt("style:family","paragraph");
     _AddAtt("style:parent-style-name","Standard");
@@ -311,7 +311,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // Standardni text - konec stranky
+    
     _AddAtt("style:name","P2");
     _AddAtt("style:family","paragraph");
     _AddAtt("style:parent-style-name","Standard");
@@ -323,7 +323,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T1 Normalni text
+    
     _AddAtt("style:name","T1");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -331,7 +331,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T2 Tucny text
+    
     _AddAtt("style:name","T2");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -340,7 +340,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T3 Kurziva
+    
     _AddAtt("style:name","T3");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -349,7 +349,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T4 Siroky text
+    
     _AddAtt("style:name","T4");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -359,7 +359,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T5 Vysoky text
+    
     _AddAtt("style:name","T5");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -370,7 +370,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T6 Velky text
+    
     _AddAtt("style:name","T6");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -380,7 +380,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T7 Podtrzeny text
+    
     _AddAtt("style:name","T7");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -389,7 +389,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T8 Podtrzena tucny text
+    
     _AddAtt("style:name","T8");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -399,7 +399,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T9 Podtrzena kurziva
+    
     _AddAtt("style:name","T9");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -409,7 +409,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T10 Horni index
+    
     _AddAtt("style:name","T10");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -418,7 +418,7 @@ sal_Bool SAL_CALL T602ImportFilter::importImpl( const Sequence< ::com::sun::star
     _End("style:properties");
     _End("style:style");
 
-    // T11 Dolni index
+    
     _AddAtt("style:name","T11");
     _AddAtt("style:family","text");
     _Start("style:style");
@@ -606,7 +606,7 @@ sal_Int16 T602ImportFilter::readnum(unsigned char *ch, bool show)
     }
     buff[i]='\0';
 
-    // mba: cast from unsigned char via int to sal_Int16 seems to be safe
+    
     return (sal_Int16) atoi((char *)buff);
 }
 
@@ -619,9 +619,9 @@ unsigned char T602ImportFilter::Setformat602(char *cmd)
 
          if (cmd[0]=='M' && cmd[1]=='T') format602.mt = readnum(&ch,false);
     else if (cmd[0]=='M' && cmd[1]=='B') format602.mb = readnum(&ch,false);
-    // else if (cmd[0]=='T' && cmd[1]=='B') {}
-    // else if (cmd[0]=='H' && cmd[1]=='E') {}
-    // else if (cmd[0]=='F' && cmd[1]=='O') {}
+    
+    
+    
     else if (cmd[0]=='C' && cmd[1]=='T') {
         format602.ct = readnum(&ch,false);
         if (!ini.forcecode)
@@ -634,7 +634,7 @@ unsigned char T602ImportFilter::Setformat602(char *cmd)
         }
     else if (cmd[0]=='P' && cmd[1]=='N')  format602.pn = readnum(&ch,false);
     else if (cmd[0]=='L' && cmd[1]=='H')  format602.lh = readnum(&ch,false);
-    // else if(cmd[0]=='S' && cmd[1]=='T') {} //styl
+    
     else if (cmd[0]=='L' && cmd[1]=='M')  format602.lm = readnum(&ch,false);
     else if (cmd[0]=='R' && cmd[1]=='M')  format602.rm = readnum(&ch,false);
     else if (cmd[0]=='P' && cmd[1]=='L')  format602.pl = readnum(&ch,false);
@@ -652,14 +652,14 @@ tnode T602ImportFilter::PointCmd602(unsigned char *ch)
 {
     char pcmd[2];
 
-    // warning: uChar -> char
+    
     pcmd[0] = (char) toupper(*ch); inschr(*ch);
     *ch = Readchar602();
     if (!*ch) return EEND;
     if (*ch=='\n') return EOL;
     if (!isalpha(*ch)) return (*ch<32) ? SETCH : WRITE;
 
-    // warning: uChar -> char
+    
     pcmd[1] = (char) toupper(*ch); inschr(*ch);
 
          if (pcmd[0]=='P' && pcmd[1]=='A') { if (pst.pars) pst.willbeeop = true; }
@@ -674,9 +674,9 @@ tnode T602ImportFilter::PointCmd602(unsigned char *ch)
         if (!*ch) return EEND;
         if (*ch=='\n') return EOL;
     }
-    // else if(pcmd[0]=='K'&&pcmd[1]=='P') {}
-    // else if(pcmd[0]=='H'&&pcmd[1]=='E') {}
-    // else if(pcmd[0]=='F'&&pcmd[1]=='O') {}
+    
+    
+    
 
     return READCH;
 }
@@ -738,7 +738,7 @@ void T602ImportFilter::Read602()
                 ch = Readchar602();
                 cmd602[1] = ch;
                 cmd602[2] = '\0';
-                if(isupper(ch)) node = SETCMD;   //nedodelano
+                if(isupper(ch)) node = SETCMD;   
                 else { inschr('@'); _Chars(cmd602); node = READCH; }
             } else {
                 inschr('@');
@@ -754,19 +754,19 @@ void T602ImportFilter::Read602()
             break;
 
         case SETCH :
-            // warning: potentially uninitialized
+            
             switch(ch) {
             case '\t' : _Start("text:tab-stop");
                     _End("text:tab-stop");
                     break;
-            case 0x03 : break; //condensed
-            case 0x01 : break; //elite
-            case 0x11 : break; //uzv1
-            case 0x12 : break; //uzv2
-            case 0x15 : break; //uzv3
-            case 0x17 : break; //uzv4
-            case 0x18 : break; //uzv5
-            case 0x19 : break; //uzv6
+            case 0x03 : break; 
+            case 0x01 : break; 
+            case 0x11 : break; 
+            case 0x12 : break; 
+            case 0x15 : break; 
+            case 0x17 : break; 
+            case 0x18 : break; 
+            case 0x19 : break; 
             case 0x13 : fst.uline = !fst.uline;break;
             case 0x02 : setfnt(fat,false);     break;
             case 0x04 : setfnt(cursive,false); break;
@@ -787,10 +787,10 @@ void T602ImportFilter::Read602()
                 ch = Readchar602();
                 if( ch == 0x0a) {
                     if(ini.reformatpars) inschr(' ');
-                    else par602(false); //formatovaci radek
+                    else par602(false); 
                     node = EOL;
                 } else {
-                    inschr(0x8d);//inschr(' ');
+                    inschr(0x8d);
                     if(ch == 0) node = EEND;
                     else if(ch == '\n') {
                         if(!pst.willbeeop) par602(false);
@@ -806,7 +806,7 @@ void T602ImportFilter::Read602()
             case 0xad:
                 ch = Readchar602();
                 if( ch==0x8d ) {
-                    if(ini.showcomm||!pst.comment) { //formatovaci pomlcka
+                    if(ini.showcomm||!pst.comment) { 
                         if(!ini.reformatpars)
                             inschr('-');
                         else {
@@ -840,7 +840,7 @@ void T602ImportFilter::Read602()
     node = QUIT;
 }
 
-// XServiceInfo
+
 OUString SAL_CALL T602ImportFilter::getImplementationName(  )
     throw (RuntimeException)
 {
@@ -890,7 +890,7 @@ T602ImportFilterDialog::~T602ImportFilterDialog()
         delete mpResMgr;
 }
 
-// XLocalizable
+
 
 void SAL_CALL T602ImportFilterDialog::setLocale( const Locale& eLocale )
     throw(::com::sun::star::uno::RuntimeException)
@@ -1133,7 +1133,7 @@ void SAL_CALL T602ImportFilterDialog::setPropertyValues( const uno::Sequence<bea
 }
 
 
-// XServiceInfo
+
 OUString SAL_CALL T602ImportFilterDialog::getImplementationName(  )
     throw (RuntimeException)
 {

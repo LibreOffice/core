@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -123,7 +123,7 @@ view::XSelectionSupplier* SwView::GetUNOObject()
 void SwView::ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions)
 {
     m_pWrtShell->ApplyAccessiblityOptions(rAccessibilityOptions);
-    //to enable the right state of the selection cursor in readonly documents
+    
     if(GetDocShell()->IsReadOnly())
         m_pWrtShell->ShowCrsr();
 
@@ -184,17 +184,17 @@ static void lcl_SetViewMetaChars( SwViewOption& rVOpt, sal_Bool bOn)
 
 void SwView::RecheckBrowseMode()
 {
-    // OS: pay attention to numerical order!
+    
     static sal_uInt16 const aInva[] =
         {
-            //SID_NEWWINDOW,/*5620*/
+            
             SID_BROWSER_MODE, /*6313*/
             SID_RULER_BORDERS, SID_RULER_PAGE_POS,
-            //SID_ATTR_LONG_LRSPACE,
+            
             SID_HTML_MODE,
             SID_RULER_PROTECT,
-            //SID_AUTOSPELL_CHECK,
-            //SID_AUTOSPELL_MARKOFF,
+            
+            
             FN_RULER,       /*20211*/
             FN_VIEW_GRAPHIC,    /*20213*/
             FN_VIEW_BOUNDS,     /**/
@@ -204,14 +204,14 @@ void SwView::RecheckBrowseMode()
             FN_HSCROLLBAR,      /*20218*/
             FN_VIEW_META_CHARS, /**/
             FN_VIEW_MARKS,      /**/
-            //FN_VIEW_FIELDNAME,    /**/
+            
             FN_VIEW_TABLEGRID,  /*20227*/
             FN_PRINT_LAYOUT, /*20237*/
             FN_QRY_MERGE,   /*20364*/
             FN_SHADOWCURSOR, /**/
             0
         };
-    // the view must not exist!
+    
     GetViewFrame()->GetBindings().Invalidate(aInva);
     CheckVisArea();
 
@@ -222,7 +222,7 @@ void SwView::RecheckBrowseMode()
     InvalidateBorder();
 }
 
-// State of view options
+
 
 void SwView::StateViewOptions(SfxItemSet &rSet)
 {
@@ -334,7 +334,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
     }
 }
 
-// execute view options
+
 
 void SwView::ExecViewOptions(SfxRequest &rReq)
 {
@@ -406,7 +406,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         else if( nSlot == FN_PRINT_LAYOUT )
             bFlag = !bFlag;
         bBrowseModeChanged = bFlag != pOpt->getBrowseMode();
-        // Disable "multiple layout"
+        
         GetDocShell()->ToggleBrowserMode( bFlag, this );
         pOpt->setBrowseMode( bFlag );
         break;
@@ -507,14 +507,14 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             if (xLngProp.is())
                 xLngProp->setIsSpellAuto( bSet );
 
-            // for the time being we do not have a specific option for grammarchecking.
-            // thus we'll use the one for spell checking...
+            
+            
             if (bSet)
             {
                 SwDocShell *pDocSh = GetDocShell();
                 SwDoc *pDoc = pDocSh? pDocSh->GetDoc() : NULL;
 
-                // right now we don't have view options for automatic grammar checking. Thus...
+                
                 sal_Bool bIsAutoGrammar = sal_False;
                 aCfg.GetProperty( UPN_IS_GRAMMAR_AUTO ) >>= bIsAutoGrammar;
 
@@ -537,7 +537,7 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
         return;
     }
 
-    // Set UserPrefs, mark request as modified
+    
     sal_Bool bWebView =  0 != dynamic_cast<const SwWebView*>(this);
     SwWrtShell &rSh = GetWrtShell();
     rSh.StartAction();
@@ -551,23 +551,23 @@ void SwView::ExecViewOptions(SfxRequest &rReq)
             CheckVisArea();
         }
 
-        // The UsrPref must be marked as modified.
-        // call for initialization
+        
+        
         pModule->GetUsrPref(bWebView);
         pModule->CheckSpellChanges( pOpt->IsOnlineSpell(), false, false, false );
     }
-    //OS: Set back modified again, because view/fields sets the Doc modified.
+    
     if( !bModified )
         rSh.ResetModified();
 
     pModule->ApplyUsrPref( *pOpt, this, bWebView ? VIEWOPT_DEST_WEB : VIEWOPT_DEST_TEXT );
 
-    // #i6193# let postits know about new spellcheck setting
+    
     if ( nSlot == SID_AUTOSPELL_CHECK )
         GetPostItMgr()->SetSpellChecking();
 
     const sal_Bool bLockedView = rSh.IsViewLocked();
-    rSh.LockView( sal_True );    //lock visible section
+    rSh.LockView( sal_True );    
     GetWrtShell().EndAction();
     if( bBrowseModeChanged && !bFlag )
         CalcVisArea( GetEditWin().GetOutputSizePixel() );

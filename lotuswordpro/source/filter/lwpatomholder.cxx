@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -70,7 +70,7 @@ LwpAtomHolder::~LwpAtomHolder()
 */
 void LwpAtomHolder::Read(LwpObjectStream *pStrm)
 {
-    //Referred to lwp: file40.cpp, QuickReadAtomHolder()
+    
 
     sal_uInt16 diskSize = pStrm->QuickReaduInt16();
     sal_uInt16 len = pStrm->QuickReaduInt16();
@@ -82,7 +82,7 @@ void LwpAtomHolder::Read(LwpObjectStream *pStrm)
     }
     m_nAtom = m_nAssocAtom = len;
 
-    //rtl_TextEncoding rEncode =  osl_getThreadTextEncoding();
+    
     rtl_TextEncoding rEncode =  RTL_TEXTENCODING_MS_1252;
     len = LwpTools::QuickReadUnicode(pStrm, m_String, diskSize-sizeof(diskSize), rEncode);
 }
@@ -101,8 +101,8 @@ void LwpAtomHolder::Skip(LwpObjectStream *pStrm)
 */
 void LwpAtomHolder::ReadPathAtom(LwpObjectStream *pStrm)
 {
-    //Referred to lwp: file40.cpp, QuickReadPathAtom()
-    // TODO:  Read the data. Now just skip it. The method to skip is same as above.
+    
+    
     Skip(pStrm);
 }
 

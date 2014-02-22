@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/servicefactory.hxx>
@@ -32,16 +32,16 @@
 
 #include <vector>
 
-//-------------------------------------------------------------
-// my defines
-//-------------------------------------------------------------
+
+
+
 
 #define TEST_CLIPBOARD
 #define RDB_SYSPATH  "d:\\projects\\src621\\dtrans\\wntmsci7\\bin\\applicat.rdb"
 
-//------------------------------------------------------------
-//  namesapces
-//------------------------------------------------------------
+
+
+
 
 using namespace ::rtl;
 using namespace ::std;
@@ -51,26 +51,26 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
-//----------------------------------------------------------------
+
 //
-//----------------------------------------------------------------
+
 
 void ShutdownServiceMgr( Reference< XMultiServiceFactory >& SrvMgr )
 {
-    // Cast factory to XComponent
+    
     Reference< XComponent > xComponent( SrvMgr, UNO_QUERY );
 
     if ( !xComponent.is() )
         OSL_FAIL("Error shuting down");
 
-    // Dispose and clear factory
+    
     xComponent->dispose();
     SrvMgr.clear();
 }
 
-//----------------------------------------------------------------
+
 //
-//----------------------------------------------------------------
+
 
 sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData )
 {
@@ -80,7 +80,7 @@ sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData 
     if ( !fstream )
         return sal_False;
 
-    // set pointer to file start
+    
     fseek( fstream, 0L, SEEK_SET );
 
     char line[1024];
@@ -95,9 +95,9 @@ sal_Bool readCntTypesFromFileIntoVector( char* fname, vector< string >& vecData 
     return sal_True;
 }
 
-//----------------------------------------------------------------
+
 //
-//----------------------------------------------------------------
+
 
 sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& vecData, Reference< XMimeContentTypeFactory > cnttypeFactory )
 {
@@ -107,7 +107,7 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
     if ( !fstream )
         return sal_False;
 
-    // set pointer to file start
+    
     fseek( fstream, 0L, SEEK_SET );
 
     vector< string >::iterator iter_end = vecData.end( );
@@ -152,22 +152,22 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
     return sal_True;
 }
 
-//----------------------------------------------------------------
-//  main
-//----------------------------------------------------------------
+
+
+
 
 int SAL_CALL main( int nArgc, char* argv[] )
 {
     if ( nArgc != 3 )
         printf( "Start with: testcnttype input-file output-file\n" );
 
-    //-------------------------------------------------
-    // get the global service-manager
-    //-------------------------------------------------
+    
+    
+    
     OUString rdbName = OUString(  RDB_SYSPATH  );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occurred.
+    
     if ( !g_xFactory.is( ) )
     {
         OSL_FAIL("Can't create RegistryServiceFactory");
@@ -176,7 +176,7 @@ int SAL_CALL main( int nArgc, char* argv[] )
 
     vector< string > vecCntTypes;
 
-    // open input-file and read the data
+    
     if ( !readCntTypesFromFileIntoVector( argv[1], vecCntTypes ) )
     {
         printf( "Can't open input file" );
@@ -198,9 +198,9 @@ int SAL_CALL main( int nArgc, char* argv[] )
         ShutdownServiceMgr( g_xFactory );
     }
 
-    //--------------------------------------------------
-    // shutdown the service manager
-    //--------------------------------------------------
+    
+    
+    
 
     ShutdownServiceMgr( g_xFactory );
 

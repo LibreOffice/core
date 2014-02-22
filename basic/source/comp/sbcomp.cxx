@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -25,33 +25,33 @@
 #include <svtools/miscopt.hxx>
 #include <stdio.h>
 
-// To activate tracing enable in sbtrace.hxx
+
 #ifdef DBG_TRACE_BASIC
 
-// Trace ini file (set NULL to ignore)
-// can be overridden with the environment variable OOO_BASICTRACEINI
-static char     GpTraceIniFile[] = "~/BasicTrace.ini";
-//static char*  GpTraceIniFile = NULL;
 
-// Trace Settings, used if no ini file / not found in ini file
+
+static char     GpTraceIniFile[] = "~/BasicTrace.ini";
+
+
+
 static char     GpTraceFileNameDefault[] = "~/BasicTrace.txt";
 static char*    GpTraceFileName = GpTraceFileNameDefault;
 
-// GbTraceOn:
-// true = tracing is active, false = tracing is disabled, default = true
-// Set to false initially if you want to activate tracing on demand with
-// TraceCommand( "TraceOn" ), see below
+
+
+
+
 static bool GbTraceOn = true;
 
-// GbIncludePCodes:
-// true = PCodes are written to trace, default = false, correspondents
-// with TraceCommand( "PCodeOn" / "PCodeOff" ), see below
+
+
+
 static bool GbIncludePCodes = false;
 
-// GbInitOnlyAtOfficeStart:
-// true = Tracing is only intialized onces after Office start when
-// Basic runs the first time. Further calls to Basic, e.g. via events
-// use the same output file. The trace ini file is not read again.
+
+
+
+
 static bool GbInitOnlyAtOfficeStart = false;
 
 static int  GnIndentPerCallLevel = 4;
@@ -81,26 +81,26 @@ static int  GnIndentForPCode = 2;
 #include <stack>
 #include <canvas/elapsedtime.hxx>
 
-//*** Profiling ***
-// GbTimerOn:
-// true = including time stamps
+
+
+
 static bool GbTimerOn = true;
 
-// GbTimeStampForEachStep:
-// true = prints time stamp after each command / pcode (very slow)
+
+
 static bool GbTimeStampForEachStep = false;
 
-// GbBlockAllAfterFirstFunctionUsage:
-// true = everything (commands, pcodes, functions) is only printed
-// for the first usage (improves performance when tracing / pro-
-// filing large macros)
+
+
+
+
 static bool GbBlockAllAfterFirstFunctionUsage = false;
 
-// GbBlockStepsAfterFirstFunctionUsage:
-// true = commands / pcodes are only printed for the first time
-// a function is executed. Afterwards only the entering/leaving
-// messages are logged (improves performance when tracing / pro-
-// filing large macros)
+
+
+
+
+
 static bool GbBlockStepsAfterFirstFunctionUsage = false;
 
 #endif
@@ -114,11 +114,11 @@ static void lcl_skipWhites( char*& rpc )
 
 inline void lcl_findNextLine( char*& rpc, char* pe )
 {
-    // Find line end
+    
     while( rpc < pe && *rpc != 13 && *rpc != 10 )
         ++rpc;
 
-    // Read all
+    
     while( rpc < pe && (*rpc == 13 || *rpc == 10) )
         ++rpc;
 }
@@ -143,14 +143,14 @@ static void lcl_ReadIniFile( const char* pIniFileName )
 
     size_t nRead = fread( Buffer, 1, BUF_SIZE, pFile );
 
-    // Scan
+    
     char* pc = Buffer;
     char* pe = Buffer + nRead;
     while( pc < pe )
     {
         lcl_skipWhites( pc ); if( pc == pe ) break;
 
-        // Read variable
+        
         char* pVarStart = pc;
         while( pc < pe && lcl_isAlpha( *pc ) )
             ++pc;
@@ -163,14 +163,14 @@ static void lcl_ReadIniFile( const char* pIniFileName )
         strncpy( VarNameBuffer, pVarStart, nVarLen );
         VarNameBuffer[nVarLen] = '\0';
 
-        // Check =
+        
         lcl_skipWhites( pc ); if( pc == pe ) break;
         if( *pc != '=' )
             continue;
         ++pc;
         lcl_skipWhites( pc ); if( pc == pe ) break;
 
-        // Read value
+        
         char* pValStart = pc;
         while( pc < pe && *pc != 13 && *pc != 10 )
             ++pc;
@@ -183,7 +183,7 @@ static void lcl_ReadIniFile( const char* pIniFileName )
         strncpy( ValBuffer, pValStart, nValLen );
         ValBuffer[nValLen] = '\0';
 
-        // Match variables
+        
         if( strcmp( VarNameBuffer, "GpTraceFileName") == 0 )
         {
             strcpy( TraceFileNameBuffer, ValBuffer );
@@ -265,7 +265,7 @@ static OString lcl_toOStringSkipLeadingWhites( const OUString& aStr )
     OString aOStr = OUStringToOString( OUString( aStr ), RTL_TEXTENCODING_ASCII_US );
     const sal_Char* pStr = aOStr.getStr();
 
-    // Skip whitespace
+    
     sal_Char c = *pStr;
     while( c == ' ' || c == '\t' )
     {
@@ -295,7 +295,7 @@ OUString lcl_dumpMethodParameters( SbMethod* pMethod )
     if ( pParams )
     {
         aStr += '(';
-        // 0 is sub itself
+        
         for ( sal_uInt16 nParam = 1; nParam < pParams->Count(); nParam++ )
         {
             SbxVariable* pVar = pParams->Get( nParam );
@@ -339,7 +339,7 @@ OUString lcl_dumpMethodParameters( SbMethod* pMethod )
 }
 
 
-// Public functions
+
 static bool GbSavTraceOn = false;
 
 #ifdef DBG_TRACE_PROFILING
@@ -379,7 +379,7 @@ bool compareFunctionNetTime( FunctionItem* p1, FunctionItem* p2 )
 
 void lcl_printTimeOutput( void )
 {
-    // Overall time output
+    
     lcl_lineOut( "" );
     lcl_lineOut( "***** Time Output *****" );
     char TimeBuffer[500];
@@ -605,7 +605,7 @@ void dbg_traceStep( SbModule* pModule, sal_uInt32 nPC, sal_Int32 nCallLvl )
     {
         double dDiffTime = dCurTime - GdLastTime;
         GdLastTime = dCurTime;
-        sprintf( TimeBuffer, "\t\t// Time = %f ms / += %f ms", dCurTime*1000.0, dDiffTime*1000.0 );
+        sprintf( TimeBuffer, "\t\t
     }
 #endif
 
@@ -801,7 +801,7 @@ void dbg_traceNotifyCall( SbModule* pModule, SbMethod* pMethod, sal_Int32 nCallL
     char TimeBuffer[200];
     if( GbTimerOn && bLeave )
     {
-        sprintf( TimeBuffer, "    // Execution Time = %f ms", dExecutionTime*1000.0 );
+        sprintf( TimeBuffer, "    
         pPostStr = TimeBuffer;
     }
 #endif
@@ -939,8 +939,8 @@ void RTL_Impl_TraceCommand( StarBASIC* pBasic, SbxArray& rPar, sal_Bool bWrite )
 
 #endif
 
-// This routine is defined here, so that the
-// compiler can be loaded as a discrete segment.
+
+
 
 sal_Bool SbModule::Compile()
 {
@@ -959,21 +959,21 @@ sal_Bool SbModule::Compile()
     if( !pParser->GetErrors() )
         pParser->aGen.Save();
     delete pParser;
-    // for the disassembler
+    
     if( pImage )
         pImage->aOUSource = aOUSource;
 
     GetSbData()->pCompMod = pOld;
 
-    // compiling a module, the module-global
-    // variables of all modules become invalid
+    
+    
     sal_Bool bRet = IsCompiled();
     if( bRet )
     {
         if( !this->ISA(SbObjModule) )
             pBasic->ClearAllModuleVars();
-        RemoveVars(); // remove 'this' Modules variables
-        // clear all method statics
+        RemoveVars(); 
+        
         for( sal_uInt16 i = 0; i < pMethods->Count(); i++ )
         {
             SbMethod* p = PTR_CAST(SbMethod,pMethods->Get( i ) );
@@ -981,7 +981,7 @@ sal_Bool SbModule::Compile()
                 p->ClearStatics();
         }
 
-        // #i31510 Init other libs only if Basic isn't running
+        
         if( GetSbData()->pInst == NULL )
         {
             SbxObject* pParent_ = pBasic->GetParent();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -45,10 +45,10 @@ const OUString DAVProperties::SUPPORTEDLOCK =
                 OUString( "DAV:supportedlock" );
 
 const OUString DAVProperties::EXECUTABLE =
-                OUString( "http://apache.org/dav/props/executable" );
+                OUString( "http:
 
-// -------------------------------------------------------------------
-// static
+
+
 void DAVProperties::createSerfPropName( const OUString & rFullName,
                                         SerfPropName & rName )
 {
@@ -60,55 +60,55 @@ void DAVProperties::createSerfPropName( const OUString & rFullName,
                         rFullName.copy( RTL_CONSTASCII_LENGTH( "DAV:" ) ),
                                         RTL_TEXTENCODING_UTF8 ) );
     }
-    else if ( rFullName.startsWith( "http://apache.org/dav/props/" ) )
+    else if ( rFullName.startsWith( "http:
     {
-        rName.nspace = "http://apache.org/dav/props/";
+        rName.nspace = "http:
         rName.name
             = strdup( OUStringToOString(
                         rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
-                                "http://apache.org/dav/props/" ) ),
+                                "http:
                             RTL_TEXTENCODING_UTF8 ) );
     }
-    else if ( rFullName.startsWith( "http://ucb.openoffice.org/dav/props/" ) )
+    else if ( rFullName.startsWith( "http:
     {
-        rName.nspace = "http://ucb.openoffice.org/dav/props/";
+        rName.nspace = "http:
         rName.name
             = strdup( OUStringToOString(
                         rFullName.copy(
                             RTL_CONSTASCII_LENGTH(
-                                "http://ucb.openoffice.org/dav/props/" ) ),
+                                "http:
                             RTL_TEXTENCODING_UTF8 ) );
     }
     else if ( rFullName.startsWith( "<prop:" ) )
     {
-        // Support for 3rd party namespaces/props
+        
 
         OString aFullName
             = OUStringToOString( rFullName, RTL_TEXTENCODING_UTF8 );
 
-        // Format: <prop:the_propname xmlns:prop="the_namespace">
+        
 
         sal_Int32 nStart = RTL_CONSTASCII_LENGTH( "<prop:" );
         sal_Int32 nLen = aFullName.indexOf( ' ' ) - nStart;
         rName.name = strdup( aFullName.copy( nStart, nLen ) );
 
-        nStart = aFullName.indexOf( '=', nStart + nLen ) + 2; // after ="
+        nStart = aFullName.indexOf( '=', nStart + nLen ) + 2; 
         nLen = aFullName.getLength() - RTL_CONSTASCII_LENGTH( "\">" ) - nStart;
         rName.nspace = strdup( aFullName.copy( nStart, nLen ) );
     }
     else
     {
-        // Add our namespace to our own properties.
-        rName.nspace = "http://ucb.openoffice.org/dav/props/";
+        
+        rName.nspace = "http:
         rName.name
             = strdup( OUStringToOString( rFullName,
                                               RTL_TEXTENCODING_UTF8 ) );
     }
 }
 
-// -------------------------------------------------------------------
-// static
+
+
 void DAVProperties::createUCBPropName( const char * nspace,
                                        const char * name,
                                        OUString & rFullName )
@@ -120,9 +120,9 @@ void DAVProperties::createUCBPropName( const char * nspace,
 
     if ( !aNameSpace.getLength() )
     {
-        // Some servers send XML without proper namespaces. Assume "DAV:"
-        // in this case, if name is a well-known dav property name.
-        // Although this is not 100% correct, it solves many problems.
+        
+        
+        
 
         if ( DAVProperties::RESOURCETYPE.matchIgnoreAsciiCase( aName, 4 )  ||
              DAVProperties::SUPPORTEDLOCK.matchIgnoreAsciiCase( aName, 4 ) ||
@@ -139,29 +139,29 @@ void DAVProperties::createUCBPropName( const char * nspace,
         }
     }
 
-    // Note: Concatenating strings BEFORE comparing against known namespaces
-    //       is important. See RFC 2815 ( 23.4.2 Meaning of Qualified Names ).
+    
+    
     rFullName  = aNameSpace;
     rFullName += aName;
 
     if ( rFullName.startsWith( "DAV:" ) )
     {
-        // Okay, Just concat strings.
+        
     }
-    else if ( rFullName.startsWith( "http://apache.org/dav/props/" ) )
+    else if ( rFullName.startsWith( "http:
     {
-        // Okay, Just concat strings.
+        
     }
-    else if ( rFullName.startsWith( "http://ucb.openoffice.org/dav/props/" ) )
+    else if ( rFullName.startsWith( "http:
     {
-        // Remove namespace from our own properties.
+        
         rFullName = rFullName.copy(
                         RTL_CONSTASCII_LENGTH(
-                            "http://ucb.openoffice.org/dav/props/" ) );
+                            "http:
     }
     else
     {
-        // Create property name that encodes, namespace and name ( XML ).
+        
         rFullName  = "<prop:";
         rFullName += aName;
         rFullName += " xmlns:prop=\"";
@@ -170,13 +170,13 @@ void DAVProperties::createUCBPropName( const char * nspace,
     }
 }
 
-// -------------------------------------------------------------------
-// static
+
+
 bool DAVProperties::isUCBDeadProperty( const SerfPropName & rName )
 {
     return ( rName.nspace &&
              ( rtl_str_compareIgnoreAsciiCase(
-                 rName.nspace, "http://ucb.openoffice.org/dav/props/" )
+                 rName.nspace, "http:
                == 0 ) );
 }
 
@@ -197,7 +197,7 @@ bool DAVProperties::isUCBSpecialProperty(const rtl::OUString& rFullName, rtl::OU
     if ( !sPropName.getLength() )
         return false;
 
-    // TODO skip whitespaces?
+    
     if ( !rFullName.startsWith( "xmlns:prop=\"", ++nEnd ) )
         return false;
 

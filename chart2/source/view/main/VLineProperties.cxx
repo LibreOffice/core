@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VLineProperties.hxx"
@@ -25,14 +25,14 @@ namespace chart
 {
 using namespace ::com::sun::star;
 
-//  get line properties from a propertyset
+
 
 VLineProperties::VLineProperties()
 {
-    this->Color = uno::makeAny( sal_Int32(0x000000) ); //type sal_Int32 UNO_NAME_LINECOLOR
-    this->LineStyle = uno::makeAny( drawing::LineStyle_SOLID ); //type drawing::LineStyle for property UNO_NAME_LINESTYLE
-    this->Transparence = uno::makeAny( sal_Int16(0) );//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
-    this->Width = uno::makeAny( sal_Int32(0) );//type sal_Int32 for property UNO_NAME_LINEWIDTH
+    this->Color = uno::makeAny( sal_Int32(0x000000) ); 
+    this->LineStyle = uno::makeAny( drawing::LineStyle_SOLID ); 
+    this->Transparence = uno::makeAny( sal_Int16(0) );
+    this->Width = uno::makeAny( sal_Int32(0) );
 }
 
 void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp, bool bUseSeriesPropertyNames )
@@ -87,6 +87,6 @@ bool VLineProperties::isLineVisible() const
     return bRet;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

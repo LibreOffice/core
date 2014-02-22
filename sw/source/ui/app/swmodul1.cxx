@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -72,7 +72,7 @@ using namespace ::com::sun::star::lang;
 
 static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, SwViewShell* pSh )
 {
-    // in FrameSets the actual visibility can differ from the ViewOption's setting
+    
     bool bVScrollChanged = rPref.IsViewVScrollBar() != pSh->GetViewOptions()->IsViewVScrollBar();
     bool bHScrollChanged = rPref.IsViewHScrollBar() != pSh->GetViewOptions()->IsViewHScrollBar();
     bool bVAlignChanged = rPref.IsVRulerRight() != pSh->GetViewOptions()->IsVRulerRight();
@@ -80,7 +80,7 @@ static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, SwViewShell
     pSh->SetUIOptions(rPref);
     const SwViewOption* pNewPref = pSh->GetViewOptions();
 
-    // Scrollbars on / off
+    
     if(bVScrollChanged)
     {
         pView->EnableVScrollbar(pNewPref->IsViewVScrollBar());
@@ -89,17 +89,17 @@ static void lcl_SetUIPrefs(const SwViewOption &rPref, SwView* pView, SwViewShell
     {
         pView->EnableHScrollbar( pNewPref->IsViewHScrollBar() || pNewPref->getBrowseMode() );
     }
-    //if only the position of the vertical ruler has been changed initiate an update
+    
     if(bVAlignChanged && !bHScrollChanged && !bVScrollChanged)
         pView->InvalidateBorder();
 
-    // Rulers on / off
+    
     if(pNewPref->IsViewVRuler())
         pView->CreateVRuler();
     else
         pView->KillVRuler();
 
-    // TabWindow on / off
+    
     if(pNewPref->IsViewHRuler())
         pView->CreateTab();
     else
@@ -124,7 +124,7 @@ SwView* GetActiveView()
 
 SwView* SwModule::GetFirstView()
 {
-    // returns only sivible SwView
+    
     const TypeId aTypeId = TYPE(SwView);
     SwView* pView = (SwView*)SfxViewShell::GetFirst(&aTypeId);
     return pView;
@@ -138,7 +138,7 @@ SwView* SwModule::GetNextView(SwView* pView)
     return pNView;
 }
 
-// New Master for the settings is set; this affects the current view and all following.
+
 void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                             sal_uInt16 nDest )
 {
@@ -150,9 +150,9 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
                                          VIEWOPT_DEST_TEXT== nDest ? sal_False :
                                          pCurrView && pCurrView->ISA(SwWebView) ));
 
-    // with Uno, only sdbcx::View, but not the Module should be changed
+    
     bool bViewOnly = VIEWOPT_DEST_VIEW_ONLY == nDest;
-    // fob Preview off
+    
     SwPagePreview* pPPView;
     if( !pCurrView && 0 != (pPPView = PTR_CAST( SwPagePreview, SfxViewShell::Current())) )
     {
@@ -177,12 +177,12 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     if( !pCurrView )
         return;
 
-    // Passing on to CORE
+    
     sal_Bool bReadonly;
     const SwDocShell* pDocSh = pCurrView->GetDocShell();
     if (pDocSh)
         bReadonly = pDocSh->IsReadOnly();
-    else //Use existing option if DocShell missing
+    else 
         bReadonly = pSh->GetViewOptions()->IsReadonly();
     boost::scoped_ptr<SwViewOption> xViewOpt;
     if (!bViewOnly)
@@ -192,7 +192,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
     xViewOpt->SetReadonly( bReadonly );
     if( !(*pSh->GetViewOptions() == *xViewOpt) )
     {
-        //is maybe only a SwViewShell
+        
         pSh->StartAction();
         pSh->ApplyViewOptions( *xViewOpt );
         ((SwWrtShell*)pSh)->SetReadOnlyAvailable(xViewOpt->IsCursorInProtectedArea());
@@ -203,7 +203,7 @@ void SwModule::ApplyUsrPref(const SwViewOption &rUsrPref, SwView* pActView,
 
     lcl_SetUIPrefs(*xViewOpt, pCurrView, pSh);
 
-    // in the end the Idle-Flag is set again
+    
     pPref->SetIdle(sal_True);
 }
 
@@ -230,7 +230,7 @@ void SwModule::ApplyUserMetric( FieldUnit eMetric, bool bWeb )
         FieldUnit eVScrollMetric = pPref->IsVScrollMetric() ? pPref->GetVScrollMetric() : eMetric;
 
         SwView* pTmpView = SwModule::GetFirstView();
-        // switch the ruler for all MDI-Windows
+        
         while(pTmpView)
         {
             if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
@@ -264,7 +264,7 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, bool b
         pPref->SetVScrollMetric(eMetric);
 
     SwView* pTmpView = SwModule::GetFirstView();
-    // switch metric at the appropriate rulers
+    
     while(pTmpView)
     {
         if(bWeb == (0 != dynamic_cast<SwWebView *>( pTmpView )))
@@ -278,7 +278,7 @@ void SwModule::ApplyRulerMetric( FieldUnit eMetric, sal_Bool bHorizontal, bool b
     }
 }
 
-//set the usrpref 's char unit attribute and set rulers unit as char if the "apply char unit" is checked
+
 void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, bool bWeb)
 {
     SwMasterUsrPref* pPref;
@@ -325,7 +325,7 @@ void SwModule::ApplyUserCharUnit(sal_Bool bApplyChar, bool bWeb)
             eVScrollMetric = FUNIT_CM;
     }
     SwView* pTmpView = SwModule::GetFirstView();
-    // switch rulers for all MDI-Windows
+    
     while(pTmpView)
     {
         if(bWeb == (0 != PTR_CAST(SwWebView, pTmpView)))
@@ -375,7 +375,7 @@ void SwModule::ShowDBObj(SwView& rView, const SwDBData& rData, sal_Bool /*bOnlyI
 
     uno::Reference<XFrame> xBeamerFrame = xFrame->findFrame("_beamer", FrameSearchFlag::CHILDREN);
     if (xBeamerFrame.is())
-    {   // the beamer has been opened by the SfxViewFrame
+    {   
         Reference<XController> xController = xBeamerFrame->getController();
         Reference<XSelectionSupplier> xControllerSelection(xController, UNO_QUERY);
         if (xControllerSelection.is())
@@ -419,7 +419,7 @@ void SwModule::SetRedlineAuthor(const OUString &rAuthor)
 
 OUString SwModule::GetRedlineAuthor(sal_uInt16 nPos)
 {
-    OSL_ENSURE(nPos < pAuthorNames->size(), "author not found!"); //#i45342# RTF doc with no author table caused reader to crash
+    OSL_ENSURE(nPos < pAuthorNames->size(), "author not found!"); 
     while(!(nPos < pAuthorNames->size()))
     {
         InsertRedlineAuthor("nn");
@@ -517,7 +517,7 @@ void SwModule::GetDeletedAuthorAttr(sal_uInt16 nAuthor, SfxItemSet &rSet)
     lcl_FillAuthorAttr(nAuthor, rSet, pModuleConfig->GetDeletedAuthorAttr());
 }
 
-// For future extension:
+
 void SwModule::GetFormatAuthorAttr( sal_uInt16 nAuthor, SfxItemSet &rSet )
 {
     lcl_FillAuthorAttr( nAuthor, rSet, pModuleConfig->GetFormatAuthorAttr() );
@@ -558,7 +558,7 @@ OUString SwModule::GetDocStatWordDelim() const
     return pModuleConfig->GetWordDelimiter();
 }
 
-// Passing-through of the ModuleConfig's Metric (for HTML-Export)
+
 sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
 {
     SwMasterUsrPref* pPref;
@@ -577,7 +577,7 @@ sal_uInt16 SwModule::GetMetric( sal_Bool bWeb ) const
     return static_cast< sal_uInt16 >(pPref->GetMetric());
 }
 
-// Pass-through Update-Status
+
 sal_uInt16 SwModule::GetLinkUpdMode( sal_Bool ) const
 {
     if(!pUsrPref)

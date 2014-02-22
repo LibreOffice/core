@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ocompinstream.hxx"
@@ -41,7 +41,7 @@ OInputCompStream::OInputCompStream( OWriteStream_Impl& aImpl,
 {
     OSL_ENSURE( m_pImpl->m_rMutexRef.Is(), "No mutex is provided!\n" );
     if ( !m_pImpl->m_rMutexRef.Is() )
-        throw uno::RuntimeException(); // just a disaster
+        throw uno::RuntimeException(); 
 
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
 }
@@ -81,7 +81,7 @@ uno::Any SAL_CALL OInputCompStream::queryInterface( const uno::Type& rType )
 {
     uno::Any aReturn;
 
-    // common interfaces
+    
     aReturn <<= ::cppu::queryInterface
                 (   rType
                     ,   static_cast<io::XInputStream*> ( this )
@@ -235,7 +235,7 @@ uno::Reference< io::XOutputStream > SAL_CALL OInputCompStream::getOutputStream()
 
 void OInputCompStream::InternalDispose()
 {
-    // can be called only by OWriteStream_Impl
+    
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
     if ( m_bDisposed )
     {
@@ -243,8 +243,8 @@ void OInputCompStream::InternalDispose()
         throw lang::DisposedException();
     }
 
-    // the source object is also a kind of locker for the current object
-    // since the listeners could dispose the object while being notified
+    
+    
     lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
 
     if ( m_pInterfaceContainer )
@@ -408,7 +408,7 @@ uno::Sequence< beans::StringPair > SAL_CALL OInputCompStream::getRelationshipByI
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    // TODO/LATER: in future the unification of the ID could be checked
+    
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
@@ -440,7 +440,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
     sal_Int32 nEntriesNum = 0;
 
-    // TODO/LATER: in future the unification of the ID could be checked
+    
     uno::Sequence< uno::Sequence< beans::StringPair > > aSeq = getAllRelationships();
     for ( sal_Int32 nInd1 = 0; nInd1 < aSeq.getLength(); nInd1++ )
         for ( sal_Int32 nInd2 = 0; nInd2 < aSeq[nInd1].getLength(); nInd2++ )
@@ -471,7 +471,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    // TODO/LATER: in future the information could be taken directly from m_pImpl when possible
+    
     uno::Sequence< uno::Sequence< beans::StringPair > > aResult;
     for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
         if ( m_aProperties[aInd].Name == "RelationsInfo" )
@@ -482,7 +482,7 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OInputCompStream::g
             break;
         }
 
-    throw io::IOException(); // the relations info could not be read
+    throw io::IOException(); 
 }
 
 void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/, const uno::Sequence< beans::StringPair >& /*aEntry*/, ::sal_Bool /*bReplace*/  )
@@ -501,7 +501,7 @@ void SAL_CALL OInputCompStream::insertRelationshipByID(  const OUString& /*sID*/
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    throw io::IOException(); // TODO: Access denied
+    throw io::IOException(); 
 }
 
 void SAL_CALL OInputCompStream::removeRelationshipByID(  const OUString& /*sID*/  )
@@ -520,7 +520,7 @@ void SAL_CALL OInputCompStream::removeRelationshipByID(  const OUString& /*sID*/
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    throw io::IOException(); // TODO: Access denied
+    throw io::IOException(); 
 }
 
 void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& /*aEntries*/, ::sal_Bool /*bReplace*/  )
@@ -539,7 +539,7 @@ void SAL_CALL OInputCompStream::insertRelationships(  const uno::Sequence< uno::
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    throw io::IOException(); // TODO: Access denied
+    throw io::IOException(); 
 }
 
 void SAL_CALL OInputCompStream::clearRelationships()
@@ -557,7 +557,7 @@ void SAL_CALL OInputCompStream::clearRelationships()
     if ( m_nStorageType != embed::StorageFormats::OFOPXML )
         throw uno::RuntimeException();
 
-    throw io::IOException(); // TODO: Access denied
+    throw io::IOException(); 
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getPropertySetInfo()
@@ -571,7 +571,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OInputCompStream::getProperty
         throw lang::DisposedException();
     }
 
-    //TODO:
+    
     return uno::Reference< beans::XPropertySetInfo >();
 }
 
@@ -590,16 +590,16 @@ void SAL_CALL OInputCompStream::setPropertyValue( const OUString& aPropertyName,
         throw lang::DisposedException();
     }
 
-    // all the provided properties are accessible
+    
     for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
     {
         if ( m_aProperties[aInd].Name.equals( aPropertyName ) )
         {
-            throw beans::PropertyVetoException(); // TODO
+            throw beans::PropertyVetoException(); 
         }
     }
 
-    throw beans::UnknownPropertyException(); // TODO
+    throw beans::UnknownPropertyException(); 
 }
 
 uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
@@ -622,9 +622,9 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
         aPropertyName = aProp;
 
     if ( aPropertyName == "RelationsInfo" )
-        throw beans::UnknownPropertyException(); // TODO
+        throw beans::UnknownPropertyException(); 
 
-    // all the provided properties are accessible
+    
     for ( sal_Int32 aInd = 0; aInd < m_aProperties.getLength(); aInd++ )
     {
         if ( m_aProperties[aInd].Name.equals( aPropertyName ) )
@@ -633,7 +633,7 @@ uno::Any SAL_CALL OInputCompStream::getPropertyValue( const OUString& aProp )
         }
     }
 
-    throw beans::UnknownPropertyException(); // TODO
+    throw beans::UnknownPropertyException(); 
 }
 
 void SAL_CALL OInputCompStream::addPropertyChangeListener(
@@ -651,7 +651,7 @@ void SAL_CALL OInputCompStream::addPropertyChangeListener(
         throw lang::DisposedException();
     }
 
-    //TODO:
+    
 }
 
 void SAL_CALL OInputCompStream::removePropertyChangeListener(
@@ -669,7 +669,7 @@ void SAL_CALL OInputCompStream::removePropertyChangeListener(
         throw lang::DisposedException();
     }
 
-    //TODO:
+    
 }
 
 void SAL_CALL OInputCompStream::addVetoableChangeListener(
@@ -687,7 +687,7 @@ void SAL_CALL OInputCompStream::addVetoableChangeListener(
         throw lang::DisposedException();
     }
 
-    //TODO:
+    
 }
 
 void SAL_CALL OInputCompStream::removeVetoableChangeListener(
@@ -705,7 +705,7 @@ void SAL_CALL OInputCompStream::removeVetoableChangeListener(
         throw lang::DisposedException();
     }
 
-    //TODO:
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

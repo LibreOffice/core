@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "pivotcachebuffer.hxx"
@@ -44,7 +44,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sheet;
@@ -54,7 +54,7 @@ using namespace ::com::sun::star::util;
 
 using ::oox::core::Relations;
 
-// ============================================================================
+
 
 namespace {
 
@@ -102,7 +102,7 @@ const sal_uInt8 BIFF12_PCDEFINITION_SUPPORTDRILL    = 0x08;
 const sal_uInt8 BIFF12_PCDWBSOURCE_HASRELID         = 0x01;
 const sal_uInt8 BIFF12_PCDWBSOURCE_HASSHEET         = 0x02;
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt16 BIFF_PC_NOSTRING                   = 0xFFFF;
 
@@ -127,7 +127,7 @@ const sal_uInt16 BIFF_PCDEFINITION_OPTIMIZEMEMORY   = 0x0008;
 const sal_uInt16 BIFF_PCDEFINITION_BACKGROUNDQUERY  = 0x0010;
 const sal_uInt16 BIFF_PCDEFINITION_ENABLEREFRESH    = 0x0020;
 
-// ----------------------------------------------------------------------------
+
 
 /** Adjusts the weird date format read from binary streams.
 
@@ -149,9 +149,9 @@ void lclAdjustBinDateTime( css::util::DateTime& orDateTime )
     }
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 PivotCacheItem::PivotCacheItem() :
     mnType( XML_m ), mbUnused( false )
@@ -254,7 +254,7 @@ void PivotCacheItem::readDouble( BiffInputStream& rStrm )
 void PivotCacheItem::readInteger( BiffInputStream& rStrm )
 {
     maValue <<= rStrm.readInt16();
-    mnType = XML_i;                 // fake, used for BIFF only
+    mnType = XML_i;                 
 }
 
 void PivotCacheItem::readDate( BiffInputStream& rStrm )
@@ -295,17 +295,17 @@ OUString PivotCacheItem::getName() const
     {
         case XML_m: return OUString();
         case XML_s: return maValue.get< OUString >();
-        case XML_n: return OUString::number( maValue.get< double >() );                            // !TODO
+        case XML_n: return OUString::number( maValue.get< double >() );                            
         case XML_i: return OUString::number( maValue.get< sal_Int32 >() );
-        case XML_d: return OUString();                                                              // !TODO
-        case XML_b: return OUString::boolean( static_cast< sal_Bool >( maValue.get< bool >() ) );   // !TODO
-        case XML_e: return OUString();                                                              // !TODO
+        case XML_d: return OUString();                                                              
+        case XML_b: return OUString::boolean( static_cast< sal_Bool >( maValue.get< bool >() ) );   
+        case XML_e: return OUString();                                                              
     }
     OSL_FAIL( "PivotCacheItem::getName - invalid data type" );
     return OUString();
 }
 
-// ----------------------------------------------------------------------------
+
 
 PivotCacheItemList::PivotCacheItemList( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -397,7 +397,7 @@ void PivotCacheItemList::getCacheItemNames( ::std::vector< OUString >& orItemNam
         orItemNames.push_back( aIt->getName() );
 }
 
-// private --------------------------------------------------------------------
+
 
 PivotCacheItem& PivotCacheItemList::createItem()
 {
@@ -424,7 +424,7 @@ void PivotCacheItemList::importArray( SequenceInputStream& rStrm )
     }
 }
 
-// ============================================================================
+
 
 PCFieldModel::PCFieldModel() :
     mnNumFmtId( 0 ),
@@ -439,7 +439,7 @@ PCFieldModel::PCFieldModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PCSharedItemsModel::PCSharedItemsModel() :
     mbHasSemiMixed( true ),
@@ -455,7 +455,7 @@ PCSharedItemsModel::PCSharedItemsModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PCFieldGroupModel::PCFieldGroupModel() :
     mfStartValue( 0.0 ),
@@ -478,7 +478,7 @@ void PCFieldGroupModel::setBiffGroupBy( sal_uInt8 nGroupBy )
     mnGroupBy = STATIC_ARRAY_SELECT( spnGroupBy, nGroupBy, XML_range );
 }
 
-// ----------------------------------------------------------------------------
+
 
 PivotCacheField::PivotCacheField( const WorkbookHelper& rHelper, bool bIsDatabaseField ) :
     WorkbookHelper( rHelper ),
@@ -639,7 +639,7 @@ void PivotCacheField::importPCDField( BiffInputStream& rStrm )
     rStrm >> nFlags;
     maFieldGroupModel.mnParentField  = rStrm.readuInt16();
     maFieldGroupModel.mnBaseField    = rStrm.readuInt16();
-    rStrm.skip( 2 );    // number of unique items (either shared or group)
+    rStrm.skip( 2 );    
     rStrm >> nGroupItems >> nBaseItems >> nSharedItems;
     maFieldModel.maName = (getBiff() == BIFF8) ? rStrm.readUniString() : rStrm.readByteStringUC( true, getTextEncoding() );
 
@@ -652,15 +652,15 @@ void PivotCacheField::importPCDField( BiffInputStream& rStrm )
     maSharedItemsModel.mbHasLongIndexes = getFlag( nFlags, BIFF_PCDFIELD_HASLONGINDEX );
     maFieldGroupModel.mbRangeGroup      = getFlag( nFlags, BIFF_PCDFIELD_RANGEGROUP );
 
-    // in BIFF, presence of parent group field is denoted by a flag
+    
     if( !getFlag( nFlags, BIFF_PCDFIELD_HASPARENT ) )
         maFieldGroupModel.mnParentField = -1;
 
-    // following PCDFSQLTYPE record contains SQL type
+    
     if( (rStrm.getNextRecId() == BIFF_ID_PCDFSQLTYPE) && rStrm.startNextRecord() )
         maFieldModel.mnSqlType = rStrm.readInt16();
 
-    // read group items, if any
+    
     if( nGroupItems > 0 )
     {
         SAL_WARN_IF(
@@ -680,7 +680,7 @@ void PivotCacheField::importPCDField( BiffInputStream& rStrm )
             importPCDFDiscretePr( rStrm );
     }
 
-    // read the shared items, if any
+    
     if( nSharedItems > 0 )
     {
         SAL_WARN_IF(
@@ -845,7 +845,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
     Reference< XDataPilotFieldGrouping > xDPGrouping( rxBaseDPField, UNO_QUERY );
     if( !xDPGrouping.is() ) return OUString();
 
-    // map the group item indexes from maGroupItems to all item indexes from maDiscreteItems
+    
     typedef ::std::vector< sal_Int32 > GroupItemList;
     typedef ::std::vector< GroupItemList > GroupItemMap;
     GroupItemMap aItemMap( maGroupItems.size() );
@@ -855,7 +855,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
         {
             if ( const PivotCacheItem* pItem = rBaseCacheField.getCacheItems().getCacheItem( aIt - aBeg ) )
             {
-                // Skip unspecified or ununsed entries or errors
+                
                 if ( pItem->isUnused() || ( pItem->getType() == XML_m ) ||  ( pItem->getType() == XML_e ) )
                     continue;
             }
@@ -863,7 +863,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
         }
     }
 
-    // process all groups
+    
     Reference< XDataPilotField > xDPGroupField;
     for( GroupItemMap::iterator aBeg = aItemMap.begin(), aIt = aBeg, aEnd = aItemMap.end(); aIt != aEnd; ++aIt )
     {
@@ -887,13 +887,13 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 further with other items. */
             if( !aMembers.empty() ) try
             {
-                // only the first call of createNameGroup() returns the new field
+                
                 Reference< XDataPilotField > xDPNewField = xDPGrouping->createNameGroup( ContainerHelper::vectorToSequence( aMembers ) );
                 OSL_ENSURE( xDPGroupField.is() != xDPNewField.is(), "PivotCacheField::createParentGroupField - missing group field" );
                 if( !xDPGroupField.is() )
                     xDPGroupField = xDPNewField;
 
-                // get current grouping info
+                
                 DataPilotFieldGroupInfo aGroupInfo;
                 PropertySet aPropSet( xDPGroupField );
                 aPropSet.getProperty( aGroupInfo, PROP_GroupInfo );
@@ -928,7 +928,7 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
                 }
                 OSL_ENSURE( !aAutoName.isEmpty(), "PivotCacheField::createParentGroupField - cannot find auto-generated group name" );
 
-                // get the real group name from the list of group items
+                
                 OUString aGroupName;
                 if( const PivotCacheItem* pGroupItem = maGroupItems.getCacheItem( static_cast< sal_Int32 >( aIt - aBeg ) ) )
                     aGroupName = pGroupItem->getName();
@@ -938,13 +938,13 @@ OUString PivotCacheField::createParentGroupField( const Reference< XDataPilotFie
 
                 if( xGroupName.is() && !aGroupName.isEmpty() )
                 {
-                    // replace the auto-generated group name with the real name
+                    
                     if( aAutoName != aGroupName )
                     {
                         xGroupName->setName( aGroupName );
                         aPropSet.setProperty( PROP_GroupInfo, aGroupInfo );
                     }
-                    // replace original item names in passed vector with group name
+                    
                     for( GroupItemList::iterator aIt2 = aIt->begin(), aEnd2 = aIt->end(); aIt2 != aEnd2; ++aIt2 )
                         if( PivotCacheGroupItem* pName = ContainerHelper::getVectorElementAccess( orItemNames, *aIt2 ) )
                             pName->maGroupName = aGroupName;
@@ -1003,7 +1003,7 @@ void PivotCacheField::importPCItemIndex( BiffInputStream& rStrm, WorksheetHelper
     writeSharedItemToSourceDataCell( rSheetHelper, nCol, nRow, nIndex );
 }
 
-// private --------------------------------------------------------------------
+
 
 void PivotCacheField::writeItemToSourceDataCell( WorksheetHelper& rSheetHelper,
         sal_Int32 nCol, sal_Int32 nRow, const PivotCacheItem& rItem ) const
@@ -1033,7 +1033,7 @@ void PivotCacheField::writeSharedItemToSourceDataCell(
         writeItemToSourceDataCell( rSheetHelper, nCol, nRow, *pCacheItem );
 }
 
-// ============================================================================
+
 
 PCDefinitionModel::PCDefinitionModel() :
     mfRefreshedDate( 0.0 ),
@@ -1053,7 +1053,7 @@ PCDefinitionModel::PCDefinitionModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PCSourceModel::PCSourceModel() :
     mnSourceType( XML_TOKEN_INVALID ),
@@ -1061,14 +1061,14 @@ PCSourceModel::PCSourceModel() :
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 PCWorksheetSourceModel::PCWorksheetSourceModel()
 {
     maRange.StartColumn = maRange.StartRow = maRange.EndColumn = maRange.EndRow = -1;
 }
 
-// ----------------------------------------------------------------------------
+
 
 PivotCache::PivotCache( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
@@ -1109,16 +1109,16 @@ void PivotCache::importWorksheetSource( const AttributeList& rAttribs, const Rel
     maSheetSrcModel.maSheet   = rAttribs.getXString( XML_sheet, OUString() );
     maSheetSrcModel.maDefName = rAttribs.getXString( XML_name, OUString() );
 
-    // resolve URL of external document
+    
     maTargetUrl = rRelations.getExternalTargetFromRelId( maSheetSrcModel.maRelId );
-    // store range address unchecked with sheet index 0, will be resolved/checked later
+    
     getAddressConverter().convertToCellRangeUnchecked( maSheetSrcModel.maRange, rAttribs.getString( XML_ref, OUString() ), 0 );
 }
 
 void PivotCache::importPCDefinition( SequenceInputStream& rStrm )
 {
     sal_uInt8 nFlags1, nFlags2;
-    rStrm.skip( 3 );    // create/refresh version id's
+    rStrm.skip( 3 );    
     rStrm >> nFlags1 >> maDefModel.mnMissItemsLimit >> maDefModel.mfRefreshedDate >> nFlags2 >> maDefModel.mnRecords;
     if( getFlag( nFlags2, BIFF12_PCDEFINITION_HASUSERNAME ) )
         rStrm >> maDefModel.maRefreshedBy;
@@ -1154,12 +1154,12 @@ void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relatio
     if( getFlag( nFlags, BIFF12_PCDWBSOURCE_HASRELID ) )
         rStrm >> maSheetSrcModel.maRelId;
 
-    // read cell range or defined name
+    
     if( nIsDefName == 0 )
     {
         BinRange aBinRange;
         rStrm >> aBinRange;
-        // store range address unchecked with sheet index 0, will be resolved/checked later
+        
         getAddressConverter().convertToCellRangeUnchecked( maSheetSrcModel.maRange, aBinRange, 0 );
     }
     else
@@ -1169,7 +1169,7 @@ void PivotCache::importPCDSheetSource( SequenceInputStream& rStrm, const Relatio
             maSheetSrcModel.maDefName = "_xlnm." + maSheetSrcModel.maDefName;
     }
 
-    // resolve URL of external document
+    
     maTargetUrl = rRelations.getExternalTargetFromRelId( maSheetSrcModel.maRelId );
 }
 
@@ -1177,11 +1177,11 @@ void PivotCache::importPCDefinition( BiffInputStream& rStrm )
 {
     sal_uInt16 nFlags, nUserNameLen;
     rStrm >> maDefModel.mnRecords;
-    rStrm.skip( 2 );    // repeated cache ID
+    rStrm.skip( 2 );    
     rStrm >> nFlags;
-    rStrm.skip( 2 );    // unused
+    rStrm.skip( 2 );    
     rStrm >> maDefModel.mnDatabaseFields;
-    rStrm.skip( 6 );    // total field count, report record count, (repeated) cache type
+    rStrm.skip( 6 );    
     rStrm >> nUserNameLen;
     if( nUserNameLen != BIFF_PC_NOSTRING )
         maDefModel.maRefreshedBy = (getBiff() == BIFF8) ?
@@ -1209,7 +1209,7 @@ PivotCacheField& PivotCache::createCacheField( bool bInitDatabaseField )
 
 void PivotCache::finalizeImport()
 {
-    // collect all fields that are based on source data (needed to finalize source data below)
+    
     OSL_ENSURE( !maFields.empty(), "PivotCache::finalizeImport - no pivot cache fields found" );
     for( PivotCacheFieldVector::const_iterator aIt = maFields.begin(), aEnd = maFields.end(); aIt != aEnd; ++aIt )
     {
@@ -1227,14 +1227,14 @@ void PivotCache::finalizeImport()
     }
     OSL_ENSURE( !maDatabaseFields.empty(), "PivotCache::finalizeImport - no pivot cache source fields found" );
 
-    // finalize source data depending on source type
+    
     switch( maSourceModel.mnSourceType )
     {
         case XML_worksheet:
         {
-            // decide whether an external document is used
+            
             bool bInternal = maTargetUrl.isEmpty() && maSheetSrcModel.maRelId.isEmpty();
-            bool bExternal = !maTargetUrl.isEmpty();   // relation ID may be empty, e.g. BIFF import
+            bool bExternal = !maTargetUrl.isEmpty();   
             OSL_ENSURE( bInternal || bExternal, "PivotCache::finalizeImport - invalid external document URL" );
             if( bInternal )
                 finalizeInternalSheetSource();
@@ -1243,7 +1243,7 @@ void PivotCache::finalizeImport()
         }
         break;
 
-        // currently, we only support worksheet data sources
+        
         case XML_external:
         break;
         case XML_consolidation:
@@ -1313,47 +1313,47 @@ void PivotCache::importPCItemIndexList( BiffInputStream& rStrm, WorksheetHelper&
             (*aIt)->importPCItemIndex( rStrm, rSheetHelper, nCol, nRow );
 }
 
-// private --------------------------------------------------------------------
+
 
 void PivotCache::finalizeInternalSheetSource()
 {
-    // resolve sheet name to sheet index
+    
     sal_Int16 nSheet = getWorksheets().getCalcSheetIndex( maSheetSrcModel.maSheet );
 
-    // if cache is based on a defined name or table, try to resolve to cell range
+    
     if( !maSheetSrcModel.maDefName.isEmpty() )
     {
-        // local or global defined name
+        
         if( const DefinedName* pDefName = getDefinedNames().getByModelName( maSheetSrcModel.maDefName, nSheet ).get() )
         {
             mbValidSource = pDefName->getAbsoluteRange( maSheetSrcModel.maRange );
         }
-        // table
+        
         else if( const Table* pTable = getTables().getTable( maSheetSrcModel.maDefName ).get() )
         {
-            // get original range from table, but exclude the totals row(s)
+            
             maSheetSrcModel.maRange = pTable->getOriginalRange();
             mbValidSource = (pTable->getHeight() - pTable->getTotalsRows()) > 1;
             if( mbValidSource )
                 maSheetSrcModel.maRange.EndRow -= pTable->getTotalsRows();
         }
     }
-    // else try the cell range (if the sheet exists)
+    
     else if( nSheet >= 0 )
     {
-        // insert sheet index into the range, range address will be checked below
+        
         maSheetSrcModel.maRange.Sheet = nSheet;
         mbValidSource = true;
     }
-    // else sheet has been deleted, generate the source data from cache
+    
     else if( !maSheetSrcModel.maSheet.isEmpty() )
     {
         prepareSourceDataSheet();
-        // return here to skip the source range check below
+        
         return;
     }
 
-    // check range location, do not allow ranges that overflow the sheet partly
+    
     mbValidSource = mbValidSource &&
         getAddressConverter().checkCellRange( maSheetSrcModel.maRange, false, true ) &&
         (maSheetSrcModel.maRange.StartRow < maSheetSrcModel.maRange.EndRow);
@@ -1372,12 +1372,12 @@ void PivotCache::finalizeExternalSheetSource()
 void PivotCache::prepareSourceDataSheet()
 {
     CellRangeAddress& rRange = maSheetSrcModel.maRange;
-    // data will be inserted in top-left cell, sheet index is still set to 0 (will be set below)
+    
     rRange.EndColumn -= rRange.StartColumn;
     rRange.StartColumn = 0;
     rRange.EndRow -= rRange.StartRow;
     rRange.StartRow = 0;
-    // check range location, do not allow ranges that overflow the sheet partly
+    
     if( getAddressConverter().checkCellRange( rRange, false, true ) )
     {
         maColSpans.insert( ValueRange( rRange.StartColumn, rRange.EndColumn ) );
@@ -1396,7 +1396,7 @@ void PivotCache::updateSourceDataRow( WorksheetHelper& rSheetHelper, sal_Int32 n
     }
 }
 
-// ============================================================================
+
 
 PivotCacheBuffer::PivotCacheBuffer( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper )
@@ -1422,11 +1422,11 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
             returned immediately. */
         case FILTER_OOXML:
         {
-            // try to find an imported pivot cache
+            
             if( PivotCache* pCache = maCaches.get( nCacheId ).get() )
                 return pCache;
 
-            // check if a fragment path exists for the passed cache identifier
+            
             FragmentPathMap::iterator aIt = maFragmentPaths.find( nCacheId );
             if( aIt == maFragmentPaths.end() )
                 return 0;
@@ -1464,7 +1464,7 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
                 /*  Import the cache stream. This may create a dummy data sheet
                     for external sheet sources. */
                 BiffPivotCacheFragment( *this, aIt->second, *pCache ).importFragment();
-                // remove the fragment entry to mark that the cache is initialized
+                
                 maFragmentPaths.erase( aIt );
             }
             return pCache;
@@ -1484,9 +1484,9 @@ PivotCache& PivotCacheBuffer::createPivotCache( sal_Int32 nCacheId )
     return *rxCache;
 }
 
-// ============================================================================
 
-} // namespace xls
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <datastreamdlg.hxx>
@@ -85,7 +85,7 @@ void DataStreamDlg::UpdateEnable()
         m_pEdRange->Enable();
         if (bOk)
         {
-            // Check the given range to make sure it's valid.
+            
             ScRange aTest = GetStartRange();
             if (!aTest.IsValid())
                 bOk = false;
@@ -103,12 +103,12 @@ ScRange DataStreamDlg::GetStartRange()
     sal_uInt16 nRes = aRange.Parse(aStr, pDoc, pDoc->GetAddressConvention());
     if ((nRes & SCA_VALID) != SCA_VALID || !aRange.IsValid())
     {
-        // Invalid range.
+        
         aRange.SetInvalid();
         return aRange;
     }
 
-    // Make sure it's only one row tall.
+    
     if (aRange.aStart.Row() != aRange.aEnd.Row())
         aRange.SetInvalid();
 
@@ -159,7 +159,7 @@ void DataStreamDlg::StartStream()
 {
     ScRange aStartRange = GetStartRange();
     if (!aStartRange.IsValid())
-        // Don't start the stream without a valid range.
+        
         return;
 
     sal_Int32 nLimit = 0;

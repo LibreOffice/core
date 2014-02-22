@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/XWindow.hpp>
@@ -43,9 +43,9 @@
 #include <sfx2/frame.hxx>
 #include <sfx2/sfxuno.hxx>
 
-//****************************************************************************
-// SfxPartChildWnd_Impl
-//****************************************************************************
+
+
+
 
 SFX_IMPL_DOCKINGWINDOW( SfxPartChildWnd_Impl, SID_BROWSER );
 
@@ -58,7 +58,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 )
     : SfxChildWindow( pParentWnd, nId )
 {
-    // Create Window
+    
     pWindow = new SfxPartDockWnd_Impl( pBindings, this, pParentWnd, WB_STDDOCKWIN | WB_CLIPCHILDREN | WB_SIZEABLE | WB_3DLOOK );
     eChildAlignment = SFX_ALIGN_TOP;
 
@@ -76,11 +76,11 @@ SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = GetFrame();
 
-    // If xFrame=NULL release pMgr! Because this window lives longer then the manager!
-    // In these case we got a xFrame->dispose() call from outside ... and has release our
-    // frame reference in our own DisposingListener.
-    // But don't do it, if xFrame already exist. Then dispose() must come from inside ...
-    // and we need a valid pMgr for further operations ...
+    
+    
+    
+    
+    
 
     SfxPartDockWnd_Impl* pWin = (SfxPartDockWnd_Impl*) pWindow;
 
@@ -93,9 +93,9 @@ sal_Bool SfxPartChildWnd_Impl::QueryClose()
     return ( (SfxPartDockWnd_Impl*)pWindow )->QueryClose();
 }
 
-//****************************************************************************
-// SfxPartDockWnd_Impl
-//****************************************************************************
+
+
+
 
 SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
 (
@@ -138,13 +138,13 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     }
 }
 
-//****************************************************************************
+
 
 SfxPartDockWnd_Impl::~SfxPartDockWnd_Impl()
 {
 }
 
-//****************************************************************************
+
 
 void SfxPartDockWnd_Impl::Resize()
 
@@ -157,7 +157,7 @@ void SfxPartDockWnd_Impl::Resize()
     SfxDockingWindow::Resize();
 }
 
-//****************************************************************************
+
 
 sal_Bool SfxPartDockWnd_Impl::QueryClose()
 {
@@ -177,7 +177,7 @@ sal_Bool SfxPartDockWnd_Impl::QueryClose()
     return bClose;
 }
 
-//****************************************************************************
+
 
 bool SfxPartDockWnd_Impl::Notify( NotifyEvent& rEvt )
 {

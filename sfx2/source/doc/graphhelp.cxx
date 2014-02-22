@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -84,11 +84,11 @@ SvMemoryStream* GraphicHelper::getFormatStrFromGDI_Impl( const GDIMetaFile* pGDI
     return pResult;
 }
 
-//---------------------------------------------------------------
-// static
+
+
 void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
 {
-    (void)pGDIMeta;  // unused
+    (void)pGDIMeta;  
     void* pResult = NULL;
 
 #ifdef WNT
@@ -121,12 +121,12 @@ void* GraphicHelper::getEnhMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta )
     return pResult;
 }
 
-//---------------------------------------------------------------
-// static
+
+
 void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, const Size& aMetaSize )
 {
-    (void)pGDIMeta;  // unused
-    (void)aMetaSize; // unused
+    (void)pGDIMeta;  
+    (void)aMetaSize; 
     void* pResult = NULL;
 
 #ifdef WNT
@@ -193,8 +193,8 @@ void* GraphicHelper::getWinMetaFileFromGDI_Impl( const GDIMetaFile* pGDIMeta, co
     return pResult;
 }
 
-//---------------------------------------------------------------
-// static
+
+
 sal_Bool GraphicHelper::supportsMetaFileHandle_Impl()
 {
 #ifdef WNT
@@ -204,12 +204,12 @@ sal_Bool GraphicHelper::supportsMetaFileHandle_Impl()
 #endif
 }
 
-//---------------------------------------------------------------
-// static
+
+
 sal_Bool GraphicHelper::mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapEx& rOverlay,
                    const Rectangle& rOverlayRect, BitmapEx& rReturn )
 {
-    // the implementation is provided by KA
+    
 
     Point           aNullPt;
     Rectangle       aBmpRect( aNullPt, rBmpEx.GetSizePixel() );
@@ -260,7 +260,7 @@ sal_Bool GraphicHelper::mergeBitmaps_Impl( const BitmapEx& rBmpEx, const BitmapE
     return !rReturn.IsEmpty();
 }
 
-// static
+
 sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
                                                         const uno::Reference< io::XStream >& xStream )
 {
@@ -287,7 +287,7 @@ sal_Bool GraphicHelper::getThumbnailFormatFromGDI_Impl( GDIMetaFile* pMetaFile,
     return bResult;
 }
 
-// static
+
 sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const uno::Reference< io::XStream >& xStream )
 {
     sal_Bool bResult = sal_False;
@@ -325,8 +325,8 @@ sal_Bool GraphicHelper::getThumbnailReplacement_Impl( sal_Int32 nResID, const un
     return bResult;
 }
 
-//---------------------------------------------------------------
-// static
+
+
 sal_uInt16 GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl( const OUString& aFactoryShortName, sal_Bool /*bIsTemplate*/ )
 {
     sal_uInt16 nResult = 0;

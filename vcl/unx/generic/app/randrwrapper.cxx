@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef USE_RANDR
@@ -35,7 +35,7 @@ class RandRWrapper
 {
     oslModule m_pRandRLib;
 
-    // function pointers
+    
     Bool(*m_pXRRQueryExtension)(Display*,int*,int*);
     XRRScreenConfiguration*(*m_pXRRGetScreenInfo)(Display*,Drawable);
     void(*m_pXRRFreeScreenConfigInfo)(XRRScreenConfiguration*);
@@ -128,16 +128,16 @@ RandRWrapper::RandRWrapper( Display* pDisplay ) :
         m_pXRRRootToScreen( NULL ),
         m_bValid( false )
 {
-    // first try in process space (e.g. gtk links that ?)
+    
     initFromModule();
     if( ! m_bValid )
     {
-        // load and resolve dependencies immediately
-        // rationale: there are older distributions where libXrandr.so.2 is not linked
-        // with libXext.so, resulting in a missing symbol and terminating the office
-        // obviously they expected libXext to be linked in global symbolspace (that is
-        // linked by the application), which is not the case with us (because we want
-        // to be able to run in headless mode even without an installed X11 library)
+        
+        
+        
+        
+        
+        
         m_pRandRLib = osl_loadModule( "libXrandr.so.2", SAL_LOADMODULE_DEFAULT | SAL_LOADMODULE_NOW );
         initFromModule();
     }
@@ -245,7 +245,7 @@ void RandRWrapper::releaseWrapper()
 
 #endif
 
-} // namespace
+} 
 
 #endif
 
@@ -284,9 +284,9 @@ int SalDisplay::processRandREvent( XEvent* pEvent )
     if( m_bUseRandRWrapper && pWrapper && pWrapper->XRRRootToScreen(GetDisplay(),pCnfEvent->window) != -1 )
     {
         nRet = pWrapper->XRRUpdateConfiguration( pEvent );
-        if( nRet == 1 && pEvent->type != ConfigureNotify) // this should then be a XRRScreenChangeNotifyEvent
+        if( nRet == 1 && pEvent->type != ConfigureNotify) 
         {
-            // update screens
+            
             bool bNotify = false;
             for( size_t i = 0; i < m_aScreens.size(); i++ )
             {

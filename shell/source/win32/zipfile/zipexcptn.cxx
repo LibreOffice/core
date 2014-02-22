@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "internal/global.hxx"
 #include "zipexcptn.hxx"
 
-//------------------------------------------
+
 /**
 */
 RuntimeException::RuntimeException(int Error) :
@@ -28,14 +28,14 @@ RuntimeException::RuntimeException(int Error) :
 {
 }
 
-//------------------------------------------
+
 /**
 */
 RuntimeException::~RuntimeException() throw()
 {
 }
 
-//------------------------------------------
+
 /**
 */
 int RuntimeException::GetErrorCode() const
@@ -43,7 +43,7 @@ int RuntimeException::GetErrorCode() const
     return m_Error;
 }
 
-//------------------------------------------
+
 /**
 */
 ZipException::ZipException(int Error) :
@@ -51,7 +51,7 @@ ZipException::ZipException(int Error) :
 {
 }
 
-//------------------------------------------
+
 /**
 */
 const char* ZipException::what() const throw()
@@ -59,7 +59,7 @@ const char* ZipException::what() const throw()
     return 0;
 }
 
-//------------------------------------------
+
 /**
 */
 Win32Exception::Win32Exception(int Error) :
@@ -68,7 +68,7 @@ Win32Exception::Win32Exception(int Error) :
 {
 }
 
-//------------------------------------------
+
 /**
 */
 Win32Exception::~Win32Exception() throw()
@@ -77,7 +77,7 @@ Win32Exception::~Win32Exception() throw()
         LocalFree(m_MsgBuff);
 }
 
-//------------------------------------------
+
 /**
 */
 const char* Win32Exception::what() const throw()
@@ -88,7 +88,7 @@ const char* Win32Exception::what() const throw()
         FORMAT_MESSAGE_IGNORE_INSERTS,
         NULL,
         GetErrorCode(),
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
         (LPTSTR) &m_MsgBuff,
         0,
         NULL);
@@ -96,7 +96,7 @@ const char* Win32Exception::what() const throw()
     return reinterpret_cast<char*>(m_MsgBuff);
 }
 
-//------------------------------------------
+
 /**
 */
 ZipContentMissException::ZipContentMissException(int Error) :
@@ -104,7 +104,7 @@ ZipContentMissException::ZipContentMissException(int Error) :
 {
 }
 
-//------------------------------------------
+
 /**
 */
 AccessViolationException::AccessViolationException(int Error) :
@@ -112,7 +112,7 @@ AccessViolationException::AccessViolationException(int Error) :
 {
 }
 
-//------------------------------------------
+
 /**
 */
 IOException::IOException(int Error) :

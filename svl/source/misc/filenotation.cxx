@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/filenotation.hxx>
@@ -25,7 +25,7 @@
 namespace svt
 {
 
-    //= OFileNotation
+    
     OFileNotation::OFileNotation( const OUString& _rUrlOrPath )
     {
         construct( _rUrlOrPath );
@@ -81,23 +81,23 @@ namespace svt
     void OFileNotation::construct( const OUString& _rUrlOrPath )
     {
         bool bSuccess = false;
-        // URL notation?
+        
         INetURLObject aParser( _rUrlOrPath );
         switch ( aParser.GetProtocol() )
         {
             case INET_PROT_FILE:
-                // file URL
+                
                 bSuccess = implInitWithURLNotation( _rUrlOrPath );
                 break;
 
             case INET_PROT_NOT_VALID:
-                // assume system notation
+                
                 bSuccess = implInitWithSystemNotation( _rUrlOrPath );
                 break;
 
             default:
-                // it's a known scheme, but no file-URL -> assume that bothe the URL representation and the
-                // system representation are the URL itself
+                
+                
                 m_sSystem = m_sFileURL = _rUrlOrPath;
                 bSuccess = true;
                 break;
@@ -119,6 +119,6 @@ namespace svt
         return OUString();
     }
 
-}   // namespace svt
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

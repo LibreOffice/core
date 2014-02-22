@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -95,12 +95,12 @@ GraphicObject::GraphicObject( const OString& rUniqueID, const GraphicManager* pM
 {
     ImplConstruct();
 
-    // assign default properties
+    
     ImplAssignGraphicData();
 
     ImplSetGraphicManager( pMgr, &rUniqueID );
 
-    // update properties
+    
     ImplAssignGraphicData();
 }
 
@@ -417,9 +417,9 @@ void GraphicObject::SetSwapStreamHdl()
 
 #define SWAPGRAPHIC_TIMEOUT     5000
 
-// #i122985# it is not correct to set the swap-timeout to a hard-coded 5000ms
-// as it was before.  Added code and experimented what to do as a good
-// compromise, see description.
+
+
+
 static sal_uInt32 GetCacheTimeInMs()
 {
     static bool bSetAtAll(true);
@@ -435,14 +435,14 @@ static sal_uInt32 GetCacheTimeInMs()
                     comphelper::getProcessComponentContext());
 
 
-            // The default is 10 minutes. The minimum is one minute, thus 60
-            // seconds. When the minimum should match to the former hard-coded
-            // 5 seconds, we have a divisor of 12 to use. For the default of 10
-            // minutes this would mean 50 seconds. Compared to before this is
-            // ten times more (would allow better navigation by switching
-            // through pages) and is controllable by the user by setting the
-            // tools/options/memory/Remove_from_memory_after setting. Seems to
-            // be a good compromise to me.
+            
+            
+            
+            
+            
+            
+            
+            
             return nSeconds * 1000 / 12;
         }
         else
@@ -486,7 +486,7 @@ void GraphicObject::FireSwapOutRequest()
 
 void GraphicObject::GraphicManagerDestroyed()
 {
-    // we're alive, but our manager doesn't live anymore ==> connect to default manager
+    
     mpMgr = NULL;
     ImplSetGraphicManager( NULL );
 }
@@ -531,13 +531,13 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     sal_Bool                bCached = sal_False;
     bool bRet;
 
-    // #i29534# Provide output rects for PDF writer
+    
     Rectangle           aCropRect;
 
     if( !( GRFMGR_DRAW_USE_DRAWMODE_SETTINGS & nFlags ) )
         pOut->SetDrawMode( nOldDrawMode & ( ~( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT ) ) );
 
-    // mirrored horizontically
+    
     if( aSz.Width() < 0L )
     {
         aPt.X() += aSz.Width() + 1;
@@ -545,7 +545,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         aAttr.SetMirrorFlags( aAttr.GetMirrorFlags() ^ BMP_MIRROR_HORZ );
     }
 
-    // mirrored vertically
+    
     if( aSz.Height() < 0L )
     {
         aPt.Y() += aSz.Height() + 1;
@@ -565,8 +565,8 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
         {
             if( bRectClip )
             {
-                // #i29534# Store crop rect for later forwarding to
-                // PDF writer
+                
+                
                 aCropRect = aClipPolyPoly.GetBoundRect();
                 pOut->IntersectClipRegion( aCropRect );
             }
@@ -584,8 +584,8 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 
     pOut->SetDrawMode( nOldDrawMode );
 
-    // #i29534# Moved below OutDev restoration, to avoid multiple swap-ins
-    // (code above needs to call GetGraphic twice)
+    
+    
     if( bCached )
     {
         if( mpSwapOutTimer )
@@ -597,7 +597,7 @@ bool GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
     return bRet;
 }
 
-// #i105243#
+
 sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
                                          const Point& rPt, const Size& rSz,
                                          const GraphicAttr* pGrfAttr,
@@ -605,7 +605,7 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
 {
     const GraphicAttr aGrfAttr( pGrfAttr ? *pGrfAttr : GetAttr() );
 
-    // Notify PDF writer about linked graphic (if any)
+    
     sal_Bool bWritingPdfLinkedGraphic( sal_False );
     Point aPt( rPt );
     Size aSz( rSz );
@@ -614,7 +614,7 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
             dynamic_cast<vcl::PDFExtOutDevData*>(rOutDev.GetExtOutDevData());
     if( pPDFExtOutDevData )
     {
-        // only delegate image handling to PDF, if no special treatment is necessary
+        
         if( GetGraphic().IsLink() &&
             rSz.Width() > 0L &&
             rSz.Height() > 0L &&
@@ -646,7 +646,7 @@ sal_Bool GraphicObject::DrawWithPDFHandling( OutputDevice& rOutDev,
 
     sal_Bool bRet = Draw( &rOutDev, rPt, rSz, &aGrfAttr, nFlags );
 
-    // Notify PDF writer about linked graphic (if any)
+    
     if( bWritingPdfLinkedGraphic )
     {
         pPDFExtOutDevData->EndGroup( const_cast< Graphic& >(GetGraphic()),
@@ -666,12 +666,12 @@ sal_Bool GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, c
 
     const MapMode   aOutMapMode( pOut->GetMapMode() );
     const MapMode   aMapMode( aOutMapMode.GetMapUnit(), Point(), aOutMapMode.GetScaleX(), aOutMapMode.GetScaleY() );
-    // #106258# Clamp size to 1 for zero values. This is okay, since
-    // logical size of zero is handled above already
+    
+    
     const Size      aOutTileSize( ::std::max( 1L, pOut->LogicToPixel( rSize, aOutMapMode ).Width() ),
                                   ::std::max( 1L, pOut->LogicToPixel( rSize, aOutMapMode ).Height() ) );
 
-    //#i69780 clip final tile size to a sane max size
+    
     while (((sal_Int64)rSize.Width() * nTileCacheSize1D) > SAL_MAX_UINT16)
         nTileCacheSize1D /= 2;
     while (((sal_Int64)rSize.Height() * nTileCacheSize1D) > SAL_MAX_UINT16)
@@ -779,12 +779,12 @@ void GraphicObject::SetGraphic( const Graphic& rGraphic, const OUString& rLink )
 
 Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMode& rDestMap, const GraphicAttr& rAttr ) const
 {
-    // #104550# Extracted from svx/source/svdraw/svdograf.cxx
+    
     Graphic             aTransGraphic( maGraphic );
     const GraphicType   eType = GetType();
     const Size          aSrcSize( aTransGraphic.GetPrefSize() );
 
-    // #104115# Convert the crop margins to graphic object mapmode
+    
     const MapMode aMapGraph( aTransGraphic.GetPrefMapMode() );
     const MapMode aMap100( MAP_100TH_MM );
 
@@ -797,7 +797,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
         if( aMapGraph == MAP_PIXEL )
         {
-            // crops are in 1/100th mm -> to aMapGraph -> to MAP_PIXEL
+            
             aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
                 Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
                 aMap100);
@@ -807,7 +807,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         }
         else
         {
-            // crops are in GraphicObject units -> to aMapGraph
+            
             aCropLeftTop = OutputDevice::LogicToLogic(
                 Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
                 aMap100,
@@ -818,10 +818,10 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 aMapGraph);
         }
 
-        // #104115# If the metafile is cropped, give it a special
-        // treatment: clip against the remaining area, scale up such
-        // that this area later fills the desired size, and move the
-        // origin to the upper left edge of that area.
+        
+        
+        
+        
         if( rAttr.IsCropped() )
         {
             const MapMode aMtfMapMode( aMtf.GetPrefMapMode() );
@@ -831,21 +831,21 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                                  aMtfMapMode.GetOrigin().X() + aSrcSize.Width() - aCropRightBottom.Width(),
                                  aMtfMapMode.GetOrigin().Y() + aSrcSize.Height() - aCropRightBottom.Height() );
 
-            // #104115# To correctly crop rotated metafiles, clip by view rectangle
+            
             aMtf.AddAction( new MetaISectRectClipRegionAction( aClipRect ), 0 );
 
-            // #104115# To crop the metafile, scale larger than the output rectangle
+            
             aMtf.Scale( (double)rDestSize.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()),
                         (double)rDestSize.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) );
 
-            // #104115# Adapt the pref size by hand (scale changes it
-            // proportionally, but we want it to be smaller than the
-            // former size, to crop the excess out)
+            
+            
+            
             aMtf.SetPrefSize( Size( (long)((double)rDestSize.Width() *  (1.0 + (aCropLeftTop.Width() + aCropRightBottom.Width()) / aSrcSize.Width())  + .5),
                                     (long)((double)rDestSize.Height() * (1.0 + (aCropLeftTop.Height() + aCropRightBottom.Height()) / aSrcSize.Height()) + .5) ) );
 
-            // #104115# Adapt the origin of the new mapmode, such that it
-            // is shifted to the place where the cropped output starts
+            
+            
             Point aNewOrigin( (long)((double)aMtfMapMode.GetOrigin().X() + rDestSize.Width() * aCropLeftTop.Width() / (aSrcSize.Width() - aCropLeftTop.Width() - aCropRightBottom.Width()) + .5),
                               (long)((double)aMtfMapMode.GetOrigin().Y() + rDestSize.Height() * aCropLeftTop.Height() / (aSrcSize.Height() - aCropLeftTop.Height() - aCropRightBottom.Height()) + .5) );
             MapMode aNewMap( rDestMap );
@@ -865,12 +865,12 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
         BitmapEx aBitmapEx( aTransGraphic.GetBitmapEx() );
         Rectangle aCropRect;
 
-        // convert crops to pixel
+        
         if(rAttr.IsCropped())
         {
             if( aMapGraph == MAP_PIXEL )
             {
-                // crops are in 1/100th mm -> to MAP_PIXEL
+                
                 aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
                     Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
                     aMap100);
@@ -880,7 +880,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
             }
             else
             {
-                // crops are in GraphicObject units -> to MAP_PIXEL
+                
                 aCropLeftTop = Application::GetDefaultDevice()->LogicToPixel(
                     Size(rAttr.GetLeftCrop(), rAttr.GetTopCrop()),
                     aMapGraph);
@@ -889,7 +889,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                     aMapGraph);
             }
 
-            // convert from prefmapmode to pixel
+            
             Size aSrcSizePixel(
                 Application::GetDefaultDevice()->LogicToPixel(
                     aSrcSize,
@@ -899,15 +899,15 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 && (aSrcSizePixel.Width() != aBitmapEx.GetSizePixel().Width() || aSrcSizePixel.Height() != aBitmapEx.GetSizePixel().Height())
                 && aSrcSizePixel.Width())
             {
-                // the size in pixels calculated from Graphic's internal MapMode (aTransGraphic.GetPrefMapMode())
-                // and it's internal size (aTransGraphic.GetPrefSize()) is different from it's real pixel size.
-                // This can be interpreted as this values to be set wrong, but needs to be corrected since e.g.
-                // existing cropping is calculated based on this logic values already.
-                // aBitmapEx.Scale(aSrcSizePixel);
+                
+                
+                
+                
+                
 
-                // another possibility is to adapt the values created so far with a factor; this
-                // will keep the original Bitmap untouched and thus quality will not change
-                // caution: convert to double first, else pretty big errors may occur
+                
+                
+                
                 const double fFactorX((double)aBitmapEx.GetSizePixel().Width() / aSrcSizePixel.Width());
                 const double fFactorY((double)aBitmapEx.GetSizePixel().Height() / aSrcSizePixel.Height());
 
@@ -919,13 +919,13 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 aSrcSizePixel = aBitmapEx.GetSizePixel();
             }
 
-            // setup crop rectangle in pixel
+            
             aCropRect = Rectangle( aCropLeftTop.Width(), aCropLeftTop.Height(),
                                  aSrcSizePixel.Width() - aCropRightBottom.Width(),
                                  aSrcSizePixel.Height() - aCropRightBottom.Height() );
         }
 
-        // #105641# Also crop animations
+        
         if( aTransGraphic.IsAnimated() )
         {
             sal_uInt16 nFrame;
@@ -937,23 +937,23 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
 
                 if( !aCropRect.IsInside( Rectangle(aAnimBmp.aPosPix, aAnimBmp.aSizePix) ) )
                 {
-                    // setup actual cropping (relative to frame position)
+                    
                     Rectangle aCropRectRel( aCropRect );
                     aCropRectRel.Move( -aAnimBmp.aPosPix.X(),
                                        -aAnimBmp.aPosPix.Y() );
 
-                    // cropping affects this frame, apply it then
-                    // do _not_ apply enlargement, this is done below
+                    
+                    
                     ImplTransformBitmap( aAnimBmp.aBmpEx, rAttr, Size(), Size(),
                                          aCropRectRel, rDestSize, sal_False );
 
                     aAnim.Replace( aAnimBmp, nFrame );
                 }
-                // else: bitmap completely within crop area,
-                // i.e. nothing is cropped away
+                
+                
             }
 
-            // now, apply enlargement (if any) through global animation size
+            
             if( aCropLeftTop.Width() < 0 ||
                 aCropLeftTop.Height() < 0 ||
                 aCropRightBottom.Width() < 0 ||
@@ -967,8 +967,8 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
                 aAnim.SetDisplaySizePixel( aNewSize );
             }
 
-            // if topleft has changed, we must move all frames to the
-            // right and bottom, resp.
+            
+            
             if( aCropLeftTop.Width() < 0 ||
                 aCropLeftTop.Height() < 0 )
             {
@@ -1005,7 +1005,7 @@ Graphic GraphicObject::GetTransformedGraphic( const Size& rDestSize, const MapMo
     return aTransGraphic;
 }
 
-Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const // TODO: Change to Impl
+Graphic GraphicObject::GetTransformedGraphic( const GraphicAttr* pAttr ) const 
 {
     GetGraphic();
 
@@ -1193,7 +1193,7 @@ GraphicObject GraphicObject::CreateGraphicObjectFromURL( const OUString &rURL )
     const OUString aURL( rURL ), aPrefix( UNO_NAME_GRAPHOBJ_URLPREFIX );
     if( aURL.startsWith( aPrefix ) )
     {
-        // graphic manager url
+        
         OString aUniqueID(OUStringToOString(rURL.copy(sizeof(UNO_NAME_GRAPHOBJ_URLPREFIX) - 1), RTL_TEXTENCODING_UTF8));
         return GraphicObject( aUniqueID );
     }
@@ -1244,8 +1244,8 @@ GraphicObject::InspectForGraphicObjectImageURL( const Reference< XInterface >& x
     }
 }
 
-// calculate scalings between real image size and logic object size. This
-// is necessary since the crop values are relative to original bitmap size
+
+
 basegfx::B2DVector GraphicObject::calculateCropScaling(
     double fWidth,
     double fHeight,

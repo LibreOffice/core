@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgpatternnode.hxx>
 #include <svgio/svgreader/svgdocument.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -69,13 +69,13 @@ namespace svgio
 
         void SvgPatternNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
-            // call parent
+            
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
-            // read style attributes
+            
             maSvgStyleAttributes.parseStyleAttribute(rTokenName, aSVGToken, aContent);
 
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenStyle:
@@ -231,7 +231,7 @@ namespace svgio
                     rfW = (getWidth().isSet()) ? getWidth().solve(rUser, xcoordinate) : 0.0;
                     rfH = (getHeight().isSet()) ? getHeight().solve(rUser, ycoordinate) : 0.0;
 
-                    // make relative to rGeoRange
+                    
                     rfW /= fTargetWidth;
                     rfH /= fTargetHeight;
                 }
@@ -258,7 +258,7 @@ namespace svgio
                         rfX = (getX().isSet()) ? getX().solve(rUser, xcoordinate) : 0.0;
                         rfY = (getY().isSet()) ? getY().solve(rUser, ycoordinate) : 0.0;
 
-                        // make relative to rGeoRange
+                        
                         rfX = (rfX - rGeoRange.getMinX()) / fTargetWidth;
                         rfY = (rfY - rGeoRange.getMinY()) / fTargetHeight;
                     }
@@ -451,10 +451,10 @@ namespace svgio
             return 0;
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <canvas/debug.hxx>
@@ -58,7 +58,7 @@ namespace canvas
         uno::Sequence< double > colorStops(2);
         double fAspectRatio=1.0;
 
-        // defaults
+        
         uno::Sequence< rendering::RGBColor > rgbColors(1);
         rgbColors[0] = rendering::RGBColor(0,0,0);
         colorSequence[0] = rDevice->getDeviceColorSpace()->convertFromRGB(rgbColors);
@@ -67,7 +67,7 @@ namespace canvas
         colorStops[0] = 0;
         colorStops[1] = 1;
 
-        // extract args
+        
         for( sal_Int32 i=0; i<rArgs.getLength(); ++i )
         {
             beans::PropertyValue aProp;
@@ -102,19 +102,19 @@ namespace canvas
         }
         else if ( rServiceName == "VerticalLineHatch" )
         {
-            // TODO: NYI
+            
         }
         else if ( rServiceName == "OrthogonalLinesHatch" )
         {
-            // TODO: NYI
+            
         }
         else if ( rServiceName == "ThreeCrossingLinesHatch" )
         {
-            // TODO: NYI
+            
         }
         else if ( rServiceName == "FourCrossingLinesHatch" )
         {
-            // TODO: NYI
+            
         }
 
         return NULL;
@@ -125,8 +125,8 @@ namespace canvas
         const uno::Sequence< uno::Sequence< double > >&     colors,
         const uno::Sequence< double >&                      stops )
     {
-        // TODO(P2): hold gradient brush statically, and only setup
-        // the colors
+        
+        
         return new ParametricPolyPolygon( rDevice, GRADIENT_LINEAR, colors, stops );
     }
 
@@ -136,8 +136,8 @@ namespace canvas
         const uno::Sequence< double >&                      stops,
         double                                              fAspectRatio )
     {
-        // TODO(P2): hold gradient polygon statically, and only setup
-        // the colors
+        
+        
         return new ParametricPolyPolygon(
             rDevice,
             ::basegfx::tools::createPolygonFromCircle(
@@ -151,8 +151,8 @@ namespace canvas
                                                                              const uno::Sequence< double >&                     stops,
                                                                              double                                             fAspectRatio )
     {
-        // TODO(P2): hold gradient polygon statically, and only setup
-        // the colors
+        
+        
         return new ParametricPolyPolygon(
             rDevice,
             ::basegfx::tools::createPolygonFromRect(
@@ -172,7 +172,7 @@ namespace canvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO(F1): outline NYI
+        
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
@@ -180,7 +180,7 @@ namespace canvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO(F1): color NYI
+        
         return uno::Sequence< double >();
     }
 
@@ -188,7 +188,7 @@ namespace canvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO(F1): point color NYI
+        
         return uno::Sequence< double >();
     }
 

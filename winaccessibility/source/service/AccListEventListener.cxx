@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -56,9 +56,9 @@ void  AccListEventListener::notifyEvent( const ::com::sun::star::accessibility::
         HandleActiveDescendantChangedEvent(aEvent.OldValue, aEvent.NewValue);
         break;
     case AccessibleEventId::INVALIDATE_ALL_CHILDREN:
-        // Since List items a transient a child events are mostly used
-        // to attach/detach listeners, it is save to ignore it here
-        //TODO: investigate again
+        
+        
+        
         break;
     case AccessibleEventId::VALUE_CHANGED:
         HandleValueChangedEvent(aEvent.OldValue, aEvent.NewValue);
@@ -84,7 +84,7 @@ void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
         {
             XAccessible* pAcc = xChild.get();
 
-            // Valueset has cache the child item xacc,Update state if no insert obj
+            
             bool bHasCache = pAgent->InsertAccObj(pAcc, m_xAccessible.get());
             if (!bHasCache)
             {
@@ -114,7 +114,7 @@ void AccListEventListener::HandleActiveDescendantChangedEvent(Any oldValue, Any 
  */
 void AccListEventListener::HandleValueChangedEvent(Any oldValue, Any newValue)
 {
-    //to enable value changed event
+    
     if (GetParentRole() == AccessibleRole::COMBO_BOX)
     {
         XAccessible* pParentAcc =

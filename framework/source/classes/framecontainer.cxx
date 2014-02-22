@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <classes/framecontainer.hxx>
@@ -34,11 +34,11 @@ namespace framework{
     @threadsafe not necessary - its not a singleton
  *****************************************************************************************************************/
 FrameContainer::FrameContainer()
-        // initialize base classes first.
-        // Order is necessary for right initilization of his and OUR member ... m_aLock
+        
+        
         : ThreadHelpBase ( &Application::GetSolarMutex()                  )
 /*DEPRECATEME
-        , m_bAsyncQuit   ( sal_False                                      ) // default must be "disabled"!
+        , m_bAsyncQuit   ( sal_False                                      ) 
         , m_aAsyncCall   ( LINK( this, FrameContainer, implts_asyncQuit ) )
 */
 {
@@ -52,7 +52,7 @@ FrameContainer::FrameContainer()
  *****************************************************************************************************************/
 FrameContainer::~FrameContainer()
 {
-    // Don't forget to free memory!
+    
     m_aContainer.clear();
     m_xActiveFrame.clear();
 }
@@ -93,7 +93,7 @@ void FrameContainer::append( const css::uno::Reference< css::frame::XFrame >& xF
 void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
     /* SAFE { */
-    // write lock necessary for follwing erase()!
+    
     WriteGuard aWriteLock( m_aLock );
 
     TFrameIterator aSearchedItem = ::std::find( m_aContainer.begin(), m_aContainer.end(), xFrame );
@@ -101,17 +101,17 @@ void FrameContainer::remove( const css::uno::Reference< css::frame::XFrame >& xF
     {
         m_aContainer.erase( aSearchedItem );
 
-        // If removed frame was the current active frame - reset state variable.
+        
         if (m_xActiveFrame==xFrame)
             m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
 
-        // We don't need the write lock any longer ...
-        // downgrade to read access.
+        
+        
         aWriteLock.downgrade();
     }
 
     aWriteLock.unlock();
-    // } SAFE
+    
 }
 
 /**-***************************************************************************************************************
@@ -142,18 +142,18 @@ sal_Bool FrameContainer::exist( const css::uno::Reference< css::frame::XFrame >&
  *****************************************************************************************************************/
 void FrameContainer::clear()
 {
-    // SAFE {
+    
     WriteGuard aWriteLock( m_aLock );
 
-    // Clear the container ...
+    
     m_aContainer.clear();
-    // ... and don't forget to reset the active frame.
-    // Its an reference to a valid container-item.
-    // But no container item => no active frame!
+    
+    
+    
     m_xActiveFrame = css::uno::Reference< css::frame::XFrame >();
 
     aWriteLock.unlock();
-    // } SAFE
+    
 }
 
 /**-***************************************************************************************************************
@@ -195,8 +195,8 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
     css::uno::Reference< css::frame::XFrame > xFrame;
     try
     {
-        // Get element form container WITH automatic test of ranges!
-        // If index not valid, a out_of_range exception is thrown.
+        
+        
         /* SAFE { */
         ReadGuard aReadLock( m_aLock );
         xFrame = m_aContainer.at( nIndex );
@@ -205,8 +205,8 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::operator[]( sal_uInt32
     }
     catch( const std::out_of_range& )
     {
-        // The index is not valid for current container-content - we must handle this case!
-        // We can return the default value ...
+        
+        
         SAL_INFO( "fwk", "FrameContainer::operator[]: Exception caught: std::out_of_range" );
     }
     return xFrame;
@@ -292,8 +292,8 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnAllChildrens( 
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
 
-    // Step over all child frames. But if direct child isn't the right one search on his children first - before
-    // you go to next direct child of this container!
+    
+    
     css::uno::Reference< css::frame::XFrame > xSearchedFrame;
     for( TConstFrameIterator pIterator=m_aContainer.begin(); pIterator!=m_aContainer.end(); ++pIterator )
     {
@@ -344,6 +344,6 @@ css::uno::Reference< css::frame::XFrame > FrameContainer::searchOnDirectChildren
     return xSearchedFrame;
 }
 
-} //  namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

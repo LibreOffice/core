@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cppuhelper/implementationentry.hxx>
@@ -85,8 +85,8 @@ ActiveMSPList::getMSPFromAnyContext( const Any& aContext )
     {
         try
         {
-            // the component supports executing scripts embedded in a - possibly foreign document.
-            // Check whether this other document its the component itself.
+            
+            
             if ( !xModel.is() || ( xModel != xScriptContext->getScriptContainer() ) )
             {
                 msp = getMSPFromInvocationContext( xScriptContext );
@@ -133,7 +133,7 @@ Reference< provider::XScriptProvider >
     ScriptComponent_map::const_iterator pos = m_mScriptComponents.find( xNormalized );
     if ( pos == m_mScriptComponents.end() )
     {
-        // TODO
+        
         msp = createNewMSP( uno::makeAny( xContext ) );
         addActiveMSP( xNormalized, msp );
     }
@@ -198,11 +198,11 @@ Reference< provider::XScriptProvider >
     }
     catch( const lang::IllegalArgumentException& )
     {
-        // allowed to leave
+        
     }
     catch( const RuntimeException& )
     {
-        // allowed to leave
+        
     }
     catch( const Exception& )
     {
@@ -227,8 +227,8 @@ ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
     {
         m_mScriptComponents[ xNormalized ] = msp;
 
-        // add self as listener for component disposal
-        // should probably throw from this method!!, reexamine
+        
+        
         try
         {
             Reference< lang::XComponent > xBroadcaster =
@@ -242,7 +242,7 @@ ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
     }
 }
 
-//*************************************************************************
+
 void SAL_CALL
 ActiveMSPList::disposing( const ::com::sun::star::lang::EventObject& Source )
 throw ( ::com::sun::star::uno::RuntimeException )
@@ -261,8 +261,8 @@ throw ( ::com::sun::star::uno::RuntimeException )
     }
     catch ( const Exception& )
     {
-        // if we get an exception here, there is not much we can do about
-        // it can't throw as it will screw up the model that is calling dispose
+        
+        
         DBG_UNHANDLED_EXCEPTION();
     }
 }
@@ -283,23 +283,23 @@ ActiveMSPList::createNonDocMSPs()
         {
             return;
         }
-        // do creation of user and share MSPs here
+        
         OUString serviceName("com.sun.star.script.provider.MasterScriptProvider");
         Sequence< Any > args(1);
 
         args[ 0 ] <<= userDirString;
         Reference< provider::XScriptProvider > userMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
-        // should check if provider reference is valid
+        
         m_hMsps[ userDirString ] = userMsp;
 
         args[ 0 ] <<= shareDirString;
         Reference< provider::XScriptProvider > shareMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
-        // should check if provider reference is valid
+        
         m_hMsps[ shareDirString ] = shareMsp;
 
         args[ 0 ] <<= bundledDirString;
         Reference< provider::XScriptProvider > bundledMsp( m_xContext->getServiceManager()->createInstanceWithArgumentsAndContext( serviceName, args, m_xContext ), UNO_QUERY );
-        // should check if provider reference is valid
+        
         m_hMsps[ bundledDirString ] = bundledMsp;
 
         created = true;
@@ -308,6 +308,6 @@ ActiveMSPList::createNonDocMSPs()
 }
 
 
-} // namespace func_provider
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

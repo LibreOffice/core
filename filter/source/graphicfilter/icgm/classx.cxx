@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <main.hxx>
 #include <outact.hxx>
 
-// ---------------------------------------------------------------
+
 
 #define ImplSetUnderlineMode()                                  \
                                                                 \
@@ -36,7 +36,7 @@
     }                                                           \
     pElement->nUnderlineColor = ImplGetBitmapColor();
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass6()
 {
@@ -197,46 +197,46 @@ void CGM::ImplDoClass6()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass8()
 {
     switch ( mnElementID )
     {
-        case 0x01 : /*Copy Segment */break;                     // NS
-        case 0x02 : /*Inheritance Filter */break;               // NS
-        case 0x03 : /*Clip Inheritance */break;                 // NS
+        case 0x01 : /*Copy Segment */break;                     
+        case 0x02 : /*Inheritance Filter */break;               
+        case 0x03 : /*Clip Inheritance */break;                 
         case 0x04 : /*Segment Transformation */break;
-        case 0x05 : /*Segment Highlighting */break;             // NS
-        case 0x06 : /*Segment Display Priority */break;         // NS
-        case 0x07 : /*Segment Pick Priority */break;            // NS
+        case 0x05 : /*Segment Highlighting */break;             
+        case 0x06 : /*Segment Display Priority */break;         
+        case 0x07 : /*Segment Pick Priority */break;            
         case 0xfe : /*INQ Current Position */break;
         case 0xff : /*INQ Inserted Object Extent */break;
-        default: break;                         // NS
+        default: break;                         
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass9()
 {
     switch ( mnElementID )
     {
-        case 0x01 : /*Pixel Array */break;                  // NS
-        case 0x02 : /*Create Bitmap */break;                    // NS
-        case 0x03 : /*Delete Bitmap */break;                    // NS
-        case 0x04 : /*Select Drawing Bitmap */break;            // NS
-        case 0x05 : /*Display Bitmap */break;               // NS
+        case 0x01 : /*Pixel Array */break;                  
+        case 0x02 : /*Create Bitmap */break;                    
+        case 0x03 : /*Delete Bitmap */break;                    
+        case 0x04 : /*Select Drawing Bitmap */break;            
+        case 0x05 : /*Display Bitmap */break;               
         case 0x06 : /*Drawing Mode */break;
-        case 0x07 : /*Mapped Bitmap ForeGrnd Color */break; // NS
-        case 0x08 : /*Fill Bitmap */break;                  // NS
-        case 0x09 : /*Two Operand BitBlt */break;           // NS
-        case 0x0a : /*Three Operand BitBlt */break;         // NS
+        case 0x07 : /*Mapped Bitmap ForeGrnd Color */break; 
+        case 0x08 : /*Fill Bitmap */break;                  
+        case 0x09 : /*Two Operand BitBlt */break;           
+        case 0x0a : /*Three Operand BitBlt */break;         
         default: break;
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGM::ImplDoClass15()
 {
@@ -249,6 +249,6 @@ void CGM::ImplDoClass15()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

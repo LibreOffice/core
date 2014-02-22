@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/linkmgr.hxx>
@@ -24,7 +24,7 @@
 #include "document.hxx"
 #include <documentlinkmgr.hxx>
 
-// -----------------------------------------------------------------------
+
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
     aFileName   ( rSource.GetFile() ),
@@ -32,7 +32,7 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
     aOptions    ( rSource.GetOptions() ),
     aSourceArea ( rSource.GetSource() ),
     aDestArea   ( rSource.GetDestArea() ),
-    nRefresh    ( rSource.GetRefreshDelay() )       // seconds
+    nRefresh    ( rSource.GetRefreshDelay() )       
 {
 }
 
@@ -70,7 +70,7 @@ void ScAreaLinkSaver::WriteToLink( ScAreaLink& rLink ) const
 
 void ScAreaLinkSaver::InsertNewLink( ScDocument* pDoc )
 {
-    // (see ScUndoRemoveAreaLink::Undo)
+    
 
     sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
@@ -97,8 +97,8 @@ ScAreaLinkSaveCollection::~ScAreaLinkSaveCollection() {}
 
 bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
 {
-    // IsEqual can be checked in sequence.
-    // Neither ref-update nor removing links will change the order.
+    
+    
 
     const sfx2::LinkManager* pLinkManager = pDoc->GetLinkManager();
     if (pLinkManager)
@@ -118,7 +118,7 @@ bool ScAreaLinkSaveCollection::IsEqual( const ScDocument* pDoc ) const
             }
         }
         if ( nPos < size() )
-            return false;           // fewer links in the document than in the save collection
+            return false;           
     }
 
     return true;
@@ -133,18 +133,18 @@ static ScAreaLink* lcl_FindLink( const ::sfx2::SvBaseLinks& rLinks, const ScArea
         if ( pBase->ISA(ScAreaLink) &&
              rSaver.IsEqualSource( *static_cast<ScAreaLink*>(pBase) ) )
         {
-            return static_cast<ScAreaLink*>(pBase);     // found
+            return static_cast<ScAreaLink*>(pBase);     
         }
     }
-    return NULL;    // not found
+    return NULL;    
 }
 
 void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
 {
-    // The save collection may contain additional entries that are not in the document.
-    // They must be inserted again.
-    // Entries from the save collection must be searched via source data, as the order
-    // of links changes if deleted entries are re-added to the link manager (always at the end).
+    
+    
+    
+    
 
     sfx2::LinkManager* pLinkManager = pDoc->GetDocLinkManager().getLinkManager(false);
     if (pLinkManager)
@@ -156,9 +156,9 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc )
             ScAreaLinkSaver* pSaver = (*this)[nPos];
             ScAreaLink* pLink = lcl_FindLink( rLinks, *pSaver );
             if ( pLink )
-                pSaver->WriteToLink( *pLink );          // restore output position
+                pSaver->WriteToLink( *pLink );          
             else
-                pSaver->InsertNewLink( pDoc );          // re-insert deleted link
+                pSaver->InsertNewLink( pDoc );          
         }
     }
 }

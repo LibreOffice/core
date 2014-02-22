@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <helpcompiler/HelpSearch.hxx>
@@ -41,7 +41,7 @@ bool HelpSearch::query(OUString const &queryStr, bool captionOnly,
 
     lucene::search::Hits *hits = searcher.search(pQuery);
     for (unsigned i = 0; i < hits->length(); ++i) {
-        lucene::document::Document &doc = hits->doc(i); // Document* belongs to Hits.
+        lucene::document::Document &doc = hits->doc(i); 
         wchar_t const *path = doc.get(L"path");
         rDocuments.push_back(TCHARArrayToOUString(path != 0 ? path : L""));
         rScores.push_back(hits->score(i));

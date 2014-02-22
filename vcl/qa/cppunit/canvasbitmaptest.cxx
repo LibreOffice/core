@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// bootstrap stuff
+
 #include <test/bootstrapfixture.hxx>
 
 #include <com/sun/star/util/Endianness.hpp>
@@ -249,13 +249,13 @@ private:
     rendering::IntegerBitmapLayout maLayout;
     const sal_Int32                mnBitsPerPixel;
 
-    // XBitmap
+    
     virtual geometry::IntegerSize2D SAL_CALL getSize() throw (uno::RuntimeException) { return maSize; }
     virtual ::sal_Bool SAL_CALL hasAlpha(  ) throw (uno::RuntimeException) { return mnBitsPerPixel != 8; }
     virtual uno::Reference< rendering::XBitmap > SAL_CALL getScaledBitmap( const geometry::RealSize2D&,
                                                                            sal_Bool ) throw (uno::RuntimeException) { return this; }
 
-    // XIntegerReadOnlyBitmap
+    
     virtual uno::Sequence< ::sal_Int8 > SAL_CALL getData( rendering::IntegerBitmapLayout&     bitmapLayout,
                                                           const geometry::IntegerRectangle2D& rect )
         throw (lang::IndexOutOfBoundsException,
@@ -339,7 +339,7 @@ private:
         return aLayout;
     }
 
-    // XBitmapPalette
+    
     virtual sal_Int32 SAL_CALL getNumberOfEntries() throw (uno::RuntimeException)
     {
         CPPUNIT_ASSERT_MESSAGE( "Got palette getNumberOfEntries interface call without handing out palette",
@@ -363,7 +363,7 @@ private:
                   sal_uInt8(nIndex),
                   sal_uInt8(nIndex)) );
 
-        return sal_True; // no palette transparency here.
+        return sal_True; 
     }
 
     virtual ::sal_Bool SAL_CALL setIndex( const uno::Sequence< double >&,
@@ -391,12 +391,12 @@ private:
 
     virtual uno::Reference< rendering::XColorSpace > SAL_CALL getColorSpace(  ) throw (uno::RuntimeException)
     {
-        // this is the method from XBitmapPalette. Return palette color
-        // space here
+        
+        
         return PaletteColorSpaceHolder::get();
     }
 
-    // XIntegerBitmapColorSpace
+    
     virtual ::sal_Int8 SAL_CALL getType(  ) throw (uno::RuntimeException)
     {
         return rendering::ColorSpaceType::RGB;
@@ -689,8 +689,8 @@ void CanvasBitmapTest::runTest()
 {
     static const sal_Int8 lcl_depths[]={1,4,8,16,24};
 
-    // Testing VclCanvasBitmap wrapper
-    // ===============================
+    
+    
 
     for( unsigned int i=0; i<SAL_N_ELEMENTS(lcl_depths); ++i )
     {
@@ -763,8 +763,8 @@ void CanvasBitmapTest::runTest()
         checkCanvasBitmap( xBmp, "alpha bitmap", nDepth );
     }
 
-    // Testing XBitmap import
-    // ======================
+    
+    
     uno::Reference< rendering::XIntegerReadOnlyBitmap > xTestBmp(
         new TestBitmap( geometry::IntegerSize2D(10,10), true ));
 
@@ -829,7 +829,7 @@ void CanvasBitmapTest::runTest()
     }
 }
 
-} // namespace
+} 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CanvasBitmapTest);
 

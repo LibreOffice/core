@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "crsrsh.hxx"
@@ -33,7 +33,7 @@
 #include <svx/svdpage.hxx>
 #include <accmap.hxx>
 
-// OD 12.12.2002 #103492#
+
 #include <pagepreviewlayout.hxx>
 
 #include <comcore.hrc>
@@ -46,7 +46,7 @@
 void SwViewImp::Init( const SwViewOption *pNewOpt )
 {
     OSL_ENSURE( pDrawView, "SwViewImp::Init without DrawView" );
-    //Create PageView if it doesn't exist
+    
     SwRootFrm *pRoot = pSh->GetLayout();
     if ( !pSdrPageView )
     {
@@ -58,8 +58,8 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
             pRoot->GetDrawPage()->SetSize( pRoot->Frm().SSize() );
 
         pSdrPageView = pDrawView->ShowSdrPage( pRoot->GetDrawPage());
-        // OD 26.06.2003 #108784# - notify drawing page view about invisible
-        // layers.
+        
+        
         pIDDMA->NotifyInvisibleLayers( *pSdrPageView );
     }
     pDrawView->SetDragStripes( pNewOpt->IsCrossHair() );
@@ -83,11 +83,11 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
 
     pDrawView->SetUseIncompatiblePathCreateInterface( sal_False );
 
-    // set handle size to 9 pixels, always
+    
     pDrawView->SetMarkHdlSizePixel(9);
 }
 
-/// CTor for the core internals
+
 SwViewImp::SwViewImp( SwViewShell *pParent ) :
     pSh( pParent ),
     pDrawView( 0 ),
@@ -99,7 +99,7 @@ SwViewImp::SwViewImp( SwViewShell *pParent ) :
     pAccMap( 0 ),
     pSdrObjCached(NULL),
     nRestoreActions( 0 ),
-    // OD 12.12.2002 #103492#
+    
     mpPgPreviewLayout( 0 )
 {
     bResetHdlHiddenPaint =
@@ -111,10 +111,10 @@ SwViewImp::~SwViewImp()
 {
     delete pAccMap;
 
-    // OD 12.12.2002 #103492#
+    
     delete mpPgPreviewLayout;
 
-    //JP 29.03.96: after ShowSdrPage  HideSdrPage must also be executed!!!
+    
     if( pDrawView )
          pDrawView->HideSdrPage();
 
@@ -170,9 +170,9 @@ void SwViewImp::SetFirstVisPage()
 {
     if ( pSh->mbDocSizeChgd && pSh->VisArea().Top() > pSh->GetLayout()->Frm().Height() )
     {
-        //We are in an action and because of erase actions the VisArea is
-        //after the first visible page.
-        //To avoid excessive formatting, hand back the last page.
+        
+        
+        
         pFirstVisPage = (SwPageFrm*)pSh->GetLayout()->Lower();
         while ( pFirstVisPage && pFirstVisPage->GetNext() )
             pFirstVisPage = (SwPageFrm*)pFirstVisPage->GetNext();
@@ -206,8 +206,8 @@ void SwViewImp::MakeDrawView()
 {
     IDocumentDrawModelAccess* pIDDMA = GetShell()->getIDocumentDrawModelAccess();
 
-    // the else here is not an error, _MakeDrawModel() calls this method again
-    // after the DrawModel is created to create DrawViews for all shells...
+    
+    
     if( !pIDDMA->GetDrawModel() )
     {
         pIDDMA->_MakeDrawModel();
@@ -216,12 +216,12 @@ void SwViewImp::MakeDrawView()
     {
         if ( !pDrawView )
         {
-            // #i72809#
-            // Discussed with FME, he also thinks that the getPrinter is old and not correct. When i got
-            // him right, it anyways returns GetOut() when it's a printer, but NULL when not. He suggested
-            // to use GetOut() and check the existing cases.
-            // Check worked well. Took a look at viewing, printing, PDF export and print preview with a test
-            // document which has an empty 2nd page (right page, see bug)
+            
+            
+            
+            
+            
+            
             OutputDevice* pOutDevForDrawView = GetShell()->GetWin();
 
             if(!pOutDevForDrawView)
@@ -236,8 +236,8 @@ void SwViewImp::MakeDrawView()
         const SwViewOption* pSwViewOption = GetShell()->GetViewOptions();
         Init(pSwViewOption);
 
-        // #i68597# If document is read-only, we will not profit from overlay,
-        // so switch it off.
+        
+        
         if(pDrawView && pDrawView->IsBufferedOverlayAllowed())
         {
             if(pSwViewOption->IsReadonly())
@@ -266,7 +266,7 @@ Color SwViewImp::GetRetoucheColor() const
     return aRet;
 }
 
-// create page preview layout
+
 void SwViewImp::InitPagePreviewLayout()
 {
     OSL_ENSURE( pSh->GetLayout(), "no layout - page preview layout can not be created.");
@@ -276,7 +276,7 @@ void SwViewImp::InitPagePreviewLayout()
 
 void SwViewImp::UpdateAccessible()
 {
-    // We require a layout and an XModel to be accessible.
+    
     IDocumentLayoutAccess* pIDLA = GetShell()->getIDocumentLayoutAccess();
     Window *pWin = GetShell()->GetWin();
     OSL_ENSURE( GetShell()->GetLayout(), "no layout, no access" );
@@ -387,13 +387,13 @@ void SwViewImp::InvalidateAccessibleRelationSet( const SwFlyFrm *pMaster,
     } while ( pTmp != pVSh );
 }
 
-/// invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
+
 void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxtFrm,
                                                        const SwTxtFrm* _pToTxtFrm )
 {
     if ( !_pFromTxtFrm && !_pToTxtFrm )
     {
-        // No text frame provided. Thus, nothing to do.
+        
         return;
     }
 
@@ -418,7 +418,7 @@ void SwViewImp::_InvalidateAccessibleParaFlowRelation( const SwTxtFrm* _pFromTxt
     } while ( pTmp != pVSh );
 }
 
-/// invalidate text selection for paragraphs
+
 void SwViewImp::_InvalidateAccessibleParaTextSelection()
 {
     SwViewShell* pVSh = GetShell();
@@ -434,7 +434,7 @@ void SwViewImp::_InvalidateAccessibleParaTextSelection()
     } while ( pTmp != pVSh );
 }
 
-/// invalidate attributes for paragraphs
+
 void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
 {
     SwViewShell* pVSh = GetShell();
@@ -450,7 +450,7 @@ void SwViewImp::_InvalidateAccessibleParaAttrs( const SwTxtFrm& rTxtFrm )
     } while ( pTmp != pVSh );
 }
 
-// OD 15.01.2003 #103492# - method signature change due to new page preview functionality
+
 void SwViewImp::UpdateAccessiblePreview( const std::vector<PreviewPage*>& _rPreviewPages,
                                          const Fraction&  _rScale,
                                          const SwPageFrm* _pSelectedPageFrm,

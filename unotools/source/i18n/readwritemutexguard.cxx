@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "unotools/readwritemutexguard.hxx"
@@ -27,15 +27,15 @@ ReadWriteGuard::ReadWriteGuard( ReadWriteMutex& rMutexP,
             sal_Int32 nRequestMode )
         : rMutex( rMutexP )
 {
-    // don't do anything until a pending write completed (or another
-    // ReadWriteGuard leaves the ctor phase)
+    
+    
     ::osl::MutexGuard aGuard( rMutex.pWriteMutex );
     nMode = nRequestMode;
     if ( nMode & ReadWriteGuardMode::nWrite )
     {
         rMutex.pWriteMutex->acquire();
-        // wait for any read to complete
-// TODO: set up a waiting thread instead of a loop
+        
+
         bool bWait = true;
         do
         {
@@ -86,17 +86,17 @@ void ReadWriteGuard::changeReadToWrite()
     DBG_ASSERT( bOk, "ReadWriteGuard::changeReadToWrite: can't" );
     if ( bOk )
     {
-        // MUST release read before acquiring write mutex or dead lock would
-        // occur if there was a write in another thread waiting for this read
-        // to complete.
+        
+        
+        
         rMutex.pMutex->acquire();
         --rMutex.nReadCount;
         rMutex.pMutex->release();
 
         rMutex.pWriteMutex->acquire();
         nMode |= ReadWriteGuardMode::nWrite;
-        // wait for any other read to complete
-// TODO: set up a waiting thread instead of a loop
+        
+
         bool bWait = true;
         do
         {
@@ -107,6 +107,6 @@ void ReadWriteGuard::changeReadToWrite()
     }
 }
 
-}   // namespace utl
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

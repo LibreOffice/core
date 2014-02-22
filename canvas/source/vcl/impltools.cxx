@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -64,8 +64,8 @@ namespace vclcanvas
     {
         ::BitmapEx bitmapExFromXBitmap( const uno::Reference< rendering::XBitmap >& xBitmap )
         {
-            // TODO(F3): CanvasCustomSprite should also be tunnelled
-            // through (also implements XIntegerBitmap interface)
+            
+            
             CanvasBitmap* pBitmapImpl = dynamic_cast< CanvasBitmap* >( xBitmap.get() );
 
             if( pBitmapImpl )
@@ -77,14 +77,14 @@ namespace vclcanvas
                 SpriteCanvas* pCanvasImpl = dynamic_cast< SpriteCanvas* >( xBitmap.get() );
                 if( pCanvasImpl && pCanvasImpl->getBackBuffer() )
                 {
-                    // TODO(F3): mind the plain Canvas impl. Consolidate with CWS canvas05
+                    
                     const ::OutputDevice& rDev( pCanvasImpl->getBackBuffer()->getOutDev() );
                     const ::Point aEmptyPoint;
                     return rDev.GetBitmapEx( aEmptyPoint,
                                              rDev.GetOutputSizePixel() );
                 }
 
-                // TODO(F2): add support for floating point bitmap formats
+                
                 uno::Reference< rendering::XIntegerReadOnlyBitmap > xIntBmp(
                     xBitmap, uno::UNO_QUERY_THROW );
 
@@ -92,7 +92,7 @@ namespace vclcanvas
                 if( !!aBmpEx )
                     return aBmpEx;
 
-                // TODO(F1): extract pixel from XBitmap interface
+                
                 ENSURE_OR_THROW( false,
                                   "bitmapExFromXBitmap(): could not extract bitmap" );
             }
@@ -118,18 +118,18 @@ namespace vclcanvas
 
             aMatrix.decompose( aScale, aTranslate, nRotate, nShearX );
 
-            // query font metric _before_ tampering with width and height
+            
             if( !::rtl::math::approxEqual(aScale.getX(), aScale.getY()) )
             {
-                // retrieve true font width
+                
                 const sal_Int32 nFontWidth( rOutDev.GetFontMetric( io_rVCLFont ).GetWidth() );
 
                 const sal_Int32 nScaledFontWidth( ::basegfx::fround(nFontWidth * aScale.getX()) );
 
                 if( !nScaledFontWidth )
                 {
-                    // scale is smaller than one pixel - disable text
-                    // output altogether
+                    
+                    
                     return false;
                 }
 
@@ -144,7 +144,7 @@ namespace vclcanvas
 
             io_rVCLFont.SetOrientation( static_cast< short >( ::basegfx::fround(-fmod(nRotate, 2*M_PI)*(1800.0/M_PI)) ) );
 
-            // TODO(F2): Missing functionality in VCL: shearing
+            
             o_rPoint.X() = ::basegfx::fround(aTranslate.getX());
             o_rPoint.Y() = ::basegfx::fround(aTranslate.getY());
 
@@ -153,7 +153,7 @@ namespace vclcanvas
 
         bool isRectangle( const PolyPolygon& rPolyPoly )
         {
-            // exclude some cheap cases first
+            
             if( rPolyPoly.Count() != 1 )
                 return false;
 
@@ -163,13 +163,13 @@ namespace vclcanvas
             if( nCount < 4 )
                 return false;
 
-            // delegate to basegfx
+            
             return ::basegfx::tools::isRectangle( rPoly.getB2DPolygon() );
         }
 
 
-        // VCL-Canvas related
-        //---------------------------------------------------------------------
+        
+        
 
         ::Point mapRealPoint2D( const geometry::RealPoint2D&    rPoint,
                                 const rendering::ViewState&     rViewState,
@@ -209,16 +209,16 @@ namespace vclcanvas
             SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap()" );
             SAL_INFO( "canvas.vcl", "::vclcanvas::tools::transformBitmap: 0x" << std::hex << &rBitmap );
 
-            // calc transformation and size of bitmap to be
-            // generated. Note, that the translational components are
-            // deleted from the transformation; this can be handled by
-            // an offset when painting the bitmap
+            
+            
+            
+            
             const Size                  aBmpSize( rBitmap.GetSizePixel() );
             ::basegfx::B2DRectangle     aDestRect;
 
             bool bCopyBack( false );
 
-            // calc effective transformation for bitmap
+            
             const ::basegfx::B2DRectangle aSrcRect( 0, 0,
                                                     aBmpSize.Width(),
                                                     aBmpSize.Height() );
@@ -226,10 +226,10 @@ namespace vclcanvas
                                                         aSrcRect,
                                                         rTransform );
 
-            // re-center bitmap, such that it's left, top border is
-            // aligned with (0,0). The method takes the given
-            // rectangle, and calculates a transformation that maps
-            // this rectangle unscaled to the origin.
+            
+            
+            
+            
             ::basegfx::B2DHomMatrix aLocalTransform;
             ::canvas::tools::calcRectToOriginTransform( aLocalTransform,
                                                         aSrcRect,
@@ -246,8 +246,8 @@ namespace vclcanvas
             Bitmap aSrcBitmap( rBitmap.GetBitmap() );
             Bitmap aSrcAlpha;
 
-            // differentiate mask and alpha channel (on-off
-            // vs. multi-level transparency)
+            
+            
             if( rBitmap.IsTransparent() )
             {
                 if( rBitmap.IsAlpha() )
@@ -265,37 +265,37 @@ namespace vclcanvas
             if( pReadAccess.get() == NULL ||
                 (pAlphaReadAccess.get() == NULL && rBitmap.IsTransparent()) )
             {
-                // TODO(E2): Error handling!
+                
                 ENSURE_OR_THROW( false,
                                   "transformBitmap(): could not access source bitmap" );
             }
 
-            // mapping table, to translate pAlphaReadAccess' pixel
-            // values into destination alpha values (needed e.g. for
-            // paletted 1-bit masks).
+            
+            
+            
             sal_uInt8 aAlphaMap[256];
 
             if( rBitmap.IsTransparent() )
             {
                 if( rBitmap.IsAlpha() )
                 {
-                    // source already has alpha channel - 1:1 mapping,
-                    // i.e. aAlphaMap[0]=0,...,aAlphaMap[255]=255.
+                    
+                    
                     ::o3tl::iota( aAlphaMap, &aAlphaMap[256], 0 );
                 }
                 else
                 {
-                    // mask transparency - determine used palette colors
+                    
                     const BitmapColor& rCol0( pAlphaReadAccess->GetPaletteColor( 0 ) );
                     const BitmapColor& rCol1( pAlphaReadAccess->GetPaletteColor( 1 ) );
 
-                    // shortcut for true luminance calculation
-                    // (assumes that palette is grey-level)
+                    
+                    
                     aAlphaMap[0] = rCol0.GetRed();
                     aAlphaMap[1] = rCol1.GetRed();
                 }
             }
-            // else: mapping table is not used
+            
 
             const Size aDestBmpSize( ::basegfx::fround( aDestRect.getWidth() ),
                                      ::basegfx::fround( aDestRect.getHeight() ) );
@@ -307,11 +307,11 @@ namespace vclcanvas
             Bitmap aDstAlpha( AlphaMask( aDestBmpSize ).GetBitmap() );
 
             {
-                // just to be on the safe side: let the
-                // ScopedAccessors get destructed before
-                // copy-constructing the resulting bitmap. This will
-                // rule out the possibility that cached accessor data
-                // is not yet written back.
+                
+                
+                
+                
+                
                 Bitmap::ScopedWriteAccess pWriteAccess( aDstBitmap );
                 Bitmap::ScopedWriteAccess pAlphaWriteAccess( aDstAlpha );
 
@@ -320,29 +320,29 @@ namespace vclcanvas
                     pAlphaWriteAccess.get() != NULL &&
                     rTransform.isInvertible() )
                 {
-                    // we're doing inverse mapping here, i.e. mapping
-                    // points from the destination bitmap back to the
-                    // source
+                    
+                    
+                    
                     ::basegfx::B2DHomMatrix aTransform( aLocalTransform );
                     aTransform.invert();
 
-                    // for the time being, always read as ARGB
+                    
                     for( int y=0; y<aDestBmpSize.Height(); ++y )
                     {
                         if( bModulateColors )
                         {
-                            // TODO(P2): Have different branches for
-                            // alpha-only modulation (color
-                            // modulations eq. 1.0)
+                            
+                            
+                            
 
-                            // modulate all color channels with given
-                            // values
+                            
+                            
 
-                            // differentiate mask and alpha channel (on-off
-                            // vs. multi-level transparency)
+                            
+                            
                             if( rBitmap.IsTransparent() )
                             {
-                                // Handling alpha and mask just the same...
+                                
                                 for( int x=0; x<aDestBmpSize.Width(); ++x )
                                 {
                                     ::basegfx::B2DPoint aPoint(x,y);
@@ -357,13 +357,13 @@ namespace vclcanvas
                                     }
                                     else
                                     {
-                                        // modulate alpha with
-                                        // nAlphaModulation. This is a
-                                        // little bit verbose, formula
-                                        // is 255 - (255-pixAlpha)*nAlphaModulation
-                                        // (invert 'alpha' pixel value,
-                                        // to get the standard alpha
-                                        // channel behaviour)
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
                                         const sal_uInt8 cMappedAlphaIdx = aAlphaMap[ pAlphaReadAccess->GetPixelIndex( nSrcY, nSrcX ) ];
                                         const sal_uInt8 cModulatedAlphaIdx = 255U - static_cast<sal_uInt8>( nAlphaModulation* (255U - cMappedAlphaIdx) + .5 );
                                         pAlphaWriteAccess->SetPixelIndex( y, x, cModulatedAlphaIdx );
@@ -403,13 +403,13 @@ namespace vclcanvas
                                     }
                                     else
                                     {
-                                        // modulate alpha with
-                                        // nAlphaModulation. This is a
-                                        // little bit verbose, formula
-                                        // is 255 - 255*nAlphaModulation
-                                        // (invert 'alpha' pixel value,
-                                        // to get the standard alpha
-                                        // channel behaviour)
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
                                         pAlphaWriteAccess->SetPixel( y, x,
                                                                      BitmapColor(
                                                                          255U -
@@ -441,11 +441,11 @@ namespace vclcanvas
                         }
                         else
                         {
-                            // differentiate mask and alpha channel (on-off
-                            // vs. multi-level transparency)
+                            
+                            
                             if( rBitmap.IsTransparent() )
                             {
-                                // Handling alpha and mask just the same...
+                                
                                 for( int x=0; x<aDestBmpSize.Width(); ++x )
                                 {
                                     ::basegfx::B2DPoint aPoint(x,y);
@@ -495,7 +495,7 @@ namespace vclcanvas
                 }
                 else
                 {
-                    // TODO(E2): Error handling!
+                    
                     ENSURE_OR_THROW( false,
                                       "transformBitmap(): could not access bitmap" );
                 }

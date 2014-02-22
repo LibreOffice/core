@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -190,8 +190,8 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
 {
     Guard< Mutex > aGuard( m_aMutex );
 
-    // may have become undisposable between PostUserEvent and here
-    // or may have disposed and receive a second UserEvent
+    
+    
     std::list<XPlugin_Impl*>& rList = ::PluginManager::get().getPlugins();
     std::list<XPlugin_Impl*>::iterator iter;
 
@@ -221,7 +221,7 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
     }
     m_aNPWindow.window = NULL;
 #ifndef UNX
-    // acrobat does an unconditional XtParent on the windows widget
+    
     getPluginComm()->NPP_SetWindow( this );
 #endif
     destroyInstance();
@@ -294,13 +294,13 @@ void XPlugin_Impl::prependArg( const char* pName, const char* pValue )
         pNewNames[nIndex+1] = m_pArgn[nIndex];
         pNewValues[nIndex+1]= m_pArgv[nIndex];
     }
-    // free old arrays
+    
     delete [] m_pArgn;
     delete [] m_pArgv;
-    // set new arrays
+    
     m_pArgn = pNewNames;
     m_pArgv = pNewValues;
-    // set new number of arguments
+    
     m_nArgs++;
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "inserted %s=%s\n", pNewNames[0], pNewValues[0] );
@@ -309,8 +309,8 @@ void XPlugin_Impl::prependArg( const char* pName, const char* pValue )
 
 void XPlugin_Impl::handleSpecialArgs()
 {
-    // special handling for real audio which needs a lot of parameters
-    // or won't function at all
+    
+    
     if( m_aDescription.Mimetype.equalsAscii( "audio/x-pn-realaudio-plugin" ) && m_nArgs < 1 )
     {
         OUString aURL;
@@ -329,36 +329,36 @@ void XPlugin_Impl::handleSpecialArgs()
 
         if( !aURL.isEmpty() )
         {
-            // set new args, old args need not be freed as there were none set
+            
             m_nArgs = 6;
             m_pArgn = new const char*[m_nArgs];
             m_pArgv = new const char*[m_nArgs];
 
-            // SRC
+            
             m_pArgn[0]      = strdup( "SRC" );
             m_pArgv[0]      = strdup( OUStringToOString( aURL, m_aEncoding ).getStr() );
-            // WIDTH
+            
             m_pArgn[1]      = strdup( "WIDTH" );
             m_pArgv[1]      = strdup( "200" );
-            // HEIGHT
+            
             m_pArgn[2]      = strdup( "HEIGHT" );
             m_pArgv[2]      = strdup( "200" );
-            // CONTROLS
+            
             m_pArgn[3]      = strdup( "CONTROLS" );
             m_pArgv[3]      = strdup( "PlayButton,StopButton,ImageWindow" );
-            // AUTOSTART
+            
             m_pArgn[4]      = strdup( "AUTOSTART" );
             m_pArgv[4]      = strdup( "TRUE" );
-            // NOJAVA
+            
             m_pArgn[5]      = strdup( "NOJAVA" );
             m_pArgv[5]      = strdup( "TRUE" );
         }
     }
-    // #69333# special for pdf
+    
     else if( m_aDescription.Mimetype.equalsAscii( "application/pdf" ) )
         m_aPluginMode = PluginMode::FULL;
 
-    // see if we have a TYPE tag
+    
     int nIndex;
     for( nIndex = 0; nIndex < m_nArgs; ++nIndex )
         if( m_pArgn[nIndex][0] == 'T' &&
@@ -369,11 +369,11 @@ void XPlugin_Impl::handleSpecialArgs()
             break;
     if( nIndex >= m_nArgs )
     {
-        // TYPE
+        
         prependArg( "TYPE", OUStringToOString( m_aDescription.Mimetype, m_aEncoding ).getStr() );
     }
 
-    // see if we have a SRC tag
+    
     for( nIndex = 0; nIndex < m_nArgs; ++nIndex )
         if( m_pArgn[nIndex][0] == 'S' &&
             m_pArgn[nIndex][1] == 'R' &&
@@ -382,7 +382,7 @@ void XPlugin_Impl::handleSpecialArgs()
             break;
     if( nIndex >= m_nArgs )
     {
-        // need a SRC parameter (as all browser set one on the plugin
+        
         OUString aURL;
         if( m_xModel.is() )
         {
@@ -399,7 +399,7 @@ void XPlugin_Impl::handleSpecialArgs()
 
         if( !aURL.isEmpty() )
         {
-            // SRC
+            
             prependArg( "SRC", OUStringToOString( aURL, m_aEncoding ).getStr() );
         }
     }
@@ -516,7 +516,7 @@ void XPlugin_Impl::loadPlugin()
     }
     const SystemEnvData* pEnvData = getSysChildSysData();
 #if defined( UNX ) && !(defined(MACOSX))
-    if (pEnvData->pDisplay) // headless?
+    if (pEnvData->pDisplay) 
     {
         XSync( (Display*)pEnvData->pDisplay, False );
     }
@@ -530,7 +530,7 @@ void XPlugin_Impl::loadPlugin()
                                                    m_aDescription.PluginName,
                                                    pEnvData->mpNSView );
 #elif defined UNX
-            // need a new PluginComm
+            
             PluginComm* pComm = NULL;
             int sv[2];
             if( !socketpair( AF_UNIX, SOCK_STREAM, 0, sv ) )
@@ -561,10 +561,10 @@ void XPlugin_Impl::loadPlugin()
                  (char**)(m_nArgs ? m_pArgv : NULL),
                  NULL );
 #ifdef MACOSX
-    // m_aNPWindow is set up in the MacPluginComm from the view
+    
     SetSysPlugDataParentView(*pEnvData);
 #elif defined( UNX )
-    if (pEnvData->pDisplay) // headless?
+    if (pEnvData->pDisplay) 
     {
         XSync( (Display*)pEnvData->pDisplay, False );
         m_aNPWindow.window  = (void*)pEnvData->aWindow;
@@ -612,11 +612,11 @@ void XPlugin_Impl::destroyStreams()
 {
     Guard< Mutex > aGuard( m_aMutex );
 
-    // streams remove themselves from this list when deleted
+    
     while( m_aOutputStreams.size() )
         delete *m_aOutputStreams.begin();
 
-    // input streams are XOutputStreams, they cannot be simply deleted
+    
     std::list<PluginInputStream*> aLocalList( m_aInputStreams );
     for( std::list<PluginInputStream*>::iterator it = aLocalList.begin();
          it != aLocalList.end(); ++it )
@@ -678,9 +678,9 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
     OString aURL  = OUStringToOString( url, m_aEncoding );
 
-    // check whether there is a notifylistener for this stream
-    // this means that the strema is created from the plugin
-    // via NPN_GetURLNotify or NPN_PostURLNotify
+    
+    
+    
     std::list<PluginEventListener*>::iterator iter;
     for( iter = m_aPEventListeners.begin();
          iter != m_aPEventListeners.end();
@@ -698,10 +698,10 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         loadPlugin();
         if( !m_aLastGetUrl.isEmpty() && m_aLastGetUrl == aURL )
         {
-            // plugin is pulling data, don't push the same stream;
-            // this complicated method could have been avoided if
-            // all plugins respected the SRC parameter; but e.g.
-            // acrobat reader plugin does not
+            
+            
+            
+            
             m_nProvidingState = PROVIDING_NONE;
             return sal_True;
         }
@@ -710,11 +710,11 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
         return sal_False;
 
      if(  url.isEmpty() )
-         // this is valid if the plugin is supposed to
-         // pull data (via e.g. NPN_GetURL)
+         
+         
          return sal_True;
 
-     // set mimetype on model
+     
      {
          uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
          if( xPS.is() )
@@ -731,10 +731,10 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
          }
      }
 
-     // there may be plugins that can use the file length information,
-     // but currently none are known. Since this file opening/seeking/closing
-     // is rather costly, it is not implemented. If there are plugins known to
-     // make use of the file length, simply put it in
+     
+     
+     
+     
 
      PluginInputStream* pStream = new PluginInputStream( this, aURL.getStr(),
                                                         length, lastmodified );
@@ -745,8 +745,8 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
     uint16_t stype = 0;
 
-    // special handling acrobat reader
-    // presenting a seekable stream to it does not seem to work correctly
+    
+    
     if( aMIME.equals( "application/pdf" ) )
         isfile = sal_False;
 
@@ -798,7 +798,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
 
             if( ! stream.is() )
             {
-                // stream has to be loaded by PluginStream itself via UCB
+                
                 pStream->load();
             }
             else
@@ -960,7 +960,7 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
     OUString aTmpFile;
     osl::FileBase::createTempFile( 0, 0, &aTmpFile );
 
-    // set correct extension, some plugins need that
+    
     OUString aName( m_aNPStream.url, strlen( m_aNPStream.url ), m_pPlugin->getTextEncoding() );
     OUString aExtension;
     sal_Int32 nSepInd = aName.lastIndexOf('.');
@@ -975,7 +975,7 @@ PluginInputStream::PluginInputStream( XPlugin_Impl* pPlugin,
     m_aFileStream.Open( aTmpFile, STREAM_READ | STREAM_WRITE );
     if( ! m_aFileStream.IsOpen() )
     {
-        // might be that the extension scrambled the whole filename
+        
         osl::FileBase::createTempFile( 0, 0, &aTmpFile );
         m_aFileStream.Open( aTmpFile, STREAM_READ | STREAM_WRITE );
     }
@@ -994,8 +994,8 @@ PluginInputStream::~PluginInputStream()
     {
         OString aFileName(OUStringToOString(aFile, m_pPlugin->getTextEncoding()));
         if( m_pPlugin->getPluginComm() && m_nMode != -1 )
-            // mode -1 means either an error occurred,
-            // or the plugin is already disposing
+            
+            
         {
             m_pPlugin->getPluginComm()->addFileToDelete( aFile );
             if( m_nMode == NP_ASFILE )
@@ -1054,7 +1054,7 @@ void PluginInputStream::setMode( sal_Int32 nMode )
 
     m_nMode = nMode;
 
-    // invalidation by plugin
+    
     if( m_nMode == -1 && m_pPlugin )
     {
         m_pPlugin->getInputStreams().remove( this );
@@ -1070,7 +1070,7 @@ void PluginInputStream::writeBytes( const Sequence<sal_Int8>& Buffer ) throw()
     m_aFileStream.Write( Buffer.getConstArray(), Buffer.getLength() );
 
     if( m_nMode == NP_SEEK )
-        // hold reference, streem gets destroyed in NPN_DestroyStream
+        
         m_xSelf = this;
 
     if( m_nMode == -1 || !m_pPlugin->getPluginComm() )

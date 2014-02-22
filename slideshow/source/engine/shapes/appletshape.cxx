@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <canvas/canvastools.hxx>
@@ -77,12 +77,12 @@ namespace slideshow
                          const OUString&                     rServiceName,
                          const char**                               pPropCopyTable,
                          sal_Size                                   nNumPropEntries,
-                         const SlideShowContext&                    rContext ); // throw ShapeLoadFailedException;
+                         const SlideShowContext&                    rContext ); 
 
         private:
 
-            // View layer methods
-            //------------------------------------------------------------------
+            
+            
 
             virtual void addViewLayer( const ViewLayerSharedPtr&    rNewLayer,
                                        bool                         bRedrawLayer );
@@ -90,8 +90,8 @@ namespace slideshow
             virtual bool clearAllViewLayers();
 
 
-            // ExternalShapeBase methods
-            //------------------------------------------------------------------
+            
+            
 
             virtual bool implRender( const ::basegfx::B2DRange& rCurrBounds ) const;
             virtual void implViewChanged( const UnoViewSharedPtr& rView );
@@ -106,7 +106,7 @@ namespace slideshow
             const char**                                    mpPropCopyTable;
             const sal_Size                                  mnNumPropEntries;
 
-            /// the list of active view shapes (one for each registered view layer)
+            
             typedef ::std::vector< ViewAppletShapeSharedPtr > ViewAppletShapeVector;
             ViewAppletShapeVector                           maViewAppletShapes;
             bool                                             mbIsPlaying;
@@ -127,11 +127,11 @@ namespace slideshow
         {
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void AppletShape::implViewChanged( const UnoViewSharedPtr& rView )
         {
-            // determine ViewAppletShape that needs update
+            
             ViewAppletShapeVector::const_iterator       aIter(maViewAppletShapes.begin());
             ViewAppletShapeVector::const_iterator const aEnd (maViewAppletShapes.end());
             while( aIter != aEnd )
@@ -143,11 +143,11 @@ namespace slideshow
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void AppletShape::implViewsChanged()
         {
-            // resize all ViewShapes
+            
             ::std::for_each( maViewAppletShapes.begin(),
                              maViewAppletShapes.end(),
                              ::boost::bind(
@@ -156,7 +156,7 @@ namespace slideshow
                                  ::boost::cref( AppletShape::getBounds())) );
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void AppletShape::addViewLayer( const ViewLayerSharedPtr& rNewLayer,
                                         bool                      bRedrawLayer )
@@ -171,21 +171,21 @@ namespace slideshow
                                                                    mnNumPropEntries,
                                                                    mxComponentContext )));
 
-                // push new size to view shape
+                
                 maViewAppletShapes.back()->resize( getBounds() );
 
-                // render the Shape on the newly added ViewLayer
+                
                 if( bRedrawLayer )
                     maViewAppletShapes.back()->render( getBounds() );
             }
             catch(uno::Exception&)
             {
-                // ignore failed shapes - slideshow should run with
-                // the remaining content
+                
+                
             }
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool AppletShape::removeViewLayer( const ViewLayerSharedPtr& rLayer )
         {
@@ -209,17 +209,17 @@ namespace slideshow
                                                             _1 ),
                                              ::boost::cref( rLayer ) ) )) == aEnd )
             {
-                // view layer seemingly was not added, failed
+                
                 return false;
             }
 
-            // actually erase from container
+            
             maViewAppletShapes.erase( aIter, aEnd );
 
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool AppletShape::clearAllViewLayers()
         {
@@ -227,11 +227,11 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool AppletShape::implRender( const ::basegfx::B2DRange& rCurrBounds ) const
         {
-            // redraw all view shapes, by calling their update() method
+            
             if( ::std::count_if( maViewAppletShapes.begin(),
                                  maViewAppletShapes.end(),
                                  ::boost::bind<bool>(
@@ -240,15 +240,15 @@ namespace slideshow
                                      ::boost::cref( rCurrBounds ) ) )
                 != static_cast<ViewAppletShapeVector::difference_type>(maViewAppletShapes.size()) )
             {
-                // at least one of the ViewShape::update() calls did return
-                // false - update failed on at least one ViewLayer
+                
+                
                 return false;
             }
 
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool AppletShape::implStartIntrinsicAnimation()
         {
@@ -262,7 +262,7 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool AppletShape::implEndIntrinsicAnimation()
         {
@@ -275,27 +275,27 @@ namespace slideshow
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool AppletShape::implPauseIntrinsicAnimation()
         {
-            // TODO(F1): any way of temporarily disabling/deactivating
-            // applets?
+            
+            
             return true;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         bool AppletShape::implIsIntrinsicAnimationPlaying() const
         {
             return mbIsPlaying;
         }
 
-        // ---------------------------------------------------------------------
+        
 
         void AppletShape::implSetIntrinsicAnimationTime(double)
         {
-            // No way of doing this, or?
+            
         }
 
         boost::shared_ptr<Shape> createAppletShape(

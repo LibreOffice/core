@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -110,7 +110,7 @@ void    XFColumnSep::ToXml(IXFStream *pStrm)
     if( m_aColor.IsValid() )
         pAttrList->AddAttribute( A2OUSTR("style:color"), m_aColor.ToString() );
     pAttrList->AddAttribute( A2OUSTR("style:height"), Int32ToOUString(m_nRelHeight) + A2OUSTR("%") );
-    //text align:
+    
     if( m_eVertAlign == enumXFAlignTop )
     {
         pAttrList->AddAttribute(A2OUSTR("style:vertical-align"),A2OUSTR("top"));
@@ -163,7 +163,7 @@ void    XFColumns::ToXml(IXFStream *pStrm)
 
     pStrm->StartElement( A2OUSTR("style:columns") );
 
-    if( m_nFlag&XFCOLUMNS_FLAG_SEPARATOR )  //column-sep:
+    if( m_nFlag&XFCOLUMNS_FLAG_SEPARATOR )  
     {
         m_aSeparator.ToXml(pStrm);
     }

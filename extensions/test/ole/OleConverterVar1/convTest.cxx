@@ -151,31 +151,31 @@ HRESULT doTest()
     varParam1.vt= VT_I1 | VT_BYREF;
     varParam1.plVal= &value;
 
-    // Testing the caching of DISPIDs and the process of aquiring member information
-    // on demand in IDispatch::Invoke
-    // Step through the corresponding IDispatch implementation of the ole bridge
+    
+    
+    
     hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodByte"), &varParam1, &varRet);
     hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"testinout_methodByte"), &varParam1, &varRet);
-    // Name ok but different case
+    
     hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout_methodByte"), &varParam1, &varRet);
     hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout_methodByte"), &varParam1, &varRet);
-    // not existing member
+    
     hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout"), &varParam1, &varRet);
     hr= oletest.Invoke1(static_cast<LPCOLESTR>(L"Testinout"), &varParam1, &varRet);
 
-    // Property
+    
     varParam1.vt= VT_ARRAY | VT_I1;
     varParam1.parray= (SAFEARRAY*)arByte;
     hr= oletest.PutPropertyByName( static_cast<LPCOLESTR>(L"AttrByte"), &varParam1);
     hr= oletest.PutPropertyByName( static_cast<LPCOLESTR>(L"AttrByte"), &varParam1);
-    // Name ok but different case
+    
     hr= oletest.PutPropertyByName( static_cast<LPCOLESTR>(L"attrByte"), &varParam1);
     hr= oletest.PutPropertyByName( static_cast<LPCOLESTR>(L"attrByte"), &varParam1);
-    // not existing member
+    
     hr= oletest.PutPropertyByName( static_cast<LPCOLESTR>(L"attr"), &varParam1);
     hr= oletest.PutPropertyByName( static_cast<LPCOLESTR>(L"attr"), &varParam1);
 
-    // PropertyGet
+    
     hr= oletest.GetPropertyByName( static_cast<LPCOLESTR>(L"AttrByte"), &varRet);
 
     hr= oletest.GetPropertyByName( static_cast<LPCOLESTR>(L"attrByte"), &varRet);
@@ -200,7 +200,7 @@ HRESULT doTest()
     hr = oletest.p->Invoke(dispid, IID_NULL, LOCALE_USER_DEFAULT,
         DISPATCH_METHOD | DISPATCH_PROPERTYPUT, &params, &varRet, NULL, NULL);
 
-    // different case
+    
     LPOLESTR method2= L"MEthodByte";
     hr = oletest.p->GetIDsOfNames(IID_NULL, &method2, 1, LOCALE_USER_DEFAULT, &dispid);
 
@@ -260,7 +260,7 @@ HRESULT doTest()
     varUnkArray.vt= VT_ARRAY | VT_UNKNOWN;
     varUnkArray.parray= (SAFEARRAY*)arUnknown;
 
-    // preparing out parameter;
+    
     char byteOut;
     CComVariant varOutByte;     //###
     varOutByte.vt= VT_BYREF | VT_UI1;
@@ -291,7 +291,7 @@ HRESULT doTest()
     varOutXInterface.vt= VT_BYREF |VT_DISPATCH;
     V_DISPATCHREF(&varOutXInterface)= &dispOut.p;
 
-    // In Parameter ( all of type Sequence ###########################################################
+    
     OutputDebugString( _T("In parameter of type Sequence ###########################################\n"
         "The functions return the Sequence parameter \n\n"));
 
@@ -337,7 +337,7 @@ HRESULT doTest()
     OutputDebugStringA("methodAny  | return value \n");
     printVariant( varRet);
 
-    // Out Parameter ###########################################################################
+    
     OutputDebugString( _T("Out parameter ###########################################\n\n"));
 
     OutputDebugString(_T("testout_methodByte  \n"));
@@ -466,7 +466,7 @@ HRESULT doTest()
     OutputDebugString(_T("testinout_methodXInterface  | out value: \n"));
     printVariant( varOutIFace);
 
-    // Properties ######################################################################
+    
     OutputDebugString( _T(" Properties ###########################################\n\n"));
 
     OutputDebugString(_T("set property \"AttrByte\" | value"));
@@ -512,7 +512,7 @@ void printVariant( VARIANT & _var)
         OutputDebugString( _T("# Array \n"));
         for( long i= 0; i < count; i++)
         {
-//          CComVariant variantValue;
+
             TCHAR *buf[256];
             wsprintf( (TCHAR*)buf, _T("%d : "), i);
             OutputDebugString( (TCHAR*)buf);
@@ -595,17 +595,17 @@ void printVariant( VARIANT & _var)
         case VT_R8:
             {
 
-//              int     decimal,   sign;
-//              char    *buffer;
-//              int     precision = 14;
-//              double  source = 3.1415926535;
 
-//              buffer = _ecvt( V_R8(&var), precision, &decimal, &sign );
+
+
+
+
+
                 sprintf( (TCHAR*)buf, _T(" VT_R8: %f \n"),V_R8( &var) );
             break;
             }
         case VT_UNKNOWN:
-            // The object implement IFont
+            
             {
                 CComDispatchDriver disp( var.punkVal);
                 CComVariant ret;
@@ -614,7 +614,7 @@ void printVariant( VARIANT & _var)
                 break;
             }
         case VT_DISPATCH:
-            // The object implement IFont
+            
             {
                 CComDispatchDriver disp( var.punkVal);
                 CComVariant ret;

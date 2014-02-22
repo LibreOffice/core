@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <undlihdl.hxx>
@@ -101,12 +101,12 @@ SvXMLEnumMapEntry const pXML_UnderlineWidth_Enum[] =
 };
 
 //
-// class XMLUnderlineTypePropHdl
+
 //
 
 XMLUnderlineTypePropHdl::~XMLUnderlineTypePropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -116,8 +116,8 @@ bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any&
         eNewUnderline, rStrImpValue, pXML_UnderlineType_Enum );
     if( bRet )
     {
-        // multi property: style and width might be set already.
-        // If the old value is NONE, the new is used unchanged.
+        
+        
         sal_Int16 eUnderline = sal_Int16();
         if( (rValue >>= eUnderline) && awt::FontUnderline::NONE!=eUnderline )
         {
@@ -125,12 +125,12 @@ bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any&
             {
             case awt::FontUnderline::NONE:
             case awt::FontUnderline::SINGLE:
-                // keep existing line style
+                
                 eNewUnderline = eUnderline;
                 break;
             case awt::FontUnderline::DOUBLE:
-                // A double line style has priority over a bold line style,
-                // but not over the line style itself.
+                
+                
                 switch( eUnderline )
                 {
                 case awt::FontUnderline::SINGLE:
@@ -141,8 +141,8 @@ bool XMLUnderlineTypePropHdl::importXML( const OUString& rStrImpValue, uno::Any&
                     eNewUnderline = awt::FontUnderline::DOUBLEWAVE;
                     break;
                 default:
-                    // If a double line style is not supported for the existing
-                    // value, keep the new one
+                    
+                    
                     eNewUnderline = eUnderline;
                     break;
                 }
@@ -183,12 +183,12 @@ bool XMLUnderlineTypePropHdl::exportXML( OUString& rStrExpValue, const uno::Any&
 }
 
 //
-// class XMLUnderlineStylePropHdl
+
 //
 
 XMLUnderlineStylePropHdl::~XMLUnderlineStylePropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -198,8 +198,8 @@ bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any
         eNewUnderline, rStrImpValue, pXML_UnderlineStyle_Enum );
     if( bRet )
     {
-        // multi property: style and width might be set already.
-        // If the old value is NONE, the new is used unchanged.
+        
+        
         sal_Int16 eUnderline = sal_Int16();
         if( (rValue >>= eUnderline) && awt::FontUnderline::NONE!=eUnderline )
         {
@@ -207,10 +207,10 @@ bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any
             {
             case awt::FontUnderline::NONE:
             case awt::FontUnderline::SINGLE:
-                // keep double or bold line style
+                
                 eNewUnderline = eUnderline;
             case awt::FontUnderline::DOTTED:
-                // The line style has priority over a double type.
+                
                 if( awt::FontUnderline::BOLD == eUnderline )
                     eNewUnderline = awt::FontUnderline::BOLDDOTTED;
                 break;
@@ -235,7 +235,7 @@ bool XMLUnderlineStylePropHdl::importXML( const OUString& rStrImpValue, uno::Any
                     eNewUnderline = awt::FontUnderline::BOLDWAVE;
                 break;
             case awt::FontUnderline::SMALLWAVE:
-                // SMALLWAVE is not used
+                
             default:
                 OSL_ENSURE( bRet, "unexpected line style value" );
                 break;
@@ -270,12 +270,12 @@ bool XMLUnderlineStylePropHdl::exportXML( OUString& rStrExpValue, const uno::Any
 }
 
 //
-// class XMLUnderlineWidthPropHdl
+
 //
 
 XMLUnderlineWidthPropHdl::~XMLUnderlineWidthPropHdl()
 {
-    // nothing to do
+    
 }
 
 bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any& rValue, const SvXMLUnitConverter& ) const
@@ -285,20 +285,20 @@ bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any
         eNewUnderline, rStrImpValue, pXML_UnderlineWidth_Enum );
     if( bRet )
     {
-        // multi property: style and width might be set already.
-        // If the old value is NONE, the new is used unchanged.
+        
+        
         sal_Int16 eUnderline = sal_Int16();
         if( (rValue >>= eUnderline) && awt::FontUnderline::NONE!=eUnderline )
         {
             switch( eNewUnderline )
             {
             case awt::FontUnderline::NONE:
-                // keep existing line style
+                
                 eNewUnderline = eUnderline;
                 break;
             case awt::FontUnderline::BOLD:
-                // A double line style has priority over a bold line style,
-                // but not over the line style itself.
+                
+                
                 switch( eUnderline )
                 {
                 case awt::FontUnderline::SINGLE:
@@ -322,7 +322,7 @@ bool XMLUnderlineWidthPropHdl::importXML( const OUString& rStrImpValue, uno::Any
                     eNewUnderline = awt::FontUnderline::BOLDWAVE;
                     break;
                 default:
-                    // a doube line style overwrites a bold one
+                    
                     eNewUnderline = eUnderline;
                     break;
                 }

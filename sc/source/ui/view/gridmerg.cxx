@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/outdev.hxx>
 
 #include "gridmerg.hxx"
 
-//------------------------------------------------------------------
+
 
 ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePixelY ) :
     pDev( pOutDev ),
@@ -30,8 +30,8 @@ ScGridMerger::ScGridMerger( OutputDevice* pOutDev, long nOnePixelX, long nOnePix
     nCount( 0 ),
     bVertical( false )
 {
-    //  optimize (DrawGrid) only for pixel MapMode,
-    //  to avoid rounding errors
+    
+    
 
     bOptimize = ( pDev->GetMapMode().GetMapUnit() == MAP_PIXEL );
 }
@@ -45,8 +45,8 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
 {
     if ( nCount )
     {
-        //  not first line - test fix position
-        //  more than one previous line - test distance
+        
+        
 
         if ( nStart != nFixStart || nEnd != nFixEnd )
         {
@@ -54,8 +54,8 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
                     ( nStart == nFixEnd ||
                         nStart == nFixEnd + ( bVertical ? nOneY : nOneX ) ) )
             {
-                //  additional optimization: extend connected lines
-                //  keep nCount at 1
+                
+                
                 nFixEnd = nEnd;
             }
             else
@@ -66,7 +66,7 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
             nVarDiff = nPos - nVarStart;
             ++nCount;
         }
-        else if ( nPos != nVarStart + nCount * nVarDiff )       //! keep VarEnd?
+        else if ( nPos != nVarStart + nCount * nVarDiff )       
             Flush();
         else
             ++nCount;
@@ -74,7 +74,7 @@ void ScGridMerger::AddLine( long nStart, long nEnd, long nPos )
 
     if ( !nCount )
     {
-        //  first line (or flushed above) - just store
+        
 
         nFixStart = nStart;
         nFixEnd   = nEnd;
@@ -127,9 +127,9 @@ void ScGridMerger::Flush()
                 long nVarEnd = nVarStart + ( nCount - 1 ) * nVarDiff;
                 if ( nVarDiff < 0 )
                 {
-                    //  nVarDiff is negative in RTL layout mode
-                    //  Change the positions so DrawGrid is called with a positive distance
-                    //  (nVarStart / nVarDiff can be modified, aren't used after Flush)
+                    
+                    
+                    
 
                     nVarDiff = -nVarDiff;
                     long nTemp = nVarStart;

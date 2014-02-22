@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scmatrix.hxx"
@@ -171,7 +171,7 @@ public:
             case mdds::mtm::element_string:
             case mdds::mtm::element_empty:
             default:
-                // Fill it with false.
+                
                 maNewMatValues.resize(maNewMatValues.size() + node.size, false);
         }
     }
@@ -193,7 +193,7 @@ class ScMatrixImpl
     MatrixImplType maMat;
     MatrixImplType maMatFlag;
     ScInterpreter* pErrorInterpreter;
-    bool            mbCloneIfConst; // Whether the matrix is cloned with a CloneIfConst() call.
+    bool            mbCloneIfConst; 
 
     ScMatrixImpl();
     ScMatrixImpl(const ScMatrixImpl&);
@@ -367,13 +367,13 @@ bool ScMatrixImpl::ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const
     }
     else if (aSize.column == 1 && rR < aSize.row)
     {
-        // single column matrix.
+        
         rC = 0;
         return true;
     }
     else if (aSize.row == 1 && rC < aSize.column)
     {
-        // single row matrix.
+        
         rR = 0;
         return true;
     }
@@ -450,7 +450,7 @@ void ScMatrixImpl::PutEmpty(SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
     {
         maMat.set_empty(nR, nC);
-        maMatFlag.set(nR, nC, false); // zero flag to indicate that this is 'empty', not 'empty path'.
+        maMatFlag.set(nR, nC, false); 
     }
     else
     {
@@ -463,7 +463,7 @@ void ScMatrixImpl::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
     {
         maMat.set_empty(nR, nC);
-        maMatFlag.set(nR, nC, true); // non-zero flag to indicate empty 'path'.
+        maMatFlag.set(nR, nC, true); 
     }
     else
     {
@@ -542,7 +542,7 @@ svl::SharedString ScMatrixImpl::GetString(SCSIZE nC, SCSIZE nR) const
             case mdds::mtm::element_numeric:
             case mdds::mtm::element_boolean:
                 fErr = maMat.get_numeric(aPos);
-                //fallthrough
+                
             default:
                 OSL_FAIL("ScMatrixImpl::GetString: access error, no string");
         }
@@ -579,10 +579,10 @@ svl::SharedString ScMatrixImpl::GetString( SvNumberFormatter& rFormatter, SCSIZE
         case mdds::mtm::element_empty:
         {
             if (!maMatFlag.get<bool>(nR, nC))
-                // not an empty path.
+                
                 break;
 
-            // result of empty FALSE jump path
+            
             sal_uLong nKey = rFormatter.GetStandardFormat( NUMBERFORMAT_LOGICAL,
                     ScGlobal::eLnge);
             OUString aStr;
@@ -634,7 +634,7 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
                 aVal.aStr = maMat.get_string(aPos);
             break;
             case mdds::mtm::element_empty:
-                // Empty path equals empty plus flag.
+                
                 aVal.nType = maMatFlag.get<bool>(nR, nC) ? SC_MATVAL_EMPTYPATH : SC_MATVAL_EMPTY;
                 aVal.fVal = 0.0;
             default:
@@ -671,15 +671,15 @@ bool ScMatrixImpl::IsString( SCSIZE nC, SCSIZE nR ) const
 
 bool ScMatrixImpl::IsEmpty( SCSIZE nC, SCSIZE nR ) const
 {
-    // Flag must be zero for this to be an empty element, instead of being an
-    // empty path element.
+    
+    
     ValidColRowReplicated( nC, nR );
     return maMat.get_type(nR, nC) == mdds::mtm::element_empty && !maMatFlag.get<bool>(nR, nC);
 }
 
 bool ScMatrixImpl::IsEmptyPath( SCSIZE nC, SCSIZE nR ) const
 {
-    // 'Empty path' is empty plus non-zero flag.
+    
     if (ValidColRowOrReplicated( nC, nR ))
         return maMat.get_type(nR, nC) == mdds::mtm::element_empty && maMatFlag.get<bool>(nR, nC);
     else
@@ -737,7 +737,7 @@ void ScMatrixImpl::MatCopy(ScMatrixImpl& mRes) const
 {
     if (maMat.size().row > mRes.maMat.size().row || maMat.size().column > mRes.maMat.size().column)
     {
-        // destination matrix is not large enough.
+        
         OSL_FAIL("ScMatrixImpl::MatCopy: dimension error");
         return;
     }
@@ -757,7 +757,7 @@ void ScMatrixImpl::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, 
     {
         for (SCSIZE j = nC1; j <= nC2; ++j)
         {
-            // Passing value array is much faster.
+            
             std::vector<double> aVals(nR2-nR1+1, fVal);
             maMat.set(nR1, j, aVals.begin(), aVals.end());
         }
@@ -797,7 +797,7 @@ void ScMatrixImpl::PutEmptyVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR )
     if (nCount && ValidColRow( nC, nR) && ValidColRow( nC, nR + nCount - 1))
     {
         maMat.set_empty(nR, nC, nCount);
-        // zero flag to indicate that this is 'empty', not 'empty path'.
+        
         std::vector<bool> aVals(nCount, false);
         maMatFlag.set(nR, nC, aVals.begin(), aVals.end());
     }
@@ -812,7 +812,7 @@ void ScMatrixImpl::PutEmptyPathVector( SCSIZE nCount, SCSIZE nC, SCSIZE nR )
     if (nCount && ValidColRow( nC, nR) && ValidColRow( nC, nR + nCount - 1))
     {
         maMat.set_empty(nR, nC, nCount);
-        // non-zero flag to indicate empty 'path'.
+        
         std::vector<bool> aVals(nCount, true);
         maMatFlag.set(nR, nC, aVals.begin(), aVals.end());
     }
@@ -896,8 +896,8 @@ struct XorEvaluator
     XorEvaluator() : mbResult(false) {}
 };
 
-// Do not short circuit logical operations, in case there are error values
-// these need to be propagated even if the result was determined earlier.
+
+
 template <typename _Evaluator>
 double EvalMatrix(const MatrixImplType& rMat)
 {
@@ -910,12 +910,12 @@ double EvalMatrix(const MatrixImplType& rMat)
             MatrixImplType::const_position_type aPos = rMat.position(i, j);
             mdds::mtm::element_t eType = rMat.get_type(aPos);
             if (eType != mdds::mtm::element_numeric && eType != mdds::mtm::element_boolean)
-                // assuming a CompareMat this is an error
+                
                 return CreateDoubleError(errIllegalArgument);
 
             double fVal = rMat.get_numeric(aPos);
             if (!::rtl::math::isFinite(fVal))
-                // DoubleError
+                
                 return fVal;
 
             aEval.operate(fVal);
@@ -928,22 +928,22 @@ double EvalMatrix(const MatrixImplType& rMat)
 
 double ScMatrixImpl::And() const
 {
-    // All elements must be of value type.
-    // True only if all the elements have non-zero values.
+    
+    
     return EvalMatrix<AndEvaluator>(maMat);
 }
 
 double ScMatrixImpl::Or() const
 {
-    // All elements must be of value type.
-    // True if at least one element has a non-zero value.
+    
+    
     return EvalMatrix<OrEvaluator>(maMat);
 }
 
 double ScMatrixImpl::Xor() const
 {
-    // All elements must be of value type.
-    // True if an odd number of elements have a non-zero value.
+    
+    
     return EvalMatrix<XorEvaluator>(maMat);
 }
 
@@ -1100,11 +1100,11 @@ public:
 
     void operator() (const MatrixImplType::element_block_node_type& node)
     {
-        // early exit if match already found
+        
         if (mnResult != ResultNotSet)
             return;
 
-        // limit lookup to the requested columns
+        
         if ((mnCol1 * maSize.row) <= mnIndex && mnIndex < ((mnCol2 + 1) * maSize.row))
         {
             mnResult = compare(node);
@@ -1201,7 +1201,7 @@ struct MaxOp
         MatrixImplType::boolean_block_type::const_iterator it,
         MatrixImplType::boolean_block_type::const_iterator itEnd)
     {
-        // If the array has at least one true value, the maximum value is 1.
+        
         it = std::find(it, itEnd, true);
         return it == itEnd ? 0.0 : 1.0;
     }
@@ -1219,7 +1219,7 @@ struct MinOp
         MatrixImplType::boolean_block_type::const_iterator it,
         MatrixImplType::boolean_block_type::const_iterator itEnd)
     {
-        // If the array has at least one false value, the minimum value is 0.
+        
         it = std::find(it, itEnd, false);
         return it == itEnd ? 1.0 : 0.0;
     }
@@ -1265,7 +1265,7 @@ public:
             case mdds::mtm::element_string:
             case mdds::mtm::element_empty:
             {
-                // empty elements are treated as empty strings.
+                
                 if (mbTextAsZero)
                     mfVal = _Op::compare(mfVal, 0.0);
             }
@@ -1613,7 +1613,7 @@ public:
             break;
             case mdds::mtm::element_empty:
             {
-                // Empty element is equivalent of having a numeric value of 0.0.
+                
                 for (size_t i = 0; i < node.size; ++i, ++miPos)
                 {
                     if (rtl::math::isNan(*miPos))
@@ -1696,13 +1696,13 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
     {
         if (rComp.maCells[1].mbValue && !rComp.maCells[1].mbEmpty)
         {
-            // Matrix on the left, and a numeric value on the right.  Use a
-            // function object that has much less branching for much better
-            // performance.
+            
+            
+            
             CompareMatrixToNumericFunc aFunc(nSize, rComp, rComp.maCells[1].mfValue, pOptions);
             maMat.walk(aFunc);
 
-            // We assume the result matrix has the same dimension as this matrix.
+            
             const std::vector<bool>& rResVal = aFunc.getValues();
             if (nSize != rResVal.size())
                 ScMatrixRef();
@@ -1714,7 +1714,7 @@ ScMatrixRef ScMatrixImpl::CompareMatrix(
     CompareMatrixFunc aFunc(nSize, rComp, nMatPos, pOptions);
     maMat.walk(aFunc);
 
-    // We assume the result matrix has the same dimension as this matrix.
+    
     const std::vector<bool>& rResVal = aFunc.getValues();
     if (nSize != rResVal.size())
         ScMatrixRef();
@@ -1755,14 +1755,14 @@ void ScMatrixImpl::AddValues( const ScMatrixImpl& rMat )
     const MatrixImplType& rOther = rMat.maMat;
     MatrixImplType::size_pair_type aSize = maMat.size();
     if (aSize != rOther.size())
-        // Geometry must match.
+        
         return;
 
-    // For now, we only add two matricies if and only if 1) the receiving
-    // matrix consists only of one numeric block, and 2) the other matrix
-    // consists of either one numeric block or one boolean block.  In the
-    // future, we may want to be more flexible support matricies that consist
-    // of multiple blocks.
+    
+    
+    
+    
+    
 
     MatrixImplType::position_type aPos1 = maMat.position(0, 0);
     MatrixImplType::const_position_type aPos2 = rOther.position(0, 0);
@@ -1892,7 +1892,7 @@ ScMatrix* ScMatrix::Clone() const
     pImpl->GetDimensions(nC, nR);
     ScMatrix* pScMat = new ScMatrix(nC, nR);
     MatCopy(*pScMat);
-    pScMat->SetErrorInterpreter(pImpl->GetErrorInterpreter());    // TODO: really?
+    pScMat->SetErrorInterpreter(pImpl->GetErrorInterpreter());    
     return pScMat;
 }
 

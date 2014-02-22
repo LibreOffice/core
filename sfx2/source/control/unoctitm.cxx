@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -104,14 +104,14 @@ SfxUnoControllerItem::SfxUnoControllerItem( SfxControllerItem *pItem, SfxBinding
 
 SfxUnoControllerItem::~SfxUnoControllerItem()
 {
-    // tell bindings to forget this controller ( if still connected )
+    
     if ( pBindings )
         pBindings->ReleaseUnoController_Impl( this );
 }
 
 void SfxUnoControllerItem::UnBind()
 {
-    // connection to SfxControllerItem is lost
+    
     pCtrlItem = NULL;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY );
     ReleaseDispatch();
@@ -124,13 +124,13 @@ void SAL_CALL SfxUnoControllerItem::statusChanged(const ::com::sun::star::frame:
 
     if ( rEvent.Requery )
     {
-        // Error can only happen if the old Dispatch is implemented incorrectly
-        // i.e. removeStatusListener did not work. But such things can happen...
-        // So protect before ReleaseDispatch from release!
+        
+        
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY  );
         ReleaseDispatch();
         if ( pCtrlItem )
-            GetNewDispatch();           // asynchronous ??
+            GetNewDispatch();           
     }
     else if ( pCtrlItem )
     {
@@ -193,27 +193,27 @@ void SfxUnoControllerItem::GetNewDispatch()
 {
     if ( !pBindings )
     {
-        // Bindings released
+        
         OSL_FAIL( "Tried to get dispatch, but no Bindings!" );
         return;
     }
 
-    // forget old dispatch
+    
     xDispatch = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > ();
 
-    // no arms, no cookies !
+    
     if ( !pBindings->GetDispatcher_Impl() || !pBindings->GetDispatcher_Impl()->GetFrame() )
         return;
 
     SfxFrame& rFrame = pBindings->GetDispatcher_Impl()->GetFrame()->GetFrame();
     SfxFrame *pParent = rFrame.GetParentFrame();
     if ( pParent )
-        // parent may intercept
+        
         xDispatch = TryGetDispatch( pParent );
 
     if ( !xDispatch.is() )
     {
-        // no interception
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  xFrame = rFrame.GetFrameInterface();
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
         if ( xProv.is() )
@@ -231,13 +231,13 @@ void SfxUnoControllerItem::GetNewDispatch()
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp;
     SfxFrame *pParent = pFrame->GetParentFrame();
     if ( pParent )
-        // parent may intercept
+        
         xDisp = TryGetDispatch( pParent );
 
-    // only components may intercept
+    
     if ( !xDisp.is() && pFrame->HasComponent() )
     {
-        // no interception
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame = pFrame->GetFrameInterface();
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >  xProv( xFrame, ::com::sun::star::uno::UNO_QUERY );
         if ( xProv.is() )
@@ -249,7 +249,7 @@ void SfxUnoControllerItem::GetNewDispatch()
 
 void SfxUnoControllerItem::ReleaseBindings()
 {
-    // connection to binding is lost; so forget the binding and the dispatch
+    
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener >  aRef( (::cppu::OWeakObject*)this, ::com::sun::star::uno::UNO_QUERY );
     ReleaseDispatch();
     if ( pBindings )
@@ -299,8 +299,8 @@ void SAL_CALL SfxStatusDispatcher::removeStatusListener( const ::com::sun::star:
     aListeners.removeInterface( aURL.Complete, aListener );
 }
 
-//-------------------------------------------------------------------------
-// XUnoTunnel
+
+
 sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException)
 {
     if ( aIdentifier == impl_getStaticIdentifier() )
@@ -311,13 +311,13 @@ sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const ::com::sun::star::uno:
 
 SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDispat, const SfxSlot* pSlot, const ::com::sun::star::util::URL& rURL )
 {
-    // this object is an adapter that shows a ::com::sun::star::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
+    
     pControllerItem = new SfxDispatchController_Impl( this, &rBindings, pDispat, pSlot, rURL );
 }
 
 SfxOfficeDispatch::SfxOfficeDispatch( SfxDispatcher* pDispat, const SfxSlot* pSlot, const ::com::sun::star::util::URL& rURL )
 {
-    // this object is an adapter that shows a ::com::sun::star::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
+    
     pControllerItem = new SfxDispatchController_Impl( this, NULL, pDispat, pSlot, rURL );
 }
 
@@ -325,7 +325,7 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
 {
     if ( pControllerItem )
     {
-        // when dispatch object is released, destroy its connection to this object and destroy it
+        
         pControllerItem->UnBindController();
         delete pControllerItem;
     }
@@ -333,7 +333,7 @@ SfxOfficeDispatch::~SfxOfficeDispatch()
 
 const ::com::sun::star::uno::Sequence< sal_Int8 >& SfxOfficeDispatch::impl_getStaticIdentifier()
 {
-    // {38 57 CA 80 09 36 11 d4 83 FE 00 50 04 52 6B 21}
+    
     static const sal_uInt8 pGUID[16] = { 0x38, 0x57, 0xCA, 0x80, 0x09, 0x36, 0x11, 0xd4, 0x83, 0xFE, 0x00, 0x50, 0x04, 0x52, 0x6B, 0x21 };
     static ::com::sun::star::uno::Sequence< sal_Int8 > seqID((const sal_Int8*)pGUID,16) ;
     return seqID ;
@@ -342,16 +342,16 @@ const ::com::sun::star::uno::Sequence< sal_Int8 >& SfxOfficeDispatch::impl_getSt
 
 void SAL_CALL SfxOfficeDispatch::dispatch( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs ) throw ( ::com::sun::star::uno::RuntimeException )
 {
-    // ControllerItem is the Impl class
+    
     if ( pControllerItem )
     {
 #if HAVE_FEATURE_JAVA
-        // The JavaContext contains an interaction handler which is used when
-        // the creation of a Java Virtual Machine fails. The second parameter
-        // indicates, that there shall only be one user notification (message box)
-        // even if the same error (interaction) reoccurs. The effect is, that if a
-        // user selects a menu entry than they may get only one notification that
-        // a JRE is not selected.
+        
+        
+        
+        
+        
+        
         com::sun::star::uno::ContextLayer layer(
             new svt::JavaContext( com::sun::star::uno::getCurrentContext(),
                                   true) );
@@ -364,11 +364,11 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const ::com::sun::sta
         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchResultListener >& rListener ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    // ControllerItem is the Impl class
+    
     if ( pControllerItem )
     {
 #if HAVE_FEATURE_JAVA
-        // see comment for SfxOfficeDispatch::dispatch
+        
         com::sun::star::uno::ContextLayer layer(
             new svt::JavaContext( com::sun::star::uno::getCurrentContext(),
                                   true) );
@@ -382,7 +382,7 @@ void SAL_CALL SfxOfficeDispatch::addStatusListener(const ::com::sun::star::uno::
     GetListeners().addInterface( aURL.Complete, aListener );
     if ( pControllerItem )
     {
-        // ControllerItem is the Impl class
+        
         pControllerItem->addStatusListener( aListener, aURL );
     }
 }
@@ -404,7 +404,7 @@ void SfxOfficeDispatch::SetMasterUnoCommand( sal_Bool bSet )
         pControllerItem->setMasterSlaveCommand( bSet );
 }
 
-// Determine if URL contains a master/slave command which must be handled a little bit different
+
 sal_Bool SfxOfficeDispatch::IsMasterUnoCommand( const ::com::sun::star::util::URL& aURL )
 {
     if ( aURL.Protocol == ".uno:" && ( aURL.Path.indexOf( '.' ) > 0 ))
@@ -454,8 +454,8 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
     SetId( nSlot );
     if ( pBindings )
     {
-        // Bind immediately to enable the cache to recycle dispatches when asked for the same command
-        // a command in "slot" or in ".uno" notation must be treated as identical commands!
+        
+        
         pBindings->ENTERREGISTRATIONS();
         BindInternal_Impl( nSlot, pBindings );
         pBindings->LEAVEREGISTRATIONS();
@@ -469,10 +469,10 @@ SfxDispatchController_Impl::~SfxDispatchController_Impl()
 
     if ( pDispatch )
     {
-        // disconnect
+        
         pDispatch->pControllerItem = NULL;
 
-        // force all listeners to release the dispatch object
+        
         ::com::sun::star::lang::EventObject aObject;
         aObject.Source = (::cppu::OWeakObject*) pDispatch;
         pDispatch->GetListeners().disposeAndClear( aObject );
@@ -502,7 +502,7 @@ void SfxDispatchController_Impl::UnBindController()
 
 void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util::URL& aURL, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs ) const
 {
-    // Extract the parameter from the URL and put them into the property value sequence
+    
     sal_Int32 nQueryIndex = aURL.Complete.indexOf( '?' );
     if ( nQueryIndex > 0 )
     {
@@ -531,47 +531,47 @@ void SfxDispatchController_Impl::addParametersToArgs( const com::sun::star::util
 
             if ( aParamType.isEmpty() )
             {
-                // Default: LONG
+                
                 rArgs[nLen].Value <<= aValue.toInt32();
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BOOL], 4 ))
             {
-                // sal_Bool support
+                
                 rArgs[nLen].Value <<= aValue.toBoolean();
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_BYTE], 4 ))
             {
-                // sal_uInt8 support
+                
                 rArgs[nLen].Value <<= sal_Int8( aValue.toInt32() );
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_LONG], 4 ))
             {
-                // LONG support
+                
                 rArgs[nLen].Value <<= aValue.toInt32();
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_SHORT], 5 ))
             {
-                // SHORT support
+                
                 rArgs[nLen].Value <<= sal_Int8( aValue.toInt32() );
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_HYPER], 5 ))
             {
-                // HYPER support
+                
                 rArgs[nLen].Value <<= aValue.toInt64();
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_FLOAT], 5 ))
             {
-                // FLOAT support
+                
                 rArgs[nLen].Value <<= aValue.toFloat();
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_STRING], 6 ))
             {
-                // STRING support
+                
                 rArgs[nLen].Value <<= OUString( INetURLObject::decode( aValue, '%', INetURLObject::DECODE_WITH_CHARSET ));
             }
             else if ( aParamType.equalsAsciiL( URLTypeNames[URLType_DOUBLE], 6))
             {
-                // DOUBLE support
+                
                 rArgs[nLen].Value <<= aValue.toDouble();
             }
         }
@@ -613,16 +613,16 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > lNewArgs;
         sal_Int32 nCount = aArgs.getLength();
 
-        // Support for URL based arguments
+        
         INetURLObject aURLObj( aURL.Complete );
         if ( aURLObj.HasParam() )
             addParametersToArgs( aURL, lNewArgs );
 
-        // Try to find call mode and frame name inside given arguments...
+        
         SfxCallMode nCall = SFX_CALLMODE_STANDARD;
         sal_Int32   nMarkArg = -1;
 
-        // Filter arguments which shouldn't be part of the sequence property value
+        
         sal_Bool    bTemp = sal_Bool();
         sal_uInt16  nModifier(0);
         std::vector< ::com::sun::star::beans::PropertyValue > aAddArgs;
@@ -645,7 +645,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 aAddArgs.push_back( aArgs[n] );
         }
 
-        // Add needed arguments to sequence property value
+        
         sal_uInt32 nAddArgs = aAddArgs.size();
         if ( nAddArgs > 0 )
         {
@@ -656,14 +656,14 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 lNewArgs[nIndex++] = aAddArgs[i];
         }
 
-        // Overwrite possible detected sychron argument, if real listener exists (currently no other way)
+        
         if ( rListener.is() )
             nCall = SFX_CALLMODE_SYNCHRON;
 
         if( GetId() == SID_JUMPTOMARK && nMarkArg == - 1 )
         {
-            // we offer dispatches for SID_JUMPTOMARK if the URL points to a bookmark inside the document
-            // so we must retrieve this as an argument from the parsed URL
+            
+            
             lNewArgs.realloc( lNewArgs.getLength()+1 );
             nMarkArg = lNewArgs.getLength()-1;
             lNewArgs[nMarkArg].Name = "Bookmark";
@@ -682,18 +682,18 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         const SfxPoolItem* pItem = NULL;
         SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
 
-        // Extra scope so that aInternalSet is destroyed before
-        // rListener->dispatchFinished potentially calls
-        // framework::Desktop::terminate -> SfxApplication::Deinitialize ->
-        // ~CntItemPool:
+        
+        
+        
+        
         if (pDispatcher)
         {
             SfxAllItemSet aInternalSet( SFX_APP()->GetPool() );
-            if (xFrameRef.is()) // an empty set is no problem ... but an empty frame reference can be a problem !
+            if (xFrameRef.is()) 
                 aInternalSet.Put( SfxUnoFrameItem( SID_FILLFRAME, xFrameRef ) );
 
             SfxShell* pShell( 0 );
-            // #i102619# Retrieve metric from shell before execution - the shell could be destroyed after execution
+            
             if ( pDispatcher->GetBindings() )
             {
                 if ( !pDispatcher->IsLocked( GetId() ) )
@@ -704,8 +704,8 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                     {
                         if ( bMasterSlave )
                         {
-                            // Extract slave command and add argument to the args list. Master slot MUST
-                            // have a argument that has the same name as the master slot and type is SfxStringItem.
+                            
+                            
                             sal_Int32 nIndex = lNewArgs.getLength();
                             lNewArgs.realloc( nIndex+1 );
                             lNewArgs[nIndex].Name   = OUString::createFromAscii( pSlot->pUnoName );
@@ -717,17 +717,17 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         TransformParameters(GetId(), lNewArgs, *xSet, pSlot);
                         if (xSet->Count())
                         {
-                            // execute with arguments - call directly
+                            
                             pItem = pDispatcher->Execute(GetId(), nCall, xSet.get(), &aInternalSet, nModifier);
                             bSuccess = (pItem != NULL);
                         }
                         else
                         {
-                            // Be sure to delete this before we send a dispatch
-                            // request, which will destroy the current shell.
+                            
+                            
                             xSet.reset();
 
-                            // execute using bindings, enables support for toggle/enum etc.
+                            
                             SfxRequest aReq( GetId(), nCall, pShell->GetPool() );
                             aReq.SetModifier( nModifier );
                             aReq.SetInternalArgs_Impl(aInternalSet);
@@ -745,17 +745,17 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
             else
             {
                 eMapUnit = GetCoreMetric( SFX_APP()->GetPool(), GetId() );
-                // AppDispatcher
+                
                 SfxAllItemSet aSet( SFX_APP()->GetPool() );
                 TransformParameters( GetId(), lNewArgs, aSet );
 
                 if ( aSet.Count() )
                     pItem = pDispatcher->Execute( GetId(), nCall, &aSet, &aInternalSet, nModifier );
                 else
-                    // SfxRequests take empty sets as argument sets, GetArgs() returning non-zero!
+                    
                     pItem = pDispatcher->Execute( GetId(), nCall, 0, &aInternalSet, nModifier );
 
-                // no bindings, no invalidate ( usually done in SfxDispatcher::Call_Impl()! )
+                
                 if ( SfxApplication::Get() )
                 {
                     SfxDispatcher* pAppDispat = SFX_APP()->GetAppDispatcher_Impl();
@@ -806,7 +806,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     if ( !pDispatch )
         return;
 
-    // Use alternative QueryState call to have a valid UNO representation of the state.
+    
     ::com::sun::star::uno::Any aState;
     if ( !pDispatcher && pBindings )
         pDispatcher = GetBindings().GetDispatcher_Impl();
@@ -814,7 +814,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
 
     if ( eState == SFX_ITEM_DONTCARE )
     {
-        // Use special uno struct to transport don't care state
+        
         ::com::sun::star::frame::status::ItemStatus aItemStatus;
         aItemStatus.State = ::com::sun::star::frame::status::ItemState::dont_care;
         aState = makeAny( aItemStatus );
@@ -834,8 +834,8 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
         ::com::sun::star::frame::status::Visibility aVisibilityStatus;
         aVisibilityStatus.bVisible = sal_False;
 
-        // MBA: we might decide to *not* disable "invisible" slots, but this would be
-        // a change that needs to adjust at least the testtool
+        
+        
         aEvent.IsEnabled           = sal_False;
         aEvent.State               = makeAny( aVisibilityStatus );
     }
@@ -848,9 +848,9 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     if ( !pDispatch )
         return;
 
-    // Bindings instance notifies controller about a state change, listeners must be notified also
-    // Don't cache visibility state changes as they are volatile. We need our real state to send it
-    // to our controllers after visibility is set to true.
+    
+    
+    
     sal_Bool bNotify = sal_True;
     if ( pState && !IsInvalidItem( pState ) )
     {
@@ -880,14 +880,14 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         ::com::sun::star::uno::Any aState;
         if ( ( eState >= SFX_ITEM_AVAILABLE ) && pState && !IsInvalidItem( pState ) && !pState->ISA(SfxVoidItem) )
         {
-            // Retrieve metric from pool to have correct sub ID when calling QueryValue
+            
             sal_uInt16     nSubId( 0 );
             SfxMapUnit eMapUnit( SFX_MAPUNIT_100TH_MM );
 
-            // retrieve the core metric
-            // it's enough to check the objectshell, the only shell that does not use the pool of the document
-            // is SfxViewFrame, but it hasn't any metric parameters
-            // TODO/LATER: what about the FormShell? Does it use any metric data?! Perhaps it should use the Pool of the document!
+            
+            
+            
+            
             if ( pSlotServ && pDispatcher )
             {
                 SfxShell* pShell = pDispatcher->GetShell( pSlotServ->GetShellLevel() );
@@ -903,7 +903,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
         }
         else if ( eState == SFX_ITEM_DONTCARE )
         {
-            // Use special uno struct to transport don't care state
+            
             ::com::sun::star::frame::status::ItemStatus aItemStatus;
             aItemStatus.State = ::com::sun::star::frame::status::ItemState::dont_care;
             aState = makeAny( aItemStatus );

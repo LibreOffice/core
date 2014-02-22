@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/WindowEvent.hpp>
@@ -51,11 +51,11 @@ using namespace ::com::sun::star;
         case WINDOW_OKBUTTON:
         case WINDOW_CANCELBUTTON:   return new VCLXButton;
         case WINDOW_CHECKBOX:       return new VCLXCheckBox;
-        // #i95042#
-        // A Window of type <MetricBox> is inherited from type <ComboBox>.
-        // Thus, it does make more sense to return a <VCLXComboBox> instance
-        // instead of only a <VCLXWindow> instance, especially regarding its
-        // corresponding accessibility API.
+        
+        
+        
+        
+        
         case WINDOW_METRICBOX:
         case WINDOW_COMBOBOX:       return new VCLXComboBox;
         case WINDOW_SPINFIELD:
@@ -97,28 +97,28 @@ using namespace ::com::sun::star;
         case WINDOW_TOOLBOX:        return new VCLXToolBox;
         case WINDOW_TABCONTROL:     return new VCLXMultiPage;
 
-        // case WINDOW_FIXEDLINE:
-        // case WINDOW_FIXEDBITMAP:
-        // case WINDOW_DATEBOX:
-        // case WINDOW_GROUPBOX:
-        // case WINDOW_LONGCURRENCYBOX:
-        // case WINDOW_SPLITTER:
-        // case WINDOW_STATUSBAR:
-        // case WINDOW_TABCONTROL:
-        // case WINDOW_NUMERICBOX:
-        // case WINDOW_TRISTATEBOX:
-        // case WINDOW_TIMEBOX:
-        // case WINDOW_SPLITWINDOW:
-        // case WINDOW_SCROLLBARBOX:
-        // case WINDOW_PATTERNBOX:
-        // case WINDOW_CURRENCYBOX:
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         default:                    return new VCLXWindow( true );
     }
 }
 
-//  ----------------------------------------------------
-//  class UnoWrapper
-//  ----------------------------------------------------
+
+
+
 
 extern "C" {
 
@@ -127,7 +127,7 @@ TOOLKIT_DLLPUBLIC UnoWrapperBase* CreateUnoWrapper()
     return new UnoWrapper( NULL );
 }
 
-}   // extern "C"
+}   
 
 
 UnoWrapper::UnoWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit>& rxToolkit )
@@ -216,8 +216,8 @@ static sal_Bool lcl_ImplIsParent( Window* pParentWindow, Window* pPossibleChild 
 
 void UnoWrapper::WindowDestroyed( Window* pWindow )
 {
-    // their still might be some children created with ::com::sun::star::loader::Java
-    // that would otherwise not be destroyed until the garbage collector cleans up
+    
+    
     Window* pChild = pWindow->GetWindow( WINDOW_FIRSTCHILD );
     while ( pChild )
     {
@@ -233,7 +233,7 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
         pChild = pNextChild;
     }
 
-    // ::com::sun::star::chaos::System-Windows suchen...
+    
     Window* pOverlap = pWindow->GetWindow( WINDOW_OVERLAP );
     if ( pOverlap )
     {
@@ -269,12 +269,12 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
     if ( xWindowPeerComp.is() )
         xWindowPeerComp->dispose();
 
-    // #102132# Iterate over frames after setting Window peer to NULL,
-    // because while destroying other frames, we get get into the method again and try
-    // to destroy this window again...
-    // #i42462#/#116855# no, don't loop: Instead, just ensure that all our top-window-children
-    // are disposed, too (which should also be a valid fix for #102132#, but doesn't have the extreme
-    // performance penalties)
+    
+    
+    
+    
+    
+    
     Window* pTopWindowChild = pWindow->GetWindow( WINDOW_FIRSTTOPWINDOWCHILD );
     while ( pTopWindowChild )
     {
@@ -283,16 +283,16 @@ void UnoWrapper::WindowDestroyed( Window* pWindow )
 
         Window* pNextTopChild = pTopWindowChild->GetWindow( WINDOW_NEXTTOPWINDOWSIBLING );
 
-        //the window still could be on the stack, so we have to
-        // use lazy delete ( it will automatically
-        // disconnect from the currently destroyed parent window )
+        
+        
+        
         pTopWindowChild->doLazyDelete();
 
         pTopWindowChild = pNextTopChild;
     }
 }
 
-// ----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > UnoWrapper::CreateAccessible( Menu* pMenu, sal_Bool bIsMenuBar )
 {
     return maAccessibleFactoryAccess.getFactory().createAccessible( pMenu, bIsMenuBar );

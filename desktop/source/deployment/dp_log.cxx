@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,7 +41,7 @@ namespace dp_log {
 
 typedef ::cppu::WeakComponentImplHelper1<ucb::XProgressHandler> t_log_helper;
 
-//==============================================================================
+
 class ProgressLogImpl : public ::dp_misc::MutexHolder, public t_log_helper
 {
     Reference<io::XOutputStream> m_xLogFile;
@@ -56,18 +56,18 @@ public:
     ProgressLogImpl( Sequence<Any> const & args,
                      Reference<XComponentContext> const & xContext );
 
-    // XProgressHandler
+    
     virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException);
     virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException);
     virtual void SAL_CALL pop() throw (RuntimeException);
 };
 
-//______________________________________________________________________________
+
 ProgressLogImpl::~ProgressLogImpl()
 {
 }
 
-//______________________________________________________________________________
+
 void ProgressLogImpl::disposing()
 {
     try {
@@ -83,7 +83,7 @@ void ProgressLogImpl::disposing()
     }
 }
 
-//______________________________________________________________________________
+
 ProgressLogImpl::ProgressLogImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xContext )
@@ -95,7 +95,7 @@ ProgressLogImpl::ProgressLogImpl(
     comphelper::unwrapArgs( args, log_file, interactionHandler );
 
     Reference<ucb::XSimpleFileAccess3> xSimpleFileAccess( ucb::SimpleFileAccess::create(xContext) );
-    // optional ia handler:
+    
     if (interactionHandler)
         xSimpleFileAccess->setInteractionHandler( *interactionHandler );
 
@@ -104,7 +104,7 @@ ProgressLogImpl::ProgressLogImpl(
     Reference<io::XSeekable> xSeekable( m_xLogFile, UNO_QUERY_THROW );
     xSeekable->seek( xSeekable->getLength() );
 
-    // write log stamp
+    
     OStringBuffer buf;
     buf.append( "###### Progress log entry " );
     TimeValue m_start_time, tLocal;
@@ -125,7 +125,7 @@ ProgressLogImpl::ProgressLogImpl(
     log_write( buf.makeStringAndClear() );
 }
 
-//______________________________________________________________________________
+
 void ProgressLogImpl::log_write( OString const & text )
 {
     try {
@@ -143,8 +143,8 @@ void ProgressLogImpl::log_write( OString const & text )
     }
 }
 
-// XProgressHandler
-//______________________________________________________________________________
+
+
 void ProgressLogImpl::push( Any const & Status )
     throw (RuntimeException)
 {
@@ -153,7 +153,7 @@ void ProgressLogImpl::push( Any const & Status )
     ++m_log_level;
 }
 
-//______________________________________________________________________________
+
 void ProgressLogImpl::update( Any const & Status )
     throw (RuntimeException)
 {
@@ -178,7 +178,7 @@ void ProgressLogImpl::update( Any const & Status )
                    buf.makeStringAndClear(), osl_getThreadTextEncoding() ) );
 }
 
-//______________________________________________________________________________
+
 void ProgressLogImpl::pop() throw (RuntimeException)
 {
     OSL_ASSERT( m_log_level > 0 );
@@ -189,10 +189,10 @@ namespace sdecl = comphelper::service_decl;
 sdecl::class_<ProgressLogImpl, sdecl::with_args<true> > servicePLI;
 extern sdecl::ServiceDecl const serviceDecl(
     servicePLI,
-    // a private one:
+    
     "com.sun.star.comp.deployment.ProgressLog",
     "com.sun.star.comp.deployment.ProgressLog" );
 
-} // namespace dp_log
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

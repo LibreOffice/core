@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "VCartesianCoordinateSystem.hxx"
@@ -44,14 +44,14 @@ public:
     {
     }
 
-    //XTextualDataSequence
+    
     virtual uno::Sequence< OUString > SAL_CALL getTextualData()
         throw ( uno::RuntimeException)
     {
         return m_aTextSequence;
     }
 
-private: //member
+private: 
     uno::Sequence< OUString > m_aTextSequence;
 };
 
@@ -136,7 +136,7 @@ void VCartesianCoordinateSystem::createVAxisList(
             {
                 aAxisProperties.m_xAxisTextProvider = new TextualDataProvider( m_aSeriesNamesForZAxis );
 
-                //for the z axis copy the positioning properties from the x axis (or from the y axis for swapped coordinate systems)
+                
                 Reference< XAxis > xSisterAxis( AxisHelper::getCrossingMainAxis( xCrossingMainAxis, m_xCooSysModel ) );
                 aAxisProperties.initAxisPositioning( Reference< beans::XPropertySet >( xSisterAxis, uno::UNO_QUERY) );
             }
@@ -206,6 +206,6 @@ void VCartesianCoordinateSystem::updateScalesAndIncrementsOnAxes()
     }
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -39,7 +39,7 @@
 
 using namespace com::sun::star;
 
-// -----------------------------------------------------------------------
+
 
 static sal_Bool lcl_IsURLButton( SdrObject* pObject )
 {
@@ -81,7 +81,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
         SdrView* pSdrView = pView->GetSdrView();
         if ( pSdrView )
         {
-            //  handle selection on drawing layer
+            
             const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
             sal_uLong nMarkCount = rMarkList.GetMarkCount();
             if ( nMarkCount )
@@ -105,23 +105,23 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
                 }
 
                 if ( eMode == SC_SELTRANS_INVALID )
-                    eMode = SC_SELTRANS_DRAW_OTHER;     // something selected but no special selection
+                    eMode = SC_SELTRANS_DRAW_OTHER;     
             }
         }
-        if ( eMode == SC_SELTRANS_INVALID )             // no drawing object selected
+        if ( eMode == SC_SELTRANS_INVALID )             
         {
             ScRange aRange;
             ScViewData* pViewData = pView->GetViewData();
             const ScMarkData& rMark = pViewData->GetMarkData();
-            //  allow MultiMarked because GetSimpleArea may be able to merge into a simple range
-            //  (GetSimpleArea modifies a local copy of MarkData)
-            // Also allow simple filtered area.
+            
+            
+            
             ScMarkType eMarkType;
             if ( ( rMark.IsMarked() || rMark.IsMultiMarked() ) &&
                     (((eMarkType = pViewData->GetSimpleArea( aRange )) == SC_MARK_SIMPLE) ||
                      (eMarkType == SC_MARK_SIMPLE_FILTERED)) )
             {
-                //  only for "real" selection, cursor alone isn't used
+                
                 if ( aRange.aStart == aRange.aEnd )
                     eMode = SC_SELTRANS_CELL;
                 else
@@ -143,7 +143,7 @@ ScSelectionTransferObj::ScSelectionTransferObj( ScTabView* pSource, ScSelectionT
     pCellData( NULL ),
     pDrawData( NULL )
 {
-    //! store range for StillValid
+    
 }
 
 ScSelectionTransferObj::~ScSelectionTransferObj()
@@ -151,8 +151,8 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
     ScModule* pScMod = SC_MOD();
     if ( pScMod->GetSelectionTransfer() == this )
     {
-        //  this is reached when the object wasn't really copied to the selection
-        //  (CopyToSelection has no effect under Windows)
+        
+        
 
         ForgetView();
         pScMod->SetSelectionTransfer( NULL );
@@ -163,8 +163,8 @@ ScSelectionTransferObj::~ScSelectionTransferObj()
 
 bool ScSelectionTransferObj::StillValid()
 {
-    //! check if view still has same cell selection
-    //! (but return sal_False if data has changed inbetween)
+    
+    
     return false;
 }
 
@@ -187,14 +187,14 @@ void ScSelectionTransferObj::ForgetView()
 
 void ScSelectionTransferObj::AddSupportedFormats()
 {
-    //  AddSupportedFormats must work without actually creating the
-    //  "real" transfer object
+    
+    
 
     switch (eMode)
     {
         case SC_SELTRANS_CELL:
         case SC_SELTRANS_CELLS:
-            //  same formats as in ScTransferObj::AddSupportedFormats
+            
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
             AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
@@ -210,7 +210,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
                 AddFormat( SOT_FORMATSTR_ID_EDITENGINE );
             break;
 
-        // different graphic formats as in ScDrawTransferObj::AddSupportedFormats:
+        
 
         case SC_SELTRANS_DRAW_BITMAP:
             AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
@@ -244,7 +244,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
             break;
 
         case SC_SELTRANS_DRAW_OTHER:
-            //  other drawing objects
+            
             AddFormat( SOT_FORMATSTR_ID_EMBED_SOURCE );
             AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
             AddFormat( SOT_FORMATSTR_ID_DRAWING );
@@ -255,7 +255,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
 
         default:
         {
-            // added to avoid warnings
+            
         }
     }
 }
@@ -266,10 +266,10 @@ void ScSelectionTransferObj::CreateCellData()
     if ( pView )
     {
         ScViewData* pViewData = pView->GetViewData();
-        ScMarkData aNewMark( pViewData->GetMarkData() );    // use local copy for MarkToSimple
+        ScMarkData aNewMark( pViewData->GetMarkData() );    
         aNewMark.MarkToSimple();
 
-        //  similar to ScViewFunctionSet::BeginDrag
+        
         if ( aNewMark.IsMarked() && !aNewMark.IsMultiMarked() )
         {
             ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -279,15 +279,15 @@ void ScSelectionTransferObj::CreateCellData()
             ScDocShellRef aDragShellRef;
             if ( pDocSh->GetDocument()->HasOLEObjectsInArea( aSelRange, &aNewMark ) )
             {
-                aDragShellRef = new ScDocShell;     // DocShell needs a Ref immediately
+                aDragShellRef = new ScDocShell;     
                 aDragShellRef->DoInitNew(NULL);
             }
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
 
             ScDocument* pClipDoc = new ScDocument( SCDOCMODE_CLIP );
-            // bApi = sal_True -> no error messages
-            // #i18364# bStopEdit = sal_False -> don't end edit mode
-            // (this may be called from pasting into the edit line)
+            
+            
+            
             sal_Bool bCopied = pViewData->GetView()->CopyToClip( pClipDoc, false, true, true, false );
 
             ScDrawLayer::SetGlobalDrawPersist(NULL);
@@ -297,21 +297,21 @@ void ScSelectionTransferObj::CreateCellData()
                 TransferableObjectDescriptor aObjDesc;
                 pDocSh->FillTransferableObjectDescriptor( aObjDesc );
                 aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-                // maSize is set in ScTransferObj ctor
+                
 
                 ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-                // SetDragHandlePos is not used - there is no mouse position
-                //? pTransferObj->SetVisibleTab( nTab );
+                
+                
 
                 SfxObjectShellRef aPersistRef( aDragShellRef );
-                pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
+                pTransferObj->SetDrawPersist( aPersistRef );    
 
                 pTransferObj->SetDragSource( pDocSh, aNewMark );
 
                 pCellData = pTransferObj;
-                pCellData->acquire();       // keep ref count up - released in ForgetView
+                pCellData->acquire();       
             }
             else
                 delete pClipDoc;
@@ -325,7 +325,7 @@ void ScSelectionTransferObj::CreateDrawData()
     OSL_ENSURE( !pDrawData, "CreateDrawData twice" );
     if ( pView )
     {
-        //  similar to ScDrawView::BeginDrag
+        
 
         ScDrawView* pDrawView = pView->GetScDrawView();
         if ( pDrawView )
@@ -334,14 +334,14 @@ void ScSelectionTransferObj::CreateDrawData()
             const SdrMarkList& rMarkList = pDrawView->GetMarkedObjectList();
             ScDrawView::CheckOle( rMarkList, bAnyOle, bOneOle );
 
-            //---------------------------------------------------------
+            
             ScDocShellRef aDragShellRef;
             if (bAnyOle)
             {
-                aDragShellRef = new ScDocShell;     // ohne Ref lebt die DocShell nicht !!!
+                aDragShellRef = new ScDocShell;     
                 aDragShellRef->DoInitNew(NULL);
             }
-            //---------------------------------------------------------
+            
 
             ScDrawLayer::SetGlobalDrawPersist(aDragShellRef);
             SdrModel* pModel = pDrawView->GetMarkedObjModel();
@@ -353,17 +353,17 @@ void ScSelectionTransferObj::CreateDrawData()
             TransferableObjectDescriptor aObjDesc;
             pDocSh->FillTransferableObjectDescriptor( aObjDesc );
             aObjDesc.maDisplayName = pDocSh->GetMedium()->GetURLObject().GetURLNoPass();
-            // maSize is set in ScDrawTransferObj ctor
+            
 
             ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
             uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
             SfxObjectShellRef aPersistRef( aDragShellRef );
-            pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
-            pTransferObj->SetDragSource( pDrawView );       // copies selection
+            pTransferObj->SetDrawPersist( aPersistRef );    
+            pTransferObj->SetDragSource( pDrawView );       
 
             pDrawData = pTransferObj;
-            pDrawData->acquire();       // keep ref count up - released in ForgetView
+            pDrawData->acquire();       
         }
     }
     OSL_ENSURE( pDrawData, "can't create DrawData" );
@@ -405,7 +405,7 @@ sal_Bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::
             break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
 
@@ -421,7 +421,7 @@ sal_Bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::
 
 void ScSelectionTransferObj::ObjectReleased()
 {
-    //  called when another selection is set from outside
+    
 
     ForgetView();
 

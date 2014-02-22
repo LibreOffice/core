@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -55,8 +55,8 @@
 #include <SwStyleNameMapper.hxx>
 #include "swabstdlg.hxx"
 #include "chrdlg.hrc"
-const sal_uInt32 nFontInc = 40;      // 2pt
-const sal_uInt32 nFontMaxSz = 19998; // 999.9pt
+const sal_uInt32 nFontInc = 40;      
+const sal_uInt32 nFontMaxSz = 19998; 
 
 
 
@@ -177,7 +177,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     SwWrtShell& rWrtSh = GetShell();
     SwTxtFmtColl* pColl = 0;
 
-    // Is only set if the whole paragraph is selected and AutoUpdateFmt is set.
+    
     if (rWrtSh.HasSelection() && rWrtSh.IsSelFullPara())
     {
         pColl = rWrtSh.GetCurTxtFmtColl();
@@ -189,7 +189,7 @@ void SwTextShell::ExecCharAttrArgs(SfxRequest &rReq)
     switch (nSlot)
     {
         case FN_TXTATR_INET:
-        // Special treatment of the PoolId of the SwFmtInetFmt
+        
         if(bArgs)
         {
             const SfxPoolItem& rItem = pArgs->Get( nWhich );
@@ -267,7 +267,7 @@ void SwTextShell::ExecParaAttr(SfxRequest &rReq)
     sal_uInt8 ePropL;
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    // Get both attributes immediately isn't more expensive!!
+    
     SfxItemSet aSet( GetPool(),
         RES_PARATR_LINESPACING, RES_PARATR_ADJUST,
         RES_FRAMEDIR, RES_FRAMEDIR,
@@ -359,7 +359,7 @@ SET_LINESPACE:
                 aSet.Put( aAdjust );
                 aAdjust.SetWhich(SID_ATTR_PARA_ADJUST);
                 GetView().GetViewFrame()->GetBindings().SetState( aAdjust );
-                // Toggle numbering alignment
+                
                 const SwNumRule* pCurRule = GetShell().GetCurNumRule();
                 if( pCurRule )
                 {
@@ -380,7 +380,7 @@ SET_LINESPACE:
                                         pCurRule->Get( 0 ).GetPositionAndSpaceMode() );
                     aSetRule.SetSvxRule( aRule, GetShell().GetDoc());
                     aSetRule.SetAutoRule( sal_True );
-                    // no start or continuation of a list - list style is only changed
+                    
                     GetShell().SetCurNumRule( aSetRule, false );
                 }
             }
@@ -499,14 +499,14 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
     SwWrtShell &rSh = GetShell();
     SfxItemPool& rPool = GetPool();
     SfxItemSet aCoreSet(rPool, aTxtFmtCollSetRange);
-    rSh.GetCurAttr(aCoreSet); // Request *all* text attributes from the core.
+    rSh.GetCurAttr(aCoreSet); 
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nSlot = aIter.FirstWhich();
     sal_Bool bFlag = sal_False;
     SfxBoolItem aFlagItem;
     const SfxPoolItem* pItem = 0;
-    int eAdjust = -1;   // Illegal value to recognize DONTCARE.
+    int eAdjust = -1;   
     SfxItemState eState = aCoreSet.GetItemState(RES_PARATR_ADJUST, false, &pItem);
 
     if( SFX_ITEM_DEFAULT == eState )
@@ -668,7 +668,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 }
                 else
                 {
-                    // is the item set?
+                    
                     sal_uInt16 nHtmlMode = GetHtmlMode(rSh.GetView().GetDocShell());
                     if((!(nHtmlMode & HTMLMODE_ON) || (0 != (nHtmlMode & HTMLMODE_SOME_STYLES))) &&
                     aCoreSet.GetItemState( RES_FRAMEDIR, false ) >= SFX_ITEM_DEFAULT)
@@ -730,7 +730,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
             break;
 
             default:
-            // Do nothing
+            
             nSlot = 0;
             break;
 

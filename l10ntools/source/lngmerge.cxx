@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -45,7 +45,7 @@ static void lcl_RemoveUTF8ByteOrderMarker( OString &rString )
 }
 
 //
-// class LngParser
+
 //
 LngParser::LngParser(const OString &rLngFile)
     : nError( LNG_OK )
@@ -65,7 +65,7 @@ LngParser::LngParser(const OString &rLngFile)
 
             if( bFirstLine )
             {
-                // Always remove UTF8 BOM from the first line
+                
                 lcl_RemoveUTF8ByteOrderMarker( sLine );
                 bFirstLine = false;
             }
@@ -177,7 +177,7 @@ bool LngParser::Merge(
     bool bGroup = false;
     OString sGroup;
 
-    // seek to next group
+    
     while ( nPos < pLines->size() && !bGroup )
     {
         OString sLine( *(*pLines)[ nPos ] );
@@ -198,7 +198,7 @@ bool LngParser::Merge(
         ResData  *pResData = new ResData( sID, sSource );
         pResData->sResTyp = "LngText";
         MergeEntrys *pEntrys = aMergeDataFile.GetMergeEntrys( pResData );
-        // read languages
+        
         bGroup = false;
 
         OString sLanguagesDone;
@@ -249,7 +249,7 @@ bool LngParser::Merge(
 
                                 OString sText1( sLang );
                                 sText1 += " = \"";
-                                // escape quotes, unescape double escaped quotes fdo#56648
+                                
                                 sText1 += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"");
                                 sText1 += "\"";
                                 *pLine = sText1;
@@ -286,7 +286,7 @@ bool LngParser::Merge(
                         OString sLine;
                         sLine += sCur;
                         sLine += " = \"";
-                        // escape quotes, unescape double escaped quotes fdo#56648
+                        
                         sLine += sNewText.replaceAll("\"","\\\"").replaceAll("\\\\\"","\\\"");
                         sLine += "\"";
 

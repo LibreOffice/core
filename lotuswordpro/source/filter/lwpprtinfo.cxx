@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -64,7 +64,7 @@ LwpPrinterInfo::LwpPrinterInfo(LwpObjectStream* pStrm)
   */
 void LwpPrinterInfo::Read(LwpObjectStream* pStrm)
 {
-    //Just skip now
+    
     Skip(pStrm);
 }
 /**
@@ -74,14 +74,14 @@ void LwpPrinterInfo::Skip(LwpObjectStream *pStrm)
 {
     /*sal_uInt16 platform =*/ pStrm->QuickReaduInt16();
 
-    //Skip the size and the buffer
+    
     sal_uInt32 size = pStrm->QuickReaduInt32();
     pStrm->SeekRel(static_cast<sal_uInt16>(size));
 
-    //Skip others printer infor
+    
     pStrm->SeekRel(6*sizeof(sal_uInt16)+sizeof(sal_uInt32)+sizeof(sal_uInt16));
 
-    //Skip the next five LwpAtomHolder
+    
     {
         LwpAtomHolder toSkip;
         toSkip.Skip(pStrm);
@@ -92,7 +92,7 @@ void LwpPrinterInfo::Skip(LwpObjectStream *pStrm)
     }
 
     sal_uInt16 count = pStrm->QuickReaduInt16();
-    //Skip each selected division
+    
     LwpAtomHolder toSkip;
     while(count--)
     {

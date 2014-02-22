@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -146,21 +146,21 @@ void PlacewareZipFile::writeLocalHeader(ZipEntry *e)
     {
         mnRC = mrFile.setPos( osl_Pos_Absolut, e->offset );
 
-        writeLong(zf_LFHSIGValue);                              // magic number
-        writeShort(zf_Vers(1, 0));                              // extract version
-        writeShort(0);                                          // flags
-        writeShort(zf_compNone);                                // compression method
-        writeLong(e->modTime);                                  // file mod date & time
-        writeLong(e->crc);                                      // file crc
-        writeLong(e->fileLen);                                  // compressed size
-        writeLong(e->fileLen);                                  // uncompressed size
-        writeShort((sal_Int16) e->name.getLength());                    // name length
-        writeShort(0);                                          // extra length field
+        writeLong(zf_LFHSIGValue);                              
+        writeShort(zf_Vers(1, 0));                              
+        writeShort(0);                                          
+        writeShort(zf_compNone);                                
+        writeLong(e->modTime);                                  
+        writeLong(e->crc);                                      
+        writeLong(e->fileLen);                                  
+        writeLong(e->fileLen);                                  
+        writeShort((sal_Int16) e->name.getLength());                    
+        writeShort(0);                                          
 
         if( !isError() )
         {
             sal_uInt64 nWritten;
-            mnRC = mrFile.write( e->name.getStr(), e->name.getLength(), nWritten ); // file name
+            mnRC = mrFile.write( e->name.getStr(), e->name.getLength(), nWritten ); 
             OSL_ASSERT( nWritten == (sal_uInt64)e->name.getLength() );
             if( !isError() )
             {
@@ -173,26 +173,26 @@ void PlacewareZipFile::writeLocalHeader(ZipEntry *e)
 /* write a zipentry in the central dir to the zipfile */
 void PlacewareZipFile::writeCentralDir(ZipEntry *e)
 {
-    writeLong(zf_CDHSIGValue);              // magic number
-    writeShort(zf_Vers(1, 0));              // version made by
-    writeShort(zf_Vers(1, 0));              // vers to extract
-    writeShort(0);                          // flags
-    writeShort(zf_compNone);                // compression method
-    writeLong(e->modTime);                  // file mod time & date
+    writeLong(zf_CDHSIGValue);              
+    writeShort(zf_Vers(1, 0));              
+    writeShort(zf_Vers(1, 0));              
+    writeShort(0);                          
+    writeShort(zf_compNone);                
+    writeLong(e->modTime);                  
     writeLong(e->crc);
-    writeLong(e->fileLen);                  // compressed file size
-    writeLong(e->fileLen);                  // uncompressed file size
-    writeShort((sal_Int16) e->name.getLength());    // name length
-    writeShort(0);                          // extra field length
-    writeShort(0);                          // file comment length
-    writeShort(0);                          // disk number start
-    writeShort(0);                          // internal file attributes
-    writeLong(0);                           // external file attributes
-    writeLong(e->offset);                   // offset w.r.t disk
+    writeLong(e->fileLen);                  
+    writeLong(e->fileLen);                  
+    writeShort((sal_Int16) e->name.getLength());    
+    writeShort(0);                          
+    writeShort(0);                          
+    writeShort(0);                          
+    writeShort(0);                          
+    writeLong(0);                           
+    writeLong(e->offset);                   
     if( !isError() )
     {
         sal_uInt64 nWritten;
-        mrFile.write( e->name.getStr(), e->name.getLength(), nWritten );    // file name
+        mrFile.write( e->name.getStr(), e->name.getLength(), nWritten );    
         OSL_ASSERT( nWritten == (sal_uInt64)e->name.getLength() );
     }
 }
@@ -200,14 +200,14 @@ void PlacewareZipFile::writeCentralDir(ZipEntry *e)
 /* write the end of the central dir to the zipfile */
 void PlacewareZipFile::writeEndCentralDir(sal_Int32 nCdOffset, sal_Int32 nCdSize)
 {
-    writeLong(zf_ECDSIGValue);      // magic number
-    writeShort(0);                  // disk num
-    writeShort(0);                  // disk with central dir
-    writeShort( static_cast< sal_Int16 >( maEntries.size() ) ); // number of file entries
-    writeShort( static_cast< sal_Int16 >( maEntries.size() ) ); // number of file entries
-    writeLong(nCdSize);             // central dir size
+    writeLong(zf_ECDSIGValue);      
+    writeShort(0);                  
+    writeShort(0);                  
+    writeShort( static_cast< sal_Int16 >( maEntries.size() ) ); 
+    writeShort( static_cast< sal_Int16 >( maEntries.size() ) ); 
+    writeLong(nCdSize);             
     writeLong(nCdOffset);
-    writeShort(0);                  // comment len
+    writeShort(0);                  
 }
 
 

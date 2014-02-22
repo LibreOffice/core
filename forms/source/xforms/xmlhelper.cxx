@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,19 +34,19 @@ using com::sun::star::xml::dom::XDocumentBuilder;
 
 
 //
-// determine valid XML name
+
 //
 
-// character class:
-// 1: NameStartChar
-// 2: NameChar
-// 4: NCNameStartChar
-// 8: NCNameChar
+
+
+
+
+
 static inline sal_uInt8 lcl_getCharClass( sal_Unicode c )
 {
     sal_uInt8 nClass = 0;
 
-    // NameStartChar
+    
     if( (c >= 'A' && c <= 'Z')
         || c == '_'
         || (c >=    'a' && c <=    'z')
@@ -62,7 +62,7 @@ static inline sal_uInt8 lcl_getCharClass( sal_Unicode c )
         || (c >= 0xF900 && c <= 0xFDCF)
         || (c >= 0xFDF0 && c <= 0xFFFD)
 
-        // surrogates
+        
         || (c >= 0xD800 && c <= 0xDBFF)
         || (c >= 0xDC00 && c <= 0xDFFF) )
     {

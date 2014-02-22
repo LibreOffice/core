@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -50,17 +50,17 @@
 
 using namespace com::sun::star;
 
-// STATIC DATA
-//  Delimiters zusaetzlich zu EditEngine-Default:
+
+
 
 const sal_Char ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 
 OUString ScEditUtil::ModifyDelimiters( const OUString& rOld )
 {
-    // underscore is used in function argument names
+    
     OUString aRet = OUString( comphelper::string::remove(rOld, '_') ) +
         OUString::createFromAscii( pCalcDelimiters ) +
-        ScCompiler::GetNativeSymbol(ocSep); // argument separator is localized.
+        ScCompiler::GetNativeSymbol(ocSep); 
     return aRet;
 }
 
@@ -112,7 +112,7 @@ OUString ScEditUtil::GetMultilineString( const EditTextObject& rEdit )
 
 OUString ScEditUtil::GetString( const EditTextObject& rEditText, const ScDocument* pDoc )
 {
-    // ScFieldEditEngine is needed to resolve field contents.
+    
     if (pDoc)
     {
         /* TODO: make ScDocument::GetEditEngine() const? Most likely it's only
@@ -204,7 +204,7 @@ OUString ScEditUtil::GetCellFieldValue(
 
             switch (rField.GetFormat())
             {
-                case SVXURLFORMAT_APPDEFAULT: //!!! einstellbar an App???
+                case SVXURLFORMAT_APPDEFAULT: 
                 case SVXURLFORMAT_REPR:
                     aRet = rField.GetRepresentation();
                 break;
@@ -272,16 +272,16 @@ OUString ScEditUtil::GetCellFieldValue(
             aRet = "?";
     }
 
-    if (aRet.isEmpty())        // leer ist baeh
-        aRet = " ";         // Space ist Default der Editengine
+    if (aRet.isEmpty())        
+        aRet = " ";         
 
     return aRet;
 }
 
 Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToTop )
 {
-    // bForceToTop = always align to top, for editing
-    // (sal_False for querying URLs etc.)
+    
+    
 
     if (!pPattern)
         pPattern = pDoc->GetPattern( nCol, nRow, nTab );
@@ -313,16 +313,16 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
         nIndent = ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
     long nPixDifX   = (long) ( ( pMargin->GetLeftMargin() + nIndent ) * nPPTX );
     aStartPos.X()   += nPixDifX * nLayoutSign;
-    nCellX          -= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );     // wegen Umbruch etc.
+    nCellX          -= nPixDifX + (long) ( pMargin->GetRightMargin() * nPPTX );     
 
-    //  vertikale Position auf die in der Tabelle anpassen
+    
 
     long nPixDifY;
     long nTopMargin = (long) ( pMargin->GetTopMargin() * nPPTY );
     SvxCellVerJustify eJust = (SvxCellVerJustify) ((const SvxVerJustifyItem&)pPattern->
                                                 GetItem(ATTR_VER_JUSTIFY)).GetValue();
 
-    //  asian vertical is always edited top-aligned
+    
     sal_Bool bAsianVertical = ((const SfxBoolItem&)pPattern->GetItem( ATTR_STACKED )).GetValue() &&
         ((const SfxBoolItem&)pPattern->GetItem( ATTR_VERTICAL_ASIAN )).GetValue();
 
@@ -337,9 +337,9 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
         long nTextHeight = pDoc->GetNeededSize( nCol, nRow, nTab,
                                                 pDev, nPPTX, nPPTY, aZoomX, aZoomY, false );
         if (!nTextHeight)
-        {                                   // leere Zelle
+        {                                   
             Font aFont;
-            // font color doesn't matter here
+            
             pPattern->GetFont( aFont, SC_AUTOCOL_BLACK, pDev, &aZoomY );
             pDev->SetFont(aFont);
             nTextHeight = pDev->GetTextHeight() + nTopMargin +
@@ -349,13 +349,13 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
         pDev->SetMapMode(aMode);
 
         if ( nTextHeight > nCellY + nTopMargin || bForceToTop )
-            nPixDifY = 0;                           // zu gross -> oben anfangen
+            nPixDifY = 0;                           
         else
         {
             if ( eJust == SVX_VER_JUSTIFY_CENTER )
                 nPixDifY = nTopMargin + ( nCellY - nTextHeight ) / 2;
             else
-                nPixDifY = nCellY - nTextHeight + nTopMargin;       // JUSTIFY_BOTTOM
+                nPixDifY = nCellY - nTextHeight + nTopMargin;       
         }
     }
 
@@ -363,9 +363,9 @@ Rectangle ScEditUtil::GetEditArea( const ScPatternAttr* pPattern, bool bForceToT
     nCellY      -= nPixDifY;
 
     if ( bLayoutRTL )
-        aStartPos.X() -= nCellX - 2;    // excluding grid on both sides
+        aStartPos.X() -= nCellX - 2;    
 
-                                                        //  -1 -> Gitter nicht ueberschreiben
+                                                        
     return Rectangle( aStartPos, Size(nCellX-1,nCellY-1) );
 }
 
@@ -377,7 +377,7 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
 {
     if ( pEngine->GetParagraphCount() > 1 )
     {
-        bNeedsObject = true;            //! Zellatribute finden ?
+        bNeedsObject = true;            
     }
     else
     {
@@ -396,10 +396,10 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
                 if ( nId == EE_CHAR_ESCAPEMENT || nId == EE_CHAR_PAIRKERNING ||
                         nId == EE_CHAR_KERNING || nId == EE_CHAR_XMLATTRIBS )
                 {
-                    //  Escapement and kerning are kept in EditEngine because there are no
-                    //  corresponding cell format items. User defined attributes are kept in
-                    //  EditEngine because "user attributes applied to all the text" is different
-                    //  from "user attributes applied to the cell".
+                    
+                    
+                    
+                    
 
                     if ( *pItem != rEditDefaults.Get(nId) )
                         bNeedsObject = true;
@@ -408,17 +408,17 @@ ScEditAttrTester::ScEditAttrTester( ScEditEngineDefaulter* pEng ) :
                     if (!bNeedsCellAttr)
                         if ( *pItem != rEditDefaults.Get(nId) )
                             bNeedsCellAttr = true;
-                //  rEditDefaults contains the defaults from the cell format
+                
             }
         }
 
-        //  Feldbefehle enthalten?
+        
 
         SfxItemState eFieldState = pEditAttrs->GetItemState( EE_FEATURE_FIELD, false );
         if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
             bNeedsObject = true;
 
-        //  not converted characters?
+        
 
         SfxItemState eConvState = pEditAttrs->GetItemState( EE_FEATURE_NOTCONV, false );
         if ( eConvState == SFX_ITEM_DONTCARE || eConvState == SFX_ITEM_SET )
@@ -464,8 +464,8 @@ ScEditEngineDefaulter::ScEditEngineDefaulter( SfxItemPool* pEnginePoolP,
             ScEnginePoolHelper( pEnginePoolP, bDeleteEnginePoolP ),
             EditEngine( pEnginePoolP )
 {
-    //  All EditEngines use ScGlobal::GetEditDefaultLanguage as DefaultLanguage.
-    //  DefaultLanguage for InputHandler's EditEngine is updated later.
+    
+    
 
     SetDefaultLanguage( ScGlobal::GetEditDefaultLanguage() );
 }
@@ -637,7 +637,7 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
             const SfxPoolItem* pParaItem;
             if ( rParaAttribs.GetItemState( nWhich, false, &pParaItem ) == SFX_ITEM_SET )
             {
-                //  if defaults are set, use only items that are different from default
+                
                 if ( !pDefaults || *pParaItem != pDefaults->Get(nWhich) )
                 {
                     if (!pCharItems)
@@ -652,8 +652,8 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
             std::vector<sal_Int32> aPortions;
             GetPortions( nPar, aPortions );
 
-            //  loop through the portions of the paragraph, and set only those items
-            //  that are not overridden by existing character attributes
+            
+            
 
             sal_Int32 nStart = 0;
             for ( std::vector<sal_Int32>::const_iterator it(aPortions.begin()); it != aPortions.end(); ++it )
@@ -664,8 +664,8 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
                 SfxItemSet aNewCharAttrs = *pCharItems;
                 for (nWhich = EE_CHAR_START; nWhich <= EE_CHAR_END; nWhich ++)
                 {
-                    //  Clear those items that are different from existing character attributes.
-                    //  Where no character attributes are set, GetAttribs returns the paragraph attributes.
+                    
+                    
                     const SfxPoolItem* pItem;
                     if ( aNewCharAttrs.GetItemState( nWhich, false, &pItem ) == SFX_ITEM_SET &&
                          *pItem != aOldCharAttrs.Get(nWhich) )
@@ -684,8 +684,8 @@ void ScEditEngineDefaulter::RemoveParaAttribs()
 
         if ( rParaAttribs.Count() )
         {
-            //  clear all paragraph attributes (including defaults),
-            //  so they are not contained in resulting EditTextObjects
+            
+            
 
             SetParaAttribs( nPar, SfxItemSet( *rParaAttribs.GetPool(), rParaAttribs.GetRanges() ) );
         }
@@ -716,14 +716,14 @@ void ScTabEditEngine::Init( const ScPatternAttr& rPattern )
     SfxItemSet* pEditDefaults = new SfxItemSet( GetEmptyItemSet() );
     rPattern.FillEditItemSet( pEditDefaults );
     SetDefaults( pEditDefaults );
-    // wir haben keine StyleSheets fuer Text
+    
     SetControlWord( GetControlWord() & ~EE_CNTRL_RTFSTYLESHEETS );
 }
 
-//      Feldbefehle fuer Kopf- und Fusszeilen
+
 
 //
-//      Zahlen aus \sw\source\core\doc\numbers.cxx
+
 //
 
 static OUString lcl_GetCharStr( sal_Int32 nNo )
@@ -770,10 +770,10 @@ static OUString lcl_GetNumStr(sal_Int32 nNo, SvxNumType eType)
             aTmpStr = OUString();
             break;
 
-//      CHAR_SPECIAL:
-//          ????
 
-//      case ARABIC:    ist jetzt default
+
+
+
         default:
             aTmpStr = OUString::number(nNo);
             break;
@@ -819,7 +819,7 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
         break;
         case text::textfield::Type::EXTENDED_TIME:
         case text::textfield::Type::TIME:
-            // For now, time field in the header / footer is always dynamic.
+            
             aRet = ScGlobal::pLocaleData->getTime(aData.aTime);
         break;
         case text::textfield::Type::DOCINFO_TITLE:
@@ -851,7 +851,7 @@ OUString ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 }
 
 //
-//                          Feld-Daten
+
 //
 
 ScFieldEditEngine::ScFieldEditEngine(
@@ -862,8 +862,8 @@ ScFieldEditEngine::ScFieldEditEngine(
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
-    //  EE_CNTRL_URLSFXEXECUTE nicht, weil die Edit-Engine den ViewFrame nicht kennt
-    // wir haben keine StyleSheets fuer Text
+    
+    
     SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
 }
 

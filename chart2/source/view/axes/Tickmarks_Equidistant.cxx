@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Tickmarks_Equidistant.hxx"
@@ -30,10 +30,10 @@ using namespace ::com::sun::star::chart2;
 using namespace ::rtl::math;
 using ::basegfx::B2DVector;
 
-//static
+
 double EquidistantTickFactory::getMinimumAtIncrement( double fMin, const ExplicitIncrementData& rIncrement )
 {
-    //the returned value will be <= fMin and on a Major Tick given by rIncrement
+    
     if(rIncrement.Distance<=0.0)
         return fMin;
 
@@ -49,10 +49,10 @@ double EquidistantTickFactory::getMinimumAtIncrement( double fMin, const Explici
     }
     return fRet;
 }
-//static
+
 double EquidistantTickFactory::getMaximumAtIncrement( double fMax, const ExplicitIncrementData& rIncrement )
 {
-    //the returned value will be >= fMax and on a Major Tick given by rIncrement
+    
     if(rIncrement.Distance<=0.0)
         return fMax;
 
@@ -76,7 +76,7 @@ EquidistantTickFactory::EquidistantTickFactory(
             , m_xInverseScaling(NULL)
             , m_pfCurrentValues(NULL)
 {
-    //@todo: make sure that the scale is valid for the scaling
+    
 
     m_pfCurrentValues = new double[getTickDepth()];
 
@@ -102,10 +102,10 @@ EquidistantTickFactory::EquidistantTickFactory(
             fMax = m_fScaledVisibleMax;
     }
 
-    //--
+    
     m_fOuterMajorTickBorderMin = EquidistantTickFactory::getMinimumAtIncrement( fMin, m_rIncrement );
     m_fOuterMajorTickBorderMax = EquidistantTickFactory::getMaximumAtIncrement( fMax, m_rIncrement );
-    //--
+    
 
     m_fOuterMajorTickBorderMin_Scaled = m_fOuterMajorTickBorderMin;
     m_fOuterMajorTickBorderMax_Scaled = m_fOuterMajorTickBorderMax;
@@ -114,8 +114,8 @@ EquidistantTickFactory::EquidistantTickFactory(
         m_fOuterMajorTickBorderMin_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMin);
         m_fOuterMajorTickBorderMax_Scaled = m_rScale.Scaling->doScaling(m_fOuterMajorTickBorderMax);
 
-        //check validity of new range: m_fOuterMajorTickBorderMin <-> m_fOuterMajorTickBorderMax
-        //it is assumed here, that the original range in the given Scale is valid
+        
+        
         if( !rtl::math::isFinite(m_fOuterMajorTickBorderMin_Scaled) )
         {
             m_fOuterMajorTickBorderMin += m_rIncrement.Distance;
@@ -181,9 +181,9 @@ void EquidistantTickFactory::addSubTicks( sal_Int32 nDepth, uno::Sequence< uno::
 
 sal_Int32 EquidistantTickFactory::getMaxTickCount( sal_Int32 nDepth ) const
 {
-    //return the maximum amount of ticks
-    //possibly open intervals at the two ends of the region are handled as if they were completely visible
-    //(this is necessary for calculating the sub ticks at the borders correctly)
+    
+    
+    
 
     if( nDepth >= getTickDepth() )
         return 0;
@@ -203,7 +203,7 @@ sal_Int32 EquidistantTickFactory::getMaxTickCount( sal_Int32 nDepth ) const
 
     double fIntervalCount = fSub / m_rIncrement.Distance;
     if (fIntervalCount > std::numeric_limits<sal_Int32>::max())
-        // Interval count too high!  Bail out.
+        
         return 0;
 
     sal_Int32 nIntervalCount = static_cast<sal_Int32>(fIntervalCount);
@@ -237,7 +237,7 @@ double* EquidistantTickFactory::getMajorTick( sal_Int32 nTick ) const
             return NULL;
     }
 
-    //return always the value after scaling
+    
     if(!m_rIncrement.PostEquidistant && m_xInverseScaling.is() )
         m_pfCurrentValues[0] = m_rScale.Scaling->doScaling( m_pfCurrentValues[0] );
 
@@ -247,15 +247,15 @@ double* EquidistantTickFactory::getMajorTick( sal_Int32 nTick ) const
 double* EquidistantTickFactory::getMinorTick( sal_Int32 nTick, sal_Int32 nDepth
                             , double fStartParentTick, double fNextParentTick ) const
 {
-    //check validity of arguments
+    
     {
-        //OSL_ENSURE( fStartParentTick < fNextParentTick, "fStartParentTick >= fNextParentTick");
+        
         if(fStartParentTick >= fNextParentTick)
             return NULL;
         if(nDepth>static_cast<sal_Int32>(m_rIncrement.SubIncrements.size()) || nDepth<=0)
             return NULL;
 
-        //subticks are only calculated if they are laying between parent ticks:
+        
         if(nTick<=0)
             return NULL;
         if(nTick>=m_rIncrement.SubIncrements[nDepth-1].IntervalCount)
@@ -277,7 +277,7 @@ double* EquidistantTickFactory::getMinorTick( sal_Int32 nTick, sal_Int32 nDepth
 
     m_pfCurrentValues[nDepth] = fAdaptedStartParent + nTick*fDistance;
 
-    //return always the value after scaling
+    
     if(!bPostEquidistant && m_xInverseScaling.is() )
         m_pfCurrentValues[nDepth] = m_rScale.Scaling->doScaling( m_pfCurrentValues[nDepth] );
 
@@ -316,7 +316,7 @@ void EquidistantTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo
 {
     uno::Sequence< uno::Sequence< double > > aAllTicks;
 
-    //create point sequences for each tick depth
+    
     sal_Int32 nDepthCount = this->getTickDepth();
     sal_Int32 nMaxMajorTickCount = this->getMaxTickCount( 0 );
 
@@ -343,16 +343,16 @@ void EquidistantTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo
     if(nDepthCount>0)
         this->addSubTicks( 1, aAllTicks );
 
-    //so far we have added all ticks between the outer major tick marks
-    //this was necessary to create sub ticks correctly
-    //now we reduce all ticks to the visible ones that lie between the real borders
+    
+    
+    
     sal_Int32 nDepth = 0;
     sal_Int32 nTick = 0;
     for( nDepth = 0; nDepth < nDepthCount; nDepth++)
     {
         sal_Int32 nInvisibleAtLowerBorder = 0;
         sal_Int32 nInvisibleAtUpperBorder = 0;
-        //we need only to check all ticks within the first major interval at each border
+        
         sal_Int32 nCheckCount = 1;
         for(sal_Int32 nN=0; nN<nDepth; nN++)
         {
@@ -361,19 +361,19 @@ void EquidistantTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo
         }
         uno::Sequence< double >& rTicks = aAllTicks[nDepth];
         sal_Int32 nCount = rTicks.getLength();
-        //check lower border
+        
         for( nTick=0; nTick<nCheckCount && nTick<nCount; nTick++)
         {
             if( !isVisible( rTicks[nTick] ) )
                 nInvisibleAtLowerBorder++;
         }
-        //check upper border
+        
         for( nTick=nCount-1; nTick>nCount-1-nCheckCount && nTick>=0; nTick--)
         {
             if( !isVisible( rTicks[nTick] ) )
                 nInvisibleAtUpperBorder++;
         }
-        //resize sequence
+        
         if( !nInvisibleAtLowerBorder && !nInvisibleAtUpperBorder)
             continue;
         if( !nInvisibleAtLowerBorder )
@@ -391,7 +391,7 @@ void EquidistantTickFactory::getAllTicks( ::std::vector< ::std::vector< TickInfo
         }
     }
 
-    //fill return value
+    
     rAllTickInfos.resize(aAllTicks.getLength());
     for( nDepth=0 ;nDepth<aAllTicks.getLength(); nDepth++ )
     {
@@ -496,8 +496,8 @@ EquidistantTickIter::~EquidistantTickIter()
 
 sal_Int32 EquidistantTickIter::getStartDepth() const
 {
-    //find the depth of the first visible tickmark:
-    //it is the depth of the smallest value
+    
+    
     sal_Int32 nReturnDepth=0;
     double fMinValue = DBL_MAX;
     for(sal_Int32 nDepth = 0; nDepth<=m_nMaxDepth ;nDepth++ )
@@ -630,6 +630,6 @@ TickInfo* EquidistantTickIter::nextInfo()
     return NULL;
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

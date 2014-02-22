@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "BarChartTypeTemplate.hxx"
@@ -125,7 +125,7 @@ struct StaticBarChartTypeTemplateInfo : public rtl::StaticAggregate< uno::Refere
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -162,7 +162,7 @@ bool BarChartTypeTemplate::isSwapXAndY() const
     return (m_eBarDirection == HORIZONTAL);
 }
 
-// ____ XChartTypeTemplate ____
+
 sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
     sal_Bool bAdaptProperties )
@@ -170,7 +170,7 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
 {
     sal_Bool bResult = ChartTypeTemplate::matchesTemplate( xDiagram, bAdaptProperties );
 
-    //check BarDirection
+    
     if( bResult )
     {
         bool bFound = false;
@@ -182,7 +182,7 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
             bResult = sal_Bool( !bVertical );
     }
 
-    // adapt solid-type of template according to values in series
+    
     if( bAdaptProperties &&
         bResult &&
         getDimension() == 3 )
@@ -228,7 +228,7 @@ Reference< chart2::XChartType > SAL_CALL BarChartTypeTemplate::getChartTypeForNe
     return xResult;
 }
 
-// ____ OPropertySet ____
+
 uno::Any BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -244,7 +244,7 @@ uno::Any BarChartTypeTemplate::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticBarChartTypeTemplateInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL BarChartTypeTemplate::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -264,7 +264,7 @@ void SAL_CALL BarChartTypeTemplate::applyStyle(
     {
         try
         {
-            //apply Geometry3D
+            
             uno::Any aAGeometry3D;
             this->getFastPropertyValue( aAGeometry3D, PROP_BAR_TEMPLATE_GEOMETRY3D );
             DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, "Geometry3D", aAGeometry3D );
@@ -321,12 +321,12 @@ Sequence< OUString > BarChartTypeTemplate::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( BarChartTypeTemplate, lcl_aServiceName );
 
 IMPLEMENT_FORWARD_XINTERFACE2( BarChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( BarChartTypeTemplate, ChartTypeTemplate, OPropertySet )
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

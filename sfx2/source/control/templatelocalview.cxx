@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sfx2/templatelocalview.hxx>
@@ -94,7 +94,7 @@ void TemplateLocalView::Populate ()
             OUString aURL = mpDocTemplates->GetPath(i,j);
 
             TemplateItemProperties aProperties;
-            aProperties.aIsFolder = false;          // Flat hierarchy for the local filesystem (no nested folders)
+            aProperties.aIsFolder = false;          
             aProperties.nId = j+1;
             aProperties.nDocId = j;
             aProperties.nRegionId = i;
@@ -119,10 +119,10 @@ void TemplateLocalView::reload ()
 
     Populate();
 
-    // Check if we are currently browsing a region or root folder
+    
     if (mnCurRegionId)
     {
-        sal_uInt16 nRegionId = mnCurRegionId - 1;   //Is offset by 1
+        sal_uInt16 nRegionId = mnCurRegionId - 1;   
 
         for (size_t i = 0; i < maRegions.size(); ++i)
         {
@@ -143,7 +143,7 @@ void TemplateLocalView::showRootRegion()
     mnCurRegionId = 0;
     maCurRegionName = OUString();
 
-    // Clone root region items so they dont get invalidated when we open another region
+    
     std::vector<ThumbnailViewItem*> items(maRegions.size());
     for (int i = 0, n = maRegions.size(); i < n; ++i)
     {
@@ -271,7 +271,7 @@ TemplateLocalView::getFilteredItems(const boost::function<bool (const TemplateIt
 
 sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
 {
-    sal_uInt16 nRegionId = mpDocTemplates->GetRegionCount();    // Next regionId
+    sal_uInt16 nRegionId = mpDocTemplates->GetRegionCount();    
     sal_uInt16 nItemId = getNextItemId();
 
     if (!mpDocTemplates->InsertDir(rName,nRegionId))
@@ -279,7 +279,7 @@ sal_uInt16 TemplateLocalView::createRegion(const OUString &rName)
 
     OUString aRegionName = rName;
 
-    // Insert to the region cache list and to the thumbnail item list
+    
     TemplateContainerItem* pItem = new TemplateContainerItem( *this, nItemId );
     pItem->mnRegionId = nRegionId;
     pItem->maTitle = aRegionName;
@@ -314,7 +314,7 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
 {
     sal_uInt16 nRegionId = USHRT_MAX;
 
-    // Remove from the region cache list
+    
     std::vector<TemplateContainerItem*>::iterator pRegionIt;
     for ( pRegionIt = maRegions.begin(); pRegionIt != maRegions.end();)
     {
@@ -330,7 +330,7 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
         }
         else
         {
-            // Syncronize regions cache ids with SfxDocumentTemplates
+            
             if (nRegionId != USHRT_MAX && (*pRegionIt)->mnRegionId > nRegionId)
                 --(*pRegionIt)->mnRegionId;
 
@@ -341,7 +341,7 @@ bool TemplateLocalView::removeRegion(const sal_uInt16 nItemId)
     if (nRegionId == USHRT_MAX)
         return false;
 
-    // Syncronize view regions ids with SfxDocumentTemplates
+    
     std::vector<ThumbnailViewItem*>::iterator pViewIt = mItemList.begin();
     for ( pViewIt = mItemList.begin(); pViewIt != mItemList.end(); ++pViewIt)
     {
@@ -377,7 +377,7 @@ bool TemplateLocalView::removeTemplate (const sal_uInt16 nItemId, const sal_uInt
                         Invalidate();
                     }
 
-                    // Update Doc Idx for all templates that follow
+                    
                     for (; pIter != pItem->maTemplates.end(); ++pIter)
                         pIter->nDocId = pIter->nDocId - 1;
 
@@ -414,7 +414,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
     {
         sal_uInt16 nSrcRegionId = pSrc->mnRegionId;
         sal_uInt16 nTargetRegion = pTarget->mnRegionId;
-        sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
+        sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    
 
         const TemplateViewItem *pViewItem = static_cast<const TemplateViewItem*>(pItem);
 
@@ -425,7 +425,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
             if (!mpDocTemplates->Copy(nTargetRegion,nTargetIdx,nSrcRegionId,pViewItem->mnDocId))
                 return false;
         }
-        // move template to destination
+        
 
         TemplateItemProperties aTemplateItem;
         aTemplateItem.nId = nTargetIdx + 1;
@@ -439,7 +439,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
 
         if (!bCopy)
         {
-            // remove template from region cached data
+            
 
             std::vector<TemplateItemProperties>::iterator aIter;
             for (aIter = pSrc->maTemplates.begin(); aIter != pSrc->maTemplates.end();)
@@ -450,7 +450,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
                 }
                 else
                 {
-                    // Keep region document id syncronized with SfxDocumentTemplates
+                    
                     if (aIter->nDocId > pViewItem->mnDocId)
                         --aIter->nDocId;
 
@@ -458,7 +458,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
                 }
             }
 
-            // Keep view document id syncronized with SfxDocumentTemplates
+            
             std::vector<ThumbnailViewItem*>::iterator pItemIter = mItemList.begin();
             for (; pItemIter != mItemList.end(); ++pItemIter)
             {
@@ -482,7 +482,7 @@ bool TemplateLocalView::moveTemplate (const ThumbnailViewItem *pItem, const sal_
 bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, selection_cmp_fn> &rItems,
                                       const sal_uInt16 nTargetItem)
 {
-    assert(mnCurRegionId);  // Only allowed in non root regions
+    assert(mnCurRegionId);  
 
     bool ret = true;
     bool refresh = false;
@@ -503,8 +503,8 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
     if (pTarget && pSrc)
     {
         sal_uInt16 nTargetRegion = pTarget->mnRegionId;
-        sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    // Next Idx
-        std::vector<sal_uInt16> aItemIds;    // List of moved items ids (also prevents the invalidation of rItems iterators when we remove them as we go)
+        sal_uInt16 nTargetIdx = mpDocTemplates->GetCount(nTargetRegion);    
+        std::vector<sal_uInt16> aItemIds;    
 
         std::set<const ThumbnailViewItem*,selection_cmp_fn>::const_iterator aSelIter;
         for ( aSelIter = rItems.begin(); aSelIter != rItems.end(); ++aSelIter, ++nTargetIdx )
@@ -522,7 +522,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                 }
             }
 
-            // move template to destination
+            
 
             TemplateItemProperties aTemplateItem;
             aTemplateItem.nId = nTargetIdx + 1;
@@ -536,7 +536,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
 
             if (!bCopy)
             {
-                // remove template from region cached data
+                
 
                 std::vector<TemplateItemProperties>::iterator pPropIter;
                 for (pPropIter = pSrc->maTemplates.begin(); pPropIter != pSrc->maTemplates.end();)
@@ -548,7 +548,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                     }
                     else
                     {
-                        // Keep region document id syncronized with SfxDocumentTemplates
+                        
                         if (pPropIter->nDocId > pViewItem->mnDocId)
                             --pPropIter->nDocId;
 
@@ -556,7 +556,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
                     }
                 }
 
-                // Keep view document id syncronized with SfxDocumentTemplates
+                
                 std::vector<ThumbnailViewItem*>::iterator pItemIter = mItemList.begin();
                 for (; pItemIter != mItemList.end(); ++pItemIter)
                 {
@@ -568,7 +568,7 @@ bool TemplateLocalView::moveTemplates(const std::set<const ThumbnailViewItem*, s
             refresh = true;
         }
 
-        // Remove items from the current view
+        
         for (std::vector<sal_uInt16>::iterator it = aItemIds.begin(); it != aItemIds.end(); ++it)
             RemoveItem(*it);
 
@@ -865,7 +865,7 @@ static void lcl_updateThumbnails (TemplateContainerItem *pItem)
     pItem->maPreview3.Clear();
     pItem->maPreview4.Clear();
 
-    // Update folder thumbnails
+    
     for (size_t i = 0, n = pItem->maTemplates.size(); i < n && pItem->HasMissingPreview(); ++i)
     {
         if ( pItem->maPreview1.IsEmpty( ) )

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -99,20 +99,20 @@ ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, bool bBig )
 
 TYPEINIT1(SfxModule, SfxShell);
 
-//=========================================================================
+
 
 SFX_IMPL_INTERFACE(SfxModule,SfxShell,SfxResId(0))
 {
 }
 
-//====================================================================
+
 
 ResMgr* SfxModule::GetResMgr()
 {
     return pResMgr;
 }
 
-//====================================================================
+
 
 SfxModule::SfxModule( ResMgr* pMgrP, sal_Bool bDummyP,
                       SfxObjectFactory* pFactoryP, ... )
@@ -149,7 +149,7 @@ void SfxModule::Construct_Impl()
     }
 }
 
-//====================================================================
+
 
 SfxModule::~SfxModule()
 {
@@ -157,8 +157,8 @@ SfxModule::~SfxModule()
     {
         if ( SFX_APP()->Get_Impl() )
         {
-            // The module will be destroyed before the Deinitialize,
-            // so remove from the array
+            
+            
             SfxModuleArr_Impl& rArr = GetModules_Impl();
             for( sal_uInt16 nPos = rArr.size(); nPos--; )
             {
@@ -176,14 +176,14 @@ SfxModule::~SfxModule()
     }
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxSlotPool* SfxModule::GetSlotPool() const
 {
     return pImpl->pSlotPool;
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
 {
@@ -205,7 +205,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
     pImpl->pFactArr->push_back( pFact );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
 {
@@ -227,7 +227,7 @@ void SfxModule::RegisterToolBoxControl( SfxTbxCtrlFactory *pFact )
     pImpl->pTbxCtrlFac->push_back( pFact );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
 {
@@ -249,7 +249,7 @@ void SfxModule::RegisterStatusBarControl( SfxStbCtrlFactory *pFact )
     pImpl->pStbCtrlFac->push_back( pFact );
 }
 
-//-------------------------------------------------------------------------
+
 
 void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
 {
@@ -271,28 +271,28 @@ void SfxModule::RegisterMenuControl( SfxMenuCtrlFactory *pFact )
     pImpl->pMenuCtrlFac->push_back( pFact );
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxTbxCtrlFactArr_Impl*  SfxModule::GetTbxCtrlFactories_Impl() const
 {
     return pImpl->pTbxCtrlFac;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxStbCtrlFactArr_Impl*  SfxModule::GetStbCtrlFactories_Impl() const
 {
     return pImpl->pStbCtrlFac;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxMenuCtrlFactArr_Impl* SfxModule::GetMenuCtrlFactories_Impl() const
 {
     return pImpl->pMenuCtrlFac;
 }
 
-//-------------------------------------------------------------------------
+
 
 SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 {
@@ -340,7 +340,7 @@ void SfxModule::Invalidate( sal_uInt16 nId )
 bool SfxModule::IsChildWindowAvailable( const sal_uInt16 i_nId, const SfxViewFrame* i_pViewFrame ) const
 {
     if ( i_nId != SID_TASKPANE )
-        // by default, assume it is
+        
         return true;
 
     const SfxViewFrame* pViewFrame = i_pViewFrame ? i_pViewFrame : GetFrame();
@@ -362,7 +362,7 @@ FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com
 {
     ENSURE_OR_RETURN( i_frame.is(), "SfxModule::GetModuleFieldUnit: invalid frame!", FUNIT_100TH_MM );
 
-    // find SfxViewFrame for the given XFrame
+    
     SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst();
     while ( pViewFrame != NULL )
     {
@@ -372,7 +372,7 @@ FieldUnit SfxModule::GetModuleFieldUnit( ::com::sun::star::uno::Reference< ::com
     }
     ENSURE_OR_RETURN( pViewFrame != NULL, "SfxModule::GetModuleFieldUnit: unable to find an SfxViewFrame for the given XFrame", FUNIT_100TH_MM );
 
-    // find the module
+    
     SfxModule const * pModule = GetActiveModule( pViewFrame );
     ENSURE_OR_RETURN( pModule != NULL, "SfxModule::GetModuleFieldUnit: no SfxModule for the given frame!", FUNIT_100TH_MM );
 	if ( pModule )

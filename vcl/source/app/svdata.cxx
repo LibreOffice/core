@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -55,7 +55,7 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::awt;
 
-// =======================================================================
+
 
 namespace
 {
@@ -63,7 +63,7 @@ namespace
         public rtl::Static<ImplSVData, private_aImplSVData> {};
 }
 
-// static SV-Data
+
 ImplSVData* pImplSVData = NULL;
 
 SalSystem* ImplGetSalSystem()
@@ -74,28 +74,28 @@ SalSystem* ImplGetSalSystem()
     return pSVData->mpSalSystem;
 }
 
-// =======================================================================
+
 
 void ImplInitSVData()
 {
     pImplSVData = &private_aImplSVData::get();
 
-    // init global instance data
+    
     memset( pImplSVData, 0, sizeof( ImplSVData ) );
     pImplSVData->maHelpData.mbAutoHelpId = true;
     pImplSVData->maNWFData.maMenuBarHighlightTextColor = Color( COL_TRANSPARENT );
 
-    // mark default layout border as unitialized
+    
     pImplSVData->maAppData.mnDefaultLayoutBorder = -1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDeInitSVData()
 {
     ImplSVData* pSVData = ImplGetSVData();
 
-    // delete global instance data
+    
     if( pSVData->mpSettingsConfigItem )
         delete pSVData->mpSettingsConfigItem;
 
@@ -110,14 +110,14 @@ void ImplDeInitSVData()
         delete pSVData->mpPaperNames, pSVData->mpPaperNames = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplDestroySVData()
 {
     pImplSVData = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* ImplGetDefaultWindow()
 {
@@ -125,17 +125,17 @@ Window* ImplGetDefaultWindow()
     if ( pSVData->maWinData.mpAppWin )
         return pSVData->maWinData.mpAppWin;
 
-    // First test if we already have a default window.
-    // Don't only place a single if..else inside solar mutex lockframe
-    // because then we might have to wait for the solar mutex what is not necessary
-    // if we already have a default window.
+    
+    
+    
+    
 
     if ( !pSVData->mpDefaultWin )
     {
         Application::GetSolarMutex().acquire();
 
-        // Test again because the thread who released the solar mutex could have called
-        // the same method
+        
+        
 
         if ( !pSVData->mpDefaultWin && !pSVData->mbDeInit )
         {
@@ -149,7 +149,7 @@ Window* ImplGetDefaultWindow()
     return pSVData->mpDefaultWin;
 }
 
-// -----------------------------------------------------------------------
+
 
 ResMgr* ImplGetResMgr()
 {
@@ -254,7 +254,7 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::uno::XCurrentContext > &context ) :
         m_prevContext( context ) {}
 
-    // XCurrentContext
+    
     virtual com::sun::star::uno::Any SAL_CALL getValueByName( const OUString& Name )
         throw (com::sun::star::uno::RuntimeException);
 private:
@@ -267,9 +267,9 @@ com::sun::star::uno::Any AccessBridgeCurrentContext::getValueByName( const OUStr
     com::sun::star::uno::Any ret;
     if ( Name == "java-vm.interaction-handler" )
     {
-        // Currently, for accessbility no interaction handler shall be offered.
-        // There may be introduced later on a handler using native toolkits
-        // jbu->obr: Instantiate here your interaction handler
+        
+        
+        
     }
     else if( m_prevContext.is() )
     {
@@ -315,7 +315,7 @@ bool ImplInitAccessBridge()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* ImplFindWindow( const SalFrame* pFrame, ::Point& rSalFramePos )
 {

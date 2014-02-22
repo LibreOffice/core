@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <SidebarTxtControl.hxx>
@@ -88,7 +88,7 @@ void SidebarTxtControl::GetFocus()
 
 void SidebarTxtControl::LoseFocus()
 {
-    // write the visible text back into the SwField
+    
     mrSidebarWin.UpdateData();
 
     Window::LoseFocus();
@@ -184,13 +184,13 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
     }
     else
     {
-        //let's make sure we see our note
+        
         mrPostItMgr.MakeVisible(&mrSidebarWin);
 
         long aOldHeight = mrSidebarWin.GetPostItTextHeight();
         bool bDone = false;
 
-        /// HACK: need to switch off processing of Undo/Redo in Outliner
+        
         if ( !( (nKey == KEY_Z || nKey == KEY_Y) && rKeyCode.IsMod1()) )
         {
             bool bIsProtected = mrSidebarWin.IsProtected();
@@ -210,7 +210,7 @@ void SidebarTxtControl::KeyInput( const KeyEvent& rKeyEvt )
             mrSidebarWin.ResizeIfNecessary( aOldHeight, mrSidebarWin.GetPostItTextHeight() );
         else
         {
-            // write back data first when showing navigator
+            
             if ( nKey==KEY_F5 )
                 mrSidebarWin.UpdateData();
             if (!mrDocView.KeyInput(rKeyEvt))
@@ -227,8 +227,8 @@ void SidebarTxtControl::MouseMove( const MouseEvent& rMEvt )
     {
         OutlinerView* pOutlinerView( GetTextView() );
         pOutlinerView->MouseMove( rMEvt );
-        // mba: why does OutlinerView not handle the modifier setting?!
-        // this forces the postit to handle *all* pointer types
+        
+        
         SetPointer( pOutlinerView->GetPointer( rMEvt.GetPosPixel() ) );
 
         const EditView& aEV = pOutlinerView->GetEditView();
@@ -341,9 +341,9 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
                 aPos = Point( aSize.getWidth()/2, aSize.getHeight()/2 );
             }
 
-            //!! call different Execute function to get rid of the new thesaurus sub menu
-            //!! pointer created in the call to Popup.
-            //!! Otherwise we would have a memory leak (see also #i107205#)
+            
+            
+            
             pMgr->Execute( aPos, this );
             delete pMgr;
         }
@@ -403,6 +403,6 @@ css::uno::Reference< css::accessibility::XAccessible > SidebarTxtControl::Create
     return xAcc;
 }
 
-} } // end of namespace sw::sidebarwindows
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -504,7 +504,7 @@ void LwpAmikakeOverride::Read(LwpObjectStream* pStrm)
     }
 }
 
-void LwpAlignmentOverride::Override(LwpAlignmentOverride* other)//add by  1-24
+void LwpAlignmentOverride::Override(LwpAlignmentOverride* other)
 {
     if (m_nOverride & AO_TYPE)
     {
@@ -521,7 +521,7 @@ void LwpAlignmentOverride::Override(LwpAlignmentOverride* other)//add by  1-24
 */
 }
 
-void LwpAlignmentOverride::OverrideAlignment(AlignType val)//add by  1-24
+void LwpAlignmentOverride::OverrideAlignment(AlignType val)
 {
     m_nAlignType = val;
     m_nOverride |= AO_TYPE;
@@ -578,8 +578,8 @@ void LwpIndentOverride::OverrideIndentRight(sal_Int32 val)
 void LwpIndentOverride::OverrideIndentRest(sal_Int32 val)
 {
     m_nRest = val;
-//    m_nAll = val;
-//    m_nFirst = 0-val;
+
+
     m_nOverride |= IO_REST;
 }
 

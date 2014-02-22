@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accelerators/acceleratorconfiguration.hxx>
@@ -94,10 +94,10 @@ public:
         return aSeq;
     }
 
-    // XComponent
+    
     virtual  void SAL_CALL dispose() throw (css::uno::RuntimeException);
 
-    /// This has to be called after when the instance is acquire()'d.
+    
     void SAL_CALL fillCache();
 
 private:
@@ -137,22 +137,22 @@ ModuleAcceleratorConfiguration::~ModuleAcceleratorConfiguration()
 
 void ModuleAcceleratorConfiguration::fillCache()
 {
-    // SAFE -> ----------------------------------
+    
     ReadGuard aReadLock(m_aLock);
     m_sModuleCFG = m_sModule;
     aReadLock.unlock();
-    // <- SAFE ----------------------------------
+    
 
 #if 0
-    // get current office locale ... but dont cache it.
-    // Otherwise we must be listener on the configuration layer
-    // which seems to superflous for this small implementation .-)
-    // XXX: what is this good for? it was a comphelper::Locale but unused
+    
+    
+    
+    
     LanguageTag aLanguageTag(m_sLocale);
 #endif
 
-    // May be the current app module does not have any
-    // accelerator config? Handle it gracefully :-)
+    
+    
     try
     {
         m_sGlobalOrModules = CFG_ENTRY_MODULES;
@@ -168,9 +168,9 @@ void ModuleAcceleratorConfiguration::fillCache()
         {}
 }
 
-//-----------------------------------------------
+
 //
-// XComponent.dispose(),  #i120029#, to release the cyclic reference
+
 //
 void SAL_CALL ModuleAcceleratorConfiguration::dispose()
     throw(css::uno::RuntimeException)

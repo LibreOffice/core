@@ -41,9 +41,9 @@ namespace drawinglayer
         const basegfx::B2DVector aFontVectorPixel(aLocalTransform * basegfx::B2DVector(0.0, 1.0));
         const sal_uInt32 nFontPixelHeight(basegfx::fround(aFontVectorPixel.getLength()));
 
-        static const sal_uInt32 nMinimumFontHeight(5); // #define WRONG_SHOW_MIN         5
-        static const sal_uInt32 nSmallFontHeight(11);  // #define WRONG_SHOW_SMALL      11
-        static const sal_uInt32 nMediumFontHeight(15); // #define WRONG_SHOW_MEDIUM     15
+        static const sal_uInt32 nMinimumFontHeight(5); 
+        static const sal_uInt32 nSmallFontHeight(11);  
+        static const sal_uInt32 nMediumFontHeight(15); 
 
         if(nFontPixelHeight > nMinimumFontHeight)
         {
@@ -62,8 +62,8 @@ namespace drawinglayer
                 nWaveStyle = WAVE_SMALL;
             }
 
-            // #i101075# draw it. Do not forget to use the evtl. offsetted origin of the target device,
-            // e.g. when used with mask/transparence buffer device
+            
+            
             const Point aOrigin(rOutputDevice.GetMapMode().GetOrigin());
 
             const basegfx::BColor aProcessedColor(rBColorModifierStack.getModifiedColor(rWrongSpellCandidate.getColor()));
@@ -76,9 +76,9 @@ namespace drawinglayer
             rOutputDevice.EnableMapMode(bMapModeEnabledState);
         }
 
-        // cannot really go wrong
+        
         return true;
     }
-} // end of namespace drawinglayer
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

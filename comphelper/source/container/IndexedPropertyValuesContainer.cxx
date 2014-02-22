@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "comphelper_module.hxx"
@@ -38,7 +38,7 @@ public:
     IndexedPropertyValuesContainer() throw();
     virtual ~IndexedPropertyValuesContainer() throw();
 
-    // XIndexContainer
+    
     virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
@@ -46,30 +46,30 @@ public:
         throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
 
-    // XIndexReplace
+    
     virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& aElement )
         throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException,
             ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-    // XIndexAccess
+    
     virtual sal_Int32 SAL_CALL getCount(  )
         throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex )
         throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException,
             ::com::sun::star::uno::RuntimeException);
 
-    // XElementAccess
+    
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
         throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements(  )
         throw(::com::sun::star::uno::RuntimeException);
 
-    //XServiceInfo
+    
     virtual OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XServiceInfo - static versions (used for component registration)
+    
     static OUString SAL_CALL getImplementationName_static();
     static uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static();
     static uno::Reference< uno::XInterface > SAL_CALL Create( const uno::Reference< uno::XComponentContext >& );
@@ -86,7 +86,7 @@ IndexedPropertyValuesContainer::~IndexedPropertyValuesContainer() throw()
 {
 }
 
-// XIndexContainer
+
 void SAL_CALL IndexedPropertyValuesContainer::insertByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& aElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -163,7 +163,7 @@ void SAL_CALL IndexedPropertyValuesContainer::removeByIndex( sal_Int32 nIndex )
         throw lang::IndexOutOfBoundsException();
 }
 
-// XIndexReplace
+
 void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, const ::com::sun::star::uno::Any& aElement )
     throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
@@ -180,7 +180,7 @@ void SAL_CALL IndexedPropertyValuesContainer::replaceByIndex( sal_Int32 nIndex, 
         throw lang::IndexOutOfBoundsException();
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL IndexedPropertyValuesContainer::getCount(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -200,7 +200,7 @@ sal_Int32 SAL_CALL IndexedPropertyValuesContainer::getCount(  )
     return aAny;
 }
 
-// XElementAccess
+
 ::com::sun::star::uno::Type SAL_CALL IndexedPropertyValuesContainer::getElementType(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -213,7 +213,7 @@ sal_Bool SAL_CALL IndexedPropertyValuesContainer::hasElements(  )
     return !maProperties.empty();
 }
 
-//XServiceInfo
+
 OUString SAL_CALL IndexedPropertyValuesContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
 {
     return getImplementationName_static();

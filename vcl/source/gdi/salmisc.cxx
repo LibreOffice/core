@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/bmpacc.hxx>
@@ -259,7 +259,7 @@ BitmapBuffer* StretchAndConvert(
     BitmapBuffer*   pDstBuffer = new BitmapBuffer;
     long            i;
 
-    // set function for getting pixels
+    
     switch( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) )
     {
         IMPL_CASE_GET_FORMAT( _1BIT_MSB_PAL );
@@ -280,15 +280,15 @@ BitmapBuffer* StretchAndConvert(
         IMPL_CASE_GET_FORMAT( _32BIT_TC_MASK );
 
         default:
-            // should never come here
-            // initialize pFncGetPixel to something valid that is
-            // least likely to crash
+            
+            
+            
             pFncGetPixel = BitmapReadAccess::GetPixelFor_1BIT_MSB_PAL;
             OSL_FAIL( "unknown read format" );
         break;
     }
 
-    // set function for setting pixels
+    
     const sal_uLong nDstScanlineFormat = BMP_SCANLINE_FORMAT( nDstBitmapFormat );
     switch( nDstScanlineFormat )
     {
@@ -310,16 +310,16 @@ BitmapBuffer* StretchAndConvert(
         IMPL_CASE_SET_FORMAT( _32BIT_TC_MASK, 32 );
 
         default:
-            // should never come here
-            // initialize pFncSetPixel to something valid that is
-            // least likely to crash
+            
+            
+            
             pFncSetPixel = BitmapReadAccess::SetPixelFor_1BIT_MSB_PAL;
             pDstBuffer->mnBitCount = 1;
             OSL_FAIL( "unknown write format" );
         break;
     }
 
-    // fill destination buffer
+    
     pDstBuffer->mnFormat = nDstBitmapFormat;
     pDstBuffer->mnWidth = rTwoRect.mnDestWidth;
     pDstBuffer->mnHeight = rTwoRect.mnDestHeight;
@@ -330,13 +330,13 @@ BitmapBuffer* StretchAndConvert(
     }
     catch( const std::bad_alloc& )
     {
-        // memory exception, clean up
+        
         pDstBuffer->mpBits = NULL;
         delete pDstBuffer;
         return NULL;
     }
 
-    // do we need a destination palette or color mask?
+    
     if( ( nDstScanlineFormat == BMP_FORMAT_1BIT_MSB_PAL ) ||
         ( nDstScanlineFormat == BMP_FORMAT_1BIT_LSB_PAL ) ||
         ( nDstScanlineFormat == BMP_FORMAT_4BIT_MSN_PAL ) ||
@@ -356,7 +356,7 @@ BitmapBuffer* StretchAndConvert(
         pDstBuffer->maColorMask = *pDstMask;
     }
 
-    // short circuit the most important conversions
+    
     bool bFastConvert = ImplFastBitmapConversion( *pDstBuffer, rSrcBuffer, rTwoRect );
     if( bFastConvert )
         return pDstBuffer;
@@ -379,9 +379,9 @@ BitmapBuffer* StretchAndConvert(
     }
     catch( const std::bad_alloc& )
     {
-        // memory exception, clean up
-        // remark: the buffer ptr causing the exception
-        // is still NULL here
+        
+        
+        
         delete[] pSrcScan;
         delete[] pDstScan;
         delete[] pMapX;
@@ -390,7 +390,7 @@ BitmapBuffer* StretchAndConvert(
         return NULL;
     }
 
-    // horizontal mapping table
+    
     if( (nDstDX != nSrcDX) && (nDstDX != 0) )
     {
         const double fFactorX = (double)nSrcDX / nDstDX;
@@ -404,7 +404,7 @@ BitmapBuffer* StretchAndConvert(
             pMapX[ i ] = nTmp++;
     }
 
-    // vertical mapping table
+    
     if( (nDstDY != nSrcDY) && (nDstDY != 0) )
     {
         const double fFactorY = (double)nSrcDY / nDstDY;
@@ -418,7 +418,7 @@ BitmapBuffer* StretchAndConvert(
             pMapY[ i ] = nTmp++;
     }
 
-    // source scanline buffer
+    
     Scanline pTmpScan;
     if( BMP_SCANLINE_ADJUSTMENT( rSrcBuffer.mnFormat ) == BMP_FORMAT_TOP_DOWN )
         pTmpScan = rSrcBuffer.mpBits, nOffset = rSrcBuffer.mnScanlineSize;
@@ -431,7 +431,7 @@ BitmapBuffer* StretchAndConvert(
     for( i = 0L; i < rSrcBuffer.mnHeight; i++, pTmpScan += nOffset )
         pSrcScan[ i ] = pTmpScan;
 
-    // destination scanline buffer
+    
     if( BMP_SCANLINE_ADJUSTMENT( pDstBuffer->mnFormat ) == BMP_FORMAT_TOP_DOWN )
         pTmpScan = pDstBuffer->mpBits, nOffset = pDstBuffer->mnScanlineSize;
     else
@@ -443,7 +443,7 @@ BitmapBuffer* StretchAndConvert(
     for( i = 0L; i < nDstDY; i++, pTmpScan += nOffset )
         pDstScan[ i ] = pTmpScan;
 
-    // do buffer scaling and conversion
+    
     if( rSrcBuffer.mnBitCount <= 8 && pDstBuffer->mnBitCount <= 8 )
     {
         ImplPALToPAL( rSrcBuffer, *pDstBuffer, pFncGetPixel, pFncSetPixel,
@@ -465,7 +465,7 @@ BitmapBuffer* StretchAndConvert(
                      pSrcScan, pDstScan, pMapX, pMapY );
     }
 
-    // cleanup
+    
     delete[] pSrcScan;
     delete[] pDstScan;
     delete[] pMapX;

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -153,7 +153,7 @@ void LwpFribSection::ParseSection()
     LwpPageLayout* pLayout = GetPageLayout();
     if(pLayout)
     {
-        // StartWithinColume not support now
+        
         LwpLayout::UseWhenType eSectionType = pLayout->GetUseWhenType();
         if(eSectionType==LwpLayout::StartWithinColume)
         {
@@ -169,7 +169,7 @@ void LwpFribSection::ParseSection()
         LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID()->obj() );
         if (m_Section.obj()->GetTag() == VO_INDEXSECTION)
         {
-            //create a new section and add it to container
+            
             XFIndex* pIndex = new XFIndex;
             pIndex->SetIndexType(enumXFIndexAlphabetical);
             /*
@@ -207,7 +207,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
         pXFIndex->SetSeparator(sal_True);
         pTemplateSep->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
     }
-    //pXFIndex->AddTemplate(A2OUSTR("separator"),A2OUSTR("Separator"),pTemplateSep);
+    
     pXFIndex->AddTemplate(A2OUSTR("separator"),styleName,pTemplateSep);
 
 
@@ -217,7 +217,7 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
     pTemplate1->AddEntry(enumXFIndexTemplateText,A2OUSTR(""));
     pTemplate1->AddEntry(enumXFIndexTemplateTab,A2OUSTR(""));
     pTemplate1->AddEntry(enumXFIndexTemplatePage,A2OUSTR(""));
-    //pXFIndex->AddTemplate(Int32ToOUString(1),A2OUSTR("Primary"),pTemplate1);
+    
     pXFIndex->AddTemplate(Int32ToOUString(1),styleName,pTemplate1);
 
     XFIndexTemplate * pTemplate2 = new XFIndexTemplate();
@@ -231,15 +231,15 @@ void LwpFribSection::SetDefaultAlphaIndex(XFIndex * pXFIndex)
 
     if (pIndexSection->IsFormatRunin())
     {
-        //pXFIndex->AddTemplate(Int32ToOUString(2),A2OUSTR("Primary"),pTemplate2);
-        //pXFIndex->AddTemplate(Int32ToOUString(3),A2OUSTR("Primary"),pTemplate3);
+        
+        
         pXFIndex->AddTemplate(Int32ToOUString(2),styleName,pTemplate2);
         pXFIndex->AddTemplate(Int32ToOUString(3),styleName,pTemplate3);
     }
     else
     {
-        //pXFIndex->AddTemplate(Int32ToOUString(2),A2OUSTR("Secondary"),pTemplate2);
-        //pXFIndex->AddTemplate(Int32ToOUString(3),A2OUSTR("Secondary"),pTemplate3);
+        
+        
         styleName = pFoundry->FindActuralStyleName(A2OUSTR("Secondary"));
         pXFIndex->AddTemplate(Int32ToOUString(2),styleName,pTemplate2);
         pXFIndex->AddTemplate(Int32ToOUString(3),styleName,pTemplate3);
@@ -258,7 +258,7 @@ LwpMasterPage::LwpMasterPage(LwpPara* pPara, LwpPageLayout* pLayout)
  */
 sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 {
-    //if there is no other frib after current firb, register master page in starting para of next page
+    
     if(IsNextPageType()&&(!pFrib->HasNextFrib()))
     {
         LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
@@ -268,7 +268,7 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     }
 
     m_bNewSection = sal_False;
-    //sal_Bool bSectionColumns = sal_False;
+    
 
     XFParaStyle* pOverStyle = new XFParaStyle;
     *pOverStyle = *(m_pPara->GetXFParaStyle());
@@ -277,7 +277,7 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
     LwpLayout::UseWhenType eUserType = m_pLayout->GetUseWhenType();
     switch(eUserType)
     {
-        case LwpLayout::StartWithinColume://not support now
+        case LwpLayout::StartWithinColume:
         {
             m_bNewSection = sal_False;
             break;
@@ -285,19 +285,19 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
         case LwpLayout::StartWithinPage:
         {
             m_bNewSection = sal_True;
-            //bSectionColumns = sal_True;
+            
             break;
         }
-        case LwpLayout::StartOnNextPage:    //fall throught
-        case LwpLayout::StartOnOddPage: //fall throught
+        case LwpLayout::StartOnNextPage:    
+        case LwpLayout::StartOnOddPage: 
         case LwpLayout::StartOnEvenPage:
         {
             LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
             pStory->SetCurrentLayout(m_pLayout);
-            //get odd page layout when the current pagelayout is mirror
+            
             m_pLayout = pStory->GetCurrentLayout();
             m_bNewSection = IsNeedSection();
-            //bSectionColumns = m_bNewSection;
+            
             pOverStyle->SetMasterPage( m_pLayout->GetStyleName());
             RegisterFillerPageStyle();
             break;
@@ -306,18 +306,18 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
             break;
     }
 
-    //register tab style;
+    
     LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
     pStory->SetTabLayout(m_pLayout);
     m_pPara->RegisterTabStyle(pOverStyle);
 
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     m_StyleName = pXFStyleManager->AddStyle(pOverStyle)->GetStyleName();
-    //register section style here
+    
     if(m_bNewSection)
     {
         XFSectionStyle* pSectStyle= new XFSectionStyle();
-        //set margin
+        
         pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
         if(pStory)
         {
@@ -328,15 +328,15 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
             pSectStyle->SetMarginRight(fRight);
         }
 
-        //if(bSectionColumns)
-        //{
-            //set columns
+        
+        
+            
             XFColumns* pColumns = m_pLayout->GetXFColumns();
             if(pColumns)
             {
                 pSectStyle->SetColumns(pColumns);
             }
-        //}
+        
         m_SectionStyleName = pXFStyleManager->AddStyle(pSectStyle)->GetStyleName();
     }
     return sal_False;
@@ -349,9 +349,9 @@ sal_Bool LwpMasterPage::RegisterMasterPage(LwpFrib* pFrib)
 sal_Bool LwpMasterPage::IsNeedSection()
 {
     sal_Bool bNewSection = sal_False;
-    //get story
+    
     LwpStory* pStory = static_cast<LwpStory*>(m_pPara->GetStoryID()->obj());
-    //if pagelayout is modified, register the pagelayout
+    
     if(pStory->IsPMModified())
     {
         bNewSection = pStory->IsNeedSection();
@@ -367,7 +367,7 @@ XFSection* LwpMasterPage::CreateXFSection()
 {
     if(m_bNewSection)
     {
-        //new a section
+        
         XFSection* pXFSection = new XFSection();
         pXFSection->SetStyleName(m_SectionStyleName);
         return pXFSection;
@@ -382,9 +382,9 @@ XFSection* LwpMasterPage::CreateXFSection()
 void LwpMasterPage::ParseSection(LwpFrib* pFrib)
 {
     LwpFribPtr* pFribPtr = m_pPara->GetFribs();
-    //XFParagraph * pXFPara = pFribPtr->GetXFPara();
+    
 
-    //parse fillerpage text
+    
     if(m_pLayout->HasFillerPageText(m_pPara->GetFoundry()))
     {
         XFParagraph *pPara = new XFParagraph();
@@ -394,12 +394,12 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
 
         m_pLayout->ConvertFillerPageText(m_pPara->GetXFContainer());
     }
-    //create a new section and add it to container
+    
     XFContentContainer* pContent = CreateXFSection();
     if(pContent)
     {
         LwpStory* pStory = static_cast<LwpStory*> ( m_pPara->GetStoryID()->obj() );
-        //delete the additional blank para, 06/28/2005
+        
         XFParagraph* pCurrPara = pFribPtr->GetXFPara();
         if(!pCurrPara->HasContents())
         {
@@ -409,7 +409,7 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
                 pCurrContainer->RemoveLastContent();
             }
         }
-        //end,06/28/2005
+        
         pStory->AddXFContent( pContent );
     }
     else
@@ -421,7 +421,7 @@ void LwpMasterPage::ParseSection(LwpFrib* pFrib)
     {
         m_pPara->SetXFContainer( pContent );
     }
-    //out put the contents after the section frib in the same para.
+    
     if(pFrib->HasNextFrib())
     {
         XFParagraph *pNextPara = new XFParagraph();

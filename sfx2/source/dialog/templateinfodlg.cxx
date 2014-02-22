@@ -4,7 +4,7 @@
 *
 * This Source Code Form is subject to the terms of the Mozilla Public
 * License, v. 2.0. If a copy of the MPL was not distributed with this
-* file, You can obtain one at http://mozilla.org/MPL/2.0/.
+* file, You can obtain one at http:
 */
 
 #include <sfx2/templateinfodlg.hxx>
@@ -89,7 +89,7 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
 
         mpInfoView->fill( xDocProps, rURL );
 
-        // Create template preview
+        
         uno::Reference<util::XURLTransformer > xTrans(
                     util::URLTransformer::create(comphelper::getProcessComponentContext()));
 
@@ -109,7 +109,7 @@ void SfxTemplateInfoDlg::loadDocument(const OUString &rURL)
             aArgs[0].Value.setValue( &b, ::getBooleanCppuType() );
             aArgs[1].Name = "ReadOnly";
             aArgs[1].Value.setValue( &b, ::getBooleanCppuType() );
-            aArgs[2].Name = "AsTemplate";    // prevents getting an empty URL with getURL()!
+            aArgs[2].Name = "AsTemplate";    
             aArgs[3].Name = "InteractionHandler";
             aArgs[3].Value <<= xInteractionHandler;
 

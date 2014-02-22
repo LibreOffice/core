@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sfx2/templateabstractview.hxx>
@@ -77,7 +77,7 @@ bool ViewFilter_Application::operator () (const ThumbnailViewItem *pItem)
 
         size_t nVisCount = 0;
 
-        // Clear thumbnails
+        
         pContainerItem->maPreview1.Clear();
         pContainerItem->maPreview2.Clear();
         pContainerItem->maPreview3.Clear();
@@ -166,7 +166,7 @@ void TemplateAbstractView::insertItem(const TemplateItemProperties &rTemplate)
 
     if ( pCur->aThumbnail.IsEmpty() )
     {
-        // Use the default thumbnail if we have nothing else
+        
         pChild->maPreview1 = TemplateAbstractView::getDefaultThumbnail(pCur->aPath);
     }
 
@@ -183,7 +183,7 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
     std::vector<ThumbnailViewItem*> aItems(rTemplates.size());
     for (size_t i = 0, n = rTemplates.size(); i < n; ++i )
     {
-        //TODO: CHECK IF THE ITEM IS A FOLDER OR NOT
+        
         const TemplateItemProperties *pCur = &rTemplates[i];
 
         TemplateViewItem *pChild = new TemplateViewItem(*this, pCur->nId);
@@ -195,7 +195,7 @@ void TemplateAbstractView::insertItems(const std::vector<TemplateItemProperties>
 
         if ( pCur->aThumbnail.IsEmpty() )
         {
-            // Use the default thumbnail if we have nothing else
+            
             pChild->maPreview1 = TemplateAbstractView::getDefaultThumbnail(pCur->aPath);
         }
 
@@ -246,7 +246,7 @@ BitmapEx TemplateAbstractView::scaleImg (const BitmapEx &rImg, long width, long 
         if (aSize.Height() == 0)
             aSize.Height() = 1;
 
-        // make the picture fit the given width/height constraints
+        
         double nRatio = std::min(double(width)/double(aSize.Width()), double(height)/double(aSize.Height()));
 
         aImg.Scale(Size(aSize.Width() * nRatio, aSize.Height() * nRatio));
@@ -286,12 +286,12 @@ IMPL_LINK_NOARG(TemplateAbstractView, ShowRootRegionHdl)
 
 void TemplateAbstractView::OnItemDblClicked (ThumbnailViewItem *pItem)
 {
-    //Check if the item is a TemplateContainerItem (Folder) or a TemplateViewItem (File)
+    
 
     TemplateContainerItem* pContainerItem = dynamic_cast<TemplateContainerItem*>(pItem);
     if ( pContainerItem )
     {
-        // Fill templates
+        
 
         mnCurRegionId = pContainerItem->mnRegionId+1;
         maCurRegionName = pContainerItem->maTitle;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -39,7 +39,7 @@ namespace
 extern "C"
 {
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -47,7 +47,7 @@ void SAL_CALL Mapping_acquire( uno_Mapping * mapping )
     that->m_bridge->acquire();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_release( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -55,7 +55,7 @@ void SAL_CALL Mapping_release( uno_Mapping * mapping )
     that->m_bridge->release();
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_map_to_uno(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -113,7 +113,7 @@ void SAL_CALL Mapping_map_to_uno(
     }
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL Mapping_map_to_java(
     uno_Mapping * mapping, void ** ppOut,
     void * pIn, typelib_InterfaceTypeDescription * td )
@@ -174,7 +174,7 @@ void SAL_CALL Mapping_map_to_java(
     }
 }
 
-//______________________________________________________________________________
+
 void SAL_CALL Bridge_free( uno_Mapping * mapping )
     SAL_THROW_EXTERN_C()
 {
@@ -189,7 +189,7 @@ void SAL_CALL Bridge_free( uno_Mapping * mapping )
 namespace jni_uno
 {
 
-//______________________________________________________________________________
+
 void Bridge::acquire() const SAL_THROW(())
 {
     if (1 == osl_atomic_increment( &m_ref ))
@@ -211,7 +211,7 @@ void Bridge::acquire() const SAL_THROW(())
     }
 }
 
-//______________________________________________________________________________
+
 void Bridge::release() const SAL_THROW(())
 {
     if (! osl_atomic_decrement( &m_ref ))
@@ -223,7 +223,7 @@ void Bridge::release() const SAL_THROW(())
     }
 }
 
-//______________________________________________________________________________
+
 Bridge::Bridge(
     uno_Environment * java_env, uno_ExtEnvironment * uno_env,
     bool registered_java2uno )
@@ -232,7 +232,7 @@ Bridge::Bridge(
       m_java_env( java_env ),
       m_registered_java2uno( registered_java2uno )
 {
-    // bootstrapping bridge jni_info
+    
     m_jni_info = JNI_info::get_jni_info(
         reinterpret_cast< ::jvmaccess::UnoVirtualMachine * >(
             m_java_env->pContext ) );
@@ -242,19 +242,19 @@ Bridge::Bridge(
     (*((uno_Environment *)m_uno_env)->acquire)( (uno_Environment *)m_uno_env );
     (*m_java_env->acquire)( m_java_env );
 
-    // java2uno
+    
     m_java2uno.acquire = Mapping_acquire;
     m_java2uno.release = Mapping_release;
     m_java2uno.mapInterface = Mapping_map_to_uno;
     m_java2uno.m_bridge = this;
-    // uno2java
+    
     m_uno2java.acquire = Mapping_acquire;
     m_uno2java.release = Mapping_release;
     m_uno2java.mapInterface = Mapping_map_to_java;
     m_uno2java.m_bridge = this;
 }
 
-//______________________________________________________________________________
+
 Bridge::~Bridge() SAL_THROW(())
 {
     (*m_java_env->release)( m_java_env );
@@ -262,10 +262,10 @@ Bridge::~Bridge() SAL_THROW(())
 }
 
 
-//______________________________________________________________________________
+
 void JNI_context::java_exc_occurred() const
 {
-    // !don't rely on JNI_info!
+    
 
     JLocalAutoRef jo_exc( *this, m_env->ExceptionOccurred() );
     m_env->ExceptionClear();
@@ -277,7 +277,7 @@ void JNI_context::java_exc_occurred() const
             get_stack_trace() );
     }
 
-    // call toString(); don't rely on m_jni_info
+    
     jclass jo_class = m_env->FindClass( "java/lang/Object" );
     if (JNI_FALSE != m_env->ExceptionCheck())
     {
@@ -286,7 +286,7 @@ void JNI_context::java_exc_occurred() const
             "cannot get class java.lang.Object!" + get_stack_trace() );
     }
     JLocalAutoRef jo_Object( *this, jo_class );
-    // method Object.toString()
+    
     jmethodID method_Object_toString = m_env->GetMethodID(
         (jclass) jo_Object.get(), "toString", "()Ljava/lang/String;" );
     if (JNI_FALSE != m_env->ExceptionCheck())
@@ -301,7 +301,7 @@ void JNI_context::java_exc_occurred() const
     JLocalAutoRef jo_descr(
         *this, m_env->CallObjectMethodA(
             jo_exc.get(), method_Object_toString, 0 ) );
-    if (m_env->ExceptionCheck()) // no chance at all
+    if (m_env->ExceptionCheck()) 
     {
         m_env->ExceptionClear();
         throw BridgeRuntimeError(
@@ -329,7 +329,7 @@ void JNI_context::java_exc_occurred() const
     throw BridgeRuntimeError( message + get_stack_trace( jo_exc.get() ) );
 }
 
-//______________________________________________________________________________
+
 void JNI_context::getClassForName(
     jclass * classClass, jmethodID * methodForName) const
 {
@@ -342,7 +342,7 @@ void JNI_context::getClassForName(
     *classClass = c;
 }
 
-//______________________________________________________________________________
+
 jclass JNI_context::findClass(
     char const * name, jclass classClass, jmethodID methodForName,
     bool inException) const
@@ -363,7 +363,7 @@ jclass JNI_context::findClass(
     return c;
 }
 
-//______________________________________________________________________________
+
 OUString JNI_context::get_stack_trace( jobject jo_exc ) const
 {
     JLocalAutoRef jo_JNI_proxy(
@@ -371,7 +371,7 @@ OUString JNI_context::get_stack_trace( jobject jo_exc ) const
         find_class( *this, "com.sun.star.bridges.jni_uno.JNI_proxy", true ) );
     if (assert_no_exception())
     {
-        // static method JNI_proxy.get_stack_trace()
+        
         jmethodID method = m_env->GetStaticMethodID(
             (jclass) jo_JNI_proxy.get(), "get_stack_trace",
             "(Ljava/lang/Throwable;)Ljava/lang/String;" );
@@ -415,7 +415,7 @@ extern "C"
 namespace
 {
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL java_env_disposing( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
@@ -431,12 +431,12 @@ void SAL_CALL java_env_disposing( uno_Environment * java_env )
 #define uno_initEnvironment java_uno_initEnvironment
 #endif
 
-//------------------------------------------------------------------------------
+
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_env )
     SAL_THROW_EXTERN_C()
 {
     java_env->environmentDisposing = java_env_disposing;
-    java_env->pExtEnv = 0; // no extended support
+    java_env->pExtEnv = 0; 
     assert(java_env->pContext != 0);
 
     ::jvmaccess::UnoVirtualMachine * machine =
@@ -449,7 +449,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_initEnvironment( uno_Environment * java_e
 #define uno_ext_getMapping java_uno_ext_getMapping
 #endif
 
-//------------------------------------------------------------------------------
+
 SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo )
     SAL_THROW_EXTERN_C()
@@ -486,7 +486,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
         if ( from_env_typename == UNO_LB_JAVA && to_env_typename == UNO_LB_UNO )
         {
             Bridge * bridge =
-                new Bridge( pFrom, pTo->pExtEnv, true ); // ref count = 1
+                new Bridge( pFrom, pTo->pExtEnv, true ); 
             mapping = &bridge->m_java2uno;
             uno_registerMapping(
                 &mapping, Bridge_free,
@@ -495,7 +495,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL uno_ext_getMapping(
         else if ( from_env_typename == UNO_LB_UNO && to_env_typename == UNO_LB_JAVA )
         {
             Bridge * bridge =
-                new Bridge( pTo, pFrom->pExtEnv, false ); // ref count = 1
+                new Bridge( pTo, pFrom->pExtEnv, false ); 
             mapping = &bridge->m_uno2java;
             uno_registerMapping(
                 &mapping, Bridge_free,

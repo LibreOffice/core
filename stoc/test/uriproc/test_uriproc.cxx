@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -173,26 +173,26 @@ void Test::testParse() {
           0, false, 0, 0, 0, 0, 0, 0, 0, 0 },
         { "scheme:/", "scheme", "/", true, 0,
           "/", false, 1, "", "", "", "", "", 0, 0 },
-        { "scheme://", "scheme", "//", true, "",
+        { "scheme:
           "", false, 0, "", "", "", "", "", 0, 0 },
-        { "scheme:///", "scheme", "///", true, "",
+        { "scheme:
           "/", false, 1, "", "", "", "", "", 0, 0 },
-        { "scheme:////", "scheme", "////", true, "",
-          "//", false, 2, "", "", "", "", "", 0, 0 },
-        { "scheme:////", "scheme", "////", true, "",
-          "//", false, 2, "", "", "", "", "", 0, 0 },
+        { "scheme:
+          "
+        { "scheme:
+          "
         { "scheme:#", 0, 0, false, 0,
           0, false, 0, 0, 0, 0, 0, 0, 0, 0 },
         { "scheme:?", "scheme", "?", false, 0,
           "?", false, 0, "", "", "", "", "", 0, 0 },
         { "/", 0, "/", true, 0,
           "/", false, 1, "", "", "", "", "", 0, 0 },
-        { "//", 0, "//", true, "",
+        { "
           "", false, 0, "", "", "", "", "", 0, 0 },
-        { "///", 0, "///", true, "",
+        { "
           "/", false, 1, "", "", "", "", "", 0, 0 },
-        { "////", 0, "////", true, "",
-          "//", false, 2, "", "", "", "", "", 0, 0 } };
+        { "
+          "
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > uriRef(
             m_uriFactory->parse(
@@ -293,296 +293,296 @@ void Test::testMakeAbsolute() {
         char const * absolute;
     };
     Data data[] = {
-        // The following tests are taken from RFC 2396, Appendix C:
-        { "http://a/b/c/d;p?q", "g:h", true,
+        
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR, "g:h" },
-        { "http://a/b/c/d;p?q", "g", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/g" },
-        { "http://a/b/c/d;p?q", "./g", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/g" },
-        { "http://a/b/c/d;p?q", "g/", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/g/" },
-        { "http://a/b/c/d;p?q", "//g", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://g" },
-        { "http://a/b/c/d;p?q", "?y", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/?y" },
-        { "http://a/b/c/d;p?q", "g?y", true,
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g?y" },
-        { "http://a/b/c/d;p?q", "#s", true,
+          "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/d;p?q#s" },
-        { "http://a/b/c/d;p?q", "g#s", true,
+          "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g#s" },
-        { "http://a/b/c/d;p?q", "g?y#s", true,
+          "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g?y#s" },
-        { "http://a/b/c/d;p?q", ";x", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/;x" },
-        { "http://a/b/c/d;p?q", "g;x", true,
+          "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g;x" },
-        { "http://a/b/c/d;p?q", "g;x?y#s", true,
+          "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g;x?y#s" },
-        { "http://a/b/c/d;p?q", ".", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/" },
-        { "http://a/b/c/d;p?q", "./", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/" },
-        { "http://a/b/c/d;p?q", "..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/" },
-        { "http://a/b/c/d;p?q", "../", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/" },
-        { "http://a/b/c/d;p?q", "../g", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/g" },
-        { "http://a/b/c/d;p?q", "../..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/" },
-        { "http://a/b/c/d;p?q", "../../", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/" },
-        { "http://a/b/c/d;p?q", "../../g", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/g" },
-        { "http://a/b/c/d;p?q", "", true,
+          "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/d;p?q" },
-        { "http://a/b/c/d;p?q", "../../../g", true,
+          "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR, 0 },
-        { "http://a/b/c/d;p?q", "../../../g", true,
-          css::uri::RelativeUriExcessParentSegments_RETAIN, "http://a/../g" },
-        { "http://a/b/c/d;p?q", "../../../g", true,
-          css::uri::RelativeUriExcessParentSegments_REMOVE, "http://a/g" },
-        { "http://a/b/c/d;p?q", "../../../../g", true,
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_RETAIN, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_REMOVE, "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR, 0 },
-        { "http://a/b/c/d;p?q", "../../../../g", true,
+        { "http:
           css::uri::RelativeUriExcessParentSegments_RETAIN,
-          "http://a/../../g" },
-        { "http://a/b/c/d;p?q", "../../../../g", true,
-          css::uri::RelativeUriExcessParentSegments_REMOVE, "http://a/g" },
-        { "http://a/b/c/d;p?q", "/./g", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/./g" },
-        { "http://a/b/c/d;p?q", "/../g", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/../g" },
-        { "http://a/b/c/d;p?q", "g.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/g." },
-        { "http://a/b/c/d;p?q", ".g", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/.g" },
-        { "http://a/b/c/d;p?q", "g..", true,
+          "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_REMOVE, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g.." },
-        { "http://a/b/c/d;p?q", "..g", true,
+          "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/..g" },
-        { "http://a/b/c/d;p?q", "./../g", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/g" },
-        { "http://a/b/c/d;p?q", "./g/.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/g/" },
-        { "http://a/b/c/d;p?q", "g/./h", true,
+          "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g/h" },
-        { "http://a/b/c/d;p?q", "g/../h", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/h" },
-        { "http://a/b/c/d;p?q", "g;x=1/./y", true,
+          "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g;x=1/y" },
-        { "http://a/b/c/d;p?q", "g;x=1/../y", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "http://a/b/c/y" },
-        { "http://a/b/c/d;p?q", "g?y/./x", true,
+          "http:
+        { "http:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g?y/./x" },
-        { "http://a/b/c/d;p?q", "g?y/../x", true,
+          "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g?y/../x" },
-        { "http://a/b/c/d;p?q", "g#s/./x", true,
+          "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g#s/./x" },
-        { "http://a/b/c/d;p?q", "g#s/../x", true,
+          "http:
+        { "http:
           css::uri::RelativeUriExcessParentSegments_ERROR,
-          "http://a/b/c/g#s/../x" },
-        { "http.://a/b/c/d;p?q", "http.:g", true,
+          "http:
+        { "http.:
           css::uri::RelativeUriExcessParentSegments_ERROR, "http.:g" },
 
-        { "scheme://a", "", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", ".", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "./", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "./.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "x/../", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "x/../.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "x/.././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "x/.././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "x/../././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "x/../././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "./x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "././x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "./././x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "./x/../.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "./x/.././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "././x/.././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "././x/../././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "./././x/../././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
 
-        { "scheme://a/", "", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", ".", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "./", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "./.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "x/../", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "x/../.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "x/.././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "x/.././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "x/../././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "x/../././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "./x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "././x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "./././x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "./x/../.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "./x/.././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "././x/.././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "././x/../././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/", "./././x/../././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
 
-        { "scheme://a/b", "", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b" },
-        { "scheme://a/b", ".", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "./", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "./.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "x/../", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "x/../.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "x/.././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "x/.././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "x/../././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "x/../././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "./x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "././x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "./././x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "./x/../.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "./x/.././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "././x/.././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "././x/../././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
-        { "scheme://a/b", "./././x/../././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/" },
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
 
-        { "scheme://a/b/", "", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", ".", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "./", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "./.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "x/../", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "x/../.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "x/.././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "x/.././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "x/../././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "x/../././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "./x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "././x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "./././x/..", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "./x/../.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "./x/.././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "././x/.././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "././x/../././", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
-        { "scheme://a/b/", "./././x/../././.", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a/b/" },
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
 
-        { "scheme://a#s", "", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a" },
-        { "scheme://a", "?q", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a?q" },
-        { "scheme://a#s", "?q", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a?q" },
-        { "scheme://a", "#s", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a#s" },
-        { "scheme://a#s1", "#s2", true,
-          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme://a#s2" } };
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
+        { "scheme:
+          css::uri::RelativeUriExcessParentSegments_ERROR, "scheme:
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
             m_uriFactory->parse(
@@ -619,74 +619,74 @@ void Test::testMakeRelative() {
         char const * absolute;
     };
     Data data[] = {
-        { "scheme1://a/b/c", "scheme2://a/b/c?q#s", true, true, false,
-          "scheme2://a/b/c?q#s", 0 },
-        { "scheme://a/b/c", "scheme:a/b/c?q#s", true, true, false,
+        { "scheme1:
+          "scheme2:
+        { "scheme:
           "scheme:a/b/c?q#s", 0 },
-        { "scheme://a/b/c", "", true, true, false, "", "scheme://a/b/c" },
-        { "scheme://a/b/c", "//d/e/f", true, true, false, "//d/e/f",
-          "scheme://d/e/f" },
-        { "scheme://a/b/c", "./e?q#s", true, true, false, "./e?q#s",
-          "scheme://a/b/e?q#s" },
-        { "scheme://a/b", "scheme://a?q", true, true, false, "/?q",
-          "scheme://a/?q" },
-        { "scheme://a/b", "scheme://a?q", true, false, false, "?q",
-          "scheme://a/?q" },
-        { "scheme://a", "scheme://a?q", true, true, false, "?q", 0 },
-        { "scheme://a/", "scheme://a?q", true, true, false, "?q",
-          "scheme://a/?q" },
-        { "scheme://a", "scheme://a/?q", true, true, false, "?q",
-          "scheme://a?q" },
-        { "scheme://a/", "scheme://a/?q", true, true, false, "?q",
-          "scheme://a/?q" },
-        { "scheme://a?q", "scheme://a?q", true, true, false, "", 0 },
-        { "scheme://a/?q", "scheme://a?q", true, true, false, "",
-          "scheme://a/?q" },
-        { "scheme://a?q", "scheme://a/?q", true, true, false, "",
-          "scheme://a?q" },
-        { "scheme://a/?q", "scheme://a/?q", true, true, false, "", 0 },
-        { "scheme://a/b/c/d", "scheme://a//", true, true, false, "//a//", 0 },
-        { "scheme://a/b/c/d", "scheme://a//", false, true, false, "../..//",
+        { "scheme:
+        { "scheme:
+          "scheme:
+        { "scheme:
+          "scheme:
+        { "scheme:
+          "scheme:
+        { "scheme:
+          "scheme:
+        { "scheme:
+        { "scheme:
+          "scheme:
+        { "scheme:
+          "scheme:
+        { "scheme:
+          "scheme:
+        { "scheme:
+        { "scheme:
+          "scheme:
+        { "scheme:
+          "scheme:
+        { "scheme:
+        { "scheme:
+        { "scheme:
           0 },
-        { "scheme://a/b/c/d", "scheme://a//", true, false, false, "../..//",
+        { "scheme:
           0 },
-        { "scheme://a/b/c/d", "scheme://a//", false, false, false, "../..//",
+        { "scheme:
           0 },
-        { "scheme://a/b/c/d", "scheme://a/e", true, true, false, "/e", 0 },
-        { "scheme://a/b/c/d", "scheme://a/e", true, false, false, "../../e",
+        { "scheme:
+        { "scheme:
           0 },
-        { "scheme://a/b/c/d/e", "scheme://a/b/f", true, true, false, "../../f",
+        { "scheme:
           0 },
-        { "scheme://a/b/c/d/e", "scheme://a/b", true, true, false, "/b", 0 },
-        { "scheme://a/b/c/d/e", "scheme://a/b", true, false, false,
+        { "scheme:
+        { "scheme:
           "../../../b", 0 },
-        { "scheme://a/b/c/d/e", "scheme://a/b/", true, true, false, "../..",
+        { "scheme:
           0 },
-        { "scheme://a/b/c/d/e", "scheme://a/b/c", true, true, false, "../../c",
+        { "scheme:
           0 },
-        { "scheme://a/b/c/d/e", "scheme://a/b/c/", true, true, false, "..", 0 },
-        { "scheme://a/b/", "scheme://a/b/c/d", true, true, false, "c/d", 0 },
-        { "scheme://a/b/", "scheme://a/b/c/d/", true, true, false, "c/d/", 0 },
-        { "scheme://a/b/c", "scheme://a/b//", true, true, false, ".//", 0 },
-        { "scheme://a/b/c", "scheme://a/b//d", true, true, false, ".//d", 0 },
-        { "scheme://a/b/c", "scheme://a/b//d//", true, true, false, ".//d//",
+        { "scheme:
+        { "scheme:
+        { "scheme:
+        { "scheme:
+        { "scheme:
+        { "scheme:
           0 },
-        { "scheme://a/b/c", "scheme://a/b/d+:", true, true, false, "./d+:", 0 },
-        { "scheme://a/b/c", "scheme://a/b/+d:", true, true, false, "+d:", 0 },
-        { "scheme://a/b/c", "scheme://a/b/d#e:f", true, true, false, "d#e:f",
+        { "scheme:
+        { "scheme:
+        { "scheme:
           0 },
-        { "scheme://a/b/c/", "scheme://a/b/../d/.e/.", true, true, false,
+        { "scheme:
           "../../d/.e/.",
-          "scheme://a/d/.e/" },
-        { "scheme://a/b/c/", "scheme://a/b/../d/.e/.", true, true, true,
-          "../%2E%2E/d/.e/%2E", "scheme://a/b/%2E%2E/d/.e/%2E" },
-        { "scheme://auth/a/b", "scheme://auth//c/d", true, true, false,
-          "//auth//c/d", 0 },
-        { "scheme://auth/a/b", "scheme://auth//c/d", false, true, false,
-          "..//c/d", 0 },
-        { "scheme://auth/a/b", "scheme://auth/c/d", true, true, false, "/c/d",
+          "scheme:
+        { "scheme:
+          "../%2E%2E/d/.e/%2E", "scheme:
+        { "scheme:
+          "
+        { "scheme:
+          "..
+        { "scheme:
           0 },
-        { "scheme://auth/a/b", "scheme://auth/c/d", true, false, false,
+        { "scheme:
           "../c/d", 0 } };
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
         css::uno::Reference< css::uri::XUriReference > baseUriRef(
@@ -731,8 +731,8 @@ void Test::testVndSunStarExpand() {
         char const * expanded;
     };
     Data data[] = {
-        { "vnd.sun.star.expand:", "" }, // liberally accepted
-        { "vnd.sun.star.expand:/", "/" }, // liberally accepted
+        { "vnd.sun.star.expand:", "" }, 
+        { "vnd.sun.star.expand:/", "/" }, 
         { "vnd.sun.star.expand:%80", 0 },
         { "vnd.sun.star.expand:%5C$%5C%24%5C%5C", "$$\\" } };
     css::uno::Reference< css::util::XMacroExpander > expander(
@@ -820,8 +820,8 @@ void Test::testVndSunStarScript() {
                             OUString::createFromAscii(
                                 data[i].parameters[j].key)));
 
-                    // setting the parameter to its original value should not change
-                    // the overall uri reference (provided it was normalized before)
+                    
+                    
                     if ( data[i].normalized ) {
                         if ( scriptUrl->hasParameter(OUString::createFromAscii(
                             data[i].parameters[j].key)) ) {
@@ -922,16 +922,16 @@ void Test::testTranslator() {
           true },
         { "/segment/segment?query#fragment", "/segment/segment?query#fragment",
           true },
-        { "//authority/segment?query#fragment",
-          "//authority/segment?query#fragment", true },
+        { "
+          "
         { "foo:bar#fragment", "foo:bar#fragment", true },
-        { "file:///abc/def", "file:///abc/def", true },
-        { "file:///abc/%FEef", "file:///abc/%feef", false },
-        { "file:///abc/%80%80ef", "file:///abc/%80%80ef", false },
-        { "file:///abc/%ED%A0%80%ED%B0%80ef",
-          "file:///abc/%ED%A0%80%ED%B0%80ef", false },
-        { "file:///abc/%25.ef", "file:///abc/%.ef", false },
-        { "file:///abc/%25ef", "file:///abc/%25ef", true } };
+        { "file:
+        { "file:
+        { "file:
+        { "file:
+          "file:
+        { "file:
+        { "file:
     css::uno::Reference< css::uri::XExternalUriReferenceTranslator >
         translator(css::uri::ExternalUriReferenceTranslator::create(m_context));
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {
@@ -960,9 +960,9 @@ void Test::testPkgUrlFactory() {
     };
     Data data[] = {
         { "a/b/c", 0 },
-        { "file:///#foo", 0 },
-        { "file:///a%25b%2fc/d~e&f@g?h",
-          "vnd.sun.star.pkg://file:%2F%2F%2Fa%2525b%252fc%2Fd~e&f@g%3Fh" } };
+        { "file:
+        { "file:
+          "vnd.sun.star.pkg:
     css::uno::Reference< css::uri::XVndSunStarPkgUrlReferenceFactory > factory(
         css::uri::VndSunStarPkgUrlReferenceFactory::create(m_context));
     for (std::size_t i = 0; i < SAL_N_ELEMENTS(data); ++i) {

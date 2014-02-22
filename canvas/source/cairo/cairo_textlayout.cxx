@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <math.h>
@@ -71,7 +71,7 @@ namespace cairocanvas
         void setupLayoutMode( OutputDevice& rOutDev,
                               sal_Int8      nTextDirection )
         {
-            // TODO(P3): avoid if already correctly set
+            
             sal_uLong nLayoutMode;
             switch( nTextDirection )
             {
@@ -92,8 +92,8 @@ namespace cairocanvas
                     break;
             }
 
-            // set calculated layout mode. Origin is always the left edge,
-            // as required at the API spec
+            
+            
             rOutDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
         }
 
@@ -129,12 +129,12 @@ namespace cairocanvas
         mpRefDevice.clear();
     }
 
-    // XTextLayout
+    
     uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  ) throw (uno::RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > >();
     }
 
@@ -142,7 +142,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
@@ -150,7 +150,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
@@ -185,8 +185,8 @@ namespace cairocanvas
         VirtualDevice aVDev( *pOutDev );
         aVDev.SetFont( mpFont->getVCLFont() );
 
-        // need metrics for Y offset, the XCanvas always renders
-        // relative to baseline
+        
+        
         const ::FontMetric& aMetric( aVDev.GetFontMetric() );
 
         setupLayoutMode( aVDev, mnTextDirection );
@@ -215,7 +215,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0.0;
     }
 
@@ -224,7 +224,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0.0;
     }
 
@@ -232,7 +232,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return rendering::TextHit();
     }
 
@@ -241,7 +241,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return rendering::Caret();
     }
 
@@ -251,7 +251,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0;
     }
 
@@ -260,7 +260,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
@@ -269,7 +269,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
@@ -277,7 +277,7 @@ namespace cairocanvas
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // TODO
+        
         return 0.0;
     }
 
@@ -313,12 +313,12 @@ namespace cairocanvas
     bool TextLayout::isCairoRenderable(SystemFontData aSysFontData) const
     {
 #if defined UNX && !defined MACOSX && !defined IOS
-        // is font usable?
+        
         if (!aSysFontData.nFontId)
             return false;
 #endif
 
-        // vertical glyph rendering is not supported in cairo for now
+        
         if (aSysFontData.bVerticalCharacterType)
         {
             OSL_TRACE(":cairocanvas::TextLayout::isCairoRenderable(): ***************** VERTICAL CHARACTER STYLE!!! ****************");
@@ -352,15 +352,15 @@ namespace cairocanvas
 #endif
         setupLayoutMode( rOutDev, mnTextDirection );
 
-        // TODO(P2): cache that
+        
         ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
 
         if( maLogicalAdvancements.getLength() )
         {
             setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
 
-            // TODO(F3): ensure correct length and termination for DX
-            // array (last entry _must_ contain the overall width)
+            
+            
         }
 
         aSysLayoutData = rOutDev.GetSysTextLayoutData(rOutpos, maText.Text,
@@ -368,11 +368,11 @@ namespace cairocanvas
                                                       ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length),
                                                       maLogicalAdvancements.getLength() ? aOffsets.get() : NULL);
 
-        // Sort them so that all glyphs on the same glyph fallback level are consecutive
+        
         std::sort(aSysLayoutData.rGlyphData.begin(), aSysLayoutData.rGlyphData.end(), compareFallbacks);
         bool bCairoRenderable = true;
 
-        //Pull all the fonts we need to render the text
+        
         typedef std::pair<SystemFontData,int> FontLevel;
         typedef std::vector<FontLevel> FontLevelVector;
         FontLevelVector aFontData;
@@ -399,18 +399,18 @@ namespace cairocanvas
             }
         }
 
-        // The ::GetSysTextLayoutData(), i.e. layouting of text to glyphs can change the font being used.
-        // The fallback checks need to be done after final font is known.
-        if (!bCairoRenderable)    // VCL FALLBACKS
+        
+        
+        if (!bCairoRenderable)    
         {
-            if (maLogicalAdvancements.getLength())        // VCL FALLBACK - with glyph advances
+            if (maLogicalAdvancements.getLength())        
             {
                 rOutDev.DrawTextArray( rOutpos, maText.Text, aOffsets.get(),
                                        ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
                                        ::canvas::tools::numeric_cast<sal_uInt16>(maText.Length) );
                 return true;
             }
-            else                                               // VCL FALLBACK - without advances
+            else                                               
             {
                 rOutDev.DrawText( rOutpos, maText.Text,
                                   ::canvas::tools::numeric_cast<sal_uInt16>(maText.StartPosition),
@@ -420,20 +420,20 @@ namespace cairocanvas
         }
 
         if (aSysLayoutData.rGlyphData.empty())
-            return false; //??? false?
+            return false; 
 
         /**
          * Setup platform independent glyph vector into cairo-based glyphs vector.
          **/
 
-        // Loop through the fonts used and render the matching glyphs for each
+        
         FontLevelVector::const_iterator aFontDataIter = aFontData.begin();
         const FontLevelVector::const_iterator aFontDataEnd = aFontData.end();
         for( ; aFontDataIter != aFontDataEnd; ++aFontDataIter )
         {
             const SystemFontData &rSysFontData = aFontDataIter->first;
 
-            // setup glyphs
+            
             std::vector<cairo_glyph_t> cairo_glyphs;
             cairo_glyphs.reserve( 256 );
 
@@ -447,8 +447,8 @@ namespace cairocanvas
                 cairo_glyph_t aGlyph;
                 aGlyph.index = systemGlyph.index;
 #ifdef CAIRO_HAS_WIN32_SURFACE
-                // Cairo requires standard glyph indexes (ETO_GLYPH_INDEX), while vcl/win/* uses ucs4 chars.
-                // Convert to standard indexes
+                
+                
                 aGlyph.index = cairo::ucs4toindex((unsigned int) aGlyph.index, rSysFontData.hFont);
 #endif
                 aGlyph.x = systemGlyph.x;
@@ -466,10 +466,10 @@ namespace cairocanvas
 
 #ifdef CAIRO_HAS_QUARTZ_SURFACE
 # ifdef MACOSX
-            // TODO: use cairo_quartz_font_face_create_for_cgfont(cgFont)
-            //       when CGFont (Mac OS X 10.5 API) is provided by the AQUA VCL backend.
+            
+            
             font_face = cairo_quartz_font_face_create_for_atsu_font_id((ATSUFontID) rSysFontData.aATSUFontID);
-# else // iOS
+# else 
             font_face = cairo_quartz_font_face_create_for_cgfont( CTFontCopyGraphicsFont( rSysFontData.rCTFont, NULL ) );
 # endif
 
@@ -477,8 +477,8 @@ namespace cairocanvas
 # if (OSL_DEBUG_LEVEL > 1)
             GetObjectW( rSysFontData.hFont, sizeof(logfont), &logfont );
 # endif
-            // Note: cairo library uses logfont fallbacks when lfEscapement, lfOrientation and lfWidth are not zero.
-            // VCL always has non-zero value for lfWidth
+            
+            
             font_face = cairo_win32_font_face_create_for_hfont(rSysFontData.hFont);
 
 #elif defined CAIRO_HAS_XLIB_SURFACE
@@ -492,25 +492,25 @@ namespace cairocanvas
 
             cairo_set_font_face( pSCairo.get(), font_face);
 
-            // create default font options. cairo_get_font_options() does not retrieve the surface defaults,
-            // only what has been set before with cairo_set_font_options()
+            
+            
             cairo_font_options_t* options = cairo_font_options_create();
             if (rSysFontData.bAntialias)
             {
-                // CAIRO_ANTIALIAS_GRAY provides more similar result to VCL Canvas,
-                // so we're not using CAIRO_ANTIALIAS_SUBPIXEL
+                
+                
                 cairo_font_options_set_antialias(options, CAIRO_ANTIALIAS_GRAY);
             }
             cairo_set_font_options( pSCairo.get(), options);
 
-            // Font color
+            
             Color mTextColor = rOutDev.GetTextColor();
             cairo_set_source_rgb(pSCairo.get(),
                                  mTextColor.GetRed()/255.0,
                                  mTextColor.GetGreen()/255.0,
                                  mTextColor.GetBlue()/255.0);
 
-            // Font rotation and scaling
+            
             cairo_matrix_t m;
             Font aFont = rOutDev.GetFont();
 
@@ -525,7 +525,7 @@ namespace cairocanvas
                 nWidth = nHeight;
             cairo_matrix_scale(&m, nWidth, nHeight);
 
-            //faux italics
+            
             if (rSysFontData.bFakeItalic)
                 m.xy = -m.xx * 0x6000L / 0x10000L;
 
@@ -556,13 +556,13 @@ namespace cairocanvas
 
             cairo_show_glyphs(pSCairo.get(), &cairo_glyphs[0], cairo_glyphs.size());
 
-            //faux bold
+            
             if (rSysFontData.bFakeBold)
             {
                 double bold_dx = 0.5 * sqrt( 0.7 * aFont.GetHeight() );
                 int total_steps = 1 * ((int) (bold_dx + 0.5));
 
-                // loop to draw the text for every half pixel of displacement
+                
                 for (int nSteps = 0; nSteps < total_steps; nSteps++)
                 {
                     for(int nGlyphIdx = 0; nGlyphIdx < (int) cairo_glyphs.size(); nGlyphIdx++)
@@ -595,17 +595,17 @@ namespace cairocanvas
 
             sal_Int32 operator()( const double& rOffset )
             {
-                // This is an optimization of the normal rMat*[x,0]
-                // transformation of the advancement vector (in x
-                // direction), followed by a length calculation of the
-                // resulting vector: advancement' =
-                // ||rMat*[x,0]||. Since advancements are vectors, we
-                // can ignore translational components, thus if [x,0],
-                // it follows that rMat*[x,0]=[x',0] holds. Thus, we
-                // just have to calc the transformation of the x
-                // component.
+                
+                
+                
+                
+                
+                
+                
+                
+                
 
-                // TODO(F2): Handle non-horizontal advancements!
+                
                 return ::basegfx::fround( hypot(maMatrix.get(0,0)*rOffset,
                                                 maMatrix.get(1,0)*rOffset) );
             }
@@ -629,7 +629,7 @@ namespace cairocanvas
                                                      viewState,
                                                      renderState);
 
-        // fill integer offsets
+        
         ::std::transform( const_cast< uno::Sequence< double >& >(inputOffsets).getConstArray(),
                           const_cast< uno::Sequence< double >& >(inputOffsets).getConstArray()+inputOffsets.getLength(),
                           outputOffsets,

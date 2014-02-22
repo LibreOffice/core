@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@ namespace sd {
 
 void DrawViewShell::ExecIMap( SfxRequest& rReq )
 {
-    // during a slide show, nothing is executed!
+    
     if(HasCurrentFunction(SID_PRESENTATION) )
         return;
 
@@ -103,7 +103,7 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 
 void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 {
-    // during a slide show, nothing is executed!
+    
     if(HasCurrentFunction(SID_PRESENTATION))
         return;
 
@@ -119,8 +119,8 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         break;
 
 
-        // Grid- / Help lines option
-        case SID_GRID_VISIBLE: // not here yet!
+        
+        case SID_GRID_VISIBLE: 
         {
             pOptions->SetGridVisible( !mpDrawView->IsGridVisible() );
         }
@@ -132,7 +132,7 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
         }
         break;
 
-        case SID_HELPLINES_VISIBLE: // not here yet!
+        case SID_HELPLINES_VISIBLE: 
         {
             pOptions->SetHelplines( !mpDrawView->IsHlplVisible() );
         }
@@ -204,8 +204,8 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
     {
         pOptions->StoreConfig();
 
-        // Saves the configuration IMMEDIATELY
-        // SFX_APP()->SaveConfiguration();
+        
+        
         WriteFrameViewData();
 
         mpFrameView->Update( pOptions );
@@ -240,6 +240,6 @@ void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
     rSet.Put( SfxBoolItem( SID_CLICK_CHANGE_ROTATION, mpFrameView->IsClickChangeRotation() ) );
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

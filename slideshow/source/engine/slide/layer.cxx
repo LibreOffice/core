@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// must be first
+
 #include <canvas/debug.hxx>
 
 #include <basegfx/range/b2drange.hxx>
@@ -76,19 +76,19 @@ namespace slideshow
                                          boost::bind( &ViewEntry::getView, _1 ),
                                          boost::cref( rNewView )))) != aEnd )
             {
-                // already added - just return existing layer
+                
                 return aIter->mpViewLayer;
 
             }
 
-            // not yet added - create new view layer
+            
             ViewLayerSharedPtr pNewLayer;
             if( mbBackgroundLayer )
                 pNewLayer = rNewView;
             else
                 pNewLayer = rNewView->createViewLayer(maBounds);
 
-            // add to local list
+            
             maViewEntries.push_back(
                 ViewEntry( rNewView,
                            pNewLayer ));
@@ -109,7 +109,7 @@ namespace slideshow
                                            boost::bind( &ViewEntry::getView, _1 ),
                                            boost::cref( rView )))) == aEnd )
             {
-                // View was not added/is already removed
+                
                 return ViewLayerSharedPtr();
             }
 
@@ -155,7 +155,7 @@ namespace slideshow
 
         void Layer::addUpdateRange( ::basegfx::B2DRange const& rUpdateRange )
         {
-            // TODO(Q1): move this to B2DMultiRange
+            
             if( !rUpdateRange.isEmpty() )
                 maUpdateAreas.appendElement( rUpdateRange,
                                              basegfx::ORIENTATION_POSITIVE );
@@ -195,8 +195,8 @@ namespace slideshow
                 return false;
             }
 
-            // layer content invalid, update areas have wrong
-            // coordinates/not sensible anymore.
+            
+            
             clearUpdateRanges();
 
             return true;
@@ -209,7 +209,7 @@ namespace slideshow
 
         void Layer::clearContent()
         {
-            // clear content on all view layers
+            
             std::for_each( maViewEntries.begin(),
                            maViewEntries.end(),
                            boost::bind(
@@ -218,8 +218,8 @@ namespace slideshow
                                    &ViewEntry::getViewLayer,
                                    _1)));
 
-            // layer content cleared, update areas are not sensible
-            // anymore.
+            
+            
             clearUpdateRanges();
         }
 
@@ -242,19 +242,19 @@ namespace slideshow
         {
             if( maUpdateAreas.count() )
             {
-                // perform proper layer update. That means, setup proper
-                // clipping, and render each shape that intersects with
-                // the calculated update area
+                
+                
+                
                 ::basegfx::B2DPolyPolygon aClip( maUpdateAreas.solveCrossovers() );
                 aClip = ::basegfx::tools::stripNeutralPolygons(aClip);
                 aClip = ::basegfx::tools::stripDispensablePolygons(aClip, false);
 
-                // actually, if there happen to be shapes with zero
-                // update area in the maUpdateAreas vector, the
-                // resulting clip polygon will be empty.
+                
+                
+                
                 if( aClip.count() )
                 {
-                    // set clip to all view layers
+                    
                     std::for_each( maViewEntries.begin(),
                                    maViewEntries.end(),
                                    boost::bind(
@@ -264,7 +264,7 @@ namespace slideshow
                                            _1),
                                        boost::cref(aClip)));
 
-                    // clear update area on all view layers
+                    
                     std::for_each( maViewEntries.begin(),
                                    maViewEntries.end(),
                                    boost::bind(

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// xdictionary.cpp: implementation of the xdictionary class.
+
 //
-//////////////////////////////////////////////////////////////////////
+
 
 
 #include <rtl/ustrbuf.hxx>
@@ -31,9 +31,9 @@
 #include <string.h>
 #include <breakiteratorImpl.hxx>
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+
+
+
 
 
 namespace com { namespace sun { namespace star { namespace i18n {
@@ -77,10 +77,10 @@ xdictionary::xdictionary(const sal_Char *lang) :
     index1 = 0;
 #ifndef DISABLE_DYNLOADING
 #ifdef SAL_DLLPREFIX
-    OUStringBuffer aBuf( strlen(lang) + 7 + 6 );    // mostly "lib*.so" (with * == dict_zh)
+    OUStringBuffer aBuf( strlen(lang) + 7 + 6 );    
     aBuf.appendAscii( SAL_DLLPREFIX );
 #else
-    OUStringBuffer aBuf( strlen(lang) + 7 + 4 );    // mostly "*.dll" (with * == dict_zh)
+    OUStringBuffer aBuf( strlen(lang) + 7 + 4 );    
 #endif
     aBuf.appendAscii( "dict_" ).appendAscii( lang ).appendAscii( SAL_DLLEXTENSION );
     hModule = osl_loadModuleRelative( &thisModule, aBuf.makeStringAndClear().pData, SAL_LOADMODULE_DEFAULT );
@@ -157,7 +157,7 @@ void xdictionary::setJapaneseWordBreak()
 
 sal_Bool xdictionary::exists(const sal_uInt32 c)
 {
-    // 0x1FFF is the hardcoded limit in gendict for existMarks
+    
     sal_Bool exist = (existMark && ((c>>3) < 0x1FFF)) ? sal::static_int_cast<sal_Bool>((existMark[c>>3] & (1<<(c&0x07))) != 0) : sal_False;
     if (!exist && japaneseWordBreak)
         return BreakIteratorImpl::getScriptClass(c) == ScriptType::ASIAN;
@@ -180,7 +180,7 @@ sal_Int32 xdictionary::getLongestMatch(const sal_Unicode* str, sal_Int32 sLen)
 
     if (begin == 0) return 0;
 
-    str++; sLen--; // first character is not stored in the dictionary
+    str++; sLen--; 
     for (sal_uInt32 i = end; i > begin; i--) {
         sal_Int32 len = lenArray[i] - lenArray[i - 1];
         if (sLen >= len) {
@@ -215,7 +215,7 @@ WordBreakCache::WordBreakCache() :
 
 sal_Bool WordBreakCache::equals(const sal_Unicode* str, Boundary& boundary)
 {
-    // Different length, different string.
+    
     if (length != boundary.endPos - boundary.startPos) return sal_False;
 
     for (sal_Int32 i = 0; i < length; i++)
@@ -297,13 +297,13 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBou
     rCache.length  = len;
     memcpy(rCache.contents, text + wordBoundary.startPos, len * sizeof(sal_Unicode));
     *(rCache.contents + len) = 0x0000;
-    // reset the wordboundary in cache
+    
     memset(rCache.wordboundary, '\0', sizeof(sal_Int32)*(len + 2));
 
-    sal_Int32 i = 0;        // loop variable
+    sal_Int32 i = 0;        
     while (rCache.wordboundary[i] < rCache.length) {
         len = 0;
-        // look the continuous white space as one word and cashe it
+        
         while (u_isWhitespace((sal_uInt32)text[wordBoundary.startPos + rCache.wordboundary[i] + len]))
             len ++;
 
@@ -344,7 +344,7 @@ WordBreakCache& xdictionary::getCache(const sal_Unicode *text, Boundary& wordBou
 
 Boundary xdictionary::previousWord(const OUString& rText, sal_Int32 anyPos, sal_Int16 wordType)
 {
-        // looking for the first non-whitespace character from anyPos
+        
         sal_uInt32 ch = rText.iterateCodePoints(&anyPos, -1);
 
         while (anyPos > 0 && u_isWhitespace(ch)) ch = rText.iterateCodePoints(&anyPos, -1);
@@ -357,7 +357,7 @@ Boundary xdictionary::nextWord(const OUString& rText, sal_Int32 anyPos, sal_Int1
         boundary = getWordBoundary(rText, anyPos, wordType, true);
         anyPos = boundary.endPos;
         if (anyPos < rText.getLength()) {
-            // looknig for the first non-whitespace character from anyPos
+            
             sal_uInt32 ch = rText.iterateCodePoints(&anyPos, 1);
             while (u_isWhitespace(ch)) ch=rText.iterateCodePoints(&anyPos, 1);
             rText.iterateCodePoints(&anyPos, -1);
@@ -372,14 +372,14 @@ Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, s
         sal_Int32 len=rText.getLength();
         if (anyPos >= len || anyPos < 0) {
             boundary.startPos = boundary.endPos = anyPos < 0 ? 0 : len;
-        } else if (seekSegment(rText, anyPos, boundary)) {          // character in dict
+        } else if (seekSegment(rText, anyPos, boundary)) {          
             WordBreakCache& aCache = getCache(text, boundary);
             sal_Int32 i = 0;
 
             while (aCache.wordboundary[i] <= anyPos - boundary.startPos) i++;
 
             sal_Int32 startPos = aCache.wordboundary[i - 1];
-            // if bDirection is false
+            
             if (!bDirection && startPos > 0 && startPos == (anyPos - boundary.startPos))
             {
                 sal_Int32 indexUtf16 = anyPos-1;
@@ -398,7 +398,7 @@ Boundary xdictionary::getWordBoundary(const OUString& rText, sal_Int32 anyPos, s
             boundary.endPos = anyPos < len ? anyPos : len;
         }
         if (wordType == WordType::WORD_COUNT) {
-            // skip punctuation for word count.
+            
             while (boundary.endPos < len)
             {
                 sal_Int32 indexUtf16 = boundary.endPos;

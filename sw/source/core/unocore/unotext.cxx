@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -284,7 +284,7 @@ SwXText::getTypes() throw (uno::RuntimeException)
     return aRet;
 }
 
-// belongs the range in the text ? insert it then.
+
 void SAL_CALL
 SwXText::insertString(const uno::Reference< text::XTextRange >& xTextRange,
     const OUString& rString, sal_Bool bAbsorb)
@@ -319,7 +319,7 @@ throw (uno::RuntimeException)
     {
         pPam = pCursor->GetPaM();
     }
-    else // pRange
+    else 
     {
         if (pRange->GetPositions(aPam))
         {
@@ -350,15 +350,15 @@ throw (uno::RuntimeException)
         }
         catch (const lang::IllegalArgumentException& iae)
         {
-            // stupid method not allowed to throw iae
+            
             throw uno::RuntimeException(iae.Message, 0);
         }
     }
     if (bAbsorb)
     {
-        //!! scan for CR characters and inserting the paragraph breaks
-        //!! has to be done in the called function.
-        //!! Implemented in SwXTextRange::DeleteAndInsert
+        
+        
+        
         if (pCursor)
         {
             SwXTextCursor * const pTextCursor(
@@ -379,8 +379,8 @@ throw (uno::RuntimeException)
     }
     else
     {
-        // create a PaM positioned before the parameter PaM,
-        // so the text is inserted before
+        
+        
         UnoActionContext aContext(GetDoc());
         SwPaM aInsertPam(*pPam->Start());
         ::sw::GroupUndoGuard const undoGuard(GetDoc()->GetIDocumentUndoRedo());
@@ -430,7 +430,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     switch (nControlCharacter)
     {
         case text::ControlCharacter::PARAGRAPH_BREAK :
-            // a table cell now becomes an ordinary text cell!
+            
             m_pImpl->m_pDoc->ClearBoxNumAttrs( aTmp.GetPoint()->nNode );
             m_pImpl->m_pDoc->SplitNode( *aTmp.GetPoint(), false );
             break;
@@ -480,7 +480,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         SwCursor aCrsr(*aTmp.GetPoint(),0,false);
         SwUnoCursorHelper::SelectPam(aCrsr, true);
         aCrsr.Left(1, CRSR_SKIP_CHARS, sal_False, sal_False);
-        //hier muss der uebergebene PaM umgesetzt werden:
+        
         if (pRange)
         {
             pRange->SetPositions(aCrsr);
@@ -537,8 +537,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         aIllegal.Message = "first parameter invalid";
         throw aIllegal;
     }
-    // first test if the range is at the right position, then call
-    // xContent->attach
+    
+    
     const SwStartNode* pOwnStartNode = GetStartNode();
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
     switch (m_pImpl->m_eType)
@@ -548,8 +548,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         case CURSOR_FOOTNOTE:   eSearchNodeType = SwFootnoteStartNode;  break;
         case CURSOR_HEADER:     eSearchNodeType = SwHeaderStartNode;    break;
         case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
-        //case CURSOR_INVALID:
-        //case CURSOR_BODY:
+        
+        
         default:
             break;
     }
@@ -557,17 +557,17 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     const SwStartNode* pTmp =
         aPam.GetNode()->FindSttNodeByType(eSearchNodeType);
 
-    // ignore SectionNodes
+    
     while (pTmp && pTmp->IsSectionNode())
     {
         pTmp = pTmp->StartOfSectionNode();
     }
-    // if the document starts with a section
+    
     while (pOwnStartNode->IsSectionNode())
     {
         pOwnStartNode = pOwnStartNode->StartOfSectionNode();
     }
-    // this checks if (this) and xRange are in the same text::XText interface
+    
     if (pOwnStartNode != pTmp)
     {
         uno::RuntimeException aRunException;
@@ -577,8 +577,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     const bool bForceExpandHints(CheckForOwnMemberMeta(aPam, bAbsorb));
 
-    // special treatment for Contents that do not replace the range, but
-    // instead are "overlaid"
+    
+    
     const uno::Reference<lang::XUnoTunnel> xContentTunnel(xContent,
             uno::UNO_QUERY);
     if (!xContentTunnel.is())
@@ -613,7 +613,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         (bAttribute && bAbsorb) ? xRange : xRange->getStart();
     if (bForceExpandHints)
     {
-        // if necessary, replace xTempRange with a new SwXTextCursor
+        
         PrepareForAttach(xTempRange, aPam);
     }
     xContent->attach(xTempRange);
@@ -850,7 +850,7 @@ SwXText::removeTextContent(
         const uno::Reference< text::XTextContent > & xContent)
 throw (container::NoSuchElementException, uno::RuntimeException)
 {
-    // forward: need no solar mutex here
+    
     if(!xContent.is())
     {
         uno::RuntimeException aRuntime;
@@ -937,17 +937,17 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
     }
 
     GetDoc()->GetIDocumentUndoRedo().StartUndo(UNDO_START, NULL);
-    //insert an empty paragraph at the start and at the end to ensure that
-    //all tables and sections can be removed by the selecting text::XTextCursor
+    
+    
     if (CURSOR_META != m_pImpl->m_eType)
     {
         SwPosition aStartPos(*pStartNode);
         const SwEndNode* pEnd = pStartNode->EndOfSectionNode();
         SwNodeIndex aEndIdx(*pEnd);
         aEndIdx--;
-        //the inserting of nodes should only be done if really necessary
-        //to prevent #97924# (removes paragraph attributes when setting the text
-        //e.g. of a table cell
+        
+        
+        
         bool bInsertNodes = false;
         SwNodeIndex aStartIdx(*pStartNode);
         do
@@ -984,9 +984,9 @@ SwXText::setString(const OUString& rString) throw (uno::RuntimeException)
     GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
 }
 
-//FIXME why is CheckForOwnMember duplicated in some insert methods?
-//  Description: Checks if pRange/pCursor are member of the same text interface.
-//              Only one of the pointers has to be set!
+
+
+
 bool SwXText::Impl::CheckForOwnMember(
     const SwPaM & rPaM)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
@@ -1007,8 +1007,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         case CURSOR_FOOTNOTE:   eSearchNodeType = SwFootnoteStartNode;  break;
         case CURSOR_HEADER:     eSearchNodeType = SwHeaderStartNode;    break;
         case CURSOR_FOOTER:     eSearchNodeType = SwFooterStartNode;    break;
-        //case CURSOR_INVALID:
-        //case CURSOR_BODY:
+        
+        
         default:
             ;
     }
@@ -1017,19 +1017,19 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if (!pSrcNode) { return false; }
     const SwStartNode* pTmp = pSrcNode->FindSttNodeByType(eSearchNodeType);
 
-    //SectionNodes ueberspringen
+    
     while(pTmp && pTmp->IsSectionNode())
     {
         pTmp = pTmp->StartOfSectionNode();
     }
 
-    //if the document starts with a section
+    
     while(pOwnStartNode->IsSectionNode())
     {
         pOwnStartNode = pOwnStartNode->StartOfSectionNode();
     }
 
-    //this checks if (this) and xRange are in the same text::XText interface
+    
     return (pOwnStartNode == pTmp);
 }
 
@@ -1155,9 +1155,9 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     uno::Any aRet;
     switch (pEntry->nWID)
     {
-//          no code necessary - the redline is always located at the end node
-//            case FN_UNO_REDLINE_NODE_START:
-//            break;
+
+
+
         case FN_UNO_REDLINE_NODE_END:
         {
             const SwRedlineTbl& rRedTbl = GetDoc()->GetRedlineTbl();
@@ -1286,14 +1286,14 @@ SwXText::Impl::finishOrAppendParagraph(
     bool bRuntimeException = false;
     OUString sMessage;
     m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_START , NULL);
-    // find end node, go backward - don't skip tables because the new
-    // paragraph has to be the last node
-    //aPam.Move( fnMoveBackward, fnGoNode );
+    
+    
+    
     SwPosition aInsertPosition(
             SwNodeIndex( *pStartNode->EndOfSectionNode(), -1 ) );
     SwPaM aPam(aInsertPosition);
-    // If we got a position reference, then the insert point is not the end of
-    // the document.
+    
+    
     if (xInsertPosition.is())
     {
         SwUnoInternalPaM aStartPam(*m_rThis.GetDoc());
@@ -1302,10 +1302,10 @@ SwXText::Impl::finishOrAppendParagraph(
         aPam.SetMark();
     }
     m_pDoc->AppendTxtNode( *aPam.GetPoint() );
-    // remove attributes from the previous paragraph
+    
     m_pDoc->ResetAttrs(aPam);
-    // in case of finishParagraph the PaM needs to be moved to the
-    // previous paragraph
+    
+    
     if (bFinish)
     {
         aPam.Move( fnMoveBackward, fnGoNode );
@@ -1344,7 +1344,7 @@ SwXText::Impl::finishOrAppendParagraph(
             aEx.Message = sMessage;
             throw aEx;
         }
-        else // if(bRuntimeException)
+        else 
         {
             uno::RuntimeException aEx;
             aEx.Message = sMessage;
@@ -1390,8 +1390,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     OUString sMessage;
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
-//        SwPaM aPam(*pStartNode->EndOfSectionNode());
-    //aPam.Move( fnMoveBackward, fnGoNode );
+
+    
     SwUnoCrsr *const pCursor = pTextCursor->GetCursor();
     m_pImpl->m_pDoc->DontExpandFmt( *pCursor->Start() );
 
@@ -1432,7 +1432,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             aEx.Message = sMessage;
             throw aEx;
         }
-        else //if(bRuntimeException)
+        else 
         {
             uno::RuntimeException aEx;
             aEx.Message = sMessage;
@@ -1454,8 +1454,8 @@ SwXText::appendTextPortion(
             rCharacterAndParagraphProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    // Right now this doesn't need a guard, as it's just calling the insert
-    // version, that has it already.
+    
+    
     uno::Reference<text::XTextRange> xInsertPosition = getEnd();
     return insertTextPortion(rText, rCharacterAndParagraphProperties, xInsertPosition);
 }
@@ -1481,9 +1481,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().StartUndo(UNDO_INSERT, NULL);
 
-    // now attach the text content here
+    
     insertTextContent( xInsertPosition, xTextContent, false );
-    // now apply the properties to the anchor
+    
     if (rCharacterAndParagraphProperties.getLength())
     {
         try
@@ -1517,14 +1517,14 @@ SwXText::appendTextContent(
         rCharacterAndParagraphProperties)
 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    // Right now this doesn't need a guard, as it's just calling the insert
-    // version, that has it already.
+    
+    
     uno::Reference<text::XTextRange> xInsertPosition = getEnd();
     return insertTextContentWithProperties(xTextContent, rCharacterAndParagraphProperties, xInsertPosition);
 }
 
-// move previously appended paragraphs into a text frames
-// to support import filters
+
+
 uno::Reference< text::XTextContent > SAL_CALL
 SwXText::convertToTextFrame(
     const uno::Reference< text::XTextRange >& xStart,
@@ -1557,8 +1557,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             uno::UNO_QUERY);
     SwXTextRange *const pEndRange   =
         ::sw::UnoTunnelGetImplementation<SwXTextRange>(xEndRangeTunnel);
-    // bookmarks have to be removed before the referenced text node
-    // is deleted in DelFullPara
+    
+    
     if (pStartRange)
     {
         pStartRange->Invalidate();
@@ -1586,13 +1586,13 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     bool bParaBeforeInserted = false;
     if (pStartStartNode != pEndStartNode || pStartStartNode != GetStartNode())
     {
-        // todo: if the start/end is in a table then insert a paragraph
-        // before/after, move the start/end nodes, then convert and
-        // remove the additional paragraphs in the end
+        
+        
+        
         if (pStartStartNode->GetStartNodeType() == SwTableBoxStartNode)
         {
             SwTableNode * pStartTableNode(pStartStartNode->FindTableNode());
-            // Is it the same table start node than the end?
+            
             SwTableNode *const pEndStartTableNode(pEndStartNode->FindTableNode());
             while (pEndStartTableNode && pStartTableNode &&
                    pEndStartTableNode->GetIndex() < pStartTableNode->GetIndex())
@@ -1617,15 +1617,15 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             *pEndPam->GetPoint() = aTableEnd;
             pEndStartNode = pEndPam->GetNode()->StartOfSectionNode();
         }
-        // now we should have the positions in the same hierarchy
+        
         if ((pStartStartNode != pEndStartNode) ||
             (pStartStartNode != GetStartNode()))
         {
-            // if not - remove the additional paragraphs and throw
+            
             if (bParaBeforeInserted)
             {
                 SwCursor aDelete(*aStartPam.GetPoint(), 0, false);
-                *aStartPam.GetPoint() = // park it because node is deleted
+                *aStartPam.GetPoint() = 
                     SwPosition(GetDoc()->GetNodes().GetEndOfContent());
                 aDelete.MovePara(fnParaCurr, fnParaStart);
                 aDelete.SetMark();
@@ -1635,7 +1635,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             if (bParaAfterInserted)
             {
                 SwCursor aDelete(*pEndPam->GetPoint(), 0, false);
-                *pEndPam->GetPoint() = // park it because node is deleted
+                *pEndPam->GetPoint() = 
                     SwPosition(GetDoc()->GetNodes().GetEndOfContent());
                 aDelete.MovePara(fnParaCurr, fnParaStart);
                 aDelete.SetMark();
@@ -1646,10 +1646,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         }
     }
 
-    // make a selection from aStartPam to a EndPam
-    // If there is no content in the frame the shape is in
-    // it gets deleted in the DelFullPara call below,
-    // In this case insert a tmp text node ( we delete it later )
+    
+    
+    
+    
     if ( aStartPam.Start()->nNode == pEndPam->Start()->nNode
     && aStartPam.End()->nNode == pEndPam->End()->nNode )
     {
@@ -1662,7 +1662,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     *aStartPam.End() = *pEndPam->End();
     pEndPam.reset(0);
 
-    // see if there are frames already anchored to this node
+    
     std::set<OUString> aAnchoredFrames;
     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
     {
@@ -1686,37 +1686,37 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                     pValues[nProp].Name, pValues[nProp].Value);
         }
 
-        {   // has to be in a block to remove the SwIndexes before
-            // DelFullPara is called
+        {   
+            
             const uno::Reference< text::XTextRange> xInsertTextRange =
                 new SwXTextRange(aStartPam, this);
-            aStartPam.DeleteMark(); // mark position node may be deleted!
+            aStartPam.DeleteMark(); 
             pNewFrame->attach( xInsertTextRange );
             pNewFrame->setName(m_pImpl->m_pDoc->GetUniqueFrameName());
         }
 
         SwTxtNode *const pTxtNode(aStartPam.GetNode()->GetTxtNode());
         OSL_ASSERT(pTxtNode);
-        if (!pTxtNode || !pTxtNode->Len()) // don't remove if it contains text!
+        if (!pTxtNode || !pTxtNode->Len()) 
         {
-            {   // has to be in a block to remove the SwIndexes before
-                // DelFullPara is called
+            {   
+                
                 SwPaM aMovePam( *aStartPam.GetNode() );
                 if (aMovePam.Move( fnMoveForward, fnGoCntnt ))
                 {
-                    // move the anchor to the next paragraph
+                    
                     SwFmtAnchor aNewAnchor(pNewFrame->GetFrmFmt()->GetAnchor());
                     aNewAnchor.SetAnchor( aMovePam.Start() );
                     m_pImpl->m_pDoc->SetAttr(
                         aNewAnchor, *pNewFrame->GetFrmFmt() );
 
-                    // also move frames anchored to us
+                    
                     for (size_t i = 0; i < m_pImpl->m_pDoc->GetSpzFrmFmts()->size(); ++i)
                     {
                         SwFrmFmt* pFrmFmt = (*m_pImpl->m_pDoc->GetSpzFrmFmts())[i];
                         if( aAnchoredFrames.find( pFrmFmt->GetName() ) != aAnchoredFrames.end() )
                         {
-                            // copy the anchor to the next paragraph
+                            
                             SwFmtAnchor aAnchor(pFrmFmt->GetAnchor());
                             aAnchor.SetAnchor(aMovePam.Start());
                             m_pImpl->m_pDoc->SetAttr(aAnchor, *pFrmFmt);
@@ -1748,7 +1748,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             ::sw::UnoTunnelGetImplementation<SwXTextCursor>(xTunnel);
         if (bParaBeforeInserted)
         {
-            // todo: remove paragraph before frame
+            
             m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM());
         }
         if (bParaAfterInserted)
@@ -1758,9 +1758,9 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                 m_pImpl->m_pDoc->DelFullPara(*pFrameCursor->GetPaM());
             else
             {
-                // In case the frame has a table only, the cursor points to the end of the first cell of the table.
+                
                 SwPaM aPaM(*pFrameCursor->GetPaM()->GetNode()->FindSttNodeByType(SwFlyStartNode)->EndOfSectionNode());
-                // Now we have the end of the frame -- the node before that will be the paragraph we want to remove.
+                
                 aPaM.GetPoint()->nNode--;
                 m_pImpl->m_pDoc->DelFullPara(aPaM);
             }
@@ -1777,7 +1777,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             aEx.Message = sMessage;
             throw aEx;
         }
-        else //if(bRuntimeException)
+        else 
         {
             uno::RuntimeException aEx;
             aEx.Message = sMessage;
@@ -1832,8 +1832,8 @@ void SwXText::Impl::ConvertCell(
     SwUnoInternalPaM aStartCellPam(*m_pDoc);
     SwUnoInternalPaM aEndCellPam(*m_pDoc);
 
-    // !!! TODO - PaMs in tables and sections do not work here -
-    //     the same applies to PaMs in frames !!!
+    
+    
 
     if (!::sw::XTextRangeToSwPaM(aStartCellPam, xStartRange) ||
         !::sw::XTextRangeToSwPaM(aEndCellPam, xEndRange))
@@ -1869,8 +1869,8 @@ void SwXText::Impl::ConvertCell(
      */
     if (aStartCellPam.Start()->nNode < aEndCellPam.End()->nNode)
     {
-        // increment on each StartNode and decrement on each EndNode
-        // we must reach zero at the end and must not go below zero
+        
+        
         long nOpenNodeBlock = 0;
         SwNodeIndex aCellIndex = aStartCellPam.Start()->nNode;
         while (aCellIndex < aEndCellPam.End()->nNode.GetIndex())
@@ -1905,7 +1905,7 @@ void SwXText::Impl::ConvertCell(
      */
     if (bFirstCell)
     {
-        // align the beginning - if necessary
+        
         if (aStartCellPam.Start()->nContent.GetIndex())
         {
             m_pDoc->SplitNode(*aStartCellPam.Start(), false);
@@ -1913,14 +1913,14 @@ void SwXText::Impl::ConvertCell(
     }
     else
     {
-        // check the predecessor
+        
         const sal_uLong nLastNodeIndex = rLastPaM.End()->nNode.GetIndex();
         const sal_uLong nStartCellNodeIndex =
             aStartCellPam.Start()->nNode.GetIndex();
         const sal_uLong nLastNodeEndIndex = rLastPaM.End()->nNode.GetIndex();
         if (nLastNodeIndex == nStartCellNodeIndex)
         {
-            // same node as predecessor then equal nContent?
+            
             if (rLastPaM.End()->nContent != aStartCellPam.Start()->nContent)
             {
                 rbExcept = true;
@@ -1932,24 +1932,24 @@ void SwXText::Impl::ConvertCell(
         }
         else if (nStartCellNodeIndex == (nLastNodeEndIndex + 1))
         {
-            // next paragraph - now the content index of the new should be 0
-            // and of the old one should be equal to the text length
-            // but if it isn't we don't care - the cell is being inserted on
-            // the node border anyway
+            
+            
+            
+            
         }
         else
         {
             rbExcept = true;
         }
     }
-    // now check if there's a need to insert another paragraph break
+    
     if (aEndCellPam.End()->nContent.GetIndex() <
             aEndCellPam.End()->nNode.GetNode().GetTxtNode()->Len())
     {
         m_pDoc->SplitNode(*aEndCellPam.End(), false);
-        // take care that the new start/endcell is moved to the right position
-        // aStartCellPam has to point to the start of the new (previous) node
-        // aEndCellPam has to point to the end of the new (previous) node
+        
+        
+        
         aStartCellPam.DeleteMark();
         aStartCellPam.Move(fnMoveBackward, fnGoNode);
         aStartCellPam.GetPoint()->nContent = 0;
@@ -1996,8 +1996,8 @@ lcl_ApplyRowProperties(
     {
         if ( pProperties[ nProperty ].Name == "TableColumnSeparators" )
         {
-            // add the separators to access the cell's positions
-            // for vertical merging later
+            
+            
             TableColumnSeparators aSeparators;
             pProperties[ nProperty ].Value >>= aSeparators;
             rRowSeparators = aSeparators;
@@ -2008,7 +2008,7 @@ lcl_ApplyRowProperties(
 }
 
 #if OSL_DEBUG_LEVEL > 0
-//-->debug cell properties of all rows
+
 static void
 lcl_DebugCellProperties(
     const uno::Sequence< uno::Sequence< uno::Sequence<
@@ -2043,7 +2043,7 @@ lcl_DebugCellProperties(
     }
     (void)sNames;
 }
-//--<
+
 #endif
 
 static void
@@ -2062,8 +2062,8 @@ lcl_ApplyCellProperties(
         const uno::Any & rValue = rCellProperties[nProperty].Value;
         if ( rName == "VerticalMerge" )
         {
-            // determine left border position
-            // add the cell to a queue of merged cells
+            
+            
             sal_Bool bMerge = sal_False;
             rValue >>= bMerge;
             sal_Int32 nLeftPos = -1;
@@ -2079,8 +2079,8 @@ lcl_ApplyCellProperties(
             }
             if (bMerge)
             {
-                // 'close' all the cell with the same left position
-                // if separate vertical merges in the same column exist
+                
+                
                 if (rMergedCells.size())
                 {
                     std::vector<VerticallyMergedCell>::iterator aMergedIter =
@@ -2095,12 +2095,12 @@ lcl_ApplyCellProperties(
                         ++aMergedIter;
                     }
                 }
-                // add the new group of merged cells
+                
                 rMergedCells.push_back(VerticallyMergedCell(xCellPS, nLeftPos));
             }
             else
             {
-                // find the cell that
+                
                 OSL_ENSURE(rMergedCells.size(),
                         "the first merged cell is missing");
                 if (rMergedCells.size())
@@ -2138,7 +2138,7 @@ lcl_ApplyCellProperties(
             }
             catch (const uno::Exception&)
             {
-                // Apply the paragraph and char properties to the cell's content
+                
                 const uno::Reference< text::XText > xCellText(xCell,
                         uno::UNO_QUERY);
                 const uno::Reference< text::XTextCursor > xCellCurs =
@@ -2173,9 +2173,9 @@ lcl_MergeCells(::std::vector<VerticallyMergedCell> & rMergedCells)
             std::vector<uno::Reference< beans::XPropertySet > >::iterator
                 aCellIter = aMergedIter->aCells.begin();
             bool bFirstCell = true;
-            // the first of the cells gets the number of cells set as RowSpan
-            // the others get the inverted number of remaining merged cells
-            // (3,-2,-1)
+            
+            
+            
             while (aCellIter != aMergedIter->aCells.end())
             {
                 (*aCellIter)->setPropertyValue(
@@ -2212,7 +2212,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         throw  uno::RuntimeException();
     }
 
-    //at first collect the text ranges as SwPaMs
+    
     const uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > >*
         pTableRanges = rTableRanges.getConstArray();
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
@@ -2255,11 +2255,11 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     SwXTextTable *const pTextTable = new SwXTextTable( *pTable->GetFrmFmt() );
     const uno::Reference< text::XTextTable > xRet = pTextTable;
     const uno::Reference< beans::XPropertySet > xPrSet = pTextTable;
-    // set properties to the table
-    // catch lang::WrappedTargetException and lang::IndexOutOfBoundsException
+    
+    
     try
     {
-        //apply table properties
+        
         const beans::PropertyValue* pTableProperties =
             rTableProperties.getConstArray();
         for (sal_Int32 nProperty = 0; nProperty < rTableProperties.getLength();
@@ -2277,7 +2277,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
             }
         }
 
-        //apply row properties
+        
         const uno::Reference< table::XTableRows >  xRows = xRet->getRows();
 
         const beans::PropertyValues* pRowProperties =
@@ -2296,7 +2296,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         lcl_DebugCellProperties(rCellProperties);
 #endif
 
-        //apply cell properties
+        
         for (sal_Int32 nRow = 0; nRow < rCellProperties.getLength(); ++nRow)
         {
             const uno::Sequence< beans::PropertyValues > aCurrentRow =
@@ -2310,8 +2310,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
                     aMergedCells);
             }
         }
-        // now that the cell properties are set the vertical merge values
-        // have to be applied
+        
+        
         lcl_MergeCells(aMergedCells);
     }
     catch (const lang::WrappedTargetException&)
@@ -2456,7 +2456,7 @@ SwXTextCursor * SwXBodyText::CreateTextCursor(const bool bIgnoreTables)
         return 0;
     }
 
-    // the cursor has to skip tables contained in this text
+    
     SwPaM aPam(GetDoc()->GetNodes().GetEndOfContent());
     aPam.Move( fnMoveBackward, fnGoDoc );
     if (!bIgnoreTables)
@@ -2517,7 +2517,7 @@ throw (uno::RuntimeException)
         SwNode& rNode = GetDoc()->GetNodes().GetEndOfContent();
 
         SwStartNode* p1 = aPam.GetNode()->StartOfSectionNode();
-        //document starts with a section?
+        
         while(p1->IsSectionNode())
         {
             p1 = p1->StartOfSectionNode();
@@ -2617,7 +2617,7 @@ public:
         return *pFmt;
     }
 protected:
-    // SwClient
+    
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
@@ -2636,8 +2636,8 @@ uno::Reference< text::XText >
 SwXHeadFootText::CreateXHeadFootText(
         SwFrmFmt & rHeadFootFmt, const bool bIsHeader)
 {
-    // re-use existing SwXHeadFootText
-    // #i105557#: do not iterate over the registered clients: race condition
+    
+    
     uno::Reference< text::XText > xText(rHeadFootFmt.GetXObject(),
             uno::UNO_QUERY);
     if (!xText.is())
@@ -2752,11 +2752,11 @@ SwXHeadFootText::createTextCursor() throw (uno::RuntimeException)
     SwUnoCrsr *const pUnoCrsr = pXCursor->GetCursor();
     pUnoCrsr->Move(fnMoveForward, fnGoNode);
 
-    // save current start node to be able to check if there is content
-    // after the table - otherwise the cursor would be in the body text!
+    
+    
     SwStartNode const*const pOwnStartNode = rNode.FindSttNodeByType(
             (m_pImpl->m_bIsHeader) ? SwHeaderStartNode : SwFooterStartNode);
-    // is there a table here?
+    
     SwTableNode* pTblNode = pUnoCrsr->GetNode()->FindTableNode();
     SwCntntNode* pCont = 0;
     while (pTblNode)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include <vcl/msgbox.hxx>
@@ -38,7 +38,7 @@
 
 #include <math.h>
 
-//========================================================================
+
 
 ScTpCalcOptions::ScTpCalcOptions(Window* pParent, const SfxItemSet& rCoreAttrs)
     : SfxTabPage(pParent, "OptCalculatePage",
@@ -69,7 +69,7 @@ ScTpCalcOptions::ScTpCalcOptions(Window* pParent, const SfxItemSet& rCoreAttrs)
     SetExchangeSupport();
 }
 
-//-----------------------------------------------------------------------
+
 
 ScTpCalcOptions::~ScTpCalcOptions()
 {
@@ -77,7 +77,7 @@ ScTpCalcOptions::~ScTpCalcOptions()
     delete pLocalOptions;
 }
 
-//-----------------------------------------------------------------------
+
 
 void ScTpCalcOptions::Init()
 {
@@ -88,14 +88,14 @@ void ScTpCalcOptions::Init()
     m_pBtnDate1904->SetClickHdl( LINK( this, ScTpCalcOptions, RadioClickHdl ) );
 }
 
-//-----------------------------------------------------------------------
+
 
 SfxTabPage* ScTpCalcOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new ScTpCalcOptions( pParent, rAttrSet ) );
 }
 
-//-----------------------------------------------------------------------
+
 
 void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 {
@@ -146,11 +146,11 @@ void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 }
 
 
-//-----------------------------------------------------------------------
+
 
 sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
-    // alle weiteren Optionen werden in den Handlern aktualisiert
+    
     pLocalOptions->SetIterCount( (sal_uInt16)m_pEdSteps->GetValue() );
     pLocalOptions->SetIgnoreCase( !m_pBtnCase->IsChecked() );
     pLocalOptions->SetCalcAsShown( m_pBtnCalc->IsChecked() );
@@ -173,7 +173,7 @@ sal_Bool ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
         return false;
 }
 
-//------------------------------------------------------------------------
+
 
 int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -201,8 +201,8 @@ int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
     return nReturn;
 }
 
-//-----------------------------------------------------------------------
-// Handler:
+
+
 
 IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
 {
@@ -222,7 +222,7 @@ IMPL_LINK( ScTpCalcOptions, RadioClickHdl, RadioButton*, pBtn )
     return 0;
 }
 
-//-----------------------------------------------------------------------
+
 
 IMPL_LINK( ScTpCalcOptions, CheckClickHdl, CheckBox*, pBtn )
 {

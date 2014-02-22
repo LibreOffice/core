@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svdmodel.hxx>
@@ -281,7 +281,7 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwRect::SetBottomAndHeight,
     &SwRect::SetLeftAndWidth
 };
-//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
 static SwRectFnCollection aVerticalLeftToRight = {
     /* fnRectGet      */
     &SwRect::_Left,
@@ -336,20 +336,20 @@ static SwRectFnCollection aVerticalLeftToRight = {
     &SwRect::SetTopAndHeight,
     &SwRect::SetLeftAndWidth
 };
-//End of SCMS
+
 SwRectFn fnRectHori = &aHorizontal;
 SwRectFn fnRectVert = &aVertical;
-//Badaa: 2008-04-18 * Support for Classical Mongolian Script (SCMS) joint with Jiayanmin
+
 SwRectFn fnRectVertL2R = &aVerticalLeftToRight;
-//End of SCMS
+
 SwRectFn fnRectB2T = &aBottomToTop;
 SwRectFn fnRectVL2R = &aVerticalRightToLeft;
 
-// #i65250#
+
 sal_uInt32 SwFrm::mnLastFrmId=0;
 
-TYPEINIT1(SwFrm,SwClient);      //rtti for SwFrm
-TYPEINIT1(SwCntntFrm,SwFrm);    //rtti for SwCntntFrm
+TYPEINIT1(SwFrm,SwClient);      
+TYPEINIT1(SwCntntFrm,SwFrm);    
 
 void _FrmInit()
 {
@@ -365,7 +365,7 @@ void _FrmInit()
 void _FrmFinit()
 {
 #if OSL_DEBUG_LEVEL > 0
-    // The cache may only contain null pointers at this time.
+    
     for( sal_uInt16 n = SwFrm::GetCachePtr()->size(); n; )
         if( (*SwFrm::GetCachePtr())[ --n ] )
         {
@@ -377,7 +377,7 @@ void _FrmFinit()
     delete SwFrm::GetCachePtr();
 }
 
-// RootFrm::Everything that belongs to CurrShell
+
 
 class SwCurrShells : public std::set<CurrShell*> {};
 
@@ -421,15 +421,15 @@ void SetShell( SwViewShell *pSh )
 
 void SwRootFrm::DeRegisterShell( SwViewShell *pSh )
 {
-    // Activate some shell if possible
+    
     if ( pCurrShell == pSh )
         pCurrShell = pSh->GetNext() != pSh ? (SwViewShell*)pSh->GetNext() : 0;
 
-    // Doesn't matter anymore
+    
     if ( pWaitingCurrShell == pSh )
         pWaitingCurrShell = 0;
 
-    // Remove references
+    
     for ( SwCurrShells::iterator it = pCurrShells->begin(); it != pCurrShells->end(); ++it )
     {
         CurrShell *pC = *it;
@@ -466,7 +466,7 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, SwViewShell * pSh ) :
     bIsNewLayout( true ),
     bCallbackActionEnabled ( false ),
     bLayoutFreezed ( false ),
-    nBrowseWidth( MM50*4 ), //2cm minimum
+    nBrowseWidth( MM50*4 ), 
     pTurbo( 0 ),
     pLastPage( 0 ),
     pCurrShell( pSh ),
@@ -490,30 +490,30 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     IDocumentFieldsAccess *pFieldsAccess = pFmt->getIDocumentFieldsAccess();
     const IDocumentSettingAccess *pSettingAccess = pFmt->getIDocumentSettingAccess();
     pTimerAccess->StopIdling();
-    // For creating the Flys by MakeFrms()
+    
     pLayoutAccess->SetCurrentViewShell( this->GetCurrShell() );
-    bCallbackActionEnabled = sal_False; // needs to be set to sal_True before leaving!
+    bCallbackActionEnabled = sal_False; 
 
     SdrModel *pMd = pFmt->getIDocumentDrawModelAccess()->GetDrawModel();
     if ( pMd )
     {
-        // Disable "multiple layout"
+        
         pDrawPage = pMd->GetPage(0);
 
         pDrawPage->SetSize( Frm().SSize() );
     }
 
-    // Initialize the layout: create pages, link content with Cntnt etc.
-    // First, initialize some stuff, then get hold of the first
-    // node (which will be needed for the PageDesc).
+    
+    
+    
 
     SwDoc* pDoc = pFmt->GetDoc();
     SwNodeIndex aIndex( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode() );
     SwCntntNode *pNode = pDoc->GetNodes().GoNextSection( &aIndex, true, false );
-    // #123067# pNode = 0 can really happen
+    
     SwTableNode *pTblNd= pNode ? pNode->FindTableNode() : 0;
 
-    // Get hold of PageDesc (either via FrmFmt of the first node or the initial one).
+    
     SwPageDesc *pDesc = 0;
     ::boost::optional<sal_uInt16> oPgNum;
 
@@ -521,7 +521,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     {
         const SwFmtPageDesc &rDesc = pTblNd->GetTable().GetFrmFmt()->GetPageDesc();
         pDesc = (SwPageDesc*)rDesc.GetPageDesc();
-        //#19104# respect the page number offset!!
+        
         oPgNum = rDesc.GetNumOffset();
         if (oPgNum)
             bIsVirtPageNum = true;
@@ -530,7 +530,7 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     {
         const SwFmtPageDesc &rDesc = pNode->GetSwAttrSet().GetPageDesc();
         pDesc = (SwPageDesc*)rDesc.GetPageDesc();
-        //#19104# respect the page number offset!!
+        
         oPgNum = rDesc.GetNumOffset();
         if (oPgNum)
             bIsVirtPageNum = true;
@@ -542,21 +542,21 @@ void SwRootFrm::Init( SwFrmFmt* pFmt )
     const bool bOdd = !oPgNum || 0 != ( oPgNum.get() % 2 );
     bool bFirst = !oPgNum || 1 == oPgNum.get();
 
-    // Create a page and put it in the layout
+    
     SwPageFrm *pPage = ::InsertNewPage( *pDesc, this, bOdd, bFirst, false, sal_False, 0 );
 
-    // Find the first page in the Bodytext section.
+    
     SwLayoutFrm *pLay = pPage->FindBodyCont();
     while( pLay->Lower() )
         pLay = (SwLayoutFrm*)pLay->Lower();
 
     SwNodeIndex aTmp( *pDoc->GetNodes().GetEndOfContent().StartOfSectionNode(), 1 );
     ::_InsertCnt( pLay, pDoc, aTmp.GetIndex(), sal_True );
-    //Remove masters that haven't been replaced yet from the list.
+    
     RemoveMasterObjs( pDrawPage );
     if( pSettingAccess->get(IDocumentSettingAccess::GLOBAL_DOCUMENT) )
         pFieldsAccess->UpdateRefFlds( NULL );
-    //b6433357: Update page fields after loading
+    
     if ( !pCurrShell || !pCurrShell->Imp()->IsUpdateExpFlds() )
     {
         SwDocPosUpdate aMsgHnt( pPage->Frm().Top() );
@@ -575,15 +575,15 @@ SwRootFrm::~SwRootFrm()
 {
     bTurboAllowed = sal_False;
     pTurbo = 0;
-    // fdo#39510 crash on document close with footnotes
-    // Object ownership in writer and esp. in layout are a mess: Before the
-    // document/layout split SwDoc and SwRootFrm were essentially one object
-    // and magically/uncleanly worked around their common destruction by call
-    // to SwDoc::IsInDtor() -- even from the layout. As of now destuction of
-    // the layout proceeds forward through the frames. Since SwTxtFtn::DelFrms
-    // also searches backwards to find the master of footnotes, they must be
-    // considered to be owned by the SwRootFrm and also be destroyed here,
-    // before tearing down the (now footnote free) rest of the layout.
+    
+    
+    
+    
+    
+    
+    
+    
+    
     RemoveFtns(0, false, true);
 
     if(pBlink)
@@ -598,25 +598,25 @@ SwRootFrm::~SwRootFrm()
     delete pDestroy;
     pDestroy = 0;
 
-    // Remove references
+    
     for ( SwCurrShells::iterator it = pCurrShells->begin(); it != pCurrShells->end(); ++it )
         (*it)->pRoot = 0;
 
     delete pCurrShells;
     pCurrShells = 0;
 
-    // Some accessible shells are left => problems on second SwFrm::Destroy call
+    
     assert(0 == nAccessibleShells);
 
-    // manually call base classes Destroy because it could call stuff
-    // that accesses members of this
+    
+    
     SwLayoutFrm::Destroy();
     SwFrm::Destroy();
 }
 
 void SwRootFrm::RemoveMasterObjs( SdrPage *pPg )
 {
-    // Remove all master objects from the Page. But don't delete!
+    
     for( sal_uLong i = pPg ? pPg->GetObjCount() : 0; i; )
     {
         SdrObject* pObj = pPg->GetObj( --i );

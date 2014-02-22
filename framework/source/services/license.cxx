@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -23,7 +23,7 @@
 #include <threadhelp/resetableguard.hxx>
 #include <services.h>
 
-// local header for UI implementation
+
 #include "services/licensedlg.hxx"
 #include "classes/resource.hrc"
 
@@ -69,7 +69,7 @@ using ::Date;
 using ::Time;
 using ::DateTime;
 
-// license file name
+
 static const char *szLicensePath = "/" LIBO_SHARE_FOLDER "/readme";
 #ifdef UNX
 static const char *szUNXLicenseName = "/LICENSE";
@@ -79,33 +79,33 @@ static const char *szWNTLicenseName = "/license";
 static const char *szWNTLicenseExt = ".txt";
 #endif
 
-//*****************************************************************************************************************
-//  constructor
-//*****************************************************************************************************************
+
+
+
 License::License( const Reference< XComponentContext >& rxContext )
-        //  Init baseclasses first
-        //  Attention:
-        //      Don't change order of initialization!
-        //      ThreadHelpBase is a struct with a mutex as member. We can't use a mutex as member, while
-        //      we must garant right initialization and a valid value of this! First initialize
-        //      baseclasses and then members. And we need the mutex for other baseclasses !!!
+        
+        
+        
+        
+        
+        
         :   ThreadHelpBase  ( &Application::GetSolarMutex() )
-        // Init member
+        
         ,   m_xContext      ( rxContext                     )
         ,   m_bTerminate    ( sal_False                     )
 {
 }
 
-//*****************************************************************************************************************
-//  destructor
-//*****************************************************************************************************************
+
+
+
 License::~License()
 {
 }
 
-//*****************************************************************************************************************
-//  XInterface, XTypeProvider, XServiceInfo
-//*****************************************************************************************************************
+
+
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2  (   License,
                                         OWeakObject                 ,
@@ -153,12 +153,12 @@ static OUString _makeDateTimeString (const DateTime& aDateTime, sal_Bool bUTC = 
 
 static sal_Bool _parseDateTime(const OUString& aString, DateTime& aDateTime)
 {
-    // take apart a canonical literal xsd:dateTime string
-    //CCYY-MM-DDThh:mm:ss(Z)
+    
+    
 
     OUString aDateTimeString = aString.trim();
 
-    // check length
+    
     if (aDateTimeString.getLength() < 19 || aDateTimeString.getLength() > 20)
         return sal_False;
 
@@ -194,11 +194,11 @@ static OUString _getCurrentDateString()
     return _makeDateTimeString(DateTime( DateTime::SYSTEM));
 }
 
-// execution of license check...
+
 css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::NamedValue >& )
     throw( css::lang::IllegalArgumentException, css::uno::Exception)
 {
-    // return value
+    
     Any aRet; aRet <<= sal_False;
 
     try
@@ -212,7 +212,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             return aRet;
         }
 
-        // determine the filename of the license to show
+        
         OUString aLangString( Application::GetSettings().GetUILanguageTag().getBcp47());
 #if defined(WNT)
         OUString aLicensePath =
@@ -229,11 +229,11 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             + aLangString
             + OUString::createFromAscii(szUNXLicenseExt);
 #endif
-        // check if we need to show the license at all
-        // open org.openoffice.Setup/Office/ooLicenseAcceptDate
+        
+        
         OUString sAccessSrvc("com.sun.star.configuration.ConfigurationUpdateAccess");
 
-        // get configuration provider
+        
         Reference< XMultiServiceFactory > theConfigProvider = theDefaultProvider::get( m_xContext );
         Sequence< Any > theArgs(1);
         NamedValue v;
@@ -243,11 +243,11 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
         Reference< XPropertySet > pset = Reference< XPropertySet >(
             theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
 
-        // if we find a date there, compare it to baseinstall license date
+        
         OUString aAcceptDate;
         if (pset->getPropertyValue("ooLicenseAcceptDate") >>= aAcceptDate)
         {
-            // get LicenseFileDate from base install
+            
             OUString aLicenseURL = aLicensePath;
             DirectoryItem aDirItem;
             if (DirectoryItem::get(aLicenseURL, aDirItem) != FileBase::E_None)
@@ -260,7 +260,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             if (!osl_getDateTimeFromTimeValue(&aTimeVal, &aDateTimeVal))
                 return makeAny(sal_False);
 
-            // compare dates
+            
             DateTime aLicenseDateTime = _oslDateTimeToDateTime(aDateTimeVal);
             DateTime aAcceptDateTime( DateTime::EMPTY);
             if (!_parseDateTime(aAcceptDate, aAcceptDateTime))
@@ -269,8 +269,8 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
             if ( aAcceptDateTime > aLicenseDateTime )
                 return makeAny(sal_True);
         }
-        // prepare to show
-        // display license dialog
+        
+        
         LanguageTag aLanguageTag( Application::GetSettings().GetUILanguageTag());
         boost::scoped_ptr<ResMgr> pResMgr( ResMgr::SearchCreateResMgr("fwe", aLanguageTag));
         boost::scoped_ptr<LicenseDialog> pDialog(new LicenseDialog(aLicensePath, pResMgr.get()));
@@ -278,12 +278,12 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
 
         if (bAgreed) {
 
-            // write org.openoffice.Setup/ooLicenseAcceptDate
+            
             aAcceptDate = _getCurrentDateString();
             pset->setPropertyValue("ooLicenseAcceptDate", makeAny(aAcceptDate));
             Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
 
-            // enable quickstarter
+            
 
             Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
             css::office::Quickstart::createAutoStart(xContext, true/*Quickstart*/, true/*Autostart*/);
@@ -297,7 +297,7 @@ css::uno::Any SAL_CALL License::execute(const css::uno::Sequence< css::beans::Na
     }
     catch (const RuntimeException&)
     {
-        // license could not be verified
+        
         aRet <<= sal_False;
     }
     return aRet;
@@ -318,9 +318,9 @@ void SAL_CALL License::removeCloseListener(const css::uno::Reference< css::util:
 }
 
 
-//************************************************************************
-//   License Dialog
-//************************************************************************
+
+
+
 
 LicenseDialog::LicenseDialog(const OUString & aLicensePath, ResMgr *pResMgr) :
     ModalDialog(NULL, ResId(DLG_LICENSE, *pResMgr)),
@@ -348,7 +348,7 @@ LicenseDialog::LicenseDialog(const OUString & aLicensePath, ResMgr *pResMgr) :
     aPBDecline.SetClickHdl( LINK(this, LicenseDialog, DeclineBtnHdl) );
     aPBAccept.SetClickHdl( LINK(this, LicenseDialog, AcceptBtnHdl) );
 
-    // We want a automatic repeating page down button
+    
     WinBits aStyle = aPBPageDown.GetStyle();
     aStyle |= WB_REPEAT;
     aPBPageDown.SetStyle( aStyle );
@@ -362,7 +362,7 @@ LicenseDialog::LicenseDialog(const OUString & aLicensePath, ResMgr *pResMgr) :
 
     aPBAccept.Disable();
 
-    // load license text
+    
     File aLicenseFile(aLicensePath);
     if ( aLicenseFile.open(osl_File_OpenFlag_Read) == FileBase::E_None)
     {
@@ -524,6 +524,6 @@ void LicenseView::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-}       //  namespace framework
+}       
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "db.hxx"
@@ -34,7 +34,7 @@
 
 #include <helpcompiler/HelpIndexer.hxx>
 
-// Extensible help
+
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <com/sun/star/deployment/thePackageManagerFactory.hpp>
 #include <comphelper/processfactory.hxx>
@@ -154,7 +154,7 @@ Databases::Databases( sal_Bool showBasic,
 
     m_vReplacement[0] = productName;
     m_vReplacement[1] = productVersion;
-    // m_vReplacement[2...4] (vendorName/-Version/-Short) are empty strings
+    
     m_vReplacement[5] = productName;
     m_vReplacement[6] = productVersion;
 
@@ -165,18 +165,18 @@ Databases::Databases( sal_Bool showBasic,
 
 Databases::~Databases()
 {
-    // release stylesheet
+    
 
     delete[] m_pCustomCSSDoc;
 
-    // release errorDocument
+    
 
     delete[] m_pErrorDoc;
 
-    // unload the databases
+    
 
     {
-        // DatabasesTable
+        
         DatabasesTable::iterator it = m_aDatabases.begin();
         while( it != m_aDatabases.end() )
         {
@@ -186,7 +186,7 @@ Databases::~Databases()
     }
 
     {
-        //  ModInfoTable
+        
 
         ModInfoTable::iterator it = m_aModInfo.begin();
         while( it != m_aModInfo.end() )
@@ -197,7 +197,7 @@ Databases::~Databases()
     }
 
     {
-        // KeywordInfoTable
+        
 
         KeywordInfoTable::iterator it = m_aKeywordInfo.begin();
         while( it != m_aKeywordInfo.end() )
@@ -226,10 +226,10 @@ static bool impl_getZipFile(
                 aFileName += "/";
             }
             aFileName += rZipName;
-            // the icons are not read when the URL is a symlink
+            
             osl::File::getAbsoluteFileURL( aWorkingDir, aFileName, rFileName );
 
-            // test existence
+            
             osl::DirectoryItem aDirItem;
             if ( osl::DirectoryItem::get( rFileName, aDirItem ) == osl::FileBase::E_None )
                 return true;
@@ -246,14 +246,14 @@ OString Databases::getImagesZipFileURL()
         uno::Reference< lang::XMultiServiceFactory > xConfigProvider =
             configuration::theDefaultProvider::get(m_xContext);
 
-        // set root path
+        
         uno::Sequence < uno::Any > lParams(1);
         beans::PropertyValue                       aParam ;
         aParam.Name    = "nodepath";
         aParam.Value <<= OUString("org.openoffice.Office.Common");
         lParams[0] = uno::makeAny(aParam);
 
-        // open it
+        
         uno::Reference< uno::XInterface > xCFG( xConfigProvider->createInstanceWithArguments(
                     OUString("com.sun.star.configuration.ConfigurationAccess"),
                     lParams) );
@@ -331,7 +331,7 @@ void Databases::replaceName( OUString& oustring ) const
         else if(idx2 == -1)
             idx = idx1;
         else {
-            // no index is zero
+            
             if(idx1 < idx2)
                 idx = idx1;
             else if(idx2 < idx1 )
@@ -407,7 +407,7 @@ const std::vector< OUString >& Databases::getModuleList( const OUString& Languag
 
             fileName = aStatus.getFileName();
 
-            // Check, whether fileName is of the form *.cfg
+            
             idx = fileName.lastIndexOf( '.' );
 
             if( idx == -1 )
@@ -577,7 +577,7 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
     if( pExtensionPath == NULL )
         key = processLang( Language ) + dbFileName;
     else
-        key = *pExtensionPath + Language + dbFileName;      // make unique, don't change language
+        key = *pExtensionPath + Language + dbFileName;      
 
     std::pair< DatabasesTable::iterator,bool > aPair =
         m_aDatabases.insert( DatabasesTable::value_type( key, reinterpret_cast<helpdatafileproxy::Hdf *>(0) ) );
@@ -595,11 +595,11 @@ helpdatafileproxy::Hdf* Databases::getHelpDataFile( const OUString& Database,
             fileURL = getInstallPathAsURL() + key;
 
         OUString fileNameHDFHelp( fileURL );
-        //Extensions always use the new format
+        
         if( pExtensionPath != NULL )
             fileNameHDFHelp += "_";
-        //SimpleFileAccess takes file URLs as arguments!!! Using filenames works accidentally but
-        //fails for example when using long path names on Windows (starting with \\?\)
+        
+        
         if( m_xSFA->exists( fileNameHDFHelp ) )
         {
             pHdf = new helpdatafileproxy::Hdf( fileNameHDFHelp, m_xSFA );
@@ -703,7 +703,7 @@ namespace chelp {
         }
 
         Reference< XCollator > m_xCollator;
-    }; // end struct KeywordElementComparator
+    }; 
 
 }
 
@@ -727,7 +727,7 @@ void KeywordInfo::KeywordElement::init( Databases *pDatabases,helpdatafileproxy:
         int h = ids.indexOf( '#', k );
         if( h < idx )
         {
-            // found an anchor
+            
             id.push_back( OUString( &idstr[k],h-k ) );
             anchor.push_back( OUString( &idstr[h+1],idx-h-1 ) );
         }
@@ -786,7 +786,7 @@ bool Databases::checkModuleMatchForExtension
 {
     bool bBelongsToDatabase = true;
 
-    // Analyse doclist string to find module assignments
+    
     bool bFoundAtLeastOneModule = false;
     bool bModuleMatch = false;
     sal_Int32 nLen = doclist.getLength();
@@ -797,7 +797,7 @@ bool Databases::checkModuleMatchForExtension
     sal_Int32 nFound = doclist.lastIndexOf( '_' );
     while( nFound != -1 )
     {
-        // Simple optimization, stop if '_' is followed by "id"
+        
         if( nLen - nFound > 2 )
         {
             if( pStr[ nFound + 1 ] == 'i' &&
@@ -895,7 +895,7 @@ KeywordInfo* Databases::getKeyword( const OUString& Database,
             }
         }
 
-        // sorting
+        
         Reference< XCollator > xCollator = getCollator( Language,OUString());
         KeywordElementComparator aComparator( xCollator );
         std::sort(aVector.begin(),aVector.end(),aComparator);
@@ -926,7 +926,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
         OUString zipFile;
         try
         {
-            // Extension jar file? Search for ?
+            
             sal_Int32 nQuestionMark1 = jar.indexOf( '?' );
             sal_Int32 nQuestionMark2 = jar.lastIndexOf( '?' );
             if( nQuestionMark1 != -1 && nQuestionMark2 != -1 && nQuestionMark1 != nQuestionMark2 )
@@ -955,7 +955,7 @@ Reference< XHierarchicalNameAccess > Databases::jarFile( const OUString& jar,
                 aArguments[ 0 ] <<= zipFile;
             }
 
-            // let ZipPackage be used ( no manifest.xml is required )
+            
             beans::NamedValue aArg;
             aArg.Name = "StorageFormat";
             aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
@@ -1023,13 +1023,13 @@ Reference< XHierarchicalNameAccess > Databases::findJarFileForPath
 
                     if( !aIdentifierInPath.equals( aIdentifier ) )
                     {
-                        // path does not start with extension identifier -> ignore
+                        
                         bSuccess = false;
                     }
                 }
                 else
                 {
-                    // No identifier -> ignore
+                    
                     bSuccess = false;
                 }
             }
@@ -1065,7 +1065,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
         OUString aCSS( m_aCSS );
         if ( aCSS.equalsAscii( "default" ) )
         {
-            // #i50760: "default" needs to adapt HC mode
+            
             uno::Reference< awt::XToolkit2 > xToolkit =
                    awt::Toolkit::create( ::comphelper::getProcessComponentContext() );
             uno::Reference< awt::XTopWindow > xTopWindow = xToolkit->getActiveTopWindow();
@@ -1142,7 +1142,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
             --retry;
             if ( !retry && error && bHighContrastMode )
             {
-                // fall back to default css
+                
                 aCSS = "default";
                 retry = 2;
                 bHighContrastMode = sal_False;
@@ -1152,7 +1152,7 @@ void Databases::cascadingStylesheet( const OUString& Language,
         if( error )
         {
             m_nCustomCSSDocLength = 0;
-            m_pCustomCSSDoc = new char[ 1 ]; // Initialize with 1 to avoid gcc compiler warning
+            m_pCustomCSSDoc = new char[ 1 ]; 
         }
     }
 
@@ -1171,7 +1171,7 @@ void Databases::setActiveText( const OUString& Module,
 {
     DataBaseIterator aDbIt( m_xContext, *this, Module, Language, true );
 
-    // #i84550 Cache information about failed ids
+    
     OString id( Id.getStr(),Id.getLength(),RTL_TEXTENCODING_UTF8 );
     EmptyActiveTextSet::iterator it = m_aEmptyActiveTextSet.find( id );
     bool bFoundAsEmpty = ( it != m_aEmptyActiveTextSet.end() );
@@ -1194,12 +1194,12 @@ void Databases::setActiveText( const OUString& Module,
 
     if( bSuccess )
     {
-        // ensure existence of tmp after for
+        
         OString tmp;
         for( int i = 0; i < nSize; ++i )
             if( pData[i] == '%' || pData[i] == '$' )
             {
-                // need of replacement
+                
                 OUString temp = OUString( pData, nSize, RTL_TEXTENCODING_UTF8 );
                 replaceName( temp );
                 tmp = OString( temp.getStr(),
@@ -1218,7 +1218,7 @@ void Databases::setActiveText( const OUString& Module,
     else
     {
         *byteCount = 0;
-        *buffer = new char[1]; // Initialize with 1 to avoid compiler warnings
+        *buffer = new char[1]; 
         if( !bFoundAsEmpty )
             m_aEmptyActiveTextSet.insert( id );
     }
@@ -1229,13 +1229,13 @@ void Databases::setInstallPath( const OUString& aInstDir )
     osl::MutexGuard aGuard( m_aMutex );
 
     osl::FileBase::getFileURLFromSystemPath( aInstDir,m_aInstallDirectory );
-        //TODO: check returned error code
+        
 
     if( !m_aInstallDirectory.endsWith( "/" ) )
         m_aInstallDirectory += "/";
 }
 
-// class ExtensionIteratorBase
+
 
 ExtensionHelpExistanceMap ExtensionIteratorBase::aHelpExistanceMap;
 
@@ -1283,7 +1283,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     if( !xPackage.is() )
         return xHelpPackage;
 
-    // #i84550 Cache information about help content in extension
+    
     OUString aExtensionPath = xPackage->getURL();
     ExtensionHelpExistanceMap::iterator it = aHelpExistanceMap.find( aExtensionPath );
     bool bFound = ( it != aHelpExistanceMap.end() );
@@ -1291,7 +1291,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetHelpPackageFromP
     if( bFound && !bHasHelp )
         return xHelpPackage;
 
-    // Check if parent package is registered
+    
     beans::Optional< beans::Ambiguous<sal_Bool> > option( xPackage->isRegistered
         ( Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>() ) );
     bool bRegistered = false;
@@ -1353,7 +1353,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextUserHelpPack
 
     if( m_iUserPackage == m_aUserPackagesSeq.getLength() )
     {
-        m_eState = SHARED_EXTENSIONS;       // Later: SHARED_MODULE
+        m_eState = SHARED_EXTENSIONS;       
     }
     else
     {
@@ -1426,7 +1426,7 @@ Reference< deployment::XPackage > ExtensionIteratorBase::implGetNextBundledHelpP
 OUString ExtensionIteratorBase::implGetFileFromPackage(
     const OUString& rFileExtension, Reference< deployment::XPackage > xPackage )
 {
-    // No extension -> search for pure language folder
+    
     bool bLangFolderOnly = rFileExtension.isEmpty();
 
     OUString aFile;
@@ -1479,7 +1479,7 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
             {
                 OUString aPureEntry = aEntry.copy( nLastSlash + 1 );
 
-                // Check language scheme
+                
                 int nLen = aPureEntry.getLength();
                 const sal_Unicode* pc = aPureEntry.getStr();
                 bool bStartCanBeLanguage = ( nLen >= 2 && isLetter( pc[0] ) && isLetter( pc[1] ) );
@@ -1492,7 +1492,7 @@ void ExtensionIteratorBase::implGetLanguageVectorFromPackage( ::std::vector< OUS
     }
 }
 
-// class DataBaseIterator
+
 
 helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, OUString* o_pExtensionRegistryPath )
 {
@@ -1504,12 +1504,12 @@ helpdatafileproxy::Hdf* DataBaseIterator::nextHdf( OUString* o_pExtensionPath, O
         {
             case INITIAL_MODULE:
                 pRetHdf = m_rDatabases.getHelpDataFile( m_aInitialModule, m_aLanguage, m_bHelpText );
-                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;     
                 break;
 
-            // Later:
-            //case SHARED_MODULE
-                //...
+            
+            
+                
 
             case USER_EXTENSIONS:
             {
@@ -1577,7 +1577,7 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< depl
         pRetHdf = m_rDatabases.getHelpDataFile(
             aHelpFilesBaseName, aUsedLanguage, m_bHelpText, &aRegDataUrl);
 
-        // Language fallback
+        
         if( !pRetHdf )
         {
             ::std::vector< OUString > av;
@@ -1601,9 +1601,9 @@ helpdatafileproxy::Hdf* DataBaseIterator::implGetHdfFromPackage( Reference< depl
     return pRetHdf;
 }
 
-// class KeyDataBaseFileIterator
 
-//returns a file URL
+
+
 OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
 {
     OUString aRetFile;
@@ -1619,12 +1619,12 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
 
                 o_rbExtension = false;
 
-                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;     
                 break;
 
-            // Later:
-            //case SHARED_MODULE
-                //...
+            
+            
+                
 
             case USER_EXTENSIONS:
             {
@@ -1671,7 +1671,7 @@ OUString KeyDataBaseFileIterator::nextDbFile( bool& o_rbExtension )
     return aRetFile;
 }
 
-//Returns a file URL, that does not contain macros
+
 OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
     ( Reference< deployment::XPackage > xPackage )
 {
@@ -1681,7 +1681,7 @@ OUString KeyDataBaseFileIterator::implGetDbFileFromPackage
     return aExpandedURL;
 }
 
-// class JarFileIterator
+
 
 Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
     ( Reference< deployment::XPackage >& o_xParentPackageBundle,
@@ -1695,12 +1695,12 @@ Reference< XHierarchicalNameAccess > JarFileIterator::nextJarFile
         {
             case INITIAL_MODULE:
                 xNA = m_rDatabases.jarFile( m_aInitialModule, m_aLanguage );
-                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;     
                 break;
 
-            // Later:
-            //case SHARED_MODULE
-                //...
+            
+            
+                
 
             case USER_EXTENSIONS:
             {
@@ -1754,7 +1754,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
         Sequence< Any > aArguments( 2 );
         aArguments[ 0 ] <<= zipFile;
 
-        // let ZipPackage be used ( no manifest.xml is required )
+        
         beans::NamedValue aArg;
         aArg.Name = "StorageFormat";
         aArg.Value <<= ZIP_STORAGE_FORMAT_STRING;
@@ -1783,7 +1783,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
 
     if( xNA.is() && o_pExtensionPath != NULL )
     {
-        // Extract path including language from file name
+        
         sal_Int32 nLastSlash = zipFile.lastIndexOf( '/' );
         if( nLastSlash != -1 )
             *o_pExtensionPath = zipFile.copy( 0, nLastSlash );
@@ -1801,7 +1801,7 @@ Reference< XHierarchicalNameAccess > JarFileIterator::implGetJarFromPackage
     return xNA;
 }
 
-// class IndexFolderIterator
+
 
 OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTemporary )
 {
@@ -1819,12 +1819,12 @@ OUString IndexFolderIterator::nextIndexFolder( bool& o_rbExtension, bool& o_rbTe
                 o_rbTemporary = false;
                 o_rbExtension = false;
 
-                m_eState = USER_EXTENSIONS;     // Later: SHARED_MODULE
+                m_eState = USER_EXTENSIONS;     
                 break;
 
-            // Later:
-            //case SHARED_MODULE
-                //...
+            
+            
+                
 
             case USER_EXTENSIONS:
             {
@@ -1879,11 +1879,11 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
     o_rbTemporary = false;
     if( !m_xSFA->isFolder( aIndexFolder ) )
     {
-        // i98680: Missing index? Try to generate now
+        
         OUString aLangURL = implGetFileFromPackage( OUString(), xPackage );
         if( m_xSFA->isFolder( aLangURL ) )
         {
-            // Test write access (shared extension may be read only)
+            
             bool bIsWriteAccess = false;
             try
             {
@@ -1898,8 +1898,8 @@ OUString IndexFolderIterator::implGetIndexFolderFromPackage( bool& o_rbTemporary
             {
             }
 
-            // TEST
-            //bIsWriteAccess = false;
+            
+            
 
             try
             {

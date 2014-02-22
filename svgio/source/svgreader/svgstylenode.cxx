@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgstylenode.hxx>
 #include <svgio/svgreader/svgdocument.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -46,10 +46,10 @@ namespace svgio
 
         void SvgStyleNode::parseAttribute(const OUString& rTokenName, SVGToken aSVGToken, const OUString& aContent)
         {
-            // call parent
+            
             SvgNode::parseAttribute(rTokenName, aSVGToken, aContent);
 
-            // parse own
+            
             switch(aSVGToken)
             {
                 case SVGTokenType:
@@ -95,14 +95,14 @@ namespace svgio
 
                         if(!aStyleContent.isEmpty())
                         {
-                            // create new style
+                            
                             SvgStyleAttributes* pNewStyle = new SvgStyleAttributes(*this);
                             maSvgStyleAttributes.push_back(pNewStyle);
 
-                            // fill with content
+                            
                             pNewStyle->readStyle(aStyleContent);
 
-                            // register new style at document
+                            
                             const_cast< SvgDocument& >(getDocument()).addSvgStyleAttributesToMapper(aStyleName, *pNewStyle);
                         }
                     }
@@ -116,10 +116,10 @@ namespace svgio
             }
         }
 
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

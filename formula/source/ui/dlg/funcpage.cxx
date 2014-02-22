@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/dispatch.hxx>
@@ -27,7 +27,7 @@
 #include "formdlgs.hrc"
 #include "ForResId.hrc"
 #include "ModuleHelper.hxx"
-//============================================================================
+
 namespace formula
 {
 
@@ -59,18 +59,18 @@ bool FormulaListBox::PreNotify( NotifyEvent& rNEvt )
 
 
 
-//============================================================================
+
 
 inline sal_uInt16 Lb2Cat( sal_uInt16 nLbPos )
 {
-    // Category 0 == LRU, otherwise Categories == LbPos-1
+    
     if ( nLbPos > 0 )
         nLbPos -= 1;
 
     return nLbPos;
 }
 
-//============================================================================
+
 
 FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     TabPage(pParent,ModuleRes(RID_FORMULATAB_FUNCTION)),
@@ -99,7 +99,7 @@ FuncPage::FuncPage(Window* pParent,const IFunctionManager* _pFunctionManager):
     aLbFunction.SetSelectHdl( LINK( this, FuncPage, SelHdl ) );
     aLbFunction.SetDoubleClickHdl( LINK( this, FuncPage, DblClkHdl ) );
 }
-// -----------------------------------------------------------------------------
+
 void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
 {
     const sal_uInt32 nCount = _pCategory->getCount();
@@ -108,7 +108,7 @@ void FuncPage::impl_addFunctions(const IFunctionCategory* _pCategory)
         TFunctionDesc pDesc(_pCategory->getFunction(i));
         aLbFunction.SetEntryData(
             aLbFunction.InsertEntry(pDesc->getFunctionName() ),(void*)pDesc );
-    } // for(sal_uInt32 i = 0 ; i < nCount; ++i)
+    } 
 }
 
 void FuncPage::UpdateFunctionList()
@@ -122,7 +122,7 @@ void FuncPage::UpdateFunctionList()
 
     aLbFunction.Clear();
     aLbFunction.SetUpdateMode( false );
-    //------------------------------------------------------
+    
 
     if ( nSelPos > 0 )
     {
@@ -139,7 +139,7 @@ void FuncPage::UpdateFunctionList()
             impl_addFunctions(pCategory);
         }
     }
-    else // LRU-List
+    else 
     {
         ::std::vector< TFunctionDesc >::iterator aIter = aLRUList.begin();
         ::std::vector< TFunctionDesc >::iterator aEnd = aLRUList.end();
@@ -147,7 +147,7 @@ void FuncPage::UpdateFunctionList()
         for ( ; aIter != aEnd; ++aIter )
         {
             const IFunctionDescription* pDesc = *aIter;
-            if (pDesc)  // may be null if a function is no longer available
+            if (pDesc)  
             {
                 aLbFunction.SetEntryData(
                     aLbFunction.InsertEntry( pDesc->getFunctionName() ), (void*)pDesc );
@@ -155,7 +155,7 @@ void FuncPage::UpdateFunctionList()
         }
     }
 
-    //------------------------------------------------------
+    
     aLbFunction.SetUpdateMode( true );
     aLbFunction.SelectEntryPos(0);
 
@@ -229,7 +229,7 @@ OUString FuncPage::GetSelFunctionName() const
 }
 const IFunctionDescription* FuncPage::GetFuncDesc( sal_uInt16 nPos ) const
 {
-    // not pretty, but hopefully rare
+    
     return (const IFunctionDescription*) aLbFunction.GetEntryData(nPos);
 }
 
@@ -239,6 +239,6 @@ void FuncPage::InitLRUList()
 }
 
 
-} // formula
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,9 +40,9 @@ using namespace ::com::sun::star;
 
 namespace dxcanvas
 {
-    //////////////////////////////////////////////////////////////////////////////////
-    // DXBitmap::DXBitmap
-    //////////////////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     DXBitmap::DXBitmap( const BitmapSharedPtr& rBitmap,
                         bool                   bWithAlpha ) :
@@ -62,7 +62,7 @@ namespace dxcanvas
         mpGraphics(),
         mbAlpha(bWithAlpha)
     {
-        // create container for pixel data
+        
         if(mbAlpha)
         {
             mpBitmap.reset(
@@ -106,7 +106,7 @@ namespace dxcanvas
     uno::Sequence< sal_Int8 > DXBitmap::getData( rendering::IntegerBitmapLayout&     /*bitmapLayout*/,
                                                  const geometry::IntegerRectangle2D& rect )
     {
-        uno::Sequence< sal_Int8 > aRes( (rect.X2-rect.X1)*(rect.Y2-rect.Y1)*4 ); // TODO(F1): Be format-agnostic here
+        uno::Sequence< sal_Int8 > aRes( (rect.X2-rect.X1)*(rect.Y2-rect.Y1)*4 ); 
 
         const Gdiplus::Rect aRect( tools::gdiPlusRectFromIntegerRectangle2D( rect ) );
 
@@ -117,18 +117,18 @@ namespace dxcanvas
         aBmpData.PixelFormat = PixelFormat32bppARGB;
         aBmpData.Scan0       = aRes.getArray();
 
-        // TODO(F1): Support more pixel formats natively
+        
 
-        // read data from bitmap
+        
         if( Gdiplus::Ok != mpBitmap->LockBits( &aRect,
                                                       Gdiplus::ImageLockModeRead | Gdiplus::ImageLockModeUserInputBuf,
-                                                      PixelFormat32bppARGB, // TODO(F1): Adapt to
-                                                      // Graphics native
-                                                      // format/change
-                                                      // getMemoryLayout
+                                                      PixelFormat32bppARGB, 
+                                                      
+                                                      
+                                                      
                                                       &aBmpData ) )
         {
-            // failed to lock, bail out
+            
             return uno::Sequence< sal_Int8 >();
         }
 
@@ -150,20 +150,20 @@ namespace dxcanvas
         aBmpData.PixelFormat = PixelFormat32bppARGB;
         aBmpData.Scan0       = (void*)data.getConstArray();
 
-        // TODO(F1): Support more pixel formats natively
+        
 
         if( Gdiplus::Ok != mpBitmap->LockBits( &aRect,
                                                       Gdiplus::ImageLockModeWrite | Gdiplus::ImageLockModeUserInputBuf,
-                                                      PixelFormat32bppARGB, // TODO: Adapt to
-                                                      // Graphics native
-                                                      // format/change
-                                                      // getMemoryLayout
+                                                      PixelFormat32bppARGB, 
+                                                      
+                                                      
+                                                      
                                                       &aBmpData ) )
         {
             throw uno::RuntimeException();
         }
 
-        // commit data to bitmap
+        
         mpBitmap->UnlockBits( &aBmpData );
     }
 

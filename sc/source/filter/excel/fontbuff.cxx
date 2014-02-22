@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -66,7 +66,7 @@ void LotusFontBuffer::Fill( const sal_uInt8 nIndex, SfxItemSet& rItemSet )
     }
 
     FontUnderline eUnderline;
-    switch( nIndex & 0x60 ) // Bit 5+6
+    switch( nIndex & 0x60 ) 
     {
         case 0x60:
         case 0x20:  eUnderline = UNDERLINE_SINGLE;      break;
@@ -125,18 +125,18 @@ void LotusFontBuffer::MakeFont( ENTRY* pEntry )
 
     switch( pEntry->nType )
     {
-        case 0x00:                      // Helvetica
+        case 0x00:                      
             eFamily = FAMILY_SWISS;
             ePitch  = PITCH_VARIABLE;
             break;
-        case 0x01:                      // Times Roman
+        case 0x01:                      
             eFamily = FAMILY_ROMAN;
             ePitch  = PITCH_VARIABLE;
             break;
-        case 0x02:                      // Courier
+        case 0x02:                      
             ePitch  = PITCH_FIXED;
             break;
-        case 0x03:                      // Symbol
+        case 0x03:                      
             eCharSet = RTL_TEXTENCODING_SYMBOL;
             break;
     }

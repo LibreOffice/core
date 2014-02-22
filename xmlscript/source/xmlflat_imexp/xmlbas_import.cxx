@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlbas_import.hxx"
@@ -34,7 +34,7 @@ using namespace ::com::sun::star::uno;
 namespace xmlscript
 {
 
-    // BasicElementBase
+    
 
     BasicElementBase::BasicElementBase( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -86,7 +86,7 @@ namespace xmlscript
         return false;
     }
 
-    // XElement
+    
 
     Reference< xml::input::XElement > BasicElementBase::getParent()
         throw (RuntimeException)
@@ -126,7 +126,7 @@ namespace xmlscript
 void BasicElementBase::characters( const OUString& /*rChars*/ )
         throw (xml::sax::SAXException, RuntimeException)
     {
-        // not used, all characters ignored
+        
     }
 
 void BasicElementBase::ignorableWhitespace( const OUString& /*rWhitespaces*/ )
@@ -144,7 +144,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // BasicLibrariesElement
+    
 
     BasicLibrariesElement::BasicLibrariesElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -155,7 +155,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // XElement
+    
 
     Reference< xml::input::XElement > BasicLibrariesElement::startChildElement(
             sal_Int32 nUid, const OUString& rLocalName,
@@ -201,7 +201,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
         else if ( rLocalName == "library-embedded" )
         {
-            // TODO: create password protected libraries
+            
 
             if ( xAttributes.is() )
             {
@@ -217,7 +217,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
                         Reference< container::XNameContainer > xLib;
                         if ( m_xLibContainer->hasByName( aName ) )
                         {
-                            // Standard library
+                            
                             m_xLibContainer->getByName( aName ) >>= xLib;
                         }
                         else
@@ -248,7 +248,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // BasicEmbeddedLibraryElement
+    
 
     BasicEmbeddedLibraryElement::BasicEmbeddedLibraryElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -271,7 +271,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
     }
 
-    // XElement
+    
 
     Reference< xml::input::XElement > BasicEmbeddedLibraryElement::startChildElement(
             sal_Int32 nUid, const OUString& rLocalName,
@@ -309,7 +309,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
             m_xLibContainer->setLibraryReadOnly( m_aLibName, m_bReadOnly );
     }
 
-    // BasicModuleElement
+    
 
     BasicModuleElement::BasicModuleElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -321,14 +321,14 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // XElement
+    
 
     Reference< xml::input::XElement > BasicModuleElement::startChildElement(
             sal_Int32 nUid, const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes )
         throw (xml::sax::SAXException, RuntimeException)
     {
-        // TODO: <byte-code>
+        
 
         Reference< xml::input::XElement > xElement;
 
@@ -338,7 +338,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
         else if ( rLocalName == "source-code" )
         {
-            // TODO: password protected libraries
+            
 
             if ( xAttributes.is() )
             {
@@ -359,7 +359,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // BasicSourceCodeElement
+    
 
     BasicSourceCodeElement::BasicSourceCodeElement( const OUString& rLocalName,
             const Reference< xml::input::XAttributes >& xAttributes,
@@ -371,7 +371,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // XElement
+    
 
     void BasicSourceCodeElement::characters( const OUString& rChars )
         throw (xml::sax::SAXException, RuntimeException)
@@ -405,7 +405,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
         }
     }
 
-    // BasicImport
+    
 
     BasicImport::BasicImport( const Reference< frame::XModel >& rxModel, bool bOasis )
         : XMLNS_UID(0)
@@ -419,7 +419,7 @@ void BasicElementBase::processingInstruction( const OUString& /*rTarget*/, const
     {
     }
 
-    // XRoot
+    
 
     void BasicImport::startDocument( const Reference< xml::input::XNamespaceMapping >& xNamespaceMapping )
         throw (xml::sax::SAXException, RuntimeException)
@@ -465,14 +465,14 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         {
             Reference< script::XLibraryContainer2 > xLibContainer;
 
-            // try the XEmbeddedScripts interface
+            
             Reference< document::XEmbeddedScripts > xDocumentScripts( m_xModel, UNO_QUERY );
             if ( xDocumentScripts.is() )
                 xLibContainer.set( xDocumentScripts->getBasicLibraries().get() );
 
             if ( !xLibContainer.is() )
             {
-                // try the "BasicLibraries" property (old-style, for compatibility)
+                
                 Reference< beans::XPropertySet > xPSet( m_xModel, UNO_QUERY );
                 if ( xPSet.is() )
                     xPSet->getPropertyValue("BasicLibraries" ) >>= xLibContainer;
@@ -493,7 +493,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return xElement;
     }
 
-    // component operations
+    
 
     OUString getImplementationName_XMLBasicImporter()
     {
@@ -557,7 +557,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return *pNames;
     }
 
-    // XMLBasicImporterBase
+    
 
     XMLBasicImporterBase::XMLBasicImporterBase( const Reference< XComponentContext >& rxContext, bool bOasis )
         :m_xContext( rxContext )
@@ -569,13 +569,13 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     {
     }
 
-    // XServiceInfo
+    
     sal_Bool XMLBasicImporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException)
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    // XImporter
+    
     void XMLBasicImporterBase::setTargetDocument( const Reference< XComponent >& rxDoc )
         throw (IllegalArgumentException, RuntimeException)
     {
@@ -601,7 +601,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         }
     }
 
-    // XDocumentHandler
+    
 
     void XMLBasicImporterBase::startDocument()
         throw (xml::sax::SAXException, RuntimeException)
@@ -677,7 +677,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
             m_xHandler->setDocumentLocator( xLocator );
     }
 
-    // XMLBasicImporter
+    
 
     XMLBasicImporter::XMLBasicImporter( const Reference< XComponentContext >& rxContext )
         :XMLBasicImporterBase( rxContext, false )
@@ -688,7 +688,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     {
     }
 
-    // XServiceInfo
+    
 
     OUString XMLBasicImporter::getImplementationName(  ) throw (RuntimeException)
     {
@@ -700,7 +700,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return getSupportedServiceNames_XMLBasicImporter();
     }
 
-    // XMLOasisBasicImporter
+    
 
     XMLOasisBasicImporter::XMLOasisBasicImporter( const Reference< XComponentContext >& rxContext )
         :XMLBasicImporterBase( rxContext, true )
@@ -711,7 +711,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
     {
     }
 
-    // XServiceInfo
+    
 
     OUString XMLOasisBasicImporter::getImplementationName(  ) throw (RuntimeException)
     {
@@ -723,7 +723,7 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return getSupportedServiceNames_XMLOasisBasicImporter();
     }
 
-    // component operations
+    
 
     Reference< XInterface > SAL_CALL create_XMLBasicImporter(
         Reference< XComponentContext > const & xContext )
@@ -739,6 +739,6 @@ void BasicImport::setDocumentLocator( const Reference< xml::sax::XLocator >& /*x
         return static_cast< lang::XTypeProvider * >( new XMLOasisBasicImporter( xContext ) );
     }
 
-}   // namespace xmlscript
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

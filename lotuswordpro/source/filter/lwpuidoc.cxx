@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -99,7 +99,7 @@ void LwpNamedProperties::Read(LwpObjectStream *pStrm)
     for (sal_uInt16 k = 0 ; k < numEntries; k++)
     {
         assert(false);
-        // TODO: Read each NamedProperties
+        
     }
     pStrm->SkipExtra();
 }
@@ -124,8 +124,8 @@ void LwpMergeOptions::Read(LwpObjectStream *pStrm)
     m_Filter.Read(pStrm);
     m_nType = pStrm->QuickReaduInt16();
 
-    //Does not process m_nType here. Assume m_nType is 0.
-    // TODO: Read the CMergeDataFile
+    
+    
     assert(m_nType==0);
 
     m_nLastActionFlag = pStrm->QuickReaduInt16();

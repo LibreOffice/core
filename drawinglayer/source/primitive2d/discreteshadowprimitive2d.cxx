@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/primitive2d/discreteshadowprimitive2d.hxx>
@@ -24,7 +24,7 @@
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -154,10 +154,10 @@ namespace drawinglayer
             return maLeft;
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -180,7 +180,7 @@ namespace drawinglayer
 
                 xRetval.realloc(8);
 
-                // TopLeft
+                
                 xRetval[0] = Primitive2DReference(
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getTopLeft(),
@@ -190,7 +190,7 @@ namespace drawinglayer
                             -fBorderX,
                             -fBorderY)));
 
-                // Top
+                
                 xRetval[1] = Primitive2DReference(
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getTop(),
@@ -200,7 +200,7 @@ namespace drawinglayer
                             fBorderX + fSingleX,
                             -fBorderY)));
 
-                // TopRight
+                
                 xRetval[2] = Primitive2DReference(
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getTopRight(),
@@ -210,7 +210,7 @@ namespace drawinglayer
                             1.0 - fBorderX,
                             -fBorderY)));
 
-                // Right
+                
                 xRetval[3] = Primitive2DReference(
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getRight(),
@@ -220,7 +220,7 @@ namespace drawinglayer
                             1.0 + fSingleX,
                             fBorderY + fSingleY)));
 
-                // BottomRight
+                
                 xRetval[4] = Primitive2DReference(
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getBottomRight(),
@@ -230,7 +230,7 @@ namespace drawinglayer
                             1.0 - (fBorderX + fSingleX) + fSingleX,
                             1.0 - (fBorderY + fSingleY) + fSingleY)));
 
-                // Bottom
+                
                 xRetval[5] = Primitive2DReference(
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getBottom(),
@@ -240,7 +240,7 @@ namespace drawinglayer
                             fBorderX + fSingleX,
                             1.0 + fSingleY)));
 
-                // BottomLeft
+                
                 xRetval[6] = Primitive2DReference(
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getBottomLeft(),
@@ -250,7 +250,7 @@ namespace drawinglayer
                             -fBorderX,
                             1.0 - fBorderY)));
 
-                // Left
+                
                 xRetval[7] = Primitive2DReference(
                     new BitmapPrimitive2D(
                         getDiscreteShadow().getLeft(),
@@ -260,7 +260,7 @@ namespace drawinglayer
                             -fBorderX,
                             fBorderY + fSingleY)));
 
-                // put all in object transformation to get to target positions
+                
                 const Primitive2DReference xTransformed(
                     new TransformPrimitive2D(
                         getTransform(),
@@ -298,16 +298,16 @@ namespace drawinglayer
         {
             if(getDiscreteShadow().getBitmapEx().IsEmpty())
             {
-                // no graphics without valid bitmap definition
+                
                 return basegfx::B2DRange();
             }
             else
             {
-                // prepare normal objectrange
+                
                 basegfx::B2DRange aRetval(0.0, 0.0, 1.0, 1.0);
                 aRetval.transform(getTransform());
 
-                // extract discrete shadow size and grow
+                
                 const basegfx::B2DVector aScale(rViewInformation.getViewTransformation() * basegfx::B2DVector(1.0, 1.0));
                 const sal_Int32 nQuarter((getDiscreteShadow().getBitmapEx().GetSizePixel().Width() - 3) >> 2);
                 const double fGrowX((1.0 / aScale.getX()) * nQuarter);
@@ -318,10 +318,10 @@ namespace drawinglayer
             }
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(DiscreteShadowPrimitive2D, PRIMITIVE2D_ID_DISCRETESHADOWPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

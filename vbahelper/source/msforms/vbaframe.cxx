@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbaframe.hxx"
@@ -41,7 +41,7 @@ ScVbaFrame::ScVbaFrame(
 {
 }
 
-// XFrame attributes
+
 
 OUString SAL_CALL ScVbaFrame::getCaption() throw (css::uno::RuntimeException)
 {
@@ -63,7 +63,7 @@ sal_Int32 SAL_CALL ScVbaFrame::getSpecialEffect() throw (uno::RuntimeException)
 
 void SAL_CALL ScVbaFrame::setSpecialEffect( sal_Int32 /*nSpecialEffect*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 sal_Int32 SAL_CALL ScVbaFrame::getBorderStyle() throw (uno::RuntimeException)
@@ -73,7 +73,7 @@ sal_Int32 SAL_CALL ScVbaFrame::getBorderStyle() throw (uno::RuntimeException)
 
 void SAL_CALL ScVbaFrame::setBorderStyle( sal_Int32 /*nBorderStyle*/ ) throw (uno::RuntimeException)
 {
-    // #STUB
+    
 }
 
 uno::Reference< msforms::XNewFont > SAL_CALL ScVbaFrame::getFont() throw (uno::RuntimeException)
@@ -81,13 +81,13 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaFrame::getFont() throw (uno::R
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-// XFrame methods
+
 
 uno::Any SAL_CALL ScVbaFrame::Controls( const uno::Any& rIndex ) throw (uno::RuntimeException)
 {
-    // horizontal anchor of frame children is inside border line (add one unit to compensate border line width)
+    
     double fOffsetX = mpGeometryHelper->getOffsetX() + getLeft() + 1.0;
-    // vertical anchor of frame children is inside border line (add half of text height and one unit to compensate border line width)
+    
     double fOffsetY = mpGeometryHelper->getOffsetY() + getTop() + (getFont()->getSize() / 2.0) + 1.0;
 
     uno::Reference< XCollection > xControls( new ScVbaControls( this, mxContext, mxDialog, m_xModel, fOffsetX, fOffsetY ) );
@@ -96,7 +96,7 @@ uno::Any SAL_CALL ScVbaFrame::Controls( const uno::Any& rIndex ) throw (uno::Run
     return uno::Any( xControls );
 }
 
-// XHelperInterface
+
 
 VBAHELPER_IMPL_XHELPERINTERFACE( ScVbaFrame, "ooo.vba.msforms.Frame" )
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

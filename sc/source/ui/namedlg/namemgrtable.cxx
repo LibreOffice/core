@@ -4,10 +4,10 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
-//ScRangeManagerTable
+
 #include "global.hxx"
 #include "reffact.hxx"
 #include "document.hxx"
@@ -225,7 +225,7 @@ void ScRangeManagerTable::SetEntry(const ScRangeNameLine& rLine)
 
 namespace {
 
-//ensure that the minimum column size is respected
+
 void CalculateItemSize(const long& rTableSize, long& rItemNameSize, long& rItemRangeSize)
 {
     long aItemScopeSize = rTableSize - rItemNameSize - rItemRangeSize;
@@ -273,7 +273,7 @@ IMPL_LINK_NOARG(ScRangeManagerTable, HeaderEndDragHdl)
     long nItemNameSize = rHeaderBar.GetItemSize(ITEMID_NAME);
     long nItemRangeSize = rHeaderBar.GetItemSize(ITEMID_RANGE);
 
-    //calculate column size based on user input and minimum size
+    
     CalculateItemSize(nTableSize, nItemNameSize, nItemRangeSize);
     long nItemScopeSize = nTableSize - nItemNameSize - nItemRangeSize;
 

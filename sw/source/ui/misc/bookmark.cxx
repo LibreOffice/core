@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -36,8 +36,8 @@ const OUString BookmarkCombo::aForbiddenChars("/\\@:*?\";,.#");
 IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 {
     sal_Bool bSelEntries = pBox->GetSelectEntryCount() != 0;
-    // if a string has been pasted from the clipboard then
-    // there may be illegal characters in the box
+    
+    
     if(!bSelEntries)
     {
         OUString sTmp = pBox->GetText();
@@ -61,8 +61,8 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
 
     }
 
-    m_pOkBtn->Enable(!bSelEntries);    // new text mark
-    m_pDeleteBtn->Enable(bSelEntries); // deletable?
+    m_pOkBtn->Enable(!bSelEntries);    
+    m_pDeleteBtn->Enable(bSelEntries); 
 
     return 0;
 }
@@ -72,15 +72,15 @@ IMPL_LINK( SwInsertBookmarkDlg, ModifyHdl, BookmarkCombo *, pBox )
  -----------------------------------------------------------------------*/
 IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
 {
-    // remove text marks from the ComboBox
+    
 
     for (sal_uInt16 i = m_pBookmarkBox->GetSelectEntryCount(); i; i-- )
         m_pBookmarkBox->RemoveEntryAt(m_pBookmarkBox->GetSelectEntryPos(i - 1));
 
     m_pBookmarkBox->SetText(OUString());
-    m_pDeleteBtn->Enable(false);   // no further entries there
+    m_pDeleteBtn->Enable(false);   
 
-    m_pOkBtn->Enable();            // the OK handler deletes
+    m_pOkBtn->Enable();            
     return 0;
 }
 
@@ -90,8 +90,8 @@ IMPL_LINK_NOARG(SwInsertBookmarkDlg, DeleteHdl)
  -----------------------------------------------------------------------*/
 void SwInsertBookmarkDlg::Apply()
 {
-    //at first remove deleted bookmarks to prevent multiple bookmarks with the same
-    //name
+    
+    
     for (sal_uInt16 nCount = m_pBookmarkBox->GetRemovedCount(); nCount > 0; nCount--)
     {
         OUString sRemoved = m_pBookmarkBox->GetRemovedEntry( nCount -1 ).GetName();
@@ -102,7 +102,7 @@ void SwInsertBookmarkDlg::Apply()
         aReq.Done();
     }
 
-    // insert text mark
+    
     SwBoxEntry  aTmpEntry(m_pBookmarkBox->GetText(), 0 );
 
     if (!m_pBookmarkBox->GetText().isEmpty() &&
@@ -136,7 +136,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRe
 
     m_pDeleteBtn->SetClickHdl(LINK(this, SwInsertBookmarkDlg, DeleteHdl));
 
-    // fill Combobox with existing bookmarks
+    
     IDocumentMarkAccess* const pMarkAccess = rSh.getIDocumentMarkAccess();
     sal_uInt16 nId = 0;
     for( IDocumentMarkAccess::const_iterator_t ppBookmark = pMarkAccess->getBookmarksBegin();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,20 +14,20 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//_______________________________________________
-// include own header
+
+
 
 #include <jobs/shelljob.hxx>
 #include <jobs/jobconst.hxx>
 #include <threadhelp/readguard.hxx>
 #include <services.h>
 
-//_______________________________________________
-// include others
+
+
 
 #include <osl/file.hxx>
 #include <osl/process.h>
@@ -36,8 +36,8 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 
-//_______________________________________________
-// include interfaces
+
+
 
 #include <com/sun/star/util/PathSubstitution.hpp>
 #include <com/sun/star/util/XStringSubstitution.hpp>
@@ -61,7 +61,7 @@ static const OUString PROP_DEACTIVATEJOBIFDONE("DeactivateJobIfDone");
 /** address job configuration property "CheckExitCode". */
 static const OUString PROP_CHECKEXITCODE("CheckExitCode");
 
-//-----------------------------------------------
+
 
 DEFINE_XSERVICEINFO_MULTISERVICE_2(ShellJob                   ,
                                    ::cppu::OWeakObject        ,
@@ -78,19 +78,19 @@ DEFINE_INIT_SERVICE(ShellJob,
                     }
                    )
 
-//-----------------------------------------------
+
 ShellJob::ShellJob(const css::uno::Reference< css::uno::XComponentContext >& xContext)
     : ThreadHelpBase(     )
     , m_xContext    (xContext)
 {
 }
 
-//-----------------------------------------------
+
 ShellJob::~ShellJob()
 {
 }
 
-//-----------------------------------------------
+
 css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lJobArguments)
     throw(css::lang::IllegalArgumentException,
           css::uno::Exception                ,
@@ -104,31 +104,31 @@ css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::N
     const ::sal_Bool                            bDeactivateJobIfDone       = lOwnCfg.getUnpackedValueOrDefault(PROP_DEACTIVATEJOBIFDONE      , sal_True         );
     const ::sal_Bool                            bCheckExitCode             = lOwnCfg.getUnpackedValueOrDefault(PROP_CHECKEXITCODE            , sal_True         );
 
-    // replace all might existing place holder.
+    
     OUString sRealCommand = impl_substituteCommandVariables(sCommand);
 
-    // Command is required as minimum.
-    // If it does not exists ... we cant do our job.
-    // Deactivate such miss configured job silently .-)
+    
+    
+    
     if (sRealCommand.isEmpty())
         return ShellJob::impl_generateAnswer4Deactivation();
 
-    // do it
+    
     ::sal_Bool bDone = impl_execute(sRealCommand, lCommandArguments, bCheckExitCode);
     if (! bDone)
         return css::uno::Any();
 
-    // Job was done ... user configured deactivation of this job
-    // in such case.
+    
+    
     if (bDeactivateJobIfDone)
         return ShellJob::impl_generateAnswer4Deactivation();
 
-    // There was no decision about deactivation of this job.
-    // So we have to return nothing here !
+    
+    
     return css::uno::Any();
 }
 
-//-----------------------------------------------
+
 css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
 {
     css::uno::Sequence< css::beans::NamedValue > aAnswer(1);
@@ -138,14 +138,14 @@ css::uno::Any ShellJob::impl_generateAnswer4Deactivation()
     return css::uno::makeAny(aAnswer);
 }
 
-//-----------------------------------------------
+
 OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 {
-    // SYNCHRONIZED ->
+    
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::uno::XComponentContext > xContext = m_xContext;
     aReadLock.unlock();
-    // <- SYNCHRONIZED
+    
 
     try
     {
@@ -161,7 +161,7 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
     return OUString();
 }
 
-//-----------------------------------------------
+
 ::sal_Bool ShellJob::impl_execute(const OUString&                       sCommand      ,
                                   const css::uno::Sequence< OUString >& lArguments    ,
                                         ::sal_Bool                             bCheckExitCode)
@@ -176,14 +176,14 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
 
     oslProcessError eError = osl_executeProcess(sCommand.pData, pArgs, nArgs, nOptions, NULL, NULL, NULL, 0, &hProcess);
 
-    // executable not found or couldnt be started
+    
     if (eError != osl_Process_E_None)
         return sal_False;
 
     ::sal_Bool bRet = sal_True;
     if (bCheckExitCode)
     {
-        // check its return codes ...
+        
         oslProcessInfo aInfo;
         aInfo.Size = sizeof (oslProcessInfo);
         eError = osl_getProcessInfo(hProcess, osl_Process_EXITCODE, &aInfo);
@@ -197,6 +197,6 @@ OUString ShellJob::impl_substituteCommandVariables(const OUString& sCommand)
     return bRet;
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

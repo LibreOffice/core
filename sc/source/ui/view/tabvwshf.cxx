@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -65,7 +65,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
     sal_uInt16      nSlot       = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
 
-    HideListBox();                  // Autofilter-DropDown-Listbox
+    HideListBox();                  
 
     switch ( nSlot )
     {
@@ -82,7 +82,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         bVisible = ((const SfxBoolItem*)pItem)->GetValue();
                 }
 
-                if( ! bVisible )            // ausblenden
+                if( ! bVisible )            
                 {
                     if ( pDoc->IsDocEditable() )
                     {
@@ -90,7 +90,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         HideTable( rMark );
                     }
                 }
-                else                        // einblenden
+                else                        
                 {
                     std::vector<OUString> rNames;
                     rNames.push_back(aName);
@@ -171,9 +171,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 SCTAB   nTabNr       = nCurrentTab;
 
                 if ( !pDoc->IsDocEditable() )
-                    break;                          // gesperrt
+                    break;                          
 
-                if ( pReqArgs != NULL )             // von Basic
+                if ( pReqArgs != NULL )             
                 {
                     sal_Bool bOk = false;
                     const SfxPoolItem*  pTabItem;
@@ -183,7 +183,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     if ( pReqArgs->HasItem( FN_PARAM_1, &pTabItem ) &&
                          pReqArgs->HasItem( nSlot, &pNameItem ) )
                     {
-                        //  Tabellennr. von Basic: 1-basiert
+                        
 
                         aName = ((const SfxStringItem*)pNameItem)->GetValue();
                         nTabNr = ((const SfxUInt16Item*)pTabItem)->GetValue() - 1;
@@ -193,9 +193,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                     if (bOk)
                         rReq.Done( *pReqArgs );
-                    //! sonst Fehler setzen
+                    
                 }
-                else                                // Dialog
+                else                                
                 {
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -249,7 +249,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 if(nCount==1 && !pDlg->GetFirstTable()->isEmpty())
                                 {
                                     rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
-                                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabNr) + 1 ) );        // 1-based
+                                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabNr) + 1 ) );        
                                     rReq.Done();
 
                                     InsertTable( *pDlg->GetFirstTable(), nTabNr );
@@ -272,14 +272,14 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                         nTabAfter=j;
                                         break;
                                     }
-                                    else // #101672#; increase nTabAfter, because it is possible that the scenario tables are the last
+                                    else 
                                         nTabAfter = j + 1;
                                 }
 
                                 if(nCount==1 && !pDlg->GetFirstTable()->isEmpty())
                                 {
                                     rReq.AppendItem( SfxStringItem( FID_INS_TABLE, *pDlg->GetFirstTable() ) );
-                                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabAfter) + 1 ) );     // 1-based
+                                    rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nTabAfter) + 1 ) );     
                                     rReq.Done();
 
                                     InsertTable( *pDlg->GetFirstTable(), nTabAfter);
@@ -302,23 +302,23 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         case FID_TAB_RENAME:
         case FID_TAB_MENU_RENAME:
             {
-                //  FID_TAB_MENU_RENAME - "umbenennen" im Menu
-                //  FID_TAB_RENAME      - "Name"-Property fuer Basic
-                //  Execute ist gleich, aber im GetState wird MENU_RENAME evtl. disabled
+                
+                
+                
 
                 if ( nSlot == FID_TAB_MENU_RENAME )
-                    nSlot = FID_TAB_RENAME;             // Execute ist gleich
+                    nSlot = FID_TAB_RENAME;             
 
                 SCTAB nTabNr = pViewData->GetTabNo();
                 ScMarkData& rMark = pViewData->GetMarkData();
                 SCTAB nTabSelCount = rMark.GetSelectCount();
 
                 if ( !pDoc->IsDocEditable() )
-                    break; // alles gesperrt
+                    break; 
 
                 if ( nSlot != FID_TAB_APPEND &&
                         ( pDoc->IsTabProtected( nTabNr ) || nTabSelCount > 1 ) )
-                    break; // kein Rename
+                    break; 
 
                 if( pReqArgs != NULL )
                 {
@@ -410,7 +410,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 if( rReq.IsAPI() )
                                 {
 #ifndef DISABLE_SCRIPTING
-                                    StarBASIC::Error( SbERR_SETPROP_FAILED ); // XXX Fehlerbehandlung???
+                                    StarBASIC::Error( SbERR_SETPROP_FAILED ); 
 #endif
                                 }
                                 else
@@ -431,7 +431,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         case FID_TAB_MOVE:
             {
                 if ( pDoc->GetChangeTrack() != NULL )
-                    break;      // bei aktiviertem ChangeTracking kein TabMove
+                    break;      
 
                 sal_Bool   bDoIt = false;
                 sal_uInt16 nDoc = 0;
@@ -449,7 +449,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         aDocName = ((const SfxStringItem*)pItem)->GetValue();
                     if( pReqArgs->HasItem( FN_PARAM_1, &pItem ) )
                     {
-                        //  Tabelle ist 1-basiert
+                        
                         nTab = ((const SfxUInt16Item*)pItem)->GetValue() - 1;
                         if ( nTab >= nTableCount )
                             nTab = SC_TAB_APPEND;
@@ -480,18 +480,18 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                     break;
                                 }
 
-                                i++;        // nur die ScDocShell's zaehlen
+                                i++;        
                             }
                             pSh = SfxObjectShell::GetNext( *pSh );
                         }
                     }
-                    else // Kein Dokumentname -> neues Dokument
+                    else 
                     {
                         nDoc = SC_DOC_NEW;
                         bDoIt = sal_True;
                     }
 
-                    if ( bDoIt && nTab >= nTableCount )     // ggf. anhaengen
+                    if ( bDoIt && nTab >= nTableCount )     
                         nTab = SC_TAB_APPEND;
                 }
                 else
@@ -516,8 +516,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         pDlg->SetForceCopyTable();
                     }
 
-                    // We support direct renaming of sheet only when one sheet
-                    // is selected.
+                    
+                    
                     pDlg->EnableRenameTable(nTabSelCount == 1);
 
                     if ( pDlg->Execute() == RET_OK )
@@ -526,7 +526,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         nTab = pDlg->GetSelectedTable();
                         bCpy = pDlg->GetCopyTable();
                         bool bRna = pDlg->GetRenameTable();
-                        // Leave aTabName string empty, when Rename is FALSE.
+                        
                         if( bRna )
                         {
                            pDlg->GetTabNameString( aTabName );
@@ -548,7 +548,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             }
                         }
                         rReq.AppendItem( SfxStringItem( FID_TAB_MOVE, aFoundDocName ) );
-                        //  Tabelle ist 1-basiert, wenn nicht APPEND
+                        
                         SCTAB nBasicTab = ( nTab <= MAXTAB ) ? (nTab+1) : nTab;
                         rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab) ) );
                         rReq.AppendItem( SfxBoolItem( FN_PARAM_2, bCpy ) );
@@ -558,7 +558,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
                 if( bDoIt )
                 {
-                    rReq.Done();        // aufzeichnen, solange das Dokument noch aktiv ist
+                    rReq.Done();        
 
                     MoveTable( nDoc, nTab, bCpy, &aTabName );
                 }
@@ -567,12 +567,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
 
         case FID_DELETE_TABLE:
             {
-                //  Parameter war ueberfluessig, weil die Methode an der Table haengt
+                
 
                 sal_Bool bDoIt = rReq.IsAPI();
                 if( !bDoIt )
                 {
-                    //  wenn's nicht von Basic kommt, nochmal nachfragen:
+                    
 
                         bDoIt = ( RET_YES ==
                                   QueryBox( GetDialogParent(),
@@ -616,7 +616,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 const ScMarkData& rMark = pViewData->GetMarkData();
                 if ( rMark.GetSelectCount() != 0 )
                 {
-                    //  handle several sheets
+                    
 
                     ::svl::IUndoManager* pUndoManager = pDocSh->GetUndoManager();
                     OUString aUndo = ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
@@ -655,7 +655,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 if ( !pDoc->IsDocEditable() )
                     break;
 
-                if ( pDoc->IsTabProtected( nTabNr ) ) // ||nTabSelCount > 1
+                if ( pDoc->IsTabProtected( nTabNr ) ) 
                     break;
 
                 if( pReqArgs != NULL )
@@ -687,7 +687,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
                     else
                     {
-                        bDone = SetTabBgColor( aColor, nCurrentTab ); //ScViewFunc.SetTabBgColor
+                        bDone = SetTabBgColor( aColor, nCurrentTab ); 
                     }
                     if( bDone )
                     {
@@ -696,8 +696,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
-                    sal_uInt16      nRet    = RET_OK; /// temp
-                    sal_Bool        bDone   = false; /// temp
+                    sal_uInt16      nRet    = RET_OK; 
+                    sal_Bool        bDone   = false; 
                     Color       aTabBgColor;
 
                     aTabBgColor = pDoc->GetTabBgColor( nCurrentTab );
@@ -734,7 +734,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                                 else
                                 {
-                                    bDone = SetTabBgColor( aSelectedColor, nCurrentTab ); //ScViewFunc.SetTabBgColor
+                                    bDone = SetTabBgColor( aSelectedColor, nCurrentTab ); 
                                 }
                                 if ( bDone )
                                 {
@@ -769,7 +769,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             GetDialogParent(), xFrame, false, xEvents, 0 ) );
                         if ( pDialog.get() && pDialog->Execute() == RET_OK )
                         {
-                            // the dialog modifies the settings directly
+                            
                         }
                     }
                 }
@@ -781,7 +781,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
         }
     }
 
-    //------------------------------------------------------------------
+    
 
     void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
     {
@@ -809,7 +809,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
             case FID_TABLE_HIDE:
                 {
                     sal_uInt16 nVis = 0;
-                    // enable menu : check to make sure we won't hide all sheets. we need at least one visible at all times.
+                    
                     for ( SCTAB i=0; i < nTabCount && nVis<nTabSelCount + 1; i++ )
                         if (pDoc->IsVisible(i))
                             ++nVis;
@@ -864,8 +864,8 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     rSet.DisableItem( nWhich );
                 break;
 
-            //  FID_TAB_MENU_RENAME - "umbenennen" im Menu
-            //  FID_TAB_RENAME      - "Name"-Property fuer Basic
+            
+            
 
             case FID_TAB_MENU_RENAME:
                 if ( !pDoc->IsDocEditable() ||

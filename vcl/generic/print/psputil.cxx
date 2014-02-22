@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -43,11 +43,11 @@ getHexValueOf (sal_Int32 nValue, sal_Char* pBuffer)
 sal_Int32
 getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer)
 {
-    // get sign
+    
     bool bNegative = nValue < 0;
     nValue = bNegative ? -nValue : nValue;
 
-    // get required buffer size, must be a multiple of two
+    
     sal_Int32 nPrecision;
     if (nValue < 0x80)
         nPrecision = 2;
@@ -60,7 +60,7 @@ getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer)
             else
                 nPrecision = 8;
 
-    // convert the int into its hex representation, write it into the buffer
+    
     sal_Int32 nRet = nPrecision;
     while (nPrecision)
     {
@@ -68,7 +68,7 @@ getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer)
         nValue /= 256;
     }
 
-    // set sign bit
+    
     if (bNegative)
     {
         switch (pBuffer[0])
@@ -85,7 +85,7 @@ getAlignedHexValueOf (sal_Int32 nValue, sal_Char* pBuffer)
         }
     }
 
-    // report precision
+    
     return nRet;
 }
 
@@ -209,8 +209,8 @@ ConverterFactory::Get (rtl_TextEncoding nEncoding)
     return NULL;
 }
 
-// wrapper for rtl_convertUnicodeToText that handles the usual cases for
-// textconversion in drawtext
+
+
 sal_Size
 ConverterFactory::Convert (const sal_Unicode *pText, int nTextLen,
                            unsigned char *pBuffer, sal_Size nBufferSize, rtl_TextEncoding nEncoding)

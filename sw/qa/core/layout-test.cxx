@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -82,8 +82,8 @@ void SwLayoutTest::setUp()
 {
     test::BootstrapFixture::setUp();
 
-    // This is a bit of a fudge, we do this to ensure that SwGlobals::ensure,
-    // which is a private symbol to us, gets called
+    
+    
     m_xWriterComponent =
         getMultiServiceFactory()->createInstance(OUString(
         "com.sun.star.comp.Writer.TextDocument"));

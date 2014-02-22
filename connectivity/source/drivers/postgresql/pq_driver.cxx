@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -103,7 +103,7 @@ Reference< XConnection > Driver::connect(
     const OUString& url,const Sequence< PropertyValue >& info )
     throw (SQLException, RuntimeException)
 {
-    if( ! acceptsURL( url ) )  // XDriver spec tells me to do so ...
+    if( ! acceptsURL( url ) )  
         return Reference< XConnection > ();
 
     Sequence< Any > seq ( 2 );
@@ -141,7 +141,7 @@ sal_Int32 Driver::getMinorVersion(  ) throw (RuntimeException)
     return PQ_SDBC_MINOR;
 }
 
-    // XServiceInfo
+    
 OUString SAL_CALL Driver::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
@@ -160,7 +160,7 @@ Sequence< OUString > Driver::getSupportedServiceNames(void)
     return DriverGetSupportedServiceNames();
 }
 
-// XComponent
+
 void Driver::disposing()
 {
 
@@ -209,7 +209,7 @@ public:
     {
     }
 
-    // XSingleComponentFactory
+    
     virtual Reference< XInterface > SAL_CALL createInstanceWithContext(
         Reference< XComponentContext > const & xContext )
         throw (Exception, RuntimeException);
@@ -218,7 +218,7 @@ public:
         Reference< XComponentContext > const & xContext )
         throw (Exception, RuntimeException);
 
-    // XServiceInfo
+    
     OUString SAL_CALL getImplementationName()
         throw(::com::sun::star::uno::RuntimeException)
     {
@@ -238,7 +238,7 @@ public:
         return m_serviceNames;
     }
 
-    // XComponent
+    
     virtual void SAL_CALL disposing();
 
 private:
@@ -263,7 +263,7 @@ Reference< XInterface > OOneInstanceComponentFactory::createInstanceWithContext(
 {
     if( ! m_theInstance.is() )
     {
-        // work around the problem in sdbc
+        
         Reference< XComponentContext > useCtx = ctx;
         if( ! useCtx.is() )
             useCtx = m_defaultContext;
@@ -289,15 +289,15 @@ void OOneInstanceComponentFactory::disposing()
         rComp->dispose();
 }
 
-//  Reference< XSingleComponentFactory > createOneInstanceComponentFactory(
-//      cppu::ComponentFactoryFunc fptr,
-//      OUString const & rImplementationName,
-//      ::com::sun::star::uno::Sequence< OUString > const & rServiceNames,
-//      rtl_ModuleCount * pModCount = 0 )
-//      SAL_THROW(())
-//  {
-//      return new OOneInstanceComponentFactory( rImplementationName, fptr , rServiceNames);
-//  }
+
+
+
+
+
+
+
+
+
 
 }
 
@@ -317,9 +317,9 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL postgresql_sdbc_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * )
 {
-    // need to extract the defaultcontext, because the way, sdbc
-    // bypasses the servicemanager, does not allow to use the
-    // XSingleComponentFactory interface ...
+    
+    
+    
     void * pRet = 0;
     Reference< XSingleComponentFactory > xFactory;
     Reference< com::sun::star::lang::XMultiServiceFactory > xSmgr(

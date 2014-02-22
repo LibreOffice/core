@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstdio>
@@ -56,7 +56,7 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-//------------------------------------------------------------------
+
 
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                                               sal_uInt16 nPrfx,
@@ -73,8 +73,8 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
     ScDocument* pDoc = GetScImport().GetDocument();
     if (pDoc)
     {
-        // ODF 1.1 and earlier => GRAM_PODF; ODF 1.2 and later => GRAM_ODFF;
-        // no version => earlier than 1.2 => GRAM_PODF.
+        
+        
         formula::FormulaGrammar::Grammar eGrammar = formula::FormulaGrammar::GRAM_ODFF;
         OUString aVer( rImport.GetODFVersion());
         sal_Int32 nLen = aVer.getLength();
@@ -86,9 +86,9 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
             eGrammar = formula::FormulaGrammar::GRAM_PODF;
         else
         {
-            // In case there was a micro version, e.g. "1.2.3", this would
-            // still yield major.minor, but pParsedEnd (5th parameter, not
-            // passed here) would point before string end upon return.
+            
+            
+            
             double fVer = ::rtl::math::stringToDouble( aVer, '.', 0, NULL, NULL);
             if (fVer < 1.2)
                 eGrammar = formula::FormulaGrammar::GRAM_PODF;
@@ -131,7 +131,7 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
     if ( pSheetData && pSheetData->HasStartPos() )
     {
-        // stream part to copy ends before the next child element
+        
         sal_Int32 nEndOffset = GetScImport().GetByteOffset();
         pSheetData->EndStreamPos( nEndOffset );
     }
@@ -209,11 +209,11 @@ void ScXMLBodyContext::Characters( const OUString& )
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
     if ( pSheetData && pSheetData->HasStartPos() )
     {
-        // stream part to copy ends before any content (whitespace) within the spreadsheet element
+        
         sal_Int32 nEndOffset = GetScImport().GetByteOffset();
         pSheetData->EndStreamPos( nEndOffset );
     }
-    // otherwise ignore
+    
 }
 
 void ScXMLBodyContext::EndElement()
@@ -221,22 +221,22 @@ void ScXMLBodyContext::EndElement()
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
     if ( pSheetData && pSheetData->HasStartPos() )
     {
-        // stream part to copy ends before the closing tag of spreadsheet element
+        
         sal_Int32 nEndOffset = GetScImport().GetByteOffset();
         pSheetData->EndStreamPos( nEndOffset );
     }
 
     if ( pSheetData )
     {
-        // store the loaded namespaces (for the office:spreadsheet element),
-        // so the prefixes in copied stream fragments remain valid
+        
+        
         const SvXMLNamespaceMap& rNamespaces = GetImport().GetNamespaceMap();
         pSheetData->StoreLoadedNamespaces( rNamespaces );
     }
 
     if (!bHadCalculationSettings)
     {
-        // #111055#; set calculation settings defaults if there is no calculation settings element
+        
         SvXMLImportContext *pContext = new ScXMLCalculationSettingsContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), NULL );
         pContext->EndElement();
     }
@@ -262,7 +262,7 @@ void ScXMLBodyContext::EndElement()
         if (pChangeTrackingImportHelper)
             pChangeTrackingImportHelper->CreateChangeTrack(GetScImport().GetDocument());
 
-        // #i37959# handle document protection after the sheet settings
+        
         if (bProtected)
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH

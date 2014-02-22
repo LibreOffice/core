@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "orcusfiltersimpl.hxx"
@@ -53,7 +53,7 @@ OUString toString(const orcus::xml_structure_tree::entity_name& entity, const or
     OUStringBuffer aBuf;
     if (entity.ns)
     {
-        // Namespace exists.  Use the short version of the xml namespace name for display.
+        
         std::string aShortName = walker.get_xmlns_short_name(entity.ns);
         aBuf.appendAscii(aShortName.c_str());
         aBuf.append(':');
@@ -69,7 +69,7 @@ void populateTree(
 {
     SvTreeListEntry* pEntry = rTreeCtrl.InsertEntry(toString(rElemName, rWalker), pParent);
     if (!pEntry)
-        // Can this ever happen!?
+        
         return;
 
     ScOrcusXMLTreeParam::EntryData& rEntryData = setUserDataToEntry(
@@ -80,7 +80,7 @@ void populateTree(
 
     if (bRepeat)
     {
-        // Recurring elements use different icon.
+        
         rTreeCtrl.SetExpandedEntryBmp(pEntry, rParam.maImgElementRepeat);
         rTreeCtrl.SetCollapsedEntryBmp(pEntry, rParam.maImgElementRepeat);
     }
@@ -90,7 +90,7 @@ void populateTree(
 
     orcus::xml_structure_tree::entity_names_type aNames;
 
-    // Insert attributes.
+    
     rWalker.get_attributes(aNames);
     orcus::xml_structure_tree::entity_names_type::const_iterator it = aNames.begin();
     orcus::xml_structure_tree::entity_names_type::const_iterator itEnd = aNames.end();
@@ -113,10 +113,10 @@ void populateTree(
 
     rWalker.get_children(aNames);
 
-    // Non-leaf if it has child elements, leaf otherwise.
+    
     rEntryData.mbLeafNode = aNames.empty();
 
-    // Insert child elements recursively.
+    
     for (it = aNames.begin(), itEnd = aNames.end(); it != itEnd; ++it)
     {
         orcus::xml_structure_tree::element aElem = rWalker.descend(*it);
@@ -201,13 +201,13 @@ bool ScOrcusXMLContextImpl::loadXMLStructure(SvTreeListBox& rTreeCtrl, ScOrcusXM
 
         orcus::xml_structure_tree::walker aWalker = aXmlTree.get_walker();
 
-        // Root element.
+        
         orcus::xml_structure_tree::element aElem = aWalker.root();
         populateTree(rTreeCtrl, aWalker, aElem.name, aElem.repeat, NULL, rParam);
     }
     catch (const std::exception&)
     {
-        // Parsing of this XML file failed.
+        
         return false;
     }
 
@@ -247,11 +247,11 @@ bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
     {
         orcus::orcus_xml filter(maNsRepo, &aFactory, NULL);
 
-        // Define all used namespaces.
+        
         std::for_each(rParam.maNamespaces.begin(), rParam.maNamespaces.end(), SetNamespaceAlias(filter, maNsRepo));
 
         {
-            // Set cell links.
+            
             ScOrcusImportXMLParam::CellLinksType::const_iterator it = rParam.maCellLinks.begin();
             ScOrcusImportXMLParam::CellLinksType::const_iterator itEnd = rParam.maCellLinks.end();
             for (; it != itEnd; ++it)
@@ -267,7 +267,7 @@ bool ScOrcusXMLContextImpl::importXML(const ScOrcusImportXMLParam& rParam)
         }
 
         {
-            // Set range links.
+            
             ScOrcusImportXMLParam::RangeLinksType::const_iterator it = rParam.maRangeLinks.begin();
             ScOrcusImportXMLParam::RangeLinksType::const_iterator itEnd = rParam.maRangeLinks.end();
             for (; it != itEnd; ++it)

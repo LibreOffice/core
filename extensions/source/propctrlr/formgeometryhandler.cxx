@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -43,10 +43,10 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
@@ -98,9 +98,9 @@ namespace pcr
     #define ANCHOR_TO_SHEET 0
     #define ANCHOR_TO_CELL  1
 
-    //====================================================================
-    //= BroadcastHelperBase
-    //====================================================================
+    
+    
+    
     class BroadcastHelperBase
     {
     protected:
@@ -116,9 +116,9 @@ namespace pcr
         ::cppu::OBroadcastHelper    maBHelper;
     };
 
-    //====================================================================
-    //= ShapeGeometryChangeNotifier - declaration
-    //====================================================================
+    
+    
+    
     /** helper class to work around the ...unfortunate implementation of property change broadcasts
         in the XShape implementation, which broadcasts way too generous and unspecified
     */
@@ -143,7 +143,7 @@ namespace pcr
             impl_init_nothrow();
         }
 
-        // property change broadcasting
+        
         void addPropertyChangeListener( const Reference< XPropertyChangeListener >& _listener )
         {
             m_aPropertyChangeListeners.addInterface( _listener );
@@ -153,14 +153,14 @@ namespace pcr
             m_aPropertyChangeListeners.removeInterface( _listener );
         }
 
-        // XComponent equivalent
+        
         void dispose()
         {
             ::osl::MutexGuard aGuard( getMutex() );
             impl_dispose_nothrow();
         }
 
-        // XInterface
+        
         virtual void SAL_CALL acquire(  ) throw ()
         {
             m_rParent.acquire();
@@ -171,10 +171,10 @@ namespace pcr
             m_rParent.release();
         }
 
-        // XPropertyChangeListener
+        
         virtual void SAL_CALL propertyChange( const PropertyChangeEvent& _event ) throw (RuntimeException);
 
-        // XEventListener
+        
         virtual void SAL_CALL disposing( const EventObject& _event ) throw (RuntimeException);
 
     protected:
@@ -200,9 +200,9 @@ namespace pcr
         Reference< XShape >                 m_xShape;
     };
 
-    //====================================================================
-    //= FormGeometryHandler - declaration
-    //====================================================================
+    
+    
+    
     class FormGeometryHandler;
     typedef HandlerComponentBase< FormGeometryHandler > FormGeometryHandler_Base;
     /** a property handler for any virtual string properties
@@ -221,7 +221,7 @@ namespace pcr
         ~FormGeometryHandler();
 
     protected:
-        // XPropertyHandler overriables
+        
         virtual Any                         SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException);
         virtual void                        SAL_CALL setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException);
         virtual LineDescriptor              SAL_CALL describePropertyLine( const OUString& _rPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::NullPointerException, ::com::sun::star::uno::RuntimeException);
@@ -230,10 +230,10 @@ namespace pcr
         virtual Sequence< OUString > SAL_CALL getActuatingProperties( ) throw (RuntimeException);
         virtual void                        SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& _rOldValue, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (NullPointerException, RuntimeException);
 
-        // OComponentHandler overridables
+        
         virtual void SAL_CALL disposing();
 
-        // PropertyHandler overridables
+        
         virtual Sequence< Property >        SAL_CALL doDescribeSupportedProperties() const;
 
     protected:
@@ -250,18 +250,18 @@ namespace pcr
         ::rtl::Reference< ShapeGeometryChangeNotifier > m_xChangeNotifier;
     };
 
-    //====================================================================
-    //= FormGeometryHandler - implementation
-    //====================================================================
+    
+    
+    
     DBG_NAME( FormGeometryHandler )
-    //--------------------------------------------------------------------
+    
     FormGeometryHandler::FormGeometryHandler( const Reference< XComponentContext >& _rxContext )
         :FormGeometryHandler_Base( _rxContext )
     {
         DBG_CTOR( FormGeometryHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     FormGeometryHandler::~FormGeometryHandler( )
     {
         if ( !rBHelper.bDisposed )
@@ -273,7 +273,7 @@ namespace pcr
         DBG_DTOR( FormGeometryHandler, NULL );
     }
 
-    //--------------------------------------------------------------------
+    
     void FormGeometryHandler::onNewComponent()
     {
         if ( m_xChangeNotifier.is() )
@@ -291,7 +291,7 @@ namespace pcr
             Reference< XControlModel > xControlModel( m_xComponent, UNO_QUERY );
             if ( xControlModel.is() )
             {
-                // do not ask the map for shapes for grid control columns ....
+                
                 Reference< XChild > xCompChild( m_xComponent, UNO_QUERY_THROW );
                 Reference< XGridColumnFactory > xCheckGrid( xCompChild->getParent(), UNO_QUERY );
                 if ( !xCheckGrid.is() )
@@ -313,13 +313,13 @@ namespace pcr
             m_xChangeNotifier = new ShapeGeometryChangeNotifier( *this, m_aMutex, m_xAssociatedShape.get() );
     }
 
-    //--------------------------------------------------------------------
+    
     OUString SAL_CALL FormGeometryHandler::getImplementationName_static(  ) throw (RuntimeException)
     {
         return OUString( "com.sun.star.comp.extensions.FormGeometryHandler" );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL FormGeometryHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
     {
         Sequence< OUString > aSupported( 1 );
@@ -327,7 +327,7 @@ namespace pcr
         return aSupported;
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL FormGeometryHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -376,7 +376,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormGeometryHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -442,7 +442,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     LineDescriptor SAL_CALL FormGeometryHandler::describePropertyLine( const OUString& _rPropertyName,
             const Reference< XPropertyControlFactory >& _rxControlFactory )
         throw (UnknownPropertyException, NullPointerException, RuntimeException)
@@ -459,7 +459,7 @@ namespace pcr
             case PROPERTY_ID_WIDTH:
             case PROPERTY_ID_HEIGHT:
                 bIsSize = true;
-                // NO break!
+                
             case PROPERTY_ID_POSITIONX:
             case PROPERTY_ID_POSITIONY:
             {
@@ -476,7 +476,7 @@ namespace pcr
 
             case PROPERTY_ID_TEXT_ANCHOR_TYPE:
             case PROPERTY_ID_SHEET_ANCHOR_TYPE:
-                // default handling from PropertyHandler is sufficient
+                
                 break;
 
             default:
@@ -491,7 +491,7 @@ namespace pcr
         return aLineDesc;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormGeometryHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _listener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -500,7 +500,7 @@ namespace pcr
             m_xChangeNotifier->addPropertyChangeListener( _listener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormGeometryHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _listener ) throw (RuntimeException)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -509,7 +509,7 @@ namespace pcr
             m_xChangeNotifier->removePropertyChangeListener( _listener );
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL FormGeometryHandler::getActuatingProperties( ) throw (RuntimeException)
     {
         Sequence< OUString > aInterestedIn(1);
@@ -517,7 +517,7 @@ namespace pcr
         return aInterestedIn;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormGeometryHandler::actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const Any& _rNewValue, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& _rxInspectorUI, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -541,7 +541,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     Sequence< Property > SAL_CALL FormGeometryHandler::doDescribeSupportedProperties() const
     {
         if ( !m_xAssociatedShape.is() )
@@ -563,7 +563,7 @@ namespace pcr
         return Sequence< Property >( &(*aProperties.begin()), aProperties.size() );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL FormGeometryHandler::disposing()
     {
         FormGeometryHandler_Base::disposing();
@@ -575,7 +575,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormGeometryHandler::impl_haveTextAnchorType_nothrow() const
     {
         ENSURE_OR_THROW( m_xShapeProperties.is(), "not to be called without shape properties" );
@@ -592,7 +592,7 @@ namespace pcr
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     bool FormGeometryHandler::impl_haveSheetAnchorType_nothrow() const
     {
         ENSURE_OR_THROW( m_xShapeProperties.is(), "not to be called without shape properties" );
@@ -612,7 +612,7 @@ namespace pcr
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         static sal_Int32 lcl_getLowerBoundRowOrColumn( const Reference< XIndexAccess >& _rxRowsOrColumns, const bool _bRows,
@@ -646,14 +646,14 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void FormGeometryHandler::impl_setSheetAnchorType_nothrow( const sal_Int32 _nAnchorType ) const
     {
         ENSURE_OR_THROW( m_xShapeProperties.is(), "illegal to be called without shape properties." );
         try
         {
             CellBindingHelper aHelper( m_xComponent, impl_getContextDocument_nothrow() );
-            // find the sheet which the control belongs to
+            
             Reference< XSpreadsheet > xSheet;
             aHelper.getControlSheetIndex( xSheet );
 
@@ -674,12 +674,12 @@ namespace pcr
             {
                 Reference< XColumnRowRange > xColsRows( xSheet, UNO_QUERY_THROW );
 
-                // get the current anchor
+                
                 Reference< XSpreadsheet > xCurrentAnchor;
                 OSL_VERIFY( m_xShapeProperties->getPropertyValue( PROPERTY_ANCHOR ) >>= xCurrentAnchor );
                 OSL_ENSURE( xCurrentAnchor.is(), "FormGeometryHandler::impl_setSheetAnchorType_nothrow: only to be called when currently anchored to a sheet!" );
 
-                // get the current position
+                
                 AwtPoint aRelativePosition( m_xAssociatedShape->getPosition() );
 
                 Reference< XTableColumns > xCols( xColsRows->getColumns(), UNO_SET_THROW );
@@ -704,9 +704,9 @@ namespace pcr
         }
     }
 
-    //====================================================================
-    //= ShapeGeometryChangeNotifier - implementation
-    //====================================================================
+    
+    
+    
     namespace
     {
         struct EventTranslation
@@ -722,7 +722,7 @@ namespace pcr
         };
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ShapeGeometryChangeNotifier::propertyChange( const PropertyChangeEvent& _event ) throw (RuntimeException)
     {
         ::comphelper::ComponentMethodGuard aGuard( *this );
@@ -766,14 +766,14 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ShapeGeometryChangeNotifier::disposing( const EventObject& /*_event*/ ) throw (RuntimeException)
     {
         ::comphelper::ComponentMethodGuard aGuard( *this );
         impl_dispose_nothrow();
     }
 
-    //--------------------------------------------------------------------
+    
     void ShapeGeometryChangeNotifier::impl_init_nothrow()
     {
         osl_atomic_increment( &m_refCount );
@@ -789,7 +789,7 @@ namespace pcr
         osl_atomic_decrement( &m_refCount );
     }
 
-    //--------------------------------------------------------------------
+    
     void ShapeGeometryChangeNotifier::impl_dispose_nothrow()
     {
         try
@@ -805,9 +805,9 @@ namespace pcr
         getBroadcastHelper().bDisposed = true;
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 extern "C" void SAL_CALL createRegistryInfo_FormGeometryHandler()
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "exceldetect.hxx"
@@ -58,7 +58,7 @@ bool hasStream(const uno::Reference<io::XInputStream>& xInStream, const OUString
     pStream->Seek(0);
 
     if (!nSize)
-        // 0-size stream.  Failed.
+        
         return false;
 
     SotStorageRef xStorage = new SotStorage(pStream, false);
@@ -93,22 +93,22 @@ bool isExcel40(const uno::Reference<io::XInputStream>& xInStream)
 
     switch (nBofId)
     {
-        case 0x0009: // Excel 2.1 worksheet (BIFF 2)
-        case 0x0209: // Excel 3.0 worksheet (BIFF 3)
-        case 0x0409: // Excel 4.0 worksheet (BIFF 4)
-        case 0x0809: // Excel 5.0 worksheet (BIFF 5), some apps create such files (fdo#70100)
+        case 0x0009: 
+        case 0x0209: 
+        case 0x0409: 
+        case 0x0809: 
             break;
         default:
             return false;
     }
 
     if (nBofSize < 4 || 16 < nBofSize)
-        // BOF record must be sized between 4 and 16 for BIFF 2, 3 and 4.
+        
         return false;
 
     sal_Size nPos = pStream->Tell();
     if (nSize - nPos < nBofSize)
-        // BOF record doesn't have required bytes.
+        
         return false;
 
     return true;
@@ -128,20 +128,20 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
     OUString aType;
     aMediaDesc[MediaDescriptor::PROP_TYPENAME()] >>= aType;
     if (aType.isEmpty())
-        // Type is not given.  We can't proceed.
+        
         return OUString();
 
     aMediaDesc.addInputStream();
     uno::Reference<io::XInputStream> xInStream(aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY);
     if (!xInStream.is())
-        // No input stream.
+        
         return OUString();
 
     if (aType == "calc_MS_Excel_97" || aType == "calc_MS_Excel_97_VorlageTemplate")
     {
-        // See if this stream is a Excel 97/XP/2003 (BIFF8) stream.
+        
         if (!hasStream(xInStream, "Workbook"))
-            // BIFF8 is expected to contain a stream named "Workbook".
+            
             return OUString();
 
         aMediaDesc[MediaDescriptor::PROP_FILTERNAME()] <<= isTemplate(aType) ? OUString("MS Excel 97 Vorlage/Template") : OUString("MS Excel 97");
@@ -150,7 +150,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
 
     if (aType == "calc_MS_Excel_95" || aType == "calc_MS_Excel_95_VorlageTemplate")
     {
-        // See if this stream is a Excel 95 (BIFF5) stream.
+        
         if (!hasStream(xInStream, "Book"))
             return OUString();
 
@@ -160,7 +160,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
 
     if (aType == "calc_MS_Excel_5095" || aType == "calc_MS_Excel_5095_VorlageTemplate")
     {
-        // See if this stream is a Excel 5.0/95 stream.
+        
         if (!hasStream(xInStream, "Book"))
             return OUString();
 
@@ -170,7 +170,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
 
     if (aType == "calc_MS_Excel_40" || aType == "calc_MS_Excel_40_VorlageTemplate")
     {
-        // See if this stream is a Excel 4.0 stream.
+        
         if (!isExcel40(xInStream))
             return OUString();
 
@@ -178,7 +178,7 @@ OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescri
         return aType;
     }
 
-    // failed!
+    
     return OUString();
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "richtextimplcontrol.hxx"
@@ -37,14 +37,14 @@
 
 #define EMPTY_PAPER_SIZE    0x7FFFFFFF
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
-    //====================================================================
-    //= RichTextControlImpl
-    //====================================================================
-    //--------------------------------------------------------------------
+
+    
+    
+    
+    
     RichTextControlImpl::RichTextControlImpl( Control* _pAntiImpl, RichTextEngine* _pEngine, ITextAttributeListener* _pTextAttrListener, ITextSelectionListener* _pSelectionListener )
         :m_pAntiImpl            ( _pAntiImpl          )
         ,m_pViewport            ( NULL                )
@@ -64,7 +64,7 @@ namespace frm
         m_pViewport->setAttributeInvalidationHandler( LINK( this, RichTextControlImpl, OnInvalidateAllAttributes ) );
         m_pViewport->Show();
 
-        // ensure that both the window and the reference device have the same map unit
+        
         MapMode aRefDeviceMapMode( m_pEngine->GetRefDevice()->GetMapMode() );
         m_pAntiImpl->SetMapMode( aRefDeviceMapMode );
         m_pViewport->SetMapMode( aRefDeviceMapMode );
@@ -81,7 +81,7 @@ namespace frm
             m_pView->SetControlWord( nViewControlWord );
         }
 
-        // ensure that it's initially scrolled to the upper left
+        
         m_pView->SetVisArea( Rectangle( Point( ), m_pViewport->GetOutputSize() ) );
 
         ensureScrollbars();
@@ -89,7 +89,7 @@ namespace frm
         m_pAntiImpl->SetBackground( Wallpaper( m_pAntiImpl->GetSettings().GetStyleSettings().GetFieldColor() ) );
     }
 
-    //--------------------------------------------------------------------
+    
     RichTextControlImpl::~RichTextControlImpl( )
     {
         m_pEngine->RemoveView( m_pView );
@@ -101,7 +101,7 @@ namespace frm
         delete m_pScrollCorner;
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::implUpdateAttribute( AttributeHandlerPool::const_iterator _pHandler )
     {
         if  (  ( _pHandler->first == SID_ATTR_CHAR_WEIGHT )
@@ -110,14 +110,14 @@ namespace frm
             || ( _pHandler->first == SID_ATTR_CHAR_FONTHEIGHT )
             )
         {
-            // these are attributes whose value depends on the current script type.
-            // I.e., in real, there are *three* items in the ItemSet: One for each script
-            // type (Latin, Asian, Complex). However, if we have an observer who is interested
-            // in the state of this attribute, we have to kind of *merge* the three attributes
-            // to only one.
-            // This is useful in case the observer is for instance a toolbox which contains only
-            // an, e.g., "bold" slot, and thus not interested in the particular script type of the
-            // current selection.
+            
+            
+            
+            
+            
+            
+            
+            
             SvxScriptSetItem aNormalizedSet( (WhichId)_pHandler->first, *m_pView->GetAttribs().GetPool() );
             normalizeScriptDependentAttribute( aNormalizedSet );
 
@@ -127,7 +127,7 @@ namespace frm
             implCheckUpdateCache( _pHandler->first, _pHandler->second->getState( m_pView->GetAttribs() ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::updateAttribute( AttributeId _nAttribute )
     {
         AttributeHandlerPool::const_iterator pHandler = m_aAttributeHandlers.find( _nAttribute );
@@ -135,7 +135,7 @@ namespace frm
             implUpdateAttribute( pHandler );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::updateAllAttributes( )
     {
         for (   AttributeHandlerPool::const_iterator pHandler = m_aAttributeHandlers.begin();
@@ -146,7 +146,7 @@ namespace frm
             implUpdateAttribute( pHandler );
         }
 
-        // notify changes of the selection, if necessary
+        
         if ( m_pSelectionListener && m_pView )
         {
             ESelection aCurrentSelection = m_pView->GetSelection();
@@ -158,7 +158,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     AttributeState RichTextControlImpl::getAttributeState( AttributeId _nAttributeId ) const
     {
         StateCache::const_iterator aCachedStatePos = m_aLastKnownStates.find( _nAttributeId );
@@ -170,10 +170,10 @@ namespace frm
         return aCachedStatePos->second;
     }
 
-    //--------------------------------------------------------------------
+    
     bool RichTextControlImpl::executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rAttribs, AttributeId _nAttribute, const SfxPoolItem* _pArgument, ScriptType _nForScriptType )
     {
-        // let's see whether we have a handler for this attribute
+        
         AttributeHandlerPool::const_iterator aHandlerPos = m_aAttributeHandlers.find( _nAttribute );
         if ( aHandlerPos != m_aAttributeHandlers.end() )
         {
@@ -183,7 +183,7 @@ namespace frm
         return false;
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::enableAttributeNotification( AttributeId _nAttributeId, ITextAttributeListener* _pListener )
     {
         AttributeHandlerPool::const_iterator aHandlerPos = m_aAttributeHandlers.find( _nAttributeId  );
@@ -198,29 +198,29 @@ namespace frm
             aHandlerPos = m_aAttributeHandlers.insert( AttributeHandlerPool::value_type( _nAttributeId , aHandler ) ).first;
         }
 
-        // remember the listener
+        
         if ( _pListener )
             m_aAttributeListeners.insert( AttributeListenerPool::value_type( _nAttributeId, _pListener ) );
 
-        // update (and broadcast) the state of this attribute
+        
         updateAttribute( _nAttributeId );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::disableAttributeNotification( AttributeId _nAttributeId )
     {
-        // forget the handler for this attribute
+        
         AttributeHandlerPool::iterator aHandlerPos = m_aAttributeHandlers.find( _nAttributeId );
         if ( aHandlerPos != m_aAttributeHandlers.end() )
             m_aAttributeHandlers.erase( aHandlerPos );
 
-        // as well as the listener
+        
         AttributeListenerPool::iterator aListenerPos = m_aAttributeListeners.find( _nAttributeId );
         if ( aListenerPos != m_aAttributeListeners.end() )
             m_aAttributeListeners.erase( aListenerPos );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::normalizeScriptDependentAttribute( SvxScriptSetItem& _rScriptSetItem )
     {
         _rScriptSetItem.GetItemSet().Put( m_pView->GetAttribs(), false );
@@ -238,35 +238,35 @@ namespace frm
             _rScriptSetItem.GetItemSet().InvalidateItem( nNormalizedWhichId );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::implCheckUpdateCache( AttributeId _nAttribute, const AttributeState& _rState )
     {
         StateCache::iterator aCachePos = m_aLastKnownStates.find( _nAttribute );
         if ( aCachePos == m_aLastKnownStates.end() )
-        {   // nothing known about this attribute, yet
+        {   
             m_aLastKnownStates.insert( StateCache::value_type( _nAttribute, _rState ) );
         }
         else
         {
             if ( aCachePos->second == _rState )
             {
-                // nothing to do
+                
                 return;
             }
             aCachePos->second = _rState;
         }
 
-        // is there a dedicated listener for this particular attribute?
+        
         AttributeListenerPool::const_iterator aListenerPos = m_aAttributeListeners.find( _nAttribute );
         if ( aListenerPos != m_aAttributeListeners.end( ) )
             aListenerPos->second->onAttributeStateChanged( _nAttribute, _rState );
 
-        // call our global listener, if there is one
+        
         if ( m_pTextAttrListener )
             m_pTextAttrListener->onAttributeStateChanged( _nAttribute, _rState );
     }
 
-    //--------------------------------------------------------------------
+    
     ScriptType RichTextControlImpl::getSelectedScriptType() const
     {
         ScriptType nScript = m_pView->GetSelectedScriptType();
@@ -275,7 +275,7 @@ namespace frm
         return nScript;
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::EditEngineStatusChanged( const EditStatus& _rStatus )
     {
         sal_uLong nStatusWord( _rStatus.GetStatusWord() );
@@ -292,16 +292,16 @@ namespace frm
         bool bHScroll = 0 != ( nStatusWord & EE_STAT_HSCROLL );
         bool bVScroll = 0 != ( nStatusWord & EE_STAT_VSCROLL );
 
-        // In case of *no* automatic line breaks, we also need to check for the *range* here.
-        // Normally, we would do this only after a EE_STAT_TEXTWIDTHCHANGED. However, due to a bug
-        // in the EditEngine (I believe so) this is not fired when the engine does not have
-        // the AutoPaperSize bits set.
-        // So in order to be properly notified, we would need the AutoPaperSize. But, with
-        // AutoPaperSize, other things do not work anymore: Either, when we set a MaxAutoPaperSize,
-        // then the view does automatic soft line breaks at the paper end - which we definitely do
-        // want. Or, if we did not set a MaxAutoPaperSize, then the view does not automatically scroll
-        // anymore in horizontal direction.
-        // So this is some kind of lose-lose situation ... :(
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if ( !windowHasAutomaticLineBreak() && bHScroll )
         {
             updateScrollbars();
@@ -314,38 +314,38 @@ namespace frm
             m_pVScroll->SetThumbPos( m_pView->GetVisArea().Top() );
     }
 
-    //--------------------------------------------------------------------
+    
     IMPL_LINK( RichTextControlImpl, OnInvalidateAllAttributes, void*, /*_pNotInterestedIn*/ )
     {
         updateAllAttributes();
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+    
     IMPL_LINK( RichTextControlImpl, OnHScroll, ScrollBar*, _pScrollbar )
     {
         m_pView->Scroll( -_pScrollbar->GetDelta(), 0, RGCHK_PAPERSZ1 );
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+    
     IMPL_LINK( RichTextControlImpl, OnVScroll, ScrollBar*, _pScrollbar )
     {
         m_pView->Scroll( 0, -_pScrollbar->GetDelta(), RGCHK_PAPERSZ1 );
         return 0L;
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::ensureScrollbars()
     {
         bool bNeedVScroll = 0 != ( m_pAntiImpl->GetStyle() & WB_VSCROLL );
         bool bNeedHScroll = 0 != ( m_pAntiImpl->GetStyle() & WB_HSCROLL );
 
         if ( ( bNeedVScroll == hasVScrollBar() ) && ( bNeedHScroll == hasHScrollBar( ) ) )
-            // nothing to do
+            
             return;
 
-        // create or delete the scrollbars, as necessary
+        
         if ( !bNeedVScroll )
         {
             delete m_pVScroll;
@@ -385,7 +385,7 @@ namespace frm
         layoutWindow();
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::ensureLineBreakSetting()
     {
         if ( !windowHasAutomaticLineBreak() )
@@ -394,12 +394,12 @@ namespace frm
         layoutWindow();
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::layoutWindow()
     {
         if ( !m_bHasEverBeenShown )
-            // no need to do anything. Especially, no need to set the paper size on the
-            // EditEngine to anything ....
+            
+            
             return;
 
         const StyleSettings& rStyleSettings = m_pAntiImpl->GetSettings().GetStyleSettings();
@@ -413,11 +413,11 @@ namespace frm
             nScrollBarHeight = m_pAntiImpl->CalcZoom( nScrollBarHeight );
         }
 
-        // the overall size we can use
+        
         Size aPlaygroundSizePixel( m_pAntiImpl->GetOutputSizePixel() );
 
-        // the size of the viewport - note that the viewport does *not* occupy all the place
-        // which is left when subtracting the scrollbar width/height
+        
+        
         Size aViewportPlaygroundPixel( aPlaygroundSizePixel );
         aViewportPlaygroundPixel.Width() = ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Width() - nScrollBarWidth ) );
         aViewportPlaygroundPixel.Height() = ::std::max( long( 10 ), long( aViewportPlaygroundPixel.Height() - nScrollBarHeight ) );
@@ -427,9 +427,9 @@ namespace frm
         Size aViewportSizePixel( aViewportPlaygroundPixel.Width() - 2 * nOffset, aViewportPlaygroundPixel.Height() - 2 * nOffset );
         Size aViewportSizeLogic( m_pViewport->PixelToLogic( aViewportSizePixel ) );
 
-        // position the viewport
+        
         m_pViewport->SetPosSizePixel( Point( nOffset, nOffset ), aViewportSizePixel );
-        // position the scrollbars
+        
         if ( m_pVScroll )
             m_pVScroll->SetPosSizePixel( Point( aViewportPlaygroundPixel.Width(), 0 ), Size( nScrollBarWidth, aViewportPlaygroundPixel.Height() ) );
         if ( m_pHScroll )
@@ -437,11 +437,11 @@ namespace frm
         if ( m_pScrollCorner )
             m_pScrollCorner->SetPosSizePixel( Point( aViewportPlaygroundPixel.Width(), aViewportPlaygroundPixel.Height() ), Size( nScrollBarWidth, nScrollBarHeight ) );
 
-        // paper size
+        
         if ( windowHasAutomaticLineBreak() )
             m_pEngine->SetPaperSize( Size( aViewportSizeLogic.Width(), m_pEngine->GetTextHeight() ) );
 
-        // output area of the view
+        
         m_pView->SetOutputArea( Rectangle( Point( ), aViewportSizeLogic ) );
         m_pView->SetVisArea( Rectangle( Point( ), aViewportSizeLogic ) );
 
@@ -449,15 +449,15 @@ namespace frm
         {
             m_pVScroll->SetVisibleSize( aViewportPlaygroundLogic.Height() );
 
-            // the default height of a text line ....
+            
             long nFontHeight = m_pEngine->GetStandardFont(0).GetSize().Height();
-            // ... is the scroll size for the vertical scrollbar
+            
             m_pVScroll->SetLineSize( nFontHeight );
-            // the viewport width, minus one line, is the page scroll size
+            
             m_pVScroll->SetPageSize( ::std::max( nFontHeight, aViewportPlaygroundLogic.Height() - nFontHeight ) );
         }
 
-        // the font width
+        
         if ( m_pHScroll )
         {
             m_pHScroll->SetVisibleSize( aViewportPlaygroundLogic.Width() );
@@ -470,17 +470,17 @@ namespace frm
                 nFontWidth = m_pViewport->GetTextWidth( "x" );
                 m_pViewport->Pop();
             }
-            // ... is the scroll size for the horizontal scrollbar
+            
             m_pHScroll->SetLineSize( 5 * nFontWidth );
-            // the viewport height, minus one character, is the page scroll size
+            
             m_pHScroll->SetPageSize( ::std::max( nFontWidth, aViewportPlaygroundLogic.Width() - nFontWidth ) );
         }
 
-        // update range and position of the scrollbars
+        
         updateScrollbars();
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::updateScrollbars()
     {
         if ( m_pVScroll )
@@ -499,7 +499,7 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::notifyInitShow()
     {
         if ( !m_bHasEverBeenShown )
@@ -509,14 +509,14 @@ namespace frm
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::notifyStyleChanged()
     {
         ensureScrollbars();
         ensureLineBreakSetting();
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::notifyZoomChanged()
     {
         const Fraction& rZoom = m_pAntiImpl->GetZoom();
@@ -532,25 +532,25 @@ namespace frm
         layoutWindow();
     }
 
-    //--------------------------------------------------------------------
+    
     bool RichTextControlImpl::windowHasAutomaticLineBreak()
     {
         return ( m_pAntiImpl->GetStyle() & WB_WORDBREAK ) != 0;
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::SetReadOnly( bool _bReadOnly )
     {
         m_pView->SetReadOnly( _bReadOnly );
     }
 
-    //--------------------------------------------------------------------
+    
     bool RichTextControlImpl::IsReadOnly() const
     {
         return m_pView->IsReadOnly( );
     }
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
         static void lcl_inflate( Rectangle& _rRect, long _nInflateX, long _nInflateY )
@@ -561,7 +561,7 @@ namespace frm
             _rRect.Bottom() += _nInflateY;
         }
     }
-    //--------------------------------------------------------------------
+    
     long RichTextControlImpl::HandleCommand( const CommandEvent& _rEvent )
     {
         if (  ( _rEvent.GetCommand() == COMMAND_WHEEL )
@@ -575,20 +575,20 @@ namespace frm
         return 0;
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::Draw( OutputDevice* _pDev, const Point& _rPos, const Size& _rSize, sal_uLong /*_nFlags*/ )
     {
-        // need to normalize the map mode of the device - every paint operation on any device needs
-        // to use the same map mode
+        
+        
         _pDev->Push( PUSH_MAPMODE | PUSH_LINECOLOR | PUSH_FILLCOLOR );
 
-        // enforce our "normalize map mode" on the device
+        
         MapMode aRefMapMode( m_pEngine->GetRefDevice()->GetMapMode() );
         MapMode aOriginalMapMode( _pDev->GetMapMode() );
         MapMode aNormalizedMapMode( aRefMapMode.GetMapUnit(), aRefMapMode.GetOrigin(), aOriginalMapMode.GetScaleX(), aOriginalMapMode.GetScaleY() );
         _pDev->SetMapMode( aNormalizedMapMode );
 
-        // translate coordinates
+        
         Point aPos( _rPos );
         Size aSize( _rSize );
         if ( aOriginalMapMode.GetMapUnit() == MAP_PIXEL )
@@ -607,11 +607,11 @@ namespace frm
         aPlayground.Right() -= aOnePixel.Width();
         aPlayground.Bottom() -= aOnePixel.Height();
 
-        // background
+        
         _pDev->SetLineColor();
         _pDev->DrawRect( aPlayground );
 
-        // do we need to draw a border?
+        
         bool bBorder = ( m_pAntiImpl->GetStyle() & WB_BORDER );
         if ( bBorder )
             _pDev->SetLineColor( m_pAntiImpl->GetSettings().GetStyleSettings().GetMonoColor() );
@@ -621,27 +621,27 @@ namespace frm
         _pDev->DrawRect( aPlayground );
 
         if ( bBorder )
-            // don't draw the text over the border
+            
             lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
 
-        // leave a space of two pixels between the "surroundings" of the control
-        // and the content
+        
+        
         lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
         lcl_inflate( aPlayground, -aOnePixel.Width(), -aOnePixel.Height() );
 
-        // actually draw the content
+        
         m_pEngine->Draw( _pDev, aPlayground, Point(), true );
 
         _pDev->Pop();
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::SetBackgroundColor( )
     {
         SetBackgroundColor( Application::GetSettings().GetStyleSettings().GetFieldColor() );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::SetBackgroundColor( const Color& _rColor )
     {
         Wallpaper aWallpaper( _rColor );
@@ -649,20 +649,20 @@ namespace frm
         m_pViewport->SetBackground( aWallpaper );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextControlImpl::SetHideInactiveSelection( bool _bHide )
     {
         m_pViewport->SetHideInactiveSelection( _bHide );
     }
 
-    //--------------------------------------------------------------------
+    
     bool RichTextControlImpl::GetHideInactiveSelection() const
     {
         return m_pViewport->GetHideInactiveSelection( );
     }
 
-//........................................................................
-}   // namespace frm
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

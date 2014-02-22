@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,7 +55,7 @@ namespace dxcanvas
         mpBitmap.reset();
         mpDevice.clear();
 
-        // forward to parent
+        
         CanvasBitmap_Base::disposeThis();
     }
 
@@ -68,12 +68,12 @@ namespace dxcanvas
     uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )  throw (uno::RuntimeException)
     {
         uno::Any aRes;
-        // 0 ... get BitmapEx
-        // 1 ... get Pixbuf with bitmap RGB content
-        // 2 ... get Pixbuf with bitmap alpha mask
+        
+        
+        
         switch( nHandle )
         {
-            // sorry, no BitmapEx here...
+            
             case 0:
                 aRes = ::com::sun::star::uno::Any( reinterpret_cast<sal_Int64>( (BitmapEx*) NULL ) );
                 break;
@@ -92,8 +92,8 @@ namespace dxcanvas
                 }
                 else
                 {
-                    // need to copy&convert the bitmap, since dx
-                    // canvas uses inline alpha channel
+                    
+                    
                     HDC hScreenDC=GetDC(NULL);
                     const basegfx::B2IVector aSize(mpBitmap->getSize());
                     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC,
@@ -109,9 +109,9 @@ namespace dxcanvas
                     aBIH.biHeight = -aSize.getY();
                     aBIH.biPlanes = 1;
                     aBIH.biBitCount = 32;
-                    aBIH.biCompression = BI_RGB; // expects pixel in
-                                                 // bbggrrxx format
-                                                 // (little endian)
+                    aBIH.biCompression = BI_RGB; 
+                                                 
+                                                 
                     aBIH.biSizeImage = 0;
                     aBIH.biXPelsPerMeter = 0;
                     aBIH.biYPelsPerMeter = 0;
@@ -128,15 +128,15 @@ namespace dxcanvas
                     BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
                     if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
                                                                  Gdiplus::ImageLockModeRead,
-                                                                 PixelFormat32bppARGB, // outputs ARGB (big endian)
+                                                                 PixelFormat32bppARGB, 
                                                                  &aBmpData ) )
                     {
-                        // failed to lock, bail out
+                        
                         return aRes;
                     }
 
-                    // now aBmpData.Scan0 contains our bits - push
-                    // them into HBITMAP, ignoring alpha
+                    
+                    
                     SetDIBits( hScreenDC, hBmpBitmap, 0, aSize.getY(), aBmpData.Scan0, (PBITMAPINFO)&aBIH, DIB_RGB_COLORS );
 
                     pGDIPlusBitmap->UnlockBits( &aBmpData );
@@ -161,9 +161,9 @@ namespace dxcanvas
                         {
                             {0,0,0,1,8,BI_RGB,0,0,0,0,0},
                             {
-                                // this here fills palette with grey
-                                // level colors, starting from 0,0,0
-                                // up to 255,255,255
+                                
+                                
+                                
 #define BOOST_PP_LOCAL_MACRO(n_) \
                     BOOST_PP_COMMA_IF(n_) \
                     {n_,n_,n_,n_}
@@ -172,8 +172,8 @@ namespace dxcanvas
                             }
                         };
 
-                    // need to copy&convert the bitmap, since dx
-                    // canvas uses inline alpha channel
+                    
+                    
                     HDC hScreenDC=GetDC(NULL);
                     const basegfx::B2IVector aSize(mpBitmap->getSize());
                     HBITMAP hBmpBitmap = CreateCompatibleBitmap( hScreenDC, aSize.getX(), aSize.getY() );
@@ -202,14 +202,14 @@ namespace dxcanvas
                     BitmapSharedPtr pGDIPlusBitmap=mpBitmap->getBitmap();
                     if( Gdiplus::Ok != pGDIPlusBitmap->LockBits( &aRect,
                                                                  Gdiplus::ImageLockModeRead,
-                                                                 PixelFormat32bppARGB, // outputs ARGB (big endian)
+                                                                 PixelFormat32bppARGB, 
                                                                  &aBmpData ) )
                     {
-                        // failed to lock, bail out
+                        
                         return aRes;
                     }
 
-                    // copy only alpha channel to pAlphaBits
+                    
                     const sal_Int32 nScanWidth((aSize.getX() + 3) & ~3);
                     boost::scoped_array<sal_uInt8> pAlphaBits( new sal_uInt8[nScanWidth*aSize.getY()] );
                     const sal_uInt8* pInBits=(sal_uInt8*)aBmpData.Scan0;
@@ -227,7 +227,7 @@ namespace dxcanvas
 
                     pGDIPlusBitmap->UnlockBits( &aBmpData );
 
-                    // set bits to newly create HBITMAP
+                    
                     SetDIBits( hScreenDC, hBmpBitmap, 0,
                                aSize.getY(), pAlphaBits.get(),
                                (PBITMAPINFO)&aDIB, DIB_RGB_COLORS );

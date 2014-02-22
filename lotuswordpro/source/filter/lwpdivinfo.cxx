@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -91,7 +91,7 @@ void LwpDivInfo::Read()
 
     m_LayoutID.ReadIndexed(m_pObjStrm);
     m_nFlags = m_pObjStrm->QuickReaduInt16();
-    if (LwpFileHeader::m_nFileRevision < 0x0010)  // In 98, graphic links count too
+    if (LwpFileHeader::m_nFileRevision < 0x0010)  
     {
         if ((m_nFlags & DI_ANYOLEDDELINKS) == 0)
             m_nFlags &= ~DI_KNOWIFANYOLEDDELINKS;
@@ -105,15 +105,15 @@ void LwpDivInfo::Read()
     m_nPageNoStyle = m_pObjStrm->QuickReaduInt16();
     m_TabColor.Read(m_pObjStrm);
 
-    // read filler page stuff
+    
     m_FillerPageTextID.ReadIndexed(m_pObjStrm);
 
-    // read external file object stuff
+    
 #if !defined(NDEBUG)
     sal_uInt16 type =
 #endif
     m_pObjStrm->QuickReaduInt16();
-    //cpExternalFile = LNULL;
+    
 
     assert(type==0);
     m_pObjStrm->SkipExtra();
@@ -124,20 +124,20 @@ void LwpDivInfo::SkipFront()
 {
     LwpObjectID toSkip;
 
-    toSkip.ReadIndexed(m_pObjStrm); // skip ListNext;
+    toSkip.ReadIndexed(m_pObjStrm); 
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
         m_pObjStrm->SkipExtra();
     }
-    toSkip.ReadIndexed(m_pObjStrm); // skip ListPrevious;
+    toSkip.ReadIndexed(m_pObjStrm); 
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
         m_pObjStrm->SkipExtra();
     }
-    toSkip.ReadIndexed(m_pObjStrm); // skip Head;
+    toSkip.ReadIndexed(m_pObjStrm); 
     if (LwpFileHeader::m_nFileRevision < 0x0006)
     {
-        toSkip.ReadIndexed(m_pObjStrm); //skip tail
+        toSkip.ReadIndexed(m_pObjStrm); 
         m_pObjStrm->SkipExtra();
     }
 }
@@ -148,7 +148,7 @@ void LwpDivInfo::GetNumberOfPages(sal_uInt16 & nPageno)
     {
         if (IsOleDivision())
         {
-            //not support now
+            
             return;
         }
         else

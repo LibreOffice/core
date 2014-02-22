@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "calc/CConnection.hxx"
@@ -40,7 +40,7 @@ using namespace connectivity::file;
 
 typedef connectivity::file::OConnection OConnection_BASE;
 
-//------------------------------------------------------------------------------
+
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -50,12 +50,12 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::sheet;
 
-// --------------------------------------------------------------------------------
+
 
 OCalcConnection::OCalcConnection(ODriver* _pDriver) : OConnection(_pDriver),m_nDocCount(0)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::OCalcConnection" );
-    // m_aFilenameExtension is not used
+    
 }
 
 OCalcConnection::~OCalcConnection()
@@ -66,7 +66,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
     throw(SQLException)
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::construct" );
-    //  open file
+    
 
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
@@ -82,7 +82,7 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
     aURL.SetSmartURL(m_aFileName);
     if ( aURL.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        //  don't pass invalid URL to loadComponentFromURL
+        
         throw SQLException();
     }
     m_aFileName = aURL.GetMainURL(INetURLObject::NO_DECODE);
@@ -99,11 +99,11 @@ void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValu
             pIter->Value >>= m_sPassword;
             break;
         }
-    } // for(;pIter != pEnd;++pIter)
-    ODocHolder aDocHodler(this); // just to test that the doc can be loaded
+    } 
+    ODocHolder aDocHodler(this); 
     acquireDoc();
 }
-// -----------------------------------------------------------------------------
+
 Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::acquireDoc" );
@@ -112,7 +112,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
         osl_atomic_increment(&m_nDocCount);
         return m_xDoc;
     }
-    //  open read-only as long as updating isn't implemented
+    
     Sequence<PropertyValue> aArgs(2);
     aArgs[0].Name = "Hidden";
     aArgs[0].Value <<= (sal_Bool) sal_True;
@@ -142,8 +142,8 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
 
     m_xDoc.set(xComponent, UNO_QUERY );
 
-    //  if the URL is not a spreadsheet document, throw the exception here
-    //  instead of at the first access to it
+    
+    
     if ( !m_xDoc.is() )
     {
         Any aErrorDetails;
@@ -170,14 +170,14 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     osl_atomic_increment(&m_nDocCount);
     return m_xDoc;
 }
-// -----------------------------------------------------------------------------
+
 void OCalcConnection::releaseDoc()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::releaseDoc" );
     if ( osl_atomic_decrement(&m_nDocCount) == 0 )
         ::comphelper::disposeComponent( m_xDoc );
 }
-// -----------------------------------------------------------------------------
+
 void OCalcConnection::disposing()
 {
     SAL_INFO( "connectivity.drivers", "calc Ocke.Janssen@sun.com OCalcConnection::disposing" );
@@ -189,12 +189,12 @@ void OCalcConnection::disposing()
     OConnection::disposing();
 }
 
-// XServiceInfo
-// --------------------------------------------------------------------------------
+
+
 
 IMPLEMENT_SERVICE_INFO(OCalcConnection, "com.sun.star.sdbc.drivers.calc.Connection", "com.sun.star.sdbc.Connection")
 
-// --------------------------------------------------------------------------------
+
 
 Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
@@ -213,7 +213,7 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
     return xMetaData;
 }
 
-//------------------------------------------------------------------------------
+
 
 ::com::sun::star::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
 {
@@ -229,7 +229,7 @@ Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(S
     return xTab;
 }
 
-// --------------------------------------------------------------------------------
+
 
 Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
@@ -243,7 +243,7 @@ Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLE
     return xReturn;
 }
 
-// --------------------------------------------------------------------------------
+
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( const OUString& sql )
     throw(SQLException, RuntimeException)
@@ -260,7 +260,7 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
     return pStmt;
 }
 
-// --------------------------------------------------------------------------------
+
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUString& /*sql*/ )
     throw(SQLException, RuntimeException)
@@ -272,6 +272,6 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUS
     ::dbtools::throwFeatureNotImplementedException( "XConnection::prepareCall", *this );
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

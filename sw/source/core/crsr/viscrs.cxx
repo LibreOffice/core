@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -55,15 +55,15 @@
 
 extern void SwCalcPixStatics( OutputDevice *pOut );
 
-// Here static members are defined. They will get changed on alteration of the
-// MapMode. This is done so that on ShowCrsr the same size does not have to be
-// expensively determined again and again.
+
+
+
 
 long SwSelPaintRects::nPixPtX = 0;
 long SwSelPaintRects::nPixPtY = 0;
 MapMode* SwSelPaintRects::pMapMode = 0;
 
-// -----  Starting from here: classes / methods for the non-text-cursor -----
+
 
 SwVisCrsr::SwVisCrsr( const SwCrsrShell * pCShell )
     : m_pCrsrShell( pCShell )
@@ -88,7 +88,7 @@ void SwVisCrsr::Show()
     {
         m_bIsVisible = true;
 
-        // display at all?
+        
         if( m_pCrsrShell->VisArea().IsOver( m_pCrsrShell->m_aCharRect ) )
             _SetPosAndShow();
     }
@@ -100,7 +100,7 @@ void SwVisCrsr::Hide()
     {
         m_bIsVisible = false;
 
-        if( m_aTxtCrsr.IsVisible() )      // Shouldn't the flags be in effect?
+        if( m_aTxtCrsr.IsVisible() )      
             m_aTxtCrsr.Hide();
     }
 }
@@ -127,7 +127,7 @@ void SwVisCrsr::_SetPosAndShow()
         aRect.Pos().setY(aRect.Pos().getY() + m_pCrsrShell->m_aCrsrHeight.getX());
     }
 
-    // check if cursor should show the current cursor bidi level
+    
     m_aTxtCrsr.SetDirection( CURSOR_DIRECTION_NONE );
     const SwCursor* pTmpCrsr = m_pCrsrShell->_GetCrsr();
 
@@ -141,7 +141,7 @@ void SwVisCrsr::_SetPosAndShow()
             if ( pFrm )
             {
                 const SwScriptInfo* pSI = ((SwTxtFrm*)pFrm)->GetScriptInfo();
-                 // cursor level has to be shown
+                 
                 if ( pSI && pSI->CountDirChg() > 1 )
                 {
                     m_aTxtCrsr.SetDirection(
@@ -214,7 +214,7 @@ void SwSelPaintRects::swapContent(SwSelPaintRects& rSwap)
     SwRects::swap(rSwap);
 
 #if HAVE_FEATURE_DESKTOP
-    // #i75172# also swap mpCursorOverlay
+    
     sdr::overlay::OverlayObject* pTempOverlay = getCursorOverlay();
     setCursorOverlay(rSwap.getCursorOverlay());
     rSwap.setCursorOverlay(pTempOverlay);
@@ -254,12 +254,12 @@ void SwSelPaintRects::Show()
 
     if(pView && pView->PaintWindowCount())
     {
-        // reset rects
+        
         SwRects::clear();
         FillRects();
 
 #if HAVE_FEATURE_DESKTOP
-        // get new rects
+        
         std::vector< basegfx::B2DRange > aNewRanges;
 
         for(sal_uInt16 a(0); a < size(); a++)
@@ -291,11 +291,11 @@ void SwSelPaintRects::Show()
 
             if (xTargetOverlay.is())
             {
-                // get the system's hilight color
+                
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
                 const Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
 
-                // create correct selection
+                
                 mpCursorOverlay = new sdr::overlay::OverlaySelection(
                     sdr::overlay::OVERLAY_TRANSPARENT,
                     aHighlight,
@@ -316,7 +316,7 @@ void SwSelPaintRects::Show()
         {
             if (pWrtShell)
             {
-                // Buffer will be deallocated in the UI layer
+                
                 MLORect *rects = (MLORect *) malloc((sizeof(MLORect))*size());
                 for (size_t i = 0; i < size(); ++i)
                 {
@@ -326,12 +326,12 @@ void SwSelPaintRects::Show()
                     rects[i] = CGRectMake(origin.X(), origin.Y(),
                                           ssize.Width(), ssize.Height());
 #else
-                    // Not yet implemented
+                    
                     (void) origin;
                     (void) ssize;
 #endif
                 }
-                // GetShell returns a SwCrsrShell which actually is a SwWrtShell
+                
                 touch_ui_selection_start(MLOSelectionText, pWrtShell, rects, size(), NULL);
             }
         }
@@ -398,7 +398,7 @@ void SwSelPaintRects::HighlightInputFld()
 
             if (xTargetOverlay.is())
             {
-                // use system's hilight color with decreased luminance as highlight color
+                
                 const SvtOptionsDrawinglayer aSvtOptionsDrawinglayer;
                 Color aHighlight(aSvtOptionsDrawinglayer.getHilightColor());
                 aHighlight.DecreaseLuminance( 128 );
@@ -430,10 +430,10 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
     SwRects::erase( begin(), begin() + nSz );
     SwRects::insert( begin(), aReg.begin(), aReg.end() );
 
-    // If the selection is to the right or at the bottom, outside the
-    // visible area, it is never aligned on one pixel at the right/bottom.
-    // This has to be determined here and if that is the case the
-    // rectangle has to be expanded.
+    
+    
+    
+    
     if( GetShell()->m_bVisPortChgd && 0 != ( nSz = size()) )
     {
         SwSelPaintRects::Get1PixelInLogic( *GetShell() );
@@ -451,11 +451,11 @@ void SwSelPaintRects::Invalidate( const SwRect& rRect )
 
 void SwSelPaintRects::Paint( const Rectangle& /*rRect*/ )
 {
-    // nothing to do with overlays
+    
 }
 
-// check current MapMode of the shell and set possibly the static members.
-// Optional set the parameters pX, pY
+
+
 void SwSelPaintRects::Get1PixelInLogic( const SwViewShell& rSh,
                                         long* pX, long* pY )
 {
@@ -528,7 +528,7 @@ void SwShellCrsr::SetMark()
 
 void SwShellCrsr::FillRects()
 {
-    // calculate the new rectangles
+    
     if( HasMark() &&
         GetPoint()->nNode.GetNode().IsCntntNode() &&
         GetPoint()->nNode.GetNode().GetCntntNode()->getLayoutFrm( GetShell()->GetLayout() ) &&
@@ -546,8 +546,8 @@ void SwShellCrsr::Show()
     } while( this != ( pTmp = dynamic_cast<SwShellCrsr*>(pTmp->GetNext()) ) );
 }
 
-// This rectangle gets painted anew, therefore the SSelection in this
-// area is invalid.
+
+
 void SwShellCrsr::Invalidate( const SwRect& rRect )
 {
     SwShellCrsr * pTmp = this;
@@ -556,8 +556,8 @@ void SwShellCrsr::Invalidate( const SwRect& rRect )
     {
         pTmp->SwSelPaintRects::Invalidate( rRect );
 
-        // skip any non SwShellCrsr objects in the ring
-        // see also: SwAutoFormat::DeleteSel()
+        
+        
         Ring* pTmpRing = pTmp;
         pTmp = 0;
         do
@@ -589,8 +589,8 @@ short SwShellCrsr::MaxReplaceArived()
     Window* pDlg = (Window*) SwView::GetSearchDialog();
     if( pDlg )
     {
-        // Terminate old actions. The table-frames get constructed and
-        // a SSelection can be created.
+        
+        
         std::vector<sal_uInt16> aArr;
         sal_uInt16 nActCnt;
         SwViewShell *pShell = const_cast< SwCrsrShell* >( GetShell() ),
@@ -613,7 +613,7 @@ short SwShellCrsr::MaxReplaceArived()
         }
     }
     else
-        // otherwise from the Basic, and than switch to RET_YES
+        
         nRet = RET_YES;
 
     return nRet;
@@ -630,7 +630,7 @@ sal_Bool SwShellCrsr::UpDown( sal_Bool bUp, sal_uInt16 nCnt )
                             &GetPtPos(), GetShell()->GetUpDownX() );
 }
 
-// if <true> than the cursor can be set to the position.
+
 sal_Bool SwShellCrsr::IsAtValidPos( sal_Bool bPoint ) const
 {
     if( GetShell() && ( GetShell()->IsAllProtect() ||
@@ -680,7 +680,7 @@ void SwShellTableCrsr::SaveTblBoxCntnt( const SwPosition* pPos )
 
 void SwShellTableCrsr::FillRects()
 {
-    // Calculate the new rectangles. If the cursor is still "parked" do nothing
+    
     if (m_SelectedBoxes.empty() || bParked || !GetPoint()->nNode.GetIndex())
         return;
 
@@ -694,9 +694,9 @@ void SwShellTableCrsr::FillRects()
         SwNodeIndex aIdx( *pSttNd );
            SwCntntNode* pCNd = rNds.GoNextSection( &aIdx, true, false );
 
-        // table in table
-        // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
-        // version to do this)
+        
+        
+        
         const SwTableNode* pCurTblNd = pCNd->FindTableNode();
         while ( pSelTblNd != pCurTblNd && pCurTblNd )
         {
@@ -726,10 +726,10 @@ void SwShellTableCrsr::FillRects()
     insert( begin(), aReg.begin(), aReg.end() );
 }
 
-// Check if the SPoint is within the Table-SSelection.
+
 sal_Bool SwShellTableCrsr::IsInside( const Point& rPt ) const
 {
-    // Calculate the new rectangles. If the cursor is still "parked" do nothing
+    
     if (m_SelectedBoxes.empty() || bParked || !GetPoint()->nNode.GetIndex())
         return sal_False;
 

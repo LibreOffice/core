@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <ucalc.hxx>
@@ -16,7 +16,7 @@ void Test::testColumnFindEditCells()
 {
     m_pDoc->InsertTab(0, "Test");
 
-    // Test the basics with real edit cells, using Column A.
+    
 
     SCROW nResRow = m_pDoc->GetFirstEditTextRow(ScRange(0,0,0,0,MAXROW,0));
     CPPUNIT_ASSERT_MESSAGE("There should be no edit cells.", nResRow == -1);
@@ -67,7 +67,7 @@ void Test::testColumnFindEditCells()
     nResRow = m_pDoc->GetFirstEditTextRow(aRange);
     CPPUNIT_ASSERT_MESSAGE("There shouldn't be an edit cell in specified range.", nResRow == -1);
 
-    // Test with non-edit cell but with ambiguous script type.
+    
 
     m_pDoc->SetString(ScAddress(1,11,0), "Some text");
     m_pDoc->SetString(ScAddress(1,12,0), "Some text");

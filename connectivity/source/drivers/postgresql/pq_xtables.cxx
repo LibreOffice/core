@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -111,8 +111,8 @@ void Tables::refresh()
         sal_Int32 tableIndex = 0;
         while( rs->next() )
         {
-            // if creating all these tables turns out to have too bad performance, we might
-            // instead offer a factory interface
+            
+            
             Table * pTable =
                 new Table( m_refMutex, m_origin, m_pSettings );
             Reference< com::sun::star::beans::XPropertySet > prop = pTable;
@@ -267,17 +267,17 @@ void Tables::appendByDescriptor(
     bufferQuoteQualifiedIdentifier( buf, schema, name , m_pSettings);
     buf.append( "(" );
 
-    // columns
+    
     Reference< XColumnsSupplier > supplier( descriptor, UNO_QUERY );
     appendColumnList( buf, supplier, m_pSettings );
 
     appendKeyList( buf, Reference< XKeysSupplier >( descriptor, UNO_QUERY ), m_pSettings );
 
     buf.append( ") " );
-    // execute the creation !
+    
     transaction.executeUpdate( buf.makeStringAndClear() );
 
-    // description ....
+    
     OUString description = extractStringProperty( descriptor, st.DESCRIPTION );
     if( !description.isEmpty() )
     {
@@ -290,7 +290,7 @@ void Tables::appendByDescriptor(
         transaction.executeUpdate( buf.makeStringAndClear() );
     }
 
-    // column descriptions
+    
     if( supplier.is() )
     {
         Reference< XEnumerationAccess > columns( supplier->getColumns(),UNO_QUERY );
@@ -318,8 +318,8 @@ void Tables::appendByDescriptor(
     transaction.commit();
 
     disposeNoThrow( stmt );
-        // TODO: cheaper recalculate
-//        Container::append( concatQualified( schema, name ), descriptor ); // maintain the lists
+        
+
     refresh();
 }
 

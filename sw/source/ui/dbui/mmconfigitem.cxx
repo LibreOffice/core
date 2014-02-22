@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <mmconfigitem.hxx>
@@ -68,9 +68,9 @@ struct DBAddressDataAssignment
 {
     SwDBData                            aDBData;
     Sequence< OUString>           aDBColumnAssignments;
-    //if loaded the name of the node has to be saved
+    
     OUString                     sConfigNodeName;
-    //all created or changed assignments need to be stored
+    
     bool                                bColumnAssignmentsChanged;
 
     DBAddressDataAssignment() :
@@ -114,7 +114,7 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
     sal_Bool                                bIsGreetingLineInMail;
     sal_Bool                                bIsIndividualGreetingLineInMail;
 
-    //mail settings
+    
     OUString                         sMailDisplayName;
     OUString                         sMailAddress;
     OUString                         sMailReplyTo;
@@ -139,11 +139,11 @@ class SwMailMergeConfigItem_Impl : public utl::ConfigItem
 
     ResStringArray                          m_AddressHeaderSA;
 
-    //these addresses are not stored in the configuration
+    
     ::std::vector< SwDocMergeInfo >         aMergeInfos;
 
-    //we do overwrite the usersettings in a special case
-    //than we do remind the usersettings here
+    
+    
     sal_Bool                                bUserSettingWereOverwritten;
     sal_Bool                                bIsAddressBlock_LastUserSetting;
     sal_Bool                                bIsGreetingLineInMail_LastUserSetting;
@@ -286,11 +286,11 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
             }
         }
     }
-    //read the list of data base assignments
+    
     Sequence<OUString> aAssignments = GetNodeNames(OUString::createFromAscii(cAddressDataAssignments));
     if(aAssignments.getLength())
     {
-        //create a list of property names to load the URLs of all data bases
+        
         const OUString* pAssignments = aAssignments.getConstArray();
         Sequence< OUString > aAssignProperties(4 * aAssignments.getLength());
         OUString* pAssignProperties = aAssignProperties.getArray();
@@ -323,7 +323,7 @@ SwMailMergeConfigItem_Impl::SwMailMergeConfigItem_Impl() :
             aAddressDataAssignments.push_back(aAssignment);
         }
     }
-    //check if the saved documents still exist
+    
     if(aSavedDocuments.getLength())
     {
         uno::Sequence< OUString > aTempDocuments(aSavedDocuments.getLength());
@@ -369,7 +369,7 @@ static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
         bFound = false;
         sNewName = "_";
         sNewName += OUString::number(nStart);
-        //search if the name exists
+        
         for(sal_Int32 nAssign = 0; nAssign < rAssignments.getLength(); ++nAssign)
         {
             if(pNames[nAssign] == sNewName)
@@ -381,7 +381,7 @@ static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
         }
     }
     while(bFound);
-    // add the new name to the array of existing names
+    
     rAssignments.realloc(rAssignments.getLength() + 1);
     rAssignments.getArray()[rAssignments.getLength() - 1] = sNewName;
     return sNewName;
@@ -389,7 +389,7 @@ static OUString lcl_CreateNodeName(Sequence<OUString>& rAssignments )
 
 static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeaders )
 {
-    //convert the strings used for UI to numbers used for the configuration
+    
     OUString sBlock(rBlock.replaceAll("\n", OUString("\\n")));
     for(sal_uInt16 i = 0; i < rHeaders.Count(); ++i)
     {
@@ -402,8 +402,8 @@ static void lcl_ConvertToNumbers(OUString& rBlock, const ResStringArray& rHeader
 
 static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHeaders)
 {
-    //convert the numbers used for the configuration to strings used for UI to numbers
-    //doesn't use ReplaceAll to prevent expansion of numbers inside of the headers
+    
+    
     OUString sBlock(rBlock.replaceAll("\\n", OUString('\n')));
     SwAddressIterator aGreetingIter(sBlock);
     sBlock = OUString();
@@ -412,7 +412,7 @@ static void lcl_ConvertFromNumbers(OUString& rBlock, const ResStringArray& rHead
         SwMergeAddressItem aNext = aGreetingIter.Next();
         if(aNext.bIsColumn)
         {
-            //the text should be 1 characters long
+            
             sal_Unicode cChar = aNext.sText[0];
             if(cChar >= '0' && cChar <= 'c')
             {
@@ -440,46 +440,46 @@ const Sequence<OUString>& SwMailMergeConfigItem_Impl::GetPropertyNames()
     {
         static const char* aPropNames[] =
         {
-            "OutputToLetter",           // 0
-            "IncludeCountry",           // 1
-            "ExcludeCountry",           // 2
-            "AddressBlockSettings",     // 3
-            "IsAddressBlock",          // 4
-            "IsGreetingLine",           // 5
-            "IsIndividualGreetingLine", // 6
-            "FemaleGreetingLines",      // 7
-            "MaleGreetingLines",        // 8
-            "NeutralGreetingLines",     // 9
-            "CurrentFemaleGreeting",    // 10
-            "CurrentMaleGreeting",      // 11
-            "CurrentNeutralGreeting",   // 12
-            "FemaleGenderValue",        // 13
-            "MailDisplayName",          // 14
-            "MailAddress",              // 15
-            "IsMailReplyTo",            // 16
-            "MailReplyTo",              // 17
-            "MailServer",               // 18
-            "MailPort",                 // 19
-            "IsSecureConnection",       // 20
-            "IsAuthentication",         // 21
-            "MailUserName",             // 22
-            "MailPassword",             // 23
-            "DataSource/DataSourceName",// 24
-            "DataSource/DataTableName", // 25
-            "DataSource/DataCommandType",// 26
-            "Filter",                   // 27
-            "SavedDocuments",           // 28
-            "EMailSupported",            // 29
-            "IsEMailGreetingLine",              //30
-            "IsEMailIndividualGreetingLine",     //31
-            "IsSMPTAfterPOP",                    //32
-            "InServerName",                      //33
-            "InServerPort",                      //34
-            "InServerIsPOP",                     //35
-            "InServerUserName",                  //36
-            "InServerPassword",                   //37
-            "IsHideEmptyParagraphs",             //38
-            "CurrentAddressBlock"               //39
+            "OutputToLetter",           
+            "IncludeCountry",           
+            "ExcludeCountry",           
+            "AddressBlockSettings",     
+            "IsAddressBlock",          
+            "IsGreetingLine",           
+            "IsIndividualGreetingLine", 
+            "FemaleGreetingLines",      
+            "MaleGreetingLines",        
+            "NeutralGreetingLines",     
+            "CurrentFemaleGreeting",    
+            "CurrentMaleGreeting",      
+            "CurrentNeutralGreeting",   
+            "FemaleGenderValue",        
+            "MailDisplayName",          
+            "MailAddress",              
+            "IsMailReplyTo",            
+            "MailReplyTo",              
+            "MailServer",               
+            "MailPort",                 
+            "IsSecureConnection",       
+            "IsAuthentication",         
+            "MailUserName",             
+            "MailPassword",             
+            "DataSource/DataSourceName",
+            "DataSource/DataTableName", 
+            "DataSource/DataCommandType",
+            "Filter",                   
+            "SavedDocuments",           
+            "EMailSupported",            
+            "IsEMailGreetingLine",              
+            "IsEMailIndividualGreetingLine",     
+            "IsSMPTAfterPOP",                    
+            "InServerName",                      
+            "InServerPort",                      
+            "InServerIsPOP",                     
+            "InServerUserName",                  
+            "InServerPassword",                   
+            "IsHideEmptyParagraphs",             
+            "CurrentAddressBlock"               
 
         };
         const int nCount = sizeof(aPropNames)/sizeof(const char*);
@@ -573,9 +573,9 @@ void  SwMailMergeConfigItem_Impl::Commit()
         }
     }
     PutProperties(aNames, aValues);
-    //store the changed / new assignments
+    
 
-    //load the existing node names to find new names
+    
     Sequence<OUString> aAssignments = GetNodeNames(OUString::createFromAscii(cAddressDataAssignments));
 
     ::std::vector<DBAddressDataAssignment>::iterator aAssignIter;
@@ -584,7 +584,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
     {
         if(aAssignIter->bColumnAssignmentsChanged)
         {
-            //create a new node name
+            
             OUString sNewNode = !aAssignIter->sConfigNodeName.isEmpty() ?
                         aAssignIter->sConfigNodeName :
                         lcl_CreateNodeName(aAssignments);
@@ -593,7 +593,7 @@ void  SwMailMergeConfigItem_Impl::Commit()
             sNodePath += sSlash;
             sNodePath += sNewNode;
             sNodePath += sSlash;
-            //only one new entry is written
+            
             Sequence< PropertyValue > aNewValues(4);
             PropertyValue* pNewValues = aNewValues.getArray();
             pNewValues[0].Name = sNodePath;
@@ -738,7 +738,7 @@ SwMailMergeConfigItem::SwMailMergeConfigItem() :
     m_pSourceView(0),
     m_pTargetView(0)
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( theMailMergeConfigMutex::get() );
     if ( !pOptions )
         pOptions = new SwMailMergeConfigItem_Impl;
@@ -748,7 +748,7 @@ SwMailMergeConfigItem::SwMailMergeConfigItem() :
 
 SwMailMergeConfigItem::~SwMailMergeConfigItem()
 {
-    // Global access, must be guarded (multithreading)
+    
     ::osl::MutexGuard aGuard( theMailMergeConfigMutex::get() );
     if ( !--nRefCount )
     {
@@ -972,7 +972,7 @@ sal_Int32 SwMailMergeConfigItem::MoveResultSet(sal_Int32 nTarget)
     {
         try
         {
-            //no action if the resultset is already at the right position
+            
             if(m_pImpl->xResultSet->getRow() != nTarget)
             {
                 if(nTarget > 0)
@@ -1037,15 +1037,15 @@ bool SwMailMergeConfigItem::IsRecordExcluded(sal_Int32 nRecord)
 
 void SwMailMergeConfigItem::ExcludeRecord(sal_Int32 nRecord, bool bExclude)
 {
-    //nRecord is based on 1
-    //the selection array contains Anys for all records
-    //excluded records  contain a '-1'
+    
+    
+    
     if(!m_aSelection.getLength() || nRecord > m_aSelection.getLength())
     {
         if(bExclude)
         {
-            //if no selection array is available we need to create one containing the
-            //entries for all available records
+            
+            
             if(!m_pImpl->xResultSet.is())
                 GetResultSet();
             if(m_pImpl->xResultSet.is())
@@ -1240,7 +1240,7 @@ Sequence< OUString> SwMailMergeConfigItem::GetColumnAssignment(
 }
 
 
-// returns the name that is assigned as e-mail column of the current data base
+
 OUString     SwMailMergeConfigItem::GetAssignedColumn(sal_uInt32 nColumn) const
 {
     OUString sRet;
@@ -1317,7 +1317,7 @@ bool SwMailMergeConfigItem::IsAddressFieldsAssigned() const
                     break;
                 }
             }
-            //find out if the column exists in the data base
+            
             if(!xCols->hasByName(sConvertedColumn))
             {
                 bResult = false;
@@ -1376,7 +1376,7 @@ bool SwMailMergeConfigItem::IsGreetingFieldsAssigned() const
                     break;
                 }
             }
-            //find out if the column exists in the data base
+            
             if(!xCols->hasByName(sConvertedColumn))
             {
                 bResult = false;
@@ -1659,7 +1659,7 @@ static SwView* lcl_ExistsView(SwView* pView)
 
 SwView*  SwMailMergeConfigItem::GetTargetView()
 {
-    //make sure that the pointer is really valid - the document may have been closed manually
+    
     if(m_pTargetView)
     {
         m_pTargetView = lcl_ExistsView(m_pTargetView);
@@ -1670,7 +1670,7 @@ SwView*  SwMailMergeConfigItem::GetTargetView()
 void  SwMailMergeConfigItem::SetTargetView(SwView* pView)
 {
     m_pTargetView = pView;
-    //reset the document merge counter
+    
     if(!m_pTargetView)
     {
         m_pImpl->aMergeInfos.clear();
@@ -1694,20 +1694,20 @@ void SwMailMergeConfigItem::SetSourceView(SwView* pView)
         pView->GetWrtShell().GetAllUsedDB( aDBNameList, &aAllDBNames );
         if(!aDBNameList.empty())
         {
-            // if fields are available there is usually no need of an addressblock and greeting
+            
             if(!m_pImpl->bUserSettingWereOverwritten)
             {
                 if( m_pImpl->bIsAddressBlock == sal_True
                     || m_pImpl->bIsGreetingLineInMail == sal_True
                     || m_pImpl->bIsGreetingLine == sal_True )
                 {
-                    //store user settings
+                    
                     m_pImpl->bUserSettingWereOverwritten = sal_True;
                     m_pImpl->bIsAddressBlock_LastUserSetting = m_pImpl->bIsAddressBlock;
                     m_pImpl->bIsGreetingLineInMail_LastUserSetting = m_pImpl->bIsGreetingLineInMail;
                     m_pImpl->bIsGreetingLine_LastUserSetting = m_pImpl->bIsGreetingLine;
 
-                    //set all to false
+                    
                     m_pImpl->bIsAddressBlock = sal_False;
                     m_pImpl->bIsGreetingLineInMail = sal_False;
                     m_pImpl->bIsGreetingLine = sal_False;
@@ -1718,7 +1718,7 @@ void SwMailMergeConfigItem::SetSourceView(SwView* pView)
         }
         else if( m_pImpl->bUserSettingWereOverwritten )
         {
-            //restore last user settings:
+            
             m_pImpl->bIsAddressBlock = m_pImpl->bIsAddressBlock_LastUserSetting;
             m_pImpl->bIsGreetingLineInMail = m_pImpl->bIsGreetingLineInMail_LastUserSetting;
             m_pImpl->bIsGreetingLine = m_pImpl->bIsGreetingLine_LastUserSetting;

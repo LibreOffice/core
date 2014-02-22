@@ -47,7 +47,7 @@ namespace dbaccess
 
     namespace PropertyAttribute = ::com::sun::star::beans::PropertyAttribute;
 
-    // OColumnSettings
+    
 
     OColumnSettings::OColumnSettings()
         :m_bHidden(sal_False)
@@ -152,6 +152,6 @@ namespace dbaccess
         return true;
     }
 
-} // namespace dbaccess
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

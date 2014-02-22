@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -28,7 +28,7 @@
 #include <vector>
 #include <algorithm>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class CoordinateData3D
 {
@@ -67,7 +67,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class CoordinateDataArray3D
 {
@@ -108,8 +108,8 @@ public:
             const basegfx::B3DPoint* pNext(0);
             const basegfx::B3DPoint* pPrev(0);
 
-            // To guarantee a correctly oriented point, choose an outmost one
-            // which then cannot be concave
+            
+            
             for(a = 1; a < nPointCount; a++)
             {
                 const basegfx::B3DPoint& rCandidate = maVector[a].getCoordinate();
@@ -123,7 +123,7 @@ public:
                 }
             }
 
-            // look for a next point different from minimal one
+            
             for(a = (nISmallest + 1) % nPointCount; a != nISmallest; a = (a + 1) % nPointCount)
             {
                 const basegfx::B3DPoint& rCandidate = maVector[a].getCoordinate();
@@ -135,7 +135,7 @@ public:
                 }
             }
 
-            // look for a previous point different from minimal one
+            
             for(a = (nISmallest + nPointCount - 1) % nPointCount; a != nISmallest; a = (a + nPointCount - 1) % nPointCount)
             {
                 const basegfx::B3DPoint& rCandidate = maVector[a].getCoordinate();
@@ -147,8 +147,8 @@ public:
                 }
             }
 
-            // we always have a minimal point. If we also have a different next and previous,
-            // we can calculate the normal
+            
+            
             if(pNext && pPrev)
             {
                 const basegfx::B3DVector aPrev(*pPrev - *pSmallest);
@@ -186,7 +186,7 @@ public:
     {
         if(nCount)
         {
-            // add nCount copies of rValue
+            
             CoordinateData3DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             maVector.insert(aIndex, nCount, rValue);
@@ -199,7 +199,7 @@ public:
 
         if(nCount)
         {
-            // insert data
+            
             CoordinateData3DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             CoordinateData3DVector::const_iterator aStart(rSource.maVector.begin());
@@ -212,7 +212,7 @@ public:
     {
         if(nCount)
         {
-            // remove point data
+            
             CoordinateData3DVector::iterator aStart(maVector.begin());
             aStart += nIndex;
             const CoordinateData3DVector::iterator aEnd(aStart + nCount);
@@ -249,7 +249,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class BColorArray
 {
@@ -346,7 +346,7 @@ public:
     {
         if(nCount)
         {
-            // add nCount copies of rValue
+            
             BColorDataVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             maVector.insert(aIndex, nCount, rValue);
@@ -362,7 +362,7 @@ public:
 
         if(nCount)
         {
-            // insert data
+            
             BColorDataVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             BColorDataVector::const_iterator aStart(rSource.maVector.begin());
@@ -391,7 +391,7 @@ public:
                     mnUsedEntries--;
             }
 
-            // remove point data
+            
             maVector.erase(aDeleteStart, aDeleteEnd);
         }
     }
@@ -414,7 +414,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class NormalsArray3D
 {
@@ -510,7 +510,7 @@ public:
     {
         if(nCount)
         {
-            // add nCount copies of rValue
+            
             NormalsData3DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             maVector.insert(aIndex, nCount, rValue);
@@ -526,7 +526,7 @@ public:
 
         if(nCount)
         {
-            // insert data
+            
             NormalsData3DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             NormalsData3DVector::const_iterator aStart(rSource.maVector.begin());
@@ -555,7 +555,7 @@ public:
                     mnUsedEntries--;
             }
 
-            // remove point data
+            
             maVector.erase(aDeleteStart, aDeleteEnd);
         }
     }
@@ -588,7 +588,7 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class TextureCoordinate2D
 {
@@ -684,7 +684,7 @@ public:
     {
         if(nCount)
         {
-            // add nCount copies of rValue
+            
             TextureData2DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             maVector.insert(aIndex, nCount, rValue);
@@ -700,7 +700,7 @@ public:
 
         if(nCount)
         {
-            // insert data
+            
             TextureData2DVector::iterator aIndex(maVector.begin());
             aIndex += nIndex;
             TextureData2DVector::const_iterator aStart(rSource.maVector.begin());
@@ -729,7 +729,7 @@ public:
                     mnUsedEntries--;
             }
 
-            // remove point data
+            
             maVector.erase(aDeleteStart, aDeleteEnd);
         }
     }
@@ -762,34 +762,34 @@ public:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 class ImplB3DPolygon
 {
-    // The point vector. This vector exists always and defines the
-    // count of members.
+    
+    
     CoordinateDataArray3D                           maPoints;
 
-    // The BColor vector. This vectors are created on demand
-    // and may be zero.
+    
+    
     BColorArray*                                    mpBColors;
 
-    // The Normals vector. This vectors are created on demand
-    // and may be zero.
+    
+    
     NormalsArray3D*                                 mpNormals;
 
-    // The TextureCoordinates vector. This vectors are created on demand
-    // and may be zero.
+    
+    
     TextureCoordinate2D*                            mpTextureCoordiantes;
 
-    // The calculated plane normal. mbPlaneNormalValid says if it's valid.
+    
     ::basegfx::B3DVector                            maPlaneNormal;
 
-    // bitfield
-    // flag which decides if this polygon is opened or closed
+    
+    
     bool                                            mbIsClosed : 1;
 
-    // flag which says if maPlaneNormal is up-to-date
+    
     bool                                            mbPlaneNormalValid : 1;
 
 protected:
@@ -802,8 +802,8 @@ protected:
     }
 
 public:
-    // This constructor is only used from the static identity polygon, thus
-    // the RefCount is set to 1 to never 'delete' this static incarnation.
+    
+    
     ImplB3DPolygon()
     :   maPoints(0L),
         mpBColors(0L),
@@ -813,7 +813,7 @@ public:
         mbIsClosed(false),
         mbPlaneNormalValid(true)
     {
-        // complete initialization with defaults
+        
     }
 
     ImplB3DPolygon(const ImplB3DPolygon& rToBeCopied)
@@ -825,7 +825,7 @@ public:
         mbIsClosed(rToBeCopied.mbIsClosed),
         mbPlaneNormalValid(rToBeCopied.mbPlaneNormalValid)
     {
-        // complete initialization using copy
+        
         if(rToBeCopied.mpBColors && rToBeCopied.mpBColors->isUsed())
         {
             mpBColors = new BColorArray(*rToBeCopied.mpBColors);
@@ -851,7 +851,7 @@ public:
         mbIsClosed(rToBeCopied.mbIsClosed),
         mbPlaneNormalValid(false)
     {
-        // complete initialization using partly copy
+        
         if(rToBeCopied.mpBColors && rToBeCopied.mpBColors->isUsed())
         {
             mpBColors = new BColorArray(*rToBeCopied.mpBColors, nIndex, nCount);
@@ -937,7 +937,7 @@ public:
             }
             else
             {
-                // candidate has no BColors, so it's assumed all unused.
+                
                 bBColorsAreEqual = !mpBColors->isUsed();
             }
         }
@@ -945,7 +945,7 @@ public:
         {
             if(rCandidate.mpBColors)
             {
-                // we have no TextureCoordiantes, so it's assumed all unused.
+                
                 bBColorsAreEqual = !rCandidate.mpBColors->isUsed();
             }
         }
@@ -965,7 +965,7 @@ public:
             }
             else
             {
-                // candidate has no normals, so it's assumed all unused.
+                
                 bNormalsAreEqual = !mpNormals->isUsed();
             }
         }
@@ -973,7 +973,7 @@ public:
         {
             if(rCandidate.mpNormals)
             {
-                // we have no normals, so it's assumed all unused.
+                
                 bNormalsAreEqual = !rCandidate.mpNormals->isUsed();
             }
         }
@@ -993,7 +993,7 @@ public:
             }
             else
             {
-                // candidate has no TextureCoordinates, so it's assumed all unused.
+                
                 bTextureCoordinatesAreEqual = !mpTextureCoordiantes->isUsed();
             }
         }
@@ -1001,7 +1001,7 @@ public:
         {
             if(rCandidate.mpTextureCoordiantes)
             {
-                // we have no TextureCoordiantes, so it's assumed all unused.
+                
                 bTextureCoordinatesAreEqual = !rCandidate.mpTextureCoordiantes->isUsed();
             }
         }
@@ -1350,7 +1350,7 @@ public:
 
             if(mbPlaneNormalValid)
             {
-                // mirror plane normal
+                
                 maPlaneNormal = -maPlaneNormal;
             }
 
@@ -1375,7 +1375,7 @@ public:
     {
         if(mbIsClosed)
         {
-            // check for same start and end point
+            
             const sal_uInt32 nIndex(maPoints.count() - 1L);
 
             if(maPoints.getCoordinate(0L) == maPoints.getCoordinate(nIndex))
@@ -1399,7 +1399,7 @@ public:
             }
         }
 
-        // test for range
+        
         for(sal_uInt32 a(0L); a < maPoints.count() - 1L; a++)
         {
             if(maPoints.getCoordinate(a) == maPoints.getCoordinate(a + 1L))
@@ -1428,7 +1428,7 @@ public:
 
     void removeDoublePointsAtBeginEnd()
     {
-        // Only remove DoublePoints at Begin and End when poly is closed
+        
         if(mbIsClosed)
         {
             bool bRemove;
@@ -1471,8 +1471,8 @@ public:
     {
         sal_uInt32 nIndex(0L);
 
-        // test as long as there are at least two points and as long as the index
-        // is smaller or equal second last point
+        
+        
         while((maPoints.count() > 1L) && (nIndex <= maPoints.count() - 2L))
         {
             const sal_uInt32 nNextIndex(nIndex + 1L);
@@ -1495,12 +1495,12 @@ public:
 
             if(bRemove)
             {
-                // if next is same as index and the control vectors are unused, delete index
+                
                 remove(nIndex, 1L);
             }
             else
             {
-                // if different, step forward
+                
                 nIndex++;
             }
         }
@@ -1510,17 +1510,17 @@ public:
     {
         maPoints.transform(rMatrix);
 
-        // Here, it seems to be possible to transform a valid plane normal and to avoid
-        // invalidation, but it's not true. If the transformation contains shears or e.g.
-        // perspective projection, the orthogonality to the transformed plane will not
-        // be preserved. It may be possible to test that at the matrix to not invalidate in
-        // all cases or to extract a matrix which does not 'shear' the vector which is
-        // a normal in this case. As long as this is not sure, i will just invalidate.
+        
+        
+        
+        
+        
+        
         invalidatePlaneNormal();
     }
 };
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace basegfx
 {
@@ -1754,6 +1754,6 @@ namespace basegfx
             mpPolygon->transform(rMatrix);
         }
     }
-} // end of namespace basegfx
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

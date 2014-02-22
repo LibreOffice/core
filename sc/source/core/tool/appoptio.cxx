@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -34,7 +34,7 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-//      ScAppOptions - Applikations-Optionen
+
 
 ScAppOptions::ScAppOptions() : pLRUList( NULL )
 {
@@ -54,9 +54,9 @@ ScAppOptions::~ScAppOptions()
 void ScAppOptions::SetDefaults()
 {
     if ( ScOptionsUtil::IsMetricSystem() )
-        eMetric     = FUNIT_CM;             // default for countries with metric system
+        eMetric     = FUNIT_CM;             
     else
-        eMetric     = FUNIT_INCH;           // default for others
+        eMetric     = FUNIT_INCH;           
 
     nZoom           = 100;
     eZoomType       = SVX_ZOOM_PERCENT;
@@ -66,7 +66,7 @@ void ScAppOptions::SetDefaults()
     bDetectiveAuto  = true;
 
     delete [] pLRUList;
-    pLRUList = new sal_uInt16[5];               // sinnvoll vorbelegen
+    pLRUList = new sal_uInt16[5];               
     pLRUList[0] = SC_OPCODE_SUM;
     pLRUList[1] = SC_OPCODE_AVERAGE;
     pLRUList[2] = SC_OPCODE_MIN;
@@ -127,7 +127,7 @@ void ScAppOptions::SetLRUFuncList( const sal_uInt16* pList, const sal_uInt16 nCo
         pLRUList = NULL;
 }
 
-//  Config Item containing app options
+
 
 static void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
 {
@@ -162,7 +162,7 @@ static void lcl_GetLastFunctions( Any& rDest, const ScAppOptions& rOpt )
         rDest <<= aSeq;
     }
     else
-        rDest <<= Sequence<sal_Int32>(0);   // empty
+        rDest <<= Sequence<sal_Int32>(0);   
 }
 
 static void lcl_SetSortList( const Any& rValue )
@@ -174,8 +174,8 @@ static void lcl_SetSortList( const Any& rValue )
         const OUString* pArray = aSeq.getConstArray();
         ScUserList aList;
 
-        //  if setting is "default", keep default values from ScUserList ctor
-        //! mark "default" in a safe way
+        
+        
         sal_Bool bDefault = ( nCount == 1 && pArray[0] == "NULL" );
 
         if (!bDefault)
@@ -206,7 +206,7 @@ static void lcl_GetSortList( Any& rDest )
         rDest <<= aSeq;
     }
     else
-        rDest <<= Sequence<OUString>(0);    // empty
+        rDest <<= Sequence<OUString>(0);    
 }
 
 #define CFGPATH_LAYOUT      "Office.Calc/Layout"
@@ -259,18 +259,18 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Other/MeasureUnit/NonMetric",  // SCLAYOUTOPT_MEASURE
-        "Other/StatusbarFunction",      // SCLAYOUTOPT_STATUSBAR
-        "Zoom/Value",                   // SCLAYOUTOPT_ZOOMVAL
-        "Zoom/Type",                    // SCLAYOUTOPT_ZOOMTYPE
-        "Zoom/Synchronize"              // SCLAYOUTOPT_SYNCZOOM
+        "Other/MeasureUnit/NonMetric",  
+        "Other/StatusbarFunction",      
+        "Zoom/Value",                   
+        "Zoom/Type",                    
+        "Zoom/Synchronize"              
     };
     Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < SCLAYOUTOPT_COUNT; i++)
         pNames[i] = OUString::createFromAscii(aPropNames[i]);
 
-    //  adjust for metric system
+    
     if (ScOptionsUtil::IsMetricSystem())
         pNames[SCLAYOUTOPT_MEASURE] = "Other/MeasureUnit/Metric";
 
@@ -281,9 +281,9 @@ Sequence<OUString> ScAppCfg::GetInputPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "LastFunctions",            // SCINPUTOPT_LASTFUNCS
-        "AutoInput",                // SCINPUTOPT_AUTOINPUT
-        "DetectiveAuto"             // SCINPUTOPT_DET_AUTO
+        "LastFunctions",            
+        "AutoInput",                
+        "DetectiveAuto"             
     };
     Sequence<OUString> aNames(SCINPUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -297,10 +297,10 @@ Sequence<OUString> ScAppCfg::GetRevisionPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Change",                   // SCREVISOPT_CHANGE
-        "Insertion",                // SCREVISOPT_INSERTION
-        "Deletion",                 // SCREVISOPT_DELETION
-        "MovedEntry"                // SCREVISOPT_MOVEDENTRY
+        "Change",                   
+        "Insertion",                
+        "Deletion",                 
+        "MovedEntry"                
     };
     Sequence<OUString> aNames(SCREVISOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -314,7 +314,7 @@ Sequence<OUString> ScAppCfg::GetContentPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Link"                      // SCCONTENTOPT_LINK
+        "Link"                      
     };
     Sequence<OUString> aNames(SCCONTENTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -328,7 +328,7 @@ Sequence<OUString> ScAppCfg::GetSortListPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "List"                      // SCSORTLISTOPT_LIST
+        "List"                      
     };
     Sequence<OUString> aNames(SCSORTLISTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -342,9 +342,9 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "DefaultObjectSize/Width",      // SCMISCOPT_DEFOBJWIDTH
-        "DefaultObjectSize/Height",     // SCMISCOPT_DEFOBJHEIGHT
-        "SharedDocument/ShowWarning"    // SCMISCOPT_SHOWSHAREDDOCWARN
+        "DefaultObjectSize/Width",      
+        "DefaultObjectSize/Height",     
+        "SharedDocument/ShowWarning"    
     };
     Sequence<OUString> aNames(SCMISCOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -358,7 +358,7 @@ Sequence<OUString> ScAppCfg::GetCompatPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "KeyBindings/BaseGroup"         // SCCOMPATOPT_KEY_BINDING
+        "KeyBindings/BaseGroup"         
     };
     Sequence<OUString> aNames(SCCOMPATOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -566,7 +566,7 @@ ScAppCfg::ScAppCfg() :
             {
                 case SCCOMPATOPT_KEY_BINDING:
                 {
-                    nIntVal = 0; // 0 = 'Default'
+                    nIntVal = 0; 
                     pValues[nProp] >>= nIntVal;
                     SetKeyBindingType(static_cast<ScOptionsUtil::KeyBindingType>(nIntVal));
                 }

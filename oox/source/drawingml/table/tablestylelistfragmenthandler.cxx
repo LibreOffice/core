@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/table/tablestylelistfragmenthandler.hxx"
@@ -40,16 +40,16 @@ TableStyleListFragmentHandler::~TableStyleListFragmentHandler()
 {
 }
 
-// CT_TableStyleList
+
 ContextHandlerRef TableStyleListFragmentHandler::onCreateContext(
     sal_Int32 aElementToken, const AttributeList& rAttribs )
 {
     switch( aElementToken )
     {
-        case A_TOKEN( tblStyleLst ):    // CT_TableStyleList
+        case A_TOKEN( tblStyleLst ):    
             mrTableStyleList.getDefaultStyleId() = rAttribs.getString( XML_def ).get();
             break;
-        case A_TOKEN( tblStyle ):       // CT_TableStyle
+        case A_TOKEN( tblStyle ):       
             std::vector< TableStyle >& rTableStyles = mrTableStyleList.getTableStyles();
             rTableStyles.resize( rTableStyles.size() + 1 );
             return new TableStyleContext( *this, rAttribs, rTableStyles.back() );
@@ -57,8 +57,8 @@ ContextHandlerRef TableStyleListFragmentHandler::onCreateContext(
     return this;
 }
 
-} // namespace table
-} // namespace drawingml
-} // namespace oox
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

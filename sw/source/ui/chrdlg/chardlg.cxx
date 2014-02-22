@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -242,7 +242,7 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
    if(!sURL.isEmpty())
     {
         sURL = URIHelper::SmartRel2Abs(INetURLObject(), sURL, Link(), false );
-        // #i100683# file URLs should be normalized in the UI
+        
         static const sal_Char* pFile = "file:";
        sal_Int32 nLength = ((sal_Int32)sizeof(pFile)-1);
        if( sURL.copy(0, nLength ).equalsAsciiL( pFile, nLength ))
@@ -255,7 +255,7 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     bModified |= m_pNameED->IsModified();
     bModified |= m_pTargetFrmLB->GetSavedValue() != m_pTargetFrmLB->GetText();
 
-    // set valid settings first
+    
     OUString sEntry = m_pVisitedLB->GetSelectEntry();
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName( sEntry, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT);
     aINetFmt.SetVisitedFmtAndId( sEntry, nId );

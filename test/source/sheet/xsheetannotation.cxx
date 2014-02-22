@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/sheet/xsheetannotation.hxx>
@@ -24,7 +24,7 @@ void XSheetAnnotation::testGetPosition()
     uno::Reference< sheet::XSheetAnnotation > aSheetAnnotation (init(), UNO_QUERY_THROW);
     table::CellAddress xResultCellAddress = aSheetAnnotation->getPosition();
 
-    //expected result
+    
     table::CellAddress xExpectedCellAddress;
     xExpectedCellAddress.Sheet = 0;
     xExpectedCellAddress.Row = 1;

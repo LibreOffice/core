@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -38,7 +38,7 @@
 #include <cellfrm.hxx>
 #include <rowfrm.hxx>
 
-/// set cursor into next/previous cell
+
 sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
 {
     sal_Bool bRet = sal_False;
@@ -47,11 +47,11 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
     if( IsTableMode() || 0 != ( pTblNd = IsCrsrInTbl() ))
     {
         SwCursor* pCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         bRet = sal_True;
 
-        // Check if we have to move the cursor to a covered cell before
-        // proceeding:
+        
+        
         const SwNode* pTableBoxStartNode = pCrsr->GetNode()->FindTableBoxStartNode();
         const SwTableBox* pTableBox = 0;
 
@@ -70,15 +70,15 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
 
         SwNodeIndex  aCellStt( *pTableBoxStartNode->EndOfSectionNode(), 1 );
 
-        // if there is another StartNode after the EndNode of a cell then
-        // there is another cell
+        
+        
         if( !aCellStt.GetNode().IsStartNode() )
         {
             if( pCrsr->HasMark() || !bAppendLine )
                 bRet = sal_False;
             else
             {
-                // if there is no list anymore then create new one
+                
                 if ( !pTableBox )
                     pTableBox = pTblNd->GetTable().GetTblBox(
                                     pCrsr->GetPoint()->nNode.GetNode().
@@ -87,7 +87,7 @@ sal_Bool SwCrsrShell::GoNextCell( sal_Bool bAppendLine )
                 OSL_ENSURE( pTableBox, "Box is not in this table" );
                 SwSelBoxes aBoxes;
 
-                // the document might change; w/o Action views would not be notified
+                
                 ((SwEditShell*)this)->StartAllAction();
                 bRet = mpDoc->InsertRow( pTblNd->GetTable().
                                     SelLineFromBox( pTableBox, aBoxes, false ));
@@ -106,10 +106,10 @@ sal_Bool SwCrsrShell::GoPrevCell()
     if( IsTableMode() || IsCrsrInTbl() )
     {
         SwCursor* pCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
-        SwCallLink aLk( *this ); // watch Crsr-Moves
+        SwCallLink aLk( *this ); 
         bRet = pCrsr->GoPrevCell();
         if( bRet )
-            UpdateCrsr(); // update current cursor
+            UpdateCrsr(); 
     }
     return bRet;
 }
@@ -128,7 +128,7 @@ static const SwFrm* lcl_FindMostUpperCellFrm( const SwFrm* pFrm )
 
 bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
 {
-    // check if the current cursor's SPoint/Mark are in a table
+    
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm->IsInTab() )
         return false;
@@ -142,7 +142,7 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     const SwTableBox* pStt = 0;
     const SwTableBox* pEnd = 0;
 
-    // search box based on layout
+    
     SwSelBoxes aBoxes;
     SwTblSearchType eType = bRow ? nsSwTblSearchType::TBLSEARCH_ROW : nsSwTblSearchType::TBLSEARCH_COL;
     const bool bCheckProtected = !IsReadOnlyAvailable();
@@ -160,7 +160,7 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         pStt = aBoxes[0];
         pEnd = aBoxes.back();
     }
-    // #i32329# Enhanced table selection
+    
     else if ( pTable->IsNewModel() )
     {
         const SwShellCrsr *pCrsr = _GetCrsr();
@@ -190,11 +190,11 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
 
         const bool bVert = pFrm->ImplFindTabFrm()->IsVertical();
 
-        // If we select upwards it is sufficient to set pStt and pEnd
-        // to the first resp. last box of the selection obtained from
-        // GetTblSel. However, selecting downwards requires the frames
-        // located at the corners of the selection. This does not work
-        // for column selections in vertical tables:
+        
+        
+        
+        
+        
         const bool bSelectUp = ( bVert && !bRow ) ||
                                 *pCrsr->GetPoint() <= *pCrsr->GetMark();
         SwCellFrms aCells;
@@ -212,14 +212,14 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         }
         else
         {
-            // will become point of table cursor
+            
             pStt = aCells[ bVert ? (bRow ? 0 : 3) : (bRow ? 2 : 1) ]->GetTabBox();
-            // will become mark of table cursor
+            
             pEnd = aCells[ bVert ? (bRow ? 3 : 0) : (bRow ? 1 : 2) ]->GetTabBox();
         }
     }
 
-    // if no table cursor exists, create one
+    
     if( !m_pTblCrsr )
     {
         m_pTblCrsr = new SwShellTableCrsr( *this, *m_pCurCrsr->GetPoint() );
@@ -229,15 +229,15 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
 
     m_pTblCrsr->DeleteMark();
 
-    // set start and end of a column
+    
     m_pTblCrsr->GetPoint()->nNode = *pEnd->GetSttNd();
     m_pTblCrsr->Move( fnMoveForward, fnGoCntnt );
     m_pTblCrsr->SetMark();
     m_pTblCrsr->GetPoint()->nNode = *pStt->GetSttNd()->EndOfSectionNode();
     m_pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
 
-    // set PtPos 'close' to the reference table, otherwise we might get problems
-    // with the repeated headlines check in UpdateCrsr():
+    
+    
     if ( !bRow )
         m_pTblCrsr->GetPtPos() = pMasterTabFrm->IsVertical()
                                    ? pMasterTabFrm->Frm().TopRight()
@@ -249,7 +249,7 @@ bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
 
 sal_Bool SwCrsrShell::SelTbl()
 {
-    // check if the current cursor's SPoint/Mark are in a table
+    
     SwFrm *pFrm = GetCurrFrm();
     if( !pFrm->IsInTab() )
         return sal_False;
@@ -271,8 +271,8 @@ sal_Bool SwCrsrShell::SelTbl()
     m_pTblCrsr->GetPoint()->nNode = *pTblNd;
     m_pTblCrsr->Move( fnMoveForward, fnGoCntnt );
     m_pTblCrsr->SetMark();
-    // set MkPos 'close' to the master table, otherwise we might get problems
-    // with the repeated headlines check in UpdateCrsr():
+    
+    
     m_pTblCrsr->GetMkPos() = pMasterTabFrm->IsVertical() ? pMasterTabFrm->Frm().TopRight() : pMasterTabFrm->Frm().TopLeft();
     m_pTblCrsr->GetPoint()->nNode = *pTblNd->EndOfSectionNode();
     m_pTblCrsr->Move( fnMoveBackward, fnGoCntnt );
@@ -282,17 +282,17 @@ sal_Bool SwCrsrShell::SelTbl()
 
 sal_Bool SwCrsrShell::SelTblBox()
 {
-    // if we're in a table, create a table cursor, and select the cell
-    // that the current cursor's point resides in
+    
+    
 
-    // search for start node of our table box. If not found, exit really
+    
     const SwStartNode* pStartNode =
         m_pCurCrsr->GetPoint()->nNode.GetNode().FindTableBoxStartNode();
 
 #if OSL_DEBUG_LEVEL > 0
-    // the old code checks whether we're in a table by asking the
-    // frame. This should yield the same result as searching for the
-    // table box start node, right?
+    
+    
+    
     SwFrm *pFrm = GetCurrFrm();
     OSL_ENSURE( !pFrm->IsInTab() == !(pStartNode != NULL),
                 "Schroedinger's table: We're in a box, and also we aren't." );
@@ -302,7 +302,7 @@ sal_Bool SwCrsrShell::SelTblBox()
 
     SET_CURR_SHELL( this );
 
-    // create a table cursor, if there isn't one already
+    
     if( !m_pTblCrsr )
     {
         m_pTblCrsr = new SwShellTableCrsr( *this, *m_pCurCrsr->GetPoint() );
@@ -310,28 +310,28 @@ sal_Bool SwCrsrShell::SelTblBox()
         m_pCurCrsr->SwSelPaintRects::Hide();
     }
 
-    // select the complete box with our shiny new m_pTblCrsr
-    // 1. delete mark, and move point to first content node in box
+    
+    
     m_pTblCrsr->DeleteMark();
     *(m_pTblCrsr->GetPoint()) = SwPosition( *pStartNode );
     m_pTblCrsr->Move( fnMoveForward, fnGoNode );
 
-    // 2. set mark, and move point to last content node in box
+    
     m_pTblCrsr->SetMark();
     *(m_pTblCrsr->GetPoint()) = SwPosition( *(pStartNode->EndOfSectionNode()) );
     m_pTblCrsr->Move( fnMoveBackward, fnGoNode );
 
-    // 3. exchange
+    
     m_pTblCrsr->Exchange();
 
-    // with some luck, UpdateCrsr() will now update everything that
-    // needs updateing
+    
+    
     UpdateCrsr();
 
     return sal_True;
 }
 
-// TODO: provide documentation
+
 /** get the next non-protected cell inside a table
 
     @param[in,out] rIdx is on a table node
@@ -342,10 +342,10 @@ sal_Bool SwCrsrShell::SelTblBox()
 */
 static bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
 {
-    // check protected cells
-    SwNodeIndex aTmp( rIdx, 2 ); // TableNode + StartNode
+    
+    SwNodeIndex aTmp( rIdx, 2 ); 
 
-    // the resulting cell should be in that table:
+    
     const SwTableNode* pTblNd = rIdx.GetNode().GetTableNode();
 
     if ( !pTblNd )
@@ -359,11 +359,11 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
     SwNodes& rNds = aTmp.GetNode().GetNodes();
     SwCntntNode* pCNd = aTmp.GetNode().GetCntntNode();
 
-    // no content node => go to next content node
+    
     if( !pCNd )
         pCNd = rNds.GoNext( &aTmp );
 
-    // robust
+    
     if ( !pCNd )
         return false;
 
@@ -372,44 +372,44 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
     if ( 0 == pFrm || pCNd->FindTableNode() != pTblNd ||
         (!bInReadOnly && pFrm->IsProtected() ) )
     {
-        // we are not located inside a 'valid' cell. We have to continue searching...
+        
 
-        // skip behind current section. This might be the end of the table cell
-        // or behind a inner section or or or...
+        
+        
         aTmp.Assign( *pCNd->EndOfSectionNode(), 1 );
 
-        // loop to find a suitable cell...
+        
         for( ;; )
         {
             SwNode* pNd = &aTmp.GetNode();
 
-            // we break this loop if we reached the end of the table.
-            // to make this code even more robust, we also break if we are
-            // already behind the table end node:
+            
+            
+            
             if( pNd == pTableEndNode || /*robust: */ pNd->GetIndex() > pTableEndNode->GetIndex() )
                 return false;
 
-            // ok, get the next content node:
+            
             pCNd = aTmp.GetNode().GetCntntNode();
             if( 0 == pCNd )
                 pCNd = rNds.GoNext( &aTmp );
 
-            // robust:
+            
             if ( !pCNd )
                 return false;
 
-            // check if we have found a suitable table cell:
+            
             pFrm = pCNd->getLayoutFrm( pCNd->GetDoc()->GetCurrentLayout() );
 
             if ( 0 != pFrm && pCNd->FindTableNode() == pTblNd &&
                 (bInReadOnly || !pFrm->IsProtected() ) )
             {
-                // finally, we have found a suitable table cell => set index and return
+                
                 rIdx = *pCNd;
                 return true;
             }
 
-            // continue behind the current section:
+            
             aTmp.Assign( *pCNd->EndOfSectionNode(), +1 );
         }
     }
@@ -417,10 +417,10 @@ static bool lcl_FindNextCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly )
     return true;
 }
 
-/// see lcl_FindNextCell()
+
 static bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
 {
-    SwNodeIndex aTmp( rIdx, -2 ); // TableNode + EndNode
+    SwNodeIndex aTmp( rIdx, -2 ); 
 
     const SwNode* pTableEndNode = &rIdx.GetNode();
     const SwTableNode* pTblNd = pTableEndNode->StartOfSectionNode()->GetTableNode();
@@ -445,7 +445,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
     if( 0 == pFrm || pCNd->FindTableNode() != pTblNd ||
         (!bInReadOnly && pFrm->IsProtected() ))
     {
-        // skip before current section
+        
         aTmp.Assign( *pCNd->StartOfSectionNode(), -1 );
         for( ;; )
         {
@@ -467,7 +467,7 @@ static bool lcl_FindPrevCell( SwNodeIndex& rIdx, sal_Bool bInReadOnly  )
                 (bInReadOnly || !pFrm->IsProtected() ) )
             {
                 rIdx = *pCNd;
-                return true; // ok, not protected
+                return true; 
             }
             aTmp.Assign( *pCNd->StartOfSectionNode(), - 1 );
         }
@@ -484,8 +484,8 @@ sal_Bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
     SwTableNode* pTblNd = aIdx.GetNode().FindTableNode();
     if( pTblNd )
     {
-        // #i26532#: If we are inside a table, we may not go backward to the
-        // table start node, because we would miss any tables inside this table.
+        
+        
         SwTableNode* pInnerTblNd = 0;
         SwNodeIndex aTmpIdx( aIdx );
         while( aTmpIdx.GetIndex() &&
@@ -501,24 +501,24 @@ sal_Bool GotoPrevTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
             0 == ( pTblNd = aIdx.GetNode().StartOfSectionNode()->GetTableNode()) )
             aIdx--;
 
-        if( pTblNd ) // any further table node?
+        if( pTblNd ) 
         {
-            if( fnPosTbl == fnMoveForward ) // at the beginning?
+            if( fnPosTbl == fnMoveForward ) 
             {
                 aIdx = *aIdx.GetNode().StartOfSectionNode();
                 if( !lcl_FindNextCell( aIdx, bInReadOnly ))
                 {
-                    // skip table
+                    
                     aIdx.Assign( *pTblNd, -1 );
                     continue;
                 }
             }
             else
             {
-                // check protected cells
+                
                 if( !lcl_FindNextCell( aIdx, bInReadOnly ))
                 {
-                    // skip table
+                    
                     aIdx.Assign( *pTblNd, -1 );
                     continue;
                 }
@@ -553,13 +553,13 @@ sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
         while( aIdx.GetIndex() < nLastNd &&
                 0 == ( pTblNd = aIdx.GetNode().GetTableNode()) )
             ++aIdx;
-        if( pTblNd ) // any further table node?
+        if( pTblNd ) 
         {
-            if( fnPosTbl == fnMoveForward ) // at the beginning?
+            if( fnPosTbl == fnMoveForward ) 
             {
                 if( !lcl_FindNextCell( aIdx, bInReadOnly ))
                 {
-                    // skip table
+                    
                     aIdx.Assign( *pTblNd->EndOfSectionNode(), + 1 );
                     continue;
                 }
@@ -567,10 +567,10 @@ sal_Bool GotoNextTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
             else
             {
                 aIdx = *aIdx.GetNode().EndOfSectionNode();
-                // check protected cells
+                
                 if( !lcl_FindNextCell( aIdx, bInReadOnly ))
                 {
-                    // skip table
+                    
                     aIdx.Assign( *pTblNd->EndOfSectionNode(), + 1 );
                     continue;
                 }
@@ -599,7 +599,7 @@ sal_Bool GotoCurrTable( SwPaM& rCurCrsr, SwPosTable fnPosTbl,
         return sal_False;
 
     SwTxtNode* pTxtNode = 0;
-    if( fnPosTbl == fnMoveBackward ) // to the end of the table
+    if( fnPosTbl == fnMoveBackward ) 
     {
         SwNodeIndex aIdx( *pTblNd->EndOfSectionNode() );
         if( !lcl_FindPrevCell( aIdx, bInReadOnly ))
@@ -642,7 +642,7 @@ sal_Bool SwCursor::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 
 sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 {
-    SwCallLink aLk( *this ); // watch Crsr-Moves; call Link if needed
+    SwCallLink aLk( *this ); 
 
     SwShellCrsr* pCrsr = m_pTblCrsr ? m_pTblCrsr : m_pCurCrsr;
     bool bCheckPos;
@@ -652,7 +652,7 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 
     if ( !m_pTblCrsr && m_pCurCrsr->HasMark() )
     {
-        // switch to table mode
+        
         m_pTblCrsr = new SwShellTableCrsr( *this, *m_pCurCrsr->GetPoint() );
         m_pCurCrsr->DeleteMark();
         m_pCurCrsr->SwSelPaintRects::Hide();
@@ -671,7 +671,7 @@ sal_Bool SwCrsrShell::MoveTable( SwWhichTable fnWhichTbl, SwPosTable fnPosTbl )
 
     if( bRet )
     {
-        // #i45028# - set "top" position for repeated headline rows
+        
         pCrsr->GetPtPos() = Point();
 
         UpdateCrsr(SwCrsrShell::SCROLLWIN|SwCrsrShell::CHKRANGE|SwCrsrShell::READONLY);
@@ -688,12 +688,12 @@ bool SwCrsrShell::IsTblComplexForChart()
 {
     bool bRet = false;
 
-    // Here we may trigger table formatting so we better do that inside an action
+    
     StartAction();
     const SwTableNode* pTNd = m_pCurCrsr->GetPoint()->nNode.GetNode().FindTableNode();
     if( pTNd )
     {
-        // in a table; check if table or section is balanced
+        
         OUString sSel;
         if( m_pTblCrsr )
             sSel = GetBoxNms();
@@ -755,7 +755,7 @@ OUString SwCrsrShell::GetBoxNms() const
 
 bool SwCrsrShell::GotoTable( const OUString& rName )
 {
-    SwCallLink aLk( *this ); // watch Crsr-Moves
+    SwCallLink aLk( *this ); 
     bool bRet = !m_pTblCrsr && m_pCurCrsr->GotoTable( rName );
     if( bRet )
     {
@@ -771,12 +771,12 @@ sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
     if( !m_pBoxIdx || !m_pBoxPtr || IsSelTblCells() || !IsAutoUpdateCells() )
         return sal_False;
 
-    // check if box content is consistent with given box format, reset if not
+    
     SwTableBox* pChkBox = 0;
     SwStartNode* pSttNd = 0;
     if( !pPos )
     {
-        // get stored position
+        
         if( m_pBoxIdx && m_pBoxPtr &&
             0 != ( pSttNd = m_pBoxIdx->GetNode().GetStartNode() ) &&
             SwTableBoxStartNode == pSttNd->GetStartNodeType() &&
@@ -790,22 +790,22 @@ sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
         pChkBox = pSttNd->FindTableNode()->GetTable().GetTblBox( pSttNd->GetIndex() );
     }
 
-    // box has more than one paragraph
+    
     if( pChkBox && pSttNd->GetIndex() + 2 != pSttNd->EndOfSectionIndex() )
         pChkBox = 0;
 
-    // destroy pointer before next action starts
+    
     if( !pPos && !pChkBox )
         ClearTblBoxCntnt();
 
-    // cursor not anymore in this section?
+    
     if( pChkBox && !pPos &&
         ( m_pCurCrsr->HasMark() || m_pCurCrsr->GetNext() != m_pCurCrsr ||
           pSttNd->GetIndex() + 1 == m_pCurCrsr->GetPoint()->nNode.GetIndex() ))
         pChkBox = 0;
 
-    // Did the content of a box change at all? This is important if e.g. Undo
-    // could not restore the content properly.
+    
+    
     if( pChkBox )
     {
         const SwTxtNode* pNd = GetDoc()->GetNodes()[
@@ -819,7 +819,7 @@ sal_Bool SwCrsrShell::CheckTblBoxCntnt( const SwPosition* pPos )
 
     if( pChkBox )
     {
-        // destroy pointer before next action starts
+        
         ClearTblBoxCntnt();
         StartAction();
         GetDoc()->ChkBoxNumFmt( *pChkBox, sal_True );
@@ -852,7 +852,7 @@ void SwCrsrShell::SaveTblBoxCntnt( const SwPosition* pPos )
 
     if( bCheckBox )
     {
-        // check m_pBoxIdx
+        
         SwPosition aPos( *m_pBoxIdx );
         CheckTblBoxCntnt( &aPos );
     }

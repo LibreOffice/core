@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/mutex.hxx>
@@ -37,7 +37,7 @@ Graphic::Graphic() :
 {
 }
 
-// ------------------------------------------------------------------------------
+
 
 Graphic::~Graphic()
     throw()
@@ -45,7 +45,7 @@ Graphic::~Graphic()
     delete mpGraphic;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void Graphic::init( const ::Graphic& rGraphic )
     throw()
@@ -55,7 +55,7 @@ void Graphic::init( const ::Graphic& rGraphic )
     ::unographic::GraphicDescriptor::init( *mpGraphic );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
     throw( uno::RuntimeException )
@@ -73,7 +73,7 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
     return aAny ;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException )
@@ -84,7 +84,7 @@ uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
     return aReturn;
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Graphic::acquire()
     throw()
@@ -92,14 +92,14 @@ void SAL_CALL Graphic::acquire()
     ::unographic::GraphicDescriptor::acquire();
 }
 
-// ------------------------------------------------------------------------------
+
 
 void SAL_CALL Graphic::release() throw()
 {
     ::unographic::GraphicDescriptor::release();
 }
 
-// ------------------------------------------------------------------------------
+
 
 namespace
 {
@@ -112,7 +112,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId_Static()
     return theGraphicUnoTunnelId::get().getSeq();
 }
 
-// ------------------------------------------------------------------------------
+
 
 OUString Graphic::getImplementationName_Static()
     throw()
@@ -120,7 +120,7 @@ OUString Graphic::getImplementationName_Static()
     return OUString( "com.sun.star.comp.graphic.Graphic" );
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< OUString > Graphic::getSupportedServiceNames_Static()
     throw()
@@ -172,7 +172,7 @@ uno::Sequence< uno::Type > SAL_CALL Graphic::getTypes()
     return aRet;
 }
 
-// ------------------------------------------------------------------------------
+
 
 uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
     throw(uno::RuntimeException)
@@ -180,7 +180,7 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
     return getImplementationId_Static();
 }
 
-// ------------------------------------------------------------------------------
+
 
 ::sal_Int8 SAL_CALL Graphic::getType()
      throw (uno::RuntimeException)
@@ -193,9 +193,9 @@ uno::Sequence< sal_Int8 > SAL_CALL Graphic::getImplementationId()
     return cRet;
 }
 
-//----------------------------------------------------------------------
-// XBitmap
-//----------------------------------------------------------------------
+
+
+
 
 awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException)
 {
@@ -208,7 +208,7 @@ awt::Size SAL_CALL Graphic::getSize(  ) throw (uno::RuntimeException)
     return awt::Size( aVclSize.Width(), aVclSize.Height() );
 }
 
-//----------------------------------------------------------------------
+
 
 uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeException)
 {
@@ -227,7 +227,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getDIB(  ) throw (uno::RuntimeExce
     }
 }
 
-//----------------------------------------------------------------------
+
 
 uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::RuntimeException)
 {
@@ -246,7 +246,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL Graphic::getMaskDIB(  ) throw (uno::Runtime
     }
 }
 
-//----------------------------------------------------------------------
+
 const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterface >& rxIFace )
     throw()
 {
@@ -254,7 +254,7 @@ const ::Graphic* Graphic::getImplementation( const uno::Reference< uno::XInterfa
     return( xTunnel.is() ? reinterpret_cast< ::Graphic* >( xTunnel->getSomething( getImplementationId_Static() ) ) : NULL );
 }
 
-//----------------------------------------------------------------------
+
 sal_Int64 SAL_CALL Graphic::getSomething( const uno::Sequence< sal_Int8 >& rId )
     throw( uno::RuntimeException )
 {

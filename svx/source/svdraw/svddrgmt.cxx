@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "svddrgm1.hxx"
@@ -72,7 +72,7 @@
 #include <map>
 #include <vector>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntry::SdrDragEntry()
 :   mbAddToTransparent(false)
@@ -83,7 +83,7 @@ SdrDragEntry::~SdrDragEntry()
 {
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntryPolyPolygon::SdrDragEntryPolyPolygon(const basegfx::B2DPolyPolygon& rOriginalPolyPolygon)
 :   SdrDragEntry(),
@@ -136,7 +136,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPolyPolygon::createPr
     return aRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntrySdrObject::SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
 :   SdrDragEntry(),
@@ -145,7 +145,7 @@ SdrDragEntrySdrObject::SdrDragEntrySdrObject(const SdrObject& rOriginal, sdr::co
     mrObjectContact(rObjectContact),
     mbModify(bModify)
 {
-    // add SdrObject parts to transparent overlay stuff
+    
     setAddToTransparent(true);
 }
 
@@ -159,9 +159,9 @@ SdrDragEntrySdrObject::~SdrDragEntrySdrObject()
 
 void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
 {
-    // for the moment, i need to re-create the clone in all cases. I need to figure
-    // out when clone and original have the same class, so that i can use operator=
-    // in those cases
+    
+    
+    
 
     if(mpClone)
     {
@@ -176,7 +176,7 @@ void SdrDragEntrySdrObject::prepareCurrentState(SdrDragMethod& rDragMethod)
             mpClone = maOriginal.getFullDragClone();
         }
 
-        // apply original transformation, implemented at the DragMethods
+        
         rDragMethod.applyCurrentTransformationToSdrObject(*mpClone);
     }
 }
@@ -187,23 +187,23 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntrySdrObject::createPrim
 
     if(mbModify && mpClone)
     {
-        // choose source for geometry data
+        
         pSource = mpClone;
     }
 
-    // get VOC and Primitive2DSequence
+    
     sdr::contact::ViewContact& rVC = pSource->GetViewContact();
     sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(mrObjectContact);
     sdr::contact::DisplayInfo aDisplayInfo;
 
-    // Do not use the last ViewPort set at the OC from the last ProcessDisplay(),
-    // here we want the complete primitive sequence without visibility clippings
+    
+    
     mrObjectContact.resetViewPort();
 
     return rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
     const drawinglayer::primitive2d::Primitive2DSequence& rSequence,
@@ -211,7 +211,7 @@ SdrDragEntryPrimitive2DSequence::SdrDragEntryPrimitive2DSequence(
 :   SdrDragEntry(),
     maPrimitive2DSequence(rSequence)
 {
-    // add parts to transparent overlay stuff if necessary
+    
     setAddToTransparent(bAddToTransparent);
 }
 
@@ -229,13 +229,13 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPrimitive2DSequence::
     return drawinglayer::primitive2d::Primitive2DSequence(&aTransformPrimitive2D, 1);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 SdrDragEntryPointGlueDrag::SdrDragEntryPointGlueDrag(const std::vector< basegfx::B2DPoint >& rPositions, bool bIsPointDrag)
 :   maPositions(rPositions),
     mbIsPointDrag(bIsPointDrag)
 {
-    // add SdrObject parts to transparent overlay stuff
+    
     setAddToTransparent(true);
 }
 
@@ -299,13 +299,13 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragEntryPointGlueDrag::create
     return aRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT0(SdrDragMethod);
 
 void SdrDragMethod::resetSdrDragEntries()
 {
-    // clear entries; creation is on demand
+    
     clearSdrDragEntries();
 }
 
@@ -360,8 +360,8 @@ void SdrDragMethod::createSdrDragEntries()
 
 void SdrDragMethod::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool bModify)
 {
-    // add full object drag; Clone() at the object has to work
-    // for this
+    
+    
     addSdrDragEntry(new SdrDragEntrySdrObject(rOriginal, rObjectContact, bModify));
 }
 
@@ -398,22 +398,22 @@ void SdrDragMethod::createSdrDragEntries_SolidDrag()
 
                                 if(!bAddWireframe && !pCandidate->HasLineStyle())
                                 {
-                                    // add wireframe for objects without outline
+                                    
                                     bAddWireframe = true;
                                 }
 
                                 if(!bSuppressFullDrag)
                                 {
-                                    // add full object drag; Clone() at the object has to work
-                                    // for this
+                                    
+                                    
                                     createSdrDragEntryForSdrObject(*pCandidate, rOC, true);
                                 }
 
                                 if(bAddWireframe)
                                 {
-                                    // when dragging a 50% transparent copy of a filled or not filled object without
-                                    // outline, this is normally hard to see. Add extra wireframe in that case. This
-                                    // works nice e.g. with text frames etc.
+                                    
+                                    
+                                    
                                     addSdrDragEntry(new SdrDragEntryPolyPolygon(pCandidate->TakeXorPoly()));
                                 }
                             }
@@ -589,40 +589,40 @@ SdrPageView* SdrDragMethod::GetDragPV() const
 
 void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 {
-    // the original applies the transformation using TRGetBaseGeometry/TRSetBaseGeometry.
-    // Later this should be the only needed one for linear transforms (not for SdrDragCrook and
-    // SdrDragDistort, those are NOT linear). Currently, this can not yet be used since the
-    // special handling of rotate/mirror due to the not-being-able to handle it in the old
-    // drawinglayer stuff. Text would currently not correctly be mirrored in the preview.
+    
+    
+    
+    
+    
     basegfx::B2DHomMatrix aObjectTransform;
     basegfx::B2DPolyPolygon aObjectPolyPolygon;
     bool bPolyUsed(rTarget.TRGetBaseGeometry(aObjectTransform, aObjectPolyPolygon));
 
-    // apply transform to object transform
+    
     aObjectTransform *= getCurrentTransformation();
 
     if(bPolyUsed)
     {
-        // do something special since the object size is in the polygon
-        // break up matrix to get the scale
+        
+        
         basegfx::B2DTuple aScale;
         basegfx::B2DTuple aTranslate;
         double fRotate, fShearX;
         aObjectTransform.decompose(aScale, aTranslate, fRotate, fShearX);
 
-        // get polygon's position and size
+        
         const basegfx::B2DRange aPolyRange(aObjectPolyPolygon.getB2DRange());
 
-        // get the scaling factors (do not mirror, this is in the object transformation)
+        
         const double fScaleX(fabs(aScale.getX()) / (basegfx::fTools::equalZero(aPolyRange.getWidth()) ? 1.0 : aPolyRange.getWidth()));
         const double fScaleY(fabs(aScale.getY()) / (basegfx::fTools::equalZero(aPolyRange.getHeight()) ? 1.0 : aPolyRange.getHeight()));
 
-        // prepare transform matrix for polygon
+        
         basegfx::B2DHomMatrix aPolyTransform(basegfx::tools::createTranslateB2DHomMatrix(
             -aPolyRange.getMinX(), -aPolyRange.getMinY()));
         aPolyTransform.scale(fScaleX, fScaleY);
 
-        // transform the polygon
+        
         aObjectPolyPolygon.transform(aPolyTransform);
     }
 
@@ -631,7 +631,7 @@ void SdrDragMethod::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 
 void SdrDragMethod::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget)
 {
-    // original uses CurrentTransformation
+    
     rTarget.transform(getCurrentTransformation());
 }
 
@@ -644,7 +644,7 @@ SdrDragMethod::SdrDragMethod(SdrDragView& rNewView)
 {
     if(mbSolidDraggingActive && Application::GetSettings().GetStyleSettings().GetHighContrastMode())
     {
-        // fallback to wireframe when high contrast is used
+        
         mbSolidDraggingActive = false;
     }
 }
@@ -686,28 +686,28 @@ typedef std::map< const SdrObject*, SdrObject*, compareConstSdrObjectRefs> SdrOb
 
 void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlayManager)
 {
-    // create SdrDragEntries on demand
+    
     if(maSdrDragEntries.empty())
     {
         createSdrDragEntries();
     }
 
-    // if there are entries, derive OverlayObjects from the entries, including
-    // modification from current interactive state
+    
+    
     if(!maSdrDragEntries.empty())
     {
-        // #i54102# SdrDragEntrySdrObject creates clones of SdrObjects as base for creating the needed
-        // primitives, holding the original and the clone. If connectors (Edges) are involved,
-        // the cloned connectors need to be connected to the cloned SdrObjects (after cloning
-        // they are connected to the original SdrObjects). To do so, trigger the preparation
-        // steps for SdrDragEntrySdrObject, save an association of (orig, clone) in a helper
-        // and evtl. remember if it was an edge
+        
+        
+        
+        
+        
+        
         SdrObjectAndCloneMap aOriginalAndClones;
         std::vector< SdrEdgeObj* > aEdges;
         sal_uInt32 a;
 
-        // #i54102# execute prepareCurrentState for all SdrDragEntrySdrObject, register pair of original and
-        // clone, remember edges
+        
+        
         for(a = 0; a < maSdrDragEntries.size(); a++)
         {
             SdrDragEntrySdrObject* pSdrDragEntrySdrObject = dynamic_cast< SdrDragEntrySdrObject*>(maSdrDragEntries[a]);
@@ -730,7 +730,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
             }
         }
 
-        // #i54102# if there are edges, reconnect their ends to the corresponding clones (if found)
+        
         if(aEdges.size())
         {
             for(a = 0; a < aEdges.size(); a++)
@@ -762,7 +762,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
             }
         }
 
-        // collect primitives for visualisation
+        
         drawinglayer::primitive2d::Primitive2DSequence aResult;
         drawinglayer::primitive2d::Primitive2DSequence aResultTransparent;
 
@@ -794,7 +794,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
             if(aConnectorOverlays.hasElements())
             {
-                // add connector overlays to transparent part
+                
                 drawinglayer::primitive2d::appendPrimitive2DSequenceToPrimitive2DSequence(aResultTransparent, aConnectorOverlays);
             }
         }
@@ -817,7 +817,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         }
     }
 
-    // add DragStripes if necessary (help lines cross the page when dragging)
+    
     if(getSdrDragView().IsDragStripes())
     {
         Rectangle aActionRectangle;
@@ -840,7 +840,7 @@ void SdrDragMethod::destroyOverlayGeometry()
 
 bool SdrDragMethod::DoAddConnectorOverlays()
 {
-    // these conditions are translated from SdrDragView::ImpDrawEdgeXor
+    
     const SdrMarkList& rMarkedNodes = getSdrDragView().GetEdgesOfMarkedNodes();
 
     if(!rMarkedNodes.GetMarkCount())
@@ -872,7 +872,7 @@ bool SdrDragMethod::DoAddConnectorOverlays()
         return false;
     }
 
-    // one more migrated from SdrEdgeObj::NspToggleEdgeXor
+    
     if(IS_TYPE(SdrDragObjOwn, this) || IS_TYPE(SdrDragMovHdl, this))
     {
         return false;
@@ -901,14 +901,14 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
 
                 if(aEdgePolygon.count())
                 {
-                    // this polygon is a temporary calculated connector path, so it is not possible to fetch
-                    // the needed primitives directly from the pEdge object which does not get changed. If full
-                    // drag is on, use the SdrObjects ItemSet to create a adequate representation
+                    
+                    
+                    
                     bool bUseSolidDragging(getSolidDraggingActive());
 
                     if(bUseSolidDragging)
                     {
-                        // switch off solid dragging if connector is not visible
+                        
                         if(!pEdge->HasLineStyle())
                         {
                             bUseSolidDragging = false;
@@ -962,7 +962,7 @@ drawinglayer::primitive2d::Primitive2DSequence SdrDragMethod::AddConnectorOverla
     return aRetval;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragMovHdl,SdrDragMethod);
 
@@ -973,8 +973,8 @@ SdrDragMovHdl::SdrDragMovHdl(SdrDragView& rNewView)
 
 void SdrDragMovHdl::createSdrDragEntries()
 {
-    // SdrDragMovHdl does not use the default drags,
-    // but creates nothing
+    
+    
 }
 
 void SdrDragMovHdl::TakeSdrDragComment(OUString& rStr) const
@@ -1066,7 +1066,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                 nSA=getSdrDragView().GetSnapAngle();
 
             if (getSdrDragView().IsMirrorAllowed(true,true))
-            { // limited
+            { 
                 if (!getSdrDragView().IsMirrorAllowed(false,false)) nSA=4500;
                 if (!getSdrDragView().IsMirrorAllowed(true,false)) nSA=9000;
             }
@@ -1075,7 +1075,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                 nSA=4500;
 
             if (nSA!=0)
-            { // angle snapping
+            { 
                 SdrHdlKind eRef=HDL_REF1;
 
                 if (GetDragHdl()->GetKind()==HDL_REF1)
@@ -1097,7 +1097,7 @@ void SdrDragMovHdl::MoveSdrDrag(const Point& rNoSnapPnt)
                     double nCos=cos(a);
                     RotatePoint(aPnt,aRef,nSin,nCos);
 
-                    // eliminate rounding errors for certain values
+                    
                     if (nSA==9000)
                     {
                         if (nNeuWink==0    || nNeuWink==18000) aPnt.Y()=aRef.Y();
@@ -1178,7 +1178,7 @@ Pointer SdrDragMovHdl::GetSdrDragPointer() const
     return Pointer(POINTER_REFHAND);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragObjOwn,SdrDragMethod);
 
@@ -1190,7 +1190,7 @@ SdrDragObjOwn::SdrDragObjOwn(SdrDragView& rNewView)
 
     if(pObj)
     {
-        // suppress full drag for some object types
+        
         setSolidDraggingActive(pObj->supportsFullDrag());
     }
 }
@@ -1219,15 +1219,15 @@ void SdrDragObjOwn::createSdrDragEntries()
                 sdr::contact::ObjectContact& rOC = pPV->GetPageWindow(0)->GetObjectContact();
                 addSdrDragEntry(new SdrDragEntrySdrObject(*mpClone, rOC, false));
 
-                // potentially no wireframe needed, full drag works
+                
                 bAddWireframe = false;
             }
         }
 
         if(!bAddWireframe)
         {
-            // check for extra conditions for wireframe, e.g. no border at
-            // objects
+            
+            
             if(!mpClone->HasLineStyle())
             {
                 bAddWireframe = true;
@@ -1236,11 +1236,11 @@ void SdrDragObjOwn::createSdrDragEntries()
 
         if(bAddWireframe)
         {
-            // use wireframe poly when full drag is off or did not work
+            
             aDragPolyPolygon = mpClone->TakeXorPoly();
         }
 
-        // add evtl. extra DragPolyPolygon
+        
         const basegfx::B2DPolyPolygon aSpecialDragPolyPolygon(mpClone->getSpecialDragPoly(DragStat()));
 
         if(aSpecialDragPolyPolygon.count())
@@ -1257,8 +1257,8 @@ void SdrDragObjOwn::createSdrDragEntries()
 
 void SdrDragObjOwn::TakeSdrDragComment(OUString& rStr) const
 {
-    // #i103058# get info string from the clone preferred, the original will
-    // not be changed. For security, use original as fallback
+    
+    
     if(mpClone)
     {
         rStr = mpClone->getSpecialDragComment(DragStat());
@@ -1284,7 +1284,7 @@ bool SdrDragObjOwn::BeginSdrDrag()
         {
             if(pObj->beginSpecialDrag(DragStat()))
             {
-                // create initial clone to have a start visualization
+                
                 mpClone = pObj->getFullDragClone();
                 mpClone->applySpecialDrag(DragStat());
 
@@ -1331,30 +1331,30 @@ void SdrDragObjOwn::MoveSdrDrag(const Point& rNoSnapPnt)
                     Hide();
                     DragStat().NextMove(aPnt);
 
-                    // since SdrDragObjOwn currently supports no transformation of
-                    // existing SdrDragEntries but only their recreation, a recreation
-                    // after every move is needed in this mode. Delete existing
-                    // SdrDragEntries here  to force their recreation in the following Show().
+                    
+                    
+                    
+                    
                     clearSdrDragEntries();
 
-                    // delete current clone (after the last reference to it is deleted above)
+                    
                     if(mpClone)
                     {
                         SdrObject::Free(mpClone);
                         mpClone = 0;
                     }
 
-                    // create a new clone and modify to current drag state
+                    
                     if(!mpClone)
                     {
                         mpClone = pObj->getFullDragClone();
                         mpClone->applySpecialDrag(DragStat());
 
-                        // #120999# AutoGrowWidth may change for SdrTextObj due to the automatism used
-                        // with bDisableAutoWidthOnDragging, so not only geometry changes but
-                        // also this (pretty indirect) property change is possible. If it gets
-                        // changed, it needs to be copied to the original since nothing will
-                        // happen when it only changes in the drag clone
+                        
+                        
+                        
+                        
+                        
                         const bool bOldAutoGrowWidth(((SdrTextAutoGrowWidthItem&)pObj->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
                         const bool bNewAutoGrowWidth(((SdrTextAutoGrowWidthItem&)mpClone->GetMergedItem(SDRATTR_TEXT_AUTOGROWWIDTH)).GetValue());
 
@@ -1415,12 +1415,12 @@ bool SdrDragObjOwn::EndSdrDrag(bool /*bCopy*/)
             }
         }
 
-        // Maybe use operator = for setting changed object data (do not change selection in
-        // view, this will destroy the interactor). This is possible since a clone is now
-        // directly modified by the modifiers. Only SdrTableObj is adding own UNDOs
-        // in its SdrTableObj::endSpecialDrag, so currently not possible. OTOH it uses
-        // a CreateUndoGeoObject(), so maybe setting SetEndDragChangesAttributes is okay. I
-        // will test this now
+        
+        
+        
+        
+        
+        
         Rectangle aBoundRect0;
 
         if(pObj->GetUserCall())
@@ -1489,20 +1489,20 @@ Pointer SdrDragObjOwn::GetSdrDragPointer() const
     return Pointer(POINTER_MOVE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragMove,SdrDragMethod);
 
 void SdrDragMove::createSdrDragEntryForSdrObject(const SdrObject& rOriginal, sdr::contact::ObjectContact& rObjectContact, bool /*bModify*/)
 {
-    // for SdrDragMove, use current Primitive2DSequence of SdrObject visualization
-    // in given ObjectContact directly
+    
+    
     sdr::contact::ViewContact& rVC = rOriginal.GetViewContact();
     sdr::contact::ViewObjectContact& rVOC = rVC.GetViewObjectContact(rObjectContact);
     sdr::contact::DisplayInfo aDisplayInfo;
 
-    // Do not use the last ViewPort set at the OC from the last ProcessDisplay(),
-    // here we want the complete primitive sequence without visible clippings
+    
+    
     rObjectContact.resetViewPort();
 
     addSdrDragEntry(new SdrDragEntryPrimitive2DSequence(rVOC.getPrimitive2DSequenceHierarchy(aDisplayInfo), true));
@@ -1643,7 +1643,7 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
             }
 
             if (aSR2.Left()>aLR.Left() || aSR2.Right()<aLR.Right())
-            { // any space to move to?
+            { 
                 aSR2.Move(aD.X(),0);
 
                 if (aSR2.Left()<aLR.Left())
@@ -1656,10 +1656,10 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
                 }
             }
             else
-                aPt1.X()=DragStat().GetStart().X(); // no space to move to
+                aPt1.X()=DragStat().GetStart().X(); 
 
             if (aSR2.Top()>aLR.Top() || aSR2.Bottom()<aLR.Bottom())
-            { // any space to move to?
+            { 
                 aSR2.Move(0,aD.Y());
 
                 if (aSR2.Top()<aLR.Top())
@@ -1672,11 +1672,11 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
                 }
             }
             else
-                aPt1.Y()=DragStat().GetStart().Y(); // no space to move to
+                aPt1.Y()=DragStat().GetStart().Y(); 
         }
 
         if (getSdrDragView().IsDraggingGluePoints())
-        { // restrict glue points to the BoundRect of the Obj
+        { 
             aPt1-=DragStat().GetStart();
             const SdrMarkList& rML=GetMarkedObjectList();
             sal_uLong nMarkAnz=rML.GetMarkCount();
@@ -1701,7 +1701,7 @@ void SdrDragMove::MoveSdrDrag(const Point& rNoSnapPnt_)
                         if (nGlueNum!=SDRGLUEPOINT_NOTFOUND)
                         {
                             Point aPt((*pGPL)[nGlueNum].GetAbsolutePos(*pObj));
-                            aPt+=aPt1; // move by this much
+                            aPt+=aPt1; 
                             if (aPt.X()<aBound.Left()  ) aPt1.X()-=aPt.X()-aBound.Left()  ;
                             if (aPt.X()>aBound.Right() ) aPt1.X()-=aPt.X()-aBound.Right() ;
                             if (aPt.Y()<aBound.Top()   ) aPt1.Y()-=aPt.Y()-aBound.Top()   ;
@@ -1764,7 +1764,7 @@ Pointer SdrDragMove::GetSdrDragPointer() const
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragResize,SdrDragMethod);
 
@@ -1850,7 +1850,7 @@ bool SdrDragResize::BeginSdrDrag()
 
     if (pRefHdl!=NULL && !getSdrDragView().IsResizeAtCenter())
     {
-        // Calc hack to adjust for calc grid
+        
         DragStat().Ref1()=pRefHdl->GetPos() - getSdrDragView().GetGridOffset();
     }
     else
@@ -2101,7 +2101,7 @@ Pointer SdrDragResize::GetSdrDragPointer() const
     return Pointer(POINTER_MOVE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragRotate,SdrDragMethod);
 
@@ -2179,7 +2179,7 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
             nSA=9000;
 
         if (nSA!=0)
-        { // angle snapping
+        { 
             nNeuWink+=nSA/2;
             nNeuWink/=nSA;
             nNeuWink*=nSA;
@@ -2200,8 +2200,8 @@ void SdrDragRotate::MoveSdrDrag(const Point& rPnt_)
 
             nWink=nNeuWink;
             double a=nWink*nPi180;
-            double nSin1=sin(a); // calculate now, so as little time as possible
-            double nCos1=cos(a); // passes between Hide() and Show()
+            double nSin1=sin(a); 
+            double nCos1=cos(a); 
             Hide();
             nSin=nSin1;
             nCos=nCos1;
@@ -2238,7 +2238,7 @@ Pointer SdrDragRotate::GetSdrDragPointer() const
     return Pointer(POINTER_ROTATE);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragShear,SdrDragMethod);
 
@@ -2345,12 +2345,12 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         Point aPnt(rPnt);
         Fraction aNeuFact(1,1);
 
-        // if angle snapping not activated, snap to raster (except when using slant)
+        
         if (nSA==0 && !bSlant)
             aPnt=GetSnapPos(aPnt);
 
         if (!bSlant && !bResize)
-        { // shear, but no resize
+        { 
             if (bVertical)
                 aPnt.X()=aP0.X();
             else
@@ -2384,7 +2384,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
                 Point aPt2(aPnt);
 
                 if (nSA!=0)
-                    aPt2=GetSnapPos(aPnt); // snap this one in any case
+                    aPt2=GetSnapPos(aPnt); 
 
                 if (bVertical)
                 {
@@ -2403,7 +2403,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
             nNeuWink=-nNeuWink;
 
         if (nSA!=0)
-        { // angle snapping
+        { 
             nNeuWink+=nSA/2;
             nNeuWink/=nSA;
             nNeuWink*=nSA;
@@ -2413,15 +2413,15 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
         bUpSideDown=nNeuWink>9000 && nNeuWink<27000;
 
         if (bSlant)
-        { // calculate resize for slant
-            // when angle snapping is activated, disable 89 degree limit
+        { 
+            
             long nTmpWink=nNeuWink;
             if (bUpSideDown) nNeuWink-=18000;
             if (bNeg) nTmpWink=-nTmpWink;
             bResize=true;
             double nCos=cos(nTmpWink*nPi180);
             aNeuFact=nCos;
-            Kuerzen(aFact,10); // three decimals should be enough
+            Kuerzen(aFact,10); 
         }
 
         if (nNeuWink>8900)
@@ -2435,7 +2435,7 @@ void SdrDragShear::MoveSdrDrag(const Point& rPnt)
             nWink=nNeuWink;
             aFact=aNeuFact;
             double a=nWink*nPi180;
-            double nTan1=tan(a); // calculate now, so as little time as possible passes between Hide() and Show()
+            double nTan1=tan(a); 
             Hide();
             nTan=nTan1;
             DragStat().NextMove(rPnt);
@@ -2520,7 +2520,7 @@ Pointer SdrDragShear::GetSdrDragPointer() const
         return Pointer(POINTER_HSHEAR);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragMirror,SdrDragMethod);
 
@@ -2581,10 +2581,10 @@ bool SdrDragMirror::BeginSdrDrag()
         nWink=NormAngle360(GetAngle(aDif));
 
         if (!getSdrDragView().IsMirrorAllowed(false,false) && !b45)
-            return false; // free choice of axis angle not allowed
+            return false; 
 
         if (!getSdrDragView().IsMirrorAllowed(true,false) && !b90)
-            return false;  // 45 degrees not allowed either
+            return false;  
 
         bSide0=ImpCheckSide(DragStat().GetStart());
         Show();
@@ -2651,7 +2651,7 @@ Pointer SdrDragMirror::GetSdrDragPointer() const
     return Pointer(POINTER_MIRROR);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragGradient, SdrDragMethod);
 
@@ -2678,19 +2678,19 @@ bool SdrDragGradient::BeginSdrDrag()
 
     if(pIAOHandle)
     {
-        // save old values
+        
         DragStat().Ref1() = pIAOHandle->GetPos();
         DragStat().Ref2() = pIAOHandle->Get2ndPos();
 
-        // what was hit?
+        
         bool bHit(false);
         SdrHdlColor* pColHdl = pIAOHandle->GetColorHdl1();
 
-        // init handling flags
+        
         pIAOHandle->SetMoveSingleHandle(false);
         pIAOHandle->SetMoveFirstHandle(false);
 
-        // test first color handle
+        
         if(pColHdl)
         {
             basegfx::B2DPoint aPosition(DragStat().GetStart().X(), DragStat().GetStart().Y());
@@ -2703,7 +2703,7 @@ bool SdrDragGradient::BeginSdrDrag()
             }
         }
 
-        // test second color handle
+        
         pColHdl = pIAOHandle->GetColorHdl2();
 
         if(!bHit && pColHdl)
@@ -2717,7 +2717,7 @@ bool SdrDragGradient::BeginSdrDrag()
             }
         }
 
-        // test gradient handle itself
+        
         if(!bHit)
         {
             basegfx::B2DPoint aPosition(DragStat().GetStart().X(), DragStat().GetStart().Y());
@@ -2728,7 +2728,7 @@ bool SdrDragGradient::BeginSdrDrag()
             }
         }
 
-        // everything up and running :o}
+        
         bRetval = bHit;
     }
     else
@@ -2745,7 +2745,7 @@ void SdrDragGradient::MoveSdrDrag(const Point& rPnt)
     {
         DragStat().NextMove(rPnt);
 
-        // Do the Move here!!! DragStat().GetStart()
+        
         Point aMoveDiff = rPnt - DragStat().GetStart();
 
         if(pIAOHandle->IsMoveSingleHandle())
@@ -2775,7 +2775,7 @@ void SdrDragGradient::MoveSdrDrag(const Point& rPnt)
                 pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2() + aMoveDiff);
         }
 
-        // new state
+        
         pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), false, false);
     }
 }
@@ -2785,7 +2785,7 @@ bool SdrDragGradient::EndSdrDrag(bool /*bCopy*/)
     Ref1() = pIAOHandle->GetPos();
     Ref2() = pIAOHandle->Get2ndPos();
 
-    // new state
+    
     pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), true, true);
 
     return true;
@@ -2793,7 +2793,7 @@ bool SdrDragGradient::EndSdrDrag(bool /*bCopy*/)
 
 void SdrDragGradient::CancelSdrDrag()
 {
-    // restore old values
+    
     pIAOHandle->SetPos(DragStat().Ref1());
     pIAOHandle->Set2ndPos(DragStat().Ref2());
 
@@ -2803,7 +2803,7 @@ void SdrDragGradient::CancelSdrDrag()
     if(pIAOHandle->GetColorHdl2())
         pIAOHandle->GetColorHdl2()->SetPos(DragStat().Ref2());
 
-    // new state
+    
     pIAOHandle->FromIAOToItem(getSdrDragView().GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj(), true, false);
 }
 
@@ -2812,7 +2812,7 @@ Pointer SdrDragGradient::GetSdrDragPointer() const
     return Pointer(POINTER_REFHAND);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragCrook,SdrDragMethod);
 
@@ -2862,8 +2862,8 @@ void SdrDragCrook::TakeSdrDragComment(OUString& rStr) const
         rStr += ImpGetResStr(STR_EditWithCopy);
 }
 
-// These defines parameterize the created raster
-// for interactions
+
+
 #define DRAG_CROOK_RASTER_MINIMUM   (4)
 #define DRAG_CROOK_RASTER_MAXIMUM   (15)
 #define DRAG_CROOK_RASTER_DISTANCE  (30)
@@ -2896,7 +2896,7 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectan
 
         for(a = 0; a <= nVerDiv; a++)
         {
-            // horizontal lines
+            
             for(b = 0; b < nHorDiv; b++)
             {
                 basegfx::B2DPolygon aHorLineSegment;
@@ -2910,7 +2910,7 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectan
                 aRetval.append(aHorLineSegment);
             }
 
-            // increments
+            
             fYPos += fYLen;
         }
 
@@ -2918,7 +2918,7 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectan
 
         for(a = 0; a <= nHorDiv; a++)
         {
-            // vertical lines
+            
             for(b = 0; b < nVerDiv; b++)
             {
                 basegfx::B2DPolygon aVerLineSegment;
@@ -2932,7 +2932,7 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectan
                 aRetval.append(aVerLineSegment);
             }
 
-            // increments
+            
             fXPos += fXLen;
         }
     }
@@ -2942,7 +2942,7 @@ basegfx::B2DPolyPolygon impCreateDragRaster(SdrPageView& rPageView, const Rectan
 
 void SdrDragCrook::createSdrDragEntries()
 {
-    // Add extended frame raster first, so it will be behind objects
+    
     if(getSdrDragView().GetSdrPageView())
     {
         const basegfx::B2DPolyPolygon aDragRaster(impCreateDragRaster(*getSdrDragView().GetSdrPageView(), GetMarkedRect()));
@@ -2953,7 +2953,7 @@ void SdrDragCrook::createSdrDragEntries()
         }
     }
 
-    // call parent
+    
     SdrDragMethod::createSdrDragEntries();
 }
 
@@ -3039,7 +3039,7 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
                             case SDRCROOK_ROTATE : CrookRotateXPoint (aCtr1,NULL,NULL,aC,aRad,nSin,nCos,bVertical);           break;
                             case SDRCROOK_SLANT  : CrookSlantXPoint  (aCtr1,NULL,NULL,aC,aRad,nSin,nCos,bVertical);           break;
                             case SDRCROOK_STRETCH: CrookStretchXPoint(aCtr1,NULL,NULL,aC,aRad,nSin,nCos,bVertical,aMarkRect); break;
-                        } // switch
+                        } 
                     }
 
                     aCtr1-=aCtr0;
@@ -3074,7 +3074,7 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
                         Point* pC2=NULL;
 
                         if (i+1<nPtAnz && aPol.IsControl(i))
-                        { // control point on the left
+                        { 
                             pC1=pPnt;
                             i++;
                             pPnt=&aPol[i];
@@ -3083,7 +3083,7 @@ void SdrDragCrook::_MovAllPoints(basegfx::B2DPolyPolygon& rTarget)
                         i++;
 
                         if (i<nPtAnz && aPol.IsControl(i))
-                        { // control point on the right
+                        { 
                             pC2=&aPol[i];
                             i++;
                         }
@@ -3140,7 +3140,7 @@ void SdrDragCrook::_MovCrookPoint(Point& rPnt, Point* pC1, Point* pC2)
             case SDRCROOK_ROTATE : CrookRotateXPoint (rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert);           break;
             case SDRCROOK_SLANT  : CrookSlantXPoint  (rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert);           break;
             case SDRCROOK_STRETCH: CrookStretchXPoint(rPnt,pC1,pC2,aC,aRad,nSin,nCos,bVert,aMarkRect); break;
-        } // switch
+        } 
     }
 }
 
@@ -3204,19 +3204,19 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
 
         if (bValid)
         {
-            double a=0; // slope of the radius
+            double a=0; 
             long nPntWink=0;
 
             if (bVertical)
             {
-                a=((double)dy1)/((double)dx1); // slope of the radius
+                a=((double)dy1)/((double)dx1); 
                 nNeuRad=((long)(dy1*a)+dx1) /2;
                 aNeuCenter.X()+=nNeuRad;
                 nPntWink=GetAngle(aPnt-aNeuCenter);
             }
             else
             {
-                a=((double)dx1)/((double)dy1); // slope of the radius
+                a=((double)dx1)/((double)dy1); 
                 nNeuRad=((long)(dx1*a)+dy1) /2;
                 aNeuCenter.Y()+=nNeuRad;
                 nPntWink=GetAngle(aPnt-aNeuCenter)-9000;
@@ -3252,7 +3252,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
             if (bResize)
             {
                 if (nSA!=0)
-                { // angle snapping
+                { 
                     long nWink0=nPntWink;
                     nPntWink+=nSA/2;
                     nPntWink/=nSA;
@@ -3284,7 +3284,7 @@ void SdrDragCrook::MoveSdrDrag(const Point& rPnt)
                     bValid=false;
 
                 if (bValid && nSA!=0)
-                { // angle snapping
+                { 
                     long nWink0=nWink;
                     nWink+=nSA/2;
                     nWink/=nSA;
@@ -3398,7 +3398,7 @@ void SdrDragCrook::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 
 void SdrDragCrook::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget)
 {
-    // use helper derived from old stuff
+    
     _MovAllPoints(rTarget);
 }
 
@@ -3486,7 +3486,7 @@ Pointer SdrDragCrook::GetSdrDragPointer() const
     return Pointer(POINTER_CROOK);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragDistort,SdrDragMethod);
 
@@ -3517,7 +3517,7 @@ void SdrDragDistort::TakeSdrDragComment(OUString& rStr) const
 
 void SdrDragDistort::createSdrDragEntries()
 {
-    // Add extended frame raster first, so it will be behind objects
+    
     if(getSdrDragView().GetSdrPageView())
     {
         const basegfx::B2DPolyPolygon aDragRaster(impCreateDragRaster(*getSdrDragView().GetSdrPageView(), GetMarkedRect()));
@@ -3528,7 +3528,7 @@ void SdrDragDistort::createSdrDragEntries()
         }
     }
 
-    // call parent
+    
     SdrDragMethod::createSdrDragEntries();
 }
 
@@ -3636,19 +3636,19 @@ void SdrDragDistort::applyCurrentTransformationToSdrObject(SdrObject& rTarget)
 
 void SdrDragDistort::applyCurrentTransformationToPolyPolygon(basegfx::B2DPolyPolygon& rTarget)
 {
-    // use helper derived from old stuff
+    
     _MovAllPoints(rTarget);
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 TYPEINIT1(SdrDragCrop,SdrDragResize);
 
 SdrDragCrop::SdrDragCrop(SdrDragView& rNewView)
 :   SdrDragObjOwn(rNewView)
 {
-    // switch off solid dragging for crop; it just makes no sense since showing
-    // a 50% transparent object above the original will not be visible
+    
+    
     setSolidDraggingActive(false);
 }
 
@@ -3670,12 +3670,12 @@ void SdrDragCrop::TakeSdrDragComment(OUString& rStr) const
 
 bool SdrDragCrop::BeginSdrDrag()
 {
-    // call parent
+    
     bool bRetval(SdrDragObjOwn::BeginSdrDrag());
 
     if(!GetDragHdl())
     {
-        // we need the DragHdl, break if not there
+        
         bRetval = false;
     }
 
@@ -3722,20 +3722,20 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
         getSdrDragView().BegUndo( aUndoStr );
         getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pObj));
-        // also need attr undo, the SdrGrafCropItem will be changed
+        
         getSdrDragView().AddUndo( getSdrDragView().GetModel()->GetSdrUndoFactory().CreateUndoAttrObject(*pObj));
     }
 
-    // new part to comute the user's drag activities
-    // get the original objects transformation
+    
+    
     basegfx::B2DHomMatrix aOriginalMatrix;
     basegfx::B2DPolyPolygon aPolyPolygon;
     bool bShearCorrected(false);
 
-    // get transformation from object
+    
     pObj->TRGetBaseGeometry(aOriginalMatrix, aPolyPolygon);
 
-    {   // TTTT correct shear, it comes currently mirrored from TRGetBaseGeometry, can be removed with aw080
+    {   
         basegfx::B2DTuple aScale;
         basegfx::B2DTuple aTranslate;
         double fRotate(0.0), fShearX(0.0);
@@ -3753,13 +3753,13 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         }
     }
 
-    // invert it to be able to work on unit coordinates
+    
     basegfx::B2DHomMatrix aInverse(aOriginalMatrix);
 
     aInverse.invert();
 
-    // gererate start point of original drag vector in unit coordinates (the
-    // vis-a-vis of the drag point)
+    
+    
     basegfx::B2DPoint aLocalStart(0.0, 0.0);
     bool bOnAxis(false);
 
@@ -3776,10 +3776,10 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         default: break;
     }
 
-    // create the current drag position in unit coordinates
+    
     basegfx::B2DPoint aLocalCurrent(aInverse * basegfx::B2DPoint(DragStat().GetNow().X(), DragStat().GetNow().Y()));
 
-    // if one of the edge handles is used, limit to X or Y drag only
+    
     if(bOnAxis)
     {
         if(basegfx::fTools::equal(aLocalStart.getX(), 0.5))
@@ -3792,7 +3792,7 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         }
     }
 
-    // create internal change in unit coordinates
+    
     basegfx::B2DHomMatrix aDiscreteChangeMatrix;
 
     if(!basegfx::fTools::equal(aLocalCurrent.getX(), aLocalStart.getX()))
@@ -3821,12 +3821,12 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         }
     }
 
-    // preparematrix to apply to object; evtl. back-correct shear
+    
     basegfx::B2DHomMatrix aNewObjectMatrix(aOriginalMatrix * aDiscreteChangeMatrix);
 
     if(bShearCorrected)
     {
-        // TTTT back-correct shear
+        
         basegfx::B2DTuple aScale;
         basegfx::B2DTuple aTranslate;
         double fRotate(0.0), fShearX(0.0);
@@ -3839,42 +3839,42 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
             aTranslate);
     }
 
-    // apply change to object by applying the unit coordinate change followed
-    // by the original change
+    
+    
     pObj->TRSetBaseGeometry(aNewObjectMatrix, aPolyPolygon);
 
-    // the following old code uses aOldRect/aNewRect to calculate the crop change for
-    // the crop item. It implies unrotated objects, so create the unrotated original
-    // erctangle and the unrotated modified rectangle. Latter can in case of shear and/or
-    // rotation not be fetched by using
+    
+    
+    
+    
     //
-    //Rectangle aNewRect( pObj->GetLogicRect() );
+    
     //
-    // as it was done before because the top-left of that new rect *will* have an offset
-    // caused by the evtl. existing shear and/or rotation, so calculate a unrotated
-    // rectangle how it would be as a result when appling the unit coordinate change
-    // to the unrotated original transformation.
+    
+    
+    
+    
     basegfx::B2DTuple aScale;
     basegfx::B2DTuple aTranslate;
     double fRotate, fShearX;
 
-    // get access to scale and translate
+    
     aOriginalMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
 
-    // prepare unsheared/unrotated versions of the old and new transformation
+    
     const basegfx::B2DHomMatrix aMatrixOriginalNoShearNoRotate(
         basegfx::tools::createScaleTranslateB2DHomMatrix(
             basegfx::absolute(aScale),
             aTranslate));
 
-    // create the ranges for these
+    
     basegfx::B2DRange aRangeOriginalNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
     basegfx::B2DRange aRangeNewNoShearNoRotate(0.0, 0.0, 1.0, 1.0);
 
     aRangeOriginalNoShearNoRotate.transform(aMatrixOriginalNoShearNoRotate);
     aRangeNewNoShearNoRotate.transform(aMatrixOriginalNoShearNoRotate * aDiscreteChangeMatrix);
 
-    // extract the old Rectangle structures
+    
     Rectangle aOldRect(
         basegfx::fround(aRangeOriginalNoShearNoRotate.getMinX()),
         basegfx::fround(aRangeOriginalNoShearNoRotate.getMinY()),
@@ -3886,24 +3886,24 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
         basegfx::fround(aRangeNewNoShearNoRotate.getMaxX()),
         basegfx::fround(aRangeNewNoShearNoRotate.getMaxY()));
 
-    // continue with the old original stuff
+    
     double fScaleX = ( aGraphicSize.Width() - rOldCrop.GetLeft() - rOldCrop.GetRight() ) / (double)aOldRect.GetWidth();
     double fScaleY = ( aGraphicSize.Height() - rOldCrop.GetTop() - rOldCrop.GetBottom() ) / (double)aOldRect.GetHeight();
 
-    // not needed since the modification is done in unit coordinates, free from shear/rotate and mirror
-    // // TTTT may be removed or exhanged by other stuff in aw080
-    // // to correct the never working combination of cropped images and mirroring
-    // // I have to correct the rectangles the calculation is based on here. In the current
-    // // core geometry stuff a vertical mirror is expressed as 180 degree rotation. All
-    // // this can be removed again when aw080 will have cleaned up the old
-    // // (non-)transformation mess in the core.
-    // if(18000 == pObj->GetGeoStat().nDrehWink)
-    // {
-    //     // old notation of vertical mirror, need to correct diffs since both rects
-    //     // are rotated by 180 degrees
-    //     aOldRect = Rectangle(aOldRect.TopLeft() - (aOldRect.BottomRight() - aOldRect.TopLeft()), aOldRect.TopLeft());
-    //     aNewRect = Rectangle(aNewRect.TopLeft() - (aNewRect.BottomRight() - aNewRect.TopLeft()), aNewRect.TopLeft());
-    // }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     sal_Int32 nDiffLeft = aNewRect.Left() - aOldRect.Left();
     sal_Int32 nDiffTop = aNewRect.Top() - aOldRect.Top();
@@ -3912,8 +3912,8 @@ bool SdrDragCrop::EndSdrDrag(bool /*bCopy*/)
 
     if(pObj->IsMirrored())
     {
-        // mirrored X or Y, for old stuff, exchange X
-        // TTTT: check for aw080
+        
+        
         sal_Int32 nTmp(nDiffLeft);
         nDiffLeft = -nDiffRight;
         nDiffRight = -nTmp;

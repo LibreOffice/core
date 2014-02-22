@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/animations/XAnimationNode.hpp>
@@ -42,7 +42,7 @@
 #include "rtl/ref.hxx"
 #include <animations/animationnodehelper.hxx>
 
-// header for class SdrObjListIter
+
 #include <svx/svditer.hxx>
 
 #include "sdpage.hxx"
@@ -89,11 +89,11 @@ namespace sd
     {
         try
         {
-            // clone animation hierarchie
+            
             Reference< ::com::sun::star::util::XCloneable > xClonable( xSourceNode, UNO_QUERY_THROW );
             Reference< XAnimationNode > xCloneNode( xClonable->createClone(), UNO_QUERY_THROW );
 
-            // create a dictionary to map source to cloned shapes
+            
             if( pSourcePage && pTargetPage )
             {
                 SdrObjListIter aSourceIter( *pSourcePage, IM_DEEPWITHGROUPS );
@@ -116,7 +116,7 @@ namespace sd
                 }
             }
 
-            // create a dictionary to map source to cloned nodes
+            
             ::anim::create_deep_vector( xSourceNode, maSourceNodeVector );
             ::anim::create_deep_vector( xCloneNode, maCloneNodeVector );
 
@@ -153,7 +153,7 @@ namespace sd
                 Reference< XIterateContainer > xIter( xNode, UNO_QUERY_THROW );
                 xIter->setTarget( transformValue( xIter->getTarget() ) );
             }
-            // its intended that here is no break!
+            
             case AnimationNodeType::PAR:
             case AnimationNodeType::SEQ:
             {

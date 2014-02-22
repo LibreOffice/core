@@ -4,10 +4,10 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
-// Gross inclusion hacks for now ...
+
 
 #include "../../../headless/svpgdi.cxx"
 #include <unx/gtk/gtkframe.hxx>
@@ -106,7 +106,7 @@ static void PrepareComboboxStyle( GtkStyleContext *context,
 
 static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
 {
-    // Size the arrow appropriately
+    
     Size aSize( rButton.GetWidth()/2, rButton.GetHeight()/2 );
     rArrow.SetSize( aSize );
 
@@ -145,7 +145,7 @@ Rectangle GtkSalGraphics::NWGetSpinButtonRect( ControlPart nPart, Rectangle aAre
     else if( nPart == PART_BUTTON_DOWN )
     {
         buttonRect.setY( aAreaRect.Top() + (aAreaRect.GetHeight() / 2) );
-        buttonRect.Bottom() = aAreaRect.Bottom(); // cover area completely
+        buttonRect.Bottom() = aAreaRect.Bottom(); 
     }
     else
     {
@@ -165,7 +165,7 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
     GtkStyleContext* pScrollbarStyle = NULL;
     if ((nPart == PART_BUTTON_LEFT) || (nPart == PART_BUTTON_RIGHT))
         pScrollbarStyle = mpHScrollbarStyle;
-    else // (nPart == PART_BUTTON_UP) || (nPart == PART_BUTTON_DOWN)
+    else 
         pScrollbarStyle = mpVScrollbarStyle;
 
     gint slider_width;
@@ -173,7 +173,7 @@ Rectangle GtkSalGraphics::NWGetScrollButtonRect( ControlPart nPart, Rectangle aA
     gint stepper_spacing;
     gint trough_border;
 
-    // Grab some button style attributes
+    
     gtk_style_context_get_style( pScrollbarStyle,
                                  "slider-width", &slider_width,
                                  "stepper-size", &stepper_size,
@@ -260,12 +260,12 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     GtkShadowType    shadowType;
     GtkOrientation    scrollbarOrientation;
     Rectangle        thumbRect = pScrollbarVal->maThumbRect;
-    Rectangle        button11BoundRect = pScrollbarVal->maButton1Rect;   // backward
-    Rectangle        button22BoundRect = pScrollbarVal->maButton2Rect;   // forward
-    Rectangle        button12BoundRect = pScrollbarVal->maButton1Rect;   // secondary forward
-    Rectangle        button21BoundRect = pScrollbarVal->maButton2Rect;   // secondary backward
-    gdouble          arrow1Angle;                                        // backward
-    gdouble          arrow2Angle;                                        // forward
+    Rectangle        button11BoundRect = pScrollbarVal->maButton1Rect;   
+    Rectangle        button22BoundRect = pScrollbarVal->maButton2Rect;   
+    Rectangle        button12BoundRect = pScrollbarVal->maButton1Rect;   
+    Rectangle        button21BoundRect = pScrollbarVal->maButton2Rect;   
+    gdouble          arrow1Angle;                                        
+    gdouble          arrow2Angle;                                        
     Rectangle        arrowRect;
     const gchar*     button1StyleClass = NULL;
     const gchar*     button2StyleClass = NULL;
@@ -275,14 +275,14 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     gint            trough_border = 0;
     gint            min_slider_length = 0;
 
-    // make controlvalue rectangles relative to area
+    
     thumbRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
     button11BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
     button22BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
     button12BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
     button21BoundRect.Move( -rControlRectangle.Left(), -rControlRectangle.Top() );
 
-    // Find the overall bounding rect of the control
+    
     scrollbarRect = rControlRectangle;
     scrollbarRect.SetSize( Size( scrollbarRect.GetWidth() + 1,
                                  scrollbarRect.GetHeight() + 1 ) );
@@ -290,7 +290,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     if ( (scrollbarRect.GetWidth() <= 1) || (scrollbarRect.GetHeight() <= 1) )
         return;
 
-    // Grab some button style attributes
+    
     gtk_style_context_get_style( context,
                                  "slider_width", &slider_width,
                                  "stepper_size", &stepper_size,
@@ -349,11 +349,11 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         button22BoundRect.SetSize( Size( stepper_size, slider_width ) );
 
         thumbRect.Bottom() = thumbRect.Top() + slider_width - 1;
-        // Make sure the thumb is at least the default width (so we don't get tiny thumbs),
-        // but if the VCL gives us a size smaller than the theme's default thumb size,
-        // honor the VCL size
+        
+        
+        
         thumbRect.Right() += magic;
-        // Center vertically in the track
+        
         thumbRect.Move( 0, (scrollbarRect.GetHeight() - slider_width) / 2 );
     }
     else
@@ -392,13 +392,13 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
         thumbRect.Right() = thumbRect.Left() + slider_width - 1;
 
         thumbRect.Bottom() += magic;
-        // Center horizontally in the track
+        
         thumbRect.Move( (scrollbarRect.GetWidth() - slider_width) / 2, 0 );
     }
 
     bool has_slider = ( thumbRect.GetWidth() > 0 && thumbRect.GetHeight() > 0 );
 
-    // ----------------- TROUGH
+    
     gtk_style_context_save(context);
     gtk_style_context_add_class(context, GTK_STYLE_CLASS_TROUGH);
     gtk_render_background(context, cr, 0, 0,
@@ -408,7 +408,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
     gtk_style_context_restore(context);
 
-    // ----------------- THUMB
+    
     if ( has_slider )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnThumbState, &stateFlags, &shadowType );
@@ -431,7 +431,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
     bool forwardButtonInsensitive = pScrollbarVal->mnMax == 0 ||
         pScrollbarVal->mnCur + pScrollbarVal->mnVisibleSize >= pScrollbarVal->mnMax;
 
-    // ----------------- BUTTON 1 //
+    
     if ( has_backward )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateFlags, &shadowType );
@@ -450,7 +450,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                          button11BoundRect.Left(), button11BoundRect.Top(),
                          button11BoundRect.GetWidth(), button11BoundRect.GetHeight() );
 
-        // ----------------- ARROW 1
+        
         NWCalcArrowRect( button11BoundRect, arrowRect );
         gtk_render_arrow(context, cr,
                          arrow1Angle,
@@ -477,7 +477,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                          button12BoundRect.Left(), button12BoundRect.Top(),
                          button12BoundRect.GetWidth(), button12BoundRect.GetHeight() );
 
-        // ----------------- ARROW 1
+        
         NWCalcArrowRect( button12BoundRect, arrowRect );
         gtk_render_arrow(context, cr,
                          arrow2Angle,
@@ -486,7 +486,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
 
         gtk_style_context_restore(context);
     }
-    // ----------------- BUTTON 2
+    
     if ( has_backward2 )
     {
         NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateFlags, &shadowType );
@@ -505,7 +505,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                          button21BoundRect.Left(), button21BoundRect.Top(),
                          button21BoundRect.GetWidth(), button21BoundRect.GetHeight() );
 
-        // ----------------- ARROW 2
+        
         NWCalcArrowRect( button21BoundRect, arrowRect );
         gtk_render_arrow(context, cr,
                          arrow1Angle,
@@ -532,7 +532,7 @@ void GtkSalGraphics::PaintScrollbar(GtkStyleContext *context,
                        button22BoundRect.Left(), button22BoundRect.Top(),
                        button22BoundRect.GetWidth(), button22BoundRect.GetHeight() );
 
-        // ----------------- ARROW 2
+        
         NWCalcArrowRect( button22BoundRect, arrowRect );
         gtk_render_arrow(context, cr,
                          arrow2Angle,
@@ -614,7 +614,7 @@ void GtkSalGraphics::PaintSpinButton(GtkStyleContext *context,
         downBtnState = pSpinVal->mnLowerState;
     }
 
-    // CTRL_SPINBUTTONS pass their area in pSpinVal, not in rControlRectangle
+    
     if ( nType == CTRL_SPINBUTTONS )
     {
         if ( !pSpinVal )
@@ -660,7 +660,7 @@ Rectangle GtkSalGraphics::NWGetComboBoxButtonRect( ControlType nType,
     gint        nFocusPad;
     GtkBorder   padding;
 
-    // Grab some button style attributes
+    
     gtk_style_context_get_style( mpButtonStyle,
                                  "focus-line-width", &nFocusWidth,
                                  "focus-padding", &nFocusPad,
@@ -703,8 +703,8 @@ void GtkSalGraphics::PaintCombobox( GtkStyleContext *context,
     Rectangle        buttonRect;
     Rectangle        arrowRect;
 
-    // Find the overall bounding rect of the buttons's drawing area,
-    // plus its actual draw rect excluding adornment
+    
+    
     areaRect = rControlRectangle;
 
     buttonRect = NWGetComboBoxButtonRect( nType, PART_BUTTON_DOWN, areaRect );
@@ -906,7 +906,7 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                                           translatedRegion.width, translatedRegion.height);
     cairo_t *cr = cairo_create(surface);
-    cairo_surface_destroy(surface); // unref
+    cairo_surface_destroy(surface); 
 
     gtk_style_context_save(context);
     gtk_style_context_set_state(context, flags);
@@ -957,14 +957,14 @@ bool GtkSalGraphics::drawNativeControl( ControlType nType, ControlPart nPart, co
     gtk_style_context_restore(context);
 
     renderAreaToPix(cr, &translatedRegion);
-    cairo_destroy(cr); // unref
+    cairo_destroy(cr); 
 
     return true;
 }
 
-// FIXME: This is incredibly lame ... but so is cairo's insistance on -exactly-
-// its own stride - neither more nor less - particularly not more aligned
-// we like 8byte aligned, it likes 4 - most odd.
+
+
+
 void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
                                       cairo_rectangle_int_t *region)
 {
@@ -1128,7 +1128,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     StyleSettings aStyleSet = rSettings.GetStyleSettings();
     GdkRGBA color;
 
-    // text colors
+    
     GdkRGBA text_color;
     gtk_style_context_get_color(pStyle, GTK_STATE_FLAG_NORMAL, &text_color);
     ::Color aTextColor = getColor( text_color );
@@ -1141,13 +1141,13 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetWindowTextColor( aTextColor );
     aStyleSet.SetFieldTextColor( aTextColor );
 
-    // mouse over text colors
+    
     gtk_style_context_get_color(pStyle, GTK_STATE_FLAG_PRELIGHT, &text_color);
     aTextColor = getColor( text_color );
     aStyleSet.SetButtonRolloverTextColor( aTextColor );
     aStyleSet.SetFieldRolloverTextColor( aTextColor );
 
-    // background colors
+    
     GdkRGBA background_color;
     gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_NORMAL, &background_color);
 
@@ -1158,7 +1158,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetWorkspaceColor( aBackColor );
     aStyleSet.SetCheckedColorSpecialCase( );
 
-    // highlighting colors
+    
     gtk_style_context_get_background_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
     ::Color aHighlightColor = getColor( text_color );
     gtk_style_context_get_color(pStyle, GTK_STATE_FLAG_SELECTED, &text_color);
@@ -1166,7 +1166,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetHighlightColor( aHighlightColor );
     aStyleSet.SetHighlightTextColor( aHighlightTextColor );
 
-    // tooltip colors
+    
     GdkRGBA tooltip_bg_color, tooltip_fg_color;
     gtk_style_context_save (pStyle);
     gtk_style_context_add_class (pStyle, GTK_STYLE_CLASS_TOOLTIP);
@@ -1177,8 +1177,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetHelpColor( getColor( tooltip_bg_color ));
     aStyleSet.SetHelpTextColor( getColor( tooltip_fg_color ));
 
-{ // FIXME: turn me into a helper function ...
-    // construct style context for text view
+{ 
+    
     GtkStyleContext *pCStyle = gtk_style_context_new();
     gtk_style_context_set_screen( pCStyle, gtk_window_get_screen( GTK_WINDOW( mpWindow ) ) );
     GtkWidgetPath *pCPath = gtk_widget_path_new();
@@ -1192,20 +1192,20 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
     ::Color aBackFieldColor = getColor( field_background_color );
     aStyleSet.SetFieldColor( aBackFieldColor );
-    // This baby is the default page/paper color
+    
     aStyleSet.SetWindowColor( aBackFieldColor );
 }
 
-    // menu disabled entries handling
+    
     aStyleSet.SetSkipDisabledInMenus( true );
     aStyleSet.SetAcceleratorsInContextMenus( false );
 
-    // menu colors
+    
     gtk_style_context_get_background_color( mpMenuStyle, GTK_STATE_FLAG_NORMAL, &background_color );
     aBackColor = getColor( background_color );
     aStyleSet.SetMenuColor( aBackColor );
 
-    // menu bar
+    
     gtk_style_context_get_background_color( mpMenuBarStyle, GTK_STATE_FLAG_NORMAL, &background_color );
     aBackColor = getColor( background_color );
     aStyleSet.SetMenuBarColor( aBackColor );
@@ -1216,15 +1216,15 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuBarTextColor( aTextColor );
     aStyleSet.SetMenuBarRolloverTextColor( aTextColor );
 
-    // menu items
+    
     gtk_style_context_get_color( mpMenuStyle, GTK_STATE_FLAG_NORMAL, &color );
     aTextColor = getColor( color );
     aStyleSet.SetMenuTextColor( aTextColor );
 
-    // Awful hack for menu separators in the Sonar and similar themes.
-    // If the menu color is not too dark, and the menu text color is lighter,
-    // make the "light" color lighter than the menu color and the "shadow"
-    // color darker than it.
+    
+    
+    
+    
     if ( aStyleSet.GetMenuColor().GetLuminance() >= 32 &&
      aStyleSet.GetMenuColor().GetLuminance() <= aStyleSet.GetMenuTextColor().GetLuminance() )
     {
@@ -1246,7 +1246,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetMenuHighlightColor( aHighlightColor );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
 
-    // hyperlink colors
+    
     GdkColor *link_color = NULL;
     gtk_style_context_get_style(pStyle,
                                  "link-color", &link_color,
@@ -1267,13 +1267,13 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
 
 #if 0
 
-    // Tab colors
-    aStyleSet.SetActiveTabColor( aBackFieldColor ); // same as the window color.
+    
+    aStyleSet.SetActiveTabColor( aBackFieldColor ); 
     Color aSelectedBackColor = getColor( pStyle->bg[GTK_STATE_ACTIVE] );
     aStyleSet.SetInactiveTabColor( aSelectedBackColor );
 
 #endif
-    // UI font
+    
     const PangoFontDescription* font = gtk_style_context_get_font(pStyle, GTK_STATE_FLAG_NORMAL);
     OString    aFamily        = pango_font_description_get_family( font );
     int nPangoHeight    = pango_font_description_get_size( font );
@@ -1282,16 +1282,16 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     PangoStretch eStretch = pango_font_description_get_stretch( font );
 
     psp::FastPrintFontInfo aInfo;
-    // set family name
+    
     aInfo.m_aFamilyName = OStringToOUString( aFamily, RTL_TEXTENCODING_UTF8 );
-    // set italic
+    
     switch( eStyle )
     {
         case PANGO_STYLE_NORMAL:    aInfo.m_eItalic = ITALIC_NONE;break;
         case PANGO_STYLE_ITALIC:    aInfo.m_eItalic = ITALIC_NORMAL;break;
         case PANGO_STYLE_OBLIQUE:    aInfo.m_eItalic = ITALIC_OBLIQUE;break;
     }
-    // set weight
+    
     if( eWeight <= PANGO_WEIGHT_ULTRALIGHT )
         aInfo.m_eWeight = WEIGHT_ULTRALIGHT;
     else if( eWeight <= PANGO_WEIGHT_LIGHT )
@@ -1302,7 +1302,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         aInfo.m_eWeight = WEIGHT_BOLD;
     else
         aInfo.m_eWeight = WEIGHT_ULTRABOLD;
-    // set width
+    
     switch( eStretch )
     {
         case PANGO_STRETCH_ULTRA_CONDENSED:    aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;break;
@@ -1318,7 +1318,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aInfo.m_eWidth = WIDTH_ULTRA_CONDENSED;
 
     fprintf( stderr, "font name BEFORE system match: \"%s\"\n", aFamily.getStr() );
-    // match font to e.g. resolve "Sans"
+    
     psp::PrintFontManager::get().matchFont( aInfo, rSettings.GetUILanguageTag().getLocale() );
     fprintf( stderr, "font match %s, name AFTER: \"%s\"\n",
                   aInfo.m_nID != 0 ? "succeeded" : "failed",
@@ -1359,7 +1359,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aFont.SetWeight( WEIGHT_BOLD );
     aStyleSet.SetTitleFont( aFont );
     aStyleSet.SetFloatTitleFont( aFont );
-    // get cursor blink time
+    
     gboolean blink = false;
 
     g_object_get( pSettings, "gtk-cursor-blink", &blink, (char *)NULL );
@@ -1367,8 +1367,8 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     {
         gint blink_time = STYLE_CURSOR_NOBLINKTIME;
         g_object_get( pSettings, "gtk-cursor-blink-time", &blink_time, (char *)NULL );
-        // set the blink_time if there is a setting and it is reasonable
-        // else leave the default value
+        
+        
         if( blink_time > 100 && blink_time != gint(STYLE_CURSOR_NOBLINKTIME) )
             aStyleSet.SetCursorBlinkTime( blink_time/2 );
     }
@@ -1399,12 +1399,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetPreferredUseImagesInMenus(showmenuicons);
     aStyleSet.SetPrimaryButtonWarpsSlider(primarybuttonwarps);
 
-    // set scrollbar settings
+    
     gint slider_width = 14;
     gint trough_border = 1;
     gint min_slider_length = 21;
 
-    // Grab some button style attributes
+    
     gtk_style_context_get_style( mpVScrollbarStyle,
                                  "slider-width", &slider_width,
                                  "trough-border", &trough_border,
@@ -1414,7 +1414,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     aStyleSet.SetScrollBarSize( slider_width + 2*trough_border );
     aStyleSet.SetMinThumbSize( min_slider_length - magic );
 
-    // preferred icon style
+    
     gchar* pIconThemeName = NULL;
     g_object_get( pSettings, "gtk-icon-theme-name", &pIconThemeName, (char *)NULL );
     aStyleSet.SetPreferredIconTheme( OUString::createFromAscii( pIconThemeName ) );
@@ -1428,7 +1428,7 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     if( gdk_screen_get_font_options != NULL )
         pNewOptions = gdk_screen_get_font_options( pScreen );
     aStyleSet.SetCairoFontOptions( pNewOptions );
-    // finally update the collected settings
+    
     rSettings.SetStyleSettings( aStyleSet );
     gchar* pThemeName = NULL;
     g_object_get( pSettings, "gtk-theme-name", &pThemeName, (char *)NULL );
@@ -1602,12 +1602,12 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
 
     print_update_area( gtk_widget_get_window( mpFrame->getWindow() ), "before copy area" );
 
-//    print_cairo_region( mpFrame->m_pRegion, "extremely odd SalFrame: shape combine region! - ");
+
 
     g_warning( "FIXME: copy area delta: %d %d needs clip intersect\n",
                (int)(nDestX - nSrcX), (int)(nDestY - nSrcY) );
 
-    // get clip region and translate it in the opposite direction & intersect ...
+    
     cairo_region_t *clip_region;
 
     RectangleVector rects;
@@ -1634,7 +1634,7 @@ void GtkSalGraphics::copyArea( long nDestX, long nDestY,
     cairo_region_intersect( region, clip_region );
     print_cairo_region( region, "reduced copy area region" );
 
-    // FIXME: this will queue (duplicate) gtk+ re-rendering for the exposed area, c'est la vie
+    
     gdk_window_move_region( gtk_widget_get_window( mpFrame->getWindow() ),
                             region, nDestX - nSrcX, nDestY - nSrcY );
     print_update_area( gtk_widget_get_window( mpFrame->getWindow() ), "after copy area" );

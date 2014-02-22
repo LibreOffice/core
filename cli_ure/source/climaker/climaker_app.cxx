@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -52,7 +52,7 @@ using namespace ::com::sun::star::uno;
 namespace climaker
 {
 
-//------------------------------------------------------------------------------
+
 static char const s_usingText [] =
 "\n"
 "using: climaker <switches> [registry-file-1 registry-file-2 ...]\n"
@@ -94,7 +94,7 @@ struct OptionInfo
 
 bool g_verbose = false;
 
-//------------------------------------------------------------------------------
+
 static const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("out"), 'O', true },
     { RTL_CONSTASCII_STRINGPARAM("types"), 'T', true },
@@ -112,7 +112,7 @@ static const OptionInfo s_option_infos [] = {
     { RTL_CONSTASCII_STRINGPARAM("help"), 'h', false }
 };
 
-//==============================================================================
+
 static OptionInfo const * get_option_info(
     OUString const & opt, sal_Unicode copt = '\0' )
 {
@@ -145,7 +145,7 @@ static OptionInfo const * get_option_info(
     return 0;
 }
 
-//==============================================================================
+
 static bool is_option(
     OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
@@ -181,7 +181,7 @@ static bool is_option(
     return false;
 }
 
-//==============================================================================
+
 static inline bool read_option(
     bool * flag, OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
@@ -191,7 +191,7 @@ static inline bool read_option(
     return ret;
 }
 
-//==============================================================================
+
 static bool read_argument(
     OUString * pValue, OptionInfo const * option_info, sal_uInt32 * pIndex )
 {
@@ -213,7 +213,7 @@ static bool read_argument(
     return false;
 }
 
-//==============================================================================
+
 static OUString const & path_get_working_dir()
 {
     static OUString s_workingDir;
@@ -222,7 +222,7 @@ static OUString const & path_get_working_dir()
     return s_workingDir;
 }
 
-//==============================================================================
+
 static OUString path_make_absolute_file_url( OUString const & path )
 {
     OUString file_url;
@@ -256,7 +256,7 @@ static OUString path_make_absolute_file_url( OUString const & path )
 
 using namespace ::climaker;
 
-//##############################################################################
+
 SAL_IMPLEMENT_MAIN()
 {
     sal_uInt32 nCount = osl_getCommandArgCount();
@@ -311,7 +311,7 @@ SAL_IMPLEMENT_MAIN()
         OUString cmd_arg;
         for ( sal_uInt32 nPos = 0; nPos < nCount; )
         {
-            // options
+            
             if (is_option( info_help, &nPos ))
             {
                 printf( s_usingText );
@@ -357,20 +357,20 @@ SAL_IMPLEMENT_MAIN()
                 cmd_arg = cmd_arg.trim();
                 if (cmd_arg.getLength() > 0)
                 {
-                    if (cmd_arg[ 0 ] == '-') // is option
+                    if (cmd_arg[ 0 ] == '-') 
                     {
                         OptionInfo const * option_info = 0;
                         if (cmd_arg.getLength() > 2 &&
                             cmd_arg[ 1 ] == '-')
                         {
-                            // long option
+                            
                             option_info = get_option_info(
                                 cmd_arg.copy( 2 ), '\0' );
                         }
                         else if (cmd_arg.getLength() == 2 &&
                                  cmd_arg[ 1 ] != '-')
                         {
-                            // short option
+                            
                             option_info = get_option_info(
                                 OUString(), cmd_arg[ 1 ] );
                         }
@@ -400,7 +400,7 @@ SAL_IMPLEMENT_MAIN()
             }
         }
 
-        // bootstrap uno
+        
         xContext = ::cppu::defaultBootstrap_InitialComponentContext();
         css::uno::Reference< container::XHierarchicalNameAccess > xTDmgr(
             xContext->getValueByName(
@@ -408,14 +408,14 @@ SAL_IMPLEMENT_MAIN()
                 "theTypeDescriptionManager" ),
             UNO_QUERY_THROW );
 
-        // The registries are consumed twice, once to insert them into the
-        // TypeDescriptionManager so that TypeEmitter can work on
-        // css.star.reflection.XTypeDescription representation, and once
-        // directly as unoidl::Provider instances to keep track which types are
-        // coming from the mandatory registries for the "no explicit types
-        // given" case (which iterates over the full TypeDescriptionManager
-        // now); a welcome clean-up would be to make TypeEmitter work on
-        // unoidl::Entity directly like the other codemakers:
+        
+        
+        
+        
+        
+        
+        
+        
         css::uno::Reference< container::XSet > xSet( xTDmgr, UNO_QUERY_THROW );
         rtl::Reference< unoidl::Manager > unoidlMgr(new unoidl::Manager);
         std::vector< rtl::Reference< unoidl::Provider > > unoidlMandatoryProvs;
@@ -435,9 +435,9 @@ SAL_IMPLEMENT_MAIN()
             unoidlMandatoryProvs.push_back(prov);
         }
 
-        if (0 == output.getLength()) // no output file specified
+        if (0 == output.getLength()) 
         {
-            // if only one rdb has been given, then take rdb name
+            
             if (1 == mandatory_registries.size())
             {
                 output = mandatory_registries[ 0 ];
@@ -465,14 +465,14 @@ SAL_IMPLEMENT_MAIN()
         OUString filename( output.copy( slash +1 ) );
         sal_Int32 dot = filename.lastIndexOf( '.' );
         OUString name( filename );
-        if (dot < 0) // has no extension
+        if (dot < 0) 
             filename += ".dll";
         else
             name = name.copy( 0, dot );
         ::System::String ^ output_dir = ustring_to_String( sys_output_dir );
         ::System::String ^ output_file = ustring_to_String( filename );
 
-        //Get the key pair for making a strong name
+        
         StrongNameKeyPair^ kp = nullptr;
         if (keyfile.getLength() > 0)
         {
@@ -496,7 +496,7 @@ SAL_IMPLEMENT_MAIN()
                     "> no key file specified. Cannot create strong name!\n");
             }
         }
-        // setup assembly info: xxx todo set more? e.g. avoid strong versioning
+        
         AssemblyName ^ assembly_name = gcnew AssemblyName();
         assembly_name->CodeBase = output_dir;
         assembly_name->Name = gcnew ::System::String(name.getStr());
@@ -509,16 +509,16 @@ SAL_IMPLEMENT_MAIN()
                 gcnew ::System::Version( ustring_to_String( version ) );
         }
 
-        // app domain
+        
         ::System::AppDomain ^ current_appdomain =
               ::System::AppDomain::CurrentDomain;
 
-// Weird warning from this statement
-// warning C4538: 'cli::array<Type> ^' : const/volatile qualifiers on this type are not supported
-// Could be a compiler bug, says http://stackoverflow.com/questions/12151060/seemingly-inappropriate-compilation-warning-with-c-cli
+
+
+
 #pragma warning (push)
 #pragma warning (disable: 4538)
-        // target assembly
+        
         Emit::AssemblyBuilder ^ assembly_builder =
             current_appdomain->DefineDynamicAssembly(
                 assembly_name, Emit::AssemblyBuilderAccess::Save, output_dir );
@@ -580,7 +580,7 @@ SAL_IMPLEMENT_MAIN()
                         params ), args ) );
         }
 
-        // load extra assemblies
+        
         array<Assembly^>^ assemblies =
             gcnew array<Assembly^>(extra_assemblies.size());
         for ( size_t pos = 0; pos < extra_assemblies.size(); ++pos )
@@ -589,16 +589,16 @@ SAL_IMPLEMENT_MAIN()
                 ustring_to_String( extra_assemblies[ pos ] ) );
         }
 
-        // type emitter
+        
         TypeEmitter ^ type_emitter = gcnew TypeEmitter(
             assembly_builder->DefineDynamicModule( output_file ), assemblies );
-        // add handler resolving assembly's types
+        
         ::System::ResolveEventHandler ^ type_resolver =
               gcnew ::System::ResolveEventHandler(
                   type_emitter, &TypeEmitter::type_resolve );
         current_appdomain->TypeResolve += type_resolver;
 
-        // and emit types to it
+        
         if (explicit_types.empty())
         {
             css::uno::Reference< reflection::XTypeDescriptionEnumeration > xTD_enum(
@@ -643,7 +643,7 @@ SAL_IMPLEMENT_MAIN()
         if (g_verbose)
         {
 #if _MSC_VER < 1700
-// Bogus: warning C4564: method 'CheckInvalidPathChars' of class 'System::IO::Path' defines unsupported default parameter 'checkAdditional'
+
 #pragma warning (push)
 #pragma warning (disable: 4564)
 #endif

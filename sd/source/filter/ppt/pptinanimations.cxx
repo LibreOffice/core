@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
@@ -100,11 +100,11 @@ const transition* transition::find( const OUString& rName )
     return NULL;
 }
 
-// ====================================================================
 
 
 
-// ====================================================================
+
+
 
 SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
 {
@@ -120,7 +120,7 @@ SvStream& operator>>(SvStream& rIn, AnimationNode& rNode )
     return rIn;
 }
 
-// ====================================================================
+
 
 static bool convertMeasure( OUString& rString )
 {
@@ -158,14 +158,14 @@ static bool convertMeasure( OUString& rString )
 }
 
 
-// ====================================================================
+
 
 bool PropertySet::hasProperty( sal_Int32 nProperty ) const
 {
     return maProperties.find( nProperty ) != maProperties.end();
 }
 
-// --------------------------------------------------------------------
+
 
 Any PropertySet::getProperty( sal_Int32 nProperty ) const
 {
@@ -176,7 +176,7 @@ Any PropertySet::getProperty( sal_Int32 nProperty ) const
         return Any();
 }
 
-// ====================================================================
+
 
 /** this adds an any to another any.
     if rNewValue is empty, rOldValue is returned.
@@ -213,14 +213,14 @@ static Any addToSequence( const Any& rOldValue, const Any& rNewValue )
     }
 }
 
-// ====================================================================
+
 
 AnimationImporter::AnimationImporter( ImplSdPPTImport* pPPTImport, SvStream& rStCtrl )
 : mpPPTImport( pPPTImport ), mrStCtrl( rStCtrl )
 {
 }
 
-// --------------------------------------------------------------------
+
 
 int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRecordHeader& rProgTagContentHd )
 {
@@ -260,14 +260,14 @@ int AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRec
     return nNodes;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::processAfterEffectNodes()
 {
     std::for_each( maAfterEffectNodes.begin(), maAfterEffectNodes.end(), sd::stl_process_after_effect_node_func );
 }
 
-// --------------------------------------------------------------------
+
 
 Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, const AnimationNode& rNode )
 {
@@ -332,7 +332,7 @@ Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, co
     return xNode;
 }
 
-// --------------------------------------------------------------------
+
 
 static bool is_random( const AnimationNode& rNode, const PropertySet& rSet, sal_Int32& rPresetClass )
 {
@@ -381,23 +381,23 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
             sal_Int32 nPresetClass;
             if( is_random( aNode, aSet, nPresetClass ) )
             {
-                // create a random animation node with the given preset class
+                
                 xNode.set( sd::RandomAnimationNode_createInstance( (sal_Int16)nPresetClass ), UNO_QUERY );
             }
 
             if( !xNode.is() )
             {
-                // create a node for the given atom
+                
                 xNode = createNode( pAtom, aNode );
             }
         }
         else
         {
-            // if we have no parent we fill the root node
+            
             xNode = mxRootNode;
         }
 
-        // import if we have a node and its not random
+        
         if( xNode.is() )
         {
             fillNode( xNode, aNode, aSet );
@@ -412,7 +412,7 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
                 nNodes += importTimeContainer( pAtom, xNode );
                 dump( "</par>\n" );
 
-                // for iteration containers, map target from children to iteration
+                
                 Reference< XIterateContainer > xIter( xNode, UNO_QUERY );
                 if( xIter.is() )
                 {
@@ -573,7 +573,7 @@ int AnimationImporter::importAnimationContainer( const Atom* pAtom, const Refere
     return nNodes;
 }
 
-// --------------------------------------------------------------------
+
 void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
     try
@@ -583,7 +583,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
         Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
         while( xE->hasMoreElements() )
         {
-            // click node
+            
             Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
 
             Event aEvent;
@@ -598,7 +598,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
                 Reference< XEnumeration > xE2( xEA2->createEnumeration(), UNO_QUERY_THROW );
                 if( xE2->hasMoreElements() )
                 {
-                    // with node
+                    
                     xE2->nextElement() >>= xEA2;
                     if( xEA2.is() )
                         xE2.query( xEA2->createEnumeration() );
@@ -619,8 +619,8 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
                                 p->Value >>= nNodeType;
                                 if( nNodeType != ::com::sun::star::presentation::EffectNodeType::ON_CLICK )
                                 {
-                                    // first effect does not start on click, so correct
-                                    // first click nodes begin to 0s
+                                    
+                                    
                                     xClickNode->setBegin( makeAny( (double)0.0 ) );
                                     break;
                                 }
@@ -638,7 +638,7 @@ void AnimationImporter::fixMainSequenceTiming( const ::com::sun::star::uno::Refe
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::fixInteractiveSequenceTiming( const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xNode )
 {
@@ -652,7 +652,7 @@ void AnimationImporter::fixInteractiveSequenceTiming( const ::com::sun::star::un
         Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
         while( xE->hasMoreElements() )
         {
-            // click node
+            
             Reference< XAnimationNode > xClickNode( xE->nextElement(), UNO_QUERY );
             xClickNode->setBegin( aBegin );
         }
@@ -663,7 +663,7 @@ void AnimationImporter::fixInteractiveSequenceTiming( const ::com::sun::star::un
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >& xNode, const Reference< XAnimationNode >& xParent )
 {
@@ -759,7 +759,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
         }
     }
 
-    // check for after-affect
+    
     Sequence< NamedValue > aUserData( xNode->getUserData() );
     NamedValue* pValue = aUserData.getArray();
     NamedValue* pLastValue = pValue;
@@ -793,10 +793,10 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
         xNode->setUserData( aUserData );
     }
 
-    // if its an after effect node, add it to the list for
-    // later processing
-    // after effect nodes are not inserted at their import
-    // position, so return false in this case
+    
+    
+    
+    
     if( bAfterEffect )
     {
         if( nMasterRel != 2 )
@@ -810,7 +810,7 @@ bool AnimationImporter::convertAnimationNode( const Reference< XAnimationNode >&
             xNode->setBegin( makeAny( aEvent ) );
         }
 
-        // add to after effect nodes for later processing
+        
         sd::AfterEffectNode aNode( xNode, xParent, nMasterRel == 2 );
         maAfterEffectNodes.push_back( aNode );
         return false;
@@ -1043,7 +1043,7 @@ bool AnimationImporter::convertAnimationValue( MS_AttributeNames eAttribute, Any
     return bRet;
 }
 
-// --------------------------------------------------------------------
+
 
 static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId, sal_Int32 nPresetSubType )
 {
@@ -1051,12 +1051,12 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
 
     if( (nPresetClass == EffectPresetClass::ENTRANCE) || (nPresetClass == EffectPresetClass::EXIT) )
     {
-        // skip wheel effect
+        
         if( nPresetId != 21 )
         {
             if( nPresetId == 5 )
             {
-                // checkerboard
+                
                 switch( nPresetSubType )
                 {
                 case  5: pStr = "downward"; break;
@@ -1065,13 +1065,13 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
             }
             else if( nPresetId == 17 )
             {
-                // stretch
+                
                 if( nPresetSubType == 10 )
                     pStr = "across";
             }
             else if( nPresetId == 18 )
             {
-                // strips
+                
                 switch( nPresetSubType )
                 {
                 case 3: pStr = "right-to-top"; break;
@@ -1104,13 +1104,13 @@ static OUString getConvertedSubType( sal_Int16 nPresetClass, sal_Int32 nPresetId
         return OUString::number( nPresetSubType );
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const AnimationNode& rNode, const PropertySet& rSet )
 {
     sal_Bool bAfterEffect = false;
 
-    // attribute Restart
+    
     if( rNode.mnRestart )
     {
         sal_Int16 nRestart = AnimationRestart::DEFAULT;
@@ -1123,7 +1123,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         xNode->setRestart( nRestart );
     }
 
-    // attribute Fill
+    
     if( rNode.mnFill )
     {
         sal_Int16 nFill = AnimationFill::DEFAULT;
@@ -1137,7 +1137,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         xNode->setFill( nFill );
     }
 
-    // attribute Duration
+    
     if( rNode.mnDuration )
     {
         Any aDuration;
@@ -1152,7 +1152,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         xNode->setDuration( aDuration );
     }
 
-    // TODO: DFF_ANIM_PATH_EDIT_MODE
+    
     if( rSet.hasProperty( DFF_ANIM_PATH_EDIT_MODE ) )
     {
         sal_Int32 nPathEditMode ;
@@ -1161,10 +1161,10 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
         }
     }
 
-    // set user data
+    
     Sequence< NamedValue > aUserData;
 
-    // attribute Type
+    
     if( rSet.hasProperty( DFF_ANIM_NODE_TYPE ) )
     {
         sal_Int32 nPPTNodeType = 0;
@@ -1300,27 +1300,27 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
 
     xNode->setUserData( aUserData );
 
-    // TODO: DFF_ANIM_ID
+    
     if( rSet.hasProperty( DFF_ANIM_ID ) )
     {
         OUString aString;
         rSet.getProperty( DFF_ANIM_ID ) >>= aString;
-        //if( !aString.isEmpty() )
-        //{
-        //}
+        
+        
+        
     }
 
-    // TODO: DFF_ANIM_EVENT_FILTER
+    
     if( rSet.hasProperty( DFF_ANIM_EVENT_FILTER ) )
     {
         OUString aString;
         rSet.getProperty( DFF_ANIM_EVENT_FILTER ) >>= aString;
-        //if( !aString.isEmpty() )
-        //{
-        //}
+        
+        
+        
     }
 
-    // DFF_ANIM_TIMEFILTER
+    
     if( rSet.hasProperty( DFF_ANIM_TIMEFILTER ) )
     {
         Reference< XAnimate > xAnim( xNode, UNO_QUERY );
@@ -1330,7 +1330,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
             rSet.getProperty( DFF_ANIM_TIMEFILTER ) >>= aString;
             if( !aString.isEmpty() )
             {
-                sal_Int32 nElements = 1; // a non empty string has at least one value
+                sal_Int32 nElements = 1; 
 
                 sal_Int32 fromIndex = 0;
                 while(true)
@@ -1366,7 +1366,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
     }
 
 
-// TODO: DFF_ANIM_ENDAFTERSLIDE / DFF_ANIM_VOLUME handling. git history has sample code
+
     Reference< XAnimateColor > xColor( xNode, UNO_QUERY );
     if( xColor.is() )
     {
@@ -1386,7 +1386,7 @@ void AnimationImporter::fillNode( Reference< XAnimationNode >& xNode, const Anim
     }
 }
 
-// --------------------------------------------------------------------
+
 
 int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -1401,7 +1401,7 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
 
         dump(">\n");
 
-        // import sub containers
+        
         const Atom* pChildAtom = pAtom->findFirstChildAtom();
 
         while( pChildAtom )
@@ -1498,7 +1498,7 @@ int AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference< 
     return nNodes;
 }
 
-// --------------------------------------------------------------------
+
 
 int AnimationImporter::importAnimationNodeContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -1574,7 +1574,7 @@ int AnimationImporter::importAnimationNodeContainer( const Atom* pAtom, const Re
     return nNodes;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -1653,7 +1653,7 @@ void AnimationImporter::importAnimateFilterContainer( const Atom* pAtom, const R
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -1708,10 +1708,10 @@ void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom
 
                     mrStCtrl.ReadUInt32( nBits ).ReadUInt32( nAdditive ).ReadUInt32( nAccumulate ).ReadUInt32( nTransformType );
 
-                    // nBits %0001: additive, %0010: accumulate, %0100: attributeName, %1000: transformtype
-                    // nAdditive 0 = base, 1 = sum, 2 = replace, 3 = multiply, 4 = none
-                    // nAccumulate 0 = none, 1 = always
-                    // nTransformType 0: "property" else "image"
+                    
+                    
+                    
+                    
 
                     if( nBits & 3 )
                     {
@@ -1798,31 +1798,31 @@ void AnimationImporter::importAnimateAttributeTargetContainer( const Atom* pAtom
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int16 AnimationImporter::implGetColorSpace( sal_Int32 nMode, sal_Int32 /*nA*/, sal_Int32 /*nB*/, sal_Int32 /*nC*/ )
 {
     switch( nMode )
     {
-    case 2: // index
-        // FALLTHROUGH intended
+    case 2: 
+        
     default:
-        // FALLTHROUGH intended
-    case 0: // rgb
+        
+    case 0: 
         return AnimationColorSpace::RGB;
 
-    case 1: // hsl
+    case 1: 
         return AnimationColorSpace::HSL;
     }
 }
 
-// --------------------------------------------------------------------
+
 
 Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int32 nB, sal_Int32 nC )
 {
     switch( nMode )
     {
-    case 0: // rgb
+    case 0: 
         {
             dump( "rgb(%ld", nA );
             dump( ",%ld", nB );
@@ -1830,7 +1830,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             Color aColor( (sal_uInt8)nA, (sal_uInt8)nB, (sal_uInt8)nC );
             return makeAny( (sal_Int32)aColor.GetRGBColor() );
         }
-    case 1: // hsl
+    case 1: 
         {
             dump( "hsl(%ld", nA );
             dump( ",%ld", nB );
@@ -1842,7 +1842,7 @@ Any AnimationImporter::implGetColorAny( sal_Int32 nMode, sal_Int32  nA, sal_Int3
             return makeAny( aHSL );
         }
 
-    case 2: // index
+    case 2: 
         {
             Color aColor;
             mpPPTImport->GetColorFromPalette((sal_uInt16)nA, aColor );
@@ -1937,7 +1937,7 @@ void AnimationImporter::importAnimateColorContainer( const Atom* pAtom, const Re
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimateSetContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -1996,7 +1996,7 @@ void AnimationImporter::importAnimateSetContainer( const Atom* pAtom, const Refe
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimateContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2075,7 +2075,7 @@ void AnimationImporter::importAnimateContainer( const Atom* pAtom, const Referen
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2128,7 +2128,7 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
                     OUString aStr;
                     if ( aPath >>= aStr )
                     {
-                        // E can appear inside a number, so we only check for its presence at the end
+                        
                         aStr = aStr.trim();
                         if (aStr.endsWith("E"))
                             aStr = aStr.copy(0, aStr.getLength() - 1);
@@ -2157,7 +2157,7 @@ void AnimationImporter::importAnimateMotionContainer( const Atom* pAtom, const R
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importCommandContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2183,8 +2183,8 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
             case DFF_msofbtCommandData:
             {
                 sal_Int32 nCommandType;
-                // looks like U1 is a bitset, bit 1 enables the type and bit 2 enables
-                // a propertyvalue that follows
+                
+                
                 mrStCtrl.ReadInt32( nBits );
                 mrStCtrl.ReadInt32( nCommandType );
 
@@ -2232,8 +2232,8 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
 
             switch( nType )
             {
-            case 0: // event
-            case 1: // call
+            case 0: 
+            case 1: 
                 if ( aParam == "onstopaudio" )
                 {
                     nCommand = EffectCommands::STOPAUDIO;
@@ -2263,7 +2263,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
                     nCommand = EffectCommands::STOP;
                 }
                 break;
-            case 2: // verb
+            case 2: 
                 {
                     aParamValue.Name = "Verb";
                     aParamValue.Value <<= aParam.toInt32();
@@ -2290,7 +2290,7 @@ void AnimationImporter::importCommandContainer( const Atom* pAtom, const Referen
     }
 }
 
-// --------------------------------------------------------------------
+
 
 int AnimationImporter::importAudioContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2360,7 +2360,7 @@ int AnimationImporter::importAudioContainer( const Atom* pAtom, const Reference<
             pChildAtom = pAtom->findNextChildAtom( pChildAtom );
         }
 
-        // TODO: What to do with them?
+        
         Any aEmpty;
         xAudio->setBegin( aEmpty );
         xAudio->setEnd( aEmpty );
@@ -2369,7 +2369,7 @@ int AnimationImporter::importAudioContainer( const Atom* pAtom, const Reference<
     return nNodes;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2397,11 +2397,11 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
                 sal_uInt32 nBits, nZoomContents;
                 float fByX, fByY, fFromX, fFromY, fToX, fToY;
 
-                // nBits %001: by, %010: from, %100: to, %1000: zoomContents(bool)
+                
                 mrStCtrl.ReadUInt32( nBits ).ReadFloat( fByX ).ReadFloat( fByY ).ReadFloat( fFromX ).ReadFloat( fFromY ).ReadFloat( fToX ).ReadFloat( fToY ).ReadUInt32( nZoomContents );
 
                 ValuePair aPair;
-                // 'from' value
+                
                 if( nBits & 2 )
                 {
                     aPair.First <<= (double)fFromX / 100.0;
@@ -2409,7 +2409,7 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
                     xTransform->setFrom( makeAny( aPair ) );
                 }
 
-                // 'to' value
+                
                 if( nBits & 4 )
                 {
                     aPair.First <<= (double)fToX / 100.0;
@@ -2417,7 +2417,7 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
                     xTransform->setTo( makeAny( aPair ) );
                 }
 
-                // 'by' value
+                
                 if( nBits & 1 )
                 {
                     aPair.First <<= (double)fByX / 100.0;
@@ -2425,16 +2425,16 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
 
                     if( nBits & 2 )
                     {
-                        // 'from' value given, import normally
+                        
                         xTransform->setBy( makeAny( aPair ) );
                     }
                     else
                     {
-                        // mapping 'by' to 'to', if no 'from' is
-                        // given. This is due to a non-conformity in
-                        // PPT, which exports animateScale effects
-                        // with a sole 'by' value, but with the
-                        // semantics of a sole 'to' animation
+                        
+                        
+                        
+                        
+                        
                         xTransform->setTo( makeAny( aPair ) );
                     }
                 }
@@ -2470,7 +2470,7 @@ void AnimationImporter::importAnimateScaleContainer( const Atom* pAtom, const Re
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2498,7 +2498,7 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
                 sal_uInt32 nBits, nU1;
                 float fBy, fFrom, fTo;
 
-                // nBits %001: by, %010: from, %100: to, %1000: zoomContents(bool)
+                
                 mrStCtrl.ReadUInt32( nBits ).ReadFloat( fBy ).ReadFloat( fFrom ).ReadFloat( fTo ).ReadUInt32( nU1 );
 
                 if( nBits & 1 )
@@ -2539,7 +2539,7 @@ void AnimationImporter::importAnimateRotationContainer( const Atom* pAtom, const
         }
     }
 }
-// --------------------------------------------------------------------
+
 
 bool AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUString& rAttributeNames )
 {
@@ -2577,7 +2577,7 @@ bool AnimationImporter::importAttributeNamesContainer( const Atom* pAtom, OUStri
     return true;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimationValues( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2655,7 +2655,7 @@ void AnimationImporter::importAnimationValues( const Atom* pAtom, const Referenc
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2665,7 +2665,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
 
     if( pAtom && xAnim.is() )
     {
-        // first count keytimes
+        
         const Atom* pIter = NULL;
         int nKeyTimes = 0;
 
@@ -2789,7 +2789,7 @@ void AnimationImporter::importAnimateKeyPoints( const Atom* pAtom, const Referen
     }
 }
 
-// --------------------------------------------------------------------
+
 
 bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
 {
@@ -2864,7 +2864,7 @@ bool AnimationImporter::importAttributeValue( const Atom* pAtom, Any& rAny )
     return bOk;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -2948,8 +2948,8 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
 
     xNode->setBegin( aBegin );
     xNode->setEnd( aEnd );
-    // TODO: xNode->setNext( aNext );
-    // TODO: xNode->setPrev( aNext );
+    
+    
 
 #ifdef DBG_ANIM_LOG
     if( aBegin.hasValue() )
@@ -2982,7 +2982,7 @@ void AnimationImporter::importAnimationEvents( const Atom* pAtom, const Referenc
 #endif
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importAnimationActions( const Atom* pAtom, const Reference< XAnimationNode >& xNode )
 {
@@ -3021,7 +3021,7 @@ void AnimationImporter::importAnimationActions( const Atom* pAtom, const Referen
     }
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, Any& rTarget, sal_Int16& rSubType )
 {
@@ -3048,7 +3048,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                 switch( nRefType )
                 {
-                case 1: // shape
+                case 1: 
                 {
                     SdrObject* pSdrObject = mpPPTImport->getShapeForId( nRefId );
                     if( pSdrObject == NULL )
@@ -3060,7 +3060,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                     {
                     case 6: rSubType = ShapeAnimationSubType::ONLY_BACKGROUND; break;
                     case 8: rSubType = ShapeAnimationSubType::ONLY_TEXT; break;
-                    case 2: // one paragraph
+                    case 2: 
                     {
                         if( ((begin == -1) && (end == -1)) || !pSdrObject->ISA( SdrTextObj )  )
                             break;
@@ -3102,15 +3102,15 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                 }
                 break;
 
-                case 2: // sound
+                case 2: 
                     {
                         OUString aSoundURL( ((ImplSdPPTImport*)mpPPTImport)->ReadSound( nRefId ) );
                         rTarget <<= aSoundURL;
                         dump( " srcRef=\"%s\"", aSoundURL );
                     }
                     break;
-                case 3: // audio object
-                case 4: // video object
+                case 3: 
+                case 4: 
                     {
                         SdrObject* pSdrObject = mpPPTImport->getShapeForId( nRefId );
                         if( pSdrObject == NULL )
@@ -3144,7 +3144,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
     return nRefMode;
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertySet& rSet )
 {
@@ -3171,7 +3171,7 @@ void AnimationImporter::importPropertySetContainer( const Atom* pAtom, PropertyS
     }
 }
 
-// ====================================================================
+
 
 #ifdef DBG_ANIM_LOG
 void AnimationImporter::dump_atom_header( const Atom* pAtom, bool bOpen, bool bAppend )
@@ -3233,7 +3233,7 @@ void AnimationImporter::dump_atom_header( const Atom* pAtom, bool bOpen, bool bA
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::dump( sal_uInt32 nLen, bool bNewLine )
 {
@@ -3260,7 +3260,7 @@ void AnimationImporter::dump( sal_uInt32 nLen, bool bNewLine )
         fprintf(mpFile,"\n");
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::dump_atom( const Atom* pAtom, bool bNewLine )
 {
@@ -3326,7 +3326,7 @@ void AnimationImporter::dump_atom( const Atom* pAtom, bool bNewLine )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void AnimationImporter::dump_anim_group( const Atom* pAtom, const AnimationNode& rNode, const PropertySet& rSet, bool bOpen )
 {
@@ -3388,7 +3388,7 @@ void AnimationImporter::dump_anim_group( const Atom* pAtom, const AnimationNode&
 
 void AnimationImporter::dump( const AnimationNode& rNode )
 {
-    // dump animation node
+    
     if( rNode.mnRestart != 0 )
     {
         fprintf(mpFile," restart=\"%s\"",
@@ -3492,7 +3492,7 @@ void AnimationImporter::dump( Any& rAny )
 
 void AnimationImporter::dump( const PropertySet& rSet )
 {
-    // dump property set
+    
 
     map< sal_Int32, Any >::const_iterator aIter( rSet.maProperties.begin() );
     const map< sal_Int32, Any >::const_iterator aEnd( rSet.maProperties.end() );
@@ -3536,7 +3536,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
         }
         break;
 
-        case DFF_ANIM_OVERRIDE:     // TODO
+        case DFF_ANIM_OVERRIDE:     
         {
             sal_Int32 nOverride;
             if( aAny >>= nOverride )
@@ -3863,6 +3863,6 @@ void AnimationImporter::dump( const char * , const OUString&  )
 
 #endif
 
-} // namespace ppt;
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

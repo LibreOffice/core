@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DataInterpreter.hxx"
@@ -62,7 +62,7 @@ Reference< uno::XComponentContext > DataInterpreter::GetComponentContext() const
     return m_xContext;
 }
 
-// ____ XDataInterpreter ____
+
 InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
@@ -81,11 +81,11 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     Reference< data::XLabeledDataSequence > xCategories;
     vector< Reference< data::XLabeledDataSequence > > aSequencesVec;
 
-    // check if we should use categories
+    
 
     bool bHasCategories( HasCategories( aArguments, aData ));
 
-    // parse data
+    
     bool bCategoriesUsed = false;
     for( sal_Int32 i=0; i < aData.getLength(); ++i )
     {
@@ -111,7 +111,7 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
         }
     }
 
-    // create DataSeries
+    
     vector< Reference< data::XLabeledDataSequence > >::const_iterator
           aSequencesVecIt = aSequencesVec.begin();
 
@@ -156,10 +156,10 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
             Reference< data::XDataSource > xSeriesSource( aSeries[i], uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aNewSequences;
 
-            // values-y
+            
             Reference< data::XLabeledDataSequence > xValuesY(
                 DataSeriesHelper::getDataSequenceByRole( xSeriesSource, "values-y", false ));
-            // re-use values-... as values-y
+            
             if( ! xValuesY.is())
             {
                 xValuesY.set(
@@ -196,7 +196,7 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
     return aResult;
 }
 
-// criterion: all series must have exactly one data::XLabeledDataSequence
+
 sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
     throw (uno::RuntimeException)
@@ -271,7 +271,7 @@ private:
     OUString m_aLabelRangeRep;
 };
 
-} // anonymous namespace
+} 
 
 Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
     const InterpretedData& aInterpretedData )
@@ -279,7 +279,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
 {
     vector< Reference< data::XLabeledDataSequence > > aResultVec;
     aResultVec.reserve( aInterpretedData.Series.getLength() +
-                        1 // categories
+                        1 
         );
 
     if( aInterpretedData.Categories.is())
@@ -293,12 +293,12 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
             Reference< data::XDataSource > xSrc( aSeries[nSeriesIdx], uno::UNO_QUERY_THROW );
             Sequence< Reference< data::XLabeledDataSequence > > aSeq( xSrc->getDataSequences());
 
-            // add all sequences of data series
+            
             for( sal_Int32 nSeqIdx=0; nSeqIdx<aSeq.getLength(); ++nSeqIdx )
             {
                 Reference< data::XLabeledDataSequence > xAdd( aSeq[nSeqIdx] );
 
-                // only add if sequence is not yet in the result
+                
                 if( find_if( aResultVec.begin(), aResultVec.end(),
                              lcl_LabeledSequenceEquals( xAdd )) == aResultVec.end())
                 {
@@ -315,7 +315,7 @@ Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
     return Reference< data::XDataSource >( DataSourceHelper::createDataSource( ContainerToSequence( aResultVec ) ) );
 }
 
-// convenience methods
+
 
 OUString DataInterpreter::GetRole( const Reference< data::XDataSequence > & xSeq )
 {
@@ -392,10 +392,10 @@ Sequence< OUString > DataInterpreter::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( DataInterpreter, OUString("com.sun.star.comp.chart2.DataInterpreter") );
 
-} // namespace chart
+} 
 
 #if OSL_DEBUG_LEVEL > 1
 namespace

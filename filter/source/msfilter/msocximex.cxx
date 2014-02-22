@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -102,8 +102,8 @@ const uno::Reference< container::XIndexContainer >&
             uno::Reference< container::XNameContainer >  xNameCont =
                 xFormsSupplier->getForms();
 
-            // The form gets a new name like "WW-Standard[n]" and will
-            // created new in any case.
+            
+            
             OUString sName( sWW8_form );
             sal_uInt16 n = 0;
 

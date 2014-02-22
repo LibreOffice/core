@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <UndoOverwrite.hxx>
@@ -61,7 +61,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
 
     bInsChar = sal_True;
     sal_Int32 nTxtNdLen = pTxtNd->GetTxt().getLength();
-    if( nSttCntnt < nTxtNdLen )     // no pure insert?
+    if( nSttCntnt < nTxtNdLen )     
     {
         aDelStr += OUString( pTxtNd->GetTxt()[nSttCntnt] );
         if( !pHistory )
@@ -98,14 +98,14 @@ SwUndoOverwrite::~SwUndoOverwrite()
 sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
                                     sal_Unicode cIns )
 {
-// What is with only inserted characters?
 
-    // Only deletion of single chars can be combined.
+
+    
     if( rPos.nNode != nSttNode || aInsStr.isEmpty()  ||
         ( !bGroup && aInsStr.getLength() != 1 ))
         return sal_False;
 
-    // Is the node a TextNode at all?
+    
     SwTxtNode * pDelTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( !pDelTxtNd ||
         (pDelTxtNd->GetTxt().getLength() != rPos.nContent.GetIndex() &&
@@ -114,7 +114,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
 
     CharClass& rCC = GetAppCharClass();
 
-    // ask the char that should be inserted
+    
     if (( CH_TXTATR_BREAKWORD == cIns || CH_TXTATR_INWORD == cIns ) ||
         rCC.isLetterNumeric( OUString( cIns ), 0 ) !=
         rCC.isLetterNumeric( aInsStr, aInsStr.getLength()-1 ) )
@@ -139,7 +139,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
         pDoc->DeleteRedline( aPam, false, USHRT_MAX );
     }
 
-    // both 'overwrites' can be combined so 'move' the corresponding character
+    
     if( !bInsChar )
     {
         if (rPos.nContent.GetIndex() < pDelTxtNd->GetTxt().getLength())
@@ -156,7 +156,7 @@ sal_Bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
 
     OUString const ins( pDelTxtNd->InsertText(OUString(cIns), rPos.nContent,
             IDocumentContentOperations::INS_EMPTYEXPAND) );
-    assert(ins.getLength() == 1); // check in SwDoc::Overwrite => cannot fail
+    assert(ins.getLength() == 1); 
     (void) ins;
     aInsStr += OUString( cIns );
 
@@ -191,7 +191,7 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         pDoc->SetAutoCorrExceptWord( 0 );
     }
 
-    // If there was not only a overwrite but also an insert, delete the surplus
+    
     if( aInsStr.getLength() > aDelStr.getLength() )
     {
         rIdx += aDelStr.getLength();
@@ -207,10 +207,10 @@ void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
         ++rIdx;
         for( sal_Int32 n = 0; n < aDelStr.getLength(); n++  )
         {
-            // do it individually, to keep the attributes!
+            
             OUString aTmpStr(aDelStr[n]);
             OUString const ins( pTxtNd->InsertText(aTmpStr, rIdx) );
-            assert(ins.getLength() == 1); // cannot fail
+            assert(ins.getLength() == 1); 
         (void) ins;
             rIdx -= 2;
             pTxtNd->EraseText( rIdx, 1 );
@@ -279,11 +279,11 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
 
     for( sal_Int32 n = 0; n < aInsStr.getLength(); n++  )
     {
-        // do it individually, to keep the attributes!
+        
         OUString const ins(
                 pTxtNd->InsertText( OUString(aInsStr[n]), rIdx,
                 IDocumentContentOperations::INS_EMPTYEXPAND) );
-        assert(ins.getLength() == 1); // cannot fail
+        assert(ins.getLength() == 1); 
         (void) ins;
         if( n < aDelStr.getLength() )
         {
@@ -294,7 +294,7 @@ void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
     }
     pTxtNd->SetIgnoreDontExpand( bOldExpFlg );
 
-    // get back old start position from UndoNodes array
+    
     if( pHistory )
         pHistory->SetTmpEnd( pHistory->Count() );
     if( pAktPam->GetMark()->nContent.GetIndex() != nSttCntnt )
@@ -354,10 +354,10 @@ void SwUndoTransliterate::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     SwDoc & rDoc = rContext.GetDoc();
 
-    // since the changes were added to the vector from the end of the string/node towards
-    // the start, we need to revert them from the start towards the end now to keep the
-    // offset information of the undo data in sync with the changing text.
-    // Thus we need to iterate from the end of the vector to the start
+    
+    
+    
+    
     for (sal_Int32 i = aChanges.size() - 1; i >= 0;  --i)
         aChanges[i]->SetChangeAtNode( rDoc );
 
@@ -393,12 +393,12 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
     aChanges.push_back( pNew );
 
     const sal_Int32* pOffsets = rOffsets.getConstArray();
-    // where did we need less memory ?
+    
     const sal_Int32* p = pOffsets;
     for( long n = 0; n < nOffsLen; ++n, ++p )
     if( *p != ( nStart + n ))
     {
-        // create the Offset array
+        
         pNew->pOffsets = new Sequence <sal_Int32> ( nLen );
         sal_Int32* pIdx = pNew->pOffsets->getArray();
         p = pOffsets;
@@ -407,7 +407,7 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
         {
             if( *p < nMyOff )
             {
-                // something is deleted
+                
                 nMyOff = *p;
                 *(pIdx-1) = nNewVal++;
             }
@@ -423,17 +423,17 @@ void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,
                 *pIdx++ = nNewVal++;
         }
 
-        // and then we need to save the attributes/bookmarks
-        // but this data must moved every time to the last in the chain!
-        for (size_t i = 0; i + 1 < aChanges.size(); ++i)    // check all changes but not the current one
+        
+        
+        for (size_t i = 0; i + 1 < aChanges.size(); ++i)    
         {
             _UndoTransliterate_Data* pD = aChanges[i];
             if( pD->nNdIdx == pNew->nNdIdx && pD->pHistory )
             {
-                // same node and have a history?
+                
                 pNew->pHistory = pD->pHistory;
                 pD->pHistory = 0;
-                break;          // more can't exist
+                break;          
             }
         }
 

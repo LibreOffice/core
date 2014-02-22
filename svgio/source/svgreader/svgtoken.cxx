@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,12 +14,12 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svgio/svgreader/svgtoken.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace svgio
 {
@@ -30,7 +30,7 @@ namespace svgio
         static OUString aSVGStrViewBox("viewBox");
         static OUString aSVGStrTransform("transform");
         static OUString aSVGStrStyle("style");
-        static OUString aSVGStrDisplay("display"); // #i121656#
+        static OUString aSVGStrDisplay("display"); 
         static OUString aSVGStrD("d");
         static OUString aSVGStrX("x");
         static OUString aSVGStrY("y");
@@ -175,7 +175,7 @@ namespace svgio
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrViewBox, SVGTokenViewBox));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrTransform, SVGTokenTransform));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrStyle, SVGTokenStyle));
-                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDisplay, SVGTokenDisplay)); // #i121656#
+                aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrDisplay, SVGTokenDisplay)); 
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrD, SVGTokenD));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrX, SVGTokenX));
                 aSVGTokenMapperList.insert(SVGTokenValueType(aSVGStrY, SVGTokenY));
@@ -327,10 +327,10 @@ namespace svgio
         {
             return aSVGStrDesc;
         }
-    } // end of namespace svgreader
-} // end of namespace svgio
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eof
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

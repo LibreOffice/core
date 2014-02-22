@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textparagraphproperties.hxx"
@@ -114,7 +114,7 @@ void BulletList::setSuffixMinusRight()
 void BulletList::setType( sal_Int32 nType )
 {
     OSL_ASSERT((nType & sal_Int32(0xFFFF0000))==0);
-//  OSL_TRACE( "OOX: set list numbering type %d", nType);
+
     switch( nType )
     {
     case XML_alphaLcParenBoth:
@@ -145,7 +145,7 @@ void BulletList::setType( sal_Int32 nType )
     case XML_arabic2Minus:
     case XML_arabicDbPeriod:
     case XML_arabicDbPlain:
-        // TODO
+        
         break;
     case XML_arabicParenBoth:
          mnNumberingType <<= NumberingType::ARABIC;
@@ -196,7 +196,7 @@ void BulletList::setType( sal_Int32 nType )
     case XML_hindiAlphaPeriod:
     case XML_hindiNumParenR:
     case XML_hindiNumPeriod:
-        // TODO
+        
         break;
     case XML_romanLcParenBoth:
         mnNumberingType <<= NumberingType::ROMAN_LOWER;
@@ -305,7 +305,7 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
             if( mnFontSize >>= nFontSize )
                 aFontDesc.Height = nFontSize;
 
-            // TODO move the to the TextFont struct.
+            
             aFontDesc.Name = aBulletFontName;
             aFontDesc.Pitch = nBulletFontPitch;
             aFontDesc.Family = nBulletFontFamily;
@@ -425,8 +425,8 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         }
         if ( noFirstLineIndentation )
         {
-            // Force Paragraph property as zero - impress seems to use the value from previous
-            // (non) bullet line if not set to zero explicitly :(
+            
+            
             aPropSet.setProperty( PROP_ParaFirstLineIndent, static_cast< sal_Int32 >(0) );
             rioBulletMap[ PROP_FirstLineOffset ] <<= static_cast< sal_Int32 >( *noFirstLineIndentation );
             noFirstLineIndentation = boost::none;
@@ -447,7 +447,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
             {
                 if( !rioBulletMap.empty() )
                 {
-                    // fix default bullet size to be 100%
+                    
                     if( rioBulletMap.find( PROP_BulletRelSize ) == rioBulletMap.end() )
                         rioBulletMap[ PROP_BulletRelSize ] <<= static_cast< sal_Int16 >( 100 );
                     Sequence< PropertyValue > aBulletPropSeq = rioBulletMap.makePropertyValueSequence();
@@ -459,7 +459,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         }
         catch (const Exception &)
         {
-            // Don't warn for now, expected to fail for Writer.
+            
         }
     }
     if ( noParaLeftMargin )
@@ -469,7 +469,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         aPropSet.setProperty( PROP_ParaFirstLineIndent, *noFirstLineIndentation );
         if( bPushDefaultValues )
         {
-            // Reset TabStops - these would be auto calculated by Impress
+            
             TabStop aTabStop;
             aTabStop.Position = 0;
             Sequence< TabStop > aSeq(1);
@@ -485,8 +485,8 @@ float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
 }
 
 #ifdef DBG_UTIL
-// Note: Please don't remove this function. This is required for
-// debugging pptx import problems.
+
+
 void TextParagraphProperties::dump() const
 {
     Reference< ::com::sun::star::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( "com.sun.star.presentation.TitleTextShape" ), UNO_QUERY );

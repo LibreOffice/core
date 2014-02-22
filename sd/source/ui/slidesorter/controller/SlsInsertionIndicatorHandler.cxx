@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -84,7 +84,7 @@ void InsertionIndicatorHandler::End (const controller::Animator::AnimationMode e
     GetInsertAnimator()->Reset(eMode);
 
     mbIsActive = false;
-    //    maInsertPosition = view::InsertPosition();
+    
     meMode = UnknownMode;
 
     mpInsertionIndicatorOverlay->Hide();
@@ -192,7 +192,7 @@ void InsertionIndicatorHandler::SetPosition (
 
     if (maInsertPosition != aInsertPosition
         || meMode != eMode
-        //        || ! mpInsertionIndicatorOverlay->IsVisible()
+        
         )
     {
         maInsertPosition = aInsertPosition;
@@ -238,9 +238,9 @@ bool InsertionIndicatorHandler::IsInsertionTrivial (
     if ( ! mbIsOverSourceView)
         return false;
 
-    // Iterate over all selected pages and check whether there are
-    // holes.  While we do this we remember the indices of the first and
-    // last selected page as preparation for the next step.
+    
+    
+    
     sal_Int32 nCurrentIndex = -1;
     sal_Int32 nFirstIndex = -1;
     sal_Int32 nLastIndex = -1;
@@ -251,23 +251,23 @@ bool InsertionIndicatorHandler::IsInsertionTrivial (
     {
         model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
 
-        // Get the page number and compare it to the last one.
+        
         const sal_Int32 nPageNumber (pDescriptor->GetPageIndex());
         if (nCurrentIndex>=0 && nPageNumber>(nCurrentIndex+1))
             return false;
         else
             nCurrentIndex = nPageNumber;
 
-        // Remember indices of the first and last page of the selection.
+        
         if (nFirstIndex == -1)
             nFirstIndex = nPageNumber;
         nLastIndex = nPageNumber;
     }
 
-    // When we come here then the selection has no holes.  We still have
-    // to check that the insertion position is not directly in front or
-    // directly behind the selection and thus moving the selection there
-    // would not change the model.
+    
+    
+    
+    
     if (nInsertionIndex<nFirstIndex || nInsertionIndex>(nLastIndex+1))
         return false;
 
@@ -285,7 +285,7 @@ bool InsertionIndicatorHandler::IsInsertionTrivial (const sal_Int8 nDndAction)
 
 
 
-//===== InsertionIndicatorHandler::ForceShowContext ===========================
+
 
 InsertionIndicatorHandler::ForceShowContext::ForceShowContext (
     const ::boost::shared_ptr<InsertionIndicatorHandler>& rpHandler)
@@ -302,6 +302,6 @@ InsertionIndicatorHandler::ForceShowContext::~ForceShowContext (void)
     mpHandler->ForceEnd();
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

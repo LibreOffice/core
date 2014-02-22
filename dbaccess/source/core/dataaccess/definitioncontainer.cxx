@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "definitioncontainer.hxx"
@@ -52,7 +52,7 @@ using namespace ::com::sun::star::ucb;
 namespace dbaccess
 {
 
-// ODefinitionContainer_Impl
+
 void ODefinitionContainer_Impl::erase( TContentPtr _pDefinition )
 {
     NamedDefinitions::iterator aPos = find( _pDefinition );
@@ -84,7 +84,7 @@ ODefinitionContainer_Impl::iterator ODefinitionContainer_Impl::find( TContentPtr
     );
 }
 
-// ODefinitionContainer
+
 
 ODefinitionContainer::ODefinitionContainer(   const Reference< XComponentContext >& _xORB
                                             , const Reference< XInterface >&    _xParentContainer
@@ -118,12 +118,12 @@ void SAL_CALL ODefinitionContainer::disposing()
 
     MutexGuard aGuard(m_aMutex);
 
-    // say goodbye to our listeners
+    
     EventObject aEvt(*this);
     m_aApproveListeners.disposeAndClear(aEvt);
     m_aContainerListeners.disposeAndClear(aEvt);
 
-    // dispose our elements
+    
     Documents::iterator aIter = m_aDocumentMap.begin();
     Documents::iterator aEnd = m_aDocumentMap.end();
 
@@ -137,9 +137,9 @@ void SAL_CALL ODefinitionContainer::disposing()
         }
     }
 
-    // remove our elements
+    
     m_aDocuments.clear();
-    //  !!! do this before clearing the map which the vector elements refer to !!!
+    
     m_aDocumentMap.clear();
 }
 
@@ -149,7 +149,7 @@ ODefinitionContainer::~ODefinitionContainer()
 
 IMPLEMENT_FORWARD_XINTERFACE2( ODefinitionContainer,OContentHelper,ODefinitionContainer_Base)
 IMPLEMENT_TYPEPROVIDER2(ODefinitionContainer,OContentHelper,ODefinitionContainer_Base);
-// XServiceInfo
+
 OUString SAL_CALL ODefinitionContainer::getImplementationName(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.sdb.ODefinitionContainer");
@@ -163,14 +163,14 @@ Sequence< OUString > SAL_CALL ODefinitionContainer::getSupportedServiceNames(  )
     return aReturn;
 }
 
-// XNameContainer
+
 void SAL_CALL ODefinitionContainer::insertByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException)
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
-    // approve the new object
+    
     Reference< XContent > xNewElement(aElement,UNO_QUERY);
-    approveNewObject( _rName, xNewElement );  // will throw if necessary
+    approveNewObject( _rName, xNewElement );  
 
     notifyByName( aGuard, _rName, xNewElement, NULL, E_INSERTED, ApproveListeners );
     implAppend( _rName, xNewElement );
@@ -181,17 +181,17 @@ void SAL_CALL ODefinitionContainer::removeByName( const OUString& _rName ) throw
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
-    // check the arguments
+    
     if (_rName.isEmpty())
         throw IllegalArgumentException();
 
     if (!checkExistence(_rName))
         throw NoSuchElementException(_rName,*this);
 
-    // the old element (for the notifications)
+    
     Reference< XContent > xOldElement = implGetByName( _rName, impl_haveAnyListeners_nothrow() );
 
-    // do the removal
+    
     notifyByName( aGuard, _rName, NULL, xOldElement, E_REMOVED, ApproveListeners );
     implRemove( _rName );
     notifyByName( aGuard, _rName, NULL, xOldElement, E_REMOVED, ContainerListemers );
@@ -200,23 +200,23 @@ void SAL_CALL ODefinitionContainer::removeByName( const OUString& _rName ) throw
     disposeComponent(xOldElement);
 }
 
-// XNameReplace
+
 void SAL_CALL ODefinitionContainer::replaceByName( const OUString& _rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException)
 {
     ResettableMutexGuard aGuard(m_aMutex);
 
-    // let derived classes approve the new object
+    
     Reference< XContent > xNewElement(aElement,UNO_QUERY);
-    approveNewObject( _rName, xNewElement );    // will throw if necessary
+    approveNewObject( _rName, xNewElement );    
 
-    // the old element (for the notifications)
+    
     Reference< XContent > xOldElement = implGetByName( _rName, impl_haveAnyListeners_nothrow() );
 
     notifyByName( aGuard, _rName, xNewElement, xOldElement, E_REPLACED, ApproveListeners );
     implReplace( _rName, xNewElement );
     notifyByName( aGuard, _rName, xNewElement, xOldElement, E_REPLACED, ContainerListemers );
 
-    // and dispose it
+    
     disposeComponent(xOldElement);
 }
 
@@ -324,7 +324,7 @@ void SAL_CALL ODefinitionContainer::removeContainerApproveListener( const Refere
         m_aApproveListeners.removeInterface( _Listener );
 }
 
-// XElementAccess
+
 Type SAL_CALL ODefinitionContainer::getElementType( ) throw (RuntimeException)
 {
     return ::getCppuType( static_cast< Reference< XContent >* >(NULL) );
@@ -336,14 +336,14 @@ sal_Bool SAL_CALL ODefinitionContainer::hasElements( ) throw (RuntimeException)
     return !m_aDocuments.empty();
 }
 
-// XEnumerationAccess
+
 Reference< XEnumeration > SAL_CALL ODefinitionContainer::createEnumeration(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     return new ::comphelper::OEnumerationByIndex(static_cast<XIndexAccess*>(this));
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL ODefinitionContainer::getCount(  ) throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -360,11 +360,11 @@ Any SAL_CALL ODefinitionContainer::getByIndex( sal_Int32 _nIndex ) throw(IndexOu
     Documents::iterator aPos = m_aDocuments[_nIndex];
     Reference<XContent> xProp = aPos->second;
     if (!xProp.is())
-    {   // that's the first access to the object
-        // -> create it
+    {   
+        
         xProp = createObject(aPos->first);
         aPos->second = Documents::mapped_type();
-        // and update the name-access map
+        
     }
 
     return makeAny(xProp);
@@ -386,10 +386,10 @@ Reference< XContent > ODefinitionContainer::implGetByName(const OUString& _rName
     Reference< XContent > xProp = aMapPos->second;
 
     if (_bReadIfNecessary && !xProp.is())
-    {   // the object has never been accessed before, so we have to read it now
-        // (that's the expensive part)
+    {   
+        
 
-        // create the object and insert it into the map
+        
         xProp = createObject(_rName);
         aMapPos->second = xProp;
         addObjectListener(xProp);
@@ -427,7 +427,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
 {
     MutexGuard aGuard(m_aMutex);
     Reference< XContent > xSource(_rSource.Source, UNO_QUERY);
-    // it's one of our documents ....
+    
     Documents::iterator aIter = m_aDocumentMap.begin();
     Documents::iterator aEnd = m_aDocumentMap.end();
     for (;aIter != aEnd;++aIter )
@@ -435,7 +435,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
         if ( xSource == aIter->second.get() )
         {
             removeObjectListener(xSource);
-            // and clear our document map/vector, so the object will be recreated on next access
+            
             aIter->second = Documents::mapped_type();
         }
     }
@@ -443,7 +443,7 @@ void SAL_CALL ODefinitionContainer::disposing( const EventObject& _rSource ) thr
 
 void ODefinitionContainer::implRemove(const OUString& _rName)
 {
-    // from the object maps
+    
     Documents::iterator aFind = m_aDocumentMap.find(_rName);
     if ( aFind != m_aDocumentMap.end() )
     {
@@ -463,8 +463,8 @@ namespace
         if ( !_rxContent.is() )
             return true;
 
-        // obtain the current name. If it's the same as the new one,
-        // don't do anything
+        
+        
         try
         {
             Reference< XPropertySet > xProps( _rxContent, UNO_QUERY );
@@ -481,7 +481,7 @@ namespace
             OSL_FAIL( "lcl_ensureName: caught an exception while obtaining the current name!" );
         }
 
-        // set the new name
+        
         Reference< XRename > xRename( _rxContent, UNO_QUERY );
         OSL_ENSURE( xRename.is(), "lcl_ensureName: invalid content (not renameable)!" );
         if ( !xRename.is() )
@@ -512,11 +512,11 @@ void ODefinitionContainer::implAppend(const OUString& _rName, const Reference< X
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( _rName );
         if ( aFind == rDefinitions.end() )
         {
-            // ensure that the new object has the proper name.
-            // Somebody could create an object with name "foo", and insert it as "bar"
-            // into a container. In this case, we need to ensure that the object name
-            // is also "bar"
-            // #i44786#
+            
+            
+            
+            
+            
             lcl_ensureName( _rxNewObject, _rName );
 
             ::rtl::Reference< OContentHelper > pContent = OContentHelper::getImplementation( _rxNewObject );
@@ -531,7 +531,7 @@ void ODefinitionContainer::implAppend(const OUString& _rName, const Reference< X
 
         m_aDocuments.push_back(m_aDocumentMap.insert(Documents::value_type(_rName,_rxNewObject)).first);
         notifyDataSourceModified();
-        // now update our structures
+        
         if ( _rxNewObject.is() )
             addObjectListener(_rxNewObject);
     }
@@ -553,7 +553,7 @@ void ODefinitionContainer::implReplace(const OUString& _rName, const Reference< 
 
 void ODefinitionContainer::approveNewObject(const OUString& _sName,const Reference< XContent >& _rxObject) const
 {
-    // check the arguments
+    
     if ( _sName.isEmpty() )
         throw IllegalArgumentException(
             DBA_RES( RID_STR_NAME_MUST_NOT_BE_EMPTY ),
@@ -591,7 +591,7 @@ void ODefinitionContainer::approveNewObject(const OUString& _sName,const Referen
             *this );
 }
 
-// XPropertyChangeListener
+
 void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& evt ) throw (RuntimeException)
 {
     ClearableMutexGuard aGuard(m_aMutex);
@@ -617,7 +617,7 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
     }
 }
 
-// XVetoableChangeListener
+
 void SAL_CALL ODefinitionContainer::vetoableChange( const PropertyChangeEvent& aEvent ) throw (PropertyVetoException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
@@ -659,5 +659,5 @@ sal_Bool ODefinitionContainer::checkExistence(const OUString& _rName)
 
 }
 
-// namespace dbaccess
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

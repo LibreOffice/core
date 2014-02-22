@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -23,7 +23,7 @@
 #include <tools/gen.hxx>
 
 
-//---------------------------- DXFVector ---------------------------------------
+
 
 
 double DXFVector::Abs() const
@@ -42,7 +42,7 @@ DXFVector DXFVector::Unit() const
 }
 
 
-//---------------------------- DXFTransform ------------------------------------
+
 
 
 DXFTransform::DXFTransform() :
@@ -84,7 +84,7 @@ DXFTransform::DXFTransform(double fScaleX, double fScaleY, double fScaleZ,
 DXFTransform::DXFTransform(const DXFVector & rExtrusion) :
     aMX(), aMY(), aMZ(), aMP(0.0, 0.0, 0.0)
 {
-    // 'Arbitrary Axis Algorithm' (cf. DXF documentation by Autodesk)
+    
     if ( fabs(rExtrusion.fx) < 1.0/64.0 && fabs(rExtrusion.fy) < 1.0/64.0) {
         aMX = DXFVector(0.0, 1.0, 0.0) * rExtrusion;
     }
@@ -227,8 +227,8 @@ sal_uLong DXFTransform::TransLineWidth(double fW) const
 
     fex=sqrt(aMX.fx*aMX.fx + aMX.fy*aMX.fy);
     fey=sqrt(aMY.fx*aMY.fx + aMY.fy*aMY.fy);
-    // ###
-    // printf("fex=%f fey=%f\n", fex, fey);
+    
+    
     return (sal_uLong)(fabs(fW)*(fex+fey)/2.0+0.5);
 }
 

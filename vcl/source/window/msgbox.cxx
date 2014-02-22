@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,7 +36,7 @@
 #include <vcl/settings.hxx>
 
 
-// =======================================================================
+
 
 static void ImplInitMsgBoxImageList()
 {
@@ -54,7 +54,7 @@ static void ImplInitMsgBoxImageList()
     }
 }
 
-// =======================================================================
+
 
 void MessBox::ImplInitMessBoxData()
 {
@@ -65,7 +65,7 @@ void MessBox::ImplInitMessBoxData()
     mbCheck             = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::ImplInitButtons()
 {
@@ -80,7 +80,7 @@ void MessBox::ImplInitButtons()
     {
         if ( nStyle & WB_DEF_CANCEL )
             nCancelFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
-        else // WB_DEF_OK
+        else 
             nOKFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
 
         AddButton( BUTTON_OK, RET_OK, nOKFlags );
@@ -90,7 +90,7 @@ void MessBox::ImplInitButtons()
     {
         if ( nStyle & WB_DEF_YES )
             nYesFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
-        else // WB_DEF_NO
+        else 
             nNoFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
         nNoFlags |= BUTTONDIALOG_CANCELBUTTON;
 
@@ -114,7 +114,7 @@ void MessBox::ImplInitButtons()
     {
         if ( nStyle & WB_DEF_CANCEL )
             nCancelFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
-        else // WB_DEF_RETRY
+        else 
             nRetryFlags |= BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON;
 
         AddButton( BUTTON_RETRY, RET_RETRY, nRetryFlags );
@@ -144,7 +144,7 @@ void MessBox::ImplInitButtons()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 MessBox::MessBox( Window* pParent, WinBits nStyle,
                   const OUString& rTitle, const OUString& rMessage ) :
@@ -159,7 +159,7 @@ MessBox::MessBox( Window* pParent, WinBits nStyle,
         SetText( rTitle );
 }
 
-// -----------------------------------------------------------------------
+
 
 MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ButtonDialog( WINDOW_MESSBOX )
@@ -182,7 +182,7 @@ MessBox::MessBox( Window* pParent, const ResId& rResId ) :
     ImplInitButtons();
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::ImplLoadRes( const ResId& )
 {
@@ -191,7 +191,7 @@ void MessBox::ImplLoadRes( const ResId& )
     SetHelpText( ReadStringRes() );
 }
 
-// -----------------------------------------------------------------------
+
 
 MessBox::~MessBox()
 {
@@ -200,7 +200,7 @@ MessBox::~MessBox()
     delete mpCheckBox;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::ImplPosControls()
 {
@@ -249,10 +249,10 @@ void MessBox::ImplPosControls()
         mpCheckBox = NULL;
     }
 
-    // Clean up message text with tabs
+    
     OUString aMessText(maMessText.replaceAll("\t", "    "));
 
-    //If window too small, we make dialog box be wider
+    
     if ( mpWindowImpl->mbFrame )
     {
         nMaxWidth = 630 * GetDPIScaleFactor();
@@ -262,15 +262,15 @@ void MessBox::ImplPosControls()
 
     nMaxWidth -= mpWindowImpl->mnLeftBorder+mpWindowImpl->mnRightBorder+4;
 
-    // MessageBox sollte min. so breit sein, das auch Title sichtbar ist
-    // Extra-Width for Closer, because Closer is set after this call
+    
+    
     nTitleWidth = CalcTitleWidth();
     nTitleWidth += mpWindowImpl->mnTopBorder;
 
     nMaxWidth -= (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_X*2);
 
-    // Wenn wir ein Image haben, dann deren Groesse ermitteln und das
-    // entsprechende Control anlegen und positionieren
+    
+    
     aImageSize = maImage.GetSizePixel();
     if ( aImageSize.Width() )
     {
@@ -288,12 +288,12 @@ void MessBox::ImplPosControls()
     else
         aTextPos.X() += IMPL_MSGBOX_OFFSET_EXTRA_X;
 
-    // Determine maximum line length without wordbreak
+    
     aFormatRect = GetTextRect( aRect, aMessText, nTextStyle, &aTextInfo );
     nMaxLineWidth = aFormatRect.GetWidth();
     nTextStyle |= TEXT_DRAW_WORDBREAK;
 
-    // Determine the width for text formatting
+    
     if ( nMaxLineWidth > 450 )
         nWidth = 450;
     else if ( nMaxLineWidth > 300 )
@@ -317,7 +317,7 @@ void MessBox::ImplPosControls()
         aFormatRect = GetTextRect( aRect, aMessText, nTextStyle, &aTextInfo );
     }
 
-    // Style fuer VCLMultiLineEdit ermitteln
+    
     aMEditSize.Width()  = aTextInfo.GetMaxLineWidth()+1;
     aMEditSize.Height() = aFormatRect.GetHeight();
     aPageSize.Width()   = aImageSize.Width();
@@ -352,16 +352,16 @@ void MessBox::ImplPosControls()
             aMinCheckboxSize.Width() += 80;
         }
 
-        // #104492# auto mnemonics for CJK strings may increase the length, so measure the
-        // checkbox length including a temporary mnemonic, the correct auto mnemonic will be
-        // generated later in the dialog (see init_show)
+        
+        
+        
 
         OUString aMnemonicString( maCheckBoxText );
         if( GetSettings().GetStyleSettings().GetAutoMnemonic() )
         {
             if( aMnemonicString == GetNonMnemonicString( maCheckBoxText ) )
             {
-                // no mnemonic found -> create one
+                
                 MnemonicGenerator aMnemonicGenerator;
                 aMnemonicString = aMnemonicGenerator.CreateMnemonic( aMnemonicString );
             }
@@ -371,18 +371,18 @@ void MessBox::ImplPosControls()
         mpCheckBox->Check( mbCheck );
         mpCheckBox->SetText( aMnemonicString );
         mpCheckBox->SetStyle( mpCheckBox->GetStyle() | WB_WORDBREAK );
-        mpCheckBox->SetHelpId( GetHelpId() );   // DR: Check box and dialog have same HID
+        mpCheckBox->SetHelpId( GetHelpId() );   
 
-        // align checkbox with message text
+        
         Size aSize = mpCheckBox->CalcMinimumSize( aMinCheckboxSize.Width() );
 
-        // now set the original non-mnemonic string
+        
         mpCheckBox->SetText( maCheckBoxText );
 
         Point aPos( aTextPos );
         aPos.Y() += aMEditSize.Height() + (IMPL_DIALOG_OFFSET)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
 
-        // increase messagebox
+        
         aPageSize.Height() += aSize.Height() + (IMPL_DIALOG_OFFSET*2)+(IMPL_MSGBOX_OFFSET_EXTRA_Y*2);
 
         mpCheckBox->SetPosSizePixel( aPos, aSize );
@@ -398,7 +398,7 @@ void MessBox::ImplPosControls()
     SetPageSizePixel( aPageSize );
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::StateChanged( StateChangedType nType )
 {
@@ -409,14 +409,14 @@ void MessBox::StateChanged( StateChangedType nType )
     ButtonDialog::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool MessBox::GetCheckBoxState() const
 {
     return mpCheckBox ? mpCheckBox->IsChecked() : mbCheck;
 }
 
-// -----------------------------------------------------------------------
+
 
 void MessBox::SetCheckBoxState( bool bCheck )
 {
@@ -424,26 +424,26 @@ void MessBox::SetCheckBoxState( bool bCheck )
     mbCheck = bCheck;
 }
 
-// -----------------------------------------------------------------------
+
 
 Size MessBox::GetOptimalSize() const
 {
-    // FIXME: base me on the font size ?
+    
     return Size( 250, 100 );
 }
 
-// ============================================================================
+
 
 void InfoBox::ImplInitInfoBoxData()
 {
-    // Default Text is the display title from the application
+    
     if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( InfoBox::GetStandardImage() );
 }
 
-// -----------------------------------------------------------------------
+
 
 InfoBox::InfoBox( Window* pParent, const OUString& rMessage ) :
     MessBox( pParent, WB_OK | WB_DEF_OK, OUString(), rMessage )
@@ -451,7 +451,7 @@ InfoBox::InfoBox( Window* pParent, const OUString& rMessage ) :
     ImplInitInfoBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 InfoBox::InfoBox( Window* pParent, const ResId & rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_INFOBOX ) )
@@ -459,7 +459,7 @@ InfoBox::InfoBox( Window* pParent, const ResId & rResId ) :
     ImplInitInfoBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 InfoBox::InfoBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
@@ -467,7 +467,7 @@ InfoBox::InfoBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     ImplInitInfoBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 Image InfoBox::GetStandardImage()
 {
@@ -475,18 +475,18 @@ Image InfoBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 4 );
 }
 
-// ============================================================================
+
 
 void WarningBox::ImplInitWarningBoxData()
 {
-    // Default Text is the display title from the application
+    
     if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( WarningBox::GetStandardImage() );
 }
 
-// -----------------------------------------------------------------------
+
 
 WarningBox::WarningBox( Window* pParent, WinBits nStyle,
                         const OUString& rMessage ) :
@@ -495,7 +495,7 @@ WarningBox::WarningBox( Window* pParent, WinBits nStyle,
     ImplInitWarningBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 WarningBox::WarningBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_WARNINGBOX ) )
@@ -503,7 +503,7 @@ WarningBox::WarningBox( Window* pParent, const ResId& rResId ) :
     ImplInitWarningBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 void WarningBox::SetDefaultCheckBoxText()
 {
@@ -512,7 +512,7 @@ void WarningBox::SetDefaultCheckBoxText()
         maCheckBoxText = ResId(SV_STDTEXT_DONTWARNAGAIN, *pResMgr).toString();
 }
 
-// -----------------------------------------------------------------------
+
 
 Image WarningBox::GetStandardImage()
 {
@@ -520,18 +520,18 @@ Image WarningBox::GetStandardImage()
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 3 );
 }
 
-// ============================================================================
+
 
 void ErrorBox::ImplInitErrorBoxData()
 {
-    // Default Text is the display title from the application
+    
     if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( ErrorBox::GetStandardImage() );
 }
 
-// -----------------------------------------------------------------------
+
 
 ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
                     const OUString& rMessage ) :
@@ -540,7 +540,7 @@ ErrorBox::ErrorBox( Window* pParent, WinBits nStyle,
     ImplInitErrorBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 ErrorBox::ErrorBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_ERRORBOX ) )
@@ -548,7 +548,7 @@ ErrorBox::ErrorBox( Window* pParent, const ResId& rResId ) :
     ImplInitErrorBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 Image ErrorBox::GetStandardImage()
 {
@@ -558,25 +558,25 @@ Image ErrorBox::GetStandardImage()
     }
     catch (const ::com::sun::star::uno::Exception &)
     {
-        // During early bootstrap we can have no initialized
-        // ucb and hence no ability to get this image, so nop.
+        
+        
         return Image();
     }
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 1 );
 }
 
-// ============================================================================
+
 
 void QueryBox::ImplInitQueryBoxData()
 {
-    // Default Text is the display title from the application
+    
     if ( GetText().isEmpty() )
         SetText( Application::GetDisplayName() );
 
     SetImage( QueryBox::GetStandardImage() );
 }
 
-// -----------------------------------------------------------------------
+
 
 QueryBox::QueryBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) :
     MessBox( pParent, nStyle, OUString(), rMessage )
@@ -584,7 +584,7 @@ QueryBox::QueryBox( Window* pParent, WinBits nStyle, const OUString& rMessage ) 
     ImplInitQueryBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
     MessBox( pParent, rResId.SetRT( RSC_QUERYBOX ) )
@@ -592,7 +592,7 @@ QueryBox::QueryBox( Window* pParent, const ResId& rResId ) :
     ImplInitQueryBoxData();
 }
 
-// -----------------------------------------------------------------------
+
 
 void QueryBox::SetDefaultCheckBoxText()
 {
@@ -601,7 +601,7 @@ void QueryBox::SetDefaultCheckBoxText()
         maCheckBoxText = ResId(SV_STDTEXT_DONTASKAGAIN, *pResMgr).toString();
 }
 
-// -----------------------------------------------------------------------
+
 
 Image QueryBox::GetStandardImage()
 {

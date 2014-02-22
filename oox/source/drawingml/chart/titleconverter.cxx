@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/titleconverter.hxx"
@@ -39,7 +39,7 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::chart2;
@@ -49,7 +49,7 @@ using namespace ::com::sun::star::uno;
 
 using ::oox::core::XmlFilterBase;
 
-// ============================================================================
+
 
 TextConverter::TextConverter( const ConverterRoot& rParent, TextModel& rModel ) :
     ConverterBase< TextModel >( rParent, rModel )
@@ -78,7 +78,7 @@ Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
     ::std::vector< Reference< XFormattedString > > aStringVec;
     if( mrModel.mxTextBody.is() )
     {
-        // rich-formatted text objects can be created, but currently Chart2 is not able to show them
+        
         const TextParagraphVector& rTextParas = mrModel.mxTextBody->getParagraphs();
         for( TextParagraphVector::const_iterator aPIt = rTextParas.begin(), aPEnd = rTextParas.end(); aPIt != aPEnd; ++aPIt )
         {
@@ -99,14 +99,14 @@ Sequence< Reference< XFormattedString > > TextConverter::createStringSequence(
     else
     {
         OUString aString;
-        // try to create string from linked data
+        
         if( mrModel.mxDataSeq.is() && !mrModel.mxDataSeq->maData.empty() )
             mrModel.mxDataSeq->maData.begin()->second >>= aString;
-        // no linked string -> fall back to default string
+        
         if( aString.isEmpty() )
             aString = rDefaultText;
 
-        // create formatted string object
+        
         if( !aString.isEmpty() )
         {
             Reference< XFormattedString > xFmtStr = appendFormattedString( aStringVec, aString, false );
@@ -134,7 +134,7 @@ Reference< XFormattedString > TextConverter::appendFormattedString(
     return xFmtStr;
 }
 
-// ============================================================================
+
 
 TitleConverter::TitleConverter( const ConverterRoot& rParent, TitleModel& rModel ) :
     ConverterBase< TitleModel >( rParent, rModel )
@@ -149,27 +149,27 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
 {
     if( rxTitled.is() )
     {
-        // create the formatted strings
+        
         TextModel& rText = mrModel.mxText.getOrCreate();
         TextConverter aTextConv( *this, rText );
         Sequence< Reference< XFormattedString > > aStringSeq = aTextConv.createStringSequence( rAutoTitle, mrModel.mxTextProp, eObjType );
         if( aStringSeq.hasElements() ) try
         {
-            // create the title object and set the string data
+            
             Reference< XTitle > xTitle( createInstance( "com.sun.star.chart2.Title" ), UNO_QUERY_THROW );
             xTitle->setText( aStringSeq );
             rxTitled->setTitleObject( xTitle );
 
-            // frame formatting (text formatting already done in TextConverter::createStringSequence())
+            
             PropertySet aPropSet( xTitle );
             getFormatter().convertFrameFormatting( aPropSet, mrModel.mxShapeProp, eObjType );
 
-            // frame rotation
+            
             OSL_ENSURE( !mrModel.mxTextProp || !rText.mxTextBody, "TitleConverter::convertFromModel - multiple text properties" );
             ModelRef< TextBody > xTextProp = mrModel.mxTextProp.is() ? mrModel.mxTextProp : rText.mxTextBody;
             getFormatter().convertTextRotation( aPropSet, xTextProp, true );
 
-            // register the title and layout data for conversion of position
+            
             registerTitleLayout( xTitle, mrModel.mxLayout, eObjType, nMainIdx, nSubIdx );
         }
         catch( Exception& )
@@ -178,7 +178,7 @@ void TitleConverter::convertFromModel( const Reference< XTitled >& rxTitled, con
     }
 }
 
-// ============================================================================
+
 
 LegendConverter::LegendConverter( const ConverterRoot& rParent, LegendModel& rModel ) :
     ConverterBase< LegendModel >( rParent, rModel )
@@ -196,16 +196,16 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
         namespace cssc = ::com::sun::star::chart;
         namespace cssc2 = ::com::sun::star::chart2;
 
-        // create the legend
+        
         Reference< XLegend > xLegend( createInstance( "com.sun.star.chart2.Legend" ), UNO_QUERY_THROW );
         rxDiagram->setLegend( xLegend );
         PropertySet aPropSet( xLegend );
         aPropSet.setProperty( PROP_Show, true );
 
-        // legend formatting
+        
         getFormatter().convertFormatting( aPropSet, mrModel.mxShapeProp, mrModel.mxTextProp, OBJECTTYPE_LEGEND );
 
-        // predefined legend position and expansion
+        
         cssc2::LegendPosition eLegendPos = cssc2::LegendPosition_CUSTOM;
         cssc::ChartLegendExpansion eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
         RelativePosition eRelPos;
@@ -220,7 +220,7 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
                 eLegendPos = cssc2::LegendPosition_LINE_END;
                 eLegendExpand = cssc::ChartLegendExpansion_HIGH;
                 break;
-            case XML_tr:    // top-right not supported
+            case XML_tr:    
                 eLegendPos = LegendPosition_CUSTOM;
                 eRelPos.Primary = 1;
                 eRelPos.Secondary =0;
@@ -238,17 +238,17 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
             break;
         }
         bool bManualLayout=false;
-        // manual positioning and size
+        
         if( mrModel.mxLayout.get() )
         {
             LayoutConverter aLayoutConv( *this, *mrModel.mxLayout );
-            // manual size needs ChartLegendExpansion_CUSTOM
+            
             if( aLayoutConv.convertFromModel( aPropSet ) )
                 eLegendExpand = cssc::ChartLegendExpansion_CUSTOM;
             bManualLayout = !aLayoutConv.getAutoLayout();
         }
 
-        // set position and expansion properties
+        
         aPropSet.setProperty( PROP_AnchorPosition, eLegendPos );
         aPropSet.setProperty( PROP_Expansion, eLegendExpand );
 
@@ -260,10 +260,10 @@ void LegendConverter::convertFromModel( const Reference< XDiagram >& rxDiagram )
     }
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

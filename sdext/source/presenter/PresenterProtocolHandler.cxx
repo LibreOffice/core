@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PresenterProtocolHandler.hxx"
@@ -72,9 +72,9 @@ namespace {
             const rtl::Reference<PresenterController>& rpPresenterController);
         virtual ~GotoNextSlideCommand (void) {}
         virtual void Execute (void);
-        // The next slide command is always enabled, even when the current slide
-        // is the last slide:  from the last slide it goes to the pause slide,
-        // and from there it ends the slide show.
+        
+        
+        
         virtual bool IsEnabled (void) const { return true; }
     private:
         rtl::Reference<PresenterController> mpPresenterController;
@@ -161,7 +161,7 @@ namespace {
         const sal_Int32 mnSizeChange;
     };
 
-} // end of anonymous namespace
+} 
 
 namespace {
     typedef ::cppu::WeakComponentImplHelper2 <
@@ -189,7 +189,7 @@ public:
         const OUString& rsURLPath,
         const ::rtl::Reference<PresenterController>& rpPresenterController);
 
-    // XDispatch
+    
     virtual void SAL_CALL dispatch(
         const css::util::URL& aURL,
         const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
@@ -205,12 +205,12 @@ public:
         const css::util::URL& rURL)
         throw(css::uno::RuntimeException);
 
-    // document::XEventListener
+    
 
     virtual void SAL_CALL notifyEvent (const css::document::EventObject& rEvent)
         throw(css::uno::RuntimeException);
 
-    // lang::XEventListener
+    
 
     virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
         throw(css::uno::RuntimeException);
@@ -231,7 +231,7 @@ private:
     void ThrowIfDisposed (void) const throw (css::lang::DisposedException);
 };
 
-//----- Service ---------------------------------------------------------------
+
 
 OUString PresenterProtocolHandler::getImplementationName_static (void)
 {
@@ -251,7 +251,7 @@ Reference<XInterface> PresenterProtocolHandler::Create (
     return Reference<XInterface>(static_cast<XWeak*>(new PresenterProtocolHandler(rxContext)));
 }
 
-//===== PresenterProtocolHandler =========================================================
+
 
 PresenterProtocolHandler::PresenterProtocolHandler (const Reference<XComponentContext>& rxContext)
     : PresenterProtocolHandlerInterfaceBase(m_aMutex)
@@ -267,7 +267,7 @@ void SAL_CALL PresenterProtocolHandler::disposing (void)
 {
 }
 
-//----- XInitialize -----------------------------------------------------------
+
 
 void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArguments)
     throw (Exception, RuntimeException)
@@ -290,7 +290,7 @@ void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArgume
     }
 }
 
-//----- XDispatchProvider -----------------------------------------------------
+
 
 Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
     const css::util::URL& rURL,
@@ -321,7 +321,7 @@ Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryD
     return Sequence<Reference<frame::XDispatch> >();
 }
 
-//-----------------------------------------------------------------------------
+
 
 void PresenterProtocolHandler::ThrowIfDisposed (void) const
     throw (::com::sun::star::lang::DisposedException)
@@ -335,7 +335,7 @@ void PresenterProtocolHandler::ThrowIfDisposed (void) const
     }
 }
 
-//===== PresenterProtocolHandler::Dispatch ====================================
+
 
 Reference<frame::XDispatch> PresenterProtocolHandler::Dispatch::Create (
     const OUString& rsURLPath,
@@ -417,7 +417,7 @@ void PresenterProtocolHandler::Dispatch::disposing (void)
     mpCommand.reset();
 }
 
-//----- XDispatch -------------------------------------------------------------
+
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     const css::util::URL& rURL,
@@ -435,7 +435,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     }
     else
     {
-        // We can not throw an IllegalArgumentException
+        
         throw RuntimeException();
     }
 }
@@ -491,7 +491,7 @@ void PresenterProtocolHandler::Dispatch::ThrowIfDisposed (void) const
     }
 }
 
-//----- document::XEventListener ----------------------------------------------
+
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::notifyEvent (
     const css::document::EventObject& rEvent)
@@ -502,7 +502,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::notifyEvent (
     mpCommand->GetState();
 }
 
-//----- lang::XEventListener --------------------------------------------------
+
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::disposing (const css::lang::EventObject& rEvent)
     throw(css::uno::RuntimeException)
@@ -511,7 +511,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::disposing (const css::lang::Ev
     mbIsListeningToWindowManager = false;
 }
 
-//===== GotoPreviousSlideCommand ==============================================
+
 
 GotoPreviousSlideCommand::GotoPreviousSlideCommand (
     const rtl::Reference<PresenterController>& rpPresenterController)
@@ -541,7 +541,7 @@ bool GotoPreviousSlideCommand::IsEnabled (void) const
     return mpPresenterController->GetSlideShowController()->getCurrentSlideIndex()>0;
 }
 
-//===== GotoNextEffect ========================================================
+
 
 GotoNextEffectCommand::GotoNextEffectCommand (
     const rtl::Reference<PresenterController>& rpPresenterController)
@@ -560,7 +560,7 @@ void GotoNextEffectCommand::Execute (void)
     mpPresenterController->GetSlideShowController()->gotoNextEffect();
 }
 
-//===== GotoNextSlide =========================================================
+
 
 GotoNextSlideCommand::GotoNextSlideCommand (
     const rtl::Reference<PresenterController>& rpPresenterController)
@@ -579,7 +579,7 @@ void GotoNextSlideCommand::Execute (void)
     mpPresenterController->GetSlideShowController()->gotoNextSlide();
 }
 
-//===== SwitchMonitorCommand ==============================================
+
 
 SwitchMonitorCommand::SwitchMonitorCommand (
     const rtl::Reference<PresenterController>& rpPresenterController)
@@ -592,7 +592,7 @@ void SwitchMonitorCommand::Execute (void)
     mpPresenterController->SwitchMonitors();
 }
 
-//===== SetNotesViewCommand ===================================================
+
 
 SetNotesViewCommand::SetNotesViewCommand (
     const bool bOn,
@@ -637,7 +637,7 @@ bool SetNotesViewCommand::IsActive (
     return rpWindowManager->GetViewMode() == PresenterWindowManager::VM_Notes;
 }
 
-//===== SetSlideSorterCommand =================================================
+
 
 SetSlideSorterCommand::SetSlideSorterCommand (
     const bool bOn,
@@ -673,7 +673,7 @@ Any SetSlideSorterCommand::GetState (void) const
     return Any(pWindowManager->GetViewMode()==PresenterWindowManager::VM_SlideOverview);
 }
 
-//===== SetHelpViewCommand ===================================================
+
 
 SetHelpViewCommand::SetHelpViewCommand (
     const bool bOn,
@@ -709,7 +709,7 @@ Any SetHelpViewCommand::GetState (void) const
     return Any(pWindowManager->GetViewMode()==PresenterWindowManager::VM_Help);
 }
 
-//===== NotesFontSizeCommand ==================================================
+
 
 NotesFontSizeCommand::NotesFontSizeCommand(
     const rtl::Reference<PresenterController>& rpPresenterController,
@@ -745,6 +745,6 @@ Any NotesFontSizeCommand::GetState (void) const
     return Any();
 }
 
-} } // end of namespace ::sdext::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

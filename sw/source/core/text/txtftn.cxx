@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "viewsh.hxx"
@@ -36,7 +36,7 @@
 #include <breakit.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <tabfrm.hxx>
-// #i28701#
+
 #include <sortedobjs.hxx>
 
 #include "swfont.hxx"
@@ -63,7 +63,7 @@ bool SwTxtFrm::_IsFtnNumFrm() const
     return !pFtn;
 }
 
-// Sucht innerhalb einer Master-Follow-Kette den richtigen TxtFrm zum SwTxtFtn
+
 SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
 {
     SwTxtFrm *pFrm = this;
@@ -79,7 +79,7 @@ SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
 }
 
 #ifdef DBG_UTIL
-void SwTxtFrm::CalcFtnFlag( sal_Int32 nStop )// For testing the SplitFrm
+void SwTxtFrm::CalcFtnFlag( sal_Int32 nStop )
 #else
 void SwTxtFrm::CalcFtnFlag()
 #endif
@@ -145,7 +145,7 @@ bool SwTxtFrm::CalcPrepFtnAdjust()
             SwTxtFormatInfo aInf( this );
             SwTxtFormatter aLine( this, &aInf );
             aLine.TruncLines();
-            SetPara( 0 );       //Wird ggf. geloescht!
+            SetPara( 0 );       
             ResetPreps();
             return false;
         }
@@ -163,8 +163,8 @@ bool SwTxtFrm::CalcPrepFtnAdjust()
 
 static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
 {
-    // nLower is an absolute value. It denotes the bottom of the line
-    // containing the footnote.
+    
+    
     SWRECTFN( pFrm )
 
     OSL_ENSURE( !pFrm->IsVertical() || !pFrm->IsSwapped(),
@@ -173,17 +173,17 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
     SwTwips nAdd;
     SwTwips nRet = nLower;
 
-    // Check if text is inside a table.
+    
     if ( pFrm->IsInTab() )
     {
-        // If pFrm is inside a table, we have to check if
-        // a) The table is not allowed to split or
-        // b) The table row is not allowed to split
+        
+        
+        
         //
-        // Inside a table, there are no footnotes,
-        // see SwFrm::FindFtnBossFrm. So we don't have to check
-        // the case that pFrm is inside a (footnote collecting) section
-        // within the table.
+        
+        
+        
+        
         const SwFrm* pRow = pFrm;
         while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
             pRow = pRow->GetUpper();
@@ -217,8 +217,8 @@ static SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
             nRet += nAdd;
     }
 
-    // #i10770#: If there are fly frames anchored at previous paragraphs,
-    // the deadline should consider their lower borders.
+    
+    
     const SwFrm* pStartFrm = pFrm->GetUpper()->GetLower();
     OSL_ENSURE( pStartFrm, "Upper has no lower" );
     SwTwips nFlyLower = bVert ? LONG_MAX : 0;
@@ -263,8 +263,8 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
 
     if( !HasPara() )
     {
-        // #109071# GetFormatted() does not work here, bacause most probably
-        // the frame is currently locked. We return the previous value.
+        
+        
         return pThis->mnFtnLine > 0 ?
                pThis->mnFtnLine :
                IsVertical() ? Frm().Left() : Frm().Bottom();
@@ -289,9 +289,9 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
     return nRet;
 }
 
-// Ermittelt die max. erreichbare Hoehe des TxtFrm im Ftn-Bereich.
-// Sie wird eingeschraenkt durch den unteren Rand der Zeile mit
-// der Ftn-Referenz.
+
+
+
 SwTwips SwTxtFrm::_GetFtnFrmHeight() const
 {
     OSL_ENSURE( !IsFollow() && IsInFtn(), "SwTxtFrm::SetFtnLine: moon walk" );
@@ -309,11 +309,11 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
                             1 : pRef->GetFtnLine( pFtnFrm->GetAttr() );
     if( nHeight )
     {
-        // So komisch es aussehen mag: Die erste Ftn auf der Seite darf sich
-        // nicht mit der Ftn-Referenz beruehren, wenn wir im Ftn-Bereich Text
-        // eingeben.
+        
+        
+        
         const SwFrm *pCont = pFtnFrm->GetUpper();
-        //Hoehe innerhalb des Cont, die ich mir 'eh noch genehmigen darf.
+        
         SWRECTFN( pCont )
         SwTwips nTmp = (*fnRect->fnYDiff)( (pCont->*fnRect->fnGetPrtBottom)(),
                                            (Frm().*fnRect->fnGetTop)() );
@@ -337,7 +337,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
 
         if ( (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(), nHeight) > 0 )
         {
-            //Wachstumspotential den Containers.
+            
             if ( !pRef->IsInFtnConnect() )
             {
                 SwSaveFtnHeight aSave( (SwFtnBossFrm*)pBoss, nHeight  );
@@ -351,7 +351,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
                 nHeight = 0;
         }
         else
-        {   // The container has to shrink
+        {   
             nTmp += (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(), nHeight);
             if( nTmp > 0 )
                 nHeight = nTmp;
@@ -367,16 +367,16 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
 
 SwTxtFrm *SwTxtFrm::FindQuoVadisFrm()
 {
-    // Erstmal feststellen, ob wir in einem FtnFrm stehen:
+    
     if( GetIndPrev() || !IsInFtn() )
         return 0;
 
-    // Zum Vorgaenger-FtnFrm
+    
     SwFtnFrm *pFtnFrm = FindFtnFrm()->GetMaster();
     if( !pFtnFrm )
         return 0;
 
-    // Nun den letzten Cntnt:
+    
     const SwCntntFrm *pCnt = pFtnFrm->ContainsCntnt();
     if( !pCnt )
         return NULL;
@@ -457,15 +457,15 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                     }
                 }
 
-                // Wir loeschen nicht, sondern wollen die Ftn verschieben.
-                // Drei Faelle koennen auftreten:
-                // 1) Es gibt weder Follow noch PrevFollow
-                //    -> RemoveFtn()  (vielleicht sogar ein OSL_ENSURE(wert)
-                // 2) nStart > GetOfst, ich habe einen Follow
-                //    -> Ftn wandert in den Follow
-                // 3) nStart < GetOfst, ich bin ein Follow
-                //    -> Ftn wandert in den PrevFollow
-                // beide muessen auf einer Seite/in einer Spalte stehen.
+                
+                
+                
+                
+                
+                
+                
+                
+                
 
                 SwFtnFrm *pFtnFrm = bEndn ? pEndBoss->FindFtn( pSource, pFtn ) :
                                             pFtnBoss->FindFtn( pSource, pFtn );
@@ -491,8 +491,8 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
                         OSL_ENSURE( !pDest->FindFtnBossFrm( !bEndn )->FindFtn(
                             pDest,pFtn),"SwTxtFrm::RemoveFtn: footnote exists");
 
-                        //Nicht ummelden sondern immer Moven.
-                        // OD 08.11.2002 #104840# - use <SwlayoutFrm::IsBefore(::)>
+                        
+                        
                         if ( bEndDoc ||
                              !pFtnFrm->FindFtnBossFrm()->IsBefore( pDest->FindFtnBossFrm( !bEndn ) )
                            )
@@ -538,18 +538,18 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
         }
         if( pUpdate )
             pUpdate->UpdateFtnNum();
-        // Wir bringen die Oszillation zum stehen:
+        
         if( bRemove && !bFtnEndDoc && HasPara() )
         {
             ValidateBodyFrm();
             ValidateFrm();
         }
     }
-    // Folgendes Problem: Aus dem FindBreak heraus wird das RemoveFtn aufgerufen,
-    // weil die letzte Zeile an den Follow abgegeben werden soll. Der Offset
-    // des Follows ist aber veraltet, er wird demnaechst gesetzt. CalcFntFlag ist
-    // auf einen richtigen Follow-Offset angewiesen. Deshalb wird hier kurzfristig
-    // der Follow-Offset manipuliert.
+    
+    
+    
+    
+    
     sal_Int32 nOldOfst = COMPLETE_STRING;
     if( HasFollow() && nStart > GetOfst() )
     {
@@ -561,31 +561,31 @@ void SwTxtFrm::RemoveFtn( const sal_Int32 nStart, const sal_Int32 nLen )
         GetFollow()->ManipOfst( nOldOfst );
 }
 
-// false, wenn irgendetwas schief gegangen ist.
-// Es gibt eigentlich nur zwei Moeglichkeiten:
-// a) Die Ftn ist bereits vorhanden
-// => dann wird sie gemoved, wenn ein anderer pSrcFrm gefunden wurde
-// b) Die Ftn ist nicht vorhanden
-// => dann wird sie fuer uns angelegt.
-// Ob die Ftn schliesslich auf unserer Spalte/Seite landet oder nicht,
-// spielt in diesem Zusammenhang keine Rolle.
-// Optimierungen bei Endnoten.
-// Noch ein Problem: wenn die Deadline im Ftn-Bereich liegt, muss die
-// Ftn verschoben werden.
+
+
+
+
+
+
+
+
+
+
+
 void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 {
     OSL_ENSURE( !IsVertical() || !IsSwapped(),
             "SwTxtFrm::ConnectFtn with swapped frame" );
 
     bFtn = true;
-    bInFtnConnect = true;   //Bloss zuruecksetzen!
+    bInFtnConnect = true;   
     const bool bEnd = pFtn->GetFtn().IsEndNote();
 
-    // We want to store this value, because it is needed as a fallback
-    // in GetFtnLine(), if there is no paragraph information available
+    
+    
     mnFtnLine = nDeadLine;
 
-    // Wir brauchen immer einen Boss (Spalte/Seite)
+    
     SwSectionFrm *pSect;
     SwCntntFrm *pCntnt = this;
     if( bEnd && IsInSct() )
@@ -607,7 +607,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     bool bDocEnd = bEnd ? !( pSect && pSect->IsEndnAtEnd() ) :
                    ( !( pSect && pSect->IsFtnAtEnd() ) &&
                        FTNPOS_CHAPTER == GetNode()->GetDoc()->GetFtnInfo().ePos );
-    //Ftn kann beim Follow angemeldet sein.
+    
     SwCntntFrm *pSrcFrm = FindFtnRef( pFtn );
 
     if( bDocEnd )
@@ -666,7 +666,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 
     SwSaveFtnHeight aHeight( pBoss, nDeadLine );
 
-    if( !pSrcFrm )      // Es wurde ueberhaupt keine Ftn gefunden.
+    if( !pSrcFrm )      
         pBoss->AppendFtn( this, pFtn );
     else
     {
@@ -675,7 +675,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 
         bool bBrutal = false;
 
-        if( pFtnBoss == pBoss ) // Ref und Ftn sind auf der selben Seite/Spalte.
+        if( pFtnBoss == pBoss ) 
         {
             SwFrm *pCont = pFtnFrm->GetUpper();
 
@@ -685,12 +685,12 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 
             if( nDiff >= 0 )
             {
-                //Wenn die Fussnote bei einem Follow angemeldet ist, so ist
-                //es jetzt an der Zeit sie umzumelden.
+                
+                
                 if ( pSrcFrm != this )
                     pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
-                //Es steht Platz zur Verfuegung, also kann die Fussnote evtl.
-                //wachsen.
+                
+                
                 if ( pFtnFrm->GetFollow() && nDiff > 0 )
                 {
                     SwTwips nHeight = (pCont->Frm().*fnRect->fnGetHeight)();
@@ -699,7 +699,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                     ValidateFrm();
                     SwViewShell *pSh = getRootFrm()->GetCurrShell();
                     if ( pSh && nHeight == (pCont->Frm().*fnRect->fnGetHeight)() )
-                        //Damit uns nix durch die Lappen geht.
+                        
                         pSh->InvalidateWindows( pCont->Frm() );
                 }
                 bInFtnConnect = false;
@@ -710,19 +710,19 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         }
         else
         {
-            // Ref und Ftn sind nicht auf einer Seite, Move-Versuch ist noetig.
+            
             SwFrm* pTmp = this;
             while( pTmp->GetNext() && pSrcFrm != pTmp )
                 pTmp = pTmp->GetNext();
             if( pSrcFrm == pTmp )
                 bBrutal = true;
             else
-            {   // Wenn unser Boss in einem spaltigen Bereich sitzt, es aber auf
-                // der Seite schon einen FtnContainer gibt, hilft nur die brutale
-                // Methode
+            {   
+                
+                
                 if( pSect && pSect->FindFtnBossFrm( !bEnd )->FindFtnCont() )
                     bBrutal = true;
-                // OD 08.11.2002 #104840# - use <SwLayoutFrm::IsBefore(..)>
+                
                 else if ( !pFtnFrm->GetPrev() ||
                           pFtnBoss->IsBefore( pBoss )
                         )
@@ -735,10 +735,10 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
             }
         }
 
-        // Die brutale Loesung: Fussnote entfernen und appenden.
-        // Es muss SetFtnDeadLine() gerufen werden, weil nach
-        // RemoveFtn die nMaxFtnHeight evtl. besser auf unsere Wuensche
-        // eingestellt werden kann.
+        
+        
+        
+        
         if( bBrutal )
         {
             pBoss->RemoveFtn( pSrcFrm, pFtn, false );
@@ -749,12 +749,12 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         }
     }
 
-    // In spaltigen Bereichen, die noch nicht bis zum Seitenrand gehen,
-    // ist kein RearrangeFtns sinnvoll, da der Fussnotencontainer noch
-    // nicht kalkuliert worden ist.
+    
+    
+    
     if( !pSect || !pSect->Growable() )
     {
-        // Umgebung validieren, um Oszillationen zu verhindern.
+        
         SwSaveFtnHeight aNochmal( pBoss, nDeadLine );
         ValidateBodyFrm();
         pBoss->RearrangeFtns( nDeadLine, true );
@@ -767,7 +767,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    // pFtnFrm kann sich durch Calc veraendert haben ...
+    
     SwFtnFrm *pFtnFrm = pBoss->FindFtn( this, pFtn );
     if( pFtnFrm && pBoss != pFtnFrm->FindFtnBossFrm( !bEnd ) )
     {
@@ -781,7 +781,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
     return;
 }
 
-// Die Portion fuer die Ftn-Referenz im Text
+
 SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                                              SwTxtAttr *pHint )
 {
@@ -822,9 +822,9 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
 
     nLower = lcl_GetFtnLower( pFrm, nLower );
 
-    //6995: Wir frischen nur auf. Das Connect tut fuer diesen Fall nix
-    //Brauchbares, sondern wuerde stattdessen fuer diesen Fall meist die
-    //Ftn wegwerfen und neu erzeugen.
+    
+    
+    
 
     if( !rInf.IsQuick() )
         pFrm->ConnectFtn( pFtn, nLower );
@@ -835,14 +835,14 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     if( pScrFrm )
         pFtnFrm = pBoss->FindFtn( pScrFrm, pFtn );
 
-    // Wir erkundigen uns, ob durch unser Append irgendeine
-    // Fussnote noch auf der Seite/Spalte steht. Wenn nicht verschwindet
-    // auch unsere Zeile. Dies fuehrt zu folgendem erwuenschten
-    // Verhalten: Ftn1 pass noch auf die Seite/Spalte, Ftn2 nicht mehr.
-    // Also bleibt die Ftn2-Referenz auf der Seite/Spalte stehen. Die
-    // Fussnote selbst folgt aber erst auf der naechsten Seite/Spalte.
-    // Ausnahme: Wenn keine weitere Zeile auf diese Seite/Spalte passt,
-    // so sollte die Ftn2-Referenz auch auf die naechste wandern.
+    
+    
+    
+    
+    
+    
+    
+    
     if( !rFtn.IsEndNote() )
     {
         SwSectionFrm *pSct = pBoss->FindSctFrm();
@@ -850,9 +850,9 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
         if( FTNPOS_CHAPTER != pDoc->GetFtnInfo().ePos || bAtSctEnd )
         {
             SwFrm* pFtnCont = pBoss->FindFtnCont();
-            // Wenn der Boss in einem Bereich liegt, kann es sich nur um eine
-            // Spalte dieses Bereichs handeln. Wenn dies nicht die erste Spalte
-            // ist, duerfen wir ausweichen
+            
+            
+            
             if( !pFrm->IsInTab() && ( GetLineNr() > 1 || pFrm->GetPrev() ||
                 ( !bAtSctEnd && pFrm->GetIndPrev() ) ||
                 ( pSct && pBoss->GetPrev() ) ) )
@@ -865,9 +865,9 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                 }
                 else
                 {
-                    // Es darf keine Fussnotencontainer in spaltigen Bereichen und
-                    // gleichzeitig auf der Seite/Seitenspalte geben
-                    if( pSct && !bAtSctEnd ) // liegt unser Container in einem (spaltigen) Bereich?
+                    
+                    
+                    if( pSct && !bAtSctEnd ) 
                     {
                         SwFtnBossFrm* pTmp = pBoss->FindSctFrm()->FindFtnBossFrm( true );
                         SwFtnContFrm* pFtnC = pTmp->FindFtnCont();
@@ -882,7 +882,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                             }
                         }
                     }
-                    // Ist dies die letzte passende Zeile?
+                    
                     SwTwips nTmpBot = Y() + nReal * 2;
 
                     if( bVertical )
@@ -901,9 +901,9 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                             SwFtnBossFrm *pFtnBoss = pFtnFrm->FindFtnBossFrm();
                             if( pFtnBoss != pBoss )
                             {
-                                // Wir sind in der letzte Zeile und die Fussnote
-                                // ist auf eine andere Seite gewandert, dann wollen
-                                // wir mit ...
+                                
+                                
+                                
                                 rInf.SetStop( true );
                                 UNDO_SWAP( pFrm )
                                 return 0;
@@ -914,7 +914,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
             }
         }
     }
-    // Endlich: FtnPortion anlegen und raus hier...
+    
     SwFtnPortion *pRet = new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ),
                                            pFtn, nReal );
     rInf.SetFtnInside( true );
@@ -924,7 +924,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     return pRet;
  }
 
-// Die Portion fuer die Ftn-Nummerierung im Ftn-Bereich
+
 SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
 {
     OSL_ENSURE( pFrm->IsInFtn() && !pFrm->GetIndPrev() && !rInf.IsFtnDone(),
@@ -936,7 +936,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     const SwFtnFrm* pFtnFrm = pFrm->FindFtnFrm();
     const SwTxtFtn* pFtn = pFtnFrm->GetAttr();
 
-    // Aha, wir sind also im Fussnotenbereich
+    
     SwFmtFtn& rFtn = (SwFmtFtn&)pFtn->GetFtn();
 
     SwDoc *pDoc = pFrm->GetNode()->GetDoc();
@@ -953,12 +953,12 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
     const IDocumentSettingAccess* pIDSA = pFrm->GetTxtNode()->getIDocumentSettingAccess();
     SwFont *pNumFnt = new SwFont( pParSet, pIDSA );
 
-    // #i37142#
-    // Underline style of paragraph font should not be considered
-    // Overline style of paragraph font should not be considered
-    // Weight style of paragraph font should not be considered
-    // Posture style of paragraph font should not be considered
-    // See also #i18463# and SwTxtFormatter::NewNumberPortion()
+    
+    
+    
+    
+    
+    
     pNumFnt->SetUnderline( UNDERLINE_NONE );
     pNumFnt->SetOverline( UNDERLINE_NONE );
     pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
@@ -989,14 +989,14 @@ OUString lcl_GetPageNumber( const SwPageFrm* pPage )
 
 SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) const
 {
-    // Wir koennen nicht davon ausgehen, dass wir ein Follow sind
-    // 7983: GetIdx() nicht nStart
+    
+    
     if( !pFrm->IsInFtn()  || pFrm->GetPrev() ||
         rInf.IsErgoDone() || rInf.GetIdx() != pFrm->GetOfst() ||
         pFrm->ImplFindFtnFrm()->GetAttr()->GetFtn().IsEndNote() )
         return 0;
 
-    // Aha, wir sind also im Fussnotenbereich
+    
     const SwFtnInfo &rFtnInfo = pFrm->GetNode()->GetDoc()->GetFtnInfo();
     SwTxtFrm *pQuoFrm = pFrm->FindQuoVadisFrm();
     if( !pQuoFrm )
@@ -1004,7 +1004,7 @@ SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) con
     const SwPageFrm* pPage = pFrm->FindPageFrm();
     const SwPageFrm* pQuoPage = pQuoFrm->FindPageFrm();
     if( pPage == pQuoFrm->FindPageFrm() )
-        return 0; // Wenn der QuoVadis auf der selben (spaltigen) Seite steht
+        return 0; 
     const OUString aPage = lcl_GetPageNumber( pPage );
     SwParaPortion *pPara = pQuoFrm->GetPara();
     if( pPara )
@@ -1043,7 +1043,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
         const SwPageFrm* pPage = pFrm->FindPageFrm();
         const SwPageFrm* pErgoPage = pErgoFrm->FindPageFrm();
         if( pPage == pErgoPage )
-            return nOffset; // Wenn der ErgoSum auf der selben Seite steht
+            return nOffset; 
     }
 
     SwTxtFormatInfo &rInf = GetInfo();
@@ -1051,18 +1051,18 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     if( rFtnInfo.aQuoVadis.isEmpty() )
         return nOffset;
 
-    // Ein Wort zu QuoVadis/ErgoSum:
-    // Fuer diese Texte wird der am Absatz eingestellte Font verwendet.
-    // Wir initialisieren uns also:
-//  ResetFont();
+    
+    
+    
+
     FeedInf( rInf );
     SeekStartAndChg( rInf, true );
     if( GetRedln() && pCurr->HasRedline() )
         GetRedln()->Seek( *pFnt, nOffset, 0 );
 
-    // Ein fieser Sonderfall: Flyfrms reichen in die Zeile und stehen
-    // natuerlich da, wo wir unseren Quovadis Text reinsetzen wollen.
-    // Erst mal sehen, ob es so schlimm ist:
+    
+    
+    
     SwLinePortion *pPor = pCurr->GetFirstPortion();
     KSHORT nLastLeft = 0;
     while( pPor )
@@ -1072,9 +1072,9 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
                         ( (SwFlyPortion*) pPor)->Width();
         pPor = pPor->GetPortion();
     }
-    // Das alte Spiel: wir wollen, dass die Zeile an einer bestimmten
-    // Stelle umbricht, also beeinflussen wir die Width.
-    // nLastLeft ist jetzt quasi der rechte Rand.
+    
+    
+    
     const KSHORT nOldRealWidth = rInf.RealWidth();
     rInf.RealWidth( nOldRealWidth - nLastLeft );
 
@@ -1095,7 +1095,7 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
         OSL_ENSURE( pFollow->IsQuoVadisPortion(),
                 "Quo Vadis, rest of QuoVadisPortion" );
 
-        // format the rest and append it to the other QuoVadis parts
+        
         pFollow->Format( rInf );
         nQuoWidth = nQuoWidth + pFollow->Width();
 
@@ -1117,8 +1117,8 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
     nLastLeft = nOldRealWidth - pCurr->Width();
     FeedInf( rInf );
 
-    // Es kann durchaus sein, dass am Ende eine Marginportion steht,
-    // die beim erneuten Aufspannen nur Aerger bereiten wuerde.
+    
+    
     pPor = pCurr->FindLastPortion();
     SwGluePortion *pGlue = pPor->IsMarginPortion() ?
         (SwMarginPortion*) pPor : 0;
@@ -1132,12 +1132,12 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
         pGlue->SetFixWidth(0);
     }
 
-    // Luxus: Wir sorgen durch das Aufspannen von Glues dafuer,
-    // dass der QuoVadis-Text rechts erscheint:
+    
+    
     nLastLeft = nLastLeft - nQuoWidth;
     if( nLastLeft )
     {
-        if( nLastLeft > pQuo->GetAscent() ) // Mindestabstand
+        if( nLastLeft > pQuo->GetAscent() ) 
         {
             switch( GetAdjust() )
             {
@@ -1186,12 +1186,12 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
         }
     }
 
-    // Jetzt aber: die QuoVadis-Portion wird angedockt:
+    
     pCurrPor = pQuo;
     while ( pCurrPor )
     {
-        // pPor->Append deletes the pPortoin pointer of pPor. Therefore
-        // we have to keep a pointer to the next portion
+        
+        
         pQuo = (SwQuoVadisPortion*)pCurrPor->GetPortion();
         pPor->Append( pCurrPor );
         pPor = pPor->GetPortion();
@@ -1200,20 +1200,20 @@ sal_Int32 SwTxtFormatter::FormatQuoVadis( const sal_Int32 nOffset )
 
     pCurr->Width( pCurr->Width() + KSHORT( nQuoWidth ) );
 
-    // Und noch einmal adjustieren wegen des Adjustment und nicht zu Letzt
-    // wegen folgendem Sonderfall: In der Zeile hat der DummUser durchgaengig
-    // einen kleineren Font eingestellt als der vom QuoVadis-Text ...
+    
+    
+    
     CalcAdjustLine( pCurr );
 
-    // Uff...
+    
     return nRet;
 }
 
-// MakeDummyLine() erzeugt eine Line, die bis zum unteren Seitenrand
-// reicht. DummyLines bzw. DummyPortions sorgen dafuer, dass Oszillationen
-// zum stehen kommen, weil Rueckflussmoeglichkeiten genommen werden.
-// Sie werden bei absatzgebundenen Frames in Fussnoten und bei Ftn-
-// Oszillationen verwendet.
+
+
+
+
+
 void SwTxtFormatter::MakeDummyLine()
 {
     KSHORT nRstHeight = GetFrmRstHeight();
@@ -1258,14 +1258,14 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
         SwFmtFtn& rFtn = (SwFmtFtn&)pTxtFtn->GetFtn();
         const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
 
-        // #i98418#
+        
         if ( bApplyGivenScriptType )
         {
             pFnt->SetActual( nGivenScriptType );
         }
         else
         {
-            // examine text and set script
+            
             OUString aTmpStr( rFtn.GetViewNumStr( *pDoc ) );
             pFnt->SetActual( SwScriptInfo::WhichFont( 0, &aTmpStr, 0 ) );
         }
@@ -1278,7 +1278,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
         const SwAttrSet& rSet = pInfo->GetAnchorCharFmt((SwDoc&)*pDoc)->GetAttrSet();
         pFnt->SetDiffFnt( &rSet, rInf.GetTxtFrm()->GetNode()->getIDocumentSettingAccess() );
 
-        // we reduce footnote size, if we are inside a double line portion
+        
         if ( ! pOld->GetEscapement() && 50 == pOld->GetPropr() )
         {
             Size aSize = pFnt->GetSize( pFnt->GetActual() );
@@ -1287,7 +1287,7 @@ SwFtnSave::SwFtnSave( const SwTxtSizeInfo &rInf,
                            pFnt->GetActual() );
         }
 
-        // set the correct rotation at the footnote font
+        
         const SfxPoolItem* pItem;
         if( SFX_ITEM_SET == rSet.GetItemState( RES_CHRATR_ROTATE,
             true, &pItem ))
@@ -1308,7 +1308,7 @@ SwFtnSave::~SwFtnSave()
 {
     if( pFnt )
     {
-        // SwFont zurueckstellen
+        
         *pFnt = *pOld;
         pFnt->GetTox() = pOld->GetTox();
         pFnt->ChgPhysFnt( pInf->GetVsh(), *pInf->GetOut() );
@@ -1321,7 +1321,7 @@ SwFtnPortion::SwFtnPortion( const OUString &rExpand,
         : SwFldPortion( rExpand, 0 )
         , pFtn(pFootn)
         , nOrigHeight( nReal )
-        // #i98418#
+        
         , mbPreferredScriptTypeSet( false )
         , mnPreferredScriptType( SW_LATIN )
 {
@@ -1337,12 +1337,12 @@ bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 
 bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
 {
-    // #i98418#
-//    SwFtnSave aFtnSave( rInf, pFtn );
+    
+
     SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
-    // the idx is manipulated in SwExpandPortion::Format
-    // this flag indicates, that a footnote is allowed to trigger
-    // an underflow during SwTxtGuess::Guess
+    
+    
+    
     rInf.SetFakeLineStart( rInf.GetIdx() > rInf.GetLineStart() );
     const bool bFull = SwFldPortion::Format( rInf );
     rInf.SetFakeLineStart( false );
@@ -1356,8 +1356,8 @@ bool SwFtnPortion::Format( SwTxtFormatInfo &rInf )
 
 void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // #i98418#
-//    SwFtnSave aFtnSave( rInf, pFtn );
+    
+
     SwFtnSave aFtnSave( rInf, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
     rInf.DrawViewOpt( *this, POR_FTN );
     SwExpandPortion::Paint( rInf );
@@ -1365,13 +1365,13 @@ void SwFtnPortion::Paint( const SwTxtPaintInfo &rInf ) const
 
 SwPosSize SwFtnPortion::GetTxtSize( const SwTxtSizeInfo &rInfo ) const
 {
-    // #i98418#
-//    SwFtnSave aFtnSave( rInfo, pFtn );
+    
+
     SwFtnSave aFtnSave( rInfo, pFtn, mbPreferredScriptTypeSet, mnPreferredScriptType );
     return SwExpandPortion::GetTxtSize( rInfo );
 }
 
-// #i98418#
+
 void SwFtnPortion::SetPreferredScriptType( sal_uInt8 nPreferredScriptType )
 {
     mbPreferredScriptTypeSet = true;
@@ -1392,22 +1392,22 @@ SwQuoVadisPortion::SwQuoVadisPortion( const OUString &rExp, const OUString& rStr
 
 bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
 {
-    // erster Versuch, vielleicht passt der Text
+    
     CheckScript( rInf );
     bool bFull = SwFldPortion::Format( rInf );
     SetLen( 0 );
 
     if( bFull )
     {
-        // zweiter Versuch, wir kuerzen den String:
+        
         aExpand = "...";
         bFull = SwFldPortion::Format( rInf );
         SetLen( 0 );
         if( bFull  )
-            // dritter Versuch, es langt: jetzt wird gestaucht:
+            
             Width( sal_uInt16(rInf.Width() - rInf.X()) );
 
-        // 8317: keine mehrzeiligen Felder bei QuoVadis und ErgoSum
+        
         if( rInf.GetRest() )
         {
             delete rInf.GetRest();
@@ -1420,8 +1420,8 @@ bool SwQuoVadisPortion::Format( SwTxtFormatInfo &rInf )
 bool SwQuoVadisPortion::GetExpTxt( const SwTxtSizeInfo &, OUString &rTxt ) const
 {
     rTxt = aExpand;
-    // if this QuoVadisPortion has a follow, the follow is responsible for
-    // the ergo text.
+    
+    
     if ( ! HasFollow() )
         rTxt += aErgo;
     return true;
@@ -1436,8 +1436,8 @@ void SwQuoVadisPortion::HandlePortion( SwPortionHandler& rPH ) const
 
 void SwQuoVadisPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    // Wir wollen _immer_ per DrawStretchText ausgeben,
-    // weil nErgo schnell mal wechseln kann.
+    
+    
     if( PrtWidth() )
     {
         rInf.DrawViewOpt( *this, POR_QUOVADIS );
@@ -1458,7 +1458,7 @@ SwErgoSumPortion::SwErgoSumPortion(const OUString &rExp, const OUString& rStr)
     SetLen(0);
     aExpand += rStr;
 
-    // 7773: sinnvolle Massnahme: ein Blank Abstand zum Text
+    
     aExpand += " ";
     SetWhichPor( POR_ERGOSUM );
 }
@@ -1474,15 +1474,15 @@ bool SwErgoSumPortion::Format( SwTxtFormatInfo &rInf )
     SetLen( 0 );
     rInf.SetErgoDone( true );
 
-    // 8317: keine mehrzeiligen Felder bei QuoVadis und ErgoSum
+    
     if( bFull && rInf.GetRest() )
     {
         delete rInf.GetRest();
         rInf.SetRest( 0 );
     }
 
-    // We return false in order to get some text into the current line,
-    // even if it's full (better than looping)
+    
+    
     return false;
 }
 

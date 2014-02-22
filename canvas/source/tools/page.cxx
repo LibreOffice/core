@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/mem_fn.hpp>
@@ -71,11 +71,11 @@ namespace canvas
 
     void Page::free( const FragmentSharedPtr& pFragment )
     {
-        // the fragment passes as argument is no longer
-        // dedicated to this page. either it is about to
-        // be relocated to some other page or it will
-        // currently be deleted. in either case, simply
-        // remove the reference from our internal storage.
+        
+        
+        
+        
+        
         FragmentContainer_t::iterator it(
             std::remove(
                 mpFragments.begin(),mpFragments.end(),pFragment));
@@ -91,18 +91,18 @@ namespace canvas
             const SurfaceRect &rect = (*it)->getRect();
             const sal_Int32 x = rect.maPos.getX();
             const sal_Int32 y = rect.maPos.getY();
-            // to avoid interpolation artifacts from other textures,
-            // one pixel gap between them
+            
+            
             const sal_Int32 w = rect.maSize.getX()+1;
             const sal_Int32 h = rect.maSize.getY()+1;
 
-            // probe location to the right
+            
             r.maPos.setX(x+w);
             r.maPos.setY(y);
             if(isValidLocation(r))
                 return true;
 
-            // probe location at bottom
+            
             r.maPos.setX(x);
             r.maPos.setY(y+h);
             if(isValidLocation(r))
@@ -119,9 +119,9 @@ namespace canvas
 
     bool Page::isValidLocation( const SurfaceRect& r ) const
     {
-        // the rectangle passed as argument has a valid
-        // location if and only if there's no intersection
-        // with existing areas.
+        
+        
+        
         SurfaceRect aBoundary(mpRenderModule->getPageSize()-basegfx::B2IVector(1,1));
         if( !r.inside(aBoundary) )
             return false;

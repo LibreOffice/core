@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/bitmapex.hxx>
@@ -47,7 +47,7 @@
 
 using namespace ::com::sun::star;
 
-// ---------------------------------------------------------------
+
 
 CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XModel > & rModel ) :
         CGMOutAct       ( rCGM ),
@@ -76,7 +76,7 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
     }
 };
 
-// ---------------------------------------------------------------
+
 
 sal_Bool CGMImpressOutAct::ImplInitPage()
 {
@@ -92,7 +92,7 @@ sal_Bool CGMImpressOutAct::ImplInitPage()
     return bStatRet;
 }
 
-// ---------------------------------------------------------------
+
 
 sal_Bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
 {
@@ -107,7 +107,7 @@ sal_Bool CGMImpressOutAct::ImplCreateShape( const OUString& rType )
     return sal_False;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrientation )
 {
@@ -120,7 +120,7 @@ void CGMImpressOutAct::ImplSetOrientation( FloatPoint& rRefPoint, double& rOrien
     maXPropSet->setPropertyValue( "RotateAngle", aAny );
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::ImplSetLineBundle()
 {
@@ -178,7 +178,7 @@ void CGMImpressOutAct::ImplSetLineBundle()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::ImplSetFillBundle()
 {
@@ -306,7 +306,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
             case ET_DOTDOTSPACE :
             case ET_LONGDASH :
             case ET_DASHDASHDOT :
-            default:            // case ET_SOLID :
+            default:            
             {
                 eLS = drawing::LineStyle_SOLID;
             }
@@ -345,7 +345,7 @@ void CGMImpressOutAct::ImplSetFillBundle()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XPropertySet > & rProperty )
 {
@@ -389,11 +389,11 @@ void CGMImpressOutAct::ImplSetTextBundle( const uno::Reference< beans::XProperty
     rProperty->setPropertyValue( "FontDescriptor", aAny );
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::InsertPage()
 {
-    if ( mnCurrentPage )    // one side is always existing, therefore the first side will be left out
+    if ( mnCurrentPage )    
     {
         uno::Reference< drawing::XDrawPage > xPage( maXDrawPages->insertNewByIndex( 0xffff ), uno::UNO_QUERY );
         maXDrawPage = xPage;
@@ -403,7 +403,7 @@ void CGMImpressOutAct::InsertPage()
     mnCurrentPage++;
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::BeginGroup()
 {
@@ -415,11 +415,11 @@ void CGMImpressOutAct::BeginGroup()
     mnGroupActCount = mpCGM->mnActCount;
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::EndGroup()
 {
-    if ( mnGroupLevel )     // preserve overflow
+    if ( mnGroupLevel )     
         mnGroupLevel--;
     if ( mnGroupLevel < CGM_OUTACT_MAX_GROUP_LEVEL )
     {
@@ -448,7 +448,7 @@ void CGMImpressOutAct::EndGroup()
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::EndGrouping()
 {
@@ -458,11 +458,11 @@ void CGMImpressOutAct::EndGrouping()
     }
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
 {
-    if ( mnGroupActCount != ( mpCGM->mnActCount - 1 ) )         // POWERPOINT HACK !!!
+    if ( mnGroupActCount != ( mpCGM->mnActCount - 1 ) )         
     {
         if ( ImplCreateShape( "com.sun.star.drawing.RectangleShape" ) )
         {
@@ -474,7 +474,7 @@ void CGMImpressOutAct::DrawRectangle( FloatRect& rFloatRect )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation )
 {
@@ -484,7 +484,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
         uno::Any aAny( &eCircleKind, ::getCppuType((const drawing::CircleKind*)0) );
         maXPropSet->setPropertyValue( "CircleKind", aAny );
 
-        long nXSize = (long)( rSize.X * 2.0 );      // strange behaviour with a awt::Size of 0
+        long nXSize = (long)( rSize.X * 2.0 );      
         long nYSize = (long)( rSize.Y * 2.0 );
         if ( nXSize < 1 )
             nXSize = 1;
@@ -501,7 +501,7 @@ void CGMImpressOutAct::DrawEllipse( FloatPoint& rCenter, FloatPoint& rSize, doub
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize, double& rOrientation,
             sal_uInt32 nType, double& fStartAngle, double& fEndAngle )
@@ -512,7 +512,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
         drawing::CircleKind eCircleKind;
 
 
-        long nXSize = (long)( rSize.X * 2.0 );      // strange behaviour with a awt::Size of 0
+        long nXSize = (long)( rSize.X * 2.0 );      
         long nYSize = (long)( rSize.Y * 2.0 );
         if ( nXSize < 1 )
             nXSize = 1;
@@ -574,7 +574,7 @@ void CGMImpressOutAct::DrawEllipticalArc( FloatPoint& rCenter, FloatPoint& rSize
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
 {
@@ -615,7 +615,7 @@ void CGMImpressOutAct::DrawBitmap( CGMBitmapDescriptor* pBmpDesc )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
 {
@@ -625,16 +625,16 @@ void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
     {
         drawing::PointSequenceSequence aRetval;
 
-        // prepare inside polygons
+        
         aRetval.realloc( 1 );
 
-        // get pointer to outside arrays
+        
         drawing::PointSequence* pOuterSequence = aRetval.getArray();
 
-        // make room in arrays
+        
         pOuterSequence->realloc((sal_Int32)nPoints);
 
-        // get pointer to arrays
+        
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
         for( sal_uInt16 n = 0; n < nPoints; n++ )
@@ -648,7 +648,7 @@ void CGMImpressOutAct::DrawPolygon( Polygon& rPoly )
 };
 
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
 {
@@ -658,16 +658,16 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
     {
         drawing::PointSequenceSequence aRetval;
 
-        // prepare inside polygons
+        
         aRetval.realloc( 1 );
 
-        // get pointer to outside arrays
+        
         drawing::PointSequence* pOuterSequence = aRetval.getArray();
 
-        // make room in arrays
+        
         pOuterSequence->realloc((sal_Int32)nPoints);
 
-        // get pointer to arrays
+        
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
         for( sal_uInt16 n = 0; n < nPoints; n++ )
@@ -680,7 +680,7 @@ void CGMImpressOutAct::DrawPolyLine( Polygon& rPoly )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
 {
@@ -692,11 +692,11 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
         aRetval.Coordinates.realloc( 1 );
         aRetval.Flags.realloc( 1 );
 
-        // get pointer to outside arrays
+        
         drawing::PointSequence* pOuterSequence = aRetval.Coordinates.getArray();
         drawing::FlagSequence* pOuterFlags = aRetval.Flags.getArray();
 
-        // make room in arrays
+        
         pOuterSequence->realloc( nPoints );
         pOuterFlags->realloc( nPoints );
 
@@ -715,7 +715,7 @@ void CGMImpressOutAct::DrawPolybezier( Polygon& rPolygon )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
 {
@@ -724,11 +724,11 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
     {
         drawing::PolyPolygonBezierCoords aRetval;
 
-        // prepare inside polygons
+        
         aRetval.Coordinates.realloc((sal_Int32)nNumPolys);
         aRetval.Flags.realloc((sal_Int32)nNumPolys);
 
-        // get pointer to outside arrays
+        
         drawing::PointSequence* pOuterSequence = aRetval.Coordinates.getArray();
         drawing::FlagSequence* pOuterFlags = aRetval.Flags.getArray();
 
@@ -737,11 +737,11 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
             Polygon aPolygon( rPolyPolygon.GetObject( a ) );
             sal_uInt32 nNumPoints = aPolygon.GetSize();
 
-            // make room in arrays
+            
             pOuterSequence->realloc((sal_Int32)nNumPoints);
             pOuterFlags->realloc((sal_Int32)nNumPoints);
 
-            // get pointer to arrays
+            
             awt::Point* pInnerSequence = pOuterSequence->getArray();
             drawing::PolygonFlags* pInnerFlags = pOuterFlags->getArray();
 
@@ -760,7 +760,7 @@ void CGMImpressOutAct::DrawPolyPolygon( PolyPolygon& rPolyPolygon )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, char* pString, sal_uInt32 /*nSize*/, FinalFlag eFlag )
 {
@@ -787,7 +787,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                 break;
             case TAV_CAP:
             case TAV_CONT:
-                break;  // -Wall these two were not here.
+                break;  
         }
 
         if ( nWidth < 0 )
@@ -871,7 +871,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                     uno::Any aQuery( aCursorText->queryInterface( ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) ));
                     if( aQuery >>= aCursorPropSet )
                     {
-                        if ( nWidth != -1 )     // paragraph adjusting in a valid textbox ?
+                        if ( nWidth != -1 )     
                         {
                             switch ( mpCGM->pElement->eTextAlignmentH )
                             {
@@ -889,7 +889,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
                             }
                             aCursorPropSet->setPropertyValue( "ParaAdjust", aAny );
                         }
-                        if ( nWidth > 0 && nHeight > 0 )    // restricted text
+                        if ( nWidth > 0 && nHeight > 0 )    
                         {
                             sal_Bool bTrue = sal_True;
                             aAny.setValue( &bTrue, ::getCppuType((const sal_Bool*)0));
@@ -909,7 +909,7 @@ void CGMImpressOutAct::DrawText( awt::Point& rTextPos, awt::Size& rTextSize, cha
     }
 };
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFlag /*eFlag*/ )
 {
@@ -947,14 +947,14 @@ void CGMImpressOutAct::AppendText( char* pString, sal_uInt32 /*nSize*/, FinalFla
     }
 }
 
-// ---------------------------------------------------------------
-// nCount != 0 -> Append Text
+
+
 sal_uInt32 CGMImpressOutAct::DrawText( TextEntry* /*pTextEntry*/, NodeFrameSet& /*rNodeFrameSet*/, sal_uInt32 /*nObjCount*/ )
 {
 return 0;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMImpressOutAct::DrawChart()
 {

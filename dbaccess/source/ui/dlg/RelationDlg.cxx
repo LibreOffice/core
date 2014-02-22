@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RelationDlg.hrc"
@@ -47,7 +47,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::dbaui;
 using namespace ::dbtools;
 
-// class ORelationDialog
+
 ORelationDialog::ORelationDialog( OJoinTableView* pParent,
                                  const TTableConnectionData::value_type& pConnectionData,
                                  sal_Bool bAllowTableSelect )
@@ -75,7 +75,7 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
 
     m_xConnection = pParent->getDesignView()->getController().getConnection();
 
-    // Connection kopieren
+    
     m_pConnData.reset( static_cast<ORelationTableConnectionData*>(pConnectionData->NewInstance()) );
     m_pConnData->CopyFrom( *pConnectionData );
 
@@ -100,7 +100,7 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
 void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionData)
 {
     ORelationTableConnectionData* pConnData = static_cast<ORelationTableConnectionData*>(_pConnectionData.get());
-    // Update Rules
+    
     switch (pConnData->GetUpdateRules())
     {
     case KeyRule::NO_ACTION:
@@ -120,7 +120,7 @@ void ORelationDialog::Init(const TTableConnectionData::value_type& _pConnectionD
         break;
     }
 
-    // Delete Rules
+    
     switch (pConnData->GetDeleteRules())
     {
     case KeyRule::NO_ACTION:
@@ -147,10 +147,10 @@ ORelationDialog::~ORelationDialog()
 
 IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 {
-    // RadioButtons auslesen
+    
     sal_uInt16 nAttrib = 0;
 
-    // Delete Rules
+    
     if( aRB_NoCascDel.IsChecked() )
         nAttrib |= KeyRule::NO_ACTION;
     if( aRB_CascDel.IsChecked() )
@@ -163,7 +163,7 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     ORelationTableConnectionData* pConnData = static_cast<ORelationTableConnectionData*>(m_pConnData.get());
     pConnData->SetDeleteRules( nAttrib );
 
-    // Update Rules
+    
     nAttrib = 0;
     if( aRB_NoCascUpd.IsChecked() )
         nAttrib |= KeyRule::NO_ACTION;
@@ -177,12 +177,12 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
 
     m_pTableControl->SaveModified();
 
-    //// wenn die ComboBoxen fuer die Tabellenauswahl enabled sind (Constructor mit bAllowTableSelect==sal_True), dann muss ich in die
-    //// Connection auch die Tabellennamen stecken
-    //m_pConnData->SetSourceWinName(m_pTableControl->getSourceWinName());
-    //m_pConnData->SetDestWinName(m_pTableControl->getDestWinName());
+    
+    
+    
+    
 
-    // try to create the relation
+    
     try
     {
         ORelationTableConnectionData* pOrigConnData = static_cast<ORelationTableConnectionData*>(m_pOrigConnData.get());
@@ -205,10 +205,10 @@ IMPL_LINK( ORelationDialog, OKClickHdl, Button*, /*pButton*/ )
     }
 
     m_bTriedOneUpdate = sal_True;
-    // this means that the original connection may be lost (if m_pConnData was not a newly created but an
-    // existent conn to be modified), which we reflect by returning RET_NO (see ::Execute)
+    
+    
 
-    // try again
+    
     Init(m_pConnData);
     m_pTableControl->Init( m_pConnData );
     m_pTableControl->lateInit();

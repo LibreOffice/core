@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@ struct StringHashTableImpl {
 
 typedef StringHashTableImpl StringHashTable;
 
-// Only for use in the implementation
+
 static StringHashTable *rtl_str_hash_new (sal_uInt32 nSize);
 static void rtl_str_hash_free (StringHashTable *pHash);
 
@@ -46,14 +46,14 @@ getHashTable ()
     return pInternPool;
 }
 
-// Better / smaller / faster hash set ....
 
-// TODO: add bottom bit-set list terminator to string list
+
+
 
 static sal_uInt32
 getNextSize (sal_uInt32 nSize)
 {
-    // Sedgewick - Algorithms in C P577.
+    
     static const sal_uInt32 nPrimes[] = { 1021, 2039, 4093, 8191, 16381, 32749,
                                           65521, 131071,262139, 524287, 1048573,
                                           2097143, 4194301, 8388593, 16777213,
@@ -157,7 +157,7 @@ rtl_str_hash_intern (rtl_uString       *pString,
 
     StringHashTable *pHash = getHashTable();
 
-    // Should we resize ?
+    
     if (pHash->nEntries >= pHash->nSize/2)
         rtl_str_hash_resize (getNextSize(pHash->nSize));
 
@@ -219,13 +219,13 @@ rtl_str_hash_remove (rtl_uString       *pString)
 
     while ((pHashStr = pHash->pData[n]) != NULL) {
         pHash->pData[n] = NULL;
-        // FIXME: rather unsophisticated and N^2 in chain-length, but robust.
+        
         rtl_str_hash_insert_nonequal (pHash, pHashStr);
         n++;
         if (n >= pHash->nSize)
             n = 0;
     }
-    // FIXME: Should we down-size ?
+    
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -35,7 +35,7 @@
 
 using namespace vcl;
 
-// =======================================================================
+
 
 void Control::ImplInitControlData()
 {
@@ -43,7 +43,7 @@ void Control::ImplInitControlData()
     mpControlData   = new ImplControlData;
 }
 
-// -----------------------------------------------------------------------
+
 
 Control::Control( WindowType nType ) :
     Window( nType )
@@ -51,7 +51,7 @@ Control::Control( WindowType nType ) :
     ImplInitControlData();
 }
 
-// -----------------------------------------------------------------------
+
 
 Control::Control( Window* pParent, WinBits nStyle ) :
     Window( WINDOW_CONTROL )
@@ -73,28 +73,28 @@ Control::Control( Window* pParent, const ResId& rResId ) :
         Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 Control::~Control()
 {
     delete mpControlData, mpControlData = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::GetFocus()
 {
     Window::GetFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::LoseFocus()
 {
     Window::LoseFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::Resize()
 {
@@ -102,13 +102,13 @@ void Control::Resize()
     Window::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::FillLayoutData() const
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::CreateLayoutData() const
 {
@@ -116,21 +116,21 @@ void Control::CreateLayoutData() const
     mpControlData->mpLayoutData = new ::vcl::ControlLayoutData();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Control::HasLayoutData() const
 {
     return mpControlData->mpLayoutData != NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 ::vcl::ControlLayoutData* Control::GetLayoutData() const
 {
     return mpControlData->mpLayoutData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::SetText( const OUString& rStr )
 {
@@ -138,7 +138,7 @@ void Control::SetText( const OUString& rStr )
     Window::SetText( rStr );
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
 {
@@ -146,7 +146,7 @@ Rectangle ControlLayoutData::GetCharacterBounds( long nIndex ) const
 }
 
 
-// -----------------------------------------------------------------------
+
 
 Rectangle Control::GetCharacterBounds( long nIndex ) const
 {
@@ -155,7 +155,7 @@ Rectangle Control::GetCharacterBounds( long nIndex ) const
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetCharacterBounds( nIndex ) : Rectangle();
 }
 
-// -----------------------------------------------------------------------
+
 
 long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
 {
@@ -174,7 +174,7 @@ long ControlLayoutData::GetIndexForPoint( const Point& rPoint ) const
     return nIndex;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Control::GetIndexForPoint( const Point& rPoint ) const
 {
@@ -183,7 +183,7 @@ long Control::GetIndexForPoint( const Point& rPoint ) const
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetIndexForPoint( rPoint ) : -1;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ControlLayoutData::GetLineCount() const
 {
@@ -193,7 +193,7 @@ long ControlLayoutData::GetLineCount() const
     return nLines;
 }
 
-// -----------------------------------------------------------------------
+
 
 Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
 {
@@ -210,15 +210,15 @@ Pair ControlLayoutData::GetLineStartEnd( long nLine ) const
     }
     else if( nLine == 0 && nDisplayLines == 0 && !m_aDisplayText.isEmpty() )
     {
-        // special case for single line controls so the implementations
-        // in that case do not have to fill in the line indices
+        
+        
         aPair.A() = 0;
         aPair.B() = m_aDisplayText.getLength()-1;
     }
     return aPair;
 }
 
-// -----------------------------------------------------------------------
+
 
 Pair Control::GetLineStartEnd( long nLine ) const
 {
@@ -227,16 +227,16 @@ Pair Control::GetLineStartEnd( long nLine ) const
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->GetLineStartEnd( nLine ) : Pair( -1, -1 );
 }
 
-// -----------------------------------------------------------------------
+
 
 long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
 {
-    // is the index sensible at all ?
+    
     if( nIndex >= 0 && nIndex < m_aDisplayText.getLength() )
     {
         int nDisplayLines = m_aLineIndices.size();
-        // if only 1 line exists, then absolute and relative index are
-        // identical -> do nothing
+        
+        
         if( nDisplayLines > 1 )
         {
             int nLine;
@@ -261,7 +261,7 @@ long ControlLayoutData::ToRelativeLineIndex( long nIndex ) const
     return nIndex;
 }
 
-// -----------------------------------------------------------------------
+
 
 long Control::ToRelativeLineIndex( long nIndex ) const
 {
@@ -270,7 +270,7 @@ long Control::ToRelativeLineIndex( long nIndex ) const
     return mpControlData->mpLayoutData ? mpControlData->mpLayoutData->ToRelativeLineIndex( nIndex ) : -1;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString Control::GetDisplayText() const
 {
@@ -279,7 +279,7 @@ OUString Control::GetDisplayText() const
     return mpControlData->mpLayoutData ? OUString(mpControlData->mpLayoutData->m_aDisplayText) : GetText();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool Control::Notify( NotifyEvent& rNEvt )
 {
@@ -290,7 +290,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
             mbHasControlFocus = true;
             StateChanged( STATE_CHANGE_CONTROL_FOCUS );
             if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_GETFOCUS, maGetFocusHdl, this ) )
-                // been destroyed within the handler
+                
                 return true;
         }
     }
@@ -304,7 +304,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
                 mbHasControlFocus = false;
                 StateChanged( STATE_CHANGE_CONTROL_FOCUS );
                 if ( ImplCallEventListenersAndHandler( VCLEVENT_CONTROL_LOSEFOCUS, maLoseFocusHdl, this ) )
-                    // been destroyed within the handler
+                    
                     return true;
             }
         }
@@ -313,7 +313,7 @@ bool Control::Notify( NotifyEvent& rNEvt )
     return Window::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::StateChanged( StateChangedType nStateChange )
 {
@@ -329,7 +329,7 @@ void Control::StateChanged( StateChangedType nStateChange )
     Window::StateChanged( nStateChange );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::AppendLayoutData( const Control& rSubControl ) const
 {
@@ -355,7 +355,7 @@ void Control::AppendLayoutData( const Control& rSubControl ) const
     }
 }
 
-// -----------------------------------------------------------------
+
 
 bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& rHandler, void* pCaller )
 {
@@ -376,7 +376,7 @@ bool Control::ImplCallEventListenersAndHandler(  sal_uLong nEvent, const Link& r
     return true;
 }
 
-// -----------------------------------------------------------------
+
 
 void Control::SetLayoutDataParent( const Control* pParent ) const
 {
@@ -384,34 +384,34 @@ void Control::SetLayoutDataParent( const Control* pParent ) const
         mpControlData->mpLayoutData->m_pParent = pParent;
 }
 
-// -----------------------------------------------------------------
+
 
 void Control::ImplClearLayoutData() const
 {
     delete mpControlData->mpLayoutData, mpControlData->mpLayoutData = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
 {
-    // use a deco view to draw the frame
-    // However, since there happens a lot of magic there, we need to fake some (style) settings
-    // on the device
+    
+    
+    
     AllSettings aOriginalSettings( pDev->GetSettings() );
 
     AllSettings aNewSettings( aOriginalSettings );
     StyleSettings aStyle( aNewSettings.GetStyleSettings() );
 
-    // The *only known* clients of the Draw methods of the various VCL-controls are form controls:
-    // During print preview, and during printing, Draw is called. Thus, drawing always happens with a
-    // mono (colored) border
+    
+    
+    
     aStyle.SetOptions( aStyle.GetOptions() | STYLE_OPTION_MONO );
     aStyle.SetMonoColor( GetSettings().GetStyleSettings().GetMonoColor() );
 
     aNewSettings.SetStyleSettings( aStyle );
-    // #i67023# do not call data changed listeners for this fake
-    // since they may understandably invalidate on settings changed
+    
+    
     pDev->OutputDevice::SetSettings( aNewSettings );
 
     DecorationView aDecoView( pDev );
@@ -420,12 +420,12 @@ void Control::ImplDrawFrame( OutputDevice* pDev, Rectangle& rRect )
     pDev->OutputDevice::SetSettings( aOriginalSettings );
 }
 
-// -----------------------------------------------------------------------
+
 
 void Control::DataChanged( const DataChangedEvent& rDCEvt)
 {
-    // we don't want to loose some style settings for controls created with the
-    // toolkit
+    
+    
     if ( IsCreatedWithToolkit() &&
          (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
@@ -447,7 +447,7 @@ void Control::DataChanged( const DataChangedEvent& rDCEvt)
     }
 }
 
-// -----------------------------------------------------------------
+
 
 ControlLayoutData::~ControlLayoutData()
 {
@@ -455,7 +455,7 @@ ControlLayoutData::~ControlLayoutData()
         m_pParent->ImplClearLayoutData();
 }
 
-// -----------------------------------------------------------------
+
 
 Size Control::GetOptimalSize() const
 {
@@ -463,7 +463,7 @@ Size Control::GetOptimalSize() const
                  GetTextHeight() + 2 * 6 );
 }
 
-// -----------------------------------------------------------------
+
 
 void Control::SetReferenceDevice( OutputDevice* _referenceDevice )
 {
@@ -474,27 +474,27 @@ void Control::SetReferenceDevice( OutputDevice* _referenceDevice )
     Invalidate();
 }
 
-// -----------------------------------------------------------------
+
 
 OutputDevice* Control::GetReferenceDevice() const
 {
     return mpControlData->mpReferenceDevice;
 }
 
-// -----------------------------------------------------------------
+
 
 const Font& Control::GetCanonicalFont( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetLabelFont();
 }
 
-// -----------------------------------------------------------------
+
 const Color& Control::GetCanonicalTextColor( const StyleSettings& _rStyle ) const
 {
     return _rStyle.GetLabelTextColor();
 }
 
-// -----------------------------------------------------------------
+
 void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
@@ -519,7 +519,7 @@ void Control::ImplInitSettings( const bool _bFont, const bool _bForeground )
     }
 }
 
-// -----------------------------------------------------------------
+
 
 void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const OUString& _rStr,
     sal_uInt16 _nStyle, MetricVector* _pVector, OUString* _pDisplayText ) const

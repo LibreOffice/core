@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -38,12 +38,12 @@ public:
     {
         FileBase::RC err;
 
-        //create a tempfile
+        
         rtl::OUString aTmpFile;
         err = FileBase::createTempFile(NULL, NULL, &aTmpFile);
         CPPUNIT_ASSERT_MESSAGE("temp File creation failed", err == osl::FileBase::E_None);
 
-        //now attempt to open with Create flag an existing file, should get E_EXIST
+        
         File tmp_file(aTmpFile);
         err = tmp_file.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
 
@@ -72,8 +72,8 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-//#####################################
-// register test suites
+
+
 CPPUNIT_TEST_SUITE_REGISTRATION(test_osl_writeFile);
 
 CPPUNIT_PLUGIN_IMPLEMENT();

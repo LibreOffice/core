@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -70,7 +70,7 @@ ImageManager::~ImageManager()
     m_pImpl->clear();
 }
 
-// XComponent
+
 void SAL_CALL ImageManager::dispose() throw (::com::sun::star::uno::RuntimeException)
 {
     m_pImpl->dispose();
@@ -87,7 +87,7 @@ void SAL_CALL ImageManager::removeEventListener( const uno::Reference< XEventLis
     m_pImpl->removeEventListener(xListener);
 }
 
-// Non-UNO methods
+
 void ImageManager::setStorage( const uno::Reference< XStorage >& Storage )
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -97,13 +97,13 @@ throw (::com::sun::star::uno::RuntimeException)
     m_pImpl->implts_initialize();
 }
 
-// XInitialization
+
 void SAL_CALL ImageManager::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException )
 {
     m_pImpl->initialize(aArguments);
 }
 
-// XImageManager
+
 void SAL_CALL ImageManager::reset()
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -160,7 +160,7 @@ throw ( ::com::sun::star::container::ElementExistException,
     m_pImpl->insertImages(nImageType,aCommandURLSequence,aGraphicSequence);
 }
 
-// XUIConfiguration
+
 void SAL_CALL ImageManager::addConfigurationListener( const uno::Reference< ::com::sun::star::ui::XUIConfigurationListener >& xListener )
 throw (::com::sun::star::uno::RuntimeException)
 {
@@ -174,7 +174,7 @@ throw (::com::sun::star::uno::RuntimeException)
     m_pImpl->removeConfigurationListener(xListener);
 }
 
-// XUIConfigurationPersistence
+
 void SAL_CALL ImageManager::reload()
 throw ( ::com::sun::star::uno::Exception,
         ::com::sun::star::uno::RuntimeException )
@@ -205,7 +205,7 @@ sal_Bool SAL_CALL ImageManager::isReadOnly() throw (::com::sun::star::uno::Runti
     return m_pImpl->isReadOnly();
 }
 
-} // namespace framework
+} 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_ImageManager_get_implementation(

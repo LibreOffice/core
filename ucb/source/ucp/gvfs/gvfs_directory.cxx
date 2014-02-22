@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /*
@@ -36,7 +36,7 @@
 using namespace com::sun::star;
 using namespace gvfs;
 
-// DynamicResultSet Implementation.
+
 
 DynamicResultSet::DynamicResultSet(
     const uno::Reference< uno::XComponentContext >& rxContext,
@@ -63,10 +63,10 @@ void DynamicResultSet::initDynamic()
     m_xResultSet2 = m_xResultSet1;
 }
 
-//=========================================================================
 
 
-// DataSupplier Implementation.
+
+
 
 
 
@@ -89,19 +89,19 @@ struct ResultListEntry
     }
 };
 
-//=========================================================================
+
 //
-// ResultList.
+
 //
-//=========================================================================
+
 
 typedef std::vector< ResultListEntry* > ResultList;
 
-//=========================================================================
+
 //
-// struct DataSupplier_Impl.
+
 //
-//=========================================================================
+
 
 struct gvfs::DataSupplier_Impl
 {
@@ -136,21 +136,21 @@ DataSupplier::DataSupplier(
 {
 }
 
-//=========================================================================
-// virtual
+
+
 DataSupplier::~DataSupplier()
 {
     delete m_pImpl;
 }
 
-// virtual
+
 OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() ) {
         OUString aId = m_pImpl->m_aResults[ nIndex ]->aId;
-        if ( !aId.isEmpty() ) // cached
+        if ( !aId.isEmpty() ) 
             return aId;
     }
 
@@ -174,7 +174,7 @@ OUString DataSupplier::queryContentIdentifierString( sal_uInt32 nIndex )
     return OUString();
 }
 
-// virtual
+
 uno::Reference< ucb::XContentIdentifier >
 DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
 {
@@ -183,7 +183,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     if ( nIndex < m_pImpl->m_aResults.size() ) {
         uno::Reference< ucb::XContentIdentifier > xId
             = m_pImpl->m_aResults[ nIndex ]->xId;
-        if ( xId.is() ) // Already cached.
+        if ( xId.is() ) 
             return xId;
     }
 
@@ -198,7 +198,7 @@ DataSupplier::queryContentIdentifier( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContentIdentifier >();
 }
 
-// virtual
+
 uno::Reference< ucb::XContent >
 DataSupplier::queryContent( sal_uInt32 nIndex )
 {
@@ -207,7 +207,7 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
     if ( nIndex < m_pImpl->m_aResults.size() ) {
         uno::Reference< ucb::XContent > xContent
             = m_pImpl->m_aResults[ nIndex ]->xContent;
-        if ( xContent.is() ) // Already cached.
+        if ( xContent.is() ) 
             return xContent;
     }
 
@@ -216,10 +216,10 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
     if ( xId.is() ) {
         try
         {
-            // FIXME:
-            // It would be really nice to propagate this information
-            // to the Content, but we can't then register it with the
-            // ContentProvider, and the ucbhelper hinders here.
+            
+            
+            
+            
             uno::Reference< ucb::XContent > xContent
                 = m_pImpl->m_xContent->getProvider()->queryContent( xId );
             m_pImpl->m_aResults[ nIndex ]->xContent = xContent;
@@ -232,12 +232,12 @@ DataSupplier::queryContent( sal_uInt32 nIndex )
     return uno::Reference< ucb::XContent >();
 }
 
-// virtual
+
 bool DataSupplier::getResult( sal_uInt32 nIndex )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
-    if ( m_pImpl->m_aResults.size() > nIndex ) // Result already present.
+    if ( m_pImpl->m_aResults.size() > nIndex ) 
         return true;
 
     if ( getData() && m_pImpl->m_aResults.size() > nIndex )
@@ -246,7 +246,7 @@ bool DataSupplier::getResult( sal_uInt32 nIndex )
     return false;
 }
 
-// virtual
+
 sal_uInt32 DataSupplier::totalCount()
 {
     getData();
@@ -256,34 +256,34 @@ sal_uInt32 DataSupplier::totalCount()
     return m_pImpl->m_aResults.size();
 }
 
-// virtual
+
 sal_uInt32 DataSupplier::currentCount()
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
     return m_pImpl->m_aResults.size();
 }
 
-// virtual
+
 bool DataSupplier::isCountFinal()
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
     return m_pImpl->m_bCountFinal;
 }
 
-// virtual
+
 uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
 
     if ( nIndex < m_pImpl->m_aResults.size() ) {
         uno::Reference< sdbc::XRow > xRow = m_pImpl->m_aResults[ nIndex ]->xRow;
-        if ( xRow.is() ) // Already cached.
+        if ( xRow.is() ) 
             return xRow;
     }
 
     if ( getResult( nIndex ) ) {
-        // Inefficient - but we can't create xContent's sensibly
-        // nor can we do the property code sensibly cleanly staticaly.
+        
+        
         Content *pContent = static_cast< ::gvfs::Content * >(queryContent( nIndex ).get());
 
         uno::Reference< sdbc::XRow > xRow =
@@ -298,7 +298,7 @@ uno::Reference< sdbc::XRow > DataSupplier::queryPropertyValues( sal_uInt32 nInde
     return uno::Reference< sdbc::XRow >();
 }
 
-// virtual
+
 void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
 {
     osl::Guard< osl::Mutex > aGuard( m_pImpl->m_aMutex );
@@ -307,12 +307,12 @@ void DataSupplier::releasePropertyValues( sal_uInt32 nIndex )
         m_pImpl->m_aResults[ nIndex ]->xRow = uno::Reference< sdbc::XRow >();
 }
 
-// virtual
+
 void DataSupplier::close()
 {
 }
 
-// virtual
+
 void DataSupplier::validate()
     throw( ucb::ResultSetException )
 {
@@ -381,7 +381,7 @@ sal_Bool DataSupplier::getData()
 
         m_pImpl->m_bCountFinal = sal_True;
 
-        // Callback possible, because listeners may be informed!
+        
         aGuard.clear();
         getResultSet()->rowCountFinal();
 

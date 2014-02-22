@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,14 +14,14 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include <sal/config.h>
 
 #ifdef _MSC_VER
-#pragma warning(push,1) // disable warnings within system headers
+#pragma warning(push,1) 
 #endif
 #include <windef.h>
 #include <winbase.h>
@@ -35,17 +35,17 @@
 static LanguageType nImplSystemLanguage = LANGUAGE_DONTKNOW;
 static LanguageType nImplSystemUILanguage = LANGUAGE_DONTKNOW;
 
-// =======================================================================
+
 
 static LanguageType GetSVLang( LANGID nWinLangId )
 {
-    // No Translation, we work with the original MS code without the SORT_ID.
-    // So we can get never LANG-ID's from MS, which are currently not defined
-    // by us.
+    
+    
+    
     return LanguageType( static_cast<sal_uInt16>(nWinLangId & 0xffff));
 }
 
-// -----------------------------------------------------------------------
+
 
 typedef LANGID (WINAPI *getLangFromEnv)();
 
@@ -79,7 +79,7 @@ static void getPlatformSystemLanguageImpl( LanguageType& rSystemLanguage,
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType MsLangId::getPlatformSystemLanguage()
 {
@@ -88,12 +88,12 @@ LanguageType MsLangId::getPlatformSystemLanguage()
     return nImplSystemLanguage;
 }
 
-// -----------------------------------------------------------------------
+
 
 LanguageType MsLangId::getPlatformSystemUILanguage()
 {
-    // TODO: this could be distinguished, #if(WINVER >= 0x0500)
-    // needs _run_ time differentiation though, not at compile time.
+    
+    
     getPlatformSystemLanguageImpl( nImplSystemUILanguage,
             &GetUserDefaultUILanguage, &GetSystemDefaultUILanguage);
     return nImplSystemUILanguage;

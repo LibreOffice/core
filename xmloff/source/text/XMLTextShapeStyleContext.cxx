@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -185,8 +185,8 @@ SvXMLImportContext *XMLTextShapeStyleContext::CreateChildContext(
     else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
               IsXMLToken( rLocalName, XML_EVENT_LISTENERS ) )
     {
-        // create and remember events import context
-        // (for delayed processing of events)
+        
+        
         pContext = new XMLEventsImportContext( GetImport(), nPrefix,
                                                    rLocalName);
         xEventContext = pContext;
@@ -217,10 +217,10 @@ void XMLTextShapeStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         xPropSet->setPropertyValue( sIsAutoUpdate, aAny );
     }
 
-    // tell the style about it's events (if applicable)
+    
     if( xEventContext.Is() )
     {
-        // set event suppplier and release reference to context
+        
         Reference<XEventsSupplier> xEventsSupplier(xStyle, UNO_QUERY);
         ((XMLEventsImportContext *)&xEventContext)->SetEvents(xEventsSupplier);
         xEventContext = 0;

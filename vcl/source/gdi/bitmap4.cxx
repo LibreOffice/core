@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -46,12 +46,12 @@ bool Bitmap::Filter( BmpFilter eFilter, const BmpFilterParam* pFilterParam, cons
     {
         case( BMP_FILTER_SMOOTH ):
         {
-            // Blur for positive values of mnRadius
+            
             if (pFilterParam->mnRadius > 0.0)
             {
                 bRet = ImplSeparableBlurFilter(pFilterParam->mnRadius);
             }
-            // Unsharpen Mask for negative values of mnRadius
+            
             else if (pFilterParam->mnRadius < 0.0)
             {
                 bRet = ImplSeparableUnsharpenFilter(pFilterParam->mnRadius);
@@ -138,24 +138,24 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
             long            (*pKoeff)[ 256 ] = new long[ 9 ][ 256 ];
             long*           pTmp;
 
-            // create LUT of products of matrix value and possible color component values
+            
             for( nY = 0; nY < 9; nY++ )
                 for( nX = nTmp = 0, nMatrixVal = pMatrix[ nY ]; nX < 256; nX++, nTmp += nMatrixVal )
                     pKoeff[ nY ][ nX ] = nTmp;
 
-            // create column LUT
+            
             for( i = 0; i < nWidth2; i++ )
                 pColm[ i ] = ( i > 0 ) ? ( i - 1 ) : 0;
 
             pColm[ nWidth + 1 ] = pColm[ nWidth ];
 
-            // create row LUT
+            
             for( i = 0; i < nHeight2; i++ )
                 pRows[ i ] = ( i > 0 ) ? ( i - 1 ) : 0;
 
             pRows[ nHeight + 1 ] = pRows[ nHeight ];
 
-            // read first three rows of bitmap color
+            
             for( i = 0; i < nWidth2; i++ )
             {
                 pColRow1[ i ] = pReadAcc->GetColor( pRows[ 0 ], pColm[ i ] );
@@ -163,12 +163,12 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
                 pColRow3[ i ] = pReadAcc->GetColor( pRows[ 2 ], pColm[ i ] );
             }
 
-            // do convolution
+            
             for( nY = 0; nY < nHeight; )
             {
                 for( nX = 0; nX < nWidth; nX++ )
                 {
-                    // first row
+                    
                     nSumR = ( pTmp = pKoeff[ 0 ] )[ ( pColor = pRowTmp1 + nX )->GetRed() ];
                     nSumG = pTmp[ pColor->GetGreen() ];
                     nSumB = pTmp[ pColor->GetBlue() ];
@@ -181,7 +181,7 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
                     nSumG += pTmp[ pColor->GetGreen() ];
                     nSumB += pTmp[ pColor->GetBlue() ];
 
-                    // second row
+                    
                     nSumR += ( pTmp = pKoeff[ 3 ] )[ ( pColor = pRowTmp2 + nX )->GetRed() ];
                     nSumG += pTmp[ pColor->GetGreen() ];
                     nSumB += pTmp[ pColor->GetBlue() ];
@@ -194,7 +194,7 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
                     nSumG += pTmp[ pColor->GetGreen() ];
                     nSumB += pTmp[ pColor->GetBlue() ];
 
-                    // third row
+                    
                     nSumR += ( pTmp = pKoeff[ 6 ] )[ ( pColor = pRowTmp3 + nX )->GetRed() ];
                     nSumG += pTmp[ pColor->GetGreen() ];
                     nSumB += pTmp[ pColor->GetBlue() ];
@@ -207,7 +207,7 @@ bool Bitmap::ImplConvolute3( const long* pMatrix, long nDivisor,
                     nSumG += pTmp[ pColor->GetGreen() ];
                     nSumB += pTmp[ pColor->GetBlue() ];
 
-                    // calculate destination color
+                    
                     pWriteAcc->SetPixel( nY, nX, BitmapColor( (sal_uInt8) MinMax( nSumR / nDivisor, 0, 255 ),
                                                               (sal_uInt8) MinMax( nSumG / nDivisor, 0, 255 ),
                                                               (sal_uInt8) MinMax( nSumB / nDivisor, 0, 255 ) ) );
@@ -284,19 +284,19 @@ bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
             long            nG1, nG2, nG3, nG4, nG5, nG6, nG7, nG8, nG9;
             long            nB1, nB2, nB3, nB4, nB5, nB6, nB7, nB8, nB9;
 
-            // create column LUT
+            
             for( i = 0; i < nWidth2; i++ )
                 pColm[ i ] = ( i > 0 ) ? ( i - 1 ) : 0;
 
             pColm[ nWidth + 1 ] = pColm[ nWidth ];
 
-            // create row LUT
+            
             for( i = 0; i < nHeight2; i++ )
                 pRows[ i ] = ( i > 0 ) ? ( i - 1 ) : 0;
 
             pRows[ nHeight + 1 ] = pRows[ nHeight ];
 
-            // read first three rows of bitmap color
+            
             if (nHeight2 > 2)
             {
                 for( i = 0; i < nWidth2; i++ )
@@ -307,7 +307,7 @@ bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
                 }
             }
 
-            // do median filtering
+            
             for( nY = 0; nY < nHeight; )
             {
                 for( nX = 0; nX < nWidth; nX++ )
@@ -339,7 +339,7 @@ bool Bitmap::ImplMedianFilter( const BmpFilterParam* /*pFilterParam*/, const Lin
                     MNMX4( nB8, nB2, nB3, nB4 );
                     MNMX3( nB9, nB2, nB3 );
 
-                    // set destination color
+                    
                     pWriteAcc->SetPixel( nY, nX, BitmapColor( (sal_uInt8) nR2, (sal_uInt8) nG2, (sal_uInt8) nB2 ) );
                 }
 
@@ -418,7 +418,7 @@ bool Bitmap::ImplSobelGrey( const BmpFilterParam* /*pFilterParam*/, const Link* 
                 long*       pVMap = new long[ nHeight + 2 ];
                 long        nX, nY, nSum1, nSum2;
 
-                // fill mapping tables
+                
                 pHMap[ 0 ] = 0;
                 for( nX = 1; nX <= nWidth; nX++ )
                     pHMap[ nX ] = nX - 1;
@@ -548,7 +548,7 @@ bool Bitmap::ImplEmbossGrey( const BmpFilterParam* pFilterParam, const Link* /*p
                 const long  nNzLz = ( ( 6 * 255 ) / 4 ) * nLz;
                 const sal_uInt8 cLz = (sal_uInt8) SAL_BOUND( nLz, 0, 255 );
 
-                // fill mapping tables
+                
                 pHMap[ 0 ] = 0;
                 for( nX = 1; nX <= nWidth; nX++ )
                     pHMap[ nX ] = nX - 1;
@@ -958,15 +958,15 @@ bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*p
                 rEntry.mnCount = 0;
             }
 
-            // get pixel count for each palette entry
+            
             for( long nY = 0; nY < nHeight ; nY++ )
                 for( long nX = 0; nX < nWidth; nX++ )
                     pPopArtTable[ pWriteAcc->GetPixel( nY, nX ).GetIndex() ].mnCount++;
 
-            // sort table
+            
             qsort( pPopArtTable, nEntryCount, sizeof( PopArtEntry ), ImplPopArtCmpFnc );
 
-            // get last used entry
+            
             sal_uLong nFirstEntry;
             sal_uLong nLastEntry = 0;
 
@@ -974,7 +974,7 @@ bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*p
                 if( pPopArtTable[ n ].mnCount )
                     nLastEntry = n;
 
-            // rotate palette (one entry)
+            
             const BitmapColor aFirstCol( pWriteAcc->GetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ 0 ].mnIndex) ) );
             for( nFirstEntry = 0; nFirstEntry < nLastEntry; nFirstEntry++ )
             {
@@ -983,7 +983,7 @@ bool Bitmap::ImplPopArt( const BmpFilterParam* /*pFilterParam*/, const Link* /*p
             }
             pWriteAcc->SetPaletteColor( sal::static_int_cast<sal_uInt16>(pPopArtTable[ nLastEntry ].mnIndex), aFirstCol );
 
-            // cleanup
+            
             delete[] pPopArtTable;
             ReleaseAccess( pWriteAcc );
             bRet = true;
@@ -1033,7 +1033,7 @@ void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContribu
         {
             aWeight = pBlurVector[aCurrentCount];
 
-            // Mirror edges
+            
             if (j < 0)
             {
                 aPixelIndex = -j;
@@ -1047,7 +1047,7 @@ void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContribu
                 aPixelIndex = j;
             }
 
-            // Edge case for small bitmaps
+            
             if ( aPixelIndex < 0 || aPixelIndex >= aSize )
             {
                 aWeight = 0.0;
@@ -1062,20 +1062,20 @@ void Bitmap::ImplBlurContributions( const int aSize, const int aNumberOfContribu
     }
 }
 
-// Separable Gaussian Blur
+
 //
-// Separable Gaussian Blur filter and accepts a blur radius
-// as a parameter so the user can change the strength of the blur.
-// Radius of 1.0 is 3 * standard deviation of gauss function.
+
+
+
 //
-// Separable Blur implementation uses 2x separable 1D convolution
-// to process the image.
+
+
 bool Bitmap::ImplSeparableBlurFilter(const double radius)
 {
     const long  nWidth = GetSizePixel().Width();
     const long  nHeight = GetSizePixel().Height();
 
-    // Prepare Blur Vector
+    
     int aNumberOfContributions;
     double* pBlurVector = MakeBlurKernel(radius, aNumberOfContributions);
 
@@ -1083,17 +1083,17 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
     int* pPixels;
     int* pCount;
 
-    // Do horizontal filtering
+    
     ImplBlurContributions( nWidth, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount);
 
     BitmapReadAccess* pReadAcc = AcquireReadAccess();
 
-    // switch coordinates as convolution pass transposes result
+    
     Bitmap aNewBitmap( Size( nHeight, nWidth ), 24 );
 
     bool bResult = ImplConvolutionPass( aNewBitmap, nWidth, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
 
-    // Cleanup
+    
     ReleaseAccess( pReadAcc );
     delete[] pWeights;
     delete[] pPixels;
@@ -1105,17 +1105,17 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
         return bResult;
     }
 
-    // Swap current bitmap with new bitmap
+    
     ImplAssignWithSize( aNewBitmap );
 
-    // Do vertical filtering
+    
     ImplBlurContributions(nHeight, aNumberOfContributions, pBlurVector, pWeights, pPixels, pCount );
 
     pReadAcc = AcquireReadAccess();
     aNewBitmap = Bitmap( Size( nWidth, nHeight ), 24 );
     bResult = ImplConvolutionPass( aNewBitmap, nHeight, pReadAcc, aNumberOfContributions, pWeights, pPixels, pCount );
 
-    // Cleanup
+    
     ReleaseAccess( pReadAcc );
     delete[] pWeights;
     delete[] pCount;
@@ -1125,14 +1125,14 @@ bool Bitmap::ImplSeparableBlurFilter(const double radius)
     if ( !bResult )
         return bResult;
 
-    // Swap current bitmap with new bitmap
+    
     ImplAssignWithSize( aNewBitmap );
 
     return true;
 }
 
-// Separable Unsharepn Mask filter is actually a substracted blured
-// image from the original image.
+
+
 bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     const long  nWidth = GetSizePixel().Width();
     const long  nHeight = GetSizePixel().Height();
@@ -1140,7 +1140,7 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
     Bitmap aBlur( *this );
     aBlur.ImplSeparableBlurFilter(-radius);
 
-    // Amount of unsharpening effect on image - currently set to a fixed value
+    
     double aAmount = 2.0;
 
     Bitmap aResultBitmap( Size( nWidth, nHeight ), 24);
@@ -1151,7 +1151,7 @@ bool Bitmap::ImplSeparableUnsharpenFilter(const double radius) {
 
     BitmapColor aColor, aColorBlur;
 
-    // For all pixels in original image substract pixels values from blured image.
+    
     for( int x = 0; x < nWidth; x++ )
     {
         for( int y = 0; y < nHeight; y++ )

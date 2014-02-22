@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -63,12 +63,12 @@ namespace linguistic
 
     bool ReplaceControlChars(OUString &rTxt)
     {
-        // non breaking field character
+        
         static const sal_Char CH_TXTATR_INWORD = static_cast<sal_Char>(0x02);
 
-        // the resulting string looks like this:
-        // 1. non breaking field characters get removed
-        // 2. remaining control characters will be replaced by ' '
+        
+        
+        
 
         if (GetNumControlChars(rTxt) == 0)
             return false;
@@ -95,10 +95,10 @@ namespace linguistic
 
     OUString GetThesaurusReplaceText(const OUString &rText)
     {
-        // The strings for synonyms returned by the thesaurus sometimes have some
-        // explanation text put in between '(' and ')' or a trailing '*'.
-        // These parts should not be put in the ReplaceEdit Text that may get
-        // inserted into the document. Thus we strip them from the text.
+        
+        
+        
+        
 
         OUString aText(rText);
 
@@ -123,10 +123,10 @@ namespace linguistic
         else if(nPos > 0)
             aText = aText.copy(0, nPos);
 
-        // remove any possible remaining ' ' that may confuse the thesaurus
-        // when it gets called with the text
+        
+        
         return comphelper::string::strip(aText, ' ');
     }
-} // namespace linguistic
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

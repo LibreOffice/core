@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -85,7 +85,7 @@ void UndoTextAPIChanged::Redo()
 
 struct TextAPIEditSource_Impl
 {
-    // needed for "internal" refcounting
+    
     SdDrawDocument*                 mpDoc;
     Outliner*                       mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
@@ -192,7 +192,7 @@ TextApiObject* TextApiObject::getImplementation( const ::com::sun::star::uno::Re
 TextAPIEditSource::TextAPIEditSource( const TextAPIEditSource& rSource )
 : SvxEditSource( *this )
 {
-    // shallow copy; uses internal refcounting
+    
     pImpl = rSource.pImpl;
     pImpl->mnRef++;
 }
@@ -204,7 +204,7 @@ SvxEditSource* TextAPIEditSource::Clone() const
 
 void TextAPIEditSource::UpdateData()
 {
-    // data is kept in outliner all the time
+    
 }
 
 TextAPIEditSource::TextAPIEditSource(SdDrawDocument* pDoc)
@@ -235,11 +235,11 @@ void TextAPIEditSource::Dispose()
 SvxTextForwarder* TextAPIEditSource::GetTextForwarder()
 {
     if( !pImpl->mpDoc )
-        return 0; // mpDoc == 0 can be used to flag this as disposed
+        return 0; 
 
     if( !pImpl->mpOutliner )
     {
-        //init draw model first
+        
         pImpl->mpOutliner = new Outliner( pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
         pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
     }
@@ -256,7 +256,7 @@ void TextAPIEditSource::SetText( OutlinerParaObject& rText )
     {
         if( !pImpl->mpOutliner )
         {
-            //init draw model first
+            
             pImpl->mpOutliner = new Outliner( pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
             pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
         }
@@ -281,6 +281,6 @@ OUString TextAPIEditSource::GetText()
         return OUString();
 }
 
-} // namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

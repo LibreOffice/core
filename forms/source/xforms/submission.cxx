@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "submission.hxx"
@@ -269,7 +269,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
 {
     liveCheck();
 
-    // construct XXPathObject for submission doc; use bind in preference of ref
+    
     EvaluationContext aEvalContext;
     ComputedExpression aExpression;
     if( !msBind.isEmpty() )
@@ -280,7 +280,7 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
             aExpression.setExpression( pBinding->getBindingExpression() );
             aEvalContext = pBinding->getEvaluationContext();
         }
-        // TODO: else: illegal binding name -> raise error
+        
     }
     else if( !maRef.getExpression().isEmpty() )
     {
@@ -296,19 +296,19 @@ bool Submission::doSubmit( const Reference< XInteractionHandler >& xHandler )
     Reference<XXPathObject> xResult = aExpression.getXPath();
     OSL_ENSURE( xResult.is(), "no result?" );
 
-    // early out if we have not obtained any result
+    
     if( ! xResult.is() )
         return false;
 
 
-    // Reference< XNodeList > aList = xResult->getNodeList();
+    
     OUString aMethod = getMethod();
 
-    // strip whitespace-only text node for get submission
+    
     Reference< XDocumentFragment > aFragment = createSubmissionDocument(
         xResult, aMethod.equalsIgnoreAsciiCase("get"));
 
-    // submit result; set encoding, etc.
+    
     boost::scoped_ptr<CSubmission> xSubmission;
     if (aMethod.equalsIgnoreAsciiCase("PUT"))
         xSubmission.reset(new CSubmissionPut( getAction(), aFragment));
@@ -374,7 +374,7 @@ Model* Submission::getModelImpl() const
 
 
 //
-// Property-Set implementation
+
 //
 
 #define HANDLE_ID 0
@@ -432,8 +432,8 @@ sal_Bool SAL_CALL Submission::convertFastPropertyValue(
 {
     if ( nHandle == HANDLE_IncludeNamespacePrefixes )
     {
-        // for convinience reasons (????), we accept a string which contains
-        // a comma-separated list of namespace prefixes
+        
+        
         OUString sTokenList;
         if ( rValue >>= sTokenList )
         {
@@ -484,8 +484,8 @@ void SAL_CALL Submission::submitWithInteraction(
             WrappedTargetException,
             RuntimeException )
 {
-    // as long as this class is not really threadsafe, we need to copy
-    // the members we're interested in
+    
+    
     Reference< XModel > xModel( mxModel );
     OUString sID( msID );
 
@@ -498,8 +498,8 @@ void SAL_CALL Submission::submitWithInteraction(
     Model* pModel = Model::getModel( xModel );
     OSL_ENSURE( pModel != NULL, "illegal model?" );
 
-    // #i36765# #i47248# warning on submission of illegal data
-    // check for validity (and query user if invalid)
+    
+    
     bool bValid = pModel->isValid();
     if( ! bValid )
     {
@@ -508,7 +508,7 @@ void SAL_CALL Submission::submitWithInteraction(
 
         if( _rxHandler.is() )
         {
-            // labouriously create interaction request
+            
             comphelper::OInteractionRequest* pRequest
                 = new comphelper::OInteractionRequest(
                     makeAny( aInvalidDataException ) );
@@ -524,22 +524,22 @@ void SAL_CALL Submission::submitWithInteraction(
             Reference<XInteractionContinuation> xCancel = pCancel;
             pRequest->addContinuation( xCancel );
 
-            // ask the handler...
+            
             _rxHandler->handle( xRequest );
             OSL_ENSURE( pContinue->wasSelected() || pCancel->wasSelected(),
                         "handler didn't select" );
 
-            // and continue, if user chose 'continue'
+            
             if( pContinue->wasSelected() )
                 bValid = true;
         }
 
-        // abort if invalid (and user didn't tell us to continue)
+        
         if( ! bValid )
             throw aInvalidDataException;
     }
 
-    // attempt submission
+    
     bool bResult = false;
     try
     {
@@ -548,12 +548,12 @@ void SAL_CALL Submission::submitWithInteraction(
     catch( const VetoException& )
     {
         OSL_FAIL( "Model::submit: Hmm. How can a single submission have a veto right?" );
-        // allowed to leave
+        
         throw;
     }
     catch( const Exception& e )
     {
-        // exception caught: re-throw as wrapped target exception
+        
         throw WrappedTargetException(
             lcl_message( sID, " due to exception being thrown" ),
             *this, makeAny( e ) );
@@ -565,7 +565,7 @@ void SAL_CALL Submission::submitWithInteraction(
     }
     else
     {
-        // other failure: throw wrapped target exception, too.
+        
         throw WrappedTargetException(
             lcl_message( sID, OUString() ), *this, Any() );
     }
@@ -578,19 +578,19 @@ void SAL_CALL Submission::submit( ) throw ( VetoException, WrappedTargetExceptio
 
 void SAL_CALL Submission::addSubmissionVetoListener( const Reference< XSubmissionVetoListener >& /*listener*/ ) throw (NoSupportException, RuntimeException)
 {
-    // TODO
+    
     throw NoSupportException();
 }
 
 void SAL_CALL Submission::removeSubmissionVetoListener( const Reference< XSubmissionVetoListener >& /*listener*/ ) throw (NoSupportException, RuntimeException)
 {
-    // TODO
+    
     throw NoSupportException();
 }
 
 static sal_Bool _isIgnorable(const Reference< XNode >& aNode)
 {
-    // ignore whitespace-only textnodes
+    
     if (aNode->getNodeType() == NodeType_TEXT_NODE)
     {
         OUString aTrimmedValue = aNode->getNodeValue().trim();
@@ -600,7 +600,7 @@ static sal_Bool _isIgnorable(const Reference< XNode >& aNode)
     return sal_False;
 }
 
-// recursively copy relevant nodes from A to B
+
 static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, const Reference< XNode >& source, sal_Bool bRemoveWSNodes)
 {
     if (!source.is()) return;
@@ -611,13 +611,13 @@ static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, cons
 
     if (cur.is())
     {
-        //  is this node relevant?
+        
         MIP mip = aModel.queryMIP(cur);
         if(mip.isRelevant() && !(bRemoveWSNodes && _isIgnorable(cur)))
         {
             imported = dstDoc->importNode(cur, sal_False);
             imported = dstParent->appendChild(imported);
-            // append source children to new imported parent
+            
             for( cur = cur->getFirstChild(); cur.is(); cur = cur->getNextSibling() )
                 _cloneNodes(aModel, imported, cur, bRemoveWSNodes);
         }
@@ -626,7 +626,7 @@ static void _cloneNodes(Model& aModel, const Reference< XNode >& dstParent, cons
 Reference< XDocument > Submission::getInstanceDocument(const Reference< XXPathObject >& aObj)
 {
     using namespace com::sun::star::xml::xpath;
-    // result
+    
     Reference< XDocument > aDocument;
 
     if (aObj->getObjectType() == XPathObjectType_XPATH_NODESET)
@@ -656,15 +656,15 @@ Reference< XDocumentFragment > Submission::createSubmissionDocument(const Refere
             if (aListItem->getNodeType()==NodeType_DOCUMENT_NODE)
                 aListItem = Reference< XNode >(
                     (Reference< XDocument >(aListItem, UNO_QUERY))->getDocumentElement(), UNO_QUERY);
-            // copy relevant nodes from instance into fragment
+            
             _cloneNodes(*getModelImpl(), aFragment, aListItem, bRemoveWSNodes);
         }
     }
     return aFragment;
 }
 
-// some forwarding: XPropertySet is implemented in our base class,
-// but also available as base of XSubmission
+
+
 Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL Submission::getPropertySetInfo(  ) throw(RuntimeException)
 {
     return PropertySetBase::getPropertySetInfo();

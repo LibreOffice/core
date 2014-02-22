@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <vbahelper/helperdecl.hxx>
 #include "vbaglobals.hxx"
@@ -31,9 +31,9 @@ using namespace ::com::sun::star::uno;
 using namespace ::ooo::vba;
 
 
-// =============================================================================
-// SwVbaGlobals
-// =============================================================================
+
+
+
 
 SwVbaGlobals::SwVbaGlobals(  uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& rxContext ) : SwVbaGlobals_BASE( uno::Reference< XHelperInterface >(), rxContext, "WordDocumentContext" )
 {
@@ -52,9 +52,9 @@ SwVbaGlobals::~SwVbaGlobals()
     OSL_TRACE("SwVbaGlobals::~SwVbaGlobals");
 }
 
-// =============================================================================
-// XGlobals
-// =============================================================================
+
+
+
 uno::Reference<word::XApplication >
 SwVbaGlobals::getApplication() throw (uno::RuntimeException)
 {
@@ -163,8 +163,8 @@ SwVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
     {
          OUString names[] = {
             OUString( "ooo.vba.word.Document" ),
-//            #FIXME #TODO make Application a proper service
-//            OUString( "ooo.vba.word.Application" ),
+
+
         };
         sal_Int32 nWordServices = SAL_N_ELEMENTS( names );
         sal_Int32 startIndex = serviceNames.getLength();

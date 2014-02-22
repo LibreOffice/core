@@ -38,13 +38,13 @@ namespace drawinglayer
 
         bool GeoTexSvx::operator==(const GeoTexSvx& /*rGeoTexSvx*/) const
         {
-            // default implementation says yes (no data -> no difference)
+            
             return true;
         }
 
         void GeoTexSvx::modifyBColor(const basegfx::B2DPoint& /*rUV*/, basegfx::BColor& rBColor, double& /*rfOpacity*/) const
         {
-            // base implementation creates random color (for testing only, may also be pure virtual)
+            
             rBColor.setRed((rand() & 0x7fff) / 32767.0);
             rBColor.setGreen((rand() & 0x7fff) / 32767.0);
             rBColor.setBlue((rand() & 0x7fff) / 32767.0);
@@ -52,13 +52,13 @@ namespace drawinglayer
 
         void GeoTexSvx::modifyOpacity(const basegfx::B2DPoint& rUV, double& rfOpacity) const
         {
-            // base implementation uses inverse of luminance of solved color (for testing only, may also be pure virtual)
+            
             basegfx::BColor aBaseColor;
             modifyBColor(rUV, aBaseColor, rfOpacity);
             rfOpacity = 1.0 - aBaseColor.luminance();
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -94,8 +94,8 @@ namespace drawinglayer
                 && maTargetRange == pCompare->maTargetRange
                 && mfBorder == pCompare->mfBorder);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -137,14 +137,14 @@ namespace drawinglayer
                 for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
                 {
                     const double fPos(fStripeWidth * a);
-                    // optimized below...
+                    
                     //
-                    // basegfx::B2DHomMatrix aNew;
-                    // aNew.scale(0.5, 0.5);
-                    // aNew.translate(0.5, 0.5);
-                    // aNew.scale(1.0, (1.0 - fPos));
-                    // aNew.translate(0.0, fPos);
-                    // aNew = maGradientInfo.getTextureTransform() * aNew;
+                    
+                    
+                    
+                    
+                    
+                    
                     aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() *
                         basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 0.5 * (1.0 - fPos), 0.5, 0.5 * (1.0 + fPos));
                     aB2DHomMatrixAndBColor.maBColor = interpolate(maStart, maEnd, double(a) / double(maGradientInfo.getSteps() - 1));
@@ -159,8 +159,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -201,13 +201,13 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
                 {
-                    // const double fPos(fStripeWidth * a);
-                    // optimized below...
+                    
+                    
                     //
-                    // basegfx::B2DHomMatrix aNew;
-                    // aNew.scale(0.50, (1.0 - fPos));
-                    // aNew.translate(0.5, 0.0);
-                    // aNew = maGradientInfo.getTextureTransform() * aNew;
+                    
+                    
+                    
+                    
                     aB2DHomMatrixAndBColor.maB2DHomMatrix = maGradientInfo.getTextureTransform() *
                         basegfx::tools::createScaleTranslateB2DHomMatrix(0.5, 1.0 - (fStripeWidth * a), 0.5, 0.0);
                     aB2DHomMatrixAndBColor.maBColor = interpolate(maEnd, maStart, double(a) / double(maGradientInfo.getSteps() - 1));
@@ -222,8 +222,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -279,8 +279,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -339,7 +339,7 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
                 {
-                    // next step
+                    
                     fWidth -= fIncrementX;
                     fHeight -= fIncrementY;
 
@@ -356,8 +356,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -415,8 +415,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -475,7 +475,7 @@ namespace drawinglayer
 
                 for(sal_uInt32 a(1); a < maGradientInfo.getSteps(); a++)
                 {
-                    // next step
+                    
                     fWidth -= fIncrementX;
                     fHeight -= fIncrementY;
 
@@ -492,8 +492,8 @@ namespace drawinglayer
 
             rBColor = basegfx::interpolate(maStart, maEnd, fScaler);
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -516,7 +516,7 @@ namespace drawinglayer
 
             fAngle = -fAngle;
 
-            // add object expansion
+            
             if(0.0 != fAngle)
             {
                 const double fAbsCos(fabs(cos(fAngle)));
@@ -529,10 +529,10 @@ namespace drawinglayer
                 fTargetSizeY = fNewY;
             }
 
-            // add object scale before rotate
+            
             maTextureTransform.scale(fTargetSizeX, fTargetSizeY);
 
-            // add texture rotate after scale to keep perpendicular angles
+            
             if(0.0 != fAngle)
             {
                 basegfx::B2DPoint aCenter(0.5, 0.5);
@@ -542,10 +542,10 @@ namespace drawinglayer
                     * maTextureTransform;
             }
 
-            // add object translate
+            
             maTextureTransform.translate(fTargetOffsetX, fTargetOffsetY);
 
-            // prepare height for texture
+            
             const double fSteps((0.0 != fDistance) ? fTargetSizeY / fDistance : 10.0);
             mnSteps = basegfx::fround(fSteps + 0.5);
             mfDistance = 1.0 / fSteps;
@@ -569,7 +569,7 @@ namespace drawinglayer
         {
             for(sal_uInt32 a(1L); a < mnSteps; a++)
             {
-                // create matrix
+                
                 const double fOffset(mfDistance * (double)a);
                 basegfx::B2DHomMatrix aNew;
                 aNew.set(1, 2, fOffset);
@@ -593,8 +593,8 @@ namespace drawinglayer
 
             return maBackTextureTransform;
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -712,7 +712,7 @@ namespace drawinglayer
                 }
             }
         }
-    } // end of namespace texture
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

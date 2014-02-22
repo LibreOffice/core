@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ChartTransferable.hxx"
@@ -29,7 +29,7 @@
 #include <svx/svdpage.hxx>
 #include <svx/unomodel.hxx>
 
-// header for class SdrView
+
 #include <svx/svdview.hxx>
 
 #define CHARTTRANSFER_OBJECTTYPE_DRAWMODEL      1
@@ -104,7 +104,7 @@ sal_Bool ChartTransferable::GetData( const ::com::sun::star::datatransfer::DataF
 sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
     const datatransfer::DataFlavor& /* rFlavor */ )
 {
-    // called from SetObject, put data into stream
+    
 
     sal_Bool bRet = sal_False;
     switch ( nUserObjectId )
@@ -116,8 +116,8 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
                 {
                     rxOStm->SetBufferSize( 0xff00 );
 
-                    // for the changed pool defaults from drawing layer pool set those
-                    // attributes as hard attributes to preserve them for saving
+                    
+                    
                     const SfxItemPool& rItemPool = pMarkedObjModel->GetItemPool();
                     const SvxFontHeightItem& rDefaultFontHeight = static_cast< const SvxFontHeightItem& >(
                         rItemPool.GetDefaultItem( EE_CHAR_FONTHEIGHT ) );
@@ -157,6 +157,6 @@ sal_Bool ChartTransferable::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
     return bRet;
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/transform2dcontext.hxx"
@@ -41,7 +41,7 @@ Transform2DContext::Transform2DContext( ContextHandler2Helper& rParent, const At
 {
     if( !btxXfrm )
     {
-        mrShape.setRotation( rAttribs.getInteger( XML_rot, 0 ) ); // 60000ths of a degree Positive angles are clockwise; negative angles are counter-clockwise
+        mrShape.setRotation( rAttribs.getInteger( XML_rot, 0 ) ); 
         mrShape.setFlip( rAttribs.getBool( XML_flipH, false ), rAttribs.getBool( XML_flipV, false ) );
     }
     else
@@ -74,16 +74,16 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
 
     switch( aElementToken )
     {
-    case A_TOKEN( off ):        // horz/vert translation
+    case A_TOKEN( off ):        
         mrShape.setPosition( awt::Point( rAttribs.getString( XML_x ).get().toInt32(), rAttribs.getString( XML_y ).get().toInt32() ) );
         break;
-    case A_TOKEN( ext ):        // horz/vert size
+    case A_TOKEN( ext ):        
         mrShape.setSize( awt::Size( rAttribs.getString( XML_cx ).get().toInt32(), rAttribs.getString( XML_cy ).get().toInt32() ) );
         break;
-    case A_TOKEN( chOff ):  // horz/vert translation of children
+    case A_TOKEN( chOff ):  
         mrShape.setChildPosition( awt::Point( rAttribs.getString( XML_x ).get().toInt32(), rAttribs.getString( XML_y ).get().toInt32() ) );
         break;
-    case A_TOKEN( chExt ):  // horz/vert size of children
+    case A_TOKEN( chExt ):  
         mrShape.setChildSize( awt::Size( rAttribs.getString( XML_cx ).get().toInt32(), rAttribs.getString( XML_cy ).get().toInt32() ) );
         break;
     }
@@ -91,7 +91,7 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
     return 0;
 }
 
-} // namespace drawingml
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

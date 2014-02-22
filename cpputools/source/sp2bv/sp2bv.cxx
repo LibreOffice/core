@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <stdio.h>
 #include <stdlib.h>
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 {
     if( hasOption("--help",argc, argv) || hasOption("-h", argc, argv))
     {
-        fprintf(stdout, HELP_TEXT);// default
+        fprintf(stdout, HELP_TEXT);
         return 0;
     }
 
@@ -67,7 +67,7 @@ int main(int argc, char **argv)
     rtl_uString* pUrl = NULL;
     if (osl_getFileURLFromSystemPath(pPath, &pUrl) != osl_File_E_None)
         return -1;
-//escape the special characters
+
 
     sal_Unicode cEscapeChar = 0x5c;
     rtl_uString* pBuffer = NULL;
@@ -92,7 +92,7 @@ int main(int argc, char **argv)
         }
         pCur ++;
     }
-//convert back to byte string so that we can print it.
+
     rtl_String* pBootVar = NULL;
     rtl_uString2String( &pBootVar, pBuffer->buffer, pBuffer->length,
                         osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);

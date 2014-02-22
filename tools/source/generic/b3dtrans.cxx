@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/b3dtrans.hxx>
 
-// B3dTransformationSet --------------------------------------------------------
-// Transformations for all 3D output
+
+
 
 B3dTransformationSet::B3dTransformationSet()
 {
@@ -126,10 +126,10 @@ void B3dTransformationSet::Ortho(basegfx::B3DHomMatrix& rTarget,
     rTarget *= aTemp;
 }
 
-/// reset values
+
 void B3dTransformationSet::Reset()
 {
-    // Reset matrices to identity matrices
+    
     maObjectTrans.identity();
     PostSetObjectTrans();
 
@@ -158,10 +158,10 @@ void B3dTransformationSet::Reset()
     CalcViewport();
 }
 
-/// Object transformation
+
 void B3dTransformationSet::PostSetObjectTrans()
 {
-    // Assign and compute inverse
+    
     maInvObjectTrans = maObjectTrans;
     maInvObjectTrans.invert();
 }
@@ -180,12 +180,12 @@ void B3dTransformationSet::SetOrientation( basegfx::B3DPoint aVRP, basegfx::B3DV
 
 void B3dTransformationSet::PostSetOrientation()
 {
-    // Assign and compute inverse
+    
     maInvOrientation = maOrientation;
     maInvOrientation.invert();
 }
 
-/// Projections for transformations
+
 void B3dTransformationSet::SetProjection(const basegfx::B3DHomMatrix& mProject)
 {
     maProjection = mProject;
@@ -201,28 +201,28 @@ const basegfx::B3DHomMatrix& B3dTransformationSet::GetProjection()
 
 void B3dTransformationSet::PostSetProjection()
 {
-    // Assign and comptue inverse
+    
     maInvProjection = GetProjection();
     maInvProjection.invert();
 
-    // invalidate dependent matrices
+    
     mbObjectToDeviceValid = false;
     mbWorldToViewValid = false;
 }
 
-/// Transformations for viewport
+
 void B3dTransformationSet::CalcViewport()
 {
-    // Parameters for projection
+    
     double fLeft(mfLeftBound);
     double fRight(mfRightBound);
     double fBottom(mfBottomBound);
     double fTop(mfTopBound);
 
-    // Adjust projection to aspect ratio, if set
+    
     if(GetRatio() != 0.0)
     {
-        // Compute current aspect ratio of boundaries
+        
         double fBoundWidth = (double)(maViewportRectangle.GetWidth() + 1);
         double fBoundHeight = (double)(maViewportRectangle.GetHeight() + 1);
         double fActRatio = 1;
@@ -230,23 +230,23 @@ void B3dTransformationSet::CalcViewport()
 
         if(fBoundWidth != 0.0)
             fActRatio = fBoundHeight / fBoundWidth;
-        // FIXME   else in this case has a lot of problems,  should this return.
+        
 
         switch(meRatio)
         {
             case Base3DRatioShrink :
             {
-                // Dilate smaller part
+                
                 if(fActRatio > mfRatio)
                 {
-                    // enlarge X
+                    
                     fFactor = 1.0 / fActRatio;
                     fRight  *= fFactor;
                     fLeft *= fFactor;
                 }
                 else
                 {
-                    // enlarge Y
+                    
                     fFactor = fActRatio;
                     fTop *= fFactor;
                     fBottom *= fFactor;
@@ -255,17 +255,17 @@ void B3dTransformationSet::CalcViewport()
             }
             case Base3DRatioGrow :
             {
-                // scale down larger part
+                
                 if(fActRatio > mfRatio)
                 {
-                    // scale down Y
+                    
                     fFactor = fActRatio;
                     fTop *= fFactor;
                     fBottom *= fFactor;
                 }
                 else
                 {
-                    // scale down X
+                    
                     fFactor = 1.0 / fActRatio;
                     fRight  *= fFactor;
                     fLeft *= fFactor;
@@ -274,7 +274,7 @@ void B3dTransformationSet::CalcViewport()
             }
             case Base3DRatioMiddle :
             {
-                // averaging
+                
                 fFactor = ((1.0 / fActRatio) + 1.0) / 2.0;
                 fRight *= fFactor;
                 fLeft *= fFactor;
@@ -286,19 +286,19 @@ void B3dTransformationSet::CalcViewport()
         }
     }
 
-    // Do projection and object areas overlap?
+    
     maSetBound = maViewportRectangle;
 
-    // Reset projection with new values
+    
     basegfx::B3DHomMatrix aNewProjection;
 
-    // #i36281#
-    // OpenGL needs a little more rough additional size to not let
-    // the front face vanish. Changed from SMALL_DVALUE to 0.000001,
-    // which is 1/10000th, comared with 1/tenth of a million from SMALL_DVALUE.
+    
+    
+    
+    
     const double fDistPart((mfFarBound - mfNearBound) * 0.0001);
 
-    // To avoid critical clipping, set Near & Far generously
+    
     if(mbPerspective)
     {
         Frustum(aNewProjection, fLeft, fRight, fBottom, fTop, mfNearBound - fDistPart, mfFarBound + fDistPart);
@@ -308,24 +308,24 @@ void B3dTransformationSet::CalcViewport()
         Ortho(aNewProjection, fLeft, fRight, fBottom, fTop, mfNearBound - fDistPart, mfFarBound + fDistPart);
     }
 
-    // Set to true to guarantee loop termination
+    
     mbProjectionValid = true;
 
-    // set new projection
+    
     SetProjection(aNewProjection);
 
-    // fill parameters for ViewportTransformation
-    // Translation
+    
+    
     maTranslate.setX((double)maSetBound.Left() + ((maSetBound.GetWidth() - 1L) / 2.0));
     maTranslate.setY((double)maSetBound.Top() + ((maSetBound.GetHeight() - 1L) / 2.0));
     maTranslate.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
 
-    // Scaling
+    
     maScale.setX((maSetBound.GetWidth() - 1L) / 2.0);
     maScale.setY((maSetBound.GetHeight() - 1L) / -2.0);
     maScale.setZ(ZBUFFER_DEPTH_RANGE / 2.0);
 
-    // React to change of viewport
+    
     PostSetViewport();
 }
 
@@ -354,7 +354,7 @@ void B3dTransformationSet::SetDeviceRectangle(double fL, double fR, double fB, d
         mbObjectToDeviceValid = false;
         mbWorldToViewValid = false;
 
-        // Broadcast changes
+        
         if(bBroadCastChange)
             DeviceRectangleChange();
     }
@@ -392,7 +392,7 @@ void B3dTransformationSet::PostSetViewport()
 {
 }
 
-// direct access to various transformations
+
 
 const basegfx::B3DPoint B3dTransformationSet::WorldToEyeCoor(const basegfx::B3DPoint& rVec)
 {
@@ -408,7 +408,7 @@ const basegfx::B3DPoint B3dTransformationSet::EyeToWorldCoor(const basegfx::B3DP
     return aVec;
 }
 
-// B3dViewport -----------------------------------------------------------------
+
 
 B3dViewport::B3dViewport()
 :   B3dTransformationSet(),
@@ -445,7 +445,7 @@ void B3dViewport::CalcOrientation()
     SetOrientation(aVRP, aVPN, aVUV);
 }
 
-// B3dCamera -------------------------------------------------------------------
+
 
 B3dCamera::B3dCamera(
     const basegfx::B3DPoint& rPos, const basegfx::B3DVector& rLkAt,
@@ -467,10 +467,10 @@ B3dCamera::~B3dCamera()
 
 void B3dCamera::DeviceRectangleChange()
 {
-    // call parent
+    
     B3dViewport::DeviceRectangleChange();
 
-    // react to changes
+    
     CalcNewViewportValues();
 }
 
@@ -515,14 +515,14 @@ bool B3dCamera::CalcFocalLength()
 
     if(bUseFocalLength)
     {
-        // Update position if focal length changes
+        
         aCorrectedPosition = basegfx::B3DPoint(0.0, 0.0, fFocalLength * fWidth / 35.0);
         aCorrectedPosition = EyeToWorldCoor(aCorrectedPosition);
         bRetval = true;
     }
     else
     {
-        // Adjust focal length based on given position
+        
         basegfx::B3DPoint aOldPosition;
         aOldPosition = WorldToEyeCoor(aOldPosition);
         if(fWidth != 0.0)

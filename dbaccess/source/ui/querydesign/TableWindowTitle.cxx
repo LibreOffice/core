@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableWindowTitle.hxx"
@@ -38,12 +38,12 @@
 using namespace dbaui;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-// class OTableWindowTitle
+
 OTableWindowTitle::OTableWindowTitle( OTableWindow* pParent ) :
      FixedText( pParent, WB_3DLOOK|WB_LEFT|WB_NOLABEL|WB_VCENTER )
     ,m_pTabWin( pParent )
 {
-    // set background- and text colour
+    
     StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
     SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
     SetTextColor(aSystemStyle.GetButtonTextColor());
@@ -76,7 +76,7 @@ void OTableWindowTitle::RequestHelp( const HelpEvent& rHEvt )
         OUString aHelpText = m_pTabWin->GetComposedName();
         if( !aHelpText.isEmpty())
         {
-            // show help
+            
             Rectangle aItemRect(Point(0,0),GetSizePixel());
             aItemRect = LogicToPixel( aItemRect );
             Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
@@ -158,7 +158,7 @@ void OTableWindowTitle::DataChanged(const DataChangedEvent& rDCEvt)
 {
     if (rDCEvt.GetType() == DATACHANGED_SETTINGS)
     {
-        // assume worst-case: colours have changed, therefore I have to adept
+        
         StyleSettings aSystemStyle = Application::GetSettings().GetStyleSettings();
         SetBackground(Wallpaper(Color(aSystemStyle.GetFaceColor())));
         SetTextColor(aSystemStyle.GetButtonTextColor());

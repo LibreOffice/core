@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@
 
 using namespace ::com::sun::star;
 
-// =======================================================================
+
 
 void ImplInitFieldSettings( Window* pWin, bool bFont, bool bForeground, bool bBackground )
 {
@@ -76,7 +76,7 @@ void ImplInitFieldSettings( Window* pWin, bool bFont, bool bForeground, bool bBa
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplInitDropDownButton( PushButton* pButton )
 {
@@ -90,7 +90,7 @@ void ImplInitDropDownButton( PushButton* pButton )
         pButton->SetBackground();
 }
 
-// =======================================================================
+
 
 ImplEntryList::ImplEntryList( Window* pWindow )
 {
@@ -104,14 +104,14 @@ ImplEntryList::ImplEntryList( Window* pWindow )
     mnMaxMRUCount = 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplEntryList::~ImplEntryList()
 {
     Clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplEntryList::Clear()
 {
@@ -119,7 +119,7 @@ void ImplEntryList::Clear()
     maEntries.clear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplEntryList::SelectEntry( sal_uInt16 nPos, bool bSelect )
 {
@@ -186,7 +186,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
         {
             sal_Int32 nComp = rSorter.compare(rStr, pTemp->maStr);
 
-            // fast insert for sorted data
+            
             if ( nComp >= 0 )
             {
                 insPos = maEntries.size();
@@ -205,7 +205,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
                 }
                 else
                 {
-                    // binary search
+                    
                     nHigh--;
                     do
                     {
@@ -236,10 +236,10 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
         }
         catch (uno::RuntimeException& )
         {
-            // XXX this is arguable, if the exception occurred because pNewEntry is
-            // garbage you wouldn't insert it. If the exception occurred because the
-            // Collator implementation is garbage then give the user a chance to see
-            // his stuff
+            
+            
+            
+            
             insPos = 0;
             maEntries.insert(maEntries.begin(),pNewEntry);
         }
@@ -249,7 +249,7 @@ sal_uInt16 ImplEntryList::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry
     return insPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplEntryList::RemoveEntry( sal_uInt16 nPos )
 {
@@ -264,7 +264,7 @@ void ImplEntryList::RemoveEntry( sal_uInt16 nPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplEntryList::FindEntry( const OUString& rString, bool bSearchMRUArea ) const
 {
@@ -278,14 +278,14 @@ sal_uInt16 ImplEntryList::FindEntry( const OUString& rString, bool bSearchMRUAre
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-    // -----------------------------------------------------------------------
+    
 
 sal_uInt16 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_uInt16 nStart, bool bForward, bool bLazy ) const
 {
     sal_uInt16  nPos = LISTBOX_ENTRY_NOTFOUND;
     sal_uInt16  nEntryCount = GetEntryCount();
     if ( !bForward )
-        nStart++;   // decrements right away
+        nStart++;   
 
     const vcl::I18nHelper& rI18nHelper = mpWindow->GetSettings().GetLocaleI18nHelper();
     for ( sal_uInt16 n = nStart; bForward ? n < nEntryCount : n != 0; )
@@ -316,7 +316,7 @@ sal_uInt16 ImplEntryList::FindMatchingEntry( const OUString& rStr, sal_uInt16 nS
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplEntryList::FindEntry( const void* pData ) const
 {
@@ -333,7 +333,7 @@ sal_uInt16 ImplEntryList::FindEntry( const void* pData ) const
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplEntryList::GetAddedHeight( sal_uInt16 i_nEndIndex, sal_uInt16 i_nBeginIndex, long i_nBeginHeight ) const
 {
@@ -343,7 +343,7 @@ long ImplEntryList::GetAddedHeight( sal_uInt16 i_nEndIndex, sal_uInt16 i_nBeginI
     sal_uInt16 nEntryCount = GetEntryCount();
     if( nStop != LISTBOX_ENTRY_NOTFOUND && nEntryCount != 0 )
     {
-        // sanity check
+        
         if( nStop > nEntryCount-1 )
             nStop = nEntryCount-1;
         if( nStart > nEntryCount-1 )
@@ -361,7 +361,7 @@ long ImplEntryList::GetAddedHeight( sal_uInt16 i_nEndIndex, sal_uInt16 i_nBeginI
     return i_nEndIndex > i_nBeginIndex ? nHeight : -nHeight;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplEntryList::GetEntryHeight( sal_uInt16 nPos ) const
 {
@@ -369,7 +369,7 @@ long ImplEntryList::GetEntryHeight( sal_uInt16 nPos ) const
     return pImplEntry ? pImplEntry->mnHeight : 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplEntryList::GetEntryText( sal_uInt16 nPos ) const
 {
@@ -380,7 +380,7 @@ OUString ImplEntryList::GetEntryText( sal_uInt16 nPos ) const
     return aEntryText;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplEntryList::HasEntryImage( sal_uInt16 nPos ) const
 {
@@ -391,7 +391,7 @@ bool ImplEntryList::HasEntryImage( sal_uInt16 nPos ) const
     return bImage;
 }
 
-// -----------------------------------------------------------------------
+
 
 Image ImplEntryList::GetEntryImage( sal_uInt16 nPos ) const
 {
@@ -402,7 +402,7 @@ Image ImplEntryList::GetEntryImage( sal_uInt16 nPos ) const
     return aImage;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplEntryList::SetEntryData( sal_uInt16 nPos, void* pNewData )
 {
@@ -411,7 +411,7 @@ void ImplEntryList::SetEntryData( sal_uInt16 nPos, void* pNewData )
         pImplEntry->mpUserData = pNewData;
 }
 
-// -----------------------------------------------------------------------
+
 
 void* ImplEntryList::GetEntryData( sal_uInt16 nPos ) const
 {
@@ -419,7 +419,7 @@ void* ImplEntryList::GetEntryData( sal_uInt16 nPos ) const
     return pImplEntry ? pImplEntry->mpUserData : NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplEntryList::SetEntryFlags( sal_uInt16 nPos, long nFlags )
 {
@@ -428,7 +428,7 @@ void ImplEntryList::SetEntryFlags( sal_uInt16 nPos, long nFlags )
         pImplEntry->mnFlags = nFlags;
 }
 
-// -----------------------------------------------------------------------
+
 
 long ImplEntryList::GetEntryFlags( sal_uInt16 nPos ) const
 {
@@ -436,7 +436,7 @@ long ImplEntryList::GetEntryFlags( sal_uInt16 nPos ) const
     return pImplEntry ? pImplEntry->mnFlags : 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplEntryList::GetSelectEntryCount() const
 {
@@ -450,14 +450,14 @@ sal_uInt16 ImplEntryList::GetSelectEntryCount() const
     return nSelCount;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplEntryList::GetSelectEntry( sal_uInt16 nIndex ) const
 {
     return GetEntryText( GetSelectEntryPos( nIndex ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplEntryList::GetSelectEntryPos( sal_uInt16 nIndex ) const
 {
@@ -482,7 +482,7 @@ sal_uInt16 ImplEntryList::GetSelectEntryPos( sal_uInt16 nIndex ) const
     return nSelEntryPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplEntryList::IsEntryPosSelected( sal_uInt16 nIndex ) const
 {
@@ -490,7 +490,7 @@ bool ImplEntryList::IsEntryPosSelected( sal_uInt16 nIndex ) const
     return pImplEntry ? pImplEntry->mbIsSelected : sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplEntryList::IsEntrySelectable( sal_uInt16 nPos ) const
 {
@@ -498,7 +498,7 @@ bool ImplEntryList::IsEntrySelectable( sal_uInt16 nPos ) const
     return pImplEntry ? ((pImplEntry->mnFlags & LISTBOX_ENTRY_FLAG_DISABLE_SELECTION) == 0) : true;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplEntryList::FindFirstSelectable( sal_uInt16 nPos, bool bForward /* = true */ )
 {
@@ -526,7 +526,7 @@ sal_uInt16 ImplEntryList::FindFirstSelectable( sal_uInt16 nPos, bool bForward /*
     return LISTBOX_ENTRY_NOTFOUND;
 }
 
-// =======================================================================
+
 
 ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, 0 ),
@@ -558,7 +558,7 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     mbSort              = ( nWinStyle & WB_SORT );
     mbEdgeBlending      = false;
 
-    // pb: #106948# explicit mirroring for calc
+    
     mbMirroring         = false;
 
     mnCurrentPos            = LISTBOX_ENTRY_NOTFOUND;
@@ -574,21 +574,21 @@ ImplListBoxWindow::ImplListBoxWindow( Window* pParent, WinBits nWinStyle ) :
     ImplCalcMetrics();
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplListBoxWindow::~ImplListBoxWindow()
 {
     delete mpEntryList;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::ImplInitSettings( bool bFont, bool bForeground, bool bBackground )
 {
     ImplInitFieldSettings( this, bFont, bForeground, bBackground );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::ImplCalcMetrics()
 {
@@ -620,7 +620,7 @@ void ImplListBoxWindow::ImplCalcMetrics()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::Clear()
 {
@@ -650,7 +650,7 @@ void ImplListBoxWindow::SetUserItemSize( const Size& rSz )
     ImplCalcMetrics();
 }
 
-// -----------------------------------------------------------------------
+
 
 struct ImplEntryMetrics
 {
@@ -663,7 +663,7 @@ struct ImplEntryMetrics
     long    nImgHeight;
 };
 
-// -----------------------------------------------------------------------
+
 void ImplListBoxWindow::EnableQuickSelection( const bool& b )
 {
     maQuickSelectionEngine.SetEnabled( b );
@@ -684,10 +684,10 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
     {
         if( (rEntry.mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE) )
         {
-            // multiline case
+            
             Size aCurSize( PixelToLogic( GetSizePixel() ) );
-            // set the current size to a large number
-            // GetTextRect should shrink it to the actual size
+            
+            
             aCurSize.Height() = 0x7fffff;
             Rectangle aTextRect( Point( 0, 0 ), aCurSize );
             aTextRect = GetTextRect( aTextRect, rEntry.maStr, TEXT_DRAW_WORDBREAK | TEXT_DRAW_MULTILINE );
@@ -699,7 +699,7 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
         }
         else
         {
-            // normal single line case
+            
             aMetrics.nTextWidth = (sal_uInt16)GetTextWidth( rEntry.maStr );
             if( aMetrics.nTextWidth > mnMaxTxtWidth )
                 mnMaxTxtWidth = aMetrics.nTextWidth;
@@ -738,8 +738,8 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
 
     if ( !aMetrics.bText && !aMetrics.bImage && !IsUserDrawEnabled() )
     {
-        // entries which have no (aka an empty) text, and no image,
-        // and are not user-drawn, should be shown nonetheless
+        
+        
         aMetrics.nEntryHeight = mnTextHeight + mnBorder;
     }
 
@@ -751,13 +751,13 @@ void ImplListBoxWindow::ImplUpdateEntryMetrics( ImplEntryType& rEntry )
     rEntry.mnHeight = aMetrics.nEntryHeight;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::ImplCallSelect()
 {
     if ( !IsTravelSelect() && GetEntryList()->GetMaxMRUCount() )
     {
-        // Insert the selected entry as MRU, if not already first MRU
+        
         sal_uInt16 nSelected = GetEntryList()->GetSelectEntryPos( 0 );
         sal_uInt16 nMRUCount = GetEntryList()->GetMRUCount();
         OUString aSelected = GetEntryList()->GetEntryText( nSelected );
@@ -794,7 +794,7 @@ void ImplListBoxWindow::ImplCallSelect()
     mbSelectionChanged = false;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplListBoxWindow::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewEntry )
 {
@@ -808,7 +808,7 @@ sal_uInt16 ImplListBoxWindow::InsertEntry( sal_uInt16 nPos, ImplEntryType* pNewE
     return nNewPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::RemoveEntry( sal_uInt16 nPos )
 {
@@ -819,7 +819,7 @@ void ImplListBoxWindow::RemoveEntry( sal_uInt16 nPos )
     ImplCalcMetrics();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::SetEntryFlags( sal_uInt16 nPos, long nFlags )
 {
@@ -829,7 +829,7 @@ void ImplListBoxWindow::SetEntryFlags( sal_uInt16 nPos, long nFlags )
         ImplUpdateEntryMetrics( *pEntry );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::ImplShowFocusRect()
 {
@@ -839,7 +839,7 @@ void ImplListBoxWindow::ImplShowFocusRect()
     mbHasFocusRect = true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::ImplHideFocusRect()
 {
@@ -851,7 +851,7 @@ void ImplListBoxWindow::ImplHideFocusRect()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplListBoxWindow::GetEntryPosForPoint( const Point& rPoint ) const
 {
@@ -870,7 +870,7 @@ sal_uInt16 ImplListBoxWindow::GetEntryPosForPoint( const Point& rPoint ) const
     return nSelect;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplListBoxWindow::IsVisible( sal_uInt16 i_nEntry ) const
 {
@@ -888,7 +888,7 @@ bool ImplListBoxWindow::IsVisible( sal_uInt16 i_nEntry ) const
     return bRet;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplListBoxWindow::GetLastVisibleEntry() const
 {
@@ -908,11 +908,11 @@ sal_uInt16 ImplListBoxWindow::GetLastVisibleEntry() const
     return nPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    mbMouseMoveSelect = false;  // only till the first MouseButtonDown
+    mbMouseMoveSelect = false;  
     maQuickSelectionEngine.Reset();
 
     if ( !IsReadOnly() )
@@ -943,13 +943,13 @@ void ImplListBoxWindow::MouseButtonDown( const MouseEvent& rMEvt )
             maDoubleClickHdl.Call( this );
         }
     }
-    else // if ( mbGrabFocus )
+    else 
     {
         GrabFocus();
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
 {
@@ -962,7 +962,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 DeselectAll();
                 mnCurrentPos = LISTBOX_ENTRY_NOTFOUND;
                 SetTopEntry( 0 );
-                if ( mbStackMode ) // #87072#, #92323#
+                if ( mbStackMode ) 
                 {
                     mbTravelSelect = true;
                     mnSelectModifier = rMEvt.GetModifier();
@@ -986,7 +986,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                     nSelect = mpEntryList->GetEntryCount() - 1;
                 nSelect = std::min( nSelect, GetLastVisibleEntry() );
                 nSelect = std::min( nSelect, (sal_uInt16) ( mpEntryList->GetEntryCount() - 1 ) );
-                // Select only visible Entries with MouseMove, otherwise Tracking...
+                
                 if ( IsVisible( nSelect ) &&
                     mpEntryList->IsEntrySelectable( nSelect ) &&
                     ( ( nSelect != mnCurrentPos ) || !GetEntryList()->GetSelectEntryCount() || ( nSelect != GetEntryList()->GetSelectEntryPos( 0 ) ) ) )
@@ -994,15 +994,15 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                     mbTrackingSelect = true;
                     if ( SelectEntries( nSelect, LET_TRACKING, false, false ) )
                     {
-                        if ( mbStackMode ) // #87072#
+                        if ( mbStackMode ) 
                         {
                             mbTravelSelect = true;
                             mnSelectModifier = rMEvt.GetModifier();
                             ImplCallSelect();
                             mbTravelSelect = false;
                         }
-                        // When list box selection change by mouse move, notity
-                        // VCLEVENT_LISTBOX_SELECT vcl event.
+                        
+                        
                         else
                         {
                             maListItemSelectHdl.Call(NULL);
@@ -1012,8 +1012,8 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
                 }
             }
 
-            // if the DD button was pressed and someone moved into the ListBox
-            // with the mouse button pressed...
+            
+            
             if ( rMEvt.IsLeft() && !rMEvt.IsSynthetic() )
             {
                 if ( !mbMulti && GetEntryList()->GetSelectEntryCount() )
@@ -1030,7 +1030,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::DeselectAll()
 {
@@ -1041,7 +1041,7 @@ void ImplListBoxWindow::DeselectAll()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::SelectEntry( sal_uInt16 nPos, bool bSelect )
 {
@@ -1052,11 +1052,11 @@ void ImplListBoxWindow::SelectEntry( sal_uInt16 nPos, bool bSelect )
         {
             if( !mbMulti )
             {
-                // deselect the selected entry
+                
                 sal_uInt16 nDeselect = GetEntryList()->GetSelectEntryPos( 0 );
                 if( nDeselect != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    //SelectEntryPos( nDeselect, sal_False );
+                    
                     GetEntryList()->SelectEntry( nDeselect, false );
                     if ( IsUpdateMode() && IsReallyVisible() )
                         ImplPaint( nDeselect, true );
@@ -1092,7 +1092,7 @@ void ImplListBoxWindow::SelectEntry( sal_uInt16 nPos, bool bSelect )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, bool bShift, bool bCtrl, bool bSelectPosChange /*=FALSE*/ )
 {
@@ -1101,7 +1101,7 @@ bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, b
 
     if( IsEnabled() && mpEntryList->IsEntrySelectable( nSelect ) )
     {
-        // here (Single-ListBox) only one entry can be deselected
+        
         if( !mbMulti )
         {
             sal_uInt16 nDeselect = mpEntryList->GetSelectEntryPos( 0 );
@@ -1113,7 +1113,7 @@ bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, b
                 bSelectionChanged = true;
             }
         }
-        // MultiListBox without Modifier
+        
         else if( mbSimpleMode && !bCtrl && !bShift )
         {
             sal_uInt16 nEntryCount = mpEntryList->GetEntryCount();
@@ -1130,10 +1130,10 @@ bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, b
             mpEntryList->SetLastSelected( nSelect );
             mpEntryList->SetSelectionAnchor( nSelect );
         }
-        // MultiListBox only with CTRL/SHIFT or not in SimpleMode
+        
         else if( ( !mbSimpleMode /* && !bShift */ ) || ( (mbSimpleMode && ( bCtrl || bShift )) || mbStackMode ) )
         {
-            // Space for selection change
+            
             if( !bShift && ( ( eLET == LET_KEYSPACE ) || ( eLET == LET_MBDOWN ) ) )
             {
                 bool bSelect = ( mbStackMode && IsMouseMoveSelect() ) ? sal_True : !mpEntryList->IsEntryPosSelected( nSelect );
@@ -1142,7 +1142,7 @@ bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, b
                     sal_uInt16 n;
                     if ( bSelect )
                     {
-                        // All entries before nSelect must be selected...
+                        
                         for ( n = 0; n < nSelect; n++ )
                             SelectEntry( n, true );
                     }
@@ -1173,7 +1173,7 @@ bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, b
                 }
                 if( nAnchor != LISTBOX_ENTRY_NOTFOUND )
                 {
-                    // All entries from achor to nSelect have to be selected
+                    
                     sal_uInt16 nStart = std::min( nSelect, nAnchor );
                     sal_uInt16 nEnd = std::max( nSelect, nAnchor );
                     for ( sal_uInt16 n = nStart; n <= nEnd; n++ )
@@ -1185,7 +1185,7 @@ bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, b
                         }
                     }
 
-                    // if appropriate some more has to be deselected...
+                    
                     sal_uInt16 nLast = mpEntryList->GetLastSelected();
                     if ( nLast != LISTBOX_ENTRY_NOTFOUND )
                     {
@@ -1249,7 +1249,7 @@ bool ImplListBoxWindow::SelectEntries( sal_uInt16 nSelect, LB_EVENT_TYPE eLET, b
     return bSelectionChanged;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
 {
@@ -1257,7 +1257,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
     Rectangle aRect( aPoint, GetOutputSizePixel() );
     bool bInside = aRect.IsInside( rTEvt.GetMouseEvent().GetPosPixel() );
 
-    if( rTEvt.IsTrackingCanceled() || rTEvt.IsTrackingEnded() ) // MouseButtonUp
+    if( rTEvt.IsTrackingCanceled() || rTEvt.IsTrackingEnded() ) 
     {
         if ( bInside && !rTEvt.IsTrackingCanceled() )
         {
@@ -1296,7 +1296,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                 mbTrack = true;
             }
 
-            // this case only happens, if the mouse button is pressed very briefly
+            
             if( rTEvt.IsTrackingEnded() && mbTrack )
             {
                 bTrackOrQuickClick = true;
@@ -1344,7 +1344,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
                     mbTrackingSelect = true;
                     if ( SelectEntries( nSelect, LET_TRACKING, bShift, bCtrl ) )
                     {
-                        if ( mbStackMode ) // #87734# (#87072#)
+                        if ( mbStackMode ) 
                         {
                             mbTravelSelect = true;
                             mnSelectModifier = rTEvt.GetMouseEvent().GetModifier();
@@ -1418,7 +1418,7 @@ void ImplListBoxWindow::Tracking( const TrackingEvent& rTEvt )
 }
 
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::KeyInput( const KeyEvent& rKEvt )
 {
@@ -1426,11 +1426,11 @@ void ImplListBoxWindow::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
 {
-    // entry to be selected
+    
     sal_uInt16 nSelect = LISTBOX_ENTRY_NOTFOUND;
     LB_EVENT_TYPE eLET = LET_KEYMOVE;
 
@@ -1458,7 +1458,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 else if ( mnCurrentPos )
                 {
-                    // search first selectable above the current position
+                    
                     nSelect = mpEntryList->FindFirstSelectable( mnCurrentPos - 1, false );
                 }
 
@@ -1485,7 +1485,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 }
                 else if ( (mnCurrentPos+1) < mpEntryList->GetEntryCount() )
                 {
-                    // search first selectable below the current position
+                    
                     nSelect = mpEntryList->FindFirstSelectable( mnCurrentPos + 1, true );
                 }
 
@@ -1520,7 +1520,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                         SetTopEntry( ( mnTop > nCurVis ) ? ( mnTop-nCurVis+1 ) : 0 );
                     }
 
-                    // find first selectable starting from mnTop looking foreward
+                    
                     nSelect = mpEntryList->FindFirstSelectable( mnTop, true );
                 }
                 bDone = true;
@@ -1554,7 +1554,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                         nTmp = (sal_uInt16)(nTmp2+(nCurVis-1) );
                         SetTopEntry( (sal_uInt16)nTmp2 );
                     }
-                    // find first selectable starting from nTmp looking backwards
+                    
                     nSelect = mpEntryList->FindFirstSelectable( nTmp, false );
                 }
                 bDone = true;
@@ -1638,7 +1638,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
             {
                 mnSelectModifier = rKEvt.GetKeyCode().GetModifier();
                 ImplCallSelect();
-                bDone = false;  // do not catch RETURN
+                bDone = false;  
             }
             maQuickSelectionEngine.Reset();
         }
@@ -1663,7 +1663,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         {
             if( bCtrl && mbMulti )
             {
-                // paint only once
+                
                 bool bUpdates = IsUpdateMode();
                 SetUpdateMode( false );
 
@@ -1671,7 +1671,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 for( sal_uInt16 i = 0; i < nEntryCount; i++ )
                     SelectEntry( i, true );
 
-                // restore update mode
+                
                 SetUpdateMode( bUpdates );
                 Invalidate();
 
@@ -1681,7 +1681,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
                 break;
             }
         }
-        // fall through intentional
+        
         default:
         {
             if ( !IsReadOnly() )
@@ -1715,7 +1715,7 @@ bool ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
     return bDone;
 }
 
-// -----------------------------------------------------------------------
+
 namespace
 {
     static ::vcl::StringEntryIdentifier lcl_getEntry( const ImplEntryList& _rList, sal_uInt16 _nPos, OUString& _out_entryText )
@@ -1726,51 +1726,51 @@ namespace
             _nPos = 0;
         _out_entryText = _rList.GetEntryText( _nPos );
 
-        // ::vcl::StringEntryIdentifier does not allow for 0 values, but our position is 0-based
-        // => normalize
+        
+        
         return reinterpret_cast< ::vcl::StringEntryIdentifier >( _nPos + 1 );
     }
 
     static sal_uInt16 lcl_getEntryPos( ::vcl::StringEntryIdentifier _entry )
     {
-        // our pos is 0-based, but StringEntryIdentifier does not allow for a NULL
+        
         return static_cast< sal_uInt16 >( reinterpret_cast< sal_Int64 >( _entry ) ) - 1;
     }
 }
 
-// -----------------------------------------------------------------------
+
 ::vcl::StringEntryIdentifier ImplListBoxWindow::CurrentEntry( OUString& _out_entryText ) const
 {
     return lcl_getEntry( *GetEntryList(), ( mnCurrentPos == LISTBOX_ENTRY_NOTFOUND ) ? 0 : mnCurrentPos + 1, _out_entryText );
 }
 
-// -----------------------------------------------------------------------
+
 ::vcl::StringEntryIdentifier ImplListBoxWindow::NextEntry( ::vcl::StringEntryIdentifier _currentEntry, OUString& _out_entryText ) const
 {
     sal_uInt16 nNextPos = lcl_getEntryPos( _currentEntry ) + 1;
     return lcl_getEntry( *GetEntryList(), nNextPos, _out_entryText );
 }
 
-// -----------------------------------------------------------------------
+
 void ImplListBoxWindow::SelectEntry( ::vcl::StringEntryIdentifier _entry )
 {
     sal_uInt16 nSelect = lcl_getEntryPos( _entry );
     if ( mpEntryList->IsEntryPosSelected( nSelect ) )
     {
-        // ignore that. This method is a callback from the QuickSelectionEngine, which means the user attempted
-        // to select the given entry by typing its starting letters. No need to act.
+        
+        
         return;
     }
 
-    // normalize
+    
     OSL_ENSURE( nSelect < mpEntryList->GetEntryCount(), "ImplListBoxWindow::SelectEntry: how that?" );
     if( nSelect >= mpEntryList->GetEntryCount() )
         nSelect = mpEntryList->GetEntryCount()-1;
 
-    // make visible
+    
     ShowProminentEntry( nSelect );
 
-    // actually select
+    
     mnCurrentPos = nSelect;
     if ( SelectEntries( nSelect, LET_KEYMOVE, false, false ) )
     {
@@ -1781,7 +1781,7 @@ void ImplListBoxWindow::SelectEntry( ::vcl::StringEntryIdentifier _entry )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::ImplPaint( sal_uInt16 nPos, bool bErase, bool bLayout )
 {
@@ -1838,7 +1838,7 @@ void ImplListBoxWindow::ImplPaint( sal_uInt16 nPos, bool bErase, bool bLayout )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos, bool bLayout )
 {
@@ -1846,10 +1846,10 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, bool bDrawImage, bool bDrawT
     if( ! pEntry )
         return;
 
-    // when changing this function don't forget to adjust ImplWin::DrawEntry()
+    
 
     if ( mbInUserDraw )
-        nPos = mnUserDrawEntry; // real entry, not the matching entry from MRU
+        nPos = mnUserDrawEntry; 
 
     long nY = mpEntryList->GetAddedHeight( nPos, mnTop );
     Size aImgSz;
@@ -1862,9 +1862,9 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, bool bDrawImage, bool bDrawT
             aImgSz = aImage.GetSizePixel();
             Point aPtImg( mnBorder - mnLeft, nY + ( ( pEntry->mnHeight - aImgSz.Height() ) / 2 ) );
 
-            // pb: #106948# explicit mirroring for calc
+            
             if ( mbMirroring )
-                // right aligned
+                
                 aPtImg.X() = mnMaxWidth + mnBorder - aImgSz.Width() - mnLeft;
 
             if ( !IsZoom() )
@@ -1905,7 +1905,7 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, bool bDrawImage, bool bDrawT
         {
             long nMaxWidth = std::max( static_cast< long >( mnMaxWidth ),
                                   GetOutputSizePixel().Width() - 2*mnBorder );
-            // a multiline entry should only be as wide a the window
+            
             if( (pEntry->mnFlags & LISTBOX_ENTRY_FLAG_MULTILINE) )
                 nMaxWidth = GetOutputSizePixel().Width() - 2*mnBorder;
 
@@ -1921,10 +1921,10 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, bool bDrawImage, bool bDrawT
             if( bLayout )
                 mpControlData->mpLayoutData->m_aLineIndices.push_back( mpControlData->mpLayoutData->m_aDisplayText.getLength() );
 
-            // pb: #106948# explicit mirroring for calc
+            
             if ( mbMirroring )
             {
-                // right aligned
+                
                 aTextRect.Left() = nMaxWidth + mnBorder - GetTextWidth( aStr ) - mnLeft;
                 if ( aImgSz.Width() > 0 )
                     aTextRect.Left() -= ( aImgSz.Width() + IMG_TXT_DISTANCE );
@@ -1958,7 +1958,7 @@ void ImplListBoxWindow::DrawEntry( sal_uInt16 nPos, bool bDrawImage, bool bDrawT
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::FillLayoutData() const
 {
@@ -1967,7 +1967,7 @@ void ImplListBoxWindow::FillLayoutData() const
         ImplDoPaint( Rectangle( Point( 0, 0 ), GetOutputSize() ), true );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::ImplDoPaint( const Rectangle& rRect, bool bLayout )
 {
@@ -1977,8 +1977,8 @@ void ImplListBoxWindow::ImplDoPaint( const Rectangle& rRect, bool bLayout )
     if ( mbHasFocusRect && ! bLayout )
         ImplHideFocusRect();
 
-    long nY = 0; // + mnBorder;
-    long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
+    long nY = 0; 
+    long nHeight = GetOutputSizePixel().Height();
 
     for( sal_uInt16 i = (sal_uInt16)mnTop; i < nCount && nY < nHeight + mnMaxHeight; i++ )
     {
@@ -1999,21 +1999,21 @@ void ImplListBoxWindow::ImplDoPaint( const Rectangle& rRect, bool bLayout )
         ImplShowFocusRect();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::Paint( const Rectangle& rRect )
 {
     ImplDoPaint( rRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplListBoxWindow::GetDisplayLineCount() const
 {
-    // FIXME: LISTBOX_ENTRY_FLAG_MULTILINE
+    
 
     sal_uInt16 nCount = mpEntryList->GetEntryCount();
-    long nHeight = GetOutputSizePixel().Height();// - mnMaxHeight + mnBorder;
+    long nHeight = GetOutputSizePixel().Height();
     sal_uInt16 nEntries = static_cast< sal_uInt16 >( ( nHeight + mnMaxHeight - 1 ) / mnMaxHeight );
     if( nEntries > nCount-mnTop )
         nEntries = nCount-mnTop;
@@ -2021,7 +2021,7 @@ sal_uInt16 ImplListBoxWindow::GetDisplayLineCount() const
     return nEntries;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::Resize()
 {
@@ -2043,7 +2043,7 @@ void ImplListBoxWindow::Resize()
     ImplClearLayoutData();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::GetFocus()
 {
@@ -2058,7 +2058,7 @@ void ImplListBoxWindow::GetFocus()
     Control::GetFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::LoseFocus()
 {
@@ -2066,7 +2066,7 @@ void ImplListBoxWindow::LoseFocus()
     Control::LoseFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::SetTopEntry( sal_uInt16 nTop )
 {
@@ -2097,7 +2097,7 @@ void ImplListBoxWindow::SetTopEntry( sal_uInt16 nTop )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::ShowProminentEntry( sal_uInt16 nEntryPos )
 {
@@ -2111,14 +2111,14 @@ void ImplListBoxWindow::ShowProminentEntry( sal_uInt16 nEntryPos )
     SetTopEntry( nEntryPos );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::SetLeftIndent( long n )
 {
     ScrollHorz( n - mnLeft );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::ScrollHorz( long n )
 {
@@ -2152,11 +2152,11 @@ void ImplListBoxWindow::ScrollHorz( long n )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
 {
-    // FIXME: LISTBOX_ENTRY_FLAG_MULTILINE
+    
 
     Size aSz;
     aSz.Height() =  nMaxLines * mnMaxHeight;
@@ -2164,7 +2164,7 @@ Size ImplListBoxWindow::CalcSize(sal_Int32 nMaxLines) const
     return aSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 Rectangle ImplListBoxWindow::GetBoundingRectangle( sal_uInt16 nItem ) const
 {
@@ -2175,7 +2175,7 @@ Rectangle ImplListBoxWindow::GetBoundingRectangle( sal_uInt16 nItem ) const
     return aRect;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::StateChanged( StateChangedType nType )
 {
@@ -2211,7 +2211,7 @@ void ImplListBoxWindow::StateChanged( StateChangedType nType )
     ImplClearLayoutData();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -2229,7 +2229,7 @@ void ImplListBoxWindow::DataChanged( const DataChangedEvent& rDCEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplListBoxWindow::ImplGetTextStyle() const
 {
@@ -2247,13 +2247,13 @@ sal_uInt16 ImplListBoxWindow::ImplGetTextStyle() const
     return nTextStyle;
 }
 
-// =======================================================================
+
 
 ImplListBox::ImplListBox( Window* pParent, WinBits nWinStyle ) :
     Control( pParent, nWinStyle ),
     maLBWindow( this, nWinStyle&(~WB_BORDER) )
 {
-    // for native widget rendering we must be able to detect this window type
+    
     SetType( WINDOW_LISTBOXWINDOW );
 
     mpVScrollBar    = new ScrollBar( this, WB_VSCROLL | WB_DRAG );
@@ -2275,7 +2275,7 @@ ImplListBox::ImplListBox( Window* pParent, WinBits nWinStyle ) :
     maLBWindow.Show();
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplListBox::~ImplListBox()
 {
@@ -2284,7 +2284,7 @@ ImplListBox::~ImplListBox()
     delete mpScrollBarBox;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::Clear()
 {
@@ -2299,7 +2299,7 @@ void ImplListBox::Clear()
     StateChanged( STATE_CHANGE_DATA );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const OUString& rStr )
 {
@@ -2309,7 +2309,7 @@ sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const OUString& rStr )
     return nNewPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const OUString& rStr, const Image& rImage )
 {
@@ -2319,7 +2319,7 @@ sal_uInt16 ImplListBox::InsertEntry( sal_uInt16 nPos, const OUString& rStr, cons
     return nNewPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::RemoveEntry( sal_uInt16 nPos )
 {
@@ -2327,42 +2327,42 @@ void ImplListBox::RemoveEntry( sal_uInt16 nPos )
     StateChanged( STATE_CHANGE_DATA );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::SetEntryFlags( sal_uInt16 nPos, long nFlags )
 {
     maLBWindow.SetEntryFlags( nPos, nFlags );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::SelectEntry( sal_uInt16 nPos, bool bSelect )
 {
     maLBWindow.SelectEntry( nPos, bSelect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::SetNoSelection()
 {
     maLBWindow.DeselectAll();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::GetFocus()
 {
     maLBWindow.GrabFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 Window* ImplListBox::GetPreferredKeyInputWindow()
 {
     return &maLBWindow;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::Resize()
 {
@@ -2372,7 +2372,7 @@ void ImplListBox::Resize()
 }
 
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ImplListBox, MRUChanged)
 {
@@ -2380,7 +2380,7 @@ IMPL_LINK_NOARG(ImplListBox, MRUChanged)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled)
 {
@@ -2396,7 +2396,7 @@ IMPL_LINK_NOARG(ImplListBox, LBWindowScrolled)
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ImplListBox, ScrollBarHdl, ScrollBar*, pSB )
 {
@@ -2409,7 +2409,7 @@ IMPL_LINK( ImplListBox, ScrollBarHdl, ScrollBar*, pSB )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::ImplCheckScrollBars()
 {
@@ -2419,19 +2419,19 @@ void ImplListBox::ImplCheckScrollBars()
     sal_uInt16 nEntries = GetEntryList()->GetEntryCount();
     sal_uInt16 nMaxVisEntries = (sal_uInt16) (aOutSz.Height() / GetEntryHeight());
 
-    // vertical ScrollBar
+    
     if( nEntries > nMaxVisEntries )
     {
         if( !mbVScroll )
             bArrange = true;
         mbVScroll = true;
 
-        // check of the scrolled-out region
+        
         if( GetEntryList()->GetSelectEntryCount() == 1 &&
             GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
             ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
         else
-            SetTopEntry( GetTopEntry() );   // MaxTop is being checked...
+            SetTopEntry( GetTopEntry() );   
     }
     else
     {
@@ -2441,7 +2441,7 @@ void ImplListBox::ImplCheckScrollBars()
         SetTopEntry( 0 );
     }
 
-    // horizontal ScrollBar
+    
     if( mbAutoHScroll )
     {
         long nWidth = (sal_uInt16) aOutSz.Width();
@@ -2455,7 +2455,7 @@ void ImplListBox::ImplCheckScrollBars()
                 bArrange = true;
             mbHScroll = true;
 
-            if ( !mbVScroll )   // maybe we do need one now
+            if ( !mbVScroll )   
             {
                 nMaxVisEntries = (sal_uInt16) ( ( aOutSz.Height() - mpHScrollBar->GetSizePixel().Height() ) / GetEntryHeight() );
                 if( nEntries > nMaxVisEntries )
@@ -2463,16 +2463,16 @@ void ImplListBox::ImplCheckScrollBars()
                     bArrange = true;
                     mbVScroll = true;
 
-                    // check of the scrolled-out region
+                    
                     if( GetEntryList()->GetSelectEntryCount() == 1 &&
                         GetEntryList()->GetSelectEntryPos( 0 ) != LISTBOX_ENTRY_NOTFOUND )
                         ShowProminentEntry( GetEntryList()->GetSelectEntryPos( 0 ) );
                     else
-                        SetTopEntry( GetTopEntry() );   // MaxTop is being checked...
+                        SetTopEntry( GetTopEntry() );   
                 }
             }
 
-            // check of the scrolled-out region
+            
             sal_uInt16 nMaxLI = (sal_uInt16) (nMaxWidth - nWidth);
             if ( nMaxLI < GetLeftIndent() )
                 SetLeftIndent( nMaxLI );
@@ -2492,7 +2492,7 @@ void ImplListBox::ImplCheckScrollBars()
     ImplInitScrollBars();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::ImplInitScrollBars()
 {
@@ -2516,12 +2516,12 @@ void ImplListBox::ImplInitScrollBars()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::ImplResizeControls()
 {
-    // Here we only position the Controls; if the Scrollbars are to be
-    // visible is already determined in ImplCheckScrollBars
+    
+    
 
     Size aOutSz = GetOutputSizePixel();
     long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
@@ -2533,13 +2533,13 @@ void ImplListBox::ImplResizeControls()
     if ( mbHScroll )
         aInnerSz.Height() -= nSBWidth;
 
-    // pb: #106948# explicit mirroring for calc
-    // Scrollbar on left or right side?
+    
+    
     bool bMirroring = maLBWindow.IsMirroring();
     Point aWinPos( bMirroring && mbVScroll ? nSBWidth : 0, 0 );
     maLBWindow.SetPosSizePixel( aWinPos, aInnerSz );
 
-    // ScrollBarBox
+    
     if( mbVScroll && mbHScroll )
     {
         Point aBoxPos( bMirroring ? 0 : aInnerSz.Width(), aInnerSz.Height() );
@@ -2551,10 +2551,10 @@ void ImplListBox::ImplResizeControls()
         mpScrollBarBox->Hide();
     }
 
-    // vertical ScrollBar
+    
     if( mbVScroll )
     {
-        // Scrollbar on left or right side?
+        
         Point aVPos( bMirroring ? 0 : aOutSz.Width() - nSBWidth, 0 );
         mpVScrollBar->SetPosSizePixel( aVPos, Size( nSBWidth, aInnerSz.Height() ) );
         mpVScrollBar->Show();
@@ -2562,11 +2562,11 @@ void ImplListBox::ImplResizeControls()
     else
     {
         mpVScrollBar->Hide();
-        // #107254# Don't reset top entry after resize, but check for max top entry
+        
         SetTopEntry( GetTopEntry() );
     }
 
-    // horizontal ScrollBar
+    
     if( mbHScroll )
     {
         Point aHPos( ( bMirroring && mbVScroll ) ? nSBWidth : 0, aOutSz.Height() - nSBWidth );
@@ -2580,7 +2580,7 @@ void ImplListBox::ImplResizeControls()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::StateChanged( StateChangedType nType )
 {
@@ -2630,14 +2630,14 @@ void ImplListBox::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
         Control::DataChanged( rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplListBox::Notify( NotifyEvent& rNEvt )
 {
@@ -2658,14 +2658,14 @@ bool ImplListBox::Notify( NotifyEvent& rNEvt )
     return nDone || Window::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 const Wallpaper& ImplListBox::GetDisplayBackground() const
 {
     return maLBWindow.GetDisplayBackground();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
 {
@@ -2683,13 +2683,13 @@ bool ImplListBox::HandleWheelAsCursorTravel( const CommandEvent& rCEvt )
     return bDone;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
 {
     bool bChanges = GetEntryList()->GetMRUCount() ? true : false;
 
-    // Remove old MRU entries
+    
     for ( sal_uInt16 n = GetEntryList()->GetMRUCount();n; )
         maLBWindow.RemoveEntry( --n );
 
@@ -2698,7 +2698,7 @@ void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
     do
     {
         OUString aEntry = rEntries.getToken( 0, cSep, nIndex );
-        // Accept only existing entries
+        
         if ( GetEntryList()->FindEntry( aEntry ) != LISTBOX_ENTRY_NOTFOUND )
         {
             ImplEntryType* pNewEntry = new ImplEntryType( aEntry );
@@ -2716,7 +2716,7 @@ void ImplListBox::SetMRUEntries( const OUString& rEntries, sal_Unicode cSep )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString ImplListBox::GetMRUEntries( sal_Unicode cSep ) const
 {
@@ -2730,7 +2730,7 @@ OUString ImplListBox::GetMRUEntries( sal_Unicode cSep ) const
     return aEntries.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBox::SetEdgeBlending(bool bNew)
 {
@@ -2741,7 +2741,7 @@ void ImplListBox::SetEdgeBlending(bool bNew)
     }
 }
 
-// =======================================================================
+
 
 ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
     Control ( pParent, nWinStyle )
@@ -2758,7 +2758,7 @@ ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
     mnItemPos = LISTBOX_ENTRY_NOTFOUND;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWin::MBDown()
 {
@@ -2766,7 +2766,7 @@ void ImplWin::MBDown()
         maMBDownHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWin::MouseButtonDown( const MouseEvent& )
 {
@@ -2776,7 +2776,7 @@ void ImplWin::MouseButtonDown( const MouseEvent& )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWin::FillLayoutData() const
 {
@@ -2784,7 +2784,7 @@ void ImplWin::FillLayoutData() const
     const_cast<ImplWin*>(this)->ImplDraw( true );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplWin::PreNotify( NotifyEvent& rNEvt )
 {
@@ -2794,7 +2794,7 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
     {
         if( pMouseEvt->IsEnterWindow() || pMouseEvt->IsLeaveWindow() )
         {
-            // trigger redraw as mouse over state has changed
+            
             if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
             && ! IsNativeControlSupported(CTRL_LISTBOX, PART_BUTTON_DOWN) )
             {
@@ -2807,7 +2807,7 @@ bool ImplWin::PreNotify( NotifyEvent& rNEvt )
     return Control::PreNotify(rNEvt);
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWin::ImplDraw( bool bLayout )
 {
@@ -2821,9 +2821,9 @@ void ImplWin::ImplDraw( bool bLayout )
         if ( IsNativeControlSupported(CTRL_LISTBOX, PART_ENTIRE_CONTROL)
             && IsNativeControlSupported(CTRL_LISTBOX, HAS_BACKGROUND_TEXTURE) )
         {
-            // Repaint the (focused) area similarly to
-            // ImplSmallBorderWindowView::DrawWindow() in
-            // vcl/source/window/brdwin.cxx
+            
+            
+            
             Window *pWin = GetParent();
 
             ImplControlValue aControlValue;
@@ -2832,9 +2832,9 @@ void ImplWin::ImplDraw( bool bLayout )
             if ( pWin->HasFocus() )
                 nState |= CTRL_STATE_FOCUSED;
 
-            // The listbox is painted over the entire control including the
-            // border, but ImplWin does not contain the border => correction
-            // needed.
+            
+            
+            
             sal_Int32 nLeft, nTop, nRight, nBottom;
             pWin->GetBorder( nLeft, nTop, nRight, nBottom );
             Point aPoint( -nLeft, -nTop );
@@ -2851,8 +2851,8 @@ void ImplWin::ImplDraw( bool bLayout )
             if( bMouseOver )
                 nState |= CTRL_STATE_ROLLOVER;
 
-            // if parent has no border, then nobody has drawn the background
-            // since no border window exists. so draw it here.
+            
+            
             WinBits nParentStyle = pWin->GetStyle();
             if( ! (nParentStyle & WB_BORDER) || (nParentStyle & WB_NOBORDER) )
             {
@@ -2897,7 +2897,7 @@ void ImplWin::ImplDraw( bool bLayout )
                     Erase( maFocusRect );
             }
         }
-        else // Disabled
+        else 
         {
             SetTextColor( rStyleSettings.GetDisableColor() );
             if ( !bNativeOK )
@@ -2918,14 +2918,14 @@ void ImplWin::ImplDraw( bool bLayout )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWin::Paint( const Rectangle& )
 {
     ImplDraw();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWin::DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImagePos, bool bLayout )
 {
@@ -2940,7 +2940,7 @@ void ImplWin::DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImageP
         Point aPtImg( nBorder, ( ( aOutSz.Height() - aImgSz.Height() ) / 2 ) );
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
 
-        // check for HC mode
+        
         Image *pImage = &maImage;
 
         if ( !IsZoom() )
@@ -3000,7 +3000,7 @@ void ImplWin::DrawEntry( bool bDrawImage, bool bDrawText, bool bDrawTextAtImageP
         ShowFocus( maFocusRect );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWin::Resize()
 {
@@ -3009,7 +3009,7 @@ void ImplWin::Resize()
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWin::GetFocus()
 {
@@ -3028,7 +3028,7 @@ void ImplWin::GetFocus()
     Control::GetFocus();
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplWin::LoseFocus()
 {
@@ -3047,7 +3047,7 @@ void ImplWin::LoseFocus()
     Control::LoseFocus();
 }
 
-// =======================================================================
+
 
 ImplBtn::ImplBtn( Window* pParent, WinBits nWinStyle ) :
     PushButton(  pParent, nWinStyle ),
@@ -3055,7 +3055,7 @@ ImplBtn::ImplBtn( Window* pParent, WinBits nWinStyle ) :
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBtn::MBDown()
 {
@@ -3063,11 +3063,11 @@ void ImplBtn::MBDown()
        maMBDownHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplBtn::MouseButtonDown( const MouseEvent& )
 {
-    //PushButton::MouseButtonDown( rMEvt );
+    
     if( IsEnabled() )
     {
         MBDown();
@@ -3075,10 +3075,10 @@ void ImplBtn::MouseButtonDown( const MouseEvent& )
     }
 }
 
-// =======================================================================
+
 
 ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
-    FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )    // no drop shadow for list boxes
+    FloatingWindow( pParent, WB_BORDER | WB_SYSTEMWINDOW | WB_NOSHADOW )    
 {
     mpImplLB = NULL;
     mnDDLineCount = 0;
@@ -3101,7 +3101,7 @@ ImplListBoxFloatingWindow::ImplListBoxFloatingWindow( Window* pParent ) :
 
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ImplListBoxFloatingWindow::PreNotify( NotifyEvent& rNEvt )
 {
@@ -3114,14 +3114,14 @@ bool ImplListBoxFloatingWindow::PreNotify( NotifyEvent& rNEvt )
     return FloatingWindow::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
 {
     FloatingWindow::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
 
-    // Fix #60890# ( MBA ): to be able to resize the Listbox even in its open state
-    // after a call to Resize(), we adjust its position if necessary
+    
+    
     if ( IsReallyVisible() && ( nFlags & WINDOW_POSSIZE_HEIGHT ) )
     {
         Point aPos = GetParent()->GetPosPixel();
@@ -3137,20 +3137,20 @@ void ImplListBoxFloatingWindow::setPosSizePixel( long nX, long nY, long nWidth, 
         SetPosPixel( ImplCalcPos( this, Rectangle( aPos, GetParent()->GetSizePixel() ), FLOATWIN_POPUPMODE_DOWN, nIndex ) );
     }
 
-//  if( !IsReallyVisible() )
+
     {
-        // The ImplListBox does not get a Resize() as not visible.
-        // But the windows must get a Resize(), so that the number of
-        // visible entries is correct for PgUp/PgDown.
-        // The number also cannot be calculated by List/Combobox, as for
-        // this the presence of the vertical Scrollbar has to be known.
+        
+        
+        
+        
+        
         mpImplLB->SetSizePixel( GetOutputSizePixel() );
         ((Window*)mpImplLB)->Resize();
         ((Window*)mpImplLB->GetMainWindow())->Resize();
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxFloatingWindow::Resize()
 {
@@ -3158,7 +3158,7 @@ void ImplListBoxFloatingWindow::Resize()
     FloatingWindow::Resize();
 }
 
-// -----------------------------------------------------------------------
+
 
 Size ImplListBoxFloatingWindow::CalcFloatSize()
 {
@@ -3179,38 +3179,38 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
 
     if( mbAutoWidth )
     {
-        // AutoSize first only for width...
+        
 
         aFloatSz.Width() = aSz.Width() + nLeft + nRight;
-        aFloatSz.Width() += nRight; // adding some space looks better...
+        aFloatSz.Width() += nRight; 
 
         if ( ( aFloatSz.Height() < nMaxHeight ) || ( mnDDLineCount && ( mnDDLineCount < mpImplLB->GetEntryList()->GetEntryCount() ) ) )
         {
-            // then we also need the vertical Scrollbar
+            
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             aFloatSz.Width() += nSBWidth;
         }
 
         long nDesktopWidth = GetDesktopRectPixel().getWidth();
         if (aFloatSz.Width() > nDesktopWidth)
-            // Don't exceed the desktop width.
+            
             aFloatSz.Width() = nDesktopWidth;
     }
 
     if ( aFloatSz.Height() > nMaxHeight )
         aFloatSz.Height() = nMaxHeight;
 
-    // Minimal height, in case height is not set to Float height.
-    // The parent of FloatWin must be DropDown-Combo/Listbox.
+    
+    
     Size aParentSz = GetParent()->GetSizePixel();
     if( (!mnDDLineCount || !nLines) && ( aFloatSz.Height() < aParentSz.Height() ) )
         aFloatSz.Height() = aParentSz.Height();
 
-    // do not get narrower than the parent...
+    
     if( aFloatSz.Width() < aParentSz.Width() )
         aFloatSz.Width() = aParentSz.Width();
 
-    // align height to entries...
+    
     long nInnerHeight = aFloatSz.Height() - nTop - nBottom;
     long nEntryHeight = mpImplLB->GetEntryHeight();
     if ( nInnerHeight % nEntryHeight )
@@ -3223,8 +3223,8 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
 
     if (aFloatSz.Width() < aSz.Width())
     {
-        // The max width of list box entries exceeds the window width.
-        // Account for the scroll bar height.
+        
+        
         long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
         aFloatSz.Height() += nSBWidth;
     }
@@ -3232,7 +3232,7 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
     return aFloatSz;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
 {
@@ -3249,8 +3249,8 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
         Size aSz = GetParent()->GetSizePixel();
         Point aPos = GetParent()->GetPosPixel();
         aPos = GetParent()->GetParent()->OutputToScreenPixel( aPos );
-        // FIXME: this ugly hack is for Mac/Aqua
-        // should be replaced by a real mechanism to place the float rectangle
+        
+        
         if( ImplGetSVData()->maNWFData.mbNoFocusRects &&
             GetParent()->IsNativeWidgetEnabled() )
         {
@@ -3262,9 +3262,9 @@ void ImplListBoxFloatingWindow::StartFloat( bool bStartTracking )
         }
         Rectangle aRect( aPos, aSz );
 
-        // check if the control's parent is un-mirrored which is the case for form controls in a mirrored UI
-        // where the document is unmirrored
-        // because StartPopupMode() expects a rectangle in mirrored coordinates we have to re-mirror
+        
+        
+        
         Window *pGrandparent = GetParent()->GetParent();
         const OutputDevice *pGrandparentOutDev = pGrandparent->GetOutDev();
 

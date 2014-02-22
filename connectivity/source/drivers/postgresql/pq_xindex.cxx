@@ -30,7 +30,7 @@
  *
  *    This Source Code Form is subject to the terms of the Mozilla Public
  *    License, v. 2.0. If a copy of the MPL was not distributed with this
- *    file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *    file, You can obtain one at http:
  *
  ************************************************************************/
 
@@ -160,7 +160,7 @@ Any Index::queryInterface( const Type & reqType ) throw (RuntimeException)
 }
 
 
-//___________________________________________________________________________________
+
 IndexDescriptor::IndexDescriptor(
     const ::rtl::Reference< RefCountedMutex > & refMutex,
     const Reference< com::sun::star::sdbc::XConnection > & connection,
@@ -188,12 +188,12 @@ Reference< XNameAccess > IndexDescriptor::getColumns(  ) throw (::com::sun::star
     {
         m_indexColumns = IndexColumnDescriptors::create(
             m_refMutex, m_conn, m_pSettings );
-//         Sequence< OUString > columnNames;
-//         getPropertyValue( getStatics().PRIVATE_COLUMN_INDEXES ) >>= columnNames;
-//         OUString indexName = extractStringProperty( this, getStatics().NAME );
-//         m_indexColumns = IndexColumns::create(
-//              m_refMutex, m_conn, m_pSettings, m_schemaName,
-//              m_tableName, indexName, columnNames );
+
+
+
+
+
+
     }
     return m_indexColumns;
 }

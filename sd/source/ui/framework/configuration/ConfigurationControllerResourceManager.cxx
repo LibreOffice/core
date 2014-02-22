@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,7 +33,7 @@ using namespace ::com::sun::star::drawing::framework;
 
 namespace sd { namespace framework {
 
-//===== ConfigurationControllerResourceManager ================================
+
 
 ConfigurationControllerResourceManager::ConfigurationControllerResourceManager (
     const ::boost::shared_ptr<ResourceFactoryManager>& rpResourceFactoryContainer,
@@ -74,9 +74,9 @@ void ConfigurationControllerResourceManager::ActivateResources (
     const Reference<XConfiguration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    // Iterate in normal order over the resources that are to be
-    // activated so that resources on which others depend are activated
-    // beforet the depending resources are activated.
+    
+    
+    
     ::std::for_each(
         rResources.begin(),
         rResources.end(),
@@ -92,9 +92,9 @@ void ConfigurationControllerResourceManager::DeactivateResources (
     const Reference<XConfiguration>& rxConfiguration)
 {
     ::osl::MutexGuard aGuard (maMutex);
-    // Iterate in reverese order over the resources that are to be
-    // deactivated so that resources on which others depend are deactivated
-    // only when the depending resources have already been deactivated.
+    
+    
+    
     ::std::for_each(
         rResources.rbegin(),
         rResources.rend(),
@@ -126,7 +126,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
     SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": activating resource " << OUStringToOString(
         FrameworkHelper::ResourceIdToString(rxResourceId), RTL_TEXTENCODING_UTF8).getStr());
 
-    // 1. Get the factory.
+    
     const OUString sResourceURL (rxResourceId->getResourceURL());
     Reference<XResourceFactory> xFactory (mpResourceFactoryContainer->GetFactory(sResourceURL));
     if ( ! xFactory.is())
@@ -138,7 +138,7 @@ void ConfigurationControllerResourceManager::ActivateResource (
 
     try
     {
-        // 2. Create the resource.
+        
         Reference<XResource> xResource;
         try
         {
@@ -146,8 +146,8 @@ void ConfigurationControllerResourceManager::ActivateResource (
         }
         catch (lang::DisposedException&)
         {
-            // The factory is disposed and can be removed from the list
-            // of registered factories.
+            
+            
             mpResourceFactoryContainer->RemoveFactoryForReference(xFactory);
         }
         catch (Exception& e)
@@ -158,13 +158,13 @@ void ConfigurationControllerResourceManager::ActivateResource (
         if (xResource.is())
         {
             SAL_INFO("sd.fwk", OSL_THIS_FUNC << ":    successfully created");
-            // 3. Add resource to URL->Object map.
+            
             AddResource(xResource, xFactory);
 
-            // 4. Add resource id to current configuration.
+            
             rxConfiguration->addResource(rxResourceId);
 
-            // 5. Notify the new resource to listeners of the ConfigurationController.
+            
             mpBroadcaster->NotifyListeners(
                 FrameworkHelper::msResourceActivationEvent,
                 rxResourceId,
@@ -204,21 +204,21 @@ void ConfigurationControllerResourceManager::DeactivateResource (
 #endif
     try
     {
-        // 1. Remove resource from URL->Object map.
+        
         ResourceDescriptor aDescriptor (RemoveResource(rxResourceId));
 
         if (aDescriptor.mxResource.is() && aDescriptor.mxResourceFactory.is())
         {
-            // 2.  Notifiy listeners that the resource is being deactivated.
+            
             mpBroadcaster->NotifyListeners(
                 FrameworkHelper::msResourceDeactivationEvent,
                 rxResourceId,
                 aDescriptor.mxResource);
 
-            // 3. Remove resource id from current configuration.
+            
             rxConfiguration->removeResource(rxResourceId);
 
-            // 4. Release the resource.
+            
             try
             {
                 aDescriptor.mxResourceFactory->releaseResource(aDescriptor.mxResource);
@@ -228,8 +228,8 @@ void ConfigurationControllerResourceManager::DeactivateResource (
                 if ( ! rException.Context.is()
                     || rException.Context == aDescriptor.mxResourceFactory)
                 {
-                    // The factory is disposed and can be removed from the
-                    // list of registered factories.
+                    
+                    
                     mpResourceFactoryContainer->RemoveFactoryForReference(
                         aDescriptor.mxResourceFactory);
                 }
@@ -245,7 +245,7 @@ void ConfigurationControllerResourceManager::DeactivateResource (
         DBG_UNHANDLED_EXCEPTION();
     }
 
-    // 5.  Notifiy listeners that the resource is being deactivated.
+    
     mpBroadcaster->NotifyListeners(
         FrameworkHelper::msResourceDeactivationEndEvent,
         rxResourceId,
@@ -275,7 +275,7 @@ void ConfigurationControllerResourceManager::AddResource (
         return;
     }
 
-    // Add the resource to the resource container.
+    
     ResourceDescriptor aDescriptor;
     aDescriptor.mxResource = rxResource;
     aDescriptor.mxResourceFactory = rxFactory;
@@ -319,7 +319,7 @@ ConfigurationControllerResourceManager::ResourceDescriptor
 
 
 
-//===== ConfigurationControllerResourceManager::ResourceComparator ============
+
 
 bool ConfigurationControllerResourceManager::ResourceComparator::operator() (
     const Reference<XResourceId>& rxId1,
@@ -336,6 +336,6 @@ bool ConfigurationControllerResourceManager::ResourceComparator::operator() (
 
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

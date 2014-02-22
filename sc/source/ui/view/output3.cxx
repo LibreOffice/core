@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/eeitem.hxx>
@@ -35,9 +35,9 @@
 
 #include <svx/fmview.hxx>
 
-//==================================================================
 
-// #i72502#
+
+
 Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 {
     Rectangle aRect;
@@ -81,14 +81,14 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 
         if(pLocalDrawView)
         {
-            // #i76114# MapMode has to be set because BeginDrawLayers uses GetPaintRegion
+            
             MapMode aOldMode = mpDev->GetMapMode();
             if (!bMetaFile)
                 mpDev->SetMapMode( MapMode( MAP_100TH_MM, aMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
 
-            // #i74769# work with SdrPaintWindow directly
-            // #i76114# pass bDisableIntersect = true, because the intersection of the table area
-            // with the Window's paint region can be empty
+            
+            
+            
             Region aRectRegion(aRect);
             mpTargetPaintWindow = pLocalDrawView->BeginDrawLayers(mpDev, aRectRegion, true);
             OSL_ENSURE(mpTargetPaintWindow, "BeginDrawLayers: Got no SdrPaintWindow (!)");
@@ -101,11 +101,11 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     return aMMOffset;
 }
 
-// #i72502#
-void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
+
+void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) 
 {
-    // #i74768# just use offset as in PrintDrawingLayer() to also get the form controls
-    // painted with offset
+    
+    
     MapMode aOldMode = mpDev->GetMapMode();
 
     if (!bMetaFile)
@@ -119,20 +119,20 @@ void ScOutputData::PostPrintDrawingLayer(const Point& rMMOffset) // #i74768#
 
         if(pLocalDrawView)
         {
-            // #i74769# work with SdrPaintWindow directly
+            
             pLocalDrawView->EndDrawLayers(*mpTargetPaintWindow, true);
             mpTargetPaintWindow = 0;
         }
     }
 
-    // #i74768#
+    
     if (!bMetaFile)
     {
         mpDev->SetMapMode( aOldMode );
     }
 }
 
-// #i72502#
+
 void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOffset)
 {
     bool bHideAllDrawingLayer(false);
@@ -148,7 +148,7 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
         }
     }
 
-    // #109985#
+    
     if(bHideAllDrawingLayer || (!mpDoc->GetDrawLayer()))
     {
         return;
@@ -161,7 +161,7 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
         mpDev->SetMapMode( MapMode( MAP_100TH_MM, rMMOffset, aOldMode.GetScaleX(), aOldMode.GetScaleY() ) );
     }
 
-    // #109985#
+    
     DrawSelectiveObjects( nLayer );
 
     if (!bMetaFile)
@@ -170,24 +170,24 @@ void ScOutputData::PrintDrawingLayer(const sal_uInt16 nLayer, const Point& rMMOf
     }
 }
 
-// #109985#
+
 void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 {
     ScDrawLayer* pModel = mpDoc->GetDrawLayer();
     if (!pModel)
         return;
 
-    //  #i46362# high contrast mode (and default text direction) must be handled
-    //  by the application, so it's still needed when using DrawLayer().
+    
+    
 
     SdrOutliner& rOutl = pModel->GetDrawOutliner();
     rOutl.EnableAutoColor( mbUseStyleColor );
     rOutl.SetDefaultHorizontalTextDirection(
                 (EEHorizontalTextDirection)mpDoc->GetEditTextDirection( nTab ) );
 
-    //  #i69767# The hyphenator must be set (used to be before drawing a text shape with hyphenation).
-    //  LinguMgr::GetHyphenator (EditEngine) uses a wrapper now that creates the real hyphenator on demand,
-    //  so it's not a performance problem to call UseHyphenator even when it's not needed.
+    
+    
+    
 
     pModel->UseHyphenator();
 
@@ -198,7 +198,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
                             DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
     }
 
-    // #109985#
+    
     if(pViewShell || pDrawView)
     {
         SdrView* pLocalDrawView = (pDrawView) ? pDrawView : pViewShell->GetSdrView();
@@ -216,13 +216,13 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 
     mpDev->SetDrawMode(nOldDrawMode);
 
-    // #109985#
+    
     return;
 }
 
-//  Teile nur fuer Bildschirm
 
-// #109985#
+
+
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
 {
     sal_Bool    bHad    = false;

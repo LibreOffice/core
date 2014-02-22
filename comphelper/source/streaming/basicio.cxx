@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,17 +14,17 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/basicio.hxx>
 
-//.........................................................................
+
 namespace comphelper
 {
-//.........................................................................
 
-//------------------------------------------------------------------------------
+
+
 const staruno::Reference<stario::XObjectOutputStream>& operator << (
         const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream,
         const starawt::FontDescriptor& _rFont)
@@ -48,13 +48,13 @@ const staruno::Reference<stario::XObjectOutputStream>& operator << (
     return _rxOutStream;
 }
 
-// FontDescriptor
-//------------------------------------------------------------------------------
+
+
 const staruno::Reference<stario::XObjectInputStream>& operator >> (
         const staruno::Reference<stario::XObjectInputStream>& _rxInStream,
         starawt::FontDescriptor& _rFont)
 {
-    // schreiben des Fontdescriptors
+    
     _rFont.Name = _rxInStream->readUTF();
     _rFont.Height = _rxInStream->readShort();
     _rFont.Width = _rxInStream->readShort();
@@ -74,92 +74,92 @@ const staruno::Reference<stario::XObjectInputStream>& operator >> (
     return _rxInStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, bool& _rVal)
 {
     _rVal = _rxInStream->readBoolean();
     return _rxInStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, bool _bVal)
 {
     _rxOutStream->writeBoolean(_bVal);
     return _rxOutStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, OUString& rStr)
 {
     rStr = _rxInStream->readUTF();
     return _rxInStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, const OUString& rStr)
 {
     _rxOutStream->writeUTF(rStr);
     return _rxOutStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Int16& _rValue)
 {
     _rValue = _rxInStream->readShort();
     return _rxInStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_Int16 _nValue)
 {
     _rxOutStream->writeShort(_nValue);
     return _rxOutStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_uInt16& _rValue)
 {
     _rValue = _rxInStream->readShort();
     return _rxInStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_uInt16 _nValue)
 {
     _rxOutStream->writeShort(_nValue);
     return _rxOutStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_uInt32& _rValue)
 {
     _rValue = _rxInStream->readLong();
     return _rxInStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_uInt32 _nValue)
 {
     _rxOutStream->writeLong(_nValue);
     return _rxOutStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectInputStream>& operator >> (const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Int32& _rValue)
 {
     _rValue = _rxInStream->readLong();
     return _rxInStream;
 }
 
-//------------------------------------------------------------------------------
+
 const staruno::Reference<stario::XObjectOutputStream>& operator << (const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream, sal_Int32 _nValue)
 {
     _rxOutStream->writeLong(_nValue);
     return _rxOutStream;
 }
 
-//.........................................................................
-}   // namespace comphelper
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

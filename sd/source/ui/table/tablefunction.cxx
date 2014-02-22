@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -162,8 +162,8 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
         apply_table_style( pObj, GetDoc(), sTableStyle );
         SdrPageView* pPV = mpView->GetSdrPageView();
 
-        // #i123359# if an object is to be replaced/manipulated it may be that it is in text edit mode,
-        // so to be on the safe side call SdrEndTextEdit here
+        
+        
         SdrTextObj* pCheckForTextEdit = dynamic_cast< SdrTextObj* >(pPickObj);
 
         if(pCheckForTextEdit && pCheckForTextEdit->IsInEditMode())
@@ -171,7 +171,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
             mpView->SdrEndTextEdit();
         }
 
-        // if we have a pick obj we need to make this new ole a pres obj replacing the current pick obj
+        
         if( pPickObj )
         {
             SdPage* pPage = static_cast< SdPage* >(pPickObj->GetPage());
@@ -200,13 +200,13 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
     {
         if( GetDoc() && (GetDoc()->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
         {
-            // in draw open a modal dialog since we have no tool pane yet
+            
             showTableDesignDialog( GetActiveWindow(), GetViewShellBase() );
         }
         else
         {
-            // Make the table design panel visible (expand it) in the
-            // sidebar.
+            
+            
             ::sfx2::sidebar::Sidebar::ShowPanel(
                 OUString("ImpressTableDesignPanel"),
                 GetViewFrame()->GetFrame().GetFrameInterface());
@@ -220,7 +220,7 @@ void DrawViewShell::FuTable(SfxRequest& rReq)
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
 {
@@ -244,7 +244,7 @@ void DrawViewShell::GetTableMenuState( SfxItemSet &rSet )
     }
 }
 
-// --------------------------------------------------------------------
+
 
 void CreateTableFromRTF( SvStream& rStream, SdDrawDocument* pModel )
 {

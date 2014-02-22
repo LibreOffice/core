@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/urlobj.hxx>
@@ -40,7 +40,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 
-// struct MultiPath_Impl -------------------------------------------------
+
 
 struct MultiPath_Impl
 {
@@ -52,7 +52,7 @@ struct MultiPath_Impl
         bEmptyAllowed( bAllowed ), bIsClassPathMode( sal_False ), bIsRadioButtonMode( false )  {}
 };
 
-// class SvxMultiPathDialog ----------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl)
 {
@@ -65,7 +65,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, svx::SvxRadioButtonListBox *, pBox )
 {
@@ -76,7 +76,7 @@ IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, svx::SvxRadioButtonListBox *, pBox
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
 {
@@ -94,7 +94,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
         if ( pImpl->bIsRadioButtonMode )
         {
             sal_uLong nPos = aRadioLB.GetEntryPos( sInsPath, 1 );
-            if ( 0xffffffff == nPos ) //See svtools/source/contnr/svtabbx.cxx SvTabListBox::GetEntryPos
+            if ( 0xffffffff == nPos ) 
             {
                 OUString sNewEntry( '\t' );
                 sNewEntry += sInsPath;
@@ -128,7 +128,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
 {
@@ -174,7 +174,7 @@ IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed ) :
 
@@ -214,7 +214,7 @@ SvxMultiPathDialog::SvxMultiPathDialog( Window* pParent, sal_Bool bEmptyAllowed 
     aDelBtn.SetAccessibleRelationMemberOf(&aPathLB);
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxMultiPathDialog::~SvxMultiPathDialog()
 {
@@ -230,7 +230,7 @@ SvxMultiPathDialog::~SvxMultiPathDialog()
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString SvxMultiPathDialog::GetPath() const
 {
@@ -268,7 +268,7 @@ OUString SvxMultiPathDialog::GetPath() const
     return sNewPath;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMultiPathDialog::SetPath( const OUString& rPath )
 {
@@ -313,7 +313,7 @@ void SvxMultiPathDialog::SetPath( const OUString& rPath )
     SelectHdl_Impl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMultiPathDialog::SetClassPathMode()
 {
@@ -322,14 +322,14 @@ void SvxMultiPathDialog::SetClassPathMode()
     aPathFL.SetText( CUI_RES( RID_SVXSTR_ARCHIVE_HEADLINE ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxMultiPathDialog::IsClassPathMode() const
 {
     return pImpl->bIsClassPathMode;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxMultiPathDialog::EnableRadioButtonMode()
 {

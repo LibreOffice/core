@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/math.hxx>
@@ -39,10 +39,10 @@ namespace basegfx
 {
     namespace
     {
-        // Generating a poly-polygon from a bunch of rectangles
+        
         //
-        // Helper functionality for sweep-line algorithm
-        // ====================================================
+        
+        
 
         typedef std::vector<B2DRange> VectorOfRanges;
 
@@ -65,16 +65,16 @@ namespace basegfx
                 lower edge the higher value.
              */
             enum EdgeType {
-                /// edge with lower coordinate value
+                
                 UPPER=0,
-                /// edge with higher coordinate value
+                
                 LOWER=1
             };
 
             enum EdgeDirection {
-                /// edge proceeds to the left
+                
                 PROCEED_LEFT=0,
-                /// edge proceeds to the right
+                
                 PROCEED_RIGHT=1
             };
 
@@ -136,14 +136,14 @@ namespace basegfx
              */
             std::ptrdiff_t      mnPolygonIdx;
 
-            /// 'upper' or 'lower' edge of original rectangle.
+            
             EdgeType            meEdgeType;
 
-            /// 'left' or 'right'
+            
             EdgeDirection       meEdgeDirection;
         };
 
-        // Needs to be list - various places hold ptrs to elements
+        
         typedef std::list< ActiveEdge > ListOfEdges;
 
 
@@ -166,9 +166,9 @@ namespace basegfx
                 lower, the finishing edge the higher value.
              */
             enum EdgeType {
-                /// edge with lower coordinate value
+                
                 STARTING_EDGE=0,
-                /// edge with higher coordinate value
+                
                 FINISHING_EDGE=1
             };
 
@@ -206,11 +206,11 @@ namespace basegfx
             EdgeType            getEdgeType() const { return meEdgeType; }
             EdgeDirection       getEdgeDirection() const { return meEdgeDirection; }
 
-            /// For STL sort
+            
             bool operator<( const SweepLineEvent& rRHS ) const { return mfPos < rRHS.mfPos; }
 
         private:
-            /// position of the event, in the direction of the line sweep
+            
             double                mfPos;
 
             /** Rectangle this event is generated for
@@ -224,10 +224,10 @@ namespace basegfx
              */
             const B2DRectangle*   mpAssociatedRect;
 
-            /// 'upper' or 'lower' edge of original rectangle.
+            
             EdgeType              meEdgeType;
 
-            /// 'up' or 'down'
+            
             EdgeDirection         meEdgeDirection;
         };
 
@@ -252,14 +252,14 @@ namespace basegfx
                 maPoints(),
                 mbIsFinished(false)
             {
-                // completely ad-hoc. but what the hell.
+                
                 maPoints.reserve(11);
             }
 
             void setPolygonPoolIndex( std::ptrdiff_t nIdx ) { mnIdx = nIdx; }
             bool isFinished() const { return mbIsFinished; }
 
-            /// Add point to the end of the existing points
+            
             void append( const B2DPoint& rPoint )
             {
                 OSL_PRECOND( maPoints.empty() ||
@@ -270,7 +270,7 @@ namespace basegfx
                 if( maPoints.empty() ||
                     maPoints.back() != rPoint )
                 {
-                    // avoid duplicate points
+                    
                     maPoints.push_back( rPoint );
                 }
             }
@@ -312,13 +312,13 @@ namespace basegfx
                 const B2DPoint aIntersectionPoint( rEvent.getPos(),
                                                    rActiveEdge.getInvariantCoord() );
 
-                // intersection point, goes to our polygon
-                // unconditionally
+                
+                
                 append(aIntersectionPoint);
 
                 if( isFinishingEdge )
                 {
-                    // isSweepLineEnteringRect ?
+                    
                     if( rEvent.getEdgeType() == SweepLineEvent::STARTING_EDGE)
                         handleFinalOwnRightEdge(rActiveEdge);
                     else
@@ -326,15 +326,15 @@ namespace basegfx
                                                rPolygonPool,
                                                rRes);
 
-                    // we're done with this rect & sweep line
+                    
                     return -1;
                 }
                 else if( metOwnEdge(rEvent,rActiveEdge) )
                 {
                     handleInitialOwnEdge(rEvent, rActiveEdge);
 
-                    // point already added, all init done, continue
-                    // with same poly
+                    
+                    
                     return mnIdx;
                 }
                 else
@@ -396,26 +396,26 @@ namespace basegfx
                     rActiveEdge.getTargetPolygonIndex() == mnIdx);
 
                 if( isHittingOurTail )
-                    finish(rRes); // just finish. no fuss.
+                    finish(rRes); 
                 else
                 {
-                    // temp poly hits final left edge
+                    
                     const std::ptrdiff_t nTmpIdx=rActiveEdge.getTargetPolygonIndex();
                     ImplPolygon& rTmp=rPolygonPool.get(nTmpIdx);
 
-                    // active edge's polygon has points
-                    // already. ours need to go in front of them.
+                    
+                    
                     maPoints.insert(maPoints.end(),
                                     rTmp.maPoints.begin(),
                                     rTmp.maPoints.end());
 
-                    // adjust leading edges, we're switching the polygon
+                    
                     ActiveEdge* const pFarEdge=rTmp.mpLeadingRightEdge;
 
                     mpLeadingRightEdge = pFarEdge;
                     pFarEdge->setTargetPolygonIndex(mnIdx);
 
-                    // nTmpIdx is an empty shell, get rid of it
+                    
                     rPolygonPool.free(nTmpIdx);
                 }
             }
@@ -431,8 +431,8 @@ namespace basegfx
                 {
                     finish(rRes);
 
-                    // so "this" is done - need new polygon to collect
-                    // further points
+                    
+                    
                     const std::ptrdiff_t nIdxNewPolygon=rPolygonPool.alloc();
                     rPolygonPool.get(nIdxNewPolygon).setPolygonPoolIndex(nIdxNewPolygon);
                     rPolygonPool.get(nIdxNewPolygon).append(rIntersectionPoint);
@@ -446,8 +446,8 @@ namespace basegfx
                     const std::ptrdiff_t nTmpIdx=rActiveEdge.getTargetPolygonIndex();
                     ImplPolygon& rTmp=rPolygonPool.get(nTmpIdx);
 
-                    // active edge's polygon has points
-                    // already. ours need to go in front of them.
+                    
+                    
                     maPoints.insert(maPoints.end(),
                                     rTmp.maPoints.begin(),
                                     rTmp.maPoints.end());
@@ -455,7 +455,7 @@ namespace basegfx
                     rTmp.maPoints.clear();
                     rTmp.append(rIntersectionPoint);
 
-                    // adjust leading edges, we're switching the polygon
+                    
                     ActiveEdge* const pFarEdge=rTmp.mpLeadingRightEdge;
                     ActiveEdge* const pNearEdge=&rActiveEdge;
 
@@ -486,7 +486,7 @@ namespace basegfx
                 return nTmpIdx;
             }
 
-            /// True when sweep line hits our own active edge
+            
             bool metOwnEdge(const SweepLineEvent& rEvent,
                             ActiveEdge&           rActiveEdge)
             {
@@ -494,7 +494,7 @@ namespace basegfx
                 return bHitOwnEdge;
             }
 
-            /// Retrieve B2DPolygon from this object
+            
             B2DPolygon getPolygon() const
             {
                 B2DPolygon aRes;
@@ -532,13 +532,13 @@ namespace basegfx
              */
             ActiveEdge*           mpLeadingRightEdge;
 
-            /// current index into vector pool
+            
             std::ptrdiff_t        mnIdx;
 
-            /// Container for the actual polygon points
+            
             std::vector<B2DPoint> maPoints;
 
-            /// When true, this polygon is 'done', i.e. nothing must be added anymore.
+            
             bool                  mbIsFinished;
         };
 
@@ -552,15 +552,15 @@ namespace basegfx
                                                 const std::vector<B2DRange>& rRanges,
                                                 const std::vector<B2VectorOrientation>& rOrientations )
         {
-            // we need exactly 2*rectVec.size() events: one for the
-            // left, and one for the right edge of each rectangle
+            
+            
             o_rEventVector.clear();
             o_rEventVector.reserve( 2*rRanges.size() );
 
-            // generate events
-            // ===============
+            
+            
 
-            // first pass: add all left edges in increasing order
+            
             std::vector<B2DRange>::const_iterator aCurrRect=rRanges.begin();
             std::vector<B2VectorOrientation>::const_iterator aCurrOrientation=rOrientations.begin();
             const std::vector<B2DRange>::const_iterator aEnd=rRanges.end();
@@ -577,7 +577,7 @@ namespace basegfx
                                     SweepLineEvent::PROCEED_UP : SweepLineEvent::PROCEED_DOWN) );
             }
 
-            // second pass: add all right edges in reversed order
+            
             std::vector<B2DRange>::const_reverse_iterator aCurrRectR=rRanges.rbegin();
             std::vector<B2VectorOrientation>::const_reverse_iterator aCurrOrientationR=rOrientations.rbegin();
             const std::vector<B2DRange>::const_reverse_iterator aEndR=rRanges.rend();
@@ -593,16 +593,16 @@ namespace basegfx
                                     SweepLineEvent::PROCEED_DOWN : SweepLineEvent::PROCEED_UP ) );
             }
 
-            // sort events
-            // ===========
+            
+            
 
-            // since we use stable_sort, the order of events with the
-            // same x value will not change. The elaborate two-pass
-            // add above thus ensures, that for each two rectangles
-            // with similar left and right x coordinates, the
-            // rectangle whose left event comes first will have its
-            // right event come last. This is advantageous for the
-            // clip algorithm below, see handleRightEdgeCrossing().
+            
+            
+            
+            
+            
+            
+            
 
             std::stable_sort( o_rEventVector.begin(),
                               o_rEventVector.end() );
@@ -639,12 +639,12 @@ namespace basegfx
             const B2DRectangle& rRect=rCurrEvent.getRect();
             const bool          bGoesDown=rCurrEvent.getEdgeDirection() == SweepLineEvent::PROCEED_DOWN;
 
-            // start event - new rect starts here, needs polygon to
-            // collect points into
+            
+            
             const std::ptrdiff_t nIdxPolygon=io_rPolygonPool.alloc();
             io_rPolygonPool.get(nIdxPolygon).setPolygonPoolIndex(nIdxPolygon);
 
-            // upper edge
+            
             aNewEdges.push_back(
                 ActiveEdge(
                     rRect,
@@ -652,7 +652,7 @@ namespace basegfx
                     bGoesDown ? nIdxPolygon : -1,
                     ActiveEdge::UPPER,
                     bGoesDown ? ActiveEdge::PROCEED_LEFT : ActiveEdge::PROCEED_RIGHT) );
-            // lower edge
+            
             aNewEdges.push_back(
                 ActiveEdge(
                     rRect,
@@ -661,17 +661,17 @@ namespace basegfx
                     ActiveEdge::LOWER,
                     bGoesDown ? ActiveEdge::PROCEED_RIGHT : ActiveEdge::PROCEED_LEFT ) );
 
-            // furthermore, have to respect a special tie-breaking
-            // rule here, for edges which share the same y value:
-            // newly added upper edges must be inserted _before_ any
-            // other edge with the same y value, and newly added lower
-            // edges must be _after_ all other edges with the same
-            // y. This ensures that the left vertical edge processing
-            // below encounters the upper edge of the current rect
-            // first, and the lower edge last, which automatically
-            // starts and finishes this rect correctly (as only then,
-            // the polygon will have their associated active edges
-            // set).
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             const double                nMinY( rRect.getMinY() );
             const double                nMaxY( rRect.getMaxY() );
             ListOfEdges::iterator       aCurr( io_rEdgeList.begin() );
@@ -681,12 +681,12 @@ namespace basegfx
                 const double nCurrY( aCurr->getInvariantCoord() );
 
                 if( nCurrY >= nMinY &&
-                    aNewEdges.size() == 2 ) // only add, if not yet done.
+                    aNewEdges.size() == 2 ) 
                 {
-                    // insert upper edge _before_ aCurr. Thus, it will
-                    // be the first entry for a range of equal y
-                    // values. Using splice here, since we hold
-                    // references to the moved list element!
+                    
+                    
+                    
+                    
                     io_rEdgeList.splice( aCurr,
                                          aNewEdges,
                                          aNewEdges.begin() );
@@ -694,23 +694,23 @@ namespace basegfx
 
                 if( nCurrY > nMaxY )
                 {
-                    // insert lower edge _before_ aCurr. Thus, it will
-                    // be the last entry for a range of equal y values
-                    // (aCurr is the first entry strictly larger than
-                    // nMaxY). Using splice here, since we hold
-                    // references to the moved list element!
+                    
+                    
+                    
+                    
+                    
                     io_rEdgeList.splice( aCurr,
                                          aNewEdges,
                                          aNewEdges.begin() );
-                    // done with insertion, can early-exit here.
+                    
                     return;
                 }
 
                 ++aCurr;
             }
 
-            // append remainder of aNewList (might still contain 2 or
-            // 1 elements, depending of the contents of io_rEdgeList).
+            
+            
             io_rEdgeList.splice( aCurr,
                                  aNewEdges );
         }
@@ -721,8 +721,8 @@ namespace basegfx
             return &rEdge.getRect() == &rRect;
         }
 
-        // wow what a hack. necessary because stl's list::erase does
-        // not eat reverse_iterator
+        
+        
         template<typename Cont, typename Iter> Iter eraseFromList(Cont&, Iter);
         template<> inline ListOfEdges::iterator eraseFromList(
             ListOfEdges& rList, ListOfEdges::iterator aIter)
@@ -747,10 +747,10 @@ namespace basegfx
         {
             const basegfx::B2DRange& rCurrRect=rCurrEvent.getRect();
 
-            // fast-forward to rCurrEvent's first active edge (holds
-            // for both starting and finishing sweep line events, a
-            // rect is regarded _outside_ any rects whose events have
-            // started earlier
+            
+            
+            
+            
             first = std::find_if(first, last,
                                  boost::bind(
                          &isSameRect,
@@ -769,14 +769,14 @@ namespace basegfx
 
                 OSL_ASSERT(nCurrPolyIdx != -1);
 
-                // second encounter of my rect -> second edge
-                // encountered, done
+                
+                
                 const bool bExit=
                     nCount &&
                     isSameRect(*first,
                                rCurrRect);
 
-                // deal with current active edge
+                
                 nCurrPolyIdx =
                     rPolygonPool.get(nCurrPolyIdx).intersect(
                         rCurrEvent,
@@ -785,13 +785,13 @@ namespace basegfx
                         rRes,
                         bExit);
 
-                // prune upper & lower active edges, if requested
+                
                 if( bPerformErase && (bExit || !nCount) )
                     first = eraseFromList(rActiveEdgeList,first);
                 else
                     ++first;
 
-                // delayed exit, had to prune first
+                
                 if( bExit )
                     return;
 
@@ -836,7 +836,7 @@ namespace basegfx
                                  VectorOfPolygons& rPolygonPool,
                                  B2DPolyPolygon&   rRes)
         {
-            // inject two new active edges for rect
+            
             createActiveEdgesFromStartEvent( rActiveEdgeList,
                                              rPolygonPool,
                                              rCurrEvent );
@@ -879,24 +879,24 @@ namespace basegfx
         B2DPolyPolygon solveCrossovers(const std::vector<B2DRange>& rRanges,
                                        const std::vector<B2VectorOrientation>& rOrientations)
         {
-            // sweep-line algorithm to generate a poly-polygon
-            // from a bunch of rectangles
-            // ===============================================
+            
+            
+            
             //
-            // This algorithm uses the well-known sweep line
-            // concept, explained in every good text book about
-            // computational geometry.
+            
+            
+            
             //
-            // We start with creating two structures for every
-            // rectangle, one representing the left x coordinate,
-            // one representing the right x coordinate (and both
-            // referencing the original rect). These structs are
-            // sorted with increasing x coordinates.
+            
+            
+            
+            
+            
             //
-            // Then, we start processing the resulting list from
-            // the beginning. Every entry in the list defines a
-            // point in time of the line sweeping from left to
-            // right across all rectangles.
+            
+            
+            
+            
             VectorOfEvents aSweepLineEvents;
             setupSweepLineEventListFromRanges( aSweepLineEvents,
                                                rRanges,
@@ -906,7 +906,7 @@ namespace basegfx
             VectorOfPolygons aPolygonPool;
             ListOfEdges      aActiveEdgeList;
 
-            // sometimes not enough, but a usable compromise
+            
             aPolygonPool.reserve( rRanges.size() );
 
             std::for_each( aSweepLineEvents.begin(),

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -63,16 +63,16 @@ struct BaseLink_Impl
         { delete m_pFileDlg; }
 };
 
-// only for internal management
+
 struct ImplBaseLinkData
 {
     struct tClientType
     {
-        // applies for all links
-        sal_uIntPtr nCntntType; // Update Format
-        // Not Ole-Links
-        sal_Bool    bIntrnlLnk;  // It is an internal link
-        sal_uInt16  nUpdateMode; // UpdateMode
+        
+        sal_uIntPtr nCntntType; 
+        
+        sal_Bool    bIntrnlLnk;  
+        sal_uInt16  nUpdateMode; 
     };
 
     struct tDDEType
@@ -98,7 +98,7 @@ class ImplDdeItem : public DdeGetPutItem
 {
     SvBaseLink* pLink;
     DdeData aData;
-    Sequence< sal_Int8 > aSeq;  // Datacontainer for DdeData !!!
+    Sequence< sal_Int8 > aSeq;  
     sal_Bool bIsValidData : 1;
     sal_Bool bIsInDTOR : 1;
 public:
@@ -121,7 +121,7 @@ public:
     sal_Bool IsInDTOR() const { return bIsInDTOR; }
 };
 
-//--------------------------------------------------------------------------
+
 
 SvBaseLink::SvBaseLink()
     : m_bIsReadOnly(false)
@@ -133,7 +133,7 @@ SvBaseLink::SvBaseLink()
     bWasLastEditOK = sal_False;
 }
 
-//--------------------------------------------------------------------------
+
 
 SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
     : m_bIsReadOnly(false)
@@ -144,13 +144,13 @@ SvBaseLink::SvBaseLink( sal_uInt16 nUpdateMode, sal_uIntPtr nContentType )
     bVisible = bSynchron = bUseCache = sal_True;
     bWasLastEditOK = sal_False;
 
-    // It it going to be a Ole-Link,
+    
     pImplData->ClientType.nUpdateMode = nUpdateMode;
     pImplData->ClientType.nCntntType = nContentType;
     pImplData->ClientType.bIntrnlLnk = sal_False;
 }
 
-//--------------------------------------------------------------------------
+
 
 SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLinkSource* pObj )
     : pImpl(0)
@@ -174,14 +174,14 @@ SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLin
         DdeTopic* pTopic = FindTopic( aLinkName, &nItemStt );
         if( pTopic )
         {
-            // then we have it all together
-            // MM_TODO how do I get the name
-            OUString aStr = aLinkName; // xLinkName->GetDisplayName();
+            
+            
+            OUString aStr = aLinkName; 
             aStr = aStr.copy( nItemStt );
             pImplData->DDEType.pItem = new ImplDdeItem( *this, aStr );
             pTopic->InsertItem( pImplData->DDEType.pItem );
 
-            // store the Advice
+            
             xObj = pObj;
         }
     }
@@ -189,7 +189,7 @@ SvBaseLink::SvBaseLink( const OUString& rLinkName, sal_uInt16 nObjectType, SvLin
         xObj = pObj;
 }
 
-//--------------------------------------------------------------------------
+
 
 SvBaseLink::~SvBaseLink()
 {
@@ -220,7 +220,7 @@ IMPL_LINK( SvBaseLink, EndEditHdl, OUString*, _pNewName )
     return 0;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetObjType( sal_uInt16 nObjTypeP )
 {
@@ -230,14 +230,14 @@ void SvBaseLink::SetObjType( sal_uInt16 nObjTypeP )
     nObjType = nObjTypeP;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetName( const OUString & rNm )
 {
     aLinkName = rNm;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetObj( SvLinkSource * pObj )
 {
@@ -248,32 +248,32 @@ void SvBaseLink::SetObj( SvLinkSource * pObj )
     xObj = pObj;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetLinkSourceName( const OUString & rLnkNm )
 {
     if( aLinkName == rLnkNm )
         return;
 
-    AddNextRef(); // should be superfluous
-    // remove old connection
+    AddNextRef(); 
+    
     Disconnect();
 
     aLinkName = rLnkNm;
 
-    // New Connection
+    
     _GetRealObject();
-    ReleaseRef(); // should be superfluous
+    ReleaseRef(); 
 }
 
-//--------------------------------------------------------------------------
+
 
 OUString  SvBaseLink::GetLinkSourceName() const
 {
     return aLinkName;
 }
 
-//--------------------------------------------------------------------------
+
 
 void SvBaseLink::SetUpdateMode( sal_uInt16 nMode )
 {
@@ -289,7 +289,7 @@ void SvBaseLink::SetUpdateMode( sal_uInt16 nMode )
     }
 }
 
-// #i88291#
+
 void SvBaseLink::clearStreamToLoadFrom()
 {
     m_xInputStreamToLoadFrom.clear();
@@ -319,7 +319,7 @@ sal_Bool SvBaseLink::Update()
             {
                 UpdateResult eRes = DataChanged(sMimeType, aData);
                 bool bSuccess = eRes == SUCCESS;
-                //for manual Updates there is no need to hold the ServerObject
+                
                 if( OBJECT_CLIENT_DDE == nObjType &&
                     LINKUPDATE_ONCALL == GetUpdateMode() && xObj.Is() )
                     xObj->RemoveAllDataAdvise( this );
@@ -327,11 +327,11 @@ sal_Bool SvBaseLink::Update()
             }
             if( xObj.Is() )
             {
-                // should be asynschron?
+                
                 if( xObj->IsPending() )
                     return sal_True;
 
-                // we do not need the object anymore
+                
                 AddNextRef();
                 Disconnect();
                 ReleaseRef();
@@ -361,14 +361,14 @@ void SvBaseLink::_GetRealObject( sal_Bool bConnect)
     {
         OUString sServer;
         if( pImpl->m_pLinkMgr->GetDisplayNames( this, &sServer ) &&
-            sServer == GetpApp()->GetAppName() )  // internal Link !!!
+            sServer == GetpApp()->GetAppName() )  
         {
-            // so that the Internal link can be created!
+            
             nObjType = OBJECT_INTERN;
             xObj = pImpl->m_pLinkMgr->CreateObj( this );
 
             pImplData->ClientType.bIntrnlLnk = sal_True;
-            nObjType = OBJECT_CLIENT_DDE;  // so we know what it once was!
+            nObjType = OBJECT_CLIENT_DDE;  
         }
         else
         {
@@ -388,7 +388,7 @@ sal_uIntPtr SvBaseLink::GetContentType() const
     if( OBJECT_CLIENT_SO & nObjType )
         return pImplData->ClientType.nCntntType;
 
-    return 0;  // all Formats ?
+    return 0;  
 }
 
 
@@ -537,7 +537,7 @@ FileDialogHelper & SvBaseLink::GetInsertFileDialog(const OUString& rFactory) con
 ImplDdeItem::~ImplDdeItem()
 {
     bIsInDTOR = sal_True;
-    // So that no-one gets the idea to delete the pointer when Disconnecting!
+    
     SvBaseLinkRef aRef( pLink );
     aRef->Disconnect();
 }
@@ -546,7 +546,7 @@ DdeData* ImplDdeItem::Get( sal_uIntPtr nFormat )
 {
     if( pLink->GetObj() )
     {
-        // is it still valid?
+        
         if( bIsValidData && nFormat == aData.GetFormat() )
             return &aData;
 
@@ -578,12 +578,12 @@ bool ImplDdeItem::Put( const DdeData*  )
 
 void ImplDdeItem::AdviseLoop( bool bOpen )
 {
-    // Connection is closed, so also unsubscribe link
+    
     if( pLink->GetObj() )
     {
         if( bOpen )
         {
-            // A connection is re-established
+            
             if( OBJECT_DDE_EXTERN == pLink->GetObjType() )
             {
                 pLink->GetObj()->AddDataAdvise( pLink, OUString("text/plain;charset=utf-16"),  ADVISEMODE_NODATA );
@@ -592,8 +592,8 @@ void ImplDdeItem::AdviseLoop( bool bOpen )
         }
         else
         {
-            // So that no-one gets the idea to delete the pointer
-            // when Disconnecting!
+            
+            
             SvBaseLinkRef aRef( pLink );
             aRef->Disconnect();
         }
@@ -616,7 +616,7 @@ static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
         DdeService* pService = *aI;
         if( pService->GetName() == sService )
         {
-            // then we search for the Topic
+            
             OUString sTopic( sNm.getToken( 0, cTokenSeparator, nTokenPos ) );
             if( pItemStt )
                 *pItemStt = nTokenPos;
@@ -630,10 +630,10 @@ static DdeTopic* FindTopic( const OUString & rLinkName, sal_uInt16* pItemStt )
                     if( (*iterTopic)->GetName() == sTopic )
                         return *iterTopic;
 
-                // Topic not found?
-                // then we try once to create it
+                
+                
                 if( i || !pService->MakeTopic( sTopic ) )
-                    break;  // did not work, exiting
+                    break;  
             }
             break;
         }

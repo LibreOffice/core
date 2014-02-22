@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,26 +14,26 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "java/ContextClassLoader.hxx"
 #include "java/lang/Object.hxx"
 
-//........................................................................
+
 namespace connectivity { namespace jdbc
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::XInterface;
 
     using ::connectivity::java_lang_Object;
 
-    //====================================================================
-    //= ContextClassLoaderScope
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ContextClassLoaderScope::ContextClassLoaderScope( JNIEnv& environment, const GlobalRef< jobject >& newClassLoader,
         const ::comphelper::ResourceBasedEventLogger& _rLoggerForErrors, const Reference< XInterface >& _rxErrorContext )
         :m_environment( environment )
@@ -44,7 +44,7 @@ namespace connectivity { namespace jdbc
         if ( !newClassLoader.is() )
             return;
 
-        do  // artificial loop for easier flow control
+        do  
         {
 
         LocalRef< jclass > threadClass( m_environment );
@@ -84,7 +84,7 @@ namespace connectivity { namespace jdbc
             return;
         }
 
-        // set the new class loader
+        
         m_environment.CallObjectMethod( m_currentThread.get(), m_setContextClassLoaderMethod, newClassLoader.get() );
         LocalRef< jthrowable > throwable( m_environment, m_environment.ExceptionOccurred() );
         if ( throwable.is() )
@@ -95,7 +95,7 @@ namespace connectivity { namespace jdbc
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ContextClassLoaderScope::pop( bool clearExceptions )
     {
         if ( isActive() )
@@ -111,8 +111,8 @@ namespace connectivity { namespace jdbc
             }
         }
     }
-//........................................................................
-} } // namespace connectivity::jdbc
-//........................................................................
+
+} } 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

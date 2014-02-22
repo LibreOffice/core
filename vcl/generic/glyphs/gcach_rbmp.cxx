@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,7 +31,7 @@ RawBitmap::~RawBitmap()
 {}
 
 
-// used by 90 and 270 degree rotations on 8 bit deep bitmaps
+
 static void ImplRotate8_90( unsigned char* p1, const unsigned char* p2,
     int xmax, int ymax, int dx, int dy, int nPad )
 {
@@ -45,7 +45,7 @@ static void ImplRotate8_90( unsigned char* p1, const unsigned char* p2,
 }
 
 
-// used by inplace 180 degree rotation on 8 bit deep bitmaps
+
 static void ImplRotate8_180( unsigned char* p1, int xmax, int ymax, int nPad )
 {
     unsigned char* p2 = p1 + ymax * (xmax + nPad);
@@ -61,7 +61,7 @@ static void ImplRotate8_180( unsigned char* p1, int xmax, int ymax, int nPad )
         p1 += nPad;
     }
 
-    // reverse middle line
+    
     p2 -= nPad;
     while( p1 < p2 )
     {
@@ -72,7 +72,7 @@ static void ImplRotate8_180( unsigned char* p1, int xmax, int ymax, int nPad )
 }
 
 
-// used by 90 or 270 degree rotations on 1 bit deep bitmaps
+
 static void ImplRotate1_90( unsigned char* p1, const unsigned char* p2,
     int xmax, int ymax, int dx, int nShift, int nDeltaShift, int nPad )
 {
@@ -82,7 +82,7 @@ static void ImplRotate1_90( unsigned char* p1, const unsigned char* p2,
         const unsigned char* p20 = p2;
         for( int x = xmax; --x >= 0; p2 += dx )
         {
-            // build bitwise and store when byte finished
+            
            nTemp += nTemp + ((*p2 >> nShift) & 1);
             if( nTemp >= 0x100U )
             {
@@ -92,17 +92,17 @@ static void ImplRotate1_90( unsigned char* p1, const unsigned char* p2,
         }
         p2 = p20;
 
-        // store left aligned remainder if needed
+        
         if( nTemp > 1 )
         {
             for(; nTemp < 0x100U; nTemp += nTemp ) ;
             *(p1++) = (unsigned char)nTemp;
         }
-        // pad scanline with zeroes
+        
         for( int i = nPad; --i >= 0;)
             *(p1++) = 0;
 
-        // increase/decrease shift, but keep bound inside 0 to 7
+        
         nShift += nDeltaShift;
         if( nShift != (nShift & 7) )
             p2 -= nDeltaShift;
@@ -111,7 +111,7 @@ static void ImplRotate1_90( unsigned char* p1, const unsigned char* p2,
 }
 
 
-// used by 180 degrees rotations on 1 bit deep bitmaps
+
 static void ImplRotate1_180( unsigned char* p1, const unsigned char* p2,
     int xmax, int ymax, int nPad )
 {
@@ -124,25 +124,25 @@ static void ImplRotate1_180( unsigned char* p1, const unsigned char* p2,
         unsigned nInp = (0x100 + *p2) >> (-xmax & 7);
         for( int x = xmax; --x >= 0; )
         {
-            // build bitwise and store when byte finished
+            
             nTemp += nTemp + (nInp & 1);
             if( nTemp >= 0x100 )
             {
                 *(p1++) = (unsigned char)nTemp;
                 nTemp = 1;
             }
-            // update input byte if needed (and available)
+            
             if( (nInp >>= 1) <= 1 && ((y != 0) || (x != 0)) )
                 nInp = 0x100 + *(--p2);
         }
 
-        // store left aligned remainder if needed
+        
         if( nTemp > 1 )
         {
             for(; nTemp < 0x100; nTemp += nTemp ) ;
             *(p1++) = (unsigned char)nTemp;
         }
-        // scanline pad is already clean
+        
         p1 += nPad;
     }
 }
@@ -154,15 +154,15 @@ bool RawBitmap::Rotate( int nAngle )
     sal_uLong nNewHeight = 0;
     sal_uLong nNewWidth = 0;
 
-    // do inplace rotation or prepare double buffered rotation
+    
     switch( nAngle )
     {
-        case 0:     // nothing to do
+        case 0:     
         case 3600:
             return true;
-        default:    // non rectangular angles not allowed
+        default:    
             return false;
-        case 1800:  // rotate by 180 degrees
+        case 1800:  
             mnXOffset = -(mnXOffset + mnWidth);
             mnYOffset = -(mnYOffset + mnHeight);
             if( mnBitCount == 8 )
@@ -174,9 +174,9 @@ bool RawBitmap::Rotate( int nAngle )
             nNewHeight       = mnHeight;
             nNewScanlineSize = mnScanlineSize;
             break;
-        case +900:  // left by 90 degrees
+        case +900:  
         case -900:
-        case 2700:  // right by 90 degrees
+        case 2700:  
             nNewWidth        = mnHeight;
             nNewHeight       = mnWidth;
             if( mnBitCount==1 )
@@ -194,15 +194,15 @@ bool RawBitmap::Rotate( int nAngle )
     memset( pBuf, 0, nBufSize );
     int i;
 
-    // dispatch non-inplace rotations
+    
     switch( nAngle )
     {
-        case 1800:  // rotate by 180 degrees
-            // we know we only need to deal with 1 bit depth
+        case 1800:  
+            
             ImplRotate1_180( pBuf, mpBits.get() + mnHeight * mnScanlineSize,
                 mnWidth, mnHeight, mnScanlineSize - (mnWidth + 7) / 8 );
             break;
-        case +900:  // rotate left by 90 degrees
+        case +900:  
             i = mnXOffset;
             mnXOffset = mnYOffset;
             mnYOffset = -nNewHeight - i;
@@ -215,7 +215,7 @@ bool RawBitmap::Rotate( int nAngle )
                     nNewWidth, nNewHeight, +mnScanlineSize,
                     (-mnWidth & 7), +1, nNewScanlineSize - (nNewWidth + 7) / 8 );
             break;
-        case 2700:  // rotate right by 90 degrees
+        case 2700:  
         case -900:
             i = mnXOffset;
             mnXOffset = -(nNewWidth + mnYOffset);

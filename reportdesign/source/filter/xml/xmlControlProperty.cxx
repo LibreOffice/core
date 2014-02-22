@@ -80,7 +80,7 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
                 break;
             case XML_TOK_VALUE_TYPE:
                 {
-                    // needs to be translated into a ::com::sun::star::uno::Type
+                    
                     static std::map< OUString, css::uno::Type > s_aTypeNameMap;
                     if (s_aTypeNameMap.empty())
                     {
@@ -110,12 +110,12 @@ OXMLControlProperty::OXMLControlProperty( ORptFilter& rImport
     }
 
 }
-// -----------------------------------------------------------------------------
+
 
 OXMLControlProperty::~OXMLControlProperty()
 {
 }
-// -----------------------------------------------------------------------------
+
 SvXMLImportContext* OXMLControlProperty::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,
@@ -144,7 +144,7 @@ SvXMLImportContext* OXMLControlProperty::CreateChildContext(
 
     return pContext;
 }
-// -----------------------------------------------------------------------------
+
 void OXMLControlProperty::EndElement()
 {
     if ( !m_aSetting.Name.isEmpty() && m_xControl.is() )
@@ -161,13 +161,13 @@ void OXMLControlProperty::EndElement()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 void OXMLControlProperty::Characters( const OUString& rChars )
 {
     if ( m_pContainer )
         m_pContainer->addValue(rChars);
 }
-// -----------------------------------------------------------------------------
+
 void OXMLControlProperty::addValue(const OUString& _sValue)
 {
     Any aValue;
@@ -183,18 +183,18 @@ void OXMLControlProperty::addValue(const OUString& _sValue)
         m_aSequence[nPos] = aValue;
     }
 }
-// -----------------------------------------------------------------------------
+
 ORptFilter& OXMLControlProperty::GetOwnImport()
 {
     return static_cast<ORptFilter&>(GetImport());
 }
-// -----------------------------------------------------------------------------
+
 Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpectedType, const OUString& _rReadCharacters)
 {
     Any aReturn;
     switch (_rExpectedType.getTypeClass())
     {
-        case TypeClass_BOOLEAN:     // sal_Bool
+        case TypeClass_BOOLEAN:     
         {
             bool bValue(false);
         #if OSL_DEBUG_LEVEL > 0
@@ -208,9 +208,9 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
             aReturn <<= bValue;
         }
         break;
-        case TypeClass_SHORT:       // sal_Int16
-        case TypeClass_LONG:        // sal_Int32
-            {   // it's a real int32/16 property
+        case TypeClass_SHORT:       
+        case TypeClass_LONG:        
+            {   
                 sal_Int32 nValue(0);
         #if OSL_DEBUG_LEVEL > 0
                 sal_Bool bSuccess =
@@ -250,7 +250,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
             break;
         case TypeClass_STRUCT:
             {
-                // recognized structs:
+                
                 static ::com::sun::star::uno::Type s_aDateType      = ::getCppuType(static_cast< ::com::sun::star::util::Date* >(NULL));
                 static ::com::sun::star::uno::Type s_aTimeType      = ::getCppuType(static_cast< ::com::sun::star::util::Time* >(NULL));
                 static ::com::sun::star::uno::Type s_aDateTimeType  = ::getCppuType(static_cast< ::com::sun::star::util::DateTime* >(NULL));
@@ -263,7 +263,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                     nType = TYPE_DATETIME;
                 if ( nType )
                 {
-                    // first extract the double
+                    
                     double nValue = 0;
                 #if OSL_DEBUG_LEVEL > 0
                     sal_Bool bSuccess =
@@ -274,7 +274,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
                         append(OUStringToOString(_rReadCharacters, RTL_TEXTENCODING_ASCII_US)).
                         append("\" into a double!").getStr());
 
-                    // then convert it into the target type
+                    
                     switch (nType)
                     {
                         case TYPE_DATE:
@@ -321,7 +321,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
 
     return aReturn;
 }
-//---------------------------------------------------------------------
+
 ::com::sun::star::util::Time OXMLControlProperty::implGetTime(double _nValue)
 {
     ::com::sun::star::util::Time aTime;
@@ -338,7 +338,7 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     return aTime;
 }
 
-//---------------------------------------------------------------------
+
 ::com::sun::star::util::Date OXMLControlProperty::implGetDate(double _nValue)
 {
     Date aToolsDate((sal_uInt32)_nValue);
@@ -346,8 +346,8 @@ Any OXMLControlProperty::convertString(const ::com::sun::star::uno::Type& _rExpe
     ::utl::typeConvert(aToolsDate, aDate);
     return aDate;
 }
-//----------------------------------------------------------------------------
-} // namespace rptxml
-// -----------------------------------------------------------------------------
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

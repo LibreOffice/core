@@ -76,17 +76,17 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, i
     {
     if( body == NULL )
         return;
-    // TODO: If the if/else/while/for comes from a macro expansion, ignore it completely for
-    // now. The code below could assume everything is in the same place (and thus also column)
-    // and give a false warning. Moreover some macros are rather lousily written and would
-    // result in poor formatting. To be evaluated later, maybe this could be handled
-    // including macro expansion.
+    
+    
+    
+    
+    
     if( stmtLocation.isMacroID())
         return;
     if( dyn_cast< CompoundStmt >( body ))
-        return; // if body is a compound statement, then it is in {}
-    const Stmt* previousParent = parentStmt( body ); // Here the statement itself.
-    // Find the next statement (in source position) after 'body'.
+        return; 
+    const Stmt* previousParent = parentStmt( body ); 
+    
     for(;;)
         {
         const Stmt* parent = parentStmt( previousParent );
@@ -96,12 +96,12 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, i
              it != parent->child_end();
              )
             {
-            if( *it == previousParent ) // found grand(grand...)parent
+            if( *it == previousParent ) 
                 {
-                // get next statement after our (grand...)parent
+                
                 ++it;
                 while( it != parent->child_end() && *it == NULL )
-                    ++it; // skip empty ones (missing 'else' bodies for example)
+                    ++it; 
                 if( it != parent->child_end())
                     {
                     bool invalid1, invalid2;
@@ -122,18 +122,18 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, i
                         }
                     return;
                     }
-                // else we need to go higher to find the next statement
+                
                 }
             else
                 ++it;
             }
-        // If going up would mean leaving a {} block, stop, because the } should
-        // make it visible the two statements are not in the same body.
+        
+        
         if( dyn_cast< CompoundStmt >( parent ))
             return;
-        // If the body to be checked is a body of an if statement that has also
-        // an else part, don't go up, the else is after the body and should make
-        // it clear the body does not continue there.
+        
+        
+        
         if( dontGoUp )
             return;
         previousParent = parent;
@@ -142,6 +142,6 @@ void BodyNotInBlock::checkBody( const Stmt* body, SourceLocation stmtLocation, i
 
 static Plugin::Registration< BodyNotInBlock > X( "bodynotinblock" );
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

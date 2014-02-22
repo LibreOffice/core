@@ -29,7 +29,7 @@
 #include <vcl/svapp.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
-// VDev RevDevice provider
+
 
 namespace
 {
@@ -72,7 +72,7 @@ namespace
         mpVirDev(0L),
         mnUseCount(0L)
     {
-        SetTimeout(3L * 60L * 1000L); // three minutes
+        SetTimeout(3L * 60L * 1000L); 
         Start();
     }
 
@@ -85,7 +85,7 @@ namespace
 
     void ImpTimedRefDev::Timeout()
     {
-        // for obvious reasons, do not call anything after this
+        
         mrOwnerOfMe.reset();
     }
 
@@ -117,16 +117,16 @@ namespace
             Start();
         }
     }
-} // end of anonymous namespace
+} 
 
 //////////////////////////////////////////////////////////////////////////////
-// access to one global ImpTimedRefDev incarnation in namespace drawinglayer::primitive
+
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        // static methods here
+        
         VirtualDevice& acquireGlobalVirtualDevice()
         {
             scoped_timed_RefDev& rStdRefDevice = the_scoped_timed_RefDev::get();
@@ -296,7 +296,7 @@ namespace drawinglayer
                     nIndex,
                     nLength);
 
-                // #i104432#, #i102556# take empty results into account
+                
                 if(!aRect.IsEmpty())
                 {
                     return basegfx::B2DRange(
@@ -355,11 +355,11 @@ namespace drawinglayer
             return aRetval;
         }
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
-// helper methods for vcl font handling
+
 
 namespace drawinglayer
 {
@@ -372,31 +372,31 @@ namespace drawinglayer
             double fFontRotation,
             const ::com::sun::star::lang::Locale& rLocale)
         {
-            // detect FontScaling
+            
             const sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));
             const sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
             const bool bFontIsScaled(nHeight != nWidth);
 
 #ifdef WIN32
-            // for WIN32 systems, start with creating an unscaled font. If FontScaling
-            // is wanted, that width needs to be adapted using FontMetric again to get a
-            // width of the unscaled font
+            
+            
+            
             Font aRetval(
                 rFontAttribute.getFamilyName(),
                 rFontAttribute.getStyleName(),
                 Size(0, nHeight));
 #else
-            // for non-WIN32 systems things are easier since these accept a Font creation
-            // with initially nWidth != nHeight for FontScaling. Despite that, use zero for
-            // FontWidth when no scaling is used to explicitly have that zero when e.g. the
-            // Font would be recorded in a MetaFile (The MetaFile FontAction WILL record a
-            // set FontWidth; import that in a WIN32 system, and trouble is there)
+            
+            
+            
+            
+            
             Font aRetval(
                 rFontAttribute.getFamilyName(),
                 rFontAttribute.getStyleName(),
                 Size(bFontIsScaled ? nWidth : 0, nHeight));
 #endif
-            // define various other FontAttribute
+            
             aRetval.SetAlign(ALIGN_BASELINE);
             aRetval.SetCharSet(rFontAttribute.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
             aRetval.SetVertical(rFontAttribute.getVertical() ? sal_True : sal_False);
@@ -407,7 +407,7 @@ namespace drawinglayer
             aRetval.SetLanguage(LanguageTag::convertToLanguageType( rLocale, false));
 
 #ifdef WIN32
-            // for WIN32 systems, correct the FontWidth if FontScaling is used
+            
             if(bFontIsScaled && nHeight > 0)
             {
                 const FontMetric aUnscaledFontMetric(Application::GetDefaultDevice()->GetFontMetric(aRetval));
@@ -420,7 +420,7 @@ namespace drawinglayer
                 }
             }
 #endif
-            // handle FontRotation (if defined)
+            
             if(!basegfx::fTools::equalZero(fFontRotation))
             {
                 sal_Int16 aRotate10th((sal_Int16)(fFontRotation * (-1800.0/F_PI)));
@@ -447,18 +447,18 @@ namespace drawinglayer
                 rFont.IsOutline(),
                 bRTL,
                 bBiDiStrong);
-            // TODO: eKerning
+            
 
-            // set FontHeight and init to no FontScaling
+            
             o_rSize.setY(rFont.GetSize().getHeight() > 0 ? rFont.GetSize().getHeight() : 0);
             o_rSize.setX(o_rSize.getY());
 
 #ifdef WIN32
-            // for WIN32 systems, the FontScaling at the Font is detected by
-            // checking that FontWidth != 0. When FontScaling is used, WIN32
-            // needs to do extra stuff to detect the correct width (since it's
-            // zero and not equal the font height) and it's relationship to
-            // the height
+            
+            
+            
+            
+            
             if(rFont.GetSize().getWidth() > 0)
             {
                 Font aUnscaledFont(rFont);
@@ -472,10 +472,10 @@ namespace drawinglayer
                 }
             }
 #else
-            // For non-WIN32 systems the detection is the same, but the value
-            // is easier achieved since width == height is interpreted as no
-            // scaling. Ergo, Width == 0 means width == height, and width != 0
-            // means the scaling is in the direct relation of width to height
+            
+            
+            
+            
             if(rFont.GetSize().getWidth() > 0)
             {
                 o_rSize.setX((double)rFont.GetSize().getWidth());
@@ -483,7 +483,7 @@ namespace drawinglayer
 #endif
             return aRetval;
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

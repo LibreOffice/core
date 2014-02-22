@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -126,8 +126,8 @@ Mutex& DispatchWatcher::GetMutex()
     return theWatcherMutex::get();
 }
 
-// Create or get the dispatch watcher implementation. This implementation must be
-// a singleton to prevent access to the framework after it wants to terminate.
+
+
 DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
 {
     static Reference< XInterface > xDispatchWatcher;
@@ -141,7 +141,7 @@ DispatchWatcher* DispatchWatcher::GetDispatchWatcher()
         {
             pDispatchWatcher = new DispatchWatcher();
 
-            // We have to hold a reference to ourself forever to prevent our own destruction.
+            
             xDispatchWatcher = static_cast< cppu::OWeakObject *>( pDispatchWatcher );
         }
     }
@@ -175,12 +175,12 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     {
         const DispatchRequest&  aDispatchRequest = *p;
 
-        // create parameter array
+        
         sal_Int32 nCount = 4;
         if ( !aDispatchRequest.aPreselectedFactory.isEmpty() )
             nCount++;
 
-        // Set Input Filter
+        
         if ( aDispatchRequest.aRequestType == REQUEST_INFILTER )
         {
             bSetInputFilter = sal_True;
@@ -189,7 +189,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             continue;
         }
 
-        // we need more properties for a print/print to request
+        
         if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
              aDispatchRequest.aRequestType == REQUEST_PRINTTO ||
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
@@ -198,7 +198,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
         Sequence < PropertyValue > aArgs( nCount );
 
-        // mark request as user interaction from outside
+        
         aArgs[0].Name = "Referer";
         aArgs[0].Value <<= OUString("private:OpenEvent");
 
@@ -243,24 +243,24 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
              aDispatchRequest.aRequestType == REQUEST_BATCHPRINT ||
              aDispatchRequest.aRequestType == REQUEST_CONVERSION)
         {
-            // documents opened for printing are opened readonly because they must be opened as a new document and this
-            // document could be open already
+            
+            
             aArgs[1].Value <<= sal_True;
 
-            // always open a new document for printing, because it must be disposed afterwards
+            
             aArgs[2].Value <<= sal_True;
 
-            // printing is done in a hidden view
+            
             aArgs[3].Value <<= sal_True;
 
-            // load document for printing without user interaction
+            
             aArgs[4].Value <<= sal_True;
 
-            // hidden documents should never be put into open tasks
+            
             aTarget = "_blank";
         }
-        // load the document ... if they are loadable!
-        // Otherwise try to dispatch it ...
+        
+        
         Reference < XPrintable > xDoc;
         if(
             ( aName.startsWith( ".uno" ) )  ||
@@ -269,8 +269,8 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             ( aName.startsWith("vnd.sun.star.script") )
           )
         {
-            // Attention: URL must be parsed full. Otherwise some detections on it will fail!
-            // It doesn't matter, if parser isn't available. Because; We try loading of URL then ...
+            
+            
             URL             aURL ;
             aURL.Complete = aName;
 
@@ -286,19 +286,19 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             {
                 {
                     ::osl::ClearableMutexGuard aGuard( GetMutex() );
-                    // Remember request so we can find it in statusChanged!
+                    
                     m_aRequestContainer.insert( DispatchWatcherHashMap::value_type( aURL.Complete, (sal_Int32)1 ) );
                     m_nRequestCount++;
                 }
 
-                // Use local vector to store dispatcher because we have to fill our request container before
-                // we can dispatch. Otherwise it would be possible that statusChanged is called before we dispatched all requests!!
+                
+                
                 aDispatches.push_back( DispatchHolder( aURL, xDispatcher ));
             }
         }
         else if ( ( aName.startsWith( "service:" ) ) )
         {
-            // TODO: the dispatch has to be done for loadComponentFromURL as well. Please ask AS for more details.
+            
             URL             aURL ;
             aURL.Complete = aName;
 
@@ -314,9 +314,9 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             {
                 try
                 {
-                    // We have to be listener to catch errors during dispatching URLs.
-                    // Otherwise it would be possible to have an office running without an open
-                    // window!!
+                    
+                    
+                    
                     Sequence < PropertyValue > aArgs2(1);
                     aArgs2[0].Name    = "SynchronMode";
                     aArgs2[0].Value <<= sal_True;
@@ -342,7 +342,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
             if ( aObj.GetProtocol() == INET_PROT_PRIVATE )
                 aTarget = "_default";
 
-            // Set "AsTemplate" argument according to request type
+            
             if ( aDispatchRequest.aRequestType == REQUEST_FORCENEW ||
                  aDispatchRequest.aRequestType == REQUEST_FORCEOPEN     )
             {
@@ -355,7 +355,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                     aArgs[nIndex].Value <<= sal_False;
             }
 
-            // if we are called in viewmode, open document read-only
+            
             if(aDispatchRequest.aRequestType == REQUEST_VIEW) {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
@@ -363,7 +363,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 aArgs[nIndex].Value <<= sal_True;
             }
 
-            // if we are called with -start set Start in mediadescriptor
+            
             if(aDispatchRequest.aRequestType == REQUEST_START) {
                 sal_Int32 nIndex = aArgs.getLength();
                 aArgs.realloc(nIndex+1);
@@ -371,7 +371,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 aArgs[nIndex].Value <<= sal_True;
             }
 
-            // Force input filter, if possible
+            
             if( bSetInputFilter )
             {
                 sal_Int32 nIndex = aArgs.getLength();
@@ -380,7 +380,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 aArgs[nIndex].Value <<= aForcedInputFilter;
             }
 
-            // This is a synchron loading of a component so we don't have to deal with our statusChanged listener mechanism.
+            
             try
             {
                 xDoc = Reference < XPrintable >( ::comphelper::SynchronousDispatch::dispatch( xDesktop, aName, aTarget, 0, aArgs ), UNO_QUERY );
@@ -405,7 +405,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                  aDispatchRequest.aRequestType == REQUEST_FORCEOPEN ||
                  aDispatchRequest.aRequestType == REQUEST_FORCENEW      )
             {
-                // request is completed
+                
                 OfficeIPCThread::RequestsCompleted( 1 );
             }
             else if ( aDispatchRequest.aRequestType == REQUEST_PRINT ||
@@ -435,7 +435,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             }
                             else
                             {
-                                // Guess
+                                
                                 bGuess = sal_True;
                                 aFilterExt = aParam.copy( 0, nPathIndex );
                             }
@@ -503,7 +503,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                                aPrinterName.isEmpty() ?
                                                      "<default_printer>" : OUStringToOString( aPrinterName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-                        // create the custom printer, if given
+                        
                         Sequence < PropertyValue > aPrinterArgs( 1 );
                         if( !aPrinterName.isEmpty() )
                         {
@@ -512,7 +512,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                             xDoc->setPrinter( aPrinterArgs );
                         }
 
-                        // print ( also without user interaction )
+                        
                         aPrinterArgs.realloc(2);
                         aPrinterArgs[0].Name = "FileName";
                         aPrinterArgs[0].Value <<= aOutFile;
@@ -522,14 +522,14 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                     } else {
                         if ( aDispatchRequest.aRequestType == REQUEST_PRINTTO )
                         {
-                            // create the printer
+                            
                             Sequence < PropertyValue > aPrinterArgs( 1 );
                             aPrinterArgs[0].Name = "Name";
                             aPrinterArgs[0].Value <<= OUString( aDispatchRequest.aPrinterName );
                             xDoc->setPrinter( aPrinterArgs );
                         }
 
-                        // print ( also without user interaction )
+                        
                         Sequence < PropertyValue > aPrinterArgs( 1 );
                         aPrinterArgs[0].Name = "Wait";
                         aPrinterArgs[0].Value <<= ( sal_Bool ) sal_True;
@@ -538,10 +538,10 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 }
                 else
                 {
-                    // place error message here ...
+                    
                 }
 
-                // remove the document
+                
                 try
                 {
                     Reference < XCloseable > xClose( xDoc, UNO_QUERY );
@@ -558,7 +558,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
                 {
                 }
 
-                // request is completed
+                
                 OfficeIPCThread::RequestsCompleted( 1 );
             }
         }
@@ -566,7 +566,7 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
 
     if ( !aDispatches.empty() )
     {
-        // Execute all asynchronous dispatches now after we placed them into our request container!
+        
         Sequence < PropertyValue > aArgs( 2 );
         aArgs[0].Name = "Referer";
         aArgs[0].Value <<= OUString("private:OpenEvent");
@@ -593,18 +593,18 @@ sal_Bool DispatchWatcher::executeDispatchRequests( const DispatchList& aDispatch
     bool bEmpty = (m_nRequestCount == 0);
     aGuard.clear();
 
-    // No more asynchronous requests?
-    // The requests are removed from the request container after they called back to this
-    // implementation via statusChanged!!
+    
+    
+    
     if ( bEmpty && !bNoTerminate /*m_aRequestContainer.empty()*/ )
     {
-        // We have to check if we have an open task otherwise we have to shutdown the office.
+        
         aGuard.clear();
         Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY );
 
         if ( !xList->hasElements() )
         {
-            // We don't have any task open so we have to shutdown ourself!!
+            
             return xDesktop->terminate();
         }
     }
@@ -627,13 +627,13 @@ void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) th
     OfficeIPCThread::RequestsCompleted( 1 );
     if ( !nCount && !OfficeIPCThread::AreRequestsPending() )
     {
-        // We have to check if we have an open task otherwise we have to shutdown the office.
+        
         Reference< XDesktop2 > xDesktop = Desktop::create( ::comphelper::getProcessComponentContext() );
         Reference< XElementAccess > xList( xDesktop->getFrames(), UNO_QUERY );
 
         if ( !xList->hasElements() )
         {
-            // We don't have any task open so we have to shutdown ourself!!
+            
             xDesktop->terminate();
         }
     }

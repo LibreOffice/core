@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ado/AIndex.hxx"
@@ -35,7 +35,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
-// -------------------------------------------------------------------------
+
 OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection,ADOIndex* _pIndex)
     : OIndex_ADO(OUString(),OUString(),sal_False,sal_False,sal_False,_bCase)
     ,m_pConnection(_pConnection)
@@ -44,7 +44,7 @@ OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection,ADOIndex* _pIndex
     m_aIndex = WpADOIndex(_pIndex);
     fillPropertyValues();
 }
-// -------------------------------------------------------------------------
+
 OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection)
     : OIndex_ADO(_bCase)
     ,m_pConnection(_pConnection)
@@ -53,7 +53,7 @@ OAdoIndex::OAdoIndex(sal_Bool _bCase,OConnection* _pConnection)
     m_aIndex.Create();
 }
 
-// -------------------------------------------------------------------------
+
 
 void OAdoIndex::refreshColumns()
 {
@@ -72,7 +72,7 @@ void OAdoIndex::refreshColumns()
         m_pColumns = new OColumns(*this,m_aMutex,aVector,aColumns,isCaseSensitive(),m_pConnection);
 }
 
-// -------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OAdoIndex::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -88,15 +88,15 @@ Sequence< sal_Int8 > OAdoIndex::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
+
 sal_Int64 OAdoIndex::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OIndex_ADO::getSomething(rId);
 }
-// -------------------------------------------------------------------------
+
 void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
 {
     if(m_aIndex.IsValid())
@@ -130,17 +130,17 @@ void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
     }
     OIndex_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoIndex::acquire() throw()
 {
     OIndex_ADO::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoIndex::release() throw()
 {
     OIndex_ADO::release();
 }
-// -----------------------------------------------------------------------------
+
 
 
 

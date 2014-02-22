@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -126,7 +126,7 @@ void FontCache::flush()
 
         for( FontDirMap::const_iterator entry_it = rDir.begin(); entry_it != rDir.end(); ++entry_it )
         {
-            // insert cache entries
+            
             const FontCacheEntry& rEntry( entry_it->second.m_aEntry );
             if( rEntry.begin() == rEntry.end() )
                 continue;
@@ -136,7 +136,7 @@ void FontCache::flush()
             aStream.WriteLine(aLine.makeStringAndClear());
 
             int nEntrySize = entry_it->second.m_aEntry.size();
-            // write: type;nfonts
+            
             aLine.append(static_cast<sal_Int32>(rEntry.front()->m_eType));
             aLine.append(';');
             aLine.append(static_cast<sal_Int32>(nEntrySize));
@@ -281,19 +281,19 @@ void FontCache::read()
             }
             else
             {
-                // invalid format, remove
+                
                 pDir = NULL;
                 nDir = 0;
                 m_bDoFlush = true;
                 continue;
             }
 
-            // is the directory modified ?
+            
             struct stat aStat;
             if( stat( aDir.getStr(), &aStat )               ||
                 ! S_ISDIR(aStat.st_mode) )
             {
-                // remove outdated cache data
+                
                 pDir = NULL;
                 nDir = 0;
                 m_bDoFlush = true;
@@ -368,7 +368,7 @@ void FontCache::read()
                 pLine = aLine.getStr();
                 nLen = aLine.getLength();
 
-                // get up to 20 token positions
+                
                 const int nMaxTokens = 20;
                 int nTokenPos[nMaxTokens];
                 nTokenPos[0] = 0;

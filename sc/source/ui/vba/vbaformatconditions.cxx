@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <ooo/vba/excel/XRange.hpp>
@@ -117,13 +117,13 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
 uno::Reference< excel::XFormatCondition >
 ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2, const css::uno::Reference< excel::XStyle >& _xStyle  ) throw (script::BasicErrorException, uno::RuntimeException)
 {
-    // #TODO
-    // #FIXME
-    // This method will NOT handle r1c1 formulas [*]and only assumes that
-    // the formulas are _xlA1 based ( need to hook into calc work ths should
-    // address this )
-    // [*] reason: getA1Formula method below is just a hook and just
-    // returns whats it gets ( e.g. doesn't convert anything )
+    
+    
+    
+    
+    
+    
+    
     uno::Reference< excel::XStyle > xStyle( _xStyle );
     uno::Reference< excel::XFormatCondition > xFormatCondition;
     try
@@ -164,7 +164,7 @@ ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, cons
         aProperty.Name = STYLENAME;
         aProperty.Value = uno::makeAny( sStyleName );
 
-        // convert vector to sequence
+        
         uno::Sequence< beans::PropertyValue > aPropertyValueList(aPropertyValueVector.size());
         VecPropValues::iterator it = aPropertyValueVector.begin();
         VecPropValues::iterator it_end = aPropertyValueVector.end();
@@ -214,7 +214,7 @@ ScVbaFormatConditions::notifyRange() throw ( script::BasicErrorException )
 OUString
 ScVbaFormatConditions::getA1Formula(const css::uno::Any& _aFormula) throw ( script::BasicErrorException )
 {
-    // #TODO, #FIXME hook-in proper formula conversion detection & logic
+    
     OUString sFormula;
     if ( !( _aFormula >>= sFormula ) )
         DebugHelper::exception(SbERR_BAD_PARAMETER, OUString() );

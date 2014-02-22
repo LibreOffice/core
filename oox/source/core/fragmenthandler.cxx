@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/core/fragmenthandler.hxx"
@@ -24,14 +24,14 @@
 namespace oox {
 namespace core {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
 
 
-// ============================================================================
+
 
 FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, const OUString& rFragmentPath, RelationsRef xRelations ) :
     mrFilter( rFilter ),
@@ -40,7 +40,7 @@ FragmentBaseData::FragmentBaseData( XmlFilterBase& rFilter, const OUString& rFra
 {
 }
 
-// ============================================================================
+
 
 FragmentHandler::FragmentHandler( XmlFilterBase& rFilter, const OUString& rFragmentPath ) :
     FragmentHandler_BASE( FragmentBaseDataRef( new FragmentBaseData( rFilter, rFragmentPath, rFilter.importRelations( rFragmentPath ) ) ) )
@@ -56,7 +56,7 @@ FragmentHandler::~FragmentHandler()
 {
 }
 
-// com.sun.star.xml.sax.XFastDocumentHandler interface ------------------------
+
 
 void FragmentHandler::startDocument() throw( SAXException, RuntimeException )
 {
@@ -71,7 +71,7 @@ void FragmentHandler::setDocumentLocator( const Reference< XLocator >& rxLocator
     implSetLocator( rxLocator );
 }
 
-// com.sun.star.xml.sax.XFastContextHandler interface -------------------------
+
 
 void FragmentHandler::startFastElement( sal_Int32, const Reference< XFastAttributeList >& ) throw( SAXException, RuntimeException )
 {
@@ -111,24 +111,24 @@ void FragmentHandler::processingInstruction( const OUString&, const OUString& ) 
 {
 }
 
-// XML stream handling --------------------------------------------------------
+
 
 Reference< XInputStream > FragmentHandler::openFragmentStream() const
 {
     return getFilter().openInputStream( getFragmentPath() );
 }
 
-// binary records -------------------------------------------------------------
+
 
 const RecordInfo* FragmentHandler::getRecordInfos() const
 {
-    // default: no support for binary records
+    
     return 0;
 }
 
-// ============================================================================
 
-} // namespace core
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/drawing/ColorMode.hpp>
@@ -72,21 +72,21 @@ static SvXMLEnumMapEntry const aXML_HorizontalAdjust_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-// aXML_WritingDirection_Enum is used with and without 'page'
-// attribute, so you'll find uses of aXML_WritingDirection_Enum
-// directly, as well as &(aXML_WritingDirection_Enum[1])
+
+
+
 static SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
 {
-    // aXML_WritingDirection_Enum
+    
     { XML_PAGE,     text::WritingMode2::PAGE },
 
-    // &(aXML_WritingDirection_Enum[1])
+    
     { XML_LR_TB,    text::WritingMode2::LR_TB },
     { XML_RL_TB,    text::WritingMode2::RL_TB },
     { XML_TB_RL,    text::WritingMode2::TB_RL },
     { XML_TB_LR,    text::WritingMode2::TB_LR },
 
-    // alternative names of the above, as accepted by XSL
+    
     { XML_LR,       text::WritingMode2::LR_TB },
     { XML_RL,       text::WritingMode2::RL_TB },
     { XML_TB,       text::WritingMode2::TB_RL },
@@ -94,14 +94,14 @@ static SvXMLEnumMapEntry const aXML_WritingDirection_Enum[] =
     { XML_TOKEN_INVALID, 0 }
 };
 
-// Dtor
+
 XMLPropertyHandlerFactory::~XMLPropertyHandlerFactory()
 {
     for( CacheMap::iterator pPos = maHandlerCache.begin(); pPos != maHandlerCache.end(); ++pPos )
         delete pPos->second;
 }
 
-// Interface
+
 const XMLPropertyHandler* XMLPropertyHandlerFactory::GetPropertyHandler( sal_Int32 nType ) const
 {
     DBG_ASSERT( (nType & ~((sal_uInt32)MID_FLAG_MASK)) == 0,
@@ -109,7 +109,7 @@ const XMLPropertyHandler* XMLPropertyHandlerFactory::GetPropertyHandler( sal_Int
     return GetBasicHandler( nType );
 }
 
-// Helper-methods to create and cache PropertyHandler
+
 XMLPropertyHandler* XMLPropertyHandlerFactory::GetHdlCache( sal_Int32 nType ) const
 {
     XMLPropertyHandler* pRet = NULL;
@@ -122,8 +122,8 @@ XMLPropertyHandler* XMLPropertyHandlerFactory::GetHdlCache( sal_Int32 nType ) co
 
 void XMLPropertyHandlerFactory::PutHdlCache( sal_Int32 nType, const XMLPropertyHandler* pHdl ) const
 {
-    // Don't be wondered about the following construct. The  sense is to be able to provide a const-
-    // method as class-interface.
+    
+    
     ((XMLPropertyHandlerFactory*)this)->maHandlerCache[ nType ] = (XMLPropertyHandler*)pHdl;
 }
 

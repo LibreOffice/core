@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -164,8 +164,8 @@ void ORelationController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue
                 }
                 else
                 {
-                    // now we save the layout information
-                    //  create the output stream
+                    
+                    
                     try
                     {
                         if ( haveDataSource() && getDataSource()->getPropertySetInfo()->hasPropertyByName(PROPERTY_LAYOUTINFORMATION) )
@@ -198,7 +198,7 @@ void ORelationController::impl_initialize()
     OJoinController::impl_initialize();
 
     if( !getSdbMetaData().supportsRelations() )
-    {// check if this database supports relations
+    {
 
         setEditable(sal_False);
         m_bRelationsPossible    = sal_False;
@@ -215,14 +215,14 @@ void ORelationController::impl_initialize()
     if(!m_bRelationsPossible)
         InvalidateAll();
 
-    // we need a datasource
+    
     OSL_ENSURE(haveDataSource(),"ORelationController::initialize: need a datasource!");
 
     Reference<XTablesSupplier> xSup(getConnection(),UNO_QUERY);
     OSL_ENSURE(xSup.is(),"Connection isn't a XTablesSupplier!");
     if(xSup.is())
         m_xTables = xSup->getTables();
-    // load the layoutInformation
+    
     loadLayoutInformation();
     try
     {
@@ -300,7 +300,7 @@ namespace
         {
         }
 
-        /// Working method which should be overridden.
+        
         virtual void SAL_CALL run();
         virtual void SAL_CALL onTerminated();
     protected:
@@ -379,7 +379,7 @@ namespace
                     OUString sReferencedTable;
                     xKey->getPropertyValue(PROPERTY_REFERENCEDTABLE) >>= sReferencedTable;
 
-                    // insert windows
+                    
                     TTableDataHelper::iterator aRefFind = m_aTableData.find(sReferencedTable);
                     if ( aRefFind == m_aTableData.end() )
                     {
@@ -390,16 +390,16 @@ namespace
                             aRefFind->second->ShowAll(sal_False);
                         }
                         else
-                            continue; // table name could not be found so we do not show this table releation
+                            continue; 
                     }
                     TTableWindowData::value_type pReferencedTable = aRefFind->second;
 
                     OUString sKeyName;
                     xKey->getPropertyValue(PROPERTY_NAME) >>= sKeyName;
-                    // insert connection
+                    
                     ORelationTableConnectionData* pTabConnData = new ORelationTableConnectionData( pReferencingTable, pReferencedTable, sKeyName );
                     m_vTableConnectionData.push_back(TTableConnectionData::value_type(pTabConnData));
-                    // insert columns
+                    
                     const Reference<XColumnsSupplier> xColsSup(xKey,UNO_QUERY);
                     OSL_ENSURE(xColsSup.is(),"Key is no XColumnsSupplier!");
                     const Reference<XNameAccess> xColumns       = xColsSup->getColumns();
@@ -418,7 +418,7 @@ namespace
                         }
                         pTabConnData->SetConnLine( j, sColumnName, sRelatedName );
                     }
-                    // Update/Del-Flags setzen
+                    
                     sal_Int32   nUpdateRule = 0;
                     sal_Int32   nDeleteRule = 0;
                     xKey->getPropertyValue(PROPERTY_UPDATERULE) >>= nUpdateRule;
@@ -427,7 +427,7 @@ namespace
                     pTabConnData->SetUpdateRules( nUpdateRule );
                     pTabConnData->SetDeleteRules( nDeleteRule );
 
-                    // Kardinalitaet setzen
+                    
                     pTabConnData->SetCardinality();
                 }
             }
@@ -440,9 +440,9 @@ void ORelationController::mergeData(const TTableConnectionData& _aConnectionData
     ::osl::MutexGuard aGuard( getMutex() );
 
     ::std::copy( _aConnectionData.begin(), _aConnectionData.end(), ::std::back_inserter( m_vTableConnectionData ));
-    //const Reference< XDatabaseMetaData> xMetaData = getConnection()->getMetaData();
-    const sal_Bool bCase = sal_True;//xMetaData.is() && xMetaData->supportsMixedCaseQuotedIdentifiers();
-    // here we are finished, so we can collect the table from connection data
+    
+    const sal_Bool bCase = sal_True;
+    
     TTableConnectionData::iterator aConnDataIter = m_vTableConnectionData.begin();
     TTableConnectionData::iterator aConnDataEnd = m_vTableConnectionData.end();
     for(;aConnDataIter != aConnDataEnd;++aConnDataIter)
@@ -470,10 +470,10 @@ IMPL_LINK( ORelationController, OnThreadFinished, void*, /*NOTINTERESTEDIN*/ )
     ::osl::MutexGuard aGuard( getMutex() );
     try
     {
-        getView()->initialize();    // show the windows and fill with our information
+        getView()->initialize();    
         getView()->Invalidate(INVALIDATE_NOERASE);
         ClearUndoManager();
-        setModified(sal_False);     // and we are not modified yet
+        setModified(sal_False);     
 
         if(m_vTableData.empty())
             Execute(ID_BROWSER_ADDTABLE,Sequence<PropertyValue>());
@@ -494,7 +494,7 @@ void ORelationController::loadData()
         if ( !m_xTables.is() )
             return;
         DatabaseMetaData aMeta(getConnection());
-        // this may take some time
+        
         const Reference< XDatabaseMetaData> xMetaData = getConnection()->getMetaData();
         const Sequence< OUString> aNames = m_xTables->getElementNames();
         const sal_Int32 nCount = aNames.getLength();

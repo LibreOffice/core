@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <MarkManager.hxx>
@@ -107,10 +107,10 @@ namespace
     }
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    // return a position at the begin of rEnd, if it is a CntntNode
-    // else set it to the begin of the Node after rEnd, if there is one
-    // else set it to the end of the node before rStt
-    // else set it to the CntntNode of the Pos outside the Range
+    
+    
+    
+    
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     static inline ::std::auto_ptr<SwPosition> lcl_FindExpelPosition(
         const SwNodeIndex& rStt,
@@ -153,24 +153,24 @@ namespace
 
     static IMark* lcl_getMarkBefore(const IDocumentMarkAccess::container_t& rMarks, const SwPosition& rPos)
     {
-        // candidates from which to choose the mark before
+        
         IDocumentMarkAccess::container_t vCandidates;
-        // no need to consider marks starting after rPos
+        
         IDocumentMarkAccess::const_iterator_t pCandidatesEnd = upper_bound(
             rMarks.begin(),
             rMarks.end(),
             rPos,
             sw::mark::CompareIMarkStartsAfter());
         vCandidates.reserve(pCandidatesEnd - rMarks.begin());
-        // only marks ending before are candidates
+        
         remove_copy_if(
             rMarks.begin(),
             pCandidatesEnd,
             back_inserter(vCandidates),
             boost::bind( ::std::logical_not<bool>(), boost::bind( &IMark::EndsBefore, _1, rPos ) ) );
-        // no candidate left => we are in front of the first mark or there are none
+        
         if(!vCandidates.size()) return NULL;
-        // return the highest (last) candidate using mark end ordering
+        
         return max_element(vCandidates.begin(), vCandidates.end(), &lcl_MarkOrderingByEnd)->get();
     }
 
@@ -181,8 +181,8 @@ namespace
     {
         if ( IDocumentMarkAccess::GetType(*io_pMark) == IDocumentMarkAccess::ANNOTATIONMARK )
         {
-            // annotation marks are allowed to span a table cell range.
-            // but trigger sorting to be save
+            
+            
             return true;
         }
 
@@ -214,21 +214,21 @@ namespace
         IDocumentMarkAccess::iterator_t ppCurrentMark = lower_bound(
             rMarks.begin(), rMarks.end(),
             rpMarkToFind, &lcl_MarkOrderingByStart);
-        // since there are usually not too many marks on the same start
-        // position, we are not doing a bisect search for the upper bound
-        // but instead start to iterate from pMarkLow directly
+        
+        
+        
         while(ppCurrentMark != rMarks.end() && **ppCurrentMark == *rpMarkToFind)
         {
             if(ppCurrentMark->get() == rpMarkToFind.get())
             {
-                //OSL_TRACE("found mark named '%s'",
-                //    OUStringToOString(ppCurrentMark->get()->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+                
+                
                 return ppCurrentMark;
             }
             ++ppCurrentMark;
         }
-        // reached a mark starting on a later start pos or the end of the
-        // vector => not found
+        
+        
         return rMarks.end();
     };
 
@@ -244,19 +244,19 @@ namespace
             ppCurrentMark != rMarks.end();
             ++ppCurrentMark)
         {
-            // Once we reach a mark starting after the target pos
-            // we do not need to continue
+            
+            
             if(ppCurrentMark->get()->StartsAfter(rPos))
                 break;
             if(IDocumentMarkAccess::GetType(**ppCurrentMark) == eType)
             {
-                //OSL_TRACE("found mark named '%s'",
-                //    OUStringToOString(ppCurrentMark->get()->GetName(), RTL_TEXTENCODING_UTF8).getStr());
+                
+                
                 return ppCurrentMark;
             }
         }
-        // reached a mark starting on a later start pos or the end of the
-        // vector => not found
+        
+        
         return rMarks.end();
     };
 
@@ -298,7 +298,7 @@ namespace
 IDocumentMarkAccess::MarkType IDocumentMarkAccess::GetType(const IMark& rBkmk)
 {
     const std::type_info* const pMarkTypeInfo = &typeid(rBkmk);
-    // not using dynamic_cast<> here for performance
+    
     if(*pMarkTypeInfo == typeid(UnoMark))
         return UNO_BOOKMARK;
     else if(*pMarkTypeInfo == typeid(DdeBookmark))
@@ -370,18 +370,18 @@ namespace sw { namespace mark
                 pPos2->nContent.GetIndex());
         }
 #endif
-        // see for example _SaveCntntIdx, Shells
+        
         OSL_PRECOND(m_vAllMarks.size() < USHRT_MAX,
             "MarkManager::makeMark(..)"
             " - more than USHRT_MAX marks are not supported correctly");
-        // There should only be one CrossRefBookmark per Textnode per Type
+        
         OSL_PRECOND(
             (eType != CROSSREF_NUMITEM_BOOKMARK && eType != CROSSREF_HEADING_BOOKMARK)
             || (lcl_FindMarkAtPos(m_vBookmarks, *rPaM.GetPoint(), eType) == m_vBookmarks.end()),
             "MarkManager::makeMark(..)"
             " - creating duplicate CrossRefBookmark");
 
-        // create mark
+        
         pMark_t pMark;
         switch(eType)
         {
@@ -421,11 +421,11 @@ namespace sw { namespace mark
         if(pMark->GetMarkPos() != pMark->GetMarkStart())
             pMarkBase->Swap();
 
-        // for performance reasons, we trust UnoMarks to have a (generated) unique name
+        
         if ( eType != IDocumentMarkAccess::UNO_BOOKMARK )
             pMarkBase->SetName( getUniqueMarkName( pMarkBase->GetName() ) );
 
-        // register mark
+        
         m_aMarkNamesSet.insert(pMarkBase->GetName());
         lcl_InsertMarkSorted(m_vAllMarks, pMark);
         switch(eType)
@@ -448,7 +448,7 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::DDE_BOOKMARK:
             case IDocumentMarkAccess::UNO_BOOKMARK:
                 lcl_InsertMarkSorted(m_vCommonMarks, pMark);
-                // no special array for these
+                
                 break;
         }
         pMarkBase->InitDoc(m_pDoc);
@@ -566,7 +566,7 @@ namespace sw { namespace mark
             ++ppMark)
         {
             ::sw::mark::MarkBase* pMark = dynamic_cast< ::sw::mark::MarkBase* >(ppMark->get());
-            // is on position ??
+            
             bool bChangedPos = false;
             if(&pMark->GetMarkPos().nNode.GetNode() == pOldNode)
             {
@@ -580,11 +580,11 @@ namespace sw { namespace mark
                 pMark->SetMarkPos(aNewPos);
                 bChangedOPos= true;
             }
-            // illegal selection? collapse the mark and restore sorting later
+            
             isSortingNeeded |= lcl_FixCorrectedMark(bChangedPos, bChangedOPos, pMark);
         }
 
-        // restore sorting if needed
+        
         if(isSortingNeeded)
             sortMarks();
 #if 0
@@ -605,7 +605,7 @@ namespace sw { namespace mark
             ppMark != m_vAllMarks.end();
             ++ppMark)
         {
-            // is on position ??
+            
             bool bChangedPos = false, bChangedOPos = false;
             ::sw::mark::MarkBase* const pMark = dynamic_cast< ::sw::mark::MarkBase* >(ppMark->get());
             if(&pMark->GetMarkPos().nNode.GetNode() == pOldNode)
@@ -623,11 +623,11 @@ namespace sw { namespace mark
                 pMark->SetOtherMarkPos(aNewPosRel);
                 bChangedOPos = true;
             }
-            // illegal selection? collapse the mark and restore sorting later
+            
             isSortingNeeded |= lcl_FixCorrectedMark(bChangedPos, bChangedOPos, pMark);
         }
 
-        // restore sorting if needed
+        
         if(isSortingNeeded)
             sortMarks();
 #if 0
@@ -647,28 +647,28 @@ namespace sw { namespace mark
         ::std::vector<const_iterator_t> vMarksToDelete;
         bool bIsSortingNeeded = false;
 
-        // boolean indicating, if at least one mark has been moved while colleting marks for deletion
+        
         bool bMarksMoved = false;
 
-        // copy all bookmarks in the move area to a vector storing all position data as offset
-        // reassignment is performed after the move
+        
+        
         for(iterator_t ppMark = m_vAllMarks.begin();
             ppMark != m_vAllMarks.end();
             ++ppMark)
         {
-            // navigator marks should not be moved
-            // TODO: Check if this might make them invalid
+            
+            
             if(IDocumentMarkAccess::GetType(**ppMark) == NAVIGATOR_REMINDER)
                 continue;
 
             ::sw::mark::MarkBase* pMark = dynamic_cast< ::sw::mark::MarkBase* >(ppMark->get());
-            // on position ??
+            
             bool bIsPosInRange = lcl_GreaterThan(pMark->GetMarkPos(), rStt, pSttIdx)
                                  && lcl_Lower(pMark->GetMarkPos(), rEnd, pEndIdx);
             bool bIsOtherPosInRange = pMark->IsExpanded()
                                       && lcl_GreaterThan(pMark->GetOtherMarkPos(), rStt, pSttIdx)
                                       && lcl_Lower(pMark->GetOtherMarkPos(), rEnd, pEndIdx);
-            // special case: completely in range, touching the end?
+            
             if ( pEndIdx != NULL
                  && ( ( bIsOtherPosInRange
                         && pMark->GetMarkPos().nNode == rEnd
@@ -685,7 +685,7 @@ namespace sw { namespace mark
                  && ( bIsOtherPosInRange
                       || !pMark->IsExpanded() ) )
             {
-                // completely in range
+                
 
                 bool bDeleteMark = true;
                 {
@@ -693,11 +693,11 @@ namespace sw { namespace mark
                     {
                     case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
                     case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-                        // no delete of cross-reference bookmarks, if range is inside one paragraph
+                        
                         bDeleteMark = rStt != rEnd;
                         break;
                     case IDocumentMarkAccess::UNO_BOOKMARK:
-                        // no delete of UNO mark, if it is not expanded and only touches the start of the range
+                        
                         bDeleteMark = bIsOtherPosInRange
                                       || pMark->IsExpanded()
                                       || pSttIdx == NULL
@@ -721,8 +721,8 @@ namespace sw { namespace mark
             }
             else if ( bIsPosInRange != bIsOtherPosInRange )
             {
-                // the bookmark is partitially in the range
-                // move position of that is in the range out of it
+                
+                
 
                 SAL_WNODEPRECATED_DECLARATIONS_PUSH
                 ::std::auto_ptr< SwPosition > pNewPos;
@@ -744,11 +744,11 @@ namespace sw { namespace mark
                     {
                     case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
                     case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-                        // no move of cross-reference bookmarks, if move occurs inside a certain node
+                        
                         bMoveMark = pMark->GetMarkPos().nNode != pNewPos->nNode;
                         break;
                     case IDocumentMarkAccess::ANNOTATIONMARK:
-                        // no move of annotation marks, if method is called to collect deleted marks
+                        
                         bMoveMark = pSaveBkmk == NULL;
                         break;
                     default:
@@ -765,38 +765,38 @@ namespace sw { namespace mark
                         pMark->SetOtherMarkPos(*pNewPos);
                     bMarksMoved = true;
 
-                    // illegal selection? collapse the mark and restore sorting later
+                    
                     bIsSortingNeeded |= lcl_FixCorrectedMark( bIsPosInRange, bIsOtherPosInRange, pMark );
                 }
             }
         }
 
         {
-            // fdo#61016 delay the deletion of the fieldmark characters
-            // to prevent that from deleting the marks on that position
-            // which would invalidate the iterators in vMarksToDelete
+            
+            
+            
             std::vector< ::boost::shared_ptr<ILazyDeleter> > vDelay;
             vDelay.reserve(vMarksToDelete.size());
 
-            // If needed, sort mark containers containing subsets of the marks
-            // in order to assure sorting.  The sorting is critical for the
-            // deletion of a mark as it is searched in these container for
-            // deletion.
+            
+            
+            
+            
             if ( vMarksToDelete.size() > 0 && bMarksMoved )
             {
                 sortSubsetMarks();
             }
-            // we just remembered the iterators to delete, so we do not need to search
-            // for the shared_ptr<> (the entry in m_vAllMarks) again
-            // reverse iteration, since erasing an entry invalidates iterators
-            // behind it (the iterators in vMarksToDelete are sorted)
+            
+            
+            
+            
             for ( ::std::vector< const_iterator_t >::reverse_iterator pppMark = vMarksToDelete.rbegin();
                   pppMark != vMarksToDelete.rend();
                   ++pppMark )
             {
                 vDelay.push_back(deleteMark(*pppMark));
             }
-        } // scope to kill vDelay
+        } 
 
         if ( bIsSortingNeeded )
         {
@@ -834,7 +834,7 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-                // if(dynamic_cast<IBookmark*>)
+                
                 {
                     IDocumentMarkAccess::iterator_t ppBookmark = lcl_FindMark(m_vBookmarks, *ppMark);
                     OSL_ENSURE(ppBookmark != m_vBookmarks.end(),
@@ -882,22 +882,22 @@ namespace sw { namespace mark
         DdeBookmark* const pDdeBookmark = dynamic_cast<DdeBookmark*>(ppMark->get());
         if(pDdeBookmark)
             pDdeBookmark->DeregisterFromDoc(m_pDoc);
-        //Effective STL Item 27, get a non-const iterator aI at the same
-        //position as const iterator ppMark was
+        
+        
         iterator_t aI = m_vAllMarks.begin();
         std::advance(aI, std::distance<const_iterator_t>(aI, ppMark));
 
-        //fdo#37974
-        //a) a mark destructor may callback into this method.
-        //b) vector::erase first calls the destructor of the object, then
-        //removes it from the vector.
-        //So if the only reference to the object is the one
-        //in the vector then we may reenter this method when the mark
-        //is destructed but before it is removed, i.e. findMark still
-        //finds the object whose destructor is being run. Take a temp
-        //extra reference on the shared_ptr, remove the entry from the
-        //vector, and on xHoldPastErase release findMark won't find
-        //it anymore.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         pMark_t xHoldPastErase = *aI;
         m_aMarkNamesSet.erase(ppMark->get()->GetName());
         m_vAllMarks.erase(aI);
@@ -909,8 +909,8 @@ namespace sw { namespace mark
         OSL_PRECOND(pMark->GetMarkPos().GetDoc() == m_pDoc,
             "<MarkManager::deleteMark(..)>"
             " - Mark is not in my doc.");
-        // finds the last Mark that is starting before pMark
-        // (pMarkLow < pMark)
+        
+        
         iterator_t pMarkLow =
             lower_bound(
                 m_vAllMarks.begin(),
@@ -1038,10 +1038,10 @@ namespace sw { namespace mark
         OUStringBuffer sBuf;
         OUString sTmp;
 
-        // try the name "<rName>XXX" (where XXX is a number starting from 1) unless there is
-        // a unused name. Due to performance-reasons (especially in mailmerge-Szenarios) there
-        // is a map m_aMarkBasenameMapUniqueOffset which holds the next possible offset (XXX) for
-        // rName (so there is no need to test for nCnt-values smaller than the offset).
+        
+        
+        
+        
         sal_Int32 nCnt = 1;
         MarkBasenameMapUniqueOffset_t::const_iterator aIter = m_aMarkBasenameMapUniqueOffset.find(rName);
         if(aIter != m_aMarkBasenameMapUniqueOffset.end()) nCnt = aIter->second;
@@ -1078,7 +1078,7 @@ namespace sw { namespace mark
         return (m_aMarkNamesSet.find(rName) != m_aMarkNamesSet.end());
     }
 
-}} // namespace ::sw::mark
+}} 
 
 #define PCURSH ((SwCrsrShell*)_pStartShell)
 #define FOREACHSHELL_START( pEShell ) \
@@ -1095,21 +1095,21 @@ namespace sw { namespace mark
 
 namespace
 {
-    // Array structure: 2 longs,
-    //  1st long contains the type and position in the DocArray,
-    //  2nd long contains the ContentPosition
+    
+    
+    
     //
-    //  CntntType --
-    //          0x8000 = Bookmark Pos1
-    //          0x8001 = Bookmark Pos2
-    //          0x2000 = Paragraph anchored frame
-    //          0x2001 = frame anchored at character, which should be moved
-    //          0x1000 = Redline Mark
-    //          0x1001 = Redline Point
-    //          0x0800 = Crsr from the CrsrShell Mark
-    //          0x0801 = Crsr from the CrsrShell Point
-    //          0x0400 = UnoCrsr Mark
-    //          0x0401 = UnoCrsr Point
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     class _SwSaveTypeCountContent
     {
@@ -1149,14 +1149,14 @@ namespace
         sal_Int32 GetContent() const       { return nContent; }
     };
 
-    // #i59534: If a paragraph will be splitted we have to restore some redline positions
-    // This help function checks a position compared with a node and an content index
+    
+    
 
-    static const int BEFORE_NODE = 0;          // Position before the given node index
-    static const int BEFORE_SAME_NODE = 1;     // Same node index but content index before given content index
-    static const int SAME_POSITION = 2;        // Same node index and samecontent index
-    static const int BEHIND_SAME_NODE = 3;     // Same node index but content index behind given content index
-    static const int BEHIND_NODE = 4;          // Position behind the given node index
+    static const int BEFORE_NODE = 0;          
+    static const int BEFORE_SAME_NODE = 1;     
+    static const int SAME_POSITION = 2;        
+    static const int BEHIND_SAME_NODE = 3;     
+    static const int BEHIND_NODE = 4;          
 
     static int lcl_RelativePosition( const SwPosition& rPos, sal_uLong nNode, sal_Int32 nCntnt )
     {
@@ -1186,7 +1186,7 @@ namespace
                     const SwPaM& rPam, _SwSaveTypeCountContent& rSave,
                     bool bChkSelDirection )
     {
-        // Respect direction of selection
+        
         bool bBound1IsStart = !bChkSelDirection ? true :
                             ( *rPam.GetPoint() < *rPam.GetMark()
                                 ? rPam.GetPoint() == &rPam.GetBound()
@@ -1215,14 +1215,14 @@ namespace
     }
 }
 
-// IDocumentMarkAccess for SwDoc
+
 IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess()
     { return static_cast< IDocumentMarkAccess* >(mpMarkManager.get()); }
 
 const IDocumentMarkAccess* SwDoc::getIDocumentMarkAccess() const
     { return static_cast< IDocumentMarkAccess* >(mpMarkManager.get()); }
 
-// SaveBookmark methods
+
 
 SaveBookmark::SaveBookmark(
     bool bSavePos,
@@ -1345,7 +1345,7 @@ void SaveBookmark::SetInDoc(
 }
 
 
-// _DelBookmarks, _{Save,Restore}CntntIdx
+
 
 void _DelBookmarks(
     const SwNodeIndex& rStt,
@@ -1354,7 +1354,7 @@ void _DelBookmarks(
     const SwIndex* pSttIdx,
     const SwIndex* pEndIdx)
 {
-    // illegal range ??
+    
     if(rStt.GetIndex() > rEnd.GetIndex()
         || (rStt == rEnd && (!pSttIdx || pSttIdx->GetIndex() >= pEndIdx->GetIndex())))
         return;
@@ -1362,13 +1362,13 @@ void _DelBookmarks(
 
     pDoc->getIDocumentMarkAccess()->deleteMarks(rStt, rEnd, pSaveBkmk, pSttIdx, pEndIdx);
 
-    // Copy all Redlines which are in the move area into an array
-    // which holds all position information as offset.
-    // Assignement happens after moving.
+    
+    
+    
     SwRedlineTbl& rTbl = (SwRedlineTbl&)pDoc->GetRedlineTbl();
     for(sal_uInt16 nCnt = 0; nCnt < rTbl.size(); ++nCnt )
     {
-        // Is at position?
+        
         SwRangeRedline* pRedl = rTbl[ nCnt ];
 
         SwPosition *pRStt = &pRedl->GetBound(true),
@@ -1431,7 +1431,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
     std::vector<sal_uLong> &rSaveArr,
     sal_uInt8 nSaveFly)
 {
-    // 1. Bookmarks
+    
     _SwSaveTypeCountContent aSave;
     aSave.SetTypeAndCount( 0x8000, 0 );
 
@@ -1449,8 +1449,8 @@ void _SaveCntntIdx(SwDoc* pDoc,
                 aSave.SetContent(pBkmk->GetMarkPos().nContent.GetIndex());
                 aSave.Add(rSaveArr);
             }
-            else // if a bookmark position is equal nCntnt, the other position
-                bMarkPosEqual = true; // has to decide if it is added to the array
+            else 
+                bMarkPosEqual = true; 
         }
 
         if(pBkmk->IsExpanded()
@@ -1458,7 +1458,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
             && pBkmk->GetOtherMarkPos().nContent.GetIndex() <= nCntnt)
         {
             if(bMarkPosEqual)
-            { // the other position is before, the (main) position is equal
+            { 
                 aSave.SetContent(pBkmk->GetMarkPos().nContent.GetIndex());
                 aSave.Add(rSaveArr);
             }
@@ -1469,7 +1469,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
         }
     }
 
-    // 2. Redlines
+    
     aSave.SetTypeAndCount( 0x1000, 0 );
     const SwRedlineTbl& rRedlTbl = pDoc->GetRedlineTbl();
     for( ; aSave.GetCount() < rRedlTbl.size(); aSave.IncCount() )
@@ -1478,9 +1478,9 @@ void _SaveCntntIdx(SwDoc* pDoc,
         int nPointPos = lcl_RelativePosition( *pRdl->GetPoint(), nNode, nCntnt );
         int nMarkPos = pRdl->HasMark() ? lcl_RelativePosition( *pRdl->GetMark(), nNode, nCntnt ) :
                                           nPointPos;
-        // #i59534: We have to store the positions inside the same node before the insert position
-        // and the one at the insert position if the corresponding Point/Mark position is before
-        // the insert position.
+        
+        
+        
         if( nPointPos == BEFORE_SAME_NODE ||
             ( nPointPos == SAME_POSITION && nMarkPos < SAME_POSITION ) )
         {
@@ -1497,7 +1497,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
         }
     }
 
-    // 4. Paragraph anchored objects
+    
     {
         SwCntntNode *pNode = pDoc->GetNodes()[nNode]->GetCntntNode();
         if( pNode )
@@ -1509,7 +1509,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
             if( bViaDoc )
                 pFrm = NULL;
 #endif
-            if( pFrm ) // Do we have a layout? Then it's a bit cheaper ...
+            if( pFrm ) 
             {
                 if( pFrm->GetDrawObjs() )
                 {
@@ -1535,7 +1535,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                                 if( nCntnt <= aSave.GetContent() )
                                 {
                                     if( SAVEFLY_SPLIT == nSaveFly )
-                                        aSave.IncType(); // = 0x2001;
+                                        aSave.IncType(); 
                                     else
                                         continue;
                                 }
@@ -1544,7 +1544,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                             while( aSave.GetCount() &&
                                     &rFmt != (*pDoc->GetSpzFrmFmts())[
                                     aSave.DecCount() ] )
-                                ; // nothing
+                                ; 
                             OSL_ENSURE( &rFmt == (*pDoc->GetSpzFrmFmts())[
                                                     aSave.GetCount() ],
                                     "_SaveCntntIdx: Lost FrameFormat" );
@@ -1553,7 +1553,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                     }
                 }
             }
-            else // No layout, so it's a bit more expensive ...
+            else 
             {
                 for( aSave.SetCount( pDoc->GetSpzFrmFmts()->size() );
                         aSave.GetCount() ; )
@@ -1577,7 +1577,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
                             if( nCntnt <= aSave.GetContent() )
                             {
                                 if( SAVEFLY_SPLIT == nSaveFly )
-                                    aSave.IncType(); // = 0x2001;
+                                    aSave.IncType(); 
                                 else
                                     continue;
                             }
@@ -1588,7 +1588,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
             }
         }
     }
-    // 5. CrsrShell
+    
     {
         SwCrsrShell* pShell = pDoc->GetEditShell();
         if( pShell )
@@ -1613,7 +1613,7 @@ void _SaveCntntIdx(SwDoc* pDoc,
             FOREACHSHELL_END( pShell )
         }
     }
-    // 6. UnoCrsr
+    
     {
         aSave.SetTypeAndCount( 0x400, 0 );
         const SwUnoCrsrTbl& rTbl = pDoc->GetUnoCrsrTbl();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "NTables.hxx"
@@ -59,7 +59,7 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
-        if(xResult->next()) // there can be only one table with this name
+        if(xResult->next()) 
         {
             OEvoabTable* pRet = new OEvoabTable(
                     this,
@@ -76,17 +76,17 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
 
     return xRet;
 }
-// -------------------------------------------------------------------------
+
 void OEvoabTables::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<OEvoabCatalog&>(m_rParent).refreshTables();
 }
-// -------------------------------------------------------------------------
+
 void OEvoabTables::disposing(void)
 {
 m_xMetaData.clear();
     OCollection::disposing();
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

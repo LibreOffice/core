@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/calc_unoapi_test.hxx>
@@ -40,7 +40,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScDataPilotTableObj);
     CPPUNIT_TEST(testRefresh);
-    //CPPUNIT_TEST(testGetHiddenFields);
+    
     CPPUNIT_TEST(testGetOutputRange);
     CPPUNIT_TEST(testSourceRange);
     CPPUNIT_TEST(testTag);
@@ -84,7 +84,7 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::init()
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
-    // set variables from xdatapilottable.[ch]xx
+    
     xCellForChange = xSheet->getCellByPosition( 1, 5 );
     xCellForCheck = xSheet->getCellByPosition( 7, 11 );
     CPPUNIT_ASSERT(xCellForCheck.is());
@@ -121,7 +121,7 @@ uno::Reference< uno::XInterface > ScDataPilotTableObj::initDP2()
     uno::Reference< container::XIndexAccess > xIndex (xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference< sheet::XSpreadsheet > xSheet( xIndex->getByIndex(0), UNO_QUERY_THROW);
 
-    // set variables from xdatapilottable.[ch]xx
+    
     xCellForChange = xSheet->getCellByPosition( 1, 5 );
     xCellForCheck = xSheet->getCellByPosition( 7, 11 );
     CPPUNIT_ASSERT(xCellForCheck.is());

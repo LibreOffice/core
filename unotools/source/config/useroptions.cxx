@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,31 +45,31 @@ using namespace com::sun::star;
 namespace
 {
 
-// vOptionNames[] -- names of the user option entries
-// The order corresponds to the #define USER_OPT_* list in useroptions.hxx.
+
+
 char const * const vOptionNames[] = {
-    "l",                         // USER_OPT_CITY
-    "o",                         // USER_OPT_COMPANY
-    "c",                         // USER_OPT_COUNTRY
-    "mail",                      // USER_OPT_EMAIL
-    "facsimiletelephonenumber",  // USER_OPT_FAX
-    "givenname",                 // USER_OPT_FIRSTNAME
-    "sn",                        // USER_OPT_LASTNAME
-    "position",                  // USER_OPT_POSITION
-    "st",                        // USER_OPT_STATE
-    "street",                    // USER_OPT_STREET
-    "homephone",                 // USER_OPT_TELEPHONEHOME
-    "telephonenumber",           // USER_OPT_TELEPHONEWORK
-    "title",                     // USER_OPT_TITLE
-    "initials",                  // USER_OPT_ID
-    "postalcode",                // USER_OPT_ZIP
-    "fathersname",               // USER_OPT_FATHERSNAME
-    "apartment",                 // USER_OPT_APARTMENT
-    "customernumber"             // USER_OPT_CUSTOMERNUMBER
+    "l",                         
+    "o",                         
+    "c",                         
+    "mail",                      
+    "facsimiletelephonenumber",  
+    "givenname",                 
+    "sn",                        
+    "position",                  
+    "st",                        
+    "street",                    
+    "homephone",                 
+    "telephonenumber",           
+    "title",                     
+    "initials",                  
+    "postalcode",                
+    "fathersname",               
+    "apartment",                 
+    "customernumber"             
 };
 const sal_uInt16 nOptionNameCount = SAL_N_ELEMENTS(vOptionNames);
 
-} // namespace
+} 
 
 boost::weak_ptr<SvtUserOptions::Impl> SvtUserOptions::pSharedImpl;
 
@@ -78,9 +78,9 @@ class SvtUserOptions::ChangeListener : public cppu::WeakImplHelper1<util::XChang
 public:
     ChangeListener (Impl& rParent): m_rParent(rParent) { }
 
-    // XChangesListener
+    
     virtual void SAL_CALL changesOccurred (util::ChangesEvent const& Event) throw(uno::RuntimeException);
-    // XEventListener
+    
     virtual void SAL_CALL disposing (lang::EventObject const& Source) throw(uno::RuntimeException);
 
 private:
@@ -195,7 +195,7 @@ void SvtUserOptions::Impl::SetToken (sal_uInt16 nToken, OUString const& sToken)
 
 OUString SvtUserOptions::Impl::GetFullName () const
 {
-    // TODO international name
+    
     OUString sFullName = GetToken(USER_OPT_FIRSTNAME).trim();
     if (!sFullName.isEmpty())
         sFullName += " ";
@@ -227,7 +227,7 @@ bool SvtUserOptions::Impl::IsTokenReadonly (sal_uInt16 nToken) const
 
 SvtUserOptions::SvtUserOptions ()
 {
-    // Global access, must be guarded (multithreading)
+    
     osl::MutexGuard aGuard(GetInitMutex());
 
     if (pSharedImpl.expired())
@@ -242,7 +242,7 @@ SvtUserOptions::SvtUserOptions ()
 
 SvtUserOptions::~SvtUserOptions()
 {
-    // Global access, must be guarded (multithreading)
+    
     osl::MutexGuard aGuard( GetInitMutex() );
     pImpl->RemoveListener(this);
 }

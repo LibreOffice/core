@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -38,11 +38,11 @@
 using namespace com::sun::star;
 
 //
-//  this file is compiled with exceptions enabled
-//  put functions here that need exceptions!
+
+
 //
 
-// -----------------------------------------------------------------------
+
 
 const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
 {
@@ -69,7 +69,7 @@ bool ScDocument::HasStringWeakCharacters( const OUString& rString )
             {
                 sal_Int16 nType = xBreakIter->getScriptType( rString, nPos );
                 if ( nType == i18n::ScriptType::WEAK )
-                    return true;                            // found
+                    return true;                            
 
                 nPos = xBreakIter->endOfScript( rString, nPos, nType );
             }
@@ -77,7 +77,7 @@ bool ScDocument::HasStringWeakCharacters( const OUString& rString )
         }
     }
 
-    return false;       // none found
+    return false;       
 }
 
 sal_uInt8 ScDocument::GetStringScriptType( const OUString& rString )
@@ -106,7 +106,7 @@ sal_uInt8 ScDocument::GetStringScriptType( const OUString& rString )
                     case i18n::ScriptType::COMPLEX:
                         nRet |= SCRIPTTYPE_COMPLEX;
                         break;
-                    // WEAK is ignored
+                    
                 }
                 nPos = xBreakIter->endOfScript( rString, nPos, nType );
             }
@@ -119,29 +119,29 @@ sal_uInt8 ScDocument::GetStringScriptType( const OUString& rString )
 sal_uInt8 ScDocument::GetCellScriptType( const ScAddress& rPos, sal_uLong nNumberFormat )
 {
     sal_uInt8 nStored = GetScriptType(rPos);
-    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
-        return nStored;                             // use stored value
+    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         
+        return nStored;                             
 
     Color* pColor;
     OUString aStr = ScCellFormat::GetString(*this, rPos, nNumberFormat, &pColor, *xPoolHelper->GetFormTable());
 
     sal_uInt8 nRet = GetStringScriptType( aStr );
 
-    SetScriptType(rPos, nRet);       // store for later calls
+    SetScriptType(rPos, nRet);       
 
     return nRet;
 }
 
 sal_uInt8 ScDocument::GetScriptType( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
-    // if script type is set, don't have to get number formats
+    
 
     ScAddress aPos(nCol, nRow, nTab);
     sal_uInt8 nStored = GetScriptType(aPos);
-    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         // stored value valid?
-        return nStored;                             // use stored value
+    if ( nStored != SC_SCRIPTTYPE_UNKNOWN )         
+        return nStored;                             
 
-    // include number formats from conditional formatting
+    
 
     const ScPatternAttr* pPattern = GetPattern( nCol, nRow, nTab );
     if (!pPattern) return 0;

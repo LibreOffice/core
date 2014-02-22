@@ -55,7 +55,7 @@ PDFIHybridAdaptor::PDFIHybridAdaptor( const uno::Reference< uno::XComponentConte
 {
 }
 
-// XFilter
+
 sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::PropertyValue >& rFilterData ) throw( uno::RuntimeException )
 {
     sal_Bool bRet = sal_False;
@@ -95,7 +95,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
             }
             if( xInput.is() )
             {
-                // TODO(P2): extracting hybrid substream twice - once during detection, second time here
+                
                 uno::Reference< io::XSeekable > xSeek( xInput, uno::UNO_QUERY );
                 if( xSeek.is() )
                     xSeek->seek( 0 );
@@ -107,7 +107,7 @@ sal_Bool SAL_CALL PDFIHybridAdaptor::filter( const uno::Sequence< beans::Propert
                     SAL_INFO("sdext.pdfimport", "created temp file " << aURL);
                     const sal_Int32 nBufSize = 4096;
                     uno::Sequence<sal_Int8> aBuf(nBufSize);
-                    // copy the bytes
+                    
                     sal_Int32 nBytes;
                     do
                     {
@@ -200,7 +200,7 @@ void SAL_CALL PDFIHybridAdaptor::setTargetDocument( const uno::Reference< lang::
         throw lang::IllegalArgumentException();
 }
 
-//---------------------------------------------------------------------------------------
+
 
 PDFIRawAdaptor::PDFIRawAdaptor( const uno::Reference< uno::XComponentContext >& xContext ) :
     PDFIAdaptorBase( m_aMutex ),
@@ -223,11 +223,11 @@ bool PDFIRawAdaptor::parse( const uno::Reference<io::XInputStream>&       xInput
                             const XmlEmitterSharedPtr&                    rEmitter,
                             const OUString&                          rURL )
 {
-    // container for metaformat
+    
     boost::shared_ptr<PDFIProcessor> pSink(
         new PDFIProcessor(xStatus, m_xContext));
 
-    // TEMP! TEMP!
+    
     if( m_bEnableToplevelText )
         pSink->enableToplevelText();
 
@@ -254,18 +254,18 @@ bool PDFIRawAdaptor::odfConvert( const OUString&                          rURL,
                                 OUString(),
                                 xStatus,pEmitter,rURL);
 
-    // tell input stream that it is no longer needed
+    
     xOutput->closeOutput();
 
     return bSuccess;
 }
 
-// XImportFilter
+
 sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::PropertyValue >&        rSourceData,
                                             const uno::Reference< xml::sax::XDocumentHandler >& rHdl,
                                             const uno::Sequence< OUString >&               /*rUserData*/ ) throw( uno::RuntimeException )
 {
-    // get the InputStream carrying the PDF content
+    
     uno::Reference< io::XInputStream > xInput;
     uno::Reference< task::XStatusIndicator > xStatus;
     uno::Reference< task::XInteractionHandler > xInteractionHandler;
@@ -293,7 +293,7 @@ sal_Bool SAL_CALL PDFIRawAdaptor::importer( const uno::Sequence< beans::Property
     XmlEmitterSharedPtr pEmitter = createSaxEmitter(rHdl);
     const bool bSuccess = parse(xInput,xInteractionHandler, aPwd, xStatus,pEmitter,aURL);
 
-    // tell input stream that it is no longer needed
+    
     xInput->closeInput();
     xInput.clear();
 

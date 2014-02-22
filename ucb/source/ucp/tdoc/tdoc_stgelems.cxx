@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -36,13 +36,13 @@
 using namespace com::sun::star;
 using namespace tdoc_ucp;
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// ParentStorageHolder Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 ParentStorageHolder::ParentStorageHolder(
             const uno::Reference< embed::XStorage > & xParentStorage,
@@ -55,13 +55,13 @@ ParentStorageHolder::ParentStorageHolder(
         m_bParentIsRootStorage = true;
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// Storage Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
                   const rtl::Reference< StorageElementFactory > & xFactory,
@@ -71,7 +71,7 @@ Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
 : ParentStorageHolder( xParentStorage, Uri( rUri ).getParentUri() ),
   m_xFactory( xFactory ),
   m_xWrappedStorage( xStorageToWrap ),
-  m_xWrappedTransObj( xStorageToWrap, uno::UNO_QUERY ), // optional interface
+  m_xWrappedTransObj( xStorageToWrap, uno::UNO_QUERY ), 
   m_xWrappedComponent( xStorageToWrap, uno::UNO_QUERY ),
   m_xWrappedTypeProv( xStorageToWrap, uno::UNO_QUERY ),
   m_bIsDocumentStorage( Uri( rUri ).isDocument() )
@@ -85,7 +85,7 @@ Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
     OSL_ENSURE( m_xWrappedTypeProv.is(),
                 "Storage::Storage: No Type Provider!" );
 
-    // Use proxy factory service to create aggregatable proxy.
+    
     try
     {
         uno::Reference< reflection::XProxyFactory > xProxyFac =
@@ -104,11 +104,11 @@ Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
     {
         osl_atomic_increment( &m_refCount );
         {
-            // Solaris compiler problem:
-            // Extra block to enforce destruction of temporary object created
-            // in next statement _before_ osl_atomic_decrement is
-            // called.  Otherwise 'this' will destroy itself even before ctor
-            // is completed (See impl. of XInterface::release())!
+            
+            
+            
+            
+            
 
             m_xAggProxy->setDelegator(
                 static_cast< cppu::OWeakObject * >( this ) );
@@ -117,26 +117,26 @@ Storage::Storage( const uno::Reference< uno::XComponentContext > & rxContext,
     }
 }
 
-//=========================================================================
-// virtual
+
+
 Storage::~Storage()
 {
     if ( m_xAggProxy.is() )
         m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
 
-    // Never dispose a document storage. Not owner!
+    
     if ( !isDocumentStorage() )
     {
         if ( m_xWrappedComponent.is() )
         {
-            // "Auto-dispose"...
+            
             try
             {
                 m_xWrappedComponent->dispose();
             }
             catch ( lang::DisposedException const & )
             {
-                // might happen.
+                
             }
             catch ( ... )
             {
@@ -146,92 +146,92 @@ Storage::~Storage()
     }
 }
 
-//=========================================================================
-//
-// uno::XInterface
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Any SAL_CALL Storage::queryInterface( const uno::Type& aType )
     throw ( uno::RuntimeException )
 {
-    // First, try to use interfaces implemented by myself and base class(es)
+    
     uno::Any aRet = StorageUNOBase::queryInterface( aType );
 
     if ( aRet.hasValue() )
         return aRet;
 
-    // Try to use requested interface from aggregated storage
+    
     return m_xAggProxy->queryAggregation( aType );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::acquire()
     throw ()
 {
     osl_atomic_increment( &m_refCount );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::release()
     throw ()
 {
-    //#i120738, Storage::release overrides OWeakObject::release(),
-    //need call OWeakObject::release() to release OWeakObject::m_pWeakConnectionPoint
+    
+    
 
     if ( m_refCount == 1 )
         m_xFactory->releaseElement( this );
 
-    //delete this;
+    
     OWeakObject::release();
 }
 
-//=========================================================================
-//
-// lang::XTypeProvider
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Sequence< uno::Type > SAL_CALL Storage::getTypes()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedTypeProv->getTypes();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< sal_Int8 > SAL_CALL Storage::getImplementationId()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedTypeProv->getImplementationId();
 }
 
-//=========================================================================
+
 //
-// lang::XComponent (base of embed::XStorage)
+
 //
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::dispose()
     throw ( uno::RuntimeException )
 {
     m_xWrappedStorage->dispose();
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::addEventListener(
         const uno::Reference< lang::XEventListener >& xListener )
     throw ( uno::RuntimeException )
 {
     m_xWrappedStorage->addEventListener( xListener );
 }
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::removeEventListener(
         const uno::Reference< lang::XEventListener >& aListener )
     throw (uno::RuntimeException)
@@ -239,34 +239,34 @@ void SAL_CALL Storage::removeEventListener(
     m_xWrappedStorage->removeEventListener( aListener );
 }
 
-//=========================================================================
-//
-// container::XElementAccess (base of container::XNameAccess)
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Type SAL_CALL Storage::getElementType()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedStorage->getElementType();
 }
 
-//=========================================================================
-// virtual
+
+
 ::sal_Bool SAL_CALL Storage::hasElements()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedStorage->hasElements();
 }
 
-//=========================================================================
-//
-// container::XNameAccess (base of embed::XStorage)
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Any SAL_CALL Storage::getByName( const OUString& aName )
     throw ( container::NoSuchElementException,
             lang::WrappedTargetException,
@@ -275,29 +275,29 @@ uno::Any SAL_CALL Storage::getByName( const OUString& aName )
     return m_xWrappedStorage->getByName( aName );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< OUString > SAL_CALL Storage::getElementNames()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedStorage->getElementNames();
 }
 
-//=========================================================================
-// virtual
+
+
 ::sal_Bool SAL_CALL Storage::hasByName( const OUString& aName )
     throw ( uno::RuntimeException )
 {
     return m_xWrappedStorage->hasByName( aName );
 }
 
-//=========================================================================
-//
-// embed::XStorage
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL Storage::copyToStorage(
         const uno::Reference< embed::XStorage >& xDest )
     throw ( embed::InvalidStorageException,
@@ -309,8 +309,8 @@ void SAL_CALL Storage::copyToStorage(
     m_xWrappedStorage->copyToStorage( xDest );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< io::XStream > SAL_CALL Storage::openStreamElement(
         const OUString& aStreamName, sal_Int32 nOpenMode )
     throw ( embed::InvalidStorageException,
@@ -323,8 +323,8 @@ uno::Reference< io::XStream > SAL_CALL Storage::openStreamElement(
     return m_xWrappedStorage->openStreamElement( aStreamName, nOpenMode );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< io::XStream > SAL_CALL Storage::openEncryptedStreamElement(
         const OUString& aStreamName,
         sal_Int32 nOpenMode,
@@ -341,8 +341,8 @@ uno::Reference< io::XStream > SAL_CALL Storage::openEncryptedStreamElement(
         aStreamName, nOpenMode, aPassword );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< embed::XStorage > SAL_CALL Storage::openStorageElement(
         const OUString& aStorName, sal_Int32 nOpenMode )
     throw ( embed::InvalidStorageException,
@@ -354,8 +354,8 @@ uno::Reference< embed::XStorage > SAL_CALL Storage::openStorageElement(
     return m_xWrappedStorage->openStorageElement( aStorName, nOpenMode );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< io::XStream > SAL_CALL Storage::cloneStreamElement(
         const OUString& aStreamName )
     throw ( embed::InvalidStorageException,
@@ -368,8 +368,8 @@ uno::Reference< io::XStream > SAL_CALL Storage::cloneStreamElement(
     return m_xWrappedStorage->cloneStreamElement( aStreamName );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< io::XStream > SAL_CALL Storage::cloneEncryptedStreamElement(
         const OUString& aStreamName,
         const OUString& aPassword )
@@ -385,8 +385,8 @@ uno::Reference< io::XStream > SAL_CALL Storage::cloneEncryptedStreamElement(
                                                            aPassword );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::copyLastCommitTo(
         const uno::Reference< embed::XStorage >& xTargetStorage )
     throw ( embed::InvalidStorageException,
@@ -398,8 +398,8 @@ void SAL_CALL Storage::copyLastCommitTo(
     m_xWrappedStorage->copyLastCommitTo( xTargetStorage );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::copyStorageElementLastCommitTo(
         const OUString& aStorName,
         const uno::Reference< embed::XStorage >& xTargetStorage )
@@ -412,8 +412,8 @@ void SAL_CALL Storage::copyStorageElementLastCommitTo(
     m_xWrappedStorage->copyStorageElementLastCommitTo( aStorName, xTargetStorage );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL Storage::isStreamElement(
         const OUString& aElementName )
     throw ( container::NoSuchElementException,
@@ -424,8 +424,8 @@ sal_Bool SAL_CALL Storage::isStreamElement(
     return m_xWrappedStorage->isStreamElement( aElementName );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Bool SAL_CALL Storage::isStorageElement(
         const OUString& aElementName )
     throw ( container::NoSuchElementException,
@@ -436,8 +436,8 @@ sal_Bool SAL_CALL Storage::isStorageElement(
     return m_xWrappedStorage->isStorageElement( aElementName );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::removeElement( const OUString& aElementName )
     throw ( embed::InvalidStorageException,
             lang::IllegalArgumentException,
@@ -449,8 +449,8 @@ void SAL_CALL Storage::removeElement( const OUString& aElementName )
     m_xWrappedStorage->removeElement( aElementName );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::renameElement( const OUString& aEleName,
                                       const OUString& aNewName )
     throw ( embed::InvalidStorageException,
@@ -464,8 +464,8 @@ void SAL_CALL Storage::renameElement( const OUString& aEleName,
     m_xWrappedStorage->renameElement( aEleName, aNewName );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::copyElementTo(
         const OUString& aElementName,
         const uno::Reference< embed::XStorage >& xDest,
@@ -481,8 +481,8 @@ void SAL_CALL Storage::copyElementTo(
     m_xWrappedStorage->copyElementTo( aElementName, xDest, aNewName );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::moveElementTo(
         const OUString& aElementName,
         const uno::Reference< embed::XStorage >& xDest,
@@ -498,20 +498,20 @@ void SAL_CALL Storage::moveElementTo(
     m_xWrappedStorage->moveElementTo( aElementName, xDest, rNewName );
 }
 
-//=========================================================================
-//
-// embed::XTransactedObject
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL Storage::commit()
     throw ( io::IOException,
             lang::WrappedTargetException,
             uno::RuntimeException )
 {
-    // Never commit a root storage (-> has no parent)!
-    // Would lead in writing the whole document to disk.
+    
+    
 
     uno::Reference< embed::XStorage > xParentStorage = getParentStorage();
     if ( xParentStorage.is() )
@@ -535,8 +535,8 @@ void SAL_CALL Storage::commit()
     }
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Storage::revert()
     throw ( io::IOException,
             lang::WrappedTargetException,
@@ -564,13 +564,13 @@ void SAL_CALL Storage::revert()
     }
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// OutputStream Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 OutputStream::OutputStream(
             const uno::Reference< uno::XComponentContext > & rxContext,
@@ -591,7 +591,7 @@ OutputStream::OutputStream(
     OSL_ENSURE( m_xWrappedTypeProv.is(),
                 "OutputStream::OutputStream: No Type Provider!" );
 
-    // Use proxy factory service to create aggregatable proxy.
+    
     try
     {
         uno::Reference< reflection::XProxyFactory > xProxyFac =
@@ -610,11 +610,11 @@ OutputStream::OutputStream(
     {
         osl_atomic_increment( &m_refCount );
         {
-            // Solaris compiler problem:
-            // Extra block to enforce destruction of temporary object created
-            // in next statement _before_ osl_atomic_decrement is
-            // called.  Otherwise 'this' will destroy itself even before ctor
-            // is completed (See impl. of XInterface::release())!
+            
+            
+            
+            
+            
 
             m_xAggProxy->setDelegator(
                 static_cast< cppu::OWeakObject * >( this ) );
@@ -623,21 +623,21 @@ OutputStream::OutputStream(
     }
 }
 
-//=========================================================================
-// virtual
+
+
 OutputStream::~OutputStream()
 {
     if ( m_xAggProxy.is() )
         m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
 }
 
-//=========================================================================
-//
-// uno::XInterface
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
     throw ( uno::RuntimeException )
 {
@@ -652,34 +652,34 @@ uno::Any SAL_CALL OutputStream::queryInterface( const uno::Type& aType )
         return uno::Any();
 }
 
-//=========================================================================
-//
-// lang::XTypeProvider
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Sequence< uno::Type > SAL_CALL OutputStream::getTypes()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedTypeProv->getTypes();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< sal_Int8 > SAL_CALL OutputStream::getImplementationId()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedTypeProv->getImplementationId();
 }
 
-//=========================================================================
-//
-// io::XOutputStream
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL
 OutputStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     throw ( io::NotConnectedException,
@@ -690,8 +690,8 @@ OutputStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     m_xWrappedStream->writeBytes( aData );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL
 OutputStream::flush()
     throw ( io::NotConnectedException,
@@ -702,8 +702,8 @@ OutputStream::flush()
     m_xWrappedStream->flush();
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL
 OutputStream::closeOutput(  )
     throw ( io::NotConnectedException,
@@ -713,31 +713,31 @@ OutputStream::closeOutput(  )
 {
     m_xWrappedStream->closeOutput();
 
-    // Release parent storage.
-    // Now, that the stream is closed/disposed it is not needed any longer.
+    
+    
     setParentStorage( uno::Reference< embed::XStorage >() );
 }
 
-//=========================================================================
-//
-// lang::XComponent
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL
 OutputStream::dispose()
     throw ( uno::RuntimeException )
 {
     m_xWrappedComponent->dispose();
 
-    // Release parent storage.
-    // Now, that the stream is closed/disposed it is not needed any longer.
+    
+    
     setParentStorage( uno::Reference< embed::XStorage >() );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL
 OutputStream::addEventListener(
         const uno::Reference< lang::XEventListener >& xListener )
@@ -746,8 +746,8 @@ OutputStream::addEventListener(
     m_xWrappedComponent->addEventListener( xListener );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL
 OutputStream::removeEventListener(
         const uno::Reference< lang::XEventListener >& aListener )
@@ -756,13 +756,13 @@ OutputStream::removeEventListener(
     m_xWrappedComponent->removeEventListener( aListener );
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// Stream Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 Stream::Stream(
             const uno::Reference< uno::XComponentContext > & rxContext,
@@ -771,8 +771,8 @@ Stream::Stream(
             const uno::Reference< io::XStream > & xStreamToWrap )
 : ParentStorageHolder( xParentStorage, Uri( rUri ).getParentUri() ),
   m_xWrappedStream( xStreamToWrap ),
-  m_xWrappedOutputStream( xStreamToWrap->getOutputStream() ), // might be empty
-  m_xWrappedTruncate( m_xWrappedOutputStream, uno::UNO_QUERY ), // might be empty
+  m_xWrappedOutputStream( xStreamToWrap->getOutputStream() ), 
+  m_xWrappedTruncate( m_xWrappedOutputStream, uno::UNO_QUERY ), 
   m_xWrappedInputStream( xStreamToWrap->getInputStream(), uno::UNO_QUERY ),
   m_xWrappedComponent( xStreamToWrap, uno::UNO_QUERY ),
   m_xWrappedTypeProv( xStreamToWrap, uno::UNO_QUERY )
@@ -786,7 +786,7 @@ Stream::Stream(
     OSL_ENSURE( m_xWrappedTypeProv.is(),
                 "OutputStream::OutputStream: No Type Provider!" );
 
-    // Use proxy factory service to create aggregatable proxy.
+    
     try
     {
         uno::Reference< reflection::XProxyFactory > xProxyFac =
@@ -805,11 +805,11 @@ Stream::Stream(
     {
         osl_atomic_increment( &m_refCount );
         {
-            // Solaris compiler problem:
-            // Extra block to enforce destruction of temporary object created
-            // in next statement _before_ osl_atomic_decrement is
-            // called.  Otherwise 'this' will destroy itself even before ctor
-            // is completed (See impl. of XInterface::release())!
+            
+            
+            
+            
+            
 
             m_xAggProxy->setDelegator(
                 static_cast< cppu::OWeakObject * >( this ) );
@@ -818,21 +818,21 @@ Stream::Stream(
     }
 }
 
-//=========================================================================
-// virtual
+
+
 Stream::~Stream()
 {
     if ( m_xAggProxy.is() )
         m_xAggProxy->setDelegator( uno::Reference< uno::XInterface >() );
 }
 
-//=========================================================================
-//
-// uno::XInterface
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
     throw ( uno::RuntimeException )
 {
@@ -847,55 +847,55 @@ uno::Any SAL_CALL Stream::queryInterface( const uno::Type& aType )
         return uno::Any();
 }
 
-//=========================================================================
-//
-// lang::XTypeProvider
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Sequence< uno::Type > SAL_CALL Stream::getTypes()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedTypeProv->getTypes();
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Sequence< sal_Int8 > SAL_CALL Stream::getImplementationId()
     throw ( uno::RuntimeException )
 {
     return m_xWrappedTypeProv->getImplementationId();
 }
 
-//=========================================================================
-//
-// io::XStream.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 uno::Reference< io::XInputStream > SAL_CALL Stream::getInputStream()
     throw( uno::RuntimeException )
 {
     return uno::Reference< io::XInputStream >( this );
 }
 
-//=========================================================================
-// virtual
+
+
 uno::Reference< io::XOutputStream > SAL_CALL Stream::getOutputStream()
     throw( uno::RuntimeException )
 {
     return uno::Reference< io::XOutputStream >( this );
 }
 
-//=========================================================================
-//
-// io::XOutputStream.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL Stream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     throw( io::NotConnectedException,
            io::BufferSizeExceededException,
@@ -909,8 +909,8 @@ void SAL_CALL Stream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
     }
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Stream::flush()
     throw( io::NotConnectedException,
            io::BufferSizeExceededException,
@@ -924,8 +924,8 @@ void SAL_CALL Stream::flush()
     }
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Stream::closeOutput()
     throw( io::NotConnectedException,
            io::IOException,
@@ -937,18 +937,18 @@ void SAL_CALL Stream::closeOutput()
         commitChanges();
     }
 
-    // Release parent storage.
-    // Now, that the stream is closed/disposed it is not needed any longer.
+    
+    
     setParentStorage( uno::Reference< embed::XStorage >() );
 }
 
-//=========================================================================
-//
-// io::XTruncate.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL Stream::truncate()
     throw( io::IOException,
            uno::RuntimeException )
@@ -960,13 +960,13 @@ void SAL_CALL Stream::truncate()
     }
 }
 
-//=========================================================================
-//
-// io::XInputStream.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 sal_Int32 SAL_CALL Stream::readBytes( uno::Sequence< sal_Int8 >& aData,
                                       sal_Int32 nBytesToRead )
     throw( io::NotConnectedException,
@@ -977,8 +977,8 @@ sal_Int32 SAL_CALL Stream::readBytes( uno::Sequence< sal_Int8 >& aData,
     return m_xWrappedInputStream->readBytes( aData, nBytesToRead );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int32 SAL_CALL Stream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
                                           sal_Int32 nMaxBytesToRead )
     throw( io::NotConnectedException,
@@ -989,8 +989,8 @@ sal_Int32 SAL_CALL Stream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
     return m_xWrappedInputStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Stream::skipBytes( sal_Int32 nBytesToSkip )
     throw( io::NotConnectedException,
            io::BufferSizeExceededException,
@@ -1000,8 +1000,8 @@ void SAL_CALL Stream::skipBytes( sal_Int32 nBytesToSkip )
     m_xWrappedInputStream->skipBytes( nBytesToSkip );
 }
 
-//=========================================================================
-// virtual
+
+
 sal_Int32 SAL_CALL Stream::available()
     throw( io::NotConnectedException,
            io::IOException,
@@ -1010,8 +1010,8 @@ sal_Int32 SAL_CALL Stream::available()
     return m_xWrappedInputStream->available();
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Stream::closeInput()
     throw( io::NotConnectedException,
            io::IOException,
@@ -1020,25 +1020,25 @@ void SAL_CALL Stream::closeInput()
     m_xWrappedInputStream->closeInput();
 }
 
-//=========================================================================
-//
-// lang::XComponent
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL Stream::dispose()
     throw ( uno::RuntimeException )
 {
     m_xWrappedComponent->dispose();
 
-    // Release parent storage.
-    // Now, that the stream is closed/disposed it is not needed any longer.
+    
+    
     setParentStorage( uno::Reference< embed::XStorage >() );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Stream::addEventListener(
         const uno::Reference< lang::XEventListener >& xListener )
     throw ( uno::RuntimeException )
@@ -1046,8 +1046,8 @@ void SAL_CALL Stream::addEventListener(
     m_xWrappedComponent->addEventListener( xListener );
 }
 
-//=========================================================================
-// virtual
+
+
 void SAL_CALL Stream::removeEventListener(
         const uno::Reference< lang::XEventListener >& aListener )
     throw ( uno::RuntimeException )
@@ -1055,11 +1055,11 @@ void SAL_CALL Stream::removeEventListener(
     m_xWrappedComponent->removeEventListener( aListener );
 }
 
-//=========================================================================
+
 //
-// Non-UNO
+
 //
-//=========================================================================
+
 
 void Stream::commitChanges()
     throw( io::IOException )
@@ -1076,7 +1076,7 @@ void Stream::commitChanges()
         }
         catch ( lang::WrappedTargetException const & )
         {
-            throw io::IOException(); // @@@
+            throw io::IOException(); 
         }
     }
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -108,7 +108,7 @@ namespace {
     }
 }
 
-// -----------------------------------------------------------------------------
+
 #ifdef DBG_UTIL
 
 #include <vector>
@@ -124,7 +124,7 @@ namespace tracing
         AllocationType( ) : pName( NULL ), nAllocatedUnits( 0 ) { }
     };
 
-    // =============================================================================
+    
     class AllocationTracer
     {
     public:
@@ -140,7 +140,7 @@ namespace tracing
         static AllocationState::iterator    getLocation( const sal_Char* _pName );
     };
 
-    // =============================================================================
+    
     AllocationTracer::AllocationState::iterator AllocationTracer::getLocation( const sal_Char* _pName )
     {
         AllocationState::iterator aLookFor = s_aAllocated.begin();
@@ -150,21 +150,21 @@ namespace tracing
             )
         {
             if ( 0 == rtl_str_compare( aLookFor->pName, _pName ) )
-                // found
+                
                 return aLookFor;
         }
-        // not found
+        
         s_aAllocated.push_back( AllocationType() );
         aLookFor = s_aAllocated.end(); --aLookFor;
-        aLookFor->pName = _pName;   // note that this assumes that _pName is a constant string ....
+        aLookFor->pName = _pName;   
         return aLookFor;
     }
 
-    // =============================================================================
+    
     AllocationTracer::AllocationState           AllocationTracer::s_aAllocated;
     ::osl::Mutex                                AllocationTracer::s_aMutex;
 
-    // =============================================================================
+    
     void AllocationTracer::registerUnit( const sal_Char* _pName )
     {
         ::osl::MutexGuard aGuard( s_aMutex );
@@ -173,7 +173,7 @@ namespace tracing
         ++aPos->nAllocatedUnits;
     }
 
-    // =============================================================================
+    
     void AllocationTracer::revokeUnit( const sal_Char* _pName )
     {
         ::osl::MutexGuard aGuard( s_aMutex );
@@ -190,7 +190,7 @@ namespace tracing
 #define TRACE_FREE( type )
 #endif
 
-// -----------------------------------------------------------------------------
+
 void ORowSetValue::setTypeKind(sal_Int32 _eType)
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::setTypeKind" );
@@ -272,7 +272,7 @@ void ORowSetValue::setTypeKind(sal_Int32 _eType)
     m_eTypeKind = _eType;
 }
 
-// -----------------------------------------------------------------------------
+
 void ORowSetValue::free()
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::free" );
@@ -341,7 +341,7 @@ void ORowSetValue::free()
         m_bNull = true;
     }
 }
-// -----------------------------------------------------------------------------
+
 ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
 {
     if(&_rRH == this)
@@ -490,12 +490,12 @@ ORowSetValue& ORowSetValue::operator=(const ORowSetValue& _rRH)
     }
 
     m_bNull     = _rRH.m_bNull;
-    // OJ: BUGID: 96277
+    
     m_eTypeKind = _rRH.m_eTypeKind;
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
 {
@@ -514,7 +514,7 @@ ORowSetValue& ORowSetValue::operator=(const Date& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 ORowSetValue& ORowSetValue::operator=(const Time& _rRH)
 {
     if(m_eTypeKind != DataType::TIME)
@@ -532,7 +532,7 @@ ORowSetValue& ORowSetValue::operator=(const Time& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 ORowSetValue& ORowSetValue::operator=(const DateTime& _rRH)
 {
     if(m_eTypeKind != DataType::TIMESTAMP)
@@ -549,7 +549,7 @@ ORowSetValue& ORowSetValue::operator=(const DateTime& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const OUString& _rRH)
 {
@@ -565,7 +565,7 @@ ORowSetValue& ORowSetValue::operator=(const OUString& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const double& _rRH)
 {
@@ -578,7 +578,7 @@ ORowSetValue& ORowSetValue::operator=(const double& _rRH)
 
     return *this;
 }
-// -----------------------------------------------------------------------------
+
 ORowSetValue& ORowSetValue::operator=(const float& _rRH)
 {
     if(m_eTypeKind != DataType::FLOAT)
@@ -590,7 +590,7 @@ ORowSetValue& ORowSetValue::operator=(const float& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const sal_Int8& _rRH)
 {
@@ -603,7 +603,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int8& _rRH)
     m_bSigned = true;
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const sal_uInt8& _rRH)
 {
@@ -616,7 +616,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt8& _rRH)
     m_bSigned = false;
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const sal_Int16& _rRH)
 {
@@ -630,7 +630,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int16& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const sal_uInt16& _rRH)
 {
@@ -644,7 +644,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt16& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
 {
@@ -659,7 +659,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int32& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const sal_uInt32& _rRH)
 {
@@ -674,7 +674,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt32& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 ORowSetValue& ORowSetValue::operator=(const bool _rRH)
 {
@@ -687,7 +687,7 @@ ORowSetValue& ORowSetValue::operator=(const bool _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
 {
     if ( DataType::BIGINT != m_eTypeKind)
@@ -700,7 +700,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_Int64& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 ORowSetValue& ORowSetValue::operator=(const sal_uInt64& _rRH)
 {
     if ( DataType::BIGINT != m_eTypeKind)
@@ -713,7 +713,7 @@ ORowSetValue& ORowSetValue::operator=(const sal_uInt64& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
 {
     if (!isStorageCompatible(DataType::LONGVARBINARY,m_eTypeKind))
@@ -732,7 +732,7 @@ ORowSetValue& ORowSetValue::operator=(const Sequence<sal_Int8>& _rRH)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 ORowSetValue& ORowSetValue::operator=(const Any& _rAny)
 {
     if (!isStorageCompatible(DataType::OBJECT,m_eTypeKind))
@@ -751,26 +751,26 @@ ORowSetValue& ORowSetValue::operator=(const Any& _rAny)
 
     return *this;
 }
-// -------------------------------------------------------------------------
+
 
 bool operator==(const Date& _rLH,const Date& _rRH)
 {
     return _rLH.Day == _rRH.Day && _rLH.Month == _rRH.Month && _rLH.Year == _rRH.Year;
 }
-// -------------------------------------------------------------------------
+
 
 bool operator==(const Time& _rLH,const Time& _rRH)
 {
     return _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.NanoSeconds == _rRH.NanoSeconds;
 }
-// -------------------------------------------------------------------------
+
 
 bool operator==(const DateTime& _rLH,const DateTime& _rRH)
 {
     return _rLH.Day == _rRH.Day && _rLH.Month == _rRH.Month && _rLH.Year == _rRH.Year &&
         _rLH.Minutes == _rRH.Minutes && _rLH.Hours == _rRH.Hours && _rLH.Seconds == _rRH.Seconds && _rLH.NanoSeconds == _rRH.NanoSeconds;
 }
-// -------------------------------------------------------------------------
+
 
 bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
 {
@@ -881,7 +881,7 @@ bool ORowSetValue::operator==(const ORowSetValue& _rRH) const
     }
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 Any ORowSetValue::makeAny() const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::makeAny" );
@@ -935,36 +935,36 @@ Any ORowSetValue::makeAny() const
                 break;
             case DataType::TINYINT:
                 if ( m_bSigned )
-                    // TypeClass_BYTE
+                    
                     rValue <<= m_aValue.m_nInt8;
                 else
-                    // There is no TypeClass_UNSIGNED_BYTE,
-                    // so silently promote it to a 16-bit integer,
-                    // that is TypeClass_UNSIGNED_SHORT
+                    
+                    
+                    
                     rValue <<= static_cast<sal_uInt16>(m_aValue.m_uInt8);
                 break;
             case DataType::SMALLINT:
                 if ( m_bSigned )
-                    // TypeClass_SHORT
+                    
                     rValue <<= m_aValue.m_nInt16;
                 else
-                    // TypeClass_UNSIGNED_SHORT
+                    
                     rValue <<= m_aValue.m_uInt16;
                 break;
             case DataType::INTEGER:
                 if ( m_bSigned )
-                    // TypeClass_LONG
+                    
                     rValue <<= m_aValue.m_nInt32;
                 else
-                    // TypeClass_UNSIGNED_LONG
+                    
                     rValue <<= m_aValue.m_uInt32;
                 break;
             case DataType::BIGINT:
                 if ( m_bSigned )
-                    // TypeClass_HYPER
+                    
                     rValue <<= m_aValue.m_nInt64;
                 else
-                    // TypeClass_UNSIGNED_HYPER
+                    
                     rValue <<= m_aValue.m_uInt64;
                 break;
             default:
@@ -975,7 +975,7 @@ Any ORowSetValue::makeAny() const
     }
     return rValue;
 }
-// -------------------------------------------------------------------------
+
 OUString ORowSetValue::getString( ) const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getString" );
@@ -1063,7 +1063,7 @@ OUString ORowSetValue::getString( ) const
     }
     return aRet;
 }
-// -------------------------------------------------------------------------
+
 bool ORowSetValue::getBool()    const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getBool" );
@@ -1090,7 +1090,7 @@ bool ORowSetValue::getBool()    const
                         break;
                     }
                 }
-                // run through
+                
             case DataType::DECIMAL:
             case DataType::NUMERIC:
 
@@ -1137,7 +1137,7 @@ bool ORowSetValue::getBool()    const
     }
     return bRet;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int8 ORowSetValue::getInt8()    const
 {
@@ -1211,7 +1211,7 @@ sal_Int8 ORowSetValue::getInt8()    const
     }
     return nRet;
 }
-// -------------------------------------------------------------------------
+
 
 sal_uInt8 ORowSetValue::getUInt8()    const
 {
@@ -1283,7 +1283,7 @@ sal_uInt8 ORowSetValue::getUInt8()    const
     return nRet;
 }
 
-// -------------------------------------------------------------------------
+
 
 sal_Int16 ORowSetValue::getInt16()  const
 {
@@ -1357,7 +1357,7 @@ sal_Int16 ORowSetValue::getInt16()  const
     }
     return nRet;
 }
-// -------------------------------------------------------------------------
+
 
 sal_uInt16 ORowSetValue::getUInt16()  const
 {
@@ -1428,7 +1428,7 @@ sal_uInt16 ORowSetValue::getUInt16()  const
     }
     return nRet;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 ORowSetValue::getInt32()  const
 {
@@ -1502,7 +1502,7 @@ sal_Int32 ORowSetValue::getInt32()  const
     }
     return nRet;
 }
-// -------------------------------------------------------------------------
+
 
 sal_uInt32 ORowSetValue::getUInt32()  const
 {
@@ -1575,7 +1575,7 @@ sal_uInt32 ORowSetValue::getUInt32()  const
     }
     return nRet;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int64 ORowSetValue::getLong()   const
 {
@@ -1649,7 +1649,7 @@ sal_Int64 ORowSetValue::getLong()   const
     }
     return nRet;
 }
-// -------------------------------------------------------------------------
+
 
 sal_uInt64 ORowSetValue::getULong()   const
 {
@@ -1723,7 +1723,7 @@ sal_uInt64 ORowSetValue::getULong()   const
     return nRet;
 }
 
-// -------------------------------------------------------------------------
+
 float ORowSetValue::getFloat()  const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getFloat" );
@@ -1800,7 +1800,7 @@ float ORowSetValue::getFloat()  const
     }
     return nRet;
 }
-// -------------------------------------------------------------------------
+
 double ORowSetValue::getDouble()    const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getDouble" );
@@ -1879,7 +1879,7 @@ double ORowSetValue::getDouble()    const
     }
     return nRet;
 }
-// -----------------------------------------------------------------------------
+
 Sequence<sal_Int8>  ORowSetValue::getSequence() const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getSequence" );
@@ -1952,7 +1952,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
     return aSeq;
 
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::util::Date ORowSetValue::getDate() const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getDate" );
@@ -1999,7 +1999,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
             case DataType::OBJECT:
             default:
                 OSL_ENSURE( false, "ORowSetValue::getDate: cannot retrieve the data!" );
-                // NO break!
+                
 
             case DataType::BINARY:
             case DataType::VARBINARY:
@@ -2011,7 +2011,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
     }
     return aValue;
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::util::Time ORowSetValue::getTime()        const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getTime" );
@@ -2056,7 +2056,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
     }
     return aValue;
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::util::DateTime ORowSetValue::getDateTime()    const
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::getDateTime" );
@@ -2109,7 +2109,7 @@ Sequence<sal_Int8>  ORowSetValue::getSequence() const
     }
     return aValue;
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetValue::setSigned(bool _bMod)
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::setSigned" );
@@ -2163,7 +2163,7 @@ void ORowSetValue::setSigned(bool _bMod)
     }
 }
 
-// -----------------------------------------------------------------------------
+
 namespace detail
 {
     class SAL_NO_VTABLE IValueSource
@@ -2200,7 +2200,7 @@ namespace detail
         {
         }
 
-        // IValueSource
+        
         virtual OUString             getString() const           { return m_xRow->getString( m_nPos ); };
         virtual bool                        getBoolean() const          { return m_xRow->getBoolean( m_nPos ); };
         virtual sal_Int8                    getByte() const             { return m_xRow->getByte( m_nPos ); };
@@ -2233,7 +2233,7 @@ namespace detail
         {
         }
 
-        // IValueSource
+        
         virtual OUString             getString() const           { return m_xColumn->getString(); };
         virtual bool                        getBoolean() const          { return m_xColumn->getBoolean(); };
         virtual sal_Int8                    getByte() const             { return m_xColumn->getByte(); };
@@ -2258,21 +2258,21 @@ namespace detail
     };
 }
 
-// -----------------------------------------------------------------------------
+
 void ORowSetValue::fill( const sal_Int32 _nType, const Reference< XColumn >& _rxColumn )
 {
     detail::ColumnValue aColumnValue( _rxColumn );
     impl_fill( _nType, true, aColumnValue );
 }
 
-// -----------------------------------------------------------------------------
+
 void ORowSetValue::fill( sal_Int32 _nPos, sal_Int32 _nType, bool  _bNullable, const Reference< XRow>& _xRow )
 {
     detail::RowValue aRowValue( _xRow, _nPos );
     impl_fill( _nType, _bNullable, aRowValue );
 }
 
-// -----------------------------------------------------------------------------
+
 void ORowSetValue::fill(sal_Int32 _nPos,
                      sal_Int32 _nType,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow)
@@ -2281,7 +2281,7 @@ void ORowSetValue::fill(sal_Int32 _nPos,
     fill(_nPos,_nType,true,_xRow);
 }
 
-// -----------------------------------------------------------------------------
+
 void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const detail::IValueSource& _rValueSource )
 
 {
@@ -2300,10 +2300,10 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const det
         if ( isSigned() )
             (*this) = _rValueSource.getLong();
         else
-            // TODO: this is rather horrible performance-wise
-            //       but fixing it needs extending the ::com::sun::star::sdbc::XRow API
-            //       to have a getULong(), and needs updating all drivers :-|
-            //       When doing that, add getUByte, getUShort, getUInt for symmetry/completeness
+            
+            
+            
+            
             (*this) = _rValueSource.getString().toUInt64();
         break;
     case DataType::FLOAT:
@@ -2370,7 +2370,7 @@ void ORowSetValue::impl_fill( const sal_Int32 _nType, bool _bNullable, const det
         setNull();
     setTypeKind(_nType);
 }
-// -----------------------------------------------------------------------------
+
 void ORowSetValue::fill(const Any& _rValue)
 {
     SAL_INFO( "connectivity.commontools", "dbtools Ocke.Janssen@sun.com ORowSetValue::fill (3)" );
@@ -2534,6 +2534,6 @@ void ORowSetValue::fill(const Any& _rValue)
     }
 }
 
-}   // namespace connectivity
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

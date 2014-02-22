@@ -52,7 +52,7 @@
 #include "xmlimp.hxx"
 #include "xmltbli.hxx"
 
-// for locking SolarMutex: svapp + mutex
+
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include "ndtxt.hxx"
@@ -110,11 +110,11 @@ static SvXMLTokenMapEntry aTableElemTokenMap[] =
     { XML_NAMESPACE_OFFICE, XML_DDE_SOURCE,
             XML_TOK_OFFICE_DDE_SOURCE },
 
-    // There are slight differences between <table:table-columns> and
-    // <table:table-columns-groups>. However, none of these are
-    // supported in Writer (they are Calc-only features), so we
-    // support column groups by simply using the <table:table-columns>
-    // token for column groups, too.
+    
+    
+    
+    
+    
     { XML_NAMESPACE_TABLE, XML_TABLE_COLUMN_GROUP,      XML_TOK_TABLE_COLS },
 
     XML_TOKEN_MAP_END
@@ -133,7 +133,7 @@ static SvXMLTokenMapEntry aTableCellAttrTokenMap[] =
     { XML_NAMESPACE_OFFICE, XML_DATE_VALUE, XML_TOK_TABLE_DATE_VALUE },
     { XML_NAMESPACE_OFFICE, XML_BOOLEAN_VALUE, XML_TOK_TABLE_BOOLEAN_VALUE },
     { XML_NAMESPACE_TABLE, XML_PROTECTED, XML_TOK_TABLE_PROTECTED },
-    { XML_NAMESPACE_TABLE, XML_PROTECT, XML_TOK_TABLE_PROTECTED }, // for backwards compatibility with SRC629 (and before)
+    { XML_NAMESPACE_TABLE, XML_PROTECT, XML_TOK_TABLE_PROTECTED }, 
     { XML_NAMESPACE_OFFICE, XML_STRING_VALUE, XML_TOK_TABLE_STRING_VALUE },
     { XML_NAMESPACE_OFFICE, XML_VALUE_TYPE, XML_TOK_TABLE_VALUE_TYPE },
     XML_TOKEN_MAP_END
@@ -162,8 +162,8 @@ class SwXMLTableCell_Impl
     OUString mXmlId;
     OUString m_StringValue;
 
-    OUString sFormula;  // cell formula; valid if length > 0
-    double dValue;      // formula value
+    OUString sFormula;  
+    double dValue;      
 
     SvXMLImportContextRef   xSubTable;
 
@@ -172,7 +172,7 @@ class SwXMLTableCell_Impl
     sal_uInt32 nColSpan;
 
     sal_Bool bProtected : 1;
-    sal_Bool bHasValue; // determines whether dValue attribute is valid
+    sal_Bool bHasValue; 
     sal_Bool mbCovered;
     bool m_bHasStringValue;
 
@@ -252,12 +252,12 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
     m_bHasStringValue = (pStringValue != 0);
     bProtected = bProtect;
 
-    if (!mbCovered) // ensure uniqueness
+    if (!mbCovered) 
     {
         mXmlId = i_rXmlId;
     }
 
-    // set formula, if valid
+    
     if (pFormula != NULL)
     {
         sFormula = *pFormula;
@@ -344,7 +344,7 @@ inline const SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol )
 {
     OSL_ENSURE( nCol < USHRT_MAX,
             "SwXMLTableRow_Impl::GetCell: column number is to big" );
-    // #i95726# - some fault tolerance
+    
     OSL_ENSURE( nCol < aCells.size(),
             "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
     return nCol < aCells.size() ? &aCells[(sal_uInt16)nCol] : 0;
@@ -354,7 +354,7 @@ inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol )
 {
     OSL_ENSURE( nCol < USHRT_MAX,
             "SwXMLTableRow_Impl::GetCell: column number is to big" );
-    // #i95726# - some fault tolerance
+    
     OSL_ENSURE( nCol < aCells.size(),
             "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
     return nCol < aCells.size() ? &aCells[(sal_uInt16)nCol] : 0;
@@ -567,9 +567,9 @@ SwXMLTableCellContext_Impl::SwXMLTableCellContext_Impl(
                 {
                     m_bValueTypeIsString = true;
                 }
-                // ignore other types - it would be correct to require
-                // matching value-type and $type-value attributes,
-                // but we've been reading those without checking forever.
+                
+                
+                
             }
             break;
         }
@@ -666,7 +666,7 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
     {
         if( GetTable()->IsValid() )
             InsertContentIfNotThere();
-        // fdo#60842: "office:string-value" overrides text content -> no import
+        
         if (!(m_bValueTypeIsString && m_bHasStringValue))
         {
             pContext = GetImport().GetTextImport()->CreateTextChildContext(
@@ -690,13 +690,13 @@ void SwXMLTableCellContext_Impl::EndElement()
             GetImport().GetTextImport()->DeleteParagraph();
             if( nColRepeat > 1 && nColSpan == 1 )
             {
-                // The original text is invalid after deleting the last
-                // paragraph
+                
+                
                 Reference < XTextCursor > xSrcTxtCursor =
                     GetImport().GetTextImport()->GetText()->createTextCursor();
                 xSrcTxtCursor->gotoEnd( sal_True );
 
-                // Until we have an API for copying we have to use the core.
+                
                 Reference<XUnoTunnel> xSrcCrsrTunnel( xSrcTxtCursor, UNO_QUERY);
                 OSL_ENSURE( xSrcCrsrTunnel.is(), "missing XUnoTunnel for Cursor" );
                 OTextCursorHelper *pSrcTxtCrsr = reinterpret_cast< OTextCursorHelper * >(
@@ -1148,13 +1148,13 @@ void SwXMLDDETableContext_Impl::StartElement(
                     bIsAutomaticUpdate = bTmp;
                 }
             }
-            // else: unknown attribute
+            
         }
-        // else: unknown attribute namespace
+        
     }
 }
 
-// generate a new name for DDE field type (called by lcl_GetDDEFieldType below)
+
 static OUString lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
 {
     OUString sPrefixStr(sPrefix);
@@ -1164,12 +1164,12 @@ static OUString lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNod
         sPrefixStr = "_";
     }
 
-    // increase count until we find a name that is not yet taken
+    
     OUString sName;
     sal_Int32 nCount = 0;
     do
     {
-        // this is crazy, but just in case all names are taken: exit gracefully
+        
         if (nCount < 0)
             return sName;
 
@@ -1183,11 +1183,11 @@ static OUString lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNod
     return sName;
 }
 
-// set table properties
+
 static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
                                     SwTableNode* pTableNode)
 {
-    // make command string
+    
     OUString sCommand(pContext->GetDDEApplication());
     sCommand += OUString(sfx2::cTokenSeparator);
     sCommand += pContext->GetDDEItem();
@@ -1199,10 +1199,10 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
 
     OUString sName(pContext->GetConnectionName());
 
-    // field type to be returned
+    
     SwDDEFieldType* pType = NULL;
 
-    // valid name?
+    
     if (sName.isEmpty())
     {
         sName = lcl_GenerateFldTypeName(pContext->GetDDEApplication(),
@@ -1210,31 +1210,31 @@ static SwDDEFieldType* lcl_GetDDEFieldType(SwXMLDDETableContext_Impl* pContext,
     }
     else
     {
-        // check for existing DDE field type with the same name
+        
         SwDDEFieldType* pOldType = (SwDDEFieldType*)pTableNode->GetDoc()->GetFldType(RES_DDEFLD, sName, false);
         if (NULL != pOldType)
         {
-            // same values -> return old type
+            
             if ( (pOldType->GetCmd() == sCommand) &&
                  (pOldType->GetType() == nType) )
             {
-                // same name, same values -> return old type!
+                
                 pType = pOldType;
             }
             else
             {
-                // same name, different values -> think of new name
+                
                 sName = lcl_GenerateFldTypeName(pContext->GetDDEApplication(),
                                                 pTableNode);
             }
         }
-        // no old type -> create new one
+        
     }
 
-    // create new field type (unless we already have one)
+    
     if (NULL == pType)
     {
-        // create new field type and return
+        
         SwDDEFieldType aDDEFieldType(sName, sCommand, nType);
         pType = (SwDDEFieldType*)pTableNode->
             GetDoc()->InsertFldType(aDDEFieldType);
@@ -1319,7 +1319,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     OUString aName;
     OUString sXmlId;
 
-    // this method will modify the document directly -> lock SolarMutex
+    
     SolarMutexGuard aGuard;
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1397,7 +1397,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     if( xTable.is() )
     {
         //FIXME
-        // xml:id for RDF metadata
+        
         GetImport().SetXmlId(xTable, sXmlId);
 
         Reference<XUnoTunnel> xTableTunnel( xTable, UNO_QUERY);
@@ -1414,7 +1414,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         xOldCursor = GetImport().GetTextImport()->GetCursor();
         GetImport().GetTextImport()->SetCursor( xText->createTextCursor() );
 
-        // take care of open redlines for tables
+        
         GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(sal_True);
     }
     if( pXTable )
@@ -1468,7 +1468,7 @@ SwXMLTableContext::~SwXMLTableContext()
     delete pSharedBoxFormats;
     delete pRows;
 
-    // close redlines on table end nodes
+    
     GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(sal_False);
 }
 
@@ -1509,7 +1509,7 @@ SvXMLImportContext *SwXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
                                                       this );
         break;
     case XML_TOK_OFFICE_DDE_SOURCE:
-        // save context for later processing (discard old context, if approp.)
+        
         if( IsValid() )
         {
             if (pDDESource != NULL)
@@ -1610,7 +1610,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
 
     sal_uInt32 i, j;
 
-    // Until it is possible to add columns here, fix the column span.
+    
     sal_uInt32 nColsReq = nCurCol + nColSpan;
     if( nColsReq > GetColumnCount() )
     {
@@ -1618,8 +1618,8 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
         nColsReq = GetColumnCount();
     }
 
-    // Check whether there are cells from a previous line already that reach
-    // into the current row.
+    
+    
     if( nCurRow > 0UL && nColSpan > 1UL )
     {
         SwXMLTableRow_Impl *pCurRow = &(*pRows)[(sal_uInt16)nCurRow];
@@ -1629,7 +1629,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
         {
             if( pCurRow->GetCell(i)->IsUsed() )
             {
-                // If this cell is used, the column span is truncated
+                
                 nColSpan = i - nCurCol;
                 nColsReq = i;
                 break;
@@ -1644,20 +1644,20 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
         nRowsReq = USHRT_MAX;
     }
 
-    // Add columns (if # required columns greater than # columns):
-    // This should never happen, since we require column definitions!
+    
+    
     if ( nColsReq > GetColumnCount() )
     {
         for( i=GetColumnCount(); i<nColsReq; i++ )
         {
             aColumnWidths.push_back( ColumnWidthInfo(MINLAY, true) );
         }
-        // adjust columns in *all* rows, if columns must be inserted
+        
         for( i=0; i<pRows->size(); i++ )
             (*pRows)[(sal_uInt16)i].Expand( nColsReq, i<nCurRow );
     }
 
-    // Add rows
+    
     if( pRows->size() < nRowsReq )
     {
         OUString aStyleName2;
@@ -1677,7 +1677,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
         }
     }
 
-    // Fill the cells
+    
     for( i=nColSpan; i>0UL; i-- )
     {
         for( j=nRowSpan; j>0UL; j-- )
@@ -1690,7 +1690,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
         }
     }
 
-    // Set current col to the next (free) column
+    
     nCurCol = nColsReq;
     while( nCurCol<GetColumnCount() && GetCell(nCurRow,nCurCol)->IsUsed() )
         nCurCol++;
@@ -1706,28 +1706,28 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
     if( nCurRow >= USHRT_MAX )
         return;
 
-    // Make sure there is at least one column.
+    
     if( 0==nCurRow && 0UL == GetColumnCount()  )
         InsertColumn( USHRT_MAX, true );
 
     if( nCurRow < pRows->size() )
     {
-        // The current row has already been inserted because of a row span
-        // of a previous row.
+        
+        
         (*pRows)[(sal_uInt16)nCurRow].Set(
             rStyleName, rDfltCellStyleName, i_rXmlId );
     }
     else
     {
-        // add a new row
+        
         pRows->push_back( new SwXMLTableRow_Impl( rStyleName, GetColumnCount(),
                                                &rDfltCellStyleName, i_rXmlId ) );
     }
 
-    // We start at the first column ...
+    
     nCurCol=0UL;
 
-    // ... but this cell may be occupied already.
+    
     while( nCurCol<GetColumnCount() && GetCell(nCurRow,nCurCol)->IsUsed() )
         nCurCol++;
 
@@ -1765,7 +1765,7 @@ void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
 
 void SwXMLTableContext::FinishRow()
 {
-    // Insert an empty cell at the end of the line if the row is not complete
+    
     if( nCurCol < GetColumnCount() )
     {
         OUString aStyleName2;
@@ -1773,7 +1773,7 @@ void SwXMLTableContext::FinishRow()
                     InsertTableSection() );
     }
 
-    // Move to the next row.
+    
     nCurRow++;
 }
 
@@ -1783,17 +1783,17 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
     const SwXMLTableCell_Impl *pPrevCell = 0;
     if( GetColumnCount() == nCol )
     {
-        // The last cell is the right one here.
+        
         pPrevCell = GetCell( pRows->size()-1U, GetColumnCount()-1UL );
     }
     else if( nCol > 0UL )
     {
-        // The previous cell in this row.
+        
         pPrevCell = GetCell( nRow, nCol-1UL );
     }
     else if( nRow > 0UL )
     {
-        // The last cell from the previous row.
+        
         pPrevCell = GetCell( nRow-1UL, GetColumnCount()-1UL );
     }
 
@@ -1802,8 +1802,8 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
     {
         if( pPrevCell->GetStartNode() )
             pSttNd = pPrevCell->GetStartNode();
-        // #i95726# - Some fault tolerance
-//        else
+        
+
         else if ( pPrevCell->GetSubTable() )
             pSttNd = pPrevCell->GetSubTable()->GetLastStartNode();
 
@@ -1852,8 +1852,8 @@ void SwXMLTableContext::ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol, 
 SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
                                              SwTableLine *pUpper )
 {
-    // The topmost table is the only table that maintains the two members
-    // pBox1 and bFirstSection.
+    
+    
     if( xParentTable.Is() )
         return ((SwXMLTableContext *)&xParentTable)->NewTableBox( pStNd,
                                                                   pUpper );
@@ -1863,8 +1863,8 @@ SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
     if( pBox1 &&
         pBox1->GetSttNd() == pStNd )
     {
-        // if the StartNode is equal to the StartNode of the initially
-        // created box, we use this box
+        
+        
         pBox = pBox1;
         pBox->SetUpper( pUpper );
         pBox1 = 0;
@@ -1893,33 +1893,33 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
     map_BoxFmt::iterator aIter = pSharedBoxFormats->find( aKey );
     if ( aIter == pSharedBoxFormats->end() )
     {
-        // unknown format so far -> construct a new one
+        
 
-        // get the old format, and reset all attributes
-        // (but preserve FillOrder)
+        
+        
         pBoxFmt2 = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
         SwFmtFillOrder aFillOrder( pBoxFmt2->GetFillOrder() );
-        pBoxFmt2->ResetAllFmtAttr(); // #i73790# - method renamed
+        pBoxFmt2->ResetAllFmtAttr(); 
         pBoxFmt2->SetFmtAttr( aFillOrder );
-        bNew = sal_True;    // it's a new format now
+        bNew = sal_True;    
 
-        // share this format, if allowed
+        
         if ( bMayShare )
             (*pSharedBoxFormats)[ aKey ] = pBoxFmt2;
     }
     else
     {
-        // set the shared format
+        
         pBoxFmt2 = aIter->second;
         pBox->ChgFrmFmt( pBoxFmt2 );
-        bNew = sal_False;   // copied from an existing format
+        bNew = sal_False;   
 
-        // claim it, if we are not allowed to share
+        
         if ( !bMayShare )
             pBoxFmt2 = (SwTableBoxFmt*)pBox->ClaimFrmFmt();
     }
 
-    // lock format (if so desired)
+    
     if ( pModifyLocked != NULL )
     {
         (*pModifyLocked) = pBoxFmt2->IsModifyLocked();
@@ -1941,10 +1941,10 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
     sal_uInt32 nColSpan = nRightCol - nLeftCol;
     sal_Int32 nColWidth = GetColumnWidth( nLeftCol, nColSpan );
 
-    // TODO: Share formats!
+    
     SwFrmFmt *pFrmFmt = pBox->ClaimFrmFmt();
     SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    pFrmFmt->ResetAllFmtAttr(); // #i73790# - method renamed
+    pFrmFmt->ResetAllFmtAttr(); 
     pFrmFmt->SetFmtAttr( aFillOrder );
 
     pFrmFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, nColWidth ) );
@@ -1959,7 +1959,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
 
         for( i = nTopRow; i < nBottomRow; i++ )
         {
-            // Could the table be splitted behind the current row?
+            
             sal_Bool bSplit = sal_True;
             SwXMLTableRow_Impl *pRow = &(*pRows)[(sal_uInt16)i];
             for( sal_uInt32 j=nLeftCol; j<nRightCol; j++ )
@@ -1982,8 +1982,8 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
         }
         if( !bSplitted )
         {
-            // No splitting was possible. That for, we have to force it.
-            // Ruthless!
+            
+            
 
             nStartRow = nTopRow;
             while( nStartRow < nBottomRow )
@@ -2020,7 +2020,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                     }
                 }
             }
-            // und jetzt nochmal von vorne ...
+            
         }
     }
 
@@ -2043,13 +2043,13 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
     }
     else
     {
-        // and it is a table: therefore we build a new box and
-        // put the rows of the table into the rows of the box
+        
+        
         pBox = new SwTableBox( pBoxFmt, 0, pUpper );
         pCell->GetSubTable()->MakeTable( pBox, nColWidth );
     }
 
-    // Share formats!
+    
     OUString sStyleName = pCell->GetStyleName();
     bool bModifyLocked;
     sal_Bool bNew;
@@ -2059,10 +2059,10 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             ! pCell->HasValue(),
         bNew, &bModifyLocked  );
 
-    // if a new format was created, then we need to set the style
+    
     if ( bNew )
     {
-        // set style
+        
         const SfxItemSet *pAutoItemSet = 0;
         if( pCell->GetStartNode() && !sStyleName.isEmpty() &&
             GetSwImport().FindAutomaticStyle(
@@ -2089,19 +2089,19 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             }
         }
 
-        // try to rescue broken documents with a certain pattern
-        // if: 1) the cell has a default number format (number 0)
-        //     2) the call has no formula
-        //     3) the value is 0.0
-        //     4) the text doesn't look anything like 0.0
-        //        [read: length > 10, or length smaller 10 and no 0 in it]
-        // then make it a text cell!
+        
+        
+        
+        
+        
+        
+        
         bool bSuppressNumericContent = false;
         if( pCell->HasValue() && (pCell->GetValue() == 0.0) &&
             pCell->GetFormula().isEmpty() &&
             !sStyleName.isEmpty() )
         {
-            // default num format?
+            
             const SfxPoolItem* pItem = NULL;
             if( pBoxFmt2->GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem )
                             == SFX_ITEM_SET )
@@ -2110,7 +2110,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                     static_cast<const SwTblBoxNumFormat*>( pItem );
                 if( ( pNumFormat != NULL ) && ( pNumFormat->GetValue() == 0 ) )
                 {
-                    // only one text node?
+                    
                     SwNodeIndex aNodeIndex( *(pCell->GetStartNode()), 1 );
                     if( ( aNodeIndex.GetNode().EndOfSectionIndex() -
                           aNodeIndex.GetNode().StartOfSectionIndex() ) == 2 )
@@ -2118,7 +2118,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                         SwTxtNode* pTxtNode= aNodeIndex.GetNode().GetTxtNode();
                         if( pTxtNode != NULL )
                         {
-                            // check text: does it look like some form of 0.0?
+                            
                             const OUString& rText = pTxtNode->GetTxt();
                             if( ( rText.getLength() > 10 ) ||
                                 ( rText.indexOf( '0' ) == -1 ) )
@@ -2128,35 +2128,35 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                         }
                     }
                     else
-                        bSuppressNumericContent = true; // several nodes
+                        bSuppressNumericContent = true; 
                 }
             }
         }
 
         if( bSuppressNumericContent )
         {
-            // suppress numeric content? Then reset number format!
+            
             pBoxFmt2->ResetFmtAttr( RES_BOXATR_FORMULA );
             pBoxFmt2->ResetFmtAttr( RES_BOXATR_FORMAT );
             pBoxFmt2->ResetFmtAttr( RES_BOXATR_VALUE );
         }
         else
         {
-            // the normal case: set formula and value (if available)
+            
 
             const OUString& rFormula = pCell->GetFormula();
             if (!rFormula.isEmpty())
             {
-                // formula cell: insert formula if valid
+                
                 SwTblBoxFormula aFormulaItem( rFormula );
                 pBoxFmt2->SetFmtAttr( aFormulaItem );
             }
             else if (!pCell->HasValue() && pCell->HasStringValue())
             {
-                // Check for another inconsistency:
-                // No value but a non-textual format, i.e. a number format
-                // Solution: the number format will be removed,
-                // the cell gets the default text format.
+                
+                
+                
+                
                 const SfxPoolItem* pItem = NULL;
                 if( pBoxFmt->GetItemState( RES_BOXATR_FORMAT, sal_False, &pItem )
                     == SFX_ITEM_SET )
@@ -2171,7 +2171,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
                         pBoxFmt->ResetFmtAttr( RES_BOXATR_FORMAT );
                 }
             }
-            // always insert value, even if default
+            
             if( pCell->HasValue() )
             {
                 SwTblBoxValue aValueItem( pCell->GetValue() );
@@ -2179,11 +2179,11 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
             }
         }
 
-        // update cell content depend on the default language
+        
         pBox->ActualiseValueBox();
     }
 
-    // table cell protection
+    
     if( pCell->IsProtected() )
     {
         SvxProtectItem aProtectItem( RES_PROTECT );
@@ -2191,7 +2191,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
         pBoxFmt2->SetFmtAttr( aProtectItem );
     }
 
-    // restore old modify-lock state
+    
     if (! bModifyLocked)
         pBoxFmt2->UnlockModify();
 
@@ -2217,10 +2217,10 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
         pLine = new SwTableLine( pLineFmt, 0, pUpper );
     }
 
-    // TODO: Share formats!
+    
     SwFrmFmt *pFrmFmt = pLine->ClaimFrmFmt();
     SwFmtFillOrder aFillOrder( pFrmFmt->GetFillOrder() );
-    pFrmFmt->ResetAllFmtAttr(); // #i73790# - method renamed
+    pFrmFmt->ResetAllFmtAttr(); 
     pFrmFmt->SetFmtAttr( aFillOrder );
 
     const SfxItemSet *pAutoItemSet = 0;
@@ -2249,35 +2249,35 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
         {
             OSL_ENSURE( nCol < nRightCol, "Zu weit gelaufen" );
 
-            // Can be split after current HTML table column?
-            // If yes, can the created region still be split to
-            // rows if the next column is added to it?
+            
+            
+            
             bool bSplit = true;
             bool bHoriSplitMayContinue = false;
             bool bHoriSplitPossible = false;
 
             if ( bHasSubTables )
             {
-                // Convert row spans if the table has subtables:
+                
                 for( sal_uInt32 nRow=nTopRow; nRow<nBottomRow; nRow++ )
                 {
                     SwXMLTableCell_Impl *pCell = GetCell(nRow,nCol);
-                    // Could the table fragment be splitted horizontally behind
-                    // the current line?
+                    
+                    
                     bool bHoriSplit = (*pRows)[(sal_uInt16)nRow].IsSplitable() &&
                                       nRow+1UL < nBottomRow &&
                                       1UL == pCell->GetRowSpan();
                     (*pRows)[(sal_uInt16)nRow].SetSplitable( bHoriSplit );
 
-                    // Could the table fragment be splitted vertically behind the
-                    // current column (uptp the current line?
+                    
+                    
                     bSplit &= ( 1UL == pCell->GetColSpan() );
                     if( bSplit )
                     {
                         bHoriSplitPossible |= bHoriSplit;
 
-                        // Could the current table fragment be splitted
-                        // horizontally behind the next collumn, too?
+                        
+                        
                         bHoriSplit &= (nCol+1UL < nRightCol &&
                                        1UL == GetCell(nRow,nCol+1UL)->GetRowSpan());
                         bHoriSplitMayContinue |= bHoriSplit;
@@ -2286,18 +2286,18 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             }
             else
             {
-                // No subtabels: We use the new table model.
+                
                 SwXMLTableCell_Impl *pCell = GetCell(nTopRow,nCol);
 
-                // #i95726# - some fault tolerance
+                
                 if ( pCell == 0 )
                 {
                     OSL_FAIL( "table seems to be corrupt." );
                     break;
                 }
 
-                // Could the table fragment be splitted vertically behind the
-                // current column (uptp the current line?
+                
+                
                 bSplit = 1UL == pCell->GetColSpan();
             }
 
@@ -2323,12 +2323,12 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             {
                 SwTableBox* pBox = 0;
                 SwXMLTableCell_Impl *pCell = GetCell( nTopRow, nStartCol );
-                // #i95726# - some fault tolerance
+                
                 if( ( !bHasSubTables || ( pCell->GetRowSpan() == (nBottomRow-nTopRow) ) ) &&
                     pCell->GetColSpan() == (nCol+1UL-nStartCol) &&
                     ( pCell->GetStartNode() || pCell->GetSubTable() ) )
                 {
-                    // insert new empty cell for covered cells:
+                    
                     long nBoxRowSpan = 1;
                     if ( !bHasSubTables )
                     {
@@ -2340,8 +2340,8 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                         }
                     }
 
-                    // The remaining box neither contains lines nor rows (i.e.
-                    // is a content box
+                    
+                    
                     nSplitCol = nCol + 1UL;
 
                     pBox = MakeTableBox( pLine, pCell,
@@ -2355,23 +2355,23 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                 }
                 else if( bHasSubTables && bHoriSplitPossible && bHoriSplitMayContinue )
                 {
-                    // The table fragment could be splitted behind the current
-                    // column, and the remaining fragment could be divided
-                    // into lines. Anyway, it could be that this applies to
-                    // the next column, too. That for, we check the next
-                    // column but rememeber the current one as a good place to
-                    // split.
+                    
+                    
+                    
+                    
+                    
+                    
                     nSplitCol = nCol + 1UL;
                 }
                 else if ( bHasSubTables )
                 {
-                    // If the table resulting table fragment could be divided
-                    // into lines if spllitting behind the current column, but
-                    // this doesn't apply for thr next column, we split begind
-                    // the current column. This applies for the last column,
-                    // too.
-                    // If the resulting box cannot be splitted into rows,
-                    // the split at the last split position we remembered.
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     if( bHoriSplitPossible || nSplitCol > nCol+1 )
                     {
                         OSL_ENSURE( !bHoriSplitMayContinue,
@@ -2402,12 +2402,12 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
 
 void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
 {
-    // fix column widths
+    
     std::vector<ColumnWidthInfo>::iterator colIter;
     sal_uInt32 nCols = GetColumnCount();
 
-    // If there are empty rows (because of some row span of previous rows)
-    // the have to be deleted. The previous rows have to be truncated.
+    
+    
 
     if( pRows->size() > nCurRow )
     {
@@ -2430,8 +2430,8 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
         InsertCell( aStyleName2, 1U, nCols, InsertTableSection() );
     }
 
-    // TODO: Do we have to keep both values, the relative and the absolute
-    // width?
+    
+    
     sal_Int32 nAbsWidth = 0L;
     sal_Int32 nMinAbsColWidth = 0L;
     sal_Int32 nRelWidth = 0L;
@@ -2457,15 +2457,15 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
 
     if( bRelWidth )
     {
-        // If there a columns that have an absolute width, we have to
-        // calculate a relative one for them.
+        
+        
         if( nAbsCols > 0UL )
         {
-            // All column that have absolute widths get relative widths;
-            // these widths relate to each over like the original absolute
-            // widths. The smallest column gets a width that hat the same
-            // value as the smallest column that has an relative width
-            // already.
+            
+            
+            
+            
+            
             if( 0L == nMinRelColWidth )
                 nMinRelColWidth = nMinAbsColWidth;
 
@@ -2484,10 +2484,10 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
 
         if( !nWidth )
         {
-            // This happens only for percentage values for the table itself.
-            // In this case, the columns get the correct width even if the
-            // the sum of the relative withs is smaller than the available
-            // width in TWIP. Therfore, we can use the relative width.
+            
+            
+            
+            
             nWidth = nRelWidth > USHRT_MAX ? USHRT_MAX : nRelWidth;
         }
         if( nRelWidth != nWidth && nRelWidth && nCols )
@@ -2505,48 +2505,48 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
     }
     else
     {
-        // If there are columns that have relative widths, we have to
-        // calculate a absolute widths for them.
+        
+        
         if( nRelCols > 0UL )
         {
-            // The absolute space that is available for all columns with a
-            // relative width.
+            
+            
             sal_Int32 nAbsForRelWidth =
                     nWidth > nAbsWidth ? nWidth - nAbsWidth : (sal_Int32)0L;
 
-            // The relative width that has to be distributed in addition to
-            // equally widthed columns.
+            
+            
             sal_Int32 nExtraRel = nRelWidth - (nRelCols * nMinRelColWidth);
 
-            // The absolute space that may be distributed in addition to
-            // minumum widthed columns.
+            
+            
             sal_Int32 nMinAbs = nRelCols * MINLAY;
             sal_Int32 nExtraAbs =
                     nAbsForRelWidth > nMinAbs ? nAbsForRelWidth - nMinAbs : (sal_Int32)0L;
 
-            bool bMin = false;      // Do all columns get the mininum width?
-            bool bMinExtra = false; // Do all columns get the minimum width plus
-                                    // some extra space?
+            bool bMin = false;      
+            bool bMinExtra = false; 
+                                    
 
             if( nAbsForRelWidth <= nMinAbs )
             {
-                // If there is not enough space left for all columns to
-                // get the minimum width, they get the minimum width, anyway.
+                
+                
                 nAbsForRelWidth = nMinAbs;
                 bMin = true;
             }
             else if( nAbsForRelWidth <= (nRelWidth * MINLAY) /
                                         nMinRelColWidth )
             {
-                // If there is enougth space for all columns to get the
-                // minimum width, but not to get a width that takes the
-                // relative width into account, each column gets the minimum
-                // width plus some extra space that is based on the additional
-                // space that is available.
+                
+                
+                
+                
+                
                 bMinExtra = true;
             }
-            // Otherwise, if there is enouth space for every column, every
-            // column gets this space.
+            
+            
 
             for( colIter = aColumnWidths.begin(); nRelCols > 0UL && colIter < aColumnWidths.end(); ++colIter )
             {
@@ -2555,8 +2555,8 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
                     sal_Int32 nAbsCol;
                     if( 1UL == nRelCols )
                     {
-                        // The last column that has a relative width gets
-                        // all absolute space that is left.
+                        
+                        
                         nAbsCol = nAbsForRelWidth;
                     }
                     else
@@ -2589,8 +2589,8 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
         {
             if( nAbsWidth < nWidth )
             {
-                // If the table's width is larger than the sum of the absolute
-                // column widths, every column get some extra width.
+                
+                
                 sal_Int32 nExtraAbs = nWidth - nAbsWidth;
                 sal_Int32 nAbsLastCol = aColumnWidths.back().width + nExtraAbs;
                 for( colIter = aColumnWidths.begin(); colIter < aColumnWidths.end()-1UL; ++colIter )
@@ -2606,9 +2606,9 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             }
             else if( nAbsWidth > nWidth )
             {
-                // If the table's width is smaller than the sum of the absolute
-                // column widths, every column needs to shrink.
-                // Every column gets the minimum width plus some extra width.
+                
+                
+                
                 sal_Int32 nExtraAbs = nWidth - (nCols * MINLAY);
                 sal_Int32 nAbsLastCol = MINLAY + nExtraAbs;
                 for( colIter = aColumnWidths.begin(); colIter < aColumnWidths.end()-1UL; ++colIter )
@@ -2633,7 +2633,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
     sal_uInt32 nRows = pRows->size();
     for(sal_uInt32 i=0UL; i<nRows; ++i )
     {
-        // Could we split the table behind the current line?
+        
         bool bSplit = true;
         if ( bHasSubTables )
         {
@@ -2659,12 +2659,12 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
 
 void SwXMLTableContext::MakeTable()
 {
-    // this method will modify the document directly -> lock SolarMutex
-    // This will call all other MakeTable*(..) methods, so
-    // those don't need to be locked separately.
+    
+    
+    
     SolarMutexGuard aGuard;
 
-    // #i97274# handle invalid tables
+    
     if (!pRows || pRows->empty() || !GetColumnCount())
     {
         OSL_FAIL("invalid table: no cells; deleting...");
@@ -2737,12 +2737,12 @@ void SwXMLTableContext::MakeTable()
         {
         case text::HoriOrientation::FULL:
         case text::HoriOrientation::NONE:
-            // For text::HoriOrientation::NONE we would prefer to use the sum
-            // of the relative column widths as reference width.
-            // Unfortunately this works only if this sum interpreted as
-            // twip value is larger than the space that is available.
-            // We don't know that space, so we have to use USHRT_MAX, too.
-            // Even if a size is specified, it will be ignored!
+            
+            
+            
+            
+            
+            
             nWidth = USHRT_MAX;
             break;
         default:
@@ -2750,7 +2750,7 @@ void SwXMLTableContext::MakeTable()
             {
                 if( pSize->GetWidthPercent() )
                 {
-                    // The width will be set in _MakeTable
+                    
                     nPrcWidth = pSize->GetWidthPercent();
                 }
                 else
@@ -2799,8 +2799,8 @@ void SwXMLTableContext::MakeTable()
     if( bSetHoriOrient )
         pFrmFmt->SetFmtAttr( SwFmtHoriOrient( 0, eHoriOrient ) );
 
-    // This must be after the call to _MakeTable, because nWidth might be
-    // changed there.
+    
+    
     pFrmFmt->LockModify();
     SwFmtFrmSize aSize( ATT_VAR_SIZE, nWidth );
     aSize.SetWidthPercent( (sal_Int8)nPrcWidth );
@@ -2811,26 +2811,26 @@ void SwXMLTableContext::MakeTable()
     for( sal_uInt16 i=0; i<pRows->size(); i++ )
         (*pRows)[i].Dispose();
 
-    // now that table is complete, change into DDE table (if appropriate)
+    
     if (NULL != pDDESource)
     {
-        // change existing table into DDE table:
-        // 1) Get DDE field type (get data from dde-source context),
+        
+        
         SwDDEFieldType* pFldType = lcl_GetDDEFieldType( pDDESource,
                                                         pTableNode );
 
-        // 2) release the DDE source context,
+        
         pDDESource->ReleaseRef();
 
-        // 3) create new DDE table, and
+        
         SwDDETable* pDDETable = new SwDDETable( pTableNode->GetTable(),
                                                 pFldType, sal_False );
 
-        // 4) set new (DDE)table at node.
+        
         pTableNode->SetNewTable(pDDETable, sal_False);
     }
 
-    // ??? this is always false: root frame is only created in SwViewShell::Init
+    
     if( pTableNode->GetDoc()->GetCurrentViewShell() )
     {
         pTableNode->DelFrms();
@@ -2849,7 +2849,7 @@ void SwXMLTableContext::MakeTable( SwTableBox *pBox, sal_Int32 nW )
 
     _MakeTable( pBox );
 
-    for (size_t i=0; i < pRows->size(); ++i) // i113600, to break the cyclic reference to SwXMLTableContext object
+    for (size_t i=0; i < pRows->size(); ++i) 
         (*pRows)[i].Dispose();
 }
 
@@ -2857,8 +2857,8 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         const SwStartNode *const pPrevSttNd,
         OUString const*const pStringValueStyleName)
 {
-    // The topmost table is the only table that maintains the two members
-    // pBox1 and bFirstSection.
+    
+    
     if( xParentTable.Is() )
         return static_cast<SwXMLTableContext *>(&xParentTable)
                     ->InsertTableSection(pPrevSttNd, pStringValueStyleName);
@@ -2873,7 +2873,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
 
     if( bFirstSection )
     {
-        // The Cursor already is in the first section
+        
         pStNd = pTxtCrsr->GetPaM()->GetNode()->FindTableBoxStartNode();
         bFirstSection = false;
         OUString sStyleName("Standard");
@@ -2885,7 +2885,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
         SwDoc* pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
         const SwEndNode *pEndNd = pPrevSttNd ? pPrevSttNd->EndOfSectionNode()
                                              : pTableNode->EndOfSectionNode();
-        // #i78921# - make code robust
+        
         OSL_ENSURE( pDoc, "<SwXMLTableContext::InsertTableSection(..)> - no <pDoc> at <SwXTextCursor> instance - <SwXTextCurosr> doesn't seem to be registered at a <SwUnoCrsr> instance." );
         if ( !pDoc )
         {
@@ -2897,7 +2897,7 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
             pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                  pColl );
-        // Consider the case that a table is defined without a row.
+        
         if( !pPrevSttNd && pBox1 != NULL )
 
         {
@@ -2917,10 +2917,10 @@ const SwStartNode *SwXMLTableContext::InsertTableSection(
     }
 
     if (pStringValueStyleName)
-    {   // fdo#62147: apply style to paragraph on string-value cell
+    {   
         GetImport().GetTextImport()->SetStyleAndAttrs( GetImport(),
             GetImport().GetTextImport()->GetCursor(), *pStringValueStyleName,
-            true, false, -1, false); // parameters same as sCellParaStyleName
+            true, false, -1, false); 
     }
 
     return pStNd;

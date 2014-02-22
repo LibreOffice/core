@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdio.h>
@@ -46,14 +46,14 @@ using namespace ::com::sun::star::accessibility;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------
+
 sal_uInt32& SvxShowCharSet::getSelectedChar()
 {
-    static sal_uInt32 cSelectedChar = ' '; // keeps selected character over app livetime
+    static sal_uInt32 cSelectedChar = ' '; 
     return cSelectedChar;
 }
 
-// class SvxShowCharSet ==================================================
+
 
 SvxShowCharSet::SvxShowCharSet(Window* pParent, const ResId& rResId)
     : Control(pParent, rResId)
@@ -75,14 +75,14 @@ SvxShowCharSet::SvxShowCharSet(Window* pParent)
 
 void SvxShowCharSet::init()
 {
-    nSelectedIndex = -1;    // TODO: move into init list when it is no longer static
+    nSelectedIndex = -1;    
     m_nXGap = 0;
     m_nYGap = 0;
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN );
     aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
     aVscrollSB.EnableDrag( true );
-    // other settings like aVscroll depend on selected font => see SetFont
+    
 
     bDrag = sal_False;
 }
@@ -90,7 +90,7 @@ void SvxShowCharSet::init()
 void SvxShowCharSet::Resize()
 {
     Control::Resize();
-    SetFont(GetFont()); //force recalculation of correct fontsize
+    SetFont(GetFont()); 
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowCharSet(Window *pParent, VclBuilder::stringmap &)
@@ -98,7 +98,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT Window* SAL_CALL makeSvxShowCharSet(Window *pPar
     return new SvxShowCharSet(pParent);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::GetFocus()
 {
@@ -106,7 +106,7 @@ void SvxShowCharSet::GetFocus()
     SelectIndex( nSelectedIndex, sal_True );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::LoseFocus()
 {
@@ -114,7 +114,7 @@ void SvxShowCharSet::LoseFocus()
     SelectIndex( nSelectedIndex, sal_False );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::StateChanged( StateChangedType nType )
 {
@@ -126,7 +126,7 @@ void SvxShowCharSet::StateChanged( StateChangedType nType )
     Control::StateChanged( nType );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -137,7 +137,7 @@ void SvxShowCharSet::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -150,7 +150,7 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
             CaptureMouse();
 
             int nIndex = PixelToMapIndex( rMEvt.GetPosPixel() );
-        // Fire the focus event
+        
             SelectIndex( nIndex , sal_True);
         }
 
@@ -159,13 +159,13 @@ void SvxShowCharSet::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if ( bDrag && rMEvt.IsLeft() )
     {
-        // released mouse over character map
+        
         if ( Rectangle(Point(), GetOutputSize()).IsInside(rMEvt.GetPosPixel()))
             aSelectHdl.Call( this );
         ReleaseMouse();
@@ -173,7 +173,7 @@ void SvxShowCharSet::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
 {
@@ -192,12 +192,12 @@ void SvxShowCharSet::MouseMove( const MouseEvent& rMEvt )
             aPos.Y() = aSize.Height()-5;
 
         int nIndex = PixelToMapIndex( aPos );
-    // Fire the focus event.
+    
         SelectIndex( nIndex , sal_True );
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::Command( const CommandEvent& rCEvt )
 {
@@ -205,21 +205,21 @@ void SvxShowCharSet::Command( const CommandEvent& rCEvt )
         Control::Command( rCEvt );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 SvxShowCharSet::GetRowPos(sal_uInt16 _nPos) const
 {
     return _nPos / COLUMN_COUNT ;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_uInt16 SvxShowCharSet::GetColumnPos(sal_uInt16 _nPos) const
 {
     return _nPos % COLUMN_COUNT ;
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxShowCharSet::FirstInView( void ) const
 {
@@ -229,7 +229,7 @@ int SvxShowCharSet::FirstInView( void ) const
     return nIndex;
 }
 
-// -----------------------------------------------------------------------
+
 
 int SvxShowCharSet::LastInView( void ) const
 {
@@ -241,7 +241,7 @@ int SvxShowCharSet::LastInView( void ) const
     return nIndex;
 }
 
-// -----------------------------------------------------------------------
+
 
 inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
 {
@@ -250,7 +250,7 @@ inline Point SvxShowCharSet::MapIndexToPixel( int nIndex ) const
     int y = ((nIndex - nBase) / COLUMN_COUNT) * nY;
     return Point( x + m_nXGap, y + m_nYGap );
 }
-// -----------------------------------------------------------------------------
+
 
 int SvxShowCharSet::PixelToMapIndex( const Point& point) const
 {
@@ -258,7 +258,7 @@ int SvxShowCharSet::PixelToMapIndex( const Point& point) const
     return (nBase + ((point.X() - m_nXGap)/nX) + ((point.Y() - m_nYGap)/nY) * COLUMN_COUNT);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
 {
@@ -301,11 +301,11 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
         case KEY_END:
             tmpSelected = maFontCharMap.GetCharCount() - 1;
             break;
-        case KEY_TAB:   // some fonts have a character at these unicode control codes
+        case KEY_TAB:   
         case KEY_ESCAPE:
         case KEY_RETURN:
             Control::KeyInput( rKEvt );
-            tmpSelected = - 1;  // mark as invalid
+            tmpSelected = - 1;  
             break;
         default:
             {
@@ -315,7 +315,7 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
                 if( tmpSelected < 0 || (cChar != cNext) )
                 {
                     Control::KeyInput( rKEvt );
-                    tmpSelected = - 1;  // mark as invalid
+                    tmpSelected = - 1;  
                 }
             }
     }
@@ -327,19 +327,19 @@ void SvxShowCharSet::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::Paint( const Rectangle& )
 {
     DrawChars_Impl( FirstInView(), LastInView() );
 }
-// -----------------------------------------------------------------------------
+
 void SvxShowCharSet::DeSelect()
 {
     DrawChars_Impl(nSelectedIndex,nSelectedIndex);
 }
 
-// stretch a grid rectangle if its at the edge to fill unused space
+
 Rectangle SvxShowCharSet::getGridRectangle(const Point &rPointUL, const Size &rOutputSize)
 {
     long x = rPointUL.X() - 1;
@@ -409,10 +409,10 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
         int ty = y + (nY - nTextHeight + 1) / 2;
         Point aPointTxTy( tx, ty );
 
-        // adjust position before it gets out of bounds
+        
         if( GetTextBoundRect( aBoundRect, aCharStr ) && !aBoundRect.IsEmpty() )
         {
-            // zero advance width => use ink width to center glyph
+            
             if( !nTextWidth )
             {
                 aPointTxTy.X() = x - aBoundRect.Left()
@@ -421,7 +421,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
 
             aBoundRect += aPointTxTy;
 
-            // shift back vertically if needed
+            
             int nYLDelta = aBoundRect.Top() - y;
             int nYHDelta = (y + nY) - aBoundRect.Bottom();
             if( nYLDelta <= 0 )
@@ -429,7 +429,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
             else if( nYHDelta <= 0 )
                 aPointTxTy.Y() += nYHDelta - 1;
 
-            // shift back horizontally if needed
+            
             int nXLDelta = aBoundRect.Left() - x;
             int nXHDelta = (x + nX) - aBoundRect.Right();
             if( nXLDelta <= 0 )
@@ -480,7 +480,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
 {
@@ -506,7 +506,7 @@ void SvxShowCharSet::InitSettings( sal_Bool bForeground, sal_Bool bBackground )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
 {
@@ -515,11 +515,11 @@ sal_UCS4 SvxShowCharSet::GetSelectCharacter() const
     return getSelectedChar();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::SetFont( const Font& rFont )
 {
-    // save last selected unicode
+    
     if( nSelectedIndex >= 0 )
         getSelectedChar() = maFontCharMap.GetCharFromIndex( nSelectedIndex );
 
@@ -546,13 +546,13 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     aVscrollSB.SetPageSize( ROW_COUNT-1 );
     aVscrollSB.SetVisibleSize( ROW_COUNT );
 
-    // restore last selected unicode
+    
     int nMapIndex = maFontCharMap.GetIndexFromChar( getSelectedChar() );
     SelectIndex( nMapIndex );
 
     aVscrollSB.Show();
 
-    // rearrange CharSet element in sync with nX- and nY-multiples
+    
     Size aDrawSize(nX * COLUMN_COUNT, nY * ROW_COUNT);
     m_nXGap = (aSize.Width() - aDrawSize.Width()) / 2;
     m_nYGap = (aSize.Height() - aDrawSize.Height()) / 2;
@@ -560,13 +560,13 @@ void SvxShowCharSet::SetFont( const Font& rFont )
     Invalidate();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
 {
     if( nNewIndex < 0 )
     {
-        // need to scroll see closest unicode
+        
         sal_uInt32 cPrev = maFontCharMap.GetPrevChar( getSelectedChar() );
         int nMapIndex = maFontCharMap.GetIndexFromChar( cPrev );
         int nNewPos = nMapIndex / COLUMN_COUNT;
@@ -577,7 +577,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
     }
     else if( nNewIndex < FirstInView() )
     {
-        // need to scroll up to see selected item
+        
         int nOldPos = aVscrollSB.GetThumbPos();
         int nDelta = (FirstInView() - nNewIndex + COLUMN_COUNT-1) / COLUMN_COUNT;
         aVscrollSB.SetThumbPos( nOldPos - nDelta );
@@ -588,7 +588,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
     }
     else if( nNewIndex > LastInView() )
     {
-        // need to scroll down to see selected item
+        
         int nOldPos = aVscrollSB.GetThumbPos();
         int nDelta = (nNewIndex - LastInView() + COLUMN_COUNT) / COLUMN_COUNT;
         aVscrollSB.SetThumbPos( nOldPos + nDelta );
@@ -605,7 +605,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
     }
     else
     {
-        // remove highlighted view
+        
         Color aLineCol = GetLineColor();
         Color aFillCol = GetFillColor();
         SetLineColor();
@@ -632,16 +632,16 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
         if( m_pAccessible )
         {
             ::svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
-            // Don't fire the focus event.
+            
             if ( bFocus )
-                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), makeAny(pItem->GetAccessible()) ); // this call asures that m_pItem is set
+                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), makeAny(pItem->GetAccessible()) ); 
             else
-                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(), makeAny(pItem->GetAccessible()) ); // this call asures that m_pItem is set
+                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(), makeAny(pItem->GetAccessible()) ); 
 
             OSL_ENSURE(pItem->m_pItem,"No accessible created!");
             Any aOldAny, aNewAny;
             aNewAny <<= AccessibleStateType::FOCUSED;
-            // Don't fire the focus event.
+            
             if ( bFocus )
                 pItem->m_pItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
 
@@ -654,24 +654,24 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, sal_Bool bFocus )
     aHighHdl.Call( this );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, sal_Bool bFocus )
 {
-    // get next available char of current font
+    
     sal_UCS4 cNext = maFontCharMap.GetNextChar( (cNew > 0) ? cNew - 1 : cNew );
 
     int nMapIndex = maFontCharMap.GetIndexFromChar( cNext );
     SelectIndex( nMapIndex, bFocus );
     if( !bFocus )
     {
-        // move selected item to top row if not in focus
+        
         aVscrollSB.SetThumbPos( nMapIndex / COLUMN_COUNT );
         Invalidate();
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl)
 {
@@ -698,21 +698,21 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxShowCharSet::~SvxShowCharSet()
 {
     if ( m_pAccessible )
         ReleaseAccessible();
 }
-// -----------------------------------------------------------------------------
+
 void SvxShowCharSet::ReleaseAccessible()
 {
     m_aItems.clear();
     m_pAccessible = NULL;
     m_xAccessible = NULL;
 }
-// -----------------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
 {
     OSL_ENSURE(!m_pAccessible,"Accessible already created!");
@@ -720,7 +720,7 @@ void SvxShowCharSet::ReleaseAccessible()
     m_xAccessible = m_pAccessible;
     return m_xAccessible;
 }
-// -----------------------------------------------------------------------------
+
 ::svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
 {
     ItemsMap::iterator aFind = m_aItems.find(_nPos);
@@ -740,21 +740,21 @@ void SvxShowCharSet::ReleaseAccessible()
     return aFind->second.get();
 }
 
-// -----------------------------------------------------------------------------
+
 ScrollBar* SvxShowCharSet::getScrollBar()
 {
     return &aVscrollSB;
 }
-// -----------------------------------------------------------------------
+
 sal_Int32 SvxShowCharSet::getMaxCharCount() const
 {
     return maFontCharMap.GetCharCount();
 }
 
 
-// class SubsetMap =======================================================
-// TODO: should be moved into Font Attributes stuff
-// we let it mature here though because it is currently the only use
+
+
+
 
 SubsetMap::SubsetMap( const FontCharMap* pFontCharMap )
 :   Resource( SVX_RES(RID_SUBSETMAP) )
@@ -776,7 +776,7 @@ const Subset* SubsetMap::GetNextSubset( bool bFirst ) const
 
 const Subset* SubsetMap::GetSubsetByUnicode( sal_UCS4 cChar ) const
 {
-    // TODO: is it worth to avoid a linear search?
+    
     for( const Subset* s = GetNextSubset( true ); s; s = GetNextSubset( false ) )
         if( (s->GetRangeMin() <= cChar) && (cChar <= s->GetRangeMax()) )
             return s;
@@ -794,7 +794,7 @@ void SubsetMap::InitList()
     if( bInit )
     {
         bInit = false;
-        //I wish icu had a way to give me the block ranges
+        
         for (int i = UBLOCK_BASIC_LATIN; i < UBLOCK_COUNT; ++i)
         {
             UBlockCode eBlock = static_cast<UBlockCode>(i);
@@ -1429,7 +1429,7 @@ void SubsetMap::InitList()
                     aAllSubsets.push_back( Subset( 0x2B740, 0x2B81F, RID_SUBSETSTR_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D ) );
                     break;
 #endif
-// Note ICU version 49 (NOT 4.9), so the MAJOR_NUM is two digits.
+
 #if U_ICU_VERSION_MAJOR_NUM >= 49
                 case UBLOCK_ARABIC_EXTENDED_A:
                     aAllSubsets.push_back( Subset( 0x08A0, 0x08FF, RID_SUBSETSTR_ARABIC_EXTENDED_A ) );
@@ -1494,7 +1494,7 @@ void SubsetMap::ApplyCharMap( const FontCharMap* pFontCharMap )
     if( !pFontCharMap )
         return;
 
-    // remove subsets that are not matched in any range
+    
     SubsetList::iterator it_next = maSubsets.begin();
     while( it_next != maSubsets.end() )
     {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/xml/crypto/XSecurityEnvironment.hpp>
@@ -37,7 +37,7 @@ using namespace ::com::sun::star::security;
 using namespace ::com::sun::star;
 
 
-// HACK!!! copied from xmlsecurity/source/dialog/resourcemanager.cxx
+
 
 namespace
 {
@@ -49,7 +49,7 @@ namespace
         if( nContStart != -1 )
         {
             nContStart = nContStart + _rPartId.getLength();
-            ++nContStart;                   // now it's start of content, directly after Id
+            ++nContStart;                   
 
             sal_Int32  nContEnd = _rRawString.indexOf( ',', nContStart );
 
@@ -89,7 +89,7 @@ MacroWarning::MacroWarning( Window* _pParent, bool _bWithSignatures, ResMgr& rRe
 
     maDisableBtn.SetClickHdl( LINK( this, MacroWarning, DisableBtnHdl ) );
     maEnableBtn.SetClickHdl( LINK( this, MacroWarning, EnableBtnHdl ) );
-    maDisableBtn.GrabFocus(); // Default button, but focus is on view button
+    maDisableBtn.GrabFocus(); 
 }
 
 MacroWarning::~MacroWarning()
@@ -127,7 +127,7 @@ IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl)
 IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl)
 {
     if( mbSignedMode && maAlwaysTrustCB.IsChecked() )
-    {   // insert path into trusted path list
+    {   
         uno::Reference< security::XDocumentDigitalSignatures > xD(
             security::DocumentDigitalSignatures::createWithVersion(comphelper::getProcessComponentContext(), maODFVersion));
         if( mxCert.is() )
@@ -163,23 +163,23 @@ IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl)
 
 void MacroWarning::InitControls()
 {
-    // set warning image
+    
     Image aImg( WarningBox::GetStandardImage() );
     maSymbolImg.SetImage( aImg );
     maSymbolImg.SetSizePixel( aImg.GetSizePixel() );
-    // set bold font and path ellipsis for docname fixedtext
+    
     Font aTmpFont = maDocNameFI.GetControlFont();
     aTmpFont.SetWeight( WEIGHT_BOLD );
     maDocNameFI.SetControlFont( aTmpFont );
     WinBits nStyle = maDocNameFI.GetStyle();
     nStyle |= WB_PATHELLIPSIS;
     maDocNameFI.SetStyle( nStyle );
-    // show signature controls?
+    
     if( mbShowSignatures )
     {
         maDescr1bFI.Hide();
         maViewSignsBtn.SetClickHdl( LINK( this, MacroWarning, ViewSignsBtnHdl ) );
-        maViewSignsBtn.Disable();   // default
+        maViewSignsBtn.Disable();   
         maAlwaysTrustCB.SetClickHdl( LINK( this, MacroWarning, AlwaysTrustCheckHdl ) );
 
         mnActSecLevel = SvtSecurityOptions().GetMacroSecurityLevel();
@@ -193,10 +193,10 @@ void MacroWarning::InitControls()
         maViewSignsBtn.Hide();
         maAlwaysTrustCB.Hide();
 
-        // move hint up to position of signer list
+        
         maDescr2FI.SetPosPixel( maSignsFI.GetPosPixel() );
     }
-    // without signature controls could be smaller
+    
     if ( !mbShowSignatures )
     {
         Point aPos = maDescr2FI.GetPosPixel();
@@ -220,7 +220,7 @@ void MacroWarning::InitControls()
         SetSizePixel( aDlgSz );
     }
 
-    // check if some buttontexts are to wide
+    
     OUString sText = maViewSignsBtn.GetText();
     long nTxtW = maViewSignsBtn.GetTextWidth( sText );
     const long nOffset = 12;
@@ -229,21 +229,21 @@ void MacroWarning::InitControls()
     long nBtnW = maViewSignsBtn.GetSizePixel().Width();
     if ( nTxtW >= nBtnW )
     {
-        // broaden the button
+        
         long nDelta = std::max( nTxtW - nBtnW, nOffset/3 );
         Size aNewSize = maViewSignsBtn.GetSizePixel();
         aNewSize.Width() += nDelta;
         maViewSignsBtn.SetSizePixel( aNewSize );
-        // and give it a new position
+        
         Point aNewPos = maViewSignsBtn.GetPosPixel();
         aNewPos.X() -= nDelta;
         maViewSignsBtn.SetPosPixel( aNewPos );
-        // the left fixedtext must be smaller
+        
         aNewSize = maSignsFI.GetSizePixel();
         aNewSize.Width() -= nDelta;
         maSignsFI.SetSizePixel( aNewSize );
     }
-    // if the button text (we compare with the longest of both) is too wide, then broaden the buttons
+    
     OUString sText1 = maEnableBtn.GetText();
     long nTxtW1 = maEnableBtn.GetTextWidth( sText1 );
     if ( sText1.indexOf( '~' ) == -1 )
@@ -256,13 +256,13 @@ void MacroWarning::InitControls()
     nBtnW = maEnableBtn.GetSizePixel().Width();
     if ( nTxtW > nBtnW )
     {
-        // broaden both buttons
+        
         long nDelta = nTxtW - nBtnW;
         Size aNewSize = maEnableBtn.GetSizePixel();
         aNewSize.Width() += nDelta;
         maEnableBtn.SetSizePixel( aNewSize );
         maDisableBtn.SetSizePixel( aNewSize );
-        // and give them a new position
+        
         Point aNewPos = maEnableBtn.GetPosPixel();
         aNewPos.X() -= (2*nDelta);
         maEnableBtn.SetPosPixel( aNewPos );
@@ -286,7 +286,7 @@ void MacroWarning::FitControls()
         nTxtH = std::max( aMinSize.Height(), maViewSignsBtn.GetSizePixel().Height() );
         nTxtH += a3Size.Height() / 2;
         nCtrlH = maSignsFI.GetSizePixel().Height();
-        nDelta = std::max( nCtrlH - nTxtH, static_cast< long >( -100 ) ); // not too large
+        nDelta = std::max( nCtrlH - nTxtH, static_cast< long >( -100 ) ); 
         aNewSize = maSignsFI.GetSizePixel();
         aNewSize.Height() -= nDelta;
         maSignsFI.SetSizePixel( aNewSize );
@@ -300,7 +300,7 @@ void MacroWarning::FitControls()
     aNewSize.Height() -= nDelta2;
     maDescr2FI.SetSizePixel( aNewSize );
 
-    // new position for the succeeding windows
+    
     Window* pWins[] =
     {
         &maDescr2FI, &maAlwaysTrustCB, &maBottomSepFL, &maEnableBtn, &maDisableBtn, &maHelpBtn
@@ -316,7 +316,7 @@ void MacroWarning::FitControls()
             nDelta += nDelta2;
     }
 
-    // new size of the dialog
+    
     aNewSize = GetSizePixel();
     aNewSize.Height() -= nDelta;
     SetSizePixel( aNewSize );

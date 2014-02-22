@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -39,7 +39,7 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
 
-//=====  internal  ============================================================
+
 
 ScAccessiblePreviewCell::ScAccessiblePreviewCell( const ::com::sun::star::uno::Reference<
                                 ::com::sun::star::accessibility::XAccessible>& rxParent,
@@ -57,9 +57,9 @@ ScAccessiblePreviewCell::~ScAccessiblePreviewCell()
 {
     if (!ScAccessibleContextBase::IsDefunc() && !rBHelper.bInDispose)
     {
-        // increment refcount to prevent double call off dtor
+        
         osl_atomic_increment( &m_refCount );
-        // call dispose to inform object which have a weak reference to this object
+        
         dispose();
     }
 }
@@ -94,7 +94,7 @@ void ScAccessiblePreviewCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     ScAccessibleContextBase::Notify(rBC, rHint);
 }
 
-//=====  XAccessibleComponent  ============================================
+
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtPoint( const awt::Point& rPoint )
                                 throw (uno::RuntimeException)
@@ -126,7 +126,7 @@ void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException)
     }
 }
 
-//=====  XAccessibleContext  ==============================================
+
 
 sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount() throw(uno::RuntimeException)
 {
@@ -172,13 +172,13 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
         pStateSet->AddState(AccessibleStateType::TRANSIENT);
         if (isVisible())
             pStateSet->AddState(AccessibleStateType::VISIBLE);
-        // MANAGES_DESCENDANTS (for paragraphs)
+        
         pStateSet->AddState(AccessibleStateType::MANAGES_DESCENDANTS);
     }
     return pStateSet;
 }
 
-//=====  XServiceInfo  ====================================================
+
 
 OUString SAL_CALL ScAccessiblePreviewCell::getImplementationName() throw(uno::RuntimeException)
 {
@@ -197,7 +197,7 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNam
     return aSequence;
 }
 
-//=====  XTypeProvider  =======================================================
+
 
 namespace
 {
@@ -211,7 +211,7 @@ uno::Sequence<sal_Int8> SAL_CALL
     return theScAccessiblePreviewCellImplementationId::get().getSeq();
 }
 
-//====  internal  =========================================================
+
 
 Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const throw (uno::RuntimeException, std::exception)
 {
@@ -268,8 +268,8 @@ bool ScAccessiblePreviewCell::IsEditable(
 bool ScAccessiblePreviewCell::IsOpaque(
     const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
-    // test whether there is a background color
-    //! could be moved to ScAccessibleCellBase
+    
+    
 
     bool bOpaque(true);
     if (mpDoc)
@@ -295,7 +295,7 @@ void ScAccessiblePreviewCell::CreateTextHelper()
         mpTextHelper = new ::accessibility::AccessibleTextHelper( pEditSource );
         mpTextHelper->SetEventSource( this );
 
-        // paragraphs in preview are transient
+        
         ::accessibility::AccessibleTextHelper::VectorOfStates aChildStates;
         aChildStates.push_back( AccessibleStateType::TRANSIENT );
         mpTextHelper->SetAdditionalChildStates( aChildStates );

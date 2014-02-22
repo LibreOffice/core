@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <column.hxx>
@@ -44,13 +44,13 @@ void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const Sc
     SCROW nClipRow2 = aClipRange.aEnd.Row();
     SCROW nClipRowLen = nClipRow2 - nClipRow1 + 1;
 
-    // Check for non-empty cell ranges in the clip column.
+    
     sc::SingleColumnSpanSet aSpanSet;
     aSpanSet.scan(rClipCol, nClipRow1, nClipRow2);
     sc::SingleColumnSpanSet::SpansType aSpans;
     aSpanSet.getSpans(aSpans);
 
-    // Translate the clip column spans into the destination column, and repeat as needed.
+    
     std::vector<sc::RowSpan> aDestSpans;
     SCROW nDestOffset = aRange.mnRow1 - nClipRow1;
     bool bContinue = true;
@@ -65,14 +65,14 @@ void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const Sc
 
             if (nDestRow1 > aRange.mnRow2)
             {
-                // We're done.
+                
                 bContinue = false;
                 continue;
             }
 
             if (nDestRow2 > aRange.mnRow2)
             {
-                // Truncate this range, and set it as the last span.
+                
                 nDestRow2 = aRange.mnRow2;
                 bContinue = false;
             }
@@ -103,7 +103,7 @@ void ScColumn::DeleteBeforeCopyFromClip( sc::CopyFromClipContext& rCxt, const Sc
         if (nDelFlag & IDF_EDITATTR)
             RemoveEditAttribs(nRow1, nRow2);
 
-        // Delete attributes just now
+        
         if (nDelFlag & IDF_ATTRIB)
         {
             pAttrArray->DeleteArea(nRow1, nRow2);
@@ -166,8 +166,8 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
             break;
             case CELLTYPE_STRING:
             {
-                // Compare the ScDocumentPool* to determine if we are copying within the
-                // same document. If not, re-intern shared strings.
+                
+                
                 svl::SharedStringPool* pSharedStringPool = (rCxt.getClipDoc()->GetPool() != pDocument->GetPool()) ?
                     &pDocument->GetSharedStringPool() : NULL;
                 svl::SharedString aStr = (pSharedStringPool ?
@@ -212,7 +212,7 @@ void ScColumn::CopyOneCellFromClip( sc::CopyFromClipContext& rCxt, SCROW nRow1, 
     const ScPostIt* pNote = rCxt.getSingleCellNote();
     if (pNote && (nFlags & (IDF_NOTE | IDF_ADDNOTES)) != 0)
     {
-        // Duplicate the cell note over the whole pasted range.
+        
 
         ScDocument* pClipDoc = rCxt.getClipDoc();
         const ScAddress& rSrcPos = pClipDoc->GetClipParam().getWholeRange().aStart;
@@ -239,7 +239,7 @@ void ScColumn::SetValues( SCROW nRow, const std::vector<double>& rVals )
 
     SCROW nLastRow = nRow + rVals.size() - 1;
     if (nLastRow > MAXROW)
-        // Out of bound. Do nothing.
+        
         return;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
@@ -266,7 +266,7 @@ void ScColumn::TransferCellValuesTo( SCROW nRow, size_t nLen, sc::CellValues& rD
 
     SCROW nLastRow = nRow + nLen - 1;
     if (nLastRow > MAXROW)
-        // Out of bound. Do nothing.
+        
         return;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
@@ -294,7 +294,7 @@ void ScColumn::CopyCellValuesFrom( SCROW nRow, const sc::CellValues& rSrc )
 
     SCROW nLastRow = nRow + rSrc.size() - 1;
     if (nLastRow > MAXROW)
-        // Out of bound. Do nothing
+        
         return;
 
     sc::CellStoreType::position_type aPos = maCells.position(nRow);
@@ -356,7 +356,7 @@ void ScColumn::CloneFormulaCell( const ScFormulaCell& rSrc, const std::vector<sc
 
         itPos = maCells.set(itPos, nRow1, aFormulas.begin(), aFormulas.end());
 
-        // Join the top and bottom of the pasted formula cells as needed.
+        
         sc::CellStoreType::position_type aPosObj = maCells.position(itPos, nRow1);
 
         assert(aPosObj.first->type == sc::element_type_formula);
@@ -443,20 +443,20 @@ void ScColumn::ForgetNoteCaptions( SCROW nRow1, SCROW nRow2 )
 
 SCROW ScColumn::GetNotePosition( size_t nIndex ) const
 {
-    // Return the row position of the nth note in the column.
+    
 
     sc::CellNoteStoreType::const_iterator it = maCellNotes.begin(), itEnd = maCellNotes.end();
 
-    size_t nCount = 0; // Number of notes encountered so far.
+    size_t nCount = 0; 
     for (; it != itEnd; ++it)
     {
         if (it->type != sc::element_type_cellnote)
-            // Skip the empty blocks.
+            
             continue;
 
         if (nIndex < nCount + it->size)
         {
-            // Index falls within this block.
+            
             size_t nOffset = nIndex - nCount;
             return it->position + nOffset;
         }
@@ -519,7 +519,7 @@ void ScColumn::GetNotesInRange(SCROW nStartRow, SCROW nEndRow,
     std::pair<sc::CellNoteStoreType::const_iterator,size_t> aPos = maCellNotes.position(nStartRow);
     sc::CellNoteStoreType::const_iterator it = aPos.first;
     if (it == maCellNotes.end())
-        // Invalid row number.
+        
         return;
 
     std::pair<sc::CellNoteStoreType::const_iterator,size_t> aEndPos =

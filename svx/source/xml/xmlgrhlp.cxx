@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -84,7 +84,7 @@ private:
     ::utl::TempFile                 maTmp;
     Reference< XInputStream >       mxStmWrapper;
 
-                                    // not available
+                                    
                                     SvXMLGraphicInputStream();
                                     SvXMLGraphicInputStream( const SvXMLGraphicInputStream& );
     SvXMLGraphicInputStream&        operator==( SvXMLGraphicInputStream& );
@@ -203,7 +203,7 @@ class SvXMLGraphicOutputStream : public::cppu::WeakImplHelper1< XOutputStream >
 {
 private:
 
-    // XOutputStream
+    
     virtual void SAL_CALL           writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
     virtual void SAL_CALL           flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
     virtual void SAL_CALL           closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
@@ -216,7 +216,7 @@ private:
     GraphicObject                   maGrfObj;
     sal_Bool                        mbClosed;
 
-                                    // not available
+                                    
                                     SvXMLGraphicOutputStream( const SvXMLGraphicOutputStream& );
     SvXMLGraphicOutputStream&       operator==( SvXMLGraphicOutputStream& );
 
@@ -290,8 +290,8 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
 
         if (pDeterminedFormat == GRFILTER_FORMAT_DONTKNOW)
         {
-            //Read the first two byte to check whether it is a gzipped stream, is so it may be in wmz or emz format
-            //unzip them and try again
+            
+            
 
             sal_uInt8    sFirstBytes[ 2 ];
 
@@ -311,7 +311,7 @@ const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
             }
             if( nStreamLen >= 2 )
             {
-                //read two byte
+                
                 mpOStm->Read( sFirstBytes, 2 );
 
                 if( sFirstBytes[0] == 0x1f && sFirstBytes[1] == 0x8b )
@@ -415,7 +415,7 @@ uno::Reference < embed::XStorage > SvXMLGraphicHelper::ImplGetGraphicStorage( co
         catch ( uno::Exception& )
         {
         }
-        //#i43196# try again to open the storage element - this time readonly
+        
         if(!xRetStorage.is())
         {
             try
@@ -526,7 +526,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageNa
             uno::Any        aAny;
             uno::Reference < beans::XPropertySet > xProps( aStream.xStream, uno::UNO_QUERY );
 
-            // set stream properties (MediaType/Compression)
+            
             if( !aMimeType.isEmpty() )
             {
                 aAny <<= aMimeType;
@@ -560,7 +560,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const OUString& rPictureStorageNa
                     pStream->SetVersion( SOFFICE_FILEFORMAT_8 );
                     pStream->SetCompressMode( COMPRESSMODE_ZBITMAP );
 
-                    // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
+                    
                     GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
                     const MetaCommentAction* pComment = ImplCheckForEPS( rMtf );
                     if ( pComment )
@@ -654,11 +654,11 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                         case( GFX_LINK_TYPE_NATIVE_MET ): aExtension = ".met"; break;
                         case( GFX_LINK_TYPE_NATIVE_PCT ): aExtension = ".pct"; break;
                         case( GFX_LINK_TYPE_NATIVE_SVG ):
-                            // backward-compat kludge: since no released OOo
-                            // version to date can handle svg properly, wrap it up
-                            // into an svm. slight catch22 here, since strict ODF
-                            // conformance _recommends_ svg - then again, most old
-                            // ODF consumers are believed to be OOo
+                            
+                            
+                            
+                            
+                            
                             if( SvtSaveOptions().GetODFDefaultVersion() <= SvtSaveOptions::ODFVER_012 )
                             {
                                 bUseGfxLink = false;
@@ -684,7 +684,7 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const OUString& rURLStr, sal_uInt
                     }
                     else if( aGrfObject.GetType() == GRAPHIC_GDIMETAFILE )
                     {
-                        // SJ: first check if this metafile is just a eps file, then we will store the eps instead of svm
+                        
                         GDIMetaFile& rMtf( (GDIMetaFile&)aGraphic.GetGDIMetaFile() );
                         if ( ImplCheckForEPS( rMtf ) )
                             aExtension = ".eps";
@@ -775,7 +775,7 @@ void SvXMLGraphicHelper::Destroy( SvXMLGraphicHelper* pSvXMLGraphicHelper )
     }
 }
 
-// XGraphicObjectResolver
+
 OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& rURL )
     throw(uno::RuntimeException)
 {
@@ -819,7 +819,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& r
     return maGrfURLs[ nIndex ].second;
 }
 
-// XBinaryStreamResolver
+
 Reference< XInputStream > SAL_CALL SvXMLGraphicHelper::getInputStream( const OUString& rURL )
     throw( RuntimeException )
 {
@@ -888,7 +888,7 @@ OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOut
     return aRet;
 }
 
-// for instantiation via service manager
+
 namespace {
 
 namespace impl
@@ -909,7 +909,7 @@ protected:
 };
 MutexContainer::~MutexContainer()
 {}
-} // namespace impl
+} 
 
 class SvXMLGraphicImportExportHelper :
     public impl::MutexContainer,
@@ -919,21 +919,21 @@ public:
     SvXMLGraphicImportExportHelper( SvXMLGraphicHelperMode eMode );
 
 protected:
-    // is called from WeakComponentImplHelper when XComponent::dispose() was
-    // called from outside
+    
+    
     virtual void SAL_CALL disposing();
 
-    // ____ XInitialization ____
-    // one argument is allowed, which is the XStorage
+    
+    
     virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
         throw (Exception,
                RuntimeException);
 
-    // ____ XGraphicObjectResolver ____
+    
     virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL )
         throw (RuntimeException);
 
-    // ____ XBinaryStreamResolver ____
+    
     virtual Reference< io::XInputStream > SAL_CALL getInputStream( const OUString& aURL )
         throw (RuntimeException);
     virtual Reference< io::XOutputStream > SAL_CALL createOutputStream()
@@ -941,7 +941,7 @@ protected:
     virtual OUString SAL_CALL resolveOutputStream( const Reference< io::XOutputStream >& aBinaryStream )
         throw (RuntimeException);
 
-    // ____ XServiceInfo ____
+    
     virtual OUString SAL_CALL getImplementationName()
         throw (RuntimeException);
     virtual ::sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
@@ -966,11 +966,11 @@ void SAL_CALL SvXMLGraphicImportExportHelper::disposing()
     OSL_ASSERT( xComp.is());
     if( xComp.is())
         xComp->dispose();
-    // m_xBinaryStreamResolver is a reference to the same object => don't call
-    // dispose() again
+    
+    
 }
 
-// ____ XInitialization ____
+
 void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
     const Sequence< Any >& aArguments )
     throw (Exception, RuntimeException)
@@ -982,12 +982,12 @@ void SAL_CALL SvXMLGraphicImportExportHelper::initialize(
     SvXMLGraphicHelper * pHelper( SvXMLGraphicHelper::Create( xStorage, m_eGraphicHelperMode ));
     m_xGraphicObjectResolver.set( pHelper );
     m_xBinaryStreamResolver.set( pHelper );
-    // SvXMLGraphicHelper::Create calls acquire.  Since we have two references
-    // now it is safe (and necessary) to undo this acquire
+    
+    
     pHelper->release();
 }
 
-// ____ XGraphicObjectResolver ____
+
 OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveGraphicObjectURL( const OUString& aURL )
     throw (uno::RuntimeException)
 {
@@ -995,7 +995,7 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveGraphicObjectURL( const
 }
 
 
-// ____ XBinaryStreamResolver ____
+
 Reference< io::XInputStream > SAL_CALL SvXMLGraphicImportExportHelper::getInputStream( const OUString& aURL )
     throw (uno::RuntimeException)
 {
@@ -1012,7 +1012,7 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::resolveOutputStream( const Ref
     return m_xBinaryStreamResolver->resolveOutputStream( aBinaryStream );
 }
 
-// ____ XServiceInfo ____
+
 OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
     throw (uno::RuntimeException)
 {
@@ -1030,7 +1030,7 @@ OUString SAL_CALL SvXMLGraphicImportExportHelper::getImplementationName()
 Sequence< OUString > SAL_CALL SvXMLGraphicImportExportHelper::getSupportedServiceNames()
     throw (uno::RuntimeException)
 {
-    // XGraphicObjectResolver and XBinaryStreamResolver are not part of any service
+    
     Sequence< OUString > aSupportedServiceNames( 2 );
     aSupportedServiceNames[0] = "com.sun.star.document.GraphicObjectResolver";
     aSupportedServiceNames[1] = "com.sun.star.document.BinaryStreamResolver";

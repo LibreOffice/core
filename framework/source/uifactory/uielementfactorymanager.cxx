@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -52,7 +52,7 @@ using namespace framework;
 namespace framework
 {
 
-// global function needed by both implementations
+
 static OUString getHashKeyFromStrings( const OUString& aType, const OUString& aName, const OUString& aModuleName )
 {
     OUStringBuffer aKey( aType );
@@ -77,7 +77,7 @@ ConfigurationAccess_FactoryManager::ConfigurationAccess_FactoryManager( const Re
 
 ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
 {
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     Reference< XContainer > xContainer( m_xConfigAccess, UNO_QUERY );
@@ -87,7 +87,7 @@ ConfigurationAccess_FactoryManager::~ConfigurationAccess_FactoryManager()
 
 OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule ) const
 {
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     FactoryManagerMap::const_iterator pIter =
@@ -101,7 +101,7 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
             return pIter->second;
         else
         {
-            // Support factories which uses a defined prefix before the ui name.
+            
             sal_Int32 nIndex = rName.indexOf( '_' );
             if ( nIndex > 0 )
             {
@@ -122,7 +122,7 @@ OUString ConfigurationAccess_FactoryManager::getFactorySpecifierFromTypeNameModu
 
 void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule, const OUString& rServiceSpecifier )
 {
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
@@ -138,7 +138,7 @@ void ConfigurationAccess_FactoryManager::addFactorySpecifierToTypeNameModule( co
 
 void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModule( const OUString& rType, const OUString& rName, const OUString& rModule )
 {
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     OUString aHashKey = getHashKeyFromStrings( rType, rName, rModule );
@@ -153,7 +153,7 @@ void ConfigurationAccess_FactoryManager::removeFactorySpecifierFromTypeNameModul
 
 Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFactoriesDescription() const
 {
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     Sequence< Sequence< PropertyValue > > aSeqSeq;
@@ -193,7 +193,7 @@ Sequence< Sequence< PropertyValue > > ConfigurationAccess_FactoryManager::getFac
     return aSeqSeq;
 }
 
-// container.XContainerListener
+
 void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException)
 {
     OUString   aType;
@@ -201,13 +201,13 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementInserted( const Contain
     OUString   aModule;
     OUString   aService;
 
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     if ( impl_getElementProps( aEvent.Element, aType, aName, aModule, aService ))
     {
-        // Create hash key from type, name and module as they are together a primary key to
-        // the UNO service that implements a user interface factory.
+        
+        
         OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
         m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, aService ));
     }
@@ -220,13 +220,13 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementRemoved ( const Contain
     OUString   aModule;
     OUString   aService;
 
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     if ( impl_getElementProps( aEvent.Element, aType, aName, aModule, aService ))
     {
-        // Create hash key from command and model as they are together a primary key to
-        // the UNO service that implements the popup menu controller.
+        
+        
         OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
         m_aFactoryManagerMap.erase( aHashKey );
     }
@@ -239,31 +239,31 @@ void SAL_CALL ConfigurationAccess_FactoryManager::elementReplaced( const Contain
     OUString   aModule;
     OUString   aService;
 
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     if ( impl_getElementProps( aEvent.Element, aType, aName, aModule, aService ))
     {
-        // Create hash key from command and model as they are together a primary key to
-        // the UNO service that implements the popup menu controller.
+        
+        
         OUString aHashKey( getHashKeyFromStrings( aType, aName, aModule ));
         m_aFactoryManagerMap.erase( aHashKey );
         m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, aService ));
     }
 }
 
-// lang.XEventListener
+
 void SAL_CALL ConfigurationAccess_FactoryManager::disposing( const EventObject& ) throw(RuntimeException)
 {
-    // SAFE
-    // remove our reference to the config access
+    
+    
     osl::MutexGuard g(m_aMutex);
     m_xConfigAccess.clear();
 }
 
 void ConfigurationAccess_FactoryManager::readConfigurationData()
 {
-    // SAFE
+    
     osl::MutexGuard g(m_aMutex);
 
     if ( !m_bConfigAccessInitialized )
@@ -301,8 +301,8 @@ void ConfigurationAccess_FactoryManager::readConfigurationData()
         {
             if ( impl_getElementProps( m_xConfigAccess->getByName( aUIElementFactories[i] ), aType, aName, aModule, aService ))
             {
-                // Create hash key from type, name and module as they are together a primary key to
-                // the UNO service that implements the user interface element factory.
+                
+                
                 aHashKey = getHashKeyFromStrings( aType, aName, aModule );
                 m_aFactoryManagerMap.insert( FactoryManagerMap::value_type( aHashKey, aService ));
             }
@@ -344,7 +344,7 @@ sal_Bool ConfigurationAccess_FactoryManager::impl_getElementProps( const Any& aE
     return sal_True;
 }
 
-} // framework
+} 
 
 namespace {
 
@@ -380,10 +380,10 @@ public:
         return aSeq;
     }
 
-    // XUIElementFactory
+    
     virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw (css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
-    // XUIElementFactoryRegistration
+    
     virtual css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > > SAL_CALL getRegisteredFactories(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::ui::XUIElementFactory > SAL_CALL getFactory( const OUString& ResourceURL, const OUString& ModuleIdentifier ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleIdentifier, const OUString& aFactoryImplementationName ) throw (css::container::ElementExistException, css::uno::RuntimeException);
@@ -415,20 +415,20 @@ void SAL_CALL UIElementFactoryManager::disposing()
     osl::MutexGuard g(rBHelper.rMutex);
     if (m_pConfigAccess)
     {
-        // reduce reference count
+        
         m_pConfigAccess->release();
         m_pConfigAccess = 0;
     }
 }
 
-// XUIElementFactory
+
 Reference< XUIElement > SAL_CALL UIElementFactoryManager::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
 throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException )
 {
     Reference< XFrame > xFrame;
-    { // SAFE
+    { 
     osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
@@ -437,19 +437,19 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
         m_pConfigAccess->readConfigurationData();
     }
 
-    // Retrieve the frame instance from the arguments to determine the module identifier. This must be provided
-    // to the search function. An empty module identifier is provided if the frame is missing or the module id cannot
-    // retrieve from it.
+    
+    
+    
     for ( int i = 0; i < Args.getLength(); i++ )
     {
         if ( Args[i].Name == "Frame")
             Args[i].Value >>= xFrame;
     }
-    } // SAFE
+    } 
 
     Reference< XModuleManager2 > xManager = ModuleManager::create( m_xContext );
 
-    // Determine the module identifier
+    
     try
     {
         OUString aModuleId;
@@ -467,11 +467,11 @@ throw ( ::com::sun::star::container::NoSuchElementException, ::com::sun::star::l
     throw NoSuchElementException();
 }
 
-// XUIElementFactoryRegistration
+
 Sequence< Sequence< PropertyValue > > SAL_CALL UIElementFactoryManager::getRegisteredFactories()
 throw ( RuntimeException )
 {
-    // SAFE
+    
     osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
@@ -487,7 +487,7 @@ Reference< XUIElementFactory > SAL_CALL UIElementFactoryManager::getFactory( con
 throw ( RuntimeException )
 {
     OUString aServiceSpecifier;
-    { // SAFE
+    { 
     osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
@@ -502,7 +502,7 @@ throw ( RuntimeException )
     RetrieveTypeNameFromResourceURL( aResourceURL, aType, aName );
 
     aServiceSpecifier = m_pConfigAccess->getFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
-    } // SAFE
+    } 
 
     if ( !aServiceSpecifier.isEmpty() ) try
     {
@@ -520,7 +520,7 @@ throw ( RuntimeException )
 void SAL_CALL UIElementFactoryManager::registerFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId, const OUString& aFactoryImplementationName )
 throw ( ElementExistException, RuntimeException )
 {
-    // SAFE
+    
     osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
@@ -530,13 +530,13 @@ throw ( ElementExistException, RuntimeException )
     }
 
     m_pConfigAccess->addFactorySpecifierToTypeNameModule( aType, aName, aModuleId, aFactoryImplementationName );
-    // SAFE
+    
 }
 
 void SAL_CALL UIElementFactoryManager::deregisterFactory( const OUString& aType, const OUString& aName, const OUString& aModuleId )
 throw ( NoSuchElementException, RuntimeException )
 {
-    // SAFE
+    
     osl::MutexGuard g(rBHelper.rMutex);
 
     if ( !m_bConfigRead )
@@ -546,7 +546,7 @@ throw ( NoSuchElementException, RuntimeException )
     }
 
     m_pConfigAccess->removeFactorySpecifierFromTypeNameModule( aType, aName, aModuleId );
-    // SAFE
+    
 }
 
 struct Instance {

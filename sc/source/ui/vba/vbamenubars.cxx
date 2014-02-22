@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include "vbamenubars.hxx"
 #include "vbamenubar.hxx"
@@ -31,7 +31,7 @@ public:
     }
     virtual uno::Any SAL_CALL nextElement() throw ( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
     {
-        // FIXME: should be add menubar
+        
         if( hasMoreElements() )
         {
             uno::Reference< XCommandBar > xCommandBar( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
@@ -51,7 +51,7 @@ ScVbaMenuBars::~ScVbaMenuBars()
 {
 }
 
-// XEnumerationAccess
+
 uno::Type SAL_CALL
 ScVbaMenuBars::getElementType() throw ( uno::RuntimeException )
 {
@@ -68,7 +68,7 @@ ScVbaMenuBars::createEnumeration() throw ( uno::RuntimeException )
 uno::Any
 ScVbaMenuBars::createCollectionObject( const uno::Any& aSource )
 {
-    // make no sense
+    
     return aSource;
 }
 
@@ -78,7 +78,7 @@ ScVbaMenuBars::getCount() throw(css::uno::RuntimeException)
     return m_xCommandBars->getCount();
 }
 
-// ScVbaCollectionBaseImpl
+
 uno::Any SAL_CALL
 ScVbaMenuBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) throw( uno::RuntimeException )
 {
@@ -96,7 +96,7 @@ ScVbaMenuBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) throw
     throw uno::RuntimeException("Not implemented", uno::Reference< uno::XInterface >() );
 }
 
-// XHelperInterface
+
 OUString
 ScVbaMenuBars::getServiceImplName()
 {

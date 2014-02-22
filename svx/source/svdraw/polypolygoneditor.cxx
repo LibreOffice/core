@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,7 +41,7 @@ bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
         sal_uInt32 nPoly, nPnt;
         if( GetRelativePolyPoint(maPolyPolygon,(*aIter), nPoly, nPnt) )
         {
-            // remove point
+            
             basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPoly));
 
             aCandidate.remove(nPnt);
@@ -73,14 +73,14 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
 
         if(PolyPolygonEditor::GetRelativePolyPoint(maPolyPolygon, (*aIter), nPolyNum, nPntNum))
         {
-            // do change at aNewPolyPolygon. Take a look at edge.
+            
             basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPolyNum));
             bool bCandidateChanged(false);
             const sal_uInt32 nCount(aCandidate.count());
 
             if(nCount && (nPntNum + 1 < nCount || aCandidate.isClosed()))
             {
-                // it's a valid edge, check control point usage
+                
                 const sal_uInt32 nNextIndex((nPntNum + 1) % nCount);
                 const bool bContolUsed(aCandidate.areControlPointsUsed()
                     && (aCandidate.isNextControlPointUsed(nPntNum) || aCandidate.isPrevControlPointUsed(nNextIndex)));
@@ -89,7 +89,7 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
                 {
                     if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_LINE == eKind)
                     {
-                        // remove control
+                        
                         aCandidate.resetNextControlPoint(nPntNum);
                         aCandidate.resetPrevControlPoint(nNextIndex);
                         bCandidateChanged = true;
@@ -99,7 +99,7 @@ bool PolyPolygonEditor::SetSegmentsKind(SdrPathSegmentKind eKind, const std::set
                 {
                     if(SDRPATHSEGMENT_TOGGLE == eKind || SDRPATHSEGMENT_CURVE == eKind)
                     {
-                        // add control
+                        
                         const basegfx::B2DPoint aStart(aCandidate.getB2DPoint(nPntNum));
                         const basegfx::B2DPoint aEnd(aCandidate.getB2DPoint(nNextIndex));
 
@@ -132,10 +132,10 @@ bool PolyPolygonEditor::SetPointsSmooth( basegfx::B2VectorContinuity eFlags, con
 
         if(PolyPolygonEditor::GetRelativePolyPoint(maPolyPolygon, (*aIter), nPolyNum, nPntNum))
         {
-            // do change at aNewPolyPolygon...
+            
             basegfx::B2DPolygon aCandidate(maPolyPolygon.getB2DPolygon(nPolyNum));
 
-            // set continuity in point, make sure there is a curve
+            
             bool bPolygonChanged(false);
             bPolygonChanged = basegfx::tools::expandToCurveInPoint(aCandidate, nPntNum);
             bPolygonChanged |= basegfx::tools::setContinuityInPoint(aCandidate, nPntNum, eFlags);
@@ -177,6 +177,6 @@ bool PolyPolygonEditor::GetRelativePolyPoint( const basegfx::B2DPolyPolygon& rPo
     return false;
 }
 
-} // end of namespace sdr
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

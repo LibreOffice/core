@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "WpsContext.hxx"
@@ -59,7 +59,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
             OptValue<OUString> oVert = rAttribs.getString(XML_vert);
             if (oVert.has() && oVert.get() == "vert270")
             {
-                // No support for this in core, work around by char rotation, as we do so for table cells already.
+                
                 uno::Reference<text::XText> xText(mxShape, uno::UNO_QUERY);
                 uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
                 xTextCursor->gotoStart(false);
@@ -73,7 +73,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 }
             }
 
-            // Handle inset attributes for Writer textframes.
+            
             sal_Int32 aInsets[] = { XML_lIns, XML_tIns, XML_rIns, XML_bIns };
             boost::optional<sal_Int32> oInsets[4];
             for (size_t i = 0; i < SAL_N_ELEMENTS(aInsets); ++i)
@@ -88,7 +88,7 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
                 if (oInsets[i])
                     xPropertySet->setPropertyValue(aProps[i], uno::makeAny(*oInsets[i]));
 
-            // Handle text vertical adjustment inside a text frame
+            
             if (rAttribs.hasAttribute(XML_anchor))
             {
                 drawing::TextVerticalAdjust eAdjust = drawingml::GetTextVerticalAdjust(rAttribs.getToken(XML_anchor, XML_t));
@@ -100,9 +100,9 @@ oox::core::ContextHandlerRef WpsContext::onCreateContext(sal_Int32 nElementToken
     case XML_noAutofit:
     case XML_spAutoFit:
     {
-        // We can't use oox::drawingml::TextBodyPropertiesContext here, as this
-        // is a child context of bodyPr, so the shape is already sent: we need
-        // to alter the XShape directly.
+        
+        
+        
         uno::Reference<beans::XPropertySet> xPropertySet(mxShape, uno::UNO_QUERY);
         if (xPropertySet.is())
             xPropertySet->setPropertyValue("FrameIsAutomaticHeight", uno::makeAny(getBaseToken(nElementToken) == XML_spAutoFit));

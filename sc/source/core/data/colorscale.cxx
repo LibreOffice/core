@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "colorscale.hxx"
@@ -71,13 +71,13 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos
                 if (aCell1.IsValid() && aCell2.IsValid())
                 {
                     if (t->GetOpCode() == ocColRowNameAuto)
-                    {   // automagically
+                    {   
                         if ( rRef1.IsColRel() )
-                        {   // ColName
+                        {   
                             aCell2.SetRow(MAXROW);
                         }
                         else
-                        {   // RowName
+                        {   
                             aCell2.SetCol(MAXCOL);
                         }
                     }
@@ -87,7 +87,7 @@ void ScFormulaListener::startListening(ScTokenArray* pArr, const ScAddress& rPos
             }
             break;
             default:
-                ;   // nothing
+                ;   
         }
     }
 
@@ -558,7 +558,7 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
             return NULL;
     }
 
-    // now we have for sure a value
+    
     double nVal = mpDoc->GetValue(rAddr);
 
     if (maColorScales.size() < 2)
@@ -568,7 +568,7 @@ Color* ScColorScaleFormat::GetColor( const ScAddress& rAddr ) const
     double nMax = std::numeric_limits<double>::min();
     calcMinMax(nMin, nMax);
 
-    // this check is for safety
+    
     if(nMin >= nMax)
         return NULL;
 
@@ -648,8 +648,8 @@ bool ScColorScaleFormat::CheckEntriesForRel(const ScRange& rRange) const
         }
     }
 
-    // TODO: check also if the changed value is the new min/max
-    // or has been the old min/max value
+    
+    
     bNeedUpdate = bNeedUpdate && GetRange().Intersects(rRange);
     return bNeedUpdate;
 }
@@ -848,7 +848,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
             return NULL;
     }
 
-    // now we have for sure a value
+    
     //
     double nValMin = getMinValue();
     double nValMax = getMaxValue();
@@ -880,7 +880,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     {
         double nMinPositive = 0;
         double nMaxNegative = 0;
-        //calculate the zero position first
+        
         if(mpFormatData->meAxisPosition == databar::AUTOMATIC)
         {
             if(nMin < 0)
@@ -895,8 +895,8 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
             else
                 pInfo->mnZero = 0;
 
-            // if max or min is used we may need to adjust it
-            // for the length calculation
+            
+            
             if (mpFormatData->mpLowerLimit->GetType() == COLORSCALE_MIN && nMin > 0)
                 nMinPositive = nMin;
             if (mpFormatData->mpUpperLimit->GetType() == COLORSCALE_MAX && nMax < 0)
@@ -905,7 +905,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
         else if( mpFormatData->meAxisPosition == databar::MIDDLE)
             pInfo->mnZero = 50;
 
-        //calculate the length
+        
         if(nValue < 0)
         {
             if (nValue < nMin)
@@ -923,7 +923,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
     }
 
 
-    // set color
+    
     if(mpFormatData->mbNeg && nValue < 0)
     {
         if(mpFormatData->mpNegativeColor)
@@ -932,7 +932,7 @@ ScDataBarInfo* ScDataBarFormat::GetDataBarInfo(const ScAddress& rAddr) const
         }
         else
         {
-            // default negative color is red
+            
             pInfo->maColor = COL_LIGHTRED;
         }
 
@@ -986,7 +986,7 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
             return NULL;
     }
 
-    // now we have for sure a value
+    
     double nVal = mpDoc->GetValue(rAddr);
 
     if (mpFormatData->maEntries.size() < 2)
@@ -995,7 +995,7 @@ ScIconSetInfo* ScIconSetFormat::GetIconSetInfo(const ScAddress& rAddr) const
     double nMin = GetMinValue();
     double nMax = GetMaxValue();
 
-    // this check is for safety
+    
     if(nMin >= nMax)
         return NULL;
 

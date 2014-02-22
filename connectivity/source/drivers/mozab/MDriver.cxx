@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/macros.h>
@@ -36,14 +36,14 @@ namespace connectivity
 {
     namespace mozab
     {
-        //------------------------------------------------------------------
+        
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL MozabDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
         {
             return *(new MozabDriver( _rxFactory ));
         }
     }
 }
-// --------------------------------------------------------------------------------
+
 MozabDriver::MozabDriver(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     : ODriver_BASE(m_aMutex), m_xMSFactory( _rxFactory )
@@ -51,16 +51,16 @@ MozabDriver::MozabDriver(
     ,m_pCreationFunc(NULL)
 {
 }
-// -----------------------------------------------------------------------------
+
 MozabDriver::~MozabDriver()
 {
 }
-// --------------------------------------------------------------------------------
+
 void MozabDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    // when driver will be destroied so all our connections have to be destroied as well
+    
     for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
@@ -68,7 +68,7 @@ void MozabDriver::disposing()
             xComp->dispose();
     }
     m_xConnections.clear();
-    connectivity::OWeakRefArray().swap(m_xConnections); // this really clears
+    connectivity::OWeakRefArray().swap(m_xConnections); 
 
     ODriver_BASE::disposing();
     if(m_hModule)
@@ -79,25 +79,25 @@ void MozabDriver::disposing()
     }
 }
 
-// static ServiceInfo
-//------------------------------------------------------------------------------
+
+
 OUString MozabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString(MOZAB_DRIVER_IMPL_NAME);
-        // this name is referenced in the configuration and in the mozab.xml
-        // Please take care when changing it.
+        
+        
 }
-//------------------------------------------------------------------------------
+
 Sequence< OUString > MozabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
-    // which service is supported
-    // for more information @see com.sun.star.sdbc.Driver
+    
+    
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.sdbc.Driver";
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL MozabDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -108,13 +108,13 @@ sal_Bool SAL_CALL MozabDriver::supportsService( const OUString& _rServiceName ) 
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL MozabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-// --------------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL MozabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
@@ -122,18 +122,18 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const OUString& url, con
 
     if ( ! acceptsURL( url ) )
         return NULL;
-    // create a new connection with the given properties and append it to our vector
+    
     Reference< XConnection > xCon;
     if (m_pCreationFunc)
     {
         ::osl::MutexGuard aGuard(m_aMutex);
-        //We must make sure we create an com.sun.star.mozilla.MozillaBootstrap brfore call any mozilla codes
+        
         Reference<XInterface> xInstance = m_xMSFactory->createInstance("com.sun.star.mozilla.MozillaBootstrap");
         OSL_ENSURE( xInstance.is(), "failed to create instance" );
 
         OConnection* pCon = reinterpret_cast<OConnection*>((*m_pCreationFunc)(this));
-        xCon = pCon;    // important here because otherwise the connection could be deleted inside (refcount goes -> 0)
-        pCon->construct(url,info);              // late constructor call which can throw exception and allows a correct dtor call when so
+        xCon = pCon;    
+        pCon->construct(url,info);              
         m_xConnections.push_back(WeakReferenceHelper(*pCon));
 
     }
@@ -150,17 +150,17 @@ Reference< XConnection > SAL_CALL MozabDriver::connect( const OUString& url, con
 
     return xCon;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL MozabDriver::acceptsURL( const OUString& url )
         throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
         return sal_False;
 
-    // here we have to look if we support this url format
+    
     return impl_classifyURL(url) != Unknown;
 }
-// --------------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( !ensureInit() )
@@ -191,37 +191,37 @@ Sequence< DriverPropertyInfo > SAL_CALL MozabDriver::getPropertyInfo( const OUSt
     ::connectivity::SharedResources aResources;
     const OUString sMessage = aResources.getResourceString(STR_URI_SYNTAX_ERROR);
     ::dbtools::throwGenericSQLException(sMessage ,*this);
-    // if you have something special to say return it here :-)
+    
     return Sequence< DriverPropertyInfo >();
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MozabDriver::getMajorVersion(  ) throw(RuntimeException)
 {
-    return 1; // depends on you
+    return 1; 
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL MozabDriver::getMinorVersion(  ) throw(RuntimeException)
 {
-    return 0; // depends on you
+    return 0; 
 }
-// --------------------------------------------------------------------------------
+
 EDriverType MozabDriver::impl_classifyURL( const OUString& url )
 {
-    // Skip 'sdbc:mozab: part of URL
+    
     //
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     OUString aAddrbookURI(url.copy(nLen+1));
-    // Get Scheme
+    
     nLen = aAddrbookURI.indexOf(':');
     OUString aAddrbookScheme;
     if ( nLen == -1 )
     {
-        // There isn't any subschema: - but could be just subschema
+        
         if ( !aAddrbookURI.isEmpty() )
             aAddrbookScheme= aAddrbookURI;
         else if(url == "sdbc:address:" )
-            return Unknown; // TODO check
+            return Unknown; 
         else
             return Unknown;
     }
@@ -252,7 +252,7 @@ EDriverType MozabDriver::impl_classifyURL( const OUString& url )
     return Unknown;
 }
 
-// --------------------------------------------------------------------------------
+
 namespace
 {
     template< typename FUNCTION >
@@ -265,7 +265,7 @@ namespace
             _rFunction = (FUNCTION)( osl_getFunctionSymbol( _rModule, sSymbolName.pData ) );
 
             if ( !_rFunction )
-            {   // did not find the symbol
+            {   
                 OUStringBuffer aBuf;
                 aBuf.append( "lcl_getFunctionFromModuleOrUnload: could not find the symbol " );
                 aBuf.append( sSymbolName );
@@ -277,7 +277,7 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------------
+
 extern "C" { static void SAL_CALL thisModule() {} }
 
 bool MozabDriver::ensureInit()
@@ -289,7 +289,7 @@ bool MozabDriver::ensureInit()
 
     const OUString sModuleName(SVLIBRARY( "mozabdrv" ));
 
-    // load the mozabdrv library
+    
     m_hModule = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);
     OSL_ENSURE(NULL != m_hModule, "MozabDriver::ensureInit: could not load the mozabdrv library!");
     if ( !m_hModule )
@@ -301,19 +301,19 @@ bool MozabDriver::ensureInit()
     lcl_getFunctionFromModuleOrUnload( m_hModule, "OMozabConnection_CreateInstance", m_pCreationFunc   );
 
     if ( !m_hModule )
-        // one of the symbols did not exist
+        
         return false;
 
     if ( m_xMSFactory.is() )
     {
-        // for purpose of transfer safety, the interface needs to be acuired once
-        // (will be release by the callee)
+        
+        
         m_xMSFactory->acquire();
         ( *pSetFactoryFunc )( m_xMSFactory.get() );
     }
 
     return true;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

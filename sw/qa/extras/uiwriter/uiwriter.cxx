@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <swmodeltestbase.hxx>
@@ -21,8 +21,8 @@ class SwUiWriterTest : public SwModelTestBase
 
 public:
     void testReplaceForward();
-    //Regression test of fdo#70143
-    //EDITING: undo search&replace corrupt text when searching backward
+    
+    
     void testReplaceBackward();
     void testFdo69893();
     void testFdo70807();
@@ -53,7 +53,7 @@ SwDoc* SwUiWriterTest::createDoc(const char* pName)
     return pTxtDoc->GetDocShell()->GetDoc();
 }
 
-//Replacement tests
+
 
 static void lcl_selectCharacters(SwPaM& rPaM, sal_Int32 first, sal_Int32 end)
 {
@@ -118,7 +118,7 @@ void SwUiWriterTest::testFdo69893()
 
     SwShellCrsr* pShellCrsr = pWrtShell->getShellCrsr(false);
     SwTxtNode& rEnd = dynamic_cast<SwTxtNode&>(pShellCrsr->End()->nNode.GetNode());
-    // Selection did not include the para after table, this was "B1".
+    
     CPPUNIT_ASSERT_EQUAL(OUString("Para after table."), rEnd.GetTxt());
 }
 
@@ -138,11 +138,11 @@ void SwUiWriterTest::testFdo70807()
 
         OUString styleName(xName->getName());
 
-        // just these styles are user defined styles
+        
         if (styleName == "pagestyle1" || styleName == "pagestyle2")
             expectedUserDefined = sal_True;
 
-        // just these styles are used in the document
+        
         if (styleName == "Right Page" || styleName == "pagestyle1" || styleName == "pagestyle2")
             expectedUsedStyle = sal_True;
 
@@ -153,13 +153,13 @@ void SwUiWriterTest::testFdo70807()
 
 void SwUiWriterTest::testImportRTF()
 {
-    // Insert "foobar" and position the cursor between "foo" and "bar".
+    
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("foobar");
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
 
-    // Insert the RTF at the cursor position.
+    
     OString aData = "{\\rtf1 Hello world!\\par}";
     SvMemoryStream aStream(const_cast<sal_Char*>(aData.getStr()), aData.getLength(), STREAM_READ);
     SwReader aReader(aStream, OUString(), OUString(), *pWrtShell->GetCrsr());
@@ -174,19 +174,19 @@ void SwUiWriterTest::testImportRTF()
 
 void SwUiWriterTest::testExportRTF()
 {
-    // Insert "aaabbbccc" and select "bbb".
+    
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->Insert("aaabbbccc");
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/false, 3, /*bBasicCall=*/false);
     pWrtShell->Left(CRSR_SKIP_CHARS, /*bSelect=*/true, 3, /*bBasicCall=*/false);
 
-    // Create the clipboard document.
+    
     boost::shared_ptr<SwDoc> pClpDoc(new SwDoc());
     pClpDoc->SetClipBoard(true);
     pWrtShell->Copy(pClpDoc.get());
 
-    // And finally export it as RTF.
+    
     WriterRef xWrt;
     SwReaderWriter::GetWriter("RTF", OUString(), xWrt);
     SvMemoryStream aStream;

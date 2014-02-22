@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -55,7 +55,7 @@ using namespace com::sun::star::linguistic2;
 using namespace linguistic;
 
 
-#define XML_NAMESPACE_TCD_STRING        "http://openoffice.org/2003/text-conversion-dictionary"
+#define XML_NAMESPACE_TCD_STRING        "http:
 #define CONV_TYPE_HANGUL_HANJA          "Hangul / Hanja"
 #define CONV_TYPE_SCHINESE_TCHINESE     "Chinese simplified / Chinese traditional"
 
@@ -102,7 +102,7 @@ public:
         return (ConvDicXMLImport &) GetImport();
     }
 
-    // SvXMLImportContext
+    
     virtual void Characters( const OUString &rChars );
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList);
 };
@@ -123,7 +123,7 @@ public:
         nConversionType = -1;
     }
 
-    // SvXMLImportContext
+    
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
 
@@ -136,7 +136,7 @@ class ConvDicXMLEntryTextContext_Impl :
     public ConvDicXMLImportContext
 {
     OUString    aLeftText;
-    sal_Int16   nPropertyType;  // used for Chinese simplified/traditional conversion
+    sal_Int16   nPropertyType;  
 
 public:
     ConvDicXMLEntryTextContext_Impl(
@@ -147,7 +147,7 @@ public:
     {
     }
 
-    // SvXMLImportContext
+    
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
 
@@ -173,7 +173,7 @@ public:
     {
     }
 
-    // SvXMLImportContext
+    
     virtual void EndElement();
     virtual SvXMLImportContext * CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< xml::sax::XAttributeList > &rxAttrList );
     virtual void Characters( const OUString &rChars );
@@ -192,7 +192,7 @@ void ConvDicXMLImportContext::Characters(const OUString & /*rChars*/)
     content is removed), and "collapsed" internally (i.e. each sequence of
     1 or more whitespace characters is replaced with one blank character).
     */
-    //collapsing not done yet!
+    
 
 }
 
@@ -280,7 +280,7 @@ SvXMLImportContext * ConvDicXMLRightTextContext_Impl::CreateChildContext(
         sal_uInt16 nPrefix, const OUString& rLocalName,
         const uno::Reference< xml::sax::XAttributeList > & /*rxAttrList*/ )
 {
-    // leaf: return default (empty) context
+    
     SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLocalName );
     return pContext;
 }
@@ -306,7 +306,7 @@ sal_Bool ConvDicXMLExport::Export()
     uno::Reference< document::XExporter > xExporter( this );
     uno::Reference< document::XFilter > xFilter( xExporter, UNO_QUERY );
     uno::Sequence< beans::PropertyValue > aProps(0);
-    xFilter->filter( aProps );      // calls exportDoc implicitly
+    xFilter->filter( aProps );      
 
     return bRet = bSuccess;
 }
@@ -319,7 +319,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
 
     GetDocHandler()->startDocument();
 
-    // Add xmlns line and some other arguments
+    
     AddAttribute( _GetNamespaceMap().GetAttrNameByKey( XML_NAMESPACE_TCD ),
                   _GetNamespaceMap().GetNameByKey( XML_NAMESPACE_TCD ) );
     AddAttributeASCII( XML_NAMESPACE_TCD, "package", "org.openoffice.Office" );
@@ -329,8 +329,8 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
     OUString aConvType( ConversionTypeToText( rDic.nConversionType ) );
     AddAttribute( XML_NAMESPACE_TCD, "conversion-type", aConvType );
 
-    //!! block necessary in order to have SvXMLElementExport d-tor called
-    //!! before the call to endDocument
+    
+    
     {
         SvXMLElementExport aRoot( *this, XML_NAMESPACE_TCD, "text-conversion-dictionary", sal_True, sal_True );
         _ExportContent();
@@ -345,7 +345,7 @@ sal_uInt32 ConvDicXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum /*eCl
 
 void ConvDicXMLExport::_ExportContent()
 {
-    // aquire sorted list of all keys
+    
     ConvMapKeySet   aKeySet;
     ConvMap::iterator aIt;
     for (aIt = rDic.aFromLeft.begin();  aIt != rDic.aFromLeft.end();  ++aIt)
@@ -356,7 +356,7 @@ void ConvDicXMLExport::_ExportContent()
     {
         OUString aLeftText( *aKeyIt );
         AddAttribute( XML_NAMESPACE_TCD, "left-text", aLeftText );
-        if (rDic.pConvPropType.get())   // property-type list available?
+        if (rDic.pConvPropType.get())   
         {
             sal_Int16 nPropertyType = -1;
             PropTypeMap::iterator aIt2 = rDic.pConvPropType->find( aLeftText );
@@ -386,7 +386,7 @@ void ConvDicXMLExport::_ExportContent()
 void SAL_CALL ConvDicXMLImport::startDocument(void)
     throw( xml::sax::SAXException, uno::RuntimeException )
 {
-    // register namespace at first possible opportunity
+    
     GetNamespaceMap().Add( "tcd",
             XML_NAMESPACE_TCD_STRING, XML_NAMESPACE_TCD );
     SvXMLImport::startDocument();

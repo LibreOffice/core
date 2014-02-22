@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string>
@@ -47,7 +47,7 @@
 
 #include <vcl/svapp.hxx>
 
-// Size check
+
 #define NAVI_ENTRIES 20
 #if NAVI_ENTRIES != NID_COUNT
 #error SwScrollNaviPopup-CTOR static array wrong size. Are new IDs added?
@@ -198,7 +198,7 @@ SfxPopupWindow* SwTbxAutoTextCtrl::CreatePopupWindow()
                 if(nBlockCount)
                 {
                     sal_uInt16 nIndex = 100 * (i);
-                    // but insert without extension
+                    
                     pPopup->InsertItem( i, sTitle);
                     PopupMenu* pSub = new PopupMenu;
                     pSub->SetSelectHdl(aLnk);
@@ -399,11 +399,11 @@ void SwTbxFieldCtrl::DelPopup()
 }
 
 
-// Navigation-Popup
-// determine the order of the toolbox items
+
+
 static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
 {
-    // -- first line
+    
     NID_TBL,
     NID_FRM,
     NID_GRF,
@@ -414,7 +414,7 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_DRW,
     NID_CTRL,
     NID_PREV,
-    // -- second line
+    
     NID_REG,
     NID_BKM,
     NID_SEL,
@@ -428,7 +428,7 @@ static sal_uInt16 aNavigationInsertIds[ NAVI_ENTRIES ] =
 };
 static const char* aNavigationHelpIds[ NAVI_ENTRIES ] =
 {
-    // -- first line
+    
     HID_NID_TBL,
     HID_NID_FRM,
     HID_NID_GRF,
@@ -439,7 +439,7 @@ static const char* aNavigationHelpIds[ NAVI_ENTRIES ] =
     HID_NID_DRW,
     HID_NID_CTRL,
     HID_NID_PREV,
-    // -- second line
+    
     HID_NID_REG,
     HID_NID_BKM,
     HID_NID_SEL,
@@ -471,7 +471,7 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
         ToolBoxItemBits  nTbxBits = 0;
         if((NID_PREV != nNaviId) && (NID_NEXT != nNaviId))
         {
-            // -2, there's no string for Next/Prev
+            
             sal_uInt16 nResStr = ST_TBL - 2 + nNaviId - NID_START;
             sText = SW_RESSTR(nResStr);
             nTbxBits = TIB_CHECKABLE;
@@ -488,10 +488,10 @@ SwScrollNaviPopup::SwScrollNaviPopup(sal_uInt16 nId, const Reference< XFrame >& 
     }
     ApplyImageList();
     aToolBox.InsertBreak(NID_COUNT/2);
-    // don't call it before!
+    
     FreeResource();
 
-    // these are global strings
+    
     for( i = 0; i < 2 * NID_COUNT; i++)
     {
         sQuickHelp[i] = SW_RESSTR(STR_IMGBTN_START + i);
@@ -559,7 +559,7 @@ IMPL_LINK(SwScrollNaviPopup, SelectHdl, ToolBox*, pSet)
         aToolBox.SetItemText(NID_NEXT, sQuickHelp[nSet - NID_START]);
         aToolBox.SetItemText(NID_PREV, sQuickHelp[nSet - NID_START + NID_COUNT]);
         aInfoField.SetText(aToolBox.GetItemText(nSet));
-        // check the current button only
+        
         for(sal_uInt16 i = 0; i < NID_COUNT; i++)
         {
             sal_uInt16 nItemId = aToolBox.GetItemId( i );

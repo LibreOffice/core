@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/unoapi_test.hxx>
@@ -35,7 +35,7 @@ public:
 
     CPPUNIT_TEST_SUITE(ScAnnotationShapeObj);
 
-    // XText
+    
     CPPUNIT_TEST(testInsertRemoveTextContent);
 
     CPPUNIT_TEST_SUITE_END();
@@ -73,14 +73,14 @@ uno::Reference<uno::XInterface> ScAnnotationShapeObj::init()
 {
 #ifdef FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
     if (!mxComponent.is())
-        // Load an empty document.
+        
         mxComponent = loadFromDesktop("private:factory/scalc");
 
     uno::Reference<sheet::XSpreadsheetDocument> xDoc(mxComponent, UNO_QUERY_THROW);
     uno::Reference<container::XIndexAccess> xIA(xDoc->getSheets(), UNO_QUERY_THROW);
     uno::Reference<sheet::XSpreadsheet> xSheet(xIA->getByIndex(0), UNO_QUERY_THROW);
 
-    // Use cell A1 for this.
+    
     uno::Reference<table::XCell> xCell = xSheet->getCellByPosition(0, 0);
     uno::Reference<sheet::XSheetAnnotationAnchor> xAnchor(xCell, UNO_QUERY_THROW);
     uno::Reference<sheet::XSheetAnnotation> xAnnotation = xAnchor->getAnnotation();

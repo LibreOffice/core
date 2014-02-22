@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/thread.h>
@@ -87,8 +87,8 @@ SvXMLImportContext *SdXMLBodyContext_Impl::CreateChildContext(
     return GetSdImport().CreateBodyContext(rLocalName, xAttrList);
 }
 
-// NB: virtually inherit so we can multiply inherit properly
-//     in SdXMLFlatDocContext_Impl
+
+
 class SdXMLDocContext_Impl : public virtual SvXMLImportContext
 {
 protected:
@@ -152,7 +152,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         {
             if( GetImport().getImportFlags() & IMPORT_STYLES )
             {
-                // office:styles inside office:document
+                
                 pContext = GetSdImport().CreateStylesContext(rLocalName, xAttrList);
             }
             break;
@@ -161,7 +161,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         {
             if( GetImport().getImportFlags() & IMPORT_AUTOSTYLES )
             {
-                // office:automatic-styles inside office:document
+                
                 pContext = GetSdImport().CreateAutoStylesContext(rLocalName, xAttrList);
             }
             break;
@@ -170,7 +170,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         {
             if( GetImport().getImportFlags() & IMPORT_MASTERSTYLES )
             {
-                // office:master-styles inside office:document
+                
                 pContext = GetSdImport().CreateMasterStylesContext(rLocalName, xAttrList);
             }
             break;
@@ -184,7 +184,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         {
             if( GetImport().getImportFlags() & IMPORT_SCRIPTS )
             {
-                // office:script inside office:document
+                
                 pContext = GetSdImport().CreateScriptContext( rLocalName );
             }
             break;
@@ -193,7 +193,7 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         {
             if( GetImport().getImportFlags() & IMPORT_CONTENT )
             {
-                // office:body inside office:document
+                
                 pContext = new SdXMLBodyContext_Impl(GetSdImport(),nPrefix,
                                                      rLocalName, xAttrList);
             }
@@ -201,14 +201,14 @@ SvXMLImportContext *SdXMLDocContext_Impl::CreateChildContext(
         }
     }
 
-    // call parent when no own context was created
+    
     if(!pContext)
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName, xAttrList);
 
     return pContext;
 }
 
-// context for flat file xml format
+
 class SdXMLFlatDocContext_Impl
     : public SdXMLDocContext_Impl, public SvXMLMetaDocumentContext
 {
@@ -242,7 +242,7 @@ SvXMLImportContext *SdXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)
 {
-    // behave like meta base class iff we encounter office:meta
+    
     const SvXMLTokenMap& rTokenMap = GetSdImport().GetDocElemTokenMap();
     if ( XML_TOK_DOC_META == rTokenMap.Get( i_nPrefix, i_rLocalName ) ) {
         return SvXMLMetaDocumentContext::CreateChildContext(
@@ -284,7 +284,7 @@ SERVICE( XMLDrawMetaImportOasis, "com.sun.star.comp.Draw.XMLOasisMetaImporter", 
 SERVICE( XMLImpressSettingsImportOasis, "com.sun.star.comp.Impress.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", sal_False, IMPORT_SETTINGS )
 SERVICE( XMLDrawSettingsImportOasis, "com.sun.star.comp.Draw.XMLOasisSettingsImporter", "XMLImpressSettingsImportOasis", sal_True, IMPORT_SETTINGS )
 
-// #110680#
+
 SdXMLImport::SdXMLImport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext,
     OUString const & implementationName,
@@ -310,7 +310,7 @@ SdXMLImport::SdXMLImport(
     msPageLayouts(  "PageLayouts"  ),
     msPreview(  "Preview"  )
 {
-    // add namespaces
+    
     GetNamespaceMap().Add(
         GetXMLToken(XML_NP_PRESENTATION),
         GetXMLToken(XML_N_PRESENTATION),
@@ -327,7 +327,7 @@ SdXMLImport::SdXMLImport(
         XML_NAMESPACE_ANIMATION);
 }
 
-// XImporter
+
 void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
     throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
@@ -339,17 +339,17 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 
     mbIsDraw = !xDocServices->supportsService("com.sun.star.presentation.PresentationDocument");
 
-    // prepare access to styles
+    
     uno::Reference< style::XStyleFamiliesSupplier > xFamSup( GetModel(), uno::UNO_QUERY );
     if(xFamSup.is())
         mxDocStyleFamilies = xFamSup->getStyleFamilies();
 
-    // prepare access to master pages
+    
     uno::Reference < drawing::XMasterPagesSupplier > xMasterPagesSupplier(GetModel(), uno::UNO_QUERY);
     if(xMasterPagesSupplier.is())
         mxDocMasterPages = mxDocMasterPages.query( xMasterPagesSupplier->getMasterPages() );
 
-    // prepare access to draw pages
+    
     uno::Reference <drawing::XDrawPagesSupplier> xDrawPagesSupplier(GetModel(), uno::UNO_QUERY);
     if(!xDrawPagesSupplier.is())
         throw lang::IllegalArgumentException();
@@ -365,8 +365,8 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
         mbIsFormsSupported = xFormsSupp.is();
     }
 
-    // #88546# enable progress bar increments, SdXMLImport is only used for
-    // draw/impress import
+    
+    
     GetShapeImport()->enableHandleProgressBar();
 
     uno::Reference< lang::XMultiServiceFactory > xFac( GetModel(), uno::UNO_QUERY );
@@ -386,7 +386,7 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     }
 }
 
-// XInitialization
+
 void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
     throw( uno::Exception, uno::RuntimeException)
 {
@@ -418,11 +418,11 @@ void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
 SdXMLImport::~SdXMLImport() throw ()
 {
-    // Styles or AutoStyles context?
+    
     if(mpMasterStylesContext)
         mpMasterStylesContext->ReleaseRef();
 
-    // delete all token maps
+    
     if(mpDocElemTokenMap)
         delete mpDocElemTokenMap;
     if(mpBodyElemTokenMap)
@@ -463,7 +463,7 @@ const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()
 };
 
         mpDocElemTokenMap = new SvXMLTokenMap(aDocElemTokenMap);
-    } // if(!mpDocElemTokenMap)
+    } 
 
     return *mpDocElemTokenMap;
 }
@@ -484,7 +484,7 @@ const SvXMLTokenMap& SdXMLImport::GetBodyElemTokenMap()
 };
 
         mpBodyElemTokenMap = new SvXMLTokenMap(aBodyElemTokenMap);
-    } // if(!mpBodyElemTokenMap)
+    } 
 
     return *mpBodyElemTokenMap;
 }
@@ -502,7 +502,7 @@ const SvXMLTokenMap& SdXMLImport::GetStylesElemTokenMap()
 };
 
         mpStylesElemTokenMap = new SvXMLTokenMap(aStylesElemTokenMap);
-    } // if(!mpStylesElemTokenMap)
+    } 
 
     return *mpStylesElemTokenMap;
 }
@@ -519,7 +519,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageElemTokenMap()
 };
 
         mpMasterPageElemTokenMap = new SvXMLTokenMap(aMasterPageElemTokenMap);
-    } // if(!mpMasterPageElemTokenMap)
+    } 
 
     return *mpMasterPageElemTokenMap;
 }
@@ -542,7 +542,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageAttrTokenMap()
 };
 
         mpMasterPageAttrTokenMap = new SvXMLTokenMap(aMasterPageAttrTokenMap);
-    } // if(!mpMasterPageAttrTokenMap)
+    } 
 
     return *mpMasterPageAttrTokenMap;
 }
@@ -558,7 +558,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterAttrTokenMap()
 };
 
         mpPageMasterAttrTokenMap = new SvXMLTokenMap(aPageMasterAttrTokenMap);
-    } // if(!mpPageMasterAttrTokenMap)
+    } 
 
     return *mpPageMasterAttrTokenMap;
 }
@@ -580,7 +580,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterStyleAttrTokenMap()
 };
 
         mpPageMasterStyleAttrTokenMap = new SvXMLTokenMap(aPageMasterStyleAttrTokenMap);
-    } // if(!mpPageMasterStyleAttrTokenMap)
+    } 
 
     return *mpPageMasterStyleAttrTokenMap;
 }
@@ -606,7 +606,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageAttrTokenMap()
 };
 
         mpDrawPageAttrTokenMap = new SvXMLTokenMap(aDrawPageAttrTokenMap);
-    } // if(!mpDrawPageAttrTokenMap)
+    } 
 
     return *mpDrawPageAttrTokenMap;
 }
@@ -624,7 +624,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageElemTokenMap()
 };
 
         mpDrawPageElemTokenMap = new SvXMLTokenMap(aDrawPageElemTokenMap);
-    } // if(!mpDrawPageElemTokenMap)
+    } 
 
     return *mpDrawPageElemTokenMap;
 }
@@ -644,7 +644,7 @@ const SvXMLTokenMap& SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
 };
 
         mpPresentationPlaceholderAttrTokenMap = new SvXMLTokenMap(aPresentationPlaceholderAttrTokenMap);
-    } // if(!mpPresentationPlaceholderAttrTokenMap)
+    } 
 
     return *mpPresentationPlaceholderAttrTokenMap;
 }
@@ -668,7 +668,7 @@ SvXMLImportContext *SdXMLImport::CreateContext(sal_uInt16 nPrefix,
                 ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
-        // flat OpenDocument file format
+        
         pContext = new SdXMLFlatDocContext_Impl( *this, nPrefix, rLocalName,
                         xAttrList, xDPS->getDocumentProperties());
     } else {
@@ -862,9 +862,9 @@ void SdXMLImport::SetConfigurationSettings(const com::sun::star::uno::Sequence<c
     }
 }
 
-// #80365# overload this method to read and use the hint value from the
-// written meta information. If no info is found, guess 10 draw objects
-//void SdXMLImport::SetStatisticAttributes(const uno::Reference<xml::sax::XAttributeList>& xAttrList)
+
+
+
 void SdXMLImport::SetStatistics(
         const uno::Sequence<beans::NamedValue> & i_rStats)
 {

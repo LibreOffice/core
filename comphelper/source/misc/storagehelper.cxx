@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/ElementModes.hpp>
@@ -50,7 +50,7 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
-// ----------------------------------------------------------------------
+
 uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
                             const uno::Reference< uno::XComponentContext >& rxContext )
         throw ( uno::Exception )
@@ -60,7 +60,7 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetStorageFactory(
     return embed::StorageFactory::create( xContext );
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStorageFactory(
                             const uno::Reference< uno::XComponentContext >& rxContext )
         throw ( uno::Exception )
@@ -70,7 +70,7 @@ uno::Reference< lang::XSingleServiceFactory > OStorageHelper::GetFileSystemStora
     return embed::FileSystemStorageFactory::create(rxContext);
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorage(
             const uno::Reference< uno::XComponentContext >& rxContext )
     throw ( uno::Exception )
@@ -83,7 +83,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetTemporaryStorage(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
             const OUString& aURL,
             sal_Int32 nStorageMode,
@@ -102,7 +102,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
             const OUString& aURL,
             sal_Int32 nStorageMode,
@@ -135,7 +135,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromURL2(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
             const uno::Reference < io::XInputStream >& xStream,
             const uno::Reference< uno::XComponentContext >& rxContext )
@@ -153,7 +153,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromInputStream(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromStream(
             const uno::Reference < io::XStream >& xStream,
             sal_Int32 nStorageMode,
@@ -172,7 +172,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageFromStream(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 void OStorageHelper::CopyInputToOutput(
             const uno::Reference< io::XInputStream >& xInput,
             const uno::Reference< io::XOutputStream >& xOutput )
@@ -197,7 +197,7 @@ void OStorageHelper::CopyInputToOutput(
     while ( nRead == nConstBufferSize );
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
             const OUString& aURL,
             const uno::Reference< uno::XComponentContext >& context )
@@ -210,7 +210,7 @@ uno::Reference< io::XInputStream > OStorageHelper::GetInputStreamFromURL(
     return xInputStream;
 }
 
-// ----------------------------------------------------------------------
+
 void OStorageHelper::SetCommonStorageEncryptionData(
             const uno::Reference< embed::XStorage >& xStorage,
             const uno::Sequence< beans::NamedValue >& aEncryptionData )
@@ -218,12 +218,12 @@ void OStorageHelper::SetCommonStorageEncryptionData(
 {
     uno::Reference< embed::XEncryptionProtectedSource2 > xEncrSet( xStorage, uno::UNO_QUERY );
     if ( !xEncrSet.is() )
-        throw io::IOException(); // TODO
+        throw io::IOException(); 
 
     xEncrSet->setEncryptionData( aEncryptionData );
 }
 
-// ----------------------------------------------------------------------
+
 sal_Int32 OStorageHelper::GetXStorageFormat(
             const uno::Reference< embed::XStorage >& xStorage )
         throw ( uno::Exception )
@@ -235,7 +235,7 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
 
     sal_Int32 nResult = 0;
 
-    // TODO/LATER: the filter configuration could be used to detect it later, or batter a special service
+    
     if (
         aMediaType.equalsIgnoreAsciiCase(MIMETYPE_VND_SUN_XML_WRITER_ASCII       ) ||
         aMediaType.equalsIgnoreAsciiCase(MIMETYPE_VND_SUN_XML_WRITER_WEB_ASCII   ) ||
@@ -273,14 +273,14 @@ sal_Int32 OStorageHelper::GetXStorageFormat(
     }
     else
     {
-        // the mediatype is not known
+        
         throw beans::IllegalTypeException();
     }
 
     return nResult;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
             const OUString& aFormat,
             const OUString& aURL,
@@ -312,7 +312,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromURL(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStream(
             const OUString& aFormat,
             const uno::Reference < io::XInputStream >& xStream,
@@ -343,7 +343,7 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromInputStr
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
             const OUString& aFormat,
             const uno::Reference < io::XStream >& xStream,
@@ -375,15 +375,15 @@ uno::Reference< embed::XStorage > OStorageHelper::GetStorageOfFormatFromStream(
     return xTempStorage;
 }
 
-// ----------------------------------------------------------------------
+
 uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( const OUString& aPassword )
 {
-    // TODO/LATER: Should not the method be part of DocPasswordHelper?
+    
     uno::Sequence< beans::NamedValue > aEncryptionData;
     if ( !aPassword.isEmpty() )
     {
         sal_Int32 nSha1Ind = 0;
-        // generate SHA256 start key
+        
         try
         {
             uno::Reference< uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -404,9 +404,9 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
             OSL_ENSURE( false, "Can not create SHA256 digest!" );
         }
 
-        // MS_1252 encoding was used for SO60 document format password encoding,
-        // this encoding supports only a minor subset of nonascii characters,
-        // but for compatibility reasons it has to be used for old document formats
+        
+        
+        
         aEncryptionData.realloc( nSha1Ind + 2 );
         aEncryptionData[nSha1Ind].Name = PACKAGE_ENCRYPTIONDATA_SHA1UTF8;
         aEncryptionData[nSha1Ind + 1].Name = PACKAGE_ENCRYPTIONDATA_SHA1MS1252;
@@ -436,13 +436,13 @@ uno::Sequence< beans::NamedValue > OStorageHelper::CreatePackageEncryptionData( 
     return aEncryptionData;
 }
 
-// ----------------------------------------------------------------------
+
 bool OStorageHelper::IsValidZipEntryFileName( const OUString& aName, bool bSlashAllowed )
 {
     return IsValidZipEntryFileName( aName.getStr(), aName.getLength(), bSlashAllowed );
 }
 
-// ----------------------------------------------------------------------
+
 bool OStorageHelper::IsValidZipEntryFileName(
     const sal_Unicode *pChar, sal_Int32 nLength, bool bSlashAllowed )
 {
@@ -470,7 +470,7 @@ bool OStorageHelper::IsValidZipEntryFileName(
     return true;
 }
 
-// ----------------------------------------------------------------------
+
 bool OStorageHelper::PathHasSegment( const OUString& aPath, const OUString& aSegment )
 {
     bool bResult = false;
@@ -510,7 +510,7 @@ LifecycleProxy::~LifecycleProxy() { }
 void LifecycleProxy::commitStorages()
 {
     for (Impl::reverse_iterator iter = m_pBadness->rbegin();
-            iter != m_pBadness->rend(); ++iter) // reverse order (outwards)
+            iter != m_pBadness->rend(); ++iter) 
     {
         uno::Reference<embed::XTransactedObject> const xTransaction(*iter,
                 uno::UNO_QUERY);

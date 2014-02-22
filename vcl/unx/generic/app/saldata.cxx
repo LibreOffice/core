@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unistd.h>
@@ -101,7 +101,7 @@ static int XIOErrorHdl( Display * )
         if( ImplGetSVData()->maAppData.mbAppQuit )
             _exit(1);
 
-        // really bad hack
+        
         if( ! SessionManagerClient::checkDocumentsSaved() )
             /* oslSignalAction eToDo = */ osl_raiseSignal (OSL_SIGNAL_USER_X11SUBSYSTEMERROR, NULL);
     }
@@ -124,7 +124,7 @@ static const struct timeval noyield__ = { 0, 0 };
 static const struct timeval yield__   = { 0, 10000 };
 
 static const char* XRequest[] = {
-    // see /usr/lib/X11/XErrorDB, /usr/openwin/lib/XErrorDB ...
+    
     NULL,
     "X_CreateWindow",
     "X_ChangeWindowAttributes",
@@ -349,10 +349,10 @@ SalXLib::SalXLib()
     m_pTimeoutFDS[0] = m_pTimeoutFDS[1] = -1;
     if (pipe (m_pTimeoutFDS) != -1)
     {
-        // initialize 'wakeup' pipe.
+        
         int flags;
 
-        // set close-on-exec descriptor flag.
+        
         if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFD)) != -1)
         {
             flags |= FD_CLOEXEC;
@@ -364,7 +364,7 @@ SalXLib::SalXLib()
             fcntl (m_pTimeoutFDS[1], F_SETFD, flags);
         }
 
-        // set non-blocking I/O flag.
+        
         if ((flags = fcntl (m_pTimeoutFDS[0], F_GETFL)) != -1)
         {
             flags |= O_NONBLOCK;
@@ -376,7 +376,7 @@ SalXLib::SalXLib()
             fcntl (m_pTimeoutFDS[1], F_SETFL, flags);
         }
 
-        // insert [0] into read descriptor set.
+        
         FD_SET( m_pTimeoutFDS[0], &aReadFDS_ );
         nFDs_ = m_pTimeoutFDS[0] + 1;
     }
@@ -384,7 +384,7 @@ SalXLib::SalXLib()
 
 SalXLib::~SalXLib()
 {
-    // close 'wakeup' pipe.
+    
     close (m_pTimeoutFDS[0]);
     close (m_pTimeoutFDS[1]);
 }
@@ -405,7 +405,7 @@ void SalXLib::Init()
 
     Display *pDisp = NULL;
 
-    // is there a -display command line parameter?
+    
 
     sal_uInt32 nParams = osl_getCommandArgCount();
     OUString aParam;
@@ -436,7 +436,7 @@ void SalXLib::Init()
 
     if (!pDisp && aDisplay.isEmpty())
     {
-        // Open $DISPLAY or default...
+        
         char *pDisplay = getenv("DISPLAY");
         if (pDisplay != NULL)
             aDisplay = OString(pDisplay);
@@ -499,7 +499,7 @@ static void PrintXError( Display *pDisplay, XErrorEvent *pEvent )
     else
     {
         std::fprintf( stderr, "\tMajor opcode: %d\n", pEvent->request_code );
-        // TODO: also display extension name?
+        
         std::fprintf( stderr, "\tMinor opcode: %d\n", pEvent->minor_code );
     }
 
@@ -573,12 +573,12 @@ void X11SalData::XError( Display *pDisplay, XErrorEvent *pEvent )
 
 struct YieldEntry
 {
-    YieldEntry* next;       // pointer to next entry
-    int         fd;         // file descriptor for reading
-    void*           data;       // data for predicate and callback
-    YieldFunc       pending;    // predicate (determins pending events)
-    YieldFunc       queued;     // read and queue up events
-    YieldFunc       handle;     // handle pending events
+    YieldEntry* next;       
+    int         fd;         
+    void*           data;       
+    YieldFunc       pending;    
+    YieldFunc       queued;     
+    YieldFunc       handle;     
 
     inline int  HasPendingEvent()   const { return pending( fd, data ); }
     inline int  IsEventQueued()     const { return queued( fd, data ); }
@@ -630,7 +630,7 @@ void SalXLib::Remove( int nFD )
 bool SalXLib::CheckTimeout( bool bExecuteTimers )
 {
     bool bRet = false;
-    if( m_aTimeout.tv_sec ) // timer is started
+    if( m_aTimeout.tv_sec ) 
     {
         timeval aTimeOfDay;
         gettimeofday( &aTimeOfDay, 0 );
@@ -639,7 +639,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
             bRet = true;
             if( bExecuteTimers )
             {
-                // timed out, update timeout
+                
                 m_aTimeout = aTimeOfDay;
                 /*
                 *  #107827# autorestart immediately, will be stopped (or set
@@ -648,7 +648,7 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
                 *  timers are being dispatched.
                 */
                 m_aTimeout += m_nTimeoutMS;
-                // notify
+                
                 GetX11SalData()->Timeout();
             }
         }
@@ -658,14 +658,14 @@ bool SalXLib::CheckTimeout( bool bExecuteTimers )
 
 void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
-    // check for timeouts here if you want to make screenshots
+    
     static char* p_prioritize_timer = getenv ("SAL_HIGHPRIORITY_REPAINT");
     if (p_prioritize_timer != NULL)
         CheckTimeout();
 
     const int nMaxEvents = bHandleAllCurrentEvents ? 100 : 1;
 
-    // first, check for already queued events.
+    
     for ( int nFD = 0; nFD < nFDs_; nFD++ )
     {
         YieldEntry* pEntry = &(yieldTable[nFD]);
@@ -681,7 +681,7 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         }
     }
 
-    // next, select with or without timeout according to bWait.
+    
     int      nFDs         = nFDs_;
     fd_set   ReadFDS      = aReadFDS_;
     fd_set   ExceptionFDS = aExceptionFDS_;
@@ -693,14 +693,14 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     if (bWait)
     {
         pTimeout = 0;
-        if (m_aTimeout.tv_sec) // Timer is started.
+        if (m_aTimeout.tv_sec) 
         {
-            // determine remaining timeout.
+            
             gettimeofday (&Timeout, 0);
             Timeout = m_aTimeout - Timeout;
             if (yield__ >= Timeout)
             {
-                // guard against micro timeout.
+                
                 Timeout = yield__;
             }
             pTimeout = &Timeout;
@@ -708,11 +708,11 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
     }
 
     {
-        // release YieldMutex (and re-acquire at block end)
+        
         SalYieldMutexReleaser aReleaser;
         nFound = select( nFDs, &ReadFDS, NULL, &ExceptionFDS, pTimeout );
     }
-    if( nFound < 0 ) // error
+    if( nFound < 0 ) 
     {
 #ifdef DBG_UTIL
         std::fprintf( stderr, "SalXLib::Yield e=%d f=%d\n", errno, nFound );
@@ -723,11 +723,11 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         }
     }
 
-    // usually handle timeouts here (as in 5.2)
+    
     if (p_prioritize_timer == NULL)
         CheckTimeout();
 
-    // handle wakeup events.
+    
     if ((nFound > 0) && (FD_ISSET(m_pTimeoutFDS[0], &ReadFDS)))
     {
         int buffer;
@@ -736,17 +736,17 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
         nFound -= 1;
     }
 
-    // handle other events.
+    
     if( nFound > 0 )
     {
-        // now we are in the protected section !
-        // recall select if we have acquired fd's, ready for reading,
+        
+        
 
         struct timeval noTimeout = { 0, 0 };
         nFound = select( nFDs_, &ReadFDS, NULL,
                          &ExceptionFDS, &noTimeout );
 
-        // someone-else has done the job for us
+        
         if (nFound == 0)
             return;
 
@@ -766,8 +766,8 @@ void SalXLib::Yield( bool bWait, bool bHandleAllCurrentEvents )
                     for( int i = 0; pEntry->IsEventQueued() && i < nMaxEvents; i++ )
                     {
                         pEntry->HandleNextEvent();
-                        // if a recursive call has done the job
-                        // so abort here
+                        
+                        
                     }
                     nFound--;
                 }

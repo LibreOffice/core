@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "Catalog.hxx"
@@ -25,10 +25,10 @@ Catalog::Catalog(const uno::Reference< XConnection >& rConnection):
 {
 }
 
-//----- OCatalog -------------------------------------------------------------
+
 void Catalog::refreshTables()
 {
-    // TODO: set type -- currenty we also get system tables...
+    
     Sequence< OUString > aTypes(2);
     aTypes[0] = "TABLE";
     aTypes[1] = "VIEW";
@@ -57,17 +57,17 @@ void Catalog::refreshTables()
 
 void Catalog::refreshViews()
 {
-    // TODO: implement me.
-    // Sets m_pViews (OCatalog)
+    
+    
 }
 
-//----- IRefreshableGroups ---------------------------------------------------
+
 void Catalog::refreshGroups()
 {
-    // TODO: implement me
+    
 }
 
-//----- IRefreshableUsers ----------------------------------------------------
+
 void Catalog::refreshUsers()
 {
     OUString sSql("SELECT DISTINCT RDB$USER FROM RDB$USER_PRIVILEGES");

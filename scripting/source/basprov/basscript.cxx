@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "basscript.hxx"
@@ -42,10 +42,10 @@ using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::beans;
 
 
-//.........................................................................
+
 namespace basprov
 {
-//.........................................................................
+
 #define BASSCRIPT_PROPERTY_ID_CALLER         1
 #define BASSCRIPT_PROPERTY_CALLER            OUString( "Caller" )
 
@@ -53,11 +53,11 @@ namespace basprov
 
     typedef ::std::map< sal_Int16, Any, ::std::less< sal_Int16 > > OutParamMap;
 
-    // =============================================================================
-    // BasicScriptImpl
-    // =============================================================================
+    
+    
+    
 
-    // -----------------------------------------------------------------------------
+    
 
     BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod )
         : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
@@ -70,7 +70,7 @@ namespace basprov
         registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, ::getCppuType( &m_caller ) );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     BasicScriptImpl::BasicScriptImpl( const OUString& funcName, SbMethodRef xMethod,
         BasicManager& documentBasicManager, const Reference< XScriptInvocationContext >& documentScriptContext ) : ::scripting_helper::OBroadcastHelperHolder( m_aMutex )
@@ -84,56 +84,56 @@ namespace basprov
         registerProperty( BASSCRIPT_PROPERTY_CALLER, BASSCRIPT_PROPERTY_ID_CALLER, BASSCRIPT_DEFAULT_ATTRIBS(), &m_caller, ::getCppuType( &m_caller ) );
     }
 
-    // -----------------------------------------------------------------------------
+    
     BasicScriptImpl::~BasicScriptImpl()
     {
         if ( m_documentBasicManager )
             EndListening( *m_documentBasicManager );
     }
 
-    // -----------------------------------------------------------------------------
-    // SfxListener
-    // -----------------------------------------------------------------------------
+    
+    
+    
     void BasicScriptImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     {
         if ( &rBC != m_documentBasicManager )
         {
             OSL_ENSURE( false, "BasicScriptImpl::Notify: where does this come from?" );
-            // not interested in
+            
             return;
         }
         const SfxSimpleHint* pSimpleHint = PTR_CAST( SfxSimpleHint, &rHint );
         if ( pSimpleHint && ( pSimpleHint->GetId() == SFX_HINT_DYING ) )
         {
             m_documentBasicManager = NULL;
-            EndListening( rBC );    // prevent multiple notifications
+            EndListening( rBC );    
         }
     }
 
-    // -----------------------------------------------------------------------------
-    // XInterface
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     IMPLEMENT_FORWARD_XINTERFACE2( BasicScriptImpl, BasicScriptImpl_BASE, OPropertyContainer )
 
-    // -----------------------------------------------------------------------------
-    // XTypeProvider
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( BasicScriptImpl, BasicScriptImpl_BASE, OPropertyContainer )
 
-    // -----------------------------------------------------------------------------
-    // OPropertySetHelper
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     ::cppu::IPropertyArrayHelper& BasicScriptImpl::getInfoHelper(  )
     {
         return *getArrayHelper();
     }
 
-    // -----------------------------------------------------------------------------
-    // OPropertyArrayUsageHelper
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     ::cppu::IPropertyArrayHelper* BasicScriptImpl::createArrayHelper(  ) const
     {
@@ -142,9 +142,9 @@ namespace basprov
         return new ::cppu::OPropertyArrayHelper( aProps );
     }
 
-    // -----------------------------------------------------------------------------
-    // XPropertySet
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     Reference< XPropertySetInfo > BasicScriptImpl::getPropertySetInfo(  ) throw (RuntimeException)
     {
@@ -152,15 +152,15 @@ namespace basprov
         return xInfo;
     }
 
-    // -----------------------------------------------------------------------------
-    // XScript
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     Any BasicScriptImpl::invoke( const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
         throw ( provider::ScriptFrameworkErrorException, reflection::InvocationTargetException, uno::RuntimeException)
     {
-        // TODO: throw CannotConvertException
-        // TODO: check length of aOutParamIndex, aOutParam
+        
+        
 
         SolarMutexGuard aGuard;
 
@@ -168,12 +168,12 @@ namespace basprov
 
         if ( m_xMethod )
         {
-            // check if compiled
+            
             SbModule* pModule = static_cast< SbModule* >( m_xMethod->GetParent() );
             if ( pModule && !pModule->IsCompiled() )
                 pModule->Compile();
 
-            // check number of parameters
+            
             sal_Int32 nParamsCount = aParams.getLength();
             SbxInfo* pInfo = m_xMethod->GetInfo();
             if ( pInfo )
@@ -200,7 +200,7 @@ namespace basprov
                 }
             }
 
-            // set parameters
+            
             SbxArrayRef xSbxParams;
             if ( nParamsCount > 0 )
             {
@@ -212,7 +212,7 @@ namespace basprov
                     unoToSbxValue( static_cast< SbxVariable* >( xSbxVar ), pParams[i] );
                     xSbxParams->Put( xSbxVar, static_cast< sal_uInt16 >( i ) + 1 );
 
-                    // Enable passing by ref
+                    
                     if ( xSbxVar->GetType() != SbxVARIANT )
                         xSbxVar->SetFlag( SBX_FIXED );
                  }
@@ -220,11 +220,11 @@ namespace basprov
             if ( xSbxParams.Is() )
                 m_xMethod->SetParameters( xSbxParams );
 
-            // call method
+            
             SbxVariableRef xReturn = new SbxVariable;
             ErrCode nErr = SbxERR_OK;
 
-            // if it's a document-based script, temporarily reset ThisComponent to the script invocation context
+            
             Any aOldThisComponent;
             if ( m_documentBasicManager && m_xDocumentScriptContext.is() )
                 aOldThisComponent = m_documentBasicManager->SetGlobalUNOConstant( "ThisComponent", makeAny( m_xDocumentScriptContext ) );
@@ -243,10 +243,10 @@ namespace basprov
 
             if ( nErr != SbxERR_OK )
             {
-                // TODO: throw InvocationTargetException ?
+                
             }
 
-            // get output parameters
+            
             if ( xSbxParams.Is() )
             {
                 SbxInfo* pInfo_ = m_xMethod->GetInfo();
@@ -279,20 +279,20 @@ namespace basprov
                 }
             }
 
-            // get return value
+            
             aReturn = sbxToUnoValue( xReturn );
 
-            // reset parameters
+            
             m_xMethod->SetParameters( NULL );
         }
 
         return aReturn;
     }
 
-    // -----------------------------------------------------------------------------
+    
 
-//.........................................................................
-}   // namespace basprov
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

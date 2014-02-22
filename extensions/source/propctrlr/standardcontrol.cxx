@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "standardcontrol.hxx"
@@ -30,12 +30,12 @@
 #include <rtl/math.hxx>
 #include <sfx2/objsh.hxx>
 
-//==================================================================
-// ugly dependencies for the OColorControl
+
+
 #include <svx/svxids.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
-//==================================================================
+
 #include <vcl/floatwin.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/colorcfg.hxx>
@@ -45,16 +45,16 @@
 #include <vcl/button.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-//==================================================================
+
 
 #include <limits>
 #include <boost/bind.hpp>
 #include <boost/scoped_ptr.hpp>
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star;
     using namespace ::com::sun::star::uno;
@@ -64,10 +64,10 @@ namespace pcr
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::inspection;
 
-    //==================================================================
-    //= OTimeControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     OTimeControl::OTimeControl( Window* pParent, WinBits nWinStyle )
         :OTimeControl_Base( PropertyControlType::TimeField, pParent, nWinStyle )
     {
@@ -76,7 +76,7 @@ namespace pcr
         getTypedControlWindow()->EnableEmptyFieldValue( true );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OTimeControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         util::Time aUNOTime;
@@ -92,7 +92,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL OTimeControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
@@ -103,16 +103,16 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+    
     Type SAL_CALL OTimeControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< util::Time* >( NULL ) );
     }
 
-    //==================================================================
-    //= ODateControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ODateControl::ODateControl( Window* pParent, WinBits nWinStyle )
         :ODateControl_Base( PropertyControlType::DateField, pParent, nWinStyle | WB_DROPDOWN )
     {
@@ -128,7 +128,7 @@ namespace pcr
         pControlWindow->EnableEmptyFieldValue( true );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ODateControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         util::Date aUNODate;
@@ -144,7 +144,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL ODateControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
@@ -157,16 +157,16 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+    
     Type SAL_CALL ODateControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< util::Date* >( NULL ) );
     }
 
-    //==================================================================
-    //= OEditControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     OEditControl::OEditControl(Window* _pParent, sal_Bool _bPW, WinBits _nWinStyle)
         :OEditControl_Base( _bPW ? PropertyControlType::CharacterField : PropertyControlType::TextField, _pParent, _nWinStyle )
     {
@@ -176,7 +176,7 @@ namespace pcr
            getTypedControlWindow()->SetMaxTextLen( 1 );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OEditControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         OUString sText;
@@ -195,7 +195,7 @@ namespace pcr
         getTypedControlWindow()->SetText( sText );
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL OEditControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
@@ -212,23 +212,23 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+    
     Type SAL_CALL OEditControl::getValueType() throw (RuntimeException)
     {
         return m_bIsPassword ? ::getCppuType( static_cast< sal_Int16* >( NULL ) ) : ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
-    //------------------------------------------------------------------
+    
     void OEditControl::modified()
     {
         OEditControl_Base::modified();
 
-        // for password controls, we fire a commit for every single change
+        
         if ( m_bIsPassword )
             m_aImplControl.notifyModifiedValue();
     }
 
-    //------------------------------------------------------------------
+    
     static long ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
     {
         double n = nValue;
@@ -240,7 +240,7 @@ namespace pcr
         return (long)n;
     }
 
-    //------------------------------------------------------------------
+    
     static double ImplCalcDoubleValue( long nValue, sal_uInt16 nDigits )
     {
         double n = nValue;
@@ -249,16 +249,16 @@ namespace pcr
         return n;
     }
 
-    //==================================================================
-    // class ODateTimeControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ODateTimeControl::ODateTimeControl( Window* _pParent, WinBits _nWinStyle)
         :ODateTimeControl_Base( PropertyControlType::DateTimeField, _pParent, _nWinStyle )
     {
         getTypedControlWindow()->EnableEmptyField( sal_True );
 
-        // determine a default format
+        
         LanguageType eSysLanguage = SvtSysLocale().GetLanguageTag().getLanguageType( false);
 
         getTypedControlWindow()->SetFormatter( getTypedControlWindow()->StandardFormatter() );
@@ -268,7 +268,7 @@ namespace pcr
         getTypedControlWindow()->SetFormatKey( nStandardDateTimeFormat );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL ODateTimeControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         if ( !_rValue.hasValue() )
@@ -288,7 +288,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL ODateTimeControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
@@ -298,14 +298,14 @@ namespace pcr
 
             ::DateTime aDateTime( *getTypedControlWindow()->GetFormatter()->GetNullDate() );
 
-            // add the "days" part
+            
             double nDays = floor( nValue );
             aDateTime += nDays;
 
-            // add the "time" part
+            
             double nTime = nValue - nDays;
             nTime = ::rtl::math::round( nTime * 86400.0 ) / 86400.0;
-                // we're not interested in 100th seconds, and this here prevents rounding errors
+                
             aDateTime += nTime;
 
             util::DateTime aUNODateTime;
@@ -316,16 +316,16 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+    
     Type SAL_CALL ODateTimeControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< util::DateTime* >( NULL ) );
     }
 
-    //========================================================================
-    //= HyperlinkInput
-    //========================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     HyperlinkInput::HyperlinkInput( Window* _pParent, WinBits _nWinStyle )
         :Edit( _pParent, _nWinStyle )
     {
@@ -346,7 +346,7 @@ namespace pcr
         SetSettings( aAllSettings );
     }
 
-    //--------------------------------------------------------------------
+    
     void HyperlinkInput::MouseMove( const ::MouseEvent& rMEvt )
     {
         Edit::MouseMove( rMEvt );
@@ -362,7 +362,7 @@ namespace pcr
         SetPointer( Pointer( ePointerStyle ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void HyperlinkInput::MouseButtonDown( const ::MouseEvent& rMEvt )
     {
         Edit::MouseButtonDown( rMEvt );
@@ -373,7 +373,7 @@ namespace pcr
             m_aMouseButtonDownPos.X() = m_aMouseButtonDownPos.Y() = -1;
     }
 
-    //--------------------------------------------------------------------
+    
     void HyperlinkInput::MouseButtonUp( const ::MouseEvent& rMEvt )
     {
         Edit::MouseButtonUp( rMEvt );
@@ -381,14 +381,14 @@ namespace pcr
         impl_checkEndClick( rMEvt );
     }
 
-    //--------------------------------------------------------------------
+    
     bool HyperlinkInput::impl_textHitTest( const ::Point& _rWindowPos )
     {
         sal_Int32 nPos = GetCharPos( _rWindowPos );
         return ( ( nPos != EDIT_NOLIMIT ) && ( nPos < GetText().getLength() ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void HyperlinkInput::impl_checkEndClick( const ::MouseEvent rMEvt )
     {
         const MouseSettings& rMouseSettings( GetSettings().GetMouseSettings() );
@@ -398,7 +398,7 @@ namespace pcr
             Application::PostUserEvent( m_aClickHandler );
     }
 
-    //--------------------------------------------------------------------
+    
     void HyperlinkInput::Tracking( const TrackingEvent& rTEvt )
     {
         Edit::Tracking( rTEvt );
@@ -407,10 +407,10 @@ namespace pcr
             impl_checkEndClick( rTEvt.GetMouseEvent() );
     }
 
-    //========================================================================
-    //= OHyperlinkControl
-    //========================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     OHyperlinkControl::OHyperlinkControl( Window* _pParent, WinBits _nWinStyle )
         :OHyperlinkControl_Base( PropertyControlType::HyperlinkField, _pParent, _nWinStyle )
         ,m_aActionListeners( m_aMutex )
@@ -418,14 +418,14 @@ namespace pcr
         getTypedControlWindow()->SetClickHdl( LINK( this, OHyperlinkControl, OnHyperlinkClicked ) );
     }
 
-    //--------------------------------------------------------------------
+    
     Any SAL_CALL OHyperlinkControl::getValue() throw (RuntimeException)
     {
         OUString sText = getTypedControlWindow()->GetText();
         return makeAny( sText );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OHyperlinkControl::setValue( const Any& _value ) throw (IllegalTypeException, RuntimeException)
     {
         OUString sText;
@@ -433,26 +433,26 @@ namespace pcr
         getTypedControlWindow()->SetText( sText );
     }
 
-    //--------------------------------------------------------------------
+    
     Type SAL_CALL OHyperlinkControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OHyperlinkControl::addActionListener( const Reference< XActionListener >& listener ) throw (RuntimeException)
     {
         if ( listener.is() )
             m_aActionListeners.addInterface( listener );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL OHyperlinkControl::removeActionListener( const Reference< XActionListener >& listener ) throw (RuntimeException)
     {
         m_aActionListeners.removeInterface( listener );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OHyperlinkControl::disposing()
     {
         OHyperlinkControl_Base::disposing();
@@ -461,7 +461,7 @@ namespace pcr
         m_aActionListeners.disposeAndClear( aEvent );
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK( OHyperlinkControl, OnHyperlinkClicked, void*, /*_NotInterestedIn*/ )
     {
         ActionEvent aEvent( *this, OUString( "clicked" ) );
@@ -473,10 +473,10 @@ namespace pcr
         return 0;
     }
 
-    //==================================================================
-    //= ONumericControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     ONumericControl::ONumericControl( Window* _pParent, WinBits _nWinStyle )
         :ONumericControl_Base( PropertyControlType::NumericField, _pParent, _nWinStyle )
         ,m_eValueUnit( FUNIT_NONE )
@@ -491,19 +491,19 @@ namespace pcr
         setMinValue( value );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int16 SAL_CALL ONumericControl::getDecimalDigits() throw (RuntimeException)
     {
         return getTypedControlWindow()->GetDecimalDigits();
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ONumericControl::setDecimalDigits( ::sal_Int16 _decimaldigits ) throw (RuntimeException)
     {
         getTypedControlWindow()->SetDecimalDigits( _decimaldigits );
     }
 
-    //--------------------------------------------------------------------
+    
     Optional< double > SAL_CALL ONumericControl::getMinValue() throw (RuntimeException)
     {
         Optional< double > aReturn( sal_True, 0 );
@@ -517,7 +517,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ONumericControl::setMinValue( const Optional< double >& _minvalue ) throw (RuntimeException)
     {
         if ( !_minvalue.IsPresent )
@@ -526,7 +526,7 @@ namespace pcr
             getTypedControlWindow()->SetMin( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) , m_eValueUnit);
     }
 
-    //--------------------------------------------------------------------
+    
     Optional< double > SAL_CALL ONumericControl::getMaxValue() throw (RuntimeException)
     {
         Optional< double > aReturn( sal_True, 0 );
@@ -540,7 +540,7 @@ namespace pcr
         return aReturn;
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ONumericControl::setMaxValue( const Optional< double >& _maxvalue ) throw (RuntimeException)
     {
         if ( !_maxvalue.IsPresent )
@@ -549,13 +549,13 @@ namespace pcr
             getTypedControlWindow()->SetMax( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ), m_eValueUnit );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int16 SAL_CALL ONumericControl::getDisplayUnit() throw (RuntimeException)
     {
         return VCLUnoHelper::ConvertToMeasurementUnit( getTypedControlWindow()->GetUnit(), 1 );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ONumericControl::setDisplayUnit( ::sal_Int16 _displayunit ) throw (IllegalArgumentException, RuntimeException)
     {
         if ( ( _displayunit < MeasureUnit::MM_100TH ) || ( _displayunit > MeasureUnit::PERCENT ) )
@@ -572,19 +572,19 @@ namespace pcr
         sal_Int16 nDummyFactor = 1;
         FieldUnit eFieldUnit = VCLUnoHelper::ConvertToFieldUnit( _displayunit, nDummyFactor );
         if ( nDummyFactor != 1 )
-            // everything which survived the checks above should result in a factor of 1, i.e.,
-            // it should have a direct counterpart as FieldUnit
+            
+            
             throw RuntimeException();
         getTypedControlWindow()->MetricFormatter::SetUnit( eFieldUnit );
     }
 
-    //--------------------------------------------------------------------
+    
     ::sal_Int16 SAL_CALL ONumericControl::getValueUnit() throw (RuntimeException)
     {
         return VCLUnoHelper::ConvertToMeasurementUnit( m_eValueUnit, m_nFieldToUNOValueFactor );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ONumericControl::setValueUnit( ::sal_Int16 _valueunit ) throw (RuntimeException)
     {
         if ( ( _valueunit < MeasureUnit::MM_100TH ) || ( _valueunit > MeasureUnit::PERCENT ) )
@@ -592,7 +592,7 @@ namespace pcr
         m_eValueUnit = VCLUnoHelper::ConvertToFieldUnit( _valueunit, m_nFieldToUNOValueFactor );
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL ONumericControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         if ( !_rValue.hasValue() )
@@ -609,7 +609,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     long ONumericControl::impl_apiValueToFieldValue_nothrow( double _nApiValue ) const
     {
         long nControlValue = ImplCalcLongValue( _nApiValue, getTypedControlWindow()->GetDecimalDigits() );
@@ -617,7 +617,7 @@ namespace pcr
         return nControlValue;
     }
 
-    //------------------------------------------------------------------
+    
     double ONumericControl::impl_fieldValueToApiValue_nothrow( sal_Int64 _nFieldValue ) const
     {
         double nApiValue = ImplCalcDoubleValue( (long)_nFieldValue, getTypedControlWindow()->GetDecimalDigits() );
@@ -625,7 +625,7 @@ namespace pcr
         return nApiValue;
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL ONumericControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
@@ -637,17 +637,17 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+    
     Type SAL_CALL ONumericControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< double* >( NULL ) );
     }
 
-    //==================================================================
-    //= OColorControl
-    //==================================================================
+    
+    
+    
     #define LB_DEFAULT_COUNT 20
-    //------------------------------------------------------------------
+    
     OUString MakeHexStr(sal_uInt32 nVal, sal_Int32 nLength)
     {
         OUStringBuffer aStr;
@@ -663,11 +663,11 @@ namespace pcr
         return aStr.makeStringAndClear();
     }
 
-    //------------------------------------------------------------------
+    
     OColorControl::OColorControl(Window* pParent, WinBits nWinStyle)
         :OColorControl_Base( PropertyControlType::ColorListBox, pParent, nWinStyle )
     {
-        // initialize the color listbox
+        
         XColorListRef pColorList;
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
         const SfxPoolItem* pItem = pDocSh ? pDocSh->GetItem( SID_COLOR_TABLE ) : NULL;
@@ -700,7 +700,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OColorControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         if ( _rValue.hasValue() )
@@ -712,7 +712,7 @@ namespace pcr
 
                 getTypedControlWindow()->SelectEntry( aRgbCol );
                 if ( !getTypedControlWindow()->IsEntrySelected( aRgbCol ) )
-                {   // the given color is not part of the list -> insert a new entry with the hex code of the color
+                {   
                     OUString aStr("0x");
                     aStr += MakeHexStr(nColor,8);
                     getTypedControlWindow()->InsertEntry( aRgbCol, aStr );
@@ -733,7 +733,7 @@ namespace pcr
             getTypedControlWindow()->SetNoSelection();
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL OColorControl::getValue() throw (RuntimeException)
     {
         Any aPropValue;
@@ -751,32 +751,32 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+    
     Type SAL_CALL OColorControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< sal_Int32* >( NULL ) );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OColorControl::clearList() throw (RuntimeException)
     {
         getTypedControlWindow()->Clear();
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OColorControl::prependListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry, 0 );
         m_aNonColorEntries.insert( NewEntry );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OColorControl::appendListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
         m_aNonColorEntries.insert( NewEntry );
     }
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL OColorControl::getListEntries(  ) throw (RuntimeException)
     {
         if ( !m_aNonColorEntries.empty() )
@@ -784,20 +784,20 @@ namespace pcr
         return Sequence< OUString >();
     }
 
-    //------------------------------------------------------------------
+    
     void OColorControl::modified()
     {
         OColorControl_Base::modified();
 
         if ( !getTypedControlWindow()->IsTravelSelect() )
-            // fire a commit
+            
             m_aImplControl.notifyModifiedValue();
     }
 
-    //==================================================================
-    //= OListboxControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     OListboxControl::OListboxControl( Window* pParent, WinBits nWinStyle)
         :OListboxControl_Base( PropertyControlType::ListBox, pParent, nWinStyle )
     {
@@ -809,7 +809,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL OListboxControl::getValue() throw (RuntimeException)
     {
         OUString sControlValue( getTypedControlWindow()->GetSelectEntry() );
@@ -820,13 +820,13 @@ namespace pcr
         return aPropValue;
     }
 
-    //------------------------------------------------------------------
+    
     Type SAL_CALL OListboxControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OListboxControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         if ( !_rValue.hasValue() )
@@ -847,24 +847,24 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OListboxControl::clearList() throw (RuntimeException)
     {
         getTypedControlWindow()->Clear();
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OListboxControl::prependListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry, 0 );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OListboxControl::appendListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
     }
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL OListboxControl::getListEntries(  ) throw (RuntimeException)
     {
         const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
@@ -876,20 +876,20 @@ namespace pcr
         return aRet;
     }
 
-    //------------------------------------------------------------------
+    
     void OListboxControl::modified()
     {
         OListboxControl_Base::modified();
 
         if ( !getTypedControlWindow()->IsTravelSelect() )
-            // fire a commit
+            
             m_aImplControl.notifyModifiedValue();
     }
 
-    //==================================================================
-    //= OComboboxControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     OComboboxControl::OComboboxControl( Window* pParent, WinBits nWinStyle)
         :OComboboxControl_Base( PropertyControlType::ComboBox, pParent, nWinStyle )
     {
@@ -897,7 +897,7 @@ namespace pcr
         getTypedControlWindow()->SetSelectHdl( LINK( this, OComboboxControl, OnEntrySelected ) );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OComboboxControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         OUString sText;
@@ -905,36 +905,36 @@ namespace pcr
         getTypedControlWindow()->SetText( sText );
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL OComboboxControl::getValue() throw (RuntimeException)
     {
         return makeAny( OUString( getTypedControlWindow()->GetText() ) );
     }
 
-    //------------------------------------------------------------------
+    
     Type SAL_CALL OComboboxControl::getValueType() throw (RuntimeException)
     {
         return ::getCppuType( static_cast< OUString* >( NULL ) );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OComboboxControl::clearList() throw (RuntimeException)
     {
         getTypedControlWindow()->Clear();
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OComboboxControl::prependListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry, 0 );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OComboboxControl::appendListEntry( const OUString& NewEntry ) throw (RuntimeException)
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
     }
-    //------------------------------------------------------------------
+    
     Sequence< OUString > SAL_CALL OComboboxControl::getListEntries(  ) throw (RuntimeException)
     {
         const sal_uInt16 nCount = getTypedControlWindow()->GetEntryCount();
@@ -946,18 +946,18 @@ namespace pcr
         return aRet;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK( OComboboxControl, OnEntrySelected, void*, /*_pNothing*/ )
     {
         if ( !getTypedControlWindow()->IsTravelSelect() )
-            // fire a commit
+            
             m_aImplControl.notifyModifiedValue();
         return 0L;
     }
 
-    //==================================================================
-    //= OMultilineFloatingEdit
-    //==================================================================
+    
+    
+    
     class OMultilineFloatingEdit : public FloatingWindow
     {
     private:
@@ -974,7 +974,7 @@ namespace pcr
         virtual bool    PreNotify(NotifyEvent& _rNEvt);
     };
 
-    //------------------------------------------------------------------
+    
     OMultilineFloatingEdit::OMultilineFloatingEdit(Window* _pParent)
         :FloatingWindow(_pParent, WB_BORDER)
         ,m_aImplEdit(this, WB_VSCROLL|WB_IGNORETAB|WB_NOBORDER)
@@ -982,13 +982,13 @@ namespace pcr
         m_aImplEdit.Show();
     }
 
-    //------------------------------------------------------------------
+    
     void OMultilineFloatingEdit::Resize()
     {
         m_aImplEdit.SetSizePixel(GetOutputSizePixel());
     }
 
-    //------------------------------------------------------------------
+    
     bool OMultilineFloatingEdit::PreNotify(NotifyEvent& _rNEvt)
     {
         bool nResult = true;
@@ -1018,10 +1018,10 @@ namespace pcr
         return nResult;
     }
 
-    //==================================================================
-    //= DropDownEditControl_Base
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     DropDownEditControl::DropDownEditControl( Window* _pParent, WinBits _nStyle )
         :DropDownEditControl_Base( _pParent, _nStyle )
         ,m_pFloatingEdit( NULL )
@@ -1044,13 +1044,13 @@ namespace pcr
             m_pDropdownButton->Show();
         }
 
-        m_pFloatingEdit = new OMultilineFloatingEdit(this); //FloatingWindow
+        m_pFloatingEdit = new OMultilineFloatingEdit(this); 
 
         m_pFloatingEdit->SetPopupModeEndHdl( LINK( this, DropDownEditControl, ReturnHdl ) );
         m_pFloatingEdit->getEdit()->SetReadOnly( ( _nStyle & WB_READONLY ) != 0 );
     }
 
-    //------------------------------------------------------------------
+    
     void DropDownEditControl::setControlHelper( ControlHelper& _rControlHelper )
     {
         DropDownEditControl_Base::setControlHelper( _rControlHelper );
@@ -1060,7 +1060,7 @@ namespace pcr
         m_pImplEdit->SetLoseFocusHdl( LINK( &_rControlHelper, ControlHelper, LoseFocusHdl ) );
     }
 
-    //------------------------------------------------------------------
+    
     DropDownEditControl::~DropDownEditControl()
     {
         {
@@ -1078,7 +1078,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     void DropDownEditControl::Resize()
     {
         ::Size aOutSz = GetOutputSizePixel();
@@ -1094,7 +1094,7 @@ namespace pcr
             m_pImplEdit->setPosSizePixel( 0, 1, aOutSz.Width(), aOutSz.Height()-2 );
     }
 
-    //------------------------------------------------------------------
+    
     bool DropDownEditControl::PreNotify( NotifyEvent& rNEvt )
     {
         bool nResult = true;
@@ -1152,10 +1152,10 @@ namespace pcr
         return nResult;
     }
 
-    //------------------------------------------------------------------
+    
     namespace
     {
-        //..............................................................
+        
         StlSyntaxSequence< OUString > lcl_convertMultiLineToList( const OUString& _rCompsedTextWithLineBreaks )
         {
             sal_Int32 nLines = comphelper::string::getTokenCount(_rCompsedTextWithLineBreaks, '\n');
@@ -1180,7 +1180,7 @@ namespace pcr
             return sMultiLineText;
         }
 
-        //..............................................................
+        
         OUString lcl_convertListToDisplayText( const StlSyntaxSequence< OUString >& _rStrings )
         {
             OUStringBuffer aComposed;
@@ -1199,7 +1199,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     #define STD_HEIGHT  100
     sal_Bool DropDownEditControl::ShowDropDown( sal_Bool bShow )
     {
@@ -1227,7 +1227,7 @@ namespace pcr
             m_pFloatingEdit->Invalidate();
             m_pFloatingEdit->Update();
 
-            // transfer the text from the floating edit to our own edit
+            
             OUString sDisplayText( m_pFloatingEdit->getEdit()->GetText() );
             if ( m_nOperationMode == eStringList )
                 sDisplayText = lcl_convertListToDisplayText( lcl_convertMultiLineToList( sDisplayText ) );
@@ -1241,7 +1241,7 @@ namespace pcr
 
     }
 
-    //------------------------------------------------------------------
+    
     long DropDownEditControl::FindPos(long nSinglePos)
     {
         long nPos=0;
@@ -1298,7 +1298,7 @@ namespace pcr
         return nPos;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK( DropDownEditControl, ReturnHdl, OMultilineFloatingEdit*, /*pMEd*/)
     {
 
@@ -1315,27 +1315,27 @@ namespace pcr
         return 0;
     }
 
-    //------------------------------------------------------------------
+    
     IMPL_LINK( DropDownEditControl, DropDownHdl, PushButton*, /*pPb*/ )
     {
         ShowDropDown(!m_bDropdown);
         return 0;
     }
 
-    //------------------------------------------------------------------
+    
     void DropDownEditControl::SetStringListValue( const StlSyntaxSequence< OUString >& _rStrings )
     {
         SetText( lcl_convertListToDisplayText( _rStrings ) );
         m_pFloatingEdit->getEdit()->SetText( lcl_convertListToMultiLine( _rStrings ) );
     }
 
-    //------------------------------------------------------------------
+    
     StlSyntaxSequence< OUString > DropDownEditControl::GetStringListValue() const
     {
         return lcl_convertMultiLineToList( m_pFloatingEdit->getEdit()->GetText() );
     }
 
-    //------------------------------------------------------------------
+    
     void DropDownEditControl::SetTextValue( const OUString& _rText )
     {
         OSL_PRECOND( m_nOperationMode == eMultiLineText, "DropDownEditControl::SetTextValue: illegal call!" );
@@ -1344,17 +1344,17 @@ namespace pcr
         SetText( _rText );
     }
 
-    //------------------------------------------------------------------
+    
     OUString DropDownEditControl::GetTextValue() const
     {
         OSL_PRECOND( m_nOperationMode == eMultiLineText, "DropDownEditControl::GetTextValue: illegal call!" );
         return GetText();
     }
 
-    //==================================================================
-    //= OMultilineEditControl
-    //==================================================================
-    //------------------------------------------------------------------
+    
+    
+    
+    
     OMultilineEditControl::OMultilineEditControl( Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle )
         :OMultilineEditControl_Base( _eMode == eMultiLineText ? PropertyControlType::MultiLineTextField : PropertyControlType::StringListField
                                    , pParent
@@ -1364,7 +1364,7 @@ namespace pcr
         getTypedControlWindow()->setOperationMode( _eMode );
     }
 
-    //------------------------------------------------------------------
+    
     void SAL_CALL OMultilineEditControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException)
     {
         impl_checkDisposed_throw();
@@ -1390,7 +1390,7 @@ namespace pcr
         }
     }
 
-    //------------------------------------------------------------------
+    
     Any SAL_CALL OMultilineEditControl::getValue() throw (RuntimeException)
     {
         impl_checkDisposed_throw();
@@ -1408,7 +1408,7 @@ namespace pcr
         return aValue;
     }
 
-    //------------------------------------------------------------------
+    
     Type SAL_CALL OMultilineEditControl::getValueType() throw (RuntimeException)
     {
         if ( getTypedControlWindow()->getOperationMode() == eMultiLineText )
@@ -1416,8 +1416,8 @@ namespace pcr
         return ::getCppuType( static_cast< Sequence< OUString >* >( NULL ) );
     }
 
-//............................................................................
-} // namespace pcr
-//............................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

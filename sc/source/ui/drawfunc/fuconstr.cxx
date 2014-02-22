@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -33,11 +33,11 @@
 #include "document.hxx"
 #include "gridwin.hxx"
 
-//  Maximal erlaubte Mausbewegung um noch Drag&Drop zu starten
-//! fusel,fuconstr,futext - zusammenfassen!
+
+
 #define SC_MAXDRAGMOVE  3
 
-//------------------------------------------------------------------------
+
 
 /*************************************************************************
 |*
@@ -66,10 +66,10 @@ sal_uInt8 FuConstruct::Command(const CommandEvent& rCEvt)
     return FuDraw::Command( rCEvt );
 }
 
-// Calculate and return offset at current zoom. rInOutPos is adjusted by
-// the calculated offset. rInOutPos now points to the position than when
-// scaled to 100% actually would be at the position you see at the current zoom
-// ( relative to the grid ) note: units are expected to be in 100th mm
+
+
+
+
 Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
 {
     Point aRetGridOff;
@@ -77,10 +77,10 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
     ScDocument* pDoc = pViewData ? pViewData->GetDocument() : NULL;
     if ( pViewData && pDoc )
     {
-        // rInOutPos mightn't be where you think it is if there is zoom
-        // involved. Lets calculate where aPos would be at 100% zoom
-        // that's the actual correct position for the object ( when you
-        // restore the zoom.
+        
+        
+        
+        
         sal_Bool bNegative = pDoc->IsNegativePage(pView->GetTab());
         Rectangle aObjRect( rInOutPos, rInOutPos );
         ScRange aRange = pDoc->GetRange( pView->GetTab(), aObjRect );
@@ -90,14 +90,14 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
         aOldPos.Y() = sc::TwipsToHMM( aOldPos.Y() );
         ScSplitPos eWhich = pViewData->GetActivePart();
         ScGridWindow* pGridWin = (ScGridWindow*)pViewData->GetActiveWin();
-        // and equiv screen pos
+        
         Point aScreenPos =  pViewShell->GetViewData()->GetScrPos( aOldStt.Col(), aOldStt.Row(), eWhich, true );
         MapMode aDrawMode = pGridWin->GetDrawMapMode();
         Point aCurPosHmm = pGridWin->PixelToLogic(aScreenPos, aDrawMode );
         Point aOff = ( rInOutPos - aCurPosHmm );
         rInOutPos = aOldPos + aOff;
         aRetGridOff = aCurPosHmm - aOldPos;
-        // fdo#64011 fix the X position when the sheet are RTL
+        
         if ( bNegative )
         {
             aRetGridOff.setX( aCurPosHmm.getX() + aOldPos.getX() );
@@ -114,7 +114,7 @@ Point FuConstruct::CurrentGridSyncOffsetAndPos( Point& rInOutPos )
 
 bool FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = FuDraw::MouseButtonDown(rMEvt);
@@ -175,9 +175,9 @@ bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
     Point aPix(rMEvt.GetPosPixel());
     Point aPnt( pWindow->PixelToLogic(aPix) );
 
-    // if object is being created then more than likely the mouse
-    // position has been 'adjusted' for the current zoom, need to
-    // restore the mouse position here to ensure resize works as expected
+    
+    
+    
     if ( pView->GetCreateObj() )
         aPnt -= pView->GetCreateObj()->GetGridOffset();
 
@@ -214,12 +214,12 @@ bool FuConstruct::MouseMove(const MouseEvent& rMEvt)
 
 bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     bool bReturn = SimpleMouseButtonUp( rMEvt );
 
-    //      Doppelklick auf Textobjekt? (->fusel)
+    
 
     sal_uInt16 nClicks = rMEvt.GetClicks();
     if ( nClicks == 2 && rMEvt.IsLeft() )
@@ -232,7 +232,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 SdrMark* pMark = rMarkList.GetMark(0);
                 SdrObject* pObj = pMark->GetMarkedSdrObj();
 
-                //  bei Uno-Controls nicht in Textmodus
+                
                 if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                 {
                     OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
@@ -242,9 +242,9 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                     pViewShell->GetViewData()->GetDispatcher().
                         Execute(nTextSlotId, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
 
-                    // jetzt den erzeugten FuText holen und in den EditModus setzen
+                    
                     FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
-                    if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
+                    if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    
                     {
                         FuText* pText = (FuText*)pPoor;
                         Point aMousePixel = rMEvt.GetPosPixel();
@@ -261,7 +261,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
     return bReturn;
 }
 
-//      SimpleMouseButtonUp - ohne Test auf Doppelklick
+
 
 bool FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 {
@@ -323,7 +323,7 @@ bool FuConstruct::KeyInput(const KeyEvent& rKEvt)
                 pWindow->ReleaseMouse();
                 bReturn = true;
             }
-            else                            // Zeichenmodus beenden
+            else                            
             {
                 pViewShell->GetViewData()->GetDispatcher().
                     Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);

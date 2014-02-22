@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "filterdetect.hxx"
@@ -56,35 +56,35 @@ bool isHTMLStream(const OString& aStreamHeader)
         if ( c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == '\f' )
         {
             if ( dp == TagOpened )
-                return false; // Invalid: Should start with a tag name
+                return false; 
             else if ( dp == InTagName )
-                break; // End of tag name reached
+                break; 
         }
         else if ( c == '<' )
         {
             if ( dp == BeforeTag )
                 dp = TagOpened;
             else
-                return false; // Invalid: Nested '<'
+                return false; 
         }
         else if ( c == '>' )
         {
             if ( dp == InTagName )
-                break; // End of tag name reached
+                break; 
             else
-                return false; // Invalid: Empty tag or before '<'
+                return false; 
         }
         else if ( c == '!' )
         {
             if ( dp == TagOpened )
-                return true; // "<!" - DOCTYPE or comments block
+                return true; 
             else
-                return false; // Invalid: '!' before '<' or inside tag name
+                return false; 
         }
         else
         {
             if ( dp == BeforeTag )
-                return false; // Invalid: Should start with a tag
+                return false; 
             else if ( dp == TagOpened )
             {
                 nStartOfTagIndex = i;
@@ -93,7 +93,7 @@ bool isHTMLStream(const OString& aStreamHeader)
         }
     }
 
-    // The string following '<' has to be a known HTML token.
+    
     if ( GetHTMLToken( OStringToOUString( aStreamHeader.copy( nStartOfTagIndex, i - nStartOfTagIndex ),
                                                 RTL_TEXTENCODING_ASCII_US ) ) != 0 )
         return true;
@@ -147,15 +147,15 @@ OUString SAL_CALL HtmlFilterDetect::detect(Sequence<PropertyValue>& lDescriptor)
 
         const sal_uInt16 nSize = 4096;
 
-        if ( nUniPos == 3 || nUniPos == 0 ) // UTF-8 or non-Unicode
+        if ( nUniPos == 3 || nUniPos == 0 ) 
             resultString = read_uInt8s_ToOString( *pInStream, nSize );
-        else // UTF-16
+        else 
             resultString = OUStringToOString( read_uInt16s_ToOUString( *pInStream, nSize ), RTL_TEXTENCODING_ASCII_US );
 
         if ( isHTMLStream( resultString.toAsciiLowerCase() ) )
         {
-            // Some Apps/Web services use ".xls" extension to indicate that
-            // the given file should be opened by a spreadsheet software
+            
+            
             if ( sDocService.isEmpty() )
             {
                 INetURLObject aParser( sUrl );
@@ -180,10 +180,10 @@ OUString SAL_CALL HtmlFilterDetect::detect(Sequence<PropertyValue>& lDescriptor)
         OSL_FAIL( "An Exception occurred while opening File stream" );
     }
 
-    return OUString(); // Failed
+    return OUString(); 
 }
 
-// XInitialization
+
 
 void SAL_CALL HtmlFilterDetect::initialize(const Sequence<Any>& /*aArguments*/)
     throw (Exception, RuntimeException)
@@ -209,7 +209,7 @@ Reference<XInterface> HtmlFilterDetect_createInstance(const Reference<XComponent
     return (cppu::OWeakObject*) new HtmlFilterDetect( rCtx );
 }
 
-// XServiceInfo
+
 
 OUString SAL_CALL HtmlFilterDetect::getImplementationName()
     throw (RuntimeException)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dbase/DCode.hxx"
@@ -32,7 +32,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 
 TYPEINIT1(OFILEOperandAttr, OOperandAttr);
-// -----------------------------------------------------------------------------
+
 OOperandAttr* OFILEAnalyzer::createOperandAttr(sal_Int32 _nPos,
                                                const Reference< XPropertySet>& _xCol,
                                                const Reference< XNameAccess>& _xIndexes)
@@ -40,7 +40,7 @@ OOperandAttr* OFILEAnalyzer::createOperandAttr(sal_Int32 _nPos,
     return new OFILEOperandAttr((sal_uInt16)_nPos,_xCol,_xIndexes);
 }
 
-//------------------------------------------------------------------
+
 OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,
                                    const Reference< XPropertySet>& _xColumn,
                                    const Reference< XNameAccess>& _xIndexes)
@@ -82,12 +82,12 @@ OFILEOperandAttr::OFILEOperandAttr(sal_uInt16 _nPos,
     }
 
 }
-// -------------------------------------------------------------------------
+
 sal_Bool OFILEOperandAttr::isIndexed() const
 {
     return m_xIndex.is();
 }
-//------------------------------------------------------------------
+
 OEvaluateSet* OFILEOperandAttr::preProcess(OBoolOperator* pOp, OOperand* pRight)
 {
     OEvaluateSet* pEvaluateSet = NULL;

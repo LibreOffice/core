@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -68,7 +68,7 @@
 using namespace ::com::sun::star;
 
 
-// ------------------------------------------------------------
+
 
 sal_uInt16 GetScriptItemId( sal_uInt16 nItemId, short nScriptType )
 {
@@ -157,31 +157,31 @@ sal_Bool IsScriptItemValid( sal_uInt16 nItemId, short nScriptType )
 }
 
 
-// ------------------------------------------------------------
 
-// Should later be moved to TOOLS/STRING (Current: 303)
-// for Grep: WS_TARGET
+
+
+
 
 
 const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
-        { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },         // EE_PARA_WRITINGDIR
-        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_XMLATTRIBS
-        { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
+        { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },         
+        { 0, SFX_ITEM_POOLABLE },                               
+        { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },   
         { SID_ATTR_PARA_FORBIDDEN_RULES, SFX_ITEM_POOLABLE },
-        { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },       // EE_PARA_ASIANCJKSPACING
-        { SID_ATTR_NUMBERING_RULE, SFX_ITEM_POOLABLE },         // EE_PARA_NUMBULL
-        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_HYPHENATE
-        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_BULLETSTATE
-        { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_OUTLLRSPACE
-        { SID_ATTR_PARA_OUTLLEVEL, SFX_ITEM_POOLABLE },         // EE_PARA_OUTLLEVEL
-        { SID_ATTR_PARA_BULLET, SFX_ITEM_POOLABLE },            // EE_PARA_BULLET
-        { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },                // EE_PARA_LRSPACE
-        { SID_ATTR_ULSPACE, SFX_ITEM_POOLABLE },                // EE_PARA_ULSPACE
-        { SID_ATTR_PARA_LINESPACE, SFX_ITEM_POOLABLE },         // EE_PARA_SBL
-        { SID_ATTR_PARA_ADJUST, SFX_ITEM_POOLABLE },            // EE_PARA_JUST
-        { SID_ATTR_TABSTOP, SFX_ITEM_POOLABLE },                // EE_PARA_TABS
-        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, // EE_PARA_JUST_METHOD
-        { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEM_POOLABLE },      // EE_PARA_VER_JUST
+        { SID_ATTR_PARA_SCRIPTSPACE, SFX_ITEM_POOLABLE },       
+        { SID_ATTR_NUMBERING_RULE, SFX_ITEM_POOLABLE },         
+        { 0, SFX_ITEM_POOLABLE },                               
+        { 0, SFX_ITEM_POOLABLE },                               
+        { 0, SFX_ITEM_POOLABLE },                               
+        { SID_ATTR_PARA_OUTLLEVEL, SFX_ITEM_POOLABLE },         
+        { SID_ATTR_PARA_BULLET, SFX_ITEM_POOLABLE },            
+        { SID_ATTR_LRSPACE, SFX_ITEM_POOLABLE },                
+        { SID_ATTR_ULSPACE, SFX_ITEM_POOLABLE },                
+        { SID_ATTR_PARA_LINESPACE, SFX_ITEM_POOLABLE },         
+        { SID_ATTR_PARA_ADJUST, SFX_ITEM_POOLABLE },            
+        { SID_ATTR_TABSTOP, SFX_ITEM_POOLABLE },                
+        { SID_ATTR_ALIGN_HOR_JUSTIFY_METHOD, SFX_ITEM_POOLABLE }, 
+        { SID_ATTR_ALIGN_VER_JUSTIFY, SFX_ITEM_POOLABLE },      
         { SID_ATTR_CHAR_COLOR, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_FONT, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_FONTHEIGHT, SFX_ITEM_POOLABLE },
@@ -209,19 +209,19 @@ const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_CHAR_CTL_POSTURE, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },
         { SID_ATTR_CHAR_RELIEF, SFX_ITEM_POOLABLE },
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_RUBI_DUMMY
-        { 0, SFX_ITEM_POOLABLE },                           // EE_CHAR_XMLATTRIBS
+        { 0, SFX_ITEM_POOLABLE },                           
+        { 0, SFX_ITEM_POOLABLE },                           
         { SID_ATTR_CHAR_OVERLINE, SFX_ITEM_POOLABLE },
-        { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },       // EE_CHAR_CASEMAP
-        { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_TAB
-        { 0, SFX_ITEM_POOLABLE },                           // EE_FEATURE_LINEBR
-        { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // EE_FEATURE_NOTCONV
+        { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },       
+        { 0, SFX_ITEM_POOLABLE },                           
+        { 0, SFX_ITEM_POOLABLE },                           
+        { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  
         { SID_FIELD, SFX_ITEM_POOLABLE }
 };
 
 const sal_uInt16 aV1Map[] = {
     3999, 4001, 4002, 4003, 4004, 4005, 4006,
-    4007, 4008, 4009, 4010, 4011, 4012, 4013, 4017, 4018, 4019 // MI: 4019?
+    4007, 4008, 4009, 4010, 4011, 4012, 4013, 4017, 4018, 4019 
 };
 
 const sal_uInt16 aV2Map[] = {
@@ -254,7 +254,7 @@ const sal_uInt16 aV5Map[] = {
 
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_Int32 nS, sal_Int32 nE )
 {
-    // Create a new attribute in the pool
+    
     const SfxPoolItem& rNew = rPool.Put( rAttr );
 
     EditCharAttrib* pNew = 0;
@@ -362,7 +362,7 @@ EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sa
         break;
         case EE_CHAR_XMLATTRIBS:
         {
-            pNew = new EditCharAttrib( rNew, nS, nE );  // Attribute is only for holding XML information...
+            pNew = new EditCharAttrib( rNew, nS, nE );  
         }
         break;
         case EE_CHAR_CASEMAP:
@@ -466,7 +466,7 @@ sal_Int32 TextPortionList::GetPos(const TextPortion* p) const
         std::find_if(maPortions.begin(), maPortions.end(), FindTextPortionByAddress(p));
 
     if (it == maPortions.end())
-        return std::numeric_limits<sal_Int32>::max(); // not found.
+        return std::numeric_limits<sal_Int32>::max(); 
 
     return std::distance(maPortions.begin(), it);
 }
@@ -474,7 +474,7 @@ sal_Int32 TextPortionList::GetPos(const TextPortion* p) const
 sal_Int32 TextPortionList::FindPortion(
     sal_Int32 nCharPos, sal_Int32& nPortionStart, bool bPreferStartingPortion) const
 {
-    // When nCharPos at portion limit, the left portion is found
+    
     sal_Int32 nTmpPos = 0;
     sal_Int32 n = maPortions.size();
     for (sal_Int32 i = 0; i < n; ++i)
@@ -483,7 +483,7 @@ sal_Int32 TextPortionList::FindPortion(
         nTmpPos = nTmpPos + rPortion.GetLen();
         if ( nTmpPos >= nCharPos )
         {
-            // take this one if we don't prefer the starting portion, or if it's the last one
+            
             if ( ( nTmpPos != nCharPos ) || !bPreferStartingPortion || ( i == n-1 ) )
             {
                 nPortionStart = nTmpPos - rPortion.GetLen();
@@ -555,19 +555,19 @@ void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
 {
     if ( bInvalid == sal_False )
     {
-//      nInvalidPosEnd = nStart;    // ??? => CreateLines
+
         nInvalidPosStart = ( nDiff >= 0 ) ? nStart : ( nStart + nDiff );
         nInvalidDiff = nDiff;
     }
     else
     {
-        // Simple tap in succession
+        
         if ( ( nDiff > 0 ) && ( nInvalidDiff > 0 ) &&
              ( ( nInvalidPosStart+nInvalidDiff ) == nStart ) )
         {
             nInvalidDiff = nInvalidDiff + nDiff;
         }
-        // Simple delete in succession
+        
         else if ( ( nDiff < 0 ) && ( nInvalidDiff < 0 ) && ( nInvalidPosStart == nStart ) )
         {
             nInvalidPosStart = nInvalidPosStart + nDiff;
@@ -575,7 +575,7 @@ void ParaPortion::MarkInvalid( sal_Int32 nStart, sal_Int32 nDiff )
         }
         else
         {
-//          nInvalidPosEnd = pNode->Len();
+
             DBG_ASSERT( ( nDiff >= 0 ) || ( (nStart+nDiff) >= 0 ), "MarkInvalid: Diff out of Range" );
             nInvalidPosStart = std::min( nInvalidPosStart, ( nDiff < 0 ? nStart+nDiff : nDiff ) );
             nInvalidDiff = 0;
@@ -592,12 +592,12 @@ void ParaPortion::MarkSelectionInvalid( sal_Int32 nStart, sal_Int32 /* nEnd */ )
     if ( bInvalid == sal_False )
     {
         nInvalidPosStart = nStart;
-//      nInvalidPosEnd = nEnd;
+
     }
     else
     {
         nInvalidPosStart = std::min( nInvalidPosStart, nStart );
-//      nInvalidPosEnd = pNode->Len();
+
     }
     nInvalidDiff = 0;
     bInvalid = sal_True;
@@ -617,7 +617,7 @@ sal_Int32 ParaPortion::GetLineNumber( sal_Int32 nIndex ) const
             return (sal_Int32)nLine;
     }
 
-    // Then it should be at the end of the last line!
+    
     DBG_ASSERT( nIndex == aLineList[ aLineList.Count() - 1 ]->GetEnd(), "Index dead wrong!" );
     return (aLineList.Count()-1);
 }
@@ -637,12 +637,12 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormatted
         const EditLine* pUnformatted = aLineList[ nLastFormattedLine+1 ];
         sal_Int32 nPortionDiff = pUnformatted->GetStartPortion() - pLastFormatted->GetEndPortion();
         sal_Int32 nTextDiff = pUnformatted->GetStart() - pLastFormatted->GetEnd();
-        nTextDiff++;    // LastFormatted->GetEnd() was included => 1 deducted too much!
+        nTextDiff++;    
 
-        // The first unformatted must begin exactly one Portion behind the last
-        // of the formatted:
-        // If the modified line was split into one portion, can
-        // nLastEnd > nNextStart!
+        
+        
+        
+        
         int nPDiff = -( nPortionDiff-1 );
         int nTDiff = -( nTextDiff-1 );
         if ( nPDiff || nTDiff )
@@ -664,7 +664,7 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_Int32 nLastFormatted
     DBG_ASSERT( aLineList[ aLineList.Count()-1 ]->GetEnd() == pNode->Len(), "CorrectLines: The end is not right!" );
 }
 
-// Shared reverse lookup acceleration pieces ...
+
 
 namespace {
 
@@ -673,9 +673,9 @@ sal_Int32 FastGetPos(const _Array& rArray, const _Val* p, sal_Int32& rLastPos)
 {
     sal_Int32 nArrayLen = rArray.size();
 
-    // Through certain filter code-paths we do a lot of appends, which in
-    // turn call GetPos - creating some N^2 nightmares. If we have a
-    // non-trivially large list, do a few checks from the end first.
+    
+    
+    
     if (rLastPos > 16 && nArrayLen > 16)
     {
         sal_Int32 nEnd;
@@ -693,12 +693,12 @@ sal_Int32 FastGetPos(const _Array& rArray, const _Val* p, sal_Int32& rLastPos)
             }
         }
     }
-    // The world's lamest linear search from svarray ...
+    
     for (sal_Int32 nIdx = 0; nIdx < nArrayLen; ++nIdx)
         if (&rArray.at(nIdx) == p)
             return rLastPos = nIdx;
 
-    // XXX "not found" condition for sal_Int32 indexes
+    
     return EE_PARA_NOT_FOUND;
 }
 
@@ -797,7 +797,7 @@ sal_Int32 ParaPortionList::FindParagraph(long nYOffset) const
     long nY = 0;
     for (size_t i = 0, n = maPortions.size(); i < n; ++i)
     {
-        nY += maPortions[i].GetHeight(); // should also be correct even in bVisible!
+        nY += maPortions[i].GetHeight(); 
         if ( nY > nYOffset )
             return i <= SAL_MAX_INT32 ? static_cast<sal_Int32>(i) : SAL_MAX_INT32;
     }
@@ -871,7 +871,7 @@ void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit
         {
             DBG_ASSERT( rPoolItem.IsA( TYPE( SvxLineSpacingItem ) ), "ConvertItem: Invalid Item!" );
             SvxLineSpacingItem& rItem = (SvxLineSpacingItem&)rPoolItem;
-            // SetLineHeight changes also eLineSpace!
+            
             if ( rItem.GetLineSpaceRule() == SVX_LINE_SPACE_MIN )
                 rItem.SetLineHeight( sal::static_int_cast< sal_uInt16 >( OutputDevice::LogicToLogic( rItem.GetLineHeight(), eSourceUnit, eDestUnit ) ) );
         }
@@ -909,7 +909,7 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
 
     for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
     {
-        // If possible go through SlotID ...
+        
 
         sal_uInt16 nSourceWhich = nWhich;
         sal_uInt16 nSlot = pDestPool->GetTrueSlotId( nWhich );
@@ -927,7 +927,7 @@ void ConvertAndPutItems( SfxItemSet& rDest, const SfxItemSet& rSource, const Map
             if ( eSourceUnit != eDestUnit )
             {
                 SfxPoolItem* pItem = rSource.Get( nSourceWhich ).Clone();
-//              pItem->SetWhich( nWhich );
+
                 ConvertItem( *pItem, eSourceUnit, eDestUnit );
                 rDest.Put( *pItem, nWhich );
                 delete pItem;
@@ -946,8 +946,8 @@ EditLine::EditLine() :
 {
 
     nStart = nEnd = 0;
-    nStartPortion = 0;  // to be able to tell the difference between a line
-                        // without Ptorions form one with the Portion number 0
+    nStartPortion = 0;  
+                        
     nEndPortion = 0;
     nHeight = 0;
     nStartPosX = 0;
@@ -1203,15 +1203,15 @@ EditSelection::EditSelection()
 
 EditSelection::EditSelection( const EditPaM& rStartAndAnd )
 {
-    // could still be optimized!
-    // do no first call the Def-constructor from PaM!
+    
+    
     aStartPaM = rStartAndAnd;
     aEndPaM = rStartAndAnd;
 }
 
 EditSelection::EditSelection( const EditPaM& rStart, const EditPaM& rEnd )
 {
-    // could still be optimized!
+    
     aStartPaM = rStart;
     aEndPaM = rEnd;
 }
@@ -1307,12 +1307,12 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
     if ( !nNew )
         return;
 
-    // Since features are treated differently than normal character attributes,
-    // can also the order of the start list be change!
-    // In every if ...,  in the next (n) opportunities due to bFeature or
-    // an existing special case, must (n-1) opportunities be provided with
-    // bResort. The most likely possibility receives no bResort, so that is
-    // not sorted anew when all attributes are the same.
+    
+    
+    
+    
+    
+    
     bool bResort = false;
     bool bExpandedEmptyAtIndexNull = false;
 
@@ -1323,31 +1323,31 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
     {
         if ( pAttrib->GetEnd() >= nIndex )
         {
-            // Move all attributes behind the insertion point...
+            
             if ( pAttrib->GetStart() > nIndex )
             {
                 pAttrib->MoveForward( nNew );
             }
-            // 0: Expand empty attribute, if at insertion point
+            
             else if ( pAttrib->IsEmpty() )
             {
-                // Do not check Index, a emty one could only be there
-                // When later checking it anyhow:
-                //   Special caase: Start == 0; AbsLen == 1, nNew = 1
-                // => Expand, because of paragraph break!
-                // Start <= nIndex, End >= nIndex => Start=End=nIndex!
-//              if ( pAttrib->GetStart() == nIndex )
+                
+                
+                
+                
+                
+
                 pAttrib->Expand( nNew );
                 if ( pAttrib->GetStart() == 0 )
                     bExpandedEmptyAtIndexNull = true;
             }
-            // 1: Attribute starts before, goes to index ...
-            else if ( pAttrib->GetEnd() == nIndex ) // Start must be before
+            
+            else if ( pAttrib->GetEnd() == nIndex ) 
             {
-                // Only expand when there is no feature
-                // and if not in exclude list!
-                // Otherwise, a UL will go on until a new ULDB, expaning both
-//              if ( !pAttrib->IsFeature() && !rExclList.FindAttrib( pAttrib->Which() ) )
+                
+                
+                
+
                 if ( !pAttrib->IsFeature() && !aCharAttribList.FindEmptyAttrib( pAttrib->Which(), nIndex ) )
                 {
                     if ( !pAttrib->IsEdge() )
@@ -1356,13 +1356,13 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
                 else
                     bResort = true;
             }
-            // 2: Attribute starts before, goes past the Index...
+            
             else if ( ( pAttrib->GetStart() < nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
             {
                 DBG_ASSERT( !pAttrib->IsFeature(), "Large Feature?!" );
                 pAttrib->Expand( nNew );
             }
-            // 3: Attribute starts on index...
+            
             else if ( pAttrib->GetStart() == nIndex )
             {
                 if ( pAttrib->IsFeature() )
@@ -1378,7 +1378,7 @@ void ContentNode::ExpandAttribs( sal_Int32 nIndex, sal_Int32 nNew, SfxItemPool& 
                         bExpand = true;
                         if( bExpandedEmptyAtIndexNull )
                         {
-                            // Check if this kind of attribut was empty and expanded here...
+                            
                             sal_uInt16 nW = pAttrib->GetItem()->Which();
                             for ( sal_uInt16 nA = 0; nA < nAttr; nA++ )
                             {
@@ -1443,8 +1443,8 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
     if ( !nDeleted )
         return;
 
-    // Since features are treated differently than normal character attributes,
-    // can also the order of the start list be change!
+    
+    
     bool bResort = false;
     bool bDelAttr = false;
     sal_Int32 nEndChanges = nIndex+nDeleted;
@@ -1457,34 +1457,34 @@ void ContentNode::CollapsAttribs( sal_Int32 nIndex, sal_Int32 nDeleted, SfxItemP
         bDelAttr = false;
         if ( pAttrib->GetEnd() >= nIndex )
         {
-            // Move all Attribute behind the insert point...
+            
             if ( pAttrib->GetStart() >= nEndChanges )
             {
                 pAttrib->MoveBackward( nDeleted );
             }
-            // 1. Delete Internal attributes...
+            
             else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() <= nEndChanges ) )
             {
-                // Special case: Attribute covers the area exactly
-                // => keep as empty Attribute.
+                
+                
                 if ( !pAttrib->IsFeature() && ( pAttrib->GetStart() == nIndex ) && ( pAttrib->GetEnd() == nEndChanges ) )
-                    pAttrib->GetEnd() = nIndex; // empty
+                    pAttrib->GetEnd() = nIndex; 
                 else
                     bDelAttr = true;
             }
-            // 2. Attribute starts earlier, ends inside or behind it ...
+            
             else if ( ( pAttrib->GetStart() <= nIndex ) && ( pAttrib->GetEnd() > nIndex ) )
             {
                 DBG_ASSERT( !pAttrib->IsFeature(), "Collapsing Feature!" );
-                if ( pAttrib->GetEnd() <= nEndChanges ) // ends inside
+                if ( pAttrib->GetEnd() <= nEndChanges ) 
                     pAttrib->GetEnd() = nIndex;
                 else
-                    pAttrib->Collaps( nDeleted );       // ends behind
+                    pAttrib->Collaps( nDeleted );       
             }
-            // 3. Attribute starts inside, ending behind ...
+            
             else if ( ( pAttrib->GetStart() >= nIndex ) && ( pAttrib->GetEnd() > nEndChanges ) )
             {
-                // Features not allowed to expand!
+                
                 if ( pAttrib->IsFeature() )
                 {
                     pAttrib->MoveBackward( nDeleted );
@@ -1539,12 +1539,12 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
     {
         if ( pAttrib->GetEnd() < nCut )
         {
-            // remain unchanged ....
+            
             ;
         }
         else if ( pAttrib->GetEnd() == nCut )
         {
-            // must be copied as an empty attributes.
+            
             if ( bKeepEndingAttribs && !pAttrib->IsFeature() && !aCharAttribList.FindAttrib( pAttrib->GetItem()->Which(), 0 ) )
             {
                 EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, 0 );
@@ -1554,8 +1554,8 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
         }
         else if ( pAttrib->IsInside( nCut ) || ( !nCut && !pAttrib->GetStart() && !pAttrib->IsFeature() ) )
         {
-            // If cut is done right at the front then the attribute must be
-            // kept! Has to be copied and changed.
+            
+            
             EditCharAttrib* pNewAttrib = MakeCharAttrib( rPool, *(pAttrib->GetItem()), 0, pAttrib->GetEnd()-nCut );
             DBG_ASSERT( pNewAttrib, "MakeCharAttrib failed!" );
             aCharAttribList.InsertAttrib( pNewAttrib );
@@ -1563,7 +1563,7 @@ void ContentNode::CopyAndCutAttribs( ContentNode* pPrevNode, SfxItemPool& rPool,
         }
         else
         {
-            // Move all attributes in the current node (this)
+            
             CharAttribList::AttribsType::iterator it = rPrevAttribs.begin() + nAttr;
             aCharAttribList.InsertAttrib(rPrevAttribs.release(it).release());
 
@@ -1593,11 +1593,11 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
     EditCharAttrib* pAttrib = GetAttrib(rNextAttribs, nAttr);
     while ( pAttrib )
     {
-        // Move all attributes in the current node (this)
+        
         bool bMelted = false;
         if ( ( pAttrib->GetStart() == 0 ) && ( !pAttrib->IsFeature() ) )
         {
-            // Attributes can possibly be summarized as:
+            
             sal_Int32 nTmpAttr = 0;
             EditCharAttrib* pTmpAttrib = GetAttrib( aCharAttribList.GetAttribs(), nTmpAttr );
             while ( !bMelted && pTmpAttrib )
@@ -1610,7 +1610,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
                         pTmpAttrib->GetEnd() =
                             pTmpAttrib->GetEnd() + pAttrib->GetLen();
                         rNextAttribs.erase(rNextAttribs.begin()+nAttr);
-                        // Unsubscribe from the pool?!
+                        
                         bMelted = true;
                     }
                 }
@@ -1628,7 +1628,7 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
         }
         pAttrib = GetAttrib(rNextAttribs, nAttr);
     }
-    // For the Attributes that just moved over:
+    
     rNextAttribs.clear();
 
 #if OSL_DEBUG_LEVEL > 2
@@ -1638,12 +1638,12 @@ void ContentNode::AppendAttribs( ContentNode* pNextNode )
 
 void ContentNode::CreateDefFont()
 {
-    // First use the information from the style ...
+    
     SfxStyleSheet* pS = aContentAttribs.GetStyleSheet();
     if ( pS )
         CreateFont( GetCharAttribs().GetDefFont(), pS->GetItemSet() );
 
-    // ... then iron out the hard paragraph formatting...
+    
     CreateFont( GetCharAttribs().GetDefFont(),
         GetContentAttribs().GetItems(), pS == NULL );
 }
@@ -1653,9 +1653,9 @@ void ContentNode::SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyl
     aContentAttribs.SetStyleSheet( pS );
 
 
-    // First use the information from the style ...
+    
     GetCharAttribs().GetDefFont() = rFontFromStyle;
-    // ... then iron out the hard paragraph formatting...
+    
     CreateFont( GetCharAttribs().GetDefFont(),
         GetContentAttribs().GetItems(), pS == NULL );
 }
@@ -1781,7 +1781,7 @@ SvxTabStop ContentAttribs::FindTabStop( sal_Int32 nCurPos, sal_uInt16 nDefTab )
             return rTab;
     }
 
-    // Determine DefTab ...
+    
     SvxTabStop aTabStop;
     const sal_Int32 x = nCurPos / nDefTab + 1;
     aTabStop.GetTabPos() = nDefTab * x;
@@ -1792,16 +1792,16 @@ void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
 {
     sal_Bool bStyleChanged = ( pStyle != pS );
     pStyle = pS;
-    // Only when other style sheet, not when current style sheet modified
+    
     if ( pStyle && bStyleChanged )
     {
-        // Selectively remove the attributes from the paragraph formatting
-        // which are specified in the style, so that the attributes of the
-        // style can have an affect.
+        
+        
+        
         const SfxItemSet& rStyleAttribs = pStyle->GetItemSet();
         for ( sal_uInt16 nWhich = EE_PARA_START; nWhich <= EE_CHAR_END; nWhich++ )
         {
-            // Don't change bullet on/off
+            
             if ( ( nWhich != EE_PARA_BULLETSTATE ) && ( rStyleAttribs.GetItemState( nWhich ) == SFX_ITEM_ON ) )
                 aAttribSet.ClearItem( nWhich );
         }
@@ -1810,7 +1810,7 @@ void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
 
 const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich ) const
 {
-    // Hard paragraph attributes take precedence!
+    
     const SfxItemSet* pTakeFrom = &aAttribSet;
     if ( pStyle && ( aAttribSet.GetItemState( nWhich, false ) != SFX_ITEM_ON  ) )
         pTakeFrom = &pStyle->GetItemSet();
@@ -1866,7 +1866,7 @@ EditDoc::EditDoc( SfxItemPool* pPool ) :
     bOwnerOfPool(pPool ? false : true),
     bModified(false)
 {
-    // Don't create a empty node, Clear() will be called in EditEngine-CTOR
+    
 };
 
 EditDoc::~EditDoc()
@@ -1981,12 +1981,12 @@ void CreateFont( SvxFont& rFont, const SfxItemSet& rSet, bool bSearchInParent, s
     if ( bSearchInParent || ( rSet.GetItemState( EE_CHAR_RELIEF ) == SFX_ITEM_ON ) )
         rFont.SetRelief( (FontRelief)((const SvxCharReliefItem&)rSet.Get( EE_CHAR_RELIEF )).GetValue() );
 
-    // If comparing the entire font, or if checking before each alteration
-    // whether the value changes, remains relatively the same thing.
-    // So possible one MakeUniqFont more in the font, but as a result a quicker
-    // abortion of the query, or one must each time check bChanged.
+    
+    
+    
+    
     if ( rFont == aPrevFont  )
-        rFont = aPrevFont;  // => The same ImpPointer for IsSameInstance
+        rFont = aPrevFont;  
 }
 
 void EditDoc::CreateDefFont( sal_Bool bUseStyles )
@@ -2074,10 +2074,10 @@ sal_Int32 EditDoc::Count() const
 OUString EditDoc::GetSepStr( LineEnd eEnd )
 {
     if ( eEnd == LINEEND_CR )
-        return OUString("\015"); // 0x0d
+        return OUString("\015"); 
     if ( eEnd == LINEEND_LF )
-        return OUString("\012"); // 0x0a
-    return OUString("\015\012"); // 0x0d, 0x0a
+        return OUString("\012"); 
+    return OUString("\015\012"); 
 }
 
 OUString EditDoc::GetText( LineEnd eEnd ) const
@@ -2133,10 +2133,10 @@ OUString EditDoc::GetParaAsString(
         if ( pNextFeature && ( pNextFeature->GetStart() < nEnd ) )
             nEnd = pNextFeature->GetStart();
         else
-            pNextFeature = 0;   // Feature does not interest the below
+            pNextFeature = 0;   
 
         DBG_ASSERT( nEnd >= nIndex, "End in front of the index?" );
-        //!! beware of sub string length  of -1
+        
         if (nEnd > nIndex)
             aStr += pNode->GetString().copy(nIndex, nEnd - nIndex);
 
@@ -2180,7 +2180,7 @@ sal_uLong EditDoc::GetTextLen() const
     {
         const ContentNode* pNode = GetObject( nNode );
         nLen += pNode->Len();
-        // Fields can be longer than the placeholder in the Node
+        
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for (sal_Int32 nAttr = rAttrs.size(); nAttr; )
         {
@@ -2229,7 +2229,7 @@ void EditDoc::SetModified( bool b )
 
 EditPaM EditDoc::RemoveText()
 {
-    // Keep the old ItemSet, to keep the chart Font.
+    
     ContentNode* pPrevFirstNode = GetObject(0);
     SfxStyleSheet* pPrevStyle = pPrevFirstNode->GetStyleSheet();
     SfxItemSet aPrevSet( pPrevFirstNode->GetContentAttribs().GetItems() );
@@ -2274,16 +2274,16 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
     OUString aStr = aPaM.GetNode()->Copy( aPaM.GetIndex() );
     aPaM.GetNode()->Erase( aPaM.GetIndex() );
 
-    // the paragraph attributes...
+    
     ContentAttribs aContentAttribs( aPaM.GetNode()->GetContentAttribs() );
 
-    // for a new paragraph we like to have the bullet/numbering visible by default
+    
     aContentAttribs.GetItems().Put( SfxBoolItem( EE_PARA_BULLETSTATE, true), EE_PARA_BULLETSTATE );
 
-    // ContenNode constructor copies also the paragraph attributes
+    
     ContentNode* pNode = new ContentNode( aStr, aContentAttribs );
 
-    // Copy the Default Font
+    
     pNode->GetCharAttribs().GetDefFont() = aPaM.GetNode()->GetCharAttribs().GetDefFont();
     SfxStyleSheet* pStyle = aPaM.GetNode()->GetStyleSheet();
     if ( pStyle )
@@ -2296,7 +2296,7 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
         }
     }
 
-    // Character attributes may need to be copied or trimmed:
+    
     pNode->CopyAndCutAttribs( aPaM.GetNode(), GetItemPool(), bKeepEndingAttribs );
 
     Insert(nPos+1, pNode);
@@ -2315,7 +2315,7 @@ EditPaM EditDoc::InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem  )
     aPaM.GetNode()->Insert( OUString(CH_FEATURE), aPaM.GetIndex() );
     aPaM.GetNode()->ExpandAttribs( aPaM.GetIndex(), 1, GetItemPool() );
 
-    // Create a feature-attribute for the feature...
+    
     EditCharAttrib* pAttrib = MakeCharAttrib( GetItemPool(), rItem, aPaM.GetIndex(), aPaM.GetIndex()+1 );
     DBG_ASSERT( pAttrib, "Why can not the feature be created?" );
     aPaM.GetNode()->GetCharAttribs().InsertAttrib( pAttrib );
@@ -2330,12 +2330,12 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
 {
     const EditPaM aPaM( pLeft, pLeft->Len() );
 
-    // First the attributes, otherwise nLen will not be correct!
+    
     pLeft->AppendAttribs( pRight );
-    // then the Text...
+    
     pLeft->Append(pRight->GetString());
 
-    // the one to the right disappears.
+    
     RemoveItemsFromPool(*pRight);
     sal_Int32 nRight = GetPos( pRight );
     Remove( nRight );
@@ -2347,7 +2347,7 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
 
 EditPaM EditDoc::RemoveChars( EditPaM aPaM, sal_Int32 nChars )
 {
-    // Maybe remove Features!
+    
     aPaM.GetNode()->Erase( aPaM.GetIndex(), nChars );
     aPaM.GetNode()->CollapsAttribs( aPaM.GetIndex(), nChars, GetItemPool() );
 
@@ -2361,10 +2361,10 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal
     DBG_ASSERT( pNode, "What to do with the attribute?" );
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
 
-    // for Optimization:
-    // This ends at the beginning of the selection => can be expanded
+    
+    
     EditCharAttrib* pEndingAttrib = 0;
-    // This starts at the end of the selection => can be expanded
+    
     EditCharAttrib* pStartingAttrib = 0;
 
     DBG_ASSERT( nStart <= nEnd, "Small miscalculations in InsertAttribInSelection" );
@@ -2375,7 +2375,7 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, sal_Int32 nStart, sal
          ( *(pStartingAttrib->GetItem()) == rPoolItem ) &&
          ( *(pEndingAttrib->GetItem()) == rPoolItem ) )
     {
-        // Will become a large Attribute.
+        
         pEndingAttrib->GetEnd() = pStartingAttrib->GetEnd();
         GetItemPool().Remove( *(pStartingAttrib->GetItem()) );
         pNode->GetCharAttribs().Remove(pStartingAttrib);
@@ -2406,16 +2406,16 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32
     DBG_ASSERT( pNode, "What to do with the attribute?" );
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribute to large!" );
 
-    // This ends at the beginning of the selection => can be expanded
+    
     rpEnding = 0;
-    // This starts at the end of the selection => can be expanded
+    
     rpStarting = 0;
 
     bool bChanged = false;
 
     DBG_ASSERT( nStart <= nEnd, "Small miscalculations in InsertAttribInSelection" );
 
-    // iterate over the attributes ...
+    
     sal_Int32 nAttr = 0;
     CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
     EditCharAttrib* pAttr = GetAttrib(rAttribs, nAttr);
@@ -2425,40 +2425,40 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32
         sal_uInt16 nAttrWhich = pAttr->Which();
         if ( ( nAttrWhich < EE_FEATURE_START ) && ( !nWhich || ( nAttrWhich == nWhich ) ) )
         {
-            // Attribute starts in Selection
+            
             if ( ( pAttr->GetStart() >= nStart ) && ( pAttr->GetStart() <= nEnd ) )
             {
                 bChanged = true;
                 if ( pAttr->GetEnd() > nEnd )
                 {
-                    pAttr->GetStart() = nEnd;   // then it starts after this
+                    pAttr->GetStart() = nEnd;   
                     rpStarting = pAttr;
                     if ( nWhich )
-                        break;  // There can be no further attributes here
+                        break;  
                 }
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
                 {
-                    // Delete feature only if on the exact spot
+                    
                     bRemoveAttrib = true;
                 }
             }
 
-            // Attribute ends in Selection
+            
             else if ( ( pAttr->GetEnd() >= nStart ) && ( pAttr->GetEnd() <= nEnd ) )
             {
                 bChanged = true;
                 if ( ( pAttr->GetStart() < nStart ) && !pAttr->IsFeature() )
                 {
-                    pAttr->GetEnd() = nStart;   // then it ends here
+                    pAttr->GetEnd() = nStart;   
                     rpEnding = pAttr;
                 }
                 else if ( !pAttr->IsFeature() || ( pAttr->GetStart() == nStart ) )
                 {
-                    // Delete feature only if on the exact spot
+                    
                     bRemoveAttrib = true;
                 }
             }
-            // Attribute overlaps the selection
+            
             else if ( ( pAttr->GetStart() <= nStart ) && ( pAttr->GetEnd() >= nEnd ) )
             {
                 bChanged = true;
@@ -2467,23 +2467,23 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32
                     pAttr->GetStart() = nEnd;
                     rpStarting = pAttr;
                     if ( nWhich )
-                        break;  // There can be further attributes!
+                        break;  
                 }
                 else if ( pAttr->GetEnd() == nEnd )
                 {
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
                     if ( nWhich )
-                        break;  // There can be further attributes!
+                        break;  
                 }
-                else // Attribute must be split ...
+                else 
                 {
                     sal_Int32 nOldEnd = pAttr->GetEnd();
                     pAttr->GetEnd() = nStart;
                     rpEnding = pAttr;
                     InsertAttrib( *pAttr->GetItem(), pNode, nEnd, nOldEnd );
                     if ( nWhich )
-                        break;  // There can be further attributes!
+                        break;  
                 }
             }
         }
@@ -2501,7 +2501,7 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32
 
     if ( bChanged )
     {
-        // char attributes need to be sorted by start again
+        
         pNode->GetCharAttribs().ResortAttribs();
         SetModified(true);
     }
@@ -2511,8 +2511,8 @@ sal_Bool EditDoc::RemoveAttribs( ContentNode* pNode, sal_Int32 nStart, sal_Int32
 
 void EditDoc::InsertAttrib( const SfxPoolItem& rPoolItem, ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd )
 {
-    // This method no longer checks whether a corresponding attribute already
-    // exists at this place!
+    
+    
     EditCharAttrib* pAttrib = MakeCharAttrib( GetItemPool(), rPoolItem, nStart, nEnd );
     DBG_ASSERT( pAttrib, "MakeCharAttrib failed!" );
     pNode->GetCharAttribs().InsertAttrib( pAttrib );
@@ -2528,22 +2528,22 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd
     }
     else
     {
-        // Check whether already a new attribute with WhichId exists at this place:
+        
         CharAttribList& rAttrList = pNode->GetCharAttribs();
         EditCharAttrib* pAttr = rAttrList.FindEmptyAttrib( rPoolItem.Which(), nStart );
         if ( pAttr )
         {
-            // Remove attribute....
+            
             rAttrList.Release(pAttr);
         }
 
-        // check whether 'the same' attribute exist at this place.
+        
         pAttr = rAttrList.FindAttrib( rPoolItem.Which(), nStart );
         if ( pAttr )
         {
-            if ( pAttr->IsInside( nStart ) )    // split
+            if ( pAttr->IsInside( nStart ) )    
             {
-                // check again if really splitting, or return !
+                
                 sal_Int32 nOldEnd = pAttr->GetEnd();
                 pAttr->GetEnd() = nStart;
                 EditCharAttrib* pNew = MakeCharAttrib( GetItemPool(), *(pAttr->GetItem()), nStart, nOldEnd );
@@ -2552,7 +2552,7 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_Int32 nStart, sal_Int32 nEnd
             else if ( pAttr->GetEnd() == nStart )
             {
                 DBG_ASSERT( !pAttr->IsEmpty(), "Still an empty attribute?" );
-                // Check if exactly the same attribute
+                
                 if ( *(pAttr->GetItem()) == rPoolItem )
                     return;
             }
@@ -2570,30 +2570,30 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
 
     sal_uInt16 nAttr = 0;
     EditCharAttrib* pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
-    // No Selection...
+    
     if ( nStartPos == nEndPos )
     {
         while ( pAttr && ( pAttr->GetStart() <= nEndPos) )
         {
             const SfxPoolItem* pItem = 0;
-            // Attribute is about...
+            
             if ( ( pAttr->GetStart() < nStartPos ) && ( pAttr->GetEnd() > nStartPos ) )
                 pItem = pAttr->GetItem();
-            // Attribute ending here is not empty
+            
             else if ( ( pAttr->GetStart() < nStartPos ) && ( pAttr->GetEnd() == nStartPos ) )
             {
                 if ( !pNode->GetCharAttribs().FindEmptyAttrib( pAttr->GetItem()->Which(), nStartPos ) )
                     pItem = pAttr->GetItem();
             }
-            // Attribute ending here is empty
+            
             else if ( ( pAttr->GetStart() == nStartPos ) && ( pAttr->GetEnd() == nStartPos ) )
             {
                 pItem = pAttr->GetItem();
             }
-            // Attribute starts here
+            
             else if ( ( pAttr->GetStart() == nStartPos ) && ( pAttr->GetEnd() > nStartPos ) )
             {
-                if ( nStartPos == 0 )   // special case
+                if ( nStartPos == 0 )   
                     pItem = pAttr->GetItem();
             }
 
@@ -2617,31 +2617,31 @@ void EditDoc::FindAttribs( ContentNode* pNode, sal_Int32 nStartPos, sal_Int32 nE
             pAttr = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
         }
     }
-    else    // Selection
+    else    
     {
         while ( pAttr && ( pAttr->GetStart() < nEndPos) )
         {
             const SfxPoolItem* pItem = 0;
-            // Attribut is about...
+            
             if ( ( pAttr->GetStart() <= nStartPos ) && ( pAttr->GetEnd() >= nEndPos ) )
                 pItem = pAttr->GetItem();
-            // Attribute starts right in the middle ...
+            
             else if ( pAttr->GetStart() >= nStartPos )
             {
-                // !!! pItem = pAttr->GetItem();
-                // PItem is simply not enough, since one for example in case
-                // of Shadow, would never find an unequal item, since such a
-                // item represents its presence by absence!
-                // If (...)
-                // It needs to be examined on exactly the same attribute at the
-                // breaki point, which is quite expensive.
-                // Since optimazation is done when inserting the  attributes
-                // this case does not appear so fast ...
-                // So based on the need for speed:
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
                 rCurSet.InvalidateItem( pAttr->GetItem()->Which() );
 
             }
-            // Attribute ends in the middle of it ...
+            
             else if ( pAttr->GetEnd() > nStartPos )
             {
                 rCurSet.InvalidateItem( pAttr->GetItem()->Which() );
@@ -2694,16 +2694,16 @@ CharAttribList::~CharAttribList()
 
 void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
 {
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// optimize: binary search?    !
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    // Maybe just simply iterate backwards:
-    // The most common and critical case: Attributes are already sorted
-    // (InsertBinTextObject!) binary search would not be optimal here.
-    // => Would bring something!
 
-    const sal_Int32 nStart = pAttrib->GetStart(); // may be better for Comp.Opt.
+
+
+    
+    
+    
+    
+
+    const sal_Int32 nStart = pAttrib->GetStart(); 
 
     if ( pAttrib->IsEmpty() )
         bHasEmptyAttribs = true;
@@ -2742,7 +2742,7 @@ void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
                     rItemPool.Remove(*rNext.GetItem());
                     aAttribs.erase(aAttribs.begin()+nNext);
                 }
-                break;  // only 1 attr with same which can start here.
+                break;  
             }
             else if (rNext.GetStart() > rAttr.GetEnd())
             {
@@ -2759,8 +2759,8 @@ sal_Int32 CharAttribList::Count() const
 
 const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos ) const
 {
-    // Backwards, if one ends where the next starts.
-    // => The starting one is the valid one ...
+    
+    
     AttribsType::const_reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
     for (; it != itEnd; ++it)
     {
@@ -2773,8 +2773,8 @@ const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 n
 
 EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_Int32 nPos )
 {
-    // Backwards, if one ends where the next starts.
-    // => The starting one is the valid one ...
+    
+    
     AttribsType::reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
     for (; it != itEnd; ++it)
     {
@@ -2864,8 +2864,8 @@ void CharAttribList::SetHasEmptyAttribs(bool b)
 
 bool CharAttribList::HasBoundingAttrib( sal_Int32 nBound ) const
 {
-    // Backwards, if one ends where the next starts.
-    // => The starting one is the valid one ...
+    
+    
     AttribsType::const_reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
     for (; it != itEnd; ++it)
     {
@@ -2926,15 +2926,15 @@ public:
 
 const EditCharAttrib* CharAttribList::FindFeature( sal_Int32 nPos ) const
 {
-    // First, find the first attribute that starts at or after specified position.
+    
     AttribsType::const_iterator it =
         std::find_if(aAttribs.begin(), aAttribs.end(), FindByStartPos(nPos));
 
     if (it == aAttribs.end())
-        // All attributes are before the specified position.
+        
         return NULL;
 
-    // And find the first attribute with feature.
+    
     it = std::find_if(it, aAttribs.end(), boost::bind(&EditCharAttrib::IsFeature, _1) == true);
     return it == aAttribs.end() ? NULL : &(*it);
 }
@@ -3045,11 +3045,11 @@ EditEngineItemPool::~EditEngineItemPool()
 
 SvStream& EditEngineItemPool::Store( SvStream& rStream ) const
 {
-    // for a 3.1 export a hack has to be installed, as in there is a BUG in
-    // SfxItemSet::Load, but not subsequently after 3.1.
+    
+    
 
-    // The selected range must be kept after Store, because itemsets are not
-    // stored until then...
+    
+    
 
     long nVersion = rStream.GetVersion();
     sal_Bool b31Format = ( nVersion && ( nVersion <= SOFFICE_FILEFORMAT_31 ) )

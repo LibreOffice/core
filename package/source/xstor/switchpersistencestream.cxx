@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/diagnose.h>
@@ -30,9 +30,9 @@ struct SPStreamData_Impl
 {
     sal_Bool m_bInStreamBased;
 
-    // the streams below are not visible from outside so there is no need to remember position
+    
 
-    // original stream related members
+    
     uno::Reference< io::XStream > m_xOrigStream;
     uno::Reference< io::XTruncate > m_xOrigTruncate;
     uno::Reference< io::XSeekable > m_xOrigSeekable;
@@ -101,11 +101,11 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
 
     if ( m_pStreamData && m_pStreamData->m_xOrigSeekable.is() )
     {
-        // check that the length is the same
+        
         if ( m_pStreamData->m_xOrigSeekable->getLength() != xNewSeekable->getLength() )
             throw uno::RuntimeException();
 
-        // get the current position
+        
         nPos = m_pStreamData->m_xOrigSeekable->getPosition();
         bInOpen = m_pStreamData->m_bInOpen;
         bOutOpen = m_pStreamData->m_bOutOpen;
@@ -135,11 +135,11 @@ void SwitchablePersistenceStream::SwitchPersistenceTo( const uno::Reference< io:
 
     if ( m_pStreamData && m_pStreamData->m_xOrigSeekable.is() )
     {
-        // check that the length is the same
+        
         if ( m_pStreamData->m_xOrigSeekable->getLength() != xNewSeekable->getLength() )
             throw uno::RuntimeException();
 
-        // get the current position
+        
         nPos = m_pStreamData->m_xOrigSeekable->getPosition();
         bInOpen = m_pStreamData->m_bInOpen;
         bOutOpen = m_pStreamData->m_bOutOpen;
@@ -170,7 +170,7 @@ void SwitchablePersistenceStream::CopyAndSwitchPersistenceTo( const uno::Referen
     }
     else
     {
-        // the provided stream must be empty
+        
         xTargetSeek = uno::Reference< io::XSeekable >( xTargetStream, uno::UNO_QUERY_THROW );
         if ( xTargetSeek->getLength() )
             throw io::IOException();
@@ -210,7 +210,7 @@ void SwitchablePersistenceStream::CloseAll_Impl()
     }
 }
 
-// com::sun::star::io::XStream
+
 uno::Reference< io::XInputStream > SAL_CALL SwitchablePersistenceStream::getInputStream(  )
     throw (uno::RuntimeException)
 {
@@ -231,7 +231,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     return static_cast< io::XOutputStream* >( this );
 }
 
-// com::sun::star::io::XInputStream
+
 ::sal_Int32 SAL_CALL SwitchablePersistenceStream::readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -240,7 +240,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     if ( !m_pStreamData )
         throw io::NotConnectedException();
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigInStream.is() )
         throw uno::RuntimeException();
 
@@ -255,7 +255,7 @@ uno::Reference< io::XOutputStream > SAL_CALL SwitchablePersistenceStream::getOut
     if ( !m_pStreamData )
         throw io::NotConnectedException();
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigInStream.is() )
         throw uno::RuntimeException();
 
@@ -270,7 +270,7 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
     if ( !m_pStreamData )
         throw io::NotConnectedException();
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigInStream.is() )
         throw uno::RuntimeException();
 
@@ -285,7 +285,7 @@ void SAL_CALL SwitchablePersistenceStream::skipBytes( ::sal_Int32 nBytesToSkip )
     if ( !m_pStreamData )
         throw io::NotConnectedException();
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigInStream.is() )
         throw uno::RuntimeException();
 
@@ -305,7 +305,7 @@ void SAL_CALL SwitchablePersistenceStream::closeInput()
         CloseAll_Impl();
 }
 
-// com::sun::star::io::XOutputStream
+
 void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sal_Int8 >& aData )
     throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException)
 {
@@ -317,7 +317,7 @@ void SAL_CALL SwitchablePersistenceStream::writeBytes( const uno::Sequence< ::sa
     if ( m_pStreamData->m_bInStreamBased )
         throw io::IOException();
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigOutStream.is() )
         throw uno::RuntimeException();
 
@@ -333,12 +333,12 @@ void SAL_CALL SwitchablePersistenceStream::flush(  )
     {
         OSL_FAIL( "flush() is not acceptable!\n" );
         return;
-        // in future throw exception, for now some code might call flush() on closed stream
-        // since file ucp implementation allows it
-        // throw io::NotConnectedException();
+        
+        
+        
     }
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigOutStream.is() )
         throw uno::RuntimeException();
 
@@ -358,7 +358,7 @@ void SAL_CALL SwitchablePersistenceStream::closeOutput(  )
         CloseAll_Impl();
 }
 
-// com::sun::star::io::XTruncate
+
 void SAL_CALL SwitchablePersistenceStream::truncate(  )
     throw (io::IOException, uno::RuntimeException)
 {
@@ -370,14 +370,14 @@ void SAL_CALL SwitchablePersistenceStream::truncate(  )
     if ( m_pStreamData->m_bInStreamBased )
         throw io::IOException();
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigTruncate.is() )
         throw uno::RuntimeException();
 
     m_pStreamData->m_xOrigTruncate->truncate();
 }
 
-// com::sun::star::io::XSeekable
+
 void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
     throw (lang::IllegalArgumentException, io::IOException, uno::RuntimeException)
 {
@@ -386,7 +386,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
     if ( !m_pStreamData )
         throw io::NotConnectedException();
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigSeekable.is() )
         throw uno::RuntimeException();
 
@@ -401,7 +401,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
     if ( !m_pStreamData )
         throw io::NotConnectedException();
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigSeekable.is() )
         throw uno::RuntimeException();
 
@@ -416,7 +416,7 @@ void SAL_CALL SwitchablePersistenceStream::seek( ::sal_Int64 location )
     if ( !m_pStreamData )
         throw io::NotConnectedException();
 
-    // the original stream data should be provided
+    
     if ( !m_pStreamData->m_xOrigSeekable.is() )
         throw uno::RuntimeException();
 

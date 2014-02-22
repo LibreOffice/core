@@ -170,7 +170,7 @@ Interceptor::addStatusListener(
         return;
 
     if(URL.Complete == m_aInterceptedURL[0])
-    {   // Save
+    {   
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[0];
         aStateEvent.FeatureDescriptor = "Update";
@@ -194,7 +194,7 @@ Interceptor::addStatusListener(
     if(URL.Complete == m_aInterceptedURL[i] ||
        URL.Complete == m_aInterceptedURL[++i] ||
        URL.Complete == m_aInterceptedURL[++i] )
-    {   // Close and return
+    {   
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[i];
         aStateEvent.FeatureDescriptor = "Close and Return";
@@ -216,7 +216,7 @@ Interceptor::addStatusListener(
     }
 
     if(URL.Complete == m_aInterceptedURL[5])
-    {   // SaveAs
+    {   
         frame::FeatureStateEvent aStateEvent;
         aStateEvent.FeatureURL.Complete = m_aInterceptedURL[5];
         aStateEvent.FeatureDescriptor = "SaveCopyTo";
@@ -265,13 +265,13 @@ Interceptor::getInterceptedURLs(  )
         uno::RuntimeException
     )
 {
-    // now implemented as update
+    
 
     return m_aInterceptedURL;
 }
 
 
-// XDispatchProvider
+
 
 uno::Reference< frame::XDispatch > SAL_CALL
 Interceptor::queryDispatch(

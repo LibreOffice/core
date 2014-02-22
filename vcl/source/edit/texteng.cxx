@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -116,7 +116,7 @@ TextEngine::~TextEngine()
     delete mpIdleFormatter;
     delete mpDoc;
     delete mpTEParaPortions;
-    delete mpViews; // only the list, not the Views
+    delete mpViews; 
     delete mpRefDev;
     delete mpUndoManager;
     delete mpIMEInfos;
@@ -178,18 +178,18 @@ void TextEngine::SetFont( const Font& rFont )
     if ( rFont != maFont )
     {
         maFont = rFont;
-        // #i40221# As the font's color now defaults to transparent (since i35764)
-        //  we have to choose a useful textcolor in this case.
-        // Otherwise maTextColor and maFont.GetColor() are both transparent....
+        
+        
+        
         if( rFont.GetColor() == COL_TRANSPARENT )
             maTextColor = COL_BLACK;
         else
             maTextColor = rFont.GetColor();
 
-        // Do not allow transparent fonts because of selection
-        // (otherwise delete the background in ImplPaint later differently)
+        
+        
         maFont.SetTransparent( false );
-        // Tell VCL not to use the font color, use text color from OutputDevice
+        
         maFont.SetColor( COL_TRANSPARENT );
         Color aFillColor( maFont.GetFillColor() );
         aFillColor.SetTransparency( 0 );
@@ -334,7 +334,7 @@ bool TextEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
             case KEYFUNC_CUT:
             case KEYFUNC_PASTE: bDoesChange = true;
             break;
-            default:    // might get handled below
+            default:    
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
@@ -368,8 +368,8 @@ bool TextEngine::DoesKeyChangeText( const KeyEvent& rKeyEvent )
 bool TextEngine::IsSimpleCharInput( const KeyEvent& rKeyEvent )
 {
     if( rKeyEvent.GetCharCode() >= 32 && rKeyEvent.GetCharCode() != 127 &&
-        KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT) && // (ssa) #i45714#:
-        KEY_MOD2 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT) )  // check for Ctrl and Alt separately
+        KEY_MOD1 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT) && 
+        KEY_MOD2 != (rKeyEvent.GetKeyCode().GetModifier() & ~KEY_SHIFT) )  
     {
         return true;
     }
@@ -419,7 +419,7 @@ OUString TextEngine::GetText( const TextSelection& rSel, LineEnd aSeparator ) co
         sal_Int32 nEndPos = pNode->GetText().getLength();
         if ( nNode == nStartPara )
             nStartPos = aSel.GetStart().GetIndex();
-        if ( nNode == nEndPara ) // may also be == nStart!
+        if ( nNode == nEndPara ) 
             nEndPos = aSel.GetEnd().GetIndex();
 
         aText += pNode->GetText().copy( nStartPos, nEndPos-nStartPos );
@@ -448,7 +448,7 @@ void TextEngine::SetText( const OUString& rText )
     ImpRemoveText();
 
     bool bUndoCurrentlyEnabled = IsUndoEnabled();
-    // the manually inserted text cannot be reversed by the user
+    
     EnableUndo( false );
 
     TextPaM aStartPaM( 0, 0 );
@@ -463,12 +463,12 @@ void TextEngine::SetText( const OUString& rText )
         TextView* pView = (*mpViews)[ nView ];
         pView->ImpSetSelection( aEmptySel );
 
-        // if no text, then no Format&Update => the text remains
+        
         if ( rText.isEmpty() && GetUpdateMode() )
             pView->Invalidate();
     }
 
-    if( rText.isEmpty() )  // otherwise needs invalidation later; !bFormatted is sufficient
+    if( rText.isEmpty() )  
         mnCurTextHeight = 0;
 
     FormatAndUpdate();
@@ -480,7 +480,7 @@ void TextEngine::SetText( const OUString& rText )
 
 void TextEngine::CursorMoved( sal_uLong nNode )
 {
-    // delete empty attribute; but only if paragraph is not empty!
+    
     TextNode* pNode = mpDoc->GetNodes().GetObject( nNode );
     if ( pNode && pNode->GetCharAttribs().HasEmptyAttribs() && !pNode->GetText().isEmpty() )
         pNode->GetCharAttribs().DeleteEmptyAttribs();
@@ -491,11 +491,11 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndo
     DBG_ASSERT( nChars, "ImpRemoveChars: 0 Chars?!" );
     if ( IsUndoEnabled() && !IsInUndo() )
     {
-        // attributes have to be saved for UNDO before RemoveChars!
+        
         TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
         OUString aStr( pNode->GetText().copy( rPaM.GetIndex(), nChars ) );
 
-        // check if attributes are being deleted or changed
+        
         sal_uInt16 nStart = rPaM.GetIndex();
         sal_uInt16 nEnd = nStart + nChars;
         for ( sal_uInt16 nAttr = pNode->GetCharAttribs().Count(); nAttr; )
@@ -503,7 +503,7 @@ void TextEngine::ImpRemoveChars( const TextPaM& rPaM, sal_uInt16 nChars, SfxUndo
             TextCharAttrib* pAttr = pNode->GetCharAttribs().GetAttrib( --nAttr );
             if ( ( pAttr->GetEnd() >= nStart ) && ( pAttr->GetStart() < nEnd ) )
             {
-                break;  // for
+                break;  
             }
         }
             InsertUndo( new TextUndoRemoveChars( this, rPaM, aStr ) );
@@ -523,7 +523,7 @@ TextPaM TextEngine::ImpConnectParagraphs( sal_uLong nLeft, sal_uLong nRight )
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new TextUndoConnectParas( this, nLeft, pLeft->GetText().getLength() ) );
 
-    // first lookup Portions, as pRight is gone after ConnectParagraphs
+    
     TEParaPortion* pLeftPortion = mpTEParaPortions->GetObject( nLeft );
     TEParaPortion* pRightPortion = mpTEParaPortions->GetObject( nRight );
     DBG_ASSERT( pLeft && pLeftPortion, "ImpConnectParagraphs(1): Hidden Portion" );
@@ -536,7 +536,7 @@ TextPaM TextEngine::ImpConnectParagraphs( sal_uLong nLeft, sal_uLong nRight )
 
     mpTEParaPortions->Remove( nRight );
     delete pRightPortion;
-    // the right Node is deleted by EditDoc::ConnectParagraphs()
+    
 
     return aPaM;
 }
@@ -551,8 +551,8 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
     TextPaM aStartPaM( aSel.GetStart() );
     TextPaM aEndPaM( aSel.GetEnd() );
 
-    CursorMoved( aStartPaM.GetPara() ); // so that newly-adjusted attributes vanish
-    CursorMoved( aEndPaM.GetPara() );   // so that newly-adjusted attributes vanish
+    CursorMoved( aStartPaM.GetPara() ); 
+    CursorMoved( aEndPaM.GetPara() );   
 
     DBG_ASSERT( mpDoc->IsValidPaM( aStartPaM ), "ImpDeleteText(1): bad Index" );
     DBG_ASSERT( mpDoc->IsValidPaM( aEndPaM ), "ImpDeleteText(2): bad Index" );
@@ -560,16 +560,16 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
     sal_uLong nStartNode = aStartPaM.GetPara();
     sal_uLong nEndNode = aEndPaM.GetPara();
 
-    // remove all Nodes inbetween
+    
     for ( sal_uLong z = nStartNode+1; z < nEndNode; z++ )
     {
-        // always nStartNode+1, because of Remove()!
+        
         ImpRemoveParagraph( nStartNode+1 );
     }
 
     if ( nStartNode != nEndNode )
     {
-        // the remainder of StartNodes...
+        
         TextNode* pLeft = mpDoc->GetNodes().GetObject( nStartNode );
         sal_Int32 nChars = pLeft->GetText().getLength() - aStartPaM.GetIndex();
         if ( nChars )
@@ -580,8 +580,8 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
             pPortion->MarkSelectionInvalid( aStartPaM.GetIndex(), pLeft->GetText().getLength() );
         }
 
-        // the beginning of EndNodes....
-        nEndNode = nStartNode+1;    // the other paragraphs were deleted
+        
+        nEndNode = nStartNode+1;    
         nChars = aEndPaM.GetIndex();
         if ( nChars )
         {
@@ -593,7 +593,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
             pPortion->MarkSelectionInvalid( 0, pPortion->GetNode()->GetText().getLength() );
         }
 
-        // connect....
+        
         aStartPaM = ImpConnectParagraphs( nStartNode, nEndNode );
     }
     else
@@ -606,7 +606,7 @@ TextPaM TextEngine::ImpDeleteText( const TextSelection& rSel )
         pPortion->MarkInvalid( aEndPaM.GetIndex(), aStartPaM.GetIndex() - aEndPaM.GetIndex() );
     }
 
-//  UpdateSelections();
+
     TextModified();
     return aStartPaM;
 }
@@ -616,7 +616,7 @@ void TextEngine::ImpRemoveParagraph( sal_uLong nPara )
     TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
 
-    // the Node is handled by Undo and is deleted if appropriate
+    
     mpDoc->GetNodes().Remove( nPara );
     if ( IsUndoEnabled() && !IsInUndo() )
         InsertUndo( new TextUndoDelPara( this, pNode, nPara ) );
@@ -643,7 +643,7 @@ bool TextEngine::IsInputSequenceCheckingRequired( sal_Unicode c, const TextSelec
 {
     SvtCTLOptions aCTLOptions;
 
-    // get the index that really is first
+    
     sal_uInt16 nFirstPos = rCurSel.GetStart().GetIndex();
     sal_uInt16 nMaxPos   = rCurSel.GetEnd().GetIndex();
     if (nMaxPos < nFirstPos)
@@ -690,7 +690,7 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
     }
     else if ( bDoOverwrite )
     {
-        // if selection, then don't overwrite a character
+        
         TextSelection aTmpSel( aPaM );
         aTmpSel.GetEnd().GetIndex()++;
         ImpDeleteText( aTmpSel );
@@ -707,15 +707,15 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
             sal_Int16 nCheckMode = aCTLOptions.IsCTLSequenceCheckingRestricted() ?
                     i18n::InputSequenceCheckMode::STRICT : i18n::InputSequenceCheckMode::BASIC;
 
-            // the text that needs to be checked is only the one
-            // before the current cursor position
+            
+            
             OUString aOldText( mpDoc->GetText( aPaM.GetPara() ).copy(0, nTmpPos) );
             OUString aNewText( aOldText );
             if (aCTLOptions.IsCTLSequenceCheckingTypeAndReplace())
             {
                 xISC->correctInputSequence( aNewText, nTmpPos - 1, c, nCheckMode );
 
-                // find position of first character that has changed
+                
                 sal_Int32 nOldLen = aOldText.getLength();
                 sal_Int32 nNewLen = aNewText.getLength();
                 const sal_Unicode *pOldTxt = aOldText.getStr();
@@ -727,24 +727,24 @@ TextPaM TextEngine::ImpInsertText( sal_Unicode c, const TextSelection& rCurSel, 
 
                 OUString aChgText( aNewText.copy( nChgPos ) );
 
-                // select text from first pos to be changed to current pos
+                
                 TextSelection aSel( TextPaM( aPaM.GetPara(), (sal_uInt16) nChgPos ), aPaM );
 
                 if (!aChgText.isEmpty())
-                    // ImpInsertText implicitly handles undo...
+                    
                     return ImpInsertText( aSel, aChgText );
                 else
                     return aPaM;
             }
             else
             {
-                // should the character be ignored (i.e. not get inserted) ?
+                
                 if (!xISC->checkInputSequence( aOldText, nTmpPos - 1, c, nCheckMode ))
-                    return aPaM;    // nothing to be done -> no need for undo
+                    return aPaM;    
             }
         }
 
-        // at this point now we will insert the character 'normally' some lines below...
+        
     }
 
 
@@ -789,9 +789,9 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const OUString&
     {
         sal_Int32 nEnd = aText.indexOf( LINE_SEP, nStart );
         if (nEnd == -1)
-            nEnd = aText.getLength(); // do not dereference!
+            nEnd = aText.getLength(); 
 
-        // Start == End => empty line
+        
         if ( nEnd > nStart )
         {
             OUString aLine(aText.copy(nStart, nEnd-nStart));
@@ -810,7 +810,7 @@ TextPaM TextEngine::ImpInsertText( const TextSelection& rCurSel, const OUString&
         if ( nEnd < aText.getLength() )
             aPaM = ImpInsertParaBreak( aPaM );
 
-        if ( nEnd == aText.getLength() )    // #108611# prevent overflow in "nStart = nEnd+1" calculation
+        if ( nEnd == aText.getLength() )    
             break;
 
         nStart = nEnd+1;
@@ -852,7 +852,7 @@ TextPaM TextEngine::ImpInsertParaBreak( const TextPaM& rPaM, bool bKeepEndingAtt
     mpTEParaPortions->Insert( pNewPortion, aPaM.GetPara() );
     ImpParagraphInserted( aPaM.GetPara() );
 
-    CursorMoved( rPaM.GetPara() );  // if empty attribute created
+    CursorMoved( rPaM.GetPara() );  
     TextModified();
 
     if ( bFirstParaContentChanged )
@@ -893,7 +893,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
         FormatAndUpdate();
 
     TEParaPortion* pPortion = mpTEParaPortions->GetObject( rPaM.GetPara() );
-    //TextNode* pNode = mpDoc->GetNodes().GetObject( rPaM.GetPara() );
+    
 
     /*
       bSpecial: If behind the last character of a made up line, stay at the
@@ -920,7 +920,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
     }
     if ( !pLine )
     {
-        // Cursor at end of paragraph
+        
         DBG_ASSERT( rPaM.GetIndex() == nCurIndex, "GetEditCursor: Bad Index!" );
 
         pLine = pPortion->GetLines().back();
@@ -934,7 +934,7 @@ Rectangle TextEngine::GetEditCursor( const TextPaM& rPaM, bool bSpecial, bool bP
     nY += mnCharHeight;
     aEditCursor.Bottom() = nY-1;
 
-    // search within the line
+    
     long nX = ImpGetXPos( rPaM.GetPara(), pLine, rPaM.GetIndex(), bPreferPortionStart );
     aEditCursor.Left() = aEditCursor.Right() = nX;
     return aEditCursor;
@@ -945,7 +945,7 @@ long TextEngine::ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex
     DBG_ASSERT( ( nIndex >= pLine->GetStart() ) && ( nIndex <= pLine->GetEnd() ) , "ImpGetXPos: Bad parameters!" );
 
     bool bDoPreferPortionStart = bPreferPortionStart;
-    // Assure that the portion belongs to this line
+    
     if ( nIndex == pLine->GetStart() )
         bDoPreferPortionStart = true;
     else if ( nIndex == pLine->GetEnd() )
@@ -966,10 +966,10 @@ long TextEngine::ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex
 
     if ( nTextPortionStart != nIndex )
     {
-        // Search within portion...
+        
         if ( nIndex == ( nTextPortionStart + pPortion->GetLen() ) )
         {
-            // End of Portion
+            
             if ( ( pPortion->GetKind() == PORTIONKIND_TAB ) ||
                  ( !IsRightToLeft() && !pPortion->IsRightToLeft() ) ||
                  ( IsRightToLeft() && pPortion->IsRightToLeft() ) )
@@ -982,8 +982,8 @@ long TextEngine::ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex
                               ( !IsRightToLeft() && pNextPortion->IsRightToLeft() ) ||
                               ( IsRightToLeft() && !pNextPortion->IsRightToLeft() ) ) )
                     {
-//                        nX += pNextPortion->GetWidth();
-                        // End of the tab portion, use start of next for cursor pos
+
+                        
                         DBG_ASSERT( !bPreferPortionStart, "ImpGetXPos: How can we get here!" );
                         nX = ImpGetXPos( nPara, pLine, nIndex, true );
                     }
@@ -1008,7 +1008,7 @@ long TextEngine::ImpGetXPos( sal_uLong nPara, TextLine* pLine, sal_uInt16 nIndex
             }
         }
     }
-    else // if ( nIndex == pLine->GetStart() )
+    else 
     {
         if ( ( pPortion->GetKind() != PORTIONKIND_TAB ) &&
                 ( ( !IsRightToLeft() && pPortion->IsRightToLeft() ) ||
@@ -1072,7 +1072,7 @@ TextPaM TextEngine::GetPaM( const Point& rDocPos, bool bSmart )
         }
     }
 
-    // not found - go to last visible
+    
     sal_uLong nLastNode = mpDoc->GetNodes().Count() - 1;
     TextNode* pLast = mpDoc->GetNodes().GetObject( nLastNode );
     return TextPaM( nLastNode, pLast->GetText().getLength() );
@@ -1092,10 +1092,10 @@ sal_uInt16 TextEngine::ImpFindIndex( sal_uLong nPortion, const Point& rPosInPara
     {
         TextLine* pTmpLine = pPortion->GetLines()[ nLine ];
         nY += mnCharHeight;
-        if ( nY > rPosInPara.Y() )  // that's it
+        if ( nY > rPosInPara.Y() )  
         {
             pLine = pTmpLine;
-            break;                  // correct Y-Position not needed
+            break;                  
         }
     }
     DBG_ASSERT( pLine, "ImpFindIndex: pLine ?" );
@@ -1133,8 +1133,8 @@ sal_uInt16 TextEngine::GetCharPos( sal_uLong nPortion, sal_uInt16 nLine, long nX
         {
             if( pTextPortion->GetLen() > 1 )
             {
-                nTmpX -= pTextPortion->GetWidth();  // position before Portion
-                // TODO: Optimize: no GetTextBreak if fixed-width Font
+                nTmpX -= pTextPortion->GetWidth();  
+                
                 Font aFont;
                 SeekCursor( nPortion, nCurIndex+1, aFont, NULL );
                 mpRefDev->SetFont( aFont);
@@ -1142,7 +1142,7 @@ sal_uInt16 TextEngine::GetCharPos( sal_uLong nPortion, sal_uInt16 nLine, long nX
                 if ( IsRightToLeft() != pTextPortion->IsRightToLeft() )
                     nPosInPortion = pTextPortion->GetWidth() - nPosInPortion;
                 nCurIndex = mpRefDev->GetTextBreak( pPortion->GetNode()->GetText(), nPosInPortion, nCurIndex );
-                // MT: GetTextBreak should assure that we are not within a CTL cell...
+                
             }
             return nCurIndex;
         }
@@ -1206,7 +1206,7 @@ sal_uLong TextEngine::CalcTextWidth()
                 mnCurTextWidth = nParaWidth;
         }
     }
-    return mnCurTextWidth+1;// wider by 1, as CreateLines breaks at >=
+    return mnCurTextWidth+1;
 }
 
 sal_uLong TextEngine::CalcTextHeight()
@@ -1222,7 +1222,7 @@ sal_uLong TextEngine::CalcTextHeight()
 sal_uLong TextEngine::CalcTextWidth( sal_uLong nPara, sal_uInt16 nPortionStart, sal_uInt16 nLen, const Font* pFont )
 {
 #ifdef DBG_UTIL
-    // within the text there must not be a Portion change (attribute/tab)!
+    
     sal_Int32 nTabPos = mpDoc->GetNodes().GetObject( nPara )->GetText().indexOf( '\t', nPortionStart );
     DBG_ASSERT( nTabPos == -1 || nTabPos >= (nPortionStart+nLen), "CalcTextWidth: Tab!" );
 #endif
@@ -1329,7 +1329,7 @@ sal_uLong TextEngine::GetParagraphCount() const
 
 void TextEngine::EnableUndo( bool bEnable )
 {
-    // delete list when switching mode
+    
     if ( bEnable != IsUndoEnabled() )
         ResetUndo();
 
@@ -1412,10 +1412,10 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, Font& rFont, Outp
         if ( pAttrib->GetStart() > nPos )
             break;
 
-        // When seeking don't use Attr that start there!
-        // Do not use empty attributes:
-        // - If just being setup and empty => no effect on Font
-        // - Characters that are setup in an empty paragraph become visible right away.
+        
+        
+        
+        
         if ( ( ( pAttrib->GetStart() < nPos ) && ( pAttrib->GetEnd() >= nPos ) )
                     || pNode->GetText().isEmpty() )
         {
@@ -1457,8 +1457,8 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, Font& rFont, Outp
         else if ( nAttr & EXTTEXTINPUT_ATTR_GRAYWAVELINE )
         {
             rFont.SetUnderline( UNDERLINE_WAVE );
-//          if( pOut )
-//              pOut->SetTextLineColor( Color( COL_LIGHTGRAY ) );
+
+
         }
     }
 }
@@ -1507,7 +1507,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
         aClipRect.Intersection( aVisArea );
         if ( !aClipRect.IsEmpty() )
         {
-            // translate into window coordinates
+            
             Point aNewPos = pView->GetWindowPos( aClipRect.TopLeft() );
             if ( IsRightToLeft() )
                 aNewPos.X() -= aOutSz.Width() - 1;
@@ -1562,7 +1562,7 @@ void TextEngine::FormatDoc()
     long nY = 0;
     bool bGrow = false;
 
-    maInvalidRect = Rectangle(); // clear
+    maInvalidRect = Rectangle(); 
     for ( sal_uLong nPara = 0; nPara < mpTEParaPortions->Count(); nPara++ )
     {
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
@@ -1577,10 +1577,10 @@ void TextEngine::FormatDoc()
             if ( CreateLines( nPara ) )
                 bGrow = true;
 
-            // set InvalidRect only once
+            
             if ( maInvalidRect.IsEmpty() )
             {
-                // otherwise remains Empty() for Paperwidth 0 (AutoPageSize)
+                
                 long nWidth = (long)mnMaxTextWidth;
                 if ( !nWidth )
                     nWidth = 0x7FFFFFFF;
@@ -1621,7 +1621,7 @@ void TextEngine::FormatDoc()
             if ( maInvalidRect.IsEmpty() )
             {
                 maInvalidRect.Top() = 0;
-                // Left and Right are not evaluated, but set because of IsEmpty
+                
                 maInvalidRect.Left() = 0;
                 maInvalidRect.Right() = mnMaxTextWidth;
             }
@@ -1666,7 +1666,7 @@ void TextEngine::CreateAndInsertEmptyLine( sal_uLong nPara )
 
     if ( bLineBreak )
     {
-        // -2: The new one is already inserted.
+        
         OSL_ENSURE(
             pTEParaPortion->GetLines()[pTEParaPortion->GetLines().size()-2],
             "CreateAndInsertEmptyLine: Soft Break, no Line?!");
@@ -1680,12 +1680,12 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
 {
     TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
 
-    // Font still should be adjusted
+    
     sal_Int32 nMaxBreakPos = mpRefDev->GetTextBreak( pNode->GetText(), nRemainingWidth, nPortionStart );
 
     DBG_ASSERT( nMaxBreakPos < pNode->GetText().getLength(), "ImpBreakLine: Break?!" );
 
-    if ( nMaxBreakPos == -1 )   // GetTextBreak() != GetTextSize()
+    if ( nMaxBreakPos == -1 )   
         nMaxBreakPos = pNode->GetText().getLength() - 1;
 
     uno::Reference < i18n::XBreakIterator > xBI = GetBreakIterator();
@@ -1705,10 +1705,10 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
     {
         nBreakPos = nMaxBreakPos;
         if ( nBreakPos <= pLine->GetStart() )
-            nBreakPos = pLine->GetStart() + 1;  // infinite loop otherwise!
+            nBreakPos = pLine->GetStart() + 1;  
     }
 
-    // the damaged Portion is the End Portion
+    
     pLine->SetEnd( nBreakPos );
     sal_uInt16 nEndPortion = SplitTextPortion( nPara, nBreakPos );
 
@@ -1716,7 +1716,7 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
                              ( pNode->GetText()[ nBreakPos ] == ' ' ) );
     if ( bBlankSeparator )
     {
-        // generally suppress blanks at the end of line
+        
         TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
         TETextPortion* pTP = pTEParaPortion->GetTextPortions()[ nEndPortion ];
         DBG_ASSERT( nBreakPos > pLine->GetStart(), "ImpBreakLine: SplitTextPortion at beginning of line?" );
@@ -1728,7 +1728,7 @@ void TextEngine::ImpBreakLine( sal_uLong nPara, TextLine* pLine, TETextPortion*,
 sal_uInt16 TextEngine::SplitTextPortion( sal_uLong nPara, sal_uInt16 nPos )
 {
 
-    // the Portion at nPos is being split, unless there is already a switch at nPos
+    
     if ( nPos == 0 )
         return 0;
 
@@ -1743,7 +1743,7 @@ sal_uInt16 TextEngine::SplitTextPortion( sal_uLong nPara, sal_uInt16 nPos )
         nTmpPos = nTmpPos + pTP->GetLen();
         if ( nTmpPos >= nPos )
         {
-            if ( nTmpPos == nPos )  // nothing needs splitting
+            if ( nTmpPos == nPos )  
                 return nSplitPortion;
             pTextPortion = pTP;
             break;
@@ -1806,9 +1806,9 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
         nTabPos = pNode->GetText().indexOf( '\t', nTabPos+1 );
     }
 
-    // Delete starting with...
-    // Unfortunately, the number of TextPortions does not have to be
-    // equal to aPositions.Count(), because of linebreaks
+    
+    
+    
     sal_uInt16 nPortionStart = 0;
     sal_uInt16 nInvPortion = 0;
     sal_uInt16 nP;
@@ -1828,15 +1828,15 @@ void TextEngine::CreateTextPortions( sal_uLong nPara, sal_uInt16 nStartPos )
             "CreateTextPortions: Nothing to delete!");
     if ( nInvPortion && ( nPortionStart+pTEParaPortion->GetTextPortions()[nInvPortion]->GetLen() > nStartPos ) )
     {
-        // better one before...
-        // But only if it was within the Portion; otherwise it might be
-        // the only one in the previous line!
+        
+        
+        
         nInvPortion--;
         nPortionStart = nPortionStart - pTEParaPortion->GetTextPortions()[nInvPortion]->GetLen();
     }
     pTEParaPortion->GetTextPortions().DeleteFromPortion( nInvPortion );
 
-    // a Portion might have been created by a line break
+    
     aPositions.insert( nPortionStart );
 
     aPositionsIt = aPositions.find( nPortionStart );
@@ -1863,10 +1863,10 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
     TextNode* const pNode = pTEParaPortion->GetNode();
     if ( nNewChars > 0 )
     {
-        // If an Attribute is starting/ending at nStartPos, or there is a tab
-        // before nStartPos => a new Portion starts.
-        // Otherwise the Portion is extended at nStartPos.
-        // Or if at the very beginning ( StartPos 0 ) followed by a tab...
+        
+        
+        
+        
         if ( ( pNode->GetCharAttribs().HasBoundingAttrib( nStartPos ) ) ||
              ( nStartPos && ( pNode->GetText()[ nStartPos - 1 ] == '\t' ) ) ||
              ( ( !nStartPos && ( nNewChars < pNode->GetText().getLength() ) && pNode->GetText()[ nNewChars ] == '\t' ) ) )
@@ -1875,12 +1875,12 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
             if ( nStartPos )
                 nNewPortionPos = SplitTextPortion( nPara, nStartPos ) + 1;
 
-           // Here could be an empty Portion if the paragraph was empty,
-            // or a new line was created by a hard line-break.
+           
+            
             if ( ( nNewPortionPos < pTEParaPortion->GetTextPortions().size() ) &&
                     !pTEParaPortion->GetTextPortions()[nNewPortionPos]->GetLen() )
             {
-                // use the empty Portion
+                
                 sal_uInt16 & r =
                     pTEParaPortion->GetTextPortions()[nNewPortionPos]->GetLen();
                 r = r + nNewChars;
@@ -1904,11 +1904,11 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
     }
     else
     {
-        // Shrink or remove Portion
-        // Before calling this function, ensure that no Portions were in the deleted range!
+        
+        
 
-        // There must be no Portion reaching into or starting within,
-        // thus: nStartPos <= nPos <= nStartPos - nNewChars(neg.)
+        
+        
         sal_uInt16 nPortion = 0;
         sal_uInt16 nPos = 0;
         sal_uInt16 nEnd = nStartPos-nNewChars;
@@ -1928,7 +1928,7 @@ void TextEngine::RecalcTextPortion( sal_uLong nPara, sal_uInt16 nStartPos, short
         DBG_ASSERT( pTP, "RecalcTextPortion: Portion not found!" );
         if ( ( nPos == nStartPos ) && ( (nPos+pTP->GetLen()) == nEnd ) )
         {
-            // remove Portion
+            
             pTEParaPortion->GetTextPortions().erase( pTEParaPortion->GetTextPortions().begin() + nPortion );
             delete pTP;
         }
@@ -1967,11 +1967,11 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
 
     const StyleSettings& rStyleSettings = pOutDev->GetSettings().GetStyleSettings();
 
-    // for all paragraphs
+    
     for ( sal_uLong nPara = 0; nPara < mpTEParaPortions->Count(); nPara++ )
     {
         TEParaPortion* pPortion = mpTEParaPortions->GetObject( nPara );
-        // in case while typing Idle-Formatting, asynchronous Paint
+        
         if ( pPortion->IsInvalid() )
             return;
 
@@ -1979,7 +1979,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
         if ( ( !pPaintArea || ( ( nY + (long)nParaHeight ) > pPaintArea->Top() ) )
                 && ( !pPaintRange || ( ( nPara >= pPaintRange->GetStart().GetPara() ) && ( nPara <= pPaintRange->GetEnd().GetPara() ) ) ) )
         {
-            // for all lines of the paragraph
+            
             sal_uInt16 nLines = pPortion->GetLines().size();
             sal_uInt16 nIndex = 0;
             for ( sal_uInt16 nLine = 0; nLine < nLines; nLine++ )
@@ -1992,7 +1992,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                         ( TextPaM( nPara, pLine->GetStart() ) < pPaintRange->GetEnd() ) &&
                         ( TextPaM( nPara, pLine->GetEnd() ) > pPaintRange->GetStart() ) ) ) )
                 {
-                    // for all Portions of the line
+                    
                     nIndex = pLine->GetStart();
                     for ( sal_uInt16 y = pLine->GetStartPortion(); y <= pLine->GetEndPortion(); y++ )
                     {
@@ -2006,7 +2006,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                         long nTxtWidth = pTextPortion->GetWidth();
                         aTmpPos.X() = rStartPos.X() + ImpGetOutputOffset( nPara, pLine, nIndex, nIndex );
 
-                        // only print if starting in the visible region
+                        
                         if ( ( ( aTmpPos.X() + nTxtWidth ) >= 0 )
                             && ( !pPaintRange || (
                                 ( TextPaM( nPara, nIndex ) < pPaintRange->GetEnd() ) &&
@@ -2030,7 +2030,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                         Point aPos = aTmpPos;
                                         if ( pPaintRange )
                                         {
-                                            // maybe not print all of it
+                                            
                                             if ( ( pPaintRange->GetStart().GetPara() == nPara )
                                                     && ( nTmpIndex < pPaintRange->GetStart().GetIndex() ) )
                                             {
@@ -2046,14 +2046,14 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                         bool bDone = false;
                                         if ( pSelStart )
                                         {
-                                            // is a part of it in the selection?
+                                            
                                             TextPaM aTextStart( nPara, nTmpIndex );
                                             TextPaM aTextEnd( nPara, nEnd );
                                             if ( ( aTextStart < *pSelEnd ) && ( aTextEnd > *pSelStart ) )
                                             {
                                                 sal_uInt16 nL;
 
-                                                // 1) Region before Selection
+                                                
                                                 if ( aTextStart < *pSelStart )
                                                 {
                                                     nL = pSelStart->GetIndex() - nTmpIndex;
@@ -2063,7 +2063,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                     nTmpIndex = nTmpIndex + nL;
 
                                                 }
-                                                // 2) Region with Selection
+                                                
                                                 nL = nEnd-nTmpIndex;
                                                 if ( aTextEnd > *pSelEnd )
                                                     nL = pSelEnd->GetIndex() - nTmpIndex;
@@ -2079,7 +2079,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                                     nTmpIndex = nTmpIndex + nL;
                                                 }
 
-                                                // 3) Region after Selection
+                                                
                                                 if ( nTmpIndex < nEnd )
                                                 {
                                                     nL = nEnd-nTmpIndex;
@@ -2100,14 +2100,14 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                 break;
                                 case PORTIONKIND_TAB:
                                 {
-                                    // for HideSelection() only Range, pSelection = 0.
+                                    
                                     if ( pSelStart || pPaintRange )
                                     {
                                         Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
                                         bool bDone = false;
                                         if ( pSelStart )
                                         {
-                                            // is the Tab in the Selection???
+                                            
                                             TextPaM aTextStart( nPara, nIndex );
                                             TextPaM aTextEnd( nPara, nIndex+1 );
                                             if ( ( aTextStart < *pSelEnd ) && ( aTextEnd > *pSelStart ) )
@@ -2137,7 +2137,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                 nY += mnCharHeight;
 
                 if ( pPaintArea && ( nY >= pPaintArea->Bottom() ) )
-                    break;  // no more visible actions
+                    break;  
             }
         }
         else
@@ -2146,13 +2146,13 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
         }
 
         if ( pPaintArea && ( nY > pPaintArea->Bottom() ) )
-            break;  // no more visible actions
+            break;  
     }
 }
 
 bool TextEngine::CreateLines( sal_uLong nPara )
 {
-    // sal_Bool: changing Height of Paragraph Yes/No - sal_True/sal_False
+    
 
     TextNode* pNode = mpDoc->GetNodes().GetObject( nPara );
     TEParaPortion* pTEParaPortion = mpTEParaPortions->GetObject( nPara );
@@ -2160,7 +2160,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
 
     sal_uInt16 nOldLineCount = pTEParaPortion->GetLines().size();
 
-    // fast special case for empty paragraphs
+    
     if ( pTEParaPortion->GetNode()->GetText().isEmpty() )
     {
         if ( !pTEParaPortion->GetTextPortions().empty() )
@@ -2176,7 +2176,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
         return nOldLineCount != pTEParaPortion->GetLines().size();
     }
 
-    // initialization
+    
     if ( pTEParaPortion->GetLines().empty() )
     {
         TextLine* pL = new TextLine;
@@ -2199,15 +2199,15 @@ bool TextEngine::CreateLines( sal_uLong nPara )
         }
         else if ( ( pTEParaPortion->IsSimpleInvalid() ) && ( nInvalidDiff < 0 ) )
         {
-            // check if deleting across Portion border
-            sal_uInt16 nStart = nInvalidStart;  // duplicate!!!
-            sal_uInt16 nEnd = nStart - nInvalidDiff;  // neg.
+            
+            sal_uInt16 nStart = nInvalidStart;  
+            sal_uInt16 nEnd = nStart - nInvalidDiff;  
             bQuickFormat = true;
             sal_uInt16 nPos = 0;
             sal_uInt16 nPortions = pTEParaPortion->GetTextPortions().size();
             for ( sal_uInt16 nTP = 0; nTP < nPortions; nTP++ )
             {
-                // there must be no Start/End in the deleted region
+                
                 TETextPortion* const pTP = pTEParaPortion->GetTextPortions()[ nTP ];
                 nPos = nPos + pTP->GetLen();
                 if ( ( nPos > nStart ) && ( nPos < nEnd ) )
@@ -2224,8 +2224,8 @@ bool TextEngine::CreateLines( sal_uLong nPara )
     else
         CreateTextPortions( nPara, nInvalidStart );
 
-    // search for line with InvalidPos; start a line prior
-    // flag lines => do not remove!
+    
+    
 
     sal_uInt16 nLine = pTEParaPortion->GetLines().size()-1;
     for ( sal_uInt16 nL = 0; nL <= nLine; nL++ )
@@ -2238,14 +2238,14 @@ bool TextEngine::CreateLines( sal_uLong nPara )
         }
         pLine->SetValid();
     }
-    // start a line before...
-    // if typing at the end, the line before cannot change
+    
+    
     if ( nLine && ( !pTEParaPortion->IsSimpleInvalid() || ( nInvalidEnd < pNode->GetText().getLength() ) || ( nInvalidDiff <= 0 ) ) )
         nLine--;
 
     TextLine* pLine = pTEParaPortion->GetLines()[ nLine ];
 
-    // format all lines starting here
+    
     size_t nDelFromLine = std::numeric_limits<size_t>::max();
     bool bLineBreak = false;
 
@@ -2265,12 +2265,12 @@ bool TextEngine::CreateLines( sal_uLong nPara )
         sal_uInt16 nTmpPos = nIndex;
         sal_uInt16 nTmpPortion = pLine->GetStartPortion();
         long nTmpWidth = mpDoc->GetLeftMargin();
-        // do not subtract margin; it is included in TmpWidth
+        
         long nXWidth = mnMaxTextWidth ? mnMaxTextWidth : 0x7FFFFFFF;
         if ( nXWidth < nTmpWidth )
             nXWidth = nTmpWidth;
 
-        // search for Portion that does not fit anymore into line
+        
         TETextPortion* pPortion = 0;
         bool bBrokenLine = false;
         bLineBreak = false;
@@ -2285,10 +2285,10 @@ bool TextEngine::CreateLines( sal_uLong nPara )
                 long nCurPos = nTmpWidth-mpDoc->GetLeftMargin();
                 nTmpWidth = ((nCurPos/mnDefTab)+1)*mnDefTab+mpDoc->GetLeftMargin();
                 pPortion->GetWidth() = nTmpWidth - nCurPos - mpDoc->GetLeftMargin();
-                // infinite loop, if this is the first token of the line and nTmpWidth > aPaperSize.Width !!!
+                
                 if ( ( nTmpWidth >= nXWidth ) && ( nTmpPortion == pLine->GetStartPortion() ) )
                 {
-                    // adjust Tab
+                    
                     pPortion->GetWidth() = nXWidth-1;
                     nTmpWidth = pPortion->GetWidth();
                     bEOL = true;
@@ -2312,7 +2312,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
             nTmpPortion++;
         }
 
-        // this was perhaps one Portion too far
+        
         bool bFixedEnd = false;
         if ( nTmpWidth > nXWidth )
         {
@@ -2357,7 +2357,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
 
         if ( ( ImpGetAlign() == TXTALIGN_CENTER ) || ( ImpGetAlign() == TXTALIGN_RIGHT ) )
         {
-            // adjust
+            
             long nTextWidth = 0;
             for ( sal_uInt16 nTP = pLine->GetStartPortion(); nTP <= pLine->GetEndPortion(); nTP++ )
             {
@@ -2369,7 +2369,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
             {
                 if ( ImpGetAlign() == TXTALIGN_CENTER )
                     pLine->SetStartX( (sal_uInt16)(nSpace / 2) );
-                else    // TXTALIGN_RIGHT
+                else    
                     pLine->SetStartX( (sal_uInt16)nSpace );
             }
         }
@@ -2378,15 +2378,15 @@ bool TextEngine::CreateLines( sal_uLong nPara )
             pLine->SetStartX( mpDoc->GetLeftMargin() );
         }
 
-         // check if the line has to be printed again
+         
         pLine->SetInvalid();
 
         if ( pTEParaPortion->IsSimpleInvalid() )
         {
-            // Change due to simple TextChange...
-            // Do not abort formatting, as Portions might have to be split!
-            // Once it is ok to abort, then validate the following lines!
-            // But mark as valid, thus reduce printing...
+            
+            
+            
+            
             if ( pLine->GetEnd() < nInvalidStart )
             {
                 if ( *pLine == aSaveLine )
@@ -2415,9 +2415,9 @@ bool TextEngine::CreateLines( sal_uLong nPara )
                 }
                 else if ( bQuickFormat && ( nEnd > nInvalidEnd) )
                 {
-                    // If the invalid line ends such that the next line starts
-                    // at the 'same' position as before (no change in line breaks),
-                    // the text width does not have to be recalculated.
+                    
+                    
+                    
                     if ( nEnd == ( aSaveLine.GetEnd() + nInvalidDiff ) )
                     {
                         bCalcPortion = false;
@@ -2428,12 +2428,12 @@ bool TextEngine::CreateLines( sal_uLong nPara )
             }
         }
 
-        nIndex = pLine->GetEnd();   // next line Start = previous line End
-                                    // because nEnd is past the last char!
+        nIndex = pLine->GetEnd();   
+                                    
 
         sal_uInt16 nEndPortion = pLine->GetEndPortion();
 
-        // next line or new line
+        
         pLine = 0;
         if ( nLine < pTEParaPortion->GetLines().size()-1 )
             pLine = pTEParaPortion->GetLines()[ ++nLine ];
@@ -2460,7 +2460,7 @@ bool TextEngine::CreateLines( sal_uLong nPara )
         pLine->SetStartPortion( nEndPortion+1 );
         pLine->SetEndPortion( nEndPortion+1 );
 
-    }   // while ( Index < Len )
+    }   
 
     if (nDelFromLine != std::numeric_limits<size_t>::max())
     {
@@ -2536,7 +2536,7 @@ bool TextEngine::Read( SvStream& rInput, const TextSelection* pSel )
 
     TextSelection aNewSel( aSel.GetEnd(), aSel.GetEnd() );
 
-    // so that FormatAndUpdate does not access the invalid selection
+    
     if ( GetActiveView() )
         GetActiveView()->ImpSetSelection( aNewSel );
 
@@ -2587,7 +2587,7 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
 
             if ( nStartPos == nEndPos )
             {
-                // Empty lines will be removed by Writer
+                
                 aText.append( "<BR>" );
             }
             else
@@ -2599,14 +2599,14 @@ bool TextEngine::Write( SvStream& rOutput, const TextSelection* pSel, bool bHTML
                     TextCharAttrib* pAttr = pNode->GetCharAttribs().FindNextAttrib( TEXTATTR_HYPERLINK, nTmpStart, nEndPos );
                     nTmpEnd = pAttr ? pAttr->GetStart() : nEndPos;
 
-                    // Text before Attribute
+                    
                     aText.append( OUString( pNode->GetText().copy( nTmpStart, nTmpEnd-nTmpStart ) ) );
 
                     if ( pAttr )
                     {
                         nTmpEnd = std::min( pAttr->GetEnd(), (sal_uInt16) nEndPos );
 
-                        // e.g. <A HREF="http://www.mopo.de/">Morgenpost</A>
+                        
                         aText.append( "<A HREF=\"" );
                         aText.append( ((const TextAttribHyperLink&) pAttr->GetAttr() ).GetURL() );
                         aText.append( "\">" );
@@ -2707,10 +2707,10 @@ void TextEngine::RemoveAttrib( sal_uLong nPara, const TextCharAttrib& rAttrib )
 void TextEngine::SetAttrib( const TextAttrib& rAttr, sal_uLong nPara, sal_uInt16 nStart, sal_uInt16 nEnd, bool bIdleFormatAndUpdate )
 {
 
-    // For now do not check if Attributes overlap!
-    // This function is for TextEditors that want to _quickly_ generate the Syntax-Highlight
+    
+    
 
-    // As TextEngine is currently intended only for TextEditors, there is no Undo for Attributes!
+    
 
     if ( nPara < mpDoc->GetNodes().Count() )
     {
@@ -2766,12 +2766,12 @@ void TextEngine::ValidatePaM( TextPaM& rPaM ) const
 }
 
 
-// adjust State & Selection
+
 
 void TextEngine::ImpParagraphInserted( sal_uLong nPara )
 {
-    // No adjustment needed for the active View;
-    // but for all passive Views the Selection needs adjusting.
+    
+    
     if ( mpViews->size() > 1 )
     {
         for ( sal_uInt16 nView = mpViews->size(); nView; )
@@ -2919,7 +2919,7 @@ void TextEngine::SetLocale( const ::com::sun::star::lang::Locale& rLocale )
 {
     if ( maLocale.Language.isEmpty() )
     {
-        maLocale = Application::GetSettings().GetUILanguageTag().getLocale();   // TODO: why UI locale?
+        maLocale = Application::GetSettings().GetUILanguageTag().getLocale();   
     }
     return maLocale;
 }
@@ -2955,13 +2955,13 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
         OUString aText( pParaPortion->GetNode()->GetText() );
 
         //
-        // Bidi functions from icu 2.0
+        
         //
         UErrorCode nError = U_ZERO_ERROR;
         UBiDi* pBidi = ubidi_openSized( aText.getLength(), 0, &nError );
         nError = U_ZERO_ERROR;
 
-        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nBidiLevel, NULL, &nError ); // UChar != sal_Unicode in MinGW
+        ubidi_setPara( pBidi, reinterpret_cast<const UChar *>(aText.getStr()), aText.getLength(), nBidiLevel, NULL, &nError ); 
         nError = U_ZERO_ERROR;
 
         long nCount = ubidi_countRuns( pBidi, &nError );
@@ -2980,7 +2980,7 @@ void TextEngine::ImpInitWritingDirections( sal_uLong nPara )
         ubidi_close( pBidi );
     }
 
-    // No infos mean no CTL and default dir is L2R...
+    
     if ( rInfos.empty() )
         rInfos.push_back( TEWritingDirectionInfo( 0, 0, (sal_uInt16)pParaPortion->GetNode()->GetText().getLength() ) );
 
@@ -3031,7 +3031,7 @@ long TextEngine::ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uIn
     {
         if ( !IsRightToLeft() && pDestPortion->GetRightToLeft() )
         {
-            // Portions behind must be added, visual before this portion
+            
             sal_uInt16 nTmpPortion = nTextPortion+1;
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
@@ -3042,7 +3042,7 @@ long TextEngine::ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uIn
                     break;
                 nTmpPortion++;
             }
-            // Portions before must be removed, visual behind this portion
+            
             nTmpPortion = nTextPortion;
             while ( nTmpPortion > pLine->GetStartPortion() )
             {
@@ -3056,7 +3056,7 @@ long TextEngine::ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uIn
         }
         else if ( IsRightToLeft() && !pDestPortion->IsRightToLeft() )
         {
-            // Portions behind must be removed, visual behind this portion
+            
             sal_uInt16 nTmpPortion = nTextPortion+1;
             while ( nTmpPortion <= pLine->GetEndPortion() )
             {
@@ -3067,7 +3067,7 @@ long TextEngine::ImpGetPortionXOffset( sal_uLong nPara, TextLine* pLine, sal_uIn
                     break;
                 nTmpPortion++;
             }
-            // Portions before must be added, visual before this portion
+            
             nTmpPortion = nTextPortion;
             while ( nTmpPortion > pLine->GetStartPortion() )
             {
@@ -3121,8 +3121,8 @@ long TextEngine::ImpGetOutputOffset( sal_uLong nPara, TextLine* pLine, sal_uInt1
 
     if ( ( nIndex == nPortionStart ) && ( nIndex == nIndex2 )  )
     {
-        // Output of full portion, so we need portion x offset.
-        // Use ImpGetPortionXOffset, because GetXPos may deliver left or right position from portioon, depending on R2L, L2R
+        
+        
         nX = ImpGetPortionXOffset( nPara, pLine, nPortion );
         if ( IsRightToLeft() )
         {

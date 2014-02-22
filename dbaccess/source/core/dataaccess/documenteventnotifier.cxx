@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "documenteventnotifier.hxx"
@@ -47,10 +47,10 @@ namespace dbaccess
 
     using namespace ::com::sun::star;
 
-    // DocumentEventHolder
+    
     typedef ::comphelper::EventHolder< DocumentEvent >  DocumentEventHolder;
 
-    // DocumentEventNotifier_Impl
+    
     class DocumentEventNotifier_Impl : public ::comphelper::IEventProcessor
     {
         oslInterlockedCount                                     m_refCount;
@@ -74,7 +74,7 @@ namespace dbaccess
         {
         }
 
-        // IReference
+        
         virtual void SAL_CALL acquire();
         virtual void SAL_CALL release();
 
@@ -121,7 +121,7 @@ namespace dbaccess
         {
         }
 
-        // IEventProcessor
+        
         virtual void processEvent( const ::comphelper::AnyEvent& _rEvent );
 
     private:
@@ -142,33 +142,33 @@ namespace dbaccess
 
     void DocumentEventNotifier_Impl::disposing()
     {
-        // SYNCHRONIZED ->
-        // cancel any pending asynchronous events
+        
+        
         ::osl::ResettableMutexGuard aGuard( m_rMutex );
         if ( m_pEventBroadcaster.is() )
         {
             m_pEventBroadcaster->removeEventsForProcessor( this );
             m_pEventBroadcaster->terminate();
-                //TODO: a protocol is missing how to join with the thread before
-                // exit(3), to ensure the thread is no longer relying on any
-                // infrastructure while that infrastructure is being shut down
-                // in atexit handlers; simply calling join here leads to
-                // deadlock, as this thread holds the solar mutex while the
-                // other thread is typically blocked waiting for the solar mutex
+                
+                
+                
+                
+                
+                
             m_pEventBroadcaster.clear();
         }
 
         lang::EventObject aEvent( m_rDocument );
         aGuard.clear();
-        // <-- SYNCHRONIZED
+        
 
         m_aLegacyEventListeners.disposeAndClear( aEvent );
         m_aDocumentEventListeners.disposeAndClear( aEvent );
 
-        // SYNCHRONIZED ->
+        
         aGuard.reset();
         m_bDisposed = true;
-        // <-- SYNCHRONIZED
+        
     }
 
     void DocumentEventNotifier_Impl::onDocumentInitialized()
@@ -178,7 +178,7 @@ namespace dbaccess
 
         m_bInitialized = true;
         if ( m_pEventBroadcaster.is() )
-            // there are already pending asynchronous events
+            
             m_pEventBroadcaster->launch();
     }
 
@@ -212,8 +212,8 @@ namespace dbaccess
             m_pEventBroadcaster.set(
                 new ::comphelper::AsyncEventNotifier("DocumentEventNotifier"));
             if ( m_bInitialized )
-                // start processing the events if and only if we (our document, respectively) are
-                // already initialized
+                
+                
                 m_pEventBroadcaster->launch();
         }
         m_pEventBroadcaster->addEvent( new DocumentEventHolder( _rEvent ), this );
@@ -221,7 +221,7 @@ namespace dbaccess
 
     void DocumentEventNotifier_Impl::processEvent( const ::comphelper::AnyEvent& _rEvent )
     {
-        // beware, this is called from the notification thread
+        
         {
             ::osl::MutexGuard aGuard( m_rMutex );
             if  ( m_bDisposed )
@@ -231,7 +231,7 @@ namespace dbaccess
         impl_notifyEvent_nothrow( rEventHolder.getEventObject() );
     }
 
-    // DocumentEventNotifier
+    
     DocumentEventNotifier::DocumentEventNotifier( ::cppu::OWeakObject& _rBroadcasterDocument, ::osl::Mutex& _rMutex )
         :m_pImpl( new DocumentEventNotifier_Impl( _rBroadcasterDocument, _rMutex ) )
     {
@@ -283,6 +283,6 @@ namespace dbaccess
         m_pImpl->notifyDocumentEventAsync( _EventName, _ViewController, _Supplement );
     }
 
-} // namespace dbaccess
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

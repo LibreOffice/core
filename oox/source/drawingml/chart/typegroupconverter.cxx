@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/typegroupconverter.hxx"
@@ -42,18 +42,18 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::chart2;
 using namespace ::com::sun::star::chart2::data;
 using namespace ::com::sun::star::uno;
 
-// ============================================================================
+
 
 namespace {
 
-// chart type service names
+
 const sal_Char SERVICE_CHART2_AREA[]      = "com.sun.star.chart2.AreaChartType";
 const sal_Char SERVICE_CHART2_CANDLE[]    = "com.sun.star.chart2.CandleStickChartType";
 const sal_Char SERVICE_CHART2_COLUMN[]    = "com.sun.star.chart2.ColumnChartType";
@@ -63,13 +63,13 @@ const sal_Char SERVICE_CHART2_FILLEDNET[] = "com.sun.star.chart2.FilledNetChartT
 const sal_Char SERVICE_CHART2_PIE[]       = "com.sun.star.chart2.PieChartType";
 const sal_Char SERVICE_CHART2_SCATTER[]   = "com.sun.star.chart2.ScatterChartType";
 const sal_Char SERVICE_CHART2_BUBBLE[]    = "com.sun.star.chart2.BubbleChartType";
-const sal_Char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    // Todo
+const sal_Char SERVICE_CHART2_SURFACE[]   = "com.sun.star.chart2.ColumnChartType";    
 
 namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
 
 static const TypeGroupInfo spTypeInfos[] =
 {
-    // type-id          type-category         service                   varied-point-color   default label pos     comb2d supp3d polar  area2d 1stvis xcateg swap   stack  revers betw   picopt
+    
     { TYPEID_BAR,       TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       true,  true,  false, true,  false, true,  false, true,  false, true,  true  },
     { TYPEID_HORBAR,    TYPECATEGORY_BAR,     SERVICE_CHART2_COLUMN,    VARPOINTMODE_SINGLE, csscd::OUTSIDE,       false, true,  false, true,  false, true,  true,  true,  false, true,  true  },
     { TYPEID_LINE,      TYPECATEGORY_LINE,    SERVICE_CHART2_LINE,      VARPOINTMODE_SINGLE, csscd::RIGHT,         true,  true,  false, false, false, true,  false, true,  false, true,  false },
@@ -98,9 +98,9 @@ const TypeGroupInfo& lclGetTypeInfoFromTypeId( TypeId eTypeId )
     return saUnknownTypeInfo;
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 UpDownBarsConverter::UpDownBarsConverter( const ConverterRoot& rParent, UpDownBarsModel& rModel ) :
     ConverterBase< UpDownBarsModel >( rParent, rModel )
@@ -115,7 +115,7 @@ void UpDownBarsConverter::convertFromModel( const Reference< XChartType >& rxCha
 {
     PropertySet aTypeProp( rxChartType );
 
-    // upbar format
+    
     Reference< XPropertySet > xWhitePropSet;
     if( aTypeProp.getProperty( xWhitePropSet, PROP_WhiteDay ) )
     {
@@ -123,7 +123,7 @@ void UpDownBarsConverter::convertFromModel( const Reference< XChartType >& rxCha
         getFormatter().convertFrameFormatting( aPropSet, mrModel.mxUpBars, OBJECTTYPE_UPBAR );
     }
 
-    // downbar format
+    
     Reference< XPropertySet > xBlackPropSet;
     if( aTypeProp.getProperty( xBlackPropSet, PROP_BlackDay ) )
     {
@@ -132,7 +132,7 @@ void UpDownBarsConverter::convertFromModel( const Reference< XChartType >& rxCha
     }
 }
 
-// ============================================================================
+
 
 TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupModel& rModel ) :
     ConverterBase< TypeGroupModel >( rParent, rModel ),
@@ -157,12 +157,12 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
         case C_TOKEN( scatterChart ):   ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_SCATTER;   mb3dChart = false;  break;
         case C_TOKEN( stockChart ):     ENSURE_AXESCOUNT( 2, 2 ); eTypeId = TYPEID_STOCK;     mb3dChart = false;  break;
         case C_TOKEN( surface3DChart ): ENSURE_AXESCOUNT( 3, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;
-        case C_TOKEN( surfaceChart ):   ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;    // 3D bar chart from all surface charts
+        case C_TOKEN( surfaceChart ):   ENSURE_AXESCOUNT( 2, 3 ); eTypeId = TYPEID_SURFACE;   mb3dChart = true;   break;    
         default:    OSL_FAIL( "TypeGroupConverter::TypeGroupConverter - unknown chart type" );
 #undef ENSURE_AXESCOUNT
     }
 
-    // special handling for some chart types
+    
     switch( eTypeId )
     {
         case TYPEID_BAR:
@@ -174,13 +174,13 @@ TypeGroupConverter::TypeGroupConverter( const ConverterRoot& rParent, TypeGroupM
                 eTypeId = TYPEID_RADARAREA;
         break;
         case TYPEID_SURFACE:
-            // create a deep 3D bar chart from surface charts
+            
             mrModel.mnGrouping = XML_standard;
         break;
         default:;
     }
 
-    // set the chart type info struct for the current chart type
+    
     maTypeInfo = lclGetTypeInfoFromTypeId( eTypeId );
 }
 
@@ -242,7 +242,7 @@ OUString TypeGroupConverter::getSingleSeriesTitle() const
 
 Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
 {
-    // create the coordinate system object
+    
     Reference< css::uno::XComponentContext > xContext = getComponentContext();
     Reference< XCoordinateSystem > xCoordSystem;
     if( maTypeInfo.mbPolarCoordSystem )
@@ -260,7 +260,7 @@ Reference< XCoordinateSystem > TypeGroupConverter::createCoordinateSystem()
             xCoordSystem = css::chart2::CartesianCoordinateSystem2d::create(xContext);
     }
 
-    // swap X and Y axis
+    
     if( maTypeInfo.mbSwappedAxesSet )
     {
         PropertySet aPropSet( xCoordSystem );
@@ -312,11 +312,11 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
 {
     try
     {
-        // create the chart type object
+        
         OUString aService = OUString::createFromAscii( maTypeInfo.mpcServiceName );
         Reference< XChartType > xChartType( createInstance( aService ), UNO_QUERY_THROW );
 
-        // additional properties
+        
         PropertySet aDiaProp( rxDiagram );
         PropertySet aTypeProp( xChartType );
         switch( maTypeInfo.meTypeCategory )
@@ -343,17 +343,17 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             default:;
         }
 
-        // create converter objects for all series models
+        
         typedef RefVector< SeriesConverter > SeriesConvVector;
         SeriesConvVector aSeries;
         for( TypeGroupModel::SeriesVector::iterator aIt = mrModel.maSeries.begin(), aEnd = mrModel.maSeries.end(); aIt != aEnd; ++aIt )
             aSeries.push_back( SeriesConvVector::value_type( new SeriesConverter( *this, **aIt ) ) );
 
-        // reverse series order for some unstacked 2D chart types
+        
         if( isReverseSeries() )
             ::std::reverse( aSeries.begin(), aSeries.end() );
 
-        // decide whether to use varying colors for each data point
+        
         bool bVaryColorsByPoint = bSupportsVaryColorsByPoint && mrModel.mbVaryColors;
         switch( maTypeInfo.meVarPointMode )
         {
@@ -366,18 +366,18 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             data sequences of different roles. */
         if( maTypeInfo.meTypeId == TYPEID_STOCK )
         {
-            // create the data series object
+            
             Reference< XDataSeries > xDataSeries( createInstance( "com.sun.star.chart2.DataSeries" ), UNO_QUERY );
             Reference< XDataSink > xDataSink( xDataSeries, UNO_QUERY );
             if( xDataSink.is() )
             {
-                // create a list of data sequences from all series
+                
                 ::std::vector< Reference< XLabeledDataSequence > > aLabeledSeqVec;
                 OSL_ENSURE( aSeries.size() >= 3, "TypeGroupConverter::convertFromModel - too few stock chart series" );
                 int nRoleIdx = (aSeries.size() == 3) ? 1 : 0;
                 for( SeriesConvVector::iterator aIt = aSeries.begin(), aEnd = aSeries.end(); (nRoleIdx < 4) && (aIt != aEnd); ++nRoleIdx, ++aIt )
                 {
-                    // create a data sequence with a specific role
+                    
                     OUString aRole;
                     switch( nRoleIdx )
                     {
@@ -391,19 +391,19 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                         aLabeledSeqVec.push_back( xDataSeq );
                 }
 
-                // attach labeled data sequences to series and insert series into chart type
+                
                 xDataSink->setData( ContainerHelper::vectorToSequence( aLabeledSeqVec ) );
 
-                // formatting of high/low lines
+                
                 aTypeProp.setProperty( PROP_ShowHighLow, true );
                 PropertySet aSeriesProp( xDataSeries );
                 if( mrModel.mxHiLowLines.is() )
                     getFormatter().convertFrameFormatting( aSeriesProp, mrModel.mxHiLowLines, OBJECTTYPE_HILOLINE );
                 else
-                    // hi/low-lines cannot be switched off via "ShowHighLow" property (?)
+                    
                     aSeriesProp.setProperty( PROP_LineStyle, ::com::sun::star::drawing::LineStyle_NONE );
 
-                // formatting of up/down bars
+                
                 bool bUpDownBars = mrModel.mxUpDownBars.is();
                 aTypeProp.setProperty( PROP_Japanese, bUpDownBars );
                 aTypeProp.setProperty( PROP_ShowFirst, bUpDownBars );
@@ -413,7 +413,7 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
                     aUpDownConv.convertFromModel( xChartType );
                 }
 
-                // insert the series into the chart type object
+                
                 insertDataSeries( xChartType, xDataSeries, nAxesSetIdx );
             }
         }
@@ -438,11 +438,11 @@ void TypeGroupConverter::convertFromModel( const Reference< XDiagram >& rxDiagra
             }
         }
 
-        // add chart type object to coordinate system
+        
         Reference< XChartTypeContainer > xChartTypeCont( rxCoordSystem, UNO_QUERY_THROW );
         xChartTypeCont->addChartType( xChartType );
 
-        // set existence of bar connector lines at diagram (only in stacked 2D bar charts)
+        
         if( mrModel.mxSerLines.is() && !mb3dChart && (maTypeInfo.meTypeCategory == TYPECATEGORY_BAR) && (isStacked() || isPercent()) )
             aDiaProp.setProperty( PROP_ConnectBars, true );
     }
@@ -458,29 +458,29 @@ void TypeGroupConverter::convertMarker( PropertySet& rPropSet, sal_Int32 nOoxSym
     {
         namespace cssc = ::com::sun::star::chart2;
 
-        // symbol style
+        
         cssc::Symbol aSymbol;
         aSymbol.Style = cssc::SymbolStyle_STANDARD;
-        switch( nOoxSymbol ) // compare with XclChPropSetHelper::WriteMarkerProperties in xlchart.cxx
+        switch( nOoxSymbol ) 
         {
             case XML_auto:      aSymbol.Style = cssc::SymbolStyle_AUTO; break;
             case XML_none:      aSymbol.Style = cssc::SymbolStyle_NONE; break;
-            case XML_square:    aSymbol.StandardSymbol = 0;             break;  // square
-            case XML_diamond:   aSymbol.StandardSymbol = 1;             break;  // diamond
-            case XML_triangle:  aSymbol.StandardSymbol = 3;             break;  // arrow up
-            case XML_x:         aSymbol.StandardSymbol = 10;            break;  // X, legacy bow tie
-            case XML_star:      aSymbol.StandardSymbol = 12;            break;  // asterisk, legacy sand glass
-            case XML_dot:       aSymbol.StandardSymbol = 4;             break;  // arrow right
-            case XML_dash:      aSymbol.StandardSymbol = 13;            break;  // horizontal bar, legacy arrow down
-            case XML_circle:    aSymbol.StandardSymbol = 8;             break;  // circle, legacy arrow right
-            case XML_plus:      aSymbol.StandardSymbol = 11;            break;  // plus, legacy arrow left
+            case XML_square:    aSymbol.StandardSymbol = 0;             break;  
+            case XML_diamond:   aSymbol.StandardSymbol = 1;             break;  
+            case XML_triangle:  aSymbol.StandardSymbol = 3;             break;  
+            case XML_x:         aSymbol.StandardSymbol = 10;            break;  
+            case XML_star:      aSymbol.StandardSymbol = 12;            break;  
+            case XML_dot:       aSymbol.StandardSymbol = 4;             break;  
+            case XML_dash:      aSymbol.StandardSymbol = 13;            break;  
+            case XML_circle:    aSymbol.StandardSymbol = 8;             break;  
+            case XML_plus:      aSymbol.StandardSymbol = 11;            break;  
         }
 
-        // symbol size (points in OOXML, 1/100 mm in Chart2)
+        
         sal_Int32 nSize = static_cast< sal_Int32 >( nOoxSize * (2540.0 / 72.0) + 0.5 );
         aSymbol.Size.Width = aSymbol.Size.Height = nSize;
 
-        // set the property
+        
         rPropSet.setProperty( PROP_Symbol, aSymbol );
     }
 }
@@ -520,7 +520,7 @@ void TypeGroupConverter::convertPieRotation( PropertySet& rPropSet, sal_Int32 nO
 {
     if( maTypeInfo.meTypeCategory == TYPECATEGORY_PIE )
     {
-        // map OOXML [0,360] clockwise (0deg top) to Chart2 counterclockwise (0deg left)
+        
         sal_Int32 nAngle = (450 - nOoxAngle) % 360;
         rPropSet.setProperty( PROP_StartingAngle, nAngle );
     }
@@ -530,13 +530,13 @@ void TypeGroupConverter::convertPieExplosion( PropertySet& rPropSet, sal_Int32 n
 {
     if( maTypeInfo.meTypeCategory == TYPECATEGORY_PIE )
     {
-        // pie explosion restricted to 100% in Chart2, set as double in range [0,1]
+        
         double fOffset = getLimitedValue< double >( nOoxExplosion / 100.0, 0.0, 1.0 );
         rPropSet.setProperty( PROP_Offset, fOffset );
     }
 }
 
-// private --------------------------------------------------------------------
+
 
 void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChartType, const Reference< XDataSeries >& rxSeries, sal_Int32 nAxesSetIdx )
 {
@@ -544,20 +544,20 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
     {
         PropertySet aSeriesProp( rxSeries );
 
-        // series stacking mode
+        
         namespace cssc = ::com::sun::star::chart2;
         cssc::StackingDirection eStacking = cssc::StackingDirection_NO_STACKING;
-        // stacked overrides deep-3d
+        
         if( isStacked() || isPercent() )
             eStacking = cssc::StackingDirection_Y_STACKING;
         else if( isDeep3dChart() )
             eStacking = cssc::StackingDirection_Z_STACKING;
         aSeriesProp.setProperty( PROP_StackingDirection, eStacking );
 
-        // additional series properties
+        
         aSeriesProp.setProperty( PROP_AttachedAxisIndex, nAxesSetIdx );
 
-        // insert series into container
+        
         try
         {
             Reference< XDataSeriesContainer > xSeriesCont( rxChartType, UNO_QUERY_THROW );
@@ -570,10 +570,10 @@ void TypeGroupConverter::insertDataSeries( const Reference< XChartType >& rxChar
     }
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

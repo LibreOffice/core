@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <iostream>
@@ -26,7 +26,7 @@
 
 namespace
 {
-    // Extract strings from nodes on all level recursively
+    
     static void lcl_ExtractLevel(
         const xmlDocPtr pSource, const xmlNodePtr pRoot,
         const xmlChar* pNodeName, PoOfstream& rPOStream )
@@ -58,7 +58,7 @@ namespace
         }
     }
 
-    // Update id and content of the topic
+    
     static xmlNodePtr lcl_UpdateTopic(
         const xmlNodePtr pCurrent, const OString& rXhpRoot )
     {
@@ -69,7 +69,7 @@ namespace
         xmlFree( pID );
 
         const sal_Int32 nFirstSlash = sID.indexOf('/');
-        // Update id attribute of topic
+        
         {
             OString sNewID =
                 sID.copy( 0, nFirstSlash + 1 ) +
@@ -84,7 +84,7 @@ namespace
             rXhpRoot +
             sID.copy(sID.indexOf('/', nFirstSlash + 1));
         xmlDocPtr pXhpFile = xmlParseFile( sXhpPath.getStr() );
-        // if xhpfile is missing than put this topic into comment
+        
         if ( !pXhpFile )
         {
             xmlNodePtr pTemp = pReturn;
@@ -98,7 +98,7 @@ namespace
             xmlFree( sNewID );
             xmlFree( sComment );
         }
-        // update topic's content on the basis of xhpfile's title
+        
         else
         {
             xmlNodePtr pXhpNode = xmlDocGetRootElement( pXhpFile );
@@ -138,7 +138,7 @@ namespace
         }
         return pReturn;
     }
-    // Localize title attribute of help_section and node tags
+    
     static void lcl_MergeLevel(
         xmlDocPtr io_pSource, const xmlNodePtr pRoot,
         const xmlChar * pNodeName, MergeDataFile* pMergeDataFile,

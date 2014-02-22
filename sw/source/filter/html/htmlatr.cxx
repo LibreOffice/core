@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -100,12 +100,12 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId 
     OUString sDTDD( OOO_STRING_SVTOOLS_HTML_dt );
     sDTDD += " ";
     if( rNm.startsWith(sDTDD) )
-        // DefinitionList - term
+        
         return (sal_uInt16)rNm.copy( sDTDD.getLength() ).toInt32() | HTML_DLCOLL_DT;
 
     sDTDD = OUString( OOO_STRING_SVTOOLS_HTML_dd ) + " ";
     if( rNm.startsWith(sDTDD) )
-        // DefinitionList - definition
+        
         return (sal_uInt16)rNm.copy( sDTDD.getLength() ).toInt32() | HTML_DLCOLL_DD;
 
     return 0;
@@ -113,18 +113,18 @@ sal_uInt16 SwHTMLWriter::GetDefListLvl( const OUString& rNm, sal_uInt16 nPoolId 
 
 void SwHTMLWriter::OutAndSetDefList( sal_uInt16 nNewLvl )
 {
-    // eventuell muss erst mal eine Liste aufgemacht werden
+    
     if( nDefListLvl < nNewLvl )
     {
-        // output </pre> for the previous(!) pararagraph, if required.
-        // Preferable, the <pre> is exported by OutHTML_SwFmtOff for the
-           // previous  paragraph already, but that's not possible, because a very
-        // deep look at the next paragraph (this one) is required to figure
-        // out that a def list starts here.
+        
+        
+           
+        
+        
 
         ChangeParaToken( 0 );
 
-        // entsprechend dem Level-Unterschied schreiben!
+        
         for( sal_uInt16 i=nDefListLvl; i<nNewLvl; i++ )
         {
             if( bLFPossible )
@@ -180,7 +180,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
     return nRet;
 }
 
-// fuer die Formate muesste eine einzige Ausgabe-Funktion genuegen !
+
 /*
  * Formate wie folgt ausgeben:
  * - fuer Formate, fuer die es entsprechende HTML-Tags gibt wird das
@@ -197,13 +197,13 @@ sal_uInt16 SwHTMLWriter::GetCSS1ScriptForScriptType( sal_uInt16 nScriptType )
 
 struct SwHTMLTxtCollOutputInfo
 {
-    OString aToken;        // auszugendens End-Token
-    SfxItemSet *pItemSet;       // harte Attributierung
+    OString aToken;        
+    SfxItemSet *pItemSet;       
 
-    sal_Bool bInNumBulList;         // in einer Aufzaehlungs-Liste;
-    sal_Bool bParaPossible;         // ein </P> darf zusaetzlich ausgegeben werden
-    sal_Bool bOutPara;              // ein </P> soll ausgegeben werden
-    sal_Bool bOutDiv;               // write a </DIV>
+    sal_Bool bInNumBulList;         
+    sal_Bool bParaPossible;         
+    sal_Bool bOutPara;              
+    sal_Bool bOutDiv;               
 
     SwHTMLTxtCollOutputInfo() :
         pItemSet( 0 ),
@@ -231,7 +231,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     pFmt( pF ), pRefFmt(0), pItemSet( 0 ), bScriptDependent( false )
 {
     sal_uInt16 nRefPoolId = 0;
-    // Den Selektor des Formats holen
+    
     sal_uInt16 nDeep = SwHTMLWriter::GetCSS1Selector( pFmt, aToken, aClass,
                                                   nRefPoolId );
     OSL_ENSURE( nDeep ? !aToken.isEmpty() : aToken.isEmpty(),
@@ -242,29 +242,29 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     sal_Bool bTxtColl = pFmt->Which() == RES_TXTFMTCOLL ||
                     pFmt->Which() == RES_CONDTXTFMTCOLL;
 
-    const SwFmt *pReferenceFmt = 0; // Vergleichs-Format
+    const SwFmt *pReferenceFmt = 0; 
     sal_Bool bSetDefaults = sal_True, bClearSame = sal_True;
     if( nDeep != 0 )
     {
-        // Es ist eine HTML-Tag-Vorlage oder die Vorlage ist von einer
-        // solchen abgeleitet
+        
+        
         if( !bOutStyles )
         {
-            // wenn keine Styles exportiert werden, muss evtl. zusaetlich
-            // harte Attributierung geschrieben werden
+            
+            
             switch( nDeep )
             {
             case CSS1_FMT_ISTAG:
             case CSS1_FMT_CMPREF:
-                // fuer HTML-Tag-Vorlagen die Unterscheide zum Original
-                // (sofern verfuegbar)
+                
+                
                 pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
                                                         pTemplate );
                 break;
 
             default:
-                // sonst die zur HTML-Tag-Vorlage des Originals oder des
-                // aktuellen Doks, wenn die nicht verfuegbar ist
+                
+                
                 if( pTemplate )
                     pReferenceFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId,
                                                             pTemplate );
@@ -276,10 +276,10 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     }
     else if( bTxtColl )
     {
-        // Nicht von einer HTML-Tag-Vorlage abgeleitete Absatz-Vorlagen
-        // muessen als harte Attributierung relativ zur Textkoerper-Volage
-        // exportiert werden. Fuer Nicht-Styles-Export sollte die der
-        // HTML-Vorlage als Referenz dienen
+        
+        
+        
+        
         if( !bOutStyles && pTemplate )
             pReferenceFmt = pTemplate->GetTxtCollFromPool( RES_POOLCOLL_TEXT, false );
         else
@@ -290,9 +290,9 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     {
         pItemSet = new SfxItemSet( *pFmt->GetAttrSet().GetPool(),
                                        pFmt->GetAttrSet().GetRanges() );
-        // wenn Unterschiede zu einer anderen Vorlage geschrieben werden
-        // sollen ist harte Attributierung noetig. Fuer Vorlagen, die
-        // nicht von HTML-Tag-Vorlagen abgeleitet sind, gilt das immer
+        
+        
+        
 
         pItemSet->Set( pFmt->GetAttrSet(), sal_True );
 
@@ -300,8 +300,8 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             SwHTMLWriter::SubtractItemSet( *pItemSet, pReferenceFmt->GetAttrSet(),
                                            bSetDefaults, bClearSame );
 
-        // einen leeren Item-Set gleich loeschen, das spart speater
-        // Arbeit
+        
+        
         if( !pItemSet->Count() )
         {
             delete pItemSet;
@@ -313,8 +313,8 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
     {
         if( bOutStyles )
         {
-            // We have to add hard attributes for any script dependent
-            // item that is not accessed by the style
+            
+            
             static const sal_uInt16 aWhichIds[3][4] =
             {
                 { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
@@ -362,7 +362,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
             }
         }
 
-        // Ggf. noch ein DropCap-Attribut uebernehmen
+        
         if( bOutStyles && bHardDrop && nDeep != 0 )
         {
             const SfxPoolItem *pItem;
@@ -390,8 +390,8 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         }
 
 
-        // Die diversen default-Abstaende aus der Vorlage oder der
-        // Vergleischs-Vorlage merken
+        
+        
         const SvxLRSpaceItem &rLRSpace =
             (pReferenceFmt ? pReferenceFmt : pFmt)->GetLRSpace();
         nLeftMargin = rLRSpace.GetTxtLeft();
@@ -403,7 +403,7 @@ SwHTMLFmtInfo::SwHTMLFmtInfo( const SwFmt *pF, SwDoc *pDoc, SwDoc *pTemplate,
         nTopMargin = rULSpace.GetUpper();
         nBottomMargin = rULSpace.GetLower();
 
-        // export language if it differs from the default language
+        
         sal_uInt16 nWhichId =
             SwHTMLWriter::GetLangWhichIdFromScript( nCSS1Script );
         const SvxLanguageItem& rLang =
@@ -452,22 +452,22 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     SwHTMLWriter & rHWrt = (SwHTMLWriter&)rWrt;
 
-    // Erstmal ein par Flags ...
+    
     sal_uInt16 nNewDefListLvl = 0;
     sal_uInt16 nNumStart = USHRT_MAX;
     sal_Bool bForceDL = sal_False;
     sal_Bool bDT = sal_False;
-    rInfo.bInNumBulList = sal_False;    // Wir sind in einer Liste?
-    sal_Bool bNumbered = sal_False;         // Der aktuelle Absatz ist numeriert
-    sal_Bool bPara = sal_False;             // das aktuelle Token ist <P>
-    rInfo.bParaPossible = sal_False;    // ein <P> darf zusaetzlich ausgegeben werden
-    sal_Bool bNoEndTag = sal_False;         // kein End-Tag ausgeben
+    rInfo.bInNumBulList = sal_False;    
+    sal_Bool bNumbered = sal_False;         
+    sal_Bool bPara = sal_False;             
+    rInfo.bParaPossible = sal_False;    
+    sal_Bool bNoEndTag = sal_False;         
 
-    rHWrt.bNoAlign = sal_False;         // kein ALIGN=... moeglich
-    sal_Bool bNoStyle = sal_False;          // kein STYLE=... moeglich
-    sal_uInt8 nBulletGrfLvl = 255;      // Die auszugebende Bullet-Grafik
+    rHWrt.bNoAlign = sal_False;         
+    sal_Bool bNoStyle = sal_False;          
+    sal_uInt8 nBulletGrfLvl = 255;      
 
-    // Sind wir in einer Aufzaehlungs- oder Numerierungliste?
+    
     const SwTxtNode* pTxtNd = rWrt.pCurPam->GetNode()->GetTxtNode();
 
     SwHTMLNumRuleInfo aNumInfo;
@@ -486,7 +486,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         rInfo.bInNumBulList = sal_True;
         nNewDefListLvl = 0;
 
-        // ist der aktuelle Absatz numeriert?
+        
         bNumbered = aNumInfo.IsNumbered();
         sal_uInt8 nLvl = aNumInfo.GetLevel();
 
@@ -497,12 +497,12 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         if( bNumbered )
         {
-            nBulletGrfLvl = nLvl; // nur veruebergehend!!!
-            // #i57919#
-            // correction of re-factoring done by cws swnumtree:
-            // - <nNumStart> has to contain the restart value, if the
-            //   numbering is restarted at this text node. Value <USHRT_MAX>
-            //   indicates, that no additional restart value has to be written.
+            nBulletGrfLvl = nLvl; 
+            
+            
+            
+            
+            
             if ( pTxtNd->IsListRestart() )
             {
                 nNumStart = static_cast< sal_uInt16 >(pTxtNd->GetActualListStartValue());
@@ -512,7 +512,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
     }
 
-    // Jetzt holen wir das Token und ggf. die Klasse
+    
     SwHTMLFmtInfo aFmtInfo( &rFmt );
     SwHTMLFmtInfo *pFmtInfo;
     SwHTMLFmtInfos::iterator it = rHWrt.aTxtCollInfos.find( aFmtInfo );
@@ -531,16 +531,16 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             ((SwHTMLFmtInfo *)pFmtInfo)->bScriptDependent = true;
     }
 
-    // Jetzt wird festgelegt, was aufgrund des Tokens so moeglich ist
-    sal_uInt16 nToken = 0;          // Token fuer Tag-Wechsel
-    sal_Bool bOutNewLine = sal_False;   // nur ein LF ausgeben?
+    
+    sal_uInt16 nToken = 0;          
+    sal_Bool bOutNewLine = sal_False;   
     if( !pFmtInfo->aToken.isEmpty() )
     {
-        // Es ist eine HTML-Tag-Vorlage oder die Vorlage ist von einer
-        // solchen abgeleitet
+        
+        
         rInfo.aToken = pFmtInfo->aToken;
 
-        // der erste Buchstabe reicht meistens
+        
         switch( rInfo.aToken[0] )
         {
         case 'A': OSL_ENSURE( rInfo.aToken == OOO_STRING_SVTOOLS_HTML_address,
@@ -588,21 +588,21 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
     else
     {
-        // alle Vorlagen, die nicht einem HTML-Tag entsprechen oder von
-        // diesem abgeleitet sind, werden als <P> exportiert
+        
+        
 
         rInfo.aToken = OOO_STRING_SVTOOLS_HTML_parabreak;
         bPara = sal_True;
     }
 
-    // Falls noetig, die harte Attributierung der Vorlage uebernehmen
+    
     if( pFmtInfo->pItemSet )
     {
         OSL_ENSURE( !rInfo.pItemSet, "Wo kommt der Item-Set her?" );
         rInfo.pItemSet = new SfxItemSet( *pFmtInfo->pItemSet );
     }
 
-    // und noch die harte Attributierung des Absatzes dazunehmen
+    
     if( pNodeItemSet )
     {
         if( rInfo.pItemSet )
@@ -611,7 +611,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             rInfo.pItemSet = new SfxItemSet( *pNodeItemSet );
     }
 
-    // den unteren Absatz-Abstand brauchen wir noch
+    
     const SvxULSpaceItem& rULSpace =
         pNodeItemSet ? ((const SvxULSpaceItem &)pNodeItemSet->Get(RES_UL_SPACE))
                      : rFmt.GetULSpace();
@@ -642,16 +642,16 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     if( bOutNewLine )
     {
-        // nur einen Zeilen-Umbruch (ohne Einrueckung) am Absatz-Anfang
-        // ausgeben
-        rInfo.aToken = OString();   // kein End-Tag ausgeben
+        
+        
+        rInfo.aToken = OString();   
         rWrt.Strm().WriteCharPtr( SAL_NEWLINE_STRING );
 
         return;
     }
 
 
-    // soll ein ALIGN=... geschrieben werden?
+    
     const SfxPoolItem* pAdjItem = 0;
     const SfxPoolItem* pItem;
 
@@ -662,13 +662,13 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         pAdjItem = pItem;
     }
 
-    // Unteren Absatz-Abstand beachten ? (nie im letzen Absatz von
-    // Tabellen)
+    
+    
     sal_Bool bUseParSpace = !rHWrt.bOutTable ||
                         (rWrt.pCurPam->GetPoint()->nNode.GetIndex() !=
                          rWrt.pCurPam->GetMark()->nNode.GetIndex());
-    // Wenn Styles exportiert werden, wird aus eingerueckten Absaetzen
-    // eine Definitions-Liste
+    
+    
     const SvxLRSpaceItem& rLRSpace =
         pNodeItemSet ? ((const SvxLRSpaceItem &)pNodeItemSet->Get(RES_LR_SPACE))
                      : rFmt.GetLRSpace();
@@ -691,9 +691,9 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
         else
         {
-            // If the left margin is 0 or negative, emulating indent
-            // with <dd> does not work. We then set a def list only if
-            // the dd style is used.
+            
+            
+            
             nNewDefListLvl = (bForceDL&& !bDT) ? 1 : 0;
         }
 
@@ -703,8 +703,8 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         if( bForceDL && bDT )
         {
-            // Statt eines DD muessen wir hier auch ein DT der Ebene
-            // darueber nehmen
+            
+            
             nNewDefListLvl++;
         }
         else if( !nNewDefListLvl && !rHWrt.bCfgOutStyles && bPara &&
@@ -713,7 +713,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                  (!pAdjItem || SVX_ADJUST_LEFT==
                     ((const SvxAdjustItem *)pAdjItem)->GetAdjust()) )
         {
-            // Absaetze ohne unteren Abstand als DT exportieren
+            
             nNewDefListLvl = 1;
             bDT = sal_True;
             rInfo.bParaPossible = sal_False;
@@ -724,7 +724,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     if( nNewDefListLvl != rHWrt.nDefListLvl )
         rHWrt.OutAndSetDefList( nNewDefListLvl );
 
-    // ggf. eine Aufzaehlung- oder Numerierungsliste beginnen
+    
     if( rInfo.bInNumBulList )
     {
         OSL_ENSURE( !rHWrt.nDefListLvl, "DL in OL geht nicht!" );
@@ -739,8 +739,8 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
     }
 
-    // Die Defaults aus der Vorlage merken, denn sie muessen nicht
-    // exportiert werden
+    
+    
     rHWrt.nDfltLeftMargin = pFmtInfo->nLeftMargin;
     rHWrt.nDfltRightMargin = pFmtInfo->nRightMargin;
     rHWrt.nDfltFirstLineIndent = pFmtInfo->nFirstLineIndent;
@@ -750,30 +750,30 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         if( !rHWrt.IsHTMLMode( HTMLMODE_LSPACE_IN_NUMBUL ) )
             rHWrt.nDfltLeftMargin = rLRSpace.GetTxtLeft();
 
-        // In Numerierungs-Listen keinen Ertzeilen-Einzug ausgeben.
+        
         rHWrt.nFirstLineIndent = rLRSpace.GetTxtFirstLineOfst();
     }
 
     if( rInfo.bInNumBulList && bNumbered && bPara && !rHWrt.bCfgOutStyles )
     {
-        // ein einzelnes LI hat keinen Abstand
+        
         rHWrt.nDfltTopMargin = 0;
         rHWrt.nDfltBottomMargin = 0;
     }
     else if( rHWrt.nDefListLvl && bPara )
     {
-        // ein einzelnes DD hat auch keinen Abstand
+        
         rHWrt.nDfltTopMargin = 0;
         rHWrt.nDfltBottomMargin = 0;
     }
     else
     {
         rHWrt.nDfltTopMargin = pFmtInfo->nTopMargin;
-        // Wenn im letzten Absatz einer Tabelle der
-        // untere Absatz-Abstand veraendert wird, vertut sich
-        // Netscape total. Deshalb exportieren wir hier erstmal
-        // nichts, indem wir den Abstand aus dem Absatz als Default
-        // setzen.
+        
+        
+        
+        
+        
         if( rHWrt.bCfgNetscape4 && !bUseParSpace )
             rHWrt.nDfltBottomMargin = rULSpace.GetLower();
         else
@@ -787,15 +787,15 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     }
 
     if( rHWrt.bLFPossible )
-        rHWrt.OutNewLine(); // Absatz-Tag in neue Zeile
+        rHWrt.OutNewLine(); 
     rInfo.bOutPara = sal_False;
 
-    // das ist jetzt unser neues Token
+    
     rHWrt.ChangeParaToken( nToken );
 
     sal_Bool bHasParSpace = bUseParSpace && rULSpace.GetLower() > 0;
 
-    // ggf ein List-Item aufmachen
+    
     if( rInfo.bInNumBulList && bNumbered )
     {
         OStringBuffer sOut;
@@ -818,9 +818,9 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         rHWrt.IsHTMLMode( HTMLMODE_NO_CONTROL_CENTERING ) &&
         rHWrt.HasControls() )
     {
-        // The align=... attribute does behave strange in netscape
-        // if there are controls in a paragraph, because the control and
-        // all text behind the control does not recognize this attribute.
+        
+        
+        
         OStringBuffer sOut;
         sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_division);
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
@@ -837,10 +837,10 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
             rHWrt.OutNewLine();
     }
 
-    // fuer BLOCKQUOTE, ADDRESS und DD wird noch ein Absatz-Token
-    // ausgegeben, wenn,
-    // - keine Styles geschrieben werden, und
-    // - ein untere Abstand oder eine Absatz-Ausrichtung existiert
+    
+    
+    
+    
     OString aToken = rInfo.aToken;
     if( !rHWrt.bCfgOutStyles && rInfo.bParaPossible && !bPara &&
         (bHasParSpace || pAdjItem) )
@@ -862,7 +862,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         for( sal_uInt16 i=0; i<3; i++ )
         {
-            // export language if it differs from the default language only.
+            
             const SfxPoolItem *pTmpItem;
             if( SFX_ITEM_SET == rInfo.pItemSet->GetItemState( aWhichIds[i],
                         true, &pTmpItem ) &&
@@ -871,22 +871,22 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
     }
 
-    // and the text direction
+    
     sal_uInt16 nDir = rHWrt.GetHTMLDirection(
             (pNodeItemSet ? static_cast < const SvxFrameDirectionItem& >(
                                     pNodeItemSet->Get( RES_FRAMEDIR ) )
                           : rFmt.GetFrmDir() ).GetValue() );
 
-    // Ein <P> wird nur geschrieben, wenn
-    // - wir in keiner OL/UL/DL sind, oder
-    // - der Absatz einer OL/UL nicht numeriert ist, oder
-    // - keine Styles exportiert werden und
-    //      - ein unterer Abstand oder
-    //      - eine Absatz-Ausrichtung existiert, ode
-    // - Styles exportiert werden und,
-    //      - die Textkoerper-Vorlage geaendert wurde, oder
-    //      - ein Benutzer-Format exportiert wird, oder
-    //      - Absatz-Attribute existieren
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if( !bPara ||
         (!rInfo.bInNumBulList && !rHWrt.nDefListLvl) ||
         (rInfo.bInNumBulList && !bNumbered) ||
@@ -896,7 +896,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         nDir != rHWrt.nDirection ||
         rHWrt.bCfgOutStyles )
     {
-        // jetzt werden Optionen ausgegeben
+        
         rHWrt.bTxtAttr = sal_False;
         rHWrt.bOutOpts = sal_True;
 
@@ -946,11 +946,11 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         }
         rWrt.Strm().WriteCharPtr( sOut.makeStringAndClear().getStr() );
 
-        // ggf. Ausrichtung ausgeben.
+        
         if( !rHWrt.bNoAlign && pAdjItem )
             OutHTML_SvxAdjust( rWrt, *pAdjItem );
 
-        // und nun ggf. noch die STYLE-Option
+        
         if( rHWrt.bCfgOutStyles && rInfo.pItemSet && !bNoStyle)
         {
             OutCSS1_ParaTagStyleOpt( rWrt, *rInfo.pItemSet );
@@ -958,13 +958,13 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
         rWrt.Strm().WriteChar( '>' );
 
-        // Soll ein </P> geschrieben wenrden
+        
         rInfo.bOutPara =
             bPara &&
             ( rHWrt.bCfgOutStyles ||
                 (!rHWrt.bCfgOutStyles && bHasParSpace) );
 
-        // wenn kein End-Tag geschrieben werden soll, es loeschen
+        
         if( bNoEndTag )
             rInfo.aToken = OString();
     }
@@ -979,7 +979,7 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
 
     rHWrt.GetNumInfo() = aNumInfo;
 
-    // die Defaults zuruecksetzen
+    
     rHWrt.nDfltLeftMargin = 0;
     rHWrt.nDfltRightMargin = 0;
     rHWrt.nDfltFirstLineIndent = 0;
@@ -993,12 +993,12 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
 {
     SwHTMLWriter & rHWrt = (SwHTMLWriter&)rWrt;
 
-    // wenn es kein Token gibt haben wir auch nichts auszugeben
+    
     if( rInfo.aToken.isEmpty() )
     {
         rHWrt.FillNextNumInfo();
         const SwHTMLNumRuleInfo& rNextInfo = *rHWrt.GetNextNumInfo();
-        // Auch in PRE muss eine Bullet-Liste beendet werden
+        
         if( rInfo.bInNumBulList )
         {
 
@@ -1020,10 +1020,10 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
         if( rHWrt.bLFPossible )
             rHWrt.OutNewLine( sal_True );
 
-        // fuer BLOCKQUOTE, ADDRESS und DD wird ggf noch ein
-        // Absatz-Token ausgegeben, wenn
-        // - keine Styles geschrieben werden, und
-        // - ein untere Abstand existiert
+        
+        
+        
+        
         if( rInfo.bParaPossible && rInfo.bOutPara )
             HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_parabreak, sal_False );
 
@@ -1043,7 +1043,7 @@ void OutHTML_SwFmtOff( Writer& rWrt, const SwHTMLTxtCollOutputInfo& rInfo )
         rHWrt.bLFPossible = sal_True;
     }
 
-    // ggf. eine Aufzaehlung- oder Numerierungsliste beenden
+    
     if( rInfo.bInNumBulList )
     {
         rHWrt.FillNextNumInfo();
@@ -1086,71 +1086,71 @@ HTMLSttEndPos::~HTMLSttEndPos()
 
 typedef std::vector<HTMLSttEndPos *> _HTMLEndLst;
 
-enum HTMLOnOffState { HTML_NOT_SUPPORTED,   // nicht unterst. Attribut
-                      HTML_REAL_VALUE,      // Attribut mit Wert
-                      HTML_ON_VALUE,        // Attribut entspricht On-Tag
-                      HTML_OFF_VALUE,       // Attribut entspricht Off-Tag
-                      HTML_CHRFMT_VALUE,    // Attribut fuer Zeichenvorlage
-                      HTML_COLOR_VALUE,     // Attribut fuer Vordergrundfarbe
-                      HTML_STYLE_VALUE,     // Attribut muss als Style exp.
-                      HTML_DROPCAP_VALUE,   // DropCap-Attributs
-                      HTML_AUTOFMT_VALUE }; // Attribute for automatic character styles
+enum HTMLOnOffState { HTML_NOT_SUPPORTED,   
+                      HTML_REAL_VALUE,      
+                      HTML_ON_VALUE,        
+                      HTML_OFF_VALUE,       
+                      HTML_CHRFMT_VALUE,    
+                      HTML_COLOR_VALUE,     
+                      HTML_STYLE_VALUE,     
+                      HTML_DROPCAP_VALUE,   
+                      HTML_AUTOFMT_VALUE }; 
 
 
 class HTMLEndPosLst
 {
-    _HTMLEndLst aStartLst;  // nach Anfangs-Psoitionen sortierte Liste
-    _HTMLEndLst aEndLst;    // nach End-Psotionen sortierte Liste
-    std::deque<sal_Int32> aScriptChgLst;    // positions where script changes
-                                    // 0 is not contained in this list,
-                                    // but the text length
-    // the script that is valif up to the position
-    // contained in aScriptChgList at the same index
+    _HTMLEndLst aStartLst;  
+    _HTMLEndLst aEndLst;    
+    std::deque<sal_Int32> aScriptChgLst;    
+                                    
+                                    
+    
+    
     ::std::vector<sal_uInt16> aScriptLst;
 
-    SwDoc *pDoc;            // das aktuelle Dokument
-    SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)
-    const Color* pDfltColor;// die Default-Vordergrund-Farbe
+    SwDoc *pDoc;            
+    SwDoc* pTemplate;       
+    const Color* pDfltColor;
     std::set<OUString>& rScriptTxtStyles;    //
 
     sal_uLong nHTMLMode;
-    sal_Bool bOutStyles : 1;    // werden Styles exportiert
+    sal_Bool bOutStyles : 1;    
 
 
-    // die Position eines Items in der Start-/Ende-Liste suchen
+    
     sal_uInt16 _FindStartPos( const HTMLSttEndPos *pPos ) const;
     sal_uInt16 _FindEndPos( const HTMLSttEndPos *pPos ) const;
 
-    // Eine SttEndPos in die Start- und Ende-Listen eintragen bzw. aus
-    // ihnen loeschen, wobei die Ende-Position bekannt ist
+    
+    
     void _InsertItem( HTMLSttEndPos *pPos, sal_uInt16 nEndPos );
     void _RemoveItem( sal_uInt16 nEndPos );
 
-    // die "Art" es Attributs ermitteln
+    
     HTMLOnOffState GetHTMLItemState( const SfxPoolItem& rItem );
 
-    // Existiert ein bestimmtes On-Tag-Item
+    
     sal_Bool ExistsOnTagItem( sal_uInt16 nWhich, sal_Int32 nPos );
 
-    // Existiert ein Item zum ausschalten eines Attributs, das genauso
-    // exportiert wird wie das uebergebene Item im gleichen Bereich?
+    
+    
     sal_Bool ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos,
                                           sal_Int32 nEndPos );
 
 
-    // das Ende eines gesplitteten Items anpassen
+    
     void FixSplittedItem( HTMLSttEndPos *pPos, sal_Int32 nNewEnd,
                             sal_uInt16 nStartPos );
 
-    // Ein Attribut in die Listen eintragen und ggf. aufteilen
+    
     void InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                                                sal_Int32 nEnd );
 
-    // Ein bereits vorhandenes Attribut aufteilen
+    
     void SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                                               sal_Int32 nEnd );
 
-    // Insert without taking care of script
+    
     void InsertNoScript( const SfxPoolItem& rItem, sal_Int32 nStart,
                           sal_Int32 nEnd, SwHTMLFmtInfos& rFmtInfos,
                          sal_Bool bParaAttrs=sal_False );
@@ -1165,7 +1165,7 @@ public:
                    const OUString& rText, std::set<OUString>& rStyles );
     ~HTMLEndPosLst();
 
-    // Ein Attribut einfuegen
+    
     void Insert( const SfxPoolItem& rItem, sal_Int32 nStart,  sal_Int32 nEnd,
                  SwHTMLFmtInfos& rFmtInfos, sal_Bool bParaAttrs=sal_False );
     void Insert( const SfxItemSet& rItemSet, sal_Int32 nStart, sal_Int32 nEnd,
@@ -1214,8 +1214,8 @@ sal_uInt16 HTMLEndPosLst::_FindEndPos( const HTMLSttEndPos *pPos ) const
 
 void HTMLEndPosLst::_InsertItem( HTMLSttEndPos *pPos, sal_uInt16 nEndPos )
 {
-    // In der Start-Liste das Attribut hinter allen vorher und an
-    // der gleichen Position gestarteten Attributen einfuegen
+    
+    
     sal_Int32 nStart = pPos->GetStart();
     sal_uInt16 i;
 
@@ -1224,7 +1224,7 @@ void HTMLEndPosLst::_InsertItem( HTMLSttEndPos *pPos, sal_uInt16 nEndPos )
         ;
     aStartLst.insert( aStartLst.begin() + i, pPos );
 
-    // die Position in der Ende-Liste wurde uebergeben
+    
     aEndLst.insert( aEndLst.begin() + nEndPos, pPos );
 }
 
@@ -1232,7 +1232,7 @@ void HTMLEndPosLst::_RemoveItem( sal_uInt16 nEndPos )
 {
     HTMLSttEndPos *pPos = aEndLst[nEndPos];
 
-    // jetzt Suchen wir es in der Start-Liste
+    
     sal_uInt16 nStartPos = _FindStartPos( pPos );
     if( nStartPos != USHRT_MAX )
         aStartLst.erase( aStartLst.begin() + nStartPos );
@@ -1401,18 +1401,18 @@ sal_Bool HTMLEndPosLst::ExistsOnTagItem( sal_uInt16 nWhich, sal_Int32 nPos )
 
         if( pTest->GetStart() > nPos )
         {
-            // dieses uns alle folgenden Attribute beginnen spaeter
+            
             break;
         }
         else if( pTest->GetEnd() > nPos )
         {
-            // das Attribut beginnt vor oder an der aktuellen Position
-            // und endet hinter ihr
+            
+            
             const SfxPoolItem *pItem = pTest->GetItem();
             if( pItem->Which() == nWhich &&
                 HTML_ON_VALUE == GetHTMLItemState(*pItem) )
             {
-                // ein On-Tag-Attibut wurde gefunden
+                
                 return sal_True;
             }
         }
@@ -1437,14 +1437,14 @@ sal_Bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos
 
         if( pTest->GetStart() > nStartPos )
         {
-            // dieses uns alle folgenden Attribute beginnen spaeter
+            
             break;
         }
         else if( pTest->GetStart()==nStartPos &&
                  pTest->GetEnd()==nEndPos )
         {
-            // das Attribut beginnt vor oder an der aktuellen Position
-            // und endet hinter ihr
+            
+            
             const SfxPoolItem *pItem = pTest->GetItem();
             sal_uInt16 nTstWhich = pItem->Which() ;
             if( (nTstWhich == RES_CHRATR_CROSSEDOUT ||
@@ -1452,8 +1452,8 @@ sal_Bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos
                  nTstWhich == RES_CHRATR_BLINK) &&
                 HTML_OFF_VALUE == GetHTMLItemState(*pItem) )
             {
-                // Ein Off-Tag-Attibut wurde gefunden, das genauso
-                // exportiert wird, wie das aktuelle Item
+                
+                
                 return sal_True;
             }
         }
@@ -1465,50 +1465,50 @@ sal_Bool HTMLEndPosLst::ExistsOffTagItem( sal_uInt16 nWhich, sal_Int32 nStartPos
 void HTMLEndPosLst::FixSplittedItem( HTMLSttEndPos *pPos, sal_Int32 nNewEnd,
                                         sal_uInt16 nStartPos )
 {
-    // die End-Position entsprechend fixen
+    
     pPos->SetEnd( nNewEnd );
 
-    // das Item aus der End-Liste entfernen
+    
     sal_uInt16 nEndPos = _FindEndPos( pPos );
     if( nEndPos != USHRT_MAX )
         aEndLst.erase( aEndLst.begin() + nEndPos );
 
-    // es wird von nun an als letztes an der entsprechenden Position
-    // beendet
+    
+    
     for( nEndPos=0; nEndPos < aEndLst.size() &&
                     aEndLst[nEndPos]->GetEnd() <= nNewEnd; nEndPos++ )
         ;
     aEndLst.insert( aEndLst.begin() + nEndPos, pPos );
 
-    // jetzt noch die spaeter gestarteten Attribute anpassen
+    
     for( sal_uInt16 i=nStartPos+1; i<aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pTest = aStartLst[i];
         sal_Int32 nTestEnd = pTest->GetEnd();
         if( pTest->GetStart() >= nNewEnd )
         {
-            // das Test-Attribut und alle folgenden beginnen, nachdem das
-            // gesplittete Attribut endet
+            
+            
             break;
         }
         else if( nTestEnd > nNewEnd )
         {
-            // das Test-Attribut beginnt, bevor das gesplittete Attribut
-            // endet und endet danach, muss also auch gesplittet werden
+            
+            
 
-            // das neue Ende setzen
+            
             pTest->SetEnd( nNewEnd );
 
-            // das Attribut aus der End-Liste entfernen
+            
             sal_uInt16 nEPos = _FindEndPos( pTest );
             if( nEPos != USHRT_MAX )
                 aEndLst.erase( aEndLst.begin() + nEPos );
 
-            // es endet jetzt als erstes Attribut an der entsprechenden
-            // Position. Diese Position in der Ende-Liste kennen wir schon.
+            
+            
             aEndLst.insert( aEndLst.begin() + nEndPos, pTest );
 
-            // den "Rest" des Attributs neu einfuegen
+            
             InsertItem( *pTest->GetItem(), nNewEnd, nTestEnd );
         }
     }
@@ -1525,25 +1525,25 @@ void HTMLEndPosLst::InsertItem( const SfxPoolItem& rItem, sal_Int32 nStart,
         sal_Int32 nTestEnd = pTest->GetEnd();
         if( nTestEnd <= nStart )
         {
-            // das Test-Attribut endet, bevor das neue beginnt
+            
             continue;
         }
         else if( nTestEnd < nEnd )
         {
-            // das Test-Attribut endet, bevor das neue endet. Das
-            // neue Attribut muss deshalb aufgesplittet werden
+            
+            
             _InsertItem( new HTMLSttEndPos( rItem, nStart, nTestEnd ), i );
             nStart = nTestEnd;
         }
         else
         {
-            // das Test-Attribut (und alle folgenden) endet, bevor das neue
-            // endet
+            
+            
             break;
         }
     }
 
-    // ein Attribut muss noch eingefuegt werden
+    
     _InsertItem( new HTMLSttEndPos( rItem, nStart, nEnd ), i );
 }
 
@@ -1554,8 +1554,8 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
 {
     sal_uInt16 nWhich = rItem.Which();
 
-    // erstmal muessen wir die alten Items anhand der Startliste suchen
-    // und die neuen Item-Bereiche festlegen
+    
+    
 
     for( sal_uInt16 i=0; i<aStartLst.size(); i++ )
     {
@@ -1565,16 +1565,16 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
 
         if( nTestStart >= nEnd )
         {
-            // dieses und alle nachfolgenden Attribute beginnen spaeter
+            
             break;
         }
         else if( nTestEnd > nStart )
         {
-            // das Test Attribut endet im zu loeschenenden Bereich
+            
             const SfxPoolItem *pItem = pTest->GetItem();
 
-            // nur entsprechende On-Tag Attribute muessen beruecksichtigt
-            // werden
+            
+            
             if( pItem->Which() == nWhich &&
                 HTML_ON_VALUE == GetHTMLItemState( *pItem ) )
             {
@@ -1582,16 +1582,16 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
 
                 if( nTestStart < nStart )
                 {
-                    // der Start des neuen Attribut entspricht
-                    // dem neuen Ende des Attribts
+                    
+                    
                     FixSplittedItem( pTest, nStart, i );
                     bDelete = false;
                 }
                 else
                 {
-                    // das Test-Item beginnt erst hinter dem neuen
-                    // Ende des Attribts und kann deshalb komplett
-                    // geloescht werden
+                    
+                    
+                    
                     aStartLst.erase( aStartLst.begin() + i );
                     i--;
 
@@ -1600,7 +1600,7 @@ void HTMLEndPosLst::SplitItem( const SfxPoolItem& rItem, sal_Int32 nStart,
                         aEndLst.erase( aEndLst.begin() + nEndPos );
                 }
 
-                // ggf den zweiten Teil des gesplitteten Attribts einfuegen
+                
                 if( nTestEnd > nEnd )
                 {
                     InsertItem( *pTest->GetItem(), nEnd, nTestEnd );
@@ -1669,24 +1669,24 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                             sal_Int32 nStart, sal_Int32 nEnd,
                             SwHTMLFmtInfos& rFmtInfos, sal_Bool bParaAttrs )
 {
-    // kein Bereich ?? dann nicht aufnehmen, wird nie wirksam !!
+    
     if( nStart != nEnd )
     {
         sal_Bool bSet = sal_False, bSplit = sal_False;
         switch( GetHTMLItemState(rItem) )
         {
         case HTML_ON_VALUE:
-            // das Attribut wird ausgegeben, wenn es nicht sowieso
-            // schon an ist
+            
+            
             if( !ExistsOnTagItem( rItem.Which(), nStart ) )
                 bSet = sal_True;
             break;
 
         case HTML_OFF_VALUE:
-            // wenn das entsprechne Attribut an ist, wird es gesplittet,
-            // Zusaetlich wird es aber als Style ausgegeben, wenn es nicht
-            // am ganzen Absatz gesetzt ist, weil es dann ja schon mit dem
-            // ABsatz-Tag ausgegeben wurde.
+            
+            
+            
+            
             if( ExistsOnTagItem( rItem.Which(), nStart ) )
                 bSplit = sal_True;
             bSet = bOutStyles && !bParaAttrs &&
@@ -1694,16 +1694,16 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             break;
 
         case HTML_REAL_VALUE:
-            // das Attribut kann immer ausgegeben werden
+            
             bSet = sal_True;
             break;
 
         case HTML_STYLE_VALUE:
-            // Das Attribut kann nur als CSS1 ausgegeben werden. Wenn
-            // es am Absatz gesetzt ist, wurde es schon mit dem
-            // Absatz-Tag ausgegeben. Einzige Ausnahme ist das
-            // Zeichen-Hintergrund-Attribut. Es muss immer wie ein
-            // Hint behandelt werden.
+            
+            
+            
+            
+            
             bSet = bOutStyles &&
                    (!bParaAttrs
                   || rItem.Which()==RES_CHRATR_BACKGROUND
@@ -1721,8 +1721,8 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                 const SwHTMLFmtInfo *pFmtInfo = GetFmtInfo( *pFmt, rFmtInfos );
                 if( !pFmtInfo->aToken.isEmpty() )
                 {
-                    // das Zeichenvorlagen-Tag muss vor den harten
-                    // Attributen ausgegeben werden
+                    
+                    
                     InsertItem( rItem, nStart, nEnd );
                 }
                 if( pFmtInfo->pItemSet )
@@ -1743,8 +1743,8 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             break;
 
         case HTML_COLOR_VALUE:
-            // Eine Vordergrund-Farbe als Absatz-Attribut wird nur
-            // exportiert, wenn sie nicht der Default-Farbe entspricht.
+            
+            
             {
                 OSL_ENSURE( RES_CHRATR_COLOR == rItem.Which(),
                         "Doch keine Vordergrund-Farbe" );
@@ -1764,7 +1764,7 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
                 nEnd = nStart + rDrop.GetChars();
                 if( !bOutStyles )
                 {
-                    // Zumindest die Attribute der Zeichenvorlage uebernehmen
+                    
                     const SwCharFmt *pCharFmt = rDrop.GetCharFmt();
                     if( pCharFmt )
                     {
@@ -1857,24 +1857,24 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
             sal_Int32 nChgPos = aScriptChgLst[i];
             if( nPos >= nChgPos )
             {
-                // the hint starts behind or at the next script change,
-                // so we may continue with this position.
+                
+                
                 continue;
             }
             if( nEnd <= nChgPos )
             {
-                // the (rest of) the hint ends before or at the next script
-                // change, so we can insert it, but only if it belongs
-                // to the current script.
+                
+                
+                
                 if( bDependsOnAnyScript || nScript == aScriptLst[i] )
                     InsertNoScript( rItem, nPos, nEnd, rFmtInfos,
                                     bParaAttrs );
                 break;
             }
 
-            // the hint starts before the next script change and ends behind
-            // it, so we can insert a hint upto the next script change and
-            // continue with the rest of the hint.
+            
+            
+            
             if( bDependsOnAnyScript || nScript == aScriptLst[i] )
                 InsertNoScript( rItem, nPos, nChgPos, rFmtInfos, bParaAttrs );
             nPos = nChgPos;
@@ -1909,16 +1909,16 @@ void HTMLEndPosLst::Insert( const SfxItemSet& rItemSet,
 void HTMLEndPosLst::Insert( const SwDrawFrmFmt& rFmt, sal_Int32 nPos,
                             SwHTMLFmtInfos& rFmtInfos )
 {
-    // der Type-Cast ist nur noetig, um nicht seinetwegen
-    // svdrwobt.hxx zu includem
+    
+    
     const SdrObject* pTextObj =
         (const SdrObject *)SwHTMLWriter::GetMarqueeTextObj( rFmt );
 
     if( pTextObj )
     {
-        // die Edit-Engine-Attribute des Objekts als SW-Attribute holen
-        // und als Hints einsortieren. Wegen der Menge der Hints werden
-        // Styles hierbei nicht beruecksichtigt!
+        
+        
+        
         const SfxItemSet& rFmtItemSet = rFmt.GetAttrSet();
         SfxItemSet aItemSet( *rFmtItemSet.GetPool(), RES_CHRATR_BEGIN,
                                                      RES_CHRATR_END );
@@ -1956,8 +1956,8 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
 {
     rHWrt.bTagOn = sal_True;
 
-    // Character border attribute must be the first which is written out
-    // because of border merge.
+    
+    
     sal_uInt16 nCharBoxIndex = 0;
     while( nCharBoxIndex < aStartLst.size() &&
            aStartLst[nCharBoxIndex]->GetItem()->Which() != RES_CHRATR_BOX )
@@ -1965,7 +1965,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
         ++nCharBoxIndex;
     }
 
-    // die Attribute in der Start-Liste sind aufsteigend sortiert
+    
     for( sal_uInt16 i=0; i< aStartLst.size(); i++ )
     {
         HTMLSttEndPos *pPos = 0;
@@ -1984,12 +1984,12 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
         sal_Int32 nStart = pPos->GetStart();
         if( nStart > nPos )
         {
-            // dieses und alle folgenden Attribute werden erst noch geoeffnet
+            
             break;
         }
         else if( nStart == nPos )
         {
-            // das Attribut ausgeben
+            
             sal_uInt16 nCSS1Script = rHWrt.nCSS1Script;
             sal_uInt16 nWhich = pPos->GetItem()->Which();
             if( RES_TXTATR_CHARFMT == nWhich ||
@@ -2001,7 +2001,7 @@ void HTMLEndPosLst::OutStartAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             if( pContext )
             {
                 HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
-                pContext = 0; // one time ony
+                pContext = 0; 
             }
             Out( aHTMLAttrFnTab, *pPos->GetItem(), rHWrt );
             rHWrt.nCSS1Script = nCSS1Script;
@@ -2014,7 +2014,7 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
 {
     rHWrt.bTagOn = sal_False;
 
-    // die Attribute in der End-Liste sind aufsteigend sortiert
+    
     sal_uInt16 i=0;
     while( i < aEndLst.size() )
     {
@@ -2026,9 +2026,9 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
             if( pContext )
             {
                 HTMLOutFuncs::FlushToAscii( rHWrt.Strm(), *pContext );
-                pContext = 0; // one time ony
+                pContext = 0; 
             }
-            // Skip closing span if next character span has the same border (border merge)
+            
             bool bSkipOut = false;
             if( pPos->GetItem()->Which() == RES_CHRATR_BOX )
             {
@@ -2053,13 +2053,13 @@ void HTMLEndPosLst::OutEndAttrs( SwHTMLWriter& rHWrt, sal_Int32 nPos,
         }
         else if( nEnd > nPos )
         {
-            // dieses und alle folgenden Attribute werden erst spaeter beendet
+            
             break;
         }
         else
         {
-            // Das Attribut wird vor der aktuellen Position beendet. Das
-            // darf nicht sein, aber wie koennen trotzdem damit umgehen
+            
+            
             OSL_ENSURE( nEnd >= nPos,
                     "Das Attribut sollte schon laengst beendet sein" );
             i++;
@@ -2077,24 +2077,24 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     const OUString& rStr = pNd->GetTxt();
     sal_Int32 nEnde = rStr.getLength();
 
-    // Besonderheit: leere Node und HR-Vorlage (horizontaler Strich)
-    //              nur ein <HR> ausgeben
+    
+    
     sal_uInt16 nPoolId = pNd->GetAnyFmtColl().GetPoolFmtId();
 
     if( !nEnde && (RES_POOLCOLL_HTML_HR==nPoolId ||
                    pNd->GetAnyFmtColl().GetName() == OOO_STRING_SVTOOLS_HTML_horzrule) )
     {
-        // dann die absatz-gebundenen Grafiken/OLE-Objekte im Absatz
-        // MIB 8.7.97: Ein <PRE> spannen wir um die Linie auf. Dann stimmen
-        // zwar die Abstaende nicht, aber sonst bekommen wir einen leeren
-        // Absatz hinter dem <HR> und das ist noch unschoener.
+        
+        
+        
+        
         rHTMLWrt.ChangeParaToken( 0 );
 
-        // Alle an dem Node verankerten Rahmen ausgeben
+        
         rHTMLWrt.OutFlyFrm( rNode.GetIndex(), 0, HTML_POS_ANY );
 
         if( rHTMLWrt.bLFPossible )
-            rHTMLWrt.OutNewLine(); // Absatz-Tag in eine neue Zeile
+            rHTMLWrt.OutNewLine(); 
 
         rHTMLWrt.bLFPossible = sal_True;
 
@@ -2185,22 +2185,22 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         return rHTMLWrt;
     }
 
-    // Die leeren Nodes mit 2pt Font-Hoehe und der Stand-Vorlage, die
-    // vor Tabellen und Bereichen eingefuegt werden, nicht exportieren,
-    // Bookmarks oder absatzgebundene Grafiken aber schon.
-    // MIB 21.7.97: Ausserdem auch keine leeren Tabellen-Zellen exportieren.
+    
+    
+    
+    
     if( !nEnde && (nPoolId == RES_POOLCOLL_STANDARD ||
                    nPoolId == RES_POOLCOLL_TABLE ||
                    nPoolId == RES_POOLCOLL_TABLE_HDLN) )
     {
-        // Der aktuelle Node ist leer und enthaelt Standard-Vorlage ...
+        
         const SfxPoolItem* pItem;
         const SfxItemSet *pItemSet = pNd->GetpSwAttrSet();
         if( pItemSet && pItemSet->Count() &&
             SFX_ITEM_SET == pItemSet->GetItemState( RES_CHRATR_FONTSIZE, false, &pItem ) &&
             40 == ((const SvxFontHeightItem *)pItem)->GetHeight() )
         {
-            // ... ausserdem ist die 2pt Schrift eingestellt ...
+            
             sal_uLong nNdPos = rWrt.pCurPam->GetPoint()->nNode.GetIndex();
             const SwNode *pNextNd = rWrt.pDoc->GetNodes()[nNdPos+1];
             const SwNode *pPrevNd = rWrt.pDoc->GetNodes()[nNdPos-1];
@@ -2212,11 +2212,11 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                                SwTableBoxStartNode==
                                 pPrevNd->GetStartNode()->GetStartNodeType() ) )
             {
-                // ... und er steht vor einer Tabelle ohne einem Bereich
+                
                 rHTMLWrt.OutBookmarks();
                 rHTMLWrt.bLFPossible = !rHTMLWrt.nLastParaToken;
 
-                // Alle an dem Node verankerten Rahmen ausgeben
+                
                 rHTMLWrt.OutFlyFrm( rNode.GetIndex(), 0, HTML_POS_ANY );
                 rHTMLWrt.bLFPossible = sal_False;
 
@@ -2225,7 +2225,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         }
     }
 
-    // PagePreaks uns PagDescs abfangen
+    
     sal_Bool bPageBreakBehind = sal_False;
     if( rHTMLWrt.bCfgFormFeed &&
         !(rHTMLWrt.bOutTable || rHTMLWrt.bOutFlyFrame) &&
@@ -2267,14 +2267,14 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
             rWrt.Strm().WriteChar( '\f' );
     }
 
-    // eventuell eine Form oeffnen
+    
     rHTMLWrt.OutForm();
 
-    // An dem Node "verankerte" Seitenegebunde Rahmen ausgeben
+    
     sal_Bool bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
                                          0, HTML_POS_PREFIX );
-    // An dem Node verankerte Rahmen ausgeben, die vor dem
-    // Absatz-Tag geschrieben werden sollen.
+    
+    
     if( bFlysLeft )
         bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
                                         0, HTML_POS_BEFORE );
@@ -2282,28 +2282,28 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     if( rHTMLWrt.pCurPam->GetPoint()->nNode == rHTMLWrt.pCurPam->GetMark()->nNode )
         nEnde = rHTMLWrt.pCurPam->GetMark()->nContent.GetIndex();
 
-    // gibt es harte Attribute, die als Optionen geschrieben werden muessen?
+    
     rHTMLWrt.bTagOn = sal_True;
 
-    // jetzt das Tag des Absatzes ausgeben
+    
     const SwFmt& rFmt = pNd->GetAnyFmtColl();
     SwHTMLTxtCollOutputInfo aFmtInfo;
     sal_Bool bOldLFPossible = rHTMLWrt.bLFPossible;
     OutHTML_SwFmt( rWrt, rFmt, pNd->GetpSwAttrSet(), aFmtInfo );
 
-    // Wenn vor dem Absatz-Tag keine neue Zeile aufgemacht wurde, dann
-    // tun wir das jetzt
+    
+    
     rHTMLWrt.bLFPossible = !rHTMLWrt.nLastParaToken;
     if( !bOldLFPossible && rHTMLWrt.bLFPossible )
         rHTMLWrt.OutNewLine();
 
 
-    // dann die Bookmarks (inkl. End-Tag)
+    
     rHTMLWrt.bOutOpts = sal_False;
     rHTMLWrt.OutBookmarks();
 
-    // jetzt ist noch mal eine gute Gelegenheit fuer ein LF, sofern es noch
-    // erlaubt ist
+    
+    
     if( rHTMLWrt.bLFPossible &&
         rHTMLWrt.GetLineLen() >= rHTMLWrt.nWhishLineLen )
     {
@@ -2311,13 +2311,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     }
     rHTMLWrt.bLFPossible = sal_False;
 
-    // Text, der aus einer Outline-Numerierung kommt ermitteln
+    
     sal_Int32 nOffset = 0;
     OUString aOutlineTxt;
     OUString aFullText;
 
-    // export numbering string as plain text only for the outline numbering,
-    // because the outline numbering isn't exported as a numbering - see <SwHTMLNumRuleInfo::Set(..)>
+    
+    
     if ( pNd->IsOutline() &&
          pNd->GetNumRule() == pNd->GetDoc()->GetOutlineNumRule() )
     {
@@ -2333,7 +2333,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         aFullText += aFootEndNoteSym;
     }
 
-    // gibt es harte Attribute, die als Tags geschrieben werden muessen?
+    
     aFullText += rStr;
     HTMLEndPosLst aEndPosLst( rWrt.pDoc, rHTMLWrt.pTemplate,
                               rHTMLWrt.pDfltColor, rHTMLWrt.bCfgOutStyles,
@@ -2348,13 +2348,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
     if( !aOutlineTxt.isEmpty() || rHTMLWrt.pFmtFtn )
     {
-        // Absatz-Attribute ausgeben, damit der Text die Attribute des
-        // Absatzes bekommt.
+        
+        
         aEndPosLst.OutStartAttrs( rHTMLWrt, 0 );
 
-        // Theoretisch muesste man hier die Zeichen-Vorlage der Numerierung
-        // beachten. Da man die ueber die UI nicht setzen kann, ignorieren
-        // wir sie erstmal.
+        
+        
+        
 
         if( !aOutlineTxt.isEmpty() )
             HTMLOutFuncs::Out_String( rWrt.Strm(), aOutlineTxt,
@@ -2368,8 +2368,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         }
     }
 
-    // erstmal den Start berichtigen. D.h. wird nur ein Teil vom Satz
-    // ausgegeben, so muessen auch da die Attribute stimmen!!
+    
+    
     rHTMLWrt.bTxtAttr = sal_True;
 
 
@@ -2379,7 +2379,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     sal_uInt16 nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
     if( nCntAttr && nStrPos > *( pHt = pNd->GetSwpHints()[ 0 ] )->GetStart() )
     {
-        // Ok, es gibt vorher Attribute, die ausgegeben werden muessen
+        
         do {
             aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset );
 
@@ -2395,11 +2395,11 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 if( !rHTMLWrt.bWriteAll && nHtEnd <= nStrPos )
                     continue;
 
-                // leere Hints am Anfang nicht beachten, oder ??
+                
                 if( nHtEnd == nHtStt )
                     continue;
 
-                // Attribut in die Liste aufnehemen
+                
                 if( rHTMLWrt.bWriteAll )
                     aEndPosLst.Insert( pHt->GetAttr(), nHtStt + nOffset,
                                        nHtEnd + nOffset,
@@ -2413,13 +2413,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                                        rHTMLWrt.aChrFmtInfos );
                 }
                 continue;
-                // aber nicht ausgeben, das erfolgt spaeter !!
+                
             }
 
         } while( nAttrPos < nCntAttr && nStrPos >
             *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
 
-        // dann gebe mal alle gesammelten Attribute von der String-Pos aus
+        
         aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset );
         aEndPosLst.OutStartAttrs( rHTMLWrt, nStrPos + nOffset );
     }
@@ -2434,7 +2434,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         sal_Int32 nPreSplitPos = 0;
         for( ; nStrPos < nEnde; nStrPos++ )
         {
-            // Die an der aktuellen Position verankerten Rahmen ausgeben
+            
             if( bFlysLeft )
             {
                 aEndPosLst.OutEndAttrs( rHTMLWrt, nStrPos + nOffset, &aContext );
@@ -2453,9 +2453,9 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     {
                         if( *pHt->End() != nStrPos )
                         {
-                            // Hints mit Ende einsortieren, wenn sie keinen
-                            // leeren Bereich aufspannen (Hints, die keinen
-                            // Bereich aufspannen werden ignoriert
+                            
+                            
+                            
                             aEndPosLst.Insert( pHt->GetAttr(), nStrPos + nOffset,
                                                *pHt->End() + nOffset,
                                                rHTMLWrt.aChrFmtInfos );
@@ -2463,7 +2463,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     }
                     else
                     {
-                        // Hints ohne-Ende werden als letztes ausgebeben
+                        
                         OSL_ENSURE( !pTxtHt, "Wieso gibt es da schon ein Attribut ohne Ende?" );
                         if( rHTMLWrt.nTxtAttrsToIgnore>0 )
                         {
@@ -2480,13 +2480,13 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                                 bWriteBreak = sal_False;
                             }
                         }
-                        bOutChar = sal_False;       // keine 255 ausgeben
+                        bOutChar = sal_False;       
                     }
                 } while( ++nAttrPos < nCntAttr && nStrPos ==
                     *( pHt = pNd->GetSwpHints()[ nAttrPos ] )->GetStart() );
             }
 
-            // Manche Draw-Formate koennen auch noch Attribute mitbringen
+            
             if( pTxtHt && RES_TXTATR_FLYCNT == pTxtHt->Which() )
             {
                 const SwFrmFmt* pFrmFmt =
@@ -2516,7 +2516,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
             if( bOutChar )
             {
-                // #i120442#: get the UTF-32 codepoint by converting an eventual UTF-16 unicode surrogate pair
+                
                 sal_uInt64 c = rStr[nStrPos];
                 if( nStrPos < nEnde - 1 )
                 {
@@ -2530,8 +2530,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     }
                 }
 
-                // try to split a line after about 255 characters
-                // at a space character unless in a PRE-context
+                
+                
                 if( ' '==c && !rHTMLWrt.nLastParaToken  )
                 {
                     sal_Int32 nLineLen;
@@ -2563,7 +2563,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                         HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
                         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_linebreak );
                     }
-                    // #i120442#: if c is outside the unicode base plane output it as "&#******;"
+                    
                     else if( c > 0xffff)
                     {
                         OString sOut("&#");
@@ -2574,9 +2574,9 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                     else
                         HTMLOutFuncs::Out_Char( rWrt.Strm(), (sal_Unicode)c, aContext, &rHTMLWrt.aNonConvertableCharacters );
 
-                    // if a paragraph's last character is a hard line break
-                    // then we need to add an extra <br>
-                    // because browsers like Mozilla wouldn't add a line for the next paragraph
+                    
+                    
+                    
                     bWriteBreak = (0x0a == c) &&
                                   (HTML_PREFORMTXT_ON != rHTMLWrt.nLastParaToken);
                 }
@@ -2587,7 +2587,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
 
     aEndPosLst.OutEndAttrs( rHTMLWrt, SAL_MAX_INT32 );
 
-    // Die an der letzten Position verankerten Rahmen ausgeben
+    
     if( bFlysLeft )
         bFlysLeft = rHTMLWrt.OutFlyFrm( rNode.GetIndex(),
                                        nEnde, HTML_POS_INSIDE );
@@ -2604,9 +2604,9 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         if( bEndOfCell && !nEnde &&
             rHTMLWrt.IsHTMLMode(HTMLMODE_NBSP_IN_TABLES) )
         {
-            // Wenn der letzte Absatz einer Tabellezelle leer ist und
-            // wir fuer den MS-IE exportieren, schreiben wir statt eines
-            // <BR> ein &nbsp;
+            
+            
+            
             rWrt.Strm().WriteChar( '&' ).WriteCharPtr( OOO_STRING_SVTOOLS_HTML_S_nbsp ).WriteChar( ';' );
         }
         else
@@ -2644,8 +2644,8 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
         rHTMLWrt.bLFPossible = sal_True;
     }
 
-    // wenn ein LF nicht schon erlaubt ist wird es erlaubt, wenn der
-    // Absatz mit einem ' ' endet
+    
+    
     if( !rHTMLWrt.bLFPossible && !rHTMLWrt.nLastParaToken &&
         nEnde > 0 && ' ' == rStr[nEnde-1] )
         rHTMLWrt.bLFPossible = sal_True;
@@ -2653,7 +2653,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
     rHTMLWrt.bTagOn = sal_False;
     OutHTML_SwFmtOff( rWrt, aFmtInfo );
 
-    // eventuell eine Form schliessen
+    
     rHTMLWrt.OutForm( sal_False );
 
     if( bPageBreakBehind )
@@ -2670,7 +2670,7 @@ sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal, const bool bVert ) const
         Size aSz( bVert ? 0 : nVal, bVert ? nVal : 0 );
         aSz = Application::GetDefaultDevice()->LogicToPixel(aSz, MapMode( MAP_TWIP ));
         nVal = bVert ? aSz.Height() : aSz.Width();
-        if( !nVal )     // wo ein Twip ist sollte auch ein Pixel sein
+        if( !nVal )     
             nVal = 1;
     }
     return nVal;
@@ -2679,8 +2679,8 @@ sal_uInt32 SwHTMLWriter::ToPixel( sal_uInt32 nVal, const bool bVert ) const
 
 static Writer& OutHTML_CSS1Attr( Writer& rWrt, const SfxPoolItem& rHt )
 {
-    // wenn gerade Hints geschrieben werden versuchen wir den Hint als
-    // CSS1-Attribut zu schreiben
+    
+    
 
     if( ((SwHTMLWriter&)rWrt).bCfgOutStyles && ((SwHTMLWriter&)rWrt).bTxtAttr )
         OutCSS1_HintSpanTag( rWrt, rHt );
@@ -2699,8 +2699,8 @@ static Writer& OutHTML_SvxColor( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( !rHTMLWrt.bTxtAttr && rHTMLWrt.bCfgOutStyles && rHTMLWrt.bCfgPreferStyles )
     {
-        // Font-Farbe nicht als Tag schreiben, wenn Styles normalen Tags
-        // vorgezogen werden
+        
+        
         return rWrt;
     }
 
@@ -2736,7 +2736,7 @@ static Writer& OutHTML_SwPosture( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
     {
-        // vielleicht als CSS1-Attribut ?
+        
         OutCSS1_HintSpanTag( rWrt, rHt );
     }
 
@@ -2786,7 +2786,7 @@ static Writer& OutHTML_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
 
         if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
         {
-            // always export font size as CSS option, too
+            
             OutCSS1_HintStyleOpt( rWrt, rHt );
         }
         rWrt.Strm().WriteChar( '>' );
@@ -2837,7 +2837,7 @@ static Writer& OutHTML_SwWeight( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
     {
-        // vielleicht als CSS1-Attribut ?
+        
         OutCSS1_HintSpanTag( rWrt, rHt );
     }
 
@@ -2851,7 +2851,7 @@ static Writer& OutHTML_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.bOutOpts )
         return rWrt;
 
-    // Wegen Netscape schrieben wir hier STRIKE und nicht S raus!
+    
     const FontStrikeout nStrike = ((const SvxCrossedOutItem&)rHt).GetStrikeout();
     if( STRIKEOUT_NONE != nStrike )
     {
@@ -2859,7 +2859,7 @@ static Writer& OutHTML_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
     {
-        // vielleicht als CSS1-Attribut ?
+        
         OutCSS1_HintSpanTag( rWrt, rHt );
     }
 
@@ -2890,7 +2890,7 @@ static Writer& OutHTML_SvxEscapement( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
     {
-        // vielleicht als CSS1-Attribut ?
+        
         OutCSS1_HintSpanTag( rWrt, rHt );
     }
 
@@ -2912,7 +2912,7 @@ static Writer& OutHTML_SwUnderline( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
     {
-        // vielleicht als CSS1-Attribut ?
+        
         OutCSS1_HintSpanTag( rWrt, rHt );
     }
 
@@ -2936,8 +2936,8 @@ static Writer& OutHTML_SwFlyCnt( Writer& rWrt, const SfxPoolItem& rHt )
 }
 
 
-// Das ist jetzt unser Blink-Item. Blinkend wird eingeschaltet, indem man
-// das Item auf sal_True setzt!
+
+
 static Writer& OutHTML_SwBlink( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
@@ -2950,7 +2950,7 @@ static Writer& OutHTML_SwBlink( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else if( rHTMLWrt.bCfgOutStyles && rHTMLWrt.bTxtAttr )
     {
-        // vielleicht als CSS1-Attribut ?
+        
         OutCSS1_HintSpanTag( rWrt, rHt );
     }
 
@@ -2965,11 +2965,11 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
     const SvxMacroTableDtor *pMacTable = rINetFmt.GetMacroTbl();
     sal_Bool bEvents = pMacTable != 0 && !pMacTable->empty();
 
-    // Gibt es ueberhaupt etwas auszugeben?
+    
     if( aURL.isEmpty() && !bEvents && rINetFmt.GetName().isEmpty() )
         return rWrt;
 
-    // Tag aus? Dann nur ein </A> ausgeben.
+    
     if( !bOn )
     {
         HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(), OOO_STRING_SVTOOLS_HTML_anchor, sal_False );
@@ -3085,7 +3085,7 @@ static Writer& OutHTML_SwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
 
     if( rHTMLWrt.bTagOn )
     {
-        // ggf. ein noch offenes Attribut voruebergehend beenden
+        
         if( rHTMLWrt.aINetFmts.size() )
         {
             SwFmtINetFmt *pINetFmt =
@@ -3093,22 +3093,22 @@ static Writer& OutHTML_SwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
             OutHTML_INetFmt( rWrt, *pINetFmt, sal_False );
         }
 
-        // jetzt das neue aufmachen
+        
         OutHTML_INetFmt( rWrt, rINetFmt, sal_True );
 
-        // und merken
+        
         SwFmtINetFmt *pINetFmt = new SwFmtINetFmt( rINetFmt );
         rHTMLWrt.aINetFmts.push_back( pINetFmt );
     }
     else
     {
-        // das
+        
         OutHTML_INetFmt( rWrt, rINetFmt, sal_False );
 
         OSL_ENSURE( rHTMLWrt.aINetFmts.size(), "da fehlt doch ein URL-Attribut" );
         if( rHTMLWrt.aINetFmts.size() )
         {
-            // das eigene Attribut vom Stack holen
+            
             SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
             rHTMLWrt.aINetFmts.pop_back();
             delete pINetFmt;
@@ -3116,8 +3116,8 @@ static Writer& OutHTML_SwFmtINetFmt( Writer& rWrt, const SfxPoolItem& rHt )
 
         if( !rHTMLWrt.aINetFmts.empty() )
         {
-            // es ist noch ein Attribut auf dem Stack, das wieder geoeffnet
-            // werden muss
+            
+            
             SwFmtINetFmt *pINetFmt = rHTMLWrt.aINetFmts.back();
             OutHTML_INetFmt( rWrt, *pINetFmt, sal_True );
         }
@@ -3253,9 +3253,9 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_WORDLINEMODE  */      0,
 /* RES_CHRATR_AUTOKERN  */          0,
 /* RES_CHRATR_BLINK */              OutHTML_SwBlink,
-/* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
-/* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
-/* RES_CHRATR_BACKGROUND */         OutHTML_CSS1Attr, // Neu: Zeichenhintergrund
+/* RES_CHRATR_NOHYPHEN  */          0, 
+/* RES_CHRATR_NOLINEBREAK */        0, 
+/* RES_CHRATR_BACKGROUND */         OutHTML_CSS1Attr, 
 /* RES_CHRATR_CJK_FONT */           OutHTML_SvxFont,
 /* RES_CHRATR_CJK_FONTSIZE */       OutHTML_SvxFontHeight,
 /* RES_CHRATR_CJK_LANGUAGE */       OutHTML_SvxLanguage,
@@ -3296,8 +3296,8 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_TXTATR_FTN */                OutHTML_SwFmtFtn,
 /* RES_TXTATR_ANNOTATION */         OutHTML_SwFmtFld,
 /* RES_TXTATR_DUMMY3 */             0,
-/* RES_TXTATR_DUMMY1 */             0, // Dummy:
-/* RES_TXTATR_DUMMY2 */             0, // Dummy:
+/* RES_TXTATR_DUMMY1 */             0, 
+/* RES_TXTATR_DUMMY2 */             0, 
 
 /* RES_PARATR_LINESPACING   */      0,
 /* RES_PARATR_ADJUST    */          OutHTML_SvxAdjust,
@@ -3307,23 +3307,23 @@ SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_PARATR_TABSTOP   */          0,
 /* RES_PARATR_HYPHENZONE*/          0,
 /* RES_PARATR_DROP */               OutHTML_CSS1Attr,
-/* RES_PARATR_REGISTER */           0, // neu:  Registerhaltigkeit
-/* RES_PARATR_NUMRULE */            0, // Dummy:
-/* RES_PARATR_SCRIPTSPACE */        0, // Dummy:
-/* RES_PARATR_HANGINGPUNCTUATION */ 0, // Dummy:
-/* RES_PARATR_FORBIDDEN_RULES */    0, // new
-/* RES_PARATR_VERTALIGN */          0, // new
-/* RES_PARATR_SNAPTOGRID*/          0, // new
-/* RES_PARATR_CONNECT_TO_BORDER */  0, // new
+/* RES_PARATR_REGISTER */           0, 
+/* RES_PARATR_NUMRULE */            0, 
+/* RES_PARATR_SCRIPTSPACE */        0, 
+/* RES_PARATR_HANGINGPUNCTUATION */ 0, 
+/* RES_PARATR_FORBIDDEN_RULES */    0, 
+/* RES_PARATR_VERTALIGN */          0, 
+/* RES_PARATR_SNAPTOGRID*/          0, 
+/* RES_PARATR_CONNECT_TO_BORDER */  0, 
 /* RES_PARATR_OUTLINELEVEL */       0,
 /* RES_PARATR_RSID */               0,
 /* RES_PARATR_GRABBAG */            0,
 
-/* RES_PARATR_LIST_ID */            0, // new
-/* RES_PARATR_LIST_LEVEL */         0, // new
-/* RES_PARATR_LIST_ISRESTART */     0, // new
-/* RES_PARATR_LIST_RESTARTVALUE */  0, // new
-/* RES_PARATR_LIST_ISCOUNTED */     0, // new
+/* RES_PARATR_LIST_ID */            0, 
+/* RES_PARATR_LIST_LEVEL */         0, 
+/* RES_PARATR_LIST_ISRESTART */     0, 
+/* RES_PARATR_LIST_RESTARTVALUE */  0, 
+/* RES_PARATR_LIST_ISCOUNTED */     0, 
 
 /* RES_FILL_ORDER   */              0,
 /* RES_FRM_SIZE */                  0,

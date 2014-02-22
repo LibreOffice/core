@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/ole/olehelper.hxx"
@@ -44,7 +44,7 @@
 namespace oox {
 namespace ole {
 
-// ============================================================================
+
 
 using ::com::sun::star::form::XFormComponent;
 using ::com::sun::star::form::XForm;
@@ -70,7 +70,7 @@ using ::com::sun::star::lang::XServiceInfo;
 
 using namespace ::com::sun::star::form;
 
-// ============================================================================
+
 
 namespace {
 
@@ -96,7 +96,7 @@ inline sal_Int32 lclDecodeBgrColor( sal_uInt32 nOleColor )
     return static_cast< sal_Int32 >( lclSwapRedBlue( nOleColor ) & 0xFFFFFF );
 }
 
-// ----------------------------------------------------------------------------
+
 
 const sal_uInt32 OLE_STDPIC_ID              = 0x0000746C;
 
@@ -128,11 +128,11 @@ classIdToGUIDCNamePairMap::classIdToGUIDCNamePairMap()
 {
     IdCntrlData initialCntrlData[] =
     {
-        // Command button MUST be at index 0
+        
         { FormComponentType::COMMANDBUTTON,
              { AX_GUID_COMMANDBUTTON, "CommandButton"} ,
         },
-        // Toggle button MUST be at index 1
+        
         {  TOGGLEBUTTON,
            { AX_GUID_TOGGLEBUTTON, "ToggleButton"},
         },
@@ -197,7 +197,7 @@ GUIDCNamePairMap& classIdToGUIDCNamePairMap::get()
     return theInst.mnIdToGUIDCNamePairMap;
 }
 
-// ----------------------------------------------------------------------------
+
 
 template< typename Type >
 void lclAppendHex( OUStringBuffer& orBuffer, Type nValue )
@@ -209,9 +209,9 @@ void lclAppendHex( OUStringBuffer& orBuffer, Type nValue )
         orBuffer[nCharIdx] = spcHexChars[ nValue & 0xF ];
 }
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 StdFontInfo::StdFontInfo() :
     mnHeight( 0 ),
@@ -231,7 +231,7 @@ StdFontInfo::StdFontInfo( const OUString& rName, sal_uInt32 nHeight,
 {
 }
 
-// ============================================================================
+
 
 sal_Int32 OleHelper::decodeOleColor(
         const GraphicHelper& rGraphicHelper, sal_uInt32 nOleColor, bool bDefaultColorBgr )
@@ -317,7 +317,7 @@ bool OleHelper::importStdFont( StdFontInfo& orFontInfo, BinaryInputStream& rInSt
 
     sal_uInt8 nVersion, nNameLen;
     rInStrm >> nVersion >> orFontInfo.mnCharSet >> orFontInfo.mnFlags >> orFontInfo.mnWeight >> orFontInfo.mnHeight >> nNameLen;
-    // according to spec the name is ASCII
+    
     orFontInfo.maName = rInStrm.readCharArrayUC( nNameLen, RTL_TEXTENCODING_ASCII_US );
     OSL_ENSURE( nVersion <= 1, "OleHelper::importStdFont - wrong version" );
     return !rInStrm.isEof() && (nVersion <= 1);
@@ -383,7 +383,7 @@ public:
 };
 OleFormCtrlExportHelper::OleFormCtrlExportHelper(  const Reference< XComponentContext >& rxCtx, const Reference< XModel >& rxDocModel, const Reference< XControlModel >& xCntrlModel ) : maControl( "Unknown" ), mpModel( NULL ), maGrfHelper( rxCtx, lcl_getFrame( rxDocModel ), StorageRef() ), mxDocModel( rxDocModel ), mxControlModel( xCntrlModel )
 {
-    // try to get the guid
+    
     Reference< com::sun::star::beans::XPropertySet > xProps( xCntrlModel, UNO_QUERY );
     if ( xProps.is() )
     {
@@ -507,7 +507,7 @@ bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rI
 {
     if ( !rInStrm.isEof() )
     {
-        // Special processing for those html controls
+        
         bool bOneOfHtmlControls = false;
         if ( rStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_SELECT )
           || rStrmClassId.toAsciiUpperCase().equalsAscii( HTML_GUID_TEXTBOX ) )
@@ -515,10 +515,10 @@ bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rI
 
         if ( bOneOfHtmlControls )
         {
-            // html controls don't seem have a handy record length following the GUID
-            // in the binary stream.
-            // Given the control stream length create a stream of nStreamSize bytes starting from
-            // nPos ( offset by the guid already read in )
+            
+            
+            
+            
             if ( !nStreamSize )
                 return false;
             const int nGuidSize = 0x10;
@@ -717,9 +717,9 @@ const Reference< XShapes >& MSConvertOCXControls::GetShapes()
     return mxShapes;
 }
 #endif
-// ============================================================================
 
-} // namespace ole
-} // namespace oox
+
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

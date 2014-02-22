@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/animation/animationstate.hxx>
@@ -25,7 +25,7 @@
 #include <drawinglayer/primitive2d/animatedprimitive2d.hxx>
 #include <drawinglayer/animation/animationtiming.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace sdr
 {
@@ -73,26 +73,26 @@ namespace sdr
             const double fCurrentTime(mrVOContact.GetObjectContact().getPrimitiveAnimator().GetTime());
             const double fNextTime(getSmallestNextTime(fCurrentTime));
 
-            // getSmallestNextTime will be zero when animation ended. If not zero, a next step
-            // exists
+            
+            
             if(!::basegfx::fTools::equalZero(fNextTime))
             {
-                // next time point exists, use it
+                
                 sal_uInt32 nNextTime;
 
                 if(fNextTime >= (double)0xffffff00)
                 {
-                    // take care for very late points in time, e.g. when a text animation stops
-                    // in a defined AnimationEntryFixed with endless (0xffffffff) duration
-                    nNextTime = GetTime() + (1000 * 60 * 60); // one hour, works with vcl timers, 0xffffff00 was too much...
+                    
+                    
+                    nNextTime = GetTime() + (1000 * 60 * 60); 
                 }
                 else
                 {
                     nNextTime = (sal_uInt32)fNextTime;
                 }
 
-                // ensure step forward in integer timing, the floating step difference maybe smaller than 1.0. Use
-                // at least 25ms for next step
+                
+                
                 const sal_uInt32 nMinimumStepTime((sal_uInt32)fCurrentTime + 25L);
 
                 if(nNextTime <= nMinimumStepTime)
@@ -100,7 +100,7 @@ namespace sdr
                     nNextTime = nMinimumStepTime;
                 }
 
-                // set time and reactivate by re-adding to the scheduler
+                
                 SetTime(nNextTime);
                 mrVOContact.GetObjectContact().getPrimitiveAnimator().InsertEvent(this);
             }
@@ -111,26 +111,26 @@ namespace sdr
             mrVOContact(rVOContact),
             maAnimatedPrimitives(rAnimatedPrimitives)
         {
-            // setup initially
+            
             prepareNextEvent();
         }
 
         PrimitiveAnimation::~PrimitiveAnimation()
         {
-            // ensure that Event member is removed from PrimitiveAnimator
+            
             mrVOContact.GetObjectContact().getPrimitiveAnimator().RemoveEvent(this);
         }
 
-        // execute event, from base class Event
+        
         void PrimitiveAnimation::Trigger(sal_uInt32 /*nTime*/)
         {
-            // schedule a repaint of associated object
+            
             mrVOContact.ActionChanged();
 
-            // re-setup
+            
             prepareNextEvent();
         }
-    } // end of namespace animation
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

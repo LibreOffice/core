@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xltracer.hxx"
@@ -70,7 +70,7 @@ void XclTracer::TracePrintRange()
 
 void XclTracer::TraceDates( sal_uInt16 nNumFmt)
 {
-    // Short Date = 14 and Short Date+Time = 22
+    
     if(nNumFmt == 14 || nNumFmt == 22)
         ProcessTraceOnce(eShortDate);
 }
@@ -89,7 +89,7 @@ void XclTracer::TraceFillPattern( bool bFillPattern)
 
 void XclTracer::TraceFormulaMissingArg()
 {
-    // missing parameter in Formula record
+    
     ProcessTraceOnce(eFormulaMissingArg);
 }
 
@@ -101,7 +101,7 @@ void XclTracer::TracePivotDataSource( bool bExternal)
 
 void XclTracer::TracePivotChartExists()
 {
-    // Pivot Charts not currently displayed.
+    
     ProcessTraceOnce(ePivotChartExists);
 }
 
@@ -117,20 +117,20 @@ void XclTracer::TraceChartOnlySheet()
 
 void XclTracer::TraceChartDataTable()
 {
-    // Data table is not supported.
+    
     ProcessTraceOnce(eChartDataTable);
 }
 
 void XclTracer::TraceChartLegendPosition()
 {
-    // If position is set to "not docked or inside the plot area" then
-    // we cannot guarantee the legend position.
+    
+    
     ProcessTraceOnce(eChartLegendPosition);
 }
 
 void XclTracer::TraceUnsupportedObjects()
 {
-    // Called from Excel 5.0 - limited Graphical object support.
+    
     ProcessTraceOnce(eUnsupportedObject);
 }
 
@@ -141,11 +141,11 @@ void XclTracer::TraceObjectNotPrintable()
 
 void XclTracer::TraceDVType(  bool bType)
 {
-    // Custom types work if 'Data->validity dialog' is not OKed.
+    
     if(bType)
         ProcessTraceOnce(eDVType);
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

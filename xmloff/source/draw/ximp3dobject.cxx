@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/extract.hxx>
@@ -85,7 +85,7 @@ void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttribu
     uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
     if(xPropSet.is())
     {
-        // set parameters
+        
         if(mbSetTransform)
         {
             uno::Any aAny;
@@ -93,14 +93,14 @@ void SdXML3DObjectContext::StartElement(const uno::Reference< xml::sax::XAttribu
             xPropSet->setPropertyValue("D3DTransformMatrix", aAny);
         }
 
-        // call parent
+        
         SdXMLShapeContext::StartElement(xAttrList);
     }
 }
 
 void SdXML3DObjectContext::EndElement()
 {
-    // call parent
+    
     SdXMLShapeContext::EndElement();
 }
 
@@ -164,23 +164,23 @@ SdXML3DCubeObjectShapeContext::~SdXML3DCubeObjectShapeContext()
 
 void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create shape
+    
     AddShape( "com.sun.star.drawing.Shape3DCubeObject" );
     if(mxShape.is())
     {
-        // add, set style and properties from base shape
+        
         SetStyle();
         SdXML3DObjectContext::StartElement(xAttrList);
 
-        // set local parameters on shape
+        
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
         {
-            // set parameters
+            
             drawing::Position3D aPosition3D;
             drawing::Direction3D aDirection3D;
 
-            // convert from min, max to size to be set
+            
             maMaxEdge = maMaxEdge - maMinEdge;
 
             aPosition3D.PositionX = maMinEdge.getX();
@@ -202,7 +202,7 @@ void SdXML3DCubeObjectShapeContext::StartElement(const uno::Reference< xml::sax:
 
 void SdXML3DCubeObjectShapeContext::EndElement()
 {
-    // call parent
+    
     SdXML3DObjectContext::EndElement();
 }
 
@@ -266,19 +266,19 @@ SdXML3DSphereObjectShapeContext::~SdXML3DSphereObjectShapeContext()
 
 void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create shape
+    
     AddShape( "com.sun.star.drawing.Shape3DSphereObject" );
     if(mxShape.is())
     {
-        // add, set style and properties from base shape
+        
         SetStyle();
         SdXML3DObjectContext::StartElement(xAttrList);
 
-        // set local parameters on shape
+        
         uno::Reference< beans::XPropertySet > xPropSet(mxShape, uno::UNO_QUERY);
         if(xPropSet.is())
         {
-            // set parameters
+            
             drawing::Position3D aPosition3D;
             drawing::Direction3D aDirection3D;
 
@@ -301,7 +301,7 @@ void SdXML3DSphereObjectShapeContext::StartElement(const uno::Reference< xml::sa
 
 void SdXML3DSphereObjectShapeContext::EndElement()
 {
-    // call parent
+    
     SdXML3DObjectContext::EndElement();
 }
 
@@ -351,26 +351,26 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
 
     if(xPropSet.is())
     {
-        // set parameters
+        
         if(!maPoints.isEmpty() && !maViewBox.isEmpty())
         {
-            // import 2d PolyPolygon from svg:d
+            
             basegfx::B2DPolyPolygon aPolyPolygon;
 
             if(basegfx::tools::importFromSvgD(aPolyPolygon, maPoints, GetImport().needFixPositionAfterZ(), 0))
             {
-                // convert to 3D PolyPolygon
+                
                 const basegfx::B3DPolyPolygon aB3DPolyPolygon(
                     basegfx::tools::createB3DPolyPolygonFromB2DPolyPolygon(
                         aPolyPolygon));
 
-                // convert to UNO API class PolyPolygonShape3D
+                
                 drawing::PolyPolygonShape3D xPolyPolygon3D;
                 basegfx::tools::B3DPolyPolygonToUnoPolyPolygonShape3D(
                     aB3DPolyPolygon,
                     xPolyPolygon3D);
 
-                // set polygon data
+                
                 uno::Any aAny;
                 aAny <<= xPolyPolygon3D;
                 xPropSet->setPropertyValue(OUString("D3DPolyPolygon3D"), aAny);
@@ -381,14 +381,14 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
             }
         }
 
-        // call parent
+        
         SdXML3DObjectContext::StartElement(xAttrList);
     }
 }
 
 void SdXML3DPolygonBasedShapeContext::EndElement()
 {
-    // call parent
+    
     SdXML3DObjectContext::EndElement();
 }
 
@@ -411,11 +411,11 @@ SdXML3DLatheObjectShapeContext::~SdXML3DLatheObjectShapeContext()
 
 void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    // create shape
+    
     AddShape( "com.sun.star.drawing.Shape3DLatheObject" );
     if(mxShape.is())
     {
-        // add, set style and properties from base shape
+        
         SetStyle();
         SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
     }
@@ -423,7 +423,7 @@ void SdXML3DLatheObjectShapeContext::StartElement(const uno::Reference< xml::sax
 
 void SdXML3DLatheObjectShapeContext::EndElement()
 {
-    // call parent
+    
     SdXML3DPolygonBasedShapeContext::EndElement();
 }
 
@@ -449,7 +449,7 @@ void SdXML3DExtrudeObjectShapeContext::StartElement(const uno::Reference< xml::s
     AddShape( "com.sun.star.drawing.Shape3DExtrudeObject" );
     if(mxShape.is())
     {
-        // add, set style and properties from base shape
+        
         SetStyle();
         SdXML3DPolygonBasedShapeContext::StartElement(xAttrList);
     }
@@ -457,10 +457,10 @@ void SdXML3DExtrudeObjectShapeContext::StartElement(const uno::Reference< xml::s
 
 void SdXML3DExtrudeObjectShapeContext::EndElement()
 {
-    // call parent
+    
     SdXML3DPolygonBasedShapeContext::EndElement();
 }
 
-// EOF
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

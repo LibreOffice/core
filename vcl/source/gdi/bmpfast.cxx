@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -55,7 +55,7 @@ public:
     void    operator++(int);
 };
 
-// template specializations for truecolor pixel formats
+
 template <>
 class TrueColorPixelPtr<BMP_FORMAT_24BIT_TC_RGB> : public BasePixelPtr
 {
@@ -182,7 +182,7 @@ class TrueColorPixelPtr<BMP_FORMAT_16BIT_TC_MSB_MASK> : public BasePixelPtr
 public:
     void    operator++()            { mpPixel += 2; }
 
-    // TODO: non565-RGB
+    
     PIXBYTE GetRed() const          { return (mpPixel[0] & 0xF8U); }
     PIXBYTE GetGreen() const        { return (mpPixel[0]<<5U) | ((mpPixel[1]>>3U)&28U); }
     PIXBYTE GetBlue() const         { return (mpPixel[1]<<3U); }
@@ -202,7 +202,7 @@ class TrueColorPixelPtr<BMP_FORMAT_16BIT_TC_LSB_MASK> : public BasePixelPtr
 public:
     void    operator++()            { mpPixel += 2; }
 
-    // TODO: non565-RGB
+    
     PIXBYTE GetRed() const          { return (mpPixel[1] & 0xF8U); }
     PIXBYTE GetGreen() const        { return (mpPixel[1]<<5U) | ((mpPixel[0]>>3U)&28U); }
     PIXBYTE GetBlue() const         { return (mpPixel[0]<<3U); }
@@ -226,14 +226,14 @@ public:
     void    SetColor( PIXBYTE, PIXBYTE, PIXBYTE ) const {}
 };
 
-// TODO: for some reason many Alpha maps are BMP_FORMAT_8BIT_PAL
-// they should be BMP_FORMAT_8BIT_TC_MASK
+
+
 template <>
 class TrueColorPixelPtr<BMP_FORMAT_8BIT_PAL>
 : public TrueColorPixelPtr<BMP_FORMAT_8BIT_TC_MASK>
 {};
 
-// converting truecolor formats
+
 template <sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplConvertPixel( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc )
@@ -247,7 +247,7 @@ inline void ImplConvertPixel<BMP_FORMAT_16BIT_TC_LSB_MASK, BMP_FORMAT_16BIT_TC_M
     const TrueColorPixelPtr<BMP_FORMAT_16BIT_TC_MSB_MASK>& rDst,
     const TrueColorPixelPtr<BMP_FORMAT_16BIT_TC_LSB_MASK>& rSrc )
 {
-    // byte swapping
+    
     const PIXBYTE* pSrc = rSrc.GetRawPtr();
     PIXBYTE* pDst = rDst.GetRawPtr();
     pDst[1] = pSrc[0];
@@ -268,7 +268,7 @@ inline void ImplConvertLine( const TrueColorPixelPtr<DSTFMT>& rDst,
     }
 }
 
-// alpha blending truecolor pixels
+
 template <unsigned ALPHABITS, sal_uLong SRCFMT, sal_uLong DSTFMT>
 inline void ImplBlendPixels( const TrueColorPixelPtr<DSTFMT>& rDst,
     const TrueColorPixelPtr<SRCFMT>& rSrc, unsigned nAlphaVal )
@@ -344,7 +344,7 @@ static bool ImplCopyImage( BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuf
     const PIXBYTE* pRawSrc = rSrcBuffer.mpBits;
     PIXBYTE* pRawDst = rDstBuffer.mpBits;
 
-    // source and destination don't match upside down
+    
     if( BMP_FORMAT_TOP_DOWN & (rSrcBuffer.mnFormat ^ rDstBuffer.mnFormat)  )
     {
         pRawDst += (rSrcBuffer.mnHeight - 1) * nDstLinestep;
@@ -374,7 +374,7 @@ template <sal_uLong DSTFMT,sal_uLong SRCFMT>
 bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer )
 {
-    // help the compiler to avoid instantiations of unneeded conversions
+    
     DBG_ASSERT( SRCFMT != DSTFMT, "ImplConvertToBitmap into same format");
     if( SRCFMT == DSTFMT )
         return false;
@@ -384,7 +384,7 @@ bool ImplConvertToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
 
     TrueColorPixelPtr<DSTFMT> aDstLine; aDstLine.SetRawPtr( rDstBuffer.mpBits );
 
-    // source and destination don't match upside down
+    
     if( BMP_FORMAT_TOP_DOWN & (rSrcBuffer.mnFormat ^ rDstBuffer.mnFormat) )
     {
         aDstLine.AddByteOffset( (rSrcBuffer.mnHeight - 1) * nDstLinestep );
@@ -406,7 +406,7 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
 {
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
 
-    // select the matching instantiation for the destination's bitmap format
+    
     switch( rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN )
     {
         case BMP_FORMAT_1BIT_MSB_PAL:
@@ -417,11 +417,11 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
             break;
 
         case BMP_FORMAT_8BIT_TC_MASK:
-//            return ImplConvertToBitmap<BMP_FORMAT_8BIT_TC_MASK>( aSrcType, rDst, rSrc );
+
         case BMP_FORMAT_24BIT_TC_MASK:
-//            return ImplConvertToBitmap<BMP_FORMAT_24BIT_TC_MASK>( aSrcType, rDst, rSrc );
+
         case BMP_FORMAT_32BIT_TC_MASK:
-//            return ImplConvertToBitmap<BMP_FORMAT_32BIT_TC_MASK>( aSrcType, rDst, rSrc );
+
             break;
 
         case BMP_FORMAT_16BIT_TC_MSB_MASK:
@@ -451,7 +451,7 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
         if( ++nNotAccelerated == 100 )
         {
-            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
+            int foo = 0; (void)foo; 
             DBG_WARNING2( "ImplConvertFromBitmap for not accelerated case (0x%04X->0x%04X)",
                 rSrc.mnFormat, rDst.mnFormat );
         }
@@ -460,38 +460,38 @@ inline bool ImplConvertFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc 
     return false;
 }
 
-// A universal stretching conversion is overkill in most common situations
-// => performance benefits for speeding up the non-stretching cases
+
+
 bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     const SalTwoRect& rTR )
 {
-    // TODO:horizontal mirroring not implemented yet
+    
     if( rTR.mnDestWidth < 0 )
         return false;
-    // vertical mirroring
+    
     if( rTR.mnDestHeight < 0 )
-        // TODO: rDst.mnFormat ^= BMP_FORMAT_TOP_DOWN;
+        
         return false;
 
-    // offseted conversion is not implemented yet
+    
     if( rTR.mnSrcX || rTR.mnSrcY )
         return false;
     if( rTR.mnDestX || rTR.mnDestY )
         return false;
 
-    // stretched conversion is not implemented yet
+    
     if( rTR.mnDestWidth != rTR.mnSrcWidth )
         return false;
     if( rTR.mnDestHeight!= rTR.mnSrcHeight )
         return false;
 
-    // check source image size
+    
     if( rSrc.mnWidth < rTR.mnSrcX + rTR.mnSrcWidth )
         return false;
     if( rSrc.mnHeight < rTR.mnSrcY + rTR.mnSrcHeight )
         return false;
 
-    // check dest image size
+    
     if( rDst.mnWidth < rTR.mnDestX + rTR.mnDestWidth )
         return false;
     if( rDst.mnHeight < rTR.mnDestY + rTR.mnDestHeight )
@@ -500,7 +500,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     const sal_uLong nSrcFormat = rSrc.mnFormat & ~BMP_FORMAT_TOP_DOWN;
     const sal_uLong nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
 
-    // TODO: also implement conversions for 16bit colormasks with non-565 format
+    
     if( nSrcFormat & (BMP_FORMAT_16BIT_TC_LSB_MASK | BMP_FORMAT_16BIT_TC_MSB_MASK) )
         if( rSrc.maColorMask.GetRedMask()  != 0xF800
         ||  rSrc.maColorMask.GetGreenMask()!= 0x07E0
@@ -512,16 +512,16 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
         ||  rDst.maColorMask.GetBlueMask() != 0x001F )
             return false;
 
-    // special handling of trivial cases
+    
     if( nSrcFormat == nDstFormat )
     {
-        // accelerated palette conversions not yet implemented
+        
         if( rSrc.maPalette != rDst.maPalette )
             return false;
         return ImplCopyImage( rDst, rSrc );
     }
 
-    // select the matching instantiation for the source's bitmap format
+    
     switch( nSrcFormat )
     {
         case BMP_FORMAT_1BIT_MSB_PAL:
@@ -532,11 +532,11 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
             break;
 
         case BMP_FORMAT_8BIT_TC_MASK:
-//            return ImplConvertFromBitmap<BMP_FORMAT_8BIT_TC_MASK>( rDst, rSrc );
+
         case BMP_FORMAT_24BIT_TC_MASK:
-//            return ImplConvertFromBitmap<BMP_FORMAT_24BIT_TC_MASK>( rDst, rSrc );
+
         case BMP_FORMAT_32BIT_TC_MASK:
-//            return ImplConvertFromBitmap<BMP_FORMAT_32BIT_TC_MASK>( rDst, rSrc );
+
             break;
 
         case BMP_FORMAT_16BIT_TC_MSB_MASK:
@@ -567,7 +567,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     {
         if( ++nNotAccelerated == 100 )
         {
-            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
+            int foo = 0; (void)foo; 
             DBG_WARNING2( "ImplFastBitmapConversion for not accelerated case (0x%04X->0x%04X)", rSrc.mnFormat, rDst.mnFormat );
         }
     }
@@ -576,7 +576,7 @@ bool ImplFastBitmapConversion( BitmapBuffer& rDst, const BitmapBuffer& rSrc,
     return false;
 }
 
-template <sal_uLong DSTFMT,sal_uLong SRCFMT> //,sal_uLong MSKFMT>
+template <sal_uLong DSTFMT,sal_uLong SRCFMT> 
 bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     BitmapBuffer& rDstBuffer, const BitmapBuffer& rSrcBuffer,
     const BitmapBuffer& rMskBuffer )
@@ -590,25 +590,25 @@ bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     TrueColorPixelPtr<BMP_FORMAT_8BIT_PAL> aMskLine; aMskLine.SetRawPtr( rMskBuffer.mpBits );
     TrueColorPixelPtr<DSTFMT> aDstLine; aDstLine.SetRawPtr( rDstBuffer.mpBits );
 
-    // special case for single line masks
+    
     if( rMskBuffer.mnHeight == 1 )
         nMskLinestep = 0;
 
-    // source and mask don't match: upside down
+    
     if( (rSrcBuffer.mnFormat ^ rMskBuffer.mnFormat) & BMP_FORMAT_TOP_DOWN )
     {
         aMskLine.AddByteOffset( (rSrcBuffer.mnHeight - 1) * nMskLinestep );
         nMskLinestep = -nMskLinestep;
     }
 
-    // source and destination don't match: upside down
+    
     if( (rSrcBuffer.mnFormat ^ rDstBuffer.mnFormat) & BMP_FORMAT_TOP_DOWN )
     {
         aDstLine.AddByteOffset( (rSrcBuffer.mnHeight - 1) * nDstLinestep );
         nDstLinestep = -nDstLinestep;
     }
 
-    assert(rDstBuffer.mnHeight <= rSrcBuffer.mnHeight); // not sure about that?
+    assert(rDstBuffer.mnHeight <= rSrcBuffer.mnHeight); 
     for (int y = rDstBuffer.mnHeight; --y >= 0;)
     {
         ImplBlendLines<8>( aDstLine, rSrcLine, aMskLine, rDstBuffer.mnWidth );
@@ -620,7 +620,7 @@ bool ImplBlendToBitmap( TrueColorPixelPtr<SRCFMT>& rSrcLine,
     return true;
 }
 
-// some specializations to reduce the code size
+
 template <>
 inline bool ImplBlendToBitmap<BMP_FORMAT_24BIT_TC_BGR,BMP_FORMAT_24BIT_TC_BGR>(
     TrueColorPixelPtr<BMP_FORMAT_24BIT_TC_BGR>&,
@@ -656,7 +656,7 @@ bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const Bi
 {
     TrueColorPixelPtr<SRCFMT> aSrcType; aSrcType.SetRawPtr( rSrc.mpBits );
 
-    // select the matching instantiation for the destination's bitmap format
+    
     switch( rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN )
     {
         case BMP_FORMAT_1BIT_MSB_PAL:
@@ -667,11 +667,11 @@ bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const Bi
             break;
 
         case BMP_FORMAT_8BIT_TC_MASK:
-//            return ImplBlendToBitmap<BMP_FORMAT_8BIT_TC_MASK>( aSrcType, rDst, rSrc, rMsk );
+
         case BMP_FORMAT_24BIT_TC_MASK:
-//            return ImplBlendToBitmap<BMP_FORMAT_24BIT_TC_MASK>( aSrcType, rDst, rSrc, rMsk );
+
         case BMP_FORMAT_32BIT_TC_MASK:
-//            return ImplBlendToBitmap<BMP_FORMAT_32BIT_TC_MASK>( aSrcType, rDst, rSrc, rMsk );
+
             break;
 
         case BMP_FORMAT_16BIT_TC_MSB_MASK:
@@ -701,7 +701,7 @@ bool ImplBlendFromBitmap( BitmapBuffer& rDst, const BitmapBuffer& rSrc, const Bi
     if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
         if( ++nNotAccelerated == 100 )
         {
-            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
+            int foo = 0; (void)foo; 
             DBG_WARNING3( "ImplBlendFromBitmap for not accelerated case (0x%04X*0x%04X->0x%04X)",
                 rSrc.mnFormat, rMsk.mnFormat, rDst.mnFormat );
         }
@@ -714,47 +714,47 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
     const BitmapReadAccess& rSrcRA, const BitmapReadAccess& rMskRA,
     const SalTwoRect& rTR )
 {
-    // accelerated blending of paletted bitmaps not implemented yet
+    
     if( rSrcRA.HasPalette() )
         return false;
     if( rDstWA.HasPalette() )
         return false;
-    // TODO: either get rid of mask's use of 8BIT_PAL or check the palette
+    
 
-    // horizontal mirroring not implemented yet
+    
     if( rTR.mnDestWidth < 0 )
         return false;
-    // vertical mirroring
+    
     if( rTR.mnDestHeight < 0 )
-        // TODO: rDst.mnFormat ^= BMP_FORMAT_TOP_DOWN;
+        
         return false;
 
-    // offseted blending is not implemented yet
+    
     if( rTR.mnSrcX || rTR.mnSrcY )
         return false;
     if( rTR.mnDestX || rTR.mnDestY )
         return false;
 
-    // stretched blending is not implemented yet
+    
     if( rTR.mnDestWidth != rTR.mnSrcWidth )
         return false;
     if( rTR.mnDestHeight!= rTR.mnSrcHeight )
         return false;
 
-    // check source image size
+    
     if( rSrcRA.Width() < rTR.mnSrcX + rTR.mnSrcWidth )
         return false;
     if( rSrcRA.Height() < rTR.mnSrcY + rTR.mnSrcHeight )
         return false;
 
-    // check mask image size
+    
     if( rMskRA.Width() < rTR.mnSrcX + rTR.mnSrcWidth )
         return false;
     if( rMskRA.Height() < rTR.mnSrcY + rTR.mnSrcHeight )
         if( rMskRA.Height() != 1 )
             return false;
 
-    // check dest image size
+    
     if( rDstWA.Width() < rTR.mnDestX + rTR.mnDestWidth )
         return false;
     if( rDstWA.Height() < rTR.mnDestY + rTR.mnDestHeight )
@@ -767,7 +767,7 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
     const sal_uLong nSrcFormat = rSrc.mnFormat & ~BMP_FORMAT_TOP_DOWN;
     const sal_uLong nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
 
-    // accelerated conversions for 16bit colormasks with non-565 format are not yet implemented
+    
     if( nSrcFormat & (BMP_FORMAT_16BIT_TC_LSB_MASK | BMP_FORMAT_16BIT_TC_MSB_MASK) )
         if( rSrc.maColorMask.GetRedMask()  != 0xF800
         ||  rSrc.maColorMask.GetGreenMask()!= 0x07E0
@@ -779,7 +779,7 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
         ||  rDst.maColorMask.GetBlueMask() != 0x001F)
             return false;
 
-    // select the matching instantiation for the source's bitmap format
+    
     switch( nSrcFormat )
     {
         case BMP_FORMAT_1BIT_MSB_PAL:
@@ -790,11 +790,11 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
             break;
 
         case BMP_FORMAT_8BIT_TC_MASK:
-//            return ImplBlendFromBitmap<BMP_FORMAT_8BIT_TC_MASK>( rDst, rSrc );
+
         case BMP_FORMAT_24BIT_TC_MASK:
-//            return ImplBlendFromBitmap<BMP_FORMAT_24BIT_TC_MASK>( rDst, rSrc );
+
         case BMP_FORMAT_32BIT_TC_MASK:
-//            return ImplBlendFromBitmap<BMP_FORMAT_32BIT_TC_MASK>( rDst, rSrc );
+
             break;
 
         case BMP_FORMAT_16BIT_TC_MSB_MASK:
@@ -824,7 +824,7 @@ bool ImplFastBitmapBlending( BitmapWriteAccess& rDstWA,
     if( rSrc.mnWidth * rSrc.mnHeight >= 4000 )
         if( ++nNotAccelerated == 100 )
         {
-            int foo = 0; (void)foo; // so no warning is created when building on pro with debug
+            int foo = 0; (void)foo; 
             DBG_WARNING3( "ImplFastBlend for not accelerated case (0x%04X*0x%04X->0x%04X)",
                 rSrc.mnFormat, rMsk.mnFormat, rDst.mnFormat );
         }
@@ -837,7 +837,7 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
 {
     const sal_uLong nDstFormat = rDst.mnFormat & ~BMP_FORMAT_TOP_DOWN;
 
-    // erasing a bitmap is often just a byte-wise memory fill
+    
     bool bByteFill = true;
     sal_uInt8 nFillByte;
 
@@ -846,7 +846,7 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
         case BMP_FORMAT_1BIT_MSB_PAL:
         case BMP_FORMAT_1BIT_LSB_PAL:
             nFillByte = rColor.GetIndex();
-            nFillByte = static_cast<sal_uInt8>( -(nFillByte & 1) ); // 0x00 or 0xFF
+            nFillByte = static_cast<sal_uInt8>( -(nFillByte & 1) ); 
             break;
         case BMP_FORMAT_4BIT_MSN_PAL:
         case BMP_FORMAT_4BIT_LSN_PAL:
@@ -881,7 +881,7 @@ bool ImplFastEraseBitmap( BitmapBuffer& rDst, const BitmapColor& rColor )
         return true;
     }
 
-    // TODO: handle other bitmap formats
+    
     switch( nDstFormat )
     {
         case BMP_FORMAT_32BIT_TC_MASK:

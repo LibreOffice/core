@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fuzoom.hxx"
@@ -58,7 +58,7 @@ FuZoom::~FuZoom()
 {
     if (bVisible)
     {
-        // Hide ZoomRect
+        
         mpViewShell->DrawMarkRect(aZoomRect);
 
         bVisible = sal_False;
@@ -74,7 +74,7 @@ rtl::Reference<FuPoor> FuZoom::Create( ViewShell* pViewSh, ::sd::Window* pWin, :
 
 sal_Bool FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     mpWindow->CaptureMouse();
@@ -103,7 +103,7 @@ sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 
         if (nSlotId == SID_ZOOM_PANNING)
         {
-            // Panning
+            
 
             Point aScroll = aBeginPos - aEndPos;
 
@@ -133,12 +133,12 @@ sal_Bool FuZoom::MouseMove(const MouseEvent& rMEvt)
 
 sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     if (bVisible)
     {
-        // Hide ZoomRect
+        
         mpViewShell->DrawMarkRect(aZoomRect);
         bVisible = sal_False;
     }
@@ -147,13 +147,13 @@ sal_Bool FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 
     if(SID_ZOOM_PANNING != nSlotId)
     {
-        // Zoom
+        
         Size aZoomSizePixel = mpWindow->LogicToPixel(aZoomRect).GetSize();
         sal_uLong nTol = DRGPIX + DRGPIX;
 
         if ( aZoomSizePixel.Width() < (long) nTol && aZoomSizePixel.Height() < (long) nTol )
         {
-            // click at place: double zoom factor
+            
             Point aPos = mpWindow->PixelToLogic(aPosPix);
             Size aSize = mpWindow->PixelToLogic(mpWindow->GetOutputSizePixel());
             aSize.Width() /= 2;
@@ -197,6 +197,6 @@ void FuZoom::Deactivate()
     mpWindow->SetPointer( aPtr );
     mpViewShell->GetViewFrame()->GetBindings().Invalidate( SidArrayZoom );
 }
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -43,10 +43,10 @@
 namespace {
 
 static char const namespaceLibreOffice[] =
-    "http://libreoffice.org/extensions/description/2011";
+    "http:
 
 static char const namespaceOpenOfficeOrg[] =
-    "http://openoffice.org/extensions/description/2006";
+    "http:
 
 static char const minimalVersionLibreOffice[] = "LibreOffice-minimal-version";
 
@@ -64,7 +64,7 @@ OUString getReferenceOpenOfficeOrgMajorMinor() {
     OUString v(
             "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("version")
             ":Version:ReferenceOOoMajorMinor}");
-    rtl::Bootstrap::expandMacros(v); //TODO: check for failure
+    rtl::Bootstrap::expandMacros(v); 
     return v;
 }
 

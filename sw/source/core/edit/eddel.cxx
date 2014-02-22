@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -36,20 +36,20 @@
 void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
 {
     bool bSelectAll = StartsWithTable() && ExtendedSelectedAll(/*bFootnotes =*/ false);
-    // only for selections
+    
     if( !rPam.HasMark() || *rPam.GetPoint() == *rPam.GetMark())
         return;
 
-    // Is the selection in a table? Then delete only the content of the selected boxes.
-    // Here, there are two cases:
-    // 1. Point and Mark are in one box, delete selection as usual
-    // 2. Point and Mark are in different boxes, search all selected boxes and delete content
-    // 3. Point and Mark are at the document start and end, Point is in a table: delete selection as usual
+    
+    
+    
+    
+    
     if( rPam.GetNode()->FindTableNode() &&
         rPam.GetNode()->StartOfSectionNode() !=
         rPam.GetNode(false)->StartOfSectionNode() && !bSelectAll )
     {
-        // group the Undo in the table
+        
         if( pUndo && !*pUndo )
         {
             GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
@@ -64,37 +64,37 @@ void SwEditShell::DeleteSel( SwPaM& rPam, sal_Bool* pUndo )
             if( pEndSelPos->nNode.GetIndex() <= rEndNd.GetIndex() )
             {
                 *aDelPam.GetPoint() = *pEndSelPos;
-                pEndSelPos = 0;     // misuse a pointer as a flag
+                pEndSelPos = 0;     
             }
             else
             {
-                // then go to the end of the selection
+                
                 aDelPam.GetPoint()->nNode = rEndNd;
                 aDelPam.Move( fnMoveBackward, fnGoCntnt );
             }
-            // skip protected boxes
+            
             if( !pNd->IsCntntNode() ||
                 !pNd->IsInProtectSect() )
             {
-                // delete everything
+                
                 GetDoc()->DeleteAndJoin( aDelPam );
                 SaveTblBoxCntnt( aDelPam.GetPoint() );
             }
 
-            if( !pEndSelPos ) // at the end of a selection
+            if( !pEndSelPos ) 
                 break;
             aDelPam.DeleteMark();
-            aDelPam.Move( fnMoveForward, fnGoCntnt ); // next box
+            aDelPam.Move( fnMoveForward, fnGoCntnt ); 
         } while( pEndSelPos );
     }
     else
     {
-        // delete everything
+        
         GetDoc()->DeleteAndJoin( rPam );
         SaveTblBoxCntnt( rPam.GetPoint() );
     }
 
-    // Selection is not needed anymore
+    
     rPam.DeleteMark();
 }
 
@@ -107,7 +107,7 @@ long SwEditShell::Delete()
         StartAllAction();
 
         sal_Bool bUndo = GetCrsr()->GetNext() != GetCrsr();
-        if( bUndo ) // more than one selection?
+        if( bUndo ) 
         {
             SwRewriter aRewriter;
             aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_MULTISEL));
@@ -119,7 +119,7 @@ long SwEditShell::Delete()
             DeleteSel( *PCURCRSR, &bUndo );
         FOREACHPAM_END()
 
-        // If undo container then close here
+        
         if( bUndo )
         {
             GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_END, 0);
@@ -137,10 +137,10 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 
     SET_CURR_SHELL( pDestShell );
 
-    // List of insert positions for smart insert of block selections
+    
     std::list< boost::shared_ptr<SwPosition> > aInsertList;
 
-    // Fill list of insert positions
+    
     {
         SwPosition * pPos = 0;
         boost::shared_ptr<SwPosition> pInsertPos;
@@ -151,7 +151,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             {
                 if( pDestShell == this )
                 {
-                    // First cursor represents the target position!!
+                    
                     PCURCRSR->DeleteMark();
                     pPos = (SwPosition*)PCURCRSR->GetPoint();
                     continue;
@@ -160,8 +160,8 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                     pPos = pDestShell->GetCrsr()->GetPoint();
             }
             if( IsBlockMode() )
-            {   // In block mode different insert positions will be calculated
-                // by simulated cursor movements from the given first insert position
+            {   
+                
                 if( nMove )
                 {
                     SwCursor aCrsr( *pPos, 0, false);
@@ -176,7 +176,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                 ++nMove;
             }
             SwPosition *pTmp = IsBlockMode() ? pInsertPos.get() : pPos;
-            // Check if a selection would be copied into itself
+            
             if( pDestShell->GetDoc() == GetDoc() &&
                 *PCURCRSR->Start() <= *pTmp && *pTmp < *PCURCRSR->End() )
                 return sal_False;
@@ -189,7 +189,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     bool bFirstMove = true;
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
     sal_Int32 nSttCntIdx = 0;
-    // For block selection this list is filled with the insert positions
+    
     std::list< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
     pDestShell->GetDoc()->GetIDocumentUndoRedo().StartUndo( UNDO_START, NULL );
@@ -199,7 +199,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         {
             if( pDestShell == this )
             {
-                // First cursor represents the target position!!
+                
                 PCURCRSR->DeleteMark();
                 pPos = (SwPosition*)PCURCRSR->GetPoint();
                 continue;
@@ -218,13 +218,13 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                 GetDoc()->SplitNode( *pPos, false );
         }
 
-        // Only for a selection (non-text nodes have selection but Point/GetMark are equal)
+        
         if( !PCURCRSR->HasMark() || *PCURCRSR->GetPoint() == *PCURCRSR->GetMark() )
             continue;
 
         if( bFirstMove )
         {
-            // Store start position of the new area
+            
             aSttNdIdx = pPos->nNode.GetIndex()-1;
             nSttCntIdx = pPos->nContent.GetIndex();
             bFirstMove = false;
@@ -241,7 +241,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     FOREACHPAM_END()
 
 
-    // Maybe nothing has been moved?
+    
     if( !bFirstMove )
     {
         SwPaM* pCrsr = pDestShell->GetCrsr();
@@ -252,14 +252,14 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     }
     else
     {
-        // If the cursor moved during move process, move also its GetMark
+        
         pDestShell->GetCrsr()->SetMark();
         pDestShell->GetCrsr()->DeleteMark();
     }
 #if OSL_DEBUG_LEVEL > 0
-// check if the indices are registered in the correct nodes
+
 {
-    SwPaM* pCmp = (SwPaM*)pDestShell->GetCrsr();        // store pointer to cursor
+    SwPaM* pCmp = (SwPaM*)pDestShell->GetCrsr();        
     do {
         OSL_ENSURE( pCmp->GetPoint()->nContent.GetIdxReg()
                     == pCmp->GetCntntNode(), "Point in wrong Node" );
@@ -271,7 +271,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 }
 #endif
 
-    // close Undo container here
+    
     pDestShell->GetDoc()->GetIDocumentUndoRedo().EndUndo( UNDO_END, NULL );
     pDestShell->EndAllAction();
 
@@ -306,21 +306,21 @@ sal_Bool SwEditShell::Replace( const OUString& rNewStr, sal_Bool bRegExpRplc )
             }
         FOREACHPAM_END()
 
-        // close Undo container here
+        
         GetDoc()->GetIDocumentUndoRedo().EndUndo(UNDO_EMPTY, NULL);
         EndAllAction();
     }
     return bRet;
 }
 
-/// special method for JOE's wizards
+
 sal_Bool SwEditShell::DelFullPara()
 {
     sal_Bool bRet = sal_False;
     if( !IsTableMode() )
     {
         SwPaM* pCrsr = GetCrsr();
-        // no multi selection
+        
         if( pCrsr->GetNext() == pCrsr && !HasReadonlySel() )
         {
             SET_CURR_SHELL( this );

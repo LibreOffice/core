@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@ using namespace com::sun::star;
 namespace hierarchy_ucp
 {
 
-//=========================================================================
+
 struct HierarchyEntry::iterator_Impl
 {
     HierarchyEntryData                                     entry;
@@ -57,7 +57,7 @@ struct HierarchyEntry::iterator_Impl
     : officeDirs( 0 ), pos( -1 /* before first */ ) {};
 };
 
-//=========================================================================
+
 void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
 {
     sal_Int32 nCount = rIn.getLength();
@@ -93,21 +93,21 @@ void makeXMLName( const OUString & rIn, OUStringBuffer & rBuffer  )
     }
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// HierarchyEntry Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 #define READ_SERVICE_NAME      "com.sun.star.ucb.HierarchyDataReadAccess"
 #define READWRITE_SERVICE_NAME "com.sun.star.ucb.HierarchyDataReadWriteAccess"
 
-// describe path of cfg entry
+
 #define CFGPROPERTY_NODEPATH    "nodepath"
 
-//=========================================================================
+
 HierarchyEntry::HierarchyEntry(
                 const uno::Reference< uno::XComponentContext >& rxContext,
                 HierarchyContentProvider* pProvider,
@@ -124,11 +124,11 @@ HierarchyEntry::HierarchyEntry(
     m_xRootReadAccess
         = pProvider->getRootConfigReadNameAccess( m_aServiceSpecifier );
 
-    // Note: do not init m_aPath in init list. createPathFromHierarchyURL
-    //       needs m_xContext and m_aMutex.
+    
+    
     m_aPath = createPathFromHierarchyURL( aUri );
 
-    // Extract language independent name from URL.
+    
     sal_Int32 nPos = rURL.lastIndexOf( '/' );
     if ( nPos > HIERARCHY_URL_SCHEME_LENGTH )
         m_aName = rURL.copy( nPos + 1 );
@@ -136,7 +136,7 @@ HierarchyEntry::HierarchyEntry(
         OSL_FAIL( "HierarchyEntry - Invalid URL!" );
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::hasData()
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -151,7 +151,7 @@ sal_Bool HierarchyEntry::hasData()
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
 {
     try
@@ -169,16 +169,16 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             OUString aTitlePath = m_aPath;
             aTitlePath += "/Title";
 
-            // Note: Avoid NoSuchElementExceptions, because exceptions are
-            //       relatively 'expensive'. Checking for availability of
-            //       title value is sufficient here, because if it is
-            //       there, the other values will be available too.
+            
+            
+            
+            
             if ( !xRootReadAccess->hasByHierarchicalName( aTitlePath ) )
                 return sal_False;
 
             OUString aValue;
 
-            // Get Title value.
+            
             if ( !( xRootReadAccess->getByHierarchicalName( aTitlePath )
                     >>= aValue ) )
             {
@@ -189,7 +189,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
 
             rData.setTitle( aValue );
 
-            // Get TargetURL value.
+            
             OUString aTargetURLPath = m_aPath;
             aTargetURLPath += "/TargetURL";
             if ( !( xRootReadAccess->getByHierarchicalName( aTargetURLPath )
@@ -200,11 +200,11 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
                 return sal_False;
             }
 
-            // TargetURL property may contain a reference to the Office
-            // installation directory. To ensure a reloctable office
-            // installation, the path to the office installtion directory must
-            // never be stored directly. A placeholder is used instead. Replace
-            // it by actual installation directory.
+            
+            
+            
+            
+            
             if ( m_xOfficeInstDirs.is() &&  !aValue.isEmpty()  )
                 aValue = m_xOfficeInstDirs->makeAbsoluteURL( aValue );
             rData.setTargetURL( aValue );
@@ -213,11 +213,11 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             aTypePath += "/Type";
             if ( xRootReadAccess->hasByHierarchicalName( aTypePath ) )
             {
-                // Might not be present since it was introduced long after
-                // Title and TargetURL (#82433#)... So not getting it is
-                // not an error.
+                
+                
+                
 
-                // Get Type value.
+                
                 sal_Int32 nType = 0;
                 if ( xRootReadAccess->getByHierarchicalName( aTypePath )
                      >>= nType )
@@ -249,14 +249,14 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByHierarchicalName
+        
 
         OSL_FAIL( "HierarchyEntry::getData - caught NoSuchElementException!" );
     }
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::setData(
                     const HierarchyEntryData& rData, sal_Bool bCreate )
 {
@@ -271,7 +271,7 @@ sal_Bool HierarchyEntry::setData(
 
         if ( m_xConfigProvider.is() )
         {
-            // Create parent's key. It must exist!
+            
 
             OUString aParentPath;
             sal_Bool bRoot = sal_True;
@@ -279,7 +279,7 @@ sal_Bool HierarchyEntry::setData(
             sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
             if ( nPos != -1 )
             {
-                // Skip "/Children" segment of the path, too.
+                
                 nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
                 OSL_ENSURE( nPos != -1,
@@ -313,7 +313,7 @@ sal_Bool HierarchyEntry::setData(
 
             if ( xBatch.is() && xParentNameAccess.is() )
             {
-                // Try to create own key. It must not exist!
+                
 
                 sal_Bool bExists = sal_True;
                 uno::Any aMyKey;
@@ -348,7 +348,7 @@ sal_Bool HierarchyEntry::setData(
 
                 if ( bExists )
                 {
-                    // Key exists. Replace values.
+                    
 
                     aMyKey >>= xNameReplace;
 
@@ -360,22 +360,22 @@ sal_Bool HierarchyEntry::setData(
                     if ( !bCreate )
                         return sal_True;
 
-                    // Key does not exist. Create / fill / insert it.
+                    
 
                     uno::Reference< lang::XSingleServiceFactory > xFac;
 
                     if ( bRoot )
                     {
-                        // Special handling for children of root,
-                        // which is not an entry. It's only a set
-                        // of entries.
+                        
+                        
+                        
                         xFac = uno::Reference< lang::XSingleServiceFactory >(
                             xParentNameAccess, uno::UNO_QUERY );
                     }
                     else
                     {
-                        // Append new entry to parents child list,
-                        // which is a set of entries.
+                        
+                        
                         xParentNameAccess->getByName(
                                         OUString( "Children" ) ) >>= xFac;
                     }
@@ -406,18 +406,18 @@ sal_Bool HierarchyEntry::setData(
 
                 if ( xNameReplace.is() )
                 {
-                    // Set Title value.
+                    
                     xNameReplace->replaceByName(
                         OUString("Title"),
                         uno::makeAny( rData.getTitle() ) );
 
-                    // Set TargetURL value.
+                    
 
-                    // TargetURL property may contain a reference to the Office
-                    // installation directory. To ensure a reloctable office
-                    // installation, the path to the office installtion
-                    // directory must never be stored directly. Use a
-                    // placeholder instead.
+                    
+                    
+                    
+                    
+                    
                     OUString aValue( rData.getTargetURL() );
                     if ( m_xOfficeInstDirs.is() &&  !aValue.isEmpty() )
                         aValue
@@ -427,7 +427,7 @@ sal_Bool HierarchyEntry::setData(
                         OUString("TargetURL"),
                         uno::makeAny( aValue ) );
 
-                    // Set Type value.
+                    
                     sal_Int32 nType
                         = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
                     xNameReplace->replaceByName(
@@ -438,7 +438,7 @@ sal_Bool HierarchyEntry::setData(
                         xContainer->insertByName(
                             m_aName, uno::makeAny( xNameReplace ) );
 
-                    // Commit changes.
+                    
                     xBatch->commitChanges();
                     return sal_True;
                 }
@@ -447,7 +447,7 @@ sal_Bool HierarchyEntry::setData(
     }
     catch ( lang::IllegalArgumentException const & )
     {
-        // replaceByName, insertByName
+        
 
         OSL_FAIL(
             "HierarchyEntry::setData - caught IllegalArgumentException!" );
@@ -458,28 +458,28 @@ sal_Bool HierarchyEntry::setData(
     }
     catch ( container::NoSuchElementException const & )
     {
-        // replaceByName, getByName
+        
 
         OSL_FAIL(
             "HierarchyEntry::setData - caught NoSuchElementException!" );
     }
     catch ( container::ElementExistException const & )
     {
-        // insertByName
+        
 
         OSL_FAIL(
             "HierarchyEntry::setData - caught ElementExistException!" );
     }
     catch ( lang::WrappedTargetException const & )
     {
-        // replaceByName, insertByName, getByName, commitChanges
+        
 
         OSL_FAIL(
             "HierarchyEntry::setData - caught WrappedTargetException!" );
     }
     catch ( uno::Exception const & )
     {
-        // createInstance, createInstanceWithArguments
+        
 
         OSL_FAIL(
             "HierarchyEntry::setData - caught Exception!" );
@@ -488,7 +488,7 @@ sal_Bool HierarchyEntry::setData(
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::move(
     const OUString& rNewURL, const HierarchyEntryData& rData )
 {
@@ -531,7 +531,7 @@ sal_Bool HierarchyEntry::move(
         sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
         if ( nPos != -1 )
         {
-            // Skip "/Children" segment of the path, too.
+            
             nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
             OSL_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
@@ -544,7 +544,7 @@ sal_Bool HierarchyEntry::move(
         nPos = aNewPath.lastIndexOf( '/' );
         if ( nPos != -1 )
         {
-            // Skip "/Children" segment of the path, too.
+            
             nPos = aNewPath.lastIndexOf( '/', nPos - 1 );
 
             OSL_ENSURE( nPos != -1, "HierarchyEntry::move - Wrong path!" );
@@ -603,15 +603,15 @@ sal_Bool HierarchyEntry::move(
     }
     catch ( uno::Exception const & )
     {
-        // createInstance, createInstanceWithArguments
+        
 
         OSL_FAIL( "HierarchyEntry::move - caught Exception!" );
         return sal_False;
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // (1) Get entry...
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     uno::Any aEntry;
     uno::Reference< container::XNameAccess >    xOldParentNameAccess;
@@ -645,22 +645,22 @@ sal_Bool HierarchyEntry::move(
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByName
+        
 
         OSL_FAIL( "HierarchyEntry::move - caught NoSuchElementException!" );
         return sal_False;
     }
     catch ( lang::WrappedTargetException const & )
     {
-        // getByName
+        
 
         OSL_FAIL( "HierarchyEntry::move - caught WrappedTargetException!" );
         return sal_False;
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // (2) Remove entry... Note: Insert BEFORE remove does not work!
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     try
     {
@@ -669,15 +669,15 @@ sal_Bool HierarchyEntry::move(
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByName, removeByName
+        
 
         OSL_FAIL( "HierarchyEntry::move - caught NoSuchElementException!" );
         return sal_False;
     }
 
-    //////////////////////////////////////////////////////////////////////
-    // (3) Insert entry at new parent...
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     try
     {
@@ -730,11 +730,11 @@ sal_Bool HierarchyEntry::move(
             OUString("Title"),
             uno::makeAny( rData.getTitle() ) );
 
-        // TargetURL property may contain a reference to the Office
-        // installation directory. To ensure a reloctable office
-        // installation, the path to the office installtion
-        // directory must never be stored directly. Use a placeholder
-        // instead.
+        
+        
+        
+        
+        
         OUString aValue( rData.getTargetURL() );
         if ( m_xOfficeInstDirs.is() &&  !aValue.isEmpty() )
             aValue = m_xOfficeInstDirs->makeRelocatableURL( aValue );
@@ -751,14 +751,14 @@ sal_Bool HierarchyEntry::move(
     }
     catch ( container::NoSuchElementException const & )
     {
-        // replaceByName, insertByName, getByName
+        
 
         OSL_FAIL( "HierarchyEntry::move - caught NoSuchElementException!" );
         return sal_False;
     }
     catch ( lang::IllegalArgumentException const & )
     {
-        // replaceByName, insertByName
+        
 
         OSL_FAIL(
             "HierarchyEntry::move - caught IllegalArgumentException!" );
@@ -766,14 +766,14 @@ sal_Bool HierarchyEntry::move(
     }
     catch ( container::ElementExistException const & )
     {
-        // insertByName
+        
 
         OSL_FAIL( "HierarchyEntry::move - caught ElementExistException!" );
         return sal_False;
     }
     catch ( lang::WrappedTargetException const & )
     {
-        // replaceByName, insertByName, getByName
+        
 
         OSL_FAIL( "HierarchyEntry::move - caught WrappedTargetException!" );
         return sal_False;
@@ -782,7 +782,7 @@ sal_Bool HierarchyEntry::move(
     return sal_True;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::remove()
 {
     try
@@ -796,7 +796,7 @@ sal_Bool HierarchyEntry::remove()
 
         if ( m_xConfigProvider.is() )
         {
-            // Create parent's key. It must exist!
+            
 
             OUString aParentPath;
             sal_Bool bRoot = sal_True;
@@ -804,7 +804,7 @@ sal_Bool HierarchyEntry::remove()
             sal_Int32 nPos = m_aPath.lastIndexOf( '/' );
             if ( nPos != -1 )
             {
-                // Skip "/Children" segment of the path, too.
+                
                 nPos = m_aPath.lastIndexOf( '/', nPos - 1 );
 
                 OSL_ENSURE( nPos != -1,
@@ -842,16 +842,16 @@ sal_Bool HierarchyEntry::remove()
 
                 if ( bRoot )
                 {
-                    // Special handling for children of root,
-                    // which is not an entry. It's only a set
-                    // of entries.
+                    
+                    
+                    
                     xContainer = uno::Reference< container::XNameContainer >(
                         xParentNameAccess, uno::UNO_QUERY );
                 }
                 else
                 {
-                    // Append new entry to parents child list,
-                    // which is a set of entries.
+                    
+                    
                      xParentNameAccess->getByName(
                         OUString("Children") )
                             >>= xContainer;
@@ -875,21 +875,21 @@ sal_Bool HierarchyEntry::remove()
     }
     catch ( container::NoSuchElementException const & )
     {
-        // getByName, removeByName
+        
 
         OSL_FAIL(
             "HierarchyEntry::remove - caught NoSuchElementException!" );
     }
     catch ( lang::WrappedTargetException const & )
     {
-        // getByName, commitChanges
+        
 
         OSL_FAIL(
             "HierarchyEntry::remove - caught WrappedTargetException!" );
     }
     catch ( uno::Exception const & )
     {
-        // createInstance, createInstanceWithArguments
+        
 
         OSL_FAIL( "HierarchyEntry::remove - caught Exception!" );
     }
@@ -897,14 +897,14 @@ sal_Bool HierarchyEntry::remove()
     return sal_False;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::first( iterator& it )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( it.m_pImpl->pos == -1 )
     {
-        // Init...
+        
 
         try
         {
@@ -951,7 +951,7 @@ sal_Bool HierarchyEntry::first( iterator& it )
         }
         catch ( container::NoSuchElementException const& )
         {
-            // getByHierarchicalName
+            
 
             OSL_FAIL(
                 "HierarchyEntry::first - caught NoSuchElementException!" );
@@ -969,7 +969,7 @@ sal_Bool HierarchyEntry::first( iterator& it )
     return sal_True;
 }
 
-//=========================================================================
+
 sal_Bool HierarchyEntry::next( iterator& it )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
@@ -982,15 +982,15 @@ sal_Bool HierarchyEntry::next( iterator& it )
     return ( it.m_pImpl->pos < it.m_pImpl->names.getLength() );
 }
 
-//=========================================================================
+
 OUString HierarchyEntry::createPathFromHierarchyURL(
     const HierarchyUri& rURI )
 {
-    // Transform path....
-    // folder/subfolder/subsubfolder
-    //      --> ['folder']/Children/['subfolder']/Children/['subsubfolder']
+    
+    
+    
 
-    const OUString aPath = rURI.getPath().copy( 1 ); // skip leading slash.
+    const OUString aPath = rURI.getPath().copy( 1 ); 
     sal_Int32 nLen = aPath.getLength();
 
     if ( nLen )
@@ -1026,7 +1026,7 @@ OUString HierarchyEntry::createPathFromHierarchyURL(
     return aPath;
 }
 
-//=========================================================================
+
 uno::Reference< container::XHierarchicalNameAccess >
 HierarchyEntry::getRootReadAccess()
 {
@@ -1035,7 +1035,7 @@ HierarchyEntry::getRootReadAccess()
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
         if ( !m_xRootReadAccess.is() )
         {
-            if ( m_bTriedToGetRootReadAccess ) // #82494#
+            if ( m_bTriedToGetRootReadAccess ) 
             {
                 OSL_FAIL( "HierarchyEntry::getRootReadAccess - "
                             "Unable to read any config data! -> #82494#" );
@@ -1052,13 +1052,13 @@ HierarchyEntry::getRootReadAccess()
 
                 if ( m_xConfigProvider.is() )
                 {
-                    // Create Root object.
+                    
 
                     uno::Sequence< uno::Any > aArguments( 1 );
                     beans::PropertyValue      aProperty;
                     aProperty.Name = OUString(
                          CFGPROPERTY_NODEPATH  );
-                    aProperty.Value <<= OUString(); // root path
+                    aProperty.Value <<= OUString(); 
                     aArguments[ 0 ] <<= aProperty;
 
                     m_bTriedToGetRootReadAccess = sal_True;
@@ -1077,7 +1077,7 @@ HierarchyEntry::getRootReadAccess()
             }
             catch ( uno::Exception const & )
             {
-                // createInstance, createInstanceWithArguments
+                
 
                 OSL_FAIL( "HierarchyEntry::getRootReadAccess - "
                             "caught Exception!" );
@@ -1087,26 +1087,26 @@ HierarchyEntry::getRootReadAccess()
     return m_xRootReadAccess;
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// HierarchyEntry::iterator Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 HierarchyEntry::iterator::iterator()
 {
     m_pImpl = new iterator_Impl;
 }
 
-//=========================================================================
+
 HierarchyEntry::iterator::~iterator()
 {
     delete m_pImpl;
 }
 
-//=========================================================================
+
 const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
 {
     if ( ( m_pImpl->pos != -1 )
@@ -1134,22 +1134,22 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
 
             m_pImpl->dir->getByHierarchicalName( aTargetURL ) >>= aValue;
 
-            // TargetURL property may contain a reference to the Office
-            // installation directory. To ensure a reloctable office
-            // installation, the path to the office installtion directory must
-            // never be stored directly. A placeholder is used instead. Replace
-            // it by actual installation directory.
+            
+            
+            
+            
+            
             if ( m_pImpl->officeDirs.is() && !aValue.isEmpty() )
                 aValue = m_pImpl->officeDirs->makeAbsoluteURL( aValue );
             m_pImpl->entry.setTargetURL( aValue );
 
             if ( m_pImpl->dir->hasByHierarchicalName( aType ) )
             {
-                // Might not be present since it was introduced long
-                // after Title and TargetURL (#82433#)... So not getting
-                // it is not an error.
+                
+                
+                
 
-                // Get Type value.
+                
                 sal_Int32 nType = 0;
                 if ( m_pImpl->dir->getByHierarchicalName( aType ) >>= nType )
                 {
@@ -1181,6 +1181,6 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
     return m_pImpl->entry;
 }
 
-} // namespace hierarchy_ucp
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

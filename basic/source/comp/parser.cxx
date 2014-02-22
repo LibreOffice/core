@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <basic/sbx.hxx>
@@ -22,87 +22,87 @@
 #include <com/sun/star/script/ModuleType.hpp>
 #include <svtools/miscopt.hxx>
 
-struct SbiParseStack {              // "Stack" for statement-blocks
-    SbiParseStack* pNext;           // Chain
+struct SbiParseStack {              
+    SbiParseStack* pNext;           
     SbiExprNode* pWithVar;
     SbiToken eExitTok;
-    sal_uInt32  nChain;                 // JUMP-Chain
+    sal_uInt32  nChain;                 
 };
 
 struct SbiStatement {
     SbiToken eTok;
     void( SbiParser::*Func )();
-    bool  bMain;                    // true: OK outside the SUB
-    bool  bSubr;                    // true: OK inside the SUB
+    bool  bMain;                    
+    bool  bSubr;                    
 };
 
 #define Y   true
 #define N   false
 
 static const SbiStatement StmntTable [] = {
-{ ATTRIBUTE, &SbiParser::Attribute, Y, Y, }, // ATTRIBUTE
-{ CALL,     &SbiParser::Call,       N, Y, }, // CALL
-{ CLOSE,    &SbiParser::Close,      N, Y, }, // CLOSE
-{ _CONST_,  &SbiParser::Dim,        Y, Y, }, // CONST
-{ DECLARE,  &SbiParser::Declare,    Y, N, }, // DECLARE
-{ DEFBOOL,  &SbiParser::DefXXX,     Y, N, }, // DEFBOOL
-{ DEFCUR,   &SbiParser::DefXXX,     Y, N, }, // DEFCUR
-{ DEFDATE,  &SbiParser::DefXXX,     Y, N, }, // DEFDATE
-{ DEFDBL,   &SbiParser::DefXXX,     Y, N, }, // DEFDBL
-{ DEFERR,   &SbiParser::DefXXX,     Y, N, }, // DEFERR
-{ DEFINT,   &SbiParser::DefXXX,     Y, N, }, // DEFINT
-{ DEFLNG,   &SbiParser::DefXXX,     Y, N, }, // DEFLNG
-{ DEFOBJ,   &SbiParser::DefXXX,     Y, N, }, // DEFOBJ
-{ DEFSNG,   &SbiParser::DefXXX,     Y, N, }, // DEFSNG
-{ DEFSTR,   &SbiParser::DefXXX,     Y, N, }, // DEFSTR
-{ DEFVAR,   &SbiParser::DefXXX,     Y, N, }, // DEFVAR
-{ DIM,      &SbiParser::Dim,        Y, Y, }, // DIM
-{ DO,       &SbiParser::DoLoop,     N, Y, }, // DO
-{ ELSE,     &SbiParser::NoIf,       N, Y, }, // ELSE
-{ ELSEIF,   &SbiParser::NoIf,       N, Y, }, // ELSEIF
-{ ENDIF,    &SbiParser::NoIf,       N, Y, }, // ENDIF
-{ END,      &SbiParser::Stop,       N, Y, }, // END
-{ ENUM,     &SbiParser::Enum,       Y, N, }, // TYPE
-{ ERASE,    &SbiParser::Erase,      N, Y, }, // ERASE
-{ _ERROR_,  &SbiParser::ErrorStmnt, N, Y, }, // ERROR
-{ EXIT,     &SbiParser::Exit,       N, Y, }, // EXIT
-{ FOR,      &SbiParser::For,        N, Y, }, // FOR
-{ FUNCTION, &SbiParser::SubFunc,    Y, N, }, // FUNCTION
-{ GOSUB,    &SbiParser::Goto,       N, Y, }, // GOSUB
-{ GLOBAL,   &SbiParser::Dim,        Y, N, }, // GLOBAL
-{ GOTO,     &SbiParser::Goto,       N, Y, }, // GOTO
-{ IF,       &SbiParser::If,         N, Y, }, // IF
-{ IMPLEMENTS, &SbiParser::Implements, Y, N, }, // IMPLEMENTS
-{ INPUT,    &SbiParser::Input,      N, Y, }, // INPUT
-{ LET,      &SbiParser::Assign,     N, Y, }, // LET
-{ LINE,     &SbiParser::Line,       N, Y, }, // LINE, -> LINE INPUT (#i92642)
-{ LINEINPUT,&SbiParser::LineInput,  N, Y, }, // LINE INPUT
-{ LOOP,     &SbiParser::BadBlock,   N, Y, }, // LOOP
-{ LSET,     &SbiParser::LSet,       N, Y, }, // LSET
-{ NAME,     &SbiParser::Name,       N, Y, }, // NAME
-{ NEXT,     &SbiParser::BadBlock,   N, Y, }, // NEXT
-{ ON,       &SbiParser::On,         N, Y, }, // ON
-{ OPEN,     &SbiParser::Open,       N, Y, }, // OPEN
-{ OPTION,   &SbiParser::Option,     Y, N, }, // OPTION
-{ PRINT,    &SbiParser::Print,      N, Y, }, // PRINT
-{ PRIVATE,  &SbiParser::Dim,        Y, N, }, // PRIVATE
-{ PROPERTY, &SbiParser::SubFunc,    Y, N, }, // FUNCTION
-{ PUBLIC,   &SbiParser::Dim,        Y, N, }, // PUBLIC
-{ REDIM,    &SbiParser::ReDim,      N, Y, }, // DIM
-{ RESUME,   &SbiParser::Resume,     N, Y, }, // RESUME
-{ RETURN,   &SbiParser::Return,     N, Y, }, // RETURN
-{ RSET,     &SbiParser::RSet,       N, Y, }, // RSET
-{ SELECT,   &SbiParser::Select,     N, Y, }, // SELECT
-{ SET,      &SbiParser::Set,        N, Y, }, // SET
-{ STATIC,   &SbiParser::Static,     Y, Y, }, // STATIC
-{ STOP,     &SbiParser::Stop,       N, Y, }, // STOP
-{ SUB,      &SbiParser::SubFunc,    Y, N, }, // SUB
-{ TYPE,     &SbiParser::Type,       Y, N, }, // TYPE
-{ UNTIL,    &SbiParser::BadBlock,   N, Y, }, // UNTIL
-{ WHILE,    &SbiParser::While,      N, Y, }, // WHILE
-{ WEND,     &SbiParser::BadBlock,   N, Y, }, // WEND
-{ WITH,     &SbiParser::With,       N, Y, }, // WITH
-{ WRITE,    &SbiParser::Write,      N, Y, }, // WRITE
+{ ATTRIBUTE, &SbiParser::Attribute, Y, Y, }, 
+{ CALL,     &SbiParser::Call,       N, Y, }, 
+{ CLOSE,    &SbiParser::Close,      N, Y, }, 
+{ _CONST_,  &SbiParser::Dim,        Y, Y, }, 
+{ DECLARE,  &SbiParser::Declare,    Y, N, }, 
+{ DEFBOOL,  &SbiParser::DefXXX,     Y, N, }, 
+{ DEFCUR,   &SbiParser::DefXXX,     Y, N, }, 
+{ DEFDATE,  &SbiParser::DefXXX,     Y, N, }, 
+{ DEFDBL,   &SbiParser::DefXXX,     Y, N, }, 
+{ DEFERR,   &SbiParser::DefXXX,     Y, N, }, 
+{ DEFINT,   &SbiParser::DefXXX,     Y, N, }, 
+{ DEFLNG,   &SbiParser::DefXXX,     Y, N, }, 
+{ DEFOBJ,   &SbiParser::DefXXX,     Y, N, }, 
+{ DEFSNG,   &SbiParser::DefXXX,     Y, N, }, 
+{ DEFSTR,   &SbiParser::DefXXX,     Y, N, }, 
+{ DEFVAR,   &SbiParser::DefXXX,     Y, N, }, 
+{ DIM,      &SbiParser::Dim,        Y, Y, }, 
+{ DO,       &SbiParser::DoLoop,     N, Y, }, 
+{ ELSE,     &SbiParser::NoIf,       N, Y, }, 
+{ ELSEIF,   &SbiParser::NoIf,       N, Y, }, 
+{ ENDIF,    &SbiParser::NoIf,       N, Y, }, 
+{ END,      &SbiParser::Stop,       N, Y, }, 
+{ ENUM,     &SbiParser::Enum,       Y, N, }, 
+{ ERASE,    &SbiParser::Erase,      N, Y, }, 
+{ _ERROR_,  &SbiParser::ErrorStmnt, N, Y, }, 
+{ EXIT,     &SbiParser::Exit,       N, Y, }, 
+{ FOR,      &SbiParser::For,        N, Y, }, 
+{ FUNCTION, &SbiParser::SubFunc,    Y, N, }, 
+{ GOSUB,    &SbiParser::Goto,       N, Y, }, 
+{ GLOBAL,   &SbiParser::Dim,        Y, N, }, 
+{ GOTO,     &SbiParser::Goto,       N, Y, }, 
+{ IF,       &SbiParser::If,         N, Y, }, 
+{ IMPLEMENTS, &SbiParser::Implements, Y, N, }, 
+{ INPUT,    &SbiParser::Input,      N, Y, }, 
+{ LET,      &SbiParser::Assign,     N, Y, }, 
+{ LINE,     &SbiParser::Line,       N, Y, }, 
+{ LINEINPUT,&SbiParser::LineInput,  N, Y, }, 
+{ LOOP,     &SbiParser::BadBlock,   N, Y, }, 
+{ LSET,     &SbiParser::LSet,       N, Y, }, 
+{ NAME,     &SbiParser::Name,       N, Y, }, 
+{ NEXT,     &SbiParser::BadBlock,   N, Y, }, 
+{ ON,       &SbiParser::On,         N, Y, }, 
+{ OPEN,     &SbiParser::Open,       N, Y, }, 
+{ OPTION,   &SbiParser::Option,     Y, N, }, 
+{ PRINT,    &SbiParser::Print,      N, Y, }, 
+{ PRIVATE,  &SbiParser::Dim,        Y, N, }, 
+{ PROPERTY, &SbiParser::SubFunc,    Y, N, }, 
+{ PUBLIC,   &SbiParser::Dim,        Y, N, }, 
+{ REDIM,    &SbiParser::ReDim,      N, Y, }, 
+{ RESUME,   &SbiParser::Resume,     N, Y, }, 
+{ RETURN,   &SbiParser::Return,     N, Y, }, 
+{ RSET,     &SbiParser::RSet,       N, Y, }, 
+{ SELECT,   &SbiParser::Select,     N, Y, }, 
+{ SET,      &SbiParser::Set,        N, Y, }, 
+{ STATIC,   &SbiParser::Static,     Y, Y, }, 
+{ STOP,     &SbiParser::Stop,       N, Y, }, 
+{ SUB,      &SbiParser::SubFunc,    Y, N, }, 
+{ TYPE,     &SbiParser::Type,       Y, N, }, 
+{ UNTIL,    &SbiParser::BadBlock,   N, Y, }, 
+{ WHILE,    &SbiParser::While,      N, Y, }, 
+{ WEND,     &SbiParser::BadBlock,   N, Y, }, 
+{ WITH,     &SbiParser::With,       N, Y, }, 
+{ WRITE,    &SbiParser::Write,      N, Y, }, 
 
 { NIL, NULL, N, N }
 };
@@ -134,7 +134,7 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
     OSL_TRACE("Parser - %s, bClassModule %d", OUStringToOString( pm->GetName(), RTL_TEXTENCODING_UTF8 ).getStr(), bClassModule );
     pPool    = &aPublics;
     for( short i = 0; i < 26; i++ )
-        eDefTypes[ i ] = SbxVARIANT;    // no explicit default type
+        eDefTypes[ i ] = SbxVARIANT;    
 
     aPublics.SetParent( &aGlobals );
     aGlobals.SetParent( &aRtlSyms );
@@ -142,15 +142,15 @@ SbiParser::SbiParser( StarBASIC* pb, SbModule* pm )
 
     nGblChain = aGen.Gen( _JUMP, 0 );
 
-    rTypeArray = new SbxArray; // array for user defined types
-    rEnumArray = new SbxArray; // array for Enum types
+    rTypeArray = new SbxArray; 
+    rEnumArray = new SbxArray; 
     bVBASupportOn = pm->IsVBACompat();
     if ( bVBASupportOn )
         EnableCompatibility();
 
 }
 
-// part of the runtime-library?
+
 SbiSymDef* SbiParser::CheckRTLForSym( const OUString& rSym, SbxDataType eType )
 {
     SbxVariable* pVar = GetBasic()->GetRtl()->Find( rSym, SbxCLASS_DONTCARE );
@@ -172,7 +172,7 @@ SbiSymDef* SbiParser::CheckRTLForSym( const OUString& rSym, SbxDataType eType )
     return pDef;
 }
 
-// close global chain
+
 
 bool SbiParser::HasGlobalCode()
 {
@@ -195,7 +195,7 @@ void SbiParser::OpenBlock( SbiToken eTok, SbiExprNode* pVar )
     pStack      = p;
     pWithVar    = pVar;
 
-    // #29955 service the for-loop level
+    
     if( eTok == FOR )
         aGen.IncForLevel();
 }
@@ -206,7 +206,7 @@ void SbiParser::CloseBlock()
     {
         SbiParseStack* p = pStack;
 
-        // #29955 service the for-loop level
+        
         if( p->eExitTok == FOR )
             aGen.DecForLevel();
 
@@ -217,7 +217,7 @@ void SbiParser::CloseBlock()
     }
 }
 
-// EXIT ...
+
 
 void SbiParser::Exit()
 {
@@ -226,7 +226,7 @@ void SbiParser::Exit()
     {
         SbiToken eExitTok = p->eExitTok;
         if( eTok == eExitTok ||
-            (eTok == PROPERTY && (eExitTok == GET || eExitTok == LET) ) )   // #i109051
+            (eTok == PROPERTY && (eExitTok == GET || eExitTok == LET) ) )   
         {
             p->nChain = aGen.Gen( _JUMP, p->nChain );
             return;
@@ -331,10 +331,10 @@ bool SbiParser::Parse()
 
     if( IsEof() )
     {
-        // AB #33133: If no sub has been created before,
-        // the global chain must be closed here!
-        // AB #40689: Due to the new static-handling there
-        // can be another nGblChain, so ask for it before.
+        
+        
+        
+        
         if( bNewGblDefs && nGblChain == 0 )
             nGblChain = aGen.Gen( _JUMP, 0 );
         return false;
@@ -348,7 +348,7 @@ bool SbiParser::Parse()
 
     if( !bSingleLineIf && MayBeLabel( true ) )
     {
-        // is a label
+        
         if( !pProc )
             Error( SbERR_NOT_IN_MAIN, aSym );
         else
@@ -361,9 +361,9 @@ bool SbiParser::Parse()
         }
     }
 
-    // end of parsing?
+    
     if( eCurTok == eEndTok ||
-        ( bVBASupportOn &&      // #i109075
+        ( bVBASupportOn &&      
           (eCurTok == ENDFUNC || eCurTok == ENDPROPERTY || eCurTok == ENDSUB) &&
           (eEndTok == ENDFUNC || eEndTok == ENDPROPERTY || eEndTok == ENDSUB) ) )
     {
@@ -373,15 +373,15 @@ bool SbiParser::Parse()
         return false;
     }
 
-    // comment?
+    
     if( eCurTok == REM )
     {
         Next(); return true;
     }
 
-        // In vba it's possible to do Error.foobar ( even if it results in
-    // a runtime error
-        if ( eCurTok == _ERROR_ && IsVBASupportOn() ) // we probably need to define a subset of keywords where this madness applies e.g. if ( IsVBASupportOn() && SymbolCanBeRedined( eCurTok ) )
+        
+    
+        if ( eCurTok == _ERROR_ && IsVBASupportOn() ) 
         {
             SbiTokenizer tokens( *(SbiTokenizer*)this );
             tokens.Next();
@@ -391,16 +391,16 @@ bool SbiParser::Parse()
         ePush = eCurTok;
             }
     }
-    // if there's a symbol, it's either a variable (LET)
-    // or a SUB-procedure (CALL without brackets)
-    // DOT for assignments in the WITH-block: .A=5
+    
+    
+    
     if( eCurTok == SYMBOL || eCurTok == DOT )
     {
         if( !pProc )
             Error( SbERR_EXPECTED, SUB );
         else
         {
-            // for correct line and column...
+            
             Next();
             Push( eCurTok );
             aGen.Statement();
@@ -411,7 +411,7 @@ bool SbiParser::Parse()
     {
         Next();
 
-        // statement parsers
+        
 
         const SbiStatement* p;
         for( p = StmntTable; p->eTok != NIL; p++ )
@@ -425,15 +425,15 @@ bool SbiParser::Parse()
                 Error( SbERR_NOT_IN_SUBR, eCurTok );
             else
             {
-                // AB #41606/#40689: Due to the new static-handling there
-                // can be another nGblChain, so ask for it before.
+                
+                
                 if( bNewGblDefs && nGblChain == 0 &&
                     ( eCurTok == SUB || eCurTok == FUNCTION || eCurTok == PROPERTY ) )
                 {
                     nGblChain = aGen.Gen( _JUMP, 0 );
                     bNewGblDefs = false;
                 }
-                // statement-opcode at the beginning of a sub, too, please
+                
                 if( ( p->bSubr && (eCurTok != STATIC || Peek() == SUB || Peek() == FUNCTION ) ) ||
                         eCurTok == SUB || eCurTok == FUNCTION )
                     aGen.Statement();
@@ -447,21 +447,21 @@ bool SbiParser::Parse()
             Error( SbERR_UNEXPECTED, eCurTok );
     }
 
-    // test for the statement's end -
-    // might also be an ELSE, as there must not necessary be a : before the ELSE!
+    
+    
 
     if( !IsEos() )
     {
         Peek();
         if( !IsEos() && eCurTok != ELSE )
         {
-            // if the parsing has been aborted, jump over to the ":"
+            
             Error( SbERR_UNEXPECTED, eCurTok );
             while( !IsEos() ) Next();
         }
     }
-    // The parser aborts at the end, the
-    // next token has not been fetched yet!
+    
+    
     return true;
 }
 
@@ -474,7 +474,7 @@ SbiExprNode* SbiParser::GetWithVar()
     SbiParseStack* p = pStack;
     while( p )
     {
-        // LoopVar can at the moment only be for with
+        
         if( p->pWithVar )
             return p->pWithVar;
         p = p->pNext;
@@ -483,7 +483,7 @@ SbiExprNode* SbiParser::GetWithVar()
 }
 
 
-// assignment or subroutine call
+
 
 void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
 {
@@ -529,7 +529,7 @@ void SbiParser::Symbol( const KeywordSymbolInfo* pKeywordSymbolInfo )
         }
         else
         {
-            // so it must be an assignment!
+            
             if( !aVar.IsLvalue() )
                 Error( SbERR_LVALUE_EXPECTED );
             TestToken( EQ );
@@ -575,7 +575,7 @@ void SbiParser::Assign()
     aGen.Gen( _PUT );
 }
 
-// assignments of an object-variable
+
 
 void SbiParser::Set()
 {
@@ -605,11 +605,11 @@ void SbiParser::Set()
         SbiExpression aExpr( this );
         aLvalue.Gen();
         aExpr.Gen();
-        // Its a good idea to distinguish between
-        // set something = another &
-        // something = another
-        // ( its necessary for vba objects where set is object
-        // specific and also doesn't involve processing default params )
+        
+        
+        
+        
+        
         if( pDef->GetTypeId() )
         {
             if ( bVBASupportOn )
@@ -627,7 +627,7 @@ void SbiParser::Set()
     }
 }
 
-// JSM 07.10.95
+
 void SbiParser::LSet()
 {
     SbiExpression aLvalue( this, SbLVALUE );
@@ -647,7 +647,7 @@ void SbiParser::LSet()
     aGen.Gen( _LSET );
 }
 
-// JSM 07.10.95
+
 void SbiParser::RSet()
 {
     SbiExpression aLvalue( this, SbLVALUE );
@@ -665,7 +665,7 @@ void SbiParser::RSet()
     aGen.Gen( _RSET );
 }
 
-// DEFINT, DEFLNG, DEFSNG, DEFDBL, DEFSTR and so on
+
 
 void SbiParser::DefXXX()
 {
@@ -694,15 +694,15 @@ void SbiParser::DefXXX()
     }
 }
 
-// STOP/SYSTEM
+
 
 void SbiParser::Stop()
 {
     aGen.Gen( _STOP );
-    Peek();     // #35694: only Peek(), so that EOL is recognized in Single-Line-If
+    Peek();     
 }
 
-// IMPLEMENTS
+
 
 void SbiParser::Implements()
 {
@@ -752,7 +752,7 @@ void SbiParser::EnableCompatibility()
     bCompatible = true;
 }
 
-// OPTION
+
 
 void SbiParser::Option()
 {
@@ -805,7 +805,7 @@ void SbiParser::Option()
             bClassModule = true;
             aGen.GetModule().SetModuleType( com::sun::star::script::ModuleType::CLASS );
             break;
-        case VBASUPPORT: // Option VBASupport used to override the module mode ( in fact this must reset the mode
+        case VBASUPPORT: 
             if( Next() == NUMBER )
             {
                 if ( nVal == 1 || nVal == 0 )
@@ -815,8 +815,8 @@ void SbiParser::Option()
                     {
                         EnableCompatibility();
                     }
-                    // if the module setting is different
-                    // reset it to what the Option tells us
+                    
+                    
                     if ( bVBASupportOn != aGen.GetModule().IsVBACompat() )
                     {
                         aGen.GetModule().SetVBACompat( bVBASupportOn );
@@ -846,7 +846,7 @@ inline void addStringConst( SbiSymPool& rPool, const char* pSym, const char* pSt
 
 void SbiParser::AddConstants( void )
 {
-    // #113063 Create constant RTL symbols
+    
     addStringConst( aPublics, "vbCr", "\x0D" );
     addStringConst( aPublics, "vbCrLf", "\x0D\x0A" );
     addStringConst( aPublics, "vbFormFeed", "\x0C" );
@@ -860,12 +860,12 @@ void SbiParser::AddConstants( void )
     addStringConst( aPublics, "vbTab", "\x09" );
     addStringConst( aPublics, "vbVerticalTab", "\x0B" );
 
-    // Force length 1 and make char 0 afterwards
+    
     OUString aNullCharStr((sal_Unicode)0);
     addStringConst( aPublics, "vbNullChar", aNullCharStr );
 }
 
-// ERROR n
+
 
 void SbiParser::ErrorStmnt()
 {

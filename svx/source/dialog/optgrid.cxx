@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/shl.hxx>
@@ -28,7 +28,7 @@
 #include <svx/dialogs.hrc>
 #include "svx/dlgutil.hxx"
 
-// local functions
+
 static void    lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin, long& nMax)
 {
     nFirst  = static_cast<long>(rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) ));
@@ -125,7 +125,7 @@ SfxItemPresentation  SvxGridItem::GetPresentation
     }
 }
 
-// TabPage Screen Settings
+
 SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, "OptGridPage" , "svx/ui/optgridpage.ui", rCoreSet ),
@@ -151,10 +151,10 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
     get(pMtrFldAngle,"mtrfldangle");
     get(pMtrFldBezAngle,"mtrfldbezangle");
 
-    // This page requires exchange Support
+    
     SetExchangeSupport();
 
-    // Set Metrics
+    
     FieldUnit eFUnit = GetModuleFieldUnit( rCoreSet );
     long nFirst, nLast, nMin, nMax;
 
@@ -182,14 +182,14 @@ SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
         LINK( this, SvxGridTabPage, ChangeDivisionHdl_Impl ) );
 }
 
-//------------------------------------------------------------------------
+
 
 SfxTabPage* SvxGridTabPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new SvxGridTabPage( pParent, rAttrSet ) );
 }
 
-//------------------------------------------------------------------------
+
 
 sal_Bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -216,7 +216,7 @@ sal_Bool SvxGridTabPage::FillItemSet( SfxItemSet& rCoreSet )
     return bAttrModified;
 }
 
-//------------------------------------------------------------------------
+
 
 void SvxGridTabPage::Reset( const SfxItemSet& rSet )
 {
@@ -243,7 +243,7 @@ void SvxGridTabPage::Reset( const SfxItemSet& rSet )
     bAttrModified = sal_False;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 {
@@ -257,8 +257,8 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
         ChangeGridsnapHdl_Impl( pCbxUseGridsnap );
     }
 
-    // Metric Change if necessary (as TabPage is in the dialog, where the
-    // metric can be set
+    
+    
     if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_METRIC , false,
                                     (const SfxPoolItem**)&pAttr ))
     {
@@ -268,7 +268,7 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
 
         if( eFUnit != pMtrFldDrawX->GetUnit() )
         {
-            // Set Metrics
+            
             long nFirst, nLast, nMin, nMax;
             long nVal = static_cast<long>(pMtrFldDrawX->Denormalize( pMtrFldDrawX->GetValue( FUNIT_TWIP ) ));
 
@@ -288,14 +288,14 @@ void SvxGridTabPage::ActivatePage( const SfxItemSet& rSet )
     }
 }
 
-// -----------------------------------------------------------------------
+
 int SvxGridTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
         FillItemSet( *_pSet );
     return( LEAVE_PAGE );
 }
-//------------------------------------------------------------------------
+
 IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
 {
     bAttrModified = sal_True;
@@ -308,7 +308,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDrawHdl_Impl, MetricField *, pField )
     }
     return 0;
 }
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
 {
@@ -320,7 +320,7 @@ IMPL_LINK_NOARG(SvxGridTabPage, ClickRotateHdl_Impl)
     return( 0L );
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
 {
@@ -334,7 +334,7 @@ IMPL_LINK( SvxGridTabPage, ChangeDivisionHdl_Impl, NumericField *, pField )
     }
     return 0;
 }
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxGridTabPage, ChangeGridsnapHdl_Impl)
 {

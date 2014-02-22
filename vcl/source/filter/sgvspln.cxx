@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -209,7 +209,7 @@ sal_uInt16 TriDiagGS(bool rep, sal_uInt16 n, double* lower,
  sal_uInt16 i;
  short  j;
 
-// double fabs(double);
+
 
  if ( n < 2 ) return(1);                    /*  n at least 2          */
 
@@ -340,7 +340,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 
 /*.cp 5 */
 {
- double temp;  // fabs(double);
+ double temp;  
  sal_uInt16 i;
  short  j;
 
@@ -400,7 +400,7 @@ sal_uInt16 ZyklTriDiagGS(bool rep, sal_uInt16 n, double* lower, double* diag,
 /*------------------  END of CYCLIC TRIDIAGONAL  ---------------------*/
 
 
-} // extern "C"
+} 
 
 
 /*************************************************************************
@@ -466,7 +466,7 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
             d[0]  =d[0]+h[0];
             d[n-2]=d[n-2]+h[n-1];
         }
-    } // switch MargCond
+    } 
     if (n==2) {
         c[1]=a[0]/d[0];
     } else {
@@ -498,7 +498,7 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
             c[0]=c[1]-Marg0*h[0]*0.5;
             c[n]=c[n-1]+MargN*h[n-1]*0.5;
         }
-    } // switch MargCond
+    } 
     for (i=0;i<n;i++) {
         b[i]=(y[i+1]-y[i])/h[i]-h[i]*(c[i+1]+2.0*c[i])/3.0;
         d[i]=(c[i+1]-c[i])/(3.0*h[i]);
@@ -521,9 +521,9 @@ sal_uInt16 NaturalSpline(sal_uInt16 n, double* x, double* y,
 
 sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
                       double* b, double* c, double* d)
-{                     // array dimensions should range from [0..n]!
+{                     
     sal_uInt16  Error;
-    sal_uInt16  i,im1,nm1; //integer
+    sal_uInt16  i,im1,nm1; 
     double  hr,hl;
     double* a;
     double* lowrow;
@@ -531,8 +531,8 @@ sal_uInt16 PeriodicSpline(sal_uInt16 n, double* x, double* y,
 
     if (n<2) return 4;
     nm1=n-1;
-    for (i=0;i<=nm1;i++) if (x[i+1]<=x[i]) return 2; // should be strictly monotonically decreasing!
-    if (y[n]!=y[0]) return 3; // begin and end should be equal!
+    for (i=0;i<=nm1;i++) if (x[i+1]<=x[i]) return 2; 
+    if (y[n]!=y[0]) return 3; 
 
     a     =new double[n+1];
     lowrow=new double[n+1];
@@ -608,13 +608,13 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
            betX = 0,betY = 0;
 
     if (n<2) return 1;
-    if ((MargCond & ~3) && (MargCond != 4)) return 2; // invalid boundary condition
+    if ((MargCond & ~3) && (MargCond != 4)) return 2; 
     if (!CondT) {
         T[0]=0.0;
         for (i=0;i<n;i++) {
             deltX=x[i+1]-x[i]; deltY=y[i+1]-y[i];
             delt =deltX*deltX+deltY*deltY;
-            if (delt<=0.0) return 3;            // two identical adjacent points!
+            if (delt<=0.0) return 3;            
             T[i+1]=T[i]+sqrt(delt);
         }
     }
@@ -644,7 +644,7 @@ sal_uInt16 ParaSpline(sal_uInt16 n, double* x, double* y, sal_uInt8 MargCond,
                 betY=betX*MargN1;
             }
         }
-    } // switch MargCond
+    } 
     if (MargCond==3) {
         Error=PeriodicSpline(n,T,x,bx,cx,dx);
         if (Error!=0) return(Error+4);
@@ -721,7 +721,7 @@ bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
     Marg01=0.0;
     MargN1=0.0;
     MargN2=0.0;
-    if (n>0) n--; // correct n (number of partial polynoms)
+    if (n>0) n--; 
 
     bool bRet = false;
     if ( ( Marg == 3 && n >= 3 ) || ( Marg == 2 && n >= 2 ) )
@@ -762,10 +762,10 @@ bool CalcSpline(Polygon& rPoly, bool Periodic, sal_uInt16& n,
 *************************************************************************/
 bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
 {
-    short  MinKoord=-32000;    // to prevent
-    short  MaxKoord=32000;     // overflows
+    short  MinKoord=-32000;    
+    short  MaxKoord=32000;     
 
-    double* ax;                // coefficients of the polynoms
+    double* ax;                
     double* ay;
     double* bx;
     double* by;
@@ -775,14 +775,14 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
     double* dy;
     double* tv;
 
-    double      Step;          // stepsize for t
-    double      dt1,dt2,dt3;   // delta t, y, ^3
+    double      Step;          
+    double      dt1,dt2,dt3;   
     double      t;
-    bool        bEnde;         // partial polynom ended?
-    sal_uInt16  n;             // number of partial polynoms to draw
-    sal_uInt16  i;             // actual partial polynom
-    bool        bOk;           // all still ok?
-    sal_uInt16  PolyMax=16380; // max number of polygon points
+    bool        bEnde;         
+    sal_uInt16  n;             
+    sal_uInt16  i;             
+    bool        bOk;           
+    sal_uInt16  PolyMax=16380; 
     long        x,y;
 
     bOk=CalcSpline(rSpln,Periodic,n,ax,ay,bx,by,cx,cy,dx,dy,tv);
@@ -790,12 +790,12 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
         Step =10;
 
         rPoly.SetSize(1);
-        rPoly.SetPoint(Point(short(ax[0]),short(ay[0])),0); // first point
+        rPoly.SetPoint(Point(short(ax[0]),short(ay[0])),0); 
         i=0;
-        while (i<n) {       // draw n partial polynoms
+        while (i<n) {       
             t=tv[i]+Step;
             bEnde=false;
-            while (!bEnde) {  // extrapolate one partial polynom
+            while (!bEnde) {  
                 bEnde=t>=tv[i+1];
                 if (bEnde) t=tv[i+1];
                 dt1=t-tv[i]; dt2=dt1*dt1; dt3=dt2*dt1;
@@ -807,11 +807,11 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
                     rPoly.SetSize(rPoly.GetSize()+1);
                     rPoly.SetPoint(Point(short(x),short(y)),rPoly.GetSize()-1);
                 } else {
-                    bOk=false; // error: polygon becomes to large
+                    bOk=false; 
                 }
                 t=t+Step;
-            } // end of partial polynom
-            i++; // next partial polynom
+            } 
+            i++; 
         }
         delete[] ax;
         delete[] ay;
@@ -823,7 +823,7 @@ bool Spline2Poly(Polygon& rSpln, bool Periodic, Polygon& rPoly)
         delete[] dy;
         delete[] tv;
         return bOk;
-    } // end of if (bOk)
+    } 
     rPoly.SetSize(0);
     return false;
 }

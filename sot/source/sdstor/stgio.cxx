@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,9 +26,9 @@
 #include "stgio.hxx"
 #include <rtl/instance.hxx>
 
-///////////////////////////// class StgIo //////////////////////////////
 
-// This class holds the storage header and all internal streams.
+
+
 
 StgIo::StgIo() : StgCache()
 {
@@ -47,7 +47,7 @@ StgIo::~StgIo()
     delete pFAT;
 }
 
-// Load the header. Do not set an error code if the header is invalid.
+
 
 bool StgIo::Load()
 {
@@ -66,7 +66,7 @@ bool StgIo::Load()
     return Good();
 }
 
-// Set up an initial, empty storage
+
 
 bool StgIo::Init()
 {
@@ -105,18 +105,18 @@ void StgIo::SetupStreams()
     }
 }
 
-// get the logical data page size
+
 
 short StgIo::GetDataPageSize()
 {
     return 1 << aHdr.GetDataPageSize();
 }
 
-// Commit everything
+
 
 bool StgIo::CommitAll()
 {
-    // Store the data (all streams and the TOC)
+    
     if( pTOC && pTOC->Store() && pDataFAT )
     {
         if( Commit() )
@@ -210,13 +210,13 @@ sal_uLong EasyFat::Mark( sal_Int32 nPage, sal_Int32 nCount, sal_Int32 nExpect )
             return FAT_OUTOFBOUNDS;
         pFree[ nCurPage ] = false;
         nCurPage = pFat[ nCurPage ];
-        //Stream zu lang
+        
         if( nCurPage != nExpect && nCount == 1 )
             return FAT_WRONGLENGTH;
-        //Stream zu kurz
+        
         if( nCurPage == nExpect && nCount != 1 && nCount != -1 )
             return FAT_WRONGLENGTH;
-        // letzter Block bei Stream ohne Laenge
+        
         if( nCurPage == nExpect && nCount == -1 )
             nCount = 1;
         if( nCount != -1 )
@@ -313,22 +313,22 @@ sal_uLong Validator::ValidateDirectoryEntries()
     if ( !rIo.pTOC )
         return FAT_INMEMORYERROR;
 
-    // Normale DirEntries
+    
     sal_uLong nErr = MarkAll( rIo.pTOC->GetRoot() );
     if( nErr != FAT_OK )
         return nErr;
-    // Small Data
+    
     nErr = aFat.Mark( rIo.pTOC->GetRoot()->aEntry.GetStartPage(),
                  rIo.pTOC->GetRoot()->aEntry.GetSize(), -2 );
     if( nErr != FAT_OK )
         return nErr;
-    // Small Data FAT
+    
     nErr = aFat.Mark(
         rIo.aHdr.GetDataFATStart(),
         rIo.aHdr.GetDataFATSize() * aFat.GetPageSize(), -2 );
     if( nErr != FAT_OK )
         return nErr;
-    // TOC
+    
     nErr = aFat.Mark(
         rIo.aHdr.GetTOCStart(), -1, -2 );
     return nErr;
@@ -389,10 +389,10 @@ sal_uLong StgIo::ValidateFATs()
             ErrorLink::get().Call( &aArg );
             bCopied = true;
         }
-//      DBG_ASSERT( nErr == FAT_OK ,"Storage kaputt");
+
         return nErr;
     }
-//  OSL_FAIL("Validiere nicht (kein FileStorage)");
+
     return FAT_OK;
 }
 

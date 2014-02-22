@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/ustrbuf.hxx>
@@ -32,11 +32,11 @@
 
 using namespace ::com::sun::star;
 
-// implementation of graphic property Stroke
 
-// implementation of presentation page property Change
 
-// implementation of an effect duration property handler
+
+
+
 
 XMLDurationPropertyHdl::~XMLDurationPropertyHdl()
 {
@@ -79,7 +79,7 @@ bool XMLDurationPropertyHdl::exportXML(
     return false;
 }
 
-// implementation of an opacity property handler
+
 
 XMLOpacityPropertyHdl::XMLOpacityPropertyHdl( SvXMLImport* pImport )
 : mpImport( pImport )
@@ -111,22 +111,22 @@ bool XMLOpacityPropertyHdl::importXML(
 
     if( bRet )
     {
-        // check ranges
+        
         if( nValue < 0 )
             nValue = 0;
         if( nValue > 100 )
             nValue = 100;
 
-        // convert xml opacity to api transparency
+        
         nValue = 100 - nValue;
 
-        // #i42959#
+        
         if( mpImport )
         {
             sal_Int32 nUPD, nBuild;
             if( mpImport->getBuildIds( nUPD, nBuild ) )
             {
-                // correct import of documents written prior to StarOffice 8/OOO 2.0 final
+                
                 if( (nUPD == 680) && (nBuild < 8951) )
                     nValue = 100 - nValue;
             }
@@ -159,7 +159,7 @@ bool XMLOpacityPropertyHdl::exportXML(
     return bRet;
 }
 
-// implementation of an text animation step amount
+
 
 XMLTextAnimationStepPropertyHdl::~XMLTextAnimationStepPropertyHdl()
 {

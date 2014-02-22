@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "analysis.hxx"
@@ -64,7 +64,7 @@ ResMgr& AnalysisAddIn::GetResMgr( void ) throw( uno::RuntimeException )
 {
     if( !pResMgr )
     {
-        InitData();     // try to get resource manager
+        InitData();     
 
         if( !pResMgr )
             throw uno::RuntimeException();
@@ -184,7 +184,7 @@ double AnalysisAddIn::FactDouble( sal_Int32 nNum ) throw( uno::RuntimeException,
     {
         pFactDoubles = new double[ MAXFACTDOUBLE + 1 ];
 
-        pFactDoubles[ 0 ] = 1.0;    // by default
+        pFactDoubles[ 0 ] = 1.0;    
 
         double      fOdd = 1.0;
         double      fEven = 2.0;
@@ -236,14 +236,14 @@ uno::Reference< uno::XInterface > SAL_CALL AnalysisAddIn_CreateInstance(
     return xInst;
 }
 
-// XServiceName
+
 OUString SAL_CALL AnalysisAddIn::getServiceName() throw( uno::RuntimeException )
 {
-    // name of specific AddIn service
+    
     return OUString( MY_SERVICE );
 }
 
-// XServiceInfo
+
 OUString SAL_CALL AnalysisAddIn::getImplementationName() throw( uno::RuntimeException )
 {
     return getImplementationName_Static();
@@ -259,12 +259,12 @@ uno::Sequence< OUString > SAL_CALL AnalysisAddIn::getSupportedServiceNames() thr
     return getSupportedServiceNames_Static();
 }
 
-// XLocalizable
+
 void SAL_CALL AnalysisAddIn::setLocale( const lang::Locale& eLocale ) throw( uno::RuntimeException )
 {
     aFuncLoc = eLocale;
 
-    InitData();     // change of locale invalidates resources!
+    InitData();     
 }
 
 lang::Locale SAL_CALL AnalysisAddIn::getLocale() throw( uno::RuntimeException )
@@ -272,11 +272,11 @@ lang::Locale SAL_CALL AnalysisAddIn::getLocale() throw( uno::RuntimeException )
     return aFuncLoc;
 }
 
-// XAddIn
+
 OUString SAL_CALL AnalysisAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException )
 {
-    //  not used by calc
-    //  (but should be implemented for other uses of the AddIn service)
+    
+    
 
     return OUString();
 }
@@ -349,8 +349,8 @@ static const OUString pDefCatName("Add-In");
 
 OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aName ) throw( uno::RuntimeException )
 {
-    //  return non-translated strings
-    //  return OUString( "Add-In" );
+    
+    
     const FuncData*     p = pFD->Get( aName );
     OUString              aRet;
     if( p )
@@ -374,8 +374,8 @@ OUString SAL_CALL AnalysisAddIn::getProgrammaticCategoryName( const OUString& aN
 
 OUString SAL_CALL AnalysisAddIn::getDisplayCategoryName( const OUString& aProgrammaticFunctionName ) throw( uno::RuntimeException )
 {
-    //  return translated strings, not used for predefined categories
-    //  return OUString( "Add-In" );
+    
+    
     const FuncData*     p = pFD->Get( aProgrammaticFunctionName );
     OUString              aRet;
     if( p )
@@ -445,7 +445,7 @@ uno::Sequence< sheet::LocalizedName > SAL_CALL AnalysisAddIn::getCompatibilityNa
     return aRet;
 }
 
-// XAnalysis
+
 /** Workday */
 sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( const uno::Reference< beans::XPropertySet >& xOptions,
     sal_Int32 nDate, sal_Int32 nDays, const uno::Any& aHDay ) throw( uno::RuntimeException, lang::IllegalArgumentException )
@@ -464,7 +464,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( const uno::Reference< beans::XProp
     if( nDays > 0 )
     {
         if( GetDayOfWeek( nActDate ) == 5 )
-            // when starting on Saturday, assuming we're starting on Sunday to get the jump over the weekend
+            
             nActDate++;
 
         while( nDays )
@@ -477,13 +477,13 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( const uno::Reference< beans::XProp
                     nDays--;
             }
             else
-                nActDate++;     // jump over weekend
+                nActDate++;     
         }
     }
     else
     {
         if( GetDayOfWeek( nActDate ) == 6 )
-            // when starting on Sunday, assuming we're starting on Saturday to get the jump over the weekend
+            
             nActDate--;
 
         while( nDays )
@@ -496,7 +496,7 @@ sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( const uno::Reference< beans::XProp
                     nDays++;
             }
             else
-                nActDate--;     // jump over weekend
+                nActDate--;     
         }
     }
 
@@ -640,7 +640,7 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 {
     double                          fRet = 0.0;
 
-    // #i32269# 0^0 is undefined, Excel returns #NUM! error
+    
     if( fX == 0.0 && fN == 0 )
         throw uno::RuntimeException();
 
@@ -700,12 +700,12 @@ double SAL_CALL AnalysisAddIn::getRandbetween( double fMin, double fMax ) throw(
     if( fMin > fMax )
         throw lang::IllegalArgumentException();
 
-    // fMax -> range
+    
     double fRet = fMax - fMin + 1.0;
     fRet *= rand();
     fRet /= (RAND_MAX + 1.0);
     fRet += fMin;
-    fRet = floor( fRet );   // simple floor is sufficient here
+    fRet = floor( fRet );   
     RETURN_FINITE( fRet );
 }
 
@@ -785,13 +785,13 @@ double SAL_CALL AnalysisAddIn::getBessely( double fNum, sal_Int32 nOrder ) throw
     RETURN_FINITE( fRet );
 }
 
-const double    SCA_MAX2        = 511.0;            // min. val for binary numbers (9 bits + sign)
-const double    SCA_MIN2        = -SCA_MAX2-1.0;    // min. val for binary numbers (9 bits + sign)
-const double    SCA_MAX8        = 536870911.0;      // max. val for octal numbers (29 bits + sign)
-const double    SCA_MIN8        = -SCA_MAX8-1.0;    // min. val for octal numbers (29 bits + sign)
-const double    SCA_MAX16       = 549755813888.0;   // max. val for hexadecimal numbers (39 bits + sign)
-const double    SCA_MIN16       = -SCA_MAX16-1.0;   // min. val for hexadecimal numbers (39 bits + sign)
-const sal_Int32 SCA_MAXPLACES   = 10;               // max. number of places
+const double    SCA_MAX2        = 511.0;            
+const double    SCA_MIN2        = -SCA_MAX2-1.0;    
+const double    SCA_MAX8        = 536870911.0;      
+const double    SCA_MIN8        = -SCA_MAX8-1.0;    
+const double    SCA_MAX16       = 549755813888.0;   
+const double    SCA_MIN16       = -SCA_MAX16-1.0;   
+const sal_Int32 SCA_MAXPLACES   = 10;               
 
 OUString SAL_CALL AnalysisAddIn::getBin2Oct( const uno::Reference< beans::XPropertySet >& xOpt, const OUString& aNum, const uno::Any& rPlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
 {

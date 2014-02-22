@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "controller/SlsFocusManager.hxx"
@@ -66,7 +66,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
         switch (eDirection)
         {
             case FMD_NONE:
-                // Nothing to be done.
+                
                 break;
 
             case FMD_LEFT:
@@ -90,19 +90,19 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
                 {
                     if (mbIsVerticalWrapActive)
                     {
-                        // Wrap arround to the bottom row or the one above
-                        // and go to the correct column.
+                        
+                        
                         const sal_Int32 nLastIndex (nPageCount-1);
                         const sal_Int32 nLastColumn (nLastIndex % nColumnCount);
                         const sal_Int32 nCurrentColumn (mnPageIndex%nColumnCount);
                         if (nLastColumn >= nCurrentColumn)
                         {
-                            // The last row contains the current column.
+                            
                             mnPageIndex = nLastIndex - (nLastColumn-nCurrentColumn);
                         }
                         else
                         {
-                            // Only the second to last row contains the current column.
+                            
                             mnPageIndex = nLastIndex - nLastColumn
                                 - nColumnCount
                                 + nCurrentColumn;
@@ -111,7 +111,7 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
                 }
                 else
                 {
-                    // Move the focus the previous row.
+                    
                     mnPageIndex = nCandidate;
                 }
             }
@@ -124,17 +124,17 @@ void FocusManager::MoveFocus (FocusMoveDirection eDirection)
                 {
                     if (mbIsVerticalWrapActive)
                     {
-                        // Wrap arround to the correct column.
+                        
                         mnPageIndex = mnPageIndex % nColumnCount;
                     }
                     else
                     {
-                        // Do not move the focus.
+                        
                     }
                 }
                 else
                 {
-                    // Move the focus to the next row.
+                    
                     mnPageIndex = nCandidate;
                 }
             }
@@ -260,7 +260,7 @@ void FocusManager::HideFocusIndicator (const model::SharedPageDescriptor& rpDesc
     {
         mrSlideSorter.GetView().SetState(rpDescriptor, model::PageDescriptor::ST_Focused, false);
 
-        // Hide focus should also fire the focus event, Currently, only accessibility add the focus listener
+        
         NotifyFocusChangeListeners();
     }
 }
@@ -278,8 +278,8 @@ void FocusManager::ShowFocusIndicator (
 
         if (bScrollToFocus)
         {
-            // Scroll the focused page object into the visible area and repaint
-            // it, so that the focus indicator becomes visible.
+            
+            
             mrSlideSorter.GetController().GetVisibleAreaManager().RequestVisible(rpDescriptor,true);
         }
         mrSlideSorter.GetView().RequestRepaint(rpDescriptor);
@@ -311,10 +311,10 @@ void FocusManager::RemoveFocusChangeListener (const Link& rListener)
 
 void FocusManager::NotifyFocusChangeListeners (void) const
 {
-    // Create a copy of the listener list to be safe when that is modified.
+    
     ::std::vector<Link> aListeners (maFocusChangeListeners);
 
-    // Tell the slection change listeners that the selection has changed.
+    
     ::std::vector<Link>::iterator iListener (aListeners.begin());
     ::std::vector<Link>::iterator iEnd (aListeners.end());
     for (; iListener!=iEnd; ++iListener)
@@ -342,6 +342,6 @@ FocusManager::FocusHider::~FocusHider (void)
         mrManager.ShowFocus();
 }
 
-} } } // end of namespace ::sd::slidesorter::controller
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

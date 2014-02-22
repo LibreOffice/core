@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef UNICODE
@@ -40,7 +40,7 @@ using namespace std;
 
 namespace
 {
-    // The provided GUID must be without surounding '{}'
+    
     string GetGuidPart(const string& guid, int index)
     {
         assert((guid.length() == 36) && "No GUID or wrong format!");
@@ -76,12 +76,12 @@ namespace
         return string(buff, str.length());
     }
 
-    // Convert the upgrade code (which is a GUID) according
-    // to the way the windows installer does when writing it
-    // to the registry
-    // The first 8 bytes will be inverted, from the last
-    // 8 bytes always the nibbles will be inverted for further
-    // details look in the MSDN under compressed registry keys
+    
+    
+    
+    
+    
+    
     string ConvertGuid(const string& guid)
     {
         string convertedGuid;
@@ -165,14 +165,14 @@ namespace
         }
         return false;
     }
-} // namespace
+} 
 
 extern "C" UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
 {
     string upgradeCode = GetMsiProperty(handle, TEXT("UpgradeCode"));
     upgradeCode = ConvertGuid(string(upgradeCode.c_str() + 1, upgradeCode.length() - 2));
 
-    //MessageBox(NULL, upgradeCode.c_str(), TEXT("Debug"), MB_OK);
+    
 
     if (RegistryKeyHasUpgradeSubKey(
         HKEY_CURRENT_USER,
@@ -180,7 +180,7 @@ extern "C" UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
         upgradeCode) && IsSetMsiProperty(handle, TEXT("ALLUSERS")))
     {
         UnsetMsiProperty(handle, TEXT("ALLUSERS"));
-        //MessageBox(NULL, "ALLUSERS removed", "DEBUG", MB_OK);
+        
     }
     else if (RegistryKeyHasUpgradeSubKey(
              HKEY_LOCAL_MACHINE,
@@ -188,7 +188,7 @@ extern "C" UINT __stdcall SetProductInstallMode(MSIHANDLE handle)
              upgradeCode) && !IsSetMsiProperty(handle, TEXT("ALLUSERS")))
     {
         SetMsiProperty(handle, TEXT("ALLUSERS"));
-        //MessageBox(NULL, "ALLUSERS set", "DEBUG", MB_OK);
+        
     }
     return ERROR_SUCCESS;
 }

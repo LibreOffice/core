@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scdetect.hxx"
@@ -79,44 +79,44 @@ const sal_Char pFilterDBase[]        = "dBase";
 const sal_Char pFilterDif[]      = "DIF";
 const sal_Char pFilterSylk[]     = "SYLK";
 
-// Tabelle mit Suchmustern
-// Bedeutung der Sequenzen
-// 0x00??: genau Byte 0x?? muss an dieser Stelle stehen
-// 0x0100: ein Byte ueberlesen (don't care)
-// 0x02nn: ein Byte aus 0xnn Alternativen folgt
-// 0x8000: Erkennung abgeschlossen
+
+
+
+
+
+
 //
 
 #define M_DC        0x0100
 #define M_ALT(ANZ)  (0x0200+(ANZ))
 #define M_ENDE      0x8000
 
-const sal_uInt16 pLotus[] =      // Lotus 1/1A/2
+const sal_uInt16 pLotus[] =      
     { 0x0000, 0x0000, 0x0002, 0x0000,
     M_ALT(2), 0x0004, 0x0006,
     0x0004, M_ENDE };
 
-const sal_uInt16 pLotusNew[] =   // Lotus >= 9.7
-    { 0x0000, 0x0000, M_DC, 0x0000,     // Rec# + Len (0x1a)
-      M_ALT(3), 0x0003, 0x0004, 0x0005, // File Revision Code 97->ME
+const sal_uInt16 pLotusNew[] =   
+    { 0x0000, 0x0000, M_DC, 0x0000,     
+      M_ALT(3), 0x0003, 0x0004, 0x0005, 
       0x0010, 0x0004, 0x0000, 0x0000,
       M_ENDE };
 
-const sal_uInt16 pLotus2[] =     // Lotus >3
-    { 0x0000, 0x0000, 0x001A, 0x0000,   // Rec# + Len (26)
-    M_ALT(2), 0x0000, 0x0002,         // File Revision Code
+const sal_uInt16 pLotus2[] =     
+    { 0x0000, 0x0000, 0x001A, 0x0000,   
+    M_ALT(2), 0x0000, 0x0002,         
     0x0010,
-    0x0004, 0x0000,                   // File Revision Subcode
+    0x0004, 0x0000,                   
     M_ENDE };
 
 const sal_uInt16 pQPro[] =
        { 0x0000, 0x0000, 0x0002, 0x0000,
-         M_ALT(4), 0x0001, 0x0002, // WB1, WB2
-         0x0006, 0x0007,           // QPro 6/7 (?)
+         M_ALT(4), 0x0001, 0x0002, 
+         0x0006, 0x0007,           
          0x0010,
          M_ENDE };
 
-const sal_uInt16 pDIF1[] =       // DIF mit CR-LF
+const sal_uInt16 pDIF1[] =       
     {
     'T', 'A', 'B', 'L', 'E',
     M_DC, M_DC,
@@ -125,7 +125,7 @@ const sal_uInt16 pDIF1[] =       // DIF mit CR-LF
     '\"',
     M_ENDE };
 
-const sal_uInt16 pDIF2[] =       // DIF mit CR oder LF
+const sal_uInt16 pDIF2[] =       
     {
     'T', 'A', 'B', 'L', 'E',
     M_DC,
@@ -134,16 +134,16 @@ const sal_uInt16 pDIF2[] =       // DIF mit CR oder LF
     '\"',
     M_ENDE };
 
-const sal_uInt16 pSylk[] =       // Sylk
+const sal_uInt16 pSylk[] =       
     {
     'I', 'D', ';',
-    M_ALT(3), 'P', 'N', 'E',        // 'P' plus undocumented Excel extensions 'N' and 'E'
+    M_ALT(3), 'P', 'N', 'E',        
     M_ENDE };
 
 bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
 {
     sal_uInt8 nByte;
-    rStr.Seek( 0 ); // am Anfang war alles Uebel...
+    rStr.Seek( 0 ); 
     rStr.ReadUChar( nByte );
     bool bSync = true;
     while( !rStr.IsEof() && bSync )
@@ -151,27 +151,27 @@ bool detectThisFormat(SvStream& rStr, const sal_uInt16* pSearch)
         sal_uInt16 nMuster = *pSearch;
 
         if( nMuster < 0x0100 )
-        { //                                direkter Byte-Vergleich
+        { 
             if( ( sal_uInt8 ) nMuster != nByte )
                 bSync = false;
         }
         else if( nMuster & M_DC )
-        { //                                             don't care
+        { 
         }
         else if( nMuster & M_ALT(0) )
-        { //                                      alternative Bytes
+        { 
             sal_uInt8 nAnzAlt = ( sal_uInt8 ) nMuster;
-            bSync = false;          // zunaechst unsynchron
+            bSync = false;          
             while( nAnzAlt > 0 )
             {
                 pSearch++;
                 if( ( sal_uInt8 ) *pSearch == nByte )
-                    bSync = true;   // jetzt erst Synchronisierung
+                    bSync = true;   
                 nAnzAlt--;
             }
         }
         else if( nMuster & M_ENDE )
-        { //                                        Format detected
+        { 
             return true;
         }
 
@@ -193,14 +193,14 @@ ScFilterDetect::~ScFilterDetect()
 }
 
 #if 0
-// This method is no longer used, but I do want to keep this for now to see
-// if we could transfer this check to the now centralized ascii detection
-// code in the filter module.
+
+
+
 static sal_Bool lcl_MayBeAscii( SvStream& rStream )
 {
-    // ASCII/CSV is considered possible if there are no null bytes, or a Byte
-    // Order Mark is present, or if, for Unicode UCS2/UTF-16, all null bytes
-    // are on either even or uneven byte positions.
+    
+    
+    
 
     rStream.Seek(STREAM_SEEK_TO_BEGIN);
 
@@ -211,7 +211,7 @@ static sal_Bool lcl_MayBeAscii( SvStream& rStream )
 
     if ( nBytesRead >= 2 && (aBuffer[0] == 0xfffe || aBuffer[0] == 0xfeff) )
     {
-        // Unicode BOM file may contain null bytes.
+        
         return sal_True;
     }
 
@@ -233,8 +233,8 @@ static sal_Bool lcl_MayBeAscii( SvStream& rStream )
 
 static sal_Bool lcl_MayBeDBase( SvStream& rStream )
 {
-    // Look for dbf marker, see connectivity/source/inc/dbase/DTable.hxx
-    // DBFType for values.
+    
+    
     const sal_uInt8 nValidMarks[] = {
         0x03, 0x04, 0x05, 0x30, 0x43, 0xB3, 0x83, 0x8b, 0x8e, 0xf5 };
     sal_uInt8 nMark;
@@ -250,7 +250,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
         return false;
 
     const size_t nHeaderBlockSize = 32;
-    // Empty dbf is >= 32*2+1 bytes in size.
+    
     const size_t nEmptyDbf = nHeaderBlockSize * 2 + 1;
 
     rStream.Seek(STREAM_SEEK_TO_END);
@@ -258,7 +258,7 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     if ( nSize < nEmptyDbf )
         return false;
 
-    // length of header starts at 8
+    
     rStream.Seek(8);
     sal_uInt16 nHeaderLen;
     rStream.ReadUInt16( nHeaderLen );
@@ -266,12 +266,12 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     if ( nHeaderLen < nEmptyDbf || nSize < nHeaderLen )
         return false;
 
-    // Last byte of header must be 0x0d, this is how it's specified.
-    // #i9581#,#i26407# but some applications don't follow the specification
-    // and pad the header with one byte 0x00 to reach an
-    // even boundary. Some (#i88577# ) even pad more or pad using a 0x1a ^Z
-    // control character (#i8857#). This results in:
-    // Last byte of header must be 0x0d on 32 bytes boundary.
+    
+    
+    
+    
+    
+    
     sal_uInt16 nBlocks = (nHeaderLen - 1) / nHeaderBlockSize;
     sal_uInt8 nEndFlag = 0;
     while ( nBlocks > 1 && nEndFlag != 0x0d ) {
@@ -290,14 +290,14 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     uno::Reference< XInteractionHandler > xInteraction;
     OUString aURL;
     OUString sTemp;
-    OUString aTypeName;            // a name describing the type (from MediaDescriptor, usually from flat detection)
-    OUString aPreselectedFilterName;      // a name describing the filter to use (from MediaDescriptor, usually from UI action)
+    OUString aTypeName;            
+    OUString aPreselectedFilterName;      
 
-    OUString aDocumentTitle; // interesting only if set in this method
+    OUString aDocumentTitle; 
 
-    // opening as template is done when a parameter tells to do so and a template filter can be detected
-    // (otherwise no valid filter would be found) or if the detected filter is a template filter and
-    // there is no parameter that forbids to open as template
+    
+    
+    
     sal_Bool bOpenAsTemplate = false;
     sal_Bool bWasReadOnly = false, bReadOnly = false;
 
@@ -305,8 +305,8 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     sal_Bool bRepairAllowed = false;
     bool bDeepDetection = false;
 
-    // now some parameters that can already be in the array, but may be overwritten or new inserted here
-    // remember their indices in the case new values must be added to the array
+    
+    
     sal_Int32 nPropertyCount = lDescriptor.getLength();
     sal_Int32 nIndexOfFilterName = -1;
     sal_Int32 nIndexOfInputStream = -1;
@@ -317,7 +317,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        // extract properties
+        
         if ( lDescriptor[nProperty].Name == "URL" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
@@ -338,8 +338,8 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
 
-            // if the preselected filter name is not correct, it must be erased after detection
-            // remember index of property to get access to it later
+            
+            
             nIndexOfFilterName = nProperty;
         }
         else if ( lDescriptor[nProperty].Name == "InputStream" )
@@ -363,9 +363,9 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
             bDeepDetection = lDescriptor[nProperty].Value.get<sal_Bool>();
     }
 
-    // can't check the type for external filters, so set the "dont" flag accordingly
+    
     SolarMutexGuard aGuard;
-    //SfxFilterFlags nMust = SFX_FILTER_IMPORT, nDont = SFX_FILTER_NOTINSTALLED;
+    
 
     SfxAllItemSet *pSet = new SfxAllItemSet( SFX_APP()->GetPool() );
     TransformParameters( SID_OPENDOC, lDescriptor, *pSet );
@@ -383,35 +383,35 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     }
     else
     {
-        // container for Calc filters
+        
         SfxFilterMatcher aMatcher("scalc");
         if ( !aPreselectedFilterName.isEmpty() )
             pFilter = SfxFilter::GetFilterByName( aPreselectedFilterName );
         else if( !aTypeName.isEmpty() )
             pFilter = aMatcher.GetFilter4EA( aTypeName );
 
-        // ctor of SfxMedium uses owner transition of ItemSet
+        
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, NULL, pSet );
         aMedium.UseInteractionHandler( sal_True );
 
         sal_Bool bIsStorage = aMedium.IsStorage();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
-            // remember input stream and content and put them into the descriptor later
-            // should be done here since later the medium can switch to a version
+            
+            
             xStream.set(aMedium.GetInputStream());
             xContent.set(aMedium.GetContent());
             bReadOnly = aMedium.IsReadOnly();
 
-            // maybe that IsStorage() already created an error!
+            
             if ( bIsStorage )
             {
                 uno::Reference < embed::XStorage > xStorage(aMedium.GetStorage( false ));
                 if ( aMedium.GetLastStorageCreationState() != ERRCODE_NONE )
                 {
-                    // error during storage creation means _here_ that the medium
-                    // is broken, but we can not handle it in medium since unpossibility
-                    // to create a storage does not _always_ means that the medium is broken
+                    
+                    
+                    
                     aMedium.SetError(aMedium.GetLastStorageCreationState(), OUString(OSL_LOG_PREFIX));
                     if ( xInteraction.is() )
                     {
@@ -443,17 +443,17 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                     catch( const lang::WrappedTargetException& aWrap )
                     {
                         if (!bDeepDetection)
-                            // Bail out early unless it's a deep detection.
+                            
                             return OUString();
 
                         packages::zip::ZipIOException aZipException;
 
-                        // repairing is done only if this type is requested from outside
+                        
                         if ( ( aWrap.TargetException >>= aZipException ) && !aTypeName.isEmpty() )
                         {
                             if ( xInteraction.is() )
                             {
-                                // the package is broken one
+                                
                                    aDocumentTitle = aMedium.GetURLObject().getName(
                                                             INetURLObject::LAST_SEGMENT,
                                                             true,
@@ -461,7 +461,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
                                 if ( !bRepairPackage )
                                 {
-                                    // ask the user whether he wants to try to repair
+                                    
                                     RequestPackageReparation aRequest( aDocumentTitle );
                                     xInteraction->handle( aRequest.GetRequest() );
                                     bRepairAllowed = aRequest.isApproved();
@@ -469,7 +469,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
                                 if ( !bRepairAllowed )
                                 {
-                                    // repair either not allowed or not successful
+                                    
                                     NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
                                     xInteraction->handle( aNotifyRequest.GetRequest() );
                                 }
@@ -494,18 +494,18 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
             }
             else
             {
-                // Non-storage format.
+                
 
                 if (aTypeName == "calc8_template" ||
                     aTypeName == "calc8" ||
                     aTypeName == "calc_StarOffice_XML_Calc" ||
                     aTypeName == "calc_StarOffice_XML_Calc_Template")
-                    // These types require storage.  Bail out.
+                    
                     return OUString();
 
                 SvStream* pStream = aMedium.GetInStream();
                 if (!pStream)
-                    // No stream, no detection.
+                    
                     return OUString();
 
                 pFilter = NULL;
@@ -513,10 +513,10 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
                 pStream->Seek( STREAM_SEEK_TO_END);
                 sal_Size nSize = pStream->Tell();
                 pStream->Seek( 0);
-                // Do not attempt to create an SotStorage on a
-                // 0-length stream as that would create the compound
-                // document header on the stream and effectively write to
-                // disk!
+                
+                
+                
+                
                 if (nSize > 0)
                 {
                     const char* pSearchFilterName = NULL;
@@ -567,7 +567,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
     if ( nIndexOfInputStream == -1 && xStream.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "InputStream";
         lDescriptor[nPropertyCount].Value <<= xStream;
@@ -576,7 +576,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
     if ( nIndexOfContent == -1 && xContent.is() )
     {
-        // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
+        
         lDescriptor.realloc( nPropertyCount + 1 );
         lDescriptor[nPropertyCount].Name = "UCBContent";
         lDescriptor[nPropertyCount].Value <<= xContent;
@@ -605,7 +605,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
         bOpenAsTemplate = sal_True;
 
-        // TODO/LATER: set progress bar that should be used
+        
     }
 
     if ( bOpenAsTemplate )
@@ -623,7 +623,7 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
 
     if ( !aDocumentTitle.isEmpty() )
     {
-        // the title was set here
+        
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );

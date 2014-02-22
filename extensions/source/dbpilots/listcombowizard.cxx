@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "listcombowizard.hxx"
@@ -30,10 +30,10 @@
 #include "dbpilots.hrc"
 #include <comphelper/extract.hxx>
 
-//.........................................................................
+
 namespace dbp
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
@@ -45,10 +45,10 @@ namespace dbp
     using namespace ::svt;
     using namespace ::dbtools;
 
-    //=====================================================================
-    //= OListComboWizard
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OListComboWizard::OListComboWizard( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XComponentContext >& _rxContext )
         :OControlWizard(_pParent, ModuleRes(RID_DLG_LISTCOMBOWIZARD), _rxObjectModel, _rxContext)
@@ -62,15 +62,15 @@ namespace dbp
         m_pCancel->SetHelpId(HID_LISTWIZARD_CANCEL);
         m_pFinish->SetHelpId(HID_LISTWIZARD_FINISH);
 
-        // if we do not need the data source selection page ...
+        
         if (!needDatasourceSelection())
-        {   // ... skip it!
+        {   
             skip(1);
             m_bHadDataSelection = sal_False;
         }
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OListComboWizard::approveControl(sal_Int16 _nClassId)
     {
         switch (_nClassId)
@@ -87,7 +87,7 @@ namespace dbp
         return sal_False;
     }
 
-    //---------------------------------------------------------------------
+    
     OWizardPage* OListComboWizard::createPage(WizardState _nState)
     {
         switch (_nState)
@@ -107,7 +107,7 @@ namespace dbp
         return NULL;
     }
 
-    //---------------------------------------------------------------------
+    
     WizardTypes::WizardState OListComboWizard::determineNextState( WizardState _nCurrentState ) const
     {
         switch (_nCurrentState)
@@ -123,7 +123,7 @@ namespace dbp
         return WZS_INVALID_STATE;
     }
 
-    //---------------------------------------------------------------------
+    
     void OListComboWizard::enterState(WizardState _nState)
     {
         OControlWizard::enterState(_nState);
@@ -137,7 +137,7 @@ namespace dbp
             defaultButton(WZB_FINISH);
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OListComboWizard::leaveState(WizardState _nState)
     {
         if (!OControlWizard::leaveState(_nState))
@@ -149,23 +149,23 @@ namespace dbp
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+    
     void OListComboWizard::implApplySettings()
     {
         try
         {
-            // for quoting identifiers, we need the connection meta data
+            
             Reference< XConnection > xConn = getFormConnection();
             DBG_ASSERT(xConn.is(), "OListComboWizard::implApplySettings: no connection, unable to quote!");
             Reference< XDatabaseMetaData > xMetaData;
             if (xConn.is())
                 xMetaData = xConn->getMetaData();
 
-            // do some quotings
+            
             if (xMetaData.is())
             {
                 OUString sQuoteString = xMetaData->getIdentifierQuoteString();
-                if (isListBox()) // only when we have a listbox this should be not empty
+                if (isListBox()) 
                     getSettings().sLinkedListField = quoteName(sQuoteString, getSettings().sLinkedListField);
 
                 OUString sCatalog, sSchema, sName;
@@ -175,15 +175,15 @@ namespace dbp
                 getSettings().sListContentField = quoteName(sQuoteString, getSettings().sListContentField);
             }
 
-            // ListSourceType: SQL
+            
             getContext().xObjectModel->setPropertyValue("ListSourceType", makeAny((sal_Int32)ListSourceType_SQL));
 
             if (isListBox())
             {
-                // BoundColumn: 1
+                
                 getContext().xObjectModel->setPropertyValue("BoundColumn", makeAny((sal_Int16)1));
 
-                // build the statement to set as list source
+                
                 OUString sStatement = "SELECT " +
                     OUString( getSettings().sListContentField ) +  ", " + OUString( getSettings().sLinkedListField ) +
                     " FROM " + OUString( getSettings().sListContentTable );
@@ -193,14 +193,14 @@ namespace dbp
             }
             else
             {
-                // build the statement to set as list source
+                
                 OUString sStatement = "SELECT DISTINCT " +
                     OUString( getSettings().sListContentField ) +
                     " FROM " + OUString( getSettings().sListContentTable );
                 getContext().xObjectModel->setPropertyValue( "ListSource", makeAny(OUString(sStatement)));
             }
 
-            // the bound field
+            
             getContext().xObjectModel->setPropertyValue("DataField", makeAny(OUString(getSettings().sLinkedFormField)));
         }
         catch(const Exception&)
@@ -209,7 +209,7 @@ namespace dbp
         }
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OListComboWizard::onFinish()
     {
         if ( !OControlWizard::onFinish() )
@@ -219,10 +219,10 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
-    //= OLCPage
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     Reference< XNameAccess > OLCPage::getTables(sal_Bool _bNeedIt)
     {
         Reference< XConnection > xConn = getFormConnection();
@@ -239,7 +239,7 @@ namespace dbp
         return xTables;
     }
 
-    //---------------------------------------------------------------------
+    
     Sequence< OUString > OLCPage::getTableFields(sal_Bool _bNeedIt)
     {
         Reference< XNameAccess > xTables = getTables(_bNeedIt);
@@ -248,17 +248,17 @@ namespace dbp
         {
             try
             {
-                // the list table as XColumnsSupplier
+                
                 Reference< XColumnsSupplier > xSuppCols;
                 xTables->getByName(getSettings().sListContentTable) >>= xSuppCols;
                 DBG_ASSERT(!_bNeedIt || xSuppCols.is(), "OLCPage::getTableFields: no columns supplier!");
 
-                // the columns
+                
                 Reference< XNameAccess > xColumns;
                 if (xSuppCols.is())
                     xColumns = xSuppCols->getColumns();
 
-                // the column names
+                
                 if (xColumns.is())
                     aColumnNames = xColumns->getElementNames();
             }
@@ -270,10 +270,10 @@ namespace dbp
         return aColumnNames;
     }
 
-    //=====================================================================
-    //= OContentTableSelection
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OContentTableSelection::OContentTableSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_TABLE))
         ,m_aFrame               (this, ModuleRes(FL_FRAME))
@@ -288,14 +288,14 @@ namespace dbp
         m_aSelectTable.SetSelectHdl(LINK(this, OContentTableSelection, OnTableSelected));
     }
 
-    //---------------------------------------------------------------------
+    
     void OContentTableSelection::ActivatePage()
     {
         OLCPage::ActivatePage();
         m_aSelectTable.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+    
     bool OContentTableSelection::canAdvance() const
     {
         if (!OLCPage::canAdvance())
@@ -304,14 +304,14 @@ namespace dbp
         return 0 != m_aSelectTable.GetSelectEntryCount();
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK( OContentTableSelection, OnTableSelected, ListBox*, /*_pListBox*/ )
     {
         updateDialogTravelUI();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK( OContentTableSelection, OnTableDoubleClicked, ListBox*, _pListBox )
     {
         if (_pListBox->GetSelectEntryCount())
@@ -319,12 +319,12 @@ namespace dbp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+    
     void OContentTableSelection::initializePage()
     {
         OLCPage::initializePage();
 
-        // fill the list with the table name
+        
         m_aSelectTable.Clear();
         try
         {
@@ -342,7 +342,7 @@ namespace dbp
         m_aSelectTable.SelectEntry(getSettings().sListContentTable);
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OContentTableSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
@@ -351,16 +351,16 @@ namespace dbp
         OListComboSettings& rSettings = getSettings();
         rSettings.sListContentTable = m_aSelectTable.GetSelectEntry();
         if (rSettings.sListContentTable.isEmpty() && (::svt::WizardTypes::eTravelBackward != _eReason))
-            // need to select a table
+            
             return sal_False;
 
         return sal_True;
     }
 
-    //=====================================================================
-    //= OContentFieldSelection
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OContentFieldSelection::OContentFieldSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_FIELD))
         ,m_aFrame               (this, ModuleRes(FL_FRAME))
@@ -376,26 +376,26 @@ namespace dbp
         m_aSelectTableField.SetDoubleClickHdl(LINK(this, OContentFieldSelection, OnTableDoubleClicked));
     }
 
-    //---------------------------------------------------------------------
+    
     void OContentFieldSelection::ActivatePage()
     {
         OLCPage::ActivatePage();
         m_aTableFields.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+    
     void OContentFieldSelection::initializePage()
     {
         OLCPage::initializePage();
 
-        // fill the list of fields
+        
         fillListBox(m_aSelectTableField, getTableFields(sal_True));
 
         m_aSelectTableField.SelectEntry(getSettings().sListContentField);
         m_aDisplayedField.SetText(getSettings().sListContentField);
     }
 
-    //---------------------------------------------------------------------
+    
     bool OContentFieldSelection::canAdvance() const
     {
         if (!OLCPage::canAdvance())
@@ -404,7 +404,7 @@ namespace dbp
         return 0 != m_aSelectTableField.GetSelectEntryCount();
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK( OContentFieldSelection, OnTableDoubleClicked, ListBox*, /*NOTINTERESTEDIN*/ )
     {
         if (m_aSelectTableField.GetSelectEntryCount())
@@ -412,7 +412,7 @@ namespace dbp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK( OContentFieldSelection, OnFieldSelected, ListBox*, /*NOTINTERESTEDIN*/ )
     {
         updateDialogTravelUI();
@@ -420,7 +420,7 @@ namespace dbp
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OContentFieldSelection::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
@@ -431,10 +431,10 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
-    //= OLinkFieldsPage
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OLinkFieldsPage::OLinkFieldsPage( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_FIELDLINK))
         ,m_aDescription         (this, ModuleRes(FT_FIELDLINK_DESC))
@@ -452,38 +452,38 @@ namespace dbp
         m_aTableField.SetSelectHdl(LINK(this, OLinkFieldsPage, OnSelectionModified));
     }
 
-    //---------------------------------------------------------------------
+    
     void OLinkFieldsPage::ActivatePage()
     {
         OLCPage::ActivatePage();
         m_aValueListField.GrabFocus();
     }
 
-    //---------------------------------------------------------------------
+    
     void OLinkFieldsPage::initializePage()
     {
         OLCPage::initializePage();
 
-        // fill the value list
+        
         fillListBox(m_aValueListField, getContext().aFieldNames);
-        // fill the table field list
+        
         fillListBox(m_aTableField, getTableFields(sal_True));
 
-        // the initial selections
+        
         m_aValueListField.SetText(getSettings().sLinkedFormField);
         m_aTableField.SetText(getSettings().sLinkedListField);
 
         implCheckFinish();
     }
 
-    //---------------------------------------------------------------------
+    
     bool OLinkFieldsPage::canAdvance() const
     {
-        // we're on the last page here, no travelNext allowed ...
+        
         return false;
     }
 
-    //---------------------------------------------------------------------
+    
     void OLinkFieldsPage::implCheckFinish()
     {
         bool bInvalidSelection = (COMBOBOX_ENTRY_NOTFOUND == m_aValueListField.GetEntryPos(m_aValueListField.GetText()));
@@ -491,14 +491,14 @@ namespace dbp
         getDialog()->enableButtons(WZB_FINISH, !bInvalidSelection);
     }
 
-    //---------------------------------------------------------------------
+    
     IMPL_LINK_NOARG(OLinkFieldsPage, OnSelectionModified)
     {
         implCheckFinish();
         return 0L;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OLinkFieldsPage::commitPage( ::svt::WizardTypes::CommitPageReason _eReason )
     {
         if (!OLCPage::commitPage(_eReason))
@@ -510,38 +510,38 @@ namespace dbp
         return sal_True;
     }
 
-    //=====================================================================
-    //= OComboDBFieldPage
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OComboDBFieldPage::OComboDBFieldPage( OControlWizard* _pParent )
         :ODBFieldPage(_pParent)
     {
         setDescriptionText(ModuleRes(RID_STR_COMBOWIZ_DBFIELD).toString());
     }
 
-    //---------------------------------------------------------------------
+    
     OUString& OComboDBFieldPage::getDBFieldSetting()
     {
         return getSettings().sLinkedFormField;
     }
 
-    //---------------------------------------------------------------------
+    
     void OComboDBFieldPage::ActivatePage()
     {
         ODBFieldPage::ActivatePage();
         getDialog()->enableButtons(WZB_FINISH, sal_True);
     }
 
-    //---------------------------------------------------------------------
+    
     bool OComboDBFieldPage::canAdvance() const
     {
-        // we're on the last page here, no travelNext allowed ...
+        
         return false;
     }
 
-//.........................................................................
-}   // namespace dbp
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

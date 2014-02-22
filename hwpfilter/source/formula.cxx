@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "formula.h"
@@ -55,9 +55,9 @@ void Formula::makeMathML(Node *res)
      if( !tmp ) return;
 #ifdef DEBUG
      inds;
-     fprintf(stderr,"<math:math xmlns:math=\"http://www.w3.org/1998/Math/MathML\">\n");
+     fprintf(stderr,"<math:math xmlns:math=\"http:
 #else
-     padd(ascii("xmlns:math"), ascii("CDATA"), ascii("http://www.w3.org/1998/Math/MathML"));
+     padd(ascii("xmlns:math"), ascii("CDATA"), ascii("http:
      rstartEl(ascii("math:math"), rList);
      pList->clear();
      rstartEl(ascii("math:semantics"), rList);
@@ -464,7 +464,7 @@ void Formula::makeRoot(Node *res)
           rendEl(ascii("math:mroot"));
 #endif
 }
-// DVO: add space to avoid warning
+
 void Formula::makeArrow(Node * /*res*/)
 {
 }
@@ -576,12 +576,12 @@ void Formula::makeBlock(Node *res)
 #endif
 }
 
-// DVO: add space to avoid warning
+
 void Formula::makeBegin(Node * /*res*/)
 {
 }
 
-// DVO: add space to avoid warning
+
 void Formula::makeEnd(Node * /*res*/)
 {
 }
@@ -592,12 +592,12 @@ int Formula::parse()
      if( !eq ) return 0;
      if( isHwpEQ ){
           MzString a;
-         // fprintf(stderr,"\n\n[BEFORE]\n[%s]\n",eq);
+         
           eq2latex(a,eq);
 
           int idx=a.find(sal::static_int_cast<char>(0xff));
           while(idx){
-                //printf("idx = [%d]\n",idx);
+                
                 a.replace(idx,0x20);
                 if((idx = a.find(sal::static_int_cast<char>(0xff),idx+1)) < 0)
                      break;
@@ -606,7 +606,7 @@ int Formula::parse()
           char *buf = (char *)malloc(a.length()+1);
           bool bStart = false;
           int i, j;
-          for( i = 0, j=0 ; i < a.length() ; i++){ // rtrim and ltrim 32 10 13
+          for( i = 0, j=0 ; i < a.length() ; i++){ 
                 if( bStart ){
                      buf[j++] = a[i];
                 }
@@ -625,7 +625,7 @@ int Formula::parse()
                 else
                      break;
           }
-         // fprintf(stderr,"\n\n[RESULT]\n[%s]\n",a.c_str());
+         
           if( strlen(buf) > 0 )
                 res = mainParse( a.c_str() );
           else
@@ -656,7 +656,7 @@ void Formula::trim()
      char *buf = (char *)malloc(len+1);
      bool bStart = false;
      int i, j;
-     for( i = 0, j=0 ; i < len ; i++){ // rtrim and ltrim 32 10 13
+     for( i = 0, j=0 ; i < len ; i++){ 
           if( bStart ){
                 buf[j++] = eq[i];
           }

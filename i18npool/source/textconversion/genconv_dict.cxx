@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,14 +44,14 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (argc < 4) exit(-1);
 
 
-    sfp = fopen(argv[2], "rb"); // open the source file for read;
+    sfp = fopen(argv[2], "rb"); 
     if (sfp == NULL)
     {
         fprintf(stderr, "Opening the dictionary source file %s for reading failed: %s\n", argv[1], strerror(errno));
         exit(1);
     }
 
-    // create the C source file to write
+    
     cfp = fopen(argv[3], "wb");
     if (cfp == NULL) {
         fclose(sfp);
@@ -81,9 +81,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     fclose(cfp);
 
     return 0;
-} // end of main
+} 
 
-// Hangul/Hanja character conversion
+
 void make_hhc_char(FILE *sfp, FILE *cfp)
 {
     sal_Int32 count, address, i, j, k;
@@ -93,15 +93,15 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
     }
     sal_uInt16 Hangul2HanjaData[10000][3];
 
-    // generate main dict. data array
+    
     fprintf(cfp, "\nstatic const sal_Unicode Hangul2HanjaData[] = {");
 
     sal_Char Cstr[1024];
     count = 0;
     address = 0;
     while (fgets(Cstr, 1024, sfp)) {
-        // input file is in UTF-8 encoding (Hangul:Hanja)
-        // don't convert last new line character to Ostr.
+        
+        
         OUString Ostr((const sal_Char *)Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
         const sal_Unicode *Ustr = Ostr.getStr();
         sal_Int32  len = Ostr.getLength();
@@ -165,7 +165,7 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
     }
     fprintf(cfp, "\n};\n");
 
-    // create function to return arrays
+    
     fprintf (cfp, "\tconst sal_Unicode* getHangul2HanjaData() { return Hangul2HanjaData; }\n");
     fprintf (cfp, "\tconst com::sun::star::i18n::Hangul_Index* getHangul2HanjaIndex() { return Hangul2HanjaIndex; }\n");
     fprintf (cfp, "\tsal_Int16 getHangul2HanjaIndexCount() { return sizeof(Hangul2HanjaIndex) / sizeof(com::sun::star::i18n::Hangul_Index); }\n");
@@ -173,7 +173,7 @@ void make_hhc_char(FILE *sfp, FILE *cfp)
     fprintf (cfp, "\tconst sal_Unicode* getHanja2HangulData() { return Hanja2HangulData; }\n");
 }
 
-// Simplified/Traditional Chinese character conversion
+
 void make_stc_char(FILE *sfp, FILE *cfp)
 {
     sal_Int32 address, i, j, k;
@@ -188,8 +188,8 @@ void make_stc_char(FILE *sfp, FILE *cfp)
 
     sal_Char Cstr[1024];
     while (fgets(Cstr, 1024, sfp)) {
-        // input file is in UTF-8 encoding (SChinese:TChinese)
-        // don't convert last new line character to Ostr.
+        
+        
         OUString Ostr((const sal_Char *)Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
         const sal_Unicode *Ustr = Ostr.getStr();
         sal_Int32  len = Ostr.getLength();
@@ -315,7 +315,7 @@ void make_stc_char(FILE *sfp, FILE *cfp)
     }
     fprintf(cfp, "\n};\n");
 
-    // create function to return arrays
+    
     fprintf (cfp, "\tconst sal_uInt16* getSTC_CharIndex_S2T() { return STC_CharIndex_S2T; }\n");
     fprintf (cfp, "\tconst sal_Unicode* getSTC_CharData_S2T() { return STC_CharData_S2T; }\n");
     fprintf (cfp, "\tconst sal_uInt16* getSTC_CharIndex_S2V() { return STC_CharIndex_S2V; }\n");
@@ -342,7 +342,7 @@ int Index_comp(const void* s1, const void* s2)
 }
 }
 
-// Simplified/Traditional Chinese word conversion
+
 void make_stc_word(FILE *sfp, FILE *cfp)
 {
     sal_Int32 count, i, length;
@@ -354,8 +354,8 @@ void make_stc_word(FILE *sfp, FILE *cfp)
     sal_Char Cstr[1024];
 
     while (fgets(Cstr, 1024, sfp)) {
-        // input file is in UTF-8 encoding (SChinese:TChinese)
-        // don't convert last new line character to Ostr.
+        
+        
         OUString Ostr((const sal_Char *)Cstr, strlen(Cstr) - 1, RTL_TEXTENCODING_UTF8);
         sal_Int32  len = Ostr.getLength();
         if (char_total + len + 1 > 0xFFFF) {
@@ -397,7 +397,7 @@ void make_stc_word(FILE *sfp, FILE *cfp)
 
         fprintf(cfp, "\nstatic sal_Int32 STC_WordData_Count = %ld;\n", sal::static_int_cast< long >(char_total));
 
-        // create function to return arrays
+        
         fprintf (cfp, "\tconst sal_Unicode* getSTC_WordData(sal_Int32& count) { count = STC_WordData_Count; return STC_WordData; }\n");
     } else {
         fprintf (cfp, "\tconst sal_Unicode* getSTC_WordData(sal_Int32& count) { count = 0; return NULL; }\n");

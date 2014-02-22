@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrapPropertyPanel.hxx"
@@ -68,9 +68,9 @@ WrapPropertyPanel::WrapPropertyPanel(
     : PanelLayout(pParent, "WrapPropertyPanel", "modules/swriter/ui/sidebarwrap.ui", rxFrame)
     , mxFrame( rxFrame )
     , mpBindings(pBindings)
-    // resources
+    
     , aWrapIL(6,2)
-    // controller items
+    
     , maSwNoWrapControl(FN_FRAME_NOWRAP, *pBindings, *this)
     , maSwWrapLeftControl(FN_FRAME_WRAP, *pBindings, *this)
     , maSwWrapRightControl(FN_FRAME_WRAP_RIGHT, *pBindings, *this)
@@ -193,7 +193,7 @@ void WrapPropertyPanel::NotifyItemUpdate(
     if ( eState == SFX_ITEM_AVAILABLE &&
         pState->ISA(SfxBoolItem) )
     {
-        //Set Radio Button enable
+        
         mpRBNoWrap->Enable(true);
         mpRBWrapLeft->Enable(true);
         mpRBWrapRight->Enable(true);
@@ -243,6 +243,6 @@ void WrapPropertyPanel::NotifyItemUpdate(
     }
 }
 
-} } // end of namespace ::sw::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

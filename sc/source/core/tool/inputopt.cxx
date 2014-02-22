@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Any.hxx>
@@ -31,7 +31,7 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-// ScInputOptions - input options
+
 
 ScInputOptions::ScInputOptions()
 {
@@ -79,7 +79,7 @@ const ScInputOptions& ScInputOptions::operator=( const ScInputOptions& rCpy )
     return *this;
 }
 
-//  Config Item containing input options
+
 
 #define CFGPATH_INPUT           "Office.Calc/Input"
 
@@ -100,17 +100,17 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "MoveSelectionDirection",   // SCINPUTOPT_MOVEDIR
-        "MoveSelection",            // SCINPUTOPT_MOVESEL
-        "SwitchToEditMode",         // SCINPUTOPT_EDTEREDIT
-        "ExpandFormatting",         // SCINPUTOPT_EXTENDFMT
-        "ShowReference",            // SCINPUTOPT_RANGEFIND
-        "ExpandReference",          // SCINPUTOPT_EXPANDREFS
-        "HighlightSelection",       // SCINPUTOPT_MARKHEADER
-        "UseTabCol",                // SCINPUTOPT_USETABCOL
-        "UsePrinterMetrics",        // SCINPUTOPT_TEXTWYSIWYG
-        "ReplaceCellsWarning",      // SCINPUTOPT_REPLCELLSWARN
-        "LegacyCellSelection"       // SCINPUTOPT_LEGACY_CELL_SELECTION
+        "MoveSelectionDirection",   
+        "MoveSelection",            
+        "SwitchToEditMode",         
+        "ExpandFormatting",         
+        "ShowReference",            
+        "ExpandReference",          
+        "HighlightSelection",       
+        "UseTabCol",                
+        "UsePrinterMetrics",        
+        "ReplaceCellsWarning",      
+        "LegacyCellSelection"       
     };
     Sequence<OUString> aNames(SCINPUTOPT_COUNT);
     OUString* pNames = aNames.getArray();

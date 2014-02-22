@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sqlcommanddesign.hxx"
@@ -44,10 +44,10 @@
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::lang::XMultiComponentFactory;
@@ -86,18 +86,18 @@ namespace pcr
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
     namespace CommandType = ::com::sun::star::sdb::CommandType;
 
-    //====================================================================
-    //= ISQLCommandAdapter
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ISQLCommandAdapter::~ISQLCommandAdapter()
     {
     }
 
-    //====================================================================
-    //= SQLCommandDesigner
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     SQLCommandDesigner::SQLCommandDesigner( const Reference< XComponentContext >& _rxContext,
             const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
             const ::dbtools::SharedConnection& _rConnection, const Link& _rCloseLink )
@@ -114,12 +114,12 @@ namespace pcr
         impl_doOpenDesignerFrame_nothrow();
     }
 
-    //--------------------------------------------------------------------
+    
     SQLCommandDesigner::~SQLCommandDesigner()
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL SQLCommandDesigner::propertyChange( const PropertyChangeEvent& Event ) throw (RuntimeException)
     {
         OSL_ENSURE( m_xDesigner.is() && ( Event.Source == m_xDesigner ), "SQLCommandDesigner::propertyChange: where did this come from?" );
@@ -144,13 +144,13 @@ namespace pcr
             catch( const RuntimeException& ) { throw; }
             catch( const Exception& )
             {
-                // not allowed to leave, so silence it
+                
                 DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SAL_CALL SQLCommandDesigner::disposing( const EventObject& Source ) throw (RuntimeException)
     {
         if ( m_xDesigner.is() && ( Source.Source == m_xDesigner ) )
@@ -160,7 +160,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SQLCommandDesigner::dispose()
     {
         if ( impl_isDisposed() )
@@ -174,28 +174,28 @@ namespace pcr
         m_xORB.clear();
     }
 
-    //--------------------------------------------------------------------
+    
     void SQLCommandDesigner::impl_checkDisposed_throw() const
     {
         if ( impl_isDisposed() )
             throw DisposedException();
     }
 
-    //--------------------------------------------------------------------
+    
     void SQLCommandDesigner::raise() const
     {
         impl_checkDisposed_throw();
         impl_raise_nothrow();
     }
 
-    //------------------------------------------------------------------------
+    
     bool SQLCommandDesigner::suspend() const
     {
         impl_checkDisposed_throw();
         return impl_trySuspendDesigner_nothrow();
     }
 
-    //--------------------------------------------------------------------
+    
     void SQLCommandDesigner::impl_raise_nothrow() const
     {
         OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_raise_nothrow: not active!" );
@@ -204,7 +204,7 @@ namespace pcr
 
         try
         {
-            // activate the frame for this component
+            
             Reference< XFrame >     xFrame( m_xDesigner->getFrame(), UNO_QUERY_THROW );
             Reference< XWindow >    xWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
             Reference< XTopWindow > xTopWindow( xWindow, UNO_QUERY_THROW );
@@ -218,7 +218,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow()
     {
         OSL_PRECOND( !isActive(),
@@ -228,9 +228,9 @@ namespace pcr
 
         try
         {
-            // for various reasons, we don't want the new frame to appear in the desktop's frame list
-            // thus, we create a blank frame at the desktop, remove it from the desktop's frame list
-            // immediately, and then load the component into this blank (and now parent-less) frame
+            
+            
+            
             Reference< XComponentLoader > xLoader( impl_createEmptyParentlessTask_nothrow(), UNO_QUERY_THROW );
             Sequence< PropertyValue > aArgs( 5 );
             aArgs[0].Name = PROPERTY_ACTIVE_CONNECTION;
@@ -253,7 +253,7 @@ namespace pcr
                 aArgs
             );
 
-            // remember this newly loaded component - we need to care for it e.g. when we're suspended
+            
             m_xDesigner = m_xDesigner.query( xQueryDesign );
             OSL_ENSURE( m_xDesigner.is() || !xQueryDesign.is(), "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: the component is expected to be a controller!" );
             if ( m_xDesigner.is() )
@@ -267,7 +267,7 @@ namespace pcr
                 }
             }
 
-            // get the frame which we just opened and set it's title
+            
             Reference< XTitle> xTitle(xQueryDesign,UNO_QUERY);
             if ( xTitle.is() )
             {
@@ -284,7 +284,7 @@ namespace pcr
         osl_atomic_decrement(&m_refCount);
     }
 
-    //------------------------------------------------------------------------
+    
     Reference< XFrame > SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow( ) const
     {
         OSL_PRECOND( m_xORB.is(), "SQLCommandDesigner::impl_createEmptyParentlessTask_nothrow: this will crash!" );
@@ -306,29 +306,29 @@ namespace pcr
         return xFrame;
     }
 
-    //------------------------------------------------------------------------
+    
     void SQLCommandDesigner::impl_designerClosed_nothrow()
     {
         if ( m_aCloseLink.IsSet() )
             m_aCloseLink.Call( this );
     }
 
-    //------------------------------------------------------------------------
+    
     void SQLCommandDesigner::impl_closeDesigner_nothrow()
     {
         OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_closeDesigner_nothrow: invalid calle!" );
-        // close it
+        
         try
         {
-            // do not listen anymore ....
+            
             Reference< XPropertySet > xProps( m_xDesigner, UNO_QUERY );
             if ( xProps.is() )
                 xProps->removePropertyChangeListener( PROPERTY_ACTIVECOMMAND, this );
 
-            // we need to close the frame via the "user interface", by dispatching a close command,
-            // instead of calling XCloseable::close directly. The latter method would also close
-            // the frame, but not care for things like shutting down the office when the last
-            // frame is gone ...
+            
+            
+            
+            
             const UnoURL aCloseURL( OUString( ".uno:CloseDoc" ),
                 Reference< XMultiServiceFactory >( m_xORB, UNO_QUERY ) );
 
@@ -341,7 +341,7 @@ namespace pcr
             }
             else
             {
-                // fallback: use the XCloseable::close (with all possible disadvantages)
+                
                 Reference< XCloseable > xClose( m_xDesigner->getFrame(), UNO_QUERY );
                 if ( xClose.is() )
                     xClose->close( sal_True );
@@ -355,7 +355,7 @@ namespace pcr
         m_xDesigner.clear();
     }
 
-    //------------------------------------------------------------------------
+    
     bool SQLCommandDesigner::impl_trySuspendDesigner_nothrow() const
     {
         OSL_PRECOND( isActive(), "SQLCommandDesigner::impl_trySuspendDesigner_nothrow: no active designer, this will crash!" );
@@ -371,8 +371,8 @@ namespace pcr
         return bAllow;
     }
 
-//........................................................................
-} // namespace pcr
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

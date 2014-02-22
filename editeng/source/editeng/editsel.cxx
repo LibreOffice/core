@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/wrkwin.hxx>
@@ -25,9 +25,9 @@
 #include <impedit.hxx>
 #include <editeng/editview.hxx>
 
-//  ----------------------------------------------------------------------
-//  class EditSelFunctionSet
-//  ----------------------------------------------------------------------
+
+
+
 EditSelFunctionSet::EditSelFunctionSet()
 {
     pCurView = NULL;
@@ -41,7 +41,7 @@ void EditSelFunctionSet::CreateAnchor()
 
 void EditSelFunctionSet::DestroyAnchor()
 {
-    // Only with multiple selection
+    
 }
 
 bool EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, sal_Bool )
@@ -62,14 +62,14 @@ bool EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 
 void EditSelFunctionSet::DeselectAtPoint( const Point& )
 {
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !   Implement when multiple selection is possible   !
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
 }
 
 void EditSelFunctionSet::BeginDrag()
 {
-    // Only with multiple selection
+    
 }
 
 
@@ -79,9 +79,9 @@ void EditSelFunctionSet::DeselectAll()
         pCurView->pImpEditView->DeselectAll();
 }
 
-//  ----------------------------------------------------------------------
-//  class EditSelectionEngine
-//  ----------------------------------------------------------------------
+
+
+
 EditSelectionEngine::EditSelectionEngine() : SelectionEngine( (Window*)0 )
 {
     SetSelectionMode( RANGE_SELECTION );

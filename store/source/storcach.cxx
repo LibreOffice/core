@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -53,7 +53,7 @@ storeError PageCache::lookupPageAt (PageHolder & rxPage, sal_uInt32 nOffset)
 
 storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
 {
-    // [SECURITY:ValInput]
+    
     PageData const * pagedata = rxPage.get();
     OSL_PRECOND(!(pagedata == 0), "store::PageCache::insertPageAt(): invalid Page");
     if (pagedata == 0)
@@ -73,7 +73,7 @@ storeError PageCache::insertPageAt (PageHolder const & rxPage, sal_uInt32 nOffse
 
 storeError PageCache::updatePageAt (PageHolder const & rxPage, sal_uInt32 nOffset)
 {
-    // [SECURITY:ValInput]
+    
     PageData const * pagedata = rxPage.get();
     OSL_PRECOND(!(pagedata == 0), "store::PageCache::updatePageAt(): invalid Page");
     if (pagedata == 0)
@@ -132,7 +132,7 @@ struct Entry
     ~Entry() {}
 };
 
-} // namespace
+} 
 
 /*========================================================================
  *
@@ -158,7 +158,7 @@ protected:
     ~EntryCache();
 };
 
-} // namespace
+} 
 
 /*========================================================================
  *
@@ -177,13 +177,13 @@ EntryCache::EntryCache()
     m_entry_cache = rtl_cache_create (
         "store_cache_entry_cache",
         sizeof(Entry),
-        0, // objalign
-        0, // constructor
-        0, // destructor
-        0, // reclaim
-        0, // userarg
-        0, // default source
-        0  // flags
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        0, 
+        0  
         );
 }
 
@@ -197,7 +197,7 @@ Entry * EntryCache::create (PageHolder const & rxPage, sal_uInt32 nOffset)
     void * pAddr = rtl_cache_alloc (m_entry_cache);
     if (pAddr != 0)
     {
-        // construct.
+        
         return new(pAddr) Entry (rxPage, nOffset);
     }
     return 0;
@@ -207,10 +207,10 @@ void EntryCache::destroy (Entry * entry)
 {
     if (entry != 0)
     {
-        // destruct.
+        
         entry->~Entry();
 
-        // return to cache.
+        
         rtl_cache_free (m_entry_cache, entry);
     }
 }
@@ -267,7 +267,7 @@ class PageCache_Impl :
     size_t       m_hash_shift;
     size_t const m_page_shift;
 
-    size_t       m_hash_entries; // total number of entries in table.
+    size_t       m_hash_entries; 
     size_t       m_nHit;
     size_t       m_nMissed;
 
@@ -321,7 +321,7 @@ protected:
     virtual ~PageCache_Impl (void);
 };
 
-} // namespace store
+} 
 
 PageCache_Impl::PageCache_Impl (sal_uInt16 nPageSize)
     : m_hash_table   (m_hash_table_0),
@@ -448,15 +448,15 @@ storeError PageCache_Impl::lookupPageAt_Impl (
     Entry const * entry = lookup_Impl (m_hash_table[index], nOffset);
     if (entry != 0)
     {
-        // Existing entry.
+        
         rxPage = entry->m_xPage;
 
-        // Update stats and leave.
+        
         m_nHit += 1;
         return store_E_None;
     }
 
-    // Cache miss. Update stats and leave.
+    
     m_nMissed += 1;
     return store_E_NotExists;
 }
@@ -468,11 +468,11 @@ storeError PageCache_Impl::insertPageAt_Impl (
     Entry * entry = EntryCache::get().create (rxPage, nOffset);
     if (entry != 0)
     {
-        // Insert new entry.
+        
         int index = hash_index_Impl(nOffset);
         entry->m_pNext = m_hash_table[index], m_hash_table[index] = entry;
 
-        // Update stats and leave.
+        
         m_hash_entries += 1;
         return store_E_None;
     }
@@ -487,10 +487,10 @@ storeError PageCache_Impl::updatePageAt_Impl (
     Entry *  entry  = lookup_Impl (m_hash_table[index], nOffset);
     if (entry != 0)
     {
-        // Update existing entry.
+        
         entry->m_xPage = rxPage;
 
-        // Update stats and leave. // m_nUpdHit += 1;
+        
         return store_E_None;
     }
     return insertPageAt_Impl (rxPage, nOffset);
@@ -504,14 +504,14 @@ storeError PageCache_Impl::removePageAt_Impl (
     {
         if ((*ppEntry)->m_nOffset == nOffset)
         {
-            // Existing entry.
+            
             Entry * entry = (*ppEntry);
 
-            // Dequeue and destroy entry.
+            
             (*ppEntry) = entry->m_pNext, entry->m_pNext = 0;
             EntryCache::get().destroy (entry);
 
-            // Update stats and leave.
+            
             m_hash_entries -= 1;
             return store_E_None;
         }
@@ -548,6 +548,6 @@ PageCache_createInstance (
     return store_E_None;
 }
 
-} // namespace store
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

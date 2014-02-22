@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/resid.hxx>
@@ -29,36 +29,36 @@
 #include <wrtsh.hrc>
 #include <sfx2/sfx.hrc>
 
-// Undo ends all modes. If a selection is emerged by the Undo,
-// this must be considered for further action.
+
+
 
 void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
 {
-    // #105332# save current state of DoesUndo()
+    
     sal_Bool bSaveDoesUndo = DoesUndo();
 
     StartAllAction();
     switch (eDoType)
     {
         case UNDO:
-            DoUndo(sal_False); // #i21739#
-            // Reset modes
+            DoUndo(sal_False); 
+            
             EnterStdMode();
             SwEditShell::Undo(nCnt);
             break;
         case REDO:
-            DoUndo(sal_False); // #i21739#
-            // Reset modes
+            DoUndo(sal_False); 
+            
             EnterStdMode();
             SwEditShell::Redo( nCnt );
             break;
         case REPEAT:
-            // #i21739# do not touch undo flag here !!!
+            
             SwEditShell::Repeat( nCnt );
             break;
     }
     EndAllAction();
-    // #105332# restore undo state
+    
     DoUndo(bSaveDoesUndo);
 
     bool bCreateXSelection = false;
@@ -68,8 +68,8 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
         if ( bFrmSelected )
             UnSelectFrm();
 
-        // Set the function pointer for canceling the selection at the
-        // cursor position.
+        
+        
         fnKillSel = &SwWrtShell::ResetSelect;
         fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
         bCreateXSelection = true;
@@ -89,8 +89,8 @@ void SwWrtShell::Do( DoType eDoType, sal_uInt16 nCnt )
     if( bCreateXSelection )
         SwTransferable::CreateSelection( *this );
 
-    // Bug 32918: After deleting of the numbering the object panel remains.
-    //            Why is not here always a CallChgLink called?
+    
+    
     CallChgLnk();
 }
 
@@ -108,7 +108,7 @@ OUString SwWrtShell::GetDoString( DoType eDoType ) const
         nResStr = STR_REDO;
         GetFirstRedoInfo(& aUndoStr);
         break;
-    default:;//prevent warning
+    default:;
     }
 
     return  SvtResId( nResStr ).toString() + aUndoStr;
@@ -125,7 +125,7 @@ sal_uInt16 SwWrtShell::GetDoStrings( DoType eDoType, SfxStringListItem& rStrs ) 
     case REDO:
         comments = GetIDocumentUndoRedo().GetRedoComments();
         break;
-    default:;//prevent warning
+    default:;
     }
 
     OUString buf;

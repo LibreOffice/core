@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/config.h>
@@ -143,8 +143,8 @@ void Test::testDeleteArea_3Ranges_Case2()
     aList.DeleteArea(0,2,0,2,4,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aList.size());
 
-    // Column 1-2 && Row 2-4 should not be in the range list. The rest should
-    // be in the list.
+    
+    
     for (SCCOL nCol = 1; nCol <= 6; ++nCol)
     {
         for (SCROW nRow = 1; nRow <= 6; ++nRow)
@@ -164,7 +164,7 @@ void Test::testDeleteArea_3Ranges_Case3()
     aList.DeleteArea(3,2,0,4,8,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aList.size());
 
-    // Column 3-4 && Row 5-8 should not be in the range list.
+    
     for (SCCOL nCol = 1; nCol <= 6; ++nCol)
     {
         for (SCROW nRow = 5; nRow <= 11; ++nRow)
@@ -184,7 +184,7 @@ void Test::testDeleteArea_3Ranges_Case4()
     aList.DeleteArea(3,5,0,4,5,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aList.size());
 
-    // Column 3-4 && Row 5 should not be in the range list.
+    
     for (SCCOL nCol = 1; nCol <= 6; ++nCol)
     {
         for (SCROW nRow = 5; nRow <= 11; ++nRow)
@@ -204,7 +204,7 @@ void Test::testDeleteArea_3Ranges_Case5()
     aList.DeleteArea(6,7,0,6,9,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aList.size());
 
-    // Column 6 && Row 7-9 should not be in the range list.
+    
     for (SCCOL nCol = 1; nCol <= 6; ++nCol)
     {
         for (SCROW nRow = 5; nRow <= 11; ++nRow)
@@ -260,7 +260,7 @@ void Test::testDeleteArea_2Ranges_Case3()
     aList.DeleteArea(2,3,0,3,7,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
 
-    // Column 2 Row 5-7 shouldn't be in the list.
+    
     for (SCCOL nCol = 0; nCol <= 2; ++nCol)
     {
         for (SCROW nRow = 5; nRow <= 10; ++nRow)
@@ -279,7 +279,7 @@ void Test::testDeleteArea_2Ranges_Case4()
     aList.DeleteArea(0,1,0,2,5,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
 
-    // Column 2 Row 3-5 shouldn't be in the list.
+    
     for (SCCOL nCol = 2; nCol <= 4; ++nCol)
     {
         for (SCROW nRow = 3; nRow <= 7; ++nRow)
@@ -298,7 +298,7 @@ void Test::testDeleteArea_2Ranges_Case5()
     aList.DeleteArea(4,5,0,5,5,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
 
-    // Column 4 and 5 Row 5 shouldn't be in the list.
+    
     for(SCCOL nCol = 2; nCol <= 5; ++nCol)
     {
         for(SCROW nRow = 2; nRow <= 5; ++nRow)
@@ -317,7 +317,7 @@ void Test::testDeleteArea_2Ranges_Case6()
     aList.DeleteArea(4,2,0,5,2,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
 
-    // Column 4 and 5 Row 2 shouldn't be in the list.
+    
     for(SCCOL nCol = 2; nCol <= 5; ++nCol)
     {
         for(SCROW nRow = 2; nRow <= 5; ++nRow)
@@ -336,7 +336,7 @@ void Test::testDeleteArea_2Ranges_Case7()
     aList.DeleteArea(2,5,0,2,5,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
 
-    // Column 2 Row 5 shouldn't be in the list.
+    
     for(SCCOL nCol = 2; nCol <= 5; ++nCol)
     {
         for(SCROW nRow = 2; nRow <= 5; ++nRow)
@@ -355,7 +355,7 @@ void Test::testDeleteArea_2Ranges_Case8()
     aList.DeleteArea(2,2,0,3,2,0);
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aList.size());
 
-    // Column 2 & 3 Row 2 shouldn't be in the list.
+    
     for(SCCOL nCol = 2; nCol <= 5; ++nCol)
     {
         for(SCROW nRow = 2; nRow <= 5; ++nRow)

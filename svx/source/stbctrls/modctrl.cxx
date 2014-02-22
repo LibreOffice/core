@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/status.hxx>
@@ -41,7 +41,7 @@ const unsigned _FEEDBACK_TIMEOUT = 3000;
 }
 
 
-// class SvxModifyControl ------------------------------------------------
+
 
 struct SvxModifyControl::ImplData
 {
@@ -87,7 +87,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
     mpImpl->maTimer.SetTimeoutHdl( LINK(this, SvxModifyControl, OnTimer) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
                                      const SfxPoolItem* pState )
@@ -100,7 +100,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
     mpImpl->maTimer.Stop();
 
     bool modified = pItem->GetValue();
-    bool start = ( !modified && mpImpl->mnModState == ImplData::MODIFICATION_STATE_YES);  // should timer be started and feedback image displayed ?
+    bool start = ( !modified && mpImpl->mnModState == ImplData::MODIFICATION_STATE_YES);  
 
     mpImpl->mnModState = (start ? ImplData::MODIFICATION_STATE_FEEDBACK : (modified ? ImplData::MODIFICATION_STATE_YES : ImplData::MODIFICATION_STATE_NO));
 
@@ -113,7 +113,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
         mpImpl->maTimer.Start();
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxModifyControl, OnTimer, Timer *, pTimer )
 {
@@ -128,15 +128,15 @@ IMPL_LINK( SvxModifyControl, OnTimer, Timer *, pTimer )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxModifyControl::_repaint()
 {
     if ( GetStatusBar().AreItemsVisible() )
-        GetStatusBar().SetItemData( GetId(), 0 );    // force repaint
+        GetStatusBar().SetItemData( GetId(), 0 );    
 }
 
-// -----------------------------------------------------------------------
+
 
 namespace {
 
@@ -177,7 +177,7 @@ void SvxModifyControl::Paint( const UserDrawEvent& rUsrEvt )
 void SvxModifyControl::DoubleClick()
 {
     if (mpImpl->mnModState != ImplData::MODIFICATION_STATE_YES)
-        // document not modified.  nothing to do here.
+        
         return;
 
     Sequence<PropertyValue> aArgs;

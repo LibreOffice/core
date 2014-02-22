@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unotextmarkup.hxx>
@@ -47,7 +47,7 @@ using namespace ::com::sun::star;
 SwXTextMarkup::SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper& rMap )
     : mpTxtNode( &rTxtNode ), maConversionMap( rMap )
 {
-    // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
+    
     SetIsAllowedToBeRemovedInModifyCall(true);
     mpTxtNode->Add(this);
 }
@@ -119,7 +119,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
 {
     SolarMutexGuard aGuard;
 
-    // paragraph already dead or modified?
+    
     if ( !mpTxtNode || nLength <= 0 )
         return;
 
@@ -127,7 +127,7 @@ void SAL_CALL SwXTextMarkup::commitStringMarkup(
         !SwSmartTagMgr::Get().IsSmartTagTypeEnabled( rIdentifier ) )
         return;
 
-    // get appropriate list to use...
+    
     SwWrongList* pWList = 0;
     bool bRepaint = false;
     if ( nType == text::TextMarkupType::SPELLCHECK )
@@ -368,19 +368,19 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
 
-    // paragraph already dead or modified?
+    
     if ( !mpTxtNode )
         return;
 
-    // check for equal length of all sequnces
+    
     sal_Int32 nLen = rMarkups.getLength();
 
-    // for grammar checking there should be exactly one sentence markup
-    // and 0..n grammar markups.
-    // Different markups are not expected but may be applied anyway since
-    // that should be no problem...
-    // but it has to be implemented, at the moment only this function is for
-    // grammar markups and sentence markup only!
+    
+    
+    
+    
+    
+    
     sal_Int32 nSentenceMarkUpIndex = -1;
     const text::TextMarkupDescriptor *pMarkups = rMarkups.getConstArray();
     sal_Int32 i;
@@ -390,7 +390,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
         {
             if (nSentenceMarkUpIndex == -1)
                 nSentenceMarkUpIndex = i;
-            else    // there is already one sentence markup
+            else    
                 throw lang::IllegalArgumentException();
         }
         else if( pMarkups[i].nType != text::TextMarkupType::PROOFREADING )
@@ -400,7 +400,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if( nSentenceMarkUpIndex == -1 )
         return;
 
-    // get appropriate list to use...
+    
     SwGrammarMarkUp* pWList = 0;
     bool bRepaint = false;
     IGrammarContact *pGrammarContact = getGrammarContact( *mpTxtNode );
@@ -458,8 +458,8 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
 void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
 {
-    // FME 2007-07-16 #i79641# In my opinion this is perfectly legal,
-    // therefore I remove the assertion in SwModify::_Remove()
+    
+    
     if ( GetRegisteredIn() )
         GetRegisteredInNonConst()->Remove( this );
 

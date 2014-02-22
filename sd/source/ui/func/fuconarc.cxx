@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -91,7 +91,7 @@ void FuConstructArc::DoExecute( SfxRequest& rReq )
                                    pCenterX->GetValue () + pAxisX->GetValue () / 2,
                                    pCenterY->GetValue () + pAxisY->GetValue () / 2);
 
-        Activate();  // sets aObjKind
+        Activate();  
         SdrCircObj* pNewCircle =
         new SdrCircObj((SdrObjKind) mpView->GetCurrentObjIdentifier(),
                        aNewRectangle,
@@ -245,7 +245,7 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
                 SID_DRAW_CIRCLECUT == nID ||
                 SID_DRAW_CIRCLECUT_NOFILL == nID)
             {
-                // force quadratic
+                
                 ImpForceQuadratic(aRect);
             }
 
@@ -274,6 +274,6 @@ SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Recta
     return pObj;
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

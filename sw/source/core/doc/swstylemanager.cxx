@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swstylemanager.hxx"
@@ -63,7 +63,7 @@ class SwStyleManager : public IStyleAccess
     SwStyleCache *mpParaCache;
 
 public:
-    // accept empty item set for ignorable paragraph items.
+    
     SwStyleManager( SfxItemSet* pIgnorableParagraphItems )
         : aAutoCharPool(),
           aAutoParaPool( pIgnorableParagraphItems ),
@@ -131,8 +131,8 @@ StylePool::SfxItemSet_Pointer_t SwStyleManager::getByName( const OUString& rName
     StylePool::SfxItemSet_Pointer_t pStyle = rpCache->getByName( rName );
     if( !pStyle.get() )
     {
-        // Ok, ok, it's allowed to ask for uncached styles (from UNO) but it should not be done
-        // during loading a document
+        
+        
         OSL_FAIL( "Don't ask for uncached styles" );
         rpCache->addCompletePool( rAutoPool );
         pStyle = rpCache->getByName( rName );
@@ -144,7 +144,7 @@ void SwStyleManager::getAllStyles( std::vector<StylePool::SfxItemSet_Pointer_t> 
                                    IStyleAccess::SwAutoStyleFamily eFamily )
 {
     StylePool& rAutoPool = eFamily == IStyleAccess::AUTO_STYLE_CHAR ? aAutoCharPool : aAutoParaPool;
-    // setup <StylePool> iterator, which skips unused styles and ignorable items
+    
     IStylePoolIteratorAccess *pIter = rAutoPool.createIterator( true, true );
     StylePool::SfxItemSet_Pointer_t pStyle = pIter->getNext();
     while( pStyle.get() )

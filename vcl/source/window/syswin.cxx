@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/debug.hxx>
@@ -36,7 +36,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-// =======================================================================
+
 class SystemWindow::ImplData
 {
 public:
@@ -61,7 +61,7 @@ SystemWindow::ImplData::~ImplData()
         delete mpTaskPaneList;
 }
 
-// =======================================================================
+
 
 SystemWindow::SystemWindow( WindowType nType ) :
     Window( nType )
@@ -87,11 +87,11 @@ SystemWindow::~SystemWindow()
     mpImplData = NULL;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SystemWindow::Notify( NotifyEvent& rNEvt )
 {
-    // capture KeyEvents for menu handling
+    
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         MenuBar* pMBar = mpMenuBar;
@@ -108,18 +108,18 @@ bool SystemWindow::Notify( NotifyEvent& rNEvt )
     return Window::Notify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
 {
-    // capture KeyEvents for taskpane cycling
+    
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
     {
         if( rNEvt.GetKeyEvent()->GetKeyCode().GetCode() == KEY_F6 &&
             rNEvt.GetKeyEvent()->GetKeyCode().IsMod1() &&
            !rNEvt.GetKeyEvent()->GetKeyCode().IsShift() )
         {
-            // Ctrl-F6 goes directly to the document
+            
             GrabFocusToDocument();
             return true;
         }
@@ -134,7 +134,7 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
             }
             if( !pTList )
             {
-                // search topmost system window which is the one to handle dialog/toolbar cycling
+                
                 SystemWindow *pSysWin = this;
                 Window *pWin = this;
                 while( pWin )
@@ -152,7 +152,7 @@ bool SystemWindow::PreNotify( NotifyEvent& rNEvt )
     return Window::PreNotify( rNEvt );
 }
 
-// -----------------------------------------------------------------------
+
 
 TaskPaneList* SystemWindow::GetTaskPaneList()
 {
@@ -174,7 +174,7 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SystemWindow::Close()
 {
@@ -188,7 +188,7 @@ bool SystemWindow::Close()
     if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
         return false;
 
-    // Is Window not closeable, ignore close
+    
     Window*     pBorderWin = ImplGetBorderWindow();
     WinBits     nStyle;
     if ( pBorderWin )
@@ -203,31 +203,31 @@ bool SystemWindow::Close()
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::TitleButtonClick( sal_uInt16 )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::Pin()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::Roll()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::Resizing( Size& )
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::SetRepresentedURL( const OUString& i_rURL )
 {
@@ -244,7 +244,7 @@ void SystemWindow::SetRepresentedURL( const OUString& i_rURL )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::SetIcon( sal_uInt16 nIcon )
 {
@@ -264,7 +264,7 @@ void SystemWindow::SetIcon( sal_uInt16 nIcon )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::EnableSaveBackground( bool bSave )
 {
@@ -282,7 +282,7 @@ void SystemWindow::EnableSaveBackground( bool bSave )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SystemWindow::IsSaveBackgroundEnabled() const
 {
@@ -295,7 +295,7 @@ bool SystemWindow::IsSaveBackgroundEnabled() const
         return false;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
 {
@@ -326,7 +326,7 @@ void SystemWindow::ShowTitleButton( sal_uInt16 nButton, bool bVisible )
         return;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SystemWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
 {
@@ -336,7 +336,7 @@ bool SystemWindow::IsTitleButtonVisible( sal_uInt16 nButton ) const
         return mbHideBtn;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::SetPin( bool bPin )
 {
@@ -348,7 +348,7 @@ void SystemWindow::SetPin( bool bPin )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::RollUp()
 {
@@ -368,7 +368,7 @@ void SystemWindow::RollUp()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::RollDown()
 {
@@ -382,7 +382,7 @@ void SystemWindow::RollDown()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::SetMinOutputSizePixel( const Size& rSize )
 {
@@ -397,7 +397,7 @@ void SystemWindow::SetMinOutputSizePixel( const Size& rSize )
         mpWindowImpl->mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::SetMaxOutputSizePixel( const Size& rSize )
 {
@@ -422,7 +422,7 @@ const Size& SystemWindow::GetMaxOutputSizePixel() const
 {
     return mpImplData->maMaxOutSize;
 }
-// -----------------------------------------------------------------------
+
 
 Size SystemWindow::GetResizeOutputSizePixel() const
 {
@@ -434,7 +434,7 @@ Size SystemWindow::GetResizeOutputSizePixel() const
     return aSize;
 }
 
-// -----------------------------------------------------------------------
+
 
 static void ImplWindowStateFromStr(WindowStateData& rData,
     const OString& rStr)
@@ -490,17 +490,17 @@ static void ImplWindowStateFromStr(WindowStateData& rData,
     aTokenStr = rStr.getToken(0, ';', nIndex);
     if (!aTokenStr.isEmpty())
     {
-        // #94144# allow Minimize again, should be masked out when read from configuration
-        // 91625 - ignore Minimize
+        
+        
         sal_uInt32 nState = (sal_uInt32)aTokenStr.toInt32();
-        //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
+        
         rData.SetState( nState );
         nValidMask |= WINDOWSTATE_MASK_STATE;
     }
     else
         rData.SetState( 0 );
 
-    // read maximized pos/size
+    
     aTokenStr = rStr.getToken(0, ',', nIndex);
     if (!aTokenStr.isEmpty())
     {
@@ -546,11 +546,11 @@ static void ImplWindowStateFromStr(WindowStateData& rData,
     else
         rData.SetMaximizedHeight( 0 );
 
-    // mark valid fields
+    
     rData.SetMask( nValidMask );
 }
 
-// -----------------------------------------------------------------------
+
 
 static OString ImplWindowStateToStr(const WindowStateData& rData)
 {
@@ -574,8 +574,8 @@ static OString ImplWindowStateToStr(const WindowStateData& rData)
     rStrBuf.append( ';' );
     if ( nValidMask & WINDOWSTATE_MASK_STATE )
     {
-        // #94144# allow Minimize again, should be masked out when read from configuration
-        // 91625 - ignore Minimize
+        
+        
         sal_uInt32 nState = rData.GetState();
         rStrBuf.append(static_cast<sal_Int32>(nState));
     }
@@ -596,7 +596,7 @@ static OString ImplWindowStateToStr(const WindowStateData& rData)
     return rStrBuf.makeStringAndClear();
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, long i_nHeight, Window* i_pConfigureWin )
 {
@@ -609,32 +609,32 @@ void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, lo
         for( unsigned int i = 1; i < Application::GetScreenCount(); i++ )
             aScreenRect.Union( Application::GetScreenPosSizePixel( i ) );
     }
-    // unfortunately most of the time width and height are not really known
+    
     if( i_nWidth < 1 )
         i_nWidth = 50;
     if( i_nHeight < 1 )
         i_nHeight = 50;
 
-    // check left border
+    
     bool bMove = false;
     if( io_rX + i_nWidth < aScreenRect.Left() )
     {
         bMove = true;
         io_rX = aScreenRect.Left();
     }
-    // check right border
+    
     if( io_rX > aScreenRect.Right() - i_nWidth )
     {
         bMove = true;
         io_rX = aScreenRect.Right() - i_nWidth;
     }
-    // check top border
+    
     if( io_rY + i_nHeight < aScreenRect.Top() )
     {
         bMove = true;
         io_rY = aScreenRect.Top();
     }
-    // check bottom border
+    
     if( io_rY > aScreenRect.Bottom() - i_nHeight )
     {
         bMove = true;
@@ -643,7 +643,7 @@ void SystemWindow::ImplMoveToScreen( long& io_rX, long& io_rY, long i_nWidth, lo
     Window* pParent = i_pConfigureWin->GetParent();
     if( bMove && pParent )
     {
-        // calculate absolute screen pos here, since that is what is contained in WindowState
+        
         Point aParentAbsPos( pParent->OutputToAbsoluteScreenPixel( Point(0,0) ) );
         Size aParentSizePixel( pParent->GetOutputSizePixel() );
         Point aPos( (aParentSizePixel.Width() - i_nWidth) / 2,
@@ -678,8 +678,8 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
         if( rData.GetMask() & (WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
         {
-            // #i43799# adjust window state sizes if a minimial output size was set
-            // otherwise the frame and the client might get different sizes
+            
+            
             if( maMinOutSize.Width() > aState.mnWidth )
                 aState.mnWidth = maMinOutSize.Width();
             if( maMinOutSize.Height() > aState.mnHeight )
@@ -690,17 +690,17 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         aState.mnMaximizedY         = rData.GetMaximizedY();
         aState.mnMaximizedWidth     = rData.GetMaximizedWidth();
         aState.mnMaximizedHeight    = rData.GetMaximizedHeight();
-        // #94144# allow Minimize again, should be masked out when read from configuration
-        // 91625 - ignore Minimize
-        //nState &= ~(WINDOWSTATE_STATE_MINIMIZED);
+        
+        
+        
         aState.mnState  = nState & WINDOWSTATE_STATE_SYSTEMMASK;
 
-        // normalize window positions onto screen
+        
         ImplMoveToScreen( aState.mnX, aState.mnY, aState.mnWidth, aState.mnHeight, pWindow );
         ImplMoveToScreen( aState.mnMaximizedX, aState.mnMaximizedY, aState.mnMaximizedWidth, aState.mnMaximizedHeight, pWindow );
 
-        // #96568# avoid having multiple frames at the same screen location
-        //  do the check only if not maximized
+        
+        
         if( !((rData.GetMask() & WINDOWSTATE_MASK_STATE) && (nState & WINDOWSTATE_STATE_MAXIMIZED)) )
             if( rData.GetMask() & (WINDOWSTATE_MASK_POS|WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
             {
@@ -720,23 +720,23 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                             if( (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.Right() ||
                                 (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.Bottom() )
                             {
-                                // displacing would leave screen
-                                aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
+                                
+                                aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; 
                                 aState.mnY = displacement;
                                 if( bWrapped ||
                                     (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.Right() ||
                                     (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.Bottom() )
-                                    break;  // further displacement not possible -> break
-                                // avoid endless testing
+                                    break;  
+                                
                                 bWrapped = true;
                             }
                             else
                             {
-                                // displace
+                                
                                 aState.mnX += displacement;
                                 aState.mnY += displacement;
                             }
-                        pWin = pSVData->maWinData.mpFirstFrame; // check new pos again
+                        pWin = pSVData->maWinData.mpFirstFrame; 
                         }
                     }
                     pWin = pWin->mpWindowImpl->mpFrameData->mpNextFrame;
@@ -745,23 +745,23 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
 
         mpWindowImpl->mpFrame->SetWindowState( &aState );
 
-        // do a synchronous resize for layout reasons
-        //  but use rData only when the window is not to be maximized (#i38089#)
-        //  otherwise we have no useful size information
+        
+        
+        
         if( (rData.GetMask() & WINDOWSTATE_MASK_STATE) && (nState & WINDOWSTATE_STATE_MAXIMIZED) )
         {
-            // query maximized size from frame
+            
             SalFrameGeometry aGeometry = mpWindowImpl->mpFrame->GetGeometry();
 
-            // but use it only if it is different from the restore size (rData)
-            // as currently only on windows the exact size of a maximized window
-            //  can be computed without actually showing the window
+            
+            
+            
             if( aGeometry.nWidth != rData.GetWidth() || aGeometry.nHeight != rData.GetHeight() )
                 ImplHandleResize( pWindow, aGeometry.nWidth, aGeometry.nHeight );
         }
         else
             if( rData.GetMask() & (WINDOWSTATE_MASK_WIDTH|WINDOWSTATE_MASK_HEIGHT) )
-                ImplHandleResize( pWindow, aState.mnWidth, aState.mnHeight );   // #i43799# use aState and not rData, see above
+                ImplHandleResize( pWindow, aState.mnWidth, aState.mnHeight );   
     }
     else
     {
@@ -794,7 +794,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
         setPosSizePixel( nX, nY, nWidth, nHeight, nPosSize );
         maOrgSize = Size( nWidth, nHeight );
 
-        // 91625 - ignore Minimize
+        
         if ( nValidMask & WINDOWSTATE_MASK_STATE )
         {
             sal_uLong nState = rData.GetState();
@@ -806,7 +806,7 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
 {
@@ -857,8 +857,8 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
             }
             if ( nValidMask & WINDOWSTATE_MASK_STATE )
             {
-                // #94144# allow Minimize again, should be masked out when read from configuration
-                // 91625 - ignore Minimize
+                
+                
                 if ( !(nValidMask&WINDOWSTATE_MASK_MINIMIZED) )
                     aState.mnState &= ~(WINDOWSTATE_STATE_MINIMIZED);
                 rData.SetState( aState.mnState );
@@ -893,7 +893,7 @@ void SystemWindow::GetWindowStateData( WindowStateData& rData ) const
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::SetWindowState(const OString& rStr)
 {
@@ -905,7 +905,7 @@ void SystemWindow::SetWindowState(const OString& rStr)
     SetWindowStateData( aData );
 }
 
-// -----------------------------------------------------------------------
+
 
 OString SystemWindow::GetWindowState( sal_uLong nMask ) const
 {
@@ -916,7 +916,7 @@ OString SystemWindow::GetWindowState( sal_uLong nMask ) const
     return ImplWindowStateToStr(aData);
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
 {
@@ -957,7 +957,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
                 }
                 MenuBar::ImplDestroy( pOldMenuBar, bDelete );
                 if( bDelete )
-                    pOldWindow = NULL;  // will be deleted in MenuBar::ImplDestroy,
+                    pOldWindow = NULL;  
             }
 
         }
@@ -969,7 +969,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
                 pOldWindow = pOldMenuBar->ImplGetWindow();
         }
 
-        // update taskpane list to make menubar accessible
+        
         if( mpImplData->mpTaskPaneList )
         {
             if( pOldWindow )
@@ -980,7 +980,7 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SystemWindow::SetMenuBarMode( sal_uInt16 nMode )
 {
@@ -997,7 +997,7 @@ void SystemWindow::SetMenuBarMode( sal_uInt16 nMode )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 bool SystemWindow::ImplIsInTaskPaneList( Window* pWin )
 {

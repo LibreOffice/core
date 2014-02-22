@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "headless/svpbmp.hxx"
@@ -66,7 +66,7 @@ bool SvpSalBitmap::Create( const Size& rSize,
         m_aBitmap = createBitmapDevice( aSize, false, nFormat );
     else
     {
-        // prepare palette
+        
         unsigned int nEntries = 1U << nBitCount;
         std::vector<basebmp::Color>* pPalette =
             new std::vector<basebmp::Color>( nEntries, basebmp::Color(COL_WHITE) );
@@ -232,7 +232,7 @@ BitmapBuffer* SvpSalBitmap::AcquireBuffer( bool )
                 break;
 
             default:
-                // this is an error case !!!!!
+                
                 nBitCount = 1;
                 pBuf->mnFormat = BMP_FORMAT_1BIT_MSB_PAL;
                 break;
@@ -282,33 +282,33 @@ void SvpSalBitmap::ReleaseBuffer( BitmapBuffer* pBuffer, bool bReadOnly )
 {
     if( !bReadOnly && pBuffer->maPalette.GetEntryCount() )
     {
-        // palette might have changed, clone device (but recycle
-        // memory)
+        
+        
         sal_uInt16 nBitCount = 0;
         switch( m_aBitmap->getScanlineFormat() )
         {
             case FORMAT_ONE_BIT_MSB_GREY:
-                // FALLTHROUGH intended
+                
             case FORMAT_ONE_BIT_MSB_PAL:
-                // FALLTHROUGH intended
+                
             case FORMAT_ONE_BIT_LSB_GREY:
-                // FALLTHROUGH intended
+                
             case FORMAT_ONE_BIT_LSB_PAL:
                 nBitCount = 1;
                 break;
 
             case FORMAT_FOUR_BIT_MSB_GREY:
-                // FALLTHROUGH intended
+                
             case FORMAT_FOUR_BIT_MSB_PAL:
-                // FALLTHROUGH intended
+                
             case FORMAT_FOUR_BIT_LSB_GREY:
-                // FALLTHROUGH intended
+                
             case FORMAT_FOUR_BIT_LSB_PAL:
                 nBitCount = 4;
                 break;
 
             case FORMAT_EIGHT_BIT_PAL:
-                // FALLTHROUGH intended
+                
             case FORMAT_EIGHT_BIT_GREY:
                 nBitCount = 8;
                 break;

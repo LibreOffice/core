@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -125,13 +125,13 @@ void EmptyInputStream::closeInput()
 }
 
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// class ContentEventListener_Impl.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 class ContentEventListener_Impl : public cppu::OWeakObject,
                                       public XContentEventListener
@@ -142,25 +142,25 @@ public:
     ContentEventListener_Impl( Content_Impl& rContent )
     : m_rContent( rContent ) {}
 
-    // XInterface
+    
     XINTERFACE_DECL()
 
-    // XContentEventListener
+    
     virtual void SAL_CALL contentEvent( const ContentEvent& evt )
         throw( RuntimeException );
 
-    // XEventListener ( base of XContentEventListener )
+    
     virtual void SAL_CALL disposing( const EventObject& Source )
         throw( RuntimeException );
 };
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// class Content_Impl.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 class Content_Impl : public salhelper::SimpleReferenceObject
 {
@@ -201,9 +201,9 @@ public:
     void inserted();
 };
 
-//=========================================================================
-// Helpers.
-//=========================================================================
+
+
+
 
 static void ensureContentProviderForURL( const Reference< XUniversalContentBroker >& rBroker,
                                          const OUString & rURL )
@@ -220,7 +220,7 @@ static void ensureContentProviderForURL( const Reference< XUniversalContentBroke
     }
 }
 
-//=========================================================================
+
 static Reference< XContentIdentifier > getContentIdentifier(
                                     const Reference< XUniversalContentBroker > & rBroker,
                                     const OUString & rURL,
@@ -246,7 +246,7 @@ static Reference< XContentIdentifier > getContentIdentifier(
     return Reference< XContentIdentifier >();
 }
 
-//=========================================================================
+
 static Reference< XContent > getContent(
                                     const Reference< XUniversalContentBroker > & rBroker,
                                     const Reference< XContentIdentifier > & xId,
@@ -262,7 +262,7 @@ static Reference< XContent > getContent(
     catch ( IllegalIdentifierException const & e )
     {
         msg = e.Message;
-        // handled below.
+        
     }
 
     if ( xContent.is() )
@@ -281,20 +281,20 @@ static Reference< XContent > getContent(
     return Reference< XContent >();
 }
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// Content Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 Content::Content()
 : m_xImpl( new Content_Impl )
 {
 }
 
-//=========================================================================
+
 Content::Content( const OUString& rURL,
                   const Reference< XCommandEnvironment >& rEnv,
                   const Reference< XComponentContext >& rCtx )
@@ -311,7 +311,7 @@ Content::Content( const OUString& rURL,
     m_xImpl = new Content_Impl( rCtx, xContent, rEnv );
 }
 
-//=========================================================================
+
 Content::Content( const Reference< XContent >& rContent,
                   const Reference< XCommandEnvironment >& rEnv,
                   const Reference< XComponentContext >& rCtx )
@@ -320,14 +320,14 @@ Content::Content( const Reference< XContent >& rContent,
     m_xImpl = new Content_Impl( rCtx, rContent, rEnv );
 }
 
-//=========================================================================
+
 Content::Content( const Content& rOther )
 {
     m_xImpl = rOther.m_xImpl;
 }
 
-//=========================================================================
-// static
+
+
 bool Content::create( const OUString& rURL,
                           const Reference< XCommandEnvironment >& rEnv,
                           const Reference< XComponentContext >& rCtx,
@@ -351,50 +351,50 @@ bool Content::create( const OUString& rURL,
     return true;
 }
 
-//=========================================================================
+
 Content::~Content()
 {
 }
 
-//=========================================================================
+
 Content& Content::operator=( const Content& rOther )
 {
     m_xImpl = rOther.m_xImpl;
     return *this;
 }
 
-//=========================================================================
+
 Reference< XContent > Content::get() const
 {
     return m_xImpl->getContent();
 }
 
-//=========================================================================
+
 const OUString& Content::getURL() const
 {
     return m_xImpl->getURL();
 }
 
-//=========================================================================
+
 const Reference< XCommandEnvironment >& Content::getCommandEnvironment() const
 {
     return m_xImpl->getEnvironment();
 }
 
-//=========================================================================
+
 void Content::setCommandEnvironment(
                         const Reference< XCommandEnvironment >& xNewEnv )
 {
     m_xImpl->setEnvironment( xNewEnv );
 }
 
-//=========================================================================
+
 Reference< XCommandInfo > Content::getCommands()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
     aCommand.Name     = "getCommandInfo";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument = Any();
 
     Any aResult = m_xImpl->executeCommand( aCommand );
@@ -404,13 +404,13 @@ Reference< XCommandInfo > Content::getCommands()
     return xInfo;
 }
 
-//=========================================================================
+
 Reference< XPropertySetInfo > Content::getProperties()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
     aCommand.Name     = "getPropertySetInfo";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument = Any();
 
     Any aResult = m_xImpl->executeCommand( aCommand );
@@ -420,7 +420,7 @@ Reference< XPropertySetInfo > Content::getProperties()
     return xInfo;
 }
 
-//=========================================================================
+
 Any Content::getPropertyValue( const OUString& rPropertyName )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -431,7 +431,7 @@ Any Content::getPropertyValue( const OUString& rPropertyName )
     return aRet.getConstArray()[ 0 ];
 }
 
-//=========================================================================
+
 Any Content::setPropertyValue( const OUString& rName,
                                 const Any& rValue )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -446,7 +446,7 @@ Any Content::setPropertyValue( const OUString& rName,
     return aErrors.getConstArray()[ 0 ];
 }
 
-//=========================================================================
+
 Sequence< Any > Content::getPropertyValues(
                             const Sequence< OUString >& rPropertyNames )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -467,7 +467,7 @@ Sequence< Any > Content::getPropertyValues(
     return aValues;
 }
 
-//=========================================================================
+
 Reference< XRow > Content::getPropertyValuesInterface(
                             const Sequence< OUString >& rPropertyNames )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -483,14 +483,14 @@ Reference< XRow > Content::getPropertyValuesInterface(
         Property& rProp = pProps[ n ];
 
         rProp.Name       = pNames[ n ];
-        rProp.Handle     = -1; // n/a
-//        rProp.Type       =
-//        rProp.Attributes = ;
+        rProp.Handle     = -1; 
+
+
     }
 
     Command aCommand;
     aCommand.Name     = "getPropertyValues";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aProps;
 
     Any aResult = m_xImpl->executeCommand( aCommand );
@@ -500,7 +500,7 @@ Reference< XRow > Content::getPropertyValuesInterface(
     return xRow;
 }
 
-//=========================================================================
+
 Sequence< Any > Content::setPropertyValues(
                             const Sequence< OUString >& rPropertyNames,
                                 const Sequence< Any >& rValues )
@@ -516,7 +516,7 @@ Sequence< Any > Content::setPropertyValues(
                         get(),
                         -1 ) ),
             m_xImpl->getEnvironment() );
-        // Unreachable
+        
     }
 
     sal_Int32 nCount = rValues.getLength();
@@ -531,14 +531,14 @@ Sequence< Any > Content::setPropertyValues(
         PropertyValue& rProp = pProps[ n ];
 
         rProp.Name   = pNames[ n ];
-        rProp.Handle = -1; // n/a
+        rProp.Handle = -1; 
         rProp.Value  = pValues[ n ];
-//        rProp.State  = ;
+
     }
 
     Command aCommand;
     aCommand.Name     = "setPropertyValues";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aProps;
 
     Any aResult = m_xImpl->executeCommand( aCommand );
@@ -548,20 +548,20 @@ Sequence< Any > Content::setPropertyValues(
     return aErrors;
 }
 
-//=========================================================================
+
 Any Content::executeCommand( const OUString& rCommandName,
                              const Any& rCommandArgument )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
     Command aCommand;
     aCommand.Name     = rCommandName;
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument = rCommandArgument;
 
     return m_xImpl->executeCommand( aCommand );
 }
 
-//=========================================================================
+
 Any Content::createCursorAny( const Sequence< OUString >& rPropertyNames,
                               ResultSetInclude eMode )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -574,7 +574,7 @@ Any Content::createCursorAny( const Sequence< OUString >& rPropertyNames,
     {
         Property& rProp = pProps[ n ];
         rProp.Name   = pNames[ n ];
-        rProp.Handle = -1; // n/a
+        rProp.Handle = -1; 
     }
 
     OpenCommandArgument2 aArg;
@@ -582,19 +582,19 @@ Any Content::createCursorAny( const Sequence< OUString >& rPropertyNames,
                         ? OpenMode::FOLDERS
                         : ( eMode == INCLUDE_DOCUMENTS_ONLY )
                             ? OpenMode::DOCUMENTS : OpenMode::ALL;
-    aArg.Priority   = 0; // unused
-    aArg.Sink.clear(); // unused
+    aArg.Priority   = 0; 
+    aArg.Sink.clear(); 
     aArg.Properties = aProps;
 
     Command aCommand;
     aCommand.Name     = "open";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aArg;
 
     return m_xImpl->executeCommand( aCommand );
 }
 
-//=========================================================================
+
 Reference< XResultSet > Content::createCursor(
                             const Sequence< OUString >& rPropertyNames,
                             ResultSetInclude eMode )
@@ -613,7 +613,7 @@ Reference< XResultSet > Content::createCursor(
 
     if ( !aResult.is() )
     {
-        // Former, the open command directly returned a XResultSet.
+        
         aCursorAny >>= aResult;
 
         OSL_ENSURE( !aResult.is(),
@@ -624,7 +624,7 @@ Reference< XResultSet > Content::createCursor(
     return aResult;
 }
 
-//=========================================================================
+
 Reference< XDynamicResultSet > Content::createDynamicCursor(
                             const Sequence< OUString >& rPropertyNames,
                             ResultSetInclude eMode )
@@ -638,7 +638,7 @@ Reference< XDynamicResultSet > Content::createDynamicCursor(
     return aResult;
 }
 
-//=========================================================================
+
 Reference< XResultSet > Content::createSortedCursor(
                             const Sequence< OUString >& rPropertyNames,
                             const Sequence< NumberedSortingInfo >& rSortInfo,
@@ -679,7 +679,7 @@ Reference< XResultSet > Content::createSortedCursor(
 
     if ( !aResult.is() )
     {
-        // Former, the open command directly returned a XResultSet.
+        
         aCursorAny >>= aResult;
 
         OSL_ENSURE( !aResult.is(),
@@ -690,7 +690,7 @@ Reference< XResultSet > Content::createSortedCursor(
     return aResult;
 }
 
-//=========================================================================
+
 Reference< XInputStream > Content::openStream()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -701,13 +701,13 @@ Reference< XInputStream > Content::openStream()
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;
-    aArg.Priority   = 0; // unused
+    aArg.Priority   = 0; 
     aArg.Sink       = xSink;
-    aArg.Properties = Sequence< Property >( 0 ); // unused
+    aArg.Properties = Sequence< Property >( 0 ); 
 
     Command aCommand;
     aCommand.Name     = "open";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aArg;
 
     m_xImpl->executeCommand( aCommand );
@@ -715,7 +715,7 @@ Reference< XInputStream > Content::openStream()
     return xSink->getInputStream();
 }
 
-//=========================================================================
+
 Reference< XInputStream > Content::openStreamNoLock()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -726,13 +726,13 @@ Reference< XInputStream > Content::openStreamNoLock()
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT_SHARE_DENY_NONE;
-    aArg.Priority   = 0; // unused
+    aArg.Priority   = 0; 
     aArg.Sink       = xSink;
-    aArg.Properties = Sequence< Property >( 0 ); // unused
+    aArg.Properties = Sequence< Property >( 0 ); 
 
     Command aCommand;
     aCommand.Name     = "open";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aArg;
 
     m_xImpl->executeCommand( aCommand );
@@ -740,7 +740,7 @@ Reference< XInputStream > Content::openStreamNoLock()
     return xSink->getInputStream();
 }
 
-//=========================================================================
+
 Reference< XStream > Content::openWriteableStream()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -751,13 +751,13 @@ Reference< XStream > Content::openWriteableStream()
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;
-    aArg.Priority   = 0; // unused
+    aArg.Priority   = 0; 
     aArg.Sink       = xStreamer;
-    aArg.Properties = Sequence< Property >( 0 ); // unused
+    aArg.Properties = Sequence< Property >( 0 ); 
 
     Command aCommand;
     aCommand.Name     = "open";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aArg;
 
     m_xImpl->executeCommand( aCommand );
@@ -765,7 +765,7 @@ Reference< XStream > Content::openWriteableStream()
     return xStreamer->getStream();
 }
 
-//=========================================================================
+
 Reference< XStream > Content::openWriteableStreamNoLock()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -776,13 +776,13 @@ Reference< XStream > Content::openWriteableStreamNoLock()
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT_SHARE_DENY_NONE;
-    aArg.Priority   = 0; // unused
+    aArg.Priority   = 0; 
     aArg.Sink       = xStreamer;
-    aArg.Properties = Sequence< Property >( 0 ); // unused
+    aArg.Properties = Sequence< Property >( 0 ); 
 
     Command aCommand;
     aCommand.Name     = "open";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aArg;
 
     m_xImpl->executeCommand( aCommand );
@@ -790,7 +790,7 @@ Reference< XStream > Content::openWriteableStreamNoLock()
     return xStreamer->getStream();
 }
 
-//=========================================================================
+
 bool Content::openStream( const Reference< XActiveDataSink >& rSink )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -799,13 +799,13 @@ bool Content::openStream( const Reference< XActiveDataSink >& rSink )
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;
-    aArg.Priority   = 0; // unused
+    aArg.Priority   = 0; 
     aArg.Sink       = rSink;
-    aArg.Properties = Sequence< Property >( 0 ); // unused
+    aArg.Properties = Sequence< Property >( 0 ); 
 
     Command aCommand;
     aCommand.Name     = "open";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aArg;
 
     m_xImpl->executeCommand( aCommand );
@@ -813,7 +813,7 @@ bool Content::openStream( const Reference< XActiveDataSink >& rSink )
     return true;
 }
 
-//=========================================================================
+
 bool Content::openStream( const Reference< XOutputStream >& rStream )
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -822,13 +822,13 @@ bool Content::openStream( const Reference< XOutputStream >& rStream )
 
     OpenCommandArgument2 aArg;
     aArg.Mode       = OpenMode::DOCUMENT;
-    aArg.Priority   = 0; // unused
+    aArg.Priority   = 0; 
     aArg.Sink       = rStream;
-    aArg.Properties = Sequence< Property >( 0 ); // unused
+    aArg.Properties = Sequence< Property >( 0 ); 
 
     Command aCommand;
     aCommand.Name     = "open";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aArg;
 
     m_xImpl->executeCommand( aCommand );
@@ -836,7 +836,7 @@ bool Content::openStream( const Reference< XOutputStream >& rStream )
     return true;
 }
 
-//=========================================================================
+
 void Content::writeStream( const Reference< XInputStream >& rStream,
                            bool bReplaceExisting )
     throw( CommandAbortedException, RuntimeException, Exception )
@@ -847,7 +847,7 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
 
     Command aCommand;
     aCommand.Name     = "insert";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aArg;
 
     m_xImpl->executeCommand( aCommand );
@@ -855,19 +855,19 @@ void Content::writeStream( const Reference< XInputStream >& rStream,
     m_xImpl->inserted();
 }
 
-//=========================================================================
+
 Sequence< ContentInfo > Content::queryCreatableContentsInfo()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
-    // First, try it using "CreatableContentsInfo" property -> the "new" way.
+    
     Sequence< ContentInfo > aInfo;
     if ( getPropertyValue(
              OUString("CreatableContentsInfo") )
          >>= aInfo )
         return aInfo;
 
-    // Second, try it using XContentCreator interface -> the "old" way (not
-    // providing the chance to supply an XCommandEnvironment.
+    
+    
     Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
     if ( xCreator.is() )
         aInfo = xCreator->queryCreatableContentsInfo();
@@ -875,7 +875,7 @@ Sequence< ContentInfo > Content::queryCreatableContentsInfo()
     return aInfo;
 }
 
-//=========================================================================
+
 bool Content::insertNewContent( const OUString& rContentType,
                                     const Sequence< OUString >&
                                         rPropertyNames,
@@ -890,7 +890,7 @@ bool Content::insertNewContent( const OUString& rContentType,
                              rNewContent );
 }
 
-//=========================================================================
+
 bool Content::insertNewContent( const OUString& rContentType,
                                     const Sequence< OUString >&
                                         rPropertyNames,
@@ -902,14 +902,14 @@ bool Content::insertNewContent( const OUString& rContentType,
     if ( rContentType.isEmpty() )
         return false;
 
-    // First, try it using "createNewContent" command -> the "new" way.
+    
     ContentInfo aInfo;
     aInfo.Type = rContentType;
     aInfo.Attributes = 0;
 
     Command aCommand;
     aCommand.Name     = "createNewContent";
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
     aCommand.Argument <<= aInfo;
 
     Reference< XContent > xNew;
@@ -927,8 +927,8 @@ bool Content::insertNewContent( const OUString& rContentType,
 
     if ( !xNew.is() )
     {
-        // Second, try it using XContentCreator interface -> the "old"
-        // way (not providing the chance to supply an XCommandEnvironment.
+        
+        
         Reference< XContentCreator > xCreator( m_xImpl->getContent(), UNO_QUERY );
 
         if ( !xCreator.is() )
@@ -954,7 +954,7 @@ bool Content::insertNewContent( const OUString& rContentType,
     return true;
 }
 
-//=========================================================================
+
 bool Content::transferContent( const Content& rSourceContent,
                                    InsertOperation eOperation,
                                    const OUString & rTitle,
@@ -969,7 +969,7 @@ bool Content::transferContent( const Content& rSourceContent,
     Reference< XUniversalContentBroker > pBroker(
         UniversalContentBroker::create( m_xImpl->getComponentContext() ) );
 
-    // Execute command "globalTransfer" at UCB.
+    
 
     TransferCommandOperation eTransOp = TransferCommandOperation();
     OUString sCommand( "globalTransfer" );
@@ -1002,18 +1002,18 @@ bool Content::transferContent( const Content& rSourceContent,
                             get(),
                             -1 ) ),
                          m_xImpl->getEnvironment() );
-            // Unreachable
+            
     }
     Command aCommand;
     aCommand.Name     = sCommand;
-    aCommand.Handle   = -1; // n/a
+    aCommand.Handle   = -1; 
 
     if ( !bCheckIn )
     {
         GlobalTransferCommandArgument2 aTransferArg(
                                             eTransOp,
-                                            rSourceContent.getURL(), // SourceURL
-                                            getURL(),   // TargetFolderURL,
+                                            rSourceContent.getURL(), 
+                                            getURL(),   
                                             rTitle,
                                             nNameClashAction,
                                             rMimeType,
@@ -1033,7 +1033,7 @@ bool Content::transferContent( const Content& rSourceContent,
     return true;
 }
 
-//=========================================================================
+
 bool Content::isFolder()
     throw( CommandAbortedException, RuntimeException, Exception )
 {
@@ -1050,13 +1050,13 @@ bool Content::isFolder()
          m_xImpl->getEnvironment() );
 
 #if !(defined(_MSC_VER) && defined(ENABLE_LTO))
-    // Unreachable - cancelCommandExecution always throws an exception.
-    // But some compilers complain...
+    
+    
     return false;
 #endif
 }
 
-//=========================================================================
+
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
@@ -1075,20 +1075,20 @@ bool Content::isDocument()
                     get() ) ),
          m_xImpl->getEnvironment() );
 
-    // Unreachable - cancelCommandExecution always throws an exception,
-    // But some compilers complain...
+    
+    
     return false;
 }
 
 SAL_WNOUNREACHABLE_CODE_POP
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// Content_Impl Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 Content_Impl::Content_Impl( const Reference< XComponentContext >& rCtx,
                             const Reference< XContent >& rContent,
@@ -1104,21 +1104,21 @@ Content_Impl::Content_Impl( const Reference< XComponentContext >& rCtx,
         m_xContent->addContentEventListener( m_xContentEventListener );
 
 #if OSL_DEBUG_LEVEL > 1
-        // Only done on demand in product version for performance reasons,
-        // but a nice debug helper.
+        
+        
         getURL();
 #endif
     }
 }
 
-//=========================================================================
+
 void Content_Impl::reinit( const Reference< XContent >& xContent )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
     m_xCommandProcessor = 0;
 
-    // #92581# - Don't reset m_aURL!!!
+    
 
     if ( m_xContent.is() )
     {
@@ -1137,23 +1137,23 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
         m_xContent->addContentEventListener( m_xContentEventListener );
 
 #if OSL_DEBUG_LEVEL > 1
-        // Only done on demand in product version for performance reasons,
-        // but a nice debug helper.
+        
+        
         getURL();
 #endif
     }
     else
     {
-        // We need m_xContent's URL in order to be able to create the
-        // content object again if demanded ( --> Content_Impl::getContent() )
+        
+        
         getURL();
 
         m_xContent = 0;
     }
 }
 
-//=========================================================================
-// virtual
+
+
 Content_Impl::~Content_Impl()
 {
     if ( m_xContent.is() )
@@ -1168,7 +1168,7 @@ Content_Impl::~Content_Impl()
     }
 }
 
-//=========================================================================
+
 void Content_Impl::disposing( const EventObject& Source )
 {
     Reference<XContent> xContent;
@@ -1197,7 +1197,7 @@ void Content_Impl::disposing( const EventObject& Source )
     }
 }
 
-//=========================================================================
+
 const OUString& Content_Impl::getURL() const
 {
     if ( m_aURL.isEmpty() && m_xContent.is() )
@@ -1215,7 +1215,7 @@ const OUString& Content_Impl::getURL() const
     return m_aURL;
 }
 
-//=========================================================================
+
 Reference< XContent > Content_Impl::getContent()
 {
     if ( !m_xContent.is() && !m_aURL.isEmpty() )
@@ -1255,7 +1255,7 @@ Reference< XContent > Content_Impl::getContent()
     return m_xContent;
 }
 
-//=========================================================================
+
 Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
 {
     if ( !m_xCommandProcessor.is() )
@@ -1270,25 +1270,25 @@ Reference< XCommandProcessor > Content_Impl::getCommandProcessor()
     return m_xCommandProcessor;
 }
 
-//=========================================================================
+
 Any Content_Impl::executeCommand( const Command& rCommand )
 {
     Reference< XCommandProcessor > xProc = getCommandProcessor();
     if ( !xProc.is() )
         return Any();
 
-    // Execute command
+    
     return xProc->execute( rCommand, 0, m_xEnv );
 }
 
-//=========================================================================
+
 inline const Reference< XCommandEnvironment >&
                                         Content_Impl::getEnvironment() const
 {
     return m_xEnv;
 }
 
-//=========================================================================
+
 inline void Content_Impl::setEnvironment(
                         const Reference< XCommandEnvironment >& xNewEnv )
 {
@@ -1296,39 +1296,39 @@ inline void Content_Impl::setEnvironment(
     m_xEnv = xNewEnv;
 }
 
-//=========================================================================
+
 void Content_Impl::inserted()
 {
-    // URL might have changed during 'insert' => recalculate in next getURL()
+    
     osl::MutexGuard aGuard( m_aMutex );
     m_aURL = "";
 }
 
-//=========================================================================
-//=========================================================================
-//
-// ContentEventListener_Impl Implementation.
-//
-//=========================================================================
-//=========================================================================
 
-//=========================================================================
+
 //
-// XInterface methods.
+
 //
-//=========================================================================
+
+
+
+
+//
+
+//
+
 
 XINTERFACE_IMPL_2( ContentEventListener_Impl,
                    XContentEventListener,
                    XEventListener ); /* base of XContentEventListener */
 
-//=========================================================================
-//
-// XContentEventListener methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
     throw( RuntimeException )
 {
@@ -1350,13 +1350,13 @@ void SAL_CALL ContentEventListener_Impl::contentEvent( const ContentEvent& evt )
     }
 }
 
-//=========================================================================
-//
-// XEventListenr methods.
-//
-//=========================================================================
 
-// virtual
+//
+
+//
+
+
+
 void SAL_CALL ContentEventListener_Impl::disposing( const EventObject& Source )
     throw( RuntimeException )
 {

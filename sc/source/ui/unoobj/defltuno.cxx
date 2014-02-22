@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <editeng/memberids.hrc>
@@ -38,7 +38,7 @@
 
 using namespace ::com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 static const SfxItemPropertyMapEntry* lcl_GetDocDefaultsMap()
 {
@@ -73,11 +73,11 @@ using sc::HMMToTwips;
 using sc::TwipsToHMM;
 using sc::TwipsToEvenHMM;
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScDocDefaultsObj, "ScDocDefaultsObj", "com.sun.star.sheet.Defaults" )
 
-//------------------------------------------------------------------------
+
 
 ScDocDefaultsObj::ScDocDefaultsObj(ScDocShell* pDocSh) :
     pDocShell( pDocSh ),
@@ -97,7 +97,7 @@ void ScDocDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
     {
-        pDocShell = NULL;       // document gone
+        pDocShell = NULL;       
     }
 }
 
@@ -105,13 +105,13 @@ void ScDocDefaultsObj::ItemsChanged()
 {
     if (pDocShell)
     {
-        //! if not in XML import, adjust row heights
+        
 
         pDocShell->PostPaint(ScRange(0, 0, 0, MAXCOL, MAXROW, MAXTAB), PAINT_GRID);
     }
 }
 
-// XPropertySet
+
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDocDefaultsObj::getPropertySetInfo()
                                                         throw(uno::RuntimeException)
@@ -175,8 +175,8 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
               pEntry->nWID == ATTR_CJK_FONT_LANGUAGE ||
               pEntry->nWID == ATTR_CTL_FONT_LANGUAGE )
     {
-        //  for getPropertyValue the PoolDefaults are sufficient,
-        //  but setPropertyValue has to be handled differently
+        
+        
 
         lang::Locale aLocale;
         if ( aValue >>= aLocale )
@@ -210,7 +210,7 @@ void SAL_CALL ScDocDefaultsObj::setPropertyValue(
             throw lang::IllegalArgumentException();
 
         pPool->SetPoolDefaultItem( *pNewItem );
-        delete pNewItem;    // copied in SetPoolDefaultItem
+        delete pNewItem;    
 
         ItemsChanged();
     }
@@ -220,7 +220,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
-    //  use pool default if set
+    
 
     SolarMutexGuard aGuard;
 
@@ -241,9 +241,9 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
             {
                 const ScDocOptions& aDocOpt = pDoc->GetDocOptions();
                 sal_uInt16 nPrec = aDocOpt.GetStdPrecision();
-                // the max value of unsigned 16-bit integer is used as the flag
-                // value for unlimited precision, c.f.
-                // SvNumberFormatter::UNLIMITED_PRECISION.
+                
+                
+                
                 if (nPrec <= ::std::numeric_limits<sal_Int16>::max())
                     aRet <<= static_cast<sal_Int16> (nPrec);
             }
@@ -274,7 +274,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyValue( const OUString& aPropertyN
 
 SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDocDefaultsObj )
 
-// XPropertyState
+
 
 beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const OUString& aPropertyName )
                                 throw(beans::UnknownPropertyException, uno::RuntimeException)
@@ -293,14 +293,14 @@ beans::PropertyState SAL_CALL ScDocDefaultsObj::getPropertyState( const OUString
     sal_uInt16 nWID = pEntry->nWID;
     if ( nWID == ATTR_FONT || nWID == ATTR_CJK_FONT || nWID == ATTR_CTL_FONT || !nWID )
     {
-        //  static default for font is system-dependent,
-        //  so font default is always treated as "direct value".
+        
+        
 
         eRet = beans::PropertyState_DIRECT_VALUE;
     }
     else
     {
-        //  check if pool default is set
+        
 
         ScDocumentPool* pPool = pDocShell->GetDocument()->GetPool();
         if ( pPool->GetPoolDefaultItem( nWID ) != NULL )
@@ -314,7 +314,7 @@ uno::Sequence<beans::PropertyState> SAL_CALL ScDocDefaultsObj::getPropertyStates
                             const uno::Sequence<OUString>& aPropertyNames )
                     throw(beans::UnknownPropertyException, uno::RuntimeException)
 {
-    //  the simple way: call getPropertyState
+    
 
     SolarMutexGuard aGuard;
     const OUString* pNames = aPropertyNames.getConstArray();
@@ -350,7 +350,7 @@ uno::Any SAL_CALL ScDocDefaultsObj::getPropertyDefault( const OUString& aPropert
                             throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                                     uno::RuntimeException)
 {
-    //  always use static default
+    
 
     SolarMutexGuard aGuard;
 

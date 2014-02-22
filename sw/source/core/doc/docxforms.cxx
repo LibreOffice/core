@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <doc.hxx>
@@ -60,10 +60,10 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
 
     try
     {
-        // create XForms components
+        
         mxXForms = xforms::XForms::create( comphelper::getProcessComponentContext() );
 
-        // change our module identifier, to be able to have a dedicated UI
+        
         Reference< XModule > xModule;
         SwDocShell* pShell( GetDocShell() );
         if ( pShell )
@@ -72,7 +72,7 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
         if ( xModule.is() )
             xModule->setIdentifier( OUString( "com.sun.star.xforms.XMLFormDocument" ) );
 
-        // create default model
+        
         if( bCreateDefaultModel && mxXForms.is() )
         {
             OUString sName("Model 1");
@@ -93,13 +93,13 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
     }
 }
 
-// #i113606#, to release the cyclic reference between XFormModel and bindings/submissions.
+
 void SwDoc::disposeXForms( )
 {
-    // get XForms models
+    
     if( mxXForms.is() )
     {
-        // iterate over all models
+        
         uno::Sequence<OUString> aNames = mxXForms->getElementNames();
         const OUString* pNames = aNames.getConstArray();
         sal_Int32 nNames = aNames.getLength();
@@ -110,22 +110,22 @@ void SwDoc::disposeXForms( )
 
             if( xModel.is() )
             {
-                // ask model for bindings
+                
                 Reference< XIndexAccess > xBindings(
                          xModel->getBindings(), UNO_QUERY );
 
-                // Then release them one by one
+                
                 int nCount = xBindings->getCount();
                 for( int i = nCount-1; i >= 0; i-- )
                 {
                     xModel->getBindings()->remove(xBindings->getByIndex( i ));
                 }
 
-                // ask model for Submissions
+                
                 Reference< XIndexAccess > xSubmissions(
                          xModel->getSubmissions(), UNO_QUERY );
 
-                // Then release them one by one
+                
                 nCount = xSubmissions->getCount();
                 for( int i = nCount-1; i >= 0; i-- )
                 {

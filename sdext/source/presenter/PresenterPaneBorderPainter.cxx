@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vcl/svapp.hxx"
@@ -154,7 +154,7 @@ private:
         const SharedBitmapDescriptor& rpBackgroundBitmap);
 };
 
-// ===== PresenterPaneBorderPainter ===========================================
+
 
 PresenterPaneBorderPainter::PresenterPaneBorderPainter (
     const Reference<XComponentContext>& rxContext)
@@ -169,7 +169,7 @@ PresenterPaneBorderPainter::~PresenterPaneBorderPainter (void)
 {
 }
 
-//----- XPaneBorderPainter ----------------------------------------------------
+
 
 awt::Rectangle SAL_CALL PresenterPaneBorderPainter::addBorder (
     const OUString& rsPaneBorderStyleName,
@@ -207,7 +207,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorder (
 {
     ThrowIfDisposed();
 
-    // Early reject paints completely outside the repaint area.
+    
     if (rRepaintArea.X >= rOuterBorderRectangle.X+rOuterBorderRectangle.Width
         || rRepaintArea.Y >= rOuterBorderRectangle.Y+rOuterBorderRectangle.Height
         || rRepaintArea.X+rRepaintArea.Width <= rOuterBorderRectangle.X
@@ -243,7 +243,7 @@ void SAL_CALL PresenterPaneBorderPainter::paintBorderWithCallout (
 {
     ThrowIfDisposed();
 
-    // Early reject paints completely outside the repaint area.
+    
     if (rRepaintArea.X >= rOuterBorderRectangle.X+rOuterBorderRectangle.Width
         || rRepaintArea.Y >= rOuterBorderRectangle.Y+rOuterBorderRectangle.Height
         || rRepaintArea.X+rRepaintArea.Width <= rOuterBorderRectangle.X
@@ -292,7 +292,7 @@ awt::Point SAL_CALL PresenterPaneBorderPainter::getCalloutOffset (
     return awt::Point(0,0);
 }
 
-//-----------------------------------------------------------------------------
+
 
 bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanvas>& rxCanvas)
 {
@@ -303,7 +303,7 @@ bool PresenterPaneBorderPainter::ProvideTheme (const Reference<rendering::XCanva
 
     if (mpTheme.get() != NULL)
     {
-        // Check if the theme already has a canvas.
+        
         if ( ! mpTheme->HasCanvas())
         {
             mpTheme->ProvideCanvas(rxCanvas);
@@ -331,13 +331,13 @@ bool PresenterPaneBorderPainter::ProvideTheme (void)
 {
     if (mpTheme.get() == NULL)
     {
-        // Create a theme without bitmaps (no canvas => no bitmaps).
+        
         return ProvideTheme(NULL);
     }
     else
     {
-        // When there already is a theme then without a canvas we can not
-        // add anything new.
+        
+        
         return false;
     }
 }
@@ -389,7 +389,7 @@ void PresenterPaneBorderPainter::ThrowIfDisposed (void) const
     }
 }
 
-//===== PresenterPaneBorderPainter::Renderer =====================================
+
 
 PresenterPaneBorderPainter::Renderer::Renderer (
     const Reference<XComponentContext>& rxContext,
@@ -437,7 +437,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
     if ( ! mxCanvas.is())
         return;
 
-    // Create the outer and inner border of the, ahm, border.
+    
     ::boost::shared_ptr<RendererPaneStyle> pStyle (GetRendererPaneStyle(rsPaneURL));
     if (pStyle.get() == NULL)
         return;
@@ -448,7 +448,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
     awt::Rectangle aInnerBox (
         pStyle->RemoveBorder(aOuterBox, drawing::framework::BorderType_TOTAL_BORDER));
 
-    // Prepare references for all used bitmaps.
+    
     SharedBitmapDescriptor pTop (pStyle->mpTop);
     SharedBitmapDescriptor pTopLeft (pStyle->mpTopLeft);
     SharedBitmapDescriptor pTopRight (pStyle->mpTopRight);
@@ -459,7 +459,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
     SharedBitmapDescriptor pBottom (pStyle->mpBottom);
     SharedBitmapDescriptor pBackground (pStyle->mpBackground);
 
-    // Paint the sides.
+    
     PaintBitmap(aCenterBox, rUpdateBox, 0,-1,
         pTopLeft->mnXOffset, pTopRight->mnXOffset, true, pTop, pBackground);
     PaintBitmap(aCenterBox, rUpdateBox, -1,0,
@@ -475,9 +475,9 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
             nCalloutX = pBottomLeft->mnXOffset + aCenterBox.X;
         if (nCalloutX > pBottomRight->mnXOffset + aCenterBox.X + aCenterBox.Width)
             nCalloutX = pBottomRight->mnXOffset + aCenterBox.X + aCenterBox.Width;
-        // Paint bottom callout.
+        
         PaintBitmap(aCenterBox, rUpdateBox, 0,+1, nCalloutX,0, false, pStyle->mpBottomCallout, pBackground);
-        // Paint regular bottom bitmap left and right.
+        
         PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
             pBottomLeft->mnXOffset, nCalloutX-aCenterBox.Width, true, pBottom, pBackground);
         PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
@@ -485,21 +485,21 @@ void PresenterPaneBorderPainter::Renderer::PaintBorder (
     }
     else
     {
-        // Stretch the bottom bitmap over the full width.
+        
         PaintBitmap(aCenterBox, rUpdateBox, 0,+1,
             pBottomLeft->mnXOffset, pBottomRight->mnXOffset, true, pBottom, pBackground);
     }
 
-    // Paint the corners.
+    
     PaintBitmap(aCenterBox, rUpdateBox, -1,-1, 0,0, false, pTopLeft, pBackground);
     PaintBitmap(aCenterBox, rUpdateBox, +1,-1, 0,0, false, pTopRight, pBackground);
     PaintBitmap(aCenterBox, rUpdateBox, -1,+1, 0,0, false, pBottomLeft, pBackground);
     PaintBitmap(aCenterBox, rUpdateBox, +1,+1, 0,0, false, pBottomRight, pBackground);
 
-    // Paint the title.
+    
     PaintTitle(rsTitle, pStyle, rUpdateBox, aOuterBox, aInnerBox, false);
 
-    // In a double buffering environment request to make the changes visible.
+    
     Reference<rendering::XSpriteCanvas> xSpriteCanvas (mxCanvas, UNO_QUERY);
     if (xSpriteCanvas.is())
         xSpriteCanvas->updateScreen(sal_False);
@@ -534,7 +534,7 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     if ( ! xLayout.is())
         return;
 
-    /// this is responsible of the texts above the slide windows
+    /
     geometry::RealRectangle2D aBox (xLayout->queryTextBounds());
     const double nTextHeight = aBox.Y2 - aBox.Y1;
     const double nTextWidth = aBox.X1 + aBox.X2;
@@ -614,12 +614,12 @@ void PresenterPaneBorderPainter::Renderer::PaintTitle (
     {
         OUString sPaneStyleName ("DefaultRendererPaneStyle");
 
-        // Get pane layout name for resource URL.
+        
         const OUString sStyleName (mpTheme->GetStyleName(rsResourceURL));
         if (!sStyleName.isEmpty())
             sPaneStyleName = sStyleName;
 
-        // Create a new pane style object and initialize it with bitmaps.
+        
         ::boost::shared_ptr<RendererPaneStyle> pStyle (
             new RendererPaneStyle(mpTheme,sPaneStyleName));
         iStyle = maRendererPaneStyles.insert(
@@ -662,7 +662,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBitmap(
     if ( ! xBitmap.is())
         return;
 
-    // Calculate position, and for side bitmaps, the size.
+    
     sal_Int32 nX = 0;
     sal_Int32 nY = 0;
     sal_Int32 nW = rpBitmap->mnWidth;
@@ -697,7 +697,7 @@ void PresenterPaneBorderPainter::Renderer::PaintBitmap(
             nH = rBox.Height - nStartOffset + nEndOffset;
     }
 
-    // Do not paint when bitmap area does not intersect with update box.
+    
     if (nX >= rUpdateBox.X + rUpdateBox.Width
         || nX+nW <= rUpdateBox.X
         || nY >= rUpdateBox.Y + rUpdateBox.Height
@@ -783,7 +783,7 @@ void PresenterPaneBorderPainter::Renderer::SetupClipping (
 
 namespace {
 
-//===== BorderSize ============================================================
+
 
 BorderSize::BorderSize (void)
     : mnLeft(0),
@@ -813,7 +813,7 @@ BorderSize& BorderSize::operator= (const BorderSize& rBorderSize)
     return *this;
 }
 
-//===== RendererPaneStyle  ============================================================
+
 
 RendererPaneStyle::RendererPaneStyle (
     const ::boost::shared_ptr<PresenterTheme>& rpTheme,
@@ -850,7 +850,7 @@ RendererPaneStyle::RendererPaneStyle (
         mpBottomCallout = GetBitmap(rpTheme, rsStyleName, "BottomCallout");
         mpBackground = GetBitmap(rpTheme, OUString(), "Background");
 
-        // Get font description.
+        
         mpFont = rpTheme->GetFont(rsStyleName);
 
         OUString sAnchor ("Left");
@@ -868,7 +868,7 @@ RendererPaneStyle::RendererPaneStyle (
         else
             meFontAnchor = AnchorCenter;
 
-        // Get border sizes.
+        
         try
         {
             ::std::vector<sal_Int32> aInnerBorder (rpTheme->GetBorderSize(rsStyleName, false));
@@ -974,8 +974,8 @@ SharedBitmapDescriptor RendererPaneStyle::GetBitmap(
         return mpEmpty;
 }
 
-} // end of anonymous namespace
+} 
 
-} } // end of namespace ::sd::presenter
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

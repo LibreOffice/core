@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/rectitem.hxx>
@@ -35,7 +35,7 @@
 #include "svx/rulritem.hxx"
 #include <svl/eitem.hxx>
 
-// class SvxRulerItem ----------------------------------------------------
+
 
 SvxRulerItem::SvxRulerItem(sal_uInt16 _nId, SvxRuler &rRul, SfxBindings &rBindings)
 : SfxControllerItem(_nId, rBindings),
@@ -43,18 +43,18 @@ SvxRulerItem::SvxRulerItem(sal_uInt16 _nId, SvxRuler &rRul, SfxBindings &rBindin
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                  const SfxPoolItem* pState)
 {
-    // SFX_ITEM_DONTCARE => pState == -1 => PTR_CAST buff
+    
     if ( eState != SFX_ITEM_AVAILABLE )
         pState = 0;
 
     switch(nSID)
     {
-        // Left / right margin
+        
         case SID_RULER_LR_MIN_MAX:
         {
             const SfxRectangleItem *pItem = PTR_CAST(SfxRectangleItem, pState);
@@ -114,14 +114,14 @@ void SvxRulerItem::StateChanged( sal_uInt16 nSID, SfxItemState eState,
             break;
         }
         case SID_RULER_PAGE_POS:
-        {   // Position page, page width
+        {   
             const SvxPagePosSizeItem *pItem = PTR_CAST(SvxPagePosSizeItem, pState);
             DBG_ASSERT(pState?  0 != pItem: true, "SvxPagePosSizeItem expected");
             rRuler.Update(pItem);
             break;
         }
         case SID_RULER_OBJECT:
-        {   // Object selection
+        {   
             const SvxObjectItem *pItem = PTR_CAST(SvxObjectItem, pState);
             DBG_ASSERT(pState?  0 != pItem: true, "SvxObjectItem expected");
             rRuler.Update(pItem);

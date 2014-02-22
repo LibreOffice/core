@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #ifdef _MSC_VER
 #pragma warning(disable : 4917 4555)
@@ -37,7 +37,7 @@ using namespace winwrap;
 
 #define HWWL_STRUCTURE                  0
 
-//Notification codes for WM_COMMAND messages
+
 #define HWN_BORDERDOUBLECLICKED         1
 #define CBHATCHWNDEXTRA                 (sizeof(LONG))
 #define SZCLASSHATCHWIN                 TEXT("hatchwin")
@@ -106,10 +106,10 @@ HINSTANCE winwrap::CWindow::Instance(void)
 
 
 
-//Hatch pattern brush bits
+
 static WORD g_wHatchBmp[]={0x11, 0x22, 0x44, 0x88, 0x11, 0x22, 0x44, 0x88};
 
-// void DrawShading(LPRECT, HDC, UINT);
+
 
 
 /*
@@ -129,7 +129,7 @@ BOOL winwrap::HatchWindowRegister(HINSTANCE hInst)
 {
     WNDCLASS    wc;
 
-    //Must have CS_DBLCLKS for border!
+    
     wc.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
     wc.hInstance     = hInst;
     wc.cbClsExtra    = 0;
@@ -289,7 +289,7 @@ void CHatchWin::RectsSet(LPRECT prcPos, LPRECT prcClip)
     m_rcPos=*prcPos;
     m_rcClip=*prcClip;
 
-    //Calculate the rectangle for the hatch window, then clip it.
+    
     rcPos=*prcPos;
     InflateRect(&rcPos, m_dBorder, m_dBorder);
     IntersectRect(&rc, &rcPos, prcClip);
@@ -302,9 +302,9 @@ void CHatchWin::RectsSet(LPRECT prcPos, LPRECT prcClip)
      * from the top and left but with the same size as prcPos
      * contains.  The hatch window will clip it.
      */
-//     SetWindowPos(m_hWndKid, NULL, rcPos.left-rc.left+m_dBorder
-//                  , rcPos.top-rc.top+m_dBorder, prcPos->right-prcPos->left
-//                  , prcPos->bottom-prcPos->top, SWP_NOZORDER | SWP_NOACTIVATE);
+
+
+
 
     RECT newRC;
     GetClientRect(m_hWnd,&newRC);
@@ -341,7 +341,7 @@ void CHatchWin::ChildSet(HWND hWndKid)
     {
         SetParent(hWndKid, m_hWnd);
 
-        //Insure this is visible when the hatch window becomes visible.
+        
         ShowWindow(hWndKid, SW_SHOW);
     }
 
@@ -408,7 +408,7 @@ LRESULT APIENTRY winwrap::HatchWndProc(
             break;
         case WM_PAINT:
             hDC=BeginPaint(hWnd,&ps);
-            //Always draw the hatching.
+            
             phw->m_aTracker.Draw(hDC);
             EndPaint(hWnd,&ps);
             break;
@@ -416,7 +416,7 @@ LRESULT APIENTRY winwrap::HatchWndProc(
             GetCursorPos(&ptMouse);
             ScreenToClient(hWnd,&ptMouse);
 
-            // track in case we have to
+            
             if(phw->m_aTracker.Track(hWnd,ptMouse,FALSE,GetParent(hWnd)))
             {
                 RECT aRect = phw->m_aTracker.m_rect;
@@ -431,7 +431,7 @@ LRESULT APIENTRY winwrap::HatchWndProc(
             phw->m_aTracker.SetCursor(hWnd,HTCLIENT);
             break;
         case WM_SETFOCUS:
-            //We need this since the container will SetFocus to us.
+            
             if (NULL!=phw->m_hWndKid)
                 SetFocus(phw->m_hWndKid);
 
@@ -460,9 +460,9 @@ LRESULT APIENTRY winwrap::HatchWndProc(
     return 0L;
 }
 
-// Fix strange warnings about some
-// ATL::CAxHostWindow::QueryInterface|AddRef|Releae functions.
-// warning C4505: 'xxx' : unreferenced local function has been removed
+
+
+
 #if defined(_MSC_VER)
 #pragma warning(disable: 4505)
 #endif

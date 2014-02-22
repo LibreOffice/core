@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -30,14 +30,14 @@
 
 using namespace ::com::sun::star;
 
-// ----------------------------------------------------------------------------
+
 
 ScDatabaseDocUtil::StrData::StrData() :
     mbSimpleText(true), mnStrLength(0)
 {
 }
 
-// ----------------------------------------------------------------------------
+
 
 void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const uno::Reference<sdbc::XRow>& xRow, long nRowPos,
@@ -50,7 +50,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
     sal_Bool bError = false;
     sal_uLong nFormatIndex = 0;
 
-    //! wasNull calls only if null value was found?
+    
 
     try
     {
@@ -58,7 +58,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
         {
             case sdbc::DataType::BIT:
             case sdbc::DataType::BOOLEAN:
-                //! use language from doc (here, date/time and currency)?
+                
                 nFormatIndex = pDoc->GetFormatTable()->GetStandardFormat(
                                     NUMBERFORMAT_LOGICAL, ScGlobal::eLnge );
                 nVal = (xRow->getBoolean(nRowPos) ? 1 : 0);
@@ -75,7 +75,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             case sdbc::DataType::DOUBLE:
             case sdbc::DataType::NUMERIC:
             case sdbc::DataType::DECIMAL:
-                //! do the conversion here?
+                
                 nVal = xRow->getDouble(nRowPos);
                 bEmptyFlag = ( nVal == 0.0 ) && xRow->wasNull();
                 bValue = sal_True;
@@ -144,7 +144,7 @@ void ScDatabaseDocUtil::PutData( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB
             case sdbc::DataType::VARBINARY:
             case sdbc::DataType::LONGVARBINARY:
             default:
-                bError = sal_True;      // unknown type
+                bError = sal_True;      
         }
     }
     catch ( uno::Exception& )

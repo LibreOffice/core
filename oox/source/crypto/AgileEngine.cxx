@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  */
 
@@ -32,7 +32,7 @@ bool hashCalc( std::vector<sal_uInt8>& output,
     return false;
 }
 
-} // namespace
+} 
 
 AgileEngine::AgileEngine() :
     CryptoEngine()
@@ -152,8 +152,8 @@ bool AgileEngine::decrypt(
                     BinaryXOutputStream& aOutputStream)
 {
     sal_uInt32 totalSize;
-    aInputStream >> totalSize; // Document unencrypted size - 4 bytes
-    aInputStream.skip( 4 );    // Reserved 4 Bytes
+    aInputStream >> totalSize; 
+    aInputStream.skip( 4 );    
 
     vector<sal_uInt8> keyDataSalt = mInfo.keyDataSalt;
 
@@ -182,7 +182,7 @@ bool AgileEngine::decrypt(
 
         hashCalc(hash, saltWithBlockKey, mInfo.hashAlgorithm);
 
-        // Only if hash > keySize
+        
         std::copy(hash.begin(), hash.begin() + keySize, iv.begin());
 
         Decrypt aDecryptor(mKey, iv, AgileEngine::cryptoType(mInfo));
@@ -202,18 +202,18 @@ bool AgileEngine::writeEncryptionInfo(
                         const OUString& /*aPassword*/,
                         BinaryXOutputStream& /*rStream*/)
 {
-    return false; // Agile encrypting is not supported for now
+    return false; 
 }
 
 bool AgileEngine::encrypt(
                     BinaryXInputStream& /*aInputStream*/,
                     BinaryXOutputStream& /*aOutputStream*/)
 {
-    return false; // Agile encrypting is not supported for now
+    return false; 
 }
 
 
-} // namespace core
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <xmloff/xmlnmspe.hxx>
@@ -154,8 +154,8 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_DR3D, XML_EDGE_ROUNDING_MODE, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* TODO: does not exist! */
+
+
     { XML_NAMESPACE_DR3D, XML_BACK_SCALE, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DR3D, XML_DEPTH, XML_ATACTION_INCH2IN,
@@ -276,8 +276,8 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_WRAP, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_STYLE, XML_WRAP_DYNAMIC_TRESHOLD, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* new attribute */
+
+
     { XML_NAMESPACE_STYLE, XML_NUMBER_WRAPPED_PARAGRAPHS, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_WRAP_CONTOUR, XML_ATACTION_COPY,
@@ -288,8 +288,8 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_FLOW_WITH_TEXT, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_STYLE, XML_OVERFLOW_BEHAVIOR, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* new attribute */
+
+
     /* Rename attribute values of <style:mirror>: (#i49139#)
          horizontal-on-left-pages --> horizontal-on-even
          horizontal-on-right-pages --> horizontal-on-odd
@@ -320,7 +320,7 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
         NO_PARAMS  },
     { XML_NAMESPACE_DRAW, XML_MARKER_END, XML_ATACTION_ENCODE_STYLE_NAME_REF,
         NO_PARAMS  },
-    // style-graphic-fill-properties-attlist
+    
     { XML_NAMESPACE_DRAW, XML_FILL, XML_ATACTION_COPY, NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_FILL_COLOR, XML_ATACTION_COPY, NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF,
@@ -338,7 +338,7 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_REF_POINT, XML_ATACTION_COPY, NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_TILE_REPEAT_OFFSET, XML_ATACTION_COPY, NO_PARAMS }, /* generated entry */
 
-    // #i25616#
+    
     { XML_NAMESPACE_DRAW, XML_TRANSPARENCY, XML_PTACTION_TRANSPARENCY, NO_PARAMS },
 
     { XML_NAMESPACE_DRAW, XML_TRANSPARENCY_NAME,
@@ -350,7 +350,7 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_SIZE_PROTECT, XML_ATACTION_SIZE_PROTECT, NO_PARAMS },
     { XML_NAMESPACE_DRAW, XML_FIT_TO_CONTOUR, XML_ATACTION_COPY, NO_PARAMS },
 
-    // Font work properties
+    
     { XML_NAMESPACE_DRAW, XML_FONTWORK_STYLE, XML_ATACTION_COPY, NO_PARAMS },
     { XML_NAMESPACE_DRAW, XML_FONTWORK_ADJUST, XML_ATACTION_COPY, NO_PARAMS },
     { XML_NAMESPACE_DRAW, XML_FONTWORK_DISTANCE, XML_ATACTION_INCH2IN, NO_PARAMS },
@@ -365,12 +365,12 @@ XMLTransformerActionInit aGraphicPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_FONTWORK_HIDE_FORM, XML_ATACTION_COPY, NO_PARAMS },
     { XML_NAMESPACE_DRAW, XML_FONTWORK_SHADOW_TRANSPARENCE, XML_ATACTION_COPY, NO_PARAMS },
 
-    { XML_NAMESPACE_DRAW, XML_WRAP_INFLUENCE_ON_POSITION, XML_ATACTION_COPY, NO_PARAMS }, // new in OOo 2.0
+    { XML_NAMESPACE_DRAW, XML_WRAP_INFLUENCE_ON_POSITION, XML_ATACTION_COPY, NO_PARAMS }, 
 
     { XML_NAMESPACE_DRAW, XML_MIRROR, XML_ATACTION_DRAW_MIRROR_OOO,
         NO_PARAMS }, /* generated entry */
 
-    // b6242385: read writing-mode for text frames
+    
     { XML_NAMESPACE_STYLE, XML_WRITING_MODE, XML_ATACTION_COPY, NO_PARAMS },
 
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
@@ -386,7 +386,7 @@ XMLTransformerActionInit aGraphicPropertyOOoElemActionTable[] =
 
 XMLTransformerActionInit aDrawingPagePropertyOOoAttrActionTable[] =
 {
-    // style-graphic-fill-properties-attlist
+    
     { XML_NAMESPACE_DRAW, XML_FILL_GRADIENT_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF,
         NO_PARAMS  },
     { XML_NAMESPACE_DRAW, XML_FILL_HATCH_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF, NO_PARAMS }, /* generated entry */
@@ -395,8 +395,8 @@ XMLTransformerActionInit aDrawingPagePropertyOOoAttrActionTable[] =
         NO_PARAMS  },
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_WIDTH, XML_ATACTION_INCH2IN, NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_DRAW, XML_FILL_IMAGE_HEIGHT, XML_ATACTION_INCH2IN, NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_DRAW, XML_OPACITY_NAME, XML_ATACTION_ENCODE_STYLE_NAME_REF,
-//      NO_PARAMS  },
+
+
 
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }
 };
@@ -566,8 +566,8 @@ XMLTransformerActionInit aTextPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_FONT_SIZE_REL_COMPLEX, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_STYLE, XML_SCRIPT_TYPE, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* new attribute*/
+
+
     { XML_NAMESPACE_FO, XML_LETTER_SPACING, XML_ATACTION_INCH2IN,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_FO, XML_LANGUAGE, XML_ATACTION_COPY,
@@ -743,8 +743,8 @@ XMLTransformerActionInit aParagraphPropertyOOoAttrActionTable[] =
     { XML_NAMESPACE_DRAW, XML_WRITING_MODE, XML_ATACTION_RENAME,
         XMLTransformerActionInit::QNameParam( XML_NAMESPACE_STYLE,
                                                  XML_WRITING_MODE ), 0, 0 },
-//  { XML_NAMESPACE_STYLE, XML_WRITING_MODE_AUTOMATIC, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* new attribute */
+
+
     { XML_NAMESPACE_STYLE, XML_SNAP_TO_LAYOUT_GRID, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_STYLE, XML_PAGE_NUMBER, XML_ATACTION_COPY,
@@ -922,16 +922,16 @@ XMLTransformerActionInit aChartPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_CHART, XML_DEEP, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* new attribute */
-//  { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* new attribute */
-//  { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* new attribute */
-//  { XML_NAMESPACE_CHART, XML_SYMBOL_NAME, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* new attribute */
-//  { XML_NAMESPACE_CHART, XML_SYMBOL_TYPE, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* new attribute */
+
+
+
+
+
+
+
+
+
+
     { XML_NAMESPACE_XLINK, XML_HREF, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_CHART, XML_SYMBOL_WIDTH, XML_ATACTION_INCH2IN,
@@ -946,10 +946,10 @@ XMLTransformerActionInit aChartPropertyOOoAttrActionTable[] =
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_CHART, XML_OVERLAP, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
-//  { XML_NAMESPACE_CHART, XML_JAPANESE_CANDLE_STICK, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* TODO: renamed? */
-//  { XML_NAMESPACE_CHART, XML_INTERPOLATION, XML_ATACTION_COPY,
-//      NO_PARAMS }, /* TODO: renamed? */
+
+
+
+
     { XML_NAMESPACE_CHART, XML_SPLINE_ORDER, XML_ATACTION_COPY,
           NO_PARAMS }, /* generated entry */
     { XML_NAMESPACE_CHART, XML_SPLINE_RESOLUTION, XML_ATACTION_COPY,
@@ -1037,14 +1037,14 @@ XMLTransformerActionInit aChartPropertyOOoAttrActionTable[] =
                                             XML_JAPANESE_CANDLE_STICK ), 0, 0 },
     { XML_NAMESPACE_CHART, XML_SYMBOL, XML_PTACTION_SYMBOL, NO_PARAMS },
 
-    // note: chart:symbol-image-name was only used before 6.0 beta
+    
     { XML_NAMESPACE_CHART, XML_SYMBOL_IMAGE_NAME, XML_PTACTION_SYMBOL_IMAGE_NAME, NO_PARAMS },
 
-    // #i32368# property should no longer be used as XML-property (in OASIS
-    // format), but is still ex-/imported for compatibility with the OOo file format
+    
+    
      { XML_NAMESPACE_CHART, XML_LINES_USED, XML_ATACTION_COPY, NO_PARAMS },
-    // #i32366# property should no longer be used as XML-property (in OASIS
-    // format), but is still ex-/imported for compatibility with the OOo file format
+    
+    
      { XML_NAMESPACE_CHART, XML_STOCK_WITH_VOLUME, XML_ATACTION_COPY, NO_PARAMS },
 
     { XML_NAMESPACE_OFFICE, XML_TOKEN_INVALID, XML_ATACTION_EOT, NO_PARAMS }

@@ -141,7 +141,7 @@ void XOBitmap::Bitmap2Array()
     VirtualDevice   aVD;
     bool            bPixelColor = false;
     const Bitmap    aBitmap( GetBitmap() );
-    const sal_uInt16    nLines = 8; // type dependent
+    const sal_uInt16    nLines = 8; 
 
     if( !pPixelArray )
         pPixelArray = new sal_uInt16[ nLines * nLines ];
@@ -150,7 +150,7 @@ void XOBitmap::Bitmap2Array()
     aVD.DrawBitmap( Point(), aBitmap );
     aPixelColor = aBckgrColor = aVD.GetPixel( Point() );
 
-    // create array and determine foreground and background color
+    
     for( sal_uInt16 i = 0; i < nLines; i++ )
     {
         for( sal_uInt16 j = 0; j < nLines; j++ )
@@ -170,18 +170,18 @@ void XOBitmap::Bitmap2Array()
     }
 }
 
-/// convert array, fore- and background color into a bitmap
+/
 void XOBitmap::Array2Bitmap()
 {
     VirtualDevice   aVD;
-    sal_uInt16          nLines = 8; // type dependent
+    sal_uInt16          nLines = 8; 
 
     if( !pPixelArray )
         return;
 
     aVD.SetOutputSizePixel( Size( nLines, nLines ) );
 
-    // create bitmap
+    
     for( sal_uInt16 i = 0; i < nLines; i++ )
     {
         for( sal_uInt16 j = 0; j < nLines; j++ )
@@ -197,7 +197,7 @@ void XOBitmap::Array2Bitmap()
     bGraphicDirty = sal_False;
 }
 
-// class XFillBitmapItem
+
 
 TYPEINIT1_AUTOFACTORY(XFillBitmapItem, NameOrIndex);
 
@@ -264,8 +264,8 @@ bool SVX_DLLPUBLIC isHistorical8x8(const BitmapEx& rBitmapEx, BitmapColor& o_rBa
                     {
                         const BitmapPalette& rPalette = pRead->GetPalette();
 
-                        // #i123564# bachground and foregrund were exchanged; of course
-                        // rPalette[0] is the background color
+                        
+                        
                         o_rFront = rPalette[1];
                         o_rBack = rPalette[0];
 
@@ -286,7 +286,7 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
     {
         if(0 == nVer)
         {
-            // work with the old bitmap
+            
             Bitmap aBmp;
 
             ReadDIB(aBmp, rIn, true);
@@ -296,8 +296,8 @@ XFillBitmapItem::XFillBitmapItem(SvStream& rIn, sal_uInt16 nVer)
         {
             sal_Int16 iTmp;
 
-            rIn.ReadInt16( iTmp ); // former XBitmapStyle
-            rIn.ReadInt16( iTmp ); // former XBitmapType
+            rIn.ReadInt16( iTmp ); 
+            rIn.ReadInt16( iTmp ); 
 
             if(XBITMAP_IMPORT == iTmp)
             {
@@ -410,9 +410,9 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
 {
     nMemberId &= ~CONVERT_TWIPS;
 
-    // needed for MID_NAME
+    
     OUString aApiName;
-    // needed for complete item (MID 0)
+    
     OUString aInternalName;
 
     OUString aURL;
@@ -449,7 +449,7 @@ bool XFillBitmapItem::QueryValue(::com::sun::star::uno::Any& rVal, sal_uInt8 nMe
         rVal <<= xBmp;
     else
     {
-        // member-id 0 => complete item (e.g. for toolbars)
+        
         DBG_ASSERT( nMemberId == 0, "invalid member-id" );
         uno::Sequence< beans::PropertyValue > aPropSeq( 3 );
 
@@ -515,7 +515,7 @@ bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_uInt
     {
         maGraphicObject  = GraphicObject::CreateGraphicObjectFromURL(aURL);
 
-        // #121194# Prefer GraphicObject over bitmap object if both are provided
+        
         if(bSetBitmap && GRAPHIC_NONE != maGraphicObject.GetType())
         {
             bSetBitmap = false;
@@ -554,7 +554,7 @@ XFillBitmapItem* XFillBitmapItem::checkForUniqueItem( SdrModel* pModel ) const
                 XFillBitmapItem::CompareValueFunc, RID_SVXSTR_BMP21,
                 pModel->GetPropertyList( XBITMAP_LIST ) );
 
-        // if the given name is not valid, replace it!
+        
         if( aUniqueName != GetName() )
         {
             return new XFillBitmapItem(aUniqueName, maGraphicObject);

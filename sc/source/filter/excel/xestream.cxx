@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdarg.h>
@@ -77,7 +77,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::formula;
 using namespace ::oox;
 
-// ============================================================================
+
 
 XclExpStream::XclExpStream( SvStream& rOutStrm, const XclExpRoot& rRoot, sal_uInt16 nMaxRecSize ) :
     mrStrm( rOutStrm ),
@@ -230,7 +230,7 @@ sal_Size XclExpStream::Write( const void* pData, sal_Size nBytes )
                     vector<sal_uInt8> aBytes(nWriteLen);
                     memcpy(&aBytes[0], pBuffer, nWriteLen);
                     mxEncrypter->EncryptBytes(mrStrm, aBytes);
-                    // TODO: How do I check if all the bytes have been successfully written ?
+                    
                 }
                 else
                 {
@@ -270,7 +270,7 @@ void XclExpStream::WriteZeroBytes( sal_Size nBytes )
 void XclExpStream::WriteZeroBytesToRecord( sal_Size nBytes )
 {
     if (!mbInRec)
-        // not in record.
+        
         return;
 
     sal_uInt8 nZero = 0;
@@ -310,7 +310,7 @@ sal_Size XclExpStream::CopyFromStream( SvStream& rInStrm, sal_Size nBytes )
 void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nFlags )
 {
     SetSliceSize( 0 );
-    nFlags &= EXC_STRF_16BIT;   // repeat only 16bit flag
+    nFlags &= EXC_STRF_16BIT;   
     sal_uInt16 nCharLen = nFlags ? 2 : 1;
 
     ScfUInt16Vec::const_iterator aEnd = rBuffer.end();
@@ -328,9 +328,9 @@ void XclExpStream::WriteUnicodeBuffer( const ScfUInt16Vec& rBuffer, sal_uInt8 nF
     }
 }
 
-// Xcl has an obscure sense of whether starting a new record or not,
-// and crashes if it encounters the string header at the very end of a record.
-// Thus we add 1 to give some room, seems like they do it that way but with another count (10?)
+
+
+
 void XclExpStream::WriteByteString( const OString& rString, sal_uInt16 nMaxLen, bool b16BitCount )
 {
     SetSliceSize( 0 );
@@ -382,7 +382,7 @@ sal_Size XclExpStream::SetSvStreamPos( sal_Size nPos )
     return mbInRec ? 0 : mrStrm.Seek( nPos );
 }
 
-// private --------------------------------------------------------------------
+
 
 void XclExpStream::InitRecord( sal_uInt16 nRecId )
 {
@@ -465,7 +465,7 @@ void XclExpStream::WriteRawZeroBytes( sal_Size nBytes )
         mrStrm.Write( &nData, nBytesLeft );
 }
 
-// ============================================================================
+
 
 XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
     mnOldPos(STREAM_SEEK_TO_END),
@@ -473,7 +473,7 @@ XclExpBiff8Encrypter::XclExpBiff8Encrypter( const XclExpRoot& rRoot ) :
 {
     Sequence< NamedValue > aEncryptionData = rRoot.GetEncryptionData();
     if( !aEncryptionData.hasElements() )
-        // Empty password.  Get the default biff8 password.
+        
         aEncryptionData = rRoot.GenerateDefaultEncryptionData();
     Init( aEncryptionData );
 }
@@ -567,7 +567,7 @@ void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
     {
         maCodec.GetDocId( mpnDocId );
 
-        // generate the salt here
+        
         TimeValue aTime;
         osl_getSystemTime( &aTime );
         rtlRandomPool aRandomPool = rtl_random_createPool ();
@@ -577,12 +577,12 @@ void XclExpBiff8Encrypter::Init( const Sequence< NamedValue >& rEncryptionData )
 
         memset( mpnSaltDigest, 0, sizeof( mpnSaltDigest ) );
 
-        // generate salt hash.
+        
         ::msfilter::MSCodec_Std97 aCodec;
         aCodec.InitCodec( rEncryptionData );
         aCodec.CreateSaltDigest( mpnSalt, mpnSaltDigest );
 
-        // verify to make sure it's in good shape.
+        
         mbValid = maCodec.VerifyKey( mpnSalt, mpnSaltDigest );
     }
 }
@@ -643,11 +643,11 @@ void XclExpBiff8Encrypter::EncryptBytes( SvStream& rStrm, vector<sal_uInt8>& aBy
 
         bool bRet = maCodec.Encode(&aBytes[nPos], nEncBytes, &aBytes[nPos], nEncBytes);
         OSL_ENSURE(bRet, "XclExpBiff8Encrypter::EncryptBytes: encryption failed!!");
-        (void) bRet; // to remove a silly compiler warning.
+        (void) bRet; 
 
         sal_Size nRet = rStrm.Write(&aBytes[nPos], nEncBytes);
         OSL_ENSURE(nRet == nEncBytes, "XclExpBiff8Encrypter::EncryptBytes: fail to write to stream!!");
-        (void) nRet; // to remove a silly compiler warning.
+        (void) nRet; 
 
         nStrmPos = rStrm.Tell();
         nBlockOffset = GetOffsetInBlock(nStrmPos);
@@ -692,7 +692,7 @@ void XclXmlUtils::GetFormulaTypeAndValue( ScFormulaCell& rCell, const char*& rsT
     {
         case NUMBERFORMAT_NUMBER:
         {
-            // either value or error code
+            
             rsType = "n";
             rsValue = OUString::number( rCell.GetValue() );
         }
@@ -778,10 +778,10 @@ static ScAddress lcl_ToAddress( const XclAddress& rAddress )
 {
     ScAddress aAddress;
 
-    // For some reason, ScRange::Format() returns omits row numbers if
-    // the row is >= MAXROW or the column is >= MAXCOL, and Excel doesn't
-    // like "A:IV" (i.e. no row numbers).  Prevent this.
-    // KOHEI: Find out if the above comment is still true.
+    
+    
+    
+    
     aAddress.SetRow( std::min<sal_Int32>( rAddress.mnRow, MAXROW ) );
     aAddress.SetCol( static_cast<sal_Int16>(std::min<sal_Int32>( rAddress.mnCol, MAXCOL )) );
 
@@ -914,8 +914,8 @@ static const char* lcl_GetUnderlineStyle( FontUnderline eUnderline, bool& bHaveU
     bHaveUnderline = true;
     switch( eUnderline )
     {
-        // OOXTODO: doubleAccounting, singleAccounting
-        // OOXTODO: what should be done with the other FontUnderline values?
+        
+        
         case UNDERLINE_SINGLE:  return "single";
         case UNDERLINE_DOUBLE:  return "double";
         case UNDERLINE_NONE:
@@ -944,20 +944,20 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
     lcl_WriteValue( pStream, XML_b,          rFontData.mnWeight > 400 ? XclXmlUtils::ToPsz( rFontData.mnWeight > 400 ) : NULL );
     lcl_WriteValue( pStream, XML_i,          rFontData.mbItalic ? XclXmlUtils::ToPsz( rFontData.mbItalic ) : NULL );
     lcl_WriteValue( pStream, XML_strike,     rFontData.mbStrikeout ? XclXmlUtils::ToPsz( rFontData.mbStrikeout ) : NULL );
-    // OOXTODO: lcl_WriteValue( rStream, XML_condense, );    // mac compatibility setting
-    // OOXTODO: lcl_WriteValue( rStream, XML_extend, );      // compatibility setting
+    
+    
     lcl_WriteValue( pStream, XML_outline,    rFontData.mbOutline ? XclXmlUtils::ToPsz( rFontData.mbOutline ) : NULL );
     lcl_WriteValue( pStream, XML_shadow,     rFontData.mbShadow ? XclXmlUtils::ToPsz( rFontData.mbShadow ) : NULL );
     lcl_WriteValue( pStream, XML_u,          bHaveUnderline ? pUnderline : NULL );
     lcl_WriteValue( pStream, XML_vertAlign,  bHaveVertAlign ? pVertAlign : NULL );
-    lcl_WriteValue( pStream, XML_sz,         OString::number( (double) (rFontData.mnHeight / 20.0) ).getStr() );  // Twips->Pt
+    lcl_WriteValue( pStream, XML_sz,         OString::number( (double) (rFontData.mnHeight / 20.0) ).getStr() );  
     if( rFontData.maColor != Color( 0xFF, 0xFF, 0xFF, 0xFF ) )
         pStream->singleElement( XML_color,
-                // OOXTODO: XML_auto,       bool
-                // OOXTODO: XML_indexed,    uint
+                
+                
                 XML_rgb,    XclXmlUtils::ToOString( rFontData.maColor ).getStr(),
-                // OOXTODO: XML_theme,      index into <clrScheme/>
-                // OOXTODO: XML_tint,       double
+                
+                
                 FSEND );
     lcl_WriteValue( pStream, nFontId,        XclXmlUtils::ToOString( rFontData.maName ).getStr() );
     lcl_WriteValue( pStream, XML_family,     OString::number(  rFontData.mnFamily ).getStr() );
@@ -967,7 +967,7 @@ sax_fastparser::FSHelperPtr XclXmlUtils::WriteFontData( sax_fastparser::FSHelper
 }
 
 
-// ============================================================================
+
 
 XclExpXmlStream::XclExpXmlStream( const Reference< XComponentContext >& rCC )
     : XmlFilterBase( rCC ),
@@ -1074,7 +1074,7 @@ const oox::drawingml::table::TableStyleListPtr XclExpXmlStream::getTableStyles()
 
 oox::drawingml::chart::ChartConverter* XclExpXmlStream::getChartConverter()
 {
-    // DO NOT CALL
+    
     return NULL;
 }
 
@@ -1101,9 +1101,9 @@ bool XclExpXmlStream::exportDocument() throw()
     if (xStatusIndicator.is())
         xStatusIndicator->start(ScGlobal::GetRscString(STR_SAVE_DOC), 100);
 
-    // NOTE: Don't use SotStorage or SvStream any more, and never call
-    // SfxMedium::GetOutStream() anywhere in the xlsx export filter code!
-    // Instead, write via XOutputStream instance.
+    
+    
+    
     SotStorageRef rStorage = static_cast<SotStorage*>(NULL);
     XclExpObjList::ResetCounters();
 
@@ -1119,7 +1119,7 @@ bool XclExpXmlStream::exportDocument() throw()
     mpRoot = &aRoot;
     aRoot.GetOldRoot().pER = &aRoot;
     aRoot.GetOldRoot().eDateiTyp = Biff8;
-    // Get the viewsettings before processing
+    
     if( pShell->GetViewData() )
         pShell->GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
 
@@ -1127,9 +1127,9 @@ bool XclExpXmlStream::exportDocument() throw()
     PushStream( CreateOutputStream( workbook, workbook,
                                     Reference <XOutputStream>(),
                                     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml",
-                                    "http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" ) );
+                                    "http:
 
-    // destruct at the end of the block
+    
     {
         ExcDocument aDocRoot( aRoot );
         if (xStatusIndicator.is())

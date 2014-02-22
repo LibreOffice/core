@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/textrun.hxx"
@@ -63,7 +63,7 @@ sal_Int32 TextRun::insertAt(
         if ( aTextCharacterProps.moHeight.has() )
             nCharHeight = aTextCharacterProps.moHeight.get();
         else
-            // UNO API has the character height as float, DML has it as int, but in hundreds.
+            
             aTextCharacterProps.moHeight = static_cast<sal_Int32>(nDefaultCharHeight * 100);
         aTextCharacterProps.pushToPropSet( aPropSet, rFilterBase );
 
@@ -82,7 +82,7 @@ sal_Int32 TextRun::insertAt(
                 if ( !aTextCharacterProps.maSymbolFont.getFontData( aSymbolFontName, nSymbolFontPitch, nSymbolFontFamily, rFilterBase ) )
                     xText->insertString( xStart, getText(), sal_False );
                 else if ( !getText().isEmpty() )
-                {   // !!#i113673<<<
+                {   
                     sal_Int16 nLatinFontPitch = 0, nLatinFontFamily = 0;
                     aTextCharacterProps.maLatinFont.getFontData( aLatinFontName, nLatinFontPitch, nLatinFontFamily, rFilterBase );
 

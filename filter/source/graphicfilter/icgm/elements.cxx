@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "elements.hxx"
 
-// ---------------------------------------------------------------
+
 
 
 CGMElements::CGMElements( CGM& rCGM ) :
@@ -29,7 +29,7 @@ CGMElements::CGMElements( CGM& rCGM ) :
     Init();
 };
 
-// ---------------------------------------------------------------
+
 
 CGMElements::~CGMElements()
 {
@@ -40,7 +40,7 @@ CGMElements::~CGMElements()
     DeleteAllBundles( aFillList );
 }
 
-// ---------------------------------------------------------------
+
 
 CGMElements& CGMElements::operator=( CGMElements& rSource )
 {
@@ -76,7 +76,7 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
     nColorMaximumIndex = rSource.nColorMaximumIndex;
     nLatestColorMaximumIndex = rSource.nLatestColorMaximumIndex;
 
-    for ( nIndex = 1; nIndex < 256; nIndex++ )      // do not overwrite the background color
+    for ( nIndex = 1; nIndex < 256; nIndex++ )      
     {
         aColorTableEntryIs[ nIndex ] = rSource.aColorTableEntryIs[ nIndex ];
         aColorTable[ nIndex ] = rSource.aColorTable[ nIndex ];
@@ -139,7 +139,7 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
     return (*this);
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMElements::Init()
 {
@@ -149,16 +149,16 @@ void CGMElements::Init()
     nColorIndexPrecision = 1;
     nColorPrecision = 1;
     nVDCIntegerPrecision = 2;
-    eRealPrecision = eVDCRealPrecision = RP_FIXED;      //RP_FLOAT;
+    eRealPrecision = eVDCRealPrecision = RP_FIXED;      
 
     nMetaFileVersion = 1;
     eScalingMode = SM_ABSTRACT;
     eVDCType = VDC_INTEGER;
     aVDCExtent.Left = aVDCExtent.Bottom = 0;
-//  aVDCExtent.Right = aVDCExtent.Top = 32767;
+
     aVDCExtent.Right = aVDCExtent.Top = 1.0;
     aVDCExtentMaximum.Left = aVDCExtentMaximum.Bottom = 0;
-//  aVDCExtentMaximum.Right = aVDCExtentMaximum.Top = 32767;
+
     aVDCExtentMaximum.Right = aVDCExtentMaximum.Top = 1.0;
 
     eDeviceViewPortMode = DVPM_FRACTION;
@@ -188,36 +188,36 @@ void CGMElements::Init()
     nColorValueExtent[ 0 ] = nColorValueExtent[ 1 ] = nColorValueExtent[ 2 ] = 0;
     nColorValueExtent[ 3 ] = nColorValueExtent[ 4 ] = nColorValueExtent[ 5 ] = 255;
 
-    nAspectSourceFlags = 0;     // all flags are individual
+    nAspectSourceFlags = 0;     
 
-    eLineWidthSpecMode = SM_SCALED;         // line parameter
+    eLineWidthSpecMode = SM_SCALED;         
     eLineCapType = LCT_NONE;
     eLineJoinType = LJT_NONE;
-    pLineBundle = &aLineBundle;                 // line bundle parameter
+    pLineBundle = &aLineBundle;                 
     aLineBundle.SetIndex( 1 );
     aLineBundle.eLineType = LT_SOLID;
     aLineBundle.nLineWidth = 1;
     aLineBundle.SetColor( 0xffffff );
     InsertBundle( aLineList, aLineBundle );
 
-    eMarkerSizeSpecMode = SM_SCALED;            // marker parameter
-    pMarkerBundle = &aMarkerBundle;             // marker bundle parameter
+    eMarkerSizeSpecMode = SM_SCALED;            
+    pMarkerBundle = &aMarkerBundle;             
     aMarkerBundle.SetIndex( 1 );
     aMarkerBundle.eMarkerType = MT_STAR;
     aMarkerBundle.nMarkerSize = 1;
     aMarkerBundle.SetColor( 0xffffff );
     InsertBundle( aMarkerList, aMarkerBundle );
 
-    eEdgeVisibility = EV_OFF;                   // edge parameter
+    eEdgeVisibility = EV_OFF;                   
     eEdgeWidthSpecMode = SM_SCALED;
-    pEdgeBundle = &aEdgeBundle;                 // edge bundle parameter
+    pEdgeBundle = &aEdgeBundle;                 
     aEdgeBundle.SetIndex( 1 );
     aEdgeBundle.eEdgeType = ET_SOLID;
     aEdgeBundle.nEdgeWidth = 1;
     aEdgeBundle.SetColor( 0xffffff );
     InsertBundle( aEdgeList, aEdgeBundle );
 
-    nCharacterHeight = 327;                     // text parameter
+    nCharacterHeight = 327;                     
     nCharacterOrientation[0] = 0;
     nCharacterOrientation[1] = 1;
     nCharacterOrientation[2] = 1;
@@ -229,7 +229,7 @@ void CGMElements::Init()
     eTextAlignmentV = TAV_NORMAL;
     nCharacterSetIndex = nAlternateCharacterSetIndex = 1;
     eCharacterCodingA = CCA_BASIC_7;
-    pTextBundle = &aTextBundle;                 // text bundle parameter
+    pTextBundle = &aTextBundle;                 
     aTextBundle.SetIndex( 1 );
     aTextBundle.nTextFontIndex = 1;
     aTextBundle.eTextPrecision = TPR_STRING;
@@ -238,7 +238,7 @@ void CGMElements::Init()
     aTextBundle.SetColor( 0xffffff );
     InsertBundle( aTextList, aTextBundle );
 
-    pFillBundle = &aFillBundle;                 // fill bundle parameter
+    pFillBundle = &aFillBundle;                 
     aFillBundle.SetIndex( 1 );
     aFillBundle.eFillInteriorStyle = FIS_HOLLOW;
     aFillBundle.nFillHatchIndex = 1;
@@ -283,7 +283,7 @@ void CGMElements::Init()
     bSegmentCount = sal_False;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, long nAngle )
 {
@@ -293,7 +293,7 @@ void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, l
     rEntry.HatchAngle = nAngle;
 }
 
-// ---------------------------------------------------------------
+
 
 void CGMElements::DeleteAllBundles( BundleList& rList )
 {
@@ -304,7 +304,7 @@ void CGMElements::DeleteAllBundles( BundleList& rList )
 };
 
 
-// ---------------------------------------------------------------
+
 
 void CGMElements::CopyAllBundles( BundleList& rSource, BundleList& rDest )
 {
@@ -318,7 +318,7 @@ void CGMElements::CopyAllBundles( BundleList& rSource, BundleList& rDest )
     }
 };
 
-// ---------------------------------------------------------------
+
 
 Bundle* CGMElements::GetBundleIndex( long nIndex, BundleList& rList, Bundle& rBundle )
 {
@@ -329,7 +329,7 @@ Bundle* CGMElements::GetBundleIndex( long nIndex, BundleList& rList, Bundle& rBu
     return pBundle;
 }
 
-// ---------------------------------------------------------------
+
 
 Bundle* CGMElements::GetBundle( BundleList& rList, long nIndex )
 {
@@ -341,7 +341,7 @@ Bundle* CGMElements::GetBundle( BundleList& rList, long nIndex )
     return NULL;
 }
 
-// ---------------------------------------------------------------
+
 
 Bundle* CGMElements::InsertBundle( BundleList& rList, Bundle& rBundle )
 {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,16 +34,16 @@
 #include <doctxm.hxx>
 #include <ftnidx.hxx>
 #include <editsh.hxx>
-/// OD 04.10.2002 #102894#
-/// class Calc needed for calculation of the hidden condition of a section.
+
+
 #include <calc.hxx>
 
 
 static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 {
-    // save attributes of the format (columns, color, ...)
-    // Cntnt and Protect items are not interesting since they are already
-    // stored in Section, thus delete them.
+    
+    
+    
     SfxItemSet* pAttr = 0;
     if( rSect.GetFmt() )
     {
@@ -64,7 +64,7 @@ static SfxItemSet* lcl_GetAttrSet( const SwSection& rSect )
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 SwUndoInsSection::SwUndoInsSection(
         SwPaM const& rPam, SwSectionData const& rNewData,
@@ -124,18 +124,18 @@ void SwUndoInsSection::UndoImpl(::sw::UndoRedoContext & rContext)
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         rDoc.DeleteRedline( *pNd, true, USHRT_MAX );
 
-    // no selection?
+    
     SwNodeIndex aIdx( *pNd );
     if( ( !nEndNode && COMPLETE_STRING == nEndCntnt ) ||
         ( nSttNode == nEndNode && nSttCntnt == nEndCntnt ))
-        // delete simply all nodes
+        
         rDoc.GetNodes().Delete( aIdx, pNd->EndOfSectionIndex() -
                                         aIdx.GetIndex() );
     else
-        // just delete format, rest happens automatically
+        
         rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 
-    // do we need to consolidate?
+    
     if (m_bSplitAtStart)
     {
         Join( rDoc, nSttNode );
@@ -201,12 +201,12 @@ void SwUndoInsSection::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pUpdateTOX )
     {
-        // initiate formatting
+        
         SwEditShell* pESh = rDoc.GetEditShell();
         if( pESh )
             pESh->CalcLayout();
 
-        // insert page numbers
+        
         ((SwTOXBaseSection*)pUpdateTOX)->UpdatePageNum();
     }
 }
@@ -271,15 +271,15 @@ SwUndoInsSection::SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 class SwUndoDelSection
     : public SwUndo
 {
 private:
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    ::std::auto_ptr<SwSectionData> const m_pSectionData; /// section not TOX
-    ::std::auto_ptr<SwTOXBase> const m_pTOXBase; /// set iff section is TOX
+    ::std::auto_ptr<SwSectionData> const m_pSectionData; 
+    ::std::auto_ptr<SwTOXBase> const m_pTOXBase; 
     ::std::auto_ptr<SfxItemSet> const m_pAttrSet;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     ::boost::shared_ptr< ::sfx2::MetadatableUndo > const m_pMetadataUndo;
@@ -340,8 +340,8 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
             pFmt->SetFmtAttr( *m_pAttrSet );
         }
 
-        /// OD 04.10.2002 #102894#
-        /// remember inserted section node for further calculations
+        
+        
         SwSectionNode* pInsertedSectNd = rDoc.GetNodes().InsertTextSection(
                 aStt, *pFmt, *m_pSectionData, 0, & aEnd);
 
@@ -351,14 +351,14 @@ void SwUndoDelSection::UndoImpl(::sw::UndoRedoContext & rContext)
             rDoc.GetFtnIdxs().UpdateFtn( aStt );
         }
 
-        /// OD 04.10.2002 #102894#
-        /// consider that section is hidden by condition.
-        /// If section is hidden by condition,
-        /// recalculate condition and update hidden condition flag.
-        /// Recalculation is necessary, because fields, on which the hide
-        /// condition depends, can be changed - fields changes aren't undoable.
-        /// NOTE: setting hidden condition flag also creates/deletes corresponding
-        ///     frames, if the hidden condition flag changes.
+        
+        
+        
+        
+        
+        
+        
+        
         SwSection& aInsertedSect = pInsertedSectNd->GetSection();
         if ( aInsertedSect.IsHidden() &&
              !aInsertedSect.GetCondition().isEmpty() )
@@ -381,12 +381,12 @@ void SwUndoDelSection::RedoImpl(::sw::UndoRedoContext & rContext)
     SwSectionNode *const pNd =
         rDoc.GetNodes()[ m_nStartNode ]->GetSectionNode();
     OSL_ENSURE( pNd, "Where is my SectionNode?" );
-    // just delete format, rest happens automatically
+    
     rDoc.DelSectionFmt( pNd->GetSection().GetFmt() );
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+
 
 class SwUndoUpdateSection
     : public SwUndo
@@ -444,7 +444,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     SfxItemSet* pCur = ::lcl_GetAttrSet( rNdSect );
     if (m_pAttrSet.get())
     {
-        // The Content and Protect items must persist
+        
         const SfxPoolItem* pItem;
         m_pAttrSet->Put( pFmt->GetFmtAttr( RES_CNTNT ));
         if( SFX_ITEM_SET == pFmt->GetItemState( RES_PROTECT, sal_True, &pItem ))
@@ -457,7 +457,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
     }
     else
     {
-        // than the old ones need to be deleted
+        
         pFmt->ResetFmtAttr( RES_FRMATR_BEGIN, RES_BREAK );
         pFmt->ResetFmtAttr( RES_HEADER, RES_OPAQUE );
         pFmt->ResetFmtAttr( RES_SURROUND, RES_FRMATR_END-1 );
@@ -472,7 +472,7 @@ void SwUndoUpdateSection::UndoImpl(::sw::UndoRedoContext & rContext)
                 &&  (m_pSectionData->GetLinkFileName() !=
                         rNdSect.GetLinkFileName()));
 
-        // swap stored section data with live section data
+        
         SwSectionData *const pOld( new SwSectionData(rNdSect) );
         rNdSect.SetSectionData(*m_pSectionData);
         m_pSectionData.reset(pOld);

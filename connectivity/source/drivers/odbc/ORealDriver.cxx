@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ORealDriver.hxx"
@@ -27,7 +27,7 @@ namespace connectivity
 {
     sal_Bool LoadFunctions(oslModule pODBCso);
     sal_Bool LoadLibrary_ODBC3(OUString &_rPath);
-    // extern declaration of the function pointer
+    
     extern T3SQLAllocHandle pODBC3SQLAllocHandle;
     extern T3SQLConnect pODBC3SQLConnect;
     extern T3SQLDriverConnect pODBC3SQLDriverConnect;
@@ -43,17 +43,17 @@ namespace connectivity
     extern T3SQLGetEnvAttr pODBC3SQLGetEnvAttr;
     extern T3SQLSetStmtAttr pODBC3SQLSetStmtAttr;
     extern T3SQLGetStmtAttr pODBC3SQLGetStmtAttr;
-    //extern T3SQLSetDescField pODBC3SQLSetDescField;
-    //extern T3SQLGetDescField pODBC3SQLGetDescField;
-    //extern T3SQLGetDescRec pODBC3SQLGetDescRec;
-    //extern T3SQLSetDescRec pODBC3SQLSetDescRec;
+    
+    
+    
+    
     extern T3SQLPrepare pODBC3SQLPrepare;
     extern T3SQLBindParameter pODBC3SQLBindParameter;
-    //extern T3SQLGetCursorName pODBC3SQLGetCursorName;
+    
     extern T3SQLSetCursorName pODBC3SQLSetCursorName;
     extern T3SQLExecute pODBC3SQLExecute;
     extern T3SQLExecDirect pODBC3SQLExecDirect;
-    //extern T3SQLNativeSql pODBC3SQLNativeSql;
+    
     extern T3SQLDescribeParam pODBC3SQLDescribeParam;
     extern T3SQLNumParams pODBC3SQLNumParams;
     extern T3SQLParamData pODBC3SQLParamData;
@@ -69,7 +69,7 @@ namespace connectivity
     extern T3SQLSetPos pODBC3SQLSetPos;
     extern T3SQLBulkOperations pODBC3SQLBulkOperations;
     extern T3SQLMoreResults pODBC3SQLMoreResults;
-    //extern T3SQLGetDiagField pODBC3SQLGetDiagField;
+    
     extern T3SQLGetDiagRec pODBC3SQLGetDiagRec;
     extern T3SQLColumnPrivileges pODBC3SQLColumnPrivileges;
     extern T3SQLColumns pODBC3SQLColumns;
@@ -102,7 +102,7 @@ namespace connectivity
             ORealObdcDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) : ODBCDriver(_rxFactory) {}
         };
 
-        //------------------------------------------------------------------
+        
 oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
 {
     oslGenericFunction pFunction = NULL;
@@ -324,35 +324,35 @@ oslGenericFunction ORealObdcDriver::getOdbcFunction(sal_Int32 _nIndex) const
     return pFunction;
 }
 
-//------------------------------------------------------------------
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL ODBCDriver_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
     return *(new ORealObdcDriver(_rxFactory));
 }
-// -----------------------------------------------------------------------------
-// ODBC Environment (common for all Connections):
+
+
 SQLHANDLE ORealObdcDriver::EnvironmentHandle(OUString &_rPath)
 {
-    // Is (for this instance) already a Enviroment made?
+    
     if (!m_pDriverHandle)
     {
         SQLHANDLE h = SQL_NULL_HANDLE;
-        // allocate Environment
+        
 
-        // load ODBC-DLL now:
+        
         if (!LoadLibrary_ODBC3(_rPath) || N3SQLAllocHandle(SQL_HANDLE_ENV,SQL_NULL_HANDLE,&h) != SQL_SUCCESS)
             return SQL_NULL_HANDLE;
 
-        // Save in global Structure
+        
         m_pDriverHandle = h;
         SQLRETURN nError = N3SQLSetEnvAttr(h, SQL_ATTR_ODBC_VERSION,(SQLPOINTER) SQL_OV_ODBC3, SQL_IS_UINTEGER);
         OSL_UNUSED( nError );
-        //N3SQLSetEnvAttr(h, SQL_ATTR_CONNECTION_POOLING,(SQLPOINTER) SQL_CP_ONE_PER_HENV, SQL_IS_INTEGER);
+        
     }
 
     return m_pDriverHandle;
 }
-// -----------------------------------------------------------------------------
+
 
     }
 }

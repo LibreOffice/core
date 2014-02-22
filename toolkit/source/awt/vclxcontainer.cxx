@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <toolkit/awt/vclxcontainer.hxx>
@@ -29,9 +29,9 @@
 #include "toolkit/awt/scrollabledialog.hxx"
 #include <toolkit/helper/property.hxx>
 
-//  ----------------------------------------------------
-//  class VCLXContainer
-//  ----------------------------------------------------
+
+
+
 
 void VCLXContainer::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 {
@@ -46,7 +46,7 @@ VCLXContainer::~VCLXContainer()
 {
 }
 
-// ::com::sun::star::uno::XInterface
+
 ::com::sun::star::uno::Any VCLXContainer::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
@@ -55,7 +55,7 @@ VCLXContainer::~VCLXContainer()
     return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
 }
 
-// ::com::sun::star::lang::XTypeProvider
+
 IMPL_XTYPEPROVIDER_START( VCLXContainer )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainer>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerPeer>* ) NULL ),
@@ -63,7 +63,7 @@ IMPL_XTYPEPROVIDER_START( VCLXContainer )
 IMPL_XTYPEPROVIDER_END
 
 
-// ::com::sun::star::awt::XVclContainer
+
 void VCLXContainer::addVclContainerListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XVclContainerListener >& rxListener ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -82,7 +82,7 @@ void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Ref
 {
     SolarMutexGuard aGuard;
 
-    // Request container interface from all children
+    
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > > aSeq;
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -105,7 +105,7 @@ void VCLXContainer::removeVclContainerListener( const ::com::sun::star::uno::Ref
 }
 
 
-// ::com::sun::star::awt::XVclContainerPeer
+
 void VCLXContainer::enableDialogControl( sal_Bool bEnable ) throw(::com::sun::star::uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
@@ -134,13 +134,13 @@ void VCLXContainer::setTabOrder( const ::com::sun::star::uno::Sequence< ::com::s
     Window* pPrevWin = NULL;
     for ( sal_uInt32 n = 0; n < nCount; n++ )
     {
-        // ::com::sun::star::style::TabStop
+        
         Window* pWin = VCLUnoHelper::GetWindow( pComps[n] );
-        // May be NULL if a ::com::sun::star::uno::Sequence is originated from TabController and is missing a peer!
+        
         if ( pWin )
         {
-            // Order windows before manipulating their style, because elements such as the
-            // RadioButton considers the PREV-window in StateChanged.
+            
+            
             if ( pPrevWin )
                 pWin->SetZOrder( pPrevWin, WINDOW_ZORDER_BEHIND );
 
@@ -182,20 +182,20 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
         if ( pWin )
         {
             Window* pSortBehind = pPrevWin;
-            // #57096# Sort all radios consecutively
+            
             sal_Bool bNewPrevWin = sal_True;
             if ( pWin->GetType() == WINDOW_RADIOBUTTON )
             {
                 if ( pPrevRadio )
                 {
-                    // This RadioButton was sorted before PrevWin
+                    
                     bNewPrevWin = ( pPrevWin == pPrevRadio );
                     pSortBehind = pPrevRadio;
                 }
                 pPrevRadio = pWin;
             }
 
-            // Z-Order
+            
             if ( pSortBehind )
                 pWin->SetZOrder( pSortBehind, WINDOW_ZORDER_BEHIND );
 
@@ -206,7 +206,7 @@ void VCLXContainer::setGroup( const ::com::sun::star::uno::Sequence< ::com::sun:
                 nStyle &= (~WB_GROUP);
             pWin->SetStyle( nStyle );
 
-            // Add WB_GROUP after the last group
+            
             if ( n == ( nCount - 1 ) )
             {
                 Window* pBehindLast = pWin->GetWindow( WINDOW_NEXT );
@@ -250,8 +250,8 @@ throw(::com::sun::star::uno::RuntimeException)
                 OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
                 if ( !pDev )
                     pDev = pWindow->GetParent();
-                // shouldn't happen but it appears pDev can be NULL
-                // #FIXME ( find out how/why )
+                
+                
                 if ( !pDev )
                     break;
 

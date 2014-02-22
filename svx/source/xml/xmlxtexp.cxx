@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/urlobj.hxx>
@@ -142,9 +142,9 @@ private:
     XMLImageStyle maImageStyle;
 };
 
-///////////////////////////////////////////////////////////////////////
 
-// #110680#
+
+
 SvxXMLXTableExportComponent::SvxXMLXTableExportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
     const OUString& rFileName,
@@ -183,7 +183,7 @@ static void initializeStreamMetadata( const uno::Reference< uno::XInterface > &x
             OUString( "MediaType" ),
             uno::makeAny( OUString( "text/xml" ) ) );
 
-        // use stock encryption
+        
         xProps->setPropertyValue(
             OUString( "UseCommonStoragePasswordEncryption" ),
             uno::makeAny( sal_True ) );
@@ -218,7 +218,7 @@ bool SvxXMLXTableExportComponent::save(
     sal_Int32 eCreate = embed::ElementModes::WRITE | embed::ElementModes::TRUNCATE;
 
     INetURLObject aURLObj( rURL );
-    bool bToStorage = aURLObj.GetProtocol() == INET_PROT_NOT_VALID; // a relative path
+    bool bToStorage = aURLObj.GetProtocol() == INET_PROT_NOT_VALID; 
 
     bool bSaveAsStorage = xTable->getElementType() == ::getCppuType((const OUString*)0);
 
@@ -239,7 +239,7 @@ bool SvxXMLXTableExportComponent::save(
         uno::Reference<xml::sax::XDocumentHandler> xHandler( xWriter, uno::UNO_QUERY );
 
         if( !bToStorage || !xStorage.is() )
-        { // local URL -> SfxMedium route
+        { 
             if( bSaveAsStorage )
                 xSubStorage = ::comphelper::OStorageHelper::GetStorageFromURL( rURL, eCreate );
             else
@@ -257,7 +257,7 @@ bool SvxXMLXTableExportComponent::save(
                 xOut = new utl::OOutputStreamWrapper( *pStream );
             }
         }
-        else // save into the xSubStorage
+        else 
         {
             OUString aPath = rURL;
 
@@ -298,7 +298,7 @@ bool SvxXMLXTableExportComponent::save(
         if( pGraphicHelper )
             xGrfResolver = pGraphicHelper;
 
-        // Finally do the export
+        
         const OUString aName;
         SvxXMLXTableExportComponent aExporter( xContext, aName, xHandler, xTable, xGrfResolver );
         bRet = aExporter.exportTable();
@@ -341,7 +341,7 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
 
         addChaffWhenEncryptedStorage();
 
-        // export namespaces
+        
         sal_uInt16 nPos = GetNamespaceMap().GetFirstKey();
         while( USHRT_MAX != nPos )
         {
@@ -423,18 +423,18 @@ bool SvxXMLXTableExportComponent::exportTable() throw()
     return bRet;
 }
 
-// methods without content:
+
 void SvxXMLXTableExportComponent::_ExportAutoStyles() {}
 void SvxXMLXTableExportComponent::_ExportMasterStyles() {}
 void SvxXMLXTableExportComponent::_ExportContent() {}
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLTableEntryExporter::~SvxXMLTableEntryExporter()
 {
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLColorEntryExporter::SvxXMLColorEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport )
@@ -459,7 +459,7 @@ void SvxXMLColorEntryExporter::exportEntry( const OUString& rStrName, const Any&
     SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, XML_COLOR, sal_True, sal_True );
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLLineEndEntryExporter::SvxXMLLineEndEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport ), maMarkerStyle( rExport )
@@ -475,7 +475,7 @@ void SvxXMLLineEndEntryExporter::exportEntry( const OUString& rStrName, const An
     maMarkerStyle.exportXML( rStrName, rValue );
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLDashEntryExporter::SvxXMLDashEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport ), maDashStyle( rExport )
@@ -491,7 +491,7 @@ void SvxXMLDashEntryExporter::exportEntry( const OUString& rStrName, const Any& 
     maDashStyle.exportXML( rStrName, rValue );
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLHatchEntryExporter::SvxXMLHatchEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport ), maHatchStyle( rExport )
@@ -507,7 +507,7 @@ void SvxXMLHatchEntryExporter::exportEntry( const OUString& rStrName, const Any&
     maHatchStyle.exportXML( rStrName, rValue );
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLGradientEntryExporter::SvxXMLGradientEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport ), maGradientStyle( rExport )
@@ -523,7 +523,7 @@ void SvxXMLGradientEntryExporter::exportEntry( const OUString& rStrName, const A
     maGradientStyle.exportXML( rStrName, rValue );
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLBitmapEntryExporter::SvxXMLBitmapEntryExporter( SvXMLExport& rExport )
 : SvxXMLTableEntryExporter( rExport )

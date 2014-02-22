@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/edit.hxx>
@@ -61,7 +61,7 @@ private:
     SwTableAutoFmt          aCurData;
     VirtualDevice           aVD;
     SvtScriptedTextHelper   aScriptedText;
-    svx::frame::Array       maArray;            /// Implementation to draw the frame borders.
+    svx::frame::Array       maArray;            
     sal_Bool                    bFitWidth;
     bool                    mbRTL;
     Size                    aPrvSize;
@@ -109,7 +109,7 @@ public:
     OUString GetInputString() const;
 
 private:
-    Edit*           m_pEdInput;   // Edit obtains the focus.
+    Edit*           m_pEdInput;   
 };
 
 
@@ -134,7 +134,7 @@ SwStringInputDlg::~SwStringInputDlg()
 {
 }
 
-// AutoFormat-Dialogue:
+
 
 SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
                     sal_Bool bSetAutoFormat, const SwTableAutoFmt* pSelFmt )
@@ -201,7 +201,7 @@ void SwAutoFormatDlg::Init( const SwTableAutoFmt* pSelFmt )
     nIndex = 0;
     if( !bSetAutoFmt )
     {
-        // Then the list to be expanded by the entry "- none -".
+        
         m_pLbFormat->InsertEntry( SwViewShell::GetShellRes()->aStrNone );
         nDfltStylePos = 1;
         nIndex = 255;
@@ -252,7 +252,7 @@ void SwAutoFormatDlg::FillAutoFmtOfIndex( SwTableAutoFmt*& rToFill ) const
 }
 
 
-// Handler:
+
 
 IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 {
@@ -307,12 +307,12 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
 
                 if( n >= pTableTbl->size() )
                 {
-                    // Format with the name does not already exist, so take up.
+                    
                     SwTableAutoFmt* pNewData = new
                                         SwTableAutoFmt( aFormatName );
                     pShell->GetTableAutoFmt( *pNewData );
 
-                    // Insert sorted!!
+                    
                     for( n = 1; n < pTableTbl->size(); ++n )
                         if( (*pTableTbl)[ n ].GetName() > aFormatName )
                             break;
@@ -406,13 +406,13 @@ IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
 
                 if( n >= pTableTbl->size() )
                 {
-                    // no format with this name exists, so rename it
+                    
                     m_pLbFormat->RemoveEntry( nDfltStylePos + nIndex );
                     SwTableAutoFmt* p = pTableTbl->ReleaseAutoFmt( nIndex );
 
                     p->SetName( aFormatName );
 
-                    // keep all arrays sorted!
+                    
                     for( n = 1; n < pTableTbl->size(); ++n )
                         if ((*pTableTbl)[n].GetName() > aFormatName)
                         {
@@ -491,7 +491,7 @@ IMPL_LINK_NOARG_INLINE_START(SwAutoFormatDlg, OkHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 
-// AutoFmtPreview
+
 
 AutoFmtPreview::AutoFmtPreview(Window* pParent) :
         Window          ( pParent ),
@@ -532,7 +532,7 @@ void AutoFmtPreview::Resize()
 
 void AutoFmtPreview::DetectRTL(SwWrtShell* pWrtShell)
 {
-    if (!pWrtShell->IsCrsrInTbl()) // We haven't created the table yet
+    if (!pWrtShell->IsCrsrInTbl()) 
         mbRTL = Application::GetSettings().GetLayoutRTL();
     else
         mbRTL = pWrtShell->IsTableRightToLeft();
@@ -604,7 +604,7 @@ const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 
 void AutoFmtPreview::DrawString( size_t nCol, size_t nRow )
 {
-    // Output of the cell text:
+    
     sal_uLong   nNum;
     double  nVal;
     OUString cellString;
@@ -690,9 +690,9 @@ MAKENUMSTR:
         if( aCurData.IsFont() &&
             theMaxStrSize.Height() < aStrSize.Height() )
         {
-                // If the string in this font does not
-                // fit into the cell, the standard font
-                // is taken again:
+                
+                
+                
                 aScriptedText.SetDefaultFont();
                 aStrSize = aScriptedText.GetTextSize();
         }
@@ -709,10 +709,10 @@ MAKENUMSTR:
                                 - aStrSize.Width()
                                 - FRAME_OFFSET );
 
-        // vertical (always centering):
+        
         aPos.Y() += (nRowHeight - (sal_uInt16)aStrSize.Height()) / 2;
 
-        // horizontal
+        
         if( mbRTL )
             aPos.X() += nRightX;
         else if (aCurData.IsJustify())
@@ -735,15 +735,15 @@ MAKENUMSTR:
         }
         else
         {
-            // Standard align:
+            
             if ( (nCol == 0) || (nIndex == 4) )
             {
-                // Text-Label left or sum left aligned
+                
                 aPos.X() += FRAME_OFFSET;
             }
             else
             {
-                    // numbers/dates right aligned
+                    
                 aPos.X() += nRightX;
             }
         }
@@ -780,14 +780,14 @@ void AutoFmtPreview::DrawBackground()
 
 void AutoFmtPreview::PaintCells()
 {
-    // 1) background
+    
     if ( aCurData.IsBackground() )
         DrawBackground();
 
-    // 2) values
+    
     DrawStrings();
 
-    // 3) border
+    
     if ( aCurData.IsFrame() )
         maArray.DrawArray( aVD );
 }
@@ -838,11 +838,11 @@ void AutoFmtPreview::CalcLineMap()
             lclSetStyleFromBorder( aStyle, rItem.GetBottom() );
             maArray.SetCellStyleBottom( nCol, nRow, aStyle );
 
-// FIXME - uncomment to draw diagonal borders
-//            lclSetStyleFromBorder( aStyle, GetDiagItem( nCol, nRow, true ).GetLine() );
-//            maArray.SetCellStyleTLBR( nCol, nRow, aStyle );
-//            lclSetStyleFromBorder( aStyle, GetDiagItem( nCol, nRow, false ).GetLine() );
-//            maArray.SetCellStyleBLTR( nCol, nRow, aStyle );
+
+
+
+
+
         }
     }
 }
@@ -850,7 +850,7 @@ void AutoFmtPreview::CalcLineMap()
 void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 {
     aCurData  = rNewData;
-    bFitWidth = aCurData.IsJustify();//sal_True;  //???
+    bFitWidth = aCurData.IsJustify();
     CalcCellArray( bFitWidth );
     CalcLineMap();
     DoPaint( Rectangle( Point(0,0), GetSizePixel() ) );
@@ -878,13 +878,13 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
     aVD.SetFillColor     ( rWinColor );
     aVD.SetOutputSizePixel  ( aPrvSize );
 
-    // Draw cells on virtual device
-    // and save the result
+    
+    
     PaintCells();
     thePreview = aVD.GetBitmap( Point(0,0), aPrvSize );
 
-    // Draw the Frame and center the preview:
-    // (virtual Device for window output)
+    
+    
     aVD.SetOutputSizePixel( theWndSize );
     oldColor = aVD.GetLineColor();
     aVD.SetLineColor();
@@ -894,7 +894,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
                          (theWndSize.Height() - aPrvSize.Height()) / 2 );
     aVD.DrawBitmap( aCenterPos, thePreview );
 
-    // Output in the preview window:
+    
     DrawBitmap( Point(0,0), aVD.GetBitmap( Point(0,0), theWndSize ) );
 
     aVD.SetDrawMode( nOldDrawMode );

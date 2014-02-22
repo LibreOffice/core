@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #define USE_CPPUNIT 1
@@ -87,10 +87,10 @@ private:
     bool compareAttributes(xmlNodePtr node1, xmlNodePtr node2);
     bool compareElements(xmlNodePtr node1, xmlNodePtr node2);
 
-    /// Error message for cppunit that prints out when expected and found are not equal.
+    
     void cppunitAssertEqual(const xmlChar *expected, const xmlChar *found);
 
-    /// Error message for cppunit that prints out when expected and found are not equal - for doubles.
+    
     void cppunitAssertEqualDouble(const xmlChar *node, double expected, double found, double delta);
 
     ToleranceContainer toleranceContainer;
@@ -159,7 +159,7 @@ void XMLDiff::loadToleranceFile(xmlDocPtr xmlToleranceFile)
     xmlNodePtr child = NULL;
     for (child = root->children; child != NULL; child = child->next)
     {
-        // assume a valid xml file
+        
         if(child->type != XML_ELEMENT_NODE)
             continue;
 
@@ -215,7 +215,7 @@ bool XMLDiff::compareElements(xmlNode* node1, xmlNode* node2)
         return false;
 #endif
 
-    //compare attributes
+    
     bool sameAttribs = compareAttributes(node1, node2);
 #if USE_CPPUNIT
     CPPUNIT_ASSERT(sameAttribs);
@@ -224,7 +224,7 @@ bool XMLDiff::compareElements(xmlNode* node1, xmlNode* node2)
         return false;
 #endif
 
-    // compare children
+    
     xmlNode* child2 = NULL;
     xmlNode* child1 = NULL;
     for(child1 = node1->children, child2 = node2->children; child1 != NULL && child2 != NULL; child1 = child1->next, child2 = child2->next)
@@ -307,7 +307,7 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
 
         if(!rtl::math::isNan(dVal1) || !rtl::math::isNan(dVal2))
         {
-            //compare by value and respect tolerance
+            
             tolerance tol;
             tol.elementName = xmlStrdup(node1->name);
             tol.attribName = xmlStrdup(attr1->name);
@@ -356,7 +356,7 @@ bool XMLDiff::compareAttributes(xmlNodePtr node1, xmlNodePtr node2)
         xmlFree(val2);
     }
 
-    // unequal number of attributes
+    
 #ifdef CPPUNIT_ASSERT
     CPPUNIT_ASSERT(!attr1);
     CPPUNIT_ASSERT(!attr2);

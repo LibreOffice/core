@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbaautotextentry.hxx"
 #include <vbahelper/vbahelper.hxx>
@@ -41,24 +41,24 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
     if( pWhere )
     {
         uno::Reference< text::XTextRange > xTextRange = pWhere->getXTextRange();
-        xTextRange->setString( OUString("x") ); // set marker
+        xTextRange->setString( OUString("x") ); 
         uno::Reference< text::XTextRange > xEndMarker = xTextRange->getEnd();
-        xEndMarker->setString( OUString("x") ); // set marker
+        xEndMarker->setString( OUString("x") ); 
         uno::Reference< text::XText > xText = pWhere->getXText();
         mxEntry->applyTo( xEndMarker->getStart() );
         uno::Reference< text::XTextCursor > xTC = xText->createTextCursorByRange( xTextRange->getStart() );
         xTC->goRight( 1, sal_True );
-        xTC->setString( OUString("") ); // remove marker
-        // remove the blank paragraph if it is a rich text
+        xTC->setString( OUString("") ); 
+        
         sal_Bool bRich = sal_False;
         _richtext >>= bRich;
         if( bRich )
         {
-            // check if it is a blank paragraph
+            
             uno::Reference< text::XParagraphCursor > xParaCursor( xTC, uno::UNO_QUERY_THROW );
             if( xParaCursor->isStartOfParagraph() && xParaCursor->isEndOfParagraph() )
             {
-                //remove the blank paragraph
+                
                 uno::Reference< frame::XModel > xModel( getCurrentWordDoc( mxContext ), uno::UNO_QUERY_THROW );
                 uno::Reference< text::XTextViewCursor > xTVCursor = word::getXTextViewCursor( xModel );
                 uno::Reference< text::XTextRange > xCurrentRange( xTC->getEnd(), uno::UNO_QUERY_THROW );
@@ -68,7 +68,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
                 xTVCursor->gotoRange( xEndMarker->getEnd(), sal_False );
             }
         }
-        xEndMarker->setString( OUString("") ); // remove marker
+        xEndMarker->setString( OUString("") ); 
         xTC = xText->createTextCursorByRange( xEndMarker->getEnd() );
         pWhere->setXTextCursor( xTC );
     }
@@ -98,7 +98,7 @@ SwVbaAutoTextEntries::SwVbaAutoTextEntries( const uno::Reference< XHelperInterfa
 {
 }
 
-// XEnumerationAccess
+
 uno::Type
 SwVbaAutoTextEntries::getElementType() throw (uno::RuntimeException)
 {

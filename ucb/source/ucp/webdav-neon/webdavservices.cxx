@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -33,7 +33,7 @@
 
 using namespace com::sun::star;
 
-//=========================================================================
+
 extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpdav1_component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
@@ -44,9 +44,9 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpdav1_component_getFactory(
                 pServiceManager ) );
     uno::Reference< lang::XSingleServiceFactory > xFactory;
 
-    //////////////////////////////////////////////////////////////////////
-    // WebDAV Content Provider.
-    //////////////////////////////////////////////////////////////////////
+    
+    
+    
 
     if ( ::webdav_ucp::ContentProvider::getImplementationName_Static().
                 equalsAscii( pImplName ) )
@@ -54,7 +54,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL ucpdav1_component_getFactory(
         xFactory = ::webdav_ucp::ContentProvider::createServiceFactory( xSMgr );
     }
 
-    //////////////////////////////////////////////////////////////////////
+    
 
     if ( xFactory.is() )
     {

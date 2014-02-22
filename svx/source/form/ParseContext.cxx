@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,11 +32,11 @@
 
 using namespace svxform;
 using namespace ::connectivity;
-//==========================================================================
-//= OSystemParseContext
-//==========================================================================
+
+
+
 DBG_NAME(OSystemParseContext)
-//-----------------------------------------------------------------------------
+
 OSystemParseContext::OSystemParseContext() : IParseContext()
 {
     DBG_CTOR(OSystemParseContext,NULL);
@@ -46,19 +46,19 @@ OSystemParseContext::OSystemParseContext() : IParseContext()
     aKeywords.get( m_aLocalizedKeywords );
 }
 
-//-----------------------------------------------------------------------------
+
 OSystemParseContext::~OSystemParseContext()
 {
     DBG_DTOR(OSystemParseContext,NULL);
 }
 
-//-----------------------------------------------------------------------------
+
 ::com::sun::star::lang::Locale OSystemParseContext::getPreferredLocale( ) const
 {
     return SvtSysLocale().GetLanguageTag().getLocale();
 }
 
-//-----------------------------------------------------------------------------
+
 OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
 {
     OUString aMsg;
@@ -82,7 +82,7 @@ OUString OSystemParseContext::getErrorMessage(ErrorCode _eCode) const
     return aMsg;
 }
 
-//-----------------------------------------------------------------------------
+
 OString OSystemParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 {
     size_t nIndex = 0;
@@ -125,7 +125,7 @@ OString OSystemParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) con
     return sKeyword;
 }
 
-// -----------------------------------------------------------------------------
+
 IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OString& rToken) const
 {
     static const IParseContext::InternationalKeyCode Intl_TokenID[] =
@@ -151,23 +151,23 @@ IParseContext::InternationalKeyCode OSystemParseContext::getIntlKeyCode(const OS
 }
 
 
-// =============================================================================
-// =============================================================================
+
+
 namespace
 {
-    // -----------------------------------------------------------------------------
+    
     ::osl::Mutex& getSafteyMutex()
     {
         static ::osl::Mutex s_aSafety;
         return s_aSafety;
     }
-    // -----------------------------------------------------------------------------
+    
     oslInterlockedCount& getCounter()
     {
         static oslInterlockedCount s_nCounter;
         return s_nCounter;
     }
-    // -----------------------------------------------------------------------------
+    
     OSystemParseContext* getSharedContext(OSystemParseContext* _pContext = NULL,sal_Bool _bSet = sal_False)
     {
         static OSystemParseContext* s_pSharedContext = NULL;
@@ -184,19 +184,19 @@ namespace
         }
         return s_pSharedContext;
     }
-    // -----------------------------------------------------------------------------
+    
 }
-// -----------------------------------------------------------------------------
+
 OParseContextClient::OParseContextClient()
 {
     ::osl::MutexGuard aGuard( getSafteyMutex() );
     if ( 1 == osl_atomic_increment( &getCounter() ) )
-    {   // first instance
+    {   
         getSharedContext( new OSystemParseContext );
     }
 }
 
-// -----------------------------------------------------------------------------
+
 OParseContextClient::~OParseContextClient()
 {
     {
@@ -205,12 +205,12 @@ OParseContextClient::~OParseContextClient()
             delete getSharedContext(NULL,sal_True);
     }
 }
-// -----------------------------------------------------------------------------
+
 const OSystemParseContext* OParseContextClient::getParseContext() const
 {
     return getSharedContext();
 }
-// -----------------------------------------------------------------------------
+
 
 
 

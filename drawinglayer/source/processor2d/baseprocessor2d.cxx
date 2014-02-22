@@ -50,22 +50,22 @@ namespace drawinglayer
 
                 for(sal_Int32 a(0L); a < nCount; a++)
                 {
-                    // get reference
+                    
                     const primitive2d::Primitive2DReference xReference(rSource[a]);
 
                     if(xReference.is())
                     {
-                        // try to cast to BasePrimitive2D implementation
+                        
                         const primitive2d::BasePrimitive2D* pBasePrimitive = dynamic_cast< const primitive2d::BasePrimitive2D* >(xReference.get());
 
                         if(pBasePrimitive)
                         {
-                            // it is a BasePrimitive2D implementation, use local processor
+                            
                             processBasePrimitive2D(*pBasePrimitive);
                         }
                         else
                         {
-                            // unknown implementation, use UNO API call instead and process recursively
+                            
                             const uno::Sequence< beans::PropertyValue >& rViewParameters(getViewInformation2D().getViewInformationSequence());
                             process(xReference->getDecomposition(rViewParameters));
                         }
@@ -73,7 +73,7 @@ namespace drawinglayer
                 }
             }
         }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

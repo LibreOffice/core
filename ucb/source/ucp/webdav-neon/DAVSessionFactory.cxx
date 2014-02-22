@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -85,9 +85,9 @@ rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
         osl_atomic_decrement( &aIt->second->m_nRefCount );
         aIt->second->m_aContainerIt = m_aMap.end();
 
-        // If URL scheme is different from http or https we definitely
-        // have to use a proxy and therefore can optimize the getProxy
-        // call a little:
+        
+        
+        
         NeonUri aURI( inUri );
 
         aIt->second = new NeonSession( this, inUri, rFlags, *m_xProxyDecider.get() );

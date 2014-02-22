@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstddef>
@@ -60,33 +60,33 @@ struct StringIdPair_Impl
     SvxSwFramePosString::StringId eVert;
 };
 
-#define LB_FRAME                0x00000001L // paragraph text area
-#define LB_PRTAREA              0x00000002L // paragraph text area + indents
-#define LB_VERT_FRAME           0x00000004L // vertical paragraph text area
-#define LB_VERT_PRTAREA         0x00000008L // vertical paragraph text area + indents
-#define LB_REL_FRM_LEFT         0x00000010L // left paragraph margin
-#define LB_REL_FRM_RIGHT        0x00000020L // right paragraph margin
+#define LB_FRAME                0x00000001L 
+#define LB_PRTAREA              0x00000002L 
+#define LB_VERT_FRAME           0x00000004L 
+#define LB_VERT_PRTAREA         0x00000008L 
+#define LB_REL_FRM_LEFT         0x00000010L 
+#define LB_REL_FRM_RIGHT        0x00000020L 
 
-#define LB_REL_PG_LEFT          0x00000040L // left page margin
-#define LB_REL_PG_RIGHT         0x00000080L // right page margin
-#define LB_REL_PG_FRAME         0x00000100L // complete page
-#define LB_REL_PG_PRTAREA       0x00000200L // text area of page
+#define LB_REL_PG_LEFT          0x00000040L 
+#define LB_REL_PG_RIGHT         0x00000080L 
+#define LB_REL_PG_FRAME         0x00000100L 
+#define LB_REL_PG_PRTAREA       0x00000200L 
 
-#define LB_FLY_REL_PG_LEFT      0x00000400L // left frame margin
-#define LB_FLY_REL_PG_RIGHT     0x00000800L // right frame margin
-#define LB_FLY_REL_PG_FRAME     0x00001000L // complete frame
-#define LB_FLY_REL_PG_PRTAREA   0x00002000L // frame interior
+#define LB_FLY_REL_PG_LEFT      0x00000400L 
+#define LB_FLY_REL_PG_RIGHT     0x00000800L 
+#define LB_FLY_REL_PG_FRAME     0x00001000L 
+#define LB_FLY_REL_PG_PRTAREA   0x00002000L 
 
-#define LB_REL_BASE             0x00010000L // as char, relative to baseline
-#define LB_REL_CHAR             0x00020000L // as char, relative to character
-#define LB_REL_ROW              0x00040000L // as char, relative to line
+#define LB_REL_BASE             0x00010000L 
+#define LB_REL_CHAR             0x00020000L 
+#define LB_REL_ROW              0x00040000L 
 
-// #i22305#
-#define LB_FLY_VERT_FRAME       0x00100000L // vertical entire frame
-#define LB_FLY_VERT_PRTAREA     0x00200000L // vertical frame text area
 
-// #i22341#
-#define LB_VERT_LINE            0x00400000L // vertical text line
+#define LB_FLY_VERT_FRAME       0x00100000L 
+#define LB_FLY_VERT_PRTAREA     0x00200000L 
+
+
+#define LB_VERT_LINE            0x00400000L 
 
 static RelationMap aRelationMap[] =
 {
@@ -108,11 +108,11 @@ static RelationMap aRelationMap[] =
     {SwFPos::REL_BORDER,        SwFPos::REL_BORDER,             LB_VERT_FRAME,          RelOrientation::FRAME},
     {SwFPos::REL_PRTAREA,       SwFPos::REL_PRTAREA,            LB_VERT_PRTAREA,        RelOrientation::PRINT_AREA},
 
-    // #i22305#
+    
     {SwFPos::FLY_REL_PG_FRAME,      SwFPos::FLY_REL_PG_FRAME,       LB_FLY_VERT_FRAME,      RelOrientation::FRAME},
     {SwFPos::FLY_REL_PG_PRTAREA,    SwFPos::FLY_REL_PG_PRTAREA,     LB_FLY_VERT_PRTAREA,    RelOrientation::PRINT_AREA},
 
-    // #i22341#
+    
     {SwFPos::REL_LINE,  SwFPos::REL_LINE,   LB_VERT_LINE,   RelOrientation::TEXT_LINE}
 };
 
@@ -179,8 +179,8 @@ static FrmMap aHFlyHtmlMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB_FLY_REL_PG_FRAME}
 };
 
-// #i18732# - own vertical alignment map for to frame anchored objects
-// #i22305#
+
+
 #define VERT_FRAME_REL   (LB_VERT_FRAME|LB_FLY_VERT_PRTAREA)
 
 static FrmMap aVFrameMap[] =
@@ -284,20 +284,20 @@ static FrmMap aHCharHtmlAbsMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB_REL_PG_FRAME}
 };
 
-// #i18732# - allow vertical alignment at page areas
-// #i22341# - handle <LB_REL_CHAR> on its own
+
+
 #define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
                          LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
 static FrmMap aVCharMap[] =
 {
-    // #i22341#
-    // introduce mappings for new vertical alignment at top of line <LB_VERT_LINE>
-    // and correct mapping for vertical alignment at character for position <FROM_BOTTOM>
-    // Note: Because of these adjustments the map becomes ambigous in its values
-    //       <eStrId>/<eMirrorStrId> and <nAlign>. These ambiguities are considered
-    //       in the methods <SwFrmPage::FillRelLB(..)>, <SwFrmPage::GetAlignment(..)>
-    //       and <SwFrmPage::FillPosLB(..)>
+    
+    
+    
+    
+    
+    
+    
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           VERT_CHAR_REL|LB_REL_CHAR},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        VERT_CHAR_REL|LB_REL_CHAR},
     {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR},
@@ -409,7 +409,7 @@ static std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
 static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
             SvxSwFramePosString::StringId eStringId, sal_Bool bVertical, sal_Bool bRTL)
 {
-    //special handling of STR_FROMLEFT
+    
     if(SwFPos::FROMLEFT == eStringId)
     {
         eStringId = bVertical ?
@@ -419,7 +419,7 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
     }
     if(bVertical)
     {
-        //exchange horizontal strings with vertical strings and vice versa
+        
         static const StringIdPair_Impl aHoriIds[] =
         {
             {SwFPos::LEFT,           SwFPos::TOP},
@@ -463,8 +463,8 @@ static SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
     }
     return eStringId;
 }
-// #i22341# - helper method in order to determine all possible
-// listbox relations in a relation map for a given relation
+
+
 static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
 {
     sal_uLong nLBRelations = 0L;
@@ -480,8 +480,8 @@ static sal_uLong lcl_GetLBRelationsForRelations( const sal_uInt16 _nRel )
     return nLBRelations;
 }
 
-// #i22341# - helper method on order to determine all possible
-// listbox relations in a relation map for a given string ID
+
+
 static sal_uLong lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
                                   const SvxSwFramePosString::StringId _eStrId,
                                   const bool _bUseMirrorStr )
@@ -762,7 +762,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
 
     if(!m_bPositioningDisabled)
     {
-        //on multiple selections the positioning is set via SdrView
+        
         if(m_bIsMultiSelection)
         {
             if( m_pHoriByMF->IsValueModified() || m_pVertByMF->IsValueModified() )
@@ -772,7 +772,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 long nVertByPos =
                             static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
 
-                // old rectangle with CoreUnit
+                
                 m_aRect = m_pSdrView->GetAllMarkedRect();
                 m_pSdrView->GetSdrPageView()->LogicToPagePos( m_aRect );
 
@@ -829,8 +829,8 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_pVertLB);
                 short nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertLB, *m_pVertToLB);
                 short nRel = GetRelation(m_pVMap, *m_pVertToLB);
-                // #i34055# - convert vertical position for
-                // as-character anchored objects
+                
+                
                 long nVertByPos =
                         static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
                 if ( GetAnchorType() == TextContentAnchorType_AS_CHARACTER )
@@ -850,10 +850,10 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                 }
             }
 
-            // #i18732#
+            
             if(TriState(m_pFollowCB->IsChecked()) != m_pFollowCB->GetSavedValue())
             {
-                //Writer internal type - based on SfxBoolItem
+                
                 const SfxPoolItem* pItem = GetItem( rOldSet, SID_SW_FOLLOW_TEXT_FLOW);
                 if(pItem)
                 {
@@ -873,7 +873,7 @@ sal_Bool SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
                         (sal_uInt32) nWidth ) );
         rSet.Put( SfxUInt32Item( GetWhich( SID_ATTR_TRANSFORM_HEIGHT ),
                         (sal_uInt32) nHeight ) );
-        //this item is required by SdrEditView::SetGeoAttrToMarked()
+        
         rSet.Put( SfxAllEnumItem( GetWhich( SID_ATTR_TRANSFORM_SIZE_POINT ), RP_LT ) );
 
         bModified = true;
@@ -974,15 +974,15 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
     {
         m_pHoriMirrorCB->Show(false);
         m_pKeepRatioCB->Enable(false);
-        // #i18732# - hide checkbox in HTML mode
+        
         m_pFollowCB->Show(false);
     }
     else
     {
-        // #i18732# correct enable/disable of check box 'Mirror on..'
+        
         m_pHoriMirrorCB->Enable(!m_pAsCharRB->IsChecked() && !m_bIsMultiSelection);
 
-        // #i18732# - enable/disable check box 'Follow text flow'.
+        
         m_pFollowCB->Enable( m_pToParaRB->IsChecked() ||
                                   m_pToCharRB->IsChecked() );
     }
@@ -1040,10 +1040,10 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
 
         m_pVertByMF->SaveValue();
         m_pHoriByMF->SaveValue();
-        // #i18732#
+        
         m_pFollowCB->SaveValue();
 
-        RangeModifyHdl(m_pWidthMF);  // initially set maximum values
+        RangeModifyHdl(m_pWidthMF);  
     }
 }
 
@@ -1114,12 +1114,12 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
     aVal.bAutoHeight = false;
     aVal.bAutoWidth = false;
     aVal.bMirror = m_pHoriMirrorCB->IsChecked();
-    // #i18732#
+    
     aVal.bFollowTextFlow = m_pFollowCB->IsChecked();
 
     if ( m_pHMap )
     {
-        // horizontal alignment
+        
         sal_uInt16 nMapPos = GetMapPos(m_pHMap, *m_pHoriToLB);
         sal_uInt16 nAlign = GetAlignment(m_pHMap, nMapPos, *m_pHoriLB, *m_pHoriToLB);
         sal_uInt16 nRel = GetRelation(m_pHMap, *m_pHoriToLB);
@@ -1132,7 +1132,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
 
     if ( m_pVMap )
     {
-        // vertical alignment
+        
         sal_uInt16 nMapPos = GetMapPos(m_pVMap, *m_pVertLB);
         sal_uInt16 nAlign = GetAlignment(m_pVMap, nMapPos, *m_pVertLB, *m_pVertToLB);
         sal_uInt16 nRel = GetRelation(m_pVMap, *m_pVertToLB);
@@ -1162,7 +1162,7 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, RangeModifyHdl)
     nWidth = aVal.nWidth;
     nHeight = aVal.nHeight;
 
-    // minimum width also for style
+    
     m_pHeightMF->SetMin(m_pHeightMF->Normalize(aVal.nMinHeight), FUNIT_TWIP);
     m_pWidthMF-> SetMin(m_pWidthMF->Normalize(aVal.nMinWidth), FUNIT_TWIP);
 
@@ -1192,8 +1192,8 @@ IMPL_LINK_NOARG(SvxSwPosSizeTabPage, AnchorTypeHdl)
 {
     m_pHoriMirrorCB->Enable(!m_pAsCharRB->IsChecked() && !m_bIsMultiSelection);
 
-    // #i18732# - enable check box 'Follow text flow' for anchor
-    // type to-paragraph' and to-character
+    
+    
     m_pFollowCB->Enable( m_pToParaRB->IsChecked() || m_pToCharRB->IsChecked() );
 
     short nId = GetAnchorType();
@@ -1228,7 +1228,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
     else
         m_bAtVertPosModified = true;
 
-    if(m_bHtmlMode  && TextContentAnchorType_AT_CHARACTER == GetAnchorType()) // again special treatment
+    if(m_bHtmlMode  && TextContentAnchorType_AT_CHARACTER == GetAnchorType()) 
     {
         if(bHori)
         {
@@ -1243,7 +1243,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
             }
         }
     }
-    if (pLB)    // only if the hanlder has been called by a change of the controller
+    if (pLB)    
         RangeModifyHdl(0);
 
     return 0;
@@ -1295,14 +1295,14 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
     else
         m_bAtVertPosModified = true;
 
-    // special treatment for HTML-Mode with horz-vert-dependencies
+    
     if(m_bHtmlMode && TextContentAnchorType_AT_CHARACTER == GetAnchorType())
     {
         sal_Bool bSet = sal_False;
         if(bHori)
         {
-            // on the right only below is allowed - from the left only at the top
-            // from the left at the character -> below
+            
+            
             if((HoriOrientation::LEFT == nAlign || HoriOrientation::RIGHT == nAlign) &&
                     0 == m_pVertLB->GetSelectEntryPos())
             {
@@ -1399,8 +1399,8 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, sal_uInt16 nMapPos, ListBo
 {
     short nAlign = 0;
 
-    // #i22341# - special handling also for map <aVCharMap>,
-    // because it contains ambigous items for alignment
+    
+    
     if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap ||
             pMap == aVCharMap )
     {
@@ -1502,8 +1502,8 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     }
     else if ( nAnchor == TextContentAnchorType_AT_FRAME )
     {
-        // #i18732# - own vertical alignment map for to frame
-        // anchored objects.
+        
+        
         m_pVMap = m_bHtmlMode ? aVFlyHtmlMap : aVFrameMap;
         m_pHMap = m_bHtmlMode ? aHFlyHtmlMap : aHFrameMap;
     }
@@ -1542,30 +1542,30 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     m_pHoriLB->Enable( bEnable );
     m_pHoriFT->Enable( bEnable );
 
-    // select current Pos
-    // horizontal
+    
+    
     if ( nH == USHRT_MAX )
     {
         nH    = m_nOldH;
         nHRel = m_nOldHRel;
     }
-    // #i22341# - pass <nHRel> as 3rd parameter to method <FillPosLB>
+    
     sal_uInt16 nMapPos = FillPosLB(m_pHMap, nH, nHRel, *m_pHoriLB);
     FillRelLB(m_pHMap, nMapPos, nH, nHRel, *m_pHoriToLB, *m_pHoriToFT);
 
-    // vertical
+    
     if ( nV == USHRT_MAX )
     {
         nV    = m_nOldV;
         nVRel = m_nOldVRel;
     }
-    // #i22341# - pass <nVRel> as 3rd parameter to method <FillPosLB>
+    
     nMapPos = FillPosLB(m_pVMap, nV, nVRel, *m_pVertLB);
     FillRelLB(m_pVMap, nMapPos, nV, nVRel, *m_pVertToLB, *m_pVertToFT);
 
-    // Edits init
+    
     bEnable = nH == HoriOrientation::NONE &&
-            nAnchor != TextContentAnchorType_AS_CHARACTER;//#61359# why not in formats&& !bFormat;
+            nAnchor != TextContentAnchorType_AS_CHARACTER;
     if (!bEnable)
     {
         m_pHoriByMF->SetValue( 0, FUNIT_TWIP );
@@ -1636,7 +1636,7 @@ void SvxSwPosSizeTabPage::UpdateExample()
         m_pExampleWN->SetVertRel(nRel);
     }
 
-    // Size
+    
     long nXPos = static_cast<long>(m_pHoriByMF->Denormalize(m_pHoriByMF->GetValue(FUNIT_TWIP)));
     long nYPos = static_cast<long>(m_pVertByMF->Denormalize(m_pVertByMF->GetValue(FUNIT_TWIP)));
     m_pExampleWN->SetRelPos(Point(nXPos, nYPos));
@@ -1695,7 +1695,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                     for (sal_uInt16 i = 0; i < rLB.GetEntryCount(); i++)
                     {
                         RelationMap *pEntry = (RelationMap *)rLB.GetEntryData(i);
-                        if (pEntry->nLBRelation == LB_REL_CHAR) // Default
+                        if (pEntry->nLBRelation == LB_REL_CHAR) 
                         {
                             rLB.SelectEntryPos(i);
                             break;
@@ -1708,8 +1708,8 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
         {
             sal_uInt16 nRelCount = SAL_N_ELEMENTS(aRelationMap);
 
-            // #i22341# - special handling for map <aVCharMap>,
-            // because its ambigous in its <eStrId>/<eMirrorStrId>.
+            
+            
             if ( pMap == aVCharMap )
             {
                 nLBRelations = ::lcl_GetLBRelationsForStrID( pMap,
@@ -1746,7 +1746,7 @@ sal_uLong SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, sal_uInt16 nMapPos, sal_u
                 rLB.SelectEntry(sSelEntry);
             else
             {
-                // Probably anchor change. So look for a similar relation.
+                
                 switch (nRel)
                 {
                     case RelOrientation::FRAME:           nRel = RelOrientation::PAGE_FRAME;    break;
@@ -1801,29 +1801,29 @@ sal_uInt16 SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
 
     _rLB.Clear();
 
-    // #i22341# - determine all possible listbox relations for
-    // given relation for map <aVCharMap>
+    
+    
     const sal_uLong nLBRelations = (_pMap != aVCharMap)
                                ? 0L
                                : ::lcl_GetLBRelationsForRelations( _nRel );
 
-    // fill listbox
+    
     std::size_t nCount = ::lcl_GetFrmMapCount(_pMap);
     for (std::size_t i = 0; _pMap && i < nCount; ++i)
     {
-//      #61359# why not from the left/from inside or from the top?
-//      if (!bFormat || (pMap[i].eStrId != SwFPos::FROMLEFT && pMap[i].eStrId != SwFPos::FROMTOP))
+
+
         {
             SvxSwFramePosString::StringId eStrId = m_pHoriMirrorCB->IsChecked() ? _pMap[i].eMirrorStrId : _pMap[i].eStrId;
             eStrId = lcl_ChangeResIdToVerticalOrRTL(eStrId, m_bIsVerticalFrame, m_bIsInRightToLeft);
             OUString sEntry(m_aFramePosString.GetString(eStrId));
             if (_rLB.GetEntryPos(sEntry) == LISTBOX_ENTRY_NOTFOUND)
             {
-                // don't insert duplicate entries at character wrapped borders
+                
                 _rLB.InsertEntry(sEntry);
             }
-            // #i22341# - add condition to handle map <aVCharMap>
-            // that is ambigous in the alignment.
+            
+            
             if ( _pMap[i].nAlign == _nAlign &&
                  ( !(_pMap == aVCharMap) || _pMap[i].nLBRelations & nLBRelations ) )
             {
@@ -1853,28 +1853,28 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
         return;
     }
 
-    // setting of the rectangle and the working area
+    
     m_aRect = m_pSdrView->GetAllMarkedRect();
     m_pSdrView->GetSdrPageView()->LogicToPagePos( m_aRect );
 
-    // get WorkArea
+    
     m_aWorkArea = m_pSdrView->GetWorkArea();
 
-    // consider anchor position (for Writer)
+    
     const SdrMarkList& rMarkList = m_pSdrView->GetMarkedObjectList();
     if( rMarkList.GetMarkCount() >= 1 )
     {
         const SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
         m_aAnchorPos = pObj->GetAnchorPos();
 
-        if( m_aAnchorPos != Point(0,0) ) // -> Writer
+        if( m_aAnchorPos != Point(0,0) ) 
         {
             for( sal_uInt16 i = 1; i < rMarkList.GetMarkCount(); i++ )
             {
                 pObj = rMarkList.GetMark( i )->GetMarkedSdrObj();
                 if( m_aAnchorPos != pObj->GetAnchorPos() )
                 {
-                    // different anchor positions -> disable positioning
+                    
                     m_pPosFrame->Enable(false);
                     m_bPositioningDisabled = true;
                     return;
@@ -1891,7 +1891,7 @@ void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
         m_aRect.SetPos( aPt2 );
     }
 
-    // this should happen via SID_ATTR_TRANSFORM_AUTOSIZE
+    
     if( rMarkList.GetMarkCount() != 1 )
         m_bIsMultiSelection = true;
 #if OSL_DEBUG_LEVEL > 1

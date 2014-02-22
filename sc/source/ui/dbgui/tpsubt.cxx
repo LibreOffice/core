@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef SC_DLLIMPLEMENTATION
@@ -31,8 +31,8 @@
 #include "subtdlg.hxx"
 #include "tpsubt.hxx"
 
-//========================================================================
-// Subtotals group tabpage:
+
+
 
 ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent,
                                       const SfxItemSet& rArgSet )
@@ -57,7 +57,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent,
     mpLbColumns->set_height_request(nHeight);
     mpLbFunctions->set_height_request(nHeight);
 
-    // Font is correctly initialized by SvTreeListBox ctor
+    
     mpLbColumns->SetSelectionMode( SINGLE_SELECTION );
     mpLbColumns->SetDragDropMode( SV_DRAGDROP_NONE );
     mpLbColumns->SetSpaceBetweenEntries( 0 );
@@ -65,7 +65,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent,
     Init ();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
@@ -85,7 +85,7 @@ ScTpSubTotalGroup::~ScTpSubTotalGroup()
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpSubTotalGroup::Init()
 {
@@ -106,7 +106,7 @@ void ScTpSubTotalGroup::Init()
     FillListBoxes();
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
                                  const SfxItemSet&  rArgSet  )
@@ -120,9 +120,9 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     else
         nGroupIdx = nGroupNo-1;
 
-    //----------------------------------------------------------
+    
 
-    // first we have to clear the listboxes...
+    
     for ( sal_uInt16 nLbEntry = 0; nLbEntry < mpLbColumns->GetEntryCount(); ++nLbEntry )
     {
         mpLbColumns->CheckEntryPos( nLbEntry, false );
@@ -155,7 +155,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
             if (i == 0 || (i > 0 && nCheckPos < nFirstChecked))
                 nFirstChecked = nCheckPos;
         }
-        // Select the first checked field from the top.
+        
         mpLbColumns->SelectEntryPos(nFirstChecked);
     }
     else
@@ -168,7 +168,7 @@ bool ScTpSubTotalGroup::DoReset( sal_uInt16             nGroupNo,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
                                        SfxItemSet&  rArgSet  )
@@ -191,9 +191,9 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     else
         nGroupIdx = nGroupNo-1;
 
-    //----------------------------------------------------------
+    
 
-    ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
+    ScSubTotalParam theSubTotalData;            
     SfxTabDialog* pDlg = GetTabDialog();
     if ( pDlg )
     {
@@ -237,10 +237,10 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
                 nCheck++;
             }
         }
-        theSubTotalData.SetSubTotals( nGroupNo,      // Gruppen-Nr.
+        theSubTotalData.SetSubTotals( nGroupNo,      
                                       pSubTotals,
                                       pFunctions,
-                                      nCheckCount ); // Anzahl der Array-Elemente
+                                      nCheckCount ); 
 
     }
 
@@ -252,7 +252,7 @@ bool ScTpSubTotalGroup::DoFillItemSet( sal_uInt16       nGroupNo,
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpSubTotalGroup::FillListBoxes()
 {
@@ -285,12 +285,12 @@ void ScTpSubTotalGroup::FillListBoxes()
             mpLbColumns->SetEntryData( i, new sal_uInt16(0) );
             i++;
         }
-        // subsequent initialization of the constant:
+        
         (sal_uInt16&)nFieldCount = i;
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
 {
@@ -309,13 +309,13 @@ sal_uInt16 ScTpSubTotalGroup::GetFieldSelPos( SCCOL nField )
     return nFieldPos;
 }
 
-// -----------------------------------------------------------------------
+
 
 ScSubTotalFunc ScTpSubTotalGroup::LbPosToFunc( sal_uInt16 nPos )
 {
     switch ( nPos )
     {
-//      case  0:    return SUBTOTAL_FUNC_NONE;
+
         case  2:    return SUBTOTAL_FUNC_AVE;
         case  6:    return SUBTOTAL_FUNC_CNT;
         case  1:    return SUBTOTAL_FUNC_CNT2;
@@ -333,13 +333,13 @@ ScSubTotalFunc ScTpSubTotalGroup::LbPosToFunc( sal_uInt16 nPos )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
 {
     switch ( eFunc )
     {
-//      case SUBTOTAL_FUNC_NONE:    return 0;
+
         case SUBTOTAL_FUNC_AVE:     return 2;
         case SUBTOTAL_FUNC_CNT:     return 6;
         case SUBTOTAL_FUNC_CNT2:    return 1;
@@ -357,9 +357,9 @@ sal_uInt16 ScTpSubTotalGroup::FuncToLbPos( ScSubTotalFunc eFunc )
     }
 }
 
-// -----------------------------------------------------------------------
-// Handler:
-//---------
+
+
+
 
 IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
 {
@@ -387,7 +387,7 @@ IMPL_LINK( ScTpSubTotalGroup, SelectHdl, ListBox *, pLb )
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 {
@@ -404,26 +404,26 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
     return 0;
 }
 
-//========================================================================
-// Derived Group TabPages:
+
+
 
 SfxTabPage* ScTpSubTotalGroup1::Create( Window*         pParent,
                                                  const SfxItemSet&  rArgSet )
     { return ( new ScTpSubTotalGroup1( pParent, rArgSet ) ); }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTpSubTotalGroup2::Create( Window*          pParent,
                                        const SfxItemSet&    rArgSet )
     { return ( new ScTpSubTotalGroup2( pParent, rArgSet ) ); }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTpSubTotalGroup3::Create( Window*          pParent,
                                        const SfxItemSet&    rArgSet )
     { return ( new ScTpSubTotalGroup3( pParent, rArgSet ) ); }
 
-// -----------------------------------------------------------------------
+
 
 ScTpSubTotalGroup1::ScTpSubTotalGroup1( Window* pParent, const SfxItemSet& rArgSet ) :
     ScTpSubTotalGroup( pParent, rArgSet )
@@ -437,7 +437,7 @@ ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgS
     ScTpSubTotalGroup( pParent, rArgSet )
 {}
 
-// -----------------------------------------------------------------------
+
 
 
 #define RESET(i) (ScTpSubTotalGroup::DoReset( (i), rArgSet ))
@@ -446,7 +446,7 @@ void ScTpSubTotalGroup2::Reset( const SfxItemSet& rArgSet ) { RESET(2); }
 void ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
 #undef RESET
 
-// -----------------------------------------------------------------------
+
 
 #define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), rArgSet ))
 sal_Bool ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
@@ -454,8 +454,8 @@ sal_Bool ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET
 sal_Bool ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
 #undef FILL
 
-//========================================================================
-// Optionen-Tabpage:
+
+
 
 ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
                                           const SfxItemSet&     rArgSet )
@@ -483,13 +483,13 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
     Init();
 }
 
-// -----------------------------------------------------------------------
+
 
 ScTpSubTotalOptions::~ScTpSubTotalOptions()
 {
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpSubTotalOptions::Init()
 {
@@ -507,7 +507,7 @@ void ScTpSubTotalOptions::Init()
     FillUserSortListBox();
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* ScTpSubTotalOptions::Create( Window*                 pParent,
                                           const SfxItemSet&     rArgSet )
@@ -515,7 +515,7 @@ SfxTabPage* ScTpSubTotalOptions::Create( Window*                 pParent,
     return ( new ScTpSubTotalOptions( pParent, rArgSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
@@ -542,11 +542,11 @@ void ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
     CheckHdl( pBtnSort );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 {
-    ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
+    ScSubTotalParam theSubTotalData;            
     SfxTabDialog* pDlg = GetTabDialog();
     if ( pDlg )
     {
@@ -572,7 +572,7 @@ sal_Bool ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
     return true;
 }
 
-// -----------------------------------------------------------------------
+
 
 void ScTpSubTotalOptions::FillUserSortListBox()
 {
@@ -587,8 +587,8 @@ void ScTpSubTotalOptions::FillUserSortListBox()
     }
 }
 
-// -----------------------------------------------------------------------
-// Handler:
+
+
 
 IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
 {

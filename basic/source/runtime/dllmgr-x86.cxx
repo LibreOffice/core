@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -80,7 +80,7 @@ SbError convert(OUString const & source, OString * target) {
             (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
              RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR))
         ? ERRCODE_NONE : ERRCODE_BASIC_BAD_ARGUMENT;
-        //TODO: more specific errcode?
+        
 }
 
 SbError convert(char const * source, sal_Int32 length, OUString * target) {
@@ -91,7 +91,7 @@ SbError convert(char const * source, sal_Int32 length, OUString * target) {
              RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
              RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR))
         ? ERRCODE_NONE : ERRCODE_BASIC_BAD_ARGUMENT;
-        //TODO: more specific errcode?
+        
 }
 
 struct UnmarshalData {
@@ -125,7 +125,7 @@ private:
 };
 
 std::size_t align(std::size_t address, std::size_t alignment) {
-    // alignment = 2^k for some k >= 0
+    
     return (address + (alignment - 1)) & ~(alignment - 1);
 }
 
@@ -134,8 +134,8 @@ char * align(
     std::size_t add)
 {
     std::vector< char >::size_type n = blob.size();
-    n = align(n - offset, alignment) + offset; //TODO: overflow in align()
-    blob.resize(n + add); //TODO: overflow
+    n = align(n - offset, alignment) + offset; 
+    blob.resize(n + add); 
     return address(blob) + n;
 }
 
@@ -254,8 +254,8 @@ SbError marshalArray(
     }
 }
 
-// 8-aligned structs are only 4-aligned on stack, so alignment of members in
-// such structs must take that into account via "offset"
+
+
 SbError marshal(
     bool outer, SbxVariable * variable, bool special,
     std::vector< char > & blob, std::size_t offset, MarshalData & data)
@@ -397,7 +397,7 @@ void const * unmarshal(SbxVariable * variable, void const * data) {
             variable->PutDouble(read< double >(&data));
             break;
         case SbxSTRING:
-            read< char * >(&data); // handled by unmarshalString
+            read< char * >(&data); 
             break;
         case SbxOBJECT:
             {
@@ -454,9 +454,9 @@ SbError unmarshalString(StringData const & data, SbxVariable & result) {
         sal_Int32 len;
         if (data.special) {
             len = static_cast< sal_Int32 >(result.GetULong());
-            if (len < 0) { // i.e., DWORD result >= 2^31
+            if (len < 0) { 
                 return ERRCODE_BASIC_BAD_ARGUMENT;
-                    //TODO: more specific errcode?
+                    
             }
         } else {
             len = rtl_str_getLength(p);
@@ -481,10 +481,10 @@ SbError call(
 {
     std::vector< char > stack;
     MarshalData data;
-    // For DWORD GetLogicalDriveStringsA(DWORD nBufferLength, LPSTR lpBuffer)
-    // from kernel32, upon return, filled lpBuffer length is result DWORD, which
-    // requires special handling in unmarshalString; other functions might
-    // require similar treatment, too:
+    
+    
+    
+    
     bool special = dll.equalsIgnoreAsciiCase("KERNEL32.DLL") &&
                    (proc.name == OString("GetLogicalDriveStringsA"));
     for (sal_uInt16 i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
@@ -532,7 +532,7 @@ SbError call(
             break;
         }
     case SbxOBJECT:
-        //TODO
+        
         DllMgr_call32(proc.proc, address(stack), stack.size());
         break;
     case SbxBOOL:
@@ -551,7 +551,7 @@ SbError call(
     }
     for (sal_uInt16 i = 1; i < (arguments == 0 ? 0 : arguments->Count()); ++i) {
         arguments->Get(i)->ResetFlag(SBX_REFERENCE);
-            //TODO: skipped for errors?!?
+            
     }
     for (std::vector< UnmarshalData >::iterator i(data.unmarshal.begin());
          i != data.unmarshal.end(); ++i)
@@ -572,10 +572,10 @@ SbError call(
 SbError getProcData(HMODULE handle, OUString const & name, ProcData * proc)
 {
     OSL_ASSERT(proc != 0);
-    if ( !name.isEmpty() && name[0] == '@' ) { //TODO: "@" vs. "#"???
-        sal_Int32 n = name.copy(1).toInt32(); //TODO: handle bad input
+    if ( !name.isEmpty() && name[0] == '@' ) { 
+        sal_Int32 n = name.copy(1).toInt32(); 
         if (n <= 0 || n > 0xFFFF) {
-            return ERRCODE_BASIC_BAD_ARGUMENT; //TODO: more specific errcode?
+            return ERRCODE_BASIC_BAD_ARGUMENT; 
         }
         FARPROC p = GetProcAddress(handle, reinterpret_cast< LPCSTR >(n));
         if (p != 0) {

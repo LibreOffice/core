@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -131,9 +131,9 @@ OUString Content::getParentURL()
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
        throw( uno::RuntimeException )
 {
-    //TODO
-    //stick a map from each CommandId to a new GCancellable and propogate
-    //it throughout the g_file_* calls
+    
+    
+    
 }
 
 OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException )
@@ -327,11 +327,11 @@ GError *MountOperation::Mount(GFile *pFile)
 {
     g_file_mount_enclosing_volume(pFile, G_MOUNT_MOUNT_NONE, mpAuthentication, NULL, MountOperation::Completed, this);
     {
-        //HACK: At least the gdk_threads_set_lock_functions(GdkThreadsEnter,
-        // GdkThreadsLeave) call in vcl/unx/gtk/app/gtkinst.cxx will lead to
-        // GdkThreadsLeave unlock the SolarMutex down to zero at the end of
-        // g_main_loop_run, so we need ~SolarMutexReleaser to raise it back to
-        // the original value again:
+        
+        
+        
+        
+        
         SolarMutexReleaser rel;
         g_main_loop_run(mpLoop);
     }
@@ -480,7 +480,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValuesFromGFileInfo(GFileInfo *
         }
         else if ( rProp.Name == "IsVolume" )
         {
-            //What do we use this for ?
+            
             xRow->appendBoolean( rProp, false );
         }
         else if ( rProp.Name == "IsCompactDisc" )
@@ -539,9 +539,9 @@ getReadOnlyException( const uno::Reference< uno::XInterface >& rContext )
 
 void Content::queryChildren( ContentRefList& rChildren )
 {
-    // Obtain a list with a snapshot of all currently instanciated contents
-    // from provider and extract the contents which are direct children
-    // of this content.
+    
+    
+    
 
     ucbhelper::ContentRefList aAllContents;
     m_xProvider->queryExistingContents( aAllContents );
@@ -562,7 +562,7 @@ void Content::queryChildren( ContentRefList& rChildren )
         ucbhelper::ContentImplHelperRef xChild = (*it);
         OUString aChildURL = xChild->getIdentifier()->getContentIdentifier();
 
-        // Is aURL a prefix of aChildURL?
+        
         if ( ( aChildURL.getLength() > nLen ) && ( aChildURL.compareTo( aURL, nLen ) == 0 ) )
         {
             sal_Int32 nPos = nLen;
@@ -570,7 +570,7 @@ void Content::queryChildren( ContentRefList& rChildren )
 
             if ( ( nPos == -1 ) || ( nPos == ( aChildURL.getLength() - 1 ) ) )
             {
-                // No further slashes / only a final slash. It's a child!
+                
                 rChildren.push_back( ::gio::Content::ContentRef (static_cast< ::gio::Content * >(xChild.get() ) ) );
             }
         }
@@ -593,10 +593,10 @@ sal_Bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifie
 
     OUString aOldURL = m_xIdentifier->getContentIdentifier();
 
-    // Exchange own identitity.
+    
     if ( exchange( xNewId ) )
     {
-        // Process instanciated children...
+        
         ContentRefList aChildren;
         queryChildren( aChildren );
 
@@ -607,7 +607,7 @@ sal_Bool Content::exchangeIdentity( const uno::Reference< ucb::XContentIdentifie
         {
             ContentRef xChild = (*it);
 
-            // Create new content identifier for the child...
+            
             uno::Reference< ucb::XContentIdentifier > xOldChildId = xChild->getIdentifier();
             OUString aOldChildURL = xOldChildId->getContentIdentifier();
             OUString aNewChildURL = aOldChildURL.replaceAt(
@@ -722,7 +722,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             fprintf(stderr, "Unknown property %s\n", OUStringToOString(rValue.Name, RTL_TEXTENCODING_UTF8).getStr());
 #endif
             aRet[ n ] <<= getReadOnlyException( static_cast< cppu::OWeakObject * >(this) );
-            //TODO
+            
         }
     }
 
@@ -755,7 +755,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 }
             }
 
-            if (!mbTransient) //Discard and refetch
+            if (!mbTransient) 
             {
                 g_object_unref(mpInfo);
                 mpInfo = NULL;
@@ -769,7 +769,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
                 mpInfo = pNewInfo;
 
-            if (mpFile) //Discard and refetch
+            if (mpFile) 
             {
                 g_object_unref(mpFile);
                 mpFile = NULL;
@@ -888,9 +888,9 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
 
         if ( !feedSink( rOpenCommand.Sink, xEnv ) )
         {
-            // Note: rOpenCommand.Sink may contain an XStream
-            //       implementation. Support for this type of
-            //       sink is optional...
+            
+            
+            
 #ifdef DEBUG
             g_warning ("Failed to load data from '%s'",
                 OUStringToOString(m_xIdentifier->getContentIdentifier(), RTL_TEXTENCODING_UTF8).getStr());
@@ -973,8 +973,8 @@ uno::Any SAL_CALL Content::execute(
         sal_Bool bDeletePhysical = sal_False;
         aCommand.Argument >>= bDeletePhysical;
 
-        //If no delete physical, try and trashcan it, if that doesn't work go
-        //ahead and try and delete it anyway
+        
+        
         if (!bDeletePhysical && !g_file_trash(getGFile(), NULL, NULL))
                 bDeletePhysical = true;
 
@@ -991,7 +991,7 @@ uno::Any SAL_CALL Content::execute(
     {
 #ifdef DEBUG
         fprintf(stderr, "UNKNOWN COMMAND\n");
-        //TODO
+        
 #endif
 
         ucbhelper::cancelCommandExecution
@@ -1111,7 +1111,7 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
     {
         uno::Sequence< ucb::ContentInfo > seq(2);
 
-        // Minimum set of props we really need
+        
         uno::Sequence< beans::Property > props( 1 );
         props[0] = beans::Property(
             OUString("Title"),
@@ -1119,13 +1119,13 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
             getCppuType( static_cast< OUString* >( 0 ) ),
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
 
-        // file
+        
         seq[0].Type       = OUString( GIO_FILE_TYPE );
         seq[0].Attributes = ( ucb::ContentInfoAttribute::INSERT_WITH_INPUTSTREAM |
                               ucb::ContentInfoAttribute::KIND_DOCUMENT );
         seq[0].Properties = props;
 
-        // folder
+        
         seq[1].Type       = OUString( GIO_FOLDER_TYPE );
         seq[1].Attributes = ucb::ContentInfoAttribute::KIND_FOLDER;
         seq[1].Properties = props;
@@ -1275,7 +1275,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
 {
     static const ucb::CommandInfo aCommandInfoTable[] =
     {
-        // Required commands
+        
         ucb::CommandInfo
         ( OUString(  "getCommandInfo"  ),
           -1, getCppuVoidType() ),
@@ -1289,7 +1289,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
         ( OUString(  "setPropertyValues"  ),
           -1, getCppuType( static_cast<uno::Sequence< beans::PropertyValue > * >( 0 ) ) ),
 
-        // Optional standard commands
+        
         ucb::CommandInfo
         ( OUString(  "delete"  ),
           -1, getCppuBooleanType() ),
@@ -1300,7 +1300,7 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
         ( OUString(  "open"  ),
           -1, getCppuType( static_cast<ucb::OpenCommandArgument2 * >( 0 ) ) ),
 
-        // Folder Only, omitted if not a folder
+        
         ucb::CommandInfo
         ( OUString(  "transfer"  ),
           -1, getCppuType( static_cast<ucb::TransferInfo * >( 0 ) ) ),

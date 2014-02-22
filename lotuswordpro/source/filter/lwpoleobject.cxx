@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -95,7 +95,7 @@ void LwpGraphicOleObject::Read()
 
     if (LwpFileHeader::m_nFileRevision >= 0x000b)
     {
-        // I'm not sure about the read method
+        
         m_pNextObj.ReadIndexed(m_pObjStrm);
         m_pPrevObj.ReadIndexed(m_pObjStrm);
     }
@@ -112,9 +112,9 @@ void LwpGraphicOleObject::GetGrafOrgSize(double & rWidth, double & rHeight)
 void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
 {
     GetGrafOrgSize(fWidth, fHeight);
-    // scaled image size
-    double fSclGrafWidth = fWidth;//LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleWidth());
-    double fSclGrafHeight = fHeight;//LwpTools::ConvertFromUnitsToMetric(pMyScale->GetScaleHeight());
+    
+    double fSclGrafWidth = fWidth;
+    double fSclGrafHeight = fHeight;
 
 
     LwpVirtualLayout* pLayout = GetLayout(NULL);
@@ -124,11 +124,11 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
         LwpLayoutScale* pMyScale = pMyFrameLayout->GetLayoutScale();
         LwpLayoutGeometry* pFrameGeo = pMyFrameLayout->GetGeometry();
 
-        // original image size
-        //double fOrgGrafWidth = (double)m_Cache.Width/TWIPS_PER_CM;
-        //double fOrgGrafHeight = (double)m_Cache.Height/TWIPS_PER_CM;
+        
+        
+        
 
-        // get margin values
+        
         double fLeftMargin = pMyFrameLayout->GetMarginsValue(MARGIN_LEFT);
         double fRightMargin = pMyFrameLayout->GetMarginsValue(MARGIN_RIGHT);
         double fTopMargin = pMyFrameLayout->GetMarginsValue(MARGIN_TOP);
@@ -136,15 +136,15 @@ void LwpGraphicOleObject::GetGrafScaledSize(double & fWidth, double & fHeight)
 
         if (pMyScale && pFrameGeo)
         {
-            // frame size
+            
             double fFrameWidth = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetWidth());
             double fFrameHeight = LwpTools::ConvertFromUnitsToMetric(pFrameGeo->GetHeight());
 
-            // calculate the displayed size of the frame
+            
             double fDisFrameWidth = fFrameWidth - (fLeftMargin+fRightMargin);
             double fDisFrameHeight = fFrameHeight - (fTopMargin+fBottomMargin);
 
-            // get scale mode
+            
             sal_uInt16 nScalemode = pMyScale->GetScaleMode();
             if (nScalemode & LwpLayoutScale::CUSTOM)
             {
@@ -215,7 +215,7 @@ void LwpOleObject::Read()
 
     cPersistentFlags = m_pObjStrm->QuickReaduInt16();
 
-    // qCMarker read
+    
     LwpObjectID ID;
 
     if (LwpFileHeader::m_nFileRevision >= 0x0004)
@@ -226,20 +226,20 @@ void LwpOleObject::Read()
 
         if (LwpFileHeader::m_nFileRevision < 0x000B)
         {
-            // null pointers have a VO_INVALID type
-            //if (VO_INVALID == m_pObjStrm->QuickReaduInt16())
-            //  return;
+            
+            
+            
 
             ID.Read(m_pObjStrm);
-            //return m_pObjStrm->Locate(ID);
+            
         }
         else
         {
             ID.ReadIndexed(m_pObjStrm);
-            //if (ID.IsNull())
-            //  return;
+            
+            
 
-            //return m_pObjStrm->Locate(ID);
+            
         }
     }
 
@@ -268,8 +268,8 @@ void LwpOleObject::XFConvert(XFContentContainer * /*pCont*/)
 
 void LwpOleObject::GetGrafOrgSize(double & rWidth, double & rHeight)
 {
-    rWidth = (double)m_SizeRect.GetWidth()/1000;//cm unit
-    rHeight = (double)m_SizeRect.GetHeight()/1000;//cm unit
+    rWidth = (double)m_SizeRect.GetWidth()/1000;
+    rHeight = (double)m_SizeRect.GetHeight()/1000;
 }
 
 void LwpOleObject::RegisterStyle()

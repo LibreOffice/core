@@ -229,8 +229,8 @@ void OOXMLParserState::resolveTableProperties(Stream & rStream)
         if (rTableProps.get() != NULL)
         {
             rStream.props(rTableProps);
-            // Don't clean the table props to send them again for each row
-            // This mimics the behaviour from RTF tokenizer.
+            
+            
         }
     }
 }
@@ -276,12 +276,12 @@ void OOXMLParserState::startTxbxContent()
     if( inTxbxContent )
         SAL_WARN( "writerfilter", "Nested w:txbxContent" );
     inTxbxContent = true;
-    // Do not save and reset section group state, it'd cause a new page.
-//    savedInSectionGroup = mbInSectionGroup;
+    
+
     savedInParagraphGroup = mbInParagraphGroup;
     savedInCharacterGroup = mbInCharacterGroup;
     savedLastParagraphInSection = mbLastParagraphInSection;
-//    mbInSectionGroup = false;
+
     mbInParagraphGroup = false;
     mbInCharacterGroup = false;
     mbLastParagraphInSection = false;
@@ -294,7 +294,7 @@ void OOXMLParserState::endTxbxContent()
         SAL_WARN( "writerfilter", "Non-matching closing w:txbxContent" );
         return;
     }
-//    mbInSectionGroup = savedInSectionGroup;
+
     mbInParagraphGroup = savedInParagraphGroup;
     mbInCharacterGroup = savedInCharacterGroup;
     mbLastParagraphInSection = savedLastParagraphInSection;

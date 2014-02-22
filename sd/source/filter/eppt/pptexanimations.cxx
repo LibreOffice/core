@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
@@ -245,7 +245,7 @@ const sal_Char* AnimationExporter::FindTransitionName( const sal_Int16 nType, co
             pRet = p->mpName;
             nFit = nF;
         }
-        if ( nFit == 7 )    // maximum
+        if ( nFit == 7 )    
             break;
         p++;
     }
@@ -273,13 +273,13 @@ AnimationExporter::AnimationExporter( const EscherSolverContainer& rSolverContai
 {
 }
 
-// --------------------------------------------------------------------
+
 
 sal_Int16 AnimationExporter::GetFillMode( const Reference< XAnimationNode >& xNode, const sal_Int16 nFillDefault )
 {
     sal_Int16 nFill = xNode->getFill();
-    //#i119699 <Animation> The animation effect "Emphasis->FlashBulb" play incorrectly in Aoo saves a .ppt to another .ppt and plays the saved one.
-    //#i119740 <Animation> The animation effect "Entrance->Flash Once" fails to play in Aoo while Aoo saves a .ppt to another .ppt and plays the saved one.
+    
+    
     if ((xNode->getType() == AnimationNodeType::ANIMATE)
         ||(xNode->getType() == AnimationNodeType::SET)
         ||(xNode->getType() == AnimationNodeType::TRANSITIONFILTER))
@@ -380,7 +380,7 @@ void AnimationExporter::processAfterEffectNodes( const Reference< XAnimationNode
 
                             switch( xChildNode3->getType() )
                             {
-                            // found an after effect
+                            
                             case AnimationNodeType::SET:
                             case AnimationNodeType::ANIMATECOLOR:
                                 {
@@ -445,8 +445,8 @@ bool AnimationExporter::hasAfterEffectNode( const Reference< XAnimationNode >& x
     return false;
 }
 
-// check if this group only contain empty groups. this may happen when
-// after effect nodes are not exported at theire original position
+
+
 bool AnimationExporter::isEmptyNode( const Reference< XAnimationNode >& xNode ) const
 {
     if( xNode.is() ) switch( xNode->getType() )
@@ -551,7 +551,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                     memset( &aAnim, 0, sizeof( aAnim ) );
                     aAnim.mnGroupType = mso_Anim_GroupType_PAR;
                     aAnim.mnNodeType = 1;
-                    // attribute Restart
+                    
                     switch( xNode->getRestart() )
                     {
                         default:
@@ -560,7 +560,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
                         case AnimationRestart::WHEN_NOT_ACTIVE : aAnim.mnRestart = 2; break;
                         case AnimationRestart::NEVER : aAnim.mnRestart = 3; break;
                     }
-                    // attribute Fill
+                    
                     switch( xNode->getFill() )
                     {
                         default:
@@ -658,7 +658,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
             }
             break;
 
-            case AnimationNodeType::AUDIO :     // #i58428#
+            case AnimationNodeType::AUDIO :     
             {
                 exportAnimNode( rStrm, xNode, pParent, nGroupLevel, nFillDefault );
                 exportAnimPropertySet( rStrm, xNode );
@@ -711,7 +711,7 @@ void AnimationExporter::exportNode( SvStream& rStrm, Reference< XAnimationNode >
         }
         if( !bSkipChildren )
         {
-            // export after effect node if one exists for this node
+            
             Reference< XAnimationNode > xAfterEffectNode;
             if( hasAfterEffectNode( xNode, xAfterEffectNode ) )
             {
@@ -770,7 +770,7 @@ Reference< XAnimationNode > AnimationExporter::createAfterEffectNodeClone( const
 
 sal_Bool AnimationExporter::GetNodeType( const Reference< XAnimationNode >& xNode, sal_Int16& nType )
 {
-    // trying to get the nodetype
+    
     Sequence< NamedValue > aUserData = xNode->getUserData();
     if ( aUserData.getLength() )
     {
@@ -796,7 +796,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
     AnimationNode   aAnim;
     memset( &aAnim, 0, sizeof( aAnim ) );
 
-    // attribute Restart
+    
     switch( xNode->getRestart() )
     {
         default:
@@ -815,7 +815,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
         case AnimationFill::HOLD :   aAnim.mnFill = 3; break;
         case AnimationFill::TRANSITION : aAnim.mnFill = 4; break;
     }
-    // attribute Duration
+    
     double fDuration = 0.0;
     com::sun::star::animations::Timing eTiming;
     if ( xNode->getDuration() >>= eTiming )
@@ -830,12 +830,12 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
     else
         aAnim.mnDuration = -1;
 
-    // NodeType, NodeGroup
+    
     aAnim.mnNodeType = 1;
     aAnim.mnGroupType = mso_Anim_GroupType_SEQ;
     switch( xNode->getType() )
     {
-        case AnimationNodeType::PAR :       // PASSTROUGH!!! (as it was intended)
+        case AnimationNodeType::PAR :       
             aAnim.mnGroupType = mso_Anim_GroupType_PAR;
         case AnimationNodeType::SEQ :
         {
@@ -883,7 +883,7 @@ void AnimationExporter::exportAnimNode( SvStream& rStrm, const Reference< XAnima
 
 void AnimationExporter::GetUserData( const Sequence< NamedValue >& rUserData, const Any ** pAny, sal_Size nLen )
 {
-    // storing user data into pAny, to allow direct access later
+    
     memset( pAny, 0, nLen );
     if ( rUserData.getLength() )
     {
@@ -957,7 +957,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
 
     Any aMasterRel, aOverride, aRunTimeContext;
 
-    // storing user data into pAny, to allow direct access later
+    
     const Sequence< NamedValue > aUserData = xNode->getUserData();
     const ::com::sun::star::uno::Any* pAny[ DFF_ANIM_PROPERTY_ID_COUNT ];
     GetUserData( aUserData, pAny, sizeof( pAny ) );
@@ -965,7 +965,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     if( pAny[ DFF_ANIM_AFTEREFFECT ] )
         ( *pAny[ DFF_ANIM_AFTEREFFECT ] ) >>= xMaster;
 
-    // calculate master-rel
+    
     if( xMaster.is() )
     {
         sal_Int32 nMasterRel = 2;
@@ -983,7 +983,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
         pAny[ DFF_ANIM_RUNTIMECONTEXT ] = &aRunTimeContext;
     }
 
-    // the order is important
+    
     if ( pAny[ DFF_ANIM_NODE_TYPE ] )
     {
         if ( *pAny[ DFF_ANIM_NODE_TYPE ] >>= nNodeType )
@@ -1053,7 +1053,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
 
     if ( pAny[ DFF_ANIM_ID ] )
     {
-        // TODO DFF_ANIM_ID
+        
     }
 
     if ( pAny[ DFF_ANIM_AFTEREFFECT ] )
@@ -1071,7 +1071,7 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     }
     if ( pAny[ DFF_ANIM_PATH_EDIT_MODE ] )
     {
-        // TODO DFF_ANIM_ID
+        
     }
 
     if( !xMaster.is() )
@@ -1111,15 +1111,15 @@ sal_Int16 AnimationExporter::exportAnimPropertySet( SvStream& rStrm, const Refer
     Reference< XAnimate > xAnim( xNode, UNO_QUERY );
     if( xAnim.is() )
     {
-        // TODO: DFF_ANIM_TIMEFILTER
+        
     }
     if ( pAny[ DFF_ANIM_EVENT_FILTER ] )
     {
-        // TODO DFF_ANIM_EVENT_FILTER
+        
     }
     if ( pAny[ DFF_ANIM_VOLUME ] )
     {
-        // TODO DFF_ANIM_VOLUME
+        
     }
     return nNodeType;
 }
@@ -1259,9 +1259,9 @@ void AnimationExporter::exportAnimAction( SvStream& rStrm, const Reference< XAni
 
 }
 
-// nFlags Bit 6 = fixInteractiveSequenceTiming (for child)
-// nFlags Bit 5 = fixInteractiveSequenceTiming (for root)
-// nFlags Bit 4 = first node of main sequence -> begin event next has to be replaced to indefinite
+
+
+
 void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnimationNode >& xNode, const sal_Int32 nFlags )
 {
     sal_uInt16 i;
@@ -1287,7 +1287,7 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                 {
                     if ( nFlags & 0x20 )
                     {
-                        // taking the first child
+                        
                         Reference< XEnumerationAccess > xEA( xNode, UNO_QUERY_THROW );
                         Reference< XEnumeration > xE( xEA->createEnumeration(), UNO_QUERY_THROW );
                         if ( xE.is() && xE->hasMoreElements() )
@@ -1300,12 +1300,12 @@ void AnimationExporter::exportAnimEvent( SvStream& rStrm, const Reference< XAnim
                     }
                     else if ( nFlags & 0x40 )
                     {
-                        // begin has to be replaced with void, so don't do anything
+                        
                     }
                     else
                     {
                         aAny = xNode->getBegin();
-                        if ( nFlags & 0x10 )    // replace ON_NEXT with IDEFINITE
+                        if ( nFlags & 0x10 )    
                         {
                             if ( ( aAny >>= aEvent ) && ( aEvent.Trigger == EventTrigger::ON_NEXT ) )
                             {
@@ -1415,7 +1415,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
             aDest += aStr;
         }
     }
-    else if ( rAttributeName == "Rotate"         // "r" or "style.rotation" ?
+    else if ( rAttributeName == "Rotate"         
             || rAttributeName == "SkewX"
             || rAttributeName == "Opacity"
             || rAttributeName == "CharHeight"
@@ -1426,7 +1426,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
             aDest += OUString::number( fNumber );
     }
     else if ( rAttributeName == "Color"
-            || rAttributeName == "FillColor"     // "Fillcolor" or "FillColor" ?
+            || rAttributeName == "FillColor"     
             || rAttributeName == "LineColor"
             || rAttributeName == "CharColor"
         )
@@ -1461,7 +1461,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
         if ( rSourceValue >>= eFillStyle )
         {
             if ( eFillStyle == ::com::sun::star::drawing::FillStyle_NONE )
-                aDest += "none";    // ?
+                aDest += "none";    
             else
                 aDest += "solid";
         }
@@ -1507,7 +1507,7 @@ Any AnimationExporter::convertAnimateValue( const Any& rSourceValue, const OUStr
             if ( eFontSlant == com::sun::star::awt::FontSlant_ITALIC )
                 aDest += "italic";
             else
-                aDest += "normal";  // ?
+                aDest += "normal";  
         }
     }
     else if ( rAttributeName == "Visibility" )
@@ -1537,8 +1537,8 @@ void AnimationExporter::exportAnimateSet( SvStream& rStrm, const Reference< XAni
         EscherExContainer aAnimateSet( rStrm, DFF_msofbtAnimateSet, 0 );
         {
             EscherExAtom aAnimateSetData( rStrm, DFF_msofbtAnimateSetData );
-            sal_uInt32 nId1 = 1;            // ??
-            sal_uInt32 nId2 = 1;            // ??
+            sal_uInt32 nId1 = 1;            
+            sal_uInt32 nId2 = 1;            
             rStrm.WriteUInt32( nId1 ).WriteUInt32( nId2 );
         }
         Any aConvertedValue( convertAnimateValue( xSet->getTo(), xSet->getAttributeName() ) );
@@ -1563,8 +1563,8 @@ sal_uInt32 AnimationExporter::GetValueTypeForAttributeName( const OUString& rAtt
         { "charfontname", 0 },
         { "charheight", 1 },
         { "charposture", 0 },
-        // TODO(Q1): This should prolly be changed in PPT import
-        // { "charrotation", ATTRIBUTE_CHAR_ROTATION },
+        
+        
         { "charrotation", 1 },
         { "charunderline", 0 },
         { "charweight", 0 },
@@ -1648,10 +1648,10 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
     {
         {
             EscherExAtom aAnimateTargetSettings( rStrm, DFF_msofbtAnimateTargetSettings, 0 );
-            // nBits %0001: additive, %0010: accumulate, %0100: attributeName, %1000: transformtype
-            // nAdditive 0 = base, 1 = sum, 2 = replace, 3 = multiply, 4 = none
-            // nAccumulate 0 = none, 1 = always
-            // nTransformType 0: "property" else "image"
+            
+            
+            
+            
             sal_uInt32 nBits = 0;
             sal_uInt32 nAdditive = 0;
             sal_uInt32 nAccumulate = 0;
@@ -1659,7 +1659,7 @@ void AnimationExporter::exportAnimateTarget( SvStream& rStrm, const Reference< X
             if ( xAnimate.is() )
             {
                 if ( !xAnimate->getAttributeName().isEmpty() )
-                    nBits |= 4;     // what is attributeName ?, maybe this is set if a DFF_msofbtAnimateAttributeNames is written
+                    nBits |= 4;     
                 sal_Int16 nAdditiveMode = xAnimate->getAdditive();
                 if ( nAdditiveMode != AnimationAdditiveMode::BASE )
                 {
@@ -1731,7 +1731,7 @@ Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, s
         xShape = aParaTarget.Shape;
     if ( xShape.is() )
     {
-        // now calculating the character range for the paragraph
+        
         sal_Int16 nParagraph = aParaTarget.Paragraph;
         Reference< XSimpleText > xText( xShape, UNO_QUERY );
         if ( xText.is() )
@@ -1770,7 +1770,7 @@ Reference< XShape > AnimationExporter::getTargetElementShape( const Any& rAny, s
 
 void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any aAny, const sal_Bool bCreate2b01Atom )
 {
-    sal_uInt32 nRefMode = 0;    // nRefMode == 2 -> Paragraph
+    sal_uInt32 nRefMode = 0;    
     sal_Int32 begin = -1;
     sal_Int32 end = -1;
     sal_Bool bParagraphTarget;
@@ -1787,7 +1787,7 @@ void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any a
         {
             EscherExAtom aAnimReference( rStrm, DFF_msofbtAnimReference );
 
-            sal_uInt32 nRefType = 1;    // TODO: nRefType == 2 -> Sound;
+            sal_uInt32 nRefType = 1;    
             sal_uInt32 nRefId = ((EscherSolverContainer&)mrSolverContainer).GetShapeId( xShape );
 
             rStrm.WriteUInt32( nRefMode )
@@ -1799,7 +1799,7 @@ void AnimationExporter::exportAnimateTargetElement( SvStream& rStrm, const Any a
         if ( bCreate2b01Atom )
         {
             EscherExAtom a2b01Atom( rStrm, 0x2b01 );
-            rStrm.WriteUInt32( (sal_uInt32)1 );     // ?
+            rStrm.WriteUInt32( (sal_uInt32)1 );     
         }
     }
 }
@@ -1848,7 +1848,7 @@ void AnimationExporter::exportAnimateKeyPoints( SvStream& rStrm, const Reference
 void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnimationNode >& xNode, const sal_Bool bExportAlways )
 {
     Any aAny;
-    // repeat count (0)
+    
     double fRepeat = 0.0;
     float fRepeatCount = 0.0;
     com::sun::star::animations::Timing eTiming;
@@ -1867,7 +1867,7 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
         rStrm.WriteUInt32( nType )
              .WriteFloat( fRepeatCount );
     }
-    // accelerate (3)
+    
     float fAccelerate = (float)xNode->getAcceleration();
     if ( bExportAlways || ( fAccelerate != 0.0 ) )
     {
@@ -1877,7 +1877,7 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
              .WriteFloat( fAccelerate );
     }
 
-    // decelerate (4)
+    
     float fDecelerate = (float)xNode->getDecelerate();
     if ( bExportAlways || ( fDecelerate != 0.0 ) )
     {
@@ -1887,7 +1887,7 @@ void AnimationExporter::exportAnimValue( SvStream& rStrm, const Reference< XAnim
              .WriteFloat( fDecelerate );
     }
 
-    // autoreverse (5)
+    
     sal_Bool bAutoReverse = xNode->getAutoReverse();
     if ( bExportAlways || bAutoReverse )
     {
@@ -1907,8 +1907,8 @@ void AnimationExporter::exportTransitionFilter( SvStream& rStrm, const Reference
         EscherExContainer aAnimateFilter( rStrm, DFF_msofbtAnimateFilter );
         {
             EscherExAtom aAnimateFilterData( rStrm, DFF_msofbtAnimateFilterData );
-            sal_uInt32 nBits = 3;       // bit 0 -> use AnimAttributeValue
-                                        // bit 1 -> use nTransition
+            sal_uInt32 nBits = 3;       
+                                        
 
             sal_uInt32 nTransition = xFilter->getMode() ? 0 : 1;
             rStrm.WriteUInt32( nBits )
@@ -1931,16 +1931,16 @@ void AnimationExporter::exportAnimateMotion( SvStream& rStrm, const Reference< X
     {
         EscherExContainer aAnimateMotion( rStrm, DFF_msofbtAnimateMotion );
         {
-            {   //SJ: Ignored from import filter
+            {   
                 EscherExAtom aAnimateMotionData( rStrm, DFF_msofbtAnimateMotionData );
                 sal_uInt32 nBits = 0x98;
                 sal_uInt32 nOrigin = 0x2;
-                float fByX = 100.0; // nBits&1
-                float fByY = 100.0; // nBits&1
-                float fFromX = 0.0; // nBits&2
-                float fFromY = 0.0; // nBits&2
-                float fToX = 100.0; // nBits&4
-                float fToY = 100.0; // nBits&4
+                float fByX = 100.0; 
+                float fByY = 100.0; 
+                float fFromX = 0.0; 
+                float fFromY = 0.0; 
+                float fToX = 100.0; 
+                float fToY = 100.0; 
                 rStrm.WriteUInt32( nBits ).WriteFloat( fByX ).WriteFloat( fByY ).WriteFloat( fFromX ).WriteFloat( fFromY ).WriteFloat( fToX ).WriteFloat( fToY ).WriteUInt32( nOrigin );
             }
 
@@ -2004,9 +2004,9 @@ void AnimationExporter::exportAnimateTransform( SvStream& rStrm, const Reference
                     }
                 }
 
-                // TODO: ZoomContents:
-                //if( nBits & 8 )
-                //( fprintf( mpFile, " zoomContents=\"%s\"", nZoomContents ? "true" : "false" );
+                
+                
+                
 
                 rStrm.WriteUInt32( nBits ).WriteFloat( fByX ).WriteFloat( fByY ).WriteFloat( fFromX ).WriteFloat( fFromY ).WriteFloat( fToX ).WriteFloat( fToY ).WriteUInt32( nZoomContents );
             }
@@ -2056,13 +2056,13 @@ sal_Bool AnimationExporter::getColorAny( const Any& rAny, const sal_Int16 nColor
 
     sal_Int32 nColor = 0;
     Sequence< double > aHSL( 3 );
-    if ( rAny >>= nColor )      // RGB color
+    if ( rAny >>= nColor )      
     {
         rA = (sal_uInt8)( nColor >> 16 );
         rB = (sal_uInt8)( nColor >> 8 );
         rC = (sal_uInt8)( nColor );
     }
-    else if ( rAny >>= aHSL )   // HSL
+    else if ( rAny >>= aHSL )   
     {
         rA = (sal_Int32) ( aHSL[ 0 ] * 255.0 / 360.0 );
         rB = (sal_Int32) ( aHSL[ 1 ] * 255.0 );
@@ -2143,7 +2143,7 @@ void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimat
 
         fInterval = (float)xIterate->getIterateInterval();
 
-        // convert interval from absolute to percentage
+        
         double fDuration = 0.0;
 
         Reference< XEnumerationAccess > xEnumerationAccess( xNode, UNO_QUERY );
@@ -2178,6 +2178,6 @@ void AnimationExporter::exportIterate( SvStream& rStrm, const Reference< XAnimat
     }
 }
 
-} // namespace ppt;
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

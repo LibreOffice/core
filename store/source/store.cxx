@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -350,10 +350,10 @@ storeError SAL_CALL store_findFirst (
     if (!pFindData)
         return store_E_InvalidParameter;
 
-    // Initialize FindData.
+    
     memset (pFindData, 0, sizeof (storeFindData));
 
-    // Find first.
+    
     pFindData->m_nReserved = (sal_uInt32)(~0);
     return xDirectory->iterate (*pFindData);
 }
@@ -374,11 +374,11 @@ storeError SAL_CALL store_findNext (
     if (!pFindData)
         return store_E_InvalidParameter;
 
-    // Check FindData.
+    
     if (!pFindData->m_nReserved)
         return store_E_NoMoreFiles;
 
-    // Find next.
+    
     pFindData->m_nReserved -= 1;
     return xDirectory->iterate (*pFindData);
 }
@@ -567,7 +567,7 @@ storeError SAL_CALL store_attrib (
     if (!(pPath && pName))
         return store_E_InvalidParameter;
 
-    // Setup page key.
+    
     OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
     OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
     OStorePageKey aKey;
@@ -576,7 +576,7 @@ storeError SAL_CALL store_attrib (
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Obtain or modify page attributes.
+    
     sal_uInt32 nAttrib = 0;
     eErrCode = xManager->attrib (aKey, nMask1, nMask2, nAttrib);
     if (pnAttrib)
@@ -606,7 +606,7 @@ storeError SAL_CALL store_link (
     if (!(pDstPath && pDstName))
         return store_E_InvalidParameter;
 
-    // Setup 'Source' page key.
+    
     OString aSrcPath (
         pSrcPath->buffer, pSrcPath->length, RTL_TEXTENCODING_UTF8);
     OString aSrcName (
@@ -618,7 +618,7 @@ storeError SAL_CALL store_link (
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Setup 'Destination' page key.
+    
     OString aDstPath (
         pDstPath->buffer, pDstPath->length, RTL_TEXTENCODING_UTF8);
     OString aDstName (
@@ -630,7 +630,7 @@ storeError SAL_CALL store_link (
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Link 'Source' hard to 'Destination'.
+    
     return xManager->link (aSrcKey, aDstKey);
 }
 
@@ -656,7 +656,7 @@ storeError SAL_CALL store_symlink (
     if (!(pDstPath && pDstName))
         return store_E_InvalidParameter;
 
-    // Setup 'Destination' page key.
+    
     OString aDstPath (
         pDstPath->buffer, pDstPath->length, RTL_TEXTENCODING_UTF8);
     OString aDstName (
@@ -668,7 +668,7 @@ storeError SAL_CALL store_symlink (
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Insert 'Source' as symlink to 'Destination'.
+    
     OString aSrcPath (
         pSrcPath->buffer, pSrcPath->length, RTL_TEXTENCODING_UTF8);
     OString aSrcName (
@@ -699,7 +699,7 @@ storeError SAL_CALL store_rename (
     if (!(pDstPath && pDstName))
         return store_E_InvalidParameter;
 
-    // Setup 'Source' page key.
+    
     OString aSrcPath (
         pSrcPath->buffer, pSrcPath->length, RTL_TEXTENCODING_UTF8);
     OString aSrcName (
@@ -711,7 +711,7 @@ storeError SAL_CALL store_rename (
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Rename 'Source' into 'Destination'.
+    
     OString aDstPath (
         pDstPath->buffer, pDstPath->length, RTL_TEXTENCODING_UTF8);
     OString aDstName (
@@ -739,7 +739,7 @@ storeError SAL_CALL store_remove (
     if (!(pPath && pName))
         return store_E_InvalidParameter;
 
-    // Setup page key.
+    
     OString aPath (pPath->buffer, pPath->length, RTL_TEXTENCODING_UTF8);
     OString aName (pName->buffer, pName->length, RTL_TEXTENCODING_UTF8);
     OStorePageKey aKey;
@@ -748,7 +748,7 @@ storeError SAL_CALL store_remove (
     if (eErrCode != store_E_None)
         return eErrCode;
 
-    // Remove.
+    
     return xManager->remove (aKey);
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/svapp.hxx>
@@ -72,7 +72,7 @@ SwFldDokPage::SwFldDokPage(Window* pParent, const SfxItemSet& rCoreSet )
     m_pLevelED->SetMax(MAXLEVEL);
     m_pDateOffsetED->SetMin(LONG_MIN);
     m_pDateOffsetED->SetMax(LONG_MAX);
-    //enable 'active' language selection
+    
     m_pNumFormatLB->SetShowLanguageControl(sal_True);
 }
 
@@ -83,9 +83,9 @@ SwFldDokPage::~SwFldDokPage()
 void SwFldDokPage::Reset(const SfxItemSet& )
 {
     SavePos(m_pTypeLB);
-    Init(); // general initialisation
+    Init(); 
 
-    // initialise TypeListBox
+    
     const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
     m_pTypeLB->SetUpdateMode(false);
@@ -96,7 +96,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
     if (!IsFldEdit())
     {
         bool bPage = false;
-        // fill Type-Listbox
+        
         for(short i = rRg.nStart; i < rRg.nEnd; ++i)
         {
             nTypeId = GetFldMgr().GetTypeId(i);
@@ -143,7 +143,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
         }
     }
 
-    // select old Pos
+    
     RestorePos(m_pTypeLB);
 
     m_pTypeLB->SetUpdateMode(true);
@@ -184,10 +184,10 @@ void SwFldDokPage::Reset(const SfxItemSet& )
 
 IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 {
-    // save old ListBoxPos
+    
     const sal_uInt16 nOld = GetTypeSel();
 
-    // current ListBoxPos
+    
     SetTypeSel(m_pTypeLB->GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
@@ -205,7 +205,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
-        // fill Selection-Listbox
+        
         m_pSelectionLB->Clear();
 
         if (nTypeId != USHRT_MAX)
@@ -296,7 +296,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
         m_pSelection->Enable( bEnable );
 
-        // fill Format-Listbox
+        
         sal_uInt16 nSize = FillFormatLB(nTypeId);
 
         sal_Bool bValue = sal_False, bLevel = sal_False, bNumFmt = sal_False, bOffset = sal_False;
@@ -314,7 +314,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
                 m_pDateFT->Show();
 
-                m_pDateOffsetED->SetFirst(-31);    // one month
+                m_pDateOffsetED->SetFirst(-31);    
                 m_pDateOffsetED->SetLast(31);
 
                 if (IsFldEdit())
@@ -328,7 +328,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
                 m_pTimeFT->Show();
 
-                m_pDateOffsetED->SetFirst(-1440);  // one day
+                m_pDateOffsetED->SetFirst(-1440);  
                 m_pDateOffsetED->SetLast(1440);
 
                 if (IsFldEdit())
@@ -392,11 +392,11 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
                 if (m_pNumFormatLB->GetFormatType() == (NUMBERFORMAT_DATE|NUMBERFORMAT_TIME))
                 {
-                    // always set Format-Type because otherwise when date/time formats are combined,
-                    // both formats would be displayed at the same time
+                    
+                    
                     m_pNumFormatLB->SetFormatType(0);
                     m_pNumFormatLB->SetFormatType(nFmtType);
-                    // set correct format once again
+                    
                     m_pNumFormatLB->SetDefFormat(GetCurField()->GetFormat());
                 }
             }
@@ -473,7 +473,7 @@ IMPL_LINK_NOARG(SwFldDokPage, SubTypeHdl)
 
 sal_uInt16 SwFldDokPage::FillFormatLB(sal_uInt16 nTypeId)
 {
-    // fill Format-Listbox
+    
     m_pFormatLB->Clear();
 
     if (nTypeId == TYP_AUTHORFLD)
@@ -521,7 +521,7 @@ IMPL_LINK_NOARG(SwFldDokPage, FormatHdl)
 
     if (nTypeId == TYP_NEXTPAGEFLD || nTypeId == TYP_PREVPAGEFLD)
     {
-        // Prev/Next - PageNumFields special treatment:
+        
         sal_uInt16 nTmp = (sal_uInt16)(sal_uLong)m_pFormatLB->GetEntryData(
                                         m_pFormatLB->GetSelectEntryPos() );
         OUString sOldTxt( m_pValueFT->GetText() );
@@ -573,7 +573,7 @@ sal_Bool SwFldDokPage::FillItemSet(SfxItemSet& )
         case TYP_AUTHORFLD:
             nFormat = nSubType;
             nSubType = 0;
-            // no break!
+            
         case TYP_EXTUSERFLD:
             nFormat |= m_pFixedCB->IsChecked() ? AF_FIXED : 0;
             break;

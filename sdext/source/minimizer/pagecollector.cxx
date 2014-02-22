@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@ void PageCollector::CollectCustomShowPages( const com::sun::star::uno::Reference
         Reference< XNameContainer > aXCont( aXCPSup->getCustomPresentations() );
         if ( aXCont.is() )
         {
-            // creating a list of every page that is used within our customshow
+            
             Sequence< OUString> aNameSeq( aXCont->getElementNames() );
             const OUString* pUString = aNameSeq.getArray();
             sal_Int32 i, nCount = aNameSeq.getLength();
@@ -118,7 +118,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
 
     try
     {
-        // generating list of all master pages
+        
         Reference< XMasterPagesSupplier > xMasterPagesSupplier( rxModel, UNO_QUERY_THROW );
         Reference< XDrawPages > xMasterPages( xMasterPagesSupplier->getMasterPages(), UNO_QUERY_THROW );
         for ( sal_Int32 i = 0; i < xMasterPages->getCount(); i++ )
@@ -141,7 +141,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
             }
         }
 
-        // mark masterpages which are referenced by drawpages
+        
         Reference< XDrawPagesSupplier > xDrawPagesSupplier( rxModel, UNO_QUERY_THROW );
         Reference< XDrawPages > xDrawPages( xDrawPagesSupplier->getDrawPages(), UNO_QUERY_THROW );
         for ( sal_Int32 j = 0; j < xDrawPages->getCount(); j++ )

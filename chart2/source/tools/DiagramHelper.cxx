@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DiagramHelper.hxx"
@@ -55,7 +55,7 @@
 #include <unotools/saveopt.hxx>
 #include <rtl/math.hxx>
 #include <svl/zformat.hxx>
-// header for class Application
+
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 
@@ -169,7 +169,7 @@ void DiagramHelper::setVertical(
                             Reference< chart2::XAxis > xAxis( xCooSys->getAxisByDimension( nDimIndex,nI ));
                             if( xAxis.is() )
                             {
-                                //adapt title rotation only when axis swapping has changed
+                                
                                 if( bChanged )
                                 {
                                     Reference< XTitled > xTitled( xAxis, uno::UNO_QUERY );
@@ -233,7 +233,7 @@ bool DiagramHelper::getVertical( const uno::Reference< chart2::XDiagram > & xDia
                     }
                     else if( bCurrent != bValue )
                     {
-                        // ambiguous -> choose always first found
+                        
                         rbAmbiguous = true;
                     }
                 }
@@ -273,7 +273,7 @@ void DiagramHelper::setStackMode(
         if( eStackMode == StackMode_Y_STACKED_PERCENT )
             bPercent = true;
 
-        //iterate through all coordinate systems
+        
         uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
         if( !xCooSysContainer.is() )
             return;
@@ -281,7 +281,7 @@ void DiagramHelper::setStackMode(
         for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
         {
             uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
-            //set correct percent stacking
+            
             const sal_Int32 nMaximumScaleIndex = xCooSys->getMaximumAxisIndexByDimension(1);
             for(sal_Int32 nI=0; nI<=nMaximumScaleIndex; ++nI)
             {
@@ -299,7 +299,7 @@ void DiagramHelper::setStackMode(
                     }
                 }
             }
-            //iterate through all chart types in the current coordinate system
+            
             uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
             if( !xChartTypeContainer.is() )
                 continue;
@@ -312,7 +312,7 @@ void DiagramHelper::setStackMode(
             {
                 uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
 
-                //iterate through all series in this chart type
+                
                 uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
                 OSL_ASSERT( xDataSeriesContainer.is());
                 if( !xDataSeriesContainer.is() )
@@ -341,7 +341,7 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
 
     StackMode eGlobalStackMode = StackMode_NONE;
 
-    //iterate through all coordinate systems
+    
     uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( !xCooSysContainer.is() )
         return eGlobalStackMode;
@@ -350,7 +350,7 @@ StackMode DiagramHelper::getStackMode( const Reference< XDiagram > & xDiagram, b
     {
         uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
 
-        //iterate through all chart types in the current coordinate system
+        
         uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
         if( !xChartTypeContainer.is() )
             continue;
@@ -392,8 +392,8 @@ StackMode DiagramHelper::getStackModeFromChartType(
         chart2::StackingDirection eCommonDirection = chart2::StackingDirection_NO_STACKING;
         bool bDirectionInitialized = false;
 
-        // first series is irrelvant for stacking, start with second, unless
-        // there is only one series
+        
+        
         const sal_Int32 nSeriesCount = aSeries.getLength();
         sal_Int32 i = (nSeriesCount == 1) ? 0: 1;
         for( ; i<nSeriesCount; ++i )
@@ -401,10 +401,10 @@ StackMode DiagramHelper::getStackModeFromChartType(
             rbFound = true;
             Reference< beans::XPropertySet > xProp( aSeries[i], uno::UNO_QUERY_THROW );
             chart2::StackingDirection eCurrentDirection = eCommonDirection;
-            // property is not MAYBEVOID
+            
             bool bSuccess = ( xProp->getPropertyValue( "StackingDirection" ) >>= eCurrentDirection );
             OSL_ASSERT( bSuccess );
-            (void)(bSuccess);  // avoid warning in non-debug builds
+            (void)(bSuccess);  
             if( ! bDirectionInitialized )
             {
                 eCommonDirection = eCurrentDirection;
@@ -428,7 +428,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
             {
                 eStackMode = StackMode_Y_STACKED;
 
-                // percent stacking
+                
                 if( xCorrespondingCoordinateSystem.is() )
                 {
                     if( 1 < xCorrespondingCoordinateSystem->getDimension() )
@@ -460,7 +460,7 @@ StackMode DiagramHelper::getStackModeFromChartType(
 
 sal_Int32 DiagramHelper::getDimension( const Reference< XDiagram > & xDiagram )
 {
-    // -1: not yet set
+    
     sal_Int32 nResult = -1;
 
     try
@@ -507,7 +507,7 @@ void DiagramHelper::setDimension(
         StackMode eStackMode = DiagramHelper::getStackMode( xDiagram, rbFound, rbAmbiguous );
         bool bIsSupportingOnlyDeepStackingFor3D=false;
 
-        //change all coordinate systems:
+        
         Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY_THROW );
         Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
         for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
@@ -529,16 +529,16 @@ void DiagramHelper::setDimension(
                     xNewCooSys = xChartType->createCoordinateSystem( nNewDimensionCount );
                     break;
                 }
-                //@todo make sure that all following charttypes are also capable of the new dimension
-                //otherwise separate them in a different group
-                //BM: might be done in replaceCoordinateSystem()
+                
+                
+                
             }
 
-            // replace the old coordinate system at all places where it was used
+            
             DiagramHelper::replaceCoordinateSystem( xDiagram, xOldCooSys, xNewCooSys );
         }
 
-        //correct stack mode if necessary
+        
         if( nNewDimensionCount==3 && eStackMode != StackMode_Z_STACKED && bIsSupportingOnlyDeepStackingFor3D )
             DiagramHelper::setStackMode( xDiagram, StackMode_Z_STACKED );
         else if( nNewDimensionCount==2 && eStackMode == StackMode_Z_STACKED )
@@ -559,7 +559,7 @@ void DiagramHelper::replaceCoordinateSystem(
     if( ! xDiagram.is())
         return;
 
-    // update the coordinate-system container
+    
     Reference< XCoordinateSystemContainer > xCont( xDiagram, uno::UNO_QUERY );
     if( xCont.is())
     {
@@ -567,7 +567,7 @@ void DiagramHelper::replaceCoordinateSystem(
         {
             Reference< chart2::data::XLabeledDataSequence > xCategories = DiagramHelper::getCategoriesFromDiagram( xDiagram );
 
-            // move chart types of xCooSysToReplace to xReplacement
+            
             Reference< XChartTypeContainer > xCTCntCooSys( xCooSysToReplace, uno::UNO_QUERY_THROW );
             Reference< XChartTypeContainer > xCTCntReplacement( xReplacement, uno::UNO_QUERY_THROW );
             xCTCntReplacement->setChartTypes( xCTCntCooSys->getChartTypes());
@@ -600,7 +600,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
 {
     bool bChanged = false;
 
-    //set property at axis
+    
     Reference< beans::XPropertySet > xProp( xDataSeries, uno::UNO_QUERY_THROW );
     if( !xProp.is() )
         return bChanged;
@@ -625,7 +625,7 @@ bool DiagramHelper::attachSeriesToAxis( bool bAttachToMainAxis
     if( bChanged && xDiagram.is() )
     {
         uno::Reference< XAxis > xAxis( AxisHelper::getAxis( 1, bAttachToMainAxis, xDiagram ) );
-        if(!xAxis.is()) //create an axis if necessary
+        if(!xAxis.is()) 
             xAxis = AxisHelper::createAxis( 1, bAttachToMainAxis, xDiagram, xContext );
         if( bAdaptAxes )
         {
@@ -653,10 +653,10 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
     if(!xDiagram.is())
         return 0;
 
-    //iterate through the model to find the given xSeries
-    //the found parent indicates the charttype
+    
+    
 
-    //iterate through all coordinate systems
+    
     uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( !xCooSysContainer.is())
         return 0;
@@ -666,7 +666,7 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
     {
         uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
 
-        //iterate through all chart types in the current coordinate system
+        
         uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
         OSL_ASSERT( xChartTypeContainer.is());
         if( !xChartTypeContainer.is() )
@@ -676,7 +676,7 @@ uno::Reference< XChartType > DiagramHelper::getChartTypeOfSeries(
         {
             uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
 
-            //iterate through all series in this chart type
+            
             uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
             OSL_ASSERT( xDataSeriesContainer.is());
             if( !xDataSeriesContainer.is() )
@@ -731,14 +731,14 @@ Sequence< Sequence< Reference< XDataSeries > > >
 {
     vector< Sequence< Reference< XDataSeries > > > aResult;
 
-    //iterate through all coordinate systems
+    
     Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( xCooSysContainer.is() )
     {
         Sequence< Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
         for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
         {
-            //iterate through all chart types in the current coordinate system
+            
             Reference< XChartTypeContainer > xChartTypeContainer( aCooSysList[nCS], uno::UNO_QUERY );
             if( !xChartTypeContainer.is() )
                 continue;
@@ -760,7 +760,7 @@ Reference< XChartType >
 {
     Reference< XChartType > xChartType;
 
-    //iterate through all coordinate systems
+    
     Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
     if( ! xCooSysContainer.is())
         return xChartType;
@@ -793,7 +793,7 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
     std::vector< Reference< XAxis > > aRet;
 
     Reference< XAxis > xResult;
-    // return first x-axis as fall-back
+    
     Reference< XAxis > xFallBack;
     try
     {
@@ -837,7 +837,7 @@ std::vector< Reference< XAxis > > lcl_getAxisHoldingCategoriesFromDiagram(
     return aRet;
 }
 
-} // anonymous namespace
+} 
 
 bool DiagramHelper::isCategoryDiagram(
             const Reference< XDiagram >& xDiagram )
@@ -920,7 +920,7 @@ Reference< data::XLabeledDataSequence >
             lcl_getAxisHoldingCategoriesFromDiagram( xDiagram ));
         std::vector< Reference< chart2::XAxis > >::iterator aIt( aCatAxes.begin() );
         std::vector< Reference< chart2::XAxis > >::const_iterator aEnd( aCatAxes.end() );
-        //search for first categories
+        
         if( aIt != aEnd )
         {
             Reference< chart2::XAxis > xCatAxis(*aIt);
@@ -1022,7 +1022,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
     ScaleData aScale( xAxis->getScaleData() );
     if( xChartDoc->hasInternalDataProvider() )
     {
-        //remove all content the is not of type double and remove multiple level
+        
         Reference< XAnyDescriptionAccess > xDataAccess( xChartDoc->getDataProvider(), uno::UNO_QUERY );
         if( xDataAccess.is() )
         {
@@ -1047,7 +1047,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
             }
             xDataAccess->setAnyRowDescriptions( aAnyCategories );
         }
-        //check the numberformat at the axis
+        
         Reference< beans::XPropertySet > xAxisProps( xAxis, uno::UNO_QUERY );
         Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( xChartDoc, uno::UNO_QUERY );
         if( xAxisProps.is() && xNumberFormatsSupplier.is() )
@@ -1072,7 +1072,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                     xKeyProps->getPropertyValue( "Type" ) >>= nType;
                 if( !( nType & util::NumberFormat::DATE ) )
                 {
-                    //set a date format to the axis
+                    
                     sal_Bool bCreate = sal_True;
                     const LocaleDataWrapper& rLocaleDataWrapper = Application::GetSettings().GetLocaleDataWrapper();
                     Sequence<sal_Int32> aKeySeq = xNumberFormats->queryKeys( util::NumberFormat::DATE,  rLocaleDataWrapper.getLanguageTag().getLocale(), bCreate );
@@ -1099,7 +1099,7 @@ void lcl_switchToTextCategories( const Reference< XChartDocument >& xChartDoc, c
     ScaleData aScale( xAxis->getScaleData() );
     if( aScale.AxisType != chart2::AxisType::CATEGORY )
         AxisHelper::removeExplicitScaling( aScale );
-    //todo migrate dates to text?
+    
     aScale.AxisType = chart2::AxisType::CATEGORY;
     aScale.AutoDateAxis = false;
     xAxis->setScaleData( aScale );
@@ -1177,7 +1177,7 @@ sal_Int32 DiagramHelper::getDateNumberFormat( const Reference< util::XNumberForm
         }
     }
 
-    //try to get a date format with full year display
+    
     NumberFormatterWrapper aNumberFormatterWrapper( xNumberFormatsSupplier );
     SvNumberFormatter* pNumFormatter = aNumberFormatterWrapper.getSvNumberFormatter();
     if( pNumFormatter )
@@ -1296,7 +1296,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
     {
         uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
 
-        //find position of series.
+        
         bool bFound = false;
 
         if( xGivenDataSeries.is() && xCooSysContainer.is() )
@@ -1307,7 +1307,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
             {
                 uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
 
-                //iterate through all chart types in the current coordinate system
+                
                 uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
                 OSL_ASSERT( xChartTypeContainer.is());
                 if( !xChartTypeContainer.is() )
@@ -1319,7 +1319,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                 {
                     uno::Reference< XChartType > xCurrentChartType( aChartTypeList[nT] );
 
-                    //iterate through all series in this chart type
+                    
                     uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xCurrentChartType, uno::UNO_QUERY );
                     OSL_ASSERT( xDataSeriesContainer.is());
                     if( !xDataSeriesContainer.is() )
@@ -1330,7 +1330,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                     for( sal_Int32 nS = 0; !bFound && nS < aSeriesList.getLength(); ++nS )
                     {
 
-                        // We found the series we are interrested in !
+                        
                         if( xGivenDataSeries==aSeriesList[nS] )
                         {
                             sal_Int32 nOldSeriesIndex = nS;
@@ -1347,7 +1347,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
 
                                 if( nNewSeriesIndex >= 0 && nNewSeriesIndex < aSeriesList.getLength() )
                                 {
-                                    //move series in the same charttype
+                                    
                                     bMovedOrMoveAllowed = true;
                                     if( bDoMove )
                                     {
@@ -1358,7 +1358,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                 }
                                 else if( nNewSeriesIndex<0 )
                                 {
-                                    //exchange series with former charttype
+                                    
                                     if( xFormerChartType.is() && DiagramHelper::areChartTypesCompatible( xFormerChartType, xCurrentChartType ) )
                                     {
                                         bMovedOrMoveAllowed = true;
@@ -1384,7 +1384,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
                                 }
                                 else if( nT+1 < aChartTypeList.getLength() )
                                 {
-                                    //exchange series with next charttype
+                                    
                                     uno::Reference< XChartType > xOtherChartType( aChartTypeList[nT+1] );
                                     if( xOtherChartType.is() && DiagramHelper::areChartTypesCompatible( xOtherChartType, xCurrentChartType ) )
                                     {
@@ -1431,7 +1431,7 @@ bool lcl_moveSeriesOrCheckIfMoveIsAllowed(
     }
     return bMovedOrMoveAllowed;
 }
-} // anonymous namespace
+} 
 
 bool DiagramHelper::isSeriesMoveable(
     const Reference< XDiagram >& xDiagram,
@@ -1459,9 +1459,9 @@ bool DiagramHelper::moveSeries( const Reference< XDiagram >& xDiagram, const Ref
 bool DiagramHelper::isSupportingFloorAndWall( const Reference<
                 chart2::XDiagram >& xDiagram )
 {
-    //pies and donuts currently do not support this because of wrong files from older versions
-    //todo: allow this in future again, if fileversion are available for ole objects (metastream)
-    //thus the wrong bottom can be removed on import
+    
+    
+    
 
     Sequence< Reference< chart2::XChartType > > aTypes(
             ::chart::DiagramHelper::getChartTypesFromDiagram( xDiagram ) );
@@ -1518,11 +1518,11 @@ sal_Int32 DiagramHelper::getGeometry3D(
             {
                 if( ! rbFound )
                 {
-                    // first series
+                    
                     nCommonGeom = nGeom;
                     rbFound = true;
                 }
-                // further series: compare for uniqueness
+                
                 else if( nCommonGeom != nGeom )
                 {
                     rbAmbiguous = true;
@@ -1565,13 +1565,13 @@ sal_Int32 DiagramHelper::getCorrectedMissingValueTreatment(
     uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
     if( xDiaProp.is() && (xDiaProp->getPropertyValue( "MissingValueTreatment" ) >>= nResult) )
     {
-        //ensure that the set value is supported by this charttype
+        
         for( sal_Int32 nN = 0; nN < aAvailableMissingValueTreatments.getLength(); nN++ )
             if( aAvailableMissingValueTreatments[nN] == nResult )
-                return nResult; //ok
+                return nResult; 
     }
 
-    //otherwise use the first supported one
+    
     if( aAvailableMissingValueTreatments.getLength() )
     {
         nResult = aAvailableMissingValueTreatments[0];
@@ -1690,7 +1690,7 @@ awt::Rectangle DiagramHelper::getDiagramRectangleFromModel( const uno::Reference
 bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
     ChartModel& rModel, bool bResetModifiedState, bool bConvertAlsoFromAutoPositioning )
 {
-    //return true if something was changed
+    
     const SvtSaveOptions::ODFDefaultVersion nCurrentODFVersion( SvtSaveOptions().GetODFDefaultVersion() );
     if( nCurrentODFVersion > SvtSaveOptions::ODFVER_012 )
     {
@@ -1709,6 +1709,6 @@ bool DiagramHelper::switchDiagramPositioningToExcludingPositioning(
     return false;
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

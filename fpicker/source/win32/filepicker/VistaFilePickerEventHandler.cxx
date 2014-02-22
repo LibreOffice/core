@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
 #include "VistaFilePickerEventHandler.hxx"
 
-// Without IFileDialogCustomize we can't do much
+
 #ifdef __IFileDialogCustomize_INTERFACE_DEFINED__
 
 #include "asyncrequests.hxx"
@@ -37,15 +37,15 @@
 
 #include <osl/file.hxx>
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+
+
+
 
 namespace fpicker{
 namespace win32{
 namespace vista{
 
-//-----------------------------------------------------------------------------------------
+
 VistaFilePickerEventHandler::VistaFilePickerEventHandler(IVistaFilePickerInternalNotify* pInternalNotify)
     : m_nRefCount           (0       )
     , m_nListenerHandle     (0       )
@@ -55,12 +55,12 @@ VistaFilePickerEventHandler::VistaFilePickerEventHandler(IVistaFilePickerInterna
 {
 }
 
-//-----------------------------------------------------------------------------------------
+
 VistaFilePickerEventHandler::~VistaFilePickerEventHandler()
 {
 }
 
-//-----------------------------------------------------------------------------------------
+
 HRESULT STDMETHODCALLTYPE VistaFilePickerEventHandler::QueryInterface(REFIID rIID    ,
                                                                       void** ppObject)
 {
@@ -84,13 +84,13 @@ HRESULT STDMETHODCALLTYPE VistaFilePickerEventHandler::QueryInterface(REFIID rII
     return E_NOINTERFACE;
 }
 
-//-----------------------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::AddRef()
 {
     return osl_atomic_increment(&m_nRefCount);
 }
 
-//-----------------------------------------------------------------------------------------
+
 ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::Release()
 {
     ULONG nReturn = --m_nRefCount;
@@ -100,34 +100,34 @@ ULONG STDMETHODCALLTYPE VistaFilePickerEventHandler::Release()
     return nReturn;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnFileOk(IFileDialog* /*pDialog*/)
 {
     return E_NOTIMPL;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnFolderChanging(IFileDialog* /*pDialog*/,
                                                            IShellItem*  /*pFolder*/)
 {
     return E_NOTIMPL;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnFolderChange(IFileDialog* /*pDialog*/)
 {
     impl_sendEvent(E_DIRECTORY_CHANGED, 0);
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnSelectionChange(IFileDialog* /*pDialog*/)
 {
     impl_sendEvent(E_FILE_SELECTION_CHANGED, 0);
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnShareViolation(IFileDialog*                 /*pDialog*/  ,
 
                                                            IShellItem*                  /*pItem*/    ,
@@ -138,7 +138,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnShareViolation(IFileDialog*         
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* pDialog)
 {
     UINT nFileTypeIndex;
@@ -153,7 +153,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnTypeChange(IFileDialog* pDialog)
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnOverwrite(IFileDialog*            /*pDialog*/  ,
                                                       IShellItem*             /*pItem*/    ,
                                                       FDE_OVERWRITE_RESPONSE* /*pResponse*/)
@@ -161,7 +161,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnOverwrite(IFileDialog*            /*
     return E_NOTIMPL;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnItemSelected(IFileDialogCustomize* /*pCustomize*/,
 
                                                          DWORD                   nIDCtl      ,
@@ -173,7 +173,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnItemSelected(IFileDialogCustomize* /
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnButtonClicked(IFileDialogCustomize* /*pCustomize*/,
                                                           DWORD                 nIDCtl    )
 {
@@ -182,7 +182,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnButtonClicked(IFileDialogCustomize* 
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustomize* /*pCustomize*/,
                                                                DWORD                 nIDCtl    ,
                                                                BOOL                  bChecked  )
@@ -195,7 +195,7 @@ STDMETHODIMP VistaFilePickerEventHandler::OnCheckButtonToggled(IFileDialogCustom
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------
+
 STDMETHODIMP VistaFilePickerEventHandler::OnControlActivating(IFileDialogCustomize* /*pCustomize*/,
                                                               DWORD                 nIDCtl    )
 {
@@ -203,21 +203,21 @@ STDMETHODIMP VistaFilePickerEventHandler::OnControlActivating(IFileDialogCustomi
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------------------
+
 void SAL_CALL VistaFilePickerEventHandler::addFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
     throw( css::uno::RuntimeException )
 {
     m_lListener.addInterface(::getCppuType( (const css::uno::Reference< css::ui::dialogs::XFilePickerListener >*)NULL ), xListener);
 }
 
-//-----------------------------------------------------------------------------------------
+
 void SAL_CALL VistaFilePickerEventHandler::removeFilePickerListener( const css::uno::Reference< css::ui::dialogs::XFilePickerListener >& xListener )
     throw( css::uno::RuntimeException )
 {
     m_lListener.removeInterface(::getCppuType( (const css::uno::Reference< css::ui::dialogs::XFilePickerListener >*)NULL ), xListener);
 }
 
-//-----------------------------------------------------------------------------------------
+
 void VistaFilePickerEventHandler::startListening( const TFileDialog& pBroadcaster )
 {
     static const sal_Bool STARTUP_SUSPENDED = sal_True;
@@ -230,7 +230,7 @@ void VistaFilePickerEventHandler::startListening( const TFileDialog& pBroadcaste
     m_pDialog->Advise(this, &m_nListenerHandle);
 }
 
-//-----------------------------------------------------------------------------------------
+
 void VistaFilePickerEventHandler::stopListening()
 {
     if (m_pDialog.is())
@@ -243,7 +243,7 @@ void VistaFilePickerEventHandler::stopListening()
 static const OUString PROP_CONTROL_ID("control_id");
 static const OUString PROP_PICKER_LISTENER("picker_listener");
 
-//-----------------------------------------------------------------------------------------
+
 class AsyncPickerEvents : public RequestHandler
 {
 public:
@@ -291,7 +291,7 @@ public:
                     xListener->dialogSizeChanged();
                     break;
 
-            // no default here. Let compiler detect changes on enum set !
+            
         }
     }
 
@@ -299,7 +299,7 @@ public:
     {}
 };
 
-//-----------------------------------------------------------------------------------------
+
 void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
                                                  ::sal_Int16  nControlID)
 {
@@ -323,7 +323,7 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
                 rRequest->setArgument(PROP_CONTROL_ID, nControlID);
 
             aNotify.triggerRequestDirectly(rRequest);
-            //aNotify.triggerRequestNonBlocked(rRequest);
+            
         }
         catch(const css::uno::RuntimeException&)
         {
@@ -332,10 +332,10 @@ void VistaFilePickerEventHandler::impl_sendEvent(  EEventType eEventType,
     }
 }
 
-} // namespace vista
-} // namespace win32
-} // namespace fpicker
+} 
+} 
+} 
 
-#endif // __IFileDialogCustomize_INTERFACE_DEFINED__
+#endif 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

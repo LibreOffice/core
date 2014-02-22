@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <uielement/statusbarmerger.hxx>
 
@@ -91,7 +91,7 @@ static void lcl_ConvertSequenceToValues(
     else if ( sAlignment == STATUSBAR_ALIGN_RIGHT )
         nItemBits |= SIB_RIGHT;
     else
-        // if unset, defaults to left alignment
+        
         nItemBits |= SIB_LEFT;
     rItem.nItemBits = nItemBits;
 }
@@ -110,7 +110,7 @@ static void lcl_CreateStatusbarItem( StatusBar* pStatusbar,
     pStatusbar->SetQuickHelpText( nItemId, rAddonItem.aLabel );
     pStatusbar->SetAccessibleName( nItemId, rAddonItem.aLabel );
 
-    // add-on specific data
+    
     AddonStatusbarItemData *pUserData = new AddonStatusbarItemData;
     pUserData->aLabel = rAddonItem.aLabel;
     pUserData->nItemBits = rAddonItem.nItemBits;
@@ -235,7 +235,7 @@ bool StatusbarMerger::ProcessMergeFallback(
     const ::rtl::OUString& rMergeFallback,
     const AddonStatusbarItemContainer& rItems )
 {
-    // fallback IGNORE or REPLACE/REMOVE item not found
+    
     if (( rMergeFallback == MERGEFALLBACK_IGNORE ) ||
             ( rMergeCommand == MERGECOMMAND_REPLACE ) ||
             ( rMergeCommand == MERGECOMMAND_REMOVE  ) )

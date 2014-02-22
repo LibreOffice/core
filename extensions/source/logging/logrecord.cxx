@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "logrecord.hxx"
@@ -24,18 +24,18 @@
 #include <osl/thread.hxx>
 #include <osl/diagnose.h>
 
-//........................................................................
+
 namespace logging
 {
-//........................................................................
+
 
     using ::com::sun::star::logging::LogRecord;
     using ::com::sun::star::util::DateTime;
 
-    //====================================================================
-    //= helper
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     namespace
     {
         /** returns a string representation of the current thread
@@ -51,7 +51,7 @@ namespace logging
         }
     }
 
-    //--------------------------------------------------------------------
+    
     LogRecord createLogRecord( const OUString& _rLoggerName, const OUString& _rClassName,
         const OUString& _rMethodName, const OUString& _rMessage,
         sal_Int32 _nLogLevel, oslInterlockedCount _nEventNumber )
@@ -83,8 +83,8 @@ namespace logging
         );
     }
 
-//........................................................................
-} // namespace logging
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

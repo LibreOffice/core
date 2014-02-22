@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -58,7 +58,7 @@ class BackendImpl : public t_helper
         const OUString m_dialogURL;
         OUString m_dialogName;
 
-        // Package
+        
         virtual beans::Optional< beans::Ambiguous<sal_Bool> > isRegistered_(
             ::osl::ResettableMutexGuard & guard,
             ::rtl::Reference<AbortChannel> const & abortChannel,
@@ -80,7 +80,7 @@ class BackendImpl : public t_helper
     };
     friend class PackageImpl;
 
-    // PackageRegistryBackend
+    
     virtual Reference<deployment::XPackage> bindPackage_(
         OUString const & url, OUString const & mediaType,
         sal_Bool bRemoved, OUString const & identifier,
@@ -98,10 +98,10 @@ public:
     BackendImpl( Sequence<Any> const & args,
                  Reference<XComponentContext> const & xComponentContext );
 
-    // XUpdatable
+    
     virtual void SAL_CALL update() throw (RuntimeException);
 
-    // XPackageRegistry
+    
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
     getSupportedPackageTypes() throw (RuntimeException);
     virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
@@ -110,7 +110,7 @@ public:
 
 };
 
-//______________________________________________________________________________
+
 BackendImpl::PackageImpl::PackageImpl(
     ::rtl::Reference<BackendImpl> const & myBackend,
     OUString const & url,
@@ -118,13 +118,13 @@ BackendImpl::PackageImpl::PackageImpl(
     OUString const & scriptURL, OUString const & dialogURL, bool bRemoved,
     OUString const & identifier)
     : Package( myBackend.get(), url,
-               OUString(), OUString(), // will be late-initialized
+               OUString(), OUString(), 
                !scriptURL.isEmpty() ? myBackend->m_xBasicLibTypeInfo
                : myBackend->m_xDialogLibTypeInfo, bRemoved, identifier),
       m_scriptURL( scriptURL ),
       m_dialogURL( dialogURL )
 {
-    // name, displayName:
+    
     if (!dialogURL.isEmpty()) {
         m_dialogName = LibraryContainer::get_libname(
             dialogURL, xCmdEnv, myBackend->getComponentContext() );
@@ -138,7 +138,7 @@ BackendImpl::PackageImpl::PackageImpl(
     m_displayName = m_name;
 }
 
-//______________________________________________________________________________
+
 BackendImpl::BackendImpl(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
@@ -181,15 +181,15 @@ bool BackendImpl::hasActiveEntry(OUString const & url)
     return false;
 }
 
-// XUpdatable
-//______________________________________________________________________________
+
+
 void BackendImpl::update() throw (RuntimeException)
 {
-    // Nothing to do here after fixing i70283!?
+    
 }
 
-// XPackageRegistry
-//______________________________________________________________________________
+
+
 Sequence< Reference<deployment::XPackageTypeInfo> >
 BackendImpl::getSupportedPackageTypes() throw (RuntimeException)
 {
@@ -209,8 +209,8 @@ void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaT
         m_backendDb->removeEntry(url);
 }
 
-// PackageRegistryBackend
-//______________________________________________________________________________
+
+
 Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString const & url, OUString const & mediaType_,
     sal_Bool bRemoved, OUString const & identifier,
@@ -219,17 +219,17 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
     OUString mediaType( mediaType_ );
     if (mediaType.isEmpty())
     {
-        // detect media-type:
+        
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv ) &&
             ucbContent.isFolder())
         {
-            // probe for script.xlb:
+            
             if (create_ucb_content(
                     0, makeURL( url, "script.xlb" ),
                     xCmdEnv, false /* no throw */ ))
                 mediaType = "application/vnd.sun.star.basic-library";
-            // probe for dialog.xlb:
+            
             else if (create_ucb_content(
                          0, makeURL( url, "dialog.xlb" ),
                          xCmdEnv, false /* no throw */ ))
@@ -282,15 +282,15 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
 }
 
 
-// Package
+
 BackendImpl * BackendImpl::PackageImpl::getMyBackend() const
 {
     BackendImpl * pBackend = static_cast<BackendImpl *>(m_myBackend.get());
     if (NULL == pBackend)
     {
-        //May throw a DisposedException
+        
         check();
-        //We should never get here...
+        
         throw RuntimeException(
             "Failed to get the BackendImpl",
             static_cast<OWeakObject*>(const_cast<PackageImpl *>(this)));
@@ -341,9 +341,9 @@ lcl_maybeAddScript(
         if (xScriptLibs->hasByName(rName))
         {
             const OUString sOriginalUrl = xScriptLibs->getOriginalLibraryLinkURL(rName);
-            //We assume here that library names in extensions are unique, which may not be the case
-            //ToDo: If the script exist in another extension, then both extensions must have the
-            //same id
+            
+            
+            
             if (sOriginalUrl.match("vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE")
                 || sOriginalUrl.match("vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE")
                 || sOriginalUrl.match("vnd.sun.star.expand:$BUNDLED_EXTENSIONS"))
@@ -407,19 +407,19 @@ void BackendImpl::PackageImpl::processPackage_(
     bool bRegistered = getMyBackend()->hasActiveEntry(getURL());
     if( !doRegisterPackage )
     {
-        //We cannot just call removeLibrary(name) because this could remove a
-        //script which was added by an extension in a different repository. For
-        //example, extension foo is contained in the bundled repository and then
-        //the user adds it it to the user repository. The extension manager will
-        //then register the new script and revoke the script from the bundled
-        //extension. removeLibrary(name) would now remove the script from the
-        //user repository. That is, the script of the newly added user extension does
-        //not work anymore. Therefore we must check if the currently active
-        //script comes in fact from the currently processed extension.
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         if (bRegistered)
         {
-            //we also prevent and live deployment at startup
+            
             if (!isRemoved() && !startup)
             {
                 lcl_maybeRemoveScript(bScript, m_name, m_scriptURL, xScriptLibs);
@@ -430,20 +430,20 @@ void BackendImpl::PackageImpl::processPackage_(
         }
     }
     if (bRegistered)
-        return;     // Already registered
+        return;     
 
-    // Update LibraryContainer
+    
     bool bScriptSuccess = false;
     bool bDialogSuccess = false;
     if (!startup)
     {
-        //If there is a bundled extension, and the user installes the same extension
-        //then the script from the bundled extension must be removed. If this does not work
-        //then live deployment does not work for scripts.
+        
+        
+        
         bScriptSuccess = lcl_maybeAddScript(bScript, m_name, m_scriptURL, xScriptLibs);
         bDialogSuccess = lcl_maybeAddScript(bDialog, m_dialogName, m_dialogURL, xDialogLibs);
     }
-    bool bSuccess = bScript || bDialog;     // Something must have happened
+    bool bSuccess = bScript || bDialog;     
     if( bRunning )
         if( (bScript && !bScriptSuccess) || (bDialog && !bDialogSuccess) )
             bSuccess = false;
@@ -452,7 +452,7 @@ void BackendImpl::PackageImpl::processPackage_(
         getMyBackend()->addDataToDb(getURL());
 }
 
-} // anon namespace
+} 
 
 namespace sdecl = comphelper::service_decl;
 sdecl::class_<BackendImpl, sdecl::with_args<true> > serviceBI;
@@ -461,8 +461,8 @@ extern sdecl::ServiceDecl const serviceDecl(
     "com.sun.star.comp.deployment.script.PackageRegistryBackend",
     BACKEND_SERVICE_NAME );
 
-} // namespace script
-} // namespace backend
-} // namespace dp_registry
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

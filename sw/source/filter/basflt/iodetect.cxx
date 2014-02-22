@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,20 +48,20 @@ SwIoDetect aFilterDetect[] =
 
 OUString SwIoDetect::IsReader(const sal_Char* pHeader, sal_uLong nLen_) const
 {
-    // Filter erkennung
+    
     struct W1_FIB
     {
-        SVBT16 wIdent;      // 0x0 int magic number
-        SVBT16 nFib;        // 0x2 FIB version written
-        SVBT16 nProduct;    // 0x4 product version written by
-        SVBT16 nlocale;     // 0x6 language stamp---localized version;
-        SVBT16 pnNext;      // 0x8
+        SVBT16 wIdent;      
+        SVBT16 nFib;        
+        SVBT16 nProduct;    
+        SVBT16 nlocale;     
+        SVBT16 pnNext;      
         SVBT16 fFlags;
 
         sal_uInt16 nFibGet()    { return SVBT16ToShort(nFib); }
         sal_uInt16 wIdentGet()  { return SVBT16ToShort(wIdent); }
         sal_uInt16 fFlagsGet()  { return SVBT16ToShort(fFlags); }
-        // SVBT16 fComplex :1;// 0004 when 1, file is in complex, fast-saved format.
+        
         sal_Bool fComplexGet()  { return static_cast< sal_Bool >((fFlagsGet() >> 2) & 1); }
     };
 
@@ -253,10 +253,10 @@ sal_Bool SwIoSystem::IsFileFilter(SfxMedium& rMedium, const OUString& rFmtName)
                     }
                 }
             }
-            //The same underlying filter can appear multiple times in the
-            //filter list, e.g. CWW8 filter twice, once for .doc and once for
-            //.dot.  We just care here if its either, not enforce that it's
-            //both which would be a bit of an odd requirement
+            
+            
+            
+            
             if (bRet)
                 break;
         }
@@ -288,7 +288,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
 
     if( pMedium ? ( pMedium->IsStorage() || SotStorage::IsStorageFile( pMedium->GetInStream() ) ) : SotStorage::IsStorageFile( rFileName ) )
     {
-        // package storage or OLEStorage based format
+        
         SotStorageRef xStg;
         if (!pMedium )
         {
@@ -298,7 +298,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
             pMedium = new SfxMedium( aObj.GetMainURL( INetURLObject::NO_DECODE ), STREAM_STD_READ );
         }
 
-        // templates should not get precedence over "normal" filters (#i35508, #i33168)
+        
         const SfxFilter* pTemplateFilter = 0;
         const SfxFilter* pOldFilter = pFCntnr->GetFilter4FilterName( rPrefFltName );
         bool bLookForTemplate = pOldFilter && pOldFilter->IsOwnTemplateFormat();
@@ -312,7 +312,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
                     if( 'C' == pFilter->GetUserData()[0] && IsValidStgFilter( xStor, *pFilter ) )
                     {
                         if ( pFilter->IsOwnTemplateFormat() && !bLookForTemplate )
-                            // found template filter; maybe there's a "normal" one also
+                            
                             pTemplateFilter = pFilter;
                         else
                             return pFilter;
@@ -321,7 +321,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
                     pFilter = aIter.Next();
                 }
 
-                // there's only a template filter that could be found
+                
                 if ( pTemplateFilter )
                     pFilter = pTemplateFilter;
             }
@@ -339,7 +339,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
                     if( 'C' == pFilter->GetUserData()[0] && IsValidStgFilter( *xStg, *pFilter ) )
                     {
                         if ( pFilter->IsOwnTemplateFormat() && !bLookForTemplate )
-                            // found template filter; maybe there's a "normal" one also
+                            
                             pTemplateFilter = pFilter;
                         else
                             return pFilter;
@@ -348,7 +348,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const OUString& rFileName,
                     pFilter = aIter.Next();
                 }
 
-                // there's only a template filter that could be found
+                
                 if ( pTemplateFilter )
                     pFilter = pTemplateFilter;
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/processor2d/linegeometryextractor2d.hxx>
@@ -23,11 +23,11 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #include <drawinglayer/primitive2d/transformprimitive2d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -52,7 +52,7 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D :
                 case PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D :
                 {
-                    // enter a line geometry group (with or without LineEnds)
+                    
                     bool bOldState(mbInLineGeometry);
                     mbInLineGeometry = true;
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
@@ -63,7 +63,7 @@ namespace drawinglayer
                 {
                     if(mbInLineGeometry)
                     {
-                        // extract hairline line geometry in world coordinates
+                        
                         const primitive2d::PolygonHairlinePrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(rCandidate));
                         basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
                         aLocalPolygon.transform(getViewInformation2D().getObjectTransformation());
@@ -75,7 +75,7 @@ namespace drawinglayer
                 {
                     if(mbInLineGeometry)
                     {
-                        // extract filled line geometry (line with width)
+                        
                         const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate));
                         basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
                         aLocalPolyPolygon.transform(getViewInformation2D().getObjectTransformation());
@@ -85,11 +85,11 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
                 {
-                    // remember current transformation and ViewInformation
+                    
                     const primitive2d::TransformPrimitive2D& rTransformCandidate(static_cast< const primitive2d::TransformPrimitive2D& >(rCandidate));
                     const geometry::ViewInformation2D aLastViewInformation2D(getViewInformation2D());
 
-                    // create new transformations for CurrentTransformation and for local ViewInformation2D
+                    
                     const geometry::ViewInformation2D aViewInformation2D(
                         getViewInformation2D().getObjectTransformation() * rTransformCandidate.getTransformation(),
                         getViewInformation2D().getViewTransformation(),
@@ -99,10 +99,10 @@ namespace drawinglayer
                         getViewInformation2D().getExtendedInformationSequence());
                     updateViewInformation(aViewInformation2D);
 
-                    // proccess content
+                    
                     process(rTransformCandidate.getChildren());
 
-                    // restore transformations
+                    
                     updateViewInformation(aLastViewInformation2D);
 
                     break;
@@ -115,18 +115,18 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                 case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
                 {
-                    // ignorable primitives
+                    
                     break;
                 }
                 default :
                 {
-                    // process recursively
+                    
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     break;
                 }
             }
         }
-    } // end of namespace processor2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

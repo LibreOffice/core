@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include "basictest.hxx"
 #include <osl/file.hxx>
@@ -24,19 +24,19 @@ namespace
         public:
         Nested_Struct(): BootstrapFixture(true, false) {};
         void testAssign1();
-        void testAssign1Alt(); // result is uno-ised and tested
+        void testAssign1Alt(); 
         void testOldAssign();
-        void testOldAssignAlt(); // result is uno-ised and tested
+        void testOldAssignAlt(); 
         void testUnfixedVarAssign();
-        void testUnfixedVarAssignAlt(); // result is uno-ised and tested
+        void testUnfixedVarAssignAlt(); 
         void testFixedVarAssign();
-        void testFixedVarAssignAlt(); // result is uno-ised and tested
-        void testUnoAccess(); // fdo#60117 specific test
+        void testFixedVarAssignAlt(); 
+        void testUnoAccess(); 
 
-        // Adds code needed to register the test suite
+        
         CPPUNIT_TEST_SUITE(Nested_Struct);
 
-        // Declares the method as a test to call
+        
         CPPUNIT_TEST(testAssign1);
         CPPUNIT_TEST(testAssign1Alt);
         CPPUNIT_TEST(testOldAssign);
@@ -47,12 +47,12 @@ namespace
         CPPUNIT_TEST(testFixedVarAssignAlt);
         CPPUNIT_TEST(testUnoAccess);
 
-        // End of test suite definition
+        
         CPPUNIT_TEST_SUITE_END();
     };
 
-// tests the new behaviour, we should be able to
-// directly modify the value of the nested 'HorizontalLine' struct
+
+
 OUString sTestSource1(
     "Function doUnitTest() as Integer\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
@@ -69,12 +69,12 @@ OUString sTestSource1Alt(
     "End Function\n"
 );
 
-// tests the old behaviour, we should still be able
-// to use the old workaround of
-// a) creating a new instance BorderLine,
-// b) cloning the new instance with the value of b0.HorizontalLine
-// c) modifying the new instance
-// d) setting b0.HorizontalLine with the value of the new instance
+
+
+
+
+
+
 OUString sTestSource2(
     "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
@@ -94,11 +94,11 @@ OUString sTestSource2Alt(
     "doUnitTest = b0\n"
 "End Function\n"
 );
-// it should be legal to assign a variant to a struct ( and copy by val )
-// make sure we aren't copying by reference, we make sure that l is not
-// a reference copy of b0.HorizontalLine, each one should have an
-// OuterLineWidth of 4 & 9 respectively and we should be returning
-// 13 the sum of the two ( hopefully unique values if we haven't copied by reference )
+
+
+
+
+
 OUString sTestSource3(
     "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\"\n"
@@ -124,8 +124,8 @@ OUString sTestSource3Alt(
 "End Function\n"
 );
 
-// nearly the same as above but this time for a fixed type
-// variable
+
+
 OUString sTestSource4(
     "Function doUnitTest()\n"
     "Dim b0 as new \"com.sun.star.table.TableBorder\", l as new \"com.sun.star.table.BorderLine\"\n"
@@ -151,11 +151,11 @@ OUString sTestSource4Alt(
 "End Function\n"
 );
 
-// Although basic might appear to correctly change nested struct elements
-// fdo#60117 shows that basic can be fooled ( and even the watch(ed) variable
-// in the debugger shows the expected values )
-// We need to additionally check the actual uno struct to see if the
-// changes made are *really* reflected in the object
+
+
+
+
+
 OUString sTestSource5(
     "Function doUnitTest() as Object\n"
     "Dim aWinDesc as new \"com.sun.star.awt.WindowDescriptor\"\n"
@@ -218,7 +218,7 @@ void Nested_Struct::testUnfixedVarAssign()
     MacroSnippet myMacro( sTestSource3 );
     myMacro.Compile();
     CPPUNIT_ASSERT_MESSAGE("testUnfixedVarAssign fails with compile error",!myMacro.HasError() );
-    // forces a broadcast
+    
     SbxVariableRef pNew = myMacro.Run();
     CPPUNIT_ASSERT(pNew->GetInteger() == 13 );
 }
@@ -236,7 +236,7 @@ void Nested_Struct::testUnfixedVarAssignAlt()
     CPPUNIT_ASSERT_EQUAL(true, bRes );
 
     int result = aResult.getLength();
-    // should have 2 elements in a sequence returned
+    
     CPPUNIT_ASSERT_EQUAL(2, result );
 
     table::TableBorder aBorder;
@@ -272,7 +272,7 @@ void Nested_Struct::testFixedVarAssignAlt()
     CPPUNIT_ASSERT_EQUAL(true, bRes );
 
     int result = aResult.getLength();
-    // should have 2 elements in a sequence returned
+    
     CPPUNIT_ASSERT_EQUAL(2, result );
 
     table::TableBorder aBorder;
@@ -300,9 +300,9 @@ void Nested_Struct::testUnoAccess()
     CPPUNIT_ASSERT_EQUAL(200, result );
 }
 
-  // Put the test suite in the registry
+  
   CPPUNIT_TEST_SUITE_REGISTRATION(Nested_Struct);
-} // namespace
+} 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

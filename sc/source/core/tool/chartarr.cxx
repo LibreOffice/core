@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -105,7 +105,7 @@ ScMemChart* ScChartArray::CreateMemChart()
             return CreateMemChartSingle();
     }
     else
-        return CreateMemChartMulti(); // Can handle 0 range better than Single
+        return CreateMemChartMulti(); 
 }
 
 namespace {
@@ -148,7 +148,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     SCSIZE nRow;
 
         //
-        //  real size (without hidden rows/columns)
+        
         //
 
     SCCOL nColAdd = HasRowHeaders() ? 1 : 0;
@@ -163,20 +163,20 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     ScRangeListRef aRangeListRef(GetRangeList());
     aRangeListRef->front()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
-    SCCOL nStrCol = nCol1; // remember for labeling
+    SCCOL nStrCol = nCol1; 
     SCROW nStrRow = nRow1;
-    // Skip hidden columns.
-    // TODO: make use of last column value once implemented.
+    
+    
     SCCOL nLastCol = -1;
     while (pDocument->ColHidden(nCol1, nTab1, NULL, &nLastCol))
         ++nCol1;
 
-    // Skip hidden rows.
+    
     SCROW nLastRow = -1;
     if (pDocument->RowHidden(nRow1, nTab1, NULL, &nLastRow))
         nRow1 = nLastRow + 1;
 
-    // if everything is hidden then the label remains at the beginning
+    
     if ( nCol1 <= nCol2 )
     {
         nStrCol = nCol1;
@@ -204,7 +204,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     aRows.reserve(nTotalRows);
     if (nRow1 <= nRow2)
     {
-        // Get all visible rows between nRow1 and nRow2.
+        
         SCROW nThisRow = nRow1;
         while (nThisRow <= nRow2)
         {
@@ -217,7 +217,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     }
     SCSIZE nRowCount = aRows.size();
 
-    // May happen at least with more than 32k rows.
+    
     if (nColCount > SHRT_MAX || nRowCount > SHRT_MAX)
     {
         nColCount = 0;
@@ -239,7 +239,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     }
 
         //
-        //  Data
+        
         //
 
     ScMemChart* pMemChart = new ScMemChart(
@@ -253,7 +253,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
             {
                 for (nRow=0; nRow<nRowCount; nRow++)
                 {
-                    // DBL_MIN is a Hack for Chart to recognize empty cells.
+                    
                     ScAddress aPos(aCols[nCol], aRows[nRow], nTab1);
                     double nVal = getCellValue(*pDocument, aPos, DBL_MIN, bCalcAsShown);
                     pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
@@ -262,14 +262,14 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         }
         else
         {
-            // Flag marking data as invalid?
+            
             for (nCol=0; nCol<nColCount; nCol++)
                 for (nRow=0; nRow<nRowCount; nRow++)
                     pMemChart->SetData( static_cast<short>(nCol), static_cast<short>(nRow), DBL_MIN );
         }
 
         //
-        //  Column Header
+        
         //
         for (nCol=0; nCol<nColCount; nCol++)
         {
@@ -291,7 +291,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
         }
 
         //
-        //  Row Header
+        
         //
         for (nRow=0; nRow<nRowCount; nRow++)
         {
@@ -321,7 +321,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     SCSIZE nColCount = GetPositionMap()->GetColCount();
     SCSIZE nRowCount = GetPositionMap()->GetRowCount();
 
-    // May happen at least with more than 32k rows.
+    
     if (nColCount > SHRT_MAX || nRowCount > SHRT_MAX)
     {
         nColCount = 0;
@@ -341,7 +341,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
     }
 
     //
-    //  Data
+    
     //
 
     ScMemChart* pMemChart = new ScMemChart(
@@ -358,10 +358,10 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
             {
                 for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
                 {
-                    double nVal = DBL_MIN; // Hack for Chart to recognize empty cells
+                    double nVal = DBL_MIN; 
                     const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
                     if (pPos)
-                        // otherwise: Gap
+                        
                         nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
 
                     pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
@@ -372,20 +372,20 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         {
             for ( nRow = 0; nRow < nRowCount; nRow++, nIndex++ )
             {
-                double nVal = DBL_MIN; // Hack for Chart to recognize empty cells
+                double nVal = DBL_MIN; 
                 const ScAddress* pPos = GetPositionMap()->GetPosition( nIndex );
                 if (pPos)
-                    // otherwise: Gap
+                    
                     nVal = getCellValue(*pDocument, *pPos, DBL_MIN, bCalcAsShown);
 
                 pMemChart->SetData(static_cast<short>(nCol), static_cast<short>(nRow), nVal);
             }
         }
 
-        //TODO: Label when gaps
+        
 
         //
-        //  Column header
+        
         //
 
         SCCOL nPosCol = 0;
@@ -412,7 +412,7 @@ ScMemChart* ScChartArray::CreateMemChartMulti()
         }
 
         //
-        //  Row header
+        
         //
 
         SCROW nPosRow = 0;

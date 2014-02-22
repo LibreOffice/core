@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,31 +14,31 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/accessiblekeybindinghelper.hxx>
 
 
-//..............................................................................
+
 namespace comphelper
 {
-//..............................................................................
 
-    using namespace ::com::sun::star; // MT 04/2003: was ::drafts::com::sun::star - otherwise to many changes
+
+    using namespace ::com::sun::star; 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::accessibility;
 
-    //==============================================================================
-    // OAccessibleKeyBindingHelper
-    //==============================================================================
+    
+    
+    
 
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     OAccessibleKeyBindingHelper::OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper )
         : cppu::WeakImplHelper1<XAccessibleKeyBinding>( rHelper )
@@ -46,13 +46,13 @@ namespace comphelper
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     OAccessibleKeyBindingHelper::~OAccessibleKeyBindingHelper()
     {
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const Sequence< awt::KeyStroke >& rKeyBinding ) throw (RuntimeException)
     {
@@ -61,7 +61,7 @@ namespace comphelper
         m_aKeyBindings.push_back( rKeyBinding );
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     void OAccessibleKeyBindingHelper::AddKeyBinding( const awt::KeyStroke& rKeyStroke ) throw (RuntimeException)
     {
@@ -72,9 +72,9 @@ namespace comphelper
         m_aKeyBindings.push_back( aSeq );
     }
 
-    // -----------------------------------------------------------------------------
-    // XAccessibleKeyBinding
-    // -----------------------------------------------------------------------------
+    
+    
+    
 
     sal_Int32 OAccessibleKeyBindingHelper::getAccessibleKeyBindingCount() throw (RuntimeException)
     {
@@ -83,7 +83,7 @@ namespace comphelper
         return m_aKeyBindings.size();
     }
 
-    // -----------------------------------------------------------------------------
+    
 
     Sequence< awt::KeyStroke > OAccessibleKeyBindingHelper::getAccessibleKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException)
     {
@@ -95,10 +95,10 @@ namespace comphelper
         return m_aKeyBindings[nIndex];
     }
 
-    // -----------------------------------------------------------------------------
+    
 
-//..............................................................................
-}   // namespace comphelper
-//..............................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

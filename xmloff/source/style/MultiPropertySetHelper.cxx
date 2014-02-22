@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -24,7 +24,7 @@
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
-// STL includes
+
 #include <algorithm>
 
 
@@ -48,11 +48,11 @@ MultiPropertySetHelper::MultiPropertySetHelper(
         aValues(),
         pValues( NULL )
 {
-    // first count the elements
+    
     for( const sal_Char** pPtr = pNames; *pPtr != NULL; pPtr++ )
         nLength++;
 
-    // allocate array and create strings
+    
     pPropertyNames = new OUString[nLength];
     for( sal_Int16 i = 0; i < nLength; i++ )
         pPropertyNames[i] = OUString::createFromAscii( pNames[i] );
@@ -61,7 +61,7 @@ MultiPropertySetHelper::MultiPropertySetHelper(
 
 MultiPropertySetHelper::~MultiPropertySetHelper()
 {
-    pValues = NULL; // memory 'owned' by aValues
+    pValues = NULL; 
 
     delete[] pSequenceIndex;
     delete[] pPropertyNames;
@@ -73,27 +73,27 @@ void MultiPropertySetHelper::hasProperties(
 {
     DBG_ASSERT( rInfo.is(), "I'd really like an XPropertySetInfo here." );
 
-    // allocate sequence index
+    
     if ( NULL == pSequenceIndex )
         pSequenceIndex = new sal_Int16[nLength] ;
 
-    // construct pSequenceIndex
+    
     sal_Int16 nNumberOfProperties = 0;
     sal_Int16 i;
 
     for( i = 0; i < nLength; i++ )
     {
-        // ask for property
+        
         sal_Bool bHasProperty =
             rInfo->hasPropertyByName( pPropertyNames[i] );
 
-        // set index and increment (if appropriate)
+        
         pSequenceIndex[i]= bHasProperty ? nNumberOfProperties : -1;
         if ( bHasProperty )
             nNumberOfProperties++;
     }
 
-    // construct property sequence from index array
+    
     if ( aPropertySequence.getLength() != nNumberOfProperties )
         aPropertySequence.realloc( nNumberOfProperties );
     OUString* pPropertySequence = aPropertySequence.getArray();
@@ -126,7 +126,7 @@ void MultiPropertySetHelper::getValues(
 {
     DBG_ASSERT( rPropertySet.is(), "We need an XPropertySet." );
 
-    // re-alloc aValues (if necessary) and fill with values from XPropertySet
+    
     sal_Int16 nSupportedPropertiesCount =
         (sal_Int16)aPropertySequence.getLength();
     if ( aValues.getLength() != nSupportedPropertiesCount )
@@ -138,7 +138,7 @@ void MultiPropertySetHelper::getValues(
             pPropertyNames[ pSequenceIndex[ i ] ] );
     }
 
-    // re-establish pValues pointer
+    
     pValues = aValues.getConstArray();
 }
 
@@ -176,8 +176,8 @@ const Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex,
     return getValue( nIndex );
 }
 
-// inline methods defined in header:
-// inline Any& MultiPropertySetHelper::getValue( sal_Int16 nIndex )
-// inline sal_Bool MultiPropertySetHelper::hasProperty( sal_Int16 nValueNo )
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

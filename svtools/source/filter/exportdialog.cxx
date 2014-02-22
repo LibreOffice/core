@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -134,17 +134,17 @@ sal_Int32 ExportDialog::GetDefaultUnit()
     sal_Int32 nDefaultUnit = UNIT_CM;
     switch( mrFltCallPara.eFieldUnit )
     {
-//      case FUNIT_NONE :
-//      case FUNIT_PERCENT :
-//      case FUNIT_CUSTOM :
+
+
+
         default:                nDefaultUnit = UNIT_CM; break;
 
-        case FUNIT_MILE :       // PASSTHROUGH INTENDED
+        case FUNIT_MILE :       
         case FUNIT_FOOT :
         case FUNIT_TWIP :
         case FUNIT_PICA :       nDefaultUnit = UNIT_INCH; break;
 
-        case FUNIT_KM :         // PASSTHROUGH INTENDED
+        case FUNIT_KM :         
         case FUNIT_M :
         case FUNIT_100TH_MM :   nDefaultUnit = UNIT_CM; break;
 
@@ -185,7 +185,7 @@ uno::Sequence< beans::PropertyValue > ExportDialog::GetFilterData( sal_Bool bUpd
         if ( ( mnInitialResolutionUnit == UNIT_DEFAULT ) && ( nUnit == GetDefaultUnit() ) )
             nUnit = UNIT_DEFAULT;
 
-        // updating ui configuration
+        
         if ( mbIsPixelFormat )
         {
             if ( nUnit > UNIT_MAX_ID )
@@ -398,7 +398,7 @@ void ExportDialog::GetGraphicSource()
             uno::Reference< frame::XController > xController( xModel->getCurrentController() );
             if ( xController.is() )
             {
-                if ( mbExportSelection )                // check if there is a selection
+                if ( mbExportSelection )                
                 {
                     uno::Reference< view::XSelectionSupplier > xSelectionSupplier( xController, uno::UNO_QUERY );
                     if ( xSelectionSupplier.is() )
@@ -416,7 +416,7 @@ void ExportDialog::GetGraphicSource()
                         uno::Reference< drawing::XDrawPage > xCurrentPage( xDrawView->getCurrentPage() );
                         if ( xCurrentPage.is() )
                         {
-                            mxPage = xCurrentPage;      // exporting whole page
+                            mxPage = xCurrentPage;      
                         }
                     }
                 }
@@ -494,7 +494,7 @@ sal_Bool ExportDialog::GetGraphicStream()
     catch( uno::Exception& )
     {
 
-        // ups
+        
 
     }
     return bRet;
@@ -536,8 +536,8 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
 
         if ( mbIsPixelFormat )
         {
-            nRawFileSize = ( maSize.Width * nBitsPerPixel + 7 ) &~ 7;   // rounding up to 8 bits
-            nRawFileSize /= 8;                                          // in bytes
+            nRawFileSize = ( maSize.Width * nBitsPerPixel + 7 ) &~ 7;   
+            nRawFileSize /= 8;                                          
             nRawFileSize *= maSize.Height;
         }
         if ( nRawFileSize > SAL_MAX_UINT32 )
@@ -546,8 +546,8 @@ sal_uInt32 ExportDialog::GetRawFileSize() const
     return static_cast< sal_uInt32 >( nRawFileSize );
 }
 
-// checks if the source dimension/resolution is not too big
-// to determine the exact graphic output size and preview for jpg
+
+
 sal_Bool ExportDialog::IsTempExportAvailable() const
 {
     return GetRawFileSize() < static_cast< sal_uInt32 >( mnMaxFilesizeForRealtimePreview );
@@ -662,7 +662,7 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
 
     setupControls();
 
-    // Size
+    
     mpLbSizeX->SetSelectHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
     if (mpSbCompression)
@@ -691,10 +691,10 @@ ExportDialog::ExportDialog(FltCallDialogParameter& rPara,
     mpRbBinary->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
     mpRbText->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    // BMP
+    
     mpCbRLEEncoding->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
-    // EPS
+    
     mpRbEPSLevel1->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
     mpRbEPSLevel2->SetClickHdl( LINK( this, ExportDialog, UpdateHdl ) );
 
@@ -714,7 +714,7 @@ void ExportDialog::setupSizeControls()
         mpFtResolution->Hide();
         mpNfResolution->Hide();
         mpLbResolution->Hide();
-        mpLbSizeX->RemoveEntry( UNIT_PIXEL );        // removing pixel
+        mpLbSizeX->RemoveEntry( UNIT_PIXEL );        
         if ( nUnit >= UNIT_PIXEL )
             nUnit = UNIT_CM;
     }
@@ -724,9 +724,9 @@ void ExportDialog::setupSizeControls()
         nUnit = UNIT_CM;
     mpLbSizeX->SelectEntryPos( static_cast< sal_uInt16 >( nUnit ) );
 
-    if ( mbIsPixelFormat )      // TODO: (metafileresolutionsupport) should be supported for vector formats also... this makes
-    {                           // sense eg for bitmap fillings in metafiles, to preserve high dpi output
-                                // (atm without special vector support the bitmaps are rendered with 96dpi)
+    if ( mbIsPixelFormat )      
+    {                           
+                                
         sal_Int32 nResolution = mpOptionsItem->ReadInt32(OUString("PixelExportResolution"), 96);
         if ( nResolution < 1 )
             nResolution = 96;
@@ -755,7 +755,7 @@ void ExportDialog::createFilterOptions()
             mpLbColorDepth->SelectEntryPos( nColor );
             mpColorDepth->Show();
 
-            // Quality
+            
             mpJPGQuality->Show();
             sal_Int32 nQuality = mpFilterOptionsItem->ReadInt32(OUString("Quality"), 75);
             if ((nQuality < 1 ) || (nQuality > 100))
@@ -772,7 +772,7 @@ void ExportDialog::createFilterOptions()
         break;
         case FORMAT_PNG :
         {
-            // Compression 1..9
+            
             mpPNGCompression->Show();
             sal_Int32 nCompression = mpFilterOptionsItem->ReadInt32(OUString("Compression"), 6);
             if ( ( nCompression < 1 ) || ( nCompression > 9 ) )
@@ -787,11 +787,11 @@ void ExportDialog::createFilterOptions()
             mpNfCompression->SetValue( 9 );
             mpNfCompression->SetStrictFormat( true );
 
-            // Interlaced
+            
             mpMode->Show();
             mpCbInterlaced->Check(mpFilterOptionsItem->ReadInt32(OUString("Interlaced"), 0) != 0);
 
-            // Transparency
+            
             mpDrawingObjects->Show();
             mpCbSaveTransparency->Check(mpFilterOptionsItem->ReadInt32(OUString("Translucent"), 1) != 0);
         }
@@ -813,18 +813,18 @@ void ExportDialog::createFilterOptions()
             mpLbColorDepth->SelectEntryPos( nColor );
             mpColorDepth->Show();
 
-            // RLE coding
+            
             mpBMPCompression->Show();
             mpCbRLEEncoding->Check(mpFilterOptionsItem->ReadBool(OUString("RLE_Coding"), true));
         }
         break;
         case FORMAT_GIF :
         {
-            // Interlaced
+            
             mpMode->Show();
             mpCbInterlaced->Check(mpFilterOptionsItem->ReadInt32(OUString("Interlaced"), 1) != 0);
 
-            // Transparency
+            
             mpDrawingObjects->Show();
             mpCbSaveTransparency->Check(mpFilterOptionsItem->ReadInt32(OUString("Translucent"), 1) != 0);
         }
@@ -833,7 +833,7 @@ void ExportDialog::createFilterOptions()
         case FORMAT_PGM :
         case FORMAT_PPM :
         {
-            // RB Binary / Text
+            
             mpEncoding->Show();
             sal_Int32 nFormat = mpFilterOptionsItem->ReadInt32(OUString("FileFormat"), 1);
             mpRbBinary->Check( nFormat == 0 );
@@ -892,7 +892,7 @@ void ExportDialog::updateControls()
 {
     GetGraphicStream();
 
-    // Size Controls
+    
     if ( !mbIsPixelFormat )
     {
         awt::Size aSize100thmm( maSize );
@@ -905,7 +905,7 @@ void ExportDialog::updateControls()
     {
         MapUnit aMapUnit( GetMapUnit( mpLbSizeX->GetSelectEntryPos() ) );
         if ( aMapUnit == MAP_PIXEL )
-        {   // calculating pixel count via resolution and original graphic size
+        {   
             mpMfSizeX->SetDecimalDigits( 0 );
             mpMfSizeY->SetDecimalDigits( 0 );
             mpMfSizeX->SetValue( maSize.Width );
@@ -931,17 +931,17 @@ void ExportDialog::updateControls()
     sal_Int32 nResolution = 0;
     switch( mpLbResolution->GetSelectEntryPos() )
     {
-        case 0 : nResolution = maResolution.Width / 100; break;     // pixels / cm
-        case 2 : nResolution = maResolution.Width; break;           // pixels / meter
+        case 0 : nResolution = maResolution.Width / 100; break;     
+        case 2 : nResolution = maResolution.Width; break;           
         default:
-        case 1 : nResolution = static_cast< sal_Int32 >(maResolution.Width * 0.0254); break;    // pixels / inch
+        case 1 : nResolution = static_cast< sal_Int32 >(maResolution.Width * 0.0254); break;    
     }
     mpNfResolution->SetValue( nResolution );
 
     if (mpSbCompression && mpSbCompression->IsVisible() && mpNfCompression)
         mpSbCompression->SetThumbPos(mpNfCompression->GetValue());
 
-    // updating estimated size
+    
     sal_Int64 nRealFileSize( mpTempStream->Tell() );
     if ( mbIsPixelFormat )
     {
@@ -971,7 +971,7 @@ void ExportDialog::updateControls()
         }
     }
 
-    // EPS
+    
     if ( mpRbEPSLevel1->IsVisible() )
     {
         sal_Bool bEnabled = !mpRbEPSLevel1->IsChecked();
@@ -1071,9 +1071,9 @@ IMPL_LINK_NOARG(ExportDialog, UpdateHdlMtfSizeY)
 IMPL_LINK_NOARG(ExportDialog, UpdateHdlNfResolution)
 {
     sal_Int32 nResolution = mpNfResolution->GetValue();
-    if ( mpLbResolution->GetSelectEntryPos() == 0 )      // pixels / cm
+    if ( mpLbResolution->GetSelectEntryPos() == 0 )      
         nResolution *= 100;
-    else if ( mpLbResolution->GetSelectEntryPos() == 1 ) // pixels / inch
+    else if ( mpLbResolution->GetSelectEntryPos() == 1 ) 
         nResolution = static_cast< sal_Int32 >( ( ( static_cast< double >( nResolution ) + 0.5 ) / 0.0254 ) );
     maResolution.Width = nResolution;
     maResolution.Height= nResolution;
@@ -1091,7 +1091,7 @@ IMPL_LINK_NOARG(ExportDialog, SbCompressionUpdateHdl)
 
 IMPL_LINK_NOARG(ExportDialog, OK)
 {
-    // writing config parameter
+    
 
 
     mrFltCallPara.aFilterData = GetFilterData( sal_True );

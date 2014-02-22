@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svl/itempool.hxx>
@@ -26,20 +26,20 @@
 #include "statcach.hxx"
 #include <sfx2/viewfrm.hxx>
 
-//====================================================================
+
 
 DBG_NAME(SfxControllerItem);
 
-//--------------------------------------------------------------------
+
 #ifdef DBG_UTIL
 
 void SfxControllerItem::CheckConfigure_Impl( sal_uIntPtr nType )
 {
-    // Real Slot? (i.e. no Separator etc.)
+    
     if ( !nId )
         return;
 
-    // is the ID configurable at all in 'nType'?
+    
     const SfxSlot *pSlot = SFX_SLOTPOOL().GetSlot(nId);
     DBG_ASSERTWARNING( pSlot, "SfxControllerItem: binding not existing slot" );
     if ( pSlot && !pSlot->IsMode(nType) )
@@ -52,8 +52,8 @@ void SfxControllerItem::CheckConfigure_Impl( sal_uIntPtr nType )
 
 #endif
 
-//--------------------------------------------------------------------
-// returns the next registered SfxControllerItem with the same id
+
+
 
 SfxControllerItem* SfxControllerItem::GetItemLink()
 {
@@ -61,8 +61,8 @@ SfxControllerItem* SfxControllerItem::GetItemLink()
     return pNext == this ? 0 : pNext;
 }
 
-//--------------------------------------------------------------------
-// returns sal_True if this binding is really bound to a function
+
+
 
 sal_Bool SfxControllerItem::IsBound() const
 {
@@ -70,8 +70,8 @@ sal_Bool SfxControllerItem::IsBound() const
     return pNext != this;
 }
 
-//====================================================================
-// registeres with the id at the bindings
+
+
 
 void SfxControllerItem::Bind( sal_uInt16 nNewId, SfxBindings *pBindinx )
 {
@@ -110,7 +110,7 @@ void SfxControllerItem::BindInternal_Impl( sal_uInt16 nNewId, SfxBindings *pBind
 }
 
 
-//====================================================================
+
 
 void SfxControllerItem::UnBind()
 
@@ -135,7 +135,7 @@ void SfxControllerItem::UnBind()
     pNext = this;
 }
 
-//====================================================================
+
 
 void SfxControllerItem::ReBind()
 
@@ -159,7 +159,7 @@ DBG_CHKTHIS(SfxControllerItem, 0);
     pBindings->Register(*this);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxControllerItem::ClearCache()
 
@@ -190,8 +190,8 @@ void SfxControllerItem::ClearCache()
     pBindings->ClearCache_Impl( GetId() );
 }
 
-//--------------------------------------------------------------------
-// replaces the successor in the list of bindings of the same id
+
+
 
 SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLink )
 {
@@ -201,8 +201,8 @@ SfxControllerItem* SfxControllerItem::ChangeItemLink( SfxControllerItem* pNewLin
     return pOldLink == this ? 0 : pOldLink;
 }
 
-//--------------------------------------------------------------------
-// changes the id of unbound functions (e.g. for sub-menu-ids)
+
+
 
 void SfxControllerItem::SetId( sal_uInt16 nItemId )
 {
@@ -211,9 +211,9 @@ void SfxControllerItem::SetId( sal_uInt16 nItemId )
     nId = nItemId;
 }
 
-//--------------------------------------------------------------------
 
-// creates a atomic item for a controller without registration.
+
+
 
 SfxControllerItem::SfxControllerItem():
     nId(0),
@@ -223,8 +223,8 @@ SfxControllerItem::SfxControllerItem():
     DBG_CTOR(SfxControllerItem, 0);
 }
 
-//--------------------------------------------------------------------
-// creates a representation of the function nId and registeres it
+
+
 
 SfxControllerItem::SfxControllerItem( sal_uInt16 nID, SfxBindings &rBindings ):
     nId(nID),
@@ -235,8 +235,8 @@ SfxControllerItem::SfxControllerItem( sal_uInt16 nID, SfxBindings &rBindings ):
     Bind(nId, &rBindings);
 }
 
-//--------------------------------------------------------------------
-// unregisteres the item in the bindings
+
+
 
 SfxControllerItem::~SfxControllerItem()
 {
@@ -245,13 +245,13 @@ SfxControllerItem::~SfxControllerItem()
     DBG_DTOR(SfxControllerItem, 0);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxControllerItem::StateChanged
 (
-    sal_uInt16,          // <SID> of the triggering slot
-    SfxItemState,       // <SfxItemState> of 'pState'
-    const SfxPoolItem*  // Slot-Status, NULL or IsInvalidItem()
+    sal_uInt16,          
+    SfxItemState,       
+    const SfxPoolItem*  
 )
 
 /*  [Description]
@@ -278,27 +278,27 @@ void SfxControllerItem::StateChanged
     DBG_CHKTHIS(SfxControllerItem, 0);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxControllerItem::DeleteFloatingWindow()
 {
     DBG_CHKTHIS(SfxControllerItem, 0);
 }
 
-//--------------------------------------------------------------------
+
 
 void SfxStatusForwarder::StateChanged
 (
-    sal_uInt16          nSID,    // <SID> of the triggering slot
-    SfxItemState        eState,  // <SfxItemState> of 'pState'
-    const SfxPoolItem*  pState   // Slot-Status, NULL or IsInvalidItem()
+    sal_uInt16          nSID,    
+    SfxItemState        eState,  
+    const SfxPoolItem*  pState   
 )
 
 {
     pMaster->StateChanged( nSID, eState, pState );
 }
 
-//--------------------------------------------------------------------
+
 
 SfxStatusForwarder::SfxStatusForwarder(
             sal_uInt16              nSlotId,
@@ -308,7 +308,7 @@ SfxStatusForwarder::SfxStatusForwarder(
 {
 }
 
-//--------------------------------------------------------------------
+
 
 SfxItemState SfxControllerItem::GetItemState
 (
@@ -353,7 +353,7 @@ SfxItemState SfxControllerItem::GetItemState
                         : SFX_ITEM_AVAILABLE;
 }
 
-//--------------------------------------------------------------------
+
 
 SfxMapUnit SfxControllerItem::GetCoreMetric() const
 
@@ -385,8 +385,8 @@ SfxMapUnit SfxControllerItem::GetCoreMetric() const
             SfxItemPool &rPool = pSh->GetPool();
             sal_uInt16 nWhich = rPool.GetWhich( nId );
 
-            // invalidate slot and its message|slot server as 'global' information
-            // about the validated message|slot server is not made available
+            
+            
             pCache->Invalidate( sal_True );
 
             return rPool.GetMetric( nWhich );

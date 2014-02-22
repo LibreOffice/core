@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/XText.hpp>
@@ -54,7 +54,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
     bLeft( bLft ),
     bFirst( bFrst )
 {
-    // NOTE: if this ever handles XML_DISPLAY attr then beware of fdo#72850 !
+    
     if( bLeft || bFirst )
     {
         Any aAny;
@@ -70,7 +70,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                 sal_Bool bShared = *(sal_Bool *)aAny.getValue();
                 if( bShared )
                 {
-                    // Don't share headers any longer
+                    
                     bShared = sal_False;
                     aAny.setValue( &bShared, ::getBooleanCppuType() );
                     xPropSet->setPropertyValue( sShareContent, aAny );
@@ -82,7 +82,7 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                 sal_Bool bSharedFirst = aAny.has<sal_Bool>() && *(sal_Bool *)aAny.getValue();
                 if( bSharedFirst )
                 {
-                    // Don't share first/right headers any longer
+                    
                     bSharedFirst = sal_False;
                     aAny.setValue( &bSharedFirst, ::getBooleanCppuType() );
                     xPropSet->setPropertyValue( sShareContentFirst, aAny );
@@ -91,8 +91,8 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
         }
         else
         {
-            // If headers or footers are switched off, no content must be
-            // inserted.
+            
+            
             bInsertContent = sal_False;
         }
     }
@@ -116,8 +116,8 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
             Any aAny;
             if( bLeft || bFirst )
             {
-                // Headers and footers are switched on already,
-                // and they aren't shared.
+                
+                
                 if (bLeft)
                     aAny = xPropSet->getPropertyValue( sTextLeft );
                 else
@@ -130,17 +130,17 @@ SvXMLImportContext *XMLTextHeaderFooterContext::CreateChildContext(
 
                 if( !bOn )
                 {
-                    // Switch header on
+                    
                     bOn = sal_True;
                     aAny.setValue( &bOn, ::getBooleanCppuType() );
                     xPropSet->setPropertyValue( sOn, aAny );
 
-                    // The content has not to be removed, because the header
-                    // or footer is empty already.
+                    
+                    
                     bRemoveContent = sal_False;
                 }
 
-                // If a header or footer is not shared, share it now.
+                
                 aAny = xPropSet->getPropertyValue( sShareContent );
                 sal_Bool bShared = *(sal_Bool *)aAny.getValue();
                 if( !bShared )
@@ -189,8 +189,8 @@ void XMLTextHeaderFooterContext::EndElement()
     }
     else if( !bLeft )
     {
-        // If no content has been inserted inro the header or footer,
-        // switch it off.
+        
+        
         sal_Bool bOn = sal_False;
         Any aAny;
         aAny.setValue( &bOn, ::getBooleanCppuType() );

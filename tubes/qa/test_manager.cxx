@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <sal/types.h>
@@ -35,18 +35,18 @@ public:
 
     void testSession();
 
-    // There is only one method because the code in setUp
-    // and tearDown is expected to be executed only once.
+    
+    
     CPPUNIT_TEST_SUITE( TestTeleTubes );
     CPPUNIT_TEST( testSession );
     CPPUNIT_TEST_SUITE_END();
 };
 
 class TestCollaboration;
-// static, not members, so they actually survive cppunit test iteration
+
 static TestCollaboration*   mpCollaboration1 = NULL;
 static TestCollaboration*   mpCollaboration2 = NULL;
-//static bool                 mbFileSentSuccess = false;
+
 static bool                 mbPacketReceived = false;
 static OUString             maTestConfigIniURL;
 static OString              maOffererIdentifier;
@@ -74,7 +74,7 @@ static gboolean timed_out( void * )
 void TestTeleTubes::setUp()
 {
     g_timeout_add_seconds (10, timed_out, NULL);
-    maTestConfigIniURL = "file://" +
+    maTestConfigIniURL = "file:
             OUString::createFromAscii( getenv("SRCDIR") ) + "/tubes/qa/test-config.ini";
     rtl::Bootstrap aTestConfig( maTestConfigIniURL );
 
@@ -105,7 +105,7 @@ static void lcl_FileSent( bool success, void * )
 
 void TestTeleTubes::testSession()
 {
-    // First try to get account and contact
+    
     AccountContactPairV pairs = TeleManager::getContacts();
     /* Both our accounts are meant to be signed in, and they both should be
      * capable of LibreOffice tubes because this test runs after we register
@@ -145,7 +145,7 @@ void TestTeleTubes::testSession()
         "and are on each other's contact lists",
         mpAccepterContact);
 
-    // Now we can start session
+    
     TeleConference* pConference = NULL;
     pConference = TeleManager::startBuddySession( mpOffererAccount, mpAccepterContact);
     CPPUNIT_ASSERT( pConference != NULL);
@@ -157,10 +157,10 @@ void TestTeleTubes::testSession()
     g_object_unref(mpAccepterContact);
     mpAccepterContact = NULL;
 
-    //while (!mbFileSentSuccess)
-    //    g_main_context_iteration( NULL, TRUE);
+    
+    
 
-    // This checks that the file was received and msCurrentUUID set (see manager.cxx)
+    
     while (!TeleManager::hasWaitingConference())
         g_main_context_iteration( NULL, TRUE);
 
@@ -176,7 +176,7 @@ void TestTeleTubes::testSession()
 
 void TestTeleTubes::tearDown()
 {
-    // Closes the TeleConference in destructor:
+    
     delete mpCollaboration1;
     delete mpCollaboration2;
 

@@ -21,7 +21,7 @@
  *
  * You should have received a copy of the GNU Lesser General Public License
  * version 3 along with OpenOffice.org.  If not, see
- * <http://www.openoffice.org/license.html>
+ * <http:
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
@@ -31,7 +31,7 @@
 
 using namespace com::sun::star::uno;
 
-//==================================================================================================
+
 Reference< XInterface > SAL_CALL PluginModel_CreateInstance( const Reference< ::com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception )
 {
     Reference< XInterface >  xService = *new PluginModel();
@@ -52,7 +52,7 @@ Any PluginModel::queryAggregation( const Type& type ) throw( RuntimeException )
 }
 
 
-// XPluginManager_Impl
+
 Sequence< OUString > PluginModel::getSupportedServiceNames_Static(void) throw()
 {
     Sequence< OUString > aSNS( 1 );
@@ -136,7 +136,7 @@ void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                     const Any& rValue )
     throw(::com::sun::star::uno::Exception)
 {
-    if( rValue.getValueTypeClass() == TypeClass_STRING ) // FIXME wrong type!
+    if( rValue.getValueTypeClass() == TypeClass_STRING ) 
 
     {
         if( nHandle == 2 )
@@ -156,22 +156,22 @@ void PluginModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const t
         rValue <<= m_aMimeType;
 }
 
-//---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
+
 void PluginModel::addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw()
 {
     m_aDisposeListeners.push_back( l );
 }
 
-//---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
+
 void PluginModel::removeEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l ) throw()
 {
     m_aDisposeListeners.remove( l );
 }
 
-//---- ::com::sun::star::lang::XComponent ----------------------------------------------------------------------------------
+
 void PluginModel::dispose(void) throw()
 {
-    // send disposing events
+    
     ::com::sun::star::lang::EventObject aEvt;
     aEvt.Source = (::cppu::OWeakObject*)this;
     ::std::list< Reference< ::com::sun::star::lang::XEventListener > > aLocalListeners = m_aDisposeListeners;
@@ -185,7 +185,7 @@ void PluginModel::dispose(void) throw()
 }
 
 
-// ::com::sun::star::io::XPersistObject
+
 OUString PluginModel::getServiceName() throw()
 {
     return OUString("com.sun.star.plugin.PluginModel");

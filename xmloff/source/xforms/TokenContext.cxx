@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TokenContext.hxx"
@@ -53,25 +53,25 @@ TokenContext::~TokenContext()
 void TokenContext::StartElement(
     const Reference<XAttributeList>& xAttributeList )
 {
-    // iterate over attributes
-    // - if in map: call HandleAttribute
-    // - xmlns:... : ignore
-    // - other: warning
+    
+    
+    
+    
     DBG_ASSERT( mpAttributes != NULL, "no token map for attributes" );
     SvXMLTokenMap aMap( mpAttributes );
 
     sal_Int16 nCount = xAttributeList->getLength();
     for( sal_Int16 i = 0; i < nCount; i++ )
     {
-        // get key/local-name pair from namespace map
+        
         OUString sLocalName;
         sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
             GetKeyByAttrName( xAttributeList->getNameByIndex(i), &sLocalName );
 
-        // get token from token map
+        
         sal_uInt16 nToken = aMap.Get( nPrefix, sLocalName );
 
-        // and the value...
+        
         const OUString& rValue = xAttributeList->getValueByIndex(i);
 
         if( nToken != XML_TOK_UNKNOWN )
@@ -80,8 +80,8 @@ void TokenContext::StartElement(
         }
         else if( nPrefix != XML_NAMESPACE_XMLNS )
         {
-            // error handling, for all attribute that are not
-            // namespace declarations
+            
+            
             GetImport().SetError( XMLERROR_UNKNOWN_ATTRIBUTE,
                                   sLocalName, rValue);
         }
@@ -93,7 +93,7 @@ SvXMLImportContext* TokenContext::CreateChildContext(
     const OUString& rLocalName,
     const Reference<XAttributeList>& xAttrList )
 {
-    // call HandleChild for elements in token map. Ignore other content.
+    
 
     SvXMLImportContext* pContext = NULL;
 
@@ -102,11 +102,11 @@ SvXMLImportContext* TokenContext::CreateChildContext(
     sal_uInt16 nToken = aMap.Get( nPrefix, rLocalName );
     if( nToken != XML_TOK_UNKNOWN )
     {
-        // call handle child, and pass down arguments
+        
         pContext = HandleChild( nToken, nPrefix, rLocalName, xAttrList );
     }
 
-    // error handling: create default context and generate warning
+    
     if( pContext == NULL )
     {
         GetImport().SetError( XMLERROR_UNKNOWN_ELEMENT, rLocalName );
@@ -125,11 +125,11 @@ static bool lcl_IsWhiteSpace( sal_Unicode c )
 
 void TokenContext::Characters( const OUString& rCharacters )
 {
-    // get iterators for string data
+    
     const sal_Unicode* pBegin = rCharacters.getStr();
     const sal_Unicode* pEnd = &( pBegin[ rCharacters.getLength() ] );
 
-    // raise error if non-whitespace character is found
+    
     if( ::std::find_if( pBegin, pEnd, ::std::not1(::std::ptr_fun(lcl_IsWhiteSpace)) ) != pEnd )
         GetImport().SetError( XMLERROR_UNKNOWN_CHARACTERS, rCharacters );
 }

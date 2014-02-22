@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -238,7 +238,7 @@ sal_uLong ImageMap::Read( SvStream& rIStm, sal_uLong nFormat, const OUString& rB
 
 sal_uLong ImageMap::ImpReadCERN( SvStream& rIStm, const OUString& rBaseURL )
 {
-    // delete old content
+    
     ClearImageMap();
 
     OString aStr;
@@ -258,7 +258,7 @@ void ImageMap::ImpReadCERNLine( const OString& rLine, const OUString& rBaseURL  
     const char* pStr = aStr.getStr();
     char        cChar = *pStr++;
 
-    // find instruction
+    
     OStringBuffer aBuf;
     while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
     {
@@ -380,7 +380,7 @@ OUString ImageMap::ImpReadCERNURL( const char** ppStr, const OUString& rBaseURL 
 
 sal_uLong ImageMap::ImpReadNCSA( SvStream& rIStm, const OUString& rBaseURL )
 {
-    // delete old content
+    
     ClearImageMap();
 
     OString aStr;
@@ -400,7 +400,7 @@ void ImageMap::ImpReadNCSALine( const OString& rLine, const OUString& rBaseURL )
     const char* pStr = aStr.getStr();
     char        cChar = *pStr++;
 
-    // find instruction
+    
     OStringBuffer aBuf;
     while( ( cChar >= 'a' ) && ( cChar <= 'z' ) && NOTEOL( cChar ) )
     {
@@ -512,8 +512,8 @@ sal_uLong ImageMap::ImpDetectFormat( SvStream& rIStm )
 
     rIStm.Read( cMagic, sizeof( cMagic ) );
 
-    // if we do not have an internal formats
-    // we check the format
+    
+    
     if ( memcmp( cMagic, IMAPMAGIC, sizeof( cMagic ) ) )
     {
         long        nCount = 128;

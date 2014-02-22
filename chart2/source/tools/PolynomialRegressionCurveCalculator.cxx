@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "PolynomialRegressionCurveCalculator.hxx"
@@ -36,7 +36,7 @@ PolynomialRegressionCurveCalculator::PolynomialRegressionCurveCalculator()
 PolynomialRegressionCurveCalculator::~PolynomialRegressionCurveCalculator()
 {}
 
-// ____ XRegressionCurveCalculator ____
+
 void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aXValues,
     const uno::Sequence< double >& aYValues )
@@ -83,13 +83,13 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         }
     }
 
-    // QR decomposition - based on org.apache.commons.math.linear.QRDecomposition from apache commons math (ASF)
+    
     sal_Int32 aMinorSize = std::min(aNoValues, aNoPowers);
 
     std::vector<double> aDiagonal;
     aDiagonal.resize(aMinorSize, 0.0);
 
-    // Calculate Householder reflectors
+    
     for (sal_Int32 aMinor = 0; aMinor < aMinorSize; aMinor++)
     {
         double aNormSqr = 0.0;
@@ -129,7 +129,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         }
     }
 
-    // Solve the linear equation
+    
     for (sal_Int32 aMinor = 0; aMinor < aMinorSize; aMinor++)
     {
         double aDotProduct = 0;
@@ -164,7 +164,7 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
         mCoefficients.insert(mCoefficients.begin(), mInterceptValue);
     }
 
-    // Calculate correlation coeffitient
+    
     double aSumError = 0.0;
     double aSumTotal = 0.0;
     double aSumYpred2 = 0.0;
@@ -212,7 +212,7 @@ double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
 
     sal_Int32 aNoCoefficients = (sal_Int32) mCoefficients.size();
 
-    // Horner's method
+    
     fResult = 0.0;
     for (sal_Int32 i = aNoCoefficients - 1; i >= 0; i--)
     {
@@ -276,6 +276,6 @@ OUString PolynomialRegressionCurveCalculator::ImplGetRepresentation(
     return aBuf.makeStringAndClear();
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

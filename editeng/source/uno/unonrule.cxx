@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/text/HoriOrientation.hpp>
@@ -90,7 +90,7 @@ SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
 {
 }
 
-//XIndexReplace
+
 void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
     throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException )
 {
@@ -106,7 +106,7 @@ void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::
     setNumberingRuleByIndex( aSeq, Index );
 }
 
-// XIndexAccess
+
 sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException )
 {
     SolarMutexGuard aGuard;
@@ -125,7 +125,7 @@ Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
     return Any( getNumberingRuleByIndex(Index) );
 }
 
-//XElementAccess
+
 Type SAL_CALL SvxUnoNumberingRules::getElementType()
     throw( RuntimeException )
 {
@@ -137,19 +137,19 @@ sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( RuntimeException )
     return sal_True;
 }
 
-// XAnyCompare
+
 sal_Int16 SAL_CALL SvxUnoNumberingRules::compare( const Any& rAny1, const Any& rAny2 ) throw(RuntimeException)
 {
     return SvxUnoNumberingRules::Compare( rAny1, rAny2 );
 }
 
-// XCloneable
+
 Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  ) throw (RuntimeException)
 {
     return new SvxUnoNumberingRules(maRule);
 }
 
-// XServiceInfo
+
 const char pSvxUnoNumberingRulesService[] = "com.sun.star.text.NumberingRules";
 
 OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(RuntimeException)
@@ -171,7 +171,7 @@ Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
 
 Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex( sal_Int32 nIndex) const throw()
 {
-    //  NumberingRule aRule;
+    
     const SvxNumberFormat& rFmt = maRule.GetLevel((sal_uInt16) nIndex);
     sal_uInt16 nIdx = 0;
 
@@ -283,7 +283,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
             sal_Int16 nSet = sal_Int16();
             aVal >>= nSet;
 
-            // There is no reason to limit numbering types.
+            
             if ( nSet>=0 )
             {
                 aFmt.SetNumberingType(nSet);
@@ -437,7 +437,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
             sal_Int16 nSize = sal_Int16();
             if( aVal >>= nSize )
             {
-                // [Bug 120650] the slide content corrupt when open in Aoo
+                
                 if ((nSize>250)||(nSize<=0))
                 {
                     nSize = 100;
@@ -455,7 +455,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex( const Sequence< beans::Prope
         throw IllegalArgumentException();
     }
 
-    // check that we always have a brush item for bitmap numbering
+    
     if( aFmt.GetNumberingType() == SVX_NUM_BITMAP )
     {
         if( NULL == aFmt.GetBrush() )

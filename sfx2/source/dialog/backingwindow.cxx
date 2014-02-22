@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "backingwindow.hxx"
@@ -60,7 +60,7 @@ const char OPEN_URL[] =           ".uno:Open";
 const char SERVICENAME_CFGREADACCESS[] = "com.sun.star.configuration.ConfigurationAccess";
 
 const int nButtonsFontSize = 15;
-const Color aButtonsBackground(114, 168, 84); // TDF green
+const Color aButtonsBackground(114, 168, 84); 
 const Color aButtonsText(COL_WHITE);
 
 BackingWindow::BackingWindow( Window* i_pParent ) :
@@ -87,19 +87,19 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
     get(mpHelpButton, "help");
     get(mpExtensionsButton, "extensions");
 
-    //Containers are invisible to cursor traversal
-    //So on pressing "right" when in Help the
-    //extension button is considered as a candidate
+    
+    
+    
     //
-    //But the containers are not invisible to the PushButton ctor which checks
-    //if the preceeding window of its parent is a button and if it then
-    //defaults to grouping with it and if it is not a button defaults to
-    //setting itself as the start of a new group.
+    
+    
+    
+    
     //
-    //So here take the second button and set it as explicitly not the start
-    //of a group, i.e. allow it to be grouped with the preceeding
-    //PushButton so when seen as a candidate by cursor travelling
-    //it will be accepted as a continuation of the group.
+    
+    
+    
+    
     WinBits nBits = mpExtensionsButton->GetStyle();
     nBits &= ~WB_GROUP;
     nBits |= WB_NOGROUP;
@@ -133,7 +133,7 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
         Reference<container::XNameAccess> xNameAccess(xConfig->createInstanceWithArguments(SERVICENAME_CFGREADACCESS,args), UNO_QUERY);
         if( xNameAccess.is() )
         {
-            //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
+            
             Any value( xNameAccess->getByName("StartCenterHideExternalLinks") );
             mnHideExternalLinks = value.get<sal_Int32>();
         }
@@ -143,26 +143,26 @@ BackingWindow::BackingWindow( Window* i_pParent ) :
         SAL_WARN( "fwk", "BackingWindow - caught an exception! " << e.Message );
     }
 
-    // fdo#34392: we do the layout dynamically, the layout depends on the font,
-    // so we should handle data changed events (font changing) of the last child
-    // control, at this point all the controls have updated settings (i.e. font).
+    
+    
+    
 
     EnableChildTransparentMode();
 
     SetStyle( GetStyle() | WB_DIALOGCONTROL );
 
-    // get dispatch provider
+    
     Reference<XDesktop2> xDesktop = Desktop::create( comphelper::getProcessComponentContext() );
     mxDesktopDispatchProvider = xDesktop;
 
-    // init background
+    
     SetBackground();
 }
 
 
 BackingWindow::~BackingWindow()
 {
-    // deregister drag&drop helper
+    
     if (mxDropTargetListener.is())
     {
         for (std::vector<Window*>::iterator aI = maDndWindows.begin(),
@@ -188,7 +188,7 @@ void BackingWindow::initControls()
 
     mbInitControls = true;
 
-    // collect the URLs of the entries in the File/New menu
+    
     SvtModuleOptions    aModuleOptions;
     std::set< OUString > aFileNewAppsAvailable;
     SvtDynamicMenuOptions aOpt;
@@ -239,7 +239,7 @@ void BackingWindow::initControls()
 
     mpExtensionsButton->SetClickHdl(LINK(this, BackingWindow, ExtLinkClickHdl));
 
-    // setup nice colors
+    
     mpCreateLabel->SetControlForeground(aButtonsText);
     Font aFont(mpCreateLabel->GetControlFont());
     aFont.SetHeight(nButtonsFontSize);
@@ -253,14 +253,14 @@ void BackingWindow::initControls()
     mpHelpBox->SetBackground(aButtonsBackground);
     mpExtensionsBox->SetBackground(aButtonsBackground);
 
-    // motif image under the buttons
+    
     Wallpaper aWallpaper(get<FixedImage>("motif")->GetImage().GetBitmapEx());
     aWallpaper.SetStyle(WALLPAPER_BOTTOMRIGHT);
     aWallpaper.SetColor(aButtonsBackground);
 
     mpButtonsBox->SetBackground(aWallpaper);
 
-    // thin white rectangle aronud the Help and Extensions buttons
+    
     mpThinBox1->SetBackground(aButtonsText);
     mpThinBox2->SetBackground(aButtonsText);
 
@@ -272,12 +272,12 @@ void BackingWindow::initControls()
 
 void BackingWindow::setupButton( PushButton* pButton )
 {
-    // the buttons should have a bit bigger font
+    
     Font aFont(pButton->GetControlFont());
     aFont.SetHeight(nButtonsFontSize);
     pButton->SetControlFont(aFont);
 
-    // color that fits the theme
+    
     pButton->SetControlForeground(aButtonsText);
 
     pButton->SetClickHdl( LINK( this, BackingWindow, ClickHdl ) );
@@ -314,10 +314,10 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
     {
         const KeyEvent* pEvt = rNEvt.GetKeyEvent();
         const KeyCode& rKeyCode(pEvt->GetKeyCode());
-        // Subwindows of BackingWindow: Sidebar and Thumbnail view
+        
         if( rKeyCode.GetCode() == KEY_F6 )
         {
-            if( rKeyCode.IsShift() ) // Shift + F6
+            if( rKeyCode.IsShift() ) 
             {
                 if( mpAllRecentThumbnails->HasFocus() )
                 {
@@ -325,12 +325,12 @@ bool BackingWindow::PreNotify( NotifyEvent& rNEvt )
                     return true;
                 }
             }
-            else if ( rKeyCode.IsMod1() ) // Ctrl + F6
+            else if ( rKeyCode.IsMod1() ) 
             {
                 mpAllRecentThumbnails->GrabFocus();
                 return true;
             }
-            else // F6
+            else 
             {
                 if( mpAllButtonsBox->HasChildPathFocus() )
                 {
@@ -347,7 +347,7 @@ bool BackingWindow::Notify( NotifyEvent& rNEvt )
 {
     if( rNEvt.GetType() == EVENT_KEYINPUT )
     {
-        // try the 'normal' accelerators (so that eg. Ctrl+Q works)
+        
         if( !mpAccExec )
         {
             mpAccExec = svt::AcceleratorExecute::createAcceleratorHelper();
@@ -368,12 +368,12 @@ void BackingWindow::GetFocus()
     sal_uInt16 nFlags = GetParent()->GetGetFocusFlags();
     if( nFlags & GETFOCUS_F6 )
     {
-        if( nFlags & GETFOCUS_FORWARD ) // F6
+        if( nFlags & GETFOCUS_FORWARD ) 
         {
             mpOpenButton->GrabFocus();
             return;
         }
-        else // Shift + F6 or Ctrl + F6
+        else 
         {
             mpAllRecentThumbnails->GrabFocus();
             return;
@@ -388,7 +388,7 @@ void BackingWindow::setOwningFrame( const com::sun::star::uno::Reference< com::s
     if( ! mbInitControls )
         initControls();
 
-    // establish drag&drop mode
+    
     mxDropTargetListener.set(new OpenFileDropTargetListener(mxContext, mxFrame));
 
     for (std::vector<Window*>::iterator aI = maDndWindows.begin(),
@@ -459,7 +459,7 @@ IMPL_LINK(BackingWindow, ExtLinkClickHdl, Button*, pButton)
 
 IMPL_LINK( BackingWindow, ClickHdl, Button*, pButton )
 {
-    // dispatch the appropriate URL and end the dialog
+    
     if( pButton == mpWriterAllButton )
         dispatchURL( WRITER_URL );
     else if( pButton == mpCalcAllButton )
@@ -525,7 +525,7 @@ static long implDispatchDelayed( void*, void* pArg )
     {
     }
 
-    // clean up
+    
     delete pDispatch;
 
     return 0;
@@ -536,14 +536,14 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
                                  const Reference< XDispatchProvider >& i_xProv,
                                  const Sequence< PropertyValue >& i_rArgs )
 {
-    // if no special dispatch provider is given, get the desktop
+    
     Reference< XDispatchProvider > xProvider( i_xProv.is() ? i_xProv : mxDesktopDispatchProvider );
 
-    // check for dispatch provider
+    
     if( !xProvider.is())
         return;
 
-    // get an URL transformer to clean up the URL
+    
     com::sun::star::util::URL aDispatchURL;
     aDispatchURL.Complete = i_rURL;
 
@@ -551,19 +551,19 @@ void BackingWindow::dispatchURL( const OUString& i_rURL,
         com::sun::star::util::URLTransformer::create( comphelper::getProcessComponentContext() ) );
     try
     {
-        // clean up the URL
+        
         xURLTransformer->parseStrict( aDispatchURL );
-        // get a Dispatch for the URL and target
+        
         Reference< XDispatch > xDispatch(
             xProvider->queryDispatch( aDispatchURL, rTarget, 0 )
             );
-        // dispatch the URL
+        
         if ( xDispatch.is() )
         {
             ImplDelayedDispatch* pDisp = new ImplDelayedDispatch( xDispatch, aDispatchURL, i_rArgs );
             sal_uLong nEventId = 0;
             if( ! Application::PostUserEvent( nEventId, Link( NULL, implDispatchDelayed ), pDisp ) )
-                delete pDisp; // event could not be posted for unknown reason, at least don't leak
+                delete pDisp; 
         }
     }
     catch (const com::sun::star::uno::RuntimeException&)

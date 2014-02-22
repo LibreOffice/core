@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dp_descriptioninfoset.hxx"
@@ -71,8 +71,8 @@ public:
     item(::sal_Int32 index) throw (css::uno::RuntimeException);
 
 private:
-    EmptyNodeList(EmptyNodeList &); // not defined
-    void operator =(EmptyNodeList &); // not defined
+    EmptyNodeList(EmptyNodeList &); 
+    void operator =(EmptyNodeList &); 
 };
 
 EmptyNodeList::EmptyNodeList() {}
@@ -154,13 +154,13 @@ public:
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
     bool exist();
-    // XCommandEnvironment
+    
     virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
     getInteractionHandler() throw (css::uno::RuntimeException);
     virtual css::uno::Reference<css::ucb::XProgressHandler >
     SAL_CALL getProgressHandler() throw (css::uno::RuntimeException);
 
-    // XInteractionHandler
+    
     virtual void SAL_CALL handle(
         css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
         throw (css::uno::RuntimeException);
@@ -172,20 +172,20 @@ ExtensionDescription::ExtensionDescription(
     const Reference< css::ucb::XCommandEnvironment >& xCmdEnv)
 {
     try {
-        //may throw ::com::sun::star::ucb::ContentCreationException
-        //If there is no description.xml then ucb will start an interaction which
-        //brings up a dialog.We want to prevent this. Therefore we wrap the xCmdEnv
-        //and filter the respective exception out.
+        
+        
+        
+        
         OUString sDescriptionUri(installDir + "/description.xml");
         Reference<css::ucb::XCommandEnvironment> xFilter =
             static_cast<css::ucb::XCommandEnvironment*>(
                 new FileDoesNotExistFilter(xCmdEnv));
         ::ucbhelper::Content descContent(sDescriptionUri, xFilter, xContext);
 
-        //throws an com::sun::star::uno::Exception if the file is not available
+        
         Reference<css::io::XInputStream> xIn;
         try
-        {   //throws com.sun.star.ucb.InteractiveIOException
+        {   
             xIn = descContent.openStream();
         }
         catch ( const css::uno::Exception& )
@@ -201,7 +201,7 @@ ExtensionDescription::ExtensionDescription(
                 sDescriptionUri, 0);
         }
 
-        //get root node of description.xml
+        
         Reference<css::xml::dom::XDocumentBuilder> xDocBuilder(
             css::xml::dom::DocumentBuilder::create(xContext) );
 
@@ -217,7 +217,7 @@ ExtensionDescription::ExtensionDescription(
             throw css::uno::Exception(sDescriptionUri + " contains data which cannot be parsed. ", 0);
         }
 
-        //check for proper root element and namespace
+        
         Reference<css::xml::dom::XElement> xRoot = xDoc->getDocumentElement();
         if (!xRoot.is())
         {
@@ -235,8 +235,8 @@ ExtensionDescription::ExtensionDescription(
             xRoot, css::uno::UNO_QUERY_THROW);
         OUString nsDescription = xRoot->getNamespaceURI();
 
-        //check if this namespace is supported
-        if ( ! (nsDescription == "http://openoffice.org/extensions/description/2006"))
+        
+        if ( ! (nsDescription == "http:
         {
             throw css::uno::Exception(sDescriptionUri + " contains a root element with an unsupported namespace. ", 0);
         }
@@ -255,7 +255,7 @@ ExtensionDescription::~ExtensionDescription()
 {
 }
 
-//======================================================================
+
 FileDoesNotExistFilter::FileDoesNotExistFilter(
     const Reference< css::ucb::XCommandEnvironment >& xCmdEnv):
     m_bExist(true), m_xCommandEnv(xCmdEnv)
@@ -269,7 +269,7 @@ bool FileDoesNotExistFilter::exist()
 {
     return m_bExist;
 }
-    // XCommandEnvironment
+    
 Reference<css::task::XInteractionHandler >
     FileDoesNotExistFilter::getInteractionHandler() throw (css::uno::RuntimeException)
 {
@@ -284,9 +284,9 @@ Reference<css::ucb::XProgressHandler >
         : Reference<css::ucb::XProgressHandler>();
 }
 
-// XInteractionHandler
-//If the interaction was caused by a non-existing file which is specified in the ctor
-//of FileDoesNotExistFilter, then we do nothing
+
+
+
 void  FileDoesNotExistFilter::handle(
         Reference<css::task::XInteractionRequest > const & xRequest )
         throw (css::uno::RuntimeException)
@@ -342,7 +342,7 @@ DescriptionInfoset::DescriptionInfoset(
     if (m_element.is()) {
         m_xpath = css::xml::xpath::XPathAPI::create(context);
         m_xpath->registerNS("desc", element->getNamespaceURI());
-        m_xpath->registerNS("xlink", "http://www.w3.org/1999/xlink");
+        m_xpath->registerNS("xlink", "http:
     }
 }
 
@@ -359,7 +359,7 @@ OUString DescriptionInfoset::getNodeValueFromExpression(OUString const & express
         try {
             n = m_xpath->selectSingleNode(m_element, expression);
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
     }
     return n.is() ? getNodeValue(n) : OUString();
@@ -370,10 +370,10 @@ void DescriptionInfoset::checkBlacklist() const
     if (m_element.is()) {
         boost::optional< OUString > id(getIdentifier());
         if (!id)
-            return; // nothing to check
+            return; 
         OUString currentversion(getVersion());
         if (currentversion.getLength() == 0)
-            return;  // nothing to check
+            return;  
 
         css::uno::Sequence< css::uno::Any > args = css::uno::Sequence< css::uno::Any >(1);
         css::beans::PropertyValue prop;
@@ -387,7 +387,7 @@ void DescriptionInfoset::checkBlacklist() const
                  "com.sun.star.configuration.ConfigurationAccess", args)),
             css::uno::UNO_QUERY_THROW);
 
-        // check first if a blacklist entry is available
+        
         if (blacklist.is() && blacklist->hasByName(*id)) {
             css::uno::Reference< css::beans::XPropertySet > extProps(
                 blacklist->getByName(*id), css::uno::UNO_QUERY_THROW);
@@ -397,14 +397,14 @@ void DescriptionInfoset::checkBlacklist() const
             css::uno::Sequence< OUString > blversions;
             anyValue >>= blversions;
 
-            // check if the current version requires further dependency checks from the blacklist
+            
             if (checkBlacklistVersion(currentversion, blversions)) {
                 anyValue = extProps->getPropertyValue("Dependencies");
                 OUString udeps;
                 anyValue >>= udeps;
 
                 if (udeps.getLength() == 0)
-                    return; // nothing todo
+                    return; 
 
                 OString xmlDependencies = OUStringToOString(udeps, RTL_TEXTENCODING_UNICODE);
 
@@ -422,18 +422,18 @@ void DescriptionInfoset::checkBlacklist() const
                 css::uno::Reference< css::xml::dom::XNodeList > xDeps(xElement->getChildNodes());
                 sal_Int32 nLen = xDeps->getLength();
 
-                // get the parent xml document  of current description info for the import
+                
                 css::uno::Reference< css::xml::dom::XDocument > xCurrentDescInfo(m_element->getOwnerDocument());
 
-                // get dependency node of current description info to merge the new dependencies from the blacklist
+                
                 css::uno::Reference< css::xml::dom::XNode > xCurrentDeps(
                     m_xpath->selectSingleNode(m_element, "desc:dependencies"));
 
-                // if no dependency node exists, create a new one in the current description info
+                
                 if (!xCurrentDeps.is()) {
                     css::uno::Reference< css::xml::dom::XNode > xNewDepNode(
                         xCurrentDescInfo->createElementNS(
-                            "http://openoffice.org/extensions/description/2006",
+                            "http:
                             "dependencies"), css::uno::UNO_QUERY_THROW);
                     m_element->appendChild(xNewDepNode);
                     xCurrentDeps = m_xpath->selectSingleNode(m_element, "desc:dependencies");
@@ -443,7 +443,7 @@ void DescriptionInfoset::checkBlacklist() const
                     css::uno::Reference< css::xml::dom::XNode > xNode(xDeps->item(i));
                     css::uno::Reference< css::xml::dom::XElement > xDep(xNode, css::uno::UNO_QUERY);
                     if (xDep.is()) {
-                        // found valid blacklist dependency, import the node first and append it to the existing dependency node
+                        
                         css::uno::Reference< css::xml::dom::XNode > importedNode = xCurrentDescInfo->importNode(xNode, true);
                         xCurrentDeps->appendChild(importedNode);
                     }
@@ -473,13 +473,13 @@ OUString DescriptionInfoset::getVersion() const
 
 css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlaforms() const
 {
-    //When there is no description.xml then we assume that we support all platforms
+    
     if (! m_element.is())
     {
         return comphelper::makeSequence( OUString("all") );
     }
 
-    //Check if the <platform> element was provided. If not the default is "all" platforms
+    
     css::uno::Reference< css::xml::dom::XNode > nodePlatform(
         m_xpath->selectSingleNode(m_element, "desc:platform"));
     if (!nodePlatform.is())
@@ -487,9 +487,9 @@ css::uno::Sequence< OUString > DescriptionInfoset::getSupportedPlaforms() const
         return comphelper::makeSequence( OUString("all") );
     }
 
-    //There is a platform element.
+    
     const OUString value = getNodeValueFromExpression("desc:platform/@value");
-    //parse the string, it can contained multiple strings separated by commas
+    
     ::std::vector< OUString> vec;
     sal_Int32 nIndex = 0;
     do
@@ -509,12 +509,12 @@ css::uno::Reference< css::xml::dom::XNodeList >
 DescriptionInfoset::getDependencies() const {
     if (m_element.is()) {
         try {
-            // check the extension blacklist first and expand the dependencies if applicable
+            
             checkBlacklist();
 
             return m_xpath->selectNodeList(m_element, "desc:dependencies/*");
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
     }
     return new EmptyNodeList;
@@ -566,7 +566,7 @@ OUString DescriptionInfoset::getIconURL( sal_Bool bHighContrast ) const
         try {
             n = m_xpath->selectSingleNode(m_element, expression);
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
     }
     return n.is()
@@ -582,7 +582,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
         try {
             ns = m_xpath->selectNodeList(m_element, expression);
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
     }
     css::uno::Sequence< OUString > urls(ns.is() ? ns->getLength() : 0);
@@ -606,7 +606,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
         try {
             xPathName = m_xpath->selectSingleNode(node, exp1);
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
         OSL_ASSERT(xPathName.is());
         if (xPathName.is())
@@ -617,7 +617,7 @@ css::uno::Sequence< OUString > DescriptionInfoset::getUrls(
         try {
             xURL = m_xpath->selectSingleNode(node, exp2);
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
         OSL_ASSERT(xURL.is());
         if (xURL.is())
@@ -642,7 +642,7 @@ OUString DescriptionInfoset::getLocalizedDisplayName() const
         try {
             xtext = m_xpath->selectSingleNode(node, exp);
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
         if (xtext.is())
             return xtext->getNodeValue();
@@ -659,13 +659,13 @@ OUString DescriptionInfoset::getLocalizedLicenseURL() const
 ::boost::optional<SimpleLicenseAttributes>
 DescriptionInfoset::getSimpleLicenseAttributes() const
 {
-    //Check if the node exist
+    
     css::uno::Reference< css::xml::dom::XNode > n;
     if (m_element.is()) {
         try {
             n = m_xpath->selectSingleNode(m_element, "/desc:description/desc:registration/desc:simple-license/@accept-by");
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
         if (n.is())
         {
@@ -706,17 +706,17 @@ DescriptionInfoset::getLocalizedChild( const OUString & sParent) const
     try {
         xParent = m_xpath->selectSingleNode(m_element, sParent);
     } catch (const css::xml::xpath::XPathException &) {
-        // ignore
+        
     }
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
     if (xParent.is())
     {
         nodeMatch = matchLanguageTag(xParent, getOfficeLanguageTag().getBcp47());
 
-        //office: en-DE, en, en-DE-altmark
+        
         if (! nodeMatch.is())
         {
-            // Already tried full tag, continue with first fallback.
+            
             const ::std::vector< OUString > aFallbacks( getOfficeLanguageTag().getFallbackStrings( false));
             for (::std::vector< OUString >::const_iterator it( aFallbacks.begin()); it != aFallbacks.end(); ++it)
             {
@@ -739,16 +739,16 @@ DescriptionInfoset::matchLanguageTag(
     OSL_ASSERT(xParent.is());
     css::uno::Reference<css::xml::dom::XNode> nodeMatch;
 
-    //first try exact match for lang
+    
     const OUString exp1("*[@lang=\"" + rTag + "\"]");
     try {
         nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
     } catch (const css::xml::xpath::XPathException &) {
-        // ignore
+        
     }
 
-    //try to match in strings that also have a country and/or variant, for
-    //example en  matches in en-US-montana, en-US, en-montana
+    
+    
     if (!nodeMatch.is())
     {
         const OUString exp2(
@@ -756,7 +756,7 @@ DescriptionInfoset::matchLanguageTag(
         try {
             nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
     }
     return nodeMatch;
@@ -773,18 +773,18 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
         try {
             nodeDefault = m_xpath->selectSingleNode(xParent, "@default-license-id");
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
         if (nodeDefault.is())
         {
-            //The old way
+            
             const OUString exp1("desc:license-text[@license-id = \""
                 + nodeDefault->getNodeValue()
                 + "\"]");
             try {
                 return m_xpath->selectSingleNode(xParent, exp1);
             } catch (const css::xml::xpath::XPathException &) {
-                // ignore
+                
             }
         }
     }
@@ -793,7 +793,7 @@ DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom
     try {
         return m_xpath->selectSingleNode(xParent, exp2);
     } catch (const css::xml::xpath::XPathException &) {
-        // ignore
+        
         return 0;
     }
 }
@@ -815,7 +815,7 @@ OUString DescriptionInfoset::getLocalizedHREFAttrFromChild(
         try {
             xURL = m_xpath->selectSingleNode(node, exp);
         } catch (const css::xml::xpath::XPathException &) {
-            // ignore
+            
         }
         OSL_ASSERT(xURL.is());
         if (xURL.is())

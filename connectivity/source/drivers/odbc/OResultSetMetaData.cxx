@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "odbc/OResultSetMetaData.hxx"
@@ -25,15 +25,15 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::sdbc;
 
-// -------------------------------------------------------------------------
+
 OResultSetMetaData::~OResultSetMetaData()
 {
 }
-// -------------------------------------------------------------------------
+
 OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)
 {
     sal_Int32 column = _column;
-    if(_column <(sal_Int32) m_vMapping.size()) // use mapping
+    if(_column <(sal_Int32) m_vMapping.size()) 
         column = m_vMapping[_column];
 
     SQLSMALLINT BUFFER_LEN = 128;
@@ -75,7 +75,7 @@ OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
 
     return  sValue;
 }
-// -------------------------------------------------------------------------
+
 SQLLEN OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
@@ -92,21 +92,21 @@ SQLLEN OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
                                          &nValue),_aStatementHandle,SQL_HANDLE_STMT,_xInterface);
     return nValue;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)
 {
     sal_Int32 column = _column;
-    if(_column < (sal_Int32)m_vMapping.size()) // use mapping
+    if(_column < (sal_Int32)m_vMapping.size()) 
         column = m_vMapping[_column];
 
     return getNumColAttrib(m_pConnection,m_aStatementHandle,*this,column,ident);
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getNumColAttrib(column,SQL_DESC_DISPLAY_SIZE);
 }
-// -------------------------------------------------------------------------
+
 SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
@@ -120,14 +120,14 @@ SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
         if(nType == SQL_UNKNOWN_TYPE)
             nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column, SQL_DESC_TYPE);
     }
-    catch(SQLException& ) // in this case we have an odbc 2.0 driver
+    catch(SQLException& ) 
     {
         nType = (SQLSMALLINT)getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE );
     }
 
     return nType;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     ::std::map<sal_Int32,sal_Int32>::iterator aFind = m_aColumnTypes.find(column);
@@ -143,7 +143,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(S
                     nType = getNumColAttrib(column, SQL_DESC_TYPE);
                 nType = OTools::MapOdbcType2Jdbc(nType);
             }
-            catch(SQLException& ) // in this case we have an odbc 2.0 driver
+            catch(SQLException& ) 
             {
                 m_bUseODBC2Types = sal_True;
                 nType = OTools::MapOdbcType2Jdbc(getNumColAttrib(column,SQL_DESC_CONCISE_TYPE ));
@@ -157,7 +157,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(S
 
     return aFind->second;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException)
 {
@@ -168,65 +168,65 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
     OTools::ThrowException(m_pConnection,N3SQLNumResultCols(m_aStatementHandle,&nNumResultCols),m_aStatementHandle,SQL_HANDLE_STMT,*this);
     return m_nColCount = nNumResultCols;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getNumColAttrib(column,SQL_DESC_CASE_SENSITIVE) == SQL_TRUE;
 }
-// -------------------------------------------------------------------------
+
 
 OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getCharColAttrib(column,SQL_DESC_SCHEMA_NAME);
 }
-// -------------------------------------------------------------------------
+
 
 OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getCharColAttrib(column,SQL_DESC_NAME);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getCharColAttrib(column,SQL_DESC_TABLE_NAME);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getCharColAttrib(column,SQL_DESC_CATALOG_NAME);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getColumnTypeName" );
     return getCharColAttrib(column,SQL_DESC_TYPE_NAME);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getColumnLabel" );
     return getCharColAttrib(column,SQL_DESC_LABEL);
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getColumnServiceName" );
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getNumColAttrib(column,SQL_DESC_FIXED_PREC_SCALE) == SQL_TRUE;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     return getNumColAttrib(column,SQL_DESC_AUTO_UNIQUE_VALUE) == SQL_TRUE;
 }
-// -------------------------------------------------------------------------
+
 
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException)
@@ -234,7 +234,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLExce
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isSigned" );
     return getNumColAttrib(column,SQL_DESC_UNSIGNED) == SQL_FALSE;
 }
-// -------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getPrecision" );
@@ -243,14 +243,14 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQ
     {
         nType = getNumColAttrib(column,SQL_DESC_PRECISION);
     }
-    catch(const SQLException& ) // in this case we have an odbc 2.0 driver
+    catch(const SQLException& ) 
     {
         m_bUseODBC2Types = sal_True;
         nType = getNumColAttrib(column,SQL_COLUMN_PRECISION );
     }
     return nType;
 }
-// -----------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::getScale" );
@@ -259,35 +259,35 @@ sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(::com:
     {
         nType = getNumColAttrib(column,SQL_DESC_SCALE);
     }
-    catch(const SQLException& ) // in this case we have an odbc 2.0 driver
+    catch(const SQLException& ) 
     {
         m_bUseODBC2Types = sal_True;
         nType = getNumColAttrib(column,SQL_COLUMN_SCALE );
     }
     return nType;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isNullable" );
     return getNumColAttrib(column,SQL_DESC_NULLABLE);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isSearchable" );
     return getNumColAttrib(column,SQL_DESC_SEARCHABLE) != SQL_PRED_NONE;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isReadOnly" );
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_READONLY;
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
@@ -295,12 +295,12 @@ sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) t
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_WRITE;
 ;
 }
-// -------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     SAL_INFO( "connectivity.drivers", "odbc Ocke.Janssen@sun.com OResultSetMetaData::isWritable" );
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_WRITE;
 }
-// -------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

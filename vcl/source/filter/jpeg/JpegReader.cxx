@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/config.h>
@@ -32,10 +32,10 @@
 #define JPEG_MIN_READ 512
 #define BUFFER_SIZE  4096
 namespace {
-    // Arbitrary maximal size (512M) of a bitmap after it has been decoded.
-    // It is used to prevent excessive swapping due to large buffers in
-    // virtual memory.
-    // May have to be tuned if it turns out to be too large or too small.
+    
+    
+    
+    
     static const sal_uInt64 MAX_BITMAP_BYTE_SIZE = sal_uInt64(512 * 1024 * 1024);
 }
 
@@ -75,8 +75,8 @@ long StreamRead( SvStream* pStream, void* pBuffer, long nBufferSize )
 
         if( pStream->GetError() == ERRCODE_IO_PENDING )
         {
-            // in order to search from the old position
-            // we temporarily reset the error
+            
+            
             pStream->ResetError();
             pStream->Seek( nInitialPosition );
             pStream->SetError( ERRCODE_IO_PENDING );
@@ -203,7 +203,7 @@ JPEGReader::~JPEGReader()
 unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
 {
     if (pParam->nWidth > SAL_MAX_INT32 / 8 || pParam->nHeight > SAL_MAX_INT32 / 8)
-        return NULL; // avoid overflows later
+        return NULL; 
 
     if (pParam->nWidth <= 0 || pParam->nHeight <=0)
         return NULL;
@@ -225,11 +225,11 @@ unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
     if (nSize > SAL_MAX_INT32 / (bGray?1:3))
         return NULL;
 
-    // Check if the bitmap is untypically large.
+    
     if (nSize*(bGray?1:3) > MAX_BITMAP_BYTE_SIZE)
     {
-        // Do not try to acquire resources for the large bitmap or to
-        // read the bitmap into memory.
+        
+        
         return NULL;
     }
 
@@ -290,7 +290,7 @@ unsigned char * JPEGReader::CreateBitmap( JPEGCreateBitmapParam * pParam )
         }
     }
 
-    // clean up, if no Bitmap buffer can be provided.
+    
     if ( !pBmpBuf )
     {
         maBmp.ReleaseAccess( mpAcc );
@@ -341,16 +341,16 @@ void JPEGReader::FillBitmap()
 
             for( long nY = 0L; nY < nHeight; nY++ )
             {
-                // #i122985# Added fast-lane implementations using CopyScanline with direct supported mem formats
+                
                 static bool bCheckOwnReader(true);
 
                 if(bCheckOwnReader)
                 {
-                    // #i122985# Trying to copy the RGB data from jpeg import to make things faster. Unfortunately
-                    // it has no GBR format, so RGB three-byte groups need to be 'flipped' to GBR first,
-                    // then CopyScanline can use a memcpy to do the data transport. CopyScanline can also
-                    // do the needed conversion from BMP_FORMAT_24BIT_TC_RGB (and it works well), but this
-                    // is not faster that the old loop below using SetPixel.
+                    
+                    
+                    
+                    
+                    
                     sal_uInt8* aSource((sal_uInt8*)mpBuffer + nY * nAlignedWidth);
                     sal_uInt8* aEnd(aSource + (nWidth * 3));
 
@@ -363,7 +363,7 @@ void JPEGReader::FillBitmap()
                 }
                 else
                 {
-                    // old version: WritePixel
+                    
                     pTmp = (sal_uInt8*) mpBuffer + nY * nAlignedWidth;
 
                     for( long nX = 0L; nX < nWidth; nX++ )
@@ -433,13 +433,13 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
     bool        bRet = false;
     sal_uInt8   cDummy;
 
-    // TODO: is it possible to get rid of this seek to the end?
-    // check if the stream's end is already available
+    
+    
     mrStream.Seek( STREAM_SEEK_TO_END );
     mrStream.ReadUChar( cDummy );
     nEndPosition = mrStream.Tell();
 
-    // else check if at least JPEG_MIN_READ bytes can be read
+    
     if( mrStream.GetError() == ERRCODE_IO_PENDING )
     {
         mrStream.ResetError();
@@ -450,10 +450,10 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
         }
     }
 
-    // seek back to the original position
+    
     mrStream.Seek( mnLastPos );
 
-    // read the (partial) image
+    
     ReadJPEG( this, &mrStream, &nLines, GetPreviewSize() );
 
     if( mpAcc )
@@ -484,7 +484,7 @@ ReadState JPEGReader::Read( Graphic& rGraphic )
         bRet = true;
     }
 
-    // Set status ( Pending has priority )
+    
     if( mrStream.GetError() == ERRCODE_IO_PENDING )
     {
         eReadState = JPEGREAD_NEED_MORE;

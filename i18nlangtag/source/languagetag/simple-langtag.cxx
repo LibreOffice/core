@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 /** Cheap and cheesy replacement code for liblangtag on systems that do not
@@ -162,8 +162,8 @@ struct lt_list_t : public my_t_impl
 
 static lt_pointer_t lt_list_value( const lt_list_t* p )
 {
-    // This may look odd, but in this implementation the list element itself
-    // holds the char* mpStr to be obtained with lt_variant_get_tag()
+    
+    
     return static_cast<lt_pointer_t>(const_cast<lt_list_t*>(p));
 }
 
@@ -219,8 +219,8 @@ static void my_appendToList( lt_list_t** ppList, lt_list_t* pEntry )
     }
 }
 
-// my_t_impl has a superfluous mpStr here, but simplifies things much in the
-// parser.
+
+
 struct my_t_list : public my_t_impl
 {
     lt_list_t* mpList;
@@ -312,7 +312,7 @@ static void lt_tag_unref(lt_tag_t *tag)
         tag->decRef();
 }
 
-/** See http://tools.ietf.org/html/rfc5646
+/** See http:
 
     We are simply ignorant of grandfathered (irregular and regular) subtags and
     may either bail out or accept them, sorry (or not). However, we do accept
@@ -329,12 +329,12 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
     tag->assign( tag_string);
     if (!tag_string)
         return 0;
-    // In case we supported other subtags this would get more complicated.
+    
     my_t_impl* aSubtags[] = { &tag->maLanguage, &tag->maScript, &tag->maRegion, &tag->maVariants, NULL };
     my_t_impl** ppSub = &aSubtags[0];
     const char* pStart = tag_string;
     const char* p = pStart;
-    const char* pEnd = pStart + strlen( pStart);   // scanning includes \0
+    const char* pEnd = pStart + strlen( pStart);   
     bool bStartLang = true;
     bool bPrivate = false;
     for ( ; p <= pEnd && ppSub && *ppSub; ++p)
@@ -349,64 +349,64 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
                     bStartLang = false;
                     switch (nLen)
                     {
-                        case 1:     // irregular or privateuse
+                        case 1:     
                             if (*pStart == 'i' || *pStart == 'x')
                             {
                                 (*ppSub)->assign( pStart, p);
                                 bPrivate = true;
                             }
                             else
-                                return 0;   // bad
+                                return 0;   
                             break;
-                        case 2:     // ISO 639 alpha-2
-                        case 3:     // ISO 639 alpha-3
+                        case 2:     
+                        case 3:     
                             (*ppSub)->assign( pStart, p);
                             break;
-                        case 4:     // reserved for future use
-                            return 0;   // bad
+                        case 4:     
+                            return 0;   
                             break;
                         case 5:
                         case 6:
                         case 7:
-                        case 8:     // registered language subtag
+                        case 8:     
                             (*ppSub++)->assign( pStart, p);
                             break;
                         default:
-                            return 0;   // bad
+                            return 0;   
                     }
                 }
                 else
                 {
                     if (nLen > 8)
-                        return 0;   // bad
+                        return 0;   
                     if (bPrivate)
                     {
-                        // Any combination of  "x" 1*("-" (2*8alphanum))
-                        // allowed, store first as language and return ok.
-                        // For i-* simply assume the same.
+                        
+                        
+                        
                         (*ppSub)->append( pStart-1, p);
-                        return !0;  // ok
+                        return !0;  
                     }
                     else if (nLen == 3)
                     {
-                        // extlang subtag, 1 to 3 allowed we don't check that.
-                        // But if it's numeric it's a region UN M.49 code
-                        // instead and no script subtag is present, so advance.
+                        
+                        
+                        
                         if ('0' <= *pStart && *pStart <= '9')
                         {
-                            ppSub += 2; // &tag->maRegion XXX watch this when inserting fields
+                            ppSub += 2; 
                             --p;
-                            continue;   // for
+                            continue;   
                         }
                         else
                             (*ppSub)->append( pStart-1, p);
                     }
                     else
                     {
-                        // Not part of language subtag, advance.
+                        
                         ++ppSub;
                         --p;
-                        continue;   // for
+                        continue;   
                     }
                 }
             }
@@ -415,52 +415,52 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
                 switch (nLen)
                 {
                     case 4:
-                        // script subtag, or a (DIGIT 3alphanum) variant with
-                        // no script and no region
+                        
+                        
                         if ('0' <= *pStart && *pStart <= '9')
                         {
-                            ppSub += 2; // &tag->maVariants XXX watch this when inserting fields
+                            ppSub += 2; 
                             --p;
-                            continue;   // for
+                            continue;   
                         }
                         else
                             (*ppSub++)->assign( pStart, p);
                         break;
                     case 3:
-                        // This may be a region UN M.49 code if 3DIGIT and no
-                        // script code present. Just check first character and
-                        // advance.
+                        
+                        
+                        
                         if ('0' <= *pStart && *pStart <= '9')
                         {
                             ++ppSub;
                             --p;
-                            continue;   // for
+                            continue;   
                         }
                         else
-                            return 0;   // bad
+                            return 0;   
                         break;
                     case 2:
-                        // script omitted, region subtag, advance.
+                        
                         ++ppSub;
                         --p;
-                        continue;   // for
+                        continue;   
                         break;
                     case 1:
-                        // script omitted, region omitted, extension subtag
-                        // with singleton, stop parsing
+                        
+                        
                         ppSub = NULL;
                         break;
                     case 5:
                     case 6:
                     case 7:
                     case 8:
-                        // script omitted, region omitted, variant subtag
-                        ppSub += 2; // &tag->maVariants XXX watch this when inserting fields
+                        
+                        ppSub += 2; 
                         --p;
-                        continue;   // for
+                        continue;   
                         break;
                     default:
-                        return 0;   // bad
+                        return 0;   
                 }
             }
             else if (*ppSub == &tag->maRegion)
@@ -469,32 +469,32 @@ static lt_bool_t lt_tag_parse(lt_tag_t *tag,
                     (*ppSub++)->assign( pStart, p);
                 else
                 {
-                    // advance to variants
+                    
                     ++ppSub;
                     --p;
-                    continue;   // for
+                    continue;   
                 }
             }
             else if (*ppSub == &tag->maVariants)
             {
-                // Stuff the remainder into variants, might not be correct, but ...
+                
                 switch (nLen)
                 {
                     case 4:
-                        // a (DIGIT 3alphanum) variant
+                        
                         if ('0' <= *pStart && *pStart <= '9')
-                            ;   // nothing
+                            ;   
                         else
-                            return 0;   // bad
+                            return 0;   
                         break;
                     case 5:
                     case 6:
                     case 7:
                     case 8:
-                        ;   // nothing, variant
+                        ;   
                         break;
                     default:
-                        return 0;   // bad
+                        return 0;   
                 }
                 (*ppSub)->append( pStart, p);
             }

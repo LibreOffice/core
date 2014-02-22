@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -93,7 +93,7 @@ Theme::Theme (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 
 void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpProperties)
 {
-    // Set up colors.
+    
     maBackgroundColor = rpProperties->GetBackgroundColor().GetColor();
     maPageBackgroundColor = svtools::ColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
 
@@ -109,7 +109,7 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
     else
         maColor[Color_PageCountFontColor] = White;
 
-    // Set up gradients.
+    
     SetGradient(Gradient_SelectedPage, aSelectionColor, 50, 50, +100,+100, +50,+25);
     SetGradient(Gradient_MouseOverPage, aSelectionColor, 75, 75, +100,+100, +50,+25);
     SetGradient(Gradient_SelectedAndFocusedPage, aSelectionColor, 50, 50, +100,+100, -50,-75);
@@ -118,12 +118,12 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
     SetGradient(Gradient_NormalPage, maBackgroundColor, -1,-1, 0,0, 0,0);
 
-    // The focused gradient needs special handling because its fill color is
-    // like that of the NormalPage gradient.
+    
+    
     GetGradient(Gradient_FocusedPage).maFillColor1 = GetGradient(Gradient_NormalPage).maFillColor1;
     GetGradient(Gradient_FocusedPage).maFillColor2 = GetGradient(Gradient_NormalPage).maFillColor2;
 
-    // Set up icons.
+    
     if (maIcons.empty())
     {
         LocalResource aResource (RID_SLIDESORTER_ICONS);
@@ -166,11 +166,11 @@ void Theme::Update (const ::boost::shared_ptr<controller::Properties>& rpPropert
 
     if (pFont)
     {
-        // Transform the point size to pixel size.
+        
         const MapMode aFontMapMode (MAP_POINT);
         const Size aFontSize (rDevice.LogicToPixel(pFont->GetSize(), aFontMapMode));
 
-        // Transform the font size to the logical coordinates of the device.
+        
         pFont->SetSize(rDevice.PixelToLogic(aFontSize));
     }
 
@@ -203,7 +203,7 @@ ColorData Theme::GetGradientColor (
         case Border2: return rDescriptor.maBorderColor2;
         case Fill1: return rDescriptor.maFillColor1;
         case Fill2: return rDescriptor.maFillColor2;
-        default: OSL_ASSERT(false); // fall through
+        default: OSL_ASSERT(false); 
         case Base: return rDescriptor.maBaseColor;
     }
 }
@@ -289,6 +289,6 @@ void Theme::InitializeIcon (const IconType eType, sal_uInt16 nResourceId)
 
 
 
-} } } // end of namespace ::sd::slidesorter::view
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

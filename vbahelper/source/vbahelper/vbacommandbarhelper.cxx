@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "vbacommandbarhelper.hxx"
 #include <com/sun/star/ui/theModuleUIConfigurationManagerSupplier.hpp>
@@ -44,7 +44,7 @@ private:
 
     MSO2OOCommandbarHelper()
     {
-        // Buildin toolbars
+        
         maBuildinToolbarMap.insert( std::make_pair( OUString("Standard") ,    OUString("private:resource/toolbar/standardbar" ) ) );
         maBuildinToolbarMap.insert( std::make_pair( OUString("Formatting"),   OUString("private:resource/toolbar/formatobjectbar") ) );
         maBuildinToolbarMap.insert( std::make_pair( OUString("Drawing"),      OUString("private:resource/toolbar/drawbar") ) );
@@ -140,7 +140,7 @@ void VbaCommandBarHelper::removeSettings( const OUString& sResourceUrl ) throw (
     else if( m_xAppCfgMgr->hasSettings( sResourceUrl ) )
         m_xAppCfgMgr->removeSettings( sResourceUrl );
 
-    // persistChanges();
+    
 }
 
 void VbaCommandBarHelper::ApplyChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings, sal_Bool bTemporary ) throw (css::uno::RuntimeException)
@@ -192,12 +192,12 @@ sal_Bool VbaCommandBarHelper::hasToolbar( const OUString& sResourceUrl, const OU
     return sal_False;
 }
 
-// return the resource url if found
+
 OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName ) throw (css::uno::RuntimeException)
 {
     OUString sResourceUrl;
 
-    // check if it is an buildin toolbar
+    
     sResourceUrl = MSO2OOCommandbarHelper::getMSO2OOCommandbarHelper()->findBuildinToolbar( sName );
     if( !sResourceUrl.isEmpty() )
         return sResourceUrl;
@@ -213,7 +213,7 @@ OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css:
         }
     }
 
-    // the customize toolbars creating during importing, shoud found there.
+    
     static OUString sToolbarPrefix(  "private:resource/toolbar/custom_"  );
     sResourceUrl = sToolbarPrefix.concat( sName );
     if( hasToolbar( sResourceUrl, sName ) )
@@ -222,7 +222,7 @@ OUString VbaCommandBarHelper::findToolbarByName( const css::uno::Reference< css:
     return OUString();
 }
 
-// if found, return the position of the control. if not found, return -1
+
 sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const OUString& sName, bool bMenu ) throw (css::uno::RuntimeException)
 {
     sal_Int32 nCount = xIndexAccess->getCount();
@@ -232,7 +232,7 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
         OUString sLabel;
         xIndexAccess->getByIndex( i ) >>= aProps;
         getPropertyValue( aProps, ITEM_DESCRIPTOR_LABEL ) >>= sLabel;
-        // handle the hotkey marker '~' (remove in toolbars (?), replace by '&' in menus)
+        
         OUStringBuffer aBuffer;
         sal_Int32 index = sLabel.indexOf( '~' );
         if( index < 0 )
@@ -252,7 +252,7 @@ sal_Int32 VbaCommandBarHelper::findControlByName( const css::uno::Reference< css
             return i;
     }
 
-    // not found
+    
     return -1;
 }
 
@@ -261,7 +261,7 @@ OUString VbaCommandBarHelper::generateCustomURL()
     OUString url( ITEM_TOOLBAR_URL );
     url += CUSTOM_TOOLBAR_STR;
 
-    // use a random number to minimize possible clash with existing custom toolbars
+    
     srand( unsigned( time( NULL ) ));
     url += OUString::number( rand(), 16 );
     return url;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "selectlabeldialog.hxx"
@@ -31,10 +31,10 @@
 #include <comphelper/types.hxx>
 #include "svtools/treelistentry.hxx"
 
-//............................................................................
+
 namespace pcr
 {
-//............................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::container;
@@ -43,11 +43,11 @@ namespace pcr
     using namespace ::com::sun::star::sdbc;
     using namespace ::com::sun::star::lang;
 
-    //========================================================================
-    // OSelectLabelDialog
-    //========================================================================
+    
+    
+    
     DBG_NAME(OSelectLabelDialog)
-    //------------------------------------------------------------------------
+    
     OSelectLabelDialog::OSelectLabelDialog( Window* pParent, Reference< XPropertySet >  _xControlModel )
         :ModalDialog(pParent, PcrRes(RID_DLG_SELECTLABELCONTROL))
         ,m_aMainDesc(this, PcrRes(1))
@@ -64,7 +64,7 @@ namespace pcr
     {
         DBG_CTOR(OSelectLabelDialog,NULL);
 
-        // initialize the TreeListBox
+        
         m_aControlTree.SetSelectionMode( SINGLE_SELECTION );
         m_aControlTree.SetDragDropMode( 0 );
         m_aControlTree.EnableInplaceEditing( false );
@@ -74,7 +74,7 @@ namespace pcr
         m_aControlTree.SetSelectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
         m_aControlTree.SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
 
-        // fill the description
+        
         OUString sDescription = m_aMainDesc.GetText();
         sal_Int16 nClassID = FormComponentType::CONTROL;
         if (::comphelper::hasProperty(PROPERTY_CLASSID, m_xControlModel))
@@ -86,7 +86,7 @@ namespace pcr
         sDescription = sDescription.replaceAll(OUString("$control_name$"), sName);
         m_aMainDesc.SetText(sDescription);
 
-        // search for the root of the form hierarchy
+        
         Reference< XChild >  xCont(m_xControlModel, UNO_QUERY);
         Reference< XInterface >  xSearch( xCont.is() ? xCont->getParent() : Reference< XInterface > ());
         Reference< XResultSet >  xParentAsResultSet(xSearch, UNO_QUERY);
@@ -97,16 +97,16 @@ namespace pcr
             xParentAsResultSet = Reference< XResultSet > (xSearch, UNO_QUERY);
         }
 
-        // and insert all entries below this root into the listbox
+        
         if (xSearch.is())
         {
-            // check which service the allowed components must suppport
+            
             sal_Int16 nClassId = 0;
             try { nClassId = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID)); } catch(...) { }
             m_sRequiredService = (FormComponentType::RADIOBUTTON == nClassId) ? OUString(SERVICE_COMPONENT_GROUPBOX) : OUString(SERVICE_COMPONENT_FIXEDTEXT);
             m_aRequiredControlImage = m_aModelImages.GetImage((FormComponentType::RADIOBUTTON == nClassId) ? RID_SVXIMG_GROUPBOX : RID_SVXIMG_FIXEDTEXT);
 
-            // calc the currently set label control (so InsertEntries can calc m_pInitialSelection)
+            
             Any aCurrentLabelControl( m_xControlModel->getPropertyValue(PROPERTY_CONTROLLABEL) );
             DBG_ASSERT((aCurrentLabelControl.getValueTypeClass() == TypeClass_INTERFACE) || !aCurrentLabelControl.hasValue(),
 
@@ -114,11 +114,11 @@ namespace pcr
             if (aCurrentLabelControl.hasValue())
                 aCurrentLabelControl >>= m_xInitialLabelControl;
 
-            // insert the root
+            
             Image aRootImage = m_aModelImages.GetImage(RID_SVXIMG_FORMS);
             SvTreeListEntry* pRoot = m_aControlTree.InsertEntry(PcrRes(RID_STR_FORMS).toString(), aRootImage, aRootImage);
 
-            // build the tree
+            
             m_pInitialSelection = NULL;
             m_bHaveAssignableControl = sal_False;
             InsertEntries(xSearch, pRoot);
@@ -139,7 +139,7 @@ namespace pcr
         }
 
         if (!m_bHaveAssignableControl)
-        {   // no controls which can be assigned
+        {   
             m_aNoAssignment.Check(true);
             m_aNoAssignment.Enable(false);
         }
@@ -150,10 +150,10 @@ namespace pcr
         FreeResource();
     }
 
-    //------------------------------------------------------------------------
+    
     OSelectLabelDialog::~OSelectLabelDialog()
     {
-        // delete the entry datas of the listbox entries
+        
         SvTreeListEntry* pLoop = m_aControlTree.First();
         while (pLoop)
         {
@@ -166,7 +166,7 @@ namespace pcr
         DBG_DTOR(OSelectLabelDialog,NULL);
     }
 
-    //------------------------------------------------------------------------
+    
     sal_Int32 OSelectLabelDialog::InsertEntries(const Reference< XInterface > & _xContainer, SvTreeListEntry* pContainerEntry)
     {
         Reference< XIndexAccess >  xContainer(_xContainer, UNO_QUERY);
@@ -186,20 +186,20 @@ namespace pcr
             }
 
             if (!::comphelper::hasProperty(PROPERTY_NAME, xAsSet))
-                // we need at least a name for displaying ...
+                
                 continue;
             sName = ::comphelper::getString(xAsSet->getPropertyValue(PROPERTY_NAME)).getStr();
 
-            // we need to check if the control model supports the required service
+            
             Reference< XServiceInfo >  xInfo(xAsSet, UNO_QUERY);
             if (!xInfo.is())
                 continue;
 
             if (!xInfo->supportsService(m_sRequiredService))
-            {   // perhaps it is a container
+            {   
                 Reference< XIndexAccess >  xCont(xAsSet, UNO_QUERY);
                 if (xCont.is() && xCont->getCount())
-                {   // yes -> step down
+                {   
                     Image aFormImage = m_aModelImages.GetImage( RID_SVXIMG_FORM );
                     SvTreeListEntry* pCont = m_aControlTree.InsertEntry(sName, aFormImage, aFormImage, pContainerEntry);
                     sal_Int32 nContChildren = InsertEntries(xCont, pCont);
@@ -209,7 +209,7 @@ namespace pcr
                         ++nChildren;
                     }
                     else
-                    {   // oops, no valid children -> remove the entry
+                    {   
                         m_aControlTree.ModelIsRemoving(pCont);
                         m_aControlTree.GetModel()->Remove(pCont);
                         m_aControlTree.ModelHasRemoved(pCont);
@@ -218,7 +218,7 @@ namespace pcr
                 continue;
             }
 
-            // get the label
+            
             if (!::comphelper::hasProperty(PROPERTY_LABEL, xAsSet))
                 continue;
 
@@ -227,7 +227,7 @@ namespace pcr
                 append(" (").append(sName).append(')').
                 makeStringAndClear();
 
-            // all requirements met -> insert
+            
             SvTreeListEntry* pCurrent = m_aControlTree.InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);
             pCurrent->SetUserData(new Reference< XPropertySet > (xAsSet));
             ++nChildren;
@@ -241,7 +241,7 @@ namespace pcr
         return nChildren;
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB)
     {
         DBG_ASSERT(pLB == &m_aControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
@@ -259,7 +259,7 @@ namespace pcr
         return 0L;
     }
 
-    //------------------------------------------------------------------------
+    
     IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton)
     {
         DBG_ASSERT(pButton == &m_aNoAssignment, "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
@@ -270,7 +270,7 @@ namespace pcr
         else
         {
             DBG_ASSERT(m_bHaveAssignableControl, "OSelectLabelDialog::OnNoAssignmentClicked");
-            // search the first assignable entry
+            
             SvTreeListEntry* pSearch = m_aControlTree.First();
             while (pSearch)
             {
@@ -278,7 +278,7 @@ namespace pcr
                     break;
                 pSearch = m_aControlTree.Next(pSearch);
             }
-            // and select it
+            
             if (pSearch)
             {
                 m_aControlTree.Select(pSearch);
@@ -298,8 +298,8 @@ namespace pcr
         return 0L;
     }
 
-//............................................................................
-}   // namespace pcr
-//............................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

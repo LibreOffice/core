@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <jobs/job.hxx>
@@ -51,7 +51,7 @@ namespace {
 typedef cppu::WeakComponentImplHelper4<
           css::lang::XServiceInfo
         , css::task::XJobExecutor
-        , css::container::XContainerListener // => lang.XEventListener
+        , css::container::XContainerListener 
         , css::document::XEventListener >
     Base;
 
@@ -104,21 +104,21 @@ public:
         return aSeq;
     }
 
-    // task.XJobExecutor
+    
     virtual void SAL_CALL trigger( const OUString& sEvent ) throw(css::uno::RuntimeException);
 
-    /// Initialization function after having acquire()'d.
+    
     void initListeners();
 
-    // document.XEventListener
+    
     virtual void SAL_CALL notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException);
 
-    // container.XContainerListener
+    
     virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL elementRemoved ( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
     virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException);
 
-    // lang.XEventListener
+    
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException);
 };
 
@@ -138,11 +138,11 @@ JobExecutor::JobExecutor( /*IN*/ const css::uno::Reference< css::uno::XComponent
 
 void JobExecutor::initListeners()
 {
-    // read the list of all currently registered events inside configuration.
-    // e.g. "/org.openoffice.Office.Jobs/Events/<event name>"
-    // We need it later to check if an incoming event request can be executed successfully
-    // or must be rejected. It's an optimization! Of course we must implement updating of this
-    // list too ... Be listener at the configuration.
+    
+    
+    
+    
+    
 
     m_aConfig.open(ConfigAccess::E_READONLY);
     if (m_aConfig.getMode() == ConfigAccess::E_READONLY)
@@ -161,8 +161,8 @@ void JobExecutor::initListeners()
             xNotifier->addContainerListener(m_xConfigListener);
         }
 
-        // don't close cfg here!
-        // It will be done inside disposing ...
+        
+        
     }
 }
 
@@ -188,7 +188,7 @@ void JobExecutor::disposing() {
     }
 }
 
-//________________________________
+
 
 /**
     @short  implementation of XJobExecutor interface
@@ -208,19 +208,19 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
     /* SAFE */ {
     osl::MutexGuard g(rBHelper.rMutex);
 
-    // Optimization!
-    // Check if the given event name exist inside configuration and reject wrong requests.
-    // This optimization supress using of the cfg api for getting event and job descriptions ...
+    
+    
+    
     if (m_lEvents.find(sEvent) == m_lEvents.end())
         return;
 
-    // get list of all enabled jobs
-    // The called static helper methods read it from the configuration and
-    // filter disabled jobs using it's time stamp values.
+    
+    
+    
     lJobs = JobData::getEnabledJobsForEvent(m_xContext, sEvent);
     } /* SAFE */
 
-    // step over all enabled jobs and execute it
+    
     sal_Int32 c = lJobs.getLength();
     for (sal_Int32 j=0; j<c; ++j)
     {
@@ -246,16 +246,16 @@ void SAL_CALL JobExecutor::trigger( const OUString& sEvent ) throw(css::uno::Run
     }
 }
 
-//________________________________
+
 
 void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException)
 {
-    const char EVENT_ON_NEW[] = "OnNew";                            // Doc UI  event
-    const char EVENT_ON_LOAD[] = "OnLoad";                          // Doc UI  event
-    const char EVENT_ON_CREATE[] = "OnCreate";                      // Doc API event
-    const char EVENT_ON_LOAD_FINISHED[] = "OnLoadFinished";         // Doc API event
-    OUString EVENT_ON_DOCUMENT_OPENED("onDocumentOpened");   // Job UI  event : OnNew    or OnLoad
-    OUString EVENT_ON_DOCUMENT_ADDED("onDocumentAdded");     // Job API event : OnCreate or OnLoadFinished
+    const char EVENT_ON_NEW[] = "OnNew";                            
+    const char EVENT_ON_LOAD[] = "OnLoad";                          
+    const char EVENT_ON_CREATE[] = "OnCreate";                      
+    const char EVENT_ON_LOAD_FINISHED[] = "OnLoadFinished";         
+    OUString EVENT_ON_DOCUMENT_OPENED("onDocumentOpened");   
+    OUString EVENT_ON_DOCUMENT_ADDED("onDocumentAdded");     
 
     OUString aModuleIdentifier;
     ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding > lJobs;
@@ -263,12 +263,12 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     /* SAFE */ {
     osl::MutexGuard g(rBHelper.rMutex);
 
-    // Optimization!
-    // Check if the given event name exist inside configuration and reject wrong requests.
-    // This optimization supress using of the cfg api for getting event and job descriptions.
-    // see using of m_lEvents.find() below ...
+    
+    
+    
+    
 
-    // retrieve event context from event source
+    
     try
     {
         aModuleIdentifier = css::frame::ModuleManager::create( m_xContext )->identify( aEvent.Source );
@@ -276,7 +276,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     catch( const css::uno::Exception& )
     {}
 
-    // Special feature: If the events "OnNew" or "OnLoad" occurs - we generate our own event "onDocumentOpened".
+    
     if (
         (aEvent.EventName == EVENT_ON_NEW) ||
         (aEvent.EventName == EVENT_ON_LOAD)
@@ -286,7 +286,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
             JobData::appendEnabledJobsForEvent(m_xContext, EVENT_ON_DOCUMENT_OPENED, lJobs);
     }
 
-    // Special feature: If the events "OnCreate" or "OnLoadFinished" occurs - we generate our own event "onDocumentAdded".
+    
     if (
         (aEvent.EventName == EVENT_ON_CREATE) ||
         (aEvent.EventName == EVENT_ON_LOAD_FINISHED)
@@ -296,12 +296,12 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
             JobData::appendEnabledJobsForEvent(m_xContext, EVENT_ON_DOCUMENT_ADDED, lJobs);
     }
 
-    // Add all jobs for "real" notified event too .-)
+    
     if (m_lEvents.find(aEvent.EventName) != m_lEvents.end())
         JobData::appendEnabledJobsForEvent(m_xContext, aEvent.EventName, lJobs);
     } /* SAFE */
 
-    // step over all enabled jobs and execute it
+    
     ::comphelper::SequenceAsVector< JobData::TJob2DocEventBinding >::const_iterator pIt;
     for (  pIt  = lJobs.begin();
            pIt != lJobs.end()  ;
@@ -335,7 +335,7 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
     }
 }
 
-//________________________________
+
 
 void SAL_CALL JobExecutor::elementInserted( const css::container::ContainerEvent& aEvent ) throw(css::uno::RuntimeException)
 {
@@ -369,10 +369,10 @@ void SAL_CALL JobExecutor::elementRemoved ( const css::container::ContainerEvent
 
 void SAL_CALL JobExecutor::elementReplaced( const css::container::ContainerEvent& ) throw(css::uno::RuntimeException)
 {
-    // I'm not interested on changed items :-)
+    
 }
 
-//________________________________
+
 
 /** @short  the used cfg changes notifier wish to be released in its reference.
 
@@ -409,7 +409,7 @@ struct Instance {
         instance(
             static_cast<cppu::OWeakObject *>(new JobExecutor(context)))
     {
-        // 2nd phase initialization needed
+        
         static_cast<JobExecutor *>(static_cast<cppu::OWeakObject *>
                 (instance.get()))->initListeners();
     }

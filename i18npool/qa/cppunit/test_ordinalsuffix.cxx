@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 #include <algorithm>
 #include <com/sun/star/i18n/XOrdinalSuffix.hpp>
@@ -50,14 +50,14 @@ void TestOrdinalSuffix::testFrench()
     uno::Sequence< OUString > aSuffixes;
     OUString *pStart, *pEnd, *pFind;
 
-    //1er
+    
     aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
     pStart = aSuffixes.begin();
     pEnd = aSuffixes.end();
     pFind = std::find(pStart, pEnd, OUString("er"));
     CPPUNIT_ASSERT(pFind != pEnd);
 
-    //2e, 3e, etc.
+    
     aSuffixes = m_xOrdinal->getOrdinalSuffix(2, aLocale);
     pStart = aSuffixes.begin();
     pEnd = aSuffixes.end();
@@ -71,21 +71,21 @@ void TestOrdinalSuffix::testEnglish()
     uno::Sequence< OUString > aSuffixes;
     OUString *pStart, *pEnd, *pFind;
 
-    //1st
+    
     aSuffixes = m_xOrdinal->getOrdinalSuffix(1, aLocale);
     pStart = aSuffixes.begin();
     pEnd = aSuffixes.end();
     pFind = std::find(pStart, pEnd, OUString("st"));
     CPPUNIT_ASSERT(pFind != pEnd);
 
-    //2nd
+    
     aSuffixes = m_xOrdinal->getOrdinalSuffix(2, aLocale);
     pStart = aSuffixes.begin();
     pEnd = aSuffixes.end();
     pFind = std::find(pStart, pEnd, OUString("nd"));
     CPPUNIT_ASSERT(pFind != pEnd);
 
-    //3rd
+    
     aSuffixes = m_xOrdinal->getOrdinalSuffix(3, aLocale);
     pStart = aSuffixes.begin();
     pEnd = aSuffixes.end();

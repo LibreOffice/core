@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "formulabuffer.hxx"
@@ -69,7 +69,7 @@ public:
 
     Item* get( const ScAddress& rPos, const OUString& rFormula )
     {
-        // Check if a token array is cached for this column.
+        
         ColCacheType::iterator it = maCache.find(rPos.Col());
         if (it == maCache.end())
             return NULL;
@@ -88,11 +88,11 @@ public:
         ColCacheType::iterator it = maCache.find(rPos.Col());
         if (it == maCache.end())
         {
-            // Create an entry for this column.
+            
             std::pair<ColCacheType::iterator,bool> r =
                 maCache.insert(ColCacheType::value_type(rPos.Col(), new Item));
             if (!r.second)
-                // Insertion failed.
+                
                 return;
 
             it = r.first;
@@ -117,7 +117,7 @@ void applySharedFormulas(
 {
     sc::SharedFormulaGroups aGroups;
     {
-        // Process shared formulas first.
+        
         std::vector<FormulaBuffer::SharedFormulaEntry>::const_iterator it = rSharedFormulas.begin(), itEnd = rSharedFormulas.end();
         for (; it != itEnd; ++it)
         {
@@ -133,14 +133,14 @@ void applySharedFormulas(
             ScTokenArray* pArray = aComp.CompileString(rTokenStr);
             if (pArray)
             {
-                aComp.CompileTokenArray(); // Generate RPN tokens.
+                aComp.CompileTokenArray(); 
                 aGroups.set(nId, pArray);
             }
         }
     }
 
     {
-        // Process formulas that use shared formulas.
+        
         std::vector<FormulaBuffer::SharedFormulaDesc>::const_iterator it = rCells.begin(), itEnd = rCells.end();
         for (; it != itEnd; ++it)
         {
@@ -155,21 +155,21 @@ void applySharedFormulas(
             rDoc.setFormulaCell(aPos, pCell);
             if (it->maCellValue.isEmpty())
             {
-                // No cached cell value. Mark it for re-calculation.
+                
                 pCell->SetDirty(true);
                 continue;
             }
 
-            // Set cached formula results. For now, we only use numeric
-            // results. Find out how to utilize cached results of other types.
+            
+            
             switch (it->mnValueType)
             {
                 case XML_n:
-                    // numeric value.
+                    
                     pCell->SetResultDouble(it->maCellValue.toDouble());
                 break;
                 default:
-                    // Mark it for re-calculation.
+                    
                     pCell->SetDirty(true);
             }
         }
@@ -188,17 +188,17 @@ void applyCellFormulas(
         CachedTokenArray::Item* p = rCache.get(aPos, it->maTokenStr);
         if (p)
         {
-            // Use the cached version to avoid re-compilation.
+            
 
             ScFormulaCell* pCell = NULL;
             if (p->mnRow + 1 == aPos.Row())
             {
-                // Put them in the same formula group.
+                
                 ScFormulaCell& rPrev = *p->mpCell;
                 ScFormulaCellGroupRef xGroup = rPrev.GetCellGroup();
                 if (!xGroup)
                 {
-                    // Last cell is not grouped yet. Start a new group.
+                    
                     assert(rPrev.aPos.Row() == p->mnRow);
                     xGroup = rPrev.CreateCellGroup(1, false);
                 }
@@ -211,7 +211,7 @@ void applyCellFormulas(
 
             rDoc.setFormulaCell(aPos, pCell);
 
-            // Update the cache.
+            
             p->mnRow = aPos.Row();
             p->mpCell = pCell;
             continue;
@@ -224,7 +224,7 @@ void applyCellFormulas(
         if (!pCode)
             continue;
 
-        aCompiler.CompileTokenArray(); // Generate RPN tokens.
+        aCompiler.CompileTokenArray(); 
         ScFormulaCell* pCell = new ScFormulaCell(&rDoc.getDoc(), aPos, pCode);
         rDoc.setFormulaCell(aPos, pCell);
         rCache.store(aPos, pCell);
@@ -355,7 +355,7 @@ void FormulaBuffer::finalizeImport()
 
     SCTAB nTabCount = rDoc.getDoc().GetTableCount();
 
-    // Fetch all the formulas to process first.
+    
     std::vector<SheetItem> aSheetItems;
     aSheetItems.reserve(nTabCount);
     for (SCTAB nTab = 0; nTab < nTabCount; ++nTab)
@@ -373,10 +373,10 @@ void FormulaBuffer::finalizeImport()
         typedef rtl::Reference<WorkerThread> WorkerThreadRef;
         std::vector<WorkerThreadRef> aThreads;
         aThreads.reserve(nThreadCount);
-        // TODO: Right now we are spawning multiple threads all at once and block
-        // on them all at once.  Any more clever thread management would require
-        // use of condition variables which our own osl thread framework seems to
-        // lack.
+        
+        
+        
+        
         while (it != itEnd)
         {
             for (size_t i = 0; i < nThreadCount; ++i)

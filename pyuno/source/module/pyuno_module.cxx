@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -70,23 +70,23 @@ namespace {
 /**
    @ index of the next to be used member in the initializer list !
  */
-// LEM TODO: export member names as keyword arguments in initialiser?
-// Python supports very flexible variadic functions. By marking
-// variables with one asterisk (e.g. *var) the given variable is
-// defined to be a tuple of all the extra arguments. By marking
-// variables with two asterisks (e.g. **var) the given variable is a
-// dictionary of all extra keyword arguments; the keys are strings,
-// which are the names that were used to identify the arguments. If
-// they exist, these arguments must be the last one in the list.
+
+
+
+
+
+
+
+
 
 class fillStructState
 {
-    // Keyword arguments used
+    
     PyObject *used;
-    // Which structure members are initialised
+    
     boost::unordered_map <const OUString, bool, OUStringHash> initialised;
-    // How many positional arguments are consumed
-    // This is always the so-many first ones
+    
+    
     sal_Int32 nPosConsumed;
 
 public:
@@ -206,7 +206,7 @@ OUString getLibDir()
         {
             static OUString libDir;
 
-            // workarounds the $(ORIGIN) until it is available
+            
             if( Module::getUrlFromAddress(
                     reinterpret_cast< oslGenericFunction >(getLibDir), libDir ) )
             {
@@ -240,7 +240,7 @@ static PyObject* getComponentContext(
     {
         Reference<XComponentContext> ctx;
 
-        // getLibDir() must be called in order to set bootstrap variables correctly !
+        
         OUString path( getLibDir());
         if( Runtime::isInitialized() )
         {
@@ -249,9 +249,9 @@ static PyObject* getComponentContext(
         }
         else
         {
-            // cppu::defaultBootstrap_InitialComponentContext expects
-            // command line arguments to be present
-            osl_setCommandArgs(0, 0); // fake it
+            
+            
+            osl_setCommandArgs(0, 0); 
 
             OUString iniFile;
             if( path.isEmpty() )
@@ -273,13 +273,13 @@ static PyObject* getComponentContext(
             osl::DirectoryItem item;
             if( osl::DirectoryItem::get( iniFile, item ) == item.E_None )
             {
-                // in case pyuno.ini exists, use this file for bootstrapping
+                
                 PyThreadDetach antiguard;
                 ctx = cppu::defaultBootstrap_InitialComponentContext (iniFile);
             }
             else
             {
-                // defaulting to the standard bootstrapping
+                
                 PyThreadDetach antiguard;
                 ctx = cppu::defaultBootstrap_InitialComponentContext ();
             }
@@ -295,9 +295,9 @@ static PyObject* getComponentContext(
     }
     catch (const com::sun::star::registry::InvalidRegistryException &e)
     {
-        // can't use raisePyExceptionWithAny() here, because the function
-        // does any conversions, which will not work with a
-        // wrongly bootstrapped pyuno!
+        
+        
+        
         raisePySystemException( "InvalidRegistryException", e.Message );
     }
     catch(const com::sun::star::lang::IllegalArgumentException & e)
@@ -322,9 +322,9 @@ static PyObject* getComponentContext(
 static PyObject* initPoniesMode(
     SAL_UNUSED_PARAMETER PyObject*, SAL_UNUSED_PARAMETER PyObject*)
 {
-    // this tries to bootstrap enough of the soffice from python to run
-    // unit tests, which is only possible indirectly because pyuno is URE
-    // so load "test" library and invoke a function there to do the work
+    
+    
+    
     try
     {
         PyObject *const ctx(getComponentContext(0, 0));
@@ -352,7 +352,7 @@ static PyObject* initPoniesMode(
         oslGenericFunction const pFunc(
                 osl_getAsciiFunctionSymbol(mod, "test_init"));
         if (!pFunc) { abort(); }
-        // guess casting pFunc is undefined behavior but don't see a better way
+        
         ((void (SAL_CALL *)(XMultiServiceFactory*)) pFunc) (xMSF.get());
     }
     catch (const com::sun::star::uno::Exception &)
@@ -408,7 +408,7 @@ static PyObject *createUnoStructHelper(
                         PyUNO *me = (PyUNO*)PyUNO_new_UNCHECKED( IdlStruct, c->xInvocation );
                         PyRef returnCandidate( (PyObject*)me, SAL_NO_ACQUIRE );
                         TypeDescription desc( typeName );
-                        OSL_ASSERT( desc.is() ); // could already instantiate an XInvocation2 !
+                        OSL_ASSERT( desc.is() ); 
 
                         typelib_CompoundTypeDescription *pCompType =
                             ( typelib_CompoundTypeDescription * ) desc.get();
@@ -530,8 +530,8 @@ static PyObject *getConstantByName(
     }
     catch( const NoSuchElementException & e )
     {
-        // to the python programmer, this is a runtime exception,
-        // do not support tweakings with the type system
+        
+        
         RuntimeException runExc( e.Message, Reference< XInterface > () );
         raisePyExceptionWithAny( makeAny( runExc ) );
     }
@@ -613,10 +613,10 @@ static PyObject *getClass( SAL_UNUSED_PARAMETER PyObject *, PyObject *args )
     }
     catch(const RuntimeException & e)
     {
-        // NOOPT !!!
-        // gcc 3.2.3 crashes here in the regcomp test scenario
-        // only since migration to python 2.3.4 ???? strange thing
-        // optimization switched off for this module !
+        
+        
+        
+        
         raisePyExceptionWithAny( makeAny(e) );
     }
     return NULL;
@@ -865,19 +865,19 @@ extern "C"
 PyObject* PyInit_pyuno()
 {
     PyUNO_initType();
-    // noop when called already, otherwise needed to allow multiple threads
+    
     PyEval_InitThreads();
     static struct PyModuleDef moduledef =
     {
         PyModuleDef_HEAD_INIT,
-        "pyuno",             // module name
-        0,                   // module documentation
-        -1,                  // module keeps state in global variables,
-        PyUNOModule_methods, // modules methods
-        0,                   // m_reload (must be 0)
-        0,                   // m_traverse
-        0,                   // m_clear
-        0,                   // m_free
+        "pyuno",             
+        0,                   
+        -1,                  
+        PyUNOModule_methods, 
+        0,                   
+        0,                   
+        0,                   
+        0,                   
     };
     return PyModule_Create(&moduledef);
 }

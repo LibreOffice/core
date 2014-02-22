@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ResultSetMetaData.hxx"
@@ -49,7 +49,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount() throw(SQLException, Runt
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     verifyValidColumn(column);
-    return 32; // Hard limit for firebird
+    return 32; 
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
@@ -65,11 +65,11 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
-    // Firebird is generally case sensitive when using quoted identifiers.
-    // IF THIS CHANGES make ResultSet::findColumn to be case-insenstive as needed.
-    // Generally names that are entirely UPPERCASE are case insensitive, however
-    // there remains some ambiguity if there is another mixed-case-named column
-    // of the same name. For safety always assume case insensitive.
+    
+    
+    
+    
+    
     (void) column;
     return sal_True;
 }
@@ -78,7 +78,7 @@ OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
     (void) column;
-    return OUString(); // Schemas supported by firebird
+    return OUString(); 
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
@@ -105,7 +105,7 @@ OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
     (void) column;
-    return OUString(); // Catalogs not supported by firebird
+    return OUString(); 
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
@@ -121,14 +121,14 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
-    // TODO: clarify what this is -- probably not the alias
+    
     return getColumnName(column);
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
-    // TODO: implement
+    
     (void) column;
     return OUString();
 }
@@ -143,7 +143,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
-    // Supported internally but no way of determining this here.
+    
     (void) column;
     return sal_False;
 }
@@ -152,7 +152,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
-    // Unsigned values aren't supported in firebird.
+    
     (void) column;
     return sal_True;
 }
@@ -160,7 +160,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
-    // TODO: implement
+    
     (void) column;
     return 0;
 }
@@ -183,7 +183,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
-    // TODO: Can the column be used as part of a where clause? Assume yes
+    
     (void) column;
     return sal_True;
 }
@@ -192,7 +192,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
     throw(SQLException, RuntimeException)
 {
     (void) column;
-    return m_pConnection->isReadOnly(); // Readonly only available on db level
+    return m_pConnection->isReadOnly(); 
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)

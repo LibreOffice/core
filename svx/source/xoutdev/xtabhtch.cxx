@@ -90,7 +90,7 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
         const Size& rSize = rStyleSettings.GetListBoxPreviewDefaultPixelSize();
 
-        // prepare polygon geometry for rectangle
+        
         const basegfx::B2DPolygon aRectangle(
             basegfx::tools::createPolygonFromRect(
                 basegfx::B2DRange(0.0, 0.0, rSize.Width(), rSize.Height())));
@@ -112,7 +112,7 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
             }
             default :
             {
-                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE; // XHATCH_TRIPLE
+                aHatchStyle = drawinglayer::attribute::HATCHSTYLE_TRIPLE; 
                 break;
             }
         }
@@ -126,7 +126,7 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
             (double)rHatch.GetDistance() * fScaleValue,
             (double)rHatch.GetAngle() * F_PI1800,
             rHatch.GetColor().getBColor(),
-            3, // same default as VCL, a minimum of three discrete units (pixels) offset
+            3, 
             false);
 
         const basegfx::BColor aBlack(0.0, 0.0, 0.0);
@@ -141,7 +141,7 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
                 aRectangle,
                 aBlack));
 
-        // prepare VirtualDevice
+        
         VirtualDevice aVirtualDevice;
         const drawinglayer::geometry::ViewInformation2D aNewViewInformation2D;
 
@@ -164,7 +164,7 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
             aVirtualDevice.Erase();
         }
 
-        // create processor and draw primitives
+        
         drawinglayer::processor2d::BaseProcessor2D* pProcessor2D = drawinglayer::processor2d::createPixelProcessor2DFromOutputDevice(
             aVirtualDevice,
             aNewViewInformation2D);
@@ -179,7 +179,7 @@ Bitmap XHatchList::CreateBitmapForUI( long nIndex )
             delete pProcessor2D;
         }
 
-        // get result bitmap and scale
+        
         aRetval = aVirtualDevice.GetBitmap(Point(0, 0), aVirtualDevice.GetOutputSizePixel());
     }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "tp_TitleRotation.hxx"
@@ -26,7 +26,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/frmdiritem.hxx>
 
-// header for class SfxInt32Item
+
 #include <svl/intitem.hxx>
 
 namespace chart
@@ -75,7 +75,7 @@ SfxTabPage* SchAlignmentTabPage::CreateWithoutRotation(Window* pParent,
 
 sal_Bool SchAlignmentTabPage::FillItemSet(SfxItemSet& rOutAttrs)
 {
-    //Since 04/1998 text can be rotated by an arbitrary angle: SCHATTR_TEXT_DEGREES
+    
     bool bStacked = m_pOrientHlp->GetStackedState() == STATE_CHECK;
     rOutAttrs.Put( SfxBoolItem( SCHATTR_TEXT_STACKED, bStacked ) );
 
@@ -103,6 +103,6 @@ void SchAlignmentTabPage::Reset(const SfxItemSet& rInAttrs)
         m_pLbTextDirection->SelectEntryValue( SvxFrameDirection(((const SvxFrameDirectionItem*)pItem)->GetValue()) );
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

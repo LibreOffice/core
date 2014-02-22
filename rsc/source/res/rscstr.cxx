@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -146,7 +146,7 @@ bool RscString::IsValueDefault( const RSCINST & rInst, CLASS_DATA pDef )
             if( pData->aRefId.aExp.IsNumber() &&
                 pDefData->aRefId.aExp.IsNumber() )
             {
-                // Sind die Referenzidentifier gleich
+                
                 if( pData->aRefId.GetNumber() == pDefData->aRefId.GetNumber() )
                 {
                     return true;
@@ -195,7 +195,7 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
     {
         RscStringInst * pStrI = ((RscStringInst *)rInst.pData);
         if(  pStrI->pStr ){
-            //char *  pChangeTab = RscChar::GetChangeTab();
+            
             sal_uInt32  n = 0;
             sal_uInt32  nPos, nSlashPos;
 
@@ -205,7 +205,7 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                 nSlashPos = nPos = 0;
 
                 while( pStrI->pStr[ n ] && (nPos < 72 || nPos - nSlashPos <= 3) )
-                { // nach \ mindesten 3 Zeichen wegeb \xa7
+                { 
                     fputc( pStrI->pStr[ n ], fOutput );
                     if( pStrI->pStr[ n ] == '\\' )
                         nSlashPos = nPos;
@@ -214,7 +214,7 @@ void RscString::WriteSrc( const RSCINST & rInst, FILE * fOutput,
                 }
 
                 fputc( '\"', fOutput );
-                if( pStrI->pStr[ n ] ) //nocht nicht zu ende
+                if( pStrI->pStr[ n ] ) 
                 {
                     fputc( '\n', fOutput );
                 }
@@ -242,7 +242,7 @@ ERRTYPE RscString::WriteRc( const RSCINST & rInst, RscWriteRc & rMem,
 
         while( aError.IsOk() && aId.IsId() )
         {
-            //Erhoehen und abfragen um Endlosrekusion zu vermeiden
+            
             nDeep++;
             if( nDeep > nRefDeep )
                 aError = ERR_REFTODEEP;

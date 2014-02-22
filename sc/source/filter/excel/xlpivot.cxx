@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "dpgroup.hxx"
@@ -34,9 +34,9 @@ namespace ScDPLayoutMode = ::com::sun::star::sheet::DataPilotFieldLayoutMode;
 namespace ScDPRefItemType = ::com::sun::star::sheet::DataPilotFieldReferenceItemType;
 namespace ScDPGroupBy = ::com::sun::star::sheet::DataPilotFieldGroupBy;
 
-// ============================================================================
-// Pivot cache
-// ============================================================================
+
+
+
 
 XclPCItem::XclPCItem() :
     meType( EXC_PCITEM_INVALID ),
@@ -63,7 +63,7 @@ void XclPCItem::SetText( const OUString& rText )
 void XclPCItem::SetDouble( double fValue )
 {
     meType = EXC_PCITEM_DOUBLE;
-    //! TODO convert double to string
+    
     maText = OUString();
     mfValue = fValue;
 }
@@ -71,7 +71,7 @@ void XclPCItem::SetDouble( double fValue )
 void XclPCItem::SetDateTime( const DateTime& rDateTime )
 {
     meType = EXC_PCITEM_DATETIME;
-    //! TODO convert date to string
+    
     maText = OUString();
     maDateTime = rDateTime;
 }
@@ -104,12 +104,12 @@ void XclPCItem::SetError( sal_uInt16 nError )
 void XclPCItem::SetBool( bool bValue )
 {
     meType = EXC_PCITEM_BOOL;
-    //! TODO convert boolean to string
+    
     maText = OUString();
     mbValue = bValue;
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool XclPCItem::IsEqual( const XclPCItem& rItem ) const
 {
@@ -163,7 +163,7 @@ const bool* XclPCItem::GetBool() const
     return (meType == EXC_PCITEM_BOOL) ? &mbValue : 0;
 }
 
-// Field settings =============================================================
+
 
 XclPCFieldInfo::XclPCFieldInfo() :
     mnFlags( 0 ),
@@ -205,7 +205,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPCFieldInfo& rInfo )
         << XclExpString( rInfo.maName );
 }
 
-// Numeric grouping field settings ============================================
+
 
 XclPCNumGroupInfo::XclPCNumGroupInfo() :
     mnFlags( EXC_SXNUMGROUP_AUTOMIN | EXC_SXNUMGROUP_AUTOMAX )
@@ -272,7 +272,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPCNumGroupInfo& rInfo )
     return rStrm << rInfo.mnFlags;
 }
 
-// Base class for pivot cache fields ==========================================
+
 
 XclPCField::XclPCField( XclPCFieldType eFieldType, sal_uInt16 nFieldIdx ) :
     meFieldType( eFieldType ),
@@ -344,7 +344,7 @@ bool XclPCField::Has16BitIndexes() const
     return IsStandardField() && ::get_flag( maFieldInfo.mnFlags, EXC_SXFIELD_16BIT );
 }
 
-// Pivot cache settings =======================================================
+
 
 /** Contains data for a pivot cache (SXDB record). */
 XclPCInfo::XclPCInfo() :
@@ -386,11 +386,11 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPCInfo& rInfo )
         << XclExpString( rInfo.maUserName );
 }
 
-// ============================================================================
-// Pivot table
-// ============================================================================
 
-// cached name ================================================================
+
+
+
+
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTCachedName& rCachedName )
 {
@@ -413,7 +413,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTCachedName& rCachedNam
     return rStrm;
 }
 
-// ----------------------------------------------------------------------------
+
 
 const OUString* XclPTVisNameInfo::GetVisName() const
 {
@@ -426,7 +426,7 @@ void XclPTVisNameInfo::SetVisName( const OUString& rName )
     maVisName.mbUseCache = rName.isEmpty();
 }
 
-// Field item settings ========================================================
+
 
 XclPTItemInfo::XclPTItemInfo() :
     mnType( EXC_SXVI_TYPE_DATA ),
@@ -453,7 +453,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTItemInfo& rInfo )
         << rInfo.maVisName;
 }
 
-// General field settings =====================================================
+
 
 XclPTFieldInfo::XclPTFieldInfo() :
     mnAxes( EXC_SXVD_AXIS_NONE ),
@@ -493,7 +493,7 @@ void XclPTFieldInfo::AddApiOrient( DataPilotFieldOrientation eOrient )
     }
 }
 
-//! TODO: should be a Sequence<GeneralFunction> in ScDPSaveData
+
 void XclPTFieldInfo::GetSubtotals( XclPTSubtotalVec& rSubtotals ) const
 {
     rSubtotals.clear();
@@ -545,7 +545,7 @@ void XclPTFieldInfo::SetSubtotals( const XclPTSubtotalVec& rSubtotals )
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTFieldInfo& rInfo )
 {
-    // rInfo.mnCacheIdx is not part of the SXVD record
+    
     return rStrm
         >> rInfo.mnAxes
         >> rInfo.mnSubtCount
@@ -556,7 +556,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPTFieldInfo& rInfo )
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldInfo& rInfo )
 {
-    // rInfo.mnCacheIdx is not part of the SXVD record
+    
     return rStrm
         << rInfo.mnAxes
         << rInfo.mnSubtCount
@@ -565,7 +565,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldInfo& rInfo )
         << rInfo.maVisName;
 }
 
-// Extended field settings ====================================================
+
 
 XclPTFieldExtInfo::XclPTFieldExtInfo() :
     mnFlags( EXC_SXVDEX_DEFAULTFLAGS ),
@@ -589,7 +589,7 @@ void XclPTFieldExtInfo::SetApiSortMode( sal_Int32 nSortMode )
     bool bSort = (nSortMode == ScDPSortMode::NAME) || (nSortMode == ScDPSortMode::DATA);
     ::set_flag( mnFlags, EXC_SXVDEX_SORT, bSort );
     if( nSortMode == ScDPSortMode::NAME )
-        mnSortField = EXC_SXVDEX_SORT_OWN;  // otherwise sort field has to be set by caller
+        mnSortField = EXC_SXVDEX_SORT_OWN;  
 }
 
 sal_Int32 XclPTFieldExtInfo::GetApiAutoShowMode() const
@@ -639,7 +639,7 @@ XclImpStream& operator>>( XclImpStream& rStrm, XclPTFieldExtInfo& rInfo )
 
     rStrm.Ignore(10);
     if (nNameLen != 0xFF)
-        // Custom field total name is used.  Pick it up.
+        
         rInfo.mpFieldTotalName.reset(new OUString(rStrm.ReadUniString(nNameLen, 0)));
 
     return rStrm;
@@ -670,7 +670,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTFieldExtInfo& rInfo )
     return rStrm;
 }
 
-// Page field settings ========================================================
+
 
 XclPTPageFieldInfo::XclPTPageFieldInfo() :
     mnField( 0 ),
@@ -695,7 +695,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTPageFieldInfo& rInfo )
         << rInfo.mnObjId;
 }
 
-// Data field settings ========================================================
+
 
 XclPTDataFieldInfo::XclPTDataFieldInfo() :
     mnField( 0 ),
@@ -803,7 +803,7 @@ void XclPTDataFieldInfo::SetApiRefItemType( sal_Int32 nRefItemType )
     {
         case ScDPRefItemType::PREVIOUS: mnRefItem = EXC_SXDI_PREVITEM;  break;
         case ScDPRefItemType::NEXT:     mnRefItem = EXC_SXDI_NEXTITEM;  break;
-        // nothing for named item reference
+        
     }
 }
 
@@ -831,7 +831,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTDataFieldInfo& rInfo )
         << rInfo.maVisName;
 }
 
-// Pivot table settings =======================================================
+
 
 XclPTInfo::XclPTInfo() :
     mnFirstHeadRow( 0 ),
@@ -897,7 +897,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTInfo& rInfo )
     return rStrm;
 }
 
-// Extended pivot table settings ==============================================
+
 
 XclPTExtInfo::XclPTExtInfo() :
     mnSxformulaRecs( 0 ),
@@ -923,21 +923,21 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPTExtInfo& rInfo )
 {
     return rStrm
         << rInfo.mnSxformulaRecs
-        << EXC_PT_NOSTRING              // length of alt. error text
-        << EXC_PT_NOSTRING              // length of alt. empty text
-        << EXC_PT_NOSTRING              // length of tag
+        << EXC_PT_NOSTRING              
+        << EXC_PT_NOSTRING              
+        << EXC_PT_NOSTRING              
         << rInfo.mnSxselectRecs
         << rInfo.mnPagePerRow
         << rInfo.mnPagePerCol
         << rInfo.mnFlags
-        << EXC_PT_NOSTRING              // length of page field style name
-        << EXC_PT_NOSTRING              // length of table style name
-        << EXC_PT_NOSTRING;             // length of vacate style name
+        << EXC_PT_NOSTRING              
+        << EXC_PT_NOSTRING              
+        << EXC_PT_NOSTRING;             
 }
 
-// ============================================================================
 
-// Pivot table autoformat settings ============================================
+
+
 
 /**
 classic     : 10 08 00 00 00 00 00 00 20 00 00 00 01 00 00 00 00
@@ -982,8 +982,8 @@ void XclPTViewEx9Info::Init( const ScDPObject& rDPObj )
     }
     else
     {
-        // Report1 for now
-        // TODO : sync with autoformat indicies
+        
+        
         mbReport     = 2;
         mnAutoFormat = 1;
         mnGridLayout = 0x10;
@@ -1001,7 +1001,7 @@ void XclPTViewEx9Info::Init( const ScDPObject& rDPObj )
 XclImpStream& operator>>( XclImpStream& rStrm, XclPTViewEx9Info& rInfo )
 {
     rStrm.Ignore( 2 );
-    rStrm >> rInfo.mbReport;            /// 2 for report* fmts ?
+    rStrm >> rInfo.mbReport;            
     rStrm.Ignore( 6 );
     rStrm >> rInfo.mnAutoFormat >> rInfo.mnGridLayout;
     rInfo.maGrandTotalName = rStrm.ReadUniString();

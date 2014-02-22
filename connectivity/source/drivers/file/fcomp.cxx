@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "file/fcomp.hxx"
@@ -44,8 +44,8 @@ using namespace ::com::sun::star::container;
 using namespace com::sun::star;
 
 DBG_NAME(OPredicateCompiler)
-//------------------------------------------------------------------
-OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs)
+
+OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)
                      : m_pAnalyzer(pAnalyzer)
                      , m_nParamCounter(0)
                      , m_bORCondition(sal_False)
@@ -53,13 +53,13 @@ OPredicateCompiler::OPredicateCompiler(OSQLAnalyzer* pAnalyzer)//,OCursor& rCurs
     DBG_CTOR(OPredicateCompiler,NULL);
 }
 
-//------------------------------------------------------------------
+
 OPredicateCompiler::~OPredicateCompiler()
 {
     Clean();
     DBG_DTOR(OPredicateCompiler,NULL);
 }
-// -----------------------------------------------------------------------------
+
 void OPredicateCompiler::dispose()
 {
     Clean();
@@ -73,8 +73,8 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         return;
 
     m_nParamCounter = 0;
-    // analyse Parse Tree (depending on Statement-type)
-    // and set pointer on WHERE-clause:
+    
+    
     OSQLParseNode * pWhereClause = NULL;
     OSQLParseNode * pOrderbyClause = NULL;
 
@@ -87,7 +87,7 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         DBG_ASSERT(SQL_ISRULE(pTableExp,table_exp)," Fehler im Parse Tree");
         DBG_ASSERT(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"Fehler im Parse Tree");
 
-        // check that we don't use anything other than count(*) as function
+        
         OSQLParseNode* pSelection = pSQLParseNode->getChild(2);
         if ( SQL_ISRULE(pSelection,scalar_exp_commalist) )
         {
@@ -117,12 +117,12 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
         pWhereClause = pSQLParseNode->getChild(3);
     }
     else
-            // Other Statement. no selection-criteria
+            
         return;
 
     if (SQL_ISRULE(pWhereClause,where_clause))
     {
-        // a where-clause is not allowed to be empty:
+        
         DBG_ASSERT(pWhereClause->count() == 2,"OFILECursor: Fehler im Parse Tree");
 
         OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
@@ -132,34 +132,34 @@ void OPredicateCompiler::start(OSQLParseNode* pSQLParseNode)
     }
     else
     {
-        // The where-clause is optionally in the majority of cases, i.e. it might be an "optional-where-clause".
+        
         DBG_ASSERT(SQL_ISRULE(pWhereClause,opt_where_clause),"OPredicateCompiler: Fehler im Parse Tree");
     }
 }
 
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
 {
     OOperand* pOperand = NULL;
-    if (pPredicateNode->count() == 3 &&                         // Expression is bracketed
+    if (pPredicateNode->count() == 3 &&                         
         SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"(") &&
         SQL_ISPUNCTUATION(pPredicateNode->getChild(2),")"))
     {
         execute(pPredicateNode->getChild(1));
     }
     else if ((SQL_ISRULE(pPredicateNode,search_condition) || (SQL_ISRULE(pPredicateNode,boolean_term)))
-                            &&          // AND/OR-linkage:
+                            &&          
                             pPredicateNode->count() == 3)
     {
-        execute(pPredicateNode->getChild(0));                           // process the left branch
-        execute(pPredicateNode->getChild(2));                           // process the right branch
+        execute(pPredicateNode->getChild(0));                           
+        execute(pPredicateNode->getChild(2));                           
 
-        if (SQL_ISTOKEN(pPredicateNode->getChild(1),OR))                // OR-Operator
+        if (SQL_ISTOKEN(pPredicateNode->getChild(1),OR))                
         {
             m_aCodeList.push_back(new OOp_OR());
             m_bORCondition = sal_True;
         }
-        else if (SQL_ISTOKEN(pPredicateNode->getChild(1),AND))      // AND-Operator
+        else if (SQL_ISTOKEN(pPredicateNode->getChild(1),AND))      
             m_aCodeList.push_back(new OOp_AND());
         else
         {
@@ -189,8 +189,8 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     }
     else if(SQL_ISRULE(pPredicateNode,num_value_exp))
     {
-        execute(pPredicateNode->getChild(0));                           // process the left branch
-        execute(pPredicateNode->getChild(2));                           // process the right branch
+        execute(pPredicateNode->getChild(0));                           
+        execute(pPredicateNode->getChild(2));                           
         if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"+"))
         {
             m_aCodeList.push_back(new OOp_ADD());
@@ -204,8 +204,8 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
     }
     else if(SQL_ISRULE(pPredicateNode,term))
     {
-        execute(pPredicateNode->getChild(0));                           // process the left branch
-        execute(pPredicateNode->getChild(2));                           // process the right branch
+        execute(pPredicateNode->getChild(0));                           
+        execute(pPredicateNode->getChild(2));                           
         if (SQL_ISPUNCTUATION(pPredicateNode->getChild(1),"*"))
         {
             m_aCodeList.push_back(new OOp_MUL());
@@ -218,12 +218,12 @@ OOperand* OPredicateCompiler::execute(OSQLParseNode* pPredicateNode)
         }
     }
     else
-        pOperand = execute_Operand(pPredicateNode);                     // now only simple operands will be processed
+        pOperand = execute_Operand(pPredicateNode);                     
 
     return pOperand;
 }
 
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 3,"OFILECursor: Fehler im Parse Tree");
@@ -235,11 +235,11 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
           SQL_ISTOKEN(pPredicateNode->getChild(2),TRUE)                     ||
           SQL_ISTOKEN(pPredicateNode->getChild(2),FALSE)                    ||
           SQL_ISRULE(pPredicateNode->getChild(2),parameter)                 ||
-          // odbc date
+          
           SQL_ISRULE(pPredicateNode->getChild(2),set_fct_spec)              ||
           SQL_ISRULE(pPredicateNode->getChild(2),position_exp)              ||
           SQL_ISRULE(pPredicateNode->getChild(2),char_substring_fct)        ||
-          // upper, lower etc.
+          
           SQL_ISRULE(pPredicateNode->getChild(2),fold)) )
     {
         m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
@@ -271,7 +271,7 @@ OOperand* OPredicateCompiler::execute_COMPARE(OSQLParseNode* pPredicateNode)  th
     return NULL;
 }
 
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
@@ -285,11 +285,11 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
 
     if (!(pAtom->getNodeType() == SQL_NODE_STRING   ||
           SQL_ISRULE(pAtom,parameter)               ||
-          // odbc date
+          
           SQL_ISRULE(pAtom,set_fct_spec)            ||
           SQL_ISRULE(pAtom,position_exp)            ||
           SQL_ISRULE(pAtom,char_substring_fct)      ||
-          // upper, lower etc.
+          
           SQL_ISRULE(pAtom,fold)) )
     {
         m_pAnalyzer->getConnection()->throwGenericSQLException(STR_QUERY_TOO_COMPLEX,NULL);
@@ -321,7 +321,7 @@ OOperand* OPredicateCompiler::execute_LIKE(OSQLParseNode* pPredicateNode) throw(
 
     return NULL;
 }
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
@@ -401,7 +401,7 @@ OOperand* OPredicateCompiler::execute_BETWEEN(OSQLParseNode* pPredicateNode) thr
 
     return NULL;
 }
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() == 2,"OFILECursor: Fehler im Parse Tree");
@@ -421,7 +421,7 @@ OOperand* OPredicateCompiler::execute_ISNULL(OSQLParseNode* pPredicateNode) thro
 
     return NULL;
 }
-//------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) throw(SQLException, RuntimeException)
 {
     OOperand* pOperand = NULL;
@@ -457,7 +457,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
                 pOperand = m_pAnalyzer->createOperandAttr(Reference< XColumnLocate>(m_orgColumns,UNO_QUERY)->findColumn(aColumnName),xCol,m_xIndexes);
             }
             else
-            {// Column doesn't exist in the Result-set
+            {
                 const OUString sError( m_pAnalyzer->getConnection()->getResources().getResourceStringWithSubstitution(
                     STR_INVALID_COLUMNNAME,
                     "$columnname$", aColumnName
@@ -487,7 +487,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     else if((pPredicateNode->count() == 2) &&
             (SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"+") || SQL_ISPUNCTUATION(pPredicateNode->getChild(0),"-")) &&
             pPredicateNode->getChild(1)->getNodeType() == SQL_NODE_INTNUM)
-    { // if -1 or +1 is there
+    { 
         OUString aValue(pPredicateNode->getChild(0)->getTokenValue());
         aValue += pPredicateNode->getChild(1)->getTokenValue();
         pOperand = new OOperandConst(*pPredicateNode->getChild(1), aValue);
@@ -497,7 +497,7 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         const OSQLParseNode* pODBCNode = pPredicateNode->getChild(1);
         const OSQLParseNode* pODBCNodeChild = pODBCNode->getChild(0);
 
-        // Odbc Date or time
+        
         if (pODBCNodeChild->getNodeType() == SQL_NODE_KEYWORD && (
             SQL_ISTOKEN(pODBCNodeChild,D) ||
             SQL_ISTOKEN(pODBCNodeChild,T) ||
@@ -546,14 +546,14 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
     return pOperand;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
+
 sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
 {
     static sal_Bool bResult;
 
     OCodeList::iterator aIter = rCodeList.begin();
     if (!(*aIter))
-        return sal_True;        // no Predicate
+        return sal_True;        
 
     for(;aIter != rCodeList.end();++aIter)
     {
@@ -575,12 +575,12 @@ sal_Bool OPredicateInterpreter::evaluate(OCodeList& rCodeList)
         delete pOperand;
     return bResult;
 }
-// -----------------------------------------------------------------------------
+
 void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueDecoratorRef& _rVal)
 {
     OCodeList::iterator aIter = rCodeList.begin();
     if (!(*aIter))
-        return ;        // no Predicate
+        return ;        
 
     for(;aIter != rCodeList.end();++aIter)
     {
@@ -601,7 +601,7 @@ void OPredicateInterpreter::evaluateSelection(OCodeList& rCodeList,ORowSetValueD
     if (IS_TYPE(OOperandResult,pOperand))
         delete pOperand;
 }
-// -----------------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   throw(SQLException, RuntimeException)
 {
     DBG_ASSERT(pPredicateNode->count() >= 4,"OFILECursor: Fehler im Parse Tree");
@@ -618,7 +618,7 @@ OOperand* OPredicateCompiler::execute_Fold(OSQLParseNode* pPredicateNode)   thro
     m_aCodeList.push_back(pOperator);
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    throw(SQLException, RuntimeException)
 {
     OOperator* pOperator = NULL;
@@ -869,7 +869,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
 
         case SQL_TOKEN_SUBSTRING:
             m_aCodeList.push_back(new OStopOperand);
-            if ( pPredicateNode->count() == 4 ) //char_substring_fct
+            if ( pPredicateNode->count() == 4 ) 
             {
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
                 for (sal_uInt32 i=0; i < pList->count(); ++i)
@@ -886,7 +886,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
 
         case SQL_TOKEN_POSITION:
             m_aCodeList.push_back(new OStopOperand);
-            if ( pPredicateNode->count() == 4 ) //position_exp
+            if ( pPredicateNode->count() == 4 ) 
             {
                 OSQLParseNode* pList = pPredicateNode->getChild(2);
                 for (sal_uInt32 i=0; i < pList->count(); ++i)
@@ -906,7 +906,7 @@ OOperand* OPredicateCompiler::executeFunction(OSQLParseNode* pPredicateNode)    
     m_aCodeList.push_back(pOperator);
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

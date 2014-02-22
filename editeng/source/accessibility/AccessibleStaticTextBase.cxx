@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,15 +14,15 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-//------------------------------------------------------------------------
+
 //
-// Global header
+
 //
-//------------------------------------------------------------------------
+
 
 #include <limits.h>
 #include <vector>
@@ -38,11 +38,11 @@
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/accessibility/AccessibleTextType.hpp>
 
-//------------------------------------------------------------------------
+
 //
-// Project-local header
+
 //
-//------------------------------------------------------------------------
+
 
 #include <editeng/editdata.hxx>
 #include <editeng/unopracc.hxx>
@@ -78,11 +78,11 @@ namespace accessibility
         }
     };
     sal_Unicode cNewLine(0x0a);
-    //------------------------------------------------------------------------
+    
     //
-    // Static Helper
+    
     //
-    //------------------------------------------------------------------------
+    
     ESelection MakeSelection( sal_Int32 nStartPara, sal_Int32 nStartIndex,
                               sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
@@ -96,11 +96,11 @@ namespace accessibility
                            nEndPara, static_cast< sal_uInt16 >(nEndIndex) );
     }
 
-    //------------------------------------------------------------------------
+    
     //
-    // AccessibleStaticTextBase_Impl declaration
+    
     //
-    //------------------------------------------------------------------------
+    
 
 
     /** AccessibleStaticTextBase_Impl
@@ -116,7 +116,7 @@ namespace accessibility
         friend class AccessibleStaticTextBase;
     public:
 
-        // receive pointer to our frontend class and view window
+        
         AccessibleStaticTextBase_Impl();
         ~AccessibleStaticTextBase_Impl();
 
@@ -187,32 +187,32 @@ namespace accessibility
 
         EPosition                   ImpCalcInternal( sal_Int32 nFlatIndex, bool bExclusive ) const;
 
-        // our frontend class (the one implementing the actual
-        // interface). That's not necessarily the one containing the impl
-        // pointer
+        
+        
+        
         uno::Reference< XAccessible > mxThis;
 
-        // implements our functionality, we're just an adapter (guarded by solar mutex)
+        
         mutable AccessibleEditableTextPara* mpTextParagraph;
 
         uno::Reference< XAccessible > mxParagraph;
 
-        // a wrapper for the text forwarders (guarded by solar mutex)
+        
         mutable SvxEditSourceAdapter maEditSource;
 
-        // guard for maOffset
+        
         mutable ::osl::Mutex maMutex;
 
-        /// our current offset to the containing shape/cell (guarded by maMutex)
+        /
         Point maOffset;
 
     };
 
-    //------------------------------------------------------------------------
+    
     //
-    // AccessibleStaticTextBase_Impl implementation
+    
     //
-    //------------------------------------------------------------------------
+    
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
         mxThis( NULL ),
@@ -223,8 +223,8 @@ namespace accessibility
         maOffset(0,0)
     {
 
-        // TODO: this is still somewhat of a hack, all the more since
-        // now the maTextParagraph has an empty parent reference set
+        
+        
     }
 
     AccessibleStaticTextBase_Impl::~AccessibleStaticTextBase_Impl()
@@ -244,7 +244,7 @@ namespace accessibility
     void AccessibleStaticTextBase_Impl::SetOffset( const Point& rPoint )
     {
 
-        // guard against non-atomic access to maOffset data structure
+        
         {
             ::osl::MutexGuard aGuard( maMutex );
             maOffset = rPoint;
@@ -253,24 +253,24 @@ namespace accessibility
         if( mpTextParagraph )
             mpTextParagraph->SetEEOffset( rPoint );
 
-        // in all cases, check visibility afterwards.
+        
         UpdateChildren();
     }
 
     void AccessibleStaticTextBase_Impl::UpdateChildren()
     {
 
-        // currently no children
+        
     }
 
     void AccessibleStaticTextBase_Impl::Dispose()
     {
 
-        // we're the owner of the paragraph, so destroy it, too
+        
         if( mpTextParagraph )
             mpTextParagraph->Dispose();
 
-        // drop references
+        
         mxParagraph = NULL;
         mxThis = NULL;
         mpTextParagraph = NULL;
@@ -279,7 +279,7 @@ namespace accessibility
 #ifdef DBG_UTIL
     void AccessibleStaticTextBase_Impl::CheckInvariants() const
     {
-        // TODO
+        
     }
 #endif
 
@@ -289,8 +289,8 @@ namespace accessibility
         if( !mpTextParagraph )
             throw lang::DisposedException ("object has been already disposed", mxThis );
 
-        // TODO: Have a different method on AccessibleEditableTextPara
-        // that does not care about state changes
+        
+        
         mpTextParagraph->SetParagraphIndex( nPara );
 
         return *mpTextParagraph;
@@ -307,7 +307,7 @@ namespace accessibility
 
     sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index( EPosition nEEIndex ) const
     {
-        // XXX checks for overflow and returns maximum if so
+        
         sal_Int32 aRes(0);
         for(sal_Int32 i=0; i<nEEIndex.nPara; ++i)
         {
@@ -325,11 +325,11 @@ namespace accessibility
     void AccessibleStaticTextBase_Impl::CorrectTextSegment( TextSegment&    aTextSegment,
                                                             int             nPara   ) const
     {
-        // Keep 'invalid' values at the TextSegment
+        
         if( aTextSegment.SegmentStart != -1 &&
             aTextSegment.SegmentEnd != -1 )
         {
-            // #112814# Correct TextSegment by paragraph offset
+            
             sal_Int32 nOffset(0);
             int i;
             for(i=0; i<nPara; ++i)
@@ -346,7 +346,7 @@ namespace accessibility
         if( nFlatIndex < 0 )
             throw lang::IndexOutOfBoundsException("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds",
                                                   mxThis);
-        // gratuitously accepting larger indices here, AccessibleEditableTextPara will throw eventually
+        
 
         sal_Int32 nCurrPara, nCurrIndex, nParas, nCurrCount;
         for( nCurrPara=0, nParas=GetParagraphCount(), nCurrCount=0, nCurrIndex=0; nCurrPara<nParas; ++nCurrPara )
@@ -355,7 +355,7 @@ namespace accessibility
             nCurrIndex += nCurrCount;
             if( nCurrIndex >= nFlatIndex )
             {
-                // check overflow
+                
                 DBG_ASSERT(nCurrPara >= 0 && nCurrPara <= SAL_MAX_INT32 &&
                            nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                            "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
@@ -364,10 +364,10 @@ namespace accessibility
             }
         }
 
-        // #102170# Allow one-past the end for ranges
+        
         if( bExclusive && nCurrIndex == nFlatIndex )
         {
-            // check overflow
+            
             DBG_ASSERT(nCurrPara > 0 && nCurrPara <= SAL_MAX_INT32 &&
                        nFlatIndex - nCurrIndex + nCurrCount >= 0 && nFlatIndex - nCurrIndex + nCurrCount <= USHRT_MAX ,
                        "AccessibleStaticTextBase_Impl::Index2Internal: index value overflow");
@@ -375,7 +375,7 @@ namespace accessibility
             return EPosition( nCurrPara-1, static_cast< sal_uInt16 >(nFlatIndex - nCurrIndex + nCurrCount) );
         }
 
-        // not found? Out of bounds
+        
         throw lang::IndexOutOfBoundsException("AccessibleStaticTextBase_Impl::Index2Internal: character index out of bounds",
                                               mxThis);
     }
@@ -408,16 +408,16 @@ namespace accessibility
         try
         {
             SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( true );
-            mpTextParagraph->GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            mpTextParagraph->GetTextForwarder();    
             sal_Bool aRetVal;
 
-            // save current selection
+            
             ESelection aOldSelection;
 
             rCacheVF.GetSelection( aOldSelection );
             rCacheVF.SetSelection( MakeSelection(nStartPara, nStartIndex, nEndPara, nEndIndex) );
             aRetVal = rCacheVF.Copy();
-            rCacheVF.SetSelection( aOldSelection ); // restore
+            rCacheVF.SetSelection( aOldSelection ); 
 
             return aRetVal;
         }
@@ -441,12 +441,12 @@ namespace accessibility
         }
         return aRect;
     }
-    //the input argument is the index(including "\n" ) in the string.
-    //the function will calculate the actual index(not including "\n") in the string.
-    //and return true if the index is just at a "\n"
+    
+    
+    
     sal_Bool AccessibleStaticTextBase_Impl::RemoveLineBreakCount( sal_Int32& rIndex )
     {
-        // get the total char number inside the cell.
+        
         sal_Int32 i, nCount, nParas;
         for( i=0, nCount=0, nParas=GetParagraphCount(); i<nParas; ++i )
             nCount += GetParagraph(i).getCharacterCount();
@@ -463,13 +463,13 @@ namespace accessibility
             nLineBreakPos = nCurrCount++;
             if ( rIndex == nLineBreakPos )
             {
-                rIndex -= (++nLineBreakCount);//(++nLineBreakCount);
+                rIndex -= (++nLineBreakCount);
                 if ( rIndex < 0)
                 {
                     rIndex = 0;
                 }
-                //if the index is at the last position of the last paragraph
-                //there is no "\n" , so we should increase rIndex by 1 and return false.
+                
+                
                 if ( (nCurrPara+1) == nParaCount )
                 {
                     rIndex++;
@@ -492,11 +492,11 @@ namespace accessibility
         }
         return sal_False;
     }
-    //------------------------------------------------------------------------
+    
     //
-    // AccessibleStaticTextBase implementation
+    
     //
-    //------------------------------------------------------------------------
+    
 
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     AccessibleStaticTextBase::AccessibleStaticTextBase( ::std::auto_ptr< SvxEditSource >        pEditSource ) :
@@ -531,7 +531,7 @@ namespace accessibility
     void AccessibleStaticTextBase::SetEditSource( ::std::auto_ptr< SvxEditSource > pEditSource ) SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
-        // precondition: solar mutex locked
+        
         DBG_TESTSOLARMUTEX();
 
         mpImpl->CheckInvariants();
@@ -576,7 +576,7 @@ namespace accessibility
     void AccessibleStaticTextBase::SetOffset( const Point& rPoint )
     {
 #ifdef DBG_UTIL
-        // precondition: solar mutex locked
+        
         DBG_TESTSOLARMUTEX();
 
         mpImpl->CheckInvariants();
@@ -607,7 +607,7 @@ namespace accessibility
     void AccessibleStaticTextBase::UpdateChildren() SAL_THROW((::com::sun::star::uno::RuntimeException))
     {
 #ifdef DBG_UTIL
-        // precondition: solar mutex locked
+        
         DBG_TESTSOLARMUTEX();
 
         mpImpl->CheckInvariants();
@@ -633,26 +633,26 @@ namespace accessibility
 #endif
     }
 
-    // XAccessibleContext
+    
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getAccessibleChildCount() throw (uno::RuntimeException)
     {
-        // no children at all
+        
         return 0;
     }
 
     uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleChild( sal_Int32 /*i*/ ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        // no children at all
+        
         return uno::Reference< XAccessible >();
     }
 
     uno::Reference< XAccessible > SAL_CALL AccessibleStaticTextBase::getAccessibleAtPoint( const awt::Point& /*_aPoint*/ ) throw (uno::RuntimeException)
     {
-        // no children at all
+        
         return uno::Reference< XAccessible >();
     }
 
-    // XAccessibleText
+    
     sal_Int32 SAL_CALL AccessibleStaticTextBase::getCaretPosition() throw (uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -685,7 +685,7 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        //get the actual index without "\n"
+        
         mpImpl->RemoveLineBreakCount( nIndex );
 
         EPosition aPos( mpImpl->Index2Internal(nIndex) );
@@ -697,11 +697,11 @@ namespace accessibility
     {
         SolarMutexGuard aGuard;
 
-        // #108900# Allow ranges for nIndex, as one-past-the-end
-        // values are now legal, too.
+        
+        
         EPosition aPos( mpImpl->Range2Internal(nIndex) );
 
-        // #i70916# Text in spread sheet cells return the wrong extents
+        
         AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( aPos.nPara );
         awt::Rectangle aParaBounds( rPara.getBounds() );
         awt::Rectangle aBounds( rPara.getCharacterBounds( aPos.nIndex ) );
@@ -718,7 +718,7 @@ namespace accessibility
         sal_Int32 i, nCount, nParas;
         for( i=0, nCount=0, nParas=mpImpl->GetParagraphCount(); i<nParas; ++i )
             nCount += mpImpl->GetParagraph(i).getCharacterCount();
-        //count on the number of "\n" which equals number of paragraphs decrease 1.
+        
         nCount = nCount + (nParas-1);
         return nCount;
     }
@@ -732,17 +732,17 @@ namespace accessibility
         int i;
         for( i=0; i<nParas; ++i )
         {
-            // TODO: maybe exploit the fact that paragraphs are
-            // ordered vertically for early exit
+            
+            
 
-            // #i70916# Text in spread sheet cells return the wrong extents
+            
             AccessibleEditableTextPara& rPara = mpImpl->GetParagraph( i );
             awt::Rectangle aParaBounds( rPara.getBounds() );
             awt::Point aPoint( rPoint );
             aPoint.X -= aParaBounds.X;
             aPoint.Y -= aParaBounds.Y;
 
-            // #112814# Use correct index offset
+            
             if ( ( nIndex = rPara.getIndexAtPoint( aPoint ) ) != -1 )
                 return mpImpl->Internal2Index( EPosition(sal::static_int_cast<sal_uInt16>(i),
                                                          sal::static_int_cast<sal_uInt16>(nIndex)) );
@@ -758,7 +758,7 @@ namespace accessibility
         sal_Int32 nStart( getSelectionStart() );
         sal_Int32 nEnd( getSelectionEnd() );
 
-        // #104481# Return the empty string for 'no selection'
+        
         if( nStart < 0 || nEnd < 0 )
             return OUString();
 
@@ -822,31 +822,31 @@ namespace accessibility
 
         if( nStartIndex > nEndIndex )
             ::std::swap(nStartIndex, nEndIndex);
-        //if startindex equals endindex we will get nothing. So return an empty string directly.
+        
         if ( nStartIndex == nEndIndex )
         {
             return OUString();
         }
         sal_Bool bStart = mpImpl->RemoveLineBreakCount( nStartIndex );
-        //if the start index is just at a "\n", we need to begin from the next char
+        
         if ( bStart )
         {
             nStartIndex++;
         }
-        //we need to find out whether the previous position of the current endindex is at "\n" or not
-        //if yes we need to mark it and add "\n" at the end of the result
+        
+        
         sal_Int32 nTemp = nEndIndex - 1;
         sal_Bool bEnd = mpImpl->RemoveLineBreakCount( nTemp );
         sal_Bool bTemp = mpImpl->RemoveLineBreakCount( nEndIndex );
-        //if the below condition is true it indicates an empty paragraph with just a "\n"
-        //so we need to set one "\n" flag to avoid duplication.
+        
+        
         if ( bStart && bEnd && ( nStartIndex == nEndIndex) )
         {
             bEnd = sal_False;
         }
-        //if the current endindex is at a "\n", we need to increase endindex by 1 to make sure
-        //the char before "\n" is included. Because string returned by this function will not include
-        //the char at the endindex.
+        
+        
+        
         if ( bTemp )
         {
             nEndIndex++;
@@ -855,10 +855,10 @@ namespace accessibility
         EPosition aStartIndex( mpImpl->Range2Internal(nStartIndex) );
         EPosition aEndIndex( mpImpl->Range2Internal(nEndIndex) );
 
-        // #102170# Special case: start and end paragraph are identical
+        
         if( aStartIndex.nPara == aEndIndex.nPara )
         {
-            //we don't return the string directly now for that we have to do some further process for "\n"
+            
             aRes = mpImpl->GetParagraph( aStartIndex.nPara ).getTextRange( aStartIndex.nIndex, aEndIndex.nIndex );
         }
         else
@@ -868,7 +868,7 @@ namespace accessibility
                                                          mpImpl->GetParagraph(i).getCharacterCount()/*-1*/);
             ++i;
 
-            // paragraphs inbetween are fully included
+            
             for( ; i<aEndIndex.nPara; ++i )
             {
                 aRes += OUString(cNewLine);
@@ -877,8 +877,8 @@ namespace accessibility
 
             if( i<=aEndIndex.nPara )
             {
-                //if the below condition is mathed it means the endindex is at mid of the last paragraph
-                //we need to add a "\n" before we add the last part of the string.
+                
+                
                 if ( !bEnd && aEndIndex.nIndex )
                 {
                     aRes += OUString(cNewLine);
@@ -886,8 +886,8 @@ namespace accessibility
                 aRes += mpImpl->GetParagraph(i).getTextRange( 0, aEndIndex.nIndex );
             }
         }
-        //According the the flag we marked before, we have to add "\n" at the beginning
-        //or at the end of the result string.
+        
+        
         if ( bStart )
         {
             aRes = OUString(cNewLine) + aRes;
@@ -910,16 +910,16 @@ namespace accessibility
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
-            // #106393# Special casing one behind last paragraph is
-            // not necessary, since then, we return the content and
-            // boundary of that last paragraph. Range2Internal is
-            // tolerant against that, and returns the last paragraph
-            // in aPos.nPara.
+            
+            
+            
+            
+            
 
-            // retrieve full text of the paragraph
+            
             aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
 
-            // #112814# Adapt the start index with the paragraph offset
+            
             aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara, 0 ) );
             aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
         }
@@ -936,10 +936,10 @@ namespace accessibility
         }
         else
         {
-            // No special handling required, forward to wrapped class
+            
             aResult = mpImpl->GetParagraph( aPos.nPara ).getTextAtIndex( aPos.nIndex, aTextType );
 
-            // #112814# Adapt the start index with the paragraph offset
+            
             mpImpl->CorrectTextSegment( aResult, aPos.nPara );
             if ( bLineBreak )
             {
@@ -964,17 +964,17 @@ namespace accessibility
         {
             if( aPos.nIndex == mpImpl->GetParagraph( aPos.nPara ).getCharacterCount() )
             {
-                // #103589# Special casing one behind the last paragraph
+                
                 aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara ).getText();
 
-                // #112814# Adapt the start index with the paragraph offset
+                
                 aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara, 0 ) );
             }
             else if( aPos.nPara > 0 )
             {
                 aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara - 1 ).getText();
 
-                // #112814# Adapt the start index with the paragraph offset
+                
                 aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara - 1, 0 ) );
             }
 
@@ -982,10 +982,10 @@ namespace accessibility
         }
         else
         {
-            // No special handling required, forward to wrapped class
+            
             aResult = mpImpl->GetParagraph( aPos.nPara ).getTextBeforeIndex( aPos.nIndex, aTextType );
 
-            // #112814# Adapt the start index with the paragraph offset
+            
             mpImpl->CorrectTextSegment( aResult, aPos.nPara );
             if ( bLineBreak && (nOldIdx-1) >= 0)
             {
@@ -1009,24 +1009,24 @@ namespace accessibility
 
         if( AccessibleTextType::PARAGRAPH == aTextType )
         {
-            // Special casing one behind the last paragraph is not
-            // necessary, this case is invalid here for
-            // getTextBehindIndex
+            
+            
+            
             if( aPos.nPara + 1 < mpImpl->GetParagraphCount() )
             {
                 aResult.SegmentText = mpImpl->GetParagraph( aPos.nPara + 1 ).getText();
 
-                // #112814# Adapt the start index with the paragraph offset
+                
                 aResult.SegmentStart = mpImpl->Internal2Index( EPosition( aPos.nPara + 1, 0 ) );
                 aResult.SegmentEnd = aResult.SegmentStart + aResult.SegmentText.getLength();
             }
         }
         else
         {
-            // No special handling required, forward to wrapped class
+            
             aResult = mpImpl->GetParagraph( aPos.nPara ).getTextBehindIndex( aPos.nIndex, aTextType );
 
-            // #112814# Adapt the start index with the paragraph offset
+            
             mpImpl->CorrectTextSegment( aResult, aPos.nPara );
             if ( bLineBreak )
             {
@@ -1051,10 +1051,10 @@ namespace accessibility
                                  aEndIndex.nPara, aEndIndex.nIndex );
     }
 
-    // XAccessibleTextAttributes
+    
     uno::Sequence< beans::PropertyValue > AccessibleStaticTextBase::getDefaultAttributes( const uno::Sequence< OUString >& RequestedAttributes ) throw (uno::RuntimeException)
     {
-        // get the intersection of the default attributes of all paragraphs
+        
 
         SolarMutexGuard aGuard;
 
@@ -1091,8 +1091,8 @@ namespace accessibility
 
     uno::Sequence< beans::PropertyValue > SAL_CALL AccessibleStaticTextBase::getRunAttributes( sal_Int32 nIndex, const uno::Sequence< OUString >& RequestedAttributes ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
     {
-        // get those default attributes of the paragraph, which are not part
-        // of the intersection of all paragraphs and add them to the run attributes
+        
+        
 
         SolarMutexGuard aGuard;
 
@@ -1124,8 +1124,8 @@ namespace accessibility
         return mpImpl->GetParagraphBoundingBox();
     }
 
-}  // end of namespace accessibility
+}  
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

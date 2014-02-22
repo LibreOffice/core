@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,13 +14,13 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "odbc/OFunctions.hxx"
 #include <osl/process.h>
 
-// Implib-Definitionen fuer ODBC-DLL/shared library:
+
 
 namespace connectivity
 {
@@ -80,9 +80,9 @@ T3SQLGetCursorName pODBC3SQLGetCursorName;
 T3SQLNativeSql pODBC3SQLNativeSql;
 
 sal_Bool LoadFunctions(oslModule pODBCso);
-// -------------------------------------------------------------------------
-// Take care of Dynamicly loading of the DLL/shared lib and Addresses:
-// Returns sal_True at success
+
+
+
 sal_Bool LoadLibrary_ODBC3(OUString &_rPath)
 {
     static sal_Bool bLoaded = sal_False;
@@ -111,7 +111,7 @@ sal_Bool LoadLibrary_ODBC3(OUString &_rPath)
 
     return bLoaded = LoadFunctions(pODBCso);
 }
-// -------------------------------------------------------------------------
+
 
 sal_Bool LoadFunctions(oslModule pODBCso)
 {
@@ -227,7 +227,7 @@ sal_Bool LoadFunctions(oslModule pODBCso)
 
     return sal_True;
 }
-// -------------------------------------------------------------------------
+
 
 }
 

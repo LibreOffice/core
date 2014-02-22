@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/fmpage.hxx>
@@ -86,7 +86,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
 {
     OUString aShapeType( xDescr->getShapeType() );
 
-    if  (   aShapeType == "com.sun.star.drawing.ShapeControl"   // compatibility
+    if  (   aShapeType == "com.sun.star.drawing.ShapeControl"   
         ||  aShapeType == "com.sun.star.drawing.ControlShape"
         )
         return new FmFormObj();
@@ -107,7 +107,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
         return SvxDrawPage::_CreateShape( pObj );
 }
 
-// XFormsSupplier
+
 ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL SvxFmDrawPage::getForms(void) throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >  xForms;
@@ -119,7 +119,7 @@ SdrObject *SvxFmDrawPage::_CreateSdrObject( const ::com::sun::star::uno::Referen
     return xForms;
 }
 
-// XFormsSupplier2
+
 sal_Bool SAL_CALL SvxFmDrawPage::hasForms(void) throw( ::com::sun::star::uno::RuntimeException )
 {
     sal_Bool bHas = sal_False;
@@ -129,7 +129,7 @@ sal_Bool SAL_CALL SvxFmDrawPage::hasForms(void) throw( ::com::sun::star::uno::Ru
     return bHas;
 }
 
-// ::com::sun::star::lang::XServiceInfo
+
 ::com::sun::star::uno::Sequence< OUString > SAL_CALL SvxFmDrawPage::getSupportedServiceNames(void) throw( ::com::sun::star::uno::RuntimeException )
 {
     return SvxDrawPage::getSupportedServiceNames();

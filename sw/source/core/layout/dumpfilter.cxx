@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "dumpfilter.hxx"
@@ -45,13 +45,13 @@ namespace
     {
         int written = nLen;
 
-        // Actually write bytes to XOutputSream
+        
         try
         {
             uno::XInterface* pObj = ( uno::XInterface* )pContext;
             uno::Reference< io::XOutputStream > xOut( pObj, uno::UNO_QUERY_THROW );
 
-            // Don't output the terminating \0 to the xml or the file will be invalid
+            
             uno::Sequence< sal_Int8 > seq( nLen );
             strncpy( ( char * ) seq.getArray() , sBuffer, nLen );
             xOut->writeBytes( seq );
@@ -92,7 +92,7 @@ namespace sw
     {
     }
 
-    // XFilter
+    
     sal_Bool LayoutDumpFilter::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
         throw (uno::RuntimeException)
     {
@@ -100,27 +100,27 @@ namespace sw
 
         utl::MediaDescriptor aMediaDesc = aDescriptor;
 
-        // Get the output stream
+        
         uno::Reference< io::XOutputStream > xOut = aMediaDesc.getUnpackedValueOrDefault(
                 utl::MediaDescriptor::PROP_OUTPUTSTREAM(),
                 uno::Reference< io::XOutputStream >() );
 
-        // Actually get the SwRootFrm to call dumpAsXml
+        
         uno::Reference< lang::XUnoTunnel > xDocTunnel( m_xSrcDoc, uno::UNO_QUERY );
         SwXTextDocument* pXDoc = UnoTunnelGetImplementation< SwXTextDocument >( xDocTunnel );
         if ( pXDoc )
         {
             SwRootFrm* pLayout = pXDoc->GetDocShell()->GetWrtShell()->GetLayout();
 
-            // Get sure that the whole layout is processed: set a visible area
-            // even though there isn't any need of it
+            
+            
             pXDoc->GetDocShell()->GetWrtShell()->StartAction();
             Rectangle aRect( 0, 0, 26000, 21000 );
             pXDoc->GetDocShell()->SetVisArea( aRect );
             pLayout->InvalidateAllCntnt( );
             pXDoc->GetDocShell()->GetWrtShell()->EndAction();
 
-            // Dump the layout XML into the XOutputStream
+            
             xmlOutputBufferPtr outBuffer = xmlOutputBufferCreateIO(
                     writeCallback, closeCallback, ( void* ) xOut.get(), NULL );
 
@@ -128,7 +128,7 @@ namespace sw
             xmlTextWriterSetIndent(writer, 1);
             xmlTextWriterStartDocument( writer, NULL, NULL, NULL );
 
-            // TODO This doesn't export the whole XML file, whereas dumpAsXML() does it nicely
+            
             pLayout->dumpAsXml( writer );
 
             xmlTextWriterEndDocument( writer );
@@ -144,20 +144,20 @@ namespace sw
     {
     }
 
-    // XExporter
+    
     void LayoutDumpFilter::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
         throw (lang::IllegalArgumentException, uno::RuntimeException)
     {
         m_xSrcDoc = xDoc;
     }
 
-    // XInitialization
+    
     void LayoutDumpFilter::initialize( const uno::Sequence< uno::Any >& )
         throw (uno::Exception, uno::RuntimeException)
     {
     }
 
-    // XServiceInfo
+    
     OUString LayoutDumpFilter::getImplementationName(  )
         throw (uno::RuntimeException)
     {
@@ -176,6 +176,6 @@ namespace sw
         return LayoutDumpFilter_getSupportedServiceNames();
     }
 
-} // Namespace sw
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

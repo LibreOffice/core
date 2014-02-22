@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DataSource.hxx"
@@ -31,7 +31,7 @@ using namespace ::com::sun::star;
 namespace
 {
 static const OUString lcl_aServiceName( "com.sun.star.comp.chart.DataSource" );
-}  // anonymous namespace
+}  
 
 namespace chart
 {
@@ -48,14 +48,14 @@ DataSource::DataSource(
 DataSource::~DataSource()
 {}
 
-// ____ XDataSource ____
+
 Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSource::getDataSequences()
     throw (uno::RuntimeException)
 {
     return m_aDataSeq;
 }
 
-// ____ XDataSink ____
+
 void SAL_CALL DataSource::setData( const Sequence< Reference< chart2::data::XLabeledDataSequence > >& aData )
     throw (uno::RuntimeException)
 {
@@ -71,6 +71,6 @@ Sequence< OUString > DataSource::getSupportedServiceNames_Static()
 
 APPHELPER_XSERVICEINFO_IMPL( DataSource, lcl_aServiceName );
 
-} // namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

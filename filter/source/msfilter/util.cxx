@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <rtl/ustring.hxx>
@@ -20,8 +20,8 @@ namespace util {
 
 rtl_TextEncoding getBestTextEncodingFromLocale(const ::com::sun::star::lang::Locale &rLocale)
 {
-    //Obviously not comprehensive, feel free to expand these, they're for ultimate fallbacks
-    //in last-ditch broken-file-format cases to guess the right 8bit encodings
+    
+    
     const OUString &rLanguage = rLocale.Language;
     if (rLanguage == "cs" || rLanguage == "hu" || rLanguage == "pl")
         return RTL_TEXTENCODING_MS_1250;
@@ -118,7 +118,7 @@ sal_Unicode bestFitOpenSymbolToMSFont(sal_Unicode cChar,
 }
 
 /*
-  http://social.msdn.microsoft.com/Forums/hu-HU/os_openXML-ecma/thread/1bf1f185-ee49-4314-94e7-f4e1563b5c00
+  http:
 
   The following information is being submitted to the standards working group as
   a proposed resolution to a defect report and is not yet part of ISO 29500-1.
@@ -273,92 +273,92 @@ OString ConvertColor( const Color &rColor, bool bAutoColor )
 
 static const ApiPaperSize spPaperSizeTable[] =
 {
-    { 0, 0 },                                                //  0 - (undefined)
-    { IN2MM100( 8.5 ),       IN2MM100( 11 )      },          //  1 - Letter paper
-    { IN2MM100( 8.5 ),       IN2MM100( 11 )      },          //  2 - Letter small paper
-    { IN2MM100( 11 ),        IN2MM100( 17 )      },          //  3 - Tabloid paper
-    { IN2MM100( 17 ),        IN2MM100( 11 )      },          //  4 - Ledger paper
-    { IN2MM100( 8.5 ),       IN2MM100( 14 )      },          //  5 - Legal paper
-    { IN2MM100( 5.5 ),       IN2MM100( 8.5 )     },          //  6 - Statement paper
-    { IN2MM100( 7.25 ),      IN2MM100( 10.5 )    },          //  7 - Executive paper
-    { MM2MM100( 297 ),       MM2MM100( 420 )     },          //  8 - A3 paper
-    { MM2MM100( 210 ),       MM2MM100( 297 )     },          //  9 - A4 paper
-    { MM2MM100( 210 ),       MM2MM100( 297 )     },          // 10 - A4 small paper
-    { MM2MM100( 148 ),       MM2MM100( 210 )     },          // 11 - A5 paper
-    { MM2MM100( 250 ),       MM2MM100( 353 )     },          // 12 - B4 paper
-    { MM2MM100( 176 ),       MM2MM100( 250 )     },          // 13 - B5 paper
-    { IN2MM100( 8.5 ),       IN2MM100( 13 )      },          // 14 - Folio paper
-    { MM2MM100( 215 ),       MM2MM100( 275 )     },          // 15 - Quarto paper
-    { IN2MM100( 10 ),        IN2MM100( 14 )      },          // 16 - Standard paper
-    { IN2MM100( 11 ),        IN2MM100( 17 )      },          // 17 - Standard paper
-    { IN2MM100( 8.5 ),       IN2MM100( 11 )      },          // 18 - Note paper
-    { IN2MM100( 3.875 ),     IN2MM100( 8.875 )   },          // 19 - #9 envelope
-    { IN2MM100( 4.125 ),     IN2MM100( 9.5 )     },          // 20 - #10 envelope
-    { IN2MM100( 4.5 ),       IN2MM100( 10.375 )  },          // 21 - #11 envelope
-    { IN2MM100( 4.75 ),      IN2MM100( 11 )      },          // 22 - #12 envelope
-    { IN2MM100( 5 ),         IN2MM100( 11.5 )    },          // 23 - #14 envelope
-    { IN2MM100( 17 ),        IN2MM100( 22 )      },          // 24 - C paper
-    { IN2MM100( 22 ),        IN2MM100( 34 )      },          // 25 - D paper
-    { IN2MM100( 34 ),        IN2MM100( 44 )      },          // 26 - E paper
-    { MM2MM100( 110 ),       MM2MM100( 220 )     },          // 27 - DL envelope
-    { MM2MM100( 162 ),       MM2MM100( 229 )     },          // 28 - C5 envelope
-    { MM2MM100( 324 ),       MM2MM100( 458 )     },          // 29 - C3 envelope
-    { MM2MM100( 229 ),       MM2MM100( 324 )     },          // 30 - C4 envelope
-    { MM2MM100( 114 ),       MM2MM100( 162 )     },          // 31 - C6 envelope
-    { MM2MM100( 114 ),       MM2MM100( 229 )     },          // 32 - C65 envelope
-    { MM2MM100( 250 ),       MM2MM100( 353 )     },          // 33 - B4 envelope
-    { MM2MM100( 176 ),       MM2MM100( 250 )     },          // 34 - B5 envelope
-    { MM2MM100( 176 ),       MM2MM100( 125 )     },          // 35 - B6 envelope
-    { MM2MM100( 110 ),       MM2MM100( 230 )     },          // 36 - Italy envelope
-    { IN2MM100( 3.875 ),     IN2MM100( 7.5 )     },          // 37 - Monarch envelope
-    { IN2MM100( 3.625 ),     IN2MM100( 6.5 )     },          // 38 - 6 3/4 envelope
-    { IN2MM100( 14.875 ),    IN2MM100( 11 )      },          // 39 - US standard fanfold
-    { IN2MM100( 8.5 ),       IN2MM100( 12 )      },          // 40 - German standard fanfold
-    { IN2MM100( 8.5 ),       IN2MM100( 13 )      },          // 41 - German legal fanfold
-    { MM2MM100( 250 ),       MM2MM100( 353 )     },          // 42 - ISO B4
-    { MM2MM100( 200 ),       MM2MM100( 148 )     },          // 43 - Japanese double postcard
-    { IN2MM100( 9 ),         IN2MM100( 11 )      },          // 44 - Standard paper
-    { IN2MM100( 10 ),        IN2MM100( 11 )      },          // 45 - Standard paper
-    { IN2MM100( 15 ),        IN2MM100( 11 )      },          // 46 - Standard paper
-    { MM2MM100( 220 ),       MM2MM100( 220 )     },          // 47 - Invite envelope
-    { 0, 0 },                                                // 48 - (undefined)
-    { 0, 0 },                                                // 49 - (undefined)
-    { IN2MM100( 9.275 ),     IN2MM100( 12 )      },          // 50 - Letter extra paper
-    { IN2MM100( 9.275 ),     IN2MM100( 15 )      },          // 51 - Legal extra paper
-    { IN2MM100( 11.69 ),     IN2MM100( 18 )      },          // 52 - Tabloid extra paper
-    { MM2MM100( 236 ),       MM2MM100( 322 )     },          // 53 - A4 extra paper
-    { IN2MM100( 8.275 ),     IN2MM100( 11 )      },          // 54 - Letter transverse paper
-    { MM2MM100( 210 ),       MM2MM100( 297 )     },          // 55 - A4 transverse paper
-    { IN2MM100( 9.275 ),     IN2MM100( 12 )      },          // 56 - Letter extra transverse paper
-    { MM2MM100( 227 ),       MM2MM100( 356 )     },          // 57 - SuperA/SuperA/A4 paper
-    { MM2MM100( 305 ),       MM2MM100( 487 )     },          // 58 - SuperB/SuperB/A3 paper
-    { IN2MM100( 8.5 ),       IN2MM100( 12.69 )   },          // 59 - Letter plus paper
-    { MM2MM100( 210 ),       MM2MM100( 330 )     },          // 60 - A4 plus paper
-    { MM2MM100( 148 ),       MM2MM100( 210 )     },          // 61 - A5 transverse paper
-    { MM2MM100( 182 ),       MM2MM100( 257 )     },          // 62 - JIS B5 transverse paper
-    { MM2MM100( 322 ),       MM2MM100( 445 )     },          // 63 - A3 extra paper
-    { MM2MM100( 174 ),       MM2MM100( 235 )     },          // 64 - A5 extra paper
-    { MM2MM100( 201 ),       MM2MM100( 276 )     },          // 65 - ISO B5 extra paper
-    { MM2MM100( 420 ),       MM2MM100( 594 )     },          // 66 - A2 paper
-    { MM2MM100( 297 ),       MM2MM100( 420 )     },          // 67 - A3 transverse paper
-    { MM2MM100( 322 ),       MM2MM100( 445 )     }           // 68 - A3 extra transverse paper
+    { 0, 0 },                                                
+    { IN2MM100( 8.5 ),       IN2MM100( 11 )      },          
+    { IN2MM100( 8.5 ),       IN2MM100( 11 )      },          
+    { IN2MM100( 11 ),        IN2MM100( 17 )      },          
+    { IN2MM100( 17 ),        IN2MM100( 11 )      },          
+    { IN2MM100( 8.5 ),       IN2MM100( 14 )      },          
+    { IN2MM100( 5.5 ),       IN2MM100( 8.5 )     },          
+    { IN2MM100( 7.25 ),      IN2MM100( 10.5 )    },          
+    { MM2MM100( 297 ),       MM2MM100( 420 )     },          
+    { MM2MM100( 210 ),       MM2MM100( 297 )     },          
+    { MM2MM100( 210 ),       MM2MM100( 297 )     },          
+    { MM2MM100( 148 ),       MM2MM100( 210 )     },          
+    { MM2MM100( 250 ),       MM2MM100( 353 )     },          
+    { MM2MM100( 176 ),       MM2MM100( 250 )     },          
+    { IN2MM100( 8.5 ),       IN2MM100( 13 )      },          
+    { MM2MM100( 215 ),       MM2MM100( 275 )     },          
+    { IN2MM100( 10 ),        IN2MM100( 14 )      },          
+    { IN2MM100( 11 ),        IN2MM100( 17 )      },          
+    { IN2MM100( 8.5 ),       IN2MM100( 11 )      },          
+    { IN2MM100( 3.875 ),     IN2MM100( 8.875 )   },          
+    { IN2MM100( 4.125 ),     IN2MM100( 9.5 )     },          
+    { IN2MM100( 4.5 ),       IN2MM100( 10.375 )  },          
+    { IN2MM100( 4.75 ),      IN2MM100( 11 )      },          
+    { IN2MM100( 5 ),         IN2MM100( 11.5 )    },          
+    { IN2MM100( 17 ),        IN2MM100( 22 )      },          
+    { IN2MM100( 22 ),        IN2MM100( 34 )      },          
+    { IN2MM100( 34 ),        IN2MM100( 44 )      },          
+    { MM2MM100( 110 ),       MM2MM100( 220 )     },          
+    { MM2MM100( 162 ),       MM2MM100( 229 )     },          
+    { MM2MM100( 324 ),       MM2MM100( 458 )     },          
+    { MM2MM100( 229 ),       MM2MM100( 324 )     },          
+    { MM2MM100( 114 ),       MM2MM100( 162 )     },          
+    { MM2MM100( 114 ),       MM2MM100( 229 )     },          
+    { MM2MM100( 250 ),       MM2MM100( 353 )     },          
+    { MM2MM100( 176 ),       MM2MM100( 250 )     },          
+    { MM2MM100( 176 ),       MM2MM100( 125 )     },          
+    { MM2MM100( 110 ),       MM2MM100( 230 )     },          
+    { IN2MM100( 3.875 ),     IN2MM100( 7.5 )     },          
+    { IN2MM100( 3.625 ),     IN2MM100( 6.5 )     },          
+    { IN2MM100( 14.875 ),    IN2MM100( 11 )      },          
+    { IN2MM100( 8.5 ),       IN2MM100( 12 )      },          
+    { IN2MM100( 8.5 ),       IN2MM100( 13 )      },          
+    { MM2MM100( 250 ),       MM2MM100( 353 )     },          
+    { MM2MM100( 200 ),       MM2MM100( 148 )     },          
+    { IN2MM100( 9 ),         IN2MM100( 11 )      },          
+    { IN2MM100( 10 ),        IN2MM100( 11 )      },          
+    { IN2MM100( 15 ),        IN2MM100( 11 )      },          
+    { MM2MM100( 220 ),       MM2MM100( 220 )     },          
+    { 0, 0 },                                                
+    { 0, 0 },                                                
+    { IN2MM100( 9.275 ),     IN2MM100( 12 )      },          
+    { IN2MM100( 9.275 ),     IN2MM100( 15 )      },          
+    { IN2MM100( 11.69 ),     IN2MM100( 18 )      },          
+    { MM2MM100( 236 ),       MM2MM100( 322 )     },          
+    { IN2MM100( 8.275 ),     IN2MM100( 11 )      },          
+    { MM2MM100( 210 ),       MM2MM100( 297 )     },          
+    { IN2MM100( 9.275 ),     IN2MM100( 12 )      },          
+    { MM2MM100( 227 ),       MM2MM100( 356 )     },          
+    { MM2MM100( 305 ),       MM2MM100( 487 )     },          
+    { IN2MM100( 8.5 ),       IN2MM100( 12.69 )   },          
+    { MM2MM100( 210 ),       MM2MM100( 330 )     },          
+    { MM2MM100( 148 ),       MM2MM100( 210 )     },          
+    { MM2MM100( 182 ),       MM2MM100( 257 )     },          
+    { MM2MM100( 322 ),       MM2MM100( 445 )     },          
+    { MM2MM100( 174 ),       MM2MM100( 235 )     },          
+    { MM2MM100( 201 ),       MM2MM100( 276 )     },          
+    { MM2MM100( 420 ),       MM2MM100( 594 )     },          
+    { MM2MM100( 297 ),       MM2MM100( 420 )     },          
+    { MM2MM100( 322 ),       MM2MM100( 445 )     }           
 };
 
 sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const com::sun::star::awt::Size& rSize )
 {
     sal_Int32 nElems = SAL_N_ELEMENTS( spPaperSizeTable );
-    // Need to find the best match for current size
+    
     sal_Int32 nDeltaWidth = 0;
     sal_Int32 nDeltaHeight = 0;
 
-    sal_Int32 nPaperSizeIndex = 0; // Undefined
+    sal_Int32 nPaperSizeIndex = 0; 
     const ApiPaperSize* pItem = spPaperSizeTable;
     const ApiPaperSize* pEnd =  spPaperSizeTable + nElems;
     for ( ; pItem != pEnd; ++pItem )
     {
         sal_Int32 nCurDeltaHeight = std::abs( pItem->mnHeight - rSize.Height );
         sal_Int32 nCurDeltaWidth = std::abs( pItem->mnWidth - rSize.Width );
-        if ( pItem == spPaperSizeTable ) // initialise delta with first item
+        if ( pItem == spPaperSizeTable ) 
         {
             nDeltaWidth = nCurDeltaWidth;
             nDeltaHeight = nCurDeltaHeight;
@@ -373,7 +373,7 @@ sal_Int32 PaperSizeConv::getMSPaperSizeIndex( const com::sun::star::awt::Size& r
             }
         }
     }
-    sal_Int32 nTol = 10; // hmm not sure is this the best way
+    sal_Int32 nTol = 10; 
     if ( nDeltaWidth <= nTol && nDeltaHeight <= nTol )
         return nPaperSizeIndex;
     return 0;
@@ -412,10 +412,9 @@ WW8ReadFieldParams::WW8ReadFieldParams( const OUString& _rData )
     , nNext( 0 )
     , nSavPtr( 0 )
 {
+
     /*
-        erstmal nach einer oeffnenden Klammer oder einer Leerstelle oder einem
-        Anfuehrungszeichen oder einem Backslash suchen, damit der Feldbefehl
-        (also INCLUDEPICTURE bzw EINFUeGENGRAFIK bzw ...) ueberlesen wird
+        First look for an opening bracket or a space or a quatation mark or a backslash, so that the field (i.e. INCLUDEPICTURE or EINFUEGENGRAFIK or...) gets oread over
     */
     const sal_Int32 nLen = aData.getLength();
 
@@ -461,7 +460,7 @@ bool WW8ReadFieldParams::GoToTokenParam()
     return false;
 }
 
-// ret: -2: NOT a '\' parameter but normal Text
+
 sal_Int32 WW8ReadFieldParams::SkipToNextToken()
 {
     if ( nNext<0 || nNext>=aData.getLength() )
@@ -476,7 +475,7 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
     if (nFnd+1<aData.getLength() && aData[nFnd+1]!='\\' && aData[nFnd]=='\\')
     {
         const sal_Int32 nRet = aData[++nFnd];
-        nNext = ++nFnd;             // und dahinter setzen
+        nNext = ++nFnd;             
         return nRet;
     }
 
@@ -487,22 +486,22 @@ sal_Int32 WW8ReadFieldParams::SkipToNextToken()
     return -2;
 }
 
-// FindNextPara sucht naechsten Backslash-Parameter oder naechste Zeichenkette
-// bis zum Blank oder naechsten "\" oder zum schliessenden Anfuehrungszeichen
-// oder zum String-Ende von pStr.
-//
-// Ausgabe ppNext (falls ppNext != 0) Suchbeginn fuer naechsten Parameter bzw. 0
-//
-// Returnwert: 0 falls String-Ende erreicht,
-//             ansonsten Anfang des Paramters bzw. der Zeichenkette
-//
+
+
+
+
+
+
+
+
+
 sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 {
     const sal_Int32 nLen = aData.getLength();
-    sal_Int32  n = nStart<0  ? nFnd : nStart;  // Anfang
-    sal_Int32 n2;          // Ende
+    sal_Int32  n = nStart<0  ? nFnd : nStart;  
+    sal_Int32 n2;          
 
-    nNext = -1;        // Default fuer nicht gefunden
+    nNext = -1;        
 
     while ( n<nLen && aData[n]==' ' )
         ++n;
@@ -512,43 +511,43 @@ sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 
     if ( aData[n]==0x13 )
     {
-        // Skip the nested field code since it's not supported
+        
         while ( n<nLen && aData[n]!=0x14 )
             ++n;
         if ( n==nLen )
             return -1;
     }
 
-    // Anfuehrungszeichen vor Para?
+    
     if ( aData[n]=='"' || aData[n]==0x201c || aData[n]==132 || aData[n]==0x14 )
     {
-        n++;                        // Anfuehrungszeichen ueberlesen
-        n2 = n;                     // ab hier nach Ende suchen
+        n++;                        
+        n2 = n;                     
         while(     (nLen > n2)
                 && (aData[n2] != '"')
                 && (aData[n2] != 0x201d)
                 && (aData[n2] != 147)
                 && (aData[n2] != 0x15) )
-            n2++;                   // Ende d. Paras suchen
+            n2++;                   
     }
-    else                        // keine Anfuehrungszeichen
+    else                        
     {
-        n2 = n;                     // ab hier nach Ende suchen
-        while ( n2<nLen && aData[n2]!=' ' ) // Ende d. Paras suchen
+        n2 = n;                     
+        while ( n2<nLen && aData[n2]!=' ' ) 
         {
             if ( aData[n2]=='\\' )
             {
                 if ( n2+1<nLen && aData[n2+1]=='\\' )
-                    n2 += 2;        // Doppel-Backslash -> OK
+                    n2 += 2;        
                 else
                 {
                     if( n2 > n )
                         n2--;
-                    break;          // einfach-Backslash -> Ende
+                    break;          
                 }
             }
             else
-                n2++;               // kein Backslash -> OK
+                n2++;               
         }
     }
     if( nLen > n2 )
@@ -561,7 +560,7 @@ sal_Int32 WW8ReadFieldParams::FindNextStringPiece(const sal_Int32 nStart)
 
 
 
-// read parameters "1-3" or 1-3 with both values between 1 and nMax
+
 bool WW8ReadFieldParams::GetTokenSttFromTo(sal_Int32* pFrom, sal_Int32* pTo, sal_Int32 nMax)
 {
     sal_Int32 nStart = 0;
@@ -601,7 +600,7 @@ EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
             break;
         }
         rReadParam.SkipToNextToken();
-        // intentional fall-through
+        
     case -2:
         {
             if ( rReadParam.GetResult().startsWithIgnoreAsciiCase("(") )
@@ -622,8 +621,8 @@ EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                                 OUString sPart = rReadParam.GetResult();
                                 sal_Int32 nBegin = sPart.indexOf('(');
 
-                                //Word disallows brackets in this field, which
-                                //aids figuring out the case of an end of )) vs )
+                                
+                                
                                 sal_Int32 nEnd = sPart.indexOf(')');
 
                                 if (nBegin != -1 && nEnd != -1)
@@ -651,7 +650,7 @@ EquationResult Read_SubF_Combined(WW8ReadFieldParams& rReadParam)
                     }
                     if ( nBegin != -1 && nEnd != -1 )
                     {
-                        // skip certain leading characters
+                        
                         for (int i = nBegin;i < nEnd-1;i++)
                         {
                             const sal_Unicode cC = sPart[nBegin+1];
@@ -696,7 +695,7 @@ struct CustomShapeTypeTranslationTable
 
 static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] =
 {
-    // { "non-primitive", mso_sptMin },
+    
     { "rectangle", "rect" },
     { "round-rectangle", "roundRect" },
     { "ellipse", "ellipse" },
@@ -710,11 +709,11 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "cross", "plus" },
     { "star5", "star5" },
     { "right-arrow", "rightArrow" },
-    // { "mso-spt14", mso_sptThickArrow },
+    
     { "pentagon-right", "homePlate" },
     { "cube", "cube" },
-    // { "mso-spt17", mso_sptBalloon },
-    // { "mso-spt18", mso_sptSeal },
+    
+    
     { "mso-spt19", "arc" },
     { "mso-spt20", "line" },
     { "mso-spt21", "plaque" },
@@ -796,7 +795,7 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "vertical-scroll", "verticalScroll" },
     { "horizontal-scroll", "horizontalScroll" },
     { "circular-arrow", "circularArrow" },
-    { "mso-spt100", "pie" }, // looks like MSO_SPT is wrong here
+    { "mso-spt100", "pie" }, 
     { "mso-spt101", "uturnArrow" },
     { "mso-spt102", "curvedRightArrow" },
     { "mso-spt103", "curvedLeftArrow" },
@@ -832,46 +831,46 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "flowchart-direct-access-storage", "flowChartMagneticDrum" },
     { "flowchart-display", "flowChartDisplay" },
     { "flowchart-delay", "flowChartDelay" },
-    // { "fontwork-plain-text", "textPlainText" },
-    // { "fontwork-stop", "textStop" },
-    // { "fontwork-triangle-up", "textTriangle" },
-    // { "fontwork-triangle-down", "textTriangleInverted" },
-    // { "fontwork-chevron-up", "textChevron" },
-    // { "fontwork-chevron-down", "textChevronInverted" },
-    // { "mso-spt142", "textRingInside" },
-    // { "mso-spt143", "textRingOutside" },
-    // { "fontwork-arch-up-curve", "textArchUpCurve" },
-    // { "fontwork-arch-down-curve", "textArchDownCurve" },
-    // { "fontwork-circle-curve", "textCircleCurve" },
-    // { "fontwork-open-circle-curve", "textButtonCurve" },
-    // { "fontwork-arch-up-pour", "textArchUpPour" },
-    // { "fontwork-arch-down-pour", "textArchDownPour" },
-    // { "fontwork-circle-pour", "textCirclePour" },
-    // { "fontwork-open-circle-pour", "textButtonPour" },
-    // { "fontwork-curve-up", "textCurveUp" },
-    // { "fontwork-curve-down", "textCurveDown" },
-    // { "fontwork-fade-up-and-right", "textCascadeUp" },
-    // { "fontwork-fade-up-and-left", "textCascadeDown" },
-    // { "fontwork-wave", "textWave1" },
-    // { "mso-spt157", "textWave2" },
-    // { "mso-spt158", "textWave3" },
-    // { "mso-spt159", "textWave4" },
-    // { "fontwork-inflate", "textInflate" },
-    // { "mso-spt161", "textDeflate" },
-    // { "mso-spt162", "textInflateBottom" },
-    // { "mso-spt163", "textDeflateBottom" },
-    // { "mso-spt164", "textInflateTop" },
-    // { "mso-spt165", "textDeflateTop" },
-    // { "mso-spt166", "textDeflateInflate" },
-    // { "mso-spt167", "textDeflateInflateDeflate" },
-    // { "fontwork-fade-right", "textFadeRight" },
-    // { "fontwork-fade-left", "textFadeLeft" },
-    // { "fontwork-fade-up", "textFadeUp" },
-    // { "fontwork-fade-down", "textFadeDown" },
-    // { "fontwork-slant-up", "textSlantUp" },
-    // { "fontwork-slant-down", "textSlantDown" },
-    // { "mso-spt174", "textCanUp" },
-    // { "mso-spt175", "textCanDown" },
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     { "flowchart-alternate-process", "flowChartAlternateProcess" },
     { "flowchart-off-page-connector", "flowChartOffpageConnector" },
     { "mso-spt178", "callout1" },
@@ -896,7 +895,7 @@ static const CustomShapeTypeTranslationTable pCustomShapeTypeTranslationTable[] 
     { "mso-spt198", "actionButtonDocument" },
     { "mso-spt199", "actionButtonSound" },
     { "mso-spt200", "actionButtonMovie" },
-    // { "mso-spt201", "hostControl" },
+    
     { "mso-spt202", "rect" },
     { "ooxml-actionButtonSound", "actionButtonSound" },
     { "ooxml-borderCallout1", "borderCallout1" },

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "basictest.hxx"
@@ -21,14 +21,14 @@ namespace
         EnableTest() : BootstrapFixture(true, false) {};
         void testDimEnable();
         void testEnableRuntime();
-        // Adds code needed to register the test suite
+        
         CPPUNIT_TEST_SUITE(EnableTest);
 
-        // Declares the method as a test to call
+        
         CPPUNIT_TEST(testDimEnable);
         CPPUNIT_TEST(testEnableRuntime);
 
-        // End of test suite definition
+        
         CPPUNIT_TEST_SUITE_END();
     };
 
@@ -63,9 +63,9 @@ void EnableTest::testDimEnable()
     CPPUNIT_ASSERT_MESSAGE("Dim causes compile error", !myMacro.HasError() );
 }
 
-  // Put the test suite in the registry
+  
   CPPUNIT_TEST_SUITE_REGISTRATION(EnableTest);
-} // namespace
+} 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

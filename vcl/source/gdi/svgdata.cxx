@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -29,11 +29,11 @@
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 using namespace ::com::sun::star;
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     const Primitive2DSequence& rSequence,
@@ -44,8 +44,8 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
 
     if(rSequence.hasElements())
     {
-        // create replacement graphic from maSequence
-        // create XPrimitive2DRenderer
+        
+        
         uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
 
         try
@@ -60,7 +60,7 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
             aRealRect.X2 = rTargetRange.getMaxX();
             aRealRect.Y2 = rTargetRange.getMaxY();
 
-            // get system DPI
+            
             const Size aDPI(Application::GetDefaultDevice()->LogicToPixel(Size(1, 1), MAP_INCH));
 
             const uno::Reference< rendering::XBitmap > xBitmap(
@@ -91,7 +91,7 @@ BitmapEx VCL_DLLPUBLIC convertPrimitive2DSequenceToBitmapEx(
     return aRetval;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void SvgData::ensureReplacement()
 {
@@ -103,22 +103,22 @@ void SvgData::ensureReplacement()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 void SvgData::ensureSequenceAndRange()
 {
     if(!maSequence.hasElements() && mnSvgDataArrayLength)
     {
-        // import SVG to maSequence, also set maRange
+        
         maRange.reset();
 
-        // create stream
+        
         const uno::Sequence< sal_Int8 > aPostData((sal_Int8*)maSvgDataArray.get(), mnSvgDataArrayLength);
         const uno::Reference< io::XInputStream > myInputStream(new comphelper::SequenceInputStream(aPostData));
 
         if(myInputStream.is())
         {
-            // create SVG interpreter
+            
             uno::Reference< uno::XComponentContext > xContext(::comphelper::getProcessComponentContext());
 
             try
@@ -141,7 +141,7 @@ void SvgData::ensureSequenceAndRange()
 
             for(sal_Int32 a(0L); a < nCount; a++)
             {
-                // get reference
+                
                 const Primitive2DReference xReference(maSequence[a]);
 
                 if(xReference.is())
@@ -160,7 +160,7 @@ void SvgData::ensureSequenceAndRange()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLength, const OUString& rPath)
 :   maSvgDataArray(rSvgDataArray),
@@ -172,7 +172,7 @@ SvgData::SvgData(const SvgDataArray& rSvgDataArray, sal_uInt32 nSvgDataArrayLeng
 {
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 SvgData::SvgData(const OUString& rPath):
     maSvgDataArray(),
     mnSvgDataArrayLength(0),
@@ -200,7 +200,7 @@ SvgData::SvgData(const OUString& rPath):
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 const basegfx::B2DRange& SvgData::getRange() const
 {
@@ -209,7 +209,7 @@ const basegfx::B2DRange& SvgData::getRange() const
     return maRange;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 const Primitive2DSequence& SvgData::getPrimitive2DSequence() const
 {
@@ -218,7 +218,7 @@ const Primitive2DSequence& SvgData::getPrimitive2DSequence() const
     return maSequence;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 const BitmapEx& SvgData::getReplacement() const
 {

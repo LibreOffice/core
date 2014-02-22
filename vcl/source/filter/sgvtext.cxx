@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -36,21 +36,21 @@ extern SgfFontLst* pSgfFonts;
 #endif
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Limitations:  only grey shadows, 2D and with fixed distance.
-//
-//
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-// AbsBase.Pas
+//
 
-// vvv special characters in text buffer vvv
+//
+//
+//
+//
+
+
+
+
+
+
+
+
 #define  TextEnd        0 /* ^@ end of character sequence                       */
 #define  HardSpace      6 /* ^F non-breaking space,' '                          */
 #define  SoftTrennK    11 /* ^K character for k-c-switch for separation, 'k'    */
@@ -62,18 +62,18 @@ extern SgfFontLst* pSgfFonts;
 #define  MaxEscValLen  8
 #define  MaxEscLen     (MaxEscValLen+3)
 
-//==============================================================================
-// Escape sequences: [Esc]<Ident><Value>[Esc]  at least 4 characters
-// Max length of value should be: 8 chars (7+sign). Therefore max. length
-// of a escape sequence: 11 chars.
-// Identifer:
+
+
+
+
+
 
 #define  EscFont   'F' /* fontID, e.g. 92500 for CG Times                           */
 #define  EscGrad   'G' /* font angle 1..255 for <<Pt-127<<Pt                        */
 #define  EscBreit  'B' /* width 1..255% of the font angle                           */
 #define  EscKaptS  'K' /* uppercase size 1..255% of the text angle                  */
 #define  EscLFeed  'L' /* character spacing 1..32767% of max. text angle of the line*/
-                        // or 1..32767 for 1..16383<<Pt absolute (if bit 15=1)
+                        
 #define  EscSlant  'S' /* italic (angle) 1..8999 for 0.01deg..89.99deg              */
 #define  EscVPos   'V' /* character vercial position 1..255 for <<Pt..127<<Pt       */
 #define  EscZAbst  'Z' /* character spacing -128..127%                              */
@@ -111,19 +111,19 @@ extern SgfFontLst* pSgfFonts;
 #define  Esc4DShd  'i' /* 4D-shadow                                                 */
 #define  EscEbShd  'b' /* embossed                                                  */
 
-//  AllEscIdent =[EscFont, EscGrad, EscBreit,EscKaptS,EscLFeed,EscSlant,EscVPos, EscZAbst,EscHJust,
-//                EscFarbe,EscBFarb,EscInts, EscMustr,EscMFarb,EscMBFrb,EscMInts,
-//                EscSMstr,EscSFarb,EscSBFrb,EscSInts,EscSXDst,EscSYDst,EscSDist,
-//                EscBold, EscLSlnt,EscRSlnt,EscUndln,EscDbUnd,EscKaptF,EscStrik,EscDbStk,
-//                EscSupSc,EscSubSc,Esc2DShd,Esc3DShd,Esc4DShd];
-// Justify muss spaetestens am Anfang des Absatzes stehen
+
+
+
+
+
+
 #define  EscSet    '\x1e' /* set flag                                               */
 #define  EscReset  '\x1f' /* reset flag                                             */
 #define  EscDeflt  '\x11' /* set flag to default                                    */
 #define  EscToggl  '\x1d' /* toggle flag                                            */
 #define  EscNoFlg  0
 #define  EscNoVal  -2147483647 /* -MaxLongInt */
-//==============================================================================
+
 #define  NoTrenn 0xFFFF   /* parameter value for 'Rest' of GetTextChar(), if separation should not occur */
 #define  DoTrenn 0xFFFE   /* parameter value for 'Rest' of GetTextChar(), if separtion should occur      */
 
@@ -136,23 +136,23 @@ extern SgfFontLst* pSgfFonts;
 #define  MaxChar 255
 
 
-//==============================================================================
+
 
 #define  CharTopToBase     100 /* due to quotes more as 75%         */
 #define  CharTopToBtm      120 /* line height larger as text angle  */
-                               // for Avanti-Bold 'ue' actually even 130%
-
-// end of AbsBase.Pas
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
+                               
 
 
 
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-// DefBase.Pas
+
+
+
+
+
+
+
+
+
 
 #define  TextBoldBit  0x0001   /* bold                   */
 #define  TextRSlnBit  0x0002   /* italic                 */
@@ -178,10 +178,10 @@ extern SgfFontLst* pSgfFonts;
 
 #define  MaxCharSlant   4200   /* maximum 42deg italic ! */
 
-// end of DefBase.Pas
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 
 bool CheckTextOutl(ObjAreaType& F, ObjLineType& L)
@@ -192,10 +192,10 @@ bool CheckTextOutl(ObjAreaType& F, ObjLineType& L)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-// Misc.Pas
+
+
+
+
 
 short hPoint2Sgf(short a)
 {
@@ -204,15 +204,15 @@ short hPoint2Sgf(short a)
     return short(b);
 }
 
-// End of Misc.Pas
-// AbsRead.Pas
 
-// ======================================================================
-// Function GetTopToBaseLine()  Function GetBaseLineToBtm()
+
+
+
+
 //
-// Calculate distance from ascender of line to baseline or from baseline to
-// descender. All in SGF-units.
-// ======================================================================
+
+
+
 
 sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
 {
@@ -221,23 +221,23 @@ sal_uInt16 GetTopToBaseLine(sal_uInt16 MaxGrad)
     return sal_uInt16(ret);
 }
 
-// ======================================================================
-// Function GetTextChar()   Function GetTextCharConv()
+
+
 //
-// Reads a character from textbuffer, in doing so escape sequences
-// are evaluated and accordingly the input/output parameter AktAtr is set.
-// Index is incremented accordingly.
-// Parameter Rest should always contain the number of characters,
-// the number of remaining characters in that line.
-// Otherwise the hyphenation does not work. If the constand NoTrenn
-// is used instaed, no hyphenation is done. To the contrary then
-// constant DoTrenn triggers hyphenation where a soft-break is present.
+
+
+
+
+
+
+
+
 //
-// Soft separators are converted to a minus sign.
-// On top GetTextCharConv() converts HardSpace and AbsatzEnde
-// in spaces, including HardTrenner in minus signs. TextEnde is
-// always returned as Char(0).
-// ======================================================================
+
+
+
+
+
 
 
 
@@ -261,9 +261,9 @@ long ChgValue(long Def, long Min, long Max, UCHAR FlgVal, long NumVal)
     long r=0;
 
     if (FlgVal==EscDeflt) {
-        r=Def;                          // return to default
+        r=Def;                          
     } else {
-        if (NumVal!=EscNoVal) r=NumVal; // set non-breaking
+        if (NumVal!=EscNoVal) r=NumVal; 
     }
 
     if (Min!=0 || Max!=0) {
@@ -327,10 +327,10 @@ UCHAR ProcessOne(UCHAR* TBuf, sal_uInt16& Index,
         Ende=(c!=Escape);
         if (!Ende) {
             c=TBuf[Index]; Index++;
-            Ident=c;                          // remember identifier
+            Ident=c;                          
             FlgVal=EscNoFlg;
             NumVal=EscNoVal;
-            c=TBuf[Index]; Index++;            // value starts here
+            c=TBuf[Index]; Index++;            
             if (c==EscSet || c==EscReset || c==EscDeflt || c==EscToggl) FlgVal=c; else {
                 if (c=='-') Sgn=-1; else Sgn=1;
                 if (c=='+' || c=='-') { c=TBuf[Index]; Index++; }
@@ -387,13 +387,13 @@ UCHAR ProcessOne(UCHAR* TBuf, sal_uInt16& Index,
                 case Esc3DShd: ChgSchnittBit(TextSh3DBit,TextSh2DBit,TextSh4DBit,TextShEbBit,FlgVal,Atr0.Schnitt,AktAtr.Schnitt); break;
                 case Esc4DShd: ChgSchnittBit(TextSh4DBit,TextSh2DBit,TextSh3DBit,TextShEbBit,FlgVal,Atr0.Schnitt,AktAtr.Schnitt); break;
                 case EscEbShd: ChgSchnittBit(TextShEbBit,TextSh2DBit,TextSh3DBit,TextSh4DBit,FlgVal,Atr0.Schnitt,AktAtr.Schnitt); break;
-            } //endcase
-            if (TBuf[Index]==Escape) Index++;         // read 2nd escape }
+            } 
+            if (TBuf[Index]==Escape) Index++;         
         }
     } while (!Ende && !ScanEsc);
     if (!Ende) c=Escape;
     return c;
-} // end of ProcessOne
+} 
 
 
 UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
@@ -408,9 +408,9 @@ UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
             if (Rest==0 || Rest==DoTrenn ||
                 nc==' ' || nc==AbsatzEnd || nc==TextEnd) c='-';
             else {
-                c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc); // skip separator
+                c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc); 
                 if (c0==SoftTrennAdd) {
-                    if (c>=32) c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc); // skip another letter
+                    if (c>=32) c=ProcessOne(TBuf,Index,Atr0,AktAtr,ScanEsc); 
                 }
             }
         }
@@ -422,12 +422,12 @@ UCHAR GetTextChar(UCHAR* TBuf, sal_uInt16& Index,
     return c;
 }
 
-  // HardSpace and HardTrenn should be converted explicitely ! }
-  // if AktAtr.Schnitt and TextKaptBit =TextKaptBit then c:=UpCase(c);(explizit) }
+  
+  
 
-  // The separationmethod SoftTrennAdd assumes, the separating consonant }
-  // is 3x present in TextBuf, e.g.: "schiff-fahrt".   }
-  // If not separated then, "-f" is removed.        }
+  
+  
+  
 
 
 UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
@@ -448,11 +448,11 @@ UCHAR GetTextCharConv(UCHAR* TBuf, sal_uInt16& Index,
 }
 
 
-// ======================================================================
-// Function GetLineFeed()
+
+
 //
-// Required line spacing in SGF-Units. ChrVPos is taken into account.
-// ======================================================================
+
+
 sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextType AktAtr,
                    sal_uInt16 nChar, sal_uInt16& LF, sal_uInt16& MaxGrad)
 {
@@ -486,7 +486,7 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
         if (!AbsEnd && c!=' ') r=i;
     }
     MaxGrad=hPoint2Sgf(MaxGrad);
-    if (MaxLF100<=4000) {  // otherwise overflow could occur
+    if (MaxLF100<=4000) {  
         LF=sal_uInt16(hPoint2Sgf(short(MaxLF100)) /100);
     } else {
         LF=sal_uInt16(hPoint2Sgf(short(MaxLF100) /100));
@@ -495,17 +495,17 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
     return r;
 }
 
-// End of AbsRead.Pas
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
 
 
 
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-// iFont.Pas
+
+
+
+
+
+
+
+
 
 #define SuperSubFact 60     /* superscript/subscript: 60% of text angle */
 #define DefaultSpace 40     /* Default: space is 40% of text angle      */
@@ -513,13 +513,13 @@ sal_uInt16 GetLineFeed(UCHAR* TBuf, sal_uInt16 Index, ObjTextType Atr0, ObjTextT
 sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_uInt16 Dreh,
                       sal_uInt16 FitXMul, sal_uInt16 FitXDiv, sal_uInt16 FitYMul, sal_uInt16 FitYDiv)
 {
-    SgfFontOne* pSgfFont; // Font from the IniFile
+    SgfFontOne* pSgfFont; 
     Font   aFont;
     Color  aColor;
     sal_uLong  Grad;
     sal_uLong  Brei;
     OUString FNam;
-    sal_uInt16 StdBrei=50;    // average line width in in % of text angle
+    sal_uInt16 StdBrei=50;    
     bool   bFit=(FitXMul!=1 || FitXDiv!=1 || FitYMul!=1 || FitYDiv!=1);
 
     pSgfFont = pSgfFonts->GetFontDesc(Atr.GetFont());
@@ -534,33 +534,33 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
         aFont.SetName(FNam);
     }
     else
-    {  // if not in Inifile, some fonts are hard coded here
+    {  
         aFont.SetPitch(PITCH_VARIABLE);
         switch (Atr.GetFont()) {
           case 92500: case 92501: case 92504: case 92505:
           {
 #if defined(WNT)
-              FNam = "Times New Roman";  // CG Times is Times New Roman in Windows
+              FNam = "Times New Roman";  
 #else
-              FNam = "Times";            // otherwise just Times
+              FNam = "Times";            
 #endif
               StdBrei=40;
               aFont.SetFamily(FAMILY_ROMAN);
           } break;
           case 94021: case 94022: case 94023: case 94024: {
 #if defined(WNT)
-              FNam = "Arial";            // Univers is Arial in Windows
+              FNam = "Arial";            
 #else
-              FNam = "Helvetica";        // otherwise Helvetica
+              FNam = "Helvetica";        
 #endif
               aFont.SetFamily(FAMILY_SWISS);
               StdBrei=47;
           } break;
           case 93950: case 93951: case 93952: case 93953: {
 #if defined(WNT)
-              FNam = "Courier New";      // The vector-Courierfont is called Courier New in Windows
+              FNam = "Courier New";      
 #else
-              FNam = "Courier";          // otherwise Courier remains Courier
+              FNam = "Courier";          
 #endif
               aFont.SetFamily(FAMILY_ROMAN);
               aFont.SetPitch(PITCH_FIXED);
@@ -568,7 +568,7 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
           default: FNam = "Helvetica";
         }
         aFont.SetName(FNam);
-        //aFont.SetCharSet(CHARSET_SYSTEM);
+        
     }
 
     Grad=sal_uLong(Atr.Grad);
@@ -612,16 +612,16 @@ sal_uInt16 SetTextContext(OutputDevice& rOut, ObjTextType& Atr, bool Kapt, sal_u
     return 0;
 }
 
-// iFont.Pas
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-// Absatz.Pas
+
+
+
+
+
+
+
+
 
 struct ProcChrSta {
     sal_uInt16 Index;
@@ -667,8 +667,8 @@ sal_uInt16 GetCharWidth(OutputDevice& rOut, UCHAR c)
     }
     else
     {
-         // with MaxChar == 255 c cannot be greater than MaxChar
-         // assert if MaxChar is ever changed
+         
+         
         BOOST_STATIC_ASSERT( MaxChar == 255 );
         BOOST_STATIC_ASSERT(sizeof(UCHAR) == 1);
         if (c>=MinChar /*&& c<=MaxChar*/)
@@ -687,16 +687,16 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
                   sal_uInt16& nChars, sal_uInt16 Rest,
                   short* Line, UCHAR* cLine)
 {
-    sal_uInt16       KernDist=0;       // value for kerning
+    sal_uInt16       KernDist=0;       
     sal_uInt16       ChrWidth;
     UCHAR        c;
     bool         AbsEnd;
 
-    c=GetTextChar(TBuf,R.Index,Atr0,R.Attrib,Rest,false); // tries to separate, if Rest contains appropriate value
+    c=GetTextChar(TBuf,R.Index,Atr0,R.Attrib,Rest,false); 
 
     AbsEnd=(c==AbsatzEnd || c==TextEnd);
     if (!AbsEnd) {
-        R.OutCh=ConvertTextChar(c); // from HardTrenn to '-', ...
+        R.OutCh=ConvertTextChar(c); 
         R.Kapt=(R.Attrib.Schnitt & TextKaptBit) !=0 && UpcasePossible(R.OutCh);
         if (R.Kapt) R.OutCh=Upcase(R.OutCh);
         SetTextContext(rOut,R.Attrib,R.Kapt,0,1,1,1,1);
@@ -704,7 +704,7 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
         UCHAR c1 = (R.Kapt)?Upcase(c):c;
         ChrWidth=GetCharWidth(rOut,c1);
 
-        if (R.Attrib.ZAbst!=100) { // special line distance ?
+        if (R.Attrib.ZAbst!=100) { 
             sal_uLong Temp;
             Temp=sal_uLong(ChrWidth)*sal_uLong(R.Attrib.ZAbst)/100;
             ChrWidth=sal_uInt16(Temp);
@@ -713,7 +713,7 @@ UCHAR ProcessChar(OutputDevice& rOut, UCHAR* TBuf, ProcChrSta& R, ObjTextType& A
         if (R.ChrXP>32000) R.ChrXP=32000;
         Line[nChars]=R.ChrXP-KernDist;
         cLine[nChars]=c;
-        R.ChrXP+=ChrWidth-KernDist; // position of next character
+        R.ChrXP+=ChrWidth-KernDist; 
     }
     return c;
 }
@@ -727,11 +727,11 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     VirtualDevice vOut;
     UCHAR        c,c0;
     UCHAR        ct;
-    bool         First;               // first char ?
-    sal_uInt8    Just = 0;            // paragraph format
-    bool         Border;              // border of box reached ?
+    bool         First;               
+    sal_uInt8    Just = 0;            
+    bool         Border;              
     bool         Border0;
-    bool         AbsEnd;              // end of paragraph reached ?
+    bool         AbsEnd;              
     ProcChrSta*  R=new ProcChrSta;
     ProcChrSta*  R0=new ProcChrSta;
     ProcChrSta*  WErec=new ProcChrSta;
@@ -741,11 +741,11 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     ProcChrSta*  TRrec=new ProcChrSta;
     sal_uInt16       TRnChar;
 
-    sal_uInt16       WordEndCnt;          // justify and separate
+    sal_uInt16       WordEndCnt;          
     bool         WordEnd;
     bool         Trenn;
 
-    short        BoxRest;             // to crush and format
+    short        BoxRest;             
     sal_uInt16       i,j,k,h;
     sal_uInt16       re,li;
 
@@ -758,14 +758,14 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     Border=false; First=true;
     WordEndCnt=0;
 
-    do {               // check how many words to on that line
+    do {               
         if (Border) c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,DoTrenn,Line,cLine);
         else        c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
         AbsEnd=(c==AbsatzEnd || c==TextEnd);
-        //if not AbsEnd then
+        
         {
             if (First) {
-                Just=R->Attrib.Justify & 0x0F; // paragraph format remains, then at start
+                Just=R->Attrib.Justify & 0x0F; 
             }
             Border=R->ChrXP>UmbWdt;
             WordEnd=(AbsEnd || (c==' ')) && (c0!=' ') && (c0!=0);
@@ -787,13 +787,13 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
         AbsEnd=AbsEnd || (nChars>=MaxLineChars);
     } while (!(AbsEnd || (Border && ((WordEndCnt>0) || WordEnd || Trenn))));
 
-    if (Border) { // separate and crush
+    if (Border) { 
         (*WErec0)=(*WErec); WEnChar0=WEnChar;
         AbsEnd=false; c0=0;
         (*R)=(*WErec); nChars=WEnChar;
         (*TRrec)=(*R); TRnChar=nChars;
         Border0=false; Border=false;
-        do {                // first check how many syllables fit
+        do {                
             ct=ProcessChar(vOut,TBuf,*TRrec,Atr0,TRnChar,DoTrenn,Line,cLine);
             c=ProcessChar(vOut,TBuf,*R,Atr0,nChars,NoTrenn,Line,cLine);
             AbsEnd=(ct==AbsatzEnd) || (ct==TextEnd) || (nChars>=MaxLineChars);
@@ -805,20 +805,20 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
                 WordEndCnt++;
                 (*WErec)=(*R0);
                 if (AbsEnd) WEnChar=nChars; else WEnChar=nChars-1;
-                (*TRrec)=(*R); TRnChar=nChars;                       // to continue searching
+                (*TRrec)=(*R); TRnChar=nChars;                       
             }
             if (Trenn && (!Border || (WordEndCnt==0))) {
-                WordEndCnt++;                       // remember we can separate here
+                WordEndCnt++;                       
                 (*WErec)=(*TRrec);
                 WEnChar=TRnChar;
-                (*TRrec)=(*R); TRnChar=nChars;      // continue searching
+                (*TRrec)=(*R); TRnChar=nChars;      
             }
             (*R0)=(*R); c0=c;
             Border0=Border;
             Border=R->ChrXP>UmbWdt;
         } while (!(AbsEnd || (Border && ((WordEndCnt>0) || WordEnd || Trenn))));
 
-        while (WErec0->Index<WErec->Index) { // to assure Line[] matches }
+        while (WErec0->Index<WErec->Index) { 
             c=ProcessChar(vOut,TBuf,*WErec0,Atr0,WEnChar0,WEnChar-WEnChar0-1,Line,cLine);
         }
 
@@ -826,9 +826,9 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
 
         if (UmbWdt>=R->ChrXP) {
             BoxRest=UmbWdt-R->ChrXP;
-        } else {                                       // crush together
-            BoxRest=R->ChrXP-UmbWdt;                   // so much should be crushed
-            for (i=2;i<=nChars;i++) {                  // first character position remains!
+        } else {                                       
+            BoxRest=R->ChrXP-UmbWdt;                   
+            for (i=2;i<=nChars;i++) {                  
                 Line[i]-=(i-1)*(BoxRest) /(nChars-1);
             }
             R->ChrXP=UmbWdt;
@@ -837,7 +837,7 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     }
 
     if (!AbsEnd) {
-        do {                                         // read empty characters
+        do {                                         
             (*WErec)=(*R);
             c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,false);
             nChars++;
@@ -850,12 +850,12 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
         }
     }
 
-    if (AbsEnd && nChars<MaxLineChars) { // align, left aligned instead of block
+    if (AbsEnd && nChars<MaxLineChars) { 
         if (Just==3) Just=0;
-        nChars++; Line[nChars]=R->ChrXP; // to assure AbsatzEnde is read
-        Line[nChars+1]=R->ChrXP;         // as the width of CR or #0 is very small
+        nChars++; Line[nChars]=R->ChrXP; 
+        Line[nChars+1]=R->ChrXP;         
         if (TBuf[R->Index-1]!=AbsatzEnd &&  TBuf[R->Index-1]!=TextEnd) {
-            c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,false); // small correction needed, if 1st word read
+            c=GetTextChar(TBuf,R->Index,Atr0,R->Attrib,NoTrenn,false); 
         }
     }
 
@@ -863,16 +863,16 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
     if (TextFit) Just=THJustLeft;
 
     switch (Just) {
-        case THJustLeft: break;                                // left
+        case THJustLeft: break;                                
         case THJustCenter: {
-            BoxRest=BoxRest /2;                                // middel
+            BoxRest=BoxRest /2;                                
             for (i=1;i<=nChars;i++) Line[i]=Line[i]+BoxRest;
         } break;
-        case THJustRight: {                                    // right
+        case THJustRight: {                                    
             for (i=1;i<=nChars;i++) Line[i]=Line[i]+BoxRest;
         } break;
         case THJustDrvOut:
-        case THJustBlock: {                                    // block and justified
+        case THJustBlock: {                                    
             re=nChars;
             if (Just==THJustDrvOut) re--;
             while (re>=1 && (cLine[re]==' ' || cLine[re]==TextEnd || cLine[re]==AbsatzEnd)) re--;
@@ -880,40 +880,40 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
             while (li<=re && (cLine[li]==' ' || cLine[li]==TextEnd || cLine[li]==AbsatzEnd)) li++;
             if (Just==THJustDrvOut) BoxRest=AdjWdt-Line[re+1];
 
-            j=0;                        // get number of spaces
+            j=0;                        
             for (i=li;i<=re;i++) {
                 if (cLine[i]==' ') {
                     j++;
                 }
             }
 
-            if (j==0) {                        // only one word ?  -> strech !
-                for (i=li+1;i<=re;i++) {       // from left to right
+            if (j==0) {                        
+                for (i=li+1;i<=re;i++) {       
                   Line[i]=Line[i]+MulDiv(i-li,BoxRest,re-li+1-1);
                 }
             } else {
                 k=0; h=0;
-                for (i=li;i<=re;i++) {          // j drill spaces !
-                    if (cLine[i]==' ') {        // space found !
+                for (i=li;i<=re;i++) {          
+                    if (cLine[i]==' ') {        
                         k++;
                         h=MulDiv(k,BoxRest,j);
                     }
                     Line[i]=Line[i]+h;
                 }
             }
-            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; // adapt the rest
+            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; 
             Line[nChars+1]=AdjWdt;
         } break;
-        case THJustLocked: {                                    // locked out
+        case THJustLocked: {                                    
             re=nChars-1;
             while (re>=1 && (cLine[re]==' ' || cLine[re]==TextEnd || cLine[re]==AbsatzEnd)) re--;
             li=1;
             while (li<=re && (cLine[li]==' ' || cLine[li]==TextEnd || cLine[li]==AbsatzEnd)) li++;
             BoxRest=AdjWdt-Line[re+1];
-            for (i=li+1;i<=re;i++) {         // strech from left to right
+            for (i=li+1;i<=re;i++) {         
                 Line[i]=Line[i]+MulDiv(i-li,BoxRest,re-li+1-1);
             }
-            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; // adapt the rest
+            for (i=re+1;i<=nChars;i++) Line[i]=Line[i]+BoxRest; 
             Line[nChars+1]=AdjWdt;
         } break;
     }
@@ -928,16 +928,16 @@ void FormatLine(UCHAR* TBuf, sal_uInt16& Index, ObjTextType& Atr0, ObjTextType& 
 
 
 
-// End of Absatz.Pas
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
 
 
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-// DrawText.Pas
+
+
+
+
+
+
+
+
 
 void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uInt16 DrehWink,
               sal_uInt16 FitXMul, sal_uInt16 FitXDiv, sal_uInt16 FitYMul, sal_uInt16 FitYDiv)
@@ -956,13 +956,13 @@ void DrawChar(OutputDevice& rOut, UCHAR c, ObjTextType T, PointType Pos, sal_uIn
 *************************************************************************/
 void TextType::Draw(OutputDevice& rOut)
 {
-    if ((Flags & TextOutlBit)!=0) return;   // source text for Outliner !!
+    if ((Flags & TextOutlBit)!=0) return;   
 
     ObjTextType T1,T2;
     sal_uInt16 Index1;
     sal_uInt16 Index2;
     UCHAR  c = TextEnd;
-    sal_uInt16 l;                // number of characters on the line
+    sal_uInt16 l;                
     sal_uInt16 i;
     short  yPos0;
     short  xPos;
@@ -978,20 +978,20 @@ void TextType::Draw(OutputDevice& rOut)
     sal_uInt16 lc;
     bool   TextFit;
     short* xLine;
-    UCHAR* cLine;   // Buffer for FormatLine
+    UCHAR* cLine;   
     sal_uInt16 FitXMul;
     sal_uInt16 FitXDiv;
     sal_uInt16 FitYMul;
     sal_uInt16 FitYDiv;
     bool   Fehler;
-    UCHAR* Buf=Buffer; // pointer to the letters
+    UCHAR* Buf=Buffer; 
 
     pSgfFonts->ReadList();
     xLine=new short[ChrXPosArrSize];
     cLine=new UCHAR[CharLineSize];
 
     TextFit=(Flags & TextFitBits)!=0;
-    bool LineFit=((Flags & TextFitZBit)!=0);  // FitSize.x=0? or flags -> strech each line
+    bool LineFit=((Flags & TextFitZBit)!=0);  
     if (TextFit && FitSize.x==0) LineFit=true;
 
     if (DrehWink==0) {
@@ -1005,9 +1005,9 @@ void TextType::Draw(OutputDevice& rOut)
     T1=T; Index1=0; yPos=0; xPos=0;
     if (TextFit) {
         ySize=Pos2.y-Pos1.y;
-        xSize=32000 /2;      // break
-        xSAdj=Pos2.x-Pos1.x; // to align for center/block
-        //if (xSize<=0) { xSize=32000 /2; LineFit=true; }
+        xSize=32000 /2;      
+        xSAdj=Pos2.x-Pos1.x; 
+        
         FitXMul=sal::static_int_cast< sal_uInt16 >(abs(Pos2.x-Pos1.x)); FitXDiv=FitSize.x; if (FitXDiv==0) FitXDiv=1;
         FitYMul=sal::static_int_cast< sal_uInt16 >(abs(Pos2.y-Pos1.y)); FitYDiv=FitSize.y; if (FitYDiv==0) FitYDiv=1;
     } else {
@@ -1037,7 +1037,7 @@ void TextType::Draw(OutputDevice& rOut)
                     LF=MulDiv(LF,FitYMul,FitYDiv);
                     MaxGrad=MulDiv(MaxGrad,FitYMul,FitYDiv);
                 } else {
-                    FitXDiv=1; // 0 does not exist
+                    FitXDiv=1; 
                 }
             }
             yPos0=yPos;
@@ -1049,7 +1049,7 @@ void TextType::Draw(OutputDevice& rOut)
                 i=1;
                 while (i<=l) {
                     c=GetTextCharConv(Buf,Index2,T,T2,l-i,false);
-                    long xp1,yp1;       // due to overflow danger
+                    long xp1,yp1;       
                     PointType Pos;
                     xp1=long(Pos1.x)+xPos+long(xLine[i]);
                     yp1=long(Pos1.y)+yPos;
@@ -1061,20 +1061,20 @@ void TextType::Draw(OutputDevice& rOut)
                     if (DrehWink!=0) RotatePoint(Pos,Pos1.x,Pos1.y,sn,cs);
                     DrawChar(rOut,c,T2,Pos,DrehWink,FitXMul,FitXDiv,FitYMul,FitYDiv);
                     i++;
-                } // while i<=l
+                } 
                 yPos=yPos0+LF;
-                T1=T2; Index1=Index2; // for next line
-            } // if ObjMin.y+yPos<=Obj_Max.y
-        } // if !Fehler
+                T1=T2; Index1=Index2; 
+            } 
+        } 
     } while (c!=TextEnd && !Ende && !Fehler);
     delete[] cLine;
     delete[] xLine;
 }
 
-// End of DrawText.Pas
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
 sal_uInt32 ObjTextType::GetFont()
 {
@@ -1088,9 +1088,9 @@ void ObjTextType::SetFont(sal_uInt32 FontID)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////
-// SGF.Ini lesen ////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////
+
+
+
 SgfFontOne::SgfFontOne()
 {
     Next=NULL;
@@ -1109,21 +1109,21 @@ void SgfFontOne::ReadOne( const OString& rID, OString& Dsc )
 {
     if ( Dsc.getLength() < 4 || ( Dsc[0] != '(' ) )
         return;
-    sal_Int32 i=1;   // first letter of  IF fontname. In front is a '('
+    sal_Int32 i=1;   
     while ( i < Dsc.getLength() && ( Dsc[i] !=')' ) )
         i++;
-    Dsc = Dsc.copy(i+1);                                // delete IF fontname incl. ()
+    Dsc = Dsc.copy(i+1);                                
 
     if ( Dsc.getLength() < 2 || ( Dsc[Dsc.getLength() - 1] !=')' ) )
         return;
-    i = Dsc.getLength()-2;                                // here is the ')' of the SV fontname
+    i = Dsc.getLength()-2;                                
     sal_Int32 j=0;
     while ( i > 0 && ( Dsc[i] != '(' ) )
     {
         i--;
         j++;
     }
-    SVFName = OStringToOUString(Dsc.copy(i+1,j), RTL_TEXTENCODING_IBM_437); // retrieve SV fontname
+    SVFName = OStringToOUString(Dsc.copy(i+1,j), RTL_TEXTENCODING_IBM_437); 
     Dsc = OStringBuffer(Dsc).remove(i,j).makeStringAndClear();
 
     IFID = (sal_uInt32)rID.toInt32();
@@ -1154,7 +1154,7 @@ void SgfFontOne::ReadOne( const OString& rID, OString& Dsc )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////////
+
 
 SgfFontLst::SgfFontLst()
 {
@@ -1211,9 +1211,9 @@ void SgfFontLst::ReadList()
             Dsc = aCfg.ReadKey( i );
             if (comphelper::string::isdigitAsciiString(FID))
             {
-                P=new SgfFontOne;                                   // new entry
-                if (Last!=NULL) Last->Next=P; else pList=P; Last=P; // link it
-                P->ReadOne(FID,Dsc);                                // interpret line
+                P=new SgfFontOne;                                   
+                if (Last!=NULL) Last->Next=P; else pList=P; Last=P; 
+                P->ReadOne(FID,Dsc);                                
             }
         }
     }

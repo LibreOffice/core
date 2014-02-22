@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <avmedia/mediaitem.hxx>
@@ -43,9 +43,6 @@ using namespace ::com::sun::star;
 namespace avmedia
 {
 
-// -------------
-// - MediaItem -
-// -------------
 
 TYPEINIT1_AUTOFACTORY( MediaItem, ::SfxPoolItem );
 
@@ -90,15 +87,11 @@ struct MediaItem::Impl
     }
 };
 
-// ------------------------------------------------------------------------------
-
 MediaItem::MediaItem( sal_uInt16 const i_nWhich, sal_uInt32 const nMaskSet )
     : SfxPoolItem( i_nWhich )
     , m_pImpl( new Impl(nMaskSet) )
 {
 }
-
-// ------------------------------------------------------------------------------
 
 MediaItem::MediaItem( const MediaItem& rItem )
     : SfxPoolItem( rItem )
@@ -106,13 +99,9 @@ MediaItem::MediaItem( const MediaItem& rItem )
 {
 }
 
-// ------------------------------------------------------------------------------
-
 MediaItem::~MediaItem()
 {
 }
-
-// ------------------------------------------------------------------------------
 
 bool MediaItem::operator==( const SfxPoolItem& rItem ) const
 {
@@ -130,14 +119,10 @@ bool MediaItem::operator==( const SfxPoolItem& rItem ) const
         && m_pImpl->m_eZoom == rOther.m_pImpl->m_eZoom;
 }
 
-// ------------------------------------------------------------------------------
-
 SfxPoolItem* MediaItem::Clone( SfxItemPool* ) const
 {
     return new MediaItem( *this );
 }
-
-//------------------------------------------------------------------------
 
 SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
                                                   SfxMapUnit,
@@ -148,8 +133,6 @@ SfxItemPresentation MediaItem::GetPresentation( SfxItemPresentation,
     rText = OUString();
     return SFX_ITEM_PRESENTATION_NONE;
 }
-
-//------------------------------------------------------------------------
 
 bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 {
@@ -169,8 +152,6 @@ bool MediaItem::QueryValue( com::sun::star::uno::Any& rVal, sal_uInt8 ) const
 
     return true;
 }
-
-//------------------------------------------------------------------------
 
 bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 {
@@ -197,8 +178,6 @@ bool MediaItem::PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 )
 
     return bRet;
 }
-
-//------------------------------------------------------------------------
 
 void MediaItem::merge( const MediaItem& rMediaItem )
 {
@@ -229,14 +208,10 @@ void MediaItem::merge( const MediaItem& rMediaItem )
         setZoom( rMediaItem.getZoom() );
 }
 
-//------------------------------------------------------------------------
-
 sal_uInt32 MediaItem::getMaskSet() const
 {
     return m_pImpl->m_nMaskSet;
 }
-
-//------------------------------------------------------------------------
 
 void MediaItem::setURL( const OUString& rURL, const OUString& rTempURL, const OUString& rReferer )
 {
@@ -245,8 +220,6 @@ void MediaItem::setURL( const OUString& rURL, const OUString& rTempURL, const OU
     m_pImpl->m_TempFileURL = rTempURL;
     m_pImpl->m_Referer = rReferer;
 }
-
-//------------------------------------------------------------------------
 
 const OUString& MediaItem::getURL() const
 {
@@ -263,22 +236,16 @@ const OUString& MediaItem::getReferer() const
     return m_pImpl->m_Referer;
 }
 
-//------------------------------------------------------------------------
-
 void MediaItem::setState( MediaState eState )
 {
     m_pImpl->m_eState = eState;
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_STATE;
 }
 
-//------------------------------------------------------------------------
-
 MediaState MediaItem::getState() const
 {
     return m_pImpl->m_eState;
 }
-
-//------------------------------------------------------------------------
 
 void MediaItem::setDuration( double fDuration )
 {
@@ -286,14 +253,10 @@ void MediaItem::setDuration( double fDuration )
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_DURATION;
 }
 
-//------------------------------------------------------------------------
-
 double MediaItem::getDuration() const
 {
     return m_pImpl->m_fDuration;
 }
-
-//------------------------------------------------------------------------
 
 void MediaItem::setTime( double fTime )
 {
@@ -301,14 +264,10 @@ void MediaItem::setTime( double fTime )
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_TIME;
 }
 
-//------------------------------------------------------------------------
-
 double MediaItem::getTime() const
 {
     return m_pImpl->m_fTime;
 }
-
-//------------------------------------------------------------------------
 
 void MediaItem::setLoop( bool bLoop )
 {
@@ -316,14 +275,10 @@ void MediaItem::setLoop( bool bLoop )
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_LOOP;
 }
 
-//------------------------------------------------------------------------
-
 bool MediaItem::isLoop() const
 {
     return m_pImpl->m_bLoop;
 }
-
-//------------------------------------------------------------------------
 
 void MediaItem::setMute( bool bMute )
 {
@@ -331,14 +286,10 @@ void MediaItem::setMute( bool bMute )
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_MUTE;
 }
 
-//------------------------------------------------------------------------
-
 bool MediaItem::isMute() const
 {
     return m_pImpl->m_bMute;
 }
-
-//------------------------------------------------------------------------
 
 void MediaItem::setVolumeDB( sal_Int16 nDB )
 {
@@ -346,14 +297,10 @@ void MediaItem::setVolumeDB( sal_Int16 nDB )
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_VOLUMEDB;
 }
 
-//------------------------------------------------------------------------
-
 sal_Int16 MediaItem::getVolumeDB() const
 {
     return m_pImpl->m_nVolumeDB;
 }
-
-//------------------------------------------------------------------------
 
 void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
 {
@@ -361,14 +308,10 @@ void MediaItem::setZoom( ::com::sun::star::media::ZoomLevel eZoom )
     m_pImpl->m_nMaskSet |= AVMEDIA_SETMASK_ZOOM;
 }
 
-//------------------------------------------------------------------------
-
 ::com::sun::star::media::ZoomLevel MediaItem::getZoom() const
 {
     return m_pImpl->m_eZoom;
 }
-
-//------------------------------------------------------------------------
 
 static OUString lcl_GetFilename(OUString const& rSourceURL)
 {
@@ -410,7 +353,7 @@ lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
             basename = rFilename.copy(0, nIndex);
             suffix = rFilename.copy(nIndex);
         }
-        sal_Int32 count(0); // sigh... try to generate non-existent name
+        sal_Int32 count(0); 
         do
         {
             ++count;
@@ -425,12 +368,12 @@ lcl_CreateStream(uno::Reference<embed::XStorage> const& xStorage,
         uno::UNO_SET_THROW);
     uno::Reference< beans::XPropertySet > const xStreamProps(xStream,
         uno::UNO_QUERY);
-    if (xStreamProps.is()) { // this is NOT supported in FileSystemStorage
+    if (xStreamProps.is()) { 
         xStreamProps->setPropertyValue("MediaType", uno::makeAny(OUString(
-            //FIXME how to detect real media type?
-            //but currently xmloff has this one hardcoded anyway...
+            
+            
             "application/vnd.sun.star.media")));
-        xStreamProps->setPropertyValue( // turn off compression
+        xStreamProps->setPropertyValue( 
             "Compressed", uno::makeAny(sal_False));
     }
     return xStream;
@@ -461,7 +404,7 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
         uno::Reference<io::XOutputStream> const xOutStream(
             xStream->getOutputStream(), uno::UNO_SET_THROW);
 
-        if (!sourceContent.openStream(xOutStream)) // copy file to storage
+        if (!sourceContent.openStream(xOutStream)) 
         {
             SAL_INFO("avmedia", "openStream to storage failed");
             return false;
@@ -488,7 +431,6 @@ bool EmbedMedia(uno::Reference<frame::XModel> const& xModel,
     }
     return false;
 }
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

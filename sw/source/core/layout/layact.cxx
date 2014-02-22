@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -75,18 +75,18 @@
 #include "sectfrm.hxx"
 #include "lineinfo.hxx"
 #include <acmplwrd.hxx>
-// #i28701#
+
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
 #include <PostItMgr.hxx>
 #include <vector>
 
-// SwLayAction static stuff
+
 
 #define IS_FLYS (pPage->GetSortedObjs())
 #define IS_INVAFLY (pPage->IsInvalidFly())
 
-// Save some typing work to avoid accessing destroyed pages.
+
 #if OSL_DEBUG_LEVEL > 1
 
 static void BreakPoint()
@@ -137,7 +137,7 @@ void SwLayAction::CheckWaitCrsr()
     }
 }
 
-// Time over already?
+
 inline void SwLayAction::CheckIdleEnd()
 {
     if ( !IsInput() )
@@ -169,7 +169,7 @@ sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *p
         if ( !pO->ISA(SwVirtFlyDrawObj) )
             continue;
 
-        // OD 2004-01-15 #110582# - do not consider invisible objects
+        
         const IDocumentDrawModelAccess* pIDDMA = pPage->GetFmt()->getIDocumentDrawModelAccess();
         if ( !pIDDMA->IsVisibleLayerId( pO->GetLayer() ) )
         {
@@ -193,23 +193,23 @@ sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *p
             if ( pO->GetLayer() == pTmp->GetLayer() )
             {
                 if ( pO->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
-                    // Only look at things above us, if inside the same layer
+                    
                     continue;
             }
             else
             {
                 const sal_Bool bLowerOfSelf = pFly->IsLowerOf( pSelfFly );
                 if ( !bLowerOfSelf && !pFly->GetFmt()->GetOpaque().GetValue() )
-                    // Things from other layers are only interesting to us if
-                    // they're not transparent or lie inwards
+                    
+                    
                     continue;
             }
         }
 
-        // OD 19.08.2002 #99657#
-        //     Fly frame without a lower have to be subtracted from paint region.
-        //     For checking, if fly frame contains transparent graphic or
-        //     has surrounded contour, assure that fly frame has a lower
+        
+        
+        
+        
         if ( pFly->Lower() &&
              pFly->Lower()->IsNoTxtFrm() &&
              ( ((SwNoTxtFrm*)pFly->Lower())->IsTransparent() ||
@@ -219,9 +219,9 @@ sal_Bool SwLayAction::PaintWithoutFlys( const SwRect &rRect, const SwCntntFrm *p
             continue;
         }
 
-        // OD 19.08.2002 #99657#
-        //     Region of a fly frame with transparent background or a transparent
-        //     shadow have not to be subtracted from paint region
+        
+        
+        
         if ( pFly->IsBackgroundTransparent() ||
              pFly->IsShadowTransparent() )
         {
@@ -270,22 +270,22 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
     }
     else
     {
-        // paint the area between printing bottom and frame bottom and
-        // the area left and right beside the frame, if its height changed.
+        
+        
         long nOldHeight = (rOldRect.*fnRect->fnGetHeight)();
         long nNewHeight = (pCnt->Frm().*fnRect->fnGetHeight)();
         const bool bHeightDiff = nOldHeight != nNewHeight;
         if( bHeightDiff )
         {
-            // OD 05.11.2002 #94454# - consider whole potential paint area.
-            //SwRect aDrawRect( pCnt->UnionFrm( sal_True ) );
+            
+            
             SwRect aDrawRect( pCnt->PaintArea() );
             if( nOldHeight > nNewHeight )
                 nOldBottom = (pCnt->*fnRect->fnGetPrtBottom)();
             (aDrawRect.*fnRect->fnSetTop)( nOldBottom );
             _PaintCntnt( pCnt, pPage, aDrawRect );
         }
-        // paint content area
+        
         SwRect aPaintRect = static_cast<SwTxtFrm*>(const_cast<SwCntntFrm*>(pCnt))->Paint();
         _PaintCntnt( pCnt, pPage, aPaintRect );
     }
@@ -322,16 +322,16 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
     bPaint = bComplete = bWaitAllowed = bCheckPages = sal_True;
     bInput = bAgain = bNextCycle = bCalcLayout = bIdle = bReschedule =
     bUpdateExpFlds = bBrowseActionStop = bActionInProgress = sal_False;
-    // OD 14.04.2003 #106346# - init new flag <mbFormatCntntOnInterrupt>.
+    
     mbFormatCntntOnInterrupt = sal_False;
 
-    pImp->pLayAct = this;   // register there
+    pImp->pLayAct = this;   
 }
 
 SwLayAction::~SwLayAction()
 {
     OSL_ENSURE( !pWait, "Wait object not destroyed" );
-    pImp->pLayAct = 0;      // unregister
+    pImp->pLayAct = 0;      
 }
 
 void SwLayAction::Reset()
@@ -347,8 +347,8 @@ void SwLayAction::Reset()
 
 sal_Bool SwLayAction::RemoveEmptyBrowserPages()
 {
-    // switching from the normal to the browser mode, empty pages may be
-    // retained for an annoyingly long time, so delete them here
+    
+    
     sal_Bool bRet = sal_False;
     const SwViewShell *pSh = pRoot->GetCurrShell();
     if( pSh && pSh->GetViewOptions()->getBrowseMode() )
@@ -376,7 +376,7 @@ void SwLayAction::Action()
 {
     bActionInProgress = sal_True;
 
-    //TurboMode? Hands-off during idle-format
+    
     if ( IsPaint() && !IsIdle() && TurboAction() )
     {
         delete pWait, pWait = 0;
@@ -409,7 +409,7 @@ void SwLayAction::Action()
 
     delete pWait, pWait = 0;
 
-    //Turbo-Action permitted again for all cases.
+    
     pRoot->ResetTurboFlag();
     pRoot->ResetTurbo();
 
@@ -443,7 +443,7 @@ SwPageFrm* SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
             {
                 if ( bPageChgd )
                 {
-                    // Use the 'topmost' page
+                    
                     SwPageFrm *pTmp = pCnt->FindPageFrm();
                     if ( pPage->GetPhyPageNum() > pTmp->GetPhyPageNum() )
                         pPage = pTmp;
@@ -456,8 +456,8 @@ SwPageFrm* SwLayAction::CheckFirstVisPage( SwPageFrm *pPage )
     return pPage;
 }
 
-// #114798# - unlock position on start and end of page
-// layout process.
+
+
 static void unlockPositionOfObjects( SwPageFrm *pPageFrm )
 {
     assert( pPageFrm );
@@ -480,18 +480,18 @@ void SwLayAction::InternalAction()
 
     pRoot->Calc();
 
-    // Figure out the first invalid page or the first one to be formatted,
-    // respectively. A complete-action means the first invalid page.
-    // However, the first page to be formatted might be the one having the
-    // number 1.  If we're doing a fake formatting, the number of the first
-    // page is the number of the first visible page.
+    
+    
+    
+    
+    
     SwPageFrm *pPage = IsComplete() ? (SwPageFrm*)pRoot->Lower() :
                 pImp->GetFirstVisPage();
     if ( !pPage )
         pPage = (SwPageFrm*)pRoot->Lower();
 
-    // If there's a first-flow-Cntnt in the first visible page that's also a Follow,
-    // we switch the page back to the original master of that Cntnt.
+    
+    
     if ( !IsComplete() )
         pPage = CheckFirstVisPage( pPage );
     sal_uInt16 nFirstPageNum = pPage->GetPhyPageNum();
@@ -533,7 +533,7 @@ void SwLayAction::InternalAction()
             ::SetProgressState( nPercentPageNum, pImp->GetShell()->GetDoc()->GetDocShell());
         }
         pOptTab = 0;
-             // No Shortcut for Idle or CalcLayout
+             
         if ( !IsIdle() && !IsComplete() && IsShortCut( pPage ) )
         {
             pRoot->DeleteEmptySct();
@@ -575,15 +575,15 @@ void SwLayAction::InternalAction()
             {
                 unlockPositionOfObjects( pPage );
 
-                // #i28701#
+                
                 SwObjectFormatter::FormatObjsAtFrm( *pPage, *pPage, this );
                 if ( !IS_FLYS )
                 {
-                    // If there are no (more) Flys, the flags are superfluous.
+                    
                     pPage->ValidateFlyLayout();
                     pPage->ValidateFlyCntnt();
                 }
-                // #i28701# - change condition
+                
                 while ( !IsInterrupt() && !IsNextCycle() &&
                         ( pPage->IsInvalid() ||
                           (IS_FLYS && IS_INVAFLY) ) )
@@ -591,7 +591,7 @@ void SwLayAction::InternalAction()
                     PROTOCOL( pPage, PROT_FILE_INIT, 0, 0)
                     XCHECKPAGE;
 
-                    // #i81146# new loop control
+                    
                     sal_uInt16 nLoopControlRuns_1 = 0;
                     const sal_uInt16 nLoopControlMax = 20;
 
@@ -608,14 +608,14 @@ void SwLayAction::InternalAction()
                         FormatLayout( pPage );
                         XCHECKPAGE;
                     }
-                    // #i28701# - change condition
+                    
                     if ( !IsNextCycle() &&
                          ( pPage->IsInvalidCntnt() ||
                            (IS_FLYS && IS_INVAFLY) ) )
                     {
                         pPage->ValidateFlyInCnt();
                         pPage->ValidateCntnt();
-                        // #i28701#
+                        
                         pPage->ValidateFlyLayout();
                         pPage->ValidateFlyCntnt();
                         if ( !FormatCntnt( pPage ) )
@@ -623,7 +623,7 @@ void SwLayAction::InternalAction()
                             XCHECKPAGE;
                             pPage->InvalidateCntnt();
                             pPage->InvalidateFlyInCnt();
-                            // #i28701#
+                            
                             pPage->InvalidateFlyLayout();
                             pPage->InvalidateFlyCntnt();
                             if ( IsBrowseActionStop() )
@@ -637,11 +637,11 @@ void SwLayAction::InternalAction()
                 unlockPositionOfObjects( pPage );
             }
 
-            // A previous page may be invalid again.
+            
             XCHECKPAGE;
             if ( !IS_FLYS )
             {
-                // If there are no (more) Flys, the flags are superfluous.
+                
                 pPage->ValidateFlyLayout();
                 pPage->ValidateFlyCntnt();
             }
@@ -677,7 +677,7 @@ void SwLayAction::InternalAction()
                     pPage = (SwPageFrm*)pPage->GetPrev();
                 }
 
-                // Continue to the next invalid page
+                
                 while ( pPage && !pPage->IsInvalid() &&
                         (!IS_FLYS || !IS_INVAFLY) )
                 {
@@ -715,22 +715,22 @@ void SwLayAction::InternalAction()
     }
     if ( IsInterrupt() && pPage )
     {
-        // If we have input, we don't want to format content anymore, but
-        // we still should clean the layout.
-        // Otherwise, the following situation might arise:
-        // The user enters some text at the end of the paragraph of the last
-        // page, causing the paragraph to create a Follow for the next page.
-        // Meanwhile the user continues typing, so we have input while
-        // still formatting.
-        // The paragraph on the new page has already been partially formatted,
-        // and the new page has been fully formatted and is set to CompletePaint,
-        // but hasn't added itself to the area to be output. Then we paint,
-        // the CompletePaint of the page is reset because the new paragraph
-        // already added itself, but the borders of the page haven't been painted
-        // yet.
-        // Oh well, with the inevitable following LayAction, the page doesn't
-        // register itself, because it's (LayoutFrm) flags have been reset
-        // already - the border of the page will never be painted.
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         SwPageFrm *pPg = pPage;
         XCHECKPAGE;
         const SwRect &rVis = pImp->GetShell()->VisArea();
@@ -740,12 +740,12 @@ void SwLayAction::InternalAction()
         if( pPg != pPage )
             pPg = pPg ? (SwPageFrm*)pPg->GetPrev() : pPage;
 
-        // set flag for interrupt content formatting
+        
         mbFormatCntntOnInterrupt = IsInput() && !IsStopPrt();
         long nBottom = rVis.Bottom();
-        // #i42586# - format current page, if idle action is active
-        // This is an optimization for the case that the interrupt is created by
-        // the move of a form control object, which is represented by a window.
+        
+        
+        
         while ( pPg && ( pPg->Frm().Top() < nBottom ||
                          ( IsIdle() && pPg == pPage ) ) )
         {
@@ -753,21 +753,21 @@ void SwLayAction::InternalAction()
 
             XCHECKPAGE;
 
-            // #i81146# new loop control
+            
             sal_uInt16 nLoopControlRuns_2 = 0;
             const sal_uInt16 nLoopControlMax = 20;
 
-            // special case: interrupt content formatting
-            // #i28701# - conditions are incorrect (macros IS_FLYS and IS_INVAFLY only
-            //            works for <pPage>) and are too strict.
-            // #i50432# - adjust interrupt formatting to normal page formatting - see above.
+            
+            
+            
+            
             while ( ( mbFormatCntntOnInterrupt &&
                       ( pPg->IsInvalid() ||
                         ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) ) ||
                     ( !mbFormatCntntOnInterrupt && pPg->IsInvalidLayout() ) )
             {
                 XCHECKPAGE;
-                // #i50432# - format also at-page anchored objects
+                
                 SwObjectFormatter::FormatObjsAtFrm( *pPg, *pPg, this );
                 if ( !pPg->GetSortedObjs() )
                 {
@@ -775,7 +775,7 @@ void SwLayAction::InternalAction()
                     pPg->ValidateFlyCntnt();
                 }
 
-                // #i81146# new loop control
+                
                 sal_uInt16 nLoopControlRuns_3 = 0;
 
                 while ( pPg->IsInvalidLayout() )
@@ -792,14 +792,14 @@ void SwLayAction::InternalAction()
                     XCHECKPAGE;
                 }
 
-                // #i50432#
+                
                 if ( mbFormatCntntOnInterrupt &&
                      ( pPg->IsInvalidCntnt() ||
                        ( pPg->GetSortedObjs() && pPg->IsInvalidFly() ) ) )
                 {
                     pPg->ValidateFlyInCnt();
                     pPg->ValidateCntnt();
-                    // #i26945#
+                    
                     pPg->ValidateFlyLayout();
                     pPg->ValidateFlyCntnt();
 
@@ -814,11 +814,11 @@ void SwLayAction::InternalAction()
                         XCHECKPAGE;
                         pPg->InvalidateCntnt();
                         pPg->InvalidateFlyInCnt();
-                        // #i26945#
+                        
                         pPg->InvalidateFlyLayout();
                         pPg->InvalidateFlyCntnt();
                     }
-                    // #i46807# - we are statisfied, if the content is formatted once complete.
+                    
                     else
                     {
                         break;
@@ -829,7 +829,7 @@ void SwLayAction::InternalAction()
             unlockPositionOfObjects( pPg );
             pPg = (SwPageFrm*)pPg->GetNext();
         }
-        // reset flag for special interrupt content formatting.
+        
         mbFormatCntntOnInterrupt = sal_False;
     }
     pOptTab = 0;
@@ -860,10 +860,10 @@ sal_Bool SwLayAction::_TurboAction( const SwCntntFrm *pCnt )
             {
                 if ( IsPaintExtraData() )
                     pImp->GetShell()->AddPaintRect( pCnt->Frm() );
-                // This is to calculate the remaining LineNums on the page,
-                // and we don't stop processing here. To perform this inside RecalcAllLines
-                // would be expensive, because we would have to notify the page even
-                // in unnecessary cases (normal actions).
+                
+                
+                
+                
                 const SwCntntFrm *pNxt = pCnt->GetNextCntntFrm();
                 while ( pNxt &&
                         (pNxt->IsInTab() || pNxt->IsInDocBody() != pCnt->IsInDocBody()) )
@@ -880,7 +880,7 @@ sal_Bool SwLayAction::_TurboAction( const SwCntntFrm *pCnt )
     if ( !pPage )
         pPage = pCnt->FindPageFrm();
 
-    // OD 2004-05-10 #i28701# - format floating screen objects at content frame.
+    
     if ( pCnt->IsTxtFrm() &&
          !SwObjectFormatter::FormatObjsAtFrm( *(const_cast<SwCntntFrm*>(pCnt)),
                                               *pPage, this ) )
@@ -991,7 +991,7 @@ static const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBotto
     return 0;
 }
 
-// #i37877# - consider drawing objects
+
 static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
                                               long _nBottom )
 {
@@ -1039,17 +1039,17 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
     const SwViewShell *pSh = pRoot->GetCurrShell();
     const bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
-    // If the page is not valid, we quickly format it, otherwise
-    // there's gonna be no end of trouble
+    
+    
     if ( !prPage->IsValid() )
     {
         if ( bBrowse )
         {
-            // OD 15.10.2002 #103517# - format complete page
-            // Thus, loop on all lowers of the page <prPage>, instead of only
-            // format its first lower.
-            // NOTE: In online layout (bBrowse == true) a page can contain
-            //     a header frame and/or a footer frame beside the body frame.
+            
+            
+            
+            
+            
             prPage->Calc();
             SwFrm* pPageLowerFrm = prPage->Lower();
             while ( pPageLowerFrm )
@@ -1070,16 +1070,16 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
     {
         bRet = sal_True;
 
-        // This is going to be a bit nasty: The first CntntFrm of this
-        // page in the Body text needs formatting; if it changes the page during
-        // that process, I need to start over a page further back, because we
-        // have been processing a PageBreak.
-        // Even more uncomfortable: The next CntntFrm must be formatted,
-        // because it's possible for empty pages to exist temporarily (for example
-        // a paragraph across multiple pages gets deleted or reduced in size).
+        
+        
+        
+        
+        
+        
+        
 
-        // This is irrelevant for the browser, if the last Cnt above it
-        // isn't visible anymore.
+        
+        
 
         const SwPageFrm *p2ndPage = prPage;
         const SwCntntFrm *pCntnt;
@@ -1103,7 +1103,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
             bool bTstCnt = true;
             if ( bBrowse )
             {
-                // Is the Cnt before already invisible?
+                
                 const SwFrm *pLst = pCntnt;
                 if ( pLst->IsInTab() )
                     pLst = pCntnt->FindTabFrm();
@@ -1120,9 +1120,9 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
 
             if ( bTstCnt )
             {
-                // #i27756# - check after each frame calculation,
-                // if the content frame has changed the page. If yes, no other
-                // frame calculation is performed
+                
+                
+                
                 bool bPageChg = false;
 
                 if ( pCntnt->IsInSct() )
@@ -1134,7 +1134,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         pSct->SetCompletePaint();
                         if ( IsAgain() )
                             return sal_False;
-                        // #i27756#
+                        
                         bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
                                    prPage->GetPrev();
                     }
@@ -1146,7 +1146,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                     pCntnt->SetCompletePaint();
                     if ( IsAgain() )
                         return sal_False;
-                    // #i27756#
+                    
                     bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
                                prPage->GetPrev();
                 }
@@ -1160,7 +1160,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         pTab->SetCompletePaint();
                         if ( IsAgain() )
                             return sal_False;
-                        // #i27756#
+                        
                         bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
                                    prPage->GetPrev();
                     }
@@ -1175,13 +1175,13 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         pSct->SetCompletePaint();
                         if ( IsAgain() )
                             return sal_False;
-                        // #i27756#
+                        
                         bPageChg = pCntnt->FindPageFrm() != p2ndPage &&
                                    prPage->GetPrev();
                     }
                 }
 
-                // #i27756#
+                
                 if ( bPageChg )
                 {
                     bRet = sal_False;
@@ -1196,8 +1196,8 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
                         prPage = (SwPageFrm*)prPage->GetPrev();
                     }
                 }
-                // #121980# - no shortcut, if at previous page
-                // an anchored object is registered, whose anchor is <pCntnt>.
+                
+                
                 else if ( prPage->GetPrev() &&
                           static_cast<SwPageFrm*>(prPage->GetPrev())->GetSortedObjs() )
                 {
@@ -1250,7 +1250,7 @@ sal_Bool SwLayAction::IsShortCut( SwPageFrm *&prPage )
     return bRet;
 }
 
-// OD 15.11.2002 #105155# - introduce support for vertical layout
+
 sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
 {
     OSL_ENSURE( !IsAgain(), "Attention to the invalid page." );
@@ -1259,7 +1259,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
 
     sal_Bool bChanged = sal_False;
     bool bAlreadyPainted = false;
-    // OD 11.11.2002 #104414# - remember frame at complete paint
+    
     SwRect aFrmAtCompletePaint;
 
     if ( !pLay->IsValid() || pLay->IsCompletePaint() )
@@ -1284,7 +1284,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
              pLay->Lower() )
         {
             const SwViewShell *pSh = pLay->getRootFrm()->GetCurrShell();
-            // Limitations because of headers / footers
+            
             if( pSh && pSh->GetViewOptions()->getBrowseMode() &&
                 !( pLay->IsCompletePaint() && pLay->FindPageFrm()->FindFtnCont() ) )
                 bNoPaint = true;
@@ -1293,8 +1293,8 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
         if ( !bNoPaint && IsPaint() && bAddRect && (pLay->IsCompletePaint() || bChanged) )
         {
             SwRect aPaint( pLay->Frm() );
-            // OD 13.02.2003 #i9719#, #105645# - consider border and shadow for
-            // page frames -> enlarge paint rectangle correspondingly.
+            
+            
             if ( pLay->IsPageFrm() )
             {
                 SwPageFrm* pPageFrm = static_cast<SwPageFrm*>(pLay);
@@ -1310,8 +1310,8 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
             }
             if( bPageInBrowseMode )
             {
-                // NOTE: no vertical layout in online layout
-                // Is the change even visible?
+                
+                
                 if ( pLay->IsCompletePaint() )
                 {
                     pImp->GetShell()->AddPaintRect( aPaint );
@@ -1337,12 +1337,12 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
             {
                 pImp->GetShell()->AddPaintRect( aPaint );
                 bAlreadyPainted = true;
-                // OD 11.11.2002 #104414# - remember frame at complete paint
+                
                 aFrmAtCompletePaint = pLay->Frm();
             }
 
-            // OD 13.02.2003 #i9719#, #105645# - provide paint of spacing
-            // between pages (not only for in online mode).
+            
+            
             if ( pLay->IsPageFrm() )
             {
                 const SwTwips nHalfDocBorder = GAPBETWEENPAGES;
@@ -1362,7 +1362,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
 
                 if ( bPrev )
                 {
-                    // top
+                    
                     SwRect aSpaceToPrevPage( aPageRect );
                     aSpaceToPrevPage.Top( aSpaceToPrevPage.Top() - nHalfDocBorder );
                     aSpaceToPrevPage.Bottom( pLay->Frm().Top() );
@@ -1371,7 +1371,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
 
                     pSh->GetOut()->DrawRect( aSpaceToPrevPage.SVRect() );
 
-                    // left
+                    
                     aSpaceToPrevPage = aPageRect;
                     aSpaceToPrevPage.Left( aSpaceToPrevPage.Left() - nHalfDocBorder );
                     aSpaceToPrevPage.Right( pLay->Frm().Left() );
@@ -1380,14 +1380,14 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
                 }
                 if ( bNext )
                 {
-                    // bottom
+                    
                     SwRect aSpaceToNextPage( aPageRect );
                     aSpaceToNextPage.Bottom( aSpaceToNextPage.Bottom() + nHalfDocBorder );
                     aSpaceToNextPage.Top( pLay->Frm().Bottom() );
                     if(aSpaceToNextPage.Height() > 0 && aSpaceToNextPage.Width() > 0)
                         pImp->GetShell()->AddPaintRect( aSpaceToNextPage );
 
-                    // right
+                    
                     aSpaceToNextPage = aPageRect;
                     aSpaceToNextPage.Right( aSpaceToNextPage.Right() + nHalfDocBorder );
                     aSpaceToNextPage.Left( pLay->Frm().Right() );
@@ -1402,7 +1402,7 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
     if ( IsPaint() && bAddRect &&
          !pLay->GetNext() && pLay->IsRetoucheFrm() && pLay->IsRetouche() )
     {
-        // OD 15.11.2002 #105155# - vertical layout support
+        
         SWRECTFN( pLay );
         SwRect aRect( pLay->GetUpper()->PaintArea() );
         (aRect.*fnRect->fnSetTop)( (pLay->*fnRect->fnGetPrtBottom)() );
@@ -1418,9 +1418,9 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
     if ( IsAgain() )
         return sal_False;
 
-    // Now, deal with the lowers that are LayoutFrms
+    
 
-    if ( pLay->IsFtnFrm() ) // no LayFrms as Lower
+    if ( pLay->IsFtnFrm() ) 
         return bChanged;
 
     SwFrm *pLow = pLay->Lower();
@@ -1431,22 +1431,22 @@ sal_Bool SwLayAction::FormatLayout( SwLayoutFrm *pLay, sal_Bool bAddRect )
         {
             if ( pLow->IsTabFrm() )
                 bTabChanged |= FormatLayoutTab( (SwTabFrm*)pLow, bAddRect );
-            // Skip the ones already registered for deletion
+            
             else if( !pLow->IsSctFrm() || ((SwSectionFrm*)pLow)->GetSection() )
                 bChanged |= FormatLayout( (SwLayoutFrm*)pLow, bAddRect );
         }
         else if ( pImp->GetShell()->IsPaintLocked() )
-            // Shortcut to minimize the cycles. With Lock, the
-            // paint is coming either way (primarily for browse)
+            
+            
             pLow->OptCalc();
 
         if ( IsAgain() )
             return sal_False;
         pLow = pLow->GetNext();
     }
-    // OD 11.11.2002 #104414# - add complete frame area as paint area, if frame
-    // area has been already added and after formatting its lowers the frame area
-    // is enlarged.
+    
+    
+    
     SwRect aBoundRect(pLay->IsPageFrm() ? static_cast<SwPageFrm*>(pLay)->GetBoundRect() : pLay->Frm() );
 
     if ( bAlreadyPainted &&
@@ -1470,7 +1470,7 @@ sal_Bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
 
     if ( !pFly->IsValid() || pFly->IsCompletePaint() || pFly->IsInvalid() )
     {
-        // The Frame has changed, now it's getting formatted.
+        
         const SwRect aOldRect( pFly->Frm() );
         pFly->Calc();
         bChanged = aOldRect != pFly->Frm();
@@ -1491,7 +1491,7 @@ sal_Bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
     if ( IsAgain() )
         return sal_False;
 
-    // Now, deal with the lowers that are LayoutFrms
+    
     sal_Bool bTabChanged = false;
     SwFrm *pLow = pFly->Lower();
     while ( pLow )
@@ -1508,8 +1508,8 @@ sal_Bool SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
     return bChanged || bTabChanged;
 }
 
-// OD 31.10.2002 #104100#
-// Implement vertical layout support
+
+
 sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
 {
     OSL_ENSURE( !IsAgain(), "8-) Attention to the invalid page." );
@@ -1524,9 +1524,9 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
 
     const SwPageFrm *pOldPage = pTab->FindPageFrm();
 
-    // OD 31.10.2002 #104100# - vertical layout support
-    // use macro to declare and init <sal_Bool bVert>, <sal_Bool bRev> and
-    // <SwRectFn fnRect> for table frame <pTab>.
+    
+    
+    
     SWRECTFN( pTab );
 
     if ( !pTab->IsValid() || pTab->IsCompletePaint() || pTab->IsComplete() )
@@ -1547,16 +1547,16 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
 
         if ( IsPaint() && bAddRect )
         {
-            // OD 01.11.2002 #104100# - add condition <pTab->Frm().HasArea()>
+            
             if ( !pTab->IsCompletePaint() &&
                  pTab->IsComplete() &&
                  ( pTab->Frm().SSize() != pTab->Prt().SSize() ||
-                   // OD 31.10.2002 #104100# - vertical layout support
+                   
                    (pTab->*fnRect->fnGetLeftMargin)() ) &&
                  pTab->Frm().HasArea()
                )
             {
-                // OD 01.11.2002 #104100# - re-implement calculation of margin rectangles.
+                
                 SwRect aMarginRect;
 
                 SwTwips nLeftMargin = (pTab->*fnRect->fnGetLeftMargin)();
@@ -1599,7 +1599,7 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
             if ( pTab->IsRetouche() && !pTab->GetNext() )
             {
                 SwRect aRect( pTab->GetUpper()->PaintArea() );
-                // OD 04.11.2002 #104100# - vertical layout support
+                
                 (aRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
                 if ( !pImp->GetShell()->AddPaintRect( aRect ) )
                     pTab->ResetRetouche();
@@ -1614,11 +1614,11 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
     }
     if ( IsPaint() && bAddRect && pTab->IsRetouche() && !pTab->GetNext() )
     {
-        // OD 04.10.2002 #102779#
-        // set correct rectangle for retouche: area between bottom of table frame
-        // and bottom of paint area of the upper frame.
+        
+        
+        
         SwRect aRect( pTab->GetUpper()->PaintArea() );
-        // OD 04.11.2002 #104100# - vertical layout support
+        
         (aRect.*fnRect->fnSetTop)( (pTab->*fnRect->fnGetPrtBottom)() );
         if ( !pImp->GetShell()->AddPaintRect( aRect ) )
             pTab->ResetRetouche();
@@ -1628,21 +1628,21 @@ sal_Bool SwLayAction::FormatLayoutTab( SwTabFrm *pTab, sal_Bool bAddRect )
 
     pTimerAccess->UnblockIdling();
 
-    // Ugly shortcut!
+    
     if ( pTab->IsLowersFormatted() &&
          (bPainted || !pImp->GetShell()->VisArea().IsOver( pTab->Frm())) )
         return sal_False;
 
-    // Now, deal with the lowers
+    
     if ( IsAgain() )
         return sal_False;
 
-    // OD 20.10.2003 #112464# - for savety reasons:
-    // check page number before formatting lowers.
+    
+    
     if ( pOldPage->GetPhyPageNum() > (pTab->FindPageFrm()->GetPhyPageNum() + 1) )
         SetNextCycle( sal_True );
 
-    // OD 20.10.2003 #112464# - format lowers, only if table frame is valid
+    
     if ( pTab->IsValid() )
     {
         SwLayoutFrm *pLow = (SwLayoutFrm*)pTab->Lower();
@@ -1666,12 +1666,12 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
 
     while ( pCntnt && pPage->IsAnLower( pCntnt ) )
     {
-        // If the Cntnt didn't change, we can use a few shortcuts.
+        
         const bool bFull = !pCntnt->IsValid() || pCntnt->IsCompletePaint() ||
                            pCntnt->IsRetouche() || pCntnt->GetDrawObjs();
         if ( bFull )
         {
-            // We do this so we don't have to search later on.
+            
             const bool bNxtCnt = IsCalcLayout() && !pCntnt->GetFollow();
             const SwCntntFrm *pCntntNext = bNxtCnt ? pCntnt->GetNextCntntFrm() : 0;
             const SwCntntFrm *pCntntPrev = pCntnt->GetPrev() ? pCntnt->GetPrevCntntFrm() : 0;
@@ -1682,15 +1682,15 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             const sal_Bool bOldPaint = IsPaint();
             bPaint = bOldPaint && !(pTab && pTab == pOptTab);
             _FormatCntnt( pCntnt, pPage );
-            // #i26945# - reset <bPaint> before format objects
+            
             bPaint = bOldPaint;
 
-            // OD 2004-05-10 #i28701# - format floating screen object at content frame.
-            // No format, if action flag <bAgain> is set or action is interrupted.
-            // OD 2004-08-30 #117736# - allow format on interruption of action, if
-            // it's the format for this interrupt
-            // #i23129#, #i36347# - pass correct page frame
-            // to the object formatter.
+            
+            
+            
+            
+            
+            
             if ( !IsAgain() &&
                  ( !IsInterrupt() || mbFormatCntntOnInterrupt ) &&
                  pCntnt->IsTxtFrm() &&
@@ -1712,18 +1712,18 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
             if ( IsAgain() )
                 return sal_False;
 
-            // Temporarily interrupt processing if layout or Flys become invalid again.
-            // However not for the BrowseView: The layout is getting invalid
-            // all the time because the page height gets adjusted.
-            // The same applies if the user wants to continue working and at least one
-            // paragraph has been processed.
+            
+            
+            
+            
+            
             if ( (!pTab || (pTab && !bInValid)) )
             {
                 CheckIdleEnd();
-                // OD 14.04.2003 #106346# - consider interrupt formatting.
+                
                 if ( ( IsInterrupt() && !mbFormatCntntOnInterrupt ) ||
                      ( !bBrowse && pPage->IsInvalidLayout() ) ||
-                     // OD 07.05.2003 #109435# - consider interrupt formatting
+                     
                      ( IS_FLYS && IS_INVAFLY && !mbFormatCntntOnInterrupt )
                    )
                     return sal_False;
@@ -1734,22 +1734,22 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                 if (  nCurNum < pPage->GetPhyPageNum() )
                     nPreInvaPage = nCurNum;
 
-                // If the Frm flowed backwards more than one page, we need to
-                // start over again from the beginning, so nothing gets left out.
+                
+                
                 if ( !IsCalcLayout() && pPage->GetPhyPageNum() > nCurNum+1 )
                 {
                     SetNextCycle( sal_True );
-                    // OD 07.05.2003 #109435# - consider interrupt formatting
+                    
                     if ( !mbFormatCntntOnInterrupt )
                     {
                         return sal_False;
                     }
                 }
             }
-            // If the Frame moved forwards to the next page, we re-run through
-            // the predecessor.
-            // This way, we catch predecessors which are now responsible for
-            // retouching, but the footers will be touched also.
+            
+            
+            
+            
             bool bSetCntnt = true;
             if ( pCntntPrev )
             {
@@ -1777,7 +1777,7 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                               (!pPage->IsInvalidLayout() ||
                                !lcl_FindFirstInvaLay( pPage, nBottom )))
                             SetBrowseActionStop( sal_True );
-                        // OD 14.04.2003 #106346# - consider interrupt formatting.
+                        
                         if ( !mbFormatCntntOnInterrupt )
                         {
                             return sal_False;
@@ -1800,14 +1800,14 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                     pImp->GetShell()->AddPaintRect( pCntnt->Frm() );
             }
 
-            // Do this if the Frm has been formatted before.
+            
             if ( pCntnt->IsTxtFrm() && ((SwTxtFrm*)pCntnt)->HasRepaint() &&
                   IsPaint() )
                 PaintCntnt( pCntnt, pPage, pCntnt->Frm(), pCntnt->Frm().Bottom());
             if ( IsIdle() )
             {
                 CheckIdleEnd();
-                // OD 14.04.2003 #106346# - consider interrupt formatting.
+                
                 if ( IsInterrupt() && !mbFormatCntntOnInterrupt )
                     return sal_False;
             }
@@ -1824,7 +1824,7 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
                             (!pPage->IsInvalidLayout() ||
                             !lcl_FindFirstInvaLay( pPage, nBottom )))
                         SetBrowseActionStop( sal_True );
-                    // OD 14.04.2003 #106346# - consider interrupt formatting.
+                    
                     if ( !mbFormatCntntOnInterrupt )
                     {
                         return sal_False;
@@ -1835,14 +1835,14 @@ sal_Bool SwLayAction::FormatCntnt( const SwPageFrm *pPage )
         }
     }
     CheckWaitCrsr();
-    // OD 14.04.2003 #106346# - consider interrupt formatting.
+    
     return !IsInterrupt() || mbFormatCntntOnInterrupt;
 }
 
 void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
                                 const SwPageFrm  *pPage )
 {
-    // We probably only ended up here because the Cntnt holds DrawObjects.
+    
     const bool bDrawObjsOnly = pCntnt->IsValid() && !pCntnt->IsCompletePaint() &&
                          !pCntnt->IsRetouche();
     SWRECTFN( pCntnt )
@@ -1869,27 +1869,27 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
     }
 }
 
-/// Returns sal_True if all Cntnts of the Fly have been processed completely.
-/// Returns sal_False if processing has been interrupted prematurely.
+
+
 sal_Bool SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
 {
     const SwCntntFrm *pCntnt = pFly->ContainsCntnt();
 
     while ( pCntnt )
     {
-        // OD 2004-05-10 #i28701#
+        
         _FormatCntnt( pCntnt, pCntnt->FindPageFrm() );
 
-        // #i28701# - format floating screen objects
-        // at content text frame
-        // #i23129#, #i36347# - pass correct page frame
-        // to the object formatter.
+        
+        
+        
+        
         if ( pCntnt->IsTxtFrm() &&
              !SwObjectFormatter::FormatObjsAtFrm(
                                             *(const_cast<SwCntntFrm*>(pCntnt)),
                                             *(pCntnt->FindPageFrm()), this ) )
         {
-            // restart format with first content
+            
             pCntnt = pFly->ContainsCntnt();
             continue;
         }
@@ -1906,18 +1906,18 @@ sal_Bool SwLayAction::_FormatFlyCntnt( const SwFlyFrm *pFly )
         if ( IsAgain() )
             return sal_False;
 
-        // If there's input, we interrupt processing.
+        
         if ( !pFly->IsFlyInCntFrm() )
         {
             CheckIdleEnd();
-            // OD 14.04.2003 #106346# - consider interrupt formatting.
+            
             if ( IsInterrupt() && !mbFormatCntntOnInterrupt )
                 return sal_False;
         }
         pCntnt = pCntnt->GetNextCntntFrm();
     }
     CheckWaitCrsr();
-    // OD 14.04.2003 #106346# - consider interrupt formatting.
+    
     return !(IsInterrupt() && !mbFormatCntntOnInterrupt);
 }
 
@@ -1934,7 +1934,7 @@ sal_Bool SwLayAction::IsStopPrt() const
 sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
 {
     OSL_ENSURE( pCnt->IsTxtFrm(), "NoTxt neighbour of Txt" );
-    // robust against misuse by e.g. #i52542#
+    
     if( !pCnt->IsTxtFrm() )
         return sal_False;
 
@@ -1949,7 +1949,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
             bProcess = pTxtNode->IsAutoCompleteWordDirty(); break;
         case WORD_COUNT :
             bProcess = pTxtNode->IsWordCountDirty(); break;
-        case SMART_TAGS :   // SMARTTAGS
+        case SMART_TAGS :   
             bProcess = pTxtNode->IsSmartTagDirty(); break;
     }
 
@@ -1998,7 +1998,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                     return sal_True;
                 break;
             }
-            case SMART_TAGS : // SMARTTAGS
+            case SMART_TAGS : 
             {
                 try {
                     const SwRect aRepaint( ((SwTxtFrm*)pCnt)->SmartTagScan( pCntntNode, nTxtPos ) );
@@ -2008,7 +2008,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
                     if ( aRepaint.HasArea() )
                         pImp->GetShell()->InvalidateWindows( aRepaint );
                 } catch( const ::com::sun::star::uno::RuntimeException& e) {
-                    // #i122885# handle smarttag problems gracefully and provide diagnostics
+                    
                     SAL_WARN( "sw.core", "SMART_TAGS Exception:" << e.Message);
                 }
                 if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD|VCL_INPUT_OTHER|VCL_INPUT_PAINT ) )
@@ -2018,7 +2018,7 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
         }
     }
 
-    // The Flys that are anchored to the paragraph need to be considered too.
+    
     if ( pCnt->GetDrawObjs() )
     {
         const SwSortedObjs &rObjs = *pCnt->GetDrawObjs();
@@ -2049,8 +2049,8 @@ sal_Bool SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
 
 sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
 {
-    // Spellcheck all contents of the pages. Either only the
-    // visible ones or all of them.
+    
+    
     const SwViewShell* pViewShell = pImp->GetShell();
     const SwViewOption* pViewOptions = pViewShell->GetViewOptions();
     const SwDoc* pDoc = pViewShell->GetDoc();
@@ -2128,7 +2128,7 @@ sal_Bool SwLayIdle::DoIdleJob( IdleJobType eJob, sal_Bool bVisAreaOnly )
                 case ONLINE_SPELLING : pPage->ValidateSpelling(); break;
                 case AUTOCOMPLETE_WORDS : pPage->ValidateAutoCompleteWords(); break;
                 case WORD_COUNT : pPage->ValidateWordCount(); break;
-                case SMART_TAGS : pPage->ValidateSmartTags(); break; // SMARTTAGS
+                case SMART_TAGS : pPage->ValidateSmartTags(); break; 
             }
         }
 
@@ -2151,7 +2151,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
         {
             Rectangle aRect( 0, 0, 5, 5 );
             aRect = pWin->PixelToLogic( aRect );
-            // OD 2004-04-23 #116347#
+            
             pWin->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             pWin->SetFillColor( eColorData );
             pWin->SetLineColor();
@@ -2163,7 +2163,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 #define SHOW_IDLE( ColorData ) ShowIdle( ColorData )
 #else
 #define SHOW_IDLE( ColorData )
-#endif // DBG_UTIL
+#endif 
 
 SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
@@ -2178,17 +2178,17 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
     pImp->GetShell()->EnableSmooth( sal_False );
 
-    // First, spellcheck the visible area. Only if there's nothing
-    // to do there, we trigger the IdleFormat.
+    
+    
     if ( !DoIdleJob( SMART_TAGS, sal_True ) &&
          !DoIdleJob( ONLINE_SPELLING, sal_True ) &&
-         !DoIdleJob( AUTOCOMPLETE_WORDS, sal_True ) ) // SMARTTAGS
+         !DoIdleJob( AUTOCOMPLETE_WORDS, sal_True ) ) 
     {
-        // Format, then register repaint rectangles with the SwViewShell if necessary.
-        // This requires running artificial actions, so we don't get undesired
-        // effects when for instance the page count gets changed.
-        // We remember the shells where the cursor is visible, so we can make
-        // it visible again if needed after a document change.
+        
+        
+        
+        
+        
         std::vector<bool> aBools;
         SwViewShell *pSh = pImp->GetShell();
         do
@@ -2208,8 +2208,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
         aAction.SetWaitAllowed( sal_False );
         aAction.Action();
 
-        // Further start/end actions only happen if there were paints started
-        // somewhere or if the visibility of the CharRects has changed.
+        
+        
         bool bActions = false;
         sal_uInt16 nBoolIdx = 0;
         do
@@ -2223,13 +2223,13 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 SwRect aTmp( pSh->VisArea() );
                 pSh->UISizeNotify();
 
-                // #137134#
-                // Are we supposed to crash if pSh isn't a cursor shell?!
-                // bActions |= aTmp != pSh->VisArea() ||
-                //             aBools[nBoolIdx] != ((SwCrsrShell*)pSh)->GetCharRect().IsOver( pSh->VisArea() );
+                
+                
+                
+                
 
-                // aBools[ i ] is true, if the i-th shell is a cursor shell (!!!)
-                // and the cursor is visible.
+                
+                
                 bActions |= aTmp != pSh->VisArea();
                 if ( aTmp == pSh->VisArea() && pSh->ISA(SwCrsrShell) )
                 {
@@ -2244,8 +2244,8 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
         if ( bActions )
         {
-            // Prepare start/end actions via CrsrShell, so the cursor, selection
-            // and VisArea can be set correctly.
+            
+            
             nBoolIdx = 0;
             do
             {
@@ -2254,34 +2254,34 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                 if ( bCrsrShell )
                     ((SwCrsrShell*)pSh)->SttCrsrMove();
 
-                // If there are accrued paints, it's best to simply invalidate
-                // the whole window. Otherwise there would arise paint problems whose
-                // solution would be disproportionally expensive.
-                //fix(18176):
+                
+                
+                
+                
                 SwViewImp *pViewImp = pSh->Imp();
                 bool bUnlock = false;
                 if ( pViewImp->GetRegion() )
                 {
                     pViewImp->DelRegion();
 
-                    // Cause a repaint with virtual device.
+                    
                     pSh->LockPaint();
                     bUnlock = true;
                 }
 
                 if ( bCrsrShell )
-                    // If the Crsr was visible, we need to make it visible again.
-                    // Otherwise, EndCrsrMove with sal_True for IdleEnd
+                    
+                    
                     ((SwCrsrShell*)pSh)->EndCrsrMove( sal_True^aBools[nBoolIdx] );
                 if( bUnlock )
                 {
                     if( bCrsrShell )
                     {
-                        // UnlockPaint overwrite the selection from the
-                        // CrsrShell and calls the virtual method paint
-                        // to fill the virtual device. This fill dont have
-                        // paint the selection! -> Set the focus flag at
-                        // CrsrShell and it dont paint the selection.
+                        
+                        
+                        
+                        
+                        
                         ((SwCrsrShell*)pSh)->ShLooseFcs();
                         pSh->UnlockPaint( sal_True );
                         ((SwCrsrShell*)pSh)->ShGetFcs( sal_False );
@@ -2301,19 +2301,19 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
             if ( !DoIdleJob( WORD_COUNT, sal_False ) )
                 if ( !DoIdleJob( SMART_TAGS, sal_False ) )
                     if ( !DoIdleJob( ONLINE_SPELLING, sal_False ) )
-                        DoIdleJob( AUTOCOMPLETE_WORDS, sal_False ); // SMARTTAGS
+                        DoIdleJob( AUTOCOMPLETE_WORDS, sal_False ); 
         }
 
         bool bInValid = false;
         const SwViewOption& rVOpt = *pImp->GetShell()->GetViewOptions();
         const SwViewShell* pViewShell = pImp->GetShell();
-        // See conditions in DoIdleJob()
+        
         const sal_Bool bSpell     = rVOpt.IsOnlineSpell();
         const sal_Bool bACmplWrd  = rVOpt.IsAutoCompleteWords();
         const sal_Bool bWordCount = pViewShell->getIDocumentStatistics()->GetDocStat().bModified;
         const bool bSmartTags = !pViewShell->GetDoc()->GetDocShell()->IsHelpDocument() &&
                                 !pViewShell->GetDoc()->isXForms() &&
-                                SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
+                                SwSmartTagMgr::Get().IsSmartTagsEnabled(); 
 
         SwPageFrm *pPg = (SwPageFrm*)pRoot->Lower();
         do
@@ -2324,7 +2324,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
                        (bSpell && pPg->IsInvalidSpelling()) ||
                        (bACmplWrd && pPg->IsInvalidAutoCompleteWords()) ||
                        (bWordCount && pPg->IsInvalidWordCount()) ||
-                       (bSmartTags && pPg->IsInvalidSmartTags()); // SMARTTAGS
+                       (bSmartTags && pPg->IsInvalidSmartTags()); 
 
             pPg = (SwPageFrm*)pPg->GetNext();
 
@@ -2346,9 +2346,9 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 #ifdef DBG_UTIL
     if ( m_bIndicator && pImp->GetShell()->GetWin() )
     {
-        // #i75172# Do not invalidate indicator, this may cause a endless loop. Instead, just repaint it
-        // This should be replaced by an overlay object in the future, anyways. Since it's only for debug
-        // purposes, it is not urgent.
+        
+        
+        
             m_bIndicator = false; SHOW_IDLE( COL_LIGHTGREEN );
     }
 #endif

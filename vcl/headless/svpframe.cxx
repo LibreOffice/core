@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -33,7 +33,7 @@ using namespace basegfx;
 SvpSalFrame* SvpSalFrame::s_pFocusFrame = NULL;
 
 namespace {
-    /// Decouple SalFrame lifetime from damagetracker lifetime
+    
     struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
     {
         DamageTracker( SvpSalFrame& rFrame ) : m_rFrame( rFrame ) {}
@@ -79,14 +79,14 @@ SvpSalFrame::SvpSalFrame( SvpSalInstance* pInstance,
     m_nMaxWidth( 0 ),
     m_nMaxHeight( 0 )
 {
-    // SAL_DEBUG("SvpSalFrame::SvpSalFrame: " << this);
-    // fast and easy cross-platform wiping of the data
+    
+    
     memset( (void *)&m_aSystemChildData, 0, sizeof( SystemEnvData ) );
     m_aSystemChildData.nSize        = sizeof( SystemEnvData );
 #ifdef IOS
-    // Nothing
+    
 #elif defined ANDROID
-    // Nothing
+    
 #else
     m_aSystemChildData.pSalFrame    = this;
     m_aSystemChildData.nDepth       = 24;
@@ -115,12 +115,12 @@ SvpSalFrame::~SvpSalFrame()
 
     if( s_pFocusFrame == this )
     {
-        // SAL_DEBUG("SvpSalFrame::~SvpSalFrame: losing focus: " << this);
+        
         s_pFocusFrame = NULL;
-        // call directly here, else an event for a destroyed frame would be dispatched
+        
         CallCallback( SALEVENT_LOSEFOCUS, NULL );
-        // if the handler has not set a new focus frame
-        // pass focus to another frame, preferably a document style window
+        
+        
         if( s_pFocusFrame == NULL )
         {
             const std::list< SalFrame* >& rFrames( m_pInstance->getFrames() );
@@ -151,7 +151,7 @@ void SvpSalFrame::GetFocus()
     {
         if( s_pFocusFrame )
             s_pFocusFrame->LoseFocus();
-        // SAL_DEBUG("SvpSalFrame::GetFocus(): " << this);
+        
         s_pFocusFrame = this;
         m_pInstance->PostEvent( this, NULL, SALEVENT_GETFOCUS );
     }
@@ -161,7 +161,7 @@ void SvpSalFrame::LoseFocus()
 {
     if( s_pFocusFrame == this )
     {
-        // SAL_DEBUG("SvpSalFrame::LoseFocus: " << this);
+        
         m_pInstance->PostEvent( this, NULL, SALEVENT_LOSEFOCUS );
         s_pFocusFrame = NULL;
     }
@@ -222,7 +222,7 @@ void SvpSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
 {
     if( bVisible && ! m_bVisible )
     {
-        // SAL_DEBUG("SvpSalFrame::Show: showing: " << this);
+        
         m_bVisible = true;
         m_pInstance->PostEvent( this, NULL, SALEVENT_RESIZE );
         if( ! bNoActivate )
@@ -230,14 +230,14 @@ void SvpSalFrame::Show( sal_Bool bVisible, sal_Bool bNoActivate )
     }
     else if( ! bVisible && m_bVisible )
     {
-        // SAL_DEBUG("SvpSalFrame::Show: hiding: " << this);
+        
         m_bVisible = false;
         m_pInstance->PostEvent( this, NULL, SALEVENT_RESIZE );
         LoseFocus();
     }
     else
     {
-        // SAL_DEBUG("SvpSalFrame::Show: nothihg: " << this);
+        
     }
 }
 
@@ -290,7 +290,7 @@ void SvpSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight, sal_u
         if (m_bDamageTracking)
             m_aFrame->setDamageTracker(
                 basebmp::IBitmapDeviceDamageTrackerSharedPtr( new DamageTracker( *this ) ) );
-        // update device in existing graphics
+        
         for( std::list< SvpSalGraphics* >::iterator it = m_aGraphics.begin();
              it != m_aGraphics.end(); ++it )
              (*it)->setDevice( m_aFrame );
@@ -330,7 +330,7 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
     if (pState == NULL)
         return;
 
-    // Request for position or size change
+    
     if (pState->mnMask & _FRAMESTATE_MASK_GEOMETRY)
     {
         long nX = maGeometry.nX;
@@ -338,7 +338,7 @@ void SvpSalFrame::SetWindowState( const SalFrameState *pState )
         long nWidth = maGeometry.nWidth;
         long nHeight = maGeometry.nHeight;
 
-        // change requested properties
+        
         if (pState->mnMask & WINDOWSTATE_MASK_X)
             nX = pState->mnX;
         if (pState->mnMask & WINDOWSTATE_MASK_Y)

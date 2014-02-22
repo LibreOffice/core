@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -60,7 +60,7 @@
 namespace OpenStormBento
 {
 
-// String definitions
+
 const char gsBenMagicBytes[] = BEN_MAGIC_BYTES;
 
 /**
@@ -81,7 +81,7 @@ sal_uLong BenOpenContainer(LwpSvStream * pStream, pLtcBenContainer * ppContainer
     }
 
     pLtcBenContainer pContainer = new LtcBenContainer(pStream);
-    if ((Err = pContainer->Open()) != BenErr_OK) // delete two inputs
+    if ((Err = pContainer->Open()) != BenErr_OK) 
     {
         delete pContainer;
         return BenErr_InvalidTOC;
@@ -102,7 +102,7 @@ LtcBenContainer::~LtcBenContainer()
 }
 
 BenError
-LtcBenContainer::Open() // delete two inputs
+LtcBenContainer::Open() 
 {
     BenError Err;
     CBenTOCReader TOCReader(this);
@@ -236,12 +236,12 @@ BenError LtcBenContainer::SeekFromEnd(long Offset)
 LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const char * sPropertyName, LtcUtBenValueStream * pCurrentValueStream)
 {
     CBenPropertyName * pPropertyName;
-    RegisterPropertyName(sPropertyName, &pPropertyName);        // Get property name object
+    RegisterPropertyName(sPropertyName, &pPropertyName);        
 
     if (NULL == pPropertyName)
-        return NULL;                                            // Property not exist
+        return NULL;                                            
 
-    // Get current object
+    
     CBenObject * pObj = NULL;
     if (pCurrentValueStream != NULL)
     {
@@ -249,7 +249,7 @@ LtcUtBenValueStream * LtcBenContainer::FindNextValueStreamWithPropertyName(const
     }
 
 
-    pObj =FindNextObjectWithProperty(pObj, pPropertyName->GetID()); // Get next object with same property name
+    pObj =FindNextObjectWithProperty(pObj, pPropertyName->GetID()); 
     if (NULL == pObj)
         return NULL;
 
@@ -308,7 +308,7 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
         pStream = NULL;
         return BenErr_NamedObjectError;
     }
-    // construct the string of property name
+    
     char sSName[64]="";
     char sDName[64]="";
 
@@ -317,7 +317,7 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
 
     /* traverse the found properties and construct the stream vectors */
     SvMemoryStream * pMemStream = NULL;
-    // get S&D's stream and merge them together
+    
     SvStream *pD = NULL, *pS = NULL;
 
     pS = FindValueStreamWithPropertyName(sSName);
@@ -336,7 +336,7 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     }
 
     OSL_ENSURE(nLen > 0, "expected a non-0 length");
-    // the 'D' stream is NULL or it has invalid length
+    
     if (nLen <= 0)
     {
         pStream = NULL;
@@ -365,6 +365,6 @@ BenError LtcBenContainer::CreateGraphicStream(SvStream * &pStream, const char *p
     return BenErr_OK;
 }
 
-}// end namespace OpenStormBento
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

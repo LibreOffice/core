@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,7 +41,7 @@ using namespace ::com::sun::star;
 
 namespace comphelper {
 
-// ============================================================================
+
 
 static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aSalt, sal_Int32 nCount, sal_Int32 nHashLength )
 {
@@ -63,13 +63,13 @@ static uno::Sequence< sal_Int8 > GeneratePBKDF2Hash( const OUString& aPassword, 
     return aResult;
 }
 
-// ============================================================================
+
 
 IDocPasswordVerifier::~IDocPasswordVerifier()
 {
 }
 
-// ============================================================================
+
 uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswordInfo( const OUString& aPassword )
 {
     uno::Sequence< beans::PropertyValue > aResult;
@@ -94,7 +94,7 @@ uno::Sequence< beans::PropertyValue > DocPasswordHelper::GenerateNewModifyPasswo
     return aResult;
 }
 
-// ============================================================================
+
 bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, const uno::Sequence< beans::PropertyValue >& aInfo )
 {
     bool bResult = false;
@@ -131,44 +131,44 @@ bool DocPasswordHelper::IsModifyPasswordCorrect( const OUString& aPassword, cons
     return bResult;
 }
 
-// ============================================================================
+
 sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
                 const OUString& aUString )
 {
     static const sal_uInt16 pInitialCode[] = {
-        0xE1F0, // 1
-        0x1D0F, // 2
-        0xCC9C, // 3
-        0x84C0, // 4
-        0x110C, // 5
-        0x0E10, // 6
-        0xF1CE, // 7
-        0x313E, // 8
-        0x1872, // 9
-        0xE139, // 10
-        0xD40F, // 11
-        0x84F9, // 12
-        0x280C, // 13
-        0xA96A, // 14
-        0x4EC3  // 15
+        0xE1F0, 
+        0x1D0F, 
+        0xCC9C, 
+        0x84C0, 
+        0x110C, 
+        0x0E10, 
+        0xF1CE, 
+        0x313E, 
+        0x1872, 
+        0xE139, 
+        0xD40F, 
+        0x84F9, 
+        0x280C, 
+        0xA96A, 
+        0x4EC3  
     };
 
     static const sal_uInt16 pEncryptionMatrix[15][7] = {
-        { 0xAEFC, 0x4DD9, 0x9BB2, 0x2745, 0x4E8A, 0x9D14, 0x2A09}, // last-14
-        { 0x7B61, 0xF6C2, 0xFDA5, 0xEB6B, 0xC6F7, 0x9DCF, 0x2BBF}, // last-13
-        { 0x4563, 0x8AC6, 0x05AD, 0x0B5A, 0x16B4, 0x2D68, 0x5AD0}, // last-12
-        { 0x0375, 0x06EA, 0x0DD4, 0x1BA8, 0x3750, 0x6EA0, 0xDD40}, // last-11
-        { 0xD849, 0xA0B3, 0x5147, 0xA28E, 0x553D, 0xAA7A, 0x44D5}, // last-10
-        { 0x6F45, 0xDE8A, 0xAD35, 0x4A4B, 0x9496, 0x390D, 0x721A}, // last-9
-        { 0xEB23, 0xC667, 0x9CEF, 0x29FF, 0x53FE, 0xA7FC, 0x5FD9}, // last-8
-        { 0x47D3, 0x8FA6, 0x8FA6, 0x1EDA, 0x3DB4, 0x7B68, 0xF6D0}, // last-7
-        { 0xB861, 0x60E3, 0xC1C6, 0x93AD, 0x377B, 0x6EF6, 0xDDEC}, // last-6
-        { 0x45A0, 0x8B40, 0x06A1, 0x0D42, 0x1A84, 0x3508, 0x6A10}, // last-5
-        { 0xAA51, 0x4483, 0x8906, 0x022D, 0x045A, 0x08B4, 0x1168}, // last-4
-        { 0x76B4, 0xED68, 0xCAF1, 0x85C3, 0x1BA7, 0x374E, 0x6E9C}, // last-3
-        { 0x3730, 0x6E60, 0xDCC0, 0xA9A1, 0x4363, 0x86C6, 0x1DAD}, // last-2
-        { 0x3331, 0x6662, 0xCCC4, 0x89A9, 0x0373, 0x06E6, 0x0DCC}, // last-1
-        { 0x1021, 0x2042, 0x4084, 0x8108, 0x1231, 0x2462, 0x48C4}  // last
+        { 0xAEFC, 0x4DD9, 0x9BB2, 0x2745, 0x4E8A, 0x9D14, 0x2A09}, 
+        { 0x7B61, 0xF6C2, 0xFDA5, 0xEB6B, 0xC6F7, 0x9DCF, 0x2BBF}, 
+        { 0x4563, 0x8AC6, 0x05AD, 0x0B5A, 0x16B4, 0x2D68, 0x5AD0}, 
+        { 0x0375, 0x06EA, 0x0DD4, 0x1BA8, 0x3750, 0x6EA0, 0xDD40}, 
+        { 0xD849, 0xA0B3, 0x5147, 0xA28E, 0x553D, 0xAA7A, 0x44D5}, 
+        { 0x6F45, 0xDE8A, 0xAD35, 0x4A4B, 0x9496, 0x390D, 0x721A}, 
+        { 0xEB23, 0xC667, 0x9CEF, 0x29FF, 0x53FE, 0xA7FC, 0x5FD9}, 
+        { 0x47D3, 0x8FA6, 0x8FA6, 0x1EDA, 0x3DB4, 0x7B68, 0xF6D0}, 
+        { 0xB861, 0x60E3, 0xC1C6, 0x93AD, 0x377B, 0x6EF6, 0xDDEC}, 
+        { 0x45A0, 0x8B40, 0x06A1, 0x0D42, 0x1A84, 0x3508, 0x6A10}, 
+        { 0xAA51, 0x4483, 0x8906, 0x022D, 0x045A, 0x08B4, 0x1168}, 
+        { 0x76B4, 0xED68, 0xCAF1, 0x85C3, 0x1BA7, 0x374E, 0x6E9C}, 
+        { 0x3730, 0x6E60, 0xDCC0, 0xA9A1, 0x4363, 0x86C6, 0x1DAD}, 
+        { 0x3331, 0x6662, 0xCCC4, 0x89A9, 0x0373, 0x06E6, 0x0DCC}, 
+        { 0x1021, 0x2042, 0x4084, 0x8108, 0x1231, 0x2462, 0x48C4}  
     };
 
     sal_uInt32 nResult = 0;
@@ -185,8 +185,8 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
         const sal_Unicode* pStr = aUString.getStr();
         for ( sal_uInt32 nInd = 0; nInd < nLen; nInd++ )
         {
-            // NO Encoding during conversion!
-            // The specification says that the low byte should be used in case it is not NULL
+            
+            
             char nHighChar = (char)( pStr[nInd] >> 8 );
             char nLowChar = (char)( pStr[nInd] & 0xFF );
             char nChar = nLowChar ? nLowChar : nHighChar;
@@ -208,7 +208,7 @@ sal_uInt32 DocPasswordHelper::GetWordHashAsUINT32(
     return nResult;
 }
 
-// ============================================================================
+
 sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
                 const OUString& aUString,
                 rtl_TextEncoding nEnc )
@@ -233,7 +233,7 @@ sal_uInt16 DocPasswordHelper::GetXLHashAsUINT16(
     return nResult;
 }
 
-// ============================================================================
+
 Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
                 const OUString& aUString,
                 rtl_TextEncoding nEnc )
@@ -246,7 +246,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     return aResult;
 }
 
-// ============================================================================
+
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateRandomByteSequence( sal_Int32 nLength )
 {
     uno::Sequence< sal_Int8 > aResult( nLength );
@@ -262,7 +262,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 }
 
 
-// ============================================================================
+
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const OUString& aPassword, const uno::Sequence< sal_Int8 >& aDocId )
 {
     uno::Sequence< sal_Int8 > aResultKey;
@@ -280,7 +280,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     return aResultKey;
 }
 
-// ============================================================================
+
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const sal_uInt16 pPassData[16], const uno::Sequence< sal_Int8 >& aDocId )
 {
     uno::Sequence< sal_Int8 > aResultKey;
@@ -291,7 +291,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     return aResultKey;
 }
 
-// ============================================================================
+
 /*static*/ uno::Sequence< sal_Int8 > DocPasswordHelper::GenerateStd97Key( const sal_uInt16 pPassData[16], const sal_uInt8 pDocId[16] )
 {
     uno::Sequence< sal_Int8 > aResultKey;
@@ -302,7 +302,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
         sal_Int32 nInd = 0;
 
-        // Fill PassData into KeyData.
+        
         for ( nInd = 0; nInd < 16 && pPassData[nInd]; nInd++)
         {
             pKeyData[2*nInd] = sal::static_int_cast< sal_uInt8 >( (pPassData[nInd] >> 0) & 0xff );
@@ -312,21 +312,21 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         pKeyData[2*nInd] = 0x80;
         pKeyData[56] = sal::static_int_cast< sal_uInt8 >( nInd << 4 );
 
-        // Fill raw digest of KeyData into KeyData.
+        
         rtlDigest hDigest = rtl_digest_create ( rtl_Digest_AlgorithmMD5 );
         (void)rtl_digest_updateMD5 (
             hDigest, pKeyData, sizeof(pKeyData));
         (void)rtl_digest_rawMD5 (
             hDigest, pKeyData, RTL_DIGEST_LENGTH_MD5);
 
-        // Update digest with KeyData and Unique.
+        
         for ( nInd = 0; nInd < 16; nInd++ )
         {
             rtl_digest_updateMD5( hDigest, pKeyData, 5 );
             rtl_digest_updateMD5( hDigest, pDocId, 16 );
         }
 
-        // Update digest with padding.
+        
         pKeyData[16] = 0x80;
         memset( pKeyData + 17, 0, sizeof(pKeyData) - 17 );
         pKeyData[56] = 0x80;
@@ -334,11 +334,11 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 
         rtl_digest_updateMD5( hDigest, &(pKeyData[16]), sizeof(pKeyData) - 16 );
 
-        // Fill raw digest of above updates
+        
         aResultKey.realloc( RTL_DIGEST_LENGTH_MD5 );
         rtl_digest_rawMD5 ( hDigest, (sal_uInt8*)aResultKey.getArray(), aResultKey.getLength() );
 
-        // Erase KeyData array and leave.
+        
         memset( pKeyData, 0, sizeof(pKeyData) );
     }
 
@@ -346,7 +346,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
 }
 
 
-// ============================================================================
+
 
 /*static*/ ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > DocPasswordHelper::requestAndVerifyDocPassword(
         IDocPasswordVerifier& rVerifier,
@@ -361,7 +361,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > aEncData;
     DocPasswordVerifierResult eResult = DocPasswordVerifierResult_WRONG_PASSWORD;
 
-    // first, try provided default passwords
+    
     if( pbIsDefaultPassword )
         *pbIsDefaultPassword = false;
     if( pDefaultPasswords )
@@ -378,7 +378,7 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         }
     }
 
-    // try media encryption data (skip, if result is OK or ABORT)
+    
     if( eResult == DocPasswordVerifierResult_WRONG_PASSWORD )
     {
         if( rMediaEncData.getLength() > 0 )
@@ -389,14 +389,14 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
         }
     }
 
-    // try media password (skip, if result is OK or ABORT)
+    
     if( eResult == DocPasswordVerifierResult_WRONG_PASSWORD )
     {
         if( !rMediaPassword.isEmpty() )
             eResult = rVerifier.verifyPassword( rMediaPassword, aEncData );
     }
 
-    // request a password (skip, if result is OK or ABORT)
+    
     if( (eResult == DocPasswordVerifierResult_WRONG_PASSWORD) && rxInteractHandler.is() ) try
     {
         PasswordRequestMode eRequestMode = PasswordRequestMode_PASSWORD_ENTER;
@@ -424,6 +424,6 @@ Sequence< sal_Int8 > DocPasswordHelper::GetXLHashAsSequence(
     return (eResult == DocPasswordVerifierResult_OK) ? aEncData : uno::Sequence< beans::NamedValue >();
 }
 
-} // namespace comphelper
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

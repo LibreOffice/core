@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -69,7 +69,7 @@ SalData::~SalData()
     }
     if( s_aAutoReleaseKey )
     {
-        // release the last pool
+        
         NSAutoreleasePool* pPool = nil;
         pPool = reinterpret_cast<NSAutoreleasePool*>( osl_getThreadKeyData( s_aAutoReleaseKey ) );
         if( pPool )
@@ -112,100 +112,100 @@ struct curs_ent
 }
 const aCursorTab[ POINTER_COUNT ] =
 {
-{ NULL, { 0, 0 } }, //POINTER_ARROW
-{ "nullptr", { 16, 16 } }, //POINTER_NULL
-{ "hourglass", { 15, 15 } }, //POINTER_WAIT
-{ NULL, { 0, 0 } }, //POINTER_TEXT
-{ "help", { 0, 0 } }, //POINTER_HELP
-{ NULL, { 0, 0 } }, //POINTER_CROSS
-{ NULL, { 0, 0 } }, //POINTER_MOVE
-{ NULL, { 0, 0 } }, //POINTER_NSIZE
-{ NULL, { 0, 0 } }, //POINTER_SSIZE
-{ NULL, { 0, 0 } }, //POINTER_WSIZE
-{ NULL, { 0, 0 } }, //POINTER_ESIZE
-{ "nwsesize", { 15, 15 } }, //POINTER_NWSIZE
-{ "neswsize", { 15, 15 } }, //POINTER_NESIZE
-{ "neswsize", { 15, 15 } }, //POINTER_SWSIZE
-{ "nwsesize", { 15, 15 } }, //POINTER_SESIZE
-{ NULL, { 0, 0 } }, //POINTER_WINDOW_NSIZE
-{ NULL, { 0, 0 } }, //POINTER_WINDOW_SSIZE
-{ NULL, { 0, 0 } }, //POINTER_WINDOW_WSIZE
-{ NULL, { 0, 0 } }, //POINTER_WINDOW_ESIZE
-{ "nwsesize", { 15, 15 } }, //POINTER_WINDOW_NWSIZE
-{ "neswsize", { 15, 15 } }, //POINTER_WINDOW_NESIZE
-{ "neswsize", { 15, 15 } }, //POINTER_WINDOW_SWSIZE
-{ "nwsesize", { 15, 15 } }, //POINTER_WINDOW_SESIZE
-{ NULL, { 0, 0 } }, //POINTER_HSPLIT
-{ NULL, { 0, 0 } }, //POINTER_VSPLIT
-{ NULL, { 0, 0 } }, //POINTER_HSIZEBAR
-{ NULL, { 0, 0 } }, //POINTER_VSIZEBAR
-{ NULL, { 0, 0 } }, //POINTER_HAND
-{ NULL, { 0, 0 } }, //POINTER_REFHAND
-{ "pen", { 3, 27 } }, //POINTER_PEN
-{ "magnify", { 12, 13 } }, //POINTER_MAGNIFY
-{ "fill", { 10, 22 } }, //POINTER_FILL
-{ "rotate", { 15, 15 } }, //POINTER_ROTATE
-{ "hshear", { 15, 15 } }, //POINTER_HSHEAR
-{ "vshear", { 15, 15 } }, //POINTER_VSHEAR
-{ "mirror", { 14, 12 } }, //POINTER_MIRROR
-{ "crook", { 15, 14 } }, //POINTER_CROOK
-{ "crop", { 9, 9 } }, //POINTER_CROP
-{ "movept", { 0, 0 } }, //POINTER_MOVEPOINT
-{ "movebw", { 0, 0 } }, //POINTER_MOVEBEZIERWEIGHT
-{ "movedata", { 0, 0 } }, //POINTER_MOVEDATA
-{ "copydata", { 0, 0 } }, //POINTER_COPYDATA
-{ "linkdata", { 0, 0 } }, //POINTER_LINKDATA
-{ "movedlnk", { 0, 0 } }, //POINTER_MOVEDATALINK
-{ "copydlnk", { 0, 0 } }, //POINTER_COPYDATALINK
-{ "movef", { 8, 8 } }, //POINTER_MOVEFILE
-{ "copyf", { 8, 8 } }, //POINTER_COPYFILE
-{ "linkf", { 8, 8 } }, //POINTER_LINKFILE
-{ "moveflnk", { 8, 8 } }, //POINTER_MOVEFILELINK
-{ "copyflnk", { 8, 8 } }, //POINTER_COPYFILELINK
-{ "movef2", { 7, 8 } }, //POINTER_MOVEFILES
-{ "copyf2", { 7, 8 } }, //POINTER_COPYFILES
-{ "notallow", { 15, 15 } }, //POINTER_NOTALLOWED
-{ "dline", { 8, 8 } }, //POINTER_DRAW_LINE
-{ "drect", { 8, 8 } }, //POINTER_DRAW_RECT
-{ "dpolygon", { 8, 8 } }, //POINTER_DRAW_POLYGON
-{ "dbezier", { 8, 8 } }, //POINTER_DRAW_BEZIER
-{ "darc", { 8, 8 } }, //POINTER_DRAW_ARC
-{ "dpie", { 8, 8 } }, //POINTER_DRAW_PIE
-{ "dcirccut", { 8, 8 } }, //POINTER_DRAW_CIRCLECUT
-{ "dellipse", { 8, 8 } }, //POINTER_DRAW_ELLIPSE
-{ "dfree", { 8, 8 } }, //POINTER_DRAW_FREEHAND
-{ "dconnect", { 8, 8 } }, //POINTER_DRAW_CONNECT
-{ "dtext", { 8, 8 } }, //POINTER_DRAW_TEXT
-{ "dcapt", { 8, 8 } }, //POINTER_DRAW_CAPTION
-{ "chart", { 15, 16 } }, //POINTER_CHART
-{ "detectiv", { 12, 13 } }, //POINTER_DETECTIVE
-{ "pivotcol", { 7, 5 } }, //POINTER_PIVOT_COL
-{ "pivotrow", { 8, 7 } }, //POINTER_PIVOT_ROW
-{ "pivotfld", { 8, 7 } }, //POINTER_PIVOT_FIELD
-{ "chain", { 0, 2 } }, //POINTER_CHAIN
-{ "chainnot", { 2, 2 } }, //POINTER_CHAIN_NOTALLOWED
-{ "timemove", { 16, 16 } }, //POINTER_TIMEEVENT_MOVE
-{ "timesize", { 16, 17 } }, //POINTER_TIMEEVENT_SIZE
-{ "asn", { 16, 12 } }, //POINTER_AUTOSCROLL_N
-{ "ass", { 15, 19 } }, //POINTER_AUTOSCROLL_S
-{ "asw", { 12, 15 } }, //POINTER_AUTOSCROLL_W
-{ "ase", { 19, 16 } }, //POINTER_AUTOSCROLL_E
-{ "asnw", { 10, 10 } }, //POINTER_AUTOSCROLL_NW
-{ "asne", { 21, 10 } }, //POINTER_AUTOSCROLL_NE
-{ "assw", { 21, 21 } }, //POINTER_AUTOSCROLL_SW
-{ "asse", { 21, 21 } }, //POINTER_AUTOSCROLL_SE
-{ "asns", { 15, 15 } }, //POINTER_AUTOSCROLL_NS
-{ "aswe", { 15, 15 } }, //POINTER_AUTOSCROLL_WE
-{ "asnswe", { 15, 15 } }, //POINTER_AUTOSCROLL_NSWE
-{ "airbrush", { 5, 22 } }, //POINTER_AIRBRUSH
-{ "vtext", { 15, 15 } }, //POINTER_TEXT_VERTICAL
-{ "pivotdel", { 18, 15 } }, //POINTER_PIVOT_DELETE
-{ "tblsels", { 15, 30 } }, //POINTER_TAB_SELECT_S
-{ "tblsele", { 30, 16 } }, //POINTER_TAB_SELECT_E
-{ "tblselse", { 30, 30 } }, //POINTER_TAB_SELECT_SE
-{ "tblselw", { 1, 16 } }, //POINTER_TAB_SELECT_W
-{ "tblselsw", { 1, 30 } }, //POINTER_TAB_SELECT_SW
-{ "pntbrsh", { 9, 16 } }  //POINTER_PAINTBRUSH
+{ NULL, { 0, 0 } }, 
+{ "nullptr", { 16, 16 } }, 
+{ "hourglass", { 15, 15 } }, 
+{ NULL, { 0, 0 } }, 
+{ "help", { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ "nwsesize", { 15, 15 } }, 
+{ "neswsize", { 15, 15 } }, 
+{ "neswsize", { 15, 15 } }, 
+{ "nwsesize", { 15, 15 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ "nwsesize", { 15, 15 } }, 
+{ "neswsize", { 15, 15 } }, 
+{ "neswsize", { 15, 15 } }, 
+{ "nwsesize", { 15, 15 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ NULL, { 0, 0 } }, 
+{ "pen", { 3, 27 } }, 
+{ "magnify", { 12, 13 } }, 
+{ "fill", { 10, 22 } }, 
+{ "rotate", { 15, 15 } }, 
+{ "hshear", { 15, 15 } }, 
+{ "vshear", { 15, 15 } }, 
+{ "mirror", { 14, 12 } }, 
+{ "crook", { 15, 14 } }, 
+{ "crop", { 9, 9 } }, 
+{ "movept", { 0, 0 } }, 
+{ "movebw", { 0, 0 } }, 
+{ "movedata", { 0, 0 } }, 
+{ "copydata", { 0, 0 } }, 
+{ "linkdata", { 0, 0 } }, 
+{ "movedlnk", { 0, 0 } }, 
+{ "copydlnk", { 0, 0 } }, 
+{ "movef", { 8, 8 } }, 
+{ "copyf", { 8, 8 } }, 
+{ "linkf", { 8, 8 } }, 
+{ "moveflnk", { 8, 8 } }, 
+{ "copyflnk", { 8, 8 } }, 
+{ "movef2", { 7, 8 } }, 
+{ "copyf2", { 7, 8 } }, 
+{ "notallow", { 15, 15 } }, 
+{ "dline", { 8, 8 } }, 
+{ "drect", { 8, 8 } }, 
+{ "dpolygon", { 8, 8 } }, 
+{ "dbezier", { 8, 8 } }, 
+{ "darc", { 8, 8 } }, 
+{ "dpie", { 8, 8 } }, 
+{ "dcirccut", { 8, 8 } }, 
+{ "dellipse", { 8, 8 } }, 
+{ "dfree", { 8, 8 } }, 
+{ "dconnect", { 8, 8 } }, 
+{ "dtext", { 8, 8 } }, 
+{ "dcapt", { 8, 8 } }, 
+{ "chart", { 15, 16 } }, 
+{ "detectiv", { 12, 13 } }, 
+{ "pivotcol", { 7, 5 } }, 
+{ "pivotrow", { 8, 7 } }, 
+{ "pivotfld", { 8, 7 } }, 
+{ "chain", { 0, 2 } }, 
+{ "chainnot", { 2, 2 } }, 
+{ "timemove", { 16, 16 } }, 
+{ "timesize", { 16, 17 } }, 
+{ "asn", { 16, 12 } }, 
+{ "ass", { 15, 19 } }, 
+{ "asw", { 12, 15 } }, 
+{ "ase", { 19, 16 } }, 
+{ "asnw", { 10, 10 } }, 
+{ "asne", { 21, 10 } }, 
+{ "assw", { 21, 21 } }, 
+{ "asse", { 21, 21 } }, 
+{ "asns", { 15, 15 } }, 
+{ "aswe", { 15, 15 } }, 
+{ "asnswe", { 15, 15 } }, 
+{ "airbrush", { 5, 22 } }, 
+{ "vtext", { 15, 15 } }, 
+{ "pivotdel", { 18, 15 } }, 
+{ "tblsels", { 15, 30 } }, 
+{ "tblsele", { 30, 16 } }, 
+{ "tblselse", { 30, 30 } }, 
+{ "tblselw", { 1, 16 } }, 
+{ "tblselsw", { 1, 30 } }, 
+{ "pntbrsh", { 9, 16 } }  
 };
 
 NSCursor* SalData::getCursor( PointerStyle i_eStyle )

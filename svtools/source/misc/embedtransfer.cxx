@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/XComponentSupplier.hpp>
@@ -54,7 +54,7 @@ SvEmbedTransferHelper::SvEmbedTransferHelper( const uno::Reference< embed::XEmbe
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 SvEmbedTransferHelper::~SvEmbedTransferHelper()
 {
@@ -65,7 +65,7 @@ SvEmbedTransferHelper::~SvEmbedTransferHelper()
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SvEmbedTransferHelper::AddSupportedFormats()
 {
@@ -74,7 +74,7 @@ void SvEmbedTransferHelper::AddSupportedFormats()
     AddFormat( FORMAT_GDIMETAFILE );
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
 {
@@ -97,8 +97,8 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                 {
                     try
                     {
-                        // TODO/LATER: Propbably the graphic should be copied here as well
-                        // currently it is handled by the applications
+                        
+                        
                         utl::TempFile aTmp;
                         aTmp.EnableKillingFile( true );
                         uno::Reference < embed::XEmbedPersist > xPers( m_xObj, uno::UNO_QUERY );
@@ -140,7 +140,7 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                         }
                         else
                         {
-                            //TODO/LATER: how to handle objects without persistance?!
+                            
                         }
                     }
                     catch ( uno::Exception& )
@@ -174,14 +174,14 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
         }
         catch( uno::Exception& )
         {
-            // Error handling?
+            
         }
     }
 
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SvEmbedTransferHelper::ObjectReleased()
 {
@@ -193,19 +193,19 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
     const Graphic* pGraphic,
     sal_Int64 nAspect )
 {
-    //TODO/LATER: need TypeName to fill it into the Descriptor (will be shown in listbox)
+    
     ::com::sun::star::datatransfer::DataFlavor aFlavor;
     SotExchange::GetFormatDataFlavor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aFlavor );
 
     rDesc.maClassName = SvGlobalName( xObj->getClassID() );
     rDesc.maTypeName = aFlavor.HumanPresentableName;
 
-    //TODO/LATER: the aspect size in the descriptor is wrong, unfortunately the stream
-    // representation of the descriptor allows only 4 bytes for the aspect
-    // so for internal transport something different should be found
+    
+    
+    
     rDesc.mnViewAspect = sal::static_int_cast<sal_uInt16>( nAspect );
 
-    //TODO/LATER: status needs to become sal_Int64
+    
     rDesc.mnOle2Misc = sal::static_int_cast<sal_Int32>(xObj->getStatus( rDesc.mnViewAspect ));
 
     Size aSize;
@@ -234,7 +234,7 @@ void SvEmbedTransferHelper::FillTransferableObjectDescriptor( TransferableObject
             aSize = Size( 5000, 5000 );
         }
 
-        // TODO/LEAN: getMapUnit can switch object to running state
+        
         aMapMode = MapMode( VCLUnoHelper::UnoEmbed2VCLMapUnit( xObj->getMapUnit( rDesc.mnViewAspect ) ) );
     }
 

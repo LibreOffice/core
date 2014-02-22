@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include "dbloader2.hxx"
 #include <tools/urlobj.hxx>
@@ -39,12 +39,12 @@ using namespace ::com::sun::star::embed;
 using namespace ::com::sun::star::ui::dialogs;
 using ::com::sun::star::awt::XWindow;
 
-// -------------------------------------------------------------------------
+
 ORptTypeDetection::ORptTypeDetection(Reference< XComponentContext > const & xContext)
 : m_xContext(xContext)
 {
 }
-// -------------------------------------------------------------------------
+
 OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::PropertyValue >& Descriptor ) throw (RuntimeException)
 {
 
@@ -77,42 +77,42 @@ OUString SAL_CALL ORptTypeDetection::detect( Sequence< ::com::sun::star::beans::
     }
     return OUString();
 }
-// -------------------------------------------------------------------------
+
 Reference< XInterface > SAL_CALL
         ORptTypeDetection::create(Reference< XComponentContext > const & xContext)
 {
     return *(new ORptTypeDetection(xContext));
 }
-// -------------------------------------------------------------------------
-// XServiceInfo
+
+
 OUString SAL_CALL ORptTypeDetection::getImplementationName() throw(  )
 {
     return getImplementationName_Static();
 }
-// -------------------------------------------------------------------------
 
-// XServiceInfo
+
+
 sal_Bool SAL_CALL ORptTypeDetection::supportsService(const OUString& ServiceName) throw(  )
 {
     return cppu::supportsService(this, ServiceName);
 }
-// -------------------------------------------------------------------------
-// XServiceInfo
+
+
 Sequence< OUString > SAL_CALL ORptTypeDetection::getSupportedServiceNames(void) throw(  )
 {
     return getSupportedServiceNames_Static();
 }
-// -------------------------------------------------------------------------
-// ORegistryServiceManager_Static
+
+
 Sequence< OUString > ORptTypeDetection::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< OUString > aSNS( 1 );
     aSNS[0] = "com.sun.star.document.ExtendedTypeDetection";
     return aSNS;
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-}//rptxml
-// -----------------------------------------------------------------------------
+
+
+}
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

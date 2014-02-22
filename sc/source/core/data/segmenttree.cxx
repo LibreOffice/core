@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,7 +26,7 @@
 
 using ::std::numeric_limits;
 
-// ============================================================================
+
 
 template<typename _ValueType, typename _ExtValueType = _ValueType>
 class ScFlatSegmentsImpl
@@ -56,7 +56,7 @@ public:
 
     SCROW findLastNotOf(ValueType nValue) const;
 
-    // range iteration
+    
     bool getFirst(RangeData& rData);
     bool getNext(RangeData& rData);
 
@@ -159,14 +159,14 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeData(SCCOLROW nPos, 
     if (!maSegments.search_tree(nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2).second)
         return false;
 
-    rData.mnPos2 = rData.mnPos2-1; // end point is not inclusive.
+    rData.mnPos2 = rData.mnPos2-1; 
     return true;
 }
 
 template<typename _ValueType, typename _ExtValueType>
 bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeDataLeaf(SCCOLROW nPos, RangeData& rData)
 {
-    // Conduct leaf-node only search.  Faster when searching between range insertion.
+    
     const ::std::pair<typename fst_type::const_iterator, bool> &ret =
         maSegments.search(maItr, nPos, rData.mnValue, &rData.mnPos1, &rData.mnPos2);
 
@@ -175,7 +175,7 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getRangeDataLeaf(SCCOLROW nP
 
     maItr = ret.first;
 
-    rData.mnPos2 = rData.mnPos2-1; // end point is not inclusive.
+    rData.mnPos2 = rData.mnPos2-1; 
     return true;
 }
 
@@ -196,10 +196,10 @@ void ScFlatSegmentsImpl<_ValueType, _ExtValueType>::insertSegment(SCCOLROW nPos,
 template<typename _ValueType, typename _ExtValueType>
 SCCOLROW ScFlatSegmentsImpl<_ValueType, _ExtValueType>::findLastNotOf(ValueType nValue) const
 {
-    SCCOLROW nPos = numeric_limits<SCCOLROW>::max(); // position not found.
+    SCCOLROW nPos = numeric_limits<SCCOLROW>::max(); 
     typename fst_type::const_reverse_iterator itr = maSegments.rbegin(), itrEnd = maSegments.rend();
-    // Note that when searching in reverse direction, we need to skip the first
-    // node, since the right-most leaf node does not store a valid value.
+    
+    
     for (++itr; itr != itrEnd; ++itr)
     {
         if (itr->second != nValue)
@@ -236,7 +236,7 @@ bool ScFlatSegmentsImpl<_ValueType, _ExtValueType>::getNext(RangeData& rData)
     return true;
 }
 
-// ============================================================================
+
 
 class ScFlatUInt16SegmentsImpl : public ScFlatSegmentsImpl<sal_uInt16, sal_uInt32>
 {
@@ -247,7 +247,7 @@ public:
     }
 };
 
-// ----------------------------------------------------------------------------
+
 
 class ScFlatBoolSegmentsImpl : public ScFlatSegmentsImpl<bool>
 {
@@ -271,7 +271,7 @@ bool ScFlatBoolSegmentsImpl::setFalse(SCCOLROW nPos1, SCCOLROW nPos2)
     return setValue(nPos1, nPos2, false);
 }
 
-// ============================================================================
+
 
 ScFlatBoolRowSegments::ForwardIterator::ForwardIterator(ScFlatBoolRowSegments& rSegs) :
     mrSegs(rSegs), mnCurPos(0), mnLastPos(-1), mbCurValue(false)
@@ -281,12 +281,12 @@ ScFlatBoolRowSegments::ForwardIterator::ForwardIterator(ScFlatBoolRowSegments& r
 bool ScFlatBoolRowSegments::ForwardIterator::getValue(SCROW nPos, bool& rVal)
 {
     if (nPos >= mnCurPos)
-        // It can only go in a forward direction.
+        
         mnCurPos = nPos;
 
     if (mnCurPos > mnLastPos)
     {
-        // position not in the current segment.  Update the current value.
+        
         ScFlatBoolRowSegments::RangeData aData;
         if (!mrSegs.getRangeData(mnCurPos, aData))
             return false;
@@ -304,7 +304,7 @@ SCROW ScFlatBoolRowSegments::ForwardIterator::getLastPos() const
     return mnLastPos;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScFlatBoolRowSegments::RangeIterator::RangeIterator(ScFlatBoolRowSegments& rSegs) :
     mrSegs(rSegs)
@@ -335,7 +335,7 @@ bool ScFlatBoolRowSegments::RangeIterator::getNext(RangeData& rRange)
     return true;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScFlatBoolRowSegments::ScFlatBoolRowSegments() :
     mpImpl(new ScFlatBoolSegmentsImpl(static_cast<SCCOLROW>(MAXROW)))
@@ -405,7 +405,7 @@ SCROW ScFlatBoolRowSegments::findLastNotOf(bool bValue) const
     return static_cast<SCROW>(mpImpl->findLastNotOf(bValue));
 }
 
-// ============================================================================
+
 
 ScFlatBoolColSegments::ScFlatBoolColSegments() :
     mpImpl(new ScFlatBoolSegmentsImpl(static_cast<SCCOLROW>(MAXCOL)))
@@ -453,7 +453,7 @@ void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipSta
     mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
 }
 
-// ============================================================================
+
 
 ScFlatUInt16RowSegments::ForwardIterator::ForwardIterator(ScFlatUInt16RowSegments& rSegs) :
     mrSegs(rSegs), mnCurPos(0), mnLastPos(-1), mnCurValue(0)
@@ -463,12 +463,12 @@ ScFlatUInt16RowSegments::ForwardIterator::ForwardIterator(ScFlatUInt16RowSegment
 bool ScFlatUInt16RowSegments::ForwardIterator::getValue(SCROW nPos, sal_uInt16& rVal)
 {
     if (nPos >= mnCurPos)
-        // It can only go in a forward direction.
+        
         mnCurPos = nPos;
 
     if (mnCurPos > mnLastPos)
     {
-        // position not in the current segment.  Update the current value.
+        
         ScFlatUInt16RowSegments::RangeData aData;
         if (!mrSegs.getRangeData(mnCurPos, aData))
             return false;
@@ -486,7 +486,7 @@ SCROW ScFlatUInt16RowSegments::ForwardIterator::getLastPos() const
     return mnLastPos;
 }
 
-// ----------------------------------------------------------------------------
+
 
 ScFlatUInt16RowSegments::ScFlatUInt16RowSegments(sal_uInt16 nDefault) :
     mpImpl(new ScFlatUInt16SegmentsImpl(static_cast<SCCOLROW>(MAXROW), nDefault))

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/msgbox.hxx>
@@ -28,7 +28,7 @@
 #include "simpref.hxx"
 #include "scmod.hxx"
 
-//============================================================================
+
 
 #define ABS_SREF          SCA_VALID \
                         | SCA_COL_ABSOLUTE | SCA_ROW_ABSOLUTE | SCA_TAB_ABSOLUTE
@@ -56,31 +56,31 @@ ScSimpleRefDlg::ScSimpleRefDlg(SfxBindings* pB, SfxChildWindow* pCW, Window* pPa
     get(m_pBtnOk, "ok");
     get(m_pBtnCancel, "cancel");
 
-    //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
+    
     Init();
-    SetDispatcherLock( true ); // Modal-Modus einschalten
+    SetDispatcherLock( true ); 
 }
 
-//----------------------------------------------------------------------------
+
 ScSimpleRefDlg::~ScSimpleRefDlg()
 {
-    SetDispatcherLock( false ); // Modal-Modus einschalten
+    SetDispatcherLock( false ); 
 }
 
-//----------------------------------------------------------------------------
+
 void ScSimpleRefDlg::FillInfo(SfxChildWinInfo& rWinInfo) const
 {
     ScAnyRefDlg::FillInfo(rWinInfo);
     rWinInfo.bVisible=bAutoReOpen;
 }
 
-//----------------------------------------------------------------------------
+
 void ScSimpleRefDlg::SetRefString(const OUString &rStr)
 {
     m_pEdAssign->SetText(rStr);
 }
 
-//----------------------------------------------------------------------------
+
 void ScSimpleRefDlg::Init()
 {
     m_pBtnOk->SetClickHdl      ( LINK( this, ScSimpleRefDlg, OkBtnHdl ) );
@@ -88,9 +88,9 @@ void ScSimpleRefDlg::Init()
     bCloseFlag=false;
 }
 
-//----------------------------------------------------------------------------
-// Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
-//  neue Selektion im Referenz-Fenster angezeigt wird.
+
+
+
 void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( m_pEdAssign->IsEnabled() )
@@ -126,25 +126,25 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 
-//----------------------------------------------------------------------------
+
 bool ScSimpleRefDlg::Close()
 {
     CancelBtnHdl(m_pBtnCancel);
     return true;
 }
 
-//------------------------------------------------------------------------
+
 void ScSimpleRefDlg::SetActive()
 {
     m_pEdAssign->GrabFocus();
 
-    //  kein NameModifyHdl, weil sonst Bereiche nicht geaendert werden koennen
-    //  (nach dem Aufziehen der Referenz wuerde der alte Inhalt wieder angezeigt)
-    //  (der ausgewaehlte DB-Name hat sich auch nicht veraendert)
+    
+    
+    
 
     RefInputDone();
 }
-//------------------------------------------------------------------------
+
 bool ScSimpleRefDlg::IsRefInputMode() const
 {
     return true;
@@ -179,7 +179,7 @@ void ScSimpleRefDlg::StartRefInput()
 {
     if ( bMultiSelection )
     {
-        // initially select the whole string, so it gets replaced by default
+        
         m_pEdAssign->SetSelection( Selection( 0, m_pEdAssign->GetText().getLength() ) );
     }
 
@@ -193,27 +193,27 @@ void ScSimpleRefDlg::RefInputDone( bool bForced)
     if ( (bForced || bCloseOnButtonUp) && bCloseFlag )
         OkBtnHdl(m_pBtnOk);
 }
-//------------------------------------------------------------------------
-// Handler:
-// ========
+
+
+
 IMPL_LINK_NOARG(ScSimpleRefDlg, OkBtnHdl)
 {
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
     aCloseHdl.Call(&aResult);
-    Link aUnoLink = aDoneHdl;       // stack var because this is deleted in DoClose
+    Link aUnoLink = aDoneHdl;       
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
     aUnoLink.Call( &aResult );
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 {
     bAutoReOpen=false;
     OUString aResult=m_pEdAssign->GetText();
     aCloseHdl.Call(NULL);
-    Link aUnoLink = aAbortedHdl;    // stack var because this is deleted in DoClose
+    Link aUnoLink = aAbortedHdl;    
     DoClose( ScSimpleRefDlgWrapper::GetChildWindowId() );
     aUnoLink.Call( &aResult );
     return 0;
@@ -221,6 +221,6 @@ IMPL_LINK_NOARG(ScSimpleRefDlg, CancelBtnHdl)
 
 
 
-//------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

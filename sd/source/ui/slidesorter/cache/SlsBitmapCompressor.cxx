@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,7 +28,7 @@
 namespace sd { namespace slidesorter { namespace cache {
 
 
-//===== NoBitmapCompression ===================================================
+
 
 /** This dummy replacement simply stores a shared pointer to the original
     preview bitmap.
@@ -68,7 +68,7 @@ bool NoBitmapCompression::IsLossless (void) const
 
 
 
-//===== CompressionByDeletion =================================================
+
 
 ::boost::shared_ptr<BitmapReplacement> CompressionByDeletion::Compress (const Bitmap& ) const
 {
@@ -80,8 +80,8 @@ bool NoBitmapCompression::IsLossless (void) const
 
 Bitmap CompressionByDeletion::Decompress (const BitmapReplacement& ) const
 {
-    // Return a NULL pointer.  This will eventually lead to a request for
-    // the creation of a new one.
+    
+    
     return Bitmap();
 }
 
@@ -96,7 +96,7 @@ bool CompressionByDeletion::IsLossless (void) const
 
 
 
-//===== ResolutionReduction ===================================================
+
 
 /** Store a scaled down bitmap together with the original size.
 */
@@ -166,7 +166,7 @@ bool ResolutionReduction::IsLossless (void) const
 
 
 
-//===== PNGCompression ========================================================
+
 
 
 class PngCompression::PngReplacement : public BitmapReplacement
@@ -237,6 +237,6 @@ bool PngCompression::IsLossless (void) const
 
 
 
-} } } // end of namespace ::sd::slidesorter::cache
+} } } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

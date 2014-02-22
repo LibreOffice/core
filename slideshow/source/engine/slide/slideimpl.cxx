@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -74,7 +74,7 @@
 
 using namespace ::com::sun::star;
 
-// -----------------------------------------------------------------------------
+
 
 namespace slideshow
 {
@@ -112,14 +112,14 @@ public:
     ~SlideImpl();
 
 
-    // Disposable interface
-    // -------------------------------------------------------------------
+    
+    
 
     virtual void dispose();
 
 
-    // Slide interface
-    // -------------------------------------------------------------------
+    
+    
 
     virtual bool prefetch();
     virtual bool show( bool );
@@ -136,19 +136,19 @@ public:
     virtual void update_settings( bool bUserPaintEnabled, RGBColor const& aUserPaintColor, double dUserPaintStrokeWidth );
 
 
-    // TODO(F2): Rework SlideBitmap to no longer be based on XBitmap,
-    // but on canvas-independent basegfx bitmaps
+    
+    
     virtual SlideBitmapSharedPtr getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const;
 
 
 private:
-    // ViewEventHandler
+    
     virtual void viewAdded( const UnoViewSharedPtr& rView );
     virtual void viewRemoved( const UnoViewSharedPtr& rView );
     virtual void viewChanged( const UnoViewSharedPtr& rView );
     virtual void viewsChanged();
 
-    // CursorManager
+    
     virtual bool requestCursor( sal_Int16 nCursorShape );
     virtual void resetCursor();
 
@@ -167,38 +167,38 @@ private:
     */
     bool isAnimated();
 
-    /// Set all Shapes to their initial attributes for slideshow
+    
     bool applyInitialShapeAttributes( const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::animations::XAnimationNode >& xRootAnimationNode );
 
-    /// Renders current slide content to bitmap
+    
     SlideBitmapSharedPtr createCurrentSlideBitmap(
         const UnoViewSharedPtr& rView,
         ::basegfx::B2ISize const & rSlideSize ) const;
 
-    /// Prefetch all shapes (not the animations)
+    
     bool loadShapes();
 
-    /// Retrieve slide size from XDrawPage
+    
     basegfx::B2ISize getSlideSizeImpl() const;
 
-    /// Prefetch show, but don't call applyInitialShapeAttributes()
+    
     bool implPrefetchShow();
 
-    /// Query the rectangle covered by the slide
+    
     ::basegfx::B2DRectangle getSlideRect() const;
 
-    /// Start GIF and other intrinsic shape animations
+    
     void endIntrinsicAnimations();
 
-    /// End GIF and other intrinsic shape animations
+    
     void startIntrinsicAnimations();
 
-    /// Add Polygons to the member maPolygons
+    
     void addPolygons(PolyPolygonVector aPolygons);
 
-    // Types
-    // =====
+    
+    
 
     enum SlideAnimationState
     {
@@ -220,10 +220,10 @@ private:
                                       VectorOfSlideBitmaps > > VectorOfVectorOfSlideBitmaps;
 
 
-    // Member variables
-    // ================
+    
+    
 
-    /// The page model object
+    
     uno::Reference< drawing::XDrawPage >                mxDrawPage;
     uno::Reference< drawing::XDrawPagesSupplier >       mxDrawPagesSupplier;
     uno::Reference< animations::XAnimationNode >        mxRootNode;
@@ -232,13 +232,13 @@ private:
     boost::shared_ptr<ShapeManagerImpl>                 mpShapeManager;
     boost::shared_ptr<SubsettableShapeManager>          mpSubsettableShapeManager;
 
-    /// Contains common objects needed throughout the slideshow
+    
     SlideShowContext                                    maContext;
 
-    /// parent cursor manager
+    
     CursorManager&                                      mrCursorManager;
 
-    /// Handles the animation and event generation for us
+    
     SlideAnimations                                     maAnimations;
     PolyPolygonVector                                   maPolygons;
 
@@ -246,7 +246,7 @@ private:
     double                                              mdUserPaintStrokeWidth;
     UserPaintOverlaySharedPtr                           mpPaintOverlay;
 
-    /// Bitmaps with slide content at various states
+    
     mutable VectorOfVectorOfSlideBitmaps                maSlideBitmaps;
 
     SlideAnimationState                                 meAnimationState;
@@ -255,16 +255,16 @@ private:
 
     sal_Int16                                           mnCurrentCursor;
 
-    /// True, when intrinsic shape animations are allowed
+    
     bool                                                mbIntrinsicAnimationsAllowed;
 
-    /// True, when user paint overlay is enabled
+    
     bool                                                mbUserPaintOverlayEnabled;
 
-    /// True, if initial load of all page shapes succeeded
+    
     bool                                                mbShapesLoaded;
 
-    /// True, if initial load of all animation info succeeded
+    
     bool                                                mbShowLoaded;
 
     /** True, if this slide is not static.
@@ -283,15 +283,15 @@ private:
     */
     bool                                                mbMainSequenceFound;
 
-    /// When true, show() was called. Slide hidden oherwise.
+    
     bool                                                mbActive;
 
-    ///When true, enablePaintOverlay was called and mbUserPaintOverlay = true
+    
     bool                                                mbPaintOverlayActive;
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////
+
 
 
 class SlideRenderer
@@ -304,7 +304,7 @@ public:
 
     void operator()( const UnoViewSharedPtr& rView )
     {
-        // fully clear view content to background color
+        
         rView->clearAll();
 
         SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( rView ) );
@@ -313,16 +313,16 @@ public:
         const ::basegfx::B2DHomMatrix   aViewTransform( rView->getTransformation() );
         const ::basegfx::B2DPoint       aOutPosPixel( aViewTransform * ::basegfx::B2DPoint() );
 
-        // setup a canvas with device coordinate space, the slide
-        // bitmap already has the correct dimension.
+        
+        
         ::cppcanvas::CanvasSharedPtr pDevicePixelCanvas( pCanvas->clone() );
         pDevicePixelCanvas->setTransformation( ::basegfx::B2DHomMatrix() );
 
-        // render at given output position
+        
         pBitmap->move( aOutPosPixel );
 
-        // clear clip (might have been changed, e.g. from comb
-        // transition)
+        
+        
         pBitmap->clip( ::basegfx::B2DPolyPolygon() );
         pBitmap->draw( pDevicePixelCanvas );
     }
@@ -332,7 +332,7 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////////
+
 
 
 SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDrawPage,
@@ -397,15 +397,15 @@ SlideImpl::SlideImpl( const uno::Reference< drawing::XDrawPage >&           xDra
     mbActive( false ),
     mbPaintOverlayActive( false )
 {
-    // clone already existing views for slide bitmaps
+    
     std::for_each( rViewContainer.begin(),
                    rViewContainer.end(),
                    boost::bind( &SlideImpl::viewAdded,
                                 this,
                                 _1 ));
 
-    // register screen update (LayerManager needs to signal pending
-    // updates)
+    
+    
     maContext.mrScreenUpdater.addViewUpdate(mpShapeManager);
 }
 
@@ -423,9 +423,9 @@ SlideImpl::~SlideImpl()
         maContext.mrScreenUpdater.removeViewUpdate(mpShapeManager);
         mpShapeManager->dispose();
 
-        // TODO(Q3): Make sure LayerManager (and thus Shapes) dies
-        // first, because SlideShowContext has SubsettableShapeManager
-        // as reference member.
+        
+        
+        
         mpLayerManager.reset();
     }
 }
@@ -443,9 +443,9 @@ void SlideImpl::dispose()
         mpShapeManager->dispose();
     }
 
-    // TODO(Q3): Make sure LayerManager (and thus Shapes) dies first,
-    // because SlideShowContext has SubsettableShapeManager as
-    // reference member.
+    
+    
+    
     mpLayerManager.reset();
     mpSubsettableShapeManager.reset();
     mpShapeManager.reset();
@@ -464,36 +464,36 @@ bool SlideImpl::prefetch()
 
 bool SlideImpl::show( bool bSlideBackgoundPainted )
 {
-    // ---------------------------------------------------------------
+    
 
     if( mbActive )
-        return true; // already active
+        return true; 
 
     if( !mpShapeManager || !mpLayerManager )
-        return false; // disposed
+        return false; 
 
-    // ---------------------------------------------------------------
+    
 
-    // set initial shape attributes (e.g. hide shapes that have
-    // 'appear' effect set)
+    
+    
     if( !applyInitialShapeAttributes(mxRootNode) )
         return false;
 
-    // ---------------------------------------------------------------
+    
 
-    // activate and take over view - clears view, if necessary
+    
     mbActive = true;
     requestCursor( mnCurrentCursor );
 
-    // enable shape management & event broadcasting for shapes of this
-    // slide. Also enables LayerManager to record updates. Currently,
-    // never let LayerManager render initial slide content, use
-    // buffered slide bitmaps instead.
+    
+    
+    
+    
     mpShapeManager->activate( true );
 
-    // ---------------------------------------------------------------
+    
 
-    // render slide to screen, if requested
+    
     if( !bSlideBackgoundPainted )
     {
         std::for_each(maContext.mrViewContainer.begin(),
@@ -506,42 +506,42 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
         maContext.mrScreenUpdater.notifyUpdate();
     }
 
-    // ---------------------------------------------------------------
+    
 
-    // fire up animations
+    
     const bool bIsAnimated( isAnimated() );
     if( bIsAnimated )
-        maAnimations.start(); // feeds initial events into queue
+        maAnimations.start(); 
 
-    // NOTE: this looks slightly weird, but is indeed correct:
-    // as isAnimated() might return false, _although_ there is
-    // a main sequence (because the animation nodes don't
-    // contain any executable effects), we gotta check both
-    // conditions here.
+    
+    
+    
+    
+    
     if( !bIsAnimated || !mbMainSequenceFound )
     {
-        // manually trigger a slide animation end event (we don't have
-        // animations at all, or we don't have a main animation
-        // sequence, but if we had, it'd end now). Note that having
-        // animations alone does not matter here, as only main
-        // sequence animations prevents showing the next slide on
-        // nextEvent().
+        
+        
+        
+        
+        
+        
         maContext.mrEventMultiplexer.notifySlideAnimationsEnd();
     }
 
-    // enable shape-intrinsic animations (drawing layer animations or
-    // GIF animations)
+    
+    
     if( mbIntrinsicAnimationsAllowed )
         startIntrinsicAnimations();
 
-    // ---------------------------------------------------------------
+    
 
-    // enable paint overlay, if maUserPaintColor is valid
+    
     activatePaintOverlay();
 
-    // ---------------------------------------------------------------
+    
 
-    // from now on, animations might be showing
+    
     meAnimationState = SHOWING_STATE;
 
     return true;
@@ -550,38 +550,38 @@ bool SlideImpl::show( bool bSlideBackgoundPainted )
 void SlideImpl::hide()
 {
     if( !mbActive || !mpShapeManager )
-        return; // already hidden/disposed
+        return; 
 
-    // ---------------------------------------------------------------
+    
 
-    // from now on, all animations are stopped
+    
     meAnimationState = FINAL_STATE;
 
-    // ---------------------------------------------------------------
+    
 
-    // disable user paint overlay under all circumstances,
-    // this slide now ceases to be active.
+    
+    
     deactivatePaintOverlay();
 
-    // ---------------------------------------------------------------
+    
 
-    // switch off all shape-intrinsic animations.
+    
     endIntrinsicAnimations();
 
-    // force-end all SMIL animations, too
+    
     maAnimations.end();
 
-    // ---------------------------------------------------------------
+    
 
-    // disable shape management & event broadcasting for shapes of this
-    // slide. Also disables LayerManager.
+    
+    
     mpShapeManager->deactivate();
 
-    // vanish from view
+    
     resetCursor();
     mbActive = false;
 
-    // ---------------------------------------------------------------
+    
 }
 
 basegfx::B2ISize SlideImpl::getSlideSize() const
@@ -608,8 +608,8 @@ PolyPolygonVector SlideImpl::getPolygons()
 
 SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const
 {
-    // search corresponding entry in maSlideBitmaps (which
-    // contains the views as the key)
+    
+    
     VectorOfVectorOfSlideBitmaps::iterator       aIter;
     const VectorOfVectorOfSlideBitmaps::iterator aEnd( maSlideBitmaps.end() );
     if( (aIter=std::find_if( maSlideBitmaps.begin(),
@@ -617,31 +617,31 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
                              boost::bind(
                                  std::equal_to<UnoViewSharedPtr>(),
                                  rView,
-                                 // select view:
+                                 
                                  boost::bind(
                                      o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                      _1 )))) == aEnd )
     {
-        // corresponding view not found - maybe view was not
-        // added to Slide?
+        
+        
         ENSURE_OR_THROW( false,
                           "SlideImpl::getInitialSlideBitmap(): view does not "
                           "match any of the added ones" );
     }
 
-    // ensure that the show is loaded
+    
     if( !mbShowLoaded )
     {
-        // only prefetch and init shapes when not done already
-        // (otherwise, at least applyInitialShapeAttributes() will be
-        // called twice for initial slide rendering). Furthermore,
-        // applyInitialShapeAttributes() _always_ performs
-        // initializations, which would be highly unwanted during a
-        // running show. OTOH, a slide whose mbShowLoaded is false is
-        // guaranteed not be running a show.
+        
+        
+        
+        
+        
+        
+        
 
-        // set initial shape attributes (e.g. hide 'appear' effect
-        // shapes)
+        
+        
         if( !const_cast<SlideImpl*>(this)->applyInitialShapeAttributes( mxRootNode ) )
             ENSURE_OR_THROW(false,
                              "SlideImpl::getCurrentSlideBitmap(): Cannot "
@@ -653,11 +653,11 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
         getSlideSizePixel( ::basegfx::B2DSize( getSlideSize() ),
                            rView ));
 
-    // is the bitmap valid (actually existent, and of correct
-    // size)?
+    
+    
     if( !rBitmap || rBitmap->getSize() != rSlideSize )
     {
-        // no bitmap there yet, or wrong size - create one
+        
         rBitmap = createCurrentSlideBitmap(rView, rSlideSize);
     }
 
@@ -665,8 +665,8 @@ SlideBitmapSharedPtr SlideImpl::getCurrentSlideBitmap( const UnoViewSharedPtr& r
 }
 
 
-// private methods
-//--------------------------------------------------------------------------------------------------------------
+
+
 
 
 void SlideImpl::viewAdded( const UnoViewSharedPtr& rView )
@@ -691,7 +691,7 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
                         boost::bind(
                             std::equal_to<UnoViewSharedPtr>(),
                             rView,
-                            // select view:
+                            
                             boost::bind(
                                 o3tl::select1st<VectorOfVectorOfSlideBitmaps::value_type>(),
                                 _1 ))),
@@ -700,16 +700,16 @@ void SlideImpl::viewRemoved( const UnoViewSharedPtr& rView )
 
 void SlideImpl::viewChanged( const UnoViewSharedPtr& rView )
 {
-    // nothing to do for the Slide - getCurrentSlideBitmap() lazily
-    // handles bitmap resizes
+    
+    
     if( mbActive && mpLayerManager )
         mpLayerManager->viewChanged(rView);
 }
 
 void SlideImpl::viewsChanged()
 {
-    // nothing to do for the Slide - getCurrentSlideBitmap() lazily
-    // handles bitmap resizes
+    
+    
     if( mbActive && mpLayerManager )
         mpLayerManager->viewsChanged();
 }
@@ -728,7 +728,7 @@ void SlideImpl::resetCursor()
 
 bool SlideImpl::isAnimated()
 {
-    // prefetch, but don't apply initial shape attributes
+    
     if( !implPrefetchShow() )
         return false;
 
@@ -747,7 +747,7 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
 
     ::cppcanvas::CanvasSharedPtr pCanvas( rView->getCanvas() );
 
-    // create a bitmap of appropriate size
+    
     ::cppcanvas::BitmapSharedPtr pBitmap(
         ::cppcanvas::BaseGfxFactory::getInstance().createBitmap(
             pCanvas,
@@ -761,14 +761,14 @@ SlideBitmapSharedPtr SlideImpl::createCurrentSlideBitmap( const UnoViewSharedPtr
     ENSURE_OR_THROW( pBitmapCanvas,
                       "SlideImpl::createCurrentSlideBitmap(): Cannot create page bitmap canvas" );
 
-    // apply linear part of destination canvas transformation (linear means in this context:
-    // transformation without any translational components)
+    
+    
     ::basegfx::B2DHomMatrix aLinearTransform( rView->getTransformation() );
     aLinearTransform.set( 0, 2, 0.0 );
     aLinearTransform.set( 1, 2, 0.0 );
     pBitmapCanvas->setTransformation( aLinearTransform );
 
-    // output all shapes to bitmap
+    
     initSlideBackground( pBitmapCanvas, rBmpSize );
     mpLayerManager->renderTo( pBitmapCanvas );
 
@@ -817,14 +817,14 @@ bool SlideImpl::implPrefetchShow()
     ENSURE_OR_RETURN_FALSE( mpLayerManager,
                        "SlideImpl::implPrefetchShow(): Invalid layer manager" );
 
-    // fetch desired page content
-    // ==========================
+    
+    
 
     if( !loadShapes() )
         return false;
 
-    // New animations framework: import the shape effect info
-    // ======================================================
+    
+    
 
     try
     {
@@ -835,24 +835,24 @@ bool SlideImpl::implPrefetchShow()
                 OSL_FAIL( "SlideImpl::implPrefetchShow(): have animation nodes, "
                             "but import animations failed." );
 
-                // could not import animation framework,
-                // _although_ some animation nodes are there -
-                // this is an error (not finding animations at
-                // all is okay - might be a static slide)
+                
+                
+                
+                
                 return false;
             }
 
-            // now check whether we've got a main sequence (if
-            // not, we must manually call
-            // EventMultiplexer::notifySlideAnimationsEnd()
-            // above, as e.g. interactive sequences alone
-            // don't block nextEvent() from issuing the next
-            // slide)
+            
+            
+            
+            
+            
+            
             MainSequenceSearcher aSearcher;
             if( ::anim::for_each_childNode( mxRootNode, aSearcher ) )
                 mbMainSequenceFound = aSearcher.getMainSequence().is();
 
-            // import successfully done
+            
             mbHaveAnimations = true;
         }
     }
@@ -866,7 +866,7 @@ bool SlideImpl::implPrefetchShow()
             OUStringToOString(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8).getStr() );
-        // TODO(E2): Error handling. For now, bail out
+        
     }
 
     mbShowLoaded = true;
@@ -962,8 +962,8 @@ bool SlideImpl::applyInitialShapeAttributes(
     {
         meAnimationState = INITIAL_STATE;
 
-        return true; // no animations - no attributes to apply -
-                     // succeeded
+        return true; 
+                     
     }
 
     uno::Reference< animations::XTargetPropertiesCreator > xPropsCreator;
@@ -994,9 +994,9 @@ bool SlideImpl::applyInitialShapeAttributes(
                 comphelper::anyToString(cppu::getCaughtException()),
                 RTL_TEXTENCODING_UTF8).getStr() );
 
-        // could not determine initial shape attributes - this
-        // is an error, as some effects might then be plainly
-        // invisible
+        
+        
+        
         ENSURE_OR_RETURN_FALSE( false,
                            "SlideImpl::applyInitialShapeAttributes(): "
                            "couldn't create TargetPropertiesCreator." );
@@ -1005,7 +1005,7 @@ bool SlideImpl::applyInitialShapeAttributes(
     uno::Sequence< animations::TargetProperties > aProps(
         xPropsCreator->createInitialTargetProperties( xRootAnimationNode ) );
 
-    // apply extracted values to our shapes
+    
     const ::std::size_t nSize( aProps.getLength() );
     for( ::std::size_t i=0; i<nSize; ++i )
     {
@@ -1015,13 +1015,13 @@ bool SlideImpl::applyInitialShapeAttributes(
 
         if( !xShape.is() )
         {
-            // not a shape target. Maybe a ParagraphTarget?
+            
             presentation::ParagraphTarget aParaTarget;
 
             if( (aProps[i].Target >>= aParaTarget) )
             {
-                // yep, ParagraphTarget found - extract shape
-                // and index
+                
+                
                 xShape = aParaTarget.Shape;
                 nParaIndex = aParaTarget.Paragraph;
             }
@@ -1049,8 +1049,8 @@ bool SlideImpl::applyInitialShapeAttributes(
 
             if( nParaIndex != -1 )
             {
-                // our target is a paragraph subset, thus look
-                // this up first.
+                
+                
                 const DocTreeNodeSupplier& rNodeSupplier( pAttrShape->getTreeNodeSupplier() );
 
                 if( rNodeSupplier.getNumberOfTreeNodes(
@@ -1111,10 +1111,10 @@ bool SlideImpl::loadShapes()
     ENSURE_OR_RETURN_FALSE( mpLayerManager,
                        "SlideImpl::loadShapes(): Invalid layer manager" );
 
-    // fetch desired page content
-    // ==========================
+    
+    
 
-    // also take master page content
+    
     uno::Reference< drawing::XDrawPage > xMasterPage;
     uno::Reference< drawing::XShapes >   xMasterPageShapes;
     sal_Int32                            nCurrCount(0);
@@ -1129,13 +1129,13 @@ bool SlideImpl::loadShapes()
 
         if( xMasterPage.is() && xMasterPageShapes.is() )
         {
-            // TODO(P2): maybe cache master pages here (or treat the
-            // masterpage as a single metafile. At least currently,
-            // masterpages do not contain animation effects)
+            
+            
+            
             try
             {
-                // load the masterpage shapes
-                // -------------------------------------------------------------------------
+                
+                
                 ShapeImporter aMPShapesFunctor( xMasterPage,
                                                 mxDrawPage,
                                                 mxDrawPagesSupplier,
@@ -1163,7 +1163,7 @@ bool SlideImpl::loadShapes()
             }
             catch( ShapeLoadFailedException& )
             {
-                // TODO(E2): Error handling. For now, bail out
+                
                 OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
                 return false;
 
@@ -1181,8 +1181,8 @@ bool SlideImpl::loadShapes()
 
     try
     {
-        // load the normal page shapes
-        // -------------------------------------------------------------------------
+        
+        
 
         ShapeImporter aShapesFunctor( mxDrawPage,
                                       mxDrawPage,
@@ -1206,7 +1206,7 @@ bool SlideImpl::loadShapes()
     }
     catch( ShapeLoadFailedException& )
     {
-        // TODO(E2): Error handling. For now, bail out
+        
         OSL_FAIL( "SlideImpl::loadShapes(): caught ShapeLoadFailedException" );
         return false;
     }
@@ -1237,7 +1237,7 @@ basegfx::B2ISize SlideImpl::getSlideSizeImpl() const
     return basegfx::B2ISize( nDocWidth, nDocHeight );
 }
 
-} // namespace
+} 
 
 
 SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         xDrawPage,
@@ -1275,7 +1275,7 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
     return pRet;
 }
 
-} // namespace internal
-} // namespace slideshow
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

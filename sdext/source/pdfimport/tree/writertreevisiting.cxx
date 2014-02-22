@@ -108,7 +108,7 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
 {
     double rel_x = rElem.x, rel_y = rElem.y;
 
-    // find anchor type by recursing though parents
+    
     Element* pAnchor = rElem.Parent;
     while( pAnchor &&
            ! dynamic_cast<ParagraphElement*>(pAnchor) &&
@@ -157,10 +157,10 @@ void WriterXmlEmitter::fillFrameProps( DrawElement&       rElem,
 
         OUStringBuffer aBuf( 256 );
 
-        // TODO(F2): general transformation case missing; if implemented, note
-        // that ODF rotation is oriented the other way
+        
+        
 
-        // build transformation string
+        
         if( fShearX != 0.0 )
         {
             aBuf.appendAscii( "skewX( " );
@@ -314,8 +314,8 @@ void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >
         PageElement* pPage = dynamic_cast<PageElement*>(*it);
         if( pPage )
         {
-            // emit only page anchored objects
-            // currently these are only DrawElement types
+            
+            
             for( std::list< Element* >::iterator child_it = pPage->Children.begin(); child_it != pPage->Children.end(); ++child_it )
             {
                 if( dynamic_cast<DrawElement*>(*child_it) != NULL )
@@ -324,9 +324,9 @@ void WriterXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >
         }
     }
 
-    // do not emit page anchored objects, they are emitted before
-    // (must precede all pages in writer document) currently these are
-    // only DrawElement types
+    
+    
+    
     for( std::list< Element* >::iterator it = elem.Children.begin(); it != elem.Children.end(); ++it )
     {
         if( dynamic_cast<DrawElement*>(*it) == NULL )
@@ -364,7 +364,7 @@ void WriterXmlOptimizer::visit( PolyPolyElement& elem, const std::list< Element*
      */
     if( elem.Parent )
     {
-        // find following PolyPolyElement in parent's children list
+        
         std::list< Element* >::iterator this_it = elem.Parent->Children.begin();
         while( this_it != elem.Parent->Children.end() && *this_it != &elem )
             ++this_it;
@@ -418,7 +418,7 @@ void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< Element
 
     if( elem.Parent && rParentIt != elem.Parent->Children.end() )
     {
-        // find if there is a previous paragraph that might be a heading for this one
+        
         std::list<Element*>::const_iterator prev = rParentIt;
         ParagraphElement* pPrevPara = NULL;
         while( prev != elem.Parent->Children.begin() )
@@ -434,21 +434,21 @@ void WriterXmlOptimizer::visit( ParagraphElement& elem, const std::list< Element
                  * this is of course incomplete
                  * FIXME: improve hints for heading
                  */
-                // check for single line
+                
                 if( pPrevPara->isSingleLined( m_rProcessor ) )
                 {
                     double head_line_height = pPrevPara->getLineHeight( m_rProcessor );
                     if( pPrevPara->y + pPrevPara->h + 2*head_line_height > elem.y )
                     {
-                        // check for larger font
+                        
                         if( head_line_height > elem.getLineHeight( m_rProcessor ) )
                         {
                             pPrevPara->Type = elem.Headline;
                         }
                         else
                         {
-                            // check whether text of pPrevPara is bold (at least first text element)
-                            // and this para is not bold (dito)
+                            
+                            
                             TextElement* pPrevText = pPrevPara->getFirstTextChild();
                             TextElement* pThisText = elem.getFirstTextChild();
                             if( pPrevText && pThisText )
@@ -472,24 +472,24 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
     if( m_rProcessor.getStatusIndicator().is() )
         m_rProcessor.getStatusIndicator()->setValue( elem.PageNumber );
 
-    // resolve hyperlinks
+    
     elem.resolveHyperlinks();
 
-    elem.resolveFontStyles( m_rProcessor ); // underlines and such
+    elem.resolveFontStyles( m_rProcessor ); 
 
-    // FIXME: until hyperlinks and font effects are adjusted for
-    // geometrical search handle them before sorting
+    
+    
     m_rProcessor.sortElements( &elem );
 
-    // find paragraphs in text
+    
     ParagraphElement* pCurPara = NULL;
     std::list< Element* >::iterator page_element, next_page_element;
     next_page_element = elem.Children.begin();
-    double fCurLineHeight = 0.0; // average height of text items in current para
-    int nCurLineElements = 0; // number of line contributing elements in current para
+    double fCurLineHeight = 0.0; 
+    int nCurLineElements = 0; 
     double line_left = elem.w, line_right = 0.0;
-    double column_width = elem.w*0.75; // estimate text width
-    // TODO: guess columns
+    double column_width = elem.w*0.75; 
+    
     while( next_page_element != elem.Children.end() )
     {
         page_element = next_page_element++;
@@ -497,7 +497,7 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
         if( pPagePara )
         {
             pCurPara = pPagePara;
-            // adjust line height and text items
+            
             fCurLineHeight = 0.0;
             nCurLineElements = 0;
             for( std::list< Element* >::iterator it = pCurPara->Children.begin();
@@ -519,10 +519,10 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
             pDraw = dynamic_cast<DrawElement*>(pLink->Children.front() );
         if( pDraw )
         {
-            // insert small drawing objects as character, else leave them page bound
+            
 
             bool bInsertToParagraph = false;
-            // first check if this is either inside the paragraph
+            
             if( pCurPara && pDraw->y < pCurPara->y + pCurPara->h )
             {
                 if( pDraw->h < fCurLineHeight * 1.5 )
@@ -530,11 +530,11 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
                     bInsertToParagraph = true;
                     fCurLineHeight = (fCurLineHeight*double(nCurLineElements) + pDraw->h)/double(nCurLineElements+1);
                     nCurLineElements++;
-                    // mark draw element as character
+                    
                     pDraw->isCharacter = true;
                 }
             }
-            // or perhaps the draw element begins a new paragraph
+            
             else if( next_page_element != elem.Children.end() )
             {
                 TextElement* pText = dynamic_cast<TextElement*>(*next_page_element);
@@ -544,9 +544,9 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
                     if( pPara && ! pPara->Children.empty() )
                         pText = dynamic_cast<TextElement*>(pPara->Children.front());
                 }
-                if( pText && // check there is a text
-                    pDraw->h < pText->h*1.5 && // and it is approx the same height
-                    // and either upper or lower edge of pDraw is inside text's vertical range
+                if( pText && 
+                    pDraw->h < pText->h*1.5 && 
+                    
                     ( ( pDraw->y >= pText->y && pDraw->y <= pText->y+pText->h ) ||
                       ( pDraw->y+pDraw->h >= pText->y && pDraw->y+pDraw->h <= pText->y+pText->h )
                       )
@@ -557,9 +557,9 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
                     nCurLineElements = 1;
                     line_left = pDraw->x;
                     line_right = pDraw->x + pDraw->w;
-                    // begin a new paragraph
+                    
                     pCurPara = NULL;
-                    // mark draw element as character
+                    
                     pDraw->isCharacter = true;
                 }
             }
@@ -580,26 +580,26 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
                                     static_cast<Element*>(pText);
             if( pCurPara )
             {
-                // there was already a text element, check for a new paragraph
+                
                 if( nCurLineElements > 0 )
                 {
-                    // if the new text is significantly distant from the paragraph
-                    // begin a new paragraph
+                    
+                    
                     if( pGeo->y > pCurPara->y+pCurPara->h + fCurLineHeight*0.5 )
-                        pCurPara = NULL; // insert new paragraph
+                        pCurPara = NULL; 
                     else if( pGeo->y > (pCurPara->y+pCurPara->h - fCurLineHeight*0.05) )
                     {
-                        // new paragraph if either the last line of the paragraph
-                        // was significantly shorter than the paragraph as a whole
+                        
+                        
                         if( (line_right - line_left) < pCurPara->w*0.75 )
                             pCurPara = NULL;
-                        // or the last line was significantly smaller than the column width
+                        
                         else if( (line_right - line_left) < column_width*0.75 )
                             pCurPara = NULL;
                     }
                 }
             }
-            // update line height/width
+            
             if( pCurPara )
             {
                 fCurLineHeight = (fCurLineHeight*double(nCurLineElements) + pGeo->h)/double(nCurLineElements+1);
@@ -618,17 +618,17 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
             }
         }
 
-        // move element to current paragraph
-        if( ! pCurPara ) // new paragraph, insert one
+        
+        if( ! pCurPara ) 
         {
             pCurPara = m_rProcessor.getElementFactory()->createParagraphElement( NULL );
-            // set parent
+            
             pCurPara->Parent = &elem;
             //insert new paragraph before current element
             page_element = elem.Children.insert( page_element, pCurPara );
-            // forward iterator to current element again
+            
             ++ page_element;
-            // update next_element which is now invalid
+            
             next_page_element = page_element;
             ++ next_page_element;
         }
@@ -639,10 +639,10 @@ void WriterXmlOptimizer::visit( PageElement& elem, const std::list< Element* >::
             pCurPara->updateGeometryWith( pCurEle );
     }
 
-    // process children
+    
     elem.applyToChildren(*this);
 
-    // find possible header and footer
+    
     checkHeaderAndFooter( elem );
 }
 
@@ -657,9 +657,9 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
      *  - at least lineheight below the previous paragraph
      */
 
-    // detect header
-    // Note: the following assumes that the pages' chiuldren have been
-    // sorted geometrically
+    
+    
+    
     std::list< Element* >::iterator it = rElem.Children.begin();
     while( it != rElem.Children.end() )
     {
@@ -686,7 +686,7 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
         ++it;
     }
 
-    // detect footer
+    
     std::list< Element* >::reverse_iterator rit = rElem.Children.rbegin();
     while( rit != rElem.Children.rend() )
     {
@@ -716,13 +716,13 @@ void WriterXmlOptimizer::checkHeaderAndFooter( PageElement& rElem )
 
 void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
 {
-    if( rParent.Children.empty() ) // this should not happen
+    if( rParent.Children.empty() ) 
     {
         OSL_FAIL( "empty paragraph optimized" );
         return;
     }
 
-    // concatenate child elements with same font id
+    
     std::list< Element* >::iterator next = rParent.Children.begin();
     std::list< Element* >::iterator it = next++;
     FrameElement* pFrame = dynamic_cast<FrameElement*>(rParent.Parent);
@@ -745,7 +745,7 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                 const GraphicsContext& rCurGC = m_rProcessor.getGraphicsContext( pCur->GCId );
                 const GraphicsContext& rNextGC = m_rProcessor.getGraphicsContext( pNext->GCId );
 
-                // line and space optimization; works only in strictly horizontal mode
+                
 
                 if( !bRotatedFrame
                     && ! rCurGC.isRotatedOrSkewed()
@@ -756,11 +756,11 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                     && pCur->Text[pCur->Text.getLength() - 1] != ' '
                     )
                 {
-                    // check for new line in paragraph
+                    
                     if( pNext->y > pCur->y+pCur->h )
                     {
-                        // new line begins
-                        // check whether a space would should be inserted or a hyphen removed
+                        
+                        
                         sal_Unicode aLastCode = pCur->Text[pCur->Text.getLength() - 1];
                         if( aLastCode == '-'
                             || aLastCode == 0x2010
@@ -768,27 +768,27 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                             || aLastCode == 0xff0d
                         )
                         {
-                            // cut a hyphen
+                            
                             pCur->Text.setLength( pCur->Text.getLength()-1 );
                         }
-                        // append a space unless there is a non breaking hyphen
+                        
                         else if( aLastCode != 0x2011 )
                         {
                             pCur->Text.append( ' ' );
                         }
                     }
-                    else // we're continuing the same line
+                    else 
                     {
-                        // check whether a space would should be inserted
-                        // check for a small horizontal offset
+                        
+                        
                         if( pCur->x + pCur->w + pNext->h*0.15 < pNext->x )
                         {
                             pCur->Text.append( ' ' );
                         }
                     }
                 }
-                // concatenate consecutive text elements unless there is a
-                // font or text color or matrix change, leave a new span in that case
+                
+                
                 if( pCur->FontId == pNext->FontId &&
                     rCurGC.FillColor.Red == rNextGC.FillColor.Red &&
                     rCurGC.FillColor.Green == rNextGC.FillColor.Green &&
@@ -798,13 +798,13 @@ void WriterXmlOptimizer::optimizeTextElements(Element& rParent)
                     )
                 {
                     pCur->updateGeometryWith( pNext );
-                    // append text to current element
+                    
                     pCur->Text.append( pNext->Text.getStr(), pNext->Text.getLength() );
-                    // append eventual children to current element
-                    // and clear children (else the children just
-                    // appended to pCur would be destroyed)
+                    
+                    
+                    
                     pCur->Children.splice( pCur->Children.end(), pNext->Children );
-                    // get rid of the now useless element
+                    
                     rParent.Children.erase( next );
                     delete pNext;
                     bConcat = true;
@@ -836,14 +836,14 @@ void WriterXmlOptimizer::visit( DocumentElement& elem, const std::list< Element*
 
 void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element* >::const_iterator& )
 {
-    // xxx TODO copied from DrawElement
+    
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext(elem.GCId );
     PropertyMap aProps;
     aProps[ "style:family" ] = "graphic";
 
     PropertyMap aGCProps;
 
-    // TODO(F3): proper dash emulation
+    
     if( elem.Action & PATH_STROKE )
     {
         aGCProps[ "draw:stroke" ] = rGC.DashArray.empty() ? OUString("solid") : OUString("dash");
@@ -864,7 +864,7 @@ void WriterXmlFinalizer::visit( PolyPolyElement& elem, const std::list< Element*
         aGCProps[ "draw:stroke" ] = "none";
     }
 
-    // TODO(F1): check whether stuff could be emulated by gradient/bitmap/hatch
+    
     if( elem.Action & (PATH_FILL | PATH_EOFILL) )
     {
         aGCProps[ "draw:fill" ]   = "solid";
@@ -894,35 +894,35 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::
 
     PropertyMap aFontProps;
 
-    // family name
+    
     aFontProps[ "fo:font-family" ] = rFont.familyName;
-    // bold
+    
     if( rFont.isBold )
     {
         aFontProps[ "fo:font-weight" ]         = "bold";
         aFontProps[ "fo:font-weight-asian" ]   = "bold";
         aFontProps[ "fo:font-weight-complex" ] = "bold";
     }
-    // italic
+    
     if( rFont.isItalic )
     {
         aFontProps[ "fo:font-style" ]         = "italic";
         aFontProps[ "fo:font-style-asian" ]   = "italic";
         aFontProps[ "fo:font-style-complex" ] = "italic";
     }
-    // underline
+    
     if( rFont.isUnderline )
     {
         aFontProps[ "style:text-underline-style" ]  = "solid";
         aFontProps[ "style:text-underline-width" ]  = "auto";
         aFontProps[ "style:text-underline-color" ]  = "font-color";
     }
-    // outline
+    
     if( rFont.isOutline )
     {
         aFontProps[ "style:text-outline" ]  = "true";
     }
-    // size
+    
     OUStringBuffer aBuf( 32 );
     aBuf.append( rFont.size*72/PDFI_OUTDEV_RESOLUTION );
     aBuf.appendAscii( "pt" );
@@ -930,7 +930,7 @@ void WriterXmlFinalizer::visit( TextElement& elem, const std::list< Element* >::
     aFontProps[ "fo:font-size" ]            = aFSize;
     aFontProps[ "style:font-size-asian" ]   = aFSize;
     aFontProps[ "style:font-size-complex" ] = aFSize;
-    // color
+    
     const GraphicsContext& rGC = m_rProcessor.getGraphicsContext( elem.GCId );
     aFontProps[ "fo:color" ]                 =  getColorString( rFont.isOutline ? rGC.LineColor : rGC.FillColor );
 
@@ -946,8 +946,8 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
 
     if( elem.Parent )
     {
-        // check for center alignement
-        // criterion: paragraph is small relative to parent and distributed around its center
+        
+        
         double p_x = elem.Parent->x;
         double p_w = elem.Parent->w;
 
@@ -961,8 +961,8 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
         if( elem.w < ( p_w/2) )
         {
             double delta = elem.w/4;
-            // allow very small paragraphs to deviate a little more
-            // relative to parent's center
+            
+            
             if( elem.w <  p_w/8 )
                 delta = elem.w;
             if( fabs( elem.x+elem.w/2 - ( p_x+ p_w/2) ) <  delta ||
@@ -974,15 +974,15 @@ void WriterXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element
         }
         if( ! bIsCenter && elem.x > p_x + p_w/10 )
         {
-            // indent
+            
             OUStringBuffer aBuf( 32 );
             aBuf.append( convPx2mm( elem.x - p_x ) );
             aBuf.appendAscii( "mm" );
             aParaProps[ "fo:margin-left" ] = aBuf.makeStringAndClear();
         }
 
-        // check whether to leave some space to next paragraph
-        // find whether there is a next paragraph
+        
+        
         std::list< Element* >::const_iterator it = rParentIt;
         const ParagraphElement* pNextPara = NULL;
         while( ++it != elem.Parent->Children.end() && ! pNextPara )
@@ -1063,12 +1063,12 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     if( m_rProcessor.getStatusIndicator().is() )
         m_rProcessor.getStatusIndicator()->setValue( elem.PageNumber );
 
-    // transform from pixel to mm
+    
     double page_width = convPx2mm( elem.w ), page_height = convPx2mm( elem.h );
 
-    // calculate page margins out of the relevant children (paragraphs)
+    
     elem.TopMargin = elem.h, elem.BottomMargin = 0, elem.LeftMargin = elem.w, elem.RightMargin = 0;
-    // first element should be a paragraphy
+    
     ParagraphElement* pFirstPara = NULL;
     for( std::list< Element* >::const_iterator it = elem.Children.begin(); it != elem.Children.end(); ++it )
     {
@@ -1091,29 +1091,29 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     if( elem.FooterElement && elem.FooterElement->y+elem.FooterElement->h > elem.h - elem.BottomMargin )
         elem.BottomMargin = elem.h - (elem.FooterElement->y + elem.FooterElement->h);
 
-    // transform margins to mm
+    
     double left_margin     = convPx2mm( elem.LeftMargin );
     double right_margin    = convPx2mm( elem.RightMargin );
     double top_margin      = convPx2mm( elem.TopMargin );
     double bottom_margin   = convPx2mm( elem.BottomMargin );
     if( ! pFirstPara )
     {
-        // use default page margins
+        
         left_margin     = 10;
         right_margin    = 10;
         top_margin      = 10;
         bottom_margin   = 10;
     }
 
-    // round left/top margin to nearest mm
+    
     left_margin     = rtl_math_round( left_margin, 0, rtl_math_RoundingMode_Floor );
     top_margin      = rtl_math_round( top_margin, 0, rtl_math_RoundingMode_Floor );
-    // round (fuzzy) right/bottom margin to nearest cm
+    
     right_margin    = rtl_math_round( right_margin, right_margin >= 10 ? -1 : 0, rtl_math_RoundingMode_Floor );
     bottom_margin   = rtl_math_round( bottom_margin, bottom_margin >= 10 ? -1 : 0, rtl_math_RoundingMode_Floor );
 
-    // set reasonable default in case of way too large margins
-    // e.g. no paragraph case
+    
+    
     if( left_margin > page_width/2.0 - 10 )
         left_margin = 10;
     if( right_margin > page_width/2.0 - 10 )
@@ -1123,7 +1123,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     if( bottom_margin > page_height/2.0 - 10 )
         bottom_margin = 10;
 
-    // catch the weird cases
+    
     if( left_margin < 0 )
         left_margin = 0;
     if( right_margin < 0 )
@@ -1133,7 +1133,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     if( bottom_margin < 0 )
         bottom_margin = 0;
 
-    // widely differing margins are unlikely to be correct
+    
     if( right_margin > left_margin*1.5 )
         right_margin = left_margin;
 
@@ -1142,7 +1142,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     elem.TopMargin       = convmm2Px( top_margin );
     elem.BottomMargin    = convmm2Px( bottom_margin );
 
-    // get styles for paragraphs
+    
     PropertyMap aPageProps;
     PropertyMap aPageLayoutProps;
     aPageLayoutProps[ "fo:page-width" ]     = unitMMString( page_width );
@@ -1160,7 +1160,7 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
     aStyle.SubStyles.push_back(&aSubStyle);
     sal_Int32 nPageStyle = m_rStyleContainer.impl_getStyleId( aStyle, false );
 
-    // create master page
+    
     OUString aMasterPageLayoutName = m_rStyleContainer.getStyleName( nPageStyle );
     aPageProps[ "style:page-layout-name" ] = aMasterPageLayoutName;
     StyleContainer::Style aMPStyle( "style:master-page", aPageProps );
@@ -1183,10 +1183,10 @@ void WriterXmlFinalizer::visit( PageElement& elem, const std::list< Element* >::
 
     OUString aMasterPageName = m_rStyleContainer.getStyleName( elem.StyleId );
 
-    // create styles for children
+    
     elem.applyToChildren(*this);
 
-    // no paragraph or other elements before the first paragraph
+    
     if( ! pFirstPara )
     {
         pFirstPara = m_rProcessor.getElementFactory()->createParagraphElement( NULL );

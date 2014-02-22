@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,10 +40,10 @@
 #include <tools/diagnose_ex.h>
 #include <vcl/outdev.hxx>
 
-//........................................................................
+
 namespace svxform
 {
-//........................................................................
+
 
     using namespace ::utl;
     using ::com::sun::star::uno::Reference;
@@ -70,10 +70,10 @@ namespace svxform
     namespace VisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace ScriptType = ::com::sun::star::i18n::ScriptType;
 
-    //--------------------------------------------------------------------
+    
     namespace
     {
-        //....................................................................
+        
         template< class INTERFACE_TYPE >
         Reference< INTERFACE_TYPE > getTypedModelNode( const Reference< XInterface >& _rxModelNode )
         {
@@ -90,7 +90,7 @@ namespace svxform
             }
         }
 
-        //....................................................................
+        
         static bool lcl_getDocumentDefaultStyleAndFamily( const Reference< XInterface >& _rxDocument, OUString& _rFamilyName, OUString& _rStyleName ) SAL_THROW(( Exception ))
         {
             bool bSuccess = true;
@@ -122,7 +122,7 @@ namespace svxform
             return bSuccess;
         }
 
-        //....................................................................
+        
         static void lcl_initializeControlFont( const Reference< XPropertySet >& _rxModel )
         {
             try
@@ -130,18 +130,18 @@ namespace svxform
                 Reference< XPropertySet > xStyle( ControlLayouter::getDefaultDocumentTextStyle( _rxModel ), UNO_SET_THROW );
                 Reference< XPropertySetInfo > xStylePSI( xStyle->getPropertySetInfo(), UNO_SET_THROW );
 
-                // determine the script type associated with the system locale
+                
                 const SvtSysLocale aSysLocale;
                 const LocaleDataWrapper& rSysLocaleData = aSysLocale.GetLocaleData();
                 const sal_Int16 eSysLocaleScriptType = MsLangId::getScriptType( rSysLocaleData.getLanguageTag().getLanguageType() );
 
-                // depending on this script type, use the right property from the document's style which controls the
-                // default locale for document content
+                
+                
                 const sal_Char* pCharLocalePropertyName = "CharLocale";
                 switch ( eSysLocaleScriptType )
                 {
                 case ScriptType::LATIN:
-                    // already defaulted above
+                    
                     break;
                 case ScriptType::ASIAN:
                     pCharLocalePropertyName = "CharLocaleAsian";
@@ -160,7 +160,7 @@ namespace svxform
                 {
                     OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );
                 }
-                // fall back to CharLocale property at the style
+                
                 if ( aDocumentCharLocale.Language.isEmpty() )
                 {
                     sCharLocalePropertyName = "CharLocale";
@@ -169,13 +169,13 @@ namespace svxform
                         OSL_VERIFY( xStyle->getPropertyValue( sCharLocalePropertyName ) >>= aDocumentCharLocale );
                     }
                 }
-                // fall back to the system locale
+                
                 if ( aDocumentCharLocale.Language.isEmpty() )
                 {
                     aDocumentCharLocale = rSysLocaleData.getLanguageTag().getLocale();
                 }
 
-                // retrieve a default font for this locale, and set it at the control
+                
                 Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_SANS, LanguageTag::convertToLanguageType( aDocumentCharLocale ), DEFAULTFONT_FLAGS_ONLYONE );
                 FontDescriptor aFontDesc = VCLUnoHelper::CreateFontDescriptor( aFont );
                 _rxModel->setPropertyValue(
@@ -190,27 +190,27 @@ namespace svxform
         }
     }
 
-    //====================================================================
-    //= ControlLayouter
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     Reference< XPropertySet > ControlLayouter::getDefaultDocumentTextStyle( const Reference< XPropertySet >& _rxModel )
     {
-        // the style family collection
+        
         Reference< XStyleFamiliesSupplier > xSuppStyleFamilies( getTypedModelNode< XStyleFamiliesSupplier >( _rxModel.get() ), UNO_SET_THROW );
         Reference< XNameAccess > xStyleFamilies( xSuppStyleFamilies->getStyleFamilies(), UNO_SET_THROW );
 
-        // the names of the family, and the style - depends on the document type we live in
+        
         OUString sFamilyName, sStyleName;
         if ( !lcl_getDocumentDefaultStyleAndFamily( xSuppStyleFamilies.get(), sFamilyName, sStyleName ) )
             throw RuntimeException("unknown document type!", NULL );
 
-        // the concrete style
+        
         Reference< XNameAccess > xStyleFamily( xStyleFamilies->getByName( sFamilyName ), UNO_QUERY_THROW );
         return Reference< XPropertySet >( xStyleFamily->getByName( sStyleName ), UNO_QUERY_THROW );
     }
 
-    //--------------------------------------------------------------------
+    
     void ControlLayouter::initializeControlLayout( const Reference< XPropertySet >& _rxControlModel, DocumentType _eDocType )
     {
         DBG_ASSERT( _rxControlModel.is(), "ControlLayouter::initializeControlLayout: invalid model!" );
@@ -221,15 +221,15 @@ namespace svxform
         {
             Reference< XPropertySetInfo > xPSI( _rxControlModel->getPropertySetInfo(), UNO_SET_THROW );
 
-            // the control type
+            
             sal_Int16 nClassId = FormComponentType::CONTROL;
             _rxControlModel->getPropertyValue( FM_PROP_CLASSID ) >>= nClassId;
 
-            // the document type
+            
             if ( _eDocType == eUnknownDocumentType )
                 _eDocType = DocumentClassification::classifyHostDocument( _rxControlModel.get() );
 
-            // let's see what the configuration says about the visual effect
+            
             OConfigurationNode  aConfig = getLayoutSettings( _eDocType );
             Any aVisualEffect = aConfig.getNodeValue( OUString( "VisualEffect" ) );
             if ( aVisualEffect.hasValue() )
@@ -258,7 +258,7 @@ namespace svxform
                         if  (   ( nVisualEffect == VisualEffect::FLAT )
                             &&  ( xPSI->hasPropertyByName( FM_PROP_BORDERCOLOR ) )
                             )
-                            // light gray flat border
+                            
                             _rxControlModel->setPropertyValue( FM_PROP_BORDERCOLOR, makeAny( (sal_Int32)0x00C0C0C0 ) );
                     }
                 }
@@ -266,8 +266,8 @@ namespace svxform
                     _rxControlModel->setPropertyValue( FM_PROP_VISUALEFFECT, makeAny( nVisualEffect ) );
             }
 
-            // the font (only if we use the document's ref devices for rendering control text, otherwise, the
-            // default font of VCL controls is assumed to be fine)
+            
+            
             if  (   useDocumentReferenceDevice( _eDocType )
                 &&  xPSI->hasPropertyByName( FM_PROP_FONT )
                 )
@@ -279,17 +279,17 @@ namespace svxform
         }
     }
 
-    //--------------------------------------------------------------------
+    
     ::utl::OConfigurationNode ControlLayouter::getLayoutSettings( DocumentType _eDocType )
     {
         OUString sConfigName = "/org.openoffice.Office.Common/Forms/ControlLayout/";
         sConfigName += DocumentClassification::getModuleIdentifierForDocumentType( _eDocType );
         return OConfigurationTreeRoot::createWithComponentContext(
-            ::comphelper::getProcessComponentContext(),    // TODO
+            ::comphelper::getProcessComponentContext(),    
             sConfigName );
     }
 
-    //--------------------------------------------------------------------
+    
     bool ControlLayouter::useDynamicBorderColor( DocumentType _eDocType )
     {
         OConfigurationNode aConfig = getLayoutSettings( _eDocType );
@@ -299,7 +299,7 @@ namespace svxform
         return bDynamicBorderColor;
     }
 
-    //--------------------------------------------------------------------
+    
     bool ControlLayouter::useDocumentReferenceDevice( DocumentType _eDocType )
     {
         if ( _eDocType == eUnknownDocumentType )
@@ -311,8 +311,8 @@ namespace svxform
         return bUseRefDevice;
     }
 
-//........................................................................
-} // namespace svxform
-//........................................................................
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

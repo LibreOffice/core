@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "listselectiondlg.hxx"
@@ -25,18 +25,18 @@
 #include "formstrings.hxx"
 #include <vcl/msgbox.hxx>
 
-//........................................................................
+
 namespace pcr
 {
-//........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::beans;
 
-    //====================================================================
-    //= ListSelectionDialog
-    //====================================================================
-    //--------------------------------------------------------------------
+    
+    
+    
+    
     ListSelectionDialog::ListSelectionDialog( Window* _pParent, const Reference< XPropertySet >& _rxListBox,
             const OUString& _rPropertyName, const OUString& _rPropertyUIName )
         :ModalDialog( _pParent, PcrRes( RID_DLG_SELECTION ) )
@@ -58,7 +58,7 @@ namespace pcr
         initialize( );
     }
 
-    //------------------------------------------------------------------------
+    
     short ListSelectionDialog::Execute()
     {
         short nResult = ModalDialog::Execute();
@@ -69,7 +69,7 @@ namespace pcr
         return nResult;
     }
 
-    //--------------------------------------------------------------------
+    
     void ListSelectionDialog::initialize( )
     {
         if ( !m_xListBox.is() )
@@ -79,17 +79,17 @@ namespace pcr
 
         try
         {
-            // initialize the multi-selection flag
+            
             sal_Bool bMultiSelection = sal_False;
             OSL_VERIFY( m_xListBox->getPropertyValue( PROPERTY_MULTISELECTION ) >>= bMultiSelection );
             m_aEntries.EnableMultiSelection( bMultiSelection );
 
-            // fill the list box with all entries
+            
             Sequence< OUString > aListEntries;
             OSL_VERIFY( m_xListBox->getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= aListEntries );
             fillEntryList( aListEntries );
 
-            // select entries according to the property
+            
             Sequence< sal_Int16 > aSelection;
             OSL_VERIFY( m_xListBox->getPropertyValue( m_sPropertyName ) >>= aSelection );
             selectEntries( aSelection );
@@ -100,7 +100,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ListSelectionDialog::commitSelection()
     {
         if ( !m_xListBox.is() )
@@ -119,7 +119,7 @@ namespace pcr
         }
     }
 
-    //--------------------------------------------------------------------
+    
     void ListSelectionDialog::fillEntryList( const Sequence< OUString >& _rListEntries )
     {
         m_aEntries.Clear();
@@ -129,7 +129,7 @@ namespace pcr
             m_aEntries.InsertEntry( *_pListEntries );
     }
 
-    //--------------------------------------------------------------------
+    
     void ListSelectionDialog::collectSelection( Sequence< sal_Int16 >& /* [out] */ _rSelection )
     {
         sal_uInt16 nSelectedCount = m_aEntries.GetSelectEntryCount( );
@@ -139,7 +139,7 @@ namespace pcr
             *pSelection = static_cast< sal_Int16 >( m_aEntries.GetSelectEntryPos( selected ) );
     }
 
-    //--------------------------------------------------------------------
+    
     void ListSelectionDialog::selectEntries( const Sequence< sal_Int16 >& /* [in ] */ _rSelection )
     {
         m_aEntries.SetNoSelection();
@@ -149,8 +149,8 @@ namespace pcr
             m_aEntries.SelectEntryPos( *pSelection );
     }
 
-//........................................................................
-}   // namespace pcr
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

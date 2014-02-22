@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/awt/XControl.hpp>
@@ -54,7 +54,7 @@ class ControlArrayWrapper : public ArrayWrapImpl
 private:
     void SetArrayElementTo( const uno::Reference< awt::XControl >& xCtrl, sal_Int32 nIndex = -1 )
     {
-        // initialize the element with specified index to the control
+        
         if ( xCtrl.is() )
         {
             if ( nIndex == -1 )
@@ -95,8 +95,8 @@ public:
         }
         catch (const uno::Exception&)
         {
-            // accept the case when the dialog already does not exist
-            // in this case the wrapper should work in dummy mode
+            
+            
         }
     }
 
@@ -112,7 +112,7 @@ public:
     }
 
 
-    // XElementAccess
+    
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException)
     {
         return cppu::UnoType<awt::XControl>::get();
@@ -123,7 +123,7 @@ public:
         return ( !mControls.empty() );
     }
 
-    // XNameAcess
+    
     virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
     {
         if ( !hasByName( aName ) )
@@ -142,7 +142,7 @@ public:
         return it != mIndices.end();
     }
 
-    // XElementAccess
+    
     virtual ::sal_Int32 SAL_CALL getCount(  ) throw (css::uno::RuntimeException)
     {
         return mControls.size();
@@ -241,7 +241,7 @@ ScVbaControls::createEnumeration() throw (uno::RuntimeException)
 uno::Any
 ScVbaControls::createCollectionObject( const css::uno::Any& aSource )
 {
-    // Create control from awt::XControl
+    
     uno::Reference< awt::XControl > xControl( aSource, uno::UNO_QUERY_THROW );
     uno::Reference< msforms::XControl > xVBAControl = ScVbaControlFactory::createUserformControl( mxContext, xControl, mxDialog, mxModel, mfOffsetX, mfOffsetY );
     return uno::Any( xVBAControl );
@@ -277,7 +277,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
 
         Object >>= aComServiceName;
 
-        // TODO: Support Before and After?
+        
         OUString aNewName;
         StringKey >>= aNewName;
         if ( aNewName.isEmpty() )
@@ -297,7 +297,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
         double fDefWidth = 72.0, fDefHeight = 18.0;
         if ( !aComServiceName.isEmpty() )
         {
-            // create a UNO control model based on the passed control type
+            
             uno::Reference< awt::XControlModel > xNewModel;
             bool bFontSupport = false;
             bool bNativeAX = false;
@@ -381,7 +381,7 @@ uno::Any SAL_CALL ScVbaControls::Add( const uno::Any& Object, const uno::Any& St
                 bNativeAX = true;
             }
 
-            // need to set a few font properties to get rid of the default DONT_KNOW values
+            
             if( bFontSupport )
             {
                 uno::Reference< beans::XPropertySet > xModelProps( xNewModel, uno::UNO_QUERY_THROW );
@@ -482,16 +482,16 @@ void SAL_CALL ScVbaControls::Remove( const uno::Any& StringKeyOrIndex )
     }
     catch (const uno::RuntimeException&)
     {
-        // the exceptions are not rethrown, impossibility to find or remove the control is currently not reported
-        // since in most cases it means just that the controls is already not there, the VBA seems to do it in the same way
+        
+        
 
-        // throw;
+        
     }
     catch (const uno::Exception&)
     {
-        // throw lang::WrappedTargetException("Can not create AXControl!",
-        //         uno::Reference< uno::XInterface >(),
-        //         uno::makeAny( e ) );
+        
+        
+        
     }
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <services/layoutmanager.hxx>
@@ -80,7 +80,7 @@
 #include <algorithm>
 #include <boost/utility.hpp>
 
-//      using namespace
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
@@ -130,7 +130,7 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_pToolbarManager( 0 )
         , m_xToolbarManager( 0 )
 {
-    // Initialize statusbar member
+    
     const sal_Bool bRefreshVisibility = sal_False;
     m_aStatusBarElement.m_aType = "statusbar";
     m_aStatusBarElement.m_aName = STATUS_BAR_ALIAS;
@@ -159,12 +159,12 @@ LayoutManager::~LayoutManager()
     delete m_pGlobalSettings;
 }
 
-// Internal helper function
+
 void LayoutManager::impl_clearUpMenuBar()
 {
     implts_lock();
 
-    // Clear up VCL menu bar to prepare shutdown
+    
     if ( m_xContainerWindow.is() )
     {
         SolarMutexGuard aGuard;
@@ -205,7 +205,7 @@ void LayoutManager::impl_clearUpMenuBar()
         }
     }
 
-    // reset inplace menubar manager
+    
     m_pInplaceMenuBar = 0;
     if ( m_xInplaceMenuBar.is() )
     {
@@ -274,7 +274,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                 {
                     try
                     {
-                        // Remove listener to old module ui configuration manager
+                        
                         xModuleCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                     }
                     catch (const Exception&)
@@ -284,7 +284,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
 
                 try
                 {
-                    // Add listener to new module ui configuration manager
+                    
                     xModuleCfgMgr = Reference< XUIConfiguration >( xModuleCfgSupplier->getUIConfigurationManager( aModuleIdentifier ), UNO_QUERY );
                     if ( xModuleCfgMgr.is() )
                         xModuleCfgMgr->addConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
@@ -295,7 +295,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
 
                 try
                 {
-                    // Retrieve persistent window state reference for our new module
+                    
                     if ( xPersistentWindowStateSupplier.is() )
                         xPersistentWindowStateSupplier->getByName( aModuleIdentifier ) >>= xPersistentWindowState;
                 }
@@ -317,7 +317,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                     {
                         try
                         {
-                            // Remove listener to old ui configuration manager
+                            
                             xDocCfgMgr->removeConfigurationListener( Reference< XUIConfigurationListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
                         }
                         catch (const Exception&)
@@ -339,7 +339,7 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
         }
         else
         {
-            // Remove configuration listeners before we can release our references
+            
             if ( xModuleCfgMgr.is() )
             {
                 try
@@ -364,8 +364,8 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
                 }
             }
 
-            // Release references to our configuration managers as we currently don't have
-            // an attached module.
+            
+            
             xModuleCfgMgr.clear();
             xDocCfgMgr.clear();
             xPersistentWindowState.clear();
@@ -384,11 +384,11 @@ void LayoutManager::implts_reset( sal_Bool bAttached )
         m_xModuleCfgMgr = xModCfgMgr;
         m_xDocCfgMgr = xDokCfgMgr;
         m_xPersistentWindowState = xPersistentWindowState;
-        m_aStatusBarElement.m_bStateRead = false; // reset state to read data again!
+        m_aStatusBarElement.m_bStateRead = false; 
         aWriteLock.unlock();
         /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-        // reset/notify toolbar layout manager
+        
         if ( pToolbarManager )
         {
             if ( bAttached )
@@ -578,7 +578,7 @@ sal_Bool LayoutManager::readWindowStateData( const OUString& aName, UIElement& r
                 }
             }
 
-            // oversteer values with global settings
+            
             if ( pGlobalSettings && ( bGetSettingsState || bGlobalSettings ))
             {
                 if ( pGlobalSettings->HasStatesInfo( GlobalSettings::UIELEMENT_TYPE_TOOLBAR ))
@@ -618,7 +618,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
     WriteGuard aWriteLock( m_aLock );
     Reference< XNameAccess > xPersistentWindowState( m_xPersistentWindowState );
 
-    // set flag to determine that we triggered the notification
+    
     m_bStoreWindowState = true;
     aWriteLock.unlock();
 
@@ -628,12 +628,12 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
     {
         try
         {
-            // Check persistent flag of the user interface element
+            
             xPropSet->getPropertyValue("Persistent") >>= bPersistent;
         }
         catch (const beans::UnknownPropertyException&)
         {
-            // Non-configurable elements should at least store their dimension/position
+            
             bPersistent = sal_True;
         }
         catch (const lang::WrappedTargetException&)
@@ -684,7 +684,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
         }
     }
 
-    // Reset flag
+    
     aWriteLock.lock();
     m_bStoreWindowState = false;
     aWriteLock.unlock();
@@ -695,7 +695,7 @@ void LayoutManager::implts_writeWindowStateData( const OUString& aName, const UI
     ::Size  aContainerWinSize;
     Window* pContainerWindow( 0 );
 
-    // Retrieve output size from container Window
+    
     SolarMutexGuard aGuard;
     pContainerWindow  = VCLUnoHelper::GetWindow( m_xContainerWindow );
     if ( pContainerWindow )
@@ -740,7 +740,7 @@ void LayoutManager::implts_setVisibleState( sal_Bool bShow )
 
 void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
 {
-    // notify listeners
+    
     uno::Any a;
     if ( bSetVisible )
         implts_notifyListeners( frame::LayoutManagerEvents::VISIBLE, a );
@@ -779,7 +779,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
         }
     }
 
-    // Hide/show the statusbar according to bSetVisible
+    
     if ( bSetVisible )
         bMustDoLayout = !implts_showStatusBar();
     else
@@ -846,7 +846,7 @@ void LayoutManager::implts_readStatusBarState( const OUString& rStatusBarName )
     WriteGuard aWriteLock( m_aLock );
     if ( !m_aStatusBarElement.m_bStateRead )
     {
-        // Read persistent data for status bar if not yet read!
+        
         if ( implts_readWindowStateData( rStatusBarName, m_aStatusBarElement ))
             m_aStatusBarElement.m_bStateRead = true;
     }
@@ -912,20 +912,20 @@ void LayoutManager::implts_createProgressBar()
 
 void LayoutManager::implts_backupProgressBarWrapper()
 {
-    // SAFE -> ----------------------------------
+    
     WriteGuard aWriteLock(m_aLock);
 
     if (m_xProgressBarBackup.is())
         return;
 
-    // safe a backup copy of the current progress!
-    // This copy will be used automaticly inside createProgressBar() which is called
-    // implictly from implts_doLayout() .-)
+    
+    
+    
     m_xProgressBarBackup = m_aProgressBarElement.m_xUIElement;
 
-    // remove the relation between this old progress bar and our old status bar.
-    // Otherwhise we work on disposed items ...
-    // The internal used ProgressBarWrapper can handle a NULL reference.
+    
+    
+    
     if ( m_xProgressBarBackup.is() )
     {
         ProgressBarWrapper* pWrapper = (ProgressBarWrapper*)m_xProgressBarBackup.get();
@@ -933,19 +933,19 @@ void LayoutManager::implts_backupProgressBarWrapper()
             pWrapper->setStatusBar( Reference< awt::XWindow >(), sal_False );
     }
 
-    // prevent us from dispose() the m_aProgressBarElement.m_xUIElement inside implts_reset()
+    
     m_aProgressBarElement.m_xUIElement.clear();
 
     aWriteLock.unlock();
-    // <- SAFE ----------------------------------
+    
 }
 
 void LayoutManager::implts_destroyProgressBar()
 {
-    // dont remove the progressbar in general
-    // We must reuse it if a new status bar is created later.
-    // Of course there exists one backup only.
-    // And further this backup will be released inside our dtor.
+    
+    
+    
+    
     implts_backupProgressBarWrapper();
 }
 
@@ -1146,7 +1146,7 @@ throw (uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
 
-        // Reset old inplace menubar!
+        
         m_pInplaceMenuBar = 0;
         if ( m_xInplaceMenuBar.is() )
             m_xInplaceMenuBar->dispose();
@@ -1198,7 +1198,7 @@ throw (uno::RuntimeException)
         }
     }
 
-    // Remove inplace menu bar
+    
     m_pInplaceMenuBar = 0;
     if ( m_xInplaceMenuBar.is() )
         m_xInplaceMenuBar->dispose();
@@ -1219,9 +1219,9 @@ throw (RuntimeException)
     implts_reset( sal_True );
 }
 
-//---------------------------------------------------------------------------------------------------------
-// XMenuBarMergingAcceptor
-//---------------------------------------------------------------------------------------------------------
+
+
+
 sal_Bool SAL_CALL LayoutManager::setMergedMenuBar(
     const Reference< XIndexAccess >& xMergedMenuBar )
 throw (uno::RuntimeException)
@@ -1262,7 +1262,7 @@ throw ( RuntimeException )
     if (( m_xDockingAreaAcceptor == xDockingAreaAcceptor ) || !m_xFrame.is() )
         return;
 
-    // IMPORTANT: Be sure to stop layout timer if don't have a docking area acceptor!
+    
     if ( !xDockingAreaAcceptor.is() )
         m_aAsyncLayoutTimer.Stop();
 
@@ -1274,7 +1274,7 @@ throw ( RuntimeException )
     if ( !xDockingAreaAcceptor.is() )
         m_aAsyncLayoutTimer.Stop();
 
-    // Remove listener from old docking area acceptor
+    
     if ( m_xDockingAreaAcceptor.is() )
     {
         Reference< awt::XWindow > xWindow( m_xDockingAreaAcceptor->getContainerWindow() );
@@ -1299,12 +1299,12 @@ throw ( RuntimeException )
         m_xContainerTopWindow.set( m_xContainerWindow, UNO_QUERY );
         m_xContainerWindow->addWindowListener( Reference< awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
 
-        // we always must keep a connection to the window of our frame for resize events
+        
         if ( m_xContainerWindow != m_xFrame->getContainerWindow() )
             m_xFrame->getContainerWindow()->addWindowListener( Reference< awt::XWindowListener >( static_cast< OWeakObject* >( this ), UNO_QUERY ));
 
-        // #i37884# set initial visibility state - in the plugin case the container window is already shown
-        // and we get no notification anymore
+        
+        
         {
             SolarMutexGuard aGuard;
             Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
@@ -1322,20 +1322,20 @@ throw ( RuntimeException )
     {
         SolarMutexGuard aGuard;
 
-        // Add layout manager as listener to get notifications about toolbar button activties
+        
         Window* pContainerWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
         if ( pContainerWindow )
             pContainerWindow->AddChildEventListener( LINK( this, LayoutManager, WindowEventListener ) );
 
-        // We have now a new container window, reparent all child windows!
+        
         implts_reparentChildWindows();
     }
     else
-        implts_destroyElements(); // remove all elements
+        implts_destroyElements(); 
 
     if ( !oldDockingAreaWindows.empty() )
     {
-        // Reset docking area size for our old docking area acceptor
+        
         awt::Rectangle aEmptyRect;
         xOldDockingAreaAcceptor->setDockingAreaSpace( aEmptyRect );
     }
@@ -1442,8 +1442,8 @@ throw (RuntimeException)
 
     bool bPreviewFrame;
     if (m_pToolbarManager)
-        // Assumes that we created the ToolbarLayoutManager with our frame, if
-        // not then we're somewhat fouled up ...
+        
+        
         bPreviewFrame = m_pToolbarManager->isPreviewFrame();
     else
     {
@@ -1451,7 +1451,7 @@ throw (RuntimeException)
         bPreviewFrame = implts_isPreviewModel( xModel );
     }
 
-    if ( m_xContainerWindow.is() && !bPreviewFrame ) // no UI elements on preview frames
+    if ( m_xContainerWindow.is() && !bPreviewFrame ) 
     {
         OUString aElementType;
         OUString aElementName;
@@ -1466,7 +1466,7 @@ throw (RuntimeException)
         else if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
                   aElementName.equalsIgnoreAsciiCase("menubar") )
         {
-            // #i38743# don't create a menubar if frame isn't top
+            
             if ( !bInPlaceMenu && !m_xMenuBar.is() && implts_isFrameOrWindowTop( xFrame ))
                 {
                 m_xMenuBar = implts_createElement( aName );
@@ -1530,7 +1530,7 @@ throw (RuntimeException)
         }
         else if ( aElementType.equalsIgnoreAsciiCase("dockingwindow"))
         {
-            // Add layout manager as listener for docking and other window events
+            
             uno::Reference< uno::XInterface > xThis( static_cast< OWeakObject* >(this), uno::UNO_QUERY );
             uno::Reference< ui::XUIElement > xUIElement( implts_createDockingWindow( aName ));
 
@@ -1539,8 +1539,8 @@ throw (RuntimeException)
                 impl_addWindowListeners( xThis, xUIElement );
             }
 
-            // The docking window is created by a factory method located in the sfx2 library.
-//            CreateDockingWindow( xFrame, aElementName );
+            
+
         }
     }
 
@@ -1549,7 +1549,7 @@ throw (RuntimeException)
 
     if ( bNotify )
     {
-        // UI element is invisible - provide information to listeners
+        
         implts_notifyListeners( frame::LayoutManagerEvents::UIELEMENT_VISIBLE, uno::makeAny( aName ) );
     }
 }
@@ -1648,13 +1648,13 @@ throw (uno::RuntimeException)
             aWriteLock.unlock();
             createElement( rResourceURL );
 
-            // There are some situation where we are not able to create an element.
-            // Therefore we have to check the reference before further action.
-            // See #i70019#
+            
+            
+            
             uno::Reference< ui::XUIElement > xUIElement( m_aStatusBarElement.m_xUIElement );
             if ( xUIElement.is() )
             {
-                // we need VCL here to pass special flags to Show()
+                
                 SolarMutexGuard aGuard;
                 Reference< awt::XWindow > xWindow( xUIElement->getRealInterface(), UNO_QUERY );
                 Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
@@ -2269,7 +2269,7 @@ throw (RuntimeException)
     aStr.append(nLockCount);
     SAL_INFO( "fwk", "" << aStr.getStr());
 #endif
-    // conform to documentation: unlock with lock count == 0 means force a layout
+    
 
     WriteGuard aWriteLock( m_aLock );
         if ( bDoLayout )
@@ -2289,9 +2289,9 @@ throw (RuntimeException)
     implts_doLayout_notify( sal_True );
 }
 
-//---------------------------------------------------------------------------------------------------------
-//  ILayoutNotifications
-//---------------------------------------------------------------------------------------------------------
+
+
+
 void LayoutManager::requestLayout( Hint eHint )
 {
     if ( eHint == HINT_TOOLBARSPACE_HAS_CHANGED )
@@ -2340,22 +2340,22 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
         awt::Rectangle aBorderSpace( aDockSpace );
         sal_Bool       bGotRequestedBorderSpace( sal_True );
 
-        // We have to add the height of a possible status bar
+        
         aBorderSpace.Height += implts_getStatusBarSize().Height();
 
         if ( !equalRectangles( aBorderSpace, aCurrBorderSpace ) || bForceRequestBorderSpace || bMustDoLayout )
         {
-            // we always resize the content window (instead of the complete container window) if we're not set up
-            // to (attempt to) preserve the content window's size
+            
+            
             if ( bOuterResize && !bPreserveContentSize )
                 bOuterResize = sal_False;
 
-            // maximized windows can resized their content window only, not their container window
+            
             if ( bOuterResize && xContainerTopWindow.is() && xContainerTopWindow->getIsMaximized() )
                 bOuterResize = sal_False;
 
-            // if the component window does not have a size (yet), then we can't use it to calc the container
-            // window size
+            
+            
             awt::Rectangle aComponentRect = xComponentWindow->getPosSize();
             if ( bOuterResize && ( aComponentRect.Width == 0 ) && ( aComponentRect.Height == 0 ) )
                 bOuterResize = sal_False;
@@ -2373,7 +2373,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
                 bGotRequestedBorderSpace = implts_resizeContainerWindow( aRequestedSize, aComponentPos );
             }
 
-            // if we did not do an container window resize, or it failed, then use the DockingAcceptor as usual
+            
             if ( !bGotRequestedBorderSpace )
                 bGotRequestedBorderSpace = xDockingAreaAcceptor->requestDockingAreaSpace( aBorderSpace );
 
@@ -2391,14 +2391,14 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
             ::Size      aContainerSize;
             ::Size      aStatusBarSize;
 
-            // Interim solution to let the layout method within the
-            // toolbar layout manager.
+            
+            
             implts_setOffset( implts_getStatusBarSize().Height() );
             if ( m_pToolbarManager )
                 m_pToolbarManager->setDockingArea( aDockSpace );
 
-            // Subtract status bar size from our container output size. Docking area windows
-            // don't contain the status bar!
+            
+            
             aStatusBarSize = implts_getStatusBarSize();
             aContainerSize = implts_getContainerWindowOutputSize();
             aContainerSize.Height() -= aStatusBarSize.Height();
@@ -2406,7 +2406,7 @@ sal_Bool LayoutManager::implts_doLayout( sal_Bool bForceRequestBorderSpace, sal_
             if ( m_pToolbarManager )
                 m_pToolbarManager->doLayout(aContainerSize);
 
-            // Position the status bar
+            
             if ( aStatusBarSize.Height() > 0 )
             {
                 implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerSize.Height() ), long( 0 ))),
@@ -2433,7 +2433,7 @@ sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContaine
     Reference< awt::XWindow >               xComponentWindow    = m_xFrame->getComponentWindow();
     aReadLock.unlock();
 
-    // calculate the maximum size we have for the container window
+    
     sal_Int32 nDisplay = xContainerTopWindow->getDisplay();
     Rectangle aWorkArea = Application::GetScreenPosSizePixel( nDisplay );
 
@@ -2441,17 +2441,17 @@ sal_Bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContaine
     {
         if (( rContainerSize.Width > aWorkArea.GetWidth() ) || ( rContainerSize.Height > aWorkArea.GetHeight() ))
             return sal_False;
-        // Strictly, this is not correct. If we have a multi-screen display (css.awt.DisplayAccess.MultiDisplay == true),
-        // the "effective work area" would be much larger than the work area of a single display, since we could in theory
-        // position the container window across multiple screens.
-        // However, this should suffice as a heuristics here ... (nobody really wants to check whether the different screens are
-        // stacked horizontally or vertically, whether their work areas can really be combined, or are separated by non-work-areas,
-        // and the like ... right?)
+        
+        
+        
+        
+        
+        
     }
 
-    // resize our container window
+    
     xContainerWindow->setPosSize( 0, 0, rContainerSize.Width, rContainerSize.Height, awt::PosSize::SIZE );
-    // position the component window
+    
     xComponentWindow->setPosSize( rComponentPos.X, rComponentPos.Y, 0, 0, awt::PosSize::POS );
     return sal_True;
 }
@@ -2525,14 +2525,14 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rB
     aReadLock.unlock();
 
     uno::Reference< awt::XDevice > xDevice( xContainerWindow, uno::UNO_QUERY );
-    // Convert relativ size to output size.
+    
     awt::Rectangle  aRectangle           = xContainerWindow->getPosSize();
     awt::DeviceInfo aInfo                = xDevice->getInfo();
     awt::Size       aContainerClientSize = awt::Size( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset,
                                                       aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
     ::Size          aStatusBarSize       = implts_getStatusBarSize();
 
-    // Position the status bar
+    
     if ( aStatusBarSize.Height() > 0 )
     {
         implts_setStatusBarPosSize( ::Point( 0, std::max(( aContainerClientSize.Height - aStatusBarSize.Height() ), long( 0 ))),
@@ -2540,9 +2540,9 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rB
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
-//      XMenuCloser
-//---------------------------------------------------------------------------------------------------------
+
+
+
 void LayoutManager::implts_updateMenuBarClose()
 {
     WriteGuard aWriteLock( m_aLock );
@@ -2560,7 +2560,7 @@ void LayoutManager::implts_updateMenuBarClose()
             MenuBar* pMenuBar = pSysWindow->GetMenuBar();
             if ( pMenuBar )
             {
-                // TODO remove link on sal_False ?!
+                
                 pMenuBar->ShowCloser( bShowCloser );
                 pMenuBar->SetCloserHdl( LINK( this, LayoutManager, MenuBarClose ));
             }
@@ -2626,9 +2626,9 @@ IMPL_LINK_NOARG(LayoutManager, SettingsChanged)
     return 1;
 }
 
-//---------------------------------------------------------------------------------------------------------
-//  XLayoutManagerEventBroadcaster
-//---------------------------------------------------------------------------------------------------------
+
+
+
 void SAL_CALL LayoutManager::addLayoutManagerEventListener( const uno::Reference< frame::XLayoutManagerListener >& xListener )
 throw (uno::RuntimeException)
 {
@@ -2662,9 +2662,9 @@ void LayoutManager::implts_notifyListeners( short nEvent, uno::Any aInfoParam )
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
-//      XWindowListener
-//---------------------------------------------------------------------------------------------------------
+
+
+
 void SAL_CALL LayoutManager::windowResized( const awt::WindowEvent& aEvent )
 throw( uno::RuntimeException )
 {
@@ -2674,16 +2674,16 @@ throw( uno::RuntimeException )
     if ( !m_xDockingAreaAcceptor.is() )
         return;
 
-    // Request to set docking area space again.
+    
     Reference< XDockingAreaAcceptor > xDockingAreaAcceptor( m_xDockingAreaAcceptor );
     Reference< awt::XWindow >         xContainerWindow( m_xContainerWindow );
 
     Reference< XInterface > xIfac( xContainerWindow, UNO_QUERY );
     if ( xIfac == aEvent.Source && m_bVisible )
     {
-        // We have to call our resize handler at least once synchronously, as some
-        // application modules need this. So we have to check if this is the first
-        // call after the async layout time expired.
+        
+        
+        
         m_bMustDoLayout = true;
         if ( !m_aAsyncLayoutTimer.IsActive() )
         {
@@ -2696,20 +2696,20 @@ throw( uno::RuntimeException )
     }
     else if ( m_xFrame.is() && aEvent.Source == m_xFrame->getContainerWindow() )
     {
-        // the container window of my DockingAreaAcceptor is not the same as of my frame
-        // I still have to resize my frames' window as nobody else will do it
+        
+        
         Reference< awt::XWindow > xComponentWindow( m_xFrame->getComponentWindow() );
         if( xComponentWindow.is() )
         {
             uno::Reference< awt::XDevice > xDevice( m_xFrame->getContainerWindow(), uno::UNO_QUERY );
 
-            // Convert relativ size to output size.
+            
             awt::Rectangle  aRectangle = m_xFrame->getContainerWindow()->getPosSize();
             awt::DeviceInfo aInfo      = xDevice->getInfo();
             awt::Size       aSize(  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
                                     aRectangle.Height - aInfo.TopInset  - aInfo.BottomInset );
 
-            // Resize our component window.
+            
             xComponentWindow->setPosSize( 0, 0, aSize.Width, aSize.Height, awt::PosSize::POSSIZE );
         }
     }
@@ -2770,7 +2770,7 @@ IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
     awt::Rectangle aDockingArea( m_aDockingArea );
     ::Size         aStatusBarSize( implts_getStatusBarSize() );
 
-    // Subtract status bar height
+    
     aDockingArea.Height -= aStatusBarSize.Height();
     aReadLock.unlock();
 
@@ -2780,9 +2780,9 @@ IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
     return 0;
 }
 
-//---------------------------------------------------------------------------------------------------------
-//      XFrameActionListener
-//---------------------------------------------------------------------------------------------------------
+
+
+
 void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
 throw ( RuntimeException )
 {
@@ -2821,7 +2821,7 @@ throw ( RuntimeException )
     }
 }
 
-// ______________________________________________
+
 
 void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
 throw( RuntimeException )
@@ -2833,12 +2833,12 @@ throw( RuntimeException )
 
     if ( rEvent.Source == Reference< XInterface >( m_xFrame, UNO_QUERY ))
     {
-        // Our frame gets disposed, release all our references that depends on a working frame reference.
+        
         Application::RemoveEventListener( LINK( this, LayoutManager, SettingsChanged ) );
 
         setDockingAreaAcceptor( Reference< ui::XDockingAreaAcceptor >() );
 
-        // destroy all elements, it's possible that dettaching is NOT called!
+        
         implts_destroyElements();
         impl_clearUpMenuBar();
         m_xMenuBar.clear();
@@ -2851,7 +2851,7 @@ throw( RuntimeException )
         m_xContainerWindow.clear();
         m_xContainerTopWindow.clear();
 
-        // forward disposing call to toolbar manager
+        
         if ( m_pToolbarManager != NULL )
             m_pToolbarManager->disposing(rEvent);
 
@@ -2891,7 +2891,7 @@ throw( RuntimeException )
     }
     else if ( rEvent.Source == Reference< XInterface >( m_xContainerWindow, UNO_QUERY ))
     {
-        // Our container window gets disposed. Remove all user interface elements.
+        
         ToolbarLayoutManager* pToolbarManager = m_pToolbarManager;
         if ( pToolbarManager )
         {
@@ -2917,10 +2917,10 @@ throw( RuntimeException )
     aWriteLock.unlock();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    // Send disposing to our listener when we have lost our frame.
+    
     if ( bDisposeAndClear )
     {
-        // Send message to all listener and forget her references.
+        
         uno::Reference< frame::XLayoutManager > xThis( static_cast< ::cppu::OWeakObject* >(this), uno::UNO_QUERY );
         lang::EventObject aEvent( xThis );
         m_aListenerContainer.disposeAndClear( aEvent );
@@ -3016,13 +3016,13 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
                 if ( !xElementCfgMgr.is() )
                     return;
 
-                // Check if the same UI configuration manager has changed => check further
+                
                 if ( Event.Source == xElementCfgMgr )
                 {
-                    // Same UI configuration manager where our element has its settings
+                    
                     if ( Event.Source == Reference< XInterface >( xDocCfgMgr, UNO_QUERY ))
                     {
-                        // document settings removed
+                        
                         if ( xModuleCfgMgr->hasSettings( Event.ResourceURL ))
                         {
                             xPropSet->setPropertyValue( aConfigSourcePropName, makeAny( m_xModuleCfgMgr ));
@@ -3034,7 +3034,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
                     bNoSettings = true;
                 }
 
-                // No settings anymore, element must be destroyed
+                
                     if ( xContainerWindow.is() && bNoSettings )
                 {
                     if ( aElementType.equalsIgnoreAsciiCase("menubar") &&
@@ -3099,7 +3099,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
                 if ( !xElementCfgMgr.is() )
                     return;
 
-                // Check if the same UI configuration manager has changed => update settings
+                
                 if ( Event.Source == xElementCfgMgr )
                     xElementSettings->updateSettings();
             }
@@ -3110,9 +3110,9 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
     }
 }
 
-//---------------------------------------------------------------------------------------------------------
-//      OPropertySetHelper
-//---------------------------------------------------------------------------------------------------------
+
+
+
 sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConvertedValue,
                                                            Any&       aOldValue,
                                                            sal_Int32  nHandle,
@@ -3214,7 +3214,7 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySet
     return (*pInfo);
 }
 
-} // namespace framework
+} 
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface * SAL_CALL
 com_sun_star_comp_framework_LayoutManager_get_implementation(

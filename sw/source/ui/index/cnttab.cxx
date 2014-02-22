@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_folders.h>
@@ -84,8 +84,8 @@ using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 #include <svtools/editbrowsebox.hxx>
 
-static const sal_Unicode aDeliStart = '['; // for the form
-static const sal_Unicode aDeliEnd    = ']'; // for the form
+static const sal_Unicode aDeliStart = '['; 
+static const sal_Unicode aDeliEnd    = ']'; 
 
 #define IDX_FILE_EXTENSION OUString("*.sdi")
 
@@ -249,8 +249,8 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
     pFormArr = new SwForm*[nTypeCount];
     pDescArr = new SwTOXDescription*[nTypeCount];
     pxIndexSectionsArr = new SwIndexSections_Impl*[nTypeCount];
-    //the standard user index is on position TOX_USER
-    //all user user indexes follow after position TOX_AUTHORITIES
+    
+    
     if(pCurTOX)
     {
         bEditTOX = sal_True;
@@ -266,7 +266,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
             sal_uInt16 nArrayIndex = static_cast< sal_uInt16 >(eCurrentTOXType.eType);
             if(eCurrentTOXType.eType == TOX_USER)
             {
-                //which user type is it?
+                
                 for(sal_uInt16 nUser = 0; nUser < nUserTypeCount; nUser++)
                 {
                     const SwTOXType* pTemp = rSh.GetTOXType(TOX_USER, nUser);
@@ -317,7 +317,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
 
     m_pExampleContainerWIN->SetAccessibleName(m_pShowExampleCB->GetText());
     SetViewAlign( WINDOWALIGN_LEFT );
-    // SetViewWindow does not work if the dialog is visible!
+    
 
     if(!m_pShowExampleCB->IsChecked())
         SetViewWindow(m_pExampleContainerWIN);
@@ -329,7 +329,7 @@ SwMultiTOXTabDialog::~SwMultiTOXTabDialog()
 {
     SW_MOD()->GetModuleConfig()->SetShowIndexPreview(m_pShowExampleCB->IsChecked());
 
-    // fdo#38515 Avoid setting focus on deleted controls in the destructors
+    
     EnableInput( false );
 
     for(sal_uInt16 i = 0; i < nTypeCount; i++)
@@ -490,19 +490,19 @@ IMPL_LINK_NOARG( SwMultiTOXTabDialog, ShowPreviewHdl )
 
             SvtPathOptions aOpt;
             aOpt.SetTemplatePath(OUString(LIBO_SHARE_FOLDER "/template/common"));
-            // 6.0 (extension .sxw)
+            
             bool bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
 
             if( !bExist )
             {
-                // 6.0 (extension .sxw)
+                
                 sTemplate = sTemplateWithoutExt;
                 sTemplate += ".sxw";
                 bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
             }
             if( !bExist )
             {
-                // 5.0 (extension .vor)
+                
                 sTemplate = sTemplateWithoutExt;
                 sTemplate += ".sdw";
                 bExist = aOpt.SearchFile( sTemplate, SvtPathOptions::PATH_TEMPLATE );
@@ -710,7 +710,7 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
             pEntry->SetUserData(reinterpret_cast<void*>(i));
         }
     }
-    // now the other styles
+    
     //
     const SwTxtFmtColl *pColl   = 0;
     const sal_uInt16 nSz = rWrtSh.GetTxtFmtCollCount();
@@ -762,7 +762,7 @@ IMPL_LINK_NOARG(SwAddStylesDlg_Impl, OkHdl)
         pEntry = m_pHeaderTree->Next(pEntry);
     }
 
-    //TODO write back style names
+    
     EndDialog(RET_OK);
     return 0;
 }
@@ -859,8 +859,8 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     get(m_pLanguageLB, "lang");
     get(m_pSortAlgorithmLB, "keytype");
 
-    //Default mode is arranged to be the tallest mode
-    //of alphabetical index, lock that height in now
+    
+    
     Size aPrefSize(get_preferred_size());
     set_height_request(aPrefSize.Height());
 
@@ -924,7 +924,7 @@ void SwTOXSelectTabPage::SetWrtShell(SwWrtShell& rSh)
     sal_uInt16 nUserTypeCount = rSh.GetTOXTypeCount(TOX_USER);
     if(nUserTypeCount > 1)
     {
-        //insert all new user indexes names after the standard user index
+        
         sal_uInt16 nPos = m_pTypeLB->GetEntryPos((void*)(sal_uInt32)TO_USER);
         nPos++;
         for(sal_uInt16 nUser = 1; nUser < nUserTypeCount; nUser++)
@@ -1015,11 +1015,11 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
     m_pAreaLB->SelectEntryPos(rDesc.IsFromChapter() ? 1 : 0);
 
     if(aCurType.eType != TOX_INDEX)
-        m_pLevelNF->SetValue(rDesc.GetLevel());   //content, user
+        m_pLevelNF->SetValue(rDesc.GetLevel());   
 
     sal_uInt16 nCreateType = rDesc.GetContentOptions();
 
-    //user + content
+    
     sal_Bool bHasStyleNames = sal_False;
     sal_uInt16 i;
 
@@ -1038,17 +1038,17 @@ void SwTOXSelectTabPage::ApplyTOXDescription()
 
     m_pLevelFromChapterCB->Check(rDesc.IsLevelFromChapter());
 
-    //all but illustration and table
+    
     m_pTOXMarksCB->Check( 0 != (nCreateType & nsSwTOXElement::TOX_MARK) );
 
-    //content
+    
     if(TOX_CONTENT == aCurType.eType)
     {
         m_pFromHeadingsCB->Check( 0 != (nCreateType & nsSwTOXElement::TOX_OUTLINELEVEL) );
         m_pAddStylesCB->SetText(sAddStyleContent);
         m_pAddStylesPB->Enable(m_pAddStylesCB->IsChecked());
     }
-    //index only
+    
     else if(TOX_INDEX == aCurType.eType)
     {
         sal_uInt16 nIndexOptions = rDesc.GetIndexOptions();
@@ -1254,7 +1254,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
 
     if(!m_bWaitingInitialSettings)
     {
-        // save current values into the proper TOXDescription
+        
         FillTOXDescription();
     }
     m_bWaitingInitialSettings = false;
@@ -1265,7 +1265,7 @@ void SwTOXSelectTabPage::Reset( const SfxItemSet& )
 
 void SwTOXSelectTabPage::ActivatePage( const SfxItemSet& )
 {
-    //nothing to do
+    
 }
 
 int SwTOXSelectTabPage::DeactivatePage( SfxItemSet* _pSet )
@@ -1338,10 +1338,10 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
 
     m_pIdxOptionsFrame->Show( 0 != (nType & TO_INDEX) );
 
-    //object index
+    
     m_pFromObjFrame->Show( 0 != (nType & TO_OBJECT) );
 
-    //set control values from the proper TOXDescription
+    
     {
         ApplyTOXDescription();
     }
@@ -1366,10 +1366,10 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
     const CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
     if(TOX_CONTENT == aCurType.eType)
     {
-        //at least one of the three CheckBoxes must be checked
+        
         if(!m_pAddStylesCB->IsChecked() && !m_pFromHeadingsCB->IsChecked() && !m_pTOXMarksCB->IsChecked())
         {
-            //TODO: InfoBox?
+            
             pBox->Check(true);
         }
         m_pAddStylesPB->Enable(m_pAddStylesCB->IsChecked());
@@ -1610,9 +1610,9 @@ public:
     void SetTabAlign(SvxTabAdjust eAlign)
          {  aFormToken.eTabAlign = eAlign;}
 
-//---> i89791
-    //used for entry number format, in TOC only
-    //needed for different UI dialog position
+
+    
+    
     void SetEntryNumberFormat(sal_uInt16 nSet) {
         switch(nSet)
         {
@@ -1643,7 +1643,7 @@ public:
     }
     sal_uInt16 GetChapterInfo() const{ return aFormToken.nChapterFormat;}
 
-    void SetOutlineLevel( sal_uInt16 nSet ) { aFormToken.nOutlineLevel = nSet;}//i53420
+    void SetOutlineLevel( sal_uInt16 nSet ) { aFormToken.nOutlineLevel = nSet;}
     sal_uInt16 GetOutlineLevel() const{ return aFormToken.nOutlineLevel;}
 
     void SetLinkEnd()
@@ -1681,7 +1681,7 @@ void SwTOXButton::KeyInput( const KeyEvent& rKEvt )
     else if(aCode.GetCode() == KEY_DELETE)
     {
         m_pParent->RemoveControl(this, sal_True);
-        //this is invalid here
+        
         return;
     }
     else if ( (aCode.GetCode() == KEY_F3) && aCode.IsShift() && !aCode.IsMod1() && !aCode.IsMod2() )
@@ -1830,7 +1830,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     m_pLevelLB->SetStyle( m_pLevelLB->GetStyle() | WB_HSCROLL );
     m_pLevelLB->SetSpaceBetweenEntries(0);
     m_pLevelLB->SetSelectionMode( SINGLE_SELECTION );
-    m_pLevelLB->SetHighlightRange();   // select full width
+    m_pLevelLB->SetHighlightRange();   
     m_pLevelLB->Show();
 
     aLastTOXType.eType = (TOXTypes)USHRT_MAX;
@@ -1879,7 +1879,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
 
     m_pEditStylePB->Enable(false);
 
-    //fill the types in
+    
     for (sal_uInt16 i = 0; i < AUTH_FIELD_END; ++i)
     {
         OUString sTmp(SW_RES(STR_AUTH_FIELD_START + i));
@@ -1908,7 +1908,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     m_pSecondKeyLB->SelectEntryPos(0);
     m_pThirdKeyLB->SelectEntryPos(0);
 }
-// pVoid is used as signal to change all levels of the example
+
 IMPL_LINK(SwTOXEntryTabPage, ModifyHdl, void*, pVoid)
 {
     UpdateDescriptor();
@@ -1931,7 +1931,7 @@ SwTOXEntryTabPage::~SwTOXEntryTabPage()
 
 sal_Bool SwTOXEntryTabPage::FillItemSet( SfxItemSet& )
 {
-    // nothing to do
+    
     return sal_True;
 }
 
@@ -2039,7 +2039,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
         m_pLevelLB->Select( m_pLevelLB->GetEntry( bToxIsIndex ? 1 : 0 ) );
         m_pLevelLB->SetSelectHdl(aLink);
 
-        //show or hide controls
+        
         m_pEntryNoPB->Show(bToxIsContent);
         m_pHyperLinkPB->Show(bToxIsContent || bToxIsSequence);
         m_pRelToStyleCB->Show(!bToxIsAuthorities);
@@ -2062,7 +2062,7 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
     }
     aLastTOXType = aCurType;
 
-    //invalidate PatternWindow
+    
     m_pTokenWIN->SetInvalid();
     LevelHdl(m_pLevelLB);
 }
@@ -2153,7 +2153,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
         OSL_ENSURE(WINDOW_EDIT != pCtrl->GetType(), "Remove should be disabled");
         if( WINDOW_EDIT != pCtrl->GetType() )
         {
-            //fill it into the ListBox
+            
             const SwFormToken& rToken = ((SwTOXButton*)pCtrl)->GetFormToken();
             PreTokenButtonRemoved(rToken);
             m_pTokenWIN->RemoveControl((SwTOXButton*)pCtrl);
@@ -2165,7 +2165,7 @@ IMPL_LINK(SwTOXEntryTabPage, RemoveInsertAuthHdl, PushButton*, pButton)
 
 void SwTOXEntryTabPage::PreTokenButtonRemoved(const SwFormToken& rToken)
 {
-    //fill it into the ListBox
+    
     sal_uInt32 nData = rToken.nAuthorityField;
     OUString sTemp(SW_RES(STR_AUTH_FIELD_START + nData));
     sal_uInt16 nPos = m_pAuthFieldsLB->InsertEntry(sTemp);
@@ -2196,14 +2196,14 @@ bool SwTOXEntryTabPage::Notify( NotifyEvent& rNEvt )
     return SfxTabPage::Notify( rNEvt );
 }
 
-// This function initializes the default value in the Token
-// put here the UI dependent initializations
+
+
 IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
 {
     OUString sText;
     FormTokenType eTokenType = TOKEN_ENTRY_NO;
     OUString sCharStyle;
-    sal_uInt16  nChapterFormat = CF_NUMBER; // i89791
+    sal_uInt16  nChapterFormat = CF_NUMBER; 
     if(pBtn == m_pEntryNoPB)
     {
         sText = SwForm::GetFormEntryNum();
@@ -2226,7 +2226,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     {
         sText = SwForm::GetFormChapterMark();
         eTokenType = TOKEN_CHAPTER_INFO;
-        nChapterFormat = CF_NUM_NOPREPST_TITLE; // i89791
+        nChapterFormat = CF_NUM_NOPREPST_TITLE; 
     }
     else if(pBtn == m_pPageNoPB)
     {
@@ -2247,7 +2247,7 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
     SwFormToken aInsert(eTokenType);
     aInsert.sCharStyleName = sCharStyle;
     aInsert.nTabStopPosition = 0;
-    aInsert.nChapterFormat = nChapterFormat; // i89791
+    aInsert.nChapterFormat = nChapterFormat; 
     m_pTokenWIN->InsertAtSelection(sText, aInsert);
     ModifyHdl(0);
     return 0;
@@ -2255,8 +2255,8 @@ IMPL_LINK(SwTOXEntryTabPage, InsertTokenHdl, PushButton*, pBtn)
 
 IMPL_LINK_NOARG(SwTOXEntryTabPage, AllLevelsHdl)
 {
-    //get current level
-    //write it into all levels
+    
+    
     if(m_pTokenWIN->IsValid())
     {
         OUString sNewToken = m_pTokenWIN->GetPattern();
@@ -2290,7 +2290,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
     m_pTokenWIN->SetForm(*m_pCurrentForm, nLevel);
     if(TOX_AUTHORITIES == m_pCurrentForm->GetTOXType())
     {
-        //fill the types in
+        
         m_pAuthFieldsLB->Clear();
         for( sal_uInt32 i = 0; i < AUTH_FIELD_END; i++)
         {
@@ -2299,13 +2299,13 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
             m_pAuthFieldsLB->SetEntryData(nPos, (void*)(sal_uIntPtr)(i));
         }
 
-        // #i21237#
+        
         SwFormTokens aPattern = m_pCurrentForm->GetPattern(nLevel + 1);
         SwFormTokens::iterator aIt = aPattern.begin();
 
         while(aIt != aPattern.end())
         {
-            SwFormToken aToken = *aIt; // #i21237#
+            SwFormToken aToken = *aIt; 
             if(TOKEN_AUTHORITY == aToken.eTokenType)
             {
                 sal_uInt32 nSearch = aToken.nAuthorityField;
@@ -2314,7 +2314,7 @@ IMPL_LINK(SwTOXEntryTabPage, LevelHdl, SvTreeListBox*, pBox)
                 m_pAuthFieldsLB->RemoveEntry(nLstBoxPos);
             }
 
-            aIt++; // #i21237#
+            aIt++; 
         }
         m_pAuthFieldsLB->SelectEntryPos(0);
     }
@@ -2342,11 +2342,11 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 
     if(pToken->eTokenType == TOKEN_CHAPTER_INFO)
     {
-//---> i89791
+
         switch(pToken->nChapterFormat)
         {
         default:
-            m_pChapterEntryLB->SetNoSelection();//to alert the user
+            m_pChapterEntryLB->SetNoSelection();
             break;
         case CF_NUM_NOPREPST_TITLE:
             m_pChapterEntryLB->SelectEntryPos(0);
@@ -2358,12 +2358,12 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
             m_pChapterEntryLB->SelectEntryPos(2);
             break;
         }
-//i53420
+
 
         m_pEntryOutlineLevelNF->SetValue(pToken->nOutlineLevel);
     }
 
-//i53420
+
     if(pToken->eTokenType == TOKEN_ENTRY_NO)
     {
         m_pEntryOutlineLevelNF->SetValue(pToken->nOutlineLevel);
@@ -2402,9 +2402,9 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
     m_pNumberFormatFT->Show( bIsEntryNumber );
     m_pNumberFormatLB->Show( bIsEntryNumber );
 
-    //now enable the visible buttons
-    //- inserting the same type of control is not allowed
-    //- some types of controls can only appear once (EntryText EntryNumber)
+    
+    
+    
 
     if(m_pEntryNoPB->IsVisible())
     {
@@ -2435,7 +2435,7 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         m_pHyperLinkPB->Enable(TOKEN_LINK_START != pToken->eTokenType &&
                             TOKEN_LINK_END != pToken->eTokenType);
     }
-    //table of authorities
+    
     if(m_pAuthInsertPB->IsVisible())
     {
         bool bText = TOKEN_TEXT == pToken->eTokenType;
@@ -2505,7 +2505,7 @@ IMPL_LINK(SwTOXEntryTabPage, NumberFormatHdl, ListBox*, pBox)
         OSL_ENSURE(pCtrl, "no active control?");
         if(pCtrl && WINDOW_EDIT != pCtrl->GetType())
         {
-           ((SwTOXButton*)pCtrl)->SetEntryNumberFormat(nPos);//i89791
+           ((SwTOXButton*)pCtrl)->SetEntryNumberFormat(nPos);
         }
         ModifyHdl(0);
     }
@@ -2548,7 +2548,7 @@ IMPL_LINK(SwTOXEntryTabPage, FillCharHdl, ComboBox*, pBox)
 
 IMPL_LINK(SwTOXEntryTabPage, AutoRightHdl, CheckBox*, pBox)
 {
-    //the most right style::TabStop is usually right aligned
+    
     Control* pCurCtrl = m_pTokenWIN->GetActiveControl();
     OSL_ENSURE(WINDOW_EDIT != pCurCtrl->GetType() &&
             ((SwTOXButton*)pCurCtrl)->GetFormToken().eTokenType == TOKEN_TAB_STOP,
@@ -2594,7 +2594,7 @@ OUString SwTOXEntryTabPage::GetLevelHelp(sal_uInt16 nLevel) const
 
     else if( TOX_AUTHORITIES == aCurType.eType )
     {
-        //wildcard -> show entry text
+        
         sRet = "*";
     }
     return sRet;
@@ -2679,7 +2679,7 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
     if(pForm)
     {
-        //apply current level settings to the form
+        
         for (ctrl_iterator iter = aControlList.begin(); iter != aControlList.end(); ++iter)
             delete (*iter);
 
@@ -2688,18 +2688,18 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
 
     nLevel = nL;
     pForm = &rForm;
-    //now the display
+    
     if(nLevel < MAXLEVEL || rForm.GetTOXType() == TOX_AUTHORITIES)
     {
-        // #i21237#
+        
         SwFormTokens aPattern = pForm->GetPattern(nLevel + 1);
         SwFormTokens::iterator aIt = aPattern.begin();
-        bool bLastWasText = false; //assure alternating text - code - text
+        bool bLastWasText = false; 
 
         Control* pSetActiveControl = 0;
-        while(aIt != aPattern.end()) // #i21237#
+        while(aIt != aPattern.end()) 
         {
-            SwFormToken aToken(*aIt); // #i21237#
+            SwFormToken aToken(*aIt); 
 
             if(TOKEN_TEXT == aToken.eTokenType)
             {
@@ -2732,14 +2732,14 @@ void SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
                 case TOKEN_LINK_START:   sForm = SwForm::GetFormLinkStt(); break;
                 case TOKEN_LINK_END:     sForm = SwForm::GetFormLinkEnd(); break;
                 case TOKEN_AUTHORITY:    sForm = SwForm::GetFormAuth(); break;
-                default:; //prevent warning
+                default:; 
                 }
 
                 InsertItem( sForm, aToken );
                 bLastWasText = false;
             }
 
-            ++aIt; // #i21237#
+            ++aIt; 
         }
         if(!bLastWasText)
         {
@@ -2762,7 +2762,7 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
         if( pActiveCtrl )
         {
             pActiveCtrl->GrabFocus();
-            //it must be a SwTOXEdit
+            
             const SwFormToken* pFToken;
             if( WINDOW_EDIT == pActiveCtrl->GetType() )
                 pFToken = &((SwTOXEdit*)pActiveCtrl)->GetFormToken();
@@ -2848,7 +2848,7 @@ Control*    SwTokenWindow::InsertItem(const OUString& rText, const SwFormToken& 
             pButton->SetText(aButtonTexts[rToken.eTokenType]);
         else
         {
-            //use the first two chars as symbol
+            
             OUString sTmp(SwAuthorityFieldType::GetAuthFieldName(
                         (ToxAuthorityField)rToken.nAuthorityField));
             pButton->SetText(sTmp.copy(0, 2));
@@ -2882,15 +2882,15 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
 
     if(TOKEN_LINK_START == aToInsertToken.eTokenType)
     {
-        //determine if start or end of hyperlink is appropriate
-        //eventually change a following link start into a link end
-        // groups of LS LE should be ignored
-        // <insert>
-        //LS <insert>
-        //LE <insert>
-        //<insert> LS
-        //<insert> LE
-        //<insert>
+        
+        
+        
+        
+        
+        
+        
+        
+        
         bool bPreStartLinkFound = false;
         bool bPreEndLinkFound = false;
 
@@ -2987,8 +2987,8 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         }
     }
 
-    //if the active control is text then insert a new button at the selection
-    //else replace the button
+    
+    
     ctrl_iterator iterActive = std::find(aControlList.begin(),
                                          aControlList.end(), pActiveCtrl);
 
@@ -3057,7 +3057,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
         delete pActiveCtrl;
     }
 
-    //now the new button
+    
     SwTOXButton* pButton = new SwTOXButton(m_pCtrlParentWin, this, aToInsertToken);
 
     aControlList.insert(iterActive, pButton);
@@ -3071,7 +3071,7 @@ void SwTokenWindow::InsertAtSelection(const OUString& rText, const SwFormToken& 
     }
     else
     {
-        //use the first two chars as symbol
+        
         OUString sTmp(SwAuthorityFieldType::GetAuthFieldName(
                     (ToxAuthorityField)aToInsertToken.nAuthorityField));
         pButton->SetText(sTmp.copy(0, 2));
@@ -3094,13 +3094,13 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
 
     ctrl_iterator it = std::find(aControlList.begin(), aControlList.end(), pDel);
 
-    assert(it != aControlList.end()); //Control does not exist!
+    assert(it != aControlList.end()); 
     if (it == aControlList.end())
         return;
 
-    // the two neighbours of the box must be merged
-    // the properties of the right one will be lost
-    assert(it != aControlList.begin() && it != aControlList.end() - 1); //Button at first or last position?
+    
+    
+    assert(it != aControlList.begin() && it != aControlList.end() - 1); 
     if (it == aControlList.begin() || it == aControlList.end() - 1)
         return;
 
@@ -3152,7 +3152,7 @@ void SwTokenWindow::AdjustPositions()
 
 void SwTokenWindow::MoveControls(long nOffset)
 {
-    // move the complete list
+    
     for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
     {
         Control *pCtrl = *it;
@@ -3168,7 +3168,7 @@ void SwTokenWindow::AdjustScrolling()
 {
     if(aControlList.size() > 1)
     {
-        //validate scroll buttons
+        
         Control* pFirstCtrl = *(aControlList.begin());
         Control* pLastCtrl = *(aControlList.rbegin());
 
@@ -3177,7 +3177,7 @@ void SwTokenWindow::AdjustScrolling()
                                                     + pLastCtrl->GetSizePixel().Width();
         bool bEnable = nWidth > nSpace;
 
-        //the active control must be visible
+        
         if(bEnable && pActiveCtrl)
         {
             Point aActivePos(pActiveCtrl->GetPosPixel());
@@ -3200,7 +3200,7 @@ void SwTokenWindow::AdjustScrolling()
         {
             if(pFirstCtrl)
             {
-                //if the control fits into the space then the first control must be at postion 0
+                
                 long nFirstPos = pFirstCtrl->GetPosPixel().X();
 
                 if(nFirstPos != 0)
@@ -3220,7 +3220,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 
     const long nSpace = m_pCtrlParentWin->GetSizePixel().Width();
 #if OSL_DEBUG_LEVEL > 1
-    //find all start/end positions and print it
+    
     OUString sMessage("Space: ");
     sMessage += OUString::number(nSpace);
     sMessage += " | ";
@@ -3243,7 +3243,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     long nMove = 0;
     if(pBtn == m_pLeftScrollWin)
     {
-        //find the first completely visible control (left edge visible)
+        
         for (ctrl_iterator it = aControlList.begin(); it != aControlList.end(); ++it)
         {
             Control *pCtrl = *it;
@@ -3254,12 +3254,12 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
             {
                 if (it == aControlList.begin())
                 {
-                    //move the current control to the left edge
+                    
                     nMove = -nXPos;
                 }
                 else
                 {
-                    //move the left neighbor to the start position
+                    
                     ctrl_iterator itLeft = it;
                     --itLeft;
                     Control *pLeft = *itLeft;
@@ -3273,7 +3273,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
     }
     else
     {
-        //find the first completely visible control (right edge visible)
+        
         for (ctrl_reverse_iterator it = aControlList.rbegin(); it != aControlList.rend(); ++it)
         {
             Control *pCtrl = *it;
@@ -3285,7 +3285,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
             {
                 if (it != aControlList.rbegin())
                 {
-                    //move the right neighbor  to the right edge right aligned
+                    
                     ctrl_reverse_iterator itRight = it;
                     --itRight;
                     Control *pRight = *itRight;
@@ -3296,12 +3296,12 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
             }
         }
 
-        //move it left until it's completely visible
+        
     }
 
     if(nMove)
     {
-        // move the complete list
+        
         MoveControls(nMove);
 
         Control *pCtrl = 0;
@@ -3328,14 +3328,14 @@ OUString SwTokenWindow::GetPattern() const
                 ? ((SwTOXEdit*)pCtrl)->GetFormToken()
                 : ((SwTOXButton*)pCtrl)->GetFormToken();
 
-        //TODO: prevent input of TOX_STYLE_DELIMITER in KeyInput
+        
         sRet += rNewToken.GetString();
     }
 
     return sRet;
 }
 
-// Check if a control of the specified TokenType is already contained in the list
+
 sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
     bool bRet = false;
@@ -3536,8 +3536,8 @@ void SwTokenWindow::SetFocus2theAllBtn()
 
 sal_uInt32 SwTokenWindow::GetControlIndex(FormTokenType eType) const
 {
-    //there are only one entry-text button and only one page-number button,
-    //so we need not add index for these two buttons.
+    
+    
     if ( eType == TOKEN_ENTRY_TEXT || eType == TOKEN_PAGE_NUMS )
     {
         return 0;
@@ -3606,13 +3606,13 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
     m_pParaLayLB->Clear();
     m_pLevelLB->Clear();
 
-    // not hyperlink for user directories
+    
 
     sal_uInt16 i, nSize = m_pCurrentForm->GetFormMax();
 
-    // display form pattern without title
+    
 
-    // display 1st TemplateEntry
+    
     OUString aStr( SW_RES( STR_TITLE ));
     if( !m_pCurrentForm->GetTemplate( 0 ).isEmpty() )
     {
@@ -3646,7 +3646,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         m_pLevelLB->InsertEntry( aCpy );
     }
 
-    // initialise templates
+    
     const SwTxtFmtColl *pColl;
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
     const sal_uInt16 nSz = rSh.GetTxtFmtCollCount();
@@ -3655,7 +3655,7 @@ void SwTOXStylesTabPage::ActivatePage( const SfxItemSet& )
         if( !(pColl = &rSh.GetTxtFmtColl( i ))->IsDefault() )
             m_pParaLayLB->InsertEntry( pColl->GetName() );
 
-    // query pool collections and set them for the directory
+    
     for( i = 0; i < m_pCurrentForm->GetFormMax(); ++i )
     {
         aStr = m_pCurrentForm->GetTemplate( i );
@@ -3696,7 +3696,7 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
     return 0;
 }
 
-// allocate templates
+
 IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
 {
     sal_uInt16 nLevPos   = m_pLevelLB->GetSelectEntryPos();
@@ -3754,7 +3754,7 @@ IMPL_LINK_NOARG_INLINE_START(SwTOXStylesTabPage, DoubleClickHdl)
 }
 IMPL_LINK_NOARG_INLINE_END(SwTOXStylesTabPage, DoubleClickHdl)
 
-// enable only when selected
+
 IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
 {
     m_pStdBT->Enable(m_pLevelLB->GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
@@ -3815,9 +3815,9 @@ SwEntryBrowseBox::SwEntryBrowseBox(Window* pParent, VclBuilderContainer* pBuilde
     xController = new ::svt::EditCellController(&aCellEdit);
     xCheckController = new ::svt::CheckBoxCellController(&aCellCheckBox);
 
-    // HACK: BrowseBox doesn't invalidate its children, how it should be.
-    // That's why WB_CLIPCHILDREN is reset in order to enforce the
-    // children' invalidation
+    
+    
+    
     WinBits aStyle = GetStyle();
     if( aStyle & WB_CLIPCHILDREN )
     {
@@ -4012,14 +4012,14 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
         OUString sLine;
         rInStr.ReadByteStringLine( sLine, eTEnc );
 
-        // # -> comment
-        // ; -> delimiter between entries ->
-        // Format: TextToSearchFor;AlternativeString;PrimaryKey;SecondaryKey
-        // Leading and trailing blanks are ignored
+        
+        
+        
+        
         if( !sLine.isEmpty() )
         {
-            //comments are contained in separate lines but are put into the struct of the following data
-            //line (if available)
+            
+            
             if( '#' != sLine[0] )
             {
                 if( !pToInsert )
@@ -4056,7 +4056,7 @@ void SwEntryBrowseBox::ReadEntries(SvStream& rInStr)
 
 void SwEntryBrowseBox::WriteEntries(SvStream& rOutStr)
 {
-    //check if the current controller is modified
+    
     sal_uInt16 nCol = GetCurColumnId();
     ::svt::CellController* pController;
     if(nCol < ITEM_CASE)
@@ -4100,7 +4100,7 @@ sal_Bool SwEntryBrowseBox::IsModified()const
         return sal_True;
 
 
-    //check if the current controller is modified
+    
     sal_uInt16 nCol = GetCurColumnId();
     ::svt::CellController* pController;
     if(nCol < ITEM_CASE)

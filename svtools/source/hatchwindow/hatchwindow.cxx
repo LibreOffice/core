@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/embed/XHatchWindowController.hpp>
@@ -52,7 +52,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
 
     OSL_ENSURE( pParent, "No parent window is provided!\n" );
     if ( !pParent )
-        throw lang::IllegalArgumentException(); // TODO
+        throw lang::IllegalArgumentException(); 
 
     pHatchWindow = new SvResizeWindow( pParent, this );
     pHatchWindow->setPosSizePixel( aBounds.X, aBounds.Y, aBounds.Width, aBounds.Height );
@@ -62,7 +62,7 @@ void VCLXHatchWindow::initializeWindow( const uno::Reference< awt::XWindowPeer >
     SetWindow( pHatchWindow );
     pHatchWindow->SetComponentInterface( this );
 
-    //pHatchWindow->Show();
+    
 }
 
 void VCLXHatchWindow::QueryObjAreaPixel( Rectangle & aRect )
@@ -102,7 +102,7 @@ void VCLXHatchWindow::InplaceDeactivate()
 {
     if ( m_xController.is() )
     {
-        // TODO: communicate with controller
+        
     }
 }
 
@@ -110,8 +110,8 @@ void VCLXHatchWindow::InplaceDeactivate()
 uno::Any SAL_CALL VCLXHatchWindow::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException )
 {
-    // Attention:
-    //    Don't use mutex or guard in this method!!! Is a method of XInterface.
+    
+    
 
     uno::Any aReturn( ::cppu::queryInterface( rType,
                                            static_cast< embed::XHatchWindow* >( this ) ) );

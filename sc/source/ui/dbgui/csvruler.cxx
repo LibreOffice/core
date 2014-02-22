@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "csvruler.hxx"
@@ -33,12 +33,12 @@ using namespace com::sun::star::uno;
 
 
 
-// ============================================================================
+
 #define SEP_PATH            "Office.Calc/Dialogs/CSVImport"
 #define FIXED_WIDTH_LIST    "FixedWidthList"
 
 
-// ============================================================================
+
 
 static void load_FixedWidthList(ScCsvSplits &aSplits)
 {
@@ -62,7 +62,7 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
 
         sSplits = sFixedWidthLists;
 
-        // String ends with a semi-colon so there is no 'int' after the last one.
+        
         sal_Int32 n = comphelper::string::getTokenCount(sSplits, ';') - 1;
         for (sal_Int32 i = 0; i < n; ++i)
             aSplits.Insert( sSplits.getToken(i, ';').toInt32() );
@@ -71,7 +71,7 @@ static void load_FixedWidthList(ScCsvSplits &aSplits)
 static void save_FixedWidthList(ScCsvSplits aSplits)
 {
     OUStringBuffer sSplits;
-    // Create a semi-colon separated string to save the splits
+    
     sal_uInt32 n = aSplits.Count();
     for (sal_uInt32 i = 0; i < n; ++i)
     {
@@ -98,7 +98,7 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
     mnPosCursorLast( 1 )
 {
-    EnableRTL( false ); // RTL
+    EnableRTL( false ); 
     InitColors();
     InitSizeData();
     maBackgrDev.SetFont( GetFont() );
@@ -113,7 +113,7 @@ ScCsvRuler::~ScCsvRuler()
 }
 
 
-// common ruler handling ------------------------------------------------------
+
 
 void ScCsvRuler::setPosSizePixel(
         long nX, long nY, long nWidth, long nHeight, sal_uInt16 nFlags )
@@ -160,7 +160,7 @@ void ScCsvRuler::InitSizeData()
 {
     maWinSize = GetSizePixel();
 
-    mnSplitSize = (GetCharWidth() * 3 / 5) | 1; // make an odd number
+    mnSplitSize = (GetCharWidth() * 3 / 5) | 1; 
 
     sal_Int32 nActiveWidth = std::min( GetWidth() - GetHdrWidth(), GetPosCount() * GetCharWidth() );
     sal_Int32 nActiveHeight = GetTextHeight();
@@ -206,7 +206,7 @@ void ScCsvRuler::MoveCursorRel( ScMoveMode eDir )
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -225,7 +225,7 @@ void ScCsvRuler::MoveCursorToSplit( ScMoveMode eDir )
             case MOVE_NEXT:     nIndex = maSplits.LowerBound( GetRulerCursorPos() + 1 );    break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
         sal_Int32 nPos = maSplits[ nIndex ];
@@ -245,14 +245,14 @@ void ScCsvRuler::ScrollVertRel( ScMoveMode eDir )
         case MOVE_NEXTPAGE: nLine += GetVisLineCount() - 1; break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     Execute( CSVCMD_SETLINEOFFSET, nLine );
 }
 
 
-// split handling -------------------------------------------------------------
+
 
 sal_Int32 ScCsvRuler::GetNoScrollPos( sal_Int32 nPos ) const
 {
@@ -330,7 +330,7 @@ sal_Int32 ScCsvRuler::FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -356,7 +356,7 @@ void ScCsvRuler::MoveCurrSplitRel( ScMoveMode eDir )
 }
 
 
-// event handling -------------------------------------------------------------
+
 
 void ScCsvRuler::Resize()
 {
@@ -413,7 +413,7 @@ void ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
         sal_Int32 nPos = GetPosFromX( rMEvt.GetPosPixel().X() );
         if( IsTracking() )
         {
-            // on mouse tracking: keep position valid
+            
             nPos = std::max( std::min( nPos, GetPosCount() - sal_Int32( 1 ) ), sal_Int32( 1 ) );
             MoveMouseTracking( nPos );
         }
@@ -422,7 +422,7 @@ void ScCsvRuler::MouseMove( const MouseEvent& rMEvt )
             Point aPoint;
             Rectangle aRect( aPoint, maWinSize );
             if( !IsVisibleSplitPos( nPos ) || !aRect.IsInside( rMEvt.GetPosPixel() ) )
-                // if focused, keep old cursor position for key input
+                
                 nPos = HasFocus() ? GetRulerCursorPos() : CSV_POS_INVALID;
             MoveCursor( nPos, false );
         }
@@ -502,19 +502,19 @@ void ScCsvRuler::MoveMouseTracking( sal_Int32 nPos )
 
 void ScCsvRuler::EndMouseTracking( bool bApply )
 {
-    if( bApply )    // tracking finished successfully
+    if( bApply )    
     {
-        // remove on simple click on an existing split
+        
         if( (mnPosMTCurr == mnPosMTStart) && maOldSplits.HasSplit( mnPosMTCurr ) && !mbPosMTMoved )
             Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
     }
-    else            // tracking cancelled
+    else            
     {
         MoveCursor( mnPosMTStart );
-        // move split to origin
+        
         if( maOldSplits.HasSplit( mnPosMTStart ) )
             MoveMouseTracking( mnPosMTStart );
-        // remove temporarily inserted split
+        
         else if( !maOldSplits.HasSplit( mnPosMTCurr ) )
             Execute( CSVCMD_REMOVESPLIT, mnPosMTCurr );
     }
@@ -522,7 +522,7 @@ void ScCsvRuler::EndMouseTracking( bool bApply )
 }
 
 
-// painting -------------------------------------------------------------------
+
 
 void ScCsvRuler::Paint( const Rectangle& )
 {
@@ -569,7 +569,7 @@ void ScCsvRuler::ImplDrawBackgrDev()
 {
     ImplDrawArea( 0, GetWidth() );
 
-    // scale
+    
     maBackgrDev.SetLineColor( maTextColor );
     maBackgrDev.SetFillColor();
     sal_Int32 nPos;
@@ -586,7 +586,7 @@ void ScCsvRuler::ImplDrawBackgrDev()
             maBackgrDev.DrawLine( Point( nX, nY - 1 ), Point( nX, nY + 1 ) );
     }
 
-    // texts
+    
     maBackgrDev.SetTextColor( maTextColor );
     maBackgrDev.SetTextFillColor();
     for( nPos = ((nFirstPos + 9) / 10) * 10; nPos <= nLastPos; nPos += 10 )
@@ -659,7 +659,7 @@ void ScCsvRuler::ImplSetMousePointer( sal_Int32 nPos )
 }
 
 
-// accessibility ==============================================================
+
 
 ScAccessibleCsvControl* ScCsvRuler::ImplCreateAccessible()
 {
@@ -667,6 +667,6 @@ ScAccessibleCsvControl* ScCsvRuler::ImplCreateAccessible()
 }
 
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

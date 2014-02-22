@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cstring>
@@ -27,14 +27,14 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/cipher.h>
 
-// -----------------------------------------------------------------------------
+
 namespace rtl_cipher
 {
 
 class create : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -87,9 +87,9 @@ public:
             CPPUNIT_ASSERT_MESSAGE("create provide wrong object.", aCipher == NULL);
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(create);
     CPPUNIT_TEST(create_001);
@@ -101,13 +101,13 @@ public:
     CPPUNIT_TEST(create_007);
     CPPUNIT_TEST(create_008);
     CPPUNIT_TEST_SUITE_END();
-}; // class create
+}; 
 
-// -----------------------------------------------------------------------------
+
 class createBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -138,11 +138,11 @@ public:
         {
             rtlCipher aCipher = rtl_cipher_createBF(rtl_Cipher_ModeInvalid);
             CPPUNIT_ASSERT_MESSAGE("create provide wrong object.", aCipher == NULL);
-            // rtl_cipher_destroy(aCipher);
+            
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(createBF);
     CPPUNIT_TEST(createBF_001);
@@ -150,12 +150,12 @@ public:
     CPPUNIT_TEST(createBF_003);
     CPPUNIT_TEST(createBF_004);
     CPPUNIT_TEST_SUITE_END();
-}; // class createBF
-// -----------------------------------------------------------------------------
+}; 
+
 class decode : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -279,20 +279,20 @@ public:
             test_encode(1,0,"B2Aahg5B");
             test_encode(1,2,"Longer text string");
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(decode);
     CPPUNIT_TEST(decode_001);
     CPPUNIT_TEST(decode_002);
     CPPUNIT_TEST_SUITE_END();
-}; // class decode
-// -----------------------------------------------------------------------------
+}; 
+
 class decodeBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -304,19 +304,19 @@ public:
     void decodeBF_001()
         {
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(decodeBF);
     CPPUNIT_TEST(decodeBF_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class decodeBF
-// -----------------------------------------------------------------------------
+}; 
+
 class destroy : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -331,19 +331,19 @@ public:
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != NULL);
             rtl_cipher_destroy(aCipher);
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(destroy);
     CPPUNIT_TEST(destroy_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class destroy
-// -----------------------------------------------------------------------------
+}; 
+
 class destroyBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -357,22 +357,22 @@ public:
             rtlCipher aCipher = rtl_cipher_createBF(rtl_Cipher_ModeECB);
             CPPUNIT_ASSERT_MESSAGE("create failed.", aCipher != NULL);
             rtl_cipher_destroyBF(aCipher);
-            // more proforma
-            // should not GPF
+            
+            
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(destroyBF);
     CPPUNIT_TEST(destroyBF_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class destroyBF
-// -----------------------------------------------------------------------------
+}; 
+
 class encode : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -433,19 +433,19 @@ public:
             test_encode(1,1,1);
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(encode);
     CPPUNIT_TEST(encode_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class encode
-// -----------------------------------------------------------------------------
+}; 
+
 class encodeBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -457,19 +457,19 @@ public:
     void encodeBF_001()
         {
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(encodeBF);
     CPPUNIT_TEST(encodeBF_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class encodeBF
-// -----------------------------------------------------------------------------
+}; 
+
 class init : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -567,9 +567,9 @@ public:
 
             rtl_cipher_destroy(aCipher);
         }
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(init);
     CPPUNIT_TEST(init_001);
@@ -577,12 +577,12 @@ public:
     CPPUNIT_TEST(init_003);
     CPPUNIT_TEST(init_004);
     CPPUNIT_TEST_SUITE_END();
-}; // class init
-// -----------------------------------------------------------------------------
+}; 
+
 class initBF : public CppUnit::TestFixture
 {
 public:
-    // initialise your test code values here.
+    
     void setUp()
     {
     }
@@ -593,19 +593,19 @@ public:
 
     void initBF_001()
         {
-            // seems to be the same as init, so empty
+            
         }
 
-    // Change the following lines only, if you add, remove or rename
-    // member functions of the current class,
-    // because these macros are need by auto register mechanism.
+    
+    
+    
 
     CPPUNIT_TEST_SUITE(initBF);
     CPPUNIT_TEST(initBF_001);
     CPPUNIT_TEST_SUITE_END();
-}; // class initBF
+}; 
 
-// -----------------------------------------------------------------------------
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::create);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::createBF);
@@ -618,13 +618,13 @@ CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::encodeBF);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::init);
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_cipher::initBF);
 
-} // namespace rtl_cipher
+} 
 
 
-// -----------------------------------------------------------------------------
 
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
+
+
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -28,11 +28,11 @@
 using namespace ::oox;
 
 
-// ============================================================================
+
 
 namespace {
 
-// compare vectors
+
 
 /** Compares two vectors.
     @return  A negative value, if rLeft<rRight; or a positive value, if rLeft>rRight;
@@ -42,20 +42,20 @@ int lclCompareVectors( const ::std::vector< Type >& rLeft, const ::std::vector< 
 {
     int nResult = 0;
 
-    // 1st: compare all elements of the vectors
+    
     typedef typename ::std::vector< Type >::const_iterator CIT;
     CIT aEndL = rLeft.end(), aEndR = rRight.end();
     for( CIT aItL = rLeft.begin(), aItR = rRight.begin(); !nResult && (aItL != aEndL) && (aItR != aEndR); ++aItL, ++aItR )
         nResult = static_cast< int >( *aItL ) - static_cast< int >( *aItR );
 
-    // 2nd: no differences found so far -> compare the vector sizes. Shorter vector is less
+    
     if( !nResult )
         nResult = static_cast< int >( rLeft.size() ) - static_cast< int >( rRight.size() );
 
     return nResult;
 }
 
-// hashing helpers
+
 
 /** Base class for value hashers.
     @descr  These function objects are used to hash any value to a sal_uInt32 value. */
@@ -94,9 +94,9 @@ inline sal_uInt16 lclHashVector( const ::std::vector< Type >& rVec )
     return lclHashVector( rVec, XclDirectHasher< Type >() );
 }
 
-} // namespace
+} 
 
-// constructors ---------------------------------------------------------------
+
 
 XclExpString::XclExpString( XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
@@ -108,7 +108,7 @@ XclExpString::XclExpString( const OUString& rString, XclStrFlags nFlags, sal_uIn
     Assign( rString, nFlags, nMaxLen );
 }
 
-// assign ---------------------------------------------------------------------
+
 
 void XclExpString::Assign( const OUString& rString, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
@@ -123,12 +123,12 @@ void XclExpString::Assign( sal_Unicode cChar, XclStrFlags nFlags, sal_uInt16 nMa
 void XclExpString::AssignByte(
         const OUString& rString, rtl_TextEncoding eTextEnc, XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
-    // length may differ from length of rString
+    
     OString aByteStr(OUStringToOString(rString, eTextEnc));
     Build(aByteStr.getStr(), aByteStr.getLength(), nFlags, nMaxLen);
 }
 
-// append ---------------------------------------------------------------------
+
 
 void XclExpString::Append( const OUString& rString )
 {
@@ -139,7 +139,7 @@ void XclExpString::AppendByte( const OUString& rString, rtl_TextEncoding eTextEn
 {
     if (!rString.isEmpty())
     {
-        // length may differ from length of rString
+        
         OString aByteStr(OUStringToOString(rString, eTextEnc));
         BuildAppend(aByteStr.getStr(), aByteStr.getLength());
     }
@@ -154,12 +154,12 @@ void XclExpString::AppendByte( sal_Unicode cChar, rtl_TextEncoding eTextEnc )
     }
     else
     {
-        OString aByteStr( &cChar, 1, eTextEnc );     // length may be >1
+        OString aByteStr( &cChar, 1, eTextEnc );     
         BuildAppend( aByteStr.getStr(), aByteStr.getLength() );
     }
 }
 
-// formatting runs ------------------------------------------------------------
+
 
 void XclExpString::AppendFormat( sal_uInt16 nChar, sal_uInt16 nFontIdx, bool bDropDuplicate )
 {
@@ -213,7 +213,7 @@ bool XclExpString::IsLessThan( const XclExpString& rCmp ) const
     return (nResult != 0) ? (nResult < 0) : (maFormats < rCmp.maFormats);
 }
 
-// get data -------------------------------------------------------------------
+
 
 sal_uInt16 XclExpString::GetFormatsCount() const
 {
@@ -228,9 +228,9 @@ sal_uInt8 XclExpString::GetFlagField() const
 sal_uInt16 XclExpString::GetHeaderSize() const
 {
     return
-        (mb8BitLen ? 1 : 2) +           // length field
-        (IsWriteFlags() ? 1 : 0) +      // flag field
-        (IsWriteFormats() ? 2 : 0);     // richtext formattting count
+        (mb8BitLen ? 1 : 2) +           
+        (IsWriteFlags() ? 1 : 0) +      
+        (IsWriteFormats() ? 2 : 0);     
 }
 
 sal_Size XclExpString::GetBufferSize() const
@@ -241,9 +241,9 @@ sal_Size XclExpString::GetBufferSize() const
 sal_Size XclExpString::GetSize() const
 {
     return
-        GetHeaderSize() +                                   // header
-        GetBufferSize() +                                   // character buffer
-        (IsWriteFormats() ? (4 * GetFormatsCount()) : 0);   // richtext formattting
+        GetHeaderSize() +                                   
+        GetBufferSize() +                                   
+        (IsWriteFormats() ? (4 * GetFormatsCount()) : 0);   
 }
 
 sal_uInt16 XclExpString::GetChar( sal_uInt16 nCharIdx ) const
@@ -259,7 +259,7 @@ sal_uInt16 XclExpString::GetHash() const
         lclHashVector( maFormats, XclFormatRunHasher() );
 }
 
-// streaming ------------------------------------------------------------------
+
 
 void XclExpString::WriteLenField( XclExpStream& rStrm ) const
 {
@@ -283,12 +283,12 @@ void XclExpString::WriteHeader( XclExpStream& rStrm ) const
 {
     OSL_ENSURE( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeader - string too long" );
     PrepareWrite( rStrm, GetHeaderSize() );
-    // length
+    
     WriteLenField( rStrm );
-    // flag field
+    
     if( IsWriteFlags() )
         rStrm << GetFlagField();
-    // format run count
+    
     if( IsWriteFormats() )
         rStrm << GetFormatsCount();
     rStrm.SetSliceSize( 0 );
@@ -332,7 +332,7 @@ void XclExpString::Write( XclExpStream& rStrm ) const
     if (!mbSkipHeader)
         WriteHeader( rStrm );
     WriteBuffer( rStrm );
-    if( IsWriteFormats() )      // only in BIFF8 included in string
+    if( IsWriteFormats() )      
         WriteFormats( rStrm );
 }
 
@@ -341,7 +341,7 @@ void XclExpString::WriteHeaderToMem( sal_uInt8* pnMem ) const
     OSL_ENSURE( pnMem, "XclExpString::WriteHeaderToMem - no memory to write to" );
     OSL_ENSURE( !mb8BitLen || (mnLen < 256), "XclExpString::WriteHeaderToMem - string too long" );
     OSL_ENSURE( !IsWriteFormats(), "XclExpString::WriteHeaderToMem - formatted strings not supported" );
-    // length
+    
     if( mb8BitLen )
     {
         *pnMem = static_cast< sal_uInt8 >( mnLen );
@@ -352,7 +352,7 @@ void XclExpString::WriteHeaderToMem( sal_uInt8* pnMem ) const
         ShortToSVBT16( mnLen, pnMem );
         pnMem += 2;
     }
-    // flag field
+    
     if( IsWriteFlags() )
         *pnMem = GetFlagField();
 }
@@ -438,7 +438,7 @@ void XclExpString::WriteXml( XclExpXmlStream& rStrm ) const
     }
 }
 
-// ----------------------------------------------------------------------------
+
 
 bool XclExpString::IsWriteFlags() const
 {
@@ -560,6 +560,6 @@ void XclExpString::PrepareWrite( XclExpStream& rStrm, sal_uInt16 nBytes ) const
     rStrm.SetSliceSize( nBytes + (mbIsUnicode ? 2 : 1) );
 }
 
-// ============================================================================
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

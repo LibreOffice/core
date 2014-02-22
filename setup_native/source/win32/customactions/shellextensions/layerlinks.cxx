@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #undef UNICODE
@@ -84,7 +84,7 @@ namespace
             }
         }
     }
-} // namespace
+} 
 
 extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 {
@@ -101,7 +101,7 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
 
     stripFinalBackslash(&sUreInstallPath);
 
-    // creating ure-link
+    
 
     HANDLE hfile = CreateFile(
         sUreLinkPath.c_str(),
@@ -116,7 +116,7 @@ extern "C" UINT __stdcall CreateLayerLinks(MSIHANDLE handle)
     {
         DWORD dummy;
 
-        // Converting string into UTF-8 encoding and writing into file "ure-link"
+        
 
         int nCharsRequired = MultiByteToWideChar( CP_ACP, 0, sUreInstallPath.c_str(), -1, NULL, 0 );
         if ( nCharsRequired )
@@ -152,14 +152,14 @@ extern "C" UINT __stdcall RemoveLayerLinks(MSIHANDLE handle)
     string sUreLinkPath = sInstallPath + TEXT("ure-link");
     string sUreDirName = sInstallPath + TEXT("URE\\bin");
 
-    // Check, if URE is still installed
+    
     bool ureDirExists = true;
     WIN32_FIND_DATA aFindData;
     HANDLE hFindContent = FindFirstFile( sUreDirName.c_str(), &aFindData );
     if ( hFindContent == INVALID_HANDLE_VALUE ) { ureDirExists = false; }
     FindClose( hFindContent );
 
-    // Deleting link to URE layer, if URE dir no longer exists
+    
     if ( ! ureDirExists )
     {
         DeleteFile(sUreLinkPath.c_str());

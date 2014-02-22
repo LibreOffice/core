@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,21 +14,21 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "richtextviewport.hxx"
 #include <editeng/editview.hxx>
 
-//........................................................................
+
 namespace frm
 {
-//........................................................................
 
-    //====================================================================
-    //= RichTextViewPort
-    //====================================================================
-    //--------------------------------------------------------------------
+
+    
+    
+    
+    
     RichTextViewPort::RichTextViewPort( Window* _pParent )
         :Control ( _pParent )
         ,m_pView(NULL)
@@ -36,20 +36,20 @@ namespace frm
     {
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextViewPort::setView( EditView& _rView )
     {
         m_pView = &_rView;
         SetPointer( _rView.GetPointer() );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextViewPort::Paint( const Rectangle& _rRect )
     {
         m_pView->Paint( _rRect );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextViewPort::GetFocus()
     {
         Control::GetFocus();
@@ -57,7 +57,7 @@ namespace frm
         m_pView->ShowCursor( true );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextViewPort::LoseFocus()
     {
         m_pView->HideCursor();
@@ -65,7 +65,7 @@ namespace frm
         Control::LoseFocus();
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextViewPort::KeyInput( const KeyEvent& _rKEvt )
     {
         if ( !m_pView->PostKeyEvent( _rKEvt ) )
@@ -74,14 +74,14 @@ namespace frm
             implInvalidateAttributes();
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextViewPort::MouseMove( const MouseEvent& _rMEvt )
     {
         Control::MouseMove( _rMEvt );
         m_pView->MouseMove( _rMEvt );
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextViewPort::MouseButtonDown( const MouseEvent& _rMEvt )
     {
         Control::MouseButtonDown( _rMEvt );
@@ -89,7 +89,7 @@ namespace frm
         GrabFocus();
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextViewPort::MouseButtonUp( const MouseEvent& _rMEvt )
     {
         Control::MouseButtonUp( _rMEvt );
@@ -97,7 +97,7 @@ namespace frm
         implInvalidateAttributes();
     }
 
-    //--------------------------------------------------------------------
+    
     void RichTextViewPort::SetHideInactiveSelection( bool _bHide )
     {
         if ( m_bHideInactiveSelection == _bHide )
@@ -107,14 +107,14 @@ namespace frm
             m_pView->SetSelectionMode( m_bHideInactiveSelection ? EE_SELMODE_HIDDEN : EE_SELMODE_STD );
     }
 
-    //--------------------------------------------------------------------
+    
     bool RichTextViewPort::GetHideInactiveSelection() const
     {
         return m_bHideInactiveSelection;
     }
 
-//........................................................................
-}   // namespace frm
-//........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

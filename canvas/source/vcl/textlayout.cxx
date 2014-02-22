@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@ namespace vclcanvas
         void setupLayoutMode( OutputDevice& rOutDev,
                               sal_Int8      nTextDirection )
         {
-            // TODO(P3): avoid if already correctly set
+            
             sal_uIntPtr nLayoutMode;
             switch( nTextDirection )
             {
@@ -68,8 +68,8 @@ namespace vclcanvas
                     break;
             }
 
-            // set calculated layout mode. Origin is always the left edge,
-            // as required at the API spec
+            
+            
             rOutDev.SetLayoutMode( nLayoutMode | TEXT_LAYOUT_TEXTORIGIN_LEFT );
         }
     }
@@ -100,7 +100,7 @@ namespace vclcanvas
         mpFont.reset();
     }
 
-    // XTextLayout
+    
     uno::Sequence< uno::Reference< rendering::XPolyPolygon2D > > SAL_CALL TextLayout::queryTextShapes(  ) throw (uno::RuntimeException)
     {
         SolarMutexGuard aGuard;
@@ -209,7 +209,7 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        // TODO(F1)
+        
         return uno::Sequence< geometry::RealRectangle2D >();
     }
 
@@ -242,8 +242,8 @@ namespace vclcanvas
         VirtualDevice aVDev( rOutDev );
         aVDev.SetFont( mpFont->getVCLFont() );
 
-        // need metrics for Y offset, the XCanvas always renders
-        // relative to baseline
+        
+        
         const ::FontMetric& aMetric( aVDev.GetFontMetric() );
 
         setupLayoutMode( aVDev, mnTextDirection );
@@ -274,7 +274,7 @@ namespace vclcanvas
 
         (void)nSize;
 
-        // TODO(F1)
+        
         return 0.0;
     }
 
@@ -286,7 +286,7 @@ namespace vclcanvas
         (void)aNextLayouts;
         (void)nSize;
 
-        // TODO(F1)
+        
         return 0.0;
     }
 
@@ -296,7 +296,7 @@ namespace vclcanvas
 
         (void)aHitPoint;
 
-        // TODO(F1)
+        
         return rendering::TextHit();
     }
 
@@ -307,7 +307,7 @@ namespace vclcanvas
         (void)nInsertionIndex;
         (void)bExcludeLigatures;
 
-        // TODO(F1)
+        
         return rendering::Caret();
     }
 
@@ -319,7 +319,7 @@ namespace vclcanvas
         (void)nCaretAdvancement;
         (void)bExcludeLigatures;
 
-        // TODO(F1)
+        
         return 0;
     }
 
@@ -330,7 +330,7 @@ namespace vclcanvas
         (void)nStartIndex;
         (void)nEndIndex;
 
-        // TODO(F1)
+        
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
@@ -341,7 +341,7 @@ namespace vclcanvas
         (void)nStartIndex;
         (void)nEndIndex;
 
-        // TODO(F1)
+        
         return uno::Reference< rendering::XPolyPolygon2D >();
     }
 
@@ -349,7 +349,7 @@ namespace vclcanvas
     {
         SolarMutexGuard aGuard;
 
-        // TODO(F1)
+        
         return 0.0;
     }
 
@@ -385,12 +385,12 @@ namespace vclcanvas
 
         if( maLogicalAdvancements.getLength() )
         {
-            // TODO(P2): cache that
+            
             ::boost::scoped_array< sal_Int32 > aOffsets(new sal_Int32[maLogicalAdvancements.getLength()]);
             setupTextOffsets( aOffsets.get(), maLogicalAdvancements, viewState, renderState );
 
-            // TODO(F3): ensure correct length and termination for DX
-            // array (last entry _must_ contain the overall width)
+            
+            
 
             rOutDev.DrawTextArray( rOutpos,
                                    maText.Text,
@@ -421,17 +421,17 @@ namespace vclcanvas
 
             sal_Int32 operator()( const double& rOffset )
             {
-                // This is an optimization of the normal rMat*[x,0]
-                // transformation of the advancement vector (in x
-                // direction), followed by a length calculation of the
-                // resulting vector: advancement' =
-                // ||rMat*[x,0]||. Since advancements are vectors, we
-                // can ignore translational components, thus if [x,0],
-                // it follows that rMat*[x,0]=[x',0] holds. Thus, we
-                // just have to calc the transformation of the x
-                // component.
+                
+                
+                
+                
+                
+                
+                
+                
+                
 
-                // TODO(F2): Handle non-horizontal advancements!
+                
                 return ::basegfx::fround( hypot(maMatrix.get(0,0)*rOffset,
                                                 maMatrix.get(1,0)*rOffset) );
             }
@@ -455,7 +455,7 @@ namespace vclcanvas
                                                      viewState,
                                                      renderState);
 
-        // fill integer offsets
+        
         ::std::transform( inputOffsets.getConstArray(),
                           inputOffsets.getConstArray()+inputOffsets.getLength(),
                           outputOffsets,

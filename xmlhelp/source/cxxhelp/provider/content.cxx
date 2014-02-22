@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 /**************************************************************************
@@ -51,7 +51,7 @@
 using namespace com::sun::star;
 using namespace chelp;
 
-// Content Implementation.
+
 
 Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
                   ::ucbhelper::ContentProviderImplHelper* pProvider,
@@ -60,32 +60,32 @@ Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
                   Databases* pDatabases )
     : ContentImplHelper( rxContext, pProvider, Identifier ),
       m_aURLParameter( Identifier->getContentIdentifier(),pDatabases ),
-      m_pDatabases( pDatabases ) // not owner
+      m_pDatabases( pDatabases ) 
 {
 }
 
-// virtual
+
 Content::~Content()
 {
 }
 
-// XInterface methods.
 
-// virtual
+
+
 void SAL_CALL Content::acquire()
     throw( )
 {
     ContentImplHelper::acquire();
 }
 
-// virtual
+
 void SAL_CALL Content::release()
     throw( )
 {
     ContentImplHelper::release();
 }
 
-// virtual
+
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     throw ( uno::RuntimeException )
 {
@@ -93,11 +93,11 @@ uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
      return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface( rType );
 }
 
-// XTypeProvider methods.
+
 
 XTYPEPROVIDER_COMMON_IMPL( Content );
 
-// virtual
+
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     throw( uno::RuntimeException )
 {
@@ -126,16 +126,16 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     return (*pCollection).getTypes();
 }
 
-// XServiceInfo methods.
 
-// virtual
+
+
 OUString SAL_CALL Content::getImplementationName()
     throw( uno::RuntimeException )
 {
     return OUString( "CHelpContent" );
 }
 
-// virtual
+
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     throw( uno::RuntimeException )
 {
@@ -144,18 +144,18 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
     return aSNS;
 }
 
-// XContent methods.
 
-// virtual
+
+
 OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
 {
     return OUString( MYUCP_CONTENT_TYPE );
 }
 
-// XCommandProcessor methods.
 
-//virtual
+
+
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     throw( uno::RuntimeException )
 {
@@ -251,7 +251,7 @@ public:
     }
 };
 
-// virtual
+
 uno::Any SAL_CALL Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 CommandId,
@@ -284,7 +284,7 @@ uno::Any SAL_CALL Content::execute(
 
         uno::Sequence< uno::Any > ret(propertyValues.getLength());
         uno::Sequence< beans::Property > props(getProperties(Environment));
-        // No properties can be set
+        
         for(sal_Int32 i = 0; i < ret.getLength(); ++i) {
             ret[i] <<= beans::UnknownPropertyException();
             for(sal_Int32 j = 0; j < props.getLength(); ++j)
@@ -298,12 +298,12 @@ uno::Any SAL_CALL Content::execute(
     }
     else if ( aCommand.Name == "getPropertySetInfo" )
     {
-        // Note: Implemented by base class.
+        
         aRet <<= getPropertySetInfo( Environment );
     }
     else if ( aCommand.Name == "getCommandInfo" )
     {
-        // Note: Implemented by base class.
+        
         aRet <<= getCommandInfo( Environment );
     }
     else if ( aCommand.Name == "open" )
@@ -380,7 +380,7 @@ uno::Any SAL_CALL Content::execute(
     }
     else
     {
-        // Unsupported command
+        
         aRet <<= ucb::UnsupportedCommandException();
         ucbhelper::cancelCommandExecution(aRet,Environment);
     }

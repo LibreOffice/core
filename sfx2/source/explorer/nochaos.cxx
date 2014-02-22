@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -26,9 +26,9 @@
 
 
 #define WID_CHAOS_START 500
-//=========================================================================
-// class CntStaticPoolDefaults_Impl
-//=========================================================================
+
+
+
 
 class CntItemPool;
 
@@ -39,7 +39,7 @@ class CntStaticPoolDefaults_Impl
     SfxItemInfo*  m_pItemInfos;
 
 private:
-    // Forbidden and not implemented...
+    
     CntStaticPoolDefaults_Impl( const CntStaticPoolDefaults_Impl& );
     CntStaticPoolDefaults_Impl& operator=( const CntStaticPoolDefaults_Impl& );
 
@@ -53,9 +53,9 @@ public:
     const SfxItemInfo* GetItemInfos() const { return m_pItemInfos; }
 };
 
-//----------------------------------------------------------------------------
 
-//=========================================================================
+
+
 
 class CntItemPool: public SfxItemPool
 {
@@ -71,34 +71,34 @@ public:
     static sal_uInt16       Release();
 };
 
-//----------------------------------------------------------------------------
 
-//----------------------------------------------------------------------------
-// static
+
+
+
 SfxItemPool* NoChaos::GetItemPool()
 {
-    // Get and hold CHAOS item pool.
+    
     return CntItemPool::Acquire();
 }
 
-//----------------------------------------------------------------------------
-// static
+
+
 sal_uInt16 NoChaos::ReleaseItemPool()
 {
-    // Release CHAOS item pool.
+    
     return CntItemPool::Release();
 }
 
-//=========================================================================
-//  CntItemPool implementation
-//=========================================================================
+
+
+
 
 static CntStaticPoolDefaults_Impl* pPoolDefs_Impl = NULL;
 
-// static member!
+
 CntItemPool* CntItemPool::_pThePool = NULL;
 
-//-------------------------------------------------------------------------
+
 CntItemPool::CntItemPool()
 : SfxItemPool( "chaos", WID_CHAOS_START, WID_CHAOS_START, NULL ),
   _nRefs( 0 )
@@ -107,26 +107,26 @@ CntItemPool::CntItemPool()
 
     FreezeIdRanges();
 
-    // Create static defaults.
+    
     pPoolDefs_Impl = new CntStaticPoolDefaults_Impl( this );
 
-    // Set item infos.
+    
     SetItemInfos( pPoolDefs_Impl->GetItemInfos() );
 
-    // Set static pool default items.
+    
     SetDefaults( pPoolDefs_Impl->GetDefaults() );
 }
 
-//-------------------------------------------------------------------------
-//virtual
+
+
 CntItemPool::~CntItemPool()
 {
-    // Release static pool default items.
+    
     ReleaseDefaults( false );
 }
 
-//-------------------------------------------------------------------------
-// static
+
+
 CntItemPool* CntItemPool::Acquire()
 {
     if ( !_pThePool )
@@ -137,8 +137,8 @@ CntItemPool* CntItemPool::Acquire()
     return _pThePool;
 }
 
-//-------------------------------------------------------------------------
-// static
+
+
 sal_uInt16 CntItemPool::Release()
 {
     if ( !_pThePool )
@@ -159,9 +159,9 @@ sal_uInt16 CntItemPool::Release()
     return nRefs;
 }
 
-//=========================================================================
-// CntStaticPoolDefaults_Impl implementation.
-//=========================================================================
+
+
+
 
 inline void CntStaticPoolDefaults_Impl::Insert(
          SfxPoolItem* pItem,        /* Static Pool Default Item */
@@ -174,7 +174,7 @@ inline void CntStaticPoolDefaults_Impl::Insert(
     m_pItemInfos[ nPos ]._nFlags = nFlags;
 }
 
-//-------------------------------------------------------------------------
+
 CntStaticPoolDefaults_Impl::~CntStaticPoolDefaults_Impl()
 {
     for ( sal_uInt32 n = 0; n < m_nItems; ++n )
@@ -184,7 +184,7 @@ CntStaticPoolDefaults_Impl::~CntStaticPoolDefaults_Impl()
     delete [] m_pItemInfos;
 }
 
-//-------------------------------------------------------------------------
+
 CntStaticPoolDefaults_Impl::CntStaticPoolDefaults_Impl( CntItemPool* /*pPool*/ )
 : m_nItems( 1 ),
   m_ppDefaults( new SfxPoolItem* [ m_nItems ] ),

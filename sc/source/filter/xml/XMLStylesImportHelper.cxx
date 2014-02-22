@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLStylesImportHelper.hxx"
@@ -234,7 +234,7 @@ void ScMyStyleRanges::SetStylesToRanges(const OUString* pStyleName, ScXMLImport&
     }
 }
 
-//----------------------------------------------------------------------------
+
 
 ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     :
@@ -367,7 +367,7 @@ void ScMyStylesImportHelper::AddRange()
 
 void ScMyStylesImportHelper::AddColumnStyle(const OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
 {
-    (void)nColumn;  // avoid warning in product version
+    (void)nColumn;  
     OSL_ENSURE(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
     ScMyStylesSet::iterator aItr(GetIterator(&sStyleName));
     OSL_ENSURE(aItr != aCellStyles.end(), "no column default style");

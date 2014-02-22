@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrappedSymbolProperties.hxx"
@@ -32,12 +32,12 @@
 #include <com/sun/star/graphic/GraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 
-// for UNO_NAME_GRAPHOBJ_URLPREFIX
+
 #include <editeng/unoprnms.hxx>
 
-// for Graphic
+
 #include <vcl/graph.hxx>
-// for GraphicObject
+
 #include <svtools/grfmgr.hxx>
 #include <vcl/outdev.hxx>
 
@@ -51,7 +51,7 @@ using ::com::sun::star::beans::Property;
 
 namespace com { namespace sun { namespace star { namespace awt {
 
-// this operator is not defined by default
+
 bool operator!=( const awt::Size & rSize1, const awt::Size & rSize2 )
 {
     return (rSize1.Width != rSize2.Width) || (rSize1.Height != rSize2.Height);
@@ -121,7 +121,7 @@ namespace
 {
 enum
 {
-    //symbol properties
+    
     PROP_CHART_SYMBOL_TYPE = FAST_PROPERTY_ID_START_CHART_SYMBOL_PROP,
     PROP_CHART_SYMBOL_BITMAP_URL,
     PROP_CHART_SYMBOL_SIZE,
@@ -141,7 +141,7 @@ sal_Int32 lcl_getSymbolType( const ::com::sun::star::chart2::Symbol& rSymbol )
         case chart2::SymbolStyle_STANDARD:
             nSymbol = rSymbol.StandardSymbol%15;
             break;
-        case chart2::SymbolStyle_POLYGON://new feature
+        case chart2::SymbolStyle_POLYGON:
             nSymbol = ::com::sun::star::chart::ChartSymbolType::AUTO;
             break;
         case chart2::SymbolStyle_GRAPHIC:
@@ -183,7 +183,7 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
     rList.push_back( new WrappedSymbolAndLinesProperty( spChart2ModelContact, ePropertyType  ) );
 }
 
-}//anonymous namespace
+}
 
 void WrappedSymbolProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
@@ -266,7 +266,7 @@ void WrappedSymbolTypeProperty::setValueToSeries( const Reference< beans::XPrope
 Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
                             throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    //the old chart (< OOo 2.3) needs symbol-type="automatic" at the plot-area if any of the series should be able to have symbols
+    
     if( m_ePropertyType == DIAGRAM )
     {
         bool bHasAmbiguousValue = false;
@@ -298,11 +298,11 @@ Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XProper
 beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    //the special situation for this property here is that the diagram default can be
-    //different from the normal default and different from all sinlges series values
-    //so we need to return PropertyState_DIRECT_VALUE for more cases
+    
+    
+    
 
-    if( m_ePropertyType == DATA_SERIES && //single series or point
+    if( m_ePropertyType == DATA_SERIES && 
         m_spChart2ModelContact.get())
     {
         Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
@@ -364,7 +364,7 @@ void WrappedSymbolBitmapURLProperty::setValueToSeries(
         {
             try
             {
-                // @todo: get factory from some context?
+                
                 Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
                 Reference< graphic::XGraphicProvider > xGraphProv( graphic::GraphicProvider::create(xContext) );
                 Sequence< beans::PropertyValue > aArgs(1);
@@ -394,7 +394,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
     if( rSymbol.Size.Height != -1 )
         return;
 
-    //find a good automatic size
+    
     try
     {
         const awt::Size aDefaultSize(250,250);
@@ -440,7 +440,7 @@ void lcl_correctSymbolSizeForBitmaps( chart2::Symbol& rSymbol )
     }
 }
 
-}//end anonymous namespace
+}
 
 WrappedSymbolSizeProperty::WrappedSymbolSizeProperty(
     ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact,
@@ -483,7 +483,7 @@ void WrappedSymbolSizeProperty::setValueToSeries(
 beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    //only export symbol size if necessary
+    
     if( m_ePropertyType == DIAGRAM )
         return beans::PropertyState_DEFAULT_VALUE;
 
@@ -518,7 +518,7 @@ WrappedSymbolAndLinesProperty::~WrappedSymbolAndLinesProperty()
 
 sal_Bool WrappedSymbolAndLinesProperty::getValueFromSeries( const Reference< beans::XPropertySet >& /*xSeriesPropertySet*/ ) const
 {
-    //do not export this property anymore, instead use a linestyle none for no lines
+    
     return sal_True;
 }
 
@@ -533,7 +533,7 @@ void WrappedSymbolAndLinesProperty::setValueToSeries(
     xSeriesPropertySet->getPropertyValue( "LineStyle" ) >>= eOldLineStyle;
     if( bDrawLines )
     {
-        //#i114298# don't overwrite dashed lines with solid lines here
+        
         if( eOldLineStyle == drawing::LineStyle_NONE )
             xSeriesPropertySet->setPropertyValue( "LineStyle", uno::makeAny( drawing::LineStyle_SOLID ) );
     }
@@ -547,11 +547,11 @@ void WrappedSymbolAndLinesProperty::setValueToSeries(
 beans::PropertyState WrappedSymbolAndLinesProperty::getPropertyState( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
                         throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
-    //do not export this property anymore, instead use a linestyle none for no lines
+    
     return beans::PropertyState_DEFAULT_VALUE;
 }
 
-} //namespace wrapper
-} //namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

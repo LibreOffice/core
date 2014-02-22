@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <swmodeltestbase.hxx>
@@ -31,7 +31,7 @@ public:
     Test() : SwModelTestBase("/sw/qa/extras/rtfexport/data/", "Rich Text Format") {}
 
     bool mustTestImportOf(const char* filename) const {
-        // Don't test the first import of these, for some reason those tests fail
+        
         const char* aBlacklist[] = {
             "math-eqarray.rtf",
             "math-escaping.rtf",
@@ -44,7 +44,7 @@ public:
         };
         std::vector<const char*> vBlacklist(aBlacklist, aBlacklist + SAL_N_ELEMENTS(aBlacklist));
 
-        // If the testcase is stored in some other format, it's pointless to test.
+        
         return (OString(filename).endsWith(".rtf") && std::find(vBlacklist.begin(), vBlacklist.end(), filename) == vBlacklist.end());
     }
 };
@@ -134,8 +134,8 @@ DECLARE_RTFEXPORT_TEST(testFdo48335, "fdo48335.odt")
 
 DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
 {
-    // See ooxmlexport's testFdo38244().
-    // Test comment range feature.
+    
+    
     uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
     uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
@@ -148,7 +148,7 @@ DECLARE_RTFEXPORT_TEST(testFdo38244, "fdo38244.rtf")
     xPropertySet.set(xRunEnum->nextElement(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(OUString("AnnotationEnd"), getProperty<OUString>(xPropertySet, "TextPortionType"));
 
-    // Test initials.
+    
     uno::Reference<text::XTextFieldsSupplier> xTextFieldsSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XEnumerationAccess> xFieldsAccess(xTextFieldsSupplier->getTextFields());
     uno::Reference<container::XEnumeration> xFields(xFieldsAccess->createEnumeration());
@@ -311,7 +311,7 @@ DECLARE_RTFEXPORT_TEST(testMathVerticalstacks, "math-vertical-stacks.rtf")
 
 DECLARE_RTFEXPORT_TEST(testMathRuns, "math-runs.rtf")
 {
-    // was [](){}, i.e. first curly bracket had an incorrect position
+    
     CPPUNIT_ASSERT_EQUAL(OUString("\\{ left [ right ] left ( right ) \\}"), getFormula(getRun(getParagraph(1), 1)));
 }
 
@@ -349,19 +349,19 @@ DECLARE_RTFEXPORT_TEST(testFdo53113, "fdo53113.odt")
 
 DECLARE_RTFEXPORT_TEST(testFdo55939, "fdo55939.odt")
 {
-    // The problem was that the exported RTF was invalid.
-    // Also, the 'Footnote text.' had an additional newline at its end.
+    
+    
     uno::Reference<text::XTextRange> xParagraph(getParagraph(1));
     getRun(xParagraph, 1, "Main text before footnote.");
-    // Why the tab has to be removed here?
+    
     CPPUNIT_ASSERT_EQUAL(OUString("Footnote text."),
             getProperty< uno::Reference<text::XTextRange> >(getRun(xParagraph, 2), "Footnote")->getText()->getString().replaceAll("\t", ""));
-    getRun(xParagraph, 3, " Text after the footnote."); // However, this leading space is intentional and OK.
+    getRun(xParagraph, 3, " Text after the footnote."); 
 }
 
 DECLARE_RTFEXPORT_TEST(testTextFrames, "textframes.odt")
 {
-    // The output was simply invalid, so let's check if all 3 frames were imported back.
+    
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xIndexAccess->getCount());
@@ -369,7 +369,7 @@ DECLARE_RTFEXPORT_TEST(testTextFrames, "textframes.odt")
 
 DECLARE_RTFEXPORT_TEST(testFdo53604, "fdo53604.odt")
 {
-    // Invalid output on empty footnote.
+    
     uno::Reference<text::XFootnotesSupplier> xFootnotesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xFootnotes(xFootnotesSupplier->getFootnotes(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
@@ -377,7 +377,7 @@ DECLARE_RTFEXPORT_TEST(testFdo53604, "fdo53604.odt")
 
 DECLARE_RTFEXPORT_TEST(testFdo52286, "fdo52286.odt")
 {
-    // The problem was that font size wasn't reduced in sub/super script.
+    
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58), getProperty<sal_Int32>(getRun(getParagraph(1), 2), "CharEscapementHeight"));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(58), getProperty<sal_Int32>(getRun(getParagraph(2), 2), "CharEscapementHeight"));
 }
@@ -395,21 +395,21 @@ DECLARE_RTFEXPORT_TEST(testFdo61507, "fdo61507.rtf")
     OUString aExpected = OUString("\xc3\x89\xc3\x81\xc5\x90\xc5\xb0\xe2\x88\xad", 11, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, xDocumentProperties->getTitle());
 
-    // Only "Hello.", no additional characters.
+    
     CPPUNIT_ASSERT_EQUAL(6, getLength());
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo30983, "fdo30983.rtf")
 {
-    // These were 'page text area', not 'entire page', i.e. both the horizontal
-    // and vertical positions were incorrect.
+    
+    
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), "HoriOrientRelation"));
     CPPUNIT_ASSERT_EQUAL(text::RelOrientation::PAGE_FRAME, getProperty<sal_Int16>(getShape(1), "VertOrientRelation"));
 }
 
 DECLARE_RTFEXPORT_TEST(testPlaceholder, "placeholder.odt")
 {
-    // Only the field text was exported, make sure we still have a field with the correct Hint text.
+    
     uno::Reference<text::XTextRange> xRun(getRun(getParagraph(1), 2));
     CPPUNIT_ASSERT_EQUAL(OUString("TextField"), getProperty<OUString>(xRun, "TextPortionType"));
     uno::Reference<beans::XPropertySet> xField = getProperty< uno::Reference<beans::XPropertySet> >(xRun, "TextField");
@@ -418,7 +418,7 @@ DECLARE_RTFEXPORT_TEST(testPlaceholder, "placeholder.odt")
 
 DECLARE_RTFEXPORT_TEST(testMnor, "mnor.rtf")
 {
-    // \mnor wasn't handled, leading to missing quotes around "divF" and so on.
+    
     OUString aActual = getFormula(getRun(getParagraph(1), 1));
     OUString aExpected("iiint from {V} to <?> {\"divF\"} dV = llint from {S} to <?> {\"F\" \xe2\x88\x99 \"n\" dS}", 74, RTL_TEXTENCODING_UTF8);
     CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
@@ -426,11 +426,11 @@ DECLARE_RTFEXPORT_TEST(testMnor, "mnor.rtf")
 
 DECLARE_RTFEXPORT_TEST(testI120928, "i120928.rtf")
 {
-    // \listpicture and \levelpicture0 was ignored, leading to missing graphic bullet in numbering.
+    
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
-    xLevels->getByIndex(0) >>= aProps; // 1st level
+    xLevels->getByIndex(0) >>= aProps; 
 
     bool bIsGraphic = false;
     for (int i = 0; i < aProps.getLength(); ++i)
@@ -455,7 +455,7 @@ DECLARE_RTFEXPORT_TEST(testBookmark, "bookmark.rtf")
 DECLARE_RTFEXPORT_TEST(testHyperlink, "hyperlink.rtf")
 {
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 1, "Hello"), "HyperLinkURL"));
-    CPPUNIT_ASSERT_EQUAL(OUString("http://en.wikipedia.org/wiki/World"), getProperty<OUString>(getRun(getParagraph(1), 2, "world"), "HyperLinkURL"));
+    CPPUNIT_ASSERT_EQUAL(OUString("http:
     CPPUNIT_ASSERT_EQUAL(OUString(""), getProperty<OUString>(getRun(getParagraph(1), 3, "!"), "HyperLinkURL"));
 }
 
@@ -499,7 +499,7 @@ DECLARE_RTFEXPORT_TEST(testTextframeGradient, "textframe-gradient.rtf")
 
 DECLARE_RTFEXPORT_TEST(testRecordChanges, "record-changes.rtf")
 {
-    // \revisions wasn't imported/exported.
+    
     CPPUNIT_ASSERT_EQUAL(true, getProperty<bool>(mxComponent, "RecordChanges"));
 }
 
@@ -519,7 +519,7 @@ DECLARE_RTFEXPORT_TEST(testFdo66682, "fdo66682.rtf")
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
     uno::Sequence<beans::PropertyValue> aProps;
-    xLevels->getByIndex(0) >>= aProps; // 1st level
+    xLevels->getByIndex(0) >>= aProps; 
 
     OUString aSuffix;
     for (int i = 0; i < aProps.getLength(); ++i)
@@ -529,13 +529,13 @@ DECLARE_RTFEXPORT_TEST(testFdo66682, "fdo66682.rtf")
         if (rProp.Name == "Suffix")
             aSuffix = rProp.Value.get<OUString>();
     }
-    // Suffix was '\0' instead of ' '.
+    
     CPPUNIT_ASSERT_EQUAL(OUString(" "), aSuffix);
 }
 
 DECLARE_RTFEXPORT_TEST(testParaShadow, "para-shadow.rtf")
 {
-    // The problem was that \brdrsh was ignored.
+    
     table::ShadowFormat aShadow = getProperty<table::ShadowFormat>(getParagraph(2), "ParaShadowFormat");
     CPPUNIT_ASSERT_EQUAL(COL_BLACK, sal_uInt32(aShadow.Color));
     CPPUNIT_ASSERT_EQUAL(table::ShadowLocation_BOTTOM_RIGHT, aShadow.Location);
@@ -545,9 +545,9 @@ DECLARE_RTFEXPORT_TEST(testParaShadow, "para-shadow.rtf")
 DECLARE_RTFEXPORT_TEST(testCharacterBorder, "charborder.odt")
 {
     uno::Reference<beans::XPropertySet> xRun(getRun(getParagraph(1),1), uno::UNO_QUERY);
-    // RTF has just one border attribute (chbrdr) for text border so all side has
-    // the same border with the same padding
-    // Border
+    
+    
+    
     {
         const table::BorderLine2 aTopBorder = getProperty<table::BorderLine2>(xRun,"CharTopBorder");
         CPPUNIT_ASSERT_BORDER_EQUAL(table::BorderLine2(0xFF6600,0,318,0,0,318), aTopBorder);
@@ -556,17 +556,17 @@ DECLARE_RTFEXPORT_TEST(testCharacterBorder, "charborder.odt")
         CPPUNIT_ASSERT_BORDER_EQUAL(aTopBorder, getProperty<table::BorderLine2>(xRun,"CharRightBorder"));
     }
 
-    // Padding (brsp)
+    
     {
         const sal_Int32 nTopPadding = getProperty<sal_Int32>(xRun,"CharTopBorderDistance");
-        // In the original ODT file the padding is 150, but the unit conversion round it down.
+        
         CPPUNIT_ASSERT_EQUAL(sal_Int32(141), nTopPadding);
         CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharLeftBorderDistance"));
         CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharBottomBorderDistance"));
         CPPUNIT_ASSERT_EQUAL(nTopPadding, getProperty<sal_Int32>(xRun,"CharRightBorderDistance"));
     }
 
-    // Shadow (brdrsh)
+    
     /* RTF use just one bool value for shadow so the next conversions
        are made during an export-import round
        color: any -> black
@@ -584,21 +584,21 @@ DECLARE_RTFEXPORT_TEST(testFdo66743, "fdo66743.rtf")
 {
     uno::Reference<text::XTextTable> xTable(getParagraphOrTable(1), uno::UNO_QUERY);
     uno::Reference<table::XCell> xCell = xTable->getCellByName("A1");
-    // This was too dark, 0x7f7f7f.
+    
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0xd8d8d8), getProperty<sal_Int32>(xCell, "BackColor"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo68787, "fdo68787.rtf")
 {
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName(DEFAULT_STYLE), uno::UNO_QUERY);
-    // This was 0, the 'lack of \chftnsep' <-> '0 line width' mapping was missing in the RTF tokenizer / exporter.
+    
     CPPUNIT_ASSERT_EQUAL(sal_Int32(25), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
 }
 
 DECLARE_RTFEXPORT_TEST(testFdo74709, "fdo74709.rtf")
 {
     uno::Reference<table::XCell> xCell = getCell(getParagraphOrTable(1), "B1");
-    // This was 0, as top/bottom/left/right padding wasn't imported.
+    
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(360)), getProperty<sal_Int32>(xCell, "RightBorderDistance"));
 }
 

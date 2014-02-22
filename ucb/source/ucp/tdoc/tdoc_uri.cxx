@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -31,65 +31,65 @@
 
 using namespace tdoc_ucp;
 
-//=========================================================================
-//=========================================================================
+
+
 //
-// Uri Implementation.
+
 //
-//=========================================================================
-//=========================================================================
+
+
 
 void Uri::init() const
 {
-    // Already inited?
+    
     if ( m_eState == UNKNOWN )
     {
         m_eState = INVALID;
 
-        // Check for proper length: must be at least length of <sheme>:/
+        
         if ( ( m_aUri.getLength() < TDOC_URL_SCHEME_LENGTH + 2 ) )
         {
-            // Invaild length (to short).
+            
             return;
         }
 
-        // Check for proper scheme. (Scheme is case insensitive.)
+        
         OUString aScheme
             = m_aUri.copy( 0, TDOC_URL_SCHEME_LENGTH ).toAsciiLowerCase();
         if ( aScheme != TDOC_URL_SCHEME )
         {
-            // Invaild scheme.
+            
             return;
         }
 
-        // Remember normalized scheme string.
+        
         m_aUri = m_aUri.replaceAt( 0, aScheme.getLength(), aScheme );
 
         if ( m_aUri[ TDOC_URL_SCHEME_LENGTH ] != ':' )
         {
-            // Invaild (no ':' after <scheme>).
+            
             return;
         }
 
         if ( m_aUri[ TDOC_URL_SCHEME_LENGTH + 1 ] != '/' )
         {
-            // Invaild (no '/' after <scheme>:).
+            
             return;
         }
 
         m_aPath = m_aUri.copy( TDOC_URL_SCHEME_LENGTH + 1 );
 
-        // Note: There must be at least one slash; see above.
+        
         sal_Int32 nLastSlash = m_aUri.lastIndexOf( '/' );
         bool bTrailingSlash = false;
         if ( nLastSlash == m_aUri.getLength() - 1 )
         {
-            // ignore trailing slash
+            
             bTrailingSlash = true;
             nLastSlash = m_aUri.lastIndexOf( '/', nLastSlash );
         }
 
-        if ( nLastSlash != -1 ) // -1 is valid for the root folder
+        if ( nLastSlash != -1 ) 
         {
             m_aParentUri = m_aUri.copy( 0, nLastSlash + 1 );
 

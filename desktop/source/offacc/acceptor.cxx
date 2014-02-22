@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -60,14 +60,14 @@ Acceptor::~Acceptor()
         osl::MutexGuard g(m_aMutex);
         t = m_thread;
     }
-    //prevent locking if the thread is still waiting
+    
     m_bDying = true;
     m_cEnable.set();
     osl_joinWithThread(t);
     {
-        // Make the final state of m_bridges visible to this thread (since
-        // m_thread is joined, the code that follows is the only one left
-        // accessing m_bridges):
+        
+        
+        
         osl::MutexGuard g(m_aMutex);
     }
     for (;;) {
@@ -87,62 +87,62 @@ void Acceptor::run()
     {
         try
         {
-            // wait until we get enabled
+            
             SAL_INFO( "desktop.offacc",
                 "Acceptor::run waiting for office to come up");
             m_cEnable.wait();
-            if (m_bDying) //see destructor
+            if (m_bDying) 
                 break;
             SAL_INFO( "desktop.offacc",
                 "Acceptor::run now enabled and continuing");
 
-            // accept connection
+            
             Reference< XConnection > rConnection = m_rAcceptor->accept( m_aConnectString );
-            // if we return without a valid connection we mus assume that the acceptor
-            // is destructed so we break out of the run method terminating the thread
+            
+            
             if (! rConnection.is()) break;
             OUString aDescription = rConnection->getDescription();
             SAL_INFO( "desktop.offacc", "Acceptor::run connection " << aDescription );
 
-            // create instanceprovider for this connection
+            
             Reference< XInstanceProvider > rInstanceProvider(
                 new AccInstanceProvider(m_rContext, rConnection));
-            // create the bridge. The remote end will have a reference to this bridge
-            // thus preventing the bridge from being disposed. When the remote end releases
-            // the bridge, it will be destructed.
+            
+            
+            
             Reference< XBridge > rBridge = m_rBridgeFactory->createBridge(
                 "", m_aProtocol, rConnection, rInstanceProvider);
             osl::MutexGuard g(m_aMutex);
             m_bridges.add(rBridge);
         } catch (const Exception& e) {
             SAL_WARN("desktop.offacc", "caught Exception \"" << e.Message << "\"");
-            // connection failed...
-            // something went wrong during connection setup.
-            // just wait for a new connection to accept
+            
+            
+            
         }
     }
 }
 
-// XInitialize
+
 void Acceptor::initialize( const Sequence<Any>& aArguments )
     throw( Exception )
 {
-    // prevent multiple initialization
+    
     osl::ClearableMutexGuard aGuard( m_aMutex );
     SAL_INFO( "desktop.offacc", "Acceptor::initialize()" );
 
     bool bOk = false;
 
-    // arg count
+    
     int nArgs = aArguments.getLength();
 
-    // not yet initialized and acceptstring
+    
     if (!m_bInit && nArgs > 0 && (aArguments[0] >>= m_aAcceptString))
     {
         SAL_INFO( "desktop.offacc", "Acceptor::initialize string=" << m_aAcceptString );
 
-        // get connect string and protocol from accept string
-        // "<connectString>;<protocol>"
+        
+        
         sal_Int32 nIndex1 = m_aAcceptString.indexOf( ';' );
         if (nIndex1 < 0) throw IllegalArgumentException(
             OUString("Invalid accept-string format"), m_rContext, 1);
@@ -152,13 +152,13 @@ void Acceptor::initialize( const Sequence<Any>& aArguments )
         if (nIndex2 < 0) nIndex2 = m_aAcceptString.getLength();
         m_aProtocol = m_aAcceptString.copy( nIndex1, nIndex2 - nIndex1 );
 
-        // start accepting in new thread...
+        
         m_thread = osl_createThread(offacc_workerfunc, this);
         m_bInit = true;
         bOk = true;
     }
 
-    // do we want to enable accepting?
+    
     bool bEnable = false;
     if (((nArgs == 1 && (aArguments[0] >>= bEnable)) ||
          (nArgs == 2 && (aArguments[1] >>= bEnable))) &&
@@ -175,7 +175,7 @@ void Acceptor::initialize( const Sequence<Any>& aArguments )
     }
 }
 
-// XServiceInfo
+
 OUString Acceptor::impl_getImplementationName()
 {
     return OUString("com.sun.star.office.comp.Acceptor");
@@ -203,7 +203,7 @@ sal_Bool Acceptor::supportsService(OUString const & ServiceName)
     return cppu::supportsService(this, ServiceName);
 }
 
-// Factory
+
 Reference< XInterface > Acceptor::impl_getInstance( const Reference< XMultiServiceFactory >& aFactory )
 {
     try {
@@ -213,7 +213,7 @@ Reference< XInterface > Acceptor::impl_getInstance( const Reference< XMultiServi
     }
 }
 
-// InstanceProvider
+
 AccInstanceProvider::AccInstanceProvider(const Reference<XComponentContext>& rxContext, const Reference<XConnection>& rConnection)
 {
     m_rContext = rxContext;
@@ -257,8 +257,8 @@ Reference<XInterface> AccInstanceProvider::getInstance (const OUString& aName )
 
 }
 
-// component management stuff...
-// ----------------------------------------------------------------------------
+
+
 extern "C"
 {
 using namespace desktop;
@@ -268,7 +268,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(char const *pIm
     void* pReturn = NULL ;
     if  ( pImplementationName && pServiceManager )
     {
-        // Define variables which are used in following macros.
+        
         Reference< XSingleServiceFactory > xFactory;
         Reference< XMultiServiceFactory >  xServiceManager(
             reinterpret_cast< XMultiServiceFactory* >(pServiceManager));
@@ -280,7 +280,7 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(char const *pIm
                 desktop::Acceptor::impl_getInstance, desktop::Acceptor::impl_getSupportedServiceNames()) );
         }
 
-        // Factory is valid - service was found.
+        
         if ( xFactory.is() )
         {
             xFactory->acquire();
@@ -288,10 +288,10 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL offacc_component_getFactory(char const *pIm
         }
     }
 
-    // Return with result of this operation.
+    
     return pReturn ;
 }
 
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

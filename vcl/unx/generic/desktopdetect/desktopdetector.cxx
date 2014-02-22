@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,8 +41,8 @@ static bool is_gnome_desktop( Display* pDisplay )
 {
     bool ret = false;
 
-    // warning: these checks are coincidental, GNOME does not
-    // explicitly advertise itself
+    
+    
     if ( NULL != getenv( "GNOME_DESKTOP_SESSION_ID" ) )
         ret = true;
 
@@ -73,7 +73,7 @@ static bool is_gnome_desktop( Display* pDisplay )
         Atom nNetWMNameAtom = XInternAtom( pDisplay, "_NET_WM_NAME", True );
         if( nUTFAtom && nNetWMNameAtom )
         {
-            // another, more expensive check: search for a gnome-panel
+            
             XLIB_Window aRoot, aParent, *pChildren = NULL;
             unsigned int nChildren = 0;
             XQueryTree( pDisplay, DefaultRootWindow( pDisplay ),
@@ -225,7 +225,7 @@ static bool is_tde_desktop( Display* pDisplay )
 {
     if ( NULL != getenv( "TDE_FULL_SESSION" ) )
     {
-        return true; // TDE
+        return true; 
     }
 
     if ( TDEVersion( pDisplay ) >= 14 )
@@ -241,7 +241,7 @@ static bool is_kde_desktop( Display* pDisplay )
         const char *pVer = getenv( "KDE_SESSION_VERSION" );
         if ( !pVer || pVer[0] == '0' )
         {
-            return true; // does not exist => KDE3
+            return true; 
         }
 
         OUString aVer( "3" );
@@ -303,7 +303,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
             return DESKTOP_UNKNOWN;
     }
 
-    // get display to connect to
+    
     const char* pDisplayStr = getenv( "DISPLAY" );
 
     OUString plugin;
@@ -329,7 +329,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
         }
     }
 
-    // no server at all
+    
     if( ! pDisplayStr || !*pDisplayStr )
         return DESKTOP_NONE;
 
@@ -361,7 +361,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     if ( ( pDesktop = getenv( "XDG_CURRENT_DESKTOP" ) ) )
         aCurrentDesktop = OString( pDesktop, strlen( pDesktop ) );
 
-    // fast environment variable checks
+    
     if ( aCurrentDesktop.equalsIgnoreAsciiCase( "unity" ) )
         ret = DESKTOP_UNITY;
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "gnome" ) )
@@ -371,8 +371,8 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     else if ( aDesktopSession.equalsIgnoreAsciiCase( "xfce" ) )
         ret = DESKTOP_XFCE;
 
-    // these guys can be slower, with X property fetches,
-    // round-trips etc. and so are done later.
+    
+    
     else if ( is_kde4_desktop( pDisplay ) )
         ret = DESKTOP_KDE4;
     else if ( is_gnome_desktop( pDisplay ) )
@@ -384,7 +384,7 @@ DESKTOP_DETECTOR_PUBLIC DesktopType get_desktop_environment()
     else
         ret = DESKTOP_UNKNOWN;
 
-    // set the default handler again
+    
     XSetErrorHandler( pOldHdl );
 
     XCloseDisplay( pDisplay );

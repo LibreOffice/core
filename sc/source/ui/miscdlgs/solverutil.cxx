@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "solverutil.hxx"
@@ -33,7 +33,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------
+
 
 #define SCSOLVER_SERVICE "com.sun.star.sheet.Solver"
 
@@ -73,7 +73,7 @@ static uno::Reference<sheet::XSolver> lcl_CreateSolver( const uno::Reference<uno
 void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
                                        uno::Sequence<OUString>& rDescriptions )
 {
-    rImplNames.realloc(0);      // clear
+    rImplNames.realloc(0);      
     rDescriptions.realloc(0);
 
     uno::Reference<uno::XComponentContext> xCtx(
@@ -108,7 +108,7 @@ void ScSolverUtil::GetImplementations( uno::Sequence<OUString>& rImplNames,
                             sDescription = xDesc->getComponentDescription();
 
                         if ( sDescription.isEmpty() )
-                            sDescription = sName;          // use implementation name if no description available
+                            sDescription = sName;          
 
                         rImplNames.realloc( nCount+1 );
                         rImplNames[nCount] = sName;
@@ -169,11 +169,11 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const OUString& r
     uno::Reference<beans::XPropertySet> xPropSet( xSolver, uno::UNO_QUERY );
     if ( !xPropSet.is() )
     {
-        // no XPropertySet - no options
+        
         return aDefaults;
     }
 
-    // fill maProperties
+    
 
     uno::Reference<beans::XPropertySetInfo> xInfo = xPropSet->getPropertySetInfo();
     OSL_ENSURE( xInfo.is(), "can't get property set info" );
@@ -189,13 +189,13 @@ uno::Sequence<beans::PropertyValue> ScSolverUtil::GetDefaults( const OUString& r
         const beans::Property& rProp = aPropSeq[nPos];
         uno::Any aValue = xPropSet->getPropertyValue( rProp.Name );
         uno::TypeClass eClass = aValue.getValueTypeClass();
-        // only use properties of supported types
+        
         if ( eClass == uno::TypeClass_BOOLEAN || eClass == uno::TypeClass_LONG || eClass == uno::TypeClass_DOUBLE )
             aDefaults[nValid++] = beans::PropertyValue( rProp.Name, -1, aValue, beans::PropertyState_DIRECT_VALUE );
     }
     aDefaults.realloc(nValid);
 
-    //! get user-visible names, sort by them
+    
 
     return aDefaults;
 }

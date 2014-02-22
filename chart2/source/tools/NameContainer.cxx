@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "NameContainer.hxx"
@@ -57,7 +57,7 @@ NameContainer::~NameContainer()
 {
 }
 
-//XServiceInfo
+
 OUString SAL_CALL NameContainer::getImplementationName()
     throw( ::com::sun::star::uno::RuntimeException )
 {
@@ -78,7 +78,7 @@ Sequence< OUString > SAL_CALL NameContainer::getSupportedServiceNames()
     return aSNS;
 }
 
-// XNameContainer
+
 void SAL_CALL NameContainer::insertByName( const OUString& rName, const Any& rElement )
     throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -96,7 +96,7 @@ void SAL_CALL NameContainer::removeByName( const OUString& Name )
     m_aMap.erase( aIt );
 }
 
-// XNameReplace
+
 void SAL_CALL NameContainer::replaceByName( const OUString& rName, const Any& rElement )
     throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException )
 {
@@ -106,7 +106,7 @@ void SAL_CALL NameContainer::replaceByName( const OUString& rName, const Any& rE
     aIt->second = rElement;
 }
 
-// XNameAccess
+
 Any SAL_CALL NameContainer::getByName( const OUString& rName )
     throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -133,7 +133,7 @@ sal_Bool SAL_CALL NameContainer::hasByName( const OUString& rName )
     return ( m_aMap.find( rName ) != m_aMap.end() );
 }
 
-// XElementAccess
+
 sal_Bool SAL_CALL NameContainer::hasElements()
     throw( uno::RuntimeException )
 {
@@ -146,13 +146,13 @@ uno::Type SAL_CALL NameContainer::getElementType()
     return m_aType;
 }
 
-// XCloneable
+
 uno::Reference< util::XCloneable > SAL_CALL NameContainer::createClone()
     throw ( uno::RuntimeException )
 {
     return uno::Reference< util::XCloneable >( new NameContainer( *this ));
 }
 
-} //namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

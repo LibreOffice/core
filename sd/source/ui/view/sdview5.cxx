@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,13 +54,13 @@ SdPage* View::GetPage()
     return pPage;
 }
 
-// returns selected object in case there's just one object in the selection
+
 SdrObject* View::GetSelectedSingleObject(SdPage* pPage)
 {
     SdrObject* pRet = NULL;
     if( pPage )
     {
-        // first try selected shape
+        
         if ( AreObjectsMarked() )
         {
             const SdrMarkList& rMarkList = GetMarkedObjectList();
@@ -87,7 +87,7 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
         if( pObj && pObj->IsEmptyPresObj() && implIsMultiPresObj( pPage->GetPresObjKind(pObj) ) )
             pEmptyObj = pObj;
 
-        // try to find empty pres obj of same type
+        
         if( !pEmptyObj )
         {
             int nIndex = 1;
@@ -98,7 +98,7 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
             while( (pEmptyObj != 0) && (!pEmptyObj->IsEmptyPresObj()) );
         }
 
-        // last try to find empty pres obj of multiple type
+        
         if( !pEmptyObj )
         {
             const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cellatr.hxx>
@@ -36,9 +36,9 @@
 #include <svl/whiter.hxx>
 #include <svx/xtable.hxx>
 
-// ----------
-// SwAttrPool
-// ----------
+
+
+
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
     : SfxItemPool( OUString("SWG"),
@@ -50,7 +50,7 @@ SwAttrPool::SwAttrPool( SwDoc* pD )
     SetVersionMap( 2, 1, 75, pVersionMap2 );
     SetVersionMap( 3, 1, 86, pVersionMap3 );
     SetVersionMap( 4, 1,121, pVersionMap4 );
-    // #i18732# - apply new version map
+    
     SetVersionMap( 5, 1,130, pVersionMap5 );
     SetVersionMap( 6, 1,136, pVersionMap6 );
     SetVersionMap( 7, 1,144, pVersionMap7 );
@@ -60,9 +60,9 @@ SwAttrPool::~SwAttrPool()
 {
 }
 
-// ---------
-// SwAttrSet
-// ---------
+
+
+
 
 SwAttrSet::SwAttrSet( SwAttrPool& rPool, sal_uInt16 nWh1, sal_uInt16 nWh2 )
     : SfxItemSet( rPool, nWh1, nWh2 ), pOldSet( 0 ), pNewSet( 0 )
@@ -165,7 +165,7 @@ int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
     return pNew ? pNew->Count() : ( pOld ? pOld->Count() : 0 );
 }
 
-/// Notification callback
+
 void  SwAttrSet::Changed( const SfxPoolItem& rOld, const SfxPoolItem& rNew )
 {
     if( pOldSet )
@@ -197,8 +197,8 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
     if( SFX_ITEM_SET == GetItemState( RES_PARATR_DROP, false, &pItem ) &&
         ((SwFmtDrop*)pItem)->GetDefinedIn() != pModify )
     {
-        // If CharFormat is set and it is set in different attribute pools then
-        // the CharFormat has to be copied.
+        
+        
         SwCharFmt* pCharFmt;
         if( 0 != ( pCharFmt = ((SwFmtDrop*)pItem)->GetCharFmt() )
             && GetPool() != pCharFmt->GetAttrSet().GetPool() )
@@ -222,7 +222,7 @@ bool SwAttrSet::SetModifyAtAttr( const SwModify* pModify )
 
 void SwAttrSet::CopyToModify( SwModify& rMod ) const
 {
-    // copy attributes across multiple documents if needed
+    
     SwCntntNode* pCNd = PTR_CAST( SwCntntNode, &rMod );
     SwFmt* pFmt = PTR_CAST( SwFmt, &rMod );
 
@@ -230,14 +230,14 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
     {
         if( Count() )
         {
-            // #i92811#
+            
             SfxStringItem* pNewListIdItem( 0 );
 
             const SfxPoolItem* pItem;
             const SwDoc *pSrcDoc = GetDoc();
             SwDoc *pDstDoc = pCNd ? pCNd->GetDoc() : pFmt->GetDoc();
 
-            // Does the NumRule has to be copied?
+            
             if( pSrcDoc != pDstDoc &&
                 SFX_ITEM_SET == GetItemState( RES_PARATR_NUMRULE, false, &pItem ) )
             {
@@ -252,8 +252,8 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 }
             }
 
-            // copy list and if needed also the corresponding list style
-            // for text nodes
+            
+            
             if ( pSrcDoc != pDstDoc &&
                  pCNd && pCNd->IsTxtNode() &&
                  GetItemState( RES_PARATR_LIST_ID, false, &pItem ) == SFX_ITEM_SET )
@@ -264,10 +264,10 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                      !pDstDoc->getListByName( sListId ) )
                 {
                     const SwList* pList = pSrcDoc->getListByName( sListId );
-                    // copy list style, if needed
+                    
                     const OUString sDefaultListStyleName =
                                             pList->GetDefaultListStyleName();
-                    // #i92811#
+                    
                     const SwNumRule* pDstDocNumRule =
                                 pDstDoc->FindNumRulePtr( sDefaultListStyleName );
                     if ( !pDstDocNumRule )
@@ -279,10 +279,10 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                     {
                         const SwNumRule* pSrcDocNumRule =
                                 pSrcDoc->FindNumRulePtr( sDefaultListStyleName );
-                        // If list id of text node equals the list style's
-                        // default list id in the source document, the same
-                        // should be hold in the destination document.
-                        // Thus, create new list id item.
+                        
+                        
+                        
+                        
                         if ( sListId == pSrcDocNumRule->GetDefaultListId() )
                         {
                             pNewListIdItem = new SfxStringItem (
@@ -290,12 +290,12 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                                             pDstDocNumRule->GetDefaultListId() );
                         }
                     }
-                    // check again, if list exist, because <SwDoc::MakeNumRule(..)>
-                    // could have also created it.
+                    
+                    
                     if ( pNewListIdItem == 0 &&
                          !pDstDoc->getListByName( sListId ) )
                     {
-                        // copy list
+                        
                         pDstDoc->createList( sListId, sDefaultListStyleName );
                     }
                 }
@@ -322,7 +322,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 
                 if( pCNd )
                 {
-                    // #i92811#
+                    
                     if ( pNewListIdItem != 0 )
                     {
                         aTmpSet.Put( *pNewListIdItem );
@@ -336,7 +336,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             }
             else if( pCNd )
             {
-                // #i92811#
+                
                 if ( pNewListIdItem != 0 )
                 {
                     SfxItemSet aTmpSet( *this );
@@ -353,7 +353,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
                 pFmt->SetFmtAttr( *this );
             }
 
-            // #i92811#
+            
             delete pNewListIdItem;
             pNewListIdItem = 0;
         }
@@ -364,7 +364,7 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
 #endif
 }
 
-/// check if ID is in range of attribute set IDs
+
 bool IsInRange( const sal_uInt16* pRange, const sal_uInt16 nId )
 {
     while( *pRange )

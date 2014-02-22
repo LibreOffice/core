@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/document/XImporter.hpp>
@@ -165,7 +165,7 @@ sal_Bool XMLEmbeddedObjectImportContext::SetComponent(
     Reference < XImporter > xImporter( xHandler, UNO_QUERY );
     xImporter->setTargetDocument( rComp );
 
-    xComp = rComp;  // keep ref to component only if there is a handler
+    xComp = rComp;  
 
     return sal_True;
 }
@@ -278,7 +278,7 @@ void XMLEmbeddedObjectImportContext::StartElement(
     if( xHandler.is() )
     {
         xHandler->startDocument();
-        // #i34042: copy namepspace declarations
+        
         SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
         Reference< XAttributeList > xAttrList( pAttrList );
         const SvXMLNamespaceMap& rNamespaceMap = GetImport().GetNamespaceMap();
@@ -311,7 +311,7 @@ void XMLEmbeddedObjectImportContext::EndElement()
     {
         Reference < XModifiable2 > xModifiable2( xComp, UNO_QUERY_THROW );
         xModifiable2->enableSetModified();
-        xModifiable2->setModified( sal_True ); // trigger new replacement image generation
+        xModifiable2->setModified( sal_True ); 
     }
     catch( Exception& )
     {

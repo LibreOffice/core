@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "WrappedScaleProperty.hxx"
@@ -189,7 +189,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
                 else if( (fStepHelp != 0.0) &&
                     (aScaleData.IncrementData.Distance >>= fStepMain) )
                 {
-                    // approximate interval count
+                    
                     sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepMain / fStepHelp);
                     rSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
                 }
@@ -300,7 +300,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             break;
         }
         case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
-            //read only property
+            
             break;
         case SCALE_PROP_LOGARITHMIC:
         {
@@ -308,7 +308,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             {
                 bool bWasLogarithm = AxisHelper::isLogarithmic( aScaleData.Scaling );
 
-                // safe comparison between sal_Bool and bool
+                
                 if( (!bBool) != (!bWasLogarithm) )
                 {
                     if( bBool )
@@ -325,7 +325,7 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             if( rOuterValue >>= bBool )
             {
                 bool bWasReverse = ( AxisOrientation_REVERSE == aScaleData.Orientation );
-                if( (!bBool) != (!bWasReverse) ) // safe comparison between sal_Bool and bool
+                if( (!bBool) != (!bWasReverse) ) 
                 {
                     aScaleData.Orientation = bBool ? AxisOrientation_REVERSE : AxisOrientation_MATHEMATICAL;
                     bSetScaleData = true;
@@ -397,7 +397,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         }
         case SCALE_PROP_STEPHELP:
         {
-            // todo: evaluate PostEquidistant
+            
             bool bNeedToCalculateExplicitValues = true;
 
             bool bLogarithmic( AxisHelper::isLogarithmic(aScaleData.Scaling) );
@@ -583,7 +583,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
     return aRet;
 }
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

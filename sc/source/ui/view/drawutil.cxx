@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <vcl/outdev.hxx>
@@ -60,8 +60,8 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     MapMode aHMMMode( MAP_100TH_MM, Point(), rZoomX, rZoomY );
     Point aPixelLog = pDev->PixelToLogic( Point( nPixelX,nPixelY ), aHMMMode );
 
-    //  Fraction(double) ctor can be used here (and avoid overflows of PixelLog * Zoom)
-    //  because ReduceInaccurate is called later anyway.
+    
+    
 
     if ( aPixelLog.X() && nTwipsX )
         rScaleX = Fraction( ((double)aPixelLog.X()) *
@@ -81,8 +81,8 @@ void ScDrawUtil::CalcScale( ScDocument* pDoc, SCTAB nTab,
     else
         rScaleY = Fraction( 1, 1 );
 
-    //  25 bits of accuracy are needed to always hit the right part of
-    //  cells in the last rows (was 17 before 1M rows).
+    
+    
     rScaleX.ReduceInaccurate( 25 );
     rScaleY.ReduceInaccurate( 25 );
 }

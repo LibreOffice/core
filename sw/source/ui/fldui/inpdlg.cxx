@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <comphelper/string.hxx>
@@ -48,7 +48,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     m_pEditED->set_height_request(m_pEditED->GetTextHeight() * 9);
     get(m_pNextBT, "next");
     get(m_pOKBT, "ok");
-    // switch font for Edit
+    
     Font aFont(m_pEditED->GetFont());
     aFont.SetWeight(WEIGHT_LIGHT);
     m_pEditED->SetFont(aFont);
@@ -59,10 +59,10 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         m_pNextBT->SetClickHdl(LINK(this, SwFldInputDlg, NextHdl));
     }
 
-    // evaluation here
+    
     OUString aStr;
     if( RES_INPUTFLD == pField->GetTyp()->Which() )
-    {   // it is an input field
+    {   
         //
         pInpFld = (SwInputField*)pField;
         m_pLabelED->SetText( pInpFld->GetPar2() );
@@ -75,7 +75,7 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
                 break;
 
             case INP_USR:
-                // user field
+                
                 if( 0 != ( pUsrType = (SwUserFieldType*)rSh.GetFldType(
                             RES_USERFLD, pInpFld->GetPar1() ) ) )
                     aStr = pUsrType->GetContent();
@@ -84,10 +84,10 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
     }
     else
     {
-        // it is a SetExpression
+        
         pSetFld = (SwSetExpField*)pField;
         OUString sFormula(pSetFld->GetFormula());
-        //values are formatted - formulas are not
+        
         CharClass aCC( LanguageTag( pSetFld->GetLanguage() ));
         if( aCC.isNumeric( sFormula ))
         {
@@ -98,8 +98,8 @@ SwFldInputDlg::SwFldInputDlg( Window *pParent, SwWrtShell &rS,
         m_pLabelED->SetText( pSetFld->GetPromptText() );
     }
 
-    // JP 31.3.00: Inputfields in readonly regions must be allowed to
-    //              input any content. - 74639
+    
+    
     sal_Bool bEnable = !rSh.IsCrsrReadonly();
 
     m_pOKBT->Enable( bEnable );

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "RelationTableView.hxx"
@@ -60,7 +60,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::accessibility;
 
-// class ORelationTableView
+
 ORelationTableView::ORelationTableView( Window* pParent, ORelationDesignView* pView )
     :OJoinTableView( pParent, pView )
     , ::comphelper::OContainerListener(m_aMutex)
@@ -88,12 +88,12 @@ void ORelationTableView::ReSync()
         if ( xContainer.is() )
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
     }
-    // Es kann sein, dass in der DB Tabellen ausgeblendet wurden, die eigentlich Bestandteil einer Relation sind. Oder eine Tabelle
-    // befand sich im Layout (durchaus ohne Relation), existiert aber nicht mehr. In beiden Faellen wird das Anlegen des TabWins schief
-    // gehen, und alle solchen TabWinDatas oder darauf bezogenen ConnDatas muss ich dann loeschen.
+    
+    
+    
     ::std::vector< OUString> arrInvalidTables;
 
-    // create and insert windows
+    
     TTableWindowData* pTabWinDataList = m_pView->getController().getTableWindowData();
     TTableWindowData::reverse_iterator aIter = pTabWinDataList->rbegin();
     for(;aIter != pTabWinDataList->rend();++aIter)
@@ -103,8 +103,8 @@ void ORelationTableView::ReSync()
 
         if (!pTabWin->Init())
         {
-            // das Initialisieren ging schief, dass heisst, dieses TabWin steht nicht zur Verfuegung, also muss ich es inklusive
-            // seiner Daten am Dokument aufraeumen
+            
+            
             pTabWin->clearListBox();
             delete pTabWin;
             arrInvalidTables.push_back(pData->GetTableName());
@@ -113,15 +113,15 @@ void ORelationTableView::ReSync()
             continue;
         }
 
-        (*GetTabWinMap())[pData->GetComposedName()] = pTabWin;  // am Anfang einfuegen, da ich die DataList ja rueckwaerts durchlaufe
-        // wenn in den Daten keine Position oder Groesse steht -> Default
+        (*GetTabWinMap())[pData->GetComposedName()] = pTabWin;  
+        
         if (!pData->HasPosition() && !pData->HasSize())
             SetDefaultTabWinPosSize(pTabWin);
 
         pTabWin->Show();
     }
 
-    // Verbindungen einfuegen
+    
     TTableConnectionData* pTabConnDataList = m_pView->getController().getTableConnectionData();
     TTableConnectionData::reverse_iterator aConIter = pTabConnDataList->rbegin();
 
@@ -130,20 +130,21 @@ void ORelationTableView::ReSync()
         ORelationTableConnectionData* pTabConnData = static_cast<ORelationTableConnectionData*>(aConIter->get());
         if ( !arrInvalidTables.empty() )
         {
-            // gibt es die beiden Tabellen zur Connection ?
+            
             OUString strTabExistenceTest = pTabConnData->getReferencingTable()->GetTableName();
             sal_Bool bInvalid = ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
             strTabExistenceTest = pTabConnData->getReferencedTable()->GetTableName();
             bInvalid = bInvalid || ::std::find(arrInvalidTables.begin(),arrInvalidTables.end(),strTabExistenceTest) != arrInvalidTables.end();
 
             if (bInvalid)
-            {   // nein -> Pech gehabt, die Connection faellt weg
+            {   
+                
                 pTabConnDataList->erase( ::std::remove(pTabConnDataList->begin(),pTabConnDataList->end(),*aConIter),pTabConnDataList->end() );
                 continue;
             }
         }
 
-        addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); // don't add the data again
+        addConnection( new ORelationTableConnection(this, *aConIter), sal_False ); 
     }
 
     if ( !GetTabWinMap()->empty() )
@@ -158,8 +159,8 @@ sal_Bool ORelationTableView::IsAddAllowed()
 
 void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const OJoinExchangeData& jxdDest)
 {
-    // Aus selektierten Feldnamen LineDataObject setzen
-    // check if relation already exists
+    
+    
     OTableWindow* pSourceWin = jxdSource.pListBox->GetTabWin();
     OTableWindow* pDestWin = jxdDest.pListBox->GetTabWin();
 
@@ -175,31 +176,30 @@ void ORelationTableView::AddConnection(const OJoinExchangeData& jxdSource, const
             break;
         }
     }
-    // insert table connection into view
-
+    
     TTableConnectionData::value_type pTabConnData(new ORelationTableConnectionData(pSourceWin->GetData(),
                                                                                    pDestWin->GetData()));
 
-    // die Namen der betroffenen Felder
+    
     OUString sSourceFieldName = jxdSource.pListBox->GetEntryText(jxdSource.pEntry);
     OUString sDestFieldName = jxdDest.pListBox->GetEntryText(jxdDest.pEntry);
 
-    // die Anzahl der PKey-Felder in der Quelle
+    
     const Reference< XNameAccess> xPrimaryKeyColumns = getPrimaryKeyColumns_throw(pSourceWin->GetData()->getTable());
     bool bAskUser = xPrimaryKeyColumns.is() && Reference< XIndexAccess>(xPrimaryKeyColumns,UNO_QUERY)->getCount() > 1;
 
     pTabConnData->SetConnLine( 0, sSourceFieldName, sDestFieldName );
 
     if ( bAskUser || m_pExistingConnection )
-        m_pCurrentlyTabConnData = pTabConnData; // this implies that we ask the user what to do
+        m_pCurrentlyTabConnData = pTabConnData; 
     else
     {
         try
         {
-            // Daten der Datenbank uebergeben
+            
             if( pTabConnData->Update() )
             {
-                // UI-Object in ConnListe eintragen
+                
                 addConnection( new ORelationTableConnection( this, pTabConnData ) );
             }
         }
@@ -220,19 +220,19 @@ void ORelationTableView::ConnDoubleClicked( OTableConnection* pConnection )
     switch (aRelDlg.Execute())
     {
         case RET_OK:
-            // successfully updated
+            
             pConnection->UpdateLineList();
-            // The connection references 1 ConnData and n ConnLines, each ConnData references n LineDatas, each Line exactly 1 LineData
-            // As the Dialog and the ConnData->Update may have changed the LineDatas we have to restore the consistent state
+            
+            
             break;
 
         case RET_NO:
-            // tried at least one update, but did not succeed -> the original connection is lost
+            
             RemoveConnection( pConnection ,sal_True);
             break;
 
         case RET_CANCEL:
-            // no break, as nothing happened and we don't need the code below
+            
             return;
 
     }
@@ -249,8 +249,8 @@ void ORelationTableView::AddNewRelation()
     sal_Bool bSuccess = (aRelDlg.Execute() == RET_OK);
     if (bSuccess)
     {
-        // already updated by the dialog
-        // dem Dokument bekanntgeben
+        
+        
         addConnection( new ORelationTableConnection(this, pNewConnData) );
     }
 }
@@ -284,20 +284,20 @@ void ORelationTableView::AddTabWin(const OUString& _rComposedName, const OUStrin
         aIter->second->SetZOrder(NULL, WINDOW_ZORDER_FIRST);
         aIter->second->GrabFocus();
         EnsureVisible(aIter->second);
-        // no new one
+        
         return;
     }
 
-    // Neue Datenstruktur in DocShell eintragen
+    
     TTableWindowData::value_type pNewTabWinData(createTableWindowData( _rComposedName, rWinName,rWinName ));
     pNewTabWinData->ShowAll(sal_False);
 
-    // Neues Fenster in Fensterliste eintragen
+    
     OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
     if(pNewTabWin->Init())
     {
         m_pView->getController().getTableWindowData()->push_back( pNewTabWinData);
-        // when we already have a table with this name insert the full qualified one instead
+        
         (*GetTabWinMap())[_rComposedName] = pNewTabWin;
 
         SetDefaultTabWinPosSize( pNewTabWin );
@@ -348,7 +348,7 @@ void ORelationTableView::lookForUiActivities()
         {
             m_pCurrentlyTabConnData.reset();
         }
-        else if ( nRet == RET_OK ) // EDIT
+        else if ( nRet == RET_OK ) 
         {
             ConnDoubleClicked(m_pExistingConnection);
             m_pCurrentlyTabConnData.reset();
@@ -360,7 +360,7 @@ void ORelationTableView::lookForUiActivities()
         ORelationDialog aRelDlg( this, m_pCurrentlyTabConnData );
         if (aRelDlg.Execute() == RET_OK)
         {
-            // already updated by the dialog
+            
             addConnection( new ORelationTableConnection( this, m_pCurrentlyTabConnData ) );
         }
         m_pCurrentlyTabConnData.reset();

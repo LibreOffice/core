@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/sqlparse.hxx"
@@ -62,9 +62,9 @@ OPreparedStatement::OPreparedStatement( OConnection* _pConnection,const OTypeInf
     OUString sNewSql;
     OSQLParseNode* pNode = aParser.parseTree(sErrorMessage,sql);
     if(pNode)
-    {   // special handling for parameters
-        //  we recusive replace all occurrences of ? in the statement and
-        //  replace them with name like "parame" */
+    {   
+        
+        
         sal_Int32 nParameterCount = 0;
         OUString sDefaultName( "parame" );
         replaceParameterNodeName(pNode,sDefaultName,nParameterCount);
@@ -150,7 +150,7 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     SQLWarning  warning;
     clearWarnings ();
 
-    // Call SQLExecute
+    
     try {
         ADORecordset* pSet=NULL;
         CHECK_RETURN(m_Command.Execute(m_RecordsAffected,m_Parameters,adCmdUnknown,&pSet))
@@ -158,8 +158,8 @@ sal_Bool SAL_CALL OPreparedStatement::execute(  ) throw(SQLException, RuntimeExc
     }
     catch (SQLWarning& ex)
     {
-        // Save pointer to warning and save with ResultSet
-        // object once it is created.
+        
+        
 
         warning = ex;
     }
@@ -177,7 +177,7 @@ sal_Int32 SAL_CALL OPreparedStatement::executeUpdate(  ) throw(SQLException, Run
     if ( VT_ERROR == m_RecordsAffected.getType() )
     {
         ADOS::ThrowException(*m_pConnection->getConnection(),*this);
-        // to be sure that we get the error really thrown
+        
         throw SQLException();
     }
     m_RecordSet = WpADORecordset(pSet);
@@ -223,7 +223,7 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
 #if OSL_DEBUG_LEVEL > 0
             OUString sParam = aParam.GetName();
 
-#endif // OSL_DEBUG_LEVEL
+#endif 
 
             DataTypeEnum eType = aParam.GetADOType();
             if ( _eType != eType && _eType != adDBTimeStamp )
@@ -262,14 +262,14 @@ Reference< XResultSet > SAL_CALL OPreparedStatement::executeQuery(  ) throw(SQLE
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
 
-    // first clear the old things
+    
     m_xMetaData.clear();
     disposeResultSet();
     if(m_RecordSet.IsValid())
         m_RecordSet.Close();
     m_RecordSet.clear();
 
-    // the create the new onces
+    
     m_RecordSet.Create();
     OLEVariant aCmd;
     aCmd.setIDispatch(m_Command);

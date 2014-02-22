@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -69,7 +69,7 @@ void Point::dump()
                mnType );
 }
 
-} // dgm namespace
+} 
 
 DiagramData::DiagramData()
     : mpFillProperties( new FillProperties )
@@ -121,7 +121,7 @@ OString normalizeDotName( const OUString& rStr )
 static sal_Int32 calcDepth( const OUString& rNodeName,
                             const dgm::Connections& rCnx )
 {
-    // find length of longest path in 'isChild' graph, ending with rNodeName
+    
     dgm::Connections::const_iterator aCurrCxn( rCnx.begin() );
     const dgm::Connections::const_iterator aEndCxn( rCnx.end() );
     while( aCurrCxn != aEndCxn )
@@ -146,8 +146,8 @@ static sal_Int32 calcDepth( const OUString& rNodeName,
 
 void Diagram::build(  )
 {
-    // build name-object maps
-    // ======================
+    
+    
 
 #if OSL_DEBUG_LEVEL > 1
     std::ofstream output("/tmp/tree.dot");
@@ -188,7 +188,7 @@ void Diagram::build(  )
 
         output << "];" << std::endl;
 
-        // does currpoint have any text set?
+        
         if( aCurrPoint->mpShape &&
             aCurrPoint->mpShape->getTextBody() &&
             !aCurrPoint->mpShape->getTextBody()->getParagraphs().empty() &&
@@ -297,7 +297,7 @@ void Diagram::build(  )
         ++aCurrCxn;
     }
 
-    // assign outline levels
+    
     DiagramData::StringMap::iterator aPresOfIter=getData()->getPresOfNameMap().begin();
     const DiagramData::StringMap::iterator aPresOfEnd=getData()->getPresOfNameMap().end();
     while( aPresOfIter != aPresOfEnd )
@@ -323,10 +323,10 @@ void Diagram::build(  )
 
 void Diagram::addTo( const ShapePtr & pParentShape )
 {
-    // collect data, init maps
+    
     build( );
 
-    // create Shape hierarchy
+    
     ShapeCreationVisitor aCreationVisitor(pParentShape, *this);
     if( mpLayout->getNode() )
         mpLayout->getNode()->accept( aCreationVisitor );
@@ -356,8 +356,8 @@ uno::Reference<xml::dom::XDocument> loadFragment(
     core::XmlFilterBase& rFilter,
     const OUString& rFragmentPath )
 {
-    // load diagramming fragments into DOM representation, that later
-    // gets serialized back to SAX events and parsed
+    
+    
     return rFilter.importFragment( rFragmentPath );
 }
 
@@ -380,7 +380,7 @@ void importFragment( core::XmlFilterBase& rFilter,
     uno::Reference<xml::sax::XFastSAXSerializable> xSerializer(
         rXDom, uno::UNO_QUERY_THROW);
 
-    // now serialize DOM tree into internal data structures
+    
     rFilter.importFragment( rxHandler, xSerializer );
 }
 
@@ -399,7 +399,7 @@ void loadDiagram( ShapePtr& pShape,
     DiagramLayoutPtr pLayout( new DiagramLayout() );
     pDiagram->setLayout( pLayout );
 
-    // data
+    
     if( !rDataModelPath.isEmpty() )
     {
         rtl::Reference< core::FragmentHandler > xRefDataModel(
@@ -410,16 +410,16 @@ void loadDiagram( ShapePtr& pShape,
                        "OOXData",
                        pDiagram,
                        xRefDataModel);
-        // Pass the info to pShape
+        
         for( ::std::vector<OUString>::const_iterator aIt = pData->getExtDrawings().begin(), aEnd = pData->getExtDrawings().end();
                 aIt != aEnd; ++aIt )
                 pShape->addExtDrawingRelId( *aIt );
     }
 
-    // extLst is present, lets bet on that and ignore the rest of the data from here
+    
     if( !pData->getExtDrawings().size() )
     {
-        // layout
+        
         if( !rLayoutPath.isEmpty() )
         {
             rtl::Reference< core::FragmentHandler > xRefLayout(
@@ -432,7 +432,7 @@ void loadDiagram( ShapePtr& pShape,
                     xRefLayout);
         }
 
-        // style
+        
         if( !rQStylePath.isEmpty() )
         {
             rtl::Reference< core::FragmentHandler > xRefQStyle(
@@ -445,7 +445,7 @@ void loadDiagram( ShapePtr& pShape,
                     xRefQStyle);
         }
 
-        // colors
+        
         if( !rColorStylePath.isEmpty() )
         {
             rtl::Reference< core::FragmentHandler > xRefColorStyle(
@@ -458,14 +458,14 @@ void loadDiagram( ShapePtr& pShape,
                     xRefColorStyle);
         }
     } else {
-        // We still want to add the XDocuments to the DiagramDomMap
+        
         DiagramDomMap& rMainDomMap = pDiagram->getDomMap();
         rMainDomMap[OUString("OOXLayout")] = loadFragment(rFilter,rLayoutPath);
         rMainDomMap[OUString("OOXStyle")] = loadFragment(rFilter,rQStylePath);
         rMainDomMap[OUString("OOXColor")] = loadFragment(rFilter,rColorStylePath);
     }
 
-    // diagram loaded. now lump together & attach to shape
+    
     pDiagram->addTo(pShape);
 }
 
@@ -486,7 +486,7 @@ void loadDiagram( const ShapePtr& pShape,
 
     OUString aEmpty;
 
-    // data
+    
     if( rXDataModelDom.is() )
         importFragment(rFilter,
                        rXDataModelDom,
@@ -494,7 +494,7 @@ void loadDiagram( const ShapePtr& pShape,
                        pDiagram,
                        new DiagramDataFragmentHandler( rFilter, aEmpty, pData ));
 
-    // layout
+    
     if( rXLayoutDom.is() )
         importFragment(rFilter,
                        rXLayoutDom,
@@ -502,7 +502,7 @@ void loadDiagram( const ShapePtr& pShape,
                        pDiagram,
                        new DiagramLayoutFragmentHandler( rFilter, aEmpty, pLayout ));
 
-    // style
+    
     if( rXQStyleDom.is() )
         importFragment(rFilter,
                        rXQStyleDom,
@@ -510,7 +510,7 @@ void loadDiagram( const ShapePtr& pShape,
                        pDiagram,
                        new DiagramQStylesFragmentHandler( rFilter, aEmpty, pDiagram->getStyles() ));
 
-    // colors
+    
     if( rXColorStyleDom.is() )
         importFragment(rFilter,
                        rXColorStyleDom,
@@ -518,7 +518,7 @@ void loadDiagram( const ShapePtr& pShape,
                        pDiagram,
                        new ColorFragmentHandler( rFilter, aEmpty, pDiagram->getColors() ));
 
-    // diagram loaded. now lump together & attach to shape
+    
     pDiagram->addTo(pShape);
 }
 

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/bindings.hxx>
@@ -28,7 +28,7 @@
 #include "sc.hrc"
 
 
-//========================================================================
+
 
 static void lcl_InvalidateOutliner( SfxBindings* pBindings )
 {
@@ -38,14 +38,14 @@ static void lcl_InvalidateOutliner( SfxBindings* pBindings )
         pBindings->Invalidate( SID_OUTLINE_HIDE );
         pBindings->Invalidate( SID_OUTLINE_REMOVE );
 
-        pBindings->Invalidate( SID_STATUS_SUM );            // wegen ein-/ausblenden
+        pBindings->Invalidate( SID_STATUS_SUM );            
         pBindings->Invalidate( SID_ATTR_SIZE );
     }
 }
 
-//------------------------------------------------------------------------
 
-//! PaintWidthHeight zur DocShell verschieben?
+
+
 
 static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
                                     sal_Bool bColumns, SCCOLROW nStart, SCCOLROW nEnd )
@@ -55,7 +55,7 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
     sal_uInt16 nParts = PAINT_GRID;
     SCCOL nStartCol = 0;
     SCROW nStartRow = 0;
-    SCCOL nEndCol = MAXCOL;         // fuer Test auf Merge
+    SCCOL nEndCol = MAXCOL;         
     SCROW nEndRow = MAXROW;
     if ( bColumns )
     {
@@ -78,7 +78,7 @@ static void lcl_PaintWidthHeight( ScDocShell& rDocShell, SCTAB nTab,
     rDocShell.PostPaint( nStartCol,nStartRow,nTab, MAXCOL,MAXROW,nTab, nParts );
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool bRecord, bool bApi )
 {
@@ -121,7 +121,7 @@ bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
         if (pDoc->IsStreamValid(nTab))
             pDoc->SetStreamValid(nTab, false);
 
-        sal_uInt16 nParts = 0;              // Datenbereich nicht geaendert
+        sal_uInt16 nParts = 0;              
         if ( bColumns )
             nParts |= PAINT_TOP;
         else
@@ -137,7 +137,7 @@ bool ScOutlineDocFunc::MakeOutline( const ScRange& rRange, bool bColumns, bool b
     else
     {
         if (!bApi)
-            rDocShell.ErrorMessage(STR_MSSG_MAKEOUTLINE_0); // "Gruppierung nicht moeglich"
+            rDocShell.ErrorMessage(STR_MSSG_MAKEOUTLINE_0); 
         delete pUndoTab;
     }
 
@@ -187,7 +187,7 @@ bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool
             if (pDoc->IsStreamValid(nTab))
                 pDoc->SetStreamValid(nTab, false);
 
-            sal_uInt16 nParts = 0;              // Datenbereich nicht geaendert
+            sal_uInt16 nParts = 0;              
             if ( bColumns )
                 nParts |= PAINT_TOP;
             else
@@ -200,14 +200,14 @@ bool ScOutlineDocFunc::RemoveOutline( const ScRange& rRange, bool bColumns, bool
             bDone = true;
             lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-            // es wird nicht wieder eingeblendet -> kein UpdatePageBreaks
+            
         }
         else
             delete pUndoTab;
     }
 
     if (!bDone && !bApi)
-        rDocShell.ErrorMessage(STR_MSSG_REMOVEOUTLINE_0);   // "Aufheben nicht moeglich"
+        rDocShell.ErrorMessage(STR_MSSG_REMOVEOUTLINE_0);   
 
     return bDone;
 }
@@ -265,7 +265,7 @@ bool ScOutlineDocFunc::RemoveAllOutlines( SCTAB nTab, bool bRecord )
     return bSuccess;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
 {
@@ -304,7 +304,7 @@ bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
             pDoc->CopyToDocument( 0, nOutStartRow, nTab, MAXCOL, nOutEndRow, nTab, IDF_NONE, false, pUndoDoc );
         }
 
-        // einblenden
+        
         SelectLevel( nTab, true,  pTable->GetColArray()->GetDepth(), false, false );
         SelectLevel( nTab, false, pTable->GetRowArray()->GetDepth(), false, false );
         pDoc->SetOutlineTable( nTab, NULL );
@@ -331,7 +331,7 @@ bool ScOutlineDocFunc::AutoOutline( const ScRange& rRange, bool bRecord )
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel,
                                     bool bRecord, bool bPaint )
@@ -340,7 +340,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     if (bRecord && !pDoc->IsUndoEnabled())
         bRecord = false;
-    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );             // ist schon da
+    ScOutlineTable* pTable = pDoc->GetOutlineTable( nTab );             
     if (!pTable)
         return false;
     ScOutlineArray* pArray = bColumns ? pTable->GetColArray() : pTable->GetRowArray();
@@ -369,28 +369,28 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoOutlineLevel( &rDocShell,
-                                    nStart, nEnd, nTab,             //! start und end berechnen
+                                    nStart, nEnd, nTab,             
                                     pUndoDoc, pUndoTab,
                                     bColumns, nLevel ) );
     }
 
-    ScSubOutlineIterator aIter( pArray );                   // alle Eintraege
+    ScSubOutlineIterator aIter( pArray );                   
     ScOutlineEntry* pEntry;
     while ((pEntry=aIter.GetNext()) != NULL)
     {
         sal_uInt16 nThisLevel = aIter.LastLevel();
         sal_Bool bShow = (nThisLevel < nLevel);
-        if (bShow)                                          // einblenden
+        if (bShow)                                          
         {
             pEntry->SetHidden( false );
             pEntry->SetVisible( true );
         }
-        else if ( nThisLevel == nLevel )                    // ausblenden
+        else if ( nThisLevel == nLevel )                    
         {
             pEntry->SetHidden( true );
             pEntry->SetVisible( true );
         }
-        else                                                // verdeckt
+        else                                                
         {
             pEntry->SetVisible( false );
         }
@@ -403,7 +403,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
                 pDoc->ShowCol( static_cast<SCCOL>(i), nTab, bShow );
             else
             {
-                // show several rows together, don't show filtered rows
+                
                 SCROW nFilterEnd = i;
                 bool bFiltered = pDoc->RowFiltered( i, nTab, NULL, &nFilterEnd );
                 nFilterEnd = std::min( nThisEnd, nFilterEnd );
@@ -426,7 +426,7 @@ bool ScOutlineDocFunc::SelectLevel( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
     return true;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
 {
@@ -468,7 +468,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
                                         pUndoDoc, pUndoTab, true ) );
         }
 
-        //  Spalten
+        
 
         nMin=MAXCOL;
         nMax=0;
@@ -489,7 +489,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         for ( i=nMin; i<=nMax; i++ )
             pDoc->ShowCol( static_cast<SCCOL>(i), nTab, true );
 
-        //  Zeilen
+        
 
         nMin=MAXROW;
         nMax=0;
@@ -509,7 +509,7 @@ bool ScOutlineDocFunc::ShowMarkedOutlines( const ScRange& rRange, bool bRecord )
         }
         for ( i=nMin; i<=nMax; i++ )
         {
-            // show several rows together, don't show filtered rows
+            
             SCROW nFilterEnd = i;
             bool bFiltered = pDoc->RowFiltered( i, nTab, NULL, &nFilterEnd );
             nFilterEnd = std::min( nMax, nFilterEnd );
@@ -584,7 +584,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
                                         pUndoDoc, pUndoTab, false ) );
         }
 
-        //  Spalten
+        
 
         nCount = pColArray->GetCount(nColLevel);
         for ( i=0; i<nCount; i++ )
@@ -597,7 +597,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
                 HideOutline( nTab, true, nColLevel, i, false, false );
         }
 
-        //  Zeilen
+        
 
         nCount = pRowArray->GetCount(nRowLevel);
         for ( i=0; i<nCount; i++ )
@@ -624,7 +624,7 @@ bool ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, bool bRecord )
     return bDone;
 }
 
-//------------------------------------------------------------------------
+
 
 bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
                                     bool bRecord, bool bPaint )
@@ -657,7 +657,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
         rDocShell.GetUndoManager()->AddUndoAction(
             new ScUndoDoOutline( &rDocShell,
-                                    nStart, nEnd, nTab, pUndoDoc,       //! start und end berechnen
+                                    nStart, nEnd, nTab, pUndoDoc,       
                                     bColumns, nLevel, nEntry, true ) );
     }
 
@@ -669,7 +669,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
             pDoc->ShowCol( static_cast<SCCOL>(i), nTab, true );
         else
         {
-            // show several rows together, don't show filtered rows
+            
             SCROW nFilterEnd = i;
             bool bFiltered = pDoc->RowFiltered( i, nTab, NULL, &nFilterEnd );
             nFilterEnd = std::min( nEnd, nFilterEnd );
@@ -707,7 +707,7 @@ bool ScOutlineDocFunc::ShowOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return true;        //! immer ???
+    return true;        
 }
 
 bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel, sal_uInt16 nEntry,
@@ -766,7 +766,7 @@ bool ScOutlineDocFunc::HideOutline( SCTAB nTab, bool bColumns, sal_uInt16 nLevel
 
     lcl_InvalidateOutliner( rDocShell.GetViewBindings() );
 
-    return true;        //! immer ???
+    return true;        
 }
 
 

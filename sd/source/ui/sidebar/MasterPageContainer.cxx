@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "MasterPageContainer.hxx"
@@ -61,7 +61,7 @@ namespace {
 
 typedef ::std::vector<sd::sidebar::SharedMasterPageDescriptor> MasterPageContainerType;
 
-} // end of anonymous namespace
+} 
 
 
 namespace sd { namespace sidebar {
@@ -140,8 +140,8 @@ private:
     */
     bool mbFirstPageObjectSeen;
 
-    // The widths for the previews contain two pixels for the border that is
-    // painted arround the preview.
+    
+    
     static const int SMALL_PREVIEW_WIDTH = 72 + 2;
     static const int LARGE_PREVIEW_WIDTH = 2*72 + 2;
 
@@ -159,9 +159,9 @@ private:
 
     ::std::vector<Link> maChangeListeners;
 
-    // We have to remember the tasks for initialization and filling in case
-    // a MasterPageContainer object is destroyed before these tasks have
-    // been completed.
+    
+    
+    
     ::boost::weak_ptr<sd::tools::TimerBasedTaskExecution> mpFillerTask;
 
     Size maSmallPreviewSizePixel;
@@ -180,7 +180,7 @@ private:
 
 
 
-//===== MasterPageContainer ===================================================
+
 
 ::boost::weak_ptr<MasterPageContainer::Implementation>
     MasterPageContainer::Implementation::mpInstance;
@@ -486,9 +486,9 @@ SdPage* MasterPageContainer::GetPageObjectForToken (
         pPageObject = pDescriptor->mpMasterPage;
         if (pPageObject == NULL)
         {
-            // The page object is not (yet) present.  Call
-            // UpdateDescriptor() to trigger the PageObjectProvider() to
-            // provide it.
+            
+            
+            
             if (bLoad)
                 mpImpl->GetModel();
             if (mpImpl->UpdateDescriptor(pDescriptor,bLoad,false, true))
@@ -571,7 +571,7 @@ bool MasterPageContainer::RequestPreview (Token aToken)
 
 
 
-//==== Implementation ================================================
+
 
 MasterPageContainer::Implementation::Implementation (void)
     : maMutex(),
@@ -600,8 +600,8 @@ MasterPageContainer::Implementation::Implementation (void)
 
 MasterPageContainer::Implementation::~Implementation (void)
 {
-    // When the initializer or filler tasks are still running then we have
-    // to stop them now in order to prevent them from calling us back.
+    
+    
     tools::TimerBasedTaskExecution::ReleaseTask(mpFillerTask);
 
     mpRequestQueue.reset();
@@ -678,11 +678,11 @@ void MasterPageContainer::Implementation::UpdatePreviewSizePixel (void)
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    // The default aspect ratio is 4:3
+    
     int nWidth (4);
     int nHeight (3);
 
-    // Search for the first entry with an existing master page.
+    
     MasterPageContainerType::const_iterator iDescriptor;
     MasterPageContainerType::const_iterator iContainerEnd(maContainer.end());
     for (iDescriptor=maContainer.begin(); iDescriptor!=iContainerEnd; ++iDescriptor)
@@ -752,11 +752,11 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
 
     Token aResult (NIL_TOKEN);
 
-    // Get page object and preview when that is inexpensive.
+    
     UpdateDescriptor(rpDescriptor,false,false, false);
 
-    // Look up the new MasterPageDescriptor and either insert it or update
-    // an already existing one.
+    
+    
     MasterPageContainerType::iterator aEntry (
         ::std::find_if (
             maContainer.begin(),
@@ -764,7 +764,7 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             MasterPageDescriptor::AllComparator(rpDescriptor)));
     if (aEntry == maContainer.end())
     {
-        // Insert a new MasterPageDescriptor.
+        
         bool bIgnore (rpDescriptor->mpPageObjectProvider.get()==NULL
             && rpDescriptor->msURL.isEmpty());
 
@@ -776,9 +776,9 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
             aResult = maContainer.size();
             rpDescriptor->SetToken(aResult);
 
-            // Templates are precious, i.e. we lock them so that they will
-            // not be destroyed when (temporarily) no one references them.
-            // They will only be deleted when the container is destroyed.
+            
+            
+            
             switch (rpDescriptor->meOrigin)
             {
                 case TEMPLATE:
@@ -798,14 +798,14 @@ MasterPageContainer::Token MasterPageContainer::Implementation::PutMasterPage (
     }
     else
     {
-        // Update an existing MasterPageDescriptor.
+        
         aResult = (*aEntry)->maToken;
         ::std::auto_ptr<std::vector<MasterPageContainerChangeEvent::EventType> > pEventTypes(
             (*aEntry)->Update(*rpDescriptor));
         if (pEventTypes.get()!=NULL && pEventTypes->size()>0)
         {
-            // One or more aspects of the descriptor have changed.  Send
-            // appropriate events to the listeners.
+            
+            
             UpdateDescriptor(*aEntry,false,false, true);
 
             std::vector<MasterPageContainerChangeEvent::EventType>::const_iterator iEventType;
@@ -885,8 +885,8 @@ Image MasterPageContainer::Implementation::GetPreviewForToken (
 
     SharedMasterPageDescriptor pDescriptor = GetDescriptor(aToken);
 
-    // When the preview is missing but inexpensively creatable then do that
-    // now.
+    
+    
     if (pDescriptor.get()!=NULL)
     {
         if (ePreviewState == PS_CREATABLE)
@@ -944,8 +944,8 @@ MasterPageContainer::PreviewState MasterPageContainer::Implementation::GetPrevie
             eState = PS_AVAILABLE;
         else if (pDescriptor->mpPreviewProvider.get() != NULL)
         {
-            // The preview does not exist but can be created.  When that is
-            // not expensive then do it at once.
+            
+            
             if (mpRequestQueue->HasRequest(aToken))
                 eState = PS_PREPARING;
             else
@@ -979,23 +979,23 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
 
     if ( ! mxModel.is())
     {
-        // Get the desktop a s service factory.
+        
         uno::Reference<frame::XDesktop2> xDesktop  = frame::Desktop::create(
             ::comphelper::getProcessComponentContext() );
 
-        // Create a new model.
+        
         OUString sModelServiceName ( "com.sun.star.presentation.PresentationDocument");
         mxModel = uno::Reference<frame::XModel>(
             ::comphelper::getProcessServiceFactory()->createInstance(
                 sModelServiceName),
             uno::UNO_QUERY);
 
-        // Initialize the model.
+        
         uno::Reference<frame::XLoadable> xLoadable (mxModel,uno::UNO_QUERY);
         if (xLoadable.is())
             xLoadable->initNew();
 
-        // Use its tunnel to get a pointer to its core implementation.
+        
         uno::Reference<lang::XUnoTunnel> xUnoTunnel (mxModel, uno::UNO_QUERY);
         if (xUnoTunnel.is())
         {
@@ -1004,7 +1004,7 @@ Reference<frame::XModel> MasterPageContainer::Implementation::GetModel (void)
                     SdXImpressDocument::getUnoTunnelId()))->GetDoc();
         }
 
-        // Create a default page.
+        
         uno::Reference<drawing::XDrawPagesSupplier> xSlideSupplier (mxModel, uno::UNO_QUERY);
         if (xSlideSupplier.is())
         {
@@ -1086,9 +1086,9 @@ Image MasterPageContainer::Implementation::GetPreviewSubstitution (
 
 void MasterPageContainer::Implementation::CleanContainer (void)
 {
-    // Remove the empty elements at the end of the container.  The empty
-    // elements in the middle can not be removed because that would
-    // invalidate the references still held by others.
+    
+    
+    
     int nIndex (maContainer.size()-1);
     while (nIndex>=0 && maContainer[nIndex].get()==NULL)
         --nIndex;
@@ -1132,18 +1132,18 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
 {
     const ::osl::MutexGuard aGuard (maMutex);
 
-    // We have to create the page object when the preview provider needs it
-    // and the caller needs the preview.
+    
+    
     bForcePageObject |= (bForcePreview
         && rpDescriptor->mpPreviewProvider->NeedsPageObject()
         && rpDescriptor->mpMasterPage==NULL);
 
-    // Define a cost threshold so that an update or page object or preview
-    // that is at least this cost are made at once. Updates with higher cost
-    // are scheduled for later.
+    
+    
+    
     sal_Int32 nCostThreshold (mpRequestQueue->IsEmpty() ? 5 : 0);
 
-    // Update the page object (which may be used for the preview update).
+    
     if (bForcePageObject)
         GetDocument();
     int nPageObjectModified (rpDescriptor->UpdatePageObject(
@@ -1160,7 +1160,7 @@ bool MasterPageContainer::Implementation::UpdateDescriptor (
     if (nPageObjectModified && ! mbFirstPageObjectSeen)
         UpdatePreviewSizePixel();
 
-    // Update the preview.
+    
     bool bPreviewModified (rpDescriptor->UpdatePreview(
         (bForcePreview ? -1 : nCostThreshold),
         maSmallPreviewSizePixel,
@@ -1197,6 +1197,6 @@ void MasterPageContainer::Implementation::FillingDone (void)
 
 
 
-} } // end of namespace sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -35,14 +35,14 @@
 #   define t_print printf
 #endif
 
-//------------------------------------------------------------------------
-// Ip version definition
-//------------------------------------------------------------------------
-#define IP_VER     4               /// currently only IPv4 is considered.
 
-//------------------------------------------------------------------------
-// helper functions
-//------------------------------------------------------------------------
+
+
+#define IP_VER     4               
+
+
+
+
 
 /** compare two OUString.
 */
@@ -118,7 +118,7 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     }
 
     struct hostent *hptr;
-    //first search /ets/hosts, then search from dns
+    
     hptr = gethostbyname( hostname);
     if ( hptr != NULL )
     {
@@ -139,13 +139,13 @@ void printUString( const ::rtl::OUString & str, const char* msg)
 {
     ::rtl::OUString aUString;
     struct hostent *hptr;
-    //first search /ets/hosts, then search from dns
+    
     hptr = gethostbyname( str_name.getStr());
     if ( hptr != NULL )
     {
         struct in_addr ** addrptr;
         addrptr = (struct in_addr **) hptr->h_addr_list ;
-        //if there are more than one IPs on the same machine, we select one
+        
         for (; *addrptr; addrptr++)
         {
             t_print("#Local IP Address: %s\n", inet_ntoa(**addrptr));
@@ -185,17 +185,17 @@ void printUString( const ::rtl::OUString & str, const char* msg)
 */
 void thread_sleep( sal_Int32 _nSec )
 {
-    /// print statement in thread process must use fflush() to force display.
-    // printf("wait %d seconds. ", _nSec );
-    // fflush(stdout);
+    
+    
+    
 
-#ifdef WNT               //Windows
+#ifdef WNT               
     Sleep( _nSec * 100 );
 #endif
-#if ( defined UNX )  //Unix
+#if ( defined UNX )  
     usleep(_nSec * 100000);
 #endif
-    // t_print("# done\n" );
+    
 }
 
 /** print Boolean value.
@@ -305,7 +305,7 @@ sal_Bool ifAvailable( rtl::OUString const&  strAddrOrHostName )
         return sal_False;
     }
 
-    aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); //sal_True;
+    aSocket.setOption( osl_Socket_OptionReuseAddr, 1 ); 
 
     TimeValue *pTimeout;
     pTimeout  = ( TimeValue* )malloc( sizeof( TimeValue ) );

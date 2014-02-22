@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -80,7 +80,7 @@ bool parseValue(xmlreader::Span const & text, sal_Bool * value) {
 
 bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
     assert(text.is() && value != 0);
-    // For backwards compatibility, support hexadecimal values:
+    
     sal_Int32 n =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
@@ -90,7 +90,7 @@ bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
                 text.begin + RTL_CONSTASCII_LENGTH("0X"),
                 text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt32(16)) :
         OString(text.begin, text.length).toInt32();
-        //TODO: check valid lexical representation
+        
     if (n >= SAL_MIN_INT16 && n <= SAL_MAX_INT16) {
         *value = static_cast< sal_Int16 >(n);
         return true;
@@ -100,7 +100,7 @@ bool parseValue(xmlreader::Span const & text, sal_Int16 * value) {
 
 bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
     assert(text.is() && value != 0);
-    // For backwards compatibility, support hexadecimal values:
+    
     *value =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
@@ -110,13 +110,13 @@ bool parseValue(xmlreader::Span const & text, sal_Int32 * value) {
                 text.begin + RTL_CONSTASCII_LENGTH("0X"),
                 text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt32(16)) :
         OString(text.begin, text.length).toInt32();
-        //TODO: check valid lexical representation
+        
     return true;
 }
 
 bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
     assert(text.is() && value != 0);
-    // For backwards compatibility, support hexadecimal values:
+    
     *value =
         rtl_str_shortenedCompareIgnoreAsciiCase_WithLength(
             text.begin, text.length, RTL_CONSTASCII_STRINGPARAM("0X"),
@@ -126,14 +126,14 @@ bool parseValue(xmlreader::Span const & text, sal_Int64 * value) {
                 text.begin + RTL_CONSTASCII_LENGTH("0X"),
                 text.length - RTL_CONSTASCII_LENGTH("0X")).toUInt64(16)) :
         OString(text.begin, text.length).toInt64();
-        //TODO: check valid lexical representation
+        
     return true;
 }
 
 bool parseValue(xmlreader::Span const & text, double * value) {
     assert(text.is() && value != 0);
     *value = OString(text.begin, text.length).toDouble();
-        //TODO: check valid lexical representation
+        
     return true;
 }
 
@@ -267,7 +267,7 @@ xmlreader::XmlReader::Text ValueParser::getTextMode() const {
             if (!items_.empty()) {
                 break;
             }
-            // fall through
+            
         case STATE_IT:
             return
                 (type_ == TYPE_STRING || type_ == TYPE_STRING_LIST ||
@@ -294,12 +294,12 @@ bool ValueParser::startElement(
             isListType(type_) && separator_.isEmpty())
         {
             pad_.clear();
-                // before first <it>, characters are not ignored; assume they
-                // are only whitespace
+                
+                
             state_ = STATE_IT;
             return true;
         }
-        // fall through
+        
     case STATE_IT:
         if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
             name.equals("unicode") &&
@@ -382,7 +382,7 @@ bool ValueParser::endElement() {
                     value = convertItems< css::uno::Sequence< sal_Int8 > >();
                     break;
                 default:
-                    assert(false); // this cannot happen
+                    assert(false); 
                     break;
                 }
                 items_.clear();
@@ -408,7 +408,7 @@ bool ValueParser::endElement() {
                 }
                 break;
             default:
-                assert(false); // this cannot happen
+                assert(false); 
                 break;
             }
             separator_ = OString();
@@ -454,7 +454,7 @@ template< typename T > css::uno::Any ValueParser::convertItems() {
     for (sal_Int32 i = 0; i < seq.getLength(); ++i) {
         bool ok = (items_[i] >>= seq[i]);
         assert(ok);
-        (void) ok; // avoid warnings
+        (void) ok; 
     }
     return css::uno::makeAny(seq);
 }

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -195,7 +195,7 @@ void LwpFoundry::RegisterAllLayouts()
 
     m_bRegisteredAll = true;
 
-    //Register CellStyle
+    
     LwpObject* pStyle = m_CellStyle.obj();
     if( pStyle )
     {
@@ -203,7 +203,7 @@ void LwpFoundry::RegisterAllLayouts()
         pStyle->RegisterStyle();
     }
 
-    //register content page layout list: Layout
+    
     pStyle = m_Layout.obj();
     if( pStyle )
     {
@@ -211,7 +211,7 @@ void LwpFoundry::RegisterAllLayouts()
         pStyle->RegisterStyle();
     }
 
-    //Register page style layout list: PageStyle, such as "Default Page"
+    
     pStyle = m_PageStyle.obj();
     if( pStyle )
     {
@@ -219,7 +219,7 @@ void LwpFoundry::RegisterAllLayouts()
         pStyle->RegisterStyle();
     }
 
-    //Register FrameStyle
+    
     pStyle = m_FrameStyle.obj();
     if( pStyle )
     {
@@ -290,7 +290,7 @@ LwpObjectID * LwpFoundry::GetDefaultTextStyle()
 */
 LwpObjectID * LwpFoundry::FindParaStyleByName(OUString name)
 {
-    //Register all text styles: para styles, character styles
+    
     LwpDLVListHeadHolder* pParaStyleHolder = static_cast<LwpDLVListHeadHolder*>(GetTextStyleHead()->obj());
     if(pParaStyleHolder)
     {
@@ -328,7 +328,7 @@ OUString LwpFoundry::FindActuralStyleName(OUString name)
 
 void LwpVersionManager::Read(LwpObjectStream *pStrm)
 {
-    // TODO: skip the data for prototype
+    
     Skip(pStrm);
 }
 
@@ -343,7 +343,7 @@ void LwpVersionManager::Skip(LwpObjectStream *pStrm)
         switch(tag)
         {
             case TAG_USER_VERSION:
-                // TODO: skip the CUserVersionControl
+                
                 pStrm->SeekRel(pStrm->QuickReaduInt16());
                 break;
 
@@ -361,7 +361,7 @@ void LwpObjectManager::Read(LwpObjectStream *pStrm)
 
     LwpObjectID dummy;
     dummy.Read(pStrm);
-    // TODO: judge if we need to set the cDelta by the dummy id
+    
 
     m_Division.ReadIndexed(pStrm);
     pStrm->SkipExtra();
@@ -383,7 +383,7 @@ void LwpContentManager::Read(LwpObjectStream *pStrm)
 {
     m_ContentList.ReadIndexed(pStrm);
 
-    // TODO:  to judge the file revision
+    
 
     m_EnumHead.ReadIndexed(pStrm);
     m_EnumTail.ReadIndexed(pStrm);
@@ -459,21 +459,21 @@ void LwpOrderedObjectManager::Read(LwpObjectStream *pStrm)
 */
 LwpOrderedObject* LwpOrderedObjectManager::Enumerate(LwpOrderedObject * pLast)
 {
-    // If Last has a next, return it.
+    
     if(pLast && !pLast->GetNext()->IsNull())
         return static_cast<LwpOrderedObject*>(pLast->GetNext()->obj());
 
     LwpListList* pList = NULL;
     if(pLast)
     {
-        // We're at the end of Last's list (not Liszt's list).
-        // Start with the next active list
+        
+        
         pList = static_cast<LwpListList*>(pLast->GetListList()->obj());
         pList= GetNextActiveListList(pList);
     }
     else
     {
-        // Start with the first active ListList
+        
         pList = GetNextActiveListList(NULL);
     }
 
@@ -537,7 +537,7 @@ Return the XFStyle* added by XFStyleManager
 IXFStyle* LwpStyleManager::AddStyle(LwpObjectID styleObjID, IXFStyle* pStyle)
 {
     assert(pStyle);
-    //pStyle may change if same style is found in XFStyleManager
+    
     XFStyleManager* pXFStyleManager = LwpGlobalMgr::GetInstance()->GetXFStyleManager();
     pStyle = pXFStyleManager->AddStyle(pStyle);
     m_StyleList.insert(LwpStyleMap::value_type(styleObjID, pStyle));

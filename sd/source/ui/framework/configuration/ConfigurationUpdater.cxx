@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -47,7 +47,7 @@ static const sal_Int32 snNormalTimeoutCountThreshold (5);
 namespace sd { namespace framework {
 
 
-//===== ConfigurationUpdaterLock ==============================================
+
 
 class ConfigurationUpdaterLock
 {
@@ -62,7 +62,7 @@ private:
 
 
 
-//===== ConfigurationUpdater ==================================================
+
 
 ConfigurationUpdater::ConfigurationUpdater (
     const ::boost::shared_ptr<ConfigurationControllerBroadcaster>& rpBroadcaster,
@@ -79,9 +79,9 @@ ConfigurationUpdater::ConfigurationUpdater (
       mnFailedUpdateCount(0),
       mpResourceManager(rpResourceManager)
 {
-    // Prepare the timer that is started when after an update the current
-    // and the requested configuration differ.  With the timer we try
-    // updates until the two configurations are the same.
+    
+    
+    
     maUpdateTimer.SetTimeout(snNormalTimeout);
     maUpdateTimer.SetTimeoutHdl(LINK(this,ConfigurationUpdater,TimeoutHandler));
     SetControllerManager(rxControllerManager);
@@ -112,13 +112,13 @@ void ConfigurationUpdater::RequestUpdate (
 {
     mxRequestedConfiguration = rxRequestedConfiguration;
 
-    // Find out whether we really can update the configuration.
+    
     if (IsUpdatePossible())
     {
         SAL_INFO("sd.fwk", OSL_THIS_FUNC << ": UpdateConfiguration start");
 
-        // Call UpdateConfiguration while that is possible and while someone
-        // set mbUpdatePending to true in the middle of it.
+        
+        
         do
         {
             UpdateConfiguration();
@@ -180,14 +180,14 @@ void ConfigurationUpdater::UpdateConfiguration (void)
             ConfigurationTracer::TraceConfiguration(
                 mxCurrentConfiguration, "current configuration");
 #endif
-            // Notify the beginning of the update.
+            
             ConfigurationChangeEvent aEvent;
             aEvent.Type = FrameworkHelper::msConfigurationUpdateStartEvent;
             aEvent.Configuration = mxRequestedConfiguration;
             mpBroadcaster->NotifyListeners(aEvent);
 
-            // Do the actual update.  All exceptions are caught and ignored,
-            // so that the end of the update is notified always.
+            
+            
             try
             {
                 if (mnLockCount == 0)
@@ -197,7 +197,7 @@ void ConfigurationUpdater::UpdateConfiguration (void)
             {
             }
 
-            // Notify the end of the update.
+            
             aEvent.Type = FrameworkHelper::msConfigurationUpdateEndEvent;
             mpBroadcaster->NotifyListeners(aEvent);
 
@@ -230,7 +230,7 @@ void ConfigurationUpdater::CleanRequestedConfiguration (void)
 {
     if (mxControllerManager.is())
     {
-        // Request the deactivation of pure anchors that have no child.
+        
         vector<Reference<XResourceId> > aResourcesToDeactivate;
         CheckPureAnchors(mxRequestedConfiguration, aResourcesToDeactivate);
         if (!aResourcesToDeactivate.empty())
@@ -250,8 +250,8 @@ void ConfigurationUpdater::CleanRequestedConfiguration (void)
 
 void ConfigurationUpdater::CheckUpdateSuccess (void)
 {
-    // When the two configurations differ then start the timer to call
-    // another update later.
+    
+    
     if ( ! AreConfigurationsEquivalent(mxCurrentConfiguration, mxRequestedConfiguration))
     {
         if (mnFailedUpdateCount <= snShortTimeoutCountThreshold)
@@ -265,7 +265,7 @@ void ConfigurationUpdater::CheckUpdateSuccess (void)
     }
     else
     {
-        // Update was successful.  Reset the failed update count.
+        
         mnFailedUpdateCount = 0;
     }
 }
@@ -286,10 +286,10 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
             "requested and current resources:", rClassifier.GetC1andC2());
 #endif
 
-        // Updating of the sub controllers is done in two steps.  In the
-        // first the sub controllers typically shut down resources that are
-        // not requested anymore.  In the second the sub controllers
-        // typically set up resources that have been newly requested.
+        
+        
+        
+        
         mpResourceManager->DeactivateResources(rClassifier.GetC2minusC1(), mxCurrentConfiguration);
         mpResourceManager->ActivateResources(rClassifier.GetC1minusC2(), mxCurrentConfiguration);
 
@@ -301,7 +301,7 @@ void ConfigurationUpdater::UpdateCore (const ConfigurationClassifier& rClassifie
             mxCurrentConfiguration, "current configuration");
 #endif
 
-        // Deactivate pure anchors that have no child.
+        
         vector<Reference<XResourceId> > aResourcesToDeactivate;
         CheckPureAnchors(mxCurrentConfiguration, aResourcesToDeactivate);
         if (!aResourcesToDeactivate.empty())
@@ -323,18 +323,18 @@ void ConfigurationUpdater::CheckPureAnchors (
     if ( ! rxConfiguration.is())
         return;
 
-    // Get a list of all resources in the configuration.
+    
     Sequence<Reference<XResourceId> > aResources(
         rxConfiguration->getResources(
             NULL, OUString(), AnchorBindingMode_INDIRECT));
     sal_Int32 nCount (aResources.getLength());
 
-    // Prepare the list of pure anchors that have to be deactivated.
+    
     rResourcesToDeactivate.clear();
 
-    // Iterate over the list in reverse order because when there is a chain
-    // of pure anchors with only the last one having no child then the whole
-    // list has to be deactivated.
+    
+    
+    
     sal_Int32 nIndex (nCount-1);
     while (nIndex >= 0)
     {
@@ -343,15 +343,15 @@ void ConfigurationUpdater::CheckPureAnchors (
             mpResourceManager->GetResource(xResourceId).mxResource);
         bool bDeactiveCurrentResource (false);
 
-        // Skip all resources that are no pure anchors.
+        
         if (xResource.is() && xResource->isAnchorOnly())
         {
-            // When xResource is not an anchor of the next resource in
-            // the list then it is the anchor of no resource at all.
+            
+            
             if (nIndex == nCount-1)
             {
-                // No following anchors, deactivate this one, then remove it
-                // from the list.
+                
+                
                 bDeactiveCurrentResource = true;
             }
             else
@@ -360,8 +360,8 @@ void ConfigurationUpdater::CheckPureAnchors (
                 if ( ! xPrevResourceId.is()
                     || ! xPrevResourceId->isBoundTo(xResourceId, AnchorBindingMode_DIRECT))
                 {
-                    // The previous resource (id) does not exist or is not bound to
-                    // the current anchor.
+                    
+                    
                     bDeactiveCurrentResource = true;
                 }
             }
@@ -373,7 +373,7 @@ void ConfigurationUpdater::CheckPureAnchors (
                 OUStringToOString(
                     FrameworkHelper::ResourceIdToString(xResourceId),
                     RTL_TEXTENCODING_UTF8).getStr() << "because it has no children");
-            // Erase element from current configuration.
+            
             for (sal_Int32 nI=nIndex; nI<nCount-2; ++nI)
                 aResources[nI] = aResources[nI+1];
             nCount -= 1;
@@ -440,6 +440,6 @@ IMPL_LINK_NOARG(ConfigurationUpdater, TimeoutHandler)
 }
 
 
-} } // end of namespace sd::framework
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "valueproperties.hxx"
@@ -27,12 +27,12 @@ namespace xmloff
 
     using namespace ::com::sun::star::form;
 
-    //= OValuePropertiesMetaData
+    
     void OValuePropertiesMetaData::getValuePropertyNames(
             OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
             sal_Char const * & _rpCurrentValuePropertyName, sal_Char const * & _rpValuePropertyName)
     {
-        // reset the pointers in case we can't determine the property names
+        
         _rpCurrentValuePropertyName = _rpValuePropertyName = NULL;
         switch (_nFormComponentType)
         {
@@ -45,7 +45,7 @@ namespace xmloff
                 else
                 {
                     if (OControlElement::PASSWORD != _eType)
-                        // no CurrentValue" for passwords
+                        
                         _rpCurrentValuePropertyName = PROPERTY_TEXT;
                     _rpValuePropertyName = PROPERTY_DEFAULT_TEXT;
                 }
@@ -61,7 +61,7 @@ namespace xmloff
             case FormComponentType::FILECONTROL:
             case FormComponentType::COMBOBOX:
                 _rpValuePropertyName = PROPERTY_DEFAULT_TEXT;
-                // NO BREAK!!
+                
             case FormComponentType::COMMANDBUTTON:
                 _rpCurrentValuePropertyName = PROPERTY_TEXT;
                 break;
@@ -128,7 +128,7 @@ namespace xmloff
         OControlElement::ElementType _eType, sal_Int16 _nFormComponentType,
         sal_Char const * & _rpValuePropertyName, sal_Char const * & _rpDefaultValuePropertyName )
     {
-        // reset the pointers in case we can't determine the property names
+        
         _rpValuePropertyName = _rpDefaultValuePropertyName = NULL;
         switch (_nFormComponentType)
         {
@@ -162,8 +162,8 @@ namespace xmloff
             case FormComponentType::COMBOBOX:
             case FormComponentType::SCROLLBAR:
             case FormComponentType::SPINBUTTON:
-                // For these types, the runtime properties are the same as the ones which in the XML
-                // stream are named "value properties"
+                
+                
                 getValuePropertyNames( _eType, _nFormComponentType, _rpValuePropertyName, _rpDefaultValuePropertyName );
                 break;
 
@@ -175,6 +175,6 @@ namespace xmloff
         }
     }
 
-}   // namespace xmloff
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

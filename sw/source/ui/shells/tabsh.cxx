@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -118,9 +118,9 @@ const sal_uInt16 aUITableAttrRange[] =
     RES_FRAMEDIR,                   RES_FRAMEDIR,
     RES_ROW_SPLIT,                  RES_ROW_SPLIT,
     FN_TABLE_BOX_TEXTORIENTATION,   FN_TABLE_BOX_TEXTORIENTATION,
-// #i29550#
+
     RES_COLLAPSING_BORDERS,         RES_COLLAPSING_BORDERS,
-// <-- collapsing borders
+
     0
 };
 
@@ -142,7 +142,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     SwTabCols aCols;
     rSh.GetTabCols( aCols );
 
-    //At first get the simple attributes.
+    
     rSet.Put( SfxStringItem( FN_PARAM_TABLE_NAME, pFmt->GetName()));
     rSet.Put( SfxUInt16Item( FN_PARAM_TABLE_HEADLINE, rSh.GetRowsToRepeat() ) );
     rSet.Put( pFmt->GetShadow() );
@@ -162,7 +162,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSh.GetTabBackground(aBrush);
     rSet.Put( aBrush, SID_ATTR_BRUSH_TABLE );
 
-    // text direction in boxes
+    
     SvxFrameDirectionItem aBoxDirection( FRMDIR_ENVIRONMENT, RES_FRAMEDIR );
     if(rSh.GetBoxDirection( aBoxDirection ))
         rSet.Put(aBoxDirection, FN_TABLE_BOX_TEXTORIENTATION);
@@ -176,25 +176,25 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     }
     SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
 
-        // Table variant: If multiple table cells are selected.
-    rSh.GetCrsr();                  //Thus GetCrsrCnt() returns the right thing
+        
+    rSh.GetCrsr();                  
     aBoxInfo.SetTable          ((rSh.IsTableMode() && rSh.GetCrsrCnt() > 1) ||
                                     !bTableSel);
-        // Always show distance field.
+        
     aBoxInfo.SetDist           (true);
-        // Set minimum size in tables and paragraphs.
+        
     aBoxInfo.SetMinDist( !bTableSel || rSh.IsTableMode() ||
                             rSh.GetSelectionType() &
                             (nsSelectionType::SEL_TXT | nsSelectionType::SEL_TBL));
-        // Always set the default spacing.
+        
     aBoxInfo.SetDefDist        (MIN_BORDER_DIST);
-        // Individual lines can have DontCare status only in tables.
+        
     aBoxInfo.SetValid( VALID_DISABLE, !bTableSel || !rSh.IsTableMode() );
 
     rSet.Put(aBoxInfo);
     rSh.GetTabBorders( rSet );
 
-    //row split
+    
     SwFmtRowSplit* pSplit = 0;
     rSh.GetRowSplit(pSplit);
     if(pSplit)
@@ -214,13 +214,13 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     rSh.GetTabCols( aTabCols );
     SvxColumnItem aColItem;
 
-    // Pointer will be deleted after the dialogue execution.
+    
     SwTableRep* pRep = new SwTableRep( aTabCols );
     pRep->SetSpace(aCols.GetRightMax());
 
     sal_uInt16 nPercent = 0;
     long nWidth = ::GetTableWidth(pFmt, aCols, &nPercent, &rSh );
-    // The table width is wrong for relative values.
+    
     if(nPercent)
         nWidth = pRep->GetSpace() * nPercent / 100;
     sal_uInt16 nAlign = pFmt->GetHoriOrient().GetHoriOrient();
@@ -254,7 +254,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 
     pRep->SetWidth(nWidth);
     pRep->SetWidthPercent(nPercent);
-    // Are individual rows / cells are selected, the column processing will be changed.
+    
     pRep->SetLineSelected(bTableSel && ! rSh.HasWholeTabSelection());
     rSet.Put(SwPtrItem(FN_TABLE_REP, pRep));
     return pRep;
@@ -288,9 +288,9 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     bool bBoxDirection = SFX_ITEM_SET == rSet.GetItemState( FN_TABLE_BOX_TEXTORIENTATION, false, &pBoxDirection );
     if( bBackground || bBorder || bRowSplit || bBoxDirection)
     {
-        // The border will be applied to the present selection.
-        // If there is no selection, the table will be completely selected.
-        // The background will always be applied to the current state.
+        
+        
+        
         sal_Bool bTableSel = rSh.IsTableMode();
         rSh.StartAllAction();
 
@@ -379,8 +379,8 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         sal_Int16 eOrient = pRep->GetAlign();
         SwFmtHoriOrient aAttr( 0, eOrient );
         aSet.Put( aAttr );
-    // The item must only be recorded while manual alignment, so that the
-    // alignment is not overwritten by the distances while recording.
+    
+    
         if(eOrient != text::HoriOrientation::NONE)
             ((SfxItemSet&)rSet).ClearItem( SID_ATTR_LRSPACE );
 
@@ -401,7 +401,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
     if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_TABLE_NAME, false, &pItem ))
         rSh.SetTableName( *pFmt, ((const SfxStringItem*)pItem)->GetValue() );
 
-    // Copy the chosen attributes in the ItemSet.
+    
     static const sal_uInt16 aIds[] =
         {
             RES_PAGEDESC,
@@ -411,9 +411,9 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
             RES_UL_SPACE,
             RES_SHADOW,
             RES_FRAMEDIR,
-            // #i29550#
+            
             RES_COLLAPSING_BORDERS,
-            // <-- collapsing borders
+            
             0
         };
     for( const sal_uInt16* pIds = aIds; *pIds; ++pIds )
@@ -448,7 +448,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();
 
-    // At first the slots which doesn't need a FrmMgr.
+    
     bool bMore = false;
     const SfxPoolItem* pItem = 0;
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -461,7 +461,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
         {
             if(!pArgs)
                 break;
-            // Create items, because we have to rework anyway.
+            
             SvxBoxItem     aBox( RES_BOX );
             SfxItemSet aCoreSet( GetPool(),
                             RES_BOX, RES_BOX,
@@ -484,7 +484,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
                 OSL_ENSURE( !this, "where is BoxItem?" );
 
-            //since the drawing layer also supports borders the which id might be a different one
+            
             SvxBoxInfoItem aInfo( SID_ATTR_BORDER_INNER );
             if (pArgs->GetItemState(SID_ATTR_BORDER_INNER, true, &pBoxItem) == SFX_ITEM_SET)
                 aInfo = *(SvxBoxInfoItem*)pBoxItem;
@@ -498,7 +498,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             aInfo.SetValid( VALID_DISABLE, false );
 
 
-// The attributes of all lines will be read and the strongest wins.
+
             const SvxBorderLine* pBorderLine;
             SvxBorderLine aBorderLine;
             if ((pBorderLine = rCoreBox.GetTop()) != NULL)
@@ -538,9 +538,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             aCoreSet.Put( aInfo );
             rSh.SetTabBorders( aCoreSet );
 
-            // we must record the "real" values because otherwise the lines can't be reconstructed on playtime
-            // the coding style of the controller (setting lines with width 0) is not transportable via Query/PutValue in
-            // the SvxBoxItem
+            
+            
+            
             rReq.AppendItem( aBox );
             rReq.AppendItem( aInfo );
             bCallDone = true;
@@ -552,8 +552,8 @@ void SwTableShell::Execute(SfxRequest &rReq)
         break;
         case FN_FORMAT_TABLE_DLG:
         {
-            //#127012# get the bindings before the dialog is called
-            // it might happen that this shell is removed after closing the dialog
+            
+            
             SfxBindings& rBindings = GetView().GetViewFrame()->GetBindings();
             SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
 
@@ -573,7 +573,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
             rSh.GetTblAttr(aCoreSet);
-            // GetTblAttr overwrites the background!
+            
             SvxBrushItem aBrush( RES_BACKGROUND );
             if(rSh.GetBoxBackground(aBrush))
                 aCoreSet.Put( aBrush );
@@ -585,7 +585,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 const SfxItemSet* pOutSet = pDlg ? pDlg->GetOutputItemSet() : rReq.GetArgs();
                 if ( pDlg )
                 {
-                    //to record FN_INSERT_TABLE correctly
+                    
                     rReq.SetSlot(FN_FORMAT_TABLE_DLG);
                     rReq.Done( *pOutSet );
                 }
@@ -729,7 +729,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 {
                     case TBLMERGE_OK:
                          bCallDone = true;
-                    //no break;
+                    
                     case TBLMERGE_NOSELECTION:  break;
                     case TBLMERGE_TOOCOMPLEX:
                     {
@@ -748,7 +748,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ( rSh.IsAdjustCellWidthAllowed(bBalance) )
             {
                 {
-                    // remove actions to make a valid table selection
+                    
                     UnoActionRemoveContext aRemoveContext(rSh.GetDoc());
                 }
                 rSh.AdjustCellWidth(bBalance);
@@ -832,13 +832,13 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if( nCount )
             {
-                // i74180: Table border patch submitted by chensuchun:
-                // -->get the SvxBoxInfoItem of the table before insert
+                
+                
                 SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
                 ::lcl_TableParamToItemSet( aCoreSet, rSh );
                 bool bSetInnerBorders = false;
                 SwUndoId nUndoId = UNDO_EMPTY;
-                // <--End
+                
 
                 if( bColumn )
                 {
@@ -855,7 +855,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     nUndoId = UNDO_TABLE_INSROW;
                 }
 
-                // -->after inserting,reset the inner table borders
+                
                 if ( bSetInnerBorders )
                 {
                     const SvxBoxInfoItem aBoxInfo((const SvxBoxInfoItem&)
@@ -873,7 +873,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             nSlot = bColumn ? FN_TABLE_INSERT_COL_DLG : FN_TABLE_INSERT_ROW_DLG;
         }
-        // No break;  on Count = 0 appears the dialog
+        
         case FN_TABLE_INSERT_COL_DLG:
         case FN_TABLE_INSERT_ROW_DLG:
         {
@@ -954,7 +954,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     case HEADLINE_BOXATTRCOPY:
                     case HEADLINE_BOXATRCOLLCOPY:
                         rSh.SplitTable(pType->GetValue()) ;
-                    default: ;//wrong parameter, do nothing
+                    default: ;
                 }
             }
             else
@@ -1045,9 +1045,9 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rSh.EndUndo();
             rSh.EndAction();
         }
-        //'this' is already destroyed
+        
         return;
-        //break;
+        
         default:
             bMore = true;
     }
@@ -1060,7 +1060,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
     }
     else
         bMore = false;
-    // Now the slots which are working directly on the TableFmt.
+    
     SwFrmFmt *pFmt = rSh.GetTableFmt();
     switch ( nSlot )
     {
@@ -1091,7 +1091,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             }
         }
         break;
-// The last case branch which needs a table manager!!
+
         case FN_TABLE_SET_COL_WIDTH:
         {
             SwTableFUNC aMgr( &rSh, sal_False);
@@ -1165,7 +1165,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
     SfxWhichIter aIter( rSet );
     SwWrtShell &rSh = GetShell();
     SwFrmFmt *pFmt = rSh.GetTableFmt();
-    // os #124829# crash report: in case of an invalid shell selection return immediately
+    
     if(!pFmt)
         return;
     sal_uInt16 nSlot = aIter.FirstWhich();
@@ -1215,7 +1215,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
 
             case FN_TABLE_OPTIMAL_HEIGHT:
             {
-                // Disable if auto height already is enabled.
+                
                 SwFmtFrmSize *pSz;
                 rSh.GetRowHeight( pSz );
                 if ( pSz )
@@ -1303,7 +1303,7 @@ void SwTableShell::GetState(SfxItemSet &rSet)
                 break;
 
             case FN_TABLE_UNSET_READ_ONLY_CELLS:
-                // disable in readonly sections, but enable in protected cells
+                
                 if( !rSh.CanUnProtectCells() )
                     rSet.DisableItem( nSlot );
                 break;
@@ -1416,13 +1416,13 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     const SfxItemSet* pArgs = rReq.GetArgs();
     SwWrtShell &rSh = GetShell();
 
-    // At first the slots, which doesn't need a FrmMgr.
+    
     const SfxPoolItem* pItem = 0;
     sal_uInt16 nSlot = rReq.GetSlot();
     if(pArgs)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), false, &pItem);
 
-    // Always aquire the language from the current cursor position.
+    
     LanguageType eLang = rSh.GetCurLang();
     SvNumberFormatter* pFormatter = rSh.GetNumberFormatter();
     sal_uInt32 nNumberFormat = NUMBERFORMAT_ENTRY_NOT_FOUND;
@@ -1433,12 +1433,12 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     case FN_NUMBER_FORMAT:
         if( pItem )
         {
-            // Determine index for string.
+            
             OUString aCode( ((const SfxStringItem*)pItem)->GetValue() );
             nNumberFormat = pFormatter->GetEntryKey( aCode, eLang );
             if( NUMBERFORMAT_ENTRY_NOT_FOUND == nNumberFormat )
             {
-                // Re-enter
+                
                 sal_Int32 nErrPos;
                 short nType;
                 if( !pFormatter->PutEntry( aCode, nErrPos, nType,
@@ -1454,7 +1454,7 @@ void SwTableShell::ExecNumberFormat(SfxRequest& rReq)
     case FN_NUMBER_CURRENCY:        nFmtType = NUMBERFORMAT_CURRENCY; break;
     case FN_NUMBER_PERCENT:         nFmtType = NUMBERFORMAT_PERCENT; break;
 
-    case FN_NUMBER_TWODEC:          // #.##0,00
+    case FN_NUMBER_TWODEC:          
         nFmtType = NUMBERFORMAT_NUMBER;
         nOffset = NF_NUMBER_1000DEC2;
         break;

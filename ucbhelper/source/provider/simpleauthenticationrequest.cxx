@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/task/XMasterPasswordHandling.hpp>
@@ -24,7 +24,7 @@
 using namespace com::sun::star;
 using namespace ucbhelper;
 
-//=========================================================================
+
 SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const OUString & rURL,
                                       const OUString & rServerName,
@@ -36,13 +36,13 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       bool bAllowUseSystemCredentials )
 {
 
-    // Fill request...
+    
     ucb::URLAuthenticationRequest aRequest;
-//    aRequest.Message        = // OUString
-//    aRequest.Context        = // XInterface
+
+
     aRequest.Classification = task::InteractionClassification_ERROR;
     aRequest.ServerName     = rServerName;
-//    aRequest.Diagnostic     = // OUString
+
     aRequest.HasRealm       = !rRealm.isEmpty();
     if ( aRequest.HasRealm )
         aRequest.Realm = rRealm;
@@ -64,7 +64,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        bAllowUseSystemCredentials );
 }
 
-//=========================================================================
+
 SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       const OUString & rURL,
                                       const OUString & rServerName,
@@ -77,13 +77,13 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
                                       EntityType eAccountType,
                                       const OUString & rAccount )
 {
-    // Fill request...
+    
     ucb::URLAuthenticationRequest aRequest;
-//    aRequest.Message        = // OUString
-//    aRequest.Context        = // XInterface
+
+
     aRequest.Classification = task::InteractionClassification_ERROR;
     aRequest.ServerName     = rServerName;
-//    aRequest.Diagnostic     = // OUString
+
     aRequest.HasRealm       = eRealmType != ENTITY_NA;
     if ( aRequest.HasRealm )
         aRequest.Realm = rRealm;
@@ -107,7 +107,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
        false );
 }
 
-//=========================================================================
+
 void SimpleAuthenticationRequest::initialize(
       const ucb::URLAuthenticationRequest & rRequest,
       bool bCanSetRealm,
@@ -119,7 +119,7 @@ void SimpleAuthenticationRequest::initialize(
 {
     setRequest( uno::makeAny( rRequest ) );
 
-    // Fill continuations...
+    
     uno::Sequence< ucb::RememberAuthentication > aRememberModes(
         bAllowPersistentStoring ? 3 : 2 );
     aRememberModes[ 0 ] = ucb::RememberAuthentication_NO;
@@ -134,12 +134,12 @@ void SimpleAuthenticationRequest::initialize(
                 bCanSetUserName,
                 bCanSetPassword,
                 bCanSetAccount,
-                aRememberModes, // rRememberPasswordModes
-                ucb::RememberAuthentication_SESSION, // eDefaultRememberPasswordMode
-                aRememberModes, // rRememberAccountModes
-                ucb::RememberAuthentication_SESSION, // eDefaultRememberAccountMode
-                bAllowUseSystemCredentials, // bCanUseSystemCredentials,
-                false // bDefaultUseSystemCredentials
+                aRememberModes, 
+                ucb::RememberAuthentication_SESSION, 
+                aRememberModes, 
+                ucb::RememberAuthentication_SESSION, 
+                bAllowUseSystemCredentials, 
+                false 
             );
 
     uno::Sequence<

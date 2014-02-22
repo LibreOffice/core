@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/io/Pipe.hpp>
@@ -52,7 +52,7 @@ using namespace cppu;
 using namespace xmloff::token;
 
 
-///////////////////////////////////////////////////////////////////////
+
 
 class SvxXMLTextImportContext : public SvXMLImportContext
 {
@@ -62,13 +62,13 @@ public:
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix, const OUString& rLocalName, const uno::Reference< XAttributeList >& xAttrList );
 
-//  SvxXMLXTableImport& getImport() const { return *(SvxXMLXTableImport*)&GetImport(); }
+
 
 private:
     const uno::Reference< XText > mxText;
 };
 
-///////////////////////////////////////////////////////////////////////
+
 
 SvxXMLTextImportContext::SvxXMLTextImportContext( SvXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName, const uno::Reference< XAttributeList >&, const uno::Reference< XText >& xText )
 : SvXMLImportContext( rImport, nPrfx, rLName ), mxText( xText )
@@ -103,7 +103,7 @@ SvXMLImportContext *SvxXMLTextImportContext::CreateChildContext( sal_uInt16 nPre
     return pContext;
 }
 
-///////////////////////////////////////////////////////////////////////
+
 
 class SvxXMLXTextImportComponent : public SvXMLImport
 {
@@ -122,7 +122,7 @@ private:
     const uno::Reference< XText > mxText;
 };
 
-// --------------------------------------------------------------------
+
 
 SvxXMLXTextImportComponent::SvxXMLXTextImportComponent(
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > xContext,
@@ -145,7 +145,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
     {
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
-//      SVX_UNOEDIT_OUTLINER_PROPERTIES,
+
         SVX_UNOEDIT_PARA_PROPERTIES,
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
@@ -167,7 +167,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
             uno::Reference<io::XInputStream> xInputStream = new utl::OInputStreamWrapper( rStream );
 
 /* testcode
-            const OUString aURL( "file:///e:/test.xml" );
+            const OUString aURL( "file:
             SfxMedium aMedium( aURL, STREAM_READ | STREAM_NOCREATE, sal_True );
             aMedium.IsRemote();
             uno::Reference<io::XOutputStream> xOut( new utl::OOutputStreamWrapper( *aMedium.GetOutStream() ) );
@@ -183,7 +183,7 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 
             uno::Reference< XInterface > xPipe( Pipe::create(comphelper::getComponentContext(xServiceFactory)), UNO_QUERY );
 
-            // connect pipe's output stream to the data source
+            
             xSource->setOutputStream( uno::Reference< io::XOutputStream >::query( xPipe ) );
 
             xml::sax::InputSource aParserInput;
@@ -199,14 +199,14 @@ void SvxReadXML( EditEngine& rEditEngine, SvStream& rStream, const ESelection& r
 
 */
 
-            // uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xText ) );
+            
             uno::Reference< XDocumentHandler > xHandler( new SvxXMLXTextImportComponent( xContext, xText ) );
 
             xParser->setDocumentHandler( xHandler );
 
             xml::sax::InputSource aParserInput;
             aParserInput.aInputStream = xInputStream;
-//          aParserInput.sSystemId = aMedium.GetName();
+
             xParser->parseStream( aParserInput );
         }
         while(false);

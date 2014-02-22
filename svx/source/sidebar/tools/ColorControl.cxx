@@ -3,7 +3,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -13,7 +13,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sidebar/ColorControl.hxx>
@@ -75,7 +75,7 @@ namespace {
 
         return XColorList::GetStdColorList();
     }
-} // end of anonymous namespace
+} 
 
 
 
@@ -88,7 +88,7 @@ ColorControl::ColorControl (
     const ::boost::function<Color(void)>& rNoColorGetter,
     const ::boost::function<void(OUString&,Color)>& rColorSetter,
     FloatingWindow* pFloatingWindow,
-    const ResId* pNoColorStringResId) // const sal_uInt32 nNoColorStringResId)
+    const ResId* pNoColorStringResId) 
     : PopupControl(pParent, rControlResId),
       maVSColor(this, rValueSetResId),
       mpFloatingWindow(pFloatingWindow),
@@ -127,7 +127,7 @@ void ColorControl::FillColors (void)
 
         maVSColor.SetStyle(aWinBits);
 
-        // neds to be done *before* layouting
+        
         if(!msNoColorString.isEmpty())
         {
             maVSColor.SetStyle(maVSColor.GetStyle() | WB_NONEFIELD);
@@ -142,11 +142,11 @@ void ColorControl::FillColors (void)
         Link aLink = LINK(this, ColorControl, VSSelectHdl);
         maVSColor.SetSelectHdl(aLink);
 
-        // Now, after all calls to SetStyle, we can change the
-        // background color.
+        
+        
         maVSColor.SetBackground(Theme::GetWallpaper(Theme::Paint_DropDownBackground));
 
-        // add entrties
+        
         maVSColor.Clear();
         maVSColor.addEntriesForXColorList(*xColorTable);
     }
@@ -167,7 +167,7 @@ void ColorControl::GetFocus (void)
 
 void ColorControl::SetCurColorSelect (Color aCol, bool bAvailable)
 {
-//  FillColors();
+
     short nCol = GetItemId_Imp( maVSColor, aCol );
     if(! bAvailable)
     {
@@ -175,14 +175,14 @@ void ColorControl::SetCurColorSelect (Color aCol, bool bAvailable)
         return;
     }
 
-    //if not found
+    
     if( nCol == -1)
     {
         maVSColor.SetNoSelection();
     }
     else
     {
-        // remove selection first to force evtl. scroll when scroll is needed
+        
         maVSColor.SetNoSelection();
         maVSColor.SelectItem(nCol);
     }
@@ -199,7 +199,7 @@ IMPL_LINK(ColorControl, VSSelectHdl, void *, pControl)
         Color aColor = maVSColor.GetItemColor( iPos );
         OUString aTmpStr = maVSColor.GetItemText( iPos );
 
-        // react when the WB_NONEFIELD created entry is selected
+        
         if (aColor.GetColor() == 0 && aTmpStr.isEmpty())
         {
             if (maNoColorGetter)
@@ -216,4 +216,4 @@ IMPL_LINK(ColorControl, VSSelectHdl, void *, pControl)
 }
 
 
-} } // end of namespace svx::sidebar
+} } 

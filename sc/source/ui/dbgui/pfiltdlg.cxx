@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,7 +44,7 @@
 #include <svl/zforlist.hxx>
 #include "svl/sharedstringpool.hxx"
 
-//==================================================================
+
 
 ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
                                     const SfxItemSet&   rArgSet,
@@ -90,7 +90,7 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         pOutItem        ( NULL ),
         pViewData       ( NULL ),
         pDoc            ( NULL ),
-        nSrcTab         ( nSourceTab ),     // ist nicht im QueryParam
+        nSrcTab         ( nSourceTab ),     
         nFieldCount     ( 0 )
 {
     for (sal_uInt16 i=0; i<=MAXCOL; i++)
@@ -100,7 +100,7 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
     FreeResource();
 }
 
-//------------------------------------------------------------------------
+
 
 ScPivotFilterDlg::~ScPivotFilterDlg()
 {
@@ -111,7 +111,7 @@ ScPivotFilterDlg::~ScPivotFilterDlg()
         delete pOutItem;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -140,7 +140,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     pViewData   = rQueryItem.GetViewData();
     pDoc        = pViewData ? pViewData->GetDocument() : NULL;
 
-    // fuer leichteren Zugriff:
+    
     aFieldLbArr  [0] = &aLbField1;
     aFieldLbArr  [1] = &aLbField2;
     aFieldLbArr  [2] = &aLbField3;
@@ -189,7 +189,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         aFtDbArea.SetText( EMPTY_OUSTRING );
     }
 
-    // Feldlisten einlesen und Eintraege selektieren:
+    
 
     FillFieldLists();
 
@@ -216,15 +216,15 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
         }
         else
         {
-            aFieldLbArr[i]->SelectEntryPos( 0 ); // "keiner" selektieren
-            aCondLbArr [i]->SelectEntryPos( 0 ); // "=" selektieren
+            aFieldLbArr[i]->SelectEntryPos( 0 ); 
+            aCondLbArr [i]->SelectEntryPos( 0 ); 
             UpdateValueList( static_cast<sal_uInt16>(i) );
             aValueEdArr[i]->SetText( EMPTY_OUSTRING );
         }
         aValueEdArr[i]->SetModifyHdl( LINK( this, ScPivotFilterDlg, ValModifyHdl ) );
     }
 
-    // Disable/Enable Logik:
+    
 
        (aLbField1.GetSelectEntryPos() != 0)
     && (aLbField2.GetSelectEntryPos() != 0)
@@ -265,7 +265,7 @@ void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPivotFilterDlg::FillFieldLists()
 {
@@ -302,7 +302,7 @@ void ScPivotFilterDlg::FillFieldLists()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
 {
@@ -348,7 +348,7 @@ void ScPivotFilterDlg::UpdateValueList( sal_uInt16 nList )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
 {
@@ -362,7 +362,7 @@ void ScPivotFilterDlg::ClearValueList( sal_uInt16 nList )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 sal_uInt16 ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
 {
@@ -372,7 +372,7 @@ sal_uInt16 ScPivotFilterDlg::GetFieldSelPos( SCCOL nField )
         return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 {
@@ -433,7 +433,7 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
                                     : SC_AND;
 
     theParam.bInplace   = false;
-    theParam.nDestTab   = 0;    // Woher kommen diese Werte?
+    theParam.nDestTab   = 0;    
     theParam.nDestCol   = 0;
     theParam.nDestRow   = 0;
 
@@ -447,9 +447,9 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
     return *pOutItem;
 }
 
-//------------------------------------------------------------------------
-// Handler:
-//------------------------------------------------------------------------
+
+
+
 
 IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
@@ -542,13 +542,13 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
     return 0;
 }
 
-//----------------------------------------------------------------------------
+
 
 IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
-    //  bei Gross-/Kleinschreibung die Werte-Listen aktualisieren
+    
 
-    if ( pBox == &aBtnCase )                    // Wertlisten
+    if ( pBox == &aBtnCase )                    
     {
         for (sal_uInt16 i=0; i<=MAXCOL; i++)
             DELETEZ( pEntryLists[i] );
@@ -567,7 +567,7 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {
@@ -579,8 +579,8 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
              if ( pEd == &aEdVal2 ) pLb = &aLbCond2;
         else if ( pEd == &aEdVal3 ) pLb = &aLbCond3;
 
-        // wenn einer der Sonderwerte leer/nicht-leer
-        // gewaehlt wird, so macht nur der =-Operator Sinn:
+        
+        
 
         if ( aStrEmpty.equals(aStrVal) || aStrNotEmpty.equals(aStrVal) )
         {

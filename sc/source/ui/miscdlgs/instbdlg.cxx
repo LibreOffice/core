@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include <sfx2/app.hxx>
 #include <sfx2/docfile.hxx>
@@ -41,7 +41,7 @@
 #define SC_INSTBDLG_CXX
 #include "instbdlg.hxx"
 
-//==================================================================
+
 
 ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nTabCount, bool bFromFile )
     : ModalDialog(pParent, "InsertSheetDialog", "modules/scalc/ui/insertsheet.ui")
@@ -71,7 +71,7 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
     Init_Impl( bFromFile );
 }
 
-//------------------------------------------------------------------------
+
 
 ScInsertTableDlg::~ScInsertTableDlg()
 {
@@ -80,7 +80,7 @@ ScInsertTableDlg::~ScInsertTableDlg()
     delete pDocInserter;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::Init_Impl( bool bFromFile )
 {
@@ -130,11 +130,11 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 short ScInsertTableDlg::Execute()
 {
-    // set Parent of DocumentInserter and Doc-Manager
+    
     Window* pOldDefParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
 
@@ -146,7 +146,7 @@ short ScInsertTableDlg::Execute()
     return nRet;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::SetNewTable_Impl()
 {
@@ -167,7 +167,7 @@ void ScInsertTableDlg::SetNewTable_Impl()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::SetFromTo_Impl()
 {
@@ -184,7 +184,7 @@ void ScInsertTableDlg::SetFromTo_Impl()
     }
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
 {
@@ -209,7 +209,7 @@ void ScInsertTableDlg::FillTables_Impl( ScDocument* pSrcDoc )
         m_pLbTables->SelectEntryPos(0);
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
 {
@@ -232,7 +232,7 @@ const OUString* ScInsertTableDlg::GetFirstTable( sal_uInt16* pN )
     return pStr;
 }
 
-//------------------------------------------------------------------------
+
 
 const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 {
@@ -251,9 +251,9 @@ const OUString* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 }
 
 
-//------------------------------------------------------------------------
-// Handler:
-//------------------------------------------------------------------------
+
+
+
 
 IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
 {
@@ -277,7 +277,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
 {
     if ( m_pBtnNew->IsChecked() )
@@ -289,7 +289,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
 {
@@ -301,7 +301,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl)
 {
@@ -309,7 +309,7 @@ IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl)
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 void ScInsertTableDlg::DoEnable_Impl()
 {
@@ -347,13 +347,13 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
         SfxMedium* pMed = pDocInserter->CreateMedium();
         if ( pMed )
         {
-            //  ERRCTX_SFX_OPENDOC -> "Fehler beim Laden des Dokumentes"
+            
             SfxErrorContext aEc( ERRCTX_SFX_OPENDOC, pMed->GetName() );
 
             if ( pDocShTables )
-                pDocShTables->DoClose();        // delete passiert beim Zuweisen auf die Ref
+                pDocShTables->DoClose();        
 
-            pMed->UseInteractionHandler( sal_True );    // to enable the filter options dialog
+            pMed->UseInteractionHandler( sal_True );    
 
             pDocShTables = new ScDocShell;
             aDocShTablesRef = pDocShTables;
@@ -365,9 +365,9 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
 
             sal_uLong nErr = pDocShTables->GetErrorCode();
             if ( nErr )
-                ErrorHandler::HandleError( nErr );              // auch Warnings
+                ErrorHandler::HandleError( nErr );              
 
-            if ( !pDocShTables->GetError() )                    // nur Errors
+            if ( !pDocShTables->GetError() )                    
             {
                 FillTables_Impl( pDocShTables->GetDocument() );
                 m_pFtPath->SetText( pDocShTables->GetTitle( SFX_TITLE_FULLNAME ) );
@@ -386,7 +386,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
         DoEnable_Impl();
     }
     else if ( bMustClose )
-        // execute slot FID_INS_TABLE_EXT and cancel file dialog
+        
         EndDialog( RET_CANCEL );
 
     return 0;

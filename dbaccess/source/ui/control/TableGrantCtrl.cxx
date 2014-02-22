@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "TableGrantCtrl.hxx"
@@ -45,7 +45,7 @@ const sal_uInt16 COL_REF        = 7;
 const sal_uInt16 COL_DROP       = 8;
 
 
-// OTableGrantControl
+
 OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
     :EditBrowseBox( pParent,_RsId, EBBF_SMART_TAB_TRAVEL | EBBF_NOROWPICTURE )
     ,m_pCheckCell( NULL )
@@ -53,7 +53,7 @@ OTableGrantControl::OTableGrantControl( Window* pParent,const ResId& _RsId)
     ,m_nDataPos( 0 )
     ,m_nDeactivateEvent(0)
 {
-    // Spalten einfuegen
+    
     sal_uInt16 i=1;
     InsertDataColumn( i, OUString(ModuleRes(STR_TABLE_PRIV_NAME)  ), 75);
     FreezeColumn(i++);
@@ -85,12 +85,12 @@ OTableGrantControl::~OTableGrantControl()
 
 void OTableGrantControl::setTablesSupplier(const Reference< XTablesSupplier >& _xTablesSup)
 {
-    // first we need the users
+    
     Reference< XUsersSupplier> xUserSup(_xTablesSup,UNO_QUERY);
     if(xUserSup.is())
         m_xUsers = xUserSup->getUsers();
 
-    // second we need the tables to determine which privileges the user has
+    
     if(_xTablesSup.is())
         m_xTables = _xTablesSup->getTables();
 
@@ -112,14 +112,14 @@ void OTableGrantControl::UpdateTables()
 
     if(m_xTables.is())
         RowInserted(0, m_aTableNames.getLength());
-    //  m_bEnable = m_xDb->GetUser() != ((OUserAdmin*)GetParent())->GetUser();
+    
 }
 
 void OTableGrantControl::Init()
 {
     EditBrowseBox::Init();
 
-    // ComboBox instanzieren
+    
     if(!m_pCheckCell)
     {
         m_pCheckCell    = new CheckBoxControl( &GetDataWindow() );
@@ -131,7 +131,7 @@ void OTableGrantControl::Init()
     }
 
     UpdateTables();
-    // Browser Mode setzen
+    
     BrowserMode nMode = BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL |
                         BROWSER_HIDECURSOR      | BROWSER_HIDESELECT;
 
@@ -269,12 +269,12 @@ OUString OTableGrantControl::GetCellText( long nRow, sal_uInt16 nColId ) const
 void OTableGrantControl::InitController( CellControllerRef& /*rController*/, long nRow, sal_uInt16 nColumnId )
 {
     OUString sTablename = m_aTableNames[nRow];
-    // special case for tablename
+    
     if(nColumnId == COL_TABLE_NAME)
         m_pEdit->SetText(sTablename);
     else
     {
-        // get the privileges from the user
+        
         TTablePrivilegeMap::const_iterator aFind = findPrivilege(nRow);
         m_pCheckCell->GetBox().Check(aFind != m_aPrivMap.end() ? isAllowed(nColumnId,aFind->second.nRights) : sal_False);
     }
@@ -290,7 +290,7 @@ void OTableGrantControl::fillPrivilege(sal_Int32 _nRow) const
             Reference<XAuthorizable> xAuth(m_xUsers->getByName(m_sUserName),UNO_QUERY);
             if ( xAuth.is() )
             {
-                // get the privileges
+                
                 TPrivileges nRights;
                 nRights.nRights = xAuth->getPrivileges(m_aTableNames[_nRow],PrivilegeObject::TABLE);
                 if(m_xGrantUser.is())

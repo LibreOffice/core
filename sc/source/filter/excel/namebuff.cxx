@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -59,7 +59,7 @@ NameBuffer::~NameBuffer()
 }
 
 
-//void NameBuffer::operator <<( const SpString &rNewString )
+
 void NameBuffer::operator <<( const OUString &rNewString )
 {
     OSL_ENSURE( maHashes.size() + nBase < 0xFFFF,
@@ -103,7 +103,7 @@ const ScTokenArray* SharedFormulaBuffer::Find( const ScAddress& rRefPos ) const
 sal_Int16 ExtSheetBuffer::Add( const OUString& rFPAN, const OUString& rTN, const bool bSWB )
 {
     maEntries.push_back( Cont( rFPAN, rTN, bSWB ) );
-    // return 1-based index of EXTERNSHEET
+    
     return static_cast< sal_Int16 >( maEntries.size() );
 }
 
@@ -126,10 +126,10 @@ bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
     }
 
     if( rTabNum == 0xFFFF )
-    {// neue Tabelle erzeugen
+    {
         SCTAB   nNewTabNum;
         if( pCur->bSWB )
-        {// Tabelle ist im selben Workbook!
+        {
             if( pExcRoot->pIR->GetDoc().GetTable( pCur->aTab, nNewTabNum ) )
             {
                 rScIndex = rTabNum = static_cast<sal_uInt16>(nNewTabNum);
@@ -139,7 +139,7 @@ bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
                 rTabNum = 0xFFFD;
         }
         else if( pExcRoot->pIR->GetDocShell() )
-        {// Tabelle ist 'echt' extern
+        {
             if( pExcRoot->pIR->GetExtDocOptions().GetDocSettings().mnLinkCnt == 0 )
             {
                 OUString      aURL( ScGlobal::GetAbsDocName( pCur->aFile,
@@ -151,8 +151,8 @@ bool ExtSheetBuffer::GetScTabIndex( sal_uInt16 nExcIndex, sal_uInt16& rScIndex )
                     return true;
                 }
                 else
-                    rTabNum = 0xFFFE;       // Tabelle einmal nicht angelegt -> wird
-                                            //  wohl auch nicht mehr gehen...
+                    rTabNum = 0xFFFE;       
+                                            
             }
             else
                 rTabNum = 0xFFFE;

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/uno/Any.hxx>
@@ -27,9 +27,9 @@
 using namespace utl;
 using namespace com::sun::star::uno;
 
-const sal_Unicode cDelim = 0x01;        // Delimiter zwischen From und To
+const sal_Unicode cDelim = 0x01;        
 
-// ScUnitConverterData
+
 ScUnitConverterData::ScUnitConverterData(
     const OUString& rFromUnit, const OUString& rToUnit, double fValue ) :
     maIndexString(BuildIndexString(rFromUnit, rToUnit)),
@@ -60,7 +60,7 @@ OUString ScUnitConverterData::BuildIndexString(
     return aBuf.makeStringAndClear();
 }
 
-// ScUnitConverter
+
 #define CFGPATH_UNIT        "Office.Calc/UnitConversion"
 #define CFGSTR_UNIT_FROM    "FromUnit"
 #define CFGSTR_UNIT_TO      "ToUnit"
@@ -68,12 +68,12 @@ OUString ScUnitConverterData::BuildIndexString(
 
 ScUnitConverter::ScUnitConverter()
 {
-    //  read from configuration - "convert.ini" is no longer used
-    //! config item as member to allow change of values
+    
+    
 
     ScLinkConfigItem aConfigItem( OUString( CFGPATH_UNIT ) );
 
-    // empty node name -> use the config item's path itself
+    
     OUString aEmptyString;
     Sequence<OUString> aNodeNames = aConfigItem.GetNodeNames( aEmptyString );
 

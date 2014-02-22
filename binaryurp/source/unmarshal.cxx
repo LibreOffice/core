@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "sal/config.h"
@@ -264,8 +264,8 @@ BinaryAny Unmarshal::readValue(css::uno::TypeDescription const & type) {
     assert(type.is());
     switch (type.get()->eTypeClass) {
     default:
-        std::abort(); // this cannot happen
-        // pseudo fall-through to avoid compiler warnings
+        std::abort(); 
+        
     case typelib_TypeClass_VOID:
         return BinaryAny();
     case typelib_TypeClass_BOOLEAN:
@@ -468,7 +468,7 @@ BinaryAny Unmarshal::readSequence(css::uno::TypeDescription const & type) {
     assert(ctd.get()->nSize >= 0);
     sal_uInt64 size = static_cast< sal_uInt64 >(n) *
         static_cast< sal_uInt64 >(ctd.get()->nSize);
-        // sal_uInt32 * sal_Int32 -> sal_uInt64 cannot overflow
+        
     if (size > SAL_MAX_SIZE - SAL_SEQUENCE_HEADER_SIZE) {
         throw css::uno::RuntimeException(
             "binaryurp::Unmarshal: sequence size too large",

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -87,7 +87,7 @@ static void SetTxtFmtCollNext( SwTxtFmtColl* pTxtColl, const SwTxtFmtColl* pDel 
  * Reset the text's hard formatting
  */
 
-/// Parameters for _Rst and lcl_SetTxtFmtColl
+
 struct ParaRstFmt
 {
     SwFmtColl* pFmtColl;
@@ -96,7 +96,7 @@ struct ParaRstFmt
     const SfxItemSet* pDelSet;
     sal_uInt16 nWhich;
     bool bReset;
-    bool bResetListAttrs; // #i62575#
+    bool bResetListAttrs; 
     bool bResetAll;
     bool bInclRefToxMark;
     bool bKeepOutlineLevelAttr;
@@ -109,7 +109,7 @@ struct ParaRstFmt
           pEndNd(pEnd),
           pDelSet(pSet),
           nWhich(nWhch),
-          bReset( false ), // #i62675#
+          bReset( false ), 
           bResetListAttrs( false ),
           bResetAll( true ),
           bInclRefToxMark( false ),
@@ -124,7 +124,7 @@ struct ParaRstFmt
           pDelSet(0),
           nWhich(0),
           bReset( false ),
-          bResetListAttrs( false ), // #i62675#
+          bResetListAttrs( false ), 
           bResetAll( true ),
           bInclRefToxMark( false ),
           bKeepOutlineLevelAttr( false )
@@ -152,7 +152,7 @@ static bool lcl_RstTxtAttr( const SwNodePtr& rpNd, void* pArgs )
 
         if( pPara->pHistory )
         {
-            // Save all attributes for the Undo.
+            
             SwRegHistory aRHst( *pTxtNode, pPara->pHistory );
             pTxtNode->GetpSwpHints()->Register( &aRHst );
             pTxtNode->RstTxtAttr( aSt, nEnd - aSt.GetIndex(), pPara->nWhich,
@@ -178,8 +178,8 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
         SwDoc* pDoc = pNode->GetDoc();
 
-        // remove unused attribute RES_LR_SPACE
-        // add list attributes
+        
+        
         SfxItemSet aSet( pDoc->GetAttrPool(),
                          RES_PAGEDESC, RES_BREAK,
                          RES_PARATR_NUMRULE, RES_PARATR_NUMRULE,
@@ -189,7 +189,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         const SfxItemSet* pSet = pNode->GetpSwAttrSet();
 
         std::vector<sal_uInt16> aClearWhichIds;
-        // restoring all paragraph list attributes
+        
         {
             SfxItemSet aListAttrSet( pDoc->GetAttrPool(), RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1 );
             aListAttrSet.Set( *pSet );
@@ -243,8 +243,8 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
             }
         }
 
-        // do not clear items directly from item set and only clear to be kept
-        // attributes, if no deletion item set is found.
+        
+        
         const bool bKeepAttributes =
                     !pPara || !pPara->pDelSet || pPara->pDelSet->Count() == 0;
         if ( bKeepAttributes )
@@ -287,7 +287,7 @@ static bool lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         else
             pNode->ResetAllAttr();
 
-        // only restore saved attributes, if needed
+        
         if ( bKeepAttributes && aSet.Count() )
         {
             pNode->LockModify();
@@ -339,7 +339,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         SwIndex& rSt = pPam->GetPoint()->nContent;
         sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
 
-        // Special case: if the Crsr is located within a URL attribute, we take over it's area
+        
         SwTxtAttr const*const pURLAttr(
             pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
         if (pURLAttr && !pURLAttr->GetINetFmt().GetValue().isEmpty())
@@ -375,7 +375,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         pPam->GetPoint()->nContent = nPtPos;
     }
 
-    // #i96644#
+    
     std::auto_ptr< SwDataChanged > pDataChanged;
     if ( bSendDataChangedEvents )
     {
@@ -397,7 +397,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     const SwPosition *pStt = pPam->Start(), *pEnd = pPam->End();
     ParaRstFmt aPara( pStt, pEnd, pHst );
 
-    // mst: not including META here; it seems attrs with CH_TXTATR are omitted
+    
     sal_uInt16 aResetableSetRange[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
@@ -426,9 +426,9 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     bool bAdd = true;
     SwNodeIndex aTmpStt( pStt->nNode );
     SwNodeIndex aTmpEnd( pEnd->nNode );
-    if( pStt->nContent.GetIndex() )     // just one part
+    if( pStt->nContent.GetIndex() )     
     {
-        // set up a later, and all CharFmtAttr -> TxtFmtAttr
+        
         SwTxtNode* pTNd = aTmpStt.GetNode().GetTxtNode();
         if( pTNd && pTNd->HasSwAttrSet() && pTNd->GetpSwAttrSet()->Count() )
         {
@@ -446,7 +446,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
         ++aTmpStt;
     }
     if( pEnd->nContent.GetIndex() == pEnd->nNode.GetNode().GetCntntNode()->Len() )
-         // set up a later, and all CharFmtAttr -> TxtFmtAttr
+         
         aTmpEnd++, bAdd = false;
     else if( pStt->nNode != pEnd->nNode || !pStt->nContent.GetIndex() )
     {
@@ -489,8 +489,8 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
 
 #define DELETECHARSETS if ( bDelete ) { delete pCharSet; delete pOtherSet; }
 
-/// Insert Hints according to content types;
-// Is used in SwDoc::Insert(..., SwFmtHint &rHt)
+
+
 
 static bool lcl_InsAttr(
     SwDoc *const pDoc,
@@ -500,14 +500,14 @@ static bool lcl_InsAttr(
     SwUndoAttr *const pUndo,
     const bool bExpandCharToPara=false)
 {
-    // Divide the Sets (for selections in Nodes)
+    
     const SfxItemSet* pCharSet = 0;
     const SfxItemSet* pOtherSet = 0;
     bool bDelete = false;
     bool bCharAttr = false;
     bool bOtherAttr = false;
 
-    // Check, if we can work with rChgSet or if we have to create additional SfxItemSets
+    
     if ( 1 == rChgSet.Count() )
     {
         SfxItemIter aIter( rChgSet );
@@ -538,9 +538,9 @@ static bool lcl_InsAttr(
         }
     }
 
-    // Build new itemset if either
-    // - rChgSet.Count() > 1 or
-    // - The attribute in rChgSet does not belong to one of the above categories
+    
+    
+    
     if ( !bCharAttr && !bOtherAttr )
     {
         SfxItemSet* pTmpCharItemSet = new SfxItemSet( pDoc->GetAttrPool(),
@@ -575,7 +575,7 @@ static bool lcl_InsAttr(
 
     if( pNode && pNode->IsTxtNode() )
     {
-        // #i27615#
+        
         if (rRg.IsInFrontOfLabel())
         {
             SwTxtNode * pTxtNd = pNode->GetTxtNode();
@@ -615,7 +615,7 @@ static bool lcl_InsAttr(
 
         const SwIndex& rSt = pStt->nContent;
 
-        // Attributes without an end do not have a range
+        
         if ( !bCharAttr && !bOtherAttr )
         {
             SfxItemSet aTxtSet( pDoc->GetAttrPool(),
@@ -644,11 +644,11 @@ static bool lcl_InsAttr(
             }
         }
 
-        // TextAttributes with an end never expand their range
+        
         if ( !bCharAttr && !bOtherAttr )
         {
-            // CharFmt and URL attributes are treated separately!
-            // TEST_TEMP ToDo: AutoFmt!
+            
+            
             SfxItemSet aTxtSet( pDoc->GetAttrPool(),
                                 RES_TXTATR_REFMARK, RES_TXTATR_TOXMARK,
                                 RES_TXTATR_META, RES_TXTATR_METAFIELD,
@@ -670,9 +670,9 @@ static bool lcl_InsAttr(
                 if (bRet && (pDoc->IsRedlineOn() || (!pDoc->IsIgnoreRedline()
                                 && !pDoc->GetRedlineTbl().empty())))
                 {
-                    // Was text content inserted? (RefMark/TOXMarks without an end)
+                    
                     sal_Bool bTxtIns = nInsCnt != rSt.GetIndex();
-                    // Was content inserted or set over the selection?
+                    
                     SwPaM aPam( pStt->nNode, bTxtIns ? nInsCnt + 1 : nEnd,
                                 pStt->nNode, nInsCnt );
                     if( pUndo )
@@ -690,7 +690,7 @@ static bool lcl_InsAttr(
         }
     }
 
-    // We always have to set the auto flag for PageDescs that are set at the Node!
+    
     if( pOtherSet && pOtherSet->Count() )
     {
         SwTableNode* pTblNd;
@@ -700,10 +700,10 @@ static bool lcl_InsAttr(
         {
             if( pNode )
             {
-                // Set auto flag. Only in the template it's without auto!
+                
                 SwFmtPageDesc aNew( *pDesc );
 
-                // Tables now also know line breaks
+                
                 if( 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
                     0 != ( pTblNd = pNode->FindTableNode() ) )
                 {
@@ -711,7 +711,7 @@ static bool lcl_InsAttr(
                     while ( 0 != ( pCurTblNd = pCurTblNd->StartOfSectionNode()->FindTableNode() ) )
                         pTblNd = pCurTblNd;
 
-                    // set the table format
+                    
                     SwFrmFmt* pFmt = pTblNd->GetTable().GetFrmFmt();
                     SwRegHistory aRegH( pFmt, *pTblNd, pHistory );
                     pFmt->SetFmtAttr( aNew );
@@ -724,9 +724,9 @@ static bool lcl_InsAttr(
                 }
             }
 
-            // bOtherAttr = true means that pOtherSet == rChgSet. In this case
-            // we know, that there is only one attribute in pOtherSet. We cannot
-            // perform the following operations, instead we return:
+            
+            
+            
             if ( bOtherAttr )
                 return bRet;
 
@@ -738,7 +738,7 @@ static bool lcl_InsAttr(
             }
         }
 
-        // Tables now also know line breaks
+        
         const SvxFmtBreakItem* pBreak;
         if( pNode && 0 == (nFlags & nsSetAttrMode::SETATTR_APICALL) &&
             0 != (pTblNd = pNode->FindTableNode() ) &&
@@ -749,15 +749,15 @@ static bool lcl_InsAttr(
             while ( 0 != ( pCurTblNd = pCurTblNd->StartOfSectionNode()->FindTableNode() ) )
                 pTblNd = pCurTblNd;
 
-             // set the table format
+             
             SwFrmFmt* pFmt = pTblNd->GetTable().GetFrmFmt();
             SwRegHistory aRegH( pFmt, *pTblNd, pHistory );
             pFmt->SetFmtAttr( *pBreak );
             bRet = true;
 
-            // bOtherAttr = true means that pOtherSet == rChgSet. In this case
-            // we know, that there is only one attribute in pOtherSet. We cannot
-            // perform the following operations, instead we return:
+            
+            
+            
             if ( bOtherAttr )
                 return bRet;
 
@@ -770,7 +770,7 @@ static bool lcl_InsAttr(
         }
 
         {
-            // If we have a PoolNumRule, create it if needed
+            
             const SwNumRuleItem* pRule;
             sal_uInt16 nPoolId=0;
             if( SFX_ITEM_SET == pOtherSet->GetItemState( RES_PARATR_NUMRULE,
@@ -782,7 +782,7 @@ static bool lcl_InsAttr(
         }
     }
 
-    if( !rRg.HasMark() )        // no range
+    if( !rRg.HasMark() )        
     {
         if( !pNode )
         {
@@ -797,7 +797,7 @@ static bool lcl_InsAttr(
             sal_Int32 nMkPos, nPtPos = rSt.GetIndex();
             const OUString& rStr = pTxtNd->GetTxt();
 
-            // Special case: if the Crsr is located within a URL attribute, we take over it's area
+            
             SwTxtAttr const*const pURLAttr(
                 pTxtNd->GetTxtAttrAt(rSt.GetIndex(), RES_TXTATR_INETFMT));
             if (pURLAttr && !pURLAttr->GetINetFmt().GetValue().isEmpty())
@@ -824,17 +824,17 @@ static bool lcl_InsAttr(
                     nPtPos = nMkPos = rSt.GetIndex();
             }
 
-            // Remove the overriding attributes from the SwpHintsArray,
-            // if the selection spans across the whole paragraph.
-            // These attributes are inserted as FormatAttributes and
-            // never override the TextAttributes!
+            
+            
+            
+            
             if( !(nFlags & nsSetAttrMode::SETATTR_DONTREPLACE ) &&
                 pTxtNd->HasHints() && !nMkPos && nPtPos == rStr.getLength())
             {
                 SwIndex aSt( pTxtNd );
                 if( pHistory )
                 {
-                    // Save all attributes for the Undo.
+                    
                     SwRegHistory aRHst( *pTxtNd, pHistory );
                     pTxtNd->GetpSwpHints()->Register( &aRHst );
                     pTxtNd->RstTxtAttr( aSt, nPtPos, 0, pCharSet );
@@ -845,7 +845,7 @@ static bool lcl_InsAttr(
                     pTxtNd->RstTxtAttr( aSt, nPtPos, 0, pCharSet );
             }
 
-            // the SwRegHistory inserts the attribute into the TxtNode!
+            
             SwRegHistory history( pNode, *pNode, pHistory );
             bRet = history.InsertItems( *pCharSet, nMkPos, nPtPos, nFlags )
                 || bRet;
@@ -891,7 +891,7 @@ static bool lcl_InsAttr(
 
         if( pStt->nContent.GetIndex() != 0 || aCntEnd.GetIndex() != nLen )
         {
-            // the SwRegHistory inserts the attribute into the TxtNode!
+            
             if( pNode->IsTxtNode() && pCharSet && pCharSet->Count() )
             {
                 SwRegHistory history( pNode, *pNode, pHistory );
@@ -906,16 +906,16 @@ static bool lcl_InsAttr(
                 bRet = pNode->SetAttr( *pOtherSet ) || bRet;
             }
 
-            // Only selection in a Node.
+            
             if( pStt->nNode == pEnd->nNode )
             {
-            //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
-            //Which is set in SW MS word Binary filter WW8ImplRreader. With this flag on, means that
-            //current setting attribute set is a character range properties set and comes from a MS word
-            //binary file, And the setting range include a paragraph end position (0X0D);
-            //More specifications, as such property inside the character range properties set recorded in
-            //MS word binary file are dealed and inserted into data model (SwDoc) one by one, so we
-            //only dealing the scenario that the char properties set with 1 item inside;
+            
+            
+            
+            
+            
+            
+            
 
                 if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1 )
                 {
@@ -935,12 +935,12 @@ static bool lcl_InsAttr(
         }
         else
             aSt = pStt->nNode;
-        aCntEnd = pEnd->nContent; // aEnd was changed!
+        aCntEnd = pEnd->nContent; 
     }
     else
         aSt.Assign( pStt->nNode.GetNode(), +1 );
 
-    // aSt points to the first full Node now
+    
 
     /*
      * The selection spans more than one Node.
@@ -952,7 +952,7 @@ static bool lcl_InsAttr(
         {
             if( aCntEnd.GetIndex() != pNode->Len() )
             {
-                // the SwRegHistory inserts the attribute into the TxtNode!
+                
                 if( pNode->IsTxtNode() && pCharSet && pCharSet->Count() )
                 {
                     SwRegHistory history( pNode, *pNode, pHistory );
@@ -978,10 +978,10 @@ static bool lcl_InsAttr(
     else
         aEnd.Assign( pEnd->nNode.GetNode(), +1 );
 
-    // aEnd points BEHIND the last full node now
+    
 
     /* Edit the fully selected Nodes. */
-    // Reset all attributes from the set!
+    
     if( pCharSet && pCharSet->Count() && !( nsSetAttrMode::SETATTR_DONTREPLACE & nFlags ) )
     {
         ParaRstFmt aPara( pStt, pEnd, pHistory, 0, pCharSet );
@@ -1028,13 +1028,13 @@ static bool lcl_InsAttr(
         ++nNodes;
     }
 
-    //The data parameter flag: bExpandCharToPara, comes from the data member of SwDoc,
-    //Which is set in SW MS word Binary filter WW8ImplRreader. With this flag on, means that
-    //current setting attribute set is a character range properties set and comes from a MS word
-    //binary file, And the setting range include a paragraph end position (0X0D);
-    //More specifications, as such property inside the character range properties set recorded in
-    //MS word binary file are dealed and inserted into data model (SwDoc) one by one, so we
-    //only dealing the scenario that the char properties set with 1 item inside;
+    
+    
+    
+    
+    
+    
+    
     if (bExpandCharToPara && pCharSet && pCharSet->Count() ==1)
     {
         SwPosition aStartPos (*rRg.Start());
@@ -1059,7 +1059,7 @@ static bool lcl_InsAttr(
     return (nNodes != 0) || bRet;
 }
 
-///Add a para for the char attribute exp...
+
 bool SwDoc::InsertPoolItem(
     const SwPaM &rRg,
     const SfxPoolItem &rHt,
@@ -1113,7 +1113,7 @@ bool SwDoc::InsertItemSet ( const SwPaM &rRg, const SfxItemSet &rSet,
     return bRet;
 }
 
-/// Set the rsid of the next nLen symbols of rRg to the current session number
+
 bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
 {
     SwTxtNode *pTxtNode = rRg.GetPoint()->nNode.GetNode().GetTxtNode();
@@ -1133,7 +1133,7 @@ bool SwDoc::UpdateRsid( const SwPaM &rRg, const sal_Int32 nLen )
     {
         SwUndo *const pLastUndo = GetUndoManager().GetLastUndo();
         SwUndoInsert *const pUndoInsert(dynamic_cast<SwUndoInsert*>(pLastUndo));
-        // this function is called after Insert so expects to find SwUndoInsert
+        
         assert(pUndoInsert);
         if (pUndoInsert)
         {
@@ -1154,8 +1154,8 @@ bool SwDoc::UpdateParRsid( SwTxtNode *pTxtNode, sal_uInt32 nVal )
     return pTxtNode->SetAttr( aRsid );
 }
 
-/// Set the attribute according to the stated format.
-/// If Undo is enabled, the old values is added to the Undo history.
+
+
 void SwDoc::SetAttr( const SfxPoolItem& rAttr, SwFmt& rFmt )
 {
     SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
@@ -1163,8 +1163,8 @@ void SwDoc::SetAttr( const SfxPoolItem& rAttr, SwFmt& rFmt )
     SetAttr( aSet, rFmt );
 }
 
-/// Set the attribute according to the stated format.
-/// If Undo is enabled, the old values is added to the Undo history.
+
+
 void SwDoc::SetAttr( const SfxItemSet& rSet, SwFmt& rFmt )
 {
     if (GetIDocumentUndoRedo().DoesUndo())
@@ -1212,28 +1212,28 @@ void SwDoc::ResetAttrAtFormat( const sal_uInt16 nWhichId,
 static int lcl_SetNewDefTabStops( SwTwips nOldWidth, SwTwips nNewWidth,
                                 SvxTabStopItem& rChgTabStop )
 {
-    // Set the default values of all TabStops to the new value.
-    // Attention: we always work with the PoolAttribut here, so that
-    // we don't calculate the same value on the same TabStop (pooled!) for all sets.
-    // We send a FmtChg to modify.
+    
+    
+    
+    
 
     sal_uInt16 nOldCnt = rChgTabStop.Count();
     if( !nOldCnt || nOldWidth == nNewWidth )
         return sal_False;
 
-    // Find the default's beginning
+    
     sal_uInt16 n;
     for( n = nOldCnt; n ; --n )
         if( SVX_TAB_ADJUST_DEFAULT != rChgTabStop[n - 1].GetAdjustment() )
             break;
     ++n;
-    if( n < nOldCnt )   // delete the DefTabStops
+    if( n < nOldCnt )   
         rChgTabStop.Remove( n, nOldCnt - n );
     return sal_True;
 }
 
-/// Set the attribute as new default attribute in this document.
-/// If Undo is enabled, the old value is added to the Undo history.
+
+
 void SwDoc::SetDefault( const SfxPoolItem& rAttr )
 {
     SfxItemSet aSet( GetAttrPool(), rAttr.Which(), rAttr.Which() );
@@ -1288,7 +1288,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             aCallMod.Add( mpDfltFrmFmt );
         }
 
-        // also copy the defaults
+        
         if( bCheckSdrDflt )
         {
             sal_uInt16 nEdtWhich, nSlotId;
@@ -1321,10 +1321,10 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
                 aNew.GetItemState( RES_PARATR_TABSTOP, false, &pTmpItem ) ) &&
             ((SvxTabStopItem*)pTmpItem)->Count() )
         {
-            // Set the default values of all TabStops to the new value.
-            // Attention: we always work with the PoolAttribut here, so that
-            // we don't calculate the same value on the same TabStop (pooled!) for all sets.
-            // We send a FmtChg to modify.
+            
+            
+            
+            
             SwTwips nNewWidth = (*(SvxTabStopItem*)pTmpItem)[ 0 ].GetTabPos(),
                     nOldWidth = ((SvxTabStopItem&)aOld.Get(RES_PARATR_TABSTOP))[ 0 ].GetTabPos();
 
@@ -1340,7 +1340,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             if( bChg )
             {
                 SwFmtChg aChgFmt( mpDfltCharFmt );
-                // notify the frames
+                
                 aCallMod.ModifyNotification( &aChgFmt, &aChgFmt );
             }
         }
@@ -1350,10 +1350,10 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     {
         SwAttrSetChg aChgOld( aOld, aOld );
         SwAttrSetChg aChgNew( aNew, aNew );
-        aCallMod.ModifyNotification( &aChgOld, &aChgNew );      // all changed are sent
+        aCallMod.ModifyNotification( &aChgOld, &aChgNew );      
     }
 
-    // remove the default formats from the object again
+    
     SwClient* pDep;
     while( 0 != ( pDep = (SwClient*)aCallMod.GetDepends()) )
         aCallMod.Remove( pDep );
@@ -1361,13 +1361,13 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     SetModified();
 }
 
-/// Get the default attribute in this document
+
 const SfxPoolItem& SwDoc::GetDefault( sal_uInt16 nFmtHint ) const
 {
     return GetAttrPool().GetDefaultItem( nFmtHint );
 }
 
-/// Delete the formats
+
 void SwDoc::DelCharFmt(sal_uInt16 nFmt, bool bBroadcast)
 {
     SwCharFmt * pDel = (*mpCharFmtTbl)[nFmt];
@@ -1408,7 +1408,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, bool bBroadcast )
     else
     {
 
-        // The format has to be in the one or the other, we'll see in which one.
+        
         SwFrmFmts::iterator it = std::find( mpFrmFmtTbl->begin(), mpFrmFmtTbl->end(), pFmt );
         if ( it != mpFrmFmtTbl->end() )
         {
@@ -1448,7 +1448,7 @@ void SwDoc::DelTblFrmFmt( SwTableFmt *pFmt )
     mpTblFrmFmtTbl->erase(it);
 }
 
-/// Create the formats
+
 SwFlyFrmFmt *SwDoc::MakeFlyFrmFmt( const OUString &rFmtName,
                                     SwFrmFmt *pDerivedFrom )
 {
@@ -1544,7 +1544,7 @@ SwFmt *SwDoc::_MakeFrmFmt(const OUString &rFmtName,
     return dynamic_cast<SwFmt*>(pFrmFmt);
 }
 
-// #i40550# - add parameter <bAuto> - not relevant
+
 SwCharFmt *SwDoc::MakeCharFmt( const OUString &rFmtName,
                                SwCharFmt *pDerivedFrom,
                                bool bBroadcast,
@@ -1580,7 +1580,7 @@ SwFmt *SwDoc::_MakeCharFmt(const OUString &rFmtName,
     return dynamic_cast<SwFmt*>(pCharFmt);
 }
 
-/// Create the FormatCollections
+
 SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const OUString &rFmtName,
                                      SwTxtFmtColl *pDerivedFrom,
                                      bool bBroadcast,
@@ -1615,7 +1615,7 @@ SwFmt *SwDoc::_MakeTxtFmtColl(const OUString &rFmtName,
     return dynamic_cast<SwFmt*>(pTxtFmtColl);
 }
 
-//FEATURE::CONDCOLL
+
 SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const OUString &rFmtName,
                                                   SwTxtFmtColl *pDerivedFrom,
                                                   bool bBroadcast)
@@ -1632,9 +1632,9 @@ SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const OUString &rFmtName,
 
     return pFmtColl;
 }
-//FEATURE::CONDCOLL
 
-// GRF
+
+
 SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const OUString &rFmtName,
                                      SwGrfFmtColl *pDerivedFrom )
 {
@@ -1650,10 +1650,10 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
 {
     OSL_ENSURE( nFmtColl, "Remove fuer Coll 0." );
 
-    // Who has the to-be-deleted as their Next?
+    
     SwTxtFmtColl *pDel = (*mpTxtFmtCollTbl)[nFmtColl];
     if( mpDfltTxtFmtColl == pDel )
-        return;     // never delete default!
+        return;     
 
     if (bBroadcast)
         BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PARA,
@@ -1667,9 +1667,9 @@ void SwDoc::DelTxtFmtColl(sal_uInt16 nFmtColl, bool bBroadcast)
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
 
-    // Remove the FmtColl
+    
     mpTxtFmtCollTbl->erase(mpTxtFmtCollTbl->begin() + nFmtColl);
-    // Correct next
+    
     for( SwTxtFmtColls::const_iterator it = mpTxtFmtCollTbl->begin() + 1; it != mpTxtFmtCollTbl->end(); ++it )
         SetTxtFmtCollNext( *it, pDel );
     delete pDel;
@@ -1700,12 +1700,12 @@ static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 
         lcl_RstAttr( pCNd, pPara );
 
-        // #i62675# check, if paragraph style has changed
+        
         if ( pPara->bResetListAttrs &&
              pFmt != pCNd->GetFmtColl() &&
              pFmt->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET )
         {
-            // Check, if the list style of the paragraph will change.
+            
             bool bChangeOfListStyleAtParagraph( true );
             SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
             OSL_ENSURE( pTNd, "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
@@ -1733,7 +1733,7 @@ static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
 
                 pCNd->ResetAttr( RES_PARATR_NUMRULE );
 
-                // reset all list attributes
+                
                 pCNd->ResetAttr( RES_PARATR_LIST_LEVEL );
                 pCNd->ResetAttr( RES_PARATR_LIST_ISRESTART );
                 pCNd->ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
@@ -1743,7 +1743,7 @@ static bool lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
         }
     }
 
-    // add to History so that old data is saved, if necessary
+    
     if( pPara->pHistory )
         pPara->pHistory->Add( pCNd->GetFmtColl(), pCNd->GetIndex(),
                 ND_TEXTNODE );
@@ -1777,56 +1777,56 @@ bool SwDoc::SetTxtFmtColl( const SwPaM &rRg,
     ParaRstFmt aPara( pStt, pEnd, pHst );
     aPara.pFmtColl = pFmt;
     aPara.bReset = bReset;
-    // #i62675#
+    
     aPara.bResetListAttrs = bResetListAttrs;
 
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
                         lcl_SetTxtFmtColl, &aPara );
     if( !aPara.nWhich )
-        bRet = false;           // didn't find a valid Node
+        bRet = false;           
 
     if( bRet )
         SetModified();
     return bRet;
 }
 
-/// Copy the formats to itself
+
 SwFmt* SwDoc::CopyFmt( const SwFmt& rFmt,
                         const SwFmtsBase& rFmtArr,
                         FNCopyFmt fnCopyFmt, const SwFmt& rDfltFmt )
 {
-    // It's no autoformat, default format or collection format,
-    // then search for it.
+    
+    
     if( !rFmt.IsAuto() || !rFmt.GetRegisteredIn() )
         for( sal_uInt16 n = 0; n < rFmtArr.GetFmtCount(); n++ )
         {
-            // Does the Doc already contain the template?
+            
             if( rFmtArr.GetFmt(n)->GetName()==rFmt.GetName() )
                 return (SwFmt*)rFmtArr.GetFmt(n);
         }
 
-    // Search for the "parent" first
+    
     SwFmt* pParent = (SwFmt*)&rDfltFmt;
     if( rFmt.DerivedFrom() && pParent != rFmt.DerivedFrom() )
         pParent = CopyFmt( *rFmt.DerivedFrom(), rFmtArr,
                                 fnCopyFmt, rDfltFmt );
 
-    // Create the format and copy the attributes
-    // #i40550#
+    
+    
     SwFmt* pNewFmt = (this->*fnCopyFmt)( rFmt.GetName(), pParent, false, true );
     pNewFmt->SetAuto( rFmt.IsAuto() );
-    pNewFmt->CopyAttrs( rFmt, sal_True );           // copy the attributes
+    pNewFmt->CopyAttrs( rFmt, sal_True );           
 
     pNewFmt->SetPoolFmtId( rFmt.GetPoolFmtId() );
     pNewFmt->SetPoolHelpId( rFmt.GetPoolHelpId() );
 
-    // Always set the HelpFile Id to dflt!
+    
     pNewFmt->SetPoolHlpFileId( UCHAR_MAX );
 
     return pNewFmt;
 }
 
-/// copy the frame format
+
 SwFrmFmt* SwDoc::CopyFrmFmt( const SwFrmFmt& rFmt )
 {
 
@@ -1834,7 +1834,7 @@ SwFrmFmt* SwDoc::CopyFrmFmt( const SwFrmFmt& rFmt )
                                 *GetDfltFrmFmt() );
 }
 
-/// copy the char format
+
 SwCharFmt* SwDoc::CopyCharFmt( const SwCharFmt& rFmt )
 {
     return (SwCharFmt*)CopyFmt( rFmt, *GetCharFmts(),
@@ -1842,20 +1842,20 @@ SwCharFmt* SwDoc::CopyCharFmt( const SwCharFmt& rFmt )
                                 *GetDfltCharFmt() );
 }
 
-/// copy TextNodes
+
 SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
 {
     SwTxtFmtColl* pNewColl = FindTxtFmtCollByName( rColl.GetName() );
     if( pNewColl )
         return pNewColl;
 
-    // search for the "parent" first
+    
     SwTxtFmtColl* pParent = mpDfltTxtFmtColl;
     if( pParent != rColl.DerivedFrom() )
         pParent = CopyTxtColl( *(SwTxtFmtColl*)rColl.DerivedFrom() );
 
 
-//FEATURE::CONDCOLL
+
     if( RES_CONDTXTFMTCOLL == rColl.Which() )
     {
         pNewColl = new SwConditionTxtFmtColl( GetAttrPool(), rColl.GetName(),
@@ -1864,15 +1864,15 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
         pNewColl->SetAuto( false );
         SetModified();
 
-        // copy the conditions
+        
         ((SwConditionTxtFmtColl*)pNewColl)->SetConditions(
                             ((SwConditionTxtFmtColl&)rColl).GetCondColls() );
     }
     else
-//FEATURE::CONDCOLL
+
         pNewColl = MakeTxtFmtColl( rColl.GetName(), pParent );
 
-    // copy the auto formats or the attributes
+    
     pNewColl->CopyAttrs( rColl, sal_True );
 
     if(rColl.IsAssignedToListLevelOfOutlineStyle())
@@ -1880,13 +1880,13 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     pNewColl->SetPoolFmtId( rColl.GetPoolFmtId() );
     pNewColl->SetPoolHelpId( rColl.GetPoolHelpId() );
 
-    // Always set the HelpFile Id to dflt!
+    
     pNewColl->SetPoolHlpFileId( UCHAR_MAX );
 
     if( &rColl.GetNextTxtFmtColl() != &rColl )
         pNewColl->SetNextTxtFmtColl( *CopyTxtColl( rColl.GetNextTxtFmtColl() ));
 
-    // create the NumRule if necessary
+    
     if( this != rColl.GetDoc() )
     {
         const SfxPoolItem* pItem;
@@ -1910,28 +1910,28 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     return pNewColl;
 }
 
-/// copy the graphic nodes
+
 SwGrfFmtColl* SwDoc::CopyGrfColl( const SwGrfFmtColl& rColl )
 {
     SwGrfFmtColl* pNewColl = FindGrfFmtCollByName( rColl.GetName() );
     if( pNewColl )
         return pNewColl;
 
-     // Search for the "parent" first
+     
     SwGrfFmtColl* pParent = mpDfltGrfFmtColl;
     if( pParent != rColl.DerivedFrom() )
         pParent = CopyGrfColl( *(SwGrfFmtColl*)rColl.DerivedFrom() );
 
-    // if not, copy them
+    
     pNewColl = MakeGrfFmtColl( rColl.GetName(), pParent );
 
-    // copy the attributes
+    
     pNewColl->CopyAttrs( rColl );
 
     pNewColl->SetPoolFmtId( rColl.GetPoolFmtId() );
     pNewColl->SetPoolHelpId( rColl.GetPoolHelpId() );
 
-    // Always set the HelpFile Id to dflt!
+    
     pNewColl->SetPoolHlpFileId( UCHAR_MAX );
 
     return pNewColl;
@@ -1956,7 +1956,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
     sal_uInt16 nSrc;
     SwFmt* pSrc, *pDest;
 
-    // 1st step: Create all formats (skip the 0th - it's the default one)
+    
     for( nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
     {
         pSrc = (SwFmt*)rSourceArr.GetFmt( --nSrc );
@@ -1968,12 +1968,12 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
                 MakeCondTxtFmtColl( pSrc->GetName(), (SwTxtFmtColl*)&rDfltFmt );
             else
-                // #i40550#
+                
                 (this->*fnCopyFmt)( pSrc->GetName(), &rDfltFmt, false, true );
         }
     }
 
-    // 2nd step: Copy all attributes, set the right parents
+    
     for( nSrc = rSourceArr.GetFmtCount(); nSrc > 1; )
     {
         pSrc = (SwFmt*)rSourceArr.GetFmt( --nSrc );
@@ -1984,7 +1984,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         pDest->SetAuto( false );
         pDest->DelDiffs( *pSrc );
 
-        // #i94285#: existing <SwFmtPageDesc> instance, before copying attributes
+        
         const SfxPoolItem* pItem;
         if( &GetAttrPool() != pSrc->GetAttrSet().GetPool() &&
             SFX_ITEM_SET == pSrc->GetAttrSet().GetItemState(
@@ -2011,7 +2011,7 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
         pDest->SetPoolFmtId( pSrc->GetPoolFmtId() );
         pDest->SetPoolHelpId( pSrc->GetPoolHelpId() );
 
-        // Always set the HelpFile Id to dflt!
+        
         pDest->SetPoolHlpFileId( UCHAR_MAX );
 
         if( pSrc->DerivedFrom() )
@@ -2029,12 +2029,12 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
             if(pSrcColl->IsAssignedToListLevelOfOutlineStyle())
                 pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());
 
-//FEATURE::CONDCOLL
+
             if( RES_CONDTXTFMTCOLL == pSrc->Which() )
-                // Copy the conditions, but delete the old ones first!
+                
                 ((SwConditionTxtFmtColl*)pDstColl)->SetConditions(
                             ((SwConditionTxtFmtColl*)pSrc)->GetCondColls() );
-//FEATURE::CONDCOLL
+
         }
     }
 }
@@ -2042,14 +2042,14 @@ void SwDoc::CopyFmtArr( const SwFmtsBase& rSourceArr,
 void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                                 const SwFrmFmt& rSrcFmt, SwFrmFmt& rDestFmt )
 {
-    // Treat the header and footer attributes in the right way:
-    // Copy content nodes across documents!
+    
+    
     sal_uInt16 nAttr = static_cast<sal_uInt16>( bCpyHeader ? RES_HEADER : RES_FOOTER );
     const SfxPoolItem* pItem;
     if( SFX_ITEM_SET != rSrcFmt.GetAttrSet().GetItemState( nAttr, false, &pItem ))
         return ;
 
-    // The header only contains the reference to the format from the other document!
+    
     SfxPoolItem* pNewItem = pItem->Clone();
 
     SwFrmFmt* pOldFmt;
@@ -2114,7 +2114,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
     {
         rDstDesc.SetPoolFmtId( rSrcDesc.GetPoolFmtId() );
         rDstDesc.SetPoolHelpId( rSrcDesc.GetPoolHelpId() );
-        // Always set the HelpFile Id to dflt!
+        
         rDstDesc.SetPoolHlpFileId( UCHAR_MAX );
     }
 
@@ -2124,7 +2124,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
                                     rSrcDesc.GetFollow()->GetName() );
         if( !pFollow )
         {
-            // copy
+            
             sal_uInt16 nPos = MakePageDesc( rSrcDesc.GetFollow()->GetName() );
             pFollow = maPageDescs[ nPos ];
             CopyPageDesc( *rSrcDesc.GetFollow(), *pFollow );
@@ -2133,8 +2133,8 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         bNotifyLayout = true;
     }
 
-    // the header and footer attributes are copied separately
-    // the content sections have to be copied in their entirety
+    
+    
     {
         SfxItemSet aAttrSet( rSrcDesc.GetMaster().GetAttrSet() );
         aAttrSet.ClearItem( RES_HEADER );
@@ -2190,7 +2190,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));
     }
 
-    // If foot notes change the pages have to be triggered
+    
     if( !(rDstDesc.GetFtnInfo() == rSrcDesc.GetFtnInfo()) )
     {
         rDstDesc.SetFtnInfo( rSrcDesc.GetFtnInfo() );
@@ -2217,23 +2217,23 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
 
     sal_uInt16 nCnt;
 
-    //To-Do:
-    //  a) in rtf export don't export our hideous pgdsctbl
-    //  extension to rtf anymore
-    //  b) in sd rtf import (View::InsertData) don't use
-    //  a super-fragile test for mere presence of \trowd to
-    //  indicate import of rtf into a table
-    //  c) then drop use of bIncludePageStyles
+    
+    
+    
+    
+    
+    
+    
     if (bIncludePageStyles)
     {
-        // and now the page templates
+        
         nCnt = rSource.maPageDescs.size();
         if( nCnt )
         {
-            // a different Doc -> Number formatter needs to be merged
+            
             SwTblNumFmtMerge aTNFM( rSource, *this );
 
-            // 1st step: Create all formats (skip the 0th - it's the default!)
+            
             while( nCnt )
             {
                 SwPageDesc *pSrc = rSource.maPageDescs[ --nCnt ];
@@ -2241,7 +2241,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
                     MakePageDesc( pSrc->GetName() );
             }
 
-            // 2nd step: Copy all attributes, set the right parents
+            
             for( nCnt = rSource.maPageDescs.size(); nCnt; )
             {
                 SwPageDesc *pSrc = rSource.maPageDescs[ --nCnt ];
@@ -2250,7 +2250,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
         }
     }
 
-    // then there are the numbering templates
+    
     nCnt = rSource.GetNumRuleTbl().size();
     if( nCnt )
     {
@@ -2271,7 +2271,7 @@ void SwDoc::ReplaceStyles( const SwDoc& rSource, bool bIncludePageStyles )
 
     if (undoGuard.UndoWasEnabled())
     {
-        // nodes array was modified!
+        
         GetIDocumentUndoRedo().DelAllUndoObj();
     }
 
@@ -2284,7 +2284,7 @@ SwFmt* SwDoc::FindFmtByName( const SwFmtsBase& rFmtArr,
     SwFmt* pFnd = 0;
     for( sal_uInt16 n = 0; n < rFmtArr.GetFmtCount(); n++ )
     {
-        // Does the Doc already contain the template?
+        
         if( rFmtArr.GetFmt(n)->GetName() == rName )
         {
             pFnd = (SwFmt*)rFmtArr.GetFmt(n);
@@ -2317,7 +2317,7 @@ void SwDoc::MoveLeftMargin( const SwPaM& rPam, bool bRight, bool bModulus )
         {
             SvxLRSpaceItem aLS( (SvxLRSpaceItem&)pTNd->SwCntntNode::GetAttr( RES_LR_SPACE ) );
 
-            // #i93873# See also lcl_MergeListLevelIndentAsLRSpaceItem in thints.cxx
+            
             if ( pTNd->AreListLevelIndentsApplicable() )
             {
                 const SwNumRule* pRule = pTNd->GetNumRule();
@@ -2400,7 +2400,7 @@ void SwDoc::_CreateNumberFormatter()
 SwTblNumFmtMerge::SwTblNumFmtMerge( const SwDoc& rSrc, SwDoc& rDest )
     : pNFmt( 0 )
 {
-    // a different Doc -> Number formatter needs to be merged
+    
     SvNumberFormatter* pN;
     if( &rSrc != &rDest && 0 != ( pN = ((SwDoc&)rSrc).GetNumberFormatter( sal_False ) ))
         ( pNFmt = rDest.GetNumberFormatter( sal_True ))->MergeFormatter( *pN );
@@ -2425,20 +2425,20 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
 
     if (mbIsAutoFmtRedline)
     {
-        // create the redline object
+        
         const SwTxtFmtColl& rColl = *pTNd->GetTxtColl();
         SwRangeRedline* pRedl = new SwRangeRedline( nsRedlineType_t::REDLINE_FMTCOLL, aPam );
         pRedl->SetMark();
 
-        // Only those items that are not set by the Set again in the Node
-        // are of interest. Thus, we take the difference.
+        
+        
         SwRedlineExtraData_FmtColl aExtraData( rColl.GetName(),
                                                 rColl.GetPoolFmtId() );
         if( pSet && pTNd->HasSwAttrSet() )
         {
             SfxItemSet aTmp( *pTNd->GetpSwAttrSet() );
             aTmp.Differentiate( *pSet );
-            // we handle the adjust item separately
+            
             const SfxPoolItem* pItem;
             if( SFX_ITEM_SET == pTNd->GetpSwAttrSet()->GetItemState(
                     RES_PARATR_ADJUST, false, &pItem ))
@@ -2447,7 +2447,7 @@ void SwDoc::SetTxtFmtCollByAutoFmt( const SwPosition& rPos, sal_uInt16 nPoolId,
         }
         pRedl->SetExtraData( &aExtraData );
 
-        //TODO: Undo is still missing!
+        
         AppendRedline( pRedl, true );
     }
 
@@ -2470,18 +2470,18 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
 
     if (mbIsAutoFmtRedline)
     {
-        // create the redline object
+        
         SwRangeRedline* pRedl = new SwRangeRedline( nsRedlineType_t::REDLINE_FORMAT, rPam );
         if( !pRedl->HasMark() )
             pRedl->SetMark();
 
-        // Only those items that are not set by the Set again in the Node
-        // are of interest. Thus, we take the difference.
+        
+        
         SwRedlineExtraData_Format aExtraData( rSet );
 
         pRedl->SetExtraData( &aExtraData );
 
-        //TODO: Undo is still missing!
+        
         AppendRedline( pRedl, true );
 
         SetRedlineMode_intern( (RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
@@ -2500,14 +2500,14 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
     SfxItemSet currentSet(GetAttrPool(), &whichIds[0]);
     pTNd->GetAttr(currentSet, nEnd, nEnd, false, true, false);
     for (size_t i = 0; whichIds[i]; i += 2)
-    {   // yuk - want to explicitly set the pool defaults too :-/
+    {   
         currentSet.Put(currentSet.Get(whichIds[i], true));
     }
 
     InsertItemSet( rPam, rSet, nsSetAttrMode::SETATTR_DONTEXPAND );
 
-    // fdo#62536: DONTEXPAND does not work when there is already an AUTOFMT
-    // here, so insert the old attributes as an empty hint to stop expand
+    
+    
     SwPaM endPam(*pTNd, nEnd);
     endPam.SetMark();
     InsertItemSet(endPam, currentSet, nsSetAttrMode::SETATTR_DEFAULT);
@@ -2519,18 +2519,18 @@ void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
 {
     if (GetIDocumentUndoRedo().DoesUndo())
     {
-        // copying <rSet> to <aSet>
+        
         SfxItemSet aSet(rSet);
-        // remove from <aSet> all items, which are already set at the format
+        
         aSet.Differentiate(rFmt.GetAttrSet());
-        // <aSet> contains now all *new* items for the format
+        
 
-        // copying current format item set to <aOldSet>
+        
         SfxItemSet aOldSet(rFmt.GetAttrSet());
-        // insert new items into <aOldSet>
+        
         aOldSet.Put(aSet);
-        // invalidate all new items in <aOldSet> in order to clear these items,
-        // if the undo action is triggered.
+        
+        
         {
             SfxItemIter aIter(aSet);
 
@@ -2591,16 +2591,16 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const OUString & sNewName,
         BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);
 }
 
-// #i69627#
+
 namespace docfunc
 {
     bool HasOutlineStyleToBeWrittenAsNormalListStyle( SwDoc& rDoc )
     {
-        // If a parent paragraph style of one of the parargraph styles, which
-        // are assigned to the list levels of the outline style, has a list style
-        // set or inherits a list style from its parent style, the outline style
-        // has to be written as a normal list style to the OpenDocument file
-        // format or the OpenOffice.org file format.
+        
+        
+        
+        
+        
         bool bRet( false );
 
         const SwTxtFmtColls* pTxtFmtColls( rDoc.GetTxtFmtColls() );
@@ -2624,7 +2624,7 @@ namespace docfunc
 
                 if ( SFX_ITEM_SET == pParentTxtFmtColl->GetItemState( RES_PARATR_NUMRULE ) )
                 {
-                    // #i106218# consider that the outline style is set
+                    
                     const SwNumRuleItem& rDirectItem = pParentTxtFmtColl->GetNumRule();
                     if ( rDirectItem.GetValue() != rDoc.GetOutlineNumRule()->GetName() )
                     {

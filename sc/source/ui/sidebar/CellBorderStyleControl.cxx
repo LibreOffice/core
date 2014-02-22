@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <CellBorderStyleControl.hxx>
@@ -151,8 +151,8 @@ IMPL_LINK(CellBorderStyleControl, TB1SelectHdl, ToolBox*, pToolBox)
          nValidFlags |= FRM_VALID_ALL;
         SvxLineItem     aLineItem1( SID_ATTR_BORDER_DIAG_BLTR );
         SvxLineItem     aLineItem2( SID_ATTR_BORDER_DIAG_TLBR );
-        aLineItem1.SetLine( NULL );     //modify
-        aLineItem2.SetLine( NULL );     //modify
+        aLineItem1.SetLine( NULL );     
+        aLineItem2.SetLine( NULL );     
         mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_BLTR, SFX_CALLMODE_RECORD, &aLineItem1, 0L);
         mrCellAppearancePropertyPanel.GetBindings()->GetDispatcher()->Execute(SID_ATTR_BORDER_DIAG_TLBR, SFX_CALLMODE_RECORD, &aLineItem2, 0L);
         }
@@ -289,7 +289,7 @@ IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
     sal_uInt8               nValidFlags = 0;
     using namespace ::com::sun::star::table::BorderLineStyle;
 
-    //FIXME: properly adapt to new line border model
+    
 
     switch ( nId )
     {
@@ -338,8 +338,8 @@ IMPL_LINK(CellBorderStyleControl, TB3SelectHdl, ToolBox *, pToolBox)
     return 0;
 }
 
-} } // end of namespace svx::sidebar
+} } 
 
-// eof
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

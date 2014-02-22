@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "KDEInit.h"
@@ -27,13 +27,13 @@ namespace connectivity
 {
     namespace kab
     {
-        // ===============================================================
-        // = KDEInit
-        // ===============================================================
+        
+        
+        
         class KDEInit
         {
         private:
-            /// KDE application if we own it
+            
             static KApplication*    s_pKApplication;
             static bool             s_bDidInsertCatalogue;
 
@@ -42,16 +42,16 @@ namespace connectivity
             static void Shutdown();
         };
 
-        // ---------------------------------------------------------------
+        
         KApplication* KDEInit::s_pKApplication = NULL;
         bool          KDEInit::s_bDidInsertCatalogue = false;
 
-        // ---------------------------------------------------------------
+        
         void KDEInit::Init()
         {
-            // TODO: All this is not thread-safe
+            
 
-            // we create a KDE application only if it is not already done
+            
             if (KApplication::kApplication() == NULL)
             {
                 OSL_ENSURE(s_pKApplication == NULL, "KDEInit::Init: inconsistency in the application pointers!");
@@ -63,26 +63,26 @@ namespace connectivity
             }
 
             /* FIXME-BCP47: what slumbering dogs may we wake up here? */
-            // set language
+            
             rtl_Locale *pProcessLocale;
             osl_getProcessLocale(&pProcessLocale);
-            // sal_Unicode and QChar are (currently) both 16 bits characters
+            
             QString aLanguage(
                 (const QChar *) pProcessLocale->Language->buffer,
                 (int) pProcessLocale->Language->length);
             KGlobal::locale()->setLanguage(aLanguage);
 
-            // load KDE address book's localized messages
+            
             KGlobal::locale()->insertCatalogue("kaddressbook");
             s_bDidInsertCatalogue = true;
         }
 
-        // ---------------------------------------------------------------
+        
         void KDEInit::Shutdown()
         {
             if ( s_bDidInsertCatalogue )
-                // this guard is necessary, since KDE 3.3 seems to crash if we remove a catalogue
-                // which we did not previously insert
+                
+                
                 KGlobal::locale()->removeCatalogue("kaddressbook");
 
             if ( s_pKApplication != NULL )
@@ -94,7 +94,7 @@ namespace connectivity
     }
 }
 
-// =======================================================================
+
 namespace
 {
     double normalizeVersion( unsigned int major, unsigned int minor )
@@ -103,18 +103,18 @@ namespace
     }
 }
 
-// -----------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL initKApplication()
 {
     ::connectivity::kab::KDEInit::Init();
 }
 
-// -----------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void SAL_CALL shutdownKApplication()
 {
     ::connectivity::kab::KDEInit::Shutdown();
 }
-// -----------------------------------------------------------------------
+
 /** checks whether the KDE version on the system we're running at is supported
     by the driver
 

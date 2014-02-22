@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,11 +22,11 @@
 #include <tools/debug.hxx>
 #include <win/saldata.hxx>
 
-// =======================================================================
+
 
 SalShlData aSalShlData;
 
-// =======================================================================
+
 
 extern "C"
 {
@@ -39,7 +39,7 @@ BOOL WINAPI _CRT_INIT( HINSTANCE hInst, DWORD nReason, LPVOID pReserved );
 BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 #endif
 {
-    // Unsere DLL-Initialisierung
+    
     if ( nReason == DLL_PROCESS_ATTACH )
         aSalShlData.mhInst = hInst;
 
@@ -54,7 +54,7 @@ BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
 
 }
 
-// =======================================================================
+
 
 HCURSOR ImplLoadSalCursor( int nId )
 {
@@ -67,7 +67,7 @@ HCURSOR ImplLoadSalCursor( int nId )
     return hCursor;
 }
 
-// -----------------------------------------------------------------------
+
 
 HBITMAP ImplLoadSalBitmap( int nId )
 {
@@ -80,7 +80,7 @@ HBITMAP ImplLoadSalBitmap( int nId )
     return hBitmap;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 {
@@ -88,7 +88,7 @@ sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 
     SalData* pSalData = GetSalData();
 
-    // check the cache first
+    
     SalIcon *pSalIcon = pSalData->mpFirstIcon;
     while( pSalIcon )
     {
@@ -102,14 +102,14 @@ sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
         }
     }
 
-    // Try at first to load the icons from the application exe file
+    
     rIcon = (HICON)LoadImage( pSalData->mhInst, MAKEINTRESOURCE( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
                                            LR_DEFAULTCOLOR );
     if ( !rIcon )
     {
-        // If the application don't provide these icons, then we try
-        // to load the icon from the VCL resource
+        
+        
         rIcon = (HICON)LoadImage( aSalShlData.mhInst, MAKEINTRESOURCE( nId ),
                                            IMAGE_ICON, GetSystemMetrics( SM_CXICON ), GetSystemMetrics( SM_CYICON ),
                                            LR_DEFAULTCOLOR );
@@ -131,7 +131,7 @@ sal_Bool ImplLoadSalIcon( int nId, HICON& rIcon, HICON& rSmallIcon )
 
     if( rIcon )
     {
-        // add to icon cache
+        
         pSalIcon = new SalIcon();
         pSalIcon->nId = nId;
         pSalIcon->hIcon = rIcon;

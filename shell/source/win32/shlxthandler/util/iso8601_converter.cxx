@@ -27,7 +27,7 @@
 #include <sstream>
 #include <iomanip>
 
-//-----------------------------------
+
 /* Converts ISO 8601 conform date/time
    represenation to the representation
    conforming to the current locale
@@ -88,7 +88,7 @@ std::wstring iso8601_date_to_local_date(const std::wstring& isoDate )
     return ws8601DateTime;
 }
 
-//------------------------------------
+
 /* Converts ISO 8601 conform duration
    representation to the representation
    conforming to the current locale

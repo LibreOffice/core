@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -98,7 +98,7 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
         }
         else if (rMEvt.IsShift())
         {
-            // Toggle between layer visible / hidden
+            
             OUString aName(GetPageText(aLayerId));
             SdrPageView* pPV = pDrViewSh->GetView()->GetSdrPageView();
             sal_Bool bVisible = pPV->IsLayerVisible(aName);
@@ -107,8 +107,8 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
         }
     }
 
-    // If you insert a new layer you must not call TabBar::MouseButtonDown(rMEvt);
-    // because you want to activate the new layer
+    
+    
     if( !bSetPageID )
         TabBar::MouseButtonDown(rMEvt);
 }
@@ -188,7 +188,7 @@ long LayerTabBar::StartRenaming()
          aLayerName == aMeasureLinesLayer ||
          aLayerName == aBackgroundLayer   || aLayerName == aBackgroundObjLayer )
     {
-        // It is not allowed to change this names
+        
         bOK = sal_False;
     }
     else
@@ -208,7 +208,7 @@ long LayerTabBar::AllowRenaming()
 {
     sal_Bool bOK = sal_True;
 
-    // Check if names already exists
+    
     ::sd::View* pView = pDrViewSh->GetView();
     SdDrawDocument& rDoc = pView->GetDoc();
     OUString aLayerName = pView->GetActiveLayer();
@@ -218,7 +218,7 @@ long LayerTabBar::AllowRenaming()
     if (aNewName.isEmpty() ||
         (rLayerAdmin.GetLayer( aNewName, false ) && aLayerName != aNewName) )
     {
-        // Name already exists
+        
         WarningBox aWarningBox( &pDrViewSh->GetViewFrame()->GetWindow(), WinBits( WB_OK ),
                                 SD_RESSTR( STR_WARN_NAME_DUPLICATE ) );
         aWarningBox.Execute();
@@ -237,7 +237,7 @@ long LayerTabBar::AllowRenaming()
              aNewName == aMeasureLinesLayer ||
              aNewName == aBackgroundLayer   || aNewName == aBackgroundObjLayer )
         {
-            // It is not allowed to use his names
+            
             bOK = sal_False;
         }
     }
@@ -284,8 +284,8 @@ void LayerTabBar::EndRenaming()
                 pManager->AddUndoAction( pAction );
             }
 
-            // First notify View since SetName() calls ResetActualLayer() and
-            // the View then already has to know the Layer
+            
+            
             pView->SetActiveLayer(aNewName);
             pLayer->SetName(aNewName);
             rDoc.SetChanged(true);
@@ -321,6 +321,6 @@ void LayerTabBar::SendDeactivatePageEvent (void)
         reinterpret_cast<void*>(GetCurPageId()));
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

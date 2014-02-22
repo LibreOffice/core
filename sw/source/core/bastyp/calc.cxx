@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #if defined(MACOSX)
@@ -53,7 +53,7 @@
 
 using namespace ::com::sun::star;
 
-// shortcut
+
 #define RESOURCE SwViewShell::GetShellRes()
 
 const sal_Char sCalc_Add[]  =   "add";
@@ -86,7 +86,7 @@ const sal_Char sCalc_Atan[] =   "atan";
 const sal_Char sCalc_Round[]=   "round";
 const sal_Char sCalc_Date[] =   "date";
 
-// ATTENTION: sorted list of all operators
+
 struct _CalcOp
 {
     union{
@@ -97,35 +97,35 @@ struct _CalcOp
 };
 
 _CalcOp const aOpTable[] = {
-/* ACOS */    {{sCalc_Acos},       CALC_ACOS},  // Arc cosine
-/* ADD */     {{sCalc_Add},        CALC_PLUS},  // Addition
-/* AND */     {{sCalc_And},        CALC_AND},   // log. AND
-/* ASIN */    {{sCalc_Asin},       CALC_ASIN},  // Arc sine
-/* ATAN */    {{sCalc_Atan},       CALC_ATAN},  // Arc tangent
-/* COS */     {{sCalc_Cos},        CALC_COS},   // Cosine
-/* DATE */    {{sCalc_Date},       CALC_DATE},  // Date
-/* DIV */     {{sCalc_Div},        CALC_DIV},   // Division
-/* EQ */      {{sCalc_Eq},         CALC_EQ},    // Equality
-/* G */       {{sCalc_G},          CALC_GRE},   // Greater than
-/* GEQ */     {{sCalc_Geq},        CALC_GEQ},   // Greater or equal
-/* L */       {{sCalc_L},          CALC_LES},   // Less than
-/* LEQ */     {{sCalc_Leq},        CALC_LEQ},   // Less or equal
-/* MAX */     {{sCalc_Max},        CALC_MAX},   // Maximum value
-/* MEAN */    {{sCalc_Mean},       CALC_MEAN},  // Mean
-/* MIN */     {{sCalc_Min},        CALC_MIN},   // Minimum value
-/* MUL */     {{sCalc_Mul},        CALC_MUL},   // Multiplication
-/* NEQ */     {{sCalc_Neq},        CALC_NEQ},   // Not equal
-/* NOT */     {{sCalc_Not},        CALC_NOT},   // log. NOT
-/* OR */      {{sCalc_Or},         CALC_OR},    // log. OR
-/* PHD */     {{sCalc_Phd},        CALC_PHD},   // Percentage
-/* POW */     {{sCalc_Pow},        CALC_POW},   // Exponentiation
-/* ROUND */   {{sCalc_Round},      CALC_ROUND}, // Rounding
-/* SIN */     {{sCalc_Sin},        CALC_SIN},   // Sine
-/* SQRT */    {{sCalc_Sqrt},       CALC_SQRT},  // Square root
-/* SUB */     {{sCalc_Sub},        CALC_MINUS}, // Subtraction
-/* SUM */     {{sCalc_Sum},        CALC_SUM},   // Sum
-/* TAN */     {{sCalc_Tan},        CALC_TAN},   // Tangent
-/* XOR */     {{sCalc_Xor},        CALC_XOR}    // log. XOR
+/* ACOS */    {{sCalc_Acos},       CALC_ACOS},  
+/* ADD */     {{sCalc_Add},        CALC_PLUS},  
+/* AND */     {{sCalc_And},        CALC_AND},   
+/* ASIN */    {{sCalc_Asin},       CALC_ASIN},  
+/* ATAN */    {{sCalc_Atan},       CALC_ATAN},  
+/* COS */     {{sCalc_Cos},        CALC_COS},   
+/* DATE */    {{sCalc_Date},       CALC_DATE},  
+/* DIV */     {{sCalc_Div},        CALC_DIV},   
+/* EQ */      {{sCalc_Eq},         CALC_EQ},    
+/* G */       {{sCalc_G},          CALC_GRE},   
+/* GEQ */     {{sCalc_Geq},        CALC_GEQ},   
+/* L */       {{sCalc_L},          CALC_LES},   
+/* LEQ */     {{sCalc_Leq},        CALC_LEQ},   
+/* MAX */     {{sCalc_Max},        CALC_MAX},   
+/* MEAN */    {{sCalc_Mean},       CALC_MEAN},  
+/* MIN */     {{sCalc_Min},        CALC_MIN},   
+/* MUL */     {{sCalc_Mul},        CALC_MUL},   
+/* NEQ */     {{sCalc_Neq},        CALC_NEQ},   
+/* NOT */     {{sCalc_Not},        CALC_NOT},   
+/* OR */      {{sCalc_Or},         CALC_OR},    
+/* PHD */     {{sCalc_Phd},        CALC_PHD},   
+/* POW */     {{sCalc_Pow},        CALC_POW},   
+/* ROUND */   {{sCalc_Round},      CALC_ROUND}, 
+/* SIN */     {{sCalc_Sin},        CALC_SIN},   
+/* SQRT */    {{sCalc_Sqrt},       CALC_SQRT},  
+/* SUB */     {{sCalc_Sub},        CALC_MINUS}, 
+/* SUM */     {{sCalc_Sum},        CALC_SUM},   
+/* TAN */     {{sCalc_Tan},        CALC_TAN},   
+/* XOR */     {{sCalc_Xor},        CALC_XOR}    
 };
 
 double const nRoundVal[] = {
@@ -134,13 +134,13 @@ double const nRoundVal[] = {
     0.5e-15,0.5e-16
 };
 
-// First character may be any alphabetic or underscore.
+
 const sal_Int32 coStartFlags =
         i18n::KParseTokens::ANY_LETTER_OR_NUMBER |
         i18n::KParseTokens::ASC_UNDERSCORE |
         i18n::KParseTokens::IGNORE_LEADING_WS;
 
-// Continuing characters may be any alphanumeric, underscore, or dot.
+
 const sal_Int32 coContFlags =
     ( coStartFlags | i18n::KParseTokens::ASC_DOT )
         & ~i18n::KParseTokens::IGNORE_LEADING_WS;
@@ -169,7 +169,7 @@ static int SAL_CALL OperatorCompare( const void *pFirst, const void *pSecond)
     }
     return nRet;
 }
-}// extern "C"
+}
 
 _CalcOp* FindOperator( const OUString& rSrch )
 {
@@ -292,14 +292,14 @@ SwCalc::SwCalc( SwDoc& rD )
         sNType18, sNType19, sNType20, sNType21, sNType22, sNType23,
         sNType24,
 
-        // those have two HashIds
+        
         sNType25, sNType26
     };
     static sal_uInt16 const aHashValue[ 27 ] =
     {
         34, 38, 43,  7, 18, 32, 22, 29, 30, 33,  3,
         28, 24, 40,  9, 11, 26, 45,  4, 23, 36, 44, 19,  5,  1,
-        // those have two HashIds
+        
         11, 38
     };
     static sal_uInt16 const aAdrToken[ 12 ] =
@@ -359,7 +359,7 @@ SwCalc::SwCalc( SwDoc& rD )
     sTmpStr = OUString::createFromAscii(sNTypeTab[25]);
     VarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, 0 );
 
-} // SwCalc::SwCalc
+} 
 
 SwCalc::~SwCalc()
 {
@@ -381,7 +381,7 @@ SwSbxValue SwCalc::Calculate( const OUString& rStr )
         return nResult;
 
     nListPor = 0;
-    eCurrListOper = CALC_PLUS; // default: sum
+    eCurrListOper = CALC_PLUS; 
 
     sCommand = rStr;
     nCommandPos = 0;
@@ -395,7 +395,7 @@ SwSbxValue SwCalc::Calculate( const OUString& rStr )
     return nResult;
 }
 
-//TODO: provide documentation
+
 /** ???
 
   @param rVal ???
@@ -456,13 +456,13 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
 
     if( !pFnd )
     {
-        // then check doc
+        
         SwHash** ppDocTbl = rDoc.GetUpdtFlds().GetFldTypeTable();
         for( SwHash* pEntry = *(ppDocTbl+ii); pEntry; pEntry = pEntry->pNext )
         {
             if( aStr == pEntry->aStr )
             {
-                // then insert here
+                
                 pFnd = new SwCalcExp( aStr, SwSbxValue(),
                                     ((SwCalcFldType*)pEntry)->pFldType );
                 pFnd->pNext = *(VarTable+ii);
@@ -485,7 +485,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
             }
             else if( !pUFld->IsValid() )
             {
-                // Save the current values...
+                
                 sal_uInt16          nOld_ListPor        = nListPor;
                 SwSbxValue      nOld_LastLeft       = nLastLeft;
                 SwSbxValue      nOld_NumberValue    = nNumberValue;
@@ -495,7 +495,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
 
                 pFndExp->nValue.PutDouble( pUFld->GetValue( *this ) );
 
-                // ...and write them back.
+                
                 nListPor        = nOld_ListPor;
                 nLastLeft       = nOld_LastLeft;
                 nNumberValue    = nOld_NumberValue;
@@ -511,7 +511,7 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
         return pFndExp;
     }
 
-    // At this point the "real" case variable has to be used
+    
     OUString const sTmpName( ::ReplacePoint(rStr) );
 
     if( !ins )
@@ -530,9 +530,9 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
             OUString sDBNum( SwFieldType::GetTypeStr(TYP_DBSETNUMBERFLD) );
             sDBNum = pCharClass->lowercase(sDBNum);
 
-            // Initialize again because this doesn't happen in docfld anymore for
-            // elements != RES_DBFLD. E.g. if there is an expression field before
-            // an DB_Field in a document.
+            
+            
+            
             VarChange( sDBNum, pMgr->GetSelectedRecordId(sSourceName, sTableName));
 
             if( sDBNum.equalsIgnoreAsciiCase(sColumnName) )
@@ -562,10 +562,10 @@ SwCalcExp* SwCalc::VarLook( const OUString& rStr, sal_uInt16 ins )
         }
         else
         {
-            //data source was not available - set return to "NoValue"
+            
             aErrExpr.nValue.SetVoidValue(true);
         }
-        // NEVER save!
+        
         return &aErrExpr;
     }
 
@@ -641,8 +641,8 @@ void SwCalc::Pop()
 SwCalcOper SwCalc::GetToken()
 {
 #if OSL_DEBUG_LEVEL > 1
-    // static for switch back to the "old" implementation of the calculator
-    // which doesn't use the I18N routines.
+    
+    
     static int nUseOld = 0;
     if( !nUseOld )
     {
@@ -653,7 +653,7 @@ SwCalcOper SwCalc::GetToken()
 
     using namespace ::com::sun::star::i18n;
     {
-        // Parse any token.
+        
         ParseResult aRes = pCharClass->parseAnyToken( sCommand, nCommandPos,
                                                       coStartFlags, OUString(),
                                                       coContFlags, OUString());
@@ -670,18 +670,18 @@ SwCalcOper SwCalc::GetToken()
         {
             OUString aName( sCommand.copy( nRealStt,
                             aRes.EndPos - nRealStt ) );
-            //#101436#: The variable may contain a database name. It must not be
-            // converted to lower case! Instead all further comparisons must be
-            // done case-insensitive
+            
+            
+            
             OUString sLowerCaseName = pCharClass->lowercase( aName );
-            // catch currency symbol
+            
             if( sLowerCaseName == sCurrSym )
             {
                 nCommandPos = aRes.EndPos;
-                return GetToken(); // call again
+                return GetToken(); 
             }
 
-            // catch operators
+            
             _CalcOp* pFnd = ::FindOperator( sLowerCaseName );
             if( pFnd )
             {
@@ -781,7 +781,7 @@ SwCalcOper SwCalc::GetToken()
                             if( -1 != ( nFndPos =
                                 sCommand.indexOf( ']', nFndPos )) )
                             {
-                                // ignore the ]
+                                
                                 if ('\\' == sCommand[nFndPos-1])
                                 {
                                     aVarName += sCommand.copy( nSttPos,
@@ -878,7 +878,7 @@ SwCalcOper SwCalc::GetToken()
             {
                 eCurrOper = eCurrListOper;
                 break;
-            } // else .. no break
+            } 
         case '\n':
             {
                 sal_Unicode c;
@@ -952,7 +952,7 @@ SwCalcOper SwCalc::GetToken()
         case '.':
             {
                 double nVal;
-                --nCommandPos; //  back to the first char
+                --nCommandPos; 
                 if( Str2Double( sCommand, nCommandPos, nVal, pLclData ))
                 {
                     nNumberValue.PutDouble( nVal );
@@ -960,7 +960,7 @@ SwCalcOper SwCalc::GetToken()
                 }
                 else
                 {
-                    // erroneous number
+                    
                     eError = CALC_SYNTAX;
                     eCurrOper = CALC_PRINT;
                 }
@@ -1028,11 +1028,11 @@ SwCalcOper SwCalc::GetToken()
                 OUString aStr( sCommand.copy( nStt, nCommandPos-nStt ));
                 aStr = pCharClass->lowercase( aStr );
 
-                // catch currency symbol
+                
                 if( aStr == sCurrSym )
-                    return GetToken();  // call again
+                    return GetToken();  
 
-                // catch operators
+                
                 _CalcOp* pFnd = ::FindOperator( aStr );
                 if( pFnd )
                 {
@@ -1190,8 +1190,8 @@ SwSbxValue SwCalc::Term()
                     bSign = false;
                 }
 
-                // rounding
-                double fNum = fVal; // find the exponent
+                
+                double fNum = fVal; 
                 int nExp = 0;
                 if( fNum > 0 )
                 {
@@ -1216,7 +1216,7 @@ SwSbxValue SwCalc::Term()
             }
             break;
 
-//#77448# (=2*3^2 != 18)
+
 
         default:
             return left;
@@ -1224,7 +1224,7 @@ SwSbxValue SwCalc::Term()
 
         if( USHRT_MAX != nSbxOper )
         {
-            // #i47706: cast to SbxOperator AFTER comparing to USHRT_MAX
+            
             SbxOperator eSbxOper = (SbxOperator)nSbxOper;
 
             GetToken();
@@ -1278,8 +1278,8 @@ SwSbxValue SwCalc::Prim()
             {
                 nErg.PutBool(!nErg.GetBool());
             }
-            // Evaluate arguments manually so that the binary NOT below does not
-            // get called. We want a BOOLEAN NOT.
+            
+            
             else if (nErg.IsNumeric())
             {
                 nErg.PutLong( nErg.GetDouble() == 0.0 ? 1 : 0 );
@@ -1287,7 +1287,7 @@ SwSbxValue SwCalc::Prim()
             else
             {
                 OSL_FAIL( "unexpected case. computing binary NOT" );
-                //!! computes a binary NOT
+                
                 nErg.Compute( SbxNOT, nErg );
             }
         }
@@ -1342,7 +1342,7 @@ SwSbxValue SwCalc::Prim()
             else
             {
                 GetToken();
-                bChkPow = true; // in order for =(7)^2 to work
+                bChkPow = true; 
             }
         }
         break;
@@ -1543,7 +1543,7 @@ sal_Bool SwCalc::IsValidVarName( const OUString& rStr, OUString* pValidName )
     sal_Bool bRet = sal_False;
     using namespace ::com::sun::star::i18n;
     {
-        // Parse any token.
+        
         ParseResult aRes = GetAppCharClass().parseAnyToken( rStr, 0,
                                                     coStartFlags, OUString(),
                                                      coContFlags, OUString() );
@@ -1627,7 +1627,7 @@ SwSbxValue& SwSbxValue::MakeDouble()
 
 #ifdef STANDALONE_HASHCALC
 
-// this is example code how to create hash values in the CTOR:
+
 
 #include <stdio.h>
 void main()

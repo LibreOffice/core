@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <test/sheet/xspreadsheets2.hxx>
@@ -110,8 +110,8 @@ void XSpreadsheets2::testImportFormulaBasicMath()
     uno::Reference< table::XCell > xDestCell = xDestSheet->getCellByPosition(2,0);
     OUString aDestFormula = xDestCell->getFormula();
 
-    // potential problem later: formulas might be adjusted
-    // add some tests that the formulas are correctly adjusted
+    
+    
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong formula imported", aDestFormula, aSrcFormula);
 }
 
@@ -165,7 +165,7 @@ void XSpreadsheets2::testImportNamedRangeDefinedInSource()
 */
     importSheetToCopy();
 
-    // New range name defined in imported sheet $SheetToCopy.$A$7
+    
     OUString aNewInSheetNamedRangeString("InSheetRangeName");
     uno::Reference< container::XNameAccess > xDestNamedRangesNameAccess(getNamedRanges(xDestDoc), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("InSheetRangeName", xDestNamedRangesNameAccess->hasByName(aNewInSheetNamedRangeString));
@@ -189,7 +189,7 @@ void XSpreadsheets2::testImportNamedRangeRedefinedInSource()
 */
     importSheetToCopy();
 
-    // the source file redefines an existing named range in the imported sheet --> the target should not be changed
+    
     OUString aRedefinedInSheetNamedRangeString("initial2");
     uno::Reference< container::XNameAccess > xDestNamedRangesNameAccess(getNamedRanges(xDestDoc), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("aRedefinedInSheetNamedRangeString", xDestNamedRangesNameAccess->hasByName(aRedefinedInSheetNamedRangeString));
@@ -211,12 +211,12 @@ void XSpreadsheets2::testImportNewNamedRange()
 */
     importSheetToCopy();
 
-    //formula with a non-existant named range in dest - new_rangename
+    
     OUString aNewNamedRangeString("new_rangename");
     uno::Reference< container::XNameAccess > xDestNamedRangesNameAccess(getNamedRanges(xDestDoc), UNO_QUERY_THROW);
     CPPUNIT_ASSERT_MESSAGE("New NamedRange not created", xDestNamedRangesNameAccess->hasByName(aNewNamedRangeString));
 
-    // verify the content of this new namedrange, pointing on $Sheet1.$B$1 in source. This address is already defined in target as NR content
+    
 
     uno::Any aNewNr = xDestNamedRangesNameAccess->getByName(aNewNamedRangeString);
     uno::Reference< sheet::XNamedRange > xDestNewNamedRange(aNewNr, UNO_QUERY_THROW);
@@ -243,7 +243,7 @@ void XSpreadsheets2::testImportCellStyle()
     uno::Reference< table::XCell > xSrcCell = xSrcSheet->getCellByPosition(3,0);
     uno::Reference< table::XCell > xDestCell = xDestSheet->getCellByPosition(3,0);
 
-    //new style created in dest
+    
     uno::Reference< beans::XPropertySet > xSrcCellPropSet (xSrcCell, UNO_QUERY_THROW);
     const OUString aCellProperty("CellStyle");
     OUString aSrcStyleName;
@@ -308,7 +308,7 @@ void XSpreadsheets2::importSheetToCopy()
         xDestDoc = getDoc(aDestFileBase, xDestComponent);
         CPPUNIT_ASSERT(xDestDoc.is());
 
-        // import sheet
+        
         uno::Reference< sheet::XSpreadsheets2 > xDestSheets (xDestDoc->getSheets(), UNO_QUERY_THROW);
         sal_Int32 nDestPos = 0;
         sal_Int32 nDestPosEffective = xDestSheets->importSheet(xDocument, aSrcSheetName, nDestPos);
@@ -325,12 +325,12 @@ void XSpreadsheets2::importSheetToCopy()
 
 bool XSpreadsheets2::isExternalReference(const OUString& aDestContent, const OUString& aSrcContent )
 {
-    OUString aStart("'file://");
+    OUString aStart("'file:
 
     CPPUNIT_ASSERT(aDestContent.startsWith(aStart));
 
-    return  (aDestContent.endsWithIgnoreAsciiCase(aSrcContent, NULL) // same cell address
-            && aDestContent.indexOf(aSrcFileName)>0); // contains source file name
+    return  (aDestContent.endsWithIgnoreAsciiCase(aSrcContent, NULL) 
+            && aDestContent.indexOf(aSrcFileName)>0); 
 }
 
 }

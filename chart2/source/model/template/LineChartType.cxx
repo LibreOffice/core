@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "LineChartType.hxx"
@@ -81,8 +81,8 @@ private:
         ::chart::PropertyHelper::setPropertyValueDefault( rOutMap, PROP_LINECHARTTYPE_CURVE_STYLE, ::chart2::CurveStyle_LINES );
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_CURVE_RESOLUTION, 20 );
 
-        // todo: check whether order 3 means polygons of order 3 or 2. (see
-        // http://www.people.nnov.ru/fractal/Splines/Basis.htm )
+        
+        
         ::chart::PropertyHelper::setPropertyValueDefault< sal_Int32 >( rOutMap, PROP_LINECHARTTYPE_SPLINE_ORDER, 3 );
     }
 };
@@ -131,7 +131,7 @@ struct StaticLineChartTypeInfo : public rtl::StaticAggregate< uno::Reference< be
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -150,21 +150,21 @@ LineChartType::LineChartType( const LineChartType & rOther ) :
 LineChartType::~LineChartType()
 {}
 
-// ____ XCloneable ____
+
 uno::Reference< util::XCloneable > SAL_CALL LineChartType::createClone()
     throw (uno::RuntimeException)
 {
     return uno::Reference< util::XCloneable >( new LineChartType( *this ));
 }
 
-// ____ XChartType ____
+
 OUString SAL_CALL LineChartType::getChartType()
     throw (uno::RuntimeException)
 {
     return CHART2_SERVICE_NAME_CHARTTYPE_LINE;
 }
 
-// ____ OPropertySet ____
+
 uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -180,7 +180,7 @@ uno::Any LineChartType::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticLineChartTypeInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL LineChartType::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -196,10 +196,10 @@ uno::Sequence< OUString > LineChartType::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( LineChartType,
                              OUString("com.sun.star.comp.chart.LineChartType") );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

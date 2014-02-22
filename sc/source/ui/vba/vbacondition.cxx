@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "vbacondition.hxx"
@@ -109,8 +109,8 @@ void
 ScVbaCondition< Ifc1 >::setFormula2( const uno::Any& _aFormula2) throw ( script::BasicErrorException )
 {
     OUString sFormula2;
-    // #TODO surely this can't be right?
-    // ( from helperapi/impl/.../calc/ConditionImpl.java
+    
+    
     if ( (_aFormula2 >>= sFormula2 ))
         mxSheetCondition->setFormula1(sFormula2);
 }
@@ -150,8 +150,8 @@ ScVbaCondition< Ifc1 >::Operator(sal_Bool _bIncludeFormulaValue) throw ( script:
         case sheet::ConditionOperator_FORMULA:
             if (_bIncludeFormulaValue)
             {
-                //#FIXME huh what's this all about
-                // from helperapi/impl/.../calc/ConditionImpl
+                
+                
                 retvalue = ISFORMULA;
                 break;
             }

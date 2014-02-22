@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sal/types.h>
@@ -58,21 +58,21 @@ struct DerivedException2: css::uno::RuntimeException {};
 struct DerivedInterface1: css::uno::XInterface {
 private:
     ~DerivedInterface1() {}
-        // avoid warnings about virtual members and non-virtual dtor
+        
 
 public:
     static void dummy(DerivedInterface1 * p) { p->~DerivedInterface1(); }
-        // ...and avoid warnings about unused ~DerivedInterface1 (see below)
+        
 };
 
 struct DerivedInterface2: css::uno::XComponentContext {
 private:
     ~DerivedInterface2() {}
-        // avoid warnings about virtual members and non-virtual dtor
+        
 
 public:
     static void dummy(DerivedInterface2 * p) { p->~DerivedInterface2(); }
-        // ...and avoid warnings about unused ~DerivedInterface2 (see below)
+        
 };
 
 class Test: public ::CppUnit::TestFixture {
@@ -91,7 +91,7 @@ public:
 };
 
 void Test::testUnoType() {
-    // Avoid warnings about unused ~DerivedInterface1/2 (see above):
+    
     if (false) {
         DerivedInterface1::dummy(0);
         DerivedInterface2::dummy(0);

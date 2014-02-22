@@ -36,8 +36,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
     switch (rMarkList.GetMarkCount())
     {
         case 0:
-            // Empty selection.  Return Context_Unknown to let the caller
-            // substitute it with the default context.
+            
+            
             break;
 
         case 1:
@@ -61,7 +61,7 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SC (const SdrMark
 
         default:
         {
-            // Multi selection.
+            
             switch (GetInventorTypeFromMark(rMarkList))
             {
                 case SdrInventor:
@@ -97,8 +97,8 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
 {
     EnumContext::Context eContext = EnumContext::Context_Unknown;
 
-    // Note that some cases are handled by the caller.  They rely on
-    // sd specific data.
+    
+    
     switch (rMarkList.GetMarkCount())
     {
         case 0:
@@ -129,9 +129,9 @@ EnumContext::Context SelectionAnalyzer::GetContextForSelection_SD (
             {
                 if (pObj->GetObjIdentifier() == OBJ_TABLE)
                 {
-                    // Let a table object take precedence over text
-                    // edit mode.  The panels for text editing are
-                    // present for table context as well, anyway.
+                    
+                    
+                    
                     eContext = EnumContext::Context_Table;
                 }
                 else
@@ -462,8 +462,8 @@ bool SelectionAnalyzer::IsShapeType (const sal_uInt16 nType)
         case OBJ_FREELINE:
         case OBJ_FREEFILL:
 
-        // #122145# adding OBJ_OLE2 since these also allow line/fill style and may
-        // be multiselected/grouped with normal draw objects, e.g. math OLE objects
+        
+        
         case OBJ_OLE2:
             return true;
 
@@ -492,4 +492,4 @@ bool SelectionAnalyzer::IsTextObjType (const sal_uInt16 nType)
 
 
 
-} } // end of namespace ::svx::sidebar
+} } 

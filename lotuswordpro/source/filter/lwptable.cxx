@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -81,12 +81,12 @@ void  LwpSuperTable::Parse(IXFStream* /*pOutputStream*/)
 {
 }
 
-//Added by  for XFConvert refactor, 03/31/2005
+
 void LwpSuperTable::XFConvert(XFContentContainer* /*pCont*/)
 {
 }
 
-//End of Add
+
 /*****************************************************************************/
  LwpTable::LwpTable(LwpObjectHeader &objHdr, LwpSvStream* pStrm)
      : LwpContent(objHdr, pStrm)
@@ -104,11 +104,11 @@ LwpTable::~LwpTable()
 void LwpTable::Read()
 {
     LwpContent::Read();
-    //m_RowCache.Read(m_pObjStrm);
-    //m_ColumnCache.Read(m_pObjStrm);
+    
+    
 
-    //m_CPNotifyList.Read(m_pObjStrm);
-    //m_CPTempVersionedNotifyList.Read(m_pObjStrm);
+    
+    
 
     m_nRow = m_pObjStrm->QuickReaduInt16();
     m_nColumn = m_pObjStrm->QuickReaduInt16();
@@ -193,7 +193,7 @@ LwpGlossary::~LwpGlossary()
 sal_uInt16 LwpGlossary::GetNumIndexRows(void)
 {
     if (GetRow() > 0 && GetRow() <= MAX_NUM_ROWS)
-        return GetRow() - 1;    // Minus one row for repeated heading.
+        return GetRow() - 1;    
     return 0;
 }
 

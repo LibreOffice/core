@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "internal/global.hxx"
@@ -38,7 +38,7 @@
 #define KB 1024.0
 const std::wstring WSPACE = std::wstring(SPACE);
 
-//-----------------------------
+
 
 CInfoTip::CInfoTip(long RefCnt) :
     m_RefCnt(RefCnt)
@@ -47,16 +47,16 @@ CInfoTip::CInfoTip(long RefCnt) :
     InterlockedIncrement(&g_DllRefCnt);
 }
 
-//-----------------------------
+
 
 CInfoTip::~CInfoTip()
 {
     InterlockedDecrement(&g_DllRefCnt);
 }
 
-//-----------------------------
-// IUnknown methods
-//-----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::QueryInterface(REFIID riid, void __RPC_FAR *__RPC_FAR *ppvObject)
 {
@@ -82,14 +82,14 @@ HRESULT STDMETHODCALLTYPE CInfoTip::QueryInterface(REFIID riid, void __RPC_FAR *
     return E_NOINTERFACE;
 }
 
-//----------------------------
+
 
 ULONG STDMETHODCALLTYPE CInfoTip::AddRef(void)
 {
     return InterlockedIncrement(&m_RefCnt);
 }
 
-//----------------------------
+
 
 ULONG STDMETHODCALLTYPE CInfoTip::Release( void)
 {
@@ -101,7 +101,7 @@ ULONG STDMETHODCALLTYPE CInfoTip::Release( void)
     return refcnt;
 }
 
-//********************helper functions for GetInfoTip functions**********************
+
 
 /** get file type information from registry.
 */
@@ -121,13 +121,13 @@ std::wstring getFileTypeInfo(const std::string& file_extension)
 */
 DWORD getSizeOfFile( char* FileName )
 {
-    HANDLE hFile = CreateFile(StringToWString(FileName).c_str(),            // open file
-                        GENERIC_READ,                                       // open for reading
-                        FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE, // share for all operations
-                        NULL,                                               // no security
-                        OPEN_EXISTING,                                      // existing file only
-                        FILE_ATTRIBUTE_NORMAL,                              // normal file
-                        NULL);                                              // no attr. template
+    HANDLE hFile = CreateFile(StringToWString(FileName).c_str(),            
+                        GENERIC_READ,                                       
+                        FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE, 
+                        NULL,                                               
+                        OPEN_EXISTING,                                      
+                        FILE_ATTRIBUTE_NORMAL,                              
+                        NULL);                                              
 
     if (hFile != INVALID_HANDLE_VALUE)
     {
@@ -191,16 +191,16 @@ std::wstring getFileSizeInfo(char* FileName)
     return EMPTY_STRING;
 }
 
-//----------------------------
-// IQueryInfo methods
-//----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppwszTip)
 {
     std::wstring msg;
     const std::wstring CONST_SPACE(SPACE);
 
-    //display File Type, no matter other info is loaded successfully or not.
+    
     std::wstring tmpTypeStr = getFileTypeInfo( get_file_name_extension(m_szFileName) );
     if ( tmpTypeStr != EMPTY_STRING )
     {
@@ -212,7 +212,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     {
         CMetaInfoReader meta_info_accessor(m_szFileName);
 
-        //display document title;
+        
         if ( meta_info_accessor.getTagData( META_INFO_TITLE ).length() > 0)
         {
             if ( msg != EMPTY_STRING )
@@ -228,7 +228,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
             msg += m_FileNameOnly;
         }
 
-        //display document author;
+        
         if ( meta_info_accessor.getTagData( META_INFO_AUTHOR ).length() > 0)
         {
             if ( msg != EMPTY_STRING )
@@ -237,7 +237,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
             msg += meta_info_accessor.getTagData( META_INFO_AUTHOR );
         }
 
-        //display document subject;
+        
         if ( meta_info_accessor.getTagData( META_INFO_SUBJECT ).length() > 0)
         {
             if ( msg != EMPTY_STRING )
@@ -246,7 +246,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
             msg += meta_info_accessor.getTagData( META_INFO_SUBJECT );
         }
 
-        //display document description;
+        
         if ( meta_info_accessor.getTagData( META_INFO_DESCRIPTION ).length() > 0)
         {
             if ( msg != EMPTY_STRING )
@@ -255,7 +255,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
             msg += meta_info_accessor.getTagData( META_INFO_DESCRIPTION );
         }
 
-        //display midified time formated into locale representation.
+        
         if ( iso8601_date_to_local_date(meta_info_accessor.getTagData(META_INFO_MODIFIED )).length() > 0)
         {
             if ( msg != EMPTY_STRING )
@@ -268,7 +268,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     {
     }
 
-    //display file size, no matter other information is loaded successfully or not.
+    
     std::wstring tmpSizeStr = getFileSizeInfo( m_szFileName );
     if ( tmpSizeStr != EMPTY_STRING )
     {
@@ -278,7 +278,7 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     }
 
 
-    //finalize and assignthe string.
+    
     LPMALLOC lpMalloc;
     HRESULT hr = SHGetMalloc(&lpMalloc);
 
@@ -300,16 +300,16 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoTip(DWORD /*dwFlags*/, wchar_t** ppws
     return E_FAIL;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetInfoFlags(DWORD * /*pdwFlags*/ )
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
-// IPersist methods
-//----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetClassID(CLSID* pClassID)
 {
@@ -317,16 +317,16 @@ HRESULT STDMETHODCALLTYPE CInfoTip::GetClassID(CLSID* pClassID)
     return S_OK;
 }
 
-//----------------------------
-// IPersistFile methods
-//----------------------------
+
+
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/)
 {
     std::wstring fname = pszFileName;
 
-    // there must be a '\' and there must even be an
-    // extension, else we would not have been called
+    
+    
     std::wstring::iterator begin = fname.begin() + fname.find_last_of(L"\\") + 1;
     std::wstring::iterator end   = fname.end();
 
@@ -336,37 +336,37 @@ HRESULT STDMETHODCALLTYPE CInfoTip::Load(LPCOLESTR pszFileName, DWORD /*dwMode*/
 
     std::string fnameA = WStringToString(fname);
 
-    // ZeroMemory because strncpy doesn't '\0'-terminates the destination
-    // string; reserve the last place in the buffer for the final '\0'
-    // that's why '(sizeof(m_szFileName) - 1)'
+    
+    
+    
     ZeroMemory(m_szFileName, sizeof(m_szFileName));
     strncpy(m_szFileName, fnameA.c_str(), (sizeof(m_szFileName) - 1));
 
     return S_OK;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::IsDirty(void)
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::Save(LPCOLESTR /*pszFileName*/, BOOL /*fRemember*/)
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::SaveCompleted(LPCOLESTR /*pszFileName*/)
 {
     return E_NOTIMPL;
 }
 
-//----------------------------
+
 
 HRESULT STDMETHODCALLTYPE CInfoTip::GetCurFile(LPOLESTR __RPC_FAR * /*ppszFileName*/)
 {

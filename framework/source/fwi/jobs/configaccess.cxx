@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <jobs/configaccess.hxx>
@@ -56,7 +56,7 @@ ConfigAccess::ConfigAccess( /*IN*/ const css::uno::Reference< css::uno::XCompone
 {
 }
 
-//________________________________
+
 /**
     @short  last chance to close an open configuration access point
     @descr  In case our user forgot to close this configuration point
@@ -68,7 +68,7 @@ ConfigAccess::~ConfigAccess()
     close();
 }
 
-//________________________________
+
 /**
     @short  return the internal mode of this instance
     @descr  May be the outside user need any information about successfully opened
@@ -84,7 +84,7 @@ ConfigAccess::EOpenMode ConfigAccess::getMode() const
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  open the configuration access in the specified mode
     @descr  We set the opened configuration access as our member. So any following method,
@@ -102,25 +102,25 @@ ConfigAccess::EOpenMode ConfigAccess::getMode() const
 void ConfigAccess::open( /*IN*/ EOpenMode eMode )
 {
     /* SAFE { */
-    // We must lock the whole method to be shure, that nobody
-    // outside uses our internal member m_xAccess!
+    
+    
     WriteGuard aWriteLock(m_aLock);
 
-    // check if configuration is already open in the right mode.
-    // By the way: Don't allow closing by using this method!
+    
+    
     if (
         (eMode  !=E_CLOSED) &&
         (m_eMode!=eMode   )
        )
     {
-        // We have to close the old access point without any question here.
-        // It will be open again using the new mode.
-        // can be called without checks! It does the checks by itself ...
-        // e.g. for already closed or not opened configuration.
-        // Flushing of all made changes will be done here too.
+        
+        
+        
+        
+        
         close();
 
-        // create the configuration provider, which provides sub access points
+        
         css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider = css::configuration::theDefaultProvider::get(m_xContext);
         css::beans::PropertyValue aParam;
         aParam.Name    = "nodepath";
@@ -129,7 +129,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
         css::uno::Sequence< css::uno::Any > lParams(1);
         lParams[0] <<= aParam;
 
-        // open it
+        
         try
         {
             if (eMode==E_READONLY)
@@ -140,7 +140,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
         }
         catch(const css::uno::Exception& ex)
         {
-            (void) ex; // avoid warning
+            (void) ex; 
             SAL_INFO("fwk", "open config: " << ex.Message);
         }
 
@@ -153,7 +153,7 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  close the internal opened configuration access and flush all changes
     @descr  It checks, if the given access is valid and react in the right way.
@@ -162,11 +162,11 @@ void ConfigAccess::open( /*IN*/ EOpenMode eMode )
 void ConfigAccess::close()
 {
     /* SAFE { */
-    // Lock the whole method, to be shure that nobody else uses our internal members
-    // during this time.
+    
+    
     WriteGuard aWriteLock(m_aLock);
 
-    // check already closed configuration
+    
     if (m_xConfig.is())
     {
         css::uno::Reference< css::util::XChangesBatch > xFlush(m_xConfig, css::uno::UNO_QUERY);
@@ -180,7 +180,7 @@ void ConfigAccess::close()
     /* } SAFE */
 }
 
-//________________________________
+
 /**
     @short  provides an access to the internal wrapped configuration access
     @descr  It's not allowed to safe this c++ (!) reference outside. You have
@@ -202,11 +202,11 @@ void ConfigAccess::close()
  */
 const css::uno::Reference< css::uno::XInterface >& ConfigAccess::cfg()
 {
-    // must be synchronized from outside!
-    // => no lock here ...
+    
+    
     return m_xConfig;
 }
 
-} // namespace framework
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "calendarImpl.hxx"
@@ -35,7 +35,7 @@ CalendarImpl::CalendarImpl(const Reference< XComponentContext > &rxContext) : m_
 
 CalendarImpl::~CalendarImpl()
 {
-    // Clear lookuptable
+    
     for (size_t l = 0; l < lookupTable.size(); l++)
         delete lookupTable[l];
     lookupTable.clear();
@@ -57,7 +57,7 @@ CalendarImpl::loadDefaultCalendar( const Locale& rLocale ) throw(RuntimeExceptio
 void SAL_CALL
 CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) throw (RuntimeException)
 {
-    Reference < XCalendar3 > xOldCalendar( xCalendar );  // backup
+    Reference < XCalendar3 > xOldCalendar( xCalendar );  
     sal_Int32 i;
 
     for (i = 0; i < sal::static_int_cast<sal_Int32>(lookupTable.size()); i++) {
@@ -73,7 +73,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
                   OUString("com.sun.star.i18n.Calendar_") + uniqueID, m_xContext);
 
         if ( ! xI.is() ) {
-            // check if the calendar is defined in localedata, load gregorian calendar service.
+            
             Sequence< Calendar2 > xC = LocaleDataImpl().getAllCalendars2(rLocale);
             for (i = 0; i < xC.getLength(); i++) {
                 if (uniqueID == xC[i].Name) {
@@ -102,7 +102,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
         xCalendar->loadCalendar(uniqueID, rLocale);
     }
     catch ( Exception& )
-    {   // restore previous calendar and re-throw
+    {   
         xCalendar = xOldCalendar;
         throw;
     }

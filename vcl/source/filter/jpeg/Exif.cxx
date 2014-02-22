@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Exif.hxx"
@@ -102,7 +102,7 @@ bool Exif::processJpeg(SvStream& rStream, bool bSetValue)
     rStream.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
     rStream.ReadUInt16( aMagic16 );
 
-    // Compare JPEG magic bytes
+    
     if( 0xFFD8 != aMagic16 )
     {
         return false;
@@ -206,26 +206,26 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
     rStream.ReadUInt32( aMagic32 );
     rStream.ReadUInt16( aMagic16 );
 
-    // Compare EXIF magic bytes
+    
     if( 0x45786966 != aMagic32 || 0x0000 != aMagic16)
     {
         return false;
     }
 
-    sal_uInt16 aLength = aSectionLength - 6; // Length = Section - Header
+    sal_uInt16 aLength = aSectionLength - 6; 
 
     sal_uInt8* aExifData = new sal_uInt8[aLength];
     sal_uInt32 aExifDataBeginPosition = rStream.Tell();
 
     rStream.Read(aExifData, aLength);
 
-    // Exif detected
+    
     mbExifPresent = true;
 
     TiffHeader* aTiffHeader = (TiffHeader*) &aExifData[0];
 
-    bool bIntel = aTiffHeader->byteOrder == 0x4949;      //big-endian
-    bool bMotorola = aTiffHeader->byteOrder == 0x4D4D;   //little-endian
+    bool bIntel = aTiffHeader->byteOrder == 0x4949;      
+    bool bMotorola = aTiffHeader->byteOrder == 0x4D4D;   
 
     if (!bIntel && !bMotorola)
     {
@@ -249,7 +249,7 @@ bool Exif::processExif(SvStream& rStream, sal_uInt16 aSectionLength, bool bSetVa
         aTiffHeader->offset = OSL_SWAPDWORD(aTiffHeader->offset);
     }
 
-    if (aTiffHeader->tagAlign != 0x002A) // TIFF tag
+    if (aTiffHeader->tagAlign != 0x002A) 
     {
         delete[] aExifData;
         return false;

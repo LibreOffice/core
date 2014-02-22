@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ado/AColumn.hxx"
@@ -53,7 +53,7 @@ void WpADOColumn::Create()
         pColumn->Release( );
     }
 }
-// -------------------------------------------------------------------------
+
 OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn)
     : connectivity::sdbcx::OColumn(_bCase)
     ,m_pConnection(_pConnection)
@@ -61,10 +61,10 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection,_ADOColumn* _pC
     construct();
     OSL_ENSURE(_pColumn,"Column can not be null!");
     m_aColumn = WpADOColumn(_pColumn);
-    //  m_aColumn.put_ParentCatalog(_pConnection->getAdoCatalog()->getCatalog());
+    
     fillPropertyValues();
 }
-// -------------------------------------------------------------------------
+
 OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
     : connectivity::sdbcx::OColumn(_bCase)
     ,m_pConnection(_pConnection)
@@ -76,7 +76,7 @@ OAdoColumn::OAdoColumn(sal_Bool _bCase,OConnection* _pConnection)
     m_Type = DataType::OTHER;
 }
 
-//--------------------------------------------------------------------------
+
 Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
 {
     static ::cppu::OImplementationId * pId = 0;
@@ -92,15 +92,15 @@ Sequence< sal_Int8 > OAdoColumn::getUnoTunnelImplementationId()
     return pId->getImplementationId();
 }
 
-// com::sun::star::lang::XUnoTunnel
-//------------------------------------------------------------------
+
+
 sal_Int64 OAdoColumn::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException)
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
                 : OColumn_ADO::getSomething(rId);
 }
-// -------------------------------------------------------------------------
+
 void OAdoColumn::construct()
 {
     sal_Int32 nAttrib = isNew() ? 0 : PropertyAttribute::READONLY;
@@ -108,7 +108,7 @@ void OAdoColumn::construct()
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISASCENDING),     PROPERTY_ID_ISASCENDING,    nAttrib,&m_IsAscending, ::getBooleanCppuType());
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN),   PROPERTY_ID_RELATEDCOLUMN,  nAttrib,&m_ReferencedColumn,    ::getCppuType(static_cast< OUString*>(0)));
 }
-// -----------------------------------------------------------------------------
+
 void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)
 {
     if(m_aColumn.IsValid())
@@ -142,7 +142,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 }
                 break;
             case PROPERTY_ID_TYPENAME:
-                //  rValue <<= m_pTable->getCatalog()->getConnection()->getTypeInfo()->find();
+                
                 break;
             case PROPERTY_ID_PRECISION:
                 {
@@ -189,7 +189,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
     }
     OColumn_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
-// -----------------------------------------------------------------------------
+
 void OAdoColumn::fillPropertyValues()
 {
     if(m_aColumn.IsValid())
@@ -226,7 +226,7 @@ void OAdoColumn::fillPropertyValues()
 
                                                     );
 
-            if ( aFind != pTypeInfoMap->end() ) // change column type if necessary
+            if ( aFind != pTypeInfoMap->end() ) 
             {
                 eType = aFind->first;
                 pTypeInfo = aFind->second;
@@ -246,7 +246,7 @@ void OAdoColumn::fillPropertyValues()
         }
 
 
-        // fill some specific props
+        
         {
             WpADOProperties aProps( m_aColumn.get_Properties() );
 
@@ -271,23 +271,23 @@ void OAdoColumn::fillPropertyValues()
         }
     }
 }
-// -----------------------------------------------------------------------------
+
 WpADOColumn OAdoColumn::getColumnImpl() const
 {
     return m_aColumn;
 }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
+
 void SAL_CALL OAdoColumn::acquire() throw()
 {
     OColumn_ADO::acquire();
 }
-// -----------------------------------------------------------------------------
+
 void SAL_CALL OAdoColumn::release() throw()
 {
     OColumn_ADO::release();
 }
-// -----------------------------------------------------------------------------
+
 
 
 

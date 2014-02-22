@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/date.hxx>
@@ -105,7 +105,7 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 #ifndef DISABLE_SCRIPTING
 
-// from source/classes/sbxmod.cxx
+
 uno::Reference< frame::XModel > getDocumentModel( StarBASIC* );
 
 static void FilterWhiteSpace( OUString& rStr )
@@ -150,15 +150,15 @@ static inline bool isFolder( FileStatus::Type aType )
 }
 
 
-//*** UCB file access ***
 
-// Converts possibly relative paths to absolute paths
-// according to the setting done by ChDir/ChDrive
+
+
+
 OUString getFullPath( const OUString& aRelPath )
 {
     OUString aFileURL;
 
-    // #80204 Try first if it already is a valid URL
+    
     INetURLObject aURLObj( aRelPath );
     aFileURL = aURLObj.GetMainURL( INetURLObject::NO_DECODE );
 
@@ -170,7 +170,7 @@ OUString getFullPath( const OUString& aRelPath )
     return aFileURL;
 }
 
-// TODO: -> SbiGlobals
+
 static uno::Reference< ucb::XSimpleFileAccess3 > getFileAccess( void )
 {
     static uno::Reference< ucb::XSimpleFileAccess3 > xSFI;
@@ -183,10 +183,10 @@ static uno::Reference< ucb::XSimpleFileAccess3 > getFileAccess( void )
 
 
 
-// Properties and methods lie down the return value at the Get (bPut = sal_False) in the
-// element 0 of the Argv; the value of element 0 is saved at Put (bPut = sal_True)
 
-// CreateObject( class )
+
+
+
 
 RTLFUNC(CreateObject)
 {
@@ -198,13 +198,13 @@ RTLFUNC(CreateObject)
         StarBASIC::Error( SbERR_CANNOT_LOAD );
     else
     {
-        // Convenience: enter BASIC as parent
+        
         p->SetParent( pBasic );
         rPar.Get( 0 )->PutObject( p );
     }
 }
 
-// Error( n )
+
 
 RTLFUNC(Error)
 {
@@ -246,9 +246,9 @@ RTLFUNC(Error)
             pBasic->MakeErrorText( nErr, aErrorMsg );
             tmpErrMsg = pBasic->GetErrorText();
         }
-        // If this rtlfunc 'Error'  passed a errcode the same as the active Err Objects's
-        // current err then  return the description for the error message if it is set
-        // ( complicated isn't it ? )
+        
+        
+        
         if ( bVBA && rPar.Count() > 1 )
         {
             uno::Reference< ooo::vba::XErrObject > xErrObj( SbxErrObject::getUnoErrObject() );
@@ -261,7 +261,7 @@ RTLFUNC(Error)
     }
 }
 
-// Sinus
+
 
 RTLFUNC(Sin)
 {
@@ -400,13 +400,13 @@ RTLFUNC(CurDir)
     (void)pBasic;
     (void)bWrite;
 
-    // #57064 Although this function doesn't work with DirEntry, it isn't touched
-    // by the adjustment to virtual URLs, as, using the DirEntry-functionality,
-    // there's no possibility to detect the current one in a way that a virtual URL
-    // could be delivered.
+    
+    
+    
+    
 
 #if defined (WNT)
-    int nCurDir = 0;  // Current dir // JSM
+    int nCurDir = 0;  
     if ( rPar.Count() == 2 )
     {
         OUString aDrive = rPar.Get(1)->GetOUString();
@@ -480,7 +480,7 @@ RTLFUNC(ChDir)
     rPar.Get(0)->PutEmpty();
     if (rPar.Count() == 2)
     {
-        // VBA: track current directory per document type (separately for Writer, Calc, Impress, etc.)
+        
         if( SbiRuntime::isVBAEnabled() )
         {
             ::basic::vba::registerCurrentDirectory( getDocumentModel( pBasic ), rPar.Get(1)->GetOUString() );
@@ -505,7 +505,7 @@ RTLFUNC(ChDrive)
 }
 
 
-// Implementation of StepRENAME with UCB
+
 void implStepRenameUCB( const OUString& aSource, const OUString& aDest )
 {
     uno::Reference< ucb::XSimpleFileAccess3 > xSFI = getFileAccess();
@@ -537,7 +537,7 @@ void implStepRenameUCB( const OUString& aSource, const OUString& aDest )
     }
 }
 
-// Implementation of StepRENAME with OSL
+
 void implStepRenameOSL( const OUString& aSource, const OUString& aDest )
 {
     FileBase::RC nRet = File::move( getFullPath( aSource ), getFullPath( aDest ) );
@@ -638,8 +638,8 @@ RTLFUNC(MkDir)
         OUString aPath = rPar.Get(1)->GetOUString();
         if ( SbiRuntime::isVBAEnabled() )
         {
-            // In vba if the full path is not specified then
-            // folder is created relative to the curdir
+            
+            
             INetURLObject aURLObj( getFullPath( aPath ) );
             if ( aURLObj.GetProtocol() != INET_PROT_FILE )
             {
@@ -686,8 +686,8 @@ RTLFUNC(MkDir)
 }
 
 
-// In OSL only empty directories can be deleted
-// so we have to delete all files recursively
+
+
 void implRemoveDirRecursive( const OUString& aDirPath )
 {
     DirectoryItem aItem;
@@ -721,12 +721,12 @@ void implRemoveDirRecursive( const OUString& aDirPath )
         {
             break;
         }
-        // Handle flags
+        
         FileStatus aFileStatus2( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileURL );
         nRet = aItem2.getFileStatus( aFileStatus2 );
         OUString aPath = aFileStatus2.getFileURL();
 
-        // Directory?
+        
         FileStatus::Type aType2 = aFileStatus2.getFileType();
         bool bFolder2 = isFolder( aType2 );
         if( bFolder2 )
@@ -876,7 +876,7 @@ RTLFUNC(Hex)
     else
     {
         SbxVariableRef pArg = rPar.Get( 1 );
-        // converting value to unsigned and limit to 2 or 4 byte representation
+        
         sal_uInt32 nVal = pArg->IsInteger() ?
             static_cast<sal_uInt16>(pArg->GetInteger()) :
             static_cast<sal_uInt32>(pArg->GetLong());
@@ -906,7 +906,7 @@ RTLFUNC(FuncCaller)
     }
 
 }
-// InStr( [start],string,string,[compare] )
+
 
 RTLFUNC(InStr)
 {
@@ -951,7 +951,7 @@ RTLFUNC(InStr)
         sal_Int32 nPos;
         const OUString& rToken = rPar.Get(nFirstStringPos+1)->GetOUString();
 
-        // #97545 Always find empty string
+        
         if( rToken.isEmpty() )
         {
             nPos = nStartPos;
@@ -979,7 +979,7 @@ RTLFUNC(InStr)
 }
 
 
-// InstrRev(string1, string2[, start[, compare]])
+
 
 RTLFUNC(InStrRev)
 {
@@ -1035,7 +1035,7 @@ RTLFUNC(InStrRev)
             sal_Int32 nTokenLen = aToken.getLength();
             if( !nTokenLen )
             {
-                // Always find empty string
+                
                 nPos = nStartPos;
             }
             else if( nStrLen > 0 )
@@ -1194,7 +1194,7 @@ RTLFUNC(LTrim)
 }
 
 
-// Mid( String, nStart, nLength )
+
 
 RTLFUNC(Mid)
 {
@@ -1208,10 +1208,10 @@ RTLFUNC(Mid)
     }
     else
     {
-        // #23178: replicate the functionality of Mid$ as a command
-        // by adding a replacement-string as a fourth parameter.
-        // In contrast to the original the third parameter (nLength)
-        // can't be left out here. That's considered in bWrite already.
+        
+        
+        
+        
         if( nArgCount == 4 )
         {
             bWrite = sal_True;
@@ -1336,7 +1336,7 @@ RTLFUNC(Oct)
     }
 }
 
-// Replace(expression, find, replace[, start[, count[, compare]]])
+
 
 RTLFUNC(Replace)
 {
@@ -1581,10 +1581,10 @@ RTLFUNC(Str)
         SbxVariableRef pArg = rPar.Get( 1 );
         pArg->Format( aStr );
 
-        // Numbers start with a space
+        
         if( pArg->IsNumericRTL() )
         {
-            // replace commas by points so that it's symmetric to Val!
+            
             aStr = aStr.replaceFirst( ",", "." );
 
             SbiInstance* pInst = GetSbData()->pInst;
@@ -1822,10 +1822,10 @@ RTLFUNC(Val)
 }
 
 
-// Helper functions for date conversion
+
 sal_Int16 implGetDateDay( double aDate )
 {
-    aDate -= 2.0; // standardize: 1.1.1900 => 0.0
+    aDate -= 2.0; 
     Date aRefDate( 1, 1, 1900 );
     if ( aDate >= 0.0 )
     {
@@ -1846,7 +1846,7 @@ sal_Int16 implGetDateMonth( double aDate )
 {
     Date aRefDate( 1,1,1900 );
     long nDays = (long)aDate;
-    nDays -= 2; // standardize: 1.1.1900 => 0.0
+    nDays -= 2; 
     aRefDate += nDays;
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetMonth() );
     return nRet;
@@ -1873,7 +1873,7 @@ void SbxDateFromUNODate( SbxValue *pVal, const ::com::sun::star::util::Date& aUn
     }
 }
 
-// Function to convert date to UNO date (com.sun.star.util.Date)
+
 RTLFUNC(CDateToUnoDate)
 {
     (void)pBasic;
@@ -1888,7 +1888,7 @@ RTLFUNC(CDateToUnoDate)
     unoToSbxValue(rPar.Get(0), Any(SbxDateToUNODate(rPar.Get(1))));
 }
 
-// Function to convert date from UNO date (com.sun.star.util.Date)
+
 RTLFUNC(CDateFromUnoDate)
 {
     (void)pBasic;
@@ -1926,7 +1926,7 @@ void SbxDateFromUNOTime( SbxValue *pVal, const ::com::sun::star::util::Time& aUn
     pVal->PutDate( implTimeSerial(aUnoTime.Hours, aUnoTime.Minutes, aUnoTime.Seconds) );
 }
 
-// Function to convert date to UNO time (com.sun.star.util.Time)
+
 RTLFUNC(CDateToUnoTime)
 {
     (void)pBasic;
@@ -1941,7 +1941,7 @@ RTLFUNC(CDateToUnoTime)
     unoToSbxValue(rPar.Get(0), Any(SbxDateToUNOTime(rPar.Get(1))));
 }
 
-// Function to convert date from UNO time (com.sun.star.util.Time)
+
 RTLFUNC(CDateFromUnoTime)
 {
     (void)pBasic;
@@ -1988,7 +1988,7 @@ void SbxDateFromUNODateTime( SbxValue *pVal, const ::com::sun::star::util::DateT
     }
 }
 
-// Function to convert date to UNO date (com.sun.star.util.Date)
+
 RTLFUNC(CDateToUnoDateTime)
 {
     (void)pBasic;
@@ -2003,7 +2003,7 @@ RTLFUNC(CDateToUnoDateTime)
     unoToSbxValue(rPar.Get(0), Any(SbxDateToUNODateTime(rPar.Get(1))));
 }
 
-// Function to convert date from UNO date (com.sun.star.util.Date)
+
 RTLFUNC(CDateFromUnoDateTime)
 {
     (void)pBasic;
@@ -2023,7 +2023,7 @@ RTLFUNC(CDateFromUnoDateTime)
         SbxBase::SetError( SbxERR_CONVERSION );
 }
 
-// Function to convert date to ISO 8601 date format
+
 RTLFUNC(CDateToIso)
 {
     (void)pBasic;
@@ -2047,7 +2047,7 @@ RTLFUNC(CDateToIso)
     }
 }
 
-// Function to convert date from ISO 8601 date format
+
 RTLFUNC(CDateFromIso)
 {
     (void)pBasic;
@@ -2108,7 +2108,7 @@ RTLFUNC(TimeSerial)
     sal_Int16 nHour = rPar.Get(1)->GetInteger();
     if ( nHour == 24 )
     {
-        nHour = 0;                      // because of UNO DateTimes, which go till 24 o'clock
+        nHour = 0;                      
     }
     sal_Int16 nMinute = rPar.Get(2)->GetInteger();
     sal_Int16 nSecond = rPar.Get(3)->GetInteger();
@@ -2120,7 +2120,7 @@ RTLFUNC(TimeSerial)
         return;
     }
 
-    rPar.Get(0)->PutDate( implTimeSerial(nHour, nMinute, nSecond) ); // JSM
+    rPar.Get(0)->PutDate( implTimeSerial(nHour, nMinute, nSecond) ); 
 }
 
 RTLFUNC(DateValue)
@@ -2134,7 +2134,7 @@ RTLFUNC(DateValue)
     }
     else
     {
-        // #39629 check GetSbData()->pInst, can be called from the URL line
+        
         SvNumberFormatter* pFormatter = NULL;
         if( GetSbData()->pInst )
         {
@@ -2142,7 +2142,7 @@ RTLFUNC(DateValue)
         }
         else
         {
-            sal_uInt32 n;   // Dummy
+            sal_uInt32 n;   
             SbiInstance::PrepareNumberFormatter( pFormatter, n, n, n );
         }
 
@@ -2152,14 +2152,14 @@ RTLFUNC(DateValue)
         sal_Bool bSuccess = pFormatter->IsNumberFormat( aStr, nIndex, fResult );
         short nType = pFormatter->GetType( nIndex );
 
-        // DateValue("February 12, 1969") raises error if the system locale is not en_US
-        // by using SbiInstance::GetNumberFormatter.
-        // It seems that both locale number formatter and English number formatter
-        // are supported in Visual Basic.
+        
+        
+        
+        
         LanguageType eLangType = GetpApp()->GetSettings().GetLanguageTag().getLanguageType();
         if( !bSuccess && ( eLangType != LANGUAGE_ENGLISH_US ) )
         {
-            // Create a new SvNumberFormatter by using LANGUAGE_ENGLISH to get the date value;
+            
             SvNumberFormatter aFormatter( comphelper::getProcessComponentContext(), LANGUAGE_ENGLISH_US );
             nIndex = 0;
             bSuccess = aFormatter.IsNumberFormat( aStr, nIndex, fResult );
@@ -2170,7 +2170,7 @@ RTLFUNC(DateValue)
         {
             if ( nType == NUMBERFORMAT_DATETIME )
             {
-                // cut time
+                
                 if ( fResult  > 0.0 )
                 {
                     fResult = floor( fResult );
@@ -2186,7 +2186,7 @@ RTLFUNC(DateValue)
         {
             StarBASIC::Error( SbERR_CONVERSION );
         }
-        // #39629 pFormatter can be requested itself
+        
         if( !GetSbData()->pInst )
         {
             delete pFormatter;
@@ -2223,7 +2223,7 @@ RTLFUNC(TimeValue)
         {
             if ( nType == NUMBERFORMAT_DATETIME )
             {
-                // cut days
+                
                 fResult = fmod( fResult, 1 );
             }
             rPar.Get(0)->PutDate( fResult );
@@ -2386,7 +2386,7 @@ double Now_Impl()
     return aSerial;
 }
 
-// Date Now(void)
+
 
 RTLFUNC(Now)
 {
@@ -2395,7 +2395,7 @@ RTLFUNC(Now)
     rPar.Get(0)->PutDate( Now_Impl() );
 }
 
-// Date Time(void)
+
 
 RTLFUNC(Time)
 {
@@ -2408,7 +2408,7 @@ RTLFUNC(Time)
         OUString aRes;
         if( pMeth->IsFixed() )
         {
-            // Time$: hh:mm:ss
+            
             char buf[ 20 ];
             snprintf( buf, sizeof(buf), "%02d:%02d:%02d",
                       aTime.GetHour(), aTime.GetMin(), aTime.GetSec() );
@@ -2416,7 +2416,7 @@ RTLFUNC(Time)
         }
         else
         {
-            // Time: system dependent
+            
             long nSeconds=aTime.GetHour();
             nSeconds *= 3600;
             nSeconds += aTime.GetMin() * 60;
@@ -2433,7 +2433,7 @@ RTLFUNC(Time)
             }
             else
             {
-                sal_uInt32 n;   // Dummy
+                sal_uInt32 n;   
                 SbiInstance::PrepareNumberFormatter( pFormatter, n, nIndex, n );
             }
 
@@ -2542,7 +2542,7 @@ RTLFUNC(IsObject)
         SbxVariable* pVar = rPar.Get(1);
         SbxBase* pObj = (SbxBase*)pVar->GetObject();
 
-        // #100385: GetObject can result in an error, so reset it
+        
         SbxBase::ResetError();
 
         SbUnoClass* pUnoClass;
@@ -2570,7 +2570,7 @@ RTLFUNC(IsDate)
     }
     else
     {
-        // #46134 only string is converted, all other types result in sal_False
+        
         SbxVariableRef xArg = rPar.Get( 1 );
         SbxDataType eType = xArg->GetType();
         sal_Bool bDate = sal_False;
@@ -2584,7 +2584,7 @@ RTLFUNC(IsDate)
             SbxError nPrevError = SbxBase::GetError();
             SbxBase::ResetError();
 
-            // force conversion of the parameter to SbxDATE
+            
             xArg->SbxValue::GetDate();
 
             bDate = !SbxBase::IsError();
@@ -2671,8 +2671,8 @@ RTLFUNC(IsNull)
     }
     else
     {
-        // #51475 because of Uno-objects return true
-        // even if the pObj value is NULL
+        
+        
         SbxVariableRef pArg = rPar.Get( 1 );
         sal_Bool bNull = rPar.Get(1)->IsNull();
         if( !bNull && pArg->GetType() == SbxOBJECT )
@@ -2715,12 +2715,12 @@ RTLFUNC(IsMissing)
     }
     else
     {
-        // #57915 Missing is reported by an error
+        
         rPar.Get( 0 )->PutBool( rPar.Get(1)->IsErr() );
     }
 }
 
-// Function looks for wildcards, removes them and always returns the pure path
+
 OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
 {
     static sal_Char cDelim1 = (sal_Char)'/';
@@ -2748,7 +2748,7 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
     }
     if( bHasWildcards )
     {
-        // Wildcards in path?
+        
         if( nLastDelim >= 0 && nLastDelim > nLastWild )
         {
             return aFileParam;
@@ -2776,11 +2776,11 @@ OUString implSetupWildcard( const OUString& rFileParam, SbiRTLData* pRTLData )
         aFileParam = aFileParam.copy( 0, nLastDelim );
     }
 
-    // Try again to get a valid URL/UNC-path with only the path
+    
     OUString aPathStr = getFullPath( aFileParam );
 
-    // Is there a pure file name left? Otherwise the path is
-    // invalid anyway because it was not accepted by OSL before
+    
+    
     if (!string::equals(aPureFileName, '*'))
     {
         pRTLData->pWildCard = new WildCard( aPureFileName );
@@ -2805,17 +2805,17 @@ bool isRootDir( OUString aDirURLStr )
     INetURLObject aDirURLObj( aDirURLStr );
     bool bRoot = false;
 
-    // Check if it's a root directory
+    
     sal_Int32 nCount = aDirURLObj.getSegmentCount();
 
-    // No segment means Unix root directory "file:///"
+    
     if( nCount == 0 )
     {
         bRoot = true;
     }
-    // Exactly one segment needs further checking, because it
-    // can be Unix "file:///foo/" -> no root
-    // or Windows  "file:///c:/"  -> root
+    
+    
+    
     else if( nCount == 1 )
     {
         OUString aSeg1 = aDirURLObj.getName( 0, true,
@@ -2825,8 +2825,8 @@ bool isRootDir( OUString aDirURLStr )
             bRoot = true;
         }
     }
-    // More than one segments can never be root
-    // so bRoot remains false
+    
+    
 
     return bRoot;
 }
@@ -2847,8 +2847,8 @@ RTLFUNC(Dir)
     {
         SbiRTLData* pRTLData = GetSbData()->pInst->GetRTLData();
 
-        // #34645: can also be called from the URL line via 'macro: Dir'
-        // there's no pRTLDate existing in that case and the method must be left
+        
+        
         if( !pRTLData )
         {
             return;
@@ -2904,20 +2904,20 @@ RTLFUNC(Dir)
                         {
                             pRTLData->nDirFlags = 0;
                         }
-                        // Read directory
+                        
                         sal_Bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
                         pRTLData->aDirSeq = xSFI->getFolderContents( aDirURLStr, bIncludeFolders );
                         pRTLData->nCurDirPos = 0;
 
-                        // #78651 Add "." and ".." directories for VB compatibility
+                        
                         if( bIncludeFolders )
                         {
                             bool bRoot = isRootDir( aDirURLStr );
 
-                            // If it's no root directory we flag the need for
-                            // the "." and ".." directories by the value -2
-                            // for the actual position. Later for -2 will be
-                            // returned "." and for -1 ".."
+                            
+                            
+                            
+                            
                             if( !bRoot )
                             {
                                 pRTLData->nCurDirPos = -2;
@@ -2973,7 +2973,7 @@ RTLFUNC(Dir)
                             }
                             else
                             {
-                                // Only directories
+                                
                                 if( bFolderFlag )
                                 {
                                     sal_Bool bFolder = xSFI->isFolder( aFile );
@@ -3002,7 +3002,7 @@ RTLFUNC(Dir)
         }
         else
         {
-            // TODO: OSL
+            
             if ( nParCount >= 2 )
             {
                 OUString aFileParam = rPar.Get(1)->GetOUString();
@@ -3019,7 +3019,7 @@ RTLFUNC(Dir)
                     pRTLData->nDirFlags = 0;
                 }
 
-                // Read directory
+                
                 bool bIncludeFolders = ((nFlags & Sb_ATTR_DIRECTORY) != 0);
                 pRTLData->pDir = new Directory( aDirURL );
                 FileBase::RC nRet = pRTLData->pDir->open();
@@ -3031,16 +3031,16 @@ RTLFUNC(Dir)
                     return;
                 }
 
-                // #86950 Add "." and ".." directories for VB compatibility
+                
                 pRTLData->nCurDirPos = 0;
                 if( bIncludeFolders )
                 {
                     bool bRoot = isRootDir( aDirURL );
 
-                    // If it's no root directory we flag the need for
-                    // the "." and ".." directories by the value -2
-                    // for the actual position. Later for -2 will be
-                    // returned "." and for -1 ".."
+                    
+                    
+                    
+                    
                     if( !bRoot )
                     {
                         pRTLData->nCurDirPos = -2;
@@ -3078,11 +3078,11 @@ RTLFUNC(Dir)
                             break;
                         }
 
-                        // Handle flags
+                        
                         FileStatus aFileStatus( osl_FileStatus_Mask_Type | osl_FileStatus_Mask_FileName );
                         nRet = aItem.getFileStatus( aFileStatus );
 
-                        // Only directories?
+                        
                         if( bFolderFlag )
                         {
                             FileStatus::Type aType = aFileStatus.getFileType();
@@ -3119,8 +3119,8 @@ RTLFUNC(GetAttr)
     {
         sal_Int16 nFlags = 0;
 
-        // In Windows, we want to use Windows API to get the file attributes
-        // for VBA interoperability.
+        
+        
     #if defined( WNT )
         if( SbiRuntime::isVBAEnabled() )
         {
@@ -3300,7 +3300,7 @@ RTLFUNC(EOF)
     (void)pBasic;
     (void)bWrite;
 
-    // No changes for UCB
+    
     if ( rPar.Count() != 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3320,7 +3320,7 @@ RTLFUNC(EOF)
         if ( pSbStrm->IsText() )
         {
             char cBla;
-            (*pSvStrm).ReadChar( cBla ); // can we read another character?
+            (*pSvStrm).ReadChar( cBla ); 
             bIsEof = pSvStrm->IsEof();
             if ( !bIsEof )
             {
@@ -3329,7 +3329,7 @@ RTLFUNC(EOF)
         }
         else
         {
-            bIsEof = pSvStrm->IsEof();  // for binary data!
+            bIsEof = pSvStrm->IsEof();  
         }
         rPar.Get(0)->PutBool( bIsEof );
     }
@@ -3340,10 +3340,10 @@ RTLFUNC(FileAttr)
     (void)pBasic;
     (void)bWrite;
 
-    // No changes for UCB
-    // #57064 Although this function doesn't operate with DirEntry, it is
-    // not touched by the adjustment to virtual URLs, as it only works on
-    // already opened files and the name doesn't matter there.
+    
+    
+    
+    
 
     if ( rPar.Count() != 3 )
     {
@@ -3366,7 +3366,7 @@ RTLFUNC(FileAttr)
         }
         else
         {
-            nRet = 0; // System file handle not supported
+            nRet = 0; 
         }
         rPar.Get(0)->PutInteger( nRet );
     }
@@ -3376,7 +3376,7 @@ RTLFUNC(Loc)
     (void)pBasic;
     (void)bWrite;
 
-    // No changes for UCB
+    
     if ( rPar.Count() != 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3397,7 +3397,7 @@ RTLFUNC(Loc)
         {
             short nBlockLen = pSbStrm->GetBlockLen();
             nPos = nBlockLen ? (pSvStrm->Tell() / nBlockLen) : 0;
-            nPos++; // block positions starting at 1
+            nPos++; 
         }
         else if ( pSbStrm->IsText() )
         {
@@ -3424,7 +3424,7 @@ RTLFUNC(Lof)
     (void)pBasic;
     (void)bWrite;
 
-    // No changes for UCB
+    
     if ( rPar.Count() != 2 )
     {
         StarBASIC::Error( SbERR_BAD_ARGUMENT );
@@ -3453,7 +3453,7 @@ RTLFUNC(Seek)
     (void)pBasic;
     (void)bWrite;
 
-    // No changes for UCB
+    
     int nArgs = (int)rPar.Count();
     if ( nArgs < 2 || nArgs > 3 )
     {
@@ -3470,17 +3470,17 @@ RTLFUNC(Seek)
     }
     SvStream* pStrm = pSbStrm->GetStrm();
 
-    if ( nArgs == 2 )   // Seek-Function
+    if ( nArgs == 2 )   
     {
         sal_uIntPtr nPos = pStrm->Tell();
         if( pSbStrm->IsRandom() )
         {
             nPos = nPos / pSbStrm->GetBlockLen();
         }
-        nPos++; // Basic counts from 1
+        nPos++; 
         rPar.Get(0)->PutLong( (sal_Int32)nPos );
     }
-    else                // Seek-Statement
+    else                
     {
         sal_Int32 nPos = rPar.Get(2)->GetLong();
         if ( nPos < 1 )
@@ -3488,7 +3488,7 @@ RTLFUNC(Seek)
             StarBASIC::Error( SbERR_BAD_ARGUMENT );
             return;
         }
-        nPos--; // Basic counts from 1, SvStreams count from 0
+        nPos--; 
         pSbStrm->SetExpandOnWriteTo( 0 );
         if ( pSbStrm->IsRandom() )
         {
@@ -3564,13 +3564,13 @@ RTLFUNC(Rnd)
 }
 
 
-//  Syntax: Shell("Path",[ Window-Style,[ "Params", [ bSync = sal_False ]]])
-//  WindowStyles (VBA-kompatibel):
-//      2 == Minimized
-//      3 == Maximized
-//     10 == Full-Screen (text mode applications OS/2, WIN95, WNT)
-//     HACK: The WindowStyle will be passed to
-//     Application::StartApp in Creator. Format: "xxxx2"
+
+
+
+
+
+
+
 
 
 RTLFUNC(Shell)
@@ -3578,7 +3578,7 @@ RTLFUNC(Shell)
     (void)pBasic;
     (void)bWrite;
 
-    // No shell command for "virtual" portal users
+    
     if( needSecurityRestrictions() )
     {
         StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
@@ -3596,7 +3596,7 @@ RTLFUNC(Shell)
         oslProcessOption nOptions = osl_Process_SEARCHPATH | osl_Process_DETACHED;
 
         OUString aCmdLine = rPar.Get(1)->GetOUString();
-        // attach additional parameters - everything must be parsed anyway
+        
         if( nArgCount >= 4 )
         {
             aCmdLine += " ";
@@ -3604,13 +3604,13 @@ RTLFUNC(Shell)
         }
         else if( aCmdLine.isEmpty() )
         {
-            // avaoid special treatment (empty list)
+            
             aCmdLine += " ";
         }
         sal_Int32 nLen = aCmdLine.getLength();
 
-        // #55735 if there are parameters, they have to be separated
-        // #72471 also separate the single parameters
+        
+        
         std::list<OUString> aTokenList;
         OUString aToken;
         sal_Int32 i = 0;
@@ -3659,10 +3659,10 @@ RTLFUNC(Shell)
                 }
             }
 
-            // insert into the list
+            
             aTokenList.push_back( aToken );
         }
-        // #55735 / #72471 end
+        
 
         sal_Int16 nWinStyle = 0;
         if( nArgCount >= 3 )
@@ -3692,7 +3692,7 @@ RTLFUNC(Shell)
             }
         }
 
-        // #72471 work parameter(s) up
+        
         std::list<OUString>::const_iterator iter = aTokenList.begin();
         const OUString& rStr = *iter;
         OUString aOUStrProg( rStr.getStr(), rStr.getLength() );
@@ -3725,7 +3725,7 @@ RTLFUNC(Shell)
                     NULL, 0,
                     &pApp ) == osl_Process_E_None;
 
-        // 53521 only free process handle on success
+        
         if (bSucc)
         {
             osl_freeProcessHandle( pApp );
@@ -3764,49 +3764,49 @@ RTLFUNC(VarType)
     }
 }
 
-// Exported function
+
 OUString getBasicTypeName( SbxDataType eType )
 {
     static const char* pTypeNames[] =
     {
-        "Empty",            // SbxEMPTY
-        "Null",             // SbxNULL
-        "Integer",          // SbxINTEGER
-        "Long",             // SbxLONG
-        "Single",           // SbxSINGLE
-        "Double",           // SbxDOUBLE
-        "Currency",         // SbxCURRENCY
-        "Date",             // SbxDATE
-        "String",           // SbxSTRING
-        "Object",           // SbxOBJECT
-        "Error",            // SbxERROR
-        "Boolean",          // SbxBOOL
-        "Variant",          // SbxVARIANT
-        "DataObject",       // SbxDATAOBJECT
+        "Empty",            
+        "Null",             
+        "Integer",          
+        "Long",             
+        "Single",           
+        "Double",           
+        "Currency",         
+        "Date",             
+        "String",           
+        "Object",           
+        "Error",            
+        "Boolean",          
+        "Variant",          
+        "DataObject",       
         "Unknown Type",     //
         "Unknown Type",     //
-        "Char",             // SbxCHAR
-        "Byte",             // SbxBYTE
-        "UShort",           // SbxUSHORT
-        "ULong",            // SbxULONG
-        "Long64",           // SbxLONG64
-        "ULong64",          // SbxULONG64
-        "Int",              // SbxINT
-        "UInt",             // SbxUINT
-        "Void",             // SbxVOID
-        "HResult",          // SbxHRESULT
-        "Pointer",          // SbxPOINTER
-        "DimArray",         // SbxDIMARRAY
-        "CArray",           // SbxCARRAY
-        "Userdef",          // SbxUSERDEF
-        "Lpstr",            // SbxLPSTR
-        "Lpwstr",           // SbxLPWSTR
-        "Unknown Type",     // SbxCoreSTRING
-        "WString",          // SbxWSTRING
-        "WChar",            // SbxWCHAR
-        "Int64",            // SbxSALINT64
-        "UInt64",           // SbxSALUINT64
-        "Decimal",          // SbxDECIMAL
+        "Char",             
+        "Byte",             
+        "UShort",           
+        "ULong",            
+        "Long64",           
+        "ULong64",          
+        "Int",              
+        "UInt",             
+        "Void",             
+        "HResult",          
+        "Pointer",          
+        "DimArray",         
+        "CArray",           
+        "Userdef",          
+        "Lpstr",            
+        "Lpwstr",           
+        "Unknown Type",     
+        "WString",          
+        "WChar",            
+        "Int64",            
+        "UInt64",           
+        "Decimal",          
     };
 
     int nPos = ((int)eType) & 0x0FFF;
@@ -3841,14 +3841,14 @@ OUString getObjectTypeName( SbxVariable* pVar )
             if ( pUnoObj )
             {
                 Any aObj = pUnoObj->getUnoAny();
-                // For upstreaming unless we start to build oovbaapi by default
-                // we need to get detect the vba-ness of the object in some
-                // other way
-                // note: Automation objects do not support XServiceInfo
+                
+                
+                
+                
                 uno::Reference< XServiceInfo > xServInfo( aObj, uno::UNO_QUERY );
                 if ( xServInfo.is() )
                 {
-                    // is this a VBA object ?
+                    
                     uno::Reference< ooo::vba::XHelperInterface > xVBA( aObj, uno::UNO_QUERY );
                     Sequence< OUString > sServices = xServInfo->getSupportedServiceNames();
                     if ( sServices.getLength() )
@@ -3937,7 +3937,7 @@ RTLFUNC(DDEInitiate)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
+    
     if( needSecurityRestrictions() )
     {
         StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
@@ -3971,7 +3971,7 @@ RTLFUNC(DDETerminate)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
+    
     if( needSecurityRestrictions() )
     {
         StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
@@ -3999,7 +3999,7 @@ RTLFUNC(DDETerminateAll)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
+    
     if( needSecurityRestrictions() )
     {
         StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
@@ -4027,7 +4027,7 @@ RTLFUNC(DDERequest)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
+    
     if( needSecurityRestrictions() )
     {
         StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
@@ -4060,7 +4060,7 @@ RTLFUNC(DDEExecute)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
+    
     if( needSecurityRestrictions() )
     {
         StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
@@ -4089,7 +4089,7 @@ RTLFUNC(DDEPoke)
     (void)pBasic;
     (void)bWrite;
 
-    // No DDE for "virtual" portal users
+    
     if( needSecurityRestrictions() )
     {
         StarBASIC::Error(SbERR_NOT_IMPLEMENTED);
@@ -4263,7 +4263,7 @@ RTLFUNC(QBColor)
     rPar.Get(0)->PutLong( nRGB );
 }
 
-// StrConv(string, conversion, LCID)
+
 RTLFUNC(StrConv)
 {
     (void)pBasic;
@@ -4284,38 +4284,38 @@ RTLFUNC(StrConv)
     sal_Int32 nOldLen = aOldStr.getLength();
     if( nOldLen == 0 )
     {
-        // null string,return
+        
         rPar.Get(0)->PutString(aOldStr);
         return;
     }
 
     sal_Int32 nType = 0;
-    if ( (nConversion & 0x03) == 3 ) //  vbProperCase
+    if ( (nConversion & 0x03) == 3 ) 
     {
         const CharClass& rCharClass = GetCharClass();
         aOldStr = rCharClass.titlecase( aOldStr.toAsciiLowerCase(), 0, nOldLen );
     }
-    else if ( (nConversion & 0x01) == 1 ) // vbUpperCase
+    else if ( (nConversion & 0x01) == 1 ) 
     {
         nType |= i18n::TransliterationModules_LOWERCASE_UPPERCASE;
     }
-    else if ( (nConversion & 0x02) == 2 ) // vbLowerCase
+    else if ( (nConversion & 0x02) == 2 ) 
     {
         nType |= i18n::TransliterationModules_UPPERCASE_LOWERCASE;
     }
-    if ( (nConversion & 0x04) == 4 ) // vbWide
+    if ( (nConversion & 0x04) == 4 ) 
     {
         nType |= i18n::TransliterationModules_HALFWIDTH_FULLWIDTH;
     }
-    else if ( (nConversion & 0x08) == 8 ) // vbNarrow
+    else if ( (nConversion & 0x08) == 8 ) 
     {
         nType |= i18n::TransliterationModules_FULLWIDTH_HALFWIDTH;
     }
-    if ( (nConversion & 0x10) == 16) // vbKatakana
+    if ( (nConversion & 0x10) == 16) 
     {
         nType |= i18n::TransliterationModules_HIRAGANA_KATAKANA;
     }
-    else if ( (nConversion & 0x20) == 32 ) // vbHiragana
+    else if ( (nConversion & 0x20) == 32 ) 
     {
         nType |= i18n::TransliterationModules_KATAKANA_HIRAGANA;
     }
@@ -4329,9 +4329,9 @@ RTLFUNC(StrConv)
         aNewStr = aTransliterationWrapper.transliterate( aOldStr, nLanguage, 0, nOldLen, &aOffsets );
     }
 
-    if ( (nConversion & 0x40) == 64 ) // vbUnicode
+    if ( (nConversion & 0x40) == 64 ) 
     {
-        // convert the string to byte string, preserving unicode (2 bytes per character)
+        
         sal_Int32 nSize = aNewStr.getLength()*2;
         const sal_Unicode* pSrc = aNewStr.getStr();
         sal_Char* pChar = new sal_Char[nSize+1];
@@ -4347,14 +4347,14 @@ RTLFUNC(StrConv)
         OString aOStr(pChar);
         delete[] pChar;
 
-        // there is no concept about default codepage in unix. so it is incorrectly in unix
+        
         OUString aOUStr = OStringToOUString(aOStr, osl_getThreadTextEncoding());
         rPar.Get(0)->PutString( aOUStr );
         return;
     }
-    else if ( (nConversion & 0x80) == 128 ) // vbFromUnicode
+    else if ( (nConversion & 0x80) == 128 ) 
     {
-        // there is no concept about default codepage in unix. so it is incorrectly in unix
+        
         OString aOStr = OUStringToOString(aNewStr,osl_getThreadTextEncoding());
         const sal_Char* pChar = aOStr.getStr();
         sal_Int32 nArraySize = aOStr.getLength();
@@ -4525,7 +4525,7 @@ RTLFUNC(SavePicture)
 }
 
 
-//-----------------------------------------------------------------------------------------
+
 
 RTLFUNC(MsgBox)
 {
@@ -4534,20 +4534,20 @@ RTLFUNC(MsgBox)
 
     static const WinBits nStyleMap[] =
     {
-        WB_OK,              // MB_OK
-        WB_OK_CANCEL,       // MB_OKCANCEL
-        WB_ABORT_RETRY_IGNORE,    // MB_ABORTRETRYIGNORE
-        WB_YES_NO_CANCEL,   // MB_YESNOCANCEL
-        WB_YES_NO,          // MB_YESNO
-        WB_RETRY_CANCEL     // MB_RETRYCANCEL
+        WB_OK,              
+        WB_OK_CANCEL,       
+        WB_ABORT_RETRY_IGNORE,    
+        WB_YES_NO_CANCEL,   
+        WB_YES_NO,          
+        WB_RETRY_CANCEL     
     };
     static const sal_Int16 nButtonMap[] =
     {
-        2, // RET_CANCEL is 0
-        1, // RET_OK     is 1
-        6, // RET_YES    is 2
-        7, // RET_NO     is 3
-        4  // RET_RETRY  is 4
+        2, 
+        1, 
+        6, 
+        7, 
+        4  
     };
 
 
@@ -4558,11 +4558,11 @@ RTLFUNC(MsgBox)
         return;
     }
     WinBits nWinBits;
-    WinBits nType = 0; // MB_OK
+    WinBits nType = 0; 
     if( nArgCount >= 3 )
         nType = (WinBits)rPar.Get(2)->GetInteger();
     WinBits nStyle = nType;
-    nStyle &= 15; // delete bits 4-16
+    nStyle &= 15; 
     if( nStyle > 5 )
     {
         nStyle = 0;
@@ -4649,7 +4649,7 @@ RTLFUNC(MsgBox)
         nMappedRet = nRet;
         if( nMappedRet == 0 )
         {
-            nMappedRet = 3; // Abort
+            nMappedRet = 3; 
         }
     }
     else
@@ -4803,13 +4803,13 @@ RTLFUNC(Partition)
         return;
     }
 
-    // the Partition function inserts leading spaces before lowervalue and uppervalue
-    // so that they both have the same number of characters as the string
-    // representation of the value (Stop + 1). This ensures that if you use the output
-    // of the Partition function with several values of Number, the resulting text
-    // will be handled properly during any subsequent sort operation.
+    
+    
+    
+    
+    
 
-    // calculate the  maximun number of characters before lowervalue and uppervalue
+    
     OUString aBeforeStart = OUString::number( nStart - 1 );
     OUString aAfterStop = OUString::number( nStop + 1 );
     sal_Int32 nLen1 = aBeforeStart.getLength();
@@ -4845,7 +4845,7 @@ RTLFUNC(Partition)
 
     if( nLen > nLen1 )
     {
-        // appending the leading spaces for the lowervalue
+        
         for ( sal_Int32 i= (nLen - nLen1) ; i > 0; --i )
         {
             aRetStr.appendAscii(" ");
@@ -4854,7 +4854,7 @@ RTLFUNC(Partition)
     aRetStr.append( aLowerValue ).appendAscii(":");
     if( nLen > nLen2 )
     {
-        // appending the leading spaces for the uppervalue
+        
         for ( sal_Int32 i= (nLen - nLen2) ; i > 0; --i )
         {
             aRetStr.appendAscii(" ");
@@ -4879,7 +4879,7 @@ static long GetDayDiff( const Date& rDate )
     {
         nDiffDays = (long)(rDate - aRefDate);
     }
-    nDiffDays += 2; // adjustment VisualBasic: 1.Jan.1900 == 2
+    nDiffDays += 2; 
     return nDiffDays;
 }
 
@@ -4887,7 +4887,7 @@ sal_Int16 implGetDateYear( double aDate )
 {
     Date aRefDate( 1,1,1900 );
     long nDays = (long) aDate;
-    nDays -= 2; // standardize: 1.1.1900 => 0.0
+    nDays -= 2; 
     aRefDate += nDays;
     sal_Int16 nRet = (sal_Int16)( aRefDate.GetYear() );
     return nRet;
@@ -4933,17 +4933,17 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& 
 #ifndef DISABLE_SCRIPTING
     else
     {
-        // grab the year & month
+        
         aCurDate = Date( 1, (( nMonth % 12 ) > 0 ) ? ( nMonth % 12 ) : 12 + ( nMonth % 12 ), nYear );
 
-        // adjust year based on month value
-        // e.g. 2000, 0, xx = 1999, 12, xx ( or December of the previous year )
-        //      2000, 13, xx = 2001, 1, xx ( or January of the following year )
+        
+        
+        
         if( ( nMonth < 1 ) || ( nMonth > 12 ) )
         {
-            // inacurrate around leap year, don't use days to calculate,
-            // just modify the months directory
-            sal_Int16 nYearAdj = ( nMonth /12 ); // default to positive months inputed
+            
+            
+            sal_Int16 nYearAdj = ( nMonth /12 ); 
             if ( nMonth <=0 )
             {
                 nYearAdj = ( ( nMonth -12 ) / 12 );
@@ -4951,9 +4951,9 @@ bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& 
             aCurDate.SetYear( aCurDate.GetYear() + nYearAdj );
         }
 
-        // adjust day value,
-        // e.g. 2000, 2, 0 = 2000, 1, 31 or the last day of the previous month
-        //      2000, 1, 32 = 2000, 2, 1 or the first day of the following month
+        
+        
+        
         if( ( nDay < 1 ) || ( nDay > aCurDate.GetDaysInMonth() ) )
         {
             aCurDate += nDay - 1;

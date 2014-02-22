@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <cmdid.h>
@@ -128,16 +128,16 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
         if ( GetStyle() & WB_SIZEABLE )
             SetSizePixel( pInfo->aSize );
 
-        // remember initial size from pInfo
+        
         aSize = GetSizePixel();
 
-        // should the FloatingWindow get zoomed?
+        
         if ( pInfo->nFlags & SFX_CHILDWIN_ZOOMIN )
             RollUp();
     }
     else
     {
-        // remember initial size from resource or ctor
+        
         aSize = GetSizePixel();
 
         Size aParentSize = GetParent()->GetOutputSizePixel();
@@ -195,7 +195,7 @@ IMPL_LINK_NOARG(SwFldDlg, OKHdl)
         SfxTabPage* pPage = GetTabPage(GetCurPageId());
         pPage->FillItemSet(*(SfxItemSet*)0);
 
-        GetOKButton().GrabFocus();  // because of InputField-Dlg
+        GetOKButton().GrabFocus();  
     }
 
     return 0;
@@ -254,7 +254,7 @@ void SwFldDlg::ReInitTabPage( sal_uInt16 nPageId, sal_Bool bOnlyActivate )
     SwFldPage* pPage = (SwFldPage* )GetTabPage(nPageId);
 
     if ( pPage )
-        pPage->EditNewField( bOnlyActivate );   // newly initialise TabPage
+        pPage->EditNewField( bOnlyActivate );   
 }
 
 /*--------------------------------------------------------------------
@@ -309,7 +309,7 @@ void SwFldDlg::ActivateDatabasePage()
     {
         ((SwFldDBPage*)pDBPage)->ActivateMailMergeAddress();
     }
-    //remove all other pages
+    
     RemoveTabPage("document");
     RemoveTabPage("variables");
     RemoveTabPage("docinfo");

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "frame.hxx"
@@ -291,7 +291,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
 
         if (IsRootFrm())
         {
-            // Root frame has access to the edit shell, so dump the current selection ranges here.
+            
             SwRootFrm* const pRootFrm = static_cast<SwRootFrm* const>(this);
             SwEditShell* pEditShell = pRootFrm->GetCurrShell()->GetDoc()->GetEditShell();
             xmlTextWriterStartElement(writer, BAD_CAST("shellCrsr"));
@@ -315,7 +315,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
         dumpInfosAsXml( writer );
         xmlTextWriterEndElement( writer );
 
-        // Dump Anchored objects if any
+        
         SwSortedObjs* pAnchored = GetDrawObjs();
         if ( pAnchored && pAnchored->Count( ) > 0 )
         {
@@ -330,7 +330,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
             xmlTextWriterEndElement( writer );
         }
 
-        // Dump the children
+        
         if ( IsTxtFrm(  ) )
         {
             SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
@@ -360,7 +360,7 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
 
 void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer )
 {
-    // output the Frm
+    
     xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", Frm().Left() );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", Frm().Top() );
@@ -369,8 +369,8 @@ void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer )
     xmlTextWriterEndElement( writer );
 }
 
-// Hack: somehow conversion from "..." to va_list does
-// bomb on two string litterals in the format.
+
+
 static const char* TMP_FORMAT = "%" SAL_PRIuUINTPTR;
 
 void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )

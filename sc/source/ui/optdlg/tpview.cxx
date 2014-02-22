@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -22,7 +22,7 @@
 
 
 
-//------------------------------------------------------------------
+
 
 #include "scitems.hxx"
 #include "tpview.hxx"
@@ -42,7 +42,7 @@
 #include <svx/xtable.hxx>
 
 
-// STATIC DATA -----------------------------------------------------------
+
 
 
 
@@ -293,7 +293,7 @@ void ScTpContentOptions::InitGridOpt()
     if ( pColorLB->GetEntryCount() == 0 )
     {
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        // there might be another DocShell here
+        
         pDocSh = PTR_CAST(ScDocShell, pDocSh);
 
         XColorListRef pColorList;
@@ -309,11 +309,11 @@ void ScTpContentOptions::InitGridOpt()
         if ( !pColorList.is() )
             return;
 
-        //------------------------------------------------------
+        
 
         pColorLB->SetUpdateMode( false );
 
-        // items from ColorTable
+        
 
         long nCount = pColorList->Count();
         for ( long n=0; n<nCount; n++ )
@@ -322,9 +322,9 @@ void ScTpContentOptions::InitGridOpt()
             pColorLB->InsertEntry( pEntry->GetColor(), pEntry->GetName() );
         }
 
-        // default GridColor
+        
 
-        Color aStdCol( SC_STD_GRIDCOLOR );          // same default as in ScViewOptions
+        Color aStdCol( SC_STD_GRIDCOLOR );          
         if ( LISTBOX_ENTRY_NOTFOUND ==
                 pColorLB->GetEntryPos( aStdCol ) )
             pColorLB->InsertEntry( aStdCol, ScGlobal::GetRscString( STR_GRIDCOLOR ) );
@@ -334,7 +334,7 @@ void ScTpContentOptions::InitGridOpt()
         Invalidate();
     }
 
-    //  also select grid color entry on subsequent calls
+    
 
     OUString  aName;
     Color     aCol    = pLocalOptions->GetGridColor( &aName );
@@ -403,14 +403,14 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
             case FUNIT_PICA:
             case FUNIT_INCH:
             {
-                // nur diese Metriken benutzen
+                
                 sal_uInt16 nPos = m_pUnitLB->InsertEntry( sMetric );
                 m_pUnitLB->SetEntryData( nPos, (void*)(sal_IntPtr)eFUnit );
             }
             break;
             default:
             {
-                // added to avoid warnings
+                
             }
         }
     }
@@ -578,7 +578,7 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
         case LM_ON_DEMAND:  m_pRequestRB-> Check();    break;
         default:
         {
-            // added to avoid warnings
+            
         }
     }
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_SELECTION, false, &pItem))

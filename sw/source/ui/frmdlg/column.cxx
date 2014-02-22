@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "column.hxx"
@@ -61,7 +61,7 @@
 
 #include "access.hrc"
 
-//to match associated data in ColumnPage.ui
+
 #define LISTBOX_SELECTION       0
 #define LISTBOX_SECTION         1
 #define LISTBOX_SECTIONS        2
@@ -164,7 +164,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh)
 
     assert(pColPgSet);
 
-    // create TabPage
+    
     pTabPage = (SwColumnPage*) SwColumnPage::Create(get_content_area(), *pColPgSet);
     pTabPage->get<Window>("applytoft")->Show();
     pTabPage->get(m_pApplyToLB, "applytolb");
@@ -209,10 +209,10 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh)
     m_pApplyToLB->SetSelectHdl(LINK(this, SwColumnDlg, ObjectHdl));
     OKButton *pOK = get<OKButton>("ok");
     pOK->SetClickHdl(LINK(this, SwColumnDlg, OkHdl));
-    //#i80458# if no columns can be set then disable OK
+    
     if( !m_pApplyToLB->GetEntryCount() )
         pOK->Enable( false );
-    //#i97810# set focus to the TabPage
+    
     pTabPage->ActivateColumnControl();
     pTabPage->Show();
 }
@@ -290,7 +290,7 @@ IMPL_LINK(SwColumnDlg, ObjectHdl, ListBox*, pBox)
 
 IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
 {
-    // evaluate current selection
+    
     SfxItemSet* pSet = 0;
     switch(nOldSelection)
     {
@@ -318,9 +318,9 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
 
     if(pSelectionSet && SFX_ITEM_SET == pSelectionSet->GetItemState(RES_COL))
     {
-        //insert region with columns
+        
         const SwFmtCol& rColItem = (const SwFmtCol&)pSelectionSet->Get(RES_COL);
-        //only if there actually are columns!
+        
         if(rColItem.GetNumCols() > 1)
             rWrtShell.GetView().GetViewFrame()->GetDispatcher()->Execute(
                 FN_INSERT_REGION, SFX_CALLMODE_ASYNCHRON, *pSelectionSet );
@@ -342,7 +342,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
 
     if(pPageSet && SFX_ITEM_SET == pPageSet->GetItemState(RES_COL) && bPageChanged)
     {
-        // deterine current PageDescriptor and fill the Set with it
+        
         const sal_uInt16 nCurIdx = rWrtShell.GetCurPageDesc();
         SwPageDesc aPageDesc(rWrtShell.GetPageDesc(nCurIdx));
         SwFrmFmt &rFmt = aPageDesc.GetMaster();
@@ -356,7 +356,7 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl)
         rWrtShell.StartAction();
         rWrtShell.Push();
         rWrtShell.SetFlyFrmAttr( aTmp );
-        // undo the frame selction again
+        
         if(rWrtShell.IsFrmSelected())
         {
             rWrtShell.UnSelectFrm();
@@ -453,7 +453,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     m_pDefaultVS->SetColCount( 5 );
 
     for (int i = 0; i < 5; ++i)
-    //Set accessible name one by one
+    
     {
         OUString aItemText;
         switch( i )
@@ -479,7 +479,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     m_pDefaultVS->SetSelectHdl(LINK(this, SwColumnPage, SetDefaultsHdl));
 
-    // announce Controls for additional region at the MoreButton
+    
     Link aCLNrLk = LINK(this, SwColumnPage, ColModify);
     m_pCLNrEdt->SetModifyHdl(aCLNrLk);
     Link aLk = LINK(this, SwColumnPage, GapModify);
@@ -505,11 +505,11 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
     m_pLineHeightEdit->SetModifyHdl( aLk );
     m_pLinePosDLB->SetSelectHdl( aLk );
 
-    // Separator line
+    
     m_pLineTypeDLB->SetUnit( FUNIT_POINT );
     m_pLineTypeDLB->SetSourceUnit( FUNIT_TWIP );
 
-    // Fill the line styles listbox
+    
     m_pLineTypeDLB->SetNone( SVX_RESSTR( RID_SVXSTR_NONE ) );
     m_pLineTypeDLB->InsertEntry(
         ::editeng::SvxBorderLine::getWidthImpl(table::BorderLineStyle::SOLID),
@@ -527,7 +527,7 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
             m_pLineWidthEdit->GetUnit(), MAP_TWIP ));
     m_pLineTypeDLB->SetWidth( nLineWidth );
 
-    // Fill the color listbox
+    
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     const SfxPoolItem*  pItem       = NULL;
     XColorListRef pColorList;
@@ -599,7 +599,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
 
     if(bFrm)
     {
-        if(bFormat)                     // there is no size here
+        if(bFormat)                     
             pColMgr->SetActualWidth(FRAME_FORMAT_WIDTH);
         else
         {
@@ -617,7 +617,7 @@ void SwColumnPage::Reset(const SfxItemSet &rSet)
             m_pBalanceColsCB->Check( true );
     }
 
-    //text direction
+    
     if( SFX_ITEM_AVAILABLE <= rSet.GetItemState( RES_FRAMEDIR ) )
     {
         const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rSet.Get(RES_FRAMEDIR);
@@ -646,8 +646,8 @@ sal_Bool SwColumnPage::FillItemSet(SfxItemSet &rSet)
 {
     if(m_pCLNrEdt->HasChildPathFocus())
         m_pCLNrEdt->GetDownHdl().Call(m_pCLNrEdt);
-    // set in ItemSet setzen
-    // the current settings are already present
+    
+    
     //
     const SfxPoolItem* pOldItem;
     const SwFmtCol& rCol = pColMgr->GetColumns();
@@ -678,8 +678,8 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
     long nGutterWidth = pColMgr->GetGutterWidth();
     if(nCols > 1)
     {
-            // Determine whether the most narrow column is too narrow
-            // for the adjusted column gap
+            
+            
         long nMin = nColWidth[0];
         sal_uInt16 i;
 
@@ -690,8 +690,8 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         if(!bAutoWidth)
         {
             pColMgr->SetAutoWidth(sal_False);
-                // when the user didn't allocate the whole width,
-                // add the missing amount to the last column.
+                
+                
             long nSum = 0;
             for(i = 0; i < nCols; ++i)
                 nSum += nColWidth[i];
@@ -743,8 +743,8 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         m_pLinePosLbl->Enable( bEnable );
         m_pLinePosDLB->Enable( bEnable );
 
-        //fdo#66815 if the values are going to be the same, don't update
-        //them to avoid the listbox selection resetting
+        
+        
         if (nLineWidth != m_pLineTypeDLB->GetWidth())
             m_pLineTypeDLB->SetWidth(nLineWidth);
         Color aColor(m_pLineColorDLB->GetSelectEntryColor());
@@ -757,13 +757,13 @@ IMPL_LINK( SwColumnPage, UpdateColMgr, void *, /*pField*/ )
         nCols = 0;
     }
 
-    //set maximum values
+    
     m_pCLNrEdt->SetMax(std::max(1L,
         std::min(long(nMaxCols), long( pColMgr->GetActualSize() / (nGutterWidth + MINLAY)) )));
     m_pCLNrEdt->SetLast(m_pCLNrEdt->GetMax());
     m_pCLNrEdt->Reformat();
 
-    //prompt example window
+    
     if(!bLockUpdate)
     {
         if(bFrm)
@@ -789,7 +789,7 @@ void SwColumnPage::Init()
     m_pAutoWidthBox->Check( bAutoWidth );
 
     sal_Int32 nColumnWidthSum = 0;
-    // set the widths
+    
     sal_uInt16 i;
     for(i = 0; i < nCols; ++i)
     {
@@ -801,7 +801,7 @@ void SwColumnPage::Init()
 
     if( 1 < nCols )
     {
-        // #97495# make sure that the automatic column width's are always equal
+        
         if(bAutoWidth)
         {
             nColumnWidthSum /= nCols;
@@ -809,16 +809,16 @@ void SwColumnPage::Init()
                 nColWidth[i] = nColumnWidthSum;
         }
         SwColLineAdj eAdj = pColMgr->GetAdjust();
-        if( COLADJ_NONE == eAdj )       // the dialog doesn't know a NONE!
+        if( COLADJ_NONE == eAdj )       
         {
             eAdj = COLADJ_TOP;
-            //without Adjust no line type
+            
             m_pLineTypeDLB->SelectEntryPos( 0 );
             m_pLineHeightEdit->SetValue( 100 );
         }
         else
         {
-            // Need to multiply by 100 because of the 2 decimals
+            
             m_pLineWidthEdit->SetValue( pColMgr->GetLineWidth() * 100, FUNIT_TWIP );
             m_pLineColorDLB->SelectEntry( pColMgr->GetLineColor() );
             m_pLineTypeDLB->SelectEntry( pColMgr->GetLineStyle() );
@@ -838,15 +838,15 @@ void SwColumnPage::Init()
     UpdateCols();
     Update();
 
-        // set maximum number of columns
-        // values below 1 are not allowed
+        
+        
     m_pCLNrEdt->SetMax(std::max(1L,
         std::min(long(nMaxCols), long( pColMgr->GetActualSize() / nMinWidth) )));
 }
 
 bool SwColumnPage::isLineNotNone() const
 {
-    // nothing is turned off
+    
     const sal_uInt16 nPos = m_pLineTypeDLB->GetSelectEntryPos();
     return nPos != LISTBOX_ENTRY_NOTFOUND && nPos != 0;
 }
@@ -873,7 +873,7 @@ void SwColumnPage::UpdateCols()
     }
     else if( bEdit )
     {
-        // here are purposely hardly any breaks
+        
         switch(nCols)
         {
             case 3: bEnable3 = sal_True;
@@ -902,7 +902,7 @@ void SwColumnPage::UpdateCols()
         bEnable = isLineNotNone();
     }
 
-    //all these depend on > 1 column and line style != none
+    
     m_pLineHeightEdit->Enable( bEnable );
     m_pLineHeightLbl->Enable( bEnable );
     m_pLineWidthLbl->Enable( bEnable );
@@ -913,7 +913,7 @@ void SwColumnPage::UpdateCols()
     if (bEnable)
         bEnable = pColMgr->GetLineHeightPercent() != 100;
 
-    //and these additionally depend on line height != 100%
+    
     m_pLinePosDLB->Enable( bEnable );
     m_pLinePosLbl->Enable( bEnable );
 }
@@ -965,11 +965,11 @@ void SwColumnPage::SetLabels( sal_uInt16 nVis )
 IMPL_LINK( SwColumnPage, ColModify, NumericField *, pNF )
 {
     nCols = (sal_uInt16)m_pCLNrEdt->GetValue();
-    //#107890# the handler is also called from LoseFocus()
-    //then no change has been made and thus no action should be taken
-    // #i17816# changing the displayed types within the ValueSet
-    //from two columns to two columns with different settings doesn't invalidate the
-    // example windows in ::ColModify()
+    
+    
+    
+    
+    
     if (!pNF || pColMgr->GetCount() != nCols)
     {
         if(pNF)
@@ -1138,7 +1138,7 @@ void SwColumnPage::Timeout()
     DBG_PROFSTART(columnhdl) ;
     if(pModifiedField)
     {
-            // find the changed column
+            
         sal_uInt16 nChanged = nFirstVis;
         if(pModifiedField == &aEd2)
             ++nChanged;
@@ -1149,7 +1149,7 @@ void SwColumnPage::Timeout()
             pModifiedField->DenormalizePercent(pModifiedField->GetValue(FUNIT_TWIP));
         long nDiff = nNewWidth - nColWidth[nChanged];
 
-        // when it's the last column
+        
         if(nChanged == nCols - 1)
         {
             nColWidth[0] -= nDiff;
@@ -1243,14 +1243,14 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
         m_pPgeExampleWN->Hide();
         m_pFrmExampleWN->Show();
 
-        // Size
+        
         const SwFmtFrmSize& rSize = (const SwFmtFrmSize&)rSet.Get(RES_FRM_SIZE);
         const SvxBoxItem& rBox = (const SvxBoxItem&) rSet.Get(RES_BOX);
 
         long nDistance = rBox.GetDistance();
         const sal_uInt16 nTotalWish = bFormat ? FRAME_FORMAT_WIDTH : sal_uInt16(rSize.GetWidth() - 2 * nDistance);
 
-        // set maximum values of column width
+        
         SetPageWidth(nTotalWish);
 
         if(pColMgr->GetActualSize() != nTotalWish)
@@ -1259,17 +1259,17 @@ void SwColumnPage::ActivatePage(const SfxItemSet& rSet)
             Init();
         }
         sal_Bool bPercent;
-        // only relative data in frame format
+        
         if ( bFormat || (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff) )
         {
-            // set value for 100%
+            
             aEd1.SetRefValue(nTotalWish);
             aEd2.SetRefValue(nTotalWish);
             aEd3.SetRefValue(nTotalWish);
             aDistEd1.SetRefValue(nTotalWish);
             aDistEd2.SetRefValue(nTotalWish);
 
-            // switch to %-view
+            
             bPercent = sal_True;
         }
         else
@@ -1316,7 +1316,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
         m_pAutoWidthBox->Check(false);
         aDistEd1.SetPrcntValue(0);
         ColModify(0);
-        // now set the width ratio to 2 : 1 or 1 : 2 respectively
+        
         sal_uInt16 nSmall = pColMgr->GetActualSize()  / 3;
         if(nItem == 4)
         {

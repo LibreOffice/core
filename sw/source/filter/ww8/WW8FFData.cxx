@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -82,9 +82,9 @@ void WW8FFData::Write(SvStream * pDataStrm)
 
     static const sal_uInt8 aHeader[] =
     {
-        0,0,0,0,        // len of struct
-        0x44,0,         // the start of "next" data
-        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, // PIC
+        0,0,0,0,        
+        0x44,0,         
+        0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
         0,0,0,0,0,0,0,0,0,0,0,0,0,0

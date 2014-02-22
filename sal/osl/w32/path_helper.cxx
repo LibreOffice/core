@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -82,14 +82,14 @@ void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
  osl_is_logical_drive_pattern
  ******************************************************************/
 
-// is [A-Za-z]:[/|\]\0
+
 const sal_Char* LDP                    = ":";
 const sal_Char* LDP_WITH_BACKSLASH     = ":\\";
 const sal_Char* LDP_WITH_SLASH         = ":/";
 
-// degenerated case returned by the Windows FileOpen dialog
-// when someone enters for instance "x:filename", the Win32
-// API accepts this case
+
+
+
 const sal_Char* LDP_WITH_DOT_BACKSLASH = ":.\\";
 
 sal_Int32 osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath)

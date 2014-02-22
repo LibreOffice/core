@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -34,7 +34,7 @@
 
 using namespace usr;
 
-//==================================================================================================
+
 class Listener_Impl
     : public UsrObject
     , public XMouseListener
@@ -49,34 +49,34 @@ public:
 
     virtual BOOL        queryInterface( Uik aUik, XInterfaceRef& rOut );
 
-    // XMouseListener
+    
     virtual void        mousePressed( const VclMouseEvent& evt );
     virtual void        mouseReleased( const VclMouseEvent& evt );
     virtual void        mouseEntered( const VclMouseEvent& evt );
     virtual void        mouseExited( const VclMouseEvent& evt );
 
-    // XMouseMotionListener
+    
     virtual void        mouseDragged( const VclMouseEvent& evt );
     virtual void        mouseMoved( const VclMouseEvent& evt );
 
-    // XKeyListener
+    
     virtual void        keyPressed( const VclKeyEvent& evt );
     virtual void        keyReleased( const VclKeyEvent& evt );
 
-    // XFocusListener
+    
     virtual void        focusGained( const FocusEvent& evt );
     virtual void        focusLost( const FocusEvent& evt );
 
-    // XWindowListener
+    
     virtual void        windowResized( const WindowEvent& evt );
     virtual void        windowMoved( const WindowEvent& evt );
     virtual void        windowShown( const EventObject& evt );
     virtual void        windowHidden( const EventObject& evt );
 
-    // XPaintListener
+    
     virtual void        windowPaint( const PaintEvent& evt );
 
-    // XEventListener
+    
     virtual void        disposing( const EventObject& evt );
 
 public:
@@ -84,7 +84,7 @@ public:
     void                removeAllListeners( const XControlRef& xControl );
 };
 
-//--------------------------------------------------------------------------------------------------
+
 void Listener_Impl::addAllListeners( const XControlRef& xControl )
 {
     XWindowRef xWindow( xControl, USR_QUERY );
@@ -95,11 +95,11 @@ void Listener_Impl::addAllListeners( const XControlRef& xControl )
     xWindow->addFocusListener( (XFocusListener*)this );
     xWindow->addWindowListener( (XWindowListener*)this );
     xWindow->addPaintListener( (XPaintListener*)this );
-    // cast due to ambiguities
+    
     xControl->addEventListener( (XEventListener*)(XPaintListener*)this );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void Listener_Impl::removeAllListeners( const XControlRef& xControl )
 {
     XWindowRef xWindow( xControl, USR_QUERY );
@@ -110,14 +110,14 @@ void Listener_Impl::removeAllListeners( const XControlRef& xControl )
     xWindow->removeFocusListener( (XFocusListener*)this );
     xWindow->removeWindowListener( (XWindowListener*)this );
     xWindow->removePaintListener( (XPaintListener*)this );
-    // cast due to ambiguities
+    
     xControl->removeEventListener( (XEventListener*)(XPaintListener*)this );
 }
 
-//--------------------------------------------------------------------------------------------------
+
 SMART_UNO_IMPLEMENTATION( Listener_Impl, UsrObject );
 
-//--------------------------------------------------------------------------------------------------
+
 BOOL Listener_Impl::queryInterface( Uik aUik, XInterfaceRef& rOut )
 {
     if (aUik == XMouseListener::getSmartUik())
@@ -140,32 +140,32 @@ BOOL Listener_Impl::queryInterface( Uik aUik, XInterfaceRef& rOut )
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------------------------
-// XMouseListener
+
+
 void Listener_Impl::mousePressed( const VclMouseEvent& evt )    {}
 void Listener_Impl::mouseReleased( const VclMouseEvent& evt )   {}
 void Listener_Impl::mouseEntered( const VclMouseEvent& evt )    {}
 void Listener_Impl::mouseExited( const VclMouseEvent& evt )     {}
 
-// XMouseMotionListener
+
 void Listener_Impl::mouseDragged( const VclMouseEvent& evt )    {}
 void Listener_Impl::mouseMoved( const VclMouseEvent& evt )      {}
 
-// XKeyListener
+
 void Listener_Impl::keyPressed( const VclKeyEvent& evt )        {}
 void Listener_Impl::keyReleased( const VclKeyEvent& evt )       {}
 
-// XFocusListener
+
 void Listener_Impl::focusGained( const FocusEvent& evt )        {}
 void Listener_Impl::focusLost( const FocusEvent& evt )          {}
 
-// XWindowListener
+
 void Listener_Impl::windowResized( const WindowEvent& evt )     {}
 void Listener_Impl::windowMoved( const WindowEvent& evt )       {}
 void Listener_Impl::windowShown( const EventObject& evt )       {}
 void Listener_Impl::windowHidden( const EventObject& evt )      {}
 
-// XPaintListener
+
 void Listener_Impl::windowPaint( const PaintEvent& evt )
 {
     if (evt.Source.is())
@@ -181,11 +181,11 @@ void Listener_Impl::windowPaint( const PaintEvent& evt )
     }
 }
 
-// XEventListener
+
 void Listener_Impl::disposing( const EventObject& evt )     {}
 
 
-//==================================================================================================
+
 class FrameControlApplication
     : public Application
 {
@@ -213,7 +213,7 @@ Application* pApp = &g_App;
 #endif
 
 
-//--------------------------------------------------------------------------------------------------
+
 void FrameControlApplication::init()
 {
     XMultiServiceFactoryRef xMgr = createRegistryServiceManager( L"test.rdb" );
@@ -239,7 +239,7 @@ void FrameControlApplication::init()
 
 
 
-    // ...
+    
 
     XInterfaceRef xInst = xMgr->createInstance( L"stardiv.one.frame.FrameControl" );
     if (xInst->queryInterface( XControl::getSmartUik(), _xControl ))
@@ -249,7 +249,7 @@ void FrameControlApplication::init()
         XWindowPeerRef xParent( _pWorkWin->GetComponentInterface() );
 
         XToolkitRef xToolkit( xMgr->createInstance( L"stardiv.vcl.VclToolkit" ), USR_QUERY );
-        //xToolkit = XToolkitRef( xMgr->createInstance( L"stardiv.uno.awt.Toolkit" ), USR_QUERY );
+        
         _xControl->createPeer( xToolkit, xParent );
         XWindowRef xWin( _xControl, USR_QUERY );
         xWin->setPosSize( 50, 50, 400, 400, PosSize_POSSIZE );
@@ -258,18 +258,18 @@ void FrameControlApplication::init()
         _pListener = new Listener_Impl();
         _pListener->acquire();
         _pListener->addAllListeners( _xControl );
-        // ... on paint a cross should be drawn
+        
     }
 }
 
-//--------------------------------------------------------------------------------------------------
+
 void FrameControlApplication::deinit()
 {
     if (_pListener)
     {
 
         _pListener->removeAllListeners( _xControl );
-        _xControl->dispose();   // disposing event should occur
+        _xControl->dispose();   
         _pListener->release();
         _pListener = NULL;
 
@@ -281,11 +281,11 @@ void FrameControlApplication::deinit()
 }
 
 
-//--------------------------------------------------------------------------------------------------
+
 void FrameControlApplication::Main()
 {
-//      void TestErrcodes();
-//      TestErrcodes();
+
+
 
     EnterMultiThread();
     SetAppName( "RadioActiveControl-Demo" );

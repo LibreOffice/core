@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Diagram.hxx"
@@ -270,7 +270,7 @@ struct StaticDiagramInfo : public rtl::StaticAggregate< uno::Reference< beans::X
 {
 };
 
-/// clones a UNO-sequence of UNO-References
+
 typedef Reference< chart2::XCoordinateSystem > lcl_tCooSysRef;
 typedef ::std::map< lcl_tCooSysRef, lcl_tCooSysRef >  lcl_tCooSysMapping;
 typedef ::std::vector< lcl_tCooSysRef >               lcl_tCooSysVector;
@@ -302,7 +302,7 @@ lcl_tCooSysMapping lcl_CloneCoordinateSystems(
     return aResult;
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -312,10 +312,10 @@ Diagram::Diagram( uno::Reference< uno::XComponentContext > const & xContext ) :
         m_xContext( xContext ),
         m_xModifyEventForwarder( ModifyListenerHelper::createModifyEventForwarder())
 {
-    // Set camera position to a default position (that should be set hard, so
-    // that it will be exported.  The property default is a camera looking
-    // straight ono the scene).  These defaults have been acquired from the old
-    // chart implementation.
+    
+    
+    
+    
     setFastPropertyValue_NoBroadcast(
         SceneProperties::PROP_SCENE_CAMERA_GEOMETRY, uno::makeAny(
             ThreeDHelper::getDefaultCameraGeometry()));
@@ -360,7 +360,7 @@ Diagram::~Diagram()
     }
 }
 
-// ____ XDiagram ____
+
 uno::Reference< beans::XPropertySet > SAL_CALL Diagram::getWall()
     throw (uno::RuntimeException)
 {
@@ -468,7 +468,7 @@ void SAL_CALL Diagram::setDiagramData(
     xTemplate->changeDiagramData( this, xDataSource, aArguments );
 }
 
-// ____ XTitled ____
+
 uno::Reference< chart2::XTitle > SAL_CALL Diagram::getTitleObject()
     throw (uno::RuntimeException)
 {
@@ -494,7 +494,7 @@ void SAL_CALL Diagram::setTitleObject( const uno::Reference< chart2::XTitle >& x
     fireModifyEvent();
 }
 
-// ____ X3DDefaultSetter ____
+
 void SAL_CALL Diagram::set3DSettingsToDefault()
     throw (uno::RuntimeException)
 {
@@ -513,7 +513,7 @@ void SAL_CALL Diagram::setDefaultIllumination()
     ThreeDHelper::setDefaultIllumination( this );
 }
 
-// ____ XCoordinateSystemContainer ____
+
 void SAL_CALL Diagram::addCoordinateSystem(
     const uno::Reference< chart2::XCoordinateSystem >& aCoordSys )
     throw (lang::IllegalArgumentException,
@@ -584,7 +584,7 @@ void SAL_CALL Diagram::setCoordinateSystems(
     fireModifyEvent();
 }
 
-// ____ XCloneable ____
+
 Reference< util::XCloneable > SAL_CALL Diagram::createClone()
     throw (uno::RuntimeException)
 {
@@ -592,7 +592,7 @@ Reference< util::XCloneable > SAL_CALL Diagram::createClone()
     return Reference< util::XCloneable >( new Diagram( *this ));
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL Diagram::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -621,21 +621,21 @@ void SAL_CALL Diagram::removeModifyListener( const Reference< util::XModifyListe
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL Diagram::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL Diagram::disposing( const lang::EventObject& /* Source */ )
     throw (uno::RuntimeException)
 {
-    // nothing
+    
 }
 
-// ____ OPropertySet ____
+
 void Diagram::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -656,7 +656,7 @@ Sequence< OUString > Diagram::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// ____ OPropertySet ____
+
 uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -667,27 +667,27 @@ uno::Any Diagram::GetDefaultValue( sal_Int32 nHandle ) const
     return (*aFound).second;
 }
 
-// ____ OPropertySet ____
+
 ::cppu::IPropertyArrayHelper & SAL_CALL Diagram::getInfoHelper()
 {
     return *StaticDiagramInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Diagram::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
     return *StaticDiagramInfo::get();
 }
 
-// ____ XFastPropertySet ____
+
 void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
     throw(beans::UnknownPropertyException,
           beans::PropertyVetoException,
           lang::IllegalArgumentException,
           lang::WrappedTargetException, uno::RuntimeException)
 {
-    //special treatment for some 3D properties
+    
     if( PROP_DIAGRAM_PERSPECTIVE == nHandle )
     {
         sal_Int32 fPerspective = 20;
@@ -715,7 +715,7 @@ void SAL_CALL Diagram::setFastPropertyValue( sal_Int32 nHandle, const Any& rValu
 
 void SAL_CALL Diagram::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 {
-    //special treatment for some 3D properties
+    
     if( nHandle == PROP_DIAGRAM_PERSPECTIVE )
     {
         sal_Int32 nPerspective = ::basegfx::fround( ThreeDHelper::CameraDistanceToPerspective(
@@ -743,10 +743,10 @@ using impl::Diagram_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( Diagram, Diagram_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( Diagram, Diagram_Base, ::property::OPropertySet )
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( Diagram,
                              OUString("com.sun.star.comp.chart2.Diagram") );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

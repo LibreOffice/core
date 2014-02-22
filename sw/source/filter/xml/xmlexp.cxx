@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -57,7 +57,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <comphelper/servicehelper.hxx>
 
-// for locking SolarMutex: svapp + mutex
+
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 
@@ -105,9 +105,9 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( !GetModel().is() )
         return ERR_SWG_WRITE_ERROR;
 
-    SwPauseThreadStarting aPauseThreadStarting; // #i73788#
+    SwPauseThreadStarting aPauseThreadStarting; 
 
-    // from here, we use core interfaces -> lock Solar-Mutex
+    
     SolarMutexGuard aGuard;
 
     {
@@ -193,39 +193,39 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     if( (getExportFlags() & EXPORT_META) != 0 )
     {
-        // Update doc stat, so that correct values are exported and
-        // the progress works correctly.
+        
+        
         pDoc->UpdateDocStat();
 
         SfxObjectShell* pObjSh = pDoc->GetDocShell();
         if( pObjSh )
-            pObjSh->UpdateDocInfoForSave();     // update information
+            pObjSh->UpdateDocInfoForSave();     
     }
     if( bShowProgress )
     {
         ProgressBarHelper *pProgress = GetProgressBarHelper();
         if( -1 == pProgress->GetReference() )
         {
-            // progress isn't initialized:
-            // We assume that the whole doc is exported, and the following
-            // durations:
-            // - meta information: 2
-            // - settings: 4 (TODO: not now!)
-            // - styles (except page styles): 2
-            // - page styles: 2 (TODO: not now!) + 2 for each paragraph
-            // - paragraph: 2 (1 for automatic styles and one for content)
+            
+            
+            
+            
+            
+            
+            
+            
 
-            // count each item once, and then multiply by two to reach the
-            // figures given above
-            // The styles in pDoc also count the default style that never
-            // gets exported -> subtract one.
-            sal_Int32 nRef = 1; // meta.xml
+            
+            
+            
+            
+            sal_Int32 nRef = 1; 
             nRef += pDoc->GetCharFmts()->size() - 1;
             nRef += pDoc->GetFrmFmts()->size() - 1;
             nRef += pDoc->GetTxtFmtColls()->size() - 1;
-            nRef *= 2; // for the above styles, xmloff will increment by 2!
-            // #i93174#: count all paragraphs for the progress bar
-            nRef += pDoc->GetUpdatedDocStat().nAllPara; // 1: only content, no autostyle
+            nRef *= 2; 
+            
+            nRef += pDoc->GetUpdatedDocStat().nAllPara; 
             pProgress->SetReference( nRef );
             pProgress->SetValue( 0 );
         }
@@ -233,23 +233,23 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
-        //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
+        
         SdrModel* pModel = pDoc->GetDrawModel();
         if( pModel )
             pModel->GetPage( 0 )->RecalcObjOrdNums();
     }
 
-    // adjust document class (eClass)
+    
     if (pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT))
     {
         eClass = XML_TEXT_GLOBAL;
 
-        // additionally, we take care of the save-linked-sections-thingy
+        
         mbSaveLinkedSections = pDoc->get(IDocumentSettingAccess::GLOBAL_DOCUMENT_SAVE_LINKS);
     }
-    // MIB: 03/26/04: The Label information is saved in the settings, so
-    // we don't need it here.
-    // else: keep default pClass that we received
+    
+    
+    
 
     SvXMLGraphicHelper *pGraphicResolver = 0;
     if( !GetGraphicResolver().is() )
@@ -273,15 +273,15 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
         }
     }
 
-    // set redline mode if we export STYLES or CONTENT, unless redline
-    // mode is taken care of outside (through info XPropertySet)
+    
+    
     sal_Bool bSaveRedline =
         ( (getExportFlags() & (EXPORT_CONTENT|EXPORT_STYLES)) != 0 );
     if( bSaveRedline )
     {
-        // if the info property set has a ShowChanges property,
-        // then change tracking is taken care of on the outside,
-        // so we don't have to!
+        
+        
+        
         Reference<XPropertySet> rInfoSet = getExportInfo();
         if( rInfoSet.is() )
         {
@@ -294,7 +294,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     bSavedShowChanges = IDocumentRedlineAccess::IsShowChanges( pDoc->GetRedlineMode() );
     if( bSaveRedline )
     {
-        // now save and switch redline mode
+        
         nRedlineMode = pDoc->GetRedlineMode();
         pDoc->SetRedlineMode(
                  (RedlineMode_t)(( nRedlineMode & nsRedlineMode_t::REDLINE_SHOW_MASK ) | nsRedlineType_t::REDLINE_INSERT ));
@@ -302,7 +302,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
      sal_uInt32 nRet = SvXMLExport::exportDoc( eClass );
 
-    // now we can restore the redline mode (if we changed it previously)
+    
     if( bSaveRedline )
     {
       pDoc->SetRedlineMode( (RedlineMode_t)(nRedlineMode ));
@@ -346,7 +346,7 @@ SwXMLExport::~SwXMLExport()
 
 void SwXMLExport::_ExportFontDecls()
 {
-    GetFontAutoStylePool(); // make sure the pool is created
+    GetFontAutoStylePool(); 
     SvXMLExport::_ExportFontDecls();
 }
 
@@ -354,7 +354,7 @@ void SwXMLExport::_ExportFontDecls()
 void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
     aProps.realloc( NUM_EXPORTED_VIEW_SETTINGS );
-     // Currently exporting 9 properties
+     
     PropertyValue *pValue = aProps.getArray();
     sal_Int32 nIndex = 0;
 
@@ -381,9 +381,9 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
     pValue[nIndex].Name = "ViewAreaHeight";
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.GetHeight() ) : rRect.GetHeight();
 
-    // "show redline mode" cannot simply be read from the document
-    // since it gets changed during execution. If it's in the info
-    // XPropertySet, we take it from there.
+    
+    
+    
     sal_Bool bShowRedlineChanges = bSavedShowChanges;
     Reference<XPropertySet> xInfoSet( getExportInfo() );
     if ( xInfoSet.is() )
@@ -421,7 +421,7 @@ void SwXMLExport::GetConfigurationSettings( Sequence < PropertyValue >& rProps)
 
 sal_Int32 SwXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >& _out_rSettings )
 {
-    // the only doc-specific settings group we know so far are the XForms settings
+    
     uno::Sequence<beans::PropertyValue> aXFormsSettings;
     Reference< XFormsSupplier > xXFormsSupp( GetModel(), UNO_QUERY );
     Reference< XNameAccess > xXForms;
@@ -438,7 +438,7 @@ sal_Int32 SwXMLExport::GetDocumentSpecificSettings( ::std::list< SettingsGroup >
 
 void SwXMLExport::SetBodyAttributes()
 {
-    // export use of soft page breaks
+    
     SwDoc *pDoc = getDoc();
     if( pDoc->GetCurrentViewShell() &&
         pDoc->GetCurrentViewShell()->GetPageCount() > 1 )
@@ -454,19 +454,19 @@ void SwXMLExport::SetBodyAttributes()
 
 void SwXMLExport::_ExportContent()
 {
-    // export forms
+    
     Reference<XDrawPageSupplier> xDrawPageSupplier(GetModel(), UNO_QUERY);
     if (xDrawPageSupplier.is())
     {
-        // export only if we actually have elements
+        
         Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
         if (xPage.is())
         {
-            // prevent export of form controls which are embedded in mute sections
+            
             GetTextParagraphExport()->PreventExportOfControlsInMuteSections(
                 xPage, GetFormExport() );
 
-            // #i36597#
+            
             if ( GetFormExport()->pageContainsForms( xPage ) || GetFormExport()->documentContainsXForms() )
             {
                 ::xmloff::OOfficeFormsExport aOfficeForms(*this);
@@ -510,11 +510,11 @@ void SwXMLExport::_ExportContent()
 
 
 //
-// uno component registration
-// helper functions for export service(s)
+
+
 //
 
-// OOo
+
 OUString SAL_CALL SwXMLExportOOO_getImplementationName() throw()
 {
     return OUString(
@@ -624,7 +624,7 @@ Reference< XInterface > SAL_CALL SwXMLExportSettingsOOO_createInstance(
     return (cppu::OWeakObject*)new SwXMLExport( comphelper::getComponentContext(rSMgr), SwXMLExportSettingsOOO_getImplementationName(), EXPORT_SETTINGS);
 }
 
-// OASIS
+
 OUString SAL_CALL SwXMLExport_getImplementationName() throw()
 {
     return OUString(

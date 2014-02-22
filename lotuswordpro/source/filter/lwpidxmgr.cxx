@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -83,7 +83,7 @@ LwpIndexManager::LwpIndexManager()
 
 LwpIndexManager::~LwpIndexManager()
 {
-    //Clear m_ObjectKeys
+    
     std::vector<LwpKey*>::iterator it;
 
     for( it = m_ObjectKeys.begin(); it != m_ObjectKeys.end(); ++it )
@@ -103,7 +103,7 @@ LwpIndexManager::~LwpIndexManager()
  */
 void LwpIndexManager::Read(LwpSvStream* pStrm)
 {
-    //Read index obj
+    
     LwpObjectHeader ObjHdr;
     ObjHdr.Read(*pStrm);
     LwpObjectStream* pObjStrm = new LwpObjectStream(pStrm, ObjHdr.IsCompressed(),
@@ -122,20 +122,20 @@ void LwpIndexManager::Read(LwpSvStream* pStrm)
 
         for (sal_uInt16 k = 0; k < m_nLeafCount; k++)
         {
-            //Read leaf
+            
             sal_Int64 nPos = m_ChildIndex[k]+LwpSvStream::LWP_STREAM_BASE;
             sal_Int64 nActualPos = pStrm->Seek(nPos);
 
             if (nPos != nActualPos)
                 throw BadSeek();
 
-            //Old Code
-            //ReadLeafIndex(pStrm);
-            //New Code
+            
+            
+            
             ReadObjIndex( pStrm );
 
 
-            //Read object in root, these objects are between the leaf objects
+            
             if(k!=m_nLeafCount-1)
             {
                 m_ObjectKeys.push_back(m_RootObjs[k]);
@@ -157,7 +157,7 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
 
     if(KeyCount)
     {
-        //read object keys
+        
         LwpKey* akey = new LwpKey();
         akey->id.Read(pObjStrm);
         m_RootObjs.push_back(akey);
@@ -175,7 +175,7 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
         for (k = 0; k < KeyCount; k++)
             m_RootObjs[k]->offset = pObjStrm->QuickReaduInt32();
 
-        //read leaf index offset
+        
         for (k = 0; k < m_nLeafCount; k++)
             m_ChildIndex[k] = pObjStrm->QuickReaduInt32();
     }
@@ -185,7 +185,7 @@ void LwpIndexManager::ReadRootData(LwpObjectStream* pObjStrm)
 }
 
 
-//Add new method to handle ObjIndex data
+
 /**
  * @descr   Read data in VO_OBJINDEX
  */
@@ -290,7 +290,7 @@ void LwpIndexManager::ReadLeafData( LwpObjectStream *pObjStrm )
     if(KeyCount)
     {
         LwpKey* akey = new LwpKey();
-        //read object keys: id & offset
+        
         akey->id.Read(pObjStrm);
         m_ObjectKeys.push_back(akey);
 
@@ -325,7 +325,7 @@ void LwpIndexManager::ReadTimeTable(LwpObjectStream *pObjStrm)
 sal_uInt32 LwpIndexManager::GetObjOffset( LwpObjectID objid )
 {
 
-    //sal_uInt16 L, U, M;
+    
     sal_uInt32 L, U, M;
 
 

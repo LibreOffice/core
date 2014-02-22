@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <element.hxx>
@@ -53,7 +53,7 @@ namespace DOM
         comphelper::AttributeList *pAttrs =
             new comphelper::AttributeList();
         OUString type = "";
-        // add namespace definitions to attributes
+        
         for (xmlNsPtr pNs = m_aNodePtr->nsDef; pNs != 0; pNs = pNs->next) {
             const xmlChar *pPrefix = pNs->prefix ? pNs->prefix : (const xmlChar*)"";
             OUString prefix(reinterpret_cast<const sal_Char*>(pPrefix),
@@ -67,7 +67,7 @@ namespace DOM
                 RTL_TEXTENCODING_UTF8);
             pAttrs->AddAttribute(name, type, val);
         }
-        // add attributes
+        
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
                         pAttr != 0; pAttr = pAttr->next) {
             ::rtl::Reference<CNode> const pNode = GetOwnerDocument().GetCNode(
@@ -86,7 +86,7 @@ namespace DOM
             : prefix + OUString(':') + getLocalName();
         Reference< XAttributeList > xAttrList(pAttrs);
         i_xHandler->startElement(name, xAttrList);
-        // recurse
+        
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
             ::rtl::Reference<CNode> const pNode(
@@ -103,7 +103,7 @@ namespace DOM
         pushContext(i_rContext);
         addNamespaces(i_rContext,m_aNodePtr);
 
-        // add attributes
+        
         i_rContext.mxAttribList->clear();
         for (xmlAttrPtr pAttr = m_aNodePtr->properties;
                         pAttr != 0; pAttr = pAttr->next) {
@@ -168,7 +168,7 @@ namespace DOM
         catch( Exception& )
         {}
 
-        // recurse
+        
         for (xmlNodePtr pChild = m_aNodePtr->children;
                         pChild != 0; pChild = pChild->next) {
             ::rtl::Reference<CNode> const pNode(
@@ -194,7 +194,7 @@ namespace DOM
         catch( Exception& )
         {}
 
-        // restore after children have been processed
+        
         i_rContext.mxCurrentHandler = xParentHandler;
         popContext(i_rContext);
     }
@@ -233,7 +233,7 @@ namespace DOM
         if (0 == m_aNodePtr) {
             return OUString();
         }
-        // search properties
+        
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         ::boost::shared_ptr<xmlChar const> const pValue(
             xmlGetProp(m_aNodePtr, (xmlChar*)o1.getStr()), xmlFree);
@@ -430,7 +430,7 @@ namespace DOM
             ::rtl::Reference<CNode> const pCNode(GetOwnerDocument().GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr), false));
             if (pCNode.is()) {
-                pCNode->invalidate(); // freed by xmlUnsetProp
+                pCNode->invalidate(); 
             }
         }
     }
@@ -460,7 +460,7 @@ namespace DOM
             ::rtl::Reference<CNode> const pCNode(GetOwnerDocument().GetCNode(
                     reinterpret_cast<xmlNodePtr>(pAttr), false));
             if (pCNode.is()) {
-                pCNode->invalidate(); // freed by xmlUnsetNsProp
+                pCNode->invalidate(); 
             }
         }
     }
@@ -513,7 +513,7 @@ namespace DOM
         }
         aAttr->setValue(oldAttr->getValue());
         xmlRemoveProp(pAttr);
-        pCNode->invalidate(); // freed by xmlRemoveProp
+        pCNode->invalidate(); 
 
         return aAttr;
     }
@@ -537,7 +537,7 @@ namespace DOM
             throw RuntimeException();
         }
 
-        // get the implementation
+        
         CAttr *const pCAttr = dynamic_cast<CAttr*>(
                 CNode::GetImplementation(xNewAttr));
         if (!pCAttr) { throw RuntimeException(); }
@@ -545,7 +545,7 @@ namespace DOM
             reinterpret_cast<xmlAttrPtr>(pCAttr->GetNodePtr());
         if (!pAttr) { throw RuntimeException(); }
 
-        // check whether the attribute is not in use by another element
+        
         if (pAttr->parent) {
             DOMException e;
             e.Code = DOMExceptionType_INUSE_ATTRIBUTE_ERR;
@@ -563,14 +563,14 @@ namespace DOM
             res = xmlNewProp(m_aNodePtr, pAttr->name, pContent);
         }
 
-        // get the new attr node
+        
         Reference< XAttr > const xAttr(
             static_cast< XNode* >(GetOwnerDocument().GetCNode(
                     reinterpret_cast<xmlNodePtr>(res)).get()),
             UNO_QUERY_THROW);
 
-        // attribute addition event
-        // dispatch DOMAttrModified event
+        
+        
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMAttrModified"), UNO_QUERY);
@@ -579,7 +579,7 @@ namespace DOM
             OUString(), xAttr->getValue(), xAttr->getName(),
             AttrChangeType_ADDITION);
 
-        guard.clear(); // release mutex before calling event handlers
+        guard.clear(); 
 
         dispatchEvent(event);
         dispatchSubtreeModified();
@@ -635,7 +635,7 @@ namespace DOM
             xmlSetProp(m_aNodePtr, xName, xValue);
         }
 
-        // dispatch DOMAttrModified event
+        
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMAttrModified"), UNO_QUERY);
@@ -644,7 +644,7 @@ namespace DOM
             Reference< XNode >(getAttributeNode(name), UNO_QUERY),
             oldValue, value, name, aChangeType);
 
-        guard.clear(); // release mutex before calling event handlers
+        guard.clear(); 
         dispatchEvent(event);
         dispatchSubtreeModified();
     }
@@ -690,19 +690,19 @@ namespace DOM
             throw RuntimeException();
         }
 
-        //find the right namespace
+        
         xmlNsPtr pNs = xmlSearchNs(m_aNodePtr->doc, m_aNodePtr, xPrefix);
-        // if no namespace found, create a new one
+        
         if (pNs == NULL) {
             pNs = xmlNewNs(m_aNodePtr, xURI, xPrefix);
         }
 
         if (strcmp((char*)pNs->href, (char*)xURI) != 0) {
-            // ambiguous ns prefix
+            
             throw RuntimeException();
         }
 
-        // found namespace matches
+        
 
         OUString oldValue;
         AttrChangeType aChangeType = AttrChangeType_MODIFICATION;
@@ -717,7 +717,7 @@ namespace DOM
                         RTL_TEXTENCODING_UTF8);
             xmlSetNsProp(m_aNodePtr, pNs, xLName, xValue);
         }
-        // dispatch DOMAttrModified event
+        
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
             "DOMAttrModified"), UNO_QUERY);
@@ -726,7 +726,7 @@ namespace DOM
             Reference< XNode >(getAttributeNodeNS(namespaceURI, OUString((char*)xLName, strlen((char*)xLName), RTL_TEXTENCODING_UTF8)), UNO_QUERY),
             oldValue, value, qualifiedName, aChangeType);
 
-        guard.clear(); // release mutex before calling event handlers
+        guard.clear(); 
         dispatchEvent(event);
         dispatchSubtreeModified();
     }

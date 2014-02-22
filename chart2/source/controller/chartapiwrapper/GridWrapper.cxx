@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "GridWrapper.hxx"
@@ -71,7 +71,7 @@ struct StaticGridWrapperPropertyArray : public rtl::StaticAggregate< Sequence< P
 {
 };
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -111,7 +111,7 @@ void GridWrapper::getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDime
     }
 }
 
-// ____ XComponent ____
+
 void SAL_CALL GridWrapper::dispose()
     throw (uno::RuntimeException)
 {
@@ -135,7 +135,7 @@ void SAL_CALL GridWrapper::removeEventListener(
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
-// WrappedPropertySet
+
 
 Reference< beans::XPropertySet > GridWrapper::getInnerPropertySet()
 {
@@ -168,7 +168,7 @@ const std::vector< WrappedProperty* > GridWrapper::createWrappedProperties()
 {
     ::std::vector< ::chart::WrappedProperty* > aWrappedProperties;
 
-    aWrappedProperties.push_back( new WrappedDefaultProperty( "LineColor", "LineColor", uno::makeAny( sal_Int32( 0x000000) ) ) ); // black
+    aWrappedProperties.push_back( new WrappedDefaultProperty( "LineColor", "LineColor", uno::makeAny( sal_Int32( 0x000000) ) ) ); 
 
     return aWrappedProperties;
 }
@@ -184,10 +184,10 @@ Sequence< OUString > GridWrapper::getSupportedServiceNames_Static()
     return aServices;
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( GridWrapper, lcl_aServiceName );
 
-} //  namespace wrapper
-} //  namespace chart
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

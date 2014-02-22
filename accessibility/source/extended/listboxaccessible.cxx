@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,40 +14,32 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <accessibility/extended/listboxaccessible.hxx>
 #include <svtools/treelistbox.hxx>
 
-//........................................................................
 namespace accessibility
 {
-//........................................................................
-
-    //====================================================================
-    //= ListBoxAccessibleBase
-    //====================================================================
-    //--------------------------------------------------------------------
+    
     ListBoxAccessibleBase::ListBoxAccessibleBase( SvTreeListBox& _rWindow )
         :m_pWindow( &_rWindow )
     {
         m_pWindow->AddEventListener( LINK( this, ListBoxAccessibleBase, WindowEventListener ) );
     }
 
-    //--------------------------------------------------------------------
     ListBoxAccessibleBase::~ListBoxAccessibleBase( )
     {
         if ( m_pWindow )
         {
-            // cannot call "dispose" here, as it is abstract, so the VTABLE of the derived class
-            // is not intact anymore
-            // so we call our "disposing" only
+            
+            
+            
             disposing();
         }
     }
 
-    //--------------------------------------------------------------------
     IMPL_LINK( ListBoxAccessibleBase, WindowEventListener, VclSimpleEvent*, pEvent )
     {
         OSL_ENSURE( pEvent && pEvent->ISA( VclWindowEvent ), "ListBoxAccessibleBase::WindowEventListener: unexpected WindowEvent!" );
@@ -61,7 +53,6 @@ namespace accessibility
         return 0;
     }
 
-    // -----------------------------------------------------------------------------
     void ListBoxAccessibleBase::disposing()
     {
         if ( m_pWindow )
@@ -69,7 +60,6 @@ namespace accessibility
         m_pWindow = NULL;
     }
 
-    // -----------------------------------------------------------------------------
     void ListBoxAccessibleBase::ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent )
     {
         if ( isAlive() )
@@ -87,9 +77,6 @@ namespace accessibility
             }
         }
     }
-
-//........................................................................
-}   // namespace accessibility
-//........................................................................
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -60,7 +60,7 @@ namespace framework
 
 static uno::WeakReference< util::XMacroExpander > m_xMacroExpander;
 
-// ------------------------------------------------------------------
+
 
 uno::Reference< util::XMacroExpander > GetMacroExpander()
 {
@@ -87,16 +87,16 @@ static void SubstituteVariables( OUString& aURL )
     {
         uno::Reference< util::XMacroExpander > xMacroExpander = GetMacroExpander();
 
-        // cut protocol
+        
         OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
-        // decode uric class chars
+        
         aMacro = ::rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
-        // expand macro string
+        
         aURL = xMacroExpander->expandMacros( aMacro );
     }
 }
 
-// ------------------------------------------------------------------
+
 
 ImageButtonToolbarController::ImageButtonToolbarController(
     const Reference< XComponentContext >&    rxContext,
@@ -110,17 +110,17 @@ ImageButtonToolbarController::ImageButtonToolbarController(
 
     Image aImage = AddonsOptions().GetImageFromURL( aCommand, bBigImages, sal_True );
 
-    // Height will be controlled by scaling according to button height
+    
     m_pToolbar->SetItemImage( m_nID, aImage );
 }
 
-// ------------------------------------------------------------------
+
 
 ImageButtonToolbarController::~ImageButtonToolbarController()
 {
 }
 
-// ------------------------------------------------------------------
+
 
 void SAL_CALL ImageButtonToolbarController::dispose()
 throw ( RuntimeException )
@@ -129,12 +129,12 @@ throw ( RuntimeException )
     ComplexToolbarController::dispose();
 }
 
-// ------------------------------------------------------------------
+
 
 void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star::frame::ControlCommand& rControlCommand )
 {
     SolarMutexGuard aSolarMutexGuard;
-    // i73486 to be downward compatible use old and "wrong" also!
+    
     if( rControlCommand.Command == "SetImag" ||
         rControlCommand.Command == "SetImage" )
     {
@@ -154,7 +154,7 @@ void ImageButtonToolbarController::executeControlCommand( const ::com::sun::star
                 {
                     m_pToolbar->SetItemImage( m_nID, aImage );
 
-                    // send notification
+                    
                     uno::Sequence< beans::NamedValue > aInfo( 1 );
                     aInfo[0].Name  = "URL";
                     aInfo[0].Value <<= aURL;
@@ -173,7 +173,7 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
     SvStream* pStream = utl::UcbStreamHelper::CreateStream( aImageURL, STREAM_STD_READ );
     if ( pStream && ( pStream->GetErrorCode() == 0 ))
     {
-        // Use graphic class to also support more graphic formats (bmp,png,...)
+        
         Graphic aGraphic;
 
         GraphicFilter& rGF = GraphicFilter::GetGraphicFilter();
@@ -181,7 +181,7 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
 
         BitmapEx aBitmapEx = aGraphic.GetBitmapEx();
 
-        const ::Size aSize = bBigImage ? aImageSizeBig : aImageSizeSmall; // Sizes used for toolbar images
+        const ::Size aSize = bBigImage ? aImageSizeBig : aImageSizeSmall; 
 
         ::Size aBmpSize = aBitmapEx.GetSizePixel();
         if ( aBmpSize.Width() > 0 && aBmpSize.Height() > 0 )
@@ -198,6 +198,6 @@ sal_Bool ImageButtonToolbarController::ReadImageFromURL( sal_Bool bBigImage, con
     return sal_False;
 }
 
-} // namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

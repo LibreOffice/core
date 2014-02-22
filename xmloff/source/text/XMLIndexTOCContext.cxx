@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "XMLIndexTOCContext.hxx"
@@ -108,7 +108,7 @@ XMLIndexTOCContext::XMLIndexTOCContext(SvXMLImport& rImport,
         sal_uInt16 nTmp;
         if (SvXMLUnitConverter::convertEnum(nTmp, rLocalName, aIndexTypeMap))
         {
-            // check for array index:
+            
             OSL_ENSURE(nTmp < (SAL_N_ELEMENTS(aIndexServiceMap)), "index out of range");
             OSL_ENSURE(SAL_N_ELEMENTS(aIndexServiceMap) ==
                        SAL_N_ELEMENTS(aIndexSourceElementMap),
@@ -129,9 +129,9 @@ void XMLIndexTOCContext::StartElement(
 {
     if (bValid)
     {
-        // find text:style-name attribute and set section style
-        // find text:protected and set value
-        // find text:name and set value (if not empty)
+        
+        
+        
         sal_Int16 nCount = xAttrList->getLength();
         sal_Bool bProtected = sal_False;
         OUString sIndexName;
@@ -173,7 +173,7 @@ void XMLIndexTOCContext::StartElement(
             }
         }
 
-        // create table of content (via MultiServiceFactory)
+        
         Reference<XMultiServiceFactory> xFactory(GetImport().GetModel(),
                                                  UNO_QUERY);
         if( xFactory.is() )
@@ -183,18 +183,18 @@ void XMLIndexTOCContext::StartElement(
                     OUString::createFromAscii(aIndexServiceMap[eIndexType]));
             if( xIfc.is() )
             {
-                // get Property set
+                
                 Reference<XPropertySet> xPropSet(xIfc, UNO_QUERY);
                 xTOCPropertySet = xPropSet;
 
-                // insert section
-                // a) insert section
-                //    The inserted index consists of an empty paragraph
-                //    only, as well as an empty paragraph *after* the index
-                // b) insert marker after index, and put Cursor inside of the
-                //    index
+                
+                
+                
+                
+                
+                
 
-                // preliminaries
+                
 #ifndef DBG_UTIL
                 OUString sMarker(" ");
 #else
@@ -203,7 +203,7 @@ void XMLIndexTOCContext::StartElement(
                 UniReference<XMLTextImportHelper> rImport =
                     GetImport().GetTextImport();
 
-                // a) insert index
+                
                 Reference<XTextContent> xTextContent(xIfc, UNO_QUERY);
                 try
                 {
@@ -212,29 +212,29 @@ void XMLIndexTOCContext::StartElement(
                 }
                 catch(const IllegalArgumentException& e)
                 {
-                    // illegal argument? Then we can't accept indices here!
+                    
                     Sequence<OUString> aSeq(1);
                     aSeq[0] = GetLocalName();
                     GetImport().SetError(
                         XMLERROR_FLAG_ERROR | XMLERROR_NO_INDEX_ALLOWED_HERE,
                         aSeq, e.Message, NULL );
 
-                    // set bValid to false, and return prematurely
+                    
                     bValid = false;
                     return;
                 }
 
-                // xml:id for RDF metadata
+                
                 GetImport().SetXmlId(xIfc, sXmlId);
 
-                // b) insert marker and move cursor
+                
                 rImport->InsertString(sMarker);
                 rImport->GetCursor()->goLeft(2, sal_False);
             }
         }
 
-        // finally, check for redlines that should start at
-        // the section start node
+        
+        
         if( bValid )
             GetImport().GetTextImport()->
                 RedlineAdjustStartNodeCursor(sal_True);
@@ -258,15 +258,15 @@ void XMLIndexTOCContext::StartElement(
 
 void XMLIndexTOCContext::EndElement()
 {
-    // complete import of index by removing the markers (if the index
-    // was actually inserted, that is)
+    
+    
     if( bValid )
     {
-        // preliminaries
+        
         OUString sEmpty;
         UniReference<XMLTextImportHelper> rHelper= GetImport().GetTextImport();
 
-        // get rid of last paragraph (unless it's the only paragraph)
+        
         rHelper->GetCursor()->goRight(1, sal_False);
         if( xBodyContextRef.Is() &&
             ((XMLIndexBodyContext*)&xBodyContextRef)->HasContent() )
@@ -276,12 +276,12 @@ void XMLIndexTOCContext::EndElement()
                                              sEmpty, sal_True);
         }
 
-        // and delete second marker
+        
         rHelper->GetCursor()->goRight(1, sal_True);
         rHelper->GetText()->insertString(rHelper->GetCursorAsRange(),
                                          sEmpty, sal_True);
 
-        // check for Redlines on our end node
+        
         GetImport().GetTextImport()->RedlineAdjustStartNodeCursor(sal_False);
     }
 }
@@ -309,7 +309,7 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
             }
             else if (IsXMLToken(rLocalName, aIndexSourceElementMap[eIndexType]))
             {
-                // instantiate source context for the appropriate index type
+                
                 switch (eIndexType)
                 {
                     case TEXT_INDEX_TOC:
@@ -352,13 +352,13 @@ SvXMLImportContext* XMLIndexTOCContext::CreateChildContext(
                         break;
                 }
             }
-            // else: ignore
+            
         }
-        // else: no text: namespace -> ignore
+        
     }
-    // else: not valid -> ignore
+    
 
-    // default: ignore
+    
     if (pContext == NULL)
     {
         pContext = SvXMLImportContext::CreateChildContext(nPrefix, rLocalName,

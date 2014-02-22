@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/drawingml/chart/chartcontextbase.hxx"
@@ -26,12 +26,12 @@ namespace oox {
 namespace drawingml {
 namespace chart {
 
-// ============================================================================
+
 
 using ::oox::core::ContextHandler2Helper;
 using ::oox::core::ContextHandlerRef;
 
-// ============================================================================
+
 
 ShapePrWrapperContext::ShapePrWrapperContext( ContextHandler2Helper& rParent, Shape& rModel ) :
     ContextBase< Shape >( rParent, rModel )
@@ -47,7 +47,7 @@ ContextHandlerRef ShapePrWrapperContext::onCreateContext( sal_Int32 nElement, co
     return (isRootElement() && (nElement == C_TOKEN( spPr ))) ? new ShapePropertiesContext( *this, mrModel ) : 0;
 }
 
-// ============================================================================
+
 
 LayoutContext::LayoutContext( ContextHandler2Helper& rParent, LayoutModel& rModel ) :
     ContextBase< LayoutModel >( rParent, rModel )
@@ -107,10 +107,10 @@ ContextHandlerRef LayoutContext::onCreateContext( sal_Int32 nElement, const Attr
     return 0;
 }
 
-// ============================================================================
 
-} // namespace chart
-} // namespace drawingml
-} // namespace oox
+
+} 
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

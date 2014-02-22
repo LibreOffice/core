@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <drawinglayer/processor3d/cutfindprocessor3d.hxx>
@@ -27,7 +27,7 @@
 #include <basegfx/polygon/b3dpolypolygontools.hxx>
 #include <drawinglayer/primitive3d/hiddengeometryprimitive3d.hxx>
 
-//////////////////////////////////////////////////////////////////////////////
+
 
 namespace drawinglayer
 {
@@ -51,19 +51,19 @@ namespace drawinglayer
         {
             if(getAnyHit() && maResult.size())
             {
-                // stop processing as soon as a hit was recognized
+                
                 return;
             }
 
-            // it is a BasePrimitive3D implementation, use getPrimitive3DID() call for switch
+            
             switch(rCandidate.getPrimitive3DID())
             {
                 case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
                 {
-                    // transform group.
+                    
                     const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(rCandidate);
 
-                    // remember old and transform front, back to object coordinates
+                    
                     const basegfx::B3DPoint aLastFront(maFront);
                     const basegfx::B3DPoint aLastBack(maBack);
                     basegfx::B3DHomMatrix aInverseTrans(rPrimitive.getTransformation());
@@ -71,7 +71,7 @@ namespace drawinglayer
                     maFront *= aInverseTrans;
                     maBack *= aInverseTrans;
 
-                    // remember current and create new transformation; add new object transform from right side
+                    
                     const geometry::ViewInformation3D aLastViewInformation3D(getViewInformation3D());
                     const geometry::ViewInformation3D aNewViewInformation3D(
                         aLastViewInformation3D.getObjectTransformation() * rPrimitive.getTransformation(),
@@ -82,14 +82,14 @@ namespace drawinglayer
                         aLastViewInformation3D.getExtendedInformationSequence());
                     updateViewInformation(aNewViewInformation3D);
 
-                    // #i102956# remember needed back-transform for found cuts (combine from right side)
+                    
                     const basegfx::B3DHomMatrix aLastCombinedTransform(maCombinedTransform);
                     maCombinedTransform = maCombinedTransform * rPrimitive.getTransformation();
 
-                    // let break down
+                    
                     process(rPrimitive.getChildren());
 
-                    // restore transformations and front, back
+                    
                     maCombinedTransform = aLastCombinedTransform;
                     updateViewInformation(aLastViewInformation3D);
                     maFront = aLastFront;
@@ -98,27 +98,27 @@ namespace drawinglayer
                 }
                 case PRIMITIVE3D_ID_POLYGONHAIRLINEPRIMITIVE3D :
                 {
-                    // PolygonHairlinePrimitive3D, not used for hit test with planes, ignore. This
-                    // means that also thick line expansion will not be hit-tested as
-                    // PolyPolygonMaterialPrimitive3D
+                    
+                    
+                    
                     break;
                 }
                 case PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D :
                 {
-                    // #i97321#
-                    // For HatchTexturePrimitive3D, do not use the decomposition since it will produce
-                    // clipped hatch lines in 3D. It can be used when the hatch also has a filling, but for
-                    // simplicity, just use the children which are the PolyPolygonMaterialPrimitive3D
-                    // which define the hatched areas anyways; for HitTest this is more than adequate
+                    
+                    
+                    
+                    
+                    
                     const primitive3d::HatchTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::HatchTexturePrimitive3D& >(rCandidate);
                     process(rPrimitive.getChildren());
                     break;
                 }
                 case PRIMITIVE3D_ID_HIDDENGEOMETRYPRIMITIVE3D :
                 {
-                    // HiddenGeometryPrimitive3D; the default decomposition would return an empty seqence,
-                    // so force this primitive to process it's children directly if the switch is set
-                    // (which is the default). Else, ignore invisible content
+                    
+                    
+                    
                     const primitive3d::HiddenGeometryPrimitive3D& rHiddenGeometry(static_cast< const primitive3d::HiddenGeometryPrimitive3D& >(rCandidate));
                        const primitive3d::Primitive3DSequence& rChildren = rHiddenGeometry.getChildren();
 
@@ -141,7 +141,7 @@ namespace drawinglayer
                     {
                         if(1.0 <= rPrimitive.getTransparence())
                         {
-                            // not visible, but use for HitTest
+                            
                             if(getUseInvisiblePrimitiveContent())
                             {
                                    process(rChildren);
@@ -149,7 +149,7 @@ namespace drawinglayer
                         }
                         else if(rPrimitive.getTransparence() >= 0.0 && rPrimitive.getTransparence() < 1.0)
                         {
-                            // visible; use content
+                            
                             process(rChildren);
                         }
                     }
@@ -158,7 +158,7 @@ namespace drawinglayer
                 }
                 case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
                 {
-                    // PolyPolygonMaterialPrimitive3D
+                    
                     const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(rCandidate);
 
                     if(!maFront.equal(maBack))
@@ -186,9 +186,9 @@ namespace drawinglayer
 
                                         if(basegfx::tools::isInside(rPolyPolygon, aCutPoint, false))
                                         {
-                                            // #i102956# add result. Do not forget to do this in the coordinate
-                                            // system the processor get started with, so use the collected
-                                            // combined transformation from processed TransformPrimitive3D's
+                                            
+                                            
+                                            
                                             maResult.push_back(maCombinedTransform * aCutPoint);
                                         }
                                     }
@@ -201,13 +201,13 @@ namespace drawinglayer
                 }
                 default :
                 {
-                    // process recursively
+                    
                     process(rCandidate.get3DDecomposition(getViewInformation3D()));
                     break;
                 }
             }
         }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

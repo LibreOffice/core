@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "connectivity/dbconversion.hxx"
@@ -44,7 +44,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
-// -----------------------------------------------------------------------------
+
 OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bool bQuote,
                                               const Reference< XTypeConverter >&  _rxTypeConverter)
 {
@@ -132,7 +132,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bo
                         bOk = _rVal >>= aDateTime;
 
                     OSL_VERIFY_RES( bOk, "DBTypeConversion::toSQLString: _rVal is not datetime!");
-                    // check if this is really a timestamp or only a date
+                    
                     if ( bOk )
                     {
                         if (bQuote)
@@ -209,7 +209,7 @@ OUString DBTypeConversion::toSQLString(sal_Int32 eType, const Any& _rVal, sal_Bo
         aRet.appendAscii(" NULL ");
     return aRet.makeStringAndClear();
 }
-// -----------------------------------------------------------------------------
+
 Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xSupplier)
 {
     OSL_ENSURE(xSupplier.is(), "getNULLDate : the formatter doesn't implement a supplier !");
@@ -217,7 +217,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
     {
         try
         {
-            // get the null date
+            
             Date aDate;
             xSupplier->getNumberFormatSettings()->getPropertyValue("NullDate") >>= aDate;
             return aDate;
@@ -229,7 +229,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
 
     return getStandardDate();
 }
-// -----------------------------------------------------------------------------
+
 void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const Reference<XNumberFormatter>& xFormatter,
                                 const Date& rNullDate,
@@ -240,13 +240,13 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
 {
     if (!rString.isEmpty())
     {
-        // Does the String need to be formatted?
+        
         sal_Int16 nTypeClass = nKeyType & ~NumberFormat::DEFINED;
         sal_Bool bTextFormat = nTypeClass == NumberFormat::TEXT;
         sal_Int32 nKeyToUse  = bTextFormat ? 0 : nKey;
         sal_Int16 nRealUsedTypeClass = nTypeClass;
-        // for a Text-Format the formatter needs some more freedom, otherwise
-        // convertStringToNumber will throw a NotNumericException
+        
+        
         try
         {
             double fValue = xFormatter->convertStringToNumber(nKeyToUse, rString);
@@ -254,12 +254,12 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             if (nRealUsedKey != nKeyToUse)
                 nRealUsedTypeClass = getNumberFormatType(xFormatter, nRealUsedKey) & ~NumberFormat::DEFINED;
 
-            // and again a special treatment, this time for percent formats
+            
             if ((NumberFormat::NUMBER == nRealUsedTypeClass) && (NumberFormat::PERCENT == nTypeClass))
-            {   // formatting should be "percent", but the String provides just a simple number -> adjust
+            {   
                 OUString sExpanded(rString);
                 static OUString s_sPercentSymbol( "%" );
-                    // need a method to add a sal_Unicode to a string, 'til then we use a static string
+                    
                 sExpanded += s_sPercentSymbol;
                 fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);
             }
@@ -270,7 +270,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                 case NumberFormat::DATETIME:
                 case NumberFormat::TIME:
                     DBTypeConversion::setValue(xVariant,rNullDate,fValue,nRealUsedTypeClass);
-                    //  xVariant->updateDouble(toStandardDbDate(rNullDate, fValue));
+                    
                     break;
                 case NumberFormat::CURRENCY:
                 case NumberFormat::NUMBER:
@@ -303,7 +303,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
     }
 }
 
-//------------------------------------------------------------------------------
+
 void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const Date& rNullDate,
                                 const double& rValue,
@@ -323,33 +323,33 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
         default:
             {
                 double nValue = rValue;
-//              Reference<XPropertySet> xProp(xVariant,UNO_QUERY);
-//              if (    xProp.is()
-//                  &&  xProp->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))
-//                  && !::comphelper::getBOOL(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISSIGNED))) )
-//              {
-//                  switch (::comphelper::getINT32(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
-//                  {
-//                      case DataType::TINYINT:
-//                          nValue = static_cast<sal_uInt8>(rValue);
-//                          break;
-//                      case DataType::SMALLINT:
-//                          nValue = static_cast<sal_uInt16>(rValue);
-//                          break;
-//                      case DataType::INTEGER:
-//                          nValue = static_cast<sal_uInt32>(rValue);
-//                          break;
-//                      case DataType::BIGINT:
-//                          nValue = static_cast<sal_uInt64>(rValue);
-//                          break;
-//                  }
-//              }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 xVariant->updateDouble(nValue);
             }
     }
 }
 
-//------------------------------------------------------------------------------
+
 double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const Date& i_relativeToNullDate )
 {
     try
@@ -396,7 +396,7 @@ double DBTypeConversion::getValue( const Reference< XColumn >& i_column, const D
         return 0.0;
     }
 }
-//------------------------------------------------------------------------------
+
 OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xColumn,
                                            const Reference<XNumberFormatter>& _xFormatter,
                                            const ::com::sun::star::lang::Locale& _rLocale,
@@ -432,7 +432,7 @@ OUString DBTypeConversion::getFormattedValue(const Reference< XPropertySet>& _xC
     return DBTypeConversion::getFormattedValue(Reference< XColumn > (_xColumn, UNO_QUERY), _xFormatter, _rNullDate, nKey, nKeyType);
 }
 
-//------------------------------------------------------------------------------
+
 OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                                    const Reference<XNumberFormatter>& xFormatter,
                                    const Date& rNullDate,
@@ -449,11 +449,11 @@ OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                 case NumberFormat::DATE:
                 case NumberFormat::DATETIME:
                 {
-                    // get a value which represents the given date, relative to the given null date
+                    
                     double fValue = getValue( xVariant, rNullDate );
                     if ( !xVariant->wasNull() )
                     {
-                         // get the null date of the formatter
+                         
                          Date aFormatterNullDate( rNullDate );
                          try
                          {
@@ -465,9 +465,9 @@ OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
                          {
                             DBG_UNHANDLED_EXCEPTION();
                          }
-                         // get a value which represents the given date, relative to the null date of the formatter
+                         
                          fValue -= toDays( rNullDate, aFormatterNullDate );
-                         // format this value
+                         
                         aString = xFormatter->convertNumberToString( nKey, fValue );
                     }
                 }
@@ -502,6 +502,6 @@ OUString DBTypeConversion::getFormattedValue(const Reference<XColumn>& xVariant,
     }
     return aString;
 }
-//------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

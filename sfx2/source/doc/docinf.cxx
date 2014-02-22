@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -32,13 +32,13 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/dibtools.hxx>
 #include "oleprops.hxx"
-// ============================================================================
 
-// stream names
+
+
 #define STREAM_SUMMARYINFO      "\005SummaryInformation"
 #define STREAM_DOCSUMMARYINFO   "\005DocumentSummaryInformation"
 
-// usings
+
 using namespace ::com::sun::star;
 
 
@@ -48,18 +48,18 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
     uno::Reference< document::XDocumentProperties> i_xDocProps,
     SotStorage* i_pStorage )
 {
-    // *** global properties from stream "005SummaryInformation" ***
+    
 
-    // load the property set
+    
     SfxOlePropertySet aGlobSet;
     ErrCode nGlobError = aGlobSet.LoadPropertySet(i_pStorage,
         OUString( STREAM_SUMMARYINFO  ) );
 
-    // global section
+    
     SfxOleSectionRef xGlobSect = aGlobSet.GetSection( SECTION_GLOBAL );
     if( xGlobSect.get() )
     {
-        // set supported properties
+        
         OUString aStrValue;
         util::DateTime aDateTime;
 
@@ -110,7 +110,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
 
         if( xGlobSect->GetFileTimeValue( aDateTime, PROPID_EDITTIME ) )
         {
-            // subtract offset 1601-01-01
+            
             aDateTime.Year  -= 1601;
             aDateTime.Month -= 1;
             aDateTime.Day   -= 1;
@@ -124,19 +124,19 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
             }
             catch (const lang::IllegalArgumentException &)
             {
-                // ignore
+                
             }
         }
     }
 
-    // *** custom properties from stream "005DocumentSummaryInformation" ***
+    
 
-    // load the property set
+    
     SfxOlePropertySet aDocSet;
     ErrCode nDocError = aDocSet.LoadPropertySet(i_pStorage,
         OUString( STREAM_DOCSUMMARYINFO  ) );
 
-    // custom properties
+    
     SfxOleSectionRef xCustomSect = aDocSet.GetSection( SECTION_CUSTOM );
     if( xCustomSect.get() )
     {
@@ -158,7 +158,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
                 }
                 catch (const uno::Exception&)
                 {
-                    //ignore
+                    
                 }
             }
         }
@@ -186,7 +186,7 @@ sal_uInt32 SFX2_DLLPUBLIC LoadOlePropertySet(
         }
     }
 
-    // return code
+    
     return (nGlobError != ERRCODE_NONE) ? nGlobError : nDocError;
 }
 
@@ -197,11 +197,11 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
     const uno::Sequence<sal_uInt8> * i_pGuid,
     const uno::Sequence<sal_uInt8> * i_pHyperlinks)
 {
-    // *** global properties into stream "005SummaryInformation" ***
+    
 
     SfxOlePropertySet aGlobSet;
 
-    // set supported properties
+    
     SfxOleSection& rGlobSect = aGlobSet.AddSection( SECTION_GLOBAL );
     rGlobSect.SetStringValue( PROPID_TITLE,    i_xDocProps->getTitle() );
     rGlobSect.SetStringValue( PROPID_SUBJECT,  i_xDocProps->getSubject() );
@@ -215,12 +215,12 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
     rGlobSect.SetStringValue( PROPID_LASTAUTHOR, i_xDocProps->getModifiedBy() );
     rGlobSect.SetFileTimeValue(PROPID_LASTSAVED,
                                 i_xDocProps->getModificationDate() );
-    // note: apparently PrintedBy is not supported in file format
+    
     rGlobSect.SetFileTimeValue(PROPID_LASTPRINTED, i_xDocProps->getPrintDate());
 
     sal_Int32 dur = i_xDocProps->getEditingDuration();
     util::DateTime aEditTime;
-    // add offset 1601-01-01
+    
     aEditTime.Year    = 1601;
     aEditTime.Month   = 1;
     aEditTime.Day     = 1;
@@ -234,21 +234,21 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
     if ( i_pThumb && i_pThumb->getLength() )
         rGlobSect.SetThumbnailValue( PROPID_THUMBNAIL, *i_pThumb );
 
-    // save the property set
+    
     ErrCode nGlobError = aGlobSet.SavePropertySet(i_pStorage,
         OUString(STREAM_SUMMARYINFO));
 
-    // *** custom properties into stream "005DocumentSummaryInformation" ***
+    
 
     SfxOlePropertySet aDocSet;
 
-    // set builtin properties
+    
     aDocSet.AddSection( SECTION_BUILTIN );
 
-    // set custom properties
+    
     SfxOleSection& rCustomSect = aDocSet.AddSection( SECTION_CUSTOM );
 
-    // write GUID
+    
     if (i_pGuid) {
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pGuid );
@@ -256,7 +256,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
             OUString("_PID_GUID") );
     }
 
-    // write hyperlinks
+    
     if (i_pHyperlinks) {
         const sal_Int32 nPropId = rCustomSect.GetFreePropertyId();
         rCustomSect.SetBlobValue( nPropId, *i_pHyperlinks );
@@ -275,7 +275,7 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
     {
         try
         {
-            // skip transient properties
+            
             if (~props[i].Attributes & beans::PropertyAttribute::TRANSIENT)
             {
                 const OUString name = props[i].Name;
@@ -288,16 +288,16 @@ bool SFX2_DLLPUBLIC SaveOlePropertySet(
         }
         catch (const uno::Exception &)
         {
-            // may happen with concurrent modification...
+            
             DBG_WARNING("SavePropertySet: exception");
         }
     }
 
-    // save the property set
+    
     ErrCode nDocError = aDocSet.SavePropertySet(i_pStorage,
         OUString( STREAM_DOCSUMMARYINFO  ) );
 
-    // return code
+    
     return (nGlobError == ERRCODE_NONE) && (nDocError == ERRCODE_NONE);
 }
 
@@ -322,6 +322,6 @@ uno::Sequence<sal_uInt8> SFX2_DLLPUBLIC convertMetaFile(GDIMetaFile* i_pThumb)
     return uno::Sequence<sal_uInt8>();
 }
 
-} // namespace sfx2
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

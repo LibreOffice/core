@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
@@ -202,7 +202,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         throw;
     }
 
-    //Set Mnemonic widgets when everything has been imported
+    
     for (std::vector<MnemonicWidgetMap>::iterator aI = m_pParserState->m_aMnemonicWidgetMaps.begin(),
         aEnd = m_pParserState->m_aMnemonicWidgetMaps.end(); aI != aEnd; ++aI)
     {
@@ -213,7 +213,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             pOne->set_mnemonic_widget(pOther);
     }
 
-    //Set a11y relations when everything has been imported
+    
     for (AtkMap::iterator aI = m_pParserState->m_aAtkInfo.begin(),
          aEnd = m_pParserState->m_aAtkInfo.end(); aI != aEnd; ++aI)
     {
@@ -243,7 +243,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         }
     }
 
-    //Set radiobutton groups when everything has been imported
+    
     for (std::vector<RadioButtonGroupMap>::iterator aI = m_pParserState->m_aGroupMaps.begin(),
          aEnd = m_pParserState->m_aGroupMaps.end(); aI != aEnd; ++aI)
     {
@@ -254,7 +254,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             pOne->group(*pOther);
     }
 
-    //Set ComboBox models when everything has been imported
+    
     for (std::vector<ComboBoxModelMap>::iterator aI = m_pParserState->m_aModelMaps.begin(),
          aEnd = m_pParserState->m_aModelMaps.end(); aI != aEnd; ++aI)
     {
@@ -265,7 +265,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             mungeModel(*pTarget, *pStore, aI->m_nActiveId);
     }
 
-    //Set TextView buffers when everything has been imported
+    
     for (std::vector<TextBufferMap>::iterator aI = m_pParserState->m_aTextBufferMaps.begin(),
          aEnd = m_pParserState->m_aTextBufferMaps.end(); aI != aEnd; ++aI)
     {
@@ -276,7 +276,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             mungeTextBuffer(*pTarget, *pBuffer);
     }
 
-    //Set SpinButton adjustments when everything has been imported
+    
     for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aNumericFormatterAdjustmentMaps.begin(),
          aEnd = m_pParserState->m_aNumericFormatterAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
@@ -307,7 +307,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             mungeAdjustment(*pTarget, *pAdjustment);
     }
 
-    //Set ScrollBar adjustments when everything has been imported
+    
     for (std::vector<WidgetAdjustmentMap>::iterator aI = m_pParserState->m_aScrollAdjustmentMaps.begin(),
          aEnd = m_pParserState->m_aScrollAdjustmentMaps.end(); aI != aEnd; ++aI)
     {
@@ -318,7 +318,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
             mungeAdjustment(*pTarget, *pAdjustment);
     }
 
-    //Set size-groups when all widgets have been imported
+    
     for (std::vector<SizeGroup>::iterator aI = m_pParserState->m_aSizeGroups.begin(),
         aEnd = m_pParserState->m_aSizeGroups.end(); aI != aEnd; ++aI)
     {
@@ -340,7 +340,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         }
     }
 
-    //Set button images when everything has been imported
+    
     std::set<OString> aImagesToBeRemoved;
     for (std::vector<ButtonImageWidgetMap>::iterator aI = m_pParserState->m_aButtonImageWidgetMaps.begin(),
          aEnd = m_pParserState->m_aButtonImageWidgetMaps.end(); aI != aEnd; ++aI)
@@ -409,15 +409,15 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         }
     }
 
-    //There may be duplicate use of an Image, so we used a set to collect and
-    //now we can remove them from the tree after their final munge
+    
+    
     for (std::set<OString>::iterator aI = aImagesToBeRemoved.begin(),
         aEnd = aImagesToBeRemoved.end(); aI != aEnd; ++aI)
     {
         delete_by_name(*aI);
     }
 
-    //Set button menus when everything has been imported
+    
     for (std::vector<ButtonMenuMap>::iterator aI = m_pParserState->m_aButtonMenuMaps.begin(),
          aEnd = m_pParserState->m_aButtonMenuMaps.end(); aI != aEnd; ++aI)
     {
@@ -430,15 +430,15 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         pTarget->SetPopupMenu(pMenu);
     }
 
-    //Remove ScrollWindow parent widgets whose children in vcl implement scrolling
-    //internally.
+    
+    
     for (std::map<Window*, Window*>::iterator aI = m_pParserState->m_aRedundantParentWidgets.begin(),
         aEnd = m_pParserState->m_aRedundantParentWidgets.end(); aI != aEnd; ++aI)
     {
         delete_by_window(aI->first);
     }
 
-    //fdo#67378 merge the label into the disclosure button
+    
     for (std::vector<VclExpander*>::iterator aI = m_pParserState->m_aExpanderWidgets.begin(),
         aEnd = m_pParserState->m_aExpanderWidgets.end(); aI != aEnd; ++aI)
     {
@@ -454,7 +454,7 @@ VclBuilder::VclBuilder(Window *pParent, OUString sUIDir, OUString sUIFile, OStri
         }
     }
 
-    //drop maps, etc. that we don't need again
+    
     delete m_pParserState;
 
     SAL_WARN_IF(!m_sID.isEmpty() && (!m_bToplevelParentFound && !get_by_name(m_sID)), "vcl.layout",
@@ -1074,9 +1074,9 @@ void VclBuilder::extractMnemonicWidget(const OString &rLabelID, stringmap &rMap)
 
 Window* VclBuilder::prepareWidgetOwnScrolling(Window *pParent, WinBits &rWinStyle)
 {
-    //For Widgets that manage their own scrolling, if one appears as a child of
-    //a scrolling window shoehorn that scrolling settings to this widget and
-    //return the real parent to use
+    
+    
+    
     if (pParent && pParent->GetType() == WINDOW_SCROLLWINDOW)
     {
         WinBits nScrollBits = pParent->GetStyle();
@@ -1090,7 +1090,7 @@ Window* VclBuilder::prepareWidgetOwnScrolling(Window *pParent, WinBits &rWinStyl
 
 void VclBuilder::cleanupWidgetOwnScrolling(Window *pScrollParent, Window *pWindow, stringmap &rMap)
 {
-    //remove the redundant scrolling parent
+    
     sal_Int32 nWidthReq = pScrollParent->get_width_request();
     rMap[OString("width-request")] = OString::number(nWidthReq);
     sal_Int32 nHeightReq = pScrollParent->get_height_request();
@@ -1111,9 +1111,9 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
 
     if (pParent && pParent->GetType() == WINDOW_TABCONTROL)
     {
-        //We have to add a page
+        
 
-        //make default pageid == position
+        
         TabControl *pTabControl = static_cast<TabControl*>(pParent);
         sal_uInt16 nNewPageCount = pTabControl->GetPageCount()+1;
         sal_uInt16 nNewPageId = nNewPageCount;
@@ -1125,15 +1125,15 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             TabPage* pPage = new TabPage(pTabControl);
             pPage->Show();
 
-            //Make up a name for it
+            
             OString sTabPageId = get_by_window(pParent) +
                 OString("-page") +
                 OString::number(nNewPageCount);
             m_aChildren.push_back(WinAndId(sTabPageId, pPage, false));
             pPage->SetHelpId(m_sHelpRoot + sTabPageId);
 
-            //And give the page one container as a child to make it a layout enabled
-            //tab page
+            
+            
             VclBin* pContainer = new VclBin(pPage);
             pContainer->Show();
             m_aChildren.push_back(WinAndId(OString(), pContainer, false));
@@ -1211,7 +1211,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
             pButton = extractStockAndBuildMenuButton(pParent, rMap);
             m_pParserState->m_aButtonMenuMaps.push_back(ButtonMenuMap(id, sMenu));
         }
-        pButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        pButton->SetImageAlign(IMAGEALIGN_LEFT); 
         pWindow = pButton;
     }
     else if (name == "GtkRadioButton")
@@ -1222,7 +1222,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
         RadioButton *pButton = new RadioButton(pParent, nBits);
-        pButton->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        pButton->SetImageAlign(IMAGEALIGN_LEFT); 
         pWindow = pButton;
     }
     else if (name == "GtkCheckButton")
@@ -1231,14 +1231,14 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         OString sWrap = extractCustomProperty(rMap);
         if (!sWrap.isEmpty())
             nBits |= WB_WORDBREAK;
-        //maybe always import as TriStateBox and enable/disable tristate
+        
         bool bIsTriState = extractInconsistent(rMap);
         CheckBox *pCheckBox = bIsTriState ?
             new TriStateBox(pParent, nBits) :
             new CheckBox(pParent, nBits);
         if (bIsTriState)
             pCheckBox->SetState(STATE_DONTKNOW);
-        pCheckBox->SetImageAlign(IMAGEALIGN_LEFT); //default to left
+        pCheckBox->SetImageAlign(IMAGEALIGN_LEFT); 
         pWindow = pCheckBox;
     }
     else if (name == "GtkSpinButton")
@@ -1386,18 +1386,18 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     }
     else if (name == "GtkTreeView")
     {
-        //To-Do
-        //a) move svtools SvTreeViewBox into vcl
-        //b) make that the default target for GtkTreeView
-        //c) remove the non-drop down mode of ListBox and convert
-        //   everything over to SvTreeViewBox
-        //d) remove the users of makeSvTreeViewBox
+        
+        
+        
+        
+        
+        
         extractModel(id, rMap);
         WinBits nWinStyle = WB_CLIPCHILDREN|WB_LEFT|WB_VCENTER|WB_3DLOOK|WB_SIMPLEMODE;
         OString sBorder = extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;
-        //ListBox manages its own scrolling,
+        
         Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         pWindow = new ListBox(pRealParent, nWinStyle);
         if (pRealParent != pParent)
@@ -1415,9 +1415,9 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
     {
         extractStock(id, rMap);
         pWindow = new FixedImage(pParent, WB_CENTER|WB_VCENTER|WB_3DLOOK);
-        //such parentless GtkImages are temps used to set icons on buttons
-        //default them to hidden to stop e.g. insert->index entry flicking temp
-        //full screen windows
+        
+        
+        
         if (!pParent)
         {
             rMap["visible"] = "false";
@@ -1478,7 +1478,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         OString sBorder = extractCustomProperty(rMap);
         if (!sBorder.isEmpty())
             nWinStyle |= WB_BORDER;
-        //VclMultiLineEdit manages its own scrolling,
+        
         Window *pRealParent = prepareWidgetOwnScrolling(pParent, nWinStyle);
         pWindow = new VclMultiLineEdit(pRealParent, nWinStyle);
         if (pRealParent != pParent)
@@ -1528,7 +1528,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
 
             m_pParserState->m_nLastToolbarId = nItemId;
 
-            return NULL; // no widget to be created
+            return NULL; 
         }
     }
     else if (name == "GtkSeparatorToolItem")
@@ -1537,7 +1537,7 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
         if (pToolBox)
         {
             pToolBox->InsertSeparator();
-            return NULL; // no widget to be created
+            return NULL; 
         }
     }
     else
@@ -1591,16 +1591,16 @@ Window *VclBuilder::makeObject(Window *pParent, const OString &name, const OStri
 
 namespace
 {
-    //return true for window types which exist in vcl but are not themselves
-    //represented in the .ui format, i.e. only their children exist.
+    
+    
     bool isConsideredGtkPseudo(Window *pWindow)
     {
         return pWindow->GetType() == WINDOW_TABPAGE;
     }
 }
 
-//Any properties from .ui load we couldn't set because of potential virtual methods
-//during ctor are applied here
+
+
 void VclBuilder::setDeferredProperties()
 {
     if (!m_bToplevelHasDeferredProperties)
@@ -1631,7 +1631,7 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
     if (m_pParent && !isConsideredGtkPseudo(m_pParent) && !m_sID.isEmpty() && rID.equals(m_sID))
     {
         pCurrentChild = m_pParent;
-        //toplevels default to resizable
+        
         if (pCurrentChild->IsDialog())
         {
             Dialog *pDialog = (Dialog*)pCurrentChild;
@@ -1649,9 +1649,9 @@ Window *VclBuilder::insertObject(Window *pParent, const OString &rClass,
     }
     else
     {
-        //if we're being inserting under a toplevel dialog whose init is
-        //deferred due to waiting to encounter it in this .ui, and it hasn't
-        //been seen yet, then make unattached widgets parent-less toplevels
+        
+        
+        
         if (pParent == m_pParent && m_bToplevelHasDeferredInit)
             pParent = NULL;
         pCurrentChild = makeObject(pParent, rClass, rID, rProps, rItems);
@@ -1760,11 +1760,11 @@ void VclBuilder::handleTabChild(Window *pParent, xmlreader::XmlReader &reader)
         pTabControl->RemovePage(pTabControl->GetCurPageId());
 }
 
-//so that tabbing between controls goes in a visually sensible sequence
-//we sort these into a best-tab-order sequence
+
+
 bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, const Window *pB) const
 {
-    //sort child order within parent list by grid position
+    
     sal_Int32 nTopA = pA->get_grid_top_attach();
     sal_Int32 nTopB = pB->get_grid_top_attach();
     if (nTopA < nTopB)
@@ -1777,7 +1777,7 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
         return true;
     if (nLeftA > nLeftB)
         return false;
-    //sort into two groups of pack start and pack end
+    
     VclPackType ePackA = pA->get_pack_type();
     VclPackType ePackB = pB->get_pack_type();
     if (ePackA < ePackB)
@@ -1789,7 +1789,7 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
     bool bPackB = pB->get_secondary();
     if (!bVerticalContainer)
     {
-        //for horizontal boxes group secondaries before primaries
+        
         if (bPackA > bPackB)
             return true;
         if (bPackA < bPackB)
@@ -1797,22 +1797,22 @@ bool VclBuilder::sortIntoBestTabTraversalOrder::operator()(const Window *pA, con
     }
     else
     {
-        //for vertical boxes group secondaries after primaries
+        
         if (bPackA < bPackB)
             return true;
         if (bPackA > bPackB)
             return false;
     }
-    //honour relative box positions with pack group, (numerical order is reversed
-    //for VCL_PACK_END, they are packed from the end back, but here we need
-    //them in visual layout order so that tabbing works as expected)
+    
+    
+    
     sal_Int32 nPackA = m_pBuilder->get_window_packing_data(pA).m_nPosition;
     sal_Int32 nPackB = m_pBuilder->get_window_packing_data(pB).m_nPosition;
     if (nPackA < nPackB)
         return ePackA == VCL_PACK_START ? true : false;
     if (nPackA > nPackB)
         return ePackA == VCL_PACK_START ? false : true;
-    //sort labels of Frames before body
+    
     if (pA->GetParent() == pB->GetParent())
     {
         const VclFrame *pFrameParent = dynamic_cast<const VclFrame*>(pA->GetParent());
@@ -1871,24 +1871,24 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
                 if (bObjectInserted)
                 {
-                    //Internal-children default in glade to not having their visible bits set
-                    //even though they are visible (generally anyway)
+                    
+                    
                     if (!sInternalChild.isEmpty())
                         pCurrentChild->Show();
 
-                    //Select the first page if it's a notebook
+                    
                     if (pCurrentChild->GetType() == WINDOW_TABCONTROL)
                     {
                         TabControl *pTabControl = static_cast<TabControl*>(pCurrentChild);
                         pTabControl->SetCurPageId(pTabControl->GetPageId(0));
 
-                        //To-Do add reorder capability to the TabControl
+                        
                     }
                     else
                     {
-                        // We want to sort labels before contents of frames
-                        // for key board traversal, especially if there
-                        // are multiple widgets using the same mnemonic
+                        
+                        
+                        
                         if (sType.equals("label"))
                         {
                             if (VclFrame *pFrameParent = dynamic_cast<VclFrame*>(pParent))
@@ -1909,8 +1909,8 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
                             }
                         }
 
-                        //To-Do make reorder a virtual in Window, move this foo
-                        //there and see above
+                        
+                        
                         std::vector<Window*> aChilds;
                         for (Window* pChild = pCurrentChild->GetWindow(WINDOW_FIRSTCHILD); pChild;
                             pChild = pChild->GetWindow(WINDOW_NEXT))
@@ -1920,8 +1920,8 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 
                         bool bIsButtonBox = dynamic_cast<VclButtonBox*>(pCurrentChild) != NULL;
 
-                        //sort child order within parent so that tabbing
-                        //between controls goes in a visually sensible sequence
+                        
+                        
                         std::stable_sort(aChilds.begin(), aChilds.end(), sortIntoBestTabTraversalOrder(this));
                         reorderWithinParent(aChilds, bIsButtonBox);
                     }
@@ -1955,8 +1955,8 @@ void VclBuilder::reorderWithinParent(std::vector<Window*>& rChilds, bool bIsButt
         if (!bIsButtonBox)
             continue;
 
-        //The first member of the group for legacy code needs WB_GROUP set and the
-        //others not
+        
+        
         WinBits nBits = rChilds[i]->GetStyle();
         nBits &= ~WB_GROUP;
         if (i == 0)
@@ -2690,8 +2690,8 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
     if (!pCurrent)
         return;
 
-    //ToolBoxItems are not true widgets just elements
-    //of the ToolBox itself
+    
+    
     ToolBox *pToolBoxParent = NULL;
     if (pCurrent == pParent)
         pToolBoxParent = dynamic_cast<ToolBox*>(pParent);
@@ -2938,7 +2938,7 @@ short VclBuilder::get_response(const Window *pWindow) const
         }
     }
 
-    //how did we not find sID ?
+    
     assert(false);
     return RET_CANCEL;
 }
@@ -2955,7 +2955,7 @@ void VclBuilder::set_response(OString sID, short nResponse)
         }
     }
 
-    //how did we not find sID ?
+    
     assert(false);
 }
 
@@ -3001,10 +3001,10 @@ OString VclBuilder::get_by_window(const Window *pWindow) const
 
 VclBuilder::PackingData VclBuilder::get_window_packing_data(const Window *pWindow) const
 {
-    //We've stored the return of new Control, some of these get
-    //border windows placed around them which are what you get
-    //from GetChild, so scoot up a level if necessary to get the
-    //window whose position value we have
+    
+    
+    
+    
     const Window *pPropHolder = pWindow->mpWindowImpl->mpClientWindow ?
         pWindow->mpWindowImpl->mpClientWindow : pWindow;
 

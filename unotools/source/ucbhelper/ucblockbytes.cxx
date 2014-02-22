@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -82,14 +82,14 @@ public:
     SvLockBytes*            getLockBytes (void)
                             { return m_xLockBytes; }
 
-    // XActiveDataControl.
+    
     virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
     virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
     virtual void SAL_CALL   start (void) throw(RuntimeException) {}
     virtual void SAL_CALL   terminate (void) throw(RuntimeException)
                             { m_xLockBytes->terminate_Impl(); }
 
-    // XActiveDataSink.
+    
     virtual void SAL_CALL   setInputStream ( const Reference<XInputStream> &rxInputStream) throw(RuntimeException)
                             { m_xLockBytes->setInputStream_Impl (rxInputStream); }
     virtual Reference<XInputStream> SAL_CALL getInputStream (void) throw(RuntimeException)
@@ -109,14 +109,14 @@ public:
                                 : m_xLockBytes( pLockBytes )
                             {}
 
-    // XActiveDataControl.
+    
     virtual void SAL_CALL   addListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
     virtual void SAL_CALL   removeListener ( const Reference<XStreamListener> &/*rxListener*/) throw(RuntimeException) {}
     virtual void SAL_CALL   start (void) throw(RuntimeException) {}
     virtual void SAL_CALL   terminate (void) throw(RuntimeException)
                             { m_xLockBytes->terminate_Impl(); }
 
-    // XActiveDataStreamer
+    
     virtual void SAL_CALL   setStream( const Reference< XStream >& aStream ) throw(RuntimeException)
                             { m_xStream = aStream; m_xLockBytes->setStream_Impl( aStream ); }
     virtual Reference< XStream > SAL_CALL getStream() throw(RuntimeException)
@@ -134,7 +134,7 @@ public:
                             ProgressHandler_Impl( const Link& rLink )
                                 : m_aProgress( rLink )
                             {}
-    // XProgressHandler
+    
     virtual void SAL_CALL   push(const Any & /*rStatus*/) throw (RuntimeException) {}
     virtual void SAL_CALL   pop() throw (RuntimeException) {}
     virtual void SAL_CALL   update(const Any & /*rStatus*/) throw (RuntimeException)
@@ -219,7 +219,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
                 OUString aBad ("private:");
                 if (!aUrl.startsWith(aBad))
                 {
-                    // URL changed (Redirection).
+                    
                     m_xLockBytes->SetRealURL_Impl( aUrl );
                 }
             }
@@ -238,10 +238,10 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
 class Moderator
     : public osl::Thread
 {
-    // usage restriction:
-    // It might be possible, that the call to the interactionhandler and/or
-    // progresshandler is done asynchrounsly, while the 'execute' simply
-    // returns. This would imply that these class must be refcounted !!!
+    
+    
+    
+    
 
 public:
     Moderator(
@@ -261,7 +261,7 @@ public:
     enum ResultType {
         NORESULT,
 
-        INTERACTIONREQUEST,    // reply expected
+        INTERACTIONREQUEST,    
 
         PROGRESSPUSH,
         PROGRESSUPDATE,
@@ -378,7 +378,7 @@ public:
 
     ~ModeratorsActiveDataStreamer();
 
-    // XActiveDataStreamer
+    
     virtual void SAL_CALL
     setStream(
         const Reference< XStream >& aStream
@@ -416,7 +416,7 @@ public:
 
     ~ModeratorsActiveDataSink();
 
-    // XActiveDataSink.
+    
     virtual void SAL_CALL
     setInputStream (
         const Reference<XInputStream> &rxInputStream
@@ -455,7 +455,7 @@ ModeratorsActiveDataSink::~ModeratorsActiveDataSink()
 {
 }
 
-// XActiveDataSink.
+
 void SAL_CALL
 ModeratorsActiveDataSink::setInputStream (
     const Reference<XInputStream> &rxInputStream
@@ -482,7 +482,7 @@ ModeratorsActiveDataStreamer::~ModeratorsActiveDataStreamer()
 {
 }
 
-// XActiveDataStreamer.
+
 void SAL_CALL
 ModeratorsActiveDataStreamer::setStream (
     const Reference<XStream> &rxStream
@@ -593,7 +593,7 @@ ModeratorsInteractionHandler::handle(
         RuntimeException
     )
 {
-    // wakes up the mainthread
+    
     m_aModerator.handle(Request);
 }
 
@@ -628,8 +628,8 @@ Moderator::Moderator(
               xProgress.is() ? new ModeratorsProgressHandler(*this) : 0),
           comphelper::getProcessComponentContext())
 {
-    // now exchange the whole data sink stuff
-    // with a thread safe version
+    
+    
 
     Reference<XInterface> *pxSink = NULL;
 
@@ -680,7 +680,7 @@ Moderator::Result Moderator::getResult(const sal_uInt32 milliSec)
         ret.result = m_aResult;
         ret.ioErrorCode = m_nIOErrorCode;
 
-        // reset
+        
         m_aResultType = NORESULT;
     }
     catch (const salhelper::ConditionWaiter::timedout&)
@@ -714,7 +714,7 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
             salhelper::ConditionWaiter aWait(m_aRep);
             aReplyType = m_aReplyType;
 
-            // reset
+            
             m_aReplyType = NOREPLY;
         }
 
@@ -728,7 +728,7 @@ void Moderator::handle( const Reference<XInteractionRequest >& Request )
                 }
             }
 
-            // resignal the exitcondition
+            
             setReply(EXIT);
             break;
         }
@@ -897,10 +897,10 @@ static bool UCBOpenContentSync(
     Reference < XProgressHandler > xProgress,
     UcbLockBytesHandlerRef xHandler )
 {
-    // http protocol must be handled in a special way:
-    //        during the opening process the input stream may change
-    //        only the last inputstream after notifying the document
-    //        headers is valid
+    
+    
+    
+    
 
     Reference<XContentIdentifier> xContId(
         xContent.is() ? xContent->getIdentifier() : 0 );
@@ -909,7 +909,7 @@ static bool UCBOpenContentSync(
     if(xContId.is())
         aScheme = xContId->getContentProviderScheme();
 
-    // now determine whether we use a timeout or not;
+    
     if( ! aScheme.equalsIgnoreAsciiCase("http")                &&
         ! aScheme.equalsIgnoreAsciiCase("https")               &&
         ! aScheme.equalsIgnoreAsciiCase("vnd.sun.star.webdav") &&
@@ -948,11 +948,11 @@ static bool UCBOpenContentSync(
         xLockBytes->SetError( ERRCODE_IO_GENERAL );
     }
 
-    sal_uInt32 nTimeout(5000); // initially 5000 milliSec
+    sal_uInt32 nTimeout(5000); 
     while(!bResultAchieved) {
 
         Moderator::Result res;
-        // try to get the result for with timeout
+        
         res = pMod->getResult(nTimeout);
 
         switch(res.type) {
@@ -1152,8 +1152,8 @@ static bool _UCBOpenContentSync(
     Reference < XContentIdentifier > xIdent = xContent->getIdentifier();
     OUString aScheme = xIdent->getContentProviderScheme();
 
-    // http protocol must be handled in a special way: during the opening process the input stream may change
-    // only the last inputstream after notifying the document headers is valid
+    
+    
     if ( aScheme.compareToAscii("http") != 0 )
         xLockBytes->SetStreamValid_Impl();
 
@@ -1228,7 +1228,7 @@ static bool _UCBOpenContentSync(
     return ( bAborted || bException );
 }
 
-//----------------------------------------------------------------------------
+
 UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     : m_aExpireDate( DateTime::EMPTY )
     , m_xInputStream (NULL)
@@ -1242,7 +1242,7 @@ UcbLockBytes::UcbLockBytes( UcbLockBytesHandler* pHandler )
     SetSynchronMode( true );
 }
 
-//----------------------------------------------------------------------------
+
 UcbLockBytes::~UcbLockBytes()
 {
     if ( !m_bDontClose )
@@ -1284,7 +1284,7 @@ Reference < XInputStream > UcbLockBytes::getInputStream()
     return m_xInputStream;
 }
 
-//----------------------------------------------------------------------------
+
 
 bool UcbLockBytes::setStream_Impl( const Reference<XStream>& aStream )
 {
@@ -1350,7 +1350,7 @@ void UcbLockBytes::SetStreamValid_Impl()
         m_aInitialized.set();
 }
 
-//----------------------------------------------------------------------------
+
 void UcbLockBytes::terminate_Impl()
 {
     m_bTerminated = true;
@@ -1367,13 +1367,13 @@ void UcbLockBytes::terminate_Impl()
         m_xHandler->Handle( UcbLockBytesHandler::DONE, this );
 }
 
-//----------------------------------------------------------------------------
+
 void UcbLockBytes::SetSynchronMode (bool bSynchron)
 {
     SvLockBytes::SetSynchronMode (bSynchron);
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, sal_uLong *pRead) const
 {
     if ( IsSynchronMode() )
@@ -1441,7 +1441,7 @@ ErrCode UcbLockBytes::ReadAt ( sal_uLong nPos, void *pBuffer, sal_uLong nCount, 
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong nCount, sal_uLong *pWritten)
 {
     if ( pWritten )
@@ -1480,7 +1480,7 @@ ErrCode UcbLockBytes::WriteAt ( sal_uLong nPos, const void *pBuffer, sal_uLong n
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::Flush() const
 {
     Reference <XOutputStream > xOutputStream = getOutputStream_Impl();
@@ -1499,7 +1499,7 @@ ErrCode UcbLockBytes::Flush() const
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
 {
     SvLockBytesStat aStat;
@@ -1523,7 +1523,7 @@ ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
     {
         sal_uLong nDiff = nNewSize-nSize, nCount=0;
         sal_uInt8* pBuffer = new sal_uInt8[ nDiff ];
-        memset(pBuffer, 0, nDiff); // initialize for enhanced security
+        memset(pBuffer, 0, nDiff); 
         WriteAt( nSize, pBuffer, nDiff, &nCount );
         delete[] pBuffer;
         if ( nCount != nDiff )
@@ -1533,7 +1533,7 @@ ErrCode UcbLockBytes::SetSize (sal_uLong nNewSize)
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
 {
     if ( IsSynchronMode() )
@@ -1570,7 +1570,7 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
     return ERRCODE_NONE;
 }
 
-//----------------------------------------------------------------------------
+
 IMPL_LINK_NOARG(UcbLockBytes, DataAvailHdl)
 {
     if ( hasInputStream_Impl() && m_xHandler.Is() )

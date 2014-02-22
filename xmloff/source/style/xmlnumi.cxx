@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -325,7 +325,7 @@ SvxXMLListLevelStyleContext_Impl::SvxXMLListLevelStyleContext_Impl(
         case XML_TOK_TEXT_LEVEL_ATTR_TYPE:
         case XML_TOK_TEXT_LEVEL_ATTR_SHOW:
         case XML_TOK_TEXT_LEVEL_ATTR_ACTUATE:
-            // This properties will be ignored
+            
             break;
         case XML_TOK_TEXT_LEVEL_ATTR_NUM_FORMAT:
             if( bNum )
@@ -411,7 +411,7 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
     if( bBullet )
     {
         eType = NumberingType::CHAR_SPECIAL;
-        nCount = 15; // 'cBullet' will be written anyway if 'bBullet' is true
+        nCount = 15; 
     }
     if( bImage )
     {
@@ -448,8 +448,8 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                 || (310 == nUPD) || (320 == nUPD) || (330 == nUPD)
                 || ((300 == nUPD) && (nBuildId <= 9573))))
         {
-            // #i93908# OOo < 3.4 wrote a bogus suffix for bullet chars
-            sSuffix = OUString(); // clear it
+            
+            sSuffix = OUString(); 
         }
     }
 
@@ -527,8 +527,8 @@ Sequence<beans::PropertyValue> SvxXMLListLevelStyleContext_Impl::GetProperties(
                     aFDesc.Name = "StarSymbol" ;
             }
 
-            // Must append 'cBullet' even if it is zero
-            // if 'bBullet' is true and 'cBullet' is zero - BulletChar property must be 0.
+            
+            
             OUStringBuffer sTmp(1);
             sTmp.append( cBullet );
             pProps[nPos].Name = "BulletChar";
@@ -868,7 +868,7 @@ SvxXMLListLevelStyleAttrContext_Impl::SvxXMLListLevelStyleAttrContext_Impl(
     {
         if( IsXMLToken( sVerticalRel, XML_BASELINE ) )
         {
-            // TOP and BOTTOM are exchanged for a baseline relation
+            
             switch( eVertOrient  )
             {
             case VertOrientation::LINE_TOP:
@@ -1143,8 +1143,8 @@ void SvxXMLListStyleContext::CreateAndInsertLate( sal_Bool bOverwrite )
         {
             const Reference< XIndexReplace >& rNumRule =
                 GetImport().GetTextImport()->GetChapterNumbering();
-            // We don't set xNumberingRules here, to avoid using them
-            // as numbering rules.
+            
+            
             if( rNumRule.is() )
                 FillUnoNumRule( rNumRule, 0 );
         }
@@ -1281,7 +1281,7 @@ void SvxXMLListStyleContext::SetDefaultStyle(
                                                  : NumberingType::CHAR_SPECIAL );
     if( !bOrdered )
     {
-        // TODO: Bullet-Font
+        
         awt::FontDescriptor aFDesc;
         aFDesc.Name =
 #ifdef _WIN32

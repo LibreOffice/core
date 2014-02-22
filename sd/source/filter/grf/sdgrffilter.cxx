@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,14 +48,14 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 
-// --
+
 #include <comphelper/processfactory.hxx>
 #include <unotools/pathoptions.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <vcl/graphicfilter.hxx>
 #include <svx/xoutbmp.hxx>
 
-// --
+
 
 #include "sdpage.hxx"
 #include "drawdoc.hxx"
@@ -89,7 +89,7 @@ using namespace com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
 
-// -----------------------------------------------------------------------------
+
 
 class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper1< com::sun::star::task::XInteractionHandler >
 {
@@ -129,22 +129,22 @@ void SdGRFFilter_ImplInteractionHdl::handle( const com::sun::star::uno::Referenc
 }
 
 
-// ---------------
-// - SdPPTFilter -
-// ---------------
+
+
+
 
 SdGRFFilter::SdGRFFilter( SfxMedium& rMedium, ::sd::DrawDocShell& rDocShell ) :
     SdFilter( rMedium, rDocShell, sal_True )
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 SdGRFFilter::~SdGRFFilter()
 {
 }
 
-// -----------------------------------------------------------------------------
+
 
 void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong nStreamError )
 {
@@ -188,7 +188,7 @@ void SdGRFFilter::HandleGraphicFilterError( sal_uInt16 nFilterError, sal_uLong n
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdGRFFilter::Import()
 {
@@ -217,14 +217,14 @@ sal_Bool SdGRFFilter::Import()
             aPagSize.Width() -= pPage->GetLftBorder() + pPage->GetRgtBorder();
             aPagSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
 
-            // scale to fit page
+            
             if ( ( ( aGrfSize.Height() > aPagSize.Height() ) || ( aGrfSize.Width() > aPagSize.Width() ) ) &&
                  aGrfSize.Height() && aPagSize.Height() )
             {
                 double fGrfWH = (double) aGrfSize.Width() / aGrfSize.Height();
                 double fWinWH = (double) aPagSize.Width() / aPagSize.Height();
 
-                // adjust graphic to page size (scales)
+                
                 if( fGrfWH < fWinWH )
                 {
                     aGrfSize.Width() = (long) ( aPagSize.Height() * fGrfWH );
@@ -237,7 +237,7 @@ sal_Bool SdGRFFilter::Import()
                 }
             }
 
-            // set output rectangle for graphic
+            
             aPos.X() = ( ( aPagSize.Width() - aGrfSize.Width() ) >> 1 ) + pPage->GetLftBorder();
             aPos.Y() = ( ( aPagSize.Height() - aGrfSize.Height() ) >> 1 )  + pPage->GetUppBorder();
 
@@ -247,11 +247,11 @@ sal_Bool SdGRFFilter::Import()
     return bRet;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool SdGRFFilter::Export()
 {
-    // SJ: todo: error handling, the GraphicExportFilter does not support proper errorhandling
+    
 
     sal_Bool bRet = sal_False;
 
@@ -276,7 +276,7 @@ sal_Bool SdGRFFilter::Export()
 
     if ( pPage )
     {
-        // taking the 'correct' page number, seems that there might exist a better method to archive this
+        
         pPage = mrDocument.GetSdPage( pPage->GetPageNum() ? ( pPage->GetPageNum() - 1 ) >> 1 : 0, ePageKind );
         if ( pPage )
         {
@@ -326,7 +326,7 @@ sal_Bool SdGRFFilter::Export()
                         aArgs[ i ].Value <<= sShortName;
                     }
 
-                    // take selection if needed
+                    
                     if( ( SFX_ITEM_SET == pSet->GetItemState( SID_SELECTION ) )
                         && static_cast< const SfxBoolItem& >( pSet->Get( SID_SELECTION ) ).GetValue()
                         && pDrawViewShell )

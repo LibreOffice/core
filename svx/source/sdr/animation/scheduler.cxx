@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,15 +14,15 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/sdr/animation/scheduler.hxx>
 
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
-// event class
+
+
 
 namespace sdr
 {
@@ -63,11 +63,11 @@ namespace sdr
                 mnTime = nNew;
             }
         }
-    } // end of namespace animation
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// eventlist class
+
+
 
 namespace sdr
 {
@@ -149,11 +149,11 @@ namespace sdr
         {
             return mpHead;
         }
-    } // end of namespace animation
-} // end of namespace sdr
+    } 
+} 
 
-//////////////////////////////////////////////////////////////////////////////
-// scheduler class
+
+
 
 namespace sdr
 {
@@ -173,14 +173,14 @@ namespace sdr
 
         void Scheduler::Timeout()
         {
-            // stop timer and add time
+            
             Stop();
             mnTime += mnDeltaTime;
 
-            // execute events
+            
             triggerEvents();
 
-            // re-start or stop timer according to event list
+            
             checkTimeout();
         }
 
@@ -190,8 +190,8 @@ namespace sdr
 
             if(pNextEvent)
             {
-                // copy events which need to be executed to a vector. Remove them from
-                // the scheduler
+                
+                
                 ::std::vector< Event* > EventPointerVector;
 
                 while(pNextEvent && pNextEvent->GetTime() <= mnTime)
@@ -201,11 +201,11 @@ namespace sdr
                     pNextEvent = maList.GetFirst();
                 }
 
-                // execute events from the vector
+                
                 for(::std::vector< Event* >::iterator aCandidate = EventPointerVector.begin();
                     aCandidate != EventPointerVector.end(); ++aCandidate)
                 {
-                    // trigger event. This may re-insert the event to the scheduler again
+                    
                     (*aCandidate)->Trigger(mnTime);
                 }
             }
@@ -213,7 +213,7 @@ namespace sdr
 
         void Scheduler::checkTimeout()
         {
-            // re-start or stop timer according to event list
+            
             if(!IsPaused() && maList.GetFirst())
             {
                 mnDeltaTime = maList.GetFirst()->GetTime() - mnTime;
@@ -235,19 +235,19 @@ namespace sdr
             return mnTime;
         }
 
-        // #i38135#
+        
         void Scheduler::SetTime(sal_uInt32 nTime)
         {
-            // reset time
+            
             Stop();
             mnTime = nTime;
 
-            // get event pointer
+            
             Event* pEvent = maList.GetFirst();
 
             if(pEvent)
             {
-                // retet event time points
+                
                 while(pEvent)
                 {
                     pEvent->SetTime(nTime);
@@ -256,8 +256,8 @@ namespace sdr
 
                 if(!IsPaused())
                 {
-                    // without delta time, init events by triggering them. This will invalidate
-                    // painted objects and add them to the scheduler again
+                    
+                    
                     mnDeltaTime = 0L;
                     triggerEvents();
                     checkTimeout();
@@ -291,7 +291,7 @@ namespace sdr
                 checkTimeout();
             }
         }
-    } // end of namespace animation
-} // end of namespace sdr
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

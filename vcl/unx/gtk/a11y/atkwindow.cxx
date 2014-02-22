@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -42,14 +42,14 @@ init_from_window( AtkObject *accessible, Window *pWindow )
 {
     static AtkRole aDefaultRole = ATK_ROLE_INVALID;
 
-    // Special role for sub-menu and combo-box popups that are exposed directly
-    // by their parents already.
+    
+    
     if( aDefaultRole == ATK_ROLE_INVALID )
         aDefaultRole = atk_role_register( "redundant object" );
 
     AtkRole role = aDefaultRole;
 
-    // Determine the appropriate role for the GtkWindow
+    
     switch( pWindow->GetAccessibleRole() )
     {
         case AccessibleRole::ALERT:
@@ -102,7 +102,7 @@ init_from_window( AtkObject *accessible, Window *pWindow )
                     PopupMenuFloatingWindow* p = dynamic_cast<PopupMenuFloatingWindow*>(pChild);
                     if (p && p->IsPopupMenu() && p->GetMenuStackLevel() == 0)
                     {
-                        // This is a top-level menu popup.  Register it.
+                        
                         role = ATK_ROLE_POPUP_MENU;
                         pChild->SetAccessibleRole( AccessibleRole::POPUP_MENU );
                         accessible->name = g_strdup( OUStringToOString( pChild->GetText(), RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -265,7 +265,7 @@ ooo_window_wrapper_class_init (AtkObjectClass *klass, gpointer)
     gobject_class->finalize = ooo_window_wrapper_real_finalize;
 }
 
-} // extern "C"
+} 
 
 /*****************************************************************************/
 

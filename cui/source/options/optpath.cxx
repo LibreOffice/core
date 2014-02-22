@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/svxdlg.hxx>
@@ -58,7 +58,7 @@ using namespace ::com::sun::star::ui::dialogs;
 using namespace ::com::sun::star::uno;
 using namespace svx;
 
-// define ----------------------------------------------------------------
+
 
 #define TAB_WIDTH_MIN   10
 #define ITEMID_TYPE       1
@@ -70,7 +70,7 @@ using namespace svx;
 #define VAR_ONE             OUString("%1")
 #define IODLG_CONFIGNAME    OUString("FilePicker_Save")
 
-// struct OptPath_Impl ---------------------------------------------------
+
 
 struct OptPath_Impl
 {
@@ -86,7 +86,7 @@ struct OptPath_Impl
     }
 };
 
-// struct PathUserData_Impl ----------------------------------------------
+
 
 struct PathUserData_Impl
 {
@@ -130,7 +130,7 @@ static OUString getCfgName_Impl( sal_uInt16 _nHandle )
     {
         if ( Hdl2CfgMap_Impl[ nIndex ].m_nHandle == _nHandle )
         {
-            // config name found
+            
             sCfgName = OUString::createFromAscii( Hdl2CfgMap_Impl[ nIndex ].m_pCfgName );
             break;
         }
@@ -162,7 +162,7 @@ OUString Convert_Impl( const OUString& rValue )
     return aReturn;
 }
 
-// class SvxControlFocusHelper ---------------------------------------------
+
 
 bool SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
 {
@@ -173,7 +173,7 @@ bool SvxControlFocusHelper::Notify( NotifyEvent& rNEvt )
     return nRet;
 }
 
-// functions -------------------------------------------------------------
+
 
 sal_Bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 {
@@ -194,7 +194,7 @@ sal_Bool IsMultiPath_Impl( const sal_uInt16 nIndex )
 #endif
 }
 
-// class SvxPathTabPage --------------------------------------------------
+
 
 SvxPathTabPage::SvxPathTabPage(Window* pParent, const SfxItemSet& rSet)
     :SfxTabPage( pParent, "OptPathsPage", "cui/ui/optpathspage.ui", rSet)
@@ -244,7 +244,7 @@ SvxPathTabPage::SvxPathTabPage(Window* pParent, const SfxItemSet& rSet)
     xDialogListener->SetDialogClosedLink( LINK( this, SvxPathTabPage, DialogClosedHdl ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 SvxPathTabPage::~SvxPathTabPage()
 {
@@ -254,7 +254,7 @@ SvxPathTabPage::~SvxPathTabPage()
     delete pImpl;
 }
 
-// -----------------------------------------------------------------------
+
 
 SfxTabPage* SvxPathTabPage::Create( Window* pParent,
                                     const SfxItemSet& rAttrSet )
@@ -262,7 +262,7 @@ SfxTabPage* SvxPathTabPage::Create( Window* pParent,
     return ( new SvxPathTabPage( pParent, rAttrSet ) );
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool SvxPathTabPage::FillItemSet( SfxItemSet& )
 {
@@ -276,7 +276,7 @@ sal_Bool SvxPathTabPage::FillItemSet( SfxItemSet& )
     return sal_True;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::Reset( const SfxItemSet& )
 {
@@ -288,7 +288,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
 
     for( sal_uInt16 i = 0; i <= (sal_uInt16)SvtPathOptions::PATH_WORK; ++i )
     {
-        // only writer uses autotext
+        
         if ( i == SvtPathOptions::PATH_AUTOTEXT
             && !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
             continue;
@@ -346,10 +346,10 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
     {
         fprintf(stderr, "FOO\n");
 
-        // restore column width
+        
         rBar.SetItemSize( ITEMID_TYPE, aUserData.GetToken(0).ToInt32() );
         HeaderEndDrag_Impl( &rBar );
-        // restore sort direction
+        
         sal_Bool bUp = (sal_Bool)(sal_uInt16)aUserData.GetToken(1).ToInt32();
         HeaderBarItemBits nBits = rBar.GetItemBits(ITEMID_TYPE);
 
@@ -370,7 +370,7 @@ void SvxPathTabPage::Reset( const SfxItemSet& )
     PathSelect_Impl( NULL );
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::FillUserData()
 {
@@ -383,14 +383,14 @@ void SvxPathTabPage::FillUserData()
     SetUserData( aUserData );
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
 {
     sal_uInt16 nSelCount = 0;
     SvTreeListEntry* pEntry = pPathBox->FirstSelected();
 
-    //the entry image indicates whether the path is write protected
+    
     Image aEntryImage;
     if(pEntry)
         aEntryImage = pPathBox->GetCollapsedEntryBmp( pEntry );
@@ -406,7 +406,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
 {
@@ -462,7 +462,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
 {
@@ -481,19 +481,19 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     sWritable = pPathImpl->sWritablePath;
     sal_uInt16 nPos = pPathImpl->nRealId;
 
-    // old path is an URL?
+    
     INetURLObject aObj( sWritable );
     bool bURL = ( aObj.GetProtocol() != INET_PROT_NOT_VALID );
     OUString aPathStr( _rFolder );
     INetURLObject aNewObj( aPathStr );
     aNewObj.removeFinalSlash();
 
-    // then the new path also an URL else system path
+    
     OUString sNewPathStr = bURL ? aPathStr : aNewObj.getFSysPath( INetURLObject::FSYS_DETECT );
 
     bool bChanged =
 #ifdef UNX
-// Unix is case sensitive
+
         ( sNewPathStr != sWritable );
 #else
         ( !sNewPathStr.equalsIgnoreAsciiCase( sWritable ) );
@@ -508,16 +508,16 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
         pPathImpl->sWritablePath = sNewPathStr;
         if ( SvtPathOptions::PATH_WORK == pPathImpl->nRealId )
         {
-            // Remove view options entry so the new work path
-            // will be used for the next open dialog.
+            
+            
             SvtViewOptions aDlgOpt( E_DIALOG, IODLG_CONFIGNAME );
             aDlgOpt.Delete();
-            // Reset also last used dir in the sfx application instance
+            
             SfxApplication *pSfxApp = SFX_APP();
             pSfxApp->ResetLastDir();
 
-            // Set configuration flag to notify file picker that it's necessary
-            // to take over the path provided.
+            
+            
             boost::shared_ptr< comphelper::ConfigurationChanges > batch(
                 comphelper::ConfigurationChanges::create());
             officecfg::Office::Common::Path::Info::WorkPathChanged::set(
@@ -527,7 +527,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const OUString& _rFolder )
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
 {
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
                 }
 
                 pPathBox->SetEntryText( Convert_Impl( sFullPath ), pEntry, 1 );
-                // save modified flag
+                
                 PathUserData_Impl* pPathImpl = (PathUserData_Impl*)pEntry->GetUserData();
                 pPathImpl->eState = SFX_ITEM_SET;
                 pPathImpl->sUserPath = sUser;
@@ -634,7 +634,7 @@ IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
     return 0;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
 {
@@ -663,7 +663,7 @@ IMPL_LINK( SvxPathTabPage, HeaderSelect_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
 {
@@ -694,7 +694,7 @@ IMPL_LINK( SvxPathTabPage, HeaderEndDrag_Impl, HeaderBar*, pBar )
     return 1;
 }
 
-// -----------------------------------------------------------------------
+
 
 IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
 {
@@ -708,7 +708,7 @@ IMPL_LINK( SvxPathTabPage, DialogClosedHdl, DialogClosedEvent*, pEvt )
     return 0L;
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::GetPathList(
     sal_uInt16 _nPathHandle, OUString& _rInternalPath,
@@ -718,14 +718,14 @@ void SvxPathTabPage::GetPathList(
 
     try
     {
-        // load PathSettings service if necessary
+        
         if ( !pImpl->m_xPathSettings.is() )
         {
             Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
             pImpl->m_xPathSettings = css::util::thePathSettings::get( xContext );
         }
 
-        // load internal paths
+        
         OUString sProp( sCfgName );
         sProp += POSTFIX_INTERNAL;
         Any aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
@@ -742,7 +742,7 @@ void SvxPathTabPage::GetPathList(
                 _rInternalPath += pPaths[i];
             }
         }
-        // load user paths
+        
         sProp = sCfgName;
         sProp += POSTFIX_USER;
         aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
@@ -758,7 +758,7 @@ void SvxPathTabPage::GetPathList(
                 _rUserPath += pPaths[i];
             }
         }
-        // then the writable path
+        
         sProp = sCfgName;
         sProp += POSTFIX_WRITABLE;
         aAny = pImpl->m_xPathSettings->getPropertyValue( sProp );
@@ -766,7 +766,7 @@ void SvxPathTabPage::GetPathList(
         if ( aAny >>= sWritablePath )
             _rWritablePath = sWritablePath;
 
-        // and the readonly flag
+        
         sProp = sCfgName;
         Reference< XPropertySetInfo > xInfo = pImpl->m_xPathSettings->getPropertySetInfo();
         Property aProp = xInfo->getPropertyByName( sProp );
@@ -778,7 +778,7 @@ void SvxPathTabPage::GetPathList(
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 void SvxPathTabPage::SetPathList(
     sal_uInt16 _nPathHandle, const OUString& _rUserPath, const OUString& _rWritablePath )
@@ -787,14 +787,14 @@ void SvxPathTabPage::SetPathList(
 
     try
     {
-        // load PathSettings service if necessary
+        
         if ( !pImpl->m_xPathSettings.is() )
         {
             Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
             pImpl->m_xPathSettings = css::util::thePathSettings::get( xContext );
         }
 
-        // save user paths
+        
         char cDelim = MULTIPATH_DELIMITER;
         sal_uInt16 nCount = comphelper::string::getTokenCount(_rUserPath, cDelim);
         Sequence< OUString > aPathSeq( nCount );
@@ -806,7 +806,7 @@ void SvxPathTabPage::SetPathList(
         Any aValue = makeAny( aPathSeq );
         pImpl->m_xPathSettings->setPropertyValue( sProp, aValue );
 
-        // then the writable path
+        
         aValue = makeAny( OUString( _rWritablePath ) );
         sProp = sCfgName;
         sProp += POSTFIX_WRITABLE;

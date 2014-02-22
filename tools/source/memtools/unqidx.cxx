@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,30 +14,30 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/unqidx.hxx>
 
 sal_uIntPtr UniqueIndexImpl::Insert( void* p )
 {
-    // NULL-Pointer not allowed
+    
     if ( !p )
         return UNIQUEINDEX_ENTRY_NOTFOUND;
 
-   // Expend array if full
+   
     sal_uIntPtr nTmp = size();
     if( nTmp == nCount )
         nTmp++;
 
-    // Avoid overflow of UniqIndex upon deletion
+    
     nUniqIndex = nUniqIndex % nTmp;
 
-    // Search next empty index
+    
     while ( find( nUniqIndex ) != end() )
         nUniqIndex = (nUniqIndex+1) % nTmp;
 
-    // Insert object to array
+    
     (*this)[ nUniqIndex ] = p;
 
     nCount++;
@@ -47,7 +47,7 @@ sal_uIntPtr UniqueIndexImpl::Insert( void* p )
 
 void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
 {
-    // NULL-Pointer not allowed
+    
     if ( !p )
         return;
 
@@ -55,7 +55,7 @@ void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
 
     bool bFound = find( nContIndex ) != end();
 
-    // Insert object to array
+    
     (*this)[ nContIndex ] = p;
 
     if( !bFound )
@@ -64,12 +64,12 @@ void UniqueIndexImpl::Insert( sal_uIntPtr nIndex, void* p )
 
 void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
 {
-    // Check for valid index
+    
     if ( (nIndex >= nStartIndex) &&
          (nIndex < (size() + nStartIndex)) )
     {
-        // insert index as empty entry, and reduce indexcount,
-        // if this entry was used
+        
+        
         iterator it = find( nIndex - nStartIndex );
         if( it != end() )
         {
@@ -84,7 +84,7 @@ void* UniqueIndexImpl::Remove( sal_uIntPtr nIndex )
 
 void* UniqueIndexImpl::Get( sal_uIntPtr nIndex ) const
 {
-    // check for valid index
+    
     if ( (nIndex >= nStartIndex) &&
          (nIndex < (size() + nStartIndex)) )
     {

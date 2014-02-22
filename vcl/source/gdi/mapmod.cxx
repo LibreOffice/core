@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <tools/stream.hxx>
@@ -74,7 +74,7 @@ ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
 {
     static long aStaticImplMapModeAry[(MAP_LASTENUMDUMMY)*sizeof(ImplMapMode)/sizeof(long)];
 
-    // #i19496 check for out-of-bounds
+    
      if( eUnit >= MAP_LASTENUMDUMMY )
         return (ImplMapMode*)aStaticImplMapModeAry;
 
@@ -93,7 +93,7 @@ ImplMapMode* ImplMapMode::ImplGetStaticMapMode( MapUnit eUnit )
 
 inline void MapMode::ImplMakeUnique()
 {
-    // If there are other references, copy
+    
     if ( mpImplMapMode->mnRefCount != 1 )
     {
         if ( mpImplMapMode->mnRefCount )
@@ -112,9 +112,9 @@ MapMode::MapMode( const MapMode& rMapMode )
 {
     DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
 
-    // Take over Shared Instance Data and increment refcount
+    
     mpImplMapMode = rMapMode.mpImplMapMode;
-    // RefCount == 0 for static objects
+    
     if ( mpImplMapMode->mnRefCount )
         mpImplMapMode->mnRefCount++;
 }
@@ -139,8 +139,8 @@ MapMode::MapMode( MapUnit eUnit, const Point& rLogicOrg,
 MapMode::~MapMode()
 {
 
-    // If it's not static ImpData and it's the last reference, delete it,
-    // else decrement refcounter
+    
+    
     if ( mpImplMapMode->mnRefCount )
     {
         if ( mpImplMapMode->mnRefCount == 1 )
@@ -182,13 +182,13 @@ MapMode& MapMode::operator=( const MapMode& rMapMode )
 {
     DBG_ASSERT( rMapMode.mpImplMapMode->mnRefCount < 0xFFFFFFFE, "MapMode: RefCount overflow" );
 
-    // First increment refcount so that we can reference ourselves
-    // RefCount == 0 for static objects
+    
+    
     if ( rMapMode.mpImplMapMode->mnRefCount )
         rMapMode.mpImplMapMode->mnRefCount++;
 
-    // If it's not static ImpData and it's the last reference, delete it,
-    // else decrement refcounter
+    
+    
     if ( mpImplMapMode->mnRefCount )
     {
         if ( mpImplMapMode->mnRefCount == 1 )

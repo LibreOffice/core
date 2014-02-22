@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "ExponentialRegressionCurveCalculator.hxx"
@@ -40,7 +40,7 @@ ExponentialRegressionCurveCalculator::ExponentialRegressionCurveCalculator() :
 ExponentialRegressionCurveCalculator::~ExponentialRegressionCurveCalculator()
 {}
 
-// ____ XRegressionCurveCalculator ____
+
 void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aXValues,
     const uno::Sequence< double >& aYValues )
@@ -56,7 +56,7 @@ void SAL_CALL ExponentialRegressionCurveCalculator::recalculateRegression(
     {
         ::rtl::math::setNan( & m_fLogSlope );
         ::rtl::math::setNan( & m_fLogIntercept );
-        ::rtl::math::setNan( & m_fCorrelationCoeffitient );// actual it is coefficient of determination
+        ::rtl::math::setNan( & m_fCorrelationCoeffitient );
         return;
     }
 
@@ -117,7 +117,7 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL ExponentialRegressionCurveCalcul
         isLinearScaling( xScalingX ) &&
         isLogarithmicScaling( xScalingY ))
     {
-        // optimize result
+        
         uno::Sequence< geometry::RealPoint2D > aResult( 2 );
         aResult[0].X = min;
         aResult[0].Y = this->getCurveValue( min );
@@ -143,7 +143,7 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
 
     if ( fIntercept == 0.0)
     {
-        // underflow, a true zero is impossible
+        
         aBuf.append( "exp( ");
         aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fLogIntercept) );
         aBuf.append( (m_fLogSlope < 0.0) ? " - " : " + ");
@@ -161,8 +161,8 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
         }
         else
         {
-            // show logarithmic output, if intercept and slope both are near one
-            // otherwise drop output of intercept, which is 1 here
+            
+            
             aBuf.append( " exp( ");
             if (!bHasSlope)
             {
@@ -181,6 +181,6 @@ OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
     return aBuf.makeStringAndClear();
 }
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

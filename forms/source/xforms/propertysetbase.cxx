@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -103,17 +103,17 @@ void PropertySetBase::notifyAndCachePropertyValue( sal_Int32 nHandle )
 
     PropertyValueCache::iterator aPos = m_aCache.find( nHandle );
     if ( aPos == m_aCache.end() )
-    {   // method has never before been invoked for this property
+    {   
         try
         {
-            // determine the type of this property
+            
             ::cppu::IPropertyArrayHelper& rPropertyMetaData = getInfoHelper();
             OUString sPropName;
             OSL_VERIFY( rPropertyMetaData.fillPropertyMembersByHandle( &sPropName, NULL, nHandle ) );
             Property aProperty = rPropertyMetaData.getPropertyByName( sPropName );
-            // default construct a value of this type
+            
             Any aEmptyValue( NULL, aProperty.Type );
-            // insert into the cache
+            
             aPos = m_aCache.insert( PropertyValueCache::value_type( nHandle, aEmptyValue ) ).first;
         }
         catch( const Exception& )
@@ -122,10 +122,10 @@ void PropertySetBase::notifyAndCachePropertyValue( sal_Int32 nHandle )
         }
     }
     Any aOldValue = aPos->second;
-    // determine the current value
+    
     Any aNewValue;
     getFastPropertyValue( aNewValue, nHandle );
-    // remember the old value
+    
     aPos->second = aNewValue;
 
     aGuard.clear();
@@ -150,8 +150,8 @@ PropertyAccessorBase& PropertySetBase::locatePropertyHandler( sal_Int32 nHandle 
     PropertyAccessors::const_iterator aPropertyPos = m_aAccessors.find( nHandle );
     OSL_ENSURE( aPropertyPos != m_aAccessors.end() && aPropertyPos->second.get(),
         "PropertySetBase::locatePropertyHandler: accessor map is corrupted!" );
-        // neither should this be called for handles where there is no accessor, nor should a
-        // NULL accssor be in the map
+        
+        
     return *aPropertyPos->second;
 }
 
@@ -166,7 +166,7 @@ sal_Bool SAL_CALL PropertySetBase::convertFastPropertyValue( Any& rConvertedValu
     rAccessor.getValue( rOldValue );
     if ( rOldValue != rValue )
     {
-        rConvertedValue = rValue;   // no conversion at all
+        rConvertedValue = rValue;   
         return sal_True;
     }
     return sal_False;

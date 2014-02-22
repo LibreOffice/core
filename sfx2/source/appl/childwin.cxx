@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <boost/scoped_ptr.hpp>
@@ -56,7 +56,7 @@ struct SfxChildWindow_Impl
     SfxWorkWindow*      pWorkWin;
 };
 
-// -----------------------------------------------------------------------
+
 
 class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::XEventListener >
 {
@@ -81,7 +81,7 @@ class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::
 
                 if ( m_pData->pWorkWin )
                 {
-                    // m_pOwner and m_pData will be killed
+                    
                     m_pData->xFrame    = ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >();
                     m_pData->pWorkWin->GetBindings().Execute( m_pOwner->GetType() );
                 }
@@ -100,7 +100,7 @@ class DisposeListener : public ::cppu::WeakImplHelper1< ::com::sun::star::lang::
         SfxChildWindow_Impl* m_pData ;
 };
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
 {
@@ -113,7 +113,7 @@ sal_Bool GetPosSizeFromString( const OUString& rStr, Point& rPos, Size& rSize )
     rSize.Width() = rStr.getToken(0, '/', nIdx).toInt32();
     rSize.Height() = rStr.getToken(0, '/', nIdx).toInt32();
 
-    // negative sizes are invalid
+    
     if ( rSize.Width() < 0 || rSize.Height() < 0 )
         return sal_False;
 
@@ -134,7 +134,7 @@ sal_Bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
         rSize.Width() = aStr.getToken(0, ';' ).toInt32();
         rSize.Height() = aStr.getToken(1, ';' ).toInt32();
 
-        // negative sizes are invalid
+        
         if ( rSize.Width() < 0 || rSize.Height() < 0 )
             return sal_False;
 
@@ -144,7 +144,7 @@ sal_Bool GetSplitSizeFromString( const OUString& rStr, Size& rSize )
     return sal_False;
 }
 
-//=========================================================================
+
 SfxChildWindow::SfxChildWindow(Window *pParentWindow, sal_uInt16 nId)
     : pParent(pParentWindow)
     , nType(nId)
@@ -185,7 +185,7 @@ void SfxChildWindow::Destroy()
         delete this;
 }
 
-//-------------------------------------------------------------------------
+
 SfxChildWindow::~SfxChildWindow()
 {
     DBG_DTOR(SfxChildWindow,0);
@@ -194,7 +194,7 @@ SfxChildWindow::~SfxChildWindow()
     delete pImp;
 }
 
-//-------------------------------------------------------------------------
+
 SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
         Window *pParent, SfxBindings* pBindings, SfxChildWinInfo& rInfo)
 {
@@ -202,8 +202,8 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     SfxChildWinFactory* pFact=0;
     sal_uInt16 nOldMode = Application::GetSystemWindowMode();
 
-    // First search for ChildWindow in SDT; "Overloading has to be realized
-    // by using ChildWindowContext
+    
+    
     SfxApplication *pApp = SFX_APP();
     {
         SfxChildWinFactArr_Impl &rFactories = pApp->GetChildWinFactories_Impl();
@@ -276,7 +276,7 @@ SfxChildWindow* SfxChildWindow::CreateChildWindow( sal_uInt16 nId,
     return pChild;
 }
 
-//-------------------------------------------------------------------------
+
 void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
 {
     sal_uInt16 nID = GetType();
@@ -292,8 +292,8 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     }
 
     OUString sName(OUString::number(nID));
-    //Try and save window state per-module, e.g. sidebar on in one application
-    //but off in another
+    
+    
     if (!rInfo.aModule.isEmpty())
         sName = rInfo.aModule + "/" + sName;
     SvtViewOptions aWinOpt(E_WINDOW, sName);
@@ -304,11 +304,11 @@ void SfxChildWindow::SaveStatus(const SfxChildWinInfo& rInfo)
     aSeq[0].Value <<= aWinData.makeStringAndClear();
     aWinOpt.SetUserData( aSeq );
 
-    // ... but save status at runtime!
+    
     pImp->pFact->aInfo = rInfo;
 }
 
-//-------------------------------------------------------------------------
+
 void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
 {
     DBG_CHKTHIS(SfxChildWindow,0);
@@ -316,7 +316,7 @@ void SfxChildWindow::SetAlignment(SfxChildAlignment eAlign)
     eChildAlignment = eAlign;
 }
 
-//-------------------------------------------------------------------------
+
 SfxChildWinInfo SfxChildWindow::GetInfo() const
 {
     DBG_CHKTHIS(SfxChildWindow,0);
@@ -348,28 +348,28 @@ SfxChildWinInfo SfxChildWindow::GetInfo() const
     return aInfo;
 }
 
-//-------------------------------------------------------------------------
+
 sal_uInt16 SfxChildWindow::GetPosition()
 {
     return pImp->pFact->nPos;
 }
 
-//-------------------------------------------------------------------------
+
 void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinInfo& rInfo)
 {
-    // load configuration
+    
 
     boost::scoped_ptr<SvtViewOptions> xWinOpt;
-    // first see if a module specific id exists
+    
     if (rInfo.aModule.getLength())
         xWinOpt.reset(new SvtViewOptions(E_WINDOW, rInfo.aModule + "/" + OUString::number(nId)));
 
-    // if not then try the generic id
+    
     if (!xWinOpt || !xWinOpt->Exists())
         xWinOpt.reset(new SvtViewOptions(E_WINDOW, OUString::number(nId)));
 
     if (xWinOpt->Exists() && xWinOpt->HasVisible() )
-        rInfo.bVisible  = xWinOpt->IsVisible(); // set state from configuration. Can be overwritten by UserData, see below
+        rInfo.bVisible  = xWinOpt->IsVisible(); 
 
     ::com::sun::star::uno::Sequence < ::com::sun::star::beans::NamedValue > aSeq = xWinOpt->GetUserData();
 
@@ -383,15 +383,15 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
 
     if ( !aWinData.isEmpty() )
     {
-        // Search for version ID
-        if ( aWinData[0] != 0x0056 ) // 'V' = 56h
-            // A version ID, so do not use
+        
+        if ( aWinData[0] != 0x0056 ) 
+            
             return;
 
-        // Delete 'V'
+        
         aWinData = aWinData.copy(1);
 
-        // Read version
+        
         char cToken = ',';
         sal_Int32 nPos = aWinData.indexOf( cToken );
         sal_uInt16 nActVersion = (sal_uInt16)aWinData.copy( 0, nPos + 1 ).toInt32();
@@ -400,8 +400,8 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
 
         aWinData = aWinData.copy(nPos+1);
 
-        // Load Visibility: is coded as a char
-        rInfo.bVisible = (aWinData[0] == 0x0056); // 'V' = 56h
+        
+        rInfo.bVisible = (aWinData[0] == 0x0056); 
         aWinData = aWinData.copy(1);
         nPos = aWinData.indexOf( cToken );
         if (nPos != -1)
@@ -409,7 +409,7 @@ void SfxChildWindow::InitializeChildWinFactory_Impl(sal_uInt16 nId, SfxChildWinI
             sal_Int32 nNextPos = aWinData.indexOf( cToken, 2 );
             if ( nNextPos != -1 )
             {
-                // there is extra information
+                
                 rInfo.nFlags = (sal_uInt16)aWinData.copy( nPos+1, nNextPos - nPos - 1 ).toInt32();
                 aWinData = aWinData.replaceAt( nPos, nNextPos-nPos+1, "" );
                 rInfo.aExtraString = aWinData;
@@ -581,7 +581,7 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
     sal_uInt16          *pPos
 )   const
 {
-    // invalid?
+    
     if ( aExtraString.isEmpty() )
         return sal_False;
     OUString aStr;
@@ -589,27 +589,27 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
     if ( nPos == -1 )
         return sal_False;
 
-    // Try to read the alignment string "ALIGN :(...)", but if
-    // it is not present, then use an older version
+    
+    
     sal_Int32 n1 = aExtraString.indexOf('(', nPos);
     if ( n1 != -1 )
     {
         sal_Int32 n2 = aExtraString.indexOf(')', n1);
         if ( n2 != -1 )
         {
-            // Cut out Alignment string
+            
             aStr = aExtraString.copy(nPos, n2 - nPos + 1);
             aStr = aStr.replaceAt(nPos, n1-nPos+1, "");
         }
     }
 
-    // First extract the Alignment
+    
     if ( aStr.isEmpty() )
         return sal_False;
     if ( pAlign )
         *pAlign = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
 
-    // then the LastAlignment
+    
     nPos = aStr.indexOf(',');
     if ( nPos == -1 )
         return sal_False;
@@ -617,10 +617,10 @@ sal_Bool SfxChildWinInfo::GetExtraData_Impl
     if ( pLastAlign )
         *pLastAlign = (SfxChildAlignment) (sal_uInt16) aStr.toInt32();
 
-    // Then the splitting information
+    
     nPos = aStr.indexOf(',');
     if ( nPos == -1 )
-        // No docking in a Splitwindow
+        
         return sal_True;
     aStr = aStr.copy(nPos+1);
     Point aChildPos;
@@ -726,21 +726,21 @@ sal_Bool SfxChildWindow::QueryClose()
 
 void SfxChildWindow::SetFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & rFrame )
 {
-    // Do nothing if nothing will be changed ...
+    
     if( pImp->xFrame != rFrame )
     {
-        // ... but stop listening on old frame, if connection exist!
+        
         if( pImp->xFrame.is() )
             pImp->xFrame->removeEventListener( pImp->xListener );
 
-        // If new frame isnt NULL -> we must guarantee valid listener for disposing events.
-        // Use already existing or create new one.
+        
+        
         if( rFrame.is() )
             if( !pImp->xListener.is() )
                 pImp->xListener = ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >( new DisposeListener( this, pImp ) );
 
-        // Set new frame in data container
-        // and build new listener connection, if necessary.
+        
+        
         pImp->xFrame = rFrame;
         if( pImp->xFrame.is() )
             pImp->xFrame->addEventListener( pImp->xListener );

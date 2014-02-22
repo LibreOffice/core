@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -77,8 +77,8 @@ struct GetPPDAttribs
 
     void executeCall()
     {
-        // This CUPS method is not at all thread-safe we need
-        // to dup the pointer to a static buffer it returns ASAP
+        
+        
         OString aResult = cupsGetPPD(m_aParameter.getStr());
         MutexGuard aGuard( *m_pSyncMutex );
         m_aResult = aResult;
@@ -119,7 +119,7 @@ OString CUPSManager::threadedCupsGetPPD( const char* pPrinter )
     OString aResult;
 
     m_aGetPPDMutex.acquire();
-    // if one thread hangs in cupsGetPPD already, don't start another
+    
     if( ! m_bPPDThreadRunning )
     {
         m_bPPDThreadRunning = true;
@@ -133,7 +133,7 @@ OString CUPSManager::threadedCupsGetPPD( const char* pPrinter )
         aValue.Seconds = 5;
         aValue.Nanosec = 0;
 
-        // NOTE: waitResult release and acquires the GetPPD mutex
+        
         aResult = pAttribs->waitResult( &aValue );
         osl_destroyThread( aThread );
     }
@@ -147,7 +147,7 @@ static const char* setPasswordCallback( const char* pIn )
     const char* pRet = NULL;
 
     PrinterInfoManager& rMgr = PrinterInfoManager::get();
-    if( rMgr.getType() == PrinterInfoManager::CUPS ) // sanity check
+    if( rMgr.getType() == PrinterInfoManager::CUPS ) 
         pRet = static_cast<CUPSManager&>(rMgr).authenticateUser( pIn );
     return pRet;
 }
@@ -188,8 +188,8 @@ CUPSManager::~CUPSManager()
 {
     if( m_aDestThread )
     {
-        // if the thread is still running here, then
-        // cupsGetDests is hung; terminate the thread instead of joining
+        
+        
         osl_terminateThread( m_aDestThread );
         osl_destroyThread( m_aDestThread );
     }
@@ -208,14 +208,14 @@ void CUPSManager::runDests()
     SAL_INFO("vcl.unx.print", "starting cupsGetDests");
     cups_dest_t* pDests = NULL;
 
-    // n#722902 - do a fast-failing check for cups working *at all* first
+    
     http_t* p_http;
     if( (p_http=httpConnectEncrypt(
              cupsServer(),
              ippPort(),
              cupsEncryption())) != NULL )
     {
-        // neat, cups is up, clean up the canary
+        
         httpClose(p_http);
 
         int nDests = cupsGetDests( &pDests );
@@ -231,17 +231,17 @@ void CUPSManager::runDests()
 
 void CUPSManager::initialize()
 {
-    // get normal printers, clear printer list
+    
     PrinterInfoManager::initialize();
 
-    // check whether thread has completed
-    // if not behave like old printing system
+    
+    
     osl::MutexGuard aGuard( m_aCUPSMutex );
 
     if( ! m_bNewDests )
         return;
 
-    // dest thread has run, clean up
+    
     if( m_aDestThread )
     {
         osl_joinWithThread( m_aDestThread );
@@ -250,7 +250,7 @@ void CUPSManager::initialize()
     }
     m_bNewDests = false;
 
-    // clear old stuff
+    
     m_aCUPSDestMap.clear();
 
     if( ! (m_nDests && m_pDests ) )
@@ -259,11 +259,11 @@ void CUPSManager::initialize()
     if( isCUPSDisabled() )
         return;
 
-    // check for CUPS server(?) > 1.2
-    // since there is no API to query, check for options that were
-    // introduced in dests with 1.2
-    // this is needed to check for %%IncludeFeature support
-    // (#i65684#, #i65491#)
+    
+    
+    
+    
+    
     bool bUsePDF = false;
     cups_dest_t* pDest = ((cups_dest_t*)m_pDests);
     const char* pOpt = cupsGetOption( "printer-info",
@@ -277,20 +277,20 @@ void CUPSManager::initialize()
 
     m_aGlobalDefaults.setDefaultBackend(bUsePDF);
 
-    // do not send include JobPatch; CUPS will insert that itself
-    // TODO: currently unknown which versions of CUPS insert JobPatches
-    // so currently it is assumed CUPS = don't insert JobPatch files
+    
+    
+    
     m_bUseJobPatch = false;
 
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
     int nPrinter = m_nDests;
 
-    // reset global default PPD options; these are queried on demand from CUPS
+    
     m_aGlobalDefaults.m_pParser = NULL;
     m_aGlobalDefaults.m_aContext = PPDContext();
 
-    // add CUPS printers, should there be a printer
-    // with the same name as a CUPS printer, overwrite it
+    
+    
     while( nPrinter-- )
     {
         pDest = ((cups_dest_t*)m_pDests)+nPrinter;
@@ -304,7 +304,7 @@ void CUPSManager::initialize()
             aPrinterName = aBuf.makeStringAndClear();
         }
 
-        // initialize printer with possible configuration from psprint.conf
+        
         bool bSetToGlobalDefaults = m_aPrinters.find( aPrinterName ) == m_aPrinters.end();
         Printer aPrinter = m_aPrinters[ aPrinterName ];
         if( bSetToGlobalDefaults )
@@ -325,13 +325,13 @@ void CUPSManager::initialize()
         OUStringBuffer aBuf( 256 );
         aBuf.appendAscii( "CUPS:" );
         aBuf.append( aPrinterName );
-        // note: the parser that goes with the PrinterInfo
-        // is created implicitly by the JobData::operator=()
-        // when it detects the NULL ptr m_pParser.
-        // if we wanted to fill in the parser here this
-        // would mean we'd have to download PPDs for each and
-        // every printer - which would be really bad runtime
-        // behaviour
+        
+        
+        
+        
+        
+        
+        
         aPrinter.m_aInfo.m_pParser = NULL;
         aPrinter.m_aInfo.m_aContext.setParser( NULL );
         boost::unordered_map< OUString, PPDContext, OUStringHash >::const_iterator c_it = m_aDefaultContexts.find( aPrinterName );
@@ -348,8 +348,8 @@ void CUPSManager::initialize()
         m_aCUPSDestMap[ aPrinter.m_aInfo.m_aPrinterName ] = nPrinter;
     }
 
-    // remove everything that is not a CUPS printer and not
-    // a special purpose printer (PDF, Fax)
+    
+    
     std::list< OUString > aRemovePrinters;
     for( boost::unordered_map< OUString, Printer, OUStringHash >::iterator it = m_aPrinters.begin();
          it != m_aPrinters.end(); ++it )
@@ -405,7 +405,7 @@ static void updatePrinterContextInfo( ppd_group_t* pPPDGroup, PPDContext& rConte
         }
     }
 
-    // recurse through subgroups
+    
     for( int g = 0; g < pPPDGroup->num_subgroups; g++ )
     {
         updatePrinterContextInfo( pPPDGroup->subgroups + g, rContext );
@@ -438,11 +438,11 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                 {
                     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
                     OUString aFileName( OStringToOUString( aPPDFile, aEncoding ) );
-                    // update the printer info with context information
+                    
                     ppd_file_t* pPPD = ppdOpenFile( aPPDFile.getStr() );
                     if( pPPD )
                     {
-                        // create the new parser
+                        
                         PPDParser* pCUPSParser = new PPDParser( aFileName );
                         pCUPSParser->m_aFile = rPrinter;
                         pNewParser = pCUPSParser;
@@ -455,11 +455,11 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                                 "\" = \"" << pDest->options[k].value << "\"");
                         PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
 
-                        // remember the default context for later use
+                        
                         PPDContext& rContext = m_aDefaultContexts[ aPrinter ];
                         rContext.setParser( pNewParser );
-                        // set system default paper; printer CUPS PPD options
-                        // may overwrite it
+                        
+                        
                         setDefaultPaper( rContext );
                         for( int i = 0; i < pPPD->num_groups; i++ )
                             updatePrinterContextInfo( pPPD->groups + i, rContext );
@@ -467,13 +467,13 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         rInfo.m_pParser = pNewParser;
                         rInfo.m_aContext = rContext;
 
-                        // clean up the mess
+                        
                         ppdClose( pPPD );
                     }
                     else
                         SAL_INFO("vcl.unx.print", "ppdOpenFile failed, falling back to generic driver");
 
-                    // remove temporary PPD file
+                    
                     unlink( aPPDFile.getStr() );
                 }
                 else
@@ -489,7 +489,7 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
 
     if( ! pNewParser )
     {
-        // get the default PPD
+        
         pNewParser = PPDParser::getParser( OUString( "SGENPRT" ) );
 
         PrinterInfo& rInfo = m_aPrinters[ aPrinter ].m_aInfo;
@@ -511,7 +511,7 @@ void CUPSManager::setupJobContextData( JobData& rData )
 
     boost::unordered_map< OUString, Printer, OUStringHash >::iterator p_it =
         m_aPrinters.find( rData.m_aPrinterName );
-    if( p_it == m_aPrinters.end() ) // huh ?
+    if( p_it == m_aPrinters.end() ) 
     {
         SAL_WARN("vcl.unx.print", "CUPS printer list in disorder, "
                 "no dest for printer " << rData.m_aPrinterName);
@@ -520,8 +520,8 @@ void CUPSManager::setupJobContextData( JobData& rData )
 
     if( p_it->second.m_aInfo.m_pParser == NULL )
     {
-        // in turn calls createCUPSParser
-        // which updates the printer info
+        
+        
         p_it->second.m_aInfo.m_pParser = PPDParser::getParser( p_it->second.m_aInfo.m_aDriverName );
     }
     if( p_it->second.m_aInfo.m_aContext.getParser() == NULL )
@@ -573,10 +573,10 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, bool bBanner
     rNumOptions = 0;
     *rOptions = NULL;
 
-    // emit features ordered to OrderDependency
-    // ignore features that are set to default
+    
+    
 
-    // sanity check
+    
     if( rJob.m_pParser == rJob.m_aContext.getParser() && rJob.m_pParser )
     {
         int i;
@@ -638,7 +638,7 @@ bool CUPSManager::endSpool( const OUString& rPrintername, const OUString& rJobTi
         fclose( pFile );
         rtl_TextEncoding aEnc = osl_getThreadTextEncoding();
 
-        // setup cups options
+        
         int nNumOptions = 0;
         cups_option_t* pOptions = NULL;
         getOptionsFromDocumentSetup( rDocumentJobData, bBanner, nNumOptions, (void**)&pOptions );
@@ -683,7 +683,7 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
     {
         if(  m_aDestThread )
         {
-            // initial asynchronous detection still running
+            
             SAL_INFO("vcl.unx.print", "syncing cups discovery thread");
             osl_joinWithThread( m_aDestThread );
             osl_destroyThread( m_aDestThread );
@@ -692,15 +692,15 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
         }
         else
         {
-            // #i82321# check for cups printer updates
-            // with this change the whole asynchronous detection in a thread is
-            // almost useless. The only relevance left is for some stalled systems
-            // where the user can set SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION
-            // (see vcl/unx/source/gdi/salprnpsp.cxx)
-            // so that checkPrintersChanged( true ) will never be called
+            
+            
+            
+            
+            
+            
 
-            // there is no way to query CUPS whether the printer list has changed
-            // so get the dest list anew
+            
+            
             if( m_nDests && m_pDests )
                 cupsFreeDests( m_nDests, (cups_dest_t*)m_pDests );
             m_nDests = 0;
@@ -717,7 +717,7 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
     if( ! bChanged )
     {
         bChanged = PrinterInfoManager::checkPrintersChanged( bWait );
-        // #i54375# ensure new merging with CUPS list in :initialize
+        
         if( bChanged )
             m_bNewDests = true;
     }
@@ -730,7 +730,7 @@ bool CUPSManager::checkPrintersChanged( bool bWait )
 
 bool CUPSManager::addPrinter( const OUString& rName, const OUString& rDriver )
 {
-    // don't touch the CUPS printers
+    
     if( m_aCUPSDestMap.find( rName ) != m_aCUPSDestMap.end() ||
         rDriver.startsWith("CUPS:")
         )
@@ -740,7 +740,7 @@ bool CUPSManager::addPrinter( const OUString& rName, const OUString& rDriver )
 
 bool CUPSManager::removePrinter( const OUString& rName, bool bCheck )
 {
-    // don't touch the CUPS printers
+    
     if( m_aCUPSDestMap.find( rName ) != m_aCUPSDestMap.end() )
         return false;
     return PrinterInfoManager::removePrinter( rName, bCheck );
@@ -790,7 +790,7 @@ bool CUPSManager::writePrinterConfig()
             cups_dest_t* pDest = ((cups_dest_t*)m_pDests) + nit->second;
             PrinterInfo& rInfo = prt->second.m_aInfo;
 
-            // create new option list
+            
             int nNewOptions = 0;
             cups_option_t* pNewOptions = NULL;
             int nValues = rInfo.m_aContext.countValuesModified();
@@ -798,14 +798,14 @@ bool CUPSManager::writePrinterConfig()
             {
                 const PPDKey* pKey = rInfo.m_aContext.getModifiedKey( i );
                 const PPDValue* pValue = rInfo.m_aContext.getValue( pKey );
-                if( pKey && pValue ) // sanity check
+                if( pKey && pValue ) 
                 {
                     OString aName = OUStringToOString( pKey->getKey(), aEncoding );
                     OString aValue = OUStringToOString( pValue->m_aOption, aEncoding );
                     nNewOptions = cupsAddOption( aName.getStr(), aValue.getStr(), nNewOptions, &pNewOptions );
                 }
             }
-            // set PPD options on CUPS dest
+            
             cupsFreeOptions( pDest->num_options, pDest->options );
             pDest->num_options = nNewOptions;
             pDest->options = pNewOptions;

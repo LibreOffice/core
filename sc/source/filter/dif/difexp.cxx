@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <rtl/math.hxx>
@@ -60,8 +60,8 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
         rOut.SetStreamCharSet( eCharSet );
 
     sal_Unicode cStrDelim('"');
-    OString aStrDelimEncoded;    // only used if not Unicode
-    OUString aStrDelimDecoded;     // only used if context encoding
+    OString aStrDelimEncoded;    
+    OUString aStrDelimDecoded;     
     bool bContextOrNotAsciiEncoding;
     if ( eCharSet == RTL_TEXTENCODING_UNICODE )
     {
@@ -109,7 +109,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
 
     aPrgrsBar.SetState( 0 );
 
-    // TABLE
+    
     OSL_ENSURE( pDoc->HasTable( nTab ), "*ScExportDif(): Table not existent!" );
 
     aOS.append(pKeyTABLE);
@@ -120,7 +120,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aOS.appendAscii("\"\n");
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
-    // VECTORS
+    
     aOS.append(pKeyVECTORS);
     aOS.appendAscii("\n0,");
     aOS.append(static_cast<sal_Int32>(nNumCols));
@@ -128,7 +128,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aOS.appendAscii(p2DoubleQuotes_LF);
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
-    // TUPLES
+    
     aOS.append(pKeyTUPLES);
     aOS.appendAscii("\n0,");
     aOS.append(static_cast<sal_Int32>(nNumRows));
@@ -136,7 +136,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aOS.appendAscii(p2DoubleQuotes_LF);
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
-    // DATA
+    
     aOS.append(pKeyDATA);
     aOS.appendAscii("\n0,0\n");
     aOS.appendAscii(p2DoubleQuotes_LF);
@@ -219,10 +219,10 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
             else
             {
-                // for an explanation why this complicated, see
-                // sc/source/ui/docsh.cxx:ScDocShell::AsciiSave()
-                // In fact we should create a common method if this would be
-                // needed just one more time..
+                
+                
+                
+                
                 OSL_ASSERT(aOS.getLength() == 0);
                 OUString aTmpStr = aString;
                 aOS.appendAscii(pStringData);
@@ -241,11 +241,11 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 }
                 else if ( bContextOrNotAsciiEncoding )
                 {
-                    // to byte encoding
+                    
                     OString aStrEnc = OUStringToOString(aTmpStr, eCharSet);
-                    // back to Unicode
+                    
                     OUString aStrDec = OStringToOUString(aStrEnc, eCharSet);
-                    // search on re-decoded string
+                    
                     sal_Int32 nPos = aStrDec.indexOf(aStrDelimDecoded);
                     while (nPos >= 0)
                     {
@@ -255,7 +255,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                         nPos = aStrDec.indexOf(
                             aStrDelimDecoded, nPos+1+aStrDelimDecoded.getLength());
                     }
-                    // write byte re-encoded
+                    
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
                     rOut.WriteUnicodeOrByteText( aStrDec, eCharSet );
                     rOut.WriteUniOrByteChar( cStrDelim, eCharSet );
@@ -263,7 +263,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                 else
                 {
                     OString aStrEnc = OUStringToOString(aTmpStr, eCharSet);
-                    // search on encoded string
+                    
                     sal_Int32 nPos = aStrEnc.indexOf(aStrDelimEncoded);
                     while (nPos >= 0)
                     {
@@ -273,7 +273,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
                         nPos = aStrEnc.indexOf(
                             aStrDelimEncoded, nPos+1+aStrDelimEncoded.getLength());
                     }
-                    // write byte encoded
+                    
                     rOut.Write(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
                     rOut.Write(aStrEnc.getStr(), aStrEnc.getLength());
                     rOut.Write(aStrDelimEncoded.getStr(), aStrDelimEncoded.getLength());
@@ -290,7 +290,7 @@ FltError ScFormatFilterPluginImpl::ScExportDif( SvStream& rOut, ScDocument* pDoc
     aOS.append('\n');
     rOut.WriteUnicodeOrByteText(aOS.makeStringAndClear());
 
-    // restore original value
+    
     rOut.SetStreamCharSet( eStreamCharSet );
 
     return eRet;

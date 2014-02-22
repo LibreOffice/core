@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -78,7 +78,7 @@ void PercentField::ShowPercent(bool bPercent)
         m_pField->SetDecimalDigits( 0 );
 
         nAktWidth = m_pField->ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
-        // round to 0.5 percent
+        
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
 
         m_pField->SetMin(std::max(static_cast< sal_Int64 >(1), nPercent));
@@ -126,7 +126,7 @@ void PercentField::SetPrcntValue(sal_Int64 nNewValue, FieldUnit eInUnit)
         m_pField->SetValue(Convert(nNewValue, eInUnit, m_pField->GetUnit()));
     else
     {
-        // Overwrite output value, do not restore later
+        
         sal_Int64 nPercent, nAktWidth;
         if(eInUnit == FUNIT_TWIP)
         {
@@ -216,7 +216,7 @@ void PercentField::SetUserValue(sal_Int64 nNewValue, FieldUnit eInUnit)
         m_pField->SetUserValue(Convert(nNewValue, eInUnit, m_pField->GetUnit()),FUNIT_NONE);
     else
     {
-        // Overwrite output value, do not restore later
+        
         sal_Int64 nPercent, nAktWidth;
         if (eInUnit == FUNIT_TWIP)
         {
@@ -259,10 +259,10 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
 
     if (eInUnit == FUNIT_CUSTOM)
     {
-        // Convert to metric
+        
         sal_Int64 nTwipValue = (nRefValue * nValue + 50) / 100;
 
-        if (eOutUnit == FUNIT_TWIP) // Only convert if necessary
+        if (eOutUnit == FUNIT_TWIP) 
             return NormalizePercent(nTwipValue);
         else
             return m_pField->ConvertValue(NormalizePercent(nTwipValue), 0, nOldDigits, FUNIT_TWIP, eOutUnit);
@@ -270,15 +270,15 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
 
     if (eOutUnit == FUNIT_CUSTOM)
     {
-        // Convert to percent
+        
         sal_Int64 nAktWidth;
         nValue = DenormalizePercent(nValue);
 
-        if (eInUnit == FUNIT_TWIP)  // Only convert if necessary
+        if (eInUnit == FUNIT_TWIP)  
             nAktWidth = nValue;
         else
             nAktWidth = m_pField->ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
-        // Round to 0.5 percent
+        
         return ((nAktWidth * 1000) / nRefValue + 5) / 10;
     }
 

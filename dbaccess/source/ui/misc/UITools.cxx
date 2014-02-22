@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "UITools.hxx"
@@ -177,14 +177,14 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
     try
     {
         if(bPwdReq && sPwd.isEmpty())
-        {   // password required, but empty -> connect using an interaction handler
+        {   
             Reference<XCompletedConnection> xConnectionCompletion(_xDataSource, UNO_QUERY);
             if (!xConnectionCompletion.is())
             {
                 SAL_WARN("dbaccess.ui", "createConnection: missing an interface ... need an error message here!");
             }
             else
-            {   // instantiate the default SDB interaction handler
+            {   
                 Reference< XInteractionHandler > xHandler( InteractionHandler::createWithParent(_rxContext, 0), UNO_QUERY);
                 _rOUTConnection = xConnectionCompletion->connectWithCompletion(xHandler);
             }
@@ -194,7 +194,7 @@ SQLExceptionInfo createConnection(  const Reference< ::com::sun::star::beans::XP
             Reference<XDataSource> xDataSource(_xDataSource,UNO_QUERY);
             _rOUTConnection = xDataSource->getConnection(sUser, sPwd);
         }
-        // be notified when connection is in disposing
+        
         Reference< XComponent >  xComponent(_rOUTConnection, UNO_QUERY);
         if (xComponent.is() && _rEvtLst.is())
             xComponent->addEventListener(_rEvtLst);
@@ -297,14 +297,14 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
 {
     TOTypeInfoSP pTypeInfo;
     _brForceToType = sal_False;
-    // search for type
+    
     ::std::pair<OTypeInfoMap::const_iterator, OTypeInfoMap::const_iterator> aPair = _rTypeInfo.equal_range(_nType);
     OTypeInfoMap::const_iterator aIter = aPair.first;
-    if(aIter != _rTypeInfo.end()) // compare with end is correct here
+    if(aIter != _rTypeInfo.end()) 
     {
         for(;aIter != aPair.second;++aIter)
         {
-            // search the best matching type
+            
     #ifdef DBG_UTIL
             OUString sDBTypeName         = aIter->second->aTypeName;         (void)sDBTypeName;
             sal_Int32       nDBTypePrecision    = aIter->second->nPrecision;        (void)nDBTypePrecision;
@@ -336,7 +336,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             {
                 sal_Int32 nPrec = aIter->second->nPrecision;
                 sal_Int32 nScale = aIter->second->nMaximumScale;
-                // search the best matching type (now comparing the local names)
+                
                 if  (   (aIter->second->aLocalTypeName.equalsIgnoreAsciiCase(_sTypeName))
                     &&  (nPrec  >= _nPrecision)
                     &&  (nScale >= _nScale)
@@ -352,13 +352,13 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
         }
 
         if (aIter == aPair.second)
-        {   // no match for the names, no match for the local names
-            // -> drop the precision and the scale restriction, accept any type with the property
-            // type id (nType)
+        {   
+            
+            
 
             for(aIter = aPair.first; aIter != aPair.second; ++aIter)
             {
-                // search the best matching type (now comparing the local names)
+                
                 sal_Int32 nPrec = aIter->second->nPrecision;
                 sal_Int32 nScale = aIter->second->nMaximumScale;
                 if  (   (nPrec  >= _nPrecision)
@@ -374,7 +374,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
             {
                 for(aIter = aPair.first; aIter != aPair.second; ++aIter)
                 {
-                    // search the best matching type (now comparing the local names)
+                    
                     sal_Int32 nScale = aIter->second->nMaximumScale;
                     if  (   (nScale >= _nScale)
                         &&  (aIter->second->bAutoIncrement  == _bAutoIncrement)
@@ -383,7 +383,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
                 }
                 if ( aIter == aPair.second )
                 {
-                    // try it without the auto increment flag
+                    
                     pTypeInfo = getTypeInfoFromType(_rTypeInfo,
                                    _nType,
                                    _sTypeName,
@@ -408,7 +408,7 @@ TOTypeInfoSP getTypeInfoFromType(const OTypeInfoMap& _rTypeInfo,
     else
     {
         ::comphelper::UStringMixEqual aCase(false);
-        // search for typeinfo where the typename is equal _sTypeName
+        
         OTypeInfoMap::const_iterator typeInfoLoop = _rTypeInfo.begin();
         OTypeInfoMap::const_iterator typeInfoEnd  = _rTypeInfo.end();
         for (; typeInfoLoop != typeInfoEnd; ++typeInfoLoop)
@@ -434,7 +434,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
         return;
     Reference< XResultSet> xRs = _rxConnection->getMetaData ()->getTypeInfo ();
     Reference< XRow> xRow(xRs,UNO_QUERY);
-    // Information for a single SQL type
+    
     if(xRs.is())
     {
         static const OUString aB1(" [ ");
@@ -443,7 +443,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
         ::std::vector<sal_Bool> aNullable;
-        // Loop on the result set until we reach end of file
+        
         while (xRs->next())
         {
             TOTypeInfoSP pInfo(new OTypeInfo());
@@ -508,12 +508,12 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nMaximumScale    = aValue;
             assert(nPos == 15);
-            // 16 and 17 are unused
+            
             nPos = 18;
             aValue.fill(nPos,aTypes[nPos],aNullable[nPos],xRow);
             pInfo->nNumPrecRadix    = aValue;
 
-            // check if values are less than zero like it happens in a oracle jdbc driver
+            
             if( pInfo->nPrecision < 0)
                 pInfo->nPrecision = 0;
             if( pInfo->nMinimumScale < 0)
@@ -568,7 +568,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
                         aName = _rsTypeNames.getToken(TYPE_BIT, ';');
                         break;
                     }
-                    // run through
+                    
                 case DataType::BOOLEAN:
                     aName = _rsTypeNames.getToken(TYPE_BOOL, ';');
                     break;
@@ -626,10 +626,10 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
             pInfo->aUIName += pInfo->aTypeName;
             if ( !aName.isEmpty() )
                 pInfo->aUIName += aB2;
-            // Now that we have the type info, save it in the multimap
+            
             _rTypeInfoMap.insert(OTypeInfoMap::value_type(pInfo->nType,pInfo));
         }
-        // for a faster index access
+        
         _rTypeInfoIters.reserve(_rTypeInfoMap.size());
 
         OTypeInfoMap::iterator aIter = _rTypeInfoMap.begin();
@@ -637,7 +637,7 @@ void fillTypeInfo(  const Reference< ::com::sun::star::sdbc::XConnection>& _rxCo
         for(;aIter != aEnd;++aIter)
             _rTypeInfoIters.push_back(aIter);
 
-        // Close the result set/statement.
+        
 
         ::comphelper::disposeComponent(xRs);
     }
@@ -655,8 +655,8 @@ void setColumnProperties(const Reference<XPropertySet>& _rxColumn,const OFieldDe
     _rxColumn->setPropertyValue(PROPERTY_DESCRIPTION,makeAny(_pFieldDesc->GetDescription()));
     if ( _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_ISCURRENCY) && _pFieldDesc->IsCurrency() )
         _rxColumn->setPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(_pFieldDesc->IsCurrency()));
-    // set autoincrement value when available
-    // and only set when the entry is not empty, that lets the value in the column untouched
+    
+    
     if ( _pFieldDesc->IsAutoIncrement() && !_pFieldDesc->GetAutoIncrementValue().isEmpty() && _rxColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_AUTOINCREMENTCREATION) )
         _rxColumn->setPropertyValue(PROPERTY_AUTOINCREMENTCREATION,makeAny(_pFieldDesc->GetAutoIncrementValue()));
 }
@@ -709,7 +709,7 @@ sal_Bool checkDataSourceAvailable(const OUString& _sDataSourceName,const Referen
     Reference< XDatabaseContext > xDataBaseContext = DatabaseContext::create(_xContext);
     sal_Bool bRet = xDataBaseContext->hasByName(_sDataSourceName);
     if ( !bRet )
-    { // try if this one is a URL
+    { 
         try
         {
             bRet = xDataBaseContext->getByName(_sDataSourceName).hasValue();
@@ -795,7 +795,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
 {
     sal_Bool bRet = sal_False;
 
-    // UNO->ItemSet
+    
     static SfxItemInfo aItemInfos[] =
     {
         { 0, 0 },
@@ -822,22 +822,22 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
     };
 
     SfxItemPool* pPool = new SfxItemPool(OUString("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, pDefaults);
-    pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    // ripped, don't understand why
-    pPool->FreezeIdRanges();                        // the same
+    pPool->SetDefaultMetric( SFX_MAPUNIT_TWIP );    
+    pPool->FreezeIdRanges();                        
 
     SfxItemSet* pFormatDescriptor = new SfxItemSet(*pPool, aAttrMap);
-    // fill it
+    
     pFormatDescriptor->Put(SvxHorJustifyItem(_eJustify, SBA_ATTR_ALIGN_HOR_JUSTIFY));
     sal_Bool bText = sal_False;
     if (_bHasFormat)
     {
-        // if the col is bound to a text field we have to disallow all non-text formats
+        
         if ((DataType::CHAR == _nDataType) || (DataType::VARCHAR == _nDataType) || (DataType::LONGVARCHAR == _nDataType) || (DataType::CLOB == _nDataType))
         {
             bText = sal_True;
             pFormatDescriptor->Put(SfxBoolItem(SID_ATTR_NUMBERFORMAT_ONE_AREA, true));
             if (!_pFormatter->IsTextFormat(_nFormatKey))
-                // text fields can only have text formats
+                
                 _nFormatKey = _pFormatter->GetStandardFormat(NUMBERFORMAT_TEXT,_pParent->GetSettings().GetLanguageTag().getLanguageType());
         }
 
@@ -851,22 +851,22 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
         pFormatDescriptor->Put(aFormatter);
     }
 
-    {   // want the dialog to be destroyed before our set
+    {   
         SbaSbAttrDlg aDlg(_pParent, pFormatDescriptor, _pFormatter, _bHasFormat);
         if (RET_OK == aDlg.Execute())
         {
-            // ItemSet->UNO
-            // UNO-properties
+            
+            
             const SfxItemSet* pSet = aDlg.GetExampleSet();
-            // (of course we could put the modified items directly into the column, but then the UNO-model
-            // won't reflect these changes, and why do we have a model, then ?)
+            
+            
 
-            // horizontal justify
+            
             SFX_ITEMSET_GET(*pSet, pHorJustify, SvxHorJustifyItem, SBA_ATTR_ALIGN_HOR_JUSTIFY, true);
 
             _eJustify = (SvxCellHorJustify)pHorJustify->GetValue();
 
-            // format key
+            
             if (_bHasFormat)
             {
                 SFX_ITEMSET_GET(*pSet, pFormat, SfxUInt32Item, SBA_DEF_FMTVALUE, true);
@@ -874,7 +874,7 @@ sal_Bool callColumnFormatDialog(Window* _pParent,
             }
             bRet = sal_True;
         }
-            // deleted formats
+            
         const SfxItemSet* pResult = aDlg.GetOutputItemSet();
         if (pResult)
         {
@@ -919,7 +919,7 @@ sal_Bool appendToFilter(const Reference<XConnection>& _xConnection,
         {
             Sequence< OUString > aFilter;
             xProp->getPropertyValue(PROPERTY_TABLEFILTER) >>= aFilter;
-            // first check if we have something like SCHEMA.%
+            
             sal_Bool bHasToInsert = sal_True;
             const OUString* pBegin = aFilter.getConstArray();
             const OUString* pEnd = pBegin + aFilter.getLength();
@@ -968,7 +968,7 @@ void notifySystemWindow(Window* _pWindow,Window* _pToRegister, ::comphelper::mem
 
 void adjustToolBoxSize(ToolBox* _pToolBox)
 {
-    // adjust the toolbox size, otherwise large bitmaps don't fit into
+    
     Size aOldSize = _pToolBox->GetSizePixel();
     Size aSize = _pToolBox->CalcWindowSizePixel();
     if ( !aSize.Width() )
@@ -1002,7 +1002,7 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
     {
         sal_Int32 nValue = aColumnSizeDlg.GetValue();
         if ( -1 == nValue )
-        {   // default width
+        {   
             nValue = _pBox->GetDefaultColumnWidth( _pBox->GetColumnTitle( _nColId ) );
         }
         else
@@ -1014,7 +1014,7 @@ void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId
     }
 }
 
-// check if SQL92 name checking is enabled
+
 sal_Bool isSQL92CheckEnabled(const Reference<XConnection>& _xConnection)
 {
     return ::dbtools::getBooleanDataSourceSetting( _xConnection, PROPERTY_ENABLESQL92CHECK );
@@ -1040,7 +1040,7 @@ void fillAutoIncrementValue(const Reference<XPropertySet>& _xDatasource,
         Sequence<PropertyValue> aInfo;
         _xDatasource->getPropertyValue(PROPERTY_INFO) >>= aInfo;
 
-        // search the right propertyvalue
+        
         const PropertyValue* pValue =::std::find_if(aInfo.getConstArray(),
                                                     aInfo.getConstArray() + aInfo.getLength(),
                                                     ::std::bind2nd(TPropertyValueEqualFunctor(),PROPERTY_AUTOINCREMENTCREATION));
@@ -1088,15 +1088,15 @@ OUString getStrippedDatabaseName(const Reference<XPropertySet>& _xDataSource,OUS
 
 void AppendConfigToken( OUString& _rURL, sal_Bool _bQuestionMark )
 {
-    // query part exists?
+    
     if ( _bQuestionMark )
-        // no, so start with '?'
+        
         _rURL += "?";
     else
-        // yes, so only append with '&'
+        
         _rURL += "&";
 
-    // set parameters
+    
     _rURL += "Language=";
     _rURL += utl::ConfigManager::getLocale();
     _rURL += "&System=";
@@ -1136,12 +1136,12 @@ namespace
 
         return bRet;
     }
-} // annonymous
+} 
 
 ::com::sun::star::util::URL createHelpAgentURL(const OUString& _sModuleName, const OString& sHelpId)
 {
     ::com::sun::star::util::URL aURL;
-    aURL.Complete = "vnd.sun.star.help://" +
+    aURL.Complete = "vnd.sun.star.help:
         _sModuleName + "/" + OStringToOUString(sHelpId, RTL_TEXTENCODING_UTF8);
 
     OUString sAnchor;
@@ -1179,29 +1179,29 @@ void setEvalDateFormatForFormatter(Reference< ::com::sun::star::util::XNumberFor
 TOTypeInfoSP queryPrimaryKeyType(const OTypeInfoMap& _rTypeInfo)
 {
     TOTypeInfoSP pTypeInfo;
-    // first we search for a type which supports autoIncrement
+    
     OTypeInfoMap::const_iterator aIter = _rTypeInfo.begin();
     OTypeInfoMap::const_iterator aEnd  = _rTypeInfo.end();
     for(;aIter != aEnd;++aIter)
     {
-        // OJ: we don't want to set an autoincrement column to be key
-        // because we don't have the possiblity to know how to create
-        // such auto increment column later on
-        // so until we know how to do it, we create a column without autoincrement
-        //  if ( !aIter->second->bAutoIncrement )
-        {   // therefor we have searched
+        
+        
+        
+        
+        
+        {   
             if ( aIter->second->nType == DataType::INTEGER )
             {
-                pTypeInfo = aIter->second; // alternative
+                pTypeInfo = aIter->second; 
                 break;
             }
             else if ( !pTypeInfo.get() && aIter->second->nType == DataType::DOUBLE )
-                pTypeInfo = aIter->second; // alternative
+                pTypeInfo = aIter->second; 
             else if ( !pTypeInfo.get() && aIter->second->nType == DataType::REAL )
-                pTypeInfo = aIter->second; // alternative
+                pTypeInfo = aIter->second; 
         }
     }
-    if ( !pTypeInfo.get() ) // just a fallback
+    if ( !pTypeInfo.get() ) 
         pTypeInfo = queryTypeInfoByType(DataType::VARCHAR,_rTypeInfo);
 
     OSL_ENSURE(pTypeInfo.get(),"checkColumns: cann't find a type which is useable as a key!");
@@ -1213,26 +1213,26 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
     OTypeInfoMap::const_iterator aIter = _rTypeInfo.find(_nDataType);
     if(aIter != _rTypeInfo.end())
         return aIter->second;
-    // fall back if the type is unknown
+    
     TOTypeInfoSP pTypeInfo;
     switch(_nDataType)
     {
         case DataType::TINYINT:
             if( (pTypeInfo = queryTypeInfoByType(DataType::SMALLINT,_rTypeInfo) ) )
                 break;
-            // run through
+            
         case DataType::SMALLINT:
             if( (pTypeInfo = queryTypeInfoByType(DataType::INTEGER,_rTypeInfo) ) )
                 break;
-            // run through
+            
         case DataType::INTEGER:
             if( (pTypeInfo = queryTypeInfoByType(DataType::FLOAT,_rTypeInfo) ) )
                 break;
-            // run through
+            
         case DataType::FLOAT:
             if( (pTypeInfo = queryTypeInfoByType(DataType::REAL,_rTypeInfo) ) )
                 break;
-            // run through
+            
         case DataType::DATE:
         case DataType::TIME:
             if( DataType::DATE == _nDataType || DataType::TIME == _nDataType )
@@ -1240,17 +1240,17 @@ TOTypeInfoSP queryTypeInfoByType(sal_Int32 _nDataType,const OTypeInfoMap& _rType
                 if( (pTypeInfo = queryTypeInfoByType(DataType::TIMESTAMP,_rTypeInfo) ) )
                     break;
             }
-            // run through
+            
         case DataType::TIMESTAMP:
         case DataType::REAL:
         case DataType::BIGINT:
             if (  (pTypeInfo = queryTypeInfoByType(DataType::DOUBLE,_rTypeInfo) ) )
                 break;
-            // run through
+            
         case DataType::DOUBLE:
             if (  (pTypeInfo = queryTypeInfoByType(DataType::NUMERIC,_rTypeInfo) ) )
                 break;
-            // run through
+            
         case DataType::NUMERIC:
              pTypeInfo = queryTypeInfoByType(DataType::DECIMAL,_rTypeInfo);
             break;
@@ -1350,8 +1350,8 @@ Reference< XPropertySet > createView( const OUString& _rName, const Reference< X
         xAppend->appendByDescriptor(xView);
 
     xView = NULL;
-    // we need to reget the view because after appending it it is no longer valid
-    // but this time it isn't a view object it is a table object with type "VIEW"
+    
+    
     Reference<XTablesSupplier> xTabSup(_rxConnection,UNO_QUERY);
     Reference< XNameAccess > xTables;
     if ( xTabSup.is() )
@@ -1428,9 +1428,9 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
             sLabel = ModuleRes( _bCollection ? STR_FOLDER_LABEL  : ((_bForm) ? STR_FRM_LABEL : STR_RPT_LABEL));
             sTargetName = ::dbtools::createUniqueName(xNameAccess,sTargetName);
 
-            // here we have everything needed to create a new query object ...
+            
             HierarchicalNameCheck aNameChecker( _xNames.get(), sName );
-            // ... ehm, except a new name
+            
             OSaveAsDlg aAskForName( _pParent,
                                     _rxContext,
                                     sTargetName,
@@ -1438,7 +1438,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
                                     aNameChecker,
                                     SAD_ADDITIONAL_DESCRIPTION | SAD_TITLE_PASTE_AS);
             if ( RET_OK != aAskForName.Execute() )
-                // cancelled by the user
+                
                 return sal_False;
 
             sNewName = aAskForName.getName();
@@ -1456,11 +1456,11 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
         Reference<XMultiServiceFactory> xORB( xNameAccess, UNO_QUERY_THROW );
         Sequence< Any > aArguments(3);
         PropertyValue aValue;
-        // set as folder
+        
         aValue.Name = "Name";
         aValue.Value <<= sNewName;
         aArguments[0] <<= aValue;
-        //parent
+        
         aValue.Name = "Parent";
         aValue.Value <<= xNameAccess;
         aArguments[1] <<= aValue;
@@ -1490,7 +1490,7 @@ sal_Bool insertHierachyElement( Window* _pParent, const Reference< XComponentCon
 
 Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >& _rxConnection, const Reference< ::com::sun::star::uno::XComponentContext >& _rxContext )
 {
-    // create a formatter working with the connections format supplier
+    
     Reference< XNumberFormatter > xFormatter;
 
     try
@@ -1499,7 +1499,7 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
 
         if ( xSupplier.is() )
         {
-            // create a new formatter
+            
             xFormatter = Reference< util::XNumberFormatter > (
                 util::NumberFormatter::create( _rxContext ), UNO_QUERY_THROW);
             xFormatter->attachNumberFormatsSupplier(xSupplier);
@@ -1512,6 +1512,6 @@ Reference< XNumberFormatter > getNumberFormatter(const Reference< XConnection >&
     return xFormatter;
 }
 
-} // dbaui
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

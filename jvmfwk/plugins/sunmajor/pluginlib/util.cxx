@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -118,7 +118,7 @@ char const *g_arSearchPaths[] = {
 };
 }
 #endif
-#endif //  UNX
+#endif 
 
 namespace jfw_plugin
 {
@@ -192,8 +192,8 @@ public:
 private:
     oslFileHandle & m_rHandle;
 
-    FileHandleGuard(FileHandleGuard &); // not implemented
-    void operator =(FileHandleGuard); // not implemented
+    FileHandleGuard(FileHandleGuard &); 
+    void operator =(FileHandleGuard); 
 };
 
 inline FileHandleGuard::~FileHandleGuard() SAL_THROW(())
@@ -247,7 +247,7 @@ FileHandleReader::readLine(OString * pLine)
             switch (osl_readFile(
                         m_aGuard.getHandle(), m_aBuffer, sizeof(m_aBuffer), &nRead))
             {
-            case osl_File_E_PIPE: //HACK! for windows
+            case osl_File_E_PIPE: 
                 nRead = 0;
             case osl_File_E_None:
                 if (nRead == 0)
@@ -279,12 +279,12 @@ FileHandleReader::readLine(OString * pLine)
             case 0x0A:
                 *pLine += OString(m_aBuffer + nStart,
                                        m_nIndex - 1 - nStart);
-                    //TODO! check for overflow, and not very efficient
+                    
                 return RESULT_OK;
             }
 
         *pLine += OString(m_aBuffer + nStart, m_nIndex - nStart);
-            //TODO! check for overflow, and not very efficient
+            
     }
 }
 
@@ -330,11 +330,11 @@ void AsynchReader::execute()
     while (true)
     {
         sal_uInt64 nRead;
-        //the function blocks until something could be read or the pipe closed.
+        
         switch (osl_readFile(
                     m_aGuard.getHandle(), aBuffer, BUFFER_SIZE, &nRead))
         {
-        case osl_File_E_PIPE: //HACK! for windows
+        case osl_File_E_PIPE: 
             nRead = 0;
         case osl_File_E_None:
             break;
@@ -350,14 +350,14 @@ void AsynchReader::execute()
         }
         else if (nRead <= BUFFER_SIZE)
         {
-            //Save the data we have in m_arData into a temporary array
+            
             boost::scoped_array<sal_Char> arTmp( new sal_Char[m_nDataSize]);
             memcpy(arTmp.get(), m_arData.get(), m_nDataSize);
-            //Enlarge m_arData to hold the newly read data
+            
             m_arData.reset(new sal_Char[(size_t)(m_nDataSize + nRead)]);
-            //Copy back the data that was already in m_arData
+            
             memcpy(m_arData.get(), arTmp.get(), m_nDataSize);
-            //Add the newly read data to m_arData
+            
             memcpy(m_arData.get() + m_nDataSize, aBuffer, (size_t) nRead);
             m_nDataSize += (size_t) nRead;
         }
@@ -382,9 +382,9 @@ bool getJavaProps(const OUString & exePath,
 
     OSL_ASSERT(!exePath.isEmpty());
     OUString usStartDir;
-    //We need to set the CLASSPATH in case the office is started from
-    //a different directory. The JREProperties.class is expected to reside
-    //next to the plugin.
+    
+    
+    
     OUString sThisLib;
     if (osl_getModuleURLFromAddress((void *) (sal_IntPtr)& getJavaProps,
                                     & sThisLib.pData) == sal_False)
@@ -395,26 +395,26 @@ bool getJavaProps(const OUString & exePath,
         != osl_File_E_None)
         return false;
 
-    //check if we shall examine a Java for accessibility support
-    //If the bootstrap variable is "1" then we pass the argument
-    //"noaccessibility" to JREProperties.class. This will prevent
-    //that it calls   java.awt.Toolkit.getDefaultToolkit();
+    
+    
+    
+    
     bool bNoAccessibility = isEnvVarSetToOne("JFW_PLUGIN_DO_NOT_CHECK_ACCESSIBILITY");
 
-    //prepare the arguments
+    
     sal_Int32 cArgs = 3;
-    OUString arg1 = "-classpath";// + sClassPath;
+    OUString arg1 = "-classpath";
     OUString arg2 = sClassPath;
     OUString arg3("JREProperties");
     OUString arg4 = "noaccessibility";
     rtl_uString *args[4] = {arg1.pData, arg2.pData, arg3.pData};
 
 #ifdef UNX
-    // Java is no longer required for a11y - we use atk directly.
+    
     bNoAccessibility = !isEnvVarSetToOne("JFW_PLUGIN_FORCE_ACCESSIBILITY");
 #endif
 
-    // Only add the fourth param if the bootstrap parameter is set.
+    
     if (bNoAccessibility)
     {
         args[3] = arg4.pData;
@@ -430,18 +430,18 @@ bool getJavaProps(const OUString & exePath,
 
     JFW_TRACE2("\n[Java framework] Executing: " + exePath + ".\n");
     oslProcessError procErr =
-        osl_executeProcess_WithRedirectedIO( exePath.pData,//usExe.pData,
+        osl_executeProcess_WithRedirectedIO( exePath.pData,
                                              args,
-                                             cArgs,                 //sal_uInt32   nArguments,
-                                             osl_Process_HIDDEN, //oslProcessOption Options,
-                                             NULL, //oslSecurity Security,
-                                             usStartDir.pData,//usStartDir.pData,//usWorkDir.pData, //rtl_uString *strWorkDir,
-                                             NULL, //rtl_uString *strEnvironment[],
-                                             0, //  sal_uInt32   nEnvironmentVars,
-                                             &javaProcess, //oslProcess *pProcess,
-                                             NULL,//oslFileHandle *pChildInputWrite,
-                                             &fileOut,//oslFileHandle *pChildOutputRead,
-                                             &fileErr);//oslFileHandle *pChildErrorRead);
+                                             cArgs,                 
+                                             osl_Process_HIDDEN, 
+                                             NULL, 
+                                             usStartDir.pData,
+                                             NULL, 
+                                             0, 
+                                             &javaProcess, 
+                                             NULL,
+                                             &fileOut,
+                                             &fileErr);
 
     if( procErr != osl_Process_E_None)
     {
@@ -455,10 +455,10 @@ bool getJavaProps(const OUString & exePath,
         *bProcessRun = true;
     }
 
-    //Start asynchronous reading (different thread) of error stream
+    
     stderrReader->launch();
 
-    //Use this thread to read output stream
+    
     FileHandleReader::Result rs = FileHandleReader::RESULT_OK;
     while (true)
     {
@@ -473,14 +473,14 @@ bool getJavaProps(const OUString & exePath,
         sLine = sLine.trim();
         if (sLine.isEmpty())
             continue;
-        //The JREProperties class writes key value pairs, separated by '='
+        
         sal_Int32 index = sLine.indexOf('=', 0);
         OSL_ASSERT(index != -1);
         OUString sKey = sLine.copy(0, index);
         OUString sVal = sLine.copy(index + 1);
 
 #ifdef JVM_ONE_PATH_CHECK
-        //replace absolute path by linux distro link
+        
         OUString sHomeProperty("java.home");
         if(sHomeProperty.equals(sKey))
         {
@@ -494,7 +494,7 @@ bool getJavaProps(const OUString & exePath,
     if (rs != FileHandleReader::RESULT_ERROR && !props.empty())
         ret = true;
 
-    //process error stream data
+    
     stderrReader->join();
     JFW_TRACE2("[Java framework]  Java wrote to stderr:\" "
                << stderrReader->getData().getStr() << " \".\n");
@@ -538,11 +538,11 @@ bool decodeOutput(const OString& s, OUString* out)
 #if defined WNT
 void createJavaInfoFromWinReg(std::vector<rtl::Reference<VendorBase> > & vecInfos)
 {
-        // Get Java s from registry
+        
     std::vector<OUString> vecJavaHome;
     if(getSDKInfoFromRegistry(vecJavaHome))
     {
-        // create impl objects
+        
         typedef std::vector<OUString>::iterator ItHome;
         for(ItHome it_home= vecJavaHome.begin(); it_home != vecJavaHome.end();
             it_home++)
@@ -578,33 +578,33 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
         FILETIME fileTime;
         nNameLen = sizeof(bufVersion);
 
-        // Iterate over all subkeys of HKEY_LOCAL_MACHINE\Software\JavaSoft\Java Runtime Environment
+        
         while (RegEnumKeyExW(hRoot, dwIndex, bufVersion, &nNameLen, NULL, NULL, NULL, &fileTime) != ERROR_NO_MORE_ITEMS)
         {
             HKEY    hKey;
-            // Open a Java Runtime Environment sub key, e.g. "1.4.0"
+            
             if (RegOpenKeyExW(hRoot, bufVersion, 0, KEY_QUERY_VALUE, &hKey) == ERROR_SUCCESS)
             {
                 DWORD   dwType;
                 DWORD   dwTmpPathLen= 0;
-                // Get the path to the JavaHome every JRE entry
-                // Find out how long the string for JavaHome is and allocate memory to hold the path
+                
+                
                 if( RegQueryValueExW(hKey, L"JavaHome", 0, &dwType, NULL, &dwTmpPathLen)== ERROR_SUCCESS)
                 {
                     char* szTmpPath= (char *) malloc( dwTmpPathLen);
-                    // Get the path for the runtime lib
+                    
                     if(RegQueryValueExW(hKey, L"JavaHome", 0, &dwType, (unsigned char*) szTmpPath, &dwTmpPathLen) == ERROR_SUCCESS)
                     {
-                        // There can be several version entries refering with the same JavaHome,e.g 1.4 and 1.4.1
+                        
                         OUString usHome((sal_Unicode*) szTmpPath);
-                        // check if there is already an entry with the same JavaHomeruntime lib
-                        // if so, we use the one with the more accurate version
+                        
+                        
                         bool bAppend= true;
                         OUString usHomeUrl;
                         if (osl_getFileURLFromSystemPath(usHome.pData, & usHomeUrl.pData) ==
                             osl_File_E_None)
                         {
-                            //iterate over the vector with java home strings
+                            
                             typedef vector<OUString>::iterator ItHome;
                             for(ItHome itHome= vecJavaHome.begin();
                                 itHome != vecJavaHome.end(); itHome++)
@@ -615,7 +615,7 @@ bool getJavaInfoFromRegistry(const wchar_t* szRegKey,
                                     break;
                                 }
                             }
-                            // Save the home dir
+                            
                             if(bAppend)
                             {
                                 vecJavaHome.push_back(usHomeUrl);
@@ -646,7 +646,7 @@ bool getJREInfoFromRegistry(vector<OUString>& vecJavaHome)
     return getJavaInfoFromRegistry(HKEY_SUN_JRE, vecJavaHome);
 }
 
-#endif // WNT
+#endif 
 
 void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
 {
@@ -654,7 +654,7 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
         return;
     int size= vec.size() - 1;
     int cIter= 0;
-    // sort for version
+    
     for(int i= 0; i < size; i++)
     {
         for(int j= size; j > 0 + cIter; j--)
@@ -663,19 +663,19 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
             rtl::Reference<VendorBase>& next= vec.at(j-1);
 
             int nCmp = 0;
-            // comparing invalid SunVersion s is possible, they will be less than a
-            // valid version
+            
+            
 
-            //check if version of current is recognized, by comparing it with itself
+            
             try
             {
                 cur->compareVersions(cur->getVersion());
             }
             catch (MalformedVersionException &)
             {
-                nCmp = -1; // current < next
+                nCmp = -1; 
             }
-            //The version of cur is valid, now compare with the second version
+            
             if (nCmp == 0)
             {
                 try
@@ -684,11 +684,11 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
                 }
                 catch (MalformedVersionException & )
                 {
-                    //The second version is invalid, therefor it is regardes less.
+                    
                     nCmp = 1;
                 }
             }
-            if(nCmp == 1) // cur > next
+            if(nCmp == 1) 
             {
                 rtl::Reference<VendorBase> less = next;
                 vec.at(j-1)= cur;
@@ -703,8 +703,8 @@ void bubbleSortVersion(vector<rtl::Reference<VendorBase> >& vec)
 bool getJREInfoFromBinPath(
     const OUString& path, vector<rtl::Reference<VendorBase> > & vecInfos)
 {
-    // file:///c:/jre/bin
-    //map:       jre/bin/java.exe
+    
+    
     bool ret = false;
 
     for ( sal_Int32 pos = 0;
@@ -717,7 +717,7 @@ bool getJREInfoFromBinPath(
         char const* const* arExePaths = (*pFunc)(&size);
         vecPaths = getVectorFromCharArray(arExePaths, size);
 
-        //make sure argument path does not end with '/'
+        
         OUString sBinPath = path;
         if (path.endsWith("/"))
             sBinPath = path.copy(0, path.getLength() - 1);
@@ -725,19 +725,19 @@ bool getJREInfoFromBinPath(
         typedef vector<OUString>::const_iterator c_it;
         for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
         {
-            //the map contains e.g. jre/bin/java.exe
-            //get the directory where the executable is contained
+            
+            
             OUString sHome;
             sal_Int32 index = i->lastIndexOf('/');
             if (index == -1)
             {
-                //map contained only : "java.exe, then the argument
-                //path is already the home directory
+                
+                
                 sHome = sBinPath;
             }
             else
             {
-                // jre/bin/jre -> jre/bin
+                
                 OUString sMapPath(i->getStr(), index);
                 index = sBinPath.lastIndexOf(sMapPath);
                 if (index != -1
@@ -765,14 +765,14 @@ vector<Reference<VendorBase> > getAllJREInfos()
     vector<Reference<VendorBase> > vecInfos;
 
 #if defined WNT
-    // Get Javas from the registry
+    
     createJavaInfoFromWinReg(vecInfos);
-#endif // WNT
+#endif 
 
 #ifndef JVM_ONE_PATH_CHECK
     createJavaInfoFromJavaHome(vecInfos);
-    //this function should be called after createJavaInfoDirScan.
-    //Otherwise in SDKs Java may be started twice
+    
+    
      createJavaInfoFromPath(vecInfos);
 #endif
 
@@ -825,7 +825,7 @@ OUString resolveDirPath(const OUString & path)
                                        osl_FileStatus_Mask_FileURL);
     if (aResolver.fetchFileStatus(path) == osl::FileBase::E_None)
     {
-        //check if this is a directory
+        
         if (aResolver.m_aStatus.getFileType() == FileStatus::Directory)
         {
 #ifndef JVM_ONE_PATH_CHECK
@@ -847,7 +847,7 @@ OUString resolveFilePath(const OUString & path)
                                        osl_FileStatus_Mask_FileURL);
     if (aResolver.fetchFileStatus(path) == osl::FileBase::E_None)
     {
-        //check if this is a file
+        
         if (aResolver.m_aStatus.getFileType() == FileStatus::Regular)
         {
 #ifndef JVM_ONE_PATH_CHECK
@@ -874,15 +874,15 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     vector<pair<OUString, OUString> > props;
 
     OUString sResolvedDir = resolveDirPath(path);
-    // If this path is invalid then there is no chance to find a JRE here
+    
     if (sResolvedDir.isEmpty())
         return 0;
 
-    //check if the directory path is good, that is a JRE was already recognized.
-    //Then we need not detect it again
-    //For example, a sun JKD contains <jdk>/bin/java and <jdk>/jre/bin/java.
-    //When <jdk>/bin/java has been found then we need not find <jdk>/jre/bin/java.
-    //Otherwise we would execute java two times for evers JDK found.
+    
+    
+    
+    
+    
     MapIt entry2 = find_if(mapJREs.begin(), mapJREs.end(),
                            SameOrSubDirJREMap(sResolvedDir));
     if (entry2 != mapJREs.end())
@@ -908,13 +908,13 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         typedef vector<OUString>::const_iterator c_it;
         for (c_it i = vecPaths.begin(); i != vecPaths.end(); ++i)
         {
-            //if the path is a link, then resolve it
-            //check if the executable exists at all
+            
+            
 
-            //path can be only "file:///". Then do not append a '/'
-            //sizeof counts the terminating 0
+            
+            
             OUString sFullPath;
-            if (path.getLength() == sizeof("file:///") - 1)
+            if (path.getLength() == sizeof("file:
                 sFullPath = sResolvedDir + (*i);
             else
                 sFullPath = sResolvedDir +
@@ -925,7 +925,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
             if (sFilePath.isEmpty())
             {
-                //The file path (to java exe) is not valid
+                
                 cit_path ifull = find(vecBadPaths.begin(), vecBadPaths.end(), sFullPath);
                 if (ifull == vecBadPaths.end())
                     vecBadPaths.push_back(sFullPath);
@@ -954,42 +954,42 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 #endif
                              props, & bProcessRun) == false)
             {
-                //The java executable could not be run or the system properties
-                //could not be retrieved. We can assume that this java is corrupt.
+                
+                
                 vecBadPaths.push_back(sFilePath);
-                //If there was a java executable, that could be run but we did not get
-                //the system properties, then we also assume that the whole Java installation
-                //does not work. In a jdk there are two executables. One in jdk/bin and the other
-                //in jdk/jre/bin. We do not search any further, because we assume that if one java
-                //does not work then the other does not work as well. This saves us to run java
-                //again which is quite costly.
+                
+                
+                
+                
+                
+                
                 if (bProcessRun == true)
                 {
-                    // 1.3.1 special treatment: jdk/bin/java and /jdk/jre/bin/java are links to
-                    //a script, named .java_wrapper. The script starts jdk/bin/sparc/native_threads/java
-                    //or jdk/jre/bin/sparc/native_threads/java. The script uses the name with which it was
-                    //invoked to build the path to the executable. It we start the script directy as .java_wrapper
-                    //then it tries to start a jdk/.../native_threads/.java_wrapper. Therefore the link, which
-                    //is named java, must be used to start the script.
+                    
+                    
+                    
+                    
+                    
+                    
                     getJavaProps(sFullPath,
 #ifdef JVM_ONE_PATH_CHECK
                                  sResolvedDir,
 #endif
                                  props, & bProcessRun);
-                    // Either we found a working 1.3.1
-                    //Or the java is broken. In both cases we stop searchin under this "root" directory
+                    
+                    
                     bBreak = true;
                     break;
                 }
-                //sFilePath is no working java executable. We continue with another possible
-                //path.
+                
+                
                 else
                 {
                     continue;
                 }
             }
-            //sFilePath is a java and we could get the system properties. We proceed with this
-            //java.
+            
+            
             else
             {
                 bBreak = true;
@@ -1003,7 +1003,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
     if (props.empty())
         return rtl::Reference<VendorBase>();
 
-    //find java.vendor property
+    
     typedef vector<pair<OUString, OUString> >::const_iterator c_ip;
     OUString sVendor("java.vendor");
     OUString sVendorName;
@@ -1019,7 +1019,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
     if (!sVendorName.isEmpty())
     {
-        //find the creator func for the respective vendor name
+        
         for ( sal_Int32 c = 0;
               gVendorMap[c].sVendorName != NULL; ++c )
         {
@@ -1069,7 +1069,7 @@ inline OUString getDirFromFile(const OUString& usFilePath)
 
 void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
-// Get Java from PATH environment variable
+
     static OUString sCurDir(".");
     static OUString sParentDir("..");
     char *szPath= getenv("PATH");
@@ -1086,14 +1086,14 @@ void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
                 if(!usTokenUrl.isEmpty())
                 {
                     OUString usBin;
-                    // "."
+                    
                     if(usTokenUrl.equals(sCurDir))
                     {
                         OUString usWorkDirUrl;
                         if(osl_Process_E_None == osl_getProcessWorkingDir(&usWorkDirUrl.pData))
                             usBin= usWorkDirUrl;
                     }
-                    // ".."
+                    
                     else if(usTokenUrl.equals(sParentDir))
                     {
                         OUString usWorkDir;
@@ -1117,7 +1117,7 @@ void createJavaInfoFromPath(vector<rtl::Reference<VendorBase> >& vecInfos)
 
 void createJavaInfoFromJavaHome(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
-    // Get Java from JAVA_HOME environment
+    
     char *szJavaHome= getenv("JAVA_HOME");
     if(szJavaHome)
     {
@@ -1152,15 +1152,15 @@ bool makeDriveLetterSame(OUString * fileURL)
 void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
     JFW_TRACE2("\n[Java framework] Checking \"/usr/jdk/latest\"\n");
-    getJREInfoByPath("file:////usr/jdk/latest", vecInfos);
+    getJREInfoByPath("file:
 }
 
 #elif defined MACOSX && defined X86_64
 
 void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 {
-    // Oracle Java 7
-    getJREInfoByPath("file:///Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home", vecInfos);
+    
+    getJREInfoByPath("file:
 }
 
 #else
@@ -1191,7 +1191,7 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
 
 
 
-    OUString usFile("file:///");
+    OUString usFile("file:
     for( int ii = 0; ii < cSearchPaths; ii ++)
     {
         OUString usDir1(usFile + arPaths[ii]);
@@ -1201,11 +1201,11 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
             for(int j= 0; j < cCollectDirs; j++)
             {
                 OUString usDir2(usDir1 + arCollectDirs[j]);
-                // prevent that we scan the whole /usr, /usr/lib, etc directories
+                
                 if (!arCollectDirs[j].isEmpty())
                 {
-                    //usr/java/xxx
-                    //Examin every subdirectory
+                    
+                    
                     Directory aCollectionDir(usDir2);
 
                     Directory::RC openErr = aCollectionDir.open();
@@ -1256,26 +1256,26 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
                 }
                 else
                 {
-                    //usr/java
-                    //When we look directly into a dir like /usr, /usr/lib, etc. then we only
-                    //look for certain java directories, such as jre, jdk, etc. Whe do not want
-                    //to examine the whole directory because of performance reasons.
+                    
+                    
+                    
+                    
                     DirectoryItem item2;
                     if(DirectoryItem::get(usDir2, item2) == File::E_None)
                     {
                         for( int k= 0; k < cJavaNames; k++)
                         {
-                            // /usr/java/j2re1.4.0
+                            
                             OUString usDir3(usDir2 + arNames[k]);
 
                             DirectoryItem item3;
                             if(DirectoryItem::get(usDir3, item) == File::E_None)
                             {
-                                //remove trailing '/'
+                                
                                 sal_Int32 islash = usDir3.lastIndexOf('/');
                                 if (islash == usDir3.getLength() - 1
                                     && (islash
-                                        > RTL_CONSTASCII_LENGTH("file://")))
+                                        > RTL_CONSTASCII_LENGTH("file:
                                     usDir3 = usDir3.copy(0, islash);
                                 getJREInfoByPath(usDir3,vecInfos);
                             }
@@ -1286,8 +1286,8 @@ void createJavaInfoDirScan(vector<rtl::Reference<VendorBase> >& vecInfos)
         }
     }
 }
-#endif // ifdef SOLARIS
-#endif // ifdef UNX
+#endif 
+#endif 
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

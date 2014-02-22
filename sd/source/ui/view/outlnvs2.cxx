@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -111,7 +111,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
             }
             else
             {
-                // open the zoom dialog here
+                
                 SetCurrentFunction( FuScale::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
             }
             Cancel();
@@ -146,7 +146,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
         case SID_ZOOM_OUT:
         {
             SetCurrentFunction( FuZoom::Create(this, GetActiveWindow(), pOlView, GetDoc(), rReq) );
-            // ends itself, no need for Cancel()!
+            
             rReq.Done();
         }
         break;
@@ -251,12 +251,12 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
             if ( !(nCntrl & EE_CNTRL_NOCOLORS) )
             {
-                // color view is enabled: disable
+                
                 pOutl->SetControlWord(nCntrl | EE_CNTRL_NOCOLORS);
             }
             else
             {
-                // color view is disabled: enable
+                
                 pOutl->SetControlWord(nCntrl & ~EE_CNTRL_NOCOLORS);
             }
 
@@ -350,7 +350,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
     DeactivateCurrentFunction();
 
     OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-    //sal_uInt16 nSId = rReq.GetSlot();
+    
 
     switch( nSId )
     {
@@ -435,7 +435,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
         case SID_SET_DEFAULT:
         {
-            pOutlinerView->RemoveAttribs(sal_True); // sal_True = also paragraph attributes
+            pOutlinerView->RemoveAttribs(sal_True); 
             Cancel();
             rReq.Done();
         }
@@ -517,8 +517,8 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     OUString aName;
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
-                    //else
-                    //  aName = GetDocSh()->GetName();
+                    
+                    
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
                 }
                 break;
@@ -535,7 +535,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                                 pOldFldItem->GetField()->ISA( SvxPageField ) ||
                                 pOldFldItem->GetField()->ISA( SvxPagesField )) )
             {
-                // select field, so it gets deleted on Insert
+                
                 ESelection aSel = pOutlinerView->GetSelection();
                 if( aSel.nStartPos == aSel.nEndPos )
                     aSel.nEndPos++;
@@ -561,7 +561,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                                 pFldItem->GetField()->ISA( SvxExtFileField ) ||
                                 pFldItem->GetField()->ISA( SvxExtTimeField ) ) )
             {
-                // Dialog...
+                
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 AbstractSdModifyFieldDlg* pDlg = pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOutlinerView->GetAttribs() ) : 0;
                 if( pDlg && (pDlg->Execute() == RET_OK) )
@@ -570,8 +570,8 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     if( pField )
                     {
                         SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
-                        //pOLV->DeleteSelected(); <-- unfortunately missing!
-                        // select field, so it gets deleted on Insert
+                        
+                        
                         ESelection aSel = pOutlinerView->GetSelection();
                         sal_Bool bSel = sal_True;
                         if( aSel.nStartPos == aSel.nEndPos )
@@ -583,7 +583,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
                         pOutlinerView->InsertField( aFieldItem );
 
-                        // reset selection to original state
+                        
                         if( !bSel )
                             aSel.nEndPos--;
                         pOutlinerView->SetSelection( aSel );
@@ -633,6 +633,6 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 }
 
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "swtypes.hxx"
@@ -28,7 +28,7 @@
 
 #include <fldui.hrc>
 #include <globals.hrc>
-// #i83479#
+
 #include <SwNodeNum.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <ndtxt.hxx>
@@ -39,7 +39,7 @@
 #define REFFLDFLAG_BOOKMARK 0x4800
 #define REFFLDFLAG_FOOTNOTE 0x5000
 #define REFFLDFLAG_ENDNOTE  0x6000
-// #i83479#
+
 #define REFFLDFLAG_HEADING  0x7100
 #define REFFLDFLAG_NUMITEM  0x7200
 
@@ -60,7 +60,7 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet )
     get(m_pSelection, "selectframe");
     get(m_pSelectionLB, "select");
     m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle() | WB_SORT);
-    // #i83479#
+    
     get(m_pSelectionToolTipLB, "selecttip");
     get(m_pFormat, "formatframe");
     get(m_pFormatLB, "format");
@@ -71,7 +71,7 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet )
     sBookmarkTxt = m_pTypeLB->GetEntry(0);
     sFootnoteTxt = m_pTypeLB->GetEntry(1);
     sEndnoteTxt = m_pTypeLB->GetEntry(2);
-    // #i83479#
+    
     sHeadingTxt = m_pTypeLB->GetEntry(3);
     sNumItemTxt = m_pTypeLB->GetEntry(4);
     m_pTypeLB->Clear();
@@ -98,7 +98,7 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet )
     m_pSelectionLB->SetDoubleClickHdl  (LINK(this, SwFldRefPage, InsertHdl));
     m_pFormatLB->SetDoubleClickHdl     (LINK(this, SwFldRefPage, InsertHdl));
 
-    // #i83479#
+    
     m_pSelectionToolTipLB->SetSelectHdl( LINK(this, SwFldRefPage, SubTypeHdl) );
     m_pSelectionToolTipLB->SetDoubleClickHdl( LINK(this, SwFldRefPage, InsertHdl) );
     m_pSelectionToolTipLB->SetStyle( m_pSelectionToolTipLB->GetStyle() | WB_HSCROLL );
@@ -110,7 +110,7 @@ SwFldRefPage::~SwFldRefPage()
 {
 }
 
-// #i83479#
+
 void SwFldRefPage::SaveSelectedTxtNode()
 {
     mpSavedSelectedTxtNode = 0;
@@ -158,21 +158,21 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     if (!IsFldEdit())
     {
         SavePos(m_pTypeLB);
-        // #i83479#
+        
         SaveSelectedTxtNode();
     }
     SetSelectionSel(LISTBOX_ENTRY_NOTFOUND);
     SetTypeSel(LISTBOX_ENTRY_NOTFOUND);
-    Init(); // general initialisation
+    Init(); 
 
-    // initialise TypeListBox
+    
     m_pTypeLB->SetUpdateMode(false);
     m_pTypeLB->Clear();
 
-    // fill Type-Listbox
+    
 
     sal_uInt16 nPos;
-    // set/insert reference
+    
     const SwFldGroupRgn& rRg = GetFldMgr().GetGroupRange(IsFldDlgHtmlMode(), GetGroup());
 
     for (short i = rRg.nStart; i < rRg.nEnd; ++i)
@@ -186,14 +186,14 @@ void SwFldRefPage::Reset(const SfxItemSet& )
         }
     }
 
-    // #i83479#
-    // entries for headings and numbered items
+    
+    
     nPos = m_pTypeLB->InsertEntry(sHeadingTxt);
     m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_HEADING);
     nPos = m_pTypeLB->InsertEntry(sNumItemTxt);
     m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_NUMITEM);
 
-    // fill up with the sequence types
+    
     SwWrtShell *pSh = GetWrtShell();
     if(!pSh)
         pSh = ::GetActiveWrtShell();
@@ -211,25 +211,25 @@ void SwFldRefPage::Reset(const SfxItemSet& )
         }
     }
 
-    // text marks - now always (because of globaldocuments)
+    
     nPos = m_pTypeLB->InsertEntry(sBookmarkTxt);
     m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_BOOKMARK);
 
-    // footnotes:
+    
     if( pSh->HasFtns() )
     {
         nPos = m_pTypeLB->InsertEntry(sFootnoteTxt);
         m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_FOOTNOTE);
     }
 
-    // endnotes:
+    
     if ( pSh->HasFtns(true) )
     {
         nPos = m_pTypeLB->InsertEntry(sEndnoteTxt);
         m_pTypeLB->SetEntryData(nPos, (void*)REFFLDFLAG_ENDNOTE);
     }
 
-    // select old Pos
+    
     if (!IsFldEdit())
         RestorePos(m_pTypeLB);
 
@@ -270,17 +270,17 @@ void SwFldRefPage::Reset(const SfxItemSet& )
 
 IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
 {
-    // save old ListBoxPos
+    
     const sal_uInt16 nOld = GetTypeSel();
 
-    // current ListBoxPos
+    
     SetTypeSel(m_pTypeLB->GetSelectEntryPos());
 
     if(GetTypeSel() == LISTBOX_ENTRY_NOTFOUND)
     {
         if (IsFldEdit())
         {
-            // select positions
+            
             OUString sName;
             sal_uInt16 nFlag = 0;
 
@@ -288,7 +288,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
             {
                 case REF_BOOKMARK:
                 {
-                    // #i83479#
+                    
                     SwGetRefField* pRefFld = dynamic_cast<SwGetRefField*>(GetCurField());
                     if ( pRefFld &&
                          pRefFld->IsRefToHeadingCrossRefBookmark() )
@@ -331,7 +331,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
                     break;
             }
 
-            if (m_pTypeLB->GetEntryPos(sName) == LISTBOX_ENTRY_NOTFOUND)   // reference to deleted mark
+            if (m_pTypeLB->GetEntryPos(sName) == LISTBOX_ENTRY_NOTFOUND)   
             {
                 sal_uInt16 nPos = m_pTypeLB->InsertEntry(sName);
                 m_pTypeLB->SetEntryData(nPos, reinterpret_cast<void*>(nFlag));
@@ -351,7 +351,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
     {
         sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
-        // fill selection-ListBox
+        
         UpdateSubType();
 
         sal_Bool bName = sal_False;     nFldDlgFmtSel = 0;
@@ -367,7 +367,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
         {
             case TYP_GETREFFLD:
                 if (REFFLDFLAG & (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(nOld))
-                    // the old one stays
+                    
                     nFldDlgFmtSel = m_pFormatLB->GetSelectEntryPos();
                 bName = sal_True;
                 break;
@@ -378,13 +378,13 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
 
             case REFFLDFLAG_BOOKMARK:
                 bName = sal_True;
-                // no break!!!
+                
             default:
                 if( REFFLDFLAG & nTypeId )
                 {
                     sal_uInt16 nOldId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(nOld);
                     if( nOldId & REFFLDFLAG || nOldId == TYP_GETREFFLD )
-                        // then the old one stays
+                        
                         nFldDlgFmtSel = m_pFormatLB->GetSelectEntryPos();
                 }
                 break;
@@ -393,7 +393,7 @@ IMPL_LINK_NOARG(SwFldRefPage, TypeHdl)
         m_pNameED->Enable(bName);
         m_pNameFT->Enable(bName);
 
-        // fill Format-Listbox
+        
         sal_uInt16 nSize = FillFormatLB(nTypeId);
         bool bFormat = nSize != 0;
         m_pFormat->Enable(bFormat);
@@ -431,7 +431,7 @@ IMPL_LINK_NOARG(SwFldRefPage, SubTypeHdl)
 
         }
         break;
-        // #i83479#
+        
         case REFFLDFLAG_HEADING:
         case REFFLDFLAG_NUMITEM:
         {
@@ -465,7 +465,7 @@ void SwFldRefPage::UpdateSubType()
     const sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)m_pTypeLB->GetEntryData(GetTypeSel());
 
     OUString sOldSel;
-    // #i83479#
+    
     if ( m_pSelectionLB->IsVisible() )
     {
         const sal_uInt16 nSelectionSel = m_pSelectionLB->GetSelectEntryPos();
@@ -479,17 +479,17 @@ void SwFldRefPage::UpdateSubType()
 
     m_pSelectionLB->SetUpdateMode(false);
     m_pSelectionLB->Clear();
-    // #i83479#
+    
     m_pSelectionToolTipLB->SetUpdateMode(sal_False);
     m_pSelectionToolTipLB->Clear();
     bool bShowSelectionToolTipLB( false );
 
     if( REFFLDFLAG & nTypeId )
     {
-        if (nTypeId == REFFLDFLAG_BOOKMARK)     // text marks!
+        if (nTypeId == REFFLDFLAG_BOOKMARK)     
         {
             m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle()|WB_SORT);
-            // get all text marks
+            
             IDocumentMarkAccess* const pMarkAccess = pSh->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getBookmarksBegin();
                 ppMark != pMarkAccess->getBookmarksEnd();
@@ -528,7 +528,7 @@ void SwFldRefPage::UpdateSubType()
                     sOldSel = aArr[n]->sDlgEntry;
             }
         }
-        // #i83479#
+        
         else if ( nTypeId == REFFLDFLAG_HEADING )
         {
             bShowSelectionToolTipLB = true;
@@ -592,14 +592,14 @@ void SwFldRefPage::UpdateSubType()
         else
         {
             m_pSelectionLB->SetStyle(m_pSelectionLB->GetStyle()|WB_SORT);
-            // get the fields to Seq-FieldType:
+            
 
             SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(
                                 nTypeId & ~REFFLDFLAG, RES_SETEXPFLD );
             if( pType )
             {
                 SwSeqFldList aArr;
-                // old selection should be kept in non-edit mode
+                
                 if(IsFldEdit())
                     sOldSel = "";
 
@@ -628,7 +628,7 @@ void SwFldRefPage::UpdateSubType()
             sOldSel = pRefFld->GetSetRefName();
     }
 
-    // #i83479#
+    
     m_pSelectionToolTipLB->Show( bShowSelectionToolTipLB );
     m_pSelectionLB->Show( !bShowSelectionToolTipLB );
     if ( bShowSelectionToolTipLB )
@@ -652,7 +652,7 @@ void SwFldRefPage::UpdateSubType()
     {
         m_pSelectionLB->SetUpdateMode(true);
 
-        // enable or disable
+        
         bool bEnable = m_pSelectionLB->GetEntryCount() != 0;
         m_pSelection->Enable( bEnable );
 
@@ -663,7 +663,7 @@ void SwFldRefPage::UpdateSubType()
                 m_pSelectionLB->SelectEntryPos(0);
         }
 
-        if (IsFldEdit() && !m_pSelectionLB->GetSelectEntryCount()) // in case the reference was already deleted...
+        if (IsFldEdit() && !m_pSelectionLB->GetSelectEntryCount()) 
             m_pNameED->SetText(sOldSel);
     }
 }
@@ -676,19 +676,19 @@ sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
     if (nFormatSel != LISTBOX_ENTRY_NOTFOUND)
         sOldSel = m_pFormatLB->GetEntry(nFormatSel);
 
-    // fill Format-Listbox
+    
     m_pFormatLB->Clear();
 
-    // refernce has less that the annotation
+    
     sal_uInt16 nSize( 0 );
     bool bAddCrossRefFormats( false );
     switch (nTypeId)
     {
-        // #i83479#
+        
         case REFFLDFLAG_HEADING:
         case REFFLDFLAG_NUMITEM:
             bAddCrossRefFormats = true;
-            // intentional no break here
+            
 
         case TYP_GETREFFLD:
         case REFFLDFLAG_BOOKMARK:
@@ -698,7 +698,7 @@ sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
             break;
 
         default:
-            // #i83479#
+            
 
             if ( REFFLDFLAG & nTypeId )
             {
@@ -719,7 +719,7 @@ sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         sal_uInt16 nPos = m_pFormatLB->InsertEntry(GetFldMgr().GetFormatStr( nTypeId, i ));
         m_pFormatLB->SetEntryData( nPos, reinterpret_cast<void*>(GetFldMgr().GetFormatId( nTypeId, i )));
     }
-    // #i83479#
+    
     if ( bAddCrossRefFormats )
     {
         sal_uInt16 nFormat = FMT_REF_NUMBER - FMT_REF_BEGIN;
@@ -734,7 +734,7 @@ sal_uInt16 SwFldRefPage::FillFormatLB(sal_uInt16 nTypeId)
         nSize += 3;
     }
 
-    // select a certain entry
+    
     if (nSize)
     {
         if (!IsFldEdit())
@@ -805,7 +805,7 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
         {
             SwFieldType* pType = GetFldMgr().GetFldType(RES_SETEXPFLD, aName);
 
-            if(!pType)  // Only insert when the name doesn't exist yet
+            if(!pType)  
             {
                 m_pSelectionLB->InsertEntry(aName);
                 m_pSelection->Enable();
@@ -823,13 +823,13 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
         {
             pSh = ::GetActiveWrtShell();
         }
-        if (nTypeId == REFFLDFLAG_BOOKMARK)     // text marks!
+        if (nTypeId == REFFLDFLAG_BOOKMARK)     
         {
             aName = m_pNameED->GetText();
             nTypeId = TYP_GETREFFLD;
             nSubType = REF_BOOKMARK;
         }
-        else if (REFFLDFLAG_FOOTNOTE == nTypeId)        // footnotes
+        else if (REFFLDFLAG_FOOTNOTE == nTypeId)        
         {
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
@@ -845,12 +845,12 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
                 aVal = OUString::number( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                    bModified = sal_True; // can happen with fields of which the references were deleted
+                    bModified = sal_True; 
             }
             else if (IsFldEdit())
                 aVal = OUString::number( pRefFld->GetSeqNo() );
         }
-        else if (REFFLDFLAG_ENDNOTE == nTypeId)         // endnotes
+        else if (REFFLDFLAG_ENDNOTE == nTypeId)         
         {
             SwSeqFldList aArr;
             _SeqFldLstElem aElem( m_pSelectionLB->GetSelectEntry(), 0 );
@@ -866,12 +866,12 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
                 aVal = OUString::number( aArr[nPos]->nSeqNo );
 
                 if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                    bModified = sal_True; // can happen with fields of which the reference was deleted
+                    bModified = sal_True; 
             }
             else if (IsFldEdit())
                 aVal = OUString::number( pRefFld->GetSeqNo() );
         }
-        // #i83479#
+        
         else if ( nTypeId == REFFLDFLAG_HEADING )
         {
             SvTreeListEntry* pEntry = m_pSelectionToolTipLB->GetCurEntry();
@@ -912,9 +912,9 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
                 }
             }
         }
-        else                                // SeqenceFields
+        else                                
         {
-            // get fields for Seq-FeldType:
+            
             SwSetExpFieldType* pType = (SwSetExpFieldType*)pSh->GetFldType(
                                     nTypeId & ~REFFLDFLAG, RES_SETEXPFLD );
             if( pType )
@@ -933,7 +933,7 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
                     aVal = OUString::number( aArr[nPos]->nSeqNo );
 
                     if (IsFldEdit() && aArr[nPos]->nSeqNo == pRefFld->GetSeqNo())
-                        bModified = sal_True; // can happen with fields of which the reference was deleted
+                        bModified = sal_True; 
                 }
                 else if (IsFldEdit())
                     aVal = OUString::number( pRefFld->GetSeqNo() );
@@ -956,7 +956,7 @@ sal_Bool SwFldRefPage::FillItemSet(SfxItemSet& )
         InsertFld( nTypeId, nSubType, aName, aVal, nFormat );
     }
 
-    ModifyHdl();    // enable/disable insert if applicable
+    ModifyHdl();    
 
     return sal_False;
 }

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svx/xoutbmp.hxx>
@@ -29,7 +29,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
-// #i75482#
+
 #include "svx/sdrpaintwindow.hxx"
 
 #define TRANSCOL Color( COL_WHITE )
@@ -53,11 +53,11 @@ void ContourWindow::SetPolyPolygon( const PolyPolygon& rPolyPoly )
     SdrPage*        pPage = (SdrPage*) pModel->GetPage( 0 );
     const sal_uInt16    nPolyCount = rPolyPoly.Count();
 
-    // First delete all drawing objects
+    
     aPolyPoly = rPolyPoly;
 
-    // To avoid to have destroyed objects which are still selected, it is necessary to deselect
-    // them first (!)
+    
+    
     pView->UnmarkAllObj();
 
     pPage->Clear();
@@ -102,8 +102,8 @@ const PolyPolygon& ContourWindow::GetPolyPolygon()
         if ( pPage && pPage->GetObjCount() )
         {
             SdrPathObj* pPathObj = (SdrPathObj*)pPage->GetObj(0L);
-            // Not sure if subdivision is needed for ContourWindow, but maybe it cannot handle
-            // curves at all. Keeping subdivision here for security
+            
+            
             const basegfx::B2DPolyPolygon aB2DPolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(pPathObj->GetPathPoly()));
             aPolyPoly = PolyPolygon(aB2DPolyPolygon);
         }
@@ -227,9 +227,9 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
 void ContourWindow::Paint( const Rectangle& rRect )
 {
-    // #i75482#
-    // encapsulate the redraw using Begin/End and use the returned
-    // data to get the target output device (e.g. when pre-rendering)
+    
+    
+    
     SdrPaintWindow* pPaintWindow = pView->BeginCompleteRedraw(this);
     OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
 
@@ -261,7 +261,7 @@ void ContourWindow::Paint( const Rectangle& rRect )
         rTarget.SetFillColor( aOldFillColor );
     }
 
-    // #i75482#
+    
     const Region aRepaintRegion(rRect);
     pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
     pView->EndCompleteRedraw(*pPaintWindow, true);

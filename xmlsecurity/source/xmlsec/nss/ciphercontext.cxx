@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -119,7 +119,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
         }
         else
         {
-            // decryption with W3C padding needs at least one block for finalizing
+            
             if ( nAvailableData < m_nBlockSize * 2 )
                 nToConvertLen = 0;
             else
@@ -131,7 +131,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::convertWithCipherContext( c
         {
             m_aLastBlock.realloc( nOldLastBlockLen + aData.getLength() );
             memcpy( m_aLastBlock.getArray() + nOldLastBlockLen, aData.getConstArray(), aData.getLength() );
-            // aToConvert stays empty
+            
         }
         else if ( nToConvertLen < nOldLastBlockLen )
         {
@@ -185,17 +185,17 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
     OSL_ENSURE( m_nConverted % m_nBlockSize == 0, "Unexpected amount of bytes is already converted!" );
     sal_Int32 nSizeForPadding = ( m_nConverted + m_aLastBlock.getLength() ) % m_nBlockSize;
 
-    // if it is decryption, the amount of data should be rounded to the block size even in case of padding
+    
     if ( ( !m_bPadding || !m_bEncryption ) && nSizeForPadding )
         throw uno::RuntimeException("The data should contain complete blocks only.", uno::Reference< uno::XInterface >() );
 
     if ( m_bW3CPadding && m_bEncryption )
     {
-        // in this case the last block should be smaller than standtard block
-        // it will be increased with the padding
+        
+        
         OSL_ENSURE( m_aLastBlock.getLength() < m_nBlockSize, "Unexpected size of cashed incomplete last block!" );
 
-        // W3CPadding handling for encryption
+        
         sal_Int32 nPaddingSize = m_nBlockSize - nSizeForPadding;
         sal_Int32 nOldLastBlockLen = m_aLastBlock.getLength();
         m_aLastBlock.realloc( nOldLastBlockLen + nPaddingSize );
@@ -212,7 +212,7 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
         m_aLastBlock[m_aLastBlock.getLength() - 1] = static_cast< sal_Int8 >( nPaddingSize );
     }
 
-    // finally should the last block be smaller than two standard blocks
+    
     OSL_ENSURE( m_aLastBlock.getLength() < m_nBlockSize * 2 , "Unexpected size of cashed incomplete last block!" );
 
     uno::Sequence< sal_Int8 > aResult;
@@ -245,8 +245,8 @@ uno::Sequence< ::sal_Int8 > SAL_CALL OCipherContext::finalizeCipherContextAndDis
 
     if ( m_bW3CPadding && !m_bEncryption )
     {
-        // W3CPadding handling for decryption
-        // aResult should have anough data, since we let m_aLastBlock be big enough in case of decryption
+        
+        
         OSL_ENSURE( aResult.getLength() >= m_nBlockSize, "Not enough data to handle the padding!" );
 
         sal_Int8 nBytesToRemove = aResult[aResult.getLength() - 1];

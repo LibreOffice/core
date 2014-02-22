@@ -4,12 +4,12 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #undef SC_DLLIMPLEMENTATION
 
-//------------------------------------------------------------------
+
 
 #include "datafdlg.hxx"
 #include "scresid.hxx"
@@ -38,7 +38,7 @@ ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
     get(m_pSlider, "scrollbar");
     get(m_pGrid, "grid");
 
-    //read header form current document, and add new controls
+    
     OSL_ENSURE( pTabViewShell, "pTabViewShell is NULL! :-/" );
     ScViewData* pViewData = pTabViewShell->GetViewData();
 
@@ -56,13 +56,13 @@ ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
         nEndRow = aEnd.Row();
 
         nTab = pViewData->GetTabNo();
-        //if there is no selection
+        
         if ((nStartCol == nEndCol) && (nStartRow == nEndRow))
             bNoSelection = true;
 
         if (bNoSelection)
         {
-            //find last not blank cell in row
+            
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
                 nEndCol++;
@@ -75,7 +75,7 @@ ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
                 }
             }
 
-            //find first not blank cell in row
+            
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
                 if (nStartCol <= 0)
@@ -91,7 +91,7 @@ ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
                 }
             }
 
-            //skip leading hide column
+            
             for (int i=1;i<=MAX_DATAFORM_COLS;i++)
             {
                 int nColWidth = pDoc->GetColWidth( nStartCol, nTab );
@@ -103,7 +103,7 @@ ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
             if (nEndCol < nStartCol)
                 nEndCol = nStartCol;
 
-            //find last not blank cell in row
+            
             for (int i=1;i<=MAX_DATAFORM_ROWS;i++)
             {
                 nEndRow++;
@@ -115,7 +115,7 @@ ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
                 }
             }
 
-            //find first not blank cell in row
+            
             for (int i=1;i<=MAX_DATAFORM_ROWS;i++)
             {
                 if (nStartRow <= 0)
@@ -138,7 +138,7 @@ ScDataFormDlg::ScDataFormDlg(Window* pParent, ScTabViewShell* pTabViewShellOri)
 
         aColLength = nEndCol - nStartCol + 1;
 
-        //new the controls
+        
         maFixedTexts.reserve(aColLength);
         maEdits.reserve(aColLength);
 

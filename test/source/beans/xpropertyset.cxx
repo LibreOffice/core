@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "test/beans/xpropertyset.hxx"
@@ -35,18 +35,18 @@ void XPropertySet::testGetPropertySetInfo()
     }
     else
     {
-        // TODO: Add a means for the client code to populate the PropsToTest.
+        
     }
 }
 
 void XPropertySet::testAddPropertyChangeListener()
 {
-    // TODO: implement this.
+    
 }
 
 void XPropertySet::testAddVetoableChangeListener()
 {
-    // TODO: implement this.
+    
 }
 
 void XPropertySet::testSetPropertyValue()
@@ -65,14 +65,14 @@ void XPropertySet::testGetPropertyValue()
     testGetPropertySetInfo();
     uno::Reference<beans::XPropertySet> xPropSet(init(), UNO_QUERY_THROW);
 
-    // Check read-only properties.
+    
     for (size_t i = 0, n = maPropsToTest.readonly.size(); i < n; ++i)
     {
         bool bSuccess = getSinglePropertyValue(xPropSet, maPropsToTest.readonly[i]);
         CPPUNIT_ASSERT(bSuccess);
     }
 
-    // Check writable properties.
+    
     for (size_t i = 0, n = maPropsToTest.normal.size(); i < n; ++i)
     {
         bool bSuccess = getSinglePropertyValue(xPropSet, maPropsToTest.normal[i]);
@@ -82,12 +82,12 @@ void XPropertySet::testGetPropertyValue()
 
 void XPropertySet::testRemovePropertyChangeListener()
 {
-    // TODO: implement this.
+    
 }
 
 void XPropertySet::testRemoveVetoableChangeListener()
 {
-    // TODO: implement this.
+    
 }
 
 bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
@@ -99,62 +99,62 @@ bool XPropertySet::isPropertyValueChangeable(const OUString& rName)
         uno::Type type = any.getValueType();
         if (type == getCppuType<sal_Bool>())
         {
-            // boolean type
+            
             sal_Bool bOld = any.get<sal_Bool>();
             xPropSet->setPropertyValue(rName, makeAny(!bOld));
         }
         else if (type == getCppuType<sal_Int8>())
         {
-            // 8-bit integer
+            
             sal_Int8 nOld = any.get<sal_Int8>();
             sal_Int8 nNew = nOld + 1;
             xPropSet->setPropertyValue(rName, makeAny(nNew));
         }
         else if (type == getCppuType<sal_Int16>())
         {
-            // 16-bit integer
+            
             sal_Int16 nOld = any.get<sal_Int16>();
             sal_Int16 nNew = nOld + 2;
             xPropSet->setPropertyValue(rName, makeAny(nNew));
         }
         else if (type == getCppuType<sal_Int32>())
         {
-            // 32-bit integer
+            
             sal_Int32 nOld = any.get<sal_Int32>();
             sal_Int32 nNew = nOld + 3;
             xPropSet->setPropertyValue(rName, makeAny(nNew));
         }
         else if (type == getCppuType<sal_Int64>())
         {
-            // 64-bit integer
+            
             sal_Int64 nOld = any.get<sal_Int64>();
             sal_Int64 nNew = nOld + 4;
             xPropSet->setPropertyValue(rName, makeAny(nNew));
         }
         else if (type == getCppuType<float>())
         {
-            // single precision
+            
             float fOld = any.get<float>();
             float fNew = fOld + 1.2;
             xPropSet->setPropertyValue(rName, makeAny(fNew));
         }
         else if (type == getCppuType<double>())
         {
-            // double precision
+            
             double fOld = any.get<double>();
             double fNew = fOld + 1.3;
             xPropSet->setPropertyValue(rName, makeAny(fNew));
         }
         else if (type == getCppuType<OUString>())
         {
-            // string type
+            
             OUString aOld = any.get<OUString>();
             OUString aNew = aOld + "foo";
             xPropSet->setPropertyValue(rName, makeAny(aNew));
         }
         else if (type == getCppuType<util::DateTime>())
         {
-            // date time type
+            
             util::DateTime aDT = any.get<util::DateTime>();
             aDT.Year += 1;
             xPropSet->setPropertyValue(rName, makeAny(aDT));
@@ -182,9 +182,9 @@ void XPropertySet::fillPropsToTest(const uno::Reference<beans::XPropertySetInfo>
 
     uno::Sequence<beans::Property> aProps = xPropInfo->getProperties();
 
-    // some properties should not be changed in a unspecific way.
-    // TODO: Maybe we should mark these properties read-only, instead of
-    // giving them a special treatment here?
+    
+    
+    
     std::set<OUString> aSkip;
     aSkip.insert("PrinterName");
     aSkip.insert("CharRelief");

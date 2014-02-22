@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <stdlib.h>
@@ -48,7 +48,7 @@ namespace
         const OUString& rName,
         const bool bCaseSensitive )
     {
-        //Iterating over all bookmarks, checking DdeBookmarks
+        
         const OUString sNameLc = bCaseSensitive ? rName : GetAppCharClass().lowercase(rName);
         for(IDocumentMarkAccess::const_iterator_t ppMark = rMarkAccess.getCommonMarksBegin();
             ppMark != rMarkAccess.getCommonMarksEnd();
@@ -96,17 +96,17 @@ static bool lcl_FindSection( const SwSectionFmt* pSectFmt, _FindItem * const pIt
                 : GetAppCharClass().lowercase( pItem->m_Item ) );
         if( sNm == sCompare )
         {
-            // found, so get the data
+            
             const SwNodeIndex* pIdx;
             if( 0 != (pIdx = pSectFmt->GetCntnt().GetCntntIdx() ) &&
                 &pSectFmt->GetDoc()->GetNodes() == &pIdx->GetNodes() )
             {
-                // a table in the normal NodesArr
+                
                 pItem->pSectNd = pIdx->GetNode().GetSectionNode();
                 return false;
             }
-            // If the name is already correct, but not the rest then we don't have them.
-            // The names are always unique.
+            
+            
         }
     }
     return true;
@@ -124,13 +124,13 @@ static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
             pFBox->GetSttNd() &&
             &pTableFmt->GetDoc()->GetNodes() == &pFBox->GetSttNd()->GetNodes() )
         {
-            // a table in the normal NodesArr
+            
             pItem->pTblNd = (SwTableNode*)
                                         pFBox->GetSttNd()->FindTableNode();
             return false;
         }
-        // If the name is already correct, but not the rest then we don't have them.
-        // The names are always unique.
+        
+        
     }
     return true;
 }
@@ -138,7 +138,7 @@ static bool lcl_FindTable( const SwFrmFmt* pTableFmt, _FindItem * const pItem )
 bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
                      uno::Any & rValue ) const
 {
-    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    
     bool bCaseSensitive = true;
     while( true )
     {
@@ -146,7 +146,7 @@ bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
         if(pBkmk)
             return SwServerObject(*pBkmk).GetData(rValue, rMimeType);
 
-        // Do we already have the Item?
+        
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
         BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
@@ -156,7 +156,7 @@ bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
         }
         if( aPara.pSectNd )
         {
-            // found, so get the data
+            
             return SwServerObject( *aPara.pSectNd ).GetData( rValue, rMimeType );
         }
         if( !bCaseSensitive )
@@ -181,7 +181,7 @@ bool SwDoc::GetData( const OUString& rItem, const OUString& rMimeType,
 bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
                      const uno::Any & rValue )
 {
-    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    
     bool bCaseSensitive = true;
     while( true )
     {
@@ -189,7 +189,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
         if(pBkmk)
             return SwServerObject(*pBkmk).SetData(rMimeType, rValue);
 
-        // Do we already have the Item?
+        
         OUString sItem( bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
         _FindItem aPara( sItem );
         BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
@@ -199,7 +199,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
         }
         if( aPara.pSectNd )
         {
-            // found, so get the data
+            
             return SwServerObject( *aPara.pSectNd ).SetData( rMimeType, rValue );
         }
         if( !bCaseSensitive )
@@ -226,16 +226,16 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
 {
     SwServerObject* pObj = NULL;
 
-    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    
     bool bCaseSensitive = true;
     while( true )
     {
-        // bookmarks
+        
         ::sw::mark::DdeBookmark* const pBkmk = lcl_FindDdeBookmark(*mpMarkManager, rItem, bCaseSensitive);
         if(pBkmk && pBkmk->IsExpanded()
             && (0 == (pObj = pBkmk->GetRefObject())))
         {
-            // mark found, but no link yet -> create hotlink
+            
             pObj = new SwServerObject(*pBkmk);
             pBkmk->SetRefObject(pObj);
             GetLinkManager().InsertServer(pObj);
@@ -244,7 +244,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
             return pObj;
 
         _FindItem aPara(bCaseSensitive ? rItem : GetAppCharClass().lowercase(rItem));
-        // sections
+        
         BOOST_FOREACH( const SwSectionFmt* pFmt, *mpSectionFmtTbl )
         {
             if (!(lcl_FindSection(pFmt, &aPara, bCaseSensitive)))
@@ -254,7 +254,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
         if(aPara.pSectNd
             && (0 == (pObj = aPara.pSectNd->GetSection().GetObject())))
         {
-            // section found, but no link yet -> create hotlink
+            
             pObj = new SwServerObject( *aPara.pSectNd );
             aPara.pSectNd->GetSection().SetRefObject( pObj );
             GetLinkManager().InsertServer(pObj);
@@ -267,7 +267,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
     }
 
     _FindItem aPara( GetAppCharClass().lowercase(rItem) );
-    // tables
+    
     BOOST_FOREACH( const SwFrmFmt* pFmt, *mpTblFrmFmtTbl )
     {
         if (!(lcl_FindTable(pFmt, &aPara)))
@@ -276,7 +276,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
     if(aPara.pTblNd
         && (0 == (pObj = aPara.pTblNd->GetTable().GetObject())))
     {
-        // table found, but no link yet -> create hotlink
+        
         pObj = new SwServerObject(*aPara.pTblNd);
         aPara.pTblNd->GetTable().SetRefObject(pObj);
         GetLinkManager().InsertServer(pObj);
@@ -287,7 +287,7 @@ bool SwDoc::SetData( const OUString& rItem, const OUString& rMimeType,
 bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const
 {
-    // Do we actually have the Item?
+    
     rpPam = 0;
     rpRange = 0;
 
@@ -299,8 +299,8 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
 
     const CharClass& rCC = GetAppCharClass();
 
-    // Extension for sections: not only link bookmarks/sections
-    // but also frames (text!), tables, outlines:
+    
+    
     if( -1 != nPos )
     {
         bool bContinue = false;
@@ -340,7 +340,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
         }
         else if( sCmp == "region" )
         {
-            sItem = sName;              // Is being dealt with further down!
+            sItem = sName;              
             bContinue = true;
         }
         else if( sCmp == "outline" )
@@ -356,13 +356,13 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
                 rOutlNds.Seek_Entry( pNd, &nTmpPos );
                 rpRange = new SwNodeRange( aPos.nNode, 0, aPos.nNode );
 
-                // look for the section's end, now
+                
                 for( ++nTmpPos;
                         nTmpPos < rOutlNds.size() &&
                         nLvl < rOutlNds[ nTmpPos ]->GetTxtNode()->
                                 GetAttrOutlineLevel()-1;
                     ++nTmpPos )
-                    ;       // there is no block
+                    ;       
 
                 if( nTmpPos < rOutlNds.size() )
                     rpRange->aEnd = *rOutlNds[ nTmpPos ];
@@ -376,7 +376,7 @@ bool SwDoc::SelectServerObj( const OUString& rStr, SwPaM*& rpPam,
             return false;
     }
 
-    // search for bookmarks and sections case senstive at first. If nothing is found then try again case insensitive
+    
     bool bCaseSensitive = true;
     while( true )
     {

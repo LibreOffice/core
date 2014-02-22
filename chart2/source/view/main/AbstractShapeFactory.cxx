@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  */
 
 #include "macros.hxx"
@@ -61,7 +61,7 @@ osl::Module* getOpenGLModule()
 {
     static osl::Module aModule;
     if (aModule.is())
-        // Already loaded.
+        
         return &aModule;
 
     OUString aLibName(SVLIBRARY("chartopengl"));
@@ -101,7 +101,7 @@ AbstractShapeFactory* AbstractShapeFactory::getOrCreateShapeFactory(uno::Referen
                 pShapeFactory->setShapeFactory(xFactory);
             }
         }
-#elif defined(IOS) || defined(ANDROID) // Library_chartopengl is not portable enough yet
+#elif defined(IOS) || defined(ANDROID) 
         pShapeFactory = NULL;
 #else
         pShapeFactory = getOpenglShapeFactory();
@@ -163,7 +163,7 @@ void AbstractShapeFactory::makeShapeInvisible( const uno::Reference< drawing::XS
     }
 }
 
-// set a name/CID at a shape (is used for selection handling)
+
 
 void AbstractShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
                                , const OUString& rName )
@@ -210,9 +210,9 @@ OUString AbstractShapeFactory::getShapeName( const uno::Reference< drawing::XSha
 uno::Any AbstractShapeFactory::makeTransformation( const awt::Point& rScreenPosition2D, double fRotationAnglePi )
 {
     ::basegfx::B2DHomMatrix aM;
-    //As autogrow is active the rectangle is automatically expanded to that side
-    //to which the text is not adjusted.
-    // aM.scale( 1, 1 ); Oops? A scale with this parameters is neutral, line commented out
+    
+    
+    
     aM.rotate( fRotationAnglePi );
     aM.translate( rScreenPosition2D.X, rScreenPosition2D.Y );
     uno::Any aATransformation = uno::makeAny( B2DHomMatrixToHomogenMatrix3(aM) );
@@ -227,8 +227,8 @@ OUString AbstractShapeFactory::getStackedString( const OUString& rString, bool b
 
     OUStringBuffer aStackStr;
 
-    //add a newline after each letter
-    //as we do not no letters here add a newline after each char
+    
+    
     for( sal_Int32 nPosSrc=0; nPosSrc < nLen; nPosSrc++ )
     {
         if( nPosSrc )
@@ -240,7 +240,7 @@ OUString AbstractShapeFactory::getStackedString( const OUString& rString, bool b
 
 bool AbstractShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
 {
-    // #i67757# check all contained polygons, if at least one polygon contains 2 or more points, return true
+    
     for( sal_Int32 nIdx = 0, nCount = rPoly.SequenceX.getLength(); nIdx < nCount; ++nIdx )
         if( rPoly.SequenceX[ nIdx ].getLength() > 1 )
             return true;
@@ -249,7 +249,7 @@ bool AbstractShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPol
 
 bool AbstractShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPoly)
 {
-    // true, if empty polypolygon or one polygon with one point
+    
     return (rPoly.SequenceX.getLength() == 0) ||
         ((rPoly.SequenceX.getLength() == 1) && (rPoly.SequenceX[0].getLength() <= 1));
 }
@@ -257,7 +257,7 @@ bool AbstractShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShap
 void AbstractShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
 {
     OSL_ENSURE( rPoly.SequenceX.getLength() <= 1, "AbstractShapeFactory::closePolygon - single polygon expected" );
-    //add a last point == first point
+    
     if(isPolygonEmptyOrSinglePoint(rPoly))
         return;
     drawing::Position3D aFirst(rPoly.SequenceX[0][0],rPoly.SequenceY[0][0],rPoly.SequenceZ[0][0]);

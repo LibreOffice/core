@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <hintids.hxx>
@@ -64,7 +64,7 @@ _PaMIntoCrsrShellRing::_PaMIntoCrsrShellRing( SwCrsrShell& rCSh,
 
 _PaMIntoCrsrShellRing::~_PaMIntoCrsrShellRing()
 {
-    // and take out the Pam again:
+    
     RemoveFromRing( rDelPam, pPrevDelPam );
     RemoveFromRing( rCrsr, pPrevCrsr );
 }
@@ -101,8 +101,8 @@ void SwAutoCorrDoc::DeleteSel( SwPaM& rDelPam )
     SwDoc* pDoc = rEditSh.GetDoc();
     if( pDoc->IsAutoFmtRedline() )
     {
-        // so that also the DelPam be moved,  include it in the
-        // Shell-Cursr-Ring !!
+        
+        
         _PaMIntoCrsrShellRing aTmp( rEditSh, rCrsr, rDelPam );
         pDoc->DeleteAndJoin( rDelPam );
     }
@@ -159,7 +159,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, c
         return sal_False;
     }
 
-    // text attributes with dummy characters must not be replaced!
+    
     bool bDoReplace = true;
     sal_Int32 const nLen = rTxt.getLength();
     for ( sal_Int32 n = 0; n < nLen; ++n )
@@ -179,7 +179,7 @@ sal_Bool SwAutoCorrDoc::ReplaceRange( sal_Int32 nPos, sal_Int32 nSourceLength, c
 
         if( pDoc->IsAutoFmtRedline() )
         {
-            if (nPos == pNd->GetTxt().getLength()) // at the End do an Insert
+            if (nPos == pNd->GetTxt().getLength()) 
             {
                 pDoc->InsertString( *pPam, rTxt );
             }
@@ -301,8 +301,8 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
     if( bUndoIdInitialized )
         bUndoIdInitialized = true;
 
-    // Found a beginning of a paragraph or a Blank,
-    // search for the word Kuerzel (Shortcut) in the Auto
+    
+    
     SwTxtNode* pTxtNd = rCrsr.GetNode()->GetTxtNode();
     OSL_ENSURE( pTxtNd, "where is the TextNode?" );
 
@@ -315,7 +315,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
         eLang = GetAppLanguage();
     LanguageTag aLanguageTag( eLang);
 
-    //JP 22.04.99: Bug 63883 - Special treatment for dots.
+    
     bool bLastCharIsPoint = nEndPos < pTxtNd->GetTxt().getLength() &&
                             ('.' == pTxtNd->GetTxt()[nEndPos]);
 
@@ -329,11 +329,11 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 
         if( pFnd->IsTextOnly() )
         {
-            //JP 22.04.99: Bug 63883 - Special treatment for dots.
+            
             if( !bLastCharIsPoint || pFnd->GetLong().isEmpty() ||
                 '.' != pFnd->GetLong()[ pFnd->GetLong().getLength() - 1 ] )
             {
-                // replace the selection
+                
                 pDoc->ReplaceRange( aPam, pFnd->GetLong(), false);
                 bRet = sal_True;
             }
@@ -366,7 +366,7 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
                 }
                 aCpyPam.SetMark();
 
-                // then until the end of the Nodes Array
+                
                 aCpyPam.GetPoint()->nNode.Assign( pAutoDoc->GetNodes().GetEndOfContent(), -1 );
                 pCntntNd = aCpyPam.GetCntntNode();
                 aCpyPam.GetPoint()->nContent.Assign( pCntntNd, pCntntNd->Len() );
@@ -396,11 +396,11 @@ bool SwAutoCorrDoc::ChgAutoCorrWord( sal_Int32& rSttPos, sal_Int32 nEndPos,
 }
 
 
-// Called by the functions:
-//  - FnCptlSttWrd
-//  - FnCptlSttSntnc
-// after the exchange of characters. Then the words, if necessary, can be inserted
-// into the exception list.
+
+
+
+
+
 void SwAutoCorrDoc::SaveCpltSttWord( sal_uLong nFlag, sal_Int32 nPos,
                                             const OUString& rExceptWord,
                                             sal_Unicode cChar )
@@ -428,15 +428,15 @@ LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos, sal_Bool bPrevPara ) co
 
 void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 {
-    // test only if this is a improvement.
-    // If yes, then add the word to the list.
+    
+    
     if( cChar == cChr && rPos.nNode.GetIndex() == nNode &&
         rPos.nContent.GetIndex() == nCntnt )
     {
-        // get the current autocorrection:
+        
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
-        // then add to the list:
+        
         if( CptlSttWrd & nFlags )
             pACorr->AddWrtSttException( sWord, eLanguage );
         else if( CptlSttSntnc & nFlags )
@@ -492,7 +492,7 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
             {
                 SwTxtAttr* pHt = pTxtNd->GetpSwpHints()->GetTextHint( n );
                 nAttrStart = *pHt->GetStart();
-                if( nAttrStart > nStart )       // beyond the area
+                if( nAttrStart > nStart )       
                     break;
 
                 if( 0 != ( pAttrEnd = pHt->End() ) &&
@@ -507,9 +507,9 @@ void SwDontExpandItem::RestoreDontExpandItems( const SwPosition& rPos )
                         GetItemState( pHt->Which(), false, &pItem ) ||
                         *pItem != pHt->GetAttr() )
                     {
-                        // The attribute was not previously set in this form in the
-                        // paragraph, so it can only be created through insert/copy
-                        // Because of that it is a candidate for DontExpand
+                        
+                        
+                        
                         pHt->SetDontExpand( true );
                     }
                 }

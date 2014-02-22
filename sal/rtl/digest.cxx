@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -901,7 +901,7 @@ rtlDigestError SAL_CALL rtl_digest_rawMD5 (
 
     ctx = &(pImpl->m_context);
 
-    /* __rtl_digest_endMD5 (ctx); *//* not finalized */
+    /* __rtl_digest_endMD5 (ctx); *
     RTL_DIGEST_LTOC (ctx->m_nA, p);
     RTL_DIGEST_LTOC (ctx->m_nB, p);
     RTL_DIGEST_LTOC (ctx->m_nC, p);

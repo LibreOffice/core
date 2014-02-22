@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "UncachedDataSequence.hxx"
@@ -34,7 +34,7 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Any;
 using ::osl::MutexGuard;
 
-// necessary for MS compiler
+
 using ::comphelper::OPropertyContainer;
 using ::chart::impl::UncachedDataSequence_Base;
 
@@ -48,7 +48,7 @@ enum
     PROP_PROPOSED_ROLE,
     PROP_XML_RANGE
 };
-}  // anonymous namespace
+}  
 
 namespace chart
 {
@@ -102,19 +102,19 @@ void UncachedDataSequence::registerProperties()
 {
     registerProperty( "NumberFormatKey",
                       PROP_NUMBERFORMAT_KEY,
-                      0,   // PropertyAttributes
+                      0,   
                       & m_nNumberFormatKey,
                       ::getCppuType( & m_nNumberFormatKey ) );
 
     registerProperty( "Role",
                       PROP_PROPOSED_ROLE,
-                      0,   // PropertyAttributes
+                      0,   
                       & m_sRole,
                       ::getCppuType( & m_sRole ) );
 
     registerProperty( "CachedXMLRange",
                       PROP_XML_RANGE,
-                      0,   // PropertyAttributes
+                      0,   
                       & m_aXMLRange,
                       ::getCppuType( & m_aXMLRange ) );
 }
@@ -132,33 +132,33 @@ Sequence< OUString > UncachedDataSequence::getSupportedServiceNames_Static()
 IMPLEMENT_FORWARD_XINTERFACE2( UncachedDataSequence, UncachedDataSequence_Base, OPropertyContainer )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UncachedDataSequence, UncachedDataSequence_Base, OPropertyContainer )
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL UncachedDataSequence::getPropertySetInfo()
     throw(uno::RuntimeException)
 {
     return Reference< beans::XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) );
 }
 
-// ____ ::comphelper::OPropertySetHelper ____
+
 ::cppu::IPropertyArrayHelper& UncachedDataSequence::getInfoHelper()
 {
     return *getArrayHelper();
 }
 
-// ____ ::comphelper::OPropertyArrayHelper ____
+
 ::cppu::IPropertyArrayHelper* UncachedDataSequence::createArrayHelper() const
 {
     Sequence< beans::Property > aProps;
-    // describes all properties which have been registered in the ctor
+    
     describeProperties( aProps );
 
     return new ::cppu::OPropertyArrayHelper( aProps );
 }
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( UncachedDataSequence, lcl_aServiceName )
 
-// ________ XNumericalDataSequence ________
+
 Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
     throw (uno::RuntimeException)
 {
@@ -174,7 +174,7 @@ Sequence< double > SAL_CALL UncachedDataSequence::getNumericalData()
     return aResult;
 }
 
-// ________ XTextualDataSequence ________
+
 Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
     throw (uno::RuntimeException)
 {
@@ -190,7 +190,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::getTextualData()
     return aResult;
 }
 
-// ________ XDataSequence  ________
+
 Sequence< Any > SAL_CALL UncachedDataSequence::getData()
     throw (uno::RuntimeException)
 {
@@ -209,7 +209,7 @@ OUString SAL_CALL UncachedDataSequence::getSourceRangeRepresentation()
 Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data::LabelOrigin )
     throw (uno::RuntimeException)
 {
-    // auto-generated label is an empty string
+    
     return Sequence< OUString >(1);
 }
 
@@ -220,7 +220,7 @@ Sequence< OUString > SAL_CALL UncachedDataSequence::generateLabel( chart2::data:
     return m_nNumberFormatKey;
 }
 
-// ____ XIndexReplace ____
+
 void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element )
     throw (lang::IllegalArgumentException,
            lang::IndexOutOfBoundsException,
@@ -238,7 +238,7 @@ void SAL_CALL UncachedDataSequence::replaceByIndex( ::sal_Int32 Index, const uno
     }
 }
 
-// ____ XIndexAccess (base of XIndexReplace) ____
+
 ::sal_Int32 SAL_CALL UncachedDataSequence::getCount()
     throw (uno::RuntimeException)
 {
@@ -255,7 +255,7 @@ uno::Any SAL_CALL UncachedDataSequence::getByIndex( ::sal_Int32 )
     return uno::Any();
 }
 
-// ____ XElementAccess (base of XIndexAccess) ____
+
 uno::Type SAL_CALL UncachedDataSequence::getElementType()
     throw (uno::RuntimeException)
 {
@@ -270,7 +270,7 @@ uno::Type SAL_CALL UncachedDataSequence::getElementType()
     return m_xDataProvider->hasDataByRangeRepresentation( m_aSourceRepresentation );
 }
 
-// ____ XNamed ____
+
 OUString SAL_CALL UncachedDataSequence::getName()
     throw (uno::RuntimeException)
 {
@@ -291,7 +291,7 @@ Reference< util::XCloneable > SAL_CALL UncachedDataSequence::createClone()
     return Reference< util::XCloneable >( pNewSeq );
 }
 
-// ____ XModifiable ____
+
 ::sal_Bool SAL_CALL UncachedDataSequence::isModified()
     throw (uno::RuntimeException)
 {
@@ -306,7 +306,7 @@ void SAL_CALL UncachedDataSequence::setModified( ::sal_Bool bModified )
         fireModifyEvent();
 }
 
-// ____ XModifyBroadcaster (base of XModifiable) ____
+
 void SAL_CALL UncachedDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -337,11 +337,11 @@ void SAL_CALL UncachedDataSequence::removeModifyListener( const Reference< util:
 
 void UncachedDataSequence::fireModifyEvent()
 {
-    // @todo: currently never called, as data changes are not yet reported by
-    // the data provider
+    
+    
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-}  // namespace chart
+}  
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

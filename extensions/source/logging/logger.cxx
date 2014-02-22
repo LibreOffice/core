@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -67,20 +67,20 @@ namespace logging
         ::cppu::OInterfaceContainerHelper   m_aHandlers;
         oslInterlockedCount                 m_nEventNumber;
 
-        // <attributes>
+        
         sal_Int32       m_nLogLevel;
         OUString m_sName;
-        // </attributes>
+        
 
     public:
         EventLogger( const Reference< XComponentContext >& _rxContext, const OUString& _rName );
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-        // XLogger
+        
         virtual OUString SAL_CALL getName() throw (RuntimeException);
         virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException);
         virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException);
@@ -122,18 +122,18 @@ namespace logging
     public:
         LoggerPool( const Reference< XComponentContext >& _rxContext );
 
-        // XServiceInfo
+        
         virtual OUString SAL_CALL getImplementationName() throw(RuntimeException);
         virtual ::sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException);
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException);
 
-        // helper for factories
+        
         static Sequence< OUString > getSupportedServiceNames_static();
         static OUString  getImplementationName_static();
         static OUString  getSingletonName_static();
         static Reference< XInterface > Create( const Reference< XComponentContext >& _rxContext );
 
-        // XLoggerPool
+        
         virtual Reference< XLogger > SAL_CALL getNamedLogger( const OUString& Name ) throw (RuntimeException);
         virtual Reference< XLogger > SAL_CALL getDefaultLogger(  ) throw (RuntimeException);
     };
@@ -303,7 +303,7 @@ namespace logging
         Reference< XLogger > xLogger( (Reference< XLogger >)rLogger );
         if ( !xLogger.is() )
         {
-            // never requested before, or already dead
+            
             xLogger = new EventLogger( m_xContext, _rName );
             rLogger = xLogger;
         }
@@ -321,6 +321,6 @@ namespace logging
         static OSingletonRegistration< LoggerPool > aAutoRegistration;
     }
 
-} // namespace logging
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

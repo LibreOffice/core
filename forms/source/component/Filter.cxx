@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Filter.hxx"
@@ -64,16 +64,16 @@
 #include <vcl/svapp.hxx>
 #include <tools/wintypes.hxx>
 
-//--------------------------------------------------------------------------
+
 extern "C" void SAL_CALL createRegistryInfo_OFilterControl()
 {
     static ::frm::OMultiInstanceAutoRegistration< ::frm::OFilterControl > aAutoRegistration;
 }
 
-//.........................................................................
+
 namespace frm
 {
-//.........................................................................
+
 
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::awt;
@@ -89,10 +89,10 @@ namespace frm
 
     using namespace ::connectivity;
 
-    //=====================================================================
-    // OFilterControl
-    //=====================================================================
-    //---------------------------------------------------------------------
+    
+    
+    
+    
     OFilterControl::OFilterControl( const Reference< XComponentContext >& _rxORB )
         :UnoControl()
         ,m_aTextListeners( *this )
@@ -105,7 +105,7 @@ namespace frm
     {
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool OFilterControl::ensureInitialized( )
     {
         if ( !m_xField.is() )
@@ -122,7 +122,7 @@ namespace frm
 
         if ( !m_xFormatter.is() )
         {
-            // we can create one from the connection, if it's an SDB connection
+            
 
             Reference< XNumberFormatsSupplier > xFormatSupplier = ::dbtools::getNumberFormats( m_xConnection, sal_True, m_xContext );
 
@@ -135,14 +135,14 @@ namespace frm
         if ( !m_xFormatter.is() )
         {
             OSL_FAIL( "OFilterControl::ensureInitialized: no number formatter!" );
-            // no fallback anymore
+            
             return sal_False;
         }
 
         return sal_True;
     }
 
-    //---------------------------------------------------------------------
+    
     Any SAL_CALL OFilterControl::queryAggregation( const Type & rType ) throw(RuntimeException)
     {
         Any aRet = UnoControl::queryAggregation( rType);
@@ -152,7 +152,7 @@ namespace frm
         return aRet;
     }
 
-    //------------------------------------------------------------------
+    
     OUString OFilterControl::GetComponentServiceName()
     {
         OUString aServiceName;
@@ -179,8 +179,8 @@ namespace frm
         return aServiceName;
     }
 
-    // XComponent
-    //---------------------------------------------------------------------
+    
+    
     void OFilterControl::dispose() throw( RuntimeException  )
     {
         EventObject aEvt(*this);
@@ -188,7 +188,7 @@ namespace frm
         UnoControl::dispose();
     }
 
-    //---------------------------------------------------------------------
+    
     void OFilterControl::createPeer( const Reference< XToolkit > & rxToolkit, const Reference< XWindowPeer >  & rParentPeer ) throw(RuntimeException)
     {
         UnoControl::createPeer( rxToolkit, rParentPeer );
@@ -200,7 +200,7 @@ namespace frm
             {
                 case FormComponentType::CHECKBOX:
                 {
-                    // checkboxes always have a tristate-mode
+                    
                     xVclWindow->setProperty( PROPERTY_TRISTATE, makeAny( sal_Bool( sal_True ) ) );
                     xVclWindow->setProperty( PROPERTY_STATE, makeAny( sal_Int32( STATE_DONTKNOW ) ) );
 
@@ -224,13 +224,13 @@ namespace frm
                     Reference< XListBox >  xListBox( getPeer(), UNO_QUERY_THROW );
                     xListBox->addItemListener( this );
                 }
-                // no break
+                
 
                 case FormComponentType::COMBOBOX:
                 {
                     xVclWindow->setProperty(PROPERTY_AUTOCOMPLETE, makeAny( sal_Bool( sal_True ) ) );
                 }
-                // no break
+                
 
                 default:
                 {
@@ -246,7 +246,7 @@ namespace frm
 
             OControl::initFormControlPeer( getPeer() );
 
-            // filter controls are _never_ readonly
+            
             Reference< XPropertySet > xModel( getModel(), UNO_QUERY_THROW );
             Reference< XPropertySetInfo > xModelPSI( xModel->getPropertySetInfo(), UNO_SET_THROW );
             if ( xModelPSI->hasPropertyByName( PROPERTY_READONLY ) )
@@ -261,17 +261,17 @@ namespace frm
             m_bFilterListFilled = sal_False;
     }
 
-    //---------------------------------------------------------------------
+    
     void OFilterControl::PrepareWindowDescriptor( WindowDescriptor& rDescr )
     {
         if (m_bFilterList)
             rDescr.WindowAttributes |= VclWindowPeerAttribute::DROPDOWN;
     }
 
-    //---------------------------------------------------------------------
+    
     void OFilterControl::ImplSetPeerProperty( const OUString& rPropName, const Any& rVal )
     {
-        // these properties are ignored
+        
         if (rPropName == PROPERTY_TEXT ||
             rPropName == PROPERTY_STATE)
             return;
@@ -279,15 +279,15 @@ namespace frm
         UnoControl::ImplSetPeerProperty( rPropName, rVal );
     }
 
-    // XEventListener
-    //---------------------------------------------------------------------
+    
+    
     void SAL_CALL OFilterControl::disposing(const EventObject& Source) throw( RuntimeException )
     {
         UnoControl::disposing(Source);
     }
 
-    // XItemListener
-    //---------------------------------------------------------------------
+    
+    
     void SAL_CALL OFilterControl::itemStateChanged( const ItemEvent& rEvent ) throw(RuntimeException)
     {
         OUStringBuffer aText;
@@ -312,19 +312,19 @@ namespace frm
                     OUString sText( aText.makeStringAndClear() );
                     sal_Int32 nMarkerPos( sText.indexOf( sExpressionMarker ) );
                     OSL_ENSURE( nMarkerPos == 0, "OFilterControl::itemStateChanged: unsupported boolean comparison mode!" );
-                    // If this assertion fails, then getBoleanComparisonPredicate created a predicate which
-                    // does not start with the expression we gave it. The only known case is when
-                    // the comparison mode is ACCESS_COMPAT, and the value is TRUE. In this case,
-                    // the expression is rather complex.
-                    // Well, so this is a known issue - the filter controls (and thus the form based filter)
-                    // do not work with boolean MS Access fields.
-                    // To fix this, we would probably have to revert here to always return "1" or "0" as normalized
-                    // filter, and change our client code to properly translate this (which could be some effort).
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     if ( nMarkerPos == 0 )
                         aText.append( sText.copy( sExpressionMarker.getLength() ) );
                     else
                     {
-                        // fallback
+                        
                         aText.appendAscii( bSelected ? "1" : "0" );
                     }
                 }
@@ -378,14 +378,14 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void OFilterControl::implInitFilterList()
     {
         if ( !ensureInitialized( ) )
-            // already asserted in ensureInitialized
+            
             return;
 
-        // ensure the cursor and the statement are disposed as soon as we leave
+        
         ::utl::SharedUNOComponent< XResultSet > xListCursor;
         ::utl::SharedUNOComponent< XStatement > xStatement;
 
@@ -399,12 +399,12 @@ namespace frm
             OUString sFieldName;
             m_xField->getPropertyValue( PROPERTY_NAME ) >>= sFieldName;
 
-            // here we need a table to which the field belongs to
+            
             const Reference< XChild > xModelAsChild( getModel(), UNO_QUERY_THROW );
             const Reference< XRowSet > xForm( xModelAsChild->getParent(), UNO_QUERY_THROW );
             const Reference< XPropertySet > xFormProps( xForm, UNO_QUERY_THROW );
 
-            // create a query composer
+            
             Reference< XColumnsSupplier > xSuppColumns;
             xFormProps->getPropertyValue("SingleSelectQueryComposer") >>= xSuppColumns;
 
@@ -417,13 +417,13 @@ namespace frm
             xComposerFieldProps->getPropertyValue( PROPERTY_REALNAME ) >>= sRealFieldName;
             xComposerFieldProps->getPropertyValue( PROPERTY_TABLENAME ) >>= sTableName;
 
-            // obtain the table of the field
+            
             const Reference< XTablesSupplier > xSuppTables( xSuppColumns, UNO_QUERY_THROW );
             const Reference< XNameAccess > xTablesNames( xSuppTables->getTables(), UNO_SET_THROW );
             const Reference< XNamed > xNamedTable( xTablesNames->getByName( sTableName ), UNO_QUERY_THROW );
             sTableName = xNamedTable->getName();
 
-            // create a statement selecting all values for the given field
+            
             OUStringBuffer aStatement;
 
             const Reference< XDatabaseMetaData >  xMeta( xConnection->getMetaData(), UNO_SET_THROW );
@@ -434,7 +434,7 @@ namespace frm
             aStatement.append( sRealFieldName );
             aStatement.append( sQuoteChar );
 
-            // if the field had an alias in our form's statement, give it this alias in the new statement, too
+            
             if ( !sFieldName.isEmpty() && ( sFieldName != sRealFieldName ) )
             {
                 aStatement.appendAscii(" AS ");
@@ -449,17 +449,17 @@ namespace frm
             ::dbtools::qualifiedNameComponents( xMeta, sTableName, sCatalog, sSchema, sTable, ::dbtools::eInDataManipulation );
             aStatement.append( ::dbtools::composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
 
-            // execute the statement
+            
             xStatement.reset( xConnection->createStatement() );
             const OUString sSelectStatement( aStatement.makeStringAndClear( ) );
             xListCursor.reset( xStatement->executeQuery( sSelectStatement ) );
 
-            // retrieve the one column which we take the values from
+            
             const Reference< XColumnsSupplier > xSupplyCols( xListCursor, UNO_QUERY_THROW );
             const Reference< XIndexAccess > xFields( xSupplyCols->getColumns(), UNO_QUERY_THROW );
             const Reference< XPropertySet > xDataField( xFields->getByIndex(0), UNO_QUERY_THROW );
 
-            // ensure the values will be  formatted according to the field format
+            
             const ::dbtools::FormattedColumnValue aFormatter( m_xFormatter, xDataField );
 
             ::std::vector< OUString > aProposals;
@@ -471,14 +471,14 @@ namespace frm
                 aProposals.push_back( sCurrentValue );
             }
 
-            // fill the list items into our peer
+            
             Sequence< OUString> aStringSeq( aProposals.size() );
             ::std::copy( aProposals.begin(), aProposals.end(), aStringSeq.getArray() );
 
             const Reference< XComboBox >  xComboBox( getPeer(), UNO_QUERY_THROW );
             xComboBox->addItems( aStringSeq, 0 );
 
-            // set the drop down line count to something reasonable
+            
             const sal_Int16 nLineCount = ::std::min( sal_Int16( 16 ), sal_Int16( aStringSeq.getLength() ) );
             xComboBox->setDropDownLineCount( nLineCount );
         }
@@ -488,25 +488,25 @@ namespace frm
         }
     }
 
-    // XFocusListener
-    //---------------------------------------------------------------------
+    
+    
     void SAL_CALL OFilterControl::focusGained(const FocusEvent& /*e*/)  throw( RuntimeException  )
     {
-        // should we fill the combobox?
+        
         if (m_bFilterList && !m_bFilterListFilled)
             implInitFilterList();
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OFilterControl::focusLost(const FocusEvent& /*e*/) throw( RuntimeException )
     {
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool SAL_CALL OFilterControl::commit() throw(RuntimeException)
     {
         if ( !ensureInitialized( ) )
-            // already asserted in ensureInitialized
+            
             return sal_True;
 
         OUString aText;
@@ -524,7 +524,7 @@ namespace frm
         }
         if (m_aText.compareTo(aText))
         {
-            // check the text with the SQL-Parser
+            
             OUString aNewText(aText);
             aNewText = aNewText.trim();
             if ( !aNewText.isEmpty() )
@@ -533,7 +533,7 @@ namespace frm
                 OUString sErrorMessage;
                 if ( !aPredicateInput.normalizePredicateString( aNewText, m_xField, &sErrorMessage ) )
                 {
-                    // display the error and outta here
+                    
                     SQLContext aError;
                     aError.Message = FRM_RES_STRING( RID_STR_SYNTAXERROR );
                     aError.Details = sErrorMessage;
@@ -552,24 +552,24 @@ namespace frm
         return sal_True;
     }
 
-    // XTextComponent
-    //---------------------------------------------------------------------
+    
+    
     void SAL_CALL OFilterControl::addTextListener(const Reference< XTextListener > & l) throw(RuntimeException)
     {
         m_aTextListeners.addInterface( l );
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OFilterControl::removeTextListener(const Reference< XTextListener > & l) throw(RuntimeException)
     {
         m_aTextListeners.removeInterface( l );
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OFilterControl::setText( const OUString& aText ) throw(RuntimeException)
     {
         if ( !ensureInitialized( ) )
-            // already asserted in ensureInitialized
+            
             return;
 
         switch (m_nControlClass)
@@ -664,7 +664,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OFilterControl::insertText( const ::com::sun::star::awt::Selection& rSel, const OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
@@ -675,13 +675,13 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     OUString SAL_CALL OFilterControl::getText() throw(RuntimeException)
     {
         return m_aText;
     }
 
-    //---------------------------------------------------------------------
+    
     OUString SAL_CALL OFilterControl::getSelectedText( void ) throw(RuntimeException)
     {
         OUString aSelected;
@@ -692,7 +692,7 @@ namespace frm
         return aSelected;
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OFilterControl::setSelection( const ::com::sun::star::awt::Selection& aSelection ) throw(::com::sun::star::uno::RuntimeException)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
@@ -700,7 +700,7 @@ namespace frm
             xText->setSelection( aSelection );
     }
 
-    //---------------------------------------------------------------------
+    
     ::com::sun::star::awt::Selection SAL_CALL OFilterControl::getSelection( void ) throw(::com::sun::star::uno::RuntimeException)
     {
         ::com::sun::star::awt::Selection aSel;
@@ -710,14 +710,14 @@ namespace frm
         return aSel;
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Bool SAL_CALL OFilterControl::isEditable( void ) throw(RuntimeException)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         return xText.is() && xText->isEditable();
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OFilterControl::setEditable( sal_Bool bEditable ) throw(RuntimeException)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
@@ -725,14 +725,14 @@ namespace frm
             xText->setEditable(bEditable);
     }
 
-    //---------------------------------------------------------------------
+    
     sal_Int16 SAL_CALL OFilterControl::getMaxTextLen() throw(RuntimeException)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
         return xText.is() ? xText->getMaxTextLen() : 0;
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OFilterControl::setMaxTextLen( sal_Int16 nLength ) throw(RuntimeException)
     {
         Reference< XTextComponent >  xText( getPeer(), UNO_QUERY );
@@ -740,7 +740,7 @@ namespace frm
             xText->setMaxTextLen(nLength);
     }
 
-    //---------------------------------------------------------------------
+    
     void OFilterControl::displayException( const ::com::sun::star::sdb::SQLContext& _rExcept )
     {
         try
@@ -754,7 +754,7 @@ namespace frm
         }
     }
 
-    //---------------------------------------------------------------------
+    
     void SAL_CALL OFilterControl::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException)
     {
         const Any* pArguments = aArguments.getConstArray();
@@ -775,7 +775,7 @@ namespace frm
         }
         else for ( ; pArguments != pArgumentsEnd; ++pArguments )
         {
-            // we recognize PropertyValues and NamedValues
+            
             if ( *pArguments >>= aProp )
             {
                 pName = &aProp.Name;
@@ -794,19 +794,19 @@ namespace frm
 
             if ( pName->equalsAscii( "MessageParent" ) )
             {
-                // the message parent
+                
                 *pValue >>= m_xMessageParent;
                 OSL_ENSURE( m_xMessageParent.is(), "OFilterControl::initialize: invalid MessageParent!" );
             }
             else if ( pName->equalsAscii( "NumberFormatter" ) )
             {
-                // the number format. This argument is optional.
+                
                 *pValue >>= m_xFormatter;
                 OSL_ENSURE( m_xFormatter.is(), "OFilterControl::initialize: invalid NumberFormatter!" );
             }
             else if ( pName->equalsAscii( "ControlModel" ) )
             {
-                // the control model for which we act as filter control
+                
                 if ( !(*pValue >>= xControlModel ) )
                 {
                     OSL_FAIL( "OFilterControl::initialize: invalid control model argument!" );
@@ -824,15 +824,15 @@ namespace frm
             OSL_FAIL( "OFilterControl::initialize: invalid control model argument!" );
             return;
         }
-        // some properties which are "derived" from the control model we're working for
-        // ...................................................
-        // the field
+        
+        
+        
         m_xField.clear();
         OSL_ENSURE( ::comphelper::hasProperty( PROPERTY_BOUNDFIELD, xControlModel ), "OFilterControl::initialize: control model needs a bound field property!" );
         xControlModel->getPropertyValue( PROPERTY_BOUNDFIELD ) >>= m_xField;
 
-        // ...................................................
-        // filter list and control class
+        
+        
         m_bFilterList = ::comphelper::hasProperty( PROPERTY_FILTERPROPOSAL, xControlModel ) && ::comphelper::getBOOL( xControlModel->getPropertyValue( PROPERTY_FILTERPROPOSAL ) );
         if ( m_bFilterList )
             m_nControlClass = FormComponentType::COMBOBOX;
@@ -864,8 +864,8 @@ namespace frm
             }
         }
 
-        // ...................................................
-        // the connection meta data for the form which we're working for
+        
+        
         Reference< XChild > xModel( xControlModel, UNO_QUERY );
         Reference< XRowSet > xForm;
         if ( xModel.is() )
@@ -902,14 +902,14 @@ namespace frm
         return aNames;
     }
 
-    //---------------------------------------------------------------------
+    
     Reference< XInterface > SAL_CALL OFilterControl::Create( const Reference< XMultiServiceFactory >& _rxFactory )
     {
         return static_cast< XServiceInfo* >( new OFilterControl( comphelper::getComponentContext(_rxFactory) ) );
     }
 
-//.........................................................................
-}   // namespace frm
-//.........................................................................
+
+}   
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "SchXMLLegendContext.hxx"
@@ -74,10 +74,10 @@ public:
     virtual ~LegendAttributeTokenMap() {}
 };
 
-//a LegendAttributeTokenMap Singleton
+
 struct theLegendAttributeTokenMap : public rtl::Static< LegendAttributeTokenMap, theLegendAttributeTokenMap > {};
 
-}//end anonymous namespace
+}
 
 SchXMLLegendContext::SchXMLLegendContext( SchXMLImportHelper& rImpHelper, SvXMLImport& rImport, const OUString& rLocalName ) :
     SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
@@ -91,7 +91,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     if( !xDoc.is() )
         return;
 
-    // turn on legend
+    
     uno::Reference< beans::XPropertySet > xDocProp( xDoc, uno::UNO_QUERY );
     if( xDocProp.is() )
     {
@@ -113,7 +113,7 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
         return;
     }
 
-    // parse attributes
+    
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     const SvXMLTokenMap& rAttrTokenMap = theLegendAttributeTokenMap::get();
 
@@ -196,10 +196,10 @@ void SchXMLLegendContext::StartElement( const uno::Reference< xml::sax::XAttribu
     else if( bHasHeight && bHasWidth )
         xLegendShape->setSize( aLegendSize );
 
-    // the fill style has the default "none" in XML, but "solid" in the model.
+    
     xLegendProps->setPropertyValue("FillStyle", uno::makeAny( drawing::FillStyle_NONE ));
 
-    // set auto-styles for Legend
+    
     const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
     if( pStylesCtxt )
     {

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlcoli.hxx"
@@ -40,7 +40,7 @@
 using namespace com::sun::star;
 using namespace xmloff::token;
 
-//------------------------------------------------------------------
+
 
 ScXMLTableColContext::ScXMLTableColContext( ScXMLImport& rImport,
                                       sal_uInt16 nPrfx,
@@ -154,8 +154,8 @@ void ScXMLTableColContext::EndElement()
         }
     }
 
-    // #i57915# ScXMLImport::SetStyleToRange can't handle empty style names.
-    // The default for a column if there is no attribute is the style "Default" (programmatic API name).
+    
+    
     if ( sCellStyleName.isEmpty() )
         sCellStyleName = "Default";
 
@@ -177,7 +177,7 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
     bGroup(bTempGroup),
     bGroupDisplay(true)
 {
-    // don't have any attributes
+    
     if (bHeader)
         nHeaderStartCol = rImport.GetTables().GetCurrentColCount();
     else if (bGroup)
@@ -232,8 +232,8 @@ SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( sal_uInt16 nPrefi
         break;
     case XML_TOK_TABLE_COLS_COL:
             pContext = new ScXMLTableColContext( GetScImport(), nPrefix,
-                                                      rLName, xAttrList//,
-                                                      //this
+                                                      rLName, xAttrList
+                                                      
                                                       );
         break;
     }

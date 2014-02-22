@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <unx/salunx.h>
@@ -41,7 +41,7 @@ X11SalSystem::~X11SalSystem()
 {
 }
 
-// for the moment only handle xinerama case
+
 unsigned int X11SalSystem::GetDisplayScreenCount()
 {
     SalDisplay* pSalDisp = GetGenericData()->GetSalDisplay();
@@ -70,7 +70,7 @@ Rectangle X11SalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
     {
         const std::vector< Rectangle >& rScreens = pSalDisp->GetXineramaScreens();
 
-        // we shouldn't be able to pick a screen > number of screens available
+        
         assert(nScreen < rScreens.size() );
 
         if( nScreen < rScreens.size() )
@@ -108,13 +108,13 @@ OUString X11SalSystem::GetDisplayScreenName( unsigned int nScreen )
             nScreen = 0;
         OUStringBuffer aBuf( 256 );
         aBuf.append( OStringToOUString( OString( DisplayString( pSalDisp->GetDisplay() ) ), osl_getThreadTextEncoding() ) );
-        // search backwards for ':'
+        
         int nPos = aBuf.getLength();
         if( nPos > 0 )
             nPos--;
         while( nPos > 0 && aBuf[nPos] != ':' )
             nPos--;
-        // search forward to '.'
+        
         while( nPos < aBuf.getLength() && aBuf[nPos] != '.' )
             nPos++;
         if( nPos < aBuf.getLength() )
@@ -149,7 +149,7 @@ int X11SalSystem::ShowNativeDialog( const OUString& rTitle, const OUString& rMes
 
     nRet = ((int)aWarn.Execute()) - 1;
 
-    // normalize behaviour, actually this should never happen
+    
     if( nRet < -1 || nRet >= int(rButtons.size()) )
         nRet = -1;
 

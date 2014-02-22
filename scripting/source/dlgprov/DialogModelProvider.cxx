@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "DialogModelProvider.hxx"
@@ -24,7 +24,7 @@
 
 #include <cppuhelper/supportsservice.hxx>
 
-// component helper namespace
+
 namespace comp_DialogModelProvider {
 
 using namespace ::com::sun::star;
@@ -35,16 +35,16 @@ using namespace script;
 using namespace beans;
 
 
-// component and service helper functions:
+
 OUString SAL_CALL _getImplementationName();
 css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames();
 css::uno::Reference< css::uno::XInterface > SAL_CALL _create( css::uno::Reference< css::uno::XComponentContext > const & context );
 
-} // closing component helper namespace
+} 
 
 
 
-/// anonymous implementation namespace
+/
 namespace dlgprov {
 
 using namespace ::com::sun::star;
@@ -59,7 +59,7 @@ DialogModelProvider::DialogModelProvider(Reference< XComponentContext > const & 
     m_xContext(context)
 {}
 
-// lang::XInitialization:
+
 void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception)
 {
     if ( aArguments.getLength() == 1 )
@@ -67,7 +67,7 @@ void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any
         OUString sURL;
         if ( !( aArguments[ 0 ] >>= sURL ))
             throw css::lang::IllegalArgumentException();
-         // Try any other URL with SimpleFileAccess
+         
         Reference< ucb::XSimpleFileAccess3 > xSFI = ucb::SimpleFileAccess::create(m_xContext);
 
         try
@@ -87,11 +87,11 @@ void SAL_CALL DialogModelProvider::initialize(const css::uno::Sequence< uno::Any
         }
         catch( Exception& )
         {}
-        //m_sURL = sURL;
+        
     }
 }
 
-// container::XElementAccess:
+
 uno::Type SAL_CALL DialogModelProvider::getElementType() throw (css::uno::RuntimeException)
 {
     return m_xDialogModel->getElementType();
@@ -102,7 +102,7 @@ uno::Type SAL_CALL DialogModelProvider::getElementType() throw (css::uno::Runtim
     return m_xDialogModel->hasElements();
 }
 
-// container::XNameAccess:
+
 uno::Any SAL_CALL DialogModelProvider::getByName(const OUString & aName) throw (css::uno::RuntimeException, css::container::NoSuchElementException, css::lang::WrappedTargetException)
 {
     return m_xDialogModel->getByName(aName);
@@ -118,13 +118,13 @@ css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getElementNames() t
     return m_xDialogModel->hasByName(aName);
 }
 
-// container::XNameReplace:
+
 void SAL_CALL DialogModelProvider::replaceByName(const OUString & aName, const uno::Any & aElement) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException)
 {
     m_xDialogModel->replaceByName(aName,aElement);
 }
 
-// container::XNameContainer:
+
 void SAL_CALL DialogModelProvider::insertByName(const OUString & aName, const uno::Any & aElement) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException)
 {
     m_xDialogModel->insertByName(aName,aElement);
@@ -158,7 +158,7 @@ void SAL_CALL DialogModelProvider::removeVetoableChangeListener( const OUString&
 {
 }
 
-// com.sun.star.uno.XServiceInfo:
+
 OUString SAL_CALL DialogModelProvider::getImplementationName() throw (css::uno::RuntimeException)
 {
     return comp_DialogModelProvider::_getImplementationName();
@@ -174,6 +174,6 @@ css::uno::Sequence< OUString > SAL_CALL DialogModelProvider::getSupportedService
     return comp_DialogModelProvider::_getSupportedServiceNames();
 }
 
-} // closing anonymous implementation namespace
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

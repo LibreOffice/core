@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -352,7 +352,7 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
                 const sal_uInt8             cNextMove = mpCodes[ i + 1 ];
                 const ChainMove&        rMove = aImplMove[ cMove ];
                 const ChainMove&        rMoveInner = aImplMoveInner[ cMove ];
-//              Point&                  rPt = aArr[ nPolyPos ];
+
                 bool                    bDone = true;
 
                 nLastX += rMove.nDX;
@@ -459,7 +459,7 @@ void ImplChain::ImplEndAdd( sal_uLong nFlag )
                 const sal_uInt8             cNextMove = mpCodes[ i + 1 ];
                 const ChainMove&        rMove = aImplMove[ cMove ];
                 const ChainMove&        rMoveOuter = aImplMoveOuter[ cMove ];
-//              Point&                  rPt = aArr[ nPolyPos ];
+
                 bool                    bDone = true;
 
                 nLastX += rMove.nDX;
@@ -582,7 +582,7 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
     sal_uLong           nCount = rArr.ImplGetRealSize();
     sal_uLong           n;
 
-    // pass 1
+    
     aNewArr1.ImplSetSize( nCount );
     pLast = &( aNewArr1[ 0 ] );
     pLast->X() = BACK_MAP( rArr[ 0 ].X() );
@@ -604,7 +604,7 @@ void ImplChain::ImplPostProcess( const ImplPointArray& rArr )
 
     aNewArr1.ImplSetRealSize( nCount = nNewPos );
 
-    // pass 2
+    
     aNewArr2.ImplSetSize( nCount );
     pLast = &( aNewArr2[ 0 ] );
     *pLast = aNewArr1[ 0 ];
@@ -663,7 +663,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         memset( pColorSet, 0, 256 * sizeof( ImplColorSet ) );
         rMtf.Clear();
 
-        // get used palette colors and sort them from light to dark colors
+        
         for( n = 0; n < nColorCount; n++ )
         {
             pColorSet[ n ].mnIndex = n;
@@ -689,7 +689,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rColorBmp, GDIMetaFile& rMtf,
         {
             const BitmapColor   aBmpCol( pRAcc->GetPaletteColor( pColorSet[ i ].mnIndex ) );
             const Color         aFindColor( aBmpCol.GetRed(), aBmpCol.GetGreen(), aBmpCol.GetBlue() );
-//          const sal_uInt8         cLum = aFindColor.GetLuminance();
+
             ImplVectMap*        pMap = ImplExpand( pRAcc, aFindColor );
 
             VECT_PROGRESS( pProgress, FRound( fPercent += fPercentStep_2 ) );
@@ -775,11 +775,11 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
         if( nFlags & BMP_VECTORIZE_REDUCE_EDGES )
             rPolyPoly.Optimize( POLY_OPTIMIZE_EDGES );
 
-        // #i14895#:setting the correct direction for polygons
-        // that represent holes and non-holes; non-hole polygons
-        // need to have a right orientation, holes need to have a
-        // left orientation in order to be treated correctly by
-        // several external tools like Flash viewers
+        
+        
+        
+        
+        
         sal_Int32   nFirstPoly = -1;
         sal_uInt16  nCurPoly( 0 ), nCount( rPolyPoly.Count() );
 
@@ -820,7 +820,7 @@ bool ImplVectorizer::ImplVectorize( const Bitmap& rMonoBmp,
                 nFirstPoly = nCurPoly;
         }
 
-        // put outmost polygon to the front
+        
         if( nFirstPoly > 0 )
         {
             const Polygon aFirst( rPolyPoly.GetObject( static_cast< sal_uInt16 >( nFirstPoly ) ) );
@@ -952,7 +952,7 @@ ImplVectMap* ImplVectorizer::ImplExpand( BitmapReadAccess* pRAcc, const Color& r
             }
         }
 
-        // cleanup
+        
         delete[] pMapIn;
         delete[] pMapOut;
     }
@@ -971,7 +971,7 @@ void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, s
 
         while( nX < nWidth )
         {
-            // skip free
+            
             while( ( nX < nWidth ) && pMap->IsFree( nY, nX ) )
                 nX++;
 
@@ -980,11 +980,11 @@ void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, s
 
             if( pMap->IsCont( nY, nX ) )
             {
-                // new contour
+                
                 ImplChain   aChain;
                 const Point aStartPt( nX++, nY );
 
-                // get chain code
+                
                 aChain.ImplBeginAdd( aStartPt );
                 ImplGetChain( pMap, aStartPt, aChain );
 
@@ -1008,13 +1008,13 @@ void ImplVectorizer::ImplCalculate( ImplVectMap* pMap, PolyPolygon& rPolyPoly, s
                         rPolyPoly.Insert( rPoly  );
                 }
 
-                // skip rest of detected contour
+                
                 while( pMap->IsCont( nY, nX ) )
                     nX++;
             }
             else
             {
-                // process done segment
+                
                 const long nStartSegX = nX++;
 
                 while( pMap->IsDone( nY, nX ) )
@@ -1041,7 +1041,7 @@ bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, Im
     {
         nFound = 0UL;
 
-        // first try last direction
+        
         nTryX = nActX + aImplMove[ nLastDir ].nDX;
         nTryY = nActY + aImplMove[ nLastDir ].nDY;
 
@@ -1053,10 +1053,10 @@ bool ImplVectorizer::ImplGetChain(  ImplVectMap* pMap, const Point& rStartPt, Im
         }
         else
         {
-            // try other directions
+            
             for( nDir = 0UL; nDir < 8UL; nDir++ )
             {
-                // we already tried nLastDir
+                
                 if( nDir != nLastDir )
                 {
                     nTryX = nActX + aImplMove[ nDir ].nDX;

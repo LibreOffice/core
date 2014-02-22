@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "xmlImportDocumentHandler.hxx"
@@ -53,7 +53,7 @@ ImportDocumentHandler::ImportDocumentHandler(uno::Reference< uno::XComponentCont
     ,m_xContext(context)
 {
 }
-// -----------------------------------------------------------------------------
+
 ImportDocumentHandler::~ImportDocumentHandler()
 {
     if ( m_xProxy.is() )
@@ -64,7 +64,7 @@ ImportDocumentHandler::~ImportDocumentHandler()
 }
 IMPLEMENT_GET_IMPLEMENTATION_ID(ImportDocumentHandler)
 IMPLEMENT_FORWARD_REFCOUNT( ImportDocumentHandler, ImportDocumentHandler_BASE )
-//------------------------------------------------------------------------
+
 OUString SAL_CALL ImportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return getImplementationName_Static();
@@ -95,12 +95,12 @@ uno::Sequence< OUString > ImportDocumentHandler::getSupportedServiceNames_static
     return aSupported;
 }
 
-//------------------------------------------------------------------------
+
 uno::Reference< uno::XInterface > SAL_CALL ImportDocumentHandler::create( const uno::Reference< uno::XComponentContext >& _rxContext )
 {
     return *(new ImportDocumentHandler( _rxContext ));
 }
-// xml::sax::XDocumentHandler:
+
 void SAL_CALL ImportDocumentHandler::startDocument() throw (uno::RuntimeException, xml::sax::SAXException)
 {
     m_xDelegatee->startDocument();
@@ -112,7 +112,7 @@ void SAL_CALL ImportDocumentHandler::endDocument() throw (uno::RuntimeException,
     uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
     if ( xReceiver.is() && m_bImportedChart )
     {
-        // this fills the chart again
+        
         ::comphelper::NamedValueCollection aArgs;
         aArgs.put( "CellRangeRepresentation", OUString("all") );
         aArgs.put( "FirstCellAsLabel", uno::makeAny( sal_True ) );
@@ -380,18 +380,18 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     m_xTypeProvider.set(m_xDelegatee,uno::UNO_QUERY);
     m_xServiceInfo.set(m_xDelegatee,uno::UNO_QUERY);
 
-    // set ourself as delegator
+    
     m_xProxy->setDelegator( *this );
 
     m_pReportElemTokenMap.reset(OXMLHelper::GetReportElemTokenMap());
 }
-// --------------------------------------------------------------------------------
+
 uno::Any SAL_CALL ImportDocumentHandler::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)
 {
     uno::Any aReturn = ImportDocumentHandler_BASE::queryInterface(_rType);
     return aReturn.hasValue() ? aReturn : (m_xProxy.is() ? m_xProxy->queryAggregation(_rType) : aReturn);
 }
-// --------------------------------------------------------------------------------
+
 uno::Sequence< uno::Type > SAL_CALL ImportDocumentHandler::getTypes(  ) throw (uno::RuntimeException)
 {
     if ( m_xTypeProvider.is() )
@@ -402,8 +402,8 @@ uno::Sequence< uno::Type > SAL_CALL ImportDocumentHandler::getTypes(  ) throw (u
     return ImportDocumentHandler_BASE::getTypes();
 }
 
-// -----------------------------------------------------------------------------
-} // namespace rptxml
-// -----------------------------------------------------------------------------
+
+} 
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -45,7 +45,7 @@
 
 using namespace dbtools;
 
-//.........................................................................
+
 namespace frm
 {
 using namespace ::com::sun::star::uno;
@@ -61,25 +61,25 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OEditControl_CreateInstance(const Reference< XMultiServiceFactory > & _rxFactory)
 {
     return *(new OEditControl( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OEditControl::_getTypes()
 {
     static Sequence<Type> aTypes;
     if (!aTypes.getLength())
     {
-        // my two base classes
+        
         aTypes = concatSequences(OBoundControl::_getTypes(), OEditControl_BASE::getTypes());
     }
     return aTypes;
 }
 
-//------------------------------------------------------------------------------
+
 Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeException)
 {
     Any aReturn = OBoundControl::queryAggregation(_rType);
@@ -89,7 +89,7 @@ Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeEx
     return aReturn;
 }
 
-//------------------------------------------------------------------------------
+
 OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
                :OBoundControl( _rxFactory, FRM_SUN_CONTROL_RICHTEXTCONTROL )
                ,m_aChangeListeners(m_aMutex)
@@ -108,7 +108,7 @@ OEditControl::OEditControl(const Reference<XComponentContext>& _rxFactory)
     decrement(m_refCount);
 }
 
-//------------------------------------------------------------------------------
+
 OEditControl::~OEditControl()
 {
     if( m_nKeyEvent )
@@ -122,21 +122,21 @@ OEditControl::~OEditControl()
 
 }
 
-// XChangeBroadcaster
-//------------------------------------------------------------------------------
+
+
 void OEditControl::addChangeListener(const Reference<XChangeListener>& l) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aChangeListeners.addInterface( l );
 }
 
-//------------------------------------------------------------------------------
+
 void OEditControl::removeChangeListener(const Reference<XChangeListener>& l) throw ( ::com::sun::star::uno::RuntimeException)
 {
     m_aChangeListeners.removeInterface( l );
 }
 
-// OComponentHelper
-//------------------------------------------------------------------------------
+
+
 void OEditControl::disposing()
 {
     OBoundControl::disposing();
@@ -145,8 +145,8 @@ void OEditControl::disposing()
     m_aChangeListeners.disposeAndClear(aEvt);
 }
 
-// XServiceInfo
-//------------------------------------------------------------------------------
+
+
 StringSequence  OEditControl::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControl::getSupportedServiceNames();
@@ -157,15 +157,15 @@ StringSequence  OEditControl::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-// XEventListener
-//------------------------------------------------------------------------------
+
+
 void OEditControl::disposing(const EventObject& Source) throw( RuntimeException )
 {
     OBoundControl::disposing(Source);
 }
 
-// XFocusListener
-//------------------------------------------------------------------------------
+
+
 void OEditControl::focusGained( const FocusEvent& /*e*/ ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
@@ -173,7 +173,7 @@ void OEditControl::focusGained( const FocusEvent& /*e*/ ) throw ( ::com::sun::st
         xSet->getPropertyValue( PROPERTY_TEXT ) >>= m_aHtmlChangeValue;
 }
 
-//------------------------------------------------------------------------------
+
 void OEditControl::focusLost( const FocusEvent& /*e*/ ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
@@ -189,19 +189,19 @@ void OEditControl::focusLost( const FocusEvent& /*e*/ ) throw ( ::com::sun::star
     }
 }
 
-// XKeyListener
-//------------------------------------------------------------------------------
+
+
 void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
 
-    // Is the Control in a form with a submit URL?
+    
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if( !xSet.is() )
         return;
 
-    // Not for  multiline edits
+    
     Any aTmp( xSet->getPropertyValue(PROPERTY_MULTILINE));
     if ((aTmp.getValueType().equals(::getBooleanCppuType())) && getBOOL(aTmp))
         return;
@@ -227,32 +227,32 @@ void OEditControl::keyPressed(const ::com::sun::star::awt::KeyEvent& e) throw ( 
         Reference<XPropertySet>  xFCSet;
         for( sal_Int32 nIndex=0; nIndex < nCount; nIndex++ )
         {
-            //  Any aElement(xElements->getByIndex(nIndex));
+            
             xElements->getByIndex(nIndex) >>= xFCSet;
             OSL_ENSURE(xFCSet.is(),"OEditControl::keyPressed: No XPropertySet!");
 
             if (hasProperty(PROPERTY_CLASSID, xFCSet) &&
                 getINT16(xFCSet->getPropertyValue(PROPERTY_CLASSID)) == FormComponentType::TEXTFIELD)
             {
-                // Found another Edit -> then do not submit!
+                
                 if (xFCSet != xSet)
                     return;
             }
         }
     }
 
-    // Because we're still in the header, trigger submit asynchronously
+    
     if( m_nKeyEvent )
         Application::RemoveUserEvent( m_nKeyEvent );
     m_nKeyEvent = Application::PostUserEvent( LINK(this, OEditControl,OnKeyPressed) );
 }
 
-//------------------------------------------------------------------------------
+
 void OEditControl::keyReleased(const ::com::sun::star::awt::KeyEvent& /*e*/) throw ( ::com::sun::star::uno::RuntimeException)
 {
 }
 
-//------------------------------------------------------------------------------
+
 IMPL_LINK(OEditControl, OnKeyPressed, void*, /*EMPTYARG*/)
 {
     m_nKeyEvent = 0;
@@ -265,27 +265,27 @@ IMPL_LINK(OEditControl, OnKeyPressed, void*, /*EMPTYARG*/)
     return 0L;
 }
 
-//------------------------------------------------------------------
+
 void SAL_CALL OEditControl::createPeer( const Reference< XToolkit>& _rxToolkit, const Reference< XWindowPeer>& _rxParent ) throw ( RuntimeException )
 {
     OBoundControl::createPeer(_rxToolkit, _rxParent);
 }
 
 /*************************************************************************/
-//------------------------------------------------------------------
+
 InterfaceRef SAL_CALL OEditModel_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
 {
     return *(new OEditModel( comphelper::getComponentContext(_rxFactory) ));
 }
 
-//------------------------------------------------------------------------------
+
 Sequence<Type> OEditModel::_getTypes()
 {
     return OEditBaseModel::_getTypes();
 }
 
 
-//------------------------------------------------------------------
+
 OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
     :OEditBaseModel( _rxFactory, FRM_SUN_COMPONENT_RICHTEXTCONTROL, FRM_SUN_CONTROL_TEXTFIELD, sal_True, sal_True )
     ,m_bMaxTextLenModified(sal_False)
@@ -296,21 +296,21 @@ OEditModel::OEditModel(const Reference<XComponentContext>& _rxFactory)
     initValueProperty( PROPERTY_TEXT, PROPERTY_ID_TEXT );
 }
 
-//------------------------------------------------------------------
+
 OEditModel::OEditModel( const OEditModel* _pOriginal, const Reference<XComponentContext>& _rxFactory )
     :OEditBaseModel( _pOriginal, _rxFactory )
     ,m_bMaxTextLenModified(sal_False)
     ,m_bWritingFormattedFake(sal_False)
 {
 
-    // Note that most of the properties are not clone from the original object:
-    // Things as the format key, it's type, and such, depend on the field being part of a loaded form
-    // (they're initialized in onConnectedDbColumn). Even if the original object _is_ part of such a form, we ourself
-    // certainly aren't, so these members are defaulted. If we're inserted into a form which is already loaded,
-    // they will be set to new values, anyway ....
+    
+    
+    
+    
+    
 }
 
-//------------------------------------------------------------------
+
 OEditModel::~OEditModel()
 {
     if (!OComponentHelper::rBHelper.bDisposed)
@@ -321,25 +321,25 @@ OEditModel::~OEditModel()
 
 }
 
-//------------------------------------------------------------------------------
+
 IMPLEMENT_DEFAULT_CLONING( OEditModel )
 
-//------------------------------------------------------------------------------
+
 void OEditModel::disposing()
 {
     OEditBaseModel::disposing();
     m_pValueFormatter.reset();
 }
 
-// XPersistObject
-//------------------------------------------------------------------------------
+
+
 OUString SAL_CALL OEditModel::getServiceName() throw ( ::com::sun::star::uno::RuntimeException)
 {
-    return OUString(FRM_COMPONENT_EDIT);  // old (non-sun) name for compatibility !
+    return OUString(FRM_COMPONENT_EDIT);  
 }
 
-// XServiceInfo
-//------------------------------------------------------------------------------
+
+
 StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw()
 {
     StringSequence aSupported = OBoundControlModel::getSupportedServiceNames();
@@ -362,7 +362,7 @@ StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw()
     return aSupported;
 }
 
-// XPropertySet
+
 void SAL_CALL OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 {
     if ( PROPERTY_ID_PERSISTENCE_MAXTEXTLENGTH == nHandle )
@@ -378,7 +378,7 @@ void SAL_CALL OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) 
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
@@ -390,13 +390,13 @@ void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     END_DESCRIBE_PROPERTIES();
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
     OEditBaseModel::describeAggregateProperties( _rAggregateProps );
 
-    // our aggregate is a rich text model, which also derives from OControlModel, as
-    // do we, so we need to remove some duplicate properties
+    
+    
     RemoveProperty( _rAggregateProps, PROPERTY_TABINDEX );
     RemoveProperty( _rAggregateProps, PROPERTY_CLASSID );
     RemoveProperty( _rAggregateProps, PROPERTY_NAME );
@@ -405,7 +405,7 @@ void OEditModel::describeAggregateProperties( Sequence< Property >& _rAggregateP
 
 }
 
-//------------------------------------------------------------------------------
+
 bool OEditModel::implActsAsRichText( ) const
 {
     sal_Bool bActAsRichText = sal_False;
@@ -416,17 +416,17 @@ bool OEditModel::implActsAsRichText( ) const
     return bActAsRichText;
 }
 
-//------------------------------------------------------------------------------
+
 void SAL_CALL OEditModel::reset(  ) throw(RuntimeException)
 {
-    // no reset if we currently act as rich text control
+    
     if ( implActsAsRichText() )
         return;
 
     OEditBaseModel::reset();
 }
 
-//------------------------------------------------------------------------------
+
 namespace
 {
     void lcl_transferProperties( const Reference< XPropertySet >& _rxSource, const Reference< XPropertySet >& _rxDest )
@@ -496,11 +496,11 @@ namespace
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutStream ) const
 {
-    // we need to fake the writing of our aggregate. Since #i24387#, we have another aggregate,
-    // but for compatibility, we need to use an "old" aggregate for writing and reading
+    
+    
 
     Reference< XPropertySet > xFakedAggregate(
         getContext()->getServiceManager()->createInstanceWithContext( (OUString)VCL_CONTROLMODEL_EDIT, getContext() ),
@@ -518,11 +518,11 @@ void OEditModel::writeAggregate( const Reference< XObjectOutputStream >& _rxOutS
         xFakedPersist->write( _rxOutStream );
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStream )
 {
-    // we need to fake the reading of our aggregate. Since #i24387#, we have another aggregate,
-    // but for compatibility, we need to use an "old" aggregate for writing and reading
+    
+    
 
     Reference< XPropertySet > xFakedAggregate(
         getContext()->getServiceManager()->createInstanceWithContext( (OUString)VCL_CONTROLMODEL_EDIT, getContext() ),
@@ -537,16 +537,16 @@ void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStre
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     Any aCurrentText;
     sal_Int16 nOldTextLen = 0;
-    // Am I loaded at the moment and did I switch MaxTextLen temporarily?
+    
     if ( m_bMaxTextLenModified )
-    {   // -> for the duration of saving, make my aggregated model believe the old TextLen
+    {   
 
-        // before doing this we have to save the current text value of the aggregate, as this may be affected by resetting the text len
+        
         aCurrentText = m_xAggregateSet->getPropertyValue(PROPERTY_TEXT);
 
         m_xAggregateSet->getPropertyValue(PROPERTY_MAXTEXTLEN) >>= nOldTextLen;
@@ -556,25 +556,25 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
     OEditBaseModel::write(_rxOutStream);
 
     if ( m_bMaxTextLenModified )
-    {   // Reset again
+    {   
         m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, makeAny(nOldTextLen));
-        // and reset the text
-        // First we set it to an empty string : Without this the second setPropertyValue would not do anything as it thinks
-        // we aren't changing the prop (it didn't notify the - implicite - change of the text prop while setting the max text len)
-        // This seems to be a bug with in toolkit's EditControl-implementation.
+        
+        
+        
+        
         m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, makeAny(OUString()));
         m_xAggregateSet->setPropertyValue(PROPERTY_TEXT, aCurrentText);
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
     OEditBaseModel::read(_rxInStream);
 
-    // Some versions (5.1 'til about 552) wrote a wrong DefaultControl-property value which is unknown
-    // to older versions (5.0).
-    // correct this ...
+    
+    
+    
     if (m_xAggregateSet.is())
     {
         Any aDefaultControl = m_xAggregateSet->getPropertyValue(PROPERTY_DEFAULTCONTROL);
@@ -583,13 +583,13 @@ void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( 
             )
         {
             m_xAggregateSet->setPropertyValue( PROPERTY_DEFAULTCONTROL, makeAny( (OUString)STARDIV_ONE_FORM_CONTROL_EDIT ) );
-            // Older as well as current versions should understand this : the former knew only the STARDIV_ONE_FORM_CONTROL_EDIT,
-            // the latter are registered for both STARDIV_ONE_FORM_CONTROL_EDIT and STARDIV_ONE_FORM_CONTROL_TEXTFIELD.
+            
+            
         }
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_uInt16 OEditModel::getPersistenceFlags() const
 {
     sal_uInt16 nFlags = OEditBaseModel::getPersistenceFlags();
@@ -600,7 +600,7 @@ sal_uInt16 OEditModel::getPersistenceFlags() const
     return nFlags;
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
 {
     Reference< XPropertySet > xField = getField();
@@ -626,12 +626,12 @@ void OEditModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm )
                 }
             }
             else
-                m_bMaxTextLenModified = sal_False; // to get sure that the text len won't be set in unloaded
+                m_bMaxTextLenModified = sal_False; 
         }
     }
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::onDisconnectedDbColumn()
 {
     OEditBaseModel::onDisconnectedDbColumn();
@@ -641,29 +641,29 @@ void OEditModel::onDisconnectedDbColumn()
     if ( hasField() && m_bMaxTextLenModified )
     {
         Any aVal;
-        aVal <<= (sal_Int16)0;  // Only if it was 0, I switched it in onConnectedDbColumn
+        aVal <<= (sal_Int16)0;  
         m_xAggregateSet->setPropertyValue(PROPERTY_MAXTEXTLEN, aVal);
         m_bMaxTextLenModified = sal_False;
     }
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OEditModel::approveDbColumnType( sal_Int32 _nColumnType )
 {
-    // if we act as rich text currently, we do not allow binding to a database column
+    
     if ( implActsAsRichText() )
         return sal_False;
 
     return OEditBaseModel::approveDbColumnType( _nColumnType );
 }
 
-//------------------------------------------------------------------------------
+
 void OEditModel::resetNoBroadcast()
 {
     OEditBaseModel::resetNoBroadcast();
 }
 
-//------------------------------------------------------------------------------
+
 sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
 {
     Any aNewValue( m_xAggregateFastSet->getFastPropertyValue( getValuePropertyAggHandle() ) );
@@ -672,8 +672,8 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     aNewValue >>= sNewValue;
 
     if  (   !aNewValue.hasValue()
-        ||  (   sNewValue.isEmpty()         // an empty string
-            &&  m_bEmptyIsNull              // which should be interpreted as NULL
+        ||  (   sNewValue.isEmpty()         
+            &&  m_bEmptyIsNull              
             )
         )
     {
@@ -701,7 +701,7 @@ sal_Bool OEditModel::commitControlValueToDbColumn( bool /*_bPostReset*/ )
     return sal_True;
 }
 
-//------------------------------------------------------------------------------
+
 Any OEditModel::translateDbColumnToControlValue()
 {
     OSL_PRECOND( m_pValueFormatter.get(), "OEditModel::translateDbColumnToControlValue: no value formatter!" );
@@ -717,7 +717,7 @@ Any OEditModel::translateDbColumnToControlValue()
         }
         else
         {
-            // #i2817# OJ
+            
             sal_uInt16 nMaxTextLen = getINT16( m_xAggregateSet->getPropertyValue( PROPERTY_MAXTEXTLEN ) );
             if ( nMaxTextLen && sValue.getLength() > nMaxTextLen )
             {
@@ -732,14 +732,14 @@ Any OEditModel::translateDbColumnToControlValue()
     return aRet.hasValue() ? aRet : makeAny( OUString() );
 }
 
-//------------------------------------------------------------------------------
+
 Any OEditModel::getDefaultForReset() const
 {
     return makeAny( m_aDefaultText );
 }
 
-//.........................................................................
+
 }
-//.........................................................................
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

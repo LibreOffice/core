@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "Axis.hxx"
@@ -184,7 +184,7 @@ void lcl_AddPropertiesToVector(
                   ::getCppuType( reinterpret_cast< const ::com::sun::star::chart::ChartAxisMarkPosition * >(0)),
                   beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //Properties for display units:
+    
     rOutProperties.push_back(
         Property( "DisplayUnits",
                   PROP_AXIS_DISPLAY_UNITS,
@@ -192,7 +192,7 @@ void lcl_AddPropertiesToVector(
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
-    //Properties for labels:
+    
     rOutProperties.push_back(
         Property( "BuiltInUnit",
                   PROP_AXIS_BUILTINUNIT,
@@ -312,10 +312,10 @@ void lcl_CloneSubGrids(
         ++pDestIt;
     }
     OSL_ASSERT( pDestIt == pDestEnd );
-    (void)(pDestEnd); // avoid warning
+    (void)(pDestEnd); 
 }
 
-} // anonymous namespace
+} 
 
 namespace chart
 {
@@ -330,7 +330,7 @@ Axis::Axis( Reference< uno::XComponentContext > const & /* xContext */ ) :
 {
     osl_atomic_increment(&m_refCount);
     setFastPropertyValue_NoBroadcast(
-        ::chart::LinePropertiesHelper::PROP_LINE_COLOR, uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  // gray30
+        ::chart::LinePropertiesHelper::PROP_LINE_COLOR, uno::makeAny( static_cast< sal_Int32 >( 0xb3b3b3 ) ) );  
 
     if( m_xGrid.is())
         ModifyListenerHelper::addListener( m_xGrid, m_xModifyEventForwarder );
@@ -364,7 +364,7 @@ Axis::Axis( const Axis & rOther ) :
         ModifyListenerHelper::addListener( m_xTitle, m_xModifyEventForwarder );
 }
 
-// late initialization to call after copy-constructing
+
 void Axis::Init( const Axis & /* rOther */ )
 {
     if( m_aScaleData.Categories.is())
@@ -410,7 +410,7 @@ void Axis::AllocateSubGrids()
 
         if( nOldSubIncCount > nNewSubIncCount )
         {
-            // remove superfluous entries
+            
             for( sal_Int32 i = nNewSubIncCount; i < nOldSubIncCount; ++i )
                 aOldBroadcasters.push_back( m_aSubGridProperties[ i ] );
             m_aSubGridProperties.realloc( nNewSubIncCount );
@@ -419,7 +419,7 @@ void Axis::AllocateSubGrids()
         {
             m_aSubGridProperties.realloc( nNewSubIncCount );
 
-            // allocate new entries
+            
             for( sal_Int32 i = nOldSubIncCount; i < nNewSubIncCount; ++i )
             {
                 m_aSubGridProperties[ i ] = new GridProperties();
@@ -428,7 +428,7 @@ void Axis::AllocateSubGrids()
             }
         }
     }
-    //don't keep the mutex locked while calling out
+    
     std::vector< Reference< beans::XPropertySet > >::iterator aBroadcaster = aOldBroadcasters.begin();
     for( ;aBroadcaster != aOldBroadcasters.end(); ++aBroadcaster )
         ModifyListenerHelper::removeListener( *aBroadcaster, xModifyEventForwarder );
@@ -436,7 +436,7 @@ void Axis::AllocateSubGrids()
         ModifyListenerHelper::addListener( *aBroadcaster, xModifyEventForwarder );
 }
 
-// ____ XAxis ____
+
 void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
     throw (uno::RuntimeException)
 {
@@ -453,7 +453,7 @@ void SAL_CALL Axis::setScaleData( const chart2::ScaleData& rScaleData )
     }
     AllocateSubGrids();
 
-    //don't keep the mutex locked while calling out
+    
     if( xOldCategories.is() && xOldCategories != xNewCategories )
     {
         ModifyListenerHelper::removeListener( xOldCategories, xModifyEventForwarder );
@@ -494,7 +494,7 @@ Sequence< Reference< beans::XPropertySet > > SAL_CALL Axis::getSubTickProperties
     return Sequence< Reference< beans::XPropertySet > >();
 }
 
-// ____ XTitled ____
+
 Reference< chart2::XTitle > SAL_CALL Axis::getTitleObject()
     throw (uno::RuntimeException)
 {
@@ -514,7 +514,7 @@ void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle
         m_xTitle = xNewTitle;
     }
 
-    //don't keep the mutex locked while calling out
+    
     if( xOldTitle.is() && xOldTitle != xNewTitle )
         ModifyListenerHelper::removeListener( xOldTitle, xModifyEventForwarder );
     if( xNewTitle.is() && xOldTitle != xNewTitle )
@@ -522,19 +522,19 @@ void SAL_CALL Axis::setTitleObject( const Reference< chart2::XTitle >& xNewTitle
     fireModifyEvent();
 }
 
-// ____ XCloneable ____
+
 Reference< util::XCloneable > SAL_CALL Axis::createClone()
     throw (uno::RuntimeException)
 {
     Axis * pNewAxis( new Axis( *this ));
-    // hold a reference to the clone
+    
     Reference< util::XCloneable > xResult( pNewAxis );
-    // do initialization that uses uno references to the clone
+    
     pNewAxis->Init( *this );
     return xResult;
 }
 
-// ____ XModifyBroadcaster ____
+
 void SAL_CALL Axis::addModifyListener( const Reference< util::XModifyListener >& aListener )
     throw (uno::RuntimeException)
 {
@@ -563,14 +563,14 @@ void SAL_CALL Axis::removeModifyListener( const Reference< util::XModifyListener
     }
 }
 
-// ____ XModifyListener ____
+
 void SAL_CALL Axis::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
-// ____ XEventListener (base of XModifyListener) ____
+
 void SAL_CALL Axis::disposing( const lang::EventObject& Source )
     throw (uno::RuntimeException)
 {
@@ -578,7 +578,7 @@ void SAL_CALL Axis::disposing( const lang::EventObject& Source )
         m_aScaleData.Categories = 0;
 }
 
-// ____ OPropertySet ____
+
 void Axis::firePropertyChangeEvent()
 {
     fireModifyEvent();
@@ -589,7 +589,7 @@ void Axis::fireModifyEvent()
     m_xModifyEventForwarder->modified( lang::EventObject( static_cast< uno::XWeak* >( this )));
 }
 
-// ____ OPropertySet ____
+
 uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
@@ -605,7 +605,7 @@ uno::Any Axis::GetDefaultValue( sal_Int32 nHandle ) const
     return *StaticAxisInfoHelper::get();
 }
 
-// ____ XPropertySet ____
+
 Reference< beans::XPropertySetInfo > SAL_CALL Axis::getPropertySetInfo()
     throw (uno::RuntimeException)
 {
@@ -625,9 +625,9 @@ using impl::Axis_Base;
 IMPLEMENT_FORWARD_XINTERFACE2( Axis, Axis_Base, ::property::OPropertySet )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( Axis, Axis_Base, ::property::OPropertySet )
 
-// implement XServiceInfo methods basing upon getSupportedServiceNames_Static
+
 APPHELPER_XSERVICEINFO_IMPL( Axis, lcl_aServiceName );
 
-} //  namespace chart
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

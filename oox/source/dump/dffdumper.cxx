@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "oox/dump/dffdumper.hxx"
@@ -24,31 +24,31 @@
 namespace oox {
 namespace dump {
 
-// ============================================================================
+
 
 
 namespace {
 
-const sal_uInt16 DFF_ID_BSE                 = 0xF007;   /// BLIP store entry.
-const sal_uInt16 DFF_ID_BSTORECONTAINER     = 0xF001;   /// BLIP store container.
-const sal_uInt16 DFF_ID_CHILDANCHOR         = 0xF00F;   /// Child anchor (in groups).
-const sal_uInt16 DFF_ID_CLIENTANCHOR        = 0xF010;   /// Client anchor.
-const sal_uInt16 DFF_ID_DG                  = 0xF008;   /// Drawing.
-const sal_uInt16 DFF_ID_DGG                 = 0xF006;   /// Drawing group.
-const sal_uInt16 DFF_ID_OPT                 = 0xF00B;   /// Property set.
-const sal_uInt16 DFF_ID_OPT2                = 0xF121;   /// Secondary property set.
-const sal_uInt16 DFF_ID_OPT3                = 0xF122;   /// Ternary property set.
-const sal_uInt16 DFF_ID_SP                  = 0xF00A;   /// Shape.
-const sal_uInt16 DFF_ID_SPGR                = 0xF009;   /// Shape group.
-const sal_uInt16 DFF_ID_SPLITMENUCOLORS     = 0xF11E;   /// Current toolbar colors.
+const sal_uInt16 DFF_ID_BSE                 = 0xF007;   
+const sal_uInt16 DFF_ID_BSTORECONTAINER     = 0xF001;   
+const sal_uInt16 DFF_ID_CHILDANCHOR         = 0xF00F;   
+const sal_uInt16 DFF_ID_CLIENTANCHOR        = 0xF010;   
+const sal_uInt16 DFF_ID_DG                  = 0xF008;   
+const sal_uInt16 DFF_ID_DGG                 = 0xF006;   
+const sal_uInt16 DFF_ID_OPT                 = 0xF00B;   
+const sal_uInt16 DFF_ID_OPT2                = 0xF121;   
+const sal_uInt16 DFF_ID_OPT3                = 0xF122;   
+const sal_uInt16 DFF_ID_SP                  = 0xF00A;   
+const sal_uInt16 DFF_ID_SPGR                = 0xF009;   
+const sal_uInt16 DFF_ID_SPLITMENUCOLORS     = 0xF11E;   
 
 const sal_uInt16 DFF_OPT_IDMASK             = 0x3FFF;
 const sal_uInt16 DFF_OPT_COMPLEX            = 0x8000;
 const sal_uInt16 DFF_OPT_FLAGSMASK          = 0x003F;
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 bool DffStreamObject::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize )
 {
@@ -64,12 +64,12 @@ void DffStreamObject::implWriteExtHeader()
     const sal_Char* pcListName = "DFF-RECORD-INST";
     switch( getRecId() )
     {
-        case DFF_ID_BSE:                pcListName = "DFFBSE-RECORD-INST";          break;  // BLIP type
-        case DFF_ID_BSTORECONTAINER:    pcListName = "DFFBSTORECONT-RECORD-INST";   break;  // BLIP count
-        case DFF_ID_DG:                 pcListName = "DFFDG-RECORD-INST";           break;  // drawing ID
-        case DFF_ID_OPT:                pcListName = "DFFOPT-RECORD-INST";          break;  // property count
-        case DFF_ID_SP:                 pcListName = "DFFSP-RECORD-INST";           break;  // shape type
-        case DFF_ID_SPLITMENUCOLORS:    pcListName = "DFFSPLITMENUC-RECORD-INST";   break;  // number of colors
+        case DFF_ID_BSE:                pcListName = "DFFBSE-RECORD-INST";          break;  
+        case DFF_ID_BSTORECONTAINER:    pcListName = "DFFBSTORECONT-RECORD-INST";   break;  
+        case DFF_ID_DG:                 pcListName = "DFFDG-RECORD-INST";           break;  
+        case DFF_ID_OPT:                pcListName = "DFFOPT-RECORD-INST";          break;  
+        case DFF_ID_SP:                 pcListName = "DFFSP-RECORD-INST";           break;  
+        case DFF_ID_SPLITMENUCOLORS:    pcListName = "DFFSPLITMENUC-RECORD-INST";   break;  
     }
     MultiItemsGuard aMultiGuard( mxOut );
     writeHexItem( "instance", mnInstVer, pcListName );
@@ -179,7 +179,7 @@ struct PropInfo
 
 typedef ::std::vector< PropInfo > PropInfoVector;
 
-} // namespace
+} 
 
 void DffStreamObject::dumpDffOpt()
 {
@@ -220,7 +220,7 @@ void DffStreamObject::dumpDffOpt()
             if( aIt != maSimpleProps.end() )
             {
                 const ItemFormat& rItemFmt = aIt->second;
-                // flags always at end of block of 64 properties
+                
                 if( (nBaseId & DFF_OPT_FLAGSMASK) == DFF_OPT_FLAGSMASK )
                 {
                     FlagsList* pFlagsList = dynamic_cast< FlagsList* >( cfg().getNameList( rItemFmt.maListName ).get() );
@@ -276,10 +276,10 @@ sal_uInt16 DffStreamObject::dumpDffOptPropHeader()
     return dumpHex< sal_uInt16 >( "id", "DFFOPT-PROPERTY-ID" );
 }
 
-// ============================================================================
 
-} // namespace dump
-} // namespace oox
+
+} 
+} 
 
 #endif
 

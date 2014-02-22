@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <config_features.h>
@@ -71,27 +71,27 @@ public:
     inline bool SAL_CALL is() const SAL_THROW(())
         { return (_pMapping != 0); }
 };
-//__________________________________________________________________________________________________
+
 inline Mapping::Mapping( uno_Mapping * pMapping ) SAL_THROW(())
     : _pMapping( pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping::Mapping( const Mapping & rMapping ) SAL_THROW(())
     : _pMapping( rMapping._pMapping )
 {
     if (_pMapping)
         (*_pMapping->acquire)( _pMapping );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping::~Mapping() SAL_THROW(())
 {
     if (_pMapping)
         (*_pMapping->release)( _pMapping );
 }
-//__________________________________________________________________________________________________
+
 inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW(())
 {
     if (pMapping)
@@ -102,7 +102,7 @@ inline Mapping & Mapping::operator = ( uno_Mapping * pMapping ) SAL_THROW(())
     return *this;
 }
 
-//==================================================================================================
+
 struct MappingEntry
 {
     sal_Int32           nRef;
@@ -120,13 +120,13 @@ struct MappingEntry
         , aMappingName( rMappingName_ )
         {}
 };
-//--------------------------------------------------------------------------------------------------
+
 struct FctOUStringHash : public std::unary_function< const OUString &, size_t >
 {
     size_t operator()( const OUString & rKey ) const SAL_THROW(())
         { return (size_t)rKey.hashCode(); }
 };
-//--------------------------------------------------------------------------------------------------
+
 struct FctPtrHash : public std::unary_function< uno_Mapping *, size_t >
 {
     size_t operator()( uno_Mapping * pKey ) const SAL_THROW(())
@@ -141,7 +141,7 @@ typedef boost::unordered_map<
 typedef set< uno_getMappingFunc > t_CallbackSet;
 typedef set< OUString > t_OUStringSet;
 
-//==================================================================================================
+
 struct MappingsData
 {
     Mutex               aMappingsMutex;
@@ -154,7 +154,7 @@ struct MappingsData
     Mutex               aNegativeLibsMutex;
     t_OUStringSet       aNegativeLibs;
 };
-//--------------------------------------------------------------------------------------------------
+
 static MappingsData & getMappingsData() SAL_THROW(())
 {
     static MappingsData * s_p = 0;
@@ -163,8 +163,8 @@ static MappingsData & getMappingsData() SAL_THROW(())
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if (! s_p)
         {
-            //TODO  This memory is leaked; see #i63473# for when this should be
-            // changed again:
+            
+            
             s_p = new MappingsData;
         }
     }
@@ -195,13 +195,13 @@ struct uno_Mediate_Mapping : public uno_Mapping
 };
 extern "C"
 {
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL mediate_free( uno_Mapping * pMapping )
     SAL_THROW(())
 {
     delete static_cast< uno_Mediate_Mapping * >( pMapping );
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
     SAL_THROW(())
 {
@@ -215,7 +215,7 @@ static void SAL_CALL mediate_acquire( uno_Mapping * pMapping )
             static_cast< uno_Mediate_Mapping * >( pMapping )->aAddPurpose.pData );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL mediate_release( uno_Mapping * pMapping )
     SAL_THROW(())
 {
@@ -225,7 +225,7 @@ static void SAL_CALL mediate_release( uno_Mapping * pMapping )
         uno_revokeMapping( pMapping );
     }
 }
-//--------------------------------------------------------------------------------------------------
+
 static void SAL_CALL mediate_mapInterface(
     uno_Mapping * pMapping,
     void ** ppOut, void * pInterface,
@@ -249,7 +249,7 @@ static void SAL_CALL mediate_mapInterface(
                 OSL_ENSURE( 0 != pTo, "### cannot release out interface: leaking!" );
                 if (0 != pTo)
                     (*pTo->releaseInterface)( pTo, pOut );
-                *ppOut = 0; // set to 0 anyway, because mapping was not successful!
+                *ppOut = 0; 
             }
         }
         else
@@ -261,7 +261,7 @@ static void SAL_CALL mediate_mapInterface(
     }
 }
 }
-//__________________________________________________________________________________________________
+
 uno_Mediate_Mapping::uno_Mediate_Mapping(
     const Environment & rFrom_, const Environment & rTo_,
     const Mapping & rFrom2Uno_, const Mapping & rUno2To_,
@@ -279,7 +279,7 @@ uno_Mediate_Mapping::uno_Mediate_Mapping(
     uno_Mapping::mapInterface   = mediate_mapInterface;
 }
 
-//==================================================================================================
+
 static inline OUString getMappingName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -297,7 +297,7 @@ static inline OUString getMappingName(
     aKey.append( ']' );
     return aKey.makeStringAndClear();
 }
-//==================================================================================================
+
 static inline OUString getBridgeName(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -339,10 +339,10 @@ static uno_ext_getMappingFunc selectMapFunc( const OUString & rBridgeName )
 #endif
 
 #if 0
-    // I don't think the affine or log bridges will be needed on any
-    // DISABLE_DYNLOADING platform (iOS at least, possibly Android), but if
-    // somebody wants to experiment, need to find out then whether these are
-    // needed.
+    
+    
+    
+    
     if (rBridgeName.equalsAscii( "affine_uno_uno" ))
         return affine_uno_uno_ext_getMapping;
     if (rBridgeName.equalsAscii( "log_uno_uno" ))
@@ -371,14 +371,14 @@ static inline oslModule loadModule( const OUString & rBridgeName )
         if (hModule)
             return hModule;
 
-        setNegativeBridge( rBridgeName ); // no load again
+        setNegativeBridge( rBridgeName ); 
     }
     return 0;
 }
 
 #endif
 
-//==================================================================================================
+
 static Mapping loadExternalMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -423,7 +423,7 @@ static Mapping loadExternalMapping(
                 return aExt;
         }
 #else
-        // find proper lib
+        
         oslModule hModule = 0;
         OUString aName;
 
@@ -459,7 +459,7 @@ static Mapping loadExternalMapping(
     return Mapping();
 }
 
-//==================================================================================================
+
 static Mapping getDirectMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose = OUString() )
     SAL_THROW(())
@@ -470,7 +470,7 @@ static Mapping getDirectMapping(
         MappingsData & rData = getMappingsData();
         ClearableMutexGuard aGuard( rData.aMappingsMutex );
 
-        // try to find registered mapping
+        
         const t_OUString2Entry::const_iterator iFind( rData.aName2Entry.find(
             getMappingName( rFrom, rTo, rAddPurpose ) ) );
 
@@ -487,7 +487,7 @@ static Mapping getDirectMapping(
     return Mapping();
 }
 
-//--------------------------------------------------------------------------------------------------
+
 static inline Mapping createMediateMapping(
     const Environment & rFrom, const Environment & rTo,
     const Mapping & rFrom2Uno, const Mapping & rUno2To,
@@ -495,14 +495,14 @@ static inline Mapping createMediateMapping(
     SAL_THROW(())
 {
     uno_Mapping * pRet = new uno_Mediate_Mapping(
-        rFrom, rTo, rFrom2Uno, rUno2To, rAddPurpose ); // ref count initially 1
+        rFrom, rTo, rFrom2Uno, rUno2To, rAddPurpose ); 
     uno_registerMapping(
         &pRet, mediate_free, rFrom.get(), rTo.get(), rAddPurpose.pData );
     Mapping aRet( pRet );
     (*pRet->release)( pRet );
     return aRet;
 }
-//==================================================================================================
+
 static Mapping getMediateMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
     SAL_THROW(())
@@ -510,30 +510,30 @@ static Mapping getMediateMapping(
     Environment aUno;
     Mapping aUno2To;
 
-    // backwards: from dest to source of mapping chain
+    
 
-    // connect to uno
+    
     OUString aUnoEnvTypeName( UNO_LB_UNO );
-    if (rTo.getTypeName() == aUnoEnvTypeName) // to is uno
+    if (rTo.getTypeName() == aUnoEnvTypeName) 
     {
         aUno = rTo;
-        // no Uno2To mapping necessary
+        
     }
     else
     {
-        // get registered uno env
+        
         ::uno_getEnvironment( (uno_Environment **)&aUno, aUnoEnvTypeName.pData, 0 );
 
         aUno2To = getDirectMapping( aUno, rTo );
-        // : uno <-> to
+        
         if (! aUno2To.is())
             return Mapping();
     }
 
-    // connect to uno
-    if (!rAddPurpose.isEmpty()) // insert purpose mapping between new ano_uno <-> uno
+    
+    if (!rAddPurpose.isEmpty()) 
     {
-        // create anonymous uno env
+        
         Environment aAnUno;
         ::uno_createEnvironment( (uno_Environment **)&aAnUno, aUnoEnvTypeName.pData, 0 );
 
@@ -541,16 +541,16 @@ static Mapping getMediateMapping(
         if (! aAnUno2Uno.is())
             return Mapping();
 
-        if (aUno2To.is()) // to is not uno
+        if (aUno2To.is()) 
         {
-            // create another purposed mediate mapping
+            
             aUno2To = createMediateMapping( aAnUno, rTo, aAnUno2Uno, aUno2To, rAddPurpose );
-            // : ano_uno <-> uno <-> to
+            
         }
         else
         {
             aUno2To = aAnUno2Uno;
-            // : ano_uno <-> to (i.e., uno)
+            
         }
         aUno = aAnUno;
     }
@@ -559,7 +559,7 @@ static Mapping getMediateMapping(
     if (aFrom2Uno.is() && aUno2To.is())
     {
         return createMediateMapping( rFrom, rTo, aFrom2Uno, aUno2To, rAddPurpose );
-        // : from <-> some uno ...
+        
     }
 
     return Mapping();
@@ -570,7 +570,7 @@ using namespace ::cppu;
 
 extern "C"
 {
-//##################################################################################################
+
 void SAL_CALL uno_getMapping(
     uno_Mapping ** ppMapping, uno_Environment * pFrom, uno_Environment * pTo,
     rtl_uString * pAddPurpose )
@@ -594,7 +594,7 @@ void SAL_CALL uno_getMapping(
 
     MappingsData & rData = getMappingsData();
 
-    // try registered mapping
+    
     {
     MutexGuard aGuard( rData.aMappingsMutex );
     const t_OUString2Entry::const_iterator iFind( rData.aName2Entry.find(
@@ -603,7 +603,7 @@ void SAL_CALL uno_getMapping(
         aRet = (*iFind).second->pMapping;
     }
 
-    // See if an identity mapping does fit.
+    
     if (!aRet.is() && pFrom == pTo && aAddPurpose.isEmpty())
         aRet = createIdentityMapping(pFrom);
 
@@ -615,7 +615,7 @@ void SAL_CALL uno_getMapping(
             return;
     }
 
-    if (! aRet.is()) // try callback chain
+    if (! aRet.is()) 
     {
         MutexGuard aGuard( rData.aCallbacksMutex );
         for ( t_CallbackSet::const_iterator iPos( rData.aCallbacks.begin() );
@@ -629,9 +629,9 @@ void SAL_CALL uno_getMapping(
 
     if (! aRet.is())
     {
-        aRet = loadExternalMapping( aFrom, aTo, aAddPurpose ); // direct try
+        aRet = loadExternalMapping( aFrom, aTo, aAddPurpose ); 
         if (! aRet.is())
-            aRet = getMediateMapping( aFrom, aTo, aAddPurpose ); // try via uno
+            aRet = getMediateMapping( aFrom, aTo, aAddPurpose ); 
     }
 
     if (aRet.is())
@@ -640,7 +640,7 @@ void SAL_CALL uno_getMapping(
         *ppMapping = aRet.get();
     }
 }
-//##################################################################################################
+
 void SAL_CALL uno_getMappingByName(
     uno_Mapping ** ppMapping, rtl_uString * pFrom, rtl_uString * pTo,
     rtl_uString * pAddPurpose )
@@ -670,7 +670,7 @@ void SAL_CALL uno_getMappingByName(
     }
 }
 
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
     uno_Mapping ** ppMapping, uno_freeMappingFunc freeMapping,
     uno_Environment * pFrom, uno_Environment * pTo, rtl_uString * pAddPurpose )
@@ -688,7 +688,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
         OString cstr( OUStringToOString( aMappingName, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "> inserting new mapping: %s", cstr.getStr() );
 #endif
-        // count initially 1
+        
         MappingEntry * pEntry = new MappingEntry( *ppMapping, freeMapping, aMappingName );
         rData.aName2Entry[ aMappingName ] = pEntry;
         rData.aMapping2Entry[ *ppMapping ] = pEntry;
@@ -698,17 +698,17 @@ CPPU_DLLPUBLIC void SAL_CALL uno_registerMapping(
         MappingEntry * pEntry = (*iFind).second;
         ++pEntry->nRef;
 
-        if (pEntry->pMapping != *ppMapping) // exchange mapping to be registered
+        if (pEntry->pMapping != *ppMapping) 
         {
             (*pEntry->pMapping->acquire)( pEntry->pMapping );
-            --pEntry->nRef; // correct count; kill mapping to be registered
+            --pEntry->nRef; 
             aGuard.clear();
             (*freeMapping)( *ppMapping );
             *ppMapping = pEntry->pMapping;
         }
     }
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
     uno_Mapping * pMapping )
     SAL_THROW_EXTERN_C()
@@ -733,7 +733,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_revokeMapping(
     }
 }
 
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_registerMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
@@ -743,7 +743,7 @@ CPPU_DLLPUBLIC void SAL_CALL uno_registerMappingCallback(
     MutexGuard aGuard( rData.aCallbacksMutex );
     rData.aCallbacks.insert( pCallback );
 }
-//##################################################################################################
+
 CPPU_DLLPUBLIC void SAL_CALL uno_revokeMappingCallback(
     uno_getMappingFunc pCallback )
     SAL_THROW_EXTERN_C()
@@ -753,6 +753,6 @@ CPPU_DLLPUBLIC void SAL_CALL uno_revokeMappingCallback(
     MutexGuard aGuard( rData.aCallbacksMutex );
     rData.aCallbacks.erase( pCallback );
 }
-} // extern "C"
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

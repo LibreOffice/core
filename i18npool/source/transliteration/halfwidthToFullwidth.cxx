@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,11 +14,11 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
-// prevent internal compiler error with MSVC6SP3
+
 #include <utility>
 
 #include <i18nutil/widthfolding.hxx>
@@ -46,12 +46,12 @@ halfwidthToFullwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
   throw(RuntimeException)
 {
     sal_Bool _useOffset = useOffset;
-    // One to One mapping
+    
     useOffset = sal_False;
     const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
     useOffset = _useOffset;
 
-    // Composition: KA + voice-mark --> GA
+    
     return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
 }
 
@@ -76,12 +76,12 @@ halfwidthKatakanaToFullwidthKatakana::transliterate( const OUString& inStr, sal_
   throw(RuntimeException)
 {
     sal_Bool _useOffset = useOffset;
-    // One to One mapping
+    
     useOffset = sal_False;
     const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
     useOffset = _useOffset;
 
-    // Composition: KA + voice-mark --> GA
+    
     return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset );
 }
 
@@ -106,12 +106,12 @@ halfwidthToFullwidthLikeJIS::transliterate( const OUString& inStr, sal_Int32 sta
   throw(RuntimeException)
 {
     sal_Bool _useOffset = useOffset;
-    // One to One mapping
+    
     useOffset = sal_False;
     const OUString& newStr = transliteration_OneToOne::transliterate( inStr, startPos, nCount, offset);
     useOffset = _useOffset;
 
-    // Composition: KA + voice-mark --> GA
+    
     return widthfolding::compose_ja_voiced_sound_marks ( newStr, 0, newStr.getLength(), offset, _useOffset, WIDTHFOLDNIG_DONT_USE_COMBINED_VU );
 }
 

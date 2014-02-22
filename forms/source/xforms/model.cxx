@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -40,7 +40,7 @@
 
 #include <algorithm>
 
-// UNO classes
+
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
@@ -83,14 +83,14 @@ using namespace xforms;
 
 
 //
-// The Model
+
 //
 
 void Model::ensureAtLeastOneInstance()
 {
     if( ! mpInstances->hasItems() )
     {
-        // create a default instance
+        
         newInstance( OUString(), OUString(), true );
     }
 }
@@ -112,22 +112,22 @@ Model::Model() :
 {
     initializePropertySet();
 
-    // initialize bindings collections
-    // (not in initializer list to avoid use of incomplete 'this')
+    
+    
     mpBindings = new BindingCollection( this );
     mxBindings = mpBindings;
 
     mpSubmissions = new SubmissionCollection( this );
     mxSubmissions = mpSubmissions;
 
-    // invariant only holds after construction
+    
     DBG_INVARIANT();
 }
 
 Model::~Model() throw()
 {
-    // give up bindings & submissions; the mxBindings/mxSubmissions
-    // references will then delete them
+    
+    
     mpBindings = NULL;
     mpSubmissions = NULL;
 }
@@ -148,12 +148,12 @@ Model* Model::getModel( const Reference<XModel>& xModel )
 
 EvaluationContext Model::getEvaluationContext()
 {
-    // the default context is the top-level element node. A default
-    // node (instanceData' is inserted when there is no default node
+    
+    
     Reference<XDocument> xInstance = getDefaultInstance();
     Reference<XNode> xElement( xInstance->getDocumentElement(), UNO_QUERY );
 
-    // no element found? Then insert default element 'instanceData'
+    
     if( ! xElement.is() )
     {
         xElement = Reference<XNode>(
@@ -233,7 +233,7 @@ void Model::dbg_assertInvariant() const
 
 
 //
-// MIP management
+
 //
 
 void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
@@ -265,20 +265,20 @@ void Model::removeMIPs( void* pTag )
 
 MIP Model::queryMIP( const XNode_t& xNode ) const
 {
-    // travel up inheritance chain and inherit MIPs
+    
     MIP aRet;
     for( XNode_t xCurrent = xNode;
          xCurrent.is();
          xCurrent = xCurrent->getParentNode() )
     {
-        // iterate over all MIPs for this node, and join MIPs
+        
         MIP aMIP;
         MIPs_t::const_iterator aEnd = maMIPs.upper_bound( xCurrent );
         MIPs_t::const_iterator aIter = maMIPs.lower_bound( xCurrent );
         for( ; aIter != aEnd; ++aIter )
           aMIP.join( aIter->second.second );
 
-        // inherit from current node (or set if we are at the start node)
+        
         if( xCurrent == xNode )
             aRet = aMIP;
         else
@@ -294,7 +294,7 @@ void Model::rebind()
 {
     OSL_ENSURE( mpBindings != NULL, "bindings?" );
 
-    // iterate over all bindings and call update
+    
     sal_Int32 nCount = mpBindings->countItems();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
@@ -308,7 +308,7 @@ void Model::rebind()
 
 void Model::deferNotifications( bool bDefer )
 {
-    // iterate over all bindings and defer notifications
+    
     sal_Int32 nCount = mpBindings->countItems();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
@@ -327,21 +327,21 @@ bool Model::setSimpleContent( const XNode_t& xConstNode,
     bool bRet = false;
     if( xConstNode.is() )
     {
-        // non-const node reference so we can assign children (if necessary)
+        
         XNode_t xNode( xConstNode );
 
         switch( xNode->getNodeType() )
         {
         case NodeType_ELEMENT_NODE:
         {
-            // find first text node child
+            
             Reference<XNode> xChild;
             for( xChild = xNode->getFirstChild();
                  xChild.is() && xChild->getNodeType() != NodeType_TEXT_NODE;
                  xChild = xChild->getNextSibling() )
-                ; // empty loop; only find first text node child
+                ; 
 
-            // create text node, if none is found
+            
             if( ! xChild.is() )
             {
                 xChild = Reference<XNode>(
@@ -355,12 +355,12 @@ bool Model::setSimpleContent( const XNode_t& xConstNode,
                         xNode->getNodeType() == NodeType_TEXT_NODE,
                         "text node creation failed?" );
         }
-        // no break; continue as with text node:
+        
 
         case NodeType_TEXT_NODE:
         case NodeType_ATTRIBUTE_NODE:
         {
-            // set the node value (defer notifications)
+            
             if( xNode->getNodeValue() != sValue )
             {
                 deferNotifications( true );
@@ -386,12 +386,12 @@ void Model::loadInstance( sal_Int32 nInstance )
 {
     Sequence<PropertyValue> aSequence = mpInstances->getItem( nInstance );
 
-    // find URL from instance
+    
     OUString sURL;
     bool bOnce = false;
     getInstanceData( aSequence, NULL, NULL, &sURL, &bOnce );
 
-    // if we have a URL, load the document and set it into the instance
+    
     if( !sURL.isEmpty() )
     {
         try
@@ -413,14 +413,14 @@ void Model::loadInstance( sal_Int32 nInstance )
         }
         catch( const Exception& )
         {
-            // couldn't load the instance -> ignore!
+            
         }
     }
 }
 
 void Model::loadInstances()
 {
-    // iterate over instance array to get PropertyValue-Sequence
+    
     const sal_Int32 nInstances = mpInstances->countItems();
     for( sal_Int32 nInstance = 0; nInstance < nInstances; nInstance++ )
     {
@@ -449,7 +449,7 @@ bool Model::isValid() const
 
 
 //
-// implement xforms::XModel
+
 //
 
 OUString Model::getID()
@@ -471,10 +471,10 @@ void Model::initialize()
 {
     DBG_ASSERT( ! mbInitialized, "model already initialized" );
 
-    // load instances
+    
     loadInstances();
 
-    // let's pretend we're initialized and rebind all bindings
+    
     mbInitialized = true;
     rebind();
 }
@@ -497,7 +497,7 @@ void Model::recalculate()
 void Model::revalidate()
     throw( RuntimeException )
 {
-    // do nothing. We don't validate anyways!
+    
 }
 
 void Model::refresh()
@@ -524,7 +524,7 @@ void SAL_CALL Model::submitWithInteraction(
         OSL_ENSURE( pSubmission->getModel() == Reference<XModel>( this ),
                     "wrong model" );
 
-        // submit. All exceptions are allowed to leave.
+        
         pSubmission->submitWithInteraction( _rxHandler );
     }
 }
@@ -545,7 +545,7 @@ Model::XDataTypeRepository_t SAL_CALL Model::getDataTypeRepository(  )
 }
 
 //
-// instance management
+
 //
 
 Model::XSet_t Model::getInstances()
@@ -579,7 +579,7 @@ Model::XDocument_t SAL_CALL Model::getDefaultInstance()
 
 
 //
-// bindings management
+
 //
 
 Model::XPropertySet_t SAL_CALL Model::createBinding()
@@ -615,7 +615,7 @@ Model::XSet_t Model::getBindings()
 
 
 //
-// submission management
+
 //
 
 Model::XSubmission_t Model::createSubmission()
@@ -653,7 +653,7 @@ Model::XSet_t Model::getSubmissions()
 }
 
 //
-// implement XPropertySet & friends
+
 //
 
 #define HANDLE_ID 0

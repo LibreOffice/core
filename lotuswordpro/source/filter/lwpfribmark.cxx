@@ -1231,12 +1231,12 @@ void LwpFribField::ConvertDocFieldStart(XFContentContainer* pXFPara,LwpFieldMark
             pContent = new XFCharCountStart;
             break;
         }
-//      case LwpFieldMark::DOC_TOTALTIME:
-//      {
-//          pContent = new XFTotalEditTimeStart;
-//          pContent->SetStyleName(m_TimeStyle);
-//          break;
-//      }
+
+
+
+
+
+
     }
     if (pContent)
     {
@@ -1278,11 +1278,11 @@ void LwpFribField::ConvertDocFieldEnd(XFContentContainer* pXFPara,LwpFieldMark* 
             pContent = new XFCharCountEnd;
             break;
         }
-//      case LwpFieldMark::DOC_TOTALTIME:
-//      {
-//          pContent = new XFTotalEditTimeEnd;
-//          break;
-//      }
+
+
+
+
+
     }
     if (pContent)
     {
@@ -1389,7 +1389,7 @@ void LwpFribField::ConvertCrossRefStart(XFContentContainer* pXFPara,LwpFieldMark
     XFCrossRefStart* pRef = new XFCrossRefStart;
     pRef->SetRefType(m_nCrossRefType);
     pRef->SetMarkName(m_sFormula);
-//  pFieldMark->SetStart(sal_True);//for some disnormal cases
+
     if (m_ModFlag)
     {
         XFTextSpanStart* pSpan = new XFTextSpanStart;

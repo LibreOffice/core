@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -41,7 +41,7 @@ typedef Reference< XSingleServiceFactory > (SAL_CALL *createFactoryFunc)
             rtl_ModuleCount*
         );
 
-//---------------------------------------------------------------------------------------
+
 struct ProviderRequest
 {
     Reference< XSingleServiceFactory > xRet;
@@ -79,13 +79,13 @@ struct ProviderRequest
     void* getProvider() const { return xRet.get(); }
 };
 
-//---------------------------------------------------------------------------------------
+
 typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Reference< XMultiServiceFactory >& _rxFactory );
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL createMozillaBootstrap(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory) throw( ::com::sun::star::uno::Exception )
 {
         const OUString sModuleName(SVLIBRARY( "mozabdrv" ));
 
-        // load the dbtools library
+        
         oslModule s_hModule = osl_loadModuleRelative(
             reinterpret_cast< oslGenericFunction >(&createMozillaBootstrap),
             sModuleName.pData, 0);
@@ -93,13 +93,13 @@ typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Refere
         if (NULL != s_hModule)
         {
 
-            // get the symbol for the method creating the factory
+            
             const OUString sFactoryCreationFunc = "OMozillaBootstrap_CreateInstance";
-            // reinterpret_cast<OMozabConnection_CreateInstanceFunction> removed GNU C
+            
             OMozillaBootstrap_CreateInstanceFunction s_pCreationFunc = (OMozillaBootstrap_CreateInstanceFunction)osl_getFunctionSymbol(s_hModule, sFactoryCreationFunc.pData);
 
             if (NULL == s_pCreationFunc)
-            {   // did not find the symbol
+            {   
                 OSL_FAIL("MozabDriver::registerClient: could not find the symbol for creating the factory!");
                 osl_unloadModule(s_hModule);
                 s_hModule = NULL;
@@ -109,7 +109,7 @@ typedef void* (SAL_CALL * OMozillaBootstrap_CreateInstanceFunction)(const Refere
         }
         return NULL;
 }
-//---------------------------------------------------------------------------------------
+
 extern "C" SAL_DLLPUBLIC_EXPORT void* SAL_CALL mozab_component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,

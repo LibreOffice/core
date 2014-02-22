@@ -57,8 +57,8 @@ namespace drawinglayer
 
             return false;
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -68,15 +68,15 @@ namespace drawinglayer
     {
         Primitive2DSequence TextCharacterStrikeoutPrimitive2D::create2DDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            // strikeout with character
+            
             const OUString aSingleCharString(getStrikeoutChar());
             basegfx::B2DVector aScale, aTranslate;
             double fRotate, fShearX;
 
-            // get decomposition
+            
             getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
-            // prepare TextLayouter
+            
             TextLayouterDevice aTextLayouter;
 
             aTextLayouter.setFontAttribute(
@@ -139,11 +139,11 @@ namespace drawinglayer
             return false;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(TextCharacterStrikeoutPrimitive2D, PRIMITIVE2D_ID_TEXTCHARACTERSTRIKEOUTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -156,20 +156,20 @@ namespace drawinglayer
             OSL_ENSURE(TEXT_STRIKEOUT_SLASH != getTextStrikeout() && TEXT_STRIKEOUT_X != getTextStrikeout(),
                 "Wrong TEXT_STRIKEOUT type; a TextCharacterStrikeoutPrimitive2D should be used (!)");
 
-            // strikeout with geometry
+            
             double fStrikeoutHeight(getHeight());
             double fStrikeoutOffset(getOffset());
             bool bDoubleLine(false);
 
-            // get decomposition
+            
             basegfx::B2DVector aScale, aTranslate;
             double fRotate, fShearX;
             getObjectTransformation().decompose(aScale, aTranslate, fRotate, fShearX);
 
-            // set line attribute
+            
             switch(getTextStrikeout())
             {
-                default : // case primitive2d::TEXT_STRIKEOUT_SINGLE:
+                default : 
                 {
                     break;
                 }
@@ -191,7 +191,7 @@ namespace drawinglayer
                 fStrikeoutHeight *= 0.64;
             }
 
-            // create base polygon and new primitive
+            
             basegfx::B2DPolygon aStrikeoutLine;
 
             aStrikeoutLine.append(basegfx::B2DPoint(0.0, -fStrikeoutOffset));
@@ -203,30 +203,30 @@ namespace drawinglayer
 
             aStrikeoutLine.transform(aUnscaledTransform);
 
-            // add primitive
+            
             const attribute::LineAttribute aLineAttribute(getFontColor(), fStrikeoutHeight, basegfx::B2DLINEJOIN_NONE);
             Primitive2DSequence xRetval(1);
             xRetval[0] = Primitive2DReference(new PolygonStrokePrimitive2D(aStrikeoutLine, aLineAttribute));
 
             if(bDoubleLine)
             {
-                // double line, create 2nd primitive with offset using TransformPrimitive based on
-                // already created NewPrimitive
+                
+                
                 const double fLineDist(2.0 * fStrikeoutHeight);
 
-                // move base point of text to 0.0 and de-rotate
+                
                 basegfx::B2DHomMatrix aTransform(basegfx::tools::createTranslateB2DHomMatrix(
                     -aTranslate.getX(), -aTranslate.getY()));
                 aTransform.rotate(-fRotate);
 
-                // translate in Y by offset
+                
                 aTransform.translate(0.0, -fLineDist);
 
-                // move back and rotate
+                
                 aTransform.rotate(fRotate);
                 aTransform.translate(aTranslate.getX(), aTranslate.getY());
 
-                // add transform primitive
+                
                 appendPrimitive2DReferenceToPrimitive2DSequence(xRetval,
                     Primitive2DReference(
                         new TransformPrimitive2D(
@@ -265,10 +265,10 @@ namespace drawinglayer
             return false;
         }
 
-        // provide unique ID
+        
         ImplPrimitive2DIDBlock(TextGeometryStrikeoutPrimitive2D, PRIMITIVE2D_ID_TEXTGEOMETRYSTRIKEOUTPRIMITIVE2D)
 
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
+    } 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

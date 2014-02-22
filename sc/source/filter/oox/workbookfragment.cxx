@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "workbookfragment.hxx"
@@ -67,7 +67,7 @@
 namespace oox {
 namespace xls {
 
-// ============================================================================
+
 
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::table;
@@ -77,15 +77,15 @@ using namespace ::oox::core;
 
 using ::oox::drawingml::ThemeFragmentHandler;
 
-// ============================================================================
+
 
 namespace {
 
-const double PROGRESS_LENGTH_GLOBALS        = 0.1;      /// 10% of progress bar for globals import.
+const double PROGRESS_LENGTH_GLOBALS        = 0.1;      
 
-} // namespace
+} 
 
-// ============================================================================
+
 
 WorkbookFragment::WorkbookFragment( const WorkbookHelper& rHelper, const OUString& rFragmentPath ) :
     WorkbookFragmentBase( rHelper, rFragmentPath )
@@ -126,7 +126,7 @@ ContextHandlerRef WorkbookFragment::onCreateContext( sal_Int32 nElement, const A
             if( nElement == XLS_TOKEN( externalReference ) ) importExternalReference( rAttribs );
         break;
         case XLS_TOKEN( definedNames ):
-            if( nElement == XLS_TOKEN( definedName ) ) { importDefinedName( rAttribs ); return this; } // collect formula
+            if( nElement == XLS_TOKEN( definedName ) ) { importDefinedName( rAttribs ); return this; } 
         break;
         case XLS_TOKEN( pivotCaches ):
             if( nElement == XLS_TOKEN( pivotCache ) ) importPivotCache( rAttribs );
@@ -228,9 +228,9 @@ public:
 
     virtual void doWork()
     {
-        // We hold the solar mutex in all threads except for
-        // the small safe section of the inner loop in
-        // sheetdatacontext.cxx
+        
+        
+        
         SAL_INFO( "sc.filter",  "start wait on solar\n" );
         SolarMutexGuard maGuard;
         SAL_INFO( "sc.filter",  "got solar\n" );
@@ -250,8 +250,8 @@ public:
 
 class ProgressBarTimer : Timer
 {
-    // FIXME: really we should unify all sheet loading
-    // progress reporting into something pleasant.
+    
+    
     class ProgressWrapper : public ISegmentProgressBar
     {
         double mfPosition;
@@ -263,10 +263,10 @@ class ProgressBarTimer : Timer
         {
         }
         virtual ~ProgressWrapper() {}
-        // IProgressBar
+        
         virtual double getPosition() const { return mfPosition; }
         virtual void   setPosition( double fPosition ) { mfPosition = fPosition; }
-        // ISegmentProgressBar
+        
         virtual double getFreeLength() const { return 0.0; }
         virtual ISegmentProgressBarRef createSegment( double /* fLength */ )
         {
@@ -305,7 +305,7 @@ static void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragm
 
     Reference< XComponentContext > xContext = comphelper::getProcessComponentContext();
 
-    // Force threading off unless experimental mode or env. var is set.
+    
     if( !officecfg::Office::Common::Misc::ExperimentalMode::get( xContext ) )
         nThreads = 0;
 
@@ -315,7 +315,7 @@ static void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragm
 
     if( nThreads != 0 )
     {
-        // test sequential read in this mode
+        
         if( nThreads < 0)
             nThreads = 0;
         ThreadPool aPool( nThreads );
@@ -325,7 +325,7 @@ static void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragm
         SheetFragmentVector::iterator it = rSheets.begin(), itEnd = rSheets.end();
         for( ; it != itEnd; ++it )
         {
-            // getting at the WorksheetGlobals is rather unpleasant
+            
             IWorksheetProgress *pProgress = WorksheetHelper::getWorksheetInterface( it->first );
             pProgress->setCustomRowProgress(
                         aProgressUpdater.wrapProgress(
@@ -337,12 +337,12 @@ static void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragm
 
         while( nSheetsLeft > 0)
         {
-            // This is a much more controlled re-enterancy hazard than
-            // allowing a yield deeper inside the filter code for progress
-            // bar updating.
+            
+            
+            
             Application::Yield();
         }
-        // join all the threads:
+        
         aPool.waitUntilWorkersDone();
     }
     else
@@ -359,26 +359,26 @@ void WorkbookFragment::finalizeImport()
 {
     ISegmentProgressBarRef xGlobalSegment = getProgressBar().createSegment( PROGRESS_LENGTH_GLOBALS );
 
-    // read the theme substream
+    
     OUString aThemeFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "theme" ) );
     if( !aThemeFragmentPath.isEmpty() )
         importOoxFragment( new ThemeFragmentHandler( getFilter(), aThemeFragmentPath, getTheme() ) );
     xGlobalSegment->setPosition( 0.25 );
 
-    // read the styles substream (requires finalized theme buffer)
+    
     OUString aStylesFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "styles" ) );
     if( !aStylesFragmentPath.isEmpty() )
         importOoxFragment( new StylesFragment( *this, aStylesFragmentPath ) );
     xGlobalSegment->setPosition( 0.5 );
 
-    // read the shared string table substream (requires finalized styles buffer)
+    
     OUString aSstFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "sharedStrings" ) );
     if( !aSstFragmentPath.isEmpty() )
         if (!importOoxFragment( new SharedStringsFragment( *this, aSstFragmentPath ) ))
             importOoxFragment(new SharedStringsFragment(*this, aSstFragmentPath.replaceFirst("sharedStrings","SharedStrings")));
     xGlobalSegment->setPosition( 0.75 );
 
-    // read the connections substream
+    
     OUString aConnFragmentPath = getFragmentPathFromFirstType( CREATE_OFFICEDOC_RELATION_TYPE( "connections" ) );
     if( !aConnFragmentPath.isEmpty() )
         importOoxFragment( new ConnectionsFragment( *this, aConnFragmentPath ) );
@@ -400,17 +400,17 @@ void WorkbookFragment::finalizeImport()
         const Relation* pRelation = getRelations().getRelationFromRelId( rWorksheets.getWorksheetRelId( nWorksheet ) );
         if( (nCalcSheet >= 0) && pRelation )
         {
-            // get fragment path of the sheet
+            
             OUString aFragmentPath = getFragmentPathFromRelation( *pRelation );
             OSL_ENSURE( !aFragmentPath.isEmpty(), "WorkbookFragment::finalizeImport - cannot access sheet fragment" );
             if( !aFragmentPath.isEmpty() )
             {
-                // leave space for formula processing ( calcuate the segments as
-                // if there is an extra sheet )
+                
+                
                 double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - ( nWorksheet - 1) );
                 ISegmentProgressBarRef xSheetSegment = getProgressBar().createSegment( fSegmentLength );
 
-                // get the sheet type according to the relations type
+                
                 WorksheetType eSheetType = SHEETTYPE_EMPTYSHEET;
                 if( pRelation->maType == CREATE_OFFICEDOC_RELATION_TYPE( "worksheet" ) )
                     eSheetType = SHEETTYPE_WORKSHEET;
@@ -424,12 +424,12 @@ void WorkbookFragment::finalizeImport()
                 OSL_ENSURE( eSheetType != SHEETTYPE_EMPTYSHEET, "WorkbookFragment::finalizeImport - unknown sheet type" );
                 if( eSheetType != SHEETTYPE_EMPTYSHEET )
                 {
-                    // create the WorksheetGlobals object
+                    
                     WorksheetGlobalsRef xSheetGlob = WorksheetHelper::constructGlobals( *this, xSheetSegment, eSheetType, nCalcSheet );
                     OSL_ENSURE( xSheetGlob.get(), "WorkbookFragment::finalizeImport - missing sheet in document" );
                     if( xSheetGlob.get() )
                     {
-                        // create the sheet fragment handler
+                        
                         ::rtl::Reference< WorksheetFragmentBase > xFragment;
                         switch( eSheetType )
                         {
@@ -445,7 +445,7 @@ void WorkbookFragment::finalizeImport()
                                 OSL_ENSURE( false, "WorkbookFragment::finalizeImport - unexpected sheet type" );
                         }
 
-                        // insert the fragment into the map
+                        
                         if( xFragment.is() )
                         {
                             aSheetFragments.push_back( SheetFragmentHandler( xSheetGlob, xFragment.get() ) );
@@ -457,13 +457,13 @@ void WorkbookFragment::finalizeImport()
         }
     }
 
-    // setup structure sizes for the number of sheets
+    
     getFormulaBuffer().SetSheetCount( aSheetFragments.size() );
 
-    // create all defined names and database ranges
+    
     getDefinedNames().finalizeImport();
     getTables().finalizeImport();
-    // open the VBA project storage
+    
     OUString aVbaFragmentPath = getFragmentPathFromFirstType( CREATE_MSOFFICE_RELATION_TYPE( "vbaProject" ) );
     if( !aVbaFragmentPath.isEmpty() )
     {
@@ -476,7 +476,7 @@ void WorkbookFragment::finalizeImport()
         }
     }
 
-    // load all worksheets
+    
     importSheetFragments(*this, aSheetFragments);
 
     for( std::vector<WorksheetHelper*>::iterator aIt = maHelpers.begin(), aEnd = maHelpers.end(); aIt != aEnd; ++aIt )
@@ -486,16 +486,16 @@ void WorkbookFragment::finalizeImport()
 
     for( SheetFragmentVector::iterator aIt = aSheetFragments.begin(), aEnd = aSheetFragments.end(); aIt != aEnd; ++aIt )
     {
-        // delete fragment object and WorkbookGlobals object, will free all allocated sheet buffers
+        
         aIt->second.clear();
         aIt->first.reset();
     }
 
-    // final conversions, e.g. calculation settings and view settings
+    
     finalizeWorkbookImport();
 }
 
-// private --------------------------------------------------------------------
+
 
 void WorkbookFragment::importExternalReference( const AttributeList& rAttribs )
 {
@@ -537,11 +537,11 @@ void WorkbookFragment::importExternalLinkFragment( ExternalLink& rExtLink )
 
 void WorkbookFragment::importPivotCacheDefFragment( const OUString& rRelId, sal_Int32 nCacheId )
 {
-    // pivot caches will be imported on demand, here we just store the fragment path in the buffer
+    
     getPivotCaches().registerPivotCacheFragment( nCacheId, getFragmentPathFromRelId( rRelId ) );
 }
 
-} // namespace xls
-} // namespace oox
+} 
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

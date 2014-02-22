@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -62,7 +62,7 @@ SdrHdl* SdrTextObj::GetHdl(sal_uInt32 nHdlNum) const
     return pH;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 bool SdrTextObj::hasSpecialDrag() const
 {
@@ -78,9 +78,9 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     bool bOrtho=rDrag.GetView()!=NULL && rDrag.GetView()->IsOrtho();
     bool bBigOrtho=bEcke && bOrtho && rDrag.GetView()->IsBigOrtho();
     Point aPos(rDrag.GetNow());
-    // Unrotate:
+    
     if (aGeo.nDrehWink!=0) RotatePoint(aPos,aTmpRect.TopLeft(),-aGeo.nSin,aGeo.nCos);
-    // Unshear:
+    
     if (aGeo.nShearWink!=0) ShearPoint(aPos,aTmpRect.TopLeft(),-aGeo.nTan);
     //
     bool bLft=(eHdl==HDL_UPLFT || eHdl==HDL_LEFT  || eHdl==HDL_LWLFT);
@@ -91,7 +91,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
     if (bRgt) aTmpRect.Right() =aPos.X();
     if (bTop) aTmpRect.Top()   =aPos.Y();
     if (bBtm) aTmpRect.Bottom()=aPos.Y();
-    if (bOrtho) { // Ortho
+    if (bOrtho) { 
         long nWdt0=aRect.Right() -aRect.Left();
         long nHgt0=aRect.Bottom()-aRect.Top();
         long nXMul=aTmpRect.Right() -aTmpRect.Left();
@@ -104,13 +104,13 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
         nYMul=std::abs(nYMul);
         nXDiv=std::abs(nXDiv);
         nYDiv=std::abs(nYDiv);
-        Fraction aXFact(nXMul,nXDiv); // fractions for canceling
-        Fraction aYFact(nYMul,nYDiv); // and for comparing
+        Fraction aXFact(nXMul,nXDiv); 
+        Fraction aYFact(nYMul,nYDiv); 
         nXMul=aXFact.GetNumerator();
         nYMul=aYFact.GetNumerator();
         nXDiv=aXFact.GetDenominator();
         nYDiv=aYFact.GetDenominator();
-        if (bEcke) { // corner point handles
+        if (bEcke) { 
             bool bUseX=(aXFact<aYFact) != bBigOrtho;
             if (bUseX) {
                 long nNeed=long(BigInt(nHgt0)*BigInt(nXMul)/BigInt(nXDiv));
@@ -123,7 +123,7 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
                 if (bLft) aTmpRect.Left()=aTmpRect.Right()-nNeed;
                 if (bRgt) aTmpRect.Right()=aTmpRect.Left()+nNeed;
             }
-        } else { // apex handles
+        } else { 
             if ((bLft || bRgt) && nXDiv!=0) {
                 long nHgt0b=aRect.Bottom()-aRect.Top();
                 long nNeed=long(BigInt(nHgt0b)*BigInt(nXMul)/BigInt(nXDiv));
@@ -138,13 +138,13 @@ Rectangle SdrTextObj::ImpDragCalcRect(const SdrDragStat& rDrag) const
             }
         }
     }
-    if (!ISA(SdrObjCustomShape))        // not justifying when in CustomShapes, to be able to detect if a shape has to be mirrored
+    if (!ISA(SdrObjCustomShape))        
         ImpJustifyRect(aTmpRect);
     return aTmpRect;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// drag
+
+
 
 bool SdrTextObj::applySpecialDrag(SdrDragStat& rDrag)
 {
@@ -178,8 +178,8 @@ OUString SdrTextObj::getSpecialDragComment(const SdrDragStat& /*rDrag*/) const
     return aStr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Create
+
+
 
 bool SdrTextObj::BegCreate(SdrDragStat& rStat)
 {
@@ -197,7 +197,7 @@ bool SdrTextObj::MovCreate(SdrDragStat& rStat)
     rStat.TakeCreateRect(aRect1);
     ImpJustifyRect(aRect1);
     rStat.SetActionRect(aRect1);
-    aRect=aRect1; // for ObjName
+    aRect=aRect1; 
     SetBoundRectDirty();
     bSnapRectDirty=true;
     if (HAS_BASE(SdrRectObj,this)) {
@@ -212,18 +212,18 @@ bool SdrTextObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     ImpJustifyRect(aRect);
     if (bTextFrame) {
         if (IsAutoGrowHeight()) {
-            // MinTextHeight
+            
             long nHgt=aRect.GetHeight()-1;
             if (nHgt==1) nHgt=0;
             NbcSetMinTextFrameHeight(nHgt);
         }
         if (IsAutoGrowWidth()) {
-            // MinTextWidth
+            
             long nWdt=aRect.GetWidth()-1;
             if (nWdt==1) nWdt=0;
             NbcSetMinTextFrameWidth(nWdt);
         }
-        // re-calculate text frame
+        
         NbcAdjustTextFrameWidthAndHeight();
     }
     SetRectsDirty();

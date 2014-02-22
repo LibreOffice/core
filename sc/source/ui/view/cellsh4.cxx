@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/request.hxx>
@@ -50,14 +50,14 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     }
     else
     {
-        //  evaluate locked selection mode
+        
 
         sal_uInt16 nLocked = pTabViewShell->GetLockedModifiers();
         if ( nLocked & KEY_SHIFT )
-            bSel = sal_True;                // EXT
+            bSel = sal_True;                
         else if ( nLocked & KEY_MOD1 )
         {
-            // ADD mode: keep the selection, start a new block when marking with shift again
+            
             bKeep = true;
         }
     }
@@ -112,20 +112,20 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     SCsCOLROW nRTLSign = 1;
     if ( pData->GetDocument()->IsLayoutRTL( pData->GetTabNo() ) )
     {
-        //! evaluate cursor movement option?
+        
         nRTLSign = -1;
     }
 
-    // once extra, so that the cursor will not be painted too often with ExecuteInputDirect:
+    
     pTabViewShell->HideAllCursors();
 
-    // #i123629#
+    
     if( pTabViewShell->GetCurObjectSelectionType() == OST_Editing )
         pTabViewShell->SetForceFocusOnCurCell(true);
     else
         pTabViewShell->SetForceFocusOnCurCell(false);
 
-    //OS: once for all should do, however!
+    
     pTabViewShell->ExecuteInputDirect();
     switch ( nSlotId )
     {
@@ -169,11 +169,11 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
             pTabViewShell->MoveCursorPage(  0, -nRepeat, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
-        case SID_CURSORPAGERIGHT_: //XXX !!!
+        case SID_CURSORPAGERIGHT_: 
             pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
-        case SID_CURSORPAGELEFT_: //XXX !!!
+        case SID_CURSORPAGELEFT_: 
             pTabViewShell->MoveCursorPage( static_cast<SCsCOL>(-nRepeat), 0, SC_FOLLOW_FIX, bSel, bKeep );
             break;
 
@@ -201,13 +201,13 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
     pViewShell->HideAllCursors();
     if (pInputHdl && pInputHdl->IsInputMode())
     {
-        // the current cell is in edit mode.  Commit the text before moving on.
+        
         pViewShell->ExecuteInputDirect();
     }
 
     SCsCOLROW nRepeat = 1;
     const SfxItemSet* pReqArgs = rReq.GetArgs();
-    // get repetition
+    
     if ( pReqArgs != NULL )
     {
         const SfxPoolItem* pItem;
@@ -216,11 +216,11 @@ void ScCellShell::ExecuteCursorSel( SfxRequest& rReq )
     }
 
     SCsROW nMovY = nRepeat;
-    // Horizontal direction depends on whether or not the UI language is RTL.
+    
     SCsCOL nMovX = nRepeat;
     if (GetViewData()->GetDocument()->IsLayoutRTL(GetViewData()->GetTabNo()))
     {
-        // mirror horizontal movement for right-to-left mode.
+        
         nMovX = -nRepeat;
     }
 
@@ -290,8 +290,8 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
             pTabViewShell->SelectNextTab( -1, (nSlotId == SID_PREV_TABLE_SEL) );
             break;
 
-        //  cursor movements in range do not originate from Basic,
-        //  because the ScSbxRange-object changes the marking at input
+        
+        
 
         case SID_NEXT_UNPROTECT:
             pTabViewShell->FindNextUnprot( false, !rReq.IsAPI() );
@@ -404,14 +404,14 @@ void ScCellShell::ExecutePage( SfxRequest& rReq )
     }
     else
     {
-        //  evaluate locked selection mode
+        
 
         sal_uInt16 nLocked = pTabViewShell->GetLockedModifiers();
         if ( nLocked & KEY_SHIFT )
-            bSel = sal_True;                // EXT
+            bSel = sal_True;                
         else if ( nLocked & KEY_MOD1 )
         {
-            // ADD mode: keep the selection, start a new block when marking with shift again
+            
             bKeep = true;
         }
     }

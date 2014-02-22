@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <svtools/insdlg.hxx>
@@ -34,11 +34,11 @@
 
 using namespace ::com::sun::star;
 
-//---------------------------------------------
-// this struct conforms to the Microsoft
-// OBJECTDESCRIPTOR -> see oleidl.h
-// (MS platform sdk)
-//---------------------------------------------
+
+
+
+
+
 
 struct OleObjectDescriptor
 {
@@ -91,7 +91,7 @@ void SvObjectServerList::Remove( const SvGlobalName & rName )
     }
 }
 
-//---------------------------------------------------------------------
+
 void SvObjectServerList::FillInsertObjects()
 /* [Description]
 
@@ -139,7 +139,7 @@ void SvObjectServerList::FillInsertObjects()
 
                     if ( !aUIName.isEmpty() )
                     {
-                        // replace %PRODUCTNAME
+                        
                         sal_Int32 nIndex = aUIName.indexOf( aStringProductName );
                         while( nIndex != -1 )
                         {
@@ -149,7 +149,7 @@ void SvObjectServerList::FillInsertObjects()
                             nIndex = aUIName.indexOf( aStringProductName );
                         }
 
-                        // replace %PRODUCTVERSION
+                        
                         nIndex = aUIName.indexOf( aStringProductVersion );
                         while( nIndex != -1 )
                         {
@@ -164,7 +164,7 @@ void SvObjectServerList::FillInsertObjects()
                     if( aClassName.MakeId( aClassID) )
                     {
                         if( !Get( aClassName ) )
-                            // noch nicht eingetragen
+                            
                             aObjectServerList.push_back( SvObjectServer( aClassName, aUIName ) );
                     }
                 }
@@ -282,7 +282,7 @@ OUString SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
 
     return aUIName;
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rData, OUString& _rName, OUString& _rSource, SotFormatStringId& _nFormat)
 {
     sal_Bool bRet = sal_False;
@@ -301,30 +301,30 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
             OleObjectDescriptor* pOleObjDescr =
                 reinterpret_cast< OleObjectDescriptor* >( anySequence.getArray( ) );
 
-            // determine the user friendly description of the embedded object
+            
             if ( pOleObjDescr->dwFullUserTypeName )
             {
-                // we set the pointer to the start of user friendly description
-                // string. it starts  at &OleObjectDescriptor + dwFullUserTypeName.
-                // dwFullUserTypeName is the offset in bytes.
-                // the user friendly description string is '\0' terminated.
+                
+                
+                
+                
                 const sal_Unicode* pUserTypeName =
                     reinterpret_cast< sal_Unicode* >(
                         reinterpret_cast< sal_Char* >( pOleObjDescr ) +
                             pOleObjDescr->dwFullUserTypeName );
 
                 _rName += pUserTypeName;
-                // the following statement was here for historical reasons, it is commented out since it causes bug i49460
-                // _nFormat = SOT_FORMATSTR_ID_EMBED_SOURCE_OLE;
+                
+                
             }
 
-            // determine the source of the embedded object
+            
             if ( pOleObjDescr->dwSrcOfCopy )
             {
-                // we set the pointer to the start of source string
-                // it starts  at &OleObjectDescriptor + dwSrcOfCopy.
-                // dwSrcOfCopy is the offset in bytes.
-                // the source string is '\0' terminated.
+                
+                
+                
+                
                 const sal_Unicode* pSrcOfCopy =
                     reinterpret_cast< sal_Unicode* >(
                         reinterpret_cast< sal_Char* >( pOleObjDescr ) +
@@ -339,6 +339,6 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
     }
     return bRet;
 }
-// -----------------------------------------------------------------------------
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

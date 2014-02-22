@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <sfx2/sfxsids.hrc>
@@ -76,7 +76,7 @@ using namespace ::comphelper;
 namespace dbaui
 {
 
-// AddTableDialogContext
+
 class AddTableDialogContext : public IAddTableDialogContext
 {
     OJoinController& m_rController;
@@ -89,7 +89,7 @@ public:
 
     virtual ~AddTableDialogContext() {}
 
-    // IAddTableDialogContext
+    
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     getConnection() const;
     virtual bool    allowViews() const;
@@ -146,7 +146,7 @@ OJoinTableView* AddTableDialogContext::getTableView() const
     return NULL;
 }
 
-// OJoinController
+
 
 OJoinController::OJoinController(const Reference< XComponentContext >& _rM)
     :OJoinController_BASE(_rM)
@@ -198,11 +198,11 @@ void OJoinController::impl_onModifyChanged()
 
 void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, long nOffsetY)
 {
-    // the data for the window
+    
     TTableWindowData::value_type pData = pTabWin->GetData();
     OSL_ENSURE(pData != 0, "SaveTabWinPosSize : TabWin hat keine Daten !");
 
-    // set Position & Size of data anew (with current window parameters)
+    
     Point aPos = pTabWin->GetPosPixel();
     aPos.X() += nOffsetX;
     aPos.Y() += nOffsetY;
@@ -214,7 +214,7 @@ void OJoinController::SaveTabWinPosSize(OTableWindow* pTabWin, long nOffsetX, lo
 FeatureState OJoinController::GetState(sal_uInt16 _nId) const
 {
     FeatureState aReturn;
-        // (disabled automatically)
+        
     aReturn.bEnabled = sal_True;
 
     switch (_nId)
@@ -252,15 +252,15 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
     {
         case ID_BROWSER_EDITDOC:
             if(isEditable())
-            { // the state should be changed to not editable
+            { 
                 switch (saveModified())
                 {
                     case RET_CANCEL:
-                        // don't change anything here so return
+                        
                         return;
                     case RET_NO:
                         reset();
-                        setModified(sal_False);     // and we are not modified yet
+                        setModified(sal_False);     
                         break;
                     default:
                         break;
@@ -297,10 +297,10 @@ void OJoinController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >& 
 
 void OJoinController::SaveTabWinsPosSize( OJoinTableView::OTableWindowMap* pTabWinList, long nOffsetX, long nOffsetY )
 {
-    // Deletion and recreation of the old implementation with the current model is not correct anymore:
-    // The TabWins have a pointer to their data, but they are managed by me. When I delete the old ones, the TabWins suddenly have a pointer to objects, which no longer exist.
-    // If the TabWins had a SetData, I could save that effort... but they don't, further I also would still have to set information anew, which actually didn't change.
-    // So I don't delete the TabWinDatas, but only update them.
+    
+    
+    
+    
     OSL_ENSURE(m_vTableData.size() == pTabWinList->size(),
         "OJoinController::SaveTabWinsPosSize : inkonsistenter Zustand : sollte genausviel TabWinDatas haben wie TabWins !");
 
@@ -434,6 +434,6 @@ TTableWindowData::value_type OJoinController::createTableWindowData(const OUStri
     return TTableWindowData::value_type();
 }
 
-}   // namespace dbaui
+}   
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

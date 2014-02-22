@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -44,7 +44,7 @@ struct DdeItemImpData
 
 class DdeItemImp : public std::vector<DdeItemImpData> {};
 
-// --- DdeInternat::SvrCallback() ----------------------------------
+
 
 HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
@@ -222,7 +222,7 @@ found:
     case XTYP_REQUEST:
     case XTYP_ADVREQ:
         {
-            OUString aRes;          // darf erst am Ende freigegeben werden!!
+            OUString aRes;          
             if ( pTopic->IsSystemTopic() )
             {
                 if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_TOPICS) )
@@ -285,10 +285,10 @@ found:
 
     case XTYP_ADVSTART:
         {
-            // wird das Item zum erstenmal ein HotLink ?
+            
             if( !pItem->pImpData && pTopic->StartAdviseLoop() )
             {
-                // dann wurde das Item ausgewechselt
+                
                 std::vector<DdeItem*>::iterator it(std::find(pTopic->aItems.begin(),
                                                              pTopic->aItems.end(),
                                                              pItem));
@@ -302,7 +302,7 @@ found:
                 {
                     if( *(*iter)->pName == hText2 )
                     {
-                        // es wurde tatsaechlich ausgewechselt
+                        
                         delete pItem;
                         pItem = 0;
                         break;
@@ -310,7 +310,7 @@ found:
                 }
 
                 if( pItem )
-                    // es wurde doch nicht ausgewechselt, also wieder rein
+                    
                     pTopic->aItems.push_back(pItem);
                 else
                     pItem = iter != pTopic->aItems.end() ? *iter : NULL;
@@ -356,7 +356,7 @@ found:
     return (HDDEDATA)NULL;
 }
 
-// --- DdeInternat::FindService() ----------------------------------
+
 
 DdeService* DdeInternal::FindService( HSZ hService )
 {
@@ -372,7 +372,7 @@ DdeService* DdeInternal::FindService( HSZ hService )
     return NULL;
 }
 
-// --- DdeInternat::FindTopic() ------------------------------------
+
 
 DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
 {
@@ -383,7 +383,7 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
     DBG_ASSERT(pInst,"SVDDE:No instance data");
 
     do
-    {            // middle check loop
+    {            
         for ( iter = rTopics.begin(); iter != rTopics.end(); ++iter )
         {
             if ( *(*iter)->pName == hTopic )
@@ -394,18 +394,18 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
         if( !bContinue )
             break;
 
-        // dann befragen wir doch mal unsere Ableitung:
+        
         TCHAR chBuf[250];
         DdeQueryString(pInst->hDdeInstSvr,hTopic,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
         bContinue = rService.MakeTopic( reinterpret_cast<const sal_Unicode*>(chBuf) );
-        // dann muessen wir noch mal suchen
+        
     }
     while( bContinue );
 
     return 0;
 }
 
-// --- DdeInternal::FindItem() -------------------------------------
+
 
 DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
 {
@@ -416,7 +416,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
     bool bContinue = false;
 
     do
-    {            // middle check loop
+    {            
 
         for ( iter = rItems.begin(); iter != rItems.end(); ++iter )
         {
@@ -427,18 +427,18 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
         if( !bContinue )
             break;
 
-        // dann befragen wir doch mal unsere Ableitung:
+        
         TCHAR chBuf[250];
         DdeQueryString(pInst->hDdeInstSvr,hItem,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
         bContinue = rTopic.MakeItem( reinterpret_cast<const sal_Unicode*>(chBuf) );
-        // dann muessen wir noch mal suchen
+        
     }
     while( bContinue );
 
     return 0;
 }
 
-// --- DdeService::DdeService() ------------------------------------
+
 
 DdeService::DdeService( const OUString& rService )
 {
@@ -485,7 +485,7 @@ DdeService::DdeService( const OUString& rService )
     AddTopic( *pSysTopic );
 }
 
-// --- DdeService::~DdeService() -----------------------------------
+
 
 DdeService::~DdeService()
 {
@@ -494,11 +494,11 @@ DdeService::~DdeService()
     if ( pInst->pServicesSvr )
         pInst->pServicesSvr->erase(std::remove(pInst->pServicesSvr->begin(), pInst->pServicesSvr->end(), this), pInst->pServicesSvr->end());
 
-    // MT: Im Auftrage des Herrn (AM) auskommentiert...
-    // Grund:
-    // Bei Client/Server werden die Server nicht beendet, wenn mehr
-    // als einer gestartet.
-    // Weil keine System-Messagequeue ?!
+    
+    
+    
+    
+    
 
     delete pSysTopic;
     delete pName;
@@ -519,14 +519,14 @@ DdeService::~DdeService()
     delete pConv;
 }
 
-// --- DdeService::GetName() ---------------------------------------
+
 
 const OUString DdeService::GetName() const
 {
     return pName->toOUString();
 }
 
-// --- DdeService::GetServices() -----------------------------------
+
 
 DdeServices& DdeService::GetServices()
 {
@@ -535,7 +535,7 @@ DdeServices& DdeService::GetServices()
     return *(pInst->pServicesSvr);
 }
 
-// --- DdeService::AddTopic() --------------------------------------
+
 
 void DdeService::AddTopic( const DdeTopic& rTopic )
 {
@@ -543,7 +543,7 @@ void DdeService::AddTopic( const DdeTopic& rTopic )
     aTopics.push_back((DdeTopic *) &rTopic);
 }
 
-// --- DdeService::RemoveTopic() -----------------------------------
+
 
 void DdeService::RemoveTopic( const DdeTopic& rTopic )
 {
@@ -553,8 +553,8 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
         if ( !DdeCmpStringHandles (*(*iter)->pName, *rTopic.pName ) )
         {
             aTopics.erase(iter);
-            // JP 27.07.95: und alle Conversions loeschen !!!
-            //              (sonst wird auf geloeschten Topics gearbeitet!!)
+            
+            
             for( size_t n = pConv->size(); n; )
             {
                 Conversation* pC = (*pConv)[ --n ];
@@ -571,7 +571,7 @@ void DdeService::RemoveTopic( const DdeTopic& rTopic )
     }
 }
 
-// --- DdeService::HasCbFormat() -----------------------------------
+
 
 bool DdeService::HasCbFormat( sal_uInt16 nFmt )
 {
@@ -581,14 +581,14 @@ bool DdeService::HasCbFormat( sal_uInt16 nFmt )
     return false;
 }
 
-// --- DdeService::HasFormat() -------------------------------------
+
 
 bool DdeService::HasFormat( sal_uLong nFmt )
 {
     return HasCbFormat( (sal_uInt16)DdeData::GetExternalFormat( nFmt ));
 }
 
-// --- DdeService::AddFormat() -------------------------------------
+
 
 void DdeService::AddFormat( sal_uLong nFmt )
 {
@@ -599,7 +599,7 @@ void DdeService::AddFormat( sal_uLong nFmt )
     aFormats.push_back( nFmt );
 }
 
-// --- DdeService::RemoveFormat() ----------------------------------
+
 
 void DdeService::RemoveFormat( sal_uLong nFmt )
 {
@@ -614,7 +614,7 @@ void DdeService::RemoveFormat( sal_uLong nFmt )
     }
 }
 
-// --- DdeTopic::DdeTopic() ----------------------------------------
+
 
 DdeTopic::DdeTopic( const OUString& rName )
 {
@@ -623,7 +623,7 @@ DdeTopic::DdeTopic( const OUString& rName )
     pName = new DdeString( pInst->hDdeInstSvr, rName );
 }
 
-// --- DdeTopic::~DdeTopic() ---------------------------------------
+
 
 DdeTopic::~DdeTopic()
 {
@@ -637,21 +637,21 @@ DdeTopic::~DdeTopic()
     delete pName;
 }
 
-// --- DdeTopic::GetName() -----------------------------------------
+
 
 const OUString DdeTopic::GetName() const
 {
     return pName->toOUString();
 }
 
-// --- DdeTopic::IsSystemTopic() -----------------------------------
+
 
 bool DdeTopic::IsSystemTopic()
 {
     return GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC);
 }
 
-// --- DdeTopic::AddItem() -----------------------------------------
+
 
 DdeItem* DdeTopic::AddItem( const DdeItem& r )
 {
@@ -669,7 +669,7 @@ DdeItem* DdeTopic::AddItem( const DdeItem& r )
     return s;
 }
 
-// --- DdeTopic::InsertItem() -----------------------------------------
+
 
 void DdeTopic::InsertItem( DdeItem* pNew )
 {
@@ -680,7 +680,7 @@ void DdeTopic::InsertItem( DdeItem* pNew )
     }
 }
 
-// --- DdeTopic::RemoveItem() --------------------------------------
+
 
 void DdeTopic::RemoveItem( const DdeItem& r )
 {
@@ -699,7 +699,7 @@ void DdeTopic::RemoveItem( const DdeItem& r )
     }
 }
 
-// --- DdeTopic::NotifyClient() ------------------------------------
+
 
 void DdeTopic::NotifyClient( const OUString& rItem )
 {
@@ -716,21 +716,21 @@ void DdeTopic::NotifyClient( const OUString& rItem )
     }
 }
 
-// --- DdeTopic::Connect() -----------------------------------------
+
 
 void DdeTopic::Connect( sal_IntPtr nId )
 {
     aConnectLink.Call( (void*)nId );
 }
 
-// --- DdeTopic::Disconnect() --------------------------------------
+
 
 void DdeTopic::Disconnect( sal_IntPtr nId )
 {
     aDisconnectLink.Call( (void*)nId );
 }
 
-// --- DdeTopic::_Disconnect() --------------------------------------
+
 
 void DdeTopic::_Disconnect( sal_IntPtr nId )
 {
@@ -741,7 +741,7 @@ void DdeTopic::_Disconnect( sal_IntPtr nId )
     Disconnect( nId );
 }
 
-// --- DdeTopic::Get() ---------------------------------------------
+
 
 DdeData* DdeTopic::Get( sal_uIntPtr nFmt )
 {
@@ -751,7 +751,7 @@ DdeData* DdeTopic::Get( sal_uIntPtr nFmt )
         return NULL;
 }
 
-// --- DdeTopic::Put() ---------------------------------------------
+
 
 bool DdeTopic::Put( const DdeData* r )
 {
@@ -761,7 +761,7 @@ bool DdeTopic::Put( const DdeData* r )
         return false;
 }
 
-// --- DdeTopic::Execute() -----------------------------------------
+
 
 bool DdeTopic::Execute( const OUString* r )
 {
@@ -771,7 +771,7 @@ bool DdeTopic::Execute( const OUString* r )
         return false;
 }
 
-// --- DdeTopic::GetConvId() ---------------------------------------
+
 
 long DdeTopic::GetConvId()
 {
@@ -780,21 +780,21 @@ long DdeTopic::GetConvId()
     return pInst->hCurConvSvr;
 }
 
-// --- DdeTopic::StartAdviseLoop() ---------------------------------
+
 
 bool DdeTopic::StartAdviseLoop()
 {
     return false;
 }
 
-// --- DdeTopic::StopAdviseLoop() ----------------------------------
+
 
 bool DdeTopic::StopAdviseLoop()
 {
     return false;
 }
 
-// --- DdeItem::DdeItem() ------------------------------------------
+
 
 DdeItem::DdeItem( const sal_Unicode* p )
 {
@@ -806,7 +806,7 @@ DdeItem::DdeItem( const sal_Unicode* p )
     pImpData = 0;
 }
 
-// --- DdeItem::DdeItem() ------------------------------------------
+
 
 DdeItem::DdeItem( const OUString& r)
 {
@@ -818,7 +818,7 @@ DdeItem::DdeItem( const OUString& r)
     pImpData = 0;
 }
 
-// --- DdeItem::DdeItem() ------------------------------------------
+
 
 DdeItem::DdeItem( const DdeItem& r)
 {
@@ -830,7 +830,7 @@ DdeItem::DdeItem( const DdeItem& r)
     pImpData = 0;
 }
 
-// --- DdeItem::~DdeItem() -----------------------------------------
+
 
 DdeItem::~DdeItem()
 {
@@ -841,14 +841,14 @@ DdeItem::~DdeItem()
     delete pImpData;
 }
 
-// --- DdeItem::GetName() ------------------------------------------
+
 
 const OUString DdeItem::GetName() const
 {
     return pName->toOUString();
 }
 
-// --- DdeItem::NotifyClient() ------------------------------------------
+
 
 void DdeItem::NotifyClient()
 {
@@ -860,7 +860,7 @@ void DdeItem::NotifyClient()
     }
 }
 
-// --- DdeItem::IncMonitor() ------------------------------------------
+
 
 void DdeItem::IncMonitor( sal_uLong nHCnv )
 {
@@ -883,7 +883,7 @@ void DdeItem::IncMonitor( sal_uLong nHCnv )
     pImpData->push_back( DdeItemImpData( nHCnv ) );
 }
 
-// --- DdeItem::DecMonitor() ------------------------------------------
+
 
 void DdeItem::DecMonitor( sal_uLong nHCnv )
 {
@@ -913,7 +913,7 @@ void DdeItem::DecMonitor( sal_uLong nHCnv )
     }
 }
 
-// --- DdeItem::GetLinks() ------------------------------------------
+
 
 short DdeItem::GetLinks()
 {
@@ -928,7 +928,7 @@ short DdeItem::GetLinks()
     return nCnt;
 }
 
-// --- DdeGetPutItem::DdeGetPutItem() ------------------------------
+
 
 DdeGetPutItem::DdeGetPutItem( const sal_Unicode* p )
     : DdeItem( p )
@@ -936,7 +936,7 @@ DdeGetPutItem::DdeGetPutItem( const sal_Unicode* p )
     nType = DDEGETPUTITEM;
 }
 
-// --- DdeGetPutItem::DdeGetPutItem() ------------------------------
+
 
 DdeGetPutItem::DdeGetPutItem( const OUString& rStr )
     : DdeItem( rStr )
@@ -944,7 +944,7 @@ DdeGetPutItem::DdeGetPutItem( const OUString& rStr )
     nType = DDEGETPUTITEM;
 }
 
-// --- DdeGetPutItem::DdeGetPutItem() ------------------------------
+
 
 DdeGetPutItem::DdeGetPutItem( const DdeItem& rItem )
     : DdeItem( rItem )
@@ -953,28 +953,28 @@ DdeGetPutItem::DdeGetPutItem( const DdeItem& rItem )
 }
 
 
-// --- DdeGetPutData::Get() ----------------------------------------
+
 
 DdeData* DdeGetPutItem::Get( sal_uLong )
 {
     return 0;
 }
 
-// --- DdeGetPutData::Put() ----------------------------------------
+
 
 bool DdeGetPutItem::Put( const DdeData* )
 {
     return false;
 }
 
-// --- DdeGetPutData::AdviseLoop() ---------------------------------
+
 
 void DdeGetPutItem::AdviseLoop( bool )
 {
 }
 
 
-// --- DdeService::SysItems() --------------------------------------
+
 
 OUString DdeService::SysItems()
 {
@@ -999,7 +999,7 @@ OUString DdeService::SysItems()
     return s;
 }
 
-// --- DdeService::Topics() ----------------------------------------
+
 
 OUString DdeService::Topics()
 {
@@ -1018,7 +1018,7 @@ OUString DdeService::Topics()
     return s;
 }
 
-// --- DdeService::Formats() ---------------------------------------
+
 
 OUString DdeService::Formats()
 {
@@ -1055,21 +1055,21 @@ OUString DdeService::Formats()
     return s;
 }
 
-// --- DdeService::Status() ----------------------------------------
+
 
 OUString DdeService::Status()
 {
     return IsBusy() ? OUString("Busy\r\n") : OUString("Ready\r\n");
 }
 
-// --- DdeService::IsBusy() ----------------------------------------
+
 
 bool DdeService::IsBusy()
 {
     return false;
 }
 
-// --- DdeService::GetHelp() ----------------------------------------
+
 
 OUString DdeService::GetHelp()
 {

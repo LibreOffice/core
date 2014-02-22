@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #ifdef _MSC_VER
@@ -59,37 +59,37 @@ namespace
 
         return  result;
     }
-} // namespace
+} 
 
 extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 {
-    // This CustomAction is necessary for updates from OOo 3.0, OOo 3.1 and OOo 3.2 to versions
-    // OOo 3.3 or later. This is caused by a change of INSTALLLOCATION, that starting with OOo 3.3
-    // contains the name of the product again (instead of only "c:\program files"). Unfortunately
-    // this causes in an update installation, that INSTALLLOCATION is set to "c:\program files",
-    // so that in an OOo 3.3 or later, the directory "program" or "share" are directly created
-    // below "c:\program files".
+    
+    
+    
+    
+    
+    
 
     HKEY    hKey;
 
-    // Reading property OFFICEDIRHOSTNAME_, that contains the part of the path behind
-    // the program files folder.
+    
+    
 
     std::_tstring   sInstallLocation = GetMsiProperty( handle, TEXT("INSTALLLOCATION") );
     std::_tstring   sOfficeDirHostname = GetMsiProperty( handle, TEXT("OFFICEDIRHOSTNAME_") );
 
-    // If sInstallLocation ends with (contains) the string sOfficeDirHostname,
-    // INSTALLLOCATION is good and nothing has to be done here.
+    
+    
 
     bool pathCompletionRequired = true;
 
     if ( _tcsstr( sInstallLocation.c_str(), sOfficeDirHostname.c_str() ) )
     {
-        pathCompletionRequired = false;  // nothing to do
+        pathCompletionRequired = false;  
     }
 
-    // If the path INSTALLLOCATION does not end with this string, INSTALLLOCATION is maybe
-    // transferred from an OOo 3.0, OOo 3.1 and OOo 3.2 and need to be changed therefore.
+    
+    
 
     if ( pathCompletionRequired )
     {
@@ -97,7 +97,7 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
         std::_tstring   sDefinedName = GetMsiProperty( handle, TEXT("DEFINEDPRODUCT") );
         std::_tstring   sUpgradeCode = GetMsiProperty( handle, TEXT("UpgradeCode") );
 
-        // sUpdateVersion can be "3.0", "3.1" or "3.2"
+        
 
         std::_tstring   sProductKey30 = "Software\\" + sManufacturer + "\\" + sDefinedName +
                                             "\\" + "3.0" + "\\" + sUpgradeCode;
@@ -143,9 +143,9 @@ extern "C" UINT __stdcall CompleteInstallPath( MSIHANDLE handle )
 
         if ( oldVersionExists )
         {
-            // Adding the new path content sOfficeDirHostname
+            
             sInstallLocation = sInstallLocation + sOfficeDirHostname;
-            // Setting the new property value
+            
             MsiSetProperty(handle, TEXT("INSTALLLOCATION"), sInstallLocation.c_str());
         }
     }

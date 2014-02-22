@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "optctl.hxx"
@@ -22,14 +22,14 @@
 #include <cuires.hrc>
 #include <svl/ctloptions.hxx>
 
-// class SvxCTLOptionsPage -----------------------------------------------------
+
 
 IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
 {
     sal_Bool bIsSequenceChecking = m_pSequenceCheckingCB->IsChecked();
     m_pRestrictedCB->Enable( bIsSequenceChecking );
     m_pTypeReplaceCB->Enable( bIsSequenceChecking );
-    // #i48117#: by default restricted and type&replace have to be switched on
+    
     if(bIsSequenceChecking)
     {
         m_pTypeReplaceCB->Check( true );
@@ -56,22 +56,22 @@ SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) 
 
     m_pNumeralsLB->SetDropDownLineCount( m_pNumeralsLB->GetEntryCount() );
 }
-// -----------------------------------------------------------------------------
+
 SvxCTLOptionsPage::~SvxCTLOptionsPage()
 {
 }
-// -----------------------------------------------------------------------------
+
 SfxTabPage* SvxCTLOptionsPage::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return new SvxCTLOptionsPage( pParent, rAttrSet );
 }
-// -----------------------------------------------------------------------------
+
 sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
 {
     sal_Bool bModified = sal_False;
     SvtCTLOptions aCTLOptions;
 
-    // Sequence checking
+    
     sal_Bool bChecked = m_pSequenceCheckingCB->IsChecked();
     if ( bChecked != m_pSequenceCheckingCB->GetSavedValue() )
     {
@@ -112,7 +112,7 @@ sal_Bool SvxCTLOptionsPage::FillItemSet( SfxItemSet& )
 
     return bModified;
 }
-// -----------------------------------------------------------------------------
+
 void SvxCTLOptionsPage::Reset( const SfxItemSet& )
 {
     SvtCTLOptions aCTLOptions;

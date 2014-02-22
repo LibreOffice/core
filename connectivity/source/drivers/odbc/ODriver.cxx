@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "odbc/ODriver.hxx"
@@ -31,14 +31,14 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
-// --------------------------------------------------------------------------------
+
 ODBCDriver::ODBCDriver(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxFactory)
     :ODriver_BASE(m_aMutex)
     ,m_xORB(_rxFactory)
     ,m_pDriverHandle(SQL_NULL_HANDLE)
 {
 }
-// --------------------------------------------------------------------------------
+
 void ODBCDriver::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -55,16 +55,16 @@ void ODBCDriver::disposing()
     ODriver_BASE::disposing();
 }
 
-// static ServiceInfo
-//------------------------------------------------------------------------------
+
+
 OUString ODBCDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
     return OUString("com.sun.star.comp.sdbc.ODBCDriver");
-        // this name is referenced in the configuration and in the odbc.xml
-        // Please take care when changing it.
+        
+        
 }
 
-//------------------------------------------------------------------------------
+
 Sequence< OUString > ODBCDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< OUString > aSNS( 1 );
@@ -72,7 +72,7 @@ Sequence< OUString > ODBCDriver::getSupportedServiceNames_Static(  ) throw (Runt
     return aSNS;
 }
 
-//------------------------------------------------------------------
+
 OUString SAL_CALL ODBCDriver::getImplementationName(  ) throw(RuntimeException)
 {
     return getImplementationName_Static();
@@ -83,13 +83,13 @@ sal_Bool SAL_CALL ODBCDriver::supportsService( const OUString& _rServiceName ) t
     return cppu::supportsService(this, _rServiceName);
 }
 
-//------------------------------------------------------------------
+
 Sequence< OUString > SAL_CALL ODBCDriver::getSupportedServiceNames(  ) throw(RuntimeException)
 {
     return getSupportedServiceNames_Static();
 }
 
-// --------------------------------------------------------------------------------
+
 Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
 {
     if ( ! acceptsURL(url) )
@@ -108,13 +108,13 @@ Reference< XConnection > SAL_CALL ODBCDriver::connect( const OUString& url, cons
 
     return xCon;
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL ODBCDriver::acceptsURL( const OUString& url )
         throw(SQLException, RuntimeException)
 {
     return url.startsWith("sdbc:odbc:");
 }
-// --------------------------------------------------------------------------------
+
 Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
 {
     if ( acceptsURL(url) )
@@ -196,18 +196,18 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const OUStr
     ::dbtools::throwGenericSQLException(sMessage ,*this);
     return Sequence< DriverPropertyInfo >();
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODBCDriver::getMajorVersion(  ) throw(RuntimeException)
 {
     return 1;
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL ODBCDriver::getMinorVersion(  ) throw(RuntimeException)
 {
     return 0;
 }
-// --------------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

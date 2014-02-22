@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <osl/thread.h>
@@ -31,7 +31,7 @@ class FilterConfigItem;
 enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 
 
-// -----------------------------Feld-Typen-------------------------------
+
 
 #define BegDocumnMagic 0xA8A8 /* Begin Document */
 #define EndDocumnMagic 0xA8A9 /* End Document   */
@@ -60,7 +60,7 @@ enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 #define MapCodFntMagic 0x8AAB /* Map Coded Font    */
 #define MapDatResMagic 0xC3AB /* Map Data Resource */
 
-// -----------------------------Order-Typen-------------------------------
+
 
 #define GOrdGivArc 0xC6   /* 1 Arc at given position   */
 #define GOrdCurArc 0x86   /* 1 Arc at current position */
@@ -201,11 +201,11 @@ enum PenStyle { PEN_NULL, PEN_SOLID, PEN_DOT, PEN_DASH, PEN_DASHDOT };
 #define GOrdSVwWin 0x27   /* 1 Set viewing window          */
 #define GOrdPVwWin 0x67   /* 1 Push and set viewing window */
 
-//============================ OS2METReader ==================================
+
 
 struct OSPalette {
     OSPalette * pSucc;
-    sal_uInt32 * p0RGB; // May be NULL!
+    sal_uInt32 * p0RGB; 
     sal_uInt16 nSize;
 };
 
@@ -241,8 +241,8 @@ struct OSBitmap {
     sal_uLong  nID;
     Bitmap     aBitmap;
 
-    // required during reading of the bitmap:
-    SvStream * pBMP; // pointer to temporary Windows-BMP file or NULL
+    
+    SvStream * pBMP; 
     sal_uInt32 nWidth, nHeight;
     sal_uInt16 nBitsPerPixel;
     sal_uLong  nMapPos;
@@ -251,7 +251,7 @@ struct OSBitmap {
 struct OSAttr {
     OSAttr *   pSucc;
     sal_uInt16 nPushOrder;
-    sal_uInt8  nIvAttrA, nIvAttrP; // special variables for the Order "GOrdPIvAtr"
+    sal_uInt8  nIvAttrA, nIvAttrP; 
 
     Color    aLinCol;
     Color    aLinBgCol;
@@ -275,33 +275,33 @@ struct OSAttr {
     RasterOp eImgBgMix;
     long     nArcP, nArcQ, nArcR, nArcS;
     short    nChrAng;
-//  long     nChrBreakExtra;
+
     Size     aChrCellSize;
-//  sal_uInt8     nChrDir;
-//  long     nChrExtra;
-//  sal_uInt8     nChrPrec;
+
+
+
     sal_uLong    nChrSet;
-//  Size     aChrShear;
+
     Point    aCurPos;
-//  long     nFracLinWidth;
-//  sal_uInt8     nLinEnd;
-//  sal_uInt8     nLinJoin;
+
+
+
     PenStyle eLinStyle;
     sal_uInt16   nLinWidth;
     Size     aMrkCellSize;
     sal_uInt8     nMrkPrec;
     sal_uInt8     nMrkSet;
     sal_uInt8     nMrkSymbol;
-//  //...    aModTransform;
-//  Point    aPatRef;
-//  sal_uInt8     nPatSet;
+
+
+
     sal_Bool     bFill;
-//  sal_uLong    nPickId;
-//  //...    aSegBound;
+
+
     sal_uInt16   nStrLinWidth;
-//  sal_uInt8     nTxtAlignHor,nTxtAlignVer;
-//  //...    aViewTransform;
-//  //...    aViewWindow;
+
+
+
 };
 
 class OS2METReader {
@@ -310,25 +310,25 @@ private:
 
     long ErrorCode;
 
-    SvStream      * pOS2MET;             // the OS2MET file to be read
-    VirtualDevice * pVirDev;             // here the drawing methods are being called
-                                         // While doing this a recording in the GDIMetaFile
-                                         // will take place.
-    sal_uLong       nOrigPos;            // initial position  in pOS2MET
-    sal_uInt16      nOrigNumberFormat;   // initial number format of pOS2MET
-    Rectangle       aBoundingRect;       // bounding rectangle as stored in the file
-    Rectangle       aCalcBndRect;        // bounding rectangle calculated on our own
-    MapMode         aGlobMapMode;        // resolution of the picture
+    SvStream      * pOS2MET;             
+    VirtualDevice * pVirDev;             
+                                         
+                                         
+    sal_uLong       nOrigPos;            
+    sal_uInt16      nOrigNumberFormat;   
+    Rectangle       aBoundingRect;       
+    Rectangle       aCalcBndRect;        
+    MapMode         aGlobMapMode;        
     sal_Bool        bCoord32;
 
     OSPalette  * pPaletteStack;
 
     LineInfo aLineInfo;
 
-    OSArea   * pAreaStack; // Areas that are being worked on
+    OSArea   * pAreaStack; 
 
-    OSPath   * pPathStack; // Paths that are being worked on
-    OSPath   * pPathList;  // finished Paths
+    OSPath   * pPathStack; 
+    OSPath   * pPathList;  
 
     OSFont   * pFontList;
 
@@ -354,8 +354,8 @@ private:
 
     void SetPalette0RGB(sal_uInt16 nIndex, sal_uLong nCol);
     sal_uInt32 GetPalette0RGB(sal_uInt32 nIndex);
-        // gets color from palette, or, if it doesn't exist,
-        // interprets nIndex as immediate RGB value.
+        
+        
     Color GetPaletteColor(sal_uInt32 nIndex);
 
 
@@ -394,11 +394,11 @@ public:
     ~OS2METReader();
 
     void ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaFile );
-        // Reads from the stream a OS2MET file und and fills up the GDIMetaFile
+        
 
 };
 
-//=================== Methods of OS2METReader ==============================
+
 
 sal_Bool OS2METReader::Callback(sal_uInt16 /*nPercent*/)
 {
@@ -686,7 +686,7 @@ void OS2METReader::SetPen( const Color& rColor, sal_uInt16 nLineWidth, PenStyle 
             eLineStyle = LINE_DASH;
         break;
         case PEN_SOLID:
-        break;  // -Wall not handled...
+        break;  
     }
     aLineInfo.SetStyle( eLineStyle );
 }
@@ -1000,10 +1000,10 @@ void OS2METReader::ReadChrStr(sal_Bool bGivenPos, sal_Bool bMove, sal_Bool bExtr
     {
         Polygon aDummyPoly(4);
 
-        aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() ), 0);                                 // TOP LEFT
-        aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() - aSize.Height() ), 1);                // BOTTOM LEFT
-        aDummyPoly.SetPoint( Point( aP0.X() + aSize.Width(), aP0.Y() ), 2);                 // TOP RIGHT
-        aDummyPoly.SetPoint( Point( aP0.X() + aSize.Width(), aP0.Y() - aSize.Height() ), 3);// BOTTOM RIGHT
+        aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() ), 0);                                 
+        aDummyPoly.SetPoint( Point( aP0.X(), aP0.Y() - aSize.Height() ), 1);                
+        aDummyPoly.SetPoint( Point( aP0.X() + aSize.Width(), aP0.Y() ), 2);                 
+        aDummyPoly.SetPoint( Point( aP0.X() + aSize.Width(), aP0.Y() - aSize.Height() ), 3);
         aDummyPoly.Rotate( aP0, (short)aAttr.nChrAng );
         if ( bMove )
             aAttr.aCurPos = aDummyPoly.GetPoint( 0 );
@@ -1022,17 +1022,17 @@ void OS2METReader::ReadArc(sal_Bool bGivenPos)
     aAttr.aCurPos=aP3;
     SetPen( aAttr.aLinCol, aAttr.nStrLinWidth, aAttr.eLinStyle );
     SetRasterOp(aAttr.eLinMix);
-    // Ok, given are 3 point of the ellipse, and the relation
-    // of width and height (as p to q):
+    
+    
     x1=aP1.X(); y1=aP1.Y();
     x2=aP2.X(); y2=aP2.Y();
     x3=aP3.X(); y3=aP3.Y();
     p=aAttr.nArcP;q=aAttr.nArcQ;
-    // Calculation of the center point cx, cy of the ellipse:
+    
     ncy=2*p*p*((y3-y1)*(x2-x1)-(y1-y2)*(x1-x3));
     ncx=2*q*q*(x2-x1);
     if ( (ncx<0.001 && ncx>-0.001) || (ncy<0.001 && ncy>-0.001) ) {
-        // Calculation impossible, points are all on the same straight line
+        
         pVirDev->DrawLine(aP1,aP2);
         pVirDev->DrawLine(aP2,aP3);
         return;
@@ -1040,11 +1040,11 @@ void OS2METReader::ReadArc(sal_Bool bGivenPos)
     cy=( q*q*((x3*x3-x1*x1)*(x2-x1)+(x2*x2-x1*x1)*(x1-x3)) +
          p*p*((y3*y3-y1*y1)*(x2-x1)+(y2*y2-y1*y1)*(x1-x3)) ) / ncy;
     cx=( q*q*(x2*x2-x1*x1)+p*p*(y2*y2-y1*y1)+cy*2*p*p*(y1-y2) ) / ncx;
-    // now we still need the radius in x and y direction:
+    
     r=sqrt(q*q*(x1-cx)*(x1-cx)+p*p*(y1-cy)*(y1-cy));
     rx=r/q; ry=r/p;
-    // We now have to find out how the the starting and the end point
-    // have to be choosen so that point no. 2 lies inside the drawn arc:
+    
+    
     w1=fmod((atan2(x1-cx,y1-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w1<0) w1+=6.28318530718;
     w3=fmod((atan2(x3-cx,y3-cy)-atan2(x2-cx,y2-cy)),6.28318530718); if (w3<0) w3+=6.28318530718;
     if (w3<w1) {
@@ -1207,7 +1207,7 @@ void OS2METReader::ReadBezier(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
 
     if( !( nNumPoints % 4 ) )
     {
-        // create bezier polygon
+        
         const sal_uInt16    nSegPoints = 25;
         const sal_uInt16    nSegments = aPolygon.GetSize() >> 2;
         Polygon         aBezPoly( nSegments * nSegPoints );
@@ -1313,12 +1313,12 @@ void OS2METReader::ReadMarker(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
         x=aAttr.aCurPos.X(); y=aAttr.aCurPos.Y();
         aCalcBndRect.Union(Rectangle(x-5,y-5,x+5,y+5));
         switch (aAttr.nMrkSymbol) {
-            case  2:   // PLUS
+            case  2:   
                 pVirDev->DrawLine(Point(x-4,y),Point(x+4,y));
                 pVirDev->DrawLine(Point(x,y-4),Point(x,y+4));
                 break;
-            case  3:   // DIAMOND
-            case  7: { // SOLIDDIAMOND
+            case  3:   
+            case  7: { 
                 Polygon aPoly(4);
                 aPoly.SetPoint(Point(x,y+4),0);
                 aPoly.SetPoint(Point(x+4,y),1);
@@ -1327,8 +1327,8 @@ void OS2METReader::ReadMarker(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
                 pVirDev->DrawPolygon(aPoly);
                 break;
             }
-            case  4:   // SQARE
-            case  8: { // SOLIDSUARE
+            case  4:   
+            case  8: { 
                 Polygon aPoly(4);
                 aPoly.SetPoint(Point(x+4,y+4),0);
                 aPoly.SetPoint(Point(x+4,y-4),1);
@@ -1337,7 +1337,7 @@ void OS2METReader::ReadMarker(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
                 pVirDev->DrawPolygon(aPoly);
                 break;
             }
-            case  5: { // SIXPOINTSTAR
+            case  5: { 
                 Polygon aPoly(12);
                 aPoly.SetPoint(Point(x  ,y-4),0);
                 aPoly.SetPoint(Point(x+2,y-2),1);
@@ -1354,7 +1354,7 @@ void OS2METReader::ReadMarker(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
                 pVirDev->DrawPolygon(aPoly);
                 break;
             }
-            case  6: { // EIGHTPOINTSTAR
+            case  6: { 
                 Polygon aPoly(16);
                 aPoly.SetPoint(Point(x  ,y-4),0);
                 aPoly.SetPoint(Point(x+1,y-2),1);
@@ -1375,15 +1375,15 @@ void OS2METReader::ReadMarker(sal_Bool bGivenPos, sal_uInt16 nOrderLen)
                 pVirDev->DrawPolygon(aPoly);
                 break;
             }
-            case  9:   // DOT
+            case  9:   
                 pVirDev->DrawEllipse(Rectangle(x-1,y-1,x+1,y+1));
                 break;
-            case 10:   // SMALLCIRCLE
+            case 10:   
                 pVirDev->DrawEllipse(Rectangle(x-2,y-2,x+2,y+2));
                 break;
-            case 64:   // BLANK
+            case 64:   
                 break;
-            default:   // (=1) CROSS
+            default:   
                 pVirDev->DrawLine(Point(x-4,y-4),Point(x+4,y+4));
                 pVirDev->DrawLine(Point(x-4,y+4),Point(x+4,y-4));
                 break;
@@ -1524,8 +1524,8 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
             pOS2MET->ReadUInt16( nDummy )
                     .ReadUInt32( nID );
 
-            if ( ! ( nDummy & 0x20 ) )  // #30933# i do not know the exact meaning of this bit,
-            {                           // but if set it seems to be better not to fill this path
+            if ( ! ( nDummy & 0x20 ) )  
+            {                           
                 while( p && p->nID != nID )
                     p = p->pSucc;
 
@@ -2051,7 +2051,7 @@ void OS2METReader::ReadOrder(sal_uInt16 nOrderID, sal_uInt16 nOrderLen)
 void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
 {
     switch (nDscID) {
-        case 0x00f7: { // 'Specify GVM Subset'
+        case 0x00f7: { 
             sal_uInt8 nbyte;
             pOS2MET->SeekRel(6);
             pOS2MET->ReadUChar( nbyte );
@@ -2065,7 +2065,7 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
         }
         case 0x00f6:
         {
-            // 'Set Picture Descriptor'
+            
             sal_Bool b32;
             sal_uInt8 nbyte,nUnitType;
             long x1,y1,x2,y2,nt,xr,yr;
@@ -2079,7 +2079,7 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
                 b32=sal_False;
             else
             {
-                b32 = sal_False;   // -Wall added the case.
+                b32 = sal_False;   
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
                 ErrorCode=2;
             }
@@ -2122,12 +2122,12 @@ void OS2METReader::ReadDsc(sal_uInt16 nDscID, sal_uInt16 /*nDscLen*/)
             aBoundingRect.Top() = y1;
             aBoundingRect.Bottom() = y2;
 
-            // no output beside this bounding rect
+            
             pVirDev->IntersectClipRegion( Rectangle( Point(), aBoundingRect.GetSize() ) );
 
             break;
         }
-        case 0x0021: // 'Set Current Defaults'
+        case 0x0021: 
             break;
     }
 }
@@ -2138,36 +2138,36 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
 
     switch (nDataID) {
 
-        case 0x0070:   // Begin Segment
+        case 0x0070:   
             break;
 
-        case 0x0091:   // Begin Image Content
+        case 0x0091:   
             break;
 
-        case 0x0094:   // Image Size
+        case 0x0094:   
             pOS2MET->SeekRel(5);
             p->nHeight=ReadBigEndianWord();
             p->nWidth=ReadBigEndianWord();
             break;
 
-        case 0x0095:   // Image Encoding
+        case 0x0095:   
             break;
 
-        case 0x0096: { // Image IDE-Size
+        case 0x0096: { 
             sal_uInt8 nbyte;
             pOS2MET->ReadUChar( nbyte ); p->nBitsPerPixel=nbyte;
             break;
         }
 
-        case 0x0097:   // Image LUT-ID
+        case 0x0097:   
             break;
 
-        case 0x009b:   // IDE Structure
+        case 0x009b:   
             break;
 
-        case 0xfe92: { // Image Data
-            // At the latest we now need the temprary BMP file and
-            // inside this file we need the header and the palette.
+        case 0xfe92: { 
+            
+            
             if (p->pBMP==NULL) {
                 p->pBMP=new SvMemoryStream();
                 p->pBMP->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
@@ -2176,19 +2176,19 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
                     ErrorCode=3;
                     return;
                 }
-                // write (Windows-)BITMAPINFOHEADER:
+                
                 (p->pBMP)->WriteUInt32( (sal_uInt32)40 ).WriteUInt32( p->nWidth ).WriteUInt32( p->nHeight );
                 (p->pBMP)->WriteUInt16( (sal_uInt16)1 ).WriteUInt16( p->nBitsPerPixel );
                 (p->pBMP)->WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );
                 (p->pBMP)->WriteUInt32( (sal_uInt32)0 ).WriteUInt32( (sal_uInt32)0 );
-                // write color table:
+                
                 if (p->nBitsPerPixel<=8) {
                     sal_uInt16 i, nColTabSize=1<<(p->nBitsPerPixel);
                     for (i=0; i<nColTabSize; i++) (p->pBMP)->WriteUInt32( GetPalette0RGB(i) );
                 }
             }
-            // OK, now the map data is beeing pushed. Unfortunatly OS2 and BMP
-            // do habe a different RGB ordering when using 24-bit
+            
+            
             sal_uInt8 * pBuf=new sal_uInt8[nDataLen];
             pOS2MET->Read(pBuf,nDataLen);
             if (p->nBitsPerPixel==24) {
@@ -2213,10 +2213,10 @@ void OS2METReader::ReadImageData(sal_uInt16 nDataID, sal_uInt16 nDataLen)
             delete[] pBuf;
             break;
         }
-        case 0x0093:   // End Image Content
+        case 0x0093:   
             break;
 
-        case 0x0071:   // End Segment
+        case 0x0071:   
             break;
     }
 }
@@ -2242,9 +2242,9 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
             case 0x02:
                 pOS2MET->ReadUChar( nTripType2 );
                 switch (nTripType2) {
-                    case 0x84:   // Font name
+                    case 0x84:   
                         break;
-                    case 0x08: { // Font Typeface
+                    case 0x08: { 
                         char str[33];
                         pOS2MET->SeekRel(1);
                         pOS2MET->Read( &str, 32 );
@@ -2257,18 +2257,18 @@ void OS2METReader::ReadFont(sal_uInt16 nFieldSize)
                     }
                 }
                 break;
-            case 0x24:   // Icid
+            case 0x24:   
                 pOS2MET->ReadUChar( nTripType2 );
                 switch (nTripType2) {
-                    case 0x05:   //Icid
+                    case 0x05:   
                         pOS2MET->ReadUChar( nByte );
                         pF->nID=((sal_uLong)nByte)&0xff;
                         break;
                 }
                 break;
-            case 0x20:   // Font Binary GCID
+            case 0x20:   
                 break;
-            case 0x1f: { // Font Attributes
+            case 0x1f: { 
                 FontWeight eWeight;
                 sal_uInt8 nbyte;
                 pOS2MET->ReadUChar( nbyte );
@@ -2342,12 +2342,12 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
         case MapColAtrMagic:
             break;
         case BegImgObjMagic: {
-            // create new bitmap by now: (will be filled later)
+            
             OSBitmap * pB=new OSBitmap;
             pB->pSucc=pBitmapList; pBitmapList=pB;
             pB->pBMP=NULL; pB->nWidth=0; pB->nHeight=0; pB->nBitsPerPixel=0;
             pB->nMapPos=0;
-            // determine ID of the bitmap:
+            
             sal_uInt8 i,nbyte,nbyte2;
             pB->nID=0;
             for (i=0; i<4; i++) {
@@ -2355,14 +2355,14 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 nbyte=((nbyte-0x30)<<4)|(nbyte2-0x30);
                 pB->nID=(pB->nID>>8)|(((sal_uLong)nbyte)<<24);
             }
-            // put new palette on the palette stack: (will be filled later)
+            
             OSPalette * pP=new OSPalette;
             pP->pSucc=pPaletteStack; pPaletteStack=pP;
             pP->p0RGB=NULL; pP->nSize=0;
             break;
         }
         case EndImgObjMagic: {
-            // read temporary Windows BMP file:
+            
             if (pBitmapList==NULL || pBitmapList->pBMP==NULL ||
                 pBitmapList->pBMP->GetError()!=0) {
                 pOS2MET->SetError(SVSTREAM_FILEFORMAT_ERROR);
@@ -2378,7 +2378,7 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                 ErrorCode=6;
             }
             delete pBitmapList->pBMP; pBitmapList->pBMP=NULL;
-            // kill palette from stack:
+            
             OSPalette * pP=pPaletteStack;
             if (pP!=NULL) {
                 pPaletteStack=pP->pSucc;
@@ -2429,24 +2429,24 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
 
             if (pOrdFile==NULL) break;
 
-            // In pOrdFile all "DatGrfObj" fields were collected so that the
-            // thererin contained "Orders" are continuous and not segmented by fields.
-            // To read them from the memory stream without having any trouble,
-            // we use a  little trick:
+            
+            
+            
+            
 
             pSave=pOS2MET;
-            pOS2MET=pOrdFile; //(!)
+            pOS2MET=pOrdFile; 
             nMaxPos=pOS2MET->Tell();
             pOS2MET->Seek(0);
 
-            // "Segment header":
+            
             pOS2MET->ReadUChar( nbyte );
-            if (nbyte==0x70) { // header exists
-                pOS2MET->SeekRel(15); // but we don't need it
+            if (nbyte==0x70) { 
+                pOS2MET->SeekRel(15); 
             }
-            else pOS2MET->SeekRel(-1); // no header, go back one byte
+            else pOS2MET->SeekRel(-1); 
 
-            // loop through Order:
+            
             while (pOS2MET->Tell()<nMaxPos && pOS2MET->GetError()==0) {
                 pOS2MET->ReadUChar( nbyte ); nOrderID=((sal_uInt16)nbyte) & 0x00ff;
                 if (nOrderID==0x00fe) {
@@ -2454,11 +2454,11 @@ void OS2METReader::ReadField(sal_uInt16 nFieldType, sal_uInt16 nFieldSize)
                     nOrderID=(nOrderID << 8) | (((sal_uInt16)nbyte) & 0x00ff);
                 }
                 if (nOrderID>0x00ff || nOrderID==GOrdPolygn) {
-                    // ooo: As written in OS2 documentation, the order length should now
-                    // be written as big endian word. (Quote: "Highorder byte precedes loworder byte").
-                    // In reality there are files in which the length is stored as little endian word
-                    // (at least for nOrderID==GOrdPolygn)
-                    // So we throw a coin or what else can we do?
+                    
+                    
+                    
+                    
+                    
                     pOS2MET->ReadUChar( nbyte ); nOrderLen=(sal_uInt16)nbyte&0x00ff;
                     pOS2MET->ReadUChar( nbyte ); if (nbyte!=0) nOrderLen=nOrderLen<<8|(((sal_uInt16)nbyte)&0x00ff);
                 }
@@ -2710,11 +2710,11 @@ void OS2METReader::ReadOS2MET( SvStream & rStreamOS2MET, GDIMetaFile & rGDIMetaF
     }
 }
 
-//================== GraphicImport - the exported function ================
 
-// this needs to be kept in sync with
-// ImpFilterLibCacheEntry::GetImportFunction() from
-// vcl/source/filter/graphicfilter.cxx
+
+
+
+
 #if defined(DISABLE_DYNLOADING)
 #define GraphicImport imeGraphicImport
 #endif

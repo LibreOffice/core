@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -60,7 +60,7 @@ OZipFileAccess::~OZipFileAccess()
         if ( !m_bDisposed )
         {
             try {
-                m_refCount++; // dispose will use refcounting so the further distruction must be avoided
+                m_refCount++; 
                 dispose();
             } catch( uno::Exception& )
             {}
@@ -143,7 +143,7 @@ sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
             if ( nEndInd == nBeginInd )
                 return sal_False;
 
-            // check that search does not use nEndInd position
+            
             sal_Int32 nLastInd = aString.lastIndexOf( aPattern[nCurInd], nEndInd - 1 );
 
             if ( nLastInd == -1 )
@@ -161,7 +161,7 @@ sal_Bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
     return sal_False;
 }
 
-// XInitialization
+
 void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArguments )
     throw ( uno::Exception,
             uno::RuntimeException )
@@ -172,7 +172,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
         throw lang::DisposedException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 
     if ( m_pZipFile )
-        throw uno::RuntimeException(THROW_WHERE, uno::Reference< uno::XInterface >() ); // initialization is allowed only one time
+        throw uno::RuntimeException(THROW_WHERE, uno::Reference< uno::XInterface >() ); 
 
     if ( !aArguments.getLength() )
         throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
@@ -199,7 +199,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     }
     else if ( (aArguments[0] >>= xStream ) )
     {
-        // a writable stream can implement both XStream & XInputStream
+        
         m_xContentStream = xStream->getInputStream();
         xSeekable = uno::Reference< io::XSeekable >( xStream, uno::UNO_QUERY );
     }
@@ -215,18 +215,18 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 
     if ( !xSeekable.is() )
     {
-        // TODO: after fwkbugfix02 is integrated a helper class can be used to make the stream seekable
+        
         throw io::IOException(THROW_WHERE, uno::Reference< uno::XInterface >() );
     }
 
-    // TODO: in case xSeekable is implemented on separated XStream implementation a wrapper is required
+    
     m_pZipFile = new ZipFile(
                 m_xContentStream,
                 m_xContext,
                 sal_True );
 }
 
-// XNameAccess
+
 uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
     throw ( container::NoSuchElementException,
             lang::WrappedTargetException,
@@ -333,7 +333,7 @@ sal_Bool SAL_CALL OZipFileAccess::hasElements()
     return ( m_pZipFile->GetEntryHash().size() != 0 );
 }
 
-// XZipFileAccess
+
 uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( const OUString& aPatternString )
     throw ( container::NoSuchElementException,
             io::IOException,
@@ -347,7 +347,7 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
     if ( !m_pZipFile )
         throw io::NotConnectedException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 
-    // Code to compare strings by patterns
+    
     uno::Sequence< OUString > aPattern = GetPatternsFromString_Impl( aPatternString );
 
     for ( EntryHash::iterator aIter = m_pZipFile->GetEntryHash().begin(); aIter != m_pZipFile->GetEntryHash().end(); ++aIter )
@@ -368,7 +368,7 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
     throw container::NoSuchElementException(THROW_WHERE, uno::Reference< uno::XInterface >() );
 }
 
-// XComponent
+
 void SAL_CALL OZipFileAccess::dispose()
     throw ( uno::RuntimeException )
 {

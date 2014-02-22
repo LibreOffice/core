@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -48,7 +48,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 
-// -----------------------------------------------------------------------
+
 TYPEINIT1(SfxEventHint, SfxHint);
 TYPEINIT1(SfxEventNamesItem, SfxPoolItem);
 TYPEINIT1(SfxViewEventHint, SfxEventHint);
@@ -137,9 +137,9 @@ void SfxEventNamesItem::AddEvent( const OUString& rName, const OUString& rUIName
 }
 
 
-//==========================================================================
 
-//--------------------------------------------------------------------------
+
+
 uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
 {
 /*
@@ -147,7 +147,7 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
     properties. These properties are EventType and Script. Possible
     values for EventType ar StarBasic, JavaScript, ...
     The Script property should contain the URL to the macro and looks
-    like "macro://./standard.module1.main()"
+    like "macro:
 
     If pMacro is NULL, we return an empty property sequence, so PropagateEvent_Impl
     can delete an event binding.
@@ -221,7 +221,7 @@ uno::Any CreateEventData_Impl( const SvxMacro *pMacro )
     return aEventData;
 }
 
-//--------------------------------------------------------------------------
+
 void PropagateEvent_Impl( SfxObjectShell *pDoc, OUString aEventName, const SvxMacro* pMacro )
 {
     uno::Reference < document::XEventsSupplier > xSupplier;
@@ -262,7 +262,7 @@ void PropagateEvent_Impl( SfxObjectShell *pDoc, OUString aEventName, const SvxMa
     }
 }
 
-//--------------------------------------------------------------------------------------------------------
+
 void SfxEventConfiguration::ConfigureEvent( OUString aName, const SvxMacro& rMacro, SfxObjectShell *pDoc )
 {
     boost::scoped_ptr<SvxMacro> pMacro;
@@ -271,7 +271,7 @@ void SfxEventConfiguration::ConfigureEvent( OUString aName, const SvxMacro& rMac
     PropagateEvent_Impl( pDoc ? pDoc : 0, aName, pMacro.get() );
 }
 
-// -------------------------------------------------------------------------------------------------------
+
 SvxMacro* SfxEventConfiguration::ConvertToMacro( const com::sun::star::uno::Any& rElement, SfxObjectShell* pDoc, sal_Bool bBlowUp )
 {
     return SfxEvents_Impl::ConvertToMacro( rElement, pDoc, bBlowUp );

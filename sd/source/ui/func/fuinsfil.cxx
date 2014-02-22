@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -127,20 +127,20 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
 
         if( xFilterManager.is() )
         {
-            // Get filter for current format
+            
             try
             {
                 OUString aAllSpec( SD_RESSTR( STR_ALL_FILES ) );
 
                 xFilterManager->appendFilter( aAllSpec, OUString("*.*") );
-                xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
+                xFilterManager->setCurrentFilter( aAllSpec ); 
 
-                // Get main filter
+                
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aOwnCont );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                // get cross filter
+                
                 pFilter = SfxFilter::GetDefaultFilterFromFactory( aOtherCont );
                 if( pFilter )
                 {
@@ -149,7 +149,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                         xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
                 }
 
-                // get femplate filter
+                
                 if( mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
                     pFilter = DrawDocShell::Factory().GetTemplateFilter();
                 else
@@ -157,13 +157,13 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                // get Powerpoint filter
+                
                 OUString aExt = ".ppt";
                 pFilter = aMatch.GetFilter4Extension( aExt );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                // Get other draw/impress filters
+                
                 pFilter = aMatch.GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_60, SFX_FILTER_IMPORT, SFX_FILTER_TEMPLATEPATH );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
@@ -212,7 +212,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                // add additional supported filters
+                
                 ::std::vector< OUString >::const_iterator aIter( aFilterVector.begin() );
 
                 while( aIter != aFilterVector.end() )
@@ -267,14 +267,14 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
             if ( pFilter->GetServiceName() == "com.sun.star.presentation.PresentationDocument" ||
                  pFilter->GetServiceName() == "com.sun.star.drawing.DrawingDocument" )
             {
-                // Draw, Impress or PowerPoint document
-                // the ownership of the Medium is transferred
+                
+                
                 if( bDrawMode )
                     InsSDDinDrMode( pMedium );
                 else
                     InsSDDinOlMode( pMedium );
 
-                // don't delete Medium here, ownership of pMedium has changed in this case
+                
                 bInserted = sal_True;
             }
         }
@@ -313,7 +313,7 @@ void FuInsertFile::DoExecute( SfxRequest& rReq )
     }
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 {
@@ -341,7 +341,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     {
         /* list with page names (if NULL, then all pages)
            First, insert pages */
-        std::vector<OUString> aBookmarkList = pDlg->GetList( 1 ); // pages
+        std::vector<OUString> aBookmarkList = pDlg->GetList( 1 ); 
         sal_Bool bLink = pDlg->IsLink();
         sal_Bool bReplace = sal_False;
         SdPage* pPage = NULL;
@@ -372,7 +372,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
         sal_Bool  bNameOK;
         std::vector<OUString> aExchangeList;
-        std::vector<OUString> aObjectBookmarkList = pDlg->GetList( 2 ); // objects
+        std::vector<OUString> aObjectBookmarkList = pDlg->GetList( 2 ); 
 
         /* if pBookmarkList is NULL, we insert selected pages, and/or selected
            objects or everything. */
@@ -393,7 +393,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             aExchangeList.clear();
         }
 
-        // to ensure ... (see above)
+        
         bNameOK = mpView->GetExchangeList( aExchangeList, aObjectBookmarkList, 1 );
 
         if( bNameOK )
@@ -409,7 +409,7 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
     return (bOK);
 }
 
-// -----------------------------------------------------------------------------
+
 
 void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 {
@@ -425,7 +425,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
     if( nRet == RET_OK )
     {
-        // selected file format: text, RTF or HTML (default is text)
+        
         sal_uInt16 nFormat = EE_FORMAT_TEXT;
 
         if( aFilterName.indexOf( "Rich") != -1 )
@@ -441,7 +441,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
            - the global outliner could be used in SdPage::CreatePresObj */
         SdrOutliner* pOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
 
-        // set reference device
+        
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
 
         SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
@@ -466,7 +466,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         }
         else
         {
-            // is it a master page?
+            
             if (static_cast<DrawViewShell*>(mpViewShell)->GetEditMode() == EM_MASTERPAGE &&
                 !pPage->IsMasterPage())
             {
@@ -475,7 +475,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
             DBG_ASSERT(pPage, "page not found");
 
-            // if editing is going on right now, let it flow into this text object
+            
             OutlinerView* pOutlinerView = mpView->GetTextEditOutlinerView();
             if( pOutlinerView )
             {
@@ -485,7 +485,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                     pObj->GetObjIdentifier() == OBJ_TITLETEXT &&
                     pOutliner->GetParagraphCount() > 1 )
                 {
-                    // in title objects, only one paragraph is allowed
+                    
                     while ( pOutliner->GetParagraphCount() > 1 )
                     {
                         Paragraph* pPara = pOutliner->GetParagraph( 0 );
@@ -521,7 +521,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
                 aSize.Width()  = std::min(aSize.Width(), aMaxSize.Width());
                 aSize = mpWindow->LogicToPixel(aSize);
 
-                // put it at the center of the window
+                
                 Size aTemp(mpWindow->GetOutputSizePixel());
                 Point aPos(aTemp.Width() / 2, aTemp.Height() / 2);
                 aPos.X() -= aSize.Width() / 2;
@@ -548,11 +548,11 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
     delete pDlg;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 {
-    // selected file format: text, RTF or HTML (default is text)
+    
     sal_uInt16 nFormat = EE_FORMAT_TEXT;
 
     if( aFilterName.indexOf( "Rich") != -1 )
@@ -567,13 +567,13 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 
     Paragraph* pPara = aSelList.empty() ? NULL : *(aSelList.begin());
 
-    // what should we insert?
+    
     while( !pDocliner->HasParaFlag( pPara, PARAFLAG_ISPAGE ) )
         pPara = pDocliner->GetParent(pPara);
 
     sal_Int32 nTargetPos = pDocliner->GetAbsPos(pPara) + 1;
 
-    // apply layout of predecessor page
+    
     sal_uInt16 nPage = 0;
     pPara = pDocliner->GetParagraph( pDocliner->GetAbsPos( pPara ) - 1 );
     while (pPara)
@@ -598,7 +598,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     ::Outliner* pOutliner = new ::Outliner( &mpDoc->GetItemPool(), OUTLINERMODE_OUTLINEOBJECT );
     pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)mpDoc->GetStyleSheetPool());
 
-    // set reference device
+    
     pOutliner->SetRefDevice(SD_MOD()->GetRefDevice( *mpDocSh ));
     pOutliner->SetPaperSize(Size(0x7fffffff, 0x7fffffff));
 
@@ -618,7 +618,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     {
         sal_Int32 nParaCount = pOutliner->GetParagraphCount();
 
-        // for progress bar: number of level-0-paragraphs
+        
         sal_uInt16 nNewPages = 0;
         pPara = pOutliner->GetParagraph( 0 );
         while (pPara)
@@ -648,7 +648,7 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
             sal_Int32 nPos = pOutliner->GetAbsPos( pSourcePara );
             sal_Int16 nDepth = pOutliner->GetDepth( nPos );
 
-            // only take the last paragraph if it is filled
+            
             if (nSourcePos < nParaCount - 1 ||
                 !pOutliner->GetText(pSourcePara).isEmpty())
             {
@@ -684,21 +684,21 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
     delete pOutliner;
 }
 
-// -----------------------------------------------------------------------------
+
 
 sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
 {
     OutlineView* pOlView = static_cast<OutlineView*>(mpView);
 
-    // transfer Outliner content to SdDrawDocument
+    
     pOlView->PrepareClose();
 
-    // einlesen wie im Zeichenmodus
+    
     if (InsSDDinDrMode(pMedium))
     {
         ::Outliner* pOutliner = pOlView->GetViewByWindow(mpWindow)->GetOutliner();
 
-        // cut notification links temporarily
+        
         Link aOldParagraphInsertedHdl = pOutliner->GetParaInsertedHdl();
         pOutliner->SetParaInsertedHdl( Link(NULL, NULL));
         Link aOldParagraphRemovingHdl = pOutliner->GetParaRemovingHdl();
@@ -716,7 +716,7 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         pOutliner->Clear();
         pOlView->FillOutliner();
 
-        // set links again
+        
         pOutliner->SetParaInsertedHdl(aOldParagraphInsertedHdl);
         pOutliner->SetParaRemovingHdl(aOldParagraphRemovingHdl);
         pOutliner->SetDepthChangedHdl(aOldDepthChangedHdl);
@@ -730,7 +730,7 @@ sal_Bool FuInsertFile::InsSDDinOlMode(SfxMedium* pMedium)
         return sal_False;
 }
 
-// -----------------------------------------------------------------------------
+
 
 void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterVector )
 {
@@ -749,6 +749,6 @@ void FuInsertFile::GetSupportedFilterVector( ::std::vector< OUString >& rFilterV
         rFilterVector.push_back( pSearchFilter->GetMimeType() );
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -34,7 +34,7 @@
  *  The contents of this file are subject to the Sun Industry Standards
  *  Source License Version 1.1 (the "License"); You may not use this file
  *  except in compliance with the License. You may obtain a copy of the
- *  License at http://www.openoffice.org/license.html.
+ *  License at http:
  *
  *  Software provided under this License is provided on an "AS IS" basis,
  *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
@@ -95,9 +95,9 @@ void LwpStory::Read()
 **************************************************************************/
 void LwpStory::XFConvert(XFContentContainer* pCont)
 {
-    //process frame which anchor frame
+    
     XFConvertFrameInFrame(pCont);
-    //process para list
+    
     XFContentContainer* pParaCont = pCont;
     LwpPara* pPara = dynamic_cast<LwpPara*> ( GetFirstPara()->obj() );
     while(pPara)
@@ -105,16 +105,16 @@ void LwpStory::XFConvert(XFContentContainer* pCont)
         pPara->SetFoundry(m_pFoundry);
         pPara->XFConvert(pParaCont);
 
-        //Get the xfcontainer for the next para
+        
         pParaCont = pPara->GetXFContainer();
         pPara = dynamic_cast<LwpPara*> ( pPara->GetNext()->obj() );
     }
 
-    //process frame which anchor is to cell after converter all the para
+    
     XFConvertFrameInCell(pCont);
     XFConvertFrameInHeaderFooter(pCont);
 
-    //Release Lwp Objects
+    
     LwpPara* pCur = dynamic_cast<LwpPara*> (GetFirstPara()->obj());
     LwpPara* pNext;
     while(pCur)
@@ -147,7 +147,7 @@ void LwpStory::Parse(IXFStream* pOutputStream)
     delete m_pXFContainer;
     m_pXFContainer = NULL;
 
-    //It seems that, currently, we do not need to process the child story
+    
     /*LwpObject* pChildStory = GetFirstStory()->obj();
     if(pChildStory)
     {
@@ -155,7 +155,7 @@ void LwpStory::Parse(IXFStream* pOutputStream)
         pChildStory->Parse(pOutputStream);
     }*/
 
-    //Don't process the next story
+    
 /*  LwpObject* pNextStory = GetNextStory()->obj();
     if(pNextStory)
     {
@@ -222,7 +222,7 @@ LwpPageLayout* LwpStory::GetNextPageLayout()
 **************************************************************************/
 void LwpStory::SortPageLayout()
 {
-    //Get all the pagelayout and store in list
+    
     std::vector<LwpPageLayout*>  aLayoutList;
     LwpVirtualLayout* pLayout = GetLayout(NULL);
     while(pLayout)
@@ -230,7 +230,7 @@ void LwpStory::SortPageLayout()
         if(pLayout->IsPage())
         {
             LwpLayout::UseWhenType eSectionType = static_cast<LwpPageLayout*>(pLayout)->GetUseWhenType();
-            //for mirror page, the child  is pagelayout
+            
             LwpVirtualLayout* pParent = pLayout->GetParentLayout();
             if(eSectionType != LwpLayout::StartWithinColume && pParent && !pParent->IsPage())
             {
@@ -239,7 +239,7 @@ void LwpStory::SortPageLayout()
         }
         pLayout = GetLayout(pLayout);
     }
-    // sort the pagelayout according to their position
+    
     std::vector<LwpPageLayout*>::iterator aIt;
     if (!aLayoutList.empty())
     {
@@ -261,7 +261,7 @@ void LwpStory::SortPageLayout()
         }
     }
 
-    //put all the sorted  layouts into list
+    
     m_LayoutList.clear();
 
     for( aIt = aLayoutList.begin(); aIt != aLayoutList.end(); ++aIt)
@@ -284,16 +284,16 @@ sal_Bool LwpStory::IsNeedSection()
     {
         if(m_pCurrentLayout->HasColumns())
         {
-            //get the following pagelayout and its type
+            
             bColumns = sal_True;
             LwpPageLayout* pNextLayout = GetNextPageLayout();
             if(pNextLayout)
             {
-                //get layout type
+                
                 LwpLayout::UseWhenType eWhenType = pNextLayout->GetUseWhenType();
                 switch(eWhenType)
                 {
-                case LwpLayout::StartWithinColume://not support now
+                case LwpLayout::StartWithinColume:
                 case LwpLayout::StartWithinPage:
                 {
                     bColumns =sal_False;
@@ -301,8 +301,8 @@ sal_Bool LwpStory::IsNeedSection()
                     break;
                 }
                 case LwpLayout::StartOnNextPage:
-                case LwpLayout::StartOnOddPage://not support now
-                case LwpLayout::StartOnEvenPage://not support now
+                case LwpLayout::StartOnOddPage:
+                case LwpLayout::StartOnEvenPage:
                 {
                     bColumns =sal_True;
                     bNewSection = sal_False;
@@ -313,7 +313,7 @@ sal_Bool LwpStory::IsNeedSection()
                 }
             }
 
-            //if bColumns is ture, the page layout doesn't need columns, set the xfcolumns to NULL in page master
+            
             if(!bColumns)
             {
                 m_pCurrentLayout->ResetXFColumns();
@@ -338,10 +338,10 @@ void LwpStory::XFConvertFrameInCell(XFContentContainer* pCont)
         while(pFrameLayout)
         {
 
-            //if(pFrameLayout->IsAnchorCell())
+            
             if(pFrameLayout->IsAnchorCell() && pFrameLayout->HasContent())
             {
-                //get the first xfpara
+                
                 XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(pCont->FindFirstContent(enumXFContentPara));
                 if(pXFFirtPara)
                     pFrameLayout->XFConvert(pXFFirtPara);
@@ -417,7 +417,7 @@ void LwpStory::XFConvertFrameInHeaderFooter(XFContentContainer* pCont)
         {
             if(pFrameLayout->IsAnchorPage() && (pLayout->IsHeader() || pLayout->IsFooter()))
             {
-                //The frame must be included by <text:p>
+                
                 XFContentContainer* pXFFirtPara = static_cast<XFContentContainer*>(pCont->FindFirstContent(enumXFContentPara));
                 if(pXFFirtPara)
                     pFrameLayout->XFConvert(pXFFirtPara);
@@ -460,10 +460,10 @@ LwpPara* LwpStory::GetLastParaOfPreviousStory()
 **************************************************************************/
 OUString LwpStory::GetContentText(sal_Bool bAllText)
 {
-    if (bAllText)//convert all text fribs
+    if (bAllText)
     {
         OUString sText = A2OUSTR("");
-        //process para list
+        
         LwpPara* pPara = dynamic_cast<LwpPara*>(GetFirstPara()->obj());
         while (pPara)
         {
@@ -473,7 +473,7 @@ OUString LwpStory::GetContentText(sal_Bool bAllText)
         }
         return sText;
     }
-    else //only the first text frib
+    else 
     {
         LwpObject* pObj = GetFirstPara()->obj();
         if(pObj)

@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "scitems.hxx"
@@ -49,7 +49,7 @@
 
 using namespace com::sun::star;
 
-//------------------------------------------------------------------------
+
 
 static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
 {
@@ -58,15 +58,15 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
         SVX_UNOEDIT_CHAR_PROPERTIES,
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
-        SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
+        SVX_UNOEDIT_NUMBERING_PROPERTIE,    
         { OUString(), 0, css::uno::Type(), 0, 0 }
     };
     static sal_Bool bTwipsSet = false;
 
     if (!bTwipsSet)
     {
-        //  modify PropertyMap to include CONVERT_TWIPS flag for font height
-        //  (headers/footers are in twips)
+        
+        
 
         SfxItemPropertyMapEntry* pEntry = aHdFtPropertyMap_Impl;
         while (!pEntry->aName.isEmpty())
@@ -87,12 +87,12 @@ static const SvxItemPropertySet * lcl_GetHdFtPropertySet()
     return &aHdFtPropertySet_Impl;
 }
 
-//------------------------------------------------------------------------
+
 
 SC_SIMPLE_SERVICE_INFO( ScHeaderFooterContentObj, "ScHeaderFooterContentObj", "com.sun.star.sheet.HeaderFooterContent" )
 SC_SIMPLE_SERVICE_INFO( ScHeaderFooterTextObj, "ScHeaderFooterTextObj", "stardiv.one.Text.Text" )
 
-//------------------------------------------------------------------------
+
 
 ScHeaderFooterContentObj::ScHeaderFooterContentObj( const EditTextObject* pLeft,
                                                     const EditTextObject* pCenter,
@@ -120,7 +120,7 @@ const EditTextObject* ScHeaderFooterContentObj::GetRightEditObject() const
     return mxRightText->GetTextObject();
 }
 
-// XHeaderFooterContent
+
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getLeftText()
                                                 throw(uno::RuntimeException)
@@ -146,7 +146,7 @@ uno::Reference<text::XText> SAL_CALL ScHeaderFooterContentObj::getRightText()
     return xInt;
 }
 
-// XUnoTunnel
+
 
 sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
@@ -181,7 +181,7 @@ ScHeaderFooterContentObj* ScHeaderFooterContentObj::getImplementation(
 }
 
 
-//------------------------------------------------------------------------
+
 
 ScHeaderFooterTextData::ScHeaderFooterTextData(
     ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
@@ -196,7 +196,7 @@ ScHeaderFooterTextData::ScHeaderFooterTextData(
 
 ScHeaderFooterTextData::~ScHeaderFooterTextData()
 {
-    SolarMutexGuard aGuard;     //  needed for EditEngine dtor
+    SolarMutexGuard aGuard;     
 
     delete pForwarder;
     delete pEditEngine;
@@ -214,14 +214,14 @@ SvxTextForwarder* ScHeaderFooterTextData::GetTextForwarder()
         pHdrEngine->EnableUndo( false );
         pHdrEngine->SetRefMapMode( MAP_TWIP );
 
-        //  default font must be set, independently of document
-        //  -> use global pool from module
+        
+        
 
         SfxItemSet aDefaults( pHdrEngine->GetEmptyItemSet() );
         const ScPatternAttr& rPattern = (const ScPatternAttr&)SC_MOD()->GetPool().GetDefaultItem(ATTR_PATTERN);
         rPattern.FillEditItemSet( &aDefaults );
-        //  FillEditItemSet adjusts font height to 1/100th mm,
-        //  but for header/footer twips is needed, as in the PatternAttr:
+        
+        
         aDefaults.Put( rPattern.GetItem(ATTR_FONT_HEIGHT), EE_CHAR_FONTHEIGHT );
         aDefaults.Put( rPattern.GetItem(ATTR_CJK_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CJK );
         aDefaults.Put( rPattern.GetItem(ATTR_CTL_FONT_HEIGHT), EE_CHAR_FONTHEIGHT_CTL );
@@ -266,21 +266,21 @@ const EditTextObject* ScHeaderFooterTextData::GetTextObject() const
     return mpTextObj;
 }
 
-//------------------------------------------------------------------------
+
 
 ScHeaderFooterTextObj::ScHeaderFooterTextObj(
     ScHeaderFooterContentObj& rContent, sal_uInt16 nP, const EditTextObject* pTextObj) :
     aTextData(rContent, nP, pTextObj)
 {
-    //  ScHeaderFooterTextData acquires rContent
-    //  pUnoText is created on demand (getString/setString work without it)
+    
+    
 }
 
 void ScHeaderFooterTextObj::CreateUnoText_Impl()
 {
     if (!mxUnoText.is())
     {
-        //  can't be aggregated because getString/setString is handled here
+        
         ScHeaderFooterEditSource aEditSrc(aTextData);
         mxUnoText.set(new SvxUnoText(&aEditSrc, lcl_GetHdFtPropertySet(), uno::Reference<text::XText>()));
     }
@@ -300,7 +300,7 @@ const SvxUnoText& ScHeaderFooterTextObj::GetUnoText()
     return *mxUnoText;
 }
 
-// XText
+
 
 uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCursor()
                                                     throw(uno::RuntimeException)
@@ -317,7 +317,7 @@ uno::Reference<text::XTextCursor> SAL_CALL ScHeaderFooterTextObj::createTextCurs
     if (!mxUnoText.is())
         CreateUnoText_Impl();
     return mxUnoText->createTextCursorByRange(aTextPosition);
-    //! wie ScCellObj::createTextCursorByRange, wenn SvxUnoTextRange_getReflection verfuegbar
+    
 }
 
 void ScHeaderFooterTextObj::FillDummyFieldData( ScHeaderFieldData& rData )
@@ -348,7 +348,7 @@ OUString SAL_CALL ScHeaderFooterTextObj::getString() throw(uno::RuntimeException
         pData = rContentObj.GetRightEditObject();
     if (pData)
     {
-        // for pure text, no font info is needed in pool defaults
+        
         ScHeaderEditEngine aEditEngine( EditEngine::CreatePool(), true );
 
         ScHeaderFieldData aData;
@@ -366,7 +366,7 @@ void SAL_CALL ScHeaderFooterTextObj::setString( const OUString& aText ) throw(un
     SolarMutexGuard aGuard;
     OUString aString(aText);
 
-    // for pure text, no font info is needed in pool defaults
+    
     ScHeaderEditEngine aEditEngine(EditEngine::CreatePool(), true);
     aEditEngine.SetText( aString );
     aTextData.UpdateData(aEditEngine);
@@ -414,7 +414,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
 
             if (!bAbsorb)
             {
-                //  don't replace -> append at end
+                
                 aSelection.Adjust();
                 aSelection.nStartPara = aSelection.nEndPara;
                 aSelection.nStartPos  = aSelection.nEndPos;
@@ -426,7 +426,7 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
             pForwarder->QuickInsertField( aItem, aSelection );
             pEditSource->UpdateData();
 
-            //  neue Selektion: ein Zeichen
+            
             aSelection.Adjust();
             aSelection.nEndPara = aSelection.nStartPara;
             aSelection.nEndPos = aSelection.nStartPos + 1;
@@ -459,8 +459,8 @@ void SAL_CALL ScHeaderFooterTextObj::insertTextContent(
 
             pHeaderField->InitDoc(xTextRange, new ScHeaderFooterEditSource(aTextData), aSelection);
 
-            //  for bAbsorb=FALSE, the new selection must be behind the inserted content
-            //  (the xml filter relies on this)
+            
+            
             if (!bAbsorb)
                 aSelection.nStartPos = aSelection.nEndPos;
 
@@ -485,7 +485,7 @@ void SAL_CALL ScHeaderFooterTextObj::removeTextContent(
         ScEditFieldObj* pHeaderField = ScEditFieldObj::getImplementation(xContent);
         if ( pHeaderField && pHeaderField->IsInserted() )
         {
-            //! Testen, ob das Feld in dieser Zelle ist
+            
             pHeaderField->DeleteField();
             return;
         }
@@ -519,24 +519,24 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextObj::getEnd() throw(
     return mxUnoText->getEnd();
 }
 
-// XTextFieldsSupplier
+
 
 uno::Reference<container::XEnumerationAccess> SAL_CALL ScHeaderFooterTextObj::getTextFields()
                                                 throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
-    // all fields
+    
     return new ScHeaderFieldsObj(aTextData);
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScHeaderFooterTextObj::getTextFieldMasters()
                                                 throw(uno::RuntimeException)
 {
-    //  sowas gibts nicht im Calc (?)
+    
     return NULL;
 }
 
-// XTextRangeMover
+
 
 void SAL_CALL ScHeaderFooterTextObj::moveTextRange(
                                         const uno::Reference<text::XTextRange>& xRange,
@@ -549,7 +549,7 @@ void SAL_CALL ScHeaderFooterTextObj::moveTextRange(
     mxUnoText->moveTextRange( xRange, nParagraphs );
 }
 
-// XEnumerationAccess
+
 
 uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFooterTextObj::createEnumeration()
                                                 throw(uno::RuntimeException)
@@ -560,7 +560,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFooterTextObj::createEn
     return mxUnoText->createEnumeration();
 }
 
-// XElementAccess
+
 
 uno::Type SAL_CALL ScHeaderFooterTextObj::getElementType() throw(uno::RuntimeException)
 {
@@ -578,7 +578,7 @@ sal_Bool SAL_CALL ScHeaderFooterTextObj::hasElements() throw(uno::RuntimeExcepti
     return mxUnoText->hasElements();
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellTextCursor::ScCellTextCursor(const ScCellTextCursor& rOther) :
     SvxUnoTextCursor( rOther ),
@@ -599,7 +599,7 @@ ScCellTextCursor::~ScCellTextCursor() throw()
     rTextObj.release();
 }
 
-// SvxUnoTextCursor methods reimplemented here to return the right objects:
+
 
 uno::Reference<text::XText> SAL_CALL ScCellTextCursor::getText() throw(uno::RuntimeException)
 {
@@ -611,7 +611,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getStart() throw(uno
 {
     SolarMutexGuard aGuard;
 
-    //! use other object for range than cursor?
+    
 
     ScCellTextCursor* pNew = new ScCellTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
@@ -628,7 +628,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd() throw(uno::
 {
     SolarMutexGuard aGuard;
 
-    //! use other object for range than cursor?
+    
 
     ScCellTextCursor* pNew = new ScCellTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
@@ -641,7 +641,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScCellTextCursor::getEnd() throw(uno::
     return xRange;
 }
 
-// XUnoTunnel
+
 
 sal_Int64 SAL_CALL ScCellTextCursor::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
@@ -674,7 +674,7 @@ ScCellTextCursor* ScCellTextCursor::getImplementation( const uno::Reference<uno:
     return pRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScHeaderFooterTextCursor::ScHeaderFooterTextCursor(const ScHeaderFooterTextCursor& rOther) :
     SvxUnoTextCursor( rOther ),
@@ -695,7 +695,7 @@ ScHeaderFooterTextCursor::~ScHeaderFooterTextCursor() throw()
     rTextObj.release();
 }
 
-// SvxUnoTextCursor methods reimplemented here to return the right objects:
+
 
 uno::Reference<text::XText> SAL_CALL ScHeaderFooterTextCursor::getText() throw(uno::RuntimeException)
 {
@@ -707,7 +707,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getStart() t
 {
     SolarMutexGuard aGuard;
 
-    //! use other object for range than cursor?
+    
 
     ScHeaderFooterTextCursor* pNew = new ScHeaderFooterTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
@@ -724,7 +724,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd() thr
 {
     SolarMutexGuard aGuard;
 
-    //! use other object for range than cursor?
+    
 
     ScHeaderFooterTextCursor* pNew = new ScHeaderFooterTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
@@ -737,7 +737,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScHeaderFooterTextCursor::getEnd() thr
     return xRange;
 }
 
-// XUnoTunnel
+
 
 sal_Int64 SAL_CALL ScHeaderFooterTextCursor::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
@@ -771,7 +771,7 @@ ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
     return pRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScDrawTextCursor::ScDrawTextCursor(const ScDrawTextCursor& rOther) :
     SvxUnoTextCursor( rOther ),
@@ -791,7 +791,7 @@ ScDrawTextCursor::~ScDrawTextCursor() throw()
 {
 }
 
-// SvxUnoTextCursor methods reimplemented here to return the right objects:
+
 
 uno::Reference<text::XText> SAL_CALL ScDrawTextCursor::getText() throw(uno::RuntimeException)
 {
@@ -803,7 +803,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getStart() throw(uno
 {
     SolarMutexGuard aGuard;
 
-    //! use other object for range than cursor?
+    
 
     ScDrawTextCursor* pNew = new ScDrawTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
@@ -820,7 +820,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd() throw(uno::
 {
     SolarMutexGuard aGuard;
 
-    //! use other object for range than cursor?
+    
 
     ScDrawTextCursor* pNew = new ScDrawTextCursor( *this );
     uno::Reference<text::XTextRange> xRange( static_cast<SvxUnoTextRangeBase*>(pNew) );
@@ -833,7 +833,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScDrawTextCursor::getEnd() throw(uno::
     return xRange;
 }
 
-// XUnoTunnel
+
 
 sal_Int64 SAL_CALL ScDrawTextCursor::getSomething(
                 const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
@@ -866,7 +866,7 @@ ScDrawTextCursor* ScDrawTextCursor::getImplementation( const uno::Reference<uno:
     return pRet;
 }
 
-//------------------------------------------------------------------------
+
 
 ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
 {
@@ -874,14 +874,14 @@ ScSimpleEditSourceHelper::ScSimpleEditSourceHelper()
     pEnginePool->SetDefaultMetric( SFX_MAPUNIT_100TH_MM );
     pEnginePool->FreezeIdRanges();
 
-    pEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);     // TRUE: become owner of pool
+    pEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);     
     pForwarder = new SvxEditEngineForwarder( *pEditEngine );
     pOriginalSource = new ScSimpleEditSource( pForwarder );
 }
 
 ScSimpleEditSourceHelper::~ScSimpleEditSourceHelper()
 {
-    SolarMutexGuard aGuard;     //  needed for EditEngine dtor
+    SolarMutexGuard aGuard;     
 
     delete pOriginalSource;
     delete pForwarder;
@@ -911,7 +911,7 @@ EditTextObject* ScEditEngineTextObj::CreateTextObject()
     return GetEditEngine()->CreateTextObject();
 }
 
-//------------------------------------------------------------------------
+
 
 ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
     pDocShell( pDocSh ),
@@ -930,7 +930,7 @@ ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
 
 ScCellTextData::~ScCellTextData()
 {
-    SolarMutexGuard aGuard;     //  needed for EditEngine dtor
+    SolarMutexGuard aGuard;     
 
     if (pDocShell)
     {
@@ -976,9 +976,9 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
             pEnginePool->FreezeIdRanges();
             pEditEngine = new ScFieldEditEngine(NULL, pEnginePool, NULL, true);
         }
-        //  currently, GetPortions doesn't work if UpdateMode is sal_False,
-        //  this will be fixed (in EditEngine) by src600
-//      pEditEngine->SetUpdateMode( sal_False );
+        
+        
+
         pEditEngine->EnableUndo( false );
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
@@ -1001,7 +1001,7 @@ SvxTextForwarder* ScCellTextData::GetTextForwarder()
                 pDoc->GetPattern( aCellPos.Col(), aCellPos.Row(), aCellPos.Tab() ) )
         {
             pPattern->FillEditItemSet( &aDefaults );
-            pPattern->FillEditParaItems( &aDefaults );  // including alignment etc. (for reading)
+            pPattern->FillEditParaItems( &aDefaults );  
         }
 
         if (pDoc->GetCellType(aCellPos) == CELLTYPE_EDIT)
@@ -1031,11 +1031,11 @@ void ScCellTextData::UpdateData()
         OSL_ENSURE(pEditEngine != NULL, "no EditEngine for UpdateData()");
         if ( pDocShell && pEditEngine )
         {
-            //  during the own UpdateData call, bDataValid must not be reset,
-            //  or things like attributes after the text would be lost
-            //  (are not stored in the cell)
-            bInUpdate = true;   // prevents bDataValid from being reset
-            pDocShell->GetDocFunc().PutData(aCellPos, *pEditEngine, true); // always as text
+            
+            
+            
+            bInUpdate = true;   
+            pDocShell->GetDocFunc().PutData(aCellPos, *pEditEngine, true); 
 
             bInUpdate = false;
             bDirty = false;
@@ -1049,24 +1049,24 @@ void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
-        //! Ref-Update
+
+        
     }
     else if ( rHint.ISA( SfxSimpleHint ) )
     {
         sal_uLong nId = ((const SfxSimpleHint&)rHint).GetId();
         if ( nId == SFX_HINT_DYING )
         {
-            pDocShell = NULL;                       // invalid now
+            pDocShell = NULL;                       
 
             DELETEZ( pForwarder );
-            DELETEZ( pEditEngine );     // EditEngine uses document's pool
+            DELETEZ( pEditEngine );     
         }
         else if ( nId == SFX_HINT_DATACHANGED )
         {
-            if (!bInUpdate)                         // not for own UpdateData calls
-                bDataValid = false;                 // text has to be read from the cell again
+            if (!bInUpdate)                         
+                bDataValid = false;                 
         }
     }
 }

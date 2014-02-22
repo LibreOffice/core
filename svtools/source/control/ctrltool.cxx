@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include <string.h>
@@ -31,9 +31,9 @@
 #include <svtools/svtresid.hxx>
 #include <svtools/ctrltool.hxx>
 
-// =======================================================================
 
-// Standard Fontgroessen fuer scalierbare Fonts
+
+
 static const sal_IntPtr aStdSizeAry[] =
 {
      60,
@@ -69,11 +69,11 @@ static const sal_IntPtr aStdSizeAry[] =
     0
 };
 
-// =======================================================================
 
-// -----------------------------
-// - class ImplFontListFonInfo -
-// -----------------------------
+
+
+
+
 
 class ImplFontListFontInfo : public FontInfo
 {
@@ -94,9 +94,9 @@ public:
     OutputDevice*           GetDevice() const { return mpDevice; }
 };
 
-// ------------------------------
-// - class ImplFontListNameInfo -
-// ------------------------------
+
+
+
 
 class ImplFontListNameInfo
 {
@@ -114,26 +114,26 @@ private:
     }
 };
 
-//sort normal to the start
+
 static int sortWeightValue(FontWeight eWeight)
 {
     if (eWeight < WEIGHT_NORMAL)
         return eWeight + 1;
     if (eWeight > WEIGHT_NORMAL)
         return eWeight - 1;
-    return 0; // eWeight == WEIGHT_NORMAL
+    return 0; 
 }
 
 static sal_Int32 ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
                                           ImplFontListFontInfo* pInfo2 )
 {
-    //Sort non italic before italics
+    
     if ( pInfo1->GetItalic() < pInfo2->GetItalic() )
         return -1;
     else if ( pInfo1->GetItalic() > pInfo2->GetItalic() )
         return 1;
 
-    //Sort normal weight to the start, followed by lightest to heaviest weights
+    
     int nWeight1 = sortWeightValue(pInfo1->GetWeight());
     int nWeight2 = sortWeightValue(pInfo2->GetWeight());
 
@@ -145,18 +145,18 @@ static sal_Int32 ImplCompareFontInfo( ImplFontListFontInfo* pInfo1,
     return pInfo1->GetStyleName().compareTo( pInfo2->GetStyleName() );
 }
 
-// =======================================================================
+
 
 static OUString ImplMakeSearchString(const OUString& rStr)
 {
     return rStr.toAsciiLowerCase();
 }
 
-// -----------------------------------------------------------------------
+
 
 static OUString ImplMakeSearchStringFromName(const OUString& rStr)
 {
-    // check for features before alternate font separator
+    
     sal_Int32 nColon = rStr.indexOf(':');
     sal_Int32 nSemiColon = rStr.indexOf(';');
     if (nColon != -1 && (nSemiColon == -1 || nColon < nSemiColon))
@@ -164,14 +164,14 @@ static OUString ImplMakeSearchStringFromName(const OUString& rStr)
     return ImplMakeSearchString(rStr.getToken( 0, ';' ));
 }
 
-// -----------------------------------------------------------------------
+
 
 ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong* pIndex) const
 {
-    // Append if there is no enty in the list or if the entry is larger
-    // then the last one. We only compare to the last entry as the list of VCL
-    // is returned sorted, which increases the probability that appending
-    // is more likely
+    
+    
+    
+    
     sal_uLong nCnt = maEntries.size();
     if ( !nCnt )
     {
@@ -193,7 +193,7 @@ ImplFontListNameInfo* FontList::ImplFind(const OUString& rSearchName, sal_uLong*
             return const_cast<ImplFontListNameInfo*>(pCmpData);
     }
 
-    // search fonts in the list
+    
     const ImplFontListNameInfo* pCompareData;
     const ImplFontListNameInfo* pFoundData = NULL;
     sal_uLong                   nLow = 0;
@@ -253,14 +253,14 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
     else
         nType = FONTLIST_FONTNAMETYPE_PRINTER;
 
-    // inquire all fonts from the device
+    
     int n = pDevice->GetDevFontCount();
     sal_uInt16  i;
     for( i = 0; i < n; i++ )
     {
         FontInfo aFontInfo = pDevice->GetDevFont( i );
 
-        // ignore raster-fonts if they are not to be displayed
+        
         if ( !bAll && (aFontInfo.GetType() == TYPE_RASTER) )
             continue;
 
@@ -300,8 +300,8 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
                     {
                         if ( eComp == 0 )
                         {
-                            // Overwrite charset, because charset should match
-                            // with the system charset
+                            
+                            
                             if ( (pTemp->GetCharSet() != eSystemEncoding) &&
                                  (pNewInfo->GetCharSet() == eSystemEncoding) )
                             {
@@ -336,16 +336,16 @@ void FontList::ImplInsertFonts( OutputDevice* pDevice, sal_Bool bAll,
     }
 }
 
-// =======================================================================
+
 
 FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll )
 {
-    // initialise variables
+    
     mpDev = pDevice;
     mpDev2 = pDevice2;
     mpSizeAry = NULL;
 
-    // store style names
+    
     maLight         = SVT_RESSTR(STR_SVT_STYLE_LIGHT);
     maLightItalic   = SVT_RESSTR(STR_SVT_STYLE_LIGHT_ITALIC);
     maNormal        = SVT_RESSTR(STR_SVT_STYLE_NORMAL);
@@ -357,8 +357,8 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll
 
     ImplInsertFonts( pDevice, bAll, sal_True );
 
-    // if required compare to the screen fonts
-    // in order to map the duplicates to Equal
+    
+    
     sal_Bool bCompareWindow = sal_False;
     if ( !pDevice2 && (pDevice->GetOutDevType() == OUTDEV_PRINTER) )
     {
@@ -371,14 +371,14 @@ FontList::FontList( OutputDevice* pDevice, OutputDevice* pDevice2, sal_Bool bAll
         ImplInsertFonts( pDevice2, bAll, !bCompareWindow );
 }
 
-// -----------------------------------------------------------------------
+
 
 FontList::~FontList()
 {
-    // delete SizeArray if required
+    
     delete[] mpSizeAry;
 
-    // delete FontInfos
+    
     ImplFontListFontInfo *pTemp, *pInfo;
     boost::ptr_vector<ImplFontListNameInfo>::iterator it;
     for (it = maEntries.begin(); it != maEntries.end(); ++it)
@@ -392,7 +392,7 @@ FontList::~FontList()
         }
     }
 }
-// -----------------------------------------------------------------------
+
 FontList* FontList::Clone() const
 {
     FontList* pReturn = new FontList(
@@ -400,7 +400,7 @@ FontList* FontList::Clone() const
     return pReturn;
 }
 
-// -----------------------------------------------------------------------
+
 
 const OUString& FontList::GetStyleName(FontWeight eWeight, FontItalic eItalic) const
 {
@@ -441,7 +441,7 @@ const OUString& FontList::GetStyleName(FontWeight eWeight, FontItalic eItalic) c
     }
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString FontList::GetStyleName(const FontInfo& rInfo) const
 {
@@ -449,12 +449,12 @@ OUString FontList::GetStyleName(const FontInfo& rInfo) const
     FontWeight eWeight = rInfo.GetWeight();
     FontItalic eItalic = rInfo.GetItalic();
 
-    // return synthetic Name if no StyleName was set
+    
     if (aStyleName.isEmpty())
         aStyleName = GetStyleName(eWeight, eItalic);
     else
     {
-        // Translate StyleName to localized name
+        
         OUString aCompareStyleName = aStyleName.toAsciiLowerCase();
         aCompareStyleName = comphelper::string::remove(aCompareStyleName, ' ');
         if (aCompareStyleName == "bold")
@@ -478,9 +478,9 @@ OUString FontList::GetStyleName(const FontInfo& rInfo) const
         else if (aCompareStyleName == "blackitalic")
             aStyleName = maBlackItalic;
 
-        // fix up StyleName, because the PS Printer driver from
-        // W2000 returns wrong StyleNames (e.g. Bold instead of Bold Italic
-        // for Helvetica)
+        
+        
+        
         if ( eItalic > ITALIC_NONE )
         {
             if ( (aStyleName == maNormal) ||
@@ -494,7 +494,7 @@ OUString FontList::GetStyleName(const FontInfo& rInfo) const
     return aStyleName;
 }
 
-// -----------------------------------------------------------------------
+
 
 OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
 {
@@ -503,7 +503,7 @@ OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
         return OUString();
     }
 
-    // Search Fontname
+    
     ImplFontListNameInfo* pData = ImplFindByName( rInfo.GetName() );
     if ( !pData )
     {
@@ -512,7 +512,7 @@ OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
         return maMapNotAvailable;
     }
 
-    // search for synthetic style
+    
     sal_uInt16              nType       = pData->mnType;
     const OUString& rStyleName  = rInfo.GetStyleName();
     if (!rStyleName.isEmpty())
@@ -546,14 +546,14 @@ OUString FontList::GetFontMapText( const FontInfo& rInfo ) const
         }
     }
 
-    // Only Printer-Font?
+    
     if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_PRINTER )
     {
         if (maMapPrinterOnly.isEmpty())
             ((FontList*)this)->maMapPrinterOnly = SVT_RESSTR(STR_SVT_FONTMAP_PRINTERONLY);
         return maMapPrinterOnly;
     }
-    // Only Screen-Font?
+    
     else if ( (nType & (FONTLIST_FONTNAMETYPE_PRINTER | FONTLIST_FONTNAMETYPE_SCREEN)) == FONTLIST_FONTNAMETYPE_SCREEN
             && rInfo.GetType() == TYPE_RASTER )
     {
@@ -575,7 +575,7 @@ namespace
         FontWeight eWeight, FontItalic eItalic)
     {
         FontInfo aInfo;
-        // if the fontname matches, we copy as much as possible
+        
         if (pFontNameInfo)
         {
             aInfo = *pFontNameInfo;
@@ -585,8 +585,8 @@ namespace
         aInfo.SetWeight(eWeight);
         aInfo.SetItalic(eItalic);
 
-        //If this is a known but uninstalled symbol font which we can remap to
-        //OpenSymbol then toggle its charset to be a symbol font
+        
+        
         if (ConvertChar::GetRecodeData(rName, OUString("OpenSymbol")))
             aInfo.SetCharSet(RTL_TEXTENCODING_SYMBOL);
 
@@ -616,7 +616,7 @@ FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) const
         }
     }
 
-    // reproduce attributes if data could not be found
+    
     FontInfo aInfo;
     if ( !pFontInfo )
     {
@@ -668,14 +668,14 @@ FontInfo FontList::Get(const OUString& rName, const OUString& rStyleName) const
     else
         aInfo = *pFontInfo;
 
-    // set Fontname to keep FontAlias
+    
     aInfo.SetName( rName );
     aInfo.SetStyleName( rStyleName );
 
     return aInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 FontInfo FontList::Get(const OUString& rName,
                         FontWeight eWeight, FontItalic eItalic) const
@@ -700,27 +700,27 @@ FontInfo FontList::Get(const OUString& rName,
         }
     }
 
-    // reproduce attributes if data could not be found
+    
     FontInfo aInfo;
     if ( !pFontInfo )
         aInfo = makeMissing(pFontNameInfo, rName, eWeight, eItalic);
     else
         aInfo = *pFontInfo;
 
-    // set Fontname to keep FontAlias
+    
     aInfo.SetName( rName );
 
     return aInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Bool FontList::IsAvailable(const OUString& rName) const
 {
     return (ImplFindByName( rName ) != 0);
 }
 
-// -----------------------------------------------------------------------
+
 
 const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
 {
@@ -729,7 +729,7 @@ const FontInfo& FontList::GetFontName( sal_uInt16 nFont ) const
     return *(maEntries[nFont].mpFirst);
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
 {
@@ -740,7 +740,7 @@ sal_Handle FontList::GetFirstFontInfo(const OUString& rName) const
         return (sal_Handle)pData->mpFirst;
 }
 
-// -----------------------------------------------------------------------
+
 
 sal_Handle FontList::GetNextFontInfo( sal_Handle hFontInfo ) const
 {
@@ -748,7 +748,7 @@ sal_Handle FontList::GetNextFontInfo( sal_Handle hFontInfo ) const
     return (sal_Handle)(pInfo->mpNext);
 }
 
-// -----------------------------------------------------------------------
+
 
 const FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo ) const
 {
@@ -756,22 +756,22 @@ const FontInfo& FontList::GetFontInfo( sal_Handle hFontInfo ) const
     return *pInfo;
 }
 
-// -----------------------------------------------------------------------
+
 
 const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const
 {
-    // first delete Size-Array
+    
     if ( mpSizeAry )
     {
         delete[] ((FontList*)this)->mpSizeAry;
         ((FontList*)this)->mpSizeAry = NULL;
     }
 
-    // use standarad sizes if no name
+    
     if ( rInfo.GetName().isEmpty() )
         return aStdSizeAry;
 
-    // first search fontname in order to use device from the matching font
+    
     OutputDevice*           pDevice = mpDev;
     ImplFontListNameInfo*   pData = ImplFindByName( rInfo.GetName() );
     if ( pData )
@@ -806,18 +806,18 @@ const sal_IntPtr* FontList::GetSizeAry( const FontInfo& rInfo ) const
     return mpSizeAry;
 }
 
-// -----------------------------------------------------------------------
+
 
 const sal_IntPtr* FontList::GetStdSizeAry()
 {
     return aStdSizeAry;
 }
 
-// =======================================================================
 
-// ---------------------------------
-// - FontSizeNames & FsizeNameItem -
-// ---------------------------------
+
+
+
+
 
 struct ImplFSNameItem
 {
@@ -825,7 +825,7 @@ struct ImplFSNameItem
     const char* mszUtf8Name;
 };
 
-//------------------------------------------------------------------------
+
 
 static const ImplFSNameItem aImplSimplifiedChinese[] =
 {
@@ -847,7 +847,7 @@ static const ImplFSNameItem aImplSimplifiedChinese[] =
     { 420, "\xe5\x88\x9d\xe5\x8f\xb7" }
 };
 
-//------------------------------------------------------------------------
+
 
 FontSizeNames::FontSizeNames( LanguageType eLanguage )
 {
@@ -858,7 +858,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
 
     if (MsLangId::isSimplifiedChinese(eLanguage))
     {
-        // equivalent for traditional chinese disabled by popular request, #i89077#
+        
         mpArray = aImplSimplifiedChinese;
         mnElem = SAL_N_ELEMENTS(aImplSimplifiedChinese);
     }
@@ -869,7 +869,7 @@ FontSizeNames::FontSizeNames( LanguageType eLanguage )
     }
 }
 
-//------------------------------------------------------------------------
+
 
 long FontSizeNames::Name2Size( const OUString& rName ) const
 {
@@ -878,7 +878,7 @@ long FontSizeNames::Name2Size( const OUString& rName ) const
         OString aName(OUStringToOString(rName,
             RTL_TEXTENCODING_UTF8));
 
-        // linear search is sufficient for this rare case
+        
         for( long i = mnElem; --i >= 0; )
             if ( aName.equals(mpArray[i].mszUtf8Name) )
                 return mpArray[i].mnSize;
@@ -887,13 +887,13 @@ long FontSizeNames::Name2Size( const OUString& rName ) const
     return 0;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString FontSizeNames::Size2Name( long nValue ) const
 {
     OUString aStr;
 
-    // binary search
+    
     for( long lower = 0, upper = mnElem - 1; lower <= upper; )
     {
         long mid = (upper + lower) >> 1;
@@ -911,7 +911,7 @@ OUString FontSizeNames::Size2Name( long nValue ) const
     return aStr;
 }
 
-//------------------------------------------------------------------------
+
 
 OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
 {
@@ -923,7 +923,7 @@ OUString FontSizeNames::GetIndexName( sal_uLong nIndex ) const
     return aStr;
 }
 
-//------------------------------------------------------------------------
+
 
 long FontSizeNames::GetIndexSize( sal_uLong nIndex ) const
 {

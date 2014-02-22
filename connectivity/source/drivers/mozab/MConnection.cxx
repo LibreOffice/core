@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 
@@ -54,25 +54,25 @@ extern "C" SAL_DLLPUBLIC_EXPORT void*  SAL_CALL OMozabConnection_CreateInstance(
 
 using namespace dbtools;
 
-//------------------------------------------------------------------------------
+
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
-// --------------------------------------------------------------------------------
+
 
 namespace connectivity { namespace mozab {
 
-// =====================================================================
-// = ConnectionImplData
-// =====================================================================
+
+
+
 struct ConnectionImplData
 {
     ::boost::shared_ptr< ::comphelper::OfficeResourceBundle >   pResourceBundle;
 };
 
-// -----------------------------------------------------------------------------
+
 #ifdef __MINGW32__
 extern "C"
 #endif
@@ -88,27 +88,27 @@ const sal_Char* getSdbcScheme( SdbcScheme _eScheme )
     }
     return NULL;
 }
-// -----------------------------------------------------------------------------
+
 OUString OConnection::getDriverImplementationName()
 {
     return OUString(MOZAB_DRIVER_IMPL_NAME);
 }
 
-// -----------------------------------------------------------------------------
+
 const sal_Char* getSchemeURI( MozillaScheme _eScheme )
 {
     switch ( _eScheme )
     {
-    case SCHEME_MOZILLA          : return "moz-abdirectory://";
-    case SCHEME_MOZILLA_MDB      : return "moz-abmdbdirectory://";
-    case SCHEME_LDAP             : return "moz-abldapdirectory://";
-    case SCHEME_OUTLOOK_MAPI     : return "moz-aboutlookdirectory://op/";
-    case SCHEME_OUTLOOK_EXPRESS  : return "moz-aboutlookdirectory://oe/";
+    case SCHEME_MOZILLA          : return "moz-abdirectory:
+    case SCHEME_MOZILLA_MDB      : return "moz-abmdbdirectory:
+    case SCHEME_LDAP             : return "moz-abldapdirectory:
+    case SCHEME_OUTLOOK_MAPI     : return "moz-aboutlookdirectory:
+    case SCHEME_OUTLOOK_EXPRESS  : return "moz-aboutlookdirectory:
     }
     return NULL;
 }
 
-// -----------------------------------------------------------------------------
+
 
 OConnection::OConnection(MozabDriver*   _pDriver)
     :OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
@@ -123,7 +123,7 @@ OConnection::OConnection(MozabDriver*   _pDriver)
     m_pDriver->acquire();
 
 }
-//-----------------------------------------------------------------------------
+
 OConnection::~OConnection()
 {
     acquire();
@@ -132,33 +132,33 @@ OConnection::~OConnection()
     m_pDriver->release();
     m_pDriver = NULL;
 }
-//-----------------------------------------------------------------------------
+
 void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }
-// -----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
+
+
 void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     OSL_TRACE("IN OConnection::construct()" );
-    //  open file
+    
     setURL(url);
     //
-    // Skip 'sdbc:mozab: part of URL
+    
     //
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     OSL_ENSURE( url.copy( 0, nLen ) == "sdbc:address", "OConnection::construct: invalid start of the URI - should never have survived XDriver::acceptsURL!" );
 
     OUString aAddrbookURI(url.copy(nLen+1));
-    // Get Scheme
+    
     nLen = aAddrbookURI.indexOf(':');
     OUString aAddrbookScheme;
     OUString sAdditionalInfo;
     if ( nLen == -1 )
     {
-        // There isn't any subschema: - but could be just subschema
+        
         if ( !aAddrbookURI.isEmpty() )
         {
             aAddrbookScheme= aAddrbookURI;
@@ -179,18 +179,18 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     OSL_TRACE("Scheme = %s\n", ((OUtoCStr(aAddrbookScheme)) ?  (OUtoCStr(aAddrbookScheme)):("NULL")) );
 
     //
-    // Now we have a URI convert it to a MozillaURI
+    
     //
-    // The Mapping being used is:
+    
     //
-    // * for Mozilla
-    //      "sdbc:address:mozilla:"        -> abdirectory://
-    // * for LDAP
-    //      "sdbc:address:ldap:"           -> abldapdirectory://
-    // * for Outlook (using MAPI API)
-    //      "sdbc:address:outlook:"        -> aboutlookdirectory://op/
-    // * for windows system address book
-    //      "sdbc:address:outlookexp:"     -> aboutlookdirectory://oe/
+    
+    
+    
+    
+    
+    
+    
+    
     //
         m_sBindDN   = "";
         m_sPassword = "";
@@ -204,7 +204,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     }
     else
     if ( aAddrbookScheme.equalsAscii( getSdbcScheme( SDBC_THUNDERBIRD ) ) ) {
-        //Yes. I am sure it is SCHEME_MOZILLA
+        
         m_sMozillaURI = OUString::createFromAscii( getSchemeURI( SCHEME_MOZILLA ) );
         m_eSDBCAddressType = SDBCAddress::ThunderBird;
         if(!sAdditionalInfo.isEmpty())
@@ -219,7 +219,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 
         if ( m_sHostName.isEmpty() )
         {
-            // see whether the URI contains a hostname/port
+            
             if ( !sAdditionalInfo.isEmpty() )
             {
                 sal_Int32 nPortSeparator = sAdditionalInfo.indexOf( ':' );
@@ -291,7 +291,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         else
             throwSQLException( STR_NO_BASEDN, *this );
 
-        // Addition of a fake query to enable the Mozilla LDAP directory to work correctly.
+        
         m_sMozillaURI += "?(or(DisplayName,=,DontDoThisAtHome)))";
 
     }
@@ -314,9 +314,9 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 
     MDatabaseMetaDataHelper     _aDbHelper;
 
-    // The creation of the nsIAbDirectory i/f for LDAP doesn't actually test
-    // the validity of the connection, it's normally delayed until the query
-    // is executed, but it's a bit late then to fail...
+    
+    
+    
     if ( isLDAP() )
     {
         if ( !_aDbHelper.testLDAPConnection( this ) )
@@ -330,7 +330,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
         }
     }
 
-    // Test connection by getting to get the Table Names
+    
     ::std::vector< OUString > tables;
     ::std::vector< OUString > types;
     if ( !_aDbHelper.getTableStrings( this, tables, types ) )
@@ -339,32 +339,32 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
     }
 
 }
-// XServiceInfo
-// --------------------------------------------------------------------------------
+
+
 IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.mozab.OConnection", "com.sun.star.sdbc.Connection")
 
-// --------------------------------------------------------------------------------
+
 Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // create a statement
-    // the statement can only be executed once
+    
+    
     Reference< XStatement > xReturn = new OStatement(this);
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
     OSL_TRACE("OConnection::prepareStatement( %s )", OUtoCStr( _sSql ) );
-    // the pre
-    // create a statement
-    // the statement can only be executed more than once
+    
+    
+    
     OPreparedStatement* pPrepared = new OPreparedStatement(this,_sSql);
     Reference< XPreparedStatement > xReturn = pPrepared;
     pPrepared->lateInit();
@@ -372,7 +372,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
     m_aStatements.push_back(WeakReferenceHelper(xReturn));
     return xReturn;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     OSL_UNUSED( _sSql );
@@ -380,112 +380,112 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUStrin
     OSL_TRACE("OConnection::prepareCall( %s )", OUtoCStr( _sSql ) );
     return NULL;
 }
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    // when you need to transform SQL92 to you driver specific you can do it here
+    
     OSL_TRACE("OConnection::nativeSQL( %s )", OUtoCStr( _sSql ) );
 
     return _sSql;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setAutoCommit", *this );
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException)
 {
-    // you have to distinguish which if you are in autocommit mode or not
-    // at normal case true should be fine here
+    
+    
 
     return sal_True;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException)
 {
-    // when you database does support transactions you should commit here
+    
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException)
 {
-    // same as commit but for the other case
+    
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // just simple -> we are close when we are disposed that means someone called dispose(); (XComponent)
+    
     return OConnection_BASE::rBHelper.bDisposed;
 }
-// --------------------------------------------------------------------------------
+
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
 
-    // here we have to create the class with biggest interface
-    // The answer is 42 :-)
+    
+    
     Reference< XDatabaseMetaData > xMetaData = m_xMetaData;
     if(!xMetaData.is())
     {
-        xMetaData = new ODatabaseMetaData(this); // need the connection because it can return it
+        xMetaData = new ODatabaseMetaData(this); 
         m_xMetaData = xMetaData;
     }
 
     return xMetaData;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setReadOnly", *this );
 }
-// --------------------------------------------------------------------------------
+
 sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException)
 {
-    // return if your connection to readonly
+    
     return sal_False;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setCatalog", *this );
 }
-// --------------------------------------------------------------------------------
+
 OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException)
 {
-    // return your current catalog
+    
     return OUString();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTransactionIsolation", *this );
 }
-// --------------------------------------------------------------------------------
+
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException)
 {
-    // please have a look at @see com.sun.star.sdbc.TransactionIsolation
+    
     return TransactionIsolation::NONE;
 }
-// --------------------------------------------------------------------------------
+
 Reference< ::com::sun::star::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException)
 {
-    // if your driver has special database types you can return it here
+    
     return NULL;
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::setTypeMap( const Reference< ::com::sun::star::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "XConnection::setTypeMap", *this );
 }
-// --------------------------------------------------------------------------------
-// XCloseable
+
+
 void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
 {
-    // we just dispose us
+    
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -493,22 +493,22 @@ void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException)
     }
     dispose();
 }
-// --------------------------------------------------------------------------------
-// XWarningsSupplier
+
+
 Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException)
 {
-    // when you collected some warnings -> return it
+    
     return Any();
 }
-// --------------------------------------------------------------------------------
+
 void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException)
 {
-    // you should clear your collected warnings here
+    
 }
-//------------------------------------------------------------------------------
+
 void OConnection::disposing()
 {
-    // we noticed that we should be destroied in near future so we have to dispose our statements
+    
     ::osl::MutexGuard aGuard(m_aMutex);
 
     m_pImplData->pResourceBundle.reset();
@@ -521,7 +521,7 @@ void OConnection::disposing()
 
     dispose_ChildImpl();
 }
-// -----------------------------------------------------------------------------
+
 
 Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
 {
@@ -537,7 +537,7 @@ Reference< XTablesSupplier > SAL_CALL OConnection::createCatalog()
     OSL_TRACE( "\tOUT OConnection::createCatalog()" );
     return xTab;
 }
-// -----------------------------------------------------------------------------
+
 
 MNameMapper* OConnection::getNameMapper ()
 {
@@ -547,7 +547,7 @@ MNameMapper* OConnection::getNameMapper ()
     return m_aNameMapper;
 }
 
-// -----------------------------------------------------------------------------
+
 void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Reference< XInterface >& _rxContext )
 {
     if ( _rError.getResId() != 0 )
@@ -584,7 +584,7 @@ void OConnection::throwSQLException( const ErrorDescriptor& _rError, const Refer
     throwGenericSQLException( STR_UNSPECIFIED_ERROR, _rxContext );
 }
 
-// -----------------------------------------------------------------------------
+
 void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const Reference< XInterface >& _rxContext )
 {
     ErrorDescriptor aError;
@@ -592,6 +592,6 @@ void OConnection::throwSQLException( const sal_uInt16 _nErrorResourceId, const R
     throwSQLException( aError, _rxContext );
 }
 
-} } // namespace connectivity::mozab
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

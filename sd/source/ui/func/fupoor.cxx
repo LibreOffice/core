@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 
 #include "fupoor.hxx"
@@ -82,7 +82,7 @@ FuPoor::FuPoor (
       bScrollable (sal_False),
       bDelayActive (sal_False),
       bFirstMouseMove (sal_False),
-      // remember MouseButton state
+      
       mnCode(0)
 {
     ReceiveRequest(rReq);
@@ -165,7 +165,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
             {
                 if (bScrollable)
                 {
-                    // scroll action in derived class
+                    
                     mpViewShell->ScrollLines(dx, dy);
                     aScrollTimer.Start();
                 }
@@ -182,8 +182,8 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
 {
     Point aPnt(mpWindow->GetPointerPosPixel());
 
-    // use remembered MouseButton state to create correct
-    // MouseEvents for this artifical MouseMove.
+    
+    
     MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
 
     return 0;
@@ -245,19 +245,19 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
                     else
                     {
-                        // insert a new page with the same page layout
+                        
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
                             SID_INSERTPAGE_QUICK, SFX_CALLMODE_ASYNCHRON);
                     }
 
-                    // consumed
+                    
                     bReturn = sal_True;
                 }
             }
             else
             {
-                // activate OLE object on RETURN for selected object
-                // activate text edit on RETURN for selected object
+                
+                
                 const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
 
                 if( !mpView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
@@ -266,7 +266,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if( pObj && pObj->ISA( SdrOle2Obj ) && !mpDocSh->IsUIActive() )
                     {
-                        //HMHmpView->HideMarkHdl();
+                        
                         mpViewShell->ActivateObject( static_cast< SdrOle2Obj* >( pObj ), 0 );
                     }
                     else if( pObj && pObj->IsEmptyPresObj() && pObj->ISA( SdrGrafObj ) )
@@ -278,7 +278,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute( SID_ATTR_CHAR, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
                     }
 
-                    // consumed
+                    
                     bReturn = sal_True;
                 }
             }
@@ -287,16 +287,16 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
         case KEY_TAB:
         {
-            // handle Mod1 and Mod2 to get travelling running on different systems
+            
             if(rKEvt.GetKeyCode().IsMod1() || rKEvt.GetKeyCode().IsMod2())
             {
-                // do something with a selected handle?
+                
                 const SdrHdlList& rHdlList = mpView->GetHdlList();
                 sal_Bool bForward(!rKEvt.GetKeyCode().IsShift());
 
                 ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
 
-                // guarantee visibility of focused handle
+                
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
 
                 if(pHdl)
@@ -306,7 +306,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     mpView->MakeVisible(aVisRect, *mpWindow);
                 }
 
-                // consumed
+                
                 bReturn = sal_True;
             }
         }
@@ -322,7 +322,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
-                // increase zoom
+                
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 3 / 2);
 
                 if (mpViewShell->ISA(DrawViewShell))
@@ -338,7 +338,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow && !mpDocSh->IsUIActive())
             {
-                // decrease zoom
+                
                 mpViewShell->SetZoom(mpWindow->GetZoom() * 2 / 3);
 
                 if (mpViewShell->ISA(DrawViewShell))
@@ -354,7 +354,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow)
             {
-                // zoom to page
+                
                 mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_PAGE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 bReturn = sal_True;
@@ -366,7 +366,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         {
             if (!mpView->IsTextEdit() && !bSlideShow)
             {
-                // zoom to selected objects
+                
                 mpViewShell->GetViewFrame()->GetDispatcher()->
                 Execute(SID_SIZE_OPTIMAL, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
                 bReturn = sal_True;
@@ -380,7 +380,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
             if (!mpView->IsTextEdit() && pZoomList->IsNextPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
-                // use next ZoomRect
+                
                 mpViewShell->SetZoomRect(pZoomList->GetNextZoomRect());
                 bReturn = sal_True;
             }
@@ -393,7 +393,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
             if (!mpView->IsTextEdit() && pZoomList->IsPreviousPossible() && !bSlideShow && !mpDocSh->IsUIActive())
             {
-                // use previous ZoomRect
+                
                 mpViewShell->SetZoomRect(pZoomList->GetPreviousZoomRect());
                 bReturn = sal_True;
             }
@@ -406,7 +406,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 && mpViewShell->ISA(DrawViewShell)
                 && !bSlideShow)
             {
-               // jump to first page
+               
                static_cast<DrawViewShell*>(mpViewShell)->SwitchPage(0);
                bReturn = sal_True;
             }
@@ -419,7 +419,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 && mpViewShell->ISA(DrawViewShell)
                 && !bSlideShow)
             {
-                // jump to last page
+                
                 SdPage* pPage =
                     static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
                 static_cast<DrawViewShell*>(mpViewShell)
@@ -437,24 +437,24 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
             if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
-                // The page-up key switches layers or pages depending on the
-                // modifier key.
+                
+                
                 if ( ! rKEvt.GetKeyCode().GetAllModifier())
                 {
-                    // With no modifier pressed we move to the previous
-                    // slide.
+                    
+                    
                     mpView->SdrEndTextEdit();
 
-                    // Previous page.
+                    
                     bReturn = sal_True;
                     SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
                     sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
 
                     if (nSdPage > 0)
                     {
-                        // Switch the page and send events regarding
-                        // deactivation the old page and activating the new
-                        // one.
+                        
+                        
+                        
                         TabControl* pPageTabControl =
                             static_cast<DrawViewShell*>(mpViewShell)
                             ->GetPageTabControl();
@@ -467,10 +467,10 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 }
                 else if (rKEvt.GetKeyCode().IsMod1())
                 {
-                    // With the CONTROL modifier we switch layers.
+                    
                     if (static_cast<DrawViewShell*>(mpViewShell)->IsLayerModeActive())
                     {
-                        // Moves to the previous layer.
+                        
                         SwitchLayer (-1);
                     }
                 }
@@ -484,23 +484,23 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 break;
             if(mpViewShell->ISA(DrawViewShell) && !bSlideShow)
             {
-                // The page-down key switches layers or pages depending on the
-                // modifier key.
+                
+                
                 if ( ! rKEvt.GetKeyCode().GetAllModifier())
                 {
-                    // With no modifier pressed we move to the next slide.
+                    
                     mpView->SdrEndTextEdit();
 
-                    // Next page.
+                    
                     bReturn = sal_True;
                     SdPage* pPage = static_cast<DrawViewShell*>(mpViewShell)->GetActualPage();
                     sal_uInt16 nSdPage = (pPage->GetPageNum() - 1) / 2;
 
                     if (nSdPage < mpDoc->GetSdPageCount(pPage->GetPageKind()) - 1)
                     {
-                        // Switch the page and send events regarding
-                        // deactivation the old page and activating the new
-                        // one.
+                        
+                        
+                        
                         TabControl* pPageTabControl =
                             static_cast<DrawViewShell*>(mpViewShell)->GetPageTabControl();
                         if (pPageTabControl->IsReallyShown())
@@ -512,11 +512,11 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                 }
                 else if (rKEvt.GetKeyCode().IsMod1())
                 {
-                    // With the CONTROL modifier we switch layers.
+                    
                     if (static_cast<DrawViewShell*>(mpViewShell)->IsLayerModeActive())
                     {
-                        // With the layer mode active pressing page-down
-                        // moves to the next layer.
+                        
+                        
                         SwitchLayer (+1);
                     }
                 }
@@ -524,7 +524,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         }
         break;
 
-        // change select state when focus is on poly point
+        
         case KEY_SPACE:
         {
             const SdrHdlList& rHdlList = mpView->GetHdlList();
@@ -534,7 +534,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 if(pHdl->GetKind() == HDL_POLY)
                 {
-                    // rescue ID of point with focus
+                    
                     sal_uInt32 nPol(pHdl->GetPolyNum());
                     sal_uInt32 nPnt(pHdl->GetPointNum());
 
@@ -557,7 +557,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(0L == rHdlList.GetFocusHdl())
                     {
-                        // restore point with focus
+                        
                         SdrHdl* pNewOne = 0L;
 
                         for(sal_uInt32 a(0); !pNewOne && a < rHdlList.GetHdlCount(); a++)
@@ -597,25 +597,25 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                 if (nCode == KEY_UP)
                 {
-                    // scroll up
+                    
                     nX = 0;
                     nY =-1;
                 }
                 else if (nCode == KEY_DOWN)
                 {
-                    // scroll down
+                    
                     nX = 0;
                     nY = 1;
                 }
                 else if (nCode == KEY_LEFT)
                 {
-                    // scroll left
+                    
                     nX =-1;
                     nY = 0;
                 }
                 else if (nCode == KEY_RIGHT)
                 {
-                    // scroll right
+                    
                     nX = 1;
                     nY = 0;
                 }
@@ -652,7 +652,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(pEdgeObj)
                     {
-                        // Suppress default connects to inside object and object center
+                        
                         bOldSuppress = pEdgeObj->GetSuppressDefaultConnect();
                         pEdgeObj->SetSuppressDefaultConnect(sal_True);
                     }
@@ -675,7 +675,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
                     else if(rKEvt.GetKeyCode().IsMod2())
                     {
-                        // move in 1 pixel distance
+                        
                         Size aLogicSizeOnePixel = (mpWindow) ? mpWindow->PixelToLogic(Size(1,1)) : Size(100, 100);
                         nX *= aLogicSizeOnePixel.Width();
                         nY *= aLogicSizeOnePixel.Height();
@@ -687,17 +687,17 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
                     else
                     {
-                        // old, fixed move distance
+                        
                         nX *= 100;
                         nY *= 100;
                     }
 
                     if(0L == pHdl)
                     {
-                        // only take action when move is allowed
+                        
                         if(mpView->IsMoveAllowed())
                         {
-                            // restrict movement to WorkArea
+                            
                             const Rectangle& rWorkArea = mpView->GetWorkArea();
 
                             if(!rWorkArea.IsEmpty())
@@ -729,7 +729,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                                 }
                             }
 
-                            // no handle selected
+                            
                             if(0 != nX || 0 != nY)
                             {
                                 mpView->MoveAllMarked(Size(nX, nY));
@@ -740,15 +740,15 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                     }
                     else
                     {
-                        // move handle with index nHandleIndex
+                        
                         if(pHdl && (nX || nY))
                         {
-                            // now move the Handle (nX, nY)
+                            
                             Point aStartPoint(pHdl->GetPos());
                             Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
                             const SdrDragStat& rDragStat = mpView->GetDragStat();
 
-                            // start dragging
+                            
                             mpView->BegDragObj(aStartPoint, 0, pHdl, 0);
 
                             if(mpView->IsDragObj())
@@ -756,7 +756,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                                 bool bWasNoSnap = rDragStat.IsNoSnap();
                                 sal_Bool bWasSnapEnabled = mpView->IsSnapEnabled();
 
-                                // switch snapping off
+                                
                                 if(!bWasNoSnap)
                                     ((SdrDragStat&)rDragStat).SetNoSnap(true);
                                 if(bWasSnapEnabled)
@@ -765,14 +765,14 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                                 mpView->MovAction(aEndPoint);
                                 mpView->EndDragObj();
 
-                                // restore snap
+                                
                                 if(!bWasNoSnap)
                                     ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
                                 if(bWasSnapEnabled)
                                     mpView->SetSnapEnabled(bWasSnapEnabled);
                             }
 
-                            // make moved handle visible
+                            
                             Rectangle aVisRect(aEndPoint - Point(100, 100), Size(200, 200));
                             mpView->MakeVisible(aVisRect, *mpWindow);
                         }
@@ -780,13 +780,13 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(pEdgeObj)
                     {
-                        // Restore original suppress value
+                        
                         pEdgeObj->SetSuppressDefaultConnect(bOldSuppress);
                     }
                 }
                 else
                 {
-                    // scroll page
+                    
                     mpViewShell->ScrollLines(nX, nY);
                 }
 
@@ -801,9 +801,9 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
         mpWindow->ReleaseMouse();
     }
 
-    // when a text-editable object is selected and the
-    // input character is printable, activate text edit on that object
-    // and feed character to object
+    
+    
+    
     if(!bReturn && !mpDocSh->IsReadOnly())
     {
         if(!mpView->IsTextEdit() && mpViewShell)
@@ -814,15 +814,15 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
             {
                 SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
 
-                // #i118485# allow TextInput for OLEs, too
+                
                 if(pObj->ISA(SdrTextObj) && pObj->HasTextEdit())
                 {
-                    // use common IsSimpleCharInput from the EditEngine.
+                    
                     sal_Bool bPrintable(EditEngine::IsSimpleCharInput(rKEvt));
 
                     if(bPrintable)
                     {
-                        // try to activate textedit mode for the selected object
+                        
                         SfxStringItem aInputString(SID_ATTR_CHAR, OUString(rKEvt.GetCharCode()));
 
                         mpViewShell->GetViewFrame()->GetDispatcher()->Execute(
@@ -831,15 +831,15 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                             &aInputString,
                             0L);
 
-                        // consumed
+                        
                         bReturn = sal_True;
                     }
                 }
             }
             else
             {
-                // test if there is a title object there. If yes, try to
-                // set it to edit mode and start typing...
+                
+                
                 if(mpViewShell->ISA(DrawViewShell)
                     && EditEngine::IsSimpleCharInput(rKEvt))
                 {
@@ -869,7 +869,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                         }
                     }
 
-                    // when candidate found and candidate is untouched, start editing text...
+                    
                     if(pCandidate && pCandidate->IsEmptyPresObj())
                     {
                         mpView->UnMarkAll();
@@ -882,7 +882,7 @@ sal_Bool FuPoor::KeyInput(const KeyEvent& rKEvt)
                             &aInputString,
                             0L);
 
-                        // consumed
+                        
                         bReturn = sal_True;
                     }
                 }
@@ -991,8 +991,8 @@ IMPL_LINK_NOARG_INLINE_START(FuPoor, DelayHdl)
 
     Point aPnt(mpWindow->GetPointerPosPixel());
 
-    // use remembered MouseButton state to create correct
-    // MouseEvents for this artifical MouseMove.
+    
+    
     MouseMove(MouseEvent(aPnt, 1, 0, GetMouseButtonCode()));
 
     return 0;
@@ -1001,7 +1001,7 @@ IMPL_LINK_INLINE_END( FuPoor, DelayHdl, Timer *, pTimer )
 
 sal_Bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     aDelayToScrollTimer.Stop ();
@@ -1011,7 +1011,7 @@ sal_Bool FuPoor::MouseButtonUp (const MouseEvent& rMEvt)
 
 sal_Bool FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // remember button state for creation of own MouseEvents
+    
     SetMouseButtonCode(rMEvt.GetButtons());
 
     return sal_False;
@@ -1066,7 +1066,7 @@ void FuPoor::ReceiveRequest(SfxRequest& rReq)
 
 SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16, const Rectangle& )
 {
-    // empty base implementation
+    
     return 0L;
 }
 
@@ -1096,16 +1096,16 @@ void FuPoor::SwitchLayer (sal_Int32 nOffset)
         DrawViewShell* pDrawViewShell =
             static_cast<DrawViewShell*>(mpViewShell);
 
-        // Calculate the new index.
+        
         sal_Int32 nIndex = pDrawViewShell->GetActiveTabLayerIndex() + nOffset;
 
-        // Make sure the new index lies inside the range of valid indices.
+        
         if (nIndex < 0)
             nIndex = 0;
         else if (nIndex >= pDrawViewShell->GetTabLayerCount ())
             nIndex = pDrawViewShell->GetTabLayerCount() - 1;
 
-        // Set the new active layer.
+        
         if (nIndex != pDrawViewShell->GetActiveTabLayerIndex ())
         {
             LayerTabBar* pLayerTabControl =
@@ -1138,7 +1138,7 @@ bool FuPoor::cancel()
     return false;
 }
 
-// #i33136#
+
 bool FuPoor::doConstructOrthogonal() const
 {
     return (
@@ -1170,6 +1170,6 @@ void FuPoor::DoExecute( SfxRequest& )
 {
 }
 
-} // end of namespace sd
+} 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

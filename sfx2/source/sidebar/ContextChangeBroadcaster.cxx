@@ -4,7 +4,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ * file, You can obtain one at http:
  *
  * This file incorporates work covered by the following license notice:
  *
@@ -14,7 +14,7 @@
  *   ownership. The ASF licenses this file to you under the Apache
  *   License, Version 2.0 (the "License"); you may not use this file
  *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
+ *   the License at http:
  */
 #include <sfx2/sidebar/ContextChangeBroadcaster.hxx>
 #include <sfx2/sidebar/EnumContext.hxx>
@@ -100,8 +100,8 @@ void ContextChangeBroadcaster::BroadcastContextChange (
 
     if ( ! rxFrame.is() || ! rxFrame->getController().is())
     {
-        // Frame is (probably) being deleted.  Broadcasting context
-        // changes is not necessary anymore.
+        
+        
         return;
     }
 
@@ -139,6 +139,6 @@ OUString ContextChangeBroadcaster::GetModuleName (const cssu::Reference<css::fra
 
 
 
-} } // end of namespace ::sd::sidebar
+} } 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
